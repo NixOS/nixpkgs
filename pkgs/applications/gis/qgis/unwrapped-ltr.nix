@@ -81,14 +81,14 @@ let
   ];
 in
 mkDerivation rec {
-  version = "3.40.12";
+  version = "3.40.14";
   pname = "qgis-ltr-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-QsAiE3HC71lGsdUKW9QZ5gCLCRsOCCM2IR3MKJlJ0vk=";
+    hash = "sha256-/AA3ATNjXj95XILyyfX8c5Sww2aUqlMXxGf8chwUbFY=";
   };
 
   passthru = {
@@ -146,6 +146,9 @@ mkDerivation rec {
       pyQt5PackageDir = "${py.pkgs.pyqt5}/${py.pkgs.python.sitePackages}";
       qsciPackageDir = "${py.pkgs.qscintilla-qt5}/${py.pkgs.python.sitePackages}";
     })
+    (replaceVars ./spatialite-path.patch {
+      spatialiteLib = "${libspatialite}/lib/mod_spatialite.so";
+    })
   ];
 
   # Add path to Qt platform plugins
@@ -199,12 +202,11 @@ mkDerivation rec {
   # >9k objects, >3h build time on a normal build slot
   requiredSystemFeatures = [ "big-parallel" ];
 
-  meta = with lib; {
+  meta = {
     description = "Free and Open Source Geographic Information System";
     homepage = "https://www.qgis.org";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ lsix ];
-    teams = [ teams.geospatial ];
-    platforms = with platforms; linux;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.geospatial ];
+    platforms = with lib.platforms; linux;
   };
 }

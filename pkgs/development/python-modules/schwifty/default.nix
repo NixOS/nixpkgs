@@ -26,8 +26,6 @@ buildPythonPackage rec {
   version = "2025.9.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-QoO4pMAtrsgaJ1yUYHc+otG3eMpw67W8sS7B/H3AoJk=";
@@ -52,15 +50,15 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "schwifty" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/mdomke/schwifty/blob/${version}/CHANGELOG.rst";
     description = "Validate/generate IBANs and BICs";
     homepage = "https://github.com/mdomke/schwifty";
-    license = licenses.mit;
-    maintainers = with maintainers; [ milibopp ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ milibopp ];
   };
 }

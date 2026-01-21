@@ -29,11 +29,11 @@ buildGoModule {
 
   vendorHash = null;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/rhysd/vim-startuptime";
     description = "Small Go program for better `vim --startuptime` alternative";
-    maintainers = with maintainers; [ _9yokuro ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ _9yokuro ];
+    license = lib.licenses.mit;
     mainProgram = "vim-startuptime";
   };
 }

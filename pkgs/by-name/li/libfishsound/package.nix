@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://xiph.org/fishsound/";
     description = "Simple programming interface for decoding and encoding audio data using Xiph.org codecs (FLAC, Speex and Vorbis)";
     longDescription = ''
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
 
       FishSound has been developed and tested on GNU/Linux, Darwin/MacOSX and Win32. It probably also works on other Unix-like systems via GNU autoconf. For Win32: nmake Makefiles, Visual Studio .NET 2003 solution files and Visual C++ 6.0 workspace files are all provided in the source distribution.
     '';
-    platforms = platforms.unix;
-    license = licenses.bsd3;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.bsd3;
   };
 }

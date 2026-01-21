@@ -45,11 +45,11 @@ let
         pandoc -F pandoc-drawio example.md -T pdf -o $out
       '';
 
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/tfc/pandoc-drawio-filter";
       description = "Pandoc filter which converts draw.io diagrams to PDF";
-      license = licenses.mit;
-      maintainers = with maintainers; [ tfc ];
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ tfc ];
       mainProgram = "pandoc-drawio";
     };
   };

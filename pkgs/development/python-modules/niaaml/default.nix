@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "niaaml";
-  version = "2.1.2";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "firefly-cpp";
     repo = "NiaAML";
     tag = version;
-    hash = "sha256-i5hjmvN9qJCGVDmRDBTiaNQn+1kZHr2iWNnD7GUimr4=";
+    hash = "sha256-AUQhdJc2nSuggV6zNOMihVJIbHAQX6EXsnhn97Tp35A=";
   };
 
   pythonRelaxDeps = [
@@ -55,11 +55,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "niaaml" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python automated machine learning framework";
     homepage = "https://github.com/firefly-cpp/NiaAML";
     changelog = "https://github.com/firefly-cpp/NiaAML/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ firefly-cpp ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ firefly-cpp ];
   };
 }

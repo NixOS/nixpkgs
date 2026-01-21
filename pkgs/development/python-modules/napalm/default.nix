@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
-  pythonOlder,
 
   # build-system
   setuptools,
@@ -36,9 +35,7 @@
 buildPythonPackage rec {
   pname = "napalm";
   version = "5.0.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "napalm-automation";
@@ -87,9 +84,9 @@ buildPythonPackage rec {
     ddt
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Network Automation and Programmability Abstraction Layer with Multivendor support";
     homepage = "https://github.com/napalm-automation/napalm";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

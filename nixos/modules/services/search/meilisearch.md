@@ -38,4 +38,6 @@ you first need to add documents to an index before you can search for documents.
 
 - `dump_dir` and `snapshot_dir` are set to `/var/lib/meilisearch/dumps` and `/var/lib/meilisearch/snapshots`, respectively. This is equivalent to the upstream defaults.
 
+- `experimental_dumpless_upgrade` is set to true by default in order to allow unattended upgrades.
+
 - All other options inherit their upstream defaults. In particular, the default configuration uses `env = "development"`, which doesn't require a master key, in which case all routes are unprotected.

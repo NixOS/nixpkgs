@@ -40,15 +40,15 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-4ejtMCuJOwT5bJQZaPQ1OjrB5O70we77yEXk9RmhywE=";
 
-  meta = with lib; {
+  meta = {
     description = "Git Explorer: cross-platform git workflow improvement tool inspired by Magit";
     homepage = "https://codeberg.org/Piturnah/gex";
     changelog = "https://codeberg.org/Piturnah/gex/releases/tag/${src.tag}";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       azd325
       bot-wxt1221
       evanrichter

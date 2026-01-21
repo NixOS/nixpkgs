@@ -63,12 +63,12 @@ stdenv.mkDerivation rec {
   ];
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Finite Field Linear Algebra Subroutines";
     mainProgram = "fflas-ffpack-config";
-    license = licenses.lgpl21Plus;
-    teams = [ teams.sage ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    teams = [ lib.teams.sage ];
+    platforms = lib.platforms.unix;
     homepage = "https://linbox-team.github.io/fflas-ffpack/";
   };
 }

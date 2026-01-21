@@ -10,6 +10,7 @@
   awscli2,
   bubblewrap,
   curl,
+  dune,
   ffmpeg,
   yt-dlp,
   runtimePackages ? [
@@ -31,7 +32,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "liquidsoap";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-EQFWFtgWvwsV+ZhO36Sd7mpxYOnd4Vv6Z+6xsgi335k=";
   };
 
@@ -78,7 +79,7 @@ stdenv.mkDerivation {
     pkg-config
     which
     ocamlPackages.ocaml
-    ocamlPackages.dune_3
+    dune
     ocamlPackages.findlib
     ocamlPackages.menhir
   ];

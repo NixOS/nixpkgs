@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     makeWrapper ${jre}/bin/java $out/bin/cfr --add-flags "-jar $jar"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Another java decompiler";
     mainProgram = "cfr";
     longDescription = ''
@@ -32,8 +32,8 @@ stdenv.mkDerivation rec {
       entirely in Java 6.
     '';
     homepage = "http://www.benf.org/other/cfr/";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.mit;
-    platforms = platforms.all;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
   };
 }

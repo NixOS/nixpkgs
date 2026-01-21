@@ -132,6 +132,7 @@ let
         maintainers = with lib.maintainers; [
           synthetica
           wineee
+          doronbehar
         ];
         pkgConfigModules = [
           (

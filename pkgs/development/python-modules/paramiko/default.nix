@@ -48,7 +48,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-relaxed
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "paramiko" ];
 
@@ -65,6 +65,5 @@ buildPythonPackage rec {
       between python scripts. All major ciphers and hash methods are
       supported. SFTP client and server mode are both supported too.
     '';
-    teams = [ lib.teams.helsinki-systems ];
   };
 }

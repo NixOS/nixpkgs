@@ -21,8 +21,6 @@ buildPythonPackage rec {
   version = "0.25.7";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
@@ -52,11 +50,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "responses" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for mocking out the requests Python library";
     homepage = "https://github.com/getsentry/responses";
     changelog = "https://github.com/getsentry/responses/blob/${src.tag}/CHANGES";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

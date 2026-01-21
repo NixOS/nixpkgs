@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://www.fossil-scm.org/home/tarball/version-${finalAttrs.version}/fossil-${finalAttrs.version}.tar.gz";
-    hash = "sha256-1YVOgyNBDy/CeuVfrhE/D4LfQwv5uFfykoYwiZ3eFFY=";
+    hash = "sha256-XzP5IKhlYi+ZBpWrKO7xc2Nb4i0ylYctd2aUG8S31DQ=";
   };
 
   # required for build time tool `./tools/translate.c`
@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     installShellCompletion --name fossil.bash tools/fossil-autocomplete.bash
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple, high-reliability, distributed software configuration management";
     longDescription = ''
       Fossil is a software configuration management system.  Fossil is
@@ -78,8 +78,8 @@ stdenv.mkDerivation (finalAttrs: {
       from the others by being extremely simple to setup and operate.
     '';
     homepage = "https://www.fossil-scm.org/";
-    license = licenses.bsd2;
-    platforms = platforms.all;
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.all;
     mainProgram = "fossil";
   };
 })

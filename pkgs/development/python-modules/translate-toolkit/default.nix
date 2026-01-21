@@ -7,7 +7,9 @@
   setuptools-scm,
 
   # dependencies
-  cwcwidth,
+  unicode-segmentation-rs,
+  urllib3,
+  tomlkit,
   lxml,
 
   # tests
@@ -28,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "translate-toolkit";
-  version = "3.16.1";
+  version = "3.18.0";
 
   pyproject = true;
 
@@ -36,15 +38,20 @@ buildPythonPackage rec {
     owner = "translate";
     repo = "translate";
     tag = version;
-    hash = "sha256-AEMqnTnnbqNsVQY0eE2ATn2NbV9jVPtfCo3Lve7MEmg=";
+    hash = "sha256-wc8bSXdFHVSzm4CWZ9b27zEYNH0rbEXf0i947VNTg/8=";
   };
 
   build-system = [ setuptools-scm ];
 
   dependencies = [
-    cwcwidth
+    unicode-segmentation-rs
+    urllib3
     lxml
   ];
+
+  optional-dependencies = {
+    toml = [ tomlkit ];
+  };
 
   nativeCheckInputs = [
     aeidon
@@ -59,6 +66,7 @@ buildPythonPackage rec {
     pytestCheckHook
     ruamel-yaml
     syrupy
+    tomlkit
     vobject
   ];
 

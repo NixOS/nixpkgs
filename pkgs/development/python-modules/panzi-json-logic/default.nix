@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  gitUpdater,
   unittestCheckHook,
   setuptools,
 }:
@@ -23,6 +24,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [ unittestCheckHook ];
 
   pythonImportsCheck = [ "json_logic" ];
+
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "Pure Python 3 JsonLogic and CertLogic implementation.";

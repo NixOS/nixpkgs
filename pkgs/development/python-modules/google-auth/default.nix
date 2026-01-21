@@ -77,7 +77,7 @@ buildPythonPackage rec {
     pytestCheckHook
     responses
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTestPaths = [
     "samples/"

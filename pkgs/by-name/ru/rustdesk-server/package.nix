@@ -48,9 +48,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/rustdesk/rustdesk-server/releases/tag/${version}";
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
-      gaelreyrol
-      tjni
-    ];
+    maintainers = [ ];
   };
 }

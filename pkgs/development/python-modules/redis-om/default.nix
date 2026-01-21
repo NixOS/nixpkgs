@@ -80,12 +80,12 @@ buildPythonPackage rec {
     "redis_om"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Object mapping, and more, for Redis and Python";
     mainProgram = "migrate";
     homepage = "https://github.com/redis/redis-om-python";
     changelog = "https://github.com/redis/redis-om-python/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ natsukium ];
   };
 }

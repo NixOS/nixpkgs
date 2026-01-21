@@ -22,10 +22,10 @@
   wirelesstools,
   hicolor-icon-theme,
   wrapGAppsHook3,
-  mateUpdateScript,
+  gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mate-applets";
   version = "1.28.1";
   outputs = [
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor finalAttrs.version}/mate-applets-${finalAttrs.version}.tar.xz";
     sha256 = "pZZxQVJ9xbFy0yKmADwjruwlMWD2ULs2QwoG3a76fi4=";
   };
 
@@ -72,17 +72,21 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname; };
+  passthru.updateScript = gitUpdater {
+    url = "https://git.mate-desktop.org/mate-applets";
+    odd-unstable = true;
+    rev-prefix = "v";
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Applets for use with the MATE panel";
     mainProgram = "mate-cpufreq-selector";
     homepage = "https://mate-desktop.org";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       lgpl2Plus
     ];
-    platforms = platforms.linux;
-    teams = [ teams.mate ];
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.mate ];
   };
-}
+})

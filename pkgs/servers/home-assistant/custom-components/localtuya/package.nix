@@ -16,11 +16,11 @@ buildHomeAssistantComponent rec {
     hash = "sha256-TISiZchkLZ3AaNh622nolIyBjDgdJBQrc30oBHN/INE=";
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/xZetsubou/hass-localtuya/releases/tag/${version}";
     description = "Home Assistant custom Integration for local handling of Tuya-based devices, fork from local-tuya";
     homepage = "https://github.com/xZetsubou/hass-localtuya";
-    maintainers = with maintainers; [ rhoriguchi ];
-    license = licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ rhoriguchi ];
+    license = lib.licenses.gpl3Only;
   };
 }

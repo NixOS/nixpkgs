@@ -90,12 +90,12 @@ stdenv.mkDerivation {
       --prefix PATH : "${waffle}/bin"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "OpenGL test suite, and test-suite runner";
     homepage = "https://gitlab.freedesktop.org/mesa/piglit";
-    license = licenses.free; # custom license. See COPYING in the source repo.
+    license = lib.licenses.free; # custom license. See COPYING in the source repo.
     inherit (mesa.meta) platforms;
-    maintainers = with maintainers; [ Flakebi ];
+    maintainers = with lib.maintainers; [ Flakebi ];
     mainProgram = "piglit";
   };
 }

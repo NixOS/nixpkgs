@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   httpx,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "ha-iotawattpy";
   version = "0.1.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -29,10 +26,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "iotawattpy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for the IoTaWatt Energy device";
     homepage = "https://github.com/gtdiehl/iotawattpy";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -29,10 +29,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pykrakenapi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation of the Kraken API";
     homepage = "https://github.com/dominiktraxl/pykrakenapi";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

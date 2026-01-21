@@ -43,12 +43,12 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/arduino-ci --prefix PATH ":" "${runtimePath}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "CI for Arduino Libraries";
     mainProgram = "arduino-ci";
     homepage = src.meta.homepage;
-    license = licenses.mit;
-    maintainers = with maintainers; [ ryantm ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ryantm ];
+    platforms = lib.platforms.unix;
   };
 }

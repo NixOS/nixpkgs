@@ -9,6 +9,7 @@
   faad2,
   fetchFromGitHub,
   fftwFloat,
+  gdk-pixbuf,
   glib,
   libogg,
   libopus,
@@ -33,19 +34,19 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kew";
-  version = "3.6.4";
+  version = "3.7.3";
 
   src = fetchFromGitHub {
     owner = "ravachol";
     repo = "kew";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PhNBAy+XS1wpU91GNoRc4jume9razD03xmmUER0p8I0=";
+    hash = "sha256-134SOyYnMPt7pIS8fb+lSA6ouubJQMGlIXPLyoRg6xA=";
   };
 
   postPatch = ''
     substituteInPlace Makefile \
       --replace-fail '$(shell uname -s)' '${uppercaseFirst stdenv.hostPlatform.parsed.kernel.name}' \
-      --replace-fail '$(shell uname -m)' '${stdenv.hostPlatform.parsed.cpu.name}'
+      --replace-fail '$(shell uname -m)' '${stdenv.hostPlatform.parsed.cpu.name}' \
   '';
 
   nativeBuildInputs = [
@@ -59,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     fftwFloat.dev
     chafa
     curl.dev
+    gdk-pixbuf
     glib.dev
     libopus
     opusfile
@@ -88,7 +90,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "autoflake";
   version = "2.3.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -31,11 +31,11 @@ buildPythonPackage rec {
     "test_is_literal_or_name"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to remove unused imports and unused variables";
     mainProgram = "autoflake";
     homepage = "https://github.com/myint/autoflake";
-    license = licenses.mit;
-    maintainers = with maintainers; [ yuriaisaka ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ yuriaisaka ];
   };
 }

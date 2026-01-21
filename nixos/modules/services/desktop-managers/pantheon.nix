@@ -43,6 +43,8 @@ in
         enable = mkEnableOption "contractor, a desktop-wide extension service used by Pantheon";
       };
 
+      parental-controls.enable = mkEnableOption "Pantheon parental controls daemon";
+
       apps.enable = mkEnableOption "Pantheon default applications";
 
     };
@@ -162,6 +164,7 @@ in
       ];
       services.pantheon.apps.enable = mkDefault true;
       services.pantheon.contractor.enable = mkDefault true;
+      services.pantheon.parental-controls.enable = mkDefault true;
       services.gnome.at-spi2-core.enable = true;
       services.gnome.evolution-data-server.enable = true;
       services.gnome.glib-networking.enable = true;
@@ -193,6 +196,7 @@ in
         pantheon.gala
         pantheon.gnome-settings-daemon
         pantheon.elementary-session-settings
+        pantheon.elementary-settings-daemon
       ];
       programs.dconf.enable = true;
       networking.networkmanager.enable = mkDefault true;
@@ -203,6 +207,22 @@ in
       systemd.user.targets."gnome-session-x11-services-ready".wants = [
         "org.gnome.SettingsDaemon.XSettings.service"
       ];
+
+      # https://github.com/elementary/settings-daemon/issues/217
+      systemd.user.services.elementary-settings-daemon = {
+        description = "elementary Settings Daemon";
+        wantedBy = [ "gnome-session-initialized.target" ];
+        after = [ "gnome-session-initialized.target" ];
+
+        # The daemon might launch external applications via g_app_info_launch.
+        environment.PATH = lib.mkForce null;
+
+        serviceConfig = {
+          Slice = "session.slice";
+          ExecStart = "${pkgs.pantheon.elementary-settings-daemon}/bin/io.elementary.settings-daemon";
+          Restart = "on-failure";
+        };
+      };
 
       # Global environment
       environment.systemPackages =
@@ -359,5 +379,14 @@ in
       ];
     })
 
+    (mkIf serviceCfg.parental-controls.enable {
+      services.malcontent.enable = mkDefault true;
+
+      environment.systemPackages = [ pkgs.pantheon.switchboard-plug-parental-controls ];
+
+      services.dbus.packages = [ pkgs.pantheon.switchboard-plug-parental-controls ];
+
+      systemd.packages = [ pkgs.pantheon.switchboard-plug-parental-controls ];
+    })
   ];
 }

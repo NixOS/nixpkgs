@@ -18,7 +18,6 @@
   multipart,
   pygments,
   python,
-  pythonOlder,
   rich,
   socksio,
   pytestCheckHook,
@@ -33,8 +32,6 @@ buildPythonPackage rec {
   pname = "httpx";
   version = "0.28.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "encode";
@@ -79,7 +76,7 @@ buildPythonPackage rec {
     trustme
     uvicorn
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   # testsuite wants to find installed packages for testing entrypoint
   preCheck = ''
@@ -111,12 +108,12 @@ buildPythonPackage rec {
   # FileNotFoundError: [Errno 2] No such file or directory
   setupHook = ./setup-hook.sh;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/encode/httpx/blob/${src.rev}/CHANGELOG.md";
     description = "Next generation HTTP client";
     mainProgram = "httpx";
     homepage = "https://github.com/encode/httpx";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

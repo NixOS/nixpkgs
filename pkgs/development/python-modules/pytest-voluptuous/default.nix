@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pytest,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
   setuptools,
   six,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "pytest-voluptuous";
   version = "1.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "F-Secure";
@@ -43,11 +40,11 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "tests/test_plugin.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytest plugin for asserting data against voluptuous schema";
     homepage = "https://github.com/F-Secure/pytest-voluptuous";
     changelog = "https://github.com/F-Secure/pytest-voluptuous/blob/${version}/CHANGELOG.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

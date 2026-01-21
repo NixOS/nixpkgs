@@ -92,11 +92,11 @@ in
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ejgallego/coq-serapi";
     description = "SerAPI is a library for machine-to-machine interaction with the Coq proof assistant";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [
       alizter
       Zimmi48
     ];

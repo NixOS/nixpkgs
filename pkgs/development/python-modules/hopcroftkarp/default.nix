@@ -17,10 +17,10 @@ buildPythonPackage rec {
   # tests fail due to bad package name
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of HopcroftKarp's algorithm";
     homepage = "https://github.com/sofiat-olaosebikan/hopcroftkarp";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     maintainers = [ ];
   };
 }

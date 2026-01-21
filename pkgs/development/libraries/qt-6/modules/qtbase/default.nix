@@ -215,6 +215,9 @@ stdenv.mkDerivation rec {
     # allow translations to be found outside of install prefix, as is the case in our split builds
     ./allow-translations-outside-prefix.patch
 
+    # make internal find_package calls between Qt components work with split builds
+    ./use-cmake-path.patch
+
     # always link to libraries by name in qmake-generated build scripts
     ./qmake-always-use-libname.patch
     # always explicitly list includedir in qmake-generated pkg-config files
@@ -326,19 +329,19 @@ stdenv.mkDerivation rec {
 
   setupHook = ../../hooks/qtbase-setup-hook.sh;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.qt.io/";
     description = "Cross-platform application framework for C++";
-    license = with licenses; [
+    license = with lib.licenses; [
       fdl13Plus
       gpl2Plus
       lgpl21Plus
       lgpl3Plus
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       nickcao
       LunNova
     ];
-    platforms = platforms.unix ++ platforms.windows;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
 }

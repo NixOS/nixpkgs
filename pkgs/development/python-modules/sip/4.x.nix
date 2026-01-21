@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = sip-module;
   version = "4.19.25";
-  format = "other";
+  pyproject = false;
 
   disabled = isPyPy;
 
@@ -57,15 +57,14 @@ buildPythonPackage rec {
     "sipconfig"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Creates C++ bindings for Python modules";
     mainProgram = "sip";
     homepage = "https://riverbankcomputing.com/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       lovek323
-      sander
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

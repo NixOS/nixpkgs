@@ -7,21 +7,18 @@
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-org-policy";
-  version = "1.14.0";
+  version = "1.15.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "google_cloud_org_policy";
     inherit version;
-    hash = "sha256-TId9QgosUStFTmLqzSVXy7x09zTAeZRuMOYfYnkbMZw=";
+    hash = "sha256-Jx0WoQ51NH6s5g0CzeMisrG2E7zJmRcQng6/KkECJTo=";
   };
 
   build-system = [ setuptools ];
@@ -45,11 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "google.cloud.orgpolicy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Protobufs for Google Cloud Organization Policy";
     homepage = "https://github.com/googleapis/python-org-policy";
     changelog = "https://github.com/googleapis/python-org-policy/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ austinbutler ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ austinbutler ];
   };
 }

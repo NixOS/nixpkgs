@@ -3,7 +3,6 @@
   azure-core,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "azure-cosmos";
   version = "4.14.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "azure_cosmos";
@@ -35,11 +32,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "azure.cosmos" ];
 
-  meta = with lib; {
+  meta = {
     description = "Azure Cosmos DB API";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/cosmos/azure-cosmos";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-cosmos_${version}/sdk/cosmos/azure-cosmos/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

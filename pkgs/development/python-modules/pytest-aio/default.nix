@@ -16,16 +16,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-aio";
-  version = "1.9.0";
+  version = "2.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "klen";
     repo = "pytest-aio";
-    tag = version;
-    hash = "sha256-6RxYn8/HAvXv1AEgSIEOLiaBkGgTcqQhWK+xbtxgj/o=";
+    rev = "43681bcfc6d2ee07bf9397a1b42d1ccfbb891deb";
+    hash = "sha256-IBtiy4pyXblIkYQunFO6HpBkCnBcEpTqcFtVELrULkk=";
   };
 
   build-system = [ poetry-core ];
@@ -42,17 +40,20 @@ buildPythonPackage rec {
     anyio
     hypothesis
     pytestCheckHook
+  ]
+  # https://github.com/python-trio/trio-asyncio/issues/160
+  ++ lib.optionals (pythonOlder "3.14") [
     trio-asyncio
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "pytest_aio" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytest plugin for aiohttp support";
     homepage = "https://github.com/klen/pytest-aio";
     changelog = "https://github.com/klen/pytest-aio/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

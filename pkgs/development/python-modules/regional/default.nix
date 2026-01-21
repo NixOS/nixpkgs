@@ -6,15 +6,12 @@
   scipy,
   matplotlib,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage {
   pname = "regional";
   version = "1.1.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "freeman-lab";
@@ -39,10 +36,10 @@ buildPythonPackage {
     "test_mask"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple manipualtion and display of spatial regions";
     homepage = "https://github.com/freeman-lab/regional";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

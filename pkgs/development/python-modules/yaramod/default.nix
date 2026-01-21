@@ -37,6 +37,9 @@ buildPythonPackage rec {
     cp -r --no-preserve=all ${nlohmann_json.src}/single_include/nlohmann/json.hpp deps/json/
     cp -r --no-preserve=all ${pybind11.src} deps/pybind11/
     cp -r --no-preserve=all ${gtest.src} deps/googletest/
+
+    substituteInPlace deps/pog/deps/fmt/fmt/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.1.0)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   dontUseCmakeConfigure = true;
@@ -61,11 +64,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "yaramod" ];
 
-  meta = with lib; {
+  meta = {
     description = "Parsing of YARA rules into AST and building new rulesets in C++";
     homepage = "https://github.com/avast/yaramod";
-    changelog = "https://github.com/avast/yaramod/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ msm ];
+    changelog = "https://github.com/avast/yaramod/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ msm ];
   };
 }

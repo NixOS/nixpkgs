@@ -37,13 +37,13 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-menus";
     description = "Library that implements freedesktops's Desktop Menu Specification in GNOME";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2
       lgpl2
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

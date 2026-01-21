@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "6.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "pynamodb";
     repo = "PynamoDB";
@@ -62,7 +60,7 @@ buildPythonPackage rec {
     "test_connection_make_api_call__binary_attributes"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Interface for Amazon’s DynamoDB";
     longDescription = ''
       DynamoDB is a great NoSQL service provided by Amazon, but the API is
@@ -70,7 +68,7 @@ buildPythonPackage rec {
     '';
     homepage = "http://jlafon.io/pynamodb.html";
     changelog = "https://github.com/pynamodb/PynamoDB/releases/tag/${src.tag}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

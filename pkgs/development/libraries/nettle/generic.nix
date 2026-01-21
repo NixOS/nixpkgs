@@ -40,7 +40,7 @@ stdenv.mkDerivation {
 
   patches = lib.optional (stdenv.hostPlatform.system == "i686-cygwin") ./cygwin.patch;
 
-  meta = with lib; {
+  meta = {
     description = "Cryptographic library";
 
     longDescription = ''
@@ -66,11 +66,11 @@ stdenv.mkDerivation {
       I/O.
     '';
 
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
     homepage = "https://www.lysator.liu.se/~nisse/nettle/";
 
-    platforms = platforms.all;
-    maintainers = [ maintainers.vcunat ];
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.vcunat ];
   };
 }

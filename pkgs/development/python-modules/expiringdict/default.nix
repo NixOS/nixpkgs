@@ -47,11 +47,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "expiringdict" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/mailgun/expiringdict/blob/${src.rev}/CHANGELOG.rst";
     description = "Dictionary with auto-expiring values for caching purposes";
     homepage = "https://github.com/mailgun/expiringdict";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ gravndal ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ gravndal ];
   };
 }

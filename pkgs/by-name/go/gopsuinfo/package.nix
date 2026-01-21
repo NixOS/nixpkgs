@@ -32,12 +32,12 @@ buildGoModule rec {
   # Install icons
   postInstall = ''make install DESTDIR=$out'';
 
-  meta = with lib; {
+  meta = {
     description = "Gopsutil-based command to display system usage info";
     homepage = "https://github.com/nwg-piotr/gopsuinfo";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ otini ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ otini ];
+    platforms = lib.platforms.linux;
     mainProgram = "gopsuinfo";
   };
 }

@@ -22,12 +22,12 @@ stdenv.mkDerivation (finalAttrs: {
     libdnet
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Gateway ACL scanner";
     mainProgram = "firewalk";
     homepage = "http://packetfactory.openwall.net/projects/firewalk/";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ tochiaha ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ tochiaha ];
+    platforms = lib.platforms.linux;
   };
 })

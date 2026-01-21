@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pebble";
   version = "5.1.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "noxdafox";
@@ -37,6 +34,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/noxdafox/pebble";
     changelog = "https://github.com/noxdafox/pebble/releases/tag/${src.tag}";
     license = lib.licenses.lgpl3Plus;
-    maintainers = with lib.maintainers; [ orivej ];
+    maintainers = [ ];
   };
 }

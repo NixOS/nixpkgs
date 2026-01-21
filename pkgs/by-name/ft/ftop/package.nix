@@ -26,11 +26,11 @@ stdenv.mkDerivation rec {
     substituteInPlace configure --replace "curses" "ncurses"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Show progress of open files and file systems";
     mainProgram = "ftop";
     homepage = "https://code.google.com/archive/p/ftop/";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     longDescription = ''
       ftop is to files what top is to processes. The progress of all open files
       and file systems can be monitored. If run as a regular user, the set of
@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
       generally all that is of interest to the user).
       As with top, the items are displayed in order from most to least active.
     '';
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

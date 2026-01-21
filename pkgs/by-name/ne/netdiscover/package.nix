@@ -27,13 +27,13 @@ stdenv.mkDerivation rec {
 
   # Running update-oui-database.sh would probably make the build irreproducible
 
-  meta = with lib; {
+  meta = {
     description = "Network address discovering tool, developed mainly for those wireless networks without dhcp server, it also works on hub/switched networks";
     homepage = "https://github.com/netdiscover-scanner/netdiscover";
     changelog = "https://github.com/netdiscover-scanner/netdiscover/releases/tag/${src.tag}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ vdot0x23 ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ vdot0x23 ];
+    platforms = lib.platforms.unix;
     mainProgram = "netdiscover";
   };
 }

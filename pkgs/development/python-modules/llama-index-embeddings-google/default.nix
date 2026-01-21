@@ -5,15 +5,12 @@
   google-generativeai,
   llama-index-core,
   hatchling,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-embeddings-google";
   version = "0.4.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "llama_index_embeddings_google";
@@ -35,10 +32,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "llama_index.embeddings.google" ];
 
-  meta = with lib; {
+  meta = {
     description = "LlamaIndex Embeddings Integration for Google";
     homepage = "https://github.com/run-llama/llama_index/tree/main/llama-index-integrations/embeddings/llama-index-embeddings-google";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

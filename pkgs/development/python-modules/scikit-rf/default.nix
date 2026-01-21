@@ -1,7 +1,6 @@
 {
   stdenv,
   lib,
-  pythonOlder,
   buildPythonPackage,
   fetchFromGitHub,
   numpy,
@@ -29,8 +28,6 @@ buildPythonPackage rec {
   pname = "scikit-rf";
   version = "1.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "scikit-rf";
@@ -86,11 +83,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "skrf" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for RF/Microwave engineering";
     homepage = "https://scikit-rf.org/";
     changelog = "https://github.com/scikit-rf/scikit-rf/releases/tag/${src.tag}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ lugarun ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ lugarun ];
   };
 }

@@ -9,7 +9,6 @@
   pkg-config,
   protobuf,
   typing-extensions,
-  pythonOlder,
   setuptools,
   zlib,
 }:
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "grpcio";
   version = "1.76.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -74,11 +71,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "grpc" ];
 
-  meta = with lib; {
+  meta = {
     description = "HTTP/2-based RPC framework";
     homepage = "https://grpc.io/grpc/python/";
     changelog = "https://github.com/grpc/grpc/releases/tag/v${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

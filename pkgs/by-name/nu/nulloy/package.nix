@@ -55,14 +55,14 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Music player with a waveform progress bar";
     homepage = "https://nulloy.com";
     changelog = "https://github.com/nulloy/nulloy/blob/${src.rev}/ChangeLog";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = "nulloy";
-    maintainers = with maintainers; [ aleksana ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ aleksana ];
+    platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

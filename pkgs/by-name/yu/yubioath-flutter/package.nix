@@ -1,31 +1,28 @@
 {
   lib,
   flutter335,
-  python3,
+  python3Packages,
   fetchFromGitHub,
   pcre2,
   libnotify,
   libappindicator,
-  pkg-config,
   gnome-screenshot,
-  makeWrapper,
   removeReferencesTo,
   runCommand,
-  yq,
-  yubioath-flutter,
+  yq-go,
   _experimental-update-script-combinators,
-  gitUpdater,
+  nix-update-script,
 }:
 
 flutter335.buildFlutterApplication rec {
   pname = "yubioath-flutter";
-  version = "7.3.0";
+  version = "7.3.1";
 
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubioath-flutter";
     tag = version;
-    hash = "sha256-1Hr8ZDHXiLiYfQg4PEpmIuIJR/USbsGCgI4YZSex2Eg=";
+    hash = "sha256-jfWLj5pN1NGfnmYQ0lYeKwlc0v7pCdvAjmmWX5GP7aM=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -39,11 +36,7 @@ flutter335.buildFlutterApplication rec {
       --replace-fail "../build/linux/helper" "${passthru.helper}/libexec/helper"
   '';
 
-  nativeBuildInputs = [
-    makeWrapper
-    removeReferencesTo
-    pkg-config
-  ];
+  nativeBuildInputs = [ removeReferencesTo ];
 
   buildInputs = [
     pcre2
@@ -86,19 +79,24 @@ flutter335.buildFlutterApplication rec {
   '';
 
   passthru = {
-    helper = python3.pkgs.callPackage ./helper.nix { inherit src version meta; };
+    helper = python3Packages.callPackage ./helper.nix { inherit src version meta; };
     pubspecSource =
       runCommand "pubspec.lock.json"
         {
-          nativeBuildInputs = [ yq ];
-          inherit (yubioath-flutter) src;
+          inherit src;
+          nativeBuildInputs = [ yq-go ];
         }
         ''
-          cat $src/pubspec.lock | yq > $out
+          yq eval --output-format=json --prettyPrint $src/pubspec.lock > "$out"
         '';
     updateScript = _experimental-update-script-combinators.sequence [
-      (gitUpdater { })
-      (_experimental-update-script-combinators.copyAttrOutputToFile "yubioath-flutter.pubspecSource" ./pubspec.lock.json)
+      (nix-update-script { extraArgs = [ "--use-github-releases" ]; })
+      (
+        (_experimental-update-script-combinators.copyAttrOutputToFile "yubioath-flutter.pubspecSource" ./pubspec.lock.json)
+        // {
+          supportedFeatures = [ ];
+        }
+      )
     ];
   };
 

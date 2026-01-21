@@ -6,7 +6,6 @@
   lark,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   regex,
   typing-extensions,
 }:
@@ -14,9 +13,7 @@
 buildPythonPackage rec {
   pname = "pycep-parser";
   version = "0.5.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.9";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gruebel";
@@ -40,11 +37,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pycep" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python based Bicep parser";
     homepage = "https://github.com/gruebel/pycep";
     changelog = "https://github.com/gruebel/pycep/blob/${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

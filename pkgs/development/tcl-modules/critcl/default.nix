@@ -13,7 +13,7 @@ mkTclDerivation rec {
   src = fetchFromGitHub {
     owner = "andreas-kupries";
     repo = "critcl";
-    rev = version;
+    tag = version;
     hash = "sha256-LBTAuwTrvwj42vo/TXVSUK8euxHgvSLai23e1jmhMso=";
   };
 
@@ -37,12 +37,12 @@ mkTclDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Easily embed C code in Tcl";
     homepage = "https://andreas-kupries.github.io/critcl/";
-    license = licenses.tcltk;
+    license = lib.licenses.tcltk;
     mainProgram = "critcl";
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.all;
   };
 }

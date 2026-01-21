@@ -207,7 +207,7 @@ stdenv.mkDerivation (
     # Wine locates a lot of libraries dynamically through dlopen().  Add
     # them to the RPATH so that the user doesn't have to set them in
     # LD_LIBRARY_PATH.
-    NIX_LDFLAGS = toString (
+    env.NIX_LDFLAGS = toString (
       map (path: "-rpath " + path) (
         map (x: "${lib.getLib x}/lib") ([ stdenv.cc.cc ] ++ finalAttrs.buildInputs)
         # libpulsecommon.so is linked but not found otherwise
@@ -221,6 +221,7 @@ stdenv.mkDerivation (
         )
       )
     );
+    env.NIX_CFLAGS_COMPILE = lib.optionalString (wineRelease == "yabridge") "-std=gnu17";
 
     # Don't shrink the ELF RPATHs in order to keep the extra RPATH
     # elements specified above.

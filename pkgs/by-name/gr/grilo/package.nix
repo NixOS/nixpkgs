@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/grilo/${lib.versions.majorMinor version}/grilo-${version}.tar.xz";
     sha256 = "CGnIHRmrE5xmfXlWfBTdy2y1y/wBCNBMreKH6ylTZwY=";
   };
 
@@ -72,16 +72,16 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "grilo";
       versionPolicy = "none";
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/grilo";
     description = "Framework that provides access to various sources of multimedia content, using a pluggable system";
-    teams = [ teams.gnome ];
-    license = licenses.lgpl2Plus;
-    platforms = platforms.unix;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.unix;
   };
 }

@@ -11,13 +11,13 @@
 
 buildGoModule rec {
   pname = "kind";
-  version = "0.30.0";
+  version = "0.31.0";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "kubernetes-sigs";
     repo = "kind";
-    hash = "sha256-TssyKO5v3xqSDjS3DYIlO7iOx/zzS3E9O88V9R7S5Ac=";
+    hash = "sha256-3icwtfwlSkYOEw9bzEhKJC7OtE1lnBjZSYp+cC/2XNc=";
   };
 
   patches = [
@@ -52,14 +52,14 @@ buildGoModule rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Kubernetes IN Docker - local clusters for testing Kubernetes";
     homepage = "https://github.com/kubernetes-sigs/kind";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       offline
       rawkode
     ];
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "kind";
   };
 }

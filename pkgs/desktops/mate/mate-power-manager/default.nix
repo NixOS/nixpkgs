@@ -18,10 +18,10 @@
   libtool,
   polkit,
   wrapGAppsHook3,
-  mateUpdateScript,
+  gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mate-power-manager";
   version = "1.28.1";
   outputs = [
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor finalAttrs.version}/mate-power-manager-${finalAttrs.version}.tar.xz";
     sha256 = "jr3LdLYH6Ggza6moFGze+Pl7zlNcKwyzv2UMWPce7iE=";
   };
 
@@ -60,17 +60,21 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname; };
+  passthru.updateScript = gitUpdater {
+    url = "https://git.mate-desktop.org/mate-power-manager";
+    odd-unstable = true;
+    rev-prefix = "v";
+  };
 
-  meta = with lib; {
+  meta = {
     description = "MATE Power Manager";
     homepage = "https://mate-desktop.org";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       fdl11Plus
     ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ chpatrick ];
-    teams = [ teams.mate ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ chpatrick ];
+    teams = [ lib.teams.mate ];
   };
-}
+})

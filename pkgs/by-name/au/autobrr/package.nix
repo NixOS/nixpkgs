@@ -7,18 +7,20 @@
   nix-update-script,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   typescript,
   versionCheckHook,
 }:
 
 let
   pname = "autobrr";
-  version = "1.69.0";
+  version = "1.71.0";
   src = fetchFromGitHub {
     owner = "autobrr";
     repo = "autobrr";
     tag = "v${version}";
-    hash = "sha256-16C160Wg7pm3BoJyyC5tuHdp4H1BDO7GfnA5u0HJ8YM=";
+    hash = "sha256-JAWnH0S7gDBwmQXpogiTCIWWfQkrI5wOjWkV6+ANcnc=";
   };
 
   autobrr-web = stdenvNoCC.mkDerivation {
@@ -27,19 +29,21 @@ let
 
     nativeBuildInputs = [
       nodejs
-      pnpm_9.configHook
+      pnpmConfigHook
+      pnpm_9
       typescript
     ];
 
     sourceRoot = "${src.name}/web";
 
-    pnpmDeps = pnpm_9.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (autobrr-web)
         pname
         version
         src
         sourceRoot
         ;
+      pnpm = pnpm_9;
       fetcherVersion = 1;
       hash = "sha256-LOY8fLGsX966MyH4w+pa9tm/5HS6LnGwd51cj8TG6Mk=";
     };
@@ -61,7 +65,7 @@ buildGoModule rec {
     src
     ;
 
-  vendorHash = "sha256-7gmF3yQFRqN7Oro/f+jhmxCUU9CltobY6EAoskCZISQ=";
+  vendorHash = "sha256-avgMRD5WSjXVVJ8r0Rq0IhfwPvxc/Sq9JxzX0rQimWI=";
 
   preBuild = ''
     cp -r ${autobrr-web}/* web/dist

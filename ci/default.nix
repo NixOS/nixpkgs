@@ -81,8 +81,6 @@ let
           };
         };
         settings.formatter.yamlfmt.excludes = [
-          # Breaks helm templating
-          "nixos/tests/k3s/k3s-test-chart/templates/*"
           # Aligns comments with whitespace
           "pkgs/development/haskell-modules/configuration-hackage2nix/main.yaml"
           # TODO: Fix formatting for auto-generated file
@@ -117,7 +115,12 @@ let
 
         settings.formatter.editorconfig-checker = {
           command = "${pkgs.lib.getExe pkgs.editorconfig-checker}";
-          options = [ "-disable-indent-size" ];
+          options = [
+            "-disable-indent-size"
+            # TODO: Remove this once this upstream issue is fixed:
+            #   https://github.com/editorconfig-checker/editorconfig-checker/issues/505
+            "-disable-charset"
+          ];
           includes = [ "*" ];
           priority = 1;
         };
@@ -169,7 +172,6 @@ rec {
   lib-tests = import ../lib/tests/release.nix { inherit pkgs; };
   manual-nixos = (import ../nixos/release.nix { }).manual.${system} or null;
   manual-nixpkgs = (import ../doc { inherit pkgs; });
-  manual-nixpkgs-tests = (import ../doc { inherit pkgs; }).tests;
   nixpkgs-vet = pkgs.callPackage ./nixpkgs-vet.nix {
     nix = pkgs.nixVersions.latest;
   };

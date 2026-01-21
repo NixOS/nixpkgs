@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "exeldro";
     repo = "obs-media-controls";
-    tag = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-r9fqpg0G9rzGSqq5FUS8ul58rj0796aGZIND8PCJ9jk=";
   };
 

@@ -12,20 +12,18 @@
       ];
 
       services.xserver.enable = true;
+      services.xserver.displayManager.lightdm.enable = true;
 
-      services.xserver.displayManager = {
-        lightdm.enable = true;
-        autoLogin = {
-          enable = true;
-          user = "alice";
-        };
+      services.displayManager.autoLogin = {
+        enable = true;
+        user = "alice";
       };
 
       # We don't ship gnome-text-editor in Budgie module, we add this line mainly
       # to catch eval issues related to this option.
       environment.budgie.excludePackages = [ pkgs.gnome-text-editor ];
 
-      services.xserver.desktopManager.budgie = {
+      services.desktopManager.budgie = {
         enable = true;
         extraPlugins = [
           pkgs.budgie-analogue-clock-applet

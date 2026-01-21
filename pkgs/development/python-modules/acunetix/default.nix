@@ -3,7 +3,6 @@
   aiofiles,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   requests,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage {
   pname = "acunetix";
   version = "0.0.7";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "hikariatama";
@@ -32,10 +29,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "acunetix" ];
 
-  meta = with lib; {
+  meta = {
     description = "Acunetix Web Vulnerability Scanner SDK for Python";
     homepage = "https://github.com/hikariatama/acunetix";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

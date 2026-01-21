@@ -8,7 +8,10 @@ stdenv.mkDerivation {
   pname = "gpio-utils";
   version = linux.version;
 
-  inherit (linux) src makeFlags;
+  inherit (linux) src;
+  makeFlags = linux.commonMakeFlags ++ [
+    "CC=${stdenv.cc.targetPrefix}cc"
+  ];
 
   preConfigure = ''
     cd tools/gpio
@@ -21,10 +24,10 @@ stdenv.mkDerivation {
     "bindir=/bin"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Linux tools to inspect the gpiochip interface";
-    maintainers = with maintainers; [ kwohlfahrt ];
-    platforms = platforms.linux;
-    license = licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ kwohlfahrt ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Only;
   };
 }

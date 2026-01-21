@@ -30,14 +30,14 @@ rec {
 
   gambit-bootstrap = import ./bootstrap.nix pkgs;
 
-  meta = with lib; {
+  meta = {
     description = "Optimizing Scheme to C compiler";
     homepage = "http://gambitscheme.org";
-    license = licenses.lgpl21Only; # dual, also asl20
+    license = lib.licenses.lgpl21Only; # dual, also asl20
     # NB regarding platforms: continuously tested on Linux x86_64 and regularly tested on macOS x86_64.
     # *should* work everywhere.
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       thoughtpolice
       raskin
       fare

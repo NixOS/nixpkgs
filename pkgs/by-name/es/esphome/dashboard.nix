@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "dashboard";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-PZf9YLtHqeR+5BRVv1yOMVt6NVlbJTj98ukGnO0RV0Q=";
   };
 
@@ -51,10 +51,10 @@ buildPythonPackage rec {
     "esphome_dashboard"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "ESPHome dashboard";
     homepage = "https://esphome.io/";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ hexa ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

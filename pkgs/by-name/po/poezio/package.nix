@@ -53,6 +53,5 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://poez.io";
     changelog = "https://codeberg.org/poezio/poezio/src/tag/v${version}/CHANGELOG";
     license = lib.licenses.zlib;
-    maintainers = with lib.maintainers; [ lsix ];
   };
 }

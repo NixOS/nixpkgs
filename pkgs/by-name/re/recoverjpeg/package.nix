@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
       }
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://rfc1149.net/devel/recoverjpeg.html";
     description = "Recover lost JPEGs and MOV files on a bogus memory card or disk";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ dotlambda ];
-    platforms = with platforms; linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ dotlambda ];
+    platforms = with lib.platforms; linux;
   };
 }

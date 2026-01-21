@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
   pname = "dupeguru";
   version = "4.3.1";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "arsenetar";
@@ -70,13 +70,13 @@ python3Packages.buildPythonApplication rec {
     wrapPythonProgramsIn "$out/share/dupeguru" "$out $pythonPath"
   '';
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "GUI tool to find duplicate files in a system";
     homepage = "https://github.com/arsenetar/dupeguru";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ novoxd ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ novoxd ];
     mainProgram = "dupeguru";
   };
 }

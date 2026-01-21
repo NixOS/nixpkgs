@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   nix-update-script,
-  pythonOlder,
 
   # build-system
   poetry-core,
@@ -15,17 +14,15 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "basedtyping";
   version = "0.1.10";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "KotlinIsland";
     repo = "basedtyping";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-IpIMO75jqJDzDgRPVEi6g7AprGeBeKbVH99XPDYUzTM=";
   };
 
@@ -52,8 +49,8 @@ buildPythonPackage rec {
   meta = {
     description = "Utilities for basedmypy";
     homepage = "https://github.com/KotlinIsland/basedtyping";
-    changelog = "https://github.com/KotlinIsland/basedtyping/releases/tag/${src.tag}";
+    changelog = "https://github.com/KotlinIsland/basedtyping/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ perchun ];
+    maintainers = with lib.maintainers; [ PerchunPak ];
   };
-}
+})

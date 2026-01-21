@@ -19,7 +19,7 @@ in
 buildPythonPackage rec {
   pname = "dnf4";
   version = "4.24.0";
-  format = "other";
+  pyproject = false;
 
   outputs = [
     "out"
@@ -92,13 +92,13 @@ buildPythonPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Package manager based on libdnf and libsolv. Replaces YUM";
     homepage = "https://github.com/rpm-software-management/dnf";
     changelog = "https://github.com/rpm-software-management/dnf/releases/tag/${version}";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ katexochen ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ katexochen ];
     mainProgram = "dnf";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

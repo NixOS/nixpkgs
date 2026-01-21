@@ -78,7 +78,7 @@ buildPythonPackage rec {
     pytestCheckHook
     shiny
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # AssertionError: assert False

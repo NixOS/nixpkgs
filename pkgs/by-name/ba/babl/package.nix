@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "babl";
-  version = "0.1.116";
+  version = "0.1.120";
 
   outputs = [
     "out"
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://download.gimp.org/pub/babl/${lib.versions.majorMinor finalAttrs.version}/babl-${finalAttrs.version}.tar.xz";
-    hash = "sha256-UPrgaYZ8et4SWYiP8ePbhf7IbXCCUuU4W1pPOaeOxIM=";
+    hash = "sha256-9HatFSAftO0MkMF0xSSx5CcczWmjdyQtamn834fOrMI=";
   };
 
   patches = [
@@ -46,6 +46,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     "-Dprefix-dev=${placeholder "dev"}"
+    # On Linux, this would be disabled by default but we have -Dauto_features=enabled.
+    # Disable it on other platforms too, since I cannot test it there.
+    "-Drelocatable=disabled"
   ]
   ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     # Docs are opt-out in native but opt-in in cross builds.
@@ -58,15 +61,15 @@ stdenv.mkDerivation (finalAttrs: {
     moveToOutput "share/doc" "$devdoc"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Image pixel format conversion library";
     mainProgram = "babl";
     homepage = "https://gegl.org/babl/";
     changelog = "https://gitlab.gnome.org/GNOME/babl/-/blob/BABL_${
-      replaceStrings [ "." ] [ "_" ] finalAttrs.version
+      lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }/NEWS";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ jtojnar ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ jtojnar ];
+    platforms = lib.platforms.unix;
   };
 })

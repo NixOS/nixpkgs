@@ -72,15 +72,15 @@ buildPythonPackage rec {
     unittestCheckHook
     warcio
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   unittestFlagsArray = [ "-v" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/Yelp/mrjob/blob/v${version}/CHANGES.txt";
     description = "Run MapReduce jobs on Hadoop or Amazon Web Services";
     homepage = "https://github.com/Yelp/mrjob";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

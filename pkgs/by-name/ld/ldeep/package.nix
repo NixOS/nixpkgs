@@ -45,12 +45,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "ldeep" ];
 
-  meta = with lib; {
+  meta = {
     description = "In-depth LDAP enumeration utility";
     homepage = "https://github.com/franc-pentest/ldeep";
     changelog = "https://github.com/franc-pentest/ldeep/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "ldeep";
   };
 }

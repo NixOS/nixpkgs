@@ -22,11 +22,11 @@ buildGoModule rec {
     "-X=main.version=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast, resumable file download client";
     homepage = "https://github.com/Code-Hex/pget?tab=readme-ov-file";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Ligthiago ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Ligthiago ];
     mainProgram = "pget";
   };
 }

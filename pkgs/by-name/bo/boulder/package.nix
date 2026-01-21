@@ -4,17 +4,18 @@
   buildGoModule,
   testers,
   boulder,
+  minica,
   nix-update-script,
 }:
 
 buildGoModule rec {
   pname = "boulder";
-  version = "2025-04-17";
+  version = "0.20251118.0";
 
   src = fetchFromGitHub {
     owner = "letsencrypt";
     repo = "boulder";
-    tag = "release-${version}";
+    tag = "v${version}";
     leaveDotGit = true;
     postFetch = ''
       pushd $out
@@ -22,10 +23,15 @@ buildGoModule rec {
       find $out -name .git -print0 | xargs -0 rm -rf
       popd
     '';
-    hash = "sha256-FXk+JZJ1azpgN6IQ9aYmpUEO1CGs9/3sog1NjrfB4d8=";
+    hash = "sha256-JVkIu8Fh5F8WQXa45I0hnSedAaIQIOFidtWVpVHbAWA=";
   };
 
   vendorHash = null;
+
+  postPatch = ''
+    # We already built the application with custom settings. This fails, so we have to disable it.
+    substituteInPlace test/certs/generate.sh --replace-fail 'make build' ""
+  '';
 
   subPackages = [ "cmd/boulder" ];
 
@@ -40,9 +46,14 @@ buildGoModule rec {
     ldflags+=" -X \"github.com/letsencrypt/boulder/core.BuildTime=$(date -u -d @0)\""
   '';
 
+  nativeCheckInputs = [ minica ];
+
   preCheck = ''
     # Test all targets.
     unset subPackages
+    # Generate integration test certificates, but skip webpki certificates that are hard to make without errors and are currently unneeded.
+    mkdir test/certs/webpki
+    bash test/certs/generate.sh
   '';
 
   # Tests that fail or require additional services.
@@ -58,6 +69,7 @@ buildGoModule rec {
     "TestAddPrecertificateIncomplete"
     "TestAddPrecertificateKeyHash"
     "TestAddPrecertificateNoOCSP"
+    "TestAddRateLimitOverride"
     "TestAddRegistration"
     "TestAddReplacementOrder"
     "TestAddSerial"
@@ -110,6 +122,7 @@ buildGoModule rec {
     "TestEnforceJWSAuthType"
     "TestExactPublicSuffixCertLimit"
     "TestExtractJWK"
+    "TestExtractRequestTarget"
     "TestFQDNSetExists"
     "TestFQDNSetTimestampsForWindow"
     "TestFQDNSets"
@@ -249,6 +262,8 @@ buildGoModule rec {
     "TestRecheckCAAFail"
     "TestRecheckCAAInternalServerError"
     "TestRecheckCAASuccess"
+    "TestRecheckInvalidIdentifierType"
+    "TestRecheckSkipIPAddress"
     "TestRedisSource_BatchSetAndGet"
     "TestRedisSource_Ping"
     "TestRegistrationsPerIPOverrideUsage"

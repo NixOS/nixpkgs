@@ -9,17 +9,17 @@
   writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "lctime";
-  version = "0.0.26";
+  version = "0.0.28";
   pyproject = true;
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "librecell";
     repo = "lctime";
-    tag = version;
-    hash = "sha256-oNmeV8r1dtO2y27jAJnlx4mKGjhzL07ad2yBdOLwgF0=";
+    tag = finalAttrs.version;
+    hash = "sha256-Td56NtqcI8763hw/XVxLP7+qExraapN9ULD3ZolfR6M=";
   };
 
   build-system = with python3Packages; [
@@ -30,13 +30,13 @@ python3Packages.buildPythonApplication rec {
     joblib
     klayout
     liberty-parser
-    matplotlib
     networkx
     numpy
-    pyspice
     scipy
     sympy
   ];
+
+  optional-dependencies.debug = with python3Packages; [ matplotlib ];
 
   nativeCheckInputs = with python3Packages; [
     pytestCheckHook
@@ -76,7 +76,7 @@ python3Packages.buildPythonApplication rec {
         ''
           cd "$HOME"
 
-          cp -R "${src}/tests/"* .
+          cp -R "${finalAttrs.src}/tests/"* .
           patchShebangs *.sh
 
           mkdir -p $out
@@ -93,8 +93,9 @@ python3Packages.buildPythonApplication rec {
       cc-by-sa-40
       cc0
     ];
+    changelog = "https://codeberg.org/librecell/lctime/releases/tag/${finalAttrs.src.tag}";
     maintainers = with lib.maintainers; [ eljamm ];
     teams = with lib.teams; [ ngi ];
     mainProgram = "lctime";
   };
-}
+})

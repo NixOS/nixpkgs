@@ -31,13 +31,13 @@
 assert xarSupport -> libxml2 != null;
 stdenv.mkDerivation (finalAttrs: {
   pname = "libarchive";
-  version = "3.8.2";
+  version = "3.8.4";
 
   src = fetchFromGitHub {
     owner = "libarchive";
     repo = "libarchive";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-s7duwuNFyYq8obTS3qc6JewJ9f8LJhItlEx8wxnMgwk=";
+    hash = "sha256-qNz7BAvi3dTNg6Bz2cfqaYGKFJlM4C+y/GARsQRRYsY=";
   };
 
   outputs = [
@@ -126,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "http://libarchive.org";
     description = "Multi-format archive and compression library";
     longDescription = ''
@@ -136,9 +136,9 @@ stdenv.mkDerivation (finalAttrs: {
       tools that use the libarchive library.
     '';
     changelog = "https://github.com/libarchive/libarchive/releases/tag/v${finalAttrs.version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ jcumming ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ jcumming ];
+    platforms = lib.platforms.all;
     inherit (acl.meta) badPlatforms;
   };
 

@@ -24,7 +24,7 @@ buildGoModule rec {
     homepage = "https://github.com/CrunchyData/postgres-operator";
     changelog = "https://github.com/CrunchyData/postgres-operator/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.bryanasdev000 ];
+    maintainers = [ ];
     mainProgram = "pgo";
   };
 }

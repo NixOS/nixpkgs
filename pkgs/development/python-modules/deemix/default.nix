@@ -8,15 +8,12 @@
   mutagen,
   requests,
   deezer-py,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "deemix";
   version = "3.6.6";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -37,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "deezer" ];
 
-  meta = with lib; {
+  meta = {
     description = "Deezer downloader built from the ashes of Deezloader Remix";
     mainProgram = "deemix";
     homepage = "https://gitlab.com/RemixDev/deemix-py";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ natto1784 ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ natto1784 ];
   };
 }

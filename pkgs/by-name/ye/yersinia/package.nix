@@ -39,23 +39,23 @@ stdenv.mkDerivation {
   autoreconfPhase = "./autogen.sh";
 
   configureFlags = [
-    "--with-pcap-includes=${libpcap}/include"
-    "--with-libnet-includes=${libnet}/include"
+    "--with-pcap-includes=${lib.getDev libpcap}/include"
+    "--with-libnet-includes=${lib.getDev libnet}/include"
   ]
   ++ lib.optional (!enableAdmin) "--disable-admin"
   ++ lib.optional (!withGtk) "--disable-gtk";
 
   makeFlags = [ "LDFLAGS=-lncurses" ];
 
-  meta = with lib; {
+  meta = {
     description = "Framework for layer 2 attacks";
     mainProgram = "yersinia";
     homepage = "https://github.com/tomac/yersinia";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ vdot0x23 ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ vdot0x23 ];
     # INSTALL and FAQ in this package seem a little outdated
     # so not sure, but it could work on openbsd, illumos, and freebsd
     # if you have a machine to test with, feel free to add these
-    platforms = with platforms; linux;
+    platforms = with lib.platforms; linux;
   };
 }

@@ -51,11 +51,11 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails 8 out of 8 tests
 
-  meta = with lib; {
+  meta = {
     description = "Set of symbols and convenience functions for Ayatana indicators";
     homepage = "https://launchpad.net/libindicator";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.msteen ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.msteen ];
   };
 }

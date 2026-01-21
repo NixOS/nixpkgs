@@ -7,7 +7,7 @@
 python3Packages.buildPythonPackage {
   pname = "gladtex";
   version = "unstable-2023-01-22";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "humenda";
@@ -20,12 +20,12 @@ python3Packages.buildPythonPackage {
     setuptools
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Embed LaTeX formulas into HTML documents as SVG images";
     mainProgram = "gladtex";
     homepage = "https://humenda.github.io/GladTeX";
-    license = licenses.lgpl3Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ pentane ];
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ pentane ];
   };
 }

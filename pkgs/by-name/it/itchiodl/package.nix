@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-XuNkqTAT9LlSwruchGQbombAKHZvKhpnqLfvJdDcrj0=";
   };
 
-  format = "pyproject";
+  pyproject = true;
 
   nativeBuildInputs = with python3Packages; [
     poetry-core
@@ -27,10 +27,10 @@ python3Packages.buildPythonApplication rec {
     requests
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Emersont1/itchio";
     description = "itch.io download tool";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fgaz ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fgaz ];
   };
 }

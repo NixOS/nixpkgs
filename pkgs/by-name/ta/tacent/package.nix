@@ -3,23 +3,27 @@
   fetchFromGitHub,
   lib,
   ninja,
+  libx11,
+  libxcb,
   stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tacent";
-  version = "0.8.18";
+  version = "0.8.18-unstable-2025-10-12";
 
   src = fetchFromGitHub {
     owner = "bluescan";
     repo = "tacent";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-z8VuJS8OaVw5CeO/udvBEmcURKIy1oWVYUv6Ai8lTI8=";
+    rev = "13e08f388681e31a64b6d55c5a4667b7554e3e96";
+    hash = "sha256-zePiqdjS5y9OPpZfMiXjlV3vKjO/YN1xs7fQuNGjQMc=";
   };
 
   nativeBuildInputs = [
     cmake
     ninja
+    libx11
+    libxcb
   ];
 
   meta = {

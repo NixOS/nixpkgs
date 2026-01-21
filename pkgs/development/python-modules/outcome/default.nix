@@ -31,6 +31,5 @@ buildPythonPackage rec {
       mit
       asl20
     ];
-    maintainers = with lib.maintainers; [ catern ];
   };
 }

@@ -23,7 +23,6 @@ in
         enable = true;
         settings = {
           stream = {
-            port = port;
             source = [
               "pipe:///run/snapserver/mpd?name=mpd&mode=create"
               "pipe:///run/snapserver/bluetooth?name=bluetooth"
@@ -32,7 +31,11 @@ in
             ];
             buffer = bufferSize;
           };
-          tcp = {
+          tcp-streaming = {
+            enabled = true;
+            port = port;
+          };
+          tcp-control = {
             enabled = true;
             port = tcpPort;
           };
@@ -76,6 +79,8 @@ in
         )
 
     with subtest("test a ipv6 connection"):
+        # URI scheme does not support IPv6 literals
+        # https://github.com/snapcast/snapcast/issues/1472
         server.execute("systemd-run --unit=snapcast-local-client snapclient -h ::1 -p ${toString port}")
         server.wait_until_succeeds(
             "journalctl -o cat -u snapserver.service | grep -q 'Hello from'"
@@ -83,7 +88,7 @@ in
         server.wait_until_succeeds("journalctl -o cat -u snapcast-local-client | grep -q 'buffer: ${toString bufferSize}'")
 
     with subtest("test a connection"):
-        client.execute("systemd-run --unit=snapcast-client snapclient -h server -p ${toString port}")
+        client.execute("systemd-run --unit=snapcast-client snapclient 'tcp://server:${toString port}'")
         server.wait_until_succeeds(
             "journalctl -o cat -u snapserver.service | grep -q 'Hello from'"
         )

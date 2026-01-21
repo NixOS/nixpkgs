@@ -19,11 +19,11 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Like jq, but for HTML";
     homepage = "https://github.com/mgdm/htmlq";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       siraben
       nerdypepper
     ];

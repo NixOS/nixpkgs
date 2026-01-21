@@ -8,7 +8,6 @@
   pkg-config,
   perl,
   texinfo,
-  texinfo6,
   nasm,
 
   # You can fetch any upstream version using this derivation by specifying version and hash
@@ -226,10 +225,10 @@
     || buildSwscale,
   # Documentation options
   withDocumentation ? withHtmlDoc || withManPages || withPodDoc || withTxtDoc,
-  withHtmlDoc ? withHeadlessDeps, # HTML documentation pages
-  withManPages ? withHeadlessDeps, # Man documentation pages
-  withPodDoc ? withHeadlessDeps, # POD documentation pages
-  withTxtDoc ? withHeadlessDeps, # Text documentation pages
+  withHtmlDoc ? withHeadlessDeps && lib.versionAtLeast version "6", # HTML documentation pages
+  withManPages ? withHeadlessDeps && lib.versionAtLeast version "6", # Man documentation pages
+  withPodDoc ? withHeadlessDeps && lib.versionAtLeast version "6", # POD documentation pages
+  withTxtDoc ? withHeadlessDeps && lib.versionAtLeast version "6", # Text documentation pages
   # Whether a "doc" output will be produced. Note that withManPages does not produce
   # a "doc" output because its files go to "man".
   withDoc ? withDocumentation && (withHtmlDoc || withPodDoc || withTxtDoc),
@@ -826,7 +825,7 @@ stdenv.mkDerivation (
     ]
     ++ optionals stdenv.hostPlatform.isx86 [ nasm ]
     # Texinfo version 7.1 introduced breaking changes, which older versions of ffmpeg do not handle.
-    ++ (if versionOlder version "5" then [ texinfo6 ] else [ texinfo ])
+    ++ optionals (lib.versionAtLeast version "6") [ texinfo ]
     ++ optionals withCudaLLVM [ clang ]
     ++ optionals withCudaNVCC [ cuda_nvcc ];
 
@@ -1037,7 +1036,7 @@ stdenv.mkDerivation (
 
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-    meta = with lib; {
+    meta = {
       description = "Complete, cross-platform solution to record, convert and stream audio and video";
       homepage = "https://www.ffmpeg.org/";
       changelog = "https://github.com/FFmpeg/FFmpeg/blob/n${version}/Changelog";
@@ -1049,7 +1048,7 @@ stdenv.mkDerivation (
         a corporation.
       '';
       license =
-        with licenses;
+        with lib.licenses;
         [ lgpl21Plus ]
         ++ optional withGPL gpl2Plus
         ++ optional withVersion3 lgpl3Plus
@@ -1067,10 +1066,10 @@ stdenv.mkDerivation (
         ++ optional buildPostproc "libpostproc"
         ++ optional buildSwresample "libswresample"
         ++ optional buildSwscale "libswscale";
-      platforms = platforms.all;
+      platforms = lib.platforms.all;
       # See https://github.com/NixOS/nixpkgs/pull/295344#issuecomment-1992263658
       broken = stdenv.hostPlatform.isMinGW && stdenv.hostPlatform.is64bit;
-      maintainers = with maintainers; [
+      maintainers = with lib.maintainers; [
         atemu
         jopejoe1
         emily

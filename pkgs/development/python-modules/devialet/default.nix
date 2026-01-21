@@ -4,7 +4,6 @@
   async-upnp-client,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "devialet";
   version = "1.5.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "fwestenberg";
@@ -34,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "devialet" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to interact with the Devialet API";
     homepage = "https://github.com/fwestenberg/devialet";
     changelog = "https://github.com/fwestenberg/devialet/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

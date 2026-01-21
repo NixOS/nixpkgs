@@ -20,7 +20,6 @@
   libpng,
   libunwind,
   libva-minimal,
-  libvdpau,
   llvmPackages,
   lm_sensors,
   meson,
@@ -51,6 +50,7 @@
     "asahi" # Apple AGX
     "crocus" # Intel legacy
     "d3d12" # WSL emulated GPU (aka Dozen)
+    "ethosu" # ARM Ethos NPU
     "etnaviv" # Vivante GPU designs (mostly NXP/Marvell SoCs)
     "freedreno" # Qualcomm Adreno (all Qualcomm SoCs)
     "i915" # Intel extra legacy
@@ -62,6 +62,7 @@
     "r300" # very old AMD
     "r600" # less old AMD
     "radeonsi" # new AMD (GCN+)
+    "rocket" # Rockchip NPU
     "softpipe" # older software renderer
     "svga" # VMWare virtualized GPU
     "tegra" # Nvidia Tegra SoCs
@@ -69,10 +70,6 @@
     "vc4" # Broadcom VC4 (Raspberry Pi 0-3)
     "virgl" # QEMU virtualized GPU (aka VirGL)
     "zink" # generic OpenGL over Vulkan, experimental
-  ]
-  ++ lib.optionals stdenv.hostPlatform.is64bit [
-    "ethosu" # ARM Ethos NPU, does not build on 32-bit
-    "rocket" # Rockchip NPU, probably horribly broken on 32-bit
   ],
   vulkanDrivers ? [
     "amd" # AMD (aka RADV)
@@ -150,6 +147,7 @@ stdenv.mkDerivation {
 
   patches = [
     ./opencl.patch
+    ./musl.patch
   ];
 
   postPatch = ''
@@ -216,6 +214,10 @@ stdenv.mkDerivation {
     # is ignored when freedreno is not being built.
     (lib.mesonOption "freedreno-kmds" "msm,kgsl,virtio,wsl")
 
+    # Enable virtio-gpu kernel mode driver (native context) support for amdgpu as well.
+    # This option is ignored when RadeonSI/RADV are not being built.
+    (lib.mesonBool "amdgpu-virtio" true)
+
     # Required for OpenCL
     (lib.mesonOption "clang-libdir" "${lib.getLib llvmPackages.clang-unwrapped}/lib")
 
@@ -267,7 +269,6 @@ stdenv.mkDerivation {
       libpng
       libunwind
       libva-minimal
-      libvdpau
       libX11
       libxcb
       libXext

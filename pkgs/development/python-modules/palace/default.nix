@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromSourcehut,
-  pythonOlder,
   cmake,
   cython_0,
   setuptools,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "palace";
   version = "0.2.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromSourcehut {
     owner = "~cnx";
@@ -44,10 +41,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "palace" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pythonic Audio Library and Codecs Environment";
     homepage = "https://mcsinyx.gitlab.io/palace";
-    license = licenses.lgpl3Plus;
-    maintainers = [ maintainers.McSinyx ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = [ lib.maintainers.McSinyx ];
   };
 }

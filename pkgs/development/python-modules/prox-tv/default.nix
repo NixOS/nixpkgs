@@ -43,10 +43,10 @@ buildPythonPackage {
 
   disabledTests = [ "test_tvp_1d" ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_tv2_1d" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/albarji/proxTV";
     description = "Toolbox for fast Total Variation proximity operators";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ multun ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ multun ];
   };
 }

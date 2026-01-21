@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     install -Dm644 ${icon} $out/share/icons/hicolor/128x128/apps/imagej.png
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://imagej.nih.gov/ij/";
     description = "Image processing and analysis in Java";
     longDescription = ''
@@ -83,10 +83,10 @@ stdenv.mkDerivation rec {
       inspired by NIH Image for the Macintosh.
       It runs on any computer with a Java 1.4 or later virtual machine.
     '';
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.publicDomain;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ yuriaisaka ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.publicDomain;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ yuriaisaka ];
     mainProgram = "imagej";
   };
 }

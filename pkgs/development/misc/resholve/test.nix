@@ -25,6 +25,7 @@
   rlwrap,
   gnutar,
   bc,
+  systemd,
   # override testing
   esh,
   getconf,
@@ -33,7 +34,6 @@
   mount,
   ncurses,
   nixos-install-tools,
-  nixos-rebuild,
   procps,
   ps,
   # known consumers
@@ -49,7 +49,6 @@
   nix-direnv,
   pdf2odt,
   pdfmm,
-  rancid,
   s0ix-selftest-tool,
   unix-privesc-check,
   wgnord,
@@ -77,6 +76,9 @@ let
     gnutar
     bc
     msmtp
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    systemd
   ];
 in
 rec {
@@ -158,6 +160,9 @@ rec {
         inputs = [ ];
       };
     };
+    postResholve = ''
+      echo "not a load-bearing test, just prove we exist"
+    '';
   };
   # demonstrate that we could use resholve in larger build
   module3 = stdenv.mkDerivation {
@@ -219,6 +224,8 @@ rec {
     INTERP = "${bash}/bin/bash";
 
     checkPhase = ''
+      echo removing parse tests matching no${stdenv.buildPlatform.uname.system}
+      rm tests/parse_*no${stdenv.buildPlatform.uname.system}.sh || true # ok if none exist
       patchShebangs .
       mkdir empty_lore
       touch empty_lore/{execers,wrappers}
@@ -288,7 +295,6 @@ rec {
         ]
         ++ lib.optionals stdenv.hostPlatform.isLinux [
           nixos-install-tools
-          nixos-rebuild
         ];
         interpreter = "none";
         execer = [
@@ -315,7 +321,6 @@ rec {
         ''
         + lib.optionalString stdenv.hostPlatform.isLinux ''
           nixos-generate-config fake args
-          nixos-rebuild fake args
         ''
       );
 
@@ -338,7 +343,6 @@ rec {
 // lib.optionalAttrs stdenv.hostPlatform.isLinux {
   inherit arch-install-scripts;
   inherit dgoss;
-  inherit rancid;
   inherit unix-privesc-check;
   inherit wgnord;
   inherit wsl-vpnkit;

@@ -7,7 +7,6 @@
   numpy,
   peft,
   protobuf,
-  pythonOlder,
   requests,
   six,
   toml,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "stanza";
   version = "1.11.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "stanfordnlp";
@@ -49,11 +46,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "stanza" ];
 
-  meta = with lib; {
+  meta = {
     description = "Official Stanford NLP Python Library for Many Human Languages";
     homepage = "https://github.com/stanfordnlp/stanza/";
     changelog = "https://github.com/stanfordnlp/stanza/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ riotbib ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ riotbib ];
   };
 }

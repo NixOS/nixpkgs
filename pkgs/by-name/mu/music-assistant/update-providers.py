@@ -123,7 +123,9 @@ async def get_provider_manifests(version: str = "master") -> List:
         basedir = Path(os.path.join(tmp, f"server-{version}"))
         sys.path.append(str(basedir))
 
-        for fn in basedir.glob("**/manifest.json"):
+        for fn in basedir.glob("**/providers/*/manifest.json"):
+            if "_demo_" in str(fn):
+                continue
             try:
                 manifests.append(await ProviderManifest.parse(str(fn)))
             except MissingField as ex:

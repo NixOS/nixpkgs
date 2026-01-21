@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pyqt5,
   pytestCheckHook,
-  pythonOlder,
   qtpy,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "qtawesome";
   version = "1.4.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "spyder-ide";
@@ -34,13 +31,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qtawesome" ];
 
-  meta = with lib; {
+  meta = {
     description = "Iconic fonts in PyQt and PySide applications";
     mainProgram = "qta-browser";
     homepage = "https://github.com/spyder-ide/qtawesome";
     changelog = "https://github.com/spyder-ide/qtawesome/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.linux; # fails on Darwin
+    platforms = lib.platforms.linux; # fails on Darwin
   };
 }

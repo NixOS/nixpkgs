@@ -4,21 +4,19 @@
   fetchurl,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "either";
   version = "1.0.0";
 
   src = fetchurl {
-    url = "https://github.com/mirage/either/releases/download/${version}/either-${version}.tbz";
-    sha256 = "bf674de3312dee7b7215f07df1e8a96eb3d679164b8a918cdd95b8d97e505884";
+    url = "https://github.com/mirage/either/releases/download/${finalAttrs.version}/either-${finalAttrs.version}.tbz";
+    hash = "sha256-v2dN4zEt7ntyFfB98eipbrPWeRZLipGM3ZW42X5QWIQ=";
   };
 
-  useDune2 = true;
-
-  meta = with lib; {
+  meta = {
     description = "Compatibility Either module";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/mirage/either";
-    maintainers = [ maintainers.sternenseemann ];
+    maintainers = [ lib.maintainers.sternenseemann ];
   };
-}
+})

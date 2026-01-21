@@ -134,11 +134,11 @@ stdenv.mkDerivation rec {
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Linux port of FAR Manager v2, a program for managing files and archives in Windows operating systems";
     homepage = "https://github.com/elfmz/far2l";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ hypersw ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ hypersw ];
+    platforms = lib.platforms.unix;
   };
 }

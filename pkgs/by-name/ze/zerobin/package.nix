@@ -17,8 +17,6 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1dfy3h823ylz4w2vv3mrmnmiyvf6rvyvsp4j3llr074w9id0zy16";
   };
 
-  disabled = python3Packages.pythonOlder "3.7";
-
   nativeBuildInputs = [
     python3Packages.doit
     python3Packages.pyscss
@@ -60,12 +58,12 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "zerobin" ];
 
-  meta = with lib; {
+  meta = {
     description = "Client side encrypted pastebin";
     homepage = "https://github.com/Tygs/0bin";
     changelog = "https://github.com/Tygs/0bin/releases/tag/v${version}";
-    license = licenses.wtfpl;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ julm ];
+    license = lib.licenses.wtfpl;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ julm ];
   };
 }

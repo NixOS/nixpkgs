@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to generate a 3D scene data clipped with an arbitrary plane";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     homepage = "https://geant4.kek.jp/~tanaka/DAWN/About_DAWNCUT.html";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ veprbl ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

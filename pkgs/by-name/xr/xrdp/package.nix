@@ -204,15 +204,15 @@ let
       };
     };
 
-    meta = with lib; {
+    meta = {
       description = "Open source RDP server";
       homepage = "https://github.com/neutrinolabs/xrdp";
-      license = licenses.asl20;
-      maintainers = with maintainers; [
+      license = lib.licenses.asl20;
+      maintainers = with lib.maintainers; [
         chvp
         lucasew
       ];
-      platforms = platforms.linux;
+      platforms = lib.platforms.linux;
     };
   };
 in

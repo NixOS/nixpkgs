@@ -35,12 +35,12 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Nice fetching program written in sh";
     homepage = "https://github.com/jobcmax/maxfetch";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "maxfetch";
-    maintainers = with maintainers; [ jtbx ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ jtbx ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -33,10 +33,10 @@ buildPecl rec {
     zlib
   ];
 
-  meta = with lib; {
+  meta = {
     description = "PHP extension for interfacing with memcached via libmemcached library";
-    license = licenses.php301;
+    license = lib.licenses.php301;
     homepage = "https://github.com/php-memcached-dev/php-memcached";
-    teams = [ teams.php ];
+    teams = [ lib.teams.php ];
   };
 }

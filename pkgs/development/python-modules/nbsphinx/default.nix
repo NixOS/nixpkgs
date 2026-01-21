@@ -10,15 +10,12 @@
   nbformat,
   sphinx,
   traitlets,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "nbsphinx";
   version = "0.9.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -49,11 +46,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nbsphinx" ];
 
-  meta = with lib; {
+  meta = {
     description = "Jupyter Notebook Tools for Sphinx";
     homepage = "https://nbsphinx.readthedocs.io/";
     changelog = "https://github.com/spatialaudio/nbsphinx/blob/${version}/NEWS.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libgrapheme";
-  version = "2.0.2";
+  version = "3.0.0";
 
   src = fetchurl {
     url = "https://dl.suckless.org/libgrapheme/libgrapheme-${version}.tar.gz";
-    hash = "sha256-pou93edr1Vul1kEWzl5CoT3wRcgcCFLemrYIlqoUMSU=";
+    hash = "sha256-Mlha9z3aYvvMD+0U8ZmqG8mIrQHa0L+9Bs8XXZzz1ow=";
   };
 
   postPatch = ''
@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
     "LDCONFIG="
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Unicode string library";
     homepage = "https://libs.suckless.org/libgrapheme/";
-    license = licenses.isc;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ sikmir ];
+    license = lib.licenses.isc;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ sikmir ];
   };
 }

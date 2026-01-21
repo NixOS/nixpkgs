@@ -65,7 +65,6 @@ stdenv.mkDerivation {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       lovek323
-      manveru
     ];
   };
 }

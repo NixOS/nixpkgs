@@ -35,11 +35,11 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Decrypt EJSON secrets and export them as environment variables";
     homepage = "https://github.com/Shopify/ejson2env";
-    maintainers = with maintainers; [ viraptor ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ viraptor ];
+    license = lib.licenses.mit;
     mainProgram = "ejson2env";
   };
 }

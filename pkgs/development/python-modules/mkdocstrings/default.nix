@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  importlib-metadata,
   jinja2,
   markdown,
   markupsafe,
@@ -11,20 +10,19 @@
   pdm-backend,
   pymdown-extensions,
   pytestCheckHook,
-  pythonOlder,
   dirty-equals,
 }:
 
 buildPythonPackage rec {
   pname = "mkdocstrings";
-  version = "0.30.1";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mkdocstrings";
     repo = "mkdocstrings";
     tag = version;
-    hash = "sha256-BfqxL35prq+pvD21w0BOJx/ls8og+LjtGdOAZlHYGVE=";
+    hash = "sha256-PQ8TL/eMYNX0gXvWhq/Rop2bv1oCoO7o3dxlCK9tbGE=";
   };
 
   postPatch = ''
@@ -41,9 +39,6 @@ buildPythonPackage rec {
     mkdocs
     mkdocs-autorefs
     pymdown-extensions
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
   ];
 
   nativeCheckInputs = [

@@ -3,7 +3,6 @@
   fetchPypi,
   buildPythonPackage,
   stdenv,
-  pythonOlder,
   rustPlatform,
   bitstring,
   cachetools,
@@ -23,7 +22,6 @@ buildPythonPackage rec {
   pname = "sourmash";
   version = "4.9.4";
   pyproject = true;
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
@@ -69,12 +67,12 @@ buildPythonPackage rec {
     "test_metagenome_kreport_out_fail"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Quickly search, compare, and analyze genomic and metagenomic data sets";
     mainProgram = "sourmash";
     homepage = "https://sourmash.bio";
     changelog = "https://github.com/sourmash-bio/sourmash/releases/tag/v${version}";
-    maintainers = with maintainers; [ luizirber ];
-    license = licenses.bsd3;
+    maintainers = with lib.maintainers; [ luizirber ];
+    license = lib.licenses.bsd3;
   };
 }

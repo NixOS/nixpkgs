@@ -17,10 +17,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-h6tDAcWOS1MikPMXiH0eQzkQIqVEC8rSsWbufGsh1CI=";
 
-  meta = with lib; {
+  meta = {
     description = "Small tool to display Znodes in Zookeeper in tree structure";
     homepage = "https://github.com/alirezameskin/zktree";
-    license = licenses.unlicense;
+    license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ alirezameskin ];
     mainProgram = "zktree";
   };

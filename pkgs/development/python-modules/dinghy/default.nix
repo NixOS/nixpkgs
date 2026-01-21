@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   aiofiles,
   aiohttp,
   backports-datetime-fromisoformat,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "dinghy";
   version = "1.4.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "nedbat";
@@ -52,13 +49,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dinghy.cli" ];
 
-  meta = with lib; {
+  meta = {
     description = "GitHub activity digest tool";
     mainProgram = "dinghy";
     homepage = "https://github.com/nedbat/dinghy";
     changelog = "https://github.com/nedbat/dinghy/blob/${src.tag}/CHANGELOG.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       trundle
       veehaitch
     ];

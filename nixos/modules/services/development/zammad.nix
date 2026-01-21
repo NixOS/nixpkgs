@@ -32,7 +32,6 @@ let
   };
 in
 {
-
   options = {
     services.zammad = {
       enable = lib.mkEnableOption "Zammad, a web-based, open source user support/ticketing solution";
@@ -68,12 +67,6 @@ in
         default = "127.0.0.1";
         example = "192.168.23.42";
         description = "Host address.";
-      };
-
-      openPorts = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Whether to open firewall ports for Zammad";
       };
 
       port = lib.mkOption {
@@ -177,6 +170,19 @@ in
         };
       };
 
+      nginx = {
+        configure = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "Whether to configure a local nginx for Zammad.";
+        };
+
+        domain = lib.mkOption {
+          type = lib.types.str;
+          description = "The domain under which zammad will be reachable.";
+        };
+      };
+
       secretKeyBaseFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         default = null;
@@ -203,7 +209,32 @@ in
     };
   };
 
+  imports = [
+    (lib.mkRemovedOptionModule [
+      "services"
+      "zammad"
+      "openPorts"
+    ] "The openPorts option was removed in favor of the nginx.configure option.")
+  ];
+
   config = lib.mkIf cfg.enable {
+    environment.systemPackages = [
+      # we try to eumulate parts of the pkgr script that are relevant to NixOS
+      (pkgs.writeShellScriptBin "zammad" ''
+        if [[ ''${1:-} != run ]]; then
+          echo "This script only supports the run subcommand".
+          exit 1
+        fi
+        shift
+
+        prog="$1"
+        shift
+        sudo -u ${cfg.user} -- env ${
+          lib.concatMapAttrsStringSep " " (n: v: "${n}=${v}") environment
+        } bash -c "cd ${cfg.package}; ${cfg.package}/bin/$prog $(printf " %q" "$@")"
+      '')
+    ];
+
     services.zammad.database.settings = {
       production = lib.mapAttrs (_: v: lib.mkDefault v) (filterNull {
         adapter = "postgresql";
@@ -216,11 +247,6 @@ in
         port = cfg.database.port;
       });
     };
-
-    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openPorts [
-      config.services.zammad.port
-      config.services.zammad.websocketPort
-    ];
 
     users.users.${cfg.user} = {
       group = "${cfg.group}";
@@ -245,21 +271,56 @@ in
       }
     ];
 
-    services.postgresql = lib.optionalAttrs (cfg.database.createLocally) {
-      enable = true;
-      ensureDatabases = [ cfg.database.name ];
-      ensureUsers = [
-        {
-          name = cfg.database.user;
-          ensureDBOwnership = true;
-        }
-      ];
-    };
-
-    services.redis = lib.optionalAttrs cfg.redis.createLocally {
-      servers."${cfg.redis.name}" = {
+    services = {
+      nginx = lib.mkIf cfg.nginx.configure {
         enable = true;
-        port = cfg.redis.port;
+        virtualHosts."${cfg.nginx.domain}" = {
+          forceSSL = true;
+          locations = {
+            "/" = {
+              proxyPass = "http://127.0.0.1:${toString config.services.zammad.port}";
+              root = "${config.services.zammad.package}/public/";
+              extraConfig = # nginx
+                ''
+                  proxy_set_header CLIENT_IP $remote_addr;
+                '';
+            };
+            "/cable" = {
+              proxyPass = "http://127.0.0.1:${toString config.services.zammad.port}";
+              proxyWebsockets = true;
+              extraConfig = # nginx
+                ''
+                  proxy_set_header CLIENT_IP $remote_addr;
+                '';
+            };
+            "/ws" = {
+              proxyPass = "http://127.0.0.1:${toString config.services.zammad.websocketPort}";
+              proxyWebsockets = true;
+              extraConfig = # nginx
+                ''
+                  proxy_set_header CLIENT_IP $remote_addr;
+                '';
+            };
+          };
+        };
+      };
+
+      postgresql = lib.optionalAttrs cfg.database.createLocally {
+        enable = true;
+        ensureDatabases = [ cfg.database.name ];
+        ensureUsers = [
+          {
+            name = cfg.database.user;
+            ensureDBOwnership = true;
+          }
+        ];
+      };
+
+      redis = lib.optionalAttrs cfg.redis.createLocally {
+        servers."${cfg.redis.name}" = {
+          enable = true;
+          port = cfg.redis.port;
+        };
       };
     };
 
@@ -273,13 +334,13 @@ in
         "network.target"
         "systemd-tmpfiles-setup.service"
       ]
-      ++ lib.optionals (cfg.database.createLocally) [
+      ++ lib.optionals cfg.database.createLocally [
         "postgresql.target"
       ]
       ++ lib.optionals cfg.redis.createLocally [
         "redis-${cfg.redis.name}.service"
       ];
-      requires = lib.optionals (cfg.database.createLocally) [
+      requires = lib.optionals cfg.database.createLocally [
         "postgresql.target"
       ];
       description = "Zammad web";
@@ -307,7 +368,7 @@ in
         # cleanup state directory from module before refactoring in
         # https://github.com/NixOS/nixpkgs/pull/277456
         if [[ -e ${cfg.dataDir}/node_modules ]]; then
-          rm -rf ${cfg.dataDir}/!("tmp"|"config"|"log"|"state_dir_migrated"|"db_seeded")
+          rm -rf ${cfg.dataDir}/!("tmp"|"config"|"log"|"state_dir_migrated"|"db_seeded"|"storage")
           rm -rf ${cfg.dataDir}/config/!("database.yml"|"secrets.yml")
           # state directory cleanup required --> zammad was already installed --> do not seed db
           echo true > ${cfg.dataDir}/db_seeded
@@ -331,8 +392,9 @@ in
     systemd.tmpfiles.rules = [
       "d ${cfg.dataDir}                               0750 ${cfg.user} ${cfg.group} - -"
       "d ${cfg.dataDir}/config                        0750 ${cfg.user} ${cfg.group} - -"
-      "d ${cfg.dataDir}/tmp                           0750 ${cfg.user} ${cfg.group} - -"
       "d ${cfg.dataDir}/log                           0750 ${cfg.user} ${cfg.group} - -"
+      "d ${cfg.dataDir}/storage                       0750 ${cfg.user} ${cfg.group} - -"
+      "d ${cfg.dataDir}/tmp                           0750 ${cfg.user} ${cfg.group} - -"
       "f ${cfg.dataDir}/config/secrets.yml            0640 ${cfg.user} ${cfg.group} - -"
       "f ${cfg.dataDir}/config/database.yml           0640 ${cfg.user} ${cfg.group} - -"
       "f ${cfg.dataDir}/db_seeded                     0640 ${cfg.user} ${cfg.group} - -"

@@ -9,10 +9,10 @@ grafanaPlugin {
     x86_64-darwin = "sha256-7gGw/RCuzHmj/vaIAweXLPqQYAl0EMSXXjPCtjRC4vU=";
     aarch64-darwin = "sha256-i2/lE7QickowFSvHoo7CuaZ1ChFVpsQgZjvuBTQapq4=";
   };
-  meta = with lib; {
+  meta = {
     description = "Visualize streaming MQTT data from within Grafana";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ nagisa ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ nagisa ];
+    platforms = lib.platforms.unix;
   };
 }

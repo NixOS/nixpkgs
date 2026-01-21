@@ -39,6 +39,12 @@ buildPythonPackage rec {
       --replace-fail "speed < 0.5" "speed < 1" \
       --replace-fail "speed < 1" "speed < 20" \
       --replace-fail "speed < 2" "speed < 20"
+  ''
+  # Fix jax 0.8.2 compat
+  # Fix submitted upstream: https://github.com/patrick-kidger/equinox/pull/1162
+  + ''
+    substituteInPlace equinox/_ad.py equinox/internal/_primitive.py \
+      --replace-fail "jax.core.get_aval(" "jax.typeof("
   '';
 
   build-system = [ hatchling ];
@@ -55,6 +61,11 @@ buildPythonPackage rec {
     optax
     pytest-xdist
     pytestCheckHook
+  ];
+
+  pytestFlags = [
+    # DeprecationWarning: The default axis_types will change in JAX v0.9.0 to jax.sharding.AxisType.Explicit.
+    "-Wignore::DeprecationWarning"
   ];
 
   disabledTests = [

@@ -32,11 +32,11 @@ stdenvNoCC.mkDerivation rec {
     cp -dr --no-preserve='ownership' Numix-Cursor{,-Light} $out/share/icons/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Numix cursor theme";
     homepage = "https://numixproject.github.io";
-    license = licenses.gpl3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ offline ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ offline ];
   };
 }

@@ -24,14 +24,14 @@ let
   platformSources =
     sources.${stdenvNoCC.system} or (throw "unsupported platform ${stdenvNoCC.system}");
 
-  sharedMeta = with lib; {
+  sharedMeta = {
     description = "CLI tool for managing Nordic Semiconductor devices";
     homepage = "https://www.nordicsemi.com/Products/Development-tools/nRF-Util";
     changelog = "https://docs.nordicsemi.com/bundle/nrfutil/page/guides/revision_history.html";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     platforms = lib.attrNames sources;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       h7x4
       ezrizhu
     ];
@@ -81,7 +81,6 @@ let
           nativeInstallCheckInputs = [
             versionCheckHook
           ];
-          versionCheckProgramArg = "--version";
 
           meta = sharedMeta // {
             mainProgram = name;
@@ -115,6 +114,7 @@ symlinkJoin {
           ''--prefix PATH : "$out/bin"''
           ''--prefix PATH : "$out"/lib/nrfutil-npm''
           ''--prefix PATH : "$out"/lib/nrfutil-nrf5sdk-tools''
+          ''--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libusb1 ]}''
           ''--set NRF_JLINK_DLL_PATH '${segger-jlink-headless}'/lib/libjlinkarm.so''
           ''--set NRFUTIL_BLE_SNIFFER_SHIM_BIN_ENV "$out"/lib/nrfutil-ble-sniffer/wireshark-shim''
           ''--set NRFUTIL_BLE_SNIFFER_HCI_SHIM_BIN_ENV "$out"/lib/nrfutil-ble-sniffer/wireshark-hci-shim''

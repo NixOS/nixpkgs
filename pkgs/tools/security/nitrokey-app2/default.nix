@@ -22,14 +22,14 @@ in
 
 buildPythonApplication rec {
   pname = "nitrokey-app2";
-  version = "2.4.1";
+  version = "2.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Nitrokey";
     repo = "nitrokey-app2";
     tag = "v${version}";
-    hash = "sha256-nzhhtnKKOHA+Cw1y+BpYsyQklzkDnmFRKGIfaJ/dmaQ=";
+    hash = "sha256-mwcYjkyEP2itwdQ/xAG50uvw6zHfUacAecbDh86GNGA=";
   };
 
   nativeBuildInputs = [
@@ -72,12 +72,12 @@ buildPythonApplication rec {
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "This application allows to manage Nitrokey 3 devices";
     homepage = "https://github.com/Nitrokey/nitrokey-app2";
     changelog = "https://github.com/Nitrokey/nitrokey-app2/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       _999eagle
       panicgh
     ];

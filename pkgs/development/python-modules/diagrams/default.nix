@@ -9,7 +9,6 @@
   jinja2,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   round,
 }:
 
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "diagrams";
   version = "0.24.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "mingrammer";
@@ -61,11 +58,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "diagrams" ];
 
-  meta = with lib; {
+  meta = {
     description = "Diagram as Code";
     homepage = "https://diagrams.mingrammer.com/";
     changelog = "https://github.com/mingrammer/diagrams/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ addict3d ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ addict3d ];
   };
 }

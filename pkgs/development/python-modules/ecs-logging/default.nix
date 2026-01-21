@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   flit-core,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "ecs-logging";
   version = "2.2.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "elastic";
@@ -27,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ecs_logging" ];
 
-  meta = with lib; {
+  meta = {
     description = "Logging formatters for the Elastic Common Schema (ECS) in Python";
     homepage = "https://github.com/elastic/ecs-logging-python";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

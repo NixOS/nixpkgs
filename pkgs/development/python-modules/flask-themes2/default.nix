@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   setuptools,
   flask,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "flask-themes2";
   version = "1.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "Flask-Themes2";
@@ -27,10 +24,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Easily theme your Flask app";
     homepage = "https://github.com/sysr-q/flask-themes2";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ruby0b ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ruby0b ];
   };
 }

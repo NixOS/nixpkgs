@@ -45,6 +45,8 @@ let
     xauth_cmd = lib.optionalString xcfg.enable "${pkgs.xorg.xauth}/bin/xauth";
     x_cmd = lib.optionalString xcfg.enable xserverWrapper;
     setup_cmd = dmcfg.sessionData.wrapper;
+    brightness_up_cmd = "${lib.getExe pkgs.brightnessctl} -q -n s +10%";
+    brightness_down_cmd = "${lib.getExe pkgs.brightnessctl} -q -n s 10%-";
   };
 
   finalConfig = defaultConfig // cfg.settings;

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   poetry-core,
@@ -19,9 +18,7 @@
 buildPythonPackage rec {
   pname = "peewee-migrate";
   version = "1.13.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "klen";
@@ -53,10 +50,10 @@ buildPythonPackage rec {
     "test_migrator"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple migration engine for Peewee";
     homepage = "https://github.com/klen/peewee_migrate";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

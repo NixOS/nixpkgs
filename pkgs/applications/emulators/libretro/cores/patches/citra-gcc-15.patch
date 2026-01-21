@@ -1,0 +1,13 @@
+Submodule externals/glslang contains modified content
+diff --git a/externals/glslang/SPIRV/SpvBuilder.h b/externals/glslang/SPIRV/SpvBuilder.h
+index 02e9cf40..40efd59c 100644
+--- a/externals/glslang/SPIRV/SpvBuilder.h
++++ b/externals/glslang/SPIRV/SpvBuilder.h
+@@ -56,6 +56,7 @@ namespace spv {
+ }
+ 
+ #include <algorithm>
++#include <cstdint>
+ #include <map>
+ #include <memory>
+ #include <set>

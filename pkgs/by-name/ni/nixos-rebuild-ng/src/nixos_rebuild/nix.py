@@ -37,6 +37,8 @@ SWITCH_TO_CONFIGURATION_CMD_PREFIX: Final = [
     "LOCALE_ARCHIVE",
     "-E",
     "NIXOS_INSTALL_BOOTLOADER",
+    "-E",
+    "NIXOS_NO_CHECK",
     "--collect",
     "--no-ask-password",
     "--pipe",
@@ -380,6 +382,9 @@ def get_nixpkgs_rev(nixpkgs_path: Path | None) -> str | None:
 
     Can be used to generate `.version-suffix` file."""
     if not nixpkgs_path:
+        return None
+
+    if not (nixpkgs_path / ".git").exists():
         return None
 
     try:

@@ -577,6 +577,26 @@ builtins.intersectAttrs super {
   # Disable tests because they require a running dbus session
   xmonad-dbus = dontCheck super.xmonad-dbus;
 
+  taffybar = lib.pipe super.taffybar [
+    (overrideCabal (drv: {
+      testDepends =
+        drv.testDepends or [ ]
+        ++ map lib.getBin [
+          pkgs.xorg.xorgserver
+          pkgs.xorg.xprop
+          pkgs.xorg.xrandr
+          pkgs.xdummy
+          pkgs.xterm
+          pkgs.dbus
+        ];
+      testFlags = drv.testFlags or [ ] ++ [
+        # TODO(@rvl): figure out why this doesn't work in Nixpkgs
+        "--skip=/python-dbusmock System services/"
+      ];
+    }))
+    (self.generateOptparseApplicativeCompletions [ "taffybar" ])
+  ];
+
   # Test suite requires running a docker container via testcontainers
   amqp-streamly = dontCheck super.amqp-streamly;
 
@@ -740,7 +760,7 @@ builtins.intersectAttrs super {
   fltkhs = overrideCabal (drv: {
     libraryToolDepends = (drv.libraryToolDepends or [ ]) ++ [ pkgs.buildPackages.autoconf ];
     librarySystemDepends = (drv.librarySystemDepends or [ ]) ++ [
-      pkgs.fltk13
+      pkgs.fltk_1_3
       pkgs.libGL
       pkgs.libjpeg
     ];
@@ -1531,6 +1551,18 @@ builtins.intersectAttrs super {
     };
   }) (enableSeparateBinOutput super.cabal2nix-unstable);
 
+  # Cabal doesn't allow us to properly specify the test dependency
+  # on nix-instantiate(1). Even though we're just evaluating pure code,
+  # it absolutely wants to write to disk.
+  language-nix-unstable = overrideCabal (drv: {
+    testDepends = drv.testDepends or [ ] ++ [ pkgs.nix ];
+    preCheck = ''
+      export TMP_NIX_DIR="$(mktemp -d)"
+      export NIX_STORE_DIR="$TMP_NIX_DIR/store"
+      export NIX_STATE_DIR="$TMP_NIX_DIR/state"
+    '';
+  }) super.language-nix-unstable;
+
   # test suite needs local redis daemon
   nri-redis = dontCheck super.nri-redis;
 
@@ -1615,7 +1647,7 @@ builtins.intersectAttrs super {
     overrideCabal
       (old: {
         passthru = old.passthru or { } // {
-          nixPackage = pkgs.nixVersions.nix_2_28;
+          nixPackage = pkgs.nixVersions.nix_2_31;
         };
       })
       (
@@ -1874,7 +1906,7 @@ builtins.intersectAttrs super {
     addBuildDepend
       # Overrides for tailwindcss copied from:
       # https://github.com/EmaApps/emanote/blob/master/nix/tailwind.nix
-      (pkgs.tailwindcss.overrideAttrs (oa: {
+      (pkgs.tailwindcss.overrideAttrs (old: {
         plugins = [
           pkgs.nodePackages."@tailwindcss/aspect-ratio"
           pkgs.nodePackages."@tailwindcss/forms"
@@ -1882,10 +1914,10 @@ builtins.intersectAttrs super {
           pkgs.nodePackages."@tailwindcss/typography"
         ];
         # Added a shim for the `tailwindcss` CLI entry point
-        nativeBuildInputs = (oa.nativeBuildInputs or [ ]) ++ [ pkgs.buildPackages.makeBinaryWrapper ];
-        postInstall = (oa.postInstall or "") + ''
+        nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.buildPackages.makeBinaryWrapper ];
+        postInstall = (old.postInstall or "") + ''
           nodePath=""
-          for p in "$out" "${pkgs.nodePackages.postcss}" $plugins; do
+          for p in "$out" "${pkgs.postcss}" $plugins; do
             nodePath="$nodePath''${nodePath:+:}$p/lib/node_modules"
           done
           makeWrapper "$out/bin/tailwindcss" "$out/bin/tailwind" --prefix NODE_PATH : "$nodePath"
@@ -2109,4 +2141,31 @@ builtins.intersectAttrs super {
   cpython = doJailbreak super.cpython;
 
   botan-bindings = super.botan-bindings.override { botan = pkgs.botan3; };
+
+  # Workaround for flaky test: https://github.com/basvandijk/threads/issues/10
+  threads = appendPatch ./patches/threads-flaky-test.patch super.threads;
 }
+
+// lib.optionalAttrs pkgs.config.allowAliases (
+  lib.genAttrs
+    [
+      "2captcha"
+      "3d-graphics-examples"
+      "3dmodels"
+      "4Blocks"
+      "assert"
+      "if"
+    ]
+    (
+      old:
+      let
+        new = "_" + old;
+      in
+      {
+        name = old;
+        value =
+          lib.warnOnInstantiate "haskell.packages.*.${old} has been renamed to haskell.packages.*.${new}"
+            self.${new};
+      }
+    )
+)

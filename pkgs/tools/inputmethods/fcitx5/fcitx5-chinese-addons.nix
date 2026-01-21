@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   fetchFromGitHub,
   cmake,
   extra-cmake-modules,
@@ -50,6 +51,15 @@ stdenv.mkDerivation rec {
     fcitx5-lua
   ];
 
+  patches = [
+    # Without this patch, setting ENABLE_CLOUDPINYIN to off would fail to build
+    (fetchpatch {
+      name = "cloudpinyin-disable-build";
+      url = "https://github.com/fcitx/fcitx5-chinese-addons/commit/024fff9c8587ca2fb01905e9a25df838e7d99da2.patch";
+      hash = "sha256-Mo5l8tsn1JQxTFHxOZfQRmbCeWZHLyxfn2Qwv/gQXGA=";
+    })
+  ];
+
   prePatch = ''
     ln -s ${pyStroke} modules/pinyinhelper/$(stripHash ${pyStroke})
     ln -s ${pyTable} modules/pinyinhelper/$(stripHash ${pyTable})
@@ -70,15 +80,15 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Addons related to Chinese, including IME previous bundled inside fcitx4";
     mainProgram = "scel2org5";
     homepage = "https://github.com/fcitx/fcitx5-chinese-addons";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       lgpl21Plus
     ];
-    maintainers = with maintainers; [ poscat ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ poscat ];
+    platforms = lib.platforms.linux;
   };
 }

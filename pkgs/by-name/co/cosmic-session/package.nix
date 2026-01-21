@@ -7,21 +7,22 @@
   dbus,
   stdenv,
   nixosTests,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-session";
-  version = "1.0.0-beta.6";
+  version = "1.0.3";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-session";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-ZmZxah5mRY14LeUTGBTljlUP7MaGxwguiwTzL1rhMHY=";
+    hash = "sha256-JlRGK3uac94r81MBaOZZ4hRcKD4fh/vgJBxic0BSWnY=";
   };
 
-  cargoHash = "sha256-bo46A7hS1U0cOsa/T4oMTKUTjxVCaGuFdN2qCjVHxhg=";
+  cargoHash = "sha256-wFh9AYQRZB9qK0vCrhW9Zk61Yg+VY3VPAqJRD47NbK4=";
 
   postPatch = ''
     substituteInPlace data/start-cosmic \
@@ -59,6 +60,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
         cosmic-noxwayland
         cosmic-autologin-noxwayland
         ;
+    };
+
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "epoch-(.*)"
+      ];
     };
   };
 

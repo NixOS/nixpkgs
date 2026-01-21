@@ -4,23 +4,20 @@
   django,
   fetchFromGitHub,
   polib,
-  pythonOlder,
   requests,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "django-rosetta";
-  version = "0.10.2";
+  version = "0.10.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mbi";
     repo = "django-rosetta";
     tag = "v${version}";
-    hash = "sha256-NqDrCDvvyZsce7/VWXujAStAW8UtNSro8aelrDi4EEs=";
+    hash = "sha256-VnKbtzLY2+3RTk4gNZASuVSDGzfgoyr06RUNB2r0eDw=";
   };
 
   build-system = [ setuptools ];
@@ -36,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rosetta" ];
 
-  meta = with lib; {
+  meta = {
     description = "Rosetta is a Django application that facilitates the translation process of your Django projects";
     homepage = "https://github.com/mbi/django-rosetta";
     changelog = "https://github.com/mbi/django-rosetta/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ derdennisop ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ derdennisop ];
   };
 }

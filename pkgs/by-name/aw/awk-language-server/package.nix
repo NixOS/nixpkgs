@@ -57,11 +57,11 @@ mkYarnPackage rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Language Server for AWK and associated VSCode client extension";
     homepage = "https://github.com/Beaglefoot/awk-language-server";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mathiassven ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mathiassven ];
     mainProgram = "awk-language-server";
   };
 }

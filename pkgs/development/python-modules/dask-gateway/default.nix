@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "dask-gateway";
   # update dask-gateway lock step with dask-gateway-server
   version = "2023.1.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask";
@@ -36,10 +36,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dask_gateway" ];
 
-  meta = with lib; {
+  meta = {
     description = "Client library for interacting with a dask-gateway server";
     homepage = "https://gateway.dask.org/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

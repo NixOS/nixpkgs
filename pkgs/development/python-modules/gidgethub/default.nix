@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   flit-core,
   uritemplate,
   pyjwt,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "gidgethub";
   version = "5.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -49,10 +46,10 @@ buildPythonPackage rec {
     "test_get"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Async GitHub API library";
     homepage = "https://github.com/brettcannon/gidgethub";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

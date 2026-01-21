@@ -24,11 +24,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "termgraph" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python command-line tool which draws basic graphs in the terminal";
     mainProgram = "termgraph";
     homepage = "https://github.com/mkaz/termgraph";
-    license = licenses.mit;
-    maintainers = with maintainers; [ samuela ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ samuela ];
   };
 }

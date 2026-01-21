@@ -8,12 +8,9 @@
   hatch-fancy-pypi-readme,
   h11,
   h2,
-  pproxy,
-  pytest-asyncio,
   pytest-httpbin,
   pytest-trio,
   pytestCheckHook,
-  pythonOlder,
   socksio,
   trio,
   # for passthru.tests
@@ -26,8 +23,6 @@ buildPythonPackage rec {
   pname = "httpcore";
   version = "1.0.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "encode";
@@ -54,13 +49,11 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    pproxy
-    pytest-asyncio
     pytest-httpbin
     pytest-trio
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "httpcore" ];
 
@@ -70,11 +63,11 @@ buildPythonPackage rec {
     inherit httpx httpx-socks respx;
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/encode/httpcore/blob/${version}/CHANGELOG.md";
     description = "Minimal low-level HTTP client";
     homepage = "https://github.com/encode/httpcore";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ris ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ ris ];
   };
 }

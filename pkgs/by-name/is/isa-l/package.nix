@@ -40,7 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/igzip";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

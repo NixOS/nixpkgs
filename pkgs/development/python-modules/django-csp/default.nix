@@ -40,9 +40,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Adds Content-Security-Policy headers to Django";
     homepage = "https://github.com/mozilla/django-csp";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

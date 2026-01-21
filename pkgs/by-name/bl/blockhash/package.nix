@@ -28,16 +28,16 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/commonsmachinery/blockhash";
     description = ''
       This is a perceptual image hash calculation tool based on algorithm
       descibed in Block Mean Value Based Image Perceptual Hashing by Bian Yang,
       Fan Gu and Xiamu Niu.
     '';
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "blockhash";
   };
 }

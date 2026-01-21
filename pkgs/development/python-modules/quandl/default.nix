@@ -5,7 +5,6 @@
   faker,
   fetchPypi,
   httpretty,
-  importlib-metadata,
   inflection,
   jsondate,
   mock,
@@ -15,7 +14,6 @@
   parameterized,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   requests,
   six,
 }:
@@ -24,8 +22,6 @@ buildPythonPackage rec {
   pname = "quandl";
   version = "3.7.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit version;
@@ -43,8 +39,7 @@ buildPythonPackage rec {
     python-dateutil
     six
     more-itertools
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ];
 
   nativeCheckInputs = [
     factory-boy
@@ -58,11 +53,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "quandl" ];
 
-  meta = with lib; {
+  meta = {
     description = "Quandl Python client library";
     homepage = "https://github.com/quandl/quandl-python";
     changelog = "https://github.com/quandl/quandl-python/blob/master/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ilya-kolpakov ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ilya-kolpakov ];
   };
 }

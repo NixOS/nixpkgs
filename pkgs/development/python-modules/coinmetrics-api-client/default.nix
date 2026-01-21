@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "coinmetrics-api-client";
-  version = "2025.10.21.15";
+  version = "2026.1.14.15";
   pyproject = true;
 
   __darwinAllowLocalNetworking = true;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "coinmetrics_api_client";
-    hash = "sha256-OtC6Sy32faZAZqMVUure4RmPj2LCe4Ifwy+5xmZ0g8U=";
+    hash = "sha256-0gNZ1A9BO/LebOvYLbUmQmMnBi4H5QeX7GdU6SVUWNs=";
   };
 
   pythonRelaxDeps = [ "typer" ];
@@ -52,15 +52,15 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-mock
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "coinmetrics.api_client" ];
 
-  meta = with lib; {
+  meta = {
     description = "Coin Metrics API v4 client library";
     homepage = "https://coinmetrics.github.io/api-client-python/site/index.html";
-    license = licenses.mit;
-    maintainers = with maintainers; [ centromere ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ centromere ];
     mainProgram = "coinmetrics";
   };
 }

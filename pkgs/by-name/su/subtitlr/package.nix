@@ -35,11 +35,11 @@ buildGoModule rec {
       --zsh <($out/bin/Subtitlr completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "This application, a subtitle generator for YouTube, utilizes OpenAI's Whisper API";
     homepage = "https://github.com/yoanbernabeu/Subtitlr/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ qjoly ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ qjoly ];
     mainProgram = "Subtitlr";
   };
 }

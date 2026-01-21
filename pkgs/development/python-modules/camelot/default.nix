@@ -5,7 +5,6 @@
   openpyxl,
   charset-normalizer,
   fetchPypi,
-  pythonOlder,
   pandas,
   tabulate,
   click,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "camelot-py";
   version = "0.11.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -45,12 +42,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "camelot" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to extract tabular data from PDFs";
     mainProgram = "camelot";
     homepage = "http://camelot-py.readthedocs.io";
     changelog = "https://github.com/camelot-dev/camelot/blob/v${version}/HISTORY.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ _2gn ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ _2gn ];
   };
 }

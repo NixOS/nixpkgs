@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   poetry-core,
-  pythonOlder,
   typing-extensions,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "celery-types";
   version = "0.23.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     pname = "celery_types";
@@ -26,10 +23,10 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "PEP-484 stubs for Celery";
     homepage = "https://github.com/sbdchd/celery-types";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

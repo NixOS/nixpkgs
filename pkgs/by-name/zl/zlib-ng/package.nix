@@ -45,13 +45,16 @@ stdenv.mkDerivation rec {
     "-DBUILD_SHARED_LIBS=ON"
     "-DINSTALL_UTILS=ON"
   ]
-  ++ lib.optionals withZlibCompat [ "-DZLIB_COMPAT=ON" ];
+  ++ lib.optionals withZlibCompat [ "-DZLIB_COMPAT=ON" ]
+  ++ lib.optional (
+    stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isCygwin
+  ) "-DCMAKE_RC_COMPILER=${stdenv.cc.targetPrefix}windres";
 
-  meta = with lib; {
+  meta = {
     description = "Zlib data compression library for the next generation systems";
     homepage = "https://github.com/zlib-ng/zlib-ng";
-    license = licenses.zlib;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ izorkin ];
+    license = lib.licenses.zlib;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ izorkin ];
   };
 }

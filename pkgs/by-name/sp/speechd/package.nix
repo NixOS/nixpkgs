@@ -15,6 +15,7 @@
   glib,
   dotconf,
   libsndfile,
+  runtimeShell,
   withLibao ? true,
   libao,
   withPulse ? false,
@@ -101,6 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   configureFlags = [
+    "--sysconfdir=/etc"
     # Audio method falls back from left to right.
     "--with-default-audio-method=\"libao,pulse,alsa,oss\""
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
@@ -127,7 +129,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = lib.optionalString withPico ''
     substituteInPlace src/modules/pico.c --replace "/usr/share/pico/lang" "${svox}/share/pico/lang"
+    substituteInPlace src/modules/generic.c --replace-fail "/bin/bash" "${runtimeShell}"
   '';
+
+  installFlags = [
+    "sysconfdir=${placeholder "out"}/etc"
+  ];
 
   postInstall =
     if libsOnly then
@@ -141,17 +148,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description =
       "Common interface to speech synthesis" + lib.optionalString libsOnly " - client libraries only";
     homepage = "https://devel.freebsoft.org/speechd";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       berce
       jtojnar
     ];
     # TODO: remove checks for `withPico` once PR #375450 is merged
-    platforms = if withAlsa || withPico then platforms.linux else platforms.unix;
+    platforms = if withAlsa || withPico then lib.platforms.linux else lib.platforms.unix;
     mainProgram = "speech-dispatcher";
   };
 })

@@ -43,7 +43,6 @@
   woff2,
   xxHash,
   makeWrapper,
-  shortenPerlShebang,
   useFixedHashes,
   asymptote,
   biber-ms,
@@ -177,6 +176,7 @@ let
       "--disable-texlive" # do not build the texlive (TeX Live scripts) package
       "--disable-linked-scripts" # do not install the linked scripts
       "-C" # use configure cache to speed up
+      "CFLAGS=-std=gnu17" # fix build with gcc15
     ]
     ++ withSystemLibs [
       # see "from TL tree" vs. "Using installed"  in configure output
@@ -350,17 +350,17 @@ rec {
 
     passthru = { inherit version buildInputs; };
 
-    meta = with lib; {
+    meta = {
       description = "Basic binaries for TeX Live";
       homepage = "http://www.tug.org/texlive";
       license = lib.licenses.gpl2Plus;
-      maintainers = with maintainers; [
+      maintainers = with lib.maintainers; [
         veprbl
         lovek323
         raskin
         jwiegley
       ];
-      platforms = platforms.all;
+      platforms = lib.platforms.all;
     };
   };
 
@@ -557,10 +557,10 @@ rec {
         ninja
       ];
 
-      meta = with lib; {
+      meta = {
         description = "LUAMETATEX engine is a follow up on LUATEX and is again part of CONTEXT development";
         homepage = "https://www.pragma-ade.nl/luametatex-1.htm";
-        license = licenses.gpl2Plus;
+        license = lib.licenses.gpl2Plus;
         maintainers = with lib.maintainers; [
           apfelkuchen6
           xworld21
@@ -583,6 +583,18 @@ rec {
     configureFlags = [
       "--disable-manpage" # man pages are provided by the doc container
       "--with-ttfautohint"
+    ];
+
+    # GCC15 compataiblity patches
+    patches = [
+      (fetchpatch {
+        url = "https://github.com/mgieseki/dvisvgm/commit/ebf66e3f59edf89e9d2b4fb7973b859e185eb034.patch";
+        hash = "sha256-5dppK9saWOuIH4Pmv7Zk9vrRc81oK8qKZqkwCuOQhaY=";
+      })
+      (fetchpatch {
+        url = "https://github.com/mgieseki/dvisvgm/commit/dcb5940dff7ca3084330119a4ff1472cd52ef6de.patch";
+        hash = "sha256-rGTFeeLaWIon4O16x1wFxb3Wr020HdUR3BgrqB5r864=";
+      })
     ];
 
     # PDF handling requires mutool (from mupdf) since Ghostscript 10.01
@@ -647,7 +659,7 @@ rec {
   pygmentex = python3Packages.buildPythonApplication rec {
     pname = "pygmentex";
     inherit (src) version;
-    format = "other";
+    pyproject = false;
 
     src = assertFixedHash pname texlive.pkgs.pygmentex.tex;
 
@@ -668,7 +680,7 @@ rec {
       runHook postInstall
     '';
 
-    meta = with lib; {
+    meta = {
       homepage = "https://www.ctan.org/pkg/pygmentex";
       description = "Auxiliary tool for typesetting code listings in LaTeX documents using Pygments";
       longDescription = ''
@@ -679,8 +691,8 @@ rec {
         software such as forum systems, wikis or other applications that need to
         prettify source code.
       '';
-      license = licenses.lppl13c;
-      maintainers = with maintainers; [ romildo ];
+      license = lib.licenses.lppl13c;
+      maintainers = with lib.maintainers; [ romildo ];
     };
   };
 

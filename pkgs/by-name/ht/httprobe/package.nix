@@ -22,11 +22,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Take a list of domains and probe for working HTTP and HTTPS servers";
     homepage = "https://github.com/tomnomnom/httprobe";
-    license = licenses.mit;
-    maintainers = [ ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.matthiasbeyer ];
     mainProgram = "httprobe";
   };
 }

@@ -13,13 +13,13 @@
   mesonEmulatorHook,
   gtk3,
   icu,
-  enchant2,
+  enchant,
   gnome,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gspell";
-  version = "1.14.0";
+  version = "1.14.2";
 
   outputs = [
     "out"
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "ZOodjp7cHCW0WpIOgNr2dVnRhm/81/hDL+z+ptD+iJc=";
+    sha256 = "TsflrMyQEygbrNa7wAAGvnM4GLgbo/4zLB6HbH4eFHc=";
   };
 
   nativeBuildInputs = [
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [
     # required for pkg-config
-    enchant2
+    enchant
   ];
 
   passthru = {
@@ -65,12 +65,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Spell-checking library for GTK applications";
     mainProgram = "gspell-app1";
     homepage = "https://gitlab.gnome.org/GNOME/gspell";
-    license = licenses.lgpl21Plus;
-    teams = [ teams.gnome ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   # build inputs
   jupyter-client,
   nbformat,
@@ -19,8 +18,6 @@ in
 buildPythonPackage {
   inherit pname version;
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jsvine";
@@ -57,12 +54,12 @@ buildPythonPackage {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Dead-simple tool for executing Jupyter notebooks from the command line";
     mainProgram = "nbexec";
     homepage = "https://github.com/jsvine/nbexec";
     changelog = "https://github.com/jsvine/nbexec/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

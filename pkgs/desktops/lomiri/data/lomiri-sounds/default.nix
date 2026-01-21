@@ -35,17 +35,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Notification and ringtone sound effects for Lomiri";
     homepage = "https://gitlab.com/ubports/development/core/lomiri-sounds";
-    license = with licenses; [
+    license = with lib.licenses; [
       cc-by-30
       cc0
       cc-by-sa-30
       cc-by-40
     ];
-    teams = [ teams.lomiri ];
-    platforms = platforms.all;
+    teams = [ lib.teams.lomiri ];
+    platforms = lib.platforms.all;
     pkgConfigModules = [
       "lomiri-sounds"
     ];

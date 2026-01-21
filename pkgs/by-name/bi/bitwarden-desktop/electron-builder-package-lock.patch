@@ -1,28 +1,12 @@
-From 0629bb5b90e54491263e371bc5594e9f97ba0af4 Mon Sep 17 00:00:00 2001
-From: Andrew Marshall <andrew@johnandrewmarshall.com>
-Date: Tue, 12 Mar 2024 11:48:15 -0400
-Subject: [PATCH] Fix using unlocked dependencies in electron-builder
-
-electron-builder will perform its "installing production dependencies"
-step using this package.json, and without the package-lock.json, NPM
-will try to fetch package metadata to install the latest, unlocked
-dependencies.
----
- apps/desktop/webpack.main.js | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/apps/desktop/webpack.main.js b/apps/desktop/webpack.main.js
-index 9d683457d9..0ad707956e 100644
---- a/apps/desktop/webpack.main.js
-+++ b/apps/desktop/webpack.main.js
-@@ -70,6 +70,7 @@ const main = {
-     new CopyWebpackPlugin({
-       patterns: [
-         "./src/package.json",
-+        "./src/package-lock.json",
-         { from: "./src/images", to: "images" },
-         { from: "./src/locales", to: "locales" },
-       ],
--- 
-2.43.2
-
+diff --git a/apps/desktop/webpack.base.js b/apps/desktop/webpack.base.js
+index c9da84cd2e..3738bac27e 100644
+--- a/apps/desktop/webpack.base.js
++++ b/apps/desktop/webpack.base.js
+@@ -110,6 +110,7 @@ module.exports.buildConfig = function buildConfig(params) {
+       new CopyWebpackPlugin({
+         patterns: [
+           path.resolve(__dirname, "src/package.json"),
++          path.resolve(__dirname, "src/package-lock.json"),
+           { from: path.resolve(__dirname, "src/images"), to: "images" },
+           { from: path.resolve(__dirname, "src/locales"), to: "locales" },
+         ],

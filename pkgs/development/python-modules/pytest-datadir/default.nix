@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   setuptools-scm,
@@ -11,9 +10,7 @@
 buildPythonPackage rec {
   pname = "pytest-datadir";
   version = "1.8.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gabrielcnr";
@@ -31,11 +28,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_datadir" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytest plugin for manipulating test data directories and files";
     homepage = "https://github.com/gabrielcnr/pytest-datadir";
     changelog = "https://github.com/gabrielcnr/pytest-datadir/blob/${src.tag}/CHANGELOG.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kira-bruneau ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kira-bruneau ];
   };
 }

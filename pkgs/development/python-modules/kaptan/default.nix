@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "kaptan";
   version = "0.6.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -29,11 +29,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Configuration manager for python applications";
     mainProgram = "kaptan";
     homepage = "https://kaptan.readthedocs.io/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

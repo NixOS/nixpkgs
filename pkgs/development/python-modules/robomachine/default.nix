@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "robomachine";
   version = "0.10.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "RoboMachine";
@@ -35,10 +35,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "robomachine" ];
 
-  meta = with lib; {
+  meta = {
     description = "Test data generator for Robot Framework";
     homepage = "https://github.com/mkorpela/RoboMachine";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bjornfor ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bjornfor ];
   };
 }

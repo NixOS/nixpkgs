@@ -11,15 +11,12 @@
   paramiko,
   requests,
   s3fs,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "textual-universal-directorytree";
   version = "1.7.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "juftin";
@@ -48,11 +45,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "textual_universal_directorytree" ];
 
-  meta = with lib; {
+  meta = {
     description = "Textual plugin for a DirectoryTree compatible with remote filesystems";
     homepage = "https://github.com/juftin/textual-universal-directorytree";
     changelog = "https://github.com/juftin/textual-universal-directorytree/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

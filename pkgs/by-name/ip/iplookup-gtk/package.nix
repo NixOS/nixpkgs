@@ -13,14 +13,14 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "iplookup-gtk";
-  version = "0.4.2";
+  version = "0.5.0";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "Bytezz";
     repo = "IPLookup-gtk";
     tag = "v${version}";
-    hash = "sha256-9v4v8LWTGHtQKtiJPZSDJyHMujnwRv7cyRtmdMDnyFo=";
+    hash = "sha256-pRTN91uwjYu3Li4NbDvJ6l9gikBnXj0j+ApMWpuLUTU=";
   };
 
   nativeBuildInputs = [

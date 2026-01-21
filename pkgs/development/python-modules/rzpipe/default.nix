@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "rzpipe";
   version = "0.6.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
@@ -25,11 +22,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rzpipe" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface for rizin";
     homepage = "https://rizin.re";
     changelog = "https://github.com/rizinorg/rizin/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

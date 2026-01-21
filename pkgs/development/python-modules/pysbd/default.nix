@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   tqdm,
   spacy,
 }:
@@ -11,7 +10,6 @@ buildPythonPackage rec {
   pname = "pysbd";
   version = "0.3.4";
   format = "setuptools";
-  disabled = pythonOlder "3.5";
 
   # provides no sdist on pypi
   src = fetchFromGitHub {
@@ -30,10 +28,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pysbd" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pysbd (Python Sentence Boundary Disambiguation) is a rule-based sentence boundary detection that works out-of-the-box across many languages";
     homepage = "https://github.com/nipunsadvilkar/pySBD";
-    license = licenses.mit;
-    teams = [ teams.tts ];
+    license = lib.licenses.mit;
+    teams = [ lib.teams.tts ];
   };
 }

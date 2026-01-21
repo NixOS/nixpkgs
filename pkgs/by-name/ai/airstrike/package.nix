@@ -8,11 +8,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "airstrike-pre";
-  version = "6a";
+  pname = "airstrike";
+  version = "pre6a";
 
   src = fetchurl {
-    url = "https://icculus.org/airstrike/airstrike-pre${version}-src.tar.gz";
+    url = "https://icculus.org/airstrike/airstrike-${version}-src.tar.gz";
     sha256 = "1h6rv2zcp84ycmd0kv1pbpqjgwx57dw42x7878d2c2vnpi5jn8qi";
   };
 
@@ -35,12 +35,12 @@ stdenv.mkDerivation rec {
       --chdir "$out/share"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "2d dogfighting game";
     mainProgram = "airstrike";
     homepage = "https://icculus.org/airstrike/";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ pSub ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ pSub ];
+    platforms = lib.platforms.linux;
   };
 }

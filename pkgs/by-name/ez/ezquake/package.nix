@@ -1,53 +1,55 @@
 {
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  curl,
+  SDL2,
+  cmake,
+  curlMinimal,
   expat,
+  fetchFromGitHub,
   jansson,
-  libpng,
-  libjpeg,
-  libGLU,
+  lib,
   libGL,
   libX11,
+  libjpeg,
+  libpng,
   libsndfile,
-  libXxf86vm,
-  pcre,
+  minizip,
+  nix-update-script,
+  pcre2,
   pkg-config,
-  SDL2,
-  vim,
-  speex,
+  stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ezquake";
-  version = "3.6.3";
+  version = "3.6.8";
 
   src = fetchFromGitHub {
     owner = "QW-Group";
-    repo = "ezquake" + "-source";
-    tag = version;
+    repo = "ezquake-source";
+    tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-ThrsJfj+eP7Lv2ZSNLO6/b98VHrL6/rhwf2p0qMvTF8=";
+    hash = "sha256-BIkBl6ncwo0NljuqOHJ3yQeDTcClh5FGssdFsKUjN90=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    expat
-    curl
-    jansson
-    libpng
-    libjpeg
-    libGLU
-    libGL
-    libsndfile
-    libX11
-    libXxf86vm
-    pcre
-    SDL2
-    vim
-    speex
+  nativeBuildInputs = [
+    cmake
+    pkg-config
   ];
+
+  buildInputs = [
+    SDL2
+    curlMinimal
+    expat
+    jansson
+    libGL
+    libX11
+    libjpeg
+    libpng
+    libsndfile
+    minizip
+    pcre2
+  ];
+
+  enableParallelBuilding = true;
 
   installPhase =
     let
@@ -55,12 +57,15 @@ stdenv.mkDerivation rec {
       arch = lib.head (lib.splitString "-" stdenv.hostPlatform.system);
     in
     ''
-      mkdir -p $out/bin
-      find .
-      mv ezquake-${sys}-${arch} $out/bin/ezquake
+      runHook preInstall
+
+      install -D \
+        ezquake-${sys}-${arch} $out/bin/${finalAttrs.meta.mainProgram}
+
+      runHook postInstall
     '';
 
-  enableParallelBuilding = true;
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://ezquake.com/";
@@ -70,4 +75,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ edwtjo ];
   };
-}
+})

@@ -15,7 +15,6 @@
   pyelftools,
   python-gnupg,
   python-u2flib-host,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   websocket-client,
@@ -25,8 +24,6 @@ buildPythonPackage rec {
   pname = "ledgerblue";
   version = "0.1.55";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -61,10 +58,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ledgerblue" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to communicate with Ledger Blue/Nano S";
     homepage = "https://github.com/LedgerHQ/blue-loader-python";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ np ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ np ];
   };
 }

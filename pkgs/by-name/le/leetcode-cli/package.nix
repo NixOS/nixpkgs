@@ -14,14 +14,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "leetcode-cli";
-  version = "0.4.7";
+  version = "0.5.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-zxaBSZS2mlGaKT+AN4oS8eJmoLdVe2/T/G41ERj3gDg=";
+    hash = "sha256-EafEz5MhY9f56N1LCPaW+ktYrV01r9vHCbublDnfAKg=";
   };
 
-  cargoHash = "sha256-JsWMQp93fGXitnZ9LLGD9dZddc6Z7jRuAyx6HreV+XM=";
+  cargoHash = "sha256-8bHpNckEsJ4VWlmEaDTeMW+Txi9SQh30lK5CKKperC8=";
 
   nativeBuildInputs = [
     pkg-config
@@ -47,11 +47,11 @@ rustPlatform.buildRustPackage rec {
     version = "leetcode ${version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Leetcode CLI utility";
     homepage = "https://github.com/clearloop/leetcode-cli";
-    license = licenses.mit;
-    maintainers = with maintainers; [ congee ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ congee ];
     mainProgram = "leetcode";
   };
 }

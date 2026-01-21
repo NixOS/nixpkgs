@@ -37,12 +37,12 @@ rustPlatform.buildRustPackage rec {
   # requires internet access
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Create `.gitignore` files using one or more templates from TopTal, GitHub or your own collection";
     homepage = "https://github.com/reemus-dev/gitnr";
     changelog = "https://github.com/reemus-dev/gitnr/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       matthiasbeyer
     ];
     mainProgram = "gitnr";

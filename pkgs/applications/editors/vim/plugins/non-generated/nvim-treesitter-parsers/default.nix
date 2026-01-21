@@ -2,4 +2,4 @@
   lib,
   vimPlugins,
 }:
-lib.recurseIntoAttrs vimPlugins.nvim-treesitter.grammarPlugins
+lib.recurseIntoAttrs vimPlugins.nvim-treesitter.parsers

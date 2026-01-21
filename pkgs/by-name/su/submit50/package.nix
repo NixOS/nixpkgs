@@ -32,7 +32,6 @@ python3Packages.buildPythonApplication rec {
   pythonImportsCheck = [ "submit50" ];
 
   nativeCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   # no python tests
 

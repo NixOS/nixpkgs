@@ -23,13 +23,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "nix-top";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "jerith666";
     repo = "nix-top";
     rev = "v${version}";
-    hash = "sha256-w/TKzbZmMt4CX2KnLwPvR1ydp5NNlp9nNx78jJvhp54=";
+    hash = "sha256-dpH1qfAHt8kDEG1QMFcD67rOhDsWZuaw3WSUZdPx3oQ=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

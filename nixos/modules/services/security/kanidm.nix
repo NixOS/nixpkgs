@@ -29,6 +29,7 @@ let
     mkIf
     mkMerge
     mkOption
+    mkOrder
     mkPackageOption
     optional
     optionals
@@ -59,17 +60,17 @@ let
     cfg.serverSettings.tls_key
   ]
   ++ optionals cfg.provision.enable provisionSecretFiles;
+  enableServerBackup = cfg.enableServer && (cfg.serverSettings.online_backup.versions != 0);
 
   # Merge bind mount paths and remove paths where a prefix is already mounted.
   # This makes sure that if e.g. the tls_chain is in the nix store and /nix/store is already in the mount
   # paths, no new bind mount is added. Adding subpaths caused problems on ofborg.
-  hasPrefixInList =
-    list: newPath: any (path: hasPrefix (builtins.toString path) (builtins.toString newPath)) list;
+  hasPrefixInList = list: newPath: any (path: hasPrefix (toString path) (toString newPath)) list;
   mergePaths = foldl' (
     merged: newPath:
     let
       # If the new path is a prefix to some existing path, we need to filter it out
-      filteredPaths = filter (p: !hasPrefix (builtins.toString newPath) (builtins.toString p)) merged;
+      filteredPaths = filter (p: !hasPrefix (toString newPath) (toString p)) merged;
       # If a prefix of the new path is already in the list, do not add it
       filteredNew = optional (!hasPrefixInList filteredPaths newPath) newPath;
     in
@@ -367,7 +368,7 @@ in
         freeformType = settingsFormat.type;
 
         options = {
-          pam_allowed_login_groups = mkOption {
+          kanidm.pam_allowed_login_groups = mkOption {
             description = "Kanidm groups that are allowed to login using PAM.";
             example = "my_pam_group";
             type = types.listOf types.str;
@@ -393,7 +394,7 @@ in
       instanceUrl = mkOption {
         description = "The instance url to which the provisioning tool should connect.";
         default = "https://localhost:${serverPort}";
-        defaultText = ''"https://localhost:<port from serverSettings.bindaddress>"'';
+        defaultText = "https://localhost:<port from serverSettings.bindaddress>";
         type = types.str;
       };
 
@@ -672,6 +673,10 @@ in
 
   config = mkIf (cfg.enableClient || cfg.enableServer || cfg.enablePam) {
     warnings = lib.optionals (cfg.package.eolMessage != "") [ cfg.package.eolMessage ];
+    services.kanidm = {
+      unixSettings.version = "2";
+      serverSettings.version = "2";
+    };
 
     assertions =
       let
@@ -709,6 +714,14 @@ in
           };
       in
       [
+        {
+          assertion = cfg.enablePam -> !(cfg.unixSettings ? pam_allowed_login_groups);
+          message = ''
+            <option>services.kanidm.unixSettings.pam_allowed_login_groups</option> has been renamed
+            to <option>services.kanidm.unixSettings.kanidm.pam_allowed_login_groups</option>.
+            Please change your usage.
+          '';
+        }
         {
           assertion =
             !cfg.enableServer
@@ -873,7 +886,7 @@ in
 
     environment.systemPackages = mkIf cfg.enableClient [ cfg.package ];
 
-    systemd.tmpfiles.settings."10-kanidm" = {
+    systemd.tmpfiles.settings."10-kanidm" = mkIf enableServerBackup {
       ${cfg.serverSettings.online_backup.path}.d = {
         mode = "0700";
         user = "kanidm";
@@ -909,13 +922,13 @@ in
           User = "kanidm";
           Group = "kanidm";
 
-          BindPaths = [
+          BindPaths =
+            [ ]
             # To store backups
-            cfg.serverSettings.online_backup.path
-          ]
-          ++ optional (
-            cfg.enablePam && cfg.unixSettings ? home_mount_prefix
-          ) cfg.unixSettings.home_mount_prefix;
+            ++ optional enableServerBackup cfg.serverSettings.online_backup.path
+            ++ optional (
+              cfg.enablePam && cfg.unixSettings ? home_mount_prefix
+            ) cfg.unixSettings.home_mount_prefix;
 
           AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
           CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
@@ -1039,8 +1052,9 @@ in
 
     system.nssModules = mkIf cfg.enablePam [ cfg.package ];
 
-    system.nssDatabases.group = optional cfg.enablePam "kanidm";
-    system.nssDatabases.passwd = optional cfg.enablePam "kanidm";
+    # Needs to be before "files" which is `mkBefore`
+    system.nssDatabases.group = mkOrder 490 (optional cfg.enablePam "kanidm");
+    system.nssDatabases.passwd = mkOrder 490 (optional cfg.enablePam "kanidm");
 
     users.groups = mkMerge [
       (mkIf cfg.enableServer { kanidm = { }; })

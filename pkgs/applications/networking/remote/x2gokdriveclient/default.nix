@@ -67,12 +67,12 @@ stdenv.mkDerivation (finalAttrs: {
     "--set QT_QPA_PLATFORM xcb"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Graphical NoMachine NX3 remote desktop client (KDrive client)";
     mainProgram = "x2gokdriveclient";
     homepage = "https://x2go.org/";
-    maintainers = with maintainers; [ juliabru ];
-    license = licenses.gpl3;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ juliabru ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
   };
 })

@@ -6,24 +6,24 @@
 
 buildGoModule rec {
   pname = "gotest";
-  version = "0.0.6";
+  version = "0.0.7";
 
   src = fetchFromGitHub {
     owner = "rakyll";
     repo = "gotest";
     rev = "v${version}";
-    sha256 = "1v11ccrjghq7nsz0f91r17di14yixsw28vs0m3dwzwqkh1a20img";
+    sha256 = "sha256-i9kM421O8sbL4SSQrEeRbtDaqOCA1y22b7QCxvt4Oow=";
   };
 
-  vendorHash = "sha256-pVq6H1HoKqCMRfJg7FftRf3vh+BWZQe6cQAX+TBzKqw=";
+  vendorHash = "sha256-Zq8alVfojJbrzw3fpYnYDxAMc/rYO9WIuRb1OcNcBaw=";
 
   subPackages = [ "." ];
 
-  meta = with lib; {
+  meta = {
     description = "go test with colors";
     mainProgram = "gotest";
     homepage = "https://github.com/rakyll/gotest";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

@@ -437,6 +437,14 @@ rec {
     isMacho = {
       kernel.execFormat = execFormats.macho;
     };
+    isPE = {
+      kernel.execFormat = execFormats.pe;
+    };
+
+    isEabi = {
+      abi.eabi = true;
+    };
+
   };
 
   # given two patterns, return a pattern which is their logical AND.

@@ -14,15 +14,15 @@
   lm_sensors,
   mate-panel,
   hicolor-icon-theme,
-  mateUpdateScript,
+  gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mate-sensors-applet";
   version = "1.28.0";
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor finalAttrs.version}/mate-sensors-applet-${finalAttrs.version}.tar.xz";
     sha256 = "1GU2ZoKvj+uGGCg8l4notw22/RfKj6lQrG9xAQIxWoE=";
   };
 
@@ -56,13 +56,17 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname; };
+  passthru.updateScript = gitUpdater {
+    url = "https://git.mate-desktop.org/mate-sensors-applet";
+    odd-unstable = true;
+    rev-prefix = "v";
+  };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mate-desktop/mate-sensors-applet";
     description = "MATE panel applet for hardware sensors";
-    license = with licenses; [ gpl2Plus ];
-    platforms = platforms.linux;
-    teams = [ teams.mate ];
+    license = with lib.licenses; [ gpl2Plus ];
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.mate ];
   };
-}
+})

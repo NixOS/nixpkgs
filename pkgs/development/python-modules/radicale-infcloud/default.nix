@@ -27,13 +27,13 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "radicale" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Unrud/RadicaleInfCloud/";
     description = "Integrate InfCloud into Radicale's web interface";
-    license = with licenses; [
+    license = with lib.licenses; [
       agpl3Plus
       gpl3Plus
     ];
-    maintainers = with maintainers; [ erictapen ];
+    maintainers = with lib.maintainers; [ erictapen ];
   };
 }

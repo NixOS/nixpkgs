@@ -5,16 +5,6 @@ let
   extraArgs = removeAttrs args [ "callPackage" ];
 in
 rec {
-  rke2_1_31 = common (
-    (import ./1_31/versions.nix)
-    // {
-      updateScript = [
-        ./update-script.sh
-        "31"
-      ];
-    }
-  ) extraArgs;
-
   rke2_1_32 = common (
     (import ./1_32/versions.nix)
     // {
@@ -45,7 +35,17 @@ rec {
     }
   ) extraArgs;
 
+  rke2_1_35 = common (
+    (import ./1_35/versions.nix)
+    // {
+      updateScript = [
+        ./update-script.sh
+        "35"
+      ];
+    }
+  ) extraArgs;
+
   # Automatically set by update script
-  rke2_stable = rke2_1_33;
-  rke2_latest = rke2_1_34;
+  rke2_stable = rke2_1_34;
+  rke2_latest = rke2_1_35;
 }

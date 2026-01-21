@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pueue";
-  version = "4.0.1";
+  version = "4.0.2";
 
   src = fetchFromGitHub {
     owner = "Nukesor";
     repo = "pueue";
     rev = "v${version}";
-    hash = "sha256-m6mXq62imJ9yVpH6M8O3I7Z4FDdnEtp9ADfMjD4RDM4=";
+    hash = "sha256-hdYbLgBpPzizaYbj+W+YyXj9ks04SFObJ23gkSMTRPs=";
   };
 
-  cargoHash = "sha256-E2mLpRCffFySzBZVtxS4YZPuTRhjU4LrFEfC1dbF6ug=";
+  cargoHash = "sha256-oMD0AqLBPXRmlKEmIBfAazO6IqfiB2aeA9VwxXyx1Xw=";
 
   nativeBuildInputs = [
     installShellFiles

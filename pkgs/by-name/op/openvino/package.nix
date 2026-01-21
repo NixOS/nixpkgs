@@ -41,12 +41,6 @@ let
   # prevent scons from leaking in the default python version
   scons' = scons.override { inherit python3Packages; };
 
-  tbbbind_version = "2_5";
-  tbbbind = fetchurl {
-    url = "https://storage.openvinotoolkit.org/dependencies/thirdparty/linux/tbbbind_${tbbbind_version}_static_lin_v4.tgz";
-    hash = "sha256-Tr8wJGUweV8Gb7lhbmcHxrF756ZdKdNRi1eKdp3VTuo=";
-  };
-
   python = python3Packages.python.withPackages (
     ps: with ps; [
       cython
@@ -78,6 +72,10 @@ stdenv.mkDerivation rec {
       url = "https://github.com/openvinotoolkit/openvino/commit/677716c2471cadf1bf1268eca6343498a886a229.patch?full_index=1";
       hash = "sha256-iaifJBdl7+tQZq1d8SiczUaXz+AdfMrLtwzfTmSG+XA=";
     })
+    (fetchpatch {
+      url = "https://github.com/openvinotoolkit/openvino/commit/564d2d6b9ca179004d32b70466dbd088eef8a307.patch?full_index=1";
+      hash = "sha256-2khosDwlV7Dwxu0dvyDuCbo/XzR/eeYRGhlSieOfrFQ=";
+    })
   ];
 
   outputs = [
@@ -101,14 +99,6 @@ stdenv.mkDerivation rec {
     cudaPackages.cuda_nvcc
   ];
 
-  postPatch = ''
-    mkdir -p temp/tbbbind_${tbbbind_version}
-    pushd temp/tbbbind_${tbbbind_version}
-    bsdtar -xf ${tbbbind}
-    echo "${tbbbind.url}" > ie_dependency.info
-    popd
-  '';
-
   dontUseSconsCheck = true;
   dontUseSconsBuild = true;
   dontUseSconsInstall = true;
@@ -118,7 +108,7 @@ stdenv.mkDerivation rec {
     "-DCMAKE_MODULE_PATH:PATH=${placeholder "out"}/lib/cmake"
     "-DCMAKE_PREFIX_PATH:PATH=${placeholder "out"}"
     "-DOpenCV_DIR=${lib.getLib opencv}/lib/cmake/opencv4/"
-    "-DCMAKE_PREFIX_PATH=${lib.getLib protobuf}"
+    "-DProtobuf_LIBRARIES=${protobuf}/lib/libprotobuf${stdenv.hostPlatform.extensions.sharedLibrary}"
     "-DPython_EXECUTABLE=${python.interpreter}"
 
     (cmakeBool "CMAKE_VERBOSE_MAKEFILE" true)
@@ -142,8 +132,7 @@ stdenv.mkDerivation rec {
     # system libs
     (cmakeBool "ENABLE_SYSTEM_FLATBUFFERS" true)
     (cmakeBool "ENABLE_SYSTEM_OPENCL" true)
-    (cmakeBool "ENABLE_SYSTEM_PROTOBUF" true)
-    (cmakeBool "Protobuf_USE_STATIC_LIBS" false)
+    (cmakeBool "ENABLE_SYSTEM_PROTOBUF" false)
     (cmakeBool "ENABLE_SYSTEM_PUGIXML" true)
     (cmakeBool "ENABLE_SYSTEM_SNAPPY" true)
     (cmakeBool "ENABLE_SYSTEM_TBB" true)
@@ -164,7 +153,6 @@ stdenv.mkDerivation rec {
     libxml2
     ocl-icd
     opencv
-    protobuf
     pugixml
     snappy
     onetbb
@@ -188,7 +176,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/openvinotoolkit/openvino/releases/tag/${src.tag}";
     description = "Open-source toolkit for optimizing and deploying AI inference";
     longDescription = ''
@@ -199,8 +187,8 @@ stdenv.mkDerivation rec {
       It supports pre-trained models from the Open Model Zoo, along with 100+ open source and public models in popular formats such as Caffe*, TensorFlow*, MXNet* and ONNX*.
     '';
     homepage = "https://docs.openvinotoolkit.org/";
-    license = with licenses; [ asl20 ];
-    platforms = platforms.all;
+    license = with lib.licenses; [ asl20 ];
+    platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # Cannot find macos sdk
   };
 }

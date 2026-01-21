@@ -47,7 +47,7 @@ buildGoModule rec {
     homepage = "https://github.com/dunglas/mercure";
     changelog = "https://github.com/dunglas/mercure/releases/tag/v${version}";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ gaelreyrol ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "mercure";
   };

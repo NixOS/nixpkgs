@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   flit-core,
-  pythonOlder,
   defusedxml,
   docutils,
   jinja2,
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "myst-parser";
   version = "4.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "executablebooks";
@@ -68,11 +65,11 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "docutils" ];
 
-  meta = with lib; {
+  meta = {
     description = "Sphinx and Docutils extension to parse MyST";
     homepage = "https://myst-parser.readthedocs.io/";
     changelog = "https://raw.githubusercontent.com/executablebooks/MyST-Parser/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ loicreynier ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ loicreynier ];
   };
 }

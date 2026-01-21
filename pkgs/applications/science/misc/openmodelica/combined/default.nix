@@ -39,14 +39,14 @@ symlinkJoin {
       --set-default OPENMODELICALIBRARY "${openmodelica.omlibrary}/lib/omlibrary"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open-source Modelica-based modeling and simulation environment intended for industrial and academic usage";
     homepage = "https://openmodelica.org";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       balodja
       smironov
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

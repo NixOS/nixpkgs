@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   pyusb,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "temperusb";
   version = "1.6.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -25,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "temperusb" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to read TEMPer USB HID devices";
     homepage = "https://github.com/padelt/temper-python";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

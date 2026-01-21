@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   flask,
   python-ldap,
   setuptools,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "flask-simpleldap";
   version = "2.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "alexferl";
@@ -32,10 +29,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flask_simpleldap" ];
 
-  meta = with lib; {
+  meta = {
     description = "LDAP authentication extension for Flask";
     homepage = "https://github.com/alexferl/flask-simpleldap";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kip93 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kip93 ];
   };
 }

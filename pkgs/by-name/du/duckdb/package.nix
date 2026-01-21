@@ -10,6 +10,7 @@
   unixODBC,
   withJdbc ? false,
   withOdbc ? false,
+  versionCheckHook,
 }:
 
 let
@@ -55,6 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doInstallCheck = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   installCheckPhase =
     let
@@ -132,6 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   passthru.updateScript = ./update.sh;
+  passthru.pythonHash = versions.python_hash;
 
   meta = {
     changelog = "https://github.com/duckdb/duckdb/releases/tag/v${finalAttrs.version}";

@@ -50,7 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Tool for those who are interested in hacking MIB2 firmware";
     homepage = "https://github.com/askac/dumpifs";
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ KSJ2000 ];
     mainProgram = "dumpifs";
   };
 })

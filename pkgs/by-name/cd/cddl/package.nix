@@ -32,15 +32,15 @@ bundlerApp {
 
   passthru.updateScript = bundlerUpdateScript "cddl";
 
-  meta = with lib; {
+  meta = {
     description = "Parser, generator, and validator for CDDL";
     homepage = "https://rubygems.org/gems/cddl";
-    license = with licenses; mit;
-    maintainers = with maintainers; [
+    license = with lib.licenses; mit;
+    maintainers = with lib.maintainers; [
       fdns
       nicknovitski
       amesgen
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

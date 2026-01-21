@@ -6,7 +6,7 @@
 }:
 anki-utils.buildAnkiAddon (finalAttrs: {
   pname = "reviewer-refocus-card";
-  version = "0-unstable-2022-12-24";
+  version = "0.3.0-unstable-2022-12-24";
   src = fetchFromGitHub {
     owner = "glutanimate";
     repo = "anki-addons-misc";

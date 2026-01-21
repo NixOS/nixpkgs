@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "release-plz";
-  version = "0.3.148";
+  version = "0.3.151";
 
   src = fetchFromGitHub {
     owner = "MarcoIeni";
     repo = "release-plz";
     rev = "release-plz-v${version}";
-    hash = "sha256-XvmgpsCxbXc+NvzKZBXmhcIM+SKCTPkQldObUuXHVus=";
+    hash = "sha256-yH+ggH5bJNvdD+iv3gk6PZ/EXHoQhdl7ur9Sj6/GE/Q=";
   };
 
-  cargoHash = "sha256-NYViI5tpOgWdaKmOrNlXIGL/d6ZhoOSeQShdPdB3eXE=";
+  cargoHash = "sha256-hi0TghUBEXBMSXq+gjxeGZWzpqzQTBg8WGOdkzP1Q70=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -50,7 +50,10 @@ rustPlatform.buildRustPackage rec {
       asl20
       mit
     ];
-    maintainers = with lib.maintainers; [ dannixon ];
+    maintainers = with lib.maintainers; [
+      dannixon
+      chrjabs
+    ];
     mainProgram = "release-plz";
     broken = stdenv.hostPlatform.isDarwin;
   };

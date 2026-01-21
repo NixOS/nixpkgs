@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -26,7 +25,6 @@
   # optional dependencies
   defusedxml,
   olefile,
-  typing-extensions,
 
   # tests
   numpy,
@@ -100,7 +98,6 @@ buildPythonPackage rec {
   optional-dependencies = {
     fpx = [ olefile ];
     mic = [ olefile ];
-    typing = lib.optionals (pythonOlder "3.10") [ typing-extensions ];
     xmp = [ defusedxml ];
   };
 
@@ -109,7 +106,7 @@ buildPythonPackage rec {
     pytestCheckHook
     numpy
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # Code quality mismathch 9 vs 10
@@ -141,7 +138,7 @@ buildPythonPackage rec {
       ;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://python-pillow.github.io/";
     changelog = "https://pillow.readthedocs.io/en/stable/releasenotes/${version}.html";
     description = "Friendly PIL fork (Python Imaging Library)";
@@ -151,8 +148,8 @@ buildPythonPackage rec {
       supports many file formats, and provides powerful image
       processing and graphics capabilities.
     '';
-    license = licenses.mit-cmu;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit-cmu;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 
 }

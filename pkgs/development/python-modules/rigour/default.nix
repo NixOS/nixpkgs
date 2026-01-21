@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "rigour";
-  version = "1.4.2";
+  version = "1.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "opensanctions";
     repo = "rigour";
     tag = "v${version}";
-    hash = "sha256-60/zaFw2rYJ6dHEU+0QimdsXHmfndiR5dguZCYE55Rc=";
+    hash = "sha256-c0/wLo2/ZFaFiSV7jOb9th0CNim0XymL8MO6IEYfyhw=";
   };
 
   build-system = [

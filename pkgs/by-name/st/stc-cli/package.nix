@@ -1,7 +1,8 @@
 {
-  lib,
   buildGoModule,
   fetchFromGitHub,
+  lib,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
@@ -16,6 +17,12 @@ buildGoModule rec {
   };
 
   vendorHash = "sha256-qLpWXikTr+vB2bIw2EqnoJ0uOxUc/qc6SdGEJQXwmTQ=";
+
+  ldflags = [ "-X main.GitTag=${version}" ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-version";
 
   meta = {
     description = "Syncthing CLI Tool";

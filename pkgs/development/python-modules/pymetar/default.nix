@@ -31,11 +31,11 @@ buildPythonPackage rec {
     ./runtests.sh
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tool to show the weather report by a given station ID";
     mainProgram = "pymetar";
     homepage = "https://github.com/klausman/pymetar";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ erosennin ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ erosennin ];
   };
 }

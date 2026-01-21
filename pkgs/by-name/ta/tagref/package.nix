@@ -17,12 +17,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-XQ0/J8o9yqEGWH1Cy5VDkpsK60SS6JhYxMNsI08uI6U=";
 
-  meta = with lib; {
+  meta = {
     description = "Manage cross-references in your code";
     homepage = "https://github.com/stepchowfun/tagref";
-    license = licenses.mit;
-    maintainers = [ maintainers.yusdacra ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.yusdacra ];
+    platforms = lib.platforms.unix;
     mainProgram = "tagref";
   };
 }

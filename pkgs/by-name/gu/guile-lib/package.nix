@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     "$(dirname $(echo ${lib.getLib stdenv.cc.cc}/lib*/libgcc_s.so))''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.nongnu.org/guile-lib/";
     description = "Collection of useful Guile Scheme modules";
     longDescription = ''
@@ -59,10 +59,8 @@ stdenv.mkDerivation rec {
       modules into a coherent library.  Think "a down-scaled, limited-scope CPAN
       for Guile".
     '';
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
-      foo-dogsquared
-    ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
     platforms = guile.meta.platforms;
   };
 }

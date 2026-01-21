@@ -3,27 +3,48 @@
   stdenv,
   fetchurl,
   elfutils,
+  xxHash,
+  dejagnu,
+  gdb,
 }:
 
 stdenv.mkDerivation rec {
   pname = "dwz";
-  version = "0.14";
+  version = "0.16";
 
   src = fetchurl {
-    url = "https://www.sourceware.org/ftp/${pname}/releases/${pname}-${version}.tar.gz";
-    sha256 = "07qdvzfk4mvbqj5z3aff7vc195dxqn1mi27w2dzs1w2zhymnw01k";
+    url = "https://www.sourceware.org/ftp/dwz/releases/dwz-${version}.tar.gz";
+    hash = "sha256-R1hT4bSebtjMLQqQnHpPwcxXHrzPxmJ4/UM0Lb4n1Q4=";
   };
+
+  postPatch = ''
+    patchShebangs --build testsuite
+  '';
 
   nativeBuildInputs = [ elfutils ];
 
+  buildInputs = [
+    xxHash
+    elfutils
+  ];
+
   makeFlags = [ "prefix=${placeholder "out"}" ];
 
-  meta = with lib; {
+  doCheck = true;
+
+  nativeCheckInputs = [
+    dejagnu
+    gdb
+  ];
+
+  strictDeps = true;
+
+  meta = {
     homepage = "https://sourceware.org/dwz/";
     description = "DWARF optimization and duplicate removal tool";
     mainProgram = "dwz";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ jbcrail ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ jbcrail ];
+    platforms = [ lib.systems.inspect.patterns.isElf ];
   };
 }

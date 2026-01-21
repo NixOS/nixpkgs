@@ -40,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
     "installedTests"
   ];
+  separateDebugInfo = true;
 
   src = fetchFromGitHub {
     owner = "flatpak";

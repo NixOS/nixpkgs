@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
 
   # build-system
@@ -31,8 +30,6 @@ buildPythonPackage rec {
   version = "3.1.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-YHI86UXBkyhnl5DjKCzHWKpKYEDkuzMPU9MPpUbUR0Y=";
@@ -53,7 +50,7 @@ buildPythonPackage rec {
     pytest-timeout
     pytestCheckHook
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "werkzeug" ];
 

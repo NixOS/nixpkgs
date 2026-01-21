@@ -39,11 +39,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/bluescan/proggyfonts";
     description = "Set of fixed-width screen fonts that are designed for code listings";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = [ maintainers.myrl ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.myrl ];
   };
 }

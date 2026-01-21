@@ -17,12 +17,12 @@ buildGoModule rec {
 
   vendorHash = "sha256-yJYWVQq6pbLPdmK4BVse6moMkurlmt6TBd6/vYM1xcU=";
 
-  meta = with lib; {
+  meta = {
     description = "OPA Rego language server";
     mainProgram = "regols";
     homepage = "https://github.com/kitagry/regols";
     changelog = "https://github.com/kitagry/regols/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ alias-dev ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ alias-dev ];
   };
 }

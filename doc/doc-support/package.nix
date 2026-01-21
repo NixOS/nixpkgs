@@ -157,7 +157,7 @@ stdenvNoCC.mkDerivation (
             buildArgs = toString ../.;
             open = "/share/doc/nixpkgs/index.html";
           };
-          nixos-render-docs-redirects' = writeShellScriptBin "redirects" "${lib.getExe nixos-render-docs-redirects} --file ${toString ../redirects.json} $@";
+          nixos-render-docs-redirects' = writeShellScriptBin "redirects" ''${lib.getExe nixos-render-docs-redirects} --file '${toString ../redirects.json}' "$@"'';
         in
         mkShellNoCC {
           packages = [
@@ -168,6 +168,7 @@ stdenvNoCC.mkDerivation (
         };
 
       tests = {
+        # Don't run this in CI because it's not reproducible
         manpage-urls = callPackage ../tests/manpage-urls.nix { };
       };
     };

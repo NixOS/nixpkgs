@@ -35,6 +35,40 @@ let
   # "gnu", etc.).
   sites = builtins.attrNames mirrors;
 
+  /**
+    Resolve a URL against the available mirrors.
+
+    If the input is a `"mirror://"` URL, it is normalized.
+    Otherwise, the URL is returned unmodified in a singleton list.
+
+    Mirror URLs should be formatted as:
+    ```
+    mirror://{mirror_name}/{path}
+    ```
+
+    The specified `mirror_name` must correspond to an entry in `pkgs/build-support/fetchurl/mirrors.nix`, otherwise an error is thrown.
+
+    # Inputs
+
+    `url` (String)
+    : A (possibly `"mirror://"`) URL to resolve.
+
+    # Output
+
+    A list of resolved URLs.
+  */
+  resolveUrl =
+    url:
+    let
+      mirrorSplit = lib.match "mirror://([[:alpha:]]+)/(.+)" url;
+      mirrorName = lib.head mirrorSplit;
+      mirrorList = mirrors."${mirrorName}" or (throw "unknown mirror:// site ${mirrorName}");
+    in
+    if mirrorSplit == null || mirrorName == null then
+      [ url ]
+    else
+      map (mirror: mirror + lib.elemAt mirrorSplit 1) mirrorList;
+
   impureEnvVars =
     lib.fetchers.proxyImpureEnvVars
     ++ [
@@ -64,7 +98,6 @@ lib.extendMkDerivation {
     "derivationArgs"
 
     # Hash attributes will be map to the corresponding outputHash*
-    "hash"
     "sha1"
     "sha256"
     "sha512"
@@ -136,6 +169,7 @@ lib.extendMkDerivation {
 
       # Passthru information, if any.
       passthru ? { },
+
       # Doing the download on a remote machine just duplicates network
       # traffic, so don't do that by default
       preferLocalBuild ? true,
@@ -214,30 +248,22 @@ lib.extendMkDerivation {
           }
         else if cacert != null then
           {
-            outputHashAlgo = "sha256";
-            outputHash = "";
+            outputHashAlgo = null;
+            outputHash = lib.fakeHash;
           }
         else
           throw "fetchurl requires a hash for fixed-output derivation: ${lib.generators.toPretty { } urls_}";
 
-      resolvedUrl =
-        let
-          mirrorSplit = lib.match "mirror://([[:alpha:]]+)/(.+)" url;
-          mirrorName = lib.head mirrorSplit;
-          mirrorList =
-            if lib.hasAttr mirrorName mirrors then
-              mirrors."${mirrorName}"
-            else
-              throw "unknown mirror:// site ${mirrorName}";
-        in
-        if mirrorSplit == null || mirrorName == null then
-          url
-        else
-          "${lib.head mirrorList}${lib.elemAt mirrorSplit 1}";
+      finalHashHasColon = lib.hasInfix ":" finalAttrs.hash;
+      finalHashColonMatch = lib.match "([^:]+)[:](.*)" finalAttrs.hash;
+
+      resolvedUrl = lib.head (resolveUrl url);
     in
 
     derivationArgs
     // {
+      __structuredAttrs = true;
+
       name =
         if finalAttrs.pname or null != null && finalAttrs.version or null != null then
           "${finalAttrs.pname}-${finalAttrs.version}"
@@ -259,11 +285,27 @@ lib.extendMkDerivation {
       preferHashedMirrors = false;
 
       # New-style output content requirements.
-      inherit (hash_) outputHashAlgo outputHash;
+      hash =
+        if
+          hash_.outputHashAlgo == null
+          || hash_.outputHash == ""
+          || lib.hasPrefix hash_.outputHashAlgo hash_.outputHash
+        then
+          hash_.outputHash
+        else
+          "${hash_.outputHashAlgo}:${hash_.outputHash}";
+      outputHashAlgo = if finalHashHasColon then lib.head finalHashColonMatch else null;
+      outputHash =
+        if finalAttrs.hash == "" then
+          lib.fakeHash
+        else if finalHashHasColon then
+          lib.elemAt finalHashColonMatch 1
+        else
+          finalAttrs.hash;
 
       # Disable TLS verification only when we know the hash and no credentials are
       # needed to access the resource
-      SSL_CERT_FILE =
+      env.SSL_CERT_FILE =
         if
           (
             hash_.outputHash == ""
@@ -297,14 +339,13 @@ lib.extendMkDerivation {
         ''
       ) curlOpts;
 
-      curlOptsList = lib.escapeShellArgs curlOptsList;
-
       inherit
-        showURLs
-        mirrorsFile
-        postFetch
+        curlOptsList
         downloadToTemp
         executable
+        mirrorsFile
+        postFetch
+        showURLs
         ;
 
       impureEnvVars = impureEnvVars ++ netrcImpureEnvVars;
@@ -312,15 +353,6 @@ lib.extendMkDerivation {
       nixpkgsVersion = lib.trivial.release;
 
       inherit preferLocalBuild;
-
-      postHook =
-        if netrcPhase == null then
-          null
-        else
-          ''
-            ${netrcPhase}
-            curlOpts="$curlOpts --netrc-file $PWD/netrc"
-          '';
 
       inherit meta;
       passthru = {
@@ -331,4 +363,7 @@ lib.extendMkDerivation {
 
   # No ellipsis
   inheritFunctionArgs = false;
+}
+// {
+  inherit resolveUrl;
 }

@@ -5,6 +5,7 @@
   fetchFromGitHub,
   callPackage,
   installShellFiles,
+  writableTmpDirAsHomeHook,
   nix-update-script,
   testers,
   targetPackages,
@@ -19,20 +20,21 @@ let
   television = rustPlatform.buildRustPackage (finalAttrs: {
     pname = "television";
 
-    version = "0.13.9";
+    version = "0.14.5";
 
     src = fetchFromGitHub {
       owner = "alexpasmantier";
       repo = "television";
       tag = finalAttrs.version;
-      hash = "sha256-xKb8XY+k5SbblIQx5tvuNxSjcfdyAAIzgZi4Q9176Qo=";
+      hash = "sha256-Oa/5f8FQ0WIAWNviiL2OZ+mmac6xUqp0C7ixmU6nt6Q=";
     };
 
-    cargoHash = "sha256-peVEGnUqxQLyqdOhkVK5FZiRjqkrYZgvXy9OTXFbk4g=";
+    cargoHash = "sha256-rKokOLm2IcUyHiQz+PwmdnpdGTGen2U4iqcY4wsTQl4=";
 
     strictDeps = true;
     nativeBuildInputs = [
       installShellFiles
+      writableTmpDirAsHomeHook
     ];
 
     # TODO(@getchoo): Investigate selectively disabling some tests, or fixing them
@@ -41,12 +43,26 @@ let
 
     postInstall = ''
       installManPage target/${stdenv.hostPlatform.rust.cargoShortTarget}/assets/tv.1
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      mkdir -p $out/share/television
+      for shell in bash zsh fish; do
+        "$out/bin/tv" init $shell > completion.$shell
 
-      installShellCompletion --cmd tv \
-        television/utils/shell/completion.bash \
-        television/utils/shell/completion.fish \
-        television/utils/shell/completion.nu \
-        television/utils/shell/completion.zsh
+        # split shell completion and shell integration
+        awk -v C=completion_pure.$shell -v D=$out/share/television/completion.$shell '
+          NR==FNR { key=$0; nextfile }
+          {
+            if (!found && index($0, key)) found=1
+            print > (found ? D : C)
+          }
+        ' television/utils/shell/completion.$shell completion.$shell
+
+        installShellCompletion --cmd tv completion_pure.$shell
+      done
+
+      # nushell doesn't contain regular completion for now
+      "$out/bin/tv" init nu > $out/share/television/completion.nu
     '';
 
     passthru = {

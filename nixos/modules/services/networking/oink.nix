@@ -12,7 +12,10 @@ let
       lib.mapAttrs' (k: v: lib.nameValuePair (lib.toLower k) v) attrs
     );
   oinkConfig = makeOinkConfig {
-    global = cfg.settings;
+    global = removeAttrs cfg.settings [
+      "apiKey"
+      "secretApiKey"
+    ];
     domains = cfg.domains;
   };
 in

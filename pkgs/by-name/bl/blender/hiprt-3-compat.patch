@@ -1,0 +1,72 @@
+diff --git a/extern/hipew/include/hiprtew.h b/extern/hipew/include/hiprtew.h
+index d245cb76..952ed805 100644
+--- a/extern/hipew/include/hiprtew.h
++++ b/extern/hipew/include/hiprtew.h
+@@ -157,7 +157,7 @@ typedef hiprtError (thiprtDestroyGlobalStackBuffer)( hiprtContext context, hiprt
+ 
+ typedef hiprtError(thiprtDestroyFuncTable)(hiprtContext context,
+                                            hiprtFuncTable funcTable);
+-typedef void(thiprtSetLogLevel)( hiprtLogLevel level );
++typedef hiprtError(thiprtSetLogLevel)( hiprtContext context, hiprtLogLevel level );
+ 
+ /* Function declarations. */
+ extern thiprtCreateContext *hiprtCreateContext;
+diff --git a/extern/hipew/src/hipew.c b/extern/hipew/src/hipew.c
+index e72ccde6..138e1efc 100644
+--- a/extern/hipew/src/hipew.c
++++ b/extern/hipew/src/hipew.c
+@@ -241,13 +241,13 @@ static int hipewHipInit(void) {
+   /* ROCm 6 changes paths from /opt/rocm/hip/lib to /opt/rocm/lib, so
+    * search for libraries there. */
+ 
+-  const char* hip_paths[] = { "libamdhip64.so",
++  const char* hip_paths[] = { "libamdhip64.so.7",
++                            "/opt/rocm/lib/libamdhip64.so.7",
++                            "/opt/rocm/hip/lib/libamdhip64.so.7",
+                             "libamdhip64.so.6",
+                             "/opt/rocm/lib/libamdhip64.so.6",
+                             "/opt/rocm/hip/lib/libamdhip64.so.6",
+-                            "libamdhip64.so.7",
+-                            "/opt/rocm/lib/libamdhip64.so.7",
+-                            "/opt/rocm/hip/lib/libamdhip64.so.7",
++                            "libamdhip64.so",
+                              NULL };
+ #endif
+   static int initialized = 0;
+diff --git a/intern/cycles/device/hiprt/device_impl.cpp b/intern/cycles/device/hiprt/device_impl.cpp
+index c251a8d0..b54bc36c 100644
+--- a/intern/cycles/device/hiprt/device_impl.cpp
++++ b/intern/cycles/device/hiprt/device_impl.cpp
+@@ -104,10 +104,10 @@ HIPRTDevice::HIPRTDevice(const DeviceInfo &info,
+   }
+ 
+   if (LOG_IS_ON(LOG_LEVEL_TRACE)) {
+-    hiprtSetLogLevel(hiprtLogLevelInfo | hiprtLogLevelWarn | hiprtLogLevelError);
++    hiprtSetLogLevel(hiprt_context, hiprtLogLevelInfo | hiprtLogLevelWarn | hiprtLogLevelError);
+   }
+   else {
+-    hiprtSetLogLevel(hiprtLogLevelNone);
++    hiprtSetLogLevel(hiprt_context, hiprtLogLevelNone);
+   }
+ }
+ 
+diff --git a/intern/cycles/kernel/CMakeLists.txt b/intern/cycles/kernel/CMakeLists.txt
+index bcaf4e16..aa6a3d17 100644
+--- a/intern/cycles/kernel/CMakeLists.txt
++++ b/intern/cycles/kernel/CMakeLists.txt
+@@ -93,13 +93,13 @@ set(SRC_KERNEL_DEVICE_HIPRT_HEADERS
+ set(SRC_KERNEL_DEVICE_HIPRT_SDK
+   hiprt/impl/Aabb.h
+   hiprt/impl/BvhNode.h
+-  hiprt/impl/Geometry.h
++  hiprt/impl/Header.h
+   hiprt/impl/hiprt_device_impl.h
+   hiprt/impl/hiprt_kernels_bitcode.h
+   hiprt/impl/Instance.h
++  hiprt/impl/Obb.h
+   hiprt/impl/QrDecomposition.h
+   hiprt/impl/Quaternion.h
+-  hiprt/impl/Scene.h
+   hiprt/impl/Transform.h
+   hiprt/impl/Triangle.h
+ )

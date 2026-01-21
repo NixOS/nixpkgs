@@ -4,7 +4,6 @@
   fetchPypi,
   pytest-cov-stub,
   pytest,
-  pythonOlder,
   setuptools,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pglast";
   version = "7.10";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -40,11 +37,11 @@ buildPythonPackage rec {
     "pglast.parser"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "PostgreSQL Languages AST and statements prettifier";
     homepage = "https://github.com/lelit/pglast";
     changelog = "https://github.com/lelit/pglast/blob/v${version}/CHANGES.rst";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     mainProgram = "pgpp";
   };

@@ -30,10 +30,10 @@ buildGoModule rec {
     mv $out/bin/cmd $out/bin/lenpaste
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Web service that allows you to share notes anonymously, an alternative to pastebin.com";
     homepage = "https://git.lcomrade.su/root/lenpaste";
-    license = licenses.agpl3Plus;
+    license = lib.licenses.agpl3Plus;
     maintainers = [ ];
     mainProgram = "lenpaste";
   };

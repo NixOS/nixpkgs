@@ -54,6 +54,11 @@ let
             gst-plugins-bad
             gst-libav
           ];
+        waylandDeps =
+          pkgs: with pkgs; [
+            libxkbcommon
+            wayland
+          ];
       in
       pkgs:
       with pkgs;
@@ -106,7 +111,8 @@ let
       ]
       ++ xorgDeps pkgs
       ++ gstreamerDeps pkgs
-      ++ extraLibraries pkgs;
+      ++ extraLibraries pkgs
+      ++ waylandDeps pkgs;
   };
 in
 symlinkJoin {

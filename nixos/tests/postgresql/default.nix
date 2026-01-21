@@ -31,6 +31,7 @@ in
   # postgresql
   postgresql = importWithArgs ./postgresql.nix;
   postgresql-jit = importWithArgs ./postgresql-jit.nix;
+  postgresql-replication = importWithArgs ./postgresql-replication.nix;
   postgresql-wal-receiver = importWithArgs ./postgresql-wal-receiver.nix;
   postgresql-tls-client-cert = importWithArgs ./postgresql-tls-client-cert.nix;
 

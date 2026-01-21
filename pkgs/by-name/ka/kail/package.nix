@@ -23,11 +23,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-u6/LsLphaqYswJkAuqgrgknnm+7MnaeH+kf9BPcdtrc=";
 
-  meta = with lib; {
+  meta = {
     description = "Kubernetes log viewer";
     homepage = "https://github.com/boz/kail";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       offline
       vdemeester
     ];

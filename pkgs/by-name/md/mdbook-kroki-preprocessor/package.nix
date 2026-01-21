@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-kroki-preprocessor";
-  version = "0.2.1";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "joelcourtney";
     repo = "mdbook-kroki-preprocessor";
     rev = "v${version}";
-    hash = "sha256-rTXieHa/EIg69vUQE2FOD1Xb4cUVe5CvBiv9CnhHB3I=";
+    hash = "sha256-NTsI/ANqm192sNE9yd2d7ldDLglWoq4L20t84PaAO3M=";
   };
 
-  cargoHash = "sha256-aTtjrCl13oOKqwPGiVlOfjGqAdBS94XGjcvn3bBWpa0=";
+  cargoHash = "sha256-BStTLg44XRdEaQKDNfR+jgjECjZantXTYNk/HX5h7eU=";
 
   nativeBuildInputs = [
     pkg-config
@@ -27,12 +27,12 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Render Kroki diagrams from files or code blocks in mdbook";
     mainProgram = "mdbook-kroki-preprocessor";
     homepage = "https://github.com/joelcourtney/mdbook-kroki-preprocessor";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       matthiasbeyer
     ];
   };

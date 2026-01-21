@@ -50,12 +50,12 @@ stdenv.mkDerivation rec {
       --replace "libstrangle_vk.so" "$out/lib/libstrangle/lib64/libstrangle_vk.so"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.com/torkel104/libstrangle";
     description = "Frame rate limiter for Linux/OpenGL";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ aske ];
+    maintainers = with lib.maintainers; [ aske ];
     mainProgram = "strangle";
   };
 }

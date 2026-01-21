@@ -3,7 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
-  ffmpeg,
+  ffmpeg_7,
   vulkan-loader,
   versionCheckHook,
   nix-update-script,
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
-    ffmpeg
+    ffmpeg_7
     vulkan-loader
   ];
 

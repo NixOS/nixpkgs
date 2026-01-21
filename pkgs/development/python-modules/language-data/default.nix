@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   marisa-trie,
-  pythonOlder,
   setuptools-scm,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "language-data";
   version = "1.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "georgkrause";
@@ -30,11 +27,11 @@ buildPythonPackage rec {
   # No unittests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Supplement module for langcodes";
     homepage = "https://github.com/georgkrause/language_data";
     changelog = "https://github.com/georgkrause/language_data/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

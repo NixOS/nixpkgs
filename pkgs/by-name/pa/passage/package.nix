@@ -5,7 +5,7 @@
   makeBinaryWrapper,
   replaceVars,
   age,
-  getopt,
+  unixtools,
   coreutils,
   findutils,
   gnugrep,
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     (replaceVars ./darwin-getopt-path.patch {
-      inherit getopt;
+      getopt = unixtools.getopt;
     })
     ./set-correct-program-name-for-sleep.patch
   ];
@@ -44,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
       age
       coreutils
       findutils
+      unixtools.getopt
       git
       gnugrep
       gnused
@@ -67,15 +68,15 @@ stdenv.mkDerivation (finalAttrs: {
     "WITH_ALLCOMP=yes"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Stores, retrieves, generates, and synchronizes passwords securely";
     homepage = "https://github.com/FiloSottile/passage";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       kaction
       ma27
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "passage";
 
     longDescription = ''

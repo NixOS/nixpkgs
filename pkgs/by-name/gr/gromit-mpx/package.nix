@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   cmake,
   pkg-config,
   gtk3,
@@ -22,21 +21,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gromit-mpx";
-  version = "1.7.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "bk138";
     repo = "gromit-mpx";
     tag = finalAttrs.version;
-    hash = "sha256-jHw4V2ZvfpT3PUihe/O+9BPsv+udFg5seMbYmxOz8Yk=";
+    hash = "sha256-dqZbkbjcfNO/rlUn5pCDdPU5rYyG1qSR38WROFwPlN0=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      url = "https://github.com/bk138/gromit-mpx/commit/e3b501d497374da083b97d0b3bbd40c5c766d2d1.patch?full_index=1";
-      hash = "sha256-MJFwwYuvIZeLJBi4p/JQ6qJo6fntj2Q7y+ufap/MGdY=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake

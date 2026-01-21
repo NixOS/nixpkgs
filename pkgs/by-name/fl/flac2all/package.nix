@@ -12,7 +12,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "flac2all";
   version = "5.4";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -54,12 +54,12 @@ python3Packages.buildPythonApplication rec {
     "flac2all_pkg.mp3"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Multi process, clustered, FLAC to multi codec audio converter with tagging support";
     mainProgram = "flac2all";
     homepage = "https://github.com/ZivaVatra/flac2all";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     # TODO: This has only been tested on Linux, but may work on Mac too.
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

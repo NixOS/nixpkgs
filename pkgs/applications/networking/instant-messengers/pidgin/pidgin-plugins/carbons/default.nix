@@ -26,11 +26,11 @@ stdenv.mkDerivation rec {
     pidgin
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/gkdr/carbons";
     description = "XEP-0280: Message Carbons plugin for libpurple";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

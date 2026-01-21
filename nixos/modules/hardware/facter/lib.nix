@@ -28,7 +28,7 @@ let
     ) cpus;
 
   # Extract all driver_modules from a list of hardware entries
-  collectDrivers = list: lib.catAttrs "driver_modules" list;
+  collectDrivers = list: lib.foldl' (lst: value: lst ++ value.driver_modules or [ ]) [ ] list;
 
   # Convert number to zero-padded 4-digit hex string (for USB device IDs)
   toZeroPaddedHex =

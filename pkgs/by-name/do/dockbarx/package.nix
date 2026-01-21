@@ -13,7 +13,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "dockbarx";
   version = "1.0-beta4";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xuzhen";
@@ -61,11 +61,11 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/xuzhen/dockbarx";
     description = "Lightweight taskbar/panel replacement which works as a stand-alone dock";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

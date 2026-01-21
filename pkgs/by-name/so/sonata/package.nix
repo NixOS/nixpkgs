@@ -23,14 +23,14 @@ let
 in
 buildPythonApplication rec {
   pname = "sonata";
-  version = "1.7.1";
+  version = "1.7.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "multani";
     repo = "sonata";
     tag = "v${version}";
-    hash = "sha256-80F2dVaRawnI0E+GzaxRUudaLWWHGUjICCEbXHVGy+E=";
+    hash = "sha256-eyB+DHcAg1nYjE415VjpPnqZC9embYRhnwXhN2ZVN0o=";
   };
 
   nativeBuildInputs = [

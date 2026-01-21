@@ -13,12 +13,10 @@
   cachetools,
   click,
   fsspec,
-  google-auth,
   mmh3,
   pydantic,
   pyparsing,
   pyroaring,
-  ray,
   requests,
   rich,
   sortedcontainers,
@@ -31,17 +29,20 @@
   google-cloud-bigquery,
   # bodo,
   # daft,
+  datafusion,
   duckdb,
   pyarrow,
-  pyiceberg-core,
   boto3,
-  huggingface-hub,
+  google-auth,
   gcsfs,
+  huggingface-hub,
   thrift,
   kerberos,
   # thrift-sasl,
   pandas,
-  # pyiceberg-core,
+  polars,
+  pyiceberg-core,
+  ray,
   s3fs,
   python-snappy,
   psycopg2-binary,
@@ -50,7 +51,6 @@
   # tests
   azure-core,
   azure-storage-blob,
-  datafusion,
   fastavro,
   moto,
   pyspark,
@@ -100,12 +100,10 @@ buildPythonPackage rec {
     cachetools
     click
     fsspec
-    google-auth
     mmh3
     pydantic
     pyparsing
     pyroaring
-    ray
     requests
     rich
     sortedcontainers
@@ -127,6 +125,9 @@ buildPythonPackage rec {
     daft = [
       # daft
     ];
+    datafusion = [
+      datafusion
+    ];
     duckdb = [
       duckdb
       pyarrow
@@ -134,14 +135,17 @@ buildPythonPackage rec {
     dynamodb = [
       boto3
     ];
-    hf = [
-      huggingface-hub
+    gcp-auth = [
+      google-auth
     ];
     gcsfs = [
       gcsfs
     ];
     glue = [
       boto3
+    ];
+    hf = [
+      huggingface-hub
     ];
     hive = [
       thrift
@@ -155,14 +159,23 @@ buildPythonPackage rec {
       pandas
       pyarrow
     ];
+    polars = [
+      polars
+    ];
     pyarrow = [
       pyarrow
+      pyiceberg-core
+    ];
+    pyiceberg-core = [
       pyiceberg-core
     ];
     ray = [
       pandas
       pyarrow
       ray
+    ];
+    rest-sigv4 = [
+      boto3
     ];
     s3fs = [
       s3fs

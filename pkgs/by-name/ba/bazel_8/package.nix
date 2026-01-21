@@ -31,7 +31,7 @@
   cctools,
   # Allow to independently override the jdks used to build and run respectively
   jdk_headless,
-  version ? "8.4.2",
+  version ? "8.5.0",
 }:
 
 let
@@ -45,7 +45,7 @@ let
 
   src = fetchzip {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    hash = "sha256-5oNYKHPaDkpunl6oC104Rh1wAEMWfLfvCFdGHlXZn4o=";
+    hash = "sha256-L8gnWpQAeHMUbydrrEtZ6WGIzhunDBWCNWMA+3dAKT0=";
     stripRoot = false;
   };
 
@@ -215,14 +215,14 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/bazelbuild/bazel/";
     description = "Build tool that builds code quickly and reliably";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # source bundles dependencies as jars
     ];
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     teams = [ lib.teams.bazel ];
     mainProgram = "bazel";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

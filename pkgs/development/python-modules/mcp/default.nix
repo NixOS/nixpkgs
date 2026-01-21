@@ -15,6 +15,7 @@
   jsonschema,
   pydantic,
   pydantic-settings,
+  pyjwt,
   python-multipart,
   sse-starlette,
   starlette,
@@ -41,25 +42,20 @@
 
 buildPythonPackage rec {
   pname = "mcp";
-  version = "1.15.0";
+  version = "1.25.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "modelcontextprotocol";
     repo = "python-sdk";
     tag = "v${version}";
-    hash = "sha256-pvbrNkGfQaZX95JZyYXuuH2gMzWouuGXjaDxPyKW0Zw=";
+    hash = "sha256-fSQCvKaNMeCzguM2tcTJJlAeZQmzSJmbfEK35D8pQcs=";
   };
 
+  # time.sleep(0.1) feels a bit optimistic and it has been flaky whilst
+  # testing this on macOS under load.
   postPatch = lib.optionalString stdenv.buildPlatform.isDarwin ''
-    # time.sleep(0.1) feels a bit optimistic and it has been flaky whilst
-    # testing this on macOS under load.
-    substituteInPlace \
-      "tests/client/test_stdio.py" \
-      "tests/server/fastmcp/test_integration.py" \
-      "tests/shared/test_ws.py" \
-      "tests/shared/test_sse.py" \
-      "tests/shared/test_streamable_http.py" \
+    substituteInPlace tests/client/test_stdio.py \
       --replace-fail "time.sleep(0.1)" "time.sleep(1)"
   '';
 
@@ -79,6 +75,7 @@ buildPythonPackage rec {
     jsonschema
     pydantic
     pydantic-settings
+    pyjwt
     python-multipart
     sse-starlette
     starlette
@@ -109,7 +106,7 @@ buildPythonPackage rec {
     pytestCheckHook
     requests
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # attempts to run the package manager uv

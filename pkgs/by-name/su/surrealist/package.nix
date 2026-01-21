@@ -95,8 +95,8 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     outputHash =
       {
-        x86_64-linux = "sha256-mjQ/OfUYUbaBQ2hCAq/+HYjUS7JwrtMvkoA2nflRMSQ=";
-        aarch64-linux = "sha256-zvL5siDAr6IXMSwP+bPePH1kHS2Tydm4qNIMvtpX+rk=";
+        x86_64-linux = "sha256-tZYIiWHaeryV/f9AFNknRZp8om0y8QH8RCxoqgmbR5g=";
+        aarch64-linux = "sha256-6nB8wcXIYR1WcYqZrNFl0Jfdz/Z3PttULQHsQcfAsOk=";
       }
       .${stdenv.hostPlatform.system}
         or (throw "${finalAttrs.pname}: Platform ${stdenv.hostPlatform.system} is not packaged yet. Supported platforms: x86_64-linux, aarch64-linux.");
@@ -166,15 +166,15 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postConfigure
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Visual management of your SurrealDB database";
     homepage = "https://surrealdb.com/surrealist";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "surrealist";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       frankp
       dmitriiStepanidenko
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

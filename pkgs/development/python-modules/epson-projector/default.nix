@@ -36,11 +36,11 @@ buildPythonPackage rec {
     "epson_projector.projector_tcp"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Epson projector support for Python";
     homepage = "https://github.com/pszafer/epson_projector";
     changelog = "https://github.com/pszafer/epson_projector/releases/tag/v.${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

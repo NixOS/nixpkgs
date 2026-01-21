@@ -10,18 +10,18 @@
   gtk3,
   python3,
   dropbox,
-  mateUpdateScript,
+  gitUpdater,
 }:
 
 let
   dropboxd = "${dropbox}/bin/dropbox";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "caja-dropbox";
   version = "1.28.0";
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor finalAttrs.version}/caja-dropbox-${finalAttrs.version}.tar.xz";
     sha256 = "t0w4qZQlS9PPfLxxK8LsdRagypQqpleFJs29aqYgGWM=";
   };
 
@@ -57,16 +57,20 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname; };
+  passthru.updateScript = gitUpdater {
+    url = "https://git.mate-desktop.org/caja-dropbox";
+    odd-unstable = true;
+    rev-prefix = "v";
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Dropbox extension for Caja file manager";
     homepage = "https://github.com/mate-desktop/caja-dropbox";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Plus
       cc-by-nd-30
     ];
-    platforms = platforms.unix;
-    teams = [ teams.mate ];
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.mate ];
   };
-}
+})

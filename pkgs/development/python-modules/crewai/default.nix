@@ -7,8 +7,8 @@
   hatchling,
 
   # dependencies
+  aiosqlite,
   appdirs,
-  blinker,
   chromadb,
   click,
   instructor,
@@ -16,6 +16,7 @@
   json5,
   jsonref,
   litellm,
+  mcp,
   openai,
   opentelemetry-api,
   opentelemetry-exporter-otlp-proto-http,
@@ -27,8 +28,6 @@
   pydantic-settings,
   pyjwt,
   python-dotenv,
-  pyvis,
-  qdrant-client,
   regex,
   tokenizers,
   tomli,
@@ -37,37 +36,57 @@
 
   # tests
   pytestCheckHook,
+  pytest-asyncio,
   pytest-xdist,
+  qdrant-client,
+  vcrpy,
   versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "crewai";
-  version = "0.203.1";
+  version = "1.7.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "crewAIInc";
     repo = "crewAI";
     tag = version;
-    hash = "sha256-vy3JdJjuiFbi66IDNo+dQ7MZqlHqvHt/zUb6eblPT7A=";
+    hash = "sha256-liJS3hrNsyAt49ROUi3/pWXfMP2wA/bFyy6yEOV6Rrk=";
   };
+
+  sourceRoot = "${src.name}/lib/crewai";
 
   build-system = [ hatchling ];
 
   pythonRelaxDeps = [
     "chromadb"
+    "click"
     "json-repair"
+    "json5"
     "litellm"
+    "mcp"
+    "openai"
+    "opentelemetry-api"
+    "opentelemetry-exporter-otlp-proto-http"
+    "opentelemetry-sdk"
+    "pdfplumber"
     "portalocker"
     "pydantic"
-    "pyvis"
+    "pydantic-settings"
+    "pyjwt"
+    "python-dotenv"
+    "regex"
+    "tokenizers"
+    "tomli"
+    "tomli-w"
+    "uv"
   ];
 
   dependencies = [
+    aiosqlite
     appdirs
-    blinker
     chromadb
     click
     instructor
@@ -75,6 +94,7 @@ buildPythonPackage rec {
     json5
     jsonref
     litellm
+    mcp
     openai
     opentelemetry-api
     opentelemetry-exporter-otlp-proto-http
@@ -86,7 +106,6 @@ buildPythonPackage rec {
     pydantic-settings
     pyjwt
     python-dotenv
-    pyvis
     regex
     tokenizers
     tomli
@@ -105,6 +124,30 @@ buildPythonPackage rec {
     "tests/test_crew.py" # require require API keys
     "tests/rag/chromadb/test_client.py" # issue with chromadb
     "tests/telemetry/test_telemetry.py" # telemetry need network access
+
+    # ImportError: cannot import name 'InitFrom' from 'qdrant_client.models'
+    "tests/rag/qdrant/test_client.py"
+
+    # Tests requiring optional dependencies
+    "tests/llms/anthropic"
+    "tests/llms/azure"
+    "tests/llms/bedrock"
+    "tests/llms/google"
+    "tests/llms/litellm"
+    "tests/llms/hooks/test_anthropic_interceptor.py"
+    "tests/llms/hooks/test_unsupported_providers.py"
+
+    # Tests requiring network/API access
+    "tests/llms/openai"
+    "tests/telemetry"
+    "tests/tracing"
+    "tests/test_streaming_integration.py"
+    "tests/hooks"
+    "tests/llms/hooks/test_openai_interceptor.py"
+    "tests/test_llm.py"
+
+    # Tests requiring crewai-tools
+    "tests/agents/test_lite_agent.py"
   ];
 
   disabledTests = [
@@ -369,17 +412,39 @@ buildPythonPackage rec {
     "test_asearch_wrong_client_type"
     "test_areset_wrong_client_type"
     "test_adelete_collection"
+
+    # Tests requiring litellm
+    "test_litellm_anthropic_error_handling"
+    "test_litellm_auth_error_handling"
+    "test_crew_agent_executor_litellm_auth_error"
+    "test_agent_with_callbacks"
+    "test_crew_memoization"
+    "test_task_guardrail"
+    "test_crew_name"
+    "test_get_conversion_instructions_non_gpt"
+    "test_supports_function_calling_false"
+
+    # Tests requiring network
+    "test_agent_max_iterations_stops_loop"
+    "test_task_output_includes_messages"
+
+    # Not work with nixpkgs-review
+    "test_concurrent_ainvoke_calls"
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-asyncio
     pytest-xdist
     qdrant-client
+    vcrpy
     versionCheckHook
     writableTmpDirAsHomeHook
   ];
 
-  versionCheckProgramArg = "--version";
+  pytestFlagsArray = [
+    "--override-ini=addopts="
+  ];
 
   meta = {
     description = "Framework for orchestrating role-playing, autonomous AI agents";

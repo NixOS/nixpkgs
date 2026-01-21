@@ -3,7 +3,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   pytestCheckHook,
   cython,
   setuptools,
@@ -19,8 +18,7 @@
 buildPythonPackage rec {
   pname = "nitime";
   version = "0.11";
-  disabled = pythonOlder "3.7";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -48,10 +46,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nitime" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://nipy.org/nitime";
     description = "Algorithms and containers for time-series analysis in time and spectral domains";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.bcdarwin ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.bcdarwin ];
   };
 }

@@ -31,7 +31,7 @@ assert gpgmeSupport -> sslSupport;
 
 stdenv.mkDerivation rec {
   pname = "mutt";
-  version = "2.2.15";
+  version = "2.2.16";
   outputs = [
     "out"
     "doc"
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://ftp.mutt.org/pub/mutt/${pname}-${version}.tar.gz";
-    hash = "sha256-pRaGEE5CA/TCo7F2UnvjuV0I6AjpT9LcrbfDBWa/iU0=";
+    hash = "sha256-HTEJp0OtiyXu+XEJsr20Zdt4N9Co0hHNOIvhtvqsPzI=";
   };
 
   patches = [
@@ -126,12 +126,12 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Small but very powerful text-based mail client";
     homepage = "http://www.mutt.org";
     mainProgram = "mutt";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ rnhmjoj ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ rnhmjoj ];
   };
 }

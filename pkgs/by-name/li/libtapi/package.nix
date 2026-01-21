@@ -163,7 +163,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.ncsa;
     mainProgram = "tapi";
     maintainers = with lib.maintainers; [
-      matthewbauer
       reckenrode
     ];
     platforms = lib.platforms.unix;

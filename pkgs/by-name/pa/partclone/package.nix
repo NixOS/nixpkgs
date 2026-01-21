@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Utilities to save and restore used blocks on a partition";
     longDescription = ''
       Partclone provides utilities to save and restore used blocks on a
@@ -60,8 +60,8 @@ stdenv.mkDerivation rec {
       ext2 partition.
     '';
     homepage = "https://partclone.org";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ marcweber ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ marcweber ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -49,11 +49,11 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     inherit (wayland.meta) homepage license maintainers;
     mainProgram = "wayland-scanner";
     description = "C code generator for Wayland protocol XML files";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     pkgConfigModules = [ "wayland-scanner" ];
   };
 })

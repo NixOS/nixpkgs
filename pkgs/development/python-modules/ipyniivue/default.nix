@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchNpmDeps,
-  pythonOlder,
   nodejs,
   npmHooks,
   hatchling,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "ipyniivue";
   version = "2.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "niivue";
@@ -55,11 +52,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "ipyniivue" ];
 
-  meta = with lib; {
+  meta = {
     description = "Show a nifti image in a webgl 2.0 canvas within a jupyter notebook cell";
     homepage = "https://github.com/niivue/ipyniivue";
     changelog = "https://github.com/niivue/ipyniivue/releases/tag/${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "portfolio_rs";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "MarkusZoppelt";
     repo = "portfolio_rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WCz41eJciYwvljiyg5MESiz4eUXBpot7+j81PPyG+fY=";
+    hash = "sha256-SuukTNEfPOCCE5bg08/K7M68R2dAe75cch39whtcSWg=";
   };
 
-  cargoHash = "sha256-s+/IaajmdKu49nQ49RdjudgKW9KdAix0Ryj+N+wnuZU=";
+  cargoHash = "sha256-L14Cu/Gex6FGeSEL7zcY+E6khtkH6fwzqkjHm67ALUw=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];

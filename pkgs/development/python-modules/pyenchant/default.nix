@@ -4,7 +4,7 @@
   buildPythonPackage,
   isPy27,
   fetchPypi,
-  enchant2,
+  enchant_2,
 }:
 
 buildPythonPackage rec {
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "sha256-glKIJGtd68lDb5GWdlCXTvDVY2RYUCYZ4yLEdvEoOJE=";
   };
 
-  propagatedBuildInputs = [ enchant2 ];
+  propagatedBuildInputs = [ enchant_2 ];
 
   postPatch =
     let
@@ -33,16 +33,16 @@ buildPythonPackage rec {
       # it "accidentally" work by pulling something from /opt.
       substituteInPlace enchant/_enchant.py                  \
         --replace 'os.environ.get("PYENCHANT_LIBRARY_PATH")' \
-                  "'${enchant2}/lib/libenchant-2${libext}'"  \
+                  "'${enchant_2}/lib/libenchant-2${libext}'"  \
         --replace '/opt/local/lib/' ""
     '';
 
   # dictionaries needed for tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for the Enchant spellchecker";
     homepage = "https://github.com/pyenchant/pyenchant";
-    license = licenses.lgpl21;
+    license = lib.licenses.lgpl21;
   };
 }

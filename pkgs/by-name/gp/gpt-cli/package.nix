@@ -51,8 +51,6 @@ python3Packages.buildPythonApplication rec {
 
   versionCheckProgram = "${placeholder "out"}/bin/gpt";
 
-  versionCheckProgramArg = "--version";
-
   meta = {
     description = "Command-line interface for ChatGPT, Claude and Bard";
     homepage = "https://github.com/kharvd/gpt-cli";

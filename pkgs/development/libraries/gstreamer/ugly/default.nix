@@ -103,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = directoryListingUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Gstreamer Ugly Plugins";
     homepage = "https://gstreamer.freedesktop.org";
     longDescription = ''
@@ -112,8 +112,8 @@ stdenv.mkDerivation (finalAttrs: {
       the plug-ins or the supporting libraries might not be how we'd
       like. The code might be widely known to present patent problems.
     '';
-    license = if enableGplPlugins then licenses.gpl2Plus else licenses.lgpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ matthewbauer ];
+    license = if enableGplPlugins then lib.licenses.gpl2Plus else lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
   };
 })

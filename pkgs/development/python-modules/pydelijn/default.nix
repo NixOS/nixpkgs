@@ -4,7 +4,6 @@
   async-timeout,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   pytz,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pydelijn";
   version = "1.1.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
@@ -40,10 +37,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pydelijn" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python package to retrieve realtime data of passages at stops of De Lijn";
     homepage = "https://github.com/bollewolle/pydelijn";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

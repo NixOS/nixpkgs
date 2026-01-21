@@ -22,14 +22,14 @@ stdenv.mkDerivation rec {
     cp lzbench $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     inherit (src.meta) homepage;
     description = "In-memory benchmark of open-source LZ77/LZSS/LZMA compressors";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Only
       gpl3Only
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ videl ];
     mainProgram = "lzbench";
   };

@@ -1,6 +1,8 @@
 {
   stdenv,
   nodejs,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   pnpm,
   fetchFromGitHub,
 }:
@@ -21,16 +23,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     nodejs
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm
   ];
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
       src
       sourceRoot
       ;
+    inherit pnpm; # This may be different than pkgs.pnpm
     fetcherVersion = 1;
     hash = pnpmDepsHash;
   };

@@ -25,22 +25,27 @@
 
 buildPythonPackage rec {
   pname = "debugpy";
-  version = "1.8.17";
+  version = "1.8.19";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "debugpy";
     tag = "v${version}";
-    hash = "sha256-U9WeWAX0qDusWcMsFaI1ct4YKlGQEHUYlKZfRiYhma0=";
+
+    # Upstream uses .gitattributes to inject information about the revision
+    # hash and the refname into `src/debugpy/_version.py`, see:
+    #
+    # - https://git-scm.com/docs/gitattributes#_export_subst and
+    # - https://github.com/microsoft/debugpy/blob/v1.8.17/src/debugpy/_version.py#L24-L30
+    postFetch = ''
+      sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${src.tag})"/' "$out/src/debugpy/_version.py"
+    '';
+
+    hash = "sha256-O9RHqyV7xMMnouCp4t18CNH/z2jBxZBUkybAw1c2gY0=";
   };
 
   patches = [
-    # Use nixpkgs version instead of versioneer
-    (replaceVars ./hardcode-version.patch {
-      inherit version;
-    })
-
     # Fix importing debugpy in:
     # - test_nodebug[module-launch(externalTerminal)]
     # - test_nodebug[module-launch(integratedTerminal)]
@@ -74,20 +79,21 @@ buildPythonPackage rec {
   # Derived from linux_and_mac/compile_linux.sh & linux_and_mac/compile_mac.sh
   preBuild = ''
     (
-        set -x
-        cd src/debugpy/_vendored/pydevd/pydevd_attach_to_process
-        $CXX linux_and_mac/attach.cpp -Ilinux_and_mac -std=c++11 -fPIC -nostartfiles ${
-          {
-            "x86_64-linux" = "-shared -o attach_linux_amd64.so";
-            "i686-linux" = "-shared -o attach_linux_x86.so";
-            "aarch64-linux" = "-shared -o attach_linux_arm64.so";
-            "riscv64-linux" = "-shared -o attach_linux_riscv64.so";
-            "x86_64-darwin" = "-D_REENTRANT -dynamiclib -lc -o attach.dylib";
-            "aarch64-darwin" = "-D_REENTRANT -dynamiclib -lc -o attach.dylib";
-          }
-          .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")
+      set -x
+      cd src/debugpy/_vendored/pydevd/pydevd_attach_to_process
+      $CXX linux_and_mac/attach.cpp -Ilinux_and_mac -std=c++11 -fPIC -nostartfiles ${
+        {
+          "x86_64-linux" = "-shared -o attach_linux_amd64.so";
+          "i686-linux" = "-shared -o attach_linux_x86.so";
+          "aarch64-linux" = "-shared -o attach_linux_arm64.so";
+          "riscv64-linux" = "-shared -o attach_linux_riscv64.so";
+          "x86_64-darwin" = "-D_REENTRANT -dynamiclib -lc -o attach.dylib";
+          "aarch64-darwin" = "-D_REENTRANT -dynamiclib -lc -o attach.dylib";
         }
-      )'';
+        .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")
+      }
+    )
+  '';
 
   build-system = [ setuptools ];
 

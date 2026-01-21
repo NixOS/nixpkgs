@@ -50,7 +50,7 @@ let
 
   openmsx = fetchzip {
     url = "https://cdn.openttd.org/openmsx-releases/0.4.2/openmsx-0.4.2-all.zip";
-    hash = "sha256-Cgrg2m+uTODFg39mKgX+hE8atV7v5bVyZd716vSZB8M=";
+    hash = "sha256-ysNFIvo7iaLN8XoaeZuZQFLpBZlYUDLDg7rH6TabaHY=";
   };
 
   # OpenTTD builds and uses some of its own tools during the build and we need those to be available for cross-compilation.
@@ -67,22 +67,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openttd";
-  version = "14.1";
+  version = "15.0";
 
   src = fetchzip {
     url = "https://cdn.openttd.org/openttd-releases/${finalAttrs.version}/openttd-${finalAttrs.version}-source.tar.xz";
-    hash = "sha256-YT4IE/rJ9pnpeMWKbOra6AbSUwW19RwOKlXkxwoMeKY=";
+    hash = "sha256-J4M0n5dLM04Xtx3WMxWKVgDbo92QjuuJgPbESpwf1e8=";
   };
-
-  patches = [
-    # Fix build against icu-76:
-    #   https://github.com/OpenTTD/OpenTTD/pull/13048
-    (fetchpatch {
-      name = "icu-75.patch";
-      url = "https://github.com/OpenTTD/OpenTTD/commit/14fac2ad37bfb9cec56b4f9169d864f6f1c7b96e.patch";
-      hash = "sha256-L35ybnTKPO+HVP/7ZYzWM2mA+s1RAywhofSuzpy/6sc=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -154,7 +144,7 @@ stdenv.mkDerivation (finalAttrs: {
         - observe as spectators
     '';
     homepage = "https://www.openttd.org/";
-    changelog = "https://cdn.openttd.org/openttd-releases/${finalAttrs.version}/changelog.txt";
+    changelog = "https://cdn.openttd.org/openttd-releases/${finalAttrs.version}/changelog.md";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pymysql,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   wheel,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "aiomysql";
   version = "0.3.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "aio-libs";
@@ -36,10 +33,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiomysql" ];
 
-  meta = with lib; {
+  meta = {
     description = "MySQL driver for asyncio";
     homepage = "https://github.com/aio-libs/aiomysql";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

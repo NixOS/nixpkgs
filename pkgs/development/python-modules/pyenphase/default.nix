@@ -20,16 +20,16 @@
   tenacity,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyenphase";
-  version = "2.4.1";
+  version = "2.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyenphase";
     repo = "pyenphase";
-    tag = "v${version}";
-    hash = "sha256-KgkXOWnKjnG3qHJN+NxHxeqEo+zVrWtWP0l3Lmn+NtI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JJtkfN3udslcNYMXGGRXjyPqP3hjix9bg7GcGNOoMbM=";
   };
 
   pythonRelaxDeps = [ "tenacity" ];
@@ -64,11 +64,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyenphase" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to control enphase envoy";
     homepage = "https://github.com/pyenphase/pyenphase";
-    changelog = "https://github.com/pyenphase/pyenphase/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/pyenphase/pyenphase/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

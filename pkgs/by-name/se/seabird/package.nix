@@ -62,11 +62,11 @@ buildGoModule rec {
 
   desktopItems = [ "dev.skynomads.Seabird.desktop" ];
 
-  meta = with lib; {
+  meta = {
     description = "Native Kubernetes desktop client";
     homepage = "https://getseabird.github.io";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ nicolas-goudry ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ nicolas-goudry ];
     mainProgram = "seabird";
   };
 }

@@ -12,6 +12,7 @@
   nix-update-script,
   enableWlrSupport ? !stdenv.hostPlatform.isDarwin,
   enableMonochromeIcon ? false,
+  wrapGAppsHook3,
 }:
 
 assert stdenv.hostPlatform.isDarwin -> (!enableWlrSupport);
@@ -54,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     kdePackages.qttools
     kdePackages.wrapQtAppsHook
     makeBinaryWrapper
+    wrapGAppsHook3
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     imagemagick
@@ -94,6 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     rm -r $out/share/metainfo
   '';
 
+  dontWrapGApps = true;
   dontWrapQtApps = true;
 
   postFixup =
@@ -107,7 +110,8 @@ stdenv.mkDerivation (finalAttrs: {
     ''
       wrapProgram $out/${binary} \
         ${lib.optionalString enableWlrSupport "--prefix PATH : ${lib.makeBinPath [ grim ]}"} \
-        ''${qtWrapperArgs[@]}
+        ''${qtWrapperArgs[@]} \
+        ''${gappsWrapperArgs[@]}
     '';
 
   passthru.updateScript = nix-update-script { };

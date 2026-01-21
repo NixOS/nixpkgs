@@ -56,11 +56,11 @@ stdenv.mkDerivation rec {
   #     bgpd-bgpd.o:/build/source/src/bgpd/bgpd.h:133: first defined here
   env.NIX_CFLAGS_COMPILE = "-fcommon";
 
-  meta = with lib; {
+  meta = {
     description = "Free implementation of the Border Gateway Protocol, Version 4. It allows ordinary machines to be used as routers exchanging routes with other systems speaking the BGP protocol";
-    license = licenses.isc;
+    license = lib.licenses.isc;
     homepage = "http://www.openbgpd.org/";
-    maintainers = with maintainers; [ kloenk ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ kloenk ];
+    platforms = lib.platforms.linux;
   };
 }

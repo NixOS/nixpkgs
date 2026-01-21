@@ -11,7 +11,7 @@
 
 buildPythonPackage {
   pname = "gradio-pdf";
-  version = "0.0.22";
+  version = "0.0.23";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -19,8 +19,8 @@ buildPythonPackage {
     repo = "gradio-pdf";
     # No source release on Pypi
     # No tags on GitHub
-    rev = "8833e9cd419d2a5eeff98e3ae8cbe690913bcfce";
-    hash = "sha256-z9rfVnH2qANDp2ukUGSogADbwqQQzCkB7Cp/04UtEpM=";
+    rev = "57deb0bd2823a9a75c5da498cc39a85f8fd4ff02";
+    hash = "sha256-FzO8jKZw4EBqmsQ0xXqj0lqSHXxKk+rZjuluyNJVPYk=";
   };
 
   build-system = [

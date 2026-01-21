@@ -5,6 +5,7 @@
   fetchFromGitHub,
   nix-update-script,
   testers,
+  validatePkgConfig,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -34,6 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--features"
     "zoneinfo64,compiled_data"
   ];
+  nativeBuildInputs = [ validatePkgConfig ];
 
   installPhase = ''
     runHook preInstall
@@ -84,19 +86,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.tests = {
     pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
-      moduleNames = [ "temporal_capi" ];
     };
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "A Rust implementation of ECMAScript's Temporal API";
     homepage = "https://github.com/boa-dev/temporal";
     changelog = "https://github.com/boa-dev/temporal/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [ aduh95 ];
+    maintainers = with lib.maintainers; [ aduh95 ];
+    pkgConfigModules = [ "temporal_capi" ];
   };
 })

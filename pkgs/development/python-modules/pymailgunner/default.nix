@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   requests,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pymailgunner";
   version = "1.5";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pschmitt";
@@ -27,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pymailgunner" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for interacting with Mailgun e-mail service";
     homepage = "https://github.com/pschmitt/pymailgunner";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -33,7 +33,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "gnome-music";
   version = "49.1";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-music/${lib.versions.major version}/gnome-music-${version}.tar.xz";
@@ -100,12 +100,12 @@ python3.pkgs.buildPythonApplication rec {
     updateScript = gnome.updateScript { packageName = "gnome-music"; };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://apps.gnome.org/Music/";
     description = "Music player and management application for the GNOME desktop environment";
     mainProgram = "gnome-music";
-    teams = [ teams.gnome ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
   };
 }

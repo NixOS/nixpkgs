@@ -2,83 +2,60 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  automake,
-  autoconf,
-  libtool,
-
-  # Optional Dependencies
-  lz4 ? null,
-  snappy ? null,
-  zlib ? null,
-  bzip2 ? null,
-  db ? null,
-  gperftools ? null,
-  leveldb ? null,
+  cmake,
+  python3,
+  swig,
+  libsodium,
+  lz4,
+  snappy,
+  zlib,
+  zstd,
+  nix-update-script,
 }:
 
-let
-  shouldUsePkg =
-    pkg: if pkg != null && lib.meta.availableOn stdenv.hostPlatform pkg then pkg else null;
-
-  optLz4 = shouldUsePkg lz4;
-  optSnappy = shouldUsePkg snappy;
-  optZlib = shouldUsePkg zlib;
-  optBzip2 = shouldUsePkg bzip2;
-  optDb = shouldUsePkg db;
-  optGperftools = shouldUsePkg gperftools;
-  optLeveldb = shouldUsePkg leveldb;
-in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wiredtiger";
-  version = "3.2.1";
+  version = "11.3.1";
 
   src = fetchFromGitHub {
     repo = "wiredtiger";
     owner = "wiredtiger";
-    rev = version;
-    sha256 = "04j2zw8b9jym43r682rh4kpdippxx7iw3ry16nxlbybzar9kgk83";
+    tag = finalAttrs.version;
+    hash = "sha256-K5cZZTvZaWR6gVXF+mHNh7nHxMqi9XaEpB2qsd/pay8=";
   };
 
   nativeBuildInputs = [
-    automake
-    autoconf
-    libtool
+    cmake
+    python3
+    swig
   ];
+
   buildInputs = [
-    optLz4
-    optSnappy
-    optZlib
-    optBzip2
-    optDb
-    optGperftools
-    optLeveldb
+    libsodium
+    lz4
+    snappy
+    zlib
+    zstd
   ];
 
-  configureFlags = [
-    (lib.withFeature false "attach")
-    (lib.withFeatureAs true "builtins" "")
-    (lib.enableFeature (optBzip2 != null) "bzip2")
-    (lib.enableFeature false "diagnostic")
-    (lib.enableFeature false "java")
-    (lib.enableFeature (optLeveldb != null) "leveldb")
-    (lib.enableFeature false "python")
-    (lib.enableFeature (optSnappy != null) "snappy")
-    (lib.enableFeature (optLz4 != null) "lz4")
-    (lib.enableFeature (optGperftools != null) "tcmalloc")
-    (lib.enableFeature (optZlib != null) "zlib")
-    (lib.withFeatureAs (optDb != null) "berkeleydb" optDb)
-    (lib.withFeature false "helium")
+  cmakeFlags = [
+    (lib.cmakeBool "ENABLE_STRICT" false)
+    (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
   ];
 
-  preConfigure = ''
-    ./autogen.sh
-  '';
+  env.NIX_CFLAGS_COMPILE = [ "-Wno-array-bounds" ];
 
-  meta = with lib; {
-    homepage = "http://wiredtiger.com/";
-    description = "";
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    homepage = "https://source.wiredtiger.com";
+    description = "High performance, scalable, NoSQL, extensible platform for data management";
     mainProgram = "wt";
-    license = licenses.gpl2;
-    platforms = intersectLists platforms.unix platforms.x86_64;
+    license = with lib.licenses; [
+      gpl2Only
+      gpl3Only
+    ];
+    platforms = lib.intersectLists lib.platforms.unix lib.platforms.x86_64;
   };
-}
+})

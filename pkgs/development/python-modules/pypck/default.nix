@@ -6,22 +6,19 @@
   pytest-asyncio,
   pytest-timeout,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pypck";
-  version = "0.8.12";
+  version = "0.9.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "alengwenus";
     repo = "pypck";
     tag = version;
-    hash = "sha256-XXlHgr8/Cl3eu1vIDl/XykB2gv8PPkPIFEBG30yUue0=";
+    hash = "sha256-EsPfPRYp75GML9JMoFPf5U8obh51LjIkg/FFRNkrEOY=";
   };
 
   postPatch = ''
@@ -36,19 +33,17 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlags = [ "--asyncio-mode=auto" ];
-
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [ "test_connection_lost" ];
 
   __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "pypck" ];
 
-  meta = with lib; {
+  meta = {
     description = "LCN-PCK library written in Python";
     homepage = "https://github.com/alengwenus/pypck";
     changelog = "https://github.com/alengwenus/pypck/releases/tag/${src.tag}";
-    license = licenses.epl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.epl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

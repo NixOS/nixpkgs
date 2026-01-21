@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "docker-vackup";
-  version = "0-unstable-2024-11-01";
+  version = "0-unstable-2025-12-02";
 
   src = fetchFromGitHub {
     owner = "BretFisher";
     repo = "docker-vackup";
-    rev = "2a8a73136302af0bebeb7f210fc14be868ab2958";
-    hash = "sha256-/iMQNnkRNTMiw+E6Wv/WatRB0DnapOVWqqszluUFed4=";
+    rev = "c57d5b8155bb65e080bf4c2d8841c8781e68f9ef";
+    hash = "sha256-nalBD4RCOFyZrNjuuK5leqHfolBvIZ0YMtSTO744Zqs=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

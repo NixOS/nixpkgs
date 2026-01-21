@@ -4,15 +4,12 @@
   fetchPypi,
   pytest,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-instafail";
   version = "0.5.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -25,11 +22,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_instafail" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytest plugin that shows failures and errors instantly instead of waiting until the end of test session";
     homepage = "https://github.com/pytest-dev/pytest-instafail";
     changelog = "https://github.com/pytest-dev/pytest-instafail/blob/v${version}/CHANGES.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ jacg ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ jacg ];
   };
 }

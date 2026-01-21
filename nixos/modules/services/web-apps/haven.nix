@@ -6,7 +6,7 @@
 }:
 let
   # Load default values from package. See https://github.com/bitvora/haven/blob/master/.env.example
-  defaultSettings = builtins.fromTOML (builtins.readFile "${cfg.package}/share/haven/.env.example");
+  defaultSettings = fromTOML (builtins.readFile "${cfg.package}/share/haven/.env.example");
 
   import_relays_file = "${pkgs.writeText "import_relays.json" (builtins.toJSON cfg.importRelays)}";
   blastr_relays_file = "${pkgs.writeText "blastr_relays.json" (builtins.toJSON cfg.blastrRelays)}";

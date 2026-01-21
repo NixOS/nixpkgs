@@ -4,12 +4,10 @@
   buildPythonPackage,
   cachecontrol,
   fetchFromGitHub,
-  importlib-resources,
   mistune,
   mypy,
   mypy-extensions,
   pytestCheckHook,
-  pythonOlder,
   rdflib,
   requests,
   ruamel-yaml,
@@ -23,8 +21,6 @@ buildPythonPackage rec {
   pname = "schema-salad";
   version = "8.9.20250723145140";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "common-workflow-language";
@@ -58,8 +54,7 @@ buildPythonPackage rec {
     types-requests
     types-setuptools
   ]
-  ++ cachecontrol.optional-dependencies.filecache
-  ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
+  ++ cachecontrol.optional-dependencies.filecache;
 
   nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.pycodegen;
 
@@ -84,11 +79,11 @@ buildPythonPackage rec {
     pycodegen = [ black ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Semantic Annotations for Linked Avro Data";
     homepage = "https://github.com/common-workflow-language/schema_salad";
     changelog = "https://github.com/common-workflow-language/schema_salad/releases/tag/${src.tag}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ veprbl ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

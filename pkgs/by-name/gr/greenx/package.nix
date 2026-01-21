@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
     export OMP_NUM_THREADS=2
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Library for Green’s function based electronic structure theory calculations";
-    license = [ licenses.asl20 ];
+    license = [ lib.licenses.asl20 ];
     homepage = "https://github.com/nomad-coe/greenX";
-    platforms = platforms.linux;
-    maintainers = [ maintainers.sheepforce ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.sheepforce ];
   };
 }

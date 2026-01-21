@@ -36,16 +36,14 @@ let
 in
 buildPythonPackage rec {
   pname = "trio";
-  version = "0.31.0";
+  version = "0.32.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "python-trio";
     repo = "trio";
     tag = "v${version}";
-    hash = "sha256-cl1GstWVHDD3nWx835k2hnswt/+AnoTLXjxVIfLP6Es=";
+    hash = "sha256-kZKP5TFg9M+NCx9V9B0qNbGiwZtBPtgVKgZYjX5w1ok=";
   };
 
   build-system = [ setuptools ];
@@ -63,13 +61,15 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     astor
-    jedi
     pyopenssl
     pytestCheckHook
     pytest-trio'
     pyyaml
     trustme
-  ];
+  ]
+  # jedi has no compatibility with python 3.14 yet
+  # https://github.com/davidhalter/jedi/issues/2064
+  ++ lib.optional (pythonOlder "3.14") jedi;
 
   preCheck = ''
     export HOME=$TMPDIR
@@ -107,6 +107,5 @@ buildPythonPackage rec {
       mit
       asl20
     ];
-    maintainers = with lib.maintainers; [ catern ];
   };
 }

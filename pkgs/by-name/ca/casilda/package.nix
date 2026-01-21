@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "casilda";
-  version = "0.9.1";
+  version = "1.0.0";
 
   outputs = [
     "out"
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "jpu";
     repo = "casilda";
     tag = finalAttrs.version;
-    hash = "sha256-7A3XzfUALsmkykwOqF/8fg7T7LoVzwk1+7TmRkh1Wys=";
+    hash = "sha256-KXICqldEJC3xKc0bd1X4O2glLeipzqHE1cGle7TKvAw=";
   };
 
   depsBuildBuild = [ pkg-config ];
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://gitlab.gnome.org/jpu/casilda";
     description = "Simple Wayland compositor widget for Gtk 4 which can be used to embed other processes windows in Gtk 4 application";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ clerie ];
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.unix;
   };

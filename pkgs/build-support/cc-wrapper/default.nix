@@ -125,8 +125,12 @@ let
   libc_bin = optionalString (libc != null) (getBin libc);
   libc_dev = optionalString (libc != null) (getDev libc);
   libc_lib = optionalString (libc != null) (getLib libc);
-  cc_solib = getLib cc + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
-  cc_bin = getBin cc + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
+  cc_solib =
+    optionalString (!nativeTools) (getLib cc)
+    + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
+  cc_bin =
+    optionalString (!nativeTools) (getBin cc)
+    + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
 
   # The wrapper scripts use 'cat' and 'grep', so we may need coreutils.
   coreutils_bin = optionalString (!nativeTools) (getBin coreutils);
@@ -599,6 +603,10 @@ stdenvNoCC.mkDerivation {
         if targetPlatform.isCygwin then
           ''
             echo addToSearchPath "LINK_DLL_FOLDERS" "${cc_bin}/lib" >> $out
+            # Work around build failure caused by the gnulib workaround for
+            # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=114870. remove after
+            # gnulib is updated in core packages (e.g. iconv, gnupatch, gnugrep)
+            echo appendToVar configureFlags gl_cv_clean_version_stddef=yes >> $out
           ''
         else
           ''

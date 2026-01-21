@@ -32,11 +32,11 @@ rustPlatform.buildRustPackage {
     "cargo-guppy"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command-line frontend for guppy";
     mainProgram = "cargo-guppy";
     homepage = "https://github.com/guppy-rs/guppy/tree/main/cargo-guppy";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # or
       asl20
     ];

@@ -27,11 +27,11 @@ stdenv.mkDerivation {
     ln -s $out/lib/scala-runner $out/bin/scaladoc
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/dwijnand/scala-runners";
     description = "Alternative implementation of the Scala distribution's runners";
-    license = licenses.asl20;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ hrhino ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ hrhino ];
   };
 }

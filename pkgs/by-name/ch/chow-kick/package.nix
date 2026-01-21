@@ -55,6 +55,23 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
+    # Fix width/height naming in chowdsp_GraphicsHelpers.h
+    substituteInPlace modules/chowdsp_utils/modules/common/chowdsp_core/DataStructures/chowdsp_GraphicsHelpers.h --replace-fail \
+      'position.y += r.h;' \
+      'position.y += r.height;'
+
+    substituteInPlace modules/chowdsp_utils/modules/common/chowdsp_core/DataStructures/chowdsp_GraphicsHelpers.h --replace-fail \
+      'height -= r.h;' \
+      'height -= r.height;'
+
+    substituteInPlace modules/chowdsp_utils/modules/common/chowdsp_core/DataStructures/chowdsp_GraphicsHelpers.h --replace-fail \
+      'position.x += r.w;' \
+      'position.x += r.width;'
+
+    substituteInPlace modules/chowdsp_utils/modules/common/chowdsp_core/DataStructures/chowdsp_GraphicsHelpers.h --replace-fail \
+      'width -= r.w;' \
+      'width -= r.width;'
+
     substituteInPlace modules/chowdsp_wdf/CMakeLists.txt --replace-fail \
       'cmake_minimum_required(VERSION 3.1)' \
       'cmake_minimum_required(VERSION 4.0)'

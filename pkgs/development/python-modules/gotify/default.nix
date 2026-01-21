@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
   flit-core,
   nix-update-script,
   httpx,
@@ -17,6 +18,7 @@ buildPythonPackage rec {
   pname = "gotify";
   version = "0.6.0";
   pyproject = true;
+  disabled = pythonAtLeast "3.14";
 
   src = fetchFromGitHub {
     owner = "d-k-bo";

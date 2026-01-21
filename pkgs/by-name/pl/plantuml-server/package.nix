@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "plantuml-server";
-  version = "1.2025.10";
+  version = "1.2026.0";
 
   src = fetchurl {
     url = "https://github.com/plantuml/plantuml-server/releases/download/v${version}/plantuml-v${version}.war";
-    hash = "sha256-GbFbQRVTQsGstu61FKpAypvopP6peHHMzxFA8yGtRp4=";
+    hash = "sha256-mFkfHqzvWXhivfWssPh2ImilWurr88AiNpU8ZJSRKSk=";
   };
 
   dontUnpack = true;
@@ -25,13 +25,13 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) plantuml-server;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Web application to generate UML diagrams on-the-fly";
     homepage = "https://plantuml.com/";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       truh
       anthonyroussel
     ];

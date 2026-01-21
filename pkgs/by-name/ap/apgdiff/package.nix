@@ -36,12 +36,12 @@ maven.buildMavenPackage rec {
       --add-flags "-jar $out/lib/apgdiff.jar"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Another PostgreSQL diff tool";
     mainProgram = "apgdiff";
     homepage = "https://apgdiff.com";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     inherit (jre.meta) platforms;
-    maintainers = [ maintainers.misterio77 ];
+    maintainers = [ lib.maintainers.misterio77 ];
   };
 }

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   pycryptodomex,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "pyctr";
   version = "0.7.6";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -22,11 +19,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyctr" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to interact with Nintendo 3DS files";
     homepage = "https://github.com/ihaveamac/pyctr";
     changelog = "https://github.com/ihaveamac/pyctr/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

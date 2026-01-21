@@ -29,6 +29,7 @@ stdenv.mkDerivation {
   patches = [
     # fix compile error regarding packed attribute in 3rd party juice library
     ./juice-cxx-packing-fix.diff
+    ./add-missing-cstdint-includes.patch
   ];
 
   nativeBuildInputs = [
@@ -59,11 +60,11 @@ stdenv.mkDerivation {
       'cmake_minimum_required(VERSION 4.0)'
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jpcima/ensemble-chorus";
     description = "Digital model of electronic string ensemble chorus";
-    maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.linux;
-    license = licenses.boost;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.boost;
   };
 }

@@ -51,13 +51,13 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "${m17n_lib}/lib")
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://mike-fabian.github.io/ibus-typing-booster/";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     description = "Completion input method for faster typing";
     mainProgram = "emoji-picker";
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     isIbusEngine = true;
   };
 }

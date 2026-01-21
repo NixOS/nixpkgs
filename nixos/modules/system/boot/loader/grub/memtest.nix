@@ -69,6 +69,6 @@ in
         linux @bootRoot@/memtest.bin ${toString cfg.params}
       }
     '';
-    boot.loader.grub.extraFiles."memtest.bin" = "${memtest86}/memtest.bin";
+    boot.loader.grub.extraFiles."memtest.bin" = memtest86.efi;
   };
 }

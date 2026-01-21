@@ -65,6 +65,7 @@ let
     mate-terminal.cmd = "SHELL=$command mate-terminal --disable-factory"; # factory mode uses dbus, and we don't have a proper dbus session set up
 
     mlterm.pkg = p: p.mlterm;
+    mlterm.kill = true;
 
     qterminal.pkg = p: p.lxqt.qterminal;
     qterminal.kill = true;
@@ -108,7 +109,7 @@ let
     # times out after spending many hours
     #wezterm.pkg = p: p.wezterm;
 
-    xfce4-terminal.pkg = p: p.xfce.xfce4-terminal;
+    xfce4-terminal.pkg = p: p.xfce4-terminal;
 
     xterm.pkg = p: p.xterm;
 

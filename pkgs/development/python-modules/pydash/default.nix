@@ -6,7 +6,6 @@
   mock,
   pytest7CheckHook,
   pytest-cov-stub,
-  pythonOlder,
   setuptools,
   sphinx-rtd-theme,
   typing-extensions,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "pydash";
   version = "8.0.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dgilland";
@@ -45,11 +42,11 @@ buildPythonPackage rec {
     "tests/pytest_mypy_testing/"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python utility libraries for doing stuff in a functional way";
     homepage = "https://pydash.readthedocs.io";
     changelog = "https://github.com/dgilland/pydash/blob/v${version}/CHANGELOG.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

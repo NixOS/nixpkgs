@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   # propagated build inputs
   click,
   fastapi,
@@ -35,8 +34,6 @@ buildPythonPackage {
   pname = "unstructured-api-tools";
   inherit version;
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Unstructured-IO";
@@ -85,12 +82,12 @@ buildPythonPackage {
     pytest-mock
   ];
 
-  meta = with lib; {
+  meta = {
     description = "";
     mainProgram = "unstructured_api_tools";
     homepage = "https://github.com/Unstructured-IO/unstructured-api-tools";
     changelog = "https://github.com/Unstructured-IO/unstructured-api-tools/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

@@ -39,7 +39,7 @@ stdenv.mkDerivation {
 
   inherit (topkg) buildPhase installPhase;
 
-  meta = with lib; {
+  meta = {
     description = "OpenType font decoder for OCaml";
     longDescription = ''
       Otfm is an in-memory decoder for the OpenType font data format. It
@@ -47,8 +47,8 @@ stdenv.mkDerivation {
       of them.
     '';
     homepage = webpage;
-    license = licenses.bsd3;
-    maintainers = [ maintainers.jirkamarsik ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.jirkamarsik ];
     mainProgram = "otftrip";
     inherit (ocaml.meta) platforms;
   };

@@ -38,7 +38,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rygel";
-  version = "45.0";
+  version = "45.1";
 
   # TODO: split out lib
   outputs = [
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/rygel/${lib.versions.major finalAttrs.version}/rygel-${finalAttrs.version}.tar.xz";
-    hash = "sha256-gmZ7kC/AZy5kz5HrcnpwE3qP3+ej2aTBWLD0sfxwCII=";
+    hash = "sha256-zzhuKA2Or5tmd6L0i6eEhMcqCVVNXFjFHNh/pZRWF8g=";
   };
 
   patches = [
@@ -121,12 +121,12 @@ stdenv.mkDerivation (finalAttrs: {
     noGtk = rygel.override { withGtk = false; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Home media solution (UPnP AV MediaServer) that allows you to easily share audio, video and pictures to other devices";
     homepage = "https://gitlab.gnome.org/GNOME/rygel";
     changelog = "https://gitlab.gnome.org/GNOME/rygel/-/blob/rygel-${finalAttrs.version}/NEWS?ref_type=tags";
-    license = licenses.lgpl21Plus;
-    teams = [ teams.gnome ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
 })

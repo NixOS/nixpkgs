@@ -27,18 +27,18 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/powerline/fonts";
     description = "Patched fonts for Powerline users";
     longDescription = ''
       Pre-patched and adjusted fonts for usage with the Powerline plugin.
     '';
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       free
       ofl
     ];
-    platforms = platforms.all;
-    maintainers = with maintainers; [ malyn ];
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ malyn ];
   };
 }

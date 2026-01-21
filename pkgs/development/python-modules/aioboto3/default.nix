@@ -56,7 +56,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ]
   ++ moto.optional-dependencies.server
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     "test_patches"
@@ -69,6 +69,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/terricain/aioboto3";
     changelog = "https://github.com/terricain/aioboto3/blob/${src.rev}/CHANGELOG.rst";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ mbalatsko ];
+    maintainers = [ ];
   };
 }

@@ -20,14 +20,14 @@ stdenv.mkDerivation rec {
     ncurses
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Conntrack top like tool";
     mainProgram = "iptstate";
     homepage = "https://github.com/jaymzh/iptstate";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ trevorj ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ trevorj ];
     downloadPage = "https://github.com/jaymzh/iptstate/releases";
-    license = licenses.zlib;
+    license = lib.licenses.zlib;
   };
 
   installPhase = ''

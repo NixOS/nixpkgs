@@ -93,13 +93,13 @@ buildPythonPackage rec {
       ln -s ${pythonEnv}/bin/certbot
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/certbot/certbot";
     changelog = "https://github.com/certbot/certbot/blob/${src.tag}/certbot/CHANGELOG.md";
     description = "ACME client that can obtain certs and extensibly update server configurations";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "certbot";
     maintainers = [ ];
-    license = with licenses; [ asl20 ];
+    license = with lib.licenses; [ asl20 ];
   };
 }

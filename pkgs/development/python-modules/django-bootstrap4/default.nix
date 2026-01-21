@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
 
   # build-system
   uv-build,
@@ -20,23 +19,15 @@
 
 buildPythonPackage rec {
   pname = "django-bootstrap4";
-  version = "25.2";
+  version = "26.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zostera";
     repo = "django-bootstrap4";
     tag = "v${version}";
-    hash = "sha256-+G9UHW4eUGl00A/kDj+iTP7ehjj/dwUENKffvGxE6/4=";
+    hash = "sha256-g66JJVPB+YQjN5IHSu/jqKVu5gS8Llb+mALJ9f5H2ds=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      name = "uv-build.patch";
-      url = "https://github.com/zostera/django-bootstrap4/commit/09b14bc9b70e7da92200c4bc014e2d3c597f0ea6.patch?full_index=1";
-      hash = "sha256-ZW9y8n0ZCOP37EoP32e7ue6h93KgGw1pW8Q1Q8IuNk8=";
-    })
-  ];
 
   build-system = [ uv-build ];
 
@@ -54,11 +45,11 @@ buildPythonPackage rec {
     export DJANGO_SETTINGS_MODULE=tests.app.settings
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Bootstrap 4 integration with Django";
     homepage = "https://github.com/zostera/django-bootstrap4";
     changelog = "https://github.com/zostera/django-bootstrap4/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

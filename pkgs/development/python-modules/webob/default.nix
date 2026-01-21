@@ -5,7 +5,6 @@
   setuptools,
   legacy-cgi,
   pytestCheckHook,
-  pythonOlder,
 
   # for passthru.tests
   pyramid,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "webob";
   version = "1.8.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Pylons";
@@ -46,10 +43,10 @@ buildPythonPackage rec {
     inherit pyramid routes tokenlib;
   };
 
-  meta = with lib; {
+  meta = {
     description = "WSGI request and response object";
     homepage = "https://webob.org/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

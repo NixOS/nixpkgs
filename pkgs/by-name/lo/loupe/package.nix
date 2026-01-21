@@ -25,17 +25,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "loupe";
-  version = "49.1";
+  version = "49.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/loupe/${lib.versions.major finalAttrs.version}/loupe-${finalAttrs.version}.tar.xz";
-    hash = "sha256-MAmLyXmhyHouyye0patyWr+QC9cQu5wrzAyULVFcUcU=";
+    hash = "sha256-WFPnXM66f6K+oBvic80vCjBhlB573+OgCLIzFxBnFCw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
     name = "loupe-deps-${finalAttrs.version}";
-    hash = "sha256-GqPHvUBA5aRUnRSP+PpdOCC9sL8axnEdfqtHFp2KYJc=";
+    hash = "sha256-9jEz6hcdFUv5Daeh/0co1hHt49bE9kFAbFvnyiEaGJg=";
   };
 
   postPatch = ''
@@ -113,14 +113,14 @@ stdenv.mkDerivation (finalAttrs: {
       ];
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/loupe";
     changelog = "https://gitlab.gnome.org/GNOME/loupe/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "Simple image viewer application written with GTK4 and Rust";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jk ];
-    teams = [ teams.gnome ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ jk ];
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.unix;
     mainProgram = "loupe";
   };
 })

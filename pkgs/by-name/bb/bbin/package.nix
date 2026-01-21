@@ -44,12 +44,12 @@ stdenvNoCC.mkDerivation rec {
     updateScript = gitUpdater { rev-prefix = "v"; };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/babashka/bbin";
     description = "Install any Babashka script or project with one command";
     mainProgram = "bbin";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     inherit (babashka-unwrapped.meta) platforms;
-    maintainers = with maintainers; [ sohalt ];
+    maintainers = with lib.maintainers; [ sohalt ];
   };
 }

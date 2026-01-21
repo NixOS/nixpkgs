@@ -3,7 +3,6 @@
   stdenv,
   callPackage,
   fetchFromGitHub,
-  fetchpatch,
 
   useMinimalFeatures ? false,
   useArmadillo ? (!useMinimalFeatures),
@@ -69,7 +68,7 @@
   pkg-config,
   poppler,
   proj,
-  python3,
+  python3Packages,
   qhull,
   rav1e,
   sqlite,
@@ -84,22 +83,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdal" + lib.optionalString useMinimalFeatures "-minimal";
-  version = "3.11.4";
+  version = "3.12.1";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CFQF3vDhhXsAnIfUcn6oTQ4Xm+GH/36dqSGc0HvyEJ0=";
+    hash = "sha256-vs9qun9Z8o4KPxWjKOV9Lp/GgAsYW7gseYv4G7+liso=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "fix-build-poppler-25.10.0.patch";
-      url = "https://github.com/OSGeo/gdal/commit/a716a6cd5ffd779b30950f046fce91878fc97b9d.patch";
-      hash = "sha256-dSotpnTiMjt3Bz63hpNjF5juZ3JsjIpD59/67cR9rNU=";
-    })
-  ];
 
   nativeBuildInputs = [
     bison
@@ -107,8 +98,8 @@ stdenv.mkDerivation (finalAttrs: {
     doxygen
     graphviz
     pkg-config
-    python3.pkgs.setuptools
-    python3.pkgs.wrapPython
+    python3Packages.setuptools
+    python3Packages.wrapPython
     swig
   ]
   ++ lib.optionals useJava [
@@ -211,8 +202,8 @@ stdenv.mkDerivation (finalAttrs: {
       libwebp
       zlib
       zstd
-      python3
-      python3.pkgs.numpy
+      python3Packages.python
+      python3Packages.numpy
     ]
     ++ tileDbDeps
     ++ libAvifDeps
@@ -228,7 +219,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ darwinDeps
     ++ nonDarwinDeps;
 
-  pythonPath = [ python3.pkgs.numpy ];
+  pythonPath = [ python3Packages.numpy ];
   postInstall = ''
     wrapPythonProgramsIn "$out/bin" "$out $pythonPath"
   ''
@@ -247,14 +238,14 @@ stdenv.mkDerivation (finalAttrs: {
     pushd autotest
 
     export HOME=$(mktemp -d)
-    export PYTHONPATH="$out/${python3.sitePackages}:$PYTHONPATH"
+    export PYTHONPATH="$out/${python3Packages.python.sitePackages}:$PYTHONPATH"
     export GDAL_DOWNLOAD_TEST_DATA=OFF
     # allows to skip tests that fail because of file handle leak
     # the issue was not investigated
     # https://github.com/OSGeo/gdal/blob/v3.9.0/autotest/gdrivers/bag.py#L54
     export CI=1
   '';
-  nativeInstallCheckInputs = with python3.pkgs; [
+  nativeInstallCheckInputs = with python3Packages; [
     pytestCheckHook
     pytest-benchmark
     pytest-env
@@ -273,6 +264,8 @@ stdenv.mkDerivation (finalAttrs: {
   disabledTests = [
     # tests that attempt to make network requests
     "test_jp2openjpeg_45"
+    "test_ogr_gmlas_datetime"
+    "test_vrtrawlink_GDAL_VRT_RAWRASTERBAND_ALLOWED_SOURCE_ONLY_REMOTE_accepted"
     # tests that require the full proj dataset which we don't package yet
     # https://github.com/OSGeo/gdal/issues/5523
     "test_transformer_dem_overrride_srs"
@@ -319,16 +312,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/OSGeo/gdal/blob/${finalAttrs.src.tag}/NEWS.md";
     description = "Translator library for raster geospatial data formats";
     homepage = "https://www.gdal.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       marcweber
       dotlambda
     ];
-    teams = [ teams.geospatial ];
-    platforms = platforms.unix;
+    teams = [ lib.teams.geospatial ];
+    platforms = lib.platforms.unix;
   };
 })

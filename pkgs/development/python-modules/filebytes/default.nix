@@ -14,10 +14,10 @@ buildPythonPackage rec {
     sha256 = "0h97i6h525hg401dvvaa5krxi184qpvldbdn0izmirvr9pvh4hkn";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://scoding.de/filebytes-introduction";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     description = "Scripts to parse ELF, PE, Mach-O and OAT (Android Runtime)";
-    maintainers = with maintainers; [ bennofs ];
+    maintainers = with lib.maintainers; [ bennofs ];
   };
 }

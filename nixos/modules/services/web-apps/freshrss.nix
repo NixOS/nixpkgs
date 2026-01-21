@@ -193,6 +193,8 @@ in
       default = "form";
       description = "Authentication type for FreshRSS.";
     };
+
+    api.enable = mkEnableOption "API access for mobile apps and third-party clients (Google Reader API and Fever API). Users must set individual API passwords in their profile settings";
   };
 
   config =
@@ -325,6 +327,7 @@ in
               "--base-url" = ''"${cfg.baseUrl}"'';
               "--language" = ''"${cfg.language}"'';
               "--db-type" = ''"${cfg.database.type}"'';
+              ${if cfg.api.enable then "--api-enabled" else null} = "";
               # The following attributes are optional depending on the type of
               # database.  Those that evaluate to null on the left hand side
               # will be omitted.
@@ -354,15 +357,15 @@ in
 
           script =
             let
+              isUserAuth = cfg.authType == "form" || cfg.authType == "none";
+
               userScriptArgs = ''--user ${cfg.defaultUser} ${
                 optionalString (cfg.authType == "form") ''--password "$(cat ${cfg.passwordFile})"''
               }'';
-              updateUserScript = optionalString (cfg.authType == "form" || cfg.authType == "none") ''
-                ./cli/update-user.php ${userScriptArgs}
-              '';
-              createUserScript = optionalString (cfg.authType == "form" || cfg.authType == "none") ''
-                ./cli/create-user.php ${userScriptArgs}
-              '';
+              mkUserScript = name: optionalString isUserAuth ''./cli/${name}.php ${userScriptArgs}'';
+
+              updateUserScript = mkUserScript "update-user";
+              createUserScript = mkUserScript "create-user";
             in
             ''
               # do installation or reconfigure

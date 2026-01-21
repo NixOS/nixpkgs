@@ -8,7 +8,6 @@
   fetchFromGitHub,
   phonenumbers,
   pydantic,
-  pythonOlder,
   qrcode,
   setuptools-scm,
   twilio,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "django-two-factor-auth";
   version = "1.17.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jazzband";
@@ -65,11 +62,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "two_factor" ];
 
-  meta = with lib; {
+  meta = {
     description = "Complete Two-Factor Authentication for Django";
     homepage = "https://github.com/jazzband/django-two-factor-auth";
     changelog = "https://github.com/jazzband/django-two-factor-auth/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ derdennisop ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ derdennisop ];
   };
 }

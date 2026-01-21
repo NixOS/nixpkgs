@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   traitlets,
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "matplotlib-inline";
   version = "0.1.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ipython";
@@ -41,10 +38,10 @@ buildPythonPackage rec {
     inherit ipython;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Matplotlib Inline Back-end for IPython and Jupyter";
     homepage = "https://github.com/ipython/matplotlib-inline";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

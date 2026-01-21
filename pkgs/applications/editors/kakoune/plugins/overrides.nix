@@ -67,15 +67,15 @@ self: super: {
             ' rc/ansi.kak >$out/share/kak/autoload/plugins/ansi.kak
     '';
 
-    meta = with lib; {
+    meta = {
       description = "Kakoune support for rendering ANSI code";
       homepage = "https://github.com/eraserhd/kak-ansi";
-      license = licenses.unlicense;
-      maintainers = with maintainers; [
+      license = lib.licenses.unlicense;
+      maintainers = with lib.maintainers; [
         eraserhd
         philiptaron
       ];
-      platforms = platforms.all;
+      platforms = lib.platforms.all;
     };
   };
 
@@ -100,15 +100,15 @@ self: super: {
       chmod +x $out/bin/edit-client
     '';
 
-    meta = with lib; {
+    meta = {
       description = "Kakoune integration with the Plan 9 plumber";
       homepage = "https://github.com/eraserhd/kak-plumb";
-      license = licenses.unlicense;
-      maintainers = with maintainers; [
+      license = lib.licenses.unlicense;
+      maintainers = with lib.maintainers; [
         eraserhd
         philiptaron
       ];
-      platforms = platforms.all;
+      platforms = lib.platforms.all;
     };
   };
 
@@ -134,15 +134,15 @@ self: super: {
       sha256 = "AAOCG0TY3G188NnkkwMCSbkkNe487F4gwiFWwG9Yo+A=";
     };
 
-    meta = with lib; {
+    meta = {
       description = "Help Kakoune save and restore state between sessions";
       homepage = "https://gitlab.com/Screwtapello/kakoune-state-save";
-      license = licenses.mit;
-      maintainers = with maintainers; [
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [
         Flakebi
         philiptaron
       ];
-      platforms = platforms.all;
+      platforms = lib.platforms.all;
     };
   };
 
@@ -179,12 +179,12 @@ self: super: {
       mv $out/bin/hop-kak $out/share/kak/bin/
     '';
 
-    meta = with lib; {
+    meta = {
       description = "Hinting brought to Kakoune selections";
       homepage = "https://git.sr.ht/~hadronized/hop.kak/";
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ oleina ];
-      platforms = platforms.all;
+      license = lib.licenses.bsd3;
+      maintainers = with lib.maintainers; [ oleina ];
+      platforms = lib.platforms.all;
     };
   };
 
@@ -207,12 +207,12 @@ self: super: {
       sed -e 's,[|] *lua,|${lua5_3}/bin/lua,' quickscope.kak >$out/share/kak/autoload/plugins/quickscope.kak
     '';
 
-    meta = with lib; {
+    meta = {
       description = "Highlight f and t jump positions";
       homepage = "https://sr.ht/~voroskoi/quickscope.kak/";
-      license = licenses.unlicense;
-      maintainers = with maintainers; [ eraserhd ];
-      platforms = platforms.all;
+      license = lib.licenses.unlicense;
+      maintainers = with lib.maintainers; [ eraserhd ];
+      platforms = lib.platforms.all;
     };
   };
 
@@ -225,12 +225,12 @@ self: super: {
       rev = "7f187d9da2867a7fda568b2135d29b9c00cfbb94";
       hash = "sha256-acBOQuJ8MgsMKdvFV5B2CxuxvXIYsg11n1mHEGqd120=";
     };
-    meta = with lib; {
+    meta = {
       description = "Soothing pastel theme for Kakoune";
       homepage = "https://github.com/catppuccin/kakoune/";
-      license = licenses.mit;
-      platforms = platforms.all;
-      maintainers = with maintainers; [ philipwilk ];
+      license = lib.licenses.mit;
+      platforms = lib.platforms.all;
+      maintainers = with lib.maintainers; [ philipwilk ];
     };
   };
 }

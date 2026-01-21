@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "jq-lsp";
-  version = "0.1.14";
+  version = "0.1.16";
 
   src = fetchFromGitHub {
     owner = "wader";
     repo = "jq-lsp";
     tag = "v${version}";
-    hash = "sha256-VWZZFa+mMFAbfHTrFqf5vEEqA20DiCz4VjX50mgTuzw=";
+    hash = "sha256-tuB5RxJSYGHLPPd3v0xrmqX6Ywxw6V8BQEHkkiAsBTA=";
   };
 
-  vendorHash = "sha256-oiy80U6WmpG0lHl5yTF017gZbiB2cWuM+cQJB0bs+RU=";
+  vendorHash = "sha256-pGXFuyYJPNcMEd0vPrmbdY/CeOF0AXwrNJEfrBBe4I0=";
 
   # based on https://github.com/wader/jq-lsp/blob/master/.goreleaser.yml
   env.CGO_ENABLED = 0;
@@ -28,11 +28,11 @@ buildGoModule rec {
     "-X main.builtBy=Nix"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "jq language server";
     homepage = "https://github.com/wader/jq-lsp";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sysedwinistrator ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sysedwinistrator ];
     mainProgram = "jq-lsp";
   };
 }

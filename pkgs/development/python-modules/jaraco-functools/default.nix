@@ -8,15 +8,12 @@
   pytestCheckHook,
   setuptools-scm,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "jaraco-functools";
   version = "4.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "jaraco_functools";
@@ -47,11 +44,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jaraco.functools" ];
 
-  meta = with lib; {
+  meta = {
     description = "Additional functools in the spirit of stdlib's functools";
     homepage = "https://github.com/jaraco/jaraco.functools";
     changelog = "https://github.com/jaraco/jaraco.functools/blob/v${version}/NEWS.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

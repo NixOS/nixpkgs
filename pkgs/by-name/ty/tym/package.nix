@@ -33,15 +33,15 @@ stdenv.mkDerivation rec {
     pcre2
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Lua-configurable terminal emulator";
     homepage = "https://github.com/endaaman/tym";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       wesleyjrz
       kashw2
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "tym";
   };
 }

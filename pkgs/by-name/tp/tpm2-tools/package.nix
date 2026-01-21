@@ -52,11 +52,11 @@ stdenv.mkDerivation rec {
   #configureFlags = [ "--enable-unit" ];
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Command line tools that provide access to a TPM 2.0 compatible device";
     homepage = "https://github.com/tpm2-software/tpm2-tools";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ scottstephens ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ scottstephens ];
   };
 }

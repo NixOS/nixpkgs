@@ -6,7 +6,7 @@
 
 buildGoModule rec {
   pname = "gauge";
-  version = "1.6.21";
+  version = "1.6.22";
 
   patches = [
     # adds a check which adds an error message when trying to
@@ -18,22 +18,22 @@ buildGoModule rec {
     owner = "getgauge";
     repo = "gauge";
     tag = "v${version}";
-    hash = "sha256-mUuoGLAVUShhNsSjURCL6yWcIW+K7P8KEBwBoBelgyw=";
+    hash = "sha256-6RJj+sDffqzdMlMkE/rJ7AEKYcxDQBR86fjlaNDb6M0=";
   };
 
-  vendorHash = "sha256-WyQbvZNd61L4Bz5btZ2hkrCTb5iuJJU5yNDzuYR5Sdc=";
+  vendorHash = "sha256-nxd+3hKHLUiHpSGTJpD5QRFJ4e0Boq5MTijmND56Uug=";
 
   excludedPackages = [
     "build"
     "man"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Light weight cross-platform test automation";
     mainProgram = "gauge";
     homepage = "https://gauge.org";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       vdemeester
       marie
     ];

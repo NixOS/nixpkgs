@@ -18,9 +18,11 @@ python3Packages.buildPythonApplication rec {
       fetchSubmodules = true;
     }).overrideAttrs
       (_: {
-        GIT_CONFIG_COUNT = 1;
-        GIT_CONFIG_KEY_0 = "url.https://github.com/.insteadOf";
-        GIT_CONFIG_VALUE_0 = "git@github.com:";
+        env = {
+          GIT_CONFIG_COUNT = 1;
+          GIT_CONFIG_KEY_0 = "url.https://github.com/.insteadOf";
+          GIT_CONFIG_VALUE_0 = "git@github.com:";
+        };
       });
 
   build-system = with python3Packages; [ setuptools ];
@@ -28,6 +30,7 @@ python3Packages.buildPythonApplication rec {
   pythonRelaxDeps = [
     "httpx"
     "responses"
+    "test-results-parser"
     "tree-sitter"
   ];
 

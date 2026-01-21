@@ -83,12 +83,12 @@ stdenv.mkDerivation {
     "-Dprometheus-cpp_ROOT=${lib.getDev prometheus-cpp}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Zeek's Messaging Library";
     mainProgram = "broker-benchmark";
     homepage = "https://github.com/zeek/broker";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ tobim ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ tobim ];
   };
 }

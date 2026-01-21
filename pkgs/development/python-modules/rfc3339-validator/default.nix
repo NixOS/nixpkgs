@@ -28,10 +28,10 @@ buildPythonPackage rec {
   ];
   pythonImportsCheck = [ "rfc3339_validator" ];
 
-  meta = with lib; {
+  meta = {
     description = "RFC 3339 validator for Python";
     homepage = "https://github.com/naimetti/rfc3339-validator";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

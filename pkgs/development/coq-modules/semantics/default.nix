@@ -55,14 +55,14 @@ mkCoqDerivation {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Survey of programming language semantics styles in Coq";
     longDescription = ''
       A survey of semantics styles in Coq, from natural semantics through
       structural operational, axiomatic, and denotational semantics, to
       abstract interpretation
     '';
-    maintainers = with maintainers; [ siraben ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ siraben ];
+    license = lib.licenses.mit;
   };
 }

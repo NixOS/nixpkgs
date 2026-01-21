@@ -8,7 +8,6 @@
   pillow,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   pywavelets,
   scikit-learn,
   setuptools,
@@ -34,8 +33,6 @@ buildPythonPackage rec {
   pname = "imagededup";
   version = "03.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "idealo";
@@ -76,11 +73,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "imagededup" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://idealo.github.io/imagededup/";
     changelog = "https://github.com/idealo/imagededup/releases/tag/${src.tag}";
     description = "Finding duplicate images made easy";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ stunkymonkey ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ stunkymonkey ];
   };
 }

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   libuuid,
   gnutls,
@@ -21,6 +22,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-0YveqiylXJi4cdDCfnPtwCVOJbQrZYsxnXES+9B4Yfw=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/GothenburgBitFactory/libshared/commit/bde76fb717c8e56e5859472ba1e890abc5b94e63.patch";
+      sha256 = "sha256-6esIya9VATtDbL3jOpXZtvMoIJ8ztznqUju4d4lE49w=";
+      stripLen = 1;
+      extraPrefix = "src/libshared/";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace src/commands/CmdNews.cpp \
@@ -61,16 +71,16 @@ stdenv.mkDerivation rec {
     ln -s $out/share/vim-plugins/task $out/share/nvim/site
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Highly flexible command-line tool to manage TODO lists";
     homepage = "https://taskwarrior.org";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       marcweber
       oxalica
       Necior
     ];
     mainProgram = "task";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

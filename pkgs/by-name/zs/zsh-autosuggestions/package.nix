@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
       $out/share/zsh-autosuggestions
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fish shell autosuggestions for Zsh";
     homepage = "https://github.com/zsh-users/zsh-autosuggestions";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.loskutov ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.loskutov ];
   };
 }

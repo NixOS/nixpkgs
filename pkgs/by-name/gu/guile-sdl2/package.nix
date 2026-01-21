@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   version = "0.8.0";
 
   src = fetchurl {
-    url = "https://files.dthompson.us/${pname}/${pname}-${version}.tar.gz";
+    url = "https://files.dthompson.us/releases/guile-sdl2/guile-sdl2-${version}.tar.gz";
     hash = "sha256-V/XrpFrqOxS5mAphtIt2e3ewflK+HdLFEqOmix98p+w=";
   };
 
@@ -43,13 +43,13 @@ stdenv.mkDerivation rec {
     "GUILE_AUTO_COMPILE=0"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://dthompson.us/projects/guile-sdl2.html";
     description = "Bindings to SDL2 for GNU Guile";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [
       seppeljordan
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

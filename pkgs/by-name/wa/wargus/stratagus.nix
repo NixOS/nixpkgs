@@ -47,11 +47,11 @@ stdenv.mkDerivation rec {
     "-DCMAKE_CXX_FLAGS=-Wno-error=format-overflow"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Strategy game engine";
     homepage = "https://wargus.github.io/stratagus.html";
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.astro ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = [ lib.maintainers.astro ];
+    platforms = lib.platforms.linux;
   };
 }

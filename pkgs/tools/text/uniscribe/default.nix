@@ -27,11 +27,11 @@ stdenv.mkDerivation {
 
   passthru.updateScript = bundlerUpdateScript "uniscribe";
 
-  meta = with lib; {
+  meta = {
     description = "Explains Unicode characters/code points: Displays their name, category, and shows compositions";
     mainProgram = "uniscribe";
     homepage = "https://github.com/janlelis/uniscribe";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kjeremy ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kjeremy ];
   };
 }

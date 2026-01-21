@@ -33,15 +33,15 @@ buildPythonPackage rec {
     pytestCheckHook
     responses
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "upcloud_api" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/UpCloudLtd/upcloud-python-api/blob/${src.tag}/CHANGELOG.md";
     description = "UpCloud API Client";
     homepage = "https://github.com/UpCloudLtd/upcloud-python-api";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

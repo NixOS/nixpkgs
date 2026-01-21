@@ -3,7 +3,6 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytest-asyncio_0,
   pytestCheckHook,
   setuptools,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "aresponses";
   version = "3.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "aresponses";
@@ -42,11 +39,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aresponses" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/aresponses/aresponses/blob/${src.rev}/README.md#changelog";
     description = "Asyncio testing server";
     homepage = "https://github.com/aresponses/aresponses";
-    license = licenses.mit;
-    maintainers = with maintainers; [ makefu ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ makefu ];
   };
 }

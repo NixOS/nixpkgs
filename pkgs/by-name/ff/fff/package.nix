@@ -40,12 +40,12 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/fff" --prefix PATH : $pathAdd
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fucking Fast File-Manager";
     mainProgram = "fff";
     homepage = "https://github.com/dylanaraps/fff";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

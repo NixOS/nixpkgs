@@ -36,12 +36,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Free/open-source library for quantitative finance";
     homepage = "https://quantlib.org";
     changelog = "https://github.com/lballabio/QuantLib/releases/tag/v${finalAttrs.version}";
-    platforms = platforms.unix;
-    license = licenses.bsd3;
-    maintainers = [ maintainers.kupac ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.kupac ];
   };
 })

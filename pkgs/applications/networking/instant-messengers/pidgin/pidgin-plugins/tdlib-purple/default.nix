@@ -46,12 +46,12 @@ stdenv.mkDerivation rec {
     lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [ "-U__ARM_NEON__" ]
   );
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ars3niy/tdlib-purple";
     description = "libpurple Telegram plugin using tdlib";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ sikmir ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ sikmir ];
+    platforms = lib.platforms.unix;
 
     # tdlib-purple is not actively maintained and currently not
     # compatible with recent versions of tdlib

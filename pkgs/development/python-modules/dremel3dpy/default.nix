@@ -6,7 +6,6 @@
   fetchPypi,
   imageio,
   imutils,
-  pythonOlder,
   requests,
   urllib3,
   tqdm,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "dremel3dpy";
   version = "2.1.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -43,10 +40,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dremel3dpy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for interacting with Dremel 3D printers";
     homepage = "https://github.com/godely/dremel3dpy";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

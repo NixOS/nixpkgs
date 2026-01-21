@@ -4,7 +4,6 @@
   click-plugins,
   colorama,
   fetchPypi,
-  pythonOlder,
   requests,
   setuptools,
   tldextract,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "shodan";
   version = "1.31.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -37,13 +34,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "shodan" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library and command-line utility for Shodan";
     mainProgram = "shodan";
     homepage = "https://github.com/achillean/shodan-python";
     changelog = "https://github.com/achillean/shodan-python/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       fab
       lihop
     ];

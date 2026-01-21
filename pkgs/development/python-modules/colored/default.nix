@@ -9,12 +9,12 @@
 buildPythonPackage rec {
   pname = "colored";
   version = "2.3.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitLab {
     owner = "dslackw";
     repo = "colored";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-PPaPw7pCZJeBz6h5omZ+kcRXsqi6ncLYGM7FNfZ0r4w=";
   };
 
@@ -26,11 +26,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "colored" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple library for color and formatting to terminal";
     homepage = "https://gitlab.com/dslackw/colored";
     changelog = "https://gitlab.com/dslackw/colored/-/raw/${version}/CHANGES.md";
     maintainers = [ ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

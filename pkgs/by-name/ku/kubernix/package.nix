@@ -30,12 +30,12 @@ rustPlatform.buildRustPackage {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Single dependency Kubernetes clusters for local testing, experimenting and development";
     mainProgram = "kubernix";
     homepage = "https://github.com/saschagrunert/kubernix";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ saschagrunert ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ saschagrunert ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-zBZk7JbNILX18g9+2ukiESnFtnIVWhdN/J/MBhIITh8=";
 
-  meta = with lib; {
+  meta = {
     description = "Utility program to manipulate influxdb api tokens for declarative setups";
     homepage = "https://github.com/oddlama/influxdb2-token-manipulator";
-    license = licenses.mit;
-    maintainers = with maintainers; [ oddlama ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ oddlama ];
     mainProgram = "influxdb2-token-manipulator";
   };
 }

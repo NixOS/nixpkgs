@@ -5,7 +5,6 @@
   fetchFromGitHub,
   pytestCheckHook,
   pytest-cov-stub,
-  pythonOlder,
   tenacity,
 }:
 
@@ -13,7 +12,6 @@ buildPythonPackage rec {
   pname = "aiokef";
   version = "0.2.17";
   format = "setuptools";
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "basnijholt";
@@ -40,10 +38,10 @@ buildPythonPackage rec {
   enabledTestPaths = [ "tests" ];
   pythonImportsCheck = [ "aiokef" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for KEF speakers";
     homepage = "https://github.com/basnijholt/aiokef";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

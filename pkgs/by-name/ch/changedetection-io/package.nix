@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "changedetection-io";
-  version = "0.51.3";
+  version = "0.51.4";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "dgtlmoon";
     repo = "changedetection.io";
     tag = version;
-    hash = "sha256-R0IL2skCUKLD/Gt9jru23aIMUVpvpx+KxQvQr4YIono=";
+    hash = "sha256-Qm3dI5ZHkLK3hTsadnzIDdmeiDM/QovGw2FZDVml5tE=";
   };
 
   pythonRelaxDeps = true;
@@ -57,13 +57,14 @@ python3.pkgs.buildPythonApplication rec {
       openpyxl
       paho-mqtt
       panzi-json-logic
+      playwright
       pluggy
       price-parser
       psutil
+      puremagic
       pyppeteer-ng
       # pyppeteerstealth
       python-engineio
-      python-magic
       python-socketio
       pytz
       referencing
@@ -90,7 +91,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "Self-hosted free open source website change detection tracking, monitoring and notification service";
     homepage = "https://github.com/dgtlmoon/changedetection.io";
     changelog = "https://github.com/dgtlmoon/changedetection.io/releases/tag/${src.tag}";
-    license = lib.licenses.asl20;
+    license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
       mikaelfangel
       thanegill

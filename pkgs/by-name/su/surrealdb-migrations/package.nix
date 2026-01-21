@@ -9,7 +9,7 @@
 
 let
   pname = "surrealdb-migrations";
-  version = "2.3.0";
+  version = "2.4.0";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -18,10 +18,10 @@ rustPlatform.buildRustPackage {
     owner = "Odonno";
     repo = "surrealdb-migrations";
     rev = "v${version}";
-    hash = "sha256-BCShTHZSeahJclOHcWh7etl0FajhFs4/RVVszFZdOV8=";
+    hash = "sha256-eeIXbpfXZ91XcQ+4T76BGZU0Ron5dAf2pUAvLj9nEok=";
   };
 
-  cargoHash = "sha256-fV7yHRiqcM4l9i3tnoMawEQxd9fqbcZYZkeTITy310g=";
+  cargoHash = "sha256-XA4OXHKSdVKoq3aKpKnYXzWjXHolDqPNLeIDS3iARYI=";
 
   # Error: No such file or directory (os error 2)
   # failures:
@@ -52,11 +52,11 @@ rustPlatform.buildRustPackage {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Awesome SurrealDB migration tool, with a user-friendly CLI and a versatile Rust library that enables seamless integration into any project";
     homepage = "https://crates.io/crates/surrealdb-migrations";
     mainProgram = "surrealdb-migrations";
-    license = licenses.mit;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

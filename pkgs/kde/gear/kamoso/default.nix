@@ -1,6 +1,7 @@
 {
   mkKdeDerivation,
   pkg-config,
+  kirigami-addons,
   gst_all_1,
   frei0r,
 }:
@@ -9,6 +10,7 @@ mkKdeDerivation {
 
   extraNativeBuildInputs = [ pkg-config ];
   extraBuildInputs = [
+    kirigami-addons
     gst_all_1.gst-plugins-base
     (gst_all_1.gst-plugins-good.override { qt6Support = true; })
     gst_all_1.gst-plugins-bad

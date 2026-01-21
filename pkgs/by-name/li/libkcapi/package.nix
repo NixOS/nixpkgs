@@ -13,16 +13,23 @@
   kcapi-dgstapp ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libkcapi";
   version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "smuellerDD";
     repo = "libkcapi";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-xOI29cjhUGUeHLaYIrPA5ZwwCE9lBdZG6kaW0lo1uL8=";
   };
+
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals kcapi-test [
+    "selftests"
+  ];
 
   nativeBuildInputs = [ autoreconfHook ];
 
@@ -33,6 +40,7 @@ stdenv.mkDerivation rec {
     buildPackages.stdenv.cc
   ];
 
+  strictDeps = true;
   enableParallelBuilding = true;
 
   configureFlags =
@@ -42,6 +50,11 @@ stdenv.mkDerivation rec {
     ++ lib.optional kcapi-rngapp "--enable-kcapi-rngapp"
     ++ lib.optional kcapi-encapp "--enable-kcapi-encapp"
     ++ lib.optional kcapi-dgstapp "--enable-kcapi-dgstapp";
+
+  postInstall = lib.optionalString kcapi-test ''
+    mkdir -p $selftests/bin
+    find $out -iname '*.sh' -exec mv {} $selftests/bin/ \;
+  '';
 
   meta = {
     homepage = "http://www.chronox.de/libkcapi.html";
@@ -56,4 +69,4 @@ stdenv.mkDerivation rec {
       thillux
     ];
   };
-}
+})

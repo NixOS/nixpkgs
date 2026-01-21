@@ -8,7 +8,6 @@
   pyasynchat,
   pyopenssl,
   pysendfile,
-  pythonOlder,
   setuptools,
 }:
 
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "pyftpdlib";
   version = "2.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -47,11 +44,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyftpdlib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Asynchronous FTP server library";
     homepage = "https://github.com/giampaolo/pyftpdlib/";
     changelog = "https://github.com/giampaolo/pyftpdlib/blob/release-${version}/HISTORY.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "ftpbench";
   };

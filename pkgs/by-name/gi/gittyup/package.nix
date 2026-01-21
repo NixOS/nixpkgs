@@ -73,15 +73,15 @@ stdenv.mkDerivation rec {
     rm -rf $out/{include,lib}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Graphical Git client designed to help you understand and manage your source code history";
     homepage = "https://murmele.github.io/Gittyup";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [
       fliegendewurst
       phijor
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

@@ -7,24 +7,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "protoc-gen-prost-serde";
-  version = "0.3.1";
+  version = "0.4.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-RQlNVGa6BRIqIGodqNN3eGl//hkUWrq7GpTGpRBCDgE=";
+    hash = "sha256-tgsGyUVoQZQcOqh56KGVwS3VcxwbKzBL3P2VpYs72Ok=";
   };
 
-  cargoHash = "sha256-OWSXA3S3o5eqM3pg2MPxx3HrCma778YJaPFOJq7S5zY=";
+  cargoHash = "sha256-otsovgqCC+IdxbdGBaPfjK61bZsHtWwY0QqZBPQxnvw=";
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Protoc plugin that generates serde serialization implementations for `protoc-gen-prost`";
     mainProgram = "protoc-gen-prost-serde";
     homepage = "https://github.com/neoeinstein/protoc-gen-prost";
     changelog = "https://github.com/neoeinstein/protoc-gen-prost/blob/main/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       felschr
       sitaaax
     ];

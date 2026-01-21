@@ -61,6 +61,5 @@ python3Packages.buildPythonApplication rec {
       mit
       bsd3
     ];
-    maintainers = with lib.maintainers; [ scalavision ];
   };
 }

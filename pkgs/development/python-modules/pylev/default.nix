@@ -23,10 +23,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pylev" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Levenshtein implementation";
     homepage = "https://github.com/toastdriven/pylev";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ jakewaksbaum ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ jakewaksbaum ];
   };
 }

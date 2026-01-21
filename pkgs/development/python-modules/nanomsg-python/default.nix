@@ -4,15 +4,12 @@
   fetchFromGitHub,
   nanomsg,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage {
   pname = "nanomsg-python";
   version = "1.0.20190114";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tonysimpson";
@@ -30,10 +27,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "nanomsg" ];
 
-  meta = with lib; {
+  meta = {
     description = "Bindings for nanomsg";
     homepage = "https://github.com/tonysimpson/nanomsg-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bgamari ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bgamari ];
   };
 }

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   flit-core,
@@ -12,7 +11,6 @@
   jinja2,
   pyyaml,
   sphinx,
-  stdlib-list,
 
   # tests
   beautifulsoup4,
@@ -21,16 +19,14 @@
 
 buildPythonPackage rec {
   pname = "sphinx-autoapi";
-  version = "3.6.0";
+  version = "3.6.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "readthedocs";
     repo = "sphinx-autoapi";
     tag = "v${version}";
-    hash = "sha256-pDfGNpDyrU4q48ZHKqfN8OrxKICfIhac2qMJDB1iE0I=";
+    hash = "sha256-dafrvrTl4bVBBaAhTCIPVrSA1pdNlbT5Rou3T//fmKQ=";
   };
 
   build-system = [ flit-core ];
@@ -40,9 +36,6 @@ buildPythonPackage rec {
     jinja2
     pyyaml
     sphinx
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [
-    stdlib-list
   ];
 
   nativeCheckInputs = [
@@ -57,7 +50,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "autoapi" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/readthedocs/sphinx-autoapi";
     changelog = "https://github.com/readthedocs/sphinx-autoapi/blob/${src.tag}/CHANGELOG.rst";
     description = "Provides 'autodoc' style documentation";
@@ -66,7 +59,7 @@ buildPythonPackage rec {
       multiple programming languages without needing to load, run, or
       import the project being documented.
     '';
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

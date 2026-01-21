@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "kn";
-  version = "1.19.5";
+  version = "1.20.0";
 
   src = fetchFromGitHub {
     owner = "knative";
     repo = "client";
     tag = "knative-v${finalAttrs.version}";
-    hash = "sha256-CgKwZCdjNN27wP79vzzTkGdk56owUDBMN79rk/ckpaI=";
+    hash = "sha256-rElNlb3NfbOZjCMWT2efknWM9B0+BFa5CCNmcA6afPY=";
   };
 
-  vendorHash = "sha256-MYIUOIdoYzHK7HBTdQzu7Jp17MYMJUnoK64jPEmIR+E=";
+  vendorHash = "sha256-rZEkwiCy2kpeKOi4lhLoW1o+cws/p++c9Dz8fKhgNKQ=";
 
   env.GOWORK = "off";
 
@@ -50,6 +50,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/knative/client";
     changelog = "https://github.com/knative/client/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ bryanasdev000 ];
+    maintainers = [ ];
   };
 })

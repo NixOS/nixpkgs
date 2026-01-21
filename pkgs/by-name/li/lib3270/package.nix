@@ -1,58 +1,46 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  which,
-  pkg-config,
-  autoconf,
-  automake,
-  libtool,
-  gettext,
-  openssl,
   curl,
+  fetchFromGitHub,
+  gettext,
+  meson,
+  ninja,
+  openssl,
+  pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lib3270";
-  version = "5.4";
+  version = "5.5.0";
 
   src = fetchFromGitHub {
     owner = "PerryWerneck";
     repo = "lib3270";
-    rev = version;
-    hash = "sha256-w6Bg+TvSDAuZwtu/nyAIuq6pgheM5nXtfuryECfnKng=";
+    tag = finalAttrs.version;
+    hash = "sha256-AGS7RkMeVKe2Ed5Aj3oHdbiGMoYGmq2Wlkcd4wSm4J8=";
   };
 
   nativeBuildInputs = [
-    which
+    meson
+    ninja
     pkg-config
-    autoconf
-    automake
-    libtool
   ];
 
   buildInputs = [
+    curl
     gettext
     openssl
-    curl
   ];
-
-  postPatch = ''
-    # Patch the required version.
-    sed -i -e "s/20211118/19800101/" src/core/session.c
-  '';
-
-  preConfigure = ''
-    NOCONFIGURE=1 sh autogen.sh
-  '';
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "TN3270 client Library";
     homepage = "https://github.com/PerryWerneck/lib3270";
-    license = licenses.lgpl3Plus;
-    maintainers = [ maintainers.vifino ];
+    changelog = "https://github.com/PerryWerneck/lib3270/blob/${finalAttrs.version}/CHANGELOG";
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ vifino ];
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

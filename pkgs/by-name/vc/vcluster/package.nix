@@ -56,7 +56,6 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     mainProgram = "vcluster";
     maintainers = with lib.maintainers; [
-      peterromfeldhk
       qjoly
     ];
   };

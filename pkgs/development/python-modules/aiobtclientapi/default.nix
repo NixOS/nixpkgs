@@ -12,7 +12,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiobtclientapi";
   version = "1.1.4";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     domain = "codeberg.org";
     owner = "plotski";
     repo = "aiobtclientapi";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ga3EyKhfdEKkjFktUlgLSX54QbTc/a48vmWjmRqa+4w=";
   };
 
@@ -64,4 +64,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ ambroisie ];
   };
-}
+})

@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "6.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "pre-commit";
     repo = "pre-commit-hooks";
@@ -50,11 +48,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pre_commit_hooks" ];
 
-  meta = with lib; {
+  meta = {
     description = "Some out-of-the-box hooks for pre-commit";
     homepage = "https://github.com/pre-commit/pre-commit-hooks";
     changelog = "https://github.com/pre-commit/pre-commit-hooks/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kalbasit ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kalbasit ];
   };
 }

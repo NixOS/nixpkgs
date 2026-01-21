@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     cp TODO README NEWS COPYING ChangeLog AUTHORS $out/share/doc/fuse-7z-ng/
   '';
 
-  meta = with lib; {
+  meta = {
     inherit (src.meta) homepage;
     description = "FUSE-based filesystem that uses the p7zip library";
     longDescription = ''
@@ -57,8 +57,8 @@ stdenv.mkDerivation rec {
 
       This project is a fork of fuse-7z ( https://gitorious.org/fuse-7z/fuse-7z ).
     '';
-    platforms = platforms.linux;
-    license = licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "fuse-7z-ng";
   };
 }

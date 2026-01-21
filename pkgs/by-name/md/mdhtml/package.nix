@@ -18,12 +18,12 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  meta = with lib; {
+  meta = {
     description = "Really simple CLI Markdown to HTML converter with styling support";
     homepage = "https://codeberg.org/Tomkoid/mdhtml";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     changelog = "https://codeberg.org/Tomkoid/mdhtml/releases";
-    maintainers = with maintainers; [ tomkoid ];
+    maintainers = with lib.maintainers; [ tomkoid ];
     mainProgram = "mdhtml";
   };
 }

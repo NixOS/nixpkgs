@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "corsix-th";
-  version = "0.69.1";
+  version = "0.69.2";
 
   src = fetchFromGitHub {
     owner = "CorsixTH";
     repo = "CorsixTH";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Jrf3PhgnJUBGy+ZcSPjU5tQFyuTmnn5+8P6LujsoSAg=";
+    hash = "sha256-Dohql0AJspcnGhoDKvszw84/YKGy7IlIfk4pWvjG+8o=";
   };
 
   patches = [
@@ -77,15 +77,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Reimplementation of the 1997 Bullfrog business sim Theme Hospital";
     mainProgram = "corsix-th";
     homepage = "https://corsixth.com/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       hughobrien
       matteopacini
     ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

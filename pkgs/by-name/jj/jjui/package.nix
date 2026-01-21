@@ -4,21 +4,26 @@
   fetchFromGitHub,
   nix-update-script,
   versionCheckHook,
+  stdenv,
 }:
 buildGoModule (finalAttrs: {
   pname = "jjui";
-  version = "0.9.5";
+  version = "0.9.10";
 
   src = fetchFromGitHub {
     owner = "idursun";
     repo = "jjui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QaAjxpn7VHUdL8PFQcDUsa7xA/7bMtGaGl1aTpKOs2M=";
+    hash = "sha256-Hsuyf5VcSZcNi2gmubXS47uRarL17oPEtorisY75bbM=";
   };
 
-  vendorHash = "sha256-YBRHpHBb3uzgXhwxVu3493CtPyG9Vzm8IPc1VW6/CKU=";
+  vendorHash = "sha256-jte0g+aUiGNARLi8DyfsX6wYYJnodHnILzmid6KvMiA=";
 
   ldflags = [ "-X main.Version=${finalAttrs.version}" ];
+
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    "-skip=TestServerAskpass"
+  ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

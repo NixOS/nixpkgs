@@ -41,11 +41,11 @@ stdenv.mkDerivation rec {
           'cmake_minimum_required(VERSION 3.10)'
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/DaveGamble/cJSON";
     description = "Ultralightweight JSON parser in ANSI C";
-    license = licenses.mit;
-    maintainers = [ maintainers.matthiasbeyer ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.matthiasbeyer ];
+    platforms = lib.platforms.unix;
   };
 }

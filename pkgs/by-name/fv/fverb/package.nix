@@ -26,12 +26,12 @@ stdenv.mkDerivation {
     patchShebangs ./dpf/utils/generate-ttl.sh
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Stereo variant of the reverberator by Jon Dattorro, for lv2";
     homepage = "https://github.com/jpcima/fverb";
-    license = licenses.bsd2;
-    maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd2;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.unix;
     # clang++: error: unsupported option '-mfpu=' for target 'arm64-apple-darwin'
     # clang++: error: unsupported option '-mfloat-abi=' for target 'arm64-apple-darwin'
     broken = stdenv.isDarwin && stdenv.isAarch64;

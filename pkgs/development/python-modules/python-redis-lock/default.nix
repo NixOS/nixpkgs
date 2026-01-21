@@ -10,7 +10,6 @@
   pkgs,
   process-tests,
   pytestCheckHook,
-  pythonOlder,
   redis,
   django-redis,
 }:
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   version = "4.0.0";
 
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -69,11 +66,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "redis_lock" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/ionelmc/python-redis-lock/blob/v${version}/CHANGELOG.rst";
     description = "Lock context manager implemented via redis SETNX/BLPOP";
     homepage = "https://github.com/ionelmc/python-redis-lock";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ erictapen ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ erictapen ];
   };
 }

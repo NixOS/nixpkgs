@@ -75,12 +75,12 @@ stdenv.mkDerivation rec {
       meson test --print-errorlogs
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Library full of GTK widgets for mobile phones";
     mainProgram = "handy-0.0-demo";
     homepage = "https://source.puri.sm/Librem5/libhandy";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

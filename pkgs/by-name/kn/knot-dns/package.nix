@@ -26,18 +26,19 @@
   sphinx,
   autoreconfHook,
   nixosTests,
-  knot-resolver,
+  knot-resolver_5,
+  knot-resolver-manager_6,
   knot-dns,
   runCommandLocal,
 }:
 
 stdenv.mkDerivation rec {
   pname = "knot-dns";
-  version = "3.5.1";
+  version = "3.5.3";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-dns/knot-${version}.tar.xz";
-    sha256 = "a614d5226ceed4b4cdd4a3badbb0297ea0f987f65948e4eb828119a3b5ac0a4b";
+    sha256 = "e003ad1eef229c4e65a6cac876ee773e25a06177ecdc83795a26617a6eebe471";
   };
 
   outputs = [
@@ -113,9 +114,10 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
-    inherit knot-resolver;
+    inherit knot-resolver_5;
   }
   // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    inherit knot-resolver-manager_6; # not very reliable on non-Linux yet
     inherit (nixosTests) knot kea;
     prometheus-exporter = nixosTests.prometheus-exporters.knot;
     # Some dependencies are very version-sensitive, so the might get dropped

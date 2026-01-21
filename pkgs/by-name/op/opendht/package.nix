@@ -72,15 +72,15 @@ stdenv.mkDerivation rec {
     extraArgs = [ "--version-regex=v(.+)" ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "C++11 Kademlia distributed hash table implementation";
     homepage = "https://github.com/savoirfairelinux/opendht";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       taeer
       olynch
       thoughtpolice
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

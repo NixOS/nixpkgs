@@ -53,7 +53,7 @@ let
           ;
       };
 
-      meta = with lib; {
+      meta = {
         description = "Small, safe and fast formatting library";
         longDescription = ''
           fmt (formerly cppformat) is an open-source formatting library. It can be
@@ -63,8 +63,8 @@ let
         changelog = "https://github.com/fmtlib/fmt/blob/${version}/ChangeLog.rst";
         downloadPage = "https://github.com/fmtlib/fmt/";
         maintainers = [ ];
-        license = licenses.mit;
-        platforms = platforms.all;
+        license = lib.licenses.mit;
+        platforms = lib.platforms.all;
       };
     };
 in

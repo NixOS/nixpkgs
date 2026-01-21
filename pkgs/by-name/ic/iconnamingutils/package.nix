@@ -20,9 +20,9 @@ stdenv.mkDerivation rec {
     (perl.withPackages (p: [ p.XMLSimple ]))
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://tango.freedesktop.org/Standard_Icon_Naming_Specification";
-    platforms = with platforms; linux ++ darwin;
-    license = licenses.gpl2;
+    platforms = with lib.platforms; linux ++ darwin;
+    license = lib.licenses.gpl2;
   };
 }

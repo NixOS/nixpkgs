@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
   regex,
   setuptools,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "rebulk";
   version = "3.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -28,11 +25,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rebulk" ];
 
-  meta = with lib; {
+  meta = {
     description = "Advanced string matching from simple patterns";
     homepage = "https://github.com/Toilal/rebulk/";
     changelog = "https://github.com/Toilal/rebulk/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

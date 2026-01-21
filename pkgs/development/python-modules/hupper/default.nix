@@ -31,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hupper" ];
 
-  meta = with lib; {
+  meta = {
     description = "In-process file monitor/reloader for reloading your code automatically during development";
     mainProgram = "hupper";
     homepage = "https://github.com/Pylons/hupper";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

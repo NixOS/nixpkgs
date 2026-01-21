@@ -29,9 +29,6 @@
   sqlalchemy,
   tornado,
   traitlets,
-  pythonOlder,
-  async-generator,
-  importlib-metadata,
 
   # tests
   addBinToPathHook,
@@ -51,14 +48,14 @@
 
 buildPythonPackage rec {
   pname = "jupyterhub";
-  version = "5.4.2";
+  version = "5.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jupyterhub";
     repo = "jupyterhub";
     tag = version;
-    hash = "sha256-eSYoLoPWHQ/HHAFW6X262hrIrmUxDxrYEzVFiwGVqCs=";
+    hash = "sha256-2LxbLwkEXpMBE5Fy7+3vQGO+CEKM50Ou5vATT6JtA8s=";
   };
 
   npmDeps = fetchNpmDeps {
@@ -104,10 +101,6 @@ buildPythonPackage rec {
     sqlalchemy
     tornado
     traitlets
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [
-    async-generator
-    importlib-metadata
   ];
 
   pythonImportsCheck = [ "jupyterhub" ];
@@ -128,7 +121,7 @@ buildPythonPackage rec {
         version = "0.21.2";
         src = fetchFromGitHub {
           inherit (prev.src) owner repo;
-          rev = "refs/tags/v${final.version}";
+          tag = "v${final.version}";
           hash = "sha256-AVVvdo/CDF9IU6l779sLc7wKz5h3kzMttdDNTPLYxtQ=";
         };
       }
@@ -138,7 +131,6 @@ buildPythonPackage rec {
     versionCheckHook
     virtualenv
   ];
-  versionCheckProgramArg = "--version";
 
   disabledTests = [
     # Tries to install older versions through pip

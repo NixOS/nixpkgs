@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-11u3a4W3vrGJQXjSMcDAS5D9mqG+XJ0L5FYmqqH/McM=";
 
-  meta = with lib; {
+  meta = {
     description = "Lightning-fast linter for .env files. Written in Rust";
     mainProgram = "dotenv-linter";
     homepage = "https://dotenv-linter.github.io";
-    license = licenses.mit;
-    maintainers = with maintainers; [ humancalico ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ humancalico ];
   };
 }

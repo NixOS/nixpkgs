@@ -85,16 +85,16 @@ stdenv.mkDerivation rec {
     xz
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Highly optimized open source ambient lighting implementation based on modern digital video and audio stream analysis for Windows, macOS and Linux (x86 and Raspberry Pi / ARM";
     homepage = "https://github.com/awawa-dev/HyperHDR";
     changelog = "https://github.com/awawa-dev/HyperHDR/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       hexa
       eymeric
     ];
     mainProgram = "hyperhdr";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

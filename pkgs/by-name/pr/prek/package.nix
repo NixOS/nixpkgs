@@ -5,27 +5,22 @@
   git,
   uv,
   python312,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "prek";
-  version = "0.2.17";
+  version = "0.2.30";
 
   src = fetchFromGitHub {
     owner = "j178";
     repo = "prek";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-7GTp1UBAnxLVEQFTQbBxGiKSvZwEVVMA7oa3Iz5Ifzk=";
+    hash = "sha256-IqFUJNFs7a/M9IUNEwW40EZTAh+6a5Ov37xg5c9iwRc=";
   };
 
-  cargoHash = "sha256-i09ZcG3xUt+qFZge/8MiZ5yKxIeBd3l0BYlY5OFf3l8=";
-
-  preBuild = ''
-    version312_str=$(${python312}/bin/python -c 'import sys; print(sys.version_info[:3])')
-
-    substituteInPlace ./tests/languages/python.rs \
-      --replace '(3, 12, 11)' "$version312_str"
-  '';
+  cargoHash = "sha256-KOpQ3P9cmcWYT3bPKtKpzHPagX4b9hH0EiWGpt98NnE=";
 
   nativeCheckInputs = [
     git
@@ -51,7 +46,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   useNextest = true;
 
   # some python tests use uv, which in turn needs python
-  UV_PYTHON = "${python312}/bin/python";
+  env = {
+    UV_PYTHON = "${python312}/bin/python";
+    UV_NO_MANAGED_PYTHON = true;
+    UV_SYSTEM_PYTHON = true;
+  };
+
+  cargoTestFlags = [ "--no-fail-fast" ];
 
   checkFlags = map (t: "--skip ${t}") [
     # these tests require internet access
@@ -68,6 +69,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "run_worktree"
     "try_repo_relative_path"
     "languages::tests::test_native_tls"
+    "rust::additional_dependencies_cli"
+    "rust::rustup_installer"
+    "rust::remote_hooks"
+    "rust::remote_hooks_with_lib_deps"
+    "unsupported::unsupported_language"
+    "remote_hook_non_workspace"
     # "meta_hooks"
     "reuse_env"
     "docker::docker"
@@ -144,13 +151,39 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "lua::remote_hook"
     # error message differs
     "run_in_non_git_repo"
+    # depends on locale
+    "init_nonexistent_repo"
+    # https://github.com/astral-sh/uv/issues/8635
+    "alternate_config_file"
+    "basic_discovery"
+    "color"
+    "cookiecutter_template_directories_are_skipped"
+    "empty_entry"
+    "git_dir_respected"
+    "git_env_vars_not_leaked_to_pip_install"
+    "gitignore_respected"
+    "invalid_entry"
+    "local_python_hook"
+    "orphan_projects"
+    "run_with_selectors"
+    "run_with_stdin_closed"
+    "show_diff_on_failure"
+    "submodule_discovery"
+    "workspace_install_hooks"
+    # We don't have git info; we run versionCheckHook instead
+    "version_info"
   ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/j178/prek";
     description = "Better `pre-commit`, re-engineered in Rust ";
     mainProgram = "prek";
-    changelog = "https://github.com/j178/prek/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/j178/prek/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = [ lib.licenses.mit ];
     maintainers = [ lib.maintainers.knl ];
   };

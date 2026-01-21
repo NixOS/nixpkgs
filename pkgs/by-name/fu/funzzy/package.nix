@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-n9UHyr7W4hrN0+2dsYAYqkP/uzBv74p5XHU0g2MReJY=";
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight watcher";
     homepage = "https://github.com/cristianoliveira/funzzy";
     changelog = "https://github.com/cristianoliveira/funzzy/releases/tag/${src.rev}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

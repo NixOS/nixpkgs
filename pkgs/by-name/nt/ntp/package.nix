@@ -49,14 +49,14 @@ stdenv.mkDerivation rec {
     rm -rf $out/share/doc
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.ntp.org/";
     description = "Implementation of the Network Time Protocol";
     license = {
       # very close to isc and bsd2
       url = "https://www.eecis.udel.edu/~mills/ntp/html/copyright.html";
     };
-    maintainers = with maintainers; [ thoughtpolice ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -31,13 +31,13 @@ stdenvNoLibc.mkDerivation (finalAttrs: {
     incdir = "/avr/include";
   };
 
-  meta = with lib; {
+  meta = {
     description = "C runtime library for AVR microcontrollers";
     homepage = "https://github.com/avrdudes/avr-libc";
     changelog = "https://github.com/avrdudes/avr-libc/blob/avr-libc-${finalAttrs.tag_version}-release/NEWS";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     platforms = [ "avr-none" ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       mguentner
       emilytrau
     ];

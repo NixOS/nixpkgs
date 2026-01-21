@@ -6,7 +6,6 @@
   filebytes,
   keystone-engine,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "ropper";
   version = "1.13.13";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sashs";
@@ -39,12 +36,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ropper" ];
 
-  meta = with lib; {
+  meta = {
     description = "Show information about files in different file formats";
     homepage = "https://scoding.de/ropper/";
     changelog = "https://github.com/sashs/Ropper/releases/tag/${src.tag}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ bennofs ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ bennofs ];
     mainProgram = "ropper";
   };
 }

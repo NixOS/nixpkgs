@@ -8,16 +8,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "nix-your-shell";
-  version = "1.4.6";
+  version = "1.4.7";
 
   src = fetchFromGitHub {
     owner = "MercuryTechnologies";
     repo = "nix-your-shell";
     tag = "v${version}";
-    hash = "sha256-FjGjLq/4qeZz9foA7pfz1hiXvsdmbnzB3BpiTESLE1c=";
+    hash = "sha256-CE1yVD0uT5QnCfuTshAvM4r0BQ6XeaT22PdEhaYJJk8=";
   };
 
-  cargoHash = "sha256-zQpK13iudyWDZbpAN8zm9kKmz8qy3yt8JxT4lwq4YF0=";
+  cargoHash = "sha256-BGyO+MK5pRMNFauRvTWxluHoPjqqsIJP1yajWEJnIvI=";
 
   passthru = {
     generate-config =
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "nix-your-shell";
     description = "`nix` and `nix-shell` wrapper for shells other than `bash`";
     homepage = "https://github.com/MercuryTechnologies/nix-your-shell";
-    changelog = "https://github.com/MercuryTechnologies/nix-your-shell/releases/tags/v${version}";
+    changelog = "https://github.com/MercuryTechnologies/nix-your-shell/releases/tag/v${version}";
     license = [ lib.licenses.mit ];
     maintainers = with lib.maintainers; [ _9999years ];
   };

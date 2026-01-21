@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "reaper-go";
-  version = "0.2.5";
+  version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "ghostsecurity";
     repo = "reaper";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3kTGlGvuTSB3KOeQvhF/pNaWVU153qGqqskJd+G6FF4=";
+    hash = "sha256-ZSHG4pQTo+Z05MvBqFoscMaZuezScTuszOF8hn4UZXs=";
   };
 
-  vendorHash = "sha256-T9qTfGRLhlYrezraRRztZC2Kw4L6Fap1YQgQdnlxKhE=";
+  vendorHash = "sha256-Kn/anDDHWfapWB/ZHu4MRmEQ7Nn8hjUMS+LWK9Dx/g4=";
 
   ldflags = [
     "-s"

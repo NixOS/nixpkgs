@@ -7,6 +7,7 @@
 
   # optional-dependencies
   numpy,
+  packaging,
   torch,
   tensorflow,
   flax,
@@ -27,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "safetensors";
-  version = "0.6.2";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "safetensors";
     tag = "v${version}";
-    hash = "sha256-IyKk29jMAbYW+16mrpqQWjnsmNFEvUwkB048AAx/Cvw=";
+    hash = "sha256-qLRPMJJGs3C/PNqHSszNWRoX/DdvXt68TWW0b7aI664=";
   };
 
   sourceRoot = "${src.name}/bindings/python";
@@ -46,7 +47,7 @@ buildPythonPackage rec {
       src
       sourceRoot
       ;
-    hash = "sha256-+92fCILZwk/TknGXgR9lRN55WnmkgUJfCszFthstzXs=";
+    hash = "sha256-zNmL1Uoq/BLh6UBzMgUs/EEbzIvy7z2ylOR//Q959l4=";
   };
 
   nativeBuildInputs = [
@@ -57,6 +58,7 @@ buildPythonPackage rec {
   optional-dependencies = lib.fix (self: {
     numpy = [ numpy ];
     torch = self.numpy ++ [
+      packaging
       torch
     ];
     tensorflow = self.numpy ++ [

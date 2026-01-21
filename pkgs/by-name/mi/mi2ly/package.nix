@@ -26,11 +26,11 @@ stdenv.mkDerivation rec {
     cp README Doc.txt COPYING Manual.txt "$out/share/doc/mi2ly"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "MIDI to Lilypond converter";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
     homepage = "https://www.nongnu.org/mi2ly/";
     mainProgram = "mi2ly";
   };

@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  pythonOlder,
   buildPythonPackage,
   setuptools,
 
@@ -25,8 +24,6 @@ buildPythonPackage rec {
   pname = "django-redis";
   version = "6.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "jazzband";
@@ -63,7 +60,7 @@ buildPythonPackage rec {
     pytestCheckHook
     redisTestHook
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   # https://github.com/jazzband/django-redis/issues/777
   dontUsePytestXdist = true;
@@ -79,11 +76,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Full featured redis cache backend for Django";
     homepage = "https://github.com/jazzband/django-redis";
     changelog = "https://github.com/jazzband/django-redis/releases/tag/${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

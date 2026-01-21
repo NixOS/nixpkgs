@@ -1,6 +1,6 @@
 {
   lib,
-  flutter335,
+  flutter338,
   fetchFromGitHub,
   autoPatchelfHook,
   copyDesktopItems,
@@ -8,26 +8,27 @@
   runCommand,
   yq-go,
   _experimental-update-script-combinators,
-  gitUpdater,
+  nix-update-script,
+  dart,
 }:
 
 let
-  version = "1.0.1270";
+  version = "1.0.1291";
 
   src = fetchFromGitHub {
     owner = "lollipopkit";
     repo = "flutter_server_box";
     tag = "v${version}";
-    hash = "sha256-3erwb2e9iINe4MVuOQKzBuBdUJyBgW2zIImZwVyll6Q=";
+    hash = "sha256-5SEw0hNeZg2a4SaqFnkKASeEVXpLWVjQVNT2NlaJz9c=";
   };
 in
-flutter335.buildFlutterApplication {
+flutter338.buildFlutterApplication {
   pname = "server-box";
   inherit version src;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  gitHashes = lib.importJSON ./gitHashes.json;
+  gitHashes = lib.importJSON ./git-hashes.json;
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -69,11 +70,22 @@ flutter335.buildFlutterApplication {
           yq eval --output-format=json --prettyPrint $src/pubspec.lock > "$out"
         '';
     updateScript = _experimental-update-script-combinators.sequence [
-      (gitUpdater { rev-prefix = "v"; })
-      (_experimental-update-script-combinators.copyAttrOutputToFile "server-box.pubspecSource" ./pubspec.lock.json)
+      (nix-update-script { })
+      (
+        (_experimental-update-script-combinators.copyAttrOutputToFile "server-box.pubspecSource" ./pubspec.lock.json)
+        // {
+          supportedFeatures = [ ];
+        }
+      )
       {
-        command = [ ./update-gitHashes.py ];
-        supportedFeatures = [ "silent" ];
+        command = [
+          dart.fetchGitHashesScript
+          "--input"
+          ./pubspec.lock.json
+          "--output"
+          ./git-hashes.json
+        ];
+        supportedFeatures = [ ];
       }
     ];
   };

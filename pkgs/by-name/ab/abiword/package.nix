@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "AbiWord";
-    rev = "refs/tags/release-${version}";
+    tag = "release-${version}";
     hash = "sha256-dYbJ726Zuxs7+VTTCWHYQLsVZ/86hRUBQRac6toO4UI=";
   };
 

@@ -40,15 +40,15 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command line tool for deskewing scanned text documents";
     homepage = "https://galfar.vevb.net/deskew";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       mpl11
     ];
-    maintainers = with maintainers; [ ryantm ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ ryantm ];
+    platforms = lib.platforms.all;
     mainProgram = "deskew";
   };
 

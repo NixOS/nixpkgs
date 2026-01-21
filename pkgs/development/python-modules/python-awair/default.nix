@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
+  pytest-asyncio,
   pytest-aiohttp,
   pytestCheckHook,
   pythonOlder,
@@ -13,39 +14,37 @@
 
 buildPythonPackage rec {
   pname = "python-awair";
-  version = "0.2.4";
-  format = "pyproject";
-  disabled = pythonOlder "3.6";
+  version = "0.2.5";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ahayworth";
     repo = "python_awair";
-    rev = version;
-    hash = "sha256-zdZyA6adM4bfEYupdZl7CzMjwyfRkQBrntNh0MusynE=";
+    tag = version;
+    hash = "sha256-ZET24T6MeCPPL1V84538U6Fb/ZVGv1hwcdTQi3Q+yMY=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     voluptuous
   ];
 
-  # Failed: async def functions are not natively supported.
-  doCheck = false;
-
   nativeCheckInputs = [
     pytest-aiohttp
+    pytest-asyncio
     pytestCheckHook
     vcrpy
   ];
 
   pythonImportsCheck = [ "python_awair" ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/ahayworth/python_awair/releases/tag/${src.tag}";
     description = "Python library for the Awair API";
     homepage = "https://github.com/ahayworth/python_awair";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -12,6 +12,8 @@
   iso8601,
   mypy-extensions,
   psycopg,
+  psycopg-pool,
+  pyasyncore,
   redis,
   tenacity,
   swh-core,
@@ -30,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "swh-storage";
-  version = "3.1.0";
+  version = "4.1.1";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -39,12 +41,17 @@ buildPythonPackage rec {
     owner = "devel";
     repo = "swh-storage";
     tag = "v${version}";
-    hash = "sha256-Bxwc8OccmqadLjHtmhToHBYHGkD7Fw3Cl3go9VLV/Bs=";
+    hash = "sha256-AY2IcRJG19oSy2usI9JZTEKYLI3SEiLpNisqD7zus8A=";
   };
 
   build-system = [
     setuptools
     setuptools-scm
+  ];
+
+  pythonRelaxDeps = [
+    # we patched click 8.2.1
+    "click"
   ];
 
   dependencies = [
@@ -56,13 +63,14 @@ buildPythonPackage rec {
     iso8601
     mypy-extensions
     psycopg
+    psycopg-pool
+    pyasyncore
     redis
     tenacity
     swh-core
     swh-model
     swh-objstorage
-  ]
-  ++ psycopg.optional-dependencies.pool;
+  ];
 
   pythonImportsCheck = [ "swh.storage" ];
 
@@ -88,11 +96,13 @@ buildPythonPackage rec {
     "swh/storage/tests/test_cassandra_migration.py"
     "swh/storage/tests/test_cassandra_ttl.py"
     "swh/storage/tests/test_cli_cassandra.py"
+    "swh/storage/tests/test_cli_object_references_cassandra.py"
     # Failing tests
     "swh/storage/tests/test_cli_object_references.py"
   ];
 
   meta = {
+    changelog = "https://gitlab.softwareheritage.org/swh/devel/swh-storage/-/tags/${src.tag}";
     description = "Abstraction layer over the archive, allowing to access all stored source code artifacts as well as their metadata";
     homepage = "https://gitlab.softwareheritage.org/swh/devel/swh-storage";
     license = lib.licenses.gpl3Only;

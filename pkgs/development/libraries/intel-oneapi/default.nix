@@ -32,7 +32,7 @@
     ];
 
     extendDrvArgs =
-      fa:
+      finalAttrs:
       {
         pname,
         versionYear,
@@ -50,7 +50,7 @@
         shortName = name: builtins.elemAt (lib.splitString "." name) 3;
       in
       {
-        version = "${fa.versionYear}.${fa.versionMajor}.${fa.versionMinor}.${fa.versionRel}";
+        version = "${finalAttrs.versionYear}.${finalAttrs.versionMajor}.${finalAttrs.versionMinor}.${finalAttrs.versionRel}";
 
         nativeBuildInputs = [
           # Installer wants tput

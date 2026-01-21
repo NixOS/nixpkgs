@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "sharkiq";
-  version = "1.4.2";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "JeffResc";
     repo = "sharkiq";
     tag = "v${version}";
-    hash = "sha256-VhWqYYGZRsEPW4g9kQznr50ujGhLcTs+TS3atxsqCng=";
+    hash = "sha256-8BLPIvx4r5i0q5dPUdwB2KgPfGC6n14RFzWxJXpBD1Y=";
   };
 
   postPatch = ''
@@ -42,11 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sharkiq" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for Shark IQ robots";
     homepage = "https://github.com/JeffResc/sharkiq";
     changelog = "https://github.com/JeffResc/sharkiq/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

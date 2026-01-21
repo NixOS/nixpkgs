@@ -17,10 +17,10 @@
   mate-desktop,
   mate-panel,
   wrapGAppsHook3,
-  mateUpdateScript,
+  gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mate-notification-daemon";
   version = "1.28.5";
   outputs = [
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mate-desktop";
     repo = "mate-notification-daemon";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-6N6lD63JL9xAtALn9URjYiCEhMZBC9TfIsrdalyY3YY=";
   };
 
@@ -61,17 +61,21 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname; };
+  passthru.updateScript = gitUpdater {
+    url = "https://git.mate-desktop.org/mate-notification-daemon";
+    odd-unstable = true;
+    rev-prefix = "v";
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Notification daemon for MATE Desktop";
     mainProgram = "mate-notification-properties";
     homepage = "https://github.com/mate-desktop/mate-notification-daemon";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       gpl3Plus
     ];
-    platforms = platforms.unix;
-    teams = [ teams.mate ];
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.mate ];
   };
-}
+})

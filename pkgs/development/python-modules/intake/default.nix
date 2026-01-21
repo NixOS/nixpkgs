@@ -18,7 +18,6 @@
   pyarrow,
   pytestCheckHook,
   python-snappy,
-  pythonOlder,
   pythonAtLeast,
   pyyaml,
   networkx,
@@ -32,8 +31,6 @@ buildPythonPackage rec {
   pname = "intake";
   version = "2.0.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "intake";
@@ -63,7 +60,7 @@ buildPythonPackage rec {
     intake-parquet
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   optional-dependencies = {
     server = [
@@ -135,11 +132,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "intake" ];
 
-  meta = with lib; {
+  meta = {
     description = "Data load and catalog system";
     homepage = "https://github.com/ContinuumIO/intake";
     changelog = "https://github.com/intake/intake/blob/${version}/docs/source/changelog.rst";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
   };
 }

@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "microsoft-gsl";
-  version = "4.2.0";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "Microsoft";
     repo = "GSL";
     rev = "v${version}";
-    hash = "sha256-NrnYfCCeQ50oHYFbn9vh5Z4mfyxc0kAM3qnzQdq9gyM=";
+    hash = "sha256-rfSfgyjU1U6gaWzlx2CeaCSb784L29vHDAC/PQl+s6E=";
   };
 
   nativeBuildInputs = [
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "C++ Core Guideline support library";
     longDescription = ''
       The Guideline Support Library (GSL) contains functions and types that are suggested for
@@ -37,9 +37,9 @@ stdenv.mkDerivation rec {
       This package contains Microsoft's implementation of GSL.
     '';
     homepage = "https://github.com/Microsoft/GSL";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       thoughtpolice
       yuriaisaka
     ];

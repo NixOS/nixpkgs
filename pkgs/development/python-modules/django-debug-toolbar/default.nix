@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  pythonOlder,
   buildPythonPackage,
 
   # build-system
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "django-debug-toolbar";
   version = "6.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jazzband";
@@ -65,11 +62,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "debug_toolbar" ];
 
-  meta = with lib; {
+  meta = {
     description = "Configurable set of panels that display debug information about the current request/response";
     homepage = "https://github.com/jazzband/django-debug-toolbar";
     changelog = "https://django-debug-toolbar.readthedocs.io/en/latest/changes.html";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

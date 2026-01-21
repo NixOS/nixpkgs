@@ -18,21 +18,21 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fastexcel";
-  version = "0.17.1";
+  version = "0.19.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ToucanToco";
     repo = "fastexcel";
-    tag = "v${version}";
-    hash = "sha256-FCI1pMCYN1f5hEg7PxF72uPPIJ5WiQPISF+YFj7+K60=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BMFZOduKN6D3y9aRkt9VAG2T9oNFBUcnmux1qTKgY5c=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-9Xr4woj7TU03AZaebpdlo1U2s0q/ls2fPmSKccpoZq0=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-aTYwXJN2hncZsEAGSlQzK5cX4uWpNoS0wpsXL0I6pZo=";
   };
 
   nativeBuildInputs = [
@@ -79,8 +79,8 @@ buildPythonPackage rec {
   meta = {
     description = "Fast excel file reader for Python, written in Rust";
     homepage = "https://github.com/ToucanToco/fastexcel/";
-    changelog = "https://github.com/ToucanToco/fastexcel/releases/tag/v${version}";
+    changelog = "https://github.com/ToucanToco/fastexcel/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

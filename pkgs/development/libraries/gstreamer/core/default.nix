@@ -146,17 +146,16 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = directoryListingUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open source multimedia framework";
     homepage = "https://gstreamer.freedesktop.org";
-    license = licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
     pkgConfigModules = [
       "gstreamer-controller-1.0"
     ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       ttuegel
-      matthewbauer
     ];
   };
 })

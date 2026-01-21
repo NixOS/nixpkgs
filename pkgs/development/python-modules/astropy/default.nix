@@ -1,6 +1,6 @@
 {
   lib,
-  fetchPypi,
+  fetchFromGitHub,
   buildPythonPackage,
   pythonOlder,
 
@@ -55,14 +55,16 @@
 
 buildPythonPackage rec {
   pname = "astropy";
-  version = "7.1.0";
+  version = "7.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-yPJUMiKVsbjPJDA9bxVb9+/bbBKCiCuWbOMEDv+MU8U=";
+  src = fetchFromGitHub {
+    owner = "astropy";
+    repo = "astropy";
+    tag = "v${version}";
+    hash = "sha256-cvwwTa6eJYncB2V6UCuBrQ5WRRvjgZF5/z4d7Z/uHc8=";
   };
 
   env = lib.optionalAttrs stdenv.cc.isClang {
@@ -159,6 +161,7 @@ buildPythonPackage rec {
   '';
 
   meta = {
+    changelog = "https://docs.astropy.org/en/${src.tag}/changelog.html";
     description = "Astronomy/Astrophysics library for Python";
     homepage = "https://www.astropy.org";
     license = lib.licenses.bsd3;

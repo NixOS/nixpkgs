@@ -67,12 +67,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "zigpy_znp" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for zigpy which communicates with TI ZNP radios";
     homepage = "https://github.com/zigpy/zigpy-znp";
     changelog = "https://github.com/zigpy/zigpy-znp/releases/tag/v${version}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ mvnetbiz ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ mvnetbiz ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "corallium";
   version = "2.1.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "KyleKing";
@@ -34,10 +34,10 @@ buildPythonPackage rec {
     tomli
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Shared functionality for calcipy-ecosystem";
     homepage = "https://corallium.kyleking.me";
-    license = licenses.mit;
-    maintainers = with maintainers; [ yajo ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ yajo ];
   };
 }

@@ -94,6 +94,7 @@ let
     {
       pname,
       meta,
+      passthru ? { },
       buildInputs ? [ ],
       libraryName ? pname,
       libraryFile ? "${libraryName}.agda-lib",
@@ -145,9 +146,13 @@ let
       meta = if meta.broken or false then meta // { hydraPlatforms = platforms.none; } else meta;
 
       # Retrieve all packages from the finished package set that have the current package as a dependency and build them
-      passthru.tests = filterAttrs (
-        name: pkg: self.lib.isUnbrokenAgdaPackage pkg && elem pname (map (pkg: pkg.pname) pkg.buildInputs)
-      ) self;
+      passthru = passthru // {
+        tests =
+          passthru.tests or { }
+          // filterAttrs (
+            name: pkg: self.lib.isUnbrokenAgdaPackage pkg && elem pname (map (pkg: pkg.pname) pkg.buildInputs)
+          ) self;
+      };
     };
 in
 {

@@ -213,6 +213,10 @@ Put each sentence in its own line.
 This makes reviews and suggestions much easier, since GitHub's review system is based on lines.
 It also helps identifying long sentences at a glance.
 
+Not everything has been migrated to this format yet.
+Please always use it for new content.
+When changing existing content, update formatting if possible, but avoid excessive diffs.
+
 ### Writing Function Documentation
 
 Function documentation is *reference documentation*, for which

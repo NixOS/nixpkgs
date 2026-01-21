@@ -19,9 +19,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pyparsing ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/heinzK1X/pylibconfig2";
     description = "Pure python library for libconfig syntax";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
   };
 }

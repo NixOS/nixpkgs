@@ -36,11 +36,11 @@ stdenv.mkDerivation rec {
     runHook postConfigure
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Rapidly extract unformatted, or unstandardized bibliographic references from email alerts, journal Web pages and PDF files";
     homepage = "http://www.molspaces.com/d_cb2bib-overview.php";
-    maintainers = with maintainers; [ edwtjo ];
-    license = licenses.gpl3;
+    maintainers = with lib.maintainers; [ edwtjo ];
+    license = lib.licenses.gpl3;
   };
 
 }

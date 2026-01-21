@@ -15,7 +15,7 @@
 buildPythonPackage rec {
   pname = "datatable";
   version = "1.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonAtLeast "3.13";
 
@@ -80,10 +80,10 @@ buildPythonPackage rec {
   ];
   pythonImportsCheck = [ "datatable" ];
 
-  meta = with lib; {
+  meta = {
     description = "data.table for Python";
     homepage = "https://github.com/h2oai/datatable";
-    license = licenses.mpl20;
+    license = lib.licenses.mpl20;
     maintainers = [ ];
   };
 }

@@ -5,15 +5,12 @@
   appdirs,
   httpx,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyradios";
   version = "2.1.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
@@ -29,10 +26,10 @@ buildPythonPackage rec {
   # Tests and pythonImportsCheck require network access
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Python client for the https://api.radio-browser.info";
     homepage = "https://github.com/andreztz/pyradios";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

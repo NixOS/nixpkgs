@@ -14,7 +14,8 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     pname = "tensorflow_estimator";
-    inherit version format;
+    inherit version;
+    format = "wheel";
     hash = "sha256-rt8h7sf7LckRUPyRoc4SvETbtyJ4oItY55/4fJ4o8VM=";
   };
 
@@ -24,9 +25,9 @@ buildPythonPackage rec {
     absl-py
   ];
 
-  meta = with lib; {
+  meta = {
     description = "TensorFlow Estimator is a high-level API that encapsulates model training, evaluation, prediction, and exporting";
     homepage = "http://tensorflow.org";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

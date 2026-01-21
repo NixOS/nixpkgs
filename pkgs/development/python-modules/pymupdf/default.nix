@@ -44,14 +44,14 @@ let
 in
 buildPythonPackage rec {
   pname = "pymupdf";
-  version = "1.26.6";
+  version = "1.26.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymupdf";
     repo = "PyMuPDF";
     tag = version;
-    hash = "sha256-CYDgMhsOqqm9AscJxVcjU72P63gpJafj+2cj03RFGaw=";
+    hash = "sha256-7OidTOG3KAx7EaQ3Bu4i1Fw007oXVAipBHeYNkmbIcA=";
   };
 
   patches = [
@@ -140,6 +140,11 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # mad about markdown table formatting
     "tests/test_tables.py::test_markdown"
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin [
+    # Trace/BPT trap: 5 when getting widget options
+    "tests/test_4505.py"
+    "tests/test_widgets.py"
   ];
 
   pythonImportsCheck = [
@@ -161,7 +166,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/pymupdf/PyMuPDF";
     changelog = "https://github.com/pymupdf/PyMuPDF/releases/tag/${src.tag}";
     license = lib.licenses.agpl3Only;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ sarahec ];
     platforms = lib.platforms.unix;
   };
 }

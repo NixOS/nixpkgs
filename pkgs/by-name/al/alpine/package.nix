@@ -43,20 +43,24 @@ stdenv.mkDerivation rec {
     "--with-c-client-target=slx"
   ];
 
-  # Fixes https://github.com/NixOS/nixpkgs/issues/372699
-  # See also https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1074804
-  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-incompatible-pointer-types" ];
+  env.NIX_CFLAGS_COMPILE = toString [
+    # Fixes https://github.com/NixOS/nixpkgs/issues/372699
+    # See also https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1074804
+    "-Wno-incompatible-pointer-types"
+    # Opt out of C23 (and its stricter prototype rules) in GCC15
+    "-std=gnu17"
+  ];
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  meta = with lib; {
+  meta = {
     description = "Console mail reader";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       raskin
       rhendric
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     homepage = "https://alpineapp.email/";
   };
 }

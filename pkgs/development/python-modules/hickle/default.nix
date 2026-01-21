@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   fetchpatch,
-  pythonOlder,
   h5py,
   numpy,
   dill,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "hickle";
   version = "5.0.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -54,11 +51,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hickle" ];
 
-  meta = with lib; {
+  meta = {
     description = "Serialize Python data to HDF5";
     homepage = "https://github.com/telegraphic/hickle";
     changelog = "https://github.com/telegraphic/hickle/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation {
   version = "${majorVersion}.${minorVersion}";
 
   src = fetchzip {
-    url = "https://dotcolon.net/download/fonts/fa_1_${majorVersion}${minorVersion}.zip";
+    url = "https://dotcolon.net/files/fonts/fa_1_${majorVersion}${minorVersion}.zip";
     hash = "sha256-BPJ+wZMYXY/yg5oEgBc5YnswA6A7w6V0gdv+cac0qdc=";
     stripRoot = false;
   };
@@ -26,11 +26,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
-    homepage = "http://dotcolon.net/font/fa_1/";
+  meta = {
+    homepage = "https://dotcolon.net/font/fa_1/";
     description = "Weighted decorative font";
-    platforms = platforms.all;
-    maintainers = with maintainers; [ minijackson ];
-    license = licenses.ofl;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ minijackson ];
+    license = lib.licenses.ofl;
   };
 }

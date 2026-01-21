@@ -44,7 +44,7 @@
 # $ conda-shell
 # $ conda install spyder
 let
-  version = "25.9.1-1";
+  version = "25.11.1-1";
 
   src =
     let
@@ -60,8 +60,8 @@ let
     fetchurl {
       url = "https://repo.anaconda.com/miniconda/Miniconda3-py313_${version}-Linux-${arch}.sh";
       hash = selectSystem {
-        x86_64-linux = "sha256-YCJxTaIphgl7vvoT2rPZVyV/7wThw30evTZFtbmbydQ=";
-        aarch64-linux = "sha256-oN5FYsNoqLXKQ4WEP0BWhMeb6nqjt111E/+ZwMZDXVE=";
+        x86_64-linux = "sha256-4LEOBQ6JKOLrmq0sUi7jtdMdMASLipmXZjqKRg1TjO8=";
+        aarch64-linux = "sha256-nznMjEbKN6/tXlY8wjSzrdNP6i8RGeB23K56N3ymuO4=";
       };
     };
 
@@ -125,6 +125,10 @@ buildFHSEnv {
       fi
       source ${condaSh}
     '';
+
+  passthru = {
+    inherit src;
+  };
 
   meta = {
     description = "Package manager for Python";

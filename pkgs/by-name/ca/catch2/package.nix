@@ -20,13 +20,13 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-H.." ];
 
-  meta = with lib; {
+  meta = {
     description = "Multi-paradigm automated test framework for C++ and Objective-C (and, maybe, C)";
     homepage = "http://catch-lib.net";
-    license = licenses.boost;
-    maintainers = with maintainers; [
+    license = lib.licenses.boost;
+    maintainers = with lib.maintainers; [
       edwtjo
     ];
-    platforms = with platforms; unix ++ windows;
+    platforms = with lib.platforms; unix ++ windows;
   };
 }

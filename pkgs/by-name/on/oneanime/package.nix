@@ -2,7 +2,7 @@
   lib,
   stdenv,
   buildGoModule,
-  flutter335,
+  flutter338,
   fetchFromGitHub,
   autoPatchelfHook,
   desktop-file-utils,
@@ -17,6 +17,7 @@
   yq-go,
   _experimental-update-script-combinators,
   nix-update-script,
+  dart,
 }:
 
 let
@@ -55,16 +56,16 @@ let
     };
   });
 
-  version = "1.4.3";
+  version = "1.4.4";
 
   src = fetchFromGitHub {
     owner = "Predidit";
     repo = "oneAnime";
     tag = version;
-    hash = "sha256-dDXDBem2G/CSGOiHTAtMZ9PrTj8b1zIiqabh/dNiSkQ=";
+    hash = "sha256-4EieR+Wys7vK+0/pWF5MkA71EeChThVGJ8J5x/8k8nA=";
   };
 in
-flutter335.buildFlutterApplication {
+flutter338.buildFlutterApplication {
   pname = "oneanime";
   inherit version src;
 
@@ -75,7 +76,7 @@ flutter335.buildFlutterApplication {
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  gitHashes = lib.importJSON ./gitHashes.json;
+  gitHashes = lib.importJSON ./git-hashes.json;
 
   customSourceBuilders = {
     # unofficial media_kit_libs_linux
@@ -166,7 +167,13 @@ flutter335.buildFlutterApplication {
         }
       )
       {
-        command = [ ./update-gitHashes.py ];
+        command = [
+          dart.fetchGitHashesScript
+          "--input"
+          ./pubspec.lock.json
+          "--output"
+          ./git-hashes.json
+        ];
         supportedFeatures = [ ];
       }
     ];

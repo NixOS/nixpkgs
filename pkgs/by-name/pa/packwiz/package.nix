@@ -32,11 +32,11 @@ buildGoModule {
       --zsh <($out/bin/packwiz completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command line tool for editing and distributing Minecraft modpacks, using a git-friendly TOML format";
     homepage = "https://packwiz.infra.link/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ infinidoge ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ infinidoge ];
     mainProgram = "packwiz";
   };
 }

@@ -36,6 +36,8 @@ buildPythonPackage rec {
     websockets
   ];
 
+  pythonRelaxDeps = [ "marshmallow" ];
+
   nativeCheckInputs = [
     aioresponses
     pytest-asyncio
@@ -49,11 +51,11 @@ buildPythonPackage rec {
     "test_convert_json_to_weather_data4"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to interact with the WeatherFlow REST API";
     homepage = "https://github.com/jeeftor/weatherflow4py";
     changelog = "https://github.com/jeeftor/weatherflow4py/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

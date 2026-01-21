@@ -4,7 +4,6 @@
   fetchPypi,
   more-itertools,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "path";
   version = "17.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -43,11 +40,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "path" ];
 
-  meta = with lib; {
+  meta = {
     description = "Object-oriented file system path manipulation";
     homepage = "https://github.com/jaraco/path";
     changelog = "https://github.com/jaraco/path/blob/v${version}/NEWS.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

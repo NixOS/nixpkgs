@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     install -D src/objs/rgrep $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Programmable text editor written around S-Lang";
     longDescription = ''
       JED is a freely available text editor for Unix, VMS, MSDOS, OS/2, BeOS,
@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
         more
     '';
     homepage = "https://www.jedsoft.org/jed/index.html";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     platforms = slang.meta.platforms;
   };
 }

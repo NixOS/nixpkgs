@@ -65,6 +65,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/cruft/cruft";
     license = lib.licenses.mit;
     mainProgram = "cruft";
-    maintainers = with lib.maintainers; [ perchun ];
+    maintainers = with lib.maintainers; [ PerchunPak ];
   };
 }

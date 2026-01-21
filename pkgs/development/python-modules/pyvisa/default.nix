@@ -6,15 +6,12 @@
   setuptools,
   typing-extensions,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyvisa";
   version = "1.15.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pyvisa";
@@ -35,10 +32,10 @@ buildPythonPackage rec {
   # Test can't find cli tool bin path correctly
   disabledTests = [ "test_visa_info" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python package for support of the Virtual Instrument Software Architecture (VISA)";
     homepage = "https://github.com/pyvisa/pyvisa";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mvnetbiz ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mvnetbiz ];
   };
 }

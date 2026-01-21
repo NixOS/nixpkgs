@@ -11,7 +11,6 @@
   nbformat,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   testpath,
   traitlets,
   xmltodict,
@@ -22,8 +21,6 @@ let
     pname = "nbclient";
     version = "0.10.2";
     pyproject = true;
-
-    disabled = pythonOlder "3.9";
 
     src = fetchFromGitHub {
       owner = "jupyter";

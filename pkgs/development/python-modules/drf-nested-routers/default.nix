@@ -31,11 +31,11 @@ buildPythonPackage rec {
     pytest-django
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/alanjds/drf-nested-routers";
     changelog = "https://github.com/alanjds/drf-nested-routers/blob/v${version}/CHANGELOG.md";
     description = "Provides routers and fields to create nested resources in the Django Rest Framework";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ felschr ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ felschr ];
   };
 }

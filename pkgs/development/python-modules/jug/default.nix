@@ -35,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jug" ];
 
-  meta = with lib; {
+  meta = {
     description = "Task-Based Parallelization Framework";
     homepage = "https://jug.readthedocs.io/";
     changelog = "https://github.com/luispedro/jug/blob/v${version}/ChangeLog";
-    license = licenses.mit;
-    maintainers = with maintainers; [ luispedro ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ luispedro ];
   };
 }

@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   src = fetchFromSourcehut {
     owner = "~technomancy";
     repo = "fnlfmt";
-    rev = "refs/tags/${version}";
-    hash = "sha256-LYHhKC8iA4N8DdCH8GfSOkN/e+W3YjkFhVSDQraKoFk=";
+    tag = version;
+    hash = "sha256-wbeWAv4xhxh7M6tRd9qpgBRtg1/fqg0AUPvh2M5f60Q=";
   };
 
   nativeBuildInputs = [ luaPackages.fennel ];
@@ -25,7 +25,6 @@ stdenv.mkDerivation rec {
     "PREFIX=$(out)"
     "FENNEL=${luaPackages.fennel}/bin/fennel"
   ];
-  sourceRoot = [ "${src.name}/tags/${version}" ];
 
   doInstallCheck = true;
   installCheckPhase = ''

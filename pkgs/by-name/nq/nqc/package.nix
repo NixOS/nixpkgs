@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
 
   dontConfigure = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://bricxcc.sourceforge.net/nqc/";
     description = "Programming language for several LEGO MINDSTORMS products including the RCX, CyberMaster, and Scout";
-    platforms = platforms.linux;
-    license = licenses.mpl10;
-    maintainers = with maintainers; [ christophcharles ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mpl10;
+    maintainers = with lib.maintainers; [ christophcharles ];
   };
 }

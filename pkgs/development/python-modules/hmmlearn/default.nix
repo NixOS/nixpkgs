@@ -8,15 +8,12 @@
   setuptools-scm,
   cython,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "hmmlearn";
   version = "0.3.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
@@ -43,10 +40,10 @@ buildPythonPackage rec {
     "hmmlearn"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Hidden Markov Models in Python with scikit-learn like API";
     homepage = "https://github.com/hmmlearn/hmmlearn";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

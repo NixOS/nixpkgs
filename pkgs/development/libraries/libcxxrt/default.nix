@@ -40,11 +40,11 @@ stdenv.mkDerivation {
     updateScript = unstableGitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/libcxxrt/libcxxrt";
     description = "Implementation of the Code Sourcery C++ ABI";
-    maintainers = with maintainers; [ qyliss ];
-    platforms = platforms.all;
-    license = licenses.bsd2;
+    maintainers = with lib.maintainers; [ qyliss ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.bsd2;
   };
 }

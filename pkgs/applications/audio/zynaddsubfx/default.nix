@@ -24,8 +24,6 @@
   ladspaH,
   jackSupport ? true,
   libjack2,
-  lashSupport ? false,
-  lash,
   ossSupport ? true,
   portaudioSupport ? true,
   portaudio,
@@ -113,7 +111,6 @@ stdenv.mkDerivation rec {
     ladspaH
   ]
   ++ lib.optionals jackSupport [ libjack2 ]
-  ++ lib.optionals lashSupport [ lash ]
   ++ lib.optionals portaudioSupport [ portaudio ]
   ++ lib.optionals sndioSupport [ sndio ]
   ++ lib.optionals (guiModule == "fltk") [
@@ -187,7 +184,7 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : ${mruby-zest}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "High quality software synthesizer (${guiName} GUI)";
     mainProgram = "zynaddsubfx";
     homepage =
@@ -196,9 +193,9 @@ stdenv.mkDerivation rec {
       else
         "https://zynaddsubfx.sourceforge.io";
 
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ kira-bruneau ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ kira-bruneau ];
+    platforms = lib.platforms.all;
 
     # On macOS:
     # - Tests don't compile (ld: unknown option: --no-as-needed)

@@ -24,11 +24,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://git.sr.ht/~sircmpwn/hare-png/";
     description = "PNG implementation for Hare";
-    license = with licenses; [ mpl20 ];
-    maintainers = with maintainers; [ starzation ];
+    license = with lib.licenses; [ mpl20 ];
+    maintainers = with lib.maintainers; [ starzation ];
     inherit (hareHook.meta) platforms badPlatforms;
   };
 })

@@ -30,11 +30,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "dnsmasq";
-  version = "2.91";
+  version = "2.92";
 
   src = fetchurl {
     url = "https://www.thekelleys.org.uk/dnsmasq/${pname}-${version}.tar.xz";
-    hash = "sha256-9iJoKEizNnetsratCCZGGKKuCgHaSGqT/YzZEYaz0VM=";
+    hash = "sha256-S/UMLBAY+fvCYDffUbkOzqDLc9RhYoRnY7kt8NbDpFg=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -106,17 +106,17 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) dnscrypt-proxy;
     kubernetes-dns-single = nixosTests.kubernetes.dns-single-node;
     kubernetes-dns-multi = nixosTests.kubernetes.dns-multi-node;
+    pihole-ftl-dnsmasq = nixosTests.pihole-ftl.dnsmasq;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Integrated DNS, DHCP and TFTP server for small networks";
     homepage = "https://www.thekelleys.org.uk/dnsmasq/doc.html";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     mainProgram = "dnsmasq";
-    platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [
+    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = with lib.maintainers; [
       fpletz
-      globin
     ];
   };
 }

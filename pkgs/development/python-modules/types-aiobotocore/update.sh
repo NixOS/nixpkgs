@@ -5,7 +5,7 @@ set -eu -o pipefail
 
 source_file=pkgs/development/python-modules/types-aiobotocore-packages/default.nix
 
-nix-update python312Packages.types-aiobotocore --commit --build
+nix-update python313Packages.types-aiobotocore --commit --build
 
 packages=(
   types-aiobotocore-accessanalyzer
@@ -14,6 +14,7 @@ packages=(
   types-aiobotocore-acm-pca
   types-aiobotocore-amp
   types-aiobotocore-amplify
+  types-aiobotocore-aiops
   types-aiobotocore-amplifybackend
   types-aiobotocore-amplifyuibuilder
   types-aiobotocore-apigateway
@@ -66,11 +67,13 @@ packages=(
   types-aiobotocore-codebuild
   types-aiobotocore-codecatalyst
   types-aiobotocore-codecommit
+  types-aiobotocore-codeconnections
   types-aiobotocore-codedeploy
   types-aiobotocore-codeguru-reviewer
   types-aiobotocore-codeguru-security
   types-aiobotocore-codeguruprofiler
   types-aiobotocore-codepipeline
+  types-aiobotocore-codestar
   types-aiobotocore-codestar-connections
   types-aiobotocore-codestar-notifications
   types-aiobotocore-cognito-identity
@@ -83,16 +86,20 @@ packages=(
   types-aiobotocore-connect
   types-aiobotocore-connect-contact-lens
   types-aiobotocore-connectcampaigns
+  types-aiobotocore-connectcampaignsv2
   types-aiobotocore-connectcases
   types-aiobotocore-connectparticipant
+  types-aiobotocore-controlcatalog
   types-aiobotocore-controltower
   types-aiobotocore-cur
   types-aiobotocore-customer-profiles
   types-aiobotocore-databrew
   types-aiobotocore-dataexchange
   types-aiobotocore-datapipeline
+  types-aiobotocore-datazone
   types-aiobotocore-datasync
   types-aiobotocore-dax
+  types-aiobotocore-deadline
   types-aiobotocore-detective
   types-aiobotocore-devicefarm
   types-aiobotocore-devops-guru
@@ -104,6 +111,7 @@ packages=(
   types-aiobotocore-docdb-elastic
   types-aiobotocore-drs
   types-aiobotocore-ds
+  types-aiobotocore-dsql
   types-aiobotocore-dynamodb
   types-aiobotocore-dynamodbstreams
   types-aiobotocore-ebs
@@ -134,6 +142,7 @@ packages=(
   types-aiobotocore-forecast
   types-aiobotocore-forecastquery
   types-aiobotocore-frauddetector
+  types-aiobotocore-freetier
   types-aiobotocore-fsx
   types-aiobotocore-gamelift
   types-aiobotocore-glacier
@@ -160,7 +169,6 @@ packages=(
   types-aiobotocore-iotdeviceadvisor
   types-aiobotocore-iotevents
   types-aiobotocore-iotevents-data
-  types-aiobotocore-iotfleethub
   types-aiobotocore-iotfleetwise
   types-aiobotocore-iotsecuretunneling
   types-aiobotocore-iotsitewise
@@ -197,8 +205,6 @@ packages=(
   types-aiobotocore-location
   types-aiobotocore-logs
   types-aiobotocore-lookoutequipment
-  types-aiobotocore-lookoutmetrics
-  types-aiobotocore-lookoutvision
   types-aiobotocore-m2
   types-aiobotocore-machinelearning
   types-aiobotocore-macie2
@@ -231,12 +237,11 @@ packages=(
   types-aiobotocore-neptune
   types-aiobotocore-network-firewall
   types-aiobotocore-networkmanager
+  types-aiobotocore-networkmonitor
   types-aiobotocore-oam
   types-aiobotocore-omics
   types-aiobotocore-opensearch
   types-aiobotocore-opensearchserverless
-  types-aiobotocore-opsworks
-  types-aiobotocore-opsworkscm
   types-aiobotocore-organizations
   types-aiobotocore-osis
   types-aiobotocore-outposts
@@ -255,10 +260,12 @@ packages=(
   types-aiobotocore-polly
   types-aiobotocore-pricing
   types-aiobotocore-proton
+  types-aiobotocore-qapps
+  types-aiobotocore-qbusiness
+  types-aiobotocore-qconnect
   types-aiobotocore-qldb
   types-aiobotocore-qldb-session
-  types-aiobotocore-quicksight
-  types-aiobotocore-ram
+  types-aiobotocore-quicksight  types-aiobotocore-ram
   types-aiobotocore-rbin
   types-aiobotocore-rds
   types-aiobotocore-rds-data
@@ -266,11 +273,11 @@ packages=(
   types-aiobotocore-redshift-data
   types-aiobotocore-redshift-serverless
   types-aiobotocore-rekognition
+  types-aiobotocore-repostspace
   types-aiobotocore-resiliencehub
   types-aiobotocore-resource-explorer-2
   types-aiobotocore-resource-groups
   types-aiobotocore-resourcegroupstaggingapi
-  types-aiobotocore-robomaker
   types-aiobotocore-rolesanywhere
   types-aiobotocore-route53
   types-aiobotocore-route53-recovery-cluster
@@ -278,6 +285,7 @@ packages=(
   types-aiobotocore-route53-recovery-readiness
   types-aiobotocore-route53domains
   types-aiobotocore-route53resolver
+  types-aiobotocore-rtbfabric
   types-aiobotocore-rum
   types-aiobotocore-s3
   types-aiobotocore-s3control
@@ -306,7 +314,6 @@ packages=(
   types-aiobotocore-shield
   types-aiobotocore-signer
   types-aiobotocore-simspaceweaver
-  types-aiobotocore-sms
   types-aiobotocore-snow-device-management
   types-aiobotocore-snowball
   types-aiobotocore-sns

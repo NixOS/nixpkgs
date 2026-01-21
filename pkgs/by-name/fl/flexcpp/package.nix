@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     ./build install x
   '';
 
-  meta = with lib; {
+  meta = {
     description = "C++ tool for generating lexical scanners";
     mainProgram = "flexc++";
     longDescription = ''
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
       option.
     '';
     homepage = "https://fbb-git.github.io/flexcpp/";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
   };
 }

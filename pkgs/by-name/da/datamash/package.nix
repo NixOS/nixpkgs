@@ -13,12 +13,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-84Lr2gNlDdZ5Fh91j5wKbMkpMhNDjUp3qO2jJarLh9I=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Command-line program which performs basic numeric,textual and statistical operations on input textual data files";
     homepage = "https://www.gnu.org/software/datamash/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ pSub ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ pSub ];
   };
 
 }

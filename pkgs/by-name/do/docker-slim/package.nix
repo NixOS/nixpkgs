@@ -50,7 +50,6 @@ buildGoModule rec {
     changelog = "https://github.com/slimtoolkit/slim/raw/${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      Br1ght0ne
       mbrgm
     ];
   };

@@ -19,11 +19,11 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-F5lOGkhFlFVB8zTxrebWsPWRNfHgZ4Y2DqKED/z5riw=";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ArchiveBox/readability-extractor";
     description = "Javascript wrapper around Mozilla Readability for ArchiveBox to call as a oneshot CLI to extract article text";
-    license = licenses.mit;
-    maintainers = with maintainers; [ viraptor ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ viraptor ];
     mainProgram = "readability-extractor";
   };
 }

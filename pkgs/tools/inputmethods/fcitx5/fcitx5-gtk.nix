@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-gtk";
-  version = "5.1.4";
+  version = "5.1.5";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    hash = "sha256-MlBLhgqpF+A9hotnhX83349wIpCQfzsqpyZb0xME2XQ=";
+    hash = "sha256-eMo/ZsZdfAxR14aSnit3yHdw/yv8KdfKjK1Hu7Ce/3o=";
   };
 
   outputs = [
@@ -75,11 +75,11 @@ stdenv.mkDerivation rec {
     gobject-introspection
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fcitx5 gtk im module and glib based dbus client library";
     homepage = "https://github.com/fcitx/fcitx5-gtk";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ poscat ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ poscat ];
+    platforms = lib.platforms.linux;
   };
 }

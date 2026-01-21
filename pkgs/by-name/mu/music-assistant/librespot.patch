@@ -1,16 +1,16 @@
 diff --git a/music_assistant/providers/spotify/helpers.py b/music_assistant/providers/spotify/helpers.py
-index 6f87b44f46b64805ef6799a54d596fd1684017f1..23de7fc2145619dd4f02551e81cb383f2b79fa15 100644
+index fe7af648..3f5121de 100644
 --- a/music_assistant/providers/spotify/helpers.py
 +++ b/music_assistant/providers/spotify/helpers.py
-@@ -4,6 +4,7 @@ from __future__ import annotations
- 
+@@ -6,6 +6,7 @@ import asyncio
  import os
  import platform
+ import time
 +from shutil import which
+ from typing import TYPE_CHECKING, Any
+ from urllib.parse import urlencode
  
- from music_assistant.helpers.process import check_output
- 
-@@ -20,12 +21,8 @@ async def get_librespot_binary() -> str:
+@@ -35,12 +36,8 @@ async def get_librespot_binary() -> str:
          except OSError:
              return None
  

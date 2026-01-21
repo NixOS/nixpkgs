@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "pydal";
-  version = "20251115.1";
+  version = "20260118.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-04G7DksOLeYaNNvw6+y8lbgXVCPzqOpksV0DZy4GcIA=";
+    hash = "sha256-bJ9/pnip0IKzI/nmTXcNfv1QpGVDEH+1eQi2zMr/u88=";
   };
 
   build-system = [ setuptools ];
@@ -49,10 +49,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pydal" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Database Abstraction Layer";
     homepage = "https://github.com/web2py/pydal";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ wamserma ];
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ wamserma ];
   };
 }

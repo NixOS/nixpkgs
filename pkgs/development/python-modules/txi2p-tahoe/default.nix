@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "txi2p-tahoe";
   version = "0.3.7";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tahoe-lafs";

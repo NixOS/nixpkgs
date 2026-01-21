@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-8Vz6zNxFAFjg6VGYaoYbFEp+fJXu3jrC7HJFxdQRkjw=";
 
-  meta = with lib; {
+  meta = {
     description = "NetFlow/IPFIX/sFlow collector in Go";
     homepage = "https://github.com/cloudflare/goflow";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ heph2 ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ heph2 ];
+    platforms = lib.platforms.all;
   };
 }

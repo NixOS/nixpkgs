@@ -133,7 +133,7 @@ body:
     attributes:
       label: "I assert that this issue is relevant for Nixpkgs"
       options:
-        - label: "I assert that this is not a [duplicate of any known issue](https://github.com/NixOS/nixpkgs/issues?q=is%3Aopen+is%3Aissue+label%3A%226.topic%3A+reproducible+builds%22)."
+        - label: "I assert that this is not a [duplicate of any known issue](https://github.com/NixOS/nixpkgs/issues?q=is%3Aissue+label%3A%226.topic%3A+reproducible+builds%22)."
           required: true
         - label: "I assert that I have read the [NixOS Code of Conduct](https://github.com/NixOS/.github/blob/master/CODE_OF_CONDUCT.md) and agree to abide by it."
           required: true

@@ -25,10 +25,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flake8_class_newline" ];
 
-  meta = with lib; {
+  meta = {
     description = "Flake8 extension to check if a new line is present after a class definition";
     homepage = "https://github.com/alexandervaneck/flake8-class-newline";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lopsided98 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lopsided98 ];
   };
 }

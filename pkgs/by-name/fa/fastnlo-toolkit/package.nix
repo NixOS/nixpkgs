@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
   # Use a workaround from https://github.com/swig/swig/issues/1538
   env.CXXFLAGS = "-D_LIBCPP_ENABLE_CXX17_REMOVED_FEATURES";
 
-  meta = with lib; {
+  meta = {
     homepage = "http://fastnlo.hepforge.org";
     description = "Fast pQCD calculations for hadron-induced processes";
     longDescription = ''
@@ -102,9 +102,9 @@ stdenv.mkDerivation rec {
       in PDF fits or in systematic studies. Very time consuming complete
       recalculations are thus avoided.
     '';
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ veprbl ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ veprbl ];
+    platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

@@ -20,6 +20,8 @@
   discount,
   json-glib,
   nix-update-script,
+  libsoup_3,
+  librsvg,
 }:
 
 stdenv.mkDerivation rec {
@@ -42,32 +44,42 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
   ];
 
-  buildInputs = [
-    gtk3
-    libgee
-    poppler
-    libpthreadstubs
-    gstreamer
-    gst-plugins-base
-    (gst-plugins-good.override { gtkSupport = true; })
-    gst-libav
-    qrencode
-    webkitgtk_4_1
-    discount
-    json-glib
-  ];
-
-  cmakeFlags = lib.optional stdenv.hostPlatform.isDarwin (lib.cmakeBool "MOVIES" false);
+  cmakeFlags = lib.optional stdenv.hostPlatform.isDarwin (lib.cmakeBool "MDVIEW" false);
+  buildInputs =
+    let
+      platformBuildInputs =
+        if stdenv.hostPlatform.isDarwin then
+          [ librsvg ]
+        else
+          [
+            libpthreadstubs
+            webkitgtk_4_1
+          ];
+    in
+    [
+      (gst-plugins-good.override { gtkSupport = true; })
+      discount
+      gst-libav
+      gst-plugins-base
+      gstreamer
+      gtk3
+      json-glib
+      libgee
+      libsoup_3
+      poppler
+      qrencode
+    ]
+    ++ platformBuildInputs;
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Presenter console with multi-monitor support for PDF files";
     mainProgram = "pdfpc";
     homepage = "https://pdfpc.github.io/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ pSub ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ pSub ];
+    platforms = lib.platforms.unix;
   };
 
 }

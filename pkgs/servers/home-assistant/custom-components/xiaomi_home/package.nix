@@ -13,13 +13,13 @@
 buildHomeAssistantComponent rec {
   owner = "XiaoMi";
   domain = "xiaomi_home";
-  version = "0.4.4";
+  version = "0.4.7";
 
   src = fetchFromGitHub {
     owner = "XiaoMi";
     repo = "ha_xiaomi_home";
     rev = "v${version}";
-    hash = "sha256-7sg8iOeO+7RgGZmGCKT5X5zfUUzt4oRJCPciLIPdIJ0=";
+    hash = "sha256-rI7uYYCvTRXcuCOQu052SjNTRUyux0Cp6mIj4WGyTy0=";
   };
 
   dependencies = [

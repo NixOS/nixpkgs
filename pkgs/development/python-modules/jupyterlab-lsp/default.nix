@@ -28,11 +28,11 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "jupyterlab_lsp" ];
 
-  meta = with lib; {
+  meta = {
     description = "Language Server Protocol integration for Jupyter(Lab)";
     homepage = "https://github.com/jupyter-lsp/jupyterlab-lsp";
-    license = licenses.bsd3;
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
 }

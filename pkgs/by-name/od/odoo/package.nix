@@ -8,8 +8,8 @@
 }:
 
 let
-  odoo_version = "18.0";
-  odoo_release = "20250506";
+  odoo_version = "19.0";
+  odoo_release = "20260104";
   python = python312.override {
     self = python;
   };
@@ -17,34 +17,36 @@ in
 python.pkgs.buildPythonApplication rec {
   pname = "odoo";
   version = "${odoo_version}.${odoo_release}";
-
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchzip {
     # find latest version on https://nightly.odoo.com/${odoo_version}/nightly/src
     url = "https://nightly.odoo.com/${odoo_version}/nightly/src/odoo_${version}.zip";
     name = "odoo-${version}";
-    hash = "sha256-rNG0He+51DnRT5g1SovGZ9uiE1HWXtcmAybcadBMjY4="; # odoo
+    hash = "sha256-JsbJ39zPZm4eyRTXkvdCMHwYaA08yUxZXcLglRn3kWs="; # odoo
   };
 
   makeWrapperArgs = [
-    "--prefix"
-    "PATH"
-    ":"
-    "${lib.makeBinPath [
-      wkhtmltopdf
-      rtlcss
-    ]}"
+    "--prefix PATH : ${
+      lib.makeBinPath [
+        wkhtmltopdf
+        rtlcss
+      ]
+    }"
   ];
 
-  propagatedBuildInputs = with python.pkgs; [
+  build-system = with python.pkgs; [
+    setuptools
+    distutils
+  ];
+
+  dependencies = with python.pkgs; [
+    asn1crypto
     babel
+    cbor2
     chardet
     cryptography
-    decorator
     docutils
-    distutils
-    ebaysdk
     freezegun
     geoip2
     gevent
@@ -57,12 +59,12 @@ python.pkgs.buildPythonApplication rec {
     markupsafe
     num2words
     ofxparse
+    openpyxl
     passlib
     pillow
     polib
     psutil
     psycopg2
-    pydot
     pyopenssl
     pypdf2
     pyserial
@@ -82,9 +84,6 @@ python.pkgs.buildPythonApplication rec {
     xlsxwriter
     xlwt
     zeep
-
-    setuptools
-    mock
   ];
 
   # takes 5+ minutes and there are not files to strip

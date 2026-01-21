@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "mockfs";
   version = "1.1.4";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mockfs";
@@ -35,11 +35,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple mock filesystem for use in unit tests";
     homepage = "https://github.com/mockfs/mockfs";
     changelog = "https://github.com/mockfs/mockfs/blob/${src.rev}/CHANGES.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

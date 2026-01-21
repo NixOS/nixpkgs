@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "librehardwaremonitor-api";
-  version = "1.5.0";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Sab44";
     repo = "librehardwaremonitor-api";
     tag = "v${version}";
-    hash = "sha256-LWh0kZp+8OUfBohQMLFXI/kkHsVuJt99YqwSGeq4EvA=";
+    hash = "sha256-dyhS7vb+qcumtWZsj3G3x66KhHUVDQxMG8+2GngkK70=";
   };
 
   build-system = [ setuptools ];

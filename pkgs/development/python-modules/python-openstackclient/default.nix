@@ -18,6 +18,7 @@
   python-manilaclient,
   python-mistralclient,
   python-neutronclient,
+  python-octaviaclient,
   python-openstackclient,
   python-watcherclient,
   python-zaqarclient,
@@ -89,6 +90,7 @@ buildPythonPackage rec {
       python-manilaclient
       python-mistralclient
       python-neutronclient
+      python-octaviaclient
       python-watcherclient
       python-zaqarclient
       python-zunclient
@@ -102,11 +104,11 @@ buildPythonPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "OpenStack Command-line Client";
     mainProgram = "openstack";
     homepage = "https://github.com/openstack/python-openstackclient";
-    license = licenses.asl20;
-    teams = [ teams.openstack ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

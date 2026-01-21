@@ -56,11 +56,11 @@ let
     inherit (param) sha256;
   };
   pname = "ppx_tools";
-  meta = with lib; {
+  meta = {
     description = "Tools for authors of ppx rewriters";
     homepage = "https://www.lexifi.com/ppx_tools";
-    license = licenses.mit;
-    maintainers = with maintainers; [ vbgl ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vbgl ];
     broken = lib.versionAtLeast ocaml.version "5.2";
   };
 in

@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pynetbox";
-  version = "7.5.0";
+  version = "7.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "netbox-community";
     repo = "pynetbox";
     tag = "v${version}";
-    hash = "sha256-gDcTWXGE0GOEmuDSwFgKytCidg8Py1PFMfJCDhuOMoQ=";
+    hash = "sha256-XflMJ6mrXOeUt+Tlmaa2Tw59M3zssnjgnZ7RoQRdOTQ=";
   };
 
   build-system = [
@@ -44,11 +44,11 @@ buildPythonPackage rec {
     "tests/integration"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/netbox-community/pynetbox/releases/tag/v${version}";
     description = "API client library for Netbox";
     homepage = "https://github.com/netbox-community/pynetbox";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

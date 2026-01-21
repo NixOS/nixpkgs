@@ -17,12 +17,12 @@ buildGoModule rec {
 
   vendorHash = "sha256-Agc3hl+VDTNW7cnh/0g4G8BgzNAX11hKASYQKieBN4M=";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/1player/host-spawn";
     description = "Run commands on your host machine from inside your flatpak sandbox, toolbox or distrobox containers";
-    license = licenses.mit0;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ garrison ];
+    license = lib.licenses.mit0;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ garrison ];
     mainProgram = "host-spawn";
   };
 }

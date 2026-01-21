@@ -24,7 +24,11 @@ stdenv.mkDerivation (finalAttrs: {
     texinfo
   ];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "AR=${stdenv.cc.targetPrefix}ar"
+    "PREFIX=$(out)"
+  ];
 
   doInstallCheck = true;
 
@@ -114,9 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     '';
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      stesie
-    ];
+    maintainers = [ ];
     mainProgram = "qjs";
     platforms = lib.platforms.all;
   };

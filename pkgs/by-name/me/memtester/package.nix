@@ -20,12 +20,12 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "INSTALLPATH=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Userspace utility for testing the memory subsystem for faults";
     homepage = "http://pyropus.ca/software/memtester/";
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.dezgeg ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = [ lib.maintainers.dezgeg ];
+    platforms = lib.platforms.unix;
     mainProgram = "memtester";
   };
 }

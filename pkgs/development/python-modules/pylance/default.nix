@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   rustPlatform,
+  pythonAtLeast,
 
   # nativeBuildInputs
   pkg-config,
@@ -31,28 +32,28 @@
   tqdm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pylance";
-  version = "0.39.0";
+  version = "1.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lance";
-    tag = "v${version}";
-    hash = "sha256-e0ZpuC0ezk+ZwmCrWkdD2MnCvnjHVVPsN01JWUNyPf4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-yhEM+1Rr0nEVj5XGQOjaZXlRQKnvPagvlNBhDfNUItw=";
   };
 
-  sourceRoot = "${src.name}/python";
+  sourceRoot = "${finalAttrs.src.name}/python";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit
+    inherit (finalAttrs)
       pname
       version
       src
       sourceRoot
       ;
-    hash = "sha256-bvnmlUSnZolwesGtIrWve0a8yQXeYDuaP7mCh3KDd5U=";
+    hash = "sha256-aMgy20urjm5gRX2fOh/vAoGUpXvnG3oY8u/D8rfSbHw=";
   };
 
   nativeBuildInputs = [
@@ -95,11 +96,16 @@ buildPythonPackage rec {
     pytestCheckHook
     tqdm
   ]
-  ++ optional-dependencies.torch;
+  ++ finalAttrs.passthru.optional-dependencies.torch;
 
   preCheck = ''
     cd python/tests
   '';
+
+  pytestFlags = lib.optionals (pythonAtLeast "3.14") [
+    # DeprecationWarning: '_UnionGenericAlias' is deprecated and slated for removal in Python 3.17
+    "-Wignore::DeprecationWarning"
+  ];
 
   disabledTests = [
     # Hangs indefinitely
@@ -144,11 +150,13 @@ buildPythonPackage rec {
     "test_multiprocess_loading"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Python wrapper for Lance columnar format";
     homepage = "https://github.com/lancedb/lance";
-    changelog = "https://github.com/lancedb/lance/releases/tag/v${version}";
+    changelog = "https://github.com/lancedb/lance/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ natsukium ];
   };
-}
+})

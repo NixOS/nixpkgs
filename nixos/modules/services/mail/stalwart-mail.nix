@@ -17,7 +17,7 @@ let
       splitAddress = addr: lib.splitString ":" addr;
       extractPort = addr: lib.toInt (builtins.foldl' (a: b: b) "" (splitAddress addr));
     in
-    builtins.map (address: extractPort address) (parseAddresses listeners);
+    map (address: extractPort address) (parseAddresses listeners);
 
 in
 {
@@ -154,33 +154,38 @@ in
     ];
 
     systemd = {
-      packages = [ cfg.package ];
       services.stalwart-mail = {
+        description = "Stalwart Mail Server";
         wantedBy = [ "multi-user.target" ];
         after = [
           "local-fs.target"
           "network.target"
         ];
 
-        preStart =
-          if useLegacyStorage then
-            ''
-              mkdir -p ${cfg.dataDir}/data/blobs
-            ''
-          else
-            ''
-              mkdir -p ${cfg.dataDir}/db
-            '';
-
         serviceConfig = {
+          # Upstream service config
+          Type = "simple";
+          LimitNOFILE = 65536;
+          KillMode = "process";
+          KillSignal = "SIGINT";
+          Restart = "on-failure";
+          RestartSec = 5;
+          SyslogIdentifier = "stalwart-mail";
+
+          ExecStartPre =
+            if useLegacyStorage then
+              ''
+                ${lib.getExe' pkgs.coreutils "mkdir"} -p ${cfg.dataDir}/data/blobs
+              ''
+            else
+              ''
+                ${lib.getExe' pkgs.coreutils "mkdir"} -p ${cfg.dataDir}/db
+              '';
           ExecStart = [
             ""
             "${lib.getExe cfg.package} --config=${configFile}"
           ];
           LoadCredential = lib.mapAttrsToList (key: value: "${key}:${value}") cfg.credentials;
-
-          StandardOutput = "journal";
-          StandardError = "journal";
 
           ReadWritePaths = [
             cfg.dataDir
@@ -228,7 +233,6 @@ in
           UMask = "0077";
         };
         unitConfig.ConditionPathExists = [
-          ""
           "${configFile}"
         ];
       };

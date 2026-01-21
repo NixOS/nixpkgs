@@ -54,17 +54,16 @@ rustPlatform.buildRustPackage rec {
     installManPage build/*
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Unit-aware calculator";
     mainProgram = "rink";
     homepage = "https://rinkcalc.app";
-    license = with licenses; [
+    license = with lib.licenses; [
       mpl20
       gpl3Plus
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       sb0
-      Br1ght0ne
     ];
   };
 }

@@ -11,16 +11,13 @@
   pyasn1,
   pyasn1-modules,
   pytestCheckHook,
-  pythonOlder,
   pyopenssl,
 }:
 
 buildPythonPackage rec {
   pname = "service-identity";
   version = "24.2.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyca";
@@ -49,11 +46,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "service_identity" ];
 
-  meta = with lib; {
+  meta = {
     description = "Service identity verification for pyOpenSSL";
     homepage = "https://service-identity.readthedocs.io";
     changelog = "https://github.com/pyca/service-identity/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

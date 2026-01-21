@@ -41,14 +41,14 @@ stdenv.mkDerivation {
 
   passthru.tests.nixos = nixosTests.logkeys;
 
-  meta = with lib; {
+  meta = {
     description = "GNU/Linux keylogger that works";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     homepage = "https://github.com/kernc/logkeys";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       mikoim
       offline
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

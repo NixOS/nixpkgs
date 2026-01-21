@@ -9,15 +9,13 @@ index 9d81055..aed0f30 100644
  
  CXXFLAGS += -std=c++23 -pipe -DWXINTL_NO_GETTEXT_MACRO -I../.. -I../../zenXml -include "zen/i18n.h" -include "zen/warn_static.h" \
             -Wall -Wfatal-errors -Wmissing-include-dirs -Wswitch-enum -Wcast-align -Wnon-virtual-dtor -Wno-unused-function -Wshadow -Wno-maybe-uninitialized \
-@@ -17,9 +17,10 @@ LDFLAGS  += `pkg-config --libs libcurl` -lidn2
- CXXFLAGS += `pkg-config --cflags libssh2`
+@@ -21,8 +21,9 @@ CXXFLAGS += `pkg-config --cflags libssh2`
  LDFLAGS  += `pkg-config --libs libssh2`
  
--CXXFLAGS += `pkg-config --cflags gtk+-2.0`
-+CXXFLAGS += `pkg-config --cflags gtk+-3.0`
+ CXXFLAGS += `pkg-config --cflags gtk+-3.0`
 +LDFLAGS += `pkg-config --libs gtk+-3.0`
  #treat as system headers so that warnings are hidden:
--CXXFLAGS += -isystem/usr/include/gtk-2.0
+-CXXFLAGS += -isystem/usr/include/gtk-3.0
 +CXXFLAGS += -isystem@gtk3-dev@/include/gtk-3.0
  
  #support for SELinux (optional)
@@ -33,15 +31,13 @@ index 0be46c9..f510284 100644
  
  CXXFLAGS += -std=c++23 -pipe -DWXINTL_NO_GETTEXT_MACRO -I../../.. -I../../../zenXml -include "zen/i18n.h" -include "zen/warn_static.h" \
             -Wall -Wfatal-errors -Wmissing-include-dirs -Wswitch-enum -Wcast-align -Wnon-virtual-dtor -Wno-unused-function -Wshadow -Wno-maybe-uninitialized \
-@@ -8,9 +8,10 @@ CXXFLAGS += -std=c++23 -pipe -DWXINTL_NO_GETTEXT_MACRO -I../../.. -I../../../zen
- LDFLAGS += -s `wx-config --libs std, aui, richtext --debug=no` -pthread
+@@ -9,8 +9,9 @@ LDFLAGS += -s `wx-config --libs std, aui, richtext --debug=no` -pthread
  
  
--CXXFLAGS += `pkg-config --cflags gtk+-2.0`
-+CXXFLAGS += `pkg-config --cflags gtk+-3.0`
+ CXXFLAGS += `pkg-config --cflags gtk+-3.0`
 +LDFLAGS += `pkg-config --libs gtk+-3.0`
  #treat as system headers so that warnings are hidden:
--CXXFLAGS += -isystem/usr/include/gtk-2.0
+-CXXFLAGS += -isystem/usr/include/gtk-3.0
 +CXXFLAGS += -isystem@gtk3-dev@/include/gtk-3.0
  
  cppFiles=

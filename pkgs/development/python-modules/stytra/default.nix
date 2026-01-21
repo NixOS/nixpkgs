@@ -22,7 +22,6 @@
   pyqtgraph,
   pyserial,
   pytestCheckHook,
-  pythonOlder,
   qdarkstyle,
   qimage2ndarray,
   scikit-image,
@@ -35,7 +34,6 @@ buildPythonPackage rec {
   pname = "stytra";
   version = "0.8.34";
   pyproject = true;
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -85,10 +83,10 @@ buildPythonPackage rec {
     "stytra/tests/test_z_experiments.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Modular package to control stimulation and track behaviour";
     homepage = "https://github.com/portugueslab/stytra";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ tbenst ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ tbenst ];
   };
 }

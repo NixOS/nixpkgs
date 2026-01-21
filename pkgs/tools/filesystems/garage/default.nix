@@ -45,7 +45,7 @@ let
         cacert
       ];
 
-      OPENSSL_NO_VENDOR = true;
+      env.OPENSSL_NO_VENDOR = true;
 
       # See https://git.deuxfleurs.fr/Deuxfleurs/garage/src/tag/v2.1.0/nix/compile.nix#L71-L78
       # on version changes for checking if changes are required here

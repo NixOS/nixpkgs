@@ -26,6 +26,8 @@
   libgbm,
   libglvnd,
   libappindicator-gtk3,
+  pipewire,
+  libpulseaudio,
 }:
 
 # Helper function for building a derivation for Franz and forks.
@@ -99,6 +101,8 @@ stdenv.mkDerivation (
         cups
         expat
         stdenv.cc.cc
+        pipewire
+        libpulseaudio
       ];
     runtimeDependencies = [
       libglvnd
@@ -106,6 +110,8 @@ stdenv.mkDerivation (
       (lib.getLib udev)
       libnotify
       libappindicator-gtk3
+      pipewire
+      libpulseaudio
     ];
 
     installPhase = ''

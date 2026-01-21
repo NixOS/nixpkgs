@@ -32,6 +32,7 @@
   ollama,
   ollama-rocm,
   ollama-cuda,
+  ollama-vulkan,
 
   config,
   # one of `[ null false "rocm" "cuda" "vulkan" ]`
@@ -56,7 +57,7 @@ let
 
   rocmRequested = shouldEnable "rocm" config.rocmSupport;
   cudaRequested = shouldEnable "cuda" config.cudaSupport;
-  vulkanRequested = shouldEnable "vulkan" false;
+  vulkanRequested = acceleration == "vulkan";
 
   enableRocm = rocmRequested && stdenv.hostPlatform.isLinux;
   enableCuda = cudaRequested && stdenv.hostPlatform.isLinux;
@@ -119,6 +120,7 @@ let
   ]
   ++ lib.optionals enableVulkan [
     "--suffix LD_LIBRARY_PATH : '${lib.makeLibraryPath (map lib.getLib vulkanLibs)}'"
+    "--set-default OLLAMA_VULKAN : '1'"
   ];
   wrapperArgs = builtins.concatStringsSep " " wrapperOptions;
 
@@ -136,16 +138,16 @@ in
 goBuild (finalAttrs: {
   pname = "ollama";
   # don't forget to invalidate all hashes each update
-  version = "0.12.11";
+  version = "0.14.2";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-o6jjn9VyLRwD1wFoUv8nNwf5QC6TOVipmMrcHtikNjI=";
+    hash = "sha256-NDtXMRpglUG0XhkTJrd90kv1utpxXGNppMHOG3Zmt54=";
   };
 
-  vendorHash = "sha256-rKRRcwmon/3K2bN7iQaMap5yNYKMCZ7P0M1C2hv4IlQ=";
+  vendorHash = "sha256-WdHAjCD20eLj0d9v1K6VYP8vJ+IZ8BEZ3CciYLLMtxc=";
 
   env =
     lib.optionalAttrs enableRocm {
@@ -185,6 +187,12 @@ goBuild (finalAttrs: {
   postPatch = ''
     substituteInPlace version/version.go \
       --replace-fail 0.0.0 '${finalAttrs.version}'
+    rm -r app
+  ''
+  # disable tests that fail in sandbox due to Metal init failure
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    rm ml/backend/ggml/ggml_test.go
+    rm ml/nn/pooling/pooling_test.go
   '';
 
   overrideModAttrs = (
@@ -261,17 +269,17 @@ goBuild (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
   versionCheckKeepEnvironment = "HOME";
-  versionCheckProgramArg = "--version";
 
   passthru = {
     tests = {
       inherit ollama;
     }
     // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-      inherit ollama-rocm ollama-cuda;
+      inherit ollama-rocm ollama-cuda ollama-vulkan;
       service = nixosTests.ollama;
       service-cuda = nixosTests.ollama-cuda;
       service-rocm = nixosTests.ollama-rocm;
+      service-vulkan = nixosTests.ollama-vulkan;
     };
   }
   // lib.optionalAttrs (!enableRocm && !enableCuda) { updateScript = nix-update-script { }; };

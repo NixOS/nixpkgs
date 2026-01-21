@@ -244,7 +244,7 @@ index 92d68e2..d1e1fa4 100644
  		g_signal_connect_object (
  			watcher->priv->desktop_settings,
 diff --git a/src/calendar/libedata-cal/e-cal-meta-backend.c b/src/calendar/libedata-cal/e-cal-meta-backend.c
-index df89788..4a1ebd0 100644
+index 371f9bb..b0a661e 100644
 --- a/src/calendar/libedata-cal/e-cal-meta-backend.c
 +++ b/src/calendar/libedata-cal/e-cal-meta-backend.c
 @@ -160,7 +160,18 @@ ecmb_is_power_saver_enabled (void)
@@ -267,7 +267,7 @@ index df89788..4a1ebd0 100644
  
  	if (g_settings_get_boolean (settings, "limit-operations-in-power-saver-mode")) {
  		GPowerProfileMonitor *power_monitor;
-@@ -2654,7 +2665,20 @@ ecmb_receive_object_sync (ECalMetaBackend *meta_backend,
+@@ -2652,7 +2663,20 @@ ecmb_receive_object_sync (ECalMetaBackend *meta_backend,
  			if (is_declined) {
  				GSettings *settings;
  
@@ -556,7 +556,7 @@ index bd9822d..3e021dd 100644
  	g_signal_connect (
  		registry->priv->settings, "changed",
 diff --git a/src/libedataserverui/e-reminders-widget.c b/src/libedataserverui/e-reminders-widget.c
-index 02dcd6e..5dfa7ac 100644
+index 980ceb1..02d9551 100644
 --- a/src/libedataserverui/e-reminders-widget.c
 +++ b/src/libedataserverui/e-reminders-widget.c
 @@ -2132,7 +2132,19 @@ static void

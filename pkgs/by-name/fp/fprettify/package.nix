@@ -7,7 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "fprettify";
   version = "0.3.7";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pseewald";
@@ -28,11 +28,11 @@ python3Packages.buildPythonApplication rec {
     configargparse
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Auto-formatter for modern Fortran code that imposes strict whitespace formatting, written in Python";
     mainProgram = "fprettify";
     homepage = "https://pypi.org/project/fprettify/";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ fabiangd ];
+    license = with lib.licenses; [ gpl3Only ];
+    maintainers = with lib.maintainers; [ fabiangd ];
   };
 }

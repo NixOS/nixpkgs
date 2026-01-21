@@ -4,7 +4,6 @@
   asdf,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools-scm,
   setuptools,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "asdf-coordinates-schemas";
   version = "0.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "asdf-format";
@@ -38,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "asdf_coordinates_schemas" ];
 
-  meta = with lib; {
+  meta = {
     description = "ASDF schemas for coordinates";
     homepage = "https://github.com/asdf-format/asdf-coordinates-schemas";
     changelog = "https://github.com/asdf-format/asdf-coordinates-schemas/blob/${version}/CHANGES.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

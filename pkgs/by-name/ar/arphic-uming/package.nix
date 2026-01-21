@@ -31,12 +31,12 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "CJK Unicode font Ming style";
     homepage = "https://www.freedesktop.org/wiki/Software/CJKUnifonts/";
 
-    license = licenses.arphicpl;
-    maintainers = [ maintainers.changlinli ];
-    platforms = platforms.all;
+    license = lib.licenses.arphicpl;
+    maintainers = [ lib.maintainers.changlinli ];
+    platforms = lib.platforms.all;
   };
 }

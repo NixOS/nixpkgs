@@ -41,16 +41,16 @@ buildPythonPackage rec {
     cherrypy
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "cachecontrol" ];
 
-  meta = with lib; {
+  meta = {
     description = "Httplib2 caching for requests";
     mainProgram = "doesitcache";
     homepage = "https://github.com/ionrock/cachecontrol";
     changelog = "https://github.com/psf/cachecontrol/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

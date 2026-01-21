@@ -17,7 +17,6 @@
   pyfiglet,
   pyperclip,
   pytestCheckHook,
-  pythonOlder,
   antlr4,
   pyyaml,
   setuptools,
@@ -31,8 +30,6 @@ buildPythonPackage rec {
   pname = "python-fx";
   version = "0.3.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "cielong";
@@ -87,12 +84,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyfx" ];
 
-  meta = with lib; {
+  disabledTests = [
+    # TypeError: CliRunner.__init__() got an unexpected keyword argument 'mix_stderr'
+    "test_start"
+  ];
+
+  meta = {
     description = "Module to view JSON in a TUI";
     homepage = "https://github.com/cielong/pyfx";
     changelog = "https://github.com/cielong/pyfx/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pyfx";
   };
 }

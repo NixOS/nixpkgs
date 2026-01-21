@@ -44,7 +44,7 @@ stdenv.mkDerivation {
     makeFlagsArray+=("CC=$CC")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Alternative password shadowing scheme";
     longDescription = ''
       The tcb package contains core components of our tcb suite implementing the alternative
@@ -60,8 +60,8 @@ stdenv.mkDerivation {
       by user management tools on Owl due to our shadow suite patches.
     '';
     homepage = "https://www.openwall.com/tcb/";
-    license = licenses.bsd3;
-    platforms = systems.inspect.patterns.isGnu;
-    maintainers = with maintainers; [ izorkin ];
+    license = lib.licenses.bsd3;
+    platforms = lib.systems.inspect.patterns.isGnu;
+    maintainers = with lib.maintainers; [ izorkin ];
   };
 }

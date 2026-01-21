@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pandas,
   typing-extensions,
   pytestCheckHook,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "kotsu";
   version = "0.3.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "datavaluepeople";
@@ -38,11 +35,11 @@ buildPythonPackage rec {
   ];
   pythonImportsCheck = [ "kotsu" ];
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight framework for structured and repeatable model validation";
     homepage = "https://github.com/datavaluepeople/kotsu";
     changelog = "https://github.com/datavaluepeople/kotsu/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mbalatsko ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

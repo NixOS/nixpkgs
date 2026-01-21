@@ -127,7 +127,7 @@ rec {
 
     : A list of strings representing the attribute path to check from `set`
 
-    `e`
+    `set`
 
     : The nested attribute set to check
 
@@ -563,7 +563,7 @@ rec {
 
     : A list of attribute names to get out of `set`
 
-    `attrs`
+    `set`
 
     : The set to get the named attributes from
 
@@ -715,10 +715,10 @@ rec {
     Iterates over every name-value pair in the given attribute set.
     The result of the callback function is often called `acc` for accumulator. It is passed between callbacks from left to right and the final `acc` is the return value of `foldlAttrs`.
 
-    Attention:
-
+    ::: {.note}
     There is a completely different function `lib.foldAttrs`
     which has nothing to do with this function, despite the similar name.
+    :::
 
     # Inputs
 
@@ -918,8 +918,8 @@ rec {
     ) [ { } ] (attrNames attrsOfLists);
 
   /**
-    Return the result of function f applied to the cartesian product of attribute set value combinations.
-    Equivalent to using cartesianProduct followed by map.
+    Return the result of function `f` applied to the cartesian product of attribute set value combinations.
+    Equivalent to using `cartesianProduct` followed by `map`.
 
     # Inputs
 
@@ -1522,7 +1522,7 @@ rec {
     );
 
   /**
-    Merge sets of attributes and use the function f to merge attribute values.
+    Merge sets of attributes and use the function `f` to merge attribute values.
     Like `lib.attrsets.zipAttrsWithNames` with all key names are passed for `names`.
 
     Implementation note: Common names appear multiple times in the list of
@@ -1628,26 +1628,43 @@ rec {
       binaryMerge 0 (length list);
 
   /**
-    Does the same as the update operator '//' except that attributes are
-    merged until the given predicate is verified.  The predicate should
-    accept 3 arguments which are the path to reach the attribute, a part of
-    the first attribute set and a part of the second attribute set.  When
-    the predicate is satisfied, the value of the first attribute set is
-    replaced by the value of the second attribute set.
+    Update `lhs` so that `rhs` wins for any given attribute path that occurs in both.
+
+    Unlike the `//` (update) operator, which operates on a single attribute set,
+    This function views its operands `lhs` and `rhs` as a mapping from attribute *paths*
+    to values.
+
+    The caller-provided function `pred` decides whether any given path is one of the following:
+
+    - `true`: a value in the mapping
+    - `false`: an attribute set whose purpose is to create the nesting structure.
 
     # Inputs
 
     `pred`
 
-    : Predicate, taking the path to the current attribute as a list of strings for attribute names, and the two values at that path from the original arguments.
+    : Predicate function (of type `List String -> Any -> Any -> Bool`)
+
+      Inputs:
+
+      - `path : List String`: the path to the current attribute as a list of strings for attribute names
+      - `lhsAtPath : Any`: the value at that path in `lhs`; same as `getAttrFromPath path lhs`
+      - `rhsAtPath : Any`: the value at that path in `rhs`; same as `getAttrFromPath path rhs`
+
+      Output:
+
+      - `true`: `path` points to a value in the mapping, and `rhsAtPath` will appear in the return value of `recursiveUpdateUntil`
+      - `false`: `path` is part of the nesting structure and will be an attrset in the return value of `recursiveUpdateUntil`
+
+      `pred` is only called for `path`s that extend prefixes for which `pred` returned `false`.
 
     `lhs`
 
-    : Left attribute set of the merge.
+    : Left attribute set of the update.
 
     `rhs`
 
-    : Right attribute set of the merge.
+    : Right attribute set of the update.
 
     # Type
 
@@ -1660,23 +1677,23 @@ rec {
     ## `lib.attrsets.recursiveUpdateUntil` usage example
 
     ```nix
-    recursiveUpdateUntil (path: l: r: path == ["foo"]) {
-      # first attribute set
+    recursiveUpdateUntil (path: lhs: rhs: path == ["foo"]) {
+      # left attribute set
       foo.bar = 1;
       foo.baz = 2;
       bar = 3;
     } {
-      #second attribute set
+      # right attribute set
       foo.bar = 1;
       foo.quz = 2;
       baz = 4;
     }
 
     => {
-      foo.bar = 1; # 'foo.*' from the second set
+      foo.bar = 1; # 'foo.*' from the 'right' set
       foo.quz = 2; #
-      bar = 3;     # 'bar' from the first set
-      baz = 4;     # 'baz' from the second set
+      bar = 3;     # 'bar' from the 'left' set
+      baz = 4;     # 'baz' from the 'right' set
     }
     ```
 
@@ -1688,9 +1705,9 @@ rec {
       f =
         attrPath:
         zipAttrsWith (
-          n: values:
+          name: values:
           let
-            here = attrPath ++ [ n ];
+            here = attrPath ++ [ name ];
           in
           if length values == 1 || pred here (elemAt values 1) (head values) then
             head values
@@ -1701,7 +1718,7 @@ rec {
     f [ ] [ rhs lhs ];
 
   /**
-    A recursive variant of the update operator ‘//’.  The recursion
+    A recursive variant of the update operator `//`.  The recursion
     stops when one of the attribute values is not an attribute set,
     in which case the right hand side value takes precedence over the
     left hand side value.
@@ -2183,7 +2200,7 @@ rec {
   recurseIntoAttrs = attrs: attrs // { recurseForDerivations = true; };
 
   /**
-    Undo the effect of recurseIntoAttrs.
+    Undo the effect of `recurseIntoAttrs`.
 
     # Inputs
 

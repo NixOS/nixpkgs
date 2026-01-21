@@ -57,7 +57,7 @@ in
       path = [ ];
       serviceConfig = {
         Type = "simple";
-        ExecStart = "${pkgs.trezord}/bin/trezord-go ${lib.optionalString cfg.emulator.enable "-e ${builtins.toString cfg.emulator.port}"}";
+        ExecStart = "${pkgs.trezord}/bin/trezord-go ${lib.optionalString cfg.emulator.enable "-e ${toString cfg.emulator.port}"}";
         User = "trezord";
       };
     };

@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mpd-notification";
-  version = "0.9.2";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "eworm-de";
     repo = "mpd-notification";
     rev = version;
-    hash = "sha256-2rnZkVKrk8jgZz/EcZGQ34tLZrVttjq3tq8k2xSl00A=";
+    hash = "sha256-1xTIqJtTz7vfg34JvlwNe6kNZuPfd3KnAT0rI8ZYk2U=";
   };
 
   nativeBuildInputs = [
@@ -53,15 +53,15 @@ stdenv.mkDerivation rec {
     substituteInPlace systemd/mpd-notification.service --replace /usr $out
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Notifications for mpd";
     homepage = "https://github.com/eworm-de/mpd-notification";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       CaitlinDavitt
       matthiasbeyer
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "mpd-notification";
   };
 }

@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   cython,
@@ -38,6 +37,7 @@
   pymysql,
   pyqt5,
   pyreadstat,
+  pyxlsb,
   qtpy,
   s3fs,
   scipy,
@@ -63,16 +63,14 @@
 let
   pandas = buildPythonPackage rec {
     pname = "pandas";
-    version = "2.3.1";
+    version = "2.3.3";
     pyproject = true;
-
-    disabled = pythonOlder "3.9";
 
     src = fetchFromGitHub {
       owner = "pandas-dev";
       repo = "pandas";
       tag = "v${version}";
-      hash = "sha256-xvdiWjJ5uHfrzXB7c4cYjFjZ6ue5i7qzb4tAEPJMAV0=";
+      hash = "sha256-jY1uM9HmJzoFk26ilbtzJnxAsQhmXS19r73JcFeFWRQ=";
     };
 
     # A NOTE regarding the Numpy version relaxing: Both Numpy versions 1.x &
@@ -127,7 +125,7 @@ let
           excel = [
             odfpy
             openpyxl
-            # TODO: pyxlsb
+            pyxlsb
             xlrd
             xlsxwriter
           ];
@@ -184,7 +182,7 @@ let
       pytest-xdist
       pytestCheckHook
     ]
-    ++ lib.flatten (lib.attrValues optional-dependencies)
+    ++ lib.concatAttrValues optional-dependencies
     ++ lib.optionals (stdenv.hostPlatform.isLinux) [
       # for locale executable
       glibc
@@ -247,20 +245,20 @@ let
 
     pythonImportsCheck = [ "pandas" ];
 
-    meta = with lib; {
+    meta = {
       # pandas devs no longer test i686, it's commonly broken
       # broken = stdenv.hostPlatform.isi686;
       changelog = "https://pandas.pydata.org/docs/whatsnew/index.html";
       description = "Powerful data structures for data analysis, time series, and statistics";
       downloadPage = "https://github.com/pandas-dev/pandas";
       homepage = "https://pandas.pydata.org";
-      license = licenses.bsd3;
+      license = lib.licenses.bsd3;
       longDescription = ''
         Flexible and powerful data analysis / manipulation library for
         Python, providing labeled data structures similar to R data.frame
         objects, statistical functions, and much more.
       '';
-      maintainers = with maintainers; [
+      maintainers = with lib.maintainers; [
         raskin
       ];
     };

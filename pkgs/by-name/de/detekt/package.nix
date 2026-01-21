@@ -34,13 +34,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
-  meta = with lib; {
+  meta = {
     description = "Static code analysis for Kotlin";
     mainProgram = "detekt";
     homepage = "https://detekt.dev/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     platforms = jre_headless.meta.platforms;
-    maintainers = with maintainers; [ mdr ];
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    maintainers = with lib.maintainers; [ mdr ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
   };
 })

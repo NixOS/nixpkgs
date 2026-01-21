@@ -5,9 +5,9 @@
   djangorestframework,
   fetchFromGitHub,
   pytest-django,
+  pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
-  jwt,
+  pyjwt,
   setuptools,
 }:
 
@@ -17,8 +17,6 @@ buildPythonPackage rec {
   pyproject = true;
 
   build-system = [ setuptools ];
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "apragacz";
@@ -35,16 +33,15 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-django
-    jwt
+    pytest-xdist
+    pyjwt
   ];
 
   pythonImportsCheck = [ "rest_registration" ];
 
   disabledTests = [
-    # This test fails on Python 3.10
+    # Failed: DID NOT RAISE <class 'rest_registration.utils.html.MLStripperParseFailed'>
     "test_convert_html_to_text_fails"
-    # This test is broken and was removed after 0.7.3. Remove this line once version > 0.7.3
-    "test_coreapi_autoschema_success"
   ];
 
   meta = {

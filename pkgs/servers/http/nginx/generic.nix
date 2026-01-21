@@ -117,6 +117,7 @@ stdenv.mkDerivation {
     "--sbin-path=bin/nginx"
     "--with-http_ssl_module"
     "--with-http_v2_module"
+    "--with-http_v3_module"
     "--with-http_realip_module"
     "--with-http_addition_module"
     "--with-http_xslt_module"
@@ -305,21 +306,18 @@ stdenv.mkDerivation {
     if meta != null then
       meta
     else
-      with lib;
       {
         description = "Reverse proxy and lightweight webserver";
         mainProgram = "nginx";
         homepage = "http://nginx.org";
-        license = [ licenses.bsd2 ] ++ concatMap (m: m.meta.license) modules;
+        license = [ lib.licenses.bsd2 ] ++ lib.concatMap (m: m.meta.license) modules;
         broken = lib.any (m: m.meta.broken or false) modules;
-        platforms = platforms.all;
-        maintainers = with maintainers; [
+        platforms = lib.platforms.all;
+        maintainers = with lib.maintainers; [
+          das_j
           fpletz
+          helsinki-Jo
           raitobezarius
-        ];
-        teams = with teams; [
-          helsinki-systems
-          stridtech
         ];
       };
 }

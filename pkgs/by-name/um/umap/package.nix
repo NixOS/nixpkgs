@@ -19,14 +19,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "umap";
-  version = "3.4.0";
+  version = "3.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "umap-project";
     repo = "umap";
     rev = version;
-    hash = "sha256-7nOBcRj2b1UaGSFEslcMt04iJmKKwFQh8eP6aeeoQ7Y=";
+    hash = "sha256-6izKVZWXlP7yk1vvDDeaSNnzlWCF1xLLUyELaeTngN0=";
   };
 
   build-system = [

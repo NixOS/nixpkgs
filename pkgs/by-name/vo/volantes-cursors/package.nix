@@ -29,12 +29,12 @@ stdenv.mkDerivation {
     "PREFIX="
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.pling.com/p/1356095/";
     description = "Classic cursor theme with a flying style";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ jordanisaacs ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ jordanisaacs ];
+    platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64; # build timeout
   };
 }

@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "C++ library of designs, containing flexible implementations of common design patterns and idioms";
     homepage = "https://loki-lib.sourceforge.net";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ peterhoeg ];
   };
 }

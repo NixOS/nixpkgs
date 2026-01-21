@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   gfortran,
   tk,
@@ -13,14 +14,22 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "cgns";
-  version = "4.5.0";
+  version = "4.5.1";
 
   src = fetchFromGitHub {
     owner = "cgns";
     repo = "cgns";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lPbXIC+O4hTtacxUcyNjZUWpEwo081MjEWhfIH3MWus=";
+    hash = "sha256-0cZtq8nVAHAubHD6IDofnh8N7xiNHQkbhXR5OpdhPQU=";
   };
+
+  patches = [
+    # Fixes crash for test_particlef on LoongArch64
+    (fetchpatch2 {
+      url = "https://github.com/CGNS/CGNS/commit/0ea14abf6da44f13ca8a01117ad7af8eb405394c.patch?full_index=1";
+      hash = "sha256-dtwTD8YqRm0NCXTDPRHmaPLTU17ZLzOyVii1aoGYge0=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace src/cgnstools/tkogl/tkogl.c \

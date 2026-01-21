@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "RTimothyEdwards";
     repo = "magic";
-    tag = "${version}";
+    tag = version;
     sha256 = "sha256-P5qfMsn3DGHjeF7zsZWeG9j38C6j5UEwUqGyjaEVO1E=";
     leaveDotGit = true;
   };
@@ -87,13 +87,14 @@ stdenv.mkDerivation rec {
     install_name_tool -add_rpath ${mesa_glu.out}/lib $out/lib/magic/tcl/magicexec
   '';
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
+  # gnu89 is needed for GCC 15 that is more strict about K&R style prototypes
+  env.NIX_CFLAGS_COMPILE = "-std=gnu89 -Wno-implicit-function-declaration";
   env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-headerpad_max_install_names";
 
-  meta = with lib; {
+  meta = {
     description = "VLSI layout tool written in Tcl";
     homepage = "http://opencircuitdesign.com/magic/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ thoughtpolice ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
 }

@@ -27,12 +27,12 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Prometheus Cloudflare Exporter";
     mainProgram = "cloudflare-exporter";
     homepage = "https://github.com/lablabs/cloudflare-exporter";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bbigras ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bbigras ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
     rm -rf $out/usr
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://archlinux.org/";
     description = "ipconfig and nfsmount tools for root on NFS, ported from klibc";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

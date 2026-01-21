@@ -16,16 +16,16 @@ buildPythonPackage rec {
     hash = "sha256-UUrJ/5t5x54xs1gweNUhwqrMJQXiyrUPn1bBfTsiPcw=";
   };
 
-  format = "pyproject";
+  pyproject = true;
 
   nativeBuildInputs = [ setuptools ];
 
   pythonImportsCheck = [ "farama_notifications" ];
 
-  meta = with lib; {
+  meta = {
     description = "Allows for providing notifications on import to all Farama Packages";
     homepage = "https://github.com/Farama-Foundation/Farama-Notifications";
-    license = licenses.mit;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

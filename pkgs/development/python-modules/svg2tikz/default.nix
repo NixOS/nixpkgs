@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "svg2tikz";
-  version = "3.3.3";
+  version = "3.3.4";
 
   pyproject = true;
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "xyz2tex";
     repo = "svg2tikz";
     tag = "v${version}";
-    hash = "sha256-wc5yzfWWixzO73s+jADpoQli0f3bmu2tBrGgj6DYnUM=";
+    hash = "sha256-hIVxrUqT9g3e8eKdz1xPqRBiN62BPLav+xPHm6WCAqw=";
   };
 
   build-system = [

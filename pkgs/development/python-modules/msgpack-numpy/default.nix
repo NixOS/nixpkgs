@@ -29,10 +29,10 @@ buildPythonPackage rec {
     ${python.interpreter} msgpack_numpy.py
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Numpy data type serialization using msgpack";
     homepage = "https://github.com/lebedov/msgpack-numpy";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ aborsu ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ aborsu ];
   };
 }

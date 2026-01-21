@@ -49,12 +49,10 @@ let
       outpaths ++ lib.concatMap (outpath: lib.map (output: outpath.${output}) outpath.outputs) outpaths;
   };
 in
-buildPythonPackage rec {
+buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } rec {
   pname = "cupy";
   version = "13.6.0";
   pyproject = true;
-
-  stdenv = cudaPackages.backendStdenv;
 
   src = fetchFromGitHub {
     owner = "cupy";
@@ -122,15 +120,15 @@ buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "NumPy-compatible matrix library accelerated by CUDA";
     homepage = "https://cupy.chainer.org/";
     changelog = "https://github.com/cupy/cupy/releases/tag/${src.tag}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     platforms = [
       "aarch64-linux"
       "x86_64-linux"
     ];
-    maintainers = with maintainers; [ hyphon81 ];
+    maintainers = [ ];
   };
 }

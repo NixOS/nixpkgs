@@ -44,12 +44,12 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-D__GNU_LIBRARY__";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://dushistov.github.io/sdcv/";
     description = "Console version of StarDict";
-    maintainers = with maintainers; [ lovek323 ];
-    license = licenses.gpl2;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ lovek323 ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
     mainProgram = "sdcv";
   };
 }

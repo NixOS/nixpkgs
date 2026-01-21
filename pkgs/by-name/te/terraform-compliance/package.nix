@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "terraform-compliance";
-  version = "1.13.0";
+  version = "1.14.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "terraform-compliance";
     repo = "cli";
     tag = version;
-    hash = "sha256-YajEWo+yibAeJv/laZ7J8EMSXN2aIFh8O/geP6e9LsI=";
+    hash = "sha256-wWwYM1ZCHiBdbjl5kRI9dFSWp7mpYb/2HlV7lbU/Xeg=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
@@ -51,13 +51,13 @@ python3.pkgs.buildPythonApplication rec {
     "terraform_compliance"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "BDD test framework for terraform";
     mainProgram = "terraform-compliance";
     homepage = "https://github.com/terraform-compliance/cli";
     changelog = "https://github.com/terraform-compliance/cli/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       kalbasit
       kashw2
     ];

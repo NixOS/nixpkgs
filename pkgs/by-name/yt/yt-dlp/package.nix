@@ -21,14 +21,14 @@ python3Packages.buildPythonApplication rec {
   # The websites yt-dlp deals with are a very moving target. That means that
   # downloads break constantly. Because of that, updates should always be backported
   # to the latest stable release.
-  version = "2025.11.12";
+  version = "2025.12.08";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yt-dlp";
     repo = "yt-dlp";
     tag = version;
-    hash = "sha256-Em8FLcCizSfvucg+KPuJyhFZ5MJ8STTjSpqaTD5xeKI=";
+    hash = "sha256-y06MDP+CrlHGrell9hcLOGlHp/gU2OOxs7can4hbj+g=";
   };
 
   postPatch = ''
@@ -38,6 +38,13 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace yt_dlp/networking/_curlcffi.py \
       --replace-fail "if curl_cffi_version != (0, 5, 10) and not (0, 10) <= curl_cffi_version < (0, 14)" \
       "if curl_cffi_version != (0, 5, 10) and not (0, 10) <= curl_cffi_version"
+    ${lib.optionalString javascriptSupport ''
+      # deno is required for full YouTube support (since 2025.11.12).
+      # This makes yt-dlp find deno even if it is used as a python dependency, i.e. in kodiPackages.sendtokodi.
+      # Crafted so people can replace deno with one of the other JS runtimes.
+      substituteInPlace yt_dlp/utils/_jsruntime.py \
+        --replace-fail "path = _determine_runtime_path(self._path, '${deno.meta.mainProgram}')" "path = '${lib.getExe deno}'"
+    ''}
   '';
 
   build-system = with python3Packages; [ hatchling ];
@@ -48,7 +55,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   # expose optional-dependencies, but provide all features
-  dependencies = lib.flatten (lib.attrValues optional-dependencies);
+  dependencies = lib.concatAttrValues optional-dependencies;
 
   optional-dependencies = {
     default = with python3Packages; [
@@ -87,7 +94,6 @@ python3Packages.buildPythonApplication rec {
 
   # Ensure these utilities are available in $PATH:
   # - ffmpeg: post-processing & transcoding support
-  # - deno: required for full YouTube support (since 2025.11.12)
   # - rtmpdump: download files over RTMP
   # - atomicparsley: embedding thumbnails
   makeWrapperArgs =
@@ -95,7 +101,6 @@ python3Packages.buildPythonApplication rec {
       packagesToBinPath =
         lib.optional atomicparsleySupport atomicparsley
         ++ lib.optional ffmpegSupport ffmpeg-headless
-        ++ lib.optional javascriptSupport deno
         ++ lib.optional rtmpSupport rtmpdump;
     in
     lib.optionals (packagesToBinPath != [ ]) [

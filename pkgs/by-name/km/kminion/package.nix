@@ -34,10 +34,10 @@ buildGoModule (finalAttrs: {
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Feature-rich Prometheus exporter for Apache Kafka written in Go";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cafkafk ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cafkafk ];
     mainProgram = "kminion";
   };
 })

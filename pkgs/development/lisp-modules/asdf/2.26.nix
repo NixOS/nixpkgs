@@ -35,11 +35,11 @@ stdenv.mkDerivation rec {
     cp -r doc/* "$out"/share/doc/asdf/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Standard software-system definition library for Common Lisp";
     homepage = "https://asdf.common-lisp.dev/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
   };
 }

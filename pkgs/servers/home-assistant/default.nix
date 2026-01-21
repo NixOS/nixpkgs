@@ -50,7 +50,7 @@ let
         src = fetchFromGitHub {
           owner = "tkdrob";
           repo = "aioskybell";
-          rev = "refs/tags/${version}";
+          tag = version;
           hash = "sha256-aBT1fDFtq1vasTvCnAXKV2vmZ6LBLZqRCiepv1HDJ+Q=";
         };
       });
@@ -60,7 +60,7 @@ let
         src = fetchFromGitHub {
           owner = "bachya";
           repo = "aiowatttime";
-          rev = "refs/tags/${version}";
+          tag = version;
           hash = "sha256-tWnxGLJT+CRFvkhxFamHxnLXBvoR8tfOvzH1o1i5JJg=";
         };
         postPatch = ''
@@ -87,8 +87,6 @@ let
         ];
       });
 
-      av = self.av_13;
-
       imageio = super.imageio.overridePythonAttrs (oldAttrs: {
         disabledTests = oldAttrs.disabledTests or [ ] ++ [
           # broken by pyav pin
@@ -97,12 +95,22 @@ let
         ];
       });
 
+      google-genai = super.google-genai.overridePythonAttrs rec {
+        version = "1.38.0";
+        src = fetchFromGitHub {
+          owner = "googleapis";
+          repo = "python-genai";
+          tag = "v${version}";
+          hash = "sha256-gJaLEpNKHl6n1MvQDIUW7ynsHYH2eEPGsYso5jSysNg=";
+        };
+      };
+
       gspread = super.gspread.overridePythonAttrs (oldAttrs: rec {
         version = "5.12.4";
         src = fetchFromGitHub {
           owner = "burnash";
           repo = "gspread";
-          rev = "refs/tags/v${version}";
+          tag = "v${version}";
           hash = "sha256-i+QbnF0Y/kUMvt91Wzb8wseO/1rZn9xzeA5BWg1haks=";
         };
         dependencies = with self; [
@@ -123,11 +131,12 @@ let
       notifications-android-tv = super.notifications-android-tv.overridePythonAttrs (oldAttrs: rec {
         version = "0.1.5";
         format = "setuptools";
+        pyproject = null;
 
         src = fetchFromGitHub {
           owner = "engrbm87";
           repo = "notifications_android_tv";
-          rev = "refs/tags/${version}";
+          tag = version;
           hash = "sha256-adkcUuPl0jdJjkBINCTW4Kmc16C/HzL+jaRZB/Qr09A=";
         };
 
@@ -146,7 +155,7 @@ let
         version = "2.2";
         src = fetchFromGitHub {
           inherit (oldAttrs.src) owner repo;
-          rev = "refs/tags/${version}";
+          tag = version;
           hash = "sha256-GGp7nKFH01m1KW6yMkKlAdd26bDi8JDWva6OQ0CWMIw=";
         };
       });
@@ -202,7 +211,7 @@ let
         src = fetchFromGitHub {
           owner = "gagebenne";
           repo = "pydexcom";
-          rev = "refs/tags/${version}";
+          tag = version;
           hash = "sha256-ItDGnUUUTwCz4ZJtFVlMYjjoBPn2h8QZgLzgnV2T/Qk=";
         };
       });
@@ -212,7 +221,7 @@ let
         src = fetchFromGitHub {
           owner = "ChrisMandich";
           repo = "PyFlume";
-          rev = "refs/tags/v${version}";
+          tag = "v${version}";
           hash = "sha256-kIE3y/qlsO9Y1MjEQcX0pfaBeIzCCHk4f1Xa215BBHo=";
         };
         dependencies = oldAttrs.propagatedBuildInputs or [ ] ++ [
@@ -220,21 +229,12 @@ let
         ];
       });
 
-      pykaleidescape = super.pykaleidescape.overridePythonAttrs (oldAttrs: rec {
-        version = "1.0.1";
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          rev = "refs/tags/v${version}";
-          hash = "sha256-KM/gtpsQ27QZz2uI1t/yVN5no0zp9LZag1duAJzK55g=";
-        };
-      });
-
       pysnooz = super.pysnooz.overridePythonAttrs (oldAttrs: rec {
         version = "0.8.6";
         src = fetchFromGitHub {
           owner = "AustinBrunkhorst";
           repo = "pysnooz";
-          rev = "refs/tags/v${version}";
+          tag = "v${version}";
           hash = "sha256-hJwIObiuFEAVhgZXYB9VCeAlewBBnk0oMkP83MUCpyU=";
         };
         patches = [ ];
@@ -246,7 +246,7 @@ let
         src = fetchFromGitHub {
           owner = "home-assistant-libs";
           repo = "pytradfri";
-          rev = "refs/tags/${version}";
+          tag = version;
           hash = "sha256-xOdTzG0bF5p1QpkXv2btwrVugQRjSwdAj8bXcC0IoQg=";
         };
         patches = [ ];
@@ -260,18 +260,6 @@ let
           repo = "wolf-comm";
           tag = version;
           hash = "sha256-LpehooW3vmohiyMwOQTFNLiNCsaLKelWQxQk8bl+y1k=";
-        };
-      };
-
-      # xmltodict>=1.0 not compatible with georss-client and aio-georss-client
-      # https://github.com/exxamalte/python-aio-georss-client/issues/63
-      xmltodict = super.xmltodict.overridePythonAttrs rec {
-        version = "0.15.1";
-        src = fetchFromGitHub {
-          owner = "martinblech";
-          repo = "xmltodict";
-          tag = "v${version}";
-          hash = "sha256-j3shoXjAoAWFd+7k+0w6eoNygS2wkbhDkIq7QG+TmSM=";
         };
       };
 
@@ -305,7 +293,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2025.11.2";
+  hassVersion = "2026.1.2";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -326,13 +314,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-o4rpdnO/TslJWRj7HwTyWOS0NBVOfAeDfWiYvlx/jhw=";
+    hash = "sha256-+H+ujcJ7uYLNFfm05V7FBdogGGUSkC1b6PaWJ5Zu24k=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-j10a2GSnFau6KYMpFrFCrCTqsmy/D5p6BwQMvlOEe+w=";
+    hash = "sha256-uWcSCmarOtfYIVYPz8wAgO8tx15MJcEP1Wv3h8YT0xI=";
   };
 
   build-system = with python.pkgs; [
@@ -360,9 +348,11 @@ python.pkgs.buildPythonApplication rec {
     })
 
     (fetchpatch {
-      # [2025.11.2] fix matter snapshots
-      url = "https://github.com/home-assistant/core/commit/04458e01be0748c3f6c980e126d5238d1ca915b6.patch";
-      hash = "sha256-gzc0KmSZhOfHVRhIVmOTFTJMI+pAX+8LcOit4JUypyA=";
+      # pytest 9 renames some snapshots
+      name = "revert-to-pytest-8.patch";
+      url = "https://github.com/home-assistant/core/commit/3f22dbaa2e1a7776185ec443bf26f90e90e55efa.patch";
+      revert = true;
+      hash = "sha256-rHXpmHUNCr+lhYqiOVrCSQTWvWJ+jHNwPJzUeFtDPIw=";
     })
   ];
 
@@ -373,10 +363,13 @@ python.pkgs.buildPythonApplication rec {
       --replace-fail "setuptools==78.1.1" setuptools
   '';
 
+  pythonRemoveDeps = [
+    "uv"
+  ];
+
   dependencies = with python.pkgs; [
     # Only packages required in pyproject.toml
     aiodns
-    aiofiles
     aiohasupervisor
     aiohttp
     aiohttp-asyncmdnsresolver
@@ -396,28 +389,20 @@ python.pkgs.buildPythonApplication rec {
     cronsim
     cryptography
     fnv-hash-fast
-    ha-ffmpeg
     hass-nabucasa
-    hassil
     home-assistant-bluetooth
-    home-assistant-intents
     httpx
     ifaddr
     jinja2
     lru-dict
-    mutagen
-    numpy
     orjson
     packaging
     pillow
     propcache
     psutil-home-assistant
     pyjwt
-    pymicro-vad
     pyopenssl
-    pyspeex-noise
     python-slugify
-    pyturbojpeg
     pyyaml
     requests
     securetar
@@ -427,7 +412,6 @@ python.pkgs.buildPythonApplication rec {
     typing-extensions
     ulid-transform
     urllib3
-    uv
     voluptuous
     voluptuous-openapi
     voluptuous-serialize
@@ -444,31 +428,36 @@ python.pkgs.buildPythonApplication rec {
   # upstream only tests on Linux, so do we.
   doCheck = stdenv.hostPlatform.isLinux;
 
+  requirementsTest = with python.pkgs; [
+    # test infrastructure (selectively from requirement_test.txt)
+    freezegun
+    pytest-asyncio
+    pytest-aiohttp
+    pytest-freezer
+    pytest-socket
+    pytest-timeout
+    pytest-unordered
+    pytest-xdist
+    pytestCheckHook
+    requests-mock
+    respx
+    syrupy
+  ];
+
   nativeCheckInputs =
-    with python.pkgs;
-    [
-      # test infrastructure (selectively from requirement_test.txt)
-      freezegun
-      pytest-asyncio
-      pytest-aiohttp
-      pytest-freezer
-      pytest-socket
-      pytest-timeout
-      pytest-unordered
-      pytest-xdist
-      pytestCheckHook
-      requests-mock
-      respx
-      syrupy
+    requirementsTest
+    ++ (with python.pkgs; [
       # Used in tests/non_packaged_scripts/test_alexa_locales.py
       beautifulsoup4
       # Used in tests/scripts/test_check_config.py
       colorlog
-    ]
+    ])
     ++ lib.concatMap (component: getPackages component python.pkgs) [
       # some components are needed even if tests in tests/components are disabled
-      "default_config"
+      "assist_pipeline"
+      "frontend"
       "hue"
+      "mobile_app"
     ];
 
   pytestFlags = [
@@ -539,13 +528,13 @@ python.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://home-assistant.io/";
     changelog = "https://github.com/home-assistant/core/releases/tag/${src.tag}";
     description = "Open source home automation that puts local control and privacy first";
-    license = licenses.asl20;
-    teams = [ teams.home-assistant ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.home-assistant ];
+    platforms = lib.platforms.linux;
     mainProgram = "hass";
   };
 }

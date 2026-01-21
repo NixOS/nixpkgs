@@ -10,6 +10,7 @@
 stdenv.mkDerivation rec {
   pname = "n2n";
   version = "3.0";
+  # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "ntop";
@@ -37,10 +38,10 @@ stdenv.mkDerivation rec {
 
   PREFIX = placeholder "out";
 
-  meta = with lib; {
+  meta = {
     description = "Peer-to-peer VPN";
     homepage = "https://www.ntop.org/products/n2n/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ malte-v ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ malte-v ];
   };
 }

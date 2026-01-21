@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "betamax";
   version = "0.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -38,11 +35,11 @@ buildPythonPackage rec {
     "tests/regression/test_requests_2_11_body_matcher.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "VCR imitation for requests";
     homepage = "https://betamax.readthedocs.org/";
     changelog = "https://github.com/betamaxpy/betamax/blob/${version}/HISTORY.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ pSub ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ pSub ];
   };
 }

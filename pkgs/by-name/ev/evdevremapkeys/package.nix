@@ -7,7 +7,7 @@
 python3Packages.buildPythonPackage {
   pname = "evdevremapkeys";
   version = "1.0.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "philipl";
@@ -33,12 +33,12 @@ python3Packages.buildPythonPackage {
 
   pythonImportsCheck = [ "evdevremapkeys" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/philipl/evdevremapkeys";
     description = "Daemon to remap events on linux input devices";
     mainProgram = "evdevremapkeys";
-    license = licenses.mit;
-    maintainers = [ maintainers.q3k ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.q3k ];
+    platforms = lib.platforms.linux;
   };
 }

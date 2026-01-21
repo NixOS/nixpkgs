@@ -2,10 +2,12 @@
   buildPackages,
   cmake,
   fetchFromGitHub,
+  fetchpatch2,
   lib,
   ninja,
   stdenv,
   versionCheckHook,
+
 }:
 
 let
@@ -53,6 +55,13 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "quick-lint-js";
   inherit version src;
 
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/quick-lint/quick-lint-js/commit/a2798b35021f34bc798e2b70ec703075dd5eb7f6.patch";
+      hash = "sha256-jEzFFntk94HQPNYLqU1XlwCnhaqt95Kk3TXmfqBGxBc=";
+    })
+  ];
+
   nativeBuildInputs = [
     cmake
     ninja
@@ -65,7 +74,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

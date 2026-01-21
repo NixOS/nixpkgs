@@ -7,15 +7,12 @@
   mkdocs-material-extensions,
   flask,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "flask-mailman";
   version = "1.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "waynerv";
@@ -38,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flask_mailman" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/waynerv/flask-mailman/blob/${src.rev}/CHANGELOG.md";
     homepage = "https://github.com/waynerv/flask-mailman";
     description = "Flask extension providing simple email sending capabilities";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ gador ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ gador ];
   };
 }

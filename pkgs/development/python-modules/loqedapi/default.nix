@@ -4,7 +4,6 @@
   async-timeout,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   wheel,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "loqedapi";
   version = "2.1.10";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "cpolhout";
@@ -38,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "loqedAPI" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to interact with the Loqed Smart Door Lock API";
     homepage = "https://github.com/cpolhout/loqedAPI";
     changelog = "https://github.com/cpolhout/loqedAPI/releases/tag/v${version}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

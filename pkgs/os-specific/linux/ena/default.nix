@@ -49,14 +49,14 @@ stdenv.mkDerivation {
     inherit rev-prefix;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Amazon Elastic Network Adapter (ENA) driver for Linux";
     homepage = "https://github.com/amzn/amzn-drivers";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       sielicki
       arianvp
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

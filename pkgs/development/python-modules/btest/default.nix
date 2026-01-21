@@ -3,22 +3,19 @@
   buildPythonPackage,
   fetchFromGitHub,
   multiprocess,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "btest";
-  version = "1.2";
+  version = "1.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "zeek";
     repo = "btest";
     tag = "v${version}";
-    hash = "sha256-c+iWzqq0RiRkZlRYjUCXIaFqgnyFdbMAWDNrVYZUvgw=";
+    hash = "sha256-hd/o79GFlmSS4u1IeEkK6l+apw8pinINxPkAZUe8U9U=";
   };
 
   build-system = [ setuptools ];
@@ -28,11 +25,11 @@ buildPythonPackage rec {
   # No tests available and no module to import
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Generic Driver for Powerful System Tests";
     homepage = "https://github.com/zeek/btest";
     changelog = "https://github.com/zeek/btest/blob/${src.tag}/CHANGES";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

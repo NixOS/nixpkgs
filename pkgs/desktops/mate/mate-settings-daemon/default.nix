@@ -18,11 +18,11 @@
   pulseaudioSupport ? stdenv.config.pulseaudio or true,
   libpulseaudio,
   wrapGAppsHook3,
-  mateUpdateScript,
+  gitUpdater,
   udevCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mate-settings-daemon";
   version = "1.28.0";
   outputs = [
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor finalAttrs.version}/mate-settings-daemon-${finalAttrs.version}.tar.xz";
     sha256 = "TtfNraqkyZ7//AKCuEEXA7t24HLEHEtXmJ+MW0BhGjo=";
   };
 
@@ -64,18 +64,22 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname; };
+  passthru.updateScript = gitUpdater {
+    url = "https://git.mate-desktop.org/mate-settings-daemon";
+    odd-unstable = true;
+    rev-prefix = "v";
+  };
 
-  meta = with lib; {
+  meta = {
     description = "MATE settings daemon";
     homepage = "https://github.com/mate-desktop/mate-settings-daemon";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       gpl3Plus
       lgpl2Plus
       mit
     ];
-    platforms = platforms.unix;
-    teams = [ teams.mate ];
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.mate ];
   };
-}
+})

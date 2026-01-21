@@ -85,7 +85,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/LedFx/LedFx";
     changelog = "https://github.com/LedFx/LedFx/blob/${version}/CHANGELOG.rst";
     license = lib.licenses.gpl3Only;
-    teams = [ lib.teams.c3d2 ];
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
     mainProgram = "ledfx";
   };
 }

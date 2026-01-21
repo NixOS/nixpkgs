@@ -22,14 +22,14 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "VM appliance disk image used in libguestfs package";
     homepage = "https://libguestfs.org";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       lgpl2Plus
     ];
-    maintainers = with maintainers; [ lukts30 ];
+    maintainers = with lib.maintainers; [ lukts30 ];
     platforms = [
       "i686-linux"
       "x86_64-linux"

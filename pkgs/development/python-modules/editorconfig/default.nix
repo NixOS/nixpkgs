@@ -36,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "editorconfig" ];
 
-  meta = with lib; {
+  meta = {
     description = "EditorConfig File Locator and Interpreter for Python";
     mainProgram = "editorconfig";
     homepage = "https://github.com/editorconfig/editorconfig-core-py";
-    license = licenses.psfl;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.psfl;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 }

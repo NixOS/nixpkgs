@@ -96,7 +96,7 @@ in
         DynamicUser = true;
         User = "mealie";
         ExecStartPre = "${pkg}/libexec/init_db";
-        ExecStart = "${lib.getExe pkg} -b ${cfg.listenAddress}:${builtins.toString cfg.port} ${lib.escapeShellArgs cfg.extraOptions}";
+        ExecStart = "${lib.getExe pkg} -b ${cfg.listenAddress}:${toString cfg.port} ${lib.escapeShellArgs cfg.extraOptions}";
         EnvironmentFile = lib.mkIf (cfg.credentialsFile != null) cfg.credentialsFile;
         StateDirectory = "mealie";
         StandardOutput = "journal";

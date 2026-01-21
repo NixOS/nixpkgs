@@ -10,15 +10,15 @@
   testers,
   cerberus,
 }:
-ocamlPackages.buildDunePackage rec {
+ocamlPackages.buildDunePackage (finalAttrs: {
   pname = "cerberus";
-  version = "0-unstable-2025-11-12";
+  version = "0-unstable-2025-12-15";
 
   src = fetchFromGitHub {
     owner = "rems-project";
     repo = "cerberus";
-    rev = "35d1ec8919c9813dd1b3770dccf53260ac5b7f73";
-    hash = "sha256-OQo/w49Z7+SGyKdePsSXplglo1gSNfnxNw85lcv0nc0=";
+    rev = "50621977ba282ac527e9259f7e9334d2c5bef41c";
+    hash = "sha256-CAZeLG1M9oBzl/5EsIYwyV3St5fdwmfkPApACbsIYAc=";
   };
 
   patches = [
@@ -35,7 +35,7 @@ ocamlPackages.buildDunePackage rec {
   # our version since git is impure
   postPatch = ''
     substituteInPlace tools/gen_version.ml \
-      --replace-fail '"unknown"' '"${version}"'
+      --replace-fail '"unknown"' '"${finalAttrs.version}"'
   '';
 
   minimalOCamlVersion = "4.12";
@@ -136,4 +136,4 @@ ocamlPackages.buildDunePackage rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

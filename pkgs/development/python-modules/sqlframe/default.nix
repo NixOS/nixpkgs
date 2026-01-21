@@ -38,14 +38,14 @@
 
 buildPythonPackage rec {
   pname = "sqlframe";
-  version = "3.43.7";
+  version = "3.43.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "eakmanrq";
     repo = "sqlframe";
     tag = "v${version}";
-    hash = "sha256-qrKNn13wFEqvMQYzHH8T1pga1EUaVIt701p0k4eXw9c=";
+    hash = "sha256-gsWA3aBolsR2zPwseHnQXSJRngXUHFGvi55UPevgUHw=";
   };
 
   build-system = [ setuptools-scm ];
@@ -83,7 +83,7 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # Requires google-cloud credentials

@@ -15,8 +15,6 @@ ocamlPackages.buildDunePackage rec {
     hash = "sha256-bMaLjHq/3ZrST5E9lBSIX0T2cAhDin+lv1XwgUF4/7w=";
   };
 
-  duneVersion = "3";
-
   buildInputs = with ocamlPackages; [
     gen
     sedlex
@@ -26,7 +24,7 @@ ocamlPackages.buildDunePackage rec {
     omd
     uri
     ounit2
-    yojson
+    yojson_2
   ];
 
   doCheck = true;

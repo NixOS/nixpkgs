@@ -57,15 +57,15 @@
 
   useDuneifVersion = lib.versions.isGe "9.0";
 
-  meta = with lib; {
+  meta = {
     description = "Development of basic set theory";
     longDescription = ''
       This Coq library develops some basic set theory.  The main
       purpose the author had in writing it was as support for the
       Topology library.
     '';
-    maintainers = with maintainers; [ siraben ];
-    license = licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ siraben ];
+    license = lib.licenses.lgpl21Plus;
   };
 }).overrideAttrs
   ({ version, ... }: lib.optionalAttrs (lib.versions.isGe "9.0" version) { repo = "topology"; })

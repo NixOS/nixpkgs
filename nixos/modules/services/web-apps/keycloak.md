@@ -54,6 +54,30 @@ The path should be provided as a string, not a Nix path, since Nix
 paths are copied into the world readable Nix store.
 :::
 
+## Unix socket authentication {#module-services-keycloak-unix-socket}
+
+For PostgreSQL, Keycloak can connect via Unix socket using peer
+authentication, avoiding the need for a database password.
+
+To use Unix sockets, set [](#opt-services.keycloak.database.host)
+to the PostgreSQL socket directory (e.g., `/run/postgresql`) and
+add the required junixsocket plugins:
+```nix
+{
+  services.keycloak = {
+    database.host = "/run/postgresql";
+    plugins = with pkgs.keycloak.plugins; [
+      junixsocket-common
+      junixsocket-native-common
+    ];
+  };
+}
+```
+
+::: {.note}
+Unix socket authentication is only supported for PostgreSQL.
+:::
+
 ## Hostname {#module-services-keycloak-hostname}
 
 The hostname is used to build the public URL used as base for

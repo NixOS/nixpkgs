@@ -4,7 +4,6 @@
   fetchPypi,
   pycryptodomex,
   pyotp,
-  pythonOlder,
   requests,
   roadlib,
   selenium,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "roadtx";
   version = "1.18.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -39,10 +36,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "roadtools.roadtx" ];
 
-  meta = with lib; {
+  meta = {
     description = "ROADtools Token eXchange";
     homepage = "https://pypi.org/project/roadtx/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

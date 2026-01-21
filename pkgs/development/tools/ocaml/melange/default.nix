@@ -23,13 +23,13 @@ let
   versionHash =
     if lib.versionAtLeast ocaml.version "5.4" then
       {
-        version = "6.0.0-54";
-        hash = "sha256-689OK37ObYhopfcaJ3AmkScGC4lCu3ZOTEM6N+Npvzs=";
+        version = "6.0.1-54";
+        hash = "sha256-bV5TD8qlLt7wQdm9W0TyhDDBFFo/PdJXGgiscnsBFmc=";
       }
     else if lib.versionAtLeast ocaml.version "5.3" then
       {
-        version = "6.0.0-53";
-        hash = "sha256-jPTQvV095BPB4EDepwGJTZ9sB/60VTO4YJTj2wI39jc=";
+        version = "6.0.1-53";
+        hash = "sha256-e1/RIsFsKeAbc2wgQf1Hhta+nyAXIuEP7uatXrU9cLs=";
       }
     else if lib.versionAtLeast ocaml.version "5.2" then
       {

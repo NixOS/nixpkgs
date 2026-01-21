@@ -49,7 +49,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "marisa_trie" ];
 
-  meta = with lib; {
+  meta = {
     description = "Static memory-efficient Trie-like structures for Python based on marisa-trie C++ library";
     longDescription = ''
       There are official SWIG-based Python bindings included in C++ library distribution.
@@ -57,6 +57,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/kmike/marisa-trie";
     changelog = "https://github.com/pytries/marisa-trie/blob/${src.tag}/CHANGES.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

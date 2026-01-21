@@ -2,7 +2,6 @@
   lib,
   fetchPypi,
   buildPythonPackage,
-  pythonOlder,
   routerFeatures,
   setuptools,
   janus,
@@ -45,7 +44,6 @@ buildPythonPackage rec {
   };
 
   # The versions of `sanic` and `websockets` in nixpkgs only support 3.6 or later
-  disabled = pythonOlder "3.6";
 
   # No useful tests
   doCheck = false;
@@ -60,10 +58,10 @@ buildPythonPackage rec {
 
   prePatch = opts.prePatch;
 
-  meta = with lib; {
+  meta = {
     description = "Server framework for web apps with an Elm frontend";
     homepage = "https://github.com/ensoft/entrance";
-    license = licenses.mit;
-    maintainers = with maintainers; [ simonchatts ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ simonchatts ];
   };
 }

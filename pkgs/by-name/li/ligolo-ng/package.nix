@@ -43,7 +43,6 @@ buildGoModule (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/ligolo-agent";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

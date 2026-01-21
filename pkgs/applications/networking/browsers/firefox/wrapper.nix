@@ -35,10 +35,23 @@
 
 ## configurability of the wrapper itself
 
-browser:
+browser_:
 
 let
   isDarwin = stdenv.hostPlatform.isDarwin;
+  browser =
+    # Wrapper breaks codesigning on macOS; though plugins that may require
+    # original mozilla signature (like 1Password) won't work with signatures
+    # stripped, at least the wrapped browser will launch.
+    if isDarwin then
+      browser_.overrideAttrs (
+        oldAttrs:
+        lib.optionalAttrs (oldAttrs.dontFixup or false) {
+          dontFixup = false;
+        }
+      )
+    else
+      browser_;
   wrapper =
     {
       applicationName ? browser.binaryName or (lib.getName browser), # Note: this is actually *binary* name and is different from browser.applicationName, which is *app* name!
@@ -76,7 +89,7 @@ let
       # PCSC-Lite daemon (services.pcscd) also must be enabled for firefox to access smartcards
       smartcardSupport = cfg.smartcardSupport or false;
 
-      allNativeMessagingHosts = map lib.getBin nativeMessagingHosts;
+      allNativeMessagingHosts = map lib.getBin (lib.unique nativeMessagingHosts);
 
       libs =
         lib.optionals stdenv.hostPlatform.isLinux (

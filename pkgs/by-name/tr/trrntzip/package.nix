@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ zlib ];
 
-  meta = with lib; {
+  meta = {
     description = "Goal of the program is to use standard values when creating zips to create identical files over multiple systems";
     longDescription = ''
       Torrentzip converts zip archives to a standard format with some
@@ -42,13 +42,13 @@ stdenv.mkDerivation (finalAttrs: {
       This is a revival of https://sourceforge.net/projects/trrntzip.
     '';
     homepage = "https://github.com/0-wiz-0/trrntzip";
-    license = with licenses; [
+    license = with lib.licenses; [
       # "This software includes code from minizip, which is part of zlib"
-      licenses.zlib
+      lib.licenses.zlib
 
       gpl2Plus
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 })

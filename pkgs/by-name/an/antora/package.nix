@@ -35,13 +35,13 @@ buildNpmPackage rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Modular documentation site generator. Designed for users of Asciidoctor";
     homepage = "https://antora.org";
-    license = licenses.mpl20;
+    license = lib.licenses.mpl20;
     mainProgram = "antora";
 
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       ehllie
       naho
     ];

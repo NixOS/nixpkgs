@@ -161,12 +161,12 @@ buildPythonPackage rec {
 
   passthru.tests.simple = callPackage ./tests.nix { };
 
-  meta = with lib; {
+  meta = {
     description = "Tool for checking the quality of font projects";
     homepage = "https://github.com/googlefonts/fontbakery";
     changelog = "https://github.com/fonttools/fontbakery/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "fontbakery";
-    maintainers = with maintainers; [ danc86 ];
+    maintainers = with lib.maintainers; [ danc86 ];
   };
 }

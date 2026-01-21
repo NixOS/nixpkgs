@@ -61,10 +61,10 @@ buildGhidraExtension {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Leverage the binutils disassembler capabilities for various processors";
     homepage = "https://ghidra-sre.org/";
     downloadPage = "https://github.com/NationalSecurityAgency/ghidra/tree/master/GPL/GnuDisassembler";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
   };
 }

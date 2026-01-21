@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   autoPatchelfHook,
+  copyDesktopItems,
   fontconfig,
   freetype,
   libICE,
@@ -12,35 +13,24 @@
   libXfixes,
   libXrandr,
   libXrender,
+  makeDesktopItem,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "segger-ozone";
-  version =
-    {
-      x86_64-linux = "3.38c";
-      i686-linux = "3.36";
-    }
-    .${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
+  version = "3.40b";
 
-  src =
-    {
-      x86_64-linux = fetchurl {
-        url = "https://www.segger.com/downloads/jlink/Ozone_Linux_V${
-          builtins.replaceStrings [ "." ] [ "" ] version
-        }_x86_64.tgz";
-        hash = "sha256-GYiFP3aK+dqpZuoJlTxJbTboYtWY9WACbxB11TctsQE=";
-      };
-      i686-linux = fetchurl {
-        url = "https://www.segger.com/downloads/jlink/Ozone_Linux_V${
-          builtins.replaceStrings [ "." ] [ "" ] version
-        }_i386.tgz";
-        hash = "sha256-u2HGOsv46BRlmqiusZD9iakLx5T530DqauNDY3YTiDY=";
-      };
-    }
-    .${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
+  src = fetchurl {
+    url = "https://www.segger.com/downloads/jlink/Ozone_Linux_V${
+      lib.replaceString "." "" finalAttrs.version
+    }_x86_64.tgz";
+    hash = "sha256-5T/DSG43IaYEfjSI1KcL/+KBVkHdAapgS8H0Oln2Vrk=";
+  };
 
-  nativeBuildInputs = [ autoPatchelfHook ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    copyDesktopItems
+  ];
 
   buildInputs = [
     fontconfig
@@ -55,13 +45,35 @@ stdenv.mkDerivation rec {
     (lib.getLib stdenv.cc.cc)
   ];
 
+  desktopItems = [
+    (makeDesktopItem {
+      categories = [
+        "Development"
+        "Debugger"
+        "X-MandrivaLinux-MoreApplications-Development"
+      ];
+      comment = "SEGGER Ozone";
+      desktopName = "Ozone";
+      exec = "Ozone %%f";
+      icon = "Ozone";
+      keywords = [
+        "ARM"
+        "Development"
+        "Embedded"
+      ];
+      name = "segger-ozone";
+      startupNotify = true;
+      terminal = false;
+    })
+  ];
+
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
-    mv Lib lib
-    mv * $out
-    ln -s $out/Ozone $out/bin
+    mkdir -p $out/libexec $out/bin
+    cp --recursive . $out/libexec/segger-ozone
+    ln -s $out/libexec/segger-ozone/Ozone $out/bin/Ozone
+    install -D --mode=0644 Ozone.png $out/share/icons/hicolor/256x256/apps/Ozone.png
 
     runHook postInstall
   '';
@@ -92,9 +104,6 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = [ lib.maintainers.bmilanov ];
-    platforms = [
-      "x86_64-linux"
-      "i686-linux"
-    ];
+    platforms = [ "x86_64-linux" ];
   };
-}
+})

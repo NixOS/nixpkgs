@@ -25,10 +25,10 @@ buildPythonPackage rec {
     hypothesis
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Computing with and displaying bytes";
     homepage = "https://github.com/mulkieran/justbytes";
-    license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 }

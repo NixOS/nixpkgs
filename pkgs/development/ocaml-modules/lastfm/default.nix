@@ -24,10 +24,10 @@ buildDunePackage rec {
     xmlplaylist
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/savonet/ocaml-lastfm";
     description = "OCaml API to lastfm radio and audioscrobbler";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ dandellion ];
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ dandellion ];
   };
 }

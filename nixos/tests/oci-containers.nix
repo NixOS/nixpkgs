@@ -16,7 +16,7 @@ let
     makeTest {
       name = "oci-containers-${backend}";
 
-      meta.maintainers = lib.teams.serokell.members ++ (with lib.maintainers; [ benley ]);
+      meta.maintainers = with lib.maintainers; [ benley ];
 
       nodes = {
         ${backend} =
@@ -73,7 +73,11 @@ let
     type:
     makeTest {
       name = "oci-containers-podman-rootless-${type}";
-      meta.maintainers = lib.teams.flyingcircus.members ++ [ lib.maintainers.ma27 ];
+      meta.maintainers = [
+        lib.maintainers.leona
+        lib.maintainers.ma27
+        lib.maintainers.osnyx
+      ];
       nodes = {
         podman =
           { pkgs, ... }:

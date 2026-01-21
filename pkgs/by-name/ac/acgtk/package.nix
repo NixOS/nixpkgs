@@ -4,6 +4,7 @@
   fetchFromGitLab,
   fetchpatch,
   ocamlPackages,
+  dune,
 }:
 
 stdenv.mkDerivation {
@@ -39,7 +40,7 @@ stdenv.mkDerivation {
     menhir
     ocaml
     findlib
-    dune_3
+    dune
   ];
 
   buildInputs = with ocamlPackages; [

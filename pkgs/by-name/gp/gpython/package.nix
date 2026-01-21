@@ -38,12 +38,12 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Python interpreter written in Go";
     mainProgram = "gpython";
     homepage = "https://github.com/go-python/gpython";
     changelog = "https://github.com/go-python/gpython/releases/tag/${src.rev}";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

@@ -41,11 +41,11 @@ rustPlatform.buildRustPackage {
     "--skip=fetch_and_play"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Kingtous/RustPlayer";
     description = "Local audio player and network m3u8 radio player using a terminal interface";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ oluceps ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ oluceps ];
+    platforms = lib.platforms.unix;
   };
 }

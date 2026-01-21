@@ -1,24 +1,25 @@
 {
   lib,
-  flutter335,
+  flutter338,
   fetchFromGitHub,
   runCommand,
   yq-go,
   _experimental-update-script-combinators,
   gitUpdater,
+  dart,
 }:
 
 let
-  version = "2.4.0";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "LinwoodDev";
     repo = "Butterfly";
     tag = "v${version}";
-    hash = "sha256-kxX9gHNKDlRir9TGSob6iz8cRJOqHdoYlvIi4MQAroc=";
+    hash = "sha256-81YuOqq8CZMn9zf1jG5tF3Spv6AI3XUr1qgaN8P8IJM=";
   };
 in
-flutter335.buildFlutterApplication {
+flutter338.buildFlutterApplication {
   pname = "butterfly";
   inherit version src;
 
@@ -26,7 +27,7 @@ flutter335.buildFlutterApplication {
 
   sourceRoot = "${src.name}/app";
 
-  gitHashes = lib.importJSON ./gitHashes.json;
+  gitHashes = lib.importJSON ./git-hashes.json;
 
   postInstall = ''
     cp -r linux/debian/usr/share $out/share
@@ -43,14 +44,30 @@ flutter335.buildFlutterApplication {
           yq eval --output-format=json --prettyPrint $src/app/pubspec.lock > "$out"
         '';
     updateScript = _experimental-update-script-combinators.sequence [
-      (gitUpdater {
-        ignoredVersions = ".*(rc|beta).*";
-        rev-prefix = "v";
-      })
-      (_experimental-update-script-combinators.copyAttrOutputToFile "butterfly.pubspecSource" ./pubspec.lock.json)
+      (
+        (gitUpdater {
+          ignoredVersions = ".*(rc|beta).*";
+          rev-prefix = "v";
+        })
+        // {
+          supportedFeatures = [ ];
+        }
+      )
+      (
+        (_experimental-update-script-combinators.copyAttrOutputToFile "butterfly.pubspecSource" ./pubspec.lock.json)
+        // {
+          supportedFeatures = [ ];
+        }
+      )
       {
-        command = [ ./update-gitHashes.py ];
-        supportedFeatures = [ "silent" ];
+        command = [
+          dart.fetchGitHashesScript
+          "--input"
+          ./pubspec.lock.json
+          "--output"
+          ./git-hashes.json
+        ];
+        supportedFeatures = [ ];
       }
     ];
   };

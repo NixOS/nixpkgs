@@ -14,7 +14,7 @@ nixeval() {
 }
 
 vendorhash() {
-    (nix --extra-experimental-features nix-command build --impure --argstr nixpkgs "$nixpkgs" --argstr attr "$1" --expr '{ nixpkgs, attr }: let pkgs = import nixpkgs {}; in with pkgs.lib; (getAttrFromPath (splitString "." attr) pkgs).overrideAttrs (attrs: { outputHash = fakeHash; })' --no-link 2>&1 >/dev/null | tail -n3 | grep -F got: | cut -d: -f2- | stripwhitespace) 2>/dev/null || true
+    (nix --extra-experimental-features nix-command build --impure --argstr nixpkgs "$nixpkgs" --argstr attr "$1" --expr '{ nixpkgs, attr }: let pkgs = import nixpkgs {}; in (pkgs.lib.getAttrFromPath (pkgs.lib.splitString "." attr) pkgs).overrideAttrs (attrs: { outputHash = pkgs.lib.fakeHash; })' --no-link 2>&1 >/dev/null | tail -n3 | grep -F got: | cut -d: -f2- | stripwhitespace) 2>/dev/null || true
 }
 
 findpath() {

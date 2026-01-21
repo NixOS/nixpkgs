@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple and configurable Blue Light Filter for X";
     longDescription = ''
       blugon is a simple and fast Blue Light Filter, that is highly configurable and provides a command line interface.
@@ -40,10 +40,10 @@ stdenv.mkDerivation rec {
       There are several different backends available.
       blugon calculates the screen color from your local time and configuration.
     '';
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://github.com/jumper149/blugon";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ jumper149 ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ jumper149 ];
     mainProgram = "blugon";
   };
 }

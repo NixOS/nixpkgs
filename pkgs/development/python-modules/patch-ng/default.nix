@@ -14,10 +14,10 @@ buildPythonPackage rec {
     sha256 = "sha256-Uv1G7kb2yGZ2kmgsH9cTTtxlotLQhOvsHSlaYIf8ApE=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library to parse and apply unified diffs";
     homepage = "https://github.com/conan-io/python-patch";
-    license = licenses.mit;
-    maintainers = with maintainers; [ HaoZeke ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ HaoZeke ];
   };
 }

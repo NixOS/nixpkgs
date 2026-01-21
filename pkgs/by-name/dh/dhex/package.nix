@@ -14,6 +14,11 @@ stdenv.mkDerivation rec {
     sha256 = "06y4lrp29f2fh303ijk1xhspa1d4x4dm6hnyw3dd8szi3k6hnwsj";
   };
 
+  postPatch = ''
+    # Fix build for gcc>=15
+    substituteInPlace ./output.h --replace-fail 'void initcolors();' 'void initcolors(tOutput*);'
+  '';
+
   buildInputs = [ ncurses ];
 
   installPhase = ''

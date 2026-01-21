@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
 
   passthru.tests.languagetool = nixosTests.languagetool;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://languagetool.org";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ edwtjo ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ edwtjo ];
     platforms = jre.meta.platforms;
     description = "Proofreading program for English, French German, Polish, and more";
   };

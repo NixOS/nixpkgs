@@ -36,11 +36,11 @@ buildGoModule rec {
       --zsh <($out/bin/gitops completion zsh 2>/dev/null)
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://docs.gitops.weave.works";
     description = "Weave Gitops CLI";
-    license = licenses.mpl20;
-    platforms = platforms.linux;
+    license = lib.licenses.mpl20;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
     mainProgram = "gitops";
   };

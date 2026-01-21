@@ -500,12 +500,12 @@ stdenv.mkDerivation (
       kodi = finalAttrs.finalPackage;
     };
 
-    meta = with lib; {
+    meta = {
       description = "Media center";
       homepage = "https://kodi.tv/";
-      license = licenses.gpl2Plus;
-      platforms = platforms.linux;
-      teams = [ teams.kodi ];
+      license = lib.licenses.gpl2Plus;
+      platforms = lib.platforms.linux;
+      teams = [ lib.teams.kodi ];
       mainProgram = "kodi";
     };
   }

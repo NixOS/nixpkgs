@@ -80,7 +80,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "http://www.proftpd.org/";
-    teams = [ lib.teams.flyingcircus ];
+    maintainers = [
+      lib.maintainers.leona
+      lib.maintainers.osnyx
+    ];
     license = lib.licenses.gpl2Plus;
     mainProgram = "proftpd";
     platforms = lib.platforms.unix;

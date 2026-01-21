@@ -32,10 +32,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "tree_sitter_html" ];
 
-  meta = with lib; {
+  meta = {
     description = "HTML grammar for tree-sitter";
     homepage = "https://github.com/tree-sitter/tree-sitter-html";
-    license = licenses.mit;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

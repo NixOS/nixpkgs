@@ -31,12 +31,12 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--program-transform-name=s/^l//" ];
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration -Wno-error=implicit-int -Wno-error=incompatible-pointer-types";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration -Wno-error=implicit-int -Wno-error=incompatible-pointer-types -std=gnu17";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://ohse.de/uwe/software/lrzsz.html";
     description = "Communication package providing the XMODEM, YMODEM ZMODEM file transfer protocols";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
   };
 }

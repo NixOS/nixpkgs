@@ -85,7 +85,7 @@
     `optionValueSeparator`
 
     : How to separate an option from its flag;
-    By default, there is no separator, so option `-c` and value `5` would become ["-c" "5"].
+    By default, there is no separator, so option `-c` and value `5` would become `["-c" "5"]`.
     This is useful if the command requires equals, for example, `-c=5`.
 
     # Examples
@@ -156,15 +156,18 @@
       );
 
   /**
-    Converts the given attributes into a single shell-escaped command-line string.
-    Similar to `toCommandLineGNU`, but returns a single escaped string instead of an array of arguments.
-    For further reference see: [`lib.cli.toCommandLineGNU`](#function-library-lib.cli.toCommandLineGNU)
+    Converts the given attributes into a single shell-escaped command-line
+    string.
+    Similar to `toCommandLineGNU`, but returns a single escaped string instead
+    of a list of arguments.
+    For further reference see:
+    [`lib.cli.toCommandLineGNU`](#function-library-lib.cli.toCommandLineGNU)
   */
   toCommandLineShellGNU =
     options: attrs: lib.escapeShellArgs (lib.cli.toCommandLineGNU options attrs);
 
   /**
-    Converts an attribute set into a list of GNU-style command line options.
+    Converts an attribute set into a list of GNU-style command-line arguments.
 
     `toCommandLineGNU` returns a list of string arguments.
 
@@ -238,31 +241,77 @@
     lib.cli.toCommandLine optionFormat;
 
   /**
-    Converts the given attributes into a single shell-escaped command-line string.
-    Similar to `toCommandLine`, but returns a single escaped string instead of an array of arguments.
-    For further reference see: [`lib.cli.toCommandLine`](#function-library-lib.cli.toCommandLine)
+    Converts the given attributes into a single shell-escaped command-line
+    string.
+    Similar to `toCommandLine`, but returns a single escaped string instead of
+    a list of arguments.
+    For further reference see:
+    [`lib.cli.toCommandLine`](#function-library-lib.cli.toCommandLine)
   */
   toCommandLineShell =
     optionFormat: attrs: lib.escapeShellArgs (lib.cli.toCommandLine optionFormat attrs);
 
   /**
-    Converts an attribute set into a list of command line options.
+    Converts an attribute set into a list of command-line arguments.
 
-    `toCommandLine` returns a list of string arguments.
+    This is the most general command-line construction helper in `lib.cli`.
+    It is parameterized by an `optionFormat` function, which defines how each
+    option name and its value are rendered.
+
+    All other helpers in this file are thin wrappers around this function.
+
+    `toCommandLine` returns a *flat list of strings*, suitable for use as `argv`
+    arguments or for further processing (e.g. shell escaping).
 
     # Inputs
 
     `optionFormat`
 
-    : The option format that describes how options and their arguments should be formatted.
+    : A function that takes the option name and returns an option spec, where
+      the option spec is an attribute set describing how the option should be
+      rendered.
+
+      The returned attribute set must contain:
+
+      - `option` (string):
+        The option flag itself, e.g. `"-v"` or `"--verbose"`.
+
+      - `sep` (string or null):
+        How to separate the option from its argument.
+        If `null`, the option and its argument are returned as two separate
+        list elements.
+        If a string (e.g. `"="`), the option and argument are concatenated.
+
+      - `explicitBool` (bool):
+        Controls how boolean values are handled:
+        - `false`:
+          `true` emits only the option flag, `false` emits nothing.
+        - `true`:
+          both `true` and `false` are rendered as explicit arguments via
+          `formatArg`.
+
+      Optional fields:
+
+      - `formatArg`:
+        Converts the option value to a string.
+        Defaults to `lib.generators.mkValueStringDefault { }`.
 
     `attrs`
 
-    : The attributes to transform into arguments.
+    : An attribute set mapping option names to values.
+
+      Supported value types:
+      - null: omitted entirely
+      - bool: handled according to `explicitBool`
+      - list: each element is rendered as a separate occurrence of the option
+      - any other value: rendered as a single option argument
+
+      Empty attribute names are rejected.
 
     # Examples
+
     :::{.example}
-    ## `lib.cli.toCommandLine` usage example
+    ## `lib.cli.toCommandLine` basic usage example
 
     ```nix
     let
@@ -271,14 +320,26 @@
         sep = "=";
         explicitBool = true;
       };
-    in lib.cli.toCommandLine optionFormat {
+    in
+    lib.cli.toCommandLine optionFormat {
       v = true;
-      verbose = [true true false null];
+      verbose = [
+        true
+        true
+        false
+        null
+      ];
       i = ".bak";
-      testsuite = ["unit" "integration"];
-      e = ["s/a/b/" "s/b/c/"];
+      testsuite = [
+        "unit"
+        "integration"
+      ];
+      e = [
+        "s/a/b/"
+        "s/b/c/"
+      ];
       n = false;
-      data = builtins.toJSON {id = 0;};
+      data = builtins.toJSON { id = 0; };
     }
     => [
       "-data={\"id\":0}"
@@ -294,8 +355,70 @@
       "-verbose=false"
     ]
     ```
-
     :::
+
+    :::{.example}
+    ## `lib.cli.toCommandLine` usage with a more complex option format
+
+    ```nix
+    let
+      optionFormat =
+        optionName:
+        let
+          isLong = builtins.stringLength optionName > 1;
+        in
+        {
+          option = if isLong then "--${optionName}" else "-${optionName}";
+          sep = if isLong then "=" else null;
+          explicitBool = true;
+          formatArg =
+            value:
+            if builtins.isAttrs value then
+              builtins.toJSON value
+            else
+              lib.generators.mkValueStringDefault { } value;
+        };
+    in
+    lib.cli.toCommandLine optionFormat {
+      v = true;
+      verbose = [
+        true
+        true
+        false
+        null
+      ];
+      n = false;
+      output = "result.txt";
+      testsuite = [
+        "unit"
+        "integration"
+      ];
+      data = {
+        id = 0;
+        name = "test";
+      };
+    }
+    => [
+      "--data={\"id\":0,\"name\":\"test\"}"
+      "-n"
+      "false"
+      "--output=result.txt"
+      "--testsuite=unit"
+      "--testsuite=integration"
+      "-v"
+      "true"
+      "--verbose=true"
+      "--verbose=true"
+      "--verbose=false"
+    ]
+    ```
+    :::
+
+    # See also
+
+    - `lib.cli.toCommandLineShell`
+    - `lib.cli.toCommandLineGNU`
+    - `lib.cli.toCommandLineShellGNU`
   */
   toCommandLine =
     optionFormat: attrs:

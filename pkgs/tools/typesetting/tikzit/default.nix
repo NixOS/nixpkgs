@@ -35,7 +35,7 @@ mkDerivation {
   # src/data/tikzlexer.l:29:10: fatal error: tikzparser.parser.hpp: No such file or directory
   enableParallelBuilding = false;
 
-  meta = with lib; {
+  meta = {
     description = "Graphical tool for rapidly creating graphs and diagrams using PGF/TikZ";
     longDescription = ''
       TikZiT is a simple GUI editor for graphs and string diagrams.
@@ -44,11 +44,11 @@ mkDerivation {
       For preview support the texlive package 'preview' has to be installed.
     '';
     homepage = "https://tikzit.github.io/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
     maintainers = [
-      maintainers.iblech
-      maintainers.mgttlinger
+      lib.maintainers.iblech
+      lib.maintainers.mgttlinger
     ];
     mainProgram = "tikzit";
   };

@@ -39,7 +39,6 @@
   pydantic,
   pygments,
   pyjwt,
-  pythonOlder,
   pyyaml,
   setuptools,
   tldextract,
@@ -52,8 +51,6 @@ buildPythonPackage rec {
   pname = "msticpy";
   version = "2.17.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "microsoft";

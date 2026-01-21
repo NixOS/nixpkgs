@@ -40,7 +40,7 @@
   libGL,
 
   mediaSupport ? true,
-  ffmpeg,
+  ffmpeg_7,
 
   audioSupport ? mediaSupport,
 
@@ -99,10 +99,10 @@ let
     ++ lib.optionals pipewireSupport [ pipewire ]
     ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
     ++ lib.optionals libvaSupport [ libva ]
-    ++ lib.optionals mediaSupport [ ffmpeg ]
+    ++ lib.optionals mediaSupport [ ffmpeg_7 ]
   );
 
-  version = "15.0.2";
+  version = "15.0.4";
 
   sources = {
     x86_64-linux = fetchurl {
@@ -112,7 +112,7 @@ let
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux-x86_64-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux-x86_64-${version}.tar.xz"
       ];
-      hash = "sha256-GtO7u9KhZgIbdTJqMTQ2ZabA6PKrwW0ogxYJvmkVfV8=";
+      hash = "sha256-Te7E+x4Jqr1g65+FdVZmUMYwDz97ZnJqJvJx48RpSt0=";
     };
 
     i686-linux = fetchurl {
@@ -122,7 +122,7 @@ let
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux-i686-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux-i686-${version}.tar.xz"
       ];
-      hash = "sha256-SHJQvNqC4Ulyg81rcp6sTG0Wwv9fHqWYQPpPBsPgwss=";
+      hash = "sha256-Cb7X9QYk1t6u5sjTtDnLWEubliWxpupDfgMKD9PC9VI=";
     };
   };
 

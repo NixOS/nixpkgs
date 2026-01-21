@@ -8,15 +8,12 @@
   cython_0,
   numpy,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyrevolve";
   version = "2.2.6";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "devitocodes";
@@ -49,11 +46,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyrevolve" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/devitocodes/pyrevolve";
     changelog = "https://github.com/devitocodes/pyrevolve/releases/tag/${src.tag}";
     description = "Python library to manage checkpointing for adjoints";
-    license = licenses.epl10;
-    maintainers = with maintainers; [ atila ];
+    license = lib.licenses.epl10;
+    maintainers = with lib.maintainers; [ atila ];
   };
 }

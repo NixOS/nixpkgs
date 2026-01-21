@@ -4,22 +4,19 @@
   bleak-retry-connector,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aioacaia";
-  version = "0.1.17";
+  version = "0.1.18";
   pyproject = true;
-
-  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "zweckj";
     repo = "aioacaia";
     tag = "v${version}";
-    hash = "sha256-y9NSHiB66ICR+qJcLOdddnkm+f5hd9Zbqamr1UCzdlk=";
+    hash = "sha256-ltqY1n7Kvpf518q+cL8u+Cyg9BHySb0dopxKNtUdoA4=";
   };
 
   build-system = [ setuptools ];
@@ -38,7 +35,7 @@ buildPythonPackage rec {
     description = "Async implementation of pyacaia";
     homepage = "https://github.com/zweckj/aioacaia";
     changelog = "https://github.com/zweckj/aioacaia/releases/tag/${src.tag}";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

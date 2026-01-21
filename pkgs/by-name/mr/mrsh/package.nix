@@ -29,13 +29,13 @@ stdenv.mkDerivation {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Minimal POSIX shell";
     mainProgram = "mrsh";
     homepage = "https://mrsh.sh";
-    license = licenses.mit;
-    maintainers = with maintainers; [ matthiasbeyer ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
+    platforms = lib.platforms.unix;
   };
 
   passthru = {

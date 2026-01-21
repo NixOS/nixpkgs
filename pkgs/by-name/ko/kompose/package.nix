@@ -11,16 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "kompose";
-  version = "1.37.0";
+  version = "1.38.0";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kompose";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wS9YoYEsCALIJMxoVTS6EH6NiBfF+qkFIv7JALnVPgs=";
+    hash = "sha256-d2rUkLGU9s2+LTBI3N7WZx1ByDv05DOUq/2OCQViiOM=";
   };
 
-  vendorHash = "sha256-dBVrkTpeYtTVdA/BEcBGyBdSk3po7TQQwo0ux6qPK2Q=";
+  vendorHash = "sha256-53G3nkz+uTwpgiZZFfmrv7Wv6d8iVm6xVyRuxjKA5Po=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -46,13 +46,13 @@ buildGoModule (finalAttrs: {
     command = "kompose version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool to help users who are familiar with docker-compose move to Kubernetes";
     mainProgram = "kompose";
     homepage = "https://kompose.io";
     changelog = "https://github.com/kubernetes/kompose/releases/tag/${finalAttrs.src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       thpham
       vdemeester
     ];

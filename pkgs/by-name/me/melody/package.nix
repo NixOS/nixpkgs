@@ -16,10 +16,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-TNW36FLK1E6uoDICfGN5ZmTX8V9ndSqyif7tbBqvqDI=";
 
-  meta = with lib; {
+  meta = {
     description = "Language that compiles to regular expressions";
     homepage = "https://github.com/yoav-lavi/melody";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "melody";
   };

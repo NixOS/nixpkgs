@@ -34,11 +34,11 @@ buildPythonPackage rec {
 
   doCheck = false; # no tests
 
-  meta = with lib; {
+  meta = {
     description = "RGB LED library for ReSpeaker 4 Mic Array, ReSpeaker V2 & ReSpeaker USB 6+1 Mic Array";
     mainProgram = "pixel_ring_check";
     homepage = "https://github.com/respeaker/pixel_ring/tree/master";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

@@ -53,11 +53,11 @@ stdenv.mkDerivation rec {
     ln $out/lib/libclxclient.so $out/lib/libclxclient.so.3
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Zita X11 library";
     homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/index.html";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ magnetophon ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ magnetophon ];
+    platforms = lib.platforms.linux;
   };
 }

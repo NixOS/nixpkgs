@@ -9,7 +9,6 @@
   numpy,
   pandas,
   python-dateutil,
-  pythonOlder,
   reactivex,
   setuptools,
   urllib3,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "influxdb-client";
   version = "1.49.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "influxdata";
@@ -56,11 +53,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "influxdb_client" ];
 
-  meta = with lib; {
+  meta = {
     description = "InfluxDB client library";
     homepage = "https://github.com/influxdata/influxdb-client-python";
     changelog = "https://github.com/influxdata/influxdb-client-python/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mic92 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mic92 ];
   };
 }

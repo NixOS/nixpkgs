@@ -8,7 +8,6 @@
   poetry-core,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   tzlocal,
 }:
 
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "gardena-bluetooth";
   version = "1.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "elupus";
@@ -45,11 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gardena_bluetooth" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for interacting with Gardena Bluetooth";
     homepage = "https://github.com/elupus/gardena-bluetooth";
     changelog = "https://github.com/elupus/gardena-bluetooth/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

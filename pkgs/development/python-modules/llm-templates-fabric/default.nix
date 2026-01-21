@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "llm-templates-fabric";
-  version = "0.2";
+  version = "0.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "llm-templates-fabric";
     tag = version;
-    hash = "sha256-tfkSjeT9WstUsNCtVr3fMzqELFCtfYphqf3xFGvHaV0=";
+    hash = "sha256-zF7YTJavLM+AFxZ2TZWwWGNwLGgQzUXx4WoO6MnTRZE=";
   };
 
   build-system = [ setuptools ];

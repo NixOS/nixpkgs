@@ -127,7 +127,7 @@ stdenv.mkDerivation rec {
   # upstream fixes them.
   enableParallelBuilding = false;
 
-  meta = with lib; {
+  meta = {
     description = "Graphics and input library designed with embedded systems in mind";
     longDescription = ''
       DirectFB is a thin library that provides hardware graphics acceleration,
@@ -140,8 +140,8 @@ stdenv.mkDerivation rec {
       Linux.
     '';
     homepage = "https://github.com/deniskropp/DirectFB";
-    license = licenses.lgpl21;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    license = lib.licenses.lgpl21;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.bjornfor ];
   };
 }

@@ -9,15 +9,12 @@
   mdit-py-plugins,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "mdformat-gfm";
   version = "0.3.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "hukkin";
@@ -45,11 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mdformat_gfm" ];
 
-  meta = with lib; {
+  meta = {
     description = "Mdformat plugin for GitHub Flavored Markdown compatibility";
     homepage = "https://github.com/hukkin/mdformat-gfm";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       aldoborrero
       polarmutex
     ];

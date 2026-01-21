@@ -14,13 +14,13 @@
 }:
 buildDotnetModule (finalAttrs: {
   pname = "msbuild-structured-log-viewer";
-  version = "2.3.100";
+  version = "2.3.121";
 
   src = fetchFromGitHub {
     owner = "KirillOsenkov";
     repo = "MSBuildStructuredLog";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-AKYCH9syf97E/VS2ayTMXUhna/TWwlFwZvmyyCp3rMI=";
+    hash = "sha256-+E6qRgS38VDtX9+imIeXhvuI7XyruXI/t7sxu3YFuRg=";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;

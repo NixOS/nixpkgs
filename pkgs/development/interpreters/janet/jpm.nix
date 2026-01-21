@@ -48,6 +48,10 @@ stdenv.mkDerivation rec {
 
     janet bootstrap.janet configs/${platformFile}
 
+    # patch default config to use janet's path instead of jpm itself
+    substituteInPlace $out/lib/janet/jpm/default-config.janet \
+      --replace-fail $out ${janet}
+
     runHook postInstall
   '';
 
@@ -55,6 +59,7 @@ stdenv.mkDerivation rec {
 
   installCheckPhase = ''
     $out/bin/jpm help
+    $out/bin/jpm show-paths
   '';
 
   meta = janet.meta // {

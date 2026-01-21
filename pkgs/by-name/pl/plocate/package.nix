@@ -11,12 +11,12 @@
 }:
 stdenv.mkDerivation rec {
   pname = "plocate";
-  version = "1.1.23";
+  version = "1.1.24";
 
   src = fetchgit {
     url = "https://git.sesse.net/plocate";
     rev = version;
-    sha256 = "sha256-TWQ2mVzosB6sGNUXI2D9GGqgaRZcmiL9GSGrrusck5Q=";
+    sha256 = "sha256-VvHptw/PG2uWflTmGNCj1PXIguXv9Bikz8qj2hRMnaQ=";
   };
 
   postPatch = ''
@@ -42,14 +42,14 @@ stdenv.mkDerivation rec {
     "-Ddbpath=locatedb"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Much faster locate";
     homepage = "https://plocate.sesse.net/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       peterhoeg
       SuperSandro2000
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

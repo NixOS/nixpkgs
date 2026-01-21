@@ -55,10 +55,10 @@ stdenv.mkDerivation {
 
   inherit (topkg) buildPhase installPhase;
 
-  meta = with lib; {
+  meta = {
     homepage = webpage;
     description = "Thin bindings to the cross-platform SDL library";
-    license = licenses.isc;
+    license = lib.licenses.isc;
     inherit (ocaml.meta) platforms;
     broken = lib.versionOlder ocaml.version "4.03";
   };

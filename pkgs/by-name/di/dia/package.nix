@@ -98,12 +98,12 @@ stdenv.mkDerivation {
     gtk-mac-integration-gtk3
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Gnome Diagram drawing software";
     mainProgram = "dia";
     homepage = "https://wiki.gnome.org/Apps/Dia";
-    maintainers = with maintainers; [ raskin ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ raskin ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
   };
 }

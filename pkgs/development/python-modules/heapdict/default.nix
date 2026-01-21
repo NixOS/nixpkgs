@@ -23,10 +23,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "heapdict" ];
 
-  meta = with lib; {
+  meta = {
     description = "Heap with decrease-key and increase-key operations";
     homepage = "https://github.com/DanielStutzbach/heapdict";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ teh ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ teh ];
   };
 }

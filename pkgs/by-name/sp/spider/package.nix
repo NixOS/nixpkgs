@@ -66,7 +66,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 
@@ -78,7 +77,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "spider";
     maintainers = with lib.maintainers; [
       j-mendez
-      KSJ2000
     ];
     platforms = lib.platforms.unix;
   };

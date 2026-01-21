@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Userspace library providing an API to the in-kernel connection tracking state table";
     longDescription = ''
       libnetfilter_conntrack is a userspace library providing a programming interface (API) to the
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       by conntrack-tools among many other applications
     '';
     homepage = "https://netfilter.org/projects/libnetfilter_conntrack/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

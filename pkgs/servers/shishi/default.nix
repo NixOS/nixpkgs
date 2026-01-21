@@ -82,11 +82,11 @@ stdenv.mkDerivation rec {
     -e 's,\(-ltasn1\),-L${libtasn1.out}/lib \1,'
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnu.org/software/shishi/";
     description = "Implementation of the Kerberos 5 network security system";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ lovek323 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ lovek323 ];
+    platforms = lib.platforms.linux;
   };
 }

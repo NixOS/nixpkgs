@@ -1,22 +1,22 @@
 {
-  fetchFromGitHub,
   bashInteractive,
   jq,
   makeWrapper,
   p7zip,
   lib,
   stdenv,
+  fetchzip,
 }:
 
 stdenv.mkDerivation rec {
   pname = "r2mod_cli";
-  version = "1.3.3.1";
+  version = "1.3.3";
 
-  src = fetchFromGitHub {
-    owner = "Foldex";
-    repo = "r2mod_cli";
-    rev = "v${version}";
-    sha256 = "sha256-Y9ZffztxfGYiUSphqwhe3rTbnJ/vmGGi1pLml+1tLP8=";
+  src = fetchzip {
+    url = "https://thunderstore.io/package/download/Foldex/r2mod_cli/${version}/";
+    hash = "sha256-J7ybNZa44/H+AjQ7L949I3iClXoDwinl/ITMK/QsTR0=";
+    extension = "zip";
+    stripRoot = false;
   };
 
   buildInputs = [ bashInteractive ];
@@ -37,12 +37,12 @@ stdenv.mkDerivation rec {
     }";
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Risk of Rain 2 Mod Manager in Bash";
-    homepage = "https://github.com/foldex/r2mod_cli";
-    license = licenses.gpl3Only;
-    maintainers = [ maintainers.reedrw ];
+    homepage = "https://thunderstore.io/package/Foldex/r2mod_cli";
+    license = lib.licenses.gpl3Only;
+    maintainers = [ lib.maintainers.reedrw ];
     mainProgram = "r2mod";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

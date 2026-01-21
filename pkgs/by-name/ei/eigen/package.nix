@@ -52,7 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "C++ template library for linear algebra: vectors, matrices, and related algorithms";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [
-      sander
       raskin
     ];
     platforms = lib.platforms.unix;

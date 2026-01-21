@@ -17,10 +17,10 @@ buildPythonPackage rec {
 
   buildInputs = [ poppler ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple PDF text extraction";
     homepage = "https://github.com/jalan/pdftotext";
-    license = licenses.mit;
-    maintainers = with maintainers; [ erikarvstedt ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ erikarvstedt ];
   };
 }

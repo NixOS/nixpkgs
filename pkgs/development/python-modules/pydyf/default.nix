@@ -7,15 +7,12 @@
   pillow,
   pytestCheckHook,
   pytest-cov-stub,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pydyf";
   version = "0.11.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -38,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pydyf" ];
 
-  meta = with lib; {
+  meta = {
     description = "Low-level PDF generator written in Python and based on PDF specification 1.7";
     homepage = "https://doc.courtbouillon.org/pydyf/stable/";
     changelog = "https://github.com/CourtBouillon/pydyf/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ rprecenth ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ rprecenth ];
   };
 }

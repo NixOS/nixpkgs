@@ -7,20 +7,21 @@
   gitMinimal,
   sqlite,
   radicle-node,
+  writableTmpDirAsHomeHook,
   versionCheckHook,
   nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "radicle-ci-broker";
-  version = "0.22.0";
+  version = "0.25.0";
 
   src = fetchFromRadicle {
     seed = "seed.radicle.xyz";
     repo = "zwTxygwuz5LDGBq255RA2CbNGrz8";
     node = "z6MkgEMYod7Hxfy9qCvDv5hYHkZ4ciWmLFgfvm3Wn1b2w2FV";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ylgOnDQRjQrG9Dngo/N6nGOnNcKgFtN9hT96yryHn0I=";
+    hash = "sha256-28PS85ME0Yg6+FnYw8GRNeo56z5efAqSE7FNk7wiTuI=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git_head
@@ -28,7 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
   };
 
-  cargoHash = "sha256-Ykf8vk/5KcZcudbKkU/Ht4gPtmG45b60IorKL90RjAA=";
+  cargoHash = "sha256-v+ax8DmXZFxYGYL7WaX5W/UIByuYcvkAMQIqpb6Emyw=";
 
   postPatch = ''
     substituteInPlace build.rs \
@@ -41,6 +42,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   preCheck = ''
     ln -s "$PWD/target/${stdenv.hostPlatform.rust.rustcTarget}/$cargoBuildType" target/debug
+
+    rad auth --alias alice --stdin </dev/null
   '';
 
   nativeCheckInputs = [
@@ -48,12 +51,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gitMinimal
     sqlite
     radicle-node
+    writableTmpDirAsHomeHook
   ];
 
   checkFlags = [ "--skip=acceptance_criteria_for_upgrades" ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

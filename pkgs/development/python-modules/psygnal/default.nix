@@ -9,7 +9,6 @@
   pydantic,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   toolz,
   typing-extensions,
   wrapt,
@@ -19,9 +18,7 @@
 buildPythonPackage rec {
   pname = "psygnal";
   version = "0.14.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyapp-kit";
@@ -56,11 +53,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "psygnal" ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of Qt Signals";
     homepage = "https://github.com/pyapp-kit/psygnal";
     changelog = "https://github.com/pyapp-kit/psygnal/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ SomeoneSerge ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ SomeoneSerge ];
   };
 }

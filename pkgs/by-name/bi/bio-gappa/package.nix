@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lczech/gappa";
     description = "Toolkit for analyzing and visualizing phylogenetic (placement) data";
     longDescription = ''
@@ -62,9 +62,9 @@ stdenv.mkDerivation (finalAttrs: {
       tools such as EPA-ng, RAxML-EPA or pplacer, and usually stored in jplace
       files.
     '';
-    platforms = platforms.all;
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ bzizou ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ bzizou ];
     mainProgram = "gappa";
   };
 })

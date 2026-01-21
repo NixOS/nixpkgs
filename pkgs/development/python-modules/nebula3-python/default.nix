@@ -7,7 +7,6 @@
   httpx,
   pdm-backend,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   six,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "nebula3-python";
   version = "3.8.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "vesoft-inc";
@@ -55,11 +52,11 @@ buildPythonPackage rec {
     "tests/test_ssl_pool.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Client API of Nebula Graph in Python";
     homepage = "https://github.com/vesoft-inc/nebula-python";
     changelog = "https://github.com/vesoft-inc/nebula-python/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

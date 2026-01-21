@@ -8,7 +8,6 @@
   fetchFromGitHub,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   requests,
   saneyaml,
   setuptools-scm,
@@ -17,16 +16,14 @@
 
 buildPythonPackage rec {
   pname = "commoncode";
-  version = "32.3.0";
+  version = "32.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "nexB";
     repo = "commoncode";
     tag = "v${version}";
-    hash = "sha256-FL9t8r53AJLR5D2XSEOq7qVHgvvHIbtPW5iVpSQCVsQ=";
+    hash = "sha256-k9E/Yz6G3IHJPf3BlscZNSL4Qk9WyGU3vXA+U+GwWA0=";
   };
 
   dontConfigure = true;
@@ -66,11 +63,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "commoncode" ];
 
-  meta = with lib; {
+  meta = {
     description = "Set of common utilities, originally split from ScanCode";
     homepage = "https://github.com/nexB/commoncode";
-    changelog = "https://github.com/nexB/commoncode/blob/v${version}/CHANGELOG.rst";
-    license = licenses.asl20;
+    changelog = "https://github.com/nexB/commoncode/blob/${src.tag}/CHANGELOG.rst";
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

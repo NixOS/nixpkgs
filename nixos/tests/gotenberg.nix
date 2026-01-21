@@ -2,7 +2,6 @@
 
 {
   name = "gotenberg";
-  meta.maintainers = with lib.maintainers; [ pyrox0 ];
 
   nodes.machine = {
     services.gotenberg = {

@@ -20,6 +20,11 @@ stdenv.mkDerivation {
     hash = "sha256-0yLhwDVFNbfiW23hNxrvItCCkyaOvEbFSg1ZQuJvhIs=";
   };
 
+  patches = [
+    # https://github.com/falconpl/falcon/pull/11
+    ./bump-minimum-cmake-required-version.patch
+  ];
+
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -30,11 +35,11 @@ stdenv.mkDerivation {
     sqlite
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Programming language with macros and syntax at once";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ pSub ];
-    platforms = with platforms; unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ pSub ];
+    platforms = with lib.platforms; unix;
     broken = stdenv.cc.isClang;
   };
 }

@@ -1,7 +1,9 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
+  nix-update-script,
+  autoreconfHook,
   pkg-config,
   check,
   cppunit,
@@ -9,23 +11,29 @@
   python3Packages,
 }:
 
-# NOTE: for subunit python library see pkgs/top-level/python-packages.nix
+# NOTE: for the subunit python library see pkgs/top-level/python-packages.nix
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "subunit";
-  version = "1.4.2";
+  version = "1.4.5";
 
-  src = fetchurl {
-    url = "https://launchpad.net/subunit/trunk/${version}/+download/${pname}-${version}.tar.gz";
-    hash = "sha256-hlOOv6kIC97w7ICVsuXeWrsUbVu3tCSzEVKUHXYG2dI=";
+  src = fetchFromGitHub {
+    owner = "testing-cabal";
+    repo = "subunit";
+    tag = finalAttrs.version;
+    hash = "sha256-yM5mlYV7KyPRzPhnbDYBFLn4uiwxFFEotX2r6KcKAwA=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    perl
+    python3Packages.wrapPython
+    python3Packages.testscenarios
+  ];
   buildInputs = [
     check
     cppunit
-    perl
-    python3Packages.wrapPython
   ];
 
   propagatedBuildInputs = with python3Packages; [
@@ -33,13 +41,18 @@ stdenv.mkDerivation rec {
     testscenarios
   ];
 
-  postFixup = "wrapPythonPrograms";
+  strictDeps = true;
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script;
+
+  meta = {
     description = "Streaming protocol for test results";
-    mainProgram = "subunit-diff";
-    homepage = "https://launchpad.net/subunit";
-    license = licenses.asl20;
-    platforms = platforms.all;
+    homepage = "https://github.com/testing-cabal/subunit";
+    license = with lib.licenses; [
+      asl20
+      bsd3
+    ];
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ maevii ];
   };
-}
+})

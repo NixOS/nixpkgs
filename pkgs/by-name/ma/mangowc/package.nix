@@ -23,13 +23,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "mangowc";
-  version = "0.10.5";
+  version = "0.10.8";
 
   src = fetchFromGitHub {
     owner = "DreamMaoMao";
     repo = "mangowc";
     tag = finalAttrs.version;
-    hash = "sha256-ZESyUtCiIQh6R0VYAo8YaP95Damw3MJVvKy5qU3pgTA=";
+    hash = "sha256-Vszn4Zp0pojvvKkyP7M7V5iqNRB0kUvwd9iez+KzOyM=";
   };
 
   nativeBuildInputs = [
@@ -57,10 +57,13 @@ stdenv.mkDerivation (finalAttrs: {
     xwayland
   ];
 
+  mesonFlags = [
+    (lib.mesonEnable "xwayland" enableXWayland)
+  ];
+
   passthru = {
     providedSessions = [
-      "dwl"
-      "mangowc"
+      "mango"
     ];
   };
 

@@ -52,11 +52,11 @@ stdenv.mkDerivation rec {
     stripDebugList=modules
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://0pointer.de/lennart/projects/mod_dnssd";
     description = "Provide Zeroconf support via DNS-SD using Avahi";
-    license = licenses.asl20;
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

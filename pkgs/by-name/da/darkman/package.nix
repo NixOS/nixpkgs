@@ -8,22 +8,21 @@
 
 buildGoModule rec {
   pname = "darkman";
-  version = "2.0.1";
+  version = "2.2.0";
 
   src = fetchFromGitLab {
     owner = "WhyNotHugo";
     repo = "darkman";
     rev = "v${version}";
-    hash = "sha256-FaEpVy/0PqY5Bmw00hMyFZb9wcwYwEuCKMatYN8Xk3o=";
+    hash = "sha256-Kpuuxxwn/huA5WwmnVGG0HowNBGyexDRpdUc3bNmB18=";
   };
 
   patches = [
-    ./go-mod.patch
     ./makefile.patch
   ];
 
   postPatch = ''
-    substituteInPlace darkman.service \
+    substituteInPlace contrib/darkman.service \
       --replace-fail /usr/bin/darkman $out/bin/darkman
     substituteInPlace contrib/dbus/nl.whynothugo.darkman.service \
       --replace-fail /usr/bin/darkman $out/bin/darkman
@@ -31,7 +30,7 @@ buildGoModule rec {
       --replace-fail /usr/bin/darkman $out/bin/darkman
   '';
 
-  vendorHash = "sha256-3lILSVm7mtquCdR7+cDMuDpHihG+gDJTcQa1cM2o7ZU=";
+  vendorHash = "sha256-QO+fz8m2rILKTokimf+v4x0lon5lZy7zC+5qjTMdcs0=";
   nativeBuildInputs = [ scdoc ];
 
   buildPhase = ''
@@ -49,12 +48,12 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Framework for dark-mode and light-mode transitions on Linux desktop";
     homepage = "https://gitlab.com/WhyNotHugo/darkman";
-    license = licenses.isc;
-    maintainers = [ maintainers.ajgrf ];
-    platforms = platforms.linux;
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.ajgrf ];
+    platforms = lib.platforms.linux;
     mainProgram = "darkman";
   };
 }

@@ -4,15 +4,12 @@
   fetchFromGitHub,
   pytestCheckHook,
   pytest-asyncio,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "sanic-routing";
   version = "23.12.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sanic-org";
@@ -28,11 +25,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sanic_routing" ];
 
-  meta = with lib; {
+  meta = {
     description = "Core routing component for the Sanic web framework";
     homepage = "https://github.com/sanic-org/sanic-routing";
     changelog = "https://github.com/sanic-org/sanic-routing/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

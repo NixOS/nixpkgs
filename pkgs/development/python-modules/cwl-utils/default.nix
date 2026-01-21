@@ -9,7 +9,6 @@
   pytest-mock,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   rdflib,
   requests,
   ruamel-yaml,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "cwl-utils";
   version = "0.40";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "common-workflow-language";
@@ -74,11 +71,11 @@ buildPythonPackage rec {
     "tests/test_graph_split.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Utilities for CWL";
     homepage = "https://github.com/common-workflow-language/cwl-utils";
     changelog = "https://github.com/common-workflow-language/cwl-utils/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

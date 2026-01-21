@@ -40,11 +40,11 @@ stdenv.mkDerivation rec {
         'cmake_minimum_required (VERSION 3.10 FATAL_ERROR)'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Audio resampling library";
     homepage = "https://soxr.sourceforge.net";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.unix ++ platforms.windows;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
     maintainers = [ ];
   };
 }

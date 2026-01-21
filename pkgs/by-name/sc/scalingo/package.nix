@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "scalingo";
-  version = "1.40.0";
+  version = "1.42.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "cli";
     rev = version;
-    hash = "sha256-AY2Iy7MwZ0OmNdv9EPgJ79Ug8pDuxlVNtLRhlX+XCC4=";
+    hash = "sha256-Ifrt3pvKw40f7lDwM2C2EVm/g6i4Dd+3fxVphAxU3as=";
   };
 
   vendorHash = null;
@@ -30,13 +30,13 @@ buildGoModule rec {
      --zsh cmd/autocomplete/scripts/scalingo_complete.zsh
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command line client for the Scalingo PaaS";
     mainProgram = "scalingo";
     homepage = "https://doc.scalingo.com/platform/cli/start";
     changelog = "https://github.com/Scalingo/cli/blob/master/CHANGELOG.md";
-    license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ cimm ];
+    license = lib.licenses.bsdOriginal;
+    maintainers = with lib.maintainers; [ cimm ];
     platforms = with lib.platforms; unix;
   };
 }

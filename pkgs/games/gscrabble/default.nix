@@ -50,15 +50,15 @@ buildPythonApplication {
       )
   '';
 
-  meta = with lib; {
+  meta = {
     # Fails to build, probably incompatible with latest Python
     # error: Multiple top-level packages discovered in a flat-layout
     # https://github.com/RaaH/gscrabble/issues/13
     broken = true;
     description = "Golden Scrabble crossword puzzle game";
     homepage = "https://github.com/RaaH/gscrabble/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

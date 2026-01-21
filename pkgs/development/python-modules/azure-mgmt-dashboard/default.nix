@@ -5,7 +5,6 @@
   buildPythonPackage,
   fetchPypi,
   isodate,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "azure-mgmt-dashboard";
   version = "1.1.0";
   format = "wheel";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "azure_mgmt_dashboard";
@@ -38,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "azure.mgmt.dashboard" ];
 
-  meta = with lib; {
+  meta = {
     description = "Microsoft Azure Dashboard Management Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/dashboard/azure-mgmt-dashboard/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ techknowlogick ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ techknowlogick ];
   };
 }

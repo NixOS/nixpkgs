@@ -34,11 +34,11 @@ stdenv.mkDerivation {
     "INSTALL_MOD_PATH=${placeholder "out"}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "DIGImend graphics tablet drivers for the Linux kernel";
     homepage = "https://digimend.github.io/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ PuercoPop ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ PuercoPop ];
+    platforms = lib.platforms.linux;
   };
 }

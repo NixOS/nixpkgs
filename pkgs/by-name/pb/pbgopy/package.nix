@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-S2X74My6wyDZOsEYTDilCFaYgV2vQzU0jOAY9cEkJ6A=";
 
-  meta = with lib; {
+  meta = {
     description = "Copy and paste between devices";
     mainProgram = "pbgopy";
     homepage = "https://github.com/nakabonne/pbgopy";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

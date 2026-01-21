@@ -10,7 +10,7 @@ anki-utils.buildAnkiAddon (finalAttrs: {
   src = fetchFromGitHub {
     owner = "mnogu";
     repo = "adjust-sound-volume";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-6reIUz+tHKd4KQpuofLa/tIL5lCloj3yODZ8Cz29jFU=";
   };
   passthru.updateScript = nix-update-script { };

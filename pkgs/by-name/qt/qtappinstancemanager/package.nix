@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qtappinstancemanager";
-  version = "1.3.0";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "oclero";
     repo = "qtappinstancemanager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/zvNR/RHNV19ZI8d+58sotWxY16q2a7wWIBuKO52H5M=";
+    hash = "sha256-jWOuI5pjKdDtvQMVAOrj/hWRAjsal/01H9Va2reEbos=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/oclero/qtappinstancemanager";
     changelog = "https://github.com/oclero/qtappinstancemanager/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ normalcea ];
+    maintainers = [ ];
     mainProgram = "qtappinstancemanager";
     platforms = lib.platforms.all;
   };

@@ -32,10 +32,10 @@ stdenv.mkDerivation rec {
   '';
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Java based, open source, static site/blog generator for developers & designers";
     homepage = "https://jbake.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ moaxcp ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ moaxcp ];
   };
 }

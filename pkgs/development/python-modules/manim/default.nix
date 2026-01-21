@@ -5,8 +5,7 @@
   texliveInfraOnly,
 
   # build-system
-  poetry-core,
-  setuptools,
+  hatchling,
 
   # buildInputs
   cairo,
@@ -37,6 +36,8 @@
   tqdm,
   typing-extensions,
   watchdog,
+  pythonAtLeast,
+  audioop-lts,
 
   # optional-dependencies
   jupyterlab,
@@ -187,18 +188,17 @@ in
 buildPythonPackage rec {
   pname = "manim";
   pyproject = true;
-  version = "0.19.0";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "ManimCommunity";
     repo = "manim";
     tag = "v${version}";
-    hash = "sha256-eQgp/GwKsfQA1ZgqfB3HF2ThEgH3Fbn9uAtcko9pkjs=";
+    hash = "sha256-VkMmIQNLUg6Epttze23vaAA8QOdlnAPQZ7UKpkFRzIk=";
   };
 
   build-system = [
-    poetry-core
-    setuptools
+    hatchling
   ];
 
   patches = [ ./pytest-report-header.patch ];
@@ -231,6 +231,9 @@ buildPythonPackage rec {
     tqdm
     typing-extensions
     watchdog
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [
+    audioop-lts
   ];
 
   optional-dependencies = {
@@ -260,7 +263,6 @@ buildPythonPackage rec {
     pytestCheckHook
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
 
   # about 55 of ~600 tests failing mostly due to demand for display
   disabledTests = import ./failing_tests.nix;
@@ -278,7 +280,7 @@ buildPythonPackage rec {
       manim.
     '';
     mainProgram = "manim";
-    changelog = "https://docs.manim.community/en/latest/changelog/${version}-changelog.html";
+    changelog = "https://github.com/ManimCommunity/manim/releases/tag/${src.tag}";
     homepage = "https://github.com/ManimCommunity/manim";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ osbm ];

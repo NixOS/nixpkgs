@@ -1,0 +1,14 @@
+diff --git a/python/utils.py b/python/utils.py
+index 1234567890..abcdef1234 100644
+--- a/python/utils.py
++++ b/python/utils.py
+@@ -938,6 +938,7 @@ def spatialite_connect(*args, **kwargs):
+     con = sqlite3.dbapi2.connect(*args, **kwargs)
+     con.enable_load_extension(True)
+     cur = con.cursor()
+     libs = [
++        ("@spatialiteLib@", "sqlite3_modspatialite_init"),
+         # SpatiaLite >= 4.2 and Sqlite >= 3.7.17, should work on all platforms
+         ("mod_spatialite", "sqlite3_modspatialite_init"),
+         # SpatiaLite >= 4.2 and Sqlite < 3.7.17 (Travis)
+         ("mod_spatialite.so", "sqlite3_modspatialite_init"),

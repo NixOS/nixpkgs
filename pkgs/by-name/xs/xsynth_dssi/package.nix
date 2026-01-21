@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     cp src/.libs/* $out/lib
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Classic-analog (VCOs-VCF-VCA) style software synthesizer";
     mainProgram = "Xsynth_gtk";
     longDescription = ''
@@ -56,8 +56,8 @@ stdenv.mkDerivation rec {
       in-process by audio applications.
     '';
     homepage = "https://dssi.sourceforge.net/download.html#Xsynth-DSSI";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

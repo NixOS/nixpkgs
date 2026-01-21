@@ -9,12 +9,12 @@ python3Packages.buildPythonApplication rec {
   pname = "sabnzbd_exporter";
   version = "0.1.80";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "msroest";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-9oL9Zbzzbr0hZjOdkaH86Tho6gaR+/6uAMreLwYzB8o=";
   };
 
@@ -39,12 +39,12 @@ python3Packages.buildPythonApplication rec {
     inherit (nixosTests.prometheus-exporters) sabnzbd;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Prometheus exporter for sabnzbd";
     homepage = "https://github.com/msroest/sabnzbd_exporter";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fugi ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fugi ];
+    platforms = lib.platforms.all;
     mainProgram = "sabnzbd_exporter.py";
   };
 }

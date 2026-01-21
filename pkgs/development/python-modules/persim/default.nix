@@ -10,16 +10,12 @@
   scikit-learn,
   scipy,
   pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "persim";
   version = "0.3.8";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -47,7 +43,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "persim" ];
 
-  disabledTests = lib.optionals (pythonAtLeast "3.10") [
+  disabledTests = [
     # AttributeError: module 'collections' has no attribute 'Iterable'
     "test_empyt_diagram_list"
     "test_empty_diagram_list"
@@ -63,11 +59,11 @@ buildPythonPackage rec {
     "test_exact_critical_pairs"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Distances and representations of persistence diagrams";
     homepage = "https://persim.scikit-tda.org";
     changelog = "https://github.com/scikit-tda/persim/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -412,12 +412,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open source deep learning framework for on-device inference";
     homepage = "https://www.tensorflow.org/lite";
-    platforms = platforms.all;
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       mschwaig
       cpcloud
       crazychaoz

@@ -4,15 +4,12 @@
   fetchPypi,
   llama-index-core,
   hatchling,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-readers-database";
   version = "0.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "llama_index_readers_database";
@@ -29,11 +26,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "llama_index.readers.database" ];
 
-  meta = with lib; {
+  meta = {
     description = "LlamaIndex Readers Integration for Databases";
     homepage = "https://github.com/run-llama/llama_index/tree/main/llama-index-integrations/readers/llama-index-readers-database";
     changelog = "https://github.com/run-llama/llama_index/blob/main/llama-index-integrations/readers/llama-index-readers-database/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

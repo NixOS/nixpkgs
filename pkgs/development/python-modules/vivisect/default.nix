@@ -9,7 +9,6 @@
   pycparser,
   pyqt5,
   pyqtwebengine,
-  pythonOlder,
   withGui ? false,
   wrapQtAppsHook,
   setuptools,
@@ -17,14 +16,12 @@
 
 buildPythonPackage rec {
   pname = "vivisect";
-  version = "1.2.1";
+  version = "1.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zBWrVBub48rYBg7k9CDmgCWPpPz3R38/mtUCM1P3Mpk=";
+    hash = "sha256-sI/xlbodbud5GJ3s9atmDS1KOD7VYs7B3OdYCx1NgE4=";
   };
 
   pythonRelaxDeps = [
@@ -63,11 +60,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "vivisect" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python disassembler, debugger, emulator, and static analysis framework";
     homepage = "https://github.com/vivisect/vivisect";
     changelog = "https://github.com/vivisect/vivisect/blob/v${version}/CHANGELOG.rst";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

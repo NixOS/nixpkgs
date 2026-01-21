@@ -333,7 +333,7 @@ in
               ];
               RestrictNamespaces = true;
               RestrictRealtime = true;
-              SocketBindAllow = "udp:${builtins.toString cfg.api_iroh.port}";
+              SocketBindAllow = "udp:${toString cfg.api_iroh.port}";
               SystemCallArchitectures = "native";
               SystemCallFilter = [
                 "@system-service"
@@ -359,14 +359,14 @@ in
               enableACME = mkOverride 99 true;
               forceSSL = mkOverride 99 true;
               locations.${cfg.nginx.path_ws} = {
-                proxyPass = "http://127.0.0.1:${builtins.toString cfg.api_ws.port}/";
+                proxyPass = "http://127.0.0.1:${toString cfg.api_ws.port}/";
                 proxyWebsockets = true;
                 extraConfig = ''
                   proxy_pass_header Authorization;
                 '';
               };
               locations.${cfg.nginx.path_ui} = {
-                proxyPass = "http://127.0.0.1:${builtins.toString cfg.ui.port}/";
+                proxyPass = "http://127.0.0.1:${toString cfg.ui.port}/";
                 extraConfig = ''
                   proxy_pass_header Authorization;
                 '';

@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitLab {
     owner = "0bs1d1an";
     repo = "sr2t";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-BPsYnKBTxt5WUd2+WumMdVi8p6iryOWG2MjI97qbaCw=";
   };
 
@@ -30,11 +30,11 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "sr2t" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to convert scanning reports to a tabular format";
     homepage = "https://gitlab.com/0bs1d1an/sr2t";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "sr2t";
   };
 }

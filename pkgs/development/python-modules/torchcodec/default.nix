@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "torchcodec";
-  version = "0.8.1";
+  version = "0.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "meta-pytorch";
     repo = "torchcodec";
     tag = "v${version}";
-    hash = "sha256-trYS4sRPSNmQLHZZS174zxbu74LT+39N23zOJdWwN6Q=";
+    hash = "sha256-QG7LX9G1HV2l75jsgsbM4ts6bg0wvsNhjml19b7yYEQ=";
   };
 
   postPatch = ''
@@ -44,17 +44,10 @@ buildPythonPackage rec {
         '"ffprobe"' \
         '"${lib.getExe' ffmpeg "ffprobe"}"'
 
-    substituteInPlace \
-      test/test_ops.py \
-      test/test_encoders.py \
+    substituteInPlace test/test_encoders.py \
       --replace-fail \
         '"ffmpeg"' \
         '"${lib.getExe ffmpeg}"'
-
-    substituteInPlace test/test_transform_ops.py \
-      --replace-fail \
-        'ffmpeg_cli = "ffmpeg"' \
-        'ffmpeg_cli = "${lib.getExe ffmpeg}"'
   '';
 
   nativeBuildInputs = [
@@ -92,7 +85,7 @@ buildPythonPackage rec {
 
   env = {
     # Upstream (Meta) is cautious with linking against GPL ffmpeg
-    # We explicitly want to link against our packages ffmpeg
+    # We explicitly want to link against our packaged ffmpeg
     I_CONFIRM_THIS_IS_NOT_A_LICENSE_VIOLATION = true;
 
     ENABLE_CUDA = cudaSupport;
@@ -151,8 +144,10 @@ buildPythonPackage rec {
       "test_against_to_file"
       "test_against_to_file"
       "test_contiguit"
+      "test_crf_valid_value"
       "test_encode_to_tensor_long_outpu"
       "test_round_trip"
+      "test_video_encoder_against_ffmpeg_cli"
       "test_video_encoder_round_trip"
 
       # RuntimeError: Requested next frame while there are no more frames left to decode

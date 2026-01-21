@@ -4,7 +4,6 @@
   fetchFromGitHub,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   packaging,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "requirements-parser";
   version = "0.13.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "madpah";
@@ -32,11 +29,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "requirements" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pip requirements file parser";
     homepage = "https://github.com/davidfischer/requirements-parser";
     changelog = "https://github.com/madpah/requirements-parser/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
   };
 }

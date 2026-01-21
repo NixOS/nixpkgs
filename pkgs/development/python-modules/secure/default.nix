@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   maya,
-  pythonOlder,
   requests,
   pytestCheckHook,
   setuptools,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "secure";
   version = "1.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "typeerror";
@@ -34,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "secure" ];
 
-  meta = with lib; {
+  meta = {
     description = "Adds optional security headers and cookie attributes for Python web frameworks";
     homepage = "https://github.com/TypeError/secure.py";
     changelog = "https://github.com/TypeError/secure/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

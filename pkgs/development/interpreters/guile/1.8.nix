@@ -65,6 +65,10 @@ stdenv.mkDerivation rec {
     ./CVE-2016-8605.patch
   ];
 
+  env = {
+    NIX_CFLAGS_COMPILE = "-std=gnu17";
+  };
+
   preBuild = ''
     sed -e '/lt_dlinit/a  lt_dladdsearchdir("'$out/lib'");' -i libguile/dynl.c
   '';
@@ -95,7 +99,7 @@ stdenv.mkDerivation rec {
     siteDir = "share/guile/site";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnu.org/software/guile/";
     description = "Embeddable Scheme implementation";
     longDescription = ''
@@ -106,8 +110,8 @@ stdenv.mkDerivation rec {
       system calls, networking support, multiple threads, dynamic linking, a
       foreign function call interface, and powerful string processing.
     '';
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ ludo ];
-    platforms = platforms.all;
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ ludo ];
+    platforms = lib.platforms.all;
   };
 }

@@ -14,13 +14,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "kimageannotator";
-  version = "0.7.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "ksnip";
     repo = "kImageAnnotator";
     rev = "v${version}";
-    hash = "sha256-LFou8gTF/XDBLNQbA4uurYJHQl7yOTKe2OGklUsmPrg=";
+    hash = "sha256-SKNNsBXmaS0ZnbMP7cKSfr+MM+ICdvYQ0k2h5s9SDcE=";
   };
 
   nativeBuildInputs = [
@@ -41,11 +41,11 @@ stdenv.mkDerivation rec {
   # Library only
   dontWrapQtApps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Tool for annotating images";
     homepage = "https://github.com/ksnip/kImageAnnotator";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ fliegendewurst ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ fliegendewurst ];
+    platforms = lib.platforms.linux;
   };
 }

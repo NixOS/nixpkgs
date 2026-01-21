@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "oslo-concurrency";
-  version = "7.2.0";
+  version = "7.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "oslo.concurrency";
     tag = version;
-    hash = "sha256-72KatSWTCx4hyUel2Fu5yiqrdYveRGruvJDWWo1hkIk=";
+    hash = "sha256-vZWEeyYkdUl9EL4bw6AIbZgVpKXgakvRyFkQAT5GqJ4=";
   };
 
   postPatch = ''
@@ -38,6 +38,9 @@ buildPythonPackage rec {
       --replace-fail "/bin/bash" "${bash}/bin/bash" \
       --replace-fail "/bin/true" "${coreutils}/bin/true" \
       --replace-fail "/bin/env" "${coreutils}/bin/env"
+
+    substituteInPlace pyproject.toml \
+      --replace-fail '"oslo_concurrency"' '"oslo_concurrency", "oslo_concurrency.fixture", "oslo_concurrency.tests"'
   '';
 
   env.PBR_VERSION = version;
@@ -80,11 +83,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "oslo_concurrency" ];
 
-  meta = with lib; {
+  meta = {
     description = "Oslo Concurrency library";
     mainProgram = "lockutils-wrapper";
     homepage = "https://github.com/openstack/oslo.concurrency";
-    license = licenses.asl20;
-    teams = [ teams.openstack ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

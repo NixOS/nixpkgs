@@ -4,6 +4,7 @@
   darwin,
   fetchFromGitHub,
   ocamlPackages,
+  dune,
   why3,
   python3,
 }:
@@ -22,7 +23,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs =
     with ocamlPackages;
     [
-      dune_3
+      dune
       findlib
       menhir
       ocaml

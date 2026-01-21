@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "build2 utility library";
     longDescription = ''
       This library is a collection of utilities that are used throughout the
@@ -62,8 +62,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://build2.org/";
     changelog = "https://git.build2.org/cgit/libbutl/log";
-    license = licenses.mit;
-    maintainers = with maintainers; [ r-burns ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ r-burns ];
+    platforms = lib.platforms.all;
   };
 }

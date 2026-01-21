@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     domain = "salsa.debian.org";
     owner = "installer-team";
     repo = "debootstrap";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-4vINaMRo6IrZ6e2/DAJ06ODy2BWm4COR1JDSY52upUc=";
   };
 

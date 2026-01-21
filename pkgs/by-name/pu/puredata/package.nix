@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   autoreconfHook,
   gettext,
   makeWrapper,
@@ -25,6 +26,12 @@ stdenv.mkDerivation rec {
   patches = [
     # expose error function used by dependents
     ./expose-error.patch
+
+    # Fix build with GCC 15
+    (fetchpatch {
+      url = "https://github.com/pure-data/pure-data/commit/95e4105bc1044cbbcbbbcc369480a77c298d7475.patch";
+      hash = "sha256-zFB9m8Nw80X9+a64Uft4tNRA4BHsVr8zxLqAof0jJEI=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -66,12 +73,12 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/pd-gui --prefix PATH : ${lib.makeBinPath [ tk ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = ''Real-time graphical programming environment for audio, video, and graphical processing'';
     homepage = "http://puredata.info";
-    license = licenses.bsd3;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ carlthome ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ carlthome ];
     mainProgram = "pd";
     changelog = "https://msp.puredata.info/Pd_documentation/x5.htm#s1";
   };

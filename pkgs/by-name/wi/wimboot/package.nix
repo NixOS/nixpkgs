@@ -37,11 +37,14 @@ stdenv.mkDerivation rec {
     cp wimboot.x86_64.efi $out/share/wimboot
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://ipxe.org/wimboot";
     description = "Windows Imaging Format bootloader";
-    license = licenses.gpl2Plus;
-    teams = [ teams.helsinki-systems ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
+      das_j
+      helsinki-Jo
+    ];
     platforms = [ "x86_64-linux" ];
   };
 }

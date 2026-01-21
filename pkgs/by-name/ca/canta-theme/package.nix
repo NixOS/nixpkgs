@@ -56,11 +56,11 @@ stdenv.mkDerivation rec {
     gtk-update-icon-cache $out/share/icons/Canta
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Flat Design theme for GTK based desktop environments";
     homepage = "https://github.com/vinceliuice/Canta-theme";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux; # numix-icon-theme-circle unavailable in darwin
-    maintainers = [ maintainers.romildo ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux; # numix-icon-theme-circle unavailable in darwin
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

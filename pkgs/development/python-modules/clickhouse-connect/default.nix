@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   # build_requires
   cython,
@@ -27,8 +26,6 @@ buildPythonPackage rec {
   version = "0.8.18";
 
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     repo = "clickhouse-connect";
@@ -77,10 +74,10 @@ buildPythonPackage rec {
     orjson = [ orjson ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "ClickHouse Database Core Driver for Python, Pandas, and Superset";
     homepage = "https://github.com/ClickHouse/clickhouse-connect";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ cpcloud ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ cpcloud ];
   };
 }

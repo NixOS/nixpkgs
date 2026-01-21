@@ -14,11 +14,11 @@
 }:
 let
   pname = "findutils";
-  version = "4.9.0";
+  version = "4.10.0";
 
   src = fetchurl {
     url = "mirror://gnu/findutils/findutils-${version}.tar.xz";
-    hash = "sha256-or+4wJ1DZ3DtxZ9Q+kg+eFsWGjt7nVR1c8sIBl/UYv4=";
+    hash = "sha256-E4fgtn/yR9Kr3pmPkN+/cMFJE5Glnd/suK5ph4nwpPU=";
   };
 in
 bash.runCommand "${pname}-${version}"
@@ -42,12 +42,12 @@ bash.runCommand "${pname}-${version}"
         mkdir $out
       '';
 
-    meta = with lib; {
+    meta = {
       description = "GNU Find Utilities, the basic directory searching utilities of the GNU operating system";
       homepage = "https://www.gnu.org/software/findutils";
-      license = licenses.gpl3Plus;
-      teams = [ teams.minimal-bootstrap ];
-      platforms = platforms.unix;
+      license = lib.licenses.gpl3Plus;
+      teams = [ lib.teams.minimal-bootstrap ];
+      platforms = lib.platforms.unix;
     };
   }
   ''
@@ -69,7 +69,8 @@ bash.runCommand "${pname}-${version}"
     bash ./configure \
       --prefix=$out \
       --build=${buildPlatform.config} \
-      --host=${hostPlatform.config}
+      --host=${hostPlatform.config} \
+      --disable-dependency-tracking
 
     # Build
     make -j $NIX_BUILD_CORES

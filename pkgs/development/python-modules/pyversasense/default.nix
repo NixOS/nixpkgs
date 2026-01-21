@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "0.0.6";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "imstevenxyz";
     repo = "pyversasense";
@@ -45,10 +43,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyversasense" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to communicate with the VersaSense API";
     homepage = "https://github.com/imstevenxyz/pyversasense";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -16,16 +16,16 @@
 
 buildNpmPackage rec {
   pname = "teams-for-linux";
-  version = "2.6.13";
+  version = "2.6.19";
 
   src = fetchFromGitHub {
     owner = "IsmaelMartinez";
     repo = "teams-for-linux";
     tag = "v${version}";
-    hash = "sha256-0dnhDQ6lx78XGpYKLikizvltmC1/MdUYAHw5HvWFhQU=";
+    hash = "sha256-LWoMMfvIZ0+t1kzhv9uOLj7kTTFp3gzHOT1j+wYN1mM=";
   };
 
-  npmDepsHash = "sha256-pb17MmY+yuMf0pnvqfH3Pu74rPi+Nvkc/K+UEzaDbsQ=";
+  npmDepsHash = "sha256-Bc/l8cKxN/wc4SVDJw0E32W2pErBuHIOopYfqSaLuyo=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -106,7 +106,7 @@ buildNpmPackage rec {
   desktopItems = [
     (makeDesktopItem {
       name = "teams-for-linux";
-      exec = "teams-for-linux";
+      exec = "teams-for-linux %U";
       icon = "teams-for-linux";
       desktopName = "Microsoft Teams for Linux";
       comment = meta.description;
@@ -115,12 +115,11 @@ buildNpmPackage rec {
         "InstantMessaging"
         "Chat"
       ];
+      mimeTypes = [ "x-scheme-handler/msteams" ];
     })
   ];
 
   passthru.updateScript = nix-update-script { };
-
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Unofficial Microsoft Teams client for Linux";

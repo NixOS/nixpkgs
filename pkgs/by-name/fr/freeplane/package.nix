@@ -5,23 +5,23 @@
   makeBinaryWrapper,
   makeDesktopItem,
   jdk17,
-  gradle_8,
+  gradle_9,
   which,
   copyDesktopItems,
 }:
 
 let
   pname = "freeplane";
-  version = "1.12.12";
+  version = "1.12.14";
 
   jdk = jdk17;
-  gradle = gradle_8;
+  gradle = gradle_9;
 
   src = fetchFromGitHub {
     owner = "freeplane";
     repo = "freeplane";
     rev = "release-${version}";
-    hash = "sha256-8VFHJ3rEHzCuIYhz6o2LYzlybRZo6n7XGIM0D7BZUkU=";
+    hash = "sha256-hoQFtxJ5FghvSKSOzcf1Yt8H948Ij/r+MKifvnkUjvA=";
   };
 
 in

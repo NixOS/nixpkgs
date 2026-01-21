@@ -29,17 +29,15 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "basedmypy";
   version = "2.10.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "KotlinIsland";
     repo = "basedmypy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-IzRKOReSgio5S5PG8iD9VQF9R1GEqBAIDeeCtq+ZVXg=";
   };
 
@@ -104,7 +102,7 @@ buildPythonPackage rec {
     setuptools
     tomli
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   disabledTests = lib.optionals (pythonAtLeast "3.12") [
     # cannot find distutils, and distutils cannot find types
@@ -137,9 +135,9 @@ buildPythonPackage rec {
   meta = {
     description = "Based Python static type checker with baseline, sane default settings and based typing features";
     homepage = "https://kotlinisland.github.io/basedmypy/";
-    changelog = "https://github.com/KotlinIsland/basedmypy/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/KotlinIsland/basedmypy/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     mainProgram = "mypy";
-    maintainers = with lib.maintainers; [ perchun ];
+    maintainers = with lib.maintainers; [ PerchunPak ];
   };
-}
+})

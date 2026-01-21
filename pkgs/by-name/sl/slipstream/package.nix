@@ -46,11 +46,11 @@ maven.buildMavenPackage rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Mod manager for FTL: Faster Than Light";
     homepage = "https://github.com/Vhati/Slipstream-Mod-Manager";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ mib ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ mib ];
     mainProgram = "slipstream";
   };
 }

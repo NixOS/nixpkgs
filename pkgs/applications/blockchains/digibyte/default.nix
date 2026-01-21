@@ -62,11 +62,11 @@ stdenv.mkDerivation rec {
     "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "DigiByte (DGB) is a rapidly growing decentralized, global blockchain";
     homepage = "https://digibyte.io/";
-    license = licenses.mit;
-    maintainers = [ maintainers.mmahut ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.mmahut ];
+    platforms = lib.platforms.linux;
   };
 }

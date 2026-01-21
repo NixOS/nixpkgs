@@ -53,12 +53,12 @@ python3.pkgs.buildPythonApplication rec {
     wrapQtApp $out/bin/vimiv
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Image viewer with Vim-like keybindings (Qt port)";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     homepage = "https://github.com/karlch/vimiv-qt";
-    maintainers = with maintainers; [ dschrempf ];
+    maintainers = with lib.maintainers; [ dschrempf ];
     mainProgram = "vimiv";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

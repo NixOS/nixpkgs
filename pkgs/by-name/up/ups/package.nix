@@ -16,10 +16,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-c6aE6iD6yCnnuSEDhhr3v1ArcfLmSP8QhS7Cz7rtVHs=";
 
-  meta = with lib; {
+  meta = {
     description = "Command line tool for creating and applying UPS patch files";
     homepage = "https://github.com/rameshvarun/ups";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ruby0b ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ruby0b ];
   };
 }

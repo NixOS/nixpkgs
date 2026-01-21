@@ -6,15 +6,12 @@
   msrestazure,
   azure-common,
   azure-mgmt-core,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-signalr";
   version = "1.2.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -32,10 +29,10 @@ buildPythonPackage rec {
   # has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "This is the Microsoft Azure SignalR Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ maxwilson ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ maxwilson ];
   };
 }

@@ -19,11 +19,11 @@ stdenv.mkDerivation {
     mkdir -p $out/share/man/man8
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://acme.com/software/micro_httpd/";
     description = "Really small HTTP server";
-    license = licenses.bsd2;
-    platforms = platforms.unix;
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
     mainProgram = "micro_httpd";
   };

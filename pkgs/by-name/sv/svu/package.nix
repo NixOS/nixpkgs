@@ -4,6 +4,8 @@
   fetchFromGitHub,
   testers,
   svu,
+  installShellFiles,
+  stdenv,
 }:
 
 buildGoModule rec {
@@ -31,13 +33,21 @@ buildGoModule rec {
     rm internal/git/git_test.go
   '';
 
+  nativeBuildInputs = [ installShellFiles ];
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd svu \
+      --bash <($out/bin/svu completion bash) \
+      --fish <($out/bin/svu completion fish) \
+      --zsh <($out/bin/svu completion zsh)
+  '';
+
   passthru.tests.version = testers.testVersion { package = svu; };
 
-  meta = with lib; {
+  meta = {
     description = "Semantic Version Util";
     homepage = "https://github.com/caarlos0/svu";
-    maintainers = with maintainers; [ caarlos0 ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ caarlos0 ];
+    license = lib.licenses.mit;
     mainProgram = "svu";
   };
 }

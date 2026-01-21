@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   six,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "flatten-json";
   version = "0.1.13";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "amirziai";

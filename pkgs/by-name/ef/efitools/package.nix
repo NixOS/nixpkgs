@@ -30,9 +30,12 @@ stdenv.mkDerivation rec {
     sha256 = "0jabgl2pxvfl780yvghq131ylpf82k7banjz0ksjhlm66ik8gb1i";
   };
 
-  # https://github.com/ncroxon/gnu-efi/issues/7#issuecomment-2122741592
   patches = [
+    # https://github.com/ncroxon/gnu-efi/issues/7#issuecomment-2122741592
     ./aarch64.patch
+
+    # Fix build with gcc15
+    ./remove-redundant-bool.patch
   ];
 
   postPatch = ''
@@ -44,11 +47,10 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tools for manipulating UEFI secure boot platforms";
     homepage = "https://git.kernel.org/pub/scm/linux/kernel/git/jejb/efitools.git";
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.grahamc ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
   };
 }

@@ -4,7 +4,6 @@
   fetchFromGitHub,
   ply,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   format = "setuptools";
   # TODO: typo; change to pyproject = true;
   pypropject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "h2non";
@@ -32,12 +29,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jsonpath_ng" ];
 
-  meta = with lib; {
+  meta = {
     description = "JSONPath implementation";
     homepage = "https://github.com/h2non/jsonpath-ng";
     changelog = "https://github.com/h2non/jsonpath-ng/blob/v${version}/History.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "jsonpath_ng";
   };
 }

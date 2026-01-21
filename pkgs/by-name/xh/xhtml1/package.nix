@@ -1,17 +1,17 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchzip,
   libxml2,
 }:
 
 stdenv.mkDerivation {
   pname = "xhtml1";
-  version = "unstable-2002-08-01";
+  version = "0-unstable-2002-08-01";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "https://www.w3.org/TR/xhtml1/xhtml1.tgz";
-    sha256 = "0rr0d89i0z75qvjbm8il93bippx09hbmjwy0y2sj44n9np69x3hl";
+    hash = "sha256-Y/IZqFAPjRl5ol5hekCEmv6l4LEP0HUIuyxU/SPfC28=";
   };
 
   nativeBuildInputs = [ libxml2 ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
         eval a=($x)
         xmlcatalog --noout --add public "''${a[1]}" "''${a[2]}" $cat
     done
-  ''; # */
+  '';
 
   meta = {
     homepage = "https://www.w3.org/TR/xhtml1/";

@@ -47,11 +47,11 @@ buildGoModule rec {
   # Tests fail as: internal/binutils/install.go:57:15: undefined: Asset
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Standalone, daemon-less, unprivileged Dockerfile and OCI compatible container image builder";
     mainProgram = "img";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/genuinetools/img";
-    maintainers = with maintainers; [ bryanasdev000 ];
+    maintainers = [ ];
   };
 }

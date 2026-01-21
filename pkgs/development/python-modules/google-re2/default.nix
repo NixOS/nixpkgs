@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   setuptools,
   pybind11,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "google-re2";
   version = "1.1.20250805";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "google_re2";
@@ -31,10 +28,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "re2" ];
 
-  meta = with lib; {
+  meta = {
     description = "RE2 Python bindings";
     homepage = "https://github.com/google/re2";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ alexbakker ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ alexbakker ];
   };
 }

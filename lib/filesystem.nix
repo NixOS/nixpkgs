@@ -28,7 +28,8 @@ in
 
   /**
     The type of a path. The path needs to exist and be accessible.
-    The result is either "directory" for a directory, "regular" for a regular file, "symlink" for a symlink, or "unknown" for anything else.
+    The result is either `"directory"` for a directory, `"regular"` for a
+    regular file, `"symlink"` for a symlink, or `"unknown"` for anything else.
 
     # Inputs
 
@@ -160,9 +161,9 @@ in
     in
     builtins.listToAttrs cabal-subdirs;
   /**
-    Find the first directory containing a file matching 'pattern'
-    upward from a given 'file'.
-    Returns 'null' if no directories contain a file matching 'pattern'.
+    Find the first directory containing a file matching `pattern`
+    upward from a given `file`.
+    Returns `null` if no directories contain a file matching `pattern`.
 
     # Inputs
 

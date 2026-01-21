@@ -75,14 +75,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Open-source braille translator and back-translator";
     homepage = "https://liblouis.io/";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl21Plus # library
       gpl3Plus # tools
     ];
-    maintainers = with maintainers; [ jtojnar ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ jtojnar ];
+    platforms = lib.platforms.unix;
   };
 })

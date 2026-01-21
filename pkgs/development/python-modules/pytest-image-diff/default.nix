@@ -34,10 +34,10 @@ buildPythonPackage rec {
     recommonmark
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytest helps for compare images and regression";
     homepage = "https://github.com/Apkawa/pytest-image-diff";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

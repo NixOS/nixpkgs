@@ -9,16 +9,16 @@
   websocket-client,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "waterfurnace";
-  version = "1.2.0";
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sdague";
     repo = "waterfurnace";
-    tag = "v${version}";
-    sha256 = "sha256-lix8dU9PxlsXIzKNFuUJkd80cUYXfTXSnFLu1ULACkE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-1WHXhLLk9l/WQvmC6zrkbLFth9jf/M1vZsv05CZtevE=";
   };
 
   build-system = [ setuptools ];
@@ -29,18 +29,16 @@ buildPythonPackage rec {
     websocket-client
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "waterfurnace" ];
 
   meta = {
     description = "Python interface to waterfurnace geothermal systems";
-    mainProgram = "waterfurnace";
     homepage = "https://github.com/sdague/waterfurnace";
-    changelog = "https://github.com/sdague/waterfurnace/blob/${src.tag}/HISTORY.rst";
+    changelog = "https://github.com/sdague/waterfurnace/blob/${finalAttrs.src.tag}/HISTORY.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "waterfurnace";
   };
-}
+})

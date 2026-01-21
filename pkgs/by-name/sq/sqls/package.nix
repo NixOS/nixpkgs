@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "sqls";
-  version = "0.2.28";
+  version = "0.2.45";
 
   src = fetchFromGitHub {
     owner = "sqls-server";
     repo = "sqls";
     rev = "v${version}";
-    hash = "sha256-b3zLyj2n+eKOPBRooS68GfM0bsiTVXDblYKyBYKiYug=";
+    hash = "sha256-r9D3YtUk/hv3ex/PSGPTNIBTW3s3a3KdIBtxDry30Zc=";
   };
 
-  vendorHash = "sha256-6IFJvdT7YLnWsg7Icd3nKXXHM6TZKZ+IG9nEBosRCwA=";
+  vendorHash = "sha256-eh43G0fR+NRRXRPCfxjlwzzw3yg/ZRb1GpWwHGqyRrE=";
 
   ldflags = [
     "-s"
@@ -26,11 +26,11 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/sqls-server/sqls";
     description = "SQL language server written in Go";
     mainProgram = "sqls";
-    license = licenses.mit;
-    maintainers = with maintainers; [ vinnymeller ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vinnymeller ];
   };
 }

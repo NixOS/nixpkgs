@@ -6,7 +6,6 @@
   packaging,
   pytestCheckHook,
   pytest-mock,
-  pythonOlder,
   R,
   rPackages,
   setuptools,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "rchitect";
   version = "0.4.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "randy3k";
@@ -58,11 +55,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rchitect" ];
 
-  meta = with lib; {
+  meta = {
     description = "Interoperate R with Python";
     homepage = "https://github.com/randy3k/rchitect";
     changelog = "https://github.com/randy3k/rchitect/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ savyajha ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ savyajha ];
   };
 }

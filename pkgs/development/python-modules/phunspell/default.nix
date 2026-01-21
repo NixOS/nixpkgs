@@ -43,11 +43,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "phunspell" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pure Python spell checker, wrapping spylls a port of Hunspell";
     homepage = "https://github.com/dvwright/phunspell";
     changelog = "https://github.com/dvwright/phunspell/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ vizid ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vizid ];
   };
 }

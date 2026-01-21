@@ -32,11 +32,11 @@ stdenv.mkDerivation {
     cp -r include/* $dev/include/OpenFX/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Image processing plug-in standard";
     homepage = "https://openeffects.org/";
-    license = licenses.bsd3;
-    platforms = platforms.all;
-    maintainers = [ maintainers.guibou ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.guibou ];
   };
 }
