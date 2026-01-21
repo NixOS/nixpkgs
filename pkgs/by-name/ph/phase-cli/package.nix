@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "phase-cli";
-  version = "1.20.0";
+  version = "1.21.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "phasehq";
     repo = "cli";
     tag = "v${version}";
-    hash = "sha256-vhjDXQutRdkeeId2shPWFtoZGH6FXvQcWhH8MLe9JqI=";
+    hash = "sha256-nj6vSq+2pquZ5A77EG9s2IXUsmAz41xD1OkaVHrKLIA=";
   };
 
   build-system = with python3Packages; [
@@ -31,6 +31,7 @@ python3Packages.buildPythonApplication rec {
     pyyaml
     toml
     python-hcl2
+    botocore
   ];
 
   nativeCheckInputs = [
@@ -51,7 +52,10 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/phasehq/cli";
     changelog = "https://github.com/phasehq/cli/releases/tag/${src.tag}";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ genga898 ];
+    maintainers = with lib.maintainers; [
+      genga898
+      medv
+    ];
     mainProgram = "phase";
   };
 }
