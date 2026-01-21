@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "torchcodec";
-  version = "0.9.0";
+  version = "0.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "meta-pytorch";
     repo = "torchcodec";
     tag = "v${version}";
-    hash = "sha256-QG7LX9G1HV2l75jsgsbM4ts6bg0wvsNhjml19b7yYEQ=";
+    hash = "sha256-HyEv3WVCnFSl+hpF2Kj/5yb5zkvI3ToyD4/oSkD47LQ=";
   };
 
   postPatch = ''
