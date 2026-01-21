@@ -111,7 +111,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = (lib.optional (!withAppleEmojis) noto-fonts-color-emoji-png);
 
-  patches = lib.optional (!withAppleEmojis) (
+  patches = [
+    ./force-90-days-expiration.patch
+  ]
+  ++ lib.optional (!withAppleEmojis) (
     replaceVars ./replace-apple-emoji-with-noto-emoji.patch {
       noto-emoji-pngs = "${noto-fonts-color-emoji-png}/share/noto-fonts-color-emoji-png";
     }
@@ -289,6 +292,7 @@ stdenv.mkDerivation (finalAttrs: {
       ]
       ++ lib.optional withAppleEmojis unfree;
     maintainers = with lib.maintainers; [
+      eclairevoyant
       marcin-serwin
       teutat3s
     ];

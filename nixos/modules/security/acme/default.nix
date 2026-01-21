@@ -51,6 +51,12 @@ let
     ''
     + script;
 
+  # We need to collect all the ACME webroots to grant them write
+  # access in the systemd service.
+  webroots = lib.remove null (
+    lib.unique (map (certAttrs: certAttrs.webroot) (lib.attrValues config.security.acme.certs))
+  );
+
   # There are many services required to make cert renewals work.
   # They all follow a common structure:
   #   - They inherit this commonServiceConfig
@@ -69,7 +75,9 @@ let
     ReadWritePaths = [
       "/var/lib/acme"
       lockdir
-    ];
+    ]
+    # Prevent runtime breakage by only adding non-overlapping paths.
+    ++ (lib.filter (x: !(lib.strings.hasPrefix "/var/lib/acme/" x)) webroots);
     PrivateTmp = true;
 
     WorkingDirectory = "/tmp";
@@ -299,12 +307,6 @@ let
         ++ data.extraLegoRenewFlags
       );
 
-      # We need to collect all the ACME webroots to grant them write
-      # access in the systemd service.
-      webroots = lib.remove null (
-        lib.unique (map (certAttrs: certAttrs.webroot) (lib.attrValues config.security.acme.certs))
-      );
-
       certificateKey = if data.csrKey != null then "${data.csrKey}" else "certificates/${keyName}.key";
     in
     {
@@ -468,8 +470,6 @@ let
               "acme/.lego/${cert}/${certDir}"
               "acme/.lego/accounts/${accountHash}"
             ];
-
-            ReadWritePaths = commonServiceConfig.ReadWritePaths ++ webroots;
 
             # Needs to be space separated, but can't use a multiline string because that'll include newlines
             BindPaths = [
