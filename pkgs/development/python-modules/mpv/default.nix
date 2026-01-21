@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "mpv";
-  version = "1.0.7";
+  version = "1.0.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jaseg";
     repo = "python-mpv";
-    rev = "v${version}";
-    hash = "sha256-2sYWTzj7+ozezNX0uFdJW+A0K6bwAmiVvqo/lr9UToA=";
+    tag = "v${version}";
+    hash = "sha256-MHdQnnjxnbOkIf56VLGi7vgNbrjhU/ODUBdZoXjxXxE=";
   };
 
   patches = [
