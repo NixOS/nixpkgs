@@ -5,10 +5,8 @@
   python-dateutil,
   pkg-config,
   rustPlatform,
-  setuptools,
   typing-extensions,
   openssl,
-  uv,
 }:
 let
   version = "0.5.8";
@@ -47,25 +45,9 @@ buildPythonPackage rec {
     patches = [ ];
     hash = "sha256-xjanEdZpX2kWJqi0dYXuvoJem9MBTWoU12uAzajsj84=";
   };
-  # cargoDeps = rustPlatform.importCargoLock {
-  #   lockFile = "${nominal-streaming-src}/Cargo.lock";
-  #   # hash = "sha256-xjanEdZpX2kWJqi0dYXuvoJem9MBTWoU12uAzajsj84=";
-  # };
-
-  build-system = [
-    setuptools
-    uv
-  ]
-  ++ (with rustPlatform; [
-    bindgenHook
-    cargoSetupHook
-    maturinBuildHook
-  ]);
-
   nativeBuildInputs = [
     pkg-config
-  ]
-  ++ (with rustPlatform; [
+  ] ++ (with rustPlatform; [
     bindgenHook
     cargoSetupHook
     maturinBuildHook
