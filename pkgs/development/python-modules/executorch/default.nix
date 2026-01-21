@@ -125,6 +125,7 @@ buildPythonPackage (finalAttrs: {
     "pytest-xdist"
   ];
   pythonRelaxDeps = [
+    "scikit-learn"
     "torchao"
   ];
   dependencies = [
