@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "qutip";
-  version = "5.2.1";
+  version = "5.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "qutip";
     repo = "qutip";
     tag = "v${version}";
-    hash = "sha256-iM+RptMvLFF51v7OJPESYFB4WaYF5HxnfpqjYWAjAKU=";
+    hash = "sha256-Av6OVw3dwZUA13W+5kJ2EwGzIMhNn9lZwEsk5EKTbyk=";
   };
 
   postPatch =
