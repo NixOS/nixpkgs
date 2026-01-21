@@ -537,6 +537,7 @@ mapAliases {
   xapp = throw "'xapp' has been renamed to/replaced by 'python-xapp'"; # Converted to throw 2025-10-29
   xbox-webapi = throw "xbox-webapi was removed because Home Assistant switched to python-xbox"; # added 2025-12-03
   XlsxWriter = throw "'XlsxWriter' has been renamed to/replaced by 'xlsxwriter'"; # Converted to throw 2025-10-29
+  y-py = throw "'y-py' has been removed as it was archived upstream; consider using 'pycrdt' instead"; # Added 2026-01-21
   Yapsy = throw "'Yapsy' has been renamed to/replaced by 'yapsy'"; # Converted to throw 2025-10-29
   ypy-websocket = throw "'ypy-websocket' has been removed as it was archived upstream; consider using 'pycrdt-websocket' instead"; # Added 2026-01-21
   z3 = throw "'z3' has been renamed to/replaced by 'z3-solver'"; # Converted to throw 2025-10-29
