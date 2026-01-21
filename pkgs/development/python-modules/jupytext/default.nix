@@ -33,14 +33,14 @@
 
 buildPythonPackage rec {
   pname = "jupytext";
-  version = "1.17.3";
+  version = "1.18.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mwouts";
     repo = "jupytext";
     tag = "v${version}";
-    hash = "sha256-qxQU3b+u9sQD0mtvZz6fw0jYmdfQmwtKaGxUc/qOcTE=";
+    hash = "sha256-D7Ps/lHF3F/7Jm4ozcjO8YsTPA1GQPqZVpPod/riGvA=";
   };
 
   patches = [
