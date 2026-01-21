@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "krb5";
-  version = "0.7.1";
+  version = "0.9.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7V8T1QMUibENhlXAraKKgcI5Gz7LigjG1znh5YNbxFA=";
+    hash = "sha256-TN0shf9HcBCO2vSP7fGYiM+Vb/N04ul+QPhBKwSMruY=";
   };
 
   build-system = [
