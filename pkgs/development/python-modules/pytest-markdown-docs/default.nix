@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-markdown-docs";
-  version = "0.5.1";
+  version = "0.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "modal-com";
     repo = "pytest-markdown-docs";
     tag = "v${version}";
-    hash = "sha256-mclN28tfPcoFxswECjbrkeOI51XXSqUXfbvuSHrd7Sw=";
+    hash = "sha256-h/EATIbn7sdvWrI2I74WDcfupqfzvB0o5CYqiIus3ZY=";
   };
 
   build-system = [ poetry-core ];
