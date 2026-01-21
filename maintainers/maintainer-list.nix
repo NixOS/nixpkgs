@@ -15908,6 +15908,12 @@
       { fingerprint = "9C68 989F ECF9 8993 3225  96DD 970A 6794 990C 52AE"; }
     ];
   };
+  maj0e = {
+    email = "contact@markusjoerg.com";
+    github = "maj0e";
+    githubId = 57637846;
+    name = "Markus Jörg";
+  };
   majesticmullet = {
     email = "hoccthomas@gmail.com.au";
     github = "MajesticMullet";
