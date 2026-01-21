@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "fastprogress";
-  version = "1.0.5";
+  version = "1.1.3";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WMoWqYHwKSgE2QXy4AQq1gjXiL9svmq5a3HsSyBFOu8=";
+    hash = "sha256-L3Bxvrk84mHdtR1mskOoUXtCFWOgEHSY5Yhe0tkTb8o=";
   };
 
   propagatedBuildInputs = [ numpy ];
