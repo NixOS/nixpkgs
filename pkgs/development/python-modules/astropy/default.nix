@@ -147,6 +147,10 @@ buildPythonPackage rec {
   preCheck = ''
     export HOME="$(mktemp -d)"
     export OMP_NUM_THREADS=$(( $NIX_BUILD_CORES / 4 ))
+    if [ $OMP_NUM_THREADS -eq 0 ]; then
+      export OMP_NUM_THREADS=1
+    fi
+
     # See https://github.com/astropy/astropy/issues/17649 and see
     # --hypothesis-profile=ci pytest flag below.
     cp conftest.py $out/
