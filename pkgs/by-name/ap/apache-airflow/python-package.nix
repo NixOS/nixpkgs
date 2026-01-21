@@ -88,13 +88,13 @@
   enabledProviders,
 }:
 let
-  version = "3.1.5";
+  version = "3.1.6";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "airflow";
     tag = version;
-    hash = "sha256-C6QujoXUHN3xLHjLhjgcecdT1VQQMQ9v2f3x97i0NpM=";
+    hash = "sha256-wC6C0jhCA76/+KhBQbe3WeSGqR6FwaudCT5xPV39Z6c=";
   };
 
   airflowUi = stdenv.mkDerivation rec {
@@ -112,7 +112,7 @@ let
       pname = "airflow-ui";
       inherit sourceRoot src version;
       fetcherVersion = 1;
-      hash = "sha256-oB6fbQ9FwBJNkbXVN1ovMYvegbmyG1xDSYBYqHKKh+M=";
+      hash = "sha256-UcEFQkDZ9Ye+VfyJ9rdZKe0wilTgO4dMsULABWfL2Co=";
     };
 
     buildPhase = ''
@@ -141,7 +141,7 @@ let
       pname = "simple-auth-manager-ui";
       inherit sourceRoot src version;
       fetcherVersion = 1;
-      hash = "sha256-rUmrDHdC/Pqpe9njAM7cmoBLuPSgh36yLCT9j8ImN58=";
+      hash = "sha256-8nZdWnhERUkiaY8USyy/a/j+dMksjmEzCabSkysndSE=";
     };
 
     buildPhase = ''
@@ -382,6 +382,8 @@ buildPythonPackage rec {
   ++ lib.concatMap (provider: providers.${provider}.imports) (requiredProviders ++ enabledProviders);
 
   passthru.updateScript = ./update.sh;
+  passthru.airflowUi = airflowUi;
+  passthru.airflowSimpleAuthUi = airflowSimpleAuthUi;
 
   # Note on testing the web UI:
   # You can (manually) test the web UI as follows:

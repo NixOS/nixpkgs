@@ -2,13 +2,19 @@
 {
   airbyte = {
     deps = [ "requests" ];
-    imports = [ "airflow.providers.airbyte.get_provider_info" ];
+    imports = [
+      "airflow.providers.airbyte"
+      "airflow.providers.airbyte.get_provider_info"
+    ];
     version = "5.2.3";
   };
 
   alibaba = {
     deps = [ "oss2" ];
-    imports = [ "airflow.providers.alibaba.get_provider_info" ];
+    imports = [
+      "airflow.providers.alibaba"
+      "airflow.providers.alibaba.get_provider_info"
+    ];
     version = "3.2.2";
   };
 
@@ -29,7 +35,10 @@
       "s3fs"
       "xmlsec"
     ];
-    imports = [ "airflow.providers.amazon.get_provider_info" ];
+    imports = [
+      "airflow.providers.amazon"
+      "airflow.providers.amazon.get_provider_info"
+    ];
     version = "9.13.0";
   };
 
@@ -39,31 +48,46 @@
       "numpy"
       "pyarrow"
     ];
-    imports = [ "airflow.providers.apache.beam.get_provider_info" ];
+    imports = [
+      "airflow.providers.apache.beam"
+      "airflow.providers.apache.beam.get_provider_info"
+    ];
     version = "6.1.4";
   };
 
   apache_cassandra = {
     deps = [ "cassandra-driver" ];
-    imports = [ "airflow.providers.apache.cassandra.get_provider_info" ];
+    imports = [
+      "airflow.providers.apache.cassandra"
+      "airflow.providers.apache.cassandra.get_provider_info"
+    ];
     version = "3.8.2";
   };
 
   apache_drill = {
     deps = [ ];
-    imports = [ "airflow.providers.apache.drill.get_provider_info" ];
+    imports = [
+      "airflow.providers.apache.drill"
+      "airflow.providers.apache.drill.get_provider_info"
+    ];
     version = "3.1.2";
   };
 
   apache_druid = {
     deps = [ "pydruid" ];
-    imports = [ "airflow.providers.apache.druid.get_provider_info" ];
+    imports = [
+      "airflow.providers.apache.druid"
+      "airflow.providers.apache.druid.get_provider_info"
+    ];
     version = "4.3.0";
   };
 
   apache_flink = {
     deps = [ "cryptography" ];
-    imports = [ "airflow.providers.apache.flink.get_provider_info" ];
+    imports = [
+      "airflow.providers.apache.flink"
+      "airflow.providers.apache.flink.get_provider_info"
+    ];
     version = "1.7.2";
   };
 
@@ -72,7 +96,10 @@
       "hdfs"
       "pandas"
     ];
-    imports = [ "airflow.providers.apache.hdfs.get_provider_info" ];
+    imports = [
+      "airflow.providers.apache.hdfs"
+      "airflow.providers.apache.hdfs.get_provider_info"
+    ];
     version = "4.10.2";
   };
 
@@ -82,19 +109,28 @@
       "pandas"
       "thrift"
     ];
-    imports = [ "airflow.providers.apache.hive.get_provider_info" ];
+    imports = [
+      "airflow.providers.apache.hive"
+      "airflow.providers.apache.hive.get_provider_info"
+    ];
     version = "9.1.2";
   };
 
   apache_iceberg = {
     deps = [ ];
-    imports = [ "airflow.providers.apache.iceberg.get_provider_info" ];
+    imports = [
+      "airflow.providers.apache.iceberg"
+      "airflow.providers.apache.iceberg.get_provider_info"
+    ];
     version = "1.3.2";
   };
 
   apache_impala = {
     deps = [ "kerberos" ];
-    imports = [ "airflow.providers.apache.impala.get_provider_info" ];
+    imports = [
+      "airflow.providers.apache.impala"
+      "airflow.providers.apache.impala.get_provider_info"
+    ];
     version = "1.7.2";
   };
 
@@ -103,13 +139,19 @@
       "asgiref"
       "confluent-kafka"
     ];
-    imports = [ "airflow.providers.apache.kafka.get_provider_info" ];
+    imports = [
+      "airflow.providers.apache.kafka"
+      "airflow.providers.apache.kafka.get_provider_info"
+    ];
     version = "1.10.3";
   };
 
   apache_kylin = {
     deps = [ ];
-    imports = [ "airflow.providers.apache.kylin.get_provider_info" ];
+    imports = [
+      "airflow.providers.apache.kylin"
+      "airflow.providers.apache.kylin.get_provider_info"
+    ];
     version = "3.9.2";
   };
 
@@ -118,19 +160,28 @@
       "aiohttp"
       "asgiref"
     ];
-    imports = [ "airflow.providers.apache.livy.get_provider_info" ];
+    imports = [
+      "airflow.providers.apache.livy"
+      "airflow.providers.apache.livy.get_provider_info"
+    ];
     version = "4.4.2";
   };
 
   apache_pig = {
     deps = [ ];
-    imports = [ "airflow.providers.apache.pig.get_provider_info" ];
+    imports = [
+      "airflow.providers.apache.pig"
+      "airflow.providers.apache.pig.get_provider_info"
+    ];
     version = "4.7.2";
   };
 
   apache_pinot = {
     deps = [ ];
-    imports = [ "airflow.providers.apache.pinot.get_provider_info" ];
+    imports = [
+      "airflow.providers.apache.pinot"
+      "airflow.providers.apache.pinot.get_provider_info"
+    ];
     version = "4.8.2";
   };
 
@@ -139,37 +190,55 @@
       "grpcio-status"
       "pyspark"
     ];
-    imports = [ "airflow.providers.apache.spark.get_provider_info" ];
+    imports = [
+      "airflow.providers.apache.spark"
+      "airflow.providers.apache.spark.get_provider_info"
+    ];
     version = "5.3.2";
   };
 
   apache_tinkerpop = {
     deps = [ "gremlinpython" ];
-    imports = [ "airflow.providers.apache.tinkerpop.get_provider_info" ];
+    imports = [
+      "airflow.providers.apache.tinkerpop"
+      "airflow.providers.apache.tinkerpop.get_provider_info"
+    ];
     version = "1.0.3";
   };
 
   apprise = {
     deps = [ "apprise" ];
-    imports = [ "airflow.providers.apprise.get_provider_info" ];
+    imports = [
+      "airflow.providers.apprise"
+      "airflow.providers.apprise.get_provider_info"
+    ];
     version = "2.1.2";
   };
 
   arangodb = {
     deps = [ "python-arango" ];
-    imports = [ "airflow.providers.arangodb.get_provider_info" ];
+    imports = [
+      "airflow.providers.arangodb"
+      "airflow.providers.arangodb.get_provider_info"
+    ];
     version = "2.8.2";
   };
 
   asana = {
     deps = [ "asana" ];
-    imports = [ "airflow.providers.asana.get_provider_info" ];
+    imports = [
+      "airflow.providers.asana"
+      "airflow.providers.asana.get_provider_info"
+    ];
     version = "2.10.2";
   };
 
   atlassian_jira = {
     deps = [ "atlassian-python-api" ];
-    imports = [ "airflow.providers.atlassian.jira.get_provider_info" ];
+    imports = [
+      "airflow.providers.atlassian.jira"
+      "airflow.providers.atlassian.jira.get_provider_info"
+    ];
     version = "3.1.2";
   };
 
@@ -178,13 +247,19 @@
       "celery"
       "flower"
     ];
-    imports = [ "airflow.providers.celery.get_provider_info" ];
+    imports = [
+      "airflow.providers.celery"
+      "airflow.providers.celery.get_provider_info"
+    ];
     version = "3.12.3";
   };
 
   cloudant = {
     deps = [ ];
-    imports = [ "airflow.providers.cloudant.get_provider_info" ];
+    imports = [
+      "airflow.providers.cloudant"
+      "airflow.providers.cloudant.get_provider_info"
+    ];
     version = "4.2.2";
   };
 
@@ -195,32 +270,48 @@
       "cryptography"
       "kubernetes"
       "kubernetes-asyncio"
+      "urllib3"
     ];
-    imports = [ "airflow.providers.cncf.kubernetes.get_provider_info" ];
+    imports = [
+      "airflow.providers.cncf.kubernetes"
+      "airflow.providers.cncf.kubernetes.get_provider_info"
+    ];
     version = "10.8.0";
   };
 
   cohere = {
     deps = [ "cohere" ];
-    imports = [ "airflow.providers.cohere.get_provider_info" ];
+    imports = [
+      "airflow.providers.cohere"
+      "airflow.providers.cohere.get_provider_info"
+    ];
     version = "1.5.3";
   };
 
   common_compat = {
     deps = [ ];
-    imports = [ "airflow.providers.common.compat.get_provider_info" ];
+    imports = [
+      "airflow.providers.common.compat"
+      "airflow.providers.common.compat.get_provider_info"
+    ];
     version = "1.7.4";
   };
 
   common_io = {
     deps = [ ];
-    imports = [ "airflow.providers.common.io.get_provider_info" ];
+    imports = [
+      "airflow.providers.common.io"
+      "airflow.providers.common.io.get_provider_info"
+    ];
     version = "1.6.3";
   };
 
   common_messaging = {
     deps = [ ];
-    imports = [ "airflow.providers.common.messaging.get_provider_info" ];
+    imports = [
+      "airflow.providers.common.messaging"
+      "airflow.providers.common.messaging.get_provider_info"
+    ];
     version = "2.0.0";
   };
 
@@ -232,7 +323,10 @@
       "polars"
       "sqlparse"
     ];
-    imports = [ "airflow.providers.common.sql.get_provider_info" ];
+    imports = [
+      "airflow.providers.common.sql"
+      "airflow.providers.common.sql.get_provider_info"
+    ];
     version = "1.28.1";
   };
 
@@ -247,13 +341,19 @@
       "pyarrow"
       "requests"
     ];
-    imports = [ "airflow.providers.databricks.get_provider_info" ];
+    imports = [
+      "airflow.providers.databricks"
+      "airflow.providers.databricks.get_provider_info"
+    ];
     version = "7.7.2";
   };
 
   datadog = {
     deps = [ "datadog" ];
-    imports = [ "airflow.providers.datadog.get_provider_info" ];
+    imports = [
+      "airflow.providers.datadog"
+      "airflow.providers.datadog.get_provider_info"
+    ];
     version = "3.9.2";
   };
 
@@ -262,19 +362,28 @@
       "aiohttp"
       "asgiref"
     ];
-    imports = [ "airflow.providers.dbt.cloud.get_provider_info" ];
+    imports = [
+      "airflow.providers.dbt.cloud"
+      "airflow.providers.dbt.cloud.get_provider_info"
+    ];
     version = "4.4.3";
   };
 
   dingding = {
     deps = [ ];
-    imports = [ "airflow.providers.dingding.get_provider_info" ];
+    imports = [
+      "airflow.providers.dingding"
+      "airflow.providers.dingding.get_provider_info"
+    ];
     version = "3.8.2";
   };
 
   discord = {
     deps = [ ];
-    imports = [ "airflow.providers.discord.get_provider_info" ];
+    imports = [
+      "airflow.providers.discord"
+      "airflow.providers.discord.get_provider_info"
+    ];
     version = "3.10.2";
   };
 
@@ -283,7 +392,10 @@
       "docker"
       "python-dotenv"
     ];
-    imports = [ "airflow.providers.docker.get_provider_info" ];
+    imports = [
+      "airflow.providers.docker"
+      "airflow.providers.docker.get_provider_info"
+    ];
     version = "4.4.2";
   };
 
@@ -292,19 +404,28 @@
       "pydantic"
       "retryhttp"
     ];
-    imports = [ "airflow.providers.edge3.get_provider_info" ];
+    imports = [
+      "airflow.providers.edge3"
+      "airflow.providers.edge3.get_provider_info"
+    ];
     version = "1.2.0";
   };
 
   elasticsearch = {
     deps = [ "elasticsearch" ];
-    imports = [ "airflow.providers.elasticsearch.get_provider_info" ];
+    imports = [
+      "airflow.providers.elasticsearch"
+      "airflow.providers.elasticsearch.get_provider_info"
+    ];
     version = "6.3.2";
   };
 
   exasol = {
     deps = [ "pandas" ];
-    imports = [ "airflow.providers.exasol.get_provider_info" ];
+    imports = [
+      "airflow.providers.exasol"
+      "airflow.providers.exasol.get_provider_info"
+    ];
     version = "4.8.2";
   };
 
@@ -323,31 +444,46 @@
       "werkzeug"
       "wtforms"
     ];
-    imports = [ "airflow.providers.fab.get_provider_info" ];
+    imports = [
+      "airflow.providers.fab"
+      "airflow.providers.fab.get_provider_info"
+    ];
     version = "2.4.2";
   };
 
   facebook = {
     deps = [ ];
-    imports = [ "airflow.providers.facebook.get_provider_info" ];
+    imports = [
+      "airflow.providers.facebook"
+      "airflow.providers.facebook.get_provider_info"
+    ];
     version = "3.8.2";
   };
 
   ftp = {
     deps = [ ];
-    imports = [ "airflow.providers.ftp.get_provider_info" ];
+    imports = [
+      "airflow.providers.ftp"
+      "airflow.providers.ftp.get_provider_info"
+    ];
     version = "3.13.2";
   };
 
   git = {
     deps = [ "gitpython" ];
-    imports = [ "airflow.providers.git.get_provider_info" ];
+    imports = [
+      "airflow.providers.git"
+      "airflow.providers.git.get_provider_info"
+    ];
     version = "0.0.7";
   };
 
   github = {
     deps = [ "pygithub" ];
-    imports = [ "airflow.providers.github.get_provider_info" ];
+    imports = [
+      "airflow.providers.github"
+      "airflow.providers.github.get_provider_info"
+    ];
     version = "2.9.2";
   };
 
@@ -401,7 +537,10 @@
       "tenacity"
       "types-protobuf"
     ];
-    imports = [ "airflow.providers.google.get_provider_info" ];
+    imports = [
+      "airflow.providers.google"
+      "airflow.providers.google.get_provider_info"
+    ];
     version = "17.2.0";
   };
 
@@ -411,7 +550,10 @@
       "google-auth-httplib2"
       "grpcio"
     ];
-    imports = [ "airflow.providers.grpc.get_provider_info" ];
+    imports = [
+      "airflow.providers.grpc"
+      "airflow.providers.grpc.get_provider_info"
+    ];
     version = "3.8.2";
   };
 
@@ -420,7 +562,10 @@
       "boto3"
       "hvac"
     ];
-    imports = [ "airflow.providers.hashicorp.get_provider_info" ];
+    imports = [
+      "airflow.providers.hashicorp"
+      "airflow.providers.hashicorp.get_provider_info"
+    ];
     version = "4.3.2";
   };
 
@@ -431,13 +576,19 @@
       "requests"
       "requests-toolbelt"
     ];
-    imports = [ "airflow.providers.http.get_provider_info" ];
+    imports = [
+      "airflow.providers.http"
+      "airflow.providers.http.get_provider_info"
+    ];
     version = "5.3.4";
   };
 
   imap = {
     deps = [ ];
-    imports = [ "airflow.providers.imap.get_provider_info" ];
+    imports = [
+      "airflow.providers.imap"
+      "airflow.providers.imap.get_provider_info"
+    ];
     version = "3.9.2";
   };
 
@@ -446,25 +597,37 @@
       "influxdb-client"
       "requests"
     ];
-    imports = [ "airflow.providers.influxdb.get_provider_info" ];
+    imports = [
+      "airflow.providers.influxdb"
+      "airflow.providers.influxdb.get_provider_info"
+    ];
     version = "2.9.3";
   };
 
   jdbc = {
     deps = [ "jaydebeapi" ];
-    imports = [ "airflow.providers.jdbc.get_provider_info" ];
+    imports = [
+      "airflow.providers.jdbc"
+      "airflow.providers.jdbc.get_provider_info"
+    ];
     version = "5.2.3";
   };
 
   jenkins = {
     deps = [ "python-jenkins" ];
-    imports = [ "airflow.providers.jenkins.get_provider_info" ];
+    imports = [
+      "airflow.providers.jenkins"
+      "airflow.providers.jenkins.get_provider_info"
+    ];
     version = "4.1.2";
   };
 
   keycloak = {
     deps = [ "python-keycloak" ];
-    imports = [ "airflow.providers.keycloak.get_provider_info" ];
+    imports = [
+      "airflow.providers.keycloak"
+      "airflow.providers.keycloak.get_provider_info"
+    ];
     version = "0.1.0";
   };
 
@@ -499,7 +662,10 @@
       "msal-extensions"
       "msgraph-core"
     ];
-    imports = [ "airflow.providers.microsoft.azure.get_provider_info" ];
+    imports = [
+      "airflow.providers.microsoft.azure"
+      "airflow.providers.microsoft.azure.get_provider_info"
+    ];
     version = "12.7.0";
   };
 
@@ -508,19 +674,28 @@
       "methodtools"
       "pymssql"
     ];
-    imports = [ "airflow.providers.microsoft.mssql.get_provider_info" ];
+    imports = [
+      "airflow.providers.microsoft.mssql"
+      "airflow.providers.microsoft.mssql.get_provider_info"
+    ];
     version = "4.3.2";
   };
 
   microsoft_psrp = {
     deps = [ "pypsrp" ];
-    imports = [ "airflow.providers.microsoft.psrp.get_provider_info" ];
+    imports = [
+      "airflow.providers.microsoft.psrp"
+      "airflow.providers.microsoft.psrp.get_provider_info"
+    ];
     version = "3.1.2";
   };
 
   microsoft_winrm = {
     deps = [ "pywinrm" ];
-    imports = [ "airflow.providers.microsoft.winrm.get_provider_info" ];
+    imports = [
+      "airflow.providers.microsoft.winrm"
+      "airflow.providers.microsoft.winrm.get_provider_info"
+    ];
     version = "3.11.0";
   };
 
@@ -529,7 +704,10 @@
       "dnspython"
       "pymongo"
     ];
-    imports = [ "airflow.providers.mongo.get_provider_info" ];
+    imports = [
+      "airflow.providers.mongo"
+      "airflow.providers.mongo.get_provider_info"
+    ];
     version = "5.2.2";
   };
 
@@ -538,49 +716,73 @@
       "aiomysql"
       "mysqlclient"
     ];
-    imports = [ "airflow.providers.mysql.get_provider_info" ];
+    imports = [
+      "airflow.providers.mysql"
+      "airflow.providers.mysql.get_provider_info"
+    ];
     version = "6.3.4";
   };
 
   neo4j = {
     deps = [ "neo4j" ];
-    imports = [ "airflow.providers.neo4j.get_provider_info" ];
+    imports = [
+      "airflow.providers.neo4j"
+      "airflow.providers.neo4j.get_provider_info"
+    ];
     version = "3.10.1";
   };
 
   odbc = {
     deps = [ "pyodbc" ];
-    imports = [ "airflow.providers.odbc.get_provider_info" ];
+    imports = [
+      "airflow.providers.odbc"
+      "airflow.providers.odbc.get_provider_info"
+    ];
     version = "4.10.2";
   };
 
   openai = {
     deps = [ "openai" ];
-    imports = [ "airflow.providers.openai.get_provider_info" ];
+    imports = [
+      "airflow.providers.openai"
+      "airflow.providers.openai.get_provider_info"
+    ];
     version = "1.6.2";
   };
 
   openfaas = {
     deps = [ ];
-    imports = [ "airflow.providers.openfaas.get_provider_info" ];
+    imports = [
+      "airflow.providers.openfaas"
+      "airflow.providers.openfaas.get_provider_info"
+    ];
     version = "3.8.2";
   };
 
   openlineage = {
     deps = [ "attrs" ];
-    imports = [ "airflow.providers.openlineage.get_provider_info" ];
+    imports = [
+      "airflow.providers.openlineage"
+      "airflow.providers.openlineage.get_provider_info"
+    ];
     version = "2.7.0";
   };
 
   opensearch = {
     deps = [ "opensearch-py" ];
-    imports = [ "airflow.providers.opensearch.get_provider_info" ];
+    imports = [
+      "airflow.providers.opensearch"
+      "airflow.providers.opensearch.get_provider_info"
+    ];
     version = "1.7.2";
   };
 
   opsgenie = {
     deps = [ ];
-    imports = [ "airflow.providers.opsgenie.get_provider_info" ];
+    imports = [
+      "airflow.providers.opsgenie"
+      "airflow.providers.opsgenie.get_provider_info"
+    ];
     version = "5.9.2";
   };
 
@@ -589,13 +791,19 @@
       "numpy"
       "oracledb"
     ];
-    imports = [ "airflow.providers.oracle.get_provider_info" ];
+    imports = [
+      "airflow.providers.oracle"
+      "airflow.providers.oracle.get_provider_info"
+    ];
     version = "4.2.0";
   };
 
   pagerduty = {
     deps = [ ];
-    imports = [ "airflow.providers.pagerduty.get_provider_info" ];
+    imports = [
+      "airflow.providers.pagerduty"
+      "airflow.providers.pagerduty.get_provider_info"
+    ];
     version = "5.0.2";
   };
 
@@ -606,19 +814,28 @@
       "pandas"
       "papermill"
     ];
-    imports = [ "airflow.providers.papermill.get_provider_info" ];
+    imports = [
+      "airflow.providers.papermill"
+      "airflow.providers.papermill.get_provider_info"
+    ];
     version = "3.11.2";
   };
 
   pgvector = {
     deps = [ "pgvector" ];
-    imports = [ "airflow.providers.pgvector.get_provider_info" ];
+    imports = [
+      "airflow.providers.pgvector"
+      "airflow.providers.pgvector.get_provider_info"
+    ];
     version = "1.5.2";
   };
 
   pinecone = {
     deps = [ ];
-    imports = [ "airflow.providers.pinecone.get_provider_info" ];
+    imports = [
+      "airflow.providers.pinecone"
+      "airflow.providers.pinecone.get_provider_info"
+    ];
     version = "2.3.4";
   };
 
@@ -630,7 +847,10 @@
       "psycopg"
       "psycopg2-binary"
     ];
-    imports = [ "airflow.providers.postgres.get_provider_info" ];
+    imports = [
+      "airflow.providers.postgres"
+      "airflow.providers.postgres.get_provider_info"
+    ];
     version = "6.3.0";
   };
 
@@ -639,19 +859,28 @@
       "pandas"
       "presto-python-client"
     ];
-    imports = [ "airflow.providers.presto.get_provider_info" ];
+    imports = [
+      "airflow.providers.presto"
+      "airflow.providers.presto.get_provider_info"
+    ];
     version = "5.9.2";
   };
 
   qdrant = {
     deps = [ "qdrant-client" ];
-    imports = [ "airflow.providers.qdrant.get_provider_info" ];
+    imports = [
+      "airflow.providers.qdrant"
+      "airflow.providers.qdrant.get_provider_info"
+    ];
     version = "1.4.3";
   };
 
   redis = {
     deps = [ "redis" ];
-    imports = [ "airflow.providers.redis.get_provider_info" ];
+    imports = [
+      "airflow.providers.redis"
+      "airflow.providers.redis.get_provider_info"
+    ];
     version = "4.3.0";
   };
 
@@ -660,19 +889,28 @@
       "pandas"
       "simple-salesforce"
     ];
-    imports = [ "airflow.providers.salesforce.get_provider_info" ];
+    imports = [
+      "airflow.providers.salesforce"
+      "airflow.providers.salesforce.get_provider_info"
+    ];
     version = "5.11.3";
   };
 
   samba = {
     deps = [ "smbprotocol" ];
-    imports = [ "airflow.providers.samba.get_provider_info" ];
+    imports = [
+      "airflow.providers.samba"
+      "airflow.providers.samba.get_provider_info"
+    ];
     version = "4.11.0";
   };
 
   segment = {
     deps = [ ];
-    imports = [ "airflow.providers.segment.get_provider_info" ];
+    imports = [
+      "airflow.providers.segment"
+      "airflow.providers.segment.get_provider_info"
+    ];
     version = "3.8.2";
   };
 
@@ -681,7 +919,10 @@
       "sendgrid"
       "werkzeug"
     ];
-    imports = [ "airflow.providers.sendgrid.get_provider_info" ];
+    imports = [
+      "airflow.providers.sendgrid"
+      "airflow.providers.sendgrid.get_provider_info"
+    ];
     version = "4.1.3";
   };
 
@@ -691,25 +932,37 @@
       "paramiko"
       "pysftp"
     ];
-    imports = [ "airflow.providers.sftp.get_provider_info" ];
+    imports = [
+      "airflow.providers.sftp"
+      "airflow.providers.sftp.get_provider_info"
+    ];
     version = "5.4.0";
   };
 
   singularity = {
     deps = [ "spython" ];
-    imports = [ "airflow.providers.singularity.get_provider_info" ];
+    imports = [
+      "airflow.providers.singularity"
+      "airflow.providers.singularity.get_provider_info"
+    ];
     version = "3.8.2";
   };
 
   slack = {
     deps = [ "slack-sdk" ];
-    imports = [ "airflow.providers.slack.get_provider_info" ];
+    imports = [
+      "airflow.providers.slack"
+      "airflow.providers.slack.get_provider_info"
+    ];
     version = "9.2.0";
   };
 
   smtp = {
     deps = [ ];
-    imports = [ "airflow.providers.smtp.get_provider_info" ];
+    imports = [
+      "airflow.providers.smtp"
+      "airflow.providers.smtp.get_provider_info"
+    ];
     version = "2.3.1";
   };
 
@@ -720,13 +973,19 @@
       "snowflake-connector-python"
       "snowflake-sqlalchemy"
     ];
-    imports = [ "airflow.providers.snowflake.get_provider_info" ];
+    imports = [
+      "airflow.providers.snowflake"
+      "airflow.providers.snowflake.get_provider_info"
+    ];
     version = "6.5.3";
   };
 
   sqlite = {
     deps = [ ];
-    imports = [ "airflow.providers.sqlite.get_provider_info" ];
+    imports = [
+      "airflow.providers.sqlite"
+      "airflow.providers.sqlite.get_provider_info"
+    ];
     version = "4.1.2";
   };
 
@@ -735,43 +994,64 @@
       "paramiko"
       "sshtunnel"
     ];
-    imports = [ "airflow.providers.ssh.get_provider_info" ];
+    imports = [
+      "airflow.providers.ssh"
+      "airflow.providers.ssh.get_provider_info"
+    ];
     version = "4.1.3";
   };
 
   standard = {
     deps = [ ];
-    imports = [ "airflow.providers.standard.get_provider_info" ];
+    imports = [
+      "airflow.providers.standard"
+      "airflow.providers.standard.get_provider_info"
+    ];
     version = "1.9.0";
   };
 
   tableau = {
     deps = [ "tableauserverclient" ];
-    imports = [ "airflow.providers.tableau.get_provider_info" ];
+    imports = [
+      "airflow.providers.tableau"
+      "airflow.providers.tableau.get_provider_info"
+    ];
     version = "5.2.0";
   };
 
   telegram = {
     deps = [ "python-telegram-bot" ];
-    imports = [ "airflow.providers.telegram.get_provider_info" ];
+    imports = [
+      "airflow.providers.telegram"
+      "airflow.providers.telegram.get_provider_info"
+    ];
     version = "4.8.2";
   };
 
   teradata = {
     deps = [ ];
-    imports = [ "airflow.providers.teradata.get_provider_info" ];
+    imports = [
+      "airflow.providers.teradata"
+      "airflow.providers.teradata.get_provider_info"
+    ];
     version = "3.2.1";
   };
 
   trino = {
     deps = [ "pandas" ];
-    imports = [ "airflow.providers.trino.get_provider_info" ];
+    imports = [
+      "airflow.providers.trino"
+      "airflow.providers.trino.get_provider_info"
+    ];
     version = "6.3.3";
   };
 
   vertica = {
     deps = [ "vertica-python" ];
-    imports = [ "airflow.providers.vertica.get_provider_info" ];
+    imports = [
+      "airflow.providers.vertica"
+      "airflow.providers.vertica.get_provider_info"
+    ];
     version = "4.1.2";
   };
 
@@ -781,25 +1061,37 @@
       "pandas"
       "weaviate-client"
     ];
-    imports = [ "airflow.providers.weaviate.get_provider_info" ];
+    imports = [
+      "airflow.providers.weaviate"
+      "airflow.providers.weaviate.get_provider_info"
+    ];
     version = "3.2.3";
   };
 
   yandex = {
     deps = [ ];
-    imports = [ "airflow.providers.yandex.get_provider_info" ];
+    imports = [
+      "airflow.providers.yandex"
+      "airflow.providers.yandex.get_provider_info"
+    ];
     version = "4.2.0";
   };
 
   ydb = {
     deps = [ ];
-    imports = [ "airflow.providers.ydb.get_provider_info" ];
+    imports = [
+      "airflow.providers.ydb"
+      "airflow.providers.ydb.get_provider_info"
+    ];
     version = "2.2.2";
   };
 
   zendesk = {
     deps = [ ];
-    imports = [ "airflow.providers.zendesk.get_provider_info" ];
+    imports = [
+      "airflow.providers.zendesk"
+      "airflow.providers.zendesk.get_provider_info"
+    ];
     version = "4.10.2";
   };
 
