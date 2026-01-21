@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "aiofiles";
-  version = "24.1.0";
+  version = "25.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Tinche";
     repo = "aiofiles";
     tag = "v${version}";
-    hash = "sha256-uDKDMSNbMIlAaifpEBh1+q2bdZNUia8pPb30IOIgOAE=";
+    hash = "sha256-NBmzoUb2una3+eWqR1HraVPibaRb9I51aYwskrjxskQ=";
   };
 
   build-system = [ hatchling ];
@@ -42,7 +42,7 @@ buildPythonPackage rec {
   meta = {
     description = "File support for asyncio";
     homepage = "https://github.com/Tinche/aiofiles";
-    changelog = "https://github.com/Tinche/aiofiles/releases/tag/v${version}";
+    changelog = "https://github.com/Tinche/aiofiles/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
