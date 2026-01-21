@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "wazeroutecalculator";
-  version = "0.15";
+  version = "0.16";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "WazeRouteCalculator";
     inherit version;
-    hash = "sha256-DB5oWthWNwamFG3kNxA/kmUBOVogoSg5LI2KrI39s4M=";
+    hash = "sha256-tJip0tSlwr7a5UVH77dAPNHag4v1JShU1vHA9xKhbwg=";
   };
 
   propagatedBuildInputs = [ requests ];
