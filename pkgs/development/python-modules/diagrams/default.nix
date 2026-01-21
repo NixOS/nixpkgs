@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "diagrams";
-  version = "0.24.4";
+  version = "0.25.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mingrammer";
     repo = "diagrams";
     tag = "v${version}";
-    hash = "sha256-N4JGrtgLgGUayFR6/xTf3GZEZjtxC/4De3ZCfRZbi6M=";
+    hash = "sha256-uDBmQSEn9LMT2CbR3VDhxW1ec4udXN5wZ1H1+RX/K0U=";
   };
 
   patches = [
