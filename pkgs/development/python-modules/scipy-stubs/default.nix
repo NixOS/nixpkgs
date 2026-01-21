@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "scipy-stubs";
-  version = "1.16.3.0";
+  version = "1.17.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scipy";
     repo = "scipy-stubs";
     tag = "v${version}";
-    hash = "sha256-TLqLJirbOGIm718cLhWcEi4VHms9imIJZadGfYphXBk=";
+    hash = "sha256-wzXRnTaSYOePt3XvZ/OeBOQCKObuCL1rWrVDo73yM1I=";
   };
 
   postPatch = ''
