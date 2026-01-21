@@ -38,14 +38,14 @@
 }:
 buildPythonPackage rec {
   pname = "syne-tune";
-  version = "0.14.2";
+  version = "0.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "syne-tune";
     repo = "syne-tune";
     tag = "v${version}";
-    hash = "sha256-51QyfJ0XOcXTeE95YOhtUmhat23joaEYvUnk7hYfksY=";
+    hash = "sha256-UNBpfC+aLXhkbyvCG2K00yedJnpYpfldqisZ/wDPtuA=";
   };
 
   postPatch = ''
