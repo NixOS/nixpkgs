@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "schedula";
-  version = "1.5.72";
+  version = "1.5.78";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vinci1it2000";
     repo = "schedula";
     tag = "v${version}";
-    hash = "sha256-UfUe9Uv4y61SOEvqW5bbK891F7ysZS+jxtp1zN5JAGM=";
+    hash = "sha256-fhcG2N524KlwaG+inOyQJaXKoMhmR6Yddff8CDi8lhk=";
   };
 
   build-system = [ setuptools ];
@@ -86,7 +86,7 @@ buildPythonPackage rec {
   meta = {
     description = "Smart function scheduler for dynamic flow-based programming";
     homepage = "https://github.com/vinci1it2000/schedula";
-    changelog = "https://github.com/vinci1it2000/schedula/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/vinci1it2000/schedula/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.eupl11;
     maintainers = with lib.maintainers; [ flokli ];
     # at least some tests fail on Darwin
