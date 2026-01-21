@@ -13,14 +13,14 @@
 
 buildPythonPackage {
   pname = "optype";
-  version = "0.14.0";
+  version = "0.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jorenham";
     repo = "optype";
-    rev = "5f16def3546222caf81a3411a27b007a00819172";
-    hash = "sha256-52cY+u0wjhJFQDLsjND/h6cfln4rCTtcy+HqaoH/re0=";
+    tag = "v${version}";
+    hash = "sha256-tzbS+CeWGxMXK1LFN/LslI6kfbVQPjqYlDB7fX0ogfU=";
   };
 
   disabled = pythonOlder "3.11";
