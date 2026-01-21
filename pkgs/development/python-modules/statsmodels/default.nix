@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "statsmodels";
-  version = "0.14.5";
+  version = "0.14.6";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3iYOWMzP0s7d+DW1WjVyM9bKhToapPkPdVOlLMccbd8=";
+    hash = "sha256-TReHPT5gfTmLhRJs1O16rYnk6difx0TNqxrzGJqZbCo=";
   };
 
   postPatch = ''
