@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "agate-sql";
-  version = "0.7.2";
+  version = "0.7.3";
   format = "setuptools";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mxswKEpXP9QWdZQ3Jz3MXIECK98vrLJLSqAppir9U7A=";
+    hash = "sha256-TFiKKOgLxiXH1fkV6Pjf9JABQKim2KNQoJiiuprfnTM=";
   };
 
   propagatedBuildInputs = [
