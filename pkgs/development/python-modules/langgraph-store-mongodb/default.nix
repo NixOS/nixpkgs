@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "langgraph-store-mongodb";
-  version = "0.1.1";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-mongodb";
-    tag = "libs/langgraph-store-mongodb/v${version}";
-    hash = "sha256-/dafQK6iy85rMt7FMVb3ssaIop9JjjrwajaHAfBUp7g=";
+    tag = "libs/langchain-mongodb/v${version}";
+    hash = "sha256-dO0dASjyNMxnbxZ/ry8lcJxedPdrv6coYiTjOcaT8/0=";
   };
 
   sourceRoot = "${src.name}/libs/langgraph-store-mongodb";
