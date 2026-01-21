@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pystemmer";
-  version = "2.2.0.1";
+  version = "3.0.0";
   format = "setuptools";
   pyproejct = true;
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "snowballstem";
     repo = "pystemmer";
     tag = "v${version}";
-    hash = "sha256-ngPx95ybgJmndpNPBwCa3BCNsozRg+dlEw+nhlIwI58=";
+    hash = "sha256-c3ucbneUo5UBfdrd5Ktl4HriVusvWBEA1brrgahEQ9A=";
   };
 
   patches = [
