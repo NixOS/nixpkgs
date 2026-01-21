@@ -14,14 +14,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ramalama";
-  version = "0.15.0";
+  version = "0.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "ramalama";
     tag = "v${version}";
-    hash = "sha256-0R7y1PpAxXzSlhfOFHf3cWPzZ544fYVUL0w7jOFSuAU=";
+    hash = "sha256-BvnnV7HbxY3ib/JPbIQRE4N4Bf5L0pFPnQJ0NBNdmIs=";
   };
 
   build-system = with python3Packages; [
@@ -31,6 +31,7 @@ python3Packages.buildPythonApplication rec {
 
   dependencies = with python3Packages; [
     argcomplete
+    bcrypt
     pyyaml
     jsonschema
     jinja2
