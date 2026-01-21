@@ -16466,6 +16466,8 @@ self: super: with self; {
 
   result = callPackage ../development/python-modules/result { };
 
+  resvg-py = callPackage ../development/python-modules/resvg-py { };
+
   rethinkdb = callPackage ../development/python-modules/rethinkdb { };
 
   retinaface = callPackage ../development/python-modules/retinaface { };
