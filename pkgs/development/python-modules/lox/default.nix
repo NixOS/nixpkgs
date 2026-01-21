@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "lox";
-  version = "0.13.0";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "BrianPugh";
     repo = "lox";
     tag = "v${version}";
-    hash = "sha256-I/+/wl+H3OLAN26qJVqyqgW72GoTddm59j2Y6fsz8AM=";
+    hash = "sha256-PZKs+D1TmrBr+1M4ni7kKLywQ8Z6YCVjH2HFF6QjHdY=";
   };
 
   build-system = [ setuptools ];
