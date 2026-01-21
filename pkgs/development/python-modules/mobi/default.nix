@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "mobi";
-  version = "0.3.3";
+  version = "0.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "iscc";
     repo = "mobi";
     tag = "v${version}";
-    hash = "sha256-g1L72MkJdrKQRsEdew+Qsn8LfCn8+cmj2pmY6s4nv2U=";
+    hash = "sha256-Hbw4TX/yKkuxYQ9vZZp/wasDCop8pvyQc5zWloMQbng=";
   };
 
   pythonRelaxDeps = [ "loguru" ];
