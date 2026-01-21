@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "ipympl";
-  version = "0.9.7";
+  version = "0.9.8";
   format = "wheel";
 
   src = fetchPypi {
     inherit pname version;
     format = "wheel";
-    hash = "sha256-NpjufqoLBHp2A1F9eqG3GzIRil9RdUyrRexdmU9nII8=";
+    hash = "sha256-bXIw1Rg4RSEJPzhU99uJ0Gnc2cKKk1s3HpyfEmNU3uE=";
     dist = "py3";
     python = "py3";
   };
