@@ -38,14 +38,14 @@
 
 buildPythonPackage rec {
   pname = "sqlframe";
-  version = "3.43.8";
+  version = "3.45.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "eakmanrq";
     repo = "sqlframe";
     tag = "v${version}";
-    hash = "sha256-gsWA3aBolsR2zPwseHnQXSJRngXUHFGvi55UPevgUHw=";
+    hash = "sha256-S0tcdmdA9SptmaFT/G3efO3yPLWrBOJVDLCK3Zu2r9w=";
   };
 
   build-system = [ setuptools-scm ];
@@ -97,6 +97,8 @@ buildPythonPackage rec {
     # duckdb.duckdb.CatalogException: Catalog Error: Table Function with name "dsdgen" is not in the catalog, but it exists in the tpcds extension.
     # "tests/integration/test_int_dataframe.py"
     "tests/integration/"
+    # AttributeError: module 'pyspark.sql.functions' has no attribute 'JVMView'
+    "tests/unit/*/test_activate.py"
   ];
 
   meta = {
