@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "pytest-mpl";
-  version = "0.17.0";
+  version = "0.18.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-++8F1+ZktLM0UvtpisGI5SJ5HzJ9405+o329/p1SysY=";
+    hash = "sha256-BMlJ6hJ4o4yj2NZ1hx9sWglYv+369P2L/U4l5YYXWac=";
   };
 
   build-system = [
