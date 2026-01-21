@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pypika";
-  version = "0.49.0";
+  version = "0.50.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kayak";
     repo = "pypika";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-Lawsc19sJ3U7rCOnYvDWhWqK/J+Hd3zKG6TrhDsTtVs=";
+    tag = "v${version}";
+    hash = "sha256-gjHr4tWy1kL7IxOe5QmH0S/HB+MsF/IOIQcTu3yjv6c=";
   };
 
   patches = [
