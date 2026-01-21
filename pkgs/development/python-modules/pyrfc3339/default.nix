@@ -5,6 +5,7 @@
 
   # build-system
   setuptools,
+  setuptools-scm,
 
   # dependencies
   pytz,
@@ -25,7 +26,10 @@ buildPythonPackage rec {
     hash = "sha256-pNtv60ecJ7kceS+dDMuKVCQGARf0SbNVBLqqTIzHDj0=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [ pytz ];
 
