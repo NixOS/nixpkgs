@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "websockets";
-  version = "15.0.1";
+  version = "16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aaugustin";
     repo = "websockets";
     tag = version;
-    hash = "sha256-DC1nK+TvCoCqchyWJOyT4Ul4gkTYXixu7XmTqvytqEo=";
+    hash = "sha256-75FkU45qbOb+xbJO4VKqfWBTep+Toh6OWch2WXnU4bg=";
   };
 
   build-system = [ setuptools ];
