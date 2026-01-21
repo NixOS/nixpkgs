@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "batinfo";
-  version = "0.4.2";
+  version = "2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nicolargo";
     repo = "batinfo";
     tag = "v${version}";
-    hash = "sha256-GgAJJA8bzQJLAU+nxmkDa5LFTHc4NGi+nj9PfKyw8/M=";
+    hash = "sha256-7oR8FRnl6reFHKPf49ZH3zQIjgOX1KTOxb3aCRNYOSg=";
   };
 
   postPatch = ''
