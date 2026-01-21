@@ -184,7 +184,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ optional (!hostCpuOnly) "--enable-targets=all"
   ++ [
-    (enableFeature (!stdenv.hostPlatform.isStatic) "inprocess-agent")
+    (enableFeature (
+      !stdenv.hostPlatform.isStatic && !stdenv.hostPlatform.isLoongArch64
+    ) "inprocess-agent")
   ]
   # Workaround for Apple Silicon, "--target" must be "faked", see eg: https://github.com/Homebrew/homebrew-core/pull/209753
   ++ optional (
