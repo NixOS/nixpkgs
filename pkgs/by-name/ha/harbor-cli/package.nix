@@ -15,7 +15,7 @@ buildGoModule (finalAttrs: {
     owner = "goharbor";
     repo = "harbor-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZlpOBYUQ6J3RsFHkoPo9Y039DpBlJTWRCkXFyLKXshU=";
+    hash = "sha256-bU42N2+zyOqdiJFbgaqcxsApdslQFOleythDE6hs8sY=";
   };
 
   vendorHash = "sha256-qTaXIkZ1g7jsPV4IkduIS6REIhs9JJcS2mOg3V77DTg=";
