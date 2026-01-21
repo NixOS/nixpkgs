@@ -94,13 +94,19 @@ let
     ];
   };
 
+  cfgSec = config.security;
+
   sudo_doas =
-    if config.security.sudo.enable || config.security.sudo-rs.enable then
+    if cfgSec.sudo.enable || cfgSec.sudo-rs.enable then
       "sudo"
-    else if config.security.doas.enable then
+    else if cfgSec.doas.enable then
       "doas"
     else
       throw "The btrbk nixos module needs either sudo or doas enabled in the configuration";
+
+  sudoWheel = optional (
+    sudo_doas == "sudo" && (cfgSec.sudo.execWheelOnly || cfgSec.sudo-rs.execWheelOnly)
+  ) "wheel";
 
   addDefaults = settings: { backend = "btrfs-progs-${sudo_doas}"; } // settings;
 
@@ -321,6 +327,7 @@ in
       createHome = true;
       shell = "${pkgs.bash}/bin/bash";
       group = "btrbk";
+      extraGroups = sudoWheel;
       openssh.authorizedKeys.keys = map (
         v:
         let
