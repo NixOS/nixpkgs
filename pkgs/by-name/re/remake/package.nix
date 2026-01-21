@@ -38,7 +38,6 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux ++ darwin;
     maintainers = with lib.maintainers; [
       bjornfor
-      shamilton
     ];
   };
 }

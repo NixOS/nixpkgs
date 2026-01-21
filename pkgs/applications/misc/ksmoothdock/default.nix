@@ -42,7 +42,6 @@ mkDerivation rec {
     mainProgram = "ksmoothdock";
     license = lib.licenses.mit;
     homepage = "https://dangvd.github.io/ksmoothdock/";
-    maintainers = with lib.maintainers; [ shamilton ];
     platforms = lib.platforms.linux;
   };
 }

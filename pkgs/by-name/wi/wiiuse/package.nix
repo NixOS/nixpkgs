@@ -51,7 +51,6 @@ stdenv.mkDerivation rec {
     mainProgram = "wiiuseexample";
     license = lib.licenses.gpl3Plus;
     homepage = "https://github.com/wiiuse/wiiuse";
-    maintainers = with lib.maintainers; [ shamilton ];
     platforms = with lib.platforms; unix;
   };
 }

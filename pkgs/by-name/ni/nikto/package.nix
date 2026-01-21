@@ -65,7 +65,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     homepage = "https://cirt.net/Nikto2";
     changelog = "https://github.com/sullo/nikto/releases/tag/${version}";
-    maintainers = with lib.maintainers; [ shamilton ];
     platforms = lib.platforms.unix;
   };
 }

@@ -134,7 +134,6 @@ mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
-      shamilton
       xddxdd
     ];
     platforms = lib.platforms.linux;

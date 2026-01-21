@@ -108,7 +108,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       artemist
       benley
-      shamilton
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
