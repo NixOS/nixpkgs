@@ -36,14 +36,14 @@
 
 buildPythonPackage rec {
   pname = "euporie";
-  version = "2.9.1";
+  version = "2.10.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "joouha";
     repo = "euporie";
     tag = "v${version}";
-    hash = "sha256-3wP6NzQaudXfACuMKYjWAQjNYQYmqeuyrvQUN8lbgyk=";
+    hash = "sha256-wXHhv5vK17XDGh+2GTaw7hoSi4tC9jGVoyrfw1yt6Zo=";
   };
 
   build-system = [
