@@ -22,12 +22,12 @@
 
 buildPythonPackage rec {
   pname = "tesserocr";
-  version = "2.8.0";
+  version = "2.9.2";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-vlGNGxtf9UwRqtoeD9EpQlCepwWB4KizmipHOgstvTY=";
+    hash = "sha256-L6H+PHlXXW/VtSd4Xnc/oZsFXwf5Iv6yrJ1sHmIjNSI=";
   };
 
   patches = [
