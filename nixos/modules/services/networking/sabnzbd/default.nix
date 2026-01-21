@@ -13,7 +13,6 @@ let
     mkOptionDefault
     mkIf
     literalExpression
-    optionalString
     types
     ;
   inherit (lib.generators)
@@ -79,7 +78,6 @@ let
       mkSection = (
         depth: attrs:
         let
-          atoms = extractAtoms attrs;
           sections = extractSections attrs;
           sectionHeadingLeft = lib.concatStrings (lib.replicate (depth + 1) "[");
           sectionHeadingRight = lib.concatStrings (lib.replicate (depth + 1) "]");
@@ -531,11 +529,18 @@ in
 
           ${lib.toShellVar "files" files}
 
+          tmpfile=$(mktemp)
+
           ${lib.getExe (pkgs.python3.withPackages (py: [ py.configobj ]))} \
             ${./config_merge.py} \
-            "''${files[@]}" | \
-          install -D -m ${if cfg.allowConfigWrite then "600" else "400"} \
-            -o '${cfg.user}' -g '${cfg.group}' /dev/stdin ${iniPathQuoted}
+            "''${files[@]}" \
+            > "$tmpfile"
+
+          install -D \
+            -m ${if cfg.allowConfigWrite then "600" else "400"} \
+            -o '${cfg.user}' -g '${cfg.group}' \
+            "$tmpfile" \
+            ${iniPathQuoted}
         '';
       };
 
