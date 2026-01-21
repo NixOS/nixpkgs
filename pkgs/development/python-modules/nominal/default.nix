@@ -17,6 +17,12 @@
   ffmpeg-python,
   pytest-cov-stub,
   pytestCheckHook,
+  cachetools,
+  openpyxl,
+  polars,
+  rich,
+  truststore,
+  urllib3,
 }:
 
 buildPythonPackage rec {
@@ -45,6 +51,12 @@ buildPythonPackage rec {
     pyyaml
     tabulate
     ffmpeg-python
+    cachetools
+    openpyxl
+    polars
+    rich
+    truststore
+    urllib3
   ];
 
   optional-dependencies = {
