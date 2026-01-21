@@ -29,6 +29,7 @@
   pyyaml,
   requests,
   responses,
+  sagemaker,
   setuptools,
   werkzeug,
   xmltodict,
@@ -36,14 +37,14 @@
 
 buildPythonPackage rec {
   pname = "moto";
-  version = "5.1.11";
+  version = "5.1.20";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "getmoto";
     repo = "moto";
     tag = version;
-    hash = "sha256-krZrPzH8/pOGvQTcofT2TzyytDXs9FTpqh9JK0QN44E=";
+    hash = "sha256-YYRXGsdAsPk/0U8VTOBBTBs84xjskar1IczWOxoEFLQ=";
   };
 
   build-system = [
@@ -297,6 +298,7 @@ buildPythonPackage rec {
     pytest-order
     pytest-xdist
     pytestCheckHook
+    sagemaker
   ]
   ++ optional-dependencies.server;
 
@@ -387,7 +389,7 @@ buildPythonPackage rec {
   meta = {
     description = "Allows your tests to easily mock out AWS Services";
     homepage = "https://github.com/getmoto/moto";
-    changelog = "https://github.com/getmoto/moto/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/getmoto/moto/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ onny ];
   };
