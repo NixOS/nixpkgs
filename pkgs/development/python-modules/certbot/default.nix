@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "certbot";
-  version = "5.1.0";
+  version = "5.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "certbot";
     repo = "certbot";
     tag = "v${version}";
-    hash = "sha256-jKhdclLBeWv6IxIZQtD8VWbSQ3SDZePA/kTxjiBXJ4o=";
+    hash = "sha256-+LQX845Qw/T+kR846bNu9xTJ0zcL76rtp48e/Cgu6Vk=";
   };
 
   postPatch = "cd certbot"; # using sourceRoot would interfere with patches
