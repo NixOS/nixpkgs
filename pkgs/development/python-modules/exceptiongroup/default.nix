@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "exceptiongroup";
-  version = "1.3.0";
+  version = "1.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "agronholm";
     repo = "exceptiongroup";
     tag = version;
-    hash = "sha256-b3Z1NsYKp0CecUq8kaC/j3xR/ZZHDIw4MhUeadizz88=";
+    hash = "sha256-3WInufN+Pp6vB/Gik6e8V1a34Dr/oiH3wDMB+2lHRMM=";
   };
 
   build-system = [ flit-scm ];
