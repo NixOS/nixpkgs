@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "genshi";
-  version = "0.7.9";
+  version = "0.7.10";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "Genshi";
     inherit version;
-    hash = "sha256-x2FwqLLcGJROCRUQPChMuInfzuNODhQLozY8gPdUGtI=";
+    hash = "sha256-hbDbETYlMU8PRPP+bvDrJWTWw03S7lZ3tJXRUUK7SXM=";
   };
 
   # FAIL: test_sanitize_remove_script_elem (genshi.filters.tests.html.HTMLSanitizerTestCase)
