@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "google-auth";
-  version = "2.45.0";
+  version = "2.47.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-auth-library-python";
     tag = "v${version}";
-    hash = "sha256-CONPYm88g8AvGlb7HBMKyWFTGntkgEkDZ2RHKyqoYhw=";
+    hash = "sha256-kgiqKeS8NTlz56yYKE8U/eKFQjHD6CJHOH5IKLgOeDk=";
   };
 
   build-system = [ setuptools ];
