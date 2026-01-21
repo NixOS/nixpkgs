@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "hishel";
-  version = "0.1.3";
+  version = "1.1.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "karpetrosyan";
     repo = "hishel";
     tag = version;
-    hash = "sha256-3dcXj9MPPtHBzafdccrOeh+Wrn9hulDA8L3itOe8ZXw=";
+    hash = "sha256-VuUt1M0+ZztWoFZomAR5s1YQ4suIN3uEq54gLTjBLeY=";
   };
 
   build-system = [
