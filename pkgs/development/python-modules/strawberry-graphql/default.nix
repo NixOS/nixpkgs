@@ -43,14 +43,14 @@
 
 buildPythonPackage rec {
   pname = "strawberry-graphql";
-  version = "0.278.0";
+  version = "0.289.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "strawberry-graphql";
     repo = "strawberry";
     tag = version;
-    hash = "sha256-GNjjSD40fhbMqfvuYSuP3tU8lfOqBGJIsoGWZCfj6C4=";
+    hash = "sha256-eiIyAYId5MHKWmn87Cj/TCNN4YU5KkAWMEMhoMIR8xM=";
   };
 
   postPatch = ''
