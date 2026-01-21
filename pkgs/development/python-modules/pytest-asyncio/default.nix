@@ -29,6 +29,8 @@ buildPythonPackage rec {
 
   build-system = [ setuptools-scm ];
 
+  pythonRelaxDeps = [ "pytest" ];
+
   buildInputs = [ pytest ];
 
   dependencies =
