@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "mdformat-mkdocs";
-  version = "4.4.2";
+  version = "5.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "KyleKing";
     repo = "mdformat-mkdocs";
     tag = "v${version}";
-    hash = "sha256-u3IHqllknX6ilReXRVyZoDfqid8Ioe+zvC3wPh04HXo=";
+    hash = "sha256-PklT9LlaIQFG194zhHQhzR8kVe084Q+1Bo9180eOMd0=";
   };
 
   build-system = [ flit-core ];
