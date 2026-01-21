@@ -3,6 +3,7 @@
   lib,
   fetchurl,
   makeWrapper,
+  nix-update-script,
 }:
 
 # Based on https://gist.github.com/msteen/96cb7df66a359b827497c5269ccbbf94 and joplin-desktop nixpkgs.
@@ -36,6 +37,8 @@ appimageTools.wrapType2 rec {
     substituteInPlace $out/share/applications/Zettlr.desktop \
       --replace-fail 'Exec=AppRun' 'Exec=${pname}'
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Markdown editor for writing academic texts and taking notes";
