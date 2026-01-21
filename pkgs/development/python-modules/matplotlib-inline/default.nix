@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  flit-core,
   traitlets,
 
   # tests
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-qExS0SsbnYgu0wFTew90z5QwPyJ+UWGVEgFURSMedSY=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ flit-core ];
 
   dependencies = [ traitlets ];
 
