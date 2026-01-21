@@ -9,13 +9,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "botocore-stubs";
-  version = "1.42.30";
+  version = "1.42.31";
   pyproject = true;
 
   src = fetchPypi {
     pname = "botocore_stubs";
     inherit (finalAttrs) version;
-    hash = "sha256-xNEWeOsXImP+sd6AVFLDdtnBHlTxkDp8+hMrp2XVe30=";
+    hash = "sha256-5+di43sgXHunl4LGfMXDUVF0jOJnRwpwrJwCYINlXZ8=";
   };
 
   build-system = [ setuptools ];
