@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "beets-copyartifacts";
-  version = "0.1.5";
+  version = "0.1.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = "beets-copyartifacts";
     owner = "adammillerio";
     tag = "v${version}";
-    hash = "sha256-UTZh7T6Z288PjxFgyFxHnPt0xpAH3cnr8/jIrlJhtyU=";
+    hash = "sha256-fMnXuMwxylO9Q7EFPpkgwwNeBuviUa8HduRrqrqdMaI=";
   };
 
   postPatch = ''
