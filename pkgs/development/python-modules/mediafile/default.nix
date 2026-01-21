@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "mediafile";
-  version = "0.13.0";
+  version = "0.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "beetbox";
     repo = "mediafile";
     tag = "v${version}";
-    hash = "sha256-Knp91nVPFkE2qYSZoWcOsMBNY+OBfWCPPNn+T1L8v0o=";
+    hash = "sha256-D5LRGncdeGcmJkrHVvI2cevov4SFO0wuhLxMqP+Ryb8=";
   };
 
   build-system = [ flit-core ];
