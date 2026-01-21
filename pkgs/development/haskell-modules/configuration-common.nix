@@ -3021,16 +3021,6 @@ with haskellLib;
   # https://github.com/mchav/snappy-hs/commit/400490df38e0db7f353c0427f034a231bdf73098#r167007963
   snappy-hs = doJailbreak super.snappy-hs;
 
-  # Too strict upper bound on doctest
-  # https://github.com/awakesecurity/proto3-wire/pull/111
-  proto3-wire = appendPatches [
-    (fetchpatch {
-      name = "add-reverse-encoders-for-packed-repeated-fields.patch";
-      url = "https://github.com/awakesecurity/proto3-wire/commit/fcc53d9935b64b6d8aaf65c8cef17f4bbed56867.patch";
-      hash = "sha256-GzXlweRshVLA29xVHhJSRIU40y+KtAplIqfvp0I8cY0=";
-    })
-  ] super.proto3-wire;
-
   # 2024-07-27: building test component requires non-trivial custom build steps
   # https://github.com/awakesecurity/proto3-suite/blob/bec9d40e2767143deed5b2d451197191f1d8c7d5/nix/overlays/haskell-packages.nix#L311
   # Hackage release trails a good deal behind master
