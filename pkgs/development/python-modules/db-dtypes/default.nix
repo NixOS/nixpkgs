@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "db-dtypes";
-  version = "1.4.4";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-db-dtypes-pandas";
     tag = "v${version}";
-    hash = "sha256-Aq/2yDyvUpLsGr+mmBDQpC9X1pWLpDtYD6qql2sgGNw=";
+    hash = "sha256-cF40Y2J944AojOXKoTzQ/ybTFY4GP5G8KWY6+NWyRT8=";
   };
 
   # https://github.com/googleapis/python-db-dtypes-pandas/pull/379
