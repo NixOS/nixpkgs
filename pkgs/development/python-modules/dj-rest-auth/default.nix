@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "dj-rest-auth";
-  version = "7.0.1";
+  version = "7.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "iMerica";
     repo = "dj-rest-auth";
     tag = version;
-    hash = "sha256-bus7Sf5H4PA5YFrkX7hbALOq04koDz3KTO42hHFJPhw=";
+    hash = "sha256-tgcEnB9n9pq+TBde8udsr8osdAAJqmXaaU1Wt2psPIw=";
   };
 
   patches = [
@@ -97,7 +97,7 @@ buildPythonPackage rec {
   meta = {
     description = "Authentication for Django Rest Framework";
     homepage = "https://github.com/iMerica/dj-rest-auth";
-    changelog = "https://github.com/iMerica/dj-rest-auth/releases/tag/${version}";
+    changelog = "https://github.com/iMerica/dj-rest-auth/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ onny ];
   };
