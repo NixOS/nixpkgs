@@ -9,21 +9,27 @@
   pycparser,
   pythonOlder,
   setuptools,
+  scikit-build-core,
+  cmake,
+  ninja,
 }:
 
 buildPythonPackage rec {
   pname = "pyvex";
-  version = "9.2.154";
+  version = "9.2.194";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-a3ei2w66v18QKAofpPvDUoM42zHRHPrNQic+FE+rLKY=";
+    hash = "sha256-obM8FsChD5ZR8O8CNgKsqC+x9+1WjFMscUUtLi91oQA=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    scikit-build-core
+  ];
 
   dependencies = [
     bitstring
@@ -33,7 +39,13 @@ buildPythonPackage rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  nativeBuildInputs = [ cffi ];
+  nativeBuildInputs = [
+    cffi
+    cmake
+    ninja
+  ];
+
+  dontUseCmakeConfigure = true;
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace vex/Makefile-gcc \
@@ -47,8 +59,6 @@ buildPythonPackage rec {
 
   preBuild = ''
     export CC=${stdenv.cc.targetPrefix}cc
-    substituteInPlace pyvex_c/Makefile \
-      --replace-fail 'AR=ar' 'AR=${stdenv.cc.targetPrefix}ar'
   '';
 
   # No tests are available on PyPI, GitHub release has tests
