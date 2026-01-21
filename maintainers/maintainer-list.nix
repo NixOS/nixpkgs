@@ -25070,6 +25070,12 @@
     github = "stasjok";
     githubId = 1353637;
   };
+  staslyakhov = {
+    name = "Stas Lyakhov";
+    email = "nix@lyakhovs.dev";
+    github = "staslyakhov";
+    githubId = 19846456;
+  };
   staticdev = {
     email = "staticdev-support@proton.me";
     github = "staticdev";
