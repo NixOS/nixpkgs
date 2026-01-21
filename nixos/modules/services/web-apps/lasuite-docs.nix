@@ -529,6 +529,11 @@ in
           recommendedProxySettings = true;
         };
 
+        locations."/static/admin" = {
+          proxyPass = "http://${cfg.bind}";
+          recommendedProxySettings = true;
+        };
+
         locations."/collaboration/ws/" = {
           proxyPass = "http://localhost:${toString cfg.collaborationServer.port}";
           recommendedProxySettings = true;
