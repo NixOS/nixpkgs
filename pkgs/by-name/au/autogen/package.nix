@@ -8,7 +8,7 @@
   which,
   pkg-config,
   perl,
-  guile_2_2,
+  guile,
   libxml2,
 }:
 
@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
     buildPackages.texinfo
   ];
   buildInputs = [
-    guile_2_2
+    guile
     libxml2
   ];
 
