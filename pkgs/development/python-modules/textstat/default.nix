@@ -9,7 +9,7 @@
   pytest,
 }:
 buildPythonPackage rec {
-  version = "0.7.8";
+  version = "0.7.12";
   pname = "textstat";
   pyproject = true;
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "textstat";
     repo = "textstat";
     tag = version;
-    hash = "sha256-EEGTmZXTAZ4fsfZk/ictvjQ6lCAi5Ma/Ae83ziGDQXQ=";
+    hash = "sha256-HOYeWpyWPLUEwnj21WfMNmIg9x+jQUtY1o+Sl5zJRq4=";
   };
 
   build-system = [
