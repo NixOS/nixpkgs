@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "agate-dbf";
-  version = "0.2.3";
+  version = "0.2.4";
   format = "setuptools";
 
   propagatedBuildInputs = [
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mKK1N1cTbMdNwpflniEB009tSPQfdBVrtsDeJruiqj8=";
+    hash = "sha256-ZVSCixAEinbbtbxO/4kR4FnqK0cVW3qJNR44KRXKFvw=";
   };
 
   meta = {
