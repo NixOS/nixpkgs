@@ -22,6 +22,12 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
+
   meta = {
     description = "Open source software for reading and writing Data Matrix barcodes";
     homepage = "https://github.com/dmtx/libdmtx";
