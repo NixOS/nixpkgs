@@ -4,6 +4,7 @@
   fetchFromGitHub,
   hatchling,
   pytest,
+  pytest-fixture-classes,
   pytestCheckHook,
 }:
 
@@ -30,7 +31,10 @@ buildPythonPackage rec {
 
   dependencies = [ pytest ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-fixture-classes
+    pytestCheckHook
+  ];
 
   disabledTestPaths = [
     # missing pytest-deadfixtures
