@@ -9,6 +9,9 @@ module.exports = async ({ github, context, core, dry }) => {
 
   const artifactClient = new DefaultArtifactClient()
 
+  // Detect if running in a fork (not NixOS/nixpkgs)
+  const isFork = context.repo.owner !== 'NixOS'
+
   async function downloadMaintainerMap(branch) {
     let run
 
@@ -68,9 +71,18 @@ module.exports = async ({ github, context, core, dry }) => {
 
     // We get here when none of the 10 commits we looked at contained a maintainer map.
     // For the master branch, we don't have any fallback options, so we error out.
-    // For other branches, we select a suitable fallback below.
-    if (branch === 'master') throw new Error('No maintainer map found.')
+    // In forks without merge-group history, return empty map to allow testing.
+    if (branch === 'master') {
+      if (isFork) {
+        core.warning(
+          'No maintainer map found. Using empty map (expected in forks without merge-group history).',
+        )
+        return {}
+      }
+      throw new Error('No maintainer map found.')
+    }
 
+    // For other branches, we select a suitable fallback below.
     const { stable, version } = classify(branch)
 
     const release = `release-${version}`
