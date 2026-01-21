@@ -76,6 +76,11 @@ let
     SystemCallArchitectures = "native";
     UMask = "0077";
   };
+
+  # Easier usage of django manage.py stuff
+  manage = pkgs.writeShellScript "manage" ''
+    ${lib.getExe' pkgs.util-linux "nsenter"} -t "$(${lib.getExe' config.systemd.package "systemctl"} show -p MainPID lasuite-docs --value)" -a --wdns=${commonServiceConfig.WorkingDirectory} -e -S follow -G follow ${lib.getExe cfg.backendPackage} "$@"
+  '';
 in
 {
   options.services.lasuite-docs = {
@@ -409,6 +414,7 @@ in
       wantedBy = [ "multi-user.target" ];
 
       preStart = ''
+        ln -sf ${manage} lasuite-docs-manage
         if [ ! -f .version ]; then
           touch .version
         fi
