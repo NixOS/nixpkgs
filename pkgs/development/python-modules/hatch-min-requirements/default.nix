@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "hatch-min-requirements";
-  version = "0.1.0";
+  version = "0.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tlambert03";
     repo = "hatch-min-requirements";
     tag = "v${version}";
-    hash = "sha256-7/6Es0DHDJ8jZ76kVbWkQjWFd8hWuB+PwCbOmIjzK5o=";
+    hash = "sha256-QKO5fVvjSqwY+48Fc8sAiZazrxZ4eBYxzVElHr2lcEA=";
   };
 
   build-system = [
