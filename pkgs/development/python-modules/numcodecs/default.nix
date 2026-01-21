@@ -27,12 +27,12 @@
 
 buildPythonPackage rec {
   pname = "numcodecs";
-  version = "0.16.3";
+  version = "0.16.5";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-U9cFhl+q8KeSfJc683d1MgAcj7tlPeEZwehEYIYU15k=";
+    hash = "sha256-DQ+2CFL4TAvZVDzE0que79N/yO/MQQrNR3fmKh0wAxg=";
   };
 
   build-system = [
