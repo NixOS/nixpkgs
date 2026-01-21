@@ -36,16 +36,6 @@ buildPythonPackage rec {
     hash = "sha256-JrfDV6zMDIzeVYrUhig3KLZbapXYXuHNZrr6tMgWhQk=";
   };
 
-  # backport patch to fix tests with Python 3.13.4
-  # FIXME: remove in next update
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/networkx/networkx/commit/d85b04a8b9619580d8901f35400414f612c83113.patch";
-      includes = [ "networkx/generators/lattice.py" ];
-      hash = "sha256-6y/aJBDgNkUzmQ6o52CGVVzqoQgkCEXA4iAXhv1cS0c=";
-    })
-  ];
-
   nativeBuildInputs = [ setuptools ];
 
   optional-dependencies = {
