@@ -38,15 +38,15 @@
 
 buildPythonPackage rec {
   pname = "jupysql";
-  version = "0.11.1";
+  version = "0.38";
 
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ploomber";
     repo = "jupysql";
-    tag = version;
-    hash = "sha256-7wfKvKqDf8LlUiLoevNRxmq8x5wLheOgIeWz72oFcuw=";
+    tag = "v${version}";
+    hash = "sha256-Z132bGkjXUNPIscIfIM8FKRO0Uc/z4Sl932CVN8f3lc=";
   };
 
   pythonRelaxDeps = [ "sqlalchemy" ];
@@ -131,7 +131,7 @@ buildPythonPackage rec {
   meta = {
     description = "Better SQL in Jupyter";
     homepage = "https://github.com/ploomber/jupysql";
-    changelog = "https://github.com/ploomber/jupysql/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/ploomber/jupysql/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ euxane ];
   };
