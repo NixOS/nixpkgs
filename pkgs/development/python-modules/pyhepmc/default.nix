@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "pyhepmc";
-  version = "2.14.0";
+  version = "2.16.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "pyhepmc";
-    tag = "v${version}";
-    hash = "sha256-yh02Z1nPGjghZYHkPBlClDEztq4VQsW3H+kuco/lBpk=";
+    tag = version;
+    hash = "sha256-FMxcebZikZXwgEW3BIlHtDVQPweN8zBku0K8FOmF6vA=";
     fetchSubmodules = true;
   };
 
@@ -50,7 +50,7 @@ buildPythonPackage rec {
   meta = {
     description = "Easy-to-use Python bindings for HepMC3";
     homepage = "https://github.com/scikit-hep/pyhepmc";
-    changelog = "https://github.com/scikit-hep/pyhepmc/releases/tag/v${version}";
+    changelog = "https://github.com/scikit-hep/pyhepmc/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ veprbl ];
   };
