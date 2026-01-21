@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "zope-event";
-  version = "6.0";
+  version = "6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zope.event";
     tag = version;
-    hash = "sha256-1ZdhJwxzYsMT2s+z4MLR71cLFzIEmwE0KFilwg7BQ1E=";
+    hash = "sha256-ugyHPqqFcObgldThkkUQgZnl1fVEcXYFnXyAxNwUFIE=";
   };
 
   postPatch = ''
