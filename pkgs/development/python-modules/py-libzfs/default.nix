@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "py-libzfs";
-  version = "24.04.0";
+  version = "25.10.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "truenas";
     repo = "py-libzfs";
-    rev = "TS-${version}";
-    hash = "sha256-Uiu0RNE06++iNWUNcKpbZvreT2D7/EqHlFZJXKe3F4A=";
+    tag = "TS-${version}";
+    hash = "sha256-kme5qUG0Nsya8HxU/oMHP1AidoMMOob/EON8sZMzKKI=";
   };
 
   patches = [
