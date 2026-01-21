@@ -32,14 +32,14 @@ let
 in
 buildPythonPackage rec {
   pname = "nglview";
-  version = "3.1.4";
+  version = "4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nglviewer";
     repo = "nglview";
     tag = "v${version}";
-    hash = "sha256-QY7rn6q67noWeoLn0RU2Sn5SeJON+Br/j+aNMlK1PDo=";
+    hash = "sha256-Dacsg3+asY0THJ5qrM7+IZCnc2rhCOrbOfN7Xai63Ac=";
   };
 
   build-system = [
@@ -88,7 +88,7 @@ buildPythonPackage rec {
   meta = {
     description = "IPython/Jupyter widget to interactively view molecular structures and trajectories";
     homepage = "https://github.com/nglviewer/nglview";
-    changelog = "https://github.com/nglviewer/nglview/releases/tag/v${version}";
+    changelog = "https://github.com/nglviewer/nglview/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ guelakais ];
   };
