@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "tensorboardx";
-  version = "2.6.2.2";
+  version = "2.6.4";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "lanpa";
     repo = "tensorboardX";
     tag = "v${version}";
-    hash = "sha256-4eMkjya0B+r/DMQobeFJCfYHwnTOWrb+aNkkW2XvoqY=";
+    hash = "sha256-GZQUJCiCKVthO95jHMIzNFcBM3R85BkyxO74CKCzizc=";
   };
 
   nativeBuildInputs = [
@@ -79,7 +79,7 @@ buildPythonPackage rec {
     description = "Library for writing tensorboard-compatible logs";
     homepage = "https://tensorboardx.readthedocs.io";
     downloadPage = "https://github.com/lanpa/tensorboardX";
-    changelog = "https://github.com/lanpa/tensorboardX/blob/${src.rev}/HISTORY.rst";
+    changelog = "https://github.com/lanpa/tensorboardX/blob/${src.tag}/HISTORY.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       lebastr
