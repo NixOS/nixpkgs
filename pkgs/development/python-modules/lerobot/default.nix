@@ -34,18 +34,19 @@
   # tests
   pytestCheckHook,
   writableTmpDirAsHomeHook,
+  pytest-timeout,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lerobot";
-  version = "0.4.0";
+  version = "0.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "lerobot";
-    tag = "v${version}";
-    hash = "sha256-RVe1X0qBPm+okO3Gi/UdkuvuX0m4RlbhIs+NJLlC9wU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-qBbXFvVQ+cESBrNy8NIoT6GR6dqzeLbRNe3JmcpiiTw=";
   };
 
   # ValueError: mutable default <class 'lerobot.configs.types.PolicyFeature'> for field value is not allowed: use default_factory
@@ -67,12 +68,12 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "av"
-    "datasets"
     "draccus"
     "gymnasium"
     "rerun-sdk"
     "torch"
     "torchvision"
+    "wandb"
   ];
 
   dependencies = [
@@ -109,6 +110,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     writableTmpDirAsHomeHook
+    pytest-timeout
   ];
 
   disabledTests = [
@@ -124,6 +126,9 @@ buildPythonPackage rec {
     "test_dataset_initialization"
     "test_factory"
     "test_from_pretrained_nonexistent_path"
+    "test_load_config_nonexistent_path_tries_hub"
+    "test_make_env_from_hub_async"
+    "test_make_env_from_hub_with_trust"
     "test_policy_defaults"
     "test_save_and_load_pretrained"
 
@@ -149,18 +154,24 @@ buildPythonPackage rec {
     #  Regex: "Can't instantiate abstract class NonCallableStep with abstract method __call_"
     #  Input: "Can't instantiate abstract class NonCallableStep without an implementation for abstract method '__call__'"
     "test_construction_rejects_step_without_call"
+
+    # TypeError: 'NoneType' object is not subscriptable
+    "test_pi0_rtc_inference_with_prev_chunk"
   ];
 
   disabledTestPaths = [
     # Sometimes hang forever on some CPU models
     "tests/policies/test_sac_policy.py"
+
+    # Sometimes hang forever
+    "tests/policies/rtc/test_modeling_rtc.py"
   ];
 
   meta = {
     description = "Making AI for Robotics more accessible with end-to-end learning";
     homepage = "https://github.com/huggingface/lerobot";
-    changelog = "https://github.com/huggingface/lerobot/releases/tag/v${version}";
+    changelog = "https://github.com/huggingface/lerobot/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

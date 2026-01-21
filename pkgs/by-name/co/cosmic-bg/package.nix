@@ -13,14 +13,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-bg";
-  version = "1.0.2";
+  version = "1.0.3";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-bg";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-tiqJ0aXXUNyoezXSsHO9klkFZ5PO+gkVv+zXd4/Lq5A=";
+    hash = "sha256-LBIcQG3ZebK1bPVJ8WNHkHMLPsEcw77oZAkQRrd4j6o=";
   };
 
   postPatch = ''
