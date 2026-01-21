@@ -8,7 +8,6 @@
   jsonnet,
   jsonschema,
   omegaconf,
-  pytest-subtests,
   pytestCheckHook,
   pyyaml,
   reconplogger,
@@ -68,7 +67,6 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    pytest-subtests
     pytestCheckHook
     types-pyyaml
     types-requests

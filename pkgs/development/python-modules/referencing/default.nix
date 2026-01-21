@@ -6,7 +6,6 @@
   hatch-vcs,
   hatchling,
   jsonschema,
-  pytest-subtests,
   pytestCheckHook,
   rpds-py,
   typing-extensions,
@@ -39,7 +38,6 @@ let
 
     nativeCheckInputs = [
       jsonschema
-      pytest-subtests
       pytestCheckHook
     ];
 

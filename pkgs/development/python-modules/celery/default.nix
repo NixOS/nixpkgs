@@ -23,7 +23,6 @@
   pydantic,
   pytest-celery,
   pytest-click,
-  pytest-subtests,
   pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
@@ -92,7 +91,6 @@ buildPythonPackage rec {
     moto
     pytest-celery
     pytest-click
-    pytest-subtests
     pytest-timeout
     pytest-xdist
     pytestCheckHook
