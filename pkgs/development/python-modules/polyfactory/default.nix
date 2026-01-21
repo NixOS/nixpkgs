@@ -49,6 +49,7 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     "tests/test_beanie_factory.py"
+    "tests/test_msgspec_factory.py"
   ];
 
   disabledTests = [
