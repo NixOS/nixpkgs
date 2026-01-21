@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
+  hatchling,
   mock,
   pytestCheckHook,
   cryptography,
@@ -10,22 +10,16 @@
 
 buildPythonPackage rec {
   pname = "py-vapid";
-  version = "1.9.2";
+  version = "1.9.4";
   pyproject = true;
 
   src = fetchPypi {
     pname = "py_vapid";
     inherit version;
-    hash = "sha256-PIlzts+DhK0MmuZNYnDMxIDguSxwLY9eoswD5rUSR/k=";
+    hash = "sha256-oAQCNWDLxU40/AY4CgWA8E/8x4joT7bRnpM57rZVGig=";
   };
 
-  patches = [
-    # Fix tests with latest cryptography
-    # Upstream PR: https://github.com/web-push-libs/vapid/pull/110
-    ./cryptography.patch
-  ];
-
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [ cryptography ];
 
