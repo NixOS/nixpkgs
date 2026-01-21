@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "otxv2";
-  version = "1.5.12";
+  version = "1.41";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AlienVault-OTX";
     repo = "OTX-Python-SDK";
     tag = version;
-    hash = "sha256-JAjBXNsX0Cuni+4L6I1RuaSfors5cBAZ2krPLhIFluY=";
+    hash = "sha256-ifBDvUXTEQZo8DY2YD5DrH6rFJSjAhKAKCBOpG8+/zE=";
   };
 
   build-system = [ setuptools ];
