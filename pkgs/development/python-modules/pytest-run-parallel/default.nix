@@ -15,6 +15,7 @@
   # tests
   pytest-cov-stub,
   pytest-order,
+  pytest-xdist,
   pytestCheckHook,
 }:
 
@@ -43,6 +44,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-cov-stub
     pytest-order
+    pytest-xdist
     pytestCheckHook
   ];
 
