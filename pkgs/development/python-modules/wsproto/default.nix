@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   h11,
   pytestCheckHook,
 }:
@@ -9,14 +10,16 @@
 buildPythonPackage rec {
   pname = "wsproto";
   version = "1.3.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-uGiF3PKU4VIEkZlQ9mbgb/xsfBFMqQCwYNbhYpNSgpQ=";
   };
 
-  propagatedBuildInputs = [ h11 ];
+  build-system = [ setuptools ];
+
+  dependencies = [ h11 ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
