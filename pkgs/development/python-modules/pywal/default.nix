@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "pywal";
-  version = "3.3.0";
+  version = "3.8.13";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1drha9kshidw908k7h3gd9ws2bl64ms7bjcsa83pwb3hqa9bkspg";
+    sha256 = "sha256-eP3Tquvo6enlcyrgscMPDAKnPEkuWPKpJH7CKTNgOzA=";
   };
 
   patches = [
