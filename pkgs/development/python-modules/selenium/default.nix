@@ -7,11 +7,15 @@
   certifi,
   pytestCheckHook,
   trio,
+  trio-typing,
   trio-websocket,
   typing-extensions,
   websocket-client,
   urllib3,
+  filetype,
+  pytest-mock,
   pytest-trio,
+  rich,
   nixosTests,
   stdenv,
   python,
@@ -19,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "selenium";
-  version = "4.29.0";
+  version = "4.40.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SeleniumHQ";
     repo = "selenium";
     tag = "selenium-${version}" + lib.optionalString (lib.versions.patch version != "0") "-python";
-    hash = "sha256-IyMXgYl/TPTpe/Y0pFyJVKj4Mp0xbkg1LSCNHzFL3bE=";
+    hash = "sha256-Yfm2kpAmmEUP+m48PQf09UvFPeGBxd0ukqTtVah5h+E=";
   };
 
   patches = [ ./dont-build-the-selenium-manager.patch ];
@@ -44,6 +48,8 @@ buildPythonPackage rec {
     cp ../rb/lib/selenium/webdriver/atoms/findElements.js $DST_REMOTE
     cp ../javascript/cdp-support/mutation-listener.js $DST_REMOTE
     cp ../third_party/js/selenium/webdriver.json $DST_FF/webdriver_prefs.json
+
+    find $out/${python.sitePackages}/
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $DST_PREFIX/common/macos
@@ -59,16 +65,45 @@ buildPythonPackage rec {
   dependencies = [
     certifi
     trio
+    trio-typing
     trio-websocket
-    urllib3
     typing-extensions
+    urllib3
     websocket-client
   ]
   ++ urllib3.optional-dependencies.socks;
 
+  pythonRemoveDeps = [
+    "types-certifi"
+    "types-urllib3"
+  ];
+
   nativeCheckInputs = [
+    filetype
     pytestCheckHook
+    pytest-mock
     pytest-trio
+    rich
+  ];
+
+  disabledTestPaths = [
+    # ERROR without error context
+    "test/selenium/webdriver/common/bidi_webextension_tests.py"
+    "test/selenium/webdriver/firefox/ff_installs_addons_tests.py"
+    # Fails to find browsers during test phase
+    "test/selenium"
+  ];
+
+  disabledTests = [
+    # Fails to find data that is only copied into out in postInstall
+    "test_missing_cdp_devtools_version_falls_back"
+    "test_uses_windows"
+    "test_uses_linux"
+    "test_uses_mac"
+    "test_set_profile_with_firefox_profile"
+    "test_set_profile_with_path"
+    "test_creates_capabilities"
+    "test_get_connection_manager_for_certs_and_timeout"
   ];
 
   __darwinAllowLocalNetworking = true;
