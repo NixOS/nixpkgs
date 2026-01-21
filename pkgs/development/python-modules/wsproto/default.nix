@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "wsproto";
-  version = "1.2.0";
+  version = "1.3.2";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rVZfJuy5JYij5DvD2WFk3oTNmQJIKxMNDduqlmSoUGU=";
+    hash = "sha256-uGiF3PKU4VIEkZlQ9mbgb/xsfBFMqQCwYNbhYpNSgpQ=";
   };
 
   propagatedBuildInputs = [ h11 ];
