@@ -62,7 +62,7 @@ lib.fix (
   self:
   lib.makeOverridable (
     {
-      npmDepsHash ? "sha256-7/DH0p66FTfC0N42FhWTqehg5m/yq929ANhL4jAt7Ss=",
+      npmDepsHash ? "sha256-nVfFeJXSPO1GVkBkWflARZl2Geyt5ARTn0HVglnPlc0=",
       patches ? [ ],
     }@args:
     buildNpmPackage {
@@ -75,7 +75,7 @@ lib.fix (
       # radicle-httpd using a more limited sparse checkout we need to carry a
       # separate hash.
       src = radicle-httpd.src.override {
-        hash = "sha256-PzokSJkcyFDAaih5gekp4GCQMm0sfF7fAK7iZbX1/S4=";
+        hash = "sha256-Zt9RiuloWmb1eL6f2Gotvy+FMTUvSokOEGOIBrBeO/E=";
         sparseCheckout = [ ];
       };
 
