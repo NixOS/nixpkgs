@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "pipdeptree";
-  version = "2.28.0";
+  version = "2.30.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "pipdeptree";
     tag = version;
-    hash = "sha256-PYlNMAomqN9T60b8bRqb8mnLjFRn3JnI79Tynncxje8=";
+    hash = "sha256-nDCd4Bk5P65+fnFM/kC3cbfPanj5P35/bta86/E65i0=";
   };
 
   postPatch = ''
