@@ -10,14 +10,14 @@
 
 buildPythonPackage {
   pname = "class-doc";
-  version = "0.2.6";
+  version = "1.25";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "danields761";
     repo = "class-doc";
-    rev = "9b122d85ce667d096ebee75a49350bbdbd48686d"; # no 0.2.6 version tag
-    hash = "sha256-4Sn/TuBvBpl1nvJBg327+sVrjGavkYKEYP32DwLWako=";
+    tag = version; # no 0.2.6 version tag
+    hash = "sha256-uHbXzgAFpsr4o7kq+wgZ3l+alAUG6iCUqenonuibiUw=";
   };
 
   patches = [
