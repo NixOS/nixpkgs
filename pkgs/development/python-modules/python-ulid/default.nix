@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "python-ulid";
-  version = "3.0.0";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mdomke";
     repo = "python-ulid";
     tag = version;
-    hash = "sha256-ZMz1LqGJDgaMq4BNU33OPOQfoXFFuwFGcplnqtXSOHA=";
+    hash = "sha256-13yGd6vYnwzTi+KGJgoQ/z6Cy67FKVC4popaj2uPOlQ=";
   };
 
   build-system = [
