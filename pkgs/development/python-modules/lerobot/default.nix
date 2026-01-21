@@ -38,14 +38,14 @@
 
 buildPythonPackage rec {
   pname = "lerobot";
-  version = "0.4.0";
+  version = "0.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "lerobot";
     tag = "v${version}";
-    hash = "sha256-RVe1X0qBPm+okO3Gi/UdkuvuX0m4RlbhIs+NJLlC9wU=";
+    hash = "sha256-qBbXFvVQ+cESBrNy8NIoT6GR6dqzeLbRNe3JmcpiiTw=";
   };
 
   # ValueError: mutable default <class 'lerobot.configs.types.PolicyFeature'> for field value is not allowed: use default_factory
@@ -159,7 +159,7 @@ buildPythonPackage rec {
   meta = {
     description = "Making AI for Robotics more accessible with end-to-end learning";
     homepage = "https://github.com/huggingface/lerobot";
-    changelog = "https://github.com/huggingface/lerobot/releases/tag/v${version}";
+    changelog = "https://github.com/huggingface/lerobot/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
