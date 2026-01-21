@@ -9,12 +9,12 @@
 }:
 buildPythonPackage rec {
   pname = "py-multibase";
-  version = "1.0.3";
+  version = "2.0.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0oog78u2Huwo9VgnoL8ynHzqgP/9kzrsrqauhDEmf+Q=";
+    hash = "sha256-WMGiZBlfoa4p6nB8b8gZZEb0vbkuD5oPEx4PKAsjiDk=";
   };
 
   postPatch = ''
