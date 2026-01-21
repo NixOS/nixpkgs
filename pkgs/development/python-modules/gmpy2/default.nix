@@ -19,7 +19,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "gmpy2";
-  version = "2.2.1";
+  version = "2.2.2";
   pyproject = true;
 
   disabled = isPyPy;
@@ -27,8 +27,8 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "aleaxit";
     repo = "gmpy";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-wrMN3kqLnjItoybKYeo4Pp2M0uma7Kg0JEQM8lr6OI0=";
+    tag = "v${version}";
+    hash = "sha256-joeHec/d82sovfASCU3nlNL6SaThnS/XYPqujiZ9h8s=";
   };
 
   patches = [
