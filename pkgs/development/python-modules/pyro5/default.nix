@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "pyro5";
-  version = "5.15";
+  version = "5.16";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "Pyro5";
     inherit version;
-    hash = "sha256-gsPfyYYLSfiXso/yT+ZxbIQWcsYAr4/kDQ46f6yaP14=";
+    hash = "sha256-1AQY7SrO4NkJPa9QI+0LDLSFprYjQpNK256AGVb1c4s=";
   };
 
   propagatedBuildInputs = [ serpent ];
