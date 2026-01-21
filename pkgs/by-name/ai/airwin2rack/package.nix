@@ -9,29 +9,15 @@
   pkg-config,
   alsa-lib,
   xorg,
+  fontconfig,
   freetype,
-  libGLU,
   libjack2,
   juce,
-  webkitgtk_4_1,
-  libsysprof-capture,
-  pcre2,
-  util-linux,
-  libselinux,
-  libsepol,
-  libthai,
-  libxkbcommon,
-  libdatrie,
-  libepoxy,
   libsoup_3,
-  lerc,
-  sqlite,
   libdeflate,
   xz,
   libwebp,
   glib,
-  gtk3-x11,
-  curl,
   vcv-rack,
   jansson,
   glew,
@@ -105,27 +91,11 @@ stdenv.mkDerivation {
     xorg.libXinerama
     xorg.libXrandr
     xorg.libXrender
-    xorg.libXtst
-    xorg.libXdmcp
-    libGLU
+    fontconfig
     libjack2
     freetype
-    webkitgtk_4_1
     glib
-    gtk3-x11
-    curl
-    libsysprof-capture
-    pcre2
-    util-linux
-    libselinux
-    libsepol
-    libthai
-    libxkbcommon
-    libdatrie
-    libepoxy
     libsoup_3
-    lerc
-    sqlite
     libdeflate
     xz # liblzma
     libwebp
@@ -163,7 +133,7 @@ stdenv.mkDerivation {
     ln -s ${clapJuceExtensions} src-juce/clap-juce-extensions
   '';
 
-  preConfigure = lib.optionalString enableVCVRack ''export RACK_DIR=${vcvRackSdk}'';
+  preConfigure = lib.optionalString enableVCVRack "export RACK_DIR=${vcvRackSdk}";
 
   buildPhase = ''
     runHook preBuild
@@ -208,14 +178,12 @@ stdenv.mkDerivation {
       "-lXinerama"
       "-lXrandr"
       "-lXrender"
-      "-lXtst"
-      "-lXdmcp"
     ]
   );
 
   meta = {
     description = "JUCE Plugin Version of Airwindows Consolidated";
-    homepage = "https://airwindows.com/";
+    homepage = "https://github.com/baconpaul/airwin2rack";
     platforms = [ "x86_64-linux" ];
     license =
       with lib.licenses;
