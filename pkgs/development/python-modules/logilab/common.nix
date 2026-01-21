@@ -2,11 +2,9 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  importlib-metadata,
   mypy-extensions,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   pytz,
   setuptools,
   typing-extensions,
@@ -16,8 +14,6 @@ buildPythonPackage rec {
   pname = "logilab-common";
   version = "2.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
@@ -35,8 +31,7 @@ buildPythonPackage rec {
     setuptools
     mypy-extensions
     typing-extensions
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

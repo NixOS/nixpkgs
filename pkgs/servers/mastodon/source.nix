@@ -5,14 +5,14 @@
   patches ? [ ],
 }:
 let
-  version = "4.5.3";
+  version = "4.5.5";
 in
 applyPatches {
   src = fetchFromGitHub {
     owner = "mastodon";
     repo = "mastodon";
     rev = "v${version}";
-    hash = "sha256-OOcy4eBGao2cVnRYhAogeSw0X234TEr50tFT2sSjmaQ=";
+    hash = "sha256-3tu7HYrJ+32yIgO6zVBokPTt66zICZOBzRFAeEVidWo=";
     passthru = {
       inherit version;
       yarnHash = "sha256-2MOl6kHidkGU2I/cZaUmbQCiEl9SDfL/j9fT/6eNdFA=";

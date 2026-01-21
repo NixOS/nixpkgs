@@ -33,14 +33,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "atril";
-  version = "1.28.2";
+  version = "1.28.3";
 
   src = fetchFromGitHub {
     owner = "mate-desktop";
     repo = "atril";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-NnWD3Gcxn8ZZKdHzg6iclLiSwj3sBvF+BwpNtcU+dSY=";
+    hash = "sha256-y+J/goOl5ol3j0ySLkyQSndS8zc+dOKhyrPv0FmVkZg=";
   };
 
   nativeBuildInputs = [
@@ -73,7 +73,11 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags =
     [ ]
     ++ lib.optionals enableDjvu [ "--enable-djvu" ]
-    ++ lib.optionals enableEpub [ "--enable-epub" ]
+    ++ lib.optionals enableEpub [
+      # FIXME: We ship this with non-existent fallback mathjax-directory
+      # because `MathJax.js` is only available in MathJax 2.7.x.
+      "--enable-epub"
+    ]
     ++ lib.optionals enablePostScript [ "--enable-ps" ]
     ++ lib.optionals enableXps [ "--enable-xps" ]
     ++ lib.optionals enableImages [ "--enable-pixbuf" ];

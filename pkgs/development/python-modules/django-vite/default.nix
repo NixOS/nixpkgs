@@ -3,15 +3,12 @@
   fetchFromGitHub,
   buildPythonPackage,
   django,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "django-vite";
   version = "3.1.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "MrBin99";

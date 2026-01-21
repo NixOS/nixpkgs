@@ -38,17 +38,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustdesk";
-  version = "1.4.4";
+  version = "1.4.5";
 
   src = fetchFromGitHub {
     owner = "rustdesk";
     repo = "rustdesk";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-o7jsVWiCkHaKFpAu27r/Lr1Q9g7uR/OYJdwsiQeDJUA=";
+    hash = "sha256-FRtYafsIKHnGPV8NaiaHxIHkon8/T2P83uq9taUD1Xc=";
   };
 
-  cargoHash = "sha256-gd2vS+p+1QtOWZcRWJWahFGo5rFG+soqxx3vJYSYJUo=";
+  cargoHash = "sha256-mEtTo1ony5w/dzJcHieG9WywHirBoQ/C0WpiAr7pUVc=";
 
   patches = [
     ./make-build-reproducible.patch
@@ -110,6 +110,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     alsa-lib
     xdotool
   ];
+
+  postPatch = ''
+    sed -e '1i #include <cstdint>' -i $cargoDepsCopy/webm-1.1.0/src/sys/libwebm/mkvparser/mkvparser.cc
+    sed -e '1i #include <cstdint>' -i $cargoDepsCopy/webm-sys-1.0.4/libwebm/mkvparser/mkvparser.cc
+  '';
 
   # Add static ui resources and libsciter to same folder as binary so that it
   # can find them.

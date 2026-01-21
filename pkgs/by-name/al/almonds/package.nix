@@ -8,7 +8,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "almonds";
   version = "1.25b";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Tenchi2xh";

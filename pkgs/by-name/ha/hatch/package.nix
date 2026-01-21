@@ -76,8 +76,6 @@ python3Packages.buildPythonApplication rec {
       darwin.ps
     ];
 
-  versionCheckProgramArg = "--version";
-
   disabledTests = [
     # AssertionError: assert (1980, 1, 2, 0, 0, 0) == (2020, 2, 2, 0, 0, 0)
     "test_default"

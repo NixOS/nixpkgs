@@ -8,9 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "pyprland";
   version = "2.5.1";
-  format = "pyproject";
-
-  disabled = python3Packages.pythonOlder "3.10";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hyprland-community";

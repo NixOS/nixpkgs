@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   numpy,
   scikit-learn,
   scipy,
@@ -35,7 +34,7 @@ buildPythonPackage rec {
 
   # AttributeError: 'NoneType' object has no attribute 'span' with Python 3.13
   # https://github.com/skorch-dev/skorch/issues/1080
-  disabled = pythonOlder "3.9" || pythonAtLeast "3.13";
+  disabled = pythonAtLeast "3.13";
 
   build-system = [ setuptools ];
 

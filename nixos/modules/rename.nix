@@ -63,9 +63,20 @@ in
       "networking"
       "wicd"
     ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule
+      [
+        "programs"
+        "adb"
+      ]
+      "This option is no longer needed as systemd 258 handles uaccess rules automatically. Please add `pkgs.android-tools` to your system packages to get the adb command."
+    )
     (mkRemovedOptionModule [
       "programs"
       "cardboard"
+    ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [
+      "programs"
+      "ecryptfs"
     ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [
       "programs"
@@ -132,6 +143,10 @@ in
       "cgmanager"
       "enable"
     ] "cgmanager was deprecated by lxc and therefore removed from nixpkgs.")
+    (mkRemovedOptionModule [
+      "services"
+      "charybdis"
+    ] "The charybdis module has been removed, the project was archived in 2021.")
     (mkRemovedOptionModule [
       "services"
       "chatgpt-retrieval-plugin"
@@ -440,6 +455,9 @@ in
     '')
     (mkRemovedOptionModule [ "services" "simplesamlphp" ] ''
       services.simplesamlphp has been vulnerable and unmaintained in nixpkgs.
+    '')
+    (mkRemovedOptionModule [ "security" "pam" "enableEcryptfs" ] ''
+      security.pam.enableFscrypt was removed since it was unmaintained in nixpkgs.
     '')
     (mkRemovedOptionModule [ "security" "rngd" ] ''
       rngd is not necessary for any device that the kernel recognises

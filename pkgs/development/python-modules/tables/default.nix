@@ -4,7 +4,6 @@
   fetchPypi,
   fetchpatch,
   buildPythonPackage,
-  pythonOlder,
   blosc2,
   bzip2,
   c-blosc,
@@ -28,8 +27,6 @@ buildPythonPackage rec {
   pname = "tables";
   version = "3.10.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

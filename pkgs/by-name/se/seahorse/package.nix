@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchurl,
+  fetchpatch,
   vala,
   meson,
   ninja,
@@ -36,6 +37,16 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/seahorse/${lib.versions.major version}/seahorse-${version}.tar.xz";
     hash = "sha256-nBkX5KYff+u3h4Sc42znF/znBsNGiAuZHQVtVNrbysw=";
   };
+
+  patches = [
+    # Fix build with gpgme 2.0+
+    # https://gitlab.gnome.org/GNOME/seahorse/-/merge_requests/248
+    (fetchpatch {
+      name = "seahorse-allow-build-with-gpgme-2_0.patch";
+      url = "https://gitlab.gnome.org/GNOME/seahorse/-/commit/aa68522cc696fa491ccfdff735b77bcf113168d0.patch";
+      hash = "sha256-xd5K8xUGuMk+41JROsq7QpZ5gD2jPAbv1kQdLI3z9lc=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson

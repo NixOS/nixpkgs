@@ -54,13 +54,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "e-search";
-  version = "15.2.1";
+  version = "15.2.3";
 
   src = fetchFromGitHub {
     owner = "xushengfeng";
     repo = "eSearch";
     tag = finalAttrs.version;
-    hash = "sha256-K4GFLUeq/IbJC3FZBgvKnZq7JrXkqe6eVGsUxxlpWF0=";
+    hash = "sha256-wzSspt1qJpBgw4MyiK+vhRjoybNcaaa9nWBPV0bctiM=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     nativeBuildInputs = [ gitMinimal ];
     pnpm = pnpm';
     fetcherVersion = 2;
-    hash = "sha256-wPwsFY7wvbE1LW5PMwMZKejELtqmdsYO2RVrEuOzdcg=";
+    hash = "sha256-q0+6vkDZdcDXwsTxby2RuQUYTgEnxGx1CeXROSrG9lU=";
   };
 
   nativeBuildInputs = [

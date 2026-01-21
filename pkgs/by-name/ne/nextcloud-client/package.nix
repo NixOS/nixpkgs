@@ -23,7 +23,7 @@
 
 stdenv.mkDerivation rec {
   pname = "nextcloud-client";
-  version = "4.0.4";
+  version = "4.0.5";
 
   outputs = [
     "out"
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     owner = "nextcloud-releases";
     repo = "desktop";
     tag = "v${version}";
-    hash = "sha256-BEjsIx0knmTj6kgM7fsJV5XN660cRe9DbYxeL7YHPRo=";
+    hash = "sha256-cEe1GTRFC+iGAAgddRm70uf5tXmpCat7Q7BptFEYKnE=";
   };
 
   patches = [
@@ -100,7 +100,6 @@ stdenv.mkDerivation rec {
     homepage = "https://nextcloud.com";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
-      kranzes
       SuperSandro2000
     ];
     platforms = lib.platforms.linux;

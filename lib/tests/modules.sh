@@ -58,12 +58,19 @@ logFailure() {
 evalConfig() {
     local attr=$1
     shift
-    local script="import ./default.nix { modules = [ $* ];}"
+
+    local nix_args=()
+
     if [ "${ABORT_ON_WARN-0}" = "1" ]; then
-      local-nix-instantiate --option abort-on-warn true -E "$script" -A "$attr"
-    else
-      local-nix-instantiate -E "$script" -A "$attr"
+        nix_args+=(--option abort-on-warn true)
     fi
+
+    if [ "${STRICT_EVAL-0}" = "1" ]; then
+        nix_args+=(--strict)
+    fi
+
+    local script="import ./default.nix { modules = [ $* ];}"
+    local-nix-instantiate "${nix_args[@]}" -E "$script" -A "$attr"
 }
 
 reportFailure() {
@@ -246,6 +253,19 @@ checkConfigError 'A definition for option .* is not of type .fileset.. Definitio
 checkConfigError 'A definition for option .* is not of type .fileset.. Definition values:\n.*' config.filesetCardinal.err2 ./fileset.nix
 checkConfigError 'A definition for option .* is not of type .fileset.. Definition values:\n.*' config.filesetCardinal.err3 ./fileset.nix
 checkConfigError 'A definition for option .* is not of type .fileset.. Definition values:\n.*' config.filesetCardinal.err4 ./fileset.nix
+
+# types.serializableValueWith
+checkConfigOutput '^null$' config.nullableValue.null ./types.nix
+checkConfigOutput '^true$' config.nullableValue.bool ./types.nix
+checkConfigOutput '^1$' config.nullableValue.int ./types.nix
+checkConfigOutput '^1.1$' config.nullableValue.float ./types.nix
+checkConfigOutput '^"foo"$' config.nullableValue.str ./types.nix
+checkConfigOutput '^".*/store.*"$' config.nullableValue.path ./types.nix
+STRICT_EVAL=1 checkConfigOutput '^\{"foo":1\}$' config.nullableValue.attrs ./types.nix
+STRICT_EVAL=1 checkConfigOutput '^\[\{"bar":\[1\]\}\]$' config.nullableValue.list ./types.nix
+
+checkConfigError 'A definition for option .* is not of type .VAL value.. .*' config.nullableValue.lambda ./types.nix
+checkConfigError 'A definition for option .* is not of type .VAL value.. .*' config.structuredValue.null ./types.nix
 
 # Check boolean option.
 checkConfigOutput '^false$' config.enable ./declare-enable.nix

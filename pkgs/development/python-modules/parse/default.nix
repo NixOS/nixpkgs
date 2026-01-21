@@ -8,7 +8,7 @@
 buildPythonPackage rec {
   pname = "parse";
   version = "1.20.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "r1chardj0n3s";

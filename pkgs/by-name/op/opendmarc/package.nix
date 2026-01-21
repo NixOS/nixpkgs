@@ -27,6 +27,11 @@ stdenv.mkDerivation rec {
     "doc"
   ];
 
+  env.NIX_CFLAGS_COMPILE = toString [
+    # gcc15 build failure
+    "-std=gnu17"
+  ];
+
   buildInputs = [ perl ];
   nativeBuildInputs = [
     autoreconfHook
@@ -65,6 +70,9 @@ stdenv.mkDerivation rec {
       bsd3
       sendmail
     ];
-    teams = [ lib.teams.helsinki-systems ];
+    maintainers = with lib.maintainers; [
+      das_j
+      helsinki-Jo
+    ];
   };
 }

@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   flit-core,
   pytestCheckHook,
@@ -10,9 +9,7 @@
 buildPythonPackage rec {
   pname = "entrypoints";
   version = "0.4";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

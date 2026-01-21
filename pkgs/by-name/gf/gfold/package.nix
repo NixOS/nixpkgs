@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gfold";
-  version = "2025.9.0";
+  version = "2025.12.0";
 
   src = fetchFromGitHub {
     owner = "nickgerace";
     repo = "gfold";
     tag = finalAttrs.version;
-    hash = "sha256-sPvhZaDGInXH2PT8fg28m7wyDZiIE4fFScNO8WIjV9s=";
+    hash = "sha256-lqDKPIWvwu60S6miSQ3TvHxhI9xuiN8VwmEz670UR78=";
   };
 
-  cargoHash = "sha256-pbIE8QXY8lYsDGdmGVsOPesVTaHRjDBSd7ihQhN2XrI=";
+  cargoHash = "sha256-g4keAwNMPmhthbKF8uiPcciOVa1gUe1bDsvWtKc/M5I=";
 
   nativeBuildInputs = [ mold ];
 

@@ -7,7 +7,6 @@
   pandas,
   pillow,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -16,13 +15,11 @@ buildPythonPackage rec {
   version = "3.1.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitLab {
     domain = "foss.heptapod.net";
     owner = "openpyxl";
     repo = "openpyxl";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-vp+TIWcHCAWlDaBcmC7w/kV7DZTZpa6463NusaJmqKo=";
   };
 

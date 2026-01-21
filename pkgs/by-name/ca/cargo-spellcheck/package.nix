@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,6 +19,8 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-MGjyoHejsUd6HCoZVlw1NDG6TE9Anh05IeObHmcnwg0=";
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-std=gnu17";
 
   preCheck = "HOME=$(mktemp -d)";
 
@@ -39,6 +42,7 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [
       newam
       matthiasbeyer
+      chrjabs
     ];
   };
 }

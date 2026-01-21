@@ -4,7 +4,6 @@
   fetchPypi,
   grpcio,
   protobuf,
-  pythonOlder,
   setuptools,
 }:
 
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "grpcio-testing";
   version = "1.76.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "grpcio_testing";

@@ -4,7 +4,6 @@
   fetchPypi,
   more-itertools,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "path";
   version = "17.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

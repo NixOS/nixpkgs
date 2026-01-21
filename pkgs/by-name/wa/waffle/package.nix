@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     wayland-scanner
   ];
 
-  PKG_CONFIG_BASH_COMPLETION_COMPLETIONSDIR = "${placeholder "out"}/share/bash-completion/completions";
+  env.PKG_CONFIG_BASH_COMPLETION_COMPLETIONSDIR = "${placeholder "out"}/share/bash-completion/completions";
 
   postInstall = ''
     wrapProgram $out/bin/wflinfo \

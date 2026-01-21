@@ -1,0 +1,19 @@
+Fedora patch; see https://bugzilla.redhat.com/show_bug.cgi?id=707994
+
+--- old/url.c	2011-01-04 14:52:24.000000000 +0530
++++ new/url.c	2011-09-02 18:25:43.305652690 +0530
+@@ -82,11 +82,11 @@
+     {"ftp", SCM_FTP},
+     {"local", SCM_LOCAL},
+     {"file", SCM_LOCAL},
+-    /*  {"exec", SCM_EXEC}, */
++    {"exec", SCM_EXEC}, 
+     {"nntp", SCM_NNTP},
+-    /*  {"nntp", SCM_NNTP_GROUP}, */
++    {"nntp", SCM_NNTP_GROUP}, 
+     {"news", SCM_NEWS},
+-    /*  {"news", SCM_NEWS_GROUP}, */
++    {"news", SCM_NEWS_GROUP}, 
+     {"data", SCM_DATA},
+ #ifndef USE_W3MMAILER
+     {"mailto", SCM_MAILTO},

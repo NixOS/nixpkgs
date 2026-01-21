@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   aiohttp,
@@ -12,8 +11,6 @@
 buildPythonPackage rec {
   pname = "pysyncthru";
   version = "0.8.0";
-
-  disabled = pythonOlder "3.7";
 
   pyproject = true;
 

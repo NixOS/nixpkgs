@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   typing-extensions,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "stringparser";
   version = "0.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "hgrecco";

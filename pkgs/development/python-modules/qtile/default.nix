@@ -36,15 +36,18 @@
   extraPackages ? [ ],
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "qtile";
   version = "0.34.1";
+  # nixpkgs-update: no auto update
+  # should be updated alongside with `qtile-extras`
+
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "qtile";
     repo = "qtile";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-PPyI+IGvHBQusVmU3D26VjYjLaa9+94KUqNwbQSzeaI=";
   };
 
@@ -142,4 +145,4 @@ buildPythonPackage rec {
       doronbehar
     ];
   };
-}
+})

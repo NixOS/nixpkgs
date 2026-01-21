@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 ruby '>= 3.1.0', '< 3.4.0'
 
-gem 'rails', '7.2.2.2'
+gem 'rails', '7.2.3'
 gem 'rouge', '~> 4.5'
 gem 'mini_mime', '~> 1.1.0'
 gem "actionpack-xml_parser"
@@ -81,6 +81,8 @@ group :test do
   gem 'rubocop-performance', '~> 1.22.0', require: false
   gem 'rubocop-rails', '~> 2.27.0', require: false
   gem 'bundle-audit', require: false
+  # `bin/rails test` fails at startup with minitest >= 6.0
+  gem 'minitest', '< 6.0'
 end
 
 gem "webrick"

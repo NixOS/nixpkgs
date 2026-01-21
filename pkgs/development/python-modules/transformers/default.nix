@@ -57,16 +57,16 @@
   hf-xet,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "transformers";
-  version = "4.57.3";
+  version = "4.57.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "transformers";
-    tag = "v${version}";
-    hash = "sha256-QqlNE2UJqn5ylVhSX5qak62ooda5IQbsc1F7SYU8Kjw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-a78ornUAYlOpr30iFdq1oUiWQTm6GeT0iq8ras5i3DQ=";
   };
 
   build-system = [ setuptools ];
@@ -194,7 +194,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/huggingface/transformers";
     description = "Natural Language Processing for TensorFlow 2.0 and PyTorch";
     mainProgram = "transformers-cli";
-    changelog = "https://github.com/huggingface/transformers/releases/tag/v${version}";
+    changelog = "https://github.com/huggingface/transformers/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
@@ -202,4 +202,4 @@ buildPythonPackage rec {
       happysalada
     ];
   };
-}
+})

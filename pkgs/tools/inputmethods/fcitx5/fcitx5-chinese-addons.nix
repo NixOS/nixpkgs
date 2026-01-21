@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   fetchFromGitHub,
   cmake,
   extra-cmake-modules,
@@ -48,6 +49,15 @@ stdenv.mkDerivation rec {
     extra-cmake-modules
     gettext
     fcitx5-lua
+  ];
+
+  patches = [
+    # Without this patch, setting ENABLE_CLOUDPINYIN to off would fail to build
+    (fetchpatch {
+      name = "cloudpinyin-disable-build";
+      url = "https://github.com/fcitx/fcitx5-chinese-addons/commit/024fff9c8587ca2fb01905e9a25df838e7d99da2.patch";
+      hash = "sha256-Mo5l8tsn1JQxTFHxOZfQRmbCeWZHLyxfn2Qwv/gQXGA=";
+    })
   ];
 
   prePatch = ''

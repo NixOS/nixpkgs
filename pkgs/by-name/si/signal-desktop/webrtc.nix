@@ -57,10 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     pulseaudio
   ];
 
-  patches = [
-    ./webrtc-fix-gcc-build.patch
-  ];
-
   postPatch = ''
     substituteInPlace build/toolchain/linux/BUILD.gn \
       --replace-fail 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'

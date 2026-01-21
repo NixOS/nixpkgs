@@ -248,5 +248,6 @@ stdenv.mkDerivation (finalAttrs: {
       kira-bruneau
       zeratax
     ];
+    mainProgram = "mangohud";
   };
 })

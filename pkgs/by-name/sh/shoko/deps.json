@@ -46,13 +46,13 @@
   },
   {
     "pname": "Magick.NET-Q8-AnyCPU",
-    "version": "13.6.0",
-    "hash": "sha256-LzHv4Acau5YKP3mnqHY3S9b4TL/xZAr+LqlJkzictPA="
+    "version": "14.9.1",
+    "hash": "sha256-4svX77hA0bfAo9Lbbks6RfAwB4DbUI8mwduMbmyaEfQ="
   },
   {
     "pname": "Magick.NET.Core",
-    "version": "13.6.0",
-    "hash": "sha256-9y7fLtgmWc830XbH6Vfj61H9W/DGqBqv+tIrg1L9U2c="
+    "version": "14.9.1",
+    "hash": "sha256-FkFcEeK08Jrp9y1znQzy4uyW6sMU1bVi3s5e5em2of4="
   },
   {
     "pname": "MessagePack",
@@ -298,6 +298,11 @@
     "pname": "Microsoft.Bcl.AsyncInterfaces",
     "version": "1.1.1",
     "hash": "sha256-fAcX4sxE0veWM1CZBtXR/Unky+6sE33yrV7ohrWGKig="
+  },
+  {
+    "pname": "Microsoft.Bcl.AsyncInterfaces",
+    "version": "8.0.0",
+    "hash": "sha256-9aWmiwMJKrKr9ohD1KSuol37y+jdDxPGJct3m2/Bknw="
   },
   {
     "pname": "Microsoft.CodeAnalysis.Analyzers",
@@ -1220,11 +1225,6 @@
     "hash": "sha256-/giVqikworG2XKqfN9uLyjUSXr35zBuZ2FX2r8X/WUY="
   },
   {
-    "pname": "Shoko.Plugin.Abstractions",
-    "version": "4.0.0-beta5",
-    "hash": "sha256-Tc3cOHkEFjaqWTdHvAscMUfOawH5fc93/u2ztXWGtSc="
-  },
-  {
     "pname": "SQLitePCLRaw.bundle_e_sqlite3",
     "version": "2.1.6",
     "hash": "sha256-dZD/bZsYXjOu46ZH5Y/wgh0uhHOqIxC+S+0ecKhr718="
@@ -1293,11 +1293,6 @@
     "pname": "System.Buffers",
     "version": "4.5.0",
     "hash": "sha256-THw2znu+KibfJRfD7cE3nRYHsm7Fyn5pjOOZVonFjvs="
-  },
-  {
-    "pname": "System.Buffers",
-    "version": "4.5.1",
-    "hash": "sha256-wws90sfi9M7kuCPWkv1CEYMJtCqx9QB/kj0ymlsNaxI="
   },
   {
     "pname": "System.ClientModel",
@@ -1623,11 +1618,6 @@
     "pname": "System.Net.WebSockets.WebSocketProtocol",
     "version": "4.5.1",
     "hash": "sha256-5g6C2vb0RCUiSBw/tlCUbmrIbCvT9zQ+w/45o3l6Ctg="
-  },
-  {
-    "pname": "System.Numerics.Vectors",
-    "version": "4.4.0",
-    "hash": "sha256-auXQK2flL/JpnB/rEcAcUm4vYMCYMEMiWOCAlIaqu2U="
   },
   {
     "pname": "System.Numerics.Vectors",

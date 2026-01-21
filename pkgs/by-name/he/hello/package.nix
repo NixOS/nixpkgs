@@ -7,6 +7,7 @@
   testers,
   versionCheckHook,
   hello,
+  gnulib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,6 +18,8 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://gnu/hello/hello-${finalAttrs.version}.tar.gz";
     hash = "sha256-WpqZbcKSzCTc9BHO6H6S9qrluNE72caBm0x6nc4IGKs=";
   };
+
+  patches = lib.optional stdenv.hostPlatform.isCygwin gnulib.patches.memcpy-fix-backport-250512;
 
   # The GNU Hello `configure` script detects how to link libiconv but fails to actually make use of that.
   # Unfortunately, this cannot be a patch to `Makefile.am` because `autoreconfHook` causes a gettext

@@ -33,8 +33,6 @@ python.pkgs.buildPythonApplication rec {
   version = "2.26.2";
   pyproject = true;
 
-  disabled = python.pkgs.pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "pdm-project";
     repo = "pdm";

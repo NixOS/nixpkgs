@@ -8,7 +8,7 @@
 buildPythonPackage rec {
   pname = "krfzf-py";
   version = "0.0.6";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "krfzf_py";

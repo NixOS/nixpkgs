@@ -34,11 +34,11 @@ let
   # TODO: we could cut the `let` short here, but it would de-indent everything.
   unwrapped = stdenv.mkDerivation (finalAttrs: {
     pname = "knot-resolver_6";
-    version = "6.0.17";
+    version = "6.1.0";
 
     src = fetchurl {
       url = "https://secure.nic.cz/files/knot-resolver/knot-resolver-${finalAttrs.version}.tar.xz";
-      hash = "sha256-E9RJbvh66y+9OwBX4iEdRYUgUkHlCaDNQ0Hb5ejLXBw=";
+      hash = "sha256-eSHfdQcobZBXS79a5mSopTeAXOQLX6ixX10NM+LEONA=";
     };
 
     outputs = [
@@ -48,12 +48,6 @@ let
     ];
 
     patches = [
-      (fetchpatch {
-        name = "test-cache-aarch64-darwin.patch";
-        url = "https://gitlab.nic.cz/knot/knot-resolver/-/commit/d155d0dbe408a3327b39f70e122aea6fb2b86684.diff";
-        excludes = [ "NEWS" ];
-        hash = "sha256-3w33v8UfhGdA50BlkfHpQLFxg+5ELk0lp7RzgvkSzK8=";
-      })
       # Install-time paths sometimes differ from run-time paths in nixpkgs.
       ./paths.patch
     ];
@@ -78,6 +72,7 @@ let
       pkg-config
       meson
       ninja
+      protobufc
     ];
 
     # http://knot-resolver.readthedocs.io/en/latest/build.html#requirements
@@ -125,16 +120,20 @@ let
 
     doInstallCheck = with stdenv; hostPlatform == buildPlatform;
     nativeInstallCheckInputs = [
-      cmocka
       which
       cacert
       lua.cqueues
       lua.basexx
       lua.http
     ];
+    installCheckInputs = [
+      cmocka
+    ];
     installCheckPhase = ''
       meson test --print-errorlogs --no-suite snowflake
     '';
+
+    strictDeps = true;
 
     passthru = {
       inherit lua;
@@ -148,8 +147,9 @@ let
       platforms = lib.platforms.unix;
       maintainers = [
         lib.maintainers.vcunat # upstream developer
+        lib.maintainers.leona
+        lib.maintainers.osnyx
       ];
-      teams = [ lib.teams.flyingcircus ];
       mainProgram = "kresd";
     };
   });

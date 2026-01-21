@@ -4,7 +4,6 @@
   fetchPypi,
   pytest,
   pyvirtualdisplay,
-  pythonOlder,
   setuptools,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pytest-xvfb";
   version = "3.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "pytest_xvfb";

@@ -1,13 +1,13 @@
 {
   lib,
   fetchFromGitHub,
-  goocanvas3,
+  goocanvas_3,
   nix-update-script,
   gpredict,
 }:
 
 (gpredict.override {
-  goocanvas2 = goocanvas3;
+  goocanvas_2 = goocanvas_3;
 }).overrideAttrs
   (finalAttrs: {
     version = "2.2.1-unstable-2025-09-20";

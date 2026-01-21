@@ -28,19 +28,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "navicat-premium";
-  version = "17.3.5";
+  version = "17.3.7";
 
   src = appimageTools.extractType2 {
     inherit (finalAttrs) pname version;
     src =
       {
         x86_64-linux = fetchurl {
-          url = "https://web.archive.org/web/20251209223816/https://dn.navicat.com/download/navicat17-premium-en-x86_64.AppImage";
-          hash = "sha256-T2NsaUv/S2dWEP1QUBA+tHrM1UeP4Mh8jamg1obeEFs=";
+          url = "https://web.archive.org/web/20260105022310/https://dn.navicat.com/download/navicat17-premium-en-x86_64.AppImage";
+          hash = "sha256-1H5YTzeEQ+JSI2/qRPcuCGkfvI58gufjMks89MqEOB4=";
         };
         aarch64-linux = fetchurl {
-          url = "https://web.archive.org/web/20251209224531/https://dn.navicat.com/download/navicat17-premium-en-aarch64.AppImage";
-          hash = "sha256-GMyIaDUFlcSfN0RydJjxOi3S5WexhyaJLXKtx9Kwvzs=";
+          url = "https://web.archive.org/web/20260105022653/https://dn.navicat.com/download/navicat17-premium-en-aarch64.AppImage";
+          hash = "sha256-PL7L0FE3XjFD5l/72CuyTe+yrN/JOy9qvrxNk0B8FKc=";
         };
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");

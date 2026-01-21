@@ -348,9 +348,10 @@ let
 
         virtualOwner = mkOption {
           default = "root";
-          type = types.str;
+          type = types.nullOr types.str;
           description = ''
             In case of a virtual device, the user who owns it.
+            `null` will not set owner, allowing access to any user.
           '';
         };
 

@@ -20,7 +20,7 @@
       services.xserver.desktopManager.xfce.enable = true;
       environment.systemPackages = [ pkgs.xfce4-whiskermenu-plugin ];
 
-      programs.thunar.plugins = [ pkgs.xfce.thunar-archive-plugin ];
+      programs.thunar.plugins = [ pkgs.thunar-archive-plugin ];
       programs.ydotool.enable = true;
     };
 

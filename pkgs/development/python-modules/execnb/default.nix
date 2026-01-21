@@ -4,21 +4,18 @@
   fastcore,
   fetchPypi,
   ipython,
-  pythonOlder,
   setuptools,
   traitlets,
 }:
 
 buildPythonPackage rec {
   pname = "execnb";
-  version = "0.1.16";
+  version = "0.1.18";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ZsnACca6Awv9DA9qce5NhWodjvxDBv6ajBU3DAZFAAw=";
+    hash = "sha256-VM2WsdFICc7trCjfupL5wW0UFTzRW5RPfWs6jYpCSDM=";
   };
 
   build-system = [ setuptools ];

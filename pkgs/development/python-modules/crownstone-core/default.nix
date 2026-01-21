@@ -4,15 +4,12 @@
   fetchFromGitHub,
   pyaes,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "crownstone-core";
   version = "3.2.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "crownstone";

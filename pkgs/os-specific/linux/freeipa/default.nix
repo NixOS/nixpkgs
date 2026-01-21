@@ -171,7 +171,6 @@ stdenv.mkDerivation rec {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   meta = {

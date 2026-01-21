@@ -7,15 +7,12 @@
   poetry-core,
   pyaml,
   pydantic,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "ha-mqtt-discoverable";
   version = "0.23.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "unixorn";

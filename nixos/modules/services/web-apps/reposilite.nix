@@ -18,7 +18,7 @@ let
     if useEmbeddedDb then
       "${cfg.database.type} ${cfg.database.path}"
     else
-      "${cfg.database.type} ${cfg.database.host}:${builtins.toString cfg.database.port} ${cfg.database.dbname} ${cfg.database.user} $(<${cfg.database.passwordFile})";
+      "${cfg.database.type} ${cfg.database.host}:${toString cfg.database.port} ${cfg.database.dbname} ${cfg.database.user} $(<${cfg.database.passwordFile})";
 
   certDir = config.security.acme.certs.${cfg.useACMEHost}.directory;
 
@@ -412,8 +412,8 @@ in
         '';
 
       serviceConfig = lib.mkMerge [
-        (lib.mkIf (builtins.dirOf cfg.workingDirectory == "/var/lib") {
-          StateDirectory = builtins.baseNameOf cfg.workingDirectory;
+        (lib.mkIf (dirOf cfg.workingDirectory == "/var/lib") {
+          StateDirectory = baseNameOf cfg.workingDirectory;
           StateDirectoryMode = "700";
         })
         {

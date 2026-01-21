@@ -6,15 +6,12 @@
   netaddr,
   netbox,
   poetry-core,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "netbox-plugin-prometheus-sd";
   version = "1.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "FlxPeters";

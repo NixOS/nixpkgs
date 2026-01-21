@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    zig.hook
+    zig
     pkg-config
     wayland-scanner
   ];
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "XSnow for Wayland";
     homepage = "https://github.com/DarkVanityOfLight/ZSnoW";
     license = lib.licenses.cc-by-nc-sa-40;
-    maintainers = [ lib.maintainers.adamperkowski ];
+    maintainers = [ lib.maintainers.koi ];
     platforms = lib.platforms.linux;
     mainProgram = "zsnow";
   };

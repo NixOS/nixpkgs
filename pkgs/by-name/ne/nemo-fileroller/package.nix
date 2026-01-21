@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
       --replace "GNOMELOCALEDIR" "${cinnamon-translations}/share/locale"
   '';
 
-  PKG_CONFIG_LIBNEMO_EXTENSION_EXTENSIONDIR = "${placeholder "out"}/${nemo.extensiondir}";
+  env.PKG_CONFIG_LIBNEMO_EXTENSION_EXTENSIONDIR = "${placeholder "out"}/${nemo.extensiondir}";
 
   meta = {
     homepage = "https://github.com/linuxmint/nemo-extensions/tree/master/nemo-fileroller";

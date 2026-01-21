@@ -33,5 +33,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       NotAShelf
     ];
     platforms = lib.platforms.linux;
+    mainProgram = "anyrun-provider";
   };
 })

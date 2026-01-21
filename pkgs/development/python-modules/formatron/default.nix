@@ -24,6 +24,17 @@ buildPythonPackage rec {
     fetchSubmodules = true;
   };
 
+  postPatch = ''
+    # Fix pydantic compatibility
+    # https://github.com/Dan-wanna-M/formatron/issues/35
+    substituteInPlace src/formatron/schemas/dict_inference.py \
+      --replace-fail 'typing.Type' 'Type' \
+      --replace-fail 'typing.Any' 'Any'
+
+    substituteInPlace src/formatron/schemas/json_schema.py \
+      --replace-fail 'from pydantic import typing' 'import typing'
+  '';
+
   build-system = [
     setuptools
   ];

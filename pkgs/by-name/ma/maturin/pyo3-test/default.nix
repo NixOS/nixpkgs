@@ -7,7 +7,7 @@
   # These are always passed as an override or as a callPackage option.
   nativeBuildInputs,
   buildAndTestSubdir,
-  format,
+  pyproject,
   preConfigure,
 }:
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   inherit
     buildAndTestSubdir
-    format
+    pyproject
     nativeBuildInputs
     preConfigure
     ;

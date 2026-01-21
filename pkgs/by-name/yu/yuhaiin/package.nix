@@ -37,8 +37,6 @@ buildGoModule rec {
     versionCheckHook
   ];
 
-  versionCheckProgramArg = [ "--version" ];
-
   meta = {
     description = "Proxy kit for Linux/Windows/MacOS";
     homepage = "https://github.com/yuhaiin/yuhaiin";

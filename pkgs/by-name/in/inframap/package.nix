@@ -28,6 +28,6 @@ buildGoModule rec {
     homepage = "https://github.com/cycloidio/inframap";
     changelog = "https://github.com/cycloidio/inframap/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ urandom ];
+    maintainers = [ ];
   };
 }

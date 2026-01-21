@@ -965,12 +965,12 @@ in
                     type = types.nonEmptyStr;
                     default =
                       if versionOlder config.system.stateVersion "24.05" then
-                        "${httpConf.scheme}://${httpConf.host}:${builtins.toString httpConf.port}/media/"
+                        "${httpConf.scheme}://${httpConf.host}:${toString httpConf.port}/media/"
                       else
                         null;
                     defaultText = literalExpression ''
                       if lib.versionOlder config.system.stateVersion "24.05"
-                      then "$\{httpConf.scheme}://$\{httpConf.host}:$\{builtins.toString httpConf.port}/media/"
+                      then "$\{httpConf.scheme}://$\{httpConf.host}:$\{toString httpConf.port}/media/"
                       else null;
                     '';
                     description = ''
@@ -1019,12 +1019,12 @@ in
                     type = types.nullOr types.nonEmptyStr;
                     default =
                       if versionOlder config.system.stateVersion "24.05" then
-                        "${httpConf.scheme}://${httpConf.host}:${builtins.toString httpConf.port}"
+                        "${httpConf.scheme}://${httpConf.host}:${toString httpConf.port}"
                       else
                         null;
                     defaultText = literalExpression ''
                       if lib.versionOlder config.system.stateVersion "24.05"
-                      then "$\{httpConf.scheme}://$\{httpConf.host}:$\{builtins.toString httpConf.port}"
+                      then "$\{httpConf.scheme}://$\{httpConf.host}:$\{toString httpConf.port}"
                       else null;
                     '';
                     description = ''

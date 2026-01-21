@@ -1,0 +1,13 @@
+diff --git a/src/lib/server/settings.ts b/src/lib/server/settings.ts
+index c28f466..4555e90 100644
+--- a/src/lib/server/settings.ts
++++ b/src/lib/server/settings.ts
+@@ -65,7 +65,7 @@ export const settingsSchema = z.object({
+     transmissionPassword: z.string().optional().default(""),
+     hideAudienceScore: z.boolean().optional().default(false),
+     autoUpdateProgress: z.boolean().optional().default(false),
+-    disableUpdateCheck: z.boolean().optional().default(false),
++    disableUpdateCheck: z.boolean().optional().default(true),
+     enableOnlinestream: z.boolean().optional().default(false),
+     includeOnlineStreamingInLibrary: z.boolean().optional().default(false),
+     disableAnimeCardTrailers: z.boolean().optional().default(false),

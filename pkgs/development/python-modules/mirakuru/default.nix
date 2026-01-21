@@ -3,7 +3,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   pytest-rerunfailures,
   setuptools,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "mirakuru";
   version = "2.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "ClearcodeHQ";

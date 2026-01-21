@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-5hT6ulmUlOrFVL4nV0tfvgkKdYGusp+1rBINQy3ZvpI=";
   };
 
-  format = "other";
+  pyproject = false;
   dontWrapGApps = true;
 
   nativeBuildInputs = [
@@ -58,7 +58,7 @@ python3Packages.buildPythonApplication rec {
     description = "Simple app for giving images that pixel-art style";
     license = lib.licenses.gpl3Plus;
     mainProgram = "halftone";
-    maintainers = with lib.maintainers; [ foo-dogsquared ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

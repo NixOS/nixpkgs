@@ -18,7 +18,6 @@
   pytest-cases,
   pytest-parallel,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   requests,
   s3fs,
@@ -33,8 +32,6 @@ buildPythonPackage rec {
   version = "0.9.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "rstudio";
     repo = "pins-python";
@@ -45,6 +42,10 @@ buildPythonPackage rec {
   build-system = [
     setuptools
     setuptools-scm
+  ];
+
+  pythonRelaxDeps = [
+    "fsspec"
   ];
 
   dependencies = [

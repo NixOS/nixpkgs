@@ -17,15 +17,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "udiskie";
-  version = "2.5.8";
+  version = "2.6.1";
 
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "coldfix";
     repo = "udiskie";
-    rev = "v${version}";
-    hash = "sha256-FFp1+7cCfkMI74rEAez8aJsaplEUa3madoSx+lwplzE=";
+    tag = "v${version}";
+    hash = "sha256-1/qQS2bAxoHbWWmMkDoV5QNSUVYCQfer6lWM9ptG+Vk=";
   };
 
   patches = [
@@ -90,7 +90,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     homepage = "https://github.com/coldfix/udiskie";
-    changelog = "https://github.com/coldfix/udiskie/blob/${src.rev}/CHANGES.rst";
+    changelog = "https://github.com/coldfix/udiskie/blob/${src.tag}/CHANGES.rst";
     description = "Removable disk automounter for udisks";
     longDescription = ''
       udiskie is a udisks2 front-end that allows to manage removeable media such

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   gradle,
   autoPatchelfHook,
   jetbrains, # Requird by upstream due to JCEF dependency
@@ -96,6 +97,16 @@ let
 
     cmakeFlags = (old.cmakeFlags or [ ]) ++ [
       "-DCMAKE_POLICY_VERSION_MINIMUM=3.10"
+    ];
+
+    patches = (old.patches or [ ]) ++ [
+      # Fix build with gcc15
+      # https://github.com/apache/thrift/pull/3078
+      (fetchpatch {
+        name = "thrift-add-missing-cstdint-include-gcc15.patch";
+        url = "https://github.com/apache/thrift/commit/947ad66940cfbadd9b24ba31d892dfc1142dd330.patch";
+        hash = "sha256-pWcG6/BepUwc/K6cBs+6d74AWIhZ2/wXvCunb/KyB0s=";
+      })
     ];
   });
 

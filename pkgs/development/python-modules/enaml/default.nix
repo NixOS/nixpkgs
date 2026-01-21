@@ -11,16 +11,13 @@
   qtpy,
   setuptools,
   setuptools-scm,
-  pythonOlder,
   sip,
 }:
 
 buildPythonPackage rec {
   pname = "enaml";
   version = "0.19.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nucleic";

@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "erdnaxe";
     repo = "galene-stream";
-    tag = "${version}";
+    tag = version;
     hash = "sha256-3TdU3vBVuFle+jon2oJLa/rTLIiwYkvzscTDbMEXD1Q=";
   };
 

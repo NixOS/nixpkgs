@@ -1,10 +1,10 @@
-# zig.hook {#zig-hook}
+# Zig {#zig}
 
 [Zig](https://ziglang.org/) is a general-purpose programming language and toolchain for maintaining robust, optimal and reusable software.
 
-In Nixpkgs, `zig.hook` overrides the default build, check and install phases.
+In Nixpkgs, `zig` overrides the default build, check and install phases.
 
-## Example code snippet {#zig-hook-example-code-snippet}
+## Example code snippet {#zig-example-code-snippet}
 
 ```nix
 {
@@ -16,7 +16,7 @@ In Nixpkgs, `zig.hook` overrides the default build, check and install phases.
 stdenv.mkDerivation {
   # . . .
 
-  nativeBuildInputs = [ zig.hook ];
+  nativeBuildInputs = [ zig ];
 
   zigBuildFlags = [ "-Dman-pages=true" ];
 
@@ -26,11 +26,11 @@ stdenv.mkDerivation {
 }
 ```
 
-## Variables controlling zig.hook {#zig-hook-variables-controlling}
+## Variables controlling zig {#zig-variables-controlling}
 
-### `zig.hook` Exclusive Variables {#zig-hook-exclusive-variables}
+### `zig` Exclusive Variables {#zig-exclusive-variables}
 
-The variables below are exclusive to `zig.hook`.
+The variables below are exclusive to `zig`.
 
 #### `dontUseZigBuild` {#dont-use-zig-build}
 
@@ -44,19 +44,23 @@ Disables using `zigCheckPhase`.
 
 Disables using `zigInstallPhase`.
 
-### Similar variables {#zig-hook-similar-variables}
+#### `dontSetZigDefaultFlags` {#dont-set-zig-default-flags}
+
+Disables using a set of default flags when performing zig builds.
+
+### Similar variables {#zig-similar-variables}
 
 The following variables are similar to their `stdenv.mkDerivation` counterparts.
 
-| `zig.hook` Variable | `stdenv.mkDerivation` Counterpart |
+| `zig` Variable | `stdenv.mkDerivation` Counterpart |
 |---------------------|-----------------------------------|
 | `zigBuildFlags`     | `buildFlags`                      |
 | `zigCheckFlags`     | `checkFlags`                      |
 | `zigInstallFlags`   | `installFlags`                    |
 
-### Variables honored by zig.hook {#zig-hook-variables-honored}
+### Variables honored by zig {#zig-variables-honored}
 
-The following variables commonly used by `stdenv.mkDerivation` are honored by `zig.hook`.
+The following variables commonly used by `stdenv.mkDerivation` are honored by `zig`.
 
 - `prefixKey`
 - `dontAddPrefix`

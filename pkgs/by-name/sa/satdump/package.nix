@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   nix-update-script,
   cmake,
   pkg-config,
@@ -51,6 +52,15 @@ stdenv.mkDerivation (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-+Sne+NMwnIAs3ff64fBHAIE4/iDExIC64sXtO0LJwI0=";
   };
+
+  patches = [
+    # fixes build with GCC 15 until newer satdump release is available
+    (fetchpatch {
+      url = "https://github.com/SatDump/SatDump/commit/2b0a874f38d9310e3e4cbc56cfcc69cb0a59e035.patch";
+      name = "fix-build-with-gcc15.patch";
+      hash = "sha256-RYNLax/VA7cT7wP88hG5cb2BDkEMMZu2v2CKo/hqwCE=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace src-core/CMakeLists.txt \

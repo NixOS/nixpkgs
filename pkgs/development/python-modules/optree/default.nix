@@ -1,7 +1,6 @@
 {
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   lib,
   cmake,
   setuptools,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "optree";
   version = "0.17.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "metaopt";

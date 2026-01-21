@@ -118,7 +118,7 @@ let
       findTests =
         tree:
         if tree ? recurseForDerivations && tree.recurseForDerivations then
-          mapAttrs (k: findTests) (builtins.removeAttrs tree [ "recurseForDerivations" ])
+          mapAttrs (k: findTests) (removeAttrs tree [ "recurseForDerivations" ])
         else
           callTest tree;
 
@@ -188,6 +188,7 @@ in
   # keep-sorted start case=no numeric=no block=yes
   _3proxy = runTest ./3proxy.nix;
   aaaaxy = runTest ./aaaaxy.nix;
+  acl = pkgs.callPackage ./acl.nix { };
   acme = import ./acme/default.nix {
     inherit runTest;
     inherit (pkgs) lib;
@@ -199,7 +200,7 @@ in
   activation-bashless-image = runTest ./activation/bashless-image.nix;
   activation-etc-overlay-immutable = runTest ./activation/etc-overlay-immutable.nix;
   activation-etc-overlay-mutable = runTest ./activation/etc-overlay-mutable.nix;
-  activation-lib = pkgs.callPackage ../modules/system/activation/lib/test.nix { };
+  activation-lib = pkgs.callPackage ../modules/system/activation/lib-test.nix { };
   activation-nix-channel = runTest ./activation/nix-channel.nix;
   activation-nixos-init = runTest ./activation/nixos-init.nix;
   activation-perlless = runTest ./activation/perlless.nix;
@@ -385,6 +386,7 @@ in
   collectd = runTest ./collectd.nix;
   commafeed = runTest ./commafeed.nix;
   connman = runTest ./connman.nix;
+  console-xkb-and-i18n = runTest ./console-xkb-and-i18n.nix;
   consul = runTest ./consul.nix;
   consul-template = runTest ./consul-template.nix;
   containers-bridge = runTest ./containers-bridge.nix;
@@ -445,6 +447,7 @@ in
   darling-dmg = runTest ./darling-dmg.nix;
   dashy = runTest ./web-apps/dashy.nix;
   davis = runTest ./davis.nix;
+  dawarich = runTest ./web-apps/dawarich.nix;
   db-rest = runTest ./db-rest.nix;
   dconf = runTest ./dconf.nix;
   ddns-updater = runTest ./ddns-updater.nix;
@@ -501,7 +504,6 @@ in
   ec2-image = runTest ./ec2-image.nix;
   ec2-nixops = (handleTestOn [ "x86_64-linux" ] ./ec2.nix { }).boot-ec2-nixops or { };
   echoip = runTest ./echoip.nix;
-  ecryptfs = runTest ./ecryptfs.nix;
   ejabberd = runTest ./xmpp/ejabberd.nix;
   elk = handleTestOn [ "x86_64-linux" ] ./elk.nix { };
   emacs-daemon = runTest ./emacs-daemon.nix;
@@ -748,6 +750,7 @@ in
   hydra = runTest ./hydra;
   i18n = runTest ./i18n.nix;
   i3wm = runTest ./i3wm.nix;
+  icecast = runTest ./icecast.nix;
   icingaweb2 = runTest ./icingaweb2.nix;
   ifm = runTest ./ifm.nix;
   ifstate = import ./ifstate { inherit runTest; };
@@ -1028,10 +1031,15 @@ in
   nbd = runTest ./nbd.nix;
   ncdns = runTest ./ncdns.nix;
   ncps = runTest ./ncps.nix;
-  ncps-custom-cache-datapath = runTest {
+  ncps-custom-sqlite-directory = runTest {
     imports = [ ./ncps.nix ];
-    defaults.services.ncps.cache.dataPath = "/path/to/ncps";
+    defaults.services.ncps.cache.databaseURL = "sqlite:/path/to/ncps/db.sqlite";
   };
+  ncps-custom-storage-local = runTest {
+    imports = [ ./ncps.nix ];
+    defaults.services.ncps.cache.storage.local = "/path/to/ncps";
+  };
+  ncps-ha = runTest ./ncps-ha.nix;
   ndppd = runTest ./ndppd.nix;
   nebula-lighthouse-service = runTest ./nebula-lighthouse-service.nix;
   nebula.connectivity = runTest ./nebula/connectivity.nix;
@@ -1105,6 +1113,7 @@ in
   nixpkgs = pkgs.callPackage ../modules/misc/nixpkgs/test.nix { inherit evalMinimalConfig; };
   nixseparatedebuginfod2 = runTest ./nixseparatedebuginfod2.nix;
   node-red = runTest ./node-red.nix;
+  nohang = runTest ./nohang.nix;
   nomad = runTest ./nomad.nix;
   nominatim = runTest ./nominatim.nix;
   non-default-filesystems = handleTest ./non-default-filesystems.nix { };
@@ -1153,6 +1162,7 @@ in
   onlyoffice = runTest ./onlyoffice.nix;
   open-web-calendar = runTest ./web-apps/open-web-calendar.nix;
   open-webui = runTest ./open-webui.nix;
+  openafs = runTest ./openafs.nix;
   openarena = runTest ./openarena.nix;
   openbao = runTest ./openbao.nix;
   opencloud = runTest ./opencloud.nix;
@@ -1171,7 +1181,7 @@ in
   opentelemetry-collector = runTest ./opentelemetry-collector.nix;
   openvscode-server = runTest ./openvscode-server.nix;
   openvswitch = runTest ./openvswitch.nix;
-  optee = handleTestOn [ "aarch64-linux" ] ./optee.nix { };
+  optee = runTestOn [ "aarch64-linux" ] ./optee.nix;
   orangefs = runTest ./orangefs.nix;
   orthanc = runTest ./orthanc.nix;
   os-prober = handleTestOn [ "x86_64-linux" ] ./os-prober.nix { };
@@ -1200,6 +1210,7 @@ in
   paperless = runTest ./paperless.nix;
   paretosecurity = runTest ./paretosecurity.nix;
   parsedmarc = handleTest ./parsedmarc { };
+  part-db = runTest ./web-apps/part-db.nix;
   pass-secret-service = runTest ./pass-secret-service.nix;
   password-option-override-ordering = runTest ./password-option-override-ordering.nix;
   patroni = handleTestOn [ "x86_64-linux" ] ./patroni.nix { };
@@ -1294,7 +1305,10 @@ in
   privatebin = runTest ./privatebin.nix;
   privoxy = runTest ./privoxy.nix;
   prometheus = import ./prometheus { inherit runTest; };
-  prometheus-exporters = handleTest ./prometheus-exporters.nix { };
+  prometheus-exporters = import ./prometheus-exporters.nix {
+    inherit runTest;
+    inherit (pkgs) lib;
+  };
   prosody = runTest ./xmpp/prosody.nix;
   prosody-mysql = handleTest ./xmpp/prosody-mysql.nix { };
   prowlarr = runTest ./prowlarr.nix;
@@ -1308,6 +1322,14 @@ in
   pyload = runTest ./pyload.nix;
   qbittorrent = runTest ./qbittorrent.nix;
   qboot = handleTestOn [ "x86_64-linux" "i686-linux" ] ./qboot.nix { };
+  qemu-vm-credentials-fwcfg = runTest {
+    imports = [ ./qemu-vm-credentials.nix ];
+    _module.args.mechanism = "fw_cfg";
+  };
+  qemu-vm-credentials-smbios = runTestOn [ "x86_64-linux" ] {
+    imports = [ ./qemu-vm-credentials.nix ];
+    _module.args.mechanism = "smbios";
+  };
   qemu-vm-external-disk-image = runTest ./qemu-vm-external-disk-image.nix;
   qemu-vm-restrictnetwork = handleTest ./qemu-vm-restrictnetwork.nix { };
   qemu-vm-store = runTest ./qemu-vm-store.nix;
@@ -1318,6 +1340,7 @@ in
   qtile = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./qtile/default.nix;
   qtile-extras = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./qtile-extras/default.nix;
   quake3 = runTest ./quake3.nix;
+  qui = runTest ./qui.nix;
   quicktun = runTest ./quicktun.nix;
   quickwit = runTest ./quickwit.nix;
   rabbitmq = runTest ./rabbitmq.nix;
@@ -1377,6 +1400,7 @@ in
   rustls-libssl = runTest ./rustls-libssl.nix;
   rxe = runTest ./rxe.nix;
   sabnzbd = runTest ./sabnzbd.nix;
+  sabnzbd-module = runTest ./sabnzbd-module.nix;
   samba = runTest ./samba.nix;
   samba-wsdd = runTest ./samba-wsdd.nix;
   sane = runTest ./sane.nix;
@@ -1403,7 +1427,7 @@ in
   sharkey = runTest ./web-apps/sharkey.nix;
   shattered-pixel-dungeon = runTest ./shattered-pixel-dungeon.nix;
   shiori = runTest ./shiori.nix;
-  shoko = runTest ./shoko.nix;
+  shoko = import ./shoko.nix { inherit runTest; };
   signal-desktop = runTest ./signal-desktop.nix;
   silverbullet = runTest ./silverbullet.nix;
   simple = runTest ./simple.nix;
@@ -1552,6 +1576,7 @@ in
   szurubooru = handleTest ./szurubooru.nix { };
   taler = handleTest ./taler { };
   tandoor-recipes = runTest ./tandoor-recipes.nix;
+  tandoor-recipes-media = runTest ./tandoor-recipes-media.nix;
   tandoor-recipes-script-name = runTest ./tandoor-recipes-script-name.nix;
   tang = runTest ./tang.nix;
   taskchampion-sync-server = runTest ./taskchampion-sync-server.nix;
@@ -1630,6 +1655,7 @@ in
   userborn-immutable-users = runTest ./userborn-immutable-users.nix;
   userborn-mutable-etc = runTest ./userborn-mutable-etc.nix;
   userborn-mutable-users = runTest ./userborn-mutable-users.nix;
+  userborn-static = runTest ./userborn-static.nix;
   ustreamer = runTest ./ustreamer.nix;
   uwsgi = runTest ./uwsgi.nix;
   v2ray = runTest ./v2ray.nix;

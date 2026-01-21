@@ -13,16 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "scipopt-gcg";
-  version = "372-unstable-2025-10-11";
-
-  # To correlate scipVersion and version, check: https://scipopt.org/#news
-  scipVersion = "9.2.4";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "scipopt";
     repo = "gcg";
-    rev = "83a2d210a03f920dd941d547da94867deb504882";
-    hash = "sha256-wbzknCmwDhJ38gItA3DppJxSJfNK7NeIkxZVRd2kmp0=";
+    tag = "v${version}";
+    hash = "sha256-HMhb35Zkjt3yzYk6X1OfigZjJrLuelrkQyCBs/UpFjc=";
   };
 
   nativeBuildInputs = [
@@ -54,14 +51,9 @@ stdenv.mkDerivation rec {
   '';
   doCheck = true;
 
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail "cmake_minimum_required(VERSION 3.3)" "cmake_minimum_required(VERSION 3.10)"
-  '';
-
   meta = {
     maintainers = with lib.maintainers; [ fettgoenner ];
-    changelog = "https://scipopt.org/doc-${scipVersion}/html/RN${lib.versions.major scipVersion}.php";
+    changelog = "https://gcg.or.rwth-aachen.de/doc-3.5.0/RN${lib.versions.major version}${lib.versions.minor version}.html";
     description = "Branch-and-Price & Column Generation for Everyone";
     license = lib.licenses.lgpl3Plus;
     homepage = "https://gcg.zib.de";

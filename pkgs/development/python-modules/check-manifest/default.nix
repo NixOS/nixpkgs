@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "0.51";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "mgedmin";
     repo = "check-manifest";

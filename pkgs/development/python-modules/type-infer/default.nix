@@ -91,6 +91,6 @@ buildPythonPackage {
     description = "Automated type inference for Machine Learning pipelines";
     homepage = "https://github.com/mindsdb/type_infer";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ mbalatsko ];
+    maintainers = [ ];
   };
 }

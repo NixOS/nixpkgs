@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "FiniteSingularity";
     repo = "obs-advanced-masks";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-NtmOWKk3eZeRa3TvclZpg4sj8lbOoY8hUhxs1z6kEW4=";
   };
 

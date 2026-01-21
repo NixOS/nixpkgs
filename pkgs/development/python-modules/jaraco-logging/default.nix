@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   tempora,
@@ -11,9 +10,7 @@
 buildPythonPackage rec {
   pname = "jaraco-logging";
   version = "3.4.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "jaraco_logging";

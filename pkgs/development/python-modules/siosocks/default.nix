@@ -6,7 +6,6 @@
   pytest-trio,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   trio,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "siosocks";
   version = "0.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

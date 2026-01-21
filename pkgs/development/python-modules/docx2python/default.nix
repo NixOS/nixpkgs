@@ -7,7 +7,6 @@
   setuptools,
   setuptools-scm,
   pytestCheckHook,
-  pythonOlder,
   typing-extensions,
 }:
 
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "docx2python";
   version = "3.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ShayHill";

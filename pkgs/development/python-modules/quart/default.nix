@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   flit-core,
@@ -13,13 +12,11 @@
   click,
   flask,
   hypercorn,
-  importlib-metadata,
   itsdangerous,
   jinja2,
   markupsafe,
   pydata-sphinx-theme,
   python-dotenv,
-  typing-extensions,
   werkzeug,
 
   # tests
@@ -57,10 +54,6 @@ buildPythonPackage rec {
     pydata-sphinx-theme
     python-dotenv
     werkzeug
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
-    typing-extensions
   ];
 
   pythonImportsCheck = [ "quart" ];

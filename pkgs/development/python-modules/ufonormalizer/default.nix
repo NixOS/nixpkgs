@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools-scm,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "ufonormalizer";
   version = "0.6.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;

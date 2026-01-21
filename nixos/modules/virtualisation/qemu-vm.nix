@@ -16,7 +16,7 @@ with lib;
 
 let
 
-  qemu-common = import ../../lib/qemu-common.nix { inherit lib pkgs; };
+  qemu-common = import ../../lib/qemu-common.nix { inherit (pkgs) lib stdenv; };
 
   cfg = config.virtualisation;
 
@@ -300,7 +300,7 @@ let
         idx:
         { size, ... }:
         ''
-          test -e "empty${builtins.toString idx}.qcow2" || ${qemu}/bin/qemu-img create -f qcow2 "empty${builtins.toString idx}.qcow2" "${builtins.toString size}M"
+          test -e "empty${toString idx}.qcow2" || ${qemu}/bin/qemu-img create -f qcow2 "empty${toString idx}.qcow2" "${toString size}M"
         ''
       ))
       (builtins.concatStringsSep "")
@@ -365,6 +365,7 @@ in
   imports = [
     ../profiles/qemu-guest.nix
     ./disk-size-option.nix
+    ./guest-networking-options.nix
     (mkRenamedOptionModule
       [
         "virtualisation"
@@ -679,57 +680,6 @@ in
       '';
     };
 
-    virtualisation.vlans = mkOption {
-      type = types.listOf types.ints.unsigned;
-      default = if config.virtualisation.interfaces == { } then [ 1 ] else [ ];
-      defaultText = lib.literalExpression ''if config.virtualisation.interfaces == {} then [ 1 ] else [ ]'';
-      example = [
-        1
-        2
-      ];
-      description = ''
-        Virtual networks to which the VM is connected.  Each
-        number «N» in this list causes
-        the VM to have a virtual Ethernet interface attached to a
-        separate virtual network on which it will be assigned IP
-        address
-        `192.168.«N».«M»`,
-        where «M» is the index of this VM
-        in the list of VMs.
-      '';
-    };
-
-    virtualisation.interfaces = mkOption {
-      default = { };
-      example = {
-        enp1s0.vlan = 1;
-      };
-      description = ''
-        Network interfaces to add to the VM.
-      '';
-      type =
-        with types;
-        attrsOf (submodule {
-          options = {
-            vlan = mkOption {
-              type = types.ints.unsigned;
-              description = ''
-                VLAN to which the network interface is connected.
-              '';
-            };
-
-            assignIP = mkOption {
-              type = types.bool;
-              default = false;
-              description = ''
-                Automatically assign an IP address to the network interface using the same scheme as
-                virtualisation.vlans.
-              '';
-            };
-          };
-        });
-    };
-
     virtualisation.writableStore = mkOption {
       type = types.bool;
       default = cfg.mountHostNixStore;
@@ -750,20 +700,6 @@ in
         Use a tmpfs for the writable store instead of writing to the VM's
         own filesystem.
       '';
-    };
-
-    networking.primaryIPAddress = mkOption {
-      type = types.str;
-      default = "";
-      internal = true;
-      description = "Primary IP address used in /etc/hosts.";
-    };
-
-    networking.primaryIPv6Address = mkOption {
-      type = types.str;
-      default = "";
-      internal = true;
-      description = "Primary IPv6 address used in /etc/hosts.";
     };
 
     virtualisation.host.pkgs = mkOption {
@@ -1143,6 +1079,85 @@ in
       '';
     };
 
+    virtualisation.credentials = mkOption {
+      description = ''
+        Credentials to pass to the VM using systemd's credential system.
+
+        See {manpage}`systemd.exec(5)` , {manpage}`systemd-creds(1)` and https://systemd.io/CREDENTIALS/ for more
+        information about systemd credentials.
+      '';
+      default = { };
+      example = {
+        database-password = {
+          text = "my-secret-password";
+        };
+        ssl-cert = {
+          source = "./cert.pem";
+        };
+        binary-key = {
+          mechanism = "fw_cfg";
+          source = "./private.der";
+        };
+        config-file = {
+          mechanism = "smbios";
+          text = ''
+            [database]
+            host=localhost
+            port=5432
+          '';
+        };
+      };
+      type = types.attrsOf (
+        lib.types.submodule (
+          {
+            name,
+            options,
+            config,
+            ...
+          }:
+          {
+            options = {
+              mechanism = lib.mkOption {
+                type = lib.types.enum [
+                  "fw_cfg"
+                  "smbios"
+                ];
+                default = if pkgs.stdenv.hostPlatform.isx86 then "smbios" else "fw_cfg";
+                defaultText = lib.literalExpression ''if pkgs.stdenv.hostPlatform.isx86 then "smbios" else "fw_cfg"'';
+                description = ''
+                  The mechanism used to pass the credential to the VM.
+                '';
+              };
+              source = lib.mkOption {
+                type = lib.types.nullOr (lib.types.pathWith { });
+                default = null;
+                description = ''
+                  Source file on the host containing the credential data.
+                '';
+              };
+              text = lib.mkOption {
+                default = null;
+                type = lib.types.nullOr lib.types.str;
+                description = ''
+                  Text content of the credential.
+
+                  For binary data or when the credential content should come from
+                  an existing file, use `source` instead.
+
+                  ::: {.warning}
+                  The text here is stored in the host's nix store as a file.
+                  :::
+                '';
+              };
+            };
+            config.source = lib.mkIf (config.text != null) (
+              lib.mkDerivedConfig options.text (pkgs.writeText name)
+            );
+          }
+        )
+      );
+    };
+
   };
 
   config = {
@@ -1331,6 +1346,14 @@ in
         "-global"
         "driver=cfi.pflash01,property=secure,value=on"
       ])
+      (lib.mapAttrsToList (
+        name: cred:
+        if cred.mechanism == "fw_cfg" then
+          "-fw_cfg name=opt/io.systemd.credentials/${name},file=${cred.source}"
+        # smbios - must use base64 encoding (SMBIOS can't handle null bytes)
+        else
+          "-smbios type=11,path=<(echo 'io.systemd.credential.binary:${name}='; base64 -w0 '${cred.source}')"
+      ) cfg.credentials)
     ];
 
     virtualisation.qemu.drives = mkMerge [

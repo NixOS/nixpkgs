@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "crlfsuite";
   version = "2.5.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Nefcore";

@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   libngspice,
   numpy,
@@ -19,7 +18,6 @@ buildPythonPackage rec {
   pname = "pyspice";
   version = "1.5";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "PySpice";

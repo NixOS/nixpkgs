@@ -20,7 +20,7 @@ in
 buildPythonPackage rec {
   pname = "deepwave";
   version = "0.0.18";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ar4";

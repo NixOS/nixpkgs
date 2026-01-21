@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "systemd-lsp";
-  version = "2025.10.16";
+  version = "2026.01.06";
 
   src = fetchFromGitHub {
     owner = "JFryy";
     repo = "systemd-lsp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xhk1jUAA81Rkq9Nmcw+XyWrSbq3ygRvS615Z56j0WBM=";
+    hash = "sha256-wTqbktVaGUk3/cJ3oH1GXvddqVKJQe09sRiyaU+cqCg=";
   };
 
-  cargoHash = "sha256-6hePUny2iBjslkIk8wVXHnuAHzG3WpBdcj8D5FM9Bc4=";
+  cargoHash = "sha256-2+0+VeHEsUyTivDU7FQbm44RZe0t0hsVHNN2fplDlRI=";
 
   passthru.updateScript = nix-update-script { };
 

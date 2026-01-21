@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation {
   pname = "icamerasrc-${ipu6-camera-hal.ipuVersion}";
-  version = "unstable-2024-09-29";
+  version = "unstable-2025-12-26";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "icamerasrc";
-    tag = "20240926_1446";
-    hash = "sha256-BpIZxkPmSVKqPntwBJjGmCaMSYFCEZHJa4soaMAJRWE=";
+    tag = "20251226_1140_191_PTL_PV_IoT";
+    hash = "sha256-BYURJfNz4D8bXbSeuWyUYnoifozFOq6rSfG9GBKVoHo=";
   };
 
   nativeBuildInputs = [

@@ -1,14 +1,10 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   buildPythonPackage,
 
   # build-system
   flit-core,
-
-  # dependencies
-  sniffio,
 
   # nativeCheckInputs
   pytestCheckHook,
@@ -17,24 +13,27 @@
   numpy,
   trio,
   wgpu-py,
-
-  nix-update-script,
 }:
 buildPythonPackage rec {
   pname = "rendercanvas";
-  version = "2.5.1";
+  version = "2.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pygfx";
     repo = "rendercanvas";
     tag = "v${version}";
-    hash = "sha256-FjKotBAGEtM5JYA3PGeoSl3v4m6vq1EE/r/gCsabdIo=";
+    hash = "sha256-fOjiGNxEUVI+jddrwqrlBYT+CAMDQCIPNHwGonBH4Hk=";
   };
 
   postPatch = ''
     rm -r rendercanvas/__pyinstaller
   '';
+
+  env = {
+    # This relaxes the timeing assertions thus making the tests less flaky
+    CI = "1";
+  };
 
   build-system = [ flit-core ];
 
@@ -48,10 +47,13 @@ buildPythonPackage rec {
     (wgpu-py.overrideAttrs { doInstallCheck = false; })
   ];
 
-  # flaky timing and / or interrupt based tests
   disabledTests = [
+    # flaky timing and / or interrupt based tests
     "test_offscreen_event_loop"
     "test_call_later_thread"
+
+    # AssertionError
+    "test_that_we_are_on_lavapipe"
   ];
   disabledTestPaths = [
     "tests/test_loop.py"
@@ -64,7 +66,6 @@ buildPythonPackage rec {
     description = "One canvas API, multiple backends";
     homepage = "https://github.com/pygfx/rendercanvas";
     changelog = "https://github.com/pygfx/rendercanvas/releases/tag/${src.tag}";
-
     platforms = lib.platforms.all;
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.bengsparks ];

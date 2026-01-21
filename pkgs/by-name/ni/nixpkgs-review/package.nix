@@ -50,7 +50,6 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
 
   makeWrapperArgs =
     let

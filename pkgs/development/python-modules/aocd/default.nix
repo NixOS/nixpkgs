@@ -14,7 +14,6 @@
   pytest-socket,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   requests,
   requests-mock,
   rich,
@@ -27,8 +26,6 @@ buildPythonPackage rec {
   pname = "aocd";
   version = "2.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "wimglenn";

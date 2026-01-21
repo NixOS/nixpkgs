@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   poetry-core,
   pytestCheckHook,
@@ -10,9 +9,7 @@
 buildPythonPackage rec {
   pname = "pysnmp-pyasn1";
   version = "1.1.3";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pysnmp";

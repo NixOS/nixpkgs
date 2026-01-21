@@ -186,8 +186,8 @@ in
           RestrictSUIDSGID = true;
           RuntimeDirectoryMode = "700";
           SocketBindAllow = [
-            "tcp:${builtins.toString cfg.settings.httpPort}"
-            "tcp:${builtins.toString cfg.settings.websocketPort}"
+            "tcp:${toString cfg.settings.httpPort}"
+            "tcp:${toString cfg.settings.websocketPort}"
           ];
           SocketBindDeny = [ "any" ];
           StateDirectoryMode = "0700";
@@ -277,13 +277,13 @@ in
               enableACME = lib.mkDefault true;
               forceSSL = true;
               locations."/" = {
-                proxyPass = "http://${cfg.settings.httpAddress}:${builtins.toString cfg.settings.httpPort}";
+                proxyPass = "http://${cfg.settings.httpAddress}:${toString cfg.settings.httpPort}";
                 extraConfig = ''
                   client_max_body_size 150m;
                 '';
               };
               locations."/cryptpad_websocket" = {
-                proxyPass = "http://${cfg.settings.httpAddress}:${builtins.toString cfg.settings.websocketPort}";
+                proxyPass = "http://${cfg.settings.httpAddress}:${toString cfg.settings.websocketPort}";
                 proxyWebsockets = true;
               };
             };

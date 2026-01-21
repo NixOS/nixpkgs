@@ -1,24 +1,21 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "iterable-io";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pR0Ps";
     repo = "iterable-io";
-    tag = "v${version}";
-    hash = "sha256-+PSINKS7/FeGHYvkOASA5m+1pBpKfURfylZ8CwKijgA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mS8x3M0DNnwW6Ov3TG8b2J702rjOnZT9r38fsIUXkro=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -30,8 +27,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library to adapt iterables to a file-like interface";
     homepage = "https://github.com/pR0Ps/iterable-io";
-    changelog = "https://github.com/pR0Ps/iterable-io/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/pR0Ps/iterable-io/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.lgpl3Only;
     maintainers = [ lib.maintainers.mjoerg ];
   };
-}
+})

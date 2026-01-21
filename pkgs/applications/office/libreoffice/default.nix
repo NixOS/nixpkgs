@@ -66,7 +66,7 @@
   nspr,
   libwpg,
   dbus-glib,
-  clucene_core_2,
+  clucene-core_2,
   libcdr,
   lcms2,
   unixODBC,
@@ -93,6 +93,7 @@
   ncurses,
   libepoxy,
   gpgme,
+  gpgmepp,
   libwebp,
   abseil-cpp,
   libepubgen,
@@ -358,7 +359,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Fix this path to point to where the headers can actually be found instead.
     substituteInPlace configure.ac --replace-fail \
       'GPGMEPP_CFLAGS=-I/usr/include/gpgme++' \
-      'GPGMEPP_CFLAGS=-I${gpgme.dev}/include/gpgme++'
+      'GPGMEPP_CFLAGS=-I${lib.getDev gpgmepp}/include/gpgme++'
 
     # Fix for Python 3.12
     substituteInPlace configure.ac --replace-fail distutils.sysconfig sysconfig
@@ -407,7 +408,7 @@ stdenv.mkDerivation (finalAttrs: {
       bluez5
       box2d_2
       cairo
-      clucene_core_2
+      clucene-core_2
       cppunit
       cups
       curl
@@ -422,6 +423,7 @@ stdenv.mkDerivation (finalAttrs: {
       glm
       adwaita-icon-theme
       gpgme
+      gpgmepp
       graphite2
       gtk3
       (harfbuzz.override { withIcu = true; })

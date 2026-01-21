@@ -100,13 +100,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   checkFlags = [
     # Error: deadline has elapsed
-    "--skip replicated_loglet"
-
+    "--skip"
+    "replicated_loglet"
     # TIMEOUT [ 180.006s]
-    "--skip fast_forward_over_trim_gap"
-
-    # TIMEOUT (could be related to https://github.com/restatedev/restate/issues/3043)
-    "--skip restatectl_smoke_test"
+    "--skip"
+    "fast_forward_over_trim_gap"
+    # TIMEOUT (could be related to https://github.com/resytatedev/restate/issues/3043)
+    "--skip"
+    "restatectl_smoke_test"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -114,7 +115,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

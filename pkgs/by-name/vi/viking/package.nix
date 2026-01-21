@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   desktopToDarwinBundle,
   docbook_xml_dtd_45,
   docbook_xsl,
@@ -11,11 +10,13 @@
   libxslt,
   pkg-config,
   wrapGAppsHook3,
+  xxd,
   yelp-tools,
   curl,
   gdk-pixbuf,
   gtk3,
   json-glib,
+  libnova,
   libxml2,
   gpsbabel,
   withGeoClue ? true,
@@ -34,24 +35,17 @@
   liboauth,
   withRealtimeGPSTracking ? (!stdenv.hostPlatform.isDarwin),
   gpsd,
+  xz,
 }:
 
 stdenv.mkDerivation rec {
   pname = "viking";
-  version = "1.10";
+  version = "1.11";
 
   src = fetchurl {
     url = "mirror://sourceforge/viking/viking-${version}.tar.bz2";
-    sha256 = "sha256-lFXIlfmLwT3iS9ayNM0PHV7NwbBotMvG62ZE9hJuRaw=";
+    hash = "sha256-/iHVwRHvIId9HNlbGkvDT6rp3ToXuskj9BjhJxo8/JE=";
   };
-
-  patches = [
-    # Fix check_md5_hash.sh on macOS
-    (fetchpatch {
-      url = "https://github.com/viking-gps/viking/pull/184/commits/b0e110a3cfefea0f1874669525eb3a220dd29f9f.patch";
-      hash = "sha256-HdkcZMV570SXOQMIZZAti2HT0gIdF/EwQCVXBaOwpqs=";
-    })
-  ];
 
   nativeBuildInputs = [
     docbook_xml_dtd_45
@@ -61,6 +55,7 @@ stdenv.mkDerivation rec {
     libxslt
     pkg-config
     wrapGAppsHook3
+    xxd
     yelp-tools
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
@@ -70,7 +65,9 @@ stdenv.mkDerivation rec {
     gdk-pixbuf
     gtk3
     json-glib
+    libnova
     libxml2
+    xz # liblzma
   ]
   ++ lib.optional withGeoClue geoclue2
   ++ lib.optional withGeoTag gexiv2
@@ -91,8 +88,6 @@ stdenv.mkDerivation rec {
     (lib.enableFeature withOAuth "oauth")
     (lib.enableFeature withRealtimeGPSTracking "realtime-gps-tracking")
   ];
-
-  hardeningDisable = [ "format" ];
 
   doCheck = true;
 

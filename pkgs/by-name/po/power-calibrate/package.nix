@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ColinIanKing/power-calibrate";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ dtzWill ];
+    maintainers = [ ];
   };
 }

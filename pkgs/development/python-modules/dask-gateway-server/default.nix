@@ -7,7 +7,6 @@
   fetchFromGitHub,
   go,
   pykerberos,
-  pythonOlder,
   skein,
   sqlalchemy,
   traitlets,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "dask-gateway-server";
   version = "2023.9.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dask";

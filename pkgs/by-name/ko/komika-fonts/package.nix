@@ -8,11 +8,6 @@
     "poster"
     "text"
     "title"
-    "komikahuna"
-    "komikandy"
-    "komikazba"
-    "komikaze"
-    "komikazoom"
   ],
 }:
 
@@ -57,26 +52,6 @@ let
         "Referer: https://www.1001freefonts.com/komika-title.font"
       ];
     };
-    "komikahuna" = {
-      url = "https://www.1001fonts.com/download/komikahuna.zip";
-      hash = "sha256-TjGxQA3ZyIOyJUNP+MVkYiSDk9WDIDPy3d2ttWC1aoc=";
-    };
-    "komikandy" = {
-      url = "https://www.1001fonts.com/download/komikandy.zip";
-      hash = "sha256-NqpR+gM2giTHGUBYoJlO8vkzOD0ep7LzAry3nIagjLY=";
-    };
-    "komikazba" = {
-      url = "https://www.1001fonts.com/download/komikazba.zip";
-      hash = "sha256-SGJMP0OdZ/AEImN5S3QshCbWSLXO4qTjHnSQYqoy3Pc=";
-    };
-    "komikaze" = {
-      url = "https://www.1001fonts.com/download/komikaze.zip";
-      hash = "sha256-daJRwgkzL5v224KwkaGMK2FqVnfin8+8WvMTvXTkCGE=";
-    };
-    "komikazoom" = {
-      url = "https://www.1001fonts.com/download/komikazoom.zip";
-      hash = "sha256-/o2QPPPiQBkNU0XRxJyI0+5CKFEv4FKU3A5ku1zyVX4=";
-    };
 
   };
   knownFonts = lib.attrNames fontMap;
@@ -95,20 +70,18 @@ let
 in
 stdenvNoCC.mkDerivation {
   pname = "komika-fonts";
-  version = "0-unstable-2024-08-12";
+  version = "0-unstable-2001-06-16";
   sourceRoot = ".";
 
   srcs = map (variant: fetchFont fontMap.${variant}) selectedFonts;
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/share/fonts/ttf
-    mv **/*.ttf $out/share/fonts/ttf
+    install -Dm444 **/*.ttf -t $out/share/fonts/ttf
     runHook postInstall
   '';
 
   meta = {
-    homepage = "https://moorstation.org/typoasis/designers/lab/index.htm";
-    # description from archive here: http://web.archive.org/web/20030422173903fw_/http://www.hardcovermedia.com/lab/Pages/Fontpages/komikahands.html
+    homepage = "https://pedroreina.net/apostrophiclab/";
     description = "First ever comic lettering super family";
     longDescription = ''
       50 fonts, covering everything the comic artist needs when it comes to lettering. 10 text faces, 10 display faces, 10 tiling faces, 10 hand variations, 9 poster faces, and 20 balloons in a font.

@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "thumbdrives";
   version = "0.3.2";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromSourcehut {
     owner = "~martijnbraam";

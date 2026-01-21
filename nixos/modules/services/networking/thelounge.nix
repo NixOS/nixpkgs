@@ -14,7 +14,7 @@ let
     "module.exports = " + builtins.toJSON ({ inherit (cfg) public port; } // cfg.extraConfig);
   pluginManifest = {
     dependencies = builtins.listToAttrs (
-      builtins.map (pkg: {
+      map (pkg: {
         name = getName pkg;
         value = getVersion pkg;
       }) cfg.plugins

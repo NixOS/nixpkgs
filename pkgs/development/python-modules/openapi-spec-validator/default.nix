@@ -1,14 +1,12 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
   poetry-core,
 
   # propagates
-  importlib-resources,
   jsonschema,
   jsonschema-path,
   lazy-object-proxy,
@@ -23,8 +21,6 @@ buildPythonPackage rec {
   pname = "openapi-spec-validator";
   version = "0.7.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   # no tests via pypi sdist
   src = fetchFromGitHub {
@@ -41,8 +37,7 @@ buildPythonPackage rec {
     jsonschema-path
     lazy-object-proxy
     openapi-schema-validator
-  ]
-  ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

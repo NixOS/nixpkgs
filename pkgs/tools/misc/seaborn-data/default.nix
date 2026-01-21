@@ -13,7 +13,7 @@ let
       description = "Data repository for seaborn examples";
       homepage = "https://github.com/mwaskom/seaborn-data";
       platforms = lib.platforms.all;
-      maintainers = with lib.maintainers; [ mbalatsko ];
+      maintainers = [ ];
     };
   };
   makeSeabornDataPackage =

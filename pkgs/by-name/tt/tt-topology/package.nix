@@ -54,8 +54,6 @@ python3Packages.buildPythonApplication rec {
   # Tests are broken
   dontUsePytestCheck = true;
 
-  versionCheckProgramArg = "--version";
-
   meta = {
     mainProgram = "tt-topology";
     description = "Command line utility used to flash multiple NB cards on a system to use specific eth routing configurations";

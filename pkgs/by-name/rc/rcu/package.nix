@@ -24,15 +24,15 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "rcu";
-  version = "4.0.31";
+  version = "4.0.33";
 
-  format = "other";
+  pyproject = false;
 
   src =
     let
       src-tarball = requireFile {
         name = "rcu-${version}-source.tar.gz";
-        hash = "sha256-gOf6CaLqoGqJuTcyARdLnKiovPDFRtsABJgEEF7fx+A=";
+        hash = "sha256-ezbG3qUfUyr9JEXyKTrULYCVm4hA4+nvcHPzJpdLaWY=";
         url = "https://www.davisr.me/projects/rcu/";
       };
     in

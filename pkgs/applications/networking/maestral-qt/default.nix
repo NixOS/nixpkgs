@@ -14,8 +14,6 @@ python3.pkgs.buildPythonApplication rec {
   version = "1.9.5";
   pyproject = true;
 
-  disabled = python3.pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = "maestral-qt";

@@ -2,7 +2,7 @@
   stdenv,
   fetchurl,
   lib,
-  nodejs,
+  nodejs_22,
   node-pre-gyp,
   node-gyp,
   python3,
@@ -15,16 +15,17 @@
   ncVersion,
 }:
 let
+  nodejs = nodejs_22;
   latestVersionForNc = {
     "31" = {
-      version = "9.0.7";
-      appHash = "sha256-7EK4QIM9/Qbku2cTOmMcz6ywqKT9l2Ot1DYsdAXOo2E=";
-      modelHash = "sha256-h3tYtnQUcuFbWAuiKsN2wiFSbbRy/7eNO992MtGrzkc=";
+      version = "9.0.9";
+      appHash = "sha256-JyxECdAjg+f62hccPUuQ7dFknzETs/JvTB6y5hkbH1M=";
+      modelHash = "sha256-xqCYMJYCk1fZ9ZnIW+hmB0AWrn9APNdu1hk6id6MQQY=";
     };
     "32" = {
-      version = "10.0.4";
-      appHash = "sha256-/RHnnvGJMcxe4EuceYc20xh3qkYy1ZzGsyvp0h03eLk=";
-      modelHash = "sha256-AJzVVdZrQs1US1JokW5VokL/uTsK7WiKmuZhw7WeRnU=";
+      version = "10.0.7";
+      appHash = "sha256-quuH9ZNQhvlJ6SsFeboVIrMtF9K6ckpQkXb9OXDvFm8=";
+      modelHash = "sha256-Q862f4mNWE6V4ZUpfNFZrs4kwRF/29uETCroyie0+zA=";
     };
   };
   currentVersionInfo =

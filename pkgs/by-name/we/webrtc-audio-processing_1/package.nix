@@ -33,6 +33,11 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.alpinelinux.org/alpine/aports/-/raw/0630fa25465530c0e7358f00016bdc812894f67f/community/webrtc-audio-processing-1/add-loongarch-support.patch";
       hash = "sha256-Cn3KwKSSV/QJm1JW0pkEWB6OmeA0fRlVkiMU8OzXNzY=";
     })
+    # Fix compilation against gcc15
+    (fetchurl {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/webrtc-audio-processing-1/-/raw/9de1306d3a6a78f435666453b85ba8ede0dd91ea/0001-Fix-compilation-with-GCC-15.patch";
+      hash = "sha256-Ws7FRBX5+nIKWJv6cROqO5eSm5AJGyZVWrAjQ4R3n0I=";
+    })
   ];
 
   outputs = [

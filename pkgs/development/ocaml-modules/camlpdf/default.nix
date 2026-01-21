@@ -6,15 +6,15 @@
   findlib,
 }:
 
-stdenv.mkDerivation rec {
-  version = "2.8";
+stdenv.mkDerivation (finalAttrs: {
+  version = "2.8.1";
   pname = "ocaml${ocaml.version}-camlpdf";
 
   src = fetchFromGitHub {
     owner = "johnwhitington";
     repo = "camlpdf";
-    rev = "v${version}";
-    hash = "sha256-+SFuFqlrP0nwm199y0QFWYvlwD+Cbh0PHA5bmXIWdNk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ZExQtcFBPiS7c6v+WEjZYQ6zXtqRTNLV0hYzYSB/eLE=";
   };
 
   nativeBuildInputs = [
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ vbgl ];
     broken = lib.versionOlder ocaml.version "4.10";
   };
-}
+})

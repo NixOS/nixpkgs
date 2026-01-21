@@ -13,7 +13,6 @@
   python-jose,
   python3-openid,
   python3-saml,
-  pythonOlder,
   requests,
   requests-oauthlib,
   responses,
@@ -25,8 +24,6 @@ buildPythonPackage rec {
   pname = "social-auth-core";
   version = "4.7.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "python-social-auth";

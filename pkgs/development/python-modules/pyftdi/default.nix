@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pyserial,
-  pythonOlder,
   pyusb,
   setuptools,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pyftdi";
   version = "0.57.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "eblot";

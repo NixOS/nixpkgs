@@ -17,14 +17,14 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wsme";
   version = "0.12.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "WSME";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-m36yJErzxwSskUte0iGVS7aK3QqLKy84okSwZ7M3mS0=";
   };
 
@@ -62,4 +62,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
-}
+})

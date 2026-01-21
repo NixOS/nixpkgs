@@ -27,7 +27,6 @@
   # tests
   anyio,
   pproxy,
-  pytest-randomly,
   pytestCheckHook,
   postgresql,
   postgresqlTestHook,
@@ -183,7 +182,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     anyio
     pproxy
-    pytest-randomly
     pytestCheckHook
     postgresql
   ]

@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "mariuz";
     repo = "flamerobin";
-    tag = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-IwJEFF3vP0BC9PoMoY+XPLT+ygXnFXP/TWaqjdQWs8s=";
   };
 

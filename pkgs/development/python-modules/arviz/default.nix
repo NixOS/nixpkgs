@@ -39,16 +39,16 @@
   zarr,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "arviz";
-  version = "0.23.0";
+  version = "0.23.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "arviz-devs";
     repo = "arviz";
-    tag = "v${version}";
-    hash = "sha256-/Xz4hTKB1lh9cxHkVXAZY8NsZoqdadukI/V1/LRZu24=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-twAYCH8jsOnXVD3+sstOLEGG1Enbq8M8ZQWffFVzS48=";
   };
 
   nativeBuildInputs = [
@@ -65,6 +65,7 @@ buildPythonPackage rec {
 
   dependencies = [
     h5netcdf
+    h5py
     matplotlib
     numpy
     pandas
@@ -79,7 +80,6 @@ buildPythonPackage rec {
     cloudpickle
     emcee
     ffmpeg
-    h5py
     jax
     jaxlib
     numba
@@ -124,8 +124,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for exploratory analysis of Bayesian models";
     homepage = "https://arviz-devs.github.io/arviz/";
-    changelog = "https://github.com/arviz-devs/arviz/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/arviz-devs/arviz/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ omnipotententity ];
   };
-}
+})

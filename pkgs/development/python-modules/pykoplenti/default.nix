@@ -7,7 +7,6 @@
   prompt-toolkit,
   pycryptodome,
   pydantic,
-  pythonOlder,
   setuptools,
 }:
 
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "pykoplenti";
   version = "1.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "stegm";

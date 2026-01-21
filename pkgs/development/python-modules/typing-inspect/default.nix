@@ -1,34 +1,33 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  setuptools,
   typing-extensions,
   mypy-extensions,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "typing-inspect";
-  version = "0.9.0";
+  version = "0.9.0-unstable-2025-10-20";
   format = "setuptools";
 
-  src = fetchPypi {
-    inherit version;
-    pname = "typing_inspect";
-    hash = "sha256-sj/EL/b272lU5IUsH7USzdGNvqAxNPkfhWqVzMlGH3g=";
+  src = fetchFromGitHub {
+    owner = "ilevkivskyi";
+    repo = "typing_inspect";
+    rev = "58c98c084ebeb45ee51935506ed1cc3449105fa9";
+    hash = "sha256-uGGtV32TGckoM3JALNu2OjIE+gmzJc7VMJlQeKJVFd8=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     typing-extensions
     mypy-extensions
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-
-  disabledTests = [
-    # https://github.com/ilevkivskyi/typing_inspect/issues/84
-    "test_typed_dict_typing_extension"
-  ];
 
   pythonImportsCheck = [ "typing_inspect" ];
 

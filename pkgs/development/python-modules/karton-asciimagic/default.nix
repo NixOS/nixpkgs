@@ -4,15 +4,12 @@
   fetchFromGitHub,
   karton-core,
   unittestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "karton-asciimagic";
   version = "1.2.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";

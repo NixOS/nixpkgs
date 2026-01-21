@@ -16,7 +16,6 @@
   webob,
   zope-deprecation,
   zope-interface,
-  pythonOlder,
   pytestCheckHook,
 }:
 
@@ -24,8 +23,6 @@ buildPythonPackage rec {
   pname = "pyramid";
   version = "2.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

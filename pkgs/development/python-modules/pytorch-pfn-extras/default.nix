@@ -20,7 +20,7 @@
   pythonAtLeast,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytorch-pfn-extras";
   version = "0.8.4";
   pyproject = true;
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pfnet";
     repo = "pytorch-pfn-extras";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-OrUYO0V5fWqkIjHiYkhvjeFy0YX8CxeRqzrw3NfGK2A=";
   };
 
@@ -67,6 +67,19 @@ buildPythonPackage rec {
   ++ lib.optionals (pythonAtLeast "3.13") [
     # RuntimeError: Dynamo is not supported on Python 3.13+
     "test_register"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # AttributeError: 'Ensure' object has no attribute '__annotations__'. Did you mean: '__annotate_func__'?
+    "test_torchscript_module"
+
+    # TypeError: cannot pickle '_contextvars.Context' object
+    "test_record_iterable_with_multiprocessing"
+
+    # TypeError: cannot pickle '_thread.lock' object
+    "test_report_from_other_process"
+
+    # AssertionError: assert 'foo' in {}
+    "test_global_summary"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # torch.distributed was not available on darwin at one point; revisit
@@ -116,7 +129,7 @@ buildPythonPackage rec {
   meta = {
     description = "Supplementary components to accelerate research and development in PyTorch";
     homepage = "https://github.com/pfnet/pytorch-pfn-extras";
-    changelog = "https://github.com/pfnet/pytorch-pfn-extras/releases/tag/${src.tag}";
+    changelog = "https://github.com/pfnet/pytorch-pfn-extras/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ samuela ];
     badPlatforms = [
@@ -124,4 +137,4 @@ buildPythonPackage rec {
       lib.systems.inspect.patterns.isDarwin
     ];
   };
-}
+})

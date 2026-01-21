@@ -6,7 +6,6 @@
   packaging,
   pygments,
   pytestCheckHook,
-  pythonOlder,
   readme-renderer,
   setuptools,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "restview";
   version = "3.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

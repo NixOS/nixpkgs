@@ -4,6 +4,7 @@
   fetchFromGitHub,
   cmake,
   libsForQt5,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,6 +22,14 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-o6RMjJz9vtfCsm+F9UYIiYPEaQn+6EU5jOTLhNHCwo4=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "bump-minimal-cmake-required-version.patch";
+      url = "https://github.com/filcuc/dotherside/commit/56cb910b368ad0f8ef1f18ef52d46ab8136ca5d6.patch?full_index=1";
+      hash = "sha256-xPMfSbTI8HWK6UYYFPATsz29lKbunm43JnaageTBZeY=";
+    })
+  ];
 
   buildInputs = [
     libsForQt5.qtbase

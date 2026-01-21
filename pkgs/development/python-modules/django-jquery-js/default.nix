@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromBitbucket {
     owner = "tim_heap";
     repo = "django-jquery";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-TzMo31jFhcvlrmq2TJgQyds9n8eATaChnyhnQ7bwdzs=";
   };
 

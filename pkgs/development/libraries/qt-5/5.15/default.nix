@@ -10,6 +10,7 @@
   generateSplicesForMkScope,
   lib,
   stdenv,
+  gcc14Stdenv,
   fetchurl,
   fetchgit,
   fetchpatch,
@@ -246,12 +247,15 @@ let
   addPackages =
     self:
     let
-      qtModule = callPackage ../qtModule.nix {
-        inherit patches;
-        # Use a variant of mkDerivation that does not include wrapQtApplications
-        # to avoid cyclic dependencies between Qt modules.
-        mkDerivation = (callPackage ../mkDerivation.nix { wrapQtAppsHook = null; }) stdenv.mkDerivation;
-      };
+      qtModuleWithStdenv =
+        stdenv:
+        callPackage ../qtModule.nix {
+          inherit patches;
+          # Use a variant of mkDerivation that does not include wrapQtApplications
+          # to avoid cyclic dependencies between Qt modules.
+          mkDerivation = (callPackage ../mkDerivation.nix { wrapQtAppsHook = null; }) stdenv.mkDerivation;
+        };
+      qtModule = qtModuleWithStdenv stdenv;
 
       callPackage = self.newScope {
         inherit
@@ -326,14 +330,22 @@ let
       qtvirtualkeyboard = callPackage ../modules/qtvirtualkeyboard.nix { };
       qtwayland = callPackage ../modules/qtwayland.nix { };
       qtwebchannel = callPackage ../modules/qtwebchannel.nix { };
-      qtwebengine = callPackage ../modules/qtwebengine.nix {
-        # Won’t build with Clang 20, as `-Wenum-constexpr-conversion`
-        # was made a hard error.
-        stdenv = if stdenv.cc.isClang then llvmPackages_19.stdenv else stdenv;
-        inherit (srcs.qtwebengine) version;
-        inherit (darwin) bootstrap_cmds;
-        python = python3;
-      };
+      qtwebengine =
+        # Actually propagating stdenv change
+        let
+          # Won’t build with Clang 20, as `-Wenum-constexpr-conversion`
+          # was made a hard error.
+          # qt5webengine no longer maintained, FTBFS with GCC 15
+          stdenv' = if stdenv.cc.isClang then llvmPackages_19.stdenv else gcc14Stdenv;
+          qtModule' = qtModuleWithStdenv stdenv';
+        in
+        callPackage ../modules/qtwebengine.nix {
+          inherit (srcs.qtwebengine) version;
+          inherit (darwin) bootstrap_cmds;
+          stdenv = stdenv';
+          qtModule = qtModule';
+          python = python3;
+        };
       qtwebglplugin = callPackage ../modules/qtwebglplugin.nix { };
       qtwebkit = callPackage ../modules/qtwebkit.nix { };
       qtwebsockets = callPackage ../modules/qtwebsockets.nix { };

@@ -2,11 +2,13 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   hatchling,
 
   # dependencies
+  kagglesdk,
   packaging,
   pyyaml,
   requests,
@@ -35,16 +37,16 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "kagglehub";
-  version = "0.3.13";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Kaggle";
     repo = "kagglehub";
-    tag = "v${version}";
-    hash = "sha256-pwQZhNtps2wZeLlMMsX0M8t6qBuEdL3m/Kjf0Qdk0PM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-R9yV29Yrq9it21K2GZLXMNM8MjBAG1iYb1o1azrAghM=";
   };
 
   build-system = [
@@ -52,6 +54,7 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    kagglesdk
     packaging
     pyyaml
     requests
@@ -90,7 +93,7 @@ buildPythonPackage rec {
     pytestCheckHook
     writableTmpDirAsHomeHook
   ]
-  ++ optional-dependencies.pandas-datasets;
+  ++ finalAttrs.passthru.optional-dependencies.pandas-datasets;
 
   disabledTestPaths = [
     # Require internet access
@@ -100,6 +103,13 @@ buildPythonPackage rec {
   disabledTests = [
     # Requires internet access
     "test_model_signing"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # TypeError: Pickler._batch_setitems() takes 2 positional arguments but 3 were given
+    "test_hf_dataset_succeeds"
+    "test_hf_dataset_with_other_loader_kwargs_prints_warning"
+    "test_hf_dataset_with_splits_succeeds"
+    "test_hf_dataset_with_valid_kwargs_succeeds"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -107,8 +117,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library to access Kaggle resources";
     homepage = "https://github.com/Kaggle/kagglehub";
-    changelog = "https://github.com/Kaggle/kagglehub/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/Kaggle/kagglehub/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

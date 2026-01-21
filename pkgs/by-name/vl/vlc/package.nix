@@ -27,7 +27,7 @@
   libXpm,
   libarchive,
   libass,
-  libbluray,
+  libbluray-full,
   libcaca,
   libcddb,
   libdc1394,
@@ -153,7 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
     libSM
     libarchive
     libass
-    libbluray
+    libbluray-full
     libcaca
     libcddb
     libdc1394

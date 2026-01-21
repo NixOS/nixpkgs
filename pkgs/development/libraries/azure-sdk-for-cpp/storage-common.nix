@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "azure-storage-common_12.11.0";
     hash = "sha256-u+zaMoX64GcTKE7QIF5WyENTogLBMTCenoI8hPY7m08=";
   };
-  sourceRoot = "source/sdk/storage/azure-storage-common";
+  sourceRoot = "${finalAttrs.src.name}/sdk/storage/azure-storage-common";
 
   postPatch = ''
     sed -i '/CMAKE_CXX_STANDARD/d' CMakeLists.txt

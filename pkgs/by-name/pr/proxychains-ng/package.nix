@@ -27,6 +27,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/rofl0r/proxychains-ng/commit/fffd2532ad34bdf7bf430b128e4c68d1164833c6.patch";
       hash = "sha256-l3qSFUDMUfVDW1Iw+R2aW/wRz4CxvpR4eOwx9KzuAAo=";
     })
+    (fetchpatch {
+      name = "CVE-2025-34451.patch";
+      url = "https://github.com/httpsgithu/proxychains-ng/commit/cc005b7132811c9149e77b5e33cff359fc95512e.patch";
+      hash = "sha256-taCNTm3qvBmLSSO0DEBu15tDZ35PDzHGtbZW7nLrRDw=";
+    })
   ];
 
   configureFlags = lib.optionals stdenv.hostPlatform.isDarwin [

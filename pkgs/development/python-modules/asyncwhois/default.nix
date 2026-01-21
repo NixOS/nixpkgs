@@ -8,7 +8,6 @@
   pytestCheckHook,
   python-dateutil,
   python-socks,
-  pythonOlder,
   tldextract,
   whodap,
 }:
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "asyncwhois";
   version = "1.1.12";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pogzyb";

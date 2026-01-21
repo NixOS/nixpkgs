@@ -22,6 +22,6 @@ buildGoModule rec {
     mainProgram = "junos_exporter";
     homepage = "https://github.com/czerwonk/junos_exporter";
     license = lib.licenses.mit;
-    teams = [ lib.teams.wdz ];
+    maintainers = with lib.maintainers; [ johannwagner ];
   };
 }

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   simplejson,
 }:
@@ -11,9 +10,7 @@
 buildPythonPackage rec {
   pname = "canonicaljson";
   version = "2.0.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

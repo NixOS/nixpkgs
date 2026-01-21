@@ -9,27 +9,34 @@
   hatch-vcs,
 
   # optional-dependencies
+  backports-zstd,
   brotli,
   brotlicffi,
+  h2,
   pysocks,
-  zstandard,
 
   # tests
+  httpx,
+  pyopenssl,
   pytestCheckHook,
+  pytest-socket,
   pytest-timeout,
+  quart,
+  quart-trio,
   tornado,
+  trio,
   trustme,
 }:
 
 let
   self = buildPythonPackage rec {
     pname = "urllib3";
-    version = "2.5.0";
+    version = "2.6.0";
     pyproject = true;
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-P8R3M8fkGdS8P2s9wrT4kLt0OQajDVa6Slv6S7/5J2A=";
+      hash = "sha256-y5vO9aSzRdXaXRRdw+MINPWOgBiCjLxyTTC0y31NSfE=";
     };
 
     build-system = [
@@ -39,22 +46,33 @@ let
 
     postPatch = ''
       substituteInPlace pyproject.toml \
-        --replace-fail ', "setuptools-scm>=8,<9"' ""
+        --replace-fail ', "setuptools-scm>=8,<10"' ""
     '';
 
     optional-dependencies = {
       brotli = if isPyPy then [ brotlicffi ] else [ brotli ];
+      h2 = [ h2 ];
       socks = [ pysocks ];
-      zstd = [ zstandard ];
+      zstd = [ backports-zstd ];
     };
 
     nativeCheckInputs = [
+      httpx
+      pyopenssl
+      pytest-socket
       pytest-timeout
       pytestCheckHook
+      quart
+      quart-trio
       tornado
+      trio
       trustme
     ]
     ++ lib.concatAttrValues optional-dependencies;
+
+    disabledTestMarks = [
+      "requires_network"
+    ];
 
     # Tests in urllib3 are mostly timeout-based instead of event-based and
     # are therefore inherently flaky. On your own machine, the tests will

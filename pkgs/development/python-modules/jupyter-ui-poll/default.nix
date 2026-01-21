@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   ipython,
 }:
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "jupyter-ui-poll";
   version = "1.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Kirill888";

@@ -291,6 +291,12 @@ def config_entry(levels: int, bootspec: BootSpec, label: str, time: str) -> str:
     entry += f'comment: {bootspec.label}, built on {time}\n'
     entry += 'kernel_path: ' + get_kernel_uri(bootspec.kernel) + '\n'
     entry += 'cmdline: ' + ' '.join(['init=' + bootspec.init] + bootspec.kernelParams).strip() + '\n'
+
+    # Set framebuffer resolution for Linux boot entries if configured
+    resolution = config('resolution')
+    if resolution is not None:
+        entry += f'resolution: {resolution}\n'
+
     if bootspec.initrd:
         entry += f'module_path: ' + get_kernel_uri(bootspec.initrd) + '\n'
 

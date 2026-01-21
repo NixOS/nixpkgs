@@ -85,5 +85,6 @@ buildDunePackage rec {
   meta = lsp.meta // {
     description = "OCaml Language Server Protocol implementation";
     mainProgram = "ocamllsp";
+    broken = lib.versions.majorMinor ocaml.version == "4.13";
   };
 }

@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "kubedock";
-  version = "0.20.0";
+  version = "0.20.2";
 
   src = fetchFromGitHub {
     owner = "joyrex2001";
     repo = "kubedock";
     rev = version;
-    hash = "sha256-6I4fIaFtA4WjYQ0RO9tniUGH1p6hnYcazj6VNOyElLg=";
+    hash = "sha256-DoAvM+/yGr34qOjC9LevYtiUmhnkh7dR90kG2TPZxWg=";
   };
 
   vendorHash = "sha256-QLiu014QowDqebDCXSxOH2TPHUG2d+34mlnbo3NdafA=";

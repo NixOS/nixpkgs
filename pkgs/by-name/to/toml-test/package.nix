@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "toml-test";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "toml-lang";
     repo = "toml-test";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QJ7rK4zdPN8c728fR9r4vXnSk4Y9T/XQJulO7kQaYFE=";
+    hash = "sha256-J5+JO+BrHzje3YmEC9WWA7U6fn+Eye4DQj/knVR+QhE=";
   };
 
-  vendorHash = "sha256-aIGcv6qAQC3URQ/WIvg/+nRyrw1N2q5uBVpRH4fwgXk=";
+  vendorHash = "sha256-JcTW21Zva/7Uvc5AvW9H1IxAcaw3AU0FAdtI3IOtZAc=";
 
   ldflags = [
     "-s"

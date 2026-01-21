@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   requests,
   setuptools,
   urllib3,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "openwrt-ubus-rpc";
   version = "0.0.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Noltari";

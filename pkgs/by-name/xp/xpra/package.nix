@@ -48,7 +48,7 @@
   withHtml ? true,
   xpra-html5,
   udevCheckHook,
-}@args:
+}:
 
 let
   inherit (python3.pkgs) cython buildPythonApplication;
@@ -86,13 +86,14 @@ let
     mkdir -p $out/include $out/lib/pkgconfig
     substituteAll ${cudaPackages.libnvjpeg.dev}/share/pkgconfig/nvjpeg.pc $out/lib/pkgconfig/nvjpeg.pc
   '';
+  effectiveBuildPythonApplication = buildPythonApplication.override {
+    stdenv = if withNvenc then cudaPackages.backendStdenv else stdenv;
+  };
 in
-buildPythonApplication rec {
+effectiveBuildPythonApplication rec {
   pname = "xpra";
   version = "6.3.6";
   format = "setuptools";
-
-  stdenv = if withNvenc then cudaPackages.backendStdenv else args.stdenv;
 
   src = fetchFromGitHub {
     owner = "Xpra-org";

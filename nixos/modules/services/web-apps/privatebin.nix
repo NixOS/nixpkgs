@@ -17,9 +17,9 @@ let
         else if v == false then
           ''false''
         else if builtins.isInt v then
-          ''${builtins.toString v}''
+          ''${toString v}''
         else if builtins.isPath v then
-          ''"${builtins.toString v}"''
+          ''"${toString v}"''
         else if builtins.isString v then
           ''"${v}"''
         else
@@ -167,7 +167,7 @@ in
         "pm.max_spare_servers" = lib.mkDefault 4;
         "pm.max_requests" = lib.mkDefault 500;
       };
-      phpEnv.CONFIG_PATH = lib.strings.removeSuffix "/conf.php" (builtins.toString privatebinSettings);
+      phpEnv.CONFIG_PATH = lib.strings.removeSuffix "/conf.php" (toString privatebinSettings);
     };
 
     services.nginx = lib.mkIf cfg.enableNginx {

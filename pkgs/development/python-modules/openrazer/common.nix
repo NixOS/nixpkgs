@@ -14,7 +14,6 @@ rec {
     homepage = "https://openrazer.github.io/";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ evanjs ];
-    teams = [ lib.teams.lumiguide ];
     platforms = lib.platforms.linux;
   };
 }

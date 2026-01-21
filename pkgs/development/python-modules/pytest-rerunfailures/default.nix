@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   packaging,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "pytest-rerunfailures";
   version = "16.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pytest-dev";

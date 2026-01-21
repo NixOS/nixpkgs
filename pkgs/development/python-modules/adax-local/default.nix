@@ -2,6 +2,7 @@
   lib,
   aiohttp,
   bleak,
+  bleak-retry-connector,
   buildPythonPackage,
   fetchFromGitHub,
   async-timeout,
@@ -10,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "adax-local";
-  version = "0.2.0";
+  version = "0.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pyAdaxLocal";
     tag = version;
-    hash = "sha256-HdhatjlN4oUzBV1cf/PfgOJbEks4KBdw4vH8Y/z6efQ=";
+    hash = "sha256-8gVpUYQoE4V3ATR6zFAz/sARyEmHu9lYyGchTpS1eX8=";
   };
 
   build-system = [ setuptools ];
@@ -25,6 +26,7 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     bleak
+    bleak-retry-connector
     async-timeout
   ];
 

@@ -130,7 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
       mpl20 # or
       lgpl21Plus
     ];
-    maintainers = with lib.maintainers; [ normalcea ];
+    maintainers = [ ];
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.linux;
     pkgConfigModules = [

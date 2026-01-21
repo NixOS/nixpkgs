@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pg8000,
@@ -16,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "aiosql";
-  version = "14.1";
+  version = "15.0";
   pyproject = true;
 
   outputs = [
@@ -28,7 +29,7 @@ buildPythonPackage rec {
     owner = "nackjicholson";
     repo = "aiosql";
     tag = version;
-    hash = "sha256-BNsjVVyYRfp3sNdzQwHy9nQveP2AHfXGK10DLybat9I=";
+    hash = "sha256-zKKp37tM0pBnWJuLmQhoQpWnUinLG/Nmnpv1rdM8wYM=";
   };
 
   sphinxRoot = "docs/source";
@@ -49,6 +50,14 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "aiosql" ];
+
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Tests that require port binding fail in darwin sandbox
+    # port_for.exceptions.PortForException: Can't select a port
+    "tests/test_pg8000.py"
+    "tests/test_apsycopg3.py"
+    "tests/test_psycopg3.py"
+  ];
 
   meta = {
     description = "Simple SQL in Python";

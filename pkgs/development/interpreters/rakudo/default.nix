@@ -20,6 +20,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-rCLlLxFexk2fzuuSMrJjbwhgU+HgJNX6Ect6uCsuJmo=";
   };
 
+  postPatch = ''
+    substituteInPlace src/core.c/CompUnit/Repository/Installation.rakumod \
+      --subst-var out
+  '';
+
+  patches = [
+    ./rakudo-plain-wrapper.patch
+  ];
+
   configureScript = "${lib.getExe perl} ./Configure.pl";
   configureFlags = [
     "--backends=moar"

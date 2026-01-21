@@ -22,13 +22,12 @@
   # nativeCheckInputs
   pytestCheckHook,
   pytest-asyncio,
-  coverage,
 }:
 
 buildPythonPackage rec {
   pname = "atproto";
   version = "0.0.65";
-  format = "pyproject";
+  pyproject = true;
 
   # use GitHub, pypi does not include tests
   src = fetchFromGitHub {
@@ -64,7 +63,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
-    coverage
   ];
 
   disabledTestPaths = [

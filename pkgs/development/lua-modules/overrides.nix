@@ -89,10 +89,6 @@ in
     nativeBuildInputs = old.nativeBuildInputs ++ [
       installShellFiles
     ];
-    postConfigure = ''
-      substituteInPlace ''${rockspecFilename} \
-        --replace-fail "'lua_cliargs = 3.0'," "'lua_cliargs >= 3.0-1',"
-    '';
     postInstall = ''
       installShellCompletion --cmd busted \
         --zsh completions/zsh/_busted \
@@ -130,6 +126,10 @@ in
         dep = openssl;
       }
     ];
+
+    env = old.env // {
+      NIX_CFLAGS_COMPILE = "-std=gnu17"; # for gcc15
+    };
 
     # Upstream rockspec is pointlessly broken into separate rockspecs, per Lua
     # version, which doesn't work well for us, so modify it
@@ -393,6 +393,7 @@ in
     buildInputs = old.buildInputs ++ [
       gnulib
     ];
+    meta.broken = isLuaJIT;
   });
 
   lrexlib-oniguruma = prev.lrexlib-oniguruma.overrideAttrs {
@@ -418,6 +419,10 @@ in
       glibc.dev
     ];
   });
+
+  lua-cmsgpack = prev.lua-cmsgpack.overrideAttrs {
+    meta.broken = isLuaJIT;
+  };
 
   lua-curl = prev.lua-curl.overrideAttrs (old: {
     buildInputs = old.buildInputs ++ [
@@ -589,7 +594,7 @@ in
     '';
   });
 
-  luaossl = prev.luaossl.overrideAttrs (_: {
+  luaossl = prev.luaossl.overrideAttrs (old: {
     externalDeps = [
       {
         name = "CRYPTO";
@@ -600,6 +605,10 @@ in
         dep = openssl;
       }
     ];
+
+    env = old.env // {
+      NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types"; # for gcc15
+    };
   });
 
   luaposix = prev.luaposix.overrideAttrs (_: {
@@ -643,7 +652,6 @@ in
     dontUseCmakeConfigure = true;
 
     doInstallCheck = true;
-    versionCheckProgramArg = "--version";
 
     propagatedBuildInputs = [
       zip
@@ -827,7 +835,8 @@ in
       substituteInPlace ''${rockspecFilename} \
         --replace-fail "'nvim-nio ~> 1.7'," "'nvim-nio >= 1.7'," \
         --replace-fail "'plenary.nvim == 0.1.4'," "'plenary.nvim'," \
-        --replace-fail "'nui.nvim == 0.3.0'," "'nui.nvim',"
+        --replace-fail "'nui.nvim == 0.3.0'," "'nui.nvim'," \
+        --replace-fail ", 'nvim-treesitter-legacy-api == 0.9.2'" ""
     '';
   };
 
@@ -997,6 +1006,27 @@ in
       runHook postCheck
     '';
   };
+
+  rocks-nvim = prev.rocks-nvim.overrideAttrs (oa: {
+
+    nativeCheckInputs = [
+      final.nlua
+      final.busted
+      writableTmpDirAsHomeHook
+    ];
+
+    doCheck = lua.luaversion == "5.1";
+
+    nvimSkipModules = [
+      "bootstrap" # tries to install luarocks from network
+    ];
+
+    checkPhase = ''
+      runHook preCheck
+      busted --run=offline
+      runHook postCheck
+    '';
+  });
 
   rtp-nvim = prev.rtp-nvim.overrideAttrs {
     doCheck = lua.luaversion == "5.1";

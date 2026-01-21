@@ -52,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "LIEF_PYTHON_API" true)
     (lib.cmakeBool "LIEF_EXAMPLES" false)
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeFeature "Python_EXECUTABLE" pyEnv.interpreter)
   ];
 
   postBuild = ''
@@ -68,6 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   pythonImportsCheck = [ "lief" ];
 
+  strictDeps = true;
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
@@ -77,7 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = with lib.platforms; linux ++ darwin;
     maintainers = with lib.maintainers; [
       lassulus
-      genericnerdyusername
     ];
   };
 })

@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "pysequoia";
   version = "0.1.29";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

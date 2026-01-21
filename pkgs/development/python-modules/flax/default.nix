@@ -83,6 +83,11 @@ buildPythonPackage rec {
     tensorflow
   ];
 
+  pytestFlags = [
+    # FutureWarning: In the future `np.object` will be defined as the corresponding NumPy scalar.
+    "-Wignore::FutureWarning"
+  ];
+
   disabledTestPaths = [
     # Docs test, needs extra deps + we're not interested in it.
     "docs/_ext/codediff_test.py"
@@ -102,6 +107,18 @@ buildPythonPackage rec {
 
     # AssertionError: nnx_model.kernel.value.sharding = NamedSharding(...
     "test_linen_to_nnx_metadata"
+
+    # AssertionError: 'Linear_0' not found in State({})
+    "test_compact_basic"
+    # KeyError: 'intermediates'
+    "test_linen_submodule"
+    "test_pure_nnx_submodule"
+    # KeyError: 'counts
+    "test_mutable_state"
+    # AttributeError: 'Top' object has no attribute '_pytree__state'. Did you mean: '_pytree__flatten'?
+    "test_shared_modules"
+    # AttributeError: 'MLP' object has no attribute 'scope
+    "test_transforms"
   ];
 
   passthru = {

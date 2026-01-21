@@ -30,6 +30,10 @@ stdenv.mkDerivation rec {
     "--with-xml2-config=${lib.getExe' (lib.getDev libxml2) "xml2-config"}"
   ];
 
+  makeFlags = [
+    "CFLAGS=-std=c17"
+  ];
+
   doCheck = true;
 
   meta = {

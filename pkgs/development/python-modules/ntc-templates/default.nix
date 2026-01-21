@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   poetry-core,
   textfsm,
   invoke,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "ntc-templates";
   version = "7.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "networktocode";

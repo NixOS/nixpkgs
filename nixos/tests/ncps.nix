@@ -6,6 +6,12 @@
 
 {
   name = "ncps";
+  meta = with lib.maintainers; {
+    maintainers = [
+      aciceri
+      kalbasit
+    ];
+  };
 
   nodes = {
     harmonia = {
@@ -25,25 +31,27 @@
       services.ncps = {
         enable = true;
 
+        analytics.reporting.enable = false;
+
         cache = {
           hostName = "ncps";
-          secretKeyPath = builtins.toString (
+          secretKeyPath = toString (
             pkgs.writeText "ncps-cache-key" "ncps:dcrGsrku0KvltFhrR5lVIMqyloAdo0y8vYZOeIFUSLJS2IToL7dPHSSCk/fi+PJf8EorpBn8PU7MNhfvZoI8mA=="
           );
-        };
 
-        upstream = {
-          caches = [ "http://harmonia:5000" ];
-          publicKeys = [
-            "cache.example.com-1:eIGQXcGQpc00x6/XFcyacLEUmC07u4RAEHt5Y8vdglo="
-          ];
+          upstream = {
+            urls = [ "http://harmonia:5000" ];
+            publicKeys = [
+              "cache.example.com-1:eIGQXcGQpc00x6/XFcyacLEUmC07u4RAEHt5Y8vdglo="
+            ];
+          };
         };
       };
 
       networking.firewall.allowedTCPPorts = [ 8501 ];
     };
 
-    client01 = {
+    client = {
       nix.settings = {
         substituters = lib.mkForce [ "http://ncps:8501" ];
         trusted-public-keys = lib.mkForce [
@@ -65,7 +73,7 @@
       narinfoNameChars = lib.strings.stringToCharacters narinfoName;
 
       narinfoPath = lib.concatStringsSep "/" [
-        nodes.ncps.services.ncps.cache.dataPath
+        nodes.ncps.services.ncps.cache.storage.local
         "store/narinfo"
         (lib.lists.elemAt narinfoNameChars 0)
         ((lib.lists.elemAt narinfoNameChars 0) + (lib.lists.elemAt narinfoNameChars 1))
@@ -79,10 +87,10 @@
 
       ncps.wait_for_unit("ncps.service")
 
-      client01.wait_until_succeeds("curl -f http://ncps:8501/ | grep '\"hostname\":\"${toString nodes.ncps.services.ncps.cache.hostName}\"' >&2")
+      client.wait_until_succeeds("curl -f http://ncps:8501/ | grep '\"hostname\":\"${toString nodes.ncps.services.ncps.cache.hostName}\"' >&2")
 
-      client01.succeed("cat /etc/nix/nix.conf >&2")
-      client01.succeed("nix-store --realise ${pkgs.emptyFile}")
+      client.succeed("cat /etc/nix/nix.conf >&2")
+      client.succeed("nix-store --realise ${pkgs.emptyFile}")
 
       ncps.succeed("cat ${narinfoPath} >&2")
     '';

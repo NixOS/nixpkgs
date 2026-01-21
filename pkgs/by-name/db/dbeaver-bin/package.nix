@@ -1,3 +1,4 @@
+# dbeaver doesn't seem feasible to package from source, see https://github.com/NixOS/nixpkgs/pull/311888
 {
   lib,
   stdenvNoCC,
@@ -18,7 +19,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dbeaver-bin";
-  version = "25.3.1";
+  version = "25.3.3";
 
   src =
     let
@@ -31,10 +32,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         aarch64-darwin = "macos-aarch64.dmg";
       };
       hash = selectSystem {
-        x86_64-linux = "sha256-+9bKKfLFR+9iBv/Sgwbd/gVpUa2c4uvkZGzx61x5bJ8=";
-        aarch64-linux = "sha256-sfrytO39RnqODECo0CPj2tusvZBIo5I9KuRqzoLbE0M=";
-        x86_64-darwin = "sha256-74EMwaG2xmH2gEyhcwqZKgVzNOup81DG8T8DmELN53g=";
-        aarch64-darwin = "sha256-cJ9hS/jQySoGbXd0yLmBNlVak8OOnMW2ToXojnx9Th4=";
+        x86_64-linux = "sha256-dzLwpP/EBYqgsLc5B5HwZvDQUjgvB11/kSPsQ2lBF4g=";
+        aarch64-linux = "sha256-DI8dgcFs3kVrXAx0DVKKA2+SNiQ3ZN3JFwJvkqzQ7Fk=";
+        x86_64-darwin = "sha256-r1T3OU+98DBXgI3Px/nNe7uv7dHzBe+Vl5w2cAaBFMI=";
+        aarch64-darwin = "sha256-OwwTOKHemQQKpPmMXo0yzD1MNqqHh+ELeWW/MmK9UfA=";
       };
     in
     fetchurl {
@@ -147,6 +148,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       gepbird
       mkg20001
+      staticdev
       yzx9
     ];
     mainProgram = "dbeaver";

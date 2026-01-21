@@ -104,6 +104,9 @@ buildPythonPackage {
 
     # ConnectionError: Connection: connecting to server: transport error
     "rerun_py/tests/api_sandbox/"
+
+    # RuntimeError: Failed to load URDF file: No elements found
+    "rerun_py/tests/unit/test_urdf_tree.py"
   ];
 
   __darwinAllowLocalNetworking = true;

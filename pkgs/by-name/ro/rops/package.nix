@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rops";
-  version = "0.1.5";
+  version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "gibbz00";
     repo = "rops";
     tag = version;
-    hash = "sha256-wwZ/4yOB4pE6lZgX8ytCC3plMYt6kxOakQoLy8SWN+k=";
+    hash = "sha256-Nqtwc9QSafvr0N8G6LKZBG4pZHzut3t85qwgVAw59iU=";
   };
 
-  cargoHash = "sha256-sKPVdvMoQ2nV29rjau/6YpO1zpAQOuZhouPCvDf2goc=";
+  cargoHash = "sha256-EaelxmE53oKsWts9oK3LsK3uA8Vy3XbGUC1vKKBe37I=";
 
   # will true when tests is fixed from source.
   doCheck = false;

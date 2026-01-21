@@ -18,13 +18,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libpinyin";
-  version = "2.10.3";
+  version = "2.11.91";
 
   src = fetchFromGitHub {
     owner = "libpinyin";
     repo = "libpinyin";
     tag = finalAttrs.version;
-    hash = "sha256-g3DgRYmLrXqAGxbyiI96UKT1gsJxLlx14K+2HzWR7nI=";
+    hash = "sha256-MXM+iGCtF8gTpRnT0Xi8s+kqsOkGLXY06R8MME2icWo=";
   };
 
   postUnpack = ''

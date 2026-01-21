@@ -3,27 +3,29 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  electron_38,
+  electron_39,
   dart-sass,
+  mpv,
   fetchPnpmDeps,
   pnpmConfigHook,
   pnpm,
   darwin,
   copyDesktopItems,
   makeDesktopItem,
+  nix-update-script,
 }:
 let
   pname = "feishin";
-  version = "0.22.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "jeffvli";
     repo = "feishin";
     tag = "v${version}";
-    hash = "sha256-sRP89xgCl49WZ7A6KaQd/vJTIDvAfZuhRbL3mcBBnIg=";
+    hash = "sha256-loe2hdn4TGCOLI1OQ19/zXikTKijYWtgSeP1gbwxfO0=";
   };
 
-  electron = electron_38;
+  electron = electron_39;
 in
 buildNpmPackage {
   inherit pname version;
@@ -39,8 +41,8 @@ buildNpmPackage {
       version
       src
       ;
-    fetcherVersion = 2;
-    hash = "sha256-CpgiVKwqEjnRJ9Pinj7uSXy4llbdRrS9Vo0Tyge3+KQ=";
+    fetcherVersion = 3;
+    hash = "sha256-gQooubVt2kDOGq4GEZIT+pQcPnzss9QmqTO9kD5Kx58=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -55,10 +57,6 @@ buildNpmPackage {
     # release/app dependencies are installed on preConfigure
     substituteInPlace package.json \
       --replace-fail '"postinstall": "electron-builder install-app-deps",' ""
-
-    # Don't check for updates.
-    substituteInPlace src/main/index.ts \
-      --replace-fail "autoUpdater.checkForUpdatesAndNotify();" ""
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     # https://github.com/electron/electron/issues/31121
@@ -100,7 +98,9 @@ buildNpmPackage {
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/{Applications,bin}
     cp -r dist/**/Feishin.app $out/Applications/
-    makeWrapper $out/Applications/Feishin.app/Contents/MacOS/Feishin $out/bin/feishin
+    makeWrapper $out/Applications/Feishin.app/Contents/MacOS/Feishin $out/bin/feishin \
+      --prefix PATH : "${lib.makeBinPath [ mpv ]}" \
+      --set DISABLE_AUTO_UPDATES 1
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     mkdir -p $out/share/feishin
@@ -113,9 +113,11 @@ buildNpmPackage {
     # Set ELECTRON_FORCE_IS_PACKAGED=1.
     # https://github.com/electron/electron/issues/35153#issuecomment-1202718531
     makeWrapper ${lib.getExe electron} $out/bin/feishin \
+      --prefix PATH : "${lib.makeBinPath [ mpv ]}" \
       --add-flags $out/share/feishin/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
-      --set ELECTRON_FORCE_IS_PACKAGED=1 \
+      --set ELECTRON_FORCE_IS_PACKAGED 1 \
+      --set DISABLE_AUTO_UPDATES 1 \
       --inherit-argv0
 
     for size in 32 64 128 256 512 1024; do
@@ -146,6 +148,8 @@ buildNpmPackage {
     })
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Full-featured Jellyfin, Navidrome, and OpenSubsonic Compatible Music Player";
     homepage = "https://github.com/jeffvli/feishin";
@@ -155,6 +159,7 @@ buildNpmPackage {
     platforms = lib.platforms.unix;
     mainProgram = "feishin";
     maintainers = with lib.maintainers; [
+      BatteredBunny
       onny
       jlbribeiro
     ];

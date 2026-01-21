@@ -24,16 +24,14 @@
 
 buildPythonPackage rec {
   pname = "hypothesis";
-  version = "6.136.9";
+  version = "6.145.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "HypothesisWorks";
     repo = "hypothesis";
     tag = "hypothesis-python-${version}";
-    hash = "sha256-Q1wxIJwAYKZ0x6c85CJSGgcdKw9a3xFw8YpJROElSNU=";
+    hash = "sha256-xyUR3yY2tmF4LGhZRUlv6fdcfVyVWwukodA0WIW0bXU=";
   };
 
   # I tried to package sphinx-selective-exclude, but it throws
@@ -103,13 +101,6 @@ buildPythonPackage rec {
     "test_prints_seed_only_on_healthcheck"
     # calls script with the naked interpreter
     "test_constants_from_running_file"
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [
-    # not sure why these tests fail with only 3.9
-    # FileNotFoundError: [Errno 2] No such file or directory: 'git'
-    "test_observability"
-    "test_assume_has_status_reason"
-    "test_observability_captures_stateful_reprs"
   ]
   ++ lib.optionals (pythonAtLeast "3.12") [
     # AssertionError: assert [b'def      \...   f(): pass'] == [b'def\\', b'    f(): pass']

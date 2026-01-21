@@ -9,14 +9,14 @@
   publicsuffix-list,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "publicsuffixlist";
-  version = "1.0.2.20251222";
+  version = "1.0.2.20260117";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-AH9okvxG0VBeh6tM1BStIKyWhd1OjfiNmVlX8s8sykU=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-JOESMNtP5Nfmi7QyA/gL9Sf2FMBiWn3CdJ17BETYWOU=";
   };
 
   postPatch = ''
@@ -38,11 +38,11 @@ buildPythonPackage rec {
   enabledTestPaths = [ "publicsuffixlist/test.py" ];
 
   meta = {
-    changelog = "https://github.com/ko-zu/psl/blob/v${version}-gha/CHANGES.md";
     description = "Public Suffix List parser implementation";
     homepage = "https://github.com/ko-zu/psl";
+    changelog = "https://github.com/ko-zu/psl/blob/v${finalAttrs.version}-gha/CHANGES.md";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "publicsuffixlist-download";
   };
-}
+})

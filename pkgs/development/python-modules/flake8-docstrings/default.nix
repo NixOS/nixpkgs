@@ -4,15 +4,12 @@
   fetchFromGitHub,
   flake8,
   pydocstyle,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "flake8-docstrings";
   version = "1.7.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "PyCQA";

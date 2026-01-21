@@ -115,7 +115,7 @@ python3Packages.buildPythonApplication rec {
       procps
     ];
 
-  format = "other";
+  pyproject = false;
   dontWrapGApps = true; # prevent double wrapping
 
   preFixup = ''

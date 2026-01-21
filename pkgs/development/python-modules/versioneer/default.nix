@@ -10,9 +10,7 @@
 buildPythonPackage rec {
   pname = "versioneer";
   version = "0.29";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-versioneer";

@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "apx-gui";
-  version = "1.0.4";
+  version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "Vanilla-OS";
     repo = "apx-gui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nZMbVXeWEgfBsVgX2iESRzDgu0tjiqC1dTCaTlW0iWA=";
+    hash = "sha256-qcuc7qVfI/mMhR8lNW8m3oBTMzjzlcycRL7Kvvf5N3o=";
   };
 
   strictDeps = true;

@@ -9,17 +9,17 @@
   writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "lctime";
-  version = "0.0.27";
+  version = "0.0.28";
   pyproject = true;
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "librecell";
     repo = "lctime";
-    tag = version;
-    hash = "sha256-KKZhsKNTr+J5+rLUdlwGMsUCa6NYY1X9yaujPe1c0Do=";
+    tag = finalAttrs.version;
+    hash = "sha256-Td56NtqcI8763hw/XVxLP7+qExraapN9ULD3ZolfR6M=";
   };
 
   build-system = with python3Packages; [
@@ -32,7 +32,6 @@ python3Packages.buildPythonApplication rec {
     liberty-parser
     networkx
     numpy
-    pyspice
     scipy
     sympy
   ];
@@ -77,7 +76,7 @@ python3Packages.buildPythonApplication rec {
         ''
           cd "$HOME"
 
-          cp -R "${src}/tests/"* .
+          cp -R "${finalAttrs.src}/tests/"* .
           patchShebangs *.sh
 
           mkdir -p $out
@@ -94,8 +93,9 @@ python3Packages.buildPythonApplication rec {
       cc-by-sa-40
       cc0
     ];
+    changelog = "https://codeberg.org/librecell/lctime/releases/tag/${finalAttrs.src.tag}";
     maintainers = with lib.maintainers; [ eljamm ];
     teams = with lib.teams; [ ngi ];
     mainProgram = "lctime";
   };
-}
+})

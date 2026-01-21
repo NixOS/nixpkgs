@@ -6,7 +6,6 @@
   cryptography,
   fetchPypi,
   isodate,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "azure-keyvault-keys";
   version = "4.11.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "azure_keyvault_keys";

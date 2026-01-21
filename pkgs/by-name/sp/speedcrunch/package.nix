@@ -3,7 +3,7 @@
   lib,
   fetchFromBitbucket,
   cmake,
-  libsForQt5,
+  qt6,
 }:
 
 stdenv.mkDerivation {
@@ -13,39 +13,44 @@ stdenv.mkDerivation {
   src = fetchFromBitbucket {
     owner = "heldercorreia";
     repo = "speedcrunch";
-    rev = "db51fc5e547aa83834761d874d3518c06d0fec9e";
-    hash = "sha256-rnl4z/HU3lAF9Y1JvdM8LZWIV1NGfR4q5gOMxlNU2EA=";
+    rev = "3c1b4c18ccb275eb2891f9d8ff36a9205c0f566b";
+    hash = "sha256-9/id5h+5aBntlcsEUGkyEzMJf7we7hMslnkqKDcbaNY=";
   };
 
   sourceRoot = "source/src";
 
-  buildInputs = with libsForQt5; [
-    qtbase
-    qttools
+  patches = [
+    ./01-fix-qt6-build.patch
   ];
 
   nativeBuildInputs = [
     cmake
-  ]
-  ++ [
-    libsForQt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
+  ];
+
+  buildInputs = [
+    qt6.qtbase
+    qt6.qttools
   ];
 
   meta = {
     homepage = "https://speedcrunch.org";
     license = lib.licenses.gpl2Plus;
-    description = "Fast power user calculator";
+    description = "High-precision scientific calculator";
     mainProgram = "speedcrunch";
     longDescription = ''
-      SpeedCrunch is a fast, high precision and powerful desktop calculator.
-      Among its distinctive features are a scrollable display, up to 50 decimal
-      precisions, unlimited variable storage, intelligent automatic completion
-      full keyboard-friendly and more than 15 built-in math function.
+      SpeedCrunch is a high-precision scientific calculator.
+      Among its distinctive features are a syntax-highlighted scrollable display,
+      up to 50 decimal places of precision, complex number support, various
+      numeric bases, unit conversions, intelligent automatic completion of functions
+      and variables, integrated formula book, over 150 built-in scientific constants,
+      fully keyboard-driven interface, over 80 built-in mathematical functions and
+      support for user-defined functions.
     '';
     maintainers = with lib.maintainers; [
       j0hax
     ];
-    inherit (libsForQt5.qtbase.meta) platforms;
+    inherit (qt6.qtbase.meta) platforms;
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

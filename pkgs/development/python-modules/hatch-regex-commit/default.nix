@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "hatch-regex-commit";
   version = "0.0.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "frankie567";

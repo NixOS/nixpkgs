@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "theharvester";
-  version = "4.8.2";
+  version = "4.9.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "laramies";
     repo = "theharvester";
     tag = version;
-    hash = "sha256-Sui9PKpp+iMxCUbFcZE2OVDiBCxXLwR9iuXFIbd0P0k=";
+    hash = "sha256-ZD5nFjhunD6miBBgCp7r82l/zIbLjHSj1jghXGav8hI=";
   };
 
   pythonRelaxDeps = true;
@@ -33,19 +33,19 @@ python3.pkgs.buildPythonApplication rec {
     certifi
     dnspython
     fastapi
+    httpx
     lxml
     netaddr
-    ujson
     playwright
     plotly
     pyppeteer
     python-dateutil
     pyyaml
-    requests
     retrying
     shodan
     slowapi
     starlette
+    ujson
     uvicorn
     uvloop
   ];
@@ -71,7 +71,7 @@ python3.pkgs.buildPythonApplication rec {
       gathers emails, names, subdomains, IPs, and URLs using multiple public data sources.
     '';
     homepage = "https://github.com/laramies/theHarvester";
-    changelog = "https://github.com/laramies/theHarvester/releases/tag/${version}";
+    changelog = "https://github.com/laramies/theHarvester/releases/tag/${src.tag}";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       c0bw3b

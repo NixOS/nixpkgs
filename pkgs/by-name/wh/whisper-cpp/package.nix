@@ -74,13 +74,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "whisper-cpp";
-  version = "1.8.2";
+  version = "1.8.3";
 
   src = fetchFromGitHub {
     owner = "ggml-org";
     repo = "whisper.cpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OU5mDnLZHmtdSEN5u0syJcU91L+NCO45f9eG6OsgFfU=";
+    hash = "sha256-TeS1lGKEzkHOoBemy/tMGtIsy0iouj9DTYIgTjUNcQk=";
   };
 
   # The upstream download script tries to download the models to the
@@ -133,6 +133,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ++ optionals (effectiveStdenv.hostPlatform.isx86 && !effectiveStdenv.hostPlatform.isStatic) [
     (cmakeBool "GGML_BACKEND_DL" true)
     (cmakeBool "GGML_CPU_ALL_VARIANTS" true)
+    (cmakeFeature "GGML_BACKEND_DIR" "${placeholder "out"}/lib")
   ]
   ++ optionals cudaSupport [
     (cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
@@ -157,9 +158,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ];
 
   postInstall = ''
-    # Add "whisper-cpp" prefix before every command
-    mv -v "$out/bin/"{quantize,whisper-quantize}
-
     install -v -D -m755 "$src/models/download-ggml-model.sh" "$out/bin/whisper-cpp-download-ggml-model"
 
     wrapProgram "$out/bin/whisper-cpp-download-ggml-model" \

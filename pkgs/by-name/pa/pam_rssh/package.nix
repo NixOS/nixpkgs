@@ -74,7 +74,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
-      kranzes
       xyenon
     ];
   };

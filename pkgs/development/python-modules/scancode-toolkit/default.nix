@@ -45,7 +45,6 @@
   pygments,
   pymaven-patch,
   pytestCheckHook,
-  pythonOlder,
   requests,
   saneyaml,
   setuptools,
@@ -57,15 +56,12 @@
   urlpy,
   writableTmpDirAsHomeHook,
   xmltodict,
-  zipp,
 }:
 
 buildPythonPackage rec {
   pname = "scancode-toolkit";
   version = "32.4.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -128,8 +124,7 @@ buildPythonPackage rec {
     typecode-libmagic
     urlpy
     xmltodict
-  ]
-  ++ lib.optionals (pythonOlder "3.9") [ zipp ];
+  ];
 
   nativeBuildInputs = [
     writableTmpDirAsHomeHook

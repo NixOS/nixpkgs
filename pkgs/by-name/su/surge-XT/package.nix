@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "SURGE_SKIP_STANDALONE" (!buildStandalone))
     (lib.cmakeBool "SURGE_SKIP_VST3" (!buildVST3))
-    (lib.cmakeBool "SURGE_SKIP_LV2" buildLV2)
+    (lib.cmakeBool "SURGE_BUILD_LV2" buildLV2)
     (lib.cmakeBool "SURGE_BUILD_CLAP" buildCLAP)
   ];
 
@@ -95,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "LV2 & VST3 synthesizer plug-in (previously released as Vember Audio Surge)";
+    description = "LV2, VST3 & CLAP synthesizer plug-in (previously released as Vember Audio Surge)";
     homepage = "https://surge-synthesizer.github.io";
     license = lib.licenses.gpl3;
     platforms = [ "x86_64-linux" ];

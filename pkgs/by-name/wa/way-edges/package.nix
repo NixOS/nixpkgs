@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libpulseaudio
   ];
 
-  RUSTFLAGS = [
+  env.RUSTFLAGS = toString [
     "--cfg tokio_unstable"
     "--cfg tokio_uring"
   ];

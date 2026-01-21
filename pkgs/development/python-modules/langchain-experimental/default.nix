@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   pdm-backend,
@@ -61,6 +62,13 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "tests/unit_tests" ];
 
   pythonImportsCheck = [ "langchain_experimental" ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+    # AttributeError: module 'ast' has no attribute 'Str'
+    # https://github.com/langchain-ai/langchain-community/issues/492
+    "test_color_question_1"
+    "test_color_question_2"
+  ];
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "libs/experimental/v";

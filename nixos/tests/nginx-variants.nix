@@ -1,6 +1,6 @@
 { pkgs, runTest, ... }:
 builtins.listToAttrs (
-  builtins.map
+  map
     (packageName: {
       name = packageName;
       value = runTest {

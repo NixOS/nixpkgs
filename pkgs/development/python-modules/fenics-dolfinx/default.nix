@@ -55,7 +55,7 @@ let
     }
   );
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   inherit (dolfinx)
     version
     src
@@ -136,7 +136,7 @@ buildPythonPackage rec {
     homepage = "https://fenicsproject.org";
     downloadPage = "https://github.com/fenics/dolfinx";
     description = "Computational environment of FEniCSx and implements the FEniCS Problem Solving Environment in C++ and Python";
-    changelog = "https://github.com/fenics/dolfinx/releases/tag/${src.tag}";
+    changelog = "https://github.com/fenics/dolfinx/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       bsd2
       lgpl3Plus
@@ -144,4 +144,4 @@ buildPythonPackage rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ qbisi ];
   };
-}
+})

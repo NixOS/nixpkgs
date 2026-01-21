@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  makeFlags = [ "-C Make/gcc" ];
+  makeFlags = [ "--directory=Make/gcc" ];
   buildFlags = [ "release" ];
 
   installPhase = ''

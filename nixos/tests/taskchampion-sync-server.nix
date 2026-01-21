@@ -18,7 +18,7 @@
     { nodes, ... }:
     let
       cfg = nodes.server.services.taskchampion-sync-server;
-      port = builtins.toString cfg.port;
+      port = toString cfg.port;
       # Generated with uuidgen
       uuid = "bf01376e-04a4-435a-9263-608567531af3";
       password = "nixos-test";

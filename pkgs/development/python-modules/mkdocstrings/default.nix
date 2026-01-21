@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  importlib-metadata,
   jinja2,
   markdown,
   markupsafe,
@@ -11,7 +10,6 @@
   pdm-backend,
   pymdown-extensions,
   pytestCheckHook,
-  pythonOlder,
   dirty-equals,
 }:
 
@@ -41,9 +39,6 @@ buildPythonPackage rec {
     mkdocs
     mkdocs-autorefs
     pymdown-extensions
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
   ];
 
   nativeCheckInputs = [

@@ -18,6 +18,23 @@ let
     ;
 in
 {
+  # Pull in some builtins not included elsewhere.
+  inherit (builtins)
+    pathExists
+    readFile
+    isBool
+    isInt
+    isFloat
+    add
+    sub
+    lessThan
+    seq
+    deepSeq
+    genericClosure
+    bitAnd
+    bitOr
+    bitXor
+    ;
 
   ## Simple (higher order) functions
 
@@ -180,7 +197,7 @@ in
 
     : 2\. Function argument
   */
-  or = x: y: x || y;
+  "or" = x: y: x || y;
 
   /**
     boolean “and”
@@ -388,24 +405,6 @@ in
   */
   mapNullable = f: a: if a == null then a else f a;
 
-  # Pull in some builtins not included elsewhere.
-  inherit (builtins)
-    pathExists
-    readFile
-    isBool
-    isInt
-    isFloat
-    add
-    sub
-    lessThan
-    seq
-    deepSeq
-    genericClosure
-    bitAnd
-    bitOr
-    bitXor
-    ;
-
   ## nixpkgs version strings
 
   /**
@@ -433,7 +432,7 @@ in
   */
   oldestSupportedRelease =
     # Update on master only. Do not backport.
-    2505;
+    2511;
 
   /**
     Whether a feature is supported in all supported releases (at the time of

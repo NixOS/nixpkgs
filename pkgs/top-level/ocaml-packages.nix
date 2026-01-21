@@ -254,9 +254,20 @@ let
 
         cohttp = callPackage ../development/ocaml-modules/cohttp { };
 
+        cohttp_5_3 = cohttp.overrideAttrs (_: {
+          version = "5.3.1";
+          __intentionallyOverridingVersion = true;
+        });
+
         cohttp-async = callPackage ../development/ocaml-modules/cohttp/async.nix { };
 
+        cohttp-async_5_3 = cohttp-async.override { cohttp = cohttp_5_3; };
+
+        cohttp-eio = callPackage ../development/ocaml-modules/cohttp/eio.nix { };
+
         cohttp-lwt = callPackage ../development/ocaml-modules/cohttp/lwt.nix { };
+
+        cohttp-lwt_5_3 = cohttp-lwt.override { cohttp = cohttp_5_3; };
 
         cohttp-lwt-jsoo = callPackage ../development/ocaml-modules/cohttp/lwt-jsoo.nix { };
 
@@ -402,6 +413,8 @@ let
 
         dns-client-lwt = callPackage ../development/ocaml-modules/dns/client-lwt.nix { };
 
+        dns-client-miou-unix = callPackage ../development/ocaml-modules/dns/client-miou-unix.nix { };
+
         dns-client-mirage = callPackage ../development/ocaml-modules/dns/client-mirage.nix { };
 
         dns-mirage = callPackage ../development/ocaml-modules/dns/mirage.nix { };
@@ -510,7 +523,9 @@ let
 
         easy-format = callPackage ../development/ocaml-modules/easy-format { };
 
-        eigen = callPackage ../development/ocaml-modules/eigen { };
+        eigen = callPackage ../development/ocaml-modules/eigen {
+          stdenv = pkgs.gcc14Stdenv;
+        };
 
         eio = callPackage ../development/ocaml-modules/eio { };
         eio_linux = callPackage ../development/ocaml-modules/eio/linux.nix { };
@@ -576,6 +591,8 @@ let
         extlib-1-7-7 = callPackage ../development/ocaml-modules/extlib/1.7.7.nix { };
 
         extunix = callPackage ../development/ocaml-modules/extunix/default.nix { };
+
+        ezgzip = callPackage ../development/ocaml-modules/ezgzip { };
 
         ezjsonm = callPackage ../development/ocaml-modules/ezjsonm { };
 
@@ -653,10 +670,17 @@ let
         fpath = callPackage ../development/ocaml-modules/fpath { };
 
         frama-c = callPackage ../development/ocaml-modules/frama-c {
-          framac = pkgs.framac.override { ocamlPackages = self; };
+          framac = pkgs.framac.override {
+            ocamlPackages = self;
+            why3 = pkgs.why3.override { ocamlPackages = self; };
+          };
         };
 
         frama-c-lannotate = callPackage ../development/ocaml-modules/frama-c-lannotate { };
+
+        frama-c-luncov = callPackage ../development/ocaml-modules/frama-c-luncov {
+          why3 = pkgs.why3.override { ocamlPackages = self; };
+        };
 
         frei0r = callPackage ../development/ocaml-modules/frei0r {
           inherit (pkgs) frei0r;
@@ -771,6 +795,10 @@ let
 
         happy-eyeballs-lwt = callPackage ../development/ocaml-modules/happy-eyeballs/lwt.nix { };
 
+        happy-eyeballs-miou-unix =
+          callPackage ../development/ocaml-modules/happy-eyeballs/miou-unix.nix
+            { };
+
         happy-eyeballs-mirage = callPackage ../development/ocaml-modules/happy-eyeballs/mirage.nix { };
 
         hashcons = callPackage ../development/ocaml-modules/hashcons { };
@@ -788,6 +816,8 @@ let
         hmap = callPackage ../development/ocaml-modules/hmap { };
 
         hpack = callPackage ../development/ocaml-modules/hpack { };
+
+        http = callPackage ../development/ocaml-modules/cohttp/http.nix { };
 
         http-mirage-client = callPackage ../development/ocaml-modules/http-mirage-client { };
 
@@ -1091,6 +1121,8 @@ let
 
         logs-syslog = callPackage ../development/ocaml-modules/logs-syslog { };
 
+        lreplay = callPackage ../development/ocaml-modules/lreplay { };
+
         lru = callPackage ../development/ocaml-modules/lru { };
 
         lsp = callPackage ../development/ocaml-modules/ocaml-lsp/lsp.nix { };
@@ -1143,7 +1175,9 @@ let
 
         magic-mime = callPackage ../development/ocaml-modules/magic-mime { };
 
-        magic-trace = callPackage ../development/ocaml-modules/magic-trace { };
+        magic-trace = callPackage ../development/ocaml-modules/magic-trace {
+          cohttp = cohttp_5_3; # due to cohttp_static_handler pulling in cohttp_5_3
+        };
 
         mariadb = callPackage ../development/ocaml-modules/mariadb {
           inherit (pkgs) mariadb;
@@ -1640,7 +1674,9 @@ let
 
         paf = callPackage ../development/ocaml-modules/paf { };
 
-        paf-cohttp = callPackage ../development/ocaml-modules/paf/cohttp.nix { };
+        paf-cohttp = callPackage ../development/ocaml-modules/paf/cohttp.nix {
+          cohttp-lwt = cohttp-lwt_5_3;
+        };
 
         parany = callPackage ../development/ocaml-modules/parany { };
 
@@ -2067,6 +2103,8 @@ let
 
         tls-lwt = callPackage ../development/ocaml-modules/tls/lwt.nix { };
 
+        tls-miou-unix = callPackage ../development/ocaml-modules/tls/miou-unix.nix { };
+
         tls-mirage = callPackage ../development/ocaml-modules/tls/mirage.nix { };
 
         toml = callPackage ../development/ocaml-modules/toml { };
@@ -2315,7 +2353,7 @@ rec {
 
   ocamlPackages_5_4 = mkOcamlPackages (callPackage ../development/compilers/ocaml/5.4.nix { });
 
-  ocamlPackages_latest = ocamlPackages_5_3;
+  ocamlPackages_latest = ocamlPackages_5_4;
 
   ocamlPackages = ocamlPackages_5_3;
 

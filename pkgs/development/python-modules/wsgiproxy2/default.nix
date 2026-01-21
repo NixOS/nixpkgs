@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   webob,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "wsgiproxy2";
   version = "0.5.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "gawel";

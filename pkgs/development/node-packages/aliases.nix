@@ -158,6 +158,7 @@ mapAliases {
   inherit (pkgs) dockerfile-language-server-nodejs; # added 2023-08-18
   inherit (pkgs) dotenv-cli; # added 2024-06-26
   eask = pkgs.eask; # added 2023-08-17
+  elasticdump = throw "'elasticdump' has been removed because it was unmaintained in nixpkgs"; # Added 2025-12-26
   inherit (pkgs.elmPackages) elm-test;
   inherit (pkgs.elmPackages) elm-review;
   elm-oracle = throw "'elm-oracle' has been removed, since it doesn't work with modern versions of Elm."; # Added 2025-11-07
@@ -192,6 +193,7 @@ mapAliases {
   inherit (pkgs) graphite-cli; # added 2024-01-25
   inherit (pkgs) graphql-language-service-cli; # added 2025-03-17
   inherit (pkgs) graphqurl; # added 2023-08-19
+  inherit (pkgs) grunt-cli; # added 2025-12-29
   gtop = pkgs.gtop; # added 2023-07-31
   gulp = self.gulp-cli; # Added 2025-11-04
   he = throw "'he' has been removed because it was unmaintained upstream"; # Added 2025-11-14
@@ -227,6 +229,7 @@ mapAliases {
   karma = pkgs.karma-runner; # added 2023-07-29
   inherit (pkgs) katex; # Added 2025-11-08
   keyoxide = pkgs.keyoxide-cli; # Added 2025-10-20
+  lcov-result-merger = throw "'lcov-result-merger' has been removed because it was unmaintained within nixpkgs"; # Added 2025-12-25
   leetcode-cli = self.vsc-leetcode-cli; # added 2023-08-31
   inherit (pkgs) lerna; # added 2025-02-12
   less = pkgs.lessc; # added 2024-06-15
@@ -413,6 +416,7 @@ mapAliases {
   vscode-langservers-extracted = pkgs.vscode-langservers-extracted; # Added 2023-05-27
   vue-language-server = self.vls; # added 2023-08-20
   vue-cli = throw "vue-cli has been removed since upstream no longer recommends using it; consider using create-vue and the new Vite-based tooling instead."; # added 2024-07-12
+  wavedrom-cli = throw "wavedrom-cli has been removed because it was unmaintained within nixpkgs"; # Added 2026-01-20
   inherit (pkgs) web-ext; # added 2023-08-20
   webpack = throw "'webpack' has been removed because it is a library that should be imported within a Javascript project, not an end-user tool."; # Added 2025-11-04
   inherit (pkgs) webpack-cli; # added 2024-12-03

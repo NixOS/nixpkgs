@@ -66,7 +66,7 @@ in
       serviceConfig = {
         Type = "dbus";
         UMask = "0022";
-        ExecStart = "${cfg.package}/bin/waydroid -w container start";
+        ExecStart = "${cfg.package}/bin/waydroid container start";
         BusName = "id.waydro.Container";
       };
     };

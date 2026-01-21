@@ -4,18 +4,18 @@
   fetchFromGitHub,
 
   # build-system
-  setuptools,
+  uv-build,
 
   # dependencies
   pytest,
 
   # tests
-  pytest7CheckHook,
+  pytestCheckHook,
 }:
 
 let
   pname = "pytest-describe";
-  version = "2.2.0";
+  version = "3.1.0";
 in
 buildPythonPackage {
   inherit pname version;
@@ -25,15 +25,14 @@ buildPythonPackage {
     owner = "pytest-dev";
     repo = "pytest-describe";
     tag = version;
-    hash = "sha256-ih0XkYOtB+gwUsgo1oSti2460P3gq3tR+UsyRlzMjLE=";
+    hash = "sha256-ygrZwd1cO9arekdzqn5Axjz4i9Q0QKFA/OS6QSIvP9Y=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ uv-build ];
 
   buildInputs = [ pytest ];
 
-  # test_fixture breaks with pytest 8.4
-  nativeCheckInputs = [ pytest7CheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "Describe-style plugin for the pytest framework";

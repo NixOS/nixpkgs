@@ -48,6 +48,12 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
 
+  # Required for FreeBSD
+  # https://github.com/freebsd/freebsd-ports/blob/21a6f0f5829384117dfc1ed11ad67954562ef7d6/security/libfido2/Makefile#L37C27-L37C77
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail "-D_POSIX_C_SOURCE=200809L" "-D_POSIX_C_SOURCE=202405L"
+  '';
+
   cmakeFlags = [
     "-DUDEV_RULES_DIR=${placeholder "out"}/etc/udev/rules.d"
     "-DCMAKE_INSTALL_LIBDIR=lib"

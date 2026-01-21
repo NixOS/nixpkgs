@@ -5,7 +5,6 @@
   fetchPypi,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   pyyaml,
   setuptools,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "related";
   version = "0.7.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

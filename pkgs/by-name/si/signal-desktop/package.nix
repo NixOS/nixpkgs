@@ -54,13 +54,13 @@ let
     '';
   });
 
-  version = "7.83.0";
+  version = "7.85.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "Signal-Desktop";
     tag = "v${version}";
-    hash = "sha256-hzeioXrO9kdFFTGhhY4klrCxRgS1eoGY7+7fTGsN4cY=";
+    hash = "sha256-fBaxgd9KjqomG2VrDnbIyVjf9Fv1vFrV4ge0h3yswGk=";
   };
 
   sticker-creator = stdenv.mkDerivation (finalAttrs: {
@@ -111,7 +111,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = (lib.optional (!withAppleEmojis) noto-fonts-color-emoji-png);
 
-  patches = lib.optional (!withAppleEmojis) (
+  patches = [
+    ./force-90-days-expiration.patch
+  ]
+  ++ lib.optional (!withAppleEmojis) (
     replaceVars ./replace-apple-emoji-with-noto-emoji.patch {
       noto-emoji-pngs = "${noto-fonts-color-emoji-png}/share/noto-fonts-color-emoji-png";
     }
@@ -127,6 +130,10 @@ stdenv.mkDerivation (finalAttrs: {
     # it at runtime.
     substituteInPlace app/updateDefaultSession.main.ts \
       --replace-fail "\''${process.versions.electron}" "`jq -r '.devDependencies.electron' < package.json`"
+
+    # https://github.com/signalapp/Signal-Desktop/issues/7667
+    substituteInPlace ts/util/version.std.ts \
+      --replace-fail 'isAdhoc(version)' 'true'
   '';
 
   pnpmDeps = fetchPnpmDeps {
@@ -140,15 +147,15 @@ stdenv.mkDerivation (finalAttrs: {
     fetcherVersion = 1;
     hash =
       if withAppleEmojis then
-        "sha256-taF3A2YcqMzqcS401fxRW9wEC/Ol7bVJ6belF4RTIRk="
+        "sha256-EqDHhfpdnj4ZhTVnmVmyiRjTUIGX5fpdAsxqRY/tzQI="
       else
-        "sha256-sWxxANPW0W5/tmowoJ7ZPBEBSurKN6C+wZAcLa2QHz8=";
+        "sha256-Vfs1/J3R6O0Ct4gAPO/mVCwr6EaMBpltOImPrRHLkFM=";
   };
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     SIGNAL_ENV = "production";
-    SOURCE_DATE_EPOCH = 1766066770;
+    SOURCE_DATE_EPOCH = 1768433780;
   };
 
   preBuild = ''
@@ -285,6 +292,7 @@ stdenv.mkDerivation (finalAttrs: {
       ]
       ++ lib.optional withAppleEmojis unfree;
     maintainers = with lib.maintainers; [
+      eclairevoyant
       marcin-serwin
       teutat3s
     ];

@@ -25,6 +25,10 @@
   cudaPackages,
   enableCuda ? config.cudaSupport,
 }:
+
+let
+  opencv' = opencv.override { enableGtk3 = true; };
+in
 stdenv.mkDerivation {
   pname = "basalt-monado";
   version = "0-unstable-2025-09-25";
@@ -57,7 +61,7 @@ stdenv.mkDerivation {
     libGL
     lz4
     magic-enum
-    opencv.cxxdev
+    opencv'.cxxdev
     onetbb
     xorg.libX11
   ]

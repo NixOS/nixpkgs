@@ -17,7 +17,7 @@
   pam,
   libcap,
   coreutils,
-  clucene_core_2,
+  clucene-core_2,
   icu75,
   libexttextcat,
   libsodium,
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     zlib
     zstd
     xz
-    clucene_core_2
+    clucene-core_2
     icu75
     libexttextcat
     libsodium
@@ -192,9 +192,10 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "dovecot";
     maintainers = with lib.maintainers; [
+      das_j
       fpletz
+      helsinki-Jo
     ];
-    teams = [ lib.teams.helsinki-systems ];
     platforms = lib.platforms.unix;
   };
   passthru.tests = {

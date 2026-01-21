@@ -48,7 +48,6 @@ buildGoModule (finalAttrs: {
   ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/task";
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 

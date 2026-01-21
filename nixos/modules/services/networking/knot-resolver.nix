@@ -7,23 +7,35 @@
 let
   cfg = config.services.knot-resolver;
   # pkgs.writers.yaml_1_1.generate with additional kresctl validate
-  configFile =
-    pkgs.runCommandLocal "knot-resolver.yaml"
+  configFile = pkgs.callPackage (
+    {
+      runCommandLocal,
+      remarshal_0_17,
+      stdenv,
+    }:
+    runCommandLocal "knot-resolver.yaml"
       {
-        nativeBuildInputs = [ pkgs.remarshal_0_17 ];
+        nativeBuildInputs = [ remarshal_0_17 ];
         value = builtins.toJSON cfg.settings;
         passAsFile = [ "value" ];
       }
       ''
         json2yaml "$valuePath" "$out"
-        ${cfg.managerPackage}/bin/kresctl validate "$out"
-      '';
+        ${
+          # We skip validation if the build platform cannot execute # the binary targeting the host platform.
+          lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+            ${cfg.managerPackage}/bin/kresctl validate "$out"
+          ''
+        }
+      ''
+  ) { };
 in
 {
   meta.maintainers = [
     lib.maintainers.vcunat # upstream developer
-  ]
-  ++ lib.teams.flyingcircus.members;
+    lib.maintainers.leona
+    lib.maintainers.osnyx
+  ];
 
   ###### interface
   options.services.knot-resolver = {

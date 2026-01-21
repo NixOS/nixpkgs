@@ -15,25 +15,24 @@ let
   vsix = stdenv.mkDerivation (finalAttrs: {
     name = "gitlens-${finalAttrs.version}.vsix";
     pname = "gitlens-vsix";
-    version = "17.7.1";
+    version = "17.8.1";
 
     src = fetchFromGitHub {
       owner = "gitkraken";
       repo = "vscode-gitlens";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-9XEv50WIG1BJenY9MswES6d72Ead2VqW5dgBr7Eu8ek=";
+      hash = "sha256-ma+2HusIdhQ2Xy9rKs9fzJYSZ2YKa0taqv7ZzitNEUo=";
     };
 
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
       fetcherVersion = 2;
-      hash = "sha256-QHITHoaz/lzZ3Th/YPlQayFMU9rtlnAZWEYkLyBuAkc=";
+      hash = "sha256-MosT/2dmYomhRXtAeAZS2AMljiVDx+K3t5lLNii2a64=";
     };
 
     postPatch = ''
       substituteInPlace scripts/generateLicenses.mjs --replace-fail 'https://raw.githubusercontent.com/microsoft/vscode/refs/heads/main/LICENSE.txt' '${pkgs.vscode-json-languageserver.src}/LICENSE.txt'
-      substituteInPlace webpack.config.mjs --replace-fail 'minify: TerserPlugin.swcMinify' 'minify: TerserPlugin.terserMinify'
-      substituteInPlace webpack.config.mjs --replace-fail 'env.skipLint' 'true'
+      substituteInPlace package.json --replace-fail '"vscode:prepublish": "pnpm run bundle"' '"vscode:prepublish": "pnpm run bundle:turbo"'
     '';
 
     nativeBuildInputs = [
@@ -41,6 +40,10 @@ let
       pnpmConfigHook
       pnpm
     ];
+
+    strictDeps = true;
+
+    env.npm_config_manage_package_manager_versions = "false";
 
     # Error: spawn /build/source/node_modules/.pnpm/sass-embedded-linux-x64@1.77.8/node_modules/sass-embedded-linux-x64/dart-sass/src/dart ENOENT
     # Remove both node_modules/.pnpm/sass-embedded and node_modules/.pnpm/sass-embedded-linux-x64
@@ -93,7 +96,6 @@ vscode-utils.buildVscodeExtension (finalAttrs: {
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens";
     homepage = "https://gitlens.amod.io/";
     license = lib.licenses.mit;
-    sourceProvenance = with lib.sourceTypes; [ fromSource ];
     maintainers = with lib.maintainers; [
       xiaoxiangmoe
       ratsclub

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   cython,
   zstd,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "indexed_zstd";
   version = "1.6.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

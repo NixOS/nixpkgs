@@ -2,47 +2,46 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   ensureNewerSourcesForZipFilesHook,
   makeDesktopItem,
   copyDesktopItems,
   cmake,
   pkg-config,
   alsa-lib,
+  libX11,
+  libXcursor,
+  libXext,
+  libXinerama,
+  libXrender,
+  libXrandr,
+  libXdmcp,
+  libXtst,
+  xvfb,
   freetype,
-  webkitgtk_4_1,
+  fontconfig,
   zenity,
   curl,
-  xorg,
   python3,
-  libsysprof-capture,
-  pcre2,
-  util-linux,
-  libselinux,
-  libsepol,
-  libthai,
   libxkbcommon,
-  libdatrie,
-  libepoxy,
   libGL,
+  libGLU,
   libjack2,
-  lerc,
-  sqlite,
   expat,
+  webkitgtk_4_1,
   makeWrapper,
+  writableTmpDirAsHomeHook,
   nix-update-script,
 }:
-let
-  version = "0.9.1";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "plugdata";
-  inherit version;
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "plugdata-team";
     repo = "plugdata";
-    tag = "v${version}";
-    hash = "sha256-dcggq455lZiwl1lps11fuKX6sx0A8UtFwFoiBJWtwFQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3ldLM6M54usqjsM9veEctXVa/G14shOdp7Yi9tQi70Y=";
     fetchSubmodules = true;
   };
 
@@ -53,36 +52,29 @@ stdenv.mkDerivation {
     copyDesktopItems
     python3
     makeWrapper
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs = [
     alsa-lib
     curl
     freetype
-    webkitgtk_4_1
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXext
-    xorg.libXinerama
-    xorg.libXrender
-    xorg.libXrandr
-    xorg.libXdmcp
-    xorg.libXtst
-    xorg.xvfb
-    libsysprof-capture
-    pcre2
-    util-linux
+    fontconfig
     libGL
-    libselinux
-    libsepol
-    libthai
+    libGLU
     libxkbcommon
-    libdatrie
-    libepoxy
-    lerc
+    libX11
+    libXcursor
+    libXext
+    libXinerama
+    libXrender
+    libXrandr
+    libXdmcp
+    libXtst
+    xvfb
     libjack2
     expat
-    sqlite
+    webkitgtk_4_1
   ];
 
   desktopItems = [
@@ -113,9 +105,22 @@ stdenv.mkDerivation {
     ]
   );
 
-  preBuild = ''
-    # fix LV2 build
-    HOME=$(mktemp -d)
+  patches = [
+    # fiddle~.c prevents building with gcc15. Upstream puredata has fixed this issue,
+    # but downstream vendored Plugdata has not implemented the patch yet.
+    # This backports the patch.
+    (fetchpatch2 {
+      url = "https://github.com/pure-data/pure-data/commit/95e4105bc1044cbbcbbbcc369480a77c298d7475.patch";
+      hash = "sha256-siwtizmlAS6fTOE1t+VvDKm1F14YquVlt2QAOKOGX2c=";
+      stripLen = 1;
+      extraPrefix = "Libraries/pure-data/";
+    })
+  ];
+
+  postPatch = ''
+    # Plugdata vendors its own version of Ffmpeg, and this script is used to unpack + build
+    # However, its shebang is broken on nix, so we fix it here.
+    patchShebangs Libraries/pd-else/Source/Shared/ffmpeg/build_ffmpeg.sh
   '';
 
   installPhase = ''
@@ -151,9 +156,9 @@ stdenv.mkDerivation {
     homepage = "https://plugdata.org/";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
-    maintainers = [
-      lib.maintainers.PowerUser64
-      lib.maintainers.l1npengtul
+    maintainers = with lib.maintainers; [
+      PowerUser64
+      l1npengtul
     ];
   };
-}
+})

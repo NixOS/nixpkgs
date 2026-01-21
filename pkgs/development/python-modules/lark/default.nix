@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "lark";
   version = "1.2.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lark-parser";

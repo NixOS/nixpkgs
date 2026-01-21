@@ -93,10 +93,7 @@ let
       homepage = src.meta.homepage;
       license = lib.licenses.gpl3;
       mainProgram = "cutter";
-      maintainers = with lib.maintainers; [
-        mic92
-        dtzWill
-      ];
+      maintainers = with lib.maintainers; [ mic92 ];
       inherit (rizin.meta) platforms;
     };
   };

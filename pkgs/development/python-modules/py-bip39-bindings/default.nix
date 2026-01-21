@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   pytestCheckHook,
   rustPlatform,
   stdenv,
@@ -12,9 +11,7 @@
 buildPythonPackage rec {
   pname = "py-bip39-bindings";
   version = "0.3.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "polkascan";

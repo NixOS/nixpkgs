@@ -134,7 +134,7 @@ let
       };
       config.confFileText = lib.pipe config.settings [
         (lib.filterAttrs (key: value: value != null))
-        (lib.mapAttrs (key: builtins.toString))
+        (lib.mapAttrs (key: toString))
         (lib.mapAttrsToList (key: value: "${key} ${value}\n"))
         lib.concatStrings
       ];

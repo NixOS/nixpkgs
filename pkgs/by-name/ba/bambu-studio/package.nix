@@ -3,6 +3,7 @@
   lib,
   binutils,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   ninja,
   pkg-config,
@@ -56,13 +57,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "bambu-studio";
-  version = "02.03.01.51";
+  version = "02.04.00.70";
 
   src = fetchFromGitHub {
     owner = "bambulab";
     repo = "BambuStudio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SnWOTFymTVHzYqraMzohOrpM0UuLW+PRfZBqkFASEWs=";
+    hash = "sha256-BrH8gKbc0y76wbWrQxU+0xMJcYAm4Gi/xmECVf6pGkI=";
   };
 
   nativeBuildInputs = [
@@ -121,6 +122,13 @@ stdenv.mkDerivation (finalAttrs: {
     ./patches/no-cereal.patch
     # Cmake 4 support
     ./patches/cmake.patch
+    # Fix build with gcc15
+    # https://github.com/bambulab/BambuStudio/pull/8555
+    (fetchpatch {
+      name = "bambu-studio-include-stdint-header.patch";
+      url = "https://github.com/bambulab/BambuStudio/commit/434752bf643933f22348d78335abe7f60550e736.patch";
+      hash = "sha256-vWqTM6IHL/gBncLk6gZHw+dFe0sdVuPdUqYeVJUbTis=";
+    })
   ];
 
   doCheck = true;

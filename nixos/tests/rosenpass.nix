@@ -101,7 +101,7 @@ in
           {
             AllowedIPs = [ "::/0" ];
             PublicKey = server.wg.public;
-            Endpoint = "server:${builtins.toString server.wg.listen}";
+            Endpoint = "server:${toString server.wg.listen}";
           }
         ];
 

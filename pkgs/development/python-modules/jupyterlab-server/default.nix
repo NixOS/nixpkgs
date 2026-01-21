@@ -2,10 +2,8 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   hatchling,
   babel,
-  importlib-metadata,
   jinja2,
   json5,
   jsonschema,
@@ -24,8 +22,6 @@ buildPythonPackage rec {
   pname = "jupyterlab-server";
   version = "2.28.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "jupyterlab_server";
@@ -47,8 +43,7 @@ buildPythonPackage rec {
     jupyter-server
     packaging
     requests
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ];
 
   optional-dependencies = {
     openapi = [

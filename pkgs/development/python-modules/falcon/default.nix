@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   pythonAtLeast,
-  pythonOlder,
   isPyPy,
   fetchFromGitHub,
 
@@ -21,7 +20,6 @@
   pyyaml,
   rapidjson,
   requests,
-  testtools,
   ujson,
   uvicorn,
   websockets,
@@ -31,8 +29,6 @@ buildPythonPackage rec {
   pname = "falcon";
   version = "4.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "falconry";
@@ -74,8 +70,7 @@ buildPythonPackage rec {
     msgpack
     mujson
     ujson
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [ testtools ];
+  ];
 
   enabledTestPaths = [ "tests" ];
 

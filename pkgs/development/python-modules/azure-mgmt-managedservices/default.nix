@@ -6,7 +6,6 @@
   fetchPypi,
   msrest,
   msrestazure,
-  pythonOlder,
   setuptools,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "azure-mgmt-managedservices";
   version = "6.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;

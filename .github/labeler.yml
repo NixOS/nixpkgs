@@ -589,6 +589,15 @@
               - nixos/modules/services/x11/desktop-managers/xfce.nix
               - nixos/tests/xfce.nix
               - pkgs/desktops/xfce/**/*
+              - pkgs/by-name/ga/garcon/**/*
+              - pkgs/by-name/li/libxfce4*/**/*
+              - pkgs/by-name/th/thunar/**/*
+              - pkgs/by-name/th/thunar-*/**/*
+              - pkgs/by-name/tu/tumbler/**/*
+              - pkgs/by-name/xf/xfce4-*/**/*
+              - pkgs/by-name/xf/xfconf/**/*
+              - pkgs/by-name/xf/xfdesktop/**/*
+              - pkgs/by-name/xf/xfwm4/**/*
 
 "6.topic: zig":
   - any:

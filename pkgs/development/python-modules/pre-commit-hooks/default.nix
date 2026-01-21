@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "6.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "pre-commit";
     repo = "pre-commit-hooks";

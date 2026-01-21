@@ -6,7 +6,6 @@
   fetchPypi,
   imageio,
   imutils,
-  pythonOlder,
   requests,
   urllib3,
   tqdm,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "dremel3dpy";
   version = "2.1.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

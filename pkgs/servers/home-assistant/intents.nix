@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   setuptools,
@@ -22,17 +21,15 @@
 
 buildPythonPackage rec {
   pname = "home-assistant-intents";
-  version = "2025.12.2";
+  version = "2026.1.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "OHF-Voice";
     repo = "intents-package";
     tag = version;
     fetchSubmodules = true;
-    hash = "sha256-7fav3h8/Eu4Q4I0deDWov5UP5aEyS/ypIGLvuQlGWCI=";
+    hash = "sha256-pCAyzx7iJL96OUSpODdjV0uzb6QU3YDROTX7pVcjWu8=";
   };
 
   build-system = [

@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "liquidsoap";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-EQFWFtgWvwsV+ZhO36Sd7mpxYOnd4Vv6Z+6xsgi335k=";
   };
 

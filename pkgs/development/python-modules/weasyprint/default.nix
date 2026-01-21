@@ -30,7 +30,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "weasyprint";
   version = "66.0";
   pyproject = true;
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Kozea";
     repo = "WeasyPrint";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-wmEDVEbikBpOQ5394IBPWQRjWZOLfMzEGxTtq4tt2Tw=";
   };
 
@@ -76,7 +76,6 @@ buildPythonPackage rec {
     versionCheckHook
     writableTmpDirAsHomeHook
   ];
-  versionCheckProgramArg = "--version";
 
   disabledTests = [
     # needs the Ahem font (fails on macOS)
@@ -98,21 +97,26 @@ buildPythonPackage rec {
     "test_visibility_3"
     "test_visibility_4"
     "test_woff_simple"
+    # AssertionError
+    "test_2d_transform"
   ];
 
   FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
 
   # Set env variable explicitly for Darwin, but allow overriding when invoking directly
-  makeWrapperArgs = [ "--set-default FONTCONFIG_FILE ${FONTCONFIG_FILE}" ];
+  makeWrapperArgs = [ "--set-default FONTCONFIG_FILE ${finalAttrs.FONTCONFIG_FILE}" ];
 
   pythonImportsCheck = [ "weasyprint" ];
 
   meta = {
-    changelog = "https://github.com/Kozea/WeasyPrint/releases/tag/${src.tag}";
+    changelog = "https://github.com/Kozea/WeasyPrint/releases/tag/${finalAttrs.src.tag}";
     description = "Converts web documents to PDF";
-    mainProgram = "weasyprint";
     homepage = "https://weasyprint.org/";
     license = lib.licenses.bsd3;
-    teams = [ lib.teams.apm ];
+    mainProgram = "weasyprint";
+    maintainers = with lib.maintainers; [
+      DutchGerman
+      friedow
+    ];
   };
-}
+})

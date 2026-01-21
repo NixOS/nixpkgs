@@ -5,7 +5,6 @@
   fetchPypi,
   jinja2,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   setuptools,
   setuptools-scm,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "mergedb";
   version = "0.1.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

@@ -7,7 +7,6 @@
   pytestCheckHook,
   python-dateutil,
   python-dotenv,
-  pythonOlder,
   requests,
   setuptools,
   responses,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "ibm-watson";
   version = "11.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "watson-developer-cloud";

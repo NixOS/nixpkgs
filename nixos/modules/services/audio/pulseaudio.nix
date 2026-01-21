@@ -282,11 +282,9 @@ in
       (lib.mkIf (cfg.extraModules != [ ]) {
         services.pulseaudio.daemon.config.dl-search-path =
           let
-            overriddenModules = builtins.map (
-              drv: drv.override { pulseaudio = overriddenPackage; }
-            ) cfg.extraModules;
+            overriddenModules = map (drv: drv.override { pulseaudio = overriddenPackage; }) cfg.extraModules;
             modulePaths =
-              builtins.map (drv: "${drv}/lib/pulseaudio/modules")
+              map (drv: "${drv}/lib/pulseaudio/modules")
                 # User-provided extra modules take precedence
                 (overriddenModules ++ [ overriddenPackage ]);
           in

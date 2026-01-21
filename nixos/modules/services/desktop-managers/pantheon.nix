@@ -208,6 +208,22 @@ in
         "org.gnome.SettingsDaemon.XSettings.service"
       ];
 
+      # https://github.com/elementary/settings-daemon/issues/217
+      systemd.user.services.elementary-settings-daemon = {
+        description = "elementary Settings Daemon";
+        wantedBy = [ "gnome-session-initialized.target" ];
+        after = [ "gnome-session-initialized.target" ];
+
+        # The daemon might launch external applications via g_app_info_launch.
+        environment.PATH = lib.mkForce null;
+
+        serviceConfig = {
+          Slice = "session.slice";
+          ExecStart = "${pkgs.pantheon.elementary-settings-daemon}/bin/io.elementary.settings-daemon";
+          Restart = "on-failure";
+        };
+      };
+
       # Global environment
       environment.systemPackages =
         (with pkgs.pantheon; [

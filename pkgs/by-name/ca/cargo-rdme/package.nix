@@ -21,6 +21,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/orium/cargo-rdme";
     changelog = "https://github.com/orium/cargo-rdme/blob/v${version}/release-notes.md";
     license = with lib.licenses; [ mpl20 ];
-    maintainers = with lib.maintainers; [ GoldsteinE ];
+    maintainers = with lib.maintainers; [
+      GoldsteinE
+      chrjabs
+    ];
   };
 }

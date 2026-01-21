@@ -4,10 +4,8 @@
   fetchPypi,
   pytestCheckHook,
   writableTmpDirAsHomeHook,
-  pythonOlder,
   hatch-jupyter-builder,
   hatchling,
-  importlib-metadata,
   ipykernel,
   ipywidgets,
   psygnal,
@@ -20,8 +18,6 @@ buildPythonPackage rec {
   pname = "anywidget";
   version = "0.9.18";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -45,8 +41,7 @@ buildPythonPackage rec {
     ipywidgets
     psygnal
     typing-extensions
-  ]
-  ++ lib.optional (pythonOlder "3.8") importlib-metadata;
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

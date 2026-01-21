@@ -15,13 +15,13 @@
 let
   pname = "interstellar";
 
-  version = "0.10.1";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "interstellar-app";
     repo = "interstellar";
     tag = "v${version}";
-    hash = "sha256-nlzTYLJSFKMdPIZ1WX4ZrT8ZBw3gd3Y2o1mmc1DH9Rs=";
+    hash = "sha256-5CFl5pvxentbKCPHkPDj4d5i3d2S3UxkQ56OX14Y8gY=";
   };
 in
 flutter335.buildFlutterApplication {

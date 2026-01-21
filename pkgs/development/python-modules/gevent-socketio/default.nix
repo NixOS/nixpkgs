@@ -5,15 +5,12 @@
   gevent,
   gevent-websocket,
   versiontools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "gevent-socketio";
   version = "0.3.6";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

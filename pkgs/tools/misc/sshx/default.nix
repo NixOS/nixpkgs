@@ -43,7 +43,6 @@ let
           license = lib.licenses.mit;
           maintainers = with lib.maintainers; [
             pinpox
-            kranzes
           ];
           mainProgram = pname;
         };

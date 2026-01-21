@@ -16,6 +16,13 @@ let
     ;
 
   cfg = config.services.shoko;
+
+  shokoPlugins = pkgs.linkFarm "shoko-plugins" (
+    map (pkg: {
+      inherit (pkg) name;
+      path = "${pkg}/lib/${pkg.pname}";
+    }) cfg.plugins
+  );
 in
 {
   options = {
@@ -67,7 +74,7 @@ in
         ''
         + optionalString (cfg.plugins != [ ]) ''
           rm -rf "$STATE_DIRECTORY/plugins"
-          ln -s '${pkgs.linkFarmFromDrvs cfg.plugins}' "$STATE_DIRECTORY/plugins"
+          ln -s '${shokoPlugins}' "$STATE_DIRECTORY/plugins"
         '';
 
       serviceConfig = {

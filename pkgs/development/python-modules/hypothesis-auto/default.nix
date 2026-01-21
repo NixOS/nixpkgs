@@ -7,15 +7,12 @@
   pydantic,
   pytest,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "hypothesis-auto";
   version = "1.1.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "hypothesis_auto";

@@ -2,7 +2,7 @@
   lib,
   stdenv,
   libcxxStdenv,
-  fetchurl,
+  fetchFromGitHub,
   pkgsStatic,
   runCommandLocal,
   binutils,
@@ -73,9 +73,11 @@ stdenv.mkDerivation (finalAttrs: {
     "selftests"
   ];
 
-  src = fetchurl {
-    url = "http://botan.randombit.net/releases/Botan-${finalAttrs.version}.tar.xz";
-    hash = "sha256-/eGUI29tVDTxNuoKBif2zJ0mr4uW6fHhx9jILNkPTyQ=";
+  src = fetchFromGitHub {
+    owner = "randombit";
+    repo = "botan";
+    tag = finalAttrs.version;
+    hash = "sha256-E4kKk4ry3SMn2DbnUTVx22lcAWDxxbo8DLyixjr/S6A=";
   };
 
   nativeBuildInputs = [
@@ -90,15 +92,12 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (stdenv.hostPlatform.isLinux && withTpm2) [
     tpm2-tss
   ]
-  ++ lib.optionals (lib.versionAtLeast finalAttrs.version "3.6.0" && !stdenv.hostPlatform.isMinGW) [
+  ++ lib.optionals (!stdenv.hostPlatform.isMinGW) [
     jitterentropy
   ]
-  ++
-    lib.optionals
-      (lib.versionAtLeast finalAttrs.version "3.7.0" && withEsdm && !stdenv.hostPlatform.isMinGW)
-      [
-        esdm
-      ]
+  ++ lib.optionals (withEsdm && !stdenv.hostPlatform.isMinGW) [
+    esdm
+  ]
   ++ lib.optionals (stdenv.hostPlatform.isMinGW) [
     windows.pthreads
   ];
@@ -130,19 +129,16 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (stdenv.hostPlatform.isLinux && withTpm2) [
     "--with-tpm2"
   ]
-  ++ lib.optionals (lib.versionAtLeast finalAttrs.version "3.6.0" && !stdenv.hostPlatform.isMinGW) [
+  ++ lib.optionals (!stdenv.hostPlatform.isMinGW) [
     "--enable-modules=jitter_rng"
   ]
-  ++
-    lib.optionals
-      (lib.versionAtLeast finalAttrs.version "3.7.0" && withEsdm && !stdenv.hostPlatform.isMinGW)
-      [
-        "--enable-modules=esdm_rng"
-      ]
-  ++ lib.optionals (lib.versionAtLeast finalAttrs.version "3.8.0" && policy != null) [
+  ++ lib.optionals (withEsdm && !stdenv.hostPlatform.isMinGW) [
+    "--enable-modules=esdm_rng"
+  ]
+  ++ lib.optionals (policy != null) [
     "--module-policy=${policy}"
   ]
-  ++ lib.optionals (lib.versionAtLeast finalAttrs.version "3.8.0" && policy == "bsi") [
+  ++ lib.optionals (policy == "bsi") [
     "--enable-module=ffi"
     "--enable-module=shake"
   ]

@@ -123,7 +123,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/ziplinectl";
-  versionCheckProgramArg = "--version";
   versionCheckKeepEnvironment = [ "DATABASE_URL" ];
   doInstallCheck = true;
 
