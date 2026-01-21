@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "patiencediff";
-  version = "0.2.15";
+  version = "0.2.17";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "breezy-team";
     repo = "patiencediff";
     tag = "v${version}";
-    hash = "sha256-SFu1oN1yE9tKeBgWhgWjDpR31AptGrls0D5kKQed+HI=";
+    hash = "sha256-lKyVl+vHVgrDL9JAOodF+4b0kqQAgR0neFPBRaCNAY4=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     description = "C implementation of patiencediff algorithm for Python";
     mainProgram = "patiencediff";
     homepage = "https://github.com/breezy-team/patiencediff";
-    changelog = "https://github.com/breezy-team/patiencediff/releases/tag/v${version}";
+    changelog = "https://github.com/breezy-team/patiencediff/releases/tag/${src.tag}";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ wildsebastian ];
   };
