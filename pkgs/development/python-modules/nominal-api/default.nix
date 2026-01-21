@@ -7,16 +7,18 @@
   conjure-python-client,
 }:
 
+# Nominal packages should be updated together
+# to ensure compatibility.
+# nixpkgs-update: no auto update
 buildPythonPackage rec {
   pname = "nominal-api";
-  version = "0.806.0";
+  version = "0.1072.2";
   pyproject = true;
 
-  # nixpkgs-update: no auto update
   src = fetchPypi {
     inherit version;
     pname = "nominal_api";
-    hash = "sha256-V9zncQFNBi3MtgBHmwY4SoSgI9cjQuBt90PeRHjaXsw=";
+    hash = "sha256-3LwZRIwIpoaVRaa1R0TGXv187YRdm4uVVrA8zj01dgI=";
   };
 
   build-system = [ setuptools ];
