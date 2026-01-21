@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "audioread";
-  version = "3.0.1";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rFRgpUmMSL3y6OdnQCWDpNzRP0QU0ob0LOQ3nos1Bm0=";
+    hash = "sha256-HEqy8pcnZMiWqKxhrFPiYcjSnwxszWUvhOGPCKTKsZA=";
   };
 
   nativeBuildInputs = [ flit-core ];
