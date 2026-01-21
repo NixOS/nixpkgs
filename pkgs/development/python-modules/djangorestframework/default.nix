@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "djangorestframework";
-  version = "3.16.0";
+  version = "3.16.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = "django-rest-framework";
-    rev = version;
-    hash = "sha256-LFq8mUx+jAFFnQTfysYs+DSN941p+8h9mDDOp+LO7VU=";
+    tag = version;
+    hash = "sha256-kjviZFuGt/x0RSc7wwl/+SeYQ5AGuv0e7HMhAmu4IgY=";
   };
 
   build-system = [ setuptools ];
