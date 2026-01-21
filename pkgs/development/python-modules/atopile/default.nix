@@ -64,7 +64,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "atopile";
-  version = "0.12.4";
+  version = "0.12.5";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -72,8 +72,8 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "atopile";
     repo = "atopile";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-SB6D1738t3kQJI+V9ClVsByHm6BsLl078N/wDAHJE6E=";
+    tag = "v${version}";
+    hash = "sha256-/1vkYGG3OHyeFpzbvRoAxUtLQLePKE2jwQx8o/CTErQ=";
   };
 
   patches = [
