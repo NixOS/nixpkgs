@@ -9,18 +9,17 @@
   sqlite-vec,
   frigate,
   nixosTests,
-  fetchpatch,
 }:
 
 let
-  version = "0.16.3";
+  version = "0.17.0-beta2";
 
   src = fetchFromGitHub {
     name = "frigate-${version}-source";
     owner = "blakeblackshear";
     repo = "frigate";
     tag = "v${version}";
-    hash = "sha256-gbEUmo28vjYsfIlHSBaLTUh9kK5rM17hkfKBQ9KhiBU=";
+    hash = "sha256-hWTvWS5+JqOd56F0lqYJD39IK/rarbbd6iFaL+GsIPM=";
   };
 
   frigate-web = callPackage ./web.nix {
@@ -77,12 +76,6 @@ python3Packages.buildPythonApplication rec {
   inherit src;
 
   patches = [
-    ./constants.patch
-    # Fixes hardcoded path /media/frigate/clips/faces. Remove in next version.
-    (fetchpatch {
-      url = "https://github.com/blakeblackshear/frigate/commit/b86e6e484f64bd43b64d7adebe78671a7a426edb.patch";
-      hash = "sha256-1+n0n0yCtjfAHkXzsZdIF0iCVdPGmsG7l8/VTqBVEjU=";
-    })
     ./ffmpeg.patch
     ./ai-edge-litert.patch
   ];
@@ -92,7 +85,7 @@ python3Packages.buildPythonApplication rec {
 
     substituteInPlace \
       frigate/app.py \
-      frigate/test/test_{http,storage}.py \
+      frigate/test/test_storage.py \
       frigate/test/http_api/base_http_test.py \
       --replace-fail "Router(migrate_db)" 'Router(migrate_db, "${placeholder "out"}/share/frigate/migrations")'
 
@@ -185,6 +178,8 @@ python3Packages.buildPythonApplication rec {
     verboselogs
     virtualenv
     ws4py
+    tensorflow
+    sherpa-onnx
   ];
 
   installPhase = ''
