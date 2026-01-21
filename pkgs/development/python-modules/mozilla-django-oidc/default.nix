@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "mozilla-django-oidc";
-  version = "4.0.1";
+  version = "5.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "mozilla-django-oidc";
-    rev = version;
-    hash = "sha256-72F1aLLIId+YClTrpOz3bL8LSq6ZhZjjtv8V/GJGkqs=";
+    tag = version;
+    hash = "sha256-5J2lzGGdjoXzdzfKdmfUaSM7KQ6Hn7KerBtoKzFsZfY=";
   };
 
   # Fix test with latest cryptography
@@ -54,7 +54,7 @@ buildPythonPackage rec {
   meta = {
     description = "Django OpenID Connect library";
     homepage = "https://github.com/mozilla/mozilla-django-oidc";
-    changelog = "https://github.com/mozilla/mozilla-django-oidc/releases/tag/${src.rev}";
+    changelog = "https://github.com/mozilla/mozilla-django-oidc/releases/tag/${src.tag}";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ felbinger ];
   };
