@@ -5,20 +5,21 @@
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
-  python,
+  pytest-instafail,
+  pytest-xdist,
   gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "psutil";
-  version = "7.1.3";
+  version = "7.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "giampaolo";
     repo = "psutil";
     tag = "release-${version}";
-    hash = "sha256-vMGUoiPr+QIe1N+I++d/DM9i2jeHTI68npGoJ2vKF10=";
+    hash = "sha256-HGIFf7E356o0OcgLOPjACmrPXneQt/8IhzyudKKuLdg=";
   };
 
   postPatch = ''
@@ -31,7 +32,11 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-instafail
+    pytest-xdist
+  ];
 
   # Segfaults on darwin:
   # https://github.com/giampaolo/psutil/issues/1715
@@ -43,7 +48,7 @@ buildPythonPackage rec {
   # - the other disabled tests are likely due to sandboxing (missing specific errors)
   enabledTestPaths = [
     # Note: $out must be referenced as test import paths are relative
-    "${placeholder "out"}/${python.sitePackages}/psutil/tests/test_system.py"
+    "tests/test_system.py"
   ];
 
   disabledTests = [
@@ -58,6 +63,10 @@ buildPythonPackage rec {
     "user"
     "test_disk_partitions" # problematic on Hydra's Linux builders, apparently
   ];
+
+  preCheck = ''
+    rm -rf psutil
+  '';
 
   pythonImportsCheck = [ "psutil" ];
 
