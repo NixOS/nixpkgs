@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "md-toc";
-  version = "8.2.3";
+  version = "9.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frnmst";
     repo = "md-toc";
     tag = version;
-    hash = "sha256-nKkKtLEW0pohXiMtjWl2Kzh7SRwZJ/yzhXpDyluLodc=";
+    hash = "sha256-YVDFYxxKMKOrHyymewLTTkmBgg6YVqWou4hTKHJmbOg=";
   };
 
   nativeBuildInputs = [ setuptools ];
