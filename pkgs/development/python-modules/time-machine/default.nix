@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "time-machine";
-  version = "2.19.0";
+  version = "3.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "adamchainz";
     repo = "time-machine";
     tag = version;
-    hash = "sha256-bPpn+RNlvy/tkFrxDY4Q13fNlNuMFj1+br8M2uU3t9A=";
+    hash = "sha256-UWoKvNz0ojVZtkIUGT02zJitza+mkyToANQMsU64xL4=";
   };
 
   build-system = [ setuptools ];
@@ -50,7 +50,7 @@ buildPythonPackage rec {
   meta = {
     description = "Travel through time in your tests";
     homepage = "https://github.com/adamchainz/time-machine";
-    changelog = "https://github.com/adamchainz/time-machine/blob/${src.rev}/CHANGELOG.rst";
+    changelog = "https://github.com/adamchainz/time-machine/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
