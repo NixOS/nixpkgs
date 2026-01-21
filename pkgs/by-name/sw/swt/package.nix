@@ -18,6 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   hardeningDisable = [ "format" ];
 
+  passthru.updateScript = ./update.sh;
   passthru.srcMetadataByPlatform = {
     # Note: This may look like an error but the content of the src.zip is in fact
     # equal on all linux systems as well as all darwin systems. Even though each
