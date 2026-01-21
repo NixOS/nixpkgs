@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "cucumber-tag-expressions";
-  version = "7.0.0";
+  version = "8.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cucumber";
     repo = "tag-expressions";
     tag = "v${version}";
-    hash = "sha256-U8x7c4NeP9GdwormQD79RWcAA2B39Yvrf/Zk0xTUtNA=";
+    hash = "sha256-3uePEu+4StDP2IV3u/AUZLxxbVVegW7ZSUllWnXU8w0=";
   };
 
   sourceRoot = "${src.name}/python";
