@@ -508,10 +508,23 @@ builtins.intersectAttrs super {
 
   lz4-frame-conduit = addTestToolDepends [ pkgs.lz4 ] super.lz4-frame-conduit;
 
-  safe-exceptions = overrideCabal (drv: {
-    # Fix strictDeps build error "could not execute: hspec-discover"
-    testToolDepends = drv.testToolDepends or [ ] ++ [ self.hspec-discover ];
-  }) super.safe-exceptions;
+  # Package does not declare tool dependency hspec-discover
+  hspec-wai = addTestToolDepends [ self.hspec-discover ] super.hspec-wai;
+
+  # Package does not declare tool dependency hspec-discover
+  http-date = addTestToolDepends [ self.hspec-discover ] super.http-date;
+
+  # Package does not declare tool dependency hspec-discover
+  http-types = addTestToolDepends [ self.hspec-discover ] super.http-types;
+
+  # Package does not declare tool dependency hspec-discover
+  safe-exceptions = addTestToolDepends [ self.hspec-discover ] super.safe-exceptions;
+
+  # Package does not declare tool dependency hspec-discover
+  unliftio = addTestToolDepends [ self.hspec-discover ] super.unliftio;
+
+  # Package does not declare tool dependency hspec-discover
+  word8 = addTestToolDepends [ self.hspec-discover ] super.word8;
 
   # Test suite requires running a database server. Testing is done upstream.
   hasql = dontCheck super.hasql;
@@ -1031,6 +1044,8 @@ builtins.intersectAttrs super {
     (disableCabalFlag "no-exe")
     enableSeparateBinOutput
     (addBuildDepend self.optparse-applicative)
+    # Package does not declare tool dependency hspec-discover
+    (addTestToolDepend self.hspec-discover)
   ];
 
   # Compile manpages (which are in RST and are compiled with Sphinx).
