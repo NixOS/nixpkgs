@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-bdd";
-  version = "7.1.2";
+  version = "8.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = "pytest-bdd";
     tag = version;
-    hash = "sha256-PC4VSsUU5qEFp/C/7OTgHINo8wmOo0w2d1Hpe0EnFzE=";
+    hash = "sha256-jxrjUXmyDEfw1sxwnlSUAfz3Kkv/4TwKFx7cone0Eyw=";
   };
 
   build-system = [ poetry-core ];
@@ -46,7 +46,7 @@ buildPythonPackage rec {
   meta = {
     description = "BDD library for the pytest";
     homepage = "https://github.com/pytest-dev/pytest-bdd";
-    changelog = "https://github.com/pytest-dev/pytest-bdd/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/pytest-dev/pytest-bdd/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jm2dev ];
     mainProgram = "pytest-bdd";
