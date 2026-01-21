@@ -5,6 +5,7 @@
   zlib,
   apngSupport ? true,
   testers,
+  darwin,
 }:
 
 assert zlib != null;
@@ -16,9 +17,9 @@ let
     hash = "sha256-aH3cDHyxKKPqWOFZtRKSUlN8J+3gwyqT8R8DEn8MAWU=";
   };
   whenPatched = lib.optionalString apngSupport;
-
+  stdenv' = if stdenv.hostPlatform.isDarwin then darwin.bootstrapStdenv else stdenv;
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenv'.mkDerivation (finalAttrs: {
   pname = "libpng" + whenPatched "-apng";
   version = "1.6.52";
 

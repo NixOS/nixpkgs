@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://sourceforge/libpng/libpng-${finalAttrs.version}.tar.xz";
-    sha256 = "1izw9ybm27llk8531w6h4jp4rk2rxy2s9vil16nwik5dp0amyqxl";
+    hash = "sha256-tGNfFbitzMitCTTupIXvWcxMriTQ8DAKmpQeUZdP/Mc=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
