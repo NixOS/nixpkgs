@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "lark";
-  version = "1.2.2";
+  version = "1.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lark-parser";
     repo = "lark";
     tag = version;
-    hash = "sha256-02NX/2bHTYSVTDLLudJmEU2DcQNn0Ke+5ayilKLlwqA=";
+    hash = "sha256-JDtLSbVjypaHqamkknHDSql1GTMf1LA4TgJXqTn4Q20=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   meta = {
     description = "Modern parsing library for Python, implementing Earley & LALR(1) and an easy interface";
     homepage = "https://lark-parser.readthedocs.io/";
-    changelog = "https://github.com/lark-parser/lark/releases/tag/${version}";
+    changelog = "https://github.com/lark-parser/lark/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
