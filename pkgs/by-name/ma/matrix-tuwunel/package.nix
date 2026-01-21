@@ -16,6 +16,7 @@
   enableJemalloc ? true,
   rust-jemalloc-sys,
   enableLiburing ? stdenv.hostPlatform.isLinux,
+  enableLdap ? false,
   liburing,
   nixosTests,
   writeTextFile,
@@ -144,7 +145,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "jemalloc"
     "jemalloc_conf"
   ]
-  ++ lib.optional enableLiburing "io_uring";
+  ++ lib.optional enableLiburing "io_uring"
+  ++ lib.optional enableLdap "ldap";
 
   nativeCheckInputs = [
     libredirect.hook
@@ -172,6 +174,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       version = testers.testVersion {
         inherit (finalAttrs) version;
         package = matrix-tuwunel;
+      };
+
+      ldap = matrix-tuwunel.override {
+        enableLdap = true;
       };
     }
     // lib.optionalAttrs stdenv.hostPlatform.isLinux {
