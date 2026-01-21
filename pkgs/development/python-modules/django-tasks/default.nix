@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "django-tasks";
-  version = "0.8.1";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RealOrangeOne";
     repo = "django-tasks";
     tag = version;
-    hash = "sha256-fXXqPmpyIq+66okWDmTIBaoaslY8BSILXjJWn8cXnMM=";
+    hash = "sha256-WU2TQa4FMEqtNtetH4qAyXqkrP/9PTw/K63MfUWEWGw=";
   };
 
   build-system = [
