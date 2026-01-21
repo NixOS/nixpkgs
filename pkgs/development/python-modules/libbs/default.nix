@@ -24,7 +24,7 @@ let
   binaries = fetchFromGitHub {
     owner = "binsync";
     repo = "bs-artifacts";
-    tag = "v${version}";
+    tag = "514c2d6ef1875435c9d137bb5d99b6fc74063817";
     hash = "sha256-P7+BTJgdC9W8cC/7xQduFYllF+0ds1dSlm59/BFvZ2g=";
   };
 in
