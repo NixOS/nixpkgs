@@ -8,6 +8,7 @@
   numpy,
   polib,
   pytest-cov-stub,
+  pytest-xdist,
   pytestCheckHook,
   python-dateutil,
   setuptools,
@@ -15,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "holidays";
-  version = "0.85";
+  version = "0.89";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vacanza";
     repo = "python-holidays";
     tag = "v${version}";
-    hash = "sha256-ExleK66foB2Q/KK7zcPJ16q4ucz3gOkntB2SQETfHqk=";
+    hash = "sha256-g7f0364Xxz+jTjgA8y0nEPbzNalQdMLdwoBZ2odq1W0=";
   };
 
   build-system = [
@@ -36,6 +37,10 @@ buildPythonPackage rec {
 
   postPatch = ''
     patchShebangs scripts/l10n/*.py
+
+    # generating l10n files imports holidays before distinfo metadata exists
+    substituteInPlace holidays/version.py \
+      --replace-fail 'version("holidays")' '"${version}"'
   '';
 
   preBuild = ''
@@ -51,6 +56,7 @@ buildPythonPackage rec {
     numpy
     polib
     pytest-cov-stub
+    pytest-xdist
     pytestCheckHook
   ];
 
