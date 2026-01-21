@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch2,
@@ -27,7 +26,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "aleaxit";
     repo = "gmpy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-joeHec/d82sovfASCU3nlNL6SaThnS/XYPqujiZ9h8s=";
   };
 
