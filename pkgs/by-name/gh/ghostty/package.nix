@@ -5,6 +5,7 @@
   bzip2,
   callPackage,
   fetchFromGitHub,
+  fetchpatch2,
   fontconfig,
   freetype,
   glib,
@@ -47,6 +48,16 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-0tmLOJCrrEnVc/ZCp/e646DTddXjv249QcSwkaukL30=";
   };
+
+  # Replace the defunct iTerm2 themes dependency with a newer version
+  # Remove when 1.2.4 or 1.3.0 is released
+  patches = [
+    (fetchpatch2 {
+      name = "fix-iterm2-themes-ref.patch";
+      url = "https://github.com/pluiedev/ghostty/commit/dc51adc52661bbcacebe5e70b62b5041e3ee56a5.patch";
+      hash = "sha256-0DrP4zN26pjeBawoi9U8y6VM/NlfhPmo27Iy5OsMj0s=";
+    })
+  ];
 
   deps = callPackage ./deps.nix {
     name = "${finalAttrs.pname}-cache-${finalAttrs.version}";
