@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "django-treebeard";
-  version = "4.7.1";
+  version = "4.8.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hG5GKQS0NxVfduBJB7pOSEgHFoVfiLiY30Eivc+9bpg=";
+    hash = "sha256-YbgHa1dhB9oh9vYEB3TA0XAlIAwu/bcN0fFLGMkgbDo=";
   };
 
   propagatedBuildInputs = [ django ];
