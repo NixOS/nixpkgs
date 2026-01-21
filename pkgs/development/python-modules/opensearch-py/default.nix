@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "opensearch-py";
-  version = "3.0.0";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "opensearch-project";
     repo = "opensearch-py";
     tag = "v${version}";
-    hash = "sha256-IAEh+rB26Zqv7j5g2YIRZRCAtFbBngoh+w8Z4e2bY+M=";
+    hash = "sha256-wAk+P64w4N0DdBFsDT3cPIyRa269dtjPr8l2W2454e4=";
   };
 
   patches = [
