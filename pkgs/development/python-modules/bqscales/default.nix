@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "bqscales";
-  version = "0.3.3";
+  version = "0.3.7";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-SlnNw4dWOzRedwIN3kCyl95qVqkY92QGOMS3Eyoqk0I=";
+    hash = "sha256-BhSIxo77oEa6Fmu7n4fIkIyTsLvhpGNsNspoBVOhIcE=";
   };
 
   nativeBuildInputs = [
