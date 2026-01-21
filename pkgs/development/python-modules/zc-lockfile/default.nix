@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "zc-lockfile";
-  version = "3.0.post1";
+  version = "4.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "zc.lockfile";
     inherit version;
-    hash = "sha256-rbLubZ5qIzPJEXjcssm5aldEx47bdxLceEp9dWSOgew=";
+    hash = "sha256-06sPU5dClqgG2zIZuRkboObVy70dqi4NFyCMubKdIQI=";
   };
 
   build-system = [ setuptools ];
