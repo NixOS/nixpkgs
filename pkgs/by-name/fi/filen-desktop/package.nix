@@ -5,12 +5,17 @@
   buildNpmPackage,
   fetchFromGitHub,
   makeDesktopItem,
-  desktopToDarwinBundle,
+  copyDesktopItems,
+  imagemagick,
+  makeWrapper,
+  electron,
 }:
 let
   packageName = "filen-desktop";
   packageVersion = "3.0.47";
   desktopName = "Filen Desktop";
+  appName = "Filen";
+
   desktopItem = makeDesktopItem {
     name = packageName;
     exec = packageName;
@@ -29,9 +34,6 @@ let
       "encrypted"
     ];
   };
-
-  iconPrefix = if stdenv.hostPlatform.isDarwin then "darwin" else "linux";
-  iconSuffix = if stdenv.hostPlatform.isDarwin then "icns" else "png";
 in
 buildNpmPackage {
   pname = packageName;
@@ -46,18 +48,14 @@ buildNpmPackage {
   };
 
   npmDepsHash = "sha256-+Ul2z6faZvAeCHq35janVTUNoqTQ5JNDeLbCV220nFU=";
-  npmBuildScript = "build";
-
-  ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
-  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = "1";
 
   nativeBuildInputs = [
     pkgs.pkg-config
-    pkgs.electron
-    pkgs.makeWrapper
+    makeWrapper
   ]
-  ++ lib.optionals stdenv.isDarwin [
-    desktopToDarwinBundle
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    copyDesktopItems
+    imagemagick
   ];
 
   buildInputs = [
@@ -66,35 +64,84 @@ buildNpmPackage {
     pkgs.pango
   ];
 
-  # Override package-lock.json electron version to use what's given by nixpkgs
+  env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+  env.PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = "1";
+
   postPatch = ''
+    # Use nixpkgs electron instead of downloading
     substituteInPlace package.json \
       --replace-fail '"electron": "^34.1.1"' '"electron": "*"'
+
+    # Disable code signing (not needed for Nix)
+    substituteInPlace package.json \
+      --replace-fail '"afterSign": "build/notarize.js",' ""
+
+    # Fix app name and userData paths inside filen-desktop app source
+    substituteInPlace src/index.ts \
+      --replace-fail 'const options = await this.options.get()' \ '
+      app.setName("${desktopName}")
+      app.setPath("userData", pathModule.join(app.getPath("appData"), "@filen", "desktop"))
+      const options = await this.options.get()
+    '
   '';
 
-  # Set up icon assets in path required by desktopItem
-  preInstall = ''
-    mkdir -p $out/share/pixmaps
-    cp $src/assets/icons/app/${iconPrefix}.${iconSuffix} $out/share/pixmaps/${packageName}.${iconSuffix}
-    cp $src/assets/icons/app/${iconPrefix}Notification.${iconSuffix} $out/share/pixmaps/${packageName}-notification.${iconSuffix}
+  buildPhase = ''
+    runHook preBuild
+
+    # Compile TypeScript
+    npm run build
+
+    # Prepare nixpkgs electron for electron-builder
+    cp -r ${electron.dist} electron-dist
+    chmod -R u+w electron-dist
+
+    # Build platform bundle
+    npx electron-builder \
+      --dir \
+      --${if stdenv.hostPlatform.isDarwin then "mac" else "linux"} \
+      -c.electronDist=electron-dist \
+      -c.electronVersion="${electron.version}"
+
+    runHook postBuild
   '';
 
-  # Create binary wrapper and desktopItem
-  # desktopItem auto-creates the .app bundle for Darwin
-  postInstall = ''
-    makeWrapper ${pkgs.electron}/bin/electron $out/bin/${packageName} \
-      --set-default ELECTRON_IS_DEV 0 \
-      --add-flags $out/lib/node_modules/@filen/desktop/dist/index.js \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ pkgs.stdenv.cc.cc.lib ]}"
+  installPhase = ''
+    runHook preInstall
 
-    mkdir -p $out/share/applications
-    cp ${desktopItem}/share/applications/* $out/share/applications/
+    ${
+      if stdenv.hostPlatform.isDarwin then
+        ''
+          # Install macOS .app bundle
+          mkdir -p $out/Applications
+          cp -r prod/mac*/${appName}.app $out/Applications/
+
+          # Create bin symlink
+          mkdir -p $out/bin
+          makeWrapper "$out/Applications/${appName}.app/Contents/MacOS/${appName}" $out/bin/${packageName}
+        ''
+      else
+        ''
+          # Copy built resources
+          mkdir -p $out/share/${packageName}
+          cp -r prod/*-unpacked/{locales,resources{,.pak}} $out/share/${packageName}
+
+          # Create desktop icon
+          mkdir -p $out/share/icons/hicolor/256x256/apps
+          magick assets/icons/app/linux.png -resize 256x256 $out/share/icons/hicolor/256x256/apps/${packageName}.png
+
+          # Create launcher with electron
+          makeWrapper ${lib.getExe electron} $out/bin/${packageName} \
+            --set ELECTRON_IS_DEV 0 \
+            --add-flags $out/share/${packageName}/resources/app.asar \
+            --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+            --inherit-argv0
+        ''
+    }
+
+    runHook postInstall
   '';
 
-  # Write correct darwin icons to .app contents
-  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    cp -rf $out/share/pixmaps/* "$out/Applications/${desktopName}.app/Contents/Resources"
-  '';
+  desktopItems = lib.optionals (!stdenv.hostPlatform.isDarwin) [ desktopItem ];
 
   meta = {
     homepage = "https://filen.io/products";
