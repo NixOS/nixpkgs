@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "cython-test-exception-raiser";
-  version = "1.0.2";
+  version = "25.11.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "twisted";
     repo = "cython-test-exception-raiser";
-    rev = "v${version}";
-    hash = "sha256-fwMq0pOrFUJnPndH/a6ghoo6mlcVSxtsWazqE9mCx3M=";
+    tag = version;
+    hash = "sha256-Od5LeytibiNZSDTI2KxK0SrDNvlQrKyL+5ea15Udi74=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   meta = {
     description = "Testing only. A cython simple extension which is used as helper for twisted/twisted Failure tests";
     homepage = "https://github.com/twisted/cython-test-exception-raiser";
-    changelog = "https://github.com/twisted/cython-test-exception-raiser/blob/${src.rev}/CHANGELOG.rst";
+    changelog = "https://github.com/twisted/cython-test-exception-raiser/blob/${src.tag}/CHANGELOG.rst";
     license = with lib.licenses; [
       publicDomain
       mit
