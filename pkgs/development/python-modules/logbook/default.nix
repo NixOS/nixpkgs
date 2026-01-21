@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "logbook";
-  version = "1.8.2";
+  version = "1.9.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "getlogbook";
     repo = "logbook";
     tag = version;
-    hash = "sha256-21323iXtjyUAxAEFMsU6t1/nNLEN5G3jHcubNCEYQ3c=";
+    hash = "sha256-/oaBUIMsDwyxjQU57BpwXQfDMBNSDAI7fqtem/4QqKw=";
   };
 
   nativeBuildInputs = [
