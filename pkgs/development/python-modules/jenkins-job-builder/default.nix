@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "jenkins-job-builder";
-  version = "6.4.2";
+  version = "6.4.4";
   format = "setuptools";
 
   build-system = [ setuptools ];
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-G+DVRd6o3GwTdFNnJkotIidrxexJZSdgCGXTA4KnJJA=";
+    hash = "sha256-7PpCDpe3KLRpt+R/Nu+qxdDxLKWVqTiCPK3j+nNaum8=";
   };
 
   postPatch = ''
