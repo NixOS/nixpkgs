@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "githubkit";
-  version = "0.13.5";
+  version = "0.14.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yanyongyu";
     repo = "githubkit";
     tag = "v${version}";
-    hash = "sha256-YKL31M1H4LBE29xmi6GfX3tTBGxS9yUvHQEiWke3ANA=";
+    hash = "sha256-9fq0PNgQmKOhFyaEQcRZa+v0HDUMirkzFZxWi6NP5wg=";
   };
 
   patches = [
