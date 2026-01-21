@@ -351,6 +351,17 @@ with haskellLib;
   # https://github.com/yesodweb/shakespeare/issues/294
   shakespeare = dontCheck super.shakespeare;
 
+  # Fixes test suite with mime-types >= 0.1.2.1
+  yesod-static = appendPatches [
+    (pkgs.fetchpatch {
+      name = "yesod-static-mime-types-0.1.2.1.patch";
+      url = "https://github.com/yesodweb/yesod/commit/5466dc3b984efcd1f963ae3c6c3a5241c4f625ee.patch";
+      sha256 = "sha256-UN8kdnSsZPRt8PdQdortd50cB+j9kUOmhECl6lfxIxI=";
+      includes = [ "**/EmbedProductionTest.hs" ];
+      stripLen = 1;
+    })
+  ] super.yesod-static;
+
   # Work around -Werror failures until a more permanent solution is released
   # https://github.com/haskell-cryptography/HsOpenSSL/issues/88
   # https://github.com/haskell-cryptography/HsOpenSSL/issues/93
