@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "seekpath";
-  version = "2.1.0";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "giovannipizzi";
     repo = "seekpath";
-    rev = "v${version}";
-    hash = "sha256-8Nm8SKHda2qt1kncXZxC4T3cpicXpDZhxPzs78JICzE=";
+    tag = "v${version}";
+    hash = "sha256-mrutQCSSiiLPt0KEohZeYcQ8aw2Jhy02bEvn6Of8w6U=";
   };
 
   LC_ALL = "en_US.utf-8";
