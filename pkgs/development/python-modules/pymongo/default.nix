@@ -18,13 +18,13 @@
 
 buildPythonPackage rec {
   pname = "pymongo";
-  version = "4.13.2";
+  version = "4.16.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "pymongo";
-    hash = "sha256-D2TGRpwjYpYubOlyWK4Tkau6FWapU6SSVi0pJLRIFcI=";
+    hash = "sha256-i6hAUGX24lim+HL+YteXoo84OhIXjHFTwB7QToRcYAw=";
   };
 
   build-system = [
