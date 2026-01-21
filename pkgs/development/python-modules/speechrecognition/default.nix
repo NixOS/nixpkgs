@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "speechrecognition";
-  version = "3.14.3";
+  version = "3.14.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Uberi";
     repo = "speech_recognition";
     tag = version;
-    hash = "sha256-g//KKxPRe1pWVJo7GsRNIV59r0J7XJEoXvH0tGuV3Jk=";
+    hash = "sha256-NPlifE6ilup/dKWjz071jfSQS3ps80/5L591KaeZi98=";
   };
 
   postPatch = ''
