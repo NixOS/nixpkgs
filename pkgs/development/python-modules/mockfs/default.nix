@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "mockfs";
-  version = "1.1.4";
+  version = "2.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mockfs";
     repo = "mockfs";
-    rev = "v${version}";
-    hash = "sha256-JwSkOI0dz9ZetfE0ZL3CthvcCSXGFYX+yQZy/oC6VBk=";
+    tag = "v${version}";
+    hash = "sha256-fTN9HLzlVCn0O8nYy4UUM+JIsYJ3qDPw3h41yhcilJ8=";
   };
 
   postPatch = ''
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   meta = {
     description = "Simple mock filesystem for use in unit tests";
     homepage = "https://github.com/mockfs/mockfs";
-    changelog = "https://github.com/mockfs/mockfs/blob/${src.rev}/CHANGES.rst";
+    changelog = "https://github.com/mockfs/mockfs/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
