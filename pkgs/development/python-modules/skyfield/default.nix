@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "skyfield";
-  version = "1.53";
+  version = "1.54";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "skyfielders";
     repo = "python-skyfield";
-    rev = version;
-    hash = "sha256-CQe+ik6HciOUaRpFp8Cx6cOlOFzeVoMVJrk7+rdcQEo=";
+    tag = version;
+    hash = "sha256-oZEmc8BVqs3eSaqrjyR/wQu1WTLv4A0a/dpEZduCXqk=";
   };
 
   # Fix broken tests on "exotic" platforms.
