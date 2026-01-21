@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "graphql-core";
-  version = "3.2.6";
+  version = "3.2.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "graphql-python";
     repo = "graphql-core";
     tag = "v${version}";
-    hash = "sha256-RkVyoTSVmtKhs42IK+oOrOL4uBs3As3N5KY0Sz1VaDQ=";
+    hash = "sha256-ag8yFf6254dX2xNZMKtVBW5QtI5JOZjzgcZveuoeAss=";
   };
 
   postPatch = ''
