@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  writeText,
+  writeTextFile,
   python,
   buildPythonPackage,
   fetchFromGitHub,
@@ -43,45 +43,16 @@
   sage,
 }:
 
-let
+buildPythonPackage (finalAttrs: {
   pname = "scipy";
-  # DON'T UPDATE THESE ATTRIBUTES MANUALLY - USE:
-  #
-  #     nix-shell maintainers/scripts/update.nix --argstr package python3.pkgs.scipy
-  #
-  # The update script uses sed regexes to replace them with the updated hashes.
-  version = "1.16.3";
-  srcHash = "sha256-2NVmsJqsUjWSD7oEJhRkRjbKvqwikBJenAhBio/+IuU=";
-  datasetsHashes = {
-    ascent = "1qjp35ncrniq9rhzb14icwwykqg2208hcssznn3hz27w39615kh3";
-    ecg = "1bwbjp43b7znnwha5hv6wiz3g0bhwrpqpi75s12zidxrbwvd62pj";
-    face = "11i8x29h80y7hhyqhil1fg8mxag5f827g33lhnsf44qk116hp2wx";
-  };
-  datasets = lib.mapAttrs (
-    d: hash:
-    fetchurl {
-      url = "https://raw.githubusercontent.com/scipy/dataset-${d}/main/${d}.dat";
-      sha256 = hash;
-    }
-  ) datasetsHashes;
-  # Additional cross compilation related properties that scipy reads in scipy/meson.build
-  crossFileScipy = writeText "cross-file-scipy.conf" ''
-    [properties]
-    numpy-include-dir = '${numpy.coreIncludeDir}'
-    pythran-include-dir = '${pythran}/${python.sitePackages}/pythran'
-    host-python-path = '${python.interpreter}'
-    host-python-version = '${python.pythonVersion}'
-  '';
-in
-buildPythonPackage {
-  inherit pname version;
+  version = "1.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scipy";
     repo = "scipy";
-    tag = "v${version}";
-    hash = srcHash;
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-bDcM/RGfce/ZTYpTBNpKmX/7rXDqQs7rYkAmeXtzkZk=";
     fetchSubmodules = true;
   };
 
@@ -189,7 +160,7 @@ buildPythonPackage {
       d: dpath:
       # Actually copy the datasets
       "cp ${dpath} scipy-data/${d}.dat"
-    ) datasets
+    ) finalAttrs.finalPackage.passthru.datasets
   ));
 
   mesonFlags = [
@@ -198,7 +169,7 @@ buildPythonPackage {
     # We always run what's necessary for cross compilation, which is passing to
     # meson the proper cross compilation related arguments. See also:
     # https://docs.scipy.org/doc/scipy/building/cross_compilation.html
-    "--cross-file=${crossFileScipy}"
+    "--cross-file=${finalAttrs.finalPackage.passthru.crossFile}"
     "-Duse-system-libraries=all"
   ];
 
@@ -229,26 +200,53 @@ buildPythonPackage {
 
   passthru = {
     inherit blas;
-    updateScript = [
-      ./update.sh
-      # Pass it this file name as argument
-      (builtins.unsafeGetAttrPos "pname" python.pkgs.scipy).file
-    ]
-    # Pass it the names of the datasets to update their hashes
-    ++ (builtins.attrNames datasetsHashes);
     tests = {
       inherit sage;
+    };
+    # NOTE: Every once in a while, these hashes might need an update. Use:
+    #
+    #   nix build -Lf. --rebuild python3.pkgs.scipy.passthru.datasets
+    #
+    # To verify the hashes are correct.
+    datasetsHashes = {
+      ascent = "sha256-A84STBr8iA+HtV9rBhEQ4uHpOWeRhPVhTjjazGwZV+I=";
+      ecg = "sha256-8grTNl+5t/hF0OXEi2/mcIE3fuRmw6Igt/afNciVi68=";
+      face = "sha256-nYsLTQgTE+K0hXSMdwRy5ale0XOBRog9hMcDBJPoKIY=";
+    };
+    datasets = lib.mapAttrs (
+      d: hash:
+      fetchurl {
+        url = "https://raw.githubusercontent.com/scipy/dataset-${d}/main/${d}.dat";
+        inherit hash;
+      }
+    ) finalAttrs.finalPackage.passthru.datasetsHashes;
+    # Additional cross compilation related properties that scipy reads in scipy/meson.build
+    buildConfig = {
+      properties = {
+        numpy-include-dir = numpy.coreIncludeDir;
+        pythran-include-dir = "${pythran}/${python.sitePackages}/pythran";
+        host-python-path = python.interpreter;
+        host-python-version = python.pythonVersion;
+      };
+    };
+    crossFile = writeTextFile {
+      name = "cross-file-scipy.conf";
+      text = lib.generators.toINI {
+        mkKeyValue = lib.generators.mkKeyValueDefault {
+          mkValueString = v: "'${v}'";
+        } " = ";
+      } finalAttrs.finalPackage.passthru.buildConfig;
     };
   };
 
   SCIPY_USE_G77_ABI_WRAPPER = 1;
 
   meta = {
-    changelog = "https://github.com/scipy/scipy/releases/tag/v${version}";
+    changelog = "https://github.com/scipy/scipy/releases/tag/v${finalAttrs.version}";
     description = "SciPy (pronounced 'Sigh Pie') is open-source software for mathematics, science, and engineering";
     downloadPage = "https://github.com/scipy/scipy";
     homepage = "https://www.scipy.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})
