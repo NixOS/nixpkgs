@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "sentinels";
-  version = "1.0.0";
+  version = "1.1.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1cglkxph47pki4db4kjx5g4ikxp2milqdlcjgqwmx4p1gx6p1q3v";
+    sha256 = "sha256-PC9k91QYfBngoaApsUi3TPWN0S7Ce04ZwOXW4itamoY=";
   };
 
   propagatedBuildInputs = [ setuptools ];
