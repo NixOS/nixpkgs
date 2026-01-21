@@ -9,7 +9,11 @@ on:
       mergedSha:
         required: true
         type: string
+      headSha:
+        required: false # only required when testVersions is true
+        type: string
       targetSha:
+        required: true
         type: string
       systems:
         required: true
@@ -36,6 +40,8 @@ jobs:
     runs-on: ubuntu-slim
     outputs:
       versions: ${{ steps.versions.outputs.versions }}
+      ciPinBumpCommit: ${{ steps.find-pinned-commit.outputs.ciPinBumpCommit }}
+      ciPinBumpCommitShort: ${{ steps.find-pinned-commit.outputs.ciPinBumpCommitShort }}
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
@@ -52,6 +58,78 @@ jobs:
           path: untrusted
           sparse-checkout: |
             ci/pinned.json
+
+      - name: Find commit that touched ci/pinned.json
+        id: find-pinned-commit
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        env:
+          TARGET_SHA: ${{ inputs.targetSha }}
+          HEAD_SHA: ${{ inputs.headSha }}
+        with:
+          script: |
+            const targetSha = process.env.TARGET_SHA
+            const headSha = process.env.HEAD_SHA
+
+            if (!targetSha || !headSha) {
+              core.setFailed('Error: Both targetSha and headSha inputs are required when testVersions is true.')
+              return
+            }
+
+            // Compare the two commits to get the list of commits in between
+            const comparison = await github.rest.repos.compareCommitsWithBasehead({
+              ...context.repo,
+              basehead: `${targetSha}...${headSha}`,
+            })
+
+            if(comparison.data.commits.length > 50) {
+              core.setFailed('Error: Too many commits in comparison, cannot reliably find pinned.json change.')
+              return
+            }
+
+            const logRateLimit = async (label) => {
+              const { data } = await github.rest.rateLimit.get()
+              const { remaining, limit, used } = data.rate
+              core.info(`[Rate Limit ${label}] ${remaining}/${limit} remaining (${used} used)`)
+            }
+
+            await logRateLimit('before commit filtering')
+
+            // Filter commits that modified ci/pinned.json
+            const commitsModifyingPinned = (
+              await Promise.all(
+                comparison.data.commits.map(async (commit) => {
+                  const commitDetails = await github.rest.repos.getCommit({
+                    ...context.repo,
+                    ref: commit.sha,
+                  })
+                  const modifiesPinned = commitDetails.data.files?.some(
+                    (file) => file.filename === "ci/pinned.json"
+                  )
+                  return modifiesPinned ? commit.sha : null
+                })
+              )
+            ).filter((sha) => sha !== null)
+
+            await logRateLimit('after commit filtering')
+
+            if (commitsModifyingPinned.length === 0) {
+              // This should not happen as testVersions should only be true
+              // when ci/pinned.json was modified in the PR.
+              core.setFailed("Error: ci/pinned.json was not modified in this PR")
+              return
+            } else if (commitsModifyingPinned.length > 1) {
+              core.setFailed([
+                "Error: Multiple commits touch ci/pinned.json in this PR:",
+                ...commitsModifyingPinned,
+                "Please ensure only a single commit modifies ci/pinned.json for accurate version matrix evaluation."
+              ].join("\n"))
+              return
+            }
+
+            const ciPinBumpCommit = commitsModifyingPinned[0]
+            core.setOutput("ciPinBumpCommit", ciPinBumpCommit)
+            core.setOutput("ciPinBumpCommitShort", ciPinBumpCommit.substring(0, 7))
+            core.info(`Found pinned.json commit: ${ciPinBumpCommit}`)
 
       - name: Install Nix
         uses: cachix/install-nix-action@4e002c8ec80594ecd40e759629461e26c8abed15 # v31
@@ -75,7 +153,7 @@ jobs:
     # Failures for versioned Evals will be collected in a separate job below
     # to not interrupt main Eval's compare step.
     continue-on-error: ${{ matrix.version != '' }}
-    name: ${{ matrix.system }}${{ matrix.version && format(' @ {0}', matrix.version) || '' }}
+    name: ${{ matrix.system }}${{ matrix.version && format(' @ {0} ({1})', matrix.version, needs.versions.outputs.ciPinBumpCommitShort) || '' }}
     timeout-minutes: 15
     steps:
       # This is not supposed to be used and just acts as a fallback.
@@ -96,7 +174,9 @@ jobs:
       - name: Check out the PR at merged and target commits
         uses: ./.github/actions/checkout
         with:
-          merged-as-untrusted-at: ${{ inputs.mergedSha }}
+          # For versioned evals, use the target as the untrusted base and apply the pin-bump commit
+          merged-as-untrusted-at: ${{ matrix.version && inputs.targetSha || inputs.mergedSha }}
+          untrusted-pin-bump: ${{ matrix.version && needs.versions.outputs.ciPinBumpCommit }}
           target-as-trusted-at: ${{ inputs.targetSha }}
 
       - name: Install Nix
@@ -284,6 +364,7 @@ jobs:
           ARTIFACT_PREFIX: ${{ inputs.artifact-prefix }}
           SYSTEMS: ${{ inputs.systems }}
           VERSIONS: ${{ needs.versions.outputs.versions }}
+          CI_PIN_BUMP_COMMIT: ${{ needs.versions.outputs.ciPinBumpCommit }}
         with:
           script: |
             const { readFileSync } = require('node:fs')
@@ -292,8 +373,10 @@ jobs:
             const prefix = process.env.ARTIFACT_PREFIX
             const systems = JSON.parse(process.env.SYSTEMS)
             const versions = JSON.parse(process.env.VERSIONS)
+            const ciPinBumpCommit = process.env.CI_PIN_BUMP_COMMIT
 
             core.summary.addHeading('Lix/Nix version comparison')
+            core.summary.addRaw(`\n*Evaluated at commit: \`${ciPinBumpCommit}\` (commit that modified ci/pinned.json)*\n`, true)
             core.summary.addTable(
               [].concat(
                 [
@@ -324,7 +407,11 @@ jobs:
                           .filter((attr) => attr.split('.').length > 1)
                         if (attrs.length > 0) {
                           core.setFailed(
-                            `${version} on ${system} has changed outpaths!\nNote: Please make sure to update ci/pinned.json separately from changes to other packages.`,
+                            `${version} on ${system} has changed outpaths!\n` +
+                              `Note: This indicates that commit ${ciPinBumpCommit} ` +
+                              `(which modified ci/pinned.json) also contains other ` +
+                              `changes affecting package outputs. ` +
+                              `Please ensure ci/pinned.json is updated in a standalone commit.`
                           )
                           return { data: ':x:' }
                         }
