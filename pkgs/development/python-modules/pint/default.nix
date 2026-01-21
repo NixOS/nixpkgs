@@ -15,7 +15,6 @@
 
   # tests
   pytestCheckHook,
-  pytest-subtests,
   pytest-benchmark,
   numpy,
   matplotlib,
@@ -55,7 +54,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-subtests
     pytest-benchmark
     matplotlib
     writableTmpDirAsHomeHook
