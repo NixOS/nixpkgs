@@ -24,14 +24,14 @@ let
 in
 buildPythonPackage rec {
   pname = "kaldi-active-grammar";
-  version = "3.1.0";
+  version = "3.2.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "daanzu";
     repo = "kaldi-active-grammar";
-    rev = "v${version}";
-    sha256 = "0lilk6yjzcy31avy2z36bl9lr60gzwhmyqwqn8akq11qc3mbffsk";
+    tag = "v${version}";
+    sha256 = "sha256-VyVshIEVp/ep4Ih7Kj66GF02JEZ4nwgJOtgR2DarzdY=";
   };
 
   KALDI_BRANCH = "foo";
