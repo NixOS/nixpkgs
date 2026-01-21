@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "asyncclick";
-  version = "8.1.8.0";
+  version = "8.3.0.5+async";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-trio";
     repo = "asyncclick";
-    tag = "${version}+async";
-    hash = "sha256-J294pYuNOSm7v2BbwDpzn3uelAnZ3ip2U1gWuchhOtA=";
+    tag = version;
+    hash = "sha256-gKtxwI/vDB2pDrhiA+e1TClwW5nXvBRCMF3oCNoLaDo=";
   };
 
   build-system = [ flit-core ];
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python composable command line utility";
     homepage = "https://github.com/python-trio/asyncclick";
-    changelog = "https://github.com/python-trio/asyncclick/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/python-trio/asyncclick/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
