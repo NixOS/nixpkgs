@@ -8,13 +8,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "3.1.0";
+  version = "3.2.1";
   pname = "intervaltree";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "902b1b88936918f9b2a19e0e5eb7ccb430ae45cde4f39ea4b36932920d33952d";
+    sha256 = "sha256-8/fouut911ufem0zzz7BACWYSo5m4wFtU35SEwxzz+I=";
   };
 
   build-system = [ setuptools ];
