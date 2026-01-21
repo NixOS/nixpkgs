@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "responses";
-  version = "0.25.7";
+  version = "0.25.8";
   pyproject = true;
 
   __darwinAllowLocalNetworking = true;
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "getsentry";
     repo = "responses";
     tag = version;
-    hash = "sha256-eiJwu0sRtr3S4yAnbsIak7g03CNqOTS16rNXoXRQumA=";
+    hash = "sha256-7vl8+7cpyJFhGDTzklQn7p5NyEFpzX9Yiz2g7fDCPGk=";
   };
 
   nativeBuildInputs = [ setuptools ];
