@@ -2,14 +2,14 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  hatchling,
+  uv-build,
   pydantic,
   pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "scim2-models";
-  version = "0.4.1";
+  version = "0.5.1";
 
   pyproject = true;
 
@@ -17,19 +17,19 @@ buildPythonPackage (finalAttrs: {
     owner = "python-scim";
     repo = "scim2-models";
     tag = finalAttrs.version;
-    hash = "sha256-cc9nSqED+gfBHC3QpeHnQ6lBnmvdHa6edp/WGiuiDfc=";
+    hash = "sha256-ahwHmWsM9IoK+yq0Qd0c2+kagMlXGi80/rAB4UQsf6U=";
   };
 
-  build-system = [ hatchling ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.8.9,<0.9.0" "uv_build"
+  '';
+
+  build-system = [ uv-build ];
 
   dependencies = [ pydantic ] ++ pydantic.optional-dependencies.email;
 
   nativeCheckInputs = [ pytestCheckHook ];
-
-  preCheck = ''
-    substituteInPlace doc/tutorial.rst \
-      --replace-fail "TzInfo(UTC)" "TzInfo(0)"
-  '';
 
   pythonImportsCheck = [ "scim2_models" ];
 
