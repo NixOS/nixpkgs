@@ -16,12 +16,12 @@
 
 buildPythonPackage rec {
   pname = "xmlsec";
-  version = "1.3.16";
+  version = "1.3.17";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-K2xwVExtHUygBqqjFJWODvNRTcgf/94bI/LsQaV5H50=";
+    hash = "sha256-8/rJrmefZlhZJcwAxfaDmuNsHQMVdhlXHe4YrMBbnAE=";
   };
 
   build-system = [ setuptools-scm ];
