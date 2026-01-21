@@ -262,13 +262,19 @@
               "sha256-vtjT+TL/7sYPu4rcVV3xCqJQ+uqkyBbf9l0KIi97j/0=";
         })
       ]
-      ++ lib.optionals (lib.versionOlder version "9.14.1") [
-        (fetchpatch {
-          name = "ghc-rts-Fix-compile-on-powerpc64-elf-v1.patch";
-          url = "https://gitlab.haskell.org/ghc/ghc/-/commit/05e5785a3157c71e327a8e9bdc80fa7082918739.patch";
-          hash = "sha256-xP5v3cKhXeTRSFvRiKEn9hPxGXgVgykjTILKjh/pdDU=";
-        })
-      ]
+      ++
+        lib.optionals
+          (
+            (lib.versions.majorMinor version == "9.12" && lib.versionOlder version "9.12.3")
+            || (lib.versions.majorMinor version != "9.12" && lib.versionOlder version "9.14.1")
+          )
+          [
+            (fetchpatch {
+              name = "ghc-rts-Fix-compile-on-powerpc64-elf-v1.patch";
+              url = "https://gitlab.haskell.org/ghc/ghc/-/commit/05e5785a3157c71e327a8e9bdc80fa7082918739.patch";
+              hash = "sha256-xP5v3cKhXeTRSFvRiKEn9hPxGXgVgykjTILKjh/pdDU=";
+            })
+          ]
       # Fix build with gcc15
       # https://gitlab.haskell.org/ghc/ghc/-/issues/25662
       # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13863
