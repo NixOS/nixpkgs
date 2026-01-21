@@ -43,16 +43,20 @@ in
     services.udev.packages = [ displaylink ];
 
     powerManagement.powerDownCommands = ''
-      #flush any bytes in pipe
-      while read -n 1 -t 1 SUSPEND_RESULT < /tmp/PmMessagesPort_out; do : ; done;
+      # Check if DisplayLink pipes exist
+      if [ -p /tmp/PmMessagesPort_in ] && [ -f /tmp/PmMessagesPort_out ]; then
+        # Flush any bytes in pipe
+        while read -n 1 -t 1 SUSPEND_RESULT < /tmp/PmMessagesPort_out; do : ; done;
 
-      #suspend DisplayLinkManager
-      echo "S" > /tmp/PmMessagesPort_in
+        # Send suspend signal
+        echo "S" > /tmp/PmMessagesPort_in
 
-      #wait until suspend of DisplayLinkManager finish
-      if [ -f /tmp/PmMessagesPort_out ]; then
-        #wait until suspend of DisplayLinkManager finish
-        read -n 1 -t 10 SUSPEND_RESULT < /tmp/PmMessagesPort_out
+        # Wait with timeout for response
+        if read -n 1 -t 10 SUSPEND_RESULT < /tmp/PmMessagesPort_out; then
+          echo "DisplayLinkManager suspended successfully"
+        else
+          echo "DisplayLinkManager suspend timed out, continuing anyway"
+        fi
       fi
     '';
 
