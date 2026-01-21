@@ -1,13 +1,11 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
-  isPy312,
   fetchFromGitHub,
   flaky,
   hypothesis,
   pytest-xdist,
-  pytestCheckHook,
+  pytest7CheckHook,
   pythonOlder,
   setuptools,
   tomli,
@@ -37,7 +35,7 @@ buildPythonPackage rec {
     flaky
     hypothesis
     pytest-xdist
-    pytestCheckHook
+    pytest7CheckHook
   ];
 
   preCheck = ''
