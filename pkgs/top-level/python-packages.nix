@@ -16561,6 +16561,8 @@ self: super: with self; {
 
   riscv-isac = callPackage ../development/python-modules/riscv-isac { };
 
+  riscv-model = callPackage ../development/python-modules/riscv-model { };
+
   ritassist = callPackage ../development/python-modules/ritassist { };
 
   rivet = toPythonModule (pkgs.rivet.override { python3 = python; });
