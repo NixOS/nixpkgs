@@ -37,13 +37,13 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery";
-  version = "3.35.1";
+  version = "3.40.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_bigquery";
     inherit version;
-    hash = "sha256-WZ8mys8ZCs/ogAD2zF9Lyea6rHiZ5PQGygVPGQb3GWA=";
+    hash = "sha256-s8yxHK8AKfFbKVaVGPZnVT/gj28UWblZAgyD+72PLmg=";
   };
 
   build-system = [ setuptools ];
