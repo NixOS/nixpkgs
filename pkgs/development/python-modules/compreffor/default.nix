@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "compreffor";
-  version = "0.5.6";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-icE9GDf5SD/gmqZrGe30SQ7ghColye3VIytSXaI/EA4=";
+    hash = "sha256-fqA0pQxZzHhzLxSABA6sK7Nvgmzi62B8MCm104qxG6g=";
   };
 
   postPatch = ''
