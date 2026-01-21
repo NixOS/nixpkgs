@@ -1,6 +1,6 @@
 {
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   grpcio-tools,
   lib,
   mypy-protobuf,
@@ -11,14 +11,16 @@
   types-protobuf,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mypy-protobuf";
   version = "5.0.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-b90c/btEGccTKR2ACjMtS7plENvRNB7ZXgvMgvyttrU=";
+  src = fetchFromGitHub {
+    owner = "nipunn1313";
+    repo = "mypy-protobuf";
+    rev = "47fa102ae5d2bd2a1fdde2adf94cf006a3e939a4"; # not tagged, but on pypi
+    hash = "sha256-VYDTJmiezHAVC3QV+HM7C5y5WaFvoInzupWhnB/iNgA=";
   };
 
   pythonRelaxDeps = [ "protobuf" ];
@@ -43,11 +45,11 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/nipunn1313/mypy-protobuf/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/nipunn1313/mypy-protobuf/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Generate mypy stub files from protobuf specs";
     homepage = "https://github.com/nipunn1313/mypy-protobuf";
     license = lib.licenses.asl20;
     mainProgram = "protoc-gen-mypy";
     maintainers = with lib.maintainers; [ lnl7 ];
   };
-}
+})
