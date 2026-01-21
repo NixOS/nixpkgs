@@ -10,7 +10,7 @@
   git,
   pkg-config,
   runCommand,
-  nodejs,
+  nodejs_22,
   node-gyp,
   libsecret,
   libkrb5,
@@ -21,6 +21,8 @@
   prefetch-npm-deps,
 }:
 let
+
+  nodejs = nodejs_22;
 
   system = stdenv.hostPlatform.system;
 
