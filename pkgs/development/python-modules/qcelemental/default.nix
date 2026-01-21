@@ -16,12 +16,12 @@
 
 buildPythonPackage rec {
   pname = "qcelemental";
-  version = "0.29.0";
+  version = "0.30.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-v2NO5lLn2V6QbikZiVEyJCM7HXBcJq/qyG5FHzFrPAQ=";
+    hash = "sha256-nIW38ReKgE1FA0r55TOOsAOlvtAV3fIQexTsyqx4r4g=";
   };
 
   build-system = [ poetry-core ];
