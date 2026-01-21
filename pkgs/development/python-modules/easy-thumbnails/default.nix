@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "easy-thumbnails";
-  version = "2.10.0";
+  version = "2.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SmileyChris";
     repo = "easy-thumbnails";
     tag = version;
-    hash = "sha256-8JTHYQIBbu/4fknK2ZEQeDSgaxKGDfflxumcFMpaGQk=";
+    hash = "sha256-GPZ99OaQRSogS8gJXz8rVUjUeNkEk019TYx0VWa0Q6I=";
   };
 
   patches = [
@@ -67,7 +67,7 @@ buildPythonPackage rec {
   meta = {
     description = "Easy thumbnails for Django";
     homepage = "https://github.com/SmileyChris/easy-thumbnails";
-    changelog = "https://github.com/SmileyChris/easy-thumbnails/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/SmileyChris/easy-thumbnails/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.onny ];
   };
