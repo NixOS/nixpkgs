@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "ratarmountcore";
-  version = "0.10.1";
+  version = "1.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mxmlnkn";
     repo = "ratarmount";
-    tag = "core-v${version}";
-    hash = "sha256-7xknOpJIjXMr7Z7JD3Jn3oma63hbEZcj/1zQ6FAp5aA=";
+    tag = "v${version}";
+    hash = "sha256-q4rTf8NH4QY/jn/Qb1i1TvG6Uj7atpq3XLFpp7BeM1E=";
     fetchSubmodules = true;
   };
 
@@ -88,7 +88,7 @@ buildPythonPackage rec {
   meta = {
     description = "Library for accessing archives by way of indexing";
     homepage = "https://github.com/mxmlnkn/ratarmount/tree/master/core";
-    changelog = "https://github.com/mxmlnkn/ratarmount/blob/${src.rev}/core/CHANGELOG.md";
+    changelog = "https://github.com/mxmlnkn/ratarmount/blob/${src.tag}/core/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mxmlnkn ];
   };
