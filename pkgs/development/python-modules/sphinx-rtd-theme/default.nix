@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "sphinx-rtd-theme";
-  version = "3.0.2";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "sphinx_rtd_theme";
     inherit version;
-    hash = "sha256-t0V7wl3acjsgsIamcLmVPIWeq2CioD7o6yuyPhduX4U=";
+    hash = "sha256-tEJ28sJ26Qkjmk9slVqmZ6qv63hZeSOxxgurx223jkw=";
   };
 
   build-system = [ setuptools ];
