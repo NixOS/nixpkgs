@@ -55,15 +55,15 @@ let
 in
 buildPythonPackage rec {
   pname = "ifcopenshell";
-  version = "0.8.0";
+  version = "0.8.5.260116";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "IfcOpenShell";
     repo = "IfcOpenShell";
-    tag = "ifcopenshell-python-${version}";
+    tag = "ifcsverchok-${version}";
     fetchSubmodules = true;
-    hash = "sha256-tnj14lBEkUZNDM9J1sRhNA7OkWTWa5JPTSF8hui3q7k=";
+    hash = "sha256-IsJ+zJNuXNXbk5F6KF6H+c2U+ip2Ewh2mWdEMPm3nvQ=";
   };
 
   patches = [
