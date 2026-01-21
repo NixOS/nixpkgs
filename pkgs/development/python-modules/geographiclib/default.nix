@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "geographiclib";
-  version = "2.0";
+  version = "2.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9/Qchdw+HC09k17IZmDcOyyEjIPhf5qeUbqdUUahWFk=";
+    hash = "sha256-amVF5iYtDtNSLhPFFXE3GHl+N+2MZywxrXsknzcu8Qg=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
