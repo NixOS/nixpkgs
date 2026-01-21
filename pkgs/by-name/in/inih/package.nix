@@ -22,6 +22,11 @@ stdenv.mkDerivation rec {
     ninja
   ];
 
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   meta = {
     description = "Simple .INI file parser in C, good for embedded systems";
     homepage = "https://github.com/benhoyt/inih";
