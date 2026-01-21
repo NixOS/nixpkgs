@@ -16,12 +16,12 @@
 
 buildPythonPackage rec {
   pname = "asyncpg";
-  version = "0.30.0";
+  version = "0.31.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xVHpkoq2cHYC9EgRgX+CujxEbgGL/h06vsyLpfPqyFE=";
+    hash = "sha256-yYk4bIOUC/vXhxgPKxUZQV4tPWJ3pw2dDwFFrHNQBzU=";
   };
 
   build-system = [
