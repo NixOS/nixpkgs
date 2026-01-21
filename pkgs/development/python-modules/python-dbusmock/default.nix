@@ -32,14 +32,14 @@ let
 in
 buildPythonPackage rec {
   pname = "python-dbusmock";
-  version = "0.36.0";
+  version = "0.37.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "martinpitt";
     repo = "python-dbusmock";
     tag = version;
-    hash = "sha256-9YnMOQUuwAcrL0ZaQr7iGly9esZaSRIFThQRNUtSndo=";
+    hash = "sha256-Q149NcbpbIgXCd7WujALC9I9vAM/tZh+enTJh0d84Kg=";
   };
 
   patches = lib.optionals doCheck [
