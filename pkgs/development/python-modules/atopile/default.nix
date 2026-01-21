@@ -72,7 +72,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "atopile";
     repo = "atopile";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/1vkYGG3OHyeFpzbvRoAxUtLQLePKE2jwQx8o/CTErQ=";
   };
 
