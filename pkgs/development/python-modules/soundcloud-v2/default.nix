@@ -1,26 +1,28 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   dacite,
   python-dateutil,
   requests,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "soundcloud-v2";
-  version = "1.6.0";
+  version = "1.6.1";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-RiUTFGwP/J7HKcHGFvT3Kw3NM/gUeMZCB/Jl8HLngkM=";
+  src = fetchFromGitHub {
+    owner = "7x11x13";
+    repo = "soundcloud.py";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xx5F5xscPCbuN7T03zL5V9LLrTbpJnTF4lmUVEqBJA4=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dacite
     python-dateutil
     requests
@@ -37,4 +39,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})
