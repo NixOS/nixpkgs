@@ -16,12 +16,12 @@
 
 buildPythonPackage rec {
   pname = "typecode";
-  version = "30.0.2";
+  version = "30.1.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-F2idIK8K5hFueX7yxd5l8M6AkSjPDmhHmzS9a6S8OJg=";
+    hash = "sha256-/KNhekPDB1eGVtcGNMKHx9oyruP97of7ydzx+9P7dQ8=";
   };
 
   dontConfigure = true;
