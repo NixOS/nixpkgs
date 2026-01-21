@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "ANSITerminal";
   version = "0.8.5";
 
   src = fetchurl {
-    url = "https://github.com/Chris00/ANSITerminal/releases/download/${version}/ANSITerminal-${version}.tbz";
+    url = "https://github.com/Chris00/ANSITerminal/releases/download/${finalAttrs.version}/ANSITerminal-${finalAttrs.version}.tbz";
     hash = "sha256-q3OyGLajAmfSu8QzEtzzE5gbiwvsVV2SsGuHZkst0w4=";
   };
 
@@ -33,4 +33,4 @@ buildDunePackage rec {
     ];
     maintainers = [ lib.maintainers.jirkamarsik ];
   };
-}
+})
