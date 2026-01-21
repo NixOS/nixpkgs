@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "parsy";
-  version = "2.1";
+  version = "2.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     repo = "parsy";
     owner = "python-parsy";
     tag = "v${version}";
-    hash = "sha256-/Bu3xZUpXI4WiYJKKWTJTdSFq8pwC1PFDw0Kr8s3Fe8=";
+    hash = "sha256-EzIpKlT0Yvh0XWP6tb24tvuOe4BH8KuwJ5WCUzAM8mY=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/python-parsy/parsy";
     description = "Easy-to-use parser combinators, for parsing in pure Python";
-    changelog = "https://github.com/python-parsy/parsy/blob/v${version}/docs/history.rst";
+    changelog = "https://github.com/python-parsy/parsy/blob/${src.tag}/docs/history.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ milibopp ];
   };
