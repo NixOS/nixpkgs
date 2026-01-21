@@ -4,7 +4,7 @@
   buildPythonPackage,
   click,
   fetchFromGitHub,
-  grapheme,
+  graphemeu,
   pytestCheckHook,
   python,
   setuptools,
@@ -27,14 +27,17 @@ buildPythonPackage rec {
     mv $out/LICENSE $out/share/doc/python${python.pythonVersion}-$pname-$version/
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     about-time
-    grapheme
+    graphemeu
   ];
 
-  pythonRelaxDeps = [ "about_time" ];
+  pythonRelaxDeps = [
+    "about_time"
+    "graphemeu"
+  ];
 
   nativeCheckInputs = [
     click
