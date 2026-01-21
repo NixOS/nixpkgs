@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pycep-parser";
-  version = "0.5.1";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gruebel";
     repo = "pycep";
     tag = version;
-    hash = "sha256-yCcJUN+gDeuifFoYyFsS5Ak/AYxLo0Q8edmhFYfi/eA=";
+    hash = "sha256-pEFgpLfGcJhUWfs/nG1r7GfIS045cfNh7MVQokluXmM=";
   };
 
   nativeBuildInputs = [ poetry-core ];
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python based Bicep parser";
     homepage = "https://github.com/gruebel/pycep";
-    changelog = "https://github.com/gruebel/pycep/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/gruebel/pycep/blob/${src.tag}/CHANGELOG.md";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ fab ];
   };
