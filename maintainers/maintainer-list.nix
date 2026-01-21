@@ -29620,5 +29620,11 @@
     githubId = 59917878;
     name = "Mathias Zhang";
   };
+  Chen-nq-0 = {
+    email = "woshiliuziao@gmail.com";
+    github = "Chen-nq-0";
+    githubId = "198324524";
+    name = "Chen-nq-0";
+  };
   # keep-sorted end
 }
