@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "pyfirefly";
-  version = "0.1.9";
+  version = "0.1.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "erwindouna";
     repo = "pyfirefly";
     tag = "v${version}";
-    hash = "sha256-VPtXk4sObN5mvZTtmXW+myQ4+Slb285zHMotRkLyhJM=";
+    hash = "sha256-SCB05cKEZ4uejl81TUjz4qN0lzYuIKR1CgMbCsA+G4E=";
   };
 
   build-system = [ poetry-core ];
