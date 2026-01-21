@@ -14,6 +14,7 @@
   pytest,
   pyyaml,
   setuptools,
+  setuptools-scm,
   sphinx,
   sphinx-copybutton,
   sphinx-design,
@@ -37,7 +38,10 @@ buildPythonPackage rec {
     hash = "sha256-DWDmnSuo12oXl9NVfNhIOtWrQeJ9DMmHxOyHY33Datk=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   optional-dependencies = {
     dev = [
