@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "ascii-magic";
-  version = "2.3.0";
+  version = "2.7.2";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "ascii_magic";
     inherit version;
-    hash = "sha256-PtQaHLFn3u1cz8YotmnzWjoD9nvdctzBi+X/2KJkPYU=";
+    hash = "sha256-nsM0/q2Zjc9GnGBL+MGNP0CMMKtgijQNj9YHol4HTLg=";
   };
 
   propagatedBuildInputs = [
