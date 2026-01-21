@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "duecredit";
-  version = "0.10.2";
+  version = "0.11.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/nOiDk+7LZcroB7fN97BsLoeZG7+XvTMrwxnJMoofUI=";
+    hash = "sha256-e1wa4Qkn+eAs9NVOLHSoqgDNKcONY33v48lI09jp8zo=";
   };
 
   nativeBuildInputs = [ setuptools ];
