@@ -25,7 +25,7 @@
   networkmanager,
   nix-update-script,
   python3,
-  pywal,
+  pywal16,
   stdenv,
   swww,
   upower,
@@ -79,7 +79,7 @@ ags.bundle {
     libsoup_3
     matugen
     networkmanager
-    pywal
+    pywal16
     swww
     upower
     wireplumber
