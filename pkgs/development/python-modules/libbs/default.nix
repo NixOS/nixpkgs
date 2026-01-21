@@ -24,20 +24,20 @@ let
   binaries = fetchFromGitHub {
     owner = "binsync";
     repo = "bs-artifacts";
-    rev = "514c2d6ef1875435c9d137bb5d99b6fc74063817";
+    tag = "v${version}";
     hash = "sha256-P7+BTJgdC9W8cC/7xQduFYllF+0ds1dSlm59/BFvZ2g=";
   };
 in
 buildPythonPackage rec {
   pname = "libbs";
-  version = "2.16.5";
+  version = "3.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "binsync";
     repo = "libbs";
     tag = "v${version}";
-    hash = "sha256-JE/eDs9vOiislIrsgBUx36XFenxgcoLtHA/veOMj2IY=";
+    hash = "sha256-Xe47JZPkbROHFlqc2o/htqvZWjknsv5KekJBqXA44O4=";
   };
 
   build-system = [ setuptools ];
