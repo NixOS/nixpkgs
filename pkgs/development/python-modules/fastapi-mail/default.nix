@@ -21,20 +21,21 @@
 
 buildPythonPackage rec {
   pname = "fastapi-mail";
-  version = "1.5.8";
+  version = "1.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sabuhish";
     repo = "fastapi-mail";
-    tag = version;
-    hash = "sha256-xxArFytTJKLTlBjR3T+c1OTpK3vSgIrpRJqQEcFs4J4=";
+    tag = "v${version}";
+    hash = "sha256-ruiUf+wGJRMLzmimb9oLi/tGV6UF9aa9G/iMgptSa9w=";
   };
 
   pythonRelaxDeps = [
     "aiosmtplib"
     "cryptography"
     "email-validator"
+    "regex"
     "pydantic"
   ];
 
