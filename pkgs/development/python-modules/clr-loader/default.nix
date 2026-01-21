@@ -13,11 +13,11 @@
 
 let
   pname = "clr-loader";
-  version = "0.2.7.post0";
+  version = "0.2.10";
   src = fetchPypi {
     pname = "clr_loader";
     inherit version;
-    hash = "sha256-t6iz+PuxvLu2OC2IfiHRdC1PELXqIJ5K2VVo/pfhx8Y=";
+    hash = "sha256-gfEUr7xQBbr8Xv5a8TQdQA4iE34nWwQqiXnz/rn8lEY=";
   };
   patches = [ ./dotnet-8-upgrade.patch ];
   # This stops msbuild from picking up $version from the environment
