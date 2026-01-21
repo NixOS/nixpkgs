@@ -26,12 +26,12 @@
 
 buildPythonPackage rec {
   pname = "black";
-  version = "25.1.0";
+  version = "26.1.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-M0ltXNEiKtczkTUrSujaFSU8Xeibk6gLPiyNmhnsJmY=";
+    hash = "sha256-0pSsM0Du+cnrXSkojpbccZ/yaaiOJ7OWNARZ3YXaTFg=";
   };
 
   patches = [
