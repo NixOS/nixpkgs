@@ -20,7 +20,7 @@ url_and_key_list=(
   "aarch64-darwin-311 $darwin_bucket/torch-${version}-cp311-none-macosx_11_0_arm64.whl torch-${version}-cp311-none-macosx_11_0_arm64.whl"
   "aarch64-darwin-312 $darwin_bucket/torch-${version}-cp312-none-macosx_11_0_arm64.whl torch-${version}-cp312-none-macosx_11_0_arm64.whl"
   "aarch64-darwin-313 $darwin_bucket/torch-${version}-cp313-none-macosx_11_0_arm64.whl torch-${version}-cp313-none-macosx_11_0_arm64.whl"
-  "aarch64-darwin-314 $darwin_bucket/torch-${version}-cp314-cp314-macosx_11_0_arm64.whl torch-${version}-cp314-cp314-macosx_11_0_arm64.whl"
+  "aarch64-darwin-314 $darwin_bucket/torch-${version}-cp314-cp314-macosx_14_0_arm64.whl torch-${version}-cp314-cp314-macosx_14_0_arm64.whl"
   "aarch64-linux-310 $linux_cpu_bucket/torch-${version}%2Bcpu-cp310-cp310-manylinux_2_28_aarch64.whl torch-${version}-cp310-cp310-manylinux_2_28_aarch64.whl"
   "aarch64-linux-311 $linux_cpu_bucket/torch-${version}%2Bcpu-cp311-cp311-manylinux_2_28_aarch64.whl torch-${version}-cp311-cp311-manylinux_2_28_aarch64.whl"
   "aarch64-linux-312 $linux_cpu_bucket/torch-${version}%2Bcpu-cp312-cp312-manylinux_2_28_aarch64.whl torch-${version}-cp312-cp312-manylinux_2_28_aarch64.whl"
