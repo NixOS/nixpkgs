@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "xkcdpass";
-  version = "1.20.0";
+  version = "1.30.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tav9fStZzdpZ+Tf7IiEKxGSa0NLgnh+Hv+dKVOI60Yo=";
+    hash = "sha256-ijprYCVdpA0OXIEkWCgCeMgtLBy5DkivvWd327+HlcM=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
