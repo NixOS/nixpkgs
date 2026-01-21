@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "onnxmltools";
-  version = "1.14.0";
+  version = "1.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "onnx";
     repo = "onnxmltools";
-    tag = version;
-    hash = "sha256-CcZlGLX8/ANHnhoOv5s/ybBN74gRH/8eLYJ6q/BJo/4=";
+    tag = "v${version}";
+    hash = "sha256-u7L52cEO1P0Qg2DLH/XpTg88EAG8X6UGA75yGZmnuRQ=";
   };
 
   build-system = [
