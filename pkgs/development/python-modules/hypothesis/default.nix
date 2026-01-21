@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "hypothesis";
-  version = "6.145.1";
+  version = "6.150.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "HypothesisWorks";
     repo = "hypothesis";
     tag = "hypothesis-python-${version}";
-    hash = "sha256-xyUR3yY2tmF4LGhZRUlv6fdcfVyVWwukodA0WIW0bXU=";
+    hash = "sha256-5u6/x+sO14N6qiyLcnJbTxqYfoWjpNi/m/lt6PfLFTE=";
   };
 
   # I tried to package sphinx-selective-exclude, but it throws
