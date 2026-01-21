@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "fipy";
-  version = "3.4.5";
+  version = "4.0";
   format = "setuptools";
 
   # Python 3.12 is not yet supported.
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "usnistgov";
     repo = "fipy";
     tag = version;
-    hash = "sha256-usuAj+bIzbCSxYuKeUDxEESbjxPCwYwdD/opaBbgl1w=";
+    hash = "sha256-pq5Xjp3YD5cILfV+Atl/Sq0SeZjDR/QQa4/F59LhGIo=";
   };
 
   propagatedBuildInputs = [
@@ -65,7 +65,7 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://www.ctcms.nist.gov/fipy/";
     description = "Finite Volume PDE Solver Using Python";
-    changelog = "https://github.com/usnistgov/fipy/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/usnistgov/fipy/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.free;
     maintainers = with lib.maintainers; [ wd15 ];
   };
