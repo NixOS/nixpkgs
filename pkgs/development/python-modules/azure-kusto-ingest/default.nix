@@ -8,27 +8,33 @@
   fetchFromGitHub,
   pandas,
   pytest-asyncio,
+  pytest-xdist,
   pytestCheckHook,
   responses,
-  setuptools,
+  uv-build,
   tenacity,
 }:
 
 buildPythonPackage rec {
   pname = "azure-kusto-ingest";
-  version = "5.0.5";
+  version = "6.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "azure-kusto-python";
     tag = "v${version}";
-    hash = "sha256-DEHTxSvc6AeBMEJuAiDavFj2xVfPmWKpZBaZcpHWHak=";
+    hash = "sha256-ZwPF6YLb2w+Thds36UeQdx64SJqKHFXSQVv39YYQOHA=";
   };
 
   sourceRoot = "${src.name}/${pname}";
 
-  build-system = [ setuptools ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.8.9,<0.9.0" uv-build
+  '';
+
+  build-system = [ uv-build ];
 
   dependencies = [
     azure-kusto-data
@@ -49,6 +55,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aiohttp
     pytest-asyncio
+    pytest-xdist
     pytestCheckHook
     responses
   ]
