@@ -14,7 +14,7 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "agentic-threat-hunting-framework";
   version = "0.4.0";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Nebulock-Inc";
     repo = "agentic-threat-hunting-framework";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-WU58wQGlUgbOqcIE7EKtABNvTKtvTiRO9iJLW4gXDlI=";
   };
 
@@ -51,8 +51,8 @@ buildPythonPackage rec {
   meta = {
     description = "Framework for agentic threat hunting";
     homepage = "https://github.com/Nebulock-Inc/agentic-threat-hunting-framework";
-    changelog = "https://github.com/Nebulock-Inc/agentic-threat-hunting-framework/releases/tag/${src.tag}";
+    changelog = "https://github.com/Nebulock-Inc/agentic-threat-hunting-framework/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
