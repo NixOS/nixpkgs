@@ -1522,11 +1522,6 @@ with pkgs;
 
   certipy = with python3Packages; toPythonApplication certipy-ad;
 
-  chipsec = callPackage ../tools/security/chipsec {
-    kernel = null;
-    withDriver = false;
-  };
-
   fedora-backgrounds = recurseIntoAttrs (callPackage ../data/misc/fedora-backgrounds { });
 
   coconut = with python312Packages; toPythonApplication coconut;

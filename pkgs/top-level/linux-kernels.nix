@@ -373,7 +373,7 @@ in
 
         ch9344 = callPackage ../os-specific/linux/ch9344 { };
 
-        chipsec = callPackage ../tools/security/chipsec {
+        chipsec = callPackage ../by-name/ch/chipsec/package.nix {
           inherit kernel;
           withDriver = true;
         };
