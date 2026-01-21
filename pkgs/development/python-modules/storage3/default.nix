@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "storage3";
-  version = "0.12.1";
+  version = "0.12.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "supabase";
     repo = "storage-py";
     tag = "v${version}";
-    hash = "sha256-Ef309CTnzbaqKAVMdvroUYAy9RImWZZqhsnwRdpGVkk=";
+    hash = "sha256-ACilbwSCNEsXyr2lUTkhOgfw/SiTnwj+rA07tnuFy5A=";
   };
 
   dependencies = [
