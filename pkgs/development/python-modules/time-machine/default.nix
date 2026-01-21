@@ -5,10 +5,11 @@
   setuptools,
   python-dateutil,
   tokenize-rt,
+  freezegun,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "time-machine";
   version = "3.2.0";
   pyproject = true;
@@ -16,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "adamchainz";
     repo = "time-machine";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-UWoKvNz0ojVZtkIUGT02zJitza+mkyToANQMsU64xL4=";
   };
 
@@ -31,9 +32,10 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    freezegun
     pytestCheckHook
   ]
-  ++ optional-dependencies.cli;
+  ++ finalAttrs.passthru.optional-dependencies.cli;
 
   disabledTests = [
     # https://github.com/adamchainz/time-machine/issues/405
@@ -50,8 +52,8 @@ buildPythonPackage rec {
   meta = {
     description = "Travel through time in your tests";
     homepage = "https://github.com/adamchainz/time-machine";
-    changelog = "https://github.com/adamchainz/time-machine/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/adamchainz/time-machine/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
