@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "python3-eventlib";
-  version = "0.3.0";
+  version = "0.8.11.3";
   format = "setuptools";
 
   disabled = !isPy3k;
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "AGProjects";
     repo = "python3-eventlib";
-    rev = version;
-    hash = "sha256-LFW3rCGa7A8tk6SjgYgjkLQ+72GE2WN8wG+XkXYTAoQ=";
+    tag = "release-${version}";
+    hash = "sha256-YwaASsMAl8jOYtNocoZx/KEVKgDHx9OTJEesJnekWQg=";
   };
 
   propagatedBuildInputs = [
