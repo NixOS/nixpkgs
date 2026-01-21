@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "python-barcode";
-  version = "0.15.1";
+  version = "0.16.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Oxgl+9sR5ZdGbf9ChrTqmx6GpXcXtZ5WOuZ5cm/IVN4=";
+    hash = "sha256-Zl7QlRawCItVkwYcWshmLKoLCNVr2tMoOIscqzmTmsU=";
   };
 
   propagatedBuildInputs = [ setuptools-scm ];
