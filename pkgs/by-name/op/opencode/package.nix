@@ -14,12 +14,12 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencode";
-  version = "1.1.25";
+  version = "1.1.30";
   src = fetchFromGitHub {
     owner = "anomalyco";
     repo = "opencode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cvz4HO5vNwA3zWx7zdVfs59Z7vD/00+MMCDbLU5WKpM=";
+    hash = "sha256-RTj64yrVLTFNpVc8MvPAJISOlBo/j2MnuL5jo4VtKWM=";
   };
 
   node_modules = stdenvNoCC.mkDerivation {
@@ -66,7 +66,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # NOTE: Required else we get errors that our fixed-output derivation references store paths
     dontFixup = true;
 
-    outputHash = "sha256-ojbTZBWM353NLMMHckMjFf+k6TpeOoF/yeQR9dq0nNo=";
+    outputHash = "sha256-5U8lpx3sy6XXgR99IfUqDffIZ8FQ1nxXq5dVwpS+d00=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
@@ -80,11 +80,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    # NOTE: Relax Bun version check to be a warning instead of an error
-    ./relax-bun-version-check.patch
     # NOTE: Remove special and windows build targes
     ./remove-special-and-windows-build-targets.patch
   ];
+
+  postPatch = ''
+    # NOTE: Relax Bun version check to be a warning instead of an error
+    substituteInPlace packages/script/src/index.ts \
+      --replace-fail 'throw new Error(`This script requires bun@''${expectedBunVersionRange}' \
+                     'console.warn(`Warning: This script requires bun@''${expectedBunVersionRange}'
+  '';
 
   configurePhase = ''
     runHook preConfigure
