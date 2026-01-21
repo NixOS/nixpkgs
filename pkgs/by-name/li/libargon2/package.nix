@@ -41,6 +41,11 @@ stdenv.mkDerivation rec {
     "LINKED_LIB_EXT="
   ];
 
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   meta = {
     description = "Key derivation function that was selected as the winner of the Password Hashing Competition in July 2015";
     longDescription = ''
