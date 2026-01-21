@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "bleak";
-  version = "2.0.0";
+  version = "2.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hbldh";
     repo = "bleak";
     tag = "v${version}";
-    hash = "sha256-UrKJoEyLa75HMCOgxmOqJi1z+32buMra+dwVe5qbBds=";
+    hash = "sha256-zplCwm0LxDTbNvjWK6VYEFe0Azd2ginkoPZpV7Tpv20=";
   };
 
   postPatch =
