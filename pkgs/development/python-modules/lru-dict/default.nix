@@ -8,7 +8,7 @@
 
 let
   pname = "lru-dict";
-  version = "1.3.0";
+  version = "1.4.1";
 in
 buildPythonPackage {
   inherit pname version;
@@ -16,7 +16,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-VP0ZZta9H83ngVlsuGBoIU7e6/8dsTos6hEHnj/Qe2s=";
+    hash = "sha256-zFGP8tOMx6irVvmmrlV/keLhUktX7Y5Zjpf0WivXCPw=";
   };
 
   nativeBuildInputs = [ setuptools ];
