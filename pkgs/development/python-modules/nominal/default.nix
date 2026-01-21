@@ -17,6 +17,7 @@
   ffmpeg-python,
   pytest-cov-stub,
   pytestCheckHook,
+  pythonRelaxDepsHook,
   cachetools,
   openpyxl,
   polars,
@@ -64,6 +65,14 @@ buildPythonPackage rec {
     # tdms = [ nptdms ]; nptdms is not in nixpkgs
   };
 
+  pythonRemoveDeps = [
+    "types-cachetools" # typing stubs, not needed at runtime
+  ];
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
   nativeCheckInputs = [
     nominal-api-protos
     pytest-cov-stub
@@ -73,6 +82,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "nominal"
     "nominal.core"
+  ];
+
+  pythonRelaxDeps = [
+    "nominal-api"
+    "urllib3"
   ];
 
   disabledTestPaths = [
