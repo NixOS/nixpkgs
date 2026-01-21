@@ -1,18 +1,20 @@
 {
+  lib,
+  stdenv,
+  python3,
+  clang_20,
   buildNpmPackage,
   fetchFromGitHub,
-  lib,
-  python3,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "nest-cli";
   version = "11.0.15";
 
   src = fetchFromGitHub {
     owner = "nestjs";
     repo = "nest-cli";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-yUDlF5UyRE9UdGhw9HDLDpg1voUMQsIenUZZ4UPhBT4=";
   };
 
@@ -25,17 +27,19 @@ buildNpmPackage rec {
 
   nativeBuildInputs = [
     python3
-  ];
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [ clang_20 ]; # clang_21 breaks gyp builds
 
   meta = {
-    homepage = "https://nestjs.com";
+    changelog = "https://github.com/nestjs/nest-cli/releases/tag/${finalAttrs.version}";
     description = "CLI tool for Nest applications";
+    downloadPage = "https://github.com/nestjs/nest-cli";
+    homepage = "https://nestjs.com";
     license = lib.licenses.mit;
-    changelog = "https://github.com/nestjs/nest-cli/releases/tag/${version}";
     mainProgram = "nest";
     maintainers = with lib.maintainers; [
       ehllie
       phanirithvij
     ];
   };
-}
+})
