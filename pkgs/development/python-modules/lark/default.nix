@@ -4,6 +4,7 @@
   fetchFromGitHub,
   regex,
   setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -18,10 +19,13 @@ buildPythonPackage rec {
     hash = "sha256-JDtLSbVjypaHqamkknHDSql1GTMf1LA4TgJXqTn4Q20=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   # Optional import, but fixes some re known bugs & allows advanced regex features
-  propagatedBuildInputs = [ regex ];
+  dependencies = [ regex ];
 
   pythonImportsCheck = [
     "lark"
