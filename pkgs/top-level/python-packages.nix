@@ -6079,7 +6079,13 @@ self: super: with self; {
 
   geotorch = callPackage ../development/python-modules/geotorch { };
 
-  gepetto-gui = toPythonModule (gepetto-viewer.withPlugins [ gepetto-viewer-corba ]);
+  gepetto-gui = toPythonModule (
+    gepetto-viewer.withPlugins [
+      gepetto-viewer-corba
+      hpp-gepetto-viewer
+      hpp-gui
+    ]
+  );
 
   gepetto-viewer = toPythonModule (pkgs.gepetto-viewer.override { python3Packages = self; });
 
@@ -6994,6 +7000,92 @@ self: super: with self; {
   hpack = callPackage ../development/python-modules/hpack { };
 
   hpccm = callPackage ../development/python-modules/hpccm { };
+
+  hpp-affordance-corba = toPythonModule (
+    pkgs.hpp-affordance-corba.override { python3Packages = self; }
+  );
+
+  hpp-baxter = toPythonModule (
+    pkgs.hpp-baxter.override {
+      pythonSupport = true;
+      python3Packages = self;
+    }
+  );
+
+  hpp-bezier-com-traj = toPythonModule (
+    pkgs.hpp-bezier-com-traj.override {
+      pythonSupport = true;
+      python3Packages = self;
+    }
+  );
+
+  hpp-centroidal-dynamics = toPythonModule (
+    pkgs.hpp-centroidal-dynamics.override {
+      pythonSupport = true;
+      python3Packages = self;
+    }
+  );
+
+  hpp-corba = toPythonModule (
+    pkgs.symlinkJoin {
+      name = "hpp";
+      paths = with self; [
+        hpp-affordance-corba
+        hpp-baxter
+        hpp-bezier-com-traj
+        hpp-centroidal-dynamics
+        hpp-corbaserver
+        hpp-environments
+        hpp-gepetto-viewer
+        hpp-gui
+        hpp-manipulation-corba
+        hpp-plot
+        hpp-practicals
+        hpp-romeo
+        hpp-tutorial
+        hpp-universal-robot
+      ];
+    }
+  );
+
+  hpp-corbaserver = toPythonModule (pkgs.hpp-corbaserver.override { python3Packages = self; });
+
+  hpp-doc = toPythonModule (pkgs.hpp-doc.override { python3Packages = self; });
+
+  hpp-environments = toPythonModule (
+    pkgs.hpp-environments.override {
+      pythonSupport = true;
+      python3Packages = self;
+    }
+  );
+
+  hpp-gepetto-viewer = toPythonModule (pkgs.hpp-gepetto-viewer.override { python3Packages = self; });
+
+  hpp-gui = toPythonModule (pkgs.hpp-gui.override { python3Packages = self; });
+
+  hpp-manipulation-corba = toPythonModule (
+    pkgs.hpp-manipulation-corba.override { python3Packages = self; }
+  );
+
+  hpp-plot = toPythonModule (pkgs.hpp-plot.override { python3Packages = self; });
+
+  hpp-practicals = toPythonModule (pkgs.hpp-practicals.override { python3Packages = self; });
+
+  hpp-romeo = toPythonModule (
+    pkgs.hpp-romeo.override {
+      pythonSupport = true;
+      python3Packages = self;
+    }
+  );
+
+  hpp-tutorial = toPythonModule (pkgs.hpp-tutorial.override { python3Packages = self; });
+
+  hpp-universal-robot = toPythonModule (
+    pkgs.hpp-universal-robot.override {
+      pythonSupport = true;
+      python3Packages = self;
+    }
+  );
 
   hs-dbus-signature = callPackage ../development/python-modules/hs-dbus-signature { };
 
