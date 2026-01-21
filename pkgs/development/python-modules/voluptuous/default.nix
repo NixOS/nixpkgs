@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "voluptuous";
-  version = "0.15.2";
+  version = "0.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alecthomas";
     repo = "voluptuous";
     tag = version;
-    hash = "sha256-TGTdYme3ZRM51YFNX/ESFc6+3QpeO/gAXYW6MT73/Ss=";
+    hash = "sha256-Lph+vNsMm69Oqqk3mX27+BR1PsZNxqiI5Uu8nY8hCBc=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     description = "Python data validation library";
     downloadPage = "https://github.com/alecthomas/voluptuous";
     homepage = "http://alecthomas.github.io/voluptuous/";
-    changelog = "https://github.com/alecthomas/voluptuous/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/alecthomas/voluptuous/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
