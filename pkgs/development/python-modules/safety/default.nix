@@ -51,6 +51,7 @@ buildPythonPackage rec {
     "filelock"
     "pydantic"
     "psutil"
+    "safety-schemas"
   ];
 
   dependencies = [
