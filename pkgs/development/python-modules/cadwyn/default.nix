@@ -22,6 +22,7 @@
   svcs,
   typer,
   uvicorn,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
@@ -35,6 +36,8 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-VVi79c/Y1mu520H/7gy9lGdBIVuKsYedU49P501NQao=";
   };
+
+  disabled = pythonAtLeast "3.14";
 
   build-system = [ hatchling ];
 
