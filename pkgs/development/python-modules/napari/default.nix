@@ -45,20 +45,15 @@
 
 mkDerivationWith buildPythonPackage rec {
   pname = "napari";
-  version = "0.6.4";
+  version = "0.6.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "napari";
     repo = "napari";
     tag = "v${version}";
-    hash = "sha256-SmFDIj170CWRuQ/rQX+Nc3cME4GCItNGkxIPPWIn7AA=";
+    hash = "sha256-F0l6GWyZ6n4HNZW7XyUk4ZBPQfrAW4DWixCaRHViDPI=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "scikit-image[data]>=0.19.1" "scikit-image"
-  '';
 
   build-system = [
     setuptools
@@ -99,6 +94,12 @@ mkDerivationWith buildPythonPackage rec {
     wrapt
   ]
   ++ dask.optional-dependencies.array;
+
+  pythonRelaxDeps = [
+    "app-model"
+    "psygnal"
+    "vispy"
+  ];
 
   postFixup = ''
     wrapQtApp $out/bin/napari
