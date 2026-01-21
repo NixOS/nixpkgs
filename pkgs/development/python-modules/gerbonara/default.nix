@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "gerbonara";
-  version = "1.5.0";
+  version = "1.6.1";
   src = fetchFromGitHub {
     owner = "jaseg";
     repo = "gerbonara";
-    rev = "v${version}";
-    hash = "sha256-yxSZuBw93wqIAw1wke80Vy/dtBcQwpQ2tQ1nwXdWi4k=";
+    tag = "v${version}";
+    hash = "sha256-kzEjfM9QrT+izwyCnNdN6Bv6lk1rzqs7tfDvERzJzzI=";
   };
 
   format = "setuptools";
