@@ -60,7 +60,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "smolagents";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-I+I7XVnYGKuATP4MIN99vx6qvDhIwcn2x25GhDIg0u0=";
   };
 
