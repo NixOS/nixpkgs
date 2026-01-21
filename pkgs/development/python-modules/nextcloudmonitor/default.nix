@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "nextcloudmonitor";
-  version = "1.5.2";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "meichthys";
     repo = "nextcloud_monitor";
     tag = "v${version}";
-    hash = "sha256-9iohznUmDusNY7iJZBcv9yn2wp3X5cS8n3Fbj/G1u0g=";
+    hash = "sha256-748cDMxPjOQFKdSt1GrQqZHmPgz20HN1+lMzo2vMj6c=";
   };
 
   patches = [
