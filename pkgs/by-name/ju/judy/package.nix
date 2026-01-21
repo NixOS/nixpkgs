@@ -29,6 +29,12 @@ stdenv.mkDerivation rec {
   # Let's wait for the upstream fix similar to https://sourceforge.net/p/judy/patches/4/
   enableParallelBuilding = false;
 
+  outputs = [
+    "out"
+    "man"
+    "dev"
+  ];
+
   meta = {
     homepage = "https://judy.sourceforge.net/";
     license = lib.licenses.lgpl21Plus;
