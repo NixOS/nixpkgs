@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "omemo-dr";
-  version = "1.0.1";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KoqMdyMdc5Sb3TdSeNTVomElK9ruUstiQayyUcIC02E=";
+    hash = "sha256-GLZUKzu37W3ONN0C8ysWQBmCuiTwFG3a4JHcuSx5pIQ=";
   };
 
   nativeBuildInputs = [ setuptools ];
