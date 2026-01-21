@@ -14,6 +14,7 @@ packages=(
   types-aiobotocore-acm-pca
   types-aiobotocore-amp
   types-aiobotocore-amplify
+  types-aiobotocore-aiops
   types-aiobotocore-amplifybackend
   types-aiobotocore-amplifyuibuilder
   types-aiobotocore-apigateway
@@ -236,6 +237,7 @@ packages=(
   types-aiobotocore-neptune
   types-aiobotocore-network-firewall
   types-aiobotocore-networkmanager
+  types-aiobotocore-networkmonitor
   types-aiobotocore-oam
   types-aiobotocore-omics
   types-aiobotocore-opensearch
@@ -258,8 +260,12 @@ packages=(
   types-aiobotocore-polly
   types-aiobotocore-pricing
   types-aiobotocore-proton
-  types-aiobotocore-quicksight
-  types-aiobotocore-ram
+  types-aiobotocore-qapps
+  types-aiobotocore-qbusiness
+  types-aiobotocore-qconnect
+  types-aiobotocore-qldb
+  types-aiobotocore-qldb-session
+  types-aiobotocore-quicksight  types-aiobotocore-ram
   types-aiobotocore-rbin
   types-aiobotocore-rds
   types-aiobotocore-rds-data

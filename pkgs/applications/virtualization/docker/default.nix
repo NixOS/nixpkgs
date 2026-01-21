@@ -277,7 +277,12 @@ let
         };
 
         patches = [
-          ./cli-system-plugin-dir-from-env.patch
+          (
+            if lib.versionOlder version "26.0.0" then
+              ./cli-system-plugin-dir-from-env-25.patch
+            else
+              ./cli-system-plugin-dir-from-env.patch
+          )
         ];
 
         vendorHash = null;
@@ -356,7 +361,6 @@ let
 
         doInstallCheck = true;
         nativeInstallCheckInputs = [ versionCheckHook ];
-        versionCheckProgramArg = "--version";
 
         passthru = {
           # Exposed for tarsum build on non-linux systems (build-support/docker/default.nix)
@@ -431,14 +435,14 @@ in
 
   docker_29 =
     let
-      version = "29.1.2";
+      version = "29.1.5";
     in
     callPackage dockerGen {
       inherit version;
       cliRev = "v${version}";
-      cliHash = "sha256-dmoCHxXOYalJCaqq32MdsAEJ+xq0aH/8fOpJHVnBxxU=";
+      cliHash = "sha256-fg18lmJsMoy7lpL4hGkIhM0LKnhEY5nl5f0YuW8yg0A=";
       mobyRev = "docker-v${version}";
-      mobyHash = "sha256-SRMaPAdg2nlWuKKQILZEGHZO6TGLh2Ci1UIWqcyo6IM=";
+      mobyHash = "sha256-iUoqJT0lIiVh5WaHzlw71QXxc3sEsSpQpADb0KveXNQ=";
       runcRev = "v1.3.4";
       runcHash = "sha256-1IfY08sBoDpbLrwz1AKBRSTuCZyOgQzYPHTDUI6fOZ8=";
       containerdRev = "v2.2.0";

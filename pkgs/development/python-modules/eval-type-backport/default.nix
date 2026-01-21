@@ -6,16 +6,16 @@
   setuptools,
   setuptools-scm,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "eval-type-backport";
-  version = "0.2.2";
+  version = "0.3.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "alexmojaki";
     repo = "eval_type_backport";
-    tag = "v${version}";
-    hash = "sha256-r+JiPBcU/6li9R/CQP0CKoWJiMgky03GKrMIsmaSJEk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-K+FrgRyxCbrKHcrUaHEJWlLp2i0xes3HwXPN9ucioZY=";
   };
 
   nativeBuildInputs = [
@@ -31,4 +31,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ PerchunPak ];
   };
-}
+})

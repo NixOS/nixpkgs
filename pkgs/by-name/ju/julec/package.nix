@@ -122,7 +122,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     ];
     mainProgram = "julec";
     maintainers = with lib.maintainers; [
-      adamperkowski
+      koi
       sebaguardian
     ];
   };

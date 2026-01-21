@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools-scm,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "napari-plugin-engine";
   version = "0.2.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "napari";

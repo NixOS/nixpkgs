@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     homepage = "https://ngyro.com/software/disarchive.html";
     license = lib.licenses.gpl3Plus;
     mainProgram = "disarchive";
-    maintainers = with lib.maintainers; [ foo-dogsquared ];
+    maintainers = [ ];
     platforms = guile.meta.platforms;
   };
 }

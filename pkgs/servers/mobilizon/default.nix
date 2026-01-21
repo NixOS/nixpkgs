@@ -19,6 +19,9 @@ in
 mixRelease rec {
   inherit (common) pname version src;
 
+  # A typo that is a build failure on elixir 1.18
+  patches = [ ./alias.patch ];
+
   nativeBuildInputs = [
     git
     cmake
@@ -46,16 +49,12 @@ mixRelease rec {
             repo = "cldr";
             rev = "v${old.version}";
             hash =
-              assert old.version == "2.37.5";
-              "sha256-T5Qvuo+xPwpgBsqHNZYnTCA4loToeBn1LKTMsDcCdYs=";
+              assert old.version == "2.44.1";
+              "sha256-5XLPQYDW9yV0ZkWbyiB2s213GTccFjdqckBmx09n4eE=";
           };
           postInstall = ''
             cp $src/priv/cldr/locales/* $out/lib/erlang/lib/ex_cldr-${old.version}/priv/cldr/locales/
           '';
-        });
-        # Upstream issue: https://github.com/bryanjos/geo_postgis/pull/87
-        geo_postgis = prev.geo_postgis.overrideAttrs (old: {
-          propagatedBuildInputs = old.propagatedBuildInputs ++ [ final.ecto ];
         });
 
         # The remainder are Git dependencies (and their deps) that are not supported by mix2nix currently.

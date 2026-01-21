@@ -4,15 +4,12 @@
   fetchFromGitHub,
   mock,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "python-decouple";
   version = "3.8";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "HBNetwork";

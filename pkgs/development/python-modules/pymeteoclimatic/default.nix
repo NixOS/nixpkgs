@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   lxml,
-  pythonOlder,
   pytestCheckHook,
   setuptools,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "pymeteoclimatic";
   version = "0.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "adrianmo";

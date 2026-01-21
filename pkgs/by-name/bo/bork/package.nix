@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation {
   };
 
   nativeBuildInputs = [
-    zig.hook
+    zig
   ];
 
   buildInputs = [

@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   setuptools,
   flask,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "flask-themes2";
   version = "1.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "Flask-Themes2";

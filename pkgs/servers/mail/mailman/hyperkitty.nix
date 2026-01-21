@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "1.3.12";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchurl {
     url = "https://gitlab.com/mailman/hyperkitty/-/releases/${version}/downloads/hyperkitty-${version}.tar.gz";
     hash = "sha256-3rWCk37FvJ6pwdXYa/t2pNpCm2Dh/qb9aWTnxmfPFh0=";

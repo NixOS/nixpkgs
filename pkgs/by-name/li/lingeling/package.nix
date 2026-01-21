@@ -17,6 +17,12 @@ stdenv.mkDerivation {
     sha256 = "1lb2g37nd8qq5hw5g6l691nx5095336yb2zlbaw43mg56hkj8357";
   };
 
+  patches = [
+    # Fix incompatible pointer type errors from GCC 15
+    # https://github.com/arminbiere/lingeling/pull/11
+    ./gcc-15.patch
+  ];
+
   configurePhase = ''
     runHook preConfigure
 

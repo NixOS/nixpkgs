@@ -2,15 +2,12 @@
   lib,
   fetchPypi,
   buildPythonPackage,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "sabyenc3";
   version = "5.4.4";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

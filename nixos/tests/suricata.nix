@@ -1,7 +1,7 @@
 { lib, pkgs, ... }:
 {
   name = "suricata";
-  meta.maintainers = lib.teams.secshell.members;
+  meta.maintainers = with lib.maintainers; [ felbinger ];
 
   nodes = {
     ids = {

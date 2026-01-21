@@ -3,10 +3,20 @@
   stdenv,
   fetchurl,
   makeWrapper,
-  jdk_headless,
+  jre_minimal,
   aapt,
 }:
 
+let
+  jre = jre_minimal.override {
+    modules = [
+      "java.base"
+      "java.desktop"
+      "java.logging"
+      "java.xml"
+    ];
+  };
+in
 stdenv.mkDerivation rec {
   pname = "apktool";
   version = "2.12.1";
@@ -28,7 +38,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -D ${src} "$out/libexec/apktool/apktool.jar"
     mkdir -p "$out/bin"
-    makeWrapper "${jdk_headless}/bin/java" "$out/bin/apktool" \
+    makeWrapper "${jre}/bin/java" "$out/bin/apktool" \
         --add-flags "-jar $out/libexec/apktool/apktool.jar" \
         --prefix PATH : ${lib.getBin aapt}
   '';

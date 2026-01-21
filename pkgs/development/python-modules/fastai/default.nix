@@ -13,15 +13,12 @@
   spacy,
   pandas,
   requests,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "fastai";
   version = "2.8.5";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

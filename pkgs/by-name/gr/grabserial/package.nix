@@ -7,7 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "grabserial";
   version = "2.1.8";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tbird20d";

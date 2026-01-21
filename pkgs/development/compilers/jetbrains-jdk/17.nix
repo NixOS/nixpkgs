@@ -60,7 +60,7 @@ openjdk17.overrideAttrs (oldAttrs: rec {
     hash = "sha256-Ckv2SNugHK75Af+ZzI91+QodOHIa5TMcjVQYsO45mQo=";
   };
 
-  env = {
+  env = (oldAttrs.env or { }) // {
     BOOT_JDK = openjdk17-bootstrap.home;
     # run `git log -1 --pretty=%ct` in jdk repo for new value on update
     SOURCE_DATE_EPOCH = 1745907200;
@@ -87,7 +87,7 @@ openjdk17.overrideAttrs (oldAttrs: rec {
         -i jb/project/tools/linux/scripts/mkimages_${arch}.sh
 
     patchShebangs .
-    ./jb/project/tools/linux/scripts/mkimages_${arch}.sh ${build} ${
+    ./jb/project/tools/linux/scripts/mkimages_${arch}.sh -w ${build} ${
       if debugBuild then "fd" else (if withJcef then "jcef" else "nomod")
     }
 

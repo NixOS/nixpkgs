@@ -21,6 +21,8 @@ rustPlatform.buildRustPackage (
       patches = [ ./web-ui-package-json.patch ];
 
       npmDepsHash = "sha256-jgsNF93DkEVgPGzdi192HKoSHPYhdrtog28jZvOLK6E=";
+      # Fix peer dependency conflicts with ESLint 9.
+      npmFlags = [ "--legacy-peer-deps" ];
 
       nativeBuildInputs = [ openapi-generator-cli ];
 
@@ -50,7 +52,7 @@ rustPlatform.buildRustPackage (
       (replaceVars ./hardcode-version.patch { inherit (finalAttrs) version; })
     ];
 
-    RUSTFLAGS = "--cfg tokio_unstable";
+    env.RUSTFLAGS = "--cfg tokio_unstable";
 
     buildFeatures = [
       "postgres"
@@ -74,7 +76,7 @@ rustPlatform.buildRustPackage (
       description = "Smart SSH, HTTPS, MySQL and Postgres bastion that requires no additional client-side software";
       homepage = "https://warpgate.null.page";
       license = lib.licenses.asl20;
-      platforms = lib.platforms.linux;
+      platforms = lib.platforms.linux ++ lib.platforms.darwin;
       mainProgram = "warpgate";
       maintainers = with lib.maintainers; [ alemonmk ];
     };

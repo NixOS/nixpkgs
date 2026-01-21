@@ -5,15 +5,12 @@
   mecab,
   swig,
   setuptools-scm,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "mecab-python3";
   version = "1.0.12";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "mecab_python3";

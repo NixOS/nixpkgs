@@ -26,7 +26,6 @@ in
 python.pkgs.buildPythonPackage rec {
   pname = "mautrix-telegram";
   version = "0.15.3";
-  disabled = python.pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mautrix";

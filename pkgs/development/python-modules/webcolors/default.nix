@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   unittestCheckHook,
   pdm-backend,
 }:
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "webcolors";
   version = "24.11.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;

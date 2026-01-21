@@ -2,10 +2,8 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  importlib-metadata,
   passlib,
   python-dateutil,
-  pythonOlder,
   scramp,
   hatchling,
   versioningit,
@@ -15,8 +13,6 @@ buildPythonPackage rec {
   pname = "pg8000";
   version = "1.31.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -32,8 +28,7 @@ buildPythonPackage rec {
     passlib
     python-dateutil
     scramp
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ];
 
   # Tests require a running PostgreSQL instance
   doCheck = false;

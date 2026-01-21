@@ -7,15 +7,15 @@
   python3Packages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "wee-slack";
-  version = "2.11.0";
+  version = "2.11.0-unstable-2026-01-07";
 
   src = fetchFromGitHub {
     repo = "wee-slack";
     owner = "wee-slack";
-    rev = "v${version}";
-    sha256 = "sha256-xQO/yi4pJSnO/ldzVQkC7UhAfpy57xzO58NV7KZm4E8=";
+    rev = "08a9cd05d482772e79d879e0b99ddd66a94d979d";
+    hash = "sha256-9S8XI+ZSzXcWOQbH6hxZ3N8VEczRE0+xxh5w9dqTL00=";
   };
 
   patches = [
@@ -25,7 +25,6 @@ stdenv.mkDerivation rec {
           name = "wee-slack-env";
           paths = with python3Packages; [
             websocket-client
-            six
           ];
         }
       }/${python3Packages.python.sitePackages}";

@@ -8,11 +8,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "medfile";
-  version = "5.0.0";
+  version = "6.0.1";
 
   src = fetchurl {
-    url = "https://files.salome-platform.org/Salome/medfile/med-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-Jn520MZ+xRwQ4xmUhOwVCLqo1e2EXGKK32YFKdzno9Q=";
+    url = "https://files.salome-platform.org/Salome/medfile/med-${finalAttrs.version}.tar.gz";
+    hash = "sha256-+PHtxodLxI2PPk6L4c9zee0xhybYq8aAToXoIVVbH6g=";
+
+    # salome uses tiger-protect-waf (https://faq.o2switch.fr/cpanel/o2switch/tiger-protect-waf/),
+    # which blocks Nixpkgs's custom UA, 403 otherwise
+    # OpenSUSE does the same: https://github.com/bmwiedemann/openSUSE/blob/08303e6e850f0de37bfabbd184dae73009f3038b/packages/m/med-tools/med-tools.spec#L32
+    curlOptsList = [
+      "--user-agent"
+      "MozillaFirefox (really Nixpkgs, see https://github.com/NixOS/nixpkgs/pull/474599)"
+    ];
   };
 
   outputs = [
@@ -21,16 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  postPatch = ''
-    # Patch cmake and source files to work with hdf5
-    substituteInPlace config/cmake_files/medMacros.cmake --replace-fail \
-      "IF (NOT HDF_VERSION_MAJOR_REF EQUAL 1 OR NOT HDF_VERSION_MINOR_REF EQUAL 12 OR NOT HDF_VERSION_RELEASE_REF GREATER 0)" \
-      "IF (HDF5_VERSION VERSION_LESS 1.12.0)"
-    substituteInPlace src/*/*.c --replace-warn \
-      "#if H5_VERS_MINOR > 12" \
-      "#if H5_VERS_MINOR > 14"
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Some medfile test files #define _a, which
     # breaks system header files that use _a as a function parameter
     substituteInPlace tests/c/*.c \

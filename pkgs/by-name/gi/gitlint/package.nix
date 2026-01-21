@@ -39,7 +39,6 @@ python3Packages.buildPythonApplication rec {
     python3Packages.pytestCheckHook
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
 
   pythonImportsCheck = [
     "gitlint"

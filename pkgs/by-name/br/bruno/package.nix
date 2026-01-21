@@ -5,6 +5,7 @@
   fetchFromGitHub,
   buildNpmPackage,
   nix-update-script,
+  nodejs_22,
   electron,
   makeWrapper,
   copyDesktopItems,
@@ -20,20 +21,22 @@
 
 buildNpmPackage rec {
   pname = "bruno";
-  version = "2.15.1";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "usebruno";
     repo = "bruno";
     tag = "v${version}";
-    hash = "sha256-REK3rJ+Svf6bLIfLwizlLa3rIBgnhQHbhzTTe8VPoc4=";
+    hash = "sha256-lvv1SJuUxNwukg/yi6mhgvVs8M/Eyf2H36NJN+6XKSE=";
 
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
     '';
   };
 
-  npmDepsHash = "sha256-CXXXyDaaoAoZhUo1YNP3PUEGzlmIaDnA+JhrCqBY1H4=";
+  nodejs = nodejs_22;
+
+  npmDepsHash = "sha256-zb0oP4/L7449z83tpcT6W/6sXS4Urph3ELN9kUC32dA=";
   npmFlags = [ "--legacy-peer-deps" ];
 
   nativeBuildInputs = [
@@ -99,6 +102,7 @@ buildNpmPackage rec {
 
     npm run build --workspace=packages/bruno-common
     npm run build --workspace=packages/bruno-graphql-docs
+    npm run build --workspace=packages/bruno-schema-types
     npm run build --workspace=packages/bruno-converters
     npm run build --workspace=packages/bruno-app
     npm run build --workspace=packages/bruno-query
@@ -164,6 +168,11 @@ buildNpmPackage rec {
           makeWrapper ${lib.getExe electron} $out/bin/bruno \
             --add-flags $out/opt/bruno/resources/app.asar \
             --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+            --prefix LD_LIBRARY_PATH : ${
+              lib.makeLibraryPath [
+                stdenv.cc.cc.lib
+              ]
+            } \
             --set-default ELECTRON_IS_DEV 0 \
             --inherit-argv0
 

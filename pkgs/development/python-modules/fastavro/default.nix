@@ -10,7 +10,6 @@
   pytestCheckHook,
   python-dateutil,
   cramjam,
-  pythonOlder,
   setuptools,
   zlib-ng,
   zstandard,
@@ -18,16 +17,14 @@
 
 buildPythonPackage rec {
   pname = "fastavro";
-  version = "1.12.0";
+  version = "1.12.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "fastavro";
     repo = "fastavro";
     tag = version;
-    hash = "sha256-r/dNXBmsNnvYbvXdZC5++1B9884dQV76pLga6u3XtO8=";
+    hash = "sha256-r/zaQ44ZPuSR1HxaqxD26kZPWREhmKP+oTOSa5QCEU4=";
   };
 
   preBuild = ''

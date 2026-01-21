@@ -8,19 +8,19 @@
 
 buildPythonPackage rec {
   pname = "zope-cachedescriptors";
-  version = "5.1";
+  version = "6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zope.cachedescriptors";
     tag = version;
-    hash = "sha256-2cb8XosPCAV2BfMisCN9mr0KIu5xcsLPIcPkmpeVT+k=";
+    hash = "sha256-PlezUzuO4P/BOVT6Ll8dYIKssC/glmVd8SCM0afgNC0=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools <= 75.6.0" setuptools
+      --replace-fail "setuptools ==" "setuptools >="
   '';
 
   build-system = [ setuptools ];

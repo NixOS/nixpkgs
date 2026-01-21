@@ -20,23 +20,18 @@
   # tests
   pytest-mock,
   pytestCheckHook,
-  setuptools,
-  virtualenv,
-  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "pyproject-api";
-  version = "1.9.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  version = "1.10.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "pyproject-api";
     tag = version;
-    hash = "sha256-Bf/FG5BNKbV3lfebEHFJ3cy80L1mWTYLXJfqPUzeNXc=";
+    hash = "sha256-fWlGGVjB43NPfBRFfOWqZUDQuqOdrFP7jsqq9xOfvaw=";
   };
 
   outputs = [
@@ -44,31 +39,23 @@ buildPythonPackage rec {
     "doc"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
     hatch-vcs
+  ];
 
+  nativeBuildInputs = [
     # docs
     sphinxHook
     furo
     sphinx-autodoc-typehints
   ];
 
-  propagatedBuildInputs = [ packaging ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  dependencies = [ packaging ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
-    setuptools
-    virtualenv
-    wheel
-  ];
-
-  disabledTests = [
-    # requires eol python2 interpreter
-    "test_can_build_on_python_2"
-    # different formatting for version specifier
-    "test_setuptools_prepare_metadata_for_build_wheel"
   ];
 
   pythonImportsCheck = [ "pyproject_api" ];

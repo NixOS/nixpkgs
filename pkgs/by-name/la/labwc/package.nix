@@ -79,7 +79,6 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
   passthru = {
     providedSessions = [ "labwc" ];

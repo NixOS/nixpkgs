@@ -20,7 +20,7 @@
 let
   pkg_path = "$out/lib/ghidra";
   pname = "ghidra";
-  version = "11.4.2";
+  version = "12.0";
 
   isMacArm64 = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
 
@@ -30,7 +30,7 @@ let
     owner = "NationalSecurityAgency";
     repo = "Ghidra";
     rev = "Ghidra_${version}_build";
-    hash = "sha256-/veSp2WuGOF0cYwUC4QFJD6kaMae5NuKrQ5Au4LjDe8=";
+    hash = "sha256-eDYbvD3Ln7twGCOBQsP8UfWAjyJUO/ofr/oitaEtCu4=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -179,7 +179,11 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     mkdir -p "$out/bin"
     ln -s "${pkg_path}/ghidraRun" "$out/bin/ghidra"
-    ln -s "${pkg_path}/support/analyzeHeadless" "$out/bin/ghidra-analyzeHeadless"
+    for bin in ${pkg_path}/support/*; do
+      if [[ -x $bin ]]; then
+        ln -s "$bin" "$out/bin/ghidra-$(basename $bin)"
+      fi
+    done
     wrapProgram "${pkg_path}/support/launch.sh" \
       --set-default NIX_GHIDRAHOME "${pkg_path}/Ghidra" \
       --prefix PATH : ${lib.makeBinPath [ openjdk21 ]}

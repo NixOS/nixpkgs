@@ -39,13 +39,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hmcl";
-  version = "3.8.1";
+  version = "3.9.2";
 
   src = fetchurl {
     # HMCL has built-in keys, such as the Microsoft OAuth secret and the CurseForge API key.
     # See https://github.com/HMCL-dev/HMCL/blob/refs/tags/release-3.6.12/.github/workflows/gradle.yml#L26-L28
     url = "https://github.com/HMCL-dev/HMCL/releases/download/v${finalAttrs.version}/HMCL-${finalAttrs.version}.jar";
-    hash = "sha256-mQ0iuIOVRETdueNbe5s9USbis6IB6n0eA2EzsMzyGng=";
+    hash = "sha256-/thuAsPadixV2vkez3w9yhkDdpJra54WkhFYaeKH0GU=";
   };
 
   # - HMCL prompts users to download prebuilt Terracotta binary for
@@ -176,7 +176,9 @@ stdenv.mkDerivation (finalAttrs: {
     makeShellWrapper ${hmclJdk}/bin/java $out/bin/hmcl \
       --add-flags "-jar $out/lib/hmcl/hmcl-terracotta-patch.jar" \
       --set LD_LIBRARY_PATH ${lib.makeLibraryPath finalAttrs.runtimeDeps} \
-      --prefix PATH : "${lib.makeBinPath minecraftJdks}" \
+      --prefix PATH : "${
+        lib.makeBinPath (minecraftJdks ++ lib.optional stdenv.hostPlatform.isLinux xorg.xrandr)
+      }" \
       --run 'cd $HOME' \
       ''${gappsWrapperArgs[@]}
   '';
@@ -200,6 +202,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     maintainers = with lib.maintainers; [
       daru-san
+      Misaka13514
       moraxyc
     ];
     inherit (hmclJdk.meta) platforms;

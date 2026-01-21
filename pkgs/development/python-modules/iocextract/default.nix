@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   regex,
   requests,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "iocextract";
   version = "1.16.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "InQuest";

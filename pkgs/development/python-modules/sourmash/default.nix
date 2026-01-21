@@ -3,7 +3,6 @@
   fetchPypi,
   buildPythonPackage,
   stdenv,
-  pythonOlder,
   rustPlatform,
   bitstring,
   cachetools,
@@ -23,7 +22,6 @@ buildPythonPackage rec {
   pname = "sourmash";
   version = "4.9.4";
   pyproject = true;
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;

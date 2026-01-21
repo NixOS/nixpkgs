@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "jsonargparse";
-  version = "4.44.0";
+  version = "4.45.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "omni-us";
     repo = "jsonargparse";
     tag = "v${version}";
-    hash = "sha256-VcCfoWT54/SGPYBOTLJuyX4507HMqwrZMQbUt0sN0Wg=";
+    hash = "sha256-bp1oQAVlFSNecE2vOyekfA8ij5Pq2PK0fasTIpoKmqs=";
   };
 
   build-system = [ setuptools ];

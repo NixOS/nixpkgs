@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation rec {
   version = "1.2";
 
   src = fetchzip {
-    url = "http://jamiewilson.io/norwester/assets/norwester.zip";
+    url = "https://jamiewilson.github.io/norwester/assets/norwester.zip";
     stripRoot = false;
     hash = "sha256-Ak/nobrQE/XYGWs/IhlZlTp74ff+s4adUR6Sht5Yf8g=";
   };
@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://jamiewilson.io/norwester";
+    homepage = "https://jamiewilson.github.io/norwester/";
     description = "Condensed geometric sans serif by Jamie Wilson";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;

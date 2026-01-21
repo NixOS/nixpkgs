@@ -11,16 +11,16 @@
   giflib,
   jellyfin,
 }:
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "jellyfin-web";
   version = "10.11.5";
 
   src =
-    assert version == jellyfin.version;
+    assert finalAttrs.version == jellyfin.version;
     fetchFromGitHub {
       owner = "jellyfin";
       repo = "jellyfin-web";
-      tag = "v${version}";
+      tag = "v${finalAttrs.version}";
       hash = "sha256-9gDGREPORJILjVqw+Kk56+5qS/TQUd8OFmsEXL7KPAE=";
     };
 
@@ -28,7 +28,7 @@ buildNpmPackage rec {
 
   postPatch = ''
     substituteInPlace webpack.common.js \
-      --replace-fail "git describe --always --dirty" "echo ${src.rev}" \
+      --replace-fail "git describe --always --dirty" "echo ${finalAttrs.src.rev}" \
   '';
 
   npmDepsHash = "sha256-AYGWZ5QvmQl8+ayjzkWuBra+QUvde36ReIJ7Fxk89VM=";
@@ -71,4 +71,4 @@ buildNpmPackage rec {
       jojosch
     ];
   };
-}
+})

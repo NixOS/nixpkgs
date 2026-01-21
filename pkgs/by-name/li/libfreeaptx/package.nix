@@ -48,6 +48,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21Plus;
     homepage = "https://github.com/iamthehorker/libfreeaptx";
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ kranzes ];
+    maintainers = [ ];
   };
 }

@@ -30,6 +30,11 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace Makefile --replace-fail \
+      ' -Werror ' ' '
+  '';
+
   buildInputs = [ curses ];
 
   installPhase = ''

@@ -22,8 +22,6 @@ buildPythonPackage rec {
   version = "0.7.9";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "napari";
     repo = "npe2";

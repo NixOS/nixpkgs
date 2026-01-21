@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   replaceVars,
   graphviz,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "pygraphviz";
   version = "1.14";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "pygraphviz";

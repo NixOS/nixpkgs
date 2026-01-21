@@ -1,10 +1,10 @@
 {
   autoPatchelfHook,
-  fetchzip,
+  fetchgit,
   lib,
   libfprint-tod,
   openssl,
-  patchelfUnstable, # have to use patchelfUnstable to support --rename-dynamic-symbols
+  patchelfUnstable,
   stdenv,
 }:
 
@@ -13,13 +13,13 @@
 #   * https://github.com/NixOS/nixpkgs/pull/260715
 let
   pname = "libfprint-2-tod1-broadcom";
-  version = "5.12.018";
+  version = "5.15.285-5.15.010.0";
 
-  src = fetchzip {
-    url = "http://dell.archive.canonical.com/updates/pool/public/libf/${pname}/${pname}_${version}.orig.tar.gz";
-    hash = "sha256-0C2PpYpEJNrU+8NT95w4QV0J5nHQisMY94Czw3jQOzw=";
-    pname = "${pname}-unpacked";
-    inherit version;
+  src = fetchgit {
+    url = "git://git.launchpad.net/~oem-solutions-engineers/libfprint-2-tod1-broadcom/";
+    branchName = "ubuntu/latest";
+    rev = "4372071d7296f40050b67e62ab256db71bd9ea30";
+    hash = "sha256-zJiRos0SrU1FxX8SfEnIv0cVy3snkRuTWaLy+MywF+Q=";
   };
 
   wrapperLibName = "wrapper-lib.so";
@@ -60,7 +60,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     autoPatchelfHook
-    patchelfUnstable
+    patchelfUnstable # have to use patchelfUnstable to support --rename-dynamic-symbols
   ];
 
   installPhase = ''
@@ -81,10 +81,13 @@ stdenv.mkDerivation {
   passthru.driverPath = "/lib/libfprint-2/tod-1";
 
   meta = {
-    description = "Broadcom driver module for libfprint-2-tod Touch OEM Driver (from Dell)";
-    homepage = "http://dell.archive.canonical.com/updates/pool/public/libf/libfprint-2-tod1-broadcom/";
+    description = "Broadcom driver module for libfprint-2-tod Touch OEM Driver for Dell ControlVault v3";
+    homepage = "https://git.launchpad.net/~oem-solutions-engineers/libfprint-2-tod1-broadcom/";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ pitkling ];
+    maintainers = with lib.maintainers; [
+      aionescu
+      pitkling
+    ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };

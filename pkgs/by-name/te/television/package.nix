@@ -5,6 +5,7 @@
   fetchFromGitHub,
   callPackage,
   installShellFiles,
+  writableTmpDirAsHomeHook,
   nix-update-script,
   testers,
   targetPackages,
@@ -19,55 +20,49 @@ let
   television = rustPlatform.buildRustPackage (finalAttrs: {
     pname = "television";
 
-    version = "0.14.1";
+    version = "0.14.5";
 
     src = fetchFromGitHub {
       owner = "alexpasmantier";
       repo = "television";
       tag = finalAttrs.version;
-      hash = "sha256-PBWadCAGfCgYcNZpkQhY9g7mrKQgkJ9UhqMjAcM/IuU=";
+      hash = "sha256-Oa/5f8FQ0WIAWNviiL2OZ+mmac6xUqp0C7ixmU6nt6Q=";
     };
 
-    cargoHash = "sha256-aa+XV1QUHjL2AjO+0AkMYimJeB7bNdb7ShrgNwevJc8=";
+    cargoHash = "sha256-rKokOLm2IcUyHiQz+PwmdnpdGTGen2U4iqcY4wsTQl4=";
 
     strictDeps = true;
     nativeBuildInputs = [
       installShellFiles
+      writableTmpDirAsHomeHook
     ];
 
     # TODO(@getchoo): Investigate selectively disabling some tests, or fixing them
     # https://github.com/NixOS/nixpkgs/pull/423662#issuecomment-3156362941
     doCheck = false;
 
-    postPatch = ''
-      # Remove keybinding overrides from shell completion scripts
-      # Users should configure their own keybindings
-
-      # Bash: Remove bind commands
-      sed -i '/^# Bind the functions to key combinations/,$d' \
-        television/utils/shell/completion.bash
-
-      # Fish: Remove bind commands for both modes
-      sed -i '/^for mode in default insert/,$d' \
-        television/utils/shell/completion.fish
-
-      # Nushell: Remove keybinding configuration
-      sed -i '/^# Bind custom keybindings/,$d' \
-        television/utils/shell/completion.nu
-
-      # Zsh: Remove zle and bindkey commands
-      sed -i '/^zle -N tv-smart-autocomplete/,$d' \
-        television/utils/shell/completion.zsh
-    '';
-
     postInstall = ''
       installManPage target/${stdenv.hostPlatform.rust.cargoShortTarget}/assets/tv.1
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      mkdir -p $out/share/television
+      for shell in bash zsh fish; do
+        "$out/bin/tv" init $shell > completion.$shell
 
-      installShellCompletion --cmd tv \
-        television/utils/shell/completion.bash \
-        television/utils/shell/completion.fish \
-        television/utils/shell/completion.nu \
-        television/utils/shell/completion.zsh
+        # split shell completion and shell integration
+        awk -v C=completion_pure.$shell -v D=$out/share/television/completion.$shell '
+          NR==FNR { key=$0; nextfile }
+          {
+            if (!found && index($0, key)) found=1
+            print > (found ? D : C)
+          }
+        ' television/utils/shell/completion.$shell completion.$shell
+
+        installShellCompletion --cmd tv completion_pure.$shell
+      done
+
+      # nushell doesn't contain regular completion for now
+      "$out/bin/tv" init nu > $out/share/television/completion.nu
     '';
 
     passthru = {

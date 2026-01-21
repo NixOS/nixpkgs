@@ -9,15 +9,12 @@
   pymdown-extensions,
   pyyaml,
   requests,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "mkdocs-mermaid2-plugin";
   version = "1.2.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "fralau";

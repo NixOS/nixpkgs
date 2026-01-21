@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cifs-utils";
-  version = "7.4";
+  version = "7.5";
 
   src = fetchurl {
     url = "https://download.samba.org/pub/linux-cifs/cifs-utils/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-UzU9BcMLT8nawAao8MUFTN2KGDTBdjE8keRpQCXEuJE=";
+    sha256 = "sha256-f6zoXj0tXrXnrb0YGt7mdZCX8TWxDW+zC+jgcK9+cFQ=";
   };
 
   nativeBuildInputs = [

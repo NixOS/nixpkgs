@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   mock,
   jinja2,
@@ -14,7 +13,6 @@ buildPythonPackage rec {
   pname = "lizard";
   version = "1.17.31";
   format = "setuptools";
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "terryyin";

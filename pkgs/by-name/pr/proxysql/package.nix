@@ -227,7 +227,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "proxysql";
     homepage = "https://proxysql.com/";
     license = with lib.licenses; [ gpl3Only ];
-    teams = [ lib.teams.helsinki-systems ];
     platforms = lib.platforms.unix;
   };
 })

@@ -28,7 +28,7 @@
   pytest-cov-stub,
   pytest-mock,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nixpkgs-updaters-library";
   version = "3.0.0";
   pyproject = true;
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "PerchunPak";
     repo = "nixpkgs-updaters-library";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-0N88valEw+QElMjy84TBKGuqqh9anKhHdW0jQfQ4qd4=";
   };
 
@@ -74,8 +74,8 @@ buildPythonPackage rec {
   meta = {
     description = "Boilerplate-less updater library for Nixpkgs ecosystems";
     homepage = "https://github.com/PerchunPak/nixpkgs-updaters-library";
-    changelog = "https://github.com/PerchunPak/nixpkgs-updaters-library/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/PerchunPak/nixpkgs-updaters-library/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ PerchunPak ];
   };
-}
+})

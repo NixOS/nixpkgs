@@ -2,18 +2,16 @@
   buildPythonPackage,
   click-odoo,
   fetchPypi,
-  importlib-resources,
   lib,
   manifestoo-core,
   nix-update-script,
-  pythonOlder,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "click-odoo-contrib";
   version = "1.23.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "click_odoo_contrib";
@@ -26,8 +24,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     click-odoo
     manifestoo-core
-  ]
-  ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
+  ];
 
   passthru.updateScript = nix-update-script { };
 

@@ -10,7 +10,6 @@
   praw,
   pyenchant,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   sqlalchemy,
   xmltodict,
@@ -23,7 +22,7 @@ buildPythonPackage rec {
   version = "8.0.4";
   pyproject = true;
 
-  disabled = isPyPy || pythonOlder "3.7";
+  disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;

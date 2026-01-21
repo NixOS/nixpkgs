@@ -13,7 +13,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "argoproj";
-    repo = "argo";
+    repo = "argo-workflows";
     tag = "v${version}";
     hash = "sha256-TM/eK8biMxKV4SFJ1Lys+NPPeaHVjbBo83k2RH1Xi40=";
   };
@@ -41,7 +41,7 @@ buildGoModule rec {
   ];
 
   postInstall = ''
-    for shell in bash zsh; do
+    for shell in bash zsh fish; do
       ${
         if (stdenv.buildPlatform == stdenv.hostPlatform) then
           "$out/bin/argo"
@@ -55,7 +55,7 @@ buildGoModule rec {
   meta = {
     description = "Container native workflow engine for Kubernetes";
     mainProgram = "argo";
-    homepage = "https://github.com/argoproj/argo";
+    homepage = "https://github.com/argoproj/argo-workflows";
     changelog = "https://github.com/argoproj/argo-workflows/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ groodt ];

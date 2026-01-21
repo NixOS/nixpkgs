@@ -1016,7 +1016,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    homepage = "https://www.freedesktop.org/wiki/Software/systemd/";
+    homepage = "https://systemd.io";
     description = "System and service manager for Linux";
     longDescription = ''
       systemd is a suite of basic building blocks for a Linux system. It

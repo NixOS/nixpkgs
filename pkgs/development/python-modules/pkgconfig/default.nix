@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "pkgconfig";
   version = "1.5.5";
-  format = "pyproject";
+  pyproject = true;
 
   inherit (pkg-config)
     setupHooks

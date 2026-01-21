@@ -19,7 +19,7 @@
 buildPythonPackage rec {
   pname = "shazamio";
   version = "0.8.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dotX12";

@@ -11,22 +11,19 @@
   pygobject3,
   pyopenssl,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "nbxmpp";
   version = "6.4.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.10";
+  pyproject = true;
 
   src = fetchFromGitLab {
     domain = "dev.gajim.org";
     owner = "gajim";
     repo = "python-nbxmpp";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-q910WbBp0TBqXw8WfYniliVGnr4Hi6dDhVDqZszSL0c=";
   };
 

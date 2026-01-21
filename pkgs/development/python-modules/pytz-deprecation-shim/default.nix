@@ -2,9 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonAtLeast,
-  pythonOlder,
-  python-dateutil,
   setuptools,
   tzdata,
   hypothesis,
@@ -16,7 +13,7 @@ buildPythonPackage rec {
   pname = "pytz-deprecation-shim";
   version = "0.1.0.post0";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "pytz_deprecation_shim";
@@ -26,9 +23,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs =
-    (lib.optionals (pythonOlder "3.6") [ python-dateutil ])
-    ++ (lib.optionals (pythonAtLeast "3.6") [ tzdata ]);
+  propagatedBuildInputs = [ tzdata ];
 
   nativeCheckInputs = [
     hypothesis

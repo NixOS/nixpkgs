@@ -43,7 +43,6 @@ buildGoModule rec {
     changelog = "https://github.com/gravitl/netmaker/-/releases/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      urandom
       qjoly
     ];
     mainProgram = "netmaker";

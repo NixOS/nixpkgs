@@ -7,7 +7,6 @@
   makeWrapper,
   packaging,
   prettytable,
-  pythonOlder,
   setuptools-scm,
   solc,
   web3,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "slither-analyzer";
   version = "0.11.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "crytic";

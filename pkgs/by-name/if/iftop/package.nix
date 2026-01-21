@@ -16,6 +16,14 @@ stdenv.mkDerivation rec {
     sha256 = "15sgkdyijb7vbxpxjavh5qm5nvyii3fqcg9mzvw7fx8s6zmfwczp";
   };
 
+  patches = [
+    # Fix build with gcc 15
+    (fetchurl {
+      url = "https://salsa.debian.org/debian/iftop/-/raw/750d49dd3fabc338586a86f5bb0a5b97a5ff5fa2/debian/patches/bug-debian-1096832-ftbfs-with-GCC-15.patch";
+      hash = "sha256-BhjN7AZNCJCqrY2IAutUYYDZkLq+TD2YnKYZxHgVdYg=";
+    })
+  ];
+
   # Explicitly link against libgcc_s, to work around the infamous
   # "libgcc_s.so.1 must be installed for pthread_cancel to work".
   LDFLAGS = lib.optionalString stdenv.hostPlatform.isLinux "-lgcc_s";

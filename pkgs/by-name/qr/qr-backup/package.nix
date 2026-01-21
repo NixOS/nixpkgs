@@ -85,7 +85,6 @@ python3Packages.buildPythonApplication rec {
 
     runHook postInstallCheck
   '';
-  versionCheckProgramArg = [ "--version" ];
 
   passthru = {
     updateScript = nix-update-script { };

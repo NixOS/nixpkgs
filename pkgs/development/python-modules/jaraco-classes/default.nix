@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "jaraco-classes";
   version = "3.4.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = isPy27;
 

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   aiohttp,
   pyjwt,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "laundrify-aio";
   version = "1.2.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "laundrify";

@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
       --replace-fail "exec[300]" "exec[400]"
   '';
 
-  makeFlags = [ "-C brcupsconfig" ];
+  makeFlags = [ "--directory=brcupsconfig" ];
 
   installPhase = ''
     runHook preInstall

@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   setuptools,
 }:
@@ -10,9 +9,7 @@ buildPythonPackage rec {
   pname = "merge3";
   version = "0.0.15";
 
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

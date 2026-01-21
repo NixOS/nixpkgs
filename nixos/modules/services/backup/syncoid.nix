@@ -27,7 +27,7 @@ let
   # Function to build "zfs allow" commands for the filesystems we've delegated
   # permissions to. It also checks if the target dataset exists before
   # delegating permissions, if it doesn't exist we delegate it to the parent
-  # dataset (if it exists). This should solve the case of provisoning new
+  # dataset (if it exists). This should solve the case of provisioning new
   # datasets.
   buildAllowCommand =
     permissions: dataset:
@@ -42,7 +42,7 @@ let
           "list"
           dataset
         ]
-      } 2> /dev/null; then
+      } 2>&1 >/dev/null; then
         ${lib.escapeShellArgs [
           "/run/booted-system/sw/bin/zfs"
           "allow"
@@ -50,7 +50,7 @@ let
           (lib.concatStringsSep "," permissions)
           dataset
         ]}
-      ${lib.optionalString ((builtins.dirOf dataset) != ".") ''
+      ${lib.optionalString ((dirOf dataset) != ".") ''
         else
           ${lib.escapeShellArgs [
             "/run/booted-system/sw/bin/zfs"
@@ -58,7 +58,7 @@ let
             cfg.user
             (lib.concatStringsSep "," permissions)
             # Remove the last part of the path
-            (builtins.dirOf dataset)
+            (dirOf dataset)
           ]}
       ''}
       fi
@@ -82,14 +82,14 @@ let
         (lib.concatStringsSep "," permissions)
         dataset
       ]}
-      ${lib.optionalString ((builtins.dirOf dataset) != ".") (
+      ${lib.optionalString ((dirOf dataset) != ".") (
         lib.escapeShellArgs [
           "/run/booted-system/sw/bin/zfs"
           "unallow"
           cfg.user
           (lib.concatStringsSep "," permissions)
           # Remove the last part of the path
-          (builtins.dirOf dataset)
+          (dirOf dataset)
         ]
       )}
     ''}";

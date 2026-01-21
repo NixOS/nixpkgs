@@ -66,6 +66,7 @@
   ffado,
   libselinux,
   libebur128,
+  bashNonInteractive,
 }:
 
 let
@@ -133,6 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
     lilv
     ncurses
     readline
+    bashNonInteractive
   ]
   ++ (
     if enableSystemd then
@@ -267,7 +269,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
     maintainers = with lib.maintainers; [
-      kranzes
       k900
     ];
     pkgConfigModules = [

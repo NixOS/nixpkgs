@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
     description = "Hot reloading for your typst files";
     homepage = "https://github.com/ItsEthra/typst-live";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.matthiasbeyer ];
     mainProgram = "typst-live";
   };
 }

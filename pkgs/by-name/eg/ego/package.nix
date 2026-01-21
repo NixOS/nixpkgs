@@ -37,7 +37,10 @@ rustPlatform.buildRustPackage rec {
     description = "Run Linux desktop applications under a different local user";
     homepage = "https://github.com/intgr/ego";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = with lib.maintainers; [
+      dit7ya
+      mio
+    ];
     mainProgram = "ego";
   };
 }

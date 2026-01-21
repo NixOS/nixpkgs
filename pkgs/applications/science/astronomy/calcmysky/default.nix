@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "calcmysky";
-  version = "0.3.5";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "10110111";
     repo = "CalcMySky";
     tag = "v${version}";
-    hash = "sha256-++011c4/IFf/5GKmFostTnxgfEdw3/GJf0e5frscCQ4=";
+    hash = "sha256-AuDHLgOS+Cu2xSJQVi8XfrINoh18STP1ox7JElafW3k=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Simulator of light scattering by planetary atmospheres";
     homepage = "https://github.com/10110111/CalcMySky";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ nickcao ];
   };
 }

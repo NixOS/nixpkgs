@@ -3,7 +3,7 @@
     { pkgs, ... }:
     let
       trivialJob = pkgs.writeTextDir "trivial.nix" ''
-        { trivial = builtins.derivation {
+        { trivial = derivation {
             name = "trivial";
             system = "${pkgs.stdenv.hostPlatform.system}";
             builder = "/bin/sh";

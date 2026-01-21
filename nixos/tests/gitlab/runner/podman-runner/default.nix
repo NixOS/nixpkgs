@@ -2,51 +2,20 @@
 # Gitlab Runner Module
 #
 # This module will add a Gitlab-Runner
-# configured similar to https://wiki.nixos.org/wiki/Gitlab_runner
 # with a nix-daemon running in a podman container `nix-daemon-container`.
-#
-# - The volumes from the `nix-daemon-container` will get mounted to
-#   each job container which Gitlab starts, which gives them access
-#   to a commonly shared Nix store.
-#
-#   - The `/nix/store` inside the job container
-#     (either image `alpineImage` or `ubuntuImage` or `nixImage`)
-#     will be read-only and nix can only store stuff into this path by using the
-#     `NIX_DAEMON` env. variable which lets it communicate through the
-#     mounted daemon socket.
-
-#   - The `bootstrapPkgs` derivation is copied into the job containers
-#     but without the Nix store paths cause they get provided by the
-#     `nix-daemon-store` volume.
-# I cannot denote these volumes because they overmount the
-# shit which is in the image.
-# TODO: make a systemd service which starts before
-# that and creates some volumes and inits these from the image.
-#
-# - The `podman-daemon-socket` volume gets mounted to the job container
-#   enabling it to use `podman`.
-#   Note: The job container instance is not using the system `podman` running in NixOS.
-#   Its a dedicated podman service `podmanDaemonContainer`
-#   running as `--privileged`
-#   [non-rootless container](https://rootlesscontaine.rs/#what-are-rootless-containers-and-what-are-not).
-#   (TODO: This podman daemon instance could be maybe run as rootless
-#   container under a user `ci` and a separated Gitlab Runner could
-#   run over this socket, effectively run only rootless containers.)
-#
-# - There is also a job runner prebuild script which is started on every job.
-#   See `scripts/prebuild.nix` to setup some missing stuff.
+# Check the documentation in the NixOS Manual.
 #
 # Debugging on the VM:
 #
-# - You can use `journalclt -u gitlab-runner.service`.
+# - You can use `journalctl -u gitlab-runner.service`.
 #
-# - To run a job container use:
+# - To run a job container inside the VM use:
 #   ```bash
 #      podman run --rm -it
 #      --volumes-from 'nix-daemon-container'
 #      -v "podman-daemon-socket:/run/podman"
 #      "local/alpine" \
-#      bash -c "export CI_PIPkELINE_ID=123456 && gitlab-runner-prebuild-script; echo hello"
+#      bash -c "export CI_PIPELINE_ID=123456 && gitlab-runner-pre-build-script; echo hello"
 #   ```
 {
   lib,
@@ -54,12 +23,9 @@
   ...
 }:
 let
-  nixRepo = pkgs.fetchFromGitHub {
-    owner = "NixOS";
-    repo = "nix";
-    rev = "2.32.4";
-    hash = "sha256-8QYnRyGOTm3h/Dp8I6HCmQzlO7C009Odqyp28pTWgcY=";
-  };
+  # Switch to not use IFD in nixpkgs test.
+  # NOTE: When reusing this runner, you can set this to `true`.
+  useIFD = false;
 
   # Either we use a Nix as the base image or Alpine.
   imageNames = {
@@ -120,8 +86,25 @@ let
 
   toEnvList = envs: lib.mapAttrsToList (k: v: "${k}=${v}") envs;
 
-  # This is the Nix base image.
-  nixImageBase = pkgs.callPackage (import (nixRepo + "/docker.nix")) {
+  # This is the Nix base image used for the Nix Daemon.
+  # The build script for the nixos/nix image is vendored due to Hydra limitations.
+  # cause it is IFD (Import from Derivation) which is not allowed.
+  # NOTE: When reusing this runner you can set `useIFD` to true:
+  nixImageBaseFn =
+    if !useIFD then
+      import ./nix-image.nix
+    else
+      import (
+        (pkgs.fetchFromGitHub {
+          owner = "NixOS";
+          repo = "nix";
+          rev = "2.32.4";
+          hash = "sha256-8QYnRyGOTm3h/Dp8I6HCmQzlO7C009Odqyp28pTWgcY=";
+        })
+        + "/docker.nix"
+      );
+
+  nixImageBase = pkgs.callPackage nixImageBaseFn {
     name = "local/nix-base";
     tag = "latest";
 

@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     makeWrapper
   ];
 
-  OPENSSL_NO_VENDOR = 1;
+  env.OPENSSL_NO_VENDOR = 1;
   buildInputs = [
     curl
     zlib

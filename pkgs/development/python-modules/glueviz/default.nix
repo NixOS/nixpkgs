@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   astropy,
   dill,
   echo,
@@ -28,8 +27,6 @@ buildPythonPackage rec {
   pname = "glueviz";
   version = "1.24.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "glue-viz";

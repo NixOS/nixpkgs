@@ -15,7 +15,6 @@
   opencv-python,
   pillow,
   requests,
-  scipy,
   soundfile,
   tqdm,
   transformers,
@@ -29,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "mlx-vlm";
-  version = "0.3.3";
+  version = "0.3.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Blaizzy";
     repo = "mlx-vlm";
     tag = "v${version}";
-    hash = "sha256-KhppKqIJPmtjgSXSC3n5HTMm3fDUJaoYJEiGfQ5vGNQ=";
+    hash = "sha256-L+llrfFo4C++JZ3GjpZi16wMZNXtKrYh3pxhZ5N1n/4=";
   };
 
   build-system = [
@@ -55,7 +54,6 @@ buildPythonPackage rec {
     opencv-python
     pillow
     requests
-    scipy
     soundfile
     tqdm
     transformers
@@ -76,6 +74,7 @@ buildPythonPackage rec {
     "test_multi_modality"
 
     # RuntimeError: [metal_kernel] No GPU back-end
+    "test_glm4v"
     "test_glm4v_moe"
     "test_kimi_vl"
   ];
@@ -92,8 +91,11 @@ buildPythonPackage rec {
   meta = {
     description = "Inference and fine-tuning of Vision Language Models (VLMs) on your Mac using MLX";
     homepage = "https://github.com/Blaizzy/mlx-vlm";
-    changelog = "https://github.com/Blaizzy/mlx-vlm/releases/tag/v${version}";
+    changelog = "https://github.com/Blaizzy/mlx-vlm/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
+    platforms = [
+      "aarch64-darwin"
+    ];
   };
 }

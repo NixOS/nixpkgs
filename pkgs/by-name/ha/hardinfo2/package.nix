@@ -51,13 +51,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hardinfo2";
-  version = "2.2.13";
+  version = "2.2.16";
 
   src = fetchFromGitHub {
     owner = "hardinfo2";
     repo = "hardinfo2";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-HRP8xjiwhlNHjW4D8y74Pshpn7bksmN5j4jhfF6KOYo=";
+    hash = "sha256-n/Rf/XKsATx3OEzYSjl+2Yzk7WSiaBkbOveA9+xR6fc=";
   };
 
   patches = [

@@ -28,11 +28,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "lbdb";
-  version = "0.56";
+  version = "0.57";
 
   src = fetchurl {
     url = "https://www.spinnaker.de/lbdb/download/lbdb-${version}.tar.gz";
-    sha256 = "sha256-uqaiO2E5TXkreyIeGWHZulcQYUyTJOj1mzXBJsK0504=";
+    sha256 = "sha256-IS/i5A317T5Ulrxegh5LBoOmyVI7iIXn6HtjS8+SOog=";
   };
 
   buildInputs = [

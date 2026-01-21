@@ -55,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
         reportlab
         odfpy
         pygobject3
+        standard-imghdr
       ]
     ))
   ];

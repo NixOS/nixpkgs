@@ -20,7 +20,7 @@
 buildPythonPackage rec {
   pname = "sphinx-tabs";
   version = "3.4.7";
-  format = "pyproject";
+  pyproject = true;
 
   outputs = [
     "out"

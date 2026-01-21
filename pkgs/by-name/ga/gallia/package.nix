@@ -8,14 +8,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gallia";
-  version = "2.0.0b3";
+  version = "2.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Fraunhofer-AISEC";
     repo = "gallia";
     tag = "v${version}";
-    hash = "sha256-/ql2EORU1oqZ/+90F0FFfRVdv6Esa5UqfaasLE4wf8k=";
+    hash = "sha256-2jiD2ZZGinfTT+35TYl3+okWkkTrY1IdfSYbjC+/cvs=";
   };
 
   postPatch = ''
@@ -32,7 +32,6 @@ python3.pkgs.buildPythonApplication rec {
     argcomplete
     boltons
     construct
-    more-itertools
     platformdirs
     pydantic
     tabulate

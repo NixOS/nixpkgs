@@ -5,7 +5,6 @@
   fetchpatch,
   ftfy,
   packaging,
-  pythonOlder,
   regex,
   setuptools,
   torch,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "clip-anytorch";
   version = "2.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "rom1504";

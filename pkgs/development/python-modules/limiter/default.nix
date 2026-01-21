@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   strenum,
   token-bucket,
 }:
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "limiter";
   version = "0.3.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "alexdelorenzo";

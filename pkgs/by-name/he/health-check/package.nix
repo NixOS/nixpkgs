@@ -39,6 +39,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ColinIanKing/health-check";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ dtzWill ];
+    maintainers = [ ];
   };
 }

@@ -17,8 +17,6 @@ python3Packages.buildPythonApplication rec {
   version = "2.8";
   pyproject = true;
 
-  disabled = python3Packages.pythonOlder "3.7";
-
   src = fetchFromSourcehut {
     owner = "~lioploum";
     repo = "offpunk";

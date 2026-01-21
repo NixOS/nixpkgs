@@ -7,6 +7,7 @@
   hatchling,
   djangorestframework,
   pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
@@ -31,8 +32,10 @@ buildPythonPackage rec {
     djangorestframework
   ];
 
-  nativeChecksInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
+    pydantic.optional-dependencies.email
   ];
 
   meta = {

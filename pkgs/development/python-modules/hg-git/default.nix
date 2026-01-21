@@ -6,15 +6,12 @@
   setuptools-scm,
   dulwich,
   mercurial,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "hg-git";
   version = "1.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "hg_git";

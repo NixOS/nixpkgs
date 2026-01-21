@@ -2,7 +2,6 @@
   lib,
   fetchPypi,
   buildPythonPackage,
-  pythonOlder,
   hatchling,
   flask,
   itsdangerous,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "flask-wtf";
   version = "1.2.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "flask_wtf";

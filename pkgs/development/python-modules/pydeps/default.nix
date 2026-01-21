@@ -5,24 +5,21 @@
   graphviz,
   stdlib-list,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   setuptools,
   toml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pydeps";
-  version = "3.0.1";
+  version = "3.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "thebjorn";
     repo = "pydeps";
-    tag = "v${version}";
-    hash = "sha256-N/WTamT981eQqxhz51Ry2OOPIecnAnYmMHlASmPpFWA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ZHD8ux3GLm5OsTkaEZfix5zgsdbLHpIxVtwKByduEzk=";
   };
 
   build-system = [ setuptools ];
@@ -56,9 +53,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python module dependency visualization";
     homepage = "https://github.com/thebjorn/pydeps";
-    changelog = "https://github.com/thebjorn/pydeps/releases/tag/v${version}";
+    changelog = "https://github.com/thebjorn/pydeps/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pydeps";
   };
-}
+})

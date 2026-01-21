@@ -181,8 +181,12 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "-m 4755 -o root" " "
   '';
 
-  env = lib.optionalAttrs stdenv.cc.isClang {
-    NIX_CFLAGS_COMPILE = "-Wno-error=int-conversion -Wno-error=incompatible-function-pointer-types";
+  env = {
+    NIX_CFLAGS_COMPILE =
+      (lib.optionalString stdenv.cc.isClang "-Wno-error=int-conversion -Wno-error=incompatible-function-pointer-types ")
+      # GCC15 defaults to C23 which is stricter about prototypes
+      # There are upstream fixes, but they are not in 3.9.4 release
+      + (lib.optionalString stdenv.cc.isGNU " -std=c17 ");
   };
 
   configureFlags = [
@@ -247,5 +251,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.all;
     mainProgram = desktopBinary;
+    # https://github.com/arakiken/mlterm/issues/157
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

@@ -66,7 +66,10 @@ stdenv.mkDerivation rec {
     # 3. Proprietary commercial software development license (removes GPL
     #    restrictions)
     license = lib.licenses.gpl2;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ bjornfor ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
+      bjornfor
+      veprbl
+    ];
   };
 }

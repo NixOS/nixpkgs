@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication {
   pname = "lerpn";
   version = "unstable-2023-06-09";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitea {
     domain = "gitea.alexisvl.rocks";

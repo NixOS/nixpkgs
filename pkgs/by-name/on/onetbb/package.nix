@@ -1,15 +1,20 @@
-{
+args@{
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
-  hwloc,
+  hwloc, # Purposefully shadowed below
   ninja,
   pkg-config,
   ctestCheckHook,
 }:
-
+let
+  # The behavior of OneTBB does not change if it is built with hwloc with support for CUDA.
+  # However, the derivation *does* change, causing rebuilds of packages like Nix.
+  # To avoid these pointless rebuilds, we make sure to always use a version of hwloc with CUDA
+  # support disabled.
+  hwloc = args.hwloc.override { enableCuda = false; };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "onetbb";
   version = "2022.3.0";
@@ -52,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     hwloc
   ];
 
-  doCheck = true;
+  doCheck = !stdenv.hostPlatform.isStatic;
 
   dontUseNinjaCheck = true;
 
@@ -71,6 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "TBB_DISABLE_HWLOC_AUTOMATIC_SEARCH" false)
+    (lib.cmakeBool "TBB_TEST" finalAttrs.finalPackage.doCheck)
   ];
 
   env = {
@@ -99,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
       template-based runtime library can help you harness the latent
       performance of multi-core processors.
     '';
-    platforms = lib.platforms.all;
+    platforms = lib.subtractLists lib.platforms.cygwin lib.platforms.all;
     # oneTBB does not support static builds
     # "You are building oneTBB as a static library. This is highly discouraged and such configuration is not supported. Consider building a dynamic library to avoid unforeseen issues."
     # https://github.com/uxlfoundation/oneTBB/blob/db7891a246cafbb90719c3dee497d96889ca692b/CMakeLists.txt#L160

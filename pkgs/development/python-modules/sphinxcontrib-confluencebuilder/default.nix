@@ -5,22 +5,19 @@
   fetchPypi,
   flit-core,
   jinja2,
-  pythonOlder,
   requests,
   sphinx,
 }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-confluencebuilder";
-  version = "2.16.0";
+  version = "3.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "sphinxcontrib_confluencebuilder";
     inherit version;
-    hash = "sha256-/DAmVxbqFbEuYp0wpJXL/orw8GMDeDkLrXq2XAHTKOA=";
+    hash = "sha256-+Z4rsqozJ3DWrg7SYr7dh7CIQlCgpX9Fj6lJmcCxoMk=";
   };
 
   build-system = [ flit-core ];

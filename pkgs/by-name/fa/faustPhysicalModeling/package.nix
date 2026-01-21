@@ -8,13 +8,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "faustPhysicalModeling";
-  version = "2.79.3";
+  version = "2.83.1";
 
   src = fetchFromGitHub {
     owner = "grame-cncm";
     repo = "faust";
     rev = version;
-    sha256 = "sha256-j5ADlKZriwLARpEJ/4xgvyAhF5ld9Hl2gXZS3NPJJj8=";
+    sha256 = "sha256-c1I5ha9QvnC7jKdycAhW/iAzUcEA7NopXAquIS001Y8=";
   };
 
   nativeBuildInputs = [

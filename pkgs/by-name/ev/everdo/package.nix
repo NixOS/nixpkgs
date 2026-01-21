@@ -8,8 +8,8 @@ let
   version = "1.9.0";
 
   src = fetchurl {
-    url = "https://release.everdo.net/${version}/Everdo-${version}.AppImage";
-    hash = "sha256-0yxAzM+qmgm4E726QDYS9QwMdp6dUcuvjZzWYEZx7kU=";
+    url = "https://downloads.everdo.net/electron/Everdo-${version}.AppImage";
+    hash = "sha256-mM2rCjK548kjNR60Mr/YxBiVk+jxuVU01B9GHfIp1Mk=";
   };
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };

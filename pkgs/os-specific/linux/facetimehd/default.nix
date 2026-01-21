@@ -45,7 +45,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       womfoo
-      grahamc
       kraem
     ];
     platforms = [

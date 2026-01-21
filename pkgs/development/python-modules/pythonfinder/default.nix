@@ -1,14 +1,12 @@
 {
   lib,
   buildPythonPackage,
-  cached-property,
   click,
   fetchFromGitHub,
   packaging,
   pytest-cov-stub,
   pytest-timeout,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -16,8 +14,6 @@ buildPythonPackage rec {
   pname = "pythonfinder";
   version = "3.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sarugaku";
@@ -28,7 +24,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [ packaging ] ++ lib.optionals (pythonOlder "3.8") [ cached-property ];
+  propagatedBuildInputs = [ packaging ];
 
   optional-dependencies = {
     cli = [ click ];

@@ -68,7 +68,7 @@ buildGoModule rec {
     homepage = "https://yktoo.com/en/software/ymuse/";
     description = "GTK client for Music Player Daemon (MPD)";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ foo-dogsquared ];
+    maintainers = [ ];
     mainProgram = "ymuse";
     platforms = lib.platforms.unix;
   };

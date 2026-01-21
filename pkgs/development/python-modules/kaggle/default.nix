@@ -62,6 +62,6 @@ buildPythonPackage rec {
     mainProgram = "kaggle";
     homepage = "https://github.com/Kaggle/kaggle-api";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ mbalatsko ];
+    maintainers = [ ];
   };
 }

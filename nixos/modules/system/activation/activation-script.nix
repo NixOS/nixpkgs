@@ -50,8 +50,6 @@ let
       ) withHeadlines;
     in
     ''
-      #!${pkgs.runtimeShell}
-
       source ${./lib/lib.sh}
 
       systemConfig='@out@'

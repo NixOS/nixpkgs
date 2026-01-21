@@ -19,14 +19,14 @@
 }:
 llvmPackages_20.stdenv.mkDerivation {
   pname = "xenia-canary";
-  version = "0-unstable-2025-12-10";
+  version = "0-unstable-2026-01-10";
 
   src = fetchFromGitHub {
     owner = "xenia-canary";
     repo = "xenia-canary";
     fetchSubmodules = true;
-    rev = "4cbcae5b649378d9e839e58e42a121d3a4e69d99";
-    hash = "sha256-VDdwlXAJAIvVWjCDurQdOW96xsykrG8W203bMXSZG/U=";
+    rev = "81656a97299c6fd01ea44e45e11af309c9f99b95";
+    hash = "sha256-UFDcS1AVNjxTBwSVKVDkL6sqyZ0bjzdvMii1pve9mxE=";
   };
 
   dontConfigure = true;

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   flit-core,
   python-dateutil,
   types-python-dateutil,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "arrow";
   version = "1.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

@@ -37,7 +37,7 @@ builtins.mapAttrs
         changelog = "https://github.com/projectcalico/calico/releases/tag/v${version}";
         description = "Cloud native networking and network security";
         license = lib.licenses.asl20;
-        maintainers = with lib.maintainers; [ urandom ];
+        maintainers = [ ];
         platforms = lib.platforms.linux;
         inherit mainProgram;
       };

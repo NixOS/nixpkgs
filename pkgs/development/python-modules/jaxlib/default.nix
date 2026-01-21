@@ -230,7 +230,7 @@ let
       owner = "google";
       repo = "jax";
       # google/jax contains tags for jax and jaxlib. Only use jaxlib tags!
-      rev = "refs/tags/${pname}-v${version}";
+      tag = "${pname}-v${version}";
       hash = "sha256-qSHPwi3is6Ts7pz5s4KzQHBMbcjGp+vAOsejW3o36Ek=";
     };
 

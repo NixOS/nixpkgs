@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "elasticsearch8";
-  version = "8.19.2";
+  version = "8.19.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lDfI5RI8JgtZdmGDv9kVIGdyVChJtpf3inlEbsiQqA4=";
+    hash = "sha256-fv/pWzYCQbbVbvaCGQN6kK0PVnI2FNtUu+V9MwWEAvQ=";
   };
 
   build-system = [ hatchling ];

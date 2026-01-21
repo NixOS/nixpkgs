@@ -25,8 +25,10 @@ let
     # The Gitlab runner where each job runs
     # on the host (not containerized and very insecure).
     shell = {
+      enabled = true; # Works on all systems.
       desc = "Shell runner (host NixOS shell, host Nix store)";
       name = "shell";
+      path = ./runner/shell-runner.nix;
       tokenFile = "${runnerTokenDir}/token-shell.env";
     };
 
@@ -36,8 +38,12 @@ let
     #  - All jobs run in an unprivileged container, e.g. with image
     #    (`local/nix`, `local/alpine`, `local/ubuntu`)
     podman = {
+      # Only enabled on x86_64-linux: due to container images.
+      # TODO: See https://github.com/NixOS/nixpkgs/issues/474409
+      enabled = pkgs.stdenv.buildPlatform.isx86_64;
       desc = "Podman runner (containers, shared containerized Nix store)";
       name = "podman";
+      path = ./runner/podman-runner;
       tokenFile = "${runnerTokenDir}/token-podman.env";
     };
   };
@@ -54,17 +60,14 @@ in
       {
         imports = [
           ../common/user-account.nix
-          (import ./runner/shell-runner.nix {
-            runnerConfig = runnerConfigs.shell;
-          })
         ]
-        # Only enable the podman runner on x86_64
-        # cause of built images.
-        ++ (lib.optional pkgs.stdenv.buildPlatform.isx86_64 (
-          import ./runner/podman-runner {
-            runnerConfig = runnerConfigs.podman;
+        # Include all runners which are enabled.
+        ++ (lib.mapAttrsToList (
+          k: runnerConfig:
+          import runnerConfig.path {
+            inherit runnerConfig;
           }
-        ));
+        ) (lib.filterAttrs (k: runnerCfg: runnerCfg.enabled) runnerConfigs));
 
         virtualisation = {
           diskSize = 10000;
@@ -169,10 +172,17 @@ in
 
       # Run all tests.
       test_connection()
-      test_register_runner(name="shell", tokenFile="${runnerConfigs.shell.tokenFile}")
-      test_register_runner(name="podman", tokenFile="${runnerConfigs.podman.tokenFile}")
+
+      # Register all runners which are enabled.
+      for name, tokenFile, enabled in [
+          ("shell", "${runnerConfigs.shell.tokenFile}", "${lib.boolToString runnerConfigs.shell.enabled}"),
+          ("podman", "${runnerConfigs.podman.tokenFile}", "${lib.boolToString runnerConfigs.podman.enabled}")]:
+        if enabled == "true":
+          test_register_runner(name=name, tokenFile=tokenFile)
+
       restart_gitlab_runner_service(runnerConfigs)
-      test_runner_registered(runnerConfigs["shell"])
-      test_runner_registered(runnerConfigs["podman"])
+
+      for config in runnerConfigs.values():
+        test_runner_registered(config)
     '';
 }

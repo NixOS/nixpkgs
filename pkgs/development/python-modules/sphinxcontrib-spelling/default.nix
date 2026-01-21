@@ -2,8 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
-  importlib-metadata,
   sphinx,
   pyenchant,
   setuptools,
@@ -14,9 +12,7 @@
 buildPythonPackage rec {
   pname = "sphinxcontrib-spelling";
   version = "8.0.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sphinx-contrib";
@@ -34,8 +30,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     sphinx
     pyenchant
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ];
 
   # No tests included
   doCheck = false;

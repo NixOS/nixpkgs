@@ -27,6 +27,12 @@ let
   cross = stdenv.hostPlatform != stdenv.buildPlatform;
 in
 {
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals (hasFeature "man-pages") [
+    "man"
+  ];
   src =
     if overrideSrc != { } then
       overrideSrc

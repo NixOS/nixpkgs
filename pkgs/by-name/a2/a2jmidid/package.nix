@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     domain = "gitea.ladish.org";
     owner = "LADI";
     repo = "a2jmidid";
-    rev = "refs/tags/${version}";
+    tag = version;
     fetchSubmodules = true;
     hash = "sha256-PZKGhHmPMf0AucPruOLB9DniM5A3BKdghFCrd5pTzeM=";
   };

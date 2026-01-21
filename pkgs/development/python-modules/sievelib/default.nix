@@ -4,7 +4,6 @@
   fetchPypi,
   mock,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
   typing-extensions,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "sievelib";
   version = "1.4.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

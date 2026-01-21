@@ -5,7 +5,6 @@
   pytestCheckHook,
   setuptools,
   ward,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   version = "0.21.0";
 
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;

@@ -612,6 +612,7 @@ let
 
           tests = {
             postgresql = nixosTests.postgresql.postgresql.passthru.override finalAttrs.finalPackage;
+            postgresql-replication = nixosTests.postgresql.postgresql-replication.passthru.override finalAttrs.finalPackage;
             postgresql-tls-client-cert = nixosTests.postgresql.postgresql-tls-client-cert.passthru.override finalAttrs.finalPackage;
             postgresql-wal-receiver = nixosTests.postgresql.postgresql-wal-receiver.passthru.override finalAttrs.finalPackage;
             pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;

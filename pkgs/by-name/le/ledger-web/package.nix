@@ -26,7 +26,6 @@ bundlerApp {
     homepage = "https://github.com/peterkeen/ledger-web";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      manveru
       nicknovitski
     ];
     platforms = lib.platforms.linux;

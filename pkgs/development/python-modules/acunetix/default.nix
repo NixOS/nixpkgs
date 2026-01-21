@@ -3,7 +3,6 @@
   aiofiles,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   requests,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage {
   pname = "acunetix";
   version = "0.0.7";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "hikariatama";

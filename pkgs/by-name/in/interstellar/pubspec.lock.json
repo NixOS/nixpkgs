@@ -160,6 +160,16 @@
       "source": "hosted",
       "version": "1.4.0"
     },
+    "charcode": {
+      "dependency": "transitive",
+      "description": {
+        "name": "charcode",
+        "sha256": "fb0f1107cac15a5ea6ef0a6ef71a807b9e4267c713bb93e00e92d737cc8dbd8a",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.4.0"
+    },
     "checked_yaml": {
       "dependency": "transitive",
       "description": {
@@ -201,7 +211,7 @@
       "version": "4.11.0"
     },
     "collection": {
-      "dependency": "transitive",
+      "dependency": "direct main",
       "description": {
         "name": "collection",
         "sha256": "2f5709ae4d3d59dd8f7cd309b4e023046b57d8a6c82130785d2b0e5868084e76",
@@ -260,6 +270,16 @@
       "source": "hosted",
       "version": "3.1.2"
     },
+    "db_viewer": {
+      "dependency": "transitive",
+      "description": {
+        "name": "db_viewer",
+        "sha256": "5f7e3cfcde9663321797d8f6f0c876f7c13f0825a2e77ec1ef065656797144d9",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.1.0"
+    },
     "dbus": {
       "dependency": "transitive",
       "description": {
@@ -269,6 +289,46 @@
       },
       "source": "hosted",
       "version": "0.7.11"
+    },
+    "drift": {
+      "dependency": "direct main",
+      "description": {
+        "name": "drift",
+        "sha256": "540cf382a3bfa99b76e51514db5b0ebcd81ce3679b7c1c9cb9478ff3735e47a1",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "2.28.2"
+    },
+    "drift_db_viewer": {
+      "dependency": "direct main",
+      "description": {
+        "name": "drift_db_viewer",
+        "sha256": "5ea77858c52b55460a1e8f34ab5f88324621d486717d876fd745765fbc227f3f",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "2.1.0"
+    },
+    "drift_dev": {
+      "dependency": "direct dev",
+      "description": {
+        "name": "drift_dev",
+        "sha256": "4db0eeedc7e8bed117a9f22d867ab7a3a294300fed5c269aac90d0b3545967ca",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "2.28.3"
+    },
+    "drift_flutter": {
+      "dependency": "direct main",
+      "description": {
+        "name": "drift_flutter",
+        "sha256": "b7534bf320aac5213259aac120670ba67b63a1fd010505babc436ff86083818f",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.2.7"
     },
     "dynamic_color": {
       "dependency": "direct main",
@@ -425,6 +485,16 @@
       "description": "flutter",
       "source": "sdk",
       "version": "0.0.0"
+    },
+    "flutter_colorpicker": {
+      "dependency": "direct main",
+      "description": {
+        "name": "flutter_colorpicker",
+        "sha256": "969de5f6f9e2a570ac660fb7b501551451ea2a1ab9e2097e89475f60e07816ea",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.1.0"
     },
     "flutter_launcher_icons": {
       "dependency": "direct dev",
@@ -988,11 +1058,11 @@
       "dependency": "transitive",
       "description": {
         "name": "meta",
-        "sha256": "e3641ec5d63ebf0d9b41bd43201a66e3fc79a65db5f61fc181f04cd27aab950c",
+        "sha256": "23f08335362185a5ea2ad3a4e597f1375e78bce8a040df5c600c8d3552ef2394",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.16.0"
+      "version": "1.17.0"
     },
     "mime": {
       "dependency": "direct main",
@@ -1213,6 +1283,16 @@
       },
       "source": "hosted",
       "version": "1.5.0"
+    },
+    "recase": {
+      "dependency": "transitive",
+      "description": {
+        "name": "recase",
+        "sha256": "e4eb4ec2dcdee52dcf99cb4ceabaffc631d7424ee55e56f280bc039737f89213",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "4.1.0"
     },
     "safe_local_storage": {
       "dependency": "transitive",
@@ -1490,6 +1570,36 @@
       "source": "hosted",
       "version": "7.0.0"
     },
+    "sqlite3": {
+      "dependency": "direct main",
+      "description": {
+        "name": "sqlite3",
+        "sha256": "3145bd74dcdb4fd6f5c6dda4d4e4490a8087d7f286a14dee5d37087290f0f8a2",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "2.9.4"
+    },
+    "sqlite3_flutter_libs": {
+      "dependency": "transitive",
+      "description": {
+        "name": "sqlite3_flutter_libs",
+        "sha256": "69c80d812ef2500202ebd22002cbfc1b6565e9ff56b2f971e757fac5d42294df",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.5.40"
+    },
+    "sqlparser": {
+      "dependency": "transitive",
+      "description": {
+        "name": "sqlparser",
+        "sha256": "57090342af1ce32bb499aa641f4ecdd2d6231b9403cea537ac059e803cc20d67",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.41.2"
+    },
     "stack_trace": {
       "dependency": "transitive",
       "description": {
@@ -1564,11 +1674,11 @@
       "dependency": "transitive",
       "description": {
         "name": "test_api",
-        "sha256": "522f00f556e73044315fa4585ec3270f1808a4b186c936e612cab0b565ff1e00",
+        "sha256": "ab2726c1a94d3176a45960b6234466ec367179b87dd74f1611adb1f3b5fb9d55",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.7.6"
+      "version": "0.7.7"
     },
     "timezone": {
       "dependency": "transitive",
@@ -1993,6 +2103,6 @@
   },
   "sdks": {
     "dart": ">=3.9.0 <4.0.0",
-    "flutter": "3.35.4"
+    "flutter": "3.38.4"
   }
 }

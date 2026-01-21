@@ -6,10 +6,12 @@
   git,
   pkg-config,
   boost,
-  eigen_3_4_0,
+  eigen_5,
   glm,
+  gcc,
   libGL,
   libpng,
+  makeWrapper,
   openexr,
   onetbb,
   xorg,
@@ -20,14 +22,14 @@
 
 stdenv.mkDerivation {
   pname = "curv";
-  version = "0.5-unstable-2025-01-20";
+  version = "0.5-unstable-2026-01-17";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "doug-moen";
     repo = "curv";
-    rev = "ef082c6612407dd8abce06015f9a16b1ebf661b8";
-    hash = "sha256-BGL07ZBA+ao3fg3qp56sVTe+3tM2SOp8TGu/jF7SVlM=";
+    rev = "1c2eb68e47e3c61a98e39cd3c50f90691c5a268d";
+    hash = "sha256-PuRBnJswrg+PjtU6ize+PjoBpQSSEzO2CeCx9mQF+3w=";
     fetchSubmodules = true;
   };
 
@@ -36,11 +38,12 @@ stdenv.mkDerivation {
     cmake
     git
     pkg-config
+    makeWrapper
   ];
 
   buildInputs = [
     boost
-    eigen_3_4_0
+    eigen_5
     glm
     libGL
     libpng
@@ -73,6 +76,18 @@ stdenv.mkDerivation {
   postPatch = ''
     substituteInPlace extern/googletest/googletest/CMakeLists.txt \
       --replace-fail "cmake_minimum_required(VERSION 2.6.2)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
+  ## support runtime compilation with -Ojit
+  fixupPhase = ''
+    wrapProgram $out/bin/curv \
+      --set NIX_CFLAGS_COMPILE_${gcc.suffixSalt} "$NIX_CFLAGS_COMPILE" \
+      --set NIX_LDFLAGS_${gcc.suffixSalt} "$NIX_LDFLAGS" \
+      --prefix PATH : "${
+        lib.makeBinPath [
+          gcc
+        ]
+      }"
   '';
 
   passthru.updateScript = unstableGitUpdater { };

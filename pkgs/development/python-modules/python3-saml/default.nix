@@ -7,7 +7,6 @@
   isodate,
   lxml,
   pytestCheckHook,
-  pythonOlder,
   poetry-core,
   xmlsec,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "python3-saml";
   version = "1.16.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "onelogin";

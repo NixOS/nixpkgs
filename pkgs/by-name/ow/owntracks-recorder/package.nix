@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/owntracks/recorder/blob/master/Changelog";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ gaelreyrol ];
+    maintainers = [ ];
     mainProgram = "ot-recorder";
   };
 })

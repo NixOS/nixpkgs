@@ -3,8 +3,10 @@
   fetchFromGitHub,
   rustPlatform,
   pkgsBuildBuild,
+  oniguruma,
   stdenv,
   zlib,
+  pkg-config,
   writableTmpDirAsHomeHook,
 }:
 
@@ -26,14 +28,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
     (pkgsBuildBuild.writeShellScriptBin "git" "echo 0000000")
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+  buildInputs = [
+    oniguruma
+  ]
+  ++ (lib.optionals stdenv.hostPlatform.isDarwin [
     zlib
-  ];
+  ]);
 
   # Needing libgit2 <=1.8.0
   #env.LIBGIT2_NO_VENDOR = 1;
 
+  # bundled oniguruma failed on gcc15
+  env.RUSTONIG_SYSTEM_LIBONIG = 1;
+
   nativeCheckInputs = [
+    pkg-config
     writableTmpDirAsHomeHook
   ];
 

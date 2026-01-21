@@ -7,7 +7,6 @@
   poetry-core,
   poetry-dynamic-versioning,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   requests,
   responses,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "pysolcast";
   version = "2.0.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "mcaulifn";

@@ -33,7 +33,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-p1gqom9saNEIm6FXinEuIJtMGwjGfQx9uLpR2kb46Uw=";
   };
 
-  format = "other";
+  pyproject = false;
 
   patches = [ ./update-compatible-with-non-flatpak-env.patch ];
   postPatch = ''
@@ -93,7 +93,7 @@ python3Packages.buildPythonApplication rec {
     description = "Intuitive text extraction tool (OCR) for GNOME desktop";
     license = lib.licenses.mit;
     mainProgram = "frog";
-    maintainers = with lib.maintainers; [ foo-dogsquared ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

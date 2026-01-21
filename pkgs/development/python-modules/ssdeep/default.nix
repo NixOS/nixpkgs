@@ -6,15 +6,12 @@
   pytestCheckHook,
   six,
   ssdeep,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "ssdeep";
   version = "3.4.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "DinoTools";

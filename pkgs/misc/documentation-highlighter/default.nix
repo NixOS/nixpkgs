@@ -6,7 +6,6 @@ runCommand "documentation-highlighter"
       homepage = "https://highlightjs.org";
       license = lib.licenses.bsd3;
       platforms = lib.platforms.all;
-      maintainers = [ lib.maintainers.grahamc ];
     };
     src = lib.sources.cleanSourceWith {
       src = ./.;

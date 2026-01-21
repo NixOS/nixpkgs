@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   aniso8601,
   jsonschema,
   flask,
@@ -26,8 +25,6 @@ buildPythonPackage rec {
   pname = "flask-restx";
   version = "1.3.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   # Tests not included in PyPI tarball
   src = fetchFromGitHub {

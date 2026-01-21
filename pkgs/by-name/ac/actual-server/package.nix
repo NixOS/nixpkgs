@@ -11,14 +11,15 @@
   nixosTests,
 }:
 let
-  yarn-berry = yarn-berry_4;
-  version = "25.12.0";
+  nodejs = nodejs_22;
+  yarn-berry = yarn-berry_4.override { inherit nodejs; };
+  version = "26.1.0";
   src = fetchFromGitHub {
     name = "actualbudget-actual-source";
     owner = "actualbudget";
     repo = "actual";
     tag = "v${version}";
-    hash = "sha256-hu5Y67vomAJI1IJ1gLAdapRACDW/Q+cOAB+Bo4uQ9+w=";
+    hash = "sha256-WjWmiosDgEj3vTsOIKysR5HrNzkApQppUsdSil4Umbo=";
   };
   translations = fetchFromGitHub {
     name = "actualbudget-translations-source";
@@ -26,8 +27,8 @@ let
     repo = "translations";
     # Note to updaters: this repo is not tagged, so just update this to the Git
     # tip at the time the update is performed.
-    rev = "570f8db9dd436810e014d587b4d27105bce7dfda";
-    hash = "sha256-fVyO4rMgbdI1Hm3J4ka9/72sNcwlfLS6Ef06YUvx4Gs=";
+    rev = "813c3d7cc8feb667c0ea3c25ba13156d75475cfe";
+    hash = "sha256-Qv9FFQCZv6WxYffP1W8Hdw15NDiGhkTeAUbyrOV5wxw=";
   };
 
 in
@@ -40,8 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     yarn-berry
-    nodejs_22
-    yarn-berry.yarnBerryConfigHook
+    nodejs
+    (yarn-berry.yarnBerryConfigHook.override { inherit nodejs; })
     (python3.withPackages (ps: [ ps.setuptools ])) # Used by node-gyp
     makeWrapper
   ]
@@ -94,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-Hlc/UMPfZCBbBcmCzmNgDSX+uH8WDEIp/KE9H5jYr2Y=";
+    hash = "sha256-7CxsRmuA53JZJa8IznJKGVvHzE7CeM7XklIZznRqXis=";
   };
 
   pname = "actual-server";
@@ -120,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
     rm -r node_modules/.bin
     cp -r ./node_modules $out/lib/actual/
 
-    makeWrapper ${lib.getExe nodejs_22} "$out/bin/actual-server" \
+    makeWrapper ${lib.getExe nodejs} "$out/bin/actual-server" \
       --add-flags "$out/lib/actual/packages/sync-server/bin/actual-server.js" \
       --set NODE_PATH "$out/actual/lib/node_modules"
 
@@ -143,6 +144,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [
       lib.maintainers.oddlama
       lib.maintainers.patrickdag
+      lib.maintainers.yash-garg
     ];
   };
 })

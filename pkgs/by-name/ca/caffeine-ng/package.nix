@@ -13,14 +13,14 @@
   xset,
   xautolock,
   xscreensaver,
-  xfce,
+  xfconf,
   wrapGAppsHook3,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "caffeine-ng";
   version = "4.2.0";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitea {
     domain = "codeberg.org";
@@ -74,7 +74,7 @@ python3Packages.buildPythonApplication rec {
           procps
           xautolock
           xscreensaver
-          xfce.xfconf
+          xfconf
           xset
         ]
       }

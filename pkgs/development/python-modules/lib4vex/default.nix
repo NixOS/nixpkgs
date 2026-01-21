@@ -5,7 +5,6 @@
   csaf-tool,
   lib4sbom,
   packageurl-python,
-  pythonOlder,
   setuptools,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "lib4vex";
   version = "0.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "anthonyharrison";

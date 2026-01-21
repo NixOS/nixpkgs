@@ -3,7 +3,6 @@
   buildPythonPackage,
   crc,
   fetchPypi,
-  pythonOlder,
   setuptools-scm,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "apycula";
   version = "0.28";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

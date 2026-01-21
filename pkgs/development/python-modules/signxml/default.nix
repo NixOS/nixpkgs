@@ -7,7 +7,6 @@
   lxml,
   pyopenssl,
   pytestCheckHook,
-  pythonOlder,
   hatchling,
   hatch-vcs,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "signxml";
   version = "4.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "XML-Security";

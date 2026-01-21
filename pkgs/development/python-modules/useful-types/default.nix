@@ -8,7 +8,7 @@
 buildPythonPackage rec {
   pname = "useful-types";
   version = "0.2.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit version;

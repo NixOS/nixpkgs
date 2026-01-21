@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   pythonRelaxDepsHook,
   requests,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "coinbase-advanced-py";
   version = "1.8.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "coinbase";

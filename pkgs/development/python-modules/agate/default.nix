@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   babel,
   buildPythonPackage,
   cssselect,
@@ -21,8 +22,6 @@ buildPythonPackage rec {
   pname = "agate";
   version = "1.14.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "wireservice";
@@ -48,6 +47,11 @@ buildPythonPackage rec {
     lxml
     pyicu
     pytestCheckHook
+  ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # Output is slightly different on macOS
+    "test_cast_format_locale"
   ];
 
   pythonImportsCheck = [ "agate" ];

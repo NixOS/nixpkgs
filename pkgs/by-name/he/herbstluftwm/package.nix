@@ -78,7 +78,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/herbstluftwm/herbstluftwm/commit/1a6e8ee24eac671569f54bfec22ab47ff285a52c.patch";
       hash = "sha256-srulWJQ9zTR4Kdxo40AdHND4nexDe2PDSR69yWsOpVA=";
     })
-
+    # Fix build with GCC 15 (missing #include <stdint.h>), can be removed with the next release (>0.9.5)
+    (fetchpatch {
+      url = "https://github.com/herbstluftwm/herbstluftwm/commit/8ff75588a750704ae06ad59b843eb88138c95653.patch";
+      hash = "sha256-mrViVcW3jZes1QMn5It0t2WfLfwl/WNF6k9yz1fm/Gs=";
+    })
   ];
 
   postPatch = ''

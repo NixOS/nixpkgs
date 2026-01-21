@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "VictoriaLogs";
-  version = "1.38.0";
+  version = "1.43.1";
 
   src = fetchFromGitHub {
     owner = "VictoriaMetrics";
     repo = "VictoriaLogs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UosxxeTZzM/f2rqUdMqPxHgnu57/dUc/X7gFOySy+M4=";
+    hash = "sha256-Tez8XTOLcuuOOVXt3cgOfRyXldP1b9ox9N9Ddm28E7I=";
   };
 
   vendorHash = null;
@@ -36,7 +36,7 @@ buildGoModule (finalAttrs: {
   postPatch = ''
     # Relax go version to major.minor
     sed -i -E 's/^(go[[:space:]]+[[:digit:]]+\.[[:digit:]]+)\.[[:digit:]]+$/\1/' go.mod
-    sed -i -E 's/^(go[[:space:]]+[[:digit:]]+\.[[:digit:]]+)\.[[:digit:]]+$/\1/' vendor/modules.txt
+    sed -i -E 's/^(## explicit; go[[:space:]]+[[:digit:]]+\.[[:digit:]]+)\.[[:digit:]]+$/\1/' vendor/modules.txt
   '';
 
   ldflags = [

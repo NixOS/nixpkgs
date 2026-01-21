@@ -1,72 +1,143 @@
 {
   lib,
   stdenv,
-  fetchzip,
+  buildNpmPackage,
+  buildDotnetModule,
+  fetchFromGitHub,
   autoPatchelfHook,
-  gcc-unwrapped,
-  zlib,
-  lttng-ust_2_12,
+  dotnetCorePackages,
+  bun,
   icu,
   openssl,
-  makeBinaryWrapper,
+  krb5,
 }:
 
 let
-  _supportedPlatforms = {
-    "armv7l-linux" = "linux-arm7";
-    "x86_64-linux" = "linux-x64";
-    "aarch64-linux" = "linux-arm64";
-  };
-  _platform = _supportedPlatforms."${stdenv.hostPlatform.system}";
-  # nix --extra-experimental-features nix-command hash convert --to sri "sha256:`nix-prefetch-url --unpack https://updates.duplicati.com/stable/duplicati-2.1.0.5_stable_2025-03-04-linux-arm64-cli.zip`"
-  _fileHashForSystem = {
-    "armv7l-linux" = "sha256-FQQ07M0rwvxNkHPW6iK5WBTKgFrZ4LOP4vgINfmtq4k=";
-    "x86_64-linux" = "sha256-1QspF/A3hOtqd8bVbSqClJIHUN9gBrd18J5qvZJLkQE=";
-    "aarch64-linux" = "sha256-mSNInaCkNf1MBZK2M42SjJnYRtB5SyGMvSGSn5oH1Cs=";
+  # for update.sh easy to handle
+  ngclientVersion = "0.0.163";
+  ngclientRev = "2546891ad116cb0a7a8df1c2bcf8a11fc17d58a4";
+  ngclientHash = "sha256-MQOJHr3JBceO7qZRQvCcR4NNxpc77oRRjBQkmMv9RUA=";
+
+  # from Duplicati/Server/webroot/ngclient/package.json
+  ngclient = buildNpmPackage {
+    pname = "ngclient";
+    version = ngclientVersion;
+
+    src = fetchFromGitHub {
+      owner = "duplicati";
+      repo = "ngclient";
+      rev = ngclientRev;
+      hash = ngclientHash;
+    };
+
+    npmDepsHash = "sha256-HYKzf7JaoOYvYlVZgMZ0jvYHf96be6abTZNtefgy59Y=";
+
+    nativeBuildInputs = [ bun ];
+
+    npmBuildScript = "build:prod";
+
+    env = {
+      NG_CLI_ANALYTICS = "false";
+      CI = "true";
+    };
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out
+      cp -r dist/ngclient/* $out/
+
+      runHook postInstall
+    '';
+
+    postInstall = ''
+      substituteInPlace $out/browser/index.html \
+          --replace-fail '<base href="/">' '<base href="/ngclient/">'
+    '';
   };
 in
-stdenv.mkDerivation (finalAttrs: {
-  # TODO build duplicati from source https://github.com/duplicati/duplicati/blob/master/.github/workflows/build-packages.yml
+buildDotnetModule rec {
   pname = "duplicati";
-  version = "2.1.0.5";
+  version = "2.2.0.1";
   channel = "stable";
-  buildDate = "2025-03-04";
+  buildDate = "2025-11-09";
 
-  src = fetchzip {
-    url =
-      with finalAttrs;
-      "https://updates.duplicati.com/stable/duplicati-${version}_${channel}_${buildDate}-${_platform}-cli.zip";
-    hash = _fileHashForSystem."${stdenv.hostPlatform.system}";
+  src = fetchFromGitHub {
+    owner = "duplicati";
+    repo = "duplicati";
+    tag = "v${version}_${channel}_${buildDate}";
+    hash = "sha256-fARK2nAqE9aN2PQSC62yIcYr3e/kBT3BVTBxLwMqk24=";
     stripRoot = true;
   };
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    makeBinaryWrapper
-  ];
+  patches = [ ./fix-unit-tests.patch ];
+
+  nugetDeps = ./deps.json;
+
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
+
+  enableParallelBuilding = false;
+
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+
   buildInputs = [
-    gcc-unwrapped
-    zlib
-    lttng-ust_2_12
+    icu
+    openssl
+    krb5
   ];
 
-  installPhase = ''
-    runHook preInstall
+  autoPatchelfIgnoreMissingDeps = lib.optionals (!stdenv.hostPlatform.isMusl) [
+    "libc.musl-x86_64.so.1"
+    "libc.musl-aarch64.so.1"
+    "libc.musl-armv7.so.1"
+  ];
 
-    mkdir -p $out/{bin,share}
-    cp -r * "$out/share/"
-    for file in $out/share/duplicati-*; do
-      makeBinaryWrapper "$file" "$out/bin/$(basename $file)" \
-      --prefix LD_LIBRARY_PATH : ${
-        lib.makeLibraryPath [
-          icu
-          openssl
-        ]
-      }
-    done
+  executables = [
+    "Duplicati.Agent"
+    "Duplicati.CommandLine"
+    "Duplicati.CommandLine.AutoUpdater"
+    "Duplicati.CommandLine.BackendTester"
+    "Duplicati.CommandLine.BackendTool"
+    "Duplicati.CommandLine.DatabaseTool"
+    "Duplicati.CommandLine.RecoveryTool"
+    "Duplicati.CommandLine.SecretTool"
+    "Duplicati.CommandLine.ServerUtil"
+    "Duplicati.CommandLine.SharpAESCrypt"
+    "Duplicati.CommandLine.Snapshots"
+    "Duplicati.CommandLine.SourceTool"
+    "Duplicati.CommandLine.SyncTool"
+    "Duplicati.GUI.TrayIcon"
+    "Duplicati.Server"
+    "Duplicati.Service"
+  ];
 
-    runHook postInstall
+  postPatch = ''
+    rm -rf Duplicati/Server/webroot/ngclient
+    ln -s ${ngclient}/browser Duplicati/Server/webroot/ngclient
   '';
+
+  postFixup = ''
+    mv $out/bin/Duplicati.Agent $out/bin/duplicati-agent
+    mv $out/bin/Duplicati.GUI.TrayIcon $out/bin/duplicati
+    mv $out/bin/Duplicati.Server $out/bin/duplicati-server
+    cp $out/bin/duplicati-server $out/lib/duplicati/duplicati-server
+    mv $out/bin/Duplicati.Service $out/bin/duplicati-service
+    mv $out/bin/Duplicati.CommandLine $out/bin/duplicati-cli
+    mv $out/bin/Duplicati.CommandLine.SyncTool $out/bin/duplicati-sync-tool
+    mv $out/bin/Duplicati.CommandLine.SourceTool $out/bin/duplicati-source-tool
+    mv $out/bin/Duplicati.CommandLine.DatabaseTool $out/bin/duplicati-database-tool
+    mv $out/bin/Duplicati.CommandLine.SharpAESCrypt $out/bin/duplicati-aescrypt
+    mv $out/bin/Duplicati.CommandLine.AutoUpdater $out/bin/duplicati-autoupdater
+    mv $out/bin/Duplicati.CommandLine.BackendTester $out/bin/duplicati-backend-tester
+    mv $out/bin/Duplicati.CommandLine.BackendTool $out/bin/duplicati-backend-tool
+    mv $out/bin/Duplicati.CommandLine.RecoveryTool $out/bin/duplicati-recovery-tool
+    mv $out/bin/Duplicati.CommandLine.SecretTool $out/bin/duplicati-secret-tool
+    mv $out/bin/Duplicati.CommandLine.ServerUtil $out/bin/duplicati-server-util
+    mv $out/bin/Duplicati.CommandLine.Snapshots $out/bin/duplicati-snapshots
+  '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Free backup client that securely stores encrypted, incremental, compressed backups on cloud storage services and remote file servers";
@@ -75,8 +146,8 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       nyanloutre
       bot-wxt1221
+      puiyq
     ];
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    platforms = builtins.attrNames _supportedPlatforms;
+    # platforms inherited from dotnet-sdk.
   };
-})
+}

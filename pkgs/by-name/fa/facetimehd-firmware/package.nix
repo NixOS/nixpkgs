@@ -69,7 +69,6 @@ stdenvNoCC.mkDerivation {
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
       womfoo
-      grahamc
     ];
     platforms = [
       "i686-linux"

@@ -12,7 +12,6 @@ fetchSubmodules=
 fetchLFS=
 builder=
 fetchTags=
-fetchTagsCompat=
 branchName=$NIX_PREFETCH_GIT_BRANCH_NAME
 
 # ENV params
@@ -117,13 +116,6 @@ for arg; do
     fi
 done
 
-# `deepClone` used to effectively imply `fetchTags`.
-# We avoid such behaviour to enhance the `postCheckout` reproducibility,
-# while keeping the old behaviour for `.git` for backward compatibility purposes.
-if [[ -n "$deepClone" ]] && [[ -z "$leaveDotGit" ]]; then
-    fetchTagsCompat=true
-fi
-
 if test -z "$url"; then
     usage
 fi
@@ -188,11 +180,15 @@ checkout_hash(){
         hash=$(hash_from_ref "$ref")
     fi
 
-    local -a fetchTagsArgs
-    if [[ -n "$fetchTags" ]]; then
-        fetchTagsArgs=(--tags)
-    else
+    local -a fetchTagsArgs=()
+    # Avoid fetching all tags at clone time when not leaving .git,
+    # but keep/restore the behaviour before
+    # commit 7e085677f996 ("nix-prefetch-git: dont't fetch tags when deep clone unless leaving .git")
+    # to preserve the fragile hashes of existing .git sources.
+    if [[ -z "$leaveDotGit" ]]; then
         fetchTagsArgs=(--no-tags)
+    elif [[ -n "$deepClone" ]]; then
+        fetchTagsArgs=(--tags)
     fi
     local -a fetchTargetArgs
     if [[ -n "$deepClone" ]]; then
@@ -282,14 +278,14 @@ clone(){
 
     # Fetch all tags if requested
     # The fetched tags are potentially non-reproducible, as tags are mutable parts of the Git tree.
-    if [[ -n "$fetchTags" ]] || [[ -n "$fetchTagsCompat" ]]; then
+    if [[ -n "$fetchTags" ]]; then
         echo "fetching all tags..." >&2
         clean_git fetch origin 'refs/tags/*:refs/tags/*' || echo "warning: failed to fetch some tags" >&2
     fi
 
-    # Name "$ref" to make `git describe` work reproducibly in `NIX_PREFETCH_GIT_CHECKOUT_HOOK`.
+    # Name tag "$ref" to make `git describe` work reproducibly in `NIX_PREFETCH_GIT_CHECKOUT_HOOK`.
     # Name only when not leaving `.git` for compatibility purposes.
-    if [[ -n "$ref" ]] && [[ -z "$leaveDotGit" ]]; then
+    if [[ "$ref" =~ ^refs/tags/ ]] && [[ -z "$leaveDotGit" ]]; then
         echo "refer to FETCH_HEAD as its original name $ref"
         clean_git update-ref "$ref" FETCH_HEAD
     fi

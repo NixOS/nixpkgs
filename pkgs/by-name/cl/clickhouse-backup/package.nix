@@ -1,9 +1,10 @@
 {
   buildGoModule,
-  clickhouse-backup,
   fetchFromGitHub,
   lib,
-  testers,
+  ps,
+  stdenv,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
@@ -13,8 +14,8 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "Altinity";
     repo = "clickhouse-backup";
-    rev = "v${version}";
-    hash = "sha256-o7twdOyd53rP95Pi+l5MIo+U/lDqB0cynqONokfy8do=";
+    tag = "v${version}";
+    hash = "sha256-LBwmdGcQuDu0tr9c67bboBzv6ypxzYRU36Z76lL94yo=";
   };
 
   vendorHash = "sha256-UxbQ/Q4HsTBkbIMBdeKns6t8tZnfdBRaHDMOA2RYDLI=";
@@ -27,9 +28,16 @@ buildGoModule rec {
     export CGO_ENABLED=0
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = clickhouse-backup;
-  };
+  preCheck = ''
+    export PATH=${ps}/bin:$PATH
+  '';
+
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [ "-skip=TestParseCallback" ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   meta = {
     description = "Tool for easy ClickHouse backup and restore using object storage for backup files";

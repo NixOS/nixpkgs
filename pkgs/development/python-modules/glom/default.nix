@@ -15,14 +15,12 @@
 
 buildPythonPackage rec {
   pname = "glom";
-  version = "24.11.0";
+  version = "25.12.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-QyX5Z1mpEgRK97bGvQ26RK2MHrYDiqsFcylmHSAhuyc=";
+    hash = "sha256-GufaiL42k99ArSe99Xp2WlXAdchslxvN3WeSdAPrAGk=";
   };
 
   build-system = [ setuptools ];

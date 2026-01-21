@@ -3,7 +3,6 @@
   pycryptodome,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "cart";
   version = "1.2.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "CybercentreCanada";

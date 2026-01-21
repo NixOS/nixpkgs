@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   which,
   pkg-config,
   glib,
@@ -49,6 +50,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   outputs = [ "out" ];
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/lakinduakash/linux-wifi-hotspot/commit/a3fce4b3ee9371eeb7b300fa7e9f291d93986db3.patch";
+      hash = "sha256-4xQ3iRUlkNpoxHXABhMIgsoDY9nENN/9FtHD3UMyAhc=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace ./src/scripts/Makefile \

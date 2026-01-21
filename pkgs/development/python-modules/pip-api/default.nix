@@ -5,7 +5,6 @@
   pip,
   pretend,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   virtualenv,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "pip-api";
   version = "0.0.34";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "di";

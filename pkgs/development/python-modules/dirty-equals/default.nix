@@ -6,7 +6,6 @@
   pydantic,
   pytest-examples,
   pytestCheckHook,
-  pythonOlder,
   pytz,
 }:
 
@@ -15,8 +14,6 @@ let
     pname = "dirty-equals";
     version = "0.9.0";
     pyproject = true;
-
-    disabled = pythonOlder "3.8";
 
     src = fetchFromGitHub {
       owner = "samuelcolvin";

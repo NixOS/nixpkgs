@@ -4,7 +4,6 @@
   fetchPypi,
   mock,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   sybil,
   twisted,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   # be met with hostility.
   # https://github.com/simplistix/testfixtures/issues/169
   # https://github.com/simplistix/testfixtures/issues/168
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

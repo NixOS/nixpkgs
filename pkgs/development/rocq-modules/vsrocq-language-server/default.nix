@@ -15,10 +15,9 @@ let
     let
       case = case: out: { inherit case out; };
     in
-    with lib.versions;
     lib.switch rocq-core.rocq-version [
-      (case (range "8.18" "9.1") "2.3.3")
-      (case (range "8.18" "9.1") "2.3.0")
+      (case (lib.versions.range "8.18" "9.1") "2.3.3")
+      (case (lib.versions.range "8.18" "9.1") "2.3.0")
     ] null;
   location = {
     domain = "github.com";
@@ -48,7 +47,6 @@ ocamlPackages.buildDunePackage {
   ++ (with ocamlPackages; [
     findlib
     lablgtk3-sourceview3
-    yojson
     zarith
     ppx_inline_test
     ppx_assert
@@ -56,7 +54,9 @@ ocamlPackages.buildDunePackage {
     ppx_deriving
     ppx_import
     sexplib
-    ppx_yojson_conv
+    (ppx_yojson_conv.override {
+      ppx_yojson_conv_lib = ppx_yojson_conv_lib.override { yojson = yojson_2; };
+    })
     lsp
     sel
     ppx_optcomp
@@ -65,16 +65,14 @@ ocamlPackages.buildDunePackage {
     make dune-files
   '';
 
-  meta =
-    with lib;
-    {
-      description = "Language server for the vsrocq vscode/codium extension";
-      homepage = "https://github.com/rocq-prover/vsrocq";
-      maintainers = with lib.maintainers; [ cohencyril ];
-      license = lib.licenses.mit;
-    }
-    // optionalAttrs (fetched.broken or false) {
-      rocqFilter = true;
-      broken = true;
-    };
+  meta = {
+    description = "Language server for the vsrocq vscode/codium extension";
+    homepage = "https://github.com/rocq-prover/vsrocq";
+    maintainers = with lib.maintainers; [ cohencyril ];
+    license = lib.licenses.mit;
+  }
+  // lib.optionalAttrs (fetched.broken or false) {
+    rocqFilter = true;
+    broken = true;
+  };
 }

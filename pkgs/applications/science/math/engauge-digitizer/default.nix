@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   version = "12.2.2";
 
   src = fetchFromGitHub {
-    owner = "markummitchell";
+    owner = "akhuettel";
     repo = "engauge-digitizer";
     rev = "v${version}";
     sha256 = "sha256-Wj9o3wWbtHsEi6LFH4xDpwVR9BwcWc472jJ/QFDQZvY=";

@@ -5,7 +5,6 @@
   setuptools,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   pytz,
   tzlocal,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "croniter";
   version = "6.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

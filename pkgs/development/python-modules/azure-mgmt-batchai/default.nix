@@ -5,16 +5,12 @@
   azure-common,
   azure-mgmt-core,
   isodate,
-  pythonOlder,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-batchai";
   version = "7.0.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit version;
@@ -26,8 +22,7 @@ buildPythonPackage rec {
     isodate
     azure-common
     azure-mgmt-core
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
+  ];
 
   pythonNamespaces = [ "azure.mgmt" ];
 

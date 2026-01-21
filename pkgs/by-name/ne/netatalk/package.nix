@@ -25,15 +25,16 @@
   dbus,
   iniparser,
   pandoc,
+  sqlite,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "netatalk";
-  version = "4.3.2";
+  version = "4.4.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/netatalk/netatalk/netatalk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-KXe0/RExgvDMGDM3uiPVcB+yvk4N/Ox+5XW01zpzjTo=";
+    hash = "sha256-GMoy3Gwl57o1KFlLeEN58BOIj6mED/xHjNH+9VUTglw=";
   };
 
   nativeBuildInputs = [
@@ -62,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     iniparser
     pandoc
+    sqlite
   ];
 
   mesonFlags = [

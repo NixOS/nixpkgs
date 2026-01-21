@@ -7,22 +7,22 @@
 
 buildDunePackage rec {
   pname = "stdcompat";
-  version = "19";
+  version = "21.1";
 
-  minimalOCamlVersion = "4.06";
+  minimalOCamlVersion = "4.11";
 
   src = fetchurl {
-    url = "https://github.com/thierry-martinez/stdcompat/releases/download/v${version}/stdcompat-${version}.tar.gz";
-    sha256 = "sha256-DKQGd4nnIN6SPls6hcA/2Jvc7ivYNpeMU6rYsVc1ClU=";
+    url = "https://github.com/ocamllibs/stdcompat/archive/refs/tags/${version}.tar.gz";
+    sha256 = "sha256-RSJ9AgUEmt23QZCk60ETIXmkJhG7knQe+s8wNxxIHm4=";
   };
 
   # Otherwise ./configure script will run and create files conflicting with dune.
   dontConfigure = true;
 
   meta = {
-    homepage = "https://github.com/thierry-martinez/stdcompat";
+    homepage = "https://github.com/ocamllibs/stdcompat";
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.vbgl ];
-    broken = lib.versionAtLeast ocaml.version "5.2";
+    broken = lib.versionAtLeast ocaml.version "5.4";
   };
 }

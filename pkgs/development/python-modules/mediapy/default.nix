@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   flit-core,
   ipython,
   matplotlib,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "mediapy";
   version = "1.2.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

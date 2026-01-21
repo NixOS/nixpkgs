@@ -4,7 +4,6 @@
   fetchFromGitHub,
   setuptools,
   requests,
-  pythonOlder,
   nix-update-script,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "python-nomad";
   version = "2.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jrxfive";

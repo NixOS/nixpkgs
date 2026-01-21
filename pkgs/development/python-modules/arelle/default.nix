@@ -50,16 +50,16 @@
   boto3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "arelle${lib.optionalString (!gui) "-headless"}";
-  version = "2.37.72";
+  version = "2.38.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Arelle";
     repo = "Arelle";
-    tag = version;
-    hash = "sha256-wytYETzntY1sGHgXua/MOkceiNKjr5qddAGWPMJni98=";
+    tag = finalAttrs.version;
+    hash = "sha256-ngFhY6yngr2OVQ6gsdpk5UAhzIpIrwiw+S+HK3oqfec=";
   };
 
   outputs = [
@@ -104,6 +104,7 @@ buildPythonPackage rec {
   optional-dependencies = {
     crypto = [ pycryptodome ];
     db = [
+      # cx-oracle # Unfree
       pg8000
       pymysql
       pyodbc
@@ -117,6 +118,7 @@ buildPythonPackage rec {
     ];
     esef = [ tinycss2 ];
     objectmaker = [ graphviz ];
+    # viewer = [ ixbrl-viewer ]; # Not yet packaged
     webserver = [
       cheroot
       tornado
@@ -143,7 +145,7 @@ buildPythonPackage rec {
     pytestCheckHook
     boto3
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   disabledTestPaths = [
     "tests/integration_tests"
@@ -169,4 +171,4 @@ buildPythonPackage rec {
       roberth
     ];
   };
-}
+})

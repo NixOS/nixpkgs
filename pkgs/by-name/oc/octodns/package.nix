@@ -22,8 +22,6 @@ python3Packages.buildPythonApplication rec {
   version = "1.15.0";
   pyproject = true;
 
-  disabled = python.pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "octodns";
     repo = "octodns";

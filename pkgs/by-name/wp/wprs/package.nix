@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-krrVgdoCcW3voSiQAoWsG+rPf1HYKbuGhplhn21as2c=";
 
-  RUSTFLAGS = "-C target-feature=+avx2"; # only works on x86 systems supporting AVX2
+  env.RUSTFLAGS = "-C target-feature=+avx2"; # only works on x86 systems supporting AVX2
 
   preFixup = ''
     cp  wprs "$out/bin/wprs"

@@ -9,6 +9,7 @@
   nix-update-script,
   testers,
   ravedude,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -27,7 +28,7 @@ rustPlatform.buildRustPackage rec {
     makeBinaryWrapper
   ];
 
-  buildInputs = [ udev ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ udev ];
 
   postInstall = ''
     wrapProgram $out/bin/ravedude --suffix PATH : ${lib.makeBinPath [ avrdude ]}
@@ -48,7 +49,7 @@ rustPlatform.buildRustPackage rec {
       mit # or
       asl20
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [
       rvarago
       liff

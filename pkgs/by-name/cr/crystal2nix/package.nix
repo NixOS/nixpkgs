@@ -40,7 +40,6 @@ crystal.buildCrystalPackage rec {
     mainProgram = "crystal2nix";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      manveru
       peterhoeg
     ];
   };

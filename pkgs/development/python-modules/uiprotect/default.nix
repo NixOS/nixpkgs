@@ -11,6 +11,7 @@
   aiohttp,
   aioshutil,
   async-timeout,
+  av,
   convertertools,
   dateparser,
   orjson,
@@ -39,14 +40,14 @@
 
 buildPythonPackage rec {
   pname = "uiprotect";
-  version = "7.33.2";
+  version = "8.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "uilibs";
     repo = "uiprotect";
     tag = "v${version}";
-    hash = "sha256-zGw77uP9Na+NnSzpxJ0Nf10L+nfbGuodVQNfomtaHhA=";
+    hash = "sha256-YYF7YERl9pKpnfD1Q00NlL8zWfEohMBO3UuidedLHn0=";
   };
 
   build-system = [ poetry-core ];
@@ -61,6 +62,7 @@ buildPythonPackage rec {
     aiohttp
     aioshutil
     async-timeout
+    av
     convertertools
     dateparser
     orjson

@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromSourcehut,
   flit-core,
 }:
@@ -9,8 +8,7 @@
 buildPythonPackage rec {
   pname = "loca";
   version = "2.0.1";
-  format = "pyproject";
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromSourcehut {
     owner = "~cnx";

@@ -12,44 +12,38 @@
   age-plugin-1p,
   makeWrapper,
   runCommand,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 buildGoModule (final: {
   pname = "age";
-  version = "1.2.1";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "FiloSottile";
     repo = "age";
     tag = "v${final.version}";
-    hash = "sha256-9ZJdrmqBj43zSvStt0r25wjSfnvitdx3GYtM3urHcaA=";
+    hash = "sha256-Qs/q3zQYV0PukABBPf/aU5V1oOhw95NG6K301VYJk8A=";
   };
 
-  vendorHash = "sha256-ilRLEV7qOBZbqzg2XQi4kt0JAb/1ftT4JmahYT0zSRU=";
+  vendorHash = "sha256-iVDkYXXR2pXlUVywPgVRNMORxOOEhAmzpSM0xqSQMSQ=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${final.version}"
+    "-X main.Version=v${final.version}"
   ];
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   preInstall = ''
     installManPage doc/*.1
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
-  installCheckPhase = ''
-    if [[ "$("$out/bin/${final.pname}" --version)" == "${final.version}" ]]; then
-      echo '${final.pname} smoke check passed'
-    else
-      echo '${final.pname} smoke check failed'
-      return 1
-    fi
-  '';
 
   # plugin test is flaky, see https://github.com/FiloSottile/age/issues/517
   checkFlags = [
@@ -73,14 +67,12 @@ buildGoModule (final: {
   # convenience function for wrapping sops with plugins
   passthru.withPlugins =
     filter:
-    runCommand "age-${final.version}-with-plugins"
-      {
-        nativeBuildInputs = [ makeWrapper ];
-      }
-      ''
-        makeWrapper ${lib.getBin final.finalPackage}/bin/age $out/bin/age \
-          --prefix PATH : "${lib.makeBinPath (filter final.passthru.plugins)}"
-      '';
+    runCommand "age-${final.version}-with-plugins" { nativeBuildInputs = [ makeWrapper ]; } ''
+      makeWrapper ${lib.getBin final.finalPackage}/bin/age $out/bin/age \
+        --prefix PATH : "${lib.makeBinPath (filter final.passthru.plugins)}"
+    '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/FiloSottile/age/releases/tag/v${final.version}";

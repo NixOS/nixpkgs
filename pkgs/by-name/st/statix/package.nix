@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
 
-  passthru.update-script = nix-update-script { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Lints and suggestions for the nix programming language";

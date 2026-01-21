@@ -2,13 +2,9 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 
   # native
   flit-core,
-
-  # propagates
-  typing-extensions,
 
   # tests
   unittestCheckHook,
@@ -19,16 +15,12 @@ buildPythonPackage rec {
   version = "0.12.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-wqkFW0+7dwX1YbnYYFPor10QzIRdIsMgCMQ0kLLY3Ws=";
   };
 
   build-system = [ flit-core ];
-
-  dependencies = lib.optionals (pythonOlder "3.10") [ typing-extensions ];
 
   nativeCheckInputs = [ unittestCheckHook ];
 

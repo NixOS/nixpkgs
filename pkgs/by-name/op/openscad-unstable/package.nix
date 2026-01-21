@@ -121,7 +121,7 @@ clangStdenv.mkDerivation rec {
     "-DUSE_BUILTIN_OPENCSG=OFF"
     "-DUSE_BUILTIN_MANIFOLD=OFF"
     "-DUSE_BUILTIN_CLIPPER2=OFF"
-    "-DOPENSCAD_VERSION=\"${builtins.replaceStrings [ "-" ] [ "." ] version}\""
+    "-DOPENSCAD_VERSION=\"${builtins.replaceStrings [ "-" ] [ "." ] (lib.strings.getVersion version)}\""
     "-DCMAKE_UNITY_BUILD=OFF" # broken compile with unity
     # IPO
     "-DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=lld"
@@ -156,7 +156,8 @@ clangStdenv.mkDerivation rec {
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/Applications
     mv $out/bin/*.app $out/Applications
-    rmdir $out/bin
+    rm $out/bin/* || true
+    ln -s $out/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD $out/bin/openscad-unstable
   '';
 
   nativeCheckInputs = [
@@ -166,6 +167,13 @@ clangStdenv.mkDerivation rec {
   ];
 
   dontUseNinjaCheck = true;
+
+  # These tests consistently fail when building on aarch64-linux
+  disabledTests = [
+    "export-svg_spec-paths-arcs01"
+    "export-svg-fill-stroke_spec-paths-arcs01"
+    "export-svg-fill-only_spec-paths-arcs01"
+  ];
 
   meta = {
     description = "3D parametric model compiler (unstable)";

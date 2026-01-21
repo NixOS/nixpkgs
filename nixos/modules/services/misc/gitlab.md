@@ -143,9 +143,9 @@ configure a Gitlab Runner with caching and reasonably good security practices.
 
 ::: {#ex-gitlab-runner-podman .example}
 
-## Example: Gitlab Runner with `podman` and Nix Store Caching
+## Gitlab Runner with `podman` and Nix Store Caching
 
-The [VM tested `podman-runner`](https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/services/continuous-integration/gitlab-runner/runner.nix)
+The [VM tested `podman-runner`](https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/gitlab/runner/podman-runner/default.nix)
 (a NixOS module for reuse) configures an advanced Gitlab runner with the following features:
 
 - The executor is `podman` which gives you better additional safety than

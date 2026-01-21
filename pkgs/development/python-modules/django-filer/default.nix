@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "django-filer";
-  version = "3.4.1";
+  version = "3.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-cms";
     repo = "django-filer";
     tag = version;
-    hash = "sha256-lbt7Tk+BJX9sesIPjZ0bIpE0RzO4nH/TAdimowfYtkA=";
+    hash = "sha256-Zy1CkQL3FEJ4YDv0VGuRKS8XlqvFT6HjnGGZFSgOPew=";
   };
 
   build-system = [ setuptools ];

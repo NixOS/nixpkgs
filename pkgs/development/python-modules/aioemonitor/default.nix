@@ -7,7 +7,6 @@
   pytest-asyncio,
   pytest-raises,
   pytestCheckHook,
-  pythonOlder,
   xmltodict,
 }:
 
@@ -15,7 +14,6 @@ buildPythonPackage rec {
   pname = "aioemonitor";
   version = "1.0.5";
   format = "setuptools";
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bdraco";

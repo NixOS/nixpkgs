@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "matthewdeanmartin";
     repo = "terminaltables3";
-    #rev = "refs/tags/v${version}";
+    #tag = "v${version}";
     rev = "f1c465b36eb9b91a984d8864b21376e7c37075b8";
     hash = "sha256-UcEovh1Eb4QNPwLGDjCphPlJSSkOdhCJ2fK3tuSWOTc=";
   };

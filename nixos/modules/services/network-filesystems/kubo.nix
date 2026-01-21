@@ -25,7 +25,7 @@ let
   # Remove the PeerID (an attribute of "Identity") of the temporary Kubo repo.
   # The "Pinning" section contains the "RemoteServices" section, which would prevent
   # the daemon from starting as that setting can't be changed via ipfs config replace.
-  defaultConfig = builtins.removeAttrs rawDefaultConfig [
+  defaultConfig = removeAttrs rawDefaultConfig [
     "Identity"
     "Pinning"
   ];

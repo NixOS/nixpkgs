@@ -131,9 +131,7 @@ buildGoModule rec {
     homepage = "https://github.com/dunglas/frankenphp";
     license = lib.licenses.mit;
     mainProgram = "frankenphp";
-    maintainers = with lib.maintainers; [
-      gaelreyrol
-    ];
+    maintainers = [ ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

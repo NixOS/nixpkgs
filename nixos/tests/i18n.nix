@@ -38,6 +38,32 @@
         };
       };
     };
+    Csimple = {
+      i18n = {
+        defaultLocale = "C";
+      };
+    };
+    CnonDefault = {
+      i18n = {
+        defaultLocale = "en_US.UTF-8";
+        extraLocaleSettings = {
+          LC_COLLATE = "C";
+          LC_MESSAGES = "C";
+          LC_TIME = "C";
+        };
+      };
+    };
   };
-  testScript = { nodes, ... }: "";
+  testScript =
+    { nodes, ... }:
+    lib.pipe nodes [
+      builtins.attrNames
+      (map (node: ''
+        ${node}.copy_from_vm(
+            ${node}.succeed("readlink -f /etc/locale.conf").strip(),
+            "${node}"
+        )
+      ''))
+      (lib.concatStringsSep "\n")
+    ];
 }

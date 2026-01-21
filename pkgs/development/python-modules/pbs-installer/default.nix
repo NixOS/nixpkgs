@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pbs-installer";
-  version = "2025.12.05";
+  version = "2026.01.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frostming";
     repo = "pbs-installer";
     tag = version;
-    hash = "sha256-wKAlqMo94dhv1swdT5+cOKnfEEg7XWUuXo/H6xk+pQY=";
+    hash = "sha256-u7RdzRQRweEjCu8Rp+PkaUZg1FxpM7UssbhD0BonOtY=";
   };
 
   build-system = [ pdm-backend ];

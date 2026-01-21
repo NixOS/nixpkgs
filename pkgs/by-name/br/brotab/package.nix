@@ -8,7 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "brotab";
   version = "1.4.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "balta2ar";

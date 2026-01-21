@@ -13,6 +13,7 @@ stdenvNoCC.mkDerivation rec {
       lib.replaceStrings [ "." ] [ "" ] version
     }.zip";
     hash = "sha256-+lw4dh7G/Xv3pzGXdMUl9xNc2Nk7wUOAh+lq3K1LrXs=";
+    stripRoot = false;
   };
 
   installPhase = ''

@@ -1,31 +1,54 @@
 {
+  autoPatchelfHook,
+  fetchzip,
   lib,
-  stdenv,
-  fetchurl,
-  deno,
-  makeWrapper,
   nixosTests,
+  stdenv,
+  stdenvNoCC,
 }:
-stdenv.mkDerivation (finalAttrs: {
+let
+  platformMap = {
+    "x86_64-linux" = {
+      os = "linux";
+      arch = "x86_64";
+      hash = "sha256-IGks7vmJd/xuJzqhogR5aLVM6eUUe6bACe5VuAWJOWA=";
+    };
+    "aarch64-linux" = {
+      os = "linux";
+      arch = "aarch64";
+      hash = "sha256-brqotISLIwD1t/2E2oyI7HSkfPpVgUODaNZJcc9o6zI=";
+    };
+    "x86_64-darwin" = {
+      os = "darwin";
+      arch = "x86_64";
+      hash = "sha256-n8GN2ZmeYEpZ0DB7zwEkXnSUZkAySNAGVn5BLw46fZI=";
+    };
+    "aarch64-darwin" = {
+      os = "darwin";
+      arch = "aarch64";
+      hash = "sha256-BISrkxLuxlo7KQiW9cUipJpEhOm94gL3GvyivO6LaBU=";
+    };
+  };
+  platform = platformMap.${stdenvNoCC.hostPlatform.system};
+in
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "silverbullet";
-  version = "2.0.0";
+  version = "2.3.0";
 
-  src = fetchurl {
-    url = "https://github.com/silverbulletmd/silverbullet/releases/download/${finalAttrs.version}/silverbullet.js";
-    hash = "sha256-O0QuzbY/ZdhOZvsUcgpZ55E+CSxbAsRxJmBQird5vCk=";
+  src = fetchzip {
+    url = "https://github.com/silverbulletmd/silverbullet/releases/download/${finalAttrs.version}/silverbullet-server-${platform.os}-${platform.arch}.zip";
+    hash = platform.hash;
+    stripRoot = false;
   };
 
-  dontUnpack = true;
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ stdenv.cc.cc.lib ];
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/{bin,lib}
-    cp $src $out/lib/silverbullet.js
-    makeWrapper ${lib.getExe deno} $out/bin/silverbullet \
-        --set DENO_NO_UPDATE_CHECK "1" \
-        --add-flags "run -A --unstable-kv --unstable-worker-options ${placeholder "out"}/lib/silverbullet.js"
+    mkdir -p $out/bin
+    cp $src/silverbullet $out/bin/
     runHook postInstall
   '';
 
@@ -40,6 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ aorith ];
     mainProgram = "silverbullet";
-    inherit (deno.meta) platforms;
+    platforms = builtins.attrNames platformMap;
   };
 })

@@ -17,13 +17,13 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "surfer";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitLab {
     owner = "surfer-project";
     repo = "surfer";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-rNJIe6FlAQI2B3lsRYHKMIGgJ1Q5EFX7kWgml+sXxtc=";
+    hash = "sha256-2ikeG4K1CpyHgAZZfPzEFRXRoEh2PnOIf+8OREO6xug=";
     fetchSubmodules = true;
   };
 
@@ -48,7 +48,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libXi
   ];
 
-  cargoHash = "sha256-Q4SyuBNR7FnBe3h1rUo48Sxk2COdQbECiXXrGpwXhPk=";
+  cargoHash = "sha256-E+9u7t6bLzORL2HiG4iT5pT4nGftyOgO2/eXHuQK4pQ=";
 
   # Avoid the network attempt from skia. See: https://github.com/cargo2nix/cargo2nix/issues/318
   doCheck = false;

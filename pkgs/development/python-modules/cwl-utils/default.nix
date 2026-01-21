@@ -9,7 +9,6 @@
   pytest-mock,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   rdflib,
   requests,
   ruamel-yaml,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "cwl-utils";
   version = "0.40";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "common-workflow-language";

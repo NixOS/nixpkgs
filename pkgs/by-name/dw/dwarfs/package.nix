@@ -112,7 +112,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   versionCheckProgram = "${placeholder "out"}/bin/dwarfs";
 
   meta = {

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   aiohttp,
   urllib3,
   orjson,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "tesla-powerwall";
   version = "0.5.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jrester";

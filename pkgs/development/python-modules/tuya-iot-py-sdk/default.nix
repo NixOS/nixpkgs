@@ -4,7 +4,6 @@
   fetchFromGitHub,
   paho-mqtt,
   pycryptodome,
-  pythonOlder,
   requests,
   websocket-client,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "tuya-iot-py-sdk";
   version = "0.6.6";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "tuya";

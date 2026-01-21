@@ -556,7 +556,12 @@ let
         changelog = "https://github.com/nodejs/node/releases/tag/v${version}";
         license = lib.licenses.mit;
         maintainers = with lib.maintainers; [ aduh95 ];
-        platforms = lib.platforms.linux ++ lib.platforms.darwin ++ lib.platforms.freebsd;
+        # https://github.com/nodejs/node/blob/732ab9d658e057af5191d4ecd156d38487509462/BUILDING.md#platform-list
+        platforms =
+          (lib.lists.intersectLists (
+            lib.platforms.linux ++ lib.platforms.darwin ++ lib.platforms.freebsd
+          ) lib.platforms.littleEndian)
+          ++ [ "s390x-linux" ];
         # This broken condition is likely too conservative. Feel free to loosen it if it works.
         broken =
           !canExecute && !canEmulate && (stdenv.buildPlatform.parsed.cpu != stdenv.hostPlatform.parsed.cpu);

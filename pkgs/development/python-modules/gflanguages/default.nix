@@ -4,7 +4,6 @@
   fetchPypi,
   protobuf,
   pytestCheckHook,
-  pythonOlder,
   regex,
   setuptools,
   setuptools-scm,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "gflanguages";
   version = "0.7.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

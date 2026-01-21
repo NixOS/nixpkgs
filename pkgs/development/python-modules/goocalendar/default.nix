@@ -7,15 +7,12 @@
   gtk3,
   pkg-config,
   pygobject3,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "goocalendar";
   version = "0.8.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "GooCalendar";

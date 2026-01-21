@@ -1,49 +1,52 @@
 {
   fetchFromGitHub,
   lib,
+  libpng,
+  nix-update-script,
   stb,
   stdenv,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qoi";
-  version = "0-unstable-2023-08-10"; # no upstream version yet.
+  version = "0-unstable-2025-11-13"; # no upstream version yet.
 
   src = fetchFromGitHub {
     owner = "phoboslab";
     repo = "qoi";
-    rev = "19b3b4087b66963a3699ee45f05ec9ef205d7c0e";
-    hash = "sha256-E1hMtjMuDS2zma2s5hlHby/sroRGhtyZm9gLQ+VztsM=";
+    rev = "44b233a95eda82fbd2e39a269199b73af0f4c4c3";
+    hash = "sha256-W5JG9Nz4NI2KZmUEtxEiGH7oxfAzEIaUyXTbSB25hZw=";
   };
+
+  patches = [
+    # https://github.com/phoboslab/qoi/pull/322
+    ./add-install-target-and-pc-module.patch
+  ];
 
   outputs = [
     "out"
     "dev"
   ];
 
-  nativeBuildInputs = [ stb ];
+  strictDeps = true;
+  enableParalleBuilding = true;
 
-  buildPhase = ''
-    runHook preBuild
+  buildInputs = [ libpng ];
 
-    make CFLAGS_CONV="-I${stb}/include/stb -O3" qoiconv
+  # Don't bloat the header-only output with binaries
+  propagatedBuildOutputs = [ ];
 
-    runHook postBuild
-  '';
+  makeFlags = [
+    "CFLAGS=-I${lib.getDev stb}/include/stb"
+    "PREFIX=${placeholder "dev"}"
+    "BINDIR=${placeholder "out"}/bin"
+  ];
 
-  installPhase = ''
-    runHook preInstall
-
-    # Conversion utility for images->qoi. Not usually needed for development.
-    mkdir -p ${placeholder "out"}/bin
-    install qoiconv ${placeholder "out"}/bin
-
-    # The actual single-header implementation. Nothing to compile, just install.
-    mkdir -p ${placeholder "dev"}/include/
-    install qoi.h ${placeholder "dev"}/include
-
-    runHook postInstall
-  '';
+  passthru = {
+    tests.pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
+    updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+  };
 
   meta = {
     description = "'Quite OK Image Format' for fast, lossless image compression";
@@ -52,5 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hzeller ];
     platforms = lib.platforms.all;
+    pkgConfigModules = [ "qoi" ];
   };
 })

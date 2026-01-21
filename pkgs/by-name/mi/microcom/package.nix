@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "microcom";
-  version = "2023.09.0";
+  version = "2025.11.0";
 
   src = fetchFromGitHub {
     owner = "pengutronix";
     repo = "microcom";
     rev = "v${version}";
-    hash = "sha256-CT/myxOK4U3DzliGsa45WMIFcYLjcoxx6w5S1NL5c7Y=";
+    hash = "sha256-drQpUOl+QLBvwT++bEBk9Bt+tTQxrnFgfuoGIW5Bcyw=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

@@ -4,7 +4,6 @@
   buildPythonPackage,
   parameterized,
   pygments,
-  pythonOlder,
   pytestCheckHook,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "mistletoe";
   version = "1.4.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "miyuchina";

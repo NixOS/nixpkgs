@@ -13,7 +13,6 @@
   pyemd,
   pyphen,
   pytestCheckHook,
-  pythonOlder,
   requests,
   scikit-learn,
   scipy,
@@ -24,7 +23,6 @@
 buildPythonPackage rec {
   pname = "textacy";
   version = "0.13.0";
-  disabled = pythonOlder "3.7";
   pyproject = true;
 
   src = fetchPypi {

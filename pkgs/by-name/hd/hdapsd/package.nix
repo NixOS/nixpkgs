@@ -2,19 +2,21 @@
   lib,
   stdenv,
   fetchurl,
+  pkg-config,
   udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
   pname = "hdapsd";
-  version = "20141203";
+  version = "20250908";
 
   src = fetchurl {
-    url = "https://github.com/evgeni/hdapsd/releases/download/${version}/hdapsd-${version}.tar.gz";
-    sha256 = "0ppgrfabd0ivx9hyny3c3rv4rphjyxcdsd5svx5pgfai49mxnl36";
+    url = "https://github.com/linux-thinkpad/hdapsd/releases/download/${version}/hdapsd-${version}.tar.gz";
+    hash = "sha256-qENcOFJ9x5CkN72ZkTx/OL+gpwAYJlJomKvAjTklDYQ=";
   };
 
   nativeBuildInputs = [
+    pkg-config
     udevCheckHook
   ];
 
@@ -25,7 +27,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Hard Drive Active Protection System Daemon";
     mainProgram = "hdapsd";
-    homepage = "http://hdaps.sf.net/";
+    homepage = "https://github.com/linux-thinkpad/hdapsd";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };

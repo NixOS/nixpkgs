@@ -9,21 +9,18 @@
   pytest-asyncio,
   pytest-django,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "django-ninja";
-  version = "1.4.3t";
+  version = "1.4.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "vitalik";
     repo = "django-ninja";
     tag = "v${version}";
-    hash = "sha256-IiOj2fBuClHyIdn/r3XxKwO+DyrgahagUKrxp+YKZ4E=";
+    hash = "sha256-C54Y5Rmhk9trEeNhE+i3aeKcnoeUc6BqFbp3dzL9xjA=";
   };
 
   build-system = [ flit-core ];

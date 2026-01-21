@@ -92,5 +92,5 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ dtzWill ];
+  meta.maintainers = [ ];
 }

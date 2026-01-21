@@ -4,21 +4,18 @@
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pycomm3";
-  version = "1.2.14";
+  version = "1.2.16";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ottowayi";
     repo = "pycomm3";
     tag = "v${version}";
-    hash = "sha256-KdvmISMH2HHU8N665QevVw7q9Qs5CwjXxcWpLoziY/Y=";
+    hash = "sha256-xcN0TKwWg23CDBmwMRZlPFuKYpeLg7KSXzhRtNuP6Ls=";
   };
 
   build-system = [ setuptools ];
@@ -37,7 +34,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python Ethernet/IP library for communicating with Allen-Bradley PLCs";
     homepage = "https://github.com/ottowayi/pycomm3";
-    changelog = "https://github.com/ottowayi/pycomm3/releases/tag/v${version}";
+    changelog = "https://github.com/ottowayi/pycomm3/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

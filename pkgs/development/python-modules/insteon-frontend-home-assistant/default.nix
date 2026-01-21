@@ -2,20 +2,18 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "insteon-frontend-home-assistant";
-  version = "0.5.0";
+  version = "0.6.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-NZwnx8tlXnsVCk4nvNjOg3cjSr2CnjqWcZG7xFTC2wA=";
+    pname = "insteon_frontend_home_assistant";
+    inherit version;
+    hash = "sha256-oBTk7gblJA6/w0wSx+efdEmY5ioJiRMUfDqjyg0LkFg=";
   };
 
   nativeBuildInputs = [ setuptools ];

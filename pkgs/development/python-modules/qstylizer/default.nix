@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   pbr,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "qstylizer";
   version = "0.2.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "blambright";

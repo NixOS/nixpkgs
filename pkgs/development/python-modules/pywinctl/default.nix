@@ -10,7 +10,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   version = "0.4.01";
   pname = "pywinctl";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Kalmat";
     repo = "pywinctl";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-l9wUnEjOpKrjulruUX+AqQIjduDfX+iMmSv/V32jpdc=";
   };
 
@@ -42,4 +42,4 @@ buildPythonPackage rec {
     description = "Cross-Platform module to get info on and control windows on screen";
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
-}
+})

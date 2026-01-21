@@ -45,6 +45,13 @@ stdenv.mkDerivation (finalAttrs: {
         'cmake_minimum_required(VERSION 3.5)'
   '';
 
+  cmakeFlags = [
+    # Be more permissive to compiler warnings
+    # Fix the new -Wrestrict warning in gcc 15 blocking build
+    # https://github.com/schrodinger/coordgenlibs/issues/137
+    (lib.cmakeBool "COORDGEN_RIGOROUS_BUILD" false)
+  ];
+
   doCheck = true;
 
   # Fix the build with Clang 20.
@@ -53,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Schrodinger-developed 2D Coordinate Generation";
     homepage = "https://github.com/schrodinger/coordgenlibs";
-    changelog = "https://github.com/schrodinger/coordgenlibs/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/schrodinger/coordgenlibs/releases/tag/v${finalAttrs.version}";
     maintainers = [ lib.maintainers.rmcgibbo ];
     license = lib.licenses.bsd3;
   };

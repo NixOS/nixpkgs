@@ -5,7 +5,6 @@
   nulltype,
   python-dateutil,
   urllib3,
-  pythonOlder,
   setuptools,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "plaid-python";
   version = "36.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "plaid_python";

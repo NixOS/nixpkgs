@@ -14,7 +14,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "nmgui";
   version = "1.0.0";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "s-adi-dev";

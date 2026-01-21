@@ -5,7 +5,6 @@
   openpyxl,
   charset-normalizer,
   fetchPypi,
-  pythonOlder,
   pandas,
   tabulate,
   click,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "camelot-py";
   version = "0.11.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

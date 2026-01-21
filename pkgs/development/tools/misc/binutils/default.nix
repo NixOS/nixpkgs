@@ -19,7 +19,9 @@ in
 
   enableGold ? withGold stdenv.targetPlatform,
   enableGoldDefault ? false,
-  enableShared ? !stdenv.hostPlatform.isStatic,
+  # shared lib linking fails on cygwin due to multiple definitions
+  # https://cygwin.com/cgit/cygwin-packages/binutils/blame/binutils.cygport
+  enableShared ? (!stdenv.hostPlatform.isStatic && !stdenv.hostPlatform.isCygwin),
   # WARN: Enabling all targets increases output size to a multiple.
   withAllTargets ? false,
 }:

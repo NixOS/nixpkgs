@@ -9,7 +9,6 @@
   psycopg2,
   pymysql,
   pytestCheckHook,
-  pythonOlder,
   sqlalchemy,
   sqlalchemy-i18n,
   sqlalchemy-utils,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "sqlalchemy-continuum";
   version = "1.4.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "sqlalchemy_continuum";

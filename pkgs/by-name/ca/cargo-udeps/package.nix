@@ -41,6 +41,7 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [
       b4dm4n
       matthiasbeyer
+      chrjabs
     ];
     mainProgram = "cargo-udeps";
   };

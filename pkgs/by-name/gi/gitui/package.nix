@@ -51,9 +51,11 @@ rustPlatform.buildRustPackage {
     substituteInPlace Cargo.toml --replace-fail 'build = "build.rs"' ""
   '';
 
-  GITUI_BUILD_NAME = version;
-  # Needed to get openssl-sys to use pkg-config.
-  OPENSSL_NO_VENDOR = 1;
+  env = {
+    GITUI_BUILD_NAME = version;
+    # Needed to get openssl-sys to use pkg-config.
+    OPENSSL_NO_VENDOR = 1;
+  };
 
   # Getting app_config_path fails with a permission denied
   checkFlags = [

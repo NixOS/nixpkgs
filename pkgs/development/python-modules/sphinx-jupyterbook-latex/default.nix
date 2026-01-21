@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   flit-core,
   packaging,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "sphinx-jupyterbook-latex";
   version = "1.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "executablebooks";

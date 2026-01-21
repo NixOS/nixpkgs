@@ -3,9 +3,11 @@
   testers,
   fetchurl,
   writeShellScriptBin,
+  writeText,
   jq,
   moreutils,
   emptyFile,
+  hello,
   ...
 }:
 let
@@ -137,5 +139,51 @@ in
     # $downloadedFile, but here we know that because the URL is broken, it will
     # have to fallback to fetching the previously-built derivation from
     # tarballs.nixos.org, which provides pre-built derivation outputs.
+  };
+
+  showURLs-urls-mirrors = testers.invalidateFetcherByDrvHash fetchurl (finalAttrs: {
+    name = "test-fetchurl-showURLs-urls-mirrors";
+    showURLs = true;
+    urls = [
+      "http://broken"
+    ]
+    ++ hello.src.urls;
+    hash =
+      let
+        hashAlgo = lib.head (lib.splitString "-" lib.fakeHash);
+      in
+      hashAlgo
+      + ":"
+      + builtins.hashString hashAlgo (
+        lib.concatStringsSep " " (lib.concatMap fetchurl.resolveUrl finalAttrs.urls) + "\n"
+      );
+  });
+
+  urls-simple = testers.invalidateFetcherByDrvHash fetchurl {
+    name = "test-fetchurl-urls-simple";
+    urls = [
+      "http://broken"
+      hello.src.resolvedUrl
+    ];
+    hash = hello.src.outputHash;
+  };
+
+  urls-mirrors = testers.invalidateFetcherByDrvHash fetchurl rec {
+    name = "test-fetchurl-urls-simple";
+    urls = [
+      "http://broken"
+    ]
+    ++ hello.src.urls;
+    hash = hello.src.outputHash;
+    postFetch = hello.postFetch or "" + ''
+      if ! diff -u ${
+        builtins.toFile "urls-resolved-by-eval" (
+          lib.concatStringsSep "\n" (lib.concatMap fetchurl.resolveUrl urls) + "\n"
+        )
+      } <(printf '%s\n' "''${resolvedUrls[@]}"); then
+        echo "ERROR: fetchurl: build-time-resolved URLs \`urls' differ from the evaluation-resolved URLs." >&2
+        exit 1
+      fi
+    '';
   };
 }

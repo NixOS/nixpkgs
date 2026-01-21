@@ -1,5 +1,5 @@
 {
-  bashInteractive,
+  bash,
   buildPackages,
   cacert,
   callPackage,
@@ -70,11 +70,11 @@ let
       # A user is required by nix
       # https://github.com/NixOS/nix/blob/9348f9291e5d9e4ba3c4347ea1b235640f54fd79/src/libutil/util.cc#L478
       export USER=nobody
-      ${buildPackages.nix}/bin/nix-store --load-db < ${
+      ${lib.getExe' buildPackages.nix "nix-store"} --load-db < ${
         closureInfo { rootPaths = contentsList; }
       }/registration
       # Reset registration times to make the image reproducible
-      ${buildPackages.sqlite}/bin/sqlite3 nix/var/nix/db/db.sqlite "UPDATE ValidPaths SET registrationTime = ''${SOURCE_DATE_EPOCH}"
+      ${lib.getExe buildPackages.sqlite} nix/var/nix/db/db.sqlite "UPDATE ValidPaths SET registrationTime = ''${SOURCE_DATE_EPOCH}"
 
       mkdir -p nix/var/nix/gcroots/docker/
       for i in ${lib.concatStringsSep " " contentsList}; do
@@ -565,7 +565,7 @@ rec {
         mkdir -p $out
         tarhash=$(tar -C layer --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" -cf - . |
                     tee -p $out/layer.tar |
-                    ${tarsum}/bin/tarsum)
+                    ${lib.getExe tarsum})
 
         cat ${baseJson} | jshon -s "$tarhash" -i checksum > $out/json
         # Indicate to docker that we're using schema version 1.0.
@@ -966,14 +966,14 @@ rec {
   # "#!/usr/bin/env executable" shebang.
   usrBinEnv = runCommand "usr-bin-env" { } ''
     mkdir -p $out/usr/bin
-    ln -s ${coreutils}/bin/env $out/usr/bin
+    ln -s ${lib.getExe' coreutils "env"} $out/usr/bin
   '';
 
-  # This provides /bin/sh, pointing to bashInteractive.
-  # The use of bashInteractive here is intentional to support cases like `docker run -it <image_name>`, so keep these use cases in mind if making any changes to how this works.
+  # This provides /bin/sh, pointing to bash (interactive).
+  # The use of bash (interactive) here is intentional to support cases like `docker run -it <image_name>`, so keep these use cases in mind if making any changes to how this works.
   binSh = runCommand "bin-sh" { } ''
     mkdir -p $out/bin
-    ln -s ${bashInteractive}/bin/bash $out/bin/sh
+    ln -s ${lib.getExe bash} $out/bin/sh
   '';
 
   # This provides the ca bundle in common locations
@@ -1268,7 +1268,7 @@ rec {
       #
       # https://github.com/NixOS/nix/issues/6379
       homeDirectory ? "/build",
-      shell ? bashInteractive + "/bin/bash",
+      shell ? lib.getExe bash,
       command ? null,
       run ? null,
     }:

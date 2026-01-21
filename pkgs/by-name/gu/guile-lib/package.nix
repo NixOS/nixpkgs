@@ -60,9 +60,7 @@ stdenv.mkDerivation rec {
       for Guile".
     '';
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
-      foo-dogsquared
-    ];
+    maintainers = [ ];
     platforms = guile.meta.platforms;
   };
 }

@@ -10,13 +10,13 @@ let
 in
 buildGoModule {
   pname = "typescript-go";
-  version = "0-unstable-2025-12-13";
+  version = "0-unstable-2026-01-14";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "typescript-go";
-    rev = "2046634603b3283c38b31489e5e4d81a013832a0";
-    hash = "sha256-F5CCz5IDNe0mhofh7JPmmUwGzasUrTUDQLClybfsBxc=";
+    rev = "f5bcdfc02e6527b774418a26ee817c4397da8546";
+    hash = "sha256-tNpRCXj/QoYP2uw7nWaQZAnQtktYgVfZZ1/L+N+/xys=";
     fetchSubmodules = false;
   };
 

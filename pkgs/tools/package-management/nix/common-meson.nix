@@ -11,11 +11,6 @@
     inherit hash;
   },
   patches ? [ ],
-  maintainers ? [
-    lib.maintainers.artturin
-    lib.maintainers.philiptaron
-    lib.maintainers.lovesegfault
-  ],
   teams ? [ lib.teams.nix ],
   self_attribute_name,
 }@args:
@@ -64,10 +59,7 @@ assert (hash == null) -> (src != null);
   xz,
   enableDocumentation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
   enableStatic ? stdenv.hostPlatform.isStatic,
-  withAWS ?
-    lib.meta.availableOn stdenv.hostPlatform aws-c-common
-    && !enableStatic
-    && (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin),
+  withAWS ? lib.meta.availableOn stdenv.hostPlatform aws-c-common,
   aws-c-common,
   aws-sdk-cpp,
   withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp,
@@ -272,7 +264,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://nixos.org/";
     license = lib.licenses.lgpl21Plus;
-    inherit maintainers teams;
+    inherit teams;
     platforms = lib.platforms.unix;
     # Gets stuck in functional-tests in cross-trunk jobset and doesn't timeout
     # https://hydra.nixos.org/build/298175022

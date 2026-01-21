@@ -6,7 +6,6 @@
   dirty-equals,
   pytest-benchmark,
   pytestCheckHook,
-  pythonOlder,
   rustPlatform,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "rtoml";
   version = "0.10";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "samuelcolvin";

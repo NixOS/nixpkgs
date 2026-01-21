@@ -66,13 +66,13 @@ stdenv.mkDerivation (
   finalAttrs:
   {
     pname = "netdata";
-    version = "2.8.4";
+    version = "2.8.5";
 
     src = fetchFromGitHub {
       owner = "netdata";
       repo = "netdata";
       rev = "v${finalAttrs.version}";
-      hash = "sha256-rrwoyTejfOwSWMZ0juTE4CzgeRVBrC7AISFUoFBMaIs=";
+      hash = "sha256-NO6KE2Gf09Y9Ff6uJQj5XAZ+05WMdvRV2iSBdWTs2CE=";
       fetchSubmodules = true;
     };
 

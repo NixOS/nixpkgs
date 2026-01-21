@@ -20,7 +20,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "themechanger";
   version = "0.12.1";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "ALEX11BR";

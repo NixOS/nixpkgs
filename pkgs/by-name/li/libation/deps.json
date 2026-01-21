@@ -6,13 +6,13 @@
   },
   {
     "pname": "AAXClean.Codecs",
-    "version": "2.1.0.1",
-    "hash": "sha256-P80CPVrJfQw+HKkgbfx6szgzpk/+PuD2k68r4+tNh/U="
+    "version": "2.1.2.1",
+    "hash": "sha256-LfzCFcrV1i+4dXYUuEUIumLqiAMZcwkXwy9MlYfcBMM="
   },
   {
     "pname": "AudibleApi",
-    "version": "10.1.0.1",
-    "hash": "sha256-kPYkep6Q4B7z/KgKd5pRN0LCxiPhKI2RxShSVZUZpY0="
+    "version": "10.1.2.1",
+    "hash": "sha256-DRI37m+uWOpmtq0+ivRfqzLFAqfYzQvyvi6GP7sCWpQ="
   },
   {
     "pname": "Avalonia",
@@ -151,8 +151,8 @@
   },
   {
     "pname": "Google.Protobuf",
-    "version": "3.33.1",
-    "hash": "sha256-GKjiqDgV21LbVguaEJ//SSNuDI7zu7n0otEbYoJZUx8="
+    "version": "3.33.2",
+    "hash": "sha256-iSEReaFbdV+86nnB6tfUzexzh6r06ItaaWwcRcvPwIM="
   },
   {
     "pname": "HarfBuzzSharp",
@@ -506,13 +506,13 @@
   },
   {
     "pname": "Polly",
-    "version": "8.6.4",
-    "hash": "sha256-Z+ZbhnHWMu55qgQkxvw3yMiMd+zIMzzQiFhvn/PeQ3I="
+    "version": "8.6.5",
+    "hash": "sha256-2YRacrP3b3C6EBCb5Pjg6fQdGj+SgbTeaWHN/oZ1d8s="
   },
   {
     "pname": "Polly.Core",
-    "version": "8.6.4",
-    "hash": "sha256-4Xrg/H481Y/WOHk1sGvFNEOfgaGrdKi+4U54PTXhh9I="
+    "version": "8.6.5",
+    "hash": "sha256-m12obNfMZdWQWJoCaF03H5qEbFDdp9FSdHTHcIIsACQ="
   },
   {
     "pname": "RBush.Signed",

@@ -43,7 +43,6 @@ let
 
     buildInputs = [
       python3Packages.boost
-      python3Packages.python-qt
       libsForQt5.qtbase
     ];
 
@@ -121,6 +120,7 @@ let
       maintainers = [ lib.maintainers.nim65s ];
       mainProgram = "gepetto-gui";
       platforms = lib.platforms.unix;
+      broken = true; # TODO @nim65s
     };
   });
 in

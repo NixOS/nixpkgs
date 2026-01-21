@@ -16,7 +16,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "blueberry";
   version = "1.4.8";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "linuxmint";

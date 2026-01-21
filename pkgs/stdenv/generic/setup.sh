@@ -1760,6 +1760,25 @@ runPhase() {
     fi
 }
 
+definePhases() {
+    # only defines phases if it is not already defined
+    if [ -z "${phases[*]:-}" ]; then
+        phases="${prePhases[*]:-} unpackPhase patchPhase ${preConfigurePhases[*]:-} \
+            configurePhase ${preBuildPhases[*]:-} buildPhase checkPhase \
+            ${preInstallPhases[*]:-} installPhase ${preFixupPhases[*]:-} fixupPhase installCheckPhase \
+            ${preDistPhases[*]:-} distPhase ${postPhases[*]:-}"
+    fi
+}
+
+printPhases() {
+    definePhases
+    # one phase per line, to make it easy to consume with tools like xargs
+    # explicitly uses the same splitting as genericBuild
+    local phase
+    for phase in ${phases[*]}; do
+        printf '%s\n' "$phase"
+    done
+}
 
 genericBuild() {
     # variable used by our gzip wrapper to add -n.
@@ -1775,12 +1794,7 @@ genericBuild() {
         return
     fi
 
-    if [ -z "${phases[*]:-}" ]; then
-        phases="${prePhases[*]:-} unpackPhase patchPhase ${preConfigurePhases[*]:-} \
-            configurePhase ${preBuildPhases[*]:-} buildPhase checkPhase \
-            ${preInstallPhases[*]:-} installPhase ${preFixupPhases[*]:-} fixupPhase installCheckPhase \
-            ${preDistPhases[*]:-} distPhase ${postPhases[*]:-}";
-    fi
+    definePhases
 
     # The use of ${phases[*]} gives the correct behavior both with and
     # without structured attrs.  This relies on the fact that each

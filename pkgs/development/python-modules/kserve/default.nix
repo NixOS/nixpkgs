@@ -63,6 +63,18 @@ buildPythonPackage rec {
     hash = "sha256-f6ILZMLxfckEpy7wSgCqUx89JWSnn0DbQiqRSHcQHms=";
   };
 
+  # Fix vllm 0.12.0 compatibility
+  # Patch submitted upstream: https://github.com/kserve/kserve/pull/4882
+  postPatch = ''
+    substituteInPlace kserve/protocol/rest/openai/types/__init__.py \
+      --replace-fail \
+        "from vllm.entrypoints.openai.protocol import EmbeddingRequest, EmbeddingResponse as Embedding, EmbeddingResponseData, EmbeddingCompletionRequest" \
+        "from vllm.entrypoints.pooling.embed.protocol import EmbeddingRequest, EmbeddingResponse as Embedding, EmbeddingResponseData, EmbeddingCompletionRequest" \
+      --replace-fail \
+        "from vllm.entrypoints.openai.protocol import RerankRequest, RerankResponse as Rerank" \
+        "from vllm.entrypoints.pooling.score.protocol import RerankRequest, RerankResponse as Rerank"
+  '';
+
   sourceRoot = "${src.name}/python/kserve";
 
   pythonRelaxDeps = [
@@ -161,6 +173,14 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    # Started failing since vllm was updated to 0.13.0
+    # pydantic_core._pydantic_core.ValidationError: 1 validation error for RerankResponse
+    # usage.prompt_tokens
+    #   Field required [type=missing, input_value={'total_tokens': 100}, input_type=dict]
+    #     For further information visit https://errors.pydantic.dev/2.11/v/missing
+    "test_create_rerank"
+    "test_create_embedding"
+
     # AssertionError: assert CompletionReq...lm_xargs=None) == CompletionReq...lm_xargs=None)
     "test_convert_params"
 

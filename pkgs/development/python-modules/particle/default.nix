@@ -9,7 +9,6 @@
   hepunits,
   pandas,
   pytestCheckHook,
-  pythonOlder,
   tabulate,
 }:
 
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "particle";
   version = "0.25.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;

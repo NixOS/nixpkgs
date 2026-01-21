@@ -23,7 +23,6 @@
   gettext,
   glew,
   gmp,
-  hipSupport ? false,
   jackaudioSupport ? false,
   jemalloc,
   lib,
@@ -67,8 +66,9 @@
   pkg-config,
   potrace,
   pugixml,
-  python3Packages, # must use instead of python3.pkgs, see https://github.com/NixOS/nixpkgs/issues/211340
-  rocmPackages, # comes with a significantly larger closure size
+  python311Packages, # must use python3Packages instead of python3.pkgs, see https://github.com/NixOS/nixpkgs/issues/211340
+  rocmPackages,
+  rocmSupport ? config.rocmSupport,
   rubberband,
   runCommand,
   shaderc,
@@ -95,6 +95,7 @@ let
     (!stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) || stdenv.hostPlatform.isDarwin;
   vulkanSupport = !stdenv.hostPlatform.isDarwin;
 
+  python3Packages = python311Packages;
   python3 = python3Packages.python;
   pyPkgsOpenusd = python3Packages.openusd.override (old: {
     opensubdiv = old.opensubdiv.override { inherit cudaSupport; };
@@ -117,17 +118,16 @@ in
 
 stdenv'.mkDerivation (finalAttrs: {
   pname = "blender";
-  version = "5.0.0";
+  version = "5.0.1";
 
   src = fetchzip {
     name = "source";
     url = "https://download.blender.org/source/blender-${finalAttrs.version}.tar.xz";
-    hash = "sha256-UUHsylDmMWRcr1gGiXuYnno7D6uMjLqTYd9ak4FnZis=";
+    hash = "sha256-fNnQRfGfNc7rbk8npkcYtoAqRjJc6MaV4mqtSJxd0EM=";
   };
 
-  patches = [
-    ./fix-hip-path.patch # https://projects.blender.org/blender/blender/pulls/150321
-  ];
+  # Minimal backport of hiprt 3.x support from https://projects.blender.org/blender/blender/pulls/144889
+  patches = lib.optional rocmSupport ./hiprt-3-compat.patch;
 
   postPatch =
     (lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -142,7 +142,7 @@ stdenv'.mkDerivation (finalAttrs: {
         --replace-fail '${"$"}{LIBDIR}/brotli/lib/libbrotlidec-static.a' \
                   '${lib.getLib brotli}/lib/libbrotlidec.dylib'
     '')
-    + (lib.optionalString hipSupport ''
+    + (lib.optionalString rocmSupport ''
       substituteInPlace extern/hipew/src/hipew.c --replace-fail '"/opt/rocm/hip/lib/libamdhip64.so.${lib.versions.major rocmPackages.clr.version}"' '"${rocmPackages.clr}/lib/libamdhip64.so"'
       substituteInPlace extern/hipew/src/hipew.c --replace-fail '"opt/rocm/hip/bin"' '"${rocmPackages.clr}/bin"'
       substituteInPlace extern/hipew/src/hiprtew.cc --replace-fail '"/opt/rocm/lib/libhiprt64.so"' '"${rocmPackages.hiprt}/lib/libhiprt64.so"'
@@ -164,7 +164,7 @@ stdenv'.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WITH_BUILDINFO" false)
     (lib.cmakeBool "WITH_CPU_CHECK" false)
     (lib.cmakeBool "WITH_CYCLES_CUDA_BINARIES" cudaSupport)
-    (lib.cmakeBool "WITH_CYCLES_DEVICE_HIP" hipSupport)
+    (lib.cmakeBool "WITH_CYCLES_DEVICE_HIP" rocmSupport)
     (lib.cmakeBool "WITH_CYCLES_DEVICE_ONEAPI" false)
     (lib.cmakeBool "WITH_CYCLES_DEVICE_OPTIX" cudaSupport)
     (lib.cmakeBool "WITH_CYCLES_EMBREE" embreeSupport)
@@ -191,7 +191,7 @@ stdenv'.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "OPTIX_ROOT_DIR" "${optix}")
     (lib.cmakeBool "WITH_CYCLES_CUDA_BINARIES" true)
   ]
-  ++ lib.optionals hipSupport [
+  ++ lib.optionals rocmSupport [
     (lib.cmakeFeature "HIPRT_INCLUDE_DIR" "${rocmPackages.hiprt}/include")
     (lib.cmakeBool "WITH_CYCLES_DEVICE_HIPRT" true)
     (lib.cmakeBool "WITH_CYCLES_HIP_BINARIES" true)
@@ -273,7 +273,7 @@ stdenv'.mkDerivation (finalAttrs: {
     zstd
   ]
   ++ lib.optional embreeSupport embree
-  ++ lib.optional hipSupport rocmPackages.clr
+  ++ lib.optional rocmSupport rocmPackages.clr
   ++ lib.optional openImageDenoiseSupport (openimagedenoise.override { inherit cudaSupport; })
   ++ (
     if (!stdenv.hostPlatform.isDarwin) then

@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "gcab";
       versionPolicy = "none";
     };
 

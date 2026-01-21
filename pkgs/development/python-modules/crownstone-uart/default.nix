@@ -4,15 +4,12 @@
   buildPythonPackage,
   pyserial,
   fetchFromGitHub,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "crownstone-uart";
   version = "2.7.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "crownstone";

@@ -6,16 +6,16 @@
 
 buildNpmPackage rec {
   pname = "vacuum-card";
-  version = "2.11.0";
+  version = "2.11.6";
 
   src = fetchFromGitHub {
     owner = "denysdovhan";
     repo = "vacuum-card";
     rev = "v${version}";
-    hash = "sha256-egWseYspxm+zkfFwTEBYQfBox3sswYMuOYqU6oEQTb4=";
+    hash = "sha256-RBKg92QpfPcrvP1TDOPM8PfjS3NyHwl4By36o4B8yUE=";
   };
 
-  npmDepsHash = "sha256-dfsKBTJV1QC8pmb/EIh4n5I9CDnOjy7+sPwQA/eLEi0=";
+  npmDepsHash = "sha256-/M9TRM/wYN0jHigCoE9UVFspxGh5bpCrZvzo42DXgLo=";
 
   installPhase = ''
     runHook preInstall

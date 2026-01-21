@@ -68,9 +68,11 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false;
 
-  OPENSSL_NO_VENDOR = 1;
-  PROTOC = "${protobuf}/bin/protoc";
-  ROCKSDB_LIB_DIR = "${rocksdb}/lib";
+  env = {
+    OPENSSL_NO_VENDOR = 1;
+    PROTOC = "${protobuf}/bin/protoc";
+    ROCKSDB_LIB_DIR = "${rocksdb}/lib";
+  };
 
   meta = {
     description = "Implementation of a https://polkadot.network node in Rust based on the Substrate framework";

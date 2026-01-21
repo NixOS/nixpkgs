@@ -20,7 +20,7 @@ import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
 from dataclasses import asdict, dataclass
-from datetime import UTC, datetime
+from datetime import datetime, date
 from functools import wraps
 from multiprocessing.dummy import Pool
 from pathlib import Path
@@ -640,12 +640,21 @@ class Editor:
             autocommit = not args.no_commit
             if autocommit:
                 assert editor.nixpkgs_repo is not None
+
+                commit_message = "{drv_name}: init at {version}".format(
+                    drv_name=editor.get_drv_name(plugin.normalized_name),
+                    version=plugin.version,
+                )
+
+                if isinstance(pdesc.repo, RepoGitHub):
+                    github_url = (
+                        f"https://github.com/{pdesc.repo.owner}/{pdesc.repo.repo}"
+                    )
+                    commit_message += f"\n\n{github_url}"
+
                 commit(
                     editor.nixpkgs_repo,
-                    "{drv_name}: init at {version}".format(
-                        drv_name=editor.get_drv_name(plugin.normalized_name),
-                        version=plugin.version,
-                    ),
+                    commit_message,
                     [args.outfile, args.input_file],
                 )
 
@@ -749,7 +758,12 @@ class Editor:
             ]
         )
 
-        def update() -> Redirects:
+        def update() -> tuple[Redirects, list[tuple[str, str, str]]]:
+            """
+            Returns:
+                tuple of (redirects, updated_plugins)
+                where updated_plugins is [(name, old_version, new_version), ...]
+            """
             if len(plugins_to_update) == 0:
                 log.error(
                     "\n\n\n\nIt seems like you provided some arguments to `--update`:\n"
@@ -759,7 +773,7 @@ class Editor:
                     "Are you sure you provided the same URIs as in your input file?\n"
                     "(" + str(input_file) + ")\n\n"
                 )
-                return {}
+                return {}, []
 
             try:
                 pool = Pool(processes=config.proc)
@@ -773,10 +787,25 @@ class Editor:
                 results = self.merge_results(current_plugins, results)
             plugins, redirects = check_results(results)
 
+            # Track version changes for commit message generation
+            updated_plugins = []
+            current_plugin_map = {p.normalized_name: p for _, p in current_plugins}
+
+            for _, new_plugin in plugins:
+                old_plugin = current_plugin_map.get(new_plugin.normalized_name)
+                if old_plugin and old_plugin.version != new_plugin.version:
+                    updated_plugins.append(
+                        (
+                            new_plugin.normalized_name,
+                            old_plugin.version,
+                            new_plugin.version,
+                        )
+                    )
+
             plugins = sorted(plugins, key=lambda v: v[1].normalized_name)
             self.generate_nix(plugins, output_file)
 
-            return redirects
+            return redirects, updated_plugins
 
         return update
 
@@ -1013,6 +1042,7 @@ def check_results(
             if redirect is not None:
                 redirects.update({pdesc: redirect})
                 new_pdesc = PluginDesc(redirect, pdesc.branch, pdesc.alias)
+                result.name = new_pdesc.name
             plugins.append((new_pdesc, result))
 
     if len(failures) == 0:
@@ -1192,19 +1222,25 @@ def update_plugins(editor: Editor, args):
     )
 
     start_time = time.time()
-    redirects = update()
+    redirects, updated_plugins = update()
     duration = time.time() - start_time
     print(f"The plugin update took {duration:.2f}s.")
     editor.rewrite_input(fetch_config, args.input_file, editor.deprecated, redirects)
 
     autocommit = not args.no_commit
 
-    if autocommit:
+    if autocommit and len(updated_plugins) > 0:
         try:
             repo = git.Repo(os.getcwd())
-            updated = datetime.now(tz=UTC).strftime("%Y-%m-%d")
+
+            if len(updated_plugins) == 1:
+                name, old_ver, new_ver = updated_plugins[0]
+                message = f"{editor.attr_path}.{name}: {old_ver} -> {new_ver}"
+            else:
+                message = f"{editor.attr_path}: update on {date.today()}"
+
             print(args.outfile)
-            commit(repo, f"{editor.attr_path}: update on {updated}", [args.outfile])
+            commit(repo, message, [args.outfile])
         except git.InvalidGitRepositoryError as e:
             print(f"Not in a git repository: {e}", file=sys.stderr)
             sys.exit(1)

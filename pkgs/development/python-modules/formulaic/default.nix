@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   hatch-vcs,
   hatchling,
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "formulaic";
   version = "1.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "matthewwardrop";

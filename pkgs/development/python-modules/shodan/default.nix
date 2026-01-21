@@ -4,7 +4,6 @@
   click-plugins,
   colorama,
   fetchPypi,
-  pythonOlder,
   requests,
   setuptools,
   tldextract,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "shodan";
   version = "1.31.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

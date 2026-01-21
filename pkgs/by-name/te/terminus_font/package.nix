@@ -58,6 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://terminus-font.sourceforge.net/";
     license = lib.licenses.ofl;
-    maintainers = with lib.maintainers; [ azey7f ];
+    maintainers = with lib.maintainers; [ maevii ];
   };
 })

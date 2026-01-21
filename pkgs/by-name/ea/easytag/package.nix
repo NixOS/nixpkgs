@@ -40,7 +40,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  NIX_LDFLAGS = "-lid3tag -lz";
+  env = {
+    NIX_LDFLAGS = "-lid3tag -lz";
+    # Note: this allows id3lib to be found at configure time, and also prevents
+    # compilation errors on Linux (GCC 15). Clang / Darwin seems to be unaffected.
+    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-std=c17 -Wno-implicit-function-declaration";
+  };
 
   nativeBuildInputs = [
     pkg-config

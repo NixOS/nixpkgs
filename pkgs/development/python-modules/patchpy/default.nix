@@ -7,13 +7,13 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "patchpy";
   version = "2.0.4";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-q+k9vYz5crCsBjI5QH7Xz3QVpntzrIXeO456dyrzf4I=";
   };
 
@@ -31,4 +31,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ sigmanificient ];
     mainProgram = "patchpy";
   };
-}
+})

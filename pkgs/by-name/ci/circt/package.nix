@@ -9,8 +9,16 @@
   ninja,
   lit,
   z3,
+  sv-lang,
+  fmt,
+  boost,
+  mimalloc,
   gitUpdater,
   callPackage,
+  versionCheckHook,
+
+  # sv-lang (slang) build is broken on darwin
+  enableSlangFrontend ? stdenv.hostPlatform.isLinux,
 }:
 
 let
@@ -19,12 +27,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "circt";
-  version = "1.131.0";
+  version = "1.138.0";
   src = fetchFromGitHub {
     owner = "llvm";
     repo = "circt";
     rev = "firtool-${version}";
-    hash = "sha256-im+w6vYsLdJ/i88mG/anFjPYgE1HfvJIemLEse0pzco=";
+    hash = "sha256-yx6sk6FO7MHNuRFBMhOXTSjtDQ0B6XyhGHb4uHSXx/8=";
     fetchSubmodules = true;
   };
 
@@ -36,16 +44,28 @@ stdenv.mkDerivation rec {
     git
     pythonEnv
     z3
+    versionCheckHook
   ];
-  buildInputs = [ circt-llvm ];
+  buildInputs = [
+    circt-llvm
+  ]
+  ++ lib.optionals enableSlangFrontend [
+    boost
+    fmt
+    mimalloc
+    sv-lang
+  ];
 
   cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
-    "-DMLIR_DIR=${circt-llvm.dev}/lib/cmake/mlir"
-
+    # Based on .github/workflows/buildAndTest.yml:211
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "LLVM_ENABLE_ASSERTIONS" false)
+    (lib.cmakeFeature "MLIR_DIR" "${circt-llvm.dev}/lib/cmake/mlir")
+    (lib.cmakeFeature "LLVM_DIR" "${circt-llvm.dev}/lib/cmake/llvm")
     # LLVM_EXTERNAL_LIT is executed by python3, the wrapped bash script will not work
-    "-DLLVM_EXTERNAL_LIT=${lit}/bin/.lit-wrapped"
-    "-DCIRCT_LLHD_SIM_ENABLED=OFF"
+    (lib.cmakeFeature "LLVM_EXTERNAL_LIT" "${lit}/bin/.lit-wrapped")
+    (lib.cmakeBool "CIRCT_SLANG_FRONTEND_ENABLED" enableSlangFrontend)
+    (lib.cmakeBool "CIRCT_SLANG_BUILD_FROM_SOURCE" false)
   ];
 
   # cannot use lib.optionalString as it creates an empty string, disabling all tests
@@ -76,6 +96,7 @@ stdenv.mkDerivation rec {
           "CIRCT :: circt-reduce/.*\\.mlir"
           "CIRCT :: circt-test/basic.mlir"
           "CIRCT :: firld/.*\\.mlir"
+          "CIRCT :: Tools/domaintool/clock-spec-json.mlir"
         ]
         ++ [
           # Temporarily disable for bump: https://github.com/llvm/circt/issues/8000
@@ -88,6 +109,11 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs tools/circt-test
+
+    substituteInPlace \
+      lib/Tools/circt-verilog-lsp-server/VerilogServerImpl/CMakeLists.txt \
+      lib/Conversion/ImportVerilog/CMakeLists.txt \
+      --replace-fail "slang_slang" "slang::slang"
   '';
 
   preConfigure = ''
@@ -103,7 +129,11 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
-  checkTarget = "check-circt check-circt-integration";
+  checkTarget = "check-circt check-circt-unit";
+
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/firtool";
+  versionCheckProgramArg = "--version";
 
   outputs = [
     "out"

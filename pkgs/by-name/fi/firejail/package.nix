@@ -99,5 +99,6 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
     homepage = "https://firejail.wordpress.com/";
+    mainProgram = "firejail";
   };
 }

@@ -6,15 +6,12 @@
   setuptools,
   jdk11,
   psutil,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "adb-enhanced";
   version = "2.5.24";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ashishb";

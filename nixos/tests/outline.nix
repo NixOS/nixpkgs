@@ -2,7 +2,10 @@
 {
   name = "outline";
 
-  meta.maintainers = lib.teams.cyberus.members;
+  meta.maintainers = with lib.maintainers; [
+    e1mo
+    xanderio
+  ];
 
   node.pkgsReadOnly = false;
 

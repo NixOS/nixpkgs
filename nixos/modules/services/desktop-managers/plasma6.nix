@@ -167,6 +167,7 @@ in
           spectacle
           ffmpegthumbs
           krdp
+          kconfig # required for xdg-terminal from xdg-utils
         ]
         ++ lib.optionals config.hardware.sensor.iio.enable [
           # This is required for autorotation in Plasma 6

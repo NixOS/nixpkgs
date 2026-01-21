@@ -4,7 +4,6 @@
   fetchPypi,
   msrestazure,
   azure-common,
-  pythonOlder,
   setuptools,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "azure-batch";
   version = "14.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

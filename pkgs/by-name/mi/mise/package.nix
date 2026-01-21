@@ -22,16 +22,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mise";
-  version = "2025.12.3";
+  version = "2026.1.5";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "mise";
     rev = "v${version}";
-    hash = "sha256-bqmV9FWQcSzjlePcBOCaqvMxkdP2gQTl6Da2eXigaSk=";
+    hash = "sha256-rOeTm4Qc8+cqce5jx4LciVMiQ7Jvu4883t0KdqgeTy4=";
   };
 
-  cargoHash = "sha256-NpQNltSEAQoYn2fKC0jRHY9iWNpRLwpIaN2FCcmobuc=";
+  cargoHash = "sha256-/QcnUD8/WsZnbQY+Ecc33KT4tOj0Ua+BOBFybBK/O4Y=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -101,7 +101,12 @@ rustPlatform.buildRustPackage rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        # Ignore subcrate releases (fox, aqua-registry)
+        "--version-regex=^v([0-9]+\\.[0-9]+\\.[0-9])$"
+      ];
+    };
     tests = {
       version = (testers.testVersion { package = mise; }).overrideAttrs (old: {
         nativeBuildInputs = old.nativeBuildInputs ++ [ cacert ];

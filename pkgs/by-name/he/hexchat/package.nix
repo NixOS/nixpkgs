@@ -1,7 +1,7 @@
 {
   dbus-glib,
   desktop-file-utils,
-  enchant2,
+  enchant_2,
   fetchFromGitHub,
   gtk2,
   isocodes,
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   #hexchat and hexchat-text loads enchant spell checking library at run time and so it needs to have route to the path
   postPatch = ''
-    sed -i "s,libenchant-2.so.2,${enchant2}/lib/libenchant-2.so.2,g" src/fe-gtk/sexy-spell-entry.c
+    sed -i "s,libenchant-2.so.2,${enchant_2}/lib/libenchant-2.so.2,g" src/fe-gtk/sexy-spell-entry.c
     sed -i "/flag.startswith('-I')/i if flag.contains('no-such-path')\ncontinue\nendif" plugins/perl/meson.build
     chmod +x meson_post_install.py
     for f in meson_post_install.py \

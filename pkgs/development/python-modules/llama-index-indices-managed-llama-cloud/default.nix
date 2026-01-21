@@ -5,15 +5,12 @@
   hatchling,
   llama-cloud,
   llama-index-core,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-indices-managed-llama-cloud";
   version = "0.9.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "llama_index_indices_managed_llama_cloud";

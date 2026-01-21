@@ -18,7 +18,7 @@
 buildPythonPackage rec {
   pname = "openpaperwork-core";
   inherit (callPackage ./src.nix { }) version src;
-  format = "pyproject";
+  pyproject = true;
 
   sourceRoot = "${src.name}/openpaperwork-core";
 

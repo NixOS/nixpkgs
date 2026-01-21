@@ -3,44 +3,44 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
-  aioresponses,
   azure-core,
   azure-identity,
   isodate,
   msrest,
-  responses,
-  pytestCheckHook,
+  aioresponses,
   pytest-asyncio,
+  pytestCheckHook,
+  responses,
 }:
 
 buildPythonPackage rec {
   pname = "pydo";
-  version = "0.22.0";
+  version = "0.24.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "digitalocean";
     repo = "pydo";
     tag = "v${version}";
-    hash = "sha256-OYL75FFyyg47H9K436oVafZCcBLSkfLaJuZEtc1o5dU=";
+    hash = "sha256-IfoW8JaLqghecADPKfVwjW99ZosHFXFt3iQ8WOyrCns=";
   };
 
   build-system = [ poetry-core ];
 
   dependencies = [
-    aioresponses
     azure-core
     azure-identity
     isodate
     msrest
-    responses
   ];
 
   pythonImportsCheck = [ "pydo" ];
 
   nativeCheckInputs = [
-    pytestCheckHook
+    aioresponses
     pytest-asyncio
+    pytestCheckHook
+    responses
   ];
 
   # integration tests require hitting the live api with a

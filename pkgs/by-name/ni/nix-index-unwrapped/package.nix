@@ -46,5 +46,6 @@ rustPlatform.buildRustPackage rec {
       bennofs
       ncfavier
     ];
+    mainProgram = "nix-index";
   };
 }

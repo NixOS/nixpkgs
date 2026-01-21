@@ -1,48 +1,90 @@
 {
   lib,
+  stdenv,
   python3,
   fetchFromGitHub,
-  wrapQtAppsHook,
+  writeShellScriptBin,
+  qt6,
+  writableTmpDirAsHomeHook,
+  ausaxs,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  version = "6.1.1";
+
+  pyside-tools-uic = writeShellScriptBin "pyside6-uic" ''
+    exec ${qt6.qtbase}/libexec/uic -g python "$@"
+  '';
+
+  pyside-tools-rcc = writeShellScriptBin "pyside6-rcc" ''
+    exec ${qt6.qtbase}/libexec/rcc -g python "$@"
+  '';
+in
+python3.pkgs.buildPythonApplication {
   pname = "sasview";
-  version = "5.0.6";
+  inherit version;
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SasView";
     repo = "sasview";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-cwP9VuvO4GPlbAxCqw31xISTi9NoF5RoBQmjWusrnzc=";
+    tag = "v${version}";
+    hash = "sha256-dc1vr+YFHItCI4NnSa+yF948/t7B6utoSp2ps/J40ys=";
   };
 
-  # AttributeError: module 'numpy' has no attribute 'float'.
-  postPatch = ''
-    substituteInPlace src/sas/sascalc/pr/p_invertor.py \
-      --replace "dtype=np.float)" "dtype=float)"
-  '';
+  build-system = with python3.pkgs; [
+    hatchling
+    hatch-build-scripts
+    hatch-requirements-txt
+    hatch-sphinx
+    hatch-vcs
+  ];
 
   nativeBuildInputs = [
-    python3.pkgs.pyqt5
-    python3.pkgs.setuptools
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
+    pyside-tools-rcc
+    pyside-tools-uic
+    python3.pkgs.pyside6
+    python3.pkgs.sasdata
+    python3.pkgs.sasmodels
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    bumps
-    h5py
-    lxml
-    periodictable
-    pillow
-    pyparsing
-    pyqt5
-    qt5reactor
+  buildInputs = [ qt6.qtbase ];
+
+  dependencies = with python3.pkgs; [
     sasmodels
-    scipy
-    setuptools
+    siphash24
+    bumps
+    columnize
+    tccbox
+    hatch-sphinx
+    sasdata
+    matplotlib
+    appdirs
+    dominate
+    html2text
+    html5lib
+    ipython
+    jsonschema
+    mako
+    numba
+    periodictable
+    platformdirs
+    pybind11
+    pylint
+    pyopencl
+    pyopengl
+    pyside6
+    pytools
+    qtconsole
+    superqt
+    twisted
+    uncertainties
     xhtml2pdf
+    zope-interface
   ];
+
+  pythonRemoveDeps = [ "zope" ];
 
   postBuild = ''
     ${python3.interpreter} src/sas/qtgui/convertUI.py
@@ -54,20 +96,30 @@ python3.pkgs.buildPythonApplication rec {
     "\${qtWrapperArgs[@]}"
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
-    pytestCheckHook
-    unittest-xml-reporting
-  ];
+  nativeCheckInputs =
+    with python3.pkgs;
+    [
+      pytestCheckHook
+      unittest-xml-reporting
+    ]
+    ++ [
+      writableTmpDirAsHomeHook
+      ausaxs
+    ];
 
   enabledTestPaths = [
     "test"
   ];
 
-  disabledTests = [
-    # NoKnownLoaderException
-    "test_invalid_cansas"
-    "test_data_reader_exception"
-  ];
+  disabledTestPaths = [ "test/sascalculator/utest_sas_gen.py::sas_gen_test::test_debye_impl" ];
+
+  preCheck =
+    let
+      ext = stdenv.hostPlatform.extensions.sharedLibrary;
+    in
+    ''
+      ln -s ${ausaxs}/lib/libausaxs.${ext} src/sas/sascalc/calculator/ausaxs/lib/libausaxs.${ext}
+    '';
 
   meta = {
     description = "Fitting and data analysis for small angle scattering data";

@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   replaceVars,
   graphviz-nox,
   xdg-utils,
@@ -33,10 +34,15 @@ buildPythonPackage rec {
       graphviz = graphviz-nox;
       xdgutils = xdg-utils;
     })
+    (fetchpatch {
+      # python314 compat; https://github.com/xflr6/graphviz/pull/238
+      url = "https://github.com/xflr6/graphviz/commit/7e0fae6d28792a628a25cadd4ec1582c7351a7a3.patch";
+      hash = "sha256-cZhNsQFi30uFpPXbEJHQ9eol7g6pdv6w8kp1GxLTBD4=";
+    })
   ];
 
   # Fontconfig error: Cannot load default config file
-  FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ freefont_ttf ]; };
+  env.FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ freefont_ttf ]; };
 
   build-system = [ setuptools ];
 

@@ -23,7 +23,7 @@ buildGoModule rec {
     mkdir -p $out/lib/viaduct.ai/v1/ksops-exec/
     mv $GOPATH/bin/kustomize-sops $out/bin/ksops
     ln -s $out/bin/ksops $out/lib/viaduct.ai/v1/ksops-exec/ksops-exec
-    ln -s $ous/bin/ksops $out/lib/viaduct.ai/v1/ksops/ksops
+    ln -s $out/bin/ksops $out/lib/viaduct.ai/v1/ksops/ksops
   '';
 
   # Tests are broken in a nix environment

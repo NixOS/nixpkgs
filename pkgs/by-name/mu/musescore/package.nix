@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "musescore";
-  version = "4.6.4";
+  version = "4.6.5";
 
   src = fetchFromGitHub {
     owner = "musescore";
     repo = "MuseScore";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fBkokokyCJcwYRgdrtWQEqW1rcdlmVQu1OrMJeKA8Sc=";
+    hash = "sha256-lfgf09gLeoiXc0xsJvvKAnSJUjy/L2Fdis/9SNjb1KM=";
   };
 
   cmakeFlags = [

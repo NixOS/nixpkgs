@@ -108,14 +108,14 @@ let
 
   libsession-util-nodejs = stdenv.mkDerivation (finalAttrs: {
     pname = "libsession-util-nodejs";
-    version = "0.5.5"; # find version in yarn.lock
+    version = "0.6.5"; # find version in yarn.lock
     src = fetchFromGitHub {
       owner = "session-foundation";
       repo = "libsession-util-nodejs";
       tag = "v${finalAttrs.version}";
       fetchSubmodules = true;
       deepClone = true; # need git rev for all submodules
-      hash = "sha256-FmI9Xmml+sjXHJ+W6CfBC8QUrQR89H3HWEYlHE2Xsts=";
+      hash = "sha256-T6qjpXZPGkRfBcJCd/4XGNEBZILEG2Py2zN8W2c1Tlc=";
       # fetchgit is not reproducible with deepClone + fetchSubmodules:
       # https://github.com/NixOS/nixpkgs/issues/100498
       postFetch = ''
@@ -153,9 +153,6 @@ let
       # prevent downloading; see https://github.com/cmake-js/cmake-js/blob/v7.3.1/lib/dist.js
       mkdir -p "$HOME/.cmake-js/electron-${stdenv.hostPlatform.node.arch}"
       ln -s ${electron.headers} "$HOME/.cmake-js/electron-${stdenv.hostPlatform.node.arch}/v${electron.version}"
-
-      # populate src/version.h
-      yarn update_version
     '';
 
     # The install script is the build script.
@@ -182,13 +179,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "session-desktop";
-  version = "1.16.10";
+  version = "1.17.5";
   src = fetchFromGitHub {
     owner = "session-foundation";
     repo = "session-desktop";
     tag = "v${finalAttrs.version}";
     leaveDotGit = true;
-    hash = "sha256-9l5AgG9YNz61lS/1Q/b46UgdyidHH7sQK7ZWz19XWr0=";
+    hash = "sha256-qx5e3HfmhB7Edr+KYK+SJfQhF19ct/40v6eIqExw+iU=";
     postFetch = ''
       pushd $out
       git rev-parse HEAD > .gitrev
@@ -237,7 +234,7 @@ stdenv.mkDerivation (finalAttrs: {
     # copy the modified yarn.lock here, and use `./yarn.lock` instead of `"${finalAttrs.src}/yarn.lock"`,
     # and also add `cp ${./yarn.lock} yarn.lock` to postPatch.
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-A2AbKOXWx8+PN467DVpKVTorZDs/UFaxjc7VS0Xdo6k=";
+    hash = "sha256-5MqCwXe/BflIymZiggtAE6XgBa/S4Qoh7KzWokU+L5c=";
   };
 
   preBuild = ''

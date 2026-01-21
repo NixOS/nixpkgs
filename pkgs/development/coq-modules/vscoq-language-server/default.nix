@@ -62,7 +62,6 @@ ocamlPackages.buildDunePackage {
   ++ (with ocamlPackages; [
     findlib
     lablgtk3-sourceview3
-    yojson
     zarith
     ppx_inline_test
     ppx_assert
@@ -70,22 +69,22 @@ ocamlPackages.buildDunePackage {
     ppx_deriving
     ppx_import
     sexplib
-    ppx_yojson_conv
+    (ppx_yojson_conv.override {
+      ppx_yojson_conv_lib = ppx_yojson_conv_lib.override { yojson = yojson_2; };
+    })
     lsp
     sel
     ppx_optcomp
   ]);
 
-  meta =
-    with lib;
-    {
-      description = "Language server for the vscoq vscode/codium extension";
-      homepage = "https://github.com/coq-community/vscoq";
-      maintainers = with lib.maintainers; [ cohencyril ];
-      license = lib.licenses.mit;
-    }
-    // optionalAttrs (fetched.broken or false) {
-      coqFilter = true;
-      broken = true;
-    };
+  meta = {
+    description = "Language server for the vscoq vscode/codium extension";
+    homepage = "https://github.com/coq-community/vscoq";
+    maintainers = with lib.maintainers; [ cohencyril ];
+    license = lib.licenses.mit;
+  }
+  // lib.optionalAttrs (fetched.broken or false) {
+    coqFilter = true;
+    broken = true;
+  };
 }

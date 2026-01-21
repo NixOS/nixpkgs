@@ -18,19 +18,19 @@
 }:
 let
   # We have to hardcode revision because upstream often create multiple releases for the same version number.
-  # This is the commit hash that maps to 1.5.0-beta.8 released on 2025-03-12
-  rev = "de11d84afac7873044568606a8468c78d57aceda";
+  # This is the commit hash that maps to 1.5.0-beta.12 released on 2025-10-11
+  rev = "73b7632ff2977d05763acd56e53bdc7a37d30c0c";
 in
 stdenv.mkDerivation {
   pname = "streamcontroller";
 
-  version = "1.5.0-beta.8";
+  version = "1.5.0-beta.12";
 
   src = fetchFromGitHub {
     repo = "StreamController";
     owner = "StreamController";
     inherit rev;
-    hash = "sha256-pE92/oX9iZYCIhwDkPkjPq/cDUQLUGs+Ou5rjFEIBpo=";
+    hash = "sha256-6H0FPkvjKSfso1+E0JwseOnubDXwYys0RVBbyaGCXw0=";
   };
 
   # The installation method documented upstream
@@ -167,6 +167,7 @@ stdenv.mkDerivation {
     pyro5
     pyspellchecker
     python-dateutil
+    python-wayland-extra
     pyudev
     pyusb
     pyyaml
@@ -182,7 +183,7 @@ stdenv.mkDerivation {
     smmap
     speedtest-cli
     streamcontroller-plugin-tools
-    streamdeck
+    streamcontroller-streamdeck
     textual
     tinycss2
     tqdm

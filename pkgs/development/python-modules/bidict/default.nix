@@ -7,7 +7,6 @@
   pytest-xdist,
   pytestCheckHook,
   typing-extensions,
-  pythonOlder,
   wheel,
 }:
 
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "bidict";
   version = "0.23.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jab";

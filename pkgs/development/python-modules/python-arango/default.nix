@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
 
   # build-system
@@ -32,16 +31,14 @@ in
 
 buildPythonPackage rec {
   pname = "python-arango";
-  version = "8.2.3";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.9";
+  version = "8.2.5";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "arangodb";
     repo = "python-arango";
     tag = version;
-    hash = "sha256-cc8VxaNVOydsuhnNa8Qo8xfhIUIkuNZUWBZNqu6xEwg=";
+    hash = "sha256-WzoQ3pwFDbPoXjHPdX03S9MAnNJTwe6MqXhq0g/pAs0=";
   };
 
   nativeBuildInputs = [

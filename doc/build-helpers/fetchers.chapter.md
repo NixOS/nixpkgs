@@ -899,10 +899,6 @@ However, `fetchFromBitbucket` will automatically switch to using `fetchgit` and 
 
 When `fetchgit` is used, refer to the `fetchgit` section for documentation of its available options.
 
-## `fetchFromSavannah` {#fetchfromsavannah}
-
-This is used with Savannah repositories. The arguments expected are very similar to `fetchFromGitHub` above.
-
 ## `fetchFromRepoOrCz` {#fetchfromrepoorcz}
 
 This is used with repo.or.cz repositories. The arguments expected are very similar to `fetchFromGitHub` above.

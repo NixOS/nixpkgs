@@ -9,6 +9,7 @@
   yojson,
   csexp,
   result,
+  seq,
   menhirSdk,
 }:
 
@@ -43,6 +44,7 @@ buildDunePackage rec {
     yojson
     csexp
     result
+    seq
     menhirSdk
   ];
 

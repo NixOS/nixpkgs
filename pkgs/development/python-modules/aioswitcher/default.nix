@@ -12,22 +12,19 @@
   pytest-resource-path,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   pytz,
   time-machine,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aioswitcher";
   version = "6.0.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "TomerFi";
     repo = "aioswitcher";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-6wBeAbBiuAZW9kHq/bKC0FMJxkLxM6RZN7RLwbF1ig4=";
   };
 
@@ -65,9 +62,13 @@ buildPythonPackage rec {
     "test_schedule_parser_with_a_non_recurring_enabled_schedule_data"
   ]
   ++ lib.optionals (pythonAtLeast "3.12") [
-    # ssertionError: Expected <'I' format requires 0 <= number <= 4294967295> to be equal to <argument out of range>, but was not.
+    # AssertionError: Expected <'I' format requires 0 <= number <= 4294967295> to be equal to <argument out of range>, but was not.
     "test_minutes_to_hexadecimal_seconds_with_a_negative_value_should_throw_an_error"
     "test_current_timestamp_to_hexadecimal_with_errornous_value_should_throw_an_error"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # AssertionError: Expected <hour must be in 0..23, not -1> to be equal
+    "test_seconds_to_iso_time_with_a_nagative_value_should_throw_an_error"
   ];
 
   pythonImportsCheck = [ "aioswitcher" ];
@@ -75,8 +76,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module to interact with Switcher water heater";
     homepage = "https://github.com/TomerFi/aioswitcher";
-    changelog = "https://github.com/TomerFi/aioswitcher/releases/tag/${src.tag}";
+    changelog = "https://github.com/TomerFi/aioswitcher/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

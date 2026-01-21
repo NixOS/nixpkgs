@@ -90,9 +90,14 @@ buildPythonPackage rec {
     pytest-dependency
   ];
 
-  disabledtests = [
+  disabledTests = [
     # flaky, timing sensitive
     "test_timing"
+
+    # flaky, depends on ssh connection
+    "test_argument_device_expansion"
+    "test_argument_file_expansion"
+    "test_local_managedfile"
   ];
 
   pytestFlags = [ "--benchmark-disable" ];

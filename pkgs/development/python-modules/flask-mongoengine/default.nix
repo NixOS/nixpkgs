@@ -7,19 +7,15 @@
   flask-wtf,
   markupsafe,
   mongoengine,
-  pythonOlder,
   setuptools,
   setuptools-scm,
-  typing-extensions,
   wtforms,
 }:
 
 buildPythonPackage rec {
   pname = "flask-mongoengine";
   version = "1.0.0-unstable-2022-08-16";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MongoEngine";
@@ -40,8 +36,7 @@ buildPythonPackage rec {
     flask
     flask-wtf
     mongoengine
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
+  ];
 
   optional-dependencies = {
     wtf = [

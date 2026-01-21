@@ -117,6 +117,9 @@ stdenv.mkDerivation rec {
 
   passthru = lib.optionalAttrs enableMpi { inherit mpi; };
 
+  # fix build with GCC 15
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   cmakeFlags = [
     "-DOPENMP=ON"
     "-DTOOLS=ON"

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   cython,
   catalogue,
   mock,
@@ -17,9 +16,7 @@
 buildPythonPackage rec {
   pname = "srsly";
   version = "2.5.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

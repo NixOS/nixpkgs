@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   pysimplesoap,
-  pythonOlder,
   setuptools,
   distutils,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "python-debianbts";
   version = "4.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit version;

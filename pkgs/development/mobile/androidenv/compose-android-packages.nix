@@ -24,7 +24,9 @@ let
   # Parses a list of versions, substituting "latest" with the latest version.
   parseVersions =
     repo: key: versions:
-    lib.unique (map (parseVersion repo key) versions);
+    lib.sort (a: b: lib.strings.compareVersions (toString a) (toString b) > 0) (
+      lib.unique (map (parseVersion repo key) versions)
+    );
 in
 {
   repoJson ? ./repo.json,
@@ -98,14 +100,27 @@ in
   numLatestPlatformVersions ? 1,
   platformVersions ?
     if minPlatformVersion != null && maxPlatformVersion != null then
+      # Range between min and max, inclusive.
       let
-        minPlatformVersionInt = coerceIntVersion (parseVersion repo "platforms" minPlatformVersion);
-        maxPlatformVersionInt = coerceIntVersion (parseVersion repo "platforms" maxPlatformVersion);
+        minPlatformVersion' = parseVersion repo "platforms" minPlatformVersion;
+        maxPlatformVersion' = parseVersion repo "platforms" maxPlatformVersion;
+        minPlatformVersionInt = coerceIntVersion minPlatformVersion';
+        maxPlatformVersionInt = coerceIntVersion maxPlatformVersion';
+        range = lib.range (lib.min minPlatformVersionInt maxPlatformVersionInt) (
+          lib.max minPlatformVersionInt maxPlatformVersionInt
+        );
       in
-      lib.range (lib.min minPlatformVersionInt maxPlatformVersionInt) (
-        lib.max minPlatformVersionInt maxPlatformVersionInt
-      )
+      # Don't use the actual latest version in lieu of the rounded version here,
+      # since when Google upgrades it would have the nasty side effect of being
+      # unstable and picking 35 -> 36 -> 37 instead of 35 -> 36.1 -> 37.
+      # Best to stay consistent.
+      #
+      # However, if only one platform is requested and it's the latest (which is the default),
+      # we should use it.
+      if lib.length range == 1 then lib.singleton maxPlatformVersion' else range
     else
+      # Use numLatestPlatformVersions with a lower cutoff of minPlatformVersion (defaulting to 1)
+      # to determine how many of the latest *major* versions we should pick.
       let
         minPlatformVersionInt =
           if minPlatformVersion == null then
@@ -116,8 +131,10 @@ in
         firstPlatformVersionInt = lib.max minPlatformVersionInt (
           latestPlatformVersionInt - (lib.max 1 numLatestPlatformVersions) + 1
         );
+        range = lib.range firstPlatformVersionInt latestPlatformVersionInt;
       in
-      lib.range firstPlatformVersionInt latestPlatformVersionInt,
+      # Ditto, see above.
+      if lib.length range == 1 then lib.singleton repo.latest.platforms else range,
   includeSources ? false,
   includeSystemImages ? false,
   systemImageTypes ? [
@@ -144,7 +161,7 @@ in
 
 let
   # Resolve all the platform versions.
-  platformVersions' = map coerceIntVersion (parseVersions repo "platforms" platformVersions);
+  platformVersions' = parseVersions repo "platforms" platformVersions;
 
   # Determine the Android os identifier from Nix's system identifier
   os =
@@ -219,28 +236,6 @@ let
     addons = fetchArchives repo.addons;
     extras = fetchArchives repo.extras;
   };
-
-  # Latest packages that are typically keyed by the API level.
-  archivesByApiLevel =
-    let
-      # Transforms the given attrset mapping API levels (with possible suffixes and minor versions)
-      # into the latest API level for each major version.
-      mkLatestByApiLevel =
-        packages:
-        lib.filterAttrs (_: value: value != null) (
-          lib.mapAttrs (
-            _: value:
-            (lib.findFirst (x: x.name == lib.versions.majorMinor x.name) { value = null; } (
-              lib.lists.sort (x: y: lib.strings.versionOlder y.name x.name) value
-            )).value
-          ) (lib.groupBy (x: lib.versions.major x.name) (lib.attrsToList packages))
-        );
-    in
-    {
-      platforms = mkLatestByApiLevel allArchives.packages.platforms;
-      sources = mkLatestByApiLevel allArchives.packages.sources;
-      system-images = mkLatestByApiLevel allArchives.system-images;
-    };
 
   # Lift the archives to the package level for easy search,
   # and add recurseIntoAttrs to all of them.
@@ -547,17 +542,14 @@ lib.recurseIntoAttrs rec {
   platforms = map (
     version:
     deployAndroidPackage {
-      package = checkVersion [ archivesByApiLevel allArchives.packages ] "platforms" version;
+      package = checkVersion allArchives.packages "platforms" version;
     }
   ) platformVersions';
-
-  # This exposes the version strings (e.g. "36.1" for API 36).
-  platformVersionStrings = map (platform: platform.version) platforms;
 
   sources = map (
     version:
     deployAndroidPackage {
-      package = checkVersion [ archivesByApiLevel allArchives.packages ] "sources" version;
+      package = checkVersion allArchives.packages "sources" version;
     }
   ) platformVersions';
 
@@ -576,12 +568,7 @@ lib.recurseIntoAttrs rec {
         # ```
         let
           availablePackages =
-            map
-              (
-                abiVersion:
-                archivesByApiLevel.system-images.${toString apiVersion}.${type}.${abiVersion}
-                or allArchives.system-images.${toString apiVersion}.${type}.${abiVersion}
-              )
+            map (abiVersion: allArchives.system-images.${toString apiVersion}.${type}.${abiVersion})
               (
                 builtins.filter (
                   abiVersion: lib.hasAttrByPath [ (toString apiVersion) type abiVersion ] allArchives.system-images

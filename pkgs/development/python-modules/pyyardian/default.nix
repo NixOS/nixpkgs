@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  pythonOlder,
   wheel,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pyyardian";
   version = "1.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "h3l1o5";

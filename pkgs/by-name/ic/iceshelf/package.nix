@@ -10,7 +10,7 @@ python3.pkgs.buildPythonApplication {
   pname = "iceshelf";
   version = "0-unstable-2019-07-03";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "mrworf";

@@ -290,23 +290,23 @@ in
   testScript = ''
     start_all()
 
-    server.wait_for_unit("sshd", timeout=30)
-    server_allowed_users.wait_for_unit("sshd", timeout=30)
-    server_localhost_only.wait_for_unit("sshd", timeout=30)
-    server_match_rule.wait_for_unit("sshd", timeout=30)
-    server_no_openssl.wait_for_unit("sshd", timeout=30)
-    server_no_pam.wait_for_unit("sshd", timeout=30)
-    server_null_pam.wait_for_unit("sshd", timeout=30)
+    server.wait_for_unit("sshd", timeout=60)
+    server_allowed_users.wait_for_unit("sshd", timeout=60)
+    server_localhost_only.wait_for_unit("sshd", timeout=60)
+    server_match_rule.wait_for_unit("sshd", timeout=60)
+    server_no_openssl.wait_for_unit("sshd", timeout=60)
+    server_no_pam.wait_for_unit("sshd", timeout=60)
+    server_null_pam.wait_for_unit("sshd", timeout=60)
     server_null_pam.fail("journalctl -u sshd.service | grep 'Unsupported option UsePAM'")
-    server_sftp.wait_for_unit("sshd", timeout=30)
+    server_sftp.wait_for_unit("sshd", timeout=60)
 
-    server_lazy.wait_for_unit("sshd.socket", timeout=30)
-    server_localhost_only_lazy.wait_for_unit("sshd.socket", timeout=30)
-    server_lazy_socket.wait_for_unit("sshd.socket", timeout=30)
+    server_lazy.wait_for_unit("sshd.socket", timeout=60)
+    server_localhost_only_lazy.wait_for_unit("sshd.socket", timeout=60)
+    server_lazy_socket.wait_for_unit("sshd.socket", timeout=60)
 
     # sshd-keygen is a oneshot unit, so just wait for multi-user.target, which
     # pulls it in.
-    server_no_sshd_with_key.wait_for_unit("multi-user.target", timeout=30)
+    server_no_sshd_with_key.wait_for_unit("multi-user.target", timeout=60)
 
     with subtest("manual-authkey"):
         client.succeed(

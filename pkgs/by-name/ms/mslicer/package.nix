@@ -7,6 +7,7 @@
   rustPlatform,
   vulkan-loader,
   wayland,
+  xorg,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -27,17 +28,27 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libxkbcommon
     vulkan-loader
     wayland
+    xorg.libXcursor
+    xorg.libXrandr
+    xorg.libXi
+    xorg.libX11
   ];
 
   # Force linking to libEGL, which is always dlopen()ed, and to
   # libwayland-client & libxkbcommon, which is dlopen()ed based on the
   # winit backend.
   NIX_LDFLAGS = [
+    "--push-state"
     "--no-as-needed"
     "-lEGL"
     "-lvulkan"
     "-lwayland-client"
     "-lxkbcommon"
+    "-lX11"
+    "-lXcursor"
+    "-lXrandr"
+    "-lXi"
+    "--pop-state"
   ];
 
   strictDeps = true;

@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchPypi,
   nodejs,
-  python3,
+  python312,
   gettext,
   nixosTests,
   pretix,
@@ -12,7 +12,7 @@
 }:
 
 let
-  python = python3.override {
+  python = python312.override {
     self = python;
     packageOverrides = self: super: {
       django = super.django_4;
@@ -21,7 +21,7 @@ let
         version = "2.3.0";
         src = fetchFromGitHub {
           inherit (oldAttrs.src) owner repo;
-          rev = "refs/tags/v${version}";
+          tag = "v${version}";
           hash = "sha256-oGg5MD9p4PSUVkt5pGLwjAF4SHHf4Aqr+/3FsuFaybY=";
         };
       });
@@ -42,13 +42,13 @@ let
   };
 
   pname = "pretix";
-  version = "2025.10.0";
+  version = "2025.10.1";
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-q8h7wYUv5ahWvM3sT9srVHnJv5QnakkUKYhgx1X/j5k=";
+    tag = "v${version}";
+    hash = "sha256-O9HAslZ8xbmLgJi3y91M6mc1oIvJZ8nRJyFRuNorRHs=";
   };
 
   npmDeps = buildNpmPackage {
@@ -266,18 +266,6 @@ python.pkgs.buildPythonApplication rec {
   disabledTests = [
     # unreliable around day changes
     "test_order_create_invoice"
-
-    # outdated translation files
-    # https://github.com/pretix/pretix/commit/c4db2a48b6ac81763fa67475d8182aee41c31376
-    "test_different_dates_spanish"
-    "test_same_day_spanish"
-    "test_same_month_spanish"
-    "test_same_year_spanish"
-
-    # broken with fakeredis>=2.27.0
-    "test_waitinglist_cache_separation"
-    "test_waitinglist_item_active"
-    "test_waitinglist_variation_active"
   ];
 
   preCheck = ''

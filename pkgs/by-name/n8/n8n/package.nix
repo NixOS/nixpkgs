@@ -18,20 +18,20 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "n8n";
-  version = "1.123.5";
+  version = "2.4.4";
 
   src = fetchFromGitHub {
     owner = "n8n-io";
     repo = "n8n";
     tag = "n8n@${finalAttrs.version}";
-    hash = "sha256-3vXJnLqQz60Sq1A8lLW0x6xAoN3DneFYVsaHAD0nzng=";
+    hash = "sha256-cp8Wpgocj+wrHwTkTvVyldAn/E9IiYnC65vxAFAG/jg=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
-    fetcherVersion = 2;
-    hash = "sha256-JlW08N9LuwmWqZsXmu4uMAHO0cb8XtOmtER7Bt/Vg8A=";
+    fetcherVersion = 3;
+    hash = "sha256-QtusZm9WaLMjfopsX4t2WiiU++j3V/PQHbelKubhMII=";
   };
 
   nativeBuildInputs = [
@@ -116,6 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       gepbird
       AdrienLemaire
+      sweenu
     ];
     license = lib.licenses.sustainableUse;
     mainProgram = "n8n";

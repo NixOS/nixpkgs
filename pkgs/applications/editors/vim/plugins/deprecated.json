@@ -111,6 +111,10 @@
         "date": "2020-03-27",
         "new": "vim-pug"
     },
+    "vscode-diff-nvim": {
+        "date": "2026-01-10",
+        "new": "codediff-nvim"
+    },
     "vundle": {
         "date": "2020-03-27",
         "new": "Vundle-vim"
