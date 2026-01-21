@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "ibmiotf";
-  version = "0.4.0";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ibm-watson-iot";
     repo = "iot-python";
     tag = version;
-    hash = "sha256-/hRRYf3mY7LqZq0jq7neJRwpvgKczHNNo5bN92Rcv5M=";
+    hash = "sha256-miNkOVPYf2EGlLKtx4UiOu/xkoffaPSiYbTpAA3El7I=";
   };
 
   build-system = [
@@ -47,7 +47,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python Client for IBM Watson IoT Platform";
     homepage = "https://github.com/ibm-watson-iot/iot-python";
-    changelog = "https://github.com/ibm-watson-iot/iot-python/releases/tag/${version}";
+    changelog = "https://github.com/ibm-watson-iot/iot-python/releases/tag/${src.tag}";
     license = lib.licenses.epl10;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
