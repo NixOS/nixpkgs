@@ -1,24 +1,35 @@
 {
   lib,
   buildPythonPackage,
-  sphinx,
   fetchFromGitHub,
+  flit-core,
+  pytestCheckHook,
+  sphinx,
 }:
 buildPythonPackage rec {
   pname = "sphinx-issues";
   version = "5.0.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sloria";
     repo = "sphinx-issues";
     tag = version;
-    sha256 = "sha256-/nc5gtZbE1ziMPWIkZTkevMfVkNtJYL/b5QLDeMhzUs=";
+    hash = "sha256-/nc5gtZbE1ziMPWIkZTkevMfVkNtJYL/b5QLDeMhzUs=";
   };
 
-  pythonImportsCheck = [ "sphinx_issues" ];
+  postPatch = ''
+    substituteInPlace tests/test_sphinx_issues.py \
+      --replace-fail 'Path(sys.executable).parent.joinpath("sphinx-build")' '"${lib.getExe' sphinx "sphinx-build"}"'
+  '';
 
-  propagatedBuildInputs = [ sphinx ];
+  build-system = [ flit-core ];
+
+  dependencies = [ sphinx ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "sphinx_issues" ];
 
   meta = {
     homepage = "https://github.com/sloria/sphinx-issues";
