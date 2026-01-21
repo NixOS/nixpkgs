@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "packageurl-python";
-  version = "0.17.5";
+  version = "0.17.6";
   pyproject = true;
 
   src = fetchPypi {
     pname = "packageurl_python";
     inherit version;
-    hash = "sha256-p74/O6cNcF9zis6b9hJPMZICRaSfpp1LQW2nA33S3mE=";
+    hash = "sha256-ElLOOhAjcspvhuuWjhb5AUxLpRHFw32Vp/Aj4spuXCU=";
   };
 
   build-system = [ setuptools ];
