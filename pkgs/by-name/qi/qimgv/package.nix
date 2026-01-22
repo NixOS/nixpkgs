@@ -40,6 +40,7 @@ stdenv.mkDerivation {
     kdePackages.qtimageformats
     kdePackages.qtsvg
     kdePackages.qttools
+    kdePackages.kimageformats
   ];
 
   postPatch = ''
