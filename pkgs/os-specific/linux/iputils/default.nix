@@ -28,6 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [
     "out"
+    "man"
     "apparmor"
   ];
 
