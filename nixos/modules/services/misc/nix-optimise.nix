@@ -1,69 +1,109 @@
 { config, lib, ... }:
-
 let
   cfg = config.nix.optimise;
+  inherit (lib)
+    mkEnableOption
+    mkRenamedOptionModule
+    mkOption
+    mkDefault
+    mkMerge
+    mkIf
+    types
+    ;
 in
-
 {
-  options = {
-    nix.optimise = {
-      automatic = lib.mkOption {
-        default = false;
-        type = lib.types.bool;
-        description = "Automatically run the nix store optimiser at a specific time.";
-      };
+  imports = [
+    (mkRenamedOptionModule [ "nix" "optimise" "automatic" ] [ "nix" "optimise" "enable" ])
+  ];
 
-      dates = lib.mkOption {
-        default = [ "03:45" ];
-        apply = lib.toList;
-        type = with lib.types; either singleLineStr (listOf str);
-        description = ''
-          Specification (in the format described by
-          {manpage}`systemd.time(7)`) of the time at
-          which the optimiser will run.
-        '';
-      };
+  options.nix.optimise = {
+    enable = mkEnableOption "" // {
+      description = "Whether to enable the nix store optimiser.";
+    };
 
-      randomizedDelaySec = lib.mkOption {
-        default = "1800";
-        type = lib.types.singleLineStr;
-        example = "45min";
-        description = ''
-          Add a randomized delay before the optimizer will run.
-          The delay will be chosen between zero and this value.
-          This value must be a time span in the format specified by
-          {manpage}`systemd.time(7)`
-        '';
-      };
+    mode = mkOption {
+      type = types.nullOr (
+        types.enum [
+          "async"
+          "sync"
+        ]
+      );
+      default = null;
+      example = "async";
+      description = ''
+        The mode of operation for the nix store optimiser.
+        `async` will run the optimiser at the specified time, and `sync` will run the optimiser after every rebuild.
+        Important: `sync` mode sinificantly slows down rebuilds, so it is not recommended for most use cases.
+        If `null`, the optimiser will not run automatically.
+      '';
+    };
 
-      persistent = lib.mkOption {
-        default = true;
-        type = lib.types.bool;
-        example = false;
-        description = ''
-          Takes a boolean argument. If true, the time when the service
-          unit was last triggered is stored on disk. When the timer is
-          activated, the service unit is triggered immediately if it
-          would have been triggered at least once during the time when
-          the timer was inactive. Such triggering is nonetheless
-          subject to the delay imposed by RandomizedDelaySec=. This is
-          useful to catch up on missed runs of the service when the
-          system was powered down.
-        '';
-      };
+    dates = mkOption {
+      default = [ "03:45" ];
+      apply = lib.toList;
+      type = with types; either singleLineStr (listOf str);
+      description = ''
+        This is only available in `async` mode.
+
+        Specification (in the format described by
+        {manpage}`systemd.time(7)`) of the time at
+        which the optimiser will run.
+      '';
+    };
+
+    randomizedDelaySec = mkOption {
+      default = "1800";
+      type = types.singleLineStr;
+      example = "45min";
+      description = ''
+        This is only available in `async` mode.
+
+        Add a randomized delay before the optimizer will run.
+        The delay will be chosen between zero and this value.
+        This value must be a time span in the format specified by
+        {manpage}`systemd.time(7)`
+      '';
+    };
+
+    persistent = mkOption {
+      default = true;
+      type = types.bool;
+      example = false;
+      description = ''
+        This is only available in `async` mode.
+
+        Takes a boolean argument. If true, the time when the service
+        unit was last triggered is stored on disk. When the timer is
+        activated, the service unit is triggered immediately if it
+        would have been triggered at least once during the time when
+        the timer was inactive. Such triggering is nonetheless
+        subject to the delay imposed by RandomizedDelaySec=. This is
+        useful to catch up on missed runs of the service when the
+        system was powered down.
+      '';
     };
   };
 
-  config = {
-    assertions = [
-      {
-        assertion = cfg.automatic -> config.nix.enable;
-        message = ''nix.optimise.automatic requires nix.enable'';
-      }
-    ];
+  config = mkIf cfg.enable (mkMerge [
+    {
+      assertions = [
+        {
+          assertion = cfg.enable -> config.nix.enable;
+          message = ''`nix.optimise.enable` requires `nix.enable = true`'';
+        }
+        {
+          assertion = cfg.mode == null;
+          message = ''Please choose `nix.optimise.mode` to be either `sync` or `async`'';
+        }
+      ];
+    }
+    (mkIf (cfg.mode == "sync") {
+      nix.settings.auto-optimise-store = mkDefault true;
+    })
+    (mkIf (cfg.mode == "async") {
+      nix.settings.auto-optimise-store = mkDefault false;
 
-    systemd = lib.mkIf config.nix.enable {
-      services.nix-optimise = {
+      systemd.services.nix-optimise = {
         description = "Nix Store Optimiser";
         unitConfig = {
           ConditionACPower = true;
@@ -76,17 +116,17 @@ in
           CPUSchedulingPolicy = "idle";
           IOSchedulingClass = "idle";
         };
-        startAt = lib.optionals cfg.automatic cfg.dates;
+        startAt = cfg.dates;
         # do not start and delay when switching
         restartIfChanged = false;
       };
 
-      timers.nix-optimise = lib.mkIf cfg.automatic {
-        timerConfig = {
-          RandomizedDelaySec = cfg.randomizedDelaySec;
-          Persistent = cfg.persistent;
-        };
+      systemd.timers.nix-optimise = {
+        RandomizedDelaySec = cfg.randomizedDelaySec;
+        Persistent = cfg.persistent;
       };
-    };
-  };
+    })
+  ]);
+
+  meta.maintainers = with lib.maintainers; [ qweered ];
 }
