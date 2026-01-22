@@ -254,7 +254,27 @@ in
 
     environment.systemPackages = [ cfg.package ];
 
-    services.dbus.packages = [ cfg.package ];
+    services.dbus.packages = [
+      cfg.package
+    ]
+    ++ lib.optionals cfg.enableWifi [
+      # Allow geoclue to access wpa_supplicant for WiFi-based geolocation
+      (pkgs.writeTextFile {
+        name = "geoclue-wpa-dbus-policy";
+        destination = "/share/dbus-1/system.d/geoclue-wpa.conf";
+        text = ''
+          <!DOCTYPE busconfig PUBLIC
+            "-//freedesktop//DTD D-BUS Bus Configuration 1.0//EN"
+            "http://www.freedesktop.org/standards/dbus/1.0/busconfig.dtd">
+          <busconfig>
+            <policy user="geoclue">
+              <allow send_destination="fi.w1.wpa_supplicant1"/>
+              <allow receive_sender="fi.w1.wpa_supplicant1"/>
+            </policy>
+          </busconfig>
+        '';
+      })
+    ];
 
     systemd.packages = [ cfg.package ];
 
