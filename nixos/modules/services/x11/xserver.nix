@@ -14,21 +14,87 @@ let
   cfg = config.services.xserver;
   xorg = pkgs.xorg;
 
+  knownVideoDriverPackages = {
+    inherit (pkgs)
+      xf86-video-amdgpu
+      xf86-video-apm
+      xf86-video-ark
+      xf86-video-ast
+      xf86-video-ati
+      xf86-video-chips
+      xf86-video-cirrus
+      xf86-video-dummy
+      xf86-video-fbdev
+      xf86-video-geode
+      xf86-video-i128
+      xf86-video-i740
+      xf86-video-intel
+      xf86-video-mga
+      xf86-video-neomagic
+      xf86_video_nested
+      xf86-video-nouveau
+      xf86-video-nv
+      xf86-video-omap
+      xf86-video-openchrome
+      xf86-video-qxl
+      xf86-video-r128
+      xf86-video-s3virge
+      xf86-video-savage
+      xf86-video-siliconmotion
+      xf86-video-sis
+      xf86-video-sisusb
+      xf86-video-suncg6
+      xf86-video-sunffb
+      xf86-video-sunleo
+      xf86-video-tdfx
+      xf86-video-trident
+      xf86-video-v4l
+      xf86-video-vbox
+      xf86-video-vesa
+      xf86-video-vmware
+      xf86-video-voodoo
+      ;
+  };
+
   # Map video driver names to driver packages. FIXME: move into card-specific modules.
-  knownVideoDrivers = {
+  videoDrivers =
+    mapAttrs' (name: value: rec {
+      name = removePrefix "xf86-video-" value.pname;
+      value = {
+        modules = value;
+      };
+    }) knownVideoDriverPackages
+    // videoDriverAliases
+    // videoDriverOverrides;
+
+  videoDriverOverrides = {
+    # Override the driver name of vbox is "vboxvideo".
+    vbox = {
+      driverName = "vboxvideo";
+      modules = [ knownVideoDriverPackages.xf86-video-vbox ];
+    };
+  };
+
+  videoDriverAliases = {
     # Alias so people can keep using "virtualbox" instead of "vboxvideo".
     virtualbox = {
-      modules = [ xorg.xf86videovboxvideo ];
+      modules = [ knownVideoDriverPackages.xf86-video-vbox ];
+      driverName = "vboxvideo";
+    };
+
+    # Alias so people can keep using "vboxvideo" instead of "vbox".
+    vboxvideo = {
+      modules = [ knownVideoDriverPackages.xf86-video-vbox ];
       driverName = "vboxvideo";
     };
 
     # Alias so that "radeon" uses the xf86-video-ati driver.
     radeon = {
-      modules = [ xorg.xf86videoati ];
+      modules = [ knownVideoDriverPackages.xf86-video-ati ];
       driverName = "ati";
     };
 
-    # modesetting does not have a xf86videomodesetting package as it is included in xorgserver
+    # modesetting does not have a xf86-video-modesetting package as it is included in xorg-server
     modesetting = { };
   };
 
@@ -399,19 +465,11 @@ in
           "nvidia"
           "amdgpu"
         ];
-        # TODO(@oxij): think how to easily add the rest, like those nvidia things
-        relatedPackages = concatLists (
-          mapAttrsToList (
-            n: v:
-            optional (hasPrefix "xf86video" n) {
-              path = [
-                "xorg"
-                n
-              ];
-              title = removePrefix "xf86video" n;
-            }
-          ) pkgs.xorg
-        );
+        relatedPackages = mapAttrsToList (name: value: {
+          path = [ name ];
+          title = removePrefix "xf86-video-" value.pname;
+        }) knownVideoDriverPackages;
+
         description = ''
           The names of the video drivers the configuration
           supports. They will be tried in order until one that
@@ -777,19 +835,14 @@ in
     # FIXME: somehow check for unknown driver names.
     services.xserver.drivers = flip concatMap cfg.videoDrivers (
       name:
-      let
-        driver = attrByPath [ name ] (
-          if xorg ? ${"xf86video" + name} then { modules = [ xorg.${"xf86video" + name} ]; } else null
-        ) knownVideoDrivers;
-      in
-      optional (driver != null) (
+      lib.optional (videoDrivers ? name) (
         {
           inherit name;
           modules = [ ];
           driverName = name;
           display = true;
         }
-        // driver
+        // videoDrivers.${name}
       )
     );
 
