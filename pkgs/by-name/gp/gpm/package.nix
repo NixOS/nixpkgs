@@ -10,7 +10,7 @@
   texinfo,
   fetchpatch,
   pkgsStatic,
-  withNcurses ? true,
+  withNcurses ? false,
   ncurses,
 }:
 

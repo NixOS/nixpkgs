@@ -9276,10 +9276,6 @@ with pkgs;
   fuse2 = lowPrio (if stdenv.hostPlatform.isDarwin then macfuse-stubs else fusePackages.fuse_2);
   fuse3 = fusePackages.fuse_3;
 
-  gpm = callPackage ../servers/gpm {
-    withNcurses = false; # Keep curses disabled for lack of value
-  };
-
   gpm-ncurses = gpm.override { withNcurses = true; };
 
   btop-cuda = btop.override { cudaSupport = true; };
