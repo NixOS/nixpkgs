@@ -9,14 +9,14 @@
   file,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "luv";
   version = "0.5.12";
 
   minimalOCamlVersion = "4.03";
 
   src = fetchurl {
-    url = "https://github.com/aantron/luv/releases/download/${version}/luv-${version}.tar.gz";
+    url = "https://github.com/aantron/luv/releases/download/${finalAttrs.version}/luv-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-dp9qCIYqSdROIAQ+Jw73F3vMe7hnkDe8BgZWImNMVsA=";
   };
 
@@ -56,4 +56,4 @@ buildDunePackage rec {
       sternenseemann
     ];
   };
-}
+})
