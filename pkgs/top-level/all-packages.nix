@@ -12203,8 +12203,10 @@ with pkgs;
     tileMode = true;
   };
 
-  curseofwar = callPackage ../games/curseofwar { SDL = null; };
-  curseofwar-sdl = callPackage ../games/curseofwar { ncurses = null; };
+  curseofwar-sdl = curseofwar.override {
+    withSDL = true;
+    ncurses = null;
+  };
 
   ddnet-server = ddnet.override { buildClient = false; };
 

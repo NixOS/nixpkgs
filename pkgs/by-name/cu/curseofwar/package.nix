@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  withSDL ? false,
   ncurses,
   SDL,
 }:
@@ -19,10 +20,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     ncurses
-    SDL
+    (if withSDL then SDL else null)
   ];
 
-  makeFlags = (lib.optionals (SDL != null) [ "SDL=yes" ]) ++ [
+  makeFlags = (lib.optional withSDL "SDL=yes") ++ [
     "PREFIX=$(out)"
     # force platform's cc on darwin, otherwise gcc is used
     "CC=${stdenv.cc.targetPrefix}cc"
@@ -32,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Fast-paced action strategy game";
     homepage = "https://a-nikolaev.github.io/curseofwar/";
     license = lib.licenses.gpl3;
-    mainProgram = if SDL != null then "curseofwar-sdl" else "curseofwar";
+    mainProgram = if withSDL then "curseofwar-sdl" else "curseofwar";
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.all;
   };
