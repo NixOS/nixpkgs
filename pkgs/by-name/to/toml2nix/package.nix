@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchCrate,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -19,6 +20,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ln -s ${./Cargo.lock} Cargo.lock
   '';
 
+  passthru.updateScript = nix-update-script { };
   meta = {
     description = "Tool to convert TOML files to Nix expressions";
     mainProgram = "toml2nix";
