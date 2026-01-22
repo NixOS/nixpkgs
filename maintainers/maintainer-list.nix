@@ -21523,6 +21523,12 @@
     githubId = 12017109;
     name = "Rabindra Dhakal";
   };
+  qb114514 = {
+    name = "qb114514";
+    email = "GNUqb114514@outlook.com";
+    github = "GNUqb114514";
+    githubId = 110373832;
+  };
   qbisi = {
     name = "qbisicwate";
     email = "qbisicwate@gmail.com";
