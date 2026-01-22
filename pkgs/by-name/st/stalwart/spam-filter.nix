@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "Secure, modern, and all-in-one mail & collaboration server, Stalwart (spam-filter module)";
+    description = "Spam filter module for the Stalwart server";
     homepage = "https://github.com/stalwartlabs/spam-filter";
     changelog = "https://github.com/stalwartlabs/spam-filter/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = with lib.licenses; [
