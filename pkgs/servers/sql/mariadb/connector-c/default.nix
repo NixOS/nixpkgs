@@ -46,6 +46,7 @@ stdenv.mkDerivation {
 
   outputs = [
     "out"
+    "man"
     "dev"
   ];
 
