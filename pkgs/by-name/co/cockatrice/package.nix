@@ -1,17 +1,14 @@
 {
   lib,
+  qt5,
   fetchFromGitHub,
-  mkDerivation,
   cmake,
-  protobuf,
-  qtbase,
-  qtmultimedia,
-  qttools,
-  qtwebsockets,
-  wrapQtAppsHook,
+  protobuf_21,
 }:
-
-mkDerivation rec {
+let
+  protobuf = protobuf_21;
+in
+qt5.mkDerivation rec {
   pname = "cockatrice";
   version = "2025-04-03-Release-2.10.2";
 
@@ -22,17 +19,17 @@ mkDerivation rec {
     sha256 = "sha256-zXAK830SdGT3xN3ST8h9LLy/oWr4MH6TZf57gLfI0e8=";
   };
 
-  buildInputs = [
-    qtbase
-    qtmultimedia
-    protobuf
-    qttools
-    qtwebsockets
-  ];
-
   nativeBuildInputs = [
     cmake
-    wrapQtAppsHook
+    qt5.wrapQtAppsHook
+  ];
+
+  buildInputs = [
+    qt5.qtbase
+    qt5.qtmultimedia
+    protobuf
+    qt5.qttools
+    qt5.qtwebsockets
   ];
 
   meta = {

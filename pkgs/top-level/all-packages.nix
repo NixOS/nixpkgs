@@ -12193,10 +12193,6 @@ with pkgs;
 
   cataclysm-dda-git = cataclysmDDA.git.tiles;
 
-  cockatrice = libsForQt5.callPackage ../games/cockatrice {
-    protobuf = protobuf_21;
-  };
-
   construoBase = lowPrio (
     callPackage ../games/construo {
       libGL = null;
