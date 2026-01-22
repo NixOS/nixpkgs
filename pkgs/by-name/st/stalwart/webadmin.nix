@@ -68,7 +68,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   meta = {
-    description = "Secure, modern, and all-in-one mail & collaboration server, Stalwart (webadmin module)";
+    description = "Web administration module for the Stalwart server";
     homepage = "https://github.com/stalwartlabs/webadmin";
     changelog = "https://github.com/stalwartlabs/webadmin/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;

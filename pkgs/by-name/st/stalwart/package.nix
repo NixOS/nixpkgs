@@ -189,7 +189,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   meta = {
-    description = "Secure, modern, and all-in-one mail & collaboration server fluent in IMAP, JMAP, SMTP, CalDAV, CardDAV, and WebDAV";
+    description = "Secure, modern, all-in-one mail and collaboration server";
+    longDescription = ''
+      Secure, scalable and fluent in every protocol (IMAP, JMAP, SMTP, CalDAV, CardDAV, WebDAV).
+    '';
     homepage = "https://github.com/stalwartlabs/stalwart";
     changelog = "https://github.com/stalwartlabs/stalwart/blob/main/CHANGELOG.md";
     license = [

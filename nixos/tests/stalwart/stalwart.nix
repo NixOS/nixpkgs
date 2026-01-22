@@ -1,4 +1,4 @@
-# Rudimentary test checking that the Stalwart collaboration server can:
+# Rudimentary test checking that the Stalwart server can:
 # - receive some message through SMTP submission, then
 # - serve this message through IMAP.
 
