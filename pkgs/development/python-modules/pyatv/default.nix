@@ -29,20 +29,15 @@
 
 buildPythonPackage rec {
   pname = "pyatv";
-  version = "0.16.1";
+  version = "0.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "postlund";
     repo = "pyatv";
     tag = "v${version}";
-    hash = "sha256-b5u9u5CD/1W422rCxHvoyBqT5CuBAh68/EUBzNDcXoE=";
+    hash = "sha256-wsLqG1yJf5A3BMgpbQMrXn6NzpcF4BU1TD+0NJ6Nt7c=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "pytest-runner" ""
-  '';
 
   pythonRelaxDeps = [
     "aiohttp"
