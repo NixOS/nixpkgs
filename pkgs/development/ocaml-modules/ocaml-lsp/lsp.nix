@@ -45,7 +45,7 @@ let
     inherit version;
   };
 in
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "lsp";
   inherit (jsonrpc_v) version src;
   minimalOCamlVersion = if lib.versionAtLeast version "1.7.0" then "4.12" else "4.06";
@@ -159,4 +159,4 @@ buildDunePackage rec {
   meta = jsonrpc.meta // {
     description = "LSP protocol implementation in OCaml";
   };
-}
+})
