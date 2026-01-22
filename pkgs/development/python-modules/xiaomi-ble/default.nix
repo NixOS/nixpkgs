@@ -24,7 +24,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "xiaomi-ble";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-BSWZCugyBnyan4Hl5RxY9IhyGwELl47EQiMrHjjUTKk=";
   };
 
