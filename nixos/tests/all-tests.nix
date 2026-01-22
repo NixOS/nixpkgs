@@ -386,6 +386,7 @@ in
   collectd = runTest ./collectd.nix;
   commafeed = runTest ./commafeed.nix;
   connman = runTest ./connman.nix;
+  console-xkb-and-i18n = runTest ./console-xkb-and-i18n.nix;
   consul = runTest ./consul.nix;
   consul-template = runTest ./consul-template.nix;
   containers-bridge = runTest ./containers-bridge.nix;

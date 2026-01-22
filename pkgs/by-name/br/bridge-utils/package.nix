@@ -27,6 +27,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   meta = {
     description = "Userspace tool to configure linux bridges (deprecated in favour or iproute2)";
     mainProgram = "brctl";

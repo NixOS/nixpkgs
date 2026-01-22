@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "lazyworktree";
-  version = "1.23.0";
+  version = "1.26.0";
 
   src = fetchFromGitHub {
     owner = "chmouel";
     repo = "lazyworktree";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qF9196fzKgU9iS7wlOBCYqxtxsauri7CWBEAPCVxo9g=";
+    hash = "sha256-NEZ8bMI7FxiHuCmFy7sjDlZv4aoX431VRQHQXigaHOM=";
   };
 
-  vendorHash = "sha256-Ch/SsuHrCIFefIuQgK0fp5qSg9JX1zPwLEDsMDYIqxE=";
+  vendorHash = "sha256-6Fxri3Ge2iaMluc5h5tL03yXeJcHT6kG3O2ewDG7Acs=";
 
   nativeBuildInputs = [ installShellFiles ];
 

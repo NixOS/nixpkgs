@@ -9,7 +9,7 @@
   libxml2,
   gobject-introspection,
   gtk3,
-  goocanvas2,
+  goocanvas_2,
   gtkspell3,
   isocodes,
   python3,
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     gtk3
-    goocanvas2
+    goocanvas_2
     gtkspell3
     isocodes
     (python3.withPackages (
