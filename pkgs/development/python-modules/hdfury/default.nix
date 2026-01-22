@@ -14,7 +14,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "glenndehaan";
     repo = "python-hdfury";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-prqaH868nC5b7+1TrVRDxCcAt4v1dyF3bQAnkQgjKx0=";
   };
 
