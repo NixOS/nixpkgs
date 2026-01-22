@@ -1090,6 +1090,7 @@ in
   nix-config = runTest ./nix-config.nix;
   nix-daemon-firewall = runTest ./nix-daemon-firewall.nix;
   nix-ld = runTest ./nix-ld.nix;
+  nix-ld-32bit = runTest ./nix-ld-32bit.nix;
   nix-misc = handleTest ./nix/misc.nix { };
   nix-required-mounts = runTest ./nix-required-mounts;
   nix-serve = runTest ./nix-serve.nix;
