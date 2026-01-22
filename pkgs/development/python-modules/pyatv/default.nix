@@ -27,7 +27,7 @@
   zeroconf,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyatv";
   version = "0.17.0";
   pyproject = true;
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "postlund";
     repo = "pyatv";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-wsLqG1yJf5A3BMgpbQMrXn6NzpcF4BU1TD+0NJ6Nt7c=";
   };
 
@@ -104,8 +104,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python client library for the Apple TV";
     homepage = "https://github.com/postlund/pyatv";
-    changelog = "https://github.com/postlund/pyatv/blob/${src.tag}/CHANGES.md";
+    changelog = "https://github.com/postlund/pyatv/blob/${finalAttrs.src.tag}/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
