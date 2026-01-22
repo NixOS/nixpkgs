@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "securityreporter";
-  version = "1.3.0";
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dongit-org";
     repo = "python-reporter";
     tag = "v${version}";
-    hash = "sha256-YvUDgsKM0JUajp8JAR2vj30QsNtcGvADGCZ791ZZD/8=";
+    hash = "sha256-bM11ztDd7Zg0O2+yGn9ZxKSo3B8nvhqUHSmdea/6sTg=";
   };
 
   postPatch = ''
