@@ -56,8 +56,12 @@ let
     };
     patches = [ ./nevpt2.patch ];
     installPhase = ''
+      runHook preInstall
+
       mkdir $out
       cp -r * $out/.
+
+      runHook postInstall
     '';
   };
 

@@ -69,10 +69,14 @@ let
     npmDepsHash = "sha256-dcdHoyqF9zC/eKtEqMho7TK2E1KIvoXo0iwSPTzj+Kw=";
 
     installPhase = ''
+      runHook preInstall
+
       pushd src/furo/theme/furo/static
       mkdir $out
       cp -rv scripts styles $out/
       popd
+
+      runHook postInstall
     '';
   };
 

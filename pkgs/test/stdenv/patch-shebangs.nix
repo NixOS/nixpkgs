@@ -20,11 +20,15 @@ let
       strictDeps = false;
       dontUnpack = true;
       installPhase = ''
+        runHook preInstall
+
         mkdir -p $out/bin
         echo "#!/bin/bash" > $out/bin/test
         echo "echo -n hello" >> $out/bin/test
         chmod +x $out/bin/test
         dontPatchShebangs=
+
+        runHook postInstall
       '';
       passthru = {
         assertion = "grep '^#!${stdenv.shell}' $out/bin/test > /dev/null";
@@ -36,11 +40,15 @@ let
       strictDeps = false;
       dontUnpack = true;
       installPhase = ''
+        runHook preInstall
+
         mkdir -p $out/bin
         echo "#!$NIX_STORE/path/to/bash" > $out/bin/test
         echo "echo -n hello" >> $out/bin/test
         chmod +x $out/bin/test
         dontPatchShebangs=
+
+        runHook postInstall
       '';
       passthru = {
         assertion = "grep \"^#!$NIX_STORE/path/to/bash\" $out/bin/test > /dev/null";
@@ -52,12 +60,16 @@ let
       strictDeps = false;
       dontUnpack = true;
       installPhase = ''
+        runHook preInstall
+
         mkdir -p $out/bin
         echo "#!$NIX_STORE/path/to/bash" > $out/bin/test
         echo "echo -n hello" >> $out/bin/test
         chmod +x $out/bin/test
         patchShebangs --update $out/bin/test
         dontPatchShebangs=1
+
+        runHook postInstall
       '';
       passthru = {
         assertion = "grep '^#!${stdenv.shell}' $out/bin/test > /dev/null";
@@ -69,11 +81,15 @@ let
       strictDeps = false;
       dontUnpack = true;
       installPhase = ''
+        runHook preInstall
+
         mkdir -p $out/bin
         echo "#!/usr/bin/env -S bash --posix" > $out/bin/test
         echo "echo -n hello" >> $out/bin/test
         chmod +x $out/bin/test
         dontPatchShebangs=
+
+        runHook postInstall
       '';
       passthru = {
         assertion = "grep -v '^#!${pkgs.coreutils}/bin/env -S ${stdenv.shell} --posix' $out/bin/test > /dev/null";
@@ -85,10 +101,14 @@ let
       strictDeps = false;
       dontUnpack = true;
       installPhase = ''
+        runHook preInstall
+
         mkdir -p $out/bin
         printf "#!/bin/bash" > $out/bin/test
         chmod +x $out/bin/test
         dontPatchShebangs=
+
+        runHook postInstall
       '';
       passthru = {
         assertion = "grep '^#!${stdenv.shell}' $out/bin/test > /dev/null";
@@ -100,10 +120,14 @@ let
       strictDeps = false;
       dontUnpack = true;
       installPhase = ''
+        runHook preInstall
+
         mkdir -p $out/bin
         echo "#!/usr/bin/builtin" > $out/bin/test
         chmod +x $out/bin/test
         dontPatchShebangs=
+
+        runHook postInstall
       '';
       passthru = {
         assertion = "grep '^#!/usr/bin/builtin' $out/bin/test > /dev/null";

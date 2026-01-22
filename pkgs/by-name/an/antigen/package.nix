@@ -17,9 +17,13 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     outdir=$out/share/antigen
     mkdir -p $outdir
     cp $src $outdir/antigen.zsh
+
+    runHook postInstall
   '';
 
   meta = {

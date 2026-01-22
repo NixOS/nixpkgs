@@ -38,7 +38,7 @@ mkDerivation (
   base
   // {
     pname = "sys-headers";
-    installPhase = "includesPhase";
+    installPhase = "runHook preInstall; includesPhase; runHook postInstall";
     dontBuild = true;
     noCC = true;
   }

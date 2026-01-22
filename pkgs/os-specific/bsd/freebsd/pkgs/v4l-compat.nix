@@ -47,12 +47,16 @@ stdenv.mkDerivation rec {
   buildPhase = ":";
 
   installPhase = ''
+    runHook preInstall
+
     for f in $allFiles; do
       mkdir -p $(dirname $out/include/$f)
       cp include/uapi/$f $out/include/$f
     done
     cp ${types_h} $out/include/linux/types.h
     cp ${videodev_h} $out/include/linux/videodev.h
+
+    runHook postInstall
   '';
 
   meta = {

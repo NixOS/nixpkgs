@@ -14,8 +14,12 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/share/pari"
     cp -R * "$out/share/pari/"
+
+    runHook postInstall
   '';
 
   meta = {

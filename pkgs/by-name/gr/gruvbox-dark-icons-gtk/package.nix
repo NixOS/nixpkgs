@@ -28,10 +28,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/icons/oomox-gruvbox-dark
     rm README.md
     cp -r * $out/share/icons/oomox-gruvbox-dark
     gtk-update-icon-cache $out/share/icons/oomox-gruvbox-dark
+
+    runHook postInstall
   '';
 
   dontDropIconThemeCache = true;

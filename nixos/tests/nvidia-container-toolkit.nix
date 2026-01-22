@@ -74,6 +74,8 @@ let
       passAsFile = [ "emptyCDISpec" ];
 
       installPhase = ''
+        runHook preInstall
+
         mkdir -p $out/bin $out/share/nvidia-container-toolkit
         cp "$emptyCDISpecPath" "$out/share/nvidia-container-toolkit/spec.json"
         echo -n "$emptyCDISpec" > "$out/bin/nvidia-ctk";
@@ -82,6 +84,8 @@ let
         cat "$out/share/nvidia-container-toolkit/spec.json"
         EOF
         chmod +x $out/bin/nvidia-ctk
+
+        runHook postInstall
       '';
       meta.mainProgram = "nvidia-ctk";
     };

@@ -18,7 +18,11 @@ stdenv.mkDerivation {
   patches = [ ./version.patch ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D ckati $out/bin/ckati
+
+    runHook postInstall
   '';
 
   meta = {

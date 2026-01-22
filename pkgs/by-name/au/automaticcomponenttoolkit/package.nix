@@ -28,7 +28,11 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm0755 act $out/bin/act
+
+    runHook postInstall
   '';
 
   meta = {

@@ -222,7 +222,7 @@ buildPythonPackage rec {
       '';
       checkPhase = "pytestCheckPhase";
 
-      installPhase = "touch $out";
+      installPhase = "runHook preInstall; touch $out; runHook postInstall";
     };
 
     tests = {

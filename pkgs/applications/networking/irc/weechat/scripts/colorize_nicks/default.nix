@@ -17,8 +17,12 @@ stdenv.mkDerivation {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share
     cp $src $out/share/colorize_nicks.py
+
+    runHook postInstall
   '';
 
   passthru = {

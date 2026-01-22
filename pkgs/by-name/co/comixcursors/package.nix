@@ -83,6 +83,8 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     for outputName in $(getAllOutputNames) ; do
       if [ $outputName != out ]; then
         local outputDir=''${!outputName};
@@ -98,6 +100,8 @@ stdenvNoCC.mkDerivation rec {
 
     # Need this directory (empty) to prevent the builder scripts from breaking.
     mkdir -p $out
+
+    runHook postInstall
   '';
 
   outputs =

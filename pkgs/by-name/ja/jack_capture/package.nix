@@ -27,8 +27,12 @@ stdenv.mkDerivation {
   buildPhase = "PREFIX=$out make jack_capture";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp jack_capture $out/bin/
+
+    runHook postInstall
   '';
 
   hardeningDisable = [ "format" ];

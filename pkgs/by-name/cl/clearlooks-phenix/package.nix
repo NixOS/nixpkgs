@@ -15,8 +15,12 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/themes/Clearlooks-Phenix
     cp -r . $out/share/themes/Clearlooks-Phenix/
+
+    runHook postInstall
   '';
 
   preferLocalBuild = true;

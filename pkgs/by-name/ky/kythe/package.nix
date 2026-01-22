@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     cd tools
     for exe in http_server \
                 kythe read_entries triples verifier \
@@ -38,6 +40,8 @@ stdenv.mkDerivation rec {
     cd ../
     cp -R ./ $out
     ln -s $out/tools $out/bin
+
+    runHook postInstall
   '';
 
   meta = {

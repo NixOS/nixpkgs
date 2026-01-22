@@ -114,9 +114,13 @@ let
       # mosflm statically links against its own libccp4, which as the syminfo.lib environment variable problem.
       # Here, we circumvent it by creating a little wrapper script that calls mosflm after setting the SYMINFO variable.
       installPhase = ''
+        runHook preInstall
+
         mkdir -p $out/bin
         cp ${mosflmBinary} $out/bin/mosflm-raw
         makeWrapper $out/bin/mosflm-raw $out/bin/mosflm --set SYMINFO ${libccp4}/share/syminfo.lib --add-flags -n
+
+        runHook postInstall
       '';
     };
 

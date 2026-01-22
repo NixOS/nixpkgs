@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mv swaks $out/bin/
 
@@ -33,6 +35,8 @@ stdenv.mkDerivation rec {
           IOSocketINET6
         ]
       }"
+
+    runHook postInstall
   '';
 
   meta = {

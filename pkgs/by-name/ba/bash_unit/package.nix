@@ -40,8 +40,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp bash_unit $out/bin/
+
+    runHook postInstall
   '';
 
   meta = {

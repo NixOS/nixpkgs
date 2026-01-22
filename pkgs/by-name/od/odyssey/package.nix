@@ -47,7 +47,11 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 -t $out/bin sources/odyssey
+
+    runHook postInstall
   '';
 
   meta = {

@@ -16,7 +16,11 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 zalgo -t $out/bin
+
+    runHook postInstall
   '';
 
   meta = {

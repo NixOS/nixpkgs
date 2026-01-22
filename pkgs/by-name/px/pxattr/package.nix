@@ -17,8 +17,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ gcc ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp pxattr $out/bin
+
+    runHook postInstall
   '';
 
   meta = {

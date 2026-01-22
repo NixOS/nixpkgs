@@ -24,8 +24,12 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     cp bios.bin bios.bin.elf $out/.
+
+    runHook postInstall
   '';
 
   hardeningDisable = [

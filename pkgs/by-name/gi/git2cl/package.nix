@@ -17,8 +17,12 @@ stdenv.mkDerivation {
 
   buildInputs = [ perl ];
   installPhase = ''
+    runHook preInstall
+
     install -D -m755 git2cl $out/bin/git2cl
     install -D -m644 README $out/share/doc/git2cl/README
+
+    runHook postInstall
   '';
 
   meta = {

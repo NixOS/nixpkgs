@@ -39,9 +39,13 @@ stdenv.mkDerivation {
   passthru.scripts = [ "wee_slack.py" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share
     cp wee_slack.py $out/share/wee_slack.py
     install -D -m 0444 weemoji.json $out/share/wee-slack/weemoji.json
+
+    runHook postInstall
   '';
 
   meta = {

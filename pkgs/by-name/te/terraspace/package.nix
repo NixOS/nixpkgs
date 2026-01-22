@@ -22,10 +22,14 @@ stdenv.mkDerivation {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     makeWrapper ${rubyEnv}/bin/terraspace $out/bin/terraspace
     wrapProgram $out/bin/terraspace \
       --prefix PATH : ${lib.makeBinPath [ rubyEnv.ruby ]}
+
+    runHook postInstall
   '';
 
   passthru.updateScript = bundlerUpdateScript "terraspace";

@@ -35,7 +35,11 @@ let
     dontBuild = true;
 
     installPhase = ''
+      runHook preInstall
+
       install -Dm555 -t $out/bin scripts/${pname}
+
+      runHook postInstall
     '';
 
     meta.mainProgram = "keyd-application-mapper";

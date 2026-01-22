@@ -29,9 +29,13 @@ stdenv.mkDerivation (finalAttrs: {
   # Create a trampoline script in $out/bin/ because a symlink doesn’t work for
   # this app.
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/Applications/GrandPerspective.app" "$out/bin"
     cp -R . "$out/Applications/GrandPerspective.app"
     makeWrapper "$out/Applications/GrandPerspective.app/Contents/MacOS/GrandPerspective" "$out/bin/grandperspective"
+
+    runHook postInstall
   '';
 
   passthru.updateScript = lib.getExe (writeShellApplication {

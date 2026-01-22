@@ -34,5 +34,5 @@ stdenv.mkDerivation {
     done
   '';
 
-  installPhase = "touch $out";
+  installPhase = "runHook preInstall; touch $out; runHook postInstall";
 }

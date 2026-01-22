@@ -83,6 +83,8 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/cups/model
     ln -s $out/opt/brother/Printers/HL2260D/cupswrapper/brother-HL2260D-cups-en.ppd $out/share/cups/model
 
@@ -105,6 +107,8 @@ stdenv.mkDerivation {
           which
         ]
       }
+
+    runHook postInstall
   '';
 
   meta = {

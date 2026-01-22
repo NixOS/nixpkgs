@@ -24,6 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     popd
     mkdir -p $out/bin
     mv libexec $out
@@ -31,6 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     installShellCompletion --zsh completions/_rbenv
     installShellCompletion --bash completions/rbenv.bash
+
+    runHook postInstall
   '';
 
   meta = {

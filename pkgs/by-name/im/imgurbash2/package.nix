@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cat <<EOF >$out/bin/imgurbash2
     #!${bash}/bin/bash
@@ -31,6 +33,8 @@ stdenv.mkDerivation rec {
     EOF
     cat imgurbash2 >> $out/bin/imgurbash2
     chmod +x $out/bin/imgurbash2
+
+    runHook postInstall
   '';
 
   meta = {

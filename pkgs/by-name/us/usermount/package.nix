@@ -31,8 +31,12 @@ stdenv.mkDerivation {
   env.NIX_CFLAGS_COMPILE = "-DENABLE_NOTIFICATIONS";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mv usermount $out/bin/
+
+    runHook postInstall
   '';
 
   meta = {

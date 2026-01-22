@@ -27,8 +27,12 @@ stdenv.mkDerivation rec {
   setOutputFlags = false;
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 -t $out/bin dnstracer
     install -Dm755 -t $man/share/man/man8 dnstracer.8
+
+    runHook postInstall
   '';
 
   buildInputs = [ ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.libresolv ];

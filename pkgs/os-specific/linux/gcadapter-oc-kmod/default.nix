@@ -29,7 +29,11 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D {,$out/${kerneldir}/extra/}gcadapter_oc.ko
+
+    runHook postInstall
   '';
 
   meta = {

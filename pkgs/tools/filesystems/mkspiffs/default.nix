@@ -41,7 +41,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 -t $out/bin mkspiffs
+
+    runHook postInstall
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];

@@ -23,8 +23,12 @@ stdenv.mkDerivation {
   makeFlags = [ "CFLAGS=-Wno-maybe-uninitialized" ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D pcimem "$out/bin/pcimem"
     install -D README "$doc/doc/README"
+
+    runHook postInstall
   '';
 
   meta = {

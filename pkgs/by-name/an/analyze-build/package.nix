@@ -21,8 +21,12 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
     install "$src/analyze-build" "$out/bin/"
+
+    runHook postInstall
   '';
 
   makeWrapperArgs = [

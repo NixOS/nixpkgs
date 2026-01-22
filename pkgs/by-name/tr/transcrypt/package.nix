@@ -37,6 +37,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -m 755 -D transcrypt $out/bin/transcrypt
     install -m 644 -D man/transcrypt.1 $out/share/man/man1/transcrypt.1
     install -m 644 -D contrib/bash/transcrypt $out/share/bash-completion/completions/transcrypt
@@ -67,6 +69,8 @@ stdenv.mkDerivation rec {
     }:"
     EOF
     chmod +x $out/bin/transcrypt-depspathprefix
+
+    runHook postInstall
   '';
 
   passthru.tests.version = testers.testVersion {

@@ -27,7 +27,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D --target-directory "$out/bin" aseq2json
+
+    runHook postInstall
   '';
 
   meta = {

@@ -30,6 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -d $out/bin
     install -m755 duk $out/bin/
   ''
@@ -38,6 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
     install -d $out/include
 
     make INSTALL_PREFIX="$out" -f Makefile.sharedlibrary install
+
+    runHook postInstall
   '';
 
   enableParallelBuilding = true;

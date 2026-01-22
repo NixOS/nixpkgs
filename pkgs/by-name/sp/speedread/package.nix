@@ -19,7 +19,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl ];
 
   installPhase = ''
+    runHook preInstall
+
     install -m755 -D speedread $out/bin/speedread
+
+    runHook postInstall
   '';
 
   meta = {

@@ -36,7 +36,11 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     touch $out
+
+    runHook postInstall
   '';
 
   checkPhase = ''

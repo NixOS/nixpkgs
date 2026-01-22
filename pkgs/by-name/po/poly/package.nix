@@ -27,9 +27,13 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fonts/opentype
     cp ${regular} $out/share/fonts/opentype/Poly-Regular.otf
     cp ${italic} $out/share/fonts/opentype/Poly-Italic.otf
+
+    runHook postInstall
   '';
 
   outputHashAlgo = "sha256";

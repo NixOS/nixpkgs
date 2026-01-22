@@ -38,11 +38,15 @@ stdenv.mkDerivation {
   # the build needs a bit of work...
   dontBuild = true;
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/mcy/{dash,scripts}
     install mcy.py      $out/bin/mcy      && chmod +x $out/bin/mcy
     install mcy-dash.py $out/bin/mcy-dash && chmod +x $out/bin/mcy-dash
     cp -r dash/.    $out/share/mcy/dash/.
     cp -r scripts/. $out/share/mcy/scripts/.
+
+    runHook postInstall
   '';
 
   meta = {

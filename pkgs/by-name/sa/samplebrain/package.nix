@@ -54,9 +54,13 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp samplebrain $out/bin
     install -m 444 -D desktop/samplebrain.svg $out/share/icons/hicolor/scalable/apps/samplebrain.svg
+
+    runHook postInstall
   '';
 
   meta = {

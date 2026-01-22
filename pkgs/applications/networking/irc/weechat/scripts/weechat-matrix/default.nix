@@ -73,6 +73,8 @@ buildPythonPackage {
   pyproject = false;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share $out/bin
     cp main.py $out/share/matrix.py
 
@@ -88,6 +90,8 @@ buildPythonPackage {
 
     mkdir -p $out/${python.sitePackages}
     cp -r matrix $out/${python.sitePackages}/matrix
+
+    runHook postInstall
   '';
 
   dontPatchShebangs = true;

@@ -18,7 +18,11 @@ stdenv.mkDerivation {
   makeFlags = [ "RELEASE=yes" ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 hdl_dump -t $out/bin
+
+    runHook postInstall
   '';
 
   meta = {

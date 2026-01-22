@@ -48,7 +48,11 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D mailman_exporter.py $out/bin/mailman3_exporter
+
+    runHook postInstall
   '';
 
   meta = {

@@ -27,8 +27,12 @@ stdenv.mkDerivation {
   makeFlags = kernelModuleMakeFlags ++ [ "KDIR='${kernel.dev}/lib/modules/${kernel.modDirVersion}'" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/tty/serial
     cp ax99100x.ko $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/tty/serial
+
+    runHook postInstall
   '';
 
   meta = {

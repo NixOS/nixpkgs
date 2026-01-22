@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     installManPage docs/man/dehydrated.1
 
     mkdir -p "$out/share/docs/dehydrated"
@@ -51,6 +53,8 @@ stdenv.mkDerivation rec {
         hexdump
       ]
     }"
+
+    runHook postInstall
   '';
 
   meta = {

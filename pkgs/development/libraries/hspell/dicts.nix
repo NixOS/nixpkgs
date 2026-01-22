@@ -36,23 +36,38 @@ in
     pname = "aspell-dict-he";
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/lib/aspell
-      cp -v he_affix.dat he.wl $out/lib/aspell'';
+      cp -v he_affix.dat he.wl $out/lib/aspell
+
+      runHook postInstall
+    '';
   };
 
   myspell = dict "myspell" {
     pname = "myspell-dict-he";
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/lib/myspell
-      cp -v he.dic he.aff $out/lib/myspell'';
+      cp -v he.dic he.aff $out/lib/myspell
+
+      runHook postInstall
+    '';
   };
 
   hunspell = dict "hunspell" {
     pname = "hunspell-dict-he";
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/lib
-      cp -rv hunspell $out/lib'';
+      cp -rv hunspell $out/lib
+
+      runHook postInstall
+    '';
   };
 }

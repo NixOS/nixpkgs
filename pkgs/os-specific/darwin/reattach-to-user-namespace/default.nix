@@ -24,8 +24,12 @@ stdenv.mkDerivation rec {
       throw "reattach-to-user-namespace isn't being built for ${stdenv.hostPlatform.system} yet.";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp reattach-to-user-namespace $out/bin/
+
+    runHook postInstall
   '';
 
   meta = {

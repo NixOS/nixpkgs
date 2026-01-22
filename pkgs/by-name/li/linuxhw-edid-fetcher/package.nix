@@ -55,11 +55,15 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
     ln -s "$fetch" "$out/bin/"
     ${lib.optionalString (displays != { }) ''
       install -D --mode=444 --target-directory="$out/lib/firmware/edid" *.bin
     ''}
+
+    runHook postInstall
   '';
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch=master" ]; };

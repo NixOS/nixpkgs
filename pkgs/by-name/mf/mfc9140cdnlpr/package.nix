@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     dir=$out/opt/brother/Printers/mfc9140cdn
 
     patchelf --set-interpreter ${pkgsi686Linux.glibc.out}/lib/ld-linux.so.2 $dir/lpd/brmfc9140cdnfilter
@@ -68,6 +70,8 @@ stdenv.mkDerivation rec {
           gawk
         ]
       }
+
+    runHook postInstall
   '';
 
   meta = {

@@ -26,6 +26,8 @@ let
       };
 
       installPhase = ''
+        runHook preInstall
+
         local fontsdir="$out/share/lilypond/${lilypond.version}/fonts"
 
         install -m755 -d "$fontsdir/otf"
@@ -41,6 +43,8 @@ let
         for font in {svg,woff}/**.{svg,woff}; do
           install -Dt "$fontsdir/svg" -m644 "$font"
         done
+
+        runHook postInstall
       '';
 
       meta = {

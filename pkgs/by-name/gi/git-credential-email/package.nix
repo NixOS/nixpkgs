@@ -55,7 +55,11 @@ python3Packages.buildPythonApplication rec {
   pyproject = false;
 
   installPhase = ''
+    runHook preInstall
+
     install -D -t $out/bin ${lib.concatStringsSep " " scripts}
+
+    runHook postInstall
   '';
 
   meta = {

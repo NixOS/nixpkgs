@@ -99,7 +99,7 @@ lib.makeOverridable (
       CPP = "${stdenv'.cc.targetPrefix}cpp";
     }
     // lib.optionalAttrs (attrs.headersOnly or false) {
-      installPhase = "includesPhase";
+      installPhase = "runHook preInstall; includesPhase; runHook postInstall";
       dontBuild = true;
     }
     // lib.optionalAttrs stdenv'.hostPlatform.isStatic { NOLIBSHARED = true; }

@@ -19,9 +19,13 @@ stdenv.mkDerivation rec {
   unpackCmd = ''${unzip}/bin/unzip "$src" -x __MACOSX/ __MACOSX/iaca-lin64/ __MACOSX/iaca-lin64/._.DS_Store'';
   nativeBuildInputs = [ makeWrapper ];
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/lib
     cp bin/iaca $out/bin/
     cp lib/* $out/lib
+
+    runHook postInstall
   '';
   preFixup =
     let

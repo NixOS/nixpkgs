@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   buildPhase = "ocaml pkg/build.ml native=true native-dynlink=${lib.boolToString withShared}";
-  installPhase = "${opaline}/bin/opaline -libdir $OCAMLFIND_DESTDIR";
+  installPhase = "runHook preInstall; ${opaline}/bin/opaline -libdir $OCAMLFIND_DESTDIR; runHook postInstall";
   configurePlatforms = [ ];
 
   meta = {

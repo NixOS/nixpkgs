@@ -82,9 +82,13 @@ stdenv.mkDerivation rec {
       );
     in
     ''
+      runHook preInstall
+
       mkdir -p $out/bin/ $out/.bin-wrapped
       mv lnxrouter $out/.bin-wrapped/lnxrouter
       makeWrapper $out/.bin-wrapped/lnxrouter $out/bin/lnxrouter --prefix PATH : ${binPath}
+
+      runHook postInstall
     '';
 
   meta = {

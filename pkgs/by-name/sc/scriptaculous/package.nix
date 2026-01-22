@@ -17,8 +17,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ unzip ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
     cp src/*.js $out
+
+    runHook postInstall
   '';
 
   meta = {

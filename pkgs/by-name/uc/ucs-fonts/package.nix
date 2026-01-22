@@ -49,11 +49,15 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -m 644 -D *.otb *.pcf.gz -t "$out/share/fonts/misc"
     install -m 644 -D *.bdf -t "$bdf/share/fonts/misc"
 
     mkfontdir "$out/share/fonts/misc"
     mkfontdir "$bdf/share/fonts/misc"
+
+    runHook postInstall
   '';
 
   outputs = [

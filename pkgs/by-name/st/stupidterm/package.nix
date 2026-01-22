@@ -34,12 +34,16 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D stupidterm $out/bin/stupidterm
     install -D -m 644 stupidterm.desktop $out/share/applications/stupidterm.desktop
     install -D -m 644 stupidterm.ini $out/share/stupidterm/stupidterm.ini
 
     substituteInPlace $out/share/applications/stupidterm.desktop \
       --replace "Exec=st" "Exec=$out/bin/stupidterm"
+
+    runHook postInstall
   '';
 
   passthru.tests.test = nixosTests.terminal-emulators.stupidterm;

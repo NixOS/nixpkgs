@@ -14,8 +14,12 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/amoeba
     cp demo.dat $out/share/amoeba/
+
+    runHook postInstall
   '';
 
   meta = {

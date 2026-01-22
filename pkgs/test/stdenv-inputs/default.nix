@@ -7,6 +7,8 @@ let
     dontUnpack = true;
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/bin $out/include $out/lib
       $CC -o $out/bin/foo ${./cc-main.c}
       chmod +x $out/bin/foo
@@ -15,6 +17,8 @@ let
         ${lib.optionalString stdenv.hostPlatform.isDarwin "-Wl,-install_name,$out/lib/libfoo.dylib"} \
         -o $out/lib/libfoo${stdenv.hostPlatform.extensions.sharedLibrary} \
         ${./foo.c}
+
+      runHook postInstall
     '';
   };
 
@@ -28,6 +32,8 @@ let
     dontUnpack = true;
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/bin $dev/include $dev/lib
       $CC -o $out/bin/bar ${./cc-main.c}
       chmod +x $out/bin/bar
@@ -36,6 +42,8 @@ let
         ${lib.optionalString stdenv.hostPlatform.isDarwin "-Wl,-install_name,$dev/lib/libbar.dylib"} \
         -o $dev/lib/libbar${stdenv.hostPlatform.extensions.sharedLibrary} \
         ${./bar.c}
+
+      runHook postInstall
     '';
   };
 in

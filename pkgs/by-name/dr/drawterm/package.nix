@@ -64,6 +64,8 @@ stdenv.mkDerivation {
     ];
 
   installPhase = ''
+    runHook preInstall
+
     installManPage drawterm.1
   ''
   + lib.optionalString withWayland ''
@@ -80,6 +82,8 @@ stdenv.mkDerivation {
     mv gui-cocoa/drawterm.app $out/Applications/
     mv drawterm $out/Applications/drawterm.app/
     ln -s $out/Applications/drawterm.app/drawterm $out/bin/
+
+    runHook postInstall
   '';
 
   passthru = {

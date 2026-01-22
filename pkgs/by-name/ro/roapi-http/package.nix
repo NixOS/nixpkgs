@@ -41,9 +41,13 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     tar xvzf $src
     mkdir -p "$out/bin"
     cp roapi-http $out/bin
+
+    runHook postInstall
   '';
 
   meta = {

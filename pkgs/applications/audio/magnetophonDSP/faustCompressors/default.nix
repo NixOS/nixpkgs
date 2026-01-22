@@ -40,6 +40,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib/lv2
     mv *.lv2/ $out/lib/lv2
     mkdir -p $out/bin
@@ -47,6 +49,8 @@ stdenv.mkDerivation rec {
     for f in $(find . -executable -type f); do
       cp $f $out/bin/
     done
+
+    runHook postInstall
   '';
 
   meta = {

@@ -28,8 +28,12 @@ stdenv.mkDerivation rec {
       "UNKNOWN"
   }";
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp nmon $out/bin
+
+    runHook postInstall
   '';
 
   meta = {

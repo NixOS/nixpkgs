@@ -21,8 +21,12 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
     install "$src/scan-build-py" "$out/bin/scan-build-py"
+
+    runHook postInstall
   '';
 
   makeWrapperArgs = [

@@ -28,6 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -d $out/bin $out/share/lynis
     install -Dm555 -t $out/libexec lynis
     cp -r include db default.prf plugins $out/share/lynis/
@@ -37,6 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
     installManPage lynis.8
     installShellCompletion --bash --name lynis.bash \
       extras/bash_completion.d/lynis
+
+    runHook postInstall
   '';
 
   meta = {

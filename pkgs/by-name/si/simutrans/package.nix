@@ -93,6 +93,8 @@ let
           src = fetchurl { inherit url sha256; };
         in
         ''
+          runHook preInstall
+
           mkdir -p "$out/share/simutrans/${pakName}"
           cd "$out/share/simutrans/${pakName}"
           "${unzip}/bin/unzip" "${src}"
@@ -104,6 +106,8 @@ let
           mv ./"$toStrip"/* .
           rm -f "$toStrip/.directory" #pak128.german had this
           rmdir -p "$toStrip"
+
+          runHook postInstall
         '';
     };
 
@@ -185,11 +189,15 @@ let
     enableParallelBuilding = true;
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/share/
       mv simutrans $out/share/
 
       mkdir -p $out/bin/
       mv build/default/sim $out/bin/simutrans
+
+      runHook postInstall
     '';
 
     meta = {

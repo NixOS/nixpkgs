@@ -18,8 +18,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp fs_mark $out/bin/
+
+    runHook postInstall
   '';
 
   meta = {

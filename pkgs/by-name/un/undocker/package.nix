@@ -23,7 +23,7 @@ buildGoModule {
 
   buildPhase = "make VSN=v${version} VSNHASH=${hash} undocker";
 
-  installPhase = "install -D undocker $out/bin/undocker";
+  installPhase = "runHook preInstall; install -D undocker $out/bin/undocker; runHook postInstall";
 
   vendorHash = null;
 

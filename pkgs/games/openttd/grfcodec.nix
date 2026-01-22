@@ -25,8 +25,12 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -a grfcodec grfid grfstrip nforenum $out/bin/
+
+    runHook postInstall
   '';
 
   meta = {

@@ -34,8 +34,12 @@ stdenv.mkDerivation {
 
   # Makefile has no rule for 'install'
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp i3-easyfocus $out/bin
+
+    runHook postInstall
   '';
 
   meta = {

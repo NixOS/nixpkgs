@@ -41,6 +41,10 @@ stdenvNoCC.mkDerivation {
     ./test/run.sh
   '';
   installPhase = ''
+    runHook preInstall
+
     touch $out
+
+    runHook postInstall
   '';
 }

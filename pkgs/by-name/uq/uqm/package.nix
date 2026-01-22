@@ -129,8 +129,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     ./build.sh uqm install
     sed -i $out/bin/uqm -e "s%/usr/local/games/%$out%g"
+
+    runHook postInstall
   '';
 
   meta = {

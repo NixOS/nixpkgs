@@ -25,7 +25,11 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm644 -t $out/lib/purple-2 jabber_http_file_upload.so
+
+    runHook postInstall
   '';
 
   meta = {

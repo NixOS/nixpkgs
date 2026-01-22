@@ -92,6 +92,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ dpkg ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
     mv opt "$out/"
 
@@ -102,6 +104,8 @@ stdenv.mkDerivation rec {
 
     substituteInPlace $out/share/applications/hyper.desktop \
       --replace "/opt/Hyper/hyper" "hyper"
+
+    runHook postInstall
   '';
 
   passthru.tests.test = nixosTests.terminal-emulators.hyper;

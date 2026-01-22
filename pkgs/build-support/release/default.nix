@@ -183,6 +183,8 @@ rec {
         '';
 
         installPhase = ''
+          runHook preInstall
+
           mkdir -p $out/{tarballs,nix-support}
 
           tar cJf "$out/tarballs/nixexprs.tar.xz" \
@@ -198,6 +200,8 @@ rec {
               touch "$out/nix-support/failed"
             fi
           done
+
+          runHook postInstall
         '';
 
         meta = meta // {

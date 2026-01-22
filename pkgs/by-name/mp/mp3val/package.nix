@@ -16,7 +16,11 @@ stdenv.mkDerivation rec {
   makefile = "Makefile.linux";
 
   installPhase = ''
+    runHook preInstall
+
     install -Dv mp3val "$out/bin/mp3val"
+
+    runHook postInstall
   '';
 
   hardeningDisable = [ "fortify" ];

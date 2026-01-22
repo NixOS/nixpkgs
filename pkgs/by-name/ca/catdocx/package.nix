@@ -21,6 +21,8 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/libexec $out/bin
     cp catdocx.sh $out/libexec
     chmod +x $out/libexec/catdocx.sh
@@ -31,6 +33,8 @@ stdenv.mkDerivation {
       ]
     }"
     ln -s $out/libexec/catdocx.sh $out/bin/catdocx
+
+    runHook postInstall
   '';
 
   meta = {

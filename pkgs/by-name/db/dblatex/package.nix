@@ -100,7 +100,11 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     ${python311.interpreter} ./setup.py install --prefix="$out" --use-python-path --verbose
+
+    runHook postInstall
   '';
 
   passthru = { inherit tex; };

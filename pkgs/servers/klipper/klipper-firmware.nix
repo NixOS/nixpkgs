@@ -68,6 +68,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     cp ./.config $out/config
     cp out/klipper.bin $out/ || true
@@ -89,6 +91,7 @@ stdenv.mkDerivation rec {
     }
     rmdir $out/lib 2>/dev/null || echo "Flash binaries exist, not cleaning up lib/"
 
+    runHook postInstall
   '';
 
   dontFixup = true;

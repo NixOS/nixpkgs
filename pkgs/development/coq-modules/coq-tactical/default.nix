@@ -26,9 +26,13 @@ mkCoqDerivation {
   };
 
   installPhase = ''
+    runHook preInstall
+
     COQLIB=$out/lib/coq/${coq.coq-version}
     mkdir -p $COQLIB/user-contrib/Tactical
     cp -pR src/* $COQLIB/user-contrib/Tactical
+
+    runHook postInstall
   '';
 
   meta = {

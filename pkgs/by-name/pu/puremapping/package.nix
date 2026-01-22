@@ -24,8 +24,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/puremapping
     mv puremapping/ $out
+
+    runHook postInstall
   '';
 
   meta = {

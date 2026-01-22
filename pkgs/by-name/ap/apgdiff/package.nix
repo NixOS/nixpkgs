@@ -28,12 +28,16 @@ maven.buildMavenPackage rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm644 target/apgdiff-${version}.jar $out/lib/apgdiff.jar
 
     mkdir -p $out/bin
     makeWrapper ${jre}/bin/java $out/bin/apgdiff \
       --argv0 apgdiff \
       --add-flags "-jar $out/lib/apgdiff.jar"
+
+    runHook postInstall
   '';
 
   meta = {

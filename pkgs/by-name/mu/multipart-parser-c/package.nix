@@ -20,11 +20,15 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib
     mv lib*${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/
 
     mkdir -p $out/include
     mv *.h $out/include/
+
+    runHook postInstall
   '';
 
   meta = {

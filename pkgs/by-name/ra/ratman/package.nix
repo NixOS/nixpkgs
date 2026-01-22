@@ -61,8 +61,12 @@ rustPlatform.buildRustPackage rec {
     npmBuildScript = "build";
 
     installPhase = ''
+      runHook preInstall
+
       mkdir $out
       cp -r dist/* $out/
+
+      runHook postInstall
     '';
   };
 

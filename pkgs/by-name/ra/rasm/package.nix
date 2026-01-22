@@ -19,7 +19,11 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [ "EXEC=rasm" ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dt $out/bin rasm
+
+    runHook postInstall
   '';
 
   meta = {

@@ -30,8 +30,12 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp connman_dmenu $out/bin/
+
+    runHook postInstall
   '';
 
   meta = {

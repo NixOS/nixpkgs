@@ -39,6 +39,8 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib/goo
     mkdir -p $out/lib/fofi
     mkdir -p $out/lib/xpdf
@@ -52,6 +54,8 @@ stdenv.mkDerivation {
     cp -v goo/*.h $out/include
     cp -v fofi/*.h $out/include
     cp -v xpdf/*.h $out/include
+
+    runHook postInstall
   '';
 
   meta = {

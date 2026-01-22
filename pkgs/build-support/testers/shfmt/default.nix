@@ -24,6 +24,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     shfmt --diff --indent $indent --simplify "$src"
   '';
   installPhase = ''
+    runHook preInstall
+
     touch "$out"
+
+    runHook postInstall
   '';
 })

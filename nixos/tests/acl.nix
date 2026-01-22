@@ -27,7 +27,11 @@ vmTools.runInLinuxVM (
     doCheck = true;
     outputs = [ "out" ];
     installPhase = ''
+      runHook preInstall
+
       touch $out
+
+      runHook postInstall
     '';
   })
 )

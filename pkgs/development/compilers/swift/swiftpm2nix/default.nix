@@ -15,6 +15,8 @@ stdenv.mkDerivation {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -vD ${./swiftpm2nix.sh} $out/bin/swiftpm2nix
     wrapProgram $out/bin/$name \
       --prefix PATH : ${
@@ -23,6 +25,8 @@ stdenv.mkDerivation {
           nurl
         ]
       } \
+
+    runHook postInstall
   '';
 
   preferLocalBuild = true;

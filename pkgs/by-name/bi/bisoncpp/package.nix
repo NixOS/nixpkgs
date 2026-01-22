@@ -53,7 +53,11 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     ./build install x
+
+    runHook postInstall
   '';
 
   meta = {

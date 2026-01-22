@@ -22,10 +22,14 @@ buildPythonPackage rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     LIBPATH="$(toPythonPath "$out")/libscanbuild"
     mkdir -p "$LIBPATH"
 
     cp -r "$src/"* "$LIBPATH"
+
+    runHook postInstall
   '';
 
   pythonImportsCheck = [ "libscanbuild" ];

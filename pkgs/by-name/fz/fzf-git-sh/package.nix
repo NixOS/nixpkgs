@@ -60,8 +60,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -D fzf-git.sh $out/share/${pname}/fzf-git.sh
     install -D fzf-git.fish $out/share/${pname}/fzf-git.fish
+
+    runHook postInstall
   '';
 
   # Smoke test

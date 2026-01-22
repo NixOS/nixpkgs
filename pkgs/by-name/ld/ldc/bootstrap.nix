@@ -53,9 +53,13 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
 
     mv bin etc import lib LICENSE README $out/
+
+    runHook postInstall
   '';
 
   meta = {

@@ -37,12 +37,16 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     ${coreutils}/bin/install -Dm755 \
       ./contrib/notmuch-mutt/notmuch-mutt \
       $out/bin/notmuch-mutt
 
     wrapProgram $out/bin/notmuch-mutt \
       --prefix PERL5LIB : $PERL5LIB
+
+    runHook postInstall
   '';
 
   meta = {

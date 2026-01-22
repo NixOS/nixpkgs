@@ -80,9 +80,13 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [ "GDC=ldc2" ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 tumiki-fighters $out/bin/tumiki-fighters
     mkdir -p $out/share/games/tumiki-fighters
     cp -r barrage sounds enemy field stage tumiki $out/share/games/tumiki-fighters/
+
+    runHook postInstall
   '';
 
   meta = {

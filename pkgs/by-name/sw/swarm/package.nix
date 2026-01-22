@@ -16,8 +16,12 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 Src/swarm $out/bin/swarm
     install -Dm644 Doc/swarm.1 $out/share/man/man1/swarm.1
+
+    runHook postInstall
   '';
 
   meta = {

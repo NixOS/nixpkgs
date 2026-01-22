@@ -19,9 +19,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ zstd ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,man}
     cp ttytime ttyplay ttyrec $out/bin
     cp docs/*.1 $out/man
+
+    runHook postInstall
   '';
 
   meta = {

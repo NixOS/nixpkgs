@@ -32,7 +32,11 @@ buildNpmPackage (finalAttrs: {
     '';
 
     installPhase = ''
+      runHook preInstall
+
       cp -r ../public/app $out
+
+      runHook postInstall
     '';
   };
 

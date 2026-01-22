@@ -14,8 +14,12 @@ stdenv.mkDerivation {
     sha256 = "1jnh43nijkqd83h7piq7225ixziggyzaalabgissyxdyz6szcn0r";
   };
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp gpu-switch $out/bin/
+
+    runHook postInstall
   '';
   meta = {
     description = "Application that allows to switch between the graphic cards of dual-GPU MacBook Pro models";

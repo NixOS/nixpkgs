@@ -35,6 +35,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       unwrapped-bin = "${babashka-unwrapped}/bin/bb";
     in
     ''
+      runHook preInstall
+
       mkdir -p $out/clojure_tools
       ln -s -t $out/clojure_tools ${clojureToolsBabashka}/*.edn
       ln -s -t $out/clojure_tools ${clojureToolsBabashka}/libexec/*
@@ -51,6 +53,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     + lib.optionalString withRlwrap ''
       substituteInPlace $out/bin/bb \
         --replace '"${unwrapped-bin}"' '"${rlwrap}/bin/rlwrap" "${unwrapped-bin}"'
+
+      runHook postInstall
     '';
 
   installCheckPhase = ''

@@ -31,6 +31,8 @@ buildPythonApplication {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/lib
     cp ${./update.py} $out/bin/vim-plugins-updater
     cp ${./get-plugins.nix} $out/bin/get-plugins.nix
@@ -45,6 +47,8 @@ buildPythonApplication {
       ]
     }" --prefix PYTHONPATH : "${./.}" )
     wrapPythonPrograms
+
+    runHook postInstall
   '';
 
   shellHook = ''

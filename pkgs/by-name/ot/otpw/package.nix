@@ -47,11 +47,15 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/lib/security $out/share/man/man{1,8}
     cp pam_*.so $out/lib/security
     cp otpw-gen $out/bin
     cp *.1 $out/share/man/man1
     cp *.8 $out/share/man/man8
+
+    runHook postInstall
   '';
 
   hardeningDisable = [

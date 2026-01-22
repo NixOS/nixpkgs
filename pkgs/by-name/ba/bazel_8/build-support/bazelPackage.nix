@@ -66,8 +66,12 @@ let
           mkdir repo_cache
         '';
         installPhase = ''
+          runHook preInstall
+
           mkdir -p $out/repo_cache
           cp -r --reflink=auto repo_cache/* $out/repo_cache
+
+          runHook postInstall
         '';
       });
   # Stage1: FOD produced by `bazel vendor`, Stage2: eventual patchelf or other tuning
@@ -122,8 +126,12 @@ let
                 | xargs -0 --no-run-if-empty rm
             '';
             installPhase = ''
+              runHook preInstall
+
               mkdir -p $out/vendor_dir
               cp -r --reflink=auto vendor_dir/* $out/vendor_dir
+
+              runHook postInstall
             '';
 
           };
@@ -134,7 +142,11 @@ let
           inherit autoPatchelfIgnoreMissingDeps;
           src = stage1;
           installPhase = ''
+            runHook preInstall
+
             cp -r . $out
+
+            runHook postInstall
           '';
         }
       );

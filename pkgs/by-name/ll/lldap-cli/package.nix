@@ -40,6 +40,8 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm555 lldap-cli -t $out/bin
     wrapProgram $out/bin/lldap-cli \
       --prefix PATH : ${
@@ -54,6 +56,8 @@ stdenv.mkDerivation {
           curl
         ]
       }
+
+    runHook postInstall
   '';
 
   passthru.updateScript = unstableGitUpdater { };

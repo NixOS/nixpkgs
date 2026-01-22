@@ -19,9 +19,13 @@ stdenv.mkDerivation {
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out"/{bin,share/doc/qrcode}
     cp qrcode "$out/bin"
     cp DOCUMENTATION LICENCE "$out/share/doc/qrcode"
+
+    runHook postInstall
   '';
 
   passthru.updateScript = unstableGitUpdater { };

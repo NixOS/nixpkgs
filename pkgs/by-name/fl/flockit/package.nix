@@ -17,6 +17,8 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib $out/bin
     cp ./libflockit.so $out/lib
 
@@ -26,6 +28,8 @@ stdenv.mkDerivation {
     EOI
     ) > $out/bin/flockit
     chmod +x $out/bin/flockit
+
+    runHook postInstall
   '';
 
   meta = {

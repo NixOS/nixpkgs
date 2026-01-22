@@ -39,10 +39,14 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 -t $out/lib bin/libyojimbo.a
     cp -r -t $out include
     mkdir -p $out/share/doc/yojimbo
     cp -r docs/html $out/share/doc/yojimbo
+
+    runHook postInstall
   '';
 
   doCheck = true;

@@ -67,6 +67,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     cp -r Resources $out
 
     mkdir -p $out/lib/
@@ -91,6 +93,8 @@ stdenv.mkDerivation rec {
     cp Installer/renoise-48.png $out/share/icons/hicolor/48x48/apps/renoise.png
     cp Installer/renoise-64.png $out/share/icons/hicolor/64x64/apps/renoise.png
     cp Installer/renoise-128.png $out/share/icons/hicolor/128x128/apps/renoise.png
+
+    runHook postInstall
   '';
 
   postFixup = ''

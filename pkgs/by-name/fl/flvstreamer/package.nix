@@ -18,11 +18,15 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp flvstreamer $out/bin
     cp streams $out/bin
     cp rtmpsrv $out/bin
     cp rtmpsuck $out/bin
+
+    runHook postInstall
   '';
 
   meta = {

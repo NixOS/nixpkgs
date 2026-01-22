@@ -217,8 +217,12 @@ let
     makeFlags = [ "export" ];
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out
       cp libint-${version}.tgz $out/.
+
+      runHook postInstall
     '';
 
     enableParallelBuilding = true;

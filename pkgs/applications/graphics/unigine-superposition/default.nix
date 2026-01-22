@@ -67,6 +67,8 @@ let
     ];
 
     installPhase = ''
+      runHook preInstall
+
       bash $src --target $name --noexec
       mkdir -p $out/bin $out/lib/unigine/superposition/
       cp -r $name/* $out/lib/unigine/superposition/
@@ -75,6 +77,8 @@ let
        wrapProgram $out/lib/unigine/superposition/Superposition \
         --set QT_XKB_CONFIG_ROOT ${xkeyboard_config} \
         --run "cd $out/lib/unigine/superposition/"
+
+      runHook postInstall
     '';
 
     dontUnpack = true;

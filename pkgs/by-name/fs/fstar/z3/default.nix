@@ -93,9 +93,13 @@ stdenvNoCC.mkDerivation {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     ln -s ${lib.getExe fstarNewZ3} $out/bin/z3-${lib.escapeShellArg fstarNewZ3.version}
     ln -s ${lib.getExe fstarOldZ3} $out/bin/z3-${lib.escapeShellArg fstarOldZ3.version}
+
+    runHook postInstall
   '';
 
   passthru = {

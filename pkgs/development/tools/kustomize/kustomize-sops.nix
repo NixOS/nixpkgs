@@ -18,12 +18,16 @@ buildGoModule rec {
   vendorHash = "sha256-ajXW6H1XBgVtMdK7/asfpy6e3rFAD2pz3Lg+QFnkVpo=";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mkdir -p $out/lib/viaduct.ai/v1/ksops/
     mkdir -p $out/lib/viaduct.ai/v1/ksops-exec/
     mv $GOPATH/bin/kustomize-sops $out/bin/ksops
     ln -s $out/bin/ksops $out/lib/viaduct.ai/v1/ksops-exec/ksops-exec
     ln -s $out/bin/ksops $out/lib/viaduct.ai/v1/ksops/ksops
+
+    runHook postInstall
   '';
 
   # Tests are broken in a nix environment

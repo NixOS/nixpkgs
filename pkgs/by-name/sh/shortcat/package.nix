@@ -18,8 +18,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ unzip ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/Applications/Shortcat.app
     cp -R . $out/Applications/Shortcat.app
+
+    runHook postInstall
   '';
 
   meta = {

@@ -30,10 +30,14 @@ stdenv.mkDerivation {
   ++ lib.optional withFuse "sqlarfs";
 
   installPhase = ''
+    runHook preInstall
+
     install -D -t $out/bin sqlar
   ''
   + lib.optionalString withFuse ''
     install -D -t $out/bin sqlarfs
+
+    runHook postInstall
   '';
 
   meta = {

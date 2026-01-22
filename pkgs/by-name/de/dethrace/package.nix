@@ -26,7 +26,11 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 dethrace $out/bin/dethrace
+
+    runHook postInstall
   '';
 
   meta = {

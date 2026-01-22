@@ -24,8 +24,12 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out/
     cp -R ./* $out
+
+    runHook postInstall
   '';
 
   passthru = {

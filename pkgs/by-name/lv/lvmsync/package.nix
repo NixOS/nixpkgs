@@ -26,8 +26,12 @@ stdenv.mkDerivation rec {
       };
     in
     ''
+      runHook preInstall
+
       mkdir -p $out/bin
       makeWrapper ${env}/bin/lvmsync $out/bin/lvmsync
+
+      runHook postInstall
     '';
 
   passthru.updateScript = bundlerUpdateScript "lvmsync";

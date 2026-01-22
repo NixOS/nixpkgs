@@ -19,7 +19,11 @@ stdenv.mkDerivation {
   buildInputs = [ python3 ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D -m755 src/yaffshiv $out/bin/yaffshiv
+
+    runHook postInstall
   '';
 
   meta = {

@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,share}
     cp ${src} $out/share/kpcli.pl
     chmod +x $out/share/kpcli.pl
@@ -57,6 +59,8 @@ stdenv.mkDerivation rec {
           ++ lib.optional stdenv.hostPlatform.isDarwin MacPasteboard
         )
       }"
+
+    runHook postInstall
   '';
 
   meta = {

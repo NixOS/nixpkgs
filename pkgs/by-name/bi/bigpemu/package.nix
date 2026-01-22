@@ -20,8 +20,12 @@ let
     };
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/bin
       tar -xvf $src -C $out/bin --strip-components=1
+
+      runHook postInstall
     '';
 
   };

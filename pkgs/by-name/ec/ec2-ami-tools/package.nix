@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
   patches = [ ./writable.patch ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     mv * $out
     rm $out/*.txt
@@ -48,6 +50,8 @@ stdenv.mkDerivation rec {
     done
 
     sed -i 's|/bin/bash|${stdenv.shell}|' $out/lib/ec2/platform/base/pipeline.rb
+
+    runHook postInstall
   ''; # */
 
   meta = {

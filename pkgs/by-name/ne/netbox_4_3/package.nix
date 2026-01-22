@@ -96,11 +96,15 @@ py.pkgs.buildPythonApplication rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/opt/netbox
     cp -r . $out/opt/netbox
     chmod +x $out/opt/netbox/netbox/manage.py
     makeWrapper $out/opt/netbox/netbox/manage.py $out/bin/netbox \
       --prefix PYTHONPATH : "$PYTHONPATH"
+
+    runHook postInstall
   '';
 
   passthru = {

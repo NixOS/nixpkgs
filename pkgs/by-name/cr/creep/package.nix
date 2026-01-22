@@ -28,8 +28,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -D -m644 creep.otb creep.bdf -t "$out/share/fonts/misc/"
     mkfontdir "$out/share/fonts/misc"
+
+    runHook postInstall
   '';
 
   meta = {

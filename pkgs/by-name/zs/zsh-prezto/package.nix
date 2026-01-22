@@ -27,8 +27,12 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/zsh-prezto
     cp -R ./ $out/share/zsh-prezto
+
+    runHook postInstall
   '';
 
   passthru.updateScript = unstableGitUpdater { };

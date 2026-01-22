@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/dictd/
     cd $out/share/dictd
 
@@ -34,6 +36,8 @@ stdenv.mkDerivation rec {
     faketime -f "$source_date" ${python3.interpreter} -O ${./wiktionary2dict.py} "${src}"
     faketime -f "$source_date" dictzip wiktionary-en.dict
     echo en_US.UTF-8 > locale
+
+    runHook postInstall
   '';
 
   passthru.updateScript = ./update.sh;

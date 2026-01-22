@@ -139,7 +139,7 @@ lib.recurseIntoAttrs {
         dontFixup = true;
         doCheck = true;
 
-        installPhase = "touch $out";
+        installPhase = "runHook preInstall; touch $out; runHook postInstall";
 
         checkPhase = ''
           fail() {

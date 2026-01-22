@@ -30,6 +30,8 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     outputWrapper="$out/bin/simple-dlna-browser"
     outputWrapped="$out/bin/wrapped-simple-dlna-browser"
 
@@ -50,6 +52,8 @@ stdenv.mkDerivation {
     # Set the program name to a fixed value
     # Normally it is guessed by the filename, but we don't want it to be the name of the wrapper
     sed -i -e 's/PROGNAME=".*"/PROGNAME="simple-dlna-browser"/' $outputWrapped
+
+    runHook postInstall
   '';
 
   meta = {

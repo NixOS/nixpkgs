@@ -18,8 +18,12 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp lzbench $out/bin
+
+    runHook postInstall
   '';
 
   meta = {

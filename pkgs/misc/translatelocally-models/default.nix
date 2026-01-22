@@ -29,12 +29,16 @@ let
       dontUnpack = true;
 
       installPhase = ''
+        runHook preInstall
+
         TARGET="$out/share/translateLocally/models"
         mkdir -p "$TARGET"
         tar -xzf "$src" -C "$TARGET"
 
         # avoid patching shebangs in inconsistently executable extra files
         find "$out" -type f -exec chmod -x {} +
+
+        runHook postInstall
       '';
 
       meta = {

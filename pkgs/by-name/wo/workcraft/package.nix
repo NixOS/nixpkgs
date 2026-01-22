@@ -20,12 +20,16 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share
     cp -r * $out/share
     mkdir $out/bin
     makeWrapper $out/share/workcraft $out/bin/workcraft \
       --set JAVA_HOME "${jre}" \
       --prefix _JAVA_OPTIONS " " "-Dawt.useSystemAAFontSettings=gasp";
+
+    runHook postInstall
   '';
 
   meta = {

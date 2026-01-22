@@ -24,10 +24,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mkdir -p $out/lib/udev
     cp micronucleus $out/bin
     cp 49-micronucleus.rules $out/lib/udev
+
+    runHook postInstall
   '';
 
   meta = {

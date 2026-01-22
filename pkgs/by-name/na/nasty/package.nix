@@ -21,8 +21,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ gpgme ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp nasty $out/bin
+
+    runHook postInstall
   '';
 
   meta = {

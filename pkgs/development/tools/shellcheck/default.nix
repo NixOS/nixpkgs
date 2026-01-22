@@ -45,10 +45,14 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
+
       install -Dm755 ${bin}/bin/shellcheck $bin/bin/shellcheck
       install -Dm644 README.md $doc/share/shellcheck/README.md
       install -Dm644 shellcheck.1 $man/share/man/man1/shellcheck.1
       mkdir $out
+
+      runHook postInstall
     '';
 
     passthru = ShellCheck.passthru or { } // {

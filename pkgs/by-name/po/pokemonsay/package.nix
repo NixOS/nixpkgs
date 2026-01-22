@@ -56,10 +56,14 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,share/pokemonsay}
     cp pokemonsay.sh $out/bin/pokemonsay
     cp pokemonthink.sh $out/bin/pokemonthink
     cp pokemons/*.cow $out/share/pokemonsay
+
+    runHook postInstall
   '';
 
   doInstallCheck = true;

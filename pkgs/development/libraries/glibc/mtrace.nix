@@ -21,8 +21,12 @@ glibc.overrideAttrs (oldAttrs: {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mv malloc/mtrace $out/bin/
+
+    runHook postInstall
   '';
 
   # Perl checked during configure

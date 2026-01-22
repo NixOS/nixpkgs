@@ -23,6 +23,8 @@ stdenv.mkDerivation {
   };
   nativeBuildInputs = [ makeWrapper ];
   installPhase = ''
+    runHook preInstall
+
     install -D pipework $out/bin/pipework
     wrapProgram $out/bin/pipework --prefix PATH : \
       ${
@@ -36,6 +38,8 @@ stdenv.mkDerivation {
           dhcpcd
         ]
       };
+
+    runHook postInstall
   '';
   meta = {
     description = "Software-Defined Networking tools for LXC";

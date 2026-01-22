@@ -16,7 +16,11 @@ stdenv.mkDerivation rec {
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ]; # gcc and/or clang compat
 
   installPhase = ''
+    runHook preInstall
+
     install -D -m ugo=rx connect $out/bin/connect
+
+    runHook postInstall
   '';
 
   meta = {

@@ -40,8 +40,12 @@ in
       USE_BAZEL_VERSION = bazel_8.version;
     };
     installPhase = ''
+      runHook preInstall
+
       mkdir $out
       cp bazel-bin/ProjectRunner.jar $out/
+
+      runHook postInstall
     '';
     nativeBuildInputs = lib.optional (stdenv.hostPlatform.isDarwin) cctools;
     bazelRepoCacheFOD = {
@@ -63,8 +67,12 @@ in
     targets = [ "//main:hello-world" ];
     bazel = bazel_8;
     installPhase = ''
+      runHook preInstall
+
       mkdir $out
       cp bazel-bin/main/hello-world $out/
+
+      runHook postInstall
     '';
     nativeBuildInputs = lib.optional (stdenv.hostPlatform.isDarwin) cctools;
     commandArgs = lib.optionals (stdenv.hostPlatform.isDarwin) [
@@ -96,8 +104,12 @@ in
       USE_BAZEL_VERSION = bazel_8.version;
     };
     installPhase = ''
+      runHook preInstall
+
       mkdir $out
       cp bazel-bin/bin $out/hello-world
+
+      runHook postInstall
     '';
     buildInputs = [
       zlib

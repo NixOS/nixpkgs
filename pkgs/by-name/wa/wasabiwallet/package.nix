@@ -57,6 +57,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/opt/${pname} $out/bin $out/share/applications
 
     # The weird path is an upstream packaging error and could be fixed in the upcoming release
@@ -69,6 +71,8 @@ stdenv.mkDerivation rec {
     done
 
     cp -v $desktopItem/share/applications/* $out/share/applications
+
+    runHook postInstall
   '';
 
   meta = {

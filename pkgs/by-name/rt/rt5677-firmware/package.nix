@@ -16,8 +16,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib/firmware
     cp ./firmware/rt5677_elf_vad $out/lib/firmware
+
+    runHook postInstall
   '';
 
   meta = {

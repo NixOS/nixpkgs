@@ -16,8 +16,12 @@ stdenv.mkDerivation rec {
   buildFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mv stricat $out/bin
+
+    runHook postInstall
   '';
 
   meta = {

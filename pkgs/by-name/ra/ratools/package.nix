@@ -21,8 +21,12 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -vD bin/* -t $out/bin
     install -vD man/* -t $out/share/man/man8
+
+    runHook postInstall
   '';
 
   meta = {

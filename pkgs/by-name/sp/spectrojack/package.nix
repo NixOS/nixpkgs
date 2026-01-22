@@ -32,9 +32,13 @@ stdenv.mkDerivation rec {
     runHook postConfigure
   '';
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 spectrojack $out/bin/spectrojack
     install -Dm644 spectrojack_icon.svg $out/usr/share/spectrojack/icon.svg
     install -Dm644 -t $out/usr/share/spectrojack/colormaps colormaps/*
+
+    runHook postInstall
   '';
 
   meta = {

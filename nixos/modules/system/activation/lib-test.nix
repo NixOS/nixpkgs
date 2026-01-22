@@ -20,7 +20,11 @@ let
       ./test.sh
     '';
     installPhase = ''
+      runHook preInstall
+
       touch $out
+
+      runHook postInstall
     '';
   };
 

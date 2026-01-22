@@ -53,6 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,lib}
 
     mv ui $out/ui
@@ -67,6 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
       } \
       --prefix PATH ":" "${lib.makeBinPath [ less ]}" \
       --set UCM_WEB_UI "$out/ui"
+
+    runHook postInstall
   '';
 
   passthru.updateScript = ./update.sh;

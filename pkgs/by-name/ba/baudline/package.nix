@@ -46,6 +46,8 @@ stdenv.mkDerivation rec {
   # LD_LIBRARY_PATH wrapper script instead.
   dontBuild = true;
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
     mkdir -p "$out/libexec/baudline"
 
@@ -59,6 +61,8 @@ stdenv.mkDerivation rec {
     for prog in "$out"/bin/*; do
         wrapProgram "$prog" --prefix LD_LIBRARY_PATH : ${rpath}
     done
+
+    runHook postInstall
   '';
 
   meta = {

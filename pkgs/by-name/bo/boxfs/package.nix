@@ -60,8 +60,12 @@ stdenv.mkDerivation {
   ++ lib.optional stdenv.hostPlatform.isDarwin "CFLAGS=-D_BSD_SOURCE";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     install boxfs boxfs-init $out/bin
+
+    runHook postInstall
   '';
 
   meta = {

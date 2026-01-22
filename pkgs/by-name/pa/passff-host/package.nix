@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     substituteInPlace bin/${version}/passff.json \
       --replace PLACEHOLDER $out/share/passff-host/passff.py
 
@@ -43,6 +45,8 @@ stdenv.mkDerivation rec {
       install -d $out$manifestDir
       ln -s $out/share/passff-host/passff.json $out$manifestDir/
     done
+
+    runHook postInstall
   '';
 
   meta = {

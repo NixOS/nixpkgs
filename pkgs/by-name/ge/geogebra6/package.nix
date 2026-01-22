@@ -59,6 +59,8 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/libexec/geogebra/ $out/bin
       cp -r GeoGebra-linux-x64/{resources,locales} "$out/"
       makeWrapper ${lib.getBin electron}/bin/electron $out/bin/geogebra \
@@ -69,6 +71,8 @@ let
 
       install -Dm644 "${srcIcon}" \
         "$out/share/icons/hicolor/scalable/apps/geogebra.svg"
+
+      runHook postInstall
     '';
   };
 
@@ -88,8 +92,12 @@ let
     nativeBuildInputs = [ unzip ];
 
     installPhase = ''
+      runHook preInstall
+
       install -dm755 $out/Applications
       unzip $src -d $out/Applications
+
+      runHook postInstall
     '';
 
     meta = meta // {

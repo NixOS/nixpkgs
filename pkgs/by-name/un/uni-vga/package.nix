@@ -46,6 +46,8 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     # install pcf and otb (for X11 and GTK applications)
     install -m 644 -D *.otb *.pcf.gz -t "$out/share/fonts"
     mkfontdir "$out/share/fonts"
@@ -58,6 +60,8 @@ stdenv.mkDerivation {
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     # install psf (for linux virtual terminal)
     install -m 644 -D *.psf.gz -t "$out/share/consolefonts"
+
+    runHook postInstall
   '';
 
   outputs = [

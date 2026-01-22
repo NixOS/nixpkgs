@@ -74,9 +74,13 @@
         dontBuild = true;
 
         installPhase = ''
+          runHook preInstall
+
           mkdir -p $out/include/
           cp -r newlib/libc/include/* $out/include/
           cp -r winsup/cygwin/include/* $out/include/
+
+          runHook postInstall
         '';
       }
     else

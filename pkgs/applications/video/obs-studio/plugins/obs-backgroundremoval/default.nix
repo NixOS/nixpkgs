@@ -50,7 +50,11 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     cmake --install build_x86_64 --prefix "$out"
+
+    runHook postInstall
   '';
 
   meta = {

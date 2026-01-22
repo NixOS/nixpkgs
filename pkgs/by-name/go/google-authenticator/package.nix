@@ -26,9 +26,13 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/lib/security
     cp ./.libs/pam_google_authenticator.so $out/lib/security
     cp google-authenticator $out/bin
+
+    runHook postInstall
   '';
 
   meta = {

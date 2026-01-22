@@ -17,8 +17,12 @@ stdenvNoCC.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out"
     cp -r * "$out"
+
+    runHook postInstall
   '';
 
   passthru.tests = { inherit (nixosTests) icingaweb2; };

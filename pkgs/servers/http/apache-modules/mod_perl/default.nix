@@ -29,12 +29,16 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     make install DESTDIR=$out
     mv $out${apacheHttpd}/* $out
     mv $out${apacheHttpd.dev}/* $out
     mv $out${perl}/* $out
     rm $out/nix -rf
+
+    runHook postInstall
   '';
 
   passthru = {

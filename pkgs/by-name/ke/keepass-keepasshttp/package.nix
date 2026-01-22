@@ -31,8 +31,12 @@ let
     pluginFilename = "KeePassHttp.plgx";
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/lib/dotnet/keepass/
       cp $pluginFilename $out/lib/dotnet/keepass/$pluginFilename
+
+      runHook postInstall
     '';
   };
 in

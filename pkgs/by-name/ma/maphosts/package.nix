@@ -20,8 +20,12 @@ stdenv.mkDerivation (finalAttrs: {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
     ln -s "${env}/bin/maphosts" "$out/bin/maphosts"
+
+    runHook postInstall
   '';
 
   passthru.updateScript = bundlerUpdateScript "maphosts";

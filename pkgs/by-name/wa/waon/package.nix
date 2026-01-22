@@ -33,7 +33,11 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dt $out/bin waon pv gwaon
+
+    runHook postInstall
   '';
 
   meta = {

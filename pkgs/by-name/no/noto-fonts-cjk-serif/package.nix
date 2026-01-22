@@ -27,7 +27,11 @@ stdenvNoCC.mkDerivation rec {
       font-path = if static then "Serif/OTC/*.ttc" else "Serif/Variable/OTC/*.otf.ttc";
     in
     ''
+      runHook preInstall
+
       install -m444 -Dt $out/share/fonts/opentype/noto-cjk ${font-path}
+
+      runHook postInstall
     '';
 
   passthru.tests.noto-fonts = nixosTests.noto-fonts;

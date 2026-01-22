@@ -33,8 +33,12 @@ perlPackages.buildPerlPackage rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dt $out/bin wakeonlan
     installManPage blib/man1/wakeonlan.1
+
+    runHook postInstall
   '';
 
   meta = {

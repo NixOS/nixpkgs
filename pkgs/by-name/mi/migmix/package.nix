@@ -30,7 +30,11 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     find $srcs -name '*.ttf' -exec install -m644 -Dt $out/share/fonts/truetype/migmix {} \;
+
+    runHook postInstall
   '';
 
   outputHashAlgo = "sha256";

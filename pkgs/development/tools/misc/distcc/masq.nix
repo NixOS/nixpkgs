@@ -11,6 +11,8 @@ stdenv.mkDerivation {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
 
     bin=${gccRaw}/bin
@@ -42,6 +44,8 @@ stdenv.mkDerivation {
         ln -sf $bbin/*-as $out/bin/as
       done
     fi
+
+    runHook postInstall
   '';
 
   meta = {

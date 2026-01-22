@@ -79,6 +79,8 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir "$out"
     cp -ar . "$out/app"
     cd "$out"
@@ -116,6 +118,8 @@ stdenv.mkDerivation {
     chmod +x bin/pcloud
 
     ln -snf $out/share/icons/hicolor/512x512/apps/pcloud.png $out/app/pcloud.png
+
+    runHook postInstall
   '';
 
   meta = {

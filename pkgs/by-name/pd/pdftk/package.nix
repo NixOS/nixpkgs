@@ -44,6 +44,8 @@ stdenv.mkDerivation rec {
   gradleBuildTask = "shadowJar";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,share/pdftk,share/man/man1}
     cp build/libs/pdftk-all.jar $out/share/pdftk
 
@@ -54,6 +56,8 @@ stdenv.mkDerivation rec {
     chmod a+x "$out/bin/pdftk"
 
     cp ${src}/pdftk.1 $out/share/man/man1
+
+    runHook postInstall
   '';
 
   meta = {

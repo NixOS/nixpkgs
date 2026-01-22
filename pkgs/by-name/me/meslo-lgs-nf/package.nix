@@ -16,8 +16,12 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fonts/truetype
     cp $src/*.ttf $out/share/fonts/truetype
+
+    runHook postInstall
   '';
 
   meta = {

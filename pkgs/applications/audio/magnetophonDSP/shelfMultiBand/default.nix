@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     for f in $(find . -executable -type f); do
       cp $f $out/bin/
@@ -38,6 +40,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib/lv2
     cp -r shelfMultiBand.lv2/ $out/lib/lv2
     cp -r shelfMultiBandMono.lv2/ $out/lib/lv2
+
+    runHook postInstall
   '';
 
   meta = {

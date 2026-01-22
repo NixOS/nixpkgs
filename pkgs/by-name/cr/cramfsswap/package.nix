@@ -24,7 +24,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib ];
 
   installPhase = ''
+    runHook preInstall
+
     install --target $out/bin -D cramfsswap
+
+    runHook postInstall
   '';
 
   meta = {

@@ -36,6 +36,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     t=$out/opt/apache-flex-sdk
     mkdir -p $t $out/bin
     mv * $t
@@ -50,6 +52,8 @@ stdenv.mkDerivation rec {
 
     mkdir -p $t/frameworks/libs/player/${playerglobal_ver}/
     cp ${playerglobal} $t/frameworks/libs/player/${playerglobal_ver}/playerglobal.swc
+
+    runHook postInstall
   '';
 
   dontFixup = true;

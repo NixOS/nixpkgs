@@ -35,11 +35,15 @@ let
     dontNpmInstall = true;
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -pv $out
       cp -prvd ./* $out/
       cd $out
       npm install
       npm run build
+
+      runHook postInstall
     '';
   };
 

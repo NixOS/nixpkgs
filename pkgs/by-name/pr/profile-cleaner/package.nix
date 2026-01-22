@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     PREFIX=\"\" DESTDIR=$out make install
     wrapProgram $out/bin/profile-cleaner \
       --prefix PATH : "${
@@ -33,6 +35,8 @@ stdenv.mkDerivation rec {
           file
         ]
       }"
+
+    runHook postInstall
   '';
 
   meta = {

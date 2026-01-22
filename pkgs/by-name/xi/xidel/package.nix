@@ -86,9 +86,13 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin" "$out/share/man/man1"
     cp meta/xidel.1 "$out/share/man/man1/"
     cp xidel "$out/bin/"
+
+    runHook postInstall
   '';
 
   # disabled, because tests require network

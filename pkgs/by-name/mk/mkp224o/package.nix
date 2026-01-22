@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
               ++ lib.optionals regexSupport [ "--enable-regex=yes" ];
             nativeBuildInputs = [ autoreconfHook ];
             buildInputs = [ libsodium ] ++ lib.optionals regexSupport [ pcre2 ];
-            installPhase = "install -D mkp224o $out";
+            installPhase = "runHook preInstall; install -D mkp224o $out; runHook postInstall";
           }
         } $out/bin/mkp224o-${suffix}
       ''

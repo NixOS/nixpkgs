@@ -48,6 +48,8 @@ maven.buildMavenPackage rec {
   #
   # We'll use wildcard expansion instead to find (what should be) the only .zip file in the "target" directory.
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
 
     FILES=(target/sonar-scanner-*.zip)
@@ -64,6 +66,8 @@ maven.buildMavenPackage rec {
 
     wrapProgram $out/bin/sonar-scanner-debug \
       --prefix PATH : ${lib.makeBinPath [ coreutils ]}
+
+    runHook postInstall
   '';
 
   passthru = {

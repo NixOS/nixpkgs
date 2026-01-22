@@ -29,8 +29,12 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D acpi_call.ko $out/lib/modules/${kernel.modDirVersion}/misc/acpi_call.ko
     install -D -m755 examples/turn_off_gpu.sh $out/bin/test_discrete_video_off.sh
+
+    runHook postInstall
   '';
 
   meta = {

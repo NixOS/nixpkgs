@@ -17,10 +17,14 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   installPhase = ''
+    runHook preInstall
+
     install -D --target-directory=$out/share/zsh/site-functions src/*
 
     # tmuxp install it so avoid collision
     rm $out/share/zsh/site-functions/_tmuxp
+
+    runHook postInstall
   '';
 
   meta = {

@@ -39,8 +39,12 @@ let
     mvnHash = "sha256-4keHPzS8pbIIwODmBUMofJt27n5WqYh+IGqE6d9od7k=";
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/share/java
       cp target/lib/*.jar $out/share/java/
+
+      runHook postInstall
     '';
   };
 
@@ -115,6 +119,8 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
     cp -r application $out/opt
 
@@ -131,6 +137,8 @@ stdenv.mkDerivation {
 
     ln -s $out/opt/abevjava.png $out/share/pixmaps/anyk.png
     ln -s $out/opt/abevjava.png $out/share/icons/anyk.png
+
+    runHook postInstall
   '';
 
   meta = {

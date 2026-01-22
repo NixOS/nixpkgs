@@ -30,8 +30,12 @@ let
     npmDepsHash = "sha256-ULl4wHEo/PP0Y0O5po7eRDd+T/UjkZhQGIj262WFtFU=";
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/share
       mv dist $out/share/photofield-ui
+
+      runHook postInstall
     '';
   };
 in

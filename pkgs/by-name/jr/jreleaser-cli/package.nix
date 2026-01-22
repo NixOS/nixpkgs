@@ -19,10 +19,14 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/java/ $out/bin/
     cp $src $out/share/java/${pname}.jar
     makeWrapper ${jre}/bin/java $out/bin/${pname} \
       --add-flags "-jar $out/share/java/${pname}.jar"
+
+    runHook postInstall
   '';
 
   meta = {

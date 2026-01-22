@@ -22,8 +22,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ rubyEnv.wrappedRuby ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp $src $out/bin/snmp-check
+
+    runHook postInstall
   '';
 
   meta = {

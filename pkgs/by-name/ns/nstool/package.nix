@@ -21,8 +21,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -v bin/nstool $out/bin
+
+    runHook postInstall
   '';
 
   meta = {

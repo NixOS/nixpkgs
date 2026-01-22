@@ -19,8 +19,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   dontConfigure = true;
   dontBuild = true;
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
       cp $src/nerdfetch $out/bin
+
+    runHook postInstall
   '';
 
   passthru.updateScript = gitUpdater {

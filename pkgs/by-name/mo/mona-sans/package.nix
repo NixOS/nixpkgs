@@ -16,8 +16,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
 
   installPhase = ''
+    runHook preInstall
+
     install -D -m444 -t $out/share/fonts/opentype fonts/otf/*.otf
     install -D -m444 -t $out/share/fonts/truetype fonts/ttf/*.ttf fonts/variable/*.ttf
+
+    runHook postInstall
   '';
 
   meta = {

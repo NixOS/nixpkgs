@@ -22,6 +22,8 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp $src/gopro-tool $out/bin/gopro-tool
     chmod +x $out/bin/gopro-tool
@@ -34,6 +36,8 @@ stdenv.mkDerivation {
           jq
         ]
       }
+
+    runHook postInstall
   '';
 
   meta = {

@@ -25,9 +25,13 @@ buildPythonPackage {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/${python.sitePackages}
     rmdir $out/${python.sitePackages}
     ln -s ${unwrapped}/lib $out/${python.sitePackages}
+
+    runHook postInstall
   '';
 
   # Those namespaces are looked up dynamically via ROOTs CPython extension, so

@@ -51,8 +51,12 @@ buildBazelPackage' rec {
   };
 
   buildAttrs.installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     install -Dm755 bazel-bin/generator/protoc-gen-js $out/bin/
+
+    runHook postInstall
   '';
 
   meta = {

@@ -49,6 +49,8 @@ stdenv.mkDerivation {
   allowSubstitutes = false;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     for i in $(cat $pathsPath); do
       ${xorg.lndir}/bin/lndir -silent $i $out
@@ -58,6 +60,8 @@ stdenv.mkDerivation {
     rm -f "$out/$dbus_file"
     substitute "${switchboard}/$dbus_file" "$out/$dbus_file" \
       --replace-fail "${switchboard}" "$out"
+
+    runHook postInstall
   '';
 
   preFixup = ''

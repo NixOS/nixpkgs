@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin/
     mv yaxg $out/bin/
     chmod +x $out/bin/yaxg
@@ -46,6 +48,8 @@ stdenv.mkDerivation rec {
         xdpyinfo
       ]
     }
+
+    runHook postInstall
   '';
 
   meta = {

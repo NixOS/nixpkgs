@@ -16,8 +16,12 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fonts/truetype
     cp fonts/ttf/VT323-Regular.ttf $out/share/fonts/truetype
+
+    runHook postInstall
   '';
 
   meta = {

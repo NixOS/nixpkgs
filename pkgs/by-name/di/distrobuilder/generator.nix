@@ -23,6 +23,8 @@ stdenvNoCC.mkDerivation {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D -m 0555 distrobuilder/lxc.generator $out/lib/systemd/system-generators/lxc
     wrapProgram $out/lib/systemd/system-generators/lxc --prefix PATH : ${
       lib.makeBinPath [
@@ -32,5 +34,7 @@ stdenvNoCC.mkDerivation {
         systemd
       ]
     }:${systemd}/lib/systemd
+
+    runHook postInstall
   '';
 }

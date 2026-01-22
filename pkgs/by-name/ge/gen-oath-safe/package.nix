@@ -39,10 +39,14 @@ stdenv.mkDerivation rec {
       ];
     in
     ''
+      runHook preInstall
+
       mkdir -p $out/bin
       cp gen-oath-safe $out/bin/
       wrapProgram $out/bin/gen-oath-safe \
         --prefix PATH : ${path}
+
+      runHook postInstall
     '';
   meta = {
     homepage = "https://git.sr.ht/~mcepl/gen-oath-safe";

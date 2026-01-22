@@ -44,6 +44,8 @@ stdenv.mkDerivation {
       };
     in
     ''
+      runHook preInstall
+
       mkdir -p $out/bin $out/astrolog
       cp *.as $out/astrolog
       install astrolog $out/bin
@@ -58,6 +60,8 @@ stdenv.mkDerivation {
         mkdir -p $out/ephemeris
         cp -r ${moonsEphemeris}/*.se1 $out/ephemeris
       ''}
+
+      runHook postInstall
     '';
 
   meta = {

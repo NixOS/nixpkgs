@@ -39,9 +39,13 @@ stdenv.mkDerivation rec {
   # 'cp' line taken from Arch recipe
   # https://projects.archlinux.org/svntogit/community.git/tree/trunk/PKGBUILD?h=packages/erlang-sdl
   installPhase = ''
+    runHook preInstall
+
     DIR=$out/lib/erlang/lib/${pname}-${version}
     mkdir -p $DIR
     cp -ruv c_src doc ebin include priv src $DIR
+
+    runHook postInstall
   '';
 
   meta = {

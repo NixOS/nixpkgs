@@ -31,11 +31,15 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mv sbin/zfsnap.sh $out/bin/zfsnap
     mv share $out
     installManPage man/*/*
     installShellCompletion completion/*.{bash,zsh}
+
+    runHook postInstall
   '';
 
   meta = {

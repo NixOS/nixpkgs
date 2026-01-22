@@ -46,8 +46,12 @@ stdenv.mkDerivation rec {
   patchFlags = [ "-p0" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp src/zgv $out/bin
+
+    runHook postInstall
   '';
 
   meta = {

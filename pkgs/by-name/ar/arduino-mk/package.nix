@@ -23,9 +23,13 @@ stdenv.mkDerivation rec {
   ];
   propagatedBuildInputs = with python3Packages; [ pyserial ];
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
     cp -rT $src $out
     installManPage *.1
+
+    runHook postInstall
   '';
   postFixupPhase = ''
     wrapPythonPrograms

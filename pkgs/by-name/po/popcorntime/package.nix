@@ -74,6 +74,8 @@ stdenv.mkDerivation rec {
 
   # Extract and copy executable in $out/bin
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/applications $out/bin $out/opt/bin $out/share/icons/hicolor/scalable/apps/
     # we can't unzip it in $out/lib, because nw.js will start with
     # an empty screen. Therefore it will be unzipped in a non-typical
@@ -85,6 +87,8 @@ stdenv.mkDerivation rec {
     ln -s $out/opt/popcorntime/src/app/images/icon.png $out/share/icons/hicolor/scalable/apps/popcorntime.png
 
     ln -s ${desktopItem}/share/applications/popcorntime.desktop $out/share/applications/popcorntime.desktop
+
+    runHook postInstall
   '';
 
   # GSETTINGS_SCHEMAS_PATH is not set in installPhase

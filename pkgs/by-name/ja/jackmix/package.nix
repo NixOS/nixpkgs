@@ -38,7 +38,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D jackmix/jackmix $out/bin/jackmix
+
+    runHook postInstall
   '';
 
   meta = {

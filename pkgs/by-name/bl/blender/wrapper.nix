@@ -15,6 +15,8 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
   ];
   installPhase = ''
+    runHook preInstall
+
     mkdir $out/{share/applications,bin} -p
     sed 's/Exec=blender/Exec=${finalAttrs.finalPackage.pname}/g' $src/share/applications/blender.desktop > $out/share/applications/${finalAttrs.finalPackage.pname}.desktop
     cp -r $src/share/blender $out/share
@@ -26,6 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper ${blender}/bin/blender $out/bin/${finalAttrs.finalPackage.pname} \
       --prefix PATH : $program_PATH \
       --prefix PYTHONPATH : $program_PYTHONPATH
+
+    runHook postInstall
   '';
 
   pythonPath = extraModules;

@@ -35,12 +35,16 @@ stdenv.mkDerivation {
   sourceRoot = ".";
 
   installPhase = ''
+    runHook preInstall
+
     cp -r opt $out
 
     # add and fix pkg-config file
     mkdir -p $out/lib/pkgconfig
     substitute $out/doc/libmedia.pc $out/lib/pkgconfig/libmedia.pc \
       --replace /opt $out
+
+    runHook postInstall
   '';
 
   postFixup = ''

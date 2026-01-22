@@ -27,7 +27,11 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -D $sourceRoot/mb2md.pl $out/bin/mb2md
+
+    runHook postInstall
   '';
 
   postFixup = ''

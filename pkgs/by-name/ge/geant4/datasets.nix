@@ -28,8 +28,12 @@ let
 
       datadir = "${placeholder "out"}/share/Geant4-${geant4.version}/data/${pname}${version}";
       installPhase = ''
+        runHook preInstall
+
         mkdir -p $datadir
         mv ./* $datadir
+
+        runHook postInstall
       '';
 
       inherit envvar;

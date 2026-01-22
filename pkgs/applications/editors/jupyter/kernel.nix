@@ -45,6 +45,8 @@ in
       unpackCmd = "mkdir jupyter_kernels";
 
       installPhase = ''
+        runHook preInstall
+
         mkdir kernels
 
         ${lib.concatStringsSep "\n" (
@@ -88,6 +90,8 @@ in
 
         mkdir $out
         cp -r kernels $out
+
+        runHook postInstall
       '';
 
       meta = {

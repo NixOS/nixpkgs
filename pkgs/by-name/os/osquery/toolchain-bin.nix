@@ -32,8 +32,12 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ autoPatchelfHook ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
     cp -r * $out
+
+    runHook postInstall
   '';
 
   meta = {

@@ -78,11 +78,15 @@ stdenv.mkDerivation rec {
 
   PREFIX = ""; # Don't install to $out/usr/local
   installPhase = ''
+    runHook preInstall
+
     make DESTDIR="$out" install
     # See:
     # - https://salsa.debian.org/debian-remote-team/nx-libs/blob/bcc152100617dc59156015a36603a15db530a64f/debian/rules#L66-72
     # - https://github.com/ArcticaProject/nx-libs/issues/652
     patchelf --remove-needed "libX11.so.6" $out/bin/nxagent
+
+    runHook postInstall
   '';
 
   meta = {

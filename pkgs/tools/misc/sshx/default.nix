@@ -82,7 +82,11 @@ in
       npmDepsHash = "sha256-QdgNtQMjK229QzB5LbCry1hKVPon8IWUnj+v5L7ydfI=";
 
       installPhase = ''
+        runHook preInstall
+
         cp -r build $out
+
+        runHook postInstall
       '';
     };
   };

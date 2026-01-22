@@ -36,6 +36,8 @@ stdenv.mkDerivation {
   sourceRoot = ".meteor";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
 
     cp -r packages $out
@@ -65,6 +67,8 @@ stdenv.mkDerivation {
     $out/dev_bundle/bin/node --no-wasm-code-gc \''${TOOL_NODE_FLAGS} $out/tools/index.js "\$@"
     EOF
     chmod +x $out/bin/meteor
+
+    runHook postInstall
   '';
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''

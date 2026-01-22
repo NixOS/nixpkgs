@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib $out/include/spooles
     cp libspooles.a libspooles.so.2.2 $out/lib/
     ln -s libspooles.so.2.2 $out/lib/libspooles.so.2
@@ -47,6 +49,8 @@ stdenv.mkDerivation rec {
          fi
       fi
     done
+
+    runHook postInstall
   '';
 
   nativeBuildInputs = [ perl ];

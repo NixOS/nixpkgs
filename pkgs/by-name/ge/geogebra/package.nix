@@ -84,6 +84,8 @@ let
     nativeBuildInputs = [ makeWrapper ];
 
     installPhase = ''
+      runHook preInstall
+
       install -D geogebra/* -t "$out/libexec/geogebra/"
 
       # The bundled jogl (required for 3D graphics) links to libXxf86vm, and loads libGL at runtime
@@ -105,6 +107,8 @@ let
 
       install -Dm644 "${srcIcon}" \
         "$out/share/icons/hicolor/scalable/apps/geogebra.svg"
+
+      runHook postInstall
     '';
   };
 
@@ -126,8 +130,12 @@ let
     nativeBuildInputs = [ unzip ];
 
     installPhase = ''
+      runHook preInstall
+
       install -dm755 $out/Applications
       unzip $src -d $out/Applications
+
+      runHook postInstall
     '';
   };
 in

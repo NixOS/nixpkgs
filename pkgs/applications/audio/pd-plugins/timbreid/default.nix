@@ -33,12 +33,16 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/
     cp -r *.pd $out/
     cp -r *.pd_linux $out/
     cp -r audio/ $out/
     cp -r data/ $out/
     cp -r doc/ $out/
+
+    runHook postInstall
   '';
 
   postFixup = ''

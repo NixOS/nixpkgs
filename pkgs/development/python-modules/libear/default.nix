@@ -17,10 +17,14 @@ buildPythonPackage rec {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     LIBPATH="$(toPythonPath "$out")/libear"
     mkdir -p "$LIBPATH"
 
     install -t "$LIBPATH" $src/*
+
+    runHook postInstall
   '';
 
   pythonImportsCheck = [ "libear" ];

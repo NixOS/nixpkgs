@@ -22,8 +22,12 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp dtach $out/bin/dtach
+
+    runHook postInstall
   '';
 
   meta = {

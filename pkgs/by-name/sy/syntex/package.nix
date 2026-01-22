@@ -18,6 +18,8 @@ stdenv.mkDerivation {
     grep -m1 -B999 '^[*][/]' SynTex.cs > COPYING.MIT
   '';
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out"/{bin,share/doc/syntex,share/syntex}
     cp README.md COPYING.MIT "$out"/share/doc/syntex
     cp syntex.exe "$out"/bin
@@ -27,6 +29,8 @@ stdenv.mkDerivation {
     echo "chmod u+w ." >> "$out/bin/syntex"
     echo "'${mono}/bin/mono' '$out/bin/syntex.exe' \"\$@\"" >>  "$out/bin/syntex"
     chmod a+x "$out/bin/syntex"
+
+    runHook postInstall
   '';
   buildInputs = [ mono ];
   meta = {

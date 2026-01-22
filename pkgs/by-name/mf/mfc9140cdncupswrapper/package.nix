@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     lpr=${mfc9140cdnlpr}/opt/brother/Printers/mfc9140cdn
     dir=$out/opt/brother/Printers/mfc9140cdn
 
@@ -63,6 +65,8 @@ stdenv.mkDerivation rec {
       ]
     }:\$PATH" $out/lib/cups/filter/brother_lpdwrapper_mfc9140cdn
     chmod +x $out/lib/cups/filter/brother_lpdwrapper_mfc9140cdn
+
+    runHook postInstall
   '';
 
   meta = {

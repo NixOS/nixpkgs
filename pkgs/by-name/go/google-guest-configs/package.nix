@@ -56,6 +56,8 @@ stdenv.mkDerivation rec {
   doInstallCheck = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,etc,lib}
     cp -r src/etc/{modprobe.d,sysctl.d} $out/etc
     cp -r src/lib/udev $out/lib
@@ -66,6 +68,8 @@ stdenv.mkDerivation rec {
       wrapProgram "$i" \
         --prefix "PATH" ":" "$binDeps"
     done
+
+    runHook postInstall
   '';
 
   meta = {

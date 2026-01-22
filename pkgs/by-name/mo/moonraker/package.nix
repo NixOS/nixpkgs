@@ -47,11 +47,15 @@ stdenvNoCC.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out $out/bin $out/lib
     cp -r moonraker $out/lib
 
     makeWrapper ${pythonEnv}/bin/python $out/bin/moonraker \
       --add-flags "$out/lib/moonraker/moonraker.py"
+
+    runHook postInstall
   '';
 
   passthru = {

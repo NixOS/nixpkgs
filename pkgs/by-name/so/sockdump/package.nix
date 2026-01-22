@@ -20,7 +20,7 @@ python3.pkgs.buildPythonApplication rec {
 
   pyproject = false; # none
 
-  installPhase = "install -D sockdump.py $out/bin/sockdump";
+  installPhase = "runHook preInstall; install -D sockdump.py $out/bin/sockdump; runHook postInstall";
 
   meta = src.meta // {
     description = "Dump unix domain socket traffic with bpf";

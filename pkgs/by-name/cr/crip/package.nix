@@ -51,6 +51,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin/
 
     for script in ${lib.escapeShellArgs scripts}; do
@@ -63,6 +65,8 @@ stdenv.mkDerivation rec {
         --set PERL5LIB "${perlPackages.makePerlPath [ perlPackages.CDDB_get ]}" \
         --set PATH "${toolDeps}"
     done
+
+    runHook postInstall
   '';
 
   meta = {

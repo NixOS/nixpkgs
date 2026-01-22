@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ beamPackages.erlang ];
 
   buildPhase = "mix escript.build";
-  installPhase = "install -Dt $out/bin mix2nix";
+  installPhase = "runHook preInstall; install -Dt $out/bin mix2nix; runHook postInstall";
 
   meta = {
     description = "Generate nix expressions from mix.lock file";

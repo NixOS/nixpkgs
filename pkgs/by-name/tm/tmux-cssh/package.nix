@@ -20,9 +20,13 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp tmux-cssh $out/bin/tmux-cssh
     wrapProgram $out/bin/tmux-cssh --suffix PATH : ${tmux}/bin
+
+    runHook postInstall
   '';
 
   meta = {

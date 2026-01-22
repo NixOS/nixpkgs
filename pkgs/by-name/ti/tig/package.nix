@@ -59,6 +59,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   installPhase = ''
+    runHook preInstall
+
     make install
     make install-doc
 
@@ -75,6 +77,8 @@ stdenv.mkDerivation rec {
 
     wrapProgram $out/bin/tig \
       --prefix PATH ':' "${git}/bin"
+
+    runHook postInstall
   '';
 
   meta = {

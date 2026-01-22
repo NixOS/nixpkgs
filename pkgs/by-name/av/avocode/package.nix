@@ -110,6 +110,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     substituteInPlace avocode.desktop.in \
       --replace /path/to/avocode-dir/Avocode $out/bin/avocode \
       --replace /path/to/avocode-dir/avocode.png avocode
@@ -124,6 +126,8 @@ stdenv.mkDerivation rec {
     mkdir $out/bin
     ln -s $out/avocode $out/bin/avocode
     ln -s ${mozjpeg}/bin/cjpeg $out/resources/cjpeg
+
+    runHook postInstall
   '';
 
   postFixup = ''

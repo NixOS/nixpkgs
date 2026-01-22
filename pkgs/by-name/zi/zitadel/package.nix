@@ -80,7 +80,11 @@ let
       '';
 
       installPhase = ''
+        runHook preInstall
+
         cp -r ${outputPath} $out
+
+        runHook postInstall
       '';
 
       outputHashMode = "recursive";
@@ -140,8 +144,12 @@ buildGoModule rec {
   doCheck = false;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     install -Dm755 $GOPATH/bin/zitadel $out/bin/
+
+    runHook postInstall
   '';
 
   passthru = {

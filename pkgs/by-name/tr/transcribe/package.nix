@@ -71,6 +71,8 @@ stdenv.mkDerivation rec {
     ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/libexec $out/share/doc
     cp transcribe $out/libexec
     cp xschelp.htb readme_gtk.html $out/share/doc
@@ -84,6 +86,8 @@ stdenv.mkDerivation rec {
     patchelf \
       --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) \
       $out/libexec/transcribe
+
+    runHook postInstall
   '';
 
   preFixup = ''

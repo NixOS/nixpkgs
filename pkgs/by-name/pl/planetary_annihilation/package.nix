@@ -38,6 +38,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,lib}
 
     cp -R * $out/
@@ -100,6 +102,8 @@ stdenv.mkDerivation rec {
         ]
       }:${lib.getLib stdenv.cc.cc}/lib64:${stdenv.cc.libc}/lib64" $f
     done
+
+    runHook postInstall
   '';
 
   meta = {

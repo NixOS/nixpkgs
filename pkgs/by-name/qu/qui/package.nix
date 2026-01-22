@@ -52,7 +52,11 @@ buildGoModule (finalAttrs: {
     '';
 
     installPhase = ''
+      runHook preInstall
+
       cp -r dist $out
+
+      runHook postInstall
     '';
   });
 

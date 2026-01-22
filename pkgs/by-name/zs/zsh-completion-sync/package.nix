@@ -20,7 +20,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -D zsh-completion-sync.plugin.zsh  $out/share/zsh-completion-sync/zsh-completion-sync.plugin.zsh
+
+    runHook postInstall
   '';
 
   meta = {

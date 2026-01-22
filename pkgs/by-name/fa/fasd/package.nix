@@ -16,7 +16,11 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
+    runHook preInstall
+
     PREFIX=$out make install
+
+    runHook postInstall
   '';
 
   meta = {

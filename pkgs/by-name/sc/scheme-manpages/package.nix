@@ -19,8 +19,12 @@ stdenvNoCC.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/man
     cp -r man3/ man7/ $out/share/man/
+
+    runHook postInstall
   '';
 
   passthru.updateScript = unstableGitUpdater { };

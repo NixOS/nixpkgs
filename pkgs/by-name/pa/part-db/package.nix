@@ -75,6 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     rm -r node_modules
     mkdir $out
     mv * .* $out/
@@ -83,6 +85,8 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${envLocalPath} $out/.env.local
     ln -s ${logPath} $out/var/log
     ln -s ${cachePath} $out/var/cache
+
+    runHook postInstall
   '';
 
   passthru.tests = { inherit (nixosTests) part-db; };

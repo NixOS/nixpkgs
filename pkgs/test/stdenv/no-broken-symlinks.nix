@@ -53,6 +53,8 @@ let
         dontConfigure = true;
         dontBuild = true;
         installPhase = ''
+          runHook preInstall
+
           mkdir -p "$out"
 
         ''
@@ -74,6 +76,8 @@ in
         (( 1 == "$(cat "$failed/testBuildFailure.exit")" ))
         grep -F 'found 1 dangling symlinks, 0 reflexive symlinks and 0 unreadable symlinks' "$failed/testBuildFailure.log"
         touch $out
+
+          runHook postInstall
       '';
 
   pass-dangling-symlink-relative-allowed = testBuilder {

@@ -25,7 +25,11 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 pig.py $out/bin/dhcpig
+
+    runHook postInstall
   '';
 
   meta = {

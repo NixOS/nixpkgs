@@ -18,9 +18,13 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
 
   installPhase = ''
+    runHook preInstall
+
     patchShebangs ./configure-jupyter.wls
     mkdir -p $out/share/Wolfram
     cp -r {WolframLanguageForJupyter,images,extras,LICENSE} $out/share/Wolfram
+
+    runHook postInstall
   '';
 
   # no tests

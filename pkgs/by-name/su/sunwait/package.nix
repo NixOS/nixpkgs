@@ -18,7 +18,11 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [ "C=${stdenv.cc.targetPrefix}c++" ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 sunwait -t $out/bin
+
+    runHook postInstall
   '';
 
   meta = {

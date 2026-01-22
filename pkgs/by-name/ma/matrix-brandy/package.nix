@@ -31,8 +31,12 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp brandy $out/bin
+
+    runHook postInstall
   '';
 
   passthru.updateScript = nix-update-script { };

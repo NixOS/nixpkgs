@@ -27,8 +27,12 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -a rofi-systemd $out/bin/rofi-systemd
+
+    runHook postInstall
   '';
 
   wrapperPath = lib.makeBinPath [

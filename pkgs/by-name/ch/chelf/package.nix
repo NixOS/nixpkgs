@@ -16,8 +16,12 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mv chelf $out/bin/chelf
+
+    runHook postInstall
   '';
 
   meta = {

@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/janusgraph
     install -D $src/lib/*.jar $out/share/janusgraph
     cd $src
@@ -40,6 +42,8 @@ stdenv.mkDerivation rec {
     # temporary workaround for
     # https://github.com/NixOS/nixpkgs/pull/244400#issuecomment-1667330430
     cd "$TMPDIR"
+
+    runHook postInstall
   '';
 
   meta = {

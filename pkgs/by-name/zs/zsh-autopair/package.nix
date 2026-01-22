@@ -16,7 +16,11 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     install -D autopair.zsh $out/share/zsh/${pname}/autopair.zsh
+
+    runHook postInstall
   '';
 
   meta = {

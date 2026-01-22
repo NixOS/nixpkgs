@@ -17,8 +17,12 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/java
     cp mysql-connector-j-*.jar $out/share/java/mysql-connector-j.jar
+
+    runHook postInstall
   '';
 
   nativeBuildInputs = [ unzip ];

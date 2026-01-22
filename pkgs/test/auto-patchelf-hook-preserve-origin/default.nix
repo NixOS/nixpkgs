@@ -64,8 +64,12 @@ let
     # we don't set buildCommand because we want to ensure fixupPhase
     # (containing autoPatchelfHook) is run.
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out
       cp -R ${lib-check}/* $out
+
+      runHook postInstall
     '';
 
     # Should not refer to our source nor to itself.

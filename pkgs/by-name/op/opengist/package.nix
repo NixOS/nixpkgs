@@ -39,8 +39,12 @@ buildGoModule (finalAttrs: {
     '';
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out
       cp -R public $out
+
+      runHook postInstall
     '';
 
     npmDepsHash = "sha256-zBao/EoAolkgMvqQPqN0P2VC4tT6gkQPqIk4HyfXC7o=";

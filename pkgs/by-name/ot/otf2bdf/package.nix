@@ -21,9 +21,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ freetype ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/man/man1
     install otf2bdf $out/bin
     cp otf2bdf.man $out/share/man/man1/otf2bdf.1
+
+    runHook postInstall
   '';
 
   meta = {

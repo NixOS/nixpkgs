@@ -17,8 +17,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ unzip ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib/jars
     cp lib/*.jar $out/lib/jars/
+
+    runHook postInstall
   '';
 
   meta = {

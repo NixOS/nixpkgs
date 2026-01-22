@@ -29,8 +29,12 @@ buildNpmPackage rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/gauge-plugins/js/${version}
     unzip deploy/gauge-js-${version}.zip -d $out/share/gauge-plugins/js/${version}
+
+    runHook postInstall
   '';
 
   meta = {

@@ -34,8 +34,12 @@ stdenv.mkDerivation {
   doInstallCheck = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 m33-linux $out/bin/m33-linux
     install -Dm755 90-micro-3d-local.rules $out/lib/udev/rules.d/90-micro-3d-local.rules
+
+    runHook postInstall
   '';
 
   meta = {

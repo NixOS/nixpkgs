@@ -21,9 +21,13 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/java
     ln -s $jar $out/share/java/clooj.jar
     makeWrapper ${jre}/bin/java $out/bin/clooj --add-flags "-jar $out/share/java/clooj.jar"
+
+    runHook postInstall
   '';
 
   meta = {

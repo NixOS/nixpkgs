@@ -14,8 +14,12 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/share/reflexive_polytopes"
     cp -R * "$out/share/reflexive_polytopes/"
+
+    runHook postInstall
   '';
 
   meta = {

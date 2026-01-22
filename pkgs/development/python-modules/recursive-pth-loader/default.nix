@@ -13,9 +13,13 @@ stdenv.mkDerivation {
   buildPhase = "${python.pythonOnBuildForHost}/bin/${python.pythonOnBuildForHost.executable} -m compileall .";
 
   installPhase = ''
+    runHook preInstall
+
     dst=$out/${python.sitePackages}
     mkdir -p $dst
     cp sitecustomize.* $dst/
+
+    runHook postInstall
   '';
 
   meta = {

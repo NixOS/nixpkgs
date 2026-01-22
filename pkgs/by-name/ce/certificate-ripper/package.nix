@@ -43,7 +43,11 @@ buildGraalvmNativeImage (finalAttrs: {
       ];
 
     installPhase = ''
+      runHook preInstall
+
       install -Dm644 target/crip.jar $out
+
+      runHook postInstall
     '';
   };
 

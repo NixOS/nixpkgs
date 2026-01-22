@@ -29,7 +29,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D $src $out/bin/mirrord
+
+    runHook postInstall
   '';
 
   passthru = {

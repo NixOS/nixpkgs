@@ -29,9 +29,13 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/lib/mozilla/native-messaging-hosts
     cp ff2mpv.py $out/bin
     cp ff2mpv.json $out/lib/mozilla/native-messaging-hosts
+
+    runHook postInstall
   '';
 
   meta = {

@@ -20,7 +20,11 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm 755 mcrcon $out/bin/mcrcon
+
+    runHook postInstall
   '';
 
   meta = {

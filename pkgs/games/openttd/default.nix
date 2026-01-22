@@ -60,8 +60,12 @@ let
     buildInputs = [ ];
     cmakeFlags = oldAttrs.cmakeFlags or [ ] ++ [ (lib.cmakeBool "OPTION_TOOLS_ONLY" true) ];
     installPhase = ''
+      runHook preInstall
+
       install -Dm555 src/strgen/strgen -t $out/bin
       install -Dm555 src/settingsgen/settingsgen -t $out/bin
+
+      runHook postInstall
     '';
   });
 in

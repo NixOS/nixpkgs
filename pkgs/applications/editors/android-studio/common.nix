@@ -100,6 +100,8 @@ let
     dontPatchShebangs = true;
 
     installPhase = ''
+      runHook preInstall
+
       cp -r . $out
       wrapProgram $out/bin/studio \
         --set-default JAVA_HOME "$out/jbr" \
@@ -206,6 +208,8 @@ let
           zlib
         ]
       }"
+
+      runHook postInstall
     '';
     meta.mainProgram = "studio";
   };

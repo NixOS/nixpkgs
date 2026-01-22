@@ -22,6 +22,8 @@ let
     nativeBuildInputs = [ makeWrapper ];
     buildInputs = [ python3 ];
     installPhase = ''
+      runHook preInstall
+
       mkdir "$out"
       cp -r bin share "$out"
       wrapProgram $out/bin/nix-pin \
@@ -31,6 +33,8 @@ let
             git
           ]
         }"
+
+      runHook postInstall
     '';
     passthru =
       let

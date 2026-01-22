@@ -30,6 +30,8 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     for d in bin/sqitch etc lib share ; do
       # make sure dest alreay exists before symlink
@@ -38,6 +40,8 @@ stdenv.mkDerivation {
         ln -s ${sqitch}/$d $out/$d
       fi
     done
+
+    runHook postInstall
   '';
   dontStrip = true;
   postFixup = ''

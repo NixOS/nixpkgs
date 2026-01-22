@@ -26,9 +26,13 @@ stdenvNoCC.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D SoundWire-Server.desktop $out/share/applications/SoundWireServer.desktop
     install -D SoundWireServer $out/bin/SoundWireServer
     install -D sw-icon.xpm $out/share/icons/hicolor/256x256/apps/sw-icon.xpm
+
+    runHook postInstall
   '';
 
   meta = {

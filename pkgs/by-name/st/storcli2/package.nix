@@ -42,7 +42,11 @@ stdenvNoCC.mkDerivation (
     dontBuild = true;
 
     installPhase = ''
+      runHook preInstall
+
       install -D ./opt/MegaRAID/storcli2/storcli2 $out/bin/storcli2
+
+      runHook postInstall
     '';
 
     # Not needed because the binary is statically linked

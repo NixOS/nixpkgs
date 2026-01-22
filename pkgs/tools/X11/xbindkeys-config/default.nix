@@ -47,9 +47,13 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/man/man1
     gzip -c ${./xbindkeys-config.1} > $out/share/man/man1/xbindkeys-config.1.gz
     cp xbindkeys_config $out/bin/xbindkeys-config
     wrapProgram $out/bin/xbindkeys-config --prefix PATH ":" "${procps}/bin"
+
+    runHook postInstall
   '';
 }

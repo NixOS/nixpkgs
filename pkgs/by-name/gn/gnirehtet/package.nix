@@ -17,8 +17,12 @@ let
       hash = "sha256-e1wwMhcco9VNoBUzbEq1ESbkX2bqTOkCbPmnV9CpvGo=";
     };
     installPhase = ''
+      runHook preInstall
+
       mkdir $out
       mv gnirehtet.apk $out
+
+      runHook postInstall
     '';
   };
 in

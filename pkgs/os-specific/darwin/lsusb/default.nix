@@ -16,10 +16,14 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mkdir -p $out/share/man/man8
     install -m 0755 lsusb $out/bin
     install -m 0444 man/lsusb.8 $out/share/man/man8
+
+    runHook postInstall
   '';
 
   meta = {

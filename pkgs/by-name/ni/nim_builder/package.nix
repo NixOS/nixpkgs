@@ -14,7 +14,11 @@ stdenv.mkDerivation {
     nim c --nimcache:$TMPDIR nim_builder
   '';
   installPhase = ''
+    runHook preInstall
+
     install -Dt $out/bin nim_builder
+
+    runHook postInstall
   '';
   meta = {
     description = "Internal Nixpkgs utility for buildNimPackage";

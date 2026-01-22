@@ -141,12 +141,16 @@ buildGoModule (
     '';
 
     installPhase = ''
+      runHook preInstall
+
       plugin="$(ls dist/*.tar.gz | tail -n1)"
       if [ -z "$plugin" ] || [ ! -f "$plugin" ]; then
         echo "No plugin tarball in dist folder!" >&2
         exit 1
       fi
       cp -av "$plugin" $out
+
+      runHook postInstall
     '';
   }
   // extraGoModuleAttrs

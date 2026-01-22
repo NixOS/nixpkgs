@@ -28,7 +28,11 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     ./doinstall.tcl $out
+
+    runHook postInstall
   '';
 
   meta = {

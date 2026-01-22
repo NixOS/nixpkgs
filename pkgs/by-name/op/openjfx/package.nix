@@ -161,7 +161,11 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     cp -r build/modular-sdk $out
+
+    runHook postInstall
   '';
 
   postFixup = ''

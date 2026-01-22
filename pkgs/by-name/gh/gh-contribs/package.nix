@@ -23,7 +23,11 @@ stdenvNoCC.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D -m755 "gh-contribs" "$out/bin/gh-contribs"
+
+    runHook postInstall
   '';
 
   postFixup = ''

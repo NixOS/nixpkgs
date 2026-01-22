@@ -27,9 +27,13 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin/
     cp das_watchdog $out/bin/
     cp test_rt $out/bin/
+
+    runHook postInstall
   '';
 
   meta = {

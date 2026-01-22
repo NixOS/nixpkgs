@@ -36,6 +36,8 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -R Write $out/
     # symlink the binary to bin/
@@ -46,6 +48,8 @@ stdenv.mkDerivation rec {
     ln -s ${desktopItem}/share/applications/* $out/share/applications/
     mkdir -p $out/share/icons
     ln -s $out/Write/Write144x144.png $out/share/icons/write_stylus.png
+
+    runHook postInstall
   '';
   preFixup =
     let

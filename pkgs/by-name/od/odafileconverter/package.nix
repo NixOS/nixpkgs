@@ -39,9 +39,13 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/lib
     cp -vr usr/bin/ODAFileConverter_${version} $out/libexec
     cp -vr usr/share $out/share
+
+    runHook postInstall
   '';
 
   dontWrapQtApps = true;

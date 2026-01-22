@@ -14,9 +14,13 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/man/man1
     cp share/tthsum.1.gz $out/share/man/man1
     cp obj-unix/tthsum $out/bin
+
+    runHook postInstall
   '';
 
   doCheck = !stdenv.hostPlatform.isDarwin;

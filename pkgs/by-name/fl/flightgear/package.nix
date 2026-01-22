@@ -48,8 +48,12 @@ let
     dontUnpack = true;
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p "$out/share/FlightGear"
       cp ${src}/* -a "$out/share/FlightGear/"
+
+      runHook postInstall
     '';
   };
   openscenegraph = callPackage ./openscenegraph-flightgear.nix { };

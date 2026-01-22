@@ -17,7 +17,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
 
   installPhase = ''
+    runHook preInstall
+
     cp -R EmacsAnywhere.spoon/ $out/
+
+    runHook postInstall
   '';
 
   meta = {

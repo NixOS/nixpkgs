@@ -19,8 +19,12 @@ buildNpmPackage (finalAttrs: {
   npmDepsHash = "sha256-EI0A4s86moYerWvZHPLnyy2O87ZskiP/tr8rAGO8MbE=";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/freifunk-meshviewer/
     cp -r build/* $out/share/freifunk-meshviewer/
+
+    runHook postInstall
   '';
 
   meta = {

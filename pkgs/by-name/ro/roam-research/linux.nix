@@ -79,6 +79,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ dpkg ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
     mv opt "$out/"
 
@@ -89,6 +91,8 @@ stdenv.mkDerivation rec {
 
     substituteInPlace $out/share/applications/roam-research.desktop \
       --replace "/opt/Roam Research/roam-research" "roam-research"
+
+    runHook postInstall
   '';
 
   # autoPatchelfHook/patchelf are not used because they cause the binary to coredump.

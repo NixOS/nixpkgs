@@ -24,7 +24,11 @@ resholve.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm 0755 pdfmm $out/bin/pdfmm
+
+    runHook postInstall
   '';
 
   solutions.default = {

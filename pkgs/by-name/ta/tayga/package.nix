@@ -27,11 +27,15 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 tayga $out/bin/tayga
     install -D tayga.conf.5 $out/share/man/man5/tayga.conf.5
     install -D tayga.8 $out/share/man/man8/tayga.8
     cp -R docs $out/share/
     cp tayga.conf.example $out/share/docs/
+
+    runHook postInstall
   '';
 
   passthru.tests.tayga = nixosTests.tayga;

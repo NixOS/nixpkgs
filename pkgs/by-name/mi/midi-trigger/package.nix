@@ -26,8 +26,12 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/lib/lv2"
     mv midi-trigger.lv2 "$out/lib/lv2"
+
+    runHook postInstall
   '';
 
   meta = {

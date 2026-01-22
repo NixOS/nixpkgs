@@ -16,8 +16,12 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/dcw-gmt
     cp -rv ./* $out/share/dcw-gmt
+
+    runHook postInstall
   '';
 
   meta = {

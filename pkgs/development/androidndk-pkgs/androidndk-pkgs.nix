@@ -105,6 +105,8 @@ else
       dontPatch = true;
       autoPatchelfIgnoreMissingDeps = true;
       installPhase = ''
+        runHook preInstall
+
         # https://developer.android.com/ndk/guides/other_build_systems
         mkdir -p $out
         cp -r ${androidndk}/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/${buildInfo.double} $out/toolchain
@@ -146,6 +148,8 @@ else
         ln -sf $out/bin/yasm $out/bin/as
 
         patchShebangs $out/bin
+
+        runHook postInstall
       '';
       meta = {
         description = "Android NDK toolchain, tuned for other platforms";

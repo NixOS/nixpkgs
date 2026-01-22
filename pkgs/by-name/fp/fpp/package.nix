@@ -24,10 +24,14 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fpp $out/bin
     cp -r fpp src $out/share/fpp
     ln -s $out/share/fpp/fpp $out/bin/fpp
     installManPage debian/usr/share/man/man1/fpp.1
+
+    runHook postInstall
   '';
 
   meta = {

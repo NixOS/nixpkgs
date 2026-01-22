@@ -23,10 +23,14 @@ stdenvNoCC.mkDerivation {
   nativeBuildInputs = [ undmg ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/Applications/Caprine.app"
     cp -R . "$out/Applications/Caprine.app"
     mkdir "$out/bin"
     ln -s "$out/Applications/Caprine.app/Contents/MacOS/Caprine" "$out/bin/caprine"
+
+    runHook postInstall
   '';
 
   meta = metaCommon // {

@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mkdir -p $dev/include
     mkdir -p $out/{usr/bin,usr/include/sys}
@@ -28,6 +30,8 @@ stdenv.mkDerivation rec {
     mv $out/usr/bin/* $out/bin
     mv $out/usr/include/* $dev/include/
     rm -rf $out/usr/
+
+    runHook postInstall
   '';
 
   meta = {

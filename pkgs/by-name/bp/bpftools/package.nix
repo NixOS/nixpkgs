@@ -75,9 +75,13 @@ stdenv.mkDerivation rec {
   makeFlags = [ "ARCH=${stdenv.hostPlatform.linuxArch}" ];
 
   installPhase = ''
+    runHook preInstall
+
     make -C bpftool install
     install -Dm755 -t $out/bin bpf_asm
     install -Dm755 -t $out/bin bpf_dbg
+
+    runHook postInstall
   '';
 
   meta = {

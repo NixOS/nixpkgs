@@ -26,8 +26,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp veikk-linux-driver-gui $out/bin
+
+    runHook postInstall
   '';
 
   meta = {

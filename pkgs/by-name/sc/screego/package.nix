@@ -41,7 +41,11 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
+
       cp -r build $out
+
+      runHook postInstall
     '';
 
   };

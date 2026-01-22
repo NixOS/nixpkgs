@@ -48,11 +48,15 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mkdir -p $out/share/icons/hicolor/256x256/apps
 
     install -Dm777 ./MRIcron $out/bin/mricron
     install -Dm444 -t $out/share/icons/hicolor/scalable/apps/ ./Resources/mricron.svg
+
+    runHook postInstall
   '';
 
   desktopItems = [

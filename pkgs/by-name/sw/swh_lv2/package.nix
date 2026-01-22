@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     lv2
   ];
 
-  installPhase = "make install-system";
+  installPhase = "runHook preInstall; make install-system; runHook postInstall";
 
   meta = {
     homepage = "http://plugin.org.uk";

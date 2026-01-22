@@ -65,8 +65,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
     cp src/espeakedit "$out/bin"
+
+    runHook postInstall
   '';
 
   meta = {

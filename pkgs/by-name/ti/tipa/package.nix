@@ -14,11 +14,15 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     export PREFIX="$out/texmf-dist"
     mkdir -p "$PREFIX" "$out/share"
     make install PREFIX="$PREFIX"
 
     ln -s -r $out/texmf* $out/share/
+
+    runHook postInstall
   '';
 
   outputHashAlgo = "sha256";

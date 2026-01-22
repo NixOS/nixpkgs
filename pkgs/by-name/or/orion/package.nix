@@ -19,8 +19,12 @@ stdenv.mkDerivation rec {
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/themes/orion
     cp -r gtk-2.0 gtk-3.0 metacity-1 openbox-3 xfwm4 $out/share/themes/orion
+
+    runHook postInstall
   '';
 
   meta = {

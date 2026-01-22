@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D ${src}/rmount.man  $out/share/man/man1/rmount.1
     install -D ${src}/rmount.bash $out/bin/rmount
     install -D ${src}/config.json $out/share/config.json
@@ -36,6 +38,8 @@ stdenv.mkDerivation rec {
         sshfs
       ]
     }
+
+    runHook postInstall
   '';
 
   meta = {

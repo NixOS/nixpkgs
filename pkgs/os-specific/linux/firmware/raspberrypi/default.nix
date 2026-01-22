@@ -17,8 +17,12 @@ stdenvNoCC.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/raspberrypi/
     mv boot "$out/share/raspberrypi/"
+
+    runHook postInstall
   '';
 
   dontConfigure = true;

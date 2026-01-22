@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp bashmount $out/bin
 
@@ -29,6 +31,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/doc/bashmount
     cp COPYING $out/share/doc/bashmount
     cp NEWS    $out/share/doc/bashmount
+
+    runHook postInstall
   '';
 
   meta = {

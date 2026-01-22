@@ -47,6 +47,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/sbin
     mkdir -p $out/share/man/man8
     for prog in gdisk sgdisk fixparts cgdisk
@@ -54,6 +56,8 @@ stdenv.mkDerivation rec {
         install -v -m755 $prog $out/sbin
         install -v -m644 $prog.8 $out/share/man/man8
     done
+
+    runHook postInstall
   '';
 
   passthru.tests = lib.optionalAttrs stdenv.hostPlatform.isx86 {

@@ -46,8 +46,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     substituteInPlace "$out/share/xgreeters/lightdm-tiny-greeter.desktop" \
       --replace "Exec=lightdm-tiny-greeter" "Exec=$out/bin/lightdm-tiny-greeter"
+
+    runHook postInstall
   '';
 
   passthru.xgreeters = linkFarm "lightdm-tiny-greeter-xgreeters" [

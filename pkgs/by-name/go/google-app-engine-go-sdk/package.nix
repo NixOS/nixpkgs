@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ python ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/
     cp -r "$src" "$out/share/go_appengine"
 
@@ -36,6 +38,8 @@ stdenv.mkDerivation rec {
         --prefix PATH : "${python}/bin" \
         --prefix PYTHONPATH : "$(toPythonPath ${cffi}):$(toPythonPath ${cryptography}):$(toPythonPath ${pyopenssl})"
     done
+
+    runHook postInstall
   '';
 
   meta = {

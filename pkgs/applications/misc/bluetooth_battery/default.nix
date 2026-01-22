@@ -21,8 +21,12 @@ buildPythonApplication rec {
   pyproject = false;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp $src/bluetooth_battery.py $out/bin/bluetooth_battery
+
+    runHook postInstall
   '';
 
   meta = {

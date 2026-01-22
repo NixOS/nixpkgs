@@ -22,9 +22,13 @@ resholve.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin/
     cp ./shunit2 $out/bin/shunit2
     chmod +x $out/bin/shunit2
+
+    runHook postInstall
   '';
 
   doInstallCheck = true;

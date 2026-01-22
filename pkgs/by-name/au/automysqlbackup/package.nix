@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/etc
 
     cp automysqlbackup $out/bin/
@@ -40,6 +42,8 @@ stdenv.mkDerivation rec {
         gzip
       ]
     }
+
+    runHook postInstall
   '';
 
   meta = {

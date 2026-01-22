@@ -20,8 +20,12 @@ stdenv.mkDerivation rec {
     libXaw
   ];
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp autocutsel $out/bin/
+
+    runHook postInstall
   '';
 
   meta = {

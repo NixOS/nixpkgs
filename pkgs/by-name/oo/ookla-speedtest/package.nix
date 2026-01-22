@@ -47,8 +47,12 @@ stdenv.mkDerivation {
   dontConfigure = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -D speedtest $out/bin/speedtest
     install -D speedtest.5 $out/share/man/man5/speedtest.5
+
+    runHook postInstall
   '';
 
   meta = {

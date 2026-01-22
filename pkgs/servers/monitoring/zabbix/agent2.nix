@@ -69,6 +69,8 @@ import ./versions.nix (
     '';
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/sbin
 
       install -Dm0644 src/go/conf/zabbix_agent2.conf $out/etc/zabbix_agent2.conf
@@ -76,6 +78,8 @@ import ./versions.nix (
 
       # create a symlink which is compatible with the zabbixAgent module
       ln -s $out/bin/zabbix_agent2 $out/sbin/zabbix_agentd
+
+      runHook postInstall
     '';
 
     meta = {

@@ -19,9 +19,13 @@ stdenv.mkDerivation (
     dontUnpack = true;
 
     installPhase = ''
+      runHook preInstall
+
       env
       mkdir -p $out/lib
       cp $src $out/lib/${jarName}
+
+      runHook postInstall
     '';
 
     meta = {

@@ -68,6 +68,8 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-reserved-user-defined-literal";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/share/doc/satallax" "$out/bin" "$out/lib" "$out/lib/satallax"
     cp bin/satallax.opt "$out/bin/satallax"
     wrapProgram "$out/bin/satallax" \
@@ -86,6 +88,8 @@ stdenv.mkDerivation rec {
     cp -r modes "$out/lib/satallax/"
     cp -r problems "$out/lib/satallax/"
     cp -r coq* "$out/lib/satallax/"
+
+    runHook postInstall
   '';
 
   doCheck = stdenv.hostPlatform.isLinux;

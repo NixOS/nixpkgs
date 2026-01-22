@@ -41,7 +41,11 @@ gccStdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     cp -fa ./gsc-boot $out/gambit/
+
+    runHook postInstall
   '';
 
   forceShare = [ "info" ];

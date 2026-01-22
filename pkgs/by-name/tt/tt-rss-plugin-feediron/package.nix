@@ -17,9 +17,13 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/feediron
 
     cp -r bin filters init.php preftab recipes $out/feediron/
+
+    runHook postInstall
   '';
 
   meta = {

@@ -17,7 +17,11 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm555 -t $out/bin devour
+
+    runHook postInstall
   '';
 
   buildInputs = [ libX11 ];

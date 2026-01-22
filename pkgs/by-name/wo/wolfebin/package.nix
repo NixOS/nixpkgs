@@ -19,9 +19,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ python3 ];
 
   installPhase = ''
+    runHook preInstall
+
     install -m 755 -d $out/bin
     install -m 755 wolfebin $out/bin
     install -m 755 wolfebin_server.py $out/bin/wolfebin_server
+
+    runHook postInstall
   '';
 
   meta = {

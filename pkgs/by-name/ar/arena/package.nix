@@ -74,8 +74,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     ln -s $out/lib/${pname}-${version}/Arena_x86_64_linux $out/bin/arena
+
+    runHook postInstall
   '';
 
   dontStrip = true;

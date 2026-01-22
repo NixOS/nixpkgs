@@ -18,6 +18,8 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ nodejs ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
 
     install -Dm755 $src/cli.js $out/bin/speed-cloudflare-cli
@@ -25,6 +27,8 @@ stdenv.mkDerivation {
     install -Dm644 $src/stats.js $out/bin/stats.js
 
     patchShebangs $out/bin/speed-cloudflare-cli
+
+    runHook postInstall
   '';
 
   meta = {

@@ -35,8 +35,12 @@ stdenv.mkDerivation rec {
   ]);
 
   installPhase = ''
+    runHook preInstall
+
     make PREFIX=$out
     make PREFIX=$out install
+
+    runHook postInstall
   '';
 
   postFixup = ''

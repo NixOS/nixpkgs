@@ -41,8 +41,12 @@ let
           sourceRoot = ".";
 
           installPhase = ''
+            runHook preInstall
+
             mkdir -p $out
             cp -r * $out/
+
+            runHook postInstall
           '';
         };
       };

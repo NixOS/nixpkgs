@@ -16,8 +16,12 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     cp -R 404.html assets favicon.ico index.html robots.txt $out
+
+    runHook postInstall
   '';
 
   meta = {

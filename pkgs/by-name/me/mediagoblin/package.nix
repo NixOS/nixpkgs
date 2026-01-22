@@ -52,8 +52,12 @@ let
     dontNpmBuild = true;
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/node_modules/
       cp -r node_modules/{jquery,video.js,videojs-resolution-switcher,leaflet} $out/node_modules/
+
+      runHook postInstall
     '';
   };
 in

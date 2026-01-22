@@ -24,8 +24,12 @@ stdenv.mkDerivation rec {
   sourceRoot = "${src.name}/src";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp rp-${if stdenv.hostPlatform.isDarwin then "osx" else "lin"} $out/bin/rp
+
+    runHook postInstall
   '';
 
   meta = {

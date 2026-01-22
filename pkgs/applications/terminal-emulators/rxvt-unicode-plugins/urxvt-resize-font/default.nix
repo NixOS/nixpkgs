@@ -17,8 +17,12 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib/urxvt/perl
     cp resize-font $out/lib/urxvt/perl
+
+    runHook postInstall
   '';
 
   meta = {

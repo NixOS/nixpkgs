@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     libxcb
   ];
 
-  installPhase = "install -D -t $out/bin xkbmon";
+  installPhase = "runHook preInstall; install -D -t $out/bin xkbmon; runHook postInstall";
 
   meta = {
     homepage = "https://github.com/xkbmon/xkbmon";

@@ -268,7 +268,11 @@ buildBazelPackage rec {
       cp $bazelOut/external/Cargo.Bazel.lock source/extensions/dynamic_modules/sdk/rust/Cargo.Bazel.lock
     '';
     installPhase = ''
+      runHook preInstall
+
       install -Dm0755 bazel-bin/source/exe/envoy-static $out/bin/envoy
+
+      runHook postInstall
     '';
   };
 

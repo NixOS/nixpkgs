@@ -27,10 +27,14 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/zerofree
     cp zerofree $out/bin
     cp COPYING $out/share/zerofree/COPYING
     installManPage ${manpage}
+
+    runHook postInstall
   '';
 
   meta = {

@@ -17,7 +17,11 @@ python3Packages.buildPythonApplication {
 
   pyproject = false;
   installPhase = ''
+    runHook preInstall
+
     install -D $src/sdat2img.py $out/bin/sdat2img
+
+    runHook postInstall
   '';
 
   meta = {

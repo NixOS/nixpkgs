@@ -41,8 +41,12 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp lib/clippy $out/bin
+
+    runHook postInstall
   '';
 
   enableParallelBuilding = true;

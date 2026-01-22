@@ -123,6 +123,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,opt/PreMiD,share/pixmaps}
     mv * $out/opt/PreMiD
 
@@ -136,6 +138,8 @@ stdenv.mkDerivation rec {
         --prefix LD_LIBRARY_PATH : ${libPath}:$out/opt/${pname}
 
     ln -s $out/opt/PreMiD/${pname} $out/bin/
+
+    runHook postInstall
   '';
 
   # This is the icon used by the desktop file

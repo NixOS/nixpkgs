@@ -82,6 +82,8 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     # remove files for 32-bit arch to skip building for this arch
     # but add -f flag to not fail if files were not found (new versions dont provide 32-bit arch)
     rm -rf x86 x86_64/lib64
@@ -100,6 +102,8 @@ stdenv.mkDerivation {
 
     # Why is this needed? SEGV otherwise.
     ln -s $opt/data/resources $opt/x86_64/resources
+
+    runHook postInstall
   '';
 
   # to test run:

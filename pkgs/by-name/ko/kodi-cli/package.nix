@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -a kodi-cli $out/bin
     wrapProgram $out/bin/kodi-cli --prefix PATH : ${
@@ -42,6 +44,8 @@ stdenv.mkDerivation rec {
         youtube-dl
       ]
     }
+
+    runHook postInstall
   '';
 
   meta = {

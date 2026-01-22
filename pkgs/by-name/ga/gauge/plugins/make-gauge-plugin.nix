@@ -57,8 +57,12 @@ stdenvNoCC.mkDerivation (
     nativeBuildInputs = lib.optional stdenvNoCC.hostPlatform.isLinux autoPatchelfHook;
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p "$out/share/gauge-plugins/${pname}/${finalAttrs.version}"
       cp -r . "$out/share/gauge-plugins/${pname}/${finalAttrs.version}"
+
+      runHook postInstall
     '';
 
     passthru = {

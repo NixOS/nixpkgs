@@ -15,7 +15,11 @@ stdenv.mkDerivation {
     sha256 = "1fkrgj3xfhj820qagh5p0rabl8z2hpad6yp984v92h9pgbfwxs33";
   };
   installPhase = ''
+    runHook preInstall
+
     install -D undaemonize $out/bin/undaemonize
+
+    runHook postInstall
   '';
   meta = {
     description = "Tiny helper utility to force programs which insist on daemonizing themselves to run in the foreground";

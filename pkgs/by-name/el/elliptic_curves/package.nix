@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     # directory layout as spkg-install.py expects
     dir="$PWD"
     cd ..
@@ -32,6 +34,8 @@ stdenv.mkDerivation rec {
     export PYTHONPATH=$PWD
 
     ${python3.interpreter} ${spkg-install}
+
+    runHook postInstall
   '';
 
   meta = {

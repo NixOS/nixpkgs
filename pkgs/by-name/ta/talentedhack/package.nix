@@ -31,9 +31,13 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     d=$out/lib/lv2/talentedhack.lv2
     mkdir -p $d
     cp *.so *.ttl $d
+
+    runHook postInstall
   '';
 
   meta = {

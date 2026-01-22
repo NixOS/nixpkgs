@@ -20,7 +20,13 @@ godot3-mono.overrideAttrs (
 
     outputs = [ "out" ];
     buildPhase = " ";
-    installPhase = ''echo "No output intended. Run make-deps.sh instead." > $out'';
+    installPhase = ''
+      runHook preInstall
+
+      echo "No output intended. Run make-deps.sh instead." > $out
+
+      runHook postInstall
+    '';
 
     # This script is used to update the accompanying deps.json file, a JSON file listing the
     # nuget packages that the godot-mono code depends on, along with their sha256 hashes. This

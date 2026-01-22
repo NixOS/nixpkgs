@@ -97,10 +97,14 @@ let
     pluginsSubdir = "lib/qt-${qtbase.qtCompatVersion}/plugins";
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out $(dirname ${pluginsSubdir}/geoservices)
       mkdir -p ${pluginsSubdir}/geoservices
       mv *.so ${pluginsSubdir}/geoservices
       mv lib $out/
+
+      runHook postInstall
     '';
 
     meta = {

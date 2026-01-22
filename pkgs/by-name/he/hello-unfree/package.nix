@@ -11,12 +11,16 @@ stdenv.mkDerivation {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cat > $out/bin/hello-unfree << EOF
     #!${runtimeShell}
     echo "Hello, you are running an unfree system!"
     EOF
     chmod +x $out/bin/hello-unfree
+
+    runHook postInstall
   '';
 
   meta = {

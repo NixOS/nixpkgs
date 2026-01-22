@@ -16,8 +16,12 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/${pname}
     cp -r shaders *.json $out/share/${pname}
+
+    runHook postInstall
   '';
 
   meta = {

@@ -34,8 +34,12 @@ stdenv.mkDerivation {
   __darwinAllowLocalNetworking = true;
 
   installPhase = ''
+    runHook preInstall
+
     [[ $TEST_RAN == 1 ]]
     echo "test passed"
     touch $out
+
+    runHook postInstall
   '';
 }

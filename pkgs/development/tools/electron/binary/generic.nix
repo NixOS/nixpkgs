@@ -143,9 +143,13 @@ let
     dontBuild = true;
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/libexec/electron
       unzip -d $out/libexec/electron $src
       chmod u-x $out/libexec/electron/*.so*
+
+      runHook postInstall
     '';
 
     # We don't want to wrap the contents of $out/libexec automatically

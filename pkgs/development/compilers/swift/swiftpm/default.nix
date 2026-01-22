@@ -461,6 +461,8 @@ stdenv.mkDerivation (
 
     # The following is derived from Utilities/bootstrap, see install_swiftpm.
     installPhase = ''
+      runHook preInstall
+
       binPath="$(swift-build --show-bin-path -c release)"
 
       mkdir -p $out/bin $out/lib/swift
@@ -485,6 +487,8 @@ stdenv.mkDerivation (
       }
       installSwiftpmModule PackageDescription ManifestAPI
       installSwiftpmModule PackagePlugin PluginAPI
+
+      runHook postInstall
     '';
 
     setupHook = ./setup-hook.sh;

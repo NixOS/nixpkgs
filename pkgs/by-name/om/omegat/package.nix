@@ -25,6 +25,8 @@ stdenv.mkDerivation {
   unpackCmd = "unzip -o $curSrc"; # tries to go interactive without -o
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -r lib docs images plugins scripts *.txt *.html OmegaT.jar $out/
 
@@ -34,6 +36,8 @@ stdenv.mkDerivation {
     exec ${jdk}/bin/java -jar -Xmx1024M $out/OmegaT.jar "\$@"
     EOF
     chmod +x $out/bin/omegat
+
+    runHook postInstall
   '';
 
   meta = {

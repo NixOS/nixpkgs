@@ -29,9 +29,13 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     for header in ${toString headers}; do
       install -Dm444 $header $out/$header
     done
+
+    runHook postInstall
   '';
 
   passthru = { inherit headers; };

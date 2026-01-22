@@ -86,6 +86,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm555 -t $lib src/*.sh
     install -Dm444 -t $lib lib/*
     makeWrapper $lib/main.sh $out/bin/nix-prefetch \
@@ -107,6 +109,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/share/doc/nix-prefetch/contrib
     cp -r contrib/hello_rs $out/share/doc/nix-prefetch/contrib
+
+    runHook postInstall
   '';
 
   nativeInstallCheckInputs = [

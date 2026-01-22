@@ -37,8 +37,12 @@ resholve.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm 755 AAXtoMP3 $out/bin/aaxtomp3
     install -Dm 755 interactiveAAXtoMP3 $out/bin/interactiveaaxtomp3
+
+    runHook postInstall
   '';
 
   solutions.default = {

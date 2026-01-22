@@ -19,7 +19,11 @@ stdenv.mkDerivation {
   buildInputs = [ zlib ];
 
   installPhase = ''
+    runHook preInstall
+
     make -C . prefix="$out" install;
+
+    runHook postInstall
   '';
 
   meta = {

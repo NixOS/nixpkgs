@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     # Create directories.
     install -m 755 -d $out/bin/
     install -m 755 -d $out/share/man/man1/
@@ -30,6 +32,8 @@ stdenv.mkDerivation rec {
     # Perform installation.
     install -m 755 bin/* $out/bin/
     install -m 644 man/*.1 $out/share/man/man1/
+
+    runHook postInstall
   '';
 
   meta = {

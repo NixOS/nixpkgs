@@ -35,9 +35,13 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp plugin-torture $out/bin/
     cp find-safe-plugins $out/bin/
+
+    runHook postInstall
   '';
 
   meta = {

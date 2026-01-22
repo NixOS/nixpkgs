@@ -48,7 +48,11 @@ let
     buildInputs = [ python3 ];
 
     installPhase = ''
+      runHook preInstall
+
       install -Dm755 $src $out
+
+      runHook postInstall
     '';
   };
 

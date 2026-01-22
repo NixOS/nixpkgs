@@ -13,10 +13,14 @@ let
     '';
     outputs = [ "out" ];
     installPhase = ''
+      runHook preInstall
+
       ./libfprint/fprint-list-supported-devices | \
         grep -o -E '(\b[0-9a-fA-F]{4}:[0-9a-fA-F]{4}\b)' | \
         awk '{print toupper($0)}' | \
         jq -S -R -s 'split("\n") | map(select(. != "")) | map({key: ., value: true}) | from_entries' > $out
+
+      runHook postInstall
     '';
     # we cannot disable doInstallcheck because than we are missing nativeCheckInputs dependencies
     installCheckPhase = "";

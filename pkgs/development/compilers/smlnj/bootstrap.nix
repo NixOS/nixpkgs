@@ -38,11 +38,15 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     rsync -av bin/ $out/bin/
 
     mkdir -p $out/lib
     rsync -av lib/ $out/lib/
+
+    runHook postInstall
   '';
 
   postInstall = ''

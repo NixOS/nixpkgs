@@ -22,8 +22,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp nad2bin $out/bin/
+
+    runHook postInstall
   '';
 
   meta = {

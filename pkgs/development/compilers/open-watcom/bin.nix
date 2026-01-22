@@ -83,6 +83,8 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     # Command line options to do an unattended install are documented in
     # https://github.com/open-watcom/open-watcom-v2/blob/master/bld/setupgui/setup.txt
     script -c "./install-bin-unwrapped -dDstDir=$out -dFullInstall=1 -i"
@@ -91,6 +93,8 @@ stdenvNoCC.mkDerivation rec {
       echo "Wrapping $e"
       wrapInPlace "$e"
     done
+
+    runHook postInstall
   '';
 
   passthru.prettyName = "open-watcom-bin";

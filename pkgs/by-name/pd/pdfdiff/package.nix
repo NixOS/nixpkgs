@@ -29,9 +29,13 @@ python3Packages.buildPythonApplication rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp pdfdiff.py $out/bin/pdfdiff
     chmod +x $out/bin/pdfdiff
+
+    runHook postInstall
   '';
 
   meta = {

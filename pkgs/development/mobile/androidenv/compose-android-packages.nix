@@ -76,7 +76,11 @@ in
               env ruby -e 'load "${./update.rb}"' -- ${lib.escapeShellArgs mkRepoRubyArguments} --input /dev/null --output repo.json
             '';
             installPhase = ''
+              runHook preInstall
+
               mv repo.json $out
+
+              runHook postInstall
             '';
           };
         repoXmlSpec = {

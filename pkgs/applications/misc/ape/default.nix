@@ -36,9 +36,13 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp ape.exe $out
     makeWrapper $out/ape.exe $out/bin/ape --add-flags ace
+
+    runHook postInstall
   '';
 
   meta = {

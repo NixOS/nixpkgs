@@ -46,6 +46,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/scripts
     mv * $out
     mv $out/_ATTENTION_ $out/doc
@@ -121,6 +123,8 @@ stdenv.mkDerivation rec {
       backupRestore 'test 3: backup, restore' $out
       backupRestore 'test 4: backup diffutils to same backup locations, restore' ${diffutils}
     }
+
+    runHook postInstall
   '';
 
   meta = {

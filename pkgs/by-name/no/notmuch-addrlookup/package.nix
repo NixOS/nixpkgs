@@ -27,7 +27,7 @@ stdenv.mkDerivation {
     notmuch
   ];
 
-  installPhase = "install -D notmuch-addrlookup $out/bin/notmuch-addrlookup";
+  installPhase = "runHook preInstall; install -D notmuch-addrlookup $out/bin/notmuch-addrlookup; runHook postInstall";
 
   meta = {
     description = "Address lookup tool for Notmuch in C";

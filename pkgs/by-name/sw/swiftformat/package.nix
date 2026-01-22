@@ -27,7 +27,11 @@ swift.stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D "$(swiftpmBinPath)/swiftformat" $out/bin/swiftformat
+
+    runHook postInstall
   '';
 
   nativeInstallCheckInputs = [

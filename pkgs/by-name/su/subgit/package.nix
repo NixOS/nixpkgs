@@ -25,9 +25,13 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out;
     cp -r bin lib $out;
     wrapProgram $out/bin/subgit --set JAVA_HOME ${jre};
+
+    runHook postInstall
   '';
 
   src = fetchurl {

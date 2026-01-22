@@ -35,6 +35,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   dontDropIconThemeCache = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/icons
     mv Flat-Remix* $out/share/icons/
 
@@ -43,6 +45,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     done
     symlinkParentIconThemes
     recordPropagatedDependencies
+
+    runHook postInstall
   '';
 
   meta = {

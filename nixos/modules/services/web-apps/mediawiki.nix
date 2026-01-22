@@ -51,6 +51,8 @@ let
     src = cfg.package;
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out
       cp -r * $out/
 
@@ -74,6 +76,8 @@ let
           } $out/share/mediawiki/extensions/${k}
         '') cfg.extensions
       )}
+
+      runHook postInstall
     '';
   };
 

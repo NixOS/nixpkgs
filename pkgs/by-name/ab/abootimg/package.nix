@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     install -D -m 755 abootimg $out/bin
     install -D -m444 ./debian/abootimg.1 $out/share/man/man1/abootimg.1;
@@ -53,6 +55,8 @@ stdenv.mkDerivation rec {
         gzip
       ]
     }
+
+    runHook postInstall
   '';
 
   meta = {

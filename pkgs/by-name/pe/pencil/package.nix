@@ -89,6 +89,8 @@ stdenv.mkDerivation rec {
   buildInputs = deps;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/opt $out/share/applications
     cp -R usr/share $out/
     cp -R opt/pencil*/ $out/opt/pencil
@@ -101,6 +103,8 @@ stdenv.mkDerivation rec {
 
     # symlink the binary to bin/
     ln -s $out/opt/pencil/pencil $out/bin/pencil
+
+    runHook postInstall
   '';
 
   preFixup =

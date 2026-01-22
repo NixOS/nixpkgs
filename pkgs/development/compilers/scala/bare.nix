@@ -23,8 +23,12 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     mv * $out
+
+    runHook postInstall
   '';
 
   # Use preFixup instead of fixupPhase

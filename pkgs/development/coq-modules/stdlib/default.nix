@@ -34,9 +34,13 @@ let
       echo building nothing
     '';
     installPhase = ''
+      runHook preInstall
+
       echo installing nothing
       # Make an output directory rather than a file, so this is more friendly to buildEnv
       mkdir $out
+
+      runHook postInstall
     '';
 
     meta = {

@@ -19,7 +19,11 @@ let
     npmDepsHash = "sha256-PJKW+ni2wKw1ivkgQsL6g0jaxoYboa3XpVEEwgT4jWo=";
     dontNpmBuild = true;
     installPhase = ''
+      runHook preInstall
+
       cp -r . "$out"
+
+      runHook postInstall
     '';
   };
   client = buildNpmPackage {
@@ -29,7 +33,11 @@ let
     npmDepsHash = "sha256-CM0l+D1VNkXBrZQHQGDiB/vAxMvpbHYoYlIugoLxSfA=";
     dontNpmBuild = true;
     installPhase = ''
+      runHook preInstall
+
       cp -r . "$out"
+
+      runHook postInstall
     '';
   };
   server = buildNpmPackage {
@@ -39,7 +47,11 @@ let
     npmDepsHash = "sha256-TxK3ba9T97p8TBlULHUov6YX7WRl2QMq6TiNHxBoQeY=";
     dontNpmBuild = true;
     installPhase = ''
+      runHook preInstall
+
       cp -r . "$out"
+
+      runHook postInstall
     '';
   };
 in

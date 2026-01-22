@@ -56,10 +56,14 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share
 
     cp realesrgan-ncnn-vulkan $out/bin/
     cp -r ${models}/models $out/share
+
+    runHook postInstall
   '';
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''

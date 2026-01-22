@@ -69,6 +69,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     # Fix references from man page https://github.com/lsof-org/lsof/issues/66
     substituteInPlace Lsof.8 \
       --replace ".so ./00DIALECTS" "" \
@@ -76,6 +78,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin $out/man/man8
     cp Lsof.8 $out/man/man8/lsof.8
     cp lsof $out/bin
+
+    runHook postInstall
   '';
 
   meta = {

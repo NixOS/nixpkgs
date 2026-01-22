@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     cp -R ./* $out/
 
@@ -43,6 +45,8 @@ stdenv.mkDerivation rec {
     # Start script performs relative search for resources, so it cannot be moved
     # to bin directory
     ln -s $out/${startScript} $out/bin/virtual-ans
+
+    runHook postInstall
   '';
 
   startScript =

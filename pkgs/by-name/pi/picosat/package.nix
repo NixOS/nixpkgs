@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
   makeFlags = lib.optional stdenv.hostPlatform.isDarwin "SONAME=-Wl,-install_name,$(out)/lib/libpicosat.so";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/lib $out/share $out/include/picosat
     cp picomus picomcs picosat picogcnf "$out"/bin
 
@@ -35,6 +37,8 @@ stdenv.mkDerivation rec {
     cp libpicosat.so "$out"/lib
 
     cp picosat.h "$out"/include/picosat
+
+    runHook postInstall
   '';
 
   meta = {

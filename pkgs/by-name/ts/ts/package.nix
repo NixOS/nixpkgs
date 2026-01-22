@@ -9,7 +9,13 @@ stdenv.mkDerivation rec {
   pname = "ts";
   version = "1.0.3";
 
-  installPhase = ''make install "PREFIX=$out"'';
+  installPhase = ''
+    runHook preInstall
+
+    make install "PREFIX=$out"
+
+    runHook postInstall
+  '';
 
   patchPhase = ''
     sed -i s,/usr/sbin/sendmail,${sendmailPath}, mail.c ts.1

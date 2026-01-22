@@ -17,8 +17,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp gzrecover $out/bin
+
+    runHook postInstall
   '';
 
   meta = {

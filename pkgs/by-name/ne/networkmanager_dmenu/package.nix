@@ -36,11 +36,15 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/applications $out/share/doc/$pname
     cp networkmanager_dmenu $out/bin/
     cp networkmanager_dmenu.desktop $out/share/applications
     cp README.md $out/share/doc/$pname/
     cp config.ini.example $out/share/doc/$pname/
+
+    runHook postInstall
   '';
 
   postFixup = ''

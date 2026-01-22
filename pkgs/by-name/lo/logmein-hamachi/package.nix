@@ -33,12 +33,16 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     patchelf \
       --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) \
       --set-rpath ${libraries} \
       hamachid
     install -D -m755 hamachid $out/bin/hamachid
     ln -s $out/bin/hamachid $out/bin/hamachi
+
+    runHook postInstall
   '';
 
   dontStrip = true;

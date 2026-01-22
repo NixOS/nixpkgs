@@ -22,9 +22,13 @@ let
       dontConfigure = true;
       dontFixup = true;
       installPhase = ''
+        runHook preInstall
+
         echo shared objects found are:
         ls -l usr/lib/*/
         cp usr/lib/*/${sharedObjectName} $out
+
+        runHook postInstall
       '';
     };
 

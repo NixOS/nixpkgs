@@ -27,8 +27,12 @@ buildNpmPackage rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
     cp -R dist/* $out/
+
+    runHook postInstall
   '';
 
   meta = {

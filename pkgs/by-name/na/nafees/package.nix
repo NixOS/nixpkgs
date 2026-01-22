@@ -39,9 +39,13 @@ stdenv.mkDerivation {
   sourceRoot = ".";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fonts/truetype
     cp *.ttf $out/share/fonts/truetype
     # cp $riqa/*.ttf $out/share/fonts/truetype
+
+    runHook postInstall
   '';
 
   outputHashAlgo = "sha256";

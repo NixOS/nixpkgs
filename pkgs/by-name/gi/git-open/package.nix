@@ -35,12 +35,16 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mv git-open $out/bin
     installManPage git-open.1
     wrapProgram $out/bin/git-open \
       --prefix PATH : "${lib.makeBinPath [ gnugrep ]}" \
       --suffix PATH : "${lib.makeBinPath [ xdg-utils ]}"
+
+    runHook postInstall
   '';
 
   meta = {

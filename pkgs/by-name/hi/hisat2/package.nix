@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp hisat2 \
        hisat2-inspect-l \
@@ -47,6 +49,8 @@ stdenv.mkDerivation rec {
        hisat2_extract_splice_sites.py \
        hisat2_simulate_reads.py \
        $out/bin
+
+    runHook postInstall
   '';
 
   meta = {

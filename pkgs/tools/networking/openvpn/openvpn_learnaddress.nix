@@ -26,6 +26,8 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm555 ovpn-learnaddress $out/libexec/openvpn/openvpn-learnaddress
 
     wrapProgram $out/libexec/openvpn/openvpn-learnaddress \
@@ -36,6 +38,8 @@ stdenv.mkDerivation {
             util-linux
           ]
         }
+
+    runHook postInstall
   '';
 
   meta = {

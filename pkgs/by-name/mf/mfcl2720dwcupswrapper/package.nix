@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     dpkg-deb -x $src $out
 
     basedir=${mfcl2720dwlpr}/opt/brother/Printers/MFCL2720DW
@@ -55,6 +57,8 @@ stdenv.mkDerivation rec {
 
     ln $dir/cupswrapper/brother_lpdwrapper_MFCL2720DW $out/lib/cups/filter
     ln $dir/cupswrapper/brother-MFCL2720DW-cups-en.ppd $out/share/cups/model
+
+    runHook postInstall
   '';
 
   meta = {

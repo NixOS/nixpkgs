@@ -20,8 +20,12 @@ stdenv.mkDerivation rec {
 
   buildPhase = "escript bootstrap";
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp rebar $out/bin/rebar
+
+    runHook postInstall
   '';
 
   meta = {

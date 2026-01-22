@@ -25,7 +25,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -D hactool${stdenv.hostPlatform.extensions.executable} $out/bin/hactool${stdenv.hostPlatform.extensions.executable}
+
+    runHook postInstall
   '';
 
   meta = {

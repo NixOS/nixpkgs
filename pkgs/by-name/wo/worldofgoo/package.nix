@@ -62,6 +62,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/applications $out/share/icons/hicolor/256x256/apps
 
     install -t $out/bin -m755 data/${arch}/WorldOfGoo.bin.${arch}
@@ -71,6 +73,8 @@ stdenv.mkDerivation rec {
       $out/share/applications/worldofgoo.desktop
 
     patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" --set-rpath $libPath $out/bin/WorldOfGoo.bin.${arch}
+
+    runHook postInstall
   '';
 
   dontStrip = true;

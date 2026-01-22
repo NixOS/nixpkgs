@@ -64,6 +64,8 @@ stdenv.mkDerivation rec {
   configureScript = "../src/configure";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out"
     cd ..
     cp -av Help Messages Options.xml ROX images style.css .DirIcon "$out"
@@ -92,6 +94,8 @@ stdenv.mkDerivation rec {
     ln -sv application-x-{bzip,xz}.png
     ln -sv application-x-{gzip,lzma}.png
     ln -sv application-{msword,rtf}.png
+
+    runHook postInstall
   '';
 
   meta = {

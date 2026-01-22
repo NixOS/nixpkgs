@@ -21,7 +21,11 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     makeWrapper ${jre}/bin/java $out/bin/ergo --add-flags "-jar $src"
+
+    runHook postInstall
   '';
 
   passthru.tests = { inherit (nixosTests) ergo; };

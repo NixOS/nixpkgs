@@ -14,7 +14,11 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     install -Dt $out/bin pdfcrack
+
+    runHook postInstall
   '';
 
   meta = {

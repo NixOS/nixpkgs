@@ -28,7 +28,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm0444 mt86plus $out/mt86plus.efi
+
+    runHook postInstall
   '';
 
   passthru.tests.systemd-boot-memtest = nixosTests.systemd-boot.memtest86;

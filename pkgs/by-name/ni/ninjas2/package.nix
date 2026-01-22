@@ -36,9 +36,13 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -dD bin/ninjas2.lv2 $out/lib/lv2/ninjas2.lv2
     install -D bin/ninjas2-vst.so  $out/lib/vst/ninjas2-vst.so
     install -D bin/ninjas2 $out/bin/ninjas2
+
+    runHook postInstall
   '';
 
   makeFlags = [ "PREFIX=$(out)" ];

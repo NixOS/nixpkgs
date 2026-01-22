@@ -71,7 +71,7 @@ else
     ];
 
     # override buildRebar3's install to let the builder use make install
-    installPhase = "";
+    installPhase = "runHook preInstall; ; runHook postInstall";
 
     doCheck = true;
     checkTarget = "travis";

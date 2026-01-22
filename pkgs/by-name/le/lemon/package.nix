@@ -31,8 +31,12 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dvm755 lemon $out/bin/lemon
     install -Dvm644 ${srcs.lempar} $out/bin/lempar.c
+
+    runHook postInstall
   '';
 
   meta = {

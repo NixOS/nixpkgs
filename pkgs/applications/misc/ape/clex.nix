@@ -16,8 +16,12 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     cp clex_lexicon.pl $out
+
+    runHook postInstall
   '';
 
   meta = {

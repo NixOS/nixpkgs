@@ -199,6 +199,8 @@ let
     buildInputs = [ apple-sdk_swift ];
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/lib/swift
       cp -r \
         "$SDKROOT/usr/lib/swift/Swift.swiftmodule" \
@@ -211,6 +213,8 @@ let
         "$SDKROOT/usr/lib/swift/libswiftFoundation.tbd" \
         "$SDKROOT/usr/lib/swift/libswiftObjectiveC.tbd" \
         $out/lib/swift/
+
+      runHook postInstall
     '';
   };
 
@@ -690,6 +694,8 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     # Undo the clang and swift wrapping we did for the build.
     # (This happened via patches to cmake files.)
     cd $SWIFT_BUILD_ROOT
@@ -733,6 +739,8 @@ stdenv.mkDerivation {
     # Swift has a separate resource root from Clang, but locates the Clang
     # resource root via subdir or symlink.
     mv $SWIFT_BUILD_ROOT/llvm/lib/clang/16.0.0 $lib/lib/swift/clang
+
+    runHook postInstall
   '';
 
   preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''

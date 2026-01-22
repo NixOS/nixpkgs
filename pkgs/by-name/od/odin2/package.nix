@@ -74,6 +74,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/lib/vst3 $out/lib/lv2 $out/lib/clap $out/share/icons/hicolor/512x512/apps
     cd Odin2_artefacts/Release
     cp Standalone/Odin2 $out/bin
@@ -83,6 +85,8 @@ stdenv.mkDerivation (finalAttrs: {
     # There’s no application icon, so the vendor’s logo will have to do.
     cp $src/manual/graphics/logo.png $out/share/icons/hicolor/512x512/apps/odin2.png
     copyDesktopItems
+
+    runHook postInstall
   '';
 
   desktopItems = [

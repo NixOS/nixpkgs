@@ -26,11 +26,15 @@ python3.pkgs.buildPythonApplication {
 
   format = "custom";
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     echo "#!${python3.interpreter}" >> $out/bin/timetagger
     cat timetagger/__main__.py >> $out/bin/timetagger
     chmod +x $out/bin/timetagger
     wrapProgram $out/bin/timetagger \
       --set TIMETAGGER_BIND "${addr}:${toString port}"
+
+    runHook postInstall
   '';
 }

@@ -17,10 +17,14 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   installPhase = ''
+    runHook preInstall
+
     OUTDIR="$out/share/zsh/site-functions"
     mkdir -p "$OUTDIR"
     cp pure.zsh "$OUTDIR/prompt_pure_setup"
     cp async.zsh "$OUTDIR/async"
+
+    runHook postInstall
   '';
 
   meta = {

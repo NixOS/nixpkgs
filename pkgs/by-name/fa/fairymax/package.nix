@@ -33,9 +33,13 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-Wno-error=return-mismatch -Wno-error=implicit-int";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out"/{bin,share/fairymax}
     cp fairymax "$out/bin"
     cp fmax.ini "$out/share/fairymax"
+
+    runHook postInstall
   '';
 
   meta = {

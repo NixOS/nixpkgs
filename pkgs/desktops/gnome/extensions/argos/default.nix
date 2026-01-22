@@ -17,8 +17,12 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/share/gnome-shell/extensions"
     cp -a argos@pew.worldwidemann.com "$out/share/gnome-shell/extensions"
+
+    runHook postInstall
   '';
 
   passthru = {

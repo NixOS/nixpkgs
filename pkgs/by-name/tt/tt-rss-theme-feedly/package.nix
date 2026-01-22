@@ -19,9 +19,13 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
 
     cp -ra feedly *.css $out
+
+    runHook postInstall
   '';
 
   passthru = {

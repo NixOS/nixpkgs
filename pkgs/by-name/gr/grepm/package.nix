@@ -23,6 +23,8 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -a $src $out/bin/grepm
     chmod +x $out/bin/grepm
@@ -30,6 +32,8 @@ stdenv.mkDerivation {
       -e "s:^grepmail:${perlPackages.grepmail}/bin/grepmail:" \
       -e "s:^\( *\)mutt:\1${mutt}/bin/mutt:" \
       $out/bin/grepm
+
+    runHook postInstall
   '';
 
   meta = {

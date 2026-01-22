@@ -24,8 +24,12 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     install -D nx2elf $out/bin/nx2elf
+
+    runHook postInstall
   '';
 
   meta = {

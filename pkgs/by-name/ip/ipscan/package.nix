@@ -29,6 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ jdk ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share
     cp usr/lib/ipscan/ipscan-linux64-${finalAttrs.version}.jar $out/share/${finalAttrs.pname}-${finalAttrs.version}.jar
 
@@ -49,6 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/share/pixmaps
     cp usr/share/pixmaps/ipscan.png $out/share/pixmaps/ipscan.png
+
+    runHook postInstall
   '';
 
   meta = {

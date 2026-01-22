@@ -15,6 +15,8 @@ stdenv.mkDerivation (finalAttrs: {
   dontConfigure = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
 
     # We copy the binary instead of symlinking.
@@ -22,6 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
     # If we symlink, it resolves to 'mamba', causing shell init scripts to fail.
     # Ref: <https://github.com/NixOS/nixpkgs/pull/460788#issuecomment-3585230714>
     cp ${mamba-cpp}/bin/mamba $out/bin/micromamba
+
+    runHook postInstall
   '';
 
   passthru.tests = {

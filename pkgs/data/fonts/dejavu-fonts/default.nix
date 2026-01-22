@@ -51,7 +51,7 @@ let
 
     preBuild = "patchShebangs scripts";
 
-    installPhase = "install -m444 -Dt $out/share/fonts/truetype build/*.ttf";
+    installPhase = "runHook preInstall; install -m444 -Dt $out/share/fonts/truetype build/*.ttf; runHook postInstall";
 
     inherit meta;
   };

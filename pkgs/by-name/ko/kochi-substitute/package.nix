@@ -30,9 +30,13 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fonts/truetype
     cp ./share/fonts/truetype/kochi/kochi-gothic-subst.ttf $out/share/fonts/truetype/
     cp ./share/fonts/truetype/kochi/kochi-mincho-subst.ttf $out/share/fonts/truetype/
+
+    runHook postInstall
   '';
 
   outputHashAlgo = "sha256";

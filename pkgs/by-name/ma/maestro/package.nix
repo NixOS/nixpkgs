@@ -24,10 +24,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
     unzip $src -d $out
     mv $out/maestro/* $out
     rm -rf $out/maestro
+
+    runHook postInstall
   '';
 
   postFixup = ''

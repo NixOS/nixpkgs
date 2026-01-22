@@ -38,7 +38,11 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 -t $out/bin ./minivmac
+
+    runHook postInstall
   '';
 
   # ensure libasound can be dlopen()'ed

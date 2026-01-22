@@ -36,6 +36,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     # codeql directory should not be top-level, otherwise,
     # it'll include /nix/store to resolve extractors.
     mkdir -p $out/{codeql,bin}
@@ -52,6 +54,8 @@ stdenv.mkDerivation rec {
     ln -s ${jdk17} $out/codeql/tools/linux64/java
 
     ln -s $out/codeql/codeql $out/bin/
+
+    runHook postInstall
   '';
 
   meta = {

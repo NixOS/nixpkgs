@@ -24,9 +24,13 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp menugen $out/bin/rofi-menugen
     cp menugenbase $out/bin/rofi-menugenbase
+
+    runHook postInstall
   '';
 
   meta = {

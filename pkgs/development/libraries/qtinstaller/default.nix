@@ -34,10 +34,14 @@ stdenv.mkDerivation rec {
   dontWrapQtApps = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,lib,share/qt-installer-framework}
     cp -a bin/{archivegen,binarycreator,devtool,installerbase,repogen} $out/bin
     cp -a lib/{libinstaller.so*,lib7z.a} $out/lib
     cp -a examples $out/share/qt-installer-framework/
+
+    runHook postInstall
   '';
 
   postFixup = ''

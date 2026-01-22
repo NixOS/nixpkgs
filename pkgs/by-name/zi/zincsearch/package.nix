@@ -27,8 +27,12 @@ let
     };
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/share
       mv dist $out/share/zinc-ui
+
+      runHook postInstall
     '';
   };
 in

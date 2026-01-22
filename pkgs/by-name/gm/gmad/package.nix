@@ -44,7 +44,11 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp ${targetName} $out/bin/gmad
+
+    runHook postInstall
   '';
 }

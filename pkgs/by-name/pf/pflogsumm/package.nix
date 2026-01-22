@@ -25,11 +25,15 @@ perlPackages.buildPerlPackage rec {
   doCheck = false;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
     mv "pflogsumm.pl" "$out/bin/pflogsumm"
 
     mkdir -p "$out/share/man/man1"
     mv "pflogsumm.1" "$out/share/man/man1"
+
+    runHook postInstall
   '';
 
   meta = {

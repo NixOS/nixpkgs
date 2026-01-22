@@ -32,8 +32,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out"
     cp -r * $out
+
+    runHook postInstall
   '';
 
   passthru.tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {

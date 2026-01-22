@@ -67,7 +67,11 @@ stdenv.mkDerivation (finalAttrs: {
   );
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 bin/release/premake5 $out/bin/premake5
+
+    runHook postInstall
   '';
 
   premake_cmd = "premake5";

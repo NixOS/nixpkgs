@@ -14,8 +14,12 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/bin
       install -m755 gen-posix-lock-obj $out/bin
+
+      runHook postInstall
     '';
 
     outputs = [ "out" ];

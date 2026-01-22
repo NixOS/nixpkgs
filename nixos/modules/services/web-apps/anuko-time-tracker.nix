@@ -48,6 +48,8 @@ let
     inherit (src) version;
     src = cfg.package;
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out
       cp -r * $out/
 
@@ -60,6 +62,8 @@ let
 
       # Remove unsafe dbinstall.php
       rm -f $out/dbinstall.php
+
+      runHook postInstall
     '';
   };
 in

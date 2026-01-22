@@ -17,9 +17,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ unzip ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     unzip $src
     mv gwt-2.4.0 $out/bin
+
+    runHook postInstall
   '';
 
   meta = {

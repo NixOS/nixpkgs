@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     substituteInPlace bin/riemann --replace '$top/lib/riemann.jar' "$out/share/java/riemann.jar"
 
     mkdir -p $out/share/java $out/bin $out/etc
@@ -26,6 +28,8 @@ stdenv.mkDerivation rec {
     mv etc/riemann.config $out/etc/
 
     wrapProgram "$out/bin/riemann" --prefix PATH : "${jre}/bin"
+
+    runHook postInstall
   '';
 
   meta = {

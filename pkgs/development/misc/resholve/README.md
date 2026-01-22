@@ -60,8 +60,12 @@ resholve.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     sed -i '2i GOSS_PATH=${goss}/bin/goss' extras/dgoss/dgoss
     install -D extras/dgoss/dgoss $out/bin/dgoss
+
+    runHook postInstall
   '';
 
   solutions = {
@@ -145,6 +149,8 @@ stdenv.mkDerivation {
   # src = ...;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     install conjure.sh $out/bin/conjure.sh
     ${resholve.phraseSolution "conjure" {
@@ -158,6 +164,8 @@ stdenv.mkDerivation {
         ];
       };
     }}
+
+    runHook postInstall
   '';
 }
 ```

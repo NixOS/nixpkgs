@@ -42,10 +42,14 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/etc/udev/rules.d
     cp opt/brother/scanner/udev-rules/type1/NN-brother-mfp-type1.rules \
       $out/etc/udev/rules.d/${libsaneUDevRuleNumber}-brother-libsane-type1.rules
     chmod 644 $out/etc/udev/rules.d/${libsaneUDevRuleNumber}-brother-libsane-type1.rules
+
+    runHook postInstall
   '';
 
   dontStrip = true;

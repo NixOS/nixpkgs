@@ -30,6 +30,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dt $out/bin app2unit
     installManPage app2unit.1
 
@@ -43,6 +45,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     do
       ln -s $out/bin/app2unit $out/bin/$link
     done
+
+    runHook postInstall
   '';
 
   dontPatchShebangs = true;

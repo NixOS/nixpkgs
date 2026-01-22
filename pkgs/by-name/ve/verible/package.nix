@@ -89,8 +89,12 @@ buildBazelPackage rec {
 
   buildAttrs = {
     installPhase = ''
+      runHook preInstall
+
       mkdir -p "$out/bin"
       .github/bin/simple-install.sh "$out/bin"
+
+      runHook postInstall
     '';
   };
 

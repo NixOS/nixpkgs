@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     xcbutilxrm
   ];
 
-  installPhase = "make install DESTDIR=$out PREFIX=\"\"";
+  installPhase = "runHook preInstall; make install DESTDIR=$out PREFIX=\"\"; runHook postInstall";
 
   meta = {
     homepage = "https://github.com/venam/2bwm";

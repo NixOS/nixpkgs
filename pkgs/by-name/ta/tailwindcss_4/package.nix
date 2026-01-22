@@ -47,8 +47,12 @@ stdenv.mkDerivation {
   dontStrip = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     install -m755 $src $out/bin/tailwindcss
+
+    runHook postInstall
   '';
 
   # libstdc++.so.6 for @parcel/watcher

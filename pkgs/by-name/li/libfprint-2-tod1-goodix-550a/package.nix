@@ -31,11 +31,15 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/lib/libfprint-2/tod-1/"
     mkdir -p "$out/lib/udev/rules.d/"
 
     cp usr/lib/x86_64-linux-gnu/libfprint-2/tod-1/libfprint-tod-goodix-550a-$version.so "$out/lib/libfprint-2/tod-1/"
     cp lib/udev/rules.d/60-libfprint-2-tod1-goodix.rules "$out/lib/udev/rules.d/"
+
+    runHook postInstall
   '';
 
   passthru.driverPath = "/lib/libfprint-2/tod-1";

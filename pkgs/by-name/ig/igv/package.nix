@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -pv $out/{share,bin}
     cp -Rv * $out/share/
 
@@ -31,6 +33,8 @@ stdenv.mkDerivation rec {
 
     chmod +x $out/bin/igv
     chmod +x $out/bin/igvtools
+
+    runHook postInstall
   '';
   nativeBuildInputs = [ wrapGAppsHook3 ];
 

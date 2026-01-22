@@ -14,7 +14,7 @@ buildNpmPackage {
 
   VITE_APIURL = "/api/v1";
 
-  installPhase = "cp -r dist $out";
+  installPhase = "runHook preInstall; cp -r dist $out; runHook postInstall";
 
   meta = common.meta // {
     description = "Spoolman frontend";

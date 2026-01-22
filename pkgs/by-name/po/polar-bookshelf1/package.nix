@@ -95,11 +95,15 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/polar-bookshelf $out/bin $out/lib
     mv opt/Polar\ Bookshelf/* $out/share/polar-bookshelf
     mv $out/share/polar-bookshelf/*.so $out/lib
     mv usr/share/* $out/share/
     ln -s $out/share/polar-bookshelf/polar-bookshelf $out/bin/polar-bookshelf
+
+    runHook postInstall
   '';
 
   preFixup = ''

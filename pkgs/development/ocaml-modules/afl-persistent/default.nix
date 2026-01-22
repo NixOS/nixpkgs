@@ -36,7 +36,11 @@ stdenv.mkDerivation rec {
 
   buildPhase = "./build.sh";
   installPhase = ''
+    runHook preInstall
+
     ${opaline}/bin/opaline -prefix $out -libdir $out/lib/ocaml/${ocaml.version}/site-lib/ ${pname}.install
+
+    runHook postInstall
   '';
 
   doCheck = true;

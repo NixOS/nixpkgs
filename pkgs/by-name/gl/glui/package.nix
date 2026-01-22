@@ -33,12 +33,16 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out"/{bin,lib,share/glui/doc,include}
     cp -rT bin "$out/bin"
     cp -rT lib "$out/lib"
     cp -rT include "$out/include"
     cp -rT doc "$out/share/glui/doc"
     cp LICENSE.txt "$out/share/glui/doc"
+
+    runHook postInstall
   '';
 
   meta = {
