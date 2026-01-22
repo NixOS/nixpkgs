@@ -12,6 +12,7 @@
   rdflib,
   requests,
   rfc3986,
+  setuptools,
   termcolor,
   uritemplate,
   pytestCheckHook,
@@ -20,15 +21,15 @@
   requests-mock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "csvw";
   version = "3.7.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cldf";
     repo = "csvw";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-HftvI4xJy/MX0WTIFNyZqNqIJIlHsWhhURpeQ1XqrT0=";
   };
 
@@ -37,7 +38,9 @@ buildPythonPackage rec {
       --replace-fail "'frictionless'" "'${lib.getExe frictionless}'"
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     attrs
     babel
     frictionless
@@ -59,6 +62,8 @@ buildPythonPackage rec {
     requests-mock
   ];
 
+  pythonRelaxDeps = [ "rfc3986" ];
+
   disabledTests = [
     # this test is flaky on darwin because it depends on the resolution of filesystem mtimes
     # https://github.com/cldf/csvw/blob/45584ad63ff3002a9b3a8073607c1847c5cbac58/tests/test_db.py#L257
@@ -78,4 +83,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})
