@@ -13,7 +13,7 @@
   yarn,
   python3,
   esbuild,
-  nodejs,
+  nodejs_20,
   node-gyp,
   libsecret,
   xorg,
@@ -27,7 +27,7 @@
 let
   system = stdenv.hostPlatform.system;
 
-  python = python3;
+  nodejs = nodejs_20;
   yarn' = yarn.override { inherit nodejs; };
   defaultYarnOpts = [ ];
 
@@ -126,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     nodejs
     yarn'
-    python
+    python3
     pkg-config
     makeWrapper
     git

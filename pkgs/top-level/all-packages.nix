@@ -11850,10 +11850,6 @@ with pkgs;
     vscode-generic = ../applications/editors/vscode/generic.nix;
   };
 
-  code-server = callPackage ../servers/code-server {
-    nodejs = nodejs_20;
-  };
-
   kiro = callPackage ../by-name/ki/kiro/package.nix {
     vscode-generic = ../applications/editors/vscode/generic.nix;
   };
