@@ -7,6 +7,7 @@
 
 with lib;
 let
+  cfg = config.services.i2pd;
   # Similar to types.enum of `attrNames attrset` but maps merged result to `attrset.${value}`
   attrEnum =
     attrset:
@@ -51,12 +52,19 @@ let
   };
 in
 {
+
+  meta = {
+    maintainers = with lib.maintainers; [
+      N4CH723HR3R
+      one-d-wide
+    ];
+  };
   ###### Interface #####
 
   options.services.i2pd =
     let
       # Type for free-form configuration options
-      format = rec {
+      settingsFormat = rec {
         type =
           with types;
           let
@@ -145,13 +153,14 @@ in
         default = true;
         description = mdDoc "If true, i2pd will be restarted on failure (does not affect clean exit)";
       };
-      config = mkOption {
+      settings = mkOption {
         description = mdDoc ''
           Free-form main i2pd configuration. Options are passed to `i2pd.conf`.
           See `https://i2pd.readthedocs.io/en/latest/user-guide/configuration/`
         '';
+        default = { };
         type = types.submodule {
-          freeformType = format.type;
+          freeformType = settingsFormat.type;
           options = {
             loglevel = mkOption {
               type = types.enum [
@@ -217,7 +226,7 @@ in
         '';
         type = types.attrsOf (
           types.submodule {
-            freeformType = format.type;
+            freeformType = settingsFormat.type;
             options = {
               host = mkOption {
                 type = types.either types.str credential.type;
@@ -246,7 +255,7 @@ in
         '';
         type = types.attrsOf (
           types.submodule {
-            freeformType = format.type;
+            freeformType = settingsFormat.type;
             options = {
               port = mkOption {
                 type = types.port;
@@ -298,7 +307,7 @@ in
           { config, ... }:
           {
             config.assertions = forEach options (option: {
-              assertion = !hasAttrByPath (splitString "." option) config;
+              assertion = (!hasAttrByPath (splitString "." option) config);
               message = "The option definition `config.${option}` no longer has any effect; please remove it.\n${message}";
             });
           }
@@ -306,7 +315,7 @@ in
       ];
     in
     deprecate "This option is defined by the `i2pd` module implementation." (
-      map (v: "services.i2pd.config.${v}") [
+      map (v: "services.i2pd.settings.${v}") [
         "conf"
         "tunconf"
         "pidfile"
@@ -322,7 +331,6 @@ in
 
   config =
     let
-      cfg = config.services.i2pd;
 
       /*
         Configuration generator
@@ -330,7 +338,7 @@ in
         *   * Out-of-section options are allowed and printed on top of a file.
         *   * Nested sub-values (`a.b.c = ...`) coerced to (`"a.b.c" = ...`).
       */
-      format =
+      settingsFormat =
         let
           print =
             v: if isList v then concatMapStringsSep "," print v else generators.mkValueStringDefault { } v;
@@ -402,7 +410,7 @@ in
           scan = attrs: forEach (collect (credential.type.check) attrs) (getAttr credential.attributeName);
         in
         concatMap scan [
-          cfg.config
+          cfg.settings
           cfg.clientTunnels
           cfg.serverTunnels
         ];
@@ -454,11 +462,11 @@ in
               (
                 "%T/conf="
                 # "%T" is temporary directory (usually `/tmp`)
-                + validate.config (format.config.generate "i2pd.conf" (credential.finalize cfg.config))
+                + validate.config (settingsFormat.config.generate "i2pd.conf" (credential.finalize cfg.config))
               )
               (
                 "%T/tunconf="
-                + format.tunnels.generate "i2pd-tunnels.conf" (
+                + settingsFormat.tunnels.generate "i2pd-tunnels.conf" (
                   mapAttrs' (k: v: nameValuePair "client-${k}" (v // { "type" = "client"; })) (
                     credential.finalize cfg.clientTunnels
                   )
