@@ -6,17 +6,17 @@
 
 let
   pname = "nix-bisect";
-  version = "0.4.1-unstable-2024-04-19";
+  version = "0.4.2";
 in
 python3.pkgs.buildPythonApplication {
   inherit pname version;
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "timokau";
+    owner = "KiaraGrouwstra";
     repo = "nix-bisect";
-    rev = "4f26082fec0817acbfa8cc6ca4c25caaf77ddcd2";
-    hash = "sha256-zyeE1jYo/9NEG8fB4gQBAR01siP4tyLvjjHN1yUS4Ug=";
+    tag = "v${version}";
+    hash = "sha256-JHywmX6Bp24OXCDRYuM0PEgVNPFRwYsge198u9e+lQs=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
@@ -33,7 +33,8 @@ python3.pkgs.buildPythonApplication {
 
   meta = {
     description = "Bisect nix builds";
-    homepage = "https://github.com/timokau/nix-bisect";
+    homepage = "https://github.com/KiaraGrouwstra/nix-bisect";
     license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kiara ];
   };
 }
