@@ -16,7 +16,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "zytedata";
     repo = "html-text";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-KLWgdVHGYRiQ61hMNx+Kcx9mE7d/TsBe110TfCe+ejU=";
   };
 
