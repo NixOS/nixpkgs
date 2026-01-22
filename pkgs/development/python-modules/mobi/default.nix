@@ -3,9 +3,9 @@
   buildPythonPackage,
   fetchFromGitHub,
   loguru,
-  poetry-core,
-  setuptools,
+  hatchling,
   standard-imghdr,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -20,16 +20,18 @@ buildPythonPackage rec {
     hash = "sha256-Hbw4TX/yKkuxYQ9vZZp/wasDCop8pvyQc5zWloMQbng=";
   };
 
+  build-system = [ hatchling ];
+
   pythonRelaxDeps = [ "loguru" ];
 
-  dependencies = [ standard-imghdr ];
-
-  nativeBuildInputs = [
-    poetry-core
-    setuptools
+  dependencies = [
+    loguru
+    standard-imghdr
   ];
 
-  propagatedBuildInputs = [ loguru ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "mobi" ];
 
