@@ -4010,8 +4010,7 @@ with pkgs;
 
   ### SHELLS
 
-  runtimeShell = "${runtimeShellPackage}${runtimeShellPackage.shellPath}";
-  runtimeShellPackage = bashNonInteractive;
+  runtimeShell = "${bashNonInteractive}${bashNonInteractive.shellPath}";
 
   bash = callPackage ../shells/bash/5.nix { };
   bashNonInteractive = lowPrio (

@@ -7,7 +7,7 @@
   pcre2,
   libiconv,
   perl,
-  runtimeShellPackage,
+  bashNonInteractive,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -61,7 +61,7 @@ stdenv.mkDerivation {
     pcre2
     libiconv
   ]
-  ++ lib.optional (!stdenv.hostPlatform.isWindows) runtimeShellPackage;
+  ++ lib.optional (!stdenv.hostPlatform.isWindows) bashNonInteractive;
 
   # cygwin: FAIL: multibyte-white-space
   # freebsd: FAIL mb-non-UTF8-performance

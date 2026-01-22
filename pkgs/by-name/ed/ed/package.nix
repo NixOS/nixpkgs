@@ -2,7 +2,7 @@
   lib,
   fetchurl,
   lzip,
-  runtimeShellPackage,
+  bashNonInteractive,
   stdenv,
   testers,
 }:
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ lzip ];
 
-  buildInputs = [ runtimeShellPackage ];
+  buildInputs = [ bashNonInteractive ];
 
   configureFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
