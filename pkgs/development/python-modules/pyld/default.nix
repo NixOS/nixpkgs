@@ -11,7 +11,7 @@ let
   json-ld = fetchFromGitHub {
     owner = "json-ld";
     repo = "json-ld.org";
-    tag = "v${version}";
+    tag = "843a70e4523d7cd2a4d3f5325586e726eb1b123f";
     sha256 = "05j0nq6vafclyypxjj30iw898ig0m32nvz0rjdlslx6lawkiwb2a";
   };
 
