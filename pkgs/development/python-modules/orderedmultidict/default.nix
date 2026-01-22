@@ -1,21 +1,23 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  flake8,
+  fetchFromGitHub,
   pytestCheckHook,
   setuptools,
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "orderedmultidict";
   version = "1.0.2";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-FqeuhDLgLMmH0tbVry31k4JY+HyHBnXHPud6CSDm9KY=";
+  src = fetchFromGitHub {
+    owner = "gruns";
+    repo = "orderedmultidict";
+    # https://github.com/gruns/orderedmultidict/issues/32
+    rev = "901194bed9c2de9e336358f3328132a81a14314e";
+    hash = "sha256-XJKmchG3BmPKrw20BEMLe2V6XlN9tXcgkf5G+P97uAQ=";
   };
 
   build-system = [ setuptools ];
@@ -31,4 +33,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/gruns/orderedmultidict";
     license = lib.licenses.unlicense;
   };
-}
+})
