@@ -22,7 +22,7 @@ stdenv.mkDerivation {
 
     for i in $out/bin/*; do
       substituteInPlace $i \
-        --replace-fail zfs ${zfs}/bin/zfs
+        --replace-fail zfs ${lib.getExe zfs}
     done
   '';
 
