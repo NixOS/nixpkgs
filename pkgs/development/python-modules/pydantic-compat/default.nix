@@ -46,6 +46,7 @@ buildPythonPackage rec {
     # deprecated, and will be removed in Pydantic V3. Instead, you should access this attribute from
     # the model class. Deprecated in Pydantic V2.11 to be removed in V3.0.
     "-Wignore::pydantic.warnings.PydanticDeprecatedSince211"
+    "-Wignore::pydantic.warnings.PydanticDeprecatedSince212"
   ];
 
   meta = {
