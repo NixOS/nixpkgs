@@ -20,6 +20,7 @@ See the [CONTRIBUTING.md](../CONTRIBUTING.md) document for more general informat
 - [`pkgs-lib`](./pkgs-lib): Definitions for utilities that need packages but are not needed for packages
 - [`test`](./test): Tests not directly associated with any specific packages
 - [`by-name`](./by-name): Top-level packages organised by name ([docs](./by-name/README.md))
+- [`sets-by-name`](./sets-by-name): Nested package sets each organized by name ([docs](./sets-by-name/README.md)).
 - All other directories loosely categorise top-level packages definitions, see [category hierarchy][categories]
 
 ## Quick Start to Adding a Package
