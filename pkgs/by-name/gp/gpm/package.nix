@@ -63,7 +63,7 @@ stdenv.mkDerivation {
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-    (if withNcurses then "--with-curses" else "--without-curses")
+    (lib.withFeature withNcurses "curses")
     # The code won't compile in c23 mode.
     # https://gcc.gnu.org/gcc-15/porting_to.html#c23-fn-decls-without-parameters
     "CFLAGS=-std=gnu17"
