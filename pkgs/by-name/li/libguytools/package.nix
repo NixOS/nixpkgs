@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Small programming toolbox";
     mainProgram = "libguytools";
     homepage = "https://libguytools.sourceforge.io";
-    maintainers = with lib.maintainers; [ d3vil0p3r ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
   };

@@ -52,7 +52,7 @@ stdenvNoCC.mkDerivation {
     description = "Detect if a domain uses DNS and/or HTTP Load-Balancing";
     mainProgram = "lbd";
     homepage = "https://github.com/D3vil0p3r/lbd";
-    maintainers = with lib.maintainers; [ d3vil0p3r ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2Plus;
   };
