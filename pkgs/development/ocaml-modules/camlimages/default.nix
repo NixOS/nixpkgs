@@ -10,7 +10,7 @@
   stdio,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "camlimages";
   version = "5.0.5";
 
@@ -18,8 +18,8 @@ buildDunePackage rec {
 
   src = fetchFromGitLab {
     owner = "camlspotter";
-    repo = pname;
-    rev = version;
+    repo = "camlimages";
+    rev = finalAttrs.version;
     hash = "sha256-/Dkj8IBVPjGCJCXrLOuJtuaa+nD/a9e8/N+TN9ukw4k=";
   };
 
@@ -37,7 +37,7 @@ buildDunePackage rec {
 
   meta = {
     branch = "5.0";
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     description = "OCaml image processing library";
     license = lib.licenses.lgpl2;
     maintainers = [
@@ -45,4 +45,4 @@ buildDunePackage rec {
       lib.maintainers.mt-caret
     ];
   };
-}
+})
