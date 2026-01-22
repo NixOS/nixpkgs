@@ -47,7 +47,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "RhetTbull";
     repo = "osxphotos";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-aX+4wgjqWxoIez/pJ7ioes5OTHFijztSFTvTxdND6Eo=";
   };
 
