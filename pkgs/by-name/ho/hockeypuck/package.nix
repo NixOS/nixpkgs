@@ -5,11 +5,16 @@
   nixosTests,
 }:
 
-let
-  sources = (import ./sources.nix) { inherit fetchFromGitHub; };
-in
-buildGoModule {
-  inherit (sources) pname version src;
+buildGoModule (finalAttrs: {
+  pname = "hockeypuck";
+  version = "2.1.0";
+
+  src = fetchFromGitHub {
+    owner = "hockeypuck";
+    repo = "hockeypuck";
+    rev = finalAttrs.version;
+    sha256 = "0da3ffbqck0dr7d89gy2yillp7g9a4ziyjlvrm8vgkkg2fs8dlb1";
+  };
 
   modRoot = "src/hockeypuck/";
   vendorHash = null;
@@ -23,4 +28,4 @@ buildGoModule {
     license = lib.licenses.agpl3Plus;
     maintainers = [ ];
   };
-}
+})

@@ -2799,10 +2799,6 @@ with pkgs;
     lua = lua5;
   };
 
-  hockeypuck = callPackage ../servers/hockeypuck/server.nix { };
-
-  hockeypuck-web = callPackage ../servers/hockeypuck/web.nix { };
-
   host = bind.host;
 
   hotdoc = python3Packages.callPackage ../development/tools/hotdoc { };

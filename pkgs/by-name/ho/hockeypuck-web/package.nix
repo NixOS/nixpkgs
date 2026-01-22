@@ -1,17 +1,14 @@
 {
   stdenv,
   lib,
-  fetchFromGitHub,
+  hockeypuck,
   nixosTests,
 }:
 
-let
-  sources = (import ./sources.nix) { inherit fetchFromGitHub; };
-in
 stdenv.mkDerivation {
-  pname = "${sources.pname}-web";
+  pname = "hockeypuck-web";
 
-  inherit (sources) version src;
+  inherit (hockeypuck) version src;
 
   dontBuild = true; # We should just copy the web templates
 
