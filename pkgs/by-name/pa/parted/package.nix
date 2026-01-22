@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     # Fix the build against C23 compilers (like gcc-15):
     (fetchpatch {
       name = "c23.patch";
-      url = "https://git.savannah.gnu.org/gitweb/?p=parted.git;a=patch;h=16343bda6ce0d41edf43f8dac368db3bbb63d271";
+      url = "https://cgit.git.savannah.gnu.org/cgit/parted.git/patch/?id=16343bda6ce0d41edf43f8dac368db3bbb63d271";
       hash = "sha256-8FgnwMrzMHPZNU+b/mRHCSu8sn6H7GhVLIhMUel40Hk=";
     })
   ];
