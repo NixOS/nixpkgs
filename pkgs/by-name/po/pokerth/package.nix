@@ -1,10 +1,8 @@
 {
   lib,
-  mkDerivation,
+  qt5,
   fetchFromGitHub,
   fetchpatch,
-  qmake,
-  qtbase,
   SDL,
   SDL_mixer,
   boost181,
@@ -12,18 +10,18 @@
   gsasl,
   libgcrypt,
   libircclient,
-  protobuf,
+  protobuf_21,
   sqlite,
-  wrapQtAppsHook,
   tinyxml,
   target ? "client",
 }:
 
 let
   boost = boost181;
+  protobuf = protobuf_21;
 in
 
-mkDerivation rec {
+qt5.mkDerivation rec {
   pname = "pokerth-${target}";
   version = "1.1.2";
 
@@ -62,8 +60,8 @@ mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    qmake
-    wrapQtAppsHook
+    qt5.qmake
+    qt5.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -75,7 +73,7 @@ mkDerivation rec {
     libgcrypt
     libircclient
     protobuf
-    qtbase
+    qt5.qtbase
     sqlite
     tinyxml
   ];
