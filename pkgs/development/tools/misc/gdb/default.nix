@@ -30,7 +30,7 @@
   enableDebuginfod ? lib.meta.availableOn stdenv.hostPlatform elfutils,
   elfutils,
   guile ? null,
-  hostCpuOnly ? false,
+  targetCpuOnly ? false,
   enableSim ? false,
   safePaths ? [
     # $debugdir:$datadir/auto-load are whitelisted by default by GDB
@@ -52,7 +52,7 @@ in
 assert pythonSupport -> python3 != null;
 
 stdenv.mkDerivation rec {
-  pname = targetPrefix + basename + lib.optionalString hostCpuOnly "-host-cpu-only";
+  pname = targetPrefix + basename + lib.optionalString targetCpuOnly "-target-cpu-only";
   version = "16.3";
 
   src = fetchurl {
@@ -148,7 +148,7 @@ stdenv.mkDerivation rec {
 
     "--disable-werror"
   ]
-  ++ lib.optional (!hostCpuOnly) "--enable-targets=all"
+  ++ lib.optional (!targetCpuOnly) "--enable-targets=all"
   ++ [
     "--enable-64-bit-bfd"
     "--disable-install-libbfd"
@@ -199,7 +199,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    mainProgram = "gdb";
+    mainProgram = targetPrefix + basename;
 
     description = "GNU Project debugger";
 

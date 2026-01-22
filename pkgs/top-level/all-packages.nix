@@ -6461,7 +6461,7 @@ with pkgs;
     guile = null;
   };
 
-  gdbHostCpuOnly = gdb.override { hostCpuOnly = true; };
+  gdbTargetCpuOnly = gdb.override { targetCpuOnly = true; };
 
   valgrind-light = (valgrind.override { gdb = null; }).overrideAttrs (oldAttrs: {
     meta = oldAttrs.meta // {
