@@ -39,13 +39,11 @@ let
   effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else args.stdenv;
   stdenv = throw "Use effectiveStdenv instead of stdenv directly, as it may be replaced by cudaPackages.backendStdenv";
 
-  version = "1.11.0";
-
   libmathdx = callPackage ./libmathdx.nix { };
 in
-buildPythonPackage.override { stdenv = effectiveStdenv; } {
+buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
   pname = "warp-lang";
-  inherit version;
+  version = "1.11.0";
   pyproject = true;
 
   # TODO(@connorbaker): Some CUDA setup hook is failing when __structuredAttrs is false,
@@ -56,7 +54,7 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } {
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "warp";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-wV4F6E4l0lfPB8zk/XhmdMNk649j5aJelW/DVu2R5mM=";
   };
 
@@ -314,9 +312,9 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } {
       JAX and Paddle.
     '';
     homepage = "https://github.com/NVIDIA/warp";
-    changelog = "https://github.com/NVIDIA/warp/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/NVIDIA/warp/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux ++ [ "aarch64-darwin" ];
     maintainers = with lib.maintainers; [ yzx9 ];
   };
-}
+})
