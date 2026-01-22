@@ -11,12 +11,12 @@
   zarith,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "jose";
   version = "0.10.0";
 
   src = fetchurl {
-    url = "https://github.com/ulrikstrid/ocaml-jose/releases/download/v${version}/${pname}-${version}.tbz";
+    url = "https://github.com/ulrikstrid/ocaml-jose/releases/download/v${finalAttrs.version}/jose-${finalAttrs.version}.tbz";
     hash = "sha256-F6Odq5JXTkAxdqV3HQusoF+9rvt4BZytslKnsIjJLI8=";
   };
 
@@ -44,4 +44,4 @@ buildDunePackage rec {
       marijanp
     ];
   };
-}
+})
