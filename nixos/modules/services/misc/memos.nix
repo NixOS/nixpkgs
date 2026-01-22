@@ -29,7 +29,10 @@ in
 
     settings = {
       mode = lib.mkOption {
-        type = lib.types.enum [ "prod" "dev" ];
+        type = lib.types.enum [
+          "prod"
+          "dev"
+        ];
         default = "prod";
         description = "Mode of server (MEMOS_MODE).";
       };
@@ -59,7 +62,11 @@ in
       };
 
       databaseDriver = lib.mkOption {
-        type = lib.types.enum [ "sqlite" "mysql" "postgres" ];
+        type = lib.types.enum [
+          "sqlite"
+          "mysql"
+          "postgres"
+        ];
         default = "sqlite";
         description = "Database driver (MEMOS_DRIVER).";
       };
