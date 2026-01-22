@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   #
   #     nix-shell maintainers/scripts/update.nix --argstr package uhd --argstr commit true
   #
-  version = "4.9.0.0";
+  version = "4.9.0.1";
 
   outputs = [
     "out"
@@ -57,14 +57,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     # The updateScript relies on the `src` using `hash`, and not `sha256. To
     # update the correct hash for the `src` vs the `uhdImagesSrc`
-    hash = "sha256-XA/ADJ0HjD6DxqFTVMwFa7tRgM56mHAEL+a0paWxKyM=";
+    hash = "sha256-AOZYCmkgsM09YORW7dVsPAwecXNZQOxOscJnVOlMoP0=";
   };
   # Firmware images are downloaded (pre-built) from the respective release on Github
   uhdImagesSrc = fetchurl {
     url = "https://github.com/EttusResearch/uhd/releases/download/v${finalAttrs.version}/uhd-images_${finalAttrs.version}.tar.xz";
     # Please don't convert this to a hash, in base64, see comment near src's
     # hash.
-    sha256 = "194gsmvn7gmwj7b1lw9sq0d0y0babbd0q1229qbb3qjc6f6m0p0y";
+    sha256 = "15ahcxb7hsylvdzzv0q0shd3wqm7p2y4kzbqk85cvsxbdklxhsvn";
   };
   # This are the minimum required Python dependencies, this attribute might
   # be useful if you want to build a development environment with a python
