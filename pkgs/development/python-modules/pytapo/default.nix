@@ -10,14 +10,14 @@
   urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytapo";
-  version = "3.3.54";
+  version = "3.3.56";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-B31PTYqXFzLkn/YuFbq0G7SDA1wMqAcwGOaj3xfmxYA=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-Cx3X0C8CiTixEdepj0bQViSMQJ65bVTRrZuMnPO/ys8=";
   };
 
   build-system = [ setuptools ];
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for communication with Tapo Cameras";
     homepage = "https://github.com/JurajNyiri/pytapo";
-    changelog = "https://github.com/JurajNyiri/pytapo/releases/tag/${version}";
+    changelog = "https://github.com/JurajNyiri/pytapo/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fleaz ];
   };
-}
+})
