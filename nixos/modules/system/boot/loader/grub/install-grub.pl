@@ -337,7 +337,9 @@ $conf .= "
     # Setup the graphics stack for bios and efi systems
     if [ \"\${grub_platform}\" = \"efi\" ]; then
       insmod efi_gop
-      insmod efi_uga
+      if [ \"\${grub_cpu}\" = \"i386\" -o \"\${grub_cpu}\" = \"x86_64\"]; then
+        insmod efi_uga
+      fi
     else
       insmod vbe
     fi
@@ -465,6 +467,13 @@ sub addEntry {
 
     my $kernel = copyToKernelsDir(Cwd::abs_path("$path/kernel"));
     my $initrd = copyToKernelsDir(Cwd::abs_path("$path/initrd"));
+    my $json_text = read_file("$path/boot.json");
+    my $data = decode_json($json_text);
+    my $devicetree;
+    if (exists $data->{"org.nixos.grub"} && exists $data->{"org.nixos.grub"}->{devicetree}) {
+        $devicetree = $data->{"org.nixos.grub"}->{devicetree};
+    }
+    my $fdtfile = defined $devicetree ? copyToKernelsDir(Cwd::abs_path("$devicetree")) : undef;
 
     # Include second initrd with secrets
     if (-e -x "$path/append-initrd-secrets") {
@@ -516,6 +525,7 @@ sub addEntry {
     }
     $conf .= "  $extraPerEntryConfig\n" if $extraPerEntryConfig;
     $conf .= "  multiboot $xen $xenParams\n" if $xen;
+    $conf .= "  devicetree $fdtfile\n" if $fdtfile;
     $conf .= "  " . ($xen ? "module" : "linux") . " $kernel $kernelParams\n";
     $conf .= "  " . ($xen ? "module" : "initrd") . " $initrd\n";
     $conf .= "}\n\n";
