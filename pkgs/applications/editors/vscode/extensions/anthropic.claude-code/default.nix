@@ -8,11 +8,12 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "claude-code";
     publisher = "anthropic";
-    version = "2.1.11";
-    hash = "sha256-zqCILYNwBudsEv7+7ZV1YQoPJi30kj5w8suXqAPKORo=";
+    version = "2.1.15";
+    hash = "sha256-BtVxSVp80qlZhMrh872+0DQ7sTskEdP/5p5T7n9jeGU=";
   };
 
   postInstall = ''
+    mkdir -p "$out/$installPrefix/resources/native-binary"
     rm -f "$out/$installPrefix/resources/native-binary/claude"*
     ln -s "${claude-code}/bin/claude" "$out/$installPrefix/resources/native-binary/claude"
   '';

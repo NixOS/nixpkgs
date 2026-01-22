@@ -7,7 +7,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  name = "sxcs";
+  pname = "sxcs";
   version = "1.1.0";
 
   src = fetchFromGitea {
