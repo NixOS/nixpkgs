@@ -6797,6 +6797,8 @@ self: super: with self; {
 
   hatch-min-requirements = callPackage ../development/python-modules/hatch-min-requirements { };
 
+  hatch-mypyc = callPackage ../development/python-modules/hatch-mypyc { };
+
   hatch-nodejs-version = callPackage ../development/python-modules/hatch-nodejs-version { };
 
   hatch-odoo = callPackage ../development/python-modules/hatch-odoo { };
