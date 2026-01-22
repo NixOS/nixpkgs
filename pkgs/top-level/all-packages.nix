@@ -8591,10 +8591,6 @@ with pkgs;
     withExtraLuaPackages = _: [ ];
   };
 
-  felix = callPackage ../servers/felix { };
-
-  felix_remoteshell = callPackage ../servers/felix/remoteshell.nix { };
-
   inherit (callPackages ../servers/firebird { })
     firebird_4
     firebird_3
