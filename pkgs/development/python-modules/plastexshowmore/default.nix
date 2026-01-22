@@ -10,7 +10,7 @@
   plasTeX,
 }:
 
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "plastexshowmore";
   version = "0.1.0";
   pyproject = true;
@@ -32,4 +32,4 @@ buildPythonPackage {
     maintainers = with lib.maintainers; [ niklashh ];
     license = lib.licenses.asl20;
   };
-}
+})
