@@ -170,6 +170,7 @@ def parse_pyproject_toml(version: str, provider_name: str) -> Dict:
         # Heuristic to generate imports based on provider name
         # This might not be exhaustive but covers common cases
         base_import_path = f"airflow.providers.{provider_name.replace('-', '.')}"
+        imports.append(base_import_path)
 
         # Try to get more specific imports from provider_info entry point if available
         provider_info_entry_point = (

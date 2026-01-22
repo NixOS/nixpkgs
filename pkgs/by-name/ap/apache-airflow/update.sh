@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p common-updater-scripts curl jq
+#!nix-shell -i bash -p common-updater-scripts curl jq nixfmt-tree
 
 set -euo pipefail
 
@@ -46,6 +46,8 @@ update-source-version "$PACKAGE_NAME" "$LATEST_TAG"
 # It will automatically pick up the new version from the nix file.
 echo "Updating provider dependencies..."
 "$PACKAGE_DIR/update-providers.py"
+echo "Formatting generated providers.nix"
+treefmt "$PACKAGE_DIR"
 
 echo "Update complete. Please check the git diff for changes."
 
