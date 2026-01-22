@@ -2557,6 +2557,8 @@ self: super: with self; {
 
   certbot-dns-route53 = callPackage ../development/python-modules/certbot-dns-route53 { };
 
+  certbot-dns-wedos = callPackage ../development/python-modules/certbot-dns-wedos { };
+
   certbot-nginx = callPackage ../development/python-modules/certbot-nginx { };
 
   certifi = callPackage ../development/python-modules/certifi { };
