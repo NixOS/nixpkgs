@@ -40,7 +40,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Kozea";
     repo = "WeasyPrint";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-kAJgSQz1RKrPwzO7I5xHXyXcXYJtvca9izjrAgTy3ek=";
   };
 
