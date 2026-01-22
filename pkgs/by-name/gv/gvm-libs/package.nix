@@ -24,15 +24,15 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gvm-libs";
-  version = "22.35.0";
+  version = "22.35.2";
 
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "gvm-libs";
-    tag = "v${version}";
-    hash = "sha256-3TWJyh9xzS/HLRjAc4hsBuu3P0SquHEZXjunWw1FqWU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-DVYU+6hUps2nwgkTWu228wVYtke4oDFUqXM73DEN6LM=";
   };
 
   postPatch = ''
@@ -73,9 +73,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Libraries module for the Greenbone Vulnerability Management Solution";
     homepage = "https://github.com/greenbone/gvm-libs";
-    changelog = "https://github.com/greenbone/gvm-libs/releases/tag/${src.tag}";
-    license = with lib.licenses; [ gpl2Plus ];
+    changelog = "https://github.com/greenbone/gvm-libs/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ fab ];
     platforms = lib.platforms.linux;
   };
-}
+})

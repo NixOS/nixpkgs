@@ -1,5 +1,6 @@
 {
   lib,
+  bash,
   buildGoModule,
   fetchFromGitea,
   installShellFiles,
@@ -14,7 +15,7 @@ buildGoModule rec {
     domain = "codeberg.org";
     owner = "vaporup";
     repo = "ssh-tools";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-ZMjpc2zjvuLJES5ixEHvo7oAx1JGzy60LzN09Ykn/54=";
   };
 
@@ -27,7 +28,10 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = [ perl ];
+  buildInputs = [
+    bash
+    perl
+  ];
 
   postInstall = ''
     install cmd/{bash,perl}/ssh-*/ssh-* -t $out/bin

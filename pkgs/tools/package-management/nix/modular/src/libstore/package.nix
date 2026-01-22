@@ -25,9 +25,7 @@
 
   withAWS ?
     # Default is this way because there have been issues building this dependency
-    stdenv.hostPlatform == stdenv.buildPlatform
-    && (stdenv.isLinux || stdenv.isDarwin)
-    && lib.meta.availableOn stdenv.hostPlatform aws-c-common,
+    lib.meta.availableOn stdenv.hostPlatform aws-c-common,
 }:
 
 mkMesonLibrary (finalAttrs: {
