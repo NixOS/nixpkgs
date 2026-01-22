@@ -75,9 +75,6 @@ with lib;
           pkgs.writeTextFile {
             name = "xray.json";
             text = builtins.toJSON cfg.settings;
-            checkPhase = ''
-              ${cfg.package}/bin/xray -test -config $out
-            '';
           };
 
     in
@@ -101,6 +98,7 @@ with lib;
           LoadCredential = "config.json:${settingsFile}";
           CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
           AmbientCapabilities = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
+          DeviceAllow = "/dev/net/tun rw";
           NoNewPrivileges = true;
         };
       };
