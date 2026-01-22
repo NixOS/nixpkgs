@@ -3,8 +3,10 @@
   async-timeout,
   beartype,
   buildPythonPackage,
-  setuptools,
-  versioneer,
+  hatchling,
+  hatch-mypyc,
+  hatch-vcs,
+  types-deprecated,
   deprecated,
   fetchFromGitHub,
   packaging,
@@ -39,8 +41,10 @@ buildPythonPackage rec {
   '';
 
   build-system = [
-    setuptools
-    versioneer
+    hatchling
+    hatch-mypyc
+    hatch-vcs
+    types-deprecated
   ];
 
   dependencies = [
