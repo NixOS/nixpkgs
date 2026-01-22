@@ -16,7 +16,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "pyrustic";
     repo = "shared";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-5O/eaVL83gWoh0msparEjcTU+5K532f495OVwkoyJO8=";
   };
 
