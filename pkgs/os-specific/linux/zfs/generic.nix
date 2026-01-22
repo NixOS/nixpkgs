@@ -305,6 +305,9 @@ let
       ]
       ++ optionals buildUser [
         "dev"
+      ]
+      ++ optionals (!buildKernel) [
+        "man"
       ];
 
       passthru = {
