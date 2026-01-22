@@ -70,7 +70,10 @@ let
       owner = "pandas-dev";
       repo = "pandas";
       tag = "v${version}";
-      hash = "sha256-pJTi0CL/ymXwERBsN4i7vjyUehklPjSSgfwpYbgoI+c=";
+      postFetch = ''
+        sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${src.tag})"/' $out/pandas/_version.py
+      '';
+      hash = "sha256-sUOPZZalTJBJwcqyXwDkmT9UX7Ni71vUa3YdFRwSiJY=";
     };
 
     build-system = [
