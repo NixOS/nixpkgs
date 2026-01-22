@@ -18,13 +18,13 @@
 
 let
   pname = "gui-for-clash";
-  version = "1.18.0";
+  version = "1.19.0";
 
   src = fetchFromGitHub {
     owner = "GUI-for-Cores";
     repo = "GUI.for.Clash";
     tag = "v${version}";
-    hash = "sha256-M5M3o7RIXszMW2KGv2UDyR002dNOL3FFj0zM4w4D+U0=";
+    hash = "sha256-eLpSpF0Lq4bQoK2K7ttGaIwrkY+WKUSuM5oG9ACMOPU=";
   };
 
   metaCommon = {
