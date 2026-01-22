@@ -54,6 +54,8 @@ let
         mkKeyValueDefault { } sep k v;
   };
   configFile = pkgs.writeText "qBittorrent.conf" (gendeepINI cfg.serverConfig);
+  configDir = "${cfg.profileDir}/qBittorrent/config";
+  runtimeConfigFile = "${configDir}/qBittorrent.conf";
 in
 {
   options.services.qbittorrent = {
@@ -154,11 +156,6 @@ in
             mode = "755";
             inherit (cfg) user group;
           };
-          "${cfg.profileDir}/qBittorrent/config/qBittorrent.conf"."L+" = mkIf (cfg.serverConfig != { }) {
-            mode = "1400";
-            inherit (cfg) user group;
-            argument = "${configFile}";
-          };
         };
       };
       services.qbittorrent = {
@@ -176,6 +173,17 @@ in
           Type = "simple";
           User = cfg.user;
           Group = cfg.group;
+          ExecStartPre = mkIf (cfg.serverConfig != { }) [
+            (pkgs.writeShellScript "qbittorrent-prestart" ''
+              set -eu
+              # Ensure config directory exists
+              install -d -m 700 '${configDir}'
+              # Remove old symlink/file (handles migration from tmpfiles L+ symlink)
+              rm -f '${runtimeConfigFile}'
+              # Copy declarative config to runtime location
+              install -m 600 '${configFile}' '${runtimeConfigFile}'
+            '')
+          ];
           ExecStart = utils.escapeSystemdExecArgs (
             [
               (getExe cfg.package)
