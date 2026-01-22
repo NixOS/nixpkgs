@@ -32,11 +32,11 @@
 }:
 
 let
-  mirage-crypto-rng-lwt = buildDunePackage rec {
+  mirage-crypto-rng-lwt = buildDunePackage (finalAttrs: {
     pname = "mirage-crypto-rng-lwt";
     version = "1.2.0";
     src = fetchurl {
-      url = "https://github.com/mirage/mirage-crypto/releases/download/v${version}/mirage-crypto-${version}.tbz";
+      url = "https://github.com/mirage/mirage-crypto/releases/download/v${finalAttrs.version}/mirage-crypto-${finalAttrs.version}.tbz";
       hash = "sha256-CVQrzZbB02j/m6iFMQX0wXgdjJTCQA3586wGEO4H5n4=";
     };
     doCheck = true;
@@ -47,7 +47,7 @@ let
       mtime
       lwt
     ];
-  };
+  });
 in
 
 buildDunePackage {
