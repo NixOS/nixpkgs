@@ -36,7 +36,7 @@ buildGoModule rec {
     homepage = "https://github.com/rshelekhov/lazymake";
     changelog = "https://github.com/rshelekhov/lazymake/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = [ ltpie123 ];
     mainProgram = "lazymake";
     platforms = lib.platforms.unix;
   };
