@@ -7,14 +7,14 @@
   stdcompat,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "pyml";
   version = "20231101";
 
   src = fetchFromGitHub {
     owner = "ocamllibs";
     repo = "pyml";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-0Yy5T/S3Npwt0XJmEsdXGg5AXYi9vV9UG9nMSzz/CEc=";
   };
 
@@ -45,4 +45,4 @@ buildDunePackage rec {
     homepage = "https://github.com/ocamllibs/pyml";
     license = lib.licenses.bsd2;
   };
-}
+})
