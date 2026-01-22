@@ -16,6 +16,8 @@ buildPythonPackage (finalAttrs: {
   version = "0.15.0";
   pyproject = true;
 
+  disabled = pythonOlder "3.11";
+
   src = fetchFromGitHub {
     owner = "jorenham";
     repo = "optype";
@@ -23,7 +25,10 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-tzbS+CeWGxMXK1LFN/LslI6kfbVQPjqYlDB7fX0ogfU=";
   };
 
-  disabled = pythonOlder "3.11";
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.9.16,<0.10.0" uv_build
+  '';
 
   build-system = [
     uv-build
