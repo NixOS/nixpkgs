@@ -13147,6 +13147,8 @@ self: super: with self; {
 
   pycketcasts = callPackage ../development/python-modules/pycketcasts { };
 
+  pyclibrary = callPackage ../development/python-modules/pyclibrary { };
+
   pyclimacell = callPackage ../development/python-modules/pyclimacell { };
 
   pyclip = callPackage ../development/python-modules/pyclip { };
