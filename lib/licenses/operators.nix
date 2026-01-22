@@ -76,7 +76,7 @@
     - [exception] Exception to apply
   */
   WITH = license: exception: {
-    licenseType = "compound";
+    licenseType = "exception";
     operator = "WITH";
     inherit license exception;
   };
@@ -88,8 +88,8 @@
     # Example
 
     ```nix
-    PLUS lib.licenses.lgpl21Only
-    => { licenseType = "plus"; operator = "+"; license = lib.licenses.lgpl21Only; };
+    PLUS lib.licenses.eupl11
+    => { licenseType = "plus"; operator = "+"; license = lib.licenses.eupl11; };
     ```
 
     # Type
