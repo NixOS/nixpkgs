@@ -10,7 +10,7 @@
   pytest-httpserver,
   requests,
   setuptools-scm,
-  setuptools,
+  uv-build,
   urllib3,
 }:
 
@@ -24,8 +24,13 @@ buildPythonPackage rec {
     hash = "sha256-bJ3tGVP46xYEPtCo6iDm6VJOp7Zet0VyThJJCspE7wA=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.7.19,<0.8.0" uv_build
+  '';
+
   build-system = [
-    setuptools
+    uv-build
     setuptools-scm
   ];
 
