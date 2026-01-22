@@ -209,15 +209,27 @@ in
       # with "native" and "gmp" backends.
       native-bignum =
         let
-          nativeBignumGhcNames = pkgs.lib.filter (name: !(builtins.elem name nativeBignumExcludes)) (
-            pkgs.lib.attrNames compiler
-          );
+          isNativeBignumGhc =
+            name:
+            !(builtins.elem name nativeBignumExcludes) && !(compiler.${name} ? isMhs && compiler.${name}.isMhs);
+          nativeBignumGhcNames = pkgs.lib.filter isNativeBignumGhc (pkgs.lib.attrNames compiler);
         in
         pkgs.lib.recurseIntoAttrs (
           pkgs.lib.genAttrs nativeBignumGhcNames (
             name: compiler.${name}.override { enableNativeBignum = true; }
           )
         );
+
+      microhs-boot = callPackage ../development/compilers/microhs/boot.nix {
+        microhs-src = bb.compiler.microhs-0_14_27_0;
+      };
+
+      microhs-0_14_27_0 = callPackage ../development/compilers/microhs/0.14.27.0.nix {
+        inherit (bb.compiler) microhs-boot;
+      };
+
+      microhs-0_14 = compiler.microhs-0_14_27_0;
+      microhs = compiler.microhs-0_14;
     }
     // pkgs.lib.optionalAttrs config.allowAliases {
       ghc810 = throw "'haskell.compiler.ghc810' has been removed."; # Added 2025-09-07
@@ -321,6 +333,16 @@ in
             buildHaskellPackages = bh.packages.native-bignum.${name};
           }
         );
+
+      microhs-0_14_27_0 = callPackage ../development/haskell-modules {
+        buildHaskellPackages = bh.packages.microhs-0_14_27_0;
+        ghc = bh.compiler.microhs-0_14_27_0;
+        compilerConfig = callPackage ../development/haskell-modules/configuration-microhs.nix { };
+        packageSetConfig = bootstrapPackageSet;
+      };
+
+      microhs-0_14 = packages.microhs-0_14_27_0;
+      microhs = packages.microhs-0_14;
     }
     // pkgs.lib.optionalAttrs config.allowAliases {
       ghc810 = throw "'haskell.packages.ghc810' has been removed."; # Added 2025-09-07
