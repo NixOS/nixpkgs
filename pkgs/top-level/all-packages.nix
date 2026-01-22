@@ -4837,6 +4837,14 @@ with pkgs;
       bolt_21 = llvmPackages_21.bolt;
       flang_21 = llvmPackages_21.flang;
 
+      llvmPackages_22 = llvmPackagesSet."22";
+      clang_22 = llvmPackages_22.clang;
+      lld_22 = llvmPackages_22.lld;
+      lldb_22 = llvmPackages_22.lldb;
+      llvm_22 = llvmPackages_22.llvm;
+      bolt_22 = llvmPackages_22.bolt;
+      flang_22 = llvmPackages_22.flang;
+
       mkLLVMPackages = llvmPackagesSet.mkPackage;
     })
     llvmPackages_18
@@ -4864,6 +4872,13 @@ with pkgs;
     llvm_21
     bolt_21
     flang_21
+    llvmPackages_22
+    clang_22
+    lld_22
+    lldb_22
+    llvm_22
+    bolt_22
+    flang_22
     mkLLVMPackages
     ;
 
@@ -12271,10 +12286,6 @@ with pkgs;
     d2x-rebirth-full
     ;
 
-  fltrator = callPackage ../games/fltrator {
-    fltk = fltk-minimal;
-  };
-
   factorio = callPackage ../by-name/fa/factorio/package.nix { releaseType = "alpha"; };
 
   factorio-experimental = factorio.override {
@@ -12324,8 +12335,6 @@ with pkgs;
   };
 
   freeciv_gtk = freeciv;
-
-  gscrabble = python3Packages.callPackage ../games/gscrabble { };
 
   ibmcloud-cli = callPackage ../tools/admin/ibmcloud-cli { stdenv = stdenvNoCC; };
 
@@ -12471,8 +12480,6 @@ with pkgs;
   steam-run-free = steam.run-free;
 
   protonup-ng = with python3Packages; toPythonApplication protonup-ng;
-
-  stuntrally = callPackage ../games/stuntrally { boost = boost183; };
 
   the-powder-toy = callPackage ../by-name/th/the-powder-toy/package.nix {
     lua = lua5_2;
