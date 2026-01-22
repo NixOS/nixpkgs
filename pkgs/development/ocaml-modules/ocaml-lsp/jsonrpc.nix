@@ -82,11 +82,11 @@ let
     ."${version}";
 in
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "jsonrpc";
   inherit version;
   src = fetchurl {
-    url = "https://github.com/ocaml/ocaml-lsp/releases/download/${version}/${params.name}-${version}.tbz";
+    url = "https://github.com/ocaml/ocaml-lsp/releases/download/${finalAttrs.version}/${params.name}-${finalAttrs.version}.tbz";
     inherit (params) sha256;
   };
 
@@ -119,4 +119,4 @@ buildDunePackage rec {
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})
