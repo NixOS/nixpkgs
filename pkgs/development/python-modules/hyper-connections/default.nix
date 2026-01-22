@@ -16,7 +16,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "lucidrains";
     repo = "hyper-connections";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-x1Yx9Fnow9154kFGLmjeCBLYJsbv6oJiC6Rk1XudqJQ=";
   };
 
