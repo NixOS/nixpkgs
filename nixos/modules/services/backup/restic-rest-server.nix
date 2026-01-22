@@ -134,6 +134,10 @@ in
     systemd.sockets.restic-rest-server = {
       listenStreams = [ cfg.listenAddress ];
       wantedBy = [ "sockets.target" ];
+      socketConfig = {
+        ReusePort = true;
+        FreeBind = true;
+      };
     };
 
     systemd.tmpfiles.rules = lib.mkIf cfg.privateRepos [

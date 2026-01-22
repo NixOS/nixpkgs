@@ -12,6 +12,8 @@ let
       {
         #for substituteAll
         inherit bash;
+        pname = "rust-bindgen";
+        inherit (rust-bindgen-unwrapped) version;
         unwrapped = rust-bindgen-unwrapped;
         meta = rust-bindgen-unwrapped.meta // {
           longDescription = rust-bindgen-unwrapped.meta.longDescription + ''
