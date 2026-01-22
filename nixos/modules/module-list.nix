@@ -1392,6 +1392,7 @@
   ./services/networking/syncthing.nix
   ./services/networking/tailscale-auth.nix
   ./services/networking/tailscale-derper.nix
+  ./services/networking/tailscale-serve.nix
   ./services/networking/tailscale.nix
   ./services/networking/tayga.nix
   ./services/networking/tcpcrypt.nix
