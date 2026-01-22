@@ -7,12 +7,11 @@
   grpcio,
   grpcio-gcp,
   grpcio-status,
-  mock,
   proto-plus,
   protobuf,
   pytest-asyncio,
+  pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
 }:
@@ -50,8 +49,8 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    mock
     pytest-asyncio
+    pytest-mock
     pytestCheckHook
   ];
 
