@@ -44,10 +44,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_SHARED_LIBS=ON"
     "-DINSTALL_UTILS=OFF"
   ]
-  ++ lib.optionals withZlibCompat [ "-DZLIB_COMPAT=ON" ]
-  ++ lib.optional (
-    stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isCygwin
-  ) "-DCMAKE_RC_COMPILER=${stdenv.cc.targetPrefix}windres";
+  ++ lib.optionals withZlibCompat [ "-DZLIB_COMPAT=ON" ];
 
   meta = {
     description = "Zlib data compression library for the next generation systems";
