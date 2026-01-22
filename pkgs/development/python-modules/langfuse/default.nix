@@ -28,7 +28,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "langfuse";
     repo = "langfuse-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-LHKNy5KSJhRhxkrp4+pjD0GGHTooaj7adrRA7I4mbdo=";
   };
 
