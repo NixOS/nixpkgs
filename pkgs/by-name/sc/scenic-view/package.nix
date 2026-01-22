@@ -4,7 +4,8 @@
   fetchFromGitHub,
   openjdk,
   openjfx,
-  gradle_7,
+  gradle_8,
+  fetchpatch2,
   makeDesktopItem,
   makeWrapper,
 }:
@@ -26,7 +27,8 @@ let
     sha256 = "1idfh9hxqs4fchr6gvhblhvjqk4mpl4rnpi84vn1l3yb700z7dwy";
   };
 
-  gradle = gradle_7;
+  # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
+  gradle = gradle_8;
 
   desktopItem = makeDesktopItem {
     name = "scenic-view";
@@ -44,6 +46,17 @@ let
 in
 stdenv.mkDerivation rec {
   inherit pname version src;
+
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/JonathanGiles/scenic-view/commit/0f682bba77e9662ce860216987c94e468f5da421.patch?full_index=1";
+      hash = "sha256-ISbKexjpGfS8xaRR4GqJ0J+z8fdv8+n4VCO6/SvLGlw=";
+      excludes = [
+        "*.md"
+      ];
+    })
+  ];
+
   nativeBuildInputs = [
     gradle
     makeWrapper
