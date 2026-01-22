@@ -17,7 +17,7 @@
   buildTests ? false,
   buildBenchmarks ? false,
   buildSamples ? false,
-  gpuTargets ? [ ], # gpuTargets = [ "gfx803" "gfx900:xnack-" "gfx906:xnack-" ... ]
+  gpuTargets ? clr.localGpuTargets or [ ], # gpuTargets = [ "gfx803" "gfx900:xnack-" "gfx906:xnack-" ... ]
 }:
 
 stdenv.mkDerivation (finalAttrs: {

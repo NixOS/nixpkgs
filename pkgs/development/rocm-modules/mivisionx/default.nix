@@ -25,7 +25,7 @@
   useOpenCL ? false,
   useCPU ? false,
   buildDocs ? false, # Needs internet
-  gpuTargets ? [ ],
+  gpuTargets ? clr.localGpuTargets or [ ],
 }:
 
 stdenv.mkDerivation (finalAttrs: {

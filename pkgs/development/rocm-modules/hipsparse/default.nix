@@ -13,7 +13,7 @@
   buildTests ? false,
   buildBenchmarks ? false,
   buildSamples ? false,
-  gpuTargets ? [ ],
+  gpuTargets ? clr.localGpuTargets or [ ],
 }:
 
 # This can also use cuSPARSE as a backend instead of rocSPARSE

@@ -9,7 +9,7 @@
   rocrand,
   gtest,
   buildTests ? false,
-  gpuTargets ? [ ],
+  gpuTargets ? clr.localGpuTargets or [ ],
 }:
 
 stdenv.mkDerivation (finalAttrs: {
