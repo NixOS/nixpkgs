@@ -28,7 +28,7 @@
   pybind11,
   pooch,
   xsimd,
-  boost188,
+  boost189,
   qhull,
 
   # dependencies
@@ -64,22 +64,6 @@ buildPythonPackage (finalAttrs: {
       excludes = [ "doc/source/dev/contributor/meson_advanced.rst" ];
     })
   ];
-  # A NOTE regarding the Numpy version relaxing: Both Numpy versions 1.x &
-  # 2.x are supported. However upstream wants to always build with Numpy 2,
-  # and with it to still be able to run with a Numpy 1 or 2. We insist to
-  # perform this substitution even though python3.pkgs.numpy is of version 2
-  # nowadays, because our ecosystem unfortunately doesn't allow easily
-  # separating runtime and build-system dependencies. See also:
-  #
-  # https://discourse.nixos.org/t/several-comments-about-priorities-and-new-policies-in-the-python-ecosystem/51790
-  #
-  # Being able to build (& run) with Numpy 1 helps for python environments
-  # that override globally the `numpy` attribute to point to `numpy_1`.
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "Cython>=3.0.8,<3.2.0" "Cython>=3.0.8" \
-      --replace-fail "numpy>=2.0.0,<2.6" numpy
-  '';
 
   build-system = [
     cython
@@ -104,7 +88,7 @@ buildPythonPackage (finalAttrs: {
     pybind11
     pooch
     xsimd
-    boost188
+    boost189
     qhull
   ];
 
