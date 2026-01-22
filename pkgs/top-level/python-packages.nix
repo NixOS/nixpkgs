@@ -2325,6 +2325,8 @@ self: super: with self; {
 
   build = callPackage ../development/python-modules/build { };
 
+  build123d = callPackage ../development/python-modules/build123d { };
+
   buildcatrust = callPackage ../development/python-modules/buildcatrust { };
 
   buildstream-plugins = callPackage ../development/python-modules/buildstream-plugins { };
@@ -2382,6 +2384,8 @@ self: super: with self; {
   cachier = callPackage ../development/python-modules/cachier { };
 
   cachy = callPackage ../development/python-modules/cachy { };
+
+  cadquery-ocp = callPackage ../development/python-modules/cadquery-ocp { };
 
   caffe = toPythonModule (
     pkgs.caffe.override {
@@ -8459,6 +8463,8 @@ self: super: with self; {
 
   lhapdf = toPythonModule (pkgs.lhapdf.override { python3 = python; });
 
+  lib3mf = callPackage ../development/python-modules/lib3mf { };
+
   lib4package = callPackage ../development/python-modules/lib4package { };
 
   lib4sbom = callPackage ../development/python-modules/lib4sbom { };
@@ -11132,6 +11138,8 @@ self: super: with self; {
   oci = callPackage ../development/python-modules/oci { };
 
   ocifs = callPackage ../development/python-modules/ocifs { };
+
+  ocpsvg = callPackage ../development/python-modules/ocpsvg { };
 
   ocrmypdf = callPackage ../development/python-modules/ocrmypdf { tesseract = pkgs.tesseract5; };
 
@@ -19305,6 +19313,8 @@ self: super: with self; {
   trezor-agent = callPackage ../development/python-modules/trezor-agent {
     pinentry = pkgs.pinentry-curses;
   };
+
+  trianglesolver = callPackage ../development/python-modules/trianglesolver { };
 
   trie = callPackage ../development/python-modules/trie { };
 

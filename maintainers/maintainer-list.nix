@@ -26682,6 +26682,11 @@
     githubId = 9853194;
     name = "Philipp Bartsch";
   };
+  tnytown = {
+    github = "tnytown";
+    githubId = 3821575;
+    name = "Andrew Pan";
+  };
   toast = {
     name = "Toast";
     github = "toast003";
