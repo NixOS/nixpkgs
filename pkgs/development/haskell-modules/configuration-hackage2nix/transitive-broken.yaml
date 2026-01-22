@@ -3394,6 +3394,7 @@ dont-distribute-packages:
  - sydtest-amqp
  - sydtest-webdriver-screenshot
  - sydtest-webdriver-yesod
+ - sydtest-webdriver-yesod_0_0_1_0
  - sylvia
  - symantic-atom
  - symantic-http-demo

@@ -1615,6 +1615,15 @@ with haskellLib;
     '';
   }) (addExtraLibrary self.QuickCheck super.Chart-tests);
 
+  # 2026-01-17: too strict bounds on QuickCheck < 2.15
+  # https://github.com/hasufell/lzma-static/pull/15
+  xz = doJailbreak super.xz;
+
+  ghcup =
+    lib.throwIf pkgs.config.allowAliases
+      "ghcup cannot be used to install the haskell tool chain on NixOS because there is no compatible bindist. Please install ghc etc. via Nix. On non-NixOS systems you can use the ghcup shell installer"
+      super.ghcup;
+
   # This breaks because of version bounds, but compiles and runs fine.
   # Last commit is 5 years ago, so we likely won't get upstream fixed soon.
   # https://bitbucket.org/rvlm/hakyll-contrib-hyphenation/src/master/
