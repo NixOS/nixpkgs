@@ -6,14 +6,13 @@
 }:
 
 let
-
   cfg = config.services.xserver.windowManager.metacity;
-  inherit (pkgs) metacity;
 in
 
 {
-  options = {
-    services.xserver.windowManager.metacity.enable = lib.mkEnableOption "metacity";
+  options.services.xserver.windowManager.metacity = {
+    enable = lib.mkEnableOption "metacity";
+    package = lib.mkPackageOption pkgs "metacity" { };
   };
 
   config = lib.mkIf cfg.enable {
@@ -21,12 +20,12 @@ in
     services.xserver.windowManager.session = lib.singleton {
       name = "metacity";
       start = ''
-        ${metacity}/bin/metacity &
+        ${cfg.package}/bin/metacity &
         waitPID=$!
       '';
     };
 
-    environment.systemPackages = [ metacity ];
+    environment.systemPackages = [ cfg.package ];
 
   };
 

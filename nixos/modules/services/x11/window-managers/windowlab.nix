@@ -10,8 +10,9 @@ let
 in
 
 {
-  options = {
-    services.xserver.windowManager.windowlab.enable = lib.mkEnableOption "windowlab";
+  options.services.xserver.windowManager.windowlab = {
+    enable = lib.mkEnableOption "windowlab";
+    package = lib.mkPackageOption pkgs "windowlab" { };
   };
 
   config = lib.mkIf cfg.enable {
@@ -19,10 +20,10 @@ in
       session = [
         {
           name = "windowlab";
-          start = "${pkgs.windowlab}/bin/windowlab";
+          start = "${cfg.package}/bin/windowlab";
         }
       ];
     };
-    environment.systemPackages = [ pkgs.windowlab ];
+    environment.systemPackages = [ cfg.package ];
   };
 }

@@ -5,26 +5,25 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.xserver.windowManager.ratpoison;
 in
 {
   ###### interface
-  options = {
-    services.xserver.windowManager.ratpoison.enable = mkEnableOption "ratpoison";
+  options.services.xserver.windowManager.ratpoison = {
+    enable = lib.mkEnableOption "ratpoison";
+    package = lib.mkPackageOption pkgs "ratpoison" { };
   };
 
   ###### implementation
-  config = mkIf cfg.enable {
-    services.xserver.windowManager.session = singleton {
+  config = lib.mkIf cfg.enable {
+    services.xserver.windowManager.session = lib.singleton {
       name = "ratpoison";
       start = ''
-        ${pkgs.ratpoison}/bin/ratpoison &
+        ${cfg.package}/bin/ratpoison &
         waitPID=$!
       '';
     };
-    environment.systemPackages = [ pkgs.ratpoison ];
+    environment.systemPackages = [ cfg.package ];
   };
 }
