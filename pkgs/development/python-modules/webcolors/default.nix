@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  unittestCheckHook,
+  pytestCheckHook,
   pdm-backend,
 }:
 
@@ -18,12 +18,7 @@ buildPythonPackage rec {
 
   build-system = [ pdm-backend ];
 
-  nativeCheckInputs = [ unittestCheckHook ];
-
-  unittestFlagsArray = [
-    "-s"
-    "tests"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "webcolors" ];
 
