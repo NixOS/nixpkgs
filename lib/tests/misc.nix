@@ -867,7 +867,7 @@ runTests {
 
   testEscapeNixIdentifierNoQuote = {
     expr = strings.escapeNixIdentifier "foo";
-    expected = ''foo'';
+    expected = "foo";
   };
 
   testEscapeNixIdentifierNumber = {
@@ -2634,7 +2634,7 @@ runTests {
       sections = {
       };
     };
-    expected = '''';
+    expected = "";
   };
 
   testToINIWithGlobalSectionGlobalEmptyIsTheSameAsToINI =
@@ -3002,12 +3002,12 @@ runTests {
 
   testToLuaEmptyAttrSet = {
     expr = generators.toLua { } { };
-    expected = ''{}'';
+    expected = "{}";
   };
 
   testToLuaEmptyList = {
     expr = generators.toLua { } [ ];
-    expected = ''{}'';
+    expected = "{}";
   };
 
   testToLuaListOfVariousTypes = {
@@ -3052,7 +3052,7 @@ runTests {
       41
       43
     ];
-    expected = ''{ 41, 43 }'';
+    expected = "{ 41, 43 }";
   };
 
   testToLuaEmptyBindings = {

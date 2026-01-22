@@ -205,10 +205,10 @@ in
       '';
 
       environment = {
-        ERL_FLAGS = ''-couch_ini ${lib.concatStringsSep " " configFiles}'';
+        ERL_FLAGS = "-couch_ini ${lib.concatStringsSep " " configFiles}";
         # 5. the vm.args file
-        COUCHDB_ARGS_FILE = ''${cfg.argsFile}'';
-        HOME = ''${cfg.databaseDir}'';
+        COUCHDB_ARGS_FILE = "${cfg.argsFile}";
+        HOME = "${cfg.databaseDir}";
       };
 
       serviceConfig = {

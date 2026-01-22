@@ -21,7 +21,7 @@
   #, musepackSupport ? false, TODO: mpcenc
   monkeysAudioSupport ? false,
   monkeysAudio,
-#, aacSupport ? false, TODO: neroAacEnc
+  #, aacSupport ? false, TODO: neroAacEnc
 }:
 
 let
