@@ -3,6 +3,7 @@
   fetchFromGitHub,
   buildPythonPackage,
   pythonOlder,
+  bcrypt,
   cryptography,
   jinja2,
   librouteros,
@@ -31,7 +32,9 @@ buildPythonPackage (finalAttrs: {
   };
 
   build-system = [ setuptools ];
+
   dependencies = [
+    bcrypt
     cryptography
     jinja2
     mako
