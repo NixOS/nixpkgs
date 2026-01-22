@@ -18,11 +18,6 @@ buildPythonPackage rec {
     hash = "sha256-pryx55dzvg+6jSUj4avskTnGKe6w1HkEh6v6OOlHIXY=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "setuptools ==" "setuptools >="
-  '';
-
   build-system = [ setuptools ];
 
   pythonImportsCheck = [ "zope.hookable" ];
