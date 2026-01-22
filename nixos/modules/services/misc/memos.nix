@@ -113,6 +113,55 @@ in
           Restart = "always";
           RestartSec = 3;
           ExecStart = "${lib.getExe cfg.package}";
+          LimitNOFILE = 65536;
+          NoNewPrivileges = true;
+          LockPersonality = true;
+          RemoveIPC = true;
+          ReadWritePaths = [
+            cfg.settings.dataDir
+          ];
+          ProtectSystem = "strict";
+          PrivateUsers = true;
+          ProtectHome = true;
+          PrivateTmp = true;
+          PrivateDevices = true;
+          ProtectHostname = true;
+          ProtectClock = true;
+          UMask = "0077";
+          ProtectKernelTunables = true;
+          ProtectKernelModules = true;
+          ProtectControlGroups = true;
+          ProtectProc = "invisible";
+          SystemCallFilter = [
+            " " # This is needed to clear the SystemCallFilter existing definitions
+            "~@reboot"
+            "~@swap"
+            "~@obsolete"
+            "~@mount"
+            "~@module"
+            "~@debug"
+            "~@cpu-emulation"
+            "~@clock"
+            "~@raw-io"
+            "~@privileged"
+            "~@resources"
+          ];
+          CapabilityBoundingSet = [
+            " " # Reset all capabilities to an empty set
+          ];
+          RestrictAddressFamilies = [
+            " " # This is needed to clear the RestrictAddressFamilies existing definitions
+            "none" # Remove all addresses families
+            "AF_UNIX"
+            "AF_INET"
+            "AF_INET6"
+          ];
+          DevicePolicy = "closed";
+          ProtectKernelLogs = true;
+          SystemCallArchitectures = "native";
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
         };
       };
     };
