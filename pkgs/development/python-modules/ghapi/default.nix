@@ -15,7 +15,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "fastai";
     repo = "ghapi";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-2x9uiULYniFVpUNgRie4i49xEqtYfq/9u/07eozw0WQ=";
   };
 
