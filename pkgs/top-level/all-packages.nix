@@ -9143,6 +9143,64 @@ with pkgs;
     f = lib.callPackageWith __splicedPackages ../servers/x11/xorg { };
   });
 
+  inherit (xorg)
+    fontadobe100dpi
+    fontadobeutopia100dpi
+    fontbh100dpi
+    fontbhlucidatypewriter100dpi
+    fontbitstream100dpi
+    fontutil
+    libAppleWM
+    libFS
+    libICE
+    libSM
+    libX11
+    libXScrnSaver
+    libXau
+    libXaw
+    libXcomposite
+    libXcursor
+    libXdamage
+    libXdmcp
+    libXext
+    libXfixes
+    libXfont2
+    libXft
+    libXi
+    libXinerama
+    libXmu
+    libXp
+    libXpm
+    libXpresent
+    libXrandr
+    libXrender
+    libXres
+    libXt
+    libXtst
+    libXv
+    libXvMC
+    libXxf86dga
+    libXxf86misc
+    libXxf86vm
+    libpthreadstubs
+    mkfontdir
+    utilmacros
+    xcbproto
+    xcbutil
+    xcbutilcursor
+    xcbutilerrors
+    xcbutilimage
+    xcbutilkeysyms
+    xcbutilrenderutil
+    xcbutilwm
+    xf86inputevdev
+    xf86inputlibinput
+    xf86videonouveau
+    xkeyboardconfig
+    xorgcffiles
+    xorgserver
+    ;
+
   zabbixFor = version: rec {
     agent = (callPackages ../servers/monitoring/zabbix/agent.nix { }).${version};
     proxy-mysql =
