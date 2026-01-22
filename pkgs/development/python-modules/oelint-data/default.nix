@@ -14,7 +14,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "priv-kweihmann";
     repo = "oelint-data";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-TN37FfLPBRrVZ8BKqp7If9EBK8JkyUAdwztHjIJX2Bc=";
   };
 
