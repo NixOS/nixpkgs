@@ -17,6 +17,8 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp easysnap* $out/bin/
 
@@ -24,6 +26,8 @@ stdenv.mkDerivation {
       substituteInPlace $i \
         --replace-fail zfs ${lib.getExe zfs}
     done
+
+    runHook postInstall
   '';
 
   meta = {
