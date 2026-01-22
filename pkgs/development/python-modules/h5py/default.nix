@@ -31,14 +31,6 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "mpi4py" ];
 
-  # Avoid strict pinning of Numpy, can't be replaced with pythonRelaxDepsHook,
-  # as these are build time dependencies. See:
-  # https://github.com/NixOS/nixpkgs/issues/327941
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "numpy >=2.0.0, <3" "numpy"
-  '';
-
   env = {
     HDF5_DIR = "${hdf5}";
     HDF5_MPI = if mpiSupport then "ON" else "OFF";
