@@ -15,6 +15,8 @@
   perl,
   pkg-config,
   python3,
+  copyPathToStore,
+  makeSetupHook,
   which,
   # darwin support
   xcbuild,
@@ -85,6 +87,11 @@ let
       "linux-generic-g++"
     else
       throw "Please add a qtPlatformCross entry for ${plat.config}";
+  qtPluginPrefix = "lib/qt-${qtCompatVersion}/plugins";
+  qtQmlPrefix = "lib/qt-${qtCompatVersion}/qml";
+  qtDocPrefix = "share/doc/qt-${qtCompatVersion}";
+  fix_qt_builtin_paths = copyPathToStore ../hooks/fix-qt-builtin-paths.sh;
+  fix_qt_module_paths = copyPathToStore ../hooks/fix-qt-module-paths.sh;
 in
 
 stdenv.mkDerivation (
@@ -93,7 +100,6 @@ stdenv.mkDerivation (
     {
       pname = "qtbase";
       inherit qtCompatVersion src version;
-      debug = debugSymbols;
 
       propagatedBuildInputs = [
         libxml2
@@ -193,11 +199,10 @@ stdenv.mkDerivation (
 
       inherit patches;
 
-      fix_qt_builtin_paths = ../hooks/fix-qt-builtin-paths.sh;
-      fix_qt_module_paths = ../hooks/fix-qt-module-paths.sh;
       preHook = ''
-        . "$fix_qt_builtin_paths"
-        . "$fix_qt_module_paths"
+        export outputBin outputDev outputDoc outputLib
+        . ${fix_qt_builtin_paths}
+        . ${fix_qt_module_paths}
         . ${../hooks/move-qt-dev-tools.sh}
         . ${../hooks/fix-qmake-libtool.sh}
       '';
@@ -205,13 +210,13 @@ stdenv.mkDerivation (
       postPatch = ''
         for prf in qml_plugin.prf qt_plugin.prf qt_docs.prf qml_module.prf create_cmake.prf; do
             substituteInPlace "mkspecs/features/$prf" \
-                --subst-var qtPluginPrefix \
-                --subst-var qtQmlPrefix \
-                --subst-var qtDocPrefix
+              --subst-var-by qtPluginPrefix ${qtPluginPrefix} \
+              --subst-var-by qtQmlPrefix ${qtQmlPrefix} \
+              --subst-var-by qtDocPrefix ${qtDocPrefix}
         done
 
-        substituteInPlace configure --replace /bin/pwd pwd
-        substituteInPlace src/corelib/global/global.pri --replace /bin/ls ${coreutils}/bin/ls
+        substituteInPlace configure --replace-fail /bin/pwd pwd
+        substituteInPlace src/corelib/global/global.pri --replace-fail /bin/ls ${coreutils}/bin/ls
         sed -e 's@/\(usr\|opt\)/@/var/empty/@g' -i mkspecs/*/*.conf
 
         sed -i '/PATHS.*NO_DEFAULT_PATH/ d' src/corelib/Qt5Config.cmake.in
@@ -261,20 +266,16 @@ stdenv.mkDerivation (
           ''
       );
 
-      qtPluginPrefix = "lib/qt-${qtCompatVersion}/plugins";
-      qtQmlPrefix = "lib/qt-${qtCompatVersion}/qml";
-      qtDocPrefix = "share/doc/qt-${qtCompatVersion}";
-
       setOutputFlags = false;
       preConfigure = ''
         export LD_LIBRARY_PATH="$PWD/lib:$PWD/plugins/platforms''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
 
-        NIX_CFLAGS_COMPILE+=" -DNIXPKGS_QT_PLUGIN_PREFIX=\"$qtPluginPrefix\""
+        NIX_CFLAGS_COMPILE+=" -DNIXPKGS_QT_PLUGIN_PREFIX=\"${qtPluginPrefix}\""
 
         # paralellize compilation of qtmake, which happens within ./configure
         export MAKEFLAGS+=" -j$NIX_BUILD_CORES"
 
-        ./bin/syncqt.pl -version $version
+        ./bin/syncqt.pl -version ${version}
       ''
       + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
         # QT's configure script will refuse to use pkg-config unless these two environment variables are set
@@ -296,9 +297,9 @@ stdenv.mkDerivation (
         NIX_OUTPUT_BIN = $bin
         NIX_OUTPUT_DEV = $dev
         NIX_OUTPUT_OUT = $out
-        NIX_OUTPUT_DOC = $dev/$qtDocPrefix
-        NIX_OUTPUT_QML = $bin/$qtQmlPrefix
-        NIX_OUTPUT_PLUGIN = $bin/$qtPluginPrefix
+        NIX_OUTPUT_DOC = $dev/${qtDocPrefix}
+        NIX_OUTPUT_QML = $bin/${qtQmlPrefix}
+        NIX_OUTPUT_PLUGIN = $bin/${qtPluginPrefix}
         EOF
         }
 
@@ -308,6 +309,7 @@ stdenv.mkDerivation (
       '';
 
       env = {
+        inherit qtPluginPrefix qtQmlPrefix;
         NIX_CFLAGS_COMPILE = toString (
           [
             "-Wno-error=sign-compare" # freetype-2.5.4 changed signedness of some struct fields
@@ -337,15 +339,15 @@ stdenv.mkDerivation (
           "-Wno-free-nonheap-object"
           "-w"
         ];
+      }
+      // lib.optionalAttrs (libpq != null) {
+        # PostgreSQL autodetection fails sporadically because Qt omits the "-lpq" flag
+        # if dependency paths contain the string "pq", which can occur in the hash.
+        # To prevent these failures, we need to override PostgreSQL detection.
+        PSQL_LIBS = "-L${libpq}/lib -lpq";
       };
 
       prefixKey = "-prefix ";
-
-      # PostgreSQL autodetection fails sporadically because Qt omits the "-lpq" flag
-      # if dependency paths contain the string "pq", which can occur in the hash.
-      # To prevent these failures, we need to override PostgreSQL detection.
-      PSQL_LIBS = lib.optionalString (libpq != null) "-L${libpq}/lib -lpq";
-
     }
     // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
       configurePlatforms = [ ];
@@ -353,9 +355,12 @@ stdenv.mkDerivation (
     // {
       # TODO Remove obsolete and useless flags once the build will be totally mastered
       configureFlags = [
-        "-plugindir $(out)/$(qtPluginPrefix)"
-        "-qmldir $(out)/$(qtQmlPrefix)"
-        "-docdir $(out)/$(qtDocPrefix)"
+        "-plugindir"
+        "${placeholder "out"}/${qtPluginPrefix}"
+        "-qmldir"
+        "${placeholder "out"}/${qtQmlPrefix}"
+        "-docdir"
+        "${placeholder "out"}/${qtDocPrefix}"
 
         "-verbose"
         "-confirm-license"
@@ -372,7 +377,8 @@ stdenv.mkDerivation (
 
         "-gui"
         "-widgets"
-        "-opengl desktop"
+        "-opengl"
+        "desktop"
         "-icu"
         "-L"
         "${icu.out}/lib"
@@ -381,8 +387,10 @@ stdenv.mkDerivation (
         "-pch"
       ]
       ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-        "-device ${qtPlatformCross stdenv.hostPlatform}"
-        "-device-option CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+        "-device"
+        "${qtPlatformCross stdenv.hostPlatform}"
+        "-device-option"
+        "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
       ]
       ++ lib.optional debugSymbols "-debug"
       ++ lib.optionals developerBuild [
@@ -435,14 +443,18 @@ stdenv.mkDerivation (
         "-I"
         "${openssl.dev}/include"
         "-system-sqlite"
-        ''-${if mysqlSupport then "plugin" else "no"}-sql-mysql''
-        ''-${if libpq != null then "plugin" else "no"}-sql-psql''
+        "-${if mysqlSupport then "plugin" else "no"}-sql-mysql"
+        "-${if libpq != null then "plugin" else "no"}-sql-psql"
         "-system-libpng"
 
-        "-make libs"
-        "-make tools"
-        ''-${lib.optionalString (!buildExamples) "no"}make examples''
-        ''-${lib.optionalString (!buildTests) "no"}make tests''
+        "-make"
+        "libs"
+        "-make"
+        "tools"
+        "-${lib.optionalString (!buildExamples) "no"}make"
+        "examples"
+        "-${lib.optionalString (!buildTests) "no"}make"
+        "tests"
       ]
       ++ (
         if stdenv.hostPlatform.isDarwin then
@@ -457,7 +469,8 @@ stdenv.mkDerivation (
           ]
           ++ [
             "-xcb"
-            "-qpa xcb"
+            "-qpa"
+            "xcb"
             "-L"
             "${libX11.out}/lib"
             "-I"
@@ -471,7 +484,7 @@ stdenv.mkDerivation (
             "-I"
             "${libXrender.out}/include"
 
-            ''-${lib.optionalString (cups == null) "no-"}cups''
+            "-${lib.optionalString (cups == null) "no-"}cups"
             "-dbus-linked"
             "-glib"
           ]
@@ -492,7 +505,7 @@ stdenv.mkDerivation (
             "-I"
             "${libmysqlclient}/include"
           ]
-          ++ lib.optional (withQttranslation && (qttranslations != null)) [
+          ++ lib.optionals (withQttranslation && (qttranslations != null)) [
             # depends on x11
             "-translationdir"
             "${qttranslations}/translations"
@@ -533,9 +546,32 @@ stdenv.mkDerivation (
 
       dontStrip = debugSymbols;
 
-      setupHook = ../hooks/qtbase-setup-hook.sh;
+      setupHook =
+        let
+          hook = makeSetupHook {
+            name = "qtbase5-setup-hook";
+            substitutions = {
+              inherit
+                qtPluginPrefix
+                qtQmlPrefix
+                qtDocPrefix
+                fix_qt_builtin_paths
+                fix_qt_module_paths
+                ;
+              debug = debugSymbols;
+            };
+          } ../hooks/qtbase-setup-hook.sh;
+        in
+        "${hook}/nix-support/setup-hook";
 
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      passthru = {
+        inherit
+          qtPluginPrefix
+          qtQmlPrefix
+          qtDocPrefix
+          ;
+        tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      };
 
       meta = {
         homepage = "https://www.qt.io/";
