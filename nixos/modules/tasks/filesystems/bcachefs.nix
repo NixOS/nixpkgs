@@ -89,6 +89,25 @@ let
         tryUnlock ${name} ${firstDevice fs}
       '';
 
+  groupByDevice = builtins.groupBy (fileSystem: fileSystem.value.device);
+
+  nameGrouped = lib.mapAttrs (
+    name: value: builtins.concatStringsSep "," (builtins.map (fileSystem: fileSystem.name) value)
+  );
+
+  reverseAttrs =
+    attrs:
+    builtins.foldl' (acc: x: acc // x) { } (
+      lib.mapAttrsToList (name: value: {
+        "${value}" = {
+          device = name;
+        };
+      }) attrs
+    );
+
+  dedupDevices =
+    fileSystems: reverseAttrs (nameGrouped (groupByDevice (lib.attrsToList fileSystems)));
+
   mkUnits =
     prefix: name: fs:
     let
@@ -285,7 +304,7 @@ in
         '';
 
         boot.initrd.postDeviceCommands = lib.mkIf (!config.boot.initrd.systemd.enable) (
-          commonFunctions + lib.concatStrings (lib.mapAttrsToList openCommand bootFs)
+          commonFunctions + lib.concatStrings (lib.mapAttrsToList openCommand (dedupDevices bootFs))
         );
 
         boot.initrd.systemd.services = lib.mapAttrs' (mkUnits "/sysroot") bootFs;
