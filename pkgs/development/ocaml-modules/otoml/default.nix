@@ -7,7 +7,7 @@
   uutf,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "otoml";
   version = "1.0.5";
 
@@ -15,8 +15,8 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "dmbaturin";
-    repo = pname;
-    rev = version;
+    repo = "otoml";
+    rev = finalAttrs.version;
     sha256 = "sha256-e9Bqd6KHorglLMzvsjakyYt/CLZR3yI/yZPl/rnbkDE=";
   };
 
@@ -29,9 +29,9 @@ buildDunePackage rec {
 
   meta = {
     description = "TOML parsing and manipulation library for OCaml";
-    changelog = "https://github.com/dmbaturin/otoml/raw/${version}/CHANGELOG.md";
+    changelog = "https://github.com/dmbaturin/otoml/raw/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
   };
-}
+})
