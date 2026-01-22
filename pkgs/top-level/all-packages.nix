@@ -12179,8 +12179,6 @@ with pkgs;
   anki-utils = callPackage ../by-name/an/anki/addons/anki-utils.nix { };
   ankiAddons = recurseIntoAttrs (callPackage ../by-name/an/anki/addons { });
 
-  arx-libertatis = libsForQt5.callPackage ../games/arx-libertatis { };
-
   beancount-ing-diba = callPackage ../applications/office/beancount/beancount-ing-diba.nix {
     inherit (python3Packages) beancount beangulp;
   };

@@ -16,8 +16,7 @@
   optipng,
   imagemagick,
   withCrashReporter ? !stdenv.hostPlatform.isDarwin,
-  qtbase ? null,
-  wrapQtAppsHook ? null,
+  qt5,
   curl ? null,
   gdb ? null,
 }:
@@ -49,7 +48,7 @@ stdenv.mkDerivation rec {
     imagemagick
     optipng
   ]
-  ++ optionals withCrashReporter [ wrapQtAppsHook ];
+  ++ optionals withCrashReporter [ qt5.wrapQtAppsHook ];
 
   buildInputs = [
     zlib
@@ -62,7 +61,7 @@ stdenv.mkDerivation rec {
     libepoxy
   ]
   ++ optionals withCrashReporter [
-    qtbase
+    qt5.qtbase
     curl
   ]
   ++ optionals stdenv.hostPlatform.isLinux [ gdb ];
