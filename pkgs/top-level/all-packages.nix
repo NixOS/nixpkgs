@@ -162,7 +162,8 @@ with pkgs;
     You should not evaluate entire Nixpkgs without measures to handle failing packages.
   '';
 
-  tests = recurseIntoAttrs (callPackages ../test { });
+  # Tests should not appear in search results
+  tests = recurseIntoAttrsWith { search = false; } (callPackages ../test { });
 
   defaultPkgConfigPackages =
     # We don't want nix-env -q to enter this, because all of these are aliases.
