@@ -89,6 +89,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/ProtonVPN/proton-vpn-daemon";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ anthonyroussel ];
+    maintainers = with lib.maintainers; [
+      anthonyroussel
+      HeitorAugustoLN
+    ];
   };
 }
