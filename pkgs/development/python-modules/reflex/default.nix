@@ -55,7 +55,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "reflex-dev";
     repo = "reflex";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-pV7J+O7WaD7hzrjvqOFtrj8CKT+SX6KWHot/VxEMtZQ=";
   };
 
