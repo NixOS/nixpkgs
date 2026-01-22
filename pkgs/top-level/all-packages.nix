@@ -108,6 +108,54 @@ with pkgs;
   gccStdenvNoLibs = mkStdenvNoLibs gccStdenv;
   clangStdenvNoLibs = mkStdenvNoLibs clangStdenv;
 
+  /**
+    Recurse into an attribute set depending on which `config.recursionMode` is set.
+
+    This function only affects a single attribute set;
+    it does not apply itself recursively for nested attribute sets.
+
+    # Inputs
+    `modes`
+    : An attribute set containg keys from `config.recursionMode` defaulting to true.
+    `attrs`
+    : An attribute set to scan for derivations.
+
+    # Type
+    ```
+    recurseIntoAttrsWith :: AttrSet -> AttrSet -> AttrSet
+    ```
+
+    # Examples
+    :::{.example}
+    ## `pkgs.recurseIntoAttrsWith` usage example
+    ```nix
+    { pkgs ? import <nixpkgs> {} }:
+    {
+      myTools = pkgs.recurseIntoAttrsWith { } {
+        inherit (pkgs) hello figlet;
+      };
+    }
+    ```
+    :::
+  */
+  recurseIntoAttrsWith =
+    {
+      hydra ? true,
+      eval ? true,
+      search ? true,
+    }:
+    attrs:
+    attrs
+    // {
+      recurseForDerivations =
+        let
+          modes = {
+            inherit hydra eval search;
+          };
+        in
+        modes.${config.recursionMode};
+    };
+
   ### Evaluating the entire Nixpkgs naively will likely fail, make failure fast
   AAAAAASomeThingsFailToEvaluate = throw ''
     This pseudo-package is likely not the only part of Nixpkgs that fails to evaluate.
