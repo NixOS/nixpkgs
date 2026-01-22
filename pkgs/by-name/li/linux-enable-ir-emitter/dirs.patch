@@ -1,0 +1,48 @@
+diff --git a/meson.build b/meson.build
+index d265530..c125dca 100644
+--- a/meson.build
++++ b/meson.build
+@@ -46,8 +46,15 @@ endif
+ ############
+ # Variable #
+ ############
+-config_dir = get_option('sysconfdir') / meson.project_name()
+-log_dir = get_option('localstatedir') / 'log' / meson.project_name()
++config_dir = get_option('config_dir') / meson.project_name()
++log_dir = get_option('log_dir') / meson.project_name()
++cfg_data = configuration_data(
++    {
++        'version': meson.project_version(),
++        'configdir': config_dir,
++        'log_file': log_dir / meson.project_name() + '.log',
++    },
++)
+ 
+ #####################
+ # Executable + Test #
+@@ -57,8 +64,12 @@ subdir('src')
+ ################
+ # Config + Log #
+ ################
+-install_emptydir(config_dir)
+-install_emptydir(log_dir)
++if get_option('create_config_dir')
++    install_emptydir(config_dir)
++endif
++if get_option('create_log_dir')
++    install_emptydir(log_dir)
++endif
+ 
+ ####################
+ # Shell completion #
+diff --git a/meson_options.txt b/meson_options.txt
+index 8a4d3f3..f836087 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -1,2 +1,6 @@
+ option('boot_service', type : 'combo', choices : ['systemd', 'openrc'], value : 'systemd')
+ option('tests', type : 'boolean', value : false)
++option('config_dir', type : 'string', value : '/var/lib')
++option('log_dir', type : 'string', value : '/var/log')
++option('create_config_dir', type : 'boolean', value : true)
++option('create_log_dir', type : 'boolean', value : true)
