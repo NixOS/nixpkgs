@@ -87,7 +87,6 @@ with lib;
               echo "metadata unavailable, trying again in 1s..."
               sleep 1
             done
-            chmod 600 $RUNTIME_DIRECTORY/v1.json
           '';
           environment = {
             DO_DELAY_ATTEMPTS_MAX = "10";
@@ -97,6 +96,7 @@ with lib;
             RemainAfterExit = true;
             RuntimeDirectory = "do-metadata";
             RuntimeDirectoryPreserve = "yes";
+            UMask = "177";
           };
           unitConfig = {
             ConditionPathExists = "!${doMetadataFile}";
