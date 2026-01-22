@@ -2,7 +2,8 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
+  hatchling,
+  uv-dynamic-versioning,
   pytestCheckHook,
   sortedcontainers,
 }:
@@ -17,7 +18,10 @@ buildPythonPackage rec {
     sha256 = "sha256-8/fouut911ufem0zzz7BACWYSo5m4wFtU35SEwxzz+I=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    hatchling
+    uv-dynamic-versioning
+  ];
 
   dependencies = [ sortedcontainers ];
 
