@@ -35,7 +35,7 @@ let
       };
 in
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "ppx_deriving_yojson";
   inherit (param) version;
 
@@ -47,7 +47,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "ocaml-ppx";
     repo = "ppx_deriving_yojson";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     inherit (param) sha256;
   };
 
@@ -63,8 +63,8 @@ buildDunePackage rec {
 
   meta = {
     description = "Yojson codec generator for OCaml >= 4.04";
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
   };
-}
+})
