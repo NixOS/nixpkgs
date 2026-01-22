@@ -5,6 +5,7 @@
   btrfs-progs,
   buildGoModule,
   fetchFromGitHub,
+  fetchpatch2,
   go-md2man,
   kubernetes,
   nix-update-script,
@@ -30,6 +31,22 @@ buildGoModule rec {
     tag = "v${version}";
     hash = "sha256-fDOfN0XESrBTDW7Nxj9niqU93BQ5/JaGLwAR3u6Xaik=";
   };
+
+  patches = [
+    # fix(oci): handle absolute symlinks in rootfs user lookup
+    # https://github.com/containerd/containerd/pull/12732
+    (fetchpatch2 {
+      # PR #12732 commit 85b5418… (the actual fix)
+      url = "https://github.com/containerd/containerd/commit/85b5418ef5a6adeac95c910bf8c33ae0fb7bbecb.patch";
+      hash = "sha256-M6kxUbf8JECta8pfFlvZ7F51ZS4aK9IEkwy7kbfdHM0=";
+    })
+
+    (fetchpatch2 {
+      # PR #12732 commit 9bbb130… (tests / coverage)
+      url = "https://github.com/containerd/containerd/commit/9bbb1309f051e54b51484fa0efbfe93e26223a2d.patch";
+      hash = "sha256-QK+WGJRjJxro26MF04yGYcfAtNvoAZqAUYg8UzEOVqM=";
+    })
+  ];
 
   postPatch = ''
     patchShebangs .
