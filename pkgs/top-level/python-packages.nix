@@ -15551,6 +15551,8 @@ self: super: with self; {
 
   python-prctl = callPackage ../development/python-modules/python-prctl { };
 
+  python-pskc = callPackage ../development/python-modules/python-pskc { };
+
   python-ptrace = callPackage ../development/python-modules/python-ptrace { };
 
   python-rabbitair = callPackage ../development/python-modules/python-rabbitair { };
