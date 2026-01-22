@@ -10960,8 +10960,7 @@ self: super: with self; {
 
   nominal-api-protos = callPackage ../development/python-modules/nominal-api-protos { };
 
-  # python bindings for nominal-streaming (rust package)
-  nominal-streaming-py = callPackage ../development/python-modules/nominal-streaming { };
+  nominal-streaming = callPackage ../development/python-modules/nominal-streaming { };
 
   nominatim-api = callPackage ../by-name/no/nominatim/nominatim-api.nix { };
 

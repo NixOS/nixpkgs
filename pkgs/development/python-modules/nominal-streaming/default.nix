@@ -61,14 +61,15 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  # propagatedBuildInputs = [ nominal-streaming ];
-
   pythonImportsCheck = [ "nominal_streaming" ];
 
   meta = {
     description = "Generated conjure client for the Nominal API";
     homepage = "https://pypi.org/project/nominal-streaming/";
-    maintainers = with lib.maintainers; [ alkasm ];
+    maintainers = with lib.maintainers; [
+      alkasm
+      watwea
+    ];
     license = lib.licenses.unfree;
   };
 }
