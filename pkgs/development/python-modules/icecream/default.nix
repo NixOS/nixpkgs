@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
 
   # build-system
   setuptools,
@@ -21,19 +21,16 @@ buildPythonPackage rec {
   version = "2.1.10";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-FZABJrp9vh+DgZWDy+X/eaKUMiRgCHjYkwfkYzsy5Sg=";
+  src = fetchFromGitHub {
+    owner = "gruns";
+    repo = "icecream";
+    tag = "v${version}";
+    hash = "sha256-5PFl+DIsWGbh2VR+xW/L9fYBF0VCo1B10b+mzsq85As=";
   };
 
-  postPatch = ''
-    substituteInPlace tests/test_icecream.py \
-      --replace assertRegexpMatches assertRegex
-  '';
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [ setuptools ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     asttokens
     colorama
     executing
@@ -41,13 +38,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-
-  disabledTests = [
-    # icecream.icecream.NoSourceAvailableError
-    "testSingledispatchArgumentToString"
-    # AssertionError: assert [[('REPL (e.g...ion?', None)]] == [[('a', '1')], [('c', '3')]]
-    "testEnableDisable"
-  ];
 
   meta = {
     description = "Little library for sweet and creamy print debugging";
