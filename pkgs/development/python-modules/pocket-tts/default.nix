@@ -29,14 +29,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pocket-tts";
-  version = "1.0.2";
+  version = "1.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kyutai-labs";
     repo = "pocket-tts";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-m//UCZEENE5bl9TV0rDCA3Th1TykvC5oZLay+f7lEr8=";
+    hash = "sha256-zGZySn8nXCjwfcXYglJIrS/u1cqiJrErx1wQkC7H93k=";
   };
 
   build-system = [

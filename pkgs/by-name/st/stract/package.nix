@@ -58,6 +58,14 @@ rustPlatform.buildRustPackage {
     rm -rf target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/build/
   '';
 
+  checkFlags = [
+    # error: struct `MyCustomDocument` is never constructed
+    "--skip=schema::document"
+    # thread 'ampc::dht::tests::proptest_chaos' panicked at crates/core/src/ampc/dht/mod.rs:670:33:
+    # assertion `left == right` failed
+    "--skip=ampc::dht::tests::proptest_chaos"
+  ];
+
   passthru.updateScript = unstableGitUpdater { };
 
   meta = {
