@@ -2,8 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  gcc-arm-embedded,
-  binutils-arm-embedded,
+  pkgsCross,
   makeWrapper,
   python3Packages,
 
@@ -26,8 +25,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    gcc-arm-embedded
-    binutils-arm-embedded
+    pkgsCross.arm-embedded.buildPackages.gcc
+    pkgsCross.arm-embedded.buildPackages.binutils
     makeWrapper
   ];
 
