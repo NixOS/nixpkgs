@@ -7,6 +7,7 @@
   numpy,
   pytestCheckHook,
   setuptools,
+  setuptools-scm,
   typing-extensions,
 }:
 
@@ -22,9 +23,12 @@ buildPythonPackage rec {
     hash = "sha256-7UjUkZPGsrtdQhgisI5IA37WvgGGiEXsey9NhATy064=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [ typing-extensions ];
+  dependencies = [ typing-extensions ];
 
   # Tests fail due to numeric precision differences on ARM
   # See https://github.com/SethMMorton/fastnumbers/issues/28
