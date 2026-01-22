@@ -12430,7 +12430,7 @@ with pkgs;
   tower-pixel-dungeon = callPackage ../by-name/sh/shattered-pixel-dungeon/tower-pixel-dungeon { };
 
   # get binaries without data built by Hydra
-  simutrans_binaries = lowPrio simutrans.binaries;
+  simutrans-bin = lowPrio simutrans.bin;
 
   steam-run = steam.run;
   steam-run-free = steam.run-free;
