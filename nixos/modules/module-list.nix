@@ -1332,6 +1332,7 @@
   ./services/networking/pptpd.nix
   ./services/networking/privoxy.nix
   ./services/networking/prosody.nix
+  ./services/networking/proton-vpn-daemon.nix
   ./services/networking/pyload.nix
   ./services/networking/quassel.nix
   ./services/networking/quicktun.nix
