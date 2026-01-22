@@ -111,6 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     mainProgram = "tmux";
     maintainers = with lib.maintainers; [
+      ethancedwards8
       fpletz
     ];
   };
