@@ -3338,6 +3338,8 @@ self: super: with self; {
 
   cucumber-tag-expressions = callPackage ../development/python-modules/cucumber-tag-expressions { };
 
+  cuda-bindings = callPackage ../development/python-modules/cuda-bindings { };
+
   cupy = callPackage ../development/python-modules/cupy {
     cudaPackages =
       # CuDNN 9 is not supported:
