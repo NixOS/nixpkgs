@@ -19,9 +19,15 @@ in
       package = lib.mkPackageOption pkgs "llama-cpp" { };
 
       model = lib.mkOption {
-        type = lib.types.path;
+        type = lib.types.nullOr lib.types.path;
         example = "/models/mistral-instruct-7b/ggml-model-q4_0.gguf";
         description = "Model path.";
+      };
+
+      modelsDir = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
+        example = "/models/";
+        description = "Models directory.";
       };
 
       extraFlags = lib.mkOption {
@@ -61,6 +67,13 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    # Enforce that either model or modelDir is set
+    assertions = [
+      {
+        assertion = cfg.model != null || cfg.modelsDir != null;
+        message = "services.llama-cpp: Either 'model' or 'modelDir' must be set.";
+      }
+    ];
 
     systemd.services.llama-cpp = {
       description = "LLaMA C++ server";
@@ -70,7 +83,15 @@ in
       serviceConfig = {
         Type = "idle";
         KillSignal = "SIGINT";
-        ExecStart = "${cfg.package}/bin/llama-server --log-disable --host ${cfg.host} --port ${toString cfg.port} -m ${cfg.model} ${utils.escapeSystemdExecArgs cfg.extraFlags}";
+        ExecStart = let
+          args = [
+            "--host" cfg.host
+            "--port" (toString cfg.port)
+          ]
+          ++ lib.optionals (cfg.model != null) [ "-m" cfg.model ]
+          ++ lib.optionals (cfg.modelsDir != null) [ "--models-dir" cfg.modelsDir ]
+          ++ cfg.extraFlags;
+        in "${cfg.package}/bin/llama-server ${utils.escapeSystemdExecArgs args}";
         Restart = "on-failure";
         RestartSec = 300;
 
