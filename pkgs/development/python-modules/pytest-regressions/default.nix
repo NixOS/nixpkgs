@@ -61,7 +61,15 @@ buildPythonPackage rec {
     "-Wignore::DeprecationWarning"
   ];
 
-  disabledTests = lib.optionals (stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isBigEndian) [
+  disabledTests = [
+    # https://github.com/ESSS/pytest-regressions/issues/225
+    "test_categorical"
+    "test_dataframe_with"
+    "test_different_data_types"
+    "test_nonrange_index"
+    "test_string_array"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isBigEndian) [
     # https://github.com/ESSS/pytest-regressions/issues/156
     # i686-linux not listed in the report, but seems to have this issue as well
     "test_different_data_types"
