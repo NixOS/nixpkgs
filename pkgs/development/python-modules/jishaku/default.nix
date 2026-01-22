@@ -13,7 +13,7 @@
   pytest-asyncio,
   typing-extensions,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jishaku";
   version = "2.6.3";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Gorialis";
     repo = "jishaku";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-8kSdzrut7LYjglpHc5dToOIQTrPsW4lVAeIWY4rzdmU=";
   };
 
@@ -55,9 +55,9 @@ buildPythonPackage rec {
   meta = {
     description = "Debugging and testing cog for discord.py bots";
     homepage = "https://jishaku.readthedocs.io/en/latest";
-    changelog = "https://github.com/Gorialis/jishaku/releases/tag/${src.tag}";
+    changelog = "https://github.com/Gorialis/jishaku/releases/tag/${finalAttrs.src.tag}";
     maintainers = [ ];
     mainProgram = "jishaku";
     license = lib.licenses.mit;
   };
-}
+})
