@@ -169,7 +169,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "AI coding agent built for the terminal";
     homepage = "https://github.com/anomalyco/opencode";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ delafthi ];
+    maintainers = with lib.maintainers; [
+      delafthi
+      graham33
+    ];
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     platforms = [
       "aarch64-linux"
