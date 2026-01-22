@@ -37,7 +37,10 @@ buildPythonPackage rec {
   meta = {
     description = "Generated protobuf client for the Nominal API";
     homepage = "https://pypi.org/project/nominal-api-protos/";
-    maintainers = with lib.maintainers; [ alkasm ];
+    maintainers = with lib.maintainers; [
+      alkasm
+      watwea
+    ];
     license = lib.licenses.unfree;
   };
 }

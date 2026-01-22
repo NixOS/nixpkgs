@@ -33,7 +33,10 @@ buildPythonPackage rec {
   meta = {
     description = "Generated conjure client for the Nominal API";
     homepage = "https://pypi.org/project/nominal-api/";
-    maintainers = with lib.maintainers; [ alkasm ];
+    maintainers = with lib.maintainers; [
+      alkasm
+      watwea
+    ];
     license = lib.licenses.unfree;
   };
 }

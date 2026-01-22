@@ -5,7 +5,7 @@
   hatchling,
   requests,
   nominal-api,
-  nominal-streaming-py,
+  nominal-streaming,
   nominal-api-protos,
   python-dateutil,
   conjure-python-client,
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     requests
     conjure-python-client
     nominal-api
-    nominal-streaming-py
+    nominal-streaming
     python-dateutil
     pandas
     typing-extensions
@@ -98,6 +98,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/nominal-io/nominal-client";
     changelog = "https://github.com/nominal-io/nominal-client/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ alkasm ];
+    maintainers = with lib.maintainers; [
+      alkasm
+      watwea
+    ];
   };
 }
