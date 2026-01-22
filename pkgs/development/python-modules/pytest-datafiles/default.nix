@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  py,
+  hatchling,
   pytest,
   pytestCheckHook,
 }:
@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "pytest-datafiles";
   version = "3.0.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "omarkohl";
@@ -19,10 +19,9 @@ buildPythonPackage rec {
     hash = "sha256-xB96JAUlEicIrTET1L363H8O2JwCTuUWr9jX/70uFvs=";
   };
 
-  buildInputs = [
-    py
-    pytest
-  ];
+  build-system = [ hatchling ];
+
+  buildInputs = [ pytest ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
