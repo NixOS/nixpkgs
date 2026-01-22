@@ -69,6 +69,13 @@ stdenv.mkDerivation {
     "CFLAGS=-std=gnu17"
   ];
 
+  outputs = [
+    "out"
+    "dev"
+    "info"
+    "man"
+  ];
+
   enableParallelBuilding = true;
 
   # Provide libgpm.so for compatibility
