@@ -45,6 +45,7 @@ in
     meta = {
       maintainers = mkOption {
         type = listOfMaintainers;
+        internal = true;
         default = [ ];
         example = lib.literalExpression ''[ lib.maintainers.alice lib.maintainers.bob ]'';
         description = ''
