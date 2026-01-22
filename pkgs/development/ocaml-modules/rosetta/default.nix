@@ -7,12 +7,12 @@
   uuuu,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "rosetta";
   version = "0.3.0";
 
   src = fetchzip {
-    url = "https://github.com/mirage/rosetta/releases/download/v${version}/rosetta-v${version}.tbz";
+    url = "https://github.com/mirage/rosetta/releases/download/v${finalAttrs.version}/rosetta-v${finalAttrs.version}.tbz";
     sha256 = "1gzp3fbk8qd207cm25dgj9kj7b44ldqpjs63pl6xqvi9hx60m3ij";
   };
 
@@ -32,4 +32,4 @@ buildDunePackage rec {
     homepage = "https://github.com/mirage/rosetta";
     maintainers = [ ];
   };
-}
+})
