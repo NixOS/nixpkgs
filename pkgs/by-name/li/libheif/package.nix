@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   pkg-config,
   dav1d,
@@ -22,7 +23,7 @@
   vips,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libheif";
   version = "1.20.2";
 
@@ -37,9 +38,18 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "strukturag";
     repo = "libheif";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-PVfdX3/Oe3DXpYU5WMnCSi2p9X4fPszq2X3uuyh8RVU=";
   };
+
+  patches = [
+    # CVE-2025-68431 (https://github.com/strukturag/libheif/security/advisories/GHSA-j87x-4gmq-cqfq)
+    (fetchpatch {
+      name = "001-fix-wrong-copy-width-in-overlay-images.patch";
+      url = "https://github.com/strukturag/libheif/commit/b8c12a7b70f46c9516711a988483bed377b78d46.patch";
+      hash = "sha256-PzGfcbdWAPdfExbSrPQwpk4v++TcNCXOhtwhgLGM13c=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -90,4 +100,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ kuflierl ];
   };
-}
+})
