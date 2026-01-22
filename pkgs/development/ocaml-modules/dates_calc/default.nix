@@ -6,7 +6,7 @@
   qcheck,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "dates_calc";
   version = "0.0.6";
 
@@ -16,7 +16,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "catalalang";
     repo = "dates-calc";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-B4li8vIK6AnPXJ1QSJ8rtr+JOcy4+h5sc1SH97U+Vgw=";
   };
 
@@ -34,4 +34,4 @@ buildDunePackage rec {
     maintainers = [ lib.maintainers.niols ];
     homepage = "https://github.com/catalalang/dates-calc";
   };
-}
+})
