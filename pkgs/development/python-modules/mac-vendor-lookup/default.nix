@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   aiofiles,
   aiohttp,
 }:
@@ -22,7 +23,9 @@ buildPythonPackage (finalAttrs: {
     sed -i '/mac-vendors.txt/d' setup.py
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiofiles
     aiohttp
   ];
