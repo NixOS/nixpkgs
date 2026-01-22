@@ -31,6 +31,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/BYVoid/OpenCC/commit/72cae18cfe4272f2b11c9ec1c44d6af7907abcab.patch";
       hash = "sha256-Cd95AsW/tLk2l8skxqfEfQUm0t23G4ocoirauwMbuwk=";
     })
+    (fetchpatch {
+      name = "CVE-2025-15536.patch";
+      url = "https://github.com/BYVoid/OpenCC/commit/345c9a50ab07018f1b4439776bad78a0d40778ec.patch";
+      hash = "sha256-lwzVRcCkMjHniaOQeoicO9fpEhyku2yhiPREk0WoXVM=";
+    })
   ];
 
   nativeBuildInputs = [
