@@ -9168,8 +9168,6 @@ with pkgs;
   docbook_xsl = docbook-xsl-nons;
   docbook_xsl_ns = docbook-xsl-ns;
 
-  documentation-highlighter = callPackage ../misc/documentation-highlighter { };
-
   moeli = eduli;
 
   font-awesome_4 = (callPackage ../data/fonts/font-awesome { }).v4;
