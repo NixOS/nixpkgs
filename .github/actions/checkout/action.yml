@@ -122,7 +122,7 @@ runs:
 
             console.log('Applying untrusted ci/pinned.json bump to ./nixpkgs/untrusted')
             try {
-              await run('git', '-C', join('nixpkgs', 'untrusted'), 'apply', '--3way', '../../pin-bump.patch')
+              await run('git', '-C', join('nixpkgs', 'untrusted'), 'apply', '--3way', join('..', '..', 'pin-bump.patch'))
             } catch {
               core.setFailed([
                 `Failed to apply ci/pinned.json bump commit ${pin_bump_sha}.`,
