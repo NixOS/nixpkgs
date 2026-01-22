@@ -9,13 +9,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "dnscontrol";
-  version = "4.31.0";
+  version = "4.31.1";
 
   src = fetchFromGitHub {
     owner = "StackExchange";
     repo = "dnscontrol";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8Pb/njUjiyUQZA3UnZ+4INJBnmXCo+F7+BhCDt1hJGQ=";
+    hash = "sha256-c0jQF6XGg0jTMqBbTwRA/ZfD/qocCHILoSujeqJ+lp4=";
   };
 
   vendorHash = "sha256-GMzLaV3LQNa4K111P6DLG28KAAgj9AHyPua4XSih14k=";

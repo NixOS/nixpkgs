@@ -9888,14 +9888,15 @@ with pkgs;
     pretendard-std
     ;
 
-  sourceHanPackages = dontRecurseIntoAttrs (callPackage ../data/fonts/source-han { });
-  source-han-sans = sourceHanPackages.sans;
-  source-han-serif = sourceHanPackages.serif;
-  source-han-mono = sourceHanPackages.mono;
-  source-han-sans-vf-otf = sourceHanPackages.sans-vf-otf;
-  source-han-sans-vf-ttf = sourceHanPackages.sans-vf-ttf;
-  source-han-serif-vf-otf = sourceHanPackages.serif-vf-otf;
-  source-han-serif-vf-ttf = sourceHanPackages.serif-vf-ttf;
+  inherit (callPackage ../data/fonts/source-han { })
+    source-han-sans
+    source-han-serif
+    source-han-mono
+    source-han-sans-vf-otf
+    source-han-sans-vf-ttf
+    source-han-serif-vf-otf
+    source-han-serif-vf-ttf
+    ;
 
   themes = name: callPackage (../data/misc/themes + ("/" + name + ".nix")) { };
 

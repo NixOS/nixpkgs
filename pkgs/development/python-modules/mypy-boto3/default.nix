@@ -147,8 +147,8 @@ in
       "sha256-jW+LgaUpdeCSJLnpNE13DSio9nFmp0icoLEMwxX44KU=";
 
   mypy-boto3-autoscaling =
-    buildMypyBoto3Package "autoscaling" "1.42.3"
-      "sha256-WUD99NFy2KrOG5M1kP8J1B9tRDNZcvOu6J8zw534r6k=";
+    buildMypyBoto3Package "autoscaling" "1.42.31"
+      "sha256-0EfPmOIE5w8S2XNGvZePztWAyDJ7tTdkXPBbFyEo+KQ=";
 
   mypy-boto3-autoscaling-plans =
     buildMypyBoto3Package "autoscaling-plans" "1.42.3"
@@ -722,8 +722,8 @@ in
       "sha256-rIkIFitznxD9ytbq4cdAbiPTJFZRwZywQ50HVo7D+VU=";
 
   mypy-boto3-keyspaces =
-    buildMypyBoto3Package "keyspaces" "1.42.3"
-      "sha256-gDJBAmI5yeGgILOhLwSc7tk3rgKxeE575ZcrY+lptPA=";
+    buildMypyBoto3Package "keyspaces" "1.42.31"
+      "sha256-isLoakoBigys+KBGRoFryEqtKT2g+Wv2D/+ttlxOlfk=";
 
   mypy-boto3-kinesis =
     buildMypyBoto3Package "kinesis" "1.42.3"
@@ -1374,8 +1374,8 @@ in
       "sha256-olIHhtYBAz8+avIUNnLoD2pdMq+TLrB8Mn+haKeUl/0=";
 
   mypy-boto3-verifiedpermissions =
-    buildMypyBoto3Package "verifiedpermissions" "1.42.3"
-      "sha256-2fA+3Ddfeetmh2vBpnIAWO7ILfTLBTxZtjJ18Yn+mHA=";
+    buildMypyBoto3Package "verifiedpermissions" "1.42.31"
+      "sha256-YIAxvp/geIyDsfhdEqc2UtIjFp12y6Tjq7SjmzpESfk=";
 
   mypy-boto3-voice-id =
     buildMypyBoto3Package "voice-id" "1.42.3"
