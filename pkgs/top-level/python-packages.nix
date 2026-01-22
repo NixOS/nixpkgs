@@ -6,7 +6,13 @@
 #
 # For more details, please see the Python section in the Nixpkgs manual.
 
-self: super: with self; {
+self: super:
+with self;
+
+# Import packages from by-name structure
+(import ./by-name-overlay.nix ../development/python-modules/by-name self super)
+
+// {
 
   bootstrap = lib.recurseIntoAttrs {
     flit-core = toPythonModule (callPackage ../development/python-modules/bootstrap/flit-core { });
@@ -2324,8 +2330,6 @@ self: super: with self; {
   buienradar = callPackage ../development/python-modules/buienradar { };
 
   build = callPackage ../development/python-modules/build { };
-
-  buildcatrust = callPackage ../development/python-modules/buildcatrust { };
 
   buildstream-plugins = callPackage ../development/python-modules/buildstream-plugins { };
 
@@ -16463,8 +16467,6 @@ self: super: with self; {
   restructuredtext-lint = callPackage ../development/python-modules/restructuredtext-lint { };
 
   restview = callPackage ../development/python-modules/restview { };
-
-  result = callPackage ../development/python-modules/result { };
 
   resvg-py = callPackage ../development/python-modules/resvg-py { };
 
