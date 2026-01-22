@@ -2,25 +2,25 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  poetry-core,
   pytestCheckHook,
   pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "hightime";
-  version = "0.2.2";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ni";
     repo = "hightime";
     rev = "v${version}";
-    hash = "sha256-P/ZP5smKyNg18YGYWpm/57YGFY3MrX1UIVDU5RsF+rA=";
+    hash = "sha256-5WEr2tOxQap+otV8DCdIi3MkfHol4TU4qZXf4u2EQhY=";
   };
 
   build-system = [
-    setuptools
+    poetry-core
   ];
 
   nativeCheckInputs = [
