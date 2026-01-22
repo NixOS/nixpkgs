@@ -47,6 +47,6 @@ buildPythonPackage rec {
     description = "Mypyc runtime library";
     homepage = "https://github.com/mypyc/librt";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }
