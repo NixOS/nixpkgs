@@ -9,7 +9,6 @@
   xcbuild,
   python3,
   ninja,
-  darwinMinVersionHook,
   git,
   cpio,
   pkg-config,
@@ -29,6 +28,17 @@
   libxslt,
   minizip,
   ffmpeg_6,
+  libepoxy,
+  libgbm,
+  libGL,
+  libxcomposite,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxrandr,
+  libxtst,
+  pipewire,
+  xorg,
 }:
 let
   platformMap = {
@@ -69,7 +79,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "livekit-libwebrtc";
-  version = "125-unstable-2025-07-25";
+  version = "137-unstable-2025-11-24";
 
   gclientDeps = gclient2nix.importGclientDeps ./sources.json;
   sourceRoot = "src";
@@ -77,29 +87,37 @@ stdenv.mkDerivation {
   patches = [
     # Adds missing dependencies to generated LICENSE
     (fetchpatch {
-      url = "https://raw.githubusercontent.com/livekit/rust-sdks/b41861c7b71762d5d85b3de07ae67ffcae7c3fa2/webrtc-sys/libwebrtc/patches/add_licenses.patch";
+      url = "https://raw.githubusercontent.com/livekit/rust-sdks/a4343fe9d88fcc96f8e88959c90d509abbd0307b/webrtc-sys/libwebrtc/patches/add_licenses.patch";
       hash = "sha256-9A4KyRW1K3eoQxsTbPX0vOnj66TCs2Fxjpsu5wO8mGI=";
     })
     # Fixes the certificate chain, required for Let's Encrypt certs
     (fetchpatch {
-      url = "https://raw.githubusercontent.com/livekit/rust-sdks/b41861c7b71762d5d85b3de07ae67ffcae7c3fa2/webrtc-sys/libwebrtc/patches/ssl_verify_callback_with_native_handle.patch";
-      hash = "sha256-/gneuCac4VGJCWCjJZlgLKFOTV+x7Lc5KVFnNIKenwM=";
+      url = "https://raw.githubusercontent.com/livekit/rust-sdks/a4343fe9d88fcc96f8e88959c90d509abbd0307b/webrtc-sys/libwebrtc/patches/ssl_verify_callback_with_native_handle.patch";
+      hash = "sha256-RBvRcJzoKItpEbqpe07YZe1D1ZVGS12EnDSISldGy+0=";
     })
     # Adds dependencies and features required by livekit
     (fetchpatch {
-      url = "https://raw.githubusercontent.com/livekit/rust-sdks/b41861c7b71762d5d85b3de07ae67ffcae7c3fa2/webrtc-sys/libwebrtc/patches/add_deps.patch";
-      hash = "sha256-EMNYcTcBYh51Tt96+HP43ND11qGKClfx3xIPQmIBSo0=";
+      url = "https://raw.githubusercontent.com/livekit/rust-sdks/a4343fe9d88fcc96f8e88959c90d509abbd0307b/webrtc-sys/libwebrtc/patches/add_deps.patch";
+      hash = "sha256-DwRtGdU5sppmiFsVuyhJoVCQrRl5JFmZJfxgUPhYXBg=";
     })
-    # Fixes "error: no matching member function for call to 'emplace'"
+    # Fix gcc-related errors
     (fetchpatch {
-      url = "https://raw.githubusercontent.com/zed-industries/livekit-rust-sdks/5f04705ac3f356350ae31534ffbc476abc9ea83d/webrtc-sys/libwebrtc/patches/abseil_use_optional.patch";
-      hash = "sha256-FOwlwOqgv5IEBCMogPACbXXxdNhGzpYcVfsolcwA7qU=";
-
-      extraPrefix = "third_party/";
+      url = "https://raw.githubusercontent.com/livekit/rust-sdks/a4343fe9d88fcc96f8e88959c90d509abbd0307b/webrtc-sys/libwebrtc/patches/force_gcc.patch";
+      hash = "sha256-1d73Pi1HkbunjYvp1NskUNE4xXbCmnh++rC6NrCJHbY=";
       stripLen = 1;
+      extraPrefix = "build/";
+    })
+    # fix a gcc-related dav1d compile option
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/livekit/rust-sdks/a4343fe9d88fcc96f8e88959c90d509abbd0307b/webrtc-sys/libwebrtc/patches/david_disable_gun_source_macro.patch";
+      hash = "sha256-RCZpeeSQHaxkL3dY2oFFXDjYeU0KHw7idQFONGge8+0=";
+      stripLen = 1;
+      extraPrefix = "third_party/";
     })
     # Required for dynamically linking to ffmpeg libraries and exposing symbols
     ./0001-shared-libraries.patch
+    # Borrow a patch from chromium to prevent a build failure due to missing libclang libraries
+    ./chromium-129-rust.patch
   ];
 
   postPatch = ''
@@ -131,13 +149,23 @@ stdenv.mkDerivation {
           -delete
       fi
     done
+
+    # Trick the update_rust.py script into thinking we have *this specfic* rust available.
+    # It isn't actually needed for the libwebrtc build, but GN will fail if it isn't there.
+    mkdir -p third_party/rust-toolchain
+    (python3 tools/rust/update_rust.py --print-package-version || true) \
+      | head -n 1 \
+      | sed 's/.* expected Rust version is \([^ ]*\) .*/rustc 1.0 1234 (\1 chromium)/' \
+      > third_party/rust-toolchain/VERSION
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
+    mkdir -p buildtools/linux64
     ln -sf ${lib.getExe gn} buildtools/linux64/gn
     substituteInPlace build/toolchain/linux/BUILD.gn \
       --replace 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p buildtools/mac
     ln -sf ${lib.getExe gn} buildtools/mac/gn
     chmod +x build/toolchain/apple/linker_driver.py
     patchShebangs build/toolchain/apple/linker_driver.py
@@ -174,6 +202,18 @@ stdenv.mkDerivation {
     glib
     alsa-lib
     pulseaudio
+    libepoxy
+    libgbm
+    libGL
+    libxcomposite
+    libxdamage
+    libxext
+    libxfixes
+    libxrandr
+    libxtst
+    pipewire
+    xorg.libX11
+    xorg.libXi
   ]);
 
   preConfigure = ''
@@ -200,16 +240,19 @@ stdenv.mkDerivation {
     "is_component_build=true"
     "enable_stripping=true"
     "rtc_use_h264=true"
+    "rtc_use_h265=true"
     "use_custom_libcxx=false"
     "use_rtti=true"
   ]
   ++ (lib.optionals stdenv.hostPlatform.isLinux [
-    "use_goma=false"
-    "rtc_use_pipewire=false"
+    "rtc_use_pipewire=true"
     "symbol_level=0"
     "enable_iterator_debugging=false"
-    "rtc_use_x11=false"
+    "rtc_use_x11=true"
     "use_sysroot=false"
+    "use_custom_libcxx_for_host=false"
+    "use_libcxx_modules=false"
+    "use_llvm_libatomic=false"
     "is_clang=false"
   ])
   ++ (lib.optionals stdenv.hostPlatform.isDarwin [
@@ -233,6 +276,7 @@ stdenv.mkDerivation {
     "pc:peer_connection"
     "sdk:videocapture_objc"
     "sdk:mac_framework_objc"
+    "desktop_capture_objc"
   ];
 
   postBuild =
@@ -251,10 +295,11 @@ stdenv.mkDerivation {
     mkdir -p $out/lib
     mkdir -p $dev/include
 
-    install -m0644 obj/webrtc.ninja args.gn LICENSE.md $dev
+    install -m0644 obj/webrtc.ninja obj/modules/desktop_capture/desktop_capture.ninja args.gn LICENSE.md $dev
 
     pushd ../..
     find . -name "*.h" -print | cpio -pd $dev/include
+    find . -name "*.inc" -print | cpio -pd $dev/include
     popd
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
