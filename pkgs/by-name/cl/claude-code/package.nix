@@ -5,54 +5,61 @@
 {
   lib,
   stdenv,
-  buildNpmPackage,
-  fetchzip,
+  fetchurl,
+  makeWrapper,
+  autoPatchelfHook,
   versionCheckHook,
   writableTmpDirAsHomeHook,
-  bubblewrap,
+  cctools,
+  darwin,
+  rcodesign,
   procps,
+  bubblewrap,
   socat,
 }:
-buildNpmPackage (finalAttrs: {
+let
+  baseUrl = "https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases";
+  manifest = lib.importJSON ./manifest.json;
+  platformKey = "${stdenv.hostPlatform.node.platform}-${stdenv.hostPlatform.node.arch}";
+  platformManifestEntry = manifest.platforms.${platformKey};
+in
+stdenv.mkDerivation {
   pname = "claude-code";
-  version = "2.1.15";
+  inherit (manifest) version;
 
-  src = fetchzip {
-    url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-${finalAttrs.version}.tgz";
-    hash = "sha256-3zhjeAwKj1fMLuriX1qpVA8zaCk1oekJ1UmeEdDx4Xg=";
+  src = fetchurl {
+    url = "${baseUrl}/${manifest.version}/${platformKey}/claude";
+    sha256 = platformManifestEntry.checksum;
   };
 
-  npmDepsHash = "sha256-K5re0co3Tkz5peXHe/UUlsqAWq4YzSULdY9+xncfL5A=";
+  dontUnpack = true;
+  dontStrip = true;
 
-  strictDeps = true;
+  nativeBuildInputs = [
+    makeWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools
+    rcodesign
+  ];
 
-  postPatch = ''
-    cp ${./package-lock.json} package-lock.json
+  installPhase = ''
+    runHook preInstall
 
-    # Replace hardcoded `/bin/bash` with `/usr/bin/env bash` for Nix compatibility
-    # https://github.com/anthropics/claude-code/issues/15195
-    substituteInPlace cli.js \
-      --replace-warn '#!/bin/bash' '#!/usr/bin/env bash'
+    install -Dm755 $src $out/bin/claude
+
+    runHook postInstall
   '';
 
-  dontNpmBuild = true;
-
-  env.AUTHORIZED = "1";
-
-  # `claude-code` tries to auto-update by default, this disables that functionality.
-  # https://docs.anthropic.com/en/docs/agents-and-tools/claude-code/overview#environment-variables
-  # The DEV=true env var causes claude to crash with `TypeError: window.WebSocket is not a constructor`
   postInstall = ''
     wrapProgram $out/bin/claude \
       --set DISABLE_AUTOUPDATER 1 \
-      --unset DEV \
       --prefix PATH : ${
         lib.makeBinPath (
-          [
-            # claude-code uses [node-tree-kill](https://github.com/pkrumins/node-tree-kill) which requires procps's pgrep(darwin) or ps(linux)
-            procps
-          ]
-          # the following packages are required for the sandbox to work (Linux only)
+          # claude-code uses [node-tree-kill](https://github.com/pkrumins/node-tree-kill) which requires procps's pgrep(darwin) or ps(linux)
+          [ procps ]
+          # the following packages are required for /sandbox command to work (Linux only)
           ++ lib.optionals stdenv.hostPlatform.isLinux [
             bubblewrap
             socat
@@ -61,20 +68,36 @@ buildNpmPackage (finalAttrs: {
       }
   '';
 
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    ${lib.getExe' cctools "${cctools.targetPrefix}install_name_tool"} $out/bin/.claude-wrapped \
+      -change /usr/lib/libicucore.A.dylib ${lib.getLib darwin.ICU}/lib/libicucore.A.dylib
+    ${lib.getExe rcodesign} sign --code-signature-flags linker-signed $out/bin/.claude-wrapped
+  '';
+
   doInstallCheck = true;
   nativeInstallCheckInputs = [
     writableTmpDirAsHomeHook
     versionCheckHook
   ];
   versionCheckKeepEnvironment = [ "HOME" ];
+  versionCheckProgramArg = "--version";
 
   passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster";
     homepage = "https://github.com/anthropics/claude-code";
-    downloadPage = "https://www.npmjs.com/package/@anthropic-ai/claude-code";
+    downloadPage = "https://claude.com/product/claude-code";
     license = lib.licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    platforms = [
+      "aarch64-darwin"
+      "x86_64-darwin"
+      "aarch64-linux"
+      "x86_64-linux"
+    ]; # Native distribution crashes on CPUs without AVX, including Rosetta 2 on Apple Silicon.
+    # https://github.com/anthropics/claude-code/issues/19907
+    hydraPlatforms = lib.lists.remove "x86_64-darwin" lib.platforms.all;
     maintainers = with lib.maintainers; [
       adeci
       malo
@@ -84,4 +107,4 @@ buildNpmPackage (finalAttrs: {
     ];
     mainProgram = "claude";
   };
-})
+}
