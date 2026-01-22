@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  versionCheckProgram = ''${placeholder "out"}/bin/ghost'';
+  versionCheckProgram = "${placeholder "out"}/bin/ghost";
 
   passthru = {
     updateScript = nix-update-script { };

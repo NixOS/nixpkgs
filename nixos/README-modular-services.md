@@ -82,7 +82,7 @@ Example:
 {
   stdenv,
   nixosTests,
-# ...
+  # ...
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "example";

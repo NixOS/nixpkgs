@@ -105,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preCheck
 
     bin/unit-hyperscan
-    ${lib.optionalString withStatic ''bin/unit-chimera''}
+    ${lib.optionalString withStatic "bin/unit-chimera"}
 
     runHook postCheck
   '';
