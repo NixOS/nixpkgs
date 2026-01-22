@@ -20,6 +20,7 @@ runs:
         PIN_BUMP_SHA: ${{ inputs.untrusted-pin-bump }}
       with:
         script: |
+          const { rm, writeFile } = require('node:fs/promises')
           const { spawn } = require('node:child_process')
           const { join } = require('node:path')
 
@@ -55,10 +56,19 @@ runs:
             return pinned.pins.nixpkgs.revision
           }
 
-          const pin_bump_sha = process.env.PIN_BUMP_SHA
+          // Getting the pin-bump diff via the API avoids issues with `git fetch`
+          // thin-packs not having enough base objects to be applied locally.
+          // Returns a unified diff suitable for `git apply`.
+          async function getPinBumpDiff(ref) {
+            const { data } = await github.rest.repos.getCommit({
+              mediaType: { format: 'diff' },
+              ...context.repo,
+              ref,
+            })
+            return data
+          }
 
-          // When dealing with a pin bump commit, we need `--depth=2` to view & apply its diff
-          const depth = pin_bump_sha ? 2 : 1
+          const pin_bump_sha = process.env.PIN_BUMP_SHA
 
           const commits = [
             {
@@ -76,17 +86,14 @@ runs:
             {
               sha: await getPinnedSha(process.env.TARGET_SHA),
               path: 'trusted-pinned'
-            },
-            {
-              sha: pin_bump_sha
             }
           ].filter(({ sha }) => Boolean(sha))
 
-          console.log('Fetching the following commits:', commits)
+          console.log('Checking out the following commits:', commits)
 
           // Fetching all commits at once is much faster than doing multiple checkouts.
           // This would fail without --refetch, because the we had a partial clone before, but changed it above.
-          await run('git', 'fetch', `--depth=${depth}`, '--refetch', 'origin', ...(commits.map(({ sha }) => sha)))
+          await run('git', 'fetch', '--depth=1', '--refetch', 'origin', ...(commits.map(({ sha }) => sha)))
 
           // Checking out onto tmpfs takes 1s and is faster by at least factor 10x.
           await run('mkdir', 'nixpkgs')
@@ -101,20 +108,21 @@ runs:
 
           // Create all worktrees in parallel.
           await Promise.all(
-            commits
-              .filter(({ path }) => Boolean(path))
-              .map(async ({ sha, path }) => {
-                await run('git', 'worktree', 'add', join('nixpkgs', path), sha, '--no-checkout')
-                await run('git', '-C', join('nixpkgs', path), 'sparse-checkout', 'disable')
-                await run('git', '-C', join('nixpkgs', path), 'checkout', '--progress')
-              })
+            commits.map(async ({ sha, path }) => {
+              await run('git', 'worktree', 'add', join('nixpkgs', path), sha, '--no-checkout')
+              await run('git', '-C', join('nixpkgs', path), 'sparse-checkout', 'disable')
+              await run('git', '-C', join('nixpkgs', path), 'checkout', '--progress')
+            })
           )
 
           // Apply pin bump to untrusted worktree
           if (pin_bump_sha) {
-            console.log('Applying untrusted ci/pinned.json bump:', pin_bump_sha)
+            console.log('Fetching ci/pinned.json bump commit:', pin_bump_sha)
+            await writeFile('pin-bump.patch', await getPinBumpDiff(pin_bump_sha))
+
+            console.log('Applying untrusted ci/pinned.json bump to ./nixpkgs/untrusted')
             try {
-              await run('git', '-C', join('nixpkgs', 'untrusted'), 'cherry-pick', '--no-commit', pin_bump_sha)
+              await run('git', '-C', join('nixpkgs', 'untrusted'), 'apply', '--3way', join('..', '..', 'pin-bump.patch'))
             } catch {
               core.setFailed([
                 `Failed to apply ci/pinned.json bump commit ${pin_bump_sha}.`,
@@ -122,5 +130,7 @@ runs:
                 `Please rebase the PR or ensure the pin bump is standalone.`
               ].join(' '))
               return
+            } finally {
+              await rm('pin-bump.patch')
             }
           }
