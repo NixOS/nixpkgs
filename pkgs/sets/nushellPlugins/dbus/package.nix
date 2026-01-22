@@ -5,7 +5,7 @@
   pkg-config,
   nix-update-script,
   fetchFromGitHub,
-  dbus,
+  pkgs,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-7pD5LA1ytO7VqFnHwgf7vW9eS3olnZBgdsj+rmcHkbU=";
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.cc.isClang [ rustPlatform.bindgenHook ];
-  buildInputs = [ dbus ];
+  buildInputs = [ pkgs.dbus ];
 
   passthru.updateScript = nix-update-script { };
 

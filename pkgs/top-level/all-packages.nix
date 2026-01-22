@@ -9459,11 +9459,6 @@ with pkgs;
 
   nushell = callPackage ../shells/nushell { };
 
-  nushellPlugins = recurseIntoAttrs (
-    callPackage ../shells/nushell/plugins {
-    }
-  );
-
   net-tools =
     # some platforms refer back to this from unixtools, so this is needed to
     # break the cycle
