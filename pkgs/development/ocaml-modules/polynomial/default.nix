@@ -6,7 +6,7 @@
   ff-sig,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "polynomial";
   version = "0.4.0";
   duneVersion = "3";
@@ -14,7 +14,7 @@ buildDunePackage rec {
   src = fetchFromGitLab {
     owner = "nomadic-labs";
     repo = "cryptography/ocaml-polynomial";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-is/PrYLCwStHiQsNq5OVRCwHdXjO2K2Z7FrXgytRfAU=";
   };
 
@@ -31,4 +31,4 @@ buildDunePackage rec {
     homepage = "https://gitlab.com/nomadic-labs/ocaml-polynomial";
     maintainers = [ lib.maintainers.ulrikstrid ];
   };
-}
+})
