@@ -21,7 +21,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "pgjones";
     repo = "quart-schema";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-xrCQNGxX9CC1fOy3CT40Sdvsd94KgE1k8B5UgIWZ8kY=";
   };
 
