@@ -7,6 +7,7 @@
   python-dateutil,
   sqlite-fts4,
   tabulate,
+  pip,
   pluggy,
   pytestCheckHook,
   hypothesis,
@@ -30,10 +31,11 @@ buildPythonPackage rec {
   dependencies = [
     click
     click-default-group
+    pip
+    pluggy
     python-dateutil
     sqlite-fts4
     tabulate
-    pluggy
   ];
 
   nativeCheckInputs = [
