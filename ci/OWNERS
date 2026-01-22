@@ -434,7 +434,7 @@ pkgs/by-name/fo/forgejo/                @adamcstephens @bendlas @emilylange
 
 # Node.js
 /pkgs/build-support/node/build-npm-package      @winterqt
-/pkgs/build-support/node/fetch-npm-deps         @winterqt
+/pkgs/build-support/node/prefetch-npm-deps      @winterqt
 /doc/languages-frameworks/javascript.section.md @winterqt
 /pkgs/development/tools/pnpm                    @Scrumplex @gepbird
 /pkgs/build-support/node/fetch-pnpm-deps        @Scrumplex @gepbird

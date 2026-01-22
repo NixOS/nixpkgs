@@ -19485,6 +19485,8 @@ self: super: with self; {
 
   typer-config = callPackage ../development/python-modules/typer-config { };
 
+  typer-injector = callPackage ../development/python-modules/typer-injector { };
+
   typer-shell = callPackage ../development/python-modules/typer-shell { };
 
   typer-slim = callPackage ../development/python-modules/typer-slim { };

@@ -3050,7 +3050,7 @@ with pkgs;
 
   npmHooks = recurseIntoAttrs (callPackage ../build-support/node/build-npm-package/hooks { });
 
-  inherit (callPackages ../build-support/node/fetch-npm-deps { })
+  inherit (callPackages ../build-support/node/prefetch-npm-deps { })
     fetchNpmDeps
     prefetch-npm-deps
     ;
@@ -4544,10 +4544,9 @@ with pkgs;
 
   haskellPackages = recurseIntoAttrs (
     # Prefer native-bignum to avoid linking issues with gmp;
-    # TemplateHaskell doesn't work with hadrian built GHCs yet
-    # https://github.com/NixOS/nixpkgs/issues/275304
+    # GHC 9.10 doesn't work too well with iserv-proxy.
     if stdenv.hostPlatform.isStatic then
-      haskell.packages.native-bignum.ghc94
+      haskell.packages.native-bignum.ghc912
     # JS backend can't use gmp
     else if stdenv.hostPlatform.isGhcjs then
       haskell.packages.native-bignum.ghc910
@@ -4987,15 +4986,15 @@ with pkgs;
   wrapRustcWith = { rustc-unwrapped, ... }@args: callPackage ../build-support/rust/rustc-wrapper args;
   wrapRustc = rustc-unwrapped: wrapRustcWith { inherit rustc-unwrapped; };
 
-  rust_1_91 = callPackage ../development/compilers/rust/1_91.nix { };
-  rust = rust_1_91;
+  rust_1_92 = callPackage ../development/compilers/rust/1_92.nix { };
+  rust = rust_1_92;
 
   mrustc = callPackage ../development/compilers/mrustc { };
   mrustc-minicargo = callPackage ../development/compilers/mrustc/minicargo.nix { };
   mrustc-bootstrap = callPackage ../development/compilers/mrustc/bootstrap.nix { };
 
-  rustPackages_1_91 = rust_1_91.packages.stable;
-  rustPackages = rustPackages_1_91;
+  rustPackages_1_92 = rust_1_92.packages.stable;
+  rustPackages = rustPackages_1_92;
 
   inherit (rustPackages)
     cargo
@@ -5409,6 +5408,8 @@ with pkgs;
     lua5_3_compat
     lua5_4
     lua5_4_compat
+    lua5_5
+    lua5_5_compat
     luajit_2_1
     luajit_2_0
     luajit_openresty
@@ -5421,6 +5422,7 @@ with pkgs;
   lua52Packages = recurseIntoAttrs lua5_2.pkgs;
   lua53Packages = recurseIntoAttrs lua5_3.pkgs;
   lua54Packages = recurseIntoAttrs lua5_4.pkgs;
+  lua55Packages = recurseIntoAttrs lua5_5.pkgs;
   luajitPackages = recurseIntoAttrs luajit.pkgs;
 
   luaPackages = lua52Packages;
@@ -6455,10 +6457,6 @@ with pkgs;
   uhdMinimal = uhd.override {
     enableUtils = false;
     enablePythonApi = false;
-  };
-
-  gdb = callPackage ../development/tools/misc/gdb {
-    guile = null;
   };
 
   gdbHostCpuOnly = gdb.override { hostCpuOnly = true; };
@@ -8364,15 +8362,6 @@ with pkgs;
     ];
   };
 
-  sbcl_2_5_9 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl { version = "2.5.9"; };
-
-    faslExt = "fasl";
-    flags = [
-      "--dynamic-space-size"
-      "3000"
-    ];
-  };
   sbcl_2_5_10 = wrapLisp {
     pkg = callPackage ../development/compilers/sbcl { version = "2.5.10"; };
     faslExt = "fasl";
@@ -8381,7 +8370,16 @@ with pkgs;
       "3000"
     ];
   };
-  sbcl = sbcl_2_5_10;
+  sbcl_2_6_0 = wrapLisp {
+    pkg = callPackage ../development/compilers/sbcl { version = "2.6.0"; };
+
+    faslExt = "fasl";
+    flags = [
+      "--dynamic-space-size"
+      "3000"
+    ];
+  };
+  sbcl = sbcl_2_6_0;
 
   sbclPackages = recurseIntoAttrs sbcl.pkgs;
 
@@ -9147,26 +9145,71 @@ with pkgs;
 
   virtualenv-clone = with python3Packages; toPythonApplication virtualenv-clone;
 
-  xorg =
-    let
-      # Use `lib.callPackageWith __splicedPackages` rather than plain `callPackage`
-      # so as not to have the newly bound xorg items already in scope,  which would
-      # have created a cycle.
-      overrides = lib.callPackageWith __splicedPackages ../servers/x11/xorg/overrides.nix {
-        inherit (buildPackages.darwin) bootstrap_cmds;
-        udev = if stdenv.hostPlatform.isLinux then udev else null;
-        libdrm = if stdenv.hostPlatform.isLinux then libdrm else null;
-      };
+  xorg = recurseIntoAttrs (makeScopeWithSplicing' {
+    otherSplices = generateSplicesForMkScope "xorg";
+    # Use `lib.callPackageWith __splicedPackages` rather than plain `callPackage`
+    # so as not to have the newly bound xorg items already in scope,  which would
+    # have created a cycle.
+    f = lib.callPackageWith __splicedPackages ../servers/x11/xorg { };
+  });
 
-      generatedPackages = lib.callPackageWith __splicedPackages ../servers/x11/xorg/default.nix { };
-
-      xorgPackages = makeScopeWithSplicing' {
-        otherSplices = generateSplicesForMkScope "xorg";
-        f = lib.extends overrides generatedPackages;
-      };
-
-    in
-    recurseIntoAttrs xorgPackages;
+  inherit (xorg)
+    fontadobe100dpi
+    fontadobeutopia100dpi
+    fontbh100dpi
+    fontbhlucidatypewriter100dpi
+    fontbitstream100dpi
+    fontutil
+    libAppleWM
+    libFS
+    libICE
+    libSM
+    libX11
+    libXScrnSaver
+    libXau
+    libXaw
+    libXcomposite
+    libXcursor
+    libXdamage
+    libXdmcp
+    libXext
+    libXfixes
+    libXfont2
+    libXft
+    libXi
+    libXinerama
+    libXmu
+    libXp
+    libXpm
+    libXpresent
+    libXrandr
+    libXrender
+    libXres
+    libXt
+    libXtst
+    libXv
+    libXvMC
+    libXxf86dga
+    libXxf86misc
+    libXxf86vm
+    libpthreadstubs
+    mkfontdir
+    utilmacros
+    xcbproto
+    xcbutil
+    xcbutilcursor
+    xcbutilerrors
+    xcbutilimage
+    xcbutilkeysyms
+    xcbutilrenderutil
+    xcbutilwm
+    xf86inputevdev
+    xf86inputlibinput
+    xf86videonouveau
+    xkeyboardconfig
+    xorgcffiles
+    xorgserver
+    ;
 
   zabbixFor = version: rec {
     agent = (callPackages ../servers/monitoring/zabbix/agent.nix { }).${version};
@@ -9890,10 +9933,6 @@ with pkgs;
     protobuf = protobuf_21; # https://github.com/blueprint-freespeech/ricochet-refresh/issues/178
   };
 
-  shaderc = callPackage ../development/compilers/shaderc {
-    inherit (darwin) autoSignDarwinBinariesHook;
-  };
-
   scheherazade-new = scheherazade.override {
     version = "4.400";
   };
@@ -9934,6 +9973,7 @@ with pkgs;
   tex-gyre-math = recurseIntoAttrs (callPackages ../data/fonts/tex-gyre-math { });
 
   xkeyboard_config = xkeyboard-config;
+  xkeyboard-config_custom = callPackage ../by-name/xk/xkeyboard-config/custom.nix { };
 
   xlsx2csv = with python3Packages; toPythonApplication xlsx2csv;
 

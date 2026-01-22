@@ -1,0 +1,5372 @@
+commit bdea6c37197a3c9bd976911cce5f580dea1c28dd
+Author: Andreas K. Hüttel <dilfridge@gentoo.org>
+Date:   Mon Jul 28 20:35:38 2025 +0200
+
+    Replace advisories directory with pointer file
+    
+    Signed-off-by: Andreas K. Hüttel <dilfridge@gentoo.org>
+
+diff --git a/advisories/GLIBC-SA-2023-0001 b/advisories/GLIBC-SA-2023-0001
+deleted file mode 100644
+index 3d19c91b6a..0000000000
+--- a/advisories/GLIBC-SA-2023-0001
++++ /dev/null
+@@ -1,14 +0,0 @@
+-printf: incorrect output for integers with thousands separator and width field
+-
+-When the printf family of functions is called with a format specifier
+-that uses an <apostrophe> (enable grouping) and a minimum width
+-specifier, the resulting output could be larger than reasonably expected
+-by a caller that computed a tight bound on the buffer size.  The
+-resulting larger than expected output could result in a buffer overflow
+-in the printf family of functions.
+-
+-CVE-Id: CVE-2023-25139
+-Public-Date: 2023-02-02
+-Vulnerable-Commit: e88b9f0e5cc50cab57a299dc7efe1a4eb385161d (2.37)
+-Fix-Commit: c980549cc6a1c03c23cc2fe3e7b0fe626a0364b0 (2.38)
+-Fix-Commit: 07b9521fc6369d000216b96562ff7c0ed32a16c4 (2.37-4)
+diff --git a/advisories/GLIBC-SA-2023-0002 b/advisories/GLIBC-SA-2023-0002
+deleted file mode 100644
+index 5122669a64..0000000000
+--- a/advisories/GLIBC-SA-2023-0002
++++ /dev/null
+@@ -1,15 +0,0 @@
+-getaddrinfo: Stack read overflow in no-aaaa mode
+-
+-If the system is configured in no-aaaa mode via /etc/resolv.conf,
+-getaddrinfo is called for the AF_UNSPEC address family, and a DNS
+-response is received over TCP that is larger than 2048 bytes,
+-getaddrinfo may potentially disclose stack contents via the returned
+-address data, or crash.
+-
+-CVE-Id: CVE-2023-4527
+-Public-Date: 2023-09-12
+-Vulnerable-Commit: f282cdbe7f436c75864e5640a409a10485e9abb2 (2.36)
+-Fix-Commit: bd77dd7e73e3530203be1c52c8a29d08270cb25d (2.39)
+-Fix-Commit: 4ea972b7edd7e36610e8cde18bf7a8149d7bac4f (2.36-113)
+-Fix-Commit: b7529346025a130fee483d42178b5c118da971bb (2.37-38)
+-Fix-Commit: b25508dd774b617f99419bdc3cf2ace4560cd2d6 (2.38-19)
+diff --git a/advisories/GLIBC-SA-2023-0003 b/advisories/GLIBC-SA-2023-0003
+deleted file mode 100644
+index d3aef80348..0000000000
+--- a/advisories/GLIBC-SA-2023-0003
++++ /dev/null
+@@ -1,15 +0,0 @@
+-getaddrinfo: Potential use-after-free
+-
+-When an NSS plugin only implements the _gethostbyname2_r and
+-_getcanonname_r callbacks, getaddrinfo could use memory that was freed
+-during buffer resizing, potentially causing a crash or read or write to
+-arbitrary memory.
+-
+-CVE-Id: CVE-2023-4806
+-Public-Date: 2023-09-12
+-Fix-Commit: 973fe93a5675c42798b2161c6f29c01b0e243994 (2.39)
+-Fix-Commit: e09ee267c03e3150c2c9ba28625ab130705a485e (2.34-420)
+-Fix-Commit: e3ccb230a961b4797510e6a1f5f21fd9021853e7 (2.35-270)
+-Fix-Commit: a9728f798ec7f05454c95637ee6581afaa9b487d (2.36-115)
+-Fix-Commit: 6529a7466c935f36e9006b854d6f4e1d4876f942 (2.37-39)
+-Fix-Commit: 00ae4f10b504bc4564e9f22f00907093f1ab9338 (2.38-20)
+diff --git a/advisories/GLIBC-SA-2023-0004 b/advisories/GLIBC-SA-2023-0004
+deleted file mode 100644
+index 5286a7aa54..0000000000
+--- a/advisories/GLIBC-SA-2023-0004
++++ /dev/null
+@@ -1,16 +0,0 @@
+-tunables: local privilege escalation through buffer overflow
+-
+-If a tunable of the form NAME=NAME=VAL is passed in the environment of a
+-setuid program and NAME is valid, it may result in a buffer overflow,
+-which could be exploited to achieve escalated privileges.  This flaw was
+-introduced in glibc 2.34.
+-
+-CVE-Id: CVE-2023-4911
+-Public-Date: 2023-10-03
+-Vulnerable-Commit: 2ed18c5b534d9e92fc006202a5af0df6b72e7aca (2.34)
+-Fix-Commit: 1056e5b4c3f2d90ed2b4a55f96add28da2f4c8fa (2.39)
+-Fix-Commit: dcc367f148bc92e7f3778a125f7a416b093964d9 (2.34-423)
+-Fix-Commit: c84018a05aec80f5ee6f682db0da1130b0196aef (2.35-274)
+-Fix-Commit: 22955ad85186ee05834e47e665056148ca07699c (2.36-118)
+-Fix-Commit: b4e23c75aea756b4bddc4abcf27a1c6dca8b6bd3 (2.37-45)
+-Fix-Commit: 750a45a783906a19591fb8ff6b7841470f1f5701 (2.38-27)
+diff --git a/advisories/GLIBC-SA-2023-0005 b/advisories/GLIBC-SA-2023-0005
+deleted file mode 100644
+index cc4eb90b82..0000000000
+--- a/advisories/GLIBC-SA-2023-0005
++++ /dev/null
+@@ -1,18 +0,0 @@
+-getaddrinfo: DoS due to memory leak
+-
+-The fix for CVE-2023-4806 introduced a memory leak when an application
+-calls getaddrinfo for AF_INET6 with AI_CANONNAME, AI_ALL and AI_V4MAPPED
+-flags set.
+-
+-CVE-Id: CVE-2023-5156
+-Public-Date: 2023-09-25
+-Vulnerable-Commit: e09ee267c03e3150c2c9ba28625ab130705a485e (2.34-420)
+-Vulnerable-Commit: e3ccb230a961b4797510e6a1f5f21fd9021853e7 (2.35-270)
+-Vulnerable-Commit: a9728f798ec7f05454c95637ee6581afaa9b487d (2.36-115)
+-Vulnerable-Commit: 6529a7466c935f36e9006b854d6f4e1d4876f942 (2.37-39)
+-Vulnerable-Commit: 00ae4f10b504bc4564e9f22f00907093f1ab9338 (2.38-20)
+-Fix-Commit: 8006457ab7e1cd556b919f477348a96fe88f2e49 (2.34-421)
+-Fix-Commit: 17092c0311f954e6f3c010f73ce3a78c24ac279a (2.35-272)
+-Fix-Commit: 856bac55f98dc840e7c27cfa82262b933385de90 (2.36-116)
+-Fix-Commit: 4473d1b87d04b25cdd0e0354814eeaa421328268 (2.37-42)
+-Fix-Commit: 5ee59ca371b99984232d7584fe2b1a758b4421d3 (2.38-24)
+diff --git a/advisories/GLIBC-SA-2024-0001 b/advisories/GLIBC-SA-2024-0001
+deleted file mode 100644
+index 28931c75ae..0000000000
+--- a/advisories/GLIBC-SA-2024-0001
++++ /dev/null
+@@ -1,15 +0,0 @@
+-syslog: Heap buffer overflow in __vsyslog_internal
+-
+-__vsyslog_internal did not handle a case where printing a SYSLOG_HEADER
+-containing a long program name failed to update the required buffer
+-size, leading to the allocation and overflow of a too-small buffer on
+-the heap.
+-
+-CVE-Id: CVE-2023-6246
+-Public-Date: 2024-01-30
+-Vulnerable-Commit: 52a5be0df411ef3ff45c10c7c308cb92993d15b1 (2.37)
+-Fix-Commit: 6bd0e4efcc78f3c0115e5ea9739a1642807450da (2.39)
+-Fix-Commit: 23514c72b780f3da097ecf33a793b7ba9c2070d2 (2.38-42)
+-Fix-Commit: 97a4292aa4a2642e251472b878d0ec4c46a0e59a (2.37-57)
+-Vulnerable-Commit: b0e7888d1fa2dbd2d9e1645ec8c796abf78880b9 (2.36-16)
+-Fix-Commit: d1a83b6767f68b3cb5b4b4ea2617254acd040c82 (2.36-126)
+diff --git a/advisories/GLIBC-SA-2024-0002 b/advisories/GLIBC-SA-2024-0002
+deleted file mode 100644
+index 940bfcf2fc..0000000000
+--- a/advisories/GLIBC-SA-2024-0002
++++ /dev/null
+@@ -1,15 +0,0 @@
+-syslog: Heap buffer overflow in __vsyslog_internal
+-
+-__vsyslog_internal used the return value of snprintf/vsnprintf to
+-calculate buffer sizes for memory allocation.  If these functions (for
+-any reason) failed and returned -1, the resulting buffer would be too
+-small to hold output.
+-
+-CVE-Id: CVE-2023-6779
+-Public-Date: 2024-01-30
+-Vulnerable-Commit: 52a5be0df411ef3ff45c10c7c308cb92993d15b1 (2.37)
+-Fix-Commit: 7e5a0c286da33159d47d0122007aac016f3e02cd (2.39)
+-Fix-Commit: d0338312aace5bbfef85e03055e1212dd0e49578 (2.38-43)
+-Fix-Commit: 67062eccd9a65d7fda9976a56aeaaf6c25a80214 (2.37-58)
+-Vulnerable-Commit: b0e7888d1fa2dbd2d9e1645ec8c796abf78880b9 (2.36-16)
+-Fix-Commit: 2bc9d7c002bdac38b5c2a3f11b78e309d7765b83 (2.36-127)
+diff --git a/advisories/GLIBC-SA-2024-0003 b/advisories/GLIBC-SA-2024-0003
+deleted file mode 100644
+index b43a5150ab..0000000000
+--- a/advisories/GLIBC-SA-2024-0003
++++ /dev/null
+@@ -1,13 +0,0 @@
+-syslog: Integer overflow in __vsyslog_internal
+-
+-__vsyslog_internal calculated a buffer size by adding two integers, but
+-did not first check if the addition would overflow.
+-
+-CVE-Id: CVE-2023-6780
+-Public-Date: 2024-01-30
+-Vulnerable-Commit: 52a5be0df411ef3ff45c10c7c308cb92993d15b1 (2.37)
+-Fix-Commit: ddf542da94caf97ff43cc2875c88749880b7259b (2.39)
+-Fix-Commit: d37c2b20a4787463d192b32041c3406c2bd91de0 (2.38-44)
+-Fix-Commit: 2b58cba076e912961ceaa5fa58588e4b10f791c0 (2.37-59)
+-Vulnerable-Commit: b0e7888d1fa2dbd2d9e1645ec8c796abf78880b9 (2.36-16)
+-Fix-Commit: b9b7d6a27aa0632f334352fa400771115b3c69b7 (2.36-128)
+diff --git a/advisories/GLIBC-SA-2024-0004 b/advisories/GLIBC-SA-2024-0004
+deleted file mode 100644
+index 08df2b3118..0000000000
+--- a/advisories/GLIBC-SA-2024-0004
++++ /dev/null
+@@ -1,28 +0,0 @@
+-ISO-2022-CN-EXT: fix out-of-bound writes when writing escape sequence
+-
+-The iconv() function in the GNU C Library versions 2.39 and older may 
+-overflow the output buffer passed to it by up to 4 bytes when converting 
+-strings to the ISO-2022-CN-EXT character set, which may be used to 
+-crash an application or overwrite a neighbouring variable.
+-
+-ISO-2022-CN-EXT uses escape sequences to indicate character set changes
+-(as specified by RFC 1922).  While the SOdesignation has the expected
+-bounds checks, neither SS2designation nor SS3designation have its;
+-allowing a write overflow of 1, 2, or 3 bytes with fixed values:
+-'$+I', '$+J', '$+K', '$+L', '$+M', or '$*H'.
+-
+-CVE-Id: CVE-2024-2961
+-Public-Date: 2024-04-17
+-Vulnerable-Commit: 755104edc75c53f4a0e7440334e944ad3c6b32fc (2.1.93-169)
+-Fix-Commit: f9dc609e06b1136bb0408be9605ce7973a767ada (2.40)
+-Fix-Commit: 31da30f23cddd36db29d5b6a1c7619361b271fb4 (2.39-31)
+-Fix-Commit: e1135387deded5d73924f6ca20c72a35dc8e1bda (2.38-66)
+-Fix-Commit: 89ce64b269a897a7780e4c73a7412016381c6ecf (2.37-89)
+-Fix-Commit: 4ed98540a7fd19f458287e783ae59c41e64df7b5 (2.36-164)
+-Fix-Commit: 36280d1ce5e245aabefb877fe4d3c6cff95dabfa (2.35-315)
+-Fix-Commit: a8b0561db4b9847ebfbfec20075697d5492a363c (2.34-459)
+-Fix-Commit: ed4f16ff6bed3037266f1fa682ebd32a18fce29c (2.33-263)
+-Fix-Commit: 682ad4c8623e611a971839990ceef00346289cc9 (2.32-140)
+-Fix-Commit: 3703c32a8d304c1ee12126134ce69be965f38000 (2.31-154)
+-
+-Reported-By: Charles Fol
+diff --git a/advisories/GLIBC-SA-2024-0005 b/advisories/GLIBC-SA-2024-0005
+deleted file mode 100644
+index a59596610a..0000000000
+--- a/advisories/GLIBC-SA-2024-0005
++++ /dev/null
+@@ -1,22 +0,0 @@
+-nscd: Stack-based buffer overflow in netgroup cache
+-
+-If the Name Service Cache Daemon's (nscd) fixed size cache is exhausted
+-by client requests then a subsequent client request for netgroup data
+-may result in a stack-based buffer overflow.  This flaw was introduced
+-in glibc 2.15 when the cache was added to nscd.
+-
+-This vulnerability is only present in the nscd binary.
+-
+-CVE-Id: CVE-2024-33599
+-Public-Date: 2024-04-23
+-Vulnerable-Commit: 684ae515993269277448150a1ca70db3b94aa5bd (2.15)
+-Fix-Commit: 69c58d5ef9f584ea198bd00f7964d364d0e6b921 (2.31-155)
+-Fix-Commit: a77064893bfe8a701770e2f53a4d33805bc47a5a (2.32-141)
+-Fix-Commit: 5c75001a96abcd50cbdb74df24c3f013188d076e (2.33-264)
+-Fix-Commit: 52f73e5c4e29b14e79167272297977f360ae1e97 (2.34-460)
+-Fix-Commit: 7a95873543ce225376faf13bb71c43dea6d24f86 (2.35-316)
+-Fix-Commit: caa3151ca460bdd9330adeedd68c3112d97bffe4 (2.36-165)
+-Fix-Commit: f75c298e747b2b8b41b1c2f551c011a52c41bfd1 (2.37-91)
+-Fix-Commit: 5968aebb86164034b8f8421b4abab2f837a5bdaf (2.38-72)
+-Fix-Commit: 1263d583d2e28afb8be53f8d6922f0842036f35d (2.39-35)
+-Fix-Commit: 87801a8fd06db1d654eea3e4f7626ff476a9bdaa (2.40)
+diff --git a/advisories/GLIBC-SA-2024-0006 b/advisories/GLIBC-SA-2024-0006
+deleted file mode 100644
+index d44148d3d9..0000000000
+--- a/advisories/GLIBC-SA-2024-0006
++++ /dev/null
+@@ -1,32 +0,0 @@
+-nscd: Null pointer crash after notfound response
+-
+-If the Name Service Cache Daemon's (nscd) cache fails to add a not-found
+-netgroup response to the cache, the client request can result in a null
+-pointer dereference.  This flaw was introduced in glibc 2.15 when the
+-cache was added to nscd.
+-
+-This vulnerability is only present in the nscd binary.
+-
+-CVE-Id: CVE-2024-33600
+-Public-Date: 2024-04-24
+-Vulnerable-Commit: 684ae515993269277448150a1ca70db3b94aa5bd (2.15)
+-Fix-Commit: b048a482f088e53144d26a61c390bed0210f49f2 (2.40)
+-Fix-Commit: 7835b00dbce53c3c87bbbb1754a95fb5e58187aa (2.40)
+-Fix-Commit: c99f886de54446cd4447db6b44be93dabbdc2f8b (2.39-37)
+-Fix-Commit: 5a508e0b508c8ad53bd0d2fb48fd71b242626341 (2.39-36)
+-Fix-Commit: 2ae9446c1b7a3064743b4a51c0bbae668ee43e4c (2.38-74)
+-Fix-Commit: 541ea5172aa658c4bd5c6c6d6fd13903c3d5bb0a (2.38-73)
+-Fix-Commit: a8070b31043c7585c36ba68a74298c4f7af075c3 (2.37-93)
+-Fix-Commit: 5eea50c4402e39588de98aa1d4469a79774703d4 (2.37-92)
+-Fix-Commit: f205b3af56740e3b014915b1bd3b162afe3407ef (2.36-167)
+-Fix-Commit: c34f470a615b136170abd16142da5dd0c024f7d1 (2.36-166)
+-Fix-Commit: bafadc589fbe21ae330e8c2af74db9da44a17660 (2.35-318)
+-Fix-Commit: 4370bef52b0f3f3652c6aa13d7a9bb3ac079746d (2.35-317)
+-Fix-Commit: 1f94122289a9bf7dba573f5d60327aaa2b85cf2e (2.34-462)
+-Fix-Commit: 966d6ac9e40222b84bb21674cc4f83c8d72a5a26 (2.34-461)
+-Fix-Commit: e3eef1b8fbdd3a7917af466ca9c4b7477251ca79 (2.33-266)
+-Fix-Commit: f20a8d696b13c6261b52a6434899121f8b19d5a7 (2.33-265)
+-Fix-Commit: be602180146de37582a3da3a0caa4b719645de9c (2.32-143)
+-Fix-Commit: 394eae338199078b7961b051c191539870742d7b (2.32-142)
+-Fix-Commit: 8d7949183760170c61e55def723c1d8050187874 (2.31-157)
+-Fix-Commit: 304ce5fe466c4762b21b36c26926a4657b59b53e (2.31-156)
+diff --git a/advisories/GLIBC-SA-2024-0007 b/advisories/GLIBC-SA-2024-0007
+deleted file mode 100644
+index b6928fa27a..0000000000
+--- a/advisories/GLIBC-SA-2024-0007
++++ /dev/null
+@@ -1,28 +0,0 @@
+-nscd: netgroup cache may terminate daemon on memory allocation failure
+-
+-The Name Service Cache Daemon's (nscd) netgroup cache uses xmalloc or
+-xrealloc and these functions may terminate the process due to a memory
+-allocation failure resulting in a denial of service to the clients.  The
+-flaw was introduced in glibc 2.15 when the cache was added to nscd.
+-
+-This vulnerability is only present in the nscd binary.
+-
+-Subsequent refactoring of the netgroup cache only added more uses of
+-xmalloc and xrealloc. Uses of xmalloc and xrealloc in other parts of
+-nscd only occur during startup of the daemon and so are not affected by
+-client requests that could trigger an out of memory followed by
+-termination.
+-
+-CVE-Id: CVE-2024-33601
+-Public-Date: 2024-04-24
+-Vulnerable-Commit: 684ae515993269277448150a1ca70db3b94aa5bd (2.15)
+-Fix-Commit: c04a21e050d64a1193a6daab872bca2528bda44b (2.40)
+-Fix-Commit: a9a8d3eebb145779a18d90e3966009a1daa63cd8 (2.39-38)
+-Fix-Commit: 71af8ca864345d39b746d5cee84b94b430fad5db (2.38-75)
+-Fix-Commit: 6e106dc214d6a033a4e945d1c6cf58061f1c5f1f (2.37-94)
+-Fix-Commit: b6742463694b1dfdd5120b91ee21cf05d15ec2e2 (2.36-168)
+-Fix-Commit: 7a5864cac60e06000394128a5a2817b03542f5a3 (2.35-319)
+-Fix-Commit: 86f1d5f4129c373ac6fb6df5bcf38273838843cb (2.34-463)
+-Fix-Commit: 4d27d4b9a188786fc6a56745506cec2acfc51f83 (2.33-267)
+-Fix-Commit: 3ed195a8ec89da281e3c4bf887a13d281b72d8f4 (2.32-144)
+-Fix-Commit: bbf5a58ccb55679217f94de706164d15372fbbc0 (2.31-158)
+diff --git a/advisories/GLIBC-SA-2024-0008 b/advisories/GLIBC-SA-2024-0008
+deleted file mode 100644
+index d93e2a6f0b..0000000000
+--- a/advisories/GLIBC-SA-2024-0008
++++ /dev/null
+@@ -1,26 +0,0 @@
+-nscd: netgroup cache assumes NSS callback uses in-buffer strings
+-
+-The Name Service Cache Daemon's (nscd) netgroup cache can corrupt memory
+-when the NSS callback does not store all strings in the provided buffer.
+-The flaw was introduced in glibc 2.15 when the cache was added to nscd.
+-
+-This vulnerability is only present in the nscd binary.
+-
+-There is no guarantee from the NSS callback API that the returned
+-strings are all within the buffer. However, the netgroup cache code
+-assumes that the NSS callback uses in-buffer strings and if it doesn't
+-the buffer resizing logic could lead to potential memory corruption.
+-
+-CVE-Id: CVE-2024-33602
+-Public-Date: 2024-04-24
+-Vulnerable-Commit: 684ae515993269277448150a1ca70db3b94aa5bd (2.15)
+-Fix-Commit: c04a21e050d64a1193a6daab872bca2528bda44b (2.40)
+-Fix-Commit: a9a8d3eebb145779a18d90e3966009a1daa63cd8 (2.39-38)
+-Fix-Commit: 71af8ca864345d39b746d5cee84b94b430fad5db (2.38-75)
+-Fix-Commit: 6e106dc214d6a033a4e945d1c6cf58061f1c5f1f (2.37-94)
+-Fix-Commit: b6742463694b1dfdd5120b91ee21cf05d15ec2e2 (2.36-168)
+-Fix-Commit: 7a5864cac60e06000394128a5a2817b03542f5a3 (2.35-319)
+-Fix-Commit: 86f1d5f4129c373ac6fb6df5bcf38273838843cb (2.34-463)
+-Fix-Commit: 4d27d4b9a188786fc6a56745506cec2acfc51f83 (2.33-267)
+-Fix-Commit: 3ed195a8ec89da281e3c4bf887a13d281b72d8f4 (2.32-144)
+-Fix-Commit: bbf5a58ccb55679217f94de706164d15372fbbc0 (2.31-158)
+diff --git a/advisories/GLIBC-SA-2025-0001 b/advisories/GLIBC-SA-2025-0001
+deleted file mode 100644
+index b053d32e91..0000000000
+--- a/advisories/GLIBC-SA-2025-0001
++++ /dev/null
+@@ -1,40 +0,0 @@
+-assert: Buffer overflow when printing assertion failure message
+-
+-When the assert() function fails, it does not allocate enough space for the
+-assertion failure message string and size information, which may lead to a
+-buffer overflow if the message string size aligns to page size.
+-
+-This bug can be triggered when an assertion in a program fails.  The assertion
+-failure message is allocated to allow developers to see this failure in core
+-dumps and it typically includes, in addition to the invariant assertion
+-string and function name, the name of the program.  If the name of the failing
+-program is user controlled, for example on a local system, this could allow an
+-attacker to control the assertion failure to trigger this buffer overflow.
+-
+-The only viable vector for exploitation of this bug is local, if a setuid
+-program exists that has an existing bug that results in an assertion failure.
+-No such program has been discovered at the time of publishing this advisory,
+-but the presence of custom setuid programs, although strongly discouraged as a
+-security practice, cannot be discounted.
+-
+-CVE-Id: CVE-2025-0395
+-Public-Date: 2025-01-22
+-Vulnerable-Commit: f8a3b5bf8fa1d0c43d2458e03cc109a04fdef194 (2.13-175)
+-Fix-Commit: 68ee0f704cb81e9ad0a78c644a83e1e9cd2ee578 (2.41)
+-Fix-Commit: cdb9ba84191ce72e86346fb8b1d906e7cd930ea2 (2.42)
+-Fix-Commit: 69fda28279b497bd405fdd442a6d8e4d3d5f681b (2.41-7)
+-Fix-Commit: 7d4b6bcae91f29d7b4daf15bab06b66cf1d2217c (2.40-66)
+-Fix-Commit: d6c156c326999f144cb5b73d29982108d549ad8a (2.40-71)
+-Fix-Commit: 808a84a8b81468b517a4d721fdc62069cb8c211f (2.39-146)
+-Fix-Commit: f6d48470aef9264d2d56f4c4533eb76db7f9c2e4 (2.39-150)
+-Fix-Commit: c32fd59314c343db88c3ea4a203870481d33c3d2 (2.38-122)
+-Fix-Commit: f984e2d7e8299726891a1a497a3c36cd5542a0bf (2.38-124)
+-Fix-Commit: a3d7865b098a3a67c44f7812208d9ce4718873ba (2.37-143)
+-Fix-Commit: b989519fe1683c204ac24ec92830e3fe3bfaccad (2.37-146)
+-Fix-Commit: 7971add7ee4171fdd8dfd17e7c04c4ed77a18845 (2.36-216)
+-Fix-Commit: 0487893d5c5bc6710d83d7c3152d888a0339559e (2.36-219)
+-Fix-Commit: 8b5d4be762419c4f6176261c6fea40ac559b88dc (2.35-370)
+-Fix-Commit: 8b3d09dc0d350191985f9d291cc30ce96f034b49 (2.35-373)
+-Fix-Commit: df4e1f4a5096b385c9bcc94424cf2eaa227b3761 (2.34-500)
+-Fix-Commit: 31eb872cb21449832ab47ad5db83281d240e1d03 (2.34-503)
+-Reported-By: Qualys Security Advisory
+diff --git a/advisories/GLIBC-SA-2025-0002 b/advisories/GLIBC-SA-2025-0002
+deleted file mode 100644
+index 161da13dd4..0000000000
+--- a/advisories/GLIBC-SA-2025-0002
++++ /dev/null
+@@ -1,23 +0,0 @@
+-elf: static setuid binary dlopen may incorrectly search LD_LIBRARY_PATH
+-
+-A statically linked setuid binary that calls dlopen (including internal
+-dlopen calls after setlocale or calls to NSS functions such as getaddrinfo)
+-may incorrectly search LD_LIBRARY_PATH to determine which library to load,
+-leading to the execution of library code that is attacker controlled.
+-
+-The only viable vector for exploitation of this bug is local, if a static
+-setuid program exists, and that program calls dlopen, then it may search
+-LD_LIBRARY_PATH to locate the SONAME to load. No such program has been
+-discovered at the time of publishing this advisory, but the presence of
+-custom setuid programs, although strongly discouraged as a security
+-practice, cannot be discounted.
+-
+-CVE-Id: CVE-2025-4802
+-Public-Date: 2025-05-16
+-Vulnerable-Commit: 10e93d968716ab82931d593bada121c17c0a4b93 (2.27)
+-Fix-Commit: 5451fa962cd0a90a0e2ec1d8910a559ace02bba0 (2.39)
+-Fix-Commit: 3be3728df2f1912c80abd3288bc6e3a25ad679e4 (2.38-132)
+-Fix-Commit: 7403ede2d7752e59e0c47d5d33d73c2bf850e7be (2.37-154)
+-Fix-Commit: 2ef7850279b2931caf6d6d6743ebaa91839e1cf7 (2.36-227)
+-Fix-Commit: 621c65ccf12ddd415ceeb2234423bd1acd0fabb3 (2.35-387)
+-Fix-Commit: 35018c0fd20eac9ceaf60060fed2745b3177359d (2.34-517)
+diff --git a/advisories/GLIBC-SA-2025-0003 b/advisories/GLIBC-SA-2025-0003
+deleted file mode 100644
+index 2adeb3ce00..0000000000
+--- a/advisories/GLIBC-SA-2025-0003
++++ /dev/null
+@@ -1,30 +0,0 @@
+-power10: strcmp fails to save and restore nonvolatile vector registers
+-
+-The Power 10 implementation of strcmp in
+-sysdeps/powerpc/powerpc64/le/power10/strcmp.S failed to save/restore
+-nonvolatile vector registers in the 32-byte aligned loop path.  This
+-results in callers reading content from those registers in a different
+-context, potentially altering program logic.
+-
+-There could be a program context where a user controlled string could
+-leak through strcmp into program code, thus altering its logic.  There
+-is also a potential for sensitive strings passed into strcmp leaking
+-through the clobbered registers into parts of the calling program that
+-should otherwise not have had access to those strings.
+-
+-The impact of this flaw is limited to applications running on Power 10
+-hardware that use the nonvolatile vector registers, i.e. v20 to v31
+-assuming that they have been treated in accordance with the OpenPower
+-psABI.  It is possible to work around the issue for those specific
+-applications by setting the glibc.cpu.hwcaps tunable to "-arch_3_1" like
+-so:
+-
+-    export GLIBC_TUNABLES=glibc.cpu.hwcaps=-arch_3_1
+-
+-CVE-Id: CVE-2025-5702
+-Public-Date: 2025-06-04
+-Vulnerable-Commit: 3367d8e180848030d1646f088759f02b8dfe0d6f (2.39)
+-Fix-Commit: 15808c77b35319e67ee0dc8f984a9a1a434701bc (2.42)
+-Fix-Commit: 0c76c951620f9e12df2a89b2c684878b55bb6795 (2.41-60)
+-Fix-Commit: 7e12550b8e3a11764a4a9090ce6bd3fc23fc8a8e (2.40-139)
+-Fix-Commit: 06a70769fd0b2e1f2a3085ad50ab620282bd77b3 (2.39-209)
+diff --git a/advisories/GLIBC-SA-2025-0004 b/advisories/GLIBC-SA-2025-0004
+deleted file mode 100644
+index 9409ca27c4..0000000000
+--- a/advisories/GLIBC-SA-2025-0004
++++ /dev/null
+@@ -1,29 +0,0 @@
+-power10: strncmp fails to save and restore nonvolatile vector registers
+-
+-The Power 10 implementation of strncmp in
+-sysdeps/powerpc/powerpc64/le/power10/strncmp.S failed to save/restore
+-nonvolatile vector registers in the 32-byte aligned loop path.  This
+-results in callers reading content from those registers in a different
+-context, potentially altering program logic.
+-
+-There could be a program context where a user controlled string could
+-leak through strncmp into program code, thus altering its logic.  There
+-is also a potential for sensitive strings passed into strncmp leaking
+-through the clobbered registers into parts of the calling program that
+-should otherwise not have had access to those strings.
+-
+-The impact of this flaw is limited to applications running on Power 10
+-hardware that use the nonvolatile vector registers, i.e. v20 to v31
+-assuming that they have been treated in accordance with the OpenPower
+-psABI.  It is possible to work around the issue for those specific
+-applications by setting the glibc.cpu.hwcaps tunable to "-arch_3_1" like
+-so:
+-
+-    export GLIBC_TUNABLES=glibc.cpu.hwcaps=-arch_3_1
+-
+-CVE-Id: CVE-2025-5745
+-Public-Date: 2025-06-05
+-Vulnerable-Commit: 23f0d81608d0ca6379894ef81670cf30af7fd081 (2.40)
+-Fix-Commit: 63c60101ce7c5eac42be90f698ba02099b41b965 (2.42)
+-Fix-Commit: 84bdbf8a6f2fdafd3661489dbb7f79835a52da82 (2.41-57)
+-Fix-Commit: 42a5a940c974d02540c8da26d6374c744d148cb9 (2.40-136)
+diff --git a/advisories/GLIBC-SA-2025-0005 b/advisories/GLIBC-SA-2025-0005
+deleted file mode 100644
+index 8bcccc59a5..0000000000
+--- a/advisories/GLIBC-SA-2025-0005
++++ /dev/null
+@@ -1,14 +0,0 @@
+-posix: Fix double-free after allocation failure in regcomp
+-
+-The regcomp function in the GNU C library version from 2.4 to 2.41 is
+-subject to a double free if some previous allocation fails. It can be
+-accomplished either by a malloc failure or by using an interposed
+-malloc that injects random malloc failures. The double free can allow
+-buffer manipulation depending of how the regex is constructed.
+-This issue affects all architectures and ABIs supported by the GNU C
+-library.
+-
+-CVE-Id: CVE-2025-8058
+-Public-Date: 2025-07-22
+-Vulnerable-Commit: 963d8d782fc98fb6dc3a66f0068795f9920c269d (2.3.3-1596)
+-Fix-Commit: 7ea06e994093fa0bcca0d0ee2c1db271d8d7885d (2.42)
+diff --git a/advisories/README b/advisories/README
+deleted file mode 100644
+index b8f8a829ca..0000000000
+--- a/advisories/README
++++ /dev/null
+@@ -1,77 +0,0 @@
+-GNU C Library Security Advisory Format
+-======================================
+-
+-Security advisories in this directory follow a simple git commit log
+-format, with a heading and free-format description augmented with tags
+-to allow parsing key information.  References to code changes are
+-specific to the glibc repository and follow a specific format:
+-
+-  Tag-name: <commit-ref> (release-version)
+-
+-The <commit-ref> indicates a specific commit in the repository.  The
+-release-version indicates the publicly consumable release in which this
+-commit is known to exist.  The release-version is derived from the
+-git-describe format, (i.e. stripped out from glibc-2.34.NNN-gxxxx) and
+-is of the form 2.34-NNN.  If the -NNN suffix is absent, it means that
+-the change is in that release tarball, otherwise the change is on the
+-release/2.YY/master branch and not in any released tarball.
+-
+-The following tags are currently being used:
+-
+-CVE-Id:
+-This is the CVE-Id assigned under the CVE Program
+-(https://www.cve.org/).
+-
+-Public-Date:
+-The date this issue became publicly known.
+-
+-Vulnerable-Commit:
+-The commit that introduced this vulnerability.  There could be multiple
+-entries, one for each release branch in the glibc repository; the
+-release-version portion of this tag should tell you which branch this is
+-on.
+-
+-Fix-Commit:
+-The commit that fixed this vulnerability.  There could be multiple
+-entries for each release branch in the glibc repository, indicating that
+-all of those commits contributed to fixing that issue in each of those
+-branches.
+-
+-Reported-By:
+-The entity that reported this issue. There could be multiple entries, one for
+-each reporter.
+-
+-Adding an Advisory
+-------------------
+-
+-An advisory for a CVE needs to be added on the master branch in two steps:
+-
+-1. Add the text of the advisory without any Fix-Commit tags along with
+-   the fix for the CVE.  Add the Vulnerable-Commit tag, if applicable.
+-   The advisories directory does not exist in release branches, so keep
+-   the advisory text commit distinct from the code changes, to ease
+-   backports.  Ask for the GLIBC-SA advisory number from the security
+-   team.
+-
+-2. Finish all backports on release branches and then back on the msater
+-   branch, add all commit refs to the advisory using the Fix-Commit
+-   tags.  Don't bother adding the release-version subscript since the
+-   next step will overwrite it.
+-
+-3. Run the process-advisories.sh script in the scripts directory on the
+-   advisory:
+-
+-     scripts/process-advisories.sh update GLIBC-SA-YYYY-NNNN
+-
+-   (replace YYYY-NNNN with the actual advisory number).
+-
+-4. Verify the updated advisory and push the result.
+-
+-Getting a NEWS snippet from advisories
+---------------------------------------
+-
+-Run:
+-
+-  scripts/process-advisories.sh news
+-
+-and copy the content into the NEWS file.
+
+commit 3ec4dd77f648da031bba4d3fa14825e057b5a40d
+Author: Andreas K. Hüttel <dilfridge@gentoo.org>
+Date:   Mon Jul 28 23:39:48 2025 +0200
+
+    NEWS: add new section
+    
+    Signed-off-by: Andreas K. Hüttel <dilfridge@gentoo.org>
+
+diff --git a/NEWS b/NEWS
+index f0b0e924a4..9cb8de11f9 100644
+--- a/NEWS
++++ b/NEWS
+@@ -5,6 +5,12 @@ See the end for copying conditions.
+ Please send GNU C library bug reports via <https://sourceware.org/bugzilla/>
+ using `glibc' in the "product" field.
+ 
++Version 2.42.1
++
++The following bugs were resolved with this release:
++
++  [insert bugs here]
++
+ Version 2.42
+ 
+ Major new features:
+
+commit bc13db73937730401d592b33092db6df806d193e
+Author: Sam James <sam@gentoo.org>
+Date:   Mon Jul 28 21:55:30 2025 +0100
+
+    inet-fortified: fix namespace violation (bug 33227)
+    
+    We need to use __sz, not sz, as we do elsewhere.
+    
+    Reviewed-by: Florian Weimer <fweimer@redhat.com>
+    (cherry picked from commit 87afbd7a1ad9c1dd116921817fa97198171045db)
+
+diff --git a/inet/bits/inet-fortified.h b/inet/bits/inet-fortified.h
+index 6738221a54..cc476ebcfd 100644
+--- a/inet/bits/inet-fortified.h
++++ b/inet/bits/inet-fortified.h
+@@ -45,15 +45,15 @@ __NTH (inet_pton (int __af,
+     __fortify_clang_warning_only_if_bos0_lt
+ 	(4, __dst, "inet_pton called with destination buffer size less than 4")
+ {
+-  size_t sz = 0;
++  size_t __sz = 0;
+   if (__af == AF_INET)
+-    sz = sizeof (struct in_addr);
++    __sz = sizeof (struct in_addr);
+   else if (__af == AF_INET6)
+-    sz = sizeof (struct in6_addr);
++    __sz = sizeof (struct in6_addr);
+   else
+     return __inet_pton_alias (__af, __src, __dst);
+ 
+-  return __glibc_fortify (inet_pton, sz, sizeof (char),
++  return __glibc_fortify (inet_pton, __sz, sizeof (char),
+ 			  __glibc_objsize (__dst),
+ 			  __af, __src, __dst);
+ };
+
+commit fd18059c0fcf5568db3688da47403b663cf91c5e
+Author: Davide Cavalca <davide@cavalca.name>
+Date:   Thu Jul 31 17:32:58 2025 +0200
+
+    stdlib: resolve a double lock init issue after fork [BZ #32994]
+    
+    The __abort_fork_reset_child (introduced in
+    d40ac01cbbc66e6d9dbd8e3485605c63b2178251) call resets the lock after the
+    fork. This causes a DRD regression in valgrind
+    (https://bugs.kde.org/show_bug.cgi?id=503668), as it's effectively a
+    double initialization, despite it being actually ok in this case. As
+    suggested in https://sourceware.org/bugzilla/show_bug.cgi?id=32994#c2
+    we replace it here with a memcpy of another initialized lock instead,
+    which makes valgrind happy.
+    
+    Reviewed-by: Florian Weimer <fweimer@redhat.com>
+    (cherry picked from commit d9a348d0927c7a1aec5caf3df3fcd36956b3eb23)
+
+diff --git a/NEWS b/NEWS
+index 9cb8de11f9..4610b8bbc6 100644
+--- a/NEWS
++++ b/NEWS
+@@ -9,7 +9,7 @@ Version 2.42.1
+ 
+ The following bugs were resolved with this release:
+ 
+-  [insert bugs here]
++  [32994] stdlib: resolve a double lock init issue after fork
+ 
+ Version 2.42
+ 
+diff --git a/stdlib/abort.c b/stdlib/abort.c
+index caa9e6dc04..904244a2fb 100644
+--- a/stdlib/abort.c
++++ b/stdlib/abort.c
+@@ -19,6 +19,7 @@
+ #include <internal-signals.h>
+ #include <libc-lock.h>
+ #include <pthreadP.h>
++#include <string.h>
+ #include <unistd.h>
+ 
+ /* Try to get a machine dependent instruction which will make the
+@@ -42,7 +43,10 @@ __libc_rwlock_define_initialized (static, lock);
+ void
+ __abort_fork_reset_child (void)
+ {
+-  __libc_rwlock_init (lock);
++  /* Reinitialize lock without calling pthread_rwlock_init, to
++     avoid a valgrind DRD false positive.  */
++  __libc_rwlock_define_initialized (, reset_lock);
++  memcpy (&lock, &reset_lock, sizeof (lock));
+ }
+ 
+ void
+
+commit 2fadee530155bae6682ab2965d6ff3a2fc9eced6
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Fri Aug 1 19:27:04 2025 +0200
+
+    elf: Extract rtld_setup_phdr function from dl_main
+    
+    Remove historic binutils reference from comment and update
+    how this data is used by applications.
+    
+    Reviewed-by: Adhemerval Zanella  <adhemerval.zanella@linaro.org>
+    (cherry picked from commit 2cac9559e06044ba520e785c151fbbd25011865f)
+
+diff --git a/elf/rtld.c b/elf/rtld.c
+index 493f9696ea..6fb900fb31 100644
+--- a/elf/rtld.c
++++ b/elf/rtld.c
+@@ -1239,6 +1239,37 @@ rtld_setup_main_map (struct link_map *main_map)
+   return has_interp;
+ }
+ 
++/* Set up the program header information for the dynamic linker
++   itself.  It can be accessed via _r_debug and dl_iterate_phdr
++   callbacks.  */
++static void
++rtld_setup_phdr (void)
++{
++  /* Starting from binutils-2.23, the linker will define the magic
++     symbol __ehdr_start to point to our own ELF header if it is
++     visible in a segment that also includes the phdrs.  */
++
++  const ElfW(Ehdr) *rtld_ehdr = &__ehdr_start;
++  assert (rtld_ehdr->e_ehsize == sizeof *rtld_ehdr);
++  assert (rtld_ehdr->e_phentsize == sizeof (ElfW(Phdr)));
++
++  const ElfW(Phdr) *rtld_phdr = (const void *) rtld_ehdr + rtld_ehdr->e_phoff;
++
++  _dl_rtld_map.l_phdr = rtld_phdr;
++  _dl_rtld_map.l_phnum = rtld_ehdr->e_phnum;
++
++
++  /* PT_GNU_RELRO is usually the last phdr.  */
++  size_t cnt = rtld_ehdr->e_phnum;
++  while (cnt-- > 0)
++    if (rtld_phdr[cnt].p_type == PT_GNU_RELRO)
++      {
++	_dl_rtld_map.l_relro_addr = rtld_phdr[cnt].p_vaddr;
++	_dl_rtld_map.l_relro_size = rtld_phdr[cnt].p_memsz;
++	break;
++      }
++}
++
+ /* Adjusts the contents of the stack and related globals for the user
+    entry point.  The ld.so processed skip_args arguments and bumped
+    _dl_argv and _dl_argc accordingly.  Those arguments are removed from
+@@ -1705,33 +1736,7 @@ dl_main (const ElfW(Phdr) *phdr,
+   ++GL(dl_ns)[LM_ID_BASE]._ns_nloaded;
+   ++GL(dl_load_adds);
+ 
+-  /* Starting from binutils-2.23, the linker will define the magic symbol
+-     __ehdr_start to point to our own ELF header if it is visible in a
+-     segment that also includes the phdrs.  If that's not available, we use
+-     the old method that assumes the beginning of the file is part of the
+-     lowest-addressed PT_LOAD segment.  */
+-
+-  /* Set up the program header information for the dynamic linker
+-     itself.  It is needed in the dl_iterate_phdr callbacks.  */
+-  const ElfW(Ehdr) *rtld_ehdr = &__ehdr_start;
+-  assert (rtld_ehdr->e_ehsize == sizeof *rtld_ehdr);
+-  assert (rtld_ehdr->e_phentsize == sizeof (ElfW(Phdr)));
+-
+-  const ElfW(Phdr) *rtld_phdr = (const void *) rtld_ehdr + rtld_ehdr->e_phoff;
+-
+-  _dl_rtld_map.l_phdr = rtld_phdr;
+-  _dl_rtld_map.l_phnum = rtld_ehdr->e_phnum;
+-
+-
+-  /* PT_GNU_RELRO is usually the last phdr.  */
+-  size_t cnt = rtld_ehdr->e_phnum;
+-  while (cnt-- > 0)
+-    if (rtld_phdr[cnt].p_type == PT_GNU_RELRO)
+-      {
+-	_dl_rtld_map.l_relro_addr = rtld_phdr[cnt].p_vaddr;
+-	_dl_rtld_map.l_relro_size = rtld_phdr[cnt].p_memsz;
+-	break;
+-      }
++  rtld_setup_phdr ();
+ 
+   /* Add the dynamic linker to the TLS list if it also uses TLS.  */
+   if (_dl_rtld_map.l_tls_blocksize != 0)
+
+commit 5e298d2d937b6da06500478be956abeb24357e05
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Fri Aug 1 19:27:35 2025 +0200
+
+    elf: Handle ld.so with LOAD segment gaps in _dl_find_object (bug 31943)
+    
+    Detect if ld.so not contiguous and handle that case in _dl_find_object.
+    Set l_find_object_processed even for initially loaded link maps,
+    otherwise dlopen of an initially loaded object adds it to
+    _dlfo_loaded_mappings (where maps are expected to be contiguous),
+    in addition to _dlfo_nodelete_mappings.
+    
+    Test elf/tst-link-map-contiguous-ldso iterates over the loader
+    image, reading every word to make sure memory is actually mapped.
+    It only does that if the l_contiguous flag is set for the link map.
+    Otherwise, it finds gaps with mmap and checks that _dl_find_object
+    does not return the ld.so mapping for them.
+    
+    The test elf/tst-link-map-contiguous-main does the same thing for
+    the libc.so shared object.  This only works if the kernel loaded
+    the main program because the glibc dynamic loader may fill
+    the gaps with PROT_NONE mappings in some cases, making it contiguous,
+    but accesses to individual words may still fault.
+    
+    Test elf/tst-link-map-contiguous-libc is again slightly different
+    because the dynamic loader always fills the gaps with PROT_NONE
+    mappings, so a different form of probing has to be used.
+    
+    Reviewed-by: Adhemerval Zanella  <adhemerval.zanella@linaro.org>
+    (cherry picked from commit 20681be149b9eb1b6c1f4246bf4bd801221c86cd)
+
+diff --git a/NEWS b/NEWS
+index 4610b8bbc6..cbe11ac95b 100644
+--- a/NEWS
++++ b/NEWS
+@@ -9,6 +9,7 @@ Version 2.42.1
+ 
+ The following bugs were resolved with this release:
+ 
++  [31943] _dl_find_object can fail if ld.so contains gaps between load segments
+   [32994] stdlib: resolve a double lock init issue after fork
+ 
+ Version 2.42
+diff --git a/elf/Makefile b/elf/Makefile
+index 48aa0b57e5..3a5596e2bb 100644
+--- a/elf/Makefile
++++ b/elf/Makefile
+@@ -543,6 +543,8 @@ tests-internal += \
+   tst-dl_find_object-threads \
+   tst-dlmopen2 \
+   tst-hash-collision3 \
++  tst-link-map-contiguous-ldso \
++  tst-link-map-contiguous-libc \
+   tst-ptrguard1 \
+   tst-stackguard1 \
+   tst-tls-surplus \
+@@ -554,6 +556,10 @@ tests-internal += \
+   unload2 \
+   # tests-internal
+ 
++ifeq ($(build-hardcoded-path-in-tests),yes)
++tests-internal += tst-link-map-contiguous-main
++endif
++
+ tests-container += \
+   tst-dlopen-self-container \
+   tst-dlopen-tlsmodid-container \
+diff --git a/elf/dl-find_object.c b/elf/dl-find_object.c
+index 1e76373292..c9f4c1c8d1 100644
+--- a/elf/dl-find_object.c
++++ b/elf/dl-find_object.c
+@@ -465,6 +465,37 @@ _dl_find_object (void *pc1, struct dl_find_object *result)
+ }
+ rtld_hidden_def (_dl_find_object)
+ 
++/* Subroutine of _dlfo_process_initial to split out noncontigous link
++   maps.  NODELETE is the number of used _dlfo_nodelete_mappings
++   elements.  It is incremented as needed, and the new NODELETE value
++   is returned.  */
++static size_t
++_dlfo_process_initial_noncontiguous_map (struct link_map *map,
++                                         size_t nodelete)
++{
++  struct dl_find_object_internal dlfo;
++  _dl_find_object_from_map (map, &dlfo);
++
++  /* PT_LOAD segments for a non-contiguous link map are added to the
++     non-closeable mappings.  */
++  const ElfW(Phdr) *ph = map->l_phdr;
++  const ElfW(Phdr) *ph_end = map->l_phdr + map->l_phnum;
++  for (; ph < ph_end; ++ph)
++    if (ph->p_type == PT_LOAD)
++      {
++        if (_dlfo_nodelete_mappings != NULL)
++          {
++            /* Second pass only.  */
++            _dlfo_nodelete_mappings[nodelete] = dlfo;
++            ElfW(Addr) start = ph->p_vaddr + map->l_addr;
++            _dlfo_nodelete_mappings[nodelete].map_start = start;
++            _dlfo_nodelete_mappings[nodelete].map_end = start + ph->p_memsz;
++          }
++        ++nodelete;
++      }
++  return nodelete;
++}
++
+ /* _dlfo_process_initial is called twice.  First to compute the array
+    sizes from the initial loaded mappings.  Second to fill in the
+    bases and infos arrays with the (still unsorted) data.  Returns the
+@@ -476,29 +507,8 @@ _dlfo_process_initial (void)
+ 
+   size_t nodelete = 0;
+   if (!main_map->l_contiguous)
+-    {
+-      struct dl_find_object_internal dlfo;
+-      _dl_find_object_from_map (main_map, &dlfo);
+-
+-      /* PT_LOAD segments for a non-contiguous are added to the
+-         non-closeable mappings.  */
+-      for (const ElfW(Phdr) *ph = main_map->l_phdr,
+-             *ph_end = main_map->l_phdr + main_map->l_phnum;
+-           ph < ph_end; ++ph)
+-        if (ph->p_type == PT_LOAD)
+-          {
+-            if (_dlfo_nodelete_mappings != NULL)
+-              {
+-                /* Second pass only.  */
+-                _dlfo_nodelete_mappings[nodelete] = dlfo;
+-                _dlfo_nodelete_mappings[nodelete].map_start
+-                  = ph->p_vaddr + main_map->l_addr;
+-                _dlfo_nodelete_mappings[nodelete].map_end
+-                  = _dlfo_nodelete_mappings[nodelete].map_start + ph->p_memsz;
+-              }
+-            ++nodelete;
+-          }
+-    }
++    /* Contiguous case already handled in _dl_find_object_init.  */
++    nodelete = _dlfo_process_initial_noncontiguous_map (main_map, nodelete);
+ 
+   size_t loaded = 0;
+   for (Lmid_t ns = 0; ns < GL(dl_nns); ++ns)
+@@ -510,11 +520,18 @@ _dlfo_process_initial (void)
+           /* lt_library link maps are implicitly NODELETE.  */
+           if (l->l_type == lt_library || l->l_nodelete_active)
+             {
+-              if (_dlfo_nodelete_mappings != NULL)
+-                /* Second pass only.  */
+-                _dl_find_object_from_map
+-                  (l, _dlfo_nodelete_mappings + nodelete);
+-              ++nodelete;
++              /* The kernel may have loaded ld.so with gaps.   */
++              if (!l->l_contiguous && is_rtld_link_map (l))
++                nodelete
++                  = _dlfo_process_initial_noncontiguous_map (l, nodelete);
++              else
++                {
++                  if (_dlfo_nodelete_mappings != NULL)
++                    /* Second pass only.  */
++                    _dl_find_object_from_map
++                      (l, _dlfo_nodelete_mappings + nodelete);
++                  ++nodelete;
++                }
+             }
+           else if (l->l_type == lt_loaded)
+             {
+@@ -764,7 +781,6 @@ _dl_find_object_update_1 (struct link_map **loaded, size_t count)
+           /* Prefer newly loaded link map.  */
+           assert (loaded_index1 > 0);
+           _dl_find_object_from_map (loaded[loaded_index1 - 1], dlfo);
+-          loaded[loaded_index1 -  1]->l_find_object_processed = 1;
+           --loaded_index1;
+         }
+ 
+diff --git a/elf/dl-find_object.h b/elf/dl-find_object.h
+index 9aa2439eaa..d9d75c4ad9 100644
+--- a/elf/dl-find_object.h
++++ b/elf/dl-find_object.h
+@@ -94,7 +94,7 @@ _dl_find_object_to_external (struct dl_find_object_internal *internal,
+ }
+ 
+ /* Extract the object location data from a link map and writes it to
+-   *RESULT using relaxed MO stores.  */
++   *RESULT using relaxed MO stores.  Set L->l_find_object_processed.  */
+ static void __attribute__ ((unused))
+ _dl_find_object_from_map (struct link_map *l,
+                           struct dl_find_object_internal *result)
+@@ -141,8 +141,11 @@ _dl_find_object_from_map (struct link_map *l,
+           break;
+         }
+       if (read_seg == 3)
+-        return;
++        goto done;
+    }
++
++ done:
++  l->l_find_object_processed = 1;
+ }
+ 
+ /* Called by the dynamic linker to set up the data structures for the
+diff --git a/elf/rtld.c b/elf/rtld.c
+index 6fb900fb31..ef4d96c053 100644
+--- a/elf/rtld.c
++++ b/elf/rtld.c
+@@ -1241,7 +1241,7 @@ rtld_setup_main_map (struct link_map *main_map)
+ 
+ /* Set up the program header information for the dynamic linker
+    itself.  It can be accessed via _r_debug and dl_iterate_phdr
+-   callbacks.  */
++   callbacks, and it is used by _dl_find_object.  */
+ static void
+ rtld_setup_phdr (void)
+ {
+@@ -1259,6 +1259,29 @@ rtld_setup_phdr (void)
+   _dl_rtld_map.l_phnum = rtld_ehdr->e_phnum;
+ 
+ 
++  _dl_rtld_map.l_contiguous = 1;
++  /* The linker may not have produced a contiguous object.  The kernel
++     will load the object with actual gaps (unlike the glibc loader
++     for shared objects, which always produces a contiguous mapping).
++     See similar logic in rtld_setup_main_map above.  */
++  {
++    ElfW(Addr) expected_load_address = 0;
++    for (const ElfW(Phdr) *ph = rtld_phdr; ph < &rtld_phdr[rtld_ehdr->e_phnum];
++	 ++ph)
++      if (ph->p_type == PT_LOAD)
++	{
++	  ElfW(Addr) mapstart = ph->p_vaddr & ~(GLRO(dl_pagesize) - 1);
++	  if (_dl_rtld_map.l_contiguous && expected_load_address != 0
++	      && expected_load_address != mapstart)
++	    _dl_rtld_map.l_contiguous = 0;
++	  ElfW(Addr) allocend = ph->p_vaddr + ph->p_memsz;
++	  /* The next expected address is the page following this load
++	     segment.  */
++	  expected_load_address = ((allocend + GLRO(dl_pagesize) - 1)
++				   & ~(GLRO(dl_pagesize) - 1));
++	}
++  }
++
+   /* PT_GNU_RELRO is usually the last phdr.  */
+   size_t cnt = rtld_ehdr->e_phnum;
+   while (cnt-- > 0)
+diff --git a/elf/tst-link-map-contiguous-ldso.c b/elf/tst-link-map-contiguous-ldso.c
+new file mode 100644
+index 0000000000..04de808bb2
+--- /dev/null
++++ b/elf/tst-link-map-contiguous-ldso.c
+@@ -0,0 +1,98 @@
++/* Check that _dl_find_object behavior matches up with gaps.
++   Copyright (C) 2025 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#include <dlfcn.h>
++#include <gnu/lib-names.h>
++#include <link.h>
++#include <stdbool.h>
++#include <stdio.h>
++#include <support/check.h>
++#include <support/xdlfcn.h>
++#include <support/xunistd.h>
++#include <sys/mman.h>
++#include <unistd.h>
++
++static int
++do_test (void)
++{
++  struct link_map *l = xdlopen (LD_SO, RTLD_NOW);
++  if (!l->l_contiguous)
++    {
++      puts ("info: ld.so link map is not contiguous");
++
++      /* Try to find holes by probing with mmap.  */
++      int pagesize = getpagesize ();
++      bool gap_found = false;
++      ElfW(Addr) addr = l->l_map_start;
++      TEST_COMPARE (addr % pagesize, 0);
++      while (addr < l->l_map_end)
++        {
++          void *expected = (void *) addr;
++          void *ptr = xmmap (expected, 1, PROT_READ | PROT_WRITE,
++                             MAP_PRIVATE | MAP_ANONYMOUS, -1);
++          struct dl_find_object dlfo;
++          int dlfo_ret = _dl_find_object (expected, &dlfo);
++          if (ptr == expected)
++            {
++              if (dlfo_ret < 0)
++                {
++                  TEST_COMPARE (dlfo_ret, -1);
++                  printf ("info: hole without mapping data found at %p\n", ptr);
++                }
++              else
++                FAIL ("object \"%s\" found in gap at %p",
++                      dlfo.dlfo_link_map->l_name, ptr);
++              gap_found = true;
++            }
++          else if (dlfo_ret == 0)
++            {
++              if ((void *) dlfo.dlfo_link_map != (void *) l)
++                {
++                  printf ("info: object \"%s\" found at %p\n",
++                          dlfo.dlfo_link_map->l_name, ptr);
++                  gap_found = true;
++                }
++            }
++          else
++            TEST_COMPARE (dlfo_ret, -1);
++          xmunmap (ptr, 1);
++          addr += pagesize;
++        }
++      if (!gap_found)
++        FAIL ("no ld.so gap found");
++    }
++  else
++    {
++      puts ("info: ld.so link map is contiguous");
++
++      /* Assert that ld.so is truly contiguous in memory.  */
++      volatile long int *p = (volatile long int *) l->l_map_start;
++      volatile long int *end = (volatile long int *) l->l_map_end;
++      while (p < end)
++        {
++          *p;
++          ++p;
++        }
++    }
++
++  xdlclose (l);
++
++  return 0;
++}
++
++#include <support/test-driver.c>
+diff --git a/elf/tst-link-map-contiguous-libc.c b/elf/tst-link-map-contiguous-libc.c
+new file mode 100644
+index 0000000000..eb5728c765
+--- /dev/null
++++ b/elf/tst-link-map-contiguous-libc.c
+@@ -0,0 +1,57 @@
++/* Check that the entire libc.so program image is readable if contiguous.
++   Copyright (C) 2025 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#include <gnu/lib-names.h>
++#include <link.h>
++#include <support/check.h>
++#include <support/xdlfcn.h>
++#include <support/xunistd.h>
++#include <sys/mman.h>
++#include <unistd.h>
++
++static int
++do_test (void)
++{
++  struct link_map *l = xdlopen (LIBC_SO, RTLD_NOW);
++
++  /* The dynamic loader fills holes with PROT_NONE mappings.  */
++  if (!l->l_contiguous)
++    FAIL_EXIT1 ("libc.so link map is not contiguous");
++
++  /* Direct probing does not work because not everything is readable
++     due to PROT_NONE mappings.  */
++  int pagesize = getpagesize ();
++  ElfW(Addr) addr = l->l_map_start;
++  TEST_COMPARE (addr % pagesize, 0);
++  while (addr < l->l_map_end)
++    {
++      void *expected = (void *) addr;
++      void *ptr = xmmap (expected, 1, PROT_READ | PROT_WRITE,
++                         MAP_PRIVATE | MAP_ANONYMOUS, -1);
++      if (ptr == expected)
++        FAIL ("hole in libc.so memory image after %lu bytes",
++              (unsigned long int) (addr - l->l_map_start));
++      xmunmap (ptr, 1);
++      addr += pagesize;
++    }
++
++  xdlclose (l);
++
++  return 0;
++}
++#include <support/test-driver.c>
+diff --git a/elf/tst-link-map-contiguous-main.c b/elf/tst-link-map-contiguous-main.c
+new file mode 100644
+index 0000000000..2d1a054f0f
+--- /dev/null
++++ b/elf/tst-link-map-contiguous-main.c
+@@ -0,0 +1,45 @@
++/* Check that the entire main program image is readable if contiguous.
++   Copyright (C) 2025 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#include <link.h>
++#include <support/check.h>
++#include <support/xdlfcn.h>
++
++static int
++do_test (void)
++{
++  struct link_map *l = xdlopen ("", RTLD_NOW);
++  if (!l->l_contiguous)
++    FAIL_UNSUPPORTED ("main link map is not contiguous");
++
++  /* This check only works if the kernel loaded the main program.  The
++     dynamic loader replaces gaps with PROT_NONE mappings, resulting
++     in faults.  */
++  volatile long int *p = (volatile long int *) l->l_map_start;
++  volatile long int *end = (volatile long int *) l->l_map_end;
++  while (p < end)
++    {
++      *p;
++      ++p;
++    }
++
++  xdlclose (l);
++
++  return 0;
++}
++#include <support/test-driver.c>
+
+commit b38f3f60d5b157edcf4d8bd1fd3ed02d417889e0
+Author: Adhemerval Zanella <adhemerval.zanella@linaro.org>
+Date:   Fri Aug 1 15:00:25 2025 -0300
+
+    nptl: Fix SYSCALL_CANCEL for return values larger than INT_MAX (BZ 33245)
+    
+    The SYSCALL_CANCEL calls __syscall_cancel, which in turn
+    calls __internal_syscall_cancel with an 'int' return instead of the
+    expected 'long int'.  This causes issues with syscalls that return
+    values larger than INT_MAX, such as copy_file_range [1].
+    
+    Checked on x86_64-linux-gnu.
+    
+    [1] https://debbugs.gnu.org/cgi/bugreport.cgi?bug=79139
+    
+    Reviewed-by: Andreas K. Huettel <dilfridge@gentoo.org>
+    (cherry picked from commit 7107bebf19286f42dcb0a97581137a5893c16206)
+
+diff --git a/NEWS b/NEWS
+index cbe11ac95b..1d04bdfef8 100644
+--- a/NEWS
++++ b/NEWS
+@@ -11,6 +11,7 @@ The following bugs were resolved with this release:
+ 
+   [31943] _dl_find_object can fail if ld.so contains gaps between load segments
+   [32994] stdlib: resolve a double lock init issue after fork
++  [33245] nptl: nptl: error in internal cancellation syscall handling
+ 
+ Version 2.42
+ 
+diff --git a/nptl/cancellation.c b/nptl/cancellation.c
+index 156e63dcf0..bed0383a23 100644
+--- a/nptl/cancellation.c
++++ b/nptl/cancellation.c
+@@ -72,8 +72,8 @@ __syscall_cancel (__syscall_arg_t a1, __syscall_arg_t a2,
+ 		  __syscall_arg_t a5, __syscall_arg_t a6,
+ 		  __SYSCALL_CANCEL7_ARG_DEF __syscall_arg_t nr)
+ {
+-  int r = __internal_syscall_cancel (a1, a2, a3, a4, a5, a6,
+-				     __SYSCALL_CANCEL7_ARG nr);
++  long int r = __internal_syscall_cancel (a1, a2, a3, a4, a5, a6,
++					  __SYSCALL_CANCEL7_ARG nr);
+   return __glibc_unlikely (INTERNAL_SYSCALL_ERROR_P (r))
+ 	 ? SYSCALL_ERROR_LABEL (INTERNAL_SYSCALL_ERRNO (r))
+ 	 : r;
+
+commit 9d5bf9c17db0f35268cd798660c8bbeea1f4071d
+Author: H.J. Lu <hjl.tools@gmail.com>
+Date:   Sat Jul 19 07:43:26 2025 -0700
+
+    Delete temporary files in support_subprocess
+    
+    Call support_delete_temp_files to delete temporary files before exit in
+    support_subprocess.
+    
+    This partially fixes BZ #33182.
+    
+    Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
+    Reviewed-by: Adhemerval Zanella  <adhemerval.zanella@linaro.org>
+    (cherry picked from commit d27b1a71cd424710813bd3d81afb32a36470d643)
+
+diff --git a/support/support_subprocess.c b/support/support_subprocess.c
+index be00dde3a7..8bf9a33ea2 100644
+--- a/support/support_subprocess.c
++++ b/support/support_subprocess.c
+@@ -25,6 +25,7 @@
+ #include <support/check.h>
+ #include <support/xunistd.h>
+ #include <support/subprocess.h>
++#include <support/temp_file-internal.h>
+ 
+ static struct support_subprocess
+ support_subprocess_init (void)
+@@ -60,6 +61,8 @@ support_subprocess (void (*callback) (void *), void *closure)
+       xclose (result.stdout_pipe[1]);
+       xclose (result.stderr_pipe[1]);
+       callback (closure);
++      /* Make sure that temporary files are deleted.  */
++      support_delete_temp_files ();
+       _exit (0);
+     }
+   xclose (result.stdout_pipe[1]);
+
+commit 9ec7a532ffdb9a6e0a4b220d7a694d6120701035
+Author: H.J. Lu <hjl.tools@gmail.com>
+Date:   Sat Jul 19 07:43:27 2025 -0700
+
+    tst-fopen-threaded.c: Delete temporary file
+    
+    Update tst-fopen-threaded.c to call support_create_temp_directory to
+    create a temporary directory and open "file" in the temporary directory,
+    instead of using /tmp/openclosetest and leaving it behind.
+    
+    This partially fixes BZ #33182.
+    
+    Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
+    Reviewed-by: Adhemerval Zanella  <adhemerval.zanella@linaro.org>
+    (cherry picked from commit e7db5150603bb2224a2bfd9628cae04ddcbe49e3)
+
+diff --git a/sysdeps/pthread/tst-fopen-threaded.c b/sysdeps/pthread/tst-fopen-threaded.c
+index ade58ad19e..c17f1eaa13 100644
+--- a/sysdeps/pthread/tst-fopen-threaded.c
++++ b/sysdeps/pthread/tst-fopen-threaded.c
+@@ -34,11 +34,13 @@
+ #include <stdio.h>
+ #include <string.h>
+ #include <unistd.h>
++#include <stdlib.h>
+ 
+ #include <support/check.h>
+ #include <support/temp_file.h>
+ #include <support/xstdio.h>
+ #include <support/xthread.h>
++#include <support/support.h>
+ 
+ #define NUM_THREADS 100
+ #define ITERS 10
+@@ -111,7 +113,8 @@ threadOpenCloseRoutine (void *argv)
+   /* Wait for all threads to be ready to call fopen and fclose.  */
+   xpthread_barrier_wait (&barrier);
+ 
+-  FILE *fd = xfopen ("/tmp/openclosetest", "w+");
++  char *file = (char *) argv;
++  FILE *fd = xfopen (file, "w+");
+   xfclose (fd);
+   return NULL;
+ }
+@@ -235,6 +238,10 @@ do_test (void)
+       xfclose (fd_file);
+     }
+ 
++  char *tempdir = support_create_temp_directory ("openclosetest-");
++  char *file = xasprintf ("%s/file", tempdir);
++  add_temp_file (file);
++
+   /* Test 3: Concurrent open/close.  */
+   for (int reps = 1; reps <= ITERS; reps++)
+     {
+@@ -243,7 +250,7 @@ do_test (void)
+         {
+           threads[i] =
+             xpthread_create (support_small_stack_thread_attribute (),
+-                             threadOpenCloseRoutine, NULL);
++                             threadOpenCloseRoutine, file);
+         }
+       for (int i = 0; i < NUM_THREADS; i++)
+         {
+@@ -252,6 +259,9 @@ do_test (void)
+       xpthread_barrier_destroy (&barrier);
+     }
+ 
++  free (file);
++  free (tempdir);
++
+   return 0;
+ }
+ 
+
+commit 41a77b78cff821007e3dd874619ebec7ce708c3d
+Author: H.J. Lu <hjl.tools@gmail.com>
+Date:   Sat Jul 19 07:43:28 2025 -0700
+
+    tst-freopen4-main.c: Call support_capture_subprocess with chroot
+    
+    Update tst-freopen4-main.c to call support_capture_subprocess with chroot,
+    which makes temporary files inaccessible, so that temporary files can be
+    deleted.
+    
+    This partially fixes BZ #33182.
+    
+    Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
+    Reviewed-by: Adhemerval Zanella  <adhemerval.zanella@linaro.org>
+    (cherry picked from commit 6463d4a7b28e5ee3891c34a8a1f0a59c24dfa9de)
+
+diff --git a/stdio-common/tst-freopen4-main.c b/stdio-common/tst-freopen4-main.c
+index 3336f5327d..436da4d203 100644
+--- a/stdio-common/tst-freopen4-main.c
++++ b/stdio-common/tst-freopen4-main.c
+@@ -28,25 +28,15 @@
+ #include <support/test-driver.h>
+ #include <support/xstdio.h>
+ #include <support/xunistd.h>
++#include <support/capture_subprocess.h>
+ 
+-int
+-do_test (void)
++static void
++do_test_chroot (void *data)
+ {
+-  mtrace ();
+-  char *temp_dir;
++  char *temp_dir = (char *) data;
+   FILE *fp;
+   int ret;
+ 
+-  /* These chroot tests verify that either reopening a renamed or
+-     deleted file works even in the absence of /proc, or that it fails
+-     (without memory leaks); thus, for example, such reopening does
+-     not crash in the absence of /proc.  */
+-
+-  support_become_root ();
+-  if (!support_can_chroot ())
+-    return EXIT_UNSUPPORTED;
+-
+-  temp_dir = support_create_temp_directory ("tst-freopen4");
+   xchroot (temp_dir);
+ 
+   /* Test freopen with NULL, renamed file.  This verifies that
+@@ -96,6 +86,32 @@ do_test (void)
+     puts ("freopen of deleted file failed (OK)");
+ 
+   free (temp_dir);
++}
++
++int
++do_test (void)
++{
++  mtrace ();
++  char *temp_dir;
++
++  /* These chroot tests verify that either reopening a renamed or
++     deleted file works even in the absence of /proc, or that it fails
++     (without memory leaks); thus, for example, such reopening does
++     not crash in the absence of /proc.  */
++
++  support_become_root ();
++  if (!support_can_chroot ())
++    return EXIT_UNSUPPORTED;
++
++  temp_dir = support_create_temp_directory ("tst-freopen4");
++
++  struct support_capture_subprocess result;
++  result = support_capture_subprocess (do_test_chroot, temp_dir);
++  support_capture_subprocess_check (&result, "freopen4", 0,
++				    sc_allow_stdout);
++  fputs (result.out.buffer, stdout);
++  support_capture_subprocess_free (&result);
++
+   return 0;
+ }
+ 
+
+commit c090b0cb1cde74aaeec01663dd55d6681dc92075
+Author: H.J. Lu <hjl.tools@gmail.com>
+Date:   Sat Jul 19 07:43:29 2025 -0700
+
+    tst-env-setuid: Delete LD_DEBUG_OUTPUT output
+    
+    Update tst-env-setuid.c to delete LD_DEBUG_OUTPUT output, instead of
+    leaving it behind.
+    
+    This partially fixes BZ #33182.
+    
+    Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
+    Reviewed-by: Adhemerval Zanella  <adhemerval.zanella@linaro.org>
+    (cherry picked from commit 5d23dfb289174d73b8907b86d2bef7a3ca889840)
+
+diff --git a/elf/tst-env-setuid.c b/elf/tst-env-setuid.c
+index 7209acd616..ff3eda7f91 100644
+--- a/elf/tst-env-setuid.c
++++ b/elf/tst-env-setuid.c
+@@ -40,6 +40,8 @@ static char SETGID_CHILD[] = "setgid-child";
+ # define PROFILE_LIB      "tst-sonamemove-runmod2.so"
+ #endif
+ 
++#define LD_DEBUG_OUTPUT   "/tmp/some-file"
++
+ struct envvar_t
+ {
+   const char *env;
+@@ -61,7 +63,7 @@ static const struct envvar_t filtered_envvars[] =
+   { "MALLOC_TRIM_THRESHOLD_",  FILTERED_VALUE },
+   { "RES_OPTIONS",             FILTERED_VALUE },
+   { "LD_DEBUG",                "all" },
+-  { "LD_DEBUG_OUTPUT",         "/tmp/some-file" },
++  { "LD_DEBUG_OUTPUT",         LD_DEBUG_OUTPUT },
+   { "LD_WARN",                 FILTERED_VALUE },
+   { "LD_VERBOSE",              FILTERED_VALUE },
+   { "LD_BIND_NOW",             "0" },
+@@ -74,6 +76,14 @@ static const struct envvar_t unfiltered_envvars[] =
+   { "LD_ASSUME_KERNEL",        UNFILTERED_VALUE },
+ };
+ 
++static void
++unlink_ld_debug_output (pid_t pid)
++{
++  char *output = xasprintf ("%s.%d", LD_DEBUG_OUTPUT, pid);
++  unlink (output);
++  free (output);
++}
++
+ static int
+ test_child (void)
+ {
+@@ -138,13 +148,21 @@ do_test (int argc, char **argv)
+   /* Setgid child process.  */
+   if (argc == 2 && strcmp (argv[1], SETGID_CHILD) == 0)
+     {
++      pid_t ppid = getppid ();
++
+       if (getgid () == getegid ())
+-	/* This can happen if the file system is mounted nosuid.  */
+-	FAIL_UNSUPPORTED ("SGID failed: GID and EGID match (%jd)\n",
+-			  (intmax_t) getgid ());
++	{
++	  /* This can happen if the file system is mounted nosuid.  */
++	  unlink_ld_debug_output (ppid);
++
++	  FAIL_UNSUPPORTED ("SGID failed: GID and EGID match (%jd)\n",
++			    (intmax_t) getgid ());
++	}
+ 
+       int ret = test_child ();
+ 
++      unlink_ld_debug_output (ppid);
++
+       if (ret != 0)
+ 	exit (1);
+       return 0;
+
+commit e5754399b542640f3f69c5e2513c57a307656032
+Author: H.J. Lu <hjl.tools@gmail.com>
+Date:   Tue Aug 5 09:16:14 2025 -0700
+
+    Revert "tst-freopen4-main.c: Call support_capture_subprocess with chroot"
+    
+    Revert commit 6463d4a7b28e5ee3891c34a8a1f0a59c24dfa9de to fix
+    
+    FAIL: stdio-common/tst-freopen4-mem
+    FAIL: stdio-common/tst-freopen64-4-mem
+    
+    This fixes BZ #33254.
+    
+    Reviewed-by: Sam James <sam@gentoo.org>
+    (cherry picked from commit adec0bf05bc23ec35573c7a5b96440089b69265e)
+
+diff --git a/stdio-common/tst-freopen4-main.c b/stdio-common/tst-freopen4-main.c
+index 436da4d203..3336f5327d 100644
+--- a/stdio-common/tst-freopen4-main.c
++++ b/stdio-common/tst-freopen4-main.c
+@@ -28,15 +28,25 @@
+ #include <support/test-driver.h>
+ #include <support/xstdio.h>
+ #include <support/xunistd.h>
+-#include <support/capture_subprocess.h>
+ 
+-static void
+-do_test_chroot (void *data)
++int
++do_test (void)
+ {
+-  char *temp_dir = (char *) data;
++  mtrace ();
++  char *temp_dir;
+   FILE *fp;
+   int ret;
+ 
++  /* These chroot tests verify that either reopening a renamed or
++     deleted file works even in the absence of /proc, or that it fails
++     (without memory leaks); thus, for example, such reopening does
++     not crash in the absence of /proc.  */
++
++  support_become_root ();
++  if (!support_can_chroot ())
++    return EXIT_UNSUPPORTED;
++
++  temp_dir = support_create_temp_directory ("tst-freopen4");
+   xchroot (temp_dir);
+ 
+   /* Test freopen with NULL, renamed file.  This verifies that
+@@ -86,32 +96,6 @@ do_test_chroot (void *data)
+     puts ("freopen of deleted file failed (OK)");
+ 
+   free (temp_dir);
+-}
+-
+-int
+-do_test (void)
+-{
+-  mtrace ();
+-  char *temp_dir;
+-
+-  /* These chroot tests verify that either reopening a renamed or
+-     deleted file works even in the absence of /proc, or that it fails
+-     (without memory leaks); thus, for example, such reopening does
+-     not crash in the absence of /proc.  */
+-
+-  support_become_root ();
+-  if (!support_can_chroot ())
+-    return EXIT_UNSUPPORTED;
+-
+-  temp_dir = support_create_temp_directory ("tst-freopen4");
+-
+-  struct support_capture_subprocess result;
+-  result = support_capture_subprocess (do_test_chroot, temp_dir);
+-  support_capture_subprocess_check (&result, "freopen4", 0,
+-				    sc_allow_stdout);
+-  fputs (result.out.buffer, stdout);
+-  support_capture_subprocess_free (&result);
+-
+   return 0;
+ }
+ 
+
+commit c5476b7907d01207ede6bf57b26cef151b601f35
+Author: Samuel Thibault <samuel.thibault@ens-lyon.org>
+Date:   Fri Jul 18 23:14:40 2025 +0200
+
+    hurd: support: Fix running SGID tests
+    
+    Secure mode is enabled only if SGID actually provides a new privilege,
+    so we have to drop it before gaining it again.
+    
+    Fixes commit 3a3fb2ed83f79100c116c824454095ecfb335ad7
+    ("Fix error reporting (false negatives) in SGID tests")
+    
+    (cherry picked from commit ad4589e2d834c80a042a8c354fb00cf33e06802c)
+
+diff --git a/support/support_capture_subprocess.c b/support/support_capture_subprocess.c
+index b4e4bf9502..c89e65b534 100644
+--- a/support/support_capture_subprocess.c
++++ b/support/support_capture_subprocess.c
+@@ -133,6 +133,27 @@ copy_and_spawn_sgid (const char *child_id, gid_t gid)
+   if (chmod (execname, 02750) != 0)
+     FAIL_UNSUPPORTED ("cannot make \"%s\" SGID: %m ", execname);
+ 
++  /* Now we can drop the privilege of that group.  */
++  const int count = 64;
++  gid_t groups[count];
++  int ngroups = getgroups(count, groups);
++
++  if (ngroups < 0)
++    FAIL_UNSUPPORTED ("Could not get group list again for user %jd\n",
++		      (intmax_t) getuid ());
++
++  int n = 0;
++  for (int i = 0; i < ngroups; i++)
++    {
++      if (groups[i] != gid)
++	{
++	  if (n != i)
++	    groups[n] = groups[i];
++	  n++;
++	}
++    }
++  setgroups (n, groups);
++
+   /* We have the binary, now spawn the subprocess.  Avoid using
+      support_subprogram because we only want the program exit status, not the
+      contents.  */
+
+commit 8a726b63047241c6dd4b55bf85eacd02244362a2
+Author: Wilco Dijkstra <wilco.dijkstra@arm.com>
+Date:   Thu Jul 10 15:49:14 2025 +0000
+
+    malloc: Remove redundant NULL check
+    
+    Remove a redundant NULL check from tcache_get_n.
+    
+    Reviewed-by: Cupertino Miranda <cupertino.miranda@oracle.com>
+    (cherry picked from commit 089b4fb90fac8ed53039bc4c465c4d333c6b4048)
+
+diff --git a/malloc/malloc.c b/malloc/malloc.c
+index 5ca390cc22..cf5c02ff64 100644
+--- a/malloc/malloc.c
++++ b/malloc/malloc.c
+@@ -3208,11 +3208,10 @@ tcache_get_n (size_t tc_idx, tcache_entry **ep, bool mangled)
+   if (__glibc_unlikely (misaligned_mem (e)))
+     malloc_printerr ("malloc(): unaligned tcache chunk detected");
+ 
+-  void *ne = e == NULL ? NULL : REVEAL_PTR (e->next);
+   if (!mangled)
+-    *ep = ne;
++    *ep = REVEAL_PTR (e->next);
+   else
+-    *ep = PROTECT_PTR (ep, ne);
++    *ep = PROTECT_PTR (ep, REVEAL_PTR (e->next));
+ 
+   ++(tcache->num_slots[tc_idx]);
+   e->key = 0;
+@@ -3229,7 +3228,7 @@ tcache_put (mchunkptr chunk, size_t tc_idx)
+ static __always_inline void *
+ tcache_get (size_t tc_idx)
+ {
+-  return tcache_get_n (tc_idx, & tcache->entries[tc_idx], false);
++  return tcache_get_n (tc_idx, &tcache->entries[tc_idx], false);
+ }
+ 
+ static __always_inline tcache_entry **
+
+commit c491dabd8a3de090d1ccb4589421a44e79c5b185
+Author: Wilco Dijkstra <wilco.dijkstra@arm.com>
+Date:   Thu Jul 17 14:31:06 2025 +0000
+
+    malloc: Fix MAX_TCACHE_SMALL_SIZE
+    
+    MAX_TCACHE_SMALL_SIZE should use chunk size since it is used after
+    checked_request2size.  Increase limit of tcache_max_bytes by 1 since all
+    comparisons use '<'.  As a result, the last tcache entry is now used as
+    expected.
+    
+    Reviewed-by: DJ Delorie <dj@redhat.com>
+    (cherry picked from commit ad4caba4146583fc543cd434221dec7113c03e09)
+
+diff --git a/malloc/malloc.c b/malloc/malloc.c
+index cf5c02ff64..b89b654f17 100644
+--- a/malloc/malloc.c
++++ b/malloc/malloc.c
+@@ -294,9 +294,9 @@
+ # define TCACHE_SMALL_BINS		64
+ # define TCACHE_LARGE_BINS		12 /* Up to 4M chunks */
+ # define TCACHE_MAX_BINS	(TCACHE_SMALL_BINS + TCACHE_LARGE_BINS)
+-# define MAX_TCACHE_SMALL_SIZE	tidx2usize (TCACHE_SMALL_BINS-1)
++# define MAX_TCACHE_SMALL_SIZE	tidx2csize (TCACHE_SMALL_BINS-1)
+ 
+-/* Only used to pre-fill the tunables.  */
++# define tidx2csize(idx)	(((size_t) idx) * MALLOC_ALIGNMENT + MINSIZE)
+ # define tidx2usize(idx)	(((size_t) idx) * MALLOC_ALIGNMENT + MINSIZE - SIZE_SZ)
+ 
+ /* When "x" is from chunksize().  */
+@@ -1932,7 +1932,7 @@ static struct malloc_par mp_ =
+   ,
+   .tcache_count = TCACHE_FILL_COUNT,
+   .tcache_small_bins = TCACHE_SMALL_BINS,
+-  .tcache_max_bytes = MAX_TCACHE_SMALL_SIZE,
++  .tcache_max_bytes = MAX_TCACHE_SMALL_SIZE + 1,
+   .tcache_unsorted_limit = 0 /* No limit.  */
+ #endif
+ };
+@@ -5586,15 +5586,13 @@ do_set_arena_max (size_t value)
+ static __always_inline int
+ do_set_tcache_max (size_t value)
+ {
++  if (value > PTRDIFF_MAX)
++    return 0;
++
+   size_t nb = request2size (value);
+   size_t tc_idx = csize2tidx (nb);
+ 
+-  /* To check that value is not too big and request2size does not return an
+-     overflown value.  */
+-  if (value > nb)
+-    return 0;
+-
+-  if (nb > MAX_TCACHE_SMALL_SIZE)
++  if (tc_idx >= TCACHE_SMALL_BINS)
+     tc_idx = large_csize2tidx (nb);
+ 
+   LIBC_PROBE (memory_tunable_tcache_max_bytes, 2, value, mp_.tcache_max_bytes);
+@@ -5603,7 +5601,7 @@ do_set_tcache_max (size_t value)
+     {
+       if (tc_idx < TCACHE_SMALL_BINS)
+ 	mp_.tcache_small_bins = tc_idx + 1;
+-      mp_.tcache_max_bytes = nb;
++      mp_.tcache_max_bytes = nb + 1;
+       return 1;
+     }
+ 
+
+commit a96a82c4a5efd3139e75cd11fd2a5554164dd5a0
+Author: Samuel Thibault <samuel.thibault@ens-lyon.org>
+Date:   Wed Jul 30 01:55:22 2025 +0200
+
+    malloc: Make sure tcache_key is odd enough
+    
+    We want tcache_key not to be a commonly-occurring value in memory, so ensure
+    a minimum amount of one and zero bits.
+    
+    And we need it non-zero, otherwise even if tcache_double_free_verify sets
+    e->key to 0 before calling __libc_free, it gets called again by __libc_free,
+    thus looping indefinitely.
+    
+    Fixes: c968fe50628db74b52124d863cd828225a1d305c ("malloc: Use tailcalls in __libc_free")
+    (cherry picked from commit 2536c4f8584082a1ac4c5e0a2a6222e290d43983)
+
+diff --git a/malloc/malloc.c b/malloc/malloc.c
+index b89b654f17..e4e2f03600 100644
+--- a/malloc/malloc.c
++++ b/malloc/malloc.c
+@@ -230,6 +230,9 @@
+ /* For uintptr_t.  */
+ #include <stdint.h>
+ 
++/* For stdc_count_ones.  */
++#include <stdbit.h>
++
+ /* For va_arg, va_start, va_end.  */
+ #include <stdarg.h>
+ 
+@@ -3152,6 +3155,19 @@ tcache_key_initialize (void)
+   if (__getrandom_nocancel_nostatus_direct (&tcache_key, sizeof(tcache_key),
+ 					    GRND_NONBLOCK)
+       != sizeof (tcache_key))
++    tcache_key = 0;
++
++  /* We need tcache_key to be non-zero (otherwise tcache_double_free_verify's
++     clearing of e->key would go unnoticed and it would loop getting called
++     through __libc_free), and we want tcache_key not to be a
++     commonly-occurring value in memory, so ensure a minimum amount of one and
++     zero bits.  */
++  int minimum_bits = __WORDSIZE / 4;
++  int maximum_bits = __WORDSIZE - minimum_bits;
++
++  while (labs (tcache_key) <= 0x1000000
++      || stdc_count_ones (tcache_key) < minimum_bits
++      || stdc_count_ones (tcache_key) > maximum_bits)
+     {
+       tcache_key = random_bits ();
+ #if __WORDSIZE == 64
+
+commit d7274d718e6f3655eabe311d4eb70fabb5ffa7ef
+Author: Samuel Thibault <samuel.thibault@ens-lyon.org>
+Date:   Sun Aug 10 23:43:37 2025 +0200
+
+    malloc: Fix checking for small negative values of tcache_key
+    
+    tcache_key is unsigned so we should turn it explicitly to signed before
+    taking its absolute value.
+    
+    (cherry picked from commit 8543577b04ded6d979ffcc5a818930e4d74d0645)
+
+diff --git a/malloc/malloc.c b/malloc/malloc.c
+index e4e2f03600..5f3e701fd1 100644
+--- a/malloc/malloc.c
++++ b/malloc/malloc.c
+@@ -3165,7 +3165,7 @@ tcache_key_initialize (void)
+   int minimum_bits = __WORDSIZE / 4;
+   int maximum_bits = __WORDSIZE - minimum_bits;
+ 
+-  while (labs (tcache_key) <= 0x1000000
++  while (labs ((intptr_t) tcache_key) <= 0x1000000
+       || stdc_count_ones (tcache_key) < minimum_bits
+       || stdc_count_ones (tcache_key) > maximum_bits)
+     {
+
+commit 8dbaecbe92ac7ab73b7d0aae84626af59131e41b
+Author: Jens Remus <jremus@linux.ibm.com>
+Date:   Fri Jul 25 15:40:03 2025 +0200
+
+    Use TLS initial-exec model for __libc_tsd_CTYPE_* thread variables [BZ #33234]
+    
+    Commit 10a66a8e421b ("Remove <libc-tsd.h>") removed the TLS initial-exec
+    (IE) model attribute from the __libc_tsd_CTYPE_* thread variable declarations
+    and definitions.  Commit a894f04d8776 ("Optimize __libc_tsd_* thread
+    variable access") restored it on declarations.
+    
+    Restore the TLS initial-exec model attribute on __libc_tsd_CTYPE_* thread
+    variable definitions.
+    
+    This resolves test tst-locale1 failure on s390 32-bit, when using a
+    GNU linker without the fix from GNU binutils commit aefebe82dc89
+    ("IBM zSystems: Fix offset relative to static TLS").
+    
+    Reviewed-by: Florian Weimer <fweimer@redhat.com>
+    (cherry picked from commit e5363e6f460c2d58809bf10fc96d70fd1ef8b5b2)
+
+diff --git a/NEWS b/NEWS
+index 1d04bdfef8..69aa600c6d 100644
+--- a/NEWS
++++ b/NEWS
+@@ -11,6 +11,7 @@ The following bugs were resolved with this release:
+ 
+   [31943] _dl_find_object can fail if ld.so contains gaps between load segments
+   [32994] stdlib: resolve a double lock init issue after fork
++  [33234] Use TLS initial-exec model for __libc_tsd_CTYPE_* thread variables
+   [33245] nptl: nptl: error in internal cancellation syscall handling
+ 
+ Version 2.42
+diff --git a/ctype/ctype-info.c b/ctype/ctype-info.c
+index b7d3422726..fb5acf9419 100644
+--- a/ctype/ctype-info.c
++++ b/ctype/ctype-info.c
+@@ -24,11 +24,11 @@
+    __ctype_init before user code runs, but this does not happen for
+    threads in secondary namespaces.  With the initializers, secondary
+    namespaces at least get locale data from the C locale.  */
+-__thread const uint16_t * __libc_tsd_CTYPE_B
++__thread const uint16_t * __libc_tsd_CTYPE_B attribute_tls_model_ie
+   = (const uint16_t *) _nl_C_LC_CTYPE_class + 128;
+-__thread const int32_t * __libc_tsd_CTYPE_TOLOWER
++__thread const int32_t * __libc_tsd_CTYPE_TOLOWER attribute_tls_model_ie
+   = (const int32_t *) _nl_C_LC_CTYPE_tolower + 128;
+-__thread const int32_t * __libc_tsd_CTYPE_TOUPPER
++__thread const int32_t * __libc_tsd_CTYPE_TOUPPER attribute_tls_model_ie
+   = (const int32_t *) _nl_C_LC_CTYPE_toupper + 128;
+ 
+ 
+
+commit d0f72b96f2e91e1aa93f7e826c71f74078ada7d0
+Author: H.J. Lu <hjl.tools@gmail.com>
+Date:   Mon Jul 28 12:16:11 2025 -0700
+
+    i386: Add GLIBC_ABI_GNU_TLS version [BZ #33221]
+    
+    On i386, programs and shared libraries with __thread usage may fail
+    silently at run-time against glibc without the TLS run-time fix for:
+    
+    https://sourceware.org/bugzilla/show_bug.cgi?id=32996
+    
+    Add GLIBC_ABI_GNU_TLS version to indicate that glibc has the working
+    GNU TLS run-time.  Linker can add the GLIBC_ABI_GNU_TLS version to
+    binaries which depend on the working TLS run-time so that such programs
+    and shared libraries will fail to load and run at run-time against
+    libc.so without the GLIBC_ABI_GNU_TLS version, instead of fail silently
+    at random.
+    
+    This fixes BZ #33221.
+    
+    Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
+    Reviewed-by: Sam James <sam@gentoo.org>
+    (cherry picked from commit ed1b7a5a489ab555a27fad9c101ebe2e1c1ba881)
+
+diff --git a/sysdeps/i386/Makefile b/sysdeps/i386/Makefile
+index ee6470d78e..c0c017b899 100644
+--- a/sysdeps/i386/Makefile
++++ b/sysdeps/i386/Makefile
+@@ -60,6 +60,15 @@ $(objpfx)tst-ld-sse-use.out: ../sysdeps/i386/tst-ld-sse-use.sh $(objpfx)ld.so
+ 	@echo "Checking ld.so for SSE register use.  This will take a few seconds..."
+ 	$(BASH) $< $(objpfx) '$(NM)' '$(OBJDUMP)' '$(READELF)' > $@; \
+ 	$(evaluate-test)
++
++tests-special += $(objpfx)check-gnu-tls.out
++
++$(objpfx)check-gnu-tls.out: $(common-objpfx)libc.so
++	LC_ALL=C $(READELF) -V -W $< \
++		| sed -ne '/.gnu.version_d/, /.gnu.version_r/ p' \
++		| grep GLIBC_ABI_GNU_TLS > $@; \
++	$(evaluate-test)
++generated += check-gnu-tls.out
+ else
+ CFLAGS-.os += $(if $(filter rtld-%.os,$(@F)), $(rtld-CFLAGS))
+ endif
+diff --git a/sysdeps/i386/Versions b/sysdeps/i386/Versions
+index 36e23b466a..9c84c8ef04 100644
+--- a/sysdeps/i386/Versions
++++ b/sysdeps/i386/Versions
+@@ -28,6 +28,11 @@ libc {
+   GLIBC_2.13 {
+     __fentry__;
+   }
++  GLIBC_ABI_GNU_TLS {
++    # This symbol is used only for empty version map and will be removed
++    # by scripts/versions.awk.
++    __placeholder_only_for_empty_version_map;
++  }
+ }
+ libm {
+   GLIBC_2.1 {
+
+commit 3970785bebcc3f1de4460072f3a041d178f64846
+Author: H.J. Lu <hjl.tools@gmail.com>
+Date:   Mon Jul 28 12:18:22 2025 -0700
+
+    x86-64: Add GLIBC_ABI_GNU2_TLS version [BZ #33129]
+    
+    Programs and shared libraries compiled with -mtls-dialect=gnu2 may fail
+    silently at run-time against glibc without the GNU2 TLS run-time fix
+    for:
+    
+    https://sourceware.org/bugzilla/show_bug.cgi?id=31372
+    
+    Add GLIBC_ABI_GNU2_TLS version to indicate that glibc has the working
+    GNU2 TLS run-time.  Linker can add the GLIBC_ABI_GNU2_TLS version to
+    binaries which depend on the working GNU2 TLS run-time:
+    
+    https://sourceware.org/bugzilla/show_bug.cgi?id=33130
+    
+    so that such programs and shared libraries will fail to load and run at
+    run-time against libc.so without the GLIBC_ABI_GNU2_TLS version, instead
+    of fail silently at random.
+    
+    This fixes BZ #33129.
+    
+    Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
+    Reviewed-by: Sam James <sam@gentoo.org>
+    (cherry picked from commit 9df8fa397d515dc86ff5565f6c45625e672d539e)
+
+diff --git a/sysdeps/x86_64/Makefile b/sysdeps/x86_64/Makefile
+index c3e1065c81..3ab8c1ed0f 100644
+--- a/sysdeps/x86_64/Makefile
++++ b/sysdeps/x86_64/Makefile
+@@ -212,6 +212,15 @@ LDFLAGS-tst-plt-rewrite2 = -Wl,-z,now
+ LDFLAGS-tst-plt-rewritemod2.so = -Wl,-z,now,-z,undefs
+ tst-plt-rewrite2-ENV = GLIBC_TUNABLES=glibc.cpu.plt_rewrite=2
+ $(objpfx)tst-plt-rewrite2: $(objpfx)tst-plt-rewritemod2.so
++
++tests-special += $(objpfx)check-gnu2-tls.out
++
++$(objpfx)check-gnu2-tls.out: $(common-objpfx)libc.so
++	LC_ALL=C $(READELF) -V -W $< \
++		| sed -ne '/.gnu.version_d/, /.gnu.version_r/ p' \
++		| grep GLIBC_ABI_GNU2_TLS > $@; \
++	$(evaluate-test)
++generated += check-gnu2-tls.out
+ endif
+ 
+ test-internal-extras += tst-gnu2-tls2mod1
+diff --git a/sysdeps/x86_64/Versions b/sysdeps/x86_64/Versions
+index e94758b236..a63c11bcb2 100644
+--- a/sysdeps/x86_64/Versions
++++ b/sysdeps/x86_64/Versions
+@@ -5,6 +5,11 @@ libc {
+   GLIBC_2.13 {
+     __fentry__;
+   }
++  GLIBC_ABI_GNU2_TLS {
++    # This symbol is used only for empty version map and will be removed
++    # by scripts/versions.awk.
++    __placeholder_only_for_empty_version_map;
++  }
+ }
+ libm {
+   GLIBC_2.1 {
+
+commit 7a8f3c6ee4b565a02da4ba0dad9aaeaeed4639ce
+Author: H.J. Lu <hjl.tools@gmail.com>
+Date:   Thu Aug 14 07:03:20 2025 -0700
+
+    x86-64: Add GLIBC_ABI_DT_X86_64_PLT [BZ #33212]
+    
+    When the linker -z mark-plt option is used to add DT_X86_64_PLT,
+    DT_X86_64_PLTSZ and DT_X86_64_PLTENT, the r_addend field of the
+    R_X86_64_JUMP_SLOT relocation stores the offset of the indirect
+    branch instruction.  However, glibc versions without the commit:
+    
+    commit f8587a61892cbafd98ce599131bf4f103466f084
+    Author: H.J. Lu <hjl.tools@gmail.com>
+    Date:   Fri May 20 19:21:48 2022 -0700
+    
+        x86-64: Ignore r_addend for R_X86_64_GLOB_DAT/R_X86_64_JUMP_SLOT
+    
+        According to x86-64 psABI, r_addend should be ignored for R_X86_64_GLOB_DAT
+        and R_X86_64_JUMP_SLOT.  Since linkers always set their r_addends to 0, we
+        can ignore their r_addends.
+    
+        Reviewed-by: Fangrui Song <maskray@google.com>
+    
+    won't ignore the r_addend value in the R_X86_64_JUMP_SLOT relocation.
+    Such programs and shared libraries will fail at run-time randomly.
+    
+    Add GLIBC_ABI_DT_X86_64_PLT version to indicate that glibc is compatible
+    with DT_X86_64_PLT.
+    
+    The linker can add the glibc GLIBC_ABI_DT_X86_64_PLT version dependency
+    whenever -z mark-plt is passed to the linker.  The resulting programs and
+    shared libraries will fail to load at run-time against libc.so without the
+    GLIBC_ABI_DT_X86_64_PLT version, instead of fail randomly.
+    
+    This fixes BZ #33212.
+    
+    Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
+    Reviewed-by: Sam James <sam@gentoo.org>
+    (cherry picked from commit 399384e0c8193e31aea014220ccfa24300ae5938)
+
+diff --git a/sysdeps/x86_64/Makefile b/sysdeps/x86_64/Makefile
+index 3ab8c1ed0f..01100597a8 100644
+--- a/sysdeps/x86_64/Makefile
++++ b/sysdeps/x86_64/Makefile
+@@ -213,6 +213,15 @@ LDFLAGS-tst-plt-rewritemod2.so = -Wl,-z,now,-z,undefs
+ tst-plt-rewrite2-ENV = GLIBC_TUNABLES=glibc.cpu.plt_rewrite=2
+ $(objpfx)tst-plt-rewrite2: $(objpfx)tst-plt-rewritemod2.so
+ 
++tests-special += $(objpfx)check-dt-x86-64-plt.out
++
++$(objpfx)check-dt-x86-64-plt.out: $(common-objpfx)libc.so
++	LC_ALL=C $(READELF) -V -W $< \
++		| sed -ne '/.gnu.version_d/, /.gnu.version_r/ p' \
++		| grep GLIBC_ABI_DT_X86_64_PLT > $@; \
++	$(evaluate-test)
++generated += check-dt-x86-64-plt.out
++
+ tests-special += $(objpfx)check-gnu2-tls.out
+ 
+ $(objpfx)check-gnu2-tls.out: $(common-objpfx)libc.so
+diff --git a/sysdeps/x86_64/Versions b/sysdeps/x86_64/Versions
+index a63c11bcb2..0a759029e5 100644
+--- a/sysdeps/x86_64/Versions
++++ b/sysdeps/x86_64/Versions
+@@ -10,6 +10,11 @@ libc {
+     # by scripts/versions.awk.
+     __placeholder_only_for_empty_version_map;
+   }
++  GLIBC_ABI_DT_X86_64_PLT {
++    # This symbol is used only for empty version map and will be removed
++    # by scripts/versions.awk.
++    __placeholder_only_for_empty_version_map;
++  }
+ }
+ libm {
+   GLIBC_2.1 {
+
+commit e87844ec42b77363a499ea4da6c4a6ab85eba310
+Author: H.J. Lu <hjl.tools@gmail.com>
+Date:   Mon Aug 18 09:06:48 2025 -0700
+
+    i386: Also add GLIBC_ABI_GNU2_TLS version [BZ #33129]
+    
+    Since the GNU2 TLS run-time bug:
+    
+    https://sourceware.org/bugzilla/show_bug.cgi?id=31372
+    
+    affects both i386 and x86-64, also add GLIBC_ABI_GNU2_TLS version to i386
+    to indicate the working GNU2 TLS run-time.  For x86-64, the additional
+    GNU2 TLS run-time bug fix is needed for
+    
+    https://sourceware.org/bugzilla/show_bug.cgi?id=31501
+    
+    Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
+    Reviewed-by: Sam James <sam@gentoo.org>
+    (cherry picked from commit bd4628f3f18ac312408782eea450429c6f044860)
+
+diff --git a/sysdeps/x86/Makefile b/sysdeps/x86/Makefile
+index 4fbd48e1c8..9e1c8cce85 100644
+--- a/sysdeps/x86/Makefile
++++ b/sysdeps/x86/Makefile
+@@ -135,6 +135,15 @@ LDFLAGS-tst-tls23 += -rdynamic
+ tst-tls23-mod.so-no-z-defs = yes
+ 
+ $(objpfx)tst-tls23-mod.so: $(libsupport)
++
++tests-special += $(objpfx)check-gnu2-tls.out
++
++$(objpfx)check-gnu2-tls.out: $(common-objpfx)libc.so
++	LC_ALL=C $(READELF) -V -W $< \
++		| sed -ne '/.gnu.version_d/, /.gnu.version_r/ p' \
++		| grep GLIBC_ABI_GNU2_TLS > $@; \
++	$(evaluate-test)
++generated += check-gnu2-tls.out
+ endif
+ 
+ ifeq ($(subdir),gmon)
+diff --git a/sysdeps/x86/Versions b/sysdeps/x86/Versions
+index 4b10c4b5d7..e8dcfccbe4 100644
+--- a/sysdeps/x86/Versions
++++ b/sysdeps/x86/Versions
+@@ -7,4 +7,9 @@ libc {
+   GLIBC_2.33 {
+     __x86_get_cpuid_feature_leaf;
+   }
++  GLIBC_ABI_GNU2_TLS {
++    # This symbol is used only for empty version map and will be removed
++    # by scripts/versions.awk.
++    __placeholder_only_for_empty_version_map;
++  }
+ }
+diff --git a/sysdeps/x86_64/Makefile b/sysdeps/x86_64/Makefile
+index 01100597a8..fe9f1cdddb 100644
+--- a/sysdeps/x86_64/Makefile
++++ b/sysdeps/x86_64/Makefile
+@@ -221,15 +221,6 @@ $(objpfx)check-dt-x86-64-plt.out: $(common-objpfx)libc.so
+ 		| grep GLIBC_ABI_DT_X86_64_PLT > $@; \
+ 	$(evaluate-test)
+ generated += check-dt-x86-64-plt.out
+-
+-tests-special += $(objpfx)check-gnu2-tls.out
+-
+-$(objpfx)check-gnu2-tls.out: $(common-objpfx)libc.so
+-	LC_ALL=C $(READELF) -V -W $< \
+-		| sed -ne '/.gnu.version_d/, /.gnu.version_r/ p' \
+-		| grep GLIBC_ABI_GNU2_TLS > $@; \
+-	$(evaluate-test)
+-generated += check-gnu2-tls.out
+ endif
+ 
+ test-internal-extras += tst-gnu2-tls2mod1
+diff --git a/sysdeps/x86_64/Versions b/sysdeps/x86_64/Versions
+index 0a759029e5..6a989ad3b3 100644
+--- a/sysdeps/x86_64/Versions
++++ b/sysdeps/x86_64/Versions
+@@ -5,11 +5,6 @@ libc {
+   GLIBC_2.13 {
+     __fentry__;
+   }
+-  GLIBC_ABI_GNU2_TLS {
+-    # This symbol is used only for empty version map and will be removed
+-    # by scripts/versions.awk.
+-    __placeholder_only_for_empty_version_map;
+-  }
+   GLIBC_ABI_DT_X86_64_PLT {
+     # This symbol is used only for empty version map and will be removed
+     # by scripts/versions.awk.
+
+commit e34453cd6a8c592c325756ff3c7ac0afd3975cb4
+Author: Pierre Blanchard <pierre.blanchard@arm.com>
+Date:   Wed Aug 20 17:41:50 2025 +0000
+
+    AArch64: Fix SVE powf routine [BZ #33299]
+    
+    Fix a bug in predicate logic introduced in last change.
+    A slight performance improvement from relying on all true
+    predicates during conversion from single to double.
+    This fixes BZ #33299.
+    
+    Reviewed-by: Wilco Dijkstra  <Wilco.Dijkstra@arm.com>
+    (cherry picked from commit aac077645a645bba0d67f3250e82017c539d0f4b)
+
+diff --git a/sysdeps/aarch64/fpu/powf_sve.c b/sysdeps/aarch64/fpu/powf_sve.c
+index 7046990aa1..65e9bd29d9 100644
+--- a/sysdeps/aarch64/fpu/powf_sve.c
++++ b/sysdeps/aarch64/fpu/powf_sve.c
+@@ -223,15 +223,15 @@ sv_powf_core (const svbool_t pg, svuint32_t i, svuint32_t iz, svint32_t k,
+   const svbool_t ptrue = svptrue_b64 ();
+ 
+   /* Unpack and promote input vectors (pg, y, z, i, k and sign_bias) into two
+-   * in order to perform core computation in double precision.  */
++     in order to perform core computation in double precision.  */
+   const svbool_t pg_lo = svunpklo (pg);
+   const svbool_t pg_hi = svunpkhi (pg);
+-  svfloat64_t y_lo
+-      = svcvt_f64_x (pg, svreinterpret_f32 (svunpklo (svreinterpret_u32 (y))));
+-  svfloat64_t y_hi
+-      = svcvt_f64_x (pg, svreinterpret_f32 (svunpkhi (svreinterpret_u32 (y))));
+-  svfloat64_t z_lo = svcvt_f64_x (pg, svreinterpret_f32 (svunpklo (iz)));
+-  svfloat64_t z_hi = svcvt_f64_x (pg, svreinterpret_f32 (svunpkhi (iz)));
++  svfloat64_t y_lo = svcvt_f64_x (
++      ptrue, svreinterpret_f32 (svunpklo (svreinterpret_u32 (y))));
++  svfloat64_t y_hi = svcvt_f64_x (
++      ptrue, svreinterpret_f32 (svunpkhi (svreinterpret_u32 (y))));
++  svfloat64_t z_lo = svcvt_f64_x (ptrue, svreinterpret_f32 (svunpklo (iz)));
++  svfloat64_t z_hi = svcvt_f64_x (ptrue, svreinterpret_f32 (svunpkhi (iz)));
+   svuint64_t i_lo = svunpklo (i);
+   svuint64_t i_hi = svunpkhi (i);
+   svint64_t k_lo = svunpklo (k);
+@@ -312,7 +312,7 @@ svfloat32_t SV_NAME_F2 (pow) (svfloat32_t x, svfloat32_t y, const svbool_t pg)
+ 			 (23 - V_POWF_EXP2_TABLE_BITS));
+ 
+   /* Compute core in extended precision and return intermediate ylogx results
+-   * to handle cases of underflow and underflow in exp.  */
++     to handle cases of underflow and overflow in exp.  */
+   svfloat32_t ylogx;
+   svfloat32_t ret
+       = sv_powf_core (yint_or_xpos, i, iz, k, y, sign_bias, &ylogx, d);
+
+commit 1166170d95863e5a6f8121a5ca9d97713f524f49
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Fri Sep 5 19:02:57 2025 +0200
+
+    libio: Define AT_RENAME_* with the same tokens as Linux
+    
+    Linux uses different expressions for the RENAME_* and AT_RENAME_*
+    constants.  Mirror that in <stdio.h>, so that the macro redefinitions
+    do not result in preprocessor warnings.
+    
+    Reviewed-by: Collin Funk <collin.funk1@gmail.com>
+    (cherry picked from commit b173557da978a04ac3bdfc0bd3b0e7ac583b44d5)
+
+diff --git a/libio/stdio.h b/libio/stdio.h
+index d042b36618..e0e70945fa 100644
+--- a/libio/stdio.h
++++ b/libio/stdio.h
+@@ -168,11 +168,11 @@ extern int renameat (int __oldfd, const char *__old, int __newfd,
+ #ifdef __USE_GNU
+ /* Flags for renameat2.  */
+ # define RENAME_NOREPLACE (1 << 0)
+-# define AT_RENAME_NOREPLACE RENAME_NOREPLACE
++# define AT_RENAME_NOREPLACE 0x0001
+ # define RENAME_EXCHANGE (1 << 1)
+-# define AT_RENAME_EXCHANGE RENAME_EXCHANGE
++# define AT_RENAME_EXCHANGE 0x0002
+ # define RENAME_WHITEOUT (1 << 2)
+-# define AT_RENAME_WHITEOUT RENAME_WHITEOUT
++# define AT_RENAME_WHITEOUT 0x0004
+ 
+ /* Rename file OLD relative to OLDFD to NEW relative to NEWFD, with
+    additional flags.  */
+diff --git a/stdio-common/tst-renameat2.c b/stdio-common/tst-renameat2.c
+index 12aa0f8b0f..6213e1376d 100644
+--- a/stdio-common/tst-renameat2.c
++++ b/stdio-common/tst-renameat2.c
+@@ -28,6 +28,12 @@
+ #include <support/xunistd.h>
+ #include <unistd.h>
+ 
++/* These constants are defined with different token sequences,
++   matching the Linux definitions, to avoid preprocessor warnings.  */
++_Static_assert (RENAME_NOREPLACE == AT_RENAME_NOREPLACE, "RENAME_NOREPLACE");
++_Static_assert (RENAME_EXCHANGE == AT_RENAME_EXCHANGE, "RENAME_EXCHANGE");
++_Static_assert (RENAME_WHITEOUT == AT_RENAME_WHITEOUT, "RENAME_WHITEOUT");
++
+ /* Directory with the temporary files.  */
+ static char *directory;
+ static int directory_fd;
+
+commit 46b4e37c9e0619d0cf065ba207c29996b326a06f
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Fri Sep 12 21:33:34 2025 +0200
+
+    nss: Group merge does not react to ERANGE during merge (bug 33361)
+    
+    The break statement in CHECK_MERGE is expected to exit the surrounding
+    while loop, not the do-while loop with in the macro.  Remove the
+    do-while loop from the macro.  It is not needed to turn the macro
+    expansion into a single statement due to the way CHECK_MERGE is used
+    (and the statement expression would cover this anyway).
+    
+    Reviewed-by: Collin Funk <collin.funk1@gmail.com>
+    (cherry picked from commit 0fceed254559836b57ee05188deac649bc505d05)
+
+diff --git a/NEWS b/NEWS
+index 69aa600c6d..06c27a8e17 100644
+--- a/NEWS
++++ b/NEWS
+@@ -13,6 +13,7 @@ The following bugs were resolved with this release:
+   [32994] stdlib: resolve a double lock init issue after fork
+   [33234] Use TLS initial-exec model for __libc_tsd_CTYPE_* thread variables
+   [33245] nptl: nptl: error in internal cancellation syscall handling
++  [33361] nss: Group merge does not react to ERANGE during merge
+ 
+ Version 2.42
+ 
+diff --git a/nss/getXXbyYY_r.c b/nss/getXXbyYY_r.c
+index eae6c3480e..2b0735fb6a 100644
+--- a/nss/getXXbyYY_r.c
++++ b/nss/getXXbyYY_r.c
+@@ -157,19 +157,15 @@ __merge_einval (LOOKUP_TYPE *a,
+ 
+ #define CHECK_MERGE(err, status)		\
+   ({						\
+-    do						\
++    if (err)					\
+       {						\
+-	if (err)				\
+-	  {					\
+-	    __set_errno (err);			\
+-	    if (err == ERANGE)			\
+-	      status = NSS_STATUS_TRYAGAIN;	\
+-	    else				\
+-	      status = NSS_STATUS_UNAVAIL;	\
+-	    break;				\
+-	  }					\
++	__set_errno (err);			\
++	if (err == ERANGE)			\
++	  status = NSS_STATUS_TRYAGAIN;		\
++	else					\
++	  status = NSS_STATUS_UNAVAIL;		\
++	break;					\
+       }						\
+-    while (0);					\
+   })
+ 
+ /* Type of the lookup function we need here.  */
+
+commit 18fd689cdced8348e42991964557cddea0ba2dc5
+Author: Adhemerval Zanella <adhemerval.zanella@linaro.org>
+Date:   Mon Sep 8 13:06:13 2025 -0300
+
+    nptl: Fix MADV_GUARD_INSTALL logic for thread without guard page (BZ 33356)
+    
+    The main issue is that setup_stack_prot fails to account for cases where
+    the cached thread stack lacks a guard page, which can cause madvise to
+    fail. Update the logic to also handle whether MADV_GUARD_INSTALL is
+    supported when resizing the guard page.
+    
+    Checked on x86_64-linux-gnu with 6.8.0 and 6.15 kernels.
+    
+    Reviewed-by: Florian Weimer <fweimer@redhat.com>
+    (cherry picked from commit 855bfa2566bbefefa27c516b344df58a75824a5c)
+
+diff --git a/NEWS b/NEWS
+index 06c27a8e17..ed3c114c7a 100644
+--- a/NEWS
++++ b/NEWS
+@@ -13,6 +13,8 @@ The following bugs were resolved with this release:
+   [32994] stdlib: resolve a double lock init issue after fork
+   [33234] Use TLS initial-exec model for __libc_tsd_CTYPE_* thread variables
+   [33245] nptl: nptl: error in internal cancellation syscall handling
++  [33356] nptl: creating thread stack with guardsize 0 can erroneously
++    conclude MADV_GUARD_INSTALL is available
+   [33361] nss: Group merge does not react to ERANGE during merge
+ 
+ Version 2.42
+diff --git a/nptl/allocatestack.c b/nptl/allocatestack.c
+index 800ca89720..fb8a60a21d 100644
+--- a/nptl/allocatestack.c
++++ b/nptl/allocatestack.c
+@@ -240,7 +240,7 @@ setup_stack_prot (char *mem, size_t size, struct pthread *pd,
+ /* Update the guard area of the thread stack MEM of size SIZE with the new
+    GUARDISZE.  It uses the method defined by PD stack_mode.  */
+ static inline bool
+-adjust_stack_prot (char *mem, size_t size, const struct pthread *pd,
++adjust_stack_prot (char *mem, size_t size, struct pthread *pd,
+ 		   size_t guardsize, size_t pagesize_m1)
+ {
+   /* The required guard area is larger than the current one.  For
+@@ -258,11 +258,23 @@ adjust_stack_prot (char *mem, size_t size, const struct pthread *pd,
+      so use the new guard placement with the new size.  */
+   if (guardsize > pd->guardsize)
+     {
++      /* There was no need to previously setup a guard page, so we need
++	 to check whether the kernel supports guard advise.  */
+       char *guard = guard_position (mem, size, guardsize, pd, pagesize_m1);
+-      if (pd->stack_mode == ALLOCATE_GUARD_MADV_GUARD)
+-	return __madvise (guard, guardsize, MADV_GUARD_INSTALL) == 0;
+-      else if (pd->stack_mode == ALLOCATE_GUARD_PROT_NONE)
+-	return __mprotect (guard, guardsize, PROT_NONE) == 0;
++      if (atomic_load_relaxed (&allocate_stack_mode)
++	  == ALLOCATE_GUARD_MADV_GUARD)
++	{
++	  if (__madvise (guard, guardsize, MADV_GUARD_INSTALL) == 0)
++	    {
++	      pd->stack_mode = ALLOCATE_GUARD_MADV_GUARD;
++	      return true;
++	    }
++	  atomic_store_relaxed (&allocate_stack_mode,
++				ALLOCATE_GUARD_PROT_NONE);
++	}
++
++      pd->stack_mode = ALLOCATE_GUARD_PROT_NONE;
++      return __mprotect (guard, guardsize, PROT_NONE) == 0;
+     }
+   /* The current guard area is larger than the required one.  For
+      _STACK_GROWS_DOWN is means change the guard as:
+diff --git a/nptl/tst-guard1.c b/nptl/tst-guard1.c
+index e3e06df0fc..1c73d3fc93 100644
+--- a/nptl/tst-guard1.c
++++ b/nptl/tst-guard1.c
+@@ -21,6 +21,7 @@
+ #include <setjmp.h>
+ #include <stackinfo.h>
+ #include <stdio.h>
++#include <support/capture_subprocess.h>
+ #include <support/check.h>
+ #include <support/test-driver.h>
+ #include <support/xsignal.h>
+@@ -202,7 +203,7 @@ tf (void *closure)
+ 
+ /* Test 1: caller provided stack without guard.  */
+ static void
+-do_test1 (void)
++do_test1 (void *closure)
+ {
+   pthread_attr_t attr;
+   xpthread_attr_init (&attr);
+@@ -227,7 +228,7 @@ do_test1 (void)
+ 
+ /* Test 2: same as 1., but with a guard area.  */
+ static void
+-do_test2 (void)
++do_test2 (void *closure)
+ {
+   pthread_attr_t attr;
+   xpthread_attr_init (&attr);
+@@ -250,18 +251,9 @@ do_test2 (void)
+   xmunmap (stack, stacksize);
+ }
+ 
+-/* Test 3: pthread_create with default values.  */
++/* Test 3: pthread_create without a guard area.  */
+ static void
+-do_test3 (void)
+-{
+-  pthread_t t = xpthread_create (NULL, tf, NULL);
+-  void *status = xpthread_join (t);
+-  TEST_VERIFY (status == 0);
+-}
+-
+-/* Test 4: pthread_create without a guard area.  */
+-static void
+-do_test4 (void)
++do_test3 (void *closure)
+ {
+   pthread_attr_t attr;
+   xpthread_attr_init (&attr);
+@@ -277,9 +269,18 @@ do_test4 (void)
+   xpthread_attr_destroy (&attr);
+ }
+ 
++/* Test 4: pthread_create with default values.  */
++static void
++do_test4 (void *closure)
++{
++  pthread_t t = xpthread_create (NULL, tf, NULL);
++  void *status = xpthread_join (t);
++  TEST_VERIFY (status == 0);
++}
++
+ /* Test 5: pthread_create with non default stack and guard size value.  */
+ static void
+-do_test5 (void)
++do_test5 (void *closure)
+ {
+   pthread_attr_t attr;
+   xpthread_attr_init (&attr);
+@@ -299,7 +300,7 @@ do_test5 (void)
+    test 3, but with a larger guard area.  The pthread_create will need to
+    increase the guard area.  */
+ static void
+-do_test6 (void)
++do_test6 (void *closure)
+ {
+   pthread_attr_t attr;
+   xpthread_attr_init (&attr);
+@@ -320,7 +321,7 @@ do_test6 (void)
+    pthread_create should use the cached stack from previous tests, but it
+    would require to reduce the guard area.  */
+ static void
+-do_test7 (void)
++do_test7 (void *closure)
+ {
+   pthread_t t = xpthread_create (NULL, tf, NULL);
+   void *status = xpthread_join (t);
+@@ -346,21 +347,40 @@ do_test (void)
+ 
+   static const struct {
+     const char *descr;
+-    void (*test)(void);
++    void (*test) (void *);
+   } tests[] = {
+     { "user provided stack without guard", do_test1 },
+     { "user provided stack with guard",    do_test2 },
+-    { "default attribute",                 do_test3 },
+-    { "default attribute without guard",   do_test4 },
++    /* N.B: do_test3 should be before do_test4 to check if a new thread
++       that uses the thread stack previously allocated without a guard
++       page correctly sets up the guard pages even on a kernel without
++       MADV_GUARD_INSTALL support (BZ 33356).  */
++    { "default attribute without guard",   do_test3 },
++    { "default attribute",                 do_test4 },
++    /* Also checks if the guard is correctly removed from the cache thread
++       stack.  */
++    { "default attribute without guard",   do_test3 },
+     { "non default stack and guard sizes", do_test5 },
+     { "reused stack with larger guard",    do_test6 },
+     { "reused stack with smaller guard",   do_test7 },
+   };
+ 
++  /* Run each test with a clean state.  */
++  for (int i = 0; i < array_length (tests); i++)
++    {
++      printf ("debug: fork: test%01d: %s\n", i, tests[i].descr);
++      struct support_capture_subprocess result =
++	support_capture_subprocess (tests[i].test, NULL);
++      support_capture_subprocess_check (&result, tests[i].descr, 0,
++					sc_allow_none);
++      support_capture_subprocess_free (&result);
++    }
++
++  /* And now run the same tests along with the thread stack cache.  */
+   for (int i = 0; i < array_length (tests); i++)
+     {
+       printf ("debug: test%01d: %s\n", i, tests[i].descr);
+-      tests[i].test();
++      tests[i].test ( NULL);
+     }
+ 
+   return 0;
+
+commit bf48b17a28066a54f172e0d63da9fc5dc60c6355
+Author: Sunil K Pandey <sunil.k.pandey@intel.com>
+Date:   Mon Oct 6 18:13:04 2025 -0700
+
+    x86: Detect Intel Wildcat Lake Processor
+    
+    Detect Intel Wildcat Lake Processor and tune it similar to Intel Panther
+    Lake.  https://cdrdv2.intel.com/v1/dl/getContent/671368 Section 1.2.
+    
+    Reviewed-by: H.J. Lu <hjl.tools@gmail.com>
+    (cherry picked from commit f8dd52901b72805a831d5a4cb7d971e4a3c9970b)
+
+diff --git a/sysdeps/x86/cpu-features.c b/sysdeps/x86/cpu-features.c
+index b7d1506135..4bdade883e 100644
+--- a/sysdeps/x86/cpu-features.c
++++ b/sysdeps/x86/cpu-features.c
+@@ -543,6 +543,7 @@ enum intel_microarch
+   INTEL_BIGCORE_PANTHERLAKE,
+   INTEL_BIGCORE_GRANITERAPIDS,
+   INTEL_BIGCORE_DIAMONDRAPIDS,
++  INTEL_BIGCORE_WILDCATLAKE,
+ 
+   /* Mixed (bigcore + atom SOC).  */
+   INTEL_MIXED_LAKEFIELD,
+@@ -702,6 +703,8 @@ intel_get_fam6_microarch (unsigned int model,
+       return INTEL_BIGCORE_ARROWLAKE;
+     case 0xCC:
+       return INTEL_BIGCORE_PANTHERLAKE;
++    case 0xD5:
++      return INTEL_BIGCORE_WILDCATLAKE;
+     case 0xAD:
+     case 0xAE:
+       return INTEL_BIGCORE_GRANITERAPIDS;
+@@ -934,6 +937,7 @@ disable_tsx:
+ 	case INTEL_BIGCORE_LUNARLAKE:
+ 	case INTEL_BIGCORE_ARROWLAKE:
+ 	case INTEL_BIGCORE_PANTHERLAKE:
++	case INTEL_BIGCORE_WILDCATLAKE:
+ 	case INTEL_BIGCORE_SAPPHIRERAPIDS:
+ 	case INTEL_BIGCORE_EMERALDRAPIDS:
+ 	case INTEL_BIGCORE_GRANITERAPIDS:
+
+commit ab8c1b5d62d7be2c3c23f535bea3d7fff19c53ae
+Author: Sunil K Pandey <sunil.k.pandey@intel.com>
+Date:   Wed Sep 24 09:38:17 2025 -0700
+
+    x86: Detect Intel Nova Lake Processor
+    
+    Detect Intel Nova Lake Processor and tune it similar to Intel Panther
+    Lake.  https://cdrdv2.intel.com/v1/dl/getContent/671368 Section 1.2.
+    
+    Reviewed-by: H.J. Lu <hjl.tools@gmail.com>
+    (cherry picked from commit a114e29ddd530962d2b44aa9d89f1f6075abe7fa)
+
+diff --git a/sysdeps/x86/cpu-features.c b/sysdeps/x86/cpu-features.c
+index 4bdade883e..b67ef541dd 100644
+--- a/sysdeps/x86/cpu-features.c
++++ b/sysdeps/x86/cpu-features.c
+@@ -544,6 +544,7 @@ enum intel_microarch
+   INTEL_BIGCORE_GRANITERAPIDS,
+   INTEL_BIGCORE_DIAMONDRAPIDS,
+   INTEL_BIGCORE_WILDCATLAKE,
++  INTEL_BIGCORE_NOVALAKE,
+ 
+   /* Mixed (bigcore + atom SOC).  */
+   INTEL_MIXED_LAKEFIELD,
+@@ -821,6 +822,17 @@ disable_tsx:
+ 	      break;
+ 	    }
+ 	}
++      else if (family == 18)
++	switch (model)
++	  {
++	  case 0x01:
++	  case 0x03:
++	    microarch = INTEL_BIGCORE_NOVALAKE;
++	    break;
++
++	  default:
++	    break;
++	  }
+       else if (family == 19)
+ 	switch (model)
+ 	  {
+@@ -938,6 +950,7 @@ disable_tsx:
+ 	case INTEL_BIGCORE_ARROWLAKE:
+ 	case INTEL_BIGCORE_PANTHERLAKE:
+ 	case INTEL_BIGCORE_WILDCATLAKE:
++	case INTEL_BIGCORE_NOVALAKE:
+ 	case INTEL_BIGCORE_SAPPHIRERAPIDS:
+ 	case INTEL_BIGCORE_EMERALDRAPIDS:
+ 	case INTEL_BIGCORE_GRANITERAPIDS:
+
+commit 6de12fc9ad56bc19fa6fcbd8ee502f29b5170d47
+Author: Yury Khrustalev <yury.khrustalev@arm.com>
+Date:   Thu Sep 25 15:51:30 2025 +0100
+
+    aarch64: define macro for calling __libc_arm_za_disable
+    
+    A common sequence of instructions is used in several places
+    in assembly files, so define it in one place as an assembly
+    macro.
+    
+    Reviewed-by: Adhemerval Zanella  <adhemerval.zanella@linaro.org>
+    (cherry picked from commit b4b713bd8921aff04773557da94fabb5fb9dd705)
+
+diff --git a/sysdeps/aarch64/__longjmp.S b/sysdeps/aarch64/__longjmp.S
+index 70ac02c44b..53b42e1bdc 100644
+--- a/sysdeps/aarch64/__longjmp.S
++++ b/sysdeps/aarch64/__longjmp.S
+@@ -26,16 +26,8 @@
+ ENTRY (__longjmp)
+ 
+ #if IS_IN(libc)
+-	/* Disable ZA state of SME in libc.a and libc.so, but not in ld.so.
+-	   The calling convention of __libc_arm_za_disable allows to do
+-	   this thus allowing to avoid saving to and reading from stack.
+-	   As a result we also don't need to sign the return address and
+-	   check it after returning because it is not stored to stack.  */
+-	mov	x13, x30
+-	cfi_register (x30, x13)
+-	bl	__libc_arm_za_disable
+-	mov	x30, x13
+-	cfi_register (x13, x30)
++	/* Disable ZA state of SME in libc.a and libc.so, but not in ld.so.  */
++	CALL_LIBC_ARM_ZA_DISABLE
+ #endif
+ 
+ 	cfi_def_cfa (x0, 0)
+diff --git a/sysdeps/aarch64/setjmp.S b/sysdeps/aarch64/setjmp.S
+index 53c5e7d8cc..92cedfad83 100644
+--- a/sysdeps/aarch64/setjmp.S
++++ b/sysdeps/aarch64/setjmp.S
+@@ -37,16 +37,8 @@ ENTRY_ALIGN (__sigsetjmp, 2)
+ 1:
+ 
+ #if IS_IN(libc)
+-	/* Disable ZA state of SME in libc.a and libc.so, but not in ld.so.
+-	   The calling convention of __libc_arm_za_disable allows to do
+-	   this thus allowing to avoid saving to and reading from stack.
+-	   As a result we also don't need to sign the return address and
+-	   check it after returning because it is not stored to stack.  */
+-	mov	x13, x30
+-	cfi_register (x30, x13)
+-	bl	__libc_arm_za_disable
+-	mov	x30, x13
+-	cfi_register (x13, x30)
++	/* Disable ZA state of SME in libc.a and libc.so, but not in ld.so.  */
++	CALL_LIBC_ARM_ZA_DISABLE
+ #endif
+ 
+ 	stp	x19, x20, [x0, #JB_X19<<3]
+diff --git a/sysdeps/unix/sysv/linux/aarch64/setcontext.S b/sysdeps/unix/sysv/linux/aarch64/setcontext.S
+index d9716f012e..8e98594663 100644
+--- a/sysdeps/unix/sysv/linux/aarch64/setcontext.S
++++ b/sysdeps/unix/sysv/linux/aarch64/setcontext.S
+@@ -49,15 +49,7 @@ ENTRY (__setcontext)
+ 	b	C_SYMBOL_NAME (__syscall_error)
+ 1:
+ 	/* Clear ZA state of SME.  */
+-	/* The calling convention of __libc_arm_za_disable allows to do
+-	   this thus allowing to avoid saving to and reading from stack.
+-	   As a result we also don't need to sign the return address and
+-	   check it after returning because it is not stored to stack.  */
+-	mov	x13, x30
+-	cfi_register (x30, x13)
+-	bl	__libc_arm_za_disable
+-	mov	x30, x13
+-	cfi_register (x13, x30)
++	CALL_LIBC_ARM_ZA_DISABLE
+ 	/* Restore the general purpose registers.  */
+ 	mov	x0, x9
+ 	cfi_def_cfa (x0, 0)
+diff --git a/sysdeps/unix/sysv/linux/aarch64/sysdep.h b/sysdeps/unix/sysv/linux/aarch64/sysdep.h
+index f0e8d64eef..fa01386b25 100644
+--- a/sysdeps/unix/sysv/linux/aarch64/sysdep.h
++++ b/sysdeps/unix/sysv/linux/aarch64/sysdep.h
+@@ -150,6 +150,18 @@
+     mov x8, SYS_ify (syscall_name);		\
+     svc 0
+ 
++/* Clear ZA state of SME (ASM version).  */
++/* The __libc_arm_za_disable function has special calling convention
++   that allows to call it without stack manipulation and preserving
++   most of the registers.  */
++	.macro CALL_LIBC_ARM_ZA_DISABLE
++	mov		x13, x30
++	.cfi_register	x30, x13
++	bl		__libc_arm_za_disable
++	mov		x30, x13
++	.cfi_register	x13, x30
++	.endm
++
+ #else /* not __ASSEMBLER__ */
+ 
+ # define VDSO_NAME  "LINUX_2.6.39"
+
+commit 256030b9842a10b1f22851b1de0c119761417544
+Author: Yury Khrustalev <yury.khrustalev@arm.com>
+Date:   Thu Sep 25 15:54:36 2025 +0100
+
+    aarch64: clear ZA state of SME before clone and clone3 syscalls
+    
+    This change adds a call to the __arm_za_disable() function immediately
+    before the SVC instruction inside clone() and clone3() wrappers. It also
+    adds a macro for inline clone() used in fork() and adds the same call to
+    the vfork implementation. This sets the ZA state of SME to "off" on return
+    from these functions (for both the child and the parent).
+    
+    The __arm_za_disable() function is described in [1] (8.1.3). Note that
+    the internal Glibc name for this function is __libc_arm_za_disable().
+    
+    When this change was originally proposed [2,3], it generated a long
+    discussion where several questions and concerns were raised. Here we
+    will address these concerns and explain why this change is useful and,
+    in fact, necessary.
+    
+    In a nutshell, a C library that conforms to the AAPCS64 spec [1] (pertinent
+    to this change, mainly, the chapters 6.2 and 6.6), should have a call to the
+    __arm_za_disable() function in clone() and clone3() wrappers. The following
+    explains in detail why this is the case.
+    
+    When we consider using the __arm_za_disable() function inside the clone()
+    and clone3() libc wrappers, we talk about the C library subroutines clone()
+    and clone3() rather than the syscalls with similar names. In the current
+    version of Glibc, clone() is public and clone3() is private, but it being
+    private is not pertinent to this discussion.
+    
+    We will begin with stating that this change is NOT a bug fix for something
+    in the kernel. The requirement to call __arm_za_disable() does NOT come from
+    the kernel. It also is NOT needed to satisfy a contract between the kernel
+    and userspace. This is why it is not for the kernel documentation to describe
+    this requirement. This requirement is instead needed to satisfy a pure userspace
+    scheme outlined in [1] and to make sure that software that uses Glibc (or any
+    other C library that has correct handling of SME states (see below)) conforms
+    to [1] without having to unnecessarily become SME-aware thus losing portability.
+    
+    To recap (see [1] (6.2)), SME extension defines SME state which is part of
+    processor state. Part of this SME state is ZA state that is necessary to
+    manage ZA storage register in the context of the ZA lazy saving scheme [1]
+    (6.6). This scheme exists because it would be challenging to handle ZA
+    storage of SME in either callee-saved or caller-saved manner.
+    
+    There are 3 kinds of ZA state that are defined in terms of the PSTATE.ZA
+    bit and the TPIDR2_EL0 register (see [1] (6.6.3)):
+    
+    - "off":       PSTATE.ZA == 0
+    - "active":    PSTATE.ZA == 1 TPIDR2_EL0 == null
+    - "dormant":   PSTATE.ZA == 1 TPIDR2_EL0 != null
+    
+    As [1] (6.7.2) outlines, every subroutine has exactly one SME-interface
+    depending on the permitted ZA-states on entry and on normal return from
+    a call to this subroutine. Callers of a subroutine must know and respect
+    the ZA-interface of the subroutines they are using. Using a subroutine
+    in a way that is not permitted by its ZA-interface is undefined behaviour.
+    
+    In particular, clone() and clone3() (the C library functions) have the
+    ZA-private interface. This means that the permitted ZA-states on entry
+    are "off" and "dormant" and that the permitted states on return are "off"
+    or "dormant" (but if and only if it was "dormant" on entry).
+    
+    This means that both functions in question should correctly handle both
+    "off" and "dormant" ZA-states on entry. The conforming states on return
+    are "off" and "dormant" (if inbound state was already "dormant").
+    
+    This change ensures that the ZA-state on return is always "off". Note,
+    that, in the context of clone() and clone3(), "on return" means a point
+    when execution resumes at certain address after transferring from clone()
+    or clone3(). For the caller (we may refer to it as "parent") this is the
+    return address in the link register where the RET instruction jumps. For
+    the "child", this is the target branch address.
+    
+    So, the "off" state on return is permitted and conformant. Why can't we
+    retain the "dormant" state? In theory, we can, but we shouldn't, here is
+    why.
+    
+    Every subroutine with a private-ZA interface, including clone() and clone3(),
+    must comply with the lazy saving scheme [1] (6.7.2). This puts additional
+    responsibility on a subroutine if ZA-state on return is "dormant" because
+    this state has special meaning. The "caller" (that is the place in code
+    where execution is transferred to, so this include both "parent" and "child")
+    may check the ZA-state and use it as per the spec of the "dormant" state that
+    is outlined in [1] (6.6.6 and 6.6.7).
+    
+    Conforming to this would require more code inside of clone() and clone3()
+    which hardly is desirable.
+    
+    For the return to "parent" this could be achieved in theory, but given that
+    neither clone() nor clone3() are supposed to be used in the middle of an
+    SME operation, if wouldn't be useful. For the "return" to "child" this
+    would be particularly difficult to achieve given the complexity of these
+    functions and their interfaces. Most importantly, it would be illegal
+    and somewhat meaningless to allow a "child" to start execution in the
+    "dormant" ZA-state because the very essence of the "dormant" state implies
+    that there is a place to return and that there is some outer context that
+    we are allowed to interact with.
+    
+    To sum up, calling __arm_za_disable() to ensure the "off" ZA-state when the
+    execution resumes after a call to clone() or clone3() is correct and also
+    the most simple way to conform to [1].
+    
+    Can there be situations when we can avoid calling __arm_za_disable()?
+    
+    Calling __arm_za_disable() implies certain (sufficiently small) overhead,
+    so one might rightly ponder avoiding making a call to this function when
+    we can afford not to. The most trivial cases like this (e.g. when the
+    calling thread doesn't have access to SME or to the TPIDR2_EL0 register)
+    are already handled by this function (see [1] (8.1.3 and 8.1.2)). Reasoning
+    about other possible use cases would require making code inside clone() and
+    clone3() more complicated and it would defeat the point of trying to make
+    an optimisation of not calling __arm_za_disable().
+    
+    Why can't the kernel do this instead?
+    
+    The handling of SME state by the kernel is described in [4]. In short,
+    kernel must not impose a specific ZA-interface onto a userspace function.
+    Interaction with the kernel happens (among other thing) via system calls.
+    In Glibc many of the system calls (notably, including SYS_clone and
+    SYS_clone3) are used via wrappers, and the kernel has no control of them
+    and, moreover, it cannot dictate how these wrappers should behave because
+    it is simply outside of the kernel's remit.
+    
+    However, in certain cases, the kernel may ensure that a "child" doesn't
+    start in an incorrect state. This is what is done by the recent change
+    included in 6.16 kernel [5]. This is not enough to ensure that code that
+    uses clone() and clone3() function conforms to [1] when it runs on a
+    system that provides SME, hence this change.
+    
+    [1]: https://github.com/ARM-software/abi-aa/blob/main/aapcs64/aapcs64.rst
+    [2]: https://inbox.sourceware.org/libc-alpha/20250522114828.2291047-1-yury.khrustalev@arm.com
+    [3]: https://inbox.sourceware.org/libc-alpha/20250609121407.3316070-1-yury.khrustalev@arm.com
+    [4]: https://www.kernel.org/doc/html/v6.16/arch/arm64/sme.html
+    [5]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=cde5c32db55740659fca6d56c09b88800d88fd29
+    
+    Reviewed-by: Adhemerval Zanella  <adhemerval.zanella@linaro.org>
+    (cherry picked from commit 27effb3d50424fb9634be77a2acd614b0386ff25)
+
+diff --git a/sysdeps/unix/sysv/linux/aarch64/clone.S b/sysdeps/unix/sysv/linux/aarch64/clone.S
+index 40015c6933..53f1efd728 100644
+--- a/sysdeps/unix/sysv/linux/aarch64/clone.S
++++ b/sysdeps/unix/sysv/linux/aarch64/clone.S
+@@ -45,6 +45,9 @@ ENTRY(__clone)
+ 	and	x1, x1, -16
+ 	cbz	x1, .Lsyscall_error
+ 
++	/* Clear ZA state of SME.  */
++	CALL_LIBC_ARM_ZA_DISABLE
++
+ 	/* Do the system call.  */
+ 	/* X0:flags, x1:newsp, x2:parenttidptr, x3:newtls, x4:childtid.  */
+ 	mov	x0, x2                  /* flags  */
+diff --git a/sysdeps/unix/sysv/linux/aarch64/clone3.S b/sysdeps/unix/sysv/linux/aarch64/clone3.S
+index c9ca845ef2..bc978b7e10 100644
+--- a/sysdeps/unix/sysv/linux/aarch64/clone3.S
++++ b/sysdeps/unix/sysv/linux/aarch64/clone3.S
+@@ -46,6 +46,9 @@ ENTRY(__clone3)
+ 	cbz	x10, .Lsyscall_error	/* No NULL cl_args pointer.  */
+ 	cbz	x2, .Lsyscall_error	/* No NULL function pointer.  */
+ 
++    /* Clear ZA state of SME.  */
++	CALL_LIBC_ARM_ZA_DISABLE
++
+ 	/* Do the system call, the kernel expects:
+ 	   x8: system call number
+ 	   x0: cl_args
+diff --git a/sysdeps/unix/sysv/linux/aarch64/sysdep.h b/sysdeps/unix/sysv/linux/aarch64/sysdep.h
+index fa01386b25..30003c0145 100644
+--- a/sysdeps/unix/sysv/linux/aarch64/sysdep.h
++++ b/sysdeps/unix/sysv/linux/aarch64/sysdep.h
+@@ -242,6 +242,31 @@
+ #undef HAVE_INTERNAL_BRK_ADDR_SYMBOL
+ #define HAVE_INTERNAL_BRK_ADDR_SYMBOL 1
+ 
++/* Clear ZA state of SME (C version).  */
++/* The __libc_arm_za_disable function has special calling convention
++   that allows to call it without stack manipulation and preserving
++   most of the registers.  */
++#define CALL_LIBC_ARM_ZA_DISABLE()			\
++({							\
++  unsigned long int __tmp;				\
++  asm volatile (					\
++  "	mov		%0, x30\n"			\
++  "	.cfi_register	x30, %0\n"			\
++  "	bl		__libc_arm_za_disable\n"	\
++  "	mov		x30, %0\n"			\
++  "	.cfi_register	%0, x30\n"			\
++  : "=r" (__tmp)					\
++  :							\
++  : "x14", "x15", "x16", "x17", "x18", "memory" );	\
++})
++
++/* Do clear ZA state of SME before making normal clone syscall.  */
++#define INLINE_CLONE_SYSCALL(a0, a1, a2, a3, a4)	\
++({							\
++  CALL_LIBC_ARM_ZA_DISABLE ();				\
++  INLINE_SYSCALL_CALL (clone, a0, a1, a2, a3, a4);	\
++})
++
+ #endif	/* __ASSEMBLER__ */
+ 
+ #endif /* linux/aarch64/sysdep.h */
+diff --git a/sysdeps/unix/sysv/linux/aarch64/vfork.S b/sysdeps/unix/sysv/linux/aarch64/vfork.S
+index d5943a7485..2600bc9be3 100644
+--- a/sysdeps/unix/sysv/linux/aarch64/vfork.S
++++ b/sysdeps/unix/sysv/linux/aarch64/vfork.S
+@@ -27,6 +27,9 @@
+ 
+ ENTRY (__vfork)
+ 
++	/* Clear ZA state of SME.  */
++	CALL_LIBC_ARM_ZA_DISABLE
++
+ 	mov	x0, #0x4111	/* CLONE_VM | CLONE_VFORK | SIGCHLD */
+ 	mov	x1, sp
+ 	DO_CALL (clone, 2)
+
+commit 71874f167aa5bb1538ff7e394beaacee28ebe65f
+Author: Yury Khrustalev <yury.khrustalev@arm.com>
+Date:   Fri Sep 26 10:03:45 2025 +0100
+
+    aarch64: tests for SME
+    
+    This commit adds tests for the following use cases relevant to handing of
+    the SME state:
+    
+     - fork() and vfork()
+     - clone() and clone3()
+     - signal handler
+    
+    While most cases are trivial, the case of clone3() is more complicated since
+    the clone3() symbol is not public in Glibc.
+    
+    To avoid having to check all possible ways clone3() may be called via other
+    public functions (e.g. vfork() or pthread_create()), we put together a test
+    that links directly with clone3.o. All the existing functions that have calls
+    to clone3() may not actually use it, in which case the outcome of such tests
+    would be unexpected. Having a direct call to the clone3() symbol in the test
+    allows to check precisely what we need to test: that the __arm_za_disable()
+    function is indeed called and has the desired effect.
+    
+    Linking to clone3.o also requires linking to __arm_za_disable.o that in
+    turn requires the _dl_hwcap2 hidden symbol which to provide in the test
+    and initialise it before using.
+    
+    Co-authored-by: Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>
+    Reviewed-by: Adhemerval Zanella  <adhemerval.zanella@linaro.org>
+    (cherry picked from commit ecb0fc2f0f839f36cd2a106283142c9df8ea8214)
+
+diff --git a/sysdeps/aarch64/Makefile b/sysdeps/aarch64/Makefile
+index bb97d31355..9479fb9679 100644
+--- a/sysdeps/aarch64/Makefile
++++ b/sysdeps/aarch64/Makefile
+@@ -79,8 +79,18 @@ sysdep_routines += \
+ 
+ tests += \
+   tst-sme-jmp \
++  tst-sme-signal \
+   tst-sme-za-state \
+   # tests
++tests-internal += \
++  tst-sme-clone \
++  tst-sme-clone3 \
++  tst-sme-fork \
++  tst-sme-vfork \
++  # tests-internal
++
++$(objpfx)tst-sme-clone3: $(objpfx)clone3.o $(objpfx)__arm_za_disable.o
++
+ endif
+ 
+ ifeq ($(subdir),malloc)
+diff --git a/sysdeps/aarch64/tst-sme-clone.c b/sysdeps/aarch64/tst-sme-clone.c
+new file mode 100644
+index 0000000000..7106ec7926
+--- /dev/null
++++ b/sysdeps/aarch64/tst-sme-clone.c
+@@ -0,0 +1,53 @@
++/* Test that ZA state of SME is cleared in both parent and child
++   when clone() syscall is used.
++   Copyright (C) 2025 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#include "tst-sme-skeleton.c"
++
++#include <support/xsched.h>
++
++static int
++fun (void * const arg)
++{
++  printf ("in child: %s\n", (const char *)arg);
++  /* Check that ZA state of SME was disabled in child.  */
++  check_sme_za_state ("after clone in child", /* Clear.  */ true);
++  return 0;
++}
++
++static char __attribute__((aligned(16)))
++stack[1024 * 1024];
++
++static void
++run (struct blk *ptr)
++{
++  char *syscall_name = (char *)"clone";
++  printf ("in parent: before %s\n", syscall_name);
++
++  /* Enabled ZA state so that effect of disabling be observable.  */
++  enable_sme_za_state (ptr);
++  check_sme_za_state ("before clone", /* Clear.  */ false);
++
++  pid_t pid = xclone (fun, syscall_name, stack, sizeof (stack),
++		      CLONE_NEWUSER | CLONE_NEWNS | SIGCHLD);
++
++  /* Check that ZA state of SME was disabled in parent.  */
++  check_sme_za_state ("after clone in parent", /* Clear.  */ true);
++
++  TEST_VERIFY (xwaitpid (pid, NULL, 0) == pid);
++}
+diff --git a/sysdeps/aarch64/tst-sme-clone3.c b/sysdeps/aarch64/tst-sme-clone3.c
+new file mode 100644
+index 0000000000..402b040cfd
+--- /dev/null
++++ b/sysdeps/aarch64/tst-sme-clone3.c
+@@ -0,0 +1,84 @@
++/* Test that ZA state of SME is cleared in both parent and child
++   when clone3() syscall is used.
++   Copyright (C) 2025 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#include "tst-sme-skeleton.c"
++
++#include <clone3.h>
++
++#include <errno.h>
++#include <sys/wait.h>
++#include <support/xsched.h>
++
++/* Since clone3 is not a public symbol, we link this test explicitly
++   with clone3.o and have to provide this declaration.  */
++int __clone3 (struct clone_args *cl_args, size_t size,
++	    int (*func)(void *arg), void *arg);
++
++static int
++fun (void * const arg)
++{
++  printf ("in child: %s\n", (const char *)arg);
++  /* Check that ZA state of SME was disabled in child.  */
++  check_sme_za_state ("after clone3 in child", /* Clear.  */ true);
++  return 0;
++}
++
++static char __attribute__((aligned(16)))
++stack[1024 * 1024];
++
++/* Required by __arm_za_disable.o and provided by the startup code
++   as a hidden symbol.  */
++uint64_t _dl_hwcap2;
++
++static void
++run (struct blk *ptr)
++{
++  _dl_hwcap2 = getauxval (AT_HWCAP2);
++
++  char *syscall_name = (char *)"clone3";
++  struct clone_args args = {
++    .flags = CLONE_VM | CLONE_VFORK,
++    .exit_signal = SIGCHLD,
++    .stack = (uintptr_t) stack,
++    .stack_size = sizeof (stack),
++  };
++  printf ("in parent: before %s\n", syscall_name);
++
++  /* Enabled ZA state so that effect of disabling be observable.  */
++  enable_sme_za_state (ptr);
++  check_sme_za_state ("before clone3", /* Clear.  */ false);
++
++  pid_t pid = __clone3 (&args, sizeof (args), fun, syscall_name);
++
++  /* Check that ZA state of SME was disabled in parent.  */
++  check_sme_za_state ("after clone3 in parent", /* Clear.  */ true);
++
++  printf ("%s child pid: %d\n", syscall_name, pid);
++
++  xwaitpid (pid, NULL, 0);
++  printf ("in parent: after %s\n", syscall_name);
++}
++
++/* Workaround to simplify linking with clone3.o.  */
++void __syscall_error(int code)
++{
++  int err = -code;
++  fprintf (stderr, "syscall error %d (%s)\n", err, strerror (err));
++  exit (err);
++}
+diff --git a/sysdeps/aarch64/tst-sme-fork.c b/sysdeps/aarch64/tst-sme-fork.c
+new file mode 100644
+index 0000000000..b003b08884
+--- /dev/null
++++ b/sysdeps/aarch64/tst-sme-fork.c
+@@ -0,0 +1,43 @@
++/* Test that ZA state of SME is cleared in both parent and child
++   when fork() function is used.
++   Copyright (C) 2025 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#include "tst-sme-skeleton.c"
++
++static void
++run (struct blk *blk)
++{
++  /* Enabled ZA state so that effect of disabling be observable.  */
++  enable_sme_za_state (blk);
++  check_sme_za_state ("before fork", /* Clear.  */ false);
++  fflush (stdout);
++
++  pid_t pid = xfork ();
++
++  if (pid == 0)
++    {
++      /* Check that ZA state of SME was disabled in child.  */
++      check_sme_za_state ("after fork in child", /* Clear.  */ true);
++      exit (0);
++    }
++
++  /* Check that ZA state of SME was disabled in parent.  */
++  check_sme_za_state ("after fork in parent", /* Clear.  */ true);
++
++  TEST_VERIFY (xwaitpid (pid, NULL, 0) == pid);
++}
+diff --git a/sysdeps/aarch64/tst-sme-helper.h b/sysdeps/aarch64/tst-sme-helper.h
+index f049416c2b..ab9c503e45 100644
+--- a/sysdeps/aarch64/tst-sme-helper.h
++++ b/sysdeps/aarch64/tst-sme-helper.h
+@@ -16,9 +16,6 @@
+    License along with the GNU C Library; if not, see
+    <https://www.gnu.org/licenses/>.  */
+ 
+-/* Streaming SVE vector register size.  */
+-static unsigned long svl;
+-
+ struct blk {
+   void *za_save_buffer;
+   uint16_t num_za_save_slices;
+@@ -68,10 +65,10 @@ start_za (void)
+ 
+ /* Load data into ZA byte by byte from p.  */
+ static void __attribute__ ((noinline))
+-load_za (const void *p)
++load_za (const void *buf, unsigned long svl)
+ {
+   register unsigned long x15 asm ("x15") = 0;
+-  register unsigned long x16 asm ("x16") = (unsigned long)p;
++  register unsigned long x16 asm ("x16") = (unsigned long)buf;
+   register unsigned long x17 asm ("x17") = svl;
+ 
+   asm volatile (
+diff --git a/sysdeps/aarch64/tst-sme-jmp.c b/sysdeps/aarch64/tst-sme-jmp.c
+index 103897ad36..b2d21c6e1a 100644
+--- a/sysdeps/aarch64/tst-sme-jmp.c
++++ b/sysdeps/aarch64/tst-sme-jmp.c
+@@ -29,6 +29,9 @@
+ 
+ #include "tst-sme-helper.h"
+ 
++/* Streaming SVE vector register size.  */
++static unsigned long svl;
++
+ static uint8_t *za_orig;
+ static uint8_t *za_dump;
+ static uint8_t *za_save;
+@@ -82,7 +85,7 @@ longjmp_test (void)
+     FAIL_EXIT1 ("svcr != 0: %lu", svcr);
+   set_tpidr2 (&blk);
+   start_za ();
+-  load_za (za_orig);
++  load_za (za_orig, svl);
+ 
+   print_data ("za save space", za_save);
+   p = get_tpidr2 ();
+@@ -131,7 +134,7 @@ setcontext_test (void)
+     FAIL_EXIT1 ("svcr != 0: %lu", svcr);
+   set_tpidr2 (&blk);
+   start_za ();
+-  load_za (za_orig);
++  load_za (za_orig, svl);
+ 
+   print_data ("za save space", za_save);
+   p = get_tpidr2 ();
+diff --git a/sysdeps/aarch64/tst-sme-signal.c b/sysdeps/aarch64/tst-sme-signal.c
+new file mode 100644
+index 0000000000..b4b07bcc44
+--- /dev/null
++++ b/sysdeps/aarch64/tst-sme-signal.c
+@@ -0,0 +1,115 @@
++/* Test handling of SME state in a signal handler.
++   Copyright (C) 2025 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#include "tst-sme-skeleton.c"
++
++#include <support/xsignal.h>
++
++static struct _aarch64_ctx *
++extension (void *p)
++{
++  return p;
++}
++
++#ifndef TPIDR2_MAGIC
++#define TPIDR2_MAGIC 0x54504902
++#endif
++
++#ifndef ZA_MAGIC
++#define ZA_MAGIC 0x54366345
++#endif
++
++#ifndef ZT_MAGIC
++#define ZT_MAGIC 0x5a544e01
++#endif
++
++#ifndef EXTRA_MAGIC
++#define EXTRA_MAGIC 0x45585401
++#endif
++
++/* We use a pipe to make sure that the final check of the SME state
++   happens after signal handler finished.  */
++static int pipefd[2];
++
++#define WRITE(msg) xwrite (1, msg, sizeof (msg));
++
++static void
++handler (int signo, siginfo_t *si, void *ctx)
++{
++  TEST_VERIFY (signo == SIGUSR1);
++  WRITE ("in the handler\n");
++  check_sme_za_state ("during signal", true /* State is clear.  */);
++  ucontext_t *uc = ctx;
++  void *p = uc->uc_mcontext.__reserved;
++  unsigned int found = 0;
++  uint32_t m;
++  while ((m = extension (p)->magic))
++    {
++      if (m == TPIDR2_MAGIC)
++        {
++          WRITE ("found TPIDR2_MAGIC\n");
++          found += 1;
++        }
++      if (m == ZA_MAGIC)
++        {
++          WRITE ("found ZA_MAGIC\n");
++          found += 1;
++        }
++      if (m == ZT_MAGIC)
++        {
++          WRITE ("found ZT_MAGIC\n");
++          found += 1;
++        }
++      if (m == EXTRA_MAGIC)
++        {
++          WRITE ("found EXTRA_MAGIC\n");
++          struct { struct _aarch64_ctx h; uint64_t data; } *e = p;
++          p = (char *)e->data;
++          continue;
++        }
++      p = (char *)p + extension (p)->size;
++    }
++  TEST_COMPARE (found, 3);
++
++  /* Signal that the wait is over (see below).  */
++  char message = '\0';
++  xwrite (pipefd[1], &message, 1);
++}
++
++static void
++run (struct blk *blk)
++{
++  xpipe (pipefd);
++
++  struct sigaction sigact;
++  sigemptyset (&sigact.sa_mask);
++  sigact.sa_flags = 0;
++  sigact.sa_flags |= SA_SIGINFO;
++  sigact.sa_sigaction = handler;
++  xsigaction (SIGUSR1, &sigact, NULL);
++
++  enable_sme_za_state (blk);
++  check_sme_za_state ("before signal", false /* State is not clear.  */);
++  xraise (SIGUSR1);
++
++  /* Wait for signal handler to complete.  */
++  char response;
++  xread (pipefd[0], &response, 1);
++
++  check_sme_za_state ("after signal", false /* State is not clear.  */);
++}
+diff --git a/sysdeps/aarch64/tst-sme-skeleton.c b/sysdeps/aarch64/tst-sme-skeleton.c
+new file mode 100644
+index 0000000000..ba84dda1cb
+--- /dev/null
++++ b/sysdeps/aarch64/tst-sme-skeleton.c
+@@ -0,0 +1,101 @@
++/* Template for SME tests.
++   Copyright (C) 2025 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#include <stdio.h>
++#include <stddef.h>
++#include <stdint.h>
++#include <string.h>
++#include <sys/auxv.h>
++
++#include <support/check.h>
++#include <support/support.h>
++#include <support/xstdlib.h>
++#include <support/xunistd.h>
++#include <support/test-driver.h>
++
++#include "tst-sme-helper.h"
++
++/* Streaming SVE vector register size.  */
++static unsigned long svl;
++
++static uint8_t *state;
++
++static void
++enable_sme_za_state (struct blk *blk)
++{
++  start_za ();
++  set_tpidr2 (blk);
++  load_za (blk, svl);
++}
++
++/* Check if SME state is disabled (when CLEAR is true) or
++   enabled (when CLEAR is false).  */
++static void
++check_sme_za_state (const char msg[], bool clear)
++{
++  unsigned long svcr = get_svcr ();
++  void *tpidr2 = get_tpidr2 ();
++  printf ("[%s]\n", msg);
++  printf ("svcr = %016lx\n", svcr);
++  printf ("tpidr2 = %016lx\n", (unsigned long)tpidr2);
++  if (clear)
++    {
++      TEST_VERIFY (svcr == 0);
++      TEST_VERIFY (tpidr2 == NULL);
++    }
++  else
++    {
++      TEST_VERIFY (svcr != 0);
++      TEST_VERIFY (tpidr2 != NULL);
++    }
++}
++
++/* Should be defined in actual test that includes this
++   skeleton file. */
++static void
++run (struct blk *ptr);
++
++static int
++do_test (void)
++{
++  unsigned long hwcap2 = getauxval (AT_HWCAP2);
++  if ((hwcap2 & HWCAP2_SME) == 0)
++    return EXIT_UNSUPPORTED;
++
++  /* Get current streaming SVE vector length in bytes.  */
++  svl = get_svl ();
++  printf ("svl: %lu\n", svl);
++
++  TEST_VERIFY_EXIT (!(svl < 16 || svl % 16 != 0 || svl >= (1 << 16)));
++
++  /* Initialise buffer for ZA state of SME.  */
++  state = xmalloc (svl * svl);
++  memset (state, 1, svl * svl);
++  struct blk blk = {
++    .za_save_buffer = state,
++    .num_za_save_slices = svl,
++    .__reserved = {0},
++  };
++
++  run (&blk);
++
++  free (state);
++  return 0;
++}
++
++#include <support/test-driver.c>
+diff --git a/sysdeps/aarch64/tst-sme-vfork.c b/sysdeps/aarch64/tst-sme-vfork.c
+new file mode 100644
+index 0000000000..3feea065e5
+--- /dev/null
++++ b/sysdeps/aarch64/tst-sme-vfork.c
+@@ -0,0 +1,43 @@
++/* Test that ZA state of SME is cleared in both parent and child
++   when vfork() function is used.
++   Copyright (C) 2025 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#include "tst-sme-skeleton.c"
++
++static void
++run (struct blk *blk)
++{
++  /* Enabled ZA state so that effect of disabling be observable.  */
++  enable_sme_za_state (blk);
++  check_sme_za_state ("before vfork", /* Clear.  */ false);
++  fflush (stdout);
++
++  pid_t pid = vfork ();
++
++  if (pid == 0)
++    {
++      /* Check that ZA state of SME was disabled in child.  */
++      check_sme_za_state ("after vfork in child", /* Clear.  */ true);
++      _exit (0);
++    }
++
++  /* Check that ZA state of SME was disabled in parent.  */
++  check_sme_za_state ("after vfork in parent", /* Clear.  */ true);
++
++  TEST_VERIFY (xwaitpid (pid, NULL, 0) == pid);
++}
+diff --git a/sysdeps/aarch64/tst-sme-za-state.c b/sysdeps/aarch64/tst-sme-za-state.c
+index 63f6eebeb4..00118ef506 100644
+--- a/sysdeps/aarch64/tst-sme-za-state.c
++++ b/sysdeps/aarch64/tst-sme-za-state.c
+@@ -16,47 +16,9 @@
+    License along with the GNU C Library; if not, see
+    <https://www.gnu.org/licenses/>.  */
+ 
+-#include <stdio.h>
+-#include <setjmp.h>
+-#include <stdlib.h>
+-#include <string.h>
+-#include <sys/auxv.h>
+-
+-#include <support/check.h>
+-#include <support/support.h>
+-#include <support/test-driver.h>
+-
+-#include "tst-sme-helper.h"
+-
+-static uint8_t *state;
+-
+-static void
+-enable_sme_za_state (struct blk *ptr)
+-{
+-  set_tpidr2 (ptr);
+-  start_za ();
+-  load_za (state);
+-}
++#include "tst-sme-skeleton.c"
+ 
+-static void
+-check_sme_za_state (const char msg[], bool clear)
+-{
+-  unsigned long svcr = get_svcr ();
+-  void *tpidr2 = get_tpidr2 ();
+-  printf ("[%s]\n", msg);
+-  printf ("svcr = %016lx\n", svcr);
+-  printf ("tpidr2 = %016lx\n", (unsigned long)tpidr2);
+-  if (clear)
+-    {
+-      TEST_VERIFY (svcr == 0);
+-      TEST_VERIFY (tpidr2 == NULL);
+-    }
+-  else
+-    {
+-      TEST_VERIFY (svcr != 0);
+-      TEST_VERIFY (tpidr2 != NULL);
+-    }
+-}
++#include <setjmp.h>
+ 
+ static void
+ run (struct blk *ptr)
+@@ -88,32 +50,3 @@ run (struct blk *ptr)
+   TEST_COMPARE (ret, 42);
+   check_sme_za_state ("after longjmp", /* Clear.  */ true);
+ }
+-
+-static int
+-do_test (void)
+-{
+-  unsigned long hwcap2 = getauxval (AT_HWCAP2);
+-  if ((hwcap2 & HWCAP2_SME) == 0)
+-    return EXIT_UNSUPPORTED;
+-
+-  /* Get current streaming SVE vector register size.  */
+-  svl = get_svl ();
+-  printf ("svl: %lu\n", svl);
+-  TEST_VERIFY_EXIT (!(svl < 16 || svl % 16 != 0 || svl >= (1 << 16)));
+-
+-  /* Initialise buffer for ZA state of SME.  */
+-  state = xmalloc (svl * svl);
+-  memset (state, 1, svl * svl);
+-  struct blk blk = {
+-    .za_save_buffer = state,
+-    .num_za_save_slices = svl,
+-    .__reserved = {0},
+-  };
+-
+-  run (&blk);
+-
+-  free (state);
+-  return 0;
+-}
+-
+-#include <support/test-driver.c>
+
+commit bf499c2a4964bddc25a006ec1402f8996d78c6ff
+Author: Jiamei Xie <xiejiamei@hygon.cn>
+Date:   Tue Oct 14 20:14:11 2025 +0800
+
+    x86: fix wmemset ifunc stray '!' (bug 33542)
+    
+    The ifunc selector for wmemset had a stray '!' in the
+    X86_ISA_CPU_FEATURES_ARCH_P(...) check:
+    
+      if (X86_ISA_CPU_FEATURE_USABLE_P (cpu_features, AVX2)
+          && X86_ISA_CPU_FEATURES_ARCH_P (cpu_features,
+                                          AVX_Fast_Unaligned_Load, !))
+    
+    This effectively negated the predicate and caused the AVX2/AVX512
+    paths to be skipped, making the dispatcher fall back to the SSE2
+    implementation even on CPUs where AVX2/AVX512 are available. The
+    regression leads to noticeable throughput loss for wmemset.
+    
+    Remove the stray '!' so the AVX_Fast_Unaligned_Load capability is
+    tested as intended and the correct AVX2/EVEX variants are selected.
+    
+    Impact:
+    - On AVX2/AVX512-capable x86_64, wmemset no longer incorrectly
+      falls back to SSE2; perf now shows __wmemset_evex/avx2 variants.
+    
+    Testing:
+    - benchtests/bench-wmemset shows improved bandwidth across sizes.
+    - perf confirm the selected symbol is no longer SSE2.
+    
+    Signed-off-by: xiejiamei <xiejiamei@hygon.com>
+    Signed-off-by: Li jing <lijing@hygon.cn>
+    Reviewed-by: Adhemerval Zanella  <adhemerval.zanella@linaro.org>
+    (cherry picked from commit 4d86b6cdd8132e0410347e07262239750f86dfb4)
+
+diff --git a/sysdeps/x86_64/multiarch/ifunc-wmemset.h b/sysdeps/x86_64/multiarch/ifunc-wmemset.h
+index f95cca6ae5..50af138230 100644
+--- a/sysdeps/x86_64/multiarch/ifunc-wmemset.h
++++ b/sysdeps/x86_64/multiarch/ifunc-wmemset.h
+@@ -35,7 +35,7 @@ IFUNC_SELECTOR (void)
+ 
+   if (X86_ISA_CPU_FEATURE_USABLE_P (cpu_features, AVX2)
+       && X86_ISA_CPU_FEATURES_ARCH_P (cpu_features,
+-				      AVX_Fast_Unaligned_Load, !))
++				      AVX_Fast_Unaligned_Load,))
+     {
+       if (X86_ISA_CPU_FEATURE_USABLE_P (cpu_features, AVX512VL))
+ 	{
+
+commit de1fe81f471496366580ad728b8986a3424b2fd7
+Author: Yury Khrustalev <yury.khrustalev@arm.com>
+Date:   Tue Oct 28 11:01:50 2025 +0000
+
+    aarch64: fix cfi directives around __libc_arm_za_disable
+    
+    Incorrect CFI directive corrupted call stack information
+    and prevented debuggers from correctly displaying call
+    stack information.
+    
+    Reviewed-by: Adhemerval Zanella  <adhemerval.zanella@linaro.org>
+    (cherry picked from commit 2f77aec043f61e8533487850b11941a640ae2dea)
+
+diff --git a/sysdeps/unix/sysv/linux/aarch64/sysdep.h b/sysdeps/unix/sysv/linux/aarch64/sysdep.h
+index 30003c0145..8a7690d4a8 100644
+--- a/sysdeps/unix/sysv/linux/aarch64/sysdep.h
++++ b/sysdeps/unix/sysv/linux/aarch64/sysdep.h
+@@ -155,11 +155,12 @@
+    that allows to call it without stack manipulation and preserving
+    most of the registers.  */
+ 	.macro CALL_LIBC_ARM_ZA_DISABLE
++	cfi_remember_state
+ 	mov		x13, x30
+-	.cfi_register	x30, x13
++	cfi_register(x30, x13)
+ 	bl		__libc_arm_za_disable
+ 	mov		x30, x13
+-	.cfi_register	x13, x30
++	cfi_restore_state
+ 	.endm
+ 
+ #else /* not __ASSEMBLER__ */
+@@ -250,11 +251,12 @@
+ ({							\
+   unsigned long int __tmp;				\
+   asm volatile (					\
++  "	.cfi_remember_state\n"			\
+   "	mov		%0, x30\n"			\
+-  "	.cfi_register	x30, %0\n"			\
++  "	.cfi_register x30, %0\n"      \
+   "	bl		__libc_arm_za_disable\n"	\
+   "	mov		x30, %0\n"			\
+-  "	.cfi_register	%0, x30\n"			\
++  "	.cfi_restore_state\n"			\
+   : "=r" (__tmp)					\
+   :							\
+   : "x14", "x15", "x16", "x17", "x18", "memory" );	\
+
+commit 17c3eab387c3ceb6972e57888a89b1480793f81a
+Author: Yury Khrustalev <yury.khrustalev@arm.com>
+Date:   Tue Nov 11 11:40:25 2025 +0000
+
+    aarch64: fix includes in SME tests
+    
+    Use the correct include for the SIGCHLD macro: signal.h
+    
+    Reviewed-by: Wilco Dijkstra  <Wilco.Dijkstra@arm.com>
+    (cherry picked from commit a9c426bcca59a9e228c4fbe75e75154217ec4ada)
+
+diff --git a/sysdeps/aarch64/tst-sme-clone.c b/sysdeps/aarch64/tst-sme-clone.c
+index 7106ec7926..b6ad54fa37 100644
+--- a/sysdeps/aarch64/tst-sme-clone.c
++++ b/sysdeps/aarch64/tst-sme-clone.c
+@@ -19,6 +19,7 @@
+ 
+ #include "tst-sme-skeleton.c"
+ 
++#include <signal.h>
+ #include <support/xsched.h>
+ 
+ static int
+diff --git a/sysdeps/aarch64/tst-sme-clone3.c b/sysdeps/aarch64/tst-sme-clone3.c
+index 402b040cfd..f420d5984d 100644
+--- a/sysdeps/aarch64/tst-sme-clone3.c
++++ b/sysdeps/aarch64/tst-sme-clone3.c
+@@ -22,7 +22,7 @@
+ #include <clone3.h>
+ 
+ #include <errno.h>
+-#include <sys/wait.h>
++#include <signal.h>
+ #include <support/xsched.h>
+ 
+ /* Since clone3 is not a public symbol, we link this test explicitly
+
+commit 97297120ce04f0edd16ed0357a11ef8731c5bd1e
+Author: Joe Ramsay <Joe.Ramsay@arm.com>
+Date:   Thu Nov 6 15:36:03 2025 +0000
+
+    AArch64: Optimise SVE scalar callbacks
+    
+    Instead of using SVE instructions to marshall special results into the
+    correct lane, just write the entire vector (and the predicate) to
+    memory, then use cheaper scalar operations.
+    
+    Geomean speedup of 16% in special intervals on Neoverse with GCC 14.
+    
+    Reviewed-by: Wilco Dijkstra  <Wilco.Dijkstra@arm.com>
+    (cherry picked from commit 5b82fb18827e962af9f080fdf3c1a69802783f67)
+
+diff --git a/sysdeps/aarch64/fpu/sv_math.h b/sysdeps/aarch64/fpu/sv_math.h
+index 3d576df4cc..65d7f0ff20 100644
+--- a/sysdeps/aarch64/fpu/sv_math.h
++++ b/sysdeps/aarch64/fpu/sv_math.h
+@@ -24,11 +24,29 @@
+ 
+ #include "vecmath_config.h"
+ 
++#if !defined(__ARM_FEATURE_SVE_BITS) || __ARM_FEATURE_SVE_BITS == 0
++/* If not specified by -msve-vector-bits, assume maximum vector length.  */
++# define SVE_VECTOR_BYTES 256
++#else
++# define SVE_VECTOR_BYTES (__ARM_FEATURE_SVE_BITS / 8)
++#endif
++#define SVE_NUM_FLTS (SVE_VECTOR_BYTES / sizeof (float))
++#define SVE_NUM_DBLS (SVE_VECTOR_BYTES / sizeof (double))
++/* Predicate is stored as one bit per byte of VL so requires VL / 64 bytes.  */
++#define SVE_NUM_PG_BYTES (SVE_VECTOR_BYTES / sizeof (uint64_t))
++
+ #define SV_NAME_F1(fun) _ZGVsMxv_##fun##f
+ #define SV_NAME_D1(fun) _ZGVsMxv_##fun
+ #define SV_NAME_F2(fun) _ZGVsMxvv_##fun##f
+ #define SV_NAME_D2(fun) _ZGVsMxvv_##fun
+ 
++static inline void
++svstr_p (uint8_t *dst, svbool_t p)
++{
++  /* Predicate STR does not currently have an intrinsic.  */
++  __asm__("str %0, [%x1]\n" : : "Upa"(p), "r"(dst) : "memory");
++}
++
+ /* Double precision.  */
+ static inline svint64_t
+ sv_s64 (int64_t x)
+@@ -51,33 +69,35 @@ sv_f64 (double x)
+ static inline svfloat64_t
+ sv_call_f64 (double (*f) (double), svfloat64_t x, svfloat64_t y, svbool_t cmp)
+ {
+-  svbool_t p = svpfirst (cmp, svpfalse ());
+-  while (svptest_any (cmp, p))
++  double tmp[SVE_NUM_DBLS];
++  uint8_t pg_bits[SVE_NUM_PG_BYTES];
++  svstr_p (pg_bits, cmp);
++  svst1 (svptrue_b64 (), tmp, svsel (cmp, x, y));
++
++  for (int i = 0; i < svcntd (); i++)
+     {
+-      double elem = svclastb_n_f64 (p, 0, x);
+-      elem = (*f) (elem);
+-      svfloat64_t y2 = svdup_n_f64 (elem);
+-      y = svsel_f64 (p, y2, y);
+-      p = svpnext_b64 (cmp, p);
++      if (pg_bits[i] & 1)
++	tmp[i] = f (tmp[i]);
+     }
+-  return y;
++  return svld1 (svptrue_b64 (), tmp);
+ }
+ 
+ static inline svfloat64_t
+ sv_call2_f64 (double (*f) (double, double), svfloat64_t x1, svfloat64_t x2,
+ 	      svfloat64_t y, svbool_t cmp)
+ {
+-  svbool_t p = svpfirst (cmp, svpfalse ());
+-  while (svptest_any (cmp, p))
++  double tmp1[SVE_NUM_DBLS], tmp2[SVE_NUM_DBLS];
++  uint8_t pg_bits[SVE_NUM_PG_BYTES];
++  svstr_p (pg_bits, cmp);
++  svst1 (svptrue_b64 (), tmp1, svsel (cmp, x1, y));
++  svst1 (cmp, tmp2, x2);
++
++  for (int i = 0; i < svcntd (); i++)
+     {
+-      double elem1 = svclastb_n_f64 (p, 0, x1);
+-      double elem2 = svclastb_n_f64 (p, 0, x2);
+-      double ret = (*f) (elem1, elem2);
+-      svfloat64_t y2 = svdup_n_f64 (ret);
+-      y = svsel_f64 (p, y2, y);
+-      p = svpnext_b64 (cmp, p);
++      if (pg_bits[i] & 1)
++	tmp1[i] = f (tmp1[i], tmp2[i]);
+     }
+-  return y;
++  return svld1 (svptrue_b64 (), tmp1);
+ }
+ 
+ static inline svuint64_t
+@@ -109,33 +129,40 @@ sv_f32 (float x)
+ static inline svfloat32_t
+ sv_call_f32 (float (*f) (float), svfloat32_t x, svfloat32_t y, svbool_t cmp)
+ {
+-  svbool_t p = svpfirst (cmp, svpfalse ());
+-  while (svptest_any (cmp, p))
++  float tmp[SVE_NUM_FLTS];
++  uint8_t pg_bits[SVE_NUM_PG_BYTES];
++  svstr_p (pg_bits, cmp);
++  svst1 (svptrue_b32 (), tmp, svsel (cmp, x, y));
++
++  for (int i = 0; i < svcntd (); i++)
+     {
+-      float elem = svclastb_n_f32 (p, 0, x);
+-      elem = f (elem);
+-      svfloat32_t y2 = svdup_n_f32 (elem);
+-      y = svsel_f32 (p, y2, y);
+-      p = svpnext_b32 (cmp, p);
++      uint8_t p = pg_bits[i];
++      if (p & 1)
++	tmp[i * 2] = f (tmp[i * 2]);
++      if (p & (1 << 4))
++	tmp[i * 2 + 1] = f (tmp[i * 2 + 1]);
+     }
+-  return y;
++  return svld1 (svptrue_b32 (), tmp);
+ }
+ 
+ static inline svfloat32_t
+ sv_call2_f32 (float (*f) (float, float), svfloat32_t x1, svfloat32_t x2,
+ 	      svfloat32_t y, svbool_t cmp)
+ {
+-  svbool_t p = svpfirst (cmp, svpfalse ());
+-  while (svptest_any (cmp, p))
++  float tmp1[SVE_NUM_FLTS], tmp2[SVE_NUM_FLTS];
++  uint8_t pg_bits[SVE_NUM_PG_BYTES];
++  svstr_p (pg_bits, cmp);
++  svst1 (svptrue_b32 (), tmp1, svsel (cmp, x1, y));
++  svst1 (cmp, tmp2, x2);
++
++  for (int i = 0; i < svcntd (); i++)
+     {
+-      float elem1 = svclastb_n_f32 (p, 0, x1);
+-      float elem2 = svclastb_n_f32 (p, 0, x2);
+-      float ret = f (elem1, elem2);
+-      svfloat32_t y2 = svdup_n_f32 (ret);
+-      y = svsel_f32 (p, y2, y);
+-      p = svpnext_b32 (cmp, p);
++      uint8_t p = pg_bits[i];
++      if (p & 1)
++	tmp1[i * 2] = f (tmp1[i * 2], tmp2[i * 2]);
++      if (p & (1 << 4))
++	tmp1[i * 2 + 1] = f (tmp1[i * 2 + 1], tmp2[i * 2 + 1]);
+     }
+-  return y;
++  return svld1 (svptrue_b32 (), tmp1);
+ }
+-
+ #endif
+
+commit ec041b1f53bf1fd29d94ee147fac69da66437dc6
+Author: Joe Ramsay <Joe.Ramsay@arm.com>
+Date:   Thu Nov 6 18:26:54 2025 +0000
+
+    AArch64: Fix instability in AdvSIMD tan
+    
+    Previously presence of special-cases in one lane could affect the
+    results in other lanes due to unconditional scalar fallback. The old
+    WANT_SIMD_EXCEPT option (which has never been enabled in libmvec) has
+    been removed from AOR, making it easier to spot and fix this. 4%
+    improvement in throughput with GCC 14 on Neoverse V1. This bug is
+    present as far back as 2.39 (where tan was first introduced).
+    
+    Reviewed-by: Wilco Dijkstra  <Wilco.Dijkstra@arm.com>
+    (cherry picked from commit 6c22823da57aa5218f717f569c04c9573c0448c5)
+
+diff --git a/sysdeps/aarch64/fpu/tan_advsimd.c b/sysdeps/aarch64/fpu/tan_advsimd.c
+index 825c9754b3..d391a003d8 100644
+--- a/sysdeps/aarch64/fpu/tan_advsimd.c
++++ b/sysdeps/aarch64/fpu/tan_advsimd.c
+@@ -25,9 +25,7 @@ static const struct data
+   float64x2_t poly[9];
+   double half_pi[2];
+   float64x2_t two_over_pi, shift;
+-#if !WANT_SIMD_EXCEPT
+   float64x2_t range_val;
+-#endif
+ } data = {
+   /* Coefficients generated using FPMinimax.  */
+   .poly = { V2 (0x1.5555555555556p-2), V2 (0x1.1111111110a63p-3),
+@@ -38,20 +36,17 @@ static const struct data
+   .half_pi = { 0x1.921fb54442d18p0, 0x1.1a62633145c07p-54 },
+   .two_over_pi = V2 (0x1.45f306dc9c883p-1),
+   .shift = V2 (0x1.8p52),
+-#if !WANT_SIMD_EXCEPT
+   .range_val = V2 (0x1p23),
+-#endif
+ };
+ 
+ #define RangeVal 0x4160000000000000  /* asuint64(0x1p23).  */
+ #define TinyBound 0x3e50000000000000 /* asuint64(2^-26).  */
+-#define Thresh 0x310000000000000     /* RangeVal - TinyBound.  */
+ 
+ /* Special cases (fall back to scalar calls).  */
+ static float64x2_t VPCS_ATTR NOINLINE
+-special_case (float64x2_t x)
++special_case (float64x2_t x, float64x2_t n, float64x2_t d, uint64x2_t special)
+ {
+-  return v_call_f64 (tan, x, x, v_u64 (-1));
++  return v_call_f64 (tan, x, vdivq_f64 (n, d), special);
+ }
+ 
+ /* Vector approximation for double-precision tan.
+@@ -65,14 +60,6 @@ float64x2_t VPCS_ATTR V_NAME_D1 (tan) (float64x2_t x)
+      very large inputs. Fall back to scalar routine for all lanes if any are
+      too large, or Inf/NaN. If fenv exceptions are expected, also fall back for
+      tiny input to avoid underflow.  */
+-#if WANT_SIMD_EXCEPT
+-  uint64x2_t iax = vreinterpretq_u64_f64 (vabsq_f64 (x));
+-  /* iax - tiny_bound > range_val - tiny_bound.  */
+-  uint64x2_t special
+-      = vcgtq_u64 (vsubq_u64 (iax, v_u64 (TinyBound)), v_u64 (Thresh));
+-  if (__glibc_unlikely (v_any_u64 (special)))
+-    return special_case (x);
+-#endif
+ 
+   /* q = nearest integer to 2 * x / pi.  */
+   float64x2_t q
+@@ -81,9 +68,8 @@ float64x2_t VPCS_ATTR V_NAME_D1 (tan) (float64x2_t x)
+ 
+   /* Use q to reduce x to r in [-pi/4, pi/4], by:
+      r = x - q * pi/2, in extended precision.  */
+-  float64x2_t r = x;
+   float64x2_t half_pi = vld1q_f64 (dat->half_pi);
+-  r = vfmsq_laneq_f64 (r, q, half_pi, 0);
++  float64x2_t r = vfmsq_laneq_f64 (x, q, half_pi, 0);
+   r = vfmsq_laneq_f64 (r, q, half_pi, 1);
+   /* Further reduce r to [-pi/8, pi/8], to be reconstructed using double angle
+      formula.  */
+@@ -114,12 +100,13 @@ float64x2_t VPCS_ATTR V_NAME_D1 (tan) (float64x2_t x)
+ 
+   uint64x2_t no_recip = vtstq_u64 (vreinterpretq_u64_s64 (qi), v_u64 (1));
+ 
+-#if !WANT_SIMD_EXCEPT
+   uint64x2_t special = vcageq_f64 (x, dat->range_val);
++  float64x2_t swap = vbslq_f64 (no_recip, n, vnegq_f64 (d));
++  d = vbslq_f64 (no_recip, d, n);
++  n = swap;
++
+   if (__glibc_unlikely (v_any_u64 (special)))
+-    return special_case (x);
+-#endif
++    return special_case (x, n, d, special);
+ 
+-  return vdivq_f64 (vbslq_f64 (no_recip, n, vnegq_f64 (d)),
+-		    vbslq_f64 (no_recip, d, n));
++  return vdivq_f64 (n, d);
+ }
+
+commit 0c9430ed976b961343dd29b752091f3c4771cf30
+Author: Joe Ramsay <Joe.Ramsay@arm.com>
+Date:   Thu Nov 6 18:29:33 2025 +0000
+
+    AArch64: Fix instability in AdvSIMD sinh
+    
+    Previously presence of special-cases in one lane could affect the
+    results in other lanes due to unconditional scalar fallback. The old
+    WANT_SIMD_EXCEPT option (which has never been enabled in libmvec) has
+    been removed from AOR, making it easier to spot and fix
+    this. No measured change in performance. This patch applies cleanly as
+    far back as 2.41, however there are conflicts with 2.40 where sinh was
+    first introduced.
+    
+    Reviewed-by: Wilco Dijkstra  <Wilco.Dijkstra@arm.com>
+    (cherry picked from commit e45af510bc816e860c8e2e1d4a652b4fe15c4b34)
+
+diff --git a/sysdeps/aarch64/fpu/sinh_advsimd.c b/sysdeps/aarch64/fpu/sinh_advsimd.c
+index 0d6a4856f8..b6b60262c6 100644
+--- a/sysdeps/aarch64/fpu/sinh_advsimd.c
++++ b/sysdeps/aarch64/fpu/sinh_advsimd.c
+@@ -24,36 +24,26 @@ static const struct data
+ {
+   struct v_expm1_data d;
+   uint64x2_t halff;
+-#if WANT_SIMD_EXCEPT
+-  uint64x2_t tiny_bound, thresh;
+-#else
+   float64x2_t large_bound;
+-#endif
+ } data = {
+   .d = V_EXPM1_DATA,
+   .halff = V2 (0x3fe0000000000000),
+-#if WANT_SIMD_EXCEPT
+-  /* 2^-26, below which sinh(x) rounds to x.  */
+-  .tiny_bound = V2 (0x3e50000000000000),
+-  /* asuint(large_bound) - asuint(tiny_bound).  */
+-  .thresh = V2 (0x0230000000000000),
+-#else
+   /* 2^9. expm1 helper overflows for large input.  */
+   .large_bound = V2 (0x1p+9),
+-#endif
+ };
+ 
+ static float64x2_t NOINLINE VPCS_ATTR
+-special_case (float64x2_t x)
++special_case (float64x2_t x, float64x2_t t, float64x2_t halfsign,
++	      uint64x2_t special)
+ {
+-  return v_call_f64 (sinh, x, x, v_u64 (-1));
++  return v_call_f64 (sinh, x, vmulq_f64 (t, halfsign), special);
+ }
+ 
+ /* Approximation for vector double-precision sinh(x) using expm1.
+    sinh(x) = (exp(x) - exp(-x)) / 2.
+    The greatest observed error is 2.52 ULP:
+-   _ZGVnN2v_sinh(-0x1.a098a2177a2b9p-2) got -0x1.ac2f05bb66fccp-2
+-				       want -0x1.ac2f05bb66fc9p-2.  */
++   _ZGVnN2v_sinh(0x1.9f6ff2ab6fb19p-2) got 0x1.aaed83a3153ccp-2
++				      want 0x1.aaed83a3153c9p-2.  */
+ float64x2_t VPCS_ATTR V_NAME_D1 (sinh) (float64x2_t x)
+ {
+   const struct data *d = ptr_barrier (&data);
+@@ -63,21 +53,16 @@ float64x2_t VPCS_ATTR V_NAME_D1 (sinh) (float64x2_t x)
+   float64x2_t halfsign = vreinterpretq_f64_u64 (
+       vbslq_u64 (v_u64 (0x8000000000000000), ix, d->halff));
+ 
+-#if WANT_SIMD_EXCEPT
+-  uint64x2_t special = vcgeq_u64 (
+-      vsubq_u64 (vreinterpretq_u64_f64 (ax), d->tiny_bound), d->thresh);
+-#else
+   uint64x2_t special = vcageq_f64 (x, d->large_bound);
+-#endif
+-
+-  /* Fall back to scalar variant for all lanes if any of them are special.  */
+-  if (__glibc_unlikely (v_any_u64 (special)))
+-    return special_case (x);
+ 
+   /* Up to the point that expm1 overflows, we can use it to calculate sinh
+      using a slight rearrangement of the definition of sinh. This allows us to
+      retain acceptable accuracy for very small inputs.  */
+   float64x2_t t = expm1_inline (ax, &d->d);
+   t = vaddq_f64 (t, vdivq_f64 (t, vaddq_f64 (t, v_f64 (1.0))));
++
++  if (__glibc_unlikely (v_any_u64 (special)))
++    return special_case (x, t, halfsign, special);
++
+   return vmulq_f64 (t, halfsign);
+ }
+
+commit 710d7a2e8374cf09280a0db170a6c813b70b59e5
+Author: Pierre Blanchard <pierre.blanchard@arm.com>
+Date:   Tue Nov 18 15:03:10 2025 +0000
+
+    AArch64: fix SVE tanpi(f) [BZ #33642]
+    
+    Fixed svld1rq using incorrect predicates (BZ #33642).
+    Next to no performance variations (tested on V1).
+    
+    Reviewed-by: Wilco Dijkstra  <Wilco.Dijkstra@arm.com>
+    (cherry picked from commit e889160273a4c2b68870c9adf341955867d76a7d)
+
+diff --git a/sysdeps/aarch64/fpu/tanpi_sve.c b/sysdeps/aarch64/fpu/tanpi_sve.c
+index 57c643ae29..bfe6828e1f 100644
+--- a/sysdeps/aarch64/fpu/tanpi_sve.c
++++ b/sysdeps/aarch64/fpu/tanpi_sve.c
+@@ -1,6 +1,6 @@
+ /* Double-precision (SVE) tanpi function
+ 
+-   Copyright (C) 2024 Free Software Foundation, Inc.
++   Copyright (C) 2024-2025 Free Software Foundation, Inc.
+    This file is part of the GNU C Library.
+ 
+    The GNU C Library is free software; you can redistribute it and/or
+@@ -58,10 +58,10 @@ svfloat64_t SV_NAME_D1 (tanpi) (svfloat64_t x, const svbool_t pg)
+   svfloat64_t r2 = svmul_x (pg, r, r);
+   svfloat64_t r4 = svmul_x (pg, r2, r2);
+ 
+-  svfloat64_t c_1_3 = svld1rq (pg, &d->c1);
+-  svfloat64_t c_5_7 = svld1rq (pg, &d->c5);
+-  svfloat64_t c_9_11 = svld1rq (pg, &d->c9);
+-  svfloat64_t c_13_14 = svld1rq (pg, &d->c13);
++  svfloat64_t c_1_3 = svld1rq (svptrue_b64 (), &d->c1);
++  svfloat64_t c_5_7 = svld1rq (svptrue_b64 (), &d->c5);
++  svfloat64_t c_9_11 = svld1rq (svptrue_b64 (), &d->c9);
++  svfloat64_t c_13_14 = svld1rq (svptrue_b64 (), &d->c13);
+   svfloat64_t p01 = svmla_lane (sv_f64 (d->c0), r2, c_1_3, 0);
+   svfloat64_t p23 = svmla_lane (sv_f64 (d->c2), r2, c_1_3, 1);
+   svfloat64_t p45 = svmla_lane (sv_f64 (d->c4), r2, c_5_7, 0);
+diff --git a/sysdeps/aarch64/fpu/tanpif_sve.c b/sysdeps/aarch64/fpu/tanpif_sve.c
+index 0285f56f34..6894379564 100644
+--- a/sysdeps/aarch64/fpu/tanpif_sve.c
++++ b/sysdeps/aarch64/fpu/tanpif_sve.c
+@@ -1,6 +1,6 @@
+ /* Single-precision (SVE) tanpi function
+ 
+-   Copyright (C) 2024 Free Software Foundation, Inc.
++   Copyright (C) 2024-2025 Free Software Foundation, Inc.
+    This file is part of the GNU C Library.
+ 
+    The GNU C Library is free software; you can redistribute it and/or
+@@ -37,7 +37,7 @@ const static struct v_tanpif_data
+ svfloat32_t SV_NAME_F1 (tanpi) (svfloat32_t x, const svbool_t pg)
+ {
+   const struct v_tanpif_data *d = ptr_barrier (&tanpif_data);
+-  svfloat32_t odd_coeffs = svld1rq (pg, &d->c1);
++  svfloat32_t odd_coeffs = svld1rq (svptrue_b32 (), &d->c1);
+   svfloat32_t n = svrintn_x (pg, x);
+ 
+   /* inf produces nan that propagates.  */
+
+commit 828b8d23f3fa05234d35032a61a746918accf91d
+Author: Pierre Blanchard <pierre.blanchard@arm.com>
+Date:   Tue Nov 18 15:09:05 2025 +0000
+
+    AArch64: Fix and improve SVE pow(f) special cases
+    
+    powf:
+    
+    Update scalar special case function to best use new interface.
+    
+    pow:
+    
+    Make specialcase NOINLINE to prevent str/ldr leaking in fast path.
+    Remove depency in sv_call2, as new callback impl is not a
+    performance gain.
+    Replace with vectorised specialcase since structure of scalar
+    routine is fairly simple.
+    
+    Throughput gain of about 5-10% on V1 for large values and 25% for subnormal `x`.
+    
+    Reviewed-by: Wilco Dijkstra  <Wilco.Dijkstra@arm.com>
+    (cherry picked from commit bb6519de1e6fe73d79bc71588ec4e5668907f080)
+
+diff --git a/sysdeps/aarch64/fpu/pow_sve.c b/sysdeps/aarch64/fpu/pow_sve.c
+index b8c1b39dca..becf1a8410 100644
+--- a/sysdeps/aarch64/fpu/pow_sve.c
++++ b/sysdeps/aarch64/fpu/pow_sve.c
+@@ -31,8 +31,8 @@
+    The SVE algorithm drops the tail in the exp computation at the price of
+    a lower accuracy, slightly above 1ULP.
+    The SVE algorithm also drops the special treatement of small (< 2^-65) and
+-   large (> 2^63) finite values of |y|, as they only affect non-round to nearest
+-   modes.
++   large (> 2^63) finite values of |y|, as they only affect non-round to
++   nearest modes.
+ 
+    Maximum measured error is 1.04 ULPs:
+    SV_NAME_D2 (pow) (0x1.3d2d45bc848acp+63, -0x1.a48a38b40cd43p-12)
+@@ -156,42 +156,22 @@ sv_zeroinfnan (svbool_t pg, svuint64_t i)
+    a double.  (int32_t)KI is the k used in the argument reduction and exponent
+    adjustment of scale, positive k here means the result may overflow and
+    negative k means the result may underflow.  */
+-static inline double
+-specialcase (double tmp, uint64_t sbits, uint64_t ki)
+-{
+-  double scale;
+-  if ((ki & 0x80000000) == 0)
+-    {
+-      /* k > 0, the exponent of scale might have overflowed by <= 460.  */
+-      sbits -= 1009ull << 52;
+-      scale = asdouble (sbits);
+-      return 0x1p1009 * (scale + scale * tmp);
+-    }
+-  /* k < 0, need special care in the subnormal range.  */
+-  sbits += 1022ull << 52;
+-  /* Note: sbits is signed scale.  */
+-  scale = asdouble (sbits);
+-  double y = scale + scale * tmp;
+-  return 0x1p-1022 * y;
+-}
+-
+-/* Scalar fallback for special cases of SVE pow's exp.  */
+ static inline svfloat64_t
+-sv_call_specialcase (svfloat64_t x1, svuint64_t u1, svuint64_t u2,
+-		     svfloat64_t y, svbool_t cmp)
++specialcase (svfloat64_t tmp, svuint64_t sbits, svuint64_t ki, svbool_t cmp)
+ {
+-  svbool_t p = svpfirst (cmp, svpfalse ());
+-  while (svptest_any (cmp, p))
+-    {
+-      double sx1 = svclastb (p, 0, x1);
+-      uint64_t su1 = svclastb (p, 0, u1);
+-      uint64_t su2 = svclastb (p, 0, u2);
+-      double elem = specialcase (sx1, su1, su2);
+-      svfloat64_t y2 = sv_f64 (elem);
+-      y = svsel (p, y2, y);
+-      p = svpnext_b64 (cmp, p);
+-    }
+-  return y;
++  svbool_t p_pos = svcmpge_n_f64 (cmp, svreinterpret_f64_u64 (ki), 0.0);
++
++  /* Scale up or down depending on sign of k.  */
++  svint64_t offset
++      = svsel_s64 (p_pos, sv_s64 (1009ull << 52), sv_s64 (-1022ull << 52));
++  svfloat64_t factor
++      = svsel_f64 (p_pos, sv_f64 (0x1p1009), sv_f64 (0x1p-1022));
++
++  svuint64_t offset_sbits
++      = svsub_u64_x (cmp, sbits, svreinterpret_u64_s64 (offset));
++  svfloat64_t scale = svreinterpret_f64_u64 (offset_sbits);
++  svfloat64_t res = svmad_f64_x (cmp, scale, tmp, scale);
++  return svmul_f64_x (cmp, res, factor);
+ }
+ 
+ /* Compute y+TAIL = log(x) where the rounded result is y and TAIL has about
+@@ -214,8 +194,8 @@ sv_log_inline (svbool_t pg, svuint64_t ix, svfloat64_t *tail,
+ 
+   /* log(x) = k*Ln2 + log(c) + log1p(z/c-1).  */
+   /* SVE lookup requires 3 separate lookup tables, as opposed to scalar version
+-     that uses array of structures. We also do the lookup earlier in the code to
+-     make sure it finishes as early as possible.  */
++     that uses array of structures. We also do the lookup earlier in the code
++     to make sure it finishes as early as possible.  */
+   svfloat64_t invc = svld1_gather_index (pg, __v_pow_log_data.invc, i);
+   svfloat64_t logc = svld1_gather_index (pg, __v_pow_log_data.logc, i);
+   svfloat64_t logctail = svld1_gather_index (pg, __v_pow_log_data.logctail, i);
+@@ -325,14 +305,14 @@ sv_exp_inline (svbool_t pg, svfloat64_t x, svfloat64_t xtail,
+       svbool_t oflow = svcmpge (pg, abstop, HugeExp);
+       oflow = svand_z (pg, uoflow, svbic_z (pg, oflow, uflow));
+ 
+-      /* For large |x| values (512 < |x| < 1024) scale * (1 + TMP) can overflow
+-    or underflow.  */
++      /* Handle underflow and overlow in scale.
++	 For large |x| values (512 < |x| < 1024), scale * (1 + TMP) can
++	 overflow or underflow.  */
+       svbool_t special = svbic_z (pg, uoflow, svorr_z (pg, uflow, oflow));
++      if (__glibc_unlikely (svptest_any (pg, special)))
++	z = svsel (special, specialcase (tmp, sbits, ki, special), z);
+ 
+-      /* Update result with special and large cases.  */
+-      z = sv_call_specialcase (tmp, sbits, ki, z, special);
+-
+-      /* Handle underflow and overflow.  */
++      /* Handle underflow and overflow in exp.  */
+       svbool_t x_is_neg = svcmplt (pg, x, 0);
+       svuint64_t sign_mask
+ 	  = svlsl_x (pg, sign_bias, 52 - V_POW_EXP_TABLE_BITS);
+@@ -353,7 +333,7 @@ sv_exp_inline (svbool_t pg, svfloat64_t x, svfloat64_t xtail,
+ }
+ 
+ static inline double
+-pow_sc (double x, double y)
++pow_specialcase (double x, double y)
+ {
+   uint64_t ix = asuint64 (x);
+   uint64_t iy = asuint64 (y);
+@@ -382,6 +362,14 @@ pow_sc (double x, double y)
+   return x;
+ }
+ 
++/* Scalar fallback for special case routines with custom signature.  */
++static svfloat64_t NOINLINE
++sv_pow_specialcase (svfloat64_t x1, svfloat64_t x2, svfloat64_t y,
++		    svbool_t cmp)
++{
++  return sv_call2_f64 (pow_specialcase, x1, x2, y, cmp);
++}
++
+ svfloat64_t SV_NAME_D2 (pow) (svfloat64_t x, svfloat64_t y, const svbool_t pg)
+ {
+   const struct data *d = ptr_barrier (&data);
+@@ -444,7 +432,7 @@ svfloat64_t SV_NAME_D2 (pow) (svfloat64_t x, svfloat64_t y, const svbool_t pg)
+ 
+   /* Cases of zero/inf/nan x or y.  */
+   if (__glibc_unlikely (svptest_any (svptrue_b64 (), special)))
+-    vz = sv_call2_f64 (pow_sc, x, y, vz, special);
++    vz = sv_pow_specialcase (x, y, vz, special);
+ 
+   return vz;
+ }
+diff --git a/sysdeps/aarch64/fpu/powf_sve.c b/sysdeps/aarch64/fpu/powf_sve.c
+index 65e9bd29d9..76f54b3522 100644
+--- a/sysdeps/aarch64/fpu/powf_sve.c
++++ b/sysdeps/aarch64/fpu/powf_sve.c
+@@ -116,11 +116,10 @@ zeroinfnan (uint32_t ix)
+    preamble of scalar powf except that we do not update ix and sign_bias. This
+    is done in the preamble of the SVE powf.  */
+ static inline float
+-powf_specialcase (float x, float y, float z)
++powf_specialcase (float x, float y)
+ {
+   uint32_t ix = asuint (x);
+   uint32_t iy = asuint (y);
+-  /* Either (x < 0x1p-126 or inf or nan) or (y is 0 or inf or nan).  */
+   if (__glibc_unlikely (zeroinfnan (iy)))
+     {
+       if (2 * iy == 0)
+@@ -142,32 +141,15 @@ powf_specialcase (float x, float y, float z)
+ 	x2 = -x2;
+       return iy & 0x80000000 ? 1 / x2 : x2;
+     }
+-  /* We need a return here in case x<0 and y is integer, but all other tests
+-   need to be run.  */
+-  return z;
++  /* Return x for convenience, but make sure result is never used.  */
++  return x;
+ }
+ 
+ /* Scalar fallback for special case routines with custom signature.  */
+ static svfloat32_t NOINLINE
+-sv_call_powf_sc (svfloat32_t x1, svfloat32_t x2, svfloat32_t y)
++sv_call_powf_sc (svfloat32_t x1, svfloat32_t x2, svfloat32_t y, svbool_t cmp)
+ {
+-  /* Special cases of x or y: zero, inf and nan.  */
+-  svbool_t xspecial = sv_zeroinfnan (svptrue_b32 (), svreinterpret_u32 (x1));
+-  svbool_t yspecial = sv_zeroinfnan (svptrue_b32 (), svreinterpret_u32 (x2));
+-  svbool_t cmp = svorr_z (svptrue_b32 (), xspecial, yspecial);
+-
+-  svbool_t p = svpfirst (cmp, svpfalse ());
+-  while (svptest_any (cmp, p))
+-    {
+-      float sx1 = svclastb (p, 0, x1);
+-      float sx2 = svclastb (p, 0, x2);
+-      float elem = svclastb (p, 0, y);
+-      elem = powf_specialcase (sx1, sx2, elem);
+-      svfloat32_t y2 = sv_f32 (elem);
+-      y = svsel (p, y2, y);
+-      p = svpnext_b32 (cmp, p);
+-    }
+-  return y;
++  return sv_call2_f32 (powf_specialcase, x1, x2, y, cmp);
+ }
+ 
+ /* Compute core for half of the lanes in double precision.  */
+@@ -330,7 +312,7 @@ svfloat32_t SV_NAME_F2 (pow) (svfloat32_t x, svfloat32_t y, const svbool_t pg)
+   ret = svsel (yint_or_xpos, ret, sv_f32 (__builtin_nanf ("")));
+ 
+   if (__glibc_unlikely (svptest_any (cmp, cmp)))
+-    return sv_call_powf_sc (x, y, ret);
++    return sv_call_powf_sc (x, y, ret, cmp);
+ 
+   return ret;
+ }
+
+commit 6b2957cfe8ad1e02c03a28abfc5a251c05e4005e
+Author: Sachin Monga <smonga@linux.ibm.com>
+Date:   Fri Nov 21 00:30:04 2025 -0500
+
+    ppc64le: Restore optimized strcmp for power10
+    
+    This patch addresses the actual cause of CVE-2025-5702
+    
+    The vector non-volatile registers are not used anymore for
+    32 byte load and comparison operation
+    
+    Additionally, the assembler workaround used earlier for the
+    instruction lxvp is replaced with actual instruction.
+    
+    Signed-off-by: Sachin Monga <smonga@linux.ibm.com>
+    Co-authored-by: Paul Murphy <paumurph@redhat.com>
+    (cherry picked from commit 9a40b1cda519cc4f532acb6d020390829df3d81b)
+
+diff --git a/sysdeps/powerpc/powerpc64/le/power10/strcmp.S b/sysdeps/powerpc/powerpc64/le/power10/strcmp.S
+new file mode 100644
+index 0000000000..0d4a53317c
+--- /dev/null
++++ b/sysdeps/powerpc/powerpc64/le/power10/strcmp.S
+@@ -0,0 +1,185 @@
++/* Optimized strcmp implementation for PowerPC64/POWER10.
++   Copyright (C) 2025 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++#include <sysdep.h>
++
++#ifndef STRCMP
++# define STRCMP strcmp
++#endif
++
++/* Implements the function
++   int [r3] strcmp (const char *s1 [r3], const char *s2 [r4]).  */
++
++
++#define COMPARE_16(vreg1,vreg2,offset)  \
++	lxv       vreg1+32,offset(r3);  \
++	lxv       vreg2+32,offset(r4);	\
++	vcmpnezb. v7,vreg1,vreg2;	\
++	bne       cr6,L(different);     \
++
++#define COMPARE_32(vreg1,vreg2,offset,label1,label2) \
++	lxvp	  vreg1+32,offset(r3);               \
++	lxvp	  vreg2+32,offset(r4);               \
++	vcmpnezb. v7,vreg1+1,vreg2+1;                \
++	bne	  cr6,L(label1);                     \
++	vcmpnezb. v7,vreg1,vreg2;                    \
++	bne	  cr6,L(label2);                     \
++
++#define TAIL(vreg1,vreg2)     \
++	vctzlsbb r6,v7;	      \
++	vextubrx r5,r6,vreg1; \
++	vextubrx r4,r6,vreg2; \
++	subf	 r3,r4,r5;    \
++	blr;                  \
++
++#define CHECK_N_BYTES(reg1,reg2,len_reg) \
++	sldi	  r0,len_reg,56;         \
++	lxvl	  32+v4,reg1,r0;         \
++	lxvl	  32+v5,reg2,r0;         \
++	add	  reg1,reg1,len_reg;     \
++	add	  reg2,reg2,len_reg;     \
++	vcmpnezb. v7,v4,v5;              \
++	vctzlsbb  r6,v7;                 \
++	cmpld	  cr7,r6,len_reg;        \
++	blt	  cr7,L(different);      \
++
++
++	.machine  power10
++ENTRY_TOCLESS (STRCMP, 4)
++	li	 r11,16
++	/* eq bit of cr1 used as swap status flag to indicate if
++	source pointers were swapped.  */
++	crclr	 4*cr1+eq
++	andi.	 r7,r3,15
++	sub	 r7,r11,r7	/* r7(nalign1) = 16 - (str1 & 15).  */
++	andi.	 r9,r4,15
++	sub	 r5,r11,r9	/* r5(nalign2) = 16 - (str2 & 15).  */
++	cmpld	 cr7,r7,r5
++	beq	 cr7,L(same_aligned)
++	blt	 cr7,L(nalign1_min)
++	/* Swap r3 and r4, and r7 and r5 such that r3 and r7 hold the
++	pointer which is closer to the next 16B boundary so that only
++	one CHECK_N_BYTES is needed before entering the loop below.  */
++	mr	 r8,r4
++	mr	 r4,r3
++	mr	 r3,r8
++	mr	 r12,r7
++	mr	 r7,r5
++	mr	 r5,r12
++	crset	 4*cr1+eq	/* Set bit on swapping source pointers.  */
++
++	.p2align 5
++L(nalign1_min):
++	CHECK_N_BYTES(r3,r4,r7)
++
++	.p2align 5
++L(s1_aligned):
++	/* r9 and r5 is number of bytes to be read after and before
++	 page boundary correspondingly.  */
++	sub 	r5,r5,r7
++	subfic	r9,r5,16
++	/* Now let r7 hold the count of quadwords which can be
++	checked without crossing a page boundary. quadword offset is
++	(str2>>4)&0xFF.  */
++	rlwinm	r7,r4,28,0xFF
++	/* Below check is required only for first iteration. For second
++	iteration and beyond, the new loop counter is always 255.  */
++	cmpldi	r7,255
++	beq	L(L3)
++	/* Get the initial loop count by 255-((str2>>4)&0xFF).  */
++	subfic  r11,r7,255
++
++	.p2align 5
++L(L1):
++	mtctr	r11
++
++	.p2align 5
++L(L2):
++	COMPARE_16(v4,v5,0)	/* Load 16B blocks using lxv.  */
++	addi	r3,r3,16
++	addi	r4,r4,16
++	bdnz	L(L2)
++	/* Cross the page boundary of s2, carefully.  */
++
++	.p2align 5
++L(L3):
++	CHECK_N_BYTES(r3,r4,r5)
++	CHECK_N_BYTES(r3,r4,r9)
++	li 	r11,255		/* Load the new loop counter.  */
++	b	L(L1)
++
++	.p2align 5
++L(same_aligned):
++	CHECK_N_BYTES(r3,r4,r7)
++        /* Align s1 to 32B and adjust s2 address.
++	   Use lxvp only if both s1 and s2 are 32B aligned.  */
++	COMPARE_16(v4,v5,0)
++	COMPARE_16(v4,v5,16)
++	COMPARE_16(v4,v5,32)
++	COMPARE_16(v4,v5,48)
++	addi	r3,r3,64
++	addi	r4,r4,64
++	COMPARE_16(v4,v5,0)
++	COMPARE_16(v4,v5,16)
++
++	clrldi	r6,r3,59
++	subfic	r5,r6,32
++	add	r3,r3,r5
++	add	r4,r4,r5
++	andi.	r5,r4,0x1F
++	beq	cr0,L(32B_aligned_loop)
++
++	.p2align 5
++L(16B_aligned_loop):
++	COMPARE_16(v4,v5,0)
++	COMPARE_16(v4,v5,16)
++	COMPARE_16(v4,v5,32)
++	COMPARE_16(v4,v5,48)
++	addi	r3,r3,64
++	addi	r4,r4,64
++	b	L(16B_aligned_loop)
++
++	/* Calculate and return the difference.  */
++L(different):
++	vctzlsbb r6,v7
++	vextubrx r5,r6,v4
++	vextubrx r4,r6,v5
++	bt  	 4*cr1+eq,L(swapped)
++	subf	 r3,r4,r5
++	blr
++
++	/* If src pointers were swapped, then swap the
++	indices and calculate the return value.  */
++L(swapped):
++	subf     r3,r5,r4
++	blr
++
++	.p2align 5
++L(32B_aligned_loop):
++	COMPARE_32(v14,v16,0,tail1,tail2)
++	COMPARE_32(v14,v16,32,tail1,tail2)
++	COMPARE_32(v14,v16,64,tail1,tail2)
++	COMPARE_32(v14,v16,96,tail1,tail2)
++	addi	r3,r3,128
++	addi	r4,r4,128
++	b	L(32B_aligned_loop)
++
++L(tail1): TAIL(v15,v17)
++L(tail2): TAIL(v14,v16)
++
++END (STRCMP)
++libc_hidden_builtin_def (strcmp)
+diff --git a/sysdeps/powerpc/powerpc64/multiarch/Makefile b/sysdeps/powerpc/powerpc64/multiarch/Makefile
+index e321ce54e0..818f287925 100644
+--- a/sysdeps/powerpc/powerpc64/multiarch/Makefile
++++ b/sysdeps/powerpc/powerpc64/multiarch/Makefile
+@@ -32,7 +32,7 @@ sysdep_routines += memcpy-power8-cached memcpy-power7 memcpy-a2 memcpy-power6 \
+ ifneq (,$(filter %le,$(config-machine)))
+ sysdep_routines += memcmp-power10 memcpy-power10 memmove-power10 memset-power10 \
+ 		   rawmemchr-power9 rawmemchr-power10 \
+-		   strcmp-power9 strncmp-power9 \
++		   strcmp-power9 strcmp-power10 strncmp-power9 \
+ 		   strcpy-power9 strcat-power10 stpcpy-power9 \
+ 		   strlen-power9 strncpy-power9 stpncpy-power9 strlen-power10
+ endif
+diff --git a/sysdeps/powerpc/powerpc64/multiarch/ifunc-impl-list.c b/sysdeps/powerpc/powerpc64/multiarch/ifunc-impl-list.c
+index 016d05fd16..dde3bec709 100644
+--- a/sysdeps/powerpc/powerpc64/multiarch/ifunc-impl-list.c
++++ b/sysdeps/powerpc/powerpc64/multiarch/ifunc-impl-list.c
+@@ -366,6 +366,10 @@ __libc_ifunc_impl_list (const char *name, struct libc_ifunc_impl *array,
+   /* Support sysdeps/powerpc/powerpc64/multiarch/strcmp.c.  */
+   IFUNC_IMPL (i, name, strcmp,
+ #ifdef __LITTLE_ENDIAN__
++	      IFUNC_IMPL_ADD (array, i, strcmp,
++			      (hwcap2 & PPC_FEATURE2_ARCH_3_1)
++			      && (hwcap & PPC_FEATURE_HAS_VSX),
++			      __strcmp_power10)
+ 	      IFUNC_IMPL_ADD (array, i, strcmp,
+ 			      hwcap2 & PPC_FEATURE2_ARCH_3_00
+ 			      && hwcap & PPC_FEATURE_HAS_ALTIVEC,
+diff --git a/sysdeps/powerpc/powerpc64/multiarch/strcmp-power10.S b/sysdeps/powerpc/powerpc64/multiarch/strcmp-power10.S
+new file mode 100644
+index 0000000000..a4ee7fb53c
+--- /dev/null
++++ b/sysdeps/powerpc/powerpc64/multiarch/strcmp-power10.S
+@@ -0,0 +1,26 @@
++/* Optimized strcmp implementation for POWER10/PPC64.
++   Copyright (C) 2025 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#if defined __LITTLE_ENDIAN__ && IS_IN (libc)
++#define STRCMP __strcmp_power10
++
++#undef libc_hidden_builtin_def
++#define libc_hidden_builtin_def(name)
++
++#include <sysdeps/powerpc/powerpc64/le/power10/strcmp.S>
++#endif /* __LITTLE_ENDIAN__ && IS_IN (libc) */
+diff --git a/sysdeps/powerpc/powerpc64/multiarch/strcmp.c b/sysdeps/powerpc/powerpc64/multiarch/strcmp.c
+index 7c77c084a7..3c636e3bbc 100644
+--- a/sysdeps/powerpc/powerpc64/multiarch/strcmp.c
++++ b/sysdeps/powerpc/powerpc64/multiarch/strcmp.c
+@@ -29,12 +29,16 @@ extern __typeof (strcmp) __strcmp_power7 attribute_hidden;
+ extern __typeof (strcmp) __strcmp_power8 attribute_hidden;
+ # ifdef __LITTLE_ENDIAN__
+ extern __typeof (strcmp) __strcmp_power9 attribute_hidden;
++extern __typeof (strcmp) __strcmp_power10 attribute_hidden;
+ # endif
+ 
+ # undef strcmp
+ 
+ libc_ifunc_redirected (__redirect_strcmp, strcmp,
+ # ifdef __LITTLE_ENDIAN__
++		        (hwcap2 & PPC_FEATURE2_ARCH_3_1
++			 && hwcap & PPC_FEATURE_HAS_VSX)
++			? __strcmp_power10 :
+ 			(hwcap2 & PPC_FEATURE2_ARCH_3_00
+ 			 && hwcap & PPC_FEATURE_HAS_ALTIVEC)
+ 			? __strcmp_power9 :
+
+commit 2dbf973fe03f9b8fd5a4740ee0af0d47afdd7bbd
+Author: Sachin Monga <smonga@linux.ibm.com>
+Date:   Fri Nov 21 00:30:52 2025 -0500
+
+    ppc64le: Restore optimized strncmp for power10
+    
+    This patch addresses the actual cause of CVE-2025-5745
+    
+    The vector non-volatile registers are not used anymore for
+    32 byte load and comparison operation
+    
+    Additionally, the assembler workaround used earlier for the
+    instruction lxvp is replaced with actual instruction.
+    
+    Signed-off-by: Sachin Monga <smonga@linux.ibm.com>
+    Co-authored-by: Paul Murphy <paumurph@redhat.com>
+    (cherry picked from commit 2ea943f7d487d6a4166658b32af7c5365889fc34)
+
+diff --git a/sysdeps/powerpc/powerpc64/le/power10/strncmp.S b/sysdeps/powerpc/powerpc64/le/power10/strncmp.S
+new file mode 100644
+index 0000000000..6e09fcb7f2
+--- /dev/null
++++ b/sysdeps/powerpc/powerpc64/le/power10/strncmp.S
+@@ -0,0 +1,252 @@
++/* Optimized strncmp implementation for PowerPC64/POWER10.
++   Copyright (C) 2025 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#include <sysdep.h>
++
++/* Implements the function
++
++   int [r3] strncmp (const char *s1 [r3], const char *s2 [r4], size_t [r5] n)
++
++   The implementation uses unaligned doubleword access to avoid specialized
++   code paths depending of data alignment for first 32 bytes and uses
++   vectorised loops after that.  */
++
++#ifndef STRNCMP
++# define STRNCMP strncmp
++#endif
++
++#define COMPARE_16(vreg1,vreg2,offset) \
++	lxv	  vreg1+32,offset(r3); \
++	lxv	  vreg2+32,offset(r4); \
++	vcmpnezb. v7,vreg1,vreg2;      \
++	bne	  cr6,L(different);    \
++	cmpldi	  cr7,r5,16;           \
++	ble	  cr7,L(ret0);         \
++	addi	  r5,r5,-16;
++
++#define COMPARE_32(vreg1,vreg2,offset,label1,label2) \
++	lxvp	  vreg1+32,offset(r3);               \
++	lxvp	  vreg2+32,offset(r4);               \
++	vcmpnezb. v7,vreg1+1,vreg2+1;                \
++	bne	  cr6,L(label1);                     \
++	vcmpnezb. v7,vreg1,vreg2;                    \
++	bne	  cr6,L(label2);                     \
++	cmpldi	  cr7,r5,32;                         \
++	ble	  cr7,L(ret0);                       \
++	addi	  r5,r5,-32;
++
++#define TAIL_FIRST_16B(vreg1,vreg2) \
++	vctzlsbb r6,v7;             \
++	cmpld	 cr7,r5,r6;         \
++	ble	 cr7,L(ret0);       \
++	vextubrx r5,r6,vreg1;       \
++	vextubrx r4,r6,vreg2;       \
++	subf	 r3,r4,r5;          \
++	blr;
++
++#define TAIL_SECOND_16B(vreg1,vreg2) \
++	vctzlsbb r6,v7;              \
++	addi	 r0,r6,16;           \
++	cmpld	 cr7,r5,r0;          \
++	ble	 cr7,L(ret0);        \
++	vextubrx r5,r6,vreg1;        \
++	vextubrx r4,r6,vreg2;        \
++	subf	 r3,r4,r5;           \
++	blr;
++
++#define CHECK_N_BYTES(reg1,reg2,len_reg) \
++	sldi	  r6,len_reg,56;	 \
++	lxvl	  32+v4,reg1,r6;	 \
++	lxvl	  32+v5,reg2,r6;	 \
++	add	  reg1,reg1,len_reg;	 \
++	add	  reg2,reg2,len_reg;	 \
++	vcmpnezb  v7,v4,v5;		 \
++	vctzlsbb  r6,v7;		 \
++	cmpld	  cr7,r6,len_reg;	 \
++	blt	  cr7,L(different);	 \
++	cmpld	  cr7,r5,len_reg;	 \
++	ble	  cr7,L(ret0);		 \
++	sub	  r5,r5,len_reg;	 \
++
++	.machine  power10
++ENTRY_TOCLESS (STRNCMP, 4)
++	/* Check if size is 0.  */
++	cmpdi	 cr0,r5,0
++	beq	 cr0,L(ret0)
++	andi.   r7,r3,4095
++	andi.   r8,r4,4095
++	cmpldi  cr0,r7,4096-16
++	cmpldi  cr1,r8,4096-16
++	bgt     cr0,L(crosses)
++	bgt     cr1,L(crosses)
++	COMPARE_16(v4,v5,0)
++	addi	r3,r3,16
++	addi	r4,r4,16
++
++L(crosses):
++	andi.	 r7,r3,15
++	subfic	 r7,r7,16	/* r7(nalign1) = 16 - (str1 & 15).  */
++	andi.	 r9,r4,15
++	subfic	 r8,r9,16	/* r8(nalign2) = 16 - (str2 & 15).  */
++	cmpld	 cr7,r7,r8
++	beq	 cr7,L(same_aligned)
++	blt	 cr7,L(nalign1_min)
++
++	/* nalign2 is minimum and s2 pointer is aligned.  */
++	CHECK_N_BYTES(r3,r4,r8)
++	/* Are we on the 64B hunk which crosses a page?  */
++	andi.   r10,r3,63       /* Determine offset into 64B hunk.  */
++	andi.   r8,r3,15        /* The offset into the 16B hunk.  */
++	neg     r7,r3
++	andi.   r9,r7,15        /* Number of bytes after a 16B cross.  */
++	rlwinm. r7,r7,26,0x3F   /* ((r4-4096))>>6&63.  */
++	beq     L(compare_64_pagecross)
++	mtctr   r7
++	b       L(compare_64B_unaligned)
++
++	/* nalign1 is minimum and s1 pointer is aligned.  */
++L(nalign1_min):
++	CHECK_N_BYTES(r3,r4,r7)
++	/* Are we on the 64B hunk which crosses a page?  */
++	andi.   r10,r4,63       /* Determine offset into 64B hunk.  */
++	andi.   r8,r4,15        /* The offset into the 16B hunk.  */
++	neg     r7,r4
++	andi.   r9,r7,15        /* Number of bytes after a 16B cross.  */
++	rlwinm. r7,r7,26,0x3F   /* ((r4-4096))>>6&63.  */
++	beq     L(compare_64_pagecross)
++	mtctr   r7
++
++	.p2align 5
++L(compare_64B_unaligned):
++	COMPARE_16(v4,v5,0)
++	COMPARE_16(v4,v5,16)
++	COMPARE_16(v4,v5,32)
++	COMPARE_16(v4,v5,48)
++	addi    r3,r3,64
++	addi    r4,r4,64
++	bdnz    L(compare_64B_unaligned)
++
++	/* Cross the page boundary of s2, carefully. Only for first
++	iteration we have to get the count of 64B blocks to be checked.
++	From second iteration and beyond, loop counter is always 63.  */
++L(compare_64_pagecross):
++	li      r11, 63
++	mtctr   r11
++	cmpldi  r10,16
++	ble     L(cross_4)
++	cmpldi  r10,32
++	ble     L(cross_3)
++	cmpldi  r10,48
++	ble     L(cross_2)
++L(cross_1):
++	CHECK_N_BYTES(r3,r4,r9)
++	CHECK_N_BYTES(r3,r4,r8)
++	COMPARE_16(v4,v5,0)
++	COMPARE_16(v4,v5,16)
++	COMPARE_16(v4,v5,32)
++	addi    r3,r3,48
++	addi    r4,r4,48
++	b       L(compare_64B_unaligned)
++L(cross_2):
++	COMPARE_16(v4,v5,0)
++	addi    r3,r3,16
++	addi    r4,r4,16
++	CHECK_N_BYTES(r3,r4,r9)
++	CHECK_N_BYTES(r3,r4,r8)
++	COMPARE_16(v4,v5,0)
++	COMPARE_16(v4,v5,16)
++	addi    r3,r3,32
++	addi    r4,r4,32
++	b       L(compare_64B_unaligned)
++L(cross_3):
++	COMPARE_16(v4,v5,0)
++	COMPARE_16(v4,v5,16)
++	addi    r3,r3,32
++	addi    r4,r4,32
++	CHECK_N_BYTES(r3,r4,r9)
++	CHECK_N_BYTES(r3,r4,r8)
++	COMPARE_16(v4,v5,0)
++	addi    r3,r3,16
++	addi    r4,r4,16
++	b       L(compare_64B_unaligned)
++L(cross_4):
++	COMPARE_16(v4,v5,0)
++	COMPARE_16(v4,v5,16)
++	COMPARE_16(v4,v5,32)
++	addi    r3,r3,48
++	addi    r4,r4,48
++	CHECK_N_BYTES(r3,r4,r9)
++	CHECK_N_BYTES(r3,r4,r8)
++	b       L(compare_64B_unaligned)
++
++L(same_aligned):
++	CHECK_N_BYTES(r3,r4,r7)
++	/* Align s1 to 32B and adjust s2 address.
++	   Use lxvp only if both s1 and s2 are 32B aligned.  */
++	COMPARE_16(v4,v5,0)
++	COMPARE_16(v4,v5,16)
++	COMPARE_16(v4,v5,32)
++	COMPARE_16(v4,v5,48)
++	addi	r3,r3,64
++	addi	r4,r4,64
++	COMPARE_16(v4,v5,0)
++	COMPARE_16(v4,v5,16)
++	addi	r5,r5,32
++
++	clrldi  r6,r3,59
++	subfic	r7,r6,32
++	add	r3,r3,r7
++	add	r4,r4,r7
++	subf	r5,r7,r5
++	andi.	r7,r4,0x1F
++	beq	cr0,L(32B_aligned_loop)
++
++	.p2align 5
++L(16B_aligned_loop):
++	COMPARE_16(v4,v5,0)
++	COMPARE_16(v4,v5,16)
++	COMPARE_16(v4,v5,32)
++	COMPARE_16(v4,v5,48)
++	addi	r3,r3,64
++	addi	r4,r4,64
++	b	L(16B_aligned_loop)
++
++	/* Calculate and return the difference.  */
++L(different):
++	TAIL_FIRST_16B(v4,v5)
++
++	.p2align 5
++L(32B_aligned_loop):
++	COMPARE_32(v14,v16,0,tail1,tail2)
++	COMPARE_32(v14,v16,32,tail1,tail2)
++	COMPARE_32(v14,v16,64,tail1,tail2)
++	COMPARE_32(v14,v16,96,tail1,tail2)
++	addi	r3,r3,128
++	addi	r4,r4,128
++	b	L(32B_aligned_loop)
++
++L(tail1): TAIL_FIRST_16B(v15,v17)
++L(tail2): TAIL_SECOND_16B(v14,v16)
++
++	.p2align 5
++L(ret0):
++	li	r3,0
++	blr
++
++END(STRNCMP)
++libc_hidden_builtin_def(strncmp)
+diff --git a/sysdeps/powerpc/powerpc64/multiarch/Makefile b/sysdeps/powerpc/powerpc64/multiarch/Makefile
+index 818f287925..c9178223a8 100644
+--- a/sysdeps/powerpc/powerpc64/multiarch/Makefile
++++ b/sysdeps/powerpc/powerpc64/multiarch/Makefile
+@@ -32,7 +32,7 @@ sysdep_routines += memcpy-power8-cached memcpy-power7 memcpy-a2 memcpy-power6 \
+ ifneq (,$(filter %le,$(config-machine)))
+ sysdep_routines += memcmp-power10 memcpy-power10 memmove-power10 memset-power10 \
+ 		   rawmemchr-power9 rawmemchr-power10 \
+-		   strcmp-power9 strcmp-power10 strncmp-power9 \
++		   strcmp-power9 strcmp-power10 strncmp-power9 strncmp-power10 \
+ 		   strcpy-power9 strcat-power10 stpcpy-power9 \
+ 		   strlen-power9 strncpy-power9 stpncpy-power9 strlen-power10
+ endif
+diff --git a/sysdeps/powerpc/powerpc64/multiarch/ifunc-impl-list.c b/sysdeps/powerpc/powerpc64/multiarch/ifunc-impl-list.c
+index dde3bec709..f2b9cccde3 100644
+--- a/sysdeps/powerpc/powerpc64/multiarch/ifunc-impl-list.c
++++ b/sysdeps/powerpc/powerpc64/multiarch/ifunc-impl-list.c
+@@ -164,6 +164,9 @@ __libc_ifunc_impl_list (const char *name, struct libc_ifunc_impl *array,
+   /* Support sysdeps/powerpc/powerpc64/multiarch/strncmp.c.  */
+   IFUNC_IMPL (i, name, strncmp,
+ #ifdef __LITTLE_ENDIAN__
++	      IFUNC_IMPL_ADD (array, i, strncmp, hwcap2 & PPC_FEATURE2_ARCH_3_1
++			      && hwcap & PPC_FEATURE_HAS_VSX,
++			      __strncmp_power10)
+ 	      IFUNC_IMPL_ADD (array, i, strncmp, hwcap2 & PPC_FEATURE2_ARCH_3_00
+ 			      && hwcap & PPC_FEATURE_HAS_ALTIVEC,
+ 			      __strncmp_power9)
+diff --git a/sysdeps/powerpc/powerpc64/multiarch/strncmp-power10.S b/sysdeps/powerpc/powerpc64/multiarch/strncmp-power10.S
+new file mode 100644
+index 0000000000..bb25bc75b8
+--- /dev/null
++++ b/sysdeps/powerpc/powerpc64/multiarch/strncmp-power10.S
+@@ -0,0 +1,25 @@
++/* Copyright (C) 2025 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#if defined __LITTLE_ENDIAN__ && IS_IN (libc)
++#define STRNCMP __strncmp_power10
++
++#undef libc_hidden_builtin_def
++#define libc_hidden_builtin_def(name)
++
++#include <sysdeps/powerpc/powerpc64/le/power10/strncmp.S>
++#endif
+diff --git a/sysdeps/powerpc/powerpc64/multiarch/strncmp.c b/sysdeps/powerpc/powerpc64/multiarch/strncmp.c
+index 4cfe27fa45..0a664a620d 100644
+--- a/sysdeps/powerpc/powerpc64/multiarch/strncmp.c
++++ b/sysdeps/powerpc/powerpc64/multiarch/strncmp.c
+@@ -29,6 +29,7 @@ extern __typeof (strncmp) __strncmp_ppc attribute_hidden;
+ extern __typeof (strncmp) __strncmp_power8 attribute_hidden;
+ # ifdef __LITTLE_ENDIAN__
+ extern __typeof (strncmp) __strncmp_power9 attribute_hidden;
++extern __typeof (strncmp) __strncmp_power10 attribute_hidden;
+ # endif
+ # undef strncmp
+ 
+@@ -36,6 +37,9 @@ extern __typeof (strncmp) __strncmp_power9 attribute_hidden;
+    ifunc symbol properly.  */
+ libc_ifunc_redirected (__redirect_strncmp, strncmp,
+ # ifdef __LITTLE_ENDIAN__
++			(hwcap2 & PPC_FEATURE2_ARCH_3_1
++			 && hwcap & PPC_FEATURE_HAS_VSX)
++			? __strncmp_power10 :
+ 			(hwcap2 & PPC_FEATURE2_ARCH_3_00
+ 			 && hwcap & PPC_FEATURE_HAS_ALTIVEC)
+ 			? __strncmp_power9 :
+
+commit 8aaf4b732d7650c2db3beb4dc8bb70eab5b022c3
+Author: Sachin Monga <smonga@linux.ibm.com>
+Date:   Thu Nov 27 03:28:17 2025 -0500
+
+    ppc64le: Power 10 rawmemchr clobbers v20 (bug #33091)
+    
+    Replace non-volatile(v20) by volatile(v17)
+    since v20 is not restored
+    
+    Reviewed-by: Peter Bergner <bergner@tenstorrent.com>
+    (cherry picked from commit b59799f14f97f697c3a36b4380bd4ce2fbe65f11)
+
+diff --git a/sysdeps/powerpc/powerpc64/le/power10/strlen.S b/sysdeps/powerpc/powerpc64/le/power10/strlen.S
+index ec644d5bff..29a5a7d960 100644
+--- a/sysdeps/powerpc/powerpc64/le/power10/strlen.S
++++ b/sysdeps/powerpc/powerpc64/le/power10/strlen.S
+@@ -31,7 +31,7 @@
+ #  define FUNCNAME RAWMEMCHR
+ # endif
+ # define MCOUNT_NARGS 2
+-# define VREG_ZERO v20
++# define VREG_ZERO v17
+ # define OFF_START_LOOP 256
+ # define RAWMEMCHR_SUBTRACT_VECTORS \
+ 	vsububm   v4,v4,v18;	    \
+
+commit b11411fe2ee7a8f3c3a2c1ee99c1729adb9a0efe
+Author: Yury Khrustalev <yury.khrustalev@arm.com>
+Date:   Thu Nov 6 12:57:58 2025 +0000
+
+    posix: Fix invalid flags test for p{write,read}v2
+    
+    Two tests fail from time to time when a new flag is added for the
+    p{write,read}v2 functions in a new Linux kernel:
+    
+     - misc/tst-preadvwritev2
+     - misc/tst-preadvwritev64v2
+    
+    This disrupts when testing Glibc on a system with a newer kernel
+    and it seems we can try improve testing for invalid flags setting
+    all the bits that are not supposed to be supported (rather than
+    setting only the next unsupported bit).
+    
+    Reviewed-by: Adhemerval Zanella  <adhemerval.zanella@linaro.org>
+    (cherry picked from commit 58a31b4316f1f687184eb147ffa1c676bc6a190e)
+
+diff --git a/misc/tst-preadvwritev2-common.c b/misc/tst-preadvwritev2-common.c
+index ff1007d6d2..5182fcdce0 100644
+--- a/misc/tst-preadvwritev2-common.c
++++ b/misc/tst-preadvwritev2-common.c
+@@ -109,9 +109,8 @@ do_test_with_invalid_iov (void)
+ static void
+ do_test_with_invalid_flags (void)
+ {
+-  /* Set the next bit from the mask of all supported flags.  */
+-  int invalid_flag = RWF_SUPPORTED != 0 ? __builtin_clz (RWF_SUPPORTED) : 2;
+-  invalid_flag = 0x1 << ((sizeof (int) * CHAR_BIT) - invalid_flag);
++  /* Set all the bits that are not used by the supported flags.  */
++  int invalid_flag = ~RWF_SUPPORTED;
+ 
+   char buf[32];
+   const struct iovec vec = { .iov_base = buf, .iov_len = sizeof (buf) };
+
+commit efdf4c0c879590109778244046f84a80a4bf8fee
+Author: DJ Delorie <dj@redhat.com>
+Date:   Wed Oct 15 21:37:56 2025 -0400
+
+    sprof: check pread size and offset for overflow
+    
+    Add a bit of descriptive paranoia to the values we read from
+    the ELF headers and use to access data.
+    
+    Reviewed-by: Collin Funk <collin.funk1@gmail.com>
+    (cherry picked from commit 324084649b2da2f6840e3a1b84159a4e9a9e9a74)
+
+diff --git a/elf/sprof.c b/elf/sprof.c
+index c82c7c9db6..e9d2a66a4f 100644
+--- a/elf/sprof.c
++++ b/elf/sprof.c
+@@ -38,6 +38,7 @@
+ #include <sys/mman.h>
+ #include <sys/param.h>
+ #include <sys/stat.h>
++#include <intprops.h>
+ 
+ /* Get libc version number.  */
+ #include "../version.h"
+@@ -410,6 +411,7 @@ load_shobj (const char *name)
+   int fd;
+   ElfW(Shdr) *shdr;
+   size_t pagesize = getpagesize ();
++  struct stat st;
+ 
+   /* Since we use dlopen() we must be prepared to work around the sometimes
+      strange lookup rules for the shared objects.  If we have a file foo.so
+@@ -550,14 +552,39 @@ load_shobj (const char *name)
+     error (EXIT_FAILURE, errno, _("Reopening shared object `%s' failed"),
+ 	   map->l_name);
+ 
++  if (fstat (fd, &st) < 0)
++    error (EXIT_FAILURE, errno, _("stat(%s) failure"), map->l_name);
++
++  /* We're depending on data that's being read from the file, so be a
++     bit paranoid here and make sure the requests are reasonable -
++     i.e. both size and offset are nonnegative and smaller than the
++     file size, as well as the offset of the end of the data.  PREAD
++     would have failed anyway, but this is more robust and explains
++     what happened better.  Note that SZ must be unsigned and OFF may
++     be signed or unsigned.  */
++#define PCHECK(sz1,off1) {						\
++    size_t sz = sz1, end_off;						\
++    off_t off = off1;							\
++    if (sz > st.st_size							\
++	|| off < 0 || off > st.st_size					\
++	|| INT_ADD_WRAPV (sz, off, &end_off)				\
++	|| end_off > st.st_size)					\
++      error (EXIT_FAILURE, ERANGE,					\
++	     _("read outside of file extents %zu + %zd > %zu"),		\
++	     sz, off, st.st_size);					\
++	}
++
+   /* Map the section header.  */
+   size_t size = ehdr->e_shnum * sizeof (ElfW(Shdr));
+   shdr = (ElfW(Shdr) *) alloca (size);
++  PCHECK (size, ehdr->e_shoff);
+   if (pread (fd, shdr, size, ehdr->e_shoff) != size)
+     error (EXIT_FAILURE, errno, _("reading of section headers failed"));
+ 
+   /* Get the section header string table.  */
+   char *shstrtab = (char *) alloca (shdr[ehdr->e_shstrndx].sh_size);
++  PCHECK (shdr[ehdr->e_shstrndx].sh_size,
++	  shdr[ehdr->e_shstrndx].sh_offset);
+   if (pread (fd, shstrtab, shdr[ehdr->e_shstrndx].sh_size,
+ 	     shdr[ehdr->e_shstrndx].sh_offset)
+       != shdr[ehdr->e_shstrndx].sh_size)
+@@ -585,6 +612,7 @@ load_shobj (const char *name)
+       size_t size = debuglink_entry->sh_size;
+       char *debuginfo_fname = (char *) alloca (size + 1);
+       debuginfo_fname[size] = '\0';
++      PCHECK (size, debuglink_entry->sh_offset);
+       if (pread (fd, debuginfo_fname, size, debuglink_entry->sh_offset)
+ 	  != size)
+ 	{
+@@ -638,21 +666,32 @@ load_shobj (const char *name)
+       if (fd2 != -1)
+ 	{
+ 	  ElfW(Ehdr) ehdr2;
++	  struct stat st;
++
++	  if (fstat (fd2, &st) < 0)
++	    error (EXIT_FAILURE, errno, _("stat(%s) failure"), workbuf);
+ 
+ 	  /* Read the ELF header.  */
++	  PCHECK (sizeof (ehdr2), 0);
+ 	  if (pread (fd2, &ehdr2, sizeof (ehdr2), 0) != sizeof (ehdr2))
+ 	    error (EXIT_FAILURE, errno,
+ 		   _("reading of ELF header failed"));
+ 
+ 	  /* Map the section header.  */
+-	  size_t size = ehdr2.e_shnum * sizeof (ElfW(Shdr));
++	  size_t size;
++	  if (INT_MULTIPLY_WRAPV (ehdr2.e_shnum, sizeof (ElfW(Shdr)), &size))
++	    error (EXIT_FAILURE, errno, _("too many section headers"));
++	    
+ 	  ElfW(Shdr) *shdr2 = (ElfW(Shdr) *) alloca (size);
++	  PCHECK (size, ehdr2.e_shoff);
+ 	  if (pread (fd2, shdr2, size, ehdr2.e_shoff) != size)
+ 	    error (EXIT_FAILURE, errno,
+ 		   _("reading of section headers failed"));
+ 
+ 	  /* Get the section header string table.  */
+ 	  shstrtab = (char *) alloca (shdr2[ehdr2.e_shstrndx].sh_size);
++	  PCHECK (shdr2[ehdr2.e_shstrndx].sh_size,
++		  shdr2[ehdr2.e_shstrndx].sh_offset);
+ 	  if (pread (fd2, shstrtab, shdr2[ehdr2.e_shstrndx].sh_size,
+ 		     shdr2[ehdr2.e_shstrndx].sh_offset)
+ 	      != shdr2[ehdr2.e_shstrndx].sh_size)
+
+commit 2a0873aa81446149c6065237e1dc2511201bef88
+Author: Collin Funk <collin.funk1@gmail.com>
+Date:   Wed Oct 22 01:51:09 2025 -0700
+
+    sprof: fix -Wformat warnings on 32-bit hosts
+    
+    Reviewed-by: H.J. Lu <hjl.tools@gmail.com>
+    (cherry picked from commit 9681f645ba20fc3c18eb12ffebf94e3df1f888e3)
+
+diff --git a/elf/sprof.c b/elf/sprof.c
+index e9d2a66a4f..513e0470b2 100644
+--- a/elf/sprof.c
++++ b/elf/sprof.c
+@@ -570,8 +570,8 @@ load_shobj (const char *name)
+ 	|| INT_ADD_WRAPV (sz, off, &end_off)				\
+ 	|| end_off > st.st_size)					\
+       error (EXIT_FAILURE, ERANGE,					\
+-	     _("read outside of file extents %zu + %zd > %zu"),		\
+-	     sz, off, st.st_size);					\
++	     _("read outside of file extents %zu + %jd > %jd"),		\
++	     sz, (intmax_t) off, (intmax_t) st.st_size);		\
+ 	}
+ 
+   /* Map the section header.  */
+
+commit 8dfb84ad4efbc39c7a7d9efdff6f6ac9017e0a53
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Thu Nov 6 14:33:22 2025 +0100
+
+    support: Fix FILE * leak in check_for_unshare_hints in test-container
+    
+    The file opened via fopen is never closed.
+    
+    (cherry picked from commit 20a2a756089eacd7e7f4c02e381e82b5d0e40a2c)
+
+diff --git a/support/test-container.c b/support/test-container.c
+index 1c40ab377f..d78139622f 100644
+--- a/support/test-container.c
++++ b/support/test-container.c
+@@ -705,6 +705,7 @@ check_for_unshare_hints (int require_pidns)
+ 
+       val = -1; /* Sentinel.  */
+       int cnt = fscanf (f, "%d", &val);
++      fclose (f);
+       if (cnt == 1 && val != files[i].bad_value)
+ 	continue;
+ 
+
+commit a1d3294a5bed821aece03994ab4e72c8b822a962
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Thu Nov 6 14:49:21 2025 +0100
+
+    support: Exit on consistency check failure in resolv_response_add_name
+    
+    Using TEST_VERIFY (crname_target != crname) instructs some analysis
+    tools that crname_target == crname might hold.  Under this assumption,
+    they report a use-after-free for crname_target->offset below, caused
+    by the previous free (crname).
+    
+    Reviewed-by: Collin Funk <collin.funk1@gmail.com>
+    (cherry picked from commit b64335ff111c071fde61aec1c1a8460afb3d16d4)
+
+diff --git a/support/resolv_test.c b/support/resolv_test.c
+index ab37d3d58c..29e59da958 100644
+--- a/support/resolv_test.c
++++ b/support/resolv_test.c
+@@ -326,7 +326,7 @@ resolv_response_add_name (struct resolv_response_builder *b,
+               crname_target = *ptr;
+             else
+               crname_target = NULL;
+-            TEST_VERIFY (crname_target != crname);
++            TEST_VERIFY_EXIT (crname_target != crname);
+             /* Not added to the tree.  */
+             free (crname);
+           }

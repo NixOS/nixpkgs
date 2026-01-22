@@ -36,8 +36,6 @@ stdenv.mkDerivation rec {
     "info"
   ];
 
-  LDFLAGS = lib.optionalString stdenv.hostPlatform.isSunOS "-lm -lmd -lmp -luutil -lnvpair -lnsl -lidmap -lavl -lsec";
-
   configureFlags = [
     "--disable-csharp"
   ]
@@ -113,6 +111,9 @@ stdenv.mkDerivation rec {
     # https://github.com/Homebrew/homebrew-core/pull/199639
     # https://savannah.gnu.org/bugs/index.php?66541
     am_cv_func_iconv_works = "yes";
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isSunOS {
+    LDFLAGS = "-lm -lmd -lmp -luutil -lnvpair -lnsl -lidmap -lavl -lsec";
   };
 
   enableParallelBuilding = true;

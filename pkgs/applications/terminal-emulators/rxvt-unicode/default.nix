@@ -135,12 +135,16 @@ stdenv.mkDerivation {
   ]
   ++ lib.optional emojiSupport "--enable-wide-glyphs";
 
-  LDFLAGS = [
-    "-lfontconfig"
-    "-lXrender"
-    "-lpthread"
-  ];
-  CFLAGS = [ "-I${freetype.dev}/include/freetype2" ];
+  env = {
+    LDFLAGS = toString [
+      "-lfontconfig"
+      "-lXrender"
+      "-lpthread"
+    ];
+    CFLAGS = toString [
+      "-I${freetype.dev}/include/freetype2"
+    ];
+  };
 
   preConfigure = ''
     # without this the terminfo won't be compiled by tic, see man tic

@@ -26,6 +26,8 @@
 # keep-sorted start skip_lines=1 case=no numeric=yes
 default-package-overrides:
   - chs-cabal == 0.1.1.2 # matches Cabal 3.12 (GHC 9.10)
+  # 2025-12-26: Needs to match egison-pattern-src from Stackage LTS
+  - egison-pattern-src-th-mode < 0.2.2
   - extensions == 0.1.0.2 # matches Cabal 3.12 (GHC 9.10)
   # 2025-09-13: hnix 0.17.0 doesn't support hnix-store-core >= 0.8
   # https://github.com/haskell-nix/hnix/pull/1112
@@ -43,6 +45,8 @@ default-package-overrides:
   # We currently use pandoc-crossref with a patch to revert it to pandoc == 3.7.*,
   # this no longer works with later versions.
   - pandoc-crossref == 0.3.21
+  # 2025-12-19: Needs to match Stackage version of rhine
+  - rhine-bayes < 1.6
 # keep-sorted end
 
 # keep-sorted start skip_lines=1 case=no numeric=yes
@@ -69,6 +73,7 @@ extra-packages:
   - ghc-exactprint == 1.9.*             # 2024-08-27: needed for GHC == 9.10
   - ghc-exactprint == 1.12.*            # 2025-10-15: needed for GHC == 9.12
   - ghc-lib == 9.6.*                    # 2022-02-17: preserve for GHC 9.4
+  - ghc-lib == 9.8.*                    # 2025-12-11: preserve for GHC 9.6, 9.8
   - ghc-lib == 9.10.*                   # 2024-12-30: preserve for GHC 9.10/ghc-tags 1.9
   - ghc-lib-parser == 9.6.*             # 2024-05-19: preserve for GHC 9.4
   - ghc-lib-parser == 9.8.*            # 2024-12-26: preserve for GHC 9.6, 9.8
@@ -108,30 +113,13 @@ extra-packages:
 # keep-sorted start skip_lines=1 case=no
 package-maintainers:
   alexfmpe:
-    - aeson-gadt-th
-    - android-activity
     - basic-sop
-    - bytestring-aeson-orphans
-    - cli-extras
-    - cli-git
-    - cli-nix
     - commutative-semigroups
-    - constraints-extras
-    - dependent-map
-    - dependent-monoidal-map
-    - dependent-sum
-    - dependent-sum-aeson-orphans
-    - dependent-sum-template
-    - gargoyle
-    - gargoyle-postgresql
-    - gargoyle-postgresql-connect
-    - gargoyle-postgresql-nix
     - generics-sop
     - ghcjs-base
     - ghcjs-dom
     - ghcjs-dom-javascript
     - ghcjs-dom-jsaddle
-    - haveibeenpwned
     - jsaddle
     - jsaddle-clib
     - jsaddle-dom
@@ -142,25 +130,15 @@ package-maintainers:
     - large-records
     - lens-sop
     - linux-namespaces
-    - monoid-map
     - monoidal-containers
-    - nix-thunk
-    - patch
     - proto-lens-arbitrary
     - proto3-suite
     - proto3-wire
     - records-sop
-    - reflex
-    - reflex-dom
-    - reflex-dom-core
-    - reflex-gadt-api
-    - reflex-fsnotify
     - th-abstraction
     - universe
     - universe-some
-    - vessel
     - warp
-    - which
   Anton-Latukha:
     - hnix
     - hnix-store-core
