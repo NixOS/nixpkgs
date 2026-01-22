@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  gccStdenv,
   fetchFromGitHub,
   gitUpdater,
   cmake,
@@ -15,7 +15,11 @@
   pcre,
   makeWrapper,
 }:
-
+let
+  # Builds with Clang, but hits an assertion failure unless GCC is used
+  # https://github.com/OpenXRay/xray-16/issues/1224
+  stdenv = gccStdenv;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openxray";
   version = "2921-january-2025-rc1";
