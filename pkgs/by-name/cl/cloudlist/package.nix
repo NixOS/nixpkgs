@@ -5,14 +5,14 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cloudlist";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "cloudlist";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Tm2gqRZxfeu5gOndVeeFU9HCePpXyx/G73VzVuJRRzY=";
   };
 
@@ -32,9 +32,9 @@ buildGoModule rec {
   meta = {
     description = "Tool for listing assets from multiple cloud providers";
     homepage = "https://github.com/projectdiscovery/cloudlist";
-    changelog = "https://github.com/projectdiscovery/cloudlist/releases/tag/v${version}";
+    changelog = "https://github.com/projectdiscovery/cloudlist/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "cloudlist";
   };
-}
+})
