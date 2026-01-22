@@ -42,13 +42,13 @@ let
     }
     ."${version}";
 in
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "eio";
   inherit version;
   inherit (param) minimalOCamlVersion;
 
   src = fetchurl {
-    url = "https://github.com/ocaml-multicore/${pname}/releases/download/v${version}/${pname}-${version}.tbz";
+    url = "https://github.com/ocaml-multicore/eio/releases/download/v${finalAttrs.version}/eio-${finalAttrs.version}.tbz";
     inherit (param) hash;
   };
 
@@ -75,10 +75,10 @@ buildDunePackage rec {
   ];
 
   meta = {
-    homepage = "https://github.com/ocaml-multicore/${pname}";
-    changelog = "https://github.com/ocaml-multicore/${pname}/raw/v${version}/CHANGES.md";
+    homepage = "https://github.com/ocaml-multicore/eio";
+    changelog = "https://github.com/ocaml-multicore/eio/raw/v${finalAttrs.version}/CHANGES.md";
     description = "Effects-Based Parallel IO for OCaml";
     license = with lib.licenses; [ isc ];
     maintainers = with lib.maintainers; [ toastal ];
   };
-}
+})
