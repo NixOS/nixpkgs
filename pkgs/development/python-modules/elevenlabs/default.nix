@@ -20,7 +20,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "elevenlabs";
     repo = "elevenlabs-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-5FETnLnmFqJ+AKey2dckTLgjwyaAAbB1BZUT8T9Tujo=";
   };
 
