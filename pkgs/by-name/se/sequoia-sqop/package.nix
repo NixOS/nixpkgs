@@ -5,12 +5,13 @@
   nix-update-script,
   installShellFiles,
   rustPlatform,
+  sqlite,
   pkg-config,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "sequoia-sqop";
-  version = "0.35.0";
+  version = "0.37.3";
 
   src = fetchFromGitLab {
     owner = "sequoia-pgp";
@@ -18,10 +19,10 @@ rustPlatform.buildRustPackage rec {
     # generated etc
     repo = "sequoia-sop";
     rev = "v${version}";
-    hash = "sha256-JgLozj9LZwk6TRHj2d4kiq8j3aILBUWaE9ldzvlTBNs=";
+    hash = "sha256-7fyItwtzNia97fbLJ1YkpkS7KmCo3I81uksh3lNvxwU=";
   };
 
-  cargoHash = "sha256-Cg07SlNmG6ELZmoQfkr6ADrGJirbFm0D1Iko1WVNfl0=";
+  cargoHash = "sha256-NrJYFf2bK/QwfFpIrPD8Zc9N/tKVbN2I48jA2B0rNWk=";
 
   nativeBuildInputs = [
     pkg-config
@@ -31,17 +32,20 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     nettle
+    sqlite
   ];
+
   buildFeatures = [ "cli" ];
+
+  env.ASSET_OUT_DIR = "/tmp/";
 
   # Install manual pages
   postInstall = ''
-    mkdir -p $out/share/man
-    cp -r man-sqop $out/share/man/man1
+    installManPage /tmp/man-pages/*.*
     installShellCompletion --cmd sqop \
-      --bash target/*/release/build/sequoia-sop*/out/sqop.bash \
-      --fish target/*/release/build/sequoia-sop*/out/sqop.fish \
-      --zsh target/*/release/build/sequoia-sop*/out/_sqop
+      --bash /tmp/shell-completions/sqop.bash \
+      --fish /tmp/shell-completions/sqop.fish \
+      --zsh /tmp/shell-completions/_sqop
     # Also elv and powershell are generated there
   '';
 
