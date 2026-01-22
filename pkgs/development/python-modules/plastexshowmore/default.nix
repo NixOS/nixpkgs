@@ -18,7 +18,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     repo = "plastexshowmore";
     owner = "PatrickMassot";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-fKjGt3bMAGUjUAea3IDo9wmcE/IJDB9vLEvFbqgWvDM=";
   };
 
