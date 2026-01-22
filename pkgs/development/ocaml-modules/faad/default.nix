@@ -7,14 +7,14 @@
   pkg-config,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "faad";
   version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-faad";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-3ayKZhgJAgsoOqn0InSrM5f3TImRHOQMtWETICo4t3o=";
   };
 
@@ -28,4 +28,4 @@ buildDunePackage rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ dandellion ];
   };
-}
+})
