@@ -4,7 +4,9 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  asgiref,
   twisted,
+  pytest-benchmark,
   pytestCheckHook,
 }:
 
@@ -22,11 +24,19 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
+  dependencies = [ asgiref ];
+
   optional-dependencies.twisted = [ twisted ];
 
   __darwinAllowLocalNetworking = true;
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
+  nativeCheckInputs = [
+    pytest-benchmark
+    pytestCheckHook
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
+
+  pytestFlags = [ "--benchmark-disable" ];
 
   pythonImportsCheck = [ "prometheus_client" ];
 
