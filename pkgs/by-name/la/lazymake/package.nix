@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "rshelekhov";
     repo = "lazymake";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-fEAU3ehb4ClsJiKknDcZMik0ux5zyYU+JoAfEpwNUe8=";
   };
 
