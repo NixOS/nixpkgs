@@ -1,198 +1,136 @@
 {
   config,
-  options,
   pkgs,
   lib,
   ...
 }:
 let
   cfg = config.services.memos;
-  opt = options.services.memos;
-  envFileFormat = pkgs.formats.keyValue { };
 in
 {
   options.services.memos = {
-    enable = lib.mkEnableOption "Memos note-taking";
-    package = lib.mkPackageOption pkgs "Memos" {
-      default = "memos";
-    };
+    enable = lib.mkEnableOption "Memo, an open-source, self-hosted note-taking service.";
 
-    openFirewall = lib.mkEnableOption "opening the ports in the firewall";
+    package = lib.mkPackageOption pkgs "Memos" { default = "memos"; };
+
+    openFirewall = lib.mkEnableOption "Open ports in the firewall for the Memos web interface.";
 
     user = lib.mkOption {
       type = lib.types.str;
-      description = ''
-        The user to run Memos as.
-
-        ::: {.note}
-        If changing the default value, **you** are responsible of creating the corresponding user with [{option}`users.users`](#opt-users.users).
-        :::
-      '';
       default = "memos";
+      description = "User under which Memos runs.";
     };
 
     group = lib.mkOption {
       type = lib.types.str;
-      description = ''
-        The group to run Memos as.
-
-        ::: {.note}
-        If changing the default value, **you** are responsible of creating the corresponding group with [{option}`users.groups`](#opt-users.groups).
-        :::
-      '';
       default = "memos";
+      description = "Group under which Memos runs.";
     };
 
-    dataDir = lib.mkOption {
-      default = "/var/lib/memos/";
-      type = lib.types.path;
-      description = ''
-        Specifies the directory where Memos will store its data.
-
-        ::: {.note}
-        It will be automatically created with the permissions of [{option}`services.memos.user`](#opt-services.memos.user) and [{option}`services.memos.group`](#opt-services.memos.group).
-        :::
-      '';
-    };
-
-    settings = lib.mkOption {
-      type = envFileFormat.type;
-      description = ''
-        The environment variables to configure Memos.
-
-        ::: {.note}
-        At time of writing, there is no clear documentation about possible values.
-        It's possible to convert CLI flags into these variables.
-        Example : CLI flag "--unix-sock" converts to {env}`MEMOS_UNIX_SOCK`.
-        :::
-      '';
-      default = {
-        MEMOS_MODE = "prod";
-        MEMOS_ADDR = "127.0.0.1";
-        MEMOS_PORT = "5230";
-        MEMOS_DATA = cfg.dataDir;
-        MEMOS_DRIVER = "sqlite";
-        MEMOS_INSTANCE_URL = "http://localhost:5230";
+    settings = {
+      mode = lib.mkOption {
+        type = lib.types.enum [
+          "prod"
+          "dev"
+        ];
+        default = "prod";
+        description = "Mode of server (MEMOS_MODE).";
       };
-      defaultText = lib.literalExpression ''
-        {
-          MEMOS_MODE = "prod";
-          MEMOS_ADDR = "127.0.0.1";
-          MEMOS_PORT = "5230";
-          MEMOS_DATA = config.${opt.dataDir};
-          MEMOS_DRIVER = "sqlite";
-          MEMOS_INSTANCE_URL = "http://localhost:5230";
-        }
-      '';
-    };
 
-    environmentFile = lib.mkOption {
-      type = lib.types.path;
-      description = ''
-        The environment file to use when starting Memos.
+      port = lib.mkOption {
+        type = lib.types.port;
+        default = 8081;
+        description = "HTTP port to listen on (MEMOS_PORT).";
+      };
 
-        ::: {.note}
-        By default, generated from [](opt-${opt.settings}).
-        :::
-      '';
-      example = "/var/lib/memos/memos.env";
-      default = envFileFormat.generate "memos.env" cfg.settings;
-      defaultText = lib.literalMD ''
-        generated from {option}`${opt.settings}`
-      '';
+      address = lib.mkOption {
+        type = with lib.types; nullOr str;
+        default = null;
+        description = "Bind address, empty means all interfaces (MEMOS_ADDR).";
+      };
+
+      unixSocket = lib.mkOption {
+        type = with lib.types; nullOr str;
+        default = null;
+        description = "Path to the unix socket (MEMOS_UNIX_SOCK). Overrides MEMOS_ADDR and MEMOS_PORT.";
+      };
+
+      dataDir = lib.mkOption {
+        type = lib.types.path;
+        default = "/var/lib/memos";
+        description = "Data directory (MEMOS_DATA).";
+      };
+
+      databaseDriver = lib.mkOption {
+        type = lib.types.enum [
+          "sqlite"
+          "mysql"
+          "postgres"
+        ];
+        default = "sqlite";
+        description = "Database driver (MEMOS_DRIVER).";
+      };
+
+      databaseSourceName = lib.mkOption {
+        type = with lib.types; nullOr str;
+        default = null;
+        description = "Database connection string (MEMOS_DSN).";
+      };
+
+      instanceUrl = lib.mkOption {
+        type = with lib.types; nullOr str;
+        default = null;
+        description = "Instance base URL (MEMOS_INSTANCE_URL).";
+      };
     };
   };
 
   config = lib.mkIf cfg.enable {
-    users.users = lib.mkIf (cfg.user == "memos") {
-      ${cfg.user} = {
-        description = lib.mkDefault "Memos service user";
-        isSystemUser = true;
-        group = cfg.group;
+    systemd = {
+      tmpfiles.settings."10-memos"."${cfg.settings.dataDir}".d = {
+        inherit (cfg) user group;
+        mode = "0750";
       };
-    };
 
-    users.groups = lib.mkIf (cfg.group == "memos") {
-      ${cfg.group} = { };
-    };
-
-    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [
-      cfg.port
-    ];
-
-    systemd.tmpfiles.settings."10-memos" = {
-      "${cfg.dataDir}" = {
-        d = {
-          mode = "0750";
-          user = cfg.user;
-          group = cfg.group;
+      services.memos = {
+        description = "Memos, a privacy-first, lightweight note-taking solution";
+        after = [ "network.target" ];
+        wantedBy = [ "multi-user.target" ];
+        environment = {
+          MEMOS_MODE = cfg.settings.mode;
+          MEMOS_PORT = toString cfg.settings.port;
+          MEMOS_ADDR = lib.mkIf (cfg.settings.address != null) cfg.settings.address;
+          MEMOS_UNIX_SOCK = lib.mkIf (cfg.settings.unixSocket != null) cfg.settings.unixSocket;
+          MEMOS_DATA = toString cfg.settings.dataDir;
+          MEMOS_DRIVER = cfg.settings.databaseDriver;
+          MEMOS_DSN = lib.mkIf (cfg.settings.databaseSourceName != null) cfg.settings.databaseSourceName;
+          MEMOS_INSTANCE_URL = lib.mkIf (cfg.settings.instanceUrl != null) cfg.settings.instanceUrl;
+        };
+        serviceConfig = {
+          User = cfg.user;
+          Group = cfg.group;
+          Type = "simple";
+          Restart = "always";
+          RestartSec = 3;
+          ExecStart = "${lib.getExe cfg.package}";
         };
       };
     };
 
-    systemd.services.memos = {
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
-      wants = [ "network.target" ];
-      description = "Memos, a privacy-first, lightweight note-taking solution";
-      serviceConfig = {
-        User = cfg.user;
-        Group = cfg.group;
-        Type = "simple";
-        RestartSec = 60;
-        LimitNOFILE = 65536;
-        NoNewPrivileges = true;
-        LockPersonality = true;
-        RemoveIPC = true;
-        ReadWritePaths = [
-          cfg.dataDir
-        ];
-        ProtectSystem = "strict";
-        PrivateUsers = true;
-        ProtectHome = true;
-        PrivateTmp = true;
-        PrivateDevices = true;
-        ProtectHostname = true;
-        ProtectClock = true;
-        UMask = "0077";
-        ProtectKernelTunables = true;
-        ProtectKernelModules = true;
-        ProtectControlGroups = true;
-        ProtectProc = "invisible";
-        SystemCallFilter = [
-          " " # This is needed to clear the SystemCallFilter existing definitions
-          "~@reboot"
-          "~@swap"
-          "~@obsolete"
-          "~@mount"
-          "~@module"
-          "~@debug"
-          "~@cpu-emulation"
-          "~@clock"
-          "~@raw-io"
-          "~@privileged"
-          "~@resources"
-        ];
-        CapabilityBoundingSet = [
-          " " # Reset all capabilities to an empty set
-        ];
-        RestrictAddressFamilies = [
-          " " # This is needed to clear the RestrictAddressFamilies existing definitions
-          "none" # Remove all addresses families
-          "AF_UNIX"
-          "AF_INET"
-          "AF_INET6"
-        ];
-        DevicePolicy = "closed";
-        ProtectKernelLogs = true;
-        SystemCallArchitectures = "native";
-        RestrictNamespaces = true;
-        RestrictRealtime = true;
-        RestrictSUIDSGID = true;
-        EnvironmentFile = cfg.environmentFile;
-        ExecStart = lib.getExe cfg.package;
+    users.users = lib.mkIf (cfg.user == "memos") {
+      memos = {
+        inherit (cfg) group;
+        isSystemUser = true;
       };
     };
+
+    users.groups = lib.mkIf (cfg.group == "memos") {
+      memos = { };
+    };
+
+    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [
+      cfg.settings.port
+    ];
   };
 
   meta.maintainers = [ lib.maintainers.m0ustach3 ];
