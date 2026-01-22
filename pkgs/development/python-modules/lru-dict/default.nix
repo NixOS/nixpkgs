@@ -6,7 +6,6 @@
   setuptools,
 }:
 
-
 buildPythonPackage (finalAttrs: {
   pname = "lru-dict";
   version = "1.4.0";
