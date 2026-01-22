@@ -1,22 +1,15 @@
 {
   lib,
-  mkDerivation,
+  qt5,
   appstream,
   fetchFromGitHub,
   cmake,
-  gettext,
-  libxslt,
   librsvg,
   itstool,
-  qtbase,
-  qtquickcontrols2,
-  qtsvg,
-  qttools,
-  qtwebview,
   docbook_xsl,
 }:
 
-mkDerivation rec {
+qt5.mkDerivation rec {
   version = "20.0";
   pname = "pentobi";
 
@@ -30,14 +23,14 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     docbook_xsl
-    qttools
+    qt5.qttools
   ];
   buildInputs = [
     appstream
-    qtbase
-    qtsvg
-    qtquickcontrols2
-    qtwebview
+    qt5.qtbase
+    qt5.qtsvg
+    qt5.qtquickcontrols2
+    qt5.qtwebview
     itstool
     librsvg
   ];

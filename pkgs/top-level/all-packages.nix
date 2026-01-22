@@ -12349,8 +12349,6 @@ with pkgs;
 
   papermc = papermcServers.papermc;
 
-  pentobi = libsForQt5.callPackage ../games/pentobi { };
-
   pokerth = libsForQt5.callPackage ../games/pokerth {
     protobuf = protobuf_21;
   };
