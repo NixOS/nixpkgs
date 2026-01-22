@@ -5,6 +5,8 @@
   nix-update-script,
   vimUtils,
   vimPlugins,
+  autoPatchelfHook,
+  stdenv,
 }:
 vimUtils.buildVimPlugin rec {
   pname = "codediff.nvim";
@@ -19,12 +21,19 @@ vimUtils.buildVimPlugin rec {
 
   dependencies = [ vimPlugins.nui-nvim ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ stdenv.cc.cc.lib ];
   dontUseCmakeConfigure = true;
   buildPhase = ''
     runHook preBuild
     make
     runHook postBuild
+  '';
+
+  # The plugin detects Nix and tries to download libgomp at runtime.
+  # Symlinking it into the plugin directory fixes error message.
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
+    ln -s ${stdenv.cc.cc.lib}/lib/libgomp.so.1 $out/libgomp.so.1
   '';
 
   passthru.updateScript = nix-update-script { };
