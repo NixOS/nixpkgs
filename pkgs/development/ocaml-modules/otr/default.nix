@@ -10,14 +10,14 @@
   base64,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "otr";
   version = "1.0.0";
 
   minimalOCamlVersion = "4.13";
 
   src = fetchurl {
-    url = "https://github.com/hannesm/ocaml-otr/releases/download/v${version}/otr-${version}.tbz";
+    url = "https://github.com/hannesm/ocaml-otr/releases/download/v${finalAttrs.version}/otr-${finalAttrs.version}.tbz";
     hash = "sha256-/CcVqLbdylB+LqpKNETkpvQ8SEAIcEFCO1MZqvdmJWU=";
   };
 
@@ -38,4 +38,4 @@ buildDunePackage rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ sternenseemann ];
   };
-}
+})
