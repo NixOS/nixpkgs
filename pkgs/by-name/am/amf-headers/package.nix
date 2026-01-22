@@ -16,8 +16,12 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/include/AMF
     cp -r amf/public/include/* $out/include/AMF
+
+    runHook postInstall
   '';
 
   meta = {

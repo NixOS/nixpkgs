@@ -37,6 +37,8 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
+    runHook preInstall
+
     root="$PWD/Library/SDRplayAPI/${version}"
 
     mkdir -p $out/{bin,lib}
@@ -48,6 +50,8 @@ stdenv.mkDerivation {
     cp "$root/lib/libsdrplay_api.so.$majorMinorVersion" "$lib"
     ln -s "$lib" "$out/lib/libsdrplay_api.$majorVersion.dylib"
     ln -s "$lib" "$out/lib/libsdrplay_api.dylib"
+
+    runHook postInstall
   '';
 
   postFixup = ''

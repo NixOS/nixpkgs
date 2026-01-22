@@ -19,8 +19,12 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fonts/truetype/redacted-elementary
     cp -a redacted/*.ttf $out/share/fonts/truetype/redacted-elementary
+
+    runHook postInstall
   '';
 
   passthru = {

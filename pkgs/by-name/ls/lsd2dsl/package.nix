@@ -72,7 +72,11 @@ stdenv.mkDerivation (finalAttrs: {
   });
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 console/lsd2dsl gui/lsd2dsl-qtgui -t $out/bin
+
+    runHook postInstall
   '';
 
   meta = {

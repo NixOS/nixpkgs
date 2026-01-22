@@ -27,8 +27,12 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -D libryzenadj.so $out/lib/libryzenadj.so
     install -D ryzenadj $out/bin/ryzenadj
+
+    runHook postInstall
   '';
 
   meta = {

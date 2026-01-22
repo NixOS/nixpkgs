@@ -26,8 +26,12 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm 755 -t $out/bin viw
     install -Dm 644 -t $out/share/doc/viw README.md
+
+    runHook postInstall
   '';
 
   meta = {

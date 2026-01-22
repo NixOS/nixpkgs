@@ -22,6 +22,8 @@ let
       version = src.version;
 
       installPhase = ''
+        runHook preInstall
+
         mkdir -p $out
         cp -r * $out/
 
@@ -37,6 +39,8 @@ let
 
         # Symlink local.yaml.
         ln -s ${kimaiConfig hostName cfg} $out/share/php/kimai/config/packages/local.yaml
+
+        runHook postInstall
       '';
     };
 

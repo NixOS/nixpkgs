@@ -38,6 +38,8 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/opt/Scrolls"
     cp -r ../Scrolls "$out/opt/Scrolls/"
     cp -r ../Scrolls_Data "$out/opt/Scrolls/"
@@ -48,6 +50,8 @@ stdenv.mkDerivation {
 
     mkdir "$out/bin"
     ln -s "$out/opt/Scrolls/Scrolls" "$out/bin/Scrolls"
+
+    runHook postInstall
   '';
 
 }

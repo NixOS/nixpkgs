@@ -25,10 +25,14 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
     cp -r ../* $out
     rm -rf $out/{data,env-vars,_include.php}
     cp ${includeScript} $out/include.php
+
+    runHook postInstall
   '';
 
   meta = {

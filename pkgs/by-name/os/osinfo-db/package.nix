@@ -23,7 +23,11 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     osinfo-db-import --dir "$out/share/osinfo" "${src}"
+
+    runHook postInstall
   '';
 
   meta = {

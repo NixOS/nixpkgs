@@ -15,9 +15,13 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     rm binaries/data/tools/fontbuilder/fonts/*.txt
     mkdir -p $out/share/0ad
     cp -r binaries/data $out/share/0ad/
+
+    runHook postInstall
   '';
 
   meta = {

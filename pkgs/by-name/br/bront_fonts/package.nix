@@ -16,7 +16,11 @@ stdenvNoCC.mkDerivation {
   };
 
   installPhase = ''
+    runHook preInstall
+
     install -m444 -Dt $out/share/fonts/truetype *Bront.ttf
+
+    runHook postInstall
   '';
 
   meta = {

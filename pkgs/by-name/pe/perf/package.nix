@@ -47,7 +47,11 @@ let
     };
 
     installPhase = ''
+      runHook preInstall
+
       install -D -m 0755 -t $out/share/d3-flame-graph/ ./dist/templates/*
+
+      runHook postInstall
     '';
   };
 in

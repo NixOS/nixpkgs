@@ -97,6 +97,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mv usr/share $out/share
     mv opt/keybase $out/share/
@@ -130,6 +132,8 @@ stdenv.mkDerivation rec {
 
     substituteInPlace $out/share/applications/keybase.desktop \
       --replace run_keybase $out/bin/keybase-gui
+
+    runHook postInstall
   '';
 
   meta = {

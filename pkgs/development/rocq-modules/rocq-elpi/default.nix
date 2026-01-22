@@ -62,9 +62,13 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
+
       etc/with-rocq-wrap.sh dune install --root . rocq-elpi --prefix=$out --libdir $OCAMLFIND_DESTDIR
       mkdir $out/lib/coq/
       mv $OCAMLFIND_DESTDIR/coq $out/lib/coq/${rocq-core.rocq-version}
+
+      runHook postInstall
     '';
 
     meta = {

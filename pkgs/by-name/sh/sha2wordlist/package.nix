@@ -26,8 +26,12 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     install -m 755 sha2wordlist $out/bin
+
+    runHook postInstall
   '';
 
   meta = {

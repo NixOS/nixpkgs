@@ -43,6 +43,8 @@ stdenv.mkDerivation rec {
   patches = [ ./dict.patch ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mkdir -p $out/share/dict
     mkdir -p $out/share/man/man1
@@ -71,6 +73,8 @@ stdenv.mkDerivation rec {
         fortune
       ]
     } --prefix ASPELL_CONF : "\"prefix ${aspellEnv};\""
+
+    runHook postInstall
   '';
 
   meta = {

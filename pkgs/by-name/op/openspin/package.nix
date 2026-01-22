@@ -16,8 +16,12 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mv build/openspin $out/bin/openspin
+
+    runHook postInstall
   '';
 
   meta = {

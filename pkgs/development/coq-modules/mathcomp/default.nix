@@ -194,7 +194,7 @@ let
           {
             preBuild = "";
             buildPhase = "";
-            installPhase = "echo doing nothing";
+            installPhase = "runHook preInstall; echo doing nothing; runHook postInstall";
           }
       );
       patched-derivation2 = patched-derivation1.overrideAttrs (
@@ -238,7 +238,7 @@ let
           {
             preBuild = "";
             buildPhase = "echo doing nothing";
-            installPhase = "echo doing nothing";
+            installPhase = "runHook preInstall; echo doing nothing; runHook postInstall";
           }
       );
     in

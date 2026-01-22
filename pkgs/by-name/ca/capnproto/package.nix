@@ -20,8 +20,12 @@ let
     version = "0";
     dontUnpack = true;
     installPhase = ''
+      runHook preInstall
+
       mkdir -p "$out"/lib
       "${binutils}"/bin/ar r "$out"/lib/libgcc_eh.a
+
+      runHook postInstall
     '';
   };
 in

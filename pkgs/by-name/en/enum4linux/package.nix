@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp enum4linux.pl $out/bin/enum4linux
 
@@ -42,6 +44,8 @@ stdenv.mkDerivation rec {
           openldap
         ]
       }
+
+    runHook postInstall
   '';
 
   meta = {

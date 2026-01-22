@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,core,modules,lib}
     mv bin core modules lib share $out/
 
@@ -31,6 +33,8 @@ stdenv.mkDerivation rec {
           nix
         ]
       }
+
+    runHook postInstall
   '';
 
   meta = {

@@ -51,6 +51,8 @@ stdenv.mkDerivation rec {
   doInstallCheck = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     cp -p * $out
 
@@ -62,6 +64,8 @@ stdenv.mkDerivation rec {
     makeWrapper '${pythonEnv.interpreter}' $out/bin/k40-whisperer \
       --add-flags $out/k40_whisperer.py \
       --prefix PYTHONPATH : $out
+
+    runHook postInstall
   '';
 
   meta = {

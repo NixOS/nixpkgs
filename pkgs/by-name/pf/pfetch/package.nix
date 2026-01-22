@@ -20,7 +20,11 @@ stdenvNoCC.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 -t $out/bin pfetch
+
+    runHook postInstall
   '';
 
   nativeInstallCheckInputs = [

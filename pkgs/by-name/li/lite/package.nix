@@ -52,10 +52,14 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/lib/lite
     cp -a lite $out/lib/lite
     cp -a data $out/lib/lite
     makeWrapper $out/lib/lite/lite $out/bin/lite
+
+    runHook postInstall
   '';
 
   meta = {

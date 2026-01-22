@@ -27,8 +27,12 @@ stdenv.mkDerivation {
   # Wrap the program because `ROLESPEC_LIB` defaults to
   # `/usr/local/lib/rolespec`.
   installPhase = ''
+    runHook preInstall
+
     make install PREFIX=$out
     wrapProgram $out/bin/rolespec --set ROLESPEC_LIB $out/lib/rolespec
+
+    runHook postInstall
   '';
 
   # Since RoleSpec installs the shell script files in `lib` directory, the

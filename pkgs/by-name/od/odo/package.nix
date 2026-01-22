@@ -24,8 +24,12 @@ buildGoModule rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -a odo $out/bin
+
+    runHook postInstall
   '';
 
   passthru.tests.version = testers.testVersion {

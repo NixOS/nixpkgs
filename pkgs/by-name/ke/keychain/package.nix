@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp keychain $out/bin/keychain
     installManPage keychain.1
@@ -49,6 +51,8 @@ stdenv.mkDerivation rec {
           procps
         ]
       }" \
+
+    runHook postInstall
   '';
 
   meta = {

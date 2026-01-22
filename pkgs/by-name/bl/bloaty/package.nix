@@ -77,7 +77,11 @@ stdenv.mkDerivation {
     cmake --build . --target check-bloaty
   '';
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 {.,$out/bin}/bloaty
+
+    runHook postInstall
   '';
 
   meta = {

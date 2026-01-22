@@ -24,7 +24,11 @@ buildGoModule rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 ./kthxbye -t $out/bin
+
+    runHook postInstall
   '';
 
   passthru.tests = {

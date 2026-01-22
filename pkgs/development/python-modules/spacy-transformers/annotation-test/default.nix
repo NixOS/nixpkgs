@@ -28,7 +28,11 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     touch $out
+
+    runHook postInstall
   '';
 
   meta.timeout = 60;

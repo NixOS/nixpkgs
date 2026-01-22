@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
       throw "nvidia-cg-toolkit does not support platform ${stdenv.hostPlatform.system}";
 
   installPhase = ''
+    runHook preInstall
+
     for b in cgc cgfxcat cginfo
     do
         patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux*.so.? "bin/$b"
@@ -40,6 +42,8 @@ stdenv.mkDerivation rec {
     [ "$system" == "i686-linux" ] && cp -v lib/* "$out/lib/"
     mkdir -p "$out/share/doc/$name/"
     cp -v -r local/Cg/* "$out/share/doc/$name/"
+
+    runHook postInstall
   '';
 
   meta = {

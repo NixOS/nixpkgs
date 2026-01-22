@@ -49,6 +49,8 @@ stdenv.mkDerivation rec {
 
   # not sure why, but all the headers seem to be installed by the make install
   installPhase = ''
+    runHook preInstall
+
     make install
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -57,6 +59,8 @@ stdenv.mkDerivation rec {
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     cp include/pa_mac_core.h $out/include/pa_mac_core.h
+
+    runHook postInstall
   '';
 
   meta = {

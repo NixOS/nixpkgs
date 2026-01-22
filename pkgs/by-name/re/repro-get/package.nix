@@ -51,8 +51,12 @@ buildGoModule rec {
       }";
       subPackages = [ "pkg/version" ];
       installPhase = ''
+        runHook preInstall
+
         rm -rf $out
         touch $out
+
+        runHook postInstall
       '';
       preCheck = "";
       outputHash = "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=";

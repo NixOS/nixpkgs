@@ -96,9 +96,13 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 -t $out/bin amber image_diff
     wrapProgram $out/bin/amber \
       --suffix VK_LAYER_PATH : ${vulkan-validation-layers}/share/vulkan/explicit_layer.d
+
+    runHook postInstall
   '';
 
   passthru.tests.lavapipe =

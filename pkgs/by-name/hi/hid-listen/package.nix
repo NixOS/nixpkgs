@@ -14,8 +14,12 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mv ./hid_listen $out/bin/hid_listen
+
+    runHook postInstall
   '';
 
   meta = {

@@ -87,6 +87,8 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     # allow cups to find the ppd files
     mkdir -p $out/share/cups/model
     mv ./usr/share/kyocera${kyodialog_version_short}/ppd${kyodialog_version_short} $out/share/cups/model/Kyocera
@@ -100,6 +102,8 @@ stdenv.mkDerivation {
     wrapPythonProgramsIn $out/lib/cups/filter "$propagatedBuildInputs"
 
     install -Dm444 usr/share/doc/kyodialog/copyright $out/share/doc/cups-kyocera-3500-4500/copyright
+
+    runHook postInstall
   '';
 
   meta = {

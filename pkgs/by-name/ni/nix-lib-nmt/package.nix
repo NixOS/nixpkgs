@@ -22,8 +22,12 @@ stdenv.mkDerivation {
   outputHash = "sha256-N7kGGDDXsXtc1S3Nqw7lCIbnVHtGNNLM1oO+Xe64hSE=";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -pv "$out"
     cp -rv * "$out"
+
+    runHook postInstall
   '';
 
   meta = {

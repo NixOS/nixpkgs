@@ -60,6 +60,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin/
     mkdir -p $out/lib64/
     mv usr/bin/dcvviewer $out/bin/dcvviewer
@@ -77,6 +79,8 @@ stdenv.mkDerivation rec {
 
     # we already ship libffi.so.7
     ln -s ${lib.getLib libffi}/lib/libffi.so $out/lib64/libffi.so.6
+
+    runHook postInstall
   '';
 
   meta = {

@@ -25,9 +25,13 @@ stdenv.mkDerivation rec {
     substituteInPlace src/libcrypto.cc --subst-var-by openssl ${lib.getLib openssl_1_1}
   '';
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -a wraith $out/bin/wraith
     ln -s wraith $out/bin/hub
+
+    runHook postInstall
   '';
 
   meta = {

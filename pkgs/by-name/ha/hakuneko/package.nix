@@ -72,10 +72,14 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     cp -R usr "$out"
     # Overwrite existing .desktop file.
     cp "${desktopItem}/share/applications/hakuneko-desktop.desktop" \
        "$out/share/applications/hakuneko-desktop.desktop"
+
+    runHook postInstall
   '';
 
   runtimeDependencies = [

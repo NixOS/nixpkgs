@@ -49,10 +49,14 @@ stdenv.mkDerivation rec {
 
   # `make install` fails to install some header files and the lib file.
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/include/zn_poly"
     mkdir -p "$out/lib"
     cp "${libbasename}"*"${libext}" "$out/lib"
     cp include/*.h "$out/include/zn_poly"
+
+    runHook postInstall
   '';
 
   doCheck = true;

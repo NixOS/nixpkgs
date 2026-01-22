@@ -24,6 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D -t $out/bin btrfs-list
 
     wrapProgram $out/bin/btrfs-list \
@@ -34,6 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
           btrfs-progs
         ]
       }
+
+    runHook postInstall
   '';
 
   meta = {

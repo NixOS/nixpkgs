@@ -117,6 +117,8 @@ stdenvNoCC.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     cp -R . $out
     rm -rf $out/config/database.yml $out/config/secrets.yml $out/tmp $out/log
     # dataDir will be set in the module, and the package gets overridden there
@@ -125,6 +127,8 @@ stdenvNoCC.mkDerivation {
     ln -s ${dataDir}/log $out/log
     ln -s ${dataDir}/storage $out/storage
     ln -s ${dataDir}/tmp $out/tmp
+
+    runHook postInstall
   '';
 
   passthru = {

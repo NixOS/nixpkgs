@@ -23,6 +23,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp edname.sh "$out/bin/edname"
     wrapProgram "$out/bin/edname" \
@@ -33,6 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
           gnused
         ]
       }"
+
+    runHook postInstall
   '';
 
   meta = {

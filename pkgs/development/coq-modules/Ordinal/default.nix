@@ -25,7 +25,11 @@ mkCoqDerivation {
   };
   releaseRev = v: "v${v}";
   installPhase = ''
+    runHook preInstall
+
     make -f Makefile.coq COQMF_COQLIB=$out/lib/coq/${coq.coq-version}/ install
+
+    runHook postInstall
   '';
   meta = {
     homepage = "https://github.com/snu-sf/Ordinal";

@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [ ];
 
-  installPhase = "mkdir -p $out; cp -R lib $out/";
+  installPhase = "runHook preInstall; mkdir -p $out; cp -R lib $out/; runHook postInstall";
 
   passthru.tests = {
     test-version = runCommand "${finalAttrs.pname}-test" { } ''

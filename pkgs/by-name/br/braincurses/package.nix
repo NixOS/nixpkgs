@@ -20,7 +20,11 @@ stdenv.mkDerivation rec {
 
   # There is no install target in the Makefile
   installPhase = ''
+    runHook preInstall
+
     install -Dt $out/bin braincurses
+
+    runHook postInstall
   '';
 
   meta = {

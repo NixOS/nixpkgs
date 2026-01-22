@@ -202,8 +202,12 @@ stdenv.mkDerivation (finalAttrs: {
           ldc2 ${lib.escapeShellArgs finalAttrs.dFlags} -of=test $src
         '';
         installPhase = ''
+          runHook preInstall
+
           mkdir -p $out/bin
           mv test $out/bin
+
+          runHook postInstall
         '';
       });
     in

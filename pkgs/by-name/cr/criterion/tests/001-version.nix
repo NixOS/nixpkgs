@@ -17,8 +17,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp ${name} $out/bin/${name}
+
+    runHook postInstall
   '';
 
   meta.mainProgram = name;

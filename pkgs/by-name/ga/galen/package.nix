@@ -24,9 +24,13 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     cat galen | sed -e "s,java,$jre8/bin/java," > $out/bin/galen
     chmod +x $out/bin/galen
     cp galen.jar $out/bin
+
+    runHook postInstall
   '';
 
   meta = {

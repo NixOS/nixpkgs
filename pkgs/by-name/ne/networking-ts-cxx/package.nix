@@ -18,9 +18,13 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{include,lib/pkgconfig}
     cp -r include $out/
     substituteAll ${./networking_ts.pc.in} $out/lib/pkgconfig/networking_ts.pc
+
+    runHook postInstall
   '';
 
   meta = {

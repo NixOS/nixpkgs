@@ -34,7 +34,7 @@ let
 
       makeFlags = [ makeTarget ];
 
-      installPhase = "install -Dt $out/bin ${makeTarget}";
+      installPhase = "runHook preInstall; install -Dt $out/bin ${makeTarget}; runHook postInstall";
 
       meta = {
         inherit description homepage mainProgram;

@@ -17,8 +17,12 @@ let
       ghc $src -o ${mainProgram}
     '';
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/bin
       cp ${mainProgram} $out/bin
+
+      runHook postInstall
     '';
   };
 in

@@ -21,8 +21,12 @@ stdenvNoCC.mkDerivation {
   nativeBuildInputs = [ b43FirmwareCutter ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib/firmware
     b43-fwcutter -w $out/lib/firmware linux/wl_apsta.o
+
+    runHook postInstall
   '';
 
   meta = {

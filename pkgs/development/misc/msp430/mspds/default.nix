@@ -48,8 +48,12 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm0755 -t $out/lib $libName
     install -Dm0644 -t $out/include DLL430_v3/include/*.h
+
+    runHook postInstall
   '';
 
   nativeBuildInputs = [ unzip ];

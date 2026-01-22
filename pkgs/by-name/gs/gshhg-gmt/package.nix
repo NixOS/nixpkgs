@@ -13,8 +13,12 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/gshhg-gmt
     cp -rv ./* $out/share/gshhg-gmt
+
+    runHook postInstall
   '';
 
   meta = {

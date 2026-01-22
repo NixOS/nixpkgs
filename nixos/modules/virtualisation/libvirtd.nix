@@ -207,10 +207,14 @@ let
     dontBuild = true;
     dontUnpack = true;
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out
       cp ${cfg.qemu.package}/share/qemu/firmware/*.json $out
       substituteInPlace $out/*.json \
         --replace-fail "${cfg.qemu.package}/share/qemu/" "/run/${dirName}/nix-ovmf/"
+
+      runHook postInstall
     '';
   };
 

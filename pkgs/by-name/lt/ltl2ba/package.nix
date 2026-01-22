@@ -21,8 +21,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mv ltl2ba $out/bin
+
+    runHook postInstall
   '';
 
   meta = {

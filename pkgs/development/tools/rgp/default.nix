@@ -69,6 +69,8 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/opt/rgp $out/bin
     cp -r . $out/opt/rgp/
 
@@ -86,6 +88,8 @@ stdenv.mkDerivation {
         --unset QT_STYLE_OVERRIDE \
         --prefix LD_LIBRARY_PATH : $out/opt/rgp/lib
     done
+
+    runHook postInstall
   '';
 
   meta = {

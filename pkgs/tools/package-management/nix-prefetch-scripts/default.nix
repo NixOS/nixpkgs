@@ -34,10 +34,14 @@ let
       dontUnpack = true;
 
       installPhase = ''
+        runHook preInstall
+
         install -vD ${src} $out/bin/$name;
         wrapProgram $out/bin/$name \
           --prefix PATH : ${lib.makeBinPath (deps ++ [ coreutils ])} \
           --set HOME /homeless-shelter
+
+        runHook postInstall
       '';
 
       preferLocalBuild = true;

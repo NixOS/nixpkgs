@@ -19,8 +19,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
     mv amlbootsig unamlbootsig amlinfo "$out/bin"
+
+    runHook postInstall
   '';
 
   meta = {

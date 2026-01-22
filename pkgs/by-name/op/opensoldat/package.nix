@@ -36,8 +36,12 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
+
       install -Dm644 soldat.smod -t $out/share/opensoldat
       install -Dm644 play-regular.ttf -t $out/share/opensoldat
+
+      runHook postInstall
     '';
 
     meta = {

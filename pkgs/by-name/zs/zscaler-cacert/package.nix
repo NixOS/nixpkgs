@@ -23,7 +23,11 @@ stdenvNoCC.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm644 $src $out/etc/ssl/certs/zscaler-ca.crt
+
+    runHook postInstall
   '';
 
   meta = {

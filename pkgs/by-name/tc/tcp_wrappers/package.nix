@@ -47,6 +47,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
     cp -v safe_finger tcpd tcpdchk tcpdmatch try-from "$out/bin"
 
@@ -61,6 +63,8 @@ stdenv.mkDerivation rec {
       mkdir -p "$out/man/man$i"
       cp *.$i "$out/man/man$i" ;
     done
+
+    runHook postInstall
   '';
 
   meta = {

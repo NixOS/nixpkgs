@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/lib
 
     cp ${src} "$out/lib/ditaa.jar"
@@ -27,6 +29,8 @@ stdenv.mkDerivation rec {
     EOF
 
     chmod a+x "$out/bin/ditaa"
+
+    runHook postInstall
   '';
 
   meta = {

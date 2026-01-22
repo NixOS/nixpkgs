@@ -29,8 +29,12 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     ENVCLEANED=1 $src -y -d $out
+
+    runHook postInstall
   '';
 
   meta = {

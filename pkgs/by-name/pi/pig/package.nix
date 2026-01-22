@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     mv * $out
 
@@ -37,6 +39,8 @@ stdenv.mkDerivation rec {
         }" \
         --set JAVA_HOME "${jre}" --set HADOOP_PREFIX "${hadoop}"
     done
+
+    runHook postInstall
   '';
 
   meta = {

@@ -38,6 +38,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p \
       $out/bin \
       $out/man/man1 \
@@ -46,6 +48,8 @@ stdenv.mkDerivation rec {
     cp -v jhead $out/bin
     cp -v jhead.1 $out/man/man1
     cp -v *.txt $out/share/doc/${pname}-${version}
+
+    runHook postInstall
   '';
 
   meta = {

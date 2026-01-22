@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
   nativeInstallCheckInputs = [ openssl.bin ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/easy-rsa
     cp -r easyrsa3/{*.cnf,x509-types,vars.example} $out/share/easy-rsa
     install -D -m755 easyrsa3/easyrsa $out/bin/easyrsa
@@ -42,6 +44,8 @@ stdenv.mkDerivation rec {
     cp -r $out/share/easy-rsa/* .
     EOF
     chmod +x $out/bin/easyrsa-init
+
+    runHook postInstall
   '';
 
   doInstallCheck = true;

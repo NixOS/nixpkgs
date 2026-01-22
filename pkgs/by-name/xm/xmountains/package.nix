@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     gccmakedep
   ];
 
-  installPhase = "install -Dm755 xmountains -t $out/bin";
+  installPhase = "runHook preInstall; install -Dm755 xmountains -t $out/bin; runHook postInstall";
 
   meta = {
     description = "X11 based fractal landscape generator";

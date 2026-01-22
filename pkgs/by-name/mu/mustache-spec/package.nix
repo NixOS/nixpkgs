@@ -19,9 +19,13 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{man/man5,doc/html}
     cp man/mustache.5 $out/man/man5
     cp man/mustache.5.html $out/doc/html
+
+    runHook postInstall
   '';
 
   meta = rec {

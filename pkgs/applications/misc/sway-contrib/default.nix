@@ -54,6 +54,8 @@ in
     ];
     buildInputs = [ bash ];
     installPhase = ''
+      runHook preInstall
+
       installManPage grimshot/grimshot.1
       installShellCompletion --cmd grimshot grimshot/grimshot-completion.bash
 
@@ -71,6 +73,8 @@ in
             gnugrep
           ]
         }"
+
+      runHook postInstall
     '';
 
     doInstallCheck = true;
@@ -107,7 +111,11 @@ in
       propagatedBuildInputs = [ python3Packages.i3ipc ];
 
       installPhase = ''
+        runHook preInstall
+
         install -Dm 0755 $src/${lname}.py $out/bin/${lname}.py
+
+        runHook postInstall
       '';
 
       meta =

@@ -22,9 +22,13 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 {.,$out/bin}/regionset
     install -Dm644 {.,$out/share/man/man8}/regionset.8
     install -Dm644 {.,$out/share/doc/regionset}/README
+
+    runHook postInstall
   '';
 
   meta = {

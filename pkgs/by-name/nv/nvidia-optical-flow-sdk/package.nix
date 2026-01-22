@@ -19,8 +19,12 @@ stdenv.mkDerivation {
   # # We only need the header files. The library files are
   # # in the nvidia_x11 driver.
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/include
     cp -R * $out/include
+
+    runHook postInstall
   '';
 
   # Makes setupCudaHook propagate nvidia-optical-flow-sdk together with cuda

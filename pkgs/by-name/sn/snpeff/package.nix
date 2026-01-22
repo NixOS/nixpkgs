@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
   sourceRoot = "snpEff";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/libexec/snpeff
     cp *.jar *.config $out/libexec/snpeff
 
@@ -36,6 +38,8 @@ stdenv.mkDerivation rec {
     # camelCase is the default
     ln -s $out/bin/snpeff $out/bin/snpEff
     ln -s $out/bin/snpsift $out/bin/snpSift
+
+    runHook postInstall
   '';
 
   meta = {

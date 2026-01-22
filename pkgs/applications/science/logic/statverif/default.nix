@@ -26,9 +26,13 @@ stdenv.mkDerivation rec {
   patchPhase = "patch -p1 < ${pf-patch}";
   buildPhase = "./build";
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp ./proverif      $out/bin/statverif
     cp ./proveriftotex $out/bin/statveriftotex
+
+    runHook postInstall
   '';
 
   meta = {

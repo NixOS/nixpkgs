@@ -16,7 +16,11 @@ let
       hash = "sha256-c8FirHc+J5Y439g0BdHxRtXVrOAzIrGEKA0m1mp9b/U=";
     };
     installPhase = ''
+      runHook preInstall
+
       cp -r $src $out
+
+      runHook postInstall
     '';
   };
   run-nextflow-pipeline = pkgs.writeShellApplication {

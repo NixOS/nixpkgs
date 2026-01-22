@@ -36,6 +36,8 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     install -m 0755 netevent $out/bin/
 
@@ -43,6 +45,8 @@ stdenv.mkDerivation {
 
     mkdir -p $doc/share/doc/netevent
     cp doc/netevent.rst $doc/share/doc/netevent/netevent.rst
+
+    runHook postInstall
   '';
 
   meta = {

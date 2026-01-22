@@ -21,10 +21,14 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     install -m755 -D $src/gatk-package-${version}-local.jar $out/bin/
     install -m755 -D $src/gatk-package-${version}-spark.jar $out/bin/
     install -m755 -D $src/gatk $out/bin/
+
+    runHook postInstall
   '';
   postFixup = ''
     wrapProgram $out/bin/gatk --prefix PATH : ${lib.makeBinPath [ jre ]}

@@ -25,9 +25,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ rubyEnv.wrappedRuby ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp *.rb $out/bin/
     mv $out/bin/cewl.rb $out/bin/cewl
+
+    runHook postInstall
   '';
 
   passthru.updateScript = bundlerUpdateScript "cewl";

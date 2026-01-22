@@ -29,11 +29,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   buildInputs = lib.optionals withNode [ nodejs ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,libexec/yarn/,share/bash-completion/completions/}
     cp -R . $out/libexec/yarn
     ln -s $out/libexec/yarn/bin/yarn.js $out/bin/yarn
     ln -s $out/libexec/yarn/bin/yarn.js $out/bin/yarnpkg
     ln -s ${completion}/yarn-completion.bash $out/share/bash-completion/completions/yarn.bash
+
+    runHook postInstall
   '';
 
   passthru = {

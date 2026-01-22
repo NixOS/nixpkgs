@@ -25,6 +25,8 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     if [ -z "$(ls -A rkboot)" ]; then
       echo "Error: The 'rkboot' directory is empty."
@@ -32,6 +34,8 @@ stdenv.mkDerivation {
     else
       mv rkboot $out/bin
     fi
+
+    runHook postInstall
   '';
 
   meta = {

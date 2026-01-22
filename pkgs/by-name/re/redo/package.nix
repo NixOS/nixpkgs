@@ -25,7 +25,11 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     package/export $out/
+
+    runHook postInstall
   '';
 
   meta = {

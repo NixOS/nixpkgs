@@ -39,6 +39,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     install -m 755 sieve-connect $out/bin
     installManPage sieve-connect.1
@@ -57,6 +59,8 @@ stdenv.mkDerivation rec {
           TermReadLineGnu
         ]
       }"
+
+    runHook postInstall
   '';
 
   meta = {

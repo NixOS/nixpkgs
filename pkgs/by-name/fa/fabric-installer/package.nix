@@ -23,11 +23,15 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,lib/fabric}
 
     cp $src $out/lib/fabric/fabric-installer.jar
     makeWrapper ${jre}/bin/java $out/bin/fabric-installer \
       --add-flags "-jar $out/lib/fabric/fabric-installer.jar"
+
+    runHook postInstall
   '';
 
   meta = {

@@ -20,8 +20,12 @@ stdenvNoCC.mkDerivation {
   nativeBuildInputs = [ unzip ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/Applications
     cp -R Fastmail.app $out/Applications/
+
+    runHook postInstall
   '';
 
   dontBuild = true;

@@ -22,9 +22,13 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp aescrypt $out/bin
     cp aescrypt_keygen $out/bin
+
+    runHook postInstall
   '';
 
   buildInputs = [ libiconv ];

@@ -36,8 +36,12 @@ stdenv.mkDerivation rec {
   patches = [ ./eid.patch ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/pcsc/drivers
     cp -r proprietary/*.bundle $out/pcsc/drivers
+
+    runHook postInstall
   '';
 
   libPath = lib.makeLibraryPath [ libusb-compat-0_1 ];

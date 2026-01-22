@@ -47,9 +47,13 @@ buildGoModule rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 bin/* -t $out/bin
     install -Dm644 oci-seccomp-bpf-hook.json -t $out
     installManPage docs/*.[1-9]
+
+    runHook postInstall
   '';
 
   meta = {

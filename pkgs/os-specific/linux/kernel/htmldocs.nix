@@ -43,9 +43,13 @@ stdenv.mkDerivation {
   makeFlags = [ "htmldocs" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/doc
     mv Documentation/output $out/share/doc/linux-doc
     cp -r Documentation/* $out/share/doc/linux-doc/
+
+    runHook postInstall
   '';
 
   meta = {

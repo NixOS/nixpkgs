@@ -28,9 +28,13 @@ stdenv.mkDerivation {
   # The "linuxinstall" target won't work for us:
   # it tries to setcap and copy to a FHS directory
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,share/man/man1}
     cp cnping $out/bin/cnping
     cp cnping.1 $out/share/man/man1/cnping.1
+
+    runHook postInstall
   '';
 
   meta = {

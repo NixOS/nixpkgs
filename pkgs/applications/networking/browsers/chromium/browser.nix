@@ -22,6 +22,8 @@ mkChromiumDerivation (base: rec {
   sandboxExecutableName = "__chromium-suid-sandbox";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$libExecPath"
     cp -v "$buildPath/"*.so "$buildPath/"*.pak "$buildPath/"*.bin "$libExecPath/"
     cp -v "$buildPath/libvulkan.so.1" "$libExecPath/"
@@ -76,6 +78,8 @@ mkChromiumDerivation (base: rec {
       echo "error: chromium-browser.desktop contains unsubstituted placeholders" >&2
       exit 1
     fi
+
+    runHook postInstall
   '';
 
   passthru = { inherit sandboxExecutableName; };

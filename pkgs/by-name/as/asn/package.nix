@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dv asn "$out/bin/asn"
 
     wrapProgram $out/bin/asn \
@@ -46,6 +48,8 @@ stdenv.mkDerivation rec {
           aha
         ]
       }"
+
+    runHook postInstall
   '';
 
   meta = {

@@ -19,7 +19,11 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -vD hyx $out/bin/hyx
+
+    runHook postInstall
   '';
 
   meta = {

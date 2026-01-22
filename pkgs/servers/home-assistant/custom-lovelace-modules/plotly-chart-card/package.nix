@@ -46,8 +46,12 @@ buildNpmPackage.override { nodejs = nodejs_22; } rec {
   env.ESBUILD_BINARY_PATH = lib.getExe esbuild;
 
   installPhase = ''
+    runHook preInstall
+
     install -d $out
     install -m0644 dist/plotly-graph-card.js $out/
+
+    runHook postInstall
   '';
 
   meta = {

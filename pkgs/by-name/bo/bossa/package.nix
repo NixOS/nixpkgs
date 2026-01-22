@@ -17,7 +17,7 @@ let
     src = ./bin2c.c;
     dontUnpack = true;
     buildPhase = "cc $src -o bin2c";
-    installPhase = "mkdir -p $out/bin; cp bin2c $out/bin/";
+    installPhase = "runHook preInstall; mkdir -p $out/bin; cp bin2c $out/bin/; runHook postInstall";
   };
 
 in
@@ -71,8 +71,12 @@ stdenv.mkDerivation rec {
   );
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp bin/bossa{c,sh,} $out/bin/
+
+    runHook postInstall
   '';
 
   meta = {

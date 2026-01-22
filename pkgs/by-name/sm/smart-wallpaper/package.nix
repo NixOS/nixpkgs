@@ -24,6 +24,8 @@ stdenvNoCC.mkDerivation {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 -t $out/bin smart-wallpaper
     wrapProgram $out/bin/smart-wallpaper \
       --prefix PATH : ${
@@ -35,6 +37,8 @@ stdenvNoCC.mkDerivation {
           redshift
         ]
       }
+
+    runHook postInstall
   '';
 
   meta = {

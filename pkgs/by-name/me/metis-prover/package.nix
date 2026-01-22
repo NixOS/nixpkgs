@@ -25,7 +25,11 @@ stdenv.mkDerivation {
   buildPhase = "make mlton";
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm0755 bin/mlton/metis $out/bin/metis
+
+    runHook postInstall
   '';
 
   meta = {

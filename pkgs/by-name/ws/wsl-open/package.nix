@@ -19,8 +19,12 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ installShellFiles ];
 
   installPhase = ''
+    runHook preInstall
+
     install -m0755 -D wsl-open.sh $out/bin/wsl-open
     installManPage wsl-open.1
+
+    runHook postInstall
   '';
 
   meta = {

@@ -37,8 +37,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/doc/csound
     cp -r ./html $out/share/doc/csound
+
+    runHook postInstall
   '';
 
   meta = {

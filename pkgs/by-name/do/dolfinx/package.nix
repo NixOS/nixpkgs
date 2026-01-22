@@ -91,7 +91,11 @@ stdenv.mkDerivation (finalAttrs: {
       doCheck = true;
 
       installPhase = ''
+        runHook preInstall
+
         touch $out
+
+        runHook postInstall
       '';
     };
   };

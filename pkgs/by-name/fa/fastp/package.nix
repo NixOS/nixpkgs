@@ -25,7 +25,11 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D fastp $out/bin/fastp
+
+    runHook postInstall
   '';
 
   meta = {

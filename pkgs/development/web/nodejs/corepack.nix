@@ -13,10 +13,14 @@ stdenv.mkDerivation {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     corepack enable --install-directory $out/bin
     # Enabling npm caused some crashes - leaving out for now
     # corepack enable --install-directory $out/bin npm
+
+    runHook postInstall
   '';
 
   meta = {

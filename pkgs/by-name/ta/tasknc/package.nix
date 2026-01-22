@@ -42,6 +42,8 @@ stdenv.mkDerivation rec {
   buildFlags = [ "VERSION=${version}" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin/
     mkdir -p $out/share/man/man1
     mkdir -p $out/share/tasknc
@@ -49,6 +51,8 @@ stdenv.mkDerivation rec {
     DESTDIR=$out PREFIX= MANPREFIX=/share/man make install
 
     wrapProgram $out/bin/tasknc --prefix PATH : ${taskwarrior2}/bin
+
+    runHook postInstall
   '';
 
   meta = {

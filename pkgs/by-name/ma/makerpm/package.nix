@@ -12,8 +12,12 @@ stdenv.mkDerivation rec {
   pname = "makerpm";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp makerpm $out/bin
+
+    runHook postInstall
   '';
 
   buildInputs = [

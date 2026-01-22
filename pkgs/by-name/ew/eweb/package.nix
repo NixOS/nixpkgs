@@ -21,9 +21,13 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -d $out/bin $out/share/doc/${pname}-${version}
     cp etangle.py $out/bin
     cp etangle.w etangle.html $out/share/doc/${pname}-${version}
+
+    runHook postInstall
   '';
 
   meta = {

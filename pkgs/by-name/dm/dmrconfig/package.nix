@@ -44,9 +44,13 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/lib/udev/rules.d
     make install
     install 99-dmr.rules $out/lib/udev/rules.d/99-dmr.rules
+
+    runHook postInstall
   '';
 
   meta = {

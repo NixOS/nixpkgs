@@ -44,6 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,share/pdftk}
     cp build/libs/pdftk-all.jar $out/share/pdftk
 
@@ -51,6 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
       --add-flags "-jar $out/share/pdftk/pdftk-all.jar"
 
     cp ${finalAttrs.src}/pdftk.1 $out/share/man/man1
+
+    runHook postInstall
   '';
 
   meta.sourceProvenance = with lib.sourceTypes; [

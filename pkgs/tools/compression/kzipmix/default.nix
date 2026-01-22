@@ -14,11 +14,15 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp amd64/{kzip,zipmix} $out/bin
 
     patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux.so.2 $out/bin/kzip
     patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux.so.2 $out/bin/zipmix
+
+    runHook postInstall
   '';
 
   meta = {

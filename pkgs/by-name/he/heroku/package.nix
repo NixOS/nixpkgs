@@ -21,12 +21,16 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/heroku $out/bin
     cp -pr * $out/share/heroku
     substituteInPlace $out/share/heroku/bin/run \
       --replace "/usr/bin/env node" "${nodejs}/bin/node"
     makeWrapper $out/share/heroku/bin/run $out/bin/heroku \
       --set HEROKU_DISABLE_AUTOUPDATE 1
+
+    runHook postInstall
   '';
 
   passthru.updateScript = writeScript "update-heroku" ''

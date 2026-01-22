@@ -24,10 +24,14 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm0755 vcs_query.py $out/bin/vcs_query
     patchShebangs $out/bin
     buildPythonPath ${python3.pkgs.vobject};
     patchPythonScript $out/bin/vcs_query
+
+    runHook postInstall
   '';
 
   meta = {

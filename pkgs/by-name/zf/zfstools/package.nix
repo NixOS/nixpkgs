@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp bin/* $out/bin/
 
@@ -33,6 +35,8 @@ stdenv.mkDerivation rec {
         --set RUBYLIB $out/lib \
         --prefix PATH : ${if stdenv.hostPlatform.isFreeBSD then freebsd.zfs else zfs}/bin
     done
+
+    runHook postInstall
   '';
 
   meta = {

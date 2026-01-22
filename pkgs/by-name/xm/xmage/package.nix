@@ -32,6 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
       strVersion = lib.substring 0 6 finalAttrs.version;
     in
     ''
+      runHook preInstall
+
       mkdir -p $out/bin
       cp -rv ./* $out
 
@@ -40,6 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
       EOS
 
       chmod +x $out/bin/xmage
+
+      runHook postInstall
     '';
 
   meta = {

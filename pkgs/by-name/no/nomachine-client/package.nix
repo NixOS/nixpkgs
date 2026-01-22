@@ -55,6 +55,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     rm bin/nxplayer bin/nxrunner
 
     mkdir -p $out/NX
@@ -79,6 +81,8 @@ stdenv.mkDerivation rec {
     for i in $out/share/applications/*.desktop; do
       substituteInPlace "$i" --replace /usr/NX/bin $out/bin
     done
+
+    runHook postInstall
   '';
 
   postFixup = ''

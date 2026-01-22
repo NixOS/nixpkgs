@@ -78,10 +78,14 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = false;
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 pgloader-bundle-${finalAttrs.version}/bin/pgloader "$out/bin/pgloader"
     wrapProgram $out/bin/pgloader --prefix LD_LIBRARY_PATH : "${finalAttrs.LD_LIBRARY_PATH}"
     mkdir -p $out/bin $out/man/man1
     installManPage source/docs/_build/man/*.1
+
+    runHook postInstall
   '';
 
   meta = {

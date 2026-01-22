@@ -17,6 +17,8 @@ stdenvNoCC.mkDerivation {
 
   dontBuild = true;
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/plasma/desktoptheme
     cp -R KDE/plasmaTheme/Aritim-Dark* $out/share/plasma/desktoptheme
     mkdir -p $out/share/aurorae/themes
@@ -27,6 +29,8 @@ stdenvNoCC.mkDerivation {
     cp -R KDE/globalTheme $out/share/plasma/look-and-feel/Aritim-Dark
     mkdir -p $out/share/themes
     cp -R GTK $out/share/themes/Aritim-Dark
+
+    runHook postInstall
   '';
 
   meta = {

@@ -14,8 +14,12 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/share/combinatorial_designs"
     mv * "$out/share/combinatorial_designs"
+
+    runHook postInstall
   '';
 
   meta = {

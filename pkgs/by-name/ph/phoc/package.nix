@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
         inherit (finalAttrs) src;
         preferLocalBuild = true;
         allowSubstitutes = false;
-        installPhase = "cp subprojects/packagefiles/wlroots/$name $out";
+        installPhase = "runHook preInstall; cp subprojects/packagefiles/wlroots/$name $out; runHook postInstall";
       })
     ];
   });

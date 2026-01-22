@@ -26,6 +26,8 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib/firmware/brcm
     bt-fw-converter -f bcbtums.inf -o $out/lib/firmware/brcm
     for filename in $out/lib/firmware/brcm/*.hcd
@@ -36,6 +38,8 @@ stdenvNoCC.mkDerivation rec {
         ln -s --relative -T $filename $out/lib/firmware/brcm/$linkname
       fi
     done
+
+    runHook postInstall
   '';
 
   outputHashMode = "recursive";

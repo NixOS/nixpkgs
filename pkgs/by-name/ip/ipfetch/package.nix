@@ -30,6 +30,8 @@ stdenv.mkDerivation {
     substituteInPlace ./ipfetch --replace-fail /usr/share/ipfetch $out/usr/share/ipfetch/flags
   '';
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mkdir -p $out/usr/share/ipfetch/
     cp -r flags $out/usr/share/ipfetch/
@@ -40,6 +42,8 @@ stdenv.mkDerivation {
         wget
       ]
     }
+
+    runHook postInstall
   '';
 
   meta = {

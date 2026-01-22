@@ -36,10 +36,14 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
     cp RYMCast "$out/bin/"
     wrapProgram "$out/bin/RYMCast" \
       --set PATH "${lib.makeBinPath [ zenity ]}"
+
+    runHook postInstall
   '';
 
   meta = {

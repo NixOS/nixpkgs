@@ -33,8 +33,12 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/wimboot/
     cp wimboot.x86_64.efi $out/share/wimboot
+
+    runHook postInstall
   '';
 
   meta = {

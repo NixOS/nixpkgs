@@ -48,6 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     wrapBin() {
       makeWrapper $1 $out/bin/$(basename $1) \
         --set INSTALL4J_JAVA_HOME "${openjdk17}" \
@@ -81,6 +83,8 @@ stdenv.mkDerivation (finalAttrs: {
           "MarvinView"
         ]
     )}
+
+    runHook postInstall
   '';
 
   meta = {

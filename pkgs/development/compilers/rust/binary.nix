@@ -53,6 +53,8 @@ rec {
     '';
 
     installPhase = ''
+      runHook preInstall
+
       ./install.sh --prefix=$out \
         --components=${installComponents}
 
@@ -65,6 +67,8 @@ rec {
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       install_name_tool -change "/usr/lib/libcurl.4.dylib" \
       "${lib.getLib curl}/lib/libcurl.4.dylib" "$out/bin/cargo"
+
+      runHook postInstall
     '';
 
     # The strip tool in cctools 973.0.1 and up appears to break rlibs in the
@@ -162,6 +166,8 @@ rec {
     '';
 
     installPhase = ''
+      runHook preInstall
+
       patchShebangs ./install.sh
       ./install.sh --prefix=$out \
         --components=cargo
@@ -173,6 +179,8 @@ rec {
     + ''
       wrapProgram "$out/bin/cargo" \
         --suffix PATH : "${rustc}/bin"
+
+      runHook postInstall
     '';
   };
 }

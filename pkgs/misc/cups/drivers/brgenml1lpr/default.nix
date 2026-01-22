@@ -83,6 +83,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     INFDIR=opt/brother/Printers/BrGenML1/inf
     LPDDIR=opt/brother/Printers/BrGenML1/lpd
 
@@ -94,6 +96,8 @@ stdenv.mkDerivation rec {
     wrapProgram $out/$LPDDIR/filter_BrGenML1 \
       --prefix PATH ":" "${ghostscript}/bin" \
       --prefix PATH ":" "${which}/bin"
+
+    runHook postInstall
   '';
 
   dontPatchELF = true;

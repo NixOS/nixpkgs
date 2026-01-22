@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     install -m0755 -D src/somafm $out/bin/somafm
     wrapProgram $out/bin/somafm --prefix PATH ":" "${
       lib.makeBinPath [
@@ -30,6 +32,8 @@ stdenv.mkDerivation rec {
         mpv
       ]
     }";
+
+    runHook postInstall
   '';
 
   meta = {

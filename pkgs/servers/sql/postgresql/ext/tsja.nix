@@ -30,9 +30,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib $out/share/postgresql/extension
     mv libtsja.so $out/lib
     mv dbinit_libtsja.txt $out/share/postgresql/extension/libtsja_dbinit.sql
+
+    runHook postInstall
   '';
 
   passthru.tests.extension = postgresqlTestExtension {

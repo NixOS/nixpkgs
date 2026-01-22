@@ -27,7 +27,11 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D lguf_brightness $out/bin/lguf_brightness
+
+    runHook postInstall
   '';
 
   meta = {

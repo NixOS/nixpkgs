@@ -29,8 +29,12 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [ "-DHADOOP_CONF_DIR=/run/wrappers/yarn-nodemanager/etc/hadoop" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
     mv target/usr/local/bin $out/
+
+    runHook postInstall
   '';
 
   meta = {

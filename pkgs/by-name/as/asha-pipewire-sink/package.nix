@@ -32,7 +32,11 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 asha_connection_test snoop_analyze asha_stream_test asha_pipewire_sink -t $out/bin
+
+    runHook postInstall
   '';
 
   meta = {

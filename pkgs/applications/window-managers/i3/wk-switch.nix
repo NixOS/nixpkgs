@@ -22,8 +22,12 @@ python3Packages.buildPythonApplication {
   doCheck = false;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
     cp i3-wk-switch.py "$out/bin/i3-wk-switch"
+
+    runHook postInstall
   '';
 
   meta = {

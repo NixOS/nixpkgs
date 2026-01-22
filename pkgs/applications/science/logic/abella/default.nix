@@ -33,6 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     rsync -av _build/default/src/abella.exe    $out/bin/abella
 
@@ -41,6 +43,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/share/abella/examples
     rsync -av examples/ $out/share/abella/examples/
+
+    runHook postInstall
   '';
 
   meta = {

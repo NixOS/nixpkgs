@@ -35,6 +35,8 @@ stdenv.mkDerivation {
 
   # Don't install `x11docker-gui`, because requires `kaptain` dependency
   installPhase = ''
+    runHook preInstall
+
     install -D x11docker "$out/bin/x11docker";
     wrapProgram "$out/bin/x11docker" \
       --prefix PATH : "${
@@ -62,6 +64,8 @@ stdenv.mkDerivation {
           xwayland
         ]
       }"
+
+    runHook postInstall
   '';
 
   meta = {

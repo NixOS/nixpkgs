@@ -22,8 +22,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     cp spam-filter.toml $out/
+
+    runHook postInstall
   '';
 
   passthru = {

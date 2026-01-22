@@ -58,6 +58,8 @@ buildGoModule rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install out/minikube -Dt $out/bin
 
     wrapProgram $out/bin/minikube --set MINIKUBE_WANTUPDATENOTIFICATION false
@@ -67,6 +69,8 @@ buildGoModule rec {
       $out/bin/minikube completion $shell > minikube.$shell
       installShellCompletion minikube.$shell
     done
+
+    runHook postInstall
   '';
 
   meta = {

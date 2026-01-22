@@ -20,8 +20,12 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out
       mv * $out/
+
+      runHook postInstall
     '';
   };
 

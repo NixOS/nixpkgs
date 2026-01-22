@@ -1102,7 +1102,7 @@ rec {
       cat $src | aspell-affix en-computers --dont-validate-words --lang=en
       runHook postBuild
     '';
-    installPhase = "aspell-install en-computers";
+    installPhase = "runHook preInstall; aspell-install en-computers; runHook postInstall";
 
     meta = {
       homepage = "https://mrsatterly.com/spelling.html";
@@ -1133,7 +1133,7 @@ rec {
       cat $src2 | aspell-plain en_GB-science --dont-validate-words --lang=en
       runHook postBuild
     '';
-    installPhase = "aspell-install en_US-science en_GB-science";
+    installPhase = "runHook preInstall; aspell-install en_US-science en_GB-science; runHook postInstall";
 
     meta = {
       homepage = "https://web.archive.org/web/20210425104207/http://www.jpetrie.net/scientific-word-list-for-spell-checkersspelling-dictionaries/";

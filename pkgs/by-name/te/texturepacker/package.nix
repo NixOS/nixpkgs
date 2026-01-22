@@ -29,10 +29,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/lib
     cp usr/lib/texturepacker/{libGrantlee_Templates.so.5,libHQX.so.1.0.0,libPVRTexLib.so} $out/lib
     cp usr/lib/texturepacker/TexturePacker $out/bin
     cp -r usr/share $out
+
+    runHook postInstall
   '';
 
   meta = {

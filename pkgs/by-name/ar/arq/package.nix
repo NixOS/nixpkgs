@@ -30,8 +30,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     cp -R Applications $out
+
+    runHook postInstall
   '';
 
   dontBuild = true;

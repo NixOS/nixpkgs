@@ -35,6 +35,8 @@ stdenvNoCC.mkDerivation rec {
       sedString = "ConfigFile=Themes/";
     in
     ''
+      runHook preInstall
+
       mkdir -p ${basePath}
       cp -r $src/* ${basePath}
     ''
@@ -47,6 +49,8 @@ stdenvNoCC.mkDerivation rec {
     + lib.optionalString (themeConfig != null) ''
       chmod u+w ${basePath}/Themes/
       ln -sf ${configFile} ${basePath}/Themes/${embeddedTheme}.conf.user
+
+      runHook postInstall
     '';
 
   meta = {

@@ -34,8 +34,12 @@ stdenv.mkDerivation (finalAttrs: {
   buildFlags = [ "modules" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/ethernet/realtek
     cp src/r8125.ko $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/ethernet/realtek/
+
+    runHook postInstall
   '';
 
   meta = {

@@ -37,6 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     binPath=$out/bin
     libexecPath=$out/libexec/fast-export
     sitepackagesPath=$out/${mercurial.python.sitePackages}
@@ -54,6 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
         --prefix PATH : "${gitMinimal}/bin":"${mercurial.python}/bin":$libexec \
         --prefix PYTHONPATH : "${mercurial}/${mercurial.python.sitePackages}":$sitepackagesPath
     done
+
+    runHook postInstall
   '';
 
   doInstallCheck = true;

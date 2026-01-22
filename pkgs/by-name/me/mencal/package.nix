@@ -15,8 +15,12 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp mencal $out/bin/
+
+    runHook postInstall
   '';
 
   buildInputs = [ perl ];

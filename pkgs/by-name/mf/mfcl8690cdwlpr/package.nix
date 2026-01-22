@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     dpkg-deb -x $src $out
 
     dir=$out/opt/brother/Printers/mfcl8690cdw
@@ -56,6 +58,8 @@ stdenv.mkDerivation rec {
     # need to use i686 glibc here, these are 32bit proprietary binaries
     interpreter=${pkgs.pkgsi686Linux.glibc}/lib/ld-linux.so.2
     patchelf --set-interpreter "$interpreter" $dir/lpd/brmfcl8690cdwfilter
+
+    runHook postInstall
   '';
 
   meta = {

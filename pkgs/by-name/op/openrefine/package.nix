@@ -39,8 +39,12 @@ let
 
     dontNpmBuild = true;
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out
       cp -r modules/core/3rdparty/* $out/
+
+      runHook postInstall
     '';
   };
 
@@ -63,6 +67,8 @@ maven.buildMavenPackage {
   doCheck = false;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib/server/target/lib
     cp -r server/target/lib/* $out/lib/server/target/lib/
     cp server/target/openrefine-*-server.jar $out/lib/server/target/lib/
@@ -84,6 +90,8 @@ maven.buildMavenPackage {
 
     mkdir -p $out/bin
     cp refine $out/bin/
+
+    runHook postInstall
   '';
 
   preFixup = ''

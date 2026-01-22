@@ -35,12 +35,16 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--sysconfdir=${confdir}" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,etc}
     cp reaver.db $out/etc/
     cp reaver wash $out/bin/
 
     wrapProgram $out/bin/reaver --run "[ -s ${confdir}/reaver/reaver.db ] || install -D $out/etc/reaver.db ${confdir}/reaver/reaver.db"
     wrapProgram $out/bin/wash   --run "[ -s ${confdir}/reaver/reaver.db ] || install -D $out/etc/reaver.db ${confdir}/reaver/reaver.db"
+
+    runHook postInstall
   '';
 
   enableParallelBuilding = true;

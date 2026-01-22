@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
       so = stdenv.hostPlatform.extensions.library;
     in
     ''
+      runHook preInstall
+
       # This is pretty horrible but sadly there is not installation procedure
       # provided.
       mkdir -p $dev/include
@@ -47,6 +49,8 @@ stdenv.mkDerivation rec {
     ''
     + ''
       ln -s libopenfec${so} $out/lib/libopenfec${so}.1
+
+      runHook postInstall
     '';
 
   passthru.updateScript = gitUpdater {

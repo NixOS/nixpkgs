@@ -32,10 +32,14 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp metapixel $out/bin/metapixel
     cp metapixel-prepare $out/bin/metapixel-prepare
     cp metapixel-sizesort $out/bin/metapixel-sizesort
+
+    runHook postInstall
   '';
 
   meta = {

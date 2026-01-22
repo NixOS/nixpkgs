@@ -22,8 +22,12 @@ callPackage ./common.nix { } {
   # Somehow building the info still does not work, because the final
   # libc.info hasn't a Top node.
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/share/info"
     cp -v "manual/"*.info* "$out/share/info"
+
+    runHook postInstall
   '';
 
   meta.description = "GNU Info manual of the GNU C Library";

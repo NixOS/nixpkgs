@@ -17,9 +17,13 @@ buildNimPackage {
   lockFile = ./lock.json;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/lib/mozilla/native-messaging-hosts"
     sed -i -e "s|REPLACE_ME_WITH_SED|$out/bin/native_main|" "tridactyl.json"
     cp tridactyl.json "$out/lib/mozilla/native-messaging-hosts/"
+
+    runHook postInstall
   '';
 
   meta = {

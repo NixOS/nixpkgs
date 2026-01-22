@@ -22,8 +22,12 @@ let
     dontConfigure = true;
     buildPhase = "true";
     installPhase = ''
+      runHook preInstall
+
       substituteInPlace contrib/collection.cgi --replace '"/etc/collection.conf"' '$ENV{COLLECTION_CONF}'
       cp contrib/collection.cgi $out
+
+      runHook postInstall
     '';
   });
 in

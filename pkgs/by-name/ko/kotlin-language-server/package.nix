@@ -19,10 +19,14 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib
     mkdir -p $out/bin
     cp -r lib/* $out/lib
     cp -r bin/* $out/bin
+
+    runHook postInstall
   '';
 
   nativeBuildInputs = [

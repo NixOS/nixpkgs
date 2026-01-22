@@ -29,11 +29,15 @@ stdenv.mkDerivation rec {
   sourceRoot = ".";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fonts/opentype
     mkdir -p $out/share/doc/${pname}-${version}
     cp -v "libre-caslon-text-${version}-src/fonts/OTF/"*.otf $out/share/fonts/opentype/
     cp -v "libre-caslon-display-${version}-src/fonts/OTF/"*.otf $out/share/fonts/opentype/
     cp -v libre-caslon-text-${version}-src/README.md libre-caslon-text-${version}-src/FONTLOG.txt $out/share/doc/${pname}-${version}
+
+    runHook postInstall
   '';
 
   outputHashAlgo = "sha256";

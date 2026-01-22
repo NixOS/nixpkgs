@@ -23,6 +23,8 @@ maven.buildMavenPackage rec {
   nativeBuildInputs = [ jdk11 ];
 
   installPhase = ''
+    runHook preInstall
+
     cp -r modules/application/target/gephi $out
 
     # remove garbage
@@ -35,6 +37,8 @@ maven.buildMavenPackage rec {
     cp ${jogl}/share/java/glue*.jar $out/gephi/modules/ext/org.gephi.visualization/org-jogamp-gluegen/
 
     printf "\n\njdkhome=${jdk11}\n" >> $out/etc/gephi.conf
+
+    runHook postInstall
   '';
 
   meta = {

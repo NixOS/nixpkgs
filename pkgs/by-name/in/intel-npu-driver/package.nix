@@ -65,9 +65,13 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     cmake --install . --component level-zero-npu
     cmake --install . --component validation-npu
     cmake --install . --component fw-npu
+
+    runHook postInstall
   '';
 
   meta = {

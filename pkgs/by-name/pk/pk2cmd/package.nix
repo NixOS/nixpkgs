@@ -20,10 +20,14 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/pk2
     cp pk2cmd $out/bin
     cp PK2DeviceFile.dat $out/share/pk2
     wrapProgram $out/bin/pk2cmd --prefix PATH : $out/share/pk2
+
+    runHook postInstall
   '';
 
   nativeBuildInputs = [ makeWrapper ];

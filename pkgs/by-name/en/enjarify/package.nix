@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     pypath="$out/${python3.sitePackages}"
     mkdir -p $out/bin $pypath
     mv enjarify $pypath
@@ -28,6 +30,8 @@ stdenv.mkDerivation rec {
     exec ${python3.interpreter} -O -m enjarify.main "\$@"
     EOF
     chmod +x $out/bin/enjarify
+
+    runHook postInstall
   '';
 
   meta = {

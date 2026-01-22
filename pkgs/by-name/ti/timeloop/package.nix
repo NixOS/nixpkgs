@@ -84,11 +84,15 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableISL "--with-isl";
 
   installPhase = ''
+    runHook preInstall
+
     cp -r ./bin ./lib $out
     mkdir -p $out/share
     cp -r ./doc $out/share
     mkdir -p $out/data
     cp -r ./problem-shapes ./configs $out/data
+
+    runHook postInstall
   '';
 
   meta = {

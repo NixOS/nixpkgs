@@ -52,6 +52,8 @@ let
     ];
 
     installPhase = ''
+      runHook preInstall
+
       install -dm755 $out/bin $out/opt/udig
       cp -r . $out/opt/udig
       makeWrapper $out/opt/udig/udig.sh $out/bin/udig \
@@ -62,6 +64,8 @@ let
             gdal
           ]
         }
+
+      runHook postInstall
     '';
 
     postFixup = ''
@@ -90,10 +94,14 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/Applications/udig
       cp -R . $out/Applications/udig
       wrapProgram $out/Applications/udig/udig.app/Contents/MacOS/udig_internal \
         --prefix DYLD_LIBRARY_PATH : ${lib.makeLibraryPath [ gdal ]}
+
+      runHook postInstall
     '';
   };
 in

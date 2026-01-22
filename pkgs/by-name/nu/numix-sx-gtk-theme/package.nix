@@ -21,8 +21,12 @@ stdenv.mkDerivation {
   sourceRoot = ".";
 
   installPhase = ''
+    runHook preInstall
+
     install -dm 755 "$out/share/themes/"
     cp -dr --no-preserve='ownership' Numix-SX-{Dark,FullDark,Light} "$out/share/themes/"
+
+    runHook postInstall
   '';
 
   meta = {

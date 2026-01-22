@@ -32,6 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapGApps = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -r dist lib share $out/
     cp tuxguitar.sh $out/bin/tuxguitar
@@ -39,6 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/dist $out/bin/dist
     ln -s $out/lib $out/bin/lib
     ln -s $out/share $out/bin/share
+
+    runHook postInstall
   '';
 
   postFixup = ''

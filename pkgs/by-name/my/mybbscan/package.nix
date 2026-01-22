@@ -26,11 +26,15 @@ python3Packages.buildPythonPackage rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,share/mybbscan}
     cp -R * $out/share/mybbscan
     makeWrapper ${python3.interpreter} $out/bin/mybbscan \
       --set PYTHONPATH "$PYTHONPATH:$out/share/mybbscan/scan.py" \
       --add-flags "$out/share/mybbscan/scan.py"
+
+    runHook postInstall
   '';
 
   meta = {

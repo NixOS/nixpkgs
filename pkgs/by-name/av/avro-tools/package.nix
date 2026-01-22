@@ -24,12 +24,16 @@ stdenv.mkDerivation {
   sourceRoot = ".";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mkdir -p $out/libexec/avro-tools
     cp $src $out/libexec/avro-tools/${pname}.jar
 
     makeWrapper ${jre}/bin/java $out/bin/avro-tools \
     --add-flags "-jar $out/libexec/avro-tools/${pname}.jar"
+
+    runHook postInstall
   '';
 
   meta = {

@@ -21,7 +21,11 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     install LAC -D -t $out/bin
+
+    runHook postInstall
   '';
 
   meta = {

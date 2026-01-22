@@ -28,9 +28,13 @@ stdenv.mkDerivation rec {
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp nbench $out/bin
     cp NNET.DAT $out
+
+    runHook postInstall
   '';
 
   meta = {

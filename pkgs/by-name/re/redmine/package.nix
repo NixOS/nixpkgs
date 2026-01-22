@@ -51,6 +51,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share
     cp -r . $out/share/redmine
     mkdir $out/share/redmine/public/assets
@@ -60,6 +62,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     done
 
     makeWrapper ${rubyEnv.wrappedRuby}/bin/ruby $out/bin/rdm-mailhandler.rb --add-flags $out/share/redmine/extra/mail_handler/rdm-mailhandler.rb
+
+    runHook postInstall
   '';
 
   passthru.tests.redmine = nixosTests.redmine;

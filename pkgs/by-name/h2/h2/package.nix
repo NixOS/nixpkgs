@@ -31,6 +31,8 @@ maven.buildMavenPackage rec {
   doCheck = false;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/java
     install -Dm644 h2/target/h2-${version}.jar $out/share/java
 
@@ -39,6 +41,8 @@ maven.buildMavenPackage rec {
 
     mkdir -p $doc/share/doc/h2
     cp -r h2/src/docsrc/* $doc/share/doc/h2
+
+    runHook postInstall
   '';
 
   passthru.updateScript = nix-update-script {

@@ -36,7 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 clit $out/bin/clit
+
+    runHook postInstall
   '';
 
   meta = {

@@ -19,10 +19,14 @@ stdenvNoCC.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp ${generator-out}/bin/protoc-gen-nanopb $out/bin/
     cp ${generator-out}/bin/nanopb_generator $out/bin/
     wrapPythonPrograms
     cp ${generator-out}/bin/nanopb_generator.py $out/bin/
+
+    runHook postInstall
   '';
 }

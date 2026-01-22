@@ -39,10 +39,14 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mkdir -p $out/lib
     cp src/Xsynth_gtk $out/bin
     cp src/.libs/* $out/lib
+
+    runHook postInstall
   '';
 
   meta = {

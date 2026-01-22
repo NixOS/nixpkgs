@@ -43,6 +43,8 @@ stdenv.mkDerivation rec {
 
     in
     ''
+      runHook preInstall
+
       mkdir -pv "$out/share/ganttproject"
       cp -rv *  "$out/share/ganttproject"
 
@@ -54,6 +56,8 @@ stdenv.mkDerivation rec {
       mv -v "$out/share/ganttproject/ganttproject" "$out/bin"
 
       cp -rv "${desktopItem}/share/applications" "$out/share"
+
+      runHook postInstall
     '';
 
   meta = {

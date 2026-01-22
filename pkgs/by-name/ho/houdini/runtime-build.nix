@@ -13,6 +13,8 @@ stdenv.mkDerivation (
 
     buildInputs = [ bc ];
     installPhase = ''
+      runHook preInstall
+
       patchShebangs houdini.install
       mkdir -p $out
       ./houdini.install --install-houdini \
@@ -25,6 +27,8 @@ stdenv.mkDerivation (
                         $out
       echo "licensingMode = localValidator" >> $out/houdini/Licensing.opt  # does not seem to do anything any more. not sure, official docs do not say anything about it
       sed -i 's@'"$out"'@$HFS@g' $out/packages/package_dirs.json  # this seem to be internal houdini tools unavailable to users anyway, but they break fixed-derivation
+
+      runHook postInstall
     '';
 
     dontFixup = true;

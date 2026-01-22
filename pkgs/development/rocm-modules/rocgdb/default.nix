@@ -95,7 +95,11 @@ stdenv.mkDerivation (finalAttrs: {
   # The source directory for ROCgdb (based on upstream GDB) contains multiple project
   # of GNU’s toolchain (binutils and onther), we only need to install the GDB part.
   installPhase = ''
+    runHook preInstall
+
     make install-gdb
+
+    runHook postInstall
   '';
 
   env.CFLAGS = "-Wno-switch -Wno-format-nonliteral -I${zstd.dev}/include -I${zlib.dev}/include -I${expat.dev}/include -I${ncurses.dev}/include";

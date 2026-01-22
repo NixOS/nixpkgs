@@ -25,9 +25,13 @@ mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     mv ca.*.pem $out/
     mv ${domain}/key.pem $out/${domain}.key.pem
     mv ${domain}/cert.pem $out/${domain}.cert.pem
+
+    runHook postInstall
   '';
 }

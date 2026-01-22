@@ -52,6 +52,8 @@ stdenv.mkDerivation rec {
   buildFlags = [ "CONFIG=Release64" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     install -Dm755 build/helio $out/bin
     wrapProgram $out/bin/helio --prefix PATH ":" ${zenity}/bin
@@ -60,6 +62,8 @@ stdenv.mkDerivation rec {
     cp -r ../Deployment/Linux/Debian/x64/usr/share/* $out/share
     substituteInPlace $out/share/applications/Helio.desktop \
       --replace "/usr/bin/helio" "$out/bin/helio"
+
+    runHook postInstall
   '';
 
   meta = {

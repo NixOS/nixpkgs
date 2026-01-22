@@ -46,9 +46,13 @@ stdenvNoCC.mkDerivation (
     nativeBuildInputs = [ unzip ];
 
     installPhase = ''
+      runHook preInstall
+
       cp -R "." "$out"
       chmod -R a-w "$out"
       chmod u+w "$out"
+
+      runHook postInstall
     '';
 
     passthru = {

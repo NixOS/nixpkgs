@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildPhase = "./build.py";
 
-  installPhase = "./install.py";
+  installPhase = "runHook preInstall; ./install.py; runHook postInstall";
 
   passthru.updateScript = nix-update-script { };
 

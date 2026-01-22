@@ -26,8 +26,12 @@ let
     dontBuild = true;
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p "$out/include"
       cp *.h "$out/include"
+
+      runHook postInstall
     '';
 
     meta = {

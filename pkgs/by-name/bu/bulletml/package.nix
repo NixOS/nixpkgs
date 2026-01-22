@@ -60,6 +60,8 @@ stdenv.mkDerivation {
   hardeningDisable = [ "format" ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D -m 644 src/bulletml.d "$out"/include/d/bulletml.d
     install -d "$out"/include/bulletml/tinyxml
     install -m 644 src/*.h "$out"/include/bulletml
@@ -74,6 +76,8 @@ stdenv.mkDerivation {
     install -m 644 README.bulletml "$out"/share/doc/libbulletml
     install -D -m 644 README "$out"/share/licenses/libbulletml/README.jp
     install -m 644 README.en "$out"/share/licenses/libbulletml
+
+    runHook postInstall
   '';
 
   meta = {

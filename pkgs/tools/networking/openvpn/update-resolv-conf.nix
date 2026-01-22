@@ -30,12 +30,16 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm555 update-resolv-conf.sh $out/libexec/openvpn/update-resolv-conf
     install -Dm555 update-systemd-network.sh $out/libexec/openvpn/update-systemd-network
 
     for i in $out/libexec/openvpn/*; do
       wrapProgram $i --prefix PATH : ${binPath}
     done
+
+    runHook postInstall
   '';
 
   meta = {

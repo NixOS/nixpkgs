@@ -28,11 +28,15 @@ python3Packages.buildPythonApplication rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp bitcoind-monitor.py $out/bin/
 
     mkdir -p $out/share/${pname}
     cp -r dashboard README.md $out/share/${pname}/
+
+    runHook postInstall
   '';
 
   meta = {

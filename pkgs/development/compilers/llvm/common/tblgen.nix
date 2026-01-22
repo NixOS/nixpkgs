@@ -108,8 +108,12 @@ let
     inherit targets;
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/bin
       cp "''${targets[@]/#/bin/}" $out/bin
+
+      runHook postInstall
     '';
   });
 in

@@ -132,6 +132,8 @@ stdenv.mkDerivation rec {
   nativeCheckInputs = [ procps ];
 
   installPhase = ''
+    runHook preInstall
+
     makeArgs=(config=release prefix=$out)
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -152,6 +154,8 @@ stdenv.mkDerivation rec {
           (placeholder "out")
         ]
       }"
+
+    runHook postInstall
   '';
 
   # Stripping breaks linking for ponyc

@@ -115,6 +115,8 @@ stdenv.mkDerivation (
     ];
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/bin
       cp -r opt $out
       ln -s $out/opt/${name}/${pname} $out/bin
@@ -123,6 +125,8 @@ stdenv.mkDerivation (
       cp -r usr/share $out
       substituteInPlace $out/share/applications/${pname}.desktop \
         --replace /opt/${name}/${pname} ${pname}
+
+      runHook postInstall
     '';
 
     dontWrapGApps = true;

@@ -16,9 +16,13 @@ stdenv.mkDerivation {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -pv $out/bin
     cp $src $out/bin/emv
     chmod +x $out/bin/emv
+
+    runHook postInstall
   '';
 
   meta = {

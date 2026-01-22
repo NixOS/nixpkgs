@@ -48,6 +48,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
     mkdir -p "$out/share/fgallery"
 
@@ -72,6 +74,8 @@ stdenv.mkDerivation rec {
             fbida
           ]
         }"
+
+    runHook postInstall
   '';
 
   meta = {

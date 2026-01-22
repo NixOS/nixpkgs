@@ -19,9 +19,13 @@ stdenv.mkDerivation {
   propagatedBuildInputs = with python3Packages; [ python ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin/
     cp bean-add $out/bin/bean-add
     chmod +x $out/bin/bean-add
+
+    runHook postInstall
   '';
 
   meta = {

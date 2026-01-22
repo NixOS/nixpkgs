@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
   buildPhase = ":";
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/java
     cp *.jar $out/share/java
 
@@ -28,6 +30,8 @@ stdenv.mkDerivation rec {
     done
 
     mv jHiccup jHiccupLogProcessor $out/bin/
+
+    runHook postInstall
   '';
 
   meta = {

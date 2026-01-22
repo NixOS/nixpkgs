@@ -15,9 +15,13 @@ stdenv.mkDerivation (finalAttrs: {
   };
   nativeBuildInputs = [ makeWrapper ];
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 hellwal -t $out/bin
     mkdir -p $out/share/docs/hellwal
     cp -r templates themes $out/share/docs/hellwal
+
+    runHook postInstall
   '';
   meta = {
     homepage = "https://github.com/danihek/hellwal";

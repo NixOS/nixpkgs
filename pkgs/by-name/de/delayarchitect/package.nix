@@ -50,9 +50,13 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib/vst3
     cd DelayArchitect_artefacts/Release
     cp -r VST3/Delay\ Architect.vst3 $out/lib/vst3
+
+    runHook postInstall
   '';
 
   meta = {

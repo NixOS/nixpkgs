@@ -24,10 +24,14 @@ let
       };
 
       installPhase = ''
+        runHook preInstall
+
         mkdir -p $out/share/fonts/opentype/
         # Pagella & Adventor are not flat archives
         test -d "${abbreviation}${version}otf" && cd "${abbreviation}${version}otf"
         cp -v *.otf $out/share/fonts/opentype/
+
+        runHook postInstall
       '';
 
       outputHashAlgo = "sha256";

@@ -72,8 +72,12 @@
           magick xc:none -page Letter empty.pdf
         '';
         installPhase = ''
+          runHook preInstall
+
           mkdir $out
           mv empty.pdf $out/empty.pdf
+
+          runHook postInstall
         '';
       };
     in

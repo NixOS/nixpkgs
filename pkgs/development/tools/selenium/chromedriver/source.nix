@@ -12,7 +12,11 @@ chromium.mkDerivation (_: {
   buildTargets = [ "chromedriver.unstripped" ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm555 $buildPath/chromedriver.unstripped $out/bin/chromedriver
+
+    runHook postInstall
   '';
 
   # Kill existing postFixup that tries to patchelf things

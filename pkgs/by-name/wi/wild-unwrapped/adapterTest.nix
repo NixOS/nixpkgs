@@ -132,7 +132,7 @@ in
       }:$PATH
     '';
 
-    installPhase = "touch $out";
+    installPhase = "runHook preInstall; touch $out; runHook postInstall";
   };
 
   # Test that the adapter works with a gcc stdenv

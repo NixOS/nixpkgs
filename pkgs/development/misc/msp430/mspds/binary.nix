@@ -30,8 +30,12 @@ stdenv.mkDerivation {
   buildInputs = [ stdenv.cc.cc ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm0755 $libname $out/lib/''${libname//_64/}
     install -Dm0644 -t $out/include Inc/*.h
+
+    runHook postInstall
   '';
 
   meta = {

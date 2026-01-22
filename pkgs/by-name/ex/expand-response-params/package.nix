@@ -22,8 +22,12 @@ stdenv.mkDerivation {
     NIX_CC_USE_RESPONSE_FILE=0 "$CC" -std=c99 -O3 -o "expand-response-params" expand-response-params.c
   '';
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $prefix/bin
     mv expand-response-params${stdenv.hostPlatform.extensions.executable} $prefix/bin/
+
+    runHook postInstall
   '';
 
   meta = {

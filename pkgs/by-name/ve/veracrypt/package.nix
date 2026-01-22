@@ -58,6 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm 755 Main/veracrypt "$out/bin/veracrypt"
     install -Dm 444 Resources/Icons/VeraCrypt-256x256.xpm "$out/share/pixmaps/veracrypt.xpm"
     install -Dm 444 License.txt -t "$out/share/doc/veracrypt/"
@@ -65,6 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
     substitute Setup/Linux/veracrypt.desktop $out/share/applications/veracrypt.desktop \
       --replace-fail "Exec=/usr/bin/veracrypt" "Exec=$out/bin/veracrypt" \
       --replace-fail "Icon=veracrypt" "Icon=veracrypt.xpm"
+
+    runHook postInstall
   '';
 
   meta = {

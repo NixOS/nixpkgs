@@ -85,7 +85,11 @@ mkMesonDerivation (
     doCheck = true;
 
     installPhase = ''
+      runHook preInstall
+
       mkdir $out
+
+      runHook postInstall
     '';
 
     meta = {

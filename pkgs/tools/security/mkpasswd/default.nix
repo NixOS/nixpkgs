@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   inherit (whois) preConfigure;
   buildPhase = "make mkpasswd";
-  installPhase = "make install-mkpasswd";
+  installPhase = "runHook preInstall; make install-mkpasswd; runHook postInstall";
 
   meta = {
     homepage = "https://packages.qa.debian.org/w/whois.html";

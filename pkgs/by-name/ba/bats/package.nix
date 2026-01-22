@@ -42,7 +42,11 @@ resholve.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     ./install.sh $out
+
+    runHook postInstall
   '';
 
   solutions = {

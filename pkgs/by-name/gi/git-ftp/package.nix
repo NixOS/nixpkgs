@@ -40,7 +40,11 @@ resholve.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     make install-all prefix=$out
+
+    runHook postInstall
   '';
 
   nativeBuildInputs = [

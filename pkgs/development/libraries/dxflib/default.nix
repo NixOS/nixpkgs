@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
     sed -i 's/CONFIG += staticlib/CONFIG += shared/' dxflib.pro
   '';
   installPhase = ''
+    runHook preInstall
+
     install -d -m 0755 $out/lib
     cp -pr *${stdenv.hostPlatform.extensions.sharedLibrary}* $out/lib
     install -d -m 0755 $out/include/dxflib
@@ -36,6 +38,8 @@ stdenv.mkDerivation rec {
     Libs: -L${placeholder "out"}/lib -ldxflib
     Cflags: -I${placeholder "out"}/include/dxflib
     EOF
+
+    runHook postInstall
   '';
   doCheck = true;
 

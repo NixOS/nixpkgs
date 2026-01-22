@@ -30,6 +30,10 @@ stdenvNoCC.mkDerivation {
     find "$src" -type f -print0 | xargs -0 shellcheck --source-path="$src"
   '';
   installPhase = ''
+    runHook preInstall
+
     touch "$out"
+
+    runHook postInstall
   '';
 }

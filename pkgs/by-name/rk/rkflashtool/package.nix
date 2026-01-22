@@ -19,8 +19,12 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp rkunpack rkcrc rkflashtool rkparameters rkparametersblock rkunsign rkmisc $out/bin
+
+    runHook postInstall
   '';
 
   meta = {

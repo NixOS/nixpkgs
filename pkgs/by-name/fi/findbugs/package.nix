@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     d=$out/libexec/findbugs
     mkdir -p $d $out/bin $out/nix-support
 
@@ -37,6 +39,8 @@ stdenv.mkDerivation rec {
     cat <<EOF > $out/nix-support/setup-hook
     export FINDBUGS_HOME=$d
     EOF
+
+    runHook postInstall
   '';
 
   meta = {

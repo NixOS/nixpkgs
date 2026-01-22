@@ -83,6 +83,8 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/opt
       for f in "installer/"*.7z; do
         7z -bd -bb0 -y x -o"$out/opt/" "$f" || true
@@ -93,6 +95,8 @@ let
         mv "$out/opt/svp-manager4-''${SIZE}.png" "$out/share/icons/hicolor/''${SIZE}x''${SIZE}/apps/svp-manager4.png"
       done
       rm -f $out/opt/{add,remove}-menuitem.sh
+
+      runHook postInstall
     '';
   });
 

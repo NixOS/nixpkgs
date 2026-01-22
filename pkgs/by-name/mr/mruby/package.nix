@@ -36,8 +36,12 @@ stdenv.mkDerivation (finalAttrs: {
   preBuild = "unset LD";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
     cp -R include build/host/{bin,lib} $out
+
+    runHook postInstall
   '';
 
   doCheck = true;

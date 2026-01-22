@@ -31,12 +31,16 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     for f in $(find . -executable -type f); do
       cp $f $out/bin/
     done
     mkdir -p $out/lib/lv2
     cp -r mooSpace.lv2 $out/lib/lv2
+
+    runHook postInstall
   '';
 
   meta = {

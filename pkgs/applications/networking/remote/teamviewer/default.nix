@@ -65,6 +65,8 @@ mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/teamviewer $out/bin $out/share/applications
     cp -a opt/teamviewer/* $out/share/teamviewer
     rm -R \
@@ -116,6 +118,8 @@ mkDerivation rec {
       --replace '/lib64/ld-linux-x86-64.so.2' '${glibc.out}/lib/ld-linux-x86-64.so.2'
     substituteInPlace $out/share/teamviewer/tv_bin/script/tvw_config \
       --replace '/var/run/' '/run/'
+
+    runHook postInstall
   '';
 
   makeWrapperArgs = [

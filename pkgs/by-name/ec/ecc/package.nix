@@ -35,12 +35,16 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
+
       # We don't use the default `make install` because we are looking to create a
       # directory structure compatible with `build.rs` of `ecc`.
       mkdir -p $out/src/libbpf
       # some headers are required
       cp -r src/libbpf/include $out/src/libbpf
       cp src/bpftool $out/src
+
+      runHook postInstall
     '';
   };
 

@@ -36,10 +36,14 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     ./icm_install all /
 
     wrapProgram $out/bin/icmbuild \
      --prefix PATH : ${ncurses}/bin
+
+    runHook postInstall
   '';
 
   meta = {

@@ -47,9 +47,13 @@ stdenv.mkDerivation {
     ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
     install -D -m 644 morse.ko "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/morse.ko"
     install -D -m 644 dot11ah/dot11ah.ko "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/dot11ah.ko"
+
+    runHook postInstall
   '';
 
   enableParallelBuilding = true;

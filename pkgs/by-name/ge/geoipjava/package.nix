@@ -22,8 +22,12 @@ stdenv.mkDerivation rec {
     jar cfv maxmindgeoip.jar $(find . -name \*.class)
   '';
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/java
     cp maxmindgeoip.jar $out/share/java
+
+    runHook postInstall
   '';
   meta = {
     description = "GeoIP Java API";

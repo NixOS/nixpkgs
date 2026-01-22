@@ -56,6 +56,8 @@ let
     version = src.version;
     src = pkgs.cloudlog;
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out
       cp -r * $out/
 
@@ -73,6 +75,8 @@ let
         rm -rf $out/assets/json/$asset.txt
         ln -s ${cfg.dataDir}/assets/json/$asset.txt $out/assets/json/$asset.txt
       done
+
+      runHook postInstall
     '';
   };
 in

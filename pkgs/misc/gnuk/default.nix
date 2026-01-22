@@ -43,6 +43,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   # TODO: Check how many of these patches are actually needed.
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
 
     find . -name gnuk.bin -exec cp {} $out \;
@@ -60,6 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
     echo "$out/bin/stlinkv2 -u \$@" >> $out/bin/unlock
     echo "$out/bin/stlinkv2 -b \$@ $out/gnuk.bin" >> $out/bin/flash
     chmod +x $out/bin/{unlock,flash}
+
+    runHook postInstall
   '';
 
   meta = {

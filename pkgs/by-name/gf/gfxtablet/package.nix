@@ -23,10 +23,14 @@ stdenv.mkDerivation rec {
   preBuild = "cd driver-uinput";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
     cp networktablet "$out/bin"
     mkdir -p "$out/share/doc/gfxtablet/"
     cp ../*.md "$out/share/doc/gfxtablet/"
+
+    runHook postInstall
   '';
 
   meta = {

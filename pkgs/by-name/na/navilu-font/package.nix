@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation rec {
 
   preBuild = "patchShebangs generate.pe";
 
-  installPhase = "install -Dm444 -t $out/share/fonts/truetype/ Navilu.ttf";
+  installPhase = "runHook preInstall; install -Dm444 -t $out/share/fonts/truetype/ Navilu.ttf; runHook postInstall";
 
   meta =
 

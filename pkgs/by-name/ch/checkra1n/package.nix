@@ -16,8 +16,12 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -dm755 "$out/bin"
     install -m755 $src $out/bin/${pname}
+
+    runHook postInstall
   '';
 
   meta = {

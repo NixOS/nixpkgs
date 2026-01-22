@@ -19,8 +19,12 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     install -m755 -D timelapse-deflicker.pl $out/bin/timelapse-deflicker
     wrapProgram $out/bin/timelapse-deflicker --set PERL5LIB $PERL5LIB
+
+    runHook postInstall
   '';
 
   nativeBuildInputs = [ makeWrapper ];

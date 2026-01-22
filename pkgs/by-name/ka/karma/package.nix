@@ -54,7 +54,11 @@ buildGoModule rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm 755 ./karma $out/bin/karma
+
+    runHook postInstall
   '';
 
   passthru.tests.karma = nixosTests.karma;

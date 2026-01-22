@@ -24,8 +24,12 @@ let
     pkgs.stdenv.mkDerivation {
       inherit name src;
       installPhase = ''
+        runHook preInstall
+
         mkdir -p $out
         cp -r $src/* $out/
+
+        runHook postInstall
       '';
     };
 in

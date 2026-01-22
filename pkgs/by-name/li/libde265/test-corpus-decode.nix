@@ -43,6 +43,10 @@ stdenv.mkDerivation {
   # but it is *much* larger
 
   installPhase = ''
+    runHook preInstall
+
     touch $out
+
+    runHook postInstall
   '';
 }

@@ -59,10 +59,14 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 fasmg $out/bin/fasmg
 
     mkdir -p $doc/share/doc/fasmg
     cp docs/*.txt $doc/share/doc/fasmg
+
+    runHook postInstall
   '';
 
   passthru.updateScript = writeScript "update-fasmg.sh" ''

@@ -35,9 +35,13 @@ python3Packages.buildPythonApplication rec {
   buildPhase = "";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/manuskript
     cp -av  bin/ i18n/ libs/ manuskript/ resources/ icons/ $out
     cp -r sample-projects/ $out/share/manuskript
+
+    runHook postInstall
   '';
 
   postFixup = ''

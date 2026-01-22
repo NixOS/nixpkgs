@@ -19,10 +19,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ dpkg ];
 
   installPhase = ''
+    runHook preInstall
+
     sed -i "s|/lib/molly-guard|${systemd}/sbin|g" lib/molly-guard/molly-guard
     sed -i "s|run-parts|${busybox}/bin/run-parts|g" lib/molly-guard/molly-guard
     sed -i "s|/etc/molly-guard/|$out/etc/molly-guard/|g" lib/molly-guard/molly-guard
     cp -r ./ $out/
+
+    runHook postInstall
   '';
 
   postFixup = ''

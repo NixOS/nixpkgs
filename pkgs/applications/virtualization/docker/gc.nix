@@ -24,6 +24,8 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp docker-gc $out/bin
     chmod +x $out/bin/docker-gc
@@ -38,6 +40,8 @@ stdenv.mkDerivation {
             gnugrep
           ]
         }"
+
+    runHook postInstall
   '';
 
   meta = {

@@ -30,6 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
   unpackPhase = "dpkg-deb -x $src $out";
 
   installPhase = ''
+    runHook preInstall
+
     dir=$out/opt/brother/Printers/MFCL2740DW
 
     substituteInPlace $dir/lpd/filter_MFCL2740DW \
@@ -53,6 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
     patchelf --set-interpreter "$interpreter" $dir/inf/braddprinter
     patchelf --set-interpreter "$interpreter" $dir/lpd/brprintconflsr3
     patchelf --set-interpreter "$interpreter" $dir/lpd/rawtobr3
+
+    runHook postInstall
   '';
 
   meta = {

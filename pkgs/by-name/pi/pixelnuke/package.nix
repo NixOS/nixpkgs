@@ -27,7 +27,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 ./pixelnuke $out/bin/pixelnuke
+
+    runHook postInstall
   '';
 
   meta = {

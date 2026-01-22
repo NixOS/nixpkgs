@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir "$out"
     mkdir "$out/lib"
     mkdir "$out/include"
@@ -56,6 +58,8 @@ stdenv.mkDerivation rec {
       "$out/bin/alsa_delay"
     install -Dm755 ../apps/alsa_loopback \
       "$out/bin/alsa_loopback"
+
+    runHook postInstall
   '';
 
   meta = {

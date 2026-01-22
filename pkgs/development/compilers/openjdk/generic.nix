@@ -496,6 +496,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib
     mv build/*/images/${if atLeast11 then "jdk" else "j2sdk-image"} $out/lib/openjdk
   ''
@@ -595,8 +597,10 @@ stdenv.mkDerivation (finalAttrs: {
     # any package that depends on the JRE has $CLASSPATH set up
     # properly.
     + lib.optionalString (!atLeast11) ''
-      mkdir -p $jre/nix-support
-      printWords "${setJavaClassPath}" > $jre/nix-support/propagated-build-inputs
+        mkdir -p $jre/nix-support
+        printWords "${setJavaClassPath}" > $jre/nix-support/propagated-build-inputs
+
+      runHook postInstall
     '';
 
   # If binaries in the jre output have RPATH dependencies on libraries from the out output, Nix will

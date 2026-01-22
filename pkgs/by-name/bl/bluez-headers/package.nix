@@ -24,8 +24,12 @@ stdenv.mkDerivation (finalAttrs: {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/include/
     cp -rv lib/* "$out/include/"
+
+    runHook postInstall
   '';
 
   meta = {

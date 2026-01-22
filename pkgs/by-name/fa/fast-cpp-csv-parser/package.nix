@@ -16,9 +16,13 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib/pkgconfig $out/include
     cp -r *.h $out/include/
     substituteAll ${./fast-cpp-csv-parser.pc.in} $out/lib/pkgconfig/fast-cpp-csv-parser.pc
+
+    runHook postInstall
   '';
 
   meta = {

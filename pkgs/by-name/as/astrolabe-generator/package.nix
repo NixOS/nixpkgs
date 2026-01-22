@@ -24,11 +24,15 @@ stdenv.mkDerivation (finalAttrs: {
   sourceRoot = ".";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,share/java}
     cp AstrolabeGenerator-${finalAttrs.version}.jar $out/share/java
 
     makeWrapper ${jre}/bin/java $out/bin/AstrolabeGenerator \
       --add-flags "-jar $out/share/java/AstrolabeGenerator-${finalAttrs.version}.jar"
+
+    runHook postInstall
   '';
 
   meta = {

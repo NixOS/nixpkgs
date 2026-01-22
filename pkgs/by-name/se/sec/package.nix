@@ -22,9 +22,13 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/man/man1
     cp sec $out/bin
     cp sec.man $out/share/man/man1/sec.1
+
+    runHook postInstall
   '';
 
   meta = {

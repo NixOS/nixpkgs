@@ -19,7 +19,11 @@ stdenv.mkDerivation {
   passthru.scripts = [ "go.py" ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D $src $out/share/go.py
+
+    runHook postInstall
   '';
 
   meta = {

@@ -56,11 +56,15 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/procyon
     mv build/Procyon.Decompiler/libs/Procyon.Decompiler-${version}.jar $out/share/procyon/procyon-decompiler.jar
 
     makeWrapper ${jre}/bin/java $out/bin/procyon \
       --add-flags "-jar $out/share/procyon/procyon-decompiler.jar"
+
+    runHook postInstall
   '';
 
   meta = {

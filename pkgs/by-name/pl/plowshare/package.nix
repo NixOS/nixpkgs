@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     make PREFIX="$out" install
 
     for fn in plow{del,down,list,mod,probe,up}; do
@@ -36,6 +38,8 @@ stdenv.mkDerivation rec {
         ]
       }"
     done
+
+    runHook postInstall
   '';
 
   meta = {

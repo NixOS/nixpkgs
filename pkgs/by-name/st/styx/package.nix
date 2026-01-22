@@ -46,6 +46,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
     install -D -m 777 src/styx.sh $out/bin/styx
 
@@ -73,6 +75,8 @@ stdenv.mkDerivation rec {
 
     mkdir $themes
     cp -r themes/* $themes
+
+    runHook postInstall
   '';
 
   meta = {

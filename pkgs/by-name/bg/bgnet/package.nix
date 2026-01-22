@@ -26,7 +26,11 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm644 src/bgnet.html $out/share/doc/bgnet/html/index.html
+
+    runHook postInstall
   '';
 
   nativeBuildInputs = [

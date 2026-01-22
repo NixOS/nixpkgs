@@ -18,11 +18,15 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ perlPackages.perl ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp asciiquarium $out/bin
     chmod +x $out/bin/asciiquarium
     wrapProgram $out/bin/asciiquarium \
       --set PERL5LIB ${perlPackages.makeFullPerlPath [ perlPackages.TermAnimation ]}
+
+    runHook postInstall
   '';
 
   meta = {

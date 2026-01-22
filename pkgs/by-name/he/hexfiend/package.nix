@@ -21,8 +21,12 @@ stdenv.mkDerivation rec {
   sourceRoot = "Hex Fiend.app";
   nativeBuildInputs = [ undmg ];
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/Applications/Hex Fiend.app"
     cp -R . "$out/Applications/Hex Fiend.app"
+
+    runHook postInstall
   '';
 
   passthru.updateScript = nix-update-script { };

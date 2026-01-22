@@ -93,9 +93,13 @@ let
               throw "${name} not packaged for ${stdenv.hostPlatform.system} (yet).";
         in
         ''
+          runHook preInstall
+
           mkdir -p $out/{lib,include}
           install -m644 -t $out/lib/ ${so}
           install -m644 -t $out/include/ ${bass.h}
+
+          runHook postInstall
         '';
 
       meta = {

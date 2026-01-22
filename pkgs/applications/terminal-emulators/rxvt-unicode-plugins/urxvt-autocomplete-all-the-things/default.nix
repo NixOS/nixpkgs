@@ -16,8 +16,12 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib/urxvt/perl
     cp autocomplete-ALL-the-things $out/lib/urxvt/perl
+
+    runHook postInstall
   '';
 
   meta = {

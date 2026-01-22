@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     EOD
   '';
 
-  installPhase = "install -D kerf $out/bin/kerf";
+  installPhase = "runHook preInstall; install -D kerf $out/bin/kerf; runHook postInstall";
 
   meta = {
     description = "Columnar tick database and time-series language";

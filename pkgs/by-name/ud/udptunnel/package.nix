@@ -14,9 +14,13 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/udptunnel
     cp udptunnel $out/bin
     cp README COPYING* $out/share/udptunnel
+
+    runHook postInstall
   '';
 
   meta = {

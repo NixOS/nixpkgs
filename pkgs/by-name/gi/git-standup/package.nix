@@ -22,10 +22,14 @@ stdenv.mkDerivation (finalAttrs: {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 -t $out/bin git-standup
 
     wrapProgram $out/bin/git-standup \
       --prefix PATH : "${lib.makeBinPath [ git ]}"
+
+    runHook postInstall
   '';
 
   meta = {

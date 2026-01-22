@@ -54,9 +54,13 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     perl ./install -to $out/bin
     echo ${finalAttrs.version} > $out/bin/VERSION
+
+    runHook postInstall
   '';
 
   passthru.tests = {

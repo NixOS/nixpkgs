@@ -45,8 +45,12 @@ stdenv.mkDerivation rec {
   installFlags = [ "INSTALL=install" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     cp -r $src/bin $out/bin
+
+    runHook postInstall
   '';
 
   postFixup = ''

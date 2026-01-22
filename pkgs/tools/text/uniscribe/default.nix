@@ -21,8 +21,12 @@ stdenv.mkDerivation {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     makeWrapper ${rubyEnv}/bin/uniscribe $out/bin/uniscribe
+
+    runHook postInstall
   '';
 
   passthru.updateScript = bundlerUpdateScript "uniscribe";

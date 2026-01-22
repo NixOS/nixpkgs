@@ -165,6 +165,8 @@ stdenv.mkDerivation {
   unpackCmd = if isDarwinAarch64 then "7zz x $curSrc -aoa -oinstantclient" else "unzip $curSrc";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/"{bin,include,lib,"share/java","share/${pname}-${version}/demo/"} $lib/lib
     install -Dm755 {adrci,genezi,uidrvci,sqlplus,exp,expdp,imp,impdp} $out/bin
 
@@ -177,6 +179,8 @@ stdenv.mkDerivation {
 
     # provide alias
     ln -sfn $out/bin/sqlplus $out/bin/sqlplus64
+
+    runHook postInstall
   '';
 
   postFixup = optionalString stdenv.hostPlatform.isDarwin ''

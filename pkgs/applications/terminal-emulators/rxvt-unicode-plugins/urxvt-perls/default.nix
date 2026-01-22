@@ -16,11 +16,15 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib/urxvt/perl
     cp keyboard-select $out/lib/urxvt/perl
     cp deprecated/clipboard \
        deprecated/url-select \
     $out/lib/urxvt/perl
+
+    runHook postInstall
   '';
 
   meta = {

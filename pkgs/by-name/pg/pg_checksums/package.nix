@@ -36,8 +36,12 @@ clangStdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 -t $out/bin pg_checksums_ext
     install -Dm644 -t $out/share/man/man1 doc/man1/pg_checksums_ext.1
+
+    runHook postInstall
   '';
 
   meta = {

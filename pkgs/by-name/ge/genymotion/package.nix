@@ -76,9 +76,13 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/libexec
     mv genymotion $out/libexec/
     ln -s $out/libexec/genymotion/{genymotion,player} $out/bin
+
+    runHook postInstall
   '';
 
   fixupPhase = ''

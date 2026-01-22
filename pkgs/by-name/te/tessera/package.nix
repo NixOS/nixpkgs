@@ -20,7 +20,11 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     makeWrapper ${jre}/bin/java $out/bin/tessera --add-flags "-jar $src"
+
+    runHook postInstall
   '';
 
   meta = {

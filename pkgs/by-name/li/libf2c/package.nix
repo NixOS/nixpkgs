@@ -32,9 +32,13 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/include $out/lib
     cp libf2c.a $out/lib
     cp f2c.h $out/include
+
+    runHook postInstall
   '';
 
   nativeBuildInputs = [ unzip ];

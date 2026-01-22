@@ -34,9 +34,13 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin/
     mv $TMP/vk-${version}-64-bin vk-cli
     install -D vk-cli --target-directory=$out/bin/
+
+    runHook postInstall
   '';
 
   postFixup = ''

@@ -37,6 +37,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mkdir -p $out/etc
     cp -a pastebinit $out/bin
@@ -44,6 +46,8 @@ stdenv.mkDerivation rec {
     cp -a pastebin.d $out/etc
     substituteInPlace $out/bin/pastebinit --subst-var-by "etc" "$out/etc"
     installManPage pastebinit.1
+
+    runHook postInstall
   '';
 
   meta = {

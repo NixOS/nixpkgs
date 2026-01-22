@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -p src/runtime/sbcl $out/bin
 
@@ -27,6 +29,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     makeWrapper $out/share/sbcl/sbcl $out/bin/sbcl \
       --add-flags "--core $out/share/sbcl/sbcl.core"
+
+    runHook postInstall
   '';
 
   postFixup = lib.optionalString (!stdenv.hostPlatform.isAarch32 && stdenv.hostPlatform.isLinux) ''

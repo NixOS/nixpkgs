@@ -79,8 +79,12 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/lib
       cp libsha1.so $out/lib/
+
+      runHook postInstall
     '';
   };
 
@@ -235,6 +239,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mv $TMP/$dirname $out
     cd $out/$dirname
@@ -247,6 +253,8 @@ stdenv.mkDerivation (finalAttrs: {
     # desktop item
     mkdir -p "$out/share"
     cp -r "${finalAttrs.desktopItem}/share/applications" "$out/share/applications"
+
+    runHook postInstall
   '';
 
   desktopItem = makeDesktopItem {

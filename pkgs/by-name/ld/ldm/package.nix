@@ -38,8 +38,12 @@ stdenv.mkDerivation rec {
   buildFlags = [ "ldm" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -v ldm $out/bin
+
+    runHook postInstall
   '';
 
   meta = {

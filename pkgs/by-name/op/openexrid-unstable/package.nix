@@ -63,9 +63,13 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     find $out
     mv $out/include $dev/
     mv $out/lib $lib/
+
+    runHook postInstall
   '';
 
   meta = {

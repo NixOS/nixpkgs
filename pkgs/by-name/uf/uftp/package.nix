@@ -26,9 +26,13 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $man/share/man/man1
     cp {uftp,uftpd,uftp_keymgt,uftpproxyd} $out/bin/
     cp {uftp.1,uftpd.1,uftp_keymgt.1,uftpproxyd.1} $man/share/man/man1
+
+    runHook postInstall
   '';
 
   meta = {

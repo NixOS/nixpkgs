@@ -37,7 +37,11 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -m644 --target $out/share/fonts/truetype/ricty -D Ricty-*.ttf
+
+    runHook postInstall
   '';
 
   meta = {

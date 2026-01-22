@@ -11,8 +11,12 @@ stdenv.mkDerivation {
     sha256 = "SHA";
   };
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/doc/pythonMAJORMINOR
     cp -R ./ $out/share/doc/pythonMAJORMINOR/TYPE
+
+    runHook postInstall
   '';
   meta = {
     maintainers = [ ];

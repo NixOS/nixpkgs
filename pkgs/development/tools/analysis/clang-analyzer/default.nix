@@ -24,6 +24,8 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/scan-view $out/bin
     cp -R clang/tools/scan-view/share/* $out/share/scan-view
     cp -R clang/tools/scan-view/bin/* $out/bin/scan-view
@@ -35,6 +37,8 @@ stdenv.mkDerivation {
       --add-flags "--use-cc=${clang}/bin/clang" \
       --add-flags "--use-c++=${clang}/bin/clang++" \
       --add-flags "--use-analyzer='${llvmPackages.clang}/bin/clang'"
+
+    runHook postInstall
   '';
 
   meta = {

@@ -19,8 +19,12 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/zsh-vi-mode
     cp *.zsh $out/share/zsh-vi-mode/
+
+    runHook postInstall
   '';
 
   meta = {

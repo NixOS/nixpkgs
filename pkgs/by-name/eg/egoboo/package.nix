@@ -33,10 +33,14 @@ stdenv.mkDerivation rec {
   # The user will need to have all the files in '.' to run egoboo, with
   # writeable controls.txt and setup.txt
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/egoboo-${version}
     cp -v game/egoboo $out/share/egoboo-${version}
     cd ..
     cp -v -Rd controls.txt setup.txt players modules basicdat $out/share/egoboo-${version}
+
+    runHook postInstall
   '';
 
   buildInputs = [

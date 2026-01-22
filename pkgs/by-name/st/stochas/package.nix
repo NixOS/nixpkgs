@@ -48,8 +48,12 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib/vst3
     cp -r stochas_artefacts/Release/VST3/Stochas.vst3 $out/lib/vst3
+
+    runHook postInstall
   '';
 
   meta = {

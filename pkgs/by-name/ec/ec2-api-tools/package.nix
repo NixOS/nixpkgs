@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     d=$out/libexec/ec2-api-tools
     mkdir -p $d
     mv * $d
@@ -33,6 +35,8 @@ stdenv.mkDerivation rec {
         --set EC2_HOME $d \
         --set JAVA_HOME ${jre}
     done
+
+    runHook postInstall
   '';
 
   meta = {

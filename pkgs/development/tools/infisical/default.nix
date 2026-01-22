@@ -59,10 +59,14 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = "chmod +x ./infisical";
   checkPhase = "./infisical --version";
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin/ $out/share/completions/ $out/share/man/
     cp infisical $out/bin
     cp completions/* $out/share/completions/
     cp manpages/* $out/share/man/
+
+    runHook postInstall
   '';
   postInstall = ''
     installManPage share/man/infisical.1.gz

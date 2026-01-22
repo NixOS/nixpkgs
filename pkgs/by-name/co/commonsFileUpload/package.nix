@@ -13,9 +13,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-r7EGiih4qOCbjaL7Wg+plbe0m3CuFWXs/RmbfGLmj1g=";
   };
   installPhase = ''
+    runHook preInstall
+
     tar xf ${src}
     mkdir -p $out/share/java
     cp commons-fileupload-*-bin/*.jar $out/share/java/
+
+    runHook postInstall
   '';
 
   meta = {

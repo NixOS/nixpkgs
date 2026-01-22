@@ -28,7 +28,11 @@ python312Packages.buildPythonApplication rec {
   format = "setuptools";
 
   installPhase = ''
+    runHook preInstall
+
     install -D -m 0755 SL1_to_Photon.py $out/bin/${pname}
+
+    runHook postInstall
   '';
 
   meta = {

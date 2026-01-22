@@ -44,7 +44,9 @@ in
 MenhirLib.overrideAttrs (
   oldAttrs:
   if oldAttrs.version <= "20211230" then
-    { installPhase = "make TARGET=$out/lib/coq/${coq.coq-version}/user-contrib/MenhirLib install"; }
+    {
+      installPhase = "runHook preInstall; make TARGET=$out/lib/coq/${coq.coq-version}/user-contrib/MenhirLib install; runHook postInstall";
+    }
   else
     { }
 )

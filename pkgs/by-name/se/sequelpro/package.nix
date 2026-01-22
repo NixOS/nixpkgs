@@ -16,9 +16,13 @@ stdenv.mkDerivation {
 
   buildInputs = [ undmg ];
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/Applications/Sequel Pro.app"
     cp -R . "$out/Applications/Sequel Pro.app"
     chmod +x "$out/Applications/Sequel Pro.app/Contents/MacOS/Sequel Pro"
+
+    runHook postInstall
   '';
 
   meta = {

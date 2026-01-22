@@ -14,8 +14,12 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp tetgen $out/bin
+
+    runHook postInstall
   '';
 
   meta = {

@@ -37,6 +37,8 @@ mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     python build.py install --verbose --prefix="$out"
     wrapProgram $out/bin/gede \
       --prefix QT_PLUGIN_PATH : ${qtbase}/${qtbase.qtPluginPrefix} \
@@ -46,6 +48,8 @@ mkDerivation rec {
           gdb
         ]
       }
+
+    runHook postInstall
   '';
 
   meta = {

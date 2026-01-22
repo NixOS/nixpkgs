@@ -39,6 +39,8 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp ${type}-Edit $out/bin/.${pname}
 
@@ -53,6 +55,8 @@ stdenv.mkDerivation rec {
       $out/bin/.${pname}
     EOF
     chmod 755 $out/bin/${pname}
+
+    runHook postInstall
   '';
 
   passthru.deps =

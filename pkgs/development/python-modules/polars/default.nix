@@ -286,7 +286,7 @@ buildPythonPackage rec {
       "tests/unit/io/test_iceberg.py"
     ];
 
-    installPhase = "touch $out";
+    installPhase = "runHook preInstall; touch $out; runHook postInstall";
   };
 
   meta = {

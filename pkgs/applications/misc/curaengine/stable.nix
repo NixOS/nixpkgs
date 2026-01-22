@@ -20,8 +20,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp build/CuraEngine $out/bin/
+
+    runHook postInstall
   '';
 
   meta = {

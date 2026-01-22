@@ -37,6 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
     install -Dm755 sycl_tests -t $out/bin/
     install -Dm755 rt_tests -t $out/bin/
@@ -46,5 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   + lib.optionalString enablePstlTests ''
     install -Dm755 pstl_tests -t $out/bin/
+
+    runHook postInstall
   '';
 })

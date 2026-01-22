@@ -16,7 +16,11 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 cdecrypt $out/bin/cdecrypt
+
+    runHook postInstall
   '';
 
   meta = {

@@ -57,6 +57,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
 
     # Install
@@ -86,6 +88,7 @@ stdenv.mkDerivation rec {
     patchelf --set-rpath ${pkgsi686Linux.curl.out}/lib \
         $out/bin/red
 
+    runHook postInstall
   '';
 
   meta = {

@@ -14,7 +14,11 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     cp extra/aliases.conf $out
+
+    runHook postInstall
   '';
 
   meta = {

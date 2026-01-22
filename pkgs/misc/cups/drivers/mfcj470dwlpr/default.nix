@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     dpkg-deb -x $src $out
 
     substituteInPlace $out/opt/brother/Printers/mfcj470dw/lpd/filtermfcj470dw \
@@ -64,6 +66,8 @@ stdenv.mkDerivation rec {
         coreutils
       ]
     }
+
+    runHook postInstall
   '';
 
   meta = {

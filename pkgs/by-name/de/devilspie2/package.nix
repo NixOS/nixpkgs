@@ -31,9 +31,13 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/man/man1
     cp bin/devilspie2 $out/bin
     cp devilspie2.1 $out/share/man/man1
+
+    runHook postInstall
   '';
 
   meta = {

@@ -20,12 +20,16 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -D zsh-autosuggestions.plugin.zsh \
       $out/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh
     install -D zsh-autosuggestions.zsh \
       $out/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
     ln -s $out/share/zsh/plugins/zsh-autosuggestions \
       $out/share/zsh-autosuggestions
+
+    runHook postInstall
   '';
 
   meta = {

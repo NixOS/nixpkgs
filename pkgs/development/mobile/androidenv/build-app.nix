@@ -59,11 +59,15 @@ stdenv.mkDerivation (
       ant ${antFlags} ${if release then "release" else "debug"}
     '';
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out
       mv bin/*-${if release then "release" else "debug"}.apk $out
 
       mkdir -p $out/nix-support
       echo "file binary-dist \"$(echo $out/*.apk)\"" > $out/nix-support/hydra-build-products
+
+      runHook postInstall
     '';
 
     inherit meta;

@@ -109,6 +109,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     CUPSFILTER_DIR=$out/lib/cups/filter
     CUPSPPD_DIR=$out/share/cups/model
     CUPSWRAPPER_DIR=opt/brother/Printers/BrGenML1/cupswrapper
@@ -127,6 +129,8 @@ stdenv.mkDerivation rec {
 
     mkdir -p $CUPSPPD_DIR
     ln -s $out/$CUPSWRAPPER_DIR/brother-BrGenML1-cups-en.ppd $CUPSPPD_DIR
+
+    runHook postInstall
   '';
 
   dontPatchELF = true;

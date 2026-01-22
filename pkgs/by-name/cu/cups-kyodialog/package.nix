@@ -84,6 +84,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     # allow cups to find the ppd files
     mkdir -p $out/share/cups/model
     mv ./usr/share/kyocera${kyodialog_version}/ppd${kyodialog_version} $out/share/cups/model/Kyocera
@@ -110,6 +112,8 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/share/applications/kyodialog.desktop \
       --replace Exec=\"/usr/bin/kyodialog${kyodialog_version}\" Exec=\"$out/bin/kyodialog\" \
       --replace Icon=/usr/share/kyocera/appicon_H.png Icon=$out/share/${pname}/icons/appicon_H.png
+
+    runHook postInstall
   '';
 
   meta = {

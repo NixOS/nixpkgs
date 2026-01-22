@@ -103,9 +103,13 @@ stdenvNoCC.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
     cp expected.txt $out
     cp ${libconfig-test-cfg} $out/libconfig-test.cfg
     cp ${libconfig-test-cfg.passthru.json} $out/libconfig-test.json
+
+    runHook postInstall
   '';
 }

@@ -27,6 +27,8 @@ stdenv.mkDerivation {
   postPatch = "substituteInPlace share/cht.sh.txt --replace '\${0##*/}' cht.sh";
 
   installPhase = ''
+    runHook preInstall
+
     install -m755 -D share/cht.sh.txt "$out/bin/cht.sh"
 
     # install shell completion files
@@ -43,6 +45,8 @@ stdenv.mkDerivation {
           xsel
         ]
       }"
+
+    runHook postInstall
   '';
 
   passthru.updateScript = unstableGitUpdater {

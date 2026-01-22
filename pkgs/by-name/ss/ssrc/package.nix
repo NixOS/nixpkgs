@@ -16,8 +16,12 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp ssrc ssrc_hp $out/bin
+
+    runHook postInstall
   '';
 
   meta = {

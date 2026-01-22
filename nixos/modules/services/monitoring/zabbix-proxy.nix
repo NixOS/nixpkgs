@@ -114,8 +114,12 @@ in
               buildInputs = [ cfg.package ];
               sourceRoot = "zabbix-''${cfg.package.version}/src/modules/dummy";
               installPhase = '''
+                runHook preInstall
+
                 mkdir -p $out/lib
                 cp dummy.so $out/lib/
+
+                runHook postInstall
               ''';
             };
           }

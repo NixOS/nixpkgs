@@ -26,10 +26,14 @@ stdenv.mkDerivation rec {
   buildInputs = [ electron ];
 
   installPhase = ''
+    runHook preInstall
+
     install -d $out/bin $out/share/nix-tour
     cp -R * $out/share/nix-tour
     makeWrapper ${electron}/bin/electron $out/bin/nix-tour \
       --add-flags $out/share/nix-tour/electron-main.js
+
+    runHook postInstall
   '';
 
   desktopItems = [

@@ -42,6 +42,8 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     cd ..
     mkdir -p "$out/lib" "$out/bin" "$out/man"
     cp -r . "$out/lib/picolisp/"
@@ -50,6 +52,8 @@ stdenv.mkDerivation {
     ln -s "$out/lib/picolisp/man/man1/pil.1" "$out/man/pil.1"
     ln -s "$out/lib/picolisp/man/man1/picolisp.1" "$out/man/picolisp.1"
     substituteInPlace $out/bin/pil --replace-fail /usr $out
+
+    runHook postInstall
   '';
 
   meta = {

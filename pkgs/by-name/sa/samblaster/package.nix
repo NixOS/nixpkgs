@@ -18,8 +18,12 @@ stdenv.mkDerivation rec {
   makeFlags = [ "CPP=${stdenv.cc.targetPrefix}c++" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp samblaster $out/bin
+
+    runHook postInstall
   '';
 
   meta = {

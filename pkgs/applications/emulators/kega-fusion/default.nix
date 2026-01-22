@@ -86,6 +86,8 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ upx ];
 
   installPhase = ''
+    runHook preInstall
+
     upx -d Fusion
     install -Dm755 Fusion "$out/lib/kega-fusion/Fusion"
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" --set-rpath "${libPath}" "$out/lib/kega-fusion/Fusion"
@@ -97,6 +99,8 @@ stdenv.mkDerivation {
     mkdir -p "$out/bin"
     substitute "$runner" "$out/bin/kega-fusion" --subst-var out
     chmod +x "$out/bin/kega-fusion"
+
+    runHook postInstall
   '';
 
   meta = {

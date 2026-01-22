@@ -29,10 +29,14 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mkdir -p $out/share/doc/bayescan
     cp bayescan_${version} $out/bin
     cp -r ../*pdf ../input_examples ../"R functions" $out/share/doc/bayescan
+
+    runHook postInstall
   '';
 
   env.NIX_CFLAGS_COMPILE = toString [ "-std=c++14" ];

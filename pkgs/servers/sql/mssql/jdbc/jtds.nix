@@ -17,8 +17,12 @@ stdenv.mkDerivation rec {
   sourceRoot = ".";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/java
     cp jtds-*.jar $out/share/java/jtds-jdbc.jar
+
+    runHook postInstall
   '';
 
   nativeBuildInputs = [ unzip ];

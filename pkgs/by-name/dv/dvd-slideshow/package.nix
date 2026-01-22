@@ -68,6 +68,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
     cp dvd-slideshow         "$out/bin/dvd-slideshow.real"
     cp dvd-menu              "$out/bin/dvd-menu.real"
@@ -84,6 +86,8 @@ stdenv.mkDerivation rec {
     ln -s dvd-slideshow.sh "$out/bin/jigl2slideshow"
 
     cp -a man "$out/"
+
+    runHook postInstall
   '';
 
   meta = {

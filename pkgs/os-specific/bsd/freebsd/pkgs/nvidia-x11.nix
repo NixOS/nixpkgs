@@ -22,8 +22,12 @@ mkDerivation {
 
   dontBuild = true;
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     make -C x11 install
+
+    runHook postInstall
   '';
 
   meta.platforms = [ "x86_64-freebsd" ];

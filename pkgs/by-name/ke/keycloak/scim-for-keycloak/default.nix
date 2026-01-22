@@ -18,7 +18,11 @@ maven.buildMavenPackage rec {
   mvnHash = "sha256-cOuJSU57OuP+U7lI+pDD7g9HPIfZAoDPYLf+eO+XuF4=";
 
   installPhase = ''
+    runHook preInstall
+
     install -D "scim-for-keycloak-server/target/scim-for-keycloak-${version}.jar" "$out/scim-for-keycloak-${version}.jar"
+
+    runHook postInstall
   '';
 
   meta = {

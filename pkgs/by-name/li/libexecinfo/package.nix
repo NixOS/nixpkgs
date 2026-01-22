@@ -41,6 +41,8 @@ stdenv.mkDerivation rec {
   patchFlags = [ "-p0" ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm644 execinfo.h stacktraverse.h -t $out/include
   ''
   + lib.optionalString enableShared ''
@@ -49,6 +51,8 @@ stdenv.mkDerivation rec {
   ''
   + lib.optionalString enableStatic ''
     install -Dm755 libexecinfo.a -t $out/lib
+
+    runHook postInstall
   '';
 
   meta = {

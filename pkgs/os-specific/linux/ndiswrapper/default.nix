@@ -28,12 +28,16 @@ stdenv.mkDerivation (finalAttrs: {
   ";
 
   installPhase = ''
+    runHook preInstall
+
     make install KBUILD=$(cat kbuild_path) DESTDIR=$out
     mv $out/usr/sbin/* $out/sbin/
     mv $out/usr/share $out/
     rm -r $out/usr
 
     patchShebangs $out/sbin
+
+    runHook postInstall
   '';
 
   src = fetchurl {

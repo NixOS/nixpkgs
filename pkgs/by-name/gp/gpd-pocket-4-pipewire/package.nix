@@ -23,10 +23,14 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -dDm0755 "$out/share/pipewire/pipewire.conf.d/"
     install -v -D -m0644 "pipewire.conf.d/gpd-pocket-4-mp-48k-l.wav" "$out/share/pipewire/pipewire.conf.d/gpd-pocket-4-mp-48k-l.wav"
     install -v -D -m0644 "pipewire.conf.d/gpd-pocket-4-mp-48k-r.wav" "$out/share/pipewire/pipewire.conf.d/gpd-pocket-4-mp-48k-r.wav"
     install -v -D -m0644 "pipewire.conf.d/sink-gpd-pocket-4.conf" "$out/share/pipewire/pipewire.conf.d/sink-gpd-pocket-4.conf"
+
+    runHook postInstall
   '';
 
   passthru.requiredLv2Packages = [

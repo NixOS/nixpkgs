@@ -39,8 +39,12 @@ stdenvNoCC.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm644 xow_dongle.bin $out/lib/firmware/xow_dongle.bin
     install -Dm644 xow_dongle_045e_02e6.bin $out/lib/firmware/xow_dongle_045e_02e6.bin
+
+    runHook postInstall
   '';
 
   meta = {

@@ -19,11 +19,15 @@ stdenv.mkDerivation rec {
   postPatch = "patchShebangs configure";
 
   installPhase = ''
+    runHook preInstall
+
     install -d $out/bin
     install cromfs-driver $out/bin
     install util/cvcromfs $out/bin
     install util/mkcromfs $out/bin
     install util/unmkcromfs $out/bin
+
+    runHook postInstall
   '';
 
   nativeBuildInputs = [ pkg-config ];

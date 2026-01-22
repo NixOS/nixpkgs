@@ -18,7 +18,11 @@ mkCoqDerivation {
   buildPhase = "make -j$NIX_BUILD_CORES";
   preBuild = "./create-makefile.sh";
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib/coq/${coq.coq-version}/Velisarios
     cp -pR model/*.vo $out/lib/coq/${coq.coq-version}/Velisarios
+
+    runHook postInstall
   '';
 }

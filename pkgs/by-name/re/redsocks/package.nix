@@ -17,9 +17,13 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,share}
     mv redsocks $out/bin
     mv doc $out/share
+
+    runHook postInstall
   '';
 
   buildInputs = [ libevent ];

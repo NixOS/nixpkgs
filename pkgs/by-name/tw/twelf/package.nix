@@ -37,6 +37,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     rsync -av bin/{*,.heap} $out/bin/
     bin/.mkexec ${smlnj}/bin/sml $out/ twelf-server twelf-server
@@ -51,6 +53,8 @@ stdenv.mkDerivation rec {
     rsync -av examples/ $out/share/twelf/examples/
     mkdir -p $out/share/twelf/vim
     rsync -av vim/ $out/share/twelf/vim/
+
+    runHook postInstall
   '';
 
   meta = {

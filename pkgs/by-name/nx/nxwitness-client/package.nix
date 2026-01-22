@@ -83,6 +83,8 @@ let
     dontWrapQtApps = true;
 
     installPhase = ''
+      runHook preInstall
+
       dpkg -x $src $out
       rm -r $out/usr
       mv $out/opt/networkoptix/client/${finalAttrs.version}/* $out/
@@ -98,6 +100,8 @@ let
       rm -r $out/lib/stdcpp
       rm -r $out/lib/opengl
       rm -r $out/lib/libva-drivers
+
+      runHook postInstall
     '';
   });
 in

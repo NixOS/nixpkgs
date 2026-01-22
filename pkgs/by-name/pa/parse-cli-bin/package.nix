@@ -24,8 +24,12 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
     cp "$src" "$out/bin/parse"
     chmod +x "$out/bin/parse"
+
+    runHook postInstall
   '';
 }

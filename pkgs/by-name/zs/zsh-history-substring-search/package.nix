@@ -17,12 +17,16 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   installPhase = ''
+    runHook preInstall
+
     install -D zsh-history-substring-search.plugin.zsh \
       "$out/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.plugin.zsh"
     install -D zsh-history-substring-search.zsh \
       "$out/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh"
     ln -s $out/share/zsh/plugins/zsh-history-substring-search \
       $out/share/zsh-history-substring-search
+
+    runHook postInstall
   '';
 
   meta = {

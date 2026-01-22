@@ -26,8 +26,12 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp vpnc-script $out/bin
+
+    runHook postInstall
   '';
 
   preFixup = ''

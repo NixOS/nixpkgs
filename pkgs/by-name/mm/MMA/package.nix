@@ -36,6 +36,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,share/mma,share/man/man1,share/man/man8}
     mkdir -p $out/etc
 
@@ -59,6 +61,8 @@ stdenv.mkDerivation rec {
     mv $out/share/mma/docs/man/mma-gb.1 $out/share/man/man1
     rm -rf $out/share/mma/docs/man
     find $out -type f | xargs sed -i "s@/usr/share/mma@$out/share/mma@g"
+
+    runHook postInstall
   '';
 
   preFixup = ''

@@ -31,6 +31,10 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     install -m755 -D iptstate $out/bin/iptstate
+
+    runHook postInstall
   '';
 }

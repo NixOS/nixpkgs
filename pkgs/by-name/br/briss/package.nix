@@ -19,10 +19,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin";
     mkdir -p "$out/share";
     install -D -m444 -t "$out/share" *.jar
     makeWrapper "${jre}/bin/java" "$out/bin/briss" --add-flags "-Xms128m -Xmx1024m -cp \"$out/share/\" -jar \"$out/share/briss-${version}.jar\""
+
+    runHook postInstall
   '';
 
   meta = {

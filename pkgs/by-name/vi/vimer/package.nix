@@ -16,9 +16,13 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out/bin/ -p
     cp vimer $out/bin/
     chmod +x $out/bin/vimer
+
+    runHook postInstall
   '';
 
   meta = {

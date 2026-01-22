@@ -703,7 +703,11 @@ in
 
               dontUnpack = true;
               installPhase = '''
+                runHook preInstall
+
                 rsvg-convert -o $out -w 96 -h 96 $src
+
+                runHook postInstall
               ''';
             };
           }

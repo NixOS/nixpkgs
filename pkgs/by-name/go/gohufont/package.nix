@@ -56,6 +56,8 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     # install the psf fonts (for the virtual console)
     fontDir="$out/share/consolefonts"
     install -D -m 644 -t "$fontDir" psf/*.psf
@@ -64,6 +66,8 @@ stdenv.mkDerivation {
     fontDir="$out/share/fonts/misc"
     install -D -m 644 -t "$fontDir" *.pcf *.otb
     mkfontdir "$fontDir"
+
+    runHook postInstall
   '';
 
   meta = {

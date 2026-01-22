@@ -26,7 +26,11 @@ gccStdenv.mkDerivation rec {
       target = if gccStdenv.hostPlatform.isDarwin then "Darwin" else "Linux";
     in
     ''
+      runHook preInstall
+
       install -m755 -D ${target}/muscle $out/bin/muscle
+
+      runHook postInstall
     '';
 
   meta = {

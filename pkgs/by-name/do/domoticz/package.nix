@@ -75,6 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/domoticz
     cp -r $src/www $out/share/domoticz/
     cp -r $src/Config $out/share/domoticz
@@ -84,6 +86,8 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/bin
     cp domoticz $out/bin
     wrapProgram $out/bin/domoticz --set LD_LIBRARY_PATH ${python3}/lib;
+
+    runHook postInstall
   '';
 
   nativeInstallCheckInputs = [

@@ -20,7 +20,11 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 rdocker.sh $out/bin/rdocker
+
+    runHook postInstall
   '';
 
   postInstall = ''

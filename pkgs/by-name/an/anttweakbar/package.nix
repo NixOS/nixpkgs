@@ -28,9 +28,13 @@ stdenv.mkDerivation rec {
 
   postPatch = "cd src";
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib/
     cp ../lib/{libAntTweakBar.so,libAntTweakBar.so.1,libAntTweakBar.a} $out/lib/
     cp -r ../include $out/
+
+    runHook postInstall
   '';
 
   meta = {

@@ -44,10 +44,14 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   installPhase = ''
+    runHook preInstall
+
     make DESTDIR=.. install
     mkdir -p $out/bin
     cp ../usr/games/tbe $out/bin
     cp -r ../usr/share $out/
+
+    runHook postInstall
   '';
 
   meta = {

@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
   installPhase = ''
+    runHook preInstall
+
     # executables
     install -Dt $out/bin os-prober linux-boot-prober
     install -Dt $out/lib newns
@@ -50,6 +52,8 @@ stdenv.mkDerivation rec {
     if [ $ARCH = "x86" ]; then
         cp -r os-probes/mounted/powerpc/20macosx $out/lib/os-probes/mounted;
     fi;
+
+    runHook postInstall
   '';
   postFixup = ''
     for file in $(find $out  -type f ! -name newns) ; do

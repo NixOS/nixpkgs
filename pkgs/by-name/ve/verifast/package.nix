@@ -55,6 +55,8 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
   dontStrip = true;
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -R bin $out/libexec
 
@@ -63,6 +65,8 @@ stdenv.mkDerivation rec {
     ${patchLib "$out/libexec/libz3.so"}
     ln -s $out/libexec/verifast $out/bin/verifast
     ln -s $out/libexec/vfide    $out/bin/vfide
+
+    runHook postInstall
   '';
 
   meta = {

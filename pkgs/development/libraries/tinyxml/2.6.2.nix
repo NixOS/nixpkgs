@@ -72,6 +72,8 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -pv $out/include/
     mkdir -pv $out/lib/pkgconfig/
     mkdir -pv $out/share/doc/tinyxml/
@@ -87,6 +89,8 @@ stdenv.mkDerivation {
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -id $out/lib/libtinyxml.dylib $out/lib/libtinyxml.dylib
+
+    runHook postInstall
   '';
 
   meta = {

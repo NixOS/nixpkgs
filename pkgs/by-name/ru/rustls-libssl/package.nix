@@ -51,6 +51,8 @@ rustPlatform.buildRustPackage {
     "dev"
   ];
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib $dev/lib/pkgconfig
 
     mv target/${target}/release/libssl${libExt} $out/lib/libssl${libExt}.3
@@ -73,6 +75,8 @@ rustPlatform.buildRustPackage {
       -e "s|${openssl.out}|$out|g" \
       -e "s|${openssl.dev}|$dev|g" \
       $dev/lib/pkgconfig/*.pc
+
+    runHook postInstall
   '';
 
   passthru.tests = nixosTests.rustls-libssl;

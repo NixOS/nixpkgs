@@ -24,10 +24,14 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/java
     mkdir -p $out/bin
     cp $src $out/share/java/$jarName
     makeWrapper "${jre}/bin/java" $out/bin/bfg --add-flags "-cp $out/share/java/$jarName com.madgag.git.bfg.cli.Main"
+
+    runHook postInstall
   '';
 
   nativeInstallCheckInputs = [

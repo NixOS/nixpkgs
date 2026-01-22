@@ -90,6 +90,8 @@ perlPackages.buildPerlPackage rec {
   doCheck = false;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
 
     cp -r bin $out
@@ -111,6 +113,8 @@ perlPackages.buildPerlPackage rec {
         }
       fi
     done
+
+    runHook postInstall
   '';
 
   outputs = [ "out" ];

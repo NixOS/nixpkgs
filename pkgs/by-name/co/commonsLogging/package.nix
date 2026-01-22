@@ -14,8 +14,12 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/java
     cp commons-logging-*.jar $out/share/java/
+
+    runHook postInstall
   '';
 
   meta = {

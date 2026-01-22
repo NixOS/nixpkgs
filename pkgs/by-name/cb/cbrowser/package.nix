@@ -21,11 +21,15 @@ stdenv.mkDerivation rec {
   buildInputs = [ tk ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/${pname}-${version}
     cp -R * $out/share/${pname}-${version}/
 
     makeWrapper $out/share/${pname}-${version}/cbrowser $out/bin/cbrowser \
       --prefix PATH : ${tk}/bin
+
+    runHook postInstall
   '';
 
   meta = {

@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     install -m 755 $src/src/tuptime $out/bin/
 
@@ -40,6 +42,8 @@ stdenv.mkDerivation rec {
 
     install -Dm 0755 $src/misc/scripts/db-tuptime-migrate-4.0-to-5.0.sh \
       $out/share/tuptime/db-tuptime-migrate-4.0-to-5.0.sh
+
+    runHook postInstall
   '';
 
   preFixup = ''

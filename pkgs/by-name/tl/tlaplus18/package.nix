@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
 
   dontUnpack = true;
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/java $out/bin
     cp $src $out/share/java/tla2tools.jar
 
@@ -32,6 +34,8 @@ stdenv.mkDerivation rec {
       --add-flags "-XX:+UseParallelGC -cp $out/share/java/tla2tools.jar tla2tex.TLA"
     makeWrapper ${jre}/bin/java $out/bin/tlarepl \
       --add-flags "-XX:+UseParallelGC -cp $out/share/java/tla2tools.jar tlc2.REPL"
+
+    runHook postInstall
   '';
 
   meta = {

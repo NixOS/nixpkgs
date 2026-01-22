@@ -109,8 +109,12 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/static/
       cp -r static/dist $out/static
+
+      runHook postInstall
     '';
   };
 
@@ -161,6 +165,8 @@ let
       '';
 
       installPhase = ''
+                      runHook preInstall
+
                       # create directory structure
                       mkdir -p $out/${python.sitePackages}/airflow/providers
 
@@ -193,6 +199,8 @@ let
                         echo "Provider directory not found: airflow/providers/${providerPath}"
                         exit 1
                       fi
+
+                      runHook postInstall
       '';
     };
 

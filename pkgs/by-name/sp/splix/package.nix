@@ -21,8 +21,12 @@ let
     };
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/share/cups/profiles/samsung
       cp * $out/share/cups/profiles/samsung/
+
+      runHook postInstall
     '';
   };
 

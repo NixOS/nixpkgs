@@ -86,5 +86,5 @@ stdenv.mkDerivation {
     java Main $properties >actual
     diff -U3 $expectedPath actual
   '';
-  installPhase = "touch $out";
+  installPhase = "runHook preInstall; touch $out; runHook postInstall";
 }

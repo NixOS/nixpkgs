@@ -35,7 +35,11 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D vendor-reset.ko -t "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/misc/"
+
+    runHook postInstall
   '';
 
   enableParallelBuilding = true;

@@ -24,8 +24,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     install -m 0755 $src/nginxfmt.py $out/bin/nginxfmt
+
+    runHook postInstall
   '';
 
   meta = {

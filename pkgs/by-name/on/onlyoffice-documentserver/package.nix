@@ -95,6 +95,8 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/etc/onlyoffice/documentserver/log4js
       cp ${server-src}/Common/config/default.json $out/etc/onlyoffice/documentserver
       cp ${server-src}/Common/config/production-linux.json $out/etc/onlyoffice/documentserver
@@ -123,6 +125,8 @@ let
       mkdir -p $out/var/lib/onlyoffice
       chmod u+w $out/var/www/onlyoffice/documentserver
       mkdir $out/var/www/onlyoffice/documentserver/fonts
+
+      runHook postInstall
     '';
 
     # stripping self extracting javascript binaries likely breaks them

@@ -29,10 +29,14 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/share/bam"
     cp -r docs examples tests  "$out/share/bam"
     mkdir -p "$out/bin"
     cp bam "$out/bin"
+
+    runHook postInstall
   '';
 
   meta = {

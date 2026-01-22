@@ -41,6 +41,8 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/steamcmd
     find . -type f -exec install -Dm 755 "{}" "$out/share/steamcmd/{}" \;
 
@@ -51,6 +53,8 @@ stdenv.mkDerivation {
       --subst-var-by steamRoot '${steamRoot}' \
       --subst-var-by steamRun ${if stdenv.hostPlatform.isLinux then (lib.getExe steam-run) else "exec"}
     chmod 0755 $out/bin/steamcmd
+
+    runHook postInstall
   '';
 
   meta = {

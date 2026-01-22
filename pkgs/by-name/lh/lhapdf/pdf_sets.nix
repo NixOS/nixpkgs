@@ -18,8 +18,12 @@ let
       preferLocalBuild = true;
 
       installPhase = ''
+        runHook preInstall
+
         mkdir -p $out/${name}/
         cp * $out/${name}/
+
+        runHook postInstall
       '';
 
       setupHook = ./pdfset-hook.sh;

@@ -44,10 +44,14 @@ let
         tgzFile=$(npm pack | tail -n 1) # Hooks to the pack command will add output (https://docs.npmjs.com/misc/scripts)
       '';
       installPhase = ''
+        runHook preInstall
+
         mkdir -p $out/tarballs
         mv $tgzFile $out/tarballs
         mkdir -p $out/nix-support
         echo "file source-dist $out/tarballs/$tgzFile" >> $out/nix-support/hydra-build-products
+
+        runHook postInstall
       '';
     };
 
@@ -684,6 +688,8 @@ let
         ];
 
         installPhase = ''
+          runHook preInstall
+
           source ${installPackage}
 
           mkdir -p $out/${packageName}
@@ -722,6 +728,8 @@ let
 
           mv ${packageName} lib
           ln -s $out/lib/node_modules/.bin $out/bin
+
+          runHook postInstall
         '';
       }
       // extraArgs

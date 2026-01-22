@@ -35,8 +35,12 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp ./netris $out/bin
+
+    runHook postInstall
   '';
 
   meta = {

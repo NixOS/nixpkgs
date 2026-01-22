@@ -26,9 +26,13 @@ stdenv.mkDerivation {
     $AR rcs libSOIL.a *.o
   '';
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib $out/include/SOIL
     cp libSOIL.a $out/lib/
     cp SOIL.h $out/include/SOIL/
+
+    runHook postInstall
   '';
 
   meta = {

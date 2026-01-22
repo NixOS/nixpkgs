@@ -1052,7 +1052,7 @@ rec {
           preferLocalBuild = true;
           allowSubstitutes = false;
           phases = "unpackPhase patchPhase installPhase";
-          installPhase = "cp -R ./ $out";
+          installPhase = "runHook preInstall; cp -R ./ $out; runHook postInstall";
         }
         # Carry (and merge) information from the underlying `src` if present.
         // (optionalAttrs (src ? meta) {

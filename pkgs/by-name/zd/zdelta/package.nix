@@ -16,8 +16,12 @@ stdenv.mkDerivation {
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -p zdc zdu $out/bin
+
+    runHook postInstall
   '';
 
   meta = {

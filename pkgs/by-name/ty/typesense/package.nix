@@ -30,8 +30,12 @@ stdenv.mkDerivation {
   sourceRoot = ".";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp $sourceRoot/typesense-server $out/bin
+
+    runHook postInstall
   '';
 
   passthru = {

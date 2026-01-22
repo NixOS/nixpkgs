@@ -25,7 +25,11 @@ stdenv.mkDerivation {
 
   buildPhase = "make -C ${KDIR} M=/build/source modules";
   installPhase = ''
+    runHook preInstall
+
     make -C ${KDIR} M=/build/source INSTALL_MOD_PATH="$out" modules_install
+
+    runHook postInstall
   '';
 
   meta = {

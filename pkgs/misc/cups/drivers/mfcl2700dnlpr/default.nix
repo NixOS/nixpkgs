@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     dpkg-deb -x $src $out
 
     dir=$out/opt/brother/Printers/MFCL2700DN
@@ -53,6 +55,8 @@ stdenv.mkDerivation rec {
     patchelf --set-interpreter "$interpreter" $dir/inf/braddprinter
     patchelf --set-interpreter "$interpreter" $dir/lpd/brprintconflsr3
     patchelf --set-interpreter "$interpreter" $dir/lpd/rawtobr3
+
+    runHook postInstall
   '';
 
   meta = {

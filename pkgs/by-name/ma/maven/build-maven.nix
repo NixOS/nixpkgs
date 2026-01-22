@@ -108,8 +108,12 @@ in
     buildPhase = "mvn --offline --settings ${settings} compile";
 
     installPhase = ''
+      runHook preInstall
+
       mvn --offline --settings ${settings} package
       mv target/*.jar $out
+
+      runHook postInstall
     '';
   };
 }

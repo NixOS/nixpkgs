@@ -36,6 +36,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     ${
       if stdenv.hostPlatform.isDarwin then
         ''
@@ -51,6 +53,8 @@ stdenv.mkDerivation rec {
     install -D train $bin/bin/liblinear-train
     install -D predict $bin/bin/liblinear-predict
     install -Dm444 -t $dev/include linear.h
+
+    runHook postInstall
   '';
 
   meta = {

@@ -27,8 +27,12 @@ stdenv.mkDerivation rec {
   buildFlags = lib.optionals stdenv.hostPlatform.isAarch64 [ "config=release_arm" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp bin/release-*/otfcc* $out/bin/
+
+    runHook postInstall
   '';
 
   enableParallelBuilding = true;

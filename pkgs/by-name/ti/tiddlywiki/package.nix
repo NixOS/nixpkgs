@@ -24,11 +24,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib/node_modules/tiddlywiki/
     mv * $out/lib/node_modules/tiddlywiki/
 
     makeWrapper ${lib.getExe nodejs} $out/bin/tiddlywiki \
       --add-flags "$out/lib/node_modules/tiddlywiki/tiddlywiki.js"
+
+    runHook postInstall
   '';
 
   passthru.updateScript = nix-update-script { };

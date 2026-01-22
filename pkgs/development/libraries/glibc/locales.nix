@@ -95,9 +95,13 @@
       ];
 
       installPhase = ''
+        runHook preInstall
+
         mkdir -p "$out/lib/locale" "$out/share/i18n"
         cp -v "$TMPDIR/$NIX_STORE/"*"/lib/locale/locale-archive" "$out/lib/locale"
         cp -v ../localedata/SUPPORTED "$out/share/i18n/SUPPORTED"
+
+        runHook postInstall
       '';
 
       setupHook = writeText "locales-setup-hook.sh" ''

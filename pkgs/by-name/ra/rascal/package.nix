@@ -21,9 +21,13 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     makeWrapper ${jdk}/bin/java $out/bin/rascal \
       --add-flags "-jar ${src}" \
+
+    runHook postInstall
   '';
 
   meta = {

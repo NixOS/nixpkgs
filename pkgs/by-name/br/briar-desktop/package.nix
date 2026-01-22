@@ -36,6 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,lib}
     cp ${finalAttrs.src} $out/lib/briar-desktop.jar
     makeWrapper ${openjdk}/bin/java $out/bin/briar-desktop \
@@ -46,6 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
           libGL
         ]
       }"
+
+    runHook postInstall
   '';
 
   fixupPhase = ''

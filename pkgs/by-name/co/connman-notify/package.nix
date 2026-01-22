@@ -35,8 +35,12 @@ python3Packages.buildPythonApplication {
   strictDeps = false;
 
   installPhase = ''
+    runHook preInstall
+
     install -D -t $out/bin connman-notify
     install -D -t $out/share/doc README.rst
+
+    runHook postInstall
   '';
 
   meta = {

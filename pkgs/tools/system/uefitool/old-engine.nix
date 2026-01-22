@@ -32,8 +32,12 @@ mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out"/bin
     cp UEFITool UEFIReplace/UEFIReplace UEFIPatch/UEFIPatch "$out"/bin
+
+    runHook postInstall
   '';
 
   meta = {

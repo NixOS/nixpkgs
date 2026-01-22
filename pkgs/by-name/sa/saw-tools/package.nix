@@ -34,12 +34,16 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib $out/share
 
     mv bin $out/bin
     mv doc $out/share
 
     wrapProgram "$out/bin/saw" --prefix PATH : "$out/bin/"
+
+    runHook postInstall
   '';
 
   passthru.tests.version = testers.testVersion {

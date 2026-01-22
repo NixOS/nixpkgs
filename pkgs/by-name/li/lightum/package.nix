@@ -39,8 +39,12 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     make install prefix=$out bindir=$out/bin docdir=$out/share/doc \
       mandir=$out/share/man INSTALL="install -c" INSTALLDATA="install -c -m 644"
+
+    runHook postInstall
   '';
 
   meta = {

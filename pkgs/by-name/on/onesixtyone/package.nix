@@ -21,7 +21,11 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -D onesixtyone $out/bin/onesixtyone
+
+    runHook postInstall
   '';
 
   passthru.updateScript = unstableGitUpdater {

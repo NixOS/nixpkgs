@@ -28,8 +28,12 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mv ./bin/redprl $out/bin
+
+    runHook postInstall
   '';
 
   meta = {

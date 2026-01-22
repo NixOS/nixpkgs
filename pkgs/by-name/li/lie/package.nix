@@ -45,6 +45,8 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -vp $out/bin
 
     cp -v Lie.exe $out
@@ -52,5 +54,7 @@ stdenv.mkDerivation {
 
     cp -v LEARN* $out
     cp -v INFO* $out
+
+    runHook postInstall
   '';
 }

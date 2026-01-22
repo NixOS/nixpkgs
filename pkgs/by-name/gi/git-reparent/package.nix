@@ -23,7 +23,11 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -m755 -Dt $out/bin git-reparent
+
+    runHook postInstall
   '';
 
   postFixup = ''

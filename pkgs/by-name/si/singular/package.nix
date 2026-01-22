@@ -130,6 +130,8 @@ stdenv.mkDerivation rec {
   doCheck = true; # very basic checks, does not test any libraries
 
   installPhase = ''
+    runHook preInstall
+
     # clean up any artefacts a previous non-sandboxed docbuild may have left behind
     rm /tmp/conic.log /tmp/conic.tex /tmp/tropicalcurve*.tex || true
     make install
@@ -142,6 +144,8 @@ stdenv.mkDerivation rec {
   + ''
     # Make sure patchelf picks up the right libraries
     rm -rf libpolys factory resources omalloc Singular
+
+    runHook postInstall
   '';
 
   # singular tests are a bit complicated, see

@@ -46,6 +46,8 @@ stdenv.mkDerivation (
     buildInputs = [ (lib.getLib stdenv.cc.cc) ];
 
     installPhase = ''
+      runHook preInstall
+
       install -m755 -D urserver $out/bin/urserver
       wrapProgram $out/bin/urserver --prefix LD_LIBRARY_PATH : "${
         lib.makeLibraryPath [
@@ -56,6 +58,8 @@ stdenv.mkDerivation (
       }"
       cp -r remotes $out/bin/remotes
       cp -r manager $out/bin/manager
+
+      runHook postInstall
     '';
 
     nativeInstallCheckInputs = [ versionCheckHook ];

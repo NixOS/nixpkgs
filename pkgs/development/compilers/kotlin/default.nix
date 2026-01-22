@@ -23,6 +23,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     rm "bin/"*.bat
     mv * $out
@@ -35,6 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
       install -D $out/LICENSE $out/share/kotlin/LICENSE
       rm $out/LICENSE
     fi
+
+    runHook postInstall
   '';
 
   meta = {

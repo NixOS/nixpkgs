@@ -27,7 +27,11 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 twilight $out/bin/twilight
+
+    runHook postInstall
   '';
 
   meta = {

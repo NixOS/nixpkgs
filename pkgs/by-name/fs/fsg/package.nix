@@ -56,10 +56,14 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/libexec
     cp sand $out/libexec
     echo -e '#!${runtimeShell}\nLC_ALL=C '$out'/libexec/sand "$@"' >$out/bin/fsg
     chmod a+x $out/bin/fsg
+
+    runHook postInstall
   '';
 
   meta = {

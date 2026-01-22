@@ -41,6 +41,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     dpkg-deb -x ./Resources/pantum_${version}-1_${architecture}.deb .
 
     mkdir -p $out $out/lib
@@ -54,6 +56,8 @@ stdenv.mkDerivation rec {
     cp -r opt/pantum/* $out/
     ln -s $out/lib/libqpdf.so* $out/lib/libqpdf.so
     ln -s $out/lib/libqpdf.so $out/lib/libqpdf.so.21
+
+    runHook postInstall
   '';
 
   meta = {

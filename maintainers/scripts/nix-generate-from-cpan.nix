@@ -22,10 +22,14 @@ stdenv.mkDerivation {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp ${./nix-generate-from-cpan.pl} $out/bin/nix-generate-from-cpan
     patchShebangs $out/bin/nix-generate-from-cpan
     wrapProgram $out/bin/nix-generate-from-cpan --set PERL5LIB $PERL5LIB
+
+    runHook postInstall
   '';
 
   meta = {

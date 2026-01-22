@@ -25,9 +25,13 @@ let
     };
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/share/${pname}
       cp -r node_modules/ $out/share/${pname}
       ln -s $out/share/${pname}/node_modules/.bin $out/bin
+
+      runHook postInstall
     '';
 
     passthru.tests = {

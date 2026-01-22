@@ -42,8 +42,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm444 dm-sflc.ko $out/lib/modules/${kernel.modDirVersion}/drivers/md/dm-sflc.ko
     install -Dm555 shufflecake $bin/shufflecake
+
+    runHook postInstall
   '';
 
   meta = {

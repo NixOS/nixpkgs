@@ -21,8 +21,12 @@
       cargo build --profile release --target ${stdenv.hostPlatform.rust.rustcTarget}
     '';
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/bin
       mv target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/hello $out/bin/
+
+      runHook postInstall
     '';
   };
 
@@ -37,8 +41,12 @@
       cargo
     ];
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/bin
       mv target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/hello $out/bin/
+
+      runHook postInstall
     '';
   };
 
@@ -73,8 +81,12 @@
       runHook postBuild
     '';
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/bin
       mv target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/hello $out/bin/
+
+      runHook postInstall
     '';
     cargoCheckType = "release";
     doCheck = true;
@@ -95,8 +107,12 @@
       runHook postBuild
     '';
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/bin
       mv target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/hello $out/bin/
+
+      runHook postInstall
     '';
     cargoCheckType = "release";
     doCheck = true;

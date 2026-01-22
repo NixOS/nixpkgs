@@ -31,8 +31,12 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p -- "$out/bin"
     cp -- jack_autoconnect "$out/bin"
+
+    runHook postInstall
   '';
 
   meta = {

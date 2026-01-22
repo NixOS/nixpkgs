@@ -59,6 +59,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin/ $out/libexec
     cp src/* $out/libexec
 
@@ -73,6 +75,8 @@ stdenv.mkDerivation rec {
       ]
     }
     installShellCompletion --bash autocomplete/adr
+
+    runHook postInstall
   '';
 
   passthru = {

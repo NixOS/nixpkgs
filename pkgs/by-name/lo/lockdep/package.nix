@@ -60,12 +60,16 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/lib $out/include
 
     cp -R include/liblockdep $out/include
     make install DESTDIR=$out prefix=""
 
     substituteInPlace $out/bin/lockdep --replace "./liblockdep.so" "$out/lib/liblockdep.so.$fullver"
+
+    runHook postInstall
   '';
 
   meta = {

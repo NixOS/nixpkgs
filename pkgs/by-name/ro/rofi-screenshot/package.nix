@@ -45,7 +45,11 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 rofi-screenshot $out/bin/rofi-screenshot
+
+    runHook postInstall
   '';
 
   meta = {

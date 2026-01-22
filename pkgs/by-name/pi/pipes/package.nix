@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out -p
     make PREFIX=$out/ install
 
@@ -31,6 +33,8 @@ stdenv.mkDerivation rec {
           ncurses
         ]
       }"
+
+    runHook postInstall
   '';
 
   meta = {

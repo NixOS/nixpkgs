@@ -15,7 +15,11 @@ stdenvNoCC.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     install -D -m0644 -t $out/etc services protocols
+
+    runHook postInstall
   '';
 
   setupHook = writeText "setup-hook" ''

@@ -21,7 +21,11 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install --target $out/bin -D cramfsck mkcramfs
+
+    runHook postInstall
   '';
 
   buildInputs = [ zlib ];

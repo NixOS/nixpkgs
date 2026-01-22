@@ -27,7 +27,11 @@ stdenv.mkDerivation rec {
   preBuild = "cd linux/igb_uio";
 
   installPhase = ''
+    runHook preInstall
+
     make -C ${KSRC} M=$(pwd) modules_install $makeFlags
+
+    runHook postInstall
   '';
 
   enableParallelBuilding = true;

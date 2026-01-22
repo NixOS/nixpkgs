@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     lpr=${mfc465cnlpr}/usr/local/Brother/Printer/mfc465cn
     dir=$out/usr/local/Brother/Printer/mfc465cn
     interpreter=${pkgsi686Linux.glibc.out}/lib/ld-linux.so.2
@@ -76,6 +78,8 @@ stdenv.mkDerivation rec {
       ]
     }:\$PATH" $out/lib/cups/filter/brlpdwrappermfc465cn
     chmod 755 $out/lib/cups/filter/brlpdwrappermfc465cn
+
+    runHook postInstall
   '';
 
   meta = {

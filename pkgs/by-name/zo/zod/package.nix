@@ -54,9 +54,13 @@ let
     enableParallelBuilding = true;
     preBuild = "cd zod_src";
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/bin
       install -m755 zod $out/bin/
       wrapProgram $out/bin/zod --chdir "${zod_assets}/usr/lib/commander-zod"
+
+      runHook postInstall
     '';
   };
   zod_map_editor = stdenv.mkDerivation {
@@ -74,9 +78,13 @@ let
     preBuild = "cd zod_src";
     makeFlags = [ "map_editor" ];
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/bin
       install -m755 zod_map_editor $out/bin
       wrapProgram $out/bin/zod_map_editor --chdir "${zod_assets}/usr/lib/commander-zod"
+
+      runHook postInstall
     '';
   };
   zod_launcher = stdenv.mkDerivation {
@@ -105,8 +113,12 @@ let
     '';
     preBuild = "cd zod_launcher_src";
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/bin
       install -m755 zod_launcher $out/bin
+
+      runHook postInstall
     '';
   };
   zod_assets = runCommandLocal "zod-engine-assets" { } ''

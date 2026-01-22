@@ -17,9 +17,13 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
     cp -rva include_c include_cpp license.txt $out/
     cp -rva lib64 $out/lib
+
+    runHook postInstall
   '';
 
   meta = {

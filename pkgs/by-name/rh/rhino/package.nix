@@ -24,9 +24,13 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/share/java"
     cp -v rhino-all/build/libs/rhino-all-*.jar "$out/share/java/js-$pkgver.jar"
     ln -s "js-$pkgver.jar" "$out/share/java/js.jar"
+
+    runHook postInstall
   '';
 
   meta = {

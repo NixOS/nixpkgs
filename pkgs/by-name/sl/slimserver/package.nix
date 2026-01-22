@@ -151,12 +151,16 @@ perlPackages.buildPerlPackage rec {
   doCheck = false;
 
   installPhase = ''
+    runHook preInstall
+
     cp -r . $out
     wrapProgram $out/slimserver.pl --prefix LD_LIBRARY_PATH : "${libPath}" --prefix PATH : "${binPath}"
     chmod +x $out/scanner.pl
     wrapProgram $out/scanner.pl --prefix LD_LIBRARY_PATH : "${libPath}" --prefix PATH : "${binPath}"
     mkdir $out/bin
     ln -s $out/slimserver.pl $out/bin/slimserver
+
+    runHook postInstall
   '';
 
   outputs = [ "out" ];

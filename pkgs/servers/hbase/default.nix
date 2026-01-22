@@ -26,11 +26,15 @@ let
 
       nativeBuildInputs = [ makeWrapper ];
       installPhase = ''
+        runHook preInstall
+
         mkdir -p $out
         cp -R * $out
         wrapProgram $out/bin/hbase --set-default JAVA_HOME ${jdk.home} \
           --run "test -d /etc/hadoop-conf && export HBASE_CONF_DIR=\''${HBASE_CONF_DIR-'/etc/hadoop-conf/'}" \
           --set-default HBASE_CONF_DIR "$out/conf/"
+
+        runHook postInstall
       '';
 
       passthru = { inherit tests; };

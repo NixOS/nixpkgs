@@ -50,6 +50,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
     mkdir -p "$out/share/man/man1"
 
@@ -58,6 +60,8 @@ stdenv.mkDerivation rec {
 
     # Install Debian man pages (upstream has none)
     cp $debian/ucspi-tcp-man/*.1 "$out/share/man/man1"
+
+    runHook postInstall
   '';
 
   meta = {

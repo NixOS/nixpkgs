@@ -50,9 +50,13 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/keynav/doc
     cp keynav $out/bin
     cp keynavrc $out/share/keynav/doc
+
+    runHook postInstall
   '';
 
   meta = {

@@ -77,6 +77,8 @@ stdenv.mkDerivation rec {
   preConfigure = "export HOME=$TMPDIR";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/neverball
     cp -R data locale $out/share/neverball
     ${
@@ -97,6 +99,8 @@ stdenv.mkDerivation rec {
         ''
     }
     cp mapc $out/bin
+
+    runHook postInstall
   '';
 
   enableParallelBuilding = true;

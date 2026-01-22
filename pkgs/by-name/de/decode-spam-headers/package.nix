@@ -24,6 +24,8 @@ python3Packages.buildPythonApplication rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D decode-spam-headers.py $out/bin/decode-spam-headers
 
     mkdir -p $doc/share/doc/${pname}
@@ -31,6 +33,8 @@ python3Packages.buildPythonApplication rec {
       README.md \
       img/ \
       $doc/share/doc/${pname}
+
+    runHook postInstall
   '';
 
   propagatedBuildInputs = [

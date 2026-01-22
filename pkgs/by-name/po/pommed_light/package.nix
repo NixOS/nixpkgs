@@ -51,6 +51,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 pommed/pommed $out/bin/pommed
     install -Dm644 pommed.conf.mactel $out/etc/pommed.conf.mactel
     install -Dm644 pommed.conf.pmac $out/etc/pommed.conf.pmac
@@ -61,6 +63,8 @@ stdenv.mkDerivation rec {
     # Sounds
     install -Dm644 pommed/data/goutte.wav $out/share/pommed/goutte.wav
     install -Dm644 pommed/data/click.wav $out/share/pommed/click.wav
+
+    runHook postInstall
   '';
 
   meta = {

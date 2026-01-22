@@ -39,6 +39,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/gef
     cp gef.py $out/share/gef
     makeWrapper ${gdb}/bin/gdb $out/bin/gef \
@@ -52,6 +54,8 @@ stdenv.mkDerivation rec {
           ps
         ]
       }
+
+    runHook postInstall
   '';
 
   nativeCheckInputs = [

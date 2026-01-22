@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     cp ${udevRules} 51-trezor.rules
     mkdir -p $out/lib/udev/rules.d
     # we use trezord group, not plugdev
@@ -33,6 +35,8 @@ stdenv.mkDerivation rec {
       --replace 'GROUP="plugdev"' 'GROUP="trezord"' \
       --replace ', TAG+="udev-acl"' ""
     cp 51-trezor.rules $out/lib/udev/rules.d/51-trezor.rules
+
+    runHook postInstall
   '';
 
   passthru.tests = { inherit (nixosTests) trezord; };

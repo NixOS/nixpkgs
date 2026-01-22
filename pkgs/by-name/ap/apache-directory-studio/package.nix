@@ -48,6 +48,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     dest="$out/libexec/ApacheDirectoryStudio"
     mkdir -p "$dest"
     cp -r . "$dest"
@@ -72,6 +74,8 @@ stdenv.mkDerivation rec {
         --run "mkdir -p /tmp/SWT-GDBusServer"
     install -D icon.xpm "$out/share/pixmaps/apache-directory-studio.xpm"
     install -D -t "$out/share/applications" ${desktopItem}/share/applications/*
+
+    runHook postInstall
   '';
 
   meta = {

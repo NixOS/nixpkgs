@@ -28,8 +28,12 @@ stdenv.mkDerivation {
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
+    runHook preInstall
+
     strip -s wavegain
     install -vD wavegain "$out/bin/wavegain"
+
+    runHook postInstall
   '';
 
   meta = {

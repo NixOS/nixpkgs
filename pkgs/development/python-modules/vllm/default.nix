@@ -161,7 +161,11 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
+
       cp -rva . $out
+
+      runHook postInstall
     '';
   };
 
@@ -226,7 +230,11 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
+
       cp -rva . $out
+
+      runHook postInstall
     '';
   }) vllm-flash-attn;
 

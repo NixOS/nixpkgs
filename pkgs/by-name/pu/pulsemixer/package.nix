@@ -22,8 +22,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ python3 ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     install pulsemixer $out/bin/
+
+    runHook postInstall
   '';
 
   postFixup = ''

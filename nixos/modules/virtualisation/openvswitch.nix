@@ -51,7 +51,7 @@ in
         buildInputs = [
           cfg.package
         ];
-        installPhase = "mkdir -p $out";
+        installPhase = "runHook preInstall; mkdir -p $out; runHook postInstall";
       };
 
     in

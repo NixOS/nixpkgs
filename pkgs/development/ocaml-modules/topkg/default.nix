@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
 
   buildPhase = "${run} build";
   createFindlibDestdir = true;
-  installPhase = "${opaline}/bin/opaline -prefix $out -libdir $OCAMLFIND_DESTDIR";
+  installPhase = "runHook preInstall; ${opaline}/bin/opaline -prefix $out -libdir $OCAMLFIND_DESTDIR; runHook postInstall";
 
   passthru = { inherit run; };
 

@@ -30,10 +30,14 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/pokete
     cp -r assets pokete_classes pokete_data mods *.py $out/share/pokete/
     mkdir -p $out/bin
     ln -s $out/share/pokete/pokete.py $out/bin/pokete
+
+    runHook postInstall
   '';
 
   postFixup = ''

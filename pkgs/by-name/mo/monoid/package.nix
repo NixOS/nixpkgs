@@ -44,8 +44,12 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -m444 -Dt $out/share/fonts/truetype _release/*
     install -m444 -Dt $out/share/doc            Readme.md
+
+    runHook postInstall
   '';
 
   meta = {

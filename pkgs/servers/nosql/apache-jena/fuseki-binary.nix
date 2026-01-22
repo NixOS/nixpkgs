@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
   installPhase = ''
+    runHook preInstall
+
     cp -r . "$out"
     chmod +x $out/fuseki
     ln -s "$out"/{fuseki-backup,fuseki-server,fuseki} "$out/bin"
@@ -33,6 +35,8 @@ stdenv.mkDerivation rec {
         --run "if [ -z \"\$FUSEKI_BASE\" ]; then export FUSEKI_BASE=\"\$HOME/.local/fuseki\" ; mkdir -p \"\$HOME/.local/fuseki\" ; fi" \
         ;
     done
+
+    runHook postInstall
   '';
   passthru = {
     tests = {

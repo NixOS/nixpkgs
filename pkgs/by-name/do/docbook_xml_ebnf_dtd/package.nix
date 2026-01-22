@@ -20,8 +20,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     cp -p $dtd dbebnf.dtd
     cp -p $catalog $(stripHash $catalog)
+
+    runHook postInstall
   '';
 
   meta = {

@@ -16,6 +16,8 @@ stdenvNoCC.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib/powershell-editor-services/ $out/bin
     mv * $out/lib/powershell-editor-services/
     cat > $out/bin/powershell-editor-services <<EOF
@@ -23,6 +25,8 @@ stdenvNoCC.mkDerivation rec {
     exec ${lib.getExe' powershell "pwsh"} -noprofile -nologo -c "& '$out/lib/powershell-editor-services/PowerShellEditorServices/Start-EditorServices.ps1' \$@"
     EOF
     chmod +x $out/bin/powershell-editor-services
+
+    runHook postInstall
   '';
 
   meta = {

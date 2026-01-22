@@ -53,10 +53,14 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp ./mellon_create_metadata.sh $out/bin
     mkdir -p $out/modules
     cp ./.libs/mod_auth_mellon.so $out/modules
+
+    runHook postInstall
   '';
 
   meta = {

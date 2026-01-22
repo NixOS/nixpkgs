@@ -24,10 +24,14 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 kubetail "$out/bin/kubetail"
     wrapProgram $out/bin/kubetail --prefix PATH : ${lib.makeBinPath [ kubectl ]}
 
     installShellCompletion completion/kubetail.{bash,fish,zsh}
+
+    runHook postInstall
   '';
 
   meta = {

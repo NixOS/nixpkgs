@@ -23,9 +23,13 @@ import ./versions.nix (
     '';
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/share/zabbix/
       cp -a ui/. $out/share/zabbix/
       cp ${phpConfig} $out/share/zabbix/conf/zabbix.conf.php
+
+      runHook postInstall
     '';
 
     meta = {

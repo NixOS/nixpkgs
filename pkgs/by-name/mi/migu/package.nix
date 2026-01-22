@@ -30,7 +30,11 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     find $srcs -name '*.ttf' | xargs install -m644 --target $out/share/fonts/truetype/migu -D
+
+    runHook postInstall
   '';
 
   outputHashAlgo = "sha256";

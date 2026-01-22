@@ -21,9 +21,13 @@ stdenv.mkDerivation rec {
   postPatch = "patchShebangs .";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     cp -vr * $out
     wrapProgram $out/bin/jbake --set JAVA_HOME "${jre}"
+
+    runHook postInstall
   '';
 
   checkPhase = ''

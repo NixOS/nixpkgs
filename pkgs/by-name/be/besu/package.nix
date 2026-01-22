@@ -22,6 +22,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -r bin $out/
     mkdir -p $out/lib
@@ -31,6 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
       --suffix ${
         if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH"
       } : ${lib.makeLibraryPath finalAttrs.buildInputs}
+
+    runHook postInstall
   '';
 
   passthru.tests = {

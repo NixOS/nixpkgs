@@ -24,7 +24,11 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D justify $out/bin/justify
+
+    runHook postInstall
   '';
 
   meta = {

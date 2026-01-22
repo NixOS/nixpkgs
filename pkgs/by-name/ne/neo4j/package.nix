@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/share/neo4j"
     cp -R * "$out/share/neo4j"
 
@@ -48,6 +50,8 @@ stdenv.mkDerivation rec {
     # user will be asked to change password on first login
     # password must be at least 8 characters long
     $out/bin/neo4j-admin dbms set-initial-password neo4jadmin
+
+    runHook postInstall
   '';
 
   passthru.tests.nixos = nixosTests.neo4j;

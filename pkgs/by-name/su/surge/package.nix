@@ -86,8 +86,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     cd ..
     cmake --build build --config Release --target install-everything-global
+
+    runHook postInstall
   '';
 
   doInstallCheck = true;

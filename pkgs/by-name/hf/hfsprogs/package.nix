@@ -24,12 +24,16 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     # Copy executables
     install -Dm 555 "newfs_hfs/newfs_hfs" "$out/bin/mkfs.hfsplus"
     install -Dm 555 "fsck_hfs/fsck_hfs" "$out/bin/fsck.hfsplus"
     # Copy man pages
     install -Dm 444 "newfs_hfs/newfs_hfs.8" "$out/share/man/man8/mkfs.hfsplus.8"
     install -Dm 444 "fsck_hfs/fsck_hfs.8" "$out/share/man/man8/fsck.hfsplus.8"
+
+    runHook postInstall
   '';
 
   meta = {

@@ -30,12 +30,16 @@ stdenv.mkDerivation {
   doCheck = false; # no test
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp $src/carddav-util.py $out/bin
 
     pythondir="$out/lib/${python3Packages.python.sitePackages}"
     mkdir -p "$pythondir"
     cp $src/carddav.py "$pythondir"
+
+    runHook postInstall
   '';
 
   preFixup = ''

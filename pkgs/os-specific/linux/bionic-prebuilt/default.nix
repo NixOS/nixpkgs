@@ -98,6 +98,8 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     # copy the bionic headers
     mkdir -p $out/include/support $out/include/android
     cp -vr libc/include/* $out/include
@@ -143,6 +145,8 @@ stdenvNoCC.mkDerivation rec {
   + ''
     mkdir -p $dev/include
     cp -v $out/include/*.h $dev/include/
+
+    runHook postInstall
   '';
 
   outputs = [

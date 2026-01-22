@@ -230,9 +230,13 @@ stdenv.mkDerivation (finalAttrs: {
   # and disables the upstream installation of a zipped Python egg that
   # can’t be imported with our Python setup.
   installPhase = ''
+    runHook preInstall
+
     cmake . -DBUILD_EXAMPLES=OFF -DBUILD_PYTHON=OFF -DBUILD_SAMPLES=OFF
     cmake --install .
     pip install --prefix="$python" python/
+
+    runHook postInstall
   '';
 
   outputs = [
