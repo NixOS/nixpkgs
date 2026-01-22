@@ -18,7 +18,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "luisbocanegra";
     repo = "kde-material-you-colors";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-fvDWBcXCIviCXMlLFPowJttNmpX1JO1OZsnSPyNhLv8=";
   };
 
