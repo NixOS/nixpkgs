@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  uv-build,
+  pdm-backend,
   pytestCheckHook,
   typing-extensions,
 }:
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   };
 
   build-system = [
-    uv-build
+    pdm-backend
   ];
 
   nativeCheckInputs = [
