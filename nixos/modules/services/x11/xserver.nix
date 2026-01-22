@@ -12,7 +12,6 @@ let
 
   # Abbreviations.
   cfg = config.services.xserver;
-  xorg = pkgs.xorg;
 
   knownVideoDriverPackages = {
     inherit (pkgs)
@@ -108,8 +107,8 @@ let
     # old non-fontconfig applications.  (Possibly this could be done
     # better using a fontconfig rule.)
     [
-      pkgs.xorg.fontadobe100dpi
-      pkgs.xorg.fontadobe75dpi
+      pkgs.font-adobe-100dpi
+      pkgs.font-adobe-75dpi
     ];
 
   xrandrOptions = {
@@ -231,7 +230,7 @@ let
   # If not running a fancy desktop environment, the cursor is likely set to
   # the default `cursor.pcf` bitmap font. This is 17px wide, so it's very
   # small and almost invisible on 4K displays.
-  fontcursormisc_hidpi = pkgs.xorg.fontxfree86type1.overrideAttrs (
+  fontcursormisc_hidpi = pkgs.font-xfree86-type1.overrideAttrs (
     old:
     let
       # The scaling constant is 230/96: the scalable `left_ptr` glyph at
@@ -878,27 +877,27 @@ in
           cfgPath = "X11/xorg.conf.d/10-evdev.conf";
         in
         {
-          ${cfgPath}.source = xorg.xf86inputevdev.out + "/share/" + cfgPath;
+          ${cfgPath}.source = xf86-input-evdev.out + "/share/" + cfgPath;
         }
       );
 
     environment.systemPackages =
       utils.removePackagesByName [
-        xorg.xorgserver.out
-        xorg.xrandr
-        xorg.xrdb
-        xorg.setxkbmap
-        xorg.iceauth # required for KDE applications (it's called by dcopserver)
-        xorg.xlsclients
-        xorg.xset
-        xorg.xsetroot
-        xorg.xinput
-        xorg.xprop
-        xorg.xauth
+        pkgs.xorg-server.out
+        pkgs.xrandr
+        pkgs.xrdb
+        pkgs.setxkbmap
+        pkgs.iceauth # required for KDE applications (it's called by dcopserver)
+        pkgs.xlsclients
+        pkgs.xset
+        pkgs.xsetroot
+        pkgs.xinput
+        pkgs.xprop
+        pkgs.xauth
         pkgs.xterm
-        xorg.xf86inputevdev.out # get evdev.4 man page
+        pkgs.xf86-input-evdev.out # get evdev.4 man page
       ] config.services.xserver.excludePackages
-      ++ optional (elem "virtualbox" cfg.videoDrivers) xorg.xrefresh;
+      ++ optional (elem "virtualbox" cfg.videoDrivers) pkgs.xrefresh;
 
     environment.pathsToLink = [ "/share/X11" ];
 
@@ -947,8 +946,8 @@ in
     ++ optional cfg.terminateOnReset "-terminate";
 
     services.xserver.modules = concatLists (catAttrs "modules" cfg.drivers) ++ [
-      xorg.xorgserver.out
-      xorg.xf86inputevdev.out
+      pkgs.xorg-server.out
+      pkgs.xf86-input-evdev.out
     ];
 
     system.checks = singleton (
@@ -1073,7 +1072,7 @@ in
     '';
 
     fonts.packages = [
-      (if cfg.upscaleDefaultCursor then fontcursormisc_hidpi else pkgs.xorg.fontcursormisc)
+      (if cfg.upscaleDefaultCursor then fontcursormisc_hidpi else pkgs.font-cursor-misc)
       pkgs.font-misc-misc
       pkgs.font-alias
     ];

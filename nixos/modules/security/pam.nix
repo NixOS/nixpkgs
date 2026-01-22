@@ -1418,7 +1418,7 @@ let
                 control = "optional";
                 modulePath = "${package}/lib/security/pam_xauth.so";
                 settings = {
-                  xauthpath = "${pkgs.xorg.xauth}/bin/xauth";
+                  xauthpath = "${pkgs.xauth}/bin/xauth";
                   systemuser = 99;
                 };
               }
