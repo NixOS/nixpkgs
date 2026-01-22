@@ -7,6 +7,8 @@
   etcd3,
   fetchFromGitHub,
   flaky,
+  hatchling,
+  hatch-vcs,
   hiro,
   importlib-resources,
   motor,
@@ -18,9 +20,7 @@
   pytest-cov-stub,
   pytest-lazy-fixtures,
   pytestCheckHook,
-  pythonOlder,
   redis,
-  setuptools,
   typing-extensions,
   valkey,
 }:
@@ -34,13 +34,7 @@ buildPythonPackage rec {
     owner = "alisaifee";
     repo = "limits";
     tag = version;
-    # Upstream uses versioneer, which relies on git attributes substitution.
-    # This leads to non-reproducible archives on github. Remove the substituted
-    # file here, and recreate it later based on our version info.
     hash = "sha256-kghfF2ihEvyMPEGO1m9BquCdeBsYRoPyIljdLL1hToQ=";
-    postFetch = ''
-      rm "$out/limits/_version.py"
-    '';
   };
 
   patches = [
@@ -50,15 +44,12 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace pytest.ini \
       --replace-fail "-K" ""
-
-    substituteInPlace setup.py \
-      --replace-fail "versioneer.get_version()" "'${version}'"
-
-    # Recreate _version.py, deleted at fetch time due to non-reproducibility.
-    echo 'def get_versions(): return {"version": "${version}"}' > limits/_version.py
   '';
 
-  build-system = [ setuptools ];
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
   dependencies = [
     deprecated
