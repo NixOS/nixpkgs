@@ -5,7 +5,7 @@
   react,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "reactiveData";
   version = "0.3.1";
   duneVersion = "3";
@@ -14,7 +14,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "ocsigen";
     repo = "reactiveData";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-MO9WMe1k2QcC5RynE6uZHohmu3QlpTHvAkvQNgu3P90=";
   };
 
@@ -26,4 +26,4 @@ buildDunePackage rec {
     license = lib.licenses.lgpl21;
     maintainers = with lib.maintainers; [ vbgl ];
   };
-}
+})
