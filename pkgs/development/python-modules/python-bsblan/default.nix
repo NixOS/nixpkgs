@@ -26,7 +26,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "liudger";
     repo = "python-bsblan";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-t60WMq1kbCIkcQSfr03K9Z6ro3zFGaDxCnl/84by+Qw=";
   };
 
