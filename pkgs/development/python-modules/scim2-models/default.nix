@@ -16,7 +16,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "python-scim";
     repo = "scim2-models";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ahwHmWsM9IoK+yq0Qd0c2+kagMlXGi80/rAB4UQsf6U=";
   };
 
