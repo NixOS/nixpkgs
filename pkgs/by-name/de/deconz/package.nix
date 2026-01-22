@@ -2,11 +2,9 @@
   stdenv,
   lib,
   fetchurl,
-  wrapQtAppsHook,
+  qt5,
   dpkg,
   autoPatchelfHook,
-  qtserialport,
-  qtwebsockets,
   openssl,
   libredirect,
   makeWrapper,
@@ -28,12 +26,12 @@ stdenv.mkDerivation rec {
     dpkg
     autoPatchelfHook
     makeWrapper
-    wrapQtAppsHook
+    qt5.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtserialport
-    qtwebsockets
+    qt5.qtserialport
+    qt5.qtwebsockets
     openssl
   ];
 
