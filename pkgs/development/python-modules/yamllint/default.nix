@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "yamllint";
-  version = "1.38.0";
+  version = "1.37.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "adrienverge";
     repo = "yamllint";
     tag = "v${version}";
-    hash = "sha256-4H8tbn2TRzTGIXmP9Hnmc93rGSLsWh5A5R9KAIz0mKM=";
+    hash = "sha256-CohqiBoQcgvGVP0Bt6U768BY1aIwh59YRsgzJfaDmP0=";
   };
 
   build-system = [ setuptools ];
