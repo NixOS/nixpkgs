@@ -1,6 +1,7 @@
 {
   lib,
   aiohttp,
+  anyio,
   buildPythonPackage,
   elastic-transport,
   fetchPypi,
@@ -9,6 +10,7 @@
   pyarrow,
   python-dateutil,
   requests,
+  sniffio,
   typing-extensions,
 }:
 
@@ -25,8 +27,10 @@ buildPythonPackage rec {
   build-system = [ hatchling ];
 
   dependencies = [
+    anyio
     elastic-transport
     python-dateutil
+    sniffio
     typing-extensions
   ];
 
