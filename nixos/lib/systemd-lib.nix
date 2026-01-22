@@ -38,7 +38,9 @@ let
     match
     mkAfter
     mkIf
+    mkOption
     optional
+    optionals
     optionalAttrs
     optionalString
     pipe
@@ -47,11 +49,23 @@ let
     reverseList
     splitString
     stringLength
+    strings
     stringToCharacters
     tail
     toIntBase10
     trace
-    types
+    ;
+
+  inherit (lib.types)
+    bool
+    either
+    nullOr
+    oneOf
+    path
+    singleLineStr
+    str
+    strMatching
+    submodule
     ;
 
   inherit (lib.strings) toJSON;
@@ -67,7 +81,7 @@ rec {
   mkPathSafeName = replaceStrings [ "@" ":" "\\" "[" "]" ] [ "-" "-" "-" "" "" ];
 
   # a type for options that take a unit name
-  unitNameType = types.strMatching "[a-zA-Z0-9@%:_.\\-]+[.](service|socket|device|mount|automount|swap|target|path|timer|scope|slice)";
+  unitNameType = strMatching "[a-zA-Z0-9@%:_.\\-]+[.](service|socket|device|mount|automount|swap|target|path|timer|scope|slice)";
 
   makeUnit =
     name: unit:
@@ -918,4 +932,204 @@ rec {
   # Corresponds to GPT_LABEL_MAX from systemd's gpt.h.
   GPTMaxLabelLength = 36;
 
+  /**
+    Creates an option which configures credentials to be passed into systemd
+    services.
+
+    The option produces a systemd service config fragment as output which will
+    configure the service to load the credential.
+
+    # Inputs
+
+    The `defaultName` argument can be passed to set the default name of the
+    credential to be loaded, and `readOnlyName` can be used if the service expects a
+    credential matching a well-known service-defined name.
+
+    The `bindPath` argument can be passed as a path for a bind mount local to the
+    service. This will produce the appropriate `BindReadOnlyPaths` setting in the
+    serviceConfig fragment produced by the option.
+
+    The `asserted` and `condition` arguments can be used to set up the appropriate
+    `AssertCredential` and `ConditionCredential` settings in the systemd service
+    config.
+
+    The given `description` argument will be enriched with information about how to
+    configure secrets.
+
+    # Option
+
+    The resulting option may be instantiated with a path or string, in which case it
+    is interpreted as a path to a file containing the secret. The secret is then
+    loaded into the service with `LoadCredential`.
+
+    The option may also be instantiated with an attribute set, in which case the
+    `name` may be given to override the default, and `encrypted` may be set to
+    indicate that the credential was encrypted with `systemd-creds`.
+
+    One of the following attributes may also be defined: `path` as a path to a file
+    containing the secret, which is then loaded into the service with
+    `LoadCredential[Encrypted]`; `value` as the raw secret bytes, in which case the
+    secret is loaded into the service with `SetCredential[Encrypted]`. Otherwise the
+    secret will resolved by the service manager as per `ImportCredential`, and the
+    `rename` option can be given to affect the name that the credential is surfaced
+    to the service with.
+
+    :::
+  */
+  mkCredentialOption =
+    {
+      defaultName,
+      fixedName ? false,
+      description,
+      nullable ? false,
+      example ? "/etc/credstore/${defaultName}",
+    }:
+    mkOption {
+      default = if nullable then null else { };
+      type = (if nullable then nullOr else lib.id) (oneOf [
+        path
+        singleLineStr
+        (submodule {
+          options = {
+            name = mkOption {
+              type = singleLineStr;
+              description = "The name of the credential to load from the service manager.";
+              default = defaultName;
+            };
+            encrypted = mkOption {
+              type = bool;
+              description = ''
+                  Whether the credential is encrypted with systemd-creds.
+
+                  This setting is only meaninful alongside `path` or `value`.
+                .'';
+              default = false;
+            };
+            path = mkOption {
+              type = nullOr (either path singleLineStr);
+              description = ''
+                The path of the credential data to load. If configured, the credential will be consumed via `LoadCredential[Encrypted]`
+
+                At most one of `path`, `value`, or `rename` should be configured.
+              '';
+              default = null;
+            };
+            value = mkOption {
+              type = nullOr str;
+              description = ''
+                The literal credential data to set. If configured, the credential will be consumed via `SetCredential[Encrypted]`
+
+                At most one of `path`, `value`, or `rename` should be configured.
+              '';
+              default = null;
+            };
+            rename = mkOption {
+              type = nullOr str;
+              description = ''
+                The name of the credential to import from the service manager. If configured, the credential will be consumed via `ImportCredential`
+
+                At most one of `path`, `value`, or `rename` should be configured.
+              '';
+              default = null;
+            };
+            allowStorePath = mkOption {
+              type = bool;
+              description = "Set to true to opt into allowing store paths for secrets. This isn't generally safe as store paths are readable by anyone";
+              default = false;
+            };
+          };
+        })
+      ]);
+      inherit example;
+      description = ''
+        ${description}
+
+        The secret will be passed to the service via systemd-creds, as per the documentation here <https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#Credentials>
+
+        The secret may be given as a string/path, in which case it is taken to
+        have the default name, to be unencrypted, and to be a path per the
+        systemd documentation for `LoadCredential`.
+      '';
+      apply =
+        credential:
+        optionalAttrs (credential != null) (
+          let
+            cred =
+              if strings.isStringLike credential then
+                {
+                  name = defaultName;
+                  encrypted = false;
+                  path = credential;
+                  value = null;
+                  rename = null;
+                  allowStorePath = false;
+                }
+              else
+                credential;
+            encrypted = optionalString cred.encrypted "Encrypted";
+            assertSafePath =
+              value:
+              if
+                !cred.allowStorePath && !cred.encrypted && (strings.isStorePath value || builtins.isPath value)
+              then
+                throw ''
+                  Credential '${cred.name}':
+                    ${toString value}
+                    is a path into the world-readable Nix store. This is not generally safe for secrets.
+
+                    This protection may be circumvented via the 'allowStorePath' option.
+                ''
+              else
+                value;
+            assertSafeName =
+              name:
+              if fixedName && name != defaultName then
+                throw "The name of the credential must be `${defaultName}`, not `${name}`"
+              else
+                name;
+            assertSafeImport =
+              value:
+              if cred.encrypted then
+                throw "Cannot enforce that the credential is encrypted without configuring `path` or `value`"
+              else
+                value;
+          in
+          cred
+          // {
+            credentialConfig = cred;
+            serviceConfig =
+              {
+                bindPath ? null,
+                asserted ? false,
+                conditional ? false,
+              }:
+              {
+                BindReadOnlyPaths = optionals (bindPath != null) [ "%d/${cred.name}:${bindPath}" ];
+                AssertCredential = optionals asserted [ cred.name ];
+                ConditionCredential = optionals conditional [ cred.name ];
+              }
+              // (
+                if cred.path != null && cred.value == null && cred.rename == null then
+                  {
+                    "LoadCredential${encrypted}" = [ "${assertSafeName cred.name}:${assertSafePath cred.path}" ];
+                  }
+                else if cred.path == null && cred.value != null && cred.rename == null then
+                  { "SetCredential${encrypted}" = [ "${assertSafeName cred.name}:${cred.value}" ]; }
+                else if cred.path == null && cred.value == null then
+                  assertSafeImport {
+                    ImportCredential = [
+                      (
+                        if cred.rename != null then
+                          "${cred.name}:${assertSafeName cred.rename}"
+                        else
+                          assertSafeName cred.name
+                      )
+                    ];
+                  }
+                else
+                  throw "At most one of `path`, `value`, or `rename` should be configured."
+              );
+          }
+        );
+    };
 }
