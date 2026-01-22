@@ -59,7 +59,10 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   passthru = {
-    updateScript = gitUpdater { rev-prefix = "HM-"; };
+    updateScript = gitUpdater {
+      rev-prefix = "HM-";
+      ignoredVersions = "rc";
+    };
   };
 
   meta = {
