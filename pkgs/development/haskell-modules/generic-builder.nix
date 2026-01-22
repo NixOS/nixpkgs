@@ -157,6 +157,7 @@ in
   coreSetup ? false, # Use only core packages to build Setup.hs.
   useCpphs ? false,
   hardeningDisable ? null,
+  enableObjectDeterminism ? lib.versionAtLeast ghc.version "9.12",
   enableSeparateBinOutput ? false,
   enableSeparateDataOutput ? false,
   enableSeparateDocOutput ? doHaddock,
@@ -354,6 +355,9 @@ let
     (enableFeature enableDeadCodeElimination "split-sections")
     (enableFeature (!dontStrip) "library-stripping")
     (enableFeature (!dontStrip) "executable-stripping")
+  ]
+  ++ optionals enableObjectDeterminism [
+    "--ghc-option=-fobject-determinism"
   ]
   ++ optionals isCross (
     [
