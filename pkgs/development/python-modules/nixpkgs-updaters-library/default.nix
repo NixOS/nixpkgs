@@ -38,7 +38,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "PerchunPak";
     repo = "nixpkgs-updaters-library";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-y6EVoxu/3aBRce2bQsnlt/faZY17b8Rr4hd7wsTPnjE=";
   };
 
