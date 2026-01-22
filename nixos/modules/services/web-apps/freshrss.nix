@@ -354,9 +354,9 @@ in
 
           script =
             let
-              userScriptArgs = ''--user ${cfg.defaultUser} ${
+              userScriptArgs = "--user ${cfg.defaultUser} ${
                 optionalString (cfg.authType == "form") ''--password "$(cat ${cfg.passwordFile})"''
-              }'';
+              }";
               updateUserScript = optionalString (cfg.authType == "form" || cfg.authType == "none") ''
                 ./cli/update-user.php ${userScriptArgs}
               '';

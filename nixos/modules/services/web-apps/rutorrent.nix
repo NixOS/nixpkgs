@@ -248,9 +248,9 @@ in
                 cp -r ${pkgs.rutorrent}/php ${cfg.dataDir}/
 
                 ${optionalString (cfg.plugins != [ ])
-                  ''cp -r ${
+                  "cp -r ${
                     concatMapStringsSep " " (p: "${pkgs.rutorrent}/plugins/${p}") cfg.plugins
-                  } ${cfg.dataDir}/plugins/''
+                  } ${cfg.dataDir}/plugins/"
                 }
 
                 chown -R ${cfg.user}:${cfg.group} ${cfg.dataDir}/{conf,share,logs,plugins}

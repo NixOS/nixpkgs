@@ -11,7 +11,7 @@ let
 
   nvidiaEnabled = (lib.elem "nvidia" config.services.xserver.videoDrivers);
 
-  serverBinPath = ''/run/wrappers/bin:${pkgs.qemu_kvm}/libexec:${
+  serverBinPath = "/run/wrappers/bin:${pkgs.qemu_kvm}/libexec:${
     lib.makeBinPath (
       with pkgs;
       [
@@ -82,7 +82,7 @@ let
         libnvidia-container
       ]
     )
-  }'';
+  }";
 
   # https://github.com/lxc/incus/blob/cff35a29ee3d7a2af1f937cbb6cf23776941854b/internal/server/instance/drivers/driver_qemu.go#L123
   OVMF2MB = pkgs.OVMF.override {

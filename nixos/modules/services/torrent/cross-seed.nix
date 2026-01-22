@@ -107,7 +107,7 @@ in
           outputDir = mkOption {
             type = types.path;
             default = "${cfg.configDir}/output";
-            defaultText = ''''${cfg.configDir}/output'';
+            defaultText = "\${cfg.configDir}/output";
             description = "Directory where cross-seed will place torrent files it finds.";
           };
 

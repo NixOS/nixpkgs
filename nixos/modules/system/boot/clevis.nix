@@ -59,7 +59,7 @@ in
               || (fs.fsType == "zfs" && lib.hasPrefix "${device}/" fs.device)
             ) config.system.build.fileSystems)
             || (lib.hasAttr device config.boot.initrd.luks.devices);
-          message = ''No filesystem or LUKS device with the name ${device} is declared in your configuration.'';
+          message = "No filesystem or LUKS device with the name ${device} is declared in your configuration.";
         }) cfg.devices
       )
     );
