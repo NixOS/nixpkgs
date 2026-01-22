@@ -29,7 +29,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ml-explore";
     repo = "mlx-lm";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ncDg7C84d1tAgk1300N7wY6kD1BocNNIqDUl0xBLhqY=";
   };
 
