@@ -8908,6 +8908,8 @@ self: super: with self; {
 
   llama-index-llms-ollama = callPackage ../development/python-modules/llama-index-llms-ollama { };
 
+  llama-index-llms-llama-cpp = callPackage ../development/python-modules/llama-index-llms-llama-cpp { };
+
   llama-index-llms-openai = callPackage ../development/python-modules/llama-index-llms-openai { };
 
   llama-index-llms-openai-like =
