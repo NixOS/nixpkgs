@@ -8,6 +8,7 @@
   SDL2,
   libpng,
   zlib,
+  zlib' ? zlib.override { static = true; },
   xz,
   freetype,
   fontconfig,
@@ -87,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
     libpng
     xz
-    zlib
+    zlib'
     freetype
     fontconfig
     curl

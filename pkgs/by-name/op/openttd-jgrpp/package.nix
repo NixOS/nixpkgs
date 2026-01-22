@@ -2,7 +2,6 @@
   fetchFromGitHub,
   openttd,
   zstd,
-  ...
 }:
 
 openttd.overrideAttrs (oldAttrs: rec {
