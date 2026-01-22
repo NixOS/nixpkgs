@@ -7,7 +7,9 @@
 let
   mkNixBackground =
     {
-      name,
+      pname,
+      version,
+      name ? "${pname}-${version}",
       src,
       description,
       license ? lib.licenses.free,
@@ -15,7 +17,12 @@ let
 
     let
       pkg = stdenv.mkDerivation {
-        inherit name src;
+        inherit
+          pname
+          version
+          name
+          src
+          ;
 
         dontUnpack = true;
 
@@ -77,7 +84,8 @@ in
 rec {
 
   binary-black = mkNixBackground {
-    name = "binary-black-2024-02-15";
+    pname = "binary-black";
+    version = "2024-02-15";
     description = "Black binary wallpaper for Nix";
     src = fetchurl {
       url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/8957e93c95867faafec7f9988cedddd6837859fa/wallpapers/nix-wallpaper-binary-black.png";
@@ -87,7 +95,8 @@ rec {
   };
 
   binary-blue = mkNixBackground {
-    name = "binary-blue-2024-02-15";
+    pname = "binary-blue";
+    version = "2024-02-15";
     description = "Blue binary wallpaper for Nix";
     src = fetchurl {
       url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/8957e93c95867faafec7f9988cedddd6837859fa/wallpapers/nix-wallpaper-binary-blue.png";
@@ -97,7 +106,8 @@ rec {
   };
 
   binary-red = mkNixBackground {
-    name = "binary-red-2024-02-15";
+    pname = "binary-red";
+    version = "2024-02-15";
     description = "Red binary wallpaper for Nix";
     src = fetchurl {
       url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/8957e93c95867faafec7f9988cedddd6837859fa/wallpapers/nix-wallpaper-binary-red.png";
@@ -107,7 +117,8 @@ rec {
   };
 
   binary-white = mkNixBackground {
-    name = "binary-white-2024-02-15";
+    pname = "binary-white";
+    version = "2024-02-15";
     description = "White binary wallpaper for Nix";
     src = fetchurl {
       url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/8957e93c95867faafec7f9988cedddd6837859fa/wallpapers/nix-wallpaper-binary-white.png";
@@ -117,7 +128,8 @@ rec {
   };
 
   catppuccin-frappe = mkNixBackground {
-    name = "catppuccin-frappe-2024-02-15";
+    pname = "catppuccin-frappe";
+    version = "2024-02-15";
     description = "Catppuccin Frappé colorscheme wallpaper for NixOS";
     src = fetchurl {
       url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/97444e18b7fe97705e8caedd29ae05e62cb5d4b7/wallpapers/nixos-wallpaper-catppuccin-frappe.png";
@@ -127,7 +139,8 @@ rec {
   };
 
   catppuccin-latte = mkNixBackground {
-    name = "catppuccin-latte-2024-02-15";
+    pname = "catppuccin-latte";
+    version = "2024-02-15";
     description = "Catppuccin Latte colorscheme wallpaper for NixOS";
     src = fetchurl {
       url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/97444e18b7fe97705e8caedd29ae05e62cb5d4b7/wallpapers/nixos-wallpaper-catppuccin-latte.png";
@@ -137,7 +150,8 @@ rec {
   };
 
   catppuccin-macchiato = mkNixBackground {
-    name = "catppuccin-macchiato-2024-02-15";
+    pname = "catppuccin-macchiato";
+    version = "2024-02-15";
     description = "Catppuccin Macchiato colorscheme wallpaper for NixOS";
     src = fetchurl {
       url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/97444e18b7fe97705e8caedd29ae05e62cb5d4b7/wallpapers/nixos-wallpaper-catppuccin-macchiato.png";
@@ -147,7 +161,8 @@ rec {
   };
 
   catppuccin-mocha = mkNixBackground {
-    name = "catppuccin-mocha-2024-02-15";
+    pname = "catppuccin-mocha";
+    version = "2024-02-15";
     description = "Catppuccin Mochacolorscheme wallpaper for NixOS";
     src = fetchurl {
       url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/97444e18b7fe97705e8caedd29ae05e62cb5d4b7/wallpapers/nixos-wallpaper-catppuccin-mocha.png";
@@ -157,7 +172,8 @@ rec {
   };
 
   dracula = mkNixBackground {
-    name = "dracula-2020-07-02";
+    pname = "dracula";
+    version = "2020-07-02";
     description = "Nix background based on the Dracula color palette";
     src = fetchurl {
       url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/03c6c20be96c38827037d2238357f2c777ec4aa5/wallpapers/nix-wallpaper-dracula.png";
@@ -167,7 +183,8 @@ rec {
   };
 
   gear = mkNixBackground {
-    name = "gear-2022-04-19";
+    pname = "gear";
+    version = "2022-04-19";
     description = "3D wallpaper for Nix";
     src = fetchurl {
       url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/bcdd2770f5f4839fddc9b503e68db2bc3a87ca4d/wallpapers/nix-wallpaper-gear.png";
@@ -179,7 +196,8 @@ rec {
   gnome-dark = simple-dark-gray-bottom;
 
   gradient-grey = mkNixBackground {
-    name = "gradient-grey-2018-10-20";
+    pname = "gradient-grey";
+    version = "2018-10-20";
     description = "Simple grey gradient background for NixOS";
     src = fetchurl {
       url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/3f7695afe75239720a32d6c38df7c9888b5ed581/wallpapers/NixOS-Gradient-grey.png";
@@ -189,7 +207,8 @@ rec {
   };
 
   moonscape = mkNixBackground {
-    name = "moonscape-2022-04-19";
+    pname = "moonscape";
+    version = "2022-04-19";
     description = "3D wallpaper for Nix";
     src = fetchurl {
       url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/bcdd2770f5f4839fddc9b503e68db2bc3a87ca4d/wallpapers/nix-wallpaper-moonscape.png";
@@ -199,7 +218,8 @@ rec {
   };
 
   mosaic-blue = mkNixBackground {
-    name = "mosaic-blue-2016-02-19";
+    pname = "mosaic-blue";
+    version = "2016-02-19";
     description = "Mosaic blue background for Nix";
     src = fetchurl {
       url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/766f10e0c93cb1236a85925a089d861b52ed2905/wallpapers/nix-wallpaper-mosaic-blue.png";
@@ -209,7 +229,8 @@ rec {
   };
 
   nineish = mkNixBackground {
-    name = "nineish-2019-12-04";
+    pname = "nineish";
+    version = "2019-12-04";
     description = "Nix background inspired by simpler times";
     src = fetchurl {
       url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/da01f68d21ddfdc9f1c6e520c2170871c81f1cf5/wallpapers/nix-wallpaper-nineish.png";
@@ -219,7 +240,8 @@ rec {
   };
 
   nineish-dark-gray = mkNixBackground {
-    name = "nineish-dark-gray-2020-07-02";
+    pname = "nineish-dark-gray";
+    version = "2020-07-02";
     description = "Dark gray Nix background inspired by simpler times";
     src = fetchurl {
       url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/f07707cecfd89bc1459d5dad76a3a4c5315efba1/wallpapers/nix-wallpaper-nineish-dark-gray.png";
@@ -229,7 +251,8 @@ rec {
   };
 
   nineish-solarized-dark = mkNixBackground {
-    name = "nineish-dark-gray-2021-07-20";
+    pname = "nineish-solarized-dark";
+    version = "2021-07-20";
     description = "Solarized dark Nix background inspired by simpler times";
     src = fetchurl {
       url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/f99638d8d1a11d97a99ff7e0e1e7df58c28643ff/wallpapers/nix-wallpaper-nineish-solarized-dark.png";
@@ -239,7 +262,8 @@ rec {
   };
 
   nineish-solarized-light = mkNixBackground {
-    name = "nineish-dark-light-2021-07-20";
+    pname = "nineish-dark-light";
+    version = "2021-07-20";
     description = "Solarized light Nix background inspired by simpler times";
     src = fetchurl {
       url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/f99638d8d1a11d97a99ff7e0e1e7df58c28643ff/wallpapers/nix-wallpaper-nineish-solarized-light.png";
@@ -249,7 +273,8 @@ rec {
   };
 
   nineish-catppuccin-frappe-alt = mkNixBackground {
-    name = "nineish-catppuccin-frappe-alt-2025-01-27";
+    pname = "nineish-catppuccin-frappe-alt";
+    version = "2025-01-27";
     description = "Alternative Catppuccin Frappe wallpaper for Nix inspired by simpler times";
     src = fetchurl {
       url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/33856d7837cb8ba76c4fc9e26f91a659066ee31f/wallpapers/nix-wallpaper-nineish-catppuccin-frappe-alt.png";
@@ -259,7 +284,8 @@ rec {
   };
 
   nineish-catppuccin-frappe = mkNixBackground {
-    name = "nineish-catppuccin-frappe-2025-01-27";
+    pname = "nineish-catppuccin-frappe";
+    version = "2025-01-27";
     description = "Catppuccin Frappe wallpaper for Nix inspired by simpler times";
     src = fetchurl {
       url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/33856d7837cb8ba76c4fc9e26f91a659066ee31f/wallpapers/nix-wallpaper-nineish-catppuccin-frappe.png";
@@ -269,7 +295,8 @@ rec {
   };
 
   nineish-catppuccin-latte-alt = mkNixBackground {
-    name = "nineish-catppuccin-latte-alt-2025-01-27";
+    pname = "nineish-catppuccin-latte-alt";
+    version = "2025-01-27";
     description = "Alternative Catppuccin Latte wallpaper for Nix inspired by simpler times";
     src = fetchurl {
       url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/33856d7837cb8ba76c4fc9e26f91a659066ee31f/wallpapers/nix-wallpaper-nineish-catppuccin-latte-alt.png";
@@ -279,7 +306,8 @@ rec {
   };
 
   nineish-catppuccin-latte = mkNixBackground {
-    name = "nineish-catppuccin-latte-2025-01-27";
+    pname = "nineish-catppuccin-latte";
+    version = "2025-01-27";
     description = "Catppuccin Latte wallpaper for Nix inspired by simpler times";
     src = fetchurl {
       url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/33856d7837cb8ba76c4fc9e26f91a659066ee31f/wallpapers/nix-wallpaper-nineish-catppuccin-latte.png";
@@ -289,7 +317,8 @@ rec {
   };
 
   nineish-catppuccin-macchiato-alt = mkNixBackground {
-    name = "nineish-catppuccin-macchiato-alt-2025-01-27";
+    pname = "nineish-catppuccin-macchiato-alt";
+    version = "2025-01-27";
     description = "Alternative Catppuccin Macchiato wallpaper for Nix inspired by simpler times";
     src = fetchurl {
       url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/33856d7837cb8ba76c4fc9e26f91a659066ee31f/wallpapers/nix-wallpaper-nineish-catppuccin-macchiato-alt.png";
@@ -299,7 +328,8 @@ rec {
   };
 
   nineish-catppuccin-macchiato = mkNixBackground {
-    name = "nineish-catppuccin-macchiato-2025-01-27";
+    pname = "nineish-catppuccin-macchiato";
+    version = "2025-01-27";
     description = "Catppuccin Macchiato wallpaper for Nix inspired by simpler times";
     src = fetchurl {
       url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/33856d7837cb8ba76c4fc9e26f91a659066ee31f/wallpapers/nix-wallpaper-nineish-catppuccin-macchiato.png";
@@ -309,7 +339,8 @@ rec {
   };
 
   nineish-catppuccin-mocha-alt = mkNixBackground {
-    name = "nineish-catppuccin-mocha-alt-2025-01-27";
+    pname = "nineish-catppuccin-mocha-alt";
+    version = "2025-01-27";
     description = "Alternative Catppuccin Mocha wallpaper for Nix inspired by simpler times";
     src = fetchurl {
       url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/33856d7837cb8ba76c4fc9e26f91a659066ee31f/wallpapers/nix-wallpaper-nineish-catppuccin-mocha-alt.png";
@@ -319,7 +350,8 @@ rec {
   };
 
   nineish-catppuccin-mocha = mkNixBackground {
-    name = "nineish-catppuccin-mocha-2025-01-27";
+    pname = "nineish-catppuccin-mocha";
+    version = "2025-01-27";
     description = "Catppuccin Mocha wallpaper for Nix inspired by simpler times";
     src = fetchurl {
       url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/33856d7837cb8ba76c4fc9e26f91a659066ee31f/wallpapers/nix-wallpaper-nineish-catppuccin-mocha.png";
@@ -329,7 +361,8 @@ rec {
   };
 
   recursive = mkNixBackground {
-    name = "recursive-2022-04-19";
+    pname = "recursive";
+    version = "2022-04-19";
     description = "3D wallpaper for Nix";
     src = fetchurl {
       url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/bcdd2770f5f4839fddc9b503e68db2bc3a87ca4d/wallpapers/nix-wallpaper-recursive.png";
@@ -339,7 +372,8 @@ rec {
   };
 
   simple-blue = mkNixBackground {
-    name = "simple-blue-2016-02-19";
+    pname = "simple-blue";
+    version = "2016-02-19";
     description = "Simple blue background for Nix";
     src = fetchurl {
       url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/766f10e0c93cb1236a85925a089d861b52ed2905/wallpapers/nix-wallpaper-simple-blue.png";
@@ -349,7 +383,8 @@ rec {
   };
 
   simple-dark-gray = mkNixBackground {
-    name = "simple-dark-gray-2016-02-19";
+    pname = "simple-dark-gray";
+    version = "2016-02-19";
     description = "Simple dark gray background for Nix";
     src = fetchurl {
       url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/766f10e0c93cb1236a85925a089d861b52ed2905/wallpapers/nix-wallpaper-simple-dark-gray.png";
@@ -359,7 +394,8 @@ rec {
   };
 
   simple-dark-gray-bootloader = mkNixBackground {
-    name = "simple-dark-gray-bootloader-2018-08-28";
+    pname = "simple-dark-gray-bootloader";
+    version = "2018-08-28";
     description = "Simple dark gray background for NixOS, specifically bootloaders";
     src = fetchurl {
       url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/9d1f11f652ed5ffe460b6c602fbfe2e7e9a08dff/bootloader/nix-wallpaper-simple-dark-gray_bootloader.png";
@@ -369,7 +405,8 @@ rec {
   };
 
   simple-dark-gray-bottom = mkNixBackground {
-    name = "simple-dark-gray-2018-08-28";
+    pname = "simple-dark-gray";
+    version = "2018-08-28";
     description = "Simple dark gray background for NixOS, specifically bootloaders and graphical login";
     src = fetchurl {
       url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/783c38b22de09f6ee33aacc817470a4513392d83/wallpapers/nix-wallpaper-simple-dark-gray_bottom.png";
@@ -379,7 +416,8 @@ rec {
   };
 
   simple-light-gray = mkNixBackground {
-    name = "simple-light-gray-2016-02-19";
+    pname = "simple-light-gray";
+    version = "2016-02-19";
     description = "Simple light gray background for Nix";
     src = fetchurl {
       url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/766f10e0c93cb1236a85925a089d861b52ed2905/wallpapers/nix-wallpaper-simple-light-gray.png";
@@ -389,7 +427,8 @@ rec {
   };
 
   simple-red = mkNixBackground {
-    name = "simple-red-2016-02-19";
+    pname = "simple-red";
+    version = "2016-02-19";
     description = "Simple red background for Nix";
     src = fetchurl {
       url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/766f10e0c93cb1236a85925a089d861b52ed2905/wallpapers/nix-wallpaper-simple-red.png";
@@ -399,7 +438,8 @@ rec {
   };
 
   stripes-logo = mkNixBackground {
-    name = "stripes-logo-2016-02-19";
+    pname = "stripes-logo";
+    version = "2016-02-19";
     description = "Stripes logo background for Nix";
     src = fetchurl {
       url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/766f10e0c93cb1236a85925a089d861b52ed2905/wallpapers/nix-wallpaper-stripes-logo.png";
@@ -409,7 +449,8 @@ rec {
   };
 
   stripes = mkNixBackground {
-    name = "stripes-2016-02-19";
+    pname = "stripes";
+    version = "2016-02-19";
     description = "Stripes background for Nix";
     src = fetchurl {
       url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/766f10e0c93cb1236a85925a089d861b52ed2905/wallpapers/nix-wallpaper-stripes.png";
@@ -419,7 +460,8 @@ rec {
   };
 
   waterfall = mkNixBackground {
-    name = "waterfall-2022-04-19";
+    pname = "waterfall";
+    version = "2022-04-19";
     description = "3D wallpaper for Nix";
     src = fetchurl {
       url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/bcdd2770f5f4839fddc9b503e68db2bc3a87ca4d/wallpapers/nix-wallpaper-waterfall.png";
@@ -429,7 +471,8 @@ rec {
   };
 
   watersplash = mkNixBackground {
-    name = "watersplash-2022-04-19";
+    pname = "watersplash";
+    version = "2022-04-19";
     description = "3D wallpaper for Nix";
     src = fetchurl {
       url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/bcdd2770f5f4839fddc9b503e68db2bc3a87ca4d/wallpapers/nix-wallpaper-watersplash.png";
