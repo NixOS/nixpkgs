@@ -32,6 +32,7 @@ let
     bitOr
     bitXor
     boolToString
+    buildInputsClosureCond
     callPackagesWith
     callPackageWith
     cartesianProduct
@@ -4463,6 +4464,68 @@ runTests {
         passthru.meta.position = "/hi:23";
       };
       expected = derivation;
+    };
+
+  testBuildInputsClosureCond =
+    let
+      # Create mock derivations with drvPath and buildInputs
+      mkDrv = name: buildInputs: propagatedBuildInputs: {
+        inherit name buildInputs propagatedBuildInputs;
+        drvPath = "/nix/store/test-${name}.drv";
+      };
+
+      # Internal packages (marked by having "internal" in name)
+      internal1 = mkDrv "internal1" [ ] [ ];
+      internal2 = mkDrv "internal2" [ internal1 ] [ ];
+      internal3 = mkDrv "internal3" [ ] [ internal1 ];
+
+      # External packages
+      external1 = mkDrv "external1" [ ] [ ];
+      external2 = mkDrv "external2" [ external1 ] [ ];
+
+      # Mixed dependencies
+      mixed = mkDrv "mixed" [ internal2 external2 ] [ internal3 ];
+
+      # Predicate to filter internal packages
+      isInternal = pkg: lib.hasInfix "internal" pkg.name;
+
+      # Compute closure of mixed package, filtering for internal dependencies only
+      result = buildInputsClosureCond isInternal [ mixed ];
+
+      # Extract names for easier comparison
+      resultNames = map (d: d.name) result;
+    in
+    {
+      expr = lib.sort builtins.lessThan resultNames;
+      # Should include: mixed (from startSet, not filtered), internal2, internal3, internal1
+      # Should NOT include: external1, external2
+      expected = [
+        "internal1"
+        "internal2"
+        "internal3"
+        "mixed"
+      ];
+    };
+
+  testBuildInputsClosureCondStartSetNotFiltered =
+    let
+      mkDrv = name: {
+        inherit name;
+        drvPath = "/nix/store/test-${name}.drv";
+        buildInputs = [ ];
+        propagatedBuildInputs = [ ];
+      };
+
+      externalPkg = mkDrv "external";
+      isInternal = pkg: lib.hasInfix "internal" pkg.name;
+
+      # Even though externalPkg doesn't match the condition,
+      # it should still be in the result because it's in startSet
+      result = buildInputsClosureCond isInternal [ externalPkg ];
+    in
+    {
+      expr = map (d: d.name) result;
+      expected = [ "external" ];
     };
 
   testTypeDescriptionInt = {
