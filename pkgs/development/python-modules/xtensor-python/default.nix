@@ -18,7 +18,7 @@ toPythonModule (
     src = fetchFromGitHub {
       owner = "xtensor-stack";
       repo = "xtensor-python";
-      tag = version;
+      tag = finalAttrs.version;
       hash = "sha256-GN1X46gmeXh3pM6sw9sSUahLOxnSoimoY+K66vy8SxM=";
     };
 
