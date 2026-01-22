@@ -3,8 +3,6 @@
   rustPlatform,
   fetchCrate,
   cargo-c,
-  buildPackages,
-  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,25 +21,11 @@ rustPlatform.buildRustPackage rec {
     ln -s ${./Cargo.lock} Cargo.lock
   '';
 
+  dontCargoBuild = true;
+  dontCargoInstall = true;
+  dontCargoCheck = true;
+
   nativeBuildInputs = [ cargo-c ];
-
-  buildPhase = ''
-    runHook preBuild
-    ${buildPackages.rust.envVars.setEnv} cargo cbuild -j $NIX_BUILD_CORES --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-    ${buildPackages.rust.envVars.setEnv} cargo cinstall -j $NIX_BUILD_CORES --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
-    runHook postInstall
-  '';
-
-  checkPhase = ''
-    runHook preCheck
-    ${buildPackages.rust.envVars.setEnv} cargo ctest -j $NIX_BUILD_CORES --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
-    runHook postCheck
-  '';
 
   meta = {
     description = "C library for Dolby Vision metadata parsing and writing";

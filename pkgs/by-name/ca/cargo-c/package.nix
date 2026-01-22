@@ -8,11 +8,20 @@
   stdenv,
   libiconv,
   rav1e,
+  makeSetupHook,
+  buildPackages,
 }:
 
 let
   # this version may need to be updated along with package version
   cargoVersion = "0.90.0";
+  sh = makeSetupHook {
+    name = "setup-hook";
+    substitutions = {
+      inherit (stdenv.targetPlatform.rust) rustcTargetSpec;
+      inherit (buildPackages.rust.envVars) setEnv;
+    };
+  } ./setup-hook.sh;
 in
 rustPlatform.buildRustPackage rec {
   pname = "cargo-c";
@@ -47,6 +56,8 @@ rustPlatform.buildRustPackage rec {
 
     runHook postInstallCheck
   '';
+
+  setupHook = "${sh}/nix-support/setup-hook";
 
   passthru = {
     tests = {
