@@ -19,14 +19,14 @@
 }:
 buildPythonPackage rec {
   pname = "datasets";
-  version = "4.0.0";
+  version = "4.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "datasets";
     tag = version;
-    hash = "sha256-Cr25PgLNGX/KcFZE5h1oiaDW9J50ccMqA5z3q4sITus=";
+    hash = "sha256-1qcKx1qs8XvqI4Kygsal1C+Ir6Vbg8OU8D6d+LUebyY=";
   };
 
   build-system = [
