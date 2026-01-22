@@ -5,12 +5,14 @@
   autoreconfHook,
   pkg-config,
   munge,
-  lua,
+  lua5_1,
   libcap,
   perl,
   ncurses,
 }:
-
+let
+  lua = lua5_1;
+in
 stdenv.mkDerivation rec {
   pname = "diod";
   version = "1.1.0";
