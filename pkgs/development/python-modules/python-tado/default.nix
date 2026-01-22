@@ -18,7 +18,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "wmalgadey";
     repo = "PyTado";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-me62VPjKU+vh0vo4Fl86sEse1QZYD2zDpxchSiUcxTY=";
   };
 
