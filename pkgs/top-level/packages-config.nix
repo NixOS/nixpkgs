@@ -15,9 +15,5 @@
       inherit (super)
         rPackages
         ;
-
-      # emacsPackages is an alias for emacs.pkgs
-      # Re-introduce emacsPackages here so that emacs.pkgs can be searched.
-      emacsPackages = emacs.pkgs;
     };
 }
