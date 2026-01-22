@@ -35,7 +35,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "scikit-bio";
     repo = "scikit-bio";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-fnZpLhn2F/KoP3q7WmdaDXeC9i7hduGRkUWlCwwME3Q=";
   };
 
