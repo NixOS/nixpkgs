@@ -9,6 +9,7 @@ let
   configFormat = pkgs.formats.toml { };
   configFile = configFormat.generate "stalwart.toml" cfg.settings;
   useLegacyStorage = lib.versionOlder config.system.stateVersion "24.11";
+  useLegacyDefault = lib.versionOlder config.system.stateVersion "26.05";
 
   parsePorts =
     listeners:
@@ -53,9 +54,25 @@ in
 
     dataDir = lib.mkOption {
       type = lib.types.path;
-      default = "/var/lib/stalwart";
+      default = if useLegacyDefault then "/var/lib/stalwart-mail" else "/var/lib/stalwart";
       description = ''
         Data directory for stalwart
+      '';
+    };
+
+    user = lib.mkOption {
+      type = lib.types.str;
+      default = if useLegacyDefault then "stalwart-mail" else "stalwart";
+      description = ''
+        User ownership of service
+      '';
+    };
+
+    group = lib.mkOption {
+      type = lib.types.str;
+      default = if useLegacyDefault then "stalwart-mail" else "stalwart";
+      description = ''
+        Group ownership of service
       '';
     };
 
@@ -147,15 +164,19 @@ in
     # service is restarted on a potentially large number of files.
     # That would cause unnecessary and unwanted delays.
     users = {
-      groups.stalwart = { };
-      users.stalwart = {
-        isSystemUser = true;
-        group = "stalwart";
+      groups = {
+        ${cfg.group} = { };
+      };
+      users = {
+        ${cfg.user} = {
+          isSystemUser = true;
+          group = "${cfg.group}";
+        };
       };
     };
 
     systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' - stalwart stalwart - -"
+      "d '${cfg.dataDir}' - '${cfg.user}' '${cfg.group}' - -"
     ];
 
     systemd = {
@@ -195,12 +216,12 @@ in
           ReadWritePaths = [
             cfg.dataDir
           ];
-          CacheDirectory = "stalwart";
-          StateDirectory = "stalwart";
+          CacheDirectory = if useLegacyDefault then "stalwart-mail" else "stalwart";
+          StateDirectory = if useLegacyDefault then "stalwart-mail" else "stalwart";
 
           # Upstream uses "stalwart" as the username since 0.12.0
-          User = "stalwart";
-          Group = "stalwart";
+          User = if useLegacyDefault then "stalwart-mail" else "${cfg.user}";
+          Group = if useLegacyDefault then "stalwart-mail" else "${cfg.group}";
 
           # Bind standard privileged ports
           AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
