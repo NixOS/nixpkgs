@@ -16,7 +16,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "OpShin";
     repo = "python-secp256k1";
-    tag = version; # No tags in repo
+    tag = finalAttrs.version;
     hash = "sha256-vYCg/VpuB0tR8LKT6AjAMXZGQDQkw1GjY5qIvPU1jVE=";
   };
 
