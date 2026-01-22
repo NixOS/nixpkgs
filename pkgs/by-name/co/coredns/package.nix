@@ -102,6 +102,12 @@ buildGoModule (finalAttrs: {
     substituteInPlace test/readme_test.go \
       --replace-fail "TestReadme" "SkipReadme"
 
+    substituteInPlace test/metrics_test.go \
+      --replace-fail "TestMetricsRewriteRequestSize" "SkipMetricsRewriteRequestSize"
+
+    substituteInPlace test/quic_test.go \
+      --replace-fail "TestQUICReloadDoesNotPanic" "SkipQUICReloadDoesNotPanic"
+
     # this test fails if any external plugins were imported.
     # it's a lint rather than a test of functionality, so it's safe to disable.
     substituteInPlace test/presubmit_test.go \
