@@ -12246,10 +12246,6 @@ with pkgs;
     d2x-rebirth-full
     ;
 
-  fltrator = callPackage ../games/fltrator {
-    fltk = fltk-minimal;
-  };
-
   factorio = callPackage ../by-name/fa/factorio/package.nix { releaseType = "alpha"; };
 
   factorio-experimental = factorio.override {
@@ -12299,8 +12295,6 @@ with pkgs;
   };
 
   freeciv_gtk = freeciv;
-
-  gscrabble = python3Packages.callPackage ../games/gscrabble { };
 
   ibmcloud-cli = callPackage ../tools/admin/ibmcloud-cli { stdenv = stdenvNoCC; };
 
