@@ -5,9 +5,12 @@
   libX11,
   zlib,
   xorgproto,
-  libGL ? null,
-  libGLU ? null,
-  libglut ? null,
+  withLibGL ? !stdenv.hostPlatform.isDarwin,
+  libGL,
+  withLibGLU ? !stdenv.hostPlatform.isDarwin,
+  libGLU,
+  withLibglut ? !stdenv.hostPlatform.isDarwin,
+  libglut,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,9 +27,9 @@ stdenv.mkDerivation rec {
     zlib
     xorgproto
   ]
-  ++ lib.optional (libGL != null) libGL
-  ++ lib.optional (libGLU != null) libGLU
-  ++ lib.optional (libglut != null) libglut;
+  ++ lib.optional withLibGL libGL
+  ++ lib.optional withLibGLU libGLU
+  ++ lib.optional withLibglut libglut;
 
   preConfigure = ''
     substituteInPlace src/Makefile.in \
@@ -38,5 +41,6 @@ stdenv.mkDerivation rec {
     mainProgram = "construo.x11";
     homepage = "http://fs.fsf.org/construo/";
     license = lib.licenses.gpl3;
+    priority = 10;
   };
 }
