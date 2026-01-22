@@ -1,10 +1,10 @@
 {
   "chromium": {
-    "version": "144.0.7559.59",
+    "version": "144.0.7559.96",
     "chromedriver": {
-      "version": "144.0.7559.60",
-      "hash_darwin": "sha256-t7iNI8tGDo5BMUGtgqIQ/9uk7LYxp5IdWrP/8KMe2YY=",
-      "hash_darwin_aarch64": "sha256-g5dieRsXshJ//Nta/dOkO87JsIgV8DW1SAVlc/Sxxz0="
+      "version": "144.0.7559.97",
+      "hash_darwin": "sha256-0jenwhaxPdE7oDC/nNnByObDRwpeMr7kfTE5WDvtjGc=",
+      "hash_darwin_aarch64": "sha256-iXERqm2wo/J930n/0zsZp7UgJxsgGoJgNn7Bbc2lBPc="
     },
     "deps": {
       "depot_tools": {
@@ -21,8 +21,8 @@
     "DEPS": {
       "src": {
         "url": "https://chromium.googlesource.com/chromium/src.git",
-        "rev": "cd1d73dd77daadf4581dc29ca73482fc241e079d",
-        "hash": "sha256-K/dmiy5u+XJIpS6AOTaXDLVYp5qAtfUbfSbGCpt9Cv8=",
+        "rev": "d7b80622cfab91c265741194e7942eefd2d21811",
+        "hash": "sha256-Cz3iDS0raJHRh+byrs7GYp6sck54mJq7yzsjLUWDWqA=",
         "recompress": true
       },
       "src/third_party/clang-format/script": {
@@ -132,8 +132,8 @@
       },
       "src/third_party/dawn": {
         "url": "https://dawn.googlesource.com/dawn.git",
-        "rev": "a8d1e554a9bd35b0418ba7fd6b0bc005250a7703",
-        "hash": "sha256-GJuT3rqNxvKkRTMvoMi8/QYda0y0RTkZLhb5v9QkwGA="
+        "rev": "9e0e116de6735ab113349675d31a23c121254fe0",
+        "hash": "sha256-MsUmRx5fQYWbkPJ/JvaoT//qjPYy5xxZXIa3t5LDxSY="
       },
       "src/third_party/dawn/third_party/glfw": {
         "url": "https://chromium.googlesource.com/external/github.com/glfw/glfw",
@@ -257,8 +257,8 @@
       },
       "src/third_party/devtools-frontend/src": {
         "url": "https://chromium.googlesource.com/devtools/devtools-frontend",
-        "rev": "d5efa4236f8676254c9f39ccfef18bd633de5fd3",
-        "hash": "sha256-BmwsvTjgYQayFnyT9EfFzpCfbgdTt9xZlsUba0uJelg="
+        "rev": "a3064782146fc247c488d44c1ad3496b29d55ec4",
+        "hash": "sha256-vLkWH/EiDHxl/dz4soKybQF1hgud/7MlnDhVPicYJGY="
       },
       "src/third_party/dom_distiller_js/dist": {
         "url": "https://chromium.googlesource.com/chromium/dom-distiller/dist.git",
@@ -807,8 +807,8 @@
       },
       "src/v8": {
         "url": "https://chromium.googlesource.com/v8/v8.git",
-        "rev": "ad25f9ae50a53bee50f459bfee25fb1e6f64adc3",
-        "hash": "sha256-vyOtnPA3tAeorNOGTDuAnwJ/UtpjeO8z+RSjx9RIFFc="
+        "rev": "6c2c296f23a5487ccb2536cf7c90d01f35d03077",
+        "hash": "sha256-gBzwGvl/tqj4Z6acdLN326I80kBLEk+Nn8oN6D193o4="
       }
     }
   },
