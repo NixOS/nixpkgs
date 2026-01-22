@@ -9,14 +9,14 @@
   astring,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "pecu";
   version = "0.7";
 
   minimalOCamlVersion = "4.03";
 
   src = fetchurl {
-    url = "https://github.com/mirage/pecu/releases/download/v${version}/pecu-${version}.tbz";
+    url = "https://github.com/mirage/pecu/releases/download/v${finalAttrs.version}/pecu-${finalAttrs.version}.tbz";
     hash = "sha256-rXR3tbFkKNM8MkQAZ2hJU9lO+qQ/qvYghXkYus6f13g=";
   };
 
@@ -35,4 +35,4 @@ buildDunePackage rec {
     homepage = "https://github.com/mirage/pecu";
     maintainers = [ lib.maintainers.sternenseemann ];
   };
-}
+})
