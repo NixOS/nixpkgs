@@ -16,13 +16,13 @@
 
 mkDerivation rec {
   pname = "klayout";
-  version = "0.30.4-1";
+  version = "0.30.5";
 
   src = fetchFromGitHub {
     owner = "KLayout";
     repo = "klayout";
     rev = "v${version}";
-    hash = "sha256-EhIGxiXqo09/p8mA00RRvKgXJncVr4qguYSPyEC0fqc=";
+    hash = "sha256-WigRictn6CxOPId2YitlEm43vEw+dSRWdoareD9HtMc=";
   };
 
   postPatch = ''
@@ -33,7 +33,9 @@ mkDerivation rec {
   nativeBuildInputs = [
     which
     perl
-    python3
+    # Crucial: 0.30.5 uses Python scripts to orchestrate the C++ build.
+    # These scripts now require tomli to parse the new pysetup.toml files.
+    (python3.withPackages (ps: [ ps.tomli ]))
     ruby
   ];
 
@@ -48,17 +50,29 @@ mkDerivation rec {
   buildPhase = ''
     runHook preBuild
     mkdir -p $out/lib
-    ./build.sh -qt5 -prefix $out/lib -option -j$NIX_BUILD_CORES
+
+    # -qt5: Using Qt5 as per your previous configuration.
+    # -rpath: Ensures the klayout binary can find its internal libraries (tl, db, etc.)
+    #         in the nix store without needing LD_LIBRARY_PATH.
+    ./build.sh \
+      -qt5 \
+      -prefix $out/lib \
+      -option "-j$NIX_BUILD_CORES" \
+      -rpath $out/lib
+
     runHook postBuild
   '';
 
   postBuild =
     lib.optionalString stdenv.hostPlatform.isLinux ''
-      mkdir $out/bin
+            mkdir -p $out/bin
 
-      install -Dm444 etc/klayout.desktop -t $out/share/applications
-      install -Dm444 etc/logo.png $out/share/icons/hicolor/256x256/apps/klayout.png
-      mv $out/lib/klayout $out/bin/
+            install -Dm444 etc/klayout.desktop -t $out/share/applications
+            install -Dm444 etc/logo.png $out/share/icons/hicolor/256x256/apps/klayout.png
+
+      # The build script puts the binary in the prefix ($out/lib).
+            # We move/copy it to $out/bin to make it available in the user's PATH.
+            cp $out/lib/klayout $out/bin/
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p $out/Applications
@@ -78,10 +92,10 @@ mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = toString [ "-Wno-parentheses" ];
 
-  dontInstall = true; # Installation already happens as part of "build.sh"
+  # Installation is handled manually in buildPhase/postBuild via build.sh -prefix
+  dontInstall = true;
 
-  # Fix: "gsiDeclQMessageLogger.cc:126:42: error: format not a string literal
-  # and no format arguments [-Werror=format-security]"
+  # Fix for: "gsiDeclQMessageLogger.cc: error: format not a string literal"
   hardeningDisable = [ "format" ];
 
   meta = {
