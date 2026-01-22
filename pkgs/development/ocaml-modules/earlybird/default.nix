@@ -18,7 +18,7 @@
   gitUpdater,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "earlybird";
   version = "1.3.4";
 
@@ -27,7 +27,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "hackwaly";
     repo = "ocamlearlybird";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-uwx8N4GDs7NT2fEmNlvdBe2cIZGVPQpoaiiKROFa+kk=";
   };
 
@@ -56,4 +56,4 @@ buildDunePackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.romildo ];
   };
-}
+})
