@@ -17,7 +17,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "pyauth";
     repo = "http-message-signatures";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-GFOdefqcAia4ZHqt1XMS2dw2bQ3AzbY0AQm7b8niYRI=";
   };
 
