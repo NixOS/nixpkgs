@@ -384,7 +384,7 @@ in
       '';
     };
 
-    globalEnvironment = mkOption {
+    defaultEnvironment = mkOption {
       type =
         with types;
         attrsOf (
@@ -433,6 +433,16 @@ in
       '';
       type = lib.types.submodule {
         freeformType = types.attrsOf unitOption;
+        options = {
+          DefaultEnvironment = lib.mkOption {
+            type = lib.types.separatedString " ";
+            description = "Configures environment variables passed to all executed processes.";
+          };
+          ManagerEnvironment = lib.mkOption {
+            type = lib.types.separatedString " ";
+            description = "Sets variables for the manager process itself.";
+          };
+        };
       };
       example = {
         WatchdogDevice = "/dev/watchdog";
@@ -697,6 +707,9 @@ in
       ) "${builtins.concatStringsSep ":" config.boot.extraSystemdUnitPaths}:";
     };
     systemd.settings.Manager = {
+      DefaultEnvironment = lib.concatStringsSep " " (
+        lib.mapAttrsToList (n: v: "${n}=${lib.escapeShellArg v}") cfg.defaultEnvironment
+      );
       ManagerEnvironment = lib.concatStringsSep " " (
         lib.mapAttrsToList (n: v: "${n}=${lib.escapeShellArg v}") cfg.managerEnvironment
       );
@@ -829,6 +842,7 @@ in
       [ "systemd" "watchdog" "kexecTime" ]
       [ "systemd" "settings" "Manager" "KExecWatchdogSec" ]
     )
+    (lib.mkRenamedOptionModule [ "systemd" "globalEnvironment" ] [ "systemd" "defaultEnvironment" ])
     (mkRemovedOptionModule [
       "systemd"
       "enableCgroupAccounting"
