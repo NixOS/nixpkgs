@@ -4,12 +4,12 @@
   fetchCrate,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "toml2nix";
   version = "0.1.1";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-YhluLS4tFMibFrDzgIvNtfjM5dAqJQvygeZocKn3+Jg=";
   };
 
@@ -29,4 +29,4 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = [ lib.maintainers.progrm_jarvis ];
   };
-}
+})
