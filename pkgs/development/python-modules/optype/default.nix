@@ -11,7 +11,7 @@
   pythonOlder,
 }:
 
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "optype";
   version = "0.15.0";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "jorenham";
     repo = "optype";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-tzbS+CeWGxMXK1LFN/LslI6kfbVQPjqYlDB7fX0ogfU=";
   };
 
@@ -57,4 +57,4 @@ buildPythonPackage {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ jolars ];
   };
-}
+})
