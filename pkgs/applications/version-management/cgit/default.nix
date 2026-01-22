@@ -128,6 +128,7 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [
       bjornfor
       qyliss
+      sternenseemann
     ];
   };
 }
