@@ -5570,3 +5570,183 @@ index d9f69649d0..181be80835 100644
    check_reverse (1,
                   "name: 1.in-addr.arpa\n"
                   "net: 0x00000001\n");
+
+commit cbf39c26b25801e9bc88499b4fd361ac172d4125
+Author: Adhemerval Zanella <adhemerval.zanella@linaro.org>
+Date:   Thu Jan 15 10:32:19 2026 -0300
+
+    posix: Reset wordexp_t fields with WRDE_REUSE (CVE-2025-15281 / BZ 33814)
+    
+    The wordexp fails to properly initialize the input wordexp_t when
+    WRDE_REUSE is used. The wordexp_t struct is properly freed, but
+    reuses the old wc_wordc value and updates the we_wordv in the
+    wrong position.  A later wordfree will then call free with an
+    invalid pointer.
+    
+    Checked on x86_64-linux-gnu and i686-linux-gnu.
+    
+    Reviewed-by: Carlos O'Donell <carlos@redhat.com>
+    (cherry picked from commit 80cc58ea2de214f85b0a1d902a3b668ad2ecb302)
+
+diff --git a/NEWS b/NEWS
+index ed3c114c7a..7e7e1930dd 100644
+--- a/NEWS
++++ b/NEWS
+@@ -16,6 +16,8 @@ The following bugs were resolved with this release:
+   [33356] nptl: creating thread stack with guardsize 0 can erroneously
+     conclude MADV_GUARD_INSTALL is available
+   [33361] nss: Group merge does not react to ERANGE during merge
++  [33814] glob: wordexp with WRDE_REUSE and WRDE_APPEND may return
++    uninitialized memory
+ 
+ Version 2.42
+ 
+diff --git a/posix/Makefile b/posix/Makefile
+index a36e5decd3..1ea86efcc1 100644
+--- a/posix/Makefile
++++ b/posix/Makefile
+@@ -327,6 +327,7 @@ tests := \
+   tst-wait4 \
+   tst-waitid \
+   tst-wordexp-nocmd \
++  tst-wordexp-reuse \
+   tstgetopt \
+   # tests
+ 
+@@ -457,6 +458,8 @@ generated += \
+   tst-rxspencer-no-utf8.mtrace \
+   tst-vfork3-mem.out \
+   tst-vfork3.mtrace \
++  tst-wordexp-reuse-mem.out \
++  tst-wordexp-reuse.mtrace \
+   # generated
+ endif
+ endif
+@@ -492,6 +495,7 @@ tests-special += \
+   $(objpfx)tst-pcre-mem.out \
+   $(objpfx)tst-rxspencer-no-utf8-mem.out \
+   $(objpfx)tst-vfork3-mem.out \
++  $(objpfx)tst-wordexp-reuse.out \
+   # tests-special
+ endif
+ endif
+@@ -775,3 +779,10 @@ $(objpfx)posix-conf-vars-def.h: $(..)scripts/gen-posix-conf-vars.awk \
+ 	$(make-target-directory)
+ 	$(AWK) -f $(filter-out Makefile, $^) > $@.tmp
+ 	mv -f $@.tmp $@
++
++tst-wordexp-reuse-ENV += MALLOC_TRACE=$(objpfx)tst-wordexp-reuse.mtrace \
++			 LD_PRELOAD=$(common-objpfx)/malloc/libc_malloc_debug.so
++
++$(objpfx)tst-wordexp-reuse-mem.out: $(objpfx)tst-wordexp-reuse.out
++	$(common-objpfx)malloc/mtrace $(objpfx)tst-wordexp-reuse.mtrace > $@; \
++	$(evaluate-test)
+diff --git a/posix/tst-wordexp-reuse.c b/posix/tst-wordexp-reuse.c
+new file mode 100644
+index 0000000000..3926b9f557
+--- /dev/null
++++ b/posix/tst-wordexp-reuse.c
+@@ -0,0 +1,89 @@
++/* Test for wordexp with WRDE_REUSE flag.
++   Copyright (C) 2026 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#include <wordexp.h>
++#include <mcheck.h>
++
++#include <support/check.h>
++
++static int
++do_test (void)
++{
++  mtrace ();
++
++  {
++    wordexp_t p = { 0 };
++    TEST_COMPARE (wordexp ("one", &p, 0), 0);
++    TEST_COMPARE (p.we_wordc, 1);
++    TEST_COMPARE_STRING (p.we_wordv[0], "one");
++    TEST_COMPARE (wordexp ("two", &p, WRDE_REUSE), 0);
++    TEST_COMPARE (p.we_wordc, 1);
++    TEST_COMPARE_STRING (p.we_wordv[0], "two");
++    wordfree (&p);
++  }
++
++  {
++    wordexp_t p = { .we_offs = 2 };
++    TEST_COMPARE (wordexp ("one", &p, 0), 0);
++    TEST_COMPARE (p.we_wordc, 1);
++    TEST_COMPARE_STRING (p.we_wordv[0], "one");
++    TEST_COMPARE (wordexp ("two", &p, WRDE_REUSE | WRDE_DOOFFS), 0);
++    TEST_COMPARE (p.we_wordc, 1);
++    TEST_COMPARE_STRING (p.we_wordv[p.we_offs + 0], "two");
++    wordfree (&p);
++  }
++
++  {
++    wordexp_t p = { 0 };
++    TEST_COMPARE (wordexp ("one", &p, 0), 0);
++    TEST_COMPARE (p.we_wordc, 1);
++    TEST_COMPARE_STRING (p.we_wordv[0], "one");
++    TEST_COMPARE (wordexp ("two", &p, WRDE_REUSE | WRDE_APPEND), 0);
++    TEST_COMPARE (p.we_wordc, 1);
++    TEST_COMPARE_STRING (p.we_wordv[0], "two");
++    wordfree (&p);
++  }
++
++  {
++    wordexp_t p = { .we_offs = 2 };
++    TEST_COMPARE (wordexp ("one", &p, WRDE_DOOFFS), 0);
++    TEST_COMPARE (p.we_wordc, 1);
++    TEST_COMPARE_STRING (p.we_wordv[p.we_offs + 0], "one");
++    TEST_COMPARE (wordexp ("two", &p, WRDE_REUSE
++				      | WRDE_DOOFFS), 0);
++    TEST_COMPARE (p.we_wordc, 1);
++    TEST_COMPARE_STRING (p.we_wordv[p.we_offs + 0], "two");
++    wordfree (&p);
++  }
++
++  {
++    wordexp_t p = { .we_offs = 2 };
++    TEST_COMPARE (wordexp ("one", &p, WRDE_DOOFFS), 0);
++    TEST_COMPARE (p.we_wordc, 1);
++    TEST_COMPARE_STRING (p.we_wordv[p.we_offs + 0], "one");
++    TEST_COMPARE (wordexp ("two", &p, WRDE_REUSE
++				      | WRDE_DOOFFS | WRDE_APPEND), 0);
++    TEST_COMPARE (p.we_wordc, 1);
++    TEST_COMPARE_STRING (p.we_wordv[p.we_offs + 0], "two");
++    wordfree (&p);
++  }
++
++  return 0;
++}
++
++#include <support/test-driver.c>
+diff --git a/posix/wordexp.c b/posix/wordexp.c
+index a69b732801..9df4bb7424 100644
+--- a/posix/wordexp.c
++++ b/posix/wordexp.c
+@@ -2216,7 +2216,9 @@ wordexp (const char *words, wordexp_t *pwordexp, int flags)
+     {
+       /* Minimal implementation of WRDE_REUSE for now */
+       wordfree (pwordexp);
++      old_word.we_wordc = 0;
+       old_word.we_wordv = NULL;
++      pwordexp->we_wordc = 0;
+     }
+ 
+   if ((flags & WRDE_APPEND) == 0)
