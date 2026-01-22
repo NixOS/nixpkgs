@@ -1,0 +1,31 @@
+From a8cc582e42dd9fd6b2304003f3e5ab7637c21b73 Mon Sep 17 00:00:00 2001
+From: Yu Watanabe <watanabe.yu+github@gmail.com>
+Date: Mon, 9 Jun 2025 13:37:38 +0900
+Subject: [PATCH 05/30] musl: meson: make musl not define wchar_t in their
+ header
+
+Otherwise, musl defines wchar_t as int, which conflicts with the
+assumption by sd-boot, i.e. wchar_t is 2 bytes.
+---
+ src/boot/meson.build | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/src/boot/meson.build b/src/boot/meson.build
+index ba0b309acf..bea96bb2e3 100644
+--- a/src/boot/meson.build
++++ b/src/boot/meson.build
+@@ -179,6 +179,11 @@ if get_option('mode') == 'developer' and get_option('debug')
+         efi_c_args += '-DEFI_DEBUG'
+ endif
+ 
++if get_option('libc') == 'musl'
++        # To make musl not define wchar_t as int, rather than short.
++        efi_c_args += '-D__DEFINED_wchar_t'
++endif
++
+ efi_c_ld_args = [
+         '-nostdlib',
+         '-static-pie',
+-- 
+2.51.0
+

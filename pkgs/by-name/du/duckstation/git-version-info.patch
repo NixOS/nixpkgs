@@ -1,0 +1,20 @@
+diff --git a/src/scmversion/gen_scmversion.sh b/src/scmversion/gen_scmversion.sh
+index 0f8fa4239..2cc91a4a8 100755
+--- a/src/scmversion/gen_scmversion.sh
++++ b/src/scmversion/gen_scmversion.sh
+@@ -10,11 +10,11 @@ else
+ fi
+ 
+ 
+-HASH=$(git rev-parse HEAD)
+-BRANCH=$(git rev-parse --abbrev-ref HEAD | tr -d '\r\n')
+-TAG=$(git describe --dirty | tr -d '\r\n')
++HASH="@gitHash@"
++BRANCH="@gitBranch@"
++TAG="@gitTag@"
+ VERSION=$(echo "${TAG}" | sed -E 's/-g[0-9a-f]+//')
+-DATE=$(git log -1 --date=iso8601-strict --format=%cd)
++DATE="@gitDate@"
+ 
+ cd $CURDIR
+ 

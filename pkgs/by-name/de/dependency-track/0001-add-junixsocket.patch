@@ -1,0 +1,17 @@
+diff --git a/pom.xml b/pom.xml
+index 9988e765..f69576b4 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -457,6 +457,12 @@
+             <version>${lib.testcontainers.version}</version>
+             <scope>test</scope>
+         </dependency>
++        <dependency>
++            <groupId>com.kohlschutter.junixsocket</groupId>
++            <artifactId>junixsocket-core</artifactId>
++            <version>2.10.0</version>
++            <type>pom</type>
++        </dependency>
+     </dependencies>
+ 
+     <build>

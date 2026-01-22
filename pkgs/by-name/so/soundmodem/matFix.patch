@@ -1,0 +1,11 @@
+--- a/matlib/mat.hh	2003-01-06 23:47:26.000000000 +0100
++++ b/matlib/mat.copy.hh	2021-01-06 10:05:34.332415179 +0100
+@@ -91,7 +91,7 @@
+                 memcpy(c, r, d1 * d3 * sizeof(c[0]));
+ }
+
+-template<typename T> void mdet(const T *c, unsigned int d)
++template<typename T> int mdet(const T *c, unsigned int d)
+ {
+         T *c2;
+         unsigned int i, j, k, l;

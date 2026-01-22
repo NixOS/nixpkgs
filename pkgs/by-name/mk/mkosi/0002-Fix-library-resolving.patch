@@ -1,0 +1,34 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Moritz Sanft <58110325+msanft@users.noreply.github.com>
+Date: Tue, 3 Sep 2024 09:00:34 +0200
+Subject: [PATCH] Fix library resolving
+
+As ctypes doesn't do lookups in the Nix store for libraries, we supply the exact paths.
+
+Signed-off-by: Moritz Sanft <58110325+msanft@users.noreply.github.com>
+---
+ mkosi/sandbox.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/mkosi/sandbox.py b/mkosi/sandbox.py
+index 4a41f333a764bc41abbd36302bd9fe86baa45a3f..1ce102597f1935deadcec475ec873eab9ca03c22 100755
+--- a/mkosi/sandbox.py
++++ b/mkosi/sandbox.py
+@@ -124,7 +124,7 @@ class cap_user_data_t(ctypes.Structure):
+     ]
+ 
+ 
+-libc = ctypes.CDLL(None, use_errno=True)
++libc = ctypes.CDLL("@LIBC@", use_errno=True)
+ 
+ libc.syscall.restype = ctypes.c_long
+ libc.unshare.argtypes = (ctypes.c_int,)
+@@ -291,7 +291,7 @@ def seccomp_suppress(*, chown: bool = False, sync: bool = False) -> None:
+     if not chown and not sync:
+         return
+ 
+-    libseccomp = ctypes.CDLL("libseccomp.so.2")
++    libseccomp = ctypes.CDLL("@LIBSECCOMP@")
+     if libseccomp is None:
+         raise FileNotFoundError("libseccomp.so.2")
+ 

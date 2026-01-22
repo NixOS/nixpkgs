@@ -1,0 +1,100 @@
+{
+  lib,
+  aiohttp,
+  aiomqtt,
+  buildPythonPackage,
+  cachetools,
+  defusedxml,
+  docker,
+  fetchFromGitHub,
+  orjson,
+  pkg-config,
+  pycountry,
+  pytest-asyncio,
+  pytest-codspeed,
+  pytestCheckHook,
+  pythonOlder,
+  rustPlatform,
+  syrupy,
+  testfixtures,
+  xz,
+}:
+
+buildPythonPackage rec {
+  pname = "deebot-client";
+  version = "17.0.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.13";
+
+  src = fetchFromGitHub {
+    owner = "DeebotUniverse";
+    repo = "client.py";
+    tag = version;
+    hash = "sha256-evd0wqID9kEBzhJgRSpcd95ALp9LPSb5RM3wEIKuY0Y=";
+  };
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-cLNFUDT74NrBgUL6vGC6lbFy2A2W1jYF7A8H3BQ/s8A=";
+  };
+
+  pythonRelaxDeps = [
+    "aiohttp"
+  ];
+
+  nativeBuildInputs = [
+    pkg-config
+    rustPlatform.cargoSetupHook
+    rustPlatform.maturinBuildHook
+  ];
+
+  buildInputs = [ xz ];
+
+  dependencies = [
+    aiohttp
+    aiomqtt
+    cachetools
+    defusedxml
+    orjson
+  ];
+
+  nativeCheckInputs = [
+    docker
+    pycountry
+    pytest-asyncio
+    pytest-codspeed
+    pytestCheckHook
+    syrupy
+    testfixtures
+  ];
+
+  preCheck = ''
+    rm -rf deebot_client
+  '';
+
+  pythonImportsCheck = [ "deebot_client" ];
+
+  disabledTests = [
+    # Tests require running container
+    "test_last_message_received_at"
+    "test_client_bot_subscription"
+    "test_client_reconnect_manual"
+    "test_p2p_success"
+    "test_p2p_not_supported"
+    "test_p2p_data_type_not_supported"
+    "test_p2p_to_late"
+    "test_p2p_parse_error"
+    "test_mqtt_task_exceptions"
+    "test_mqtt_task_exceptions"
+    "test_client_reconnect_on_broker_error"
+  ];
+
+  meta = {
+    description = "Deebot client library";
+    homepage = "https://github.com/DeebotUniverse/client.py";
+    changelog = "https://github.com/DeebotUniverse/client.py/releases/tag/${version}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
+  };
+}

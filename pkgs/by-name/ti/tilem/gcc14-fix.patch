@@ -1,0 +1,13 @@
+diff --git a/gui/macro.c b/gui/macro.c
+index ae8db8b..226d48f 100644
+--- a/gui/macro.c
++++ b/gui/macro.c
+@@ -86,7 +86,7 @@ void tilem_macro_add_action(TilemMacro* macro, int type, char * value) {
+ 	macro->actions = tilem_macro_actions_new(macro, n + 1);
+ 
+ 	/* Then we need to save the action */	
+-	macro->actions[n] =  g_new(char, strlen(value)); /* FIXME : gcc says : "assignment from incompatible pointer type" ??? */
++	macro->actions[n] =  g_new(TilemMacroAtom, 1); /* FIXME : gcc says : "assignment from incompatible pointer type" ??? */
+ 	macro->actions[n]->value = g_strdup(value);
+ 	macro->actions[n]->type = type;
+ 	macro->n++;

@@ -1,0 +1,56 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pandas,
+  pyarrow,
+  geoarrow-pyarrow,
+  geoarrow-types,
+  setuptools-scm,
+}:
+buildPythonPackage rec {
+  pname = "geoarrow-pandas";
+  version = "0.1.2";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    repo = "geoarrow-python";
+    owner = "geoarrow";
+    tag = "geoarrow-pandas-${version}";
+    hash = "sha256-Ni+GKTRhRDRHip1us3OZPuUhHQCNU7Nap865T/+CU8Y=";
+  };
+
+  sourceRoot = "${src.name}/geoarrow-pandas";
+
+  build-system = [ setuptools-scm ];
+
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  dependencies = [
+    geoarrow-pyarrow
+    geoarrow-types
+    pandas
+    pyarrow
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "geoarrow.pandas" ];
+
+  meta = {
+    description = "Python implementation of the GeoArrow specification";
+    homepage = "https://github.com/geoarrow/geoarrow-python";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      cpcloud
+    ];
+    teams = [ lib.teams.geospatial ];
+    # its removal upstream is in question
+    # https://github.com/geoarrow/geoarrow-python/issues/75
+    # please unbreak it if the author decides to release a new version
+    broken = true;
+  };
+}

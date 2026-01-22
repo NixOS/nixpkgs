@@ -1,0 +1,13 @@
+Seulement dans b: logs
+diff --color -ur a/Makefile b/Makefile
+--- a/Makefile	2021-02-15 17:07:14.333810200 +0100
++++ b/Makefile	2021-02-15 17:19:18.599426984 +0100
+@@ -6,7 +6,7 @@
+ tmpdir   = /tmp
+ 
+ cqrlog: src/cqrlog.lpi
+-	$(CC) --ws=gtk2 --pcp=$(tmpdir)/.lazarus src/cqrlog.lpi
++	$(CC) --ws=gtk2 --pcp=$(tmpdir)/.lazarus --lazarusdir=@Lazarusdir@ src/cqrlog.lpi
+ 	$(ST) src/cqrlog
+ 	gzip tools/cqrlog.1 -c > tools/cqrlog.1.gz
+ 

@@ -1,0 +1,20 @@
+diff --git a/cmake/BuildQCoro.cmake b/cmake/BuildQCoro.cmake
+index 941e813..41c88c6 100644
+--- a/cmake/BuildQCoro.cmake
++++ b/cmake/BuildQCoro.cmake
+@@ -14,14 +14,6 @@ if (BACKEND_ONLY)
+     set(QCORO_WITH_QML OFF)
+ endif()
+ 
+-FetchContent_Declare(
+-    qcoro
+-    GIT_REPOSITORY https://github.com/danvratil/qcoro.git
+-    GIT_TAG        v${QCORO_VERSION}
+-    SOURCE_SUBDIR  "NeedManualAddSubDir" # make it possible to add_subdirectory below
+-)
+-
+-FetchContent_MakeAvailable(qcoro)
+ 
+ set(mll ${CMAKE_MESSAGE_LOG_LEVEL})
+ if (NOT VERBOSE_FETCH)
+

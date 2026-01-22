@@ -1,0 +1,13 @@
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 0955b27..e648982 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -264,7 +264,7 @@ set_target_properties(${targetname} PROPERTIES
+     SOVERSION "${LIBQGPGME_SOVERSION}"
+ )
+ 
+-target_include_directories(${targetname} INTERFACE "$<INSTALL_INTERFACE:include/qgpgme-qt${QT_MAJOR_VERSION}>")
++target_include_directories(${targetname} INTERFACE "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/qgpgme-qt${QT_MAJOR_VERSION}>")
+ 
+ if (${QT_MAJOR_VERSION} EQUAL 6)
+     set(config_suffix Qt6)

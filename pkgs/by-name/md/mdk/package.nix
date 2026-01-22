@@ -1,0 +1,33 @@
+{
+  lib,
+  stdenv,
+  fetchurl,
+  intltool,
+  pkg-config,
+  glib,
+}:
+
+stdenv.mkDerivation rec {
+  pname = "gnu-mdk";
+  version = "1.3.1";
+  src = fetchurl {
+    url = "mirror://gnu/mdk/v${version}/mdk-${version}.tar.gz";
+    sha256 = "sha256-67ljk4xojBUP9qrtwp8w0JAgoeMdVbMMIQHwh3NRbRk=";
+  };
+  nativeBuildInputs = [
+    pkg-config
+    intltool
+  ];
+  buildInputs = [ glib ];
+  postInstall = ''
+    mkdir -p $out/share/emacs/site-lisp/
+    cp -v ./misc/*.el $out/share/emacs/site-lisp
+  '';
+
+  meta = {
+    description = "GNU MIX Development Kit (MDK)";
+    homepage = "https://www.gnu.org/software/mdk/";
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.all;
+  };
+}

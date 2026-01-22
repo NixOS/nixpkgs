@@ -1,0 +1,39 @@
+diff --git a/cli/src/lib.rs b/cli/src/lib.rs
+index 4a00747e..e17d253b 100644
+--- a/cli/src/lib.rs
++++ b/cli/src/lib.rs
+@@ -6,7 +6,6 @@ pub mod highlight;
+ pub mod init;
+ pub mod input;
+ pub mod logger;
+ pub mod parse;
+-pub mod playground;
+ pub mod query;
+ pub mod query_testing;
+ pub mod tags;
+diff --git a/cli/src/main.rs b/cli/src/main.rs
+index 1758fada..4bc56cc2 100644
+--- a/cli/src/main.rs
++++ b/cli/src/main.rs
+@@ -23,7 +23,7 @@ use tree_sitter_cli::{
+     input::{get_input, get_tmp_source_file, CliInput},
+     logger,
+     parse::{self, ParseDebugType, ParseFileOptions, ParseOutput, ParseTheme},
+-    playground, query,
++    query,
+     tags::{self, TagsOptions},
+     test::{self, TestOptions, TestStats},
+     test_highlight, test_tags, util, version, wasm,
+@@ -1614,10 +1614,8 @@ impl Tags {
+ 
+ impl Playground {
+     fn run(self, current_dir: &Path) -> Result<()> {
+-        let open_in_browser = !self.quiet;
+-        let grammar_path = self.grammar_path.as_deref().map_or(current_dir, Path::new);
+-        playground::serve(grammar_path, open_in_browser)?;
+-        Ok(())
++        println!("ERROR: web-ui is not available in this nixpkgs build; enable the webUISupport");
++        std::process::exit(1);
+     }
+ }
+ 

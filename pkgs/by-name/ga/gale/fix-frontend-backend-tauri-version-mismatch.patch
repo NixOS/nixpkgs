@@ -1,0 +1,88 @@
+diff --git a/package.json b/package.json
+index baa5356..d2c5dcf 100644
+--- a/package.json
++++ b/package.json
+@@ -32,7 +32,7 @@
+ 	},
+ 	"type": "module",
+ 	"dependencies": {
+-		"@tauri-apps/api": "^2.6.0",
++		"@tauri-apps/api": "2.7.0",
+ 		"@tauri-apps/plugin-clipboard-manager": "^2.3.0",
+ 		"@tauri-apps/plugin-deep-link": "^2.4.0",
+ 		"@tauri-apps/plugin-dialog": "^2.3.0",
+diff --git a/pnpm-lock.yaml b/pnpm-lock.yaml
+index 562bafc..50dac76 100644
+--- a/pnpm-lock.yaml
++++ b/pnpm-lock.yaml
+@@ -9,8 +9,8 @@ importers:
+   .:
+     dependencies:
+       '@tauri-apps/api':
+-        specifier: ^2.6.0
+-        version: 2.6.0
++        specifier: 2.7.0
++        version: 2.7.0
+       '@tauri-apps/plugin-clipboard-manager':
+         specifier: ^2.3.0
+         version: 2.3.0
+@@ -517,8 +517,8 @@ packages:
+     peerDependencies:
+       vite: ^5.2.0 || ^6 || ^7
+ 
+-  '@tauri-apps/api@2.6.0':
+-    resolution: {integrity: sha512-hRNcdercfgpzgFrMXWwNDBN0B7vNzOzRepy6ZAmhxi5mDLVPNrTpo9MGg2tN/F7JRugj4d2aF7E1rtPXAHaetg==}
++  '@tauri-apps/api@2.7.0':
++    resolution: {integrity: sha512-v7fVE8jqBl8xJFOcBafDzXFc8FnicoH3j8o8DNNs0tHuEBmXUDqrCOAzMRX0UkfpwqZLqvrvK0GNQ45DfnoVDg==}
+ 
+   '@tauri-apps/plugin-clipboard-manager@2.3.0':
+     resolution: {integrity: sha512-81NOBA2P+OTY8RLkBwyl9ZR/0CeggLub4F6zxcxUIfFOAqtky7J61+K/MkH2SC1FMxNBxrX0swDuKvkjkHadlA==}
+@@ -1548,39 +1548,39 @@ snapshots:
+       tailwindcss: 4.1.11
+       vite: 5.4.19(lightningcss@1.30.1)
+ 
+-  '@tauri-apps/api@2.6.0': {}
++  '@tauri-apps/api@2.7.0': {}
+ 
+   '@tauri-apps/plugin-clipboard-manager@2.3.0':
+     dependencies:
+-      '@tauri-apps/api': 2.6.0
++      '@tauri-apps/api': 2.7.0
+ 
+   '@tauri-apps/plugin-deep-link@2.4.0':
+     dependencies:
+-      '@tauri-apps/api': 2.6.0
++      '@tauri-apps/api': 2.7.0
+ 
+   '@tauri-apps/plugin-dialog@2.3.0':
+     dependencies:
+-      '@tauri-apps/api': 2.6.0
++      '@tauri-apps/api': 2.7.0
+ 
+   '@tauri-apps/plugin-http@2.5.0':
+     dependencies:
+-      '@tauri-apps/api': 2.6.0
++      '@tauri-apps/api': 2.7.0
+ 
+   '@tauri-apps/plugin-os@2.3.0':
+     dependencies:
+-      '@tauri-apps/api': 2.6.0
++      '@tauri-apps/api': 2.7.0
+ 
+   '@tauri-apps/plugin-process@2.3.0':
+     dependencies:
+-      '@tauri-apps/api': 2.6.0
++      '@tauri-apps/api': 2.7.0
+ 
+   '@tauri-apps/plugin-shell@2.3.0':
+     dependencies:
+-      '@tauri-apps/api': 2.6.0
++      '@tauri-apps/api': 2.7.0
+ 
+   '@tauri-apps/plugin-updater@2.9.0':
+     dependencies:
+-      '@tauri-apps/api': 2.6.0
++      '@tauri-apps/api': 2.7.0
+ 
+   '@types/cookie@0.6.0': {}
+ 

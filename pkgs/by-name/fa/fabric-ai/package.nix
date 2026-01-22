@@ -1,0 +1,48 @@
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  nix-update-script,
+}:
+
+buildGoModule rec {
+  pname = "fabric-ai";
+  version = "1.4.380";
+
+  src = fetchFromGitHub {
+    owner = "danielmiessler";
+    repo = "fabric";
+    tag = "v${version}";
+    hash = "sha256-d4WjshFCZtO7414It53yBEmKB+ERhA/Q9KUb8bX7tCk=";
+  };
+
+  vendorHash = "sha256-147i0ZnNtph5DhaxK330kyUkDA4MBcpzrtIJGBEJHHQ=";
+
+  # Fabric introduced plugin tests that fail in the nix build sandbox.
+  doCheck = false;
+
+  ldflags = [
+    "-s"
+    "-w"
+  ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion \
+      --bash ./completions/fabric.bash \
+      --zsh ./completions/_fabric \
+      --fish ./completions/fabric.fish
+  '';
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    description = "Fabric is an open-source framework for augmenting humans using AI. It provides a modular framework for solving specific problems using a crowdsourced set of AI prompts that can be used anywhere";
+    homepage = "https://github.com/danielmiessler/fabric";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jaredmontoya ];
+    mainProgram = "fabric";
+  };
+}

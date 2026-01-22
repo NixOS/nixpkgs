@@ -1,0 +1,36 @@
+{
+  "name": "nixpkgs",
+  "image": "mcr.microsoft.com/devcontainers/universal:2-linux",
+  "features": {
+    "ghcr.io/devcontainers/features/nix:1": {
+      // fails in the devcontainer sandbox, enable sandbox via config instead
+      "multiUser": false,
+      // TODO: nixfmt-rfc-style → nixfmt (once it's in a stable release)
+      // https://github.com/NixOS/nixpkgs/issues/425583
+      "packages": "nixpkgs.nixd,nixpkgs.nixfmt-rfc-style",
+      "useAttributePath": true,
+      "extraNixConfig": "experimental-features = nix-command flakes,sandbox = true"
+    }
+  },
+  // Fixup permissions inside container.
+  // https://github.com/NixOS/nix/issues/6680#issuecomment-1230902525
+  "postCreateCommand": "sudo apt-get install -y acl",
+  "postStartCommand": "sudo setfacl -k /tmp; if [ -e /dev/kvm ]; then sudo chgrp $(id -g) /dev/kvm; fi",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "jnoortheen.nix-ide"
+      ],
+      "settings": {
+        "[nix]": {
+            "editor.formatOnSave": true
+        },
+        "nix.enableLanguageServer": true,
+        "nix.serverPath": "nixd"
+      }
+    }
+  },
+  "remoteEnv": {
+    "NIXPKGS": "/workspaces/nixpkgs"
+  }
+}

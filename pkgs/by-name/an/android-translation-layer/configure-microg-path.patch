@@ -1,0 +1,16 @@
+diff --git a/src/main-executable/main.c b/src/main-executable/main.c
+index 545da00f..2f87447d 100644
+--- a/src/main-executable/main.c
++++ b/src/main-executable/main.c
+@@ -390,7 +390,10 @@ static void open(GtkApplication *app, GFile **files, gint nfiles, const gchar *h
+ 
+ 	ret = stat(MICROG_APK_PATH_LOCAL, &dont_care);
+ 	errno_localdir = errno;
+-	if (!ret) {
++	char *env_microg = getenv("MICROG_APK_PATH");
++	if (env_microg && access(env_microg, F_OK) == 0) {
++	    microg_apk = strdup(env_microg);
++	} else if (stat(MICROG_APK_PATH_LOCAL, &dont_care) == 0) {
+ 		microg_apk = strdup(MICROG_APK_PATH_LOCAL); // for running out of builddir; using strdup so we can always safely call free on this
+ 	} else {
+ 		char *microg_install_dir = malloc(strlen(dex_install_dir) + strlen(REL_MICROG_APK_INSTALL_PATH) + 1); // +1 for NULL
