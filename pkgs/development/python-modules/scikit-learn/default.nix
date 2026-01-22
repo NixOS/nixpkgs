@@ -38,6 +38,10 @@ buildPythonPackage rec {
     substituteInPlace meson.build --replace-fail \
       "run_command('sklearn/_build_utils/version.py', check: true).stdout().strip()," \
       "'${version}',"
+    substituteInPlace pyproject.toml \
+      --replace-fail "meson-python>=0.17.1,<0.19.0" meson-python \
+      --replace-fail "numpy>=2,<2.4.0" numpy \
+      --replace-fail "scipy>=1.10.0,<1.17.0" scipy
   '';
 
   buildInputs = [
