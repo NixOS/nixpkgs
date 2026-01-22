@@ -138,19 +138,18 @@ in
         openssh
       ];
 
-      preStart = ''
-        ln -sf ${configFile} /var/lib/${cfg.stateDirectoryName}/config.yml
-        ln -sf ${pkgs.wiki-js}/server /var/lib/${cfg.stateDirectoryName}
-        ln -sf ${pkgs.wiki-js}/assets /var/lib/${cfg.stateDirectoryName}
-        ln -sf ${pkgs.wiki-js}/package.json /var/lib/${cfg.stateDirectoryName}/package.json
-      '';
-
       serviceConfig = {
         EnvironmentFile = mkIf (cfg.environmentFile != null) cfg.environmentFile;
         StateDirectory = cfg.stateDirectoryName;
         WorkingDirectory = "/var/lib/${cfg.stateDirectoryName}";
         DynamicUser = true;
         PrivateTmp = true;
+        ExecStartPre = [
+          "${lib.getExe' pkgs.coreutils "ln"} -sf ${configFile} /var/lib/${cfg.stateDirectoryName}/config.yml"
+          "${lib.getExe' pkgs.coreutils "ln"} -sf ${pkgs.wiki-js}/server /var/lib/${cfg.stateDirectoryName}"
+          "${lib.getExe' pkgs.coreutils "ln"} -sf ${pkgs.wiki-js}/assets /var/lib/${cfg.stateDirectoryName}"
+          "${lib.getExe' pkgs.coreutils "ln"} -sf ${pkgs.wiki-js}/package.json /var/lib/${cfg.stateDirectoryName}/package.json"
+        ];
         ExecStart = "${pkgs.nodejs_20}/bin/node ${pkgs.wiki-js}/server";
       };
     };
