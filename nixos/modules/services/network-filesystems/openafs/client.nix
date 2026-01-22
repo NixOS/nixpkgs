@@ -30,12 +30,12 @@ let
       sedExpr = '':x /^>\(${localCellsRegex}\) / { n; :y /^>/! { n; by }; bx }; p'';
       globalCommand =
         if cfg.cellServDB != { } then
-          ''sed -n -e ${lib.escapeShellArg sedExpr} ${cfg.globalCellServDBFile}''
+          "sed -n -e ${lib.escapeShellArg sedExpr} ${cfg.globalCellServDBFile}"
         else
-          ''cat ${cfg.globalCellServDBFile}'';
+          "cat ${cfg.globalCellServDBFile}";
     in
     pkgs.runCommand "CellServDB" { preferLocalBuild = true; } ''
-      ${lib.optionalString (cfg.globalCellServDBFile != null) ''${globalCommand} > $out''}
+      ${lib.optionalString (cfg.globalCellServDBFile != null) "${globalCommand} > $out"}
       cat ${clientServDB} >> $out
     '';
 

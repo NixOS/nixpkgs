@@ -66,8 +66,8 @@
   mp4Support ? false,
   mp4v2 ? null, # ffmpeg does support mp4 better
 
-# not in nixpkgs
-#, vtxSupport ? true, libayemu ? null
+  # not in nixpkgs
+  #, vtxSupport ? true, libayemu ? null
 }:
 
 assert samplerateSupport -> jackSupport;
