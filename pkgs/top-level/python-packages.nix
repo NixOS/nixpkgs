@@ -9606,6 +9606,8 @@ self: super: with self; {
 
   mficlient = callPackage ../development/python-modules/mficlient { };
 
+  mflux = callPackage ../development/python-modules/mflux { };
+
   mfusepy = callPackage ../development/python-modules/mfusepy { };
 
   mhcflurry = callPackage ../development/python-modules/mhcflurry { };
