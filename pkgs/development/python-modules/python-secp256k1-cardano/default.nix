@@ -11,8 +11,7 @@
 buildPythonPackage {
   pname = "python-secp256k1-cardano";
   version = "0.2.4";
-
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OpShin";
