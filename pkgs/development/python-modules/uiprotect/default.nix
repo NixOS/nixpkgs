@@ -38,7 +38,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "uiprotect";
   version = "10.0.1";
   pyproject = true;
@@ -46,7 +46,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "uilibs";
     repo = "uiprotect";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-pxxl/NhvJh2Ur8g+25padewvshqSUZmB7vpGmVlH15k=";
   };
 
@@ -97,8 +97,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python API for UniFi Protect (Unofficial)";
     homepage = "https://github.com/uilibs/uiprotect";
-    changelog = "https://github.com/uilibs/uiprotect/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/uilibs/uiprotect/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})
