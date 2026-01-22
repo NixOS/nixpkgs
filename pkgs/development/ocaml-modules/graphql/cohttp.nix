@@ -12,7 +12,7 @@
   graphql-lwt,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "graphql-cohttp";
 
   inherit (graphql) version src;
@@ -45,4 +45,4 @@ buildDunePackage rec {
     description = "Run GraphQL servers with “cohttp”";
   };
 
-}
+})
