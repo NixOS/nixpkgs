@@ -2,13 +2,14 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
+  setuptools,
   pkg-config,
   cffi,
   secp256k1,
   pytestCheckHook,
 }:
 
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "python-secp256k1-cardano";
   version = "0.2.4";
   pyproject = true;
@@ -22,7 +23,9 @@ buildPythonPackage {
 
   nativeBuildInputs = [ pkg-config ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     cffi
     secp256k1
   ];
@@ -44,4 +47,4 @@ buildPythonPackage {
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ aciceri ];
   };
-}
+})
