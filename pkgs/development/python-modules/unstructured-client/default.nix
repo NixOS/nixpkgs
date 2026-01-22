@@ -27,7 +27,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Unstructured-IO";
     repo = "unstructured-python-client";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-+neZK7I5qjidLlM298TrVl5mGFBdGZdxAdFaJIf0tNk=";
   };
 
