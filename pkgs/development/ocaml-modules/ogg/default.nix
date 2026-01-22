@@ -6,14 +6,14 @@
   libogg,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "ogg";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-xiph";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-mVMuPPjQRfwtQqpoUaEtTilMcGO0MJ4xiOd0D7ucOEQ=";
   };
 
@@ -28,4 +28,4 @@ buildDunePackage rec {
     license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ dandellion ];
   };
-}
+})
