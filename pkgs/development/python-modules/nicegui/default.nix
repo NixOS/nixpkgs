@@ -49,7 +49,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "zauberzeug";
     repo = "nicegui";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-umM2ffkiXWJVU2i17fbtnd+ghEt0uVzop9fNhaRTCWM=";
   };
 
