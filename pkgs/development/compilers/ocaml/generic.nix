@@ -3,6 +3,7 @@
   major_version,
   patch_version,
   patches ? [ ],
+  doCheck ? true,
   ...
 }@args:
 let
@@ -83,6 +84,7 @@ let
 in
 
 stdenv.mkDerivation (
+  finalArgs:
   args
   // {
 
@@ -115,7 +117,9 @@ stdenv.mkDerivation (
         "-host ${stdenv.hostPlatform.config}"
         "-target ${stdenv.targetPlatform.config}"
       ]
-      ++ optional noNakedPointers (flags "--disable-naked-pointers" "-no-naked-pointers");
+      ++ optional noNakedPointers (flags "--disable-naked-pointers" "-no-naked-pointers")
+      ++ optional finalArgs.doCheck "--enable-ocamltest";
+
     dontAddStaticConfigureFlags = lib.versionOlder version "4.08";
 
     env =
@@ -195,6 +199,9 @@ stdenv.mkDerivation (
       nativeCompilers = useNativeCompilers;
     };
 
+    checkTarget = "tests";
+    inherit doCheck;
+
     meta = {
       homepage = "https://ocaml.org/";
       branch = versionNoPatch;
@@ -203,6 +210,8 @@ stdenv.mkDerivation (
         lgpl2 # library
       ];
       description = "OCaml is an industrial-strength programming language supporting functional, imperative and object-oriented styles";
+
+      maintainers = [ lib.maintainers.georgyo ];
 
       longDescription = ''
         OCaml is a general purpose programming language with an emphasis on expressiveness and safety. Developed for more than 20 years at Inria by a group of leading researchers, it has an advanced type system that helps catch your mistakes without getting in your way. It's used in environments where a single mistake can cost millions and speed matters, is supported by an active community, and has a rich set of libraries and development tools. It's widely used in teaching for its power and simplicity.
