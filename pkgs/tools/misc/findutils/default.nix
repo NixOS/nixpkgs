@@ -24,7 +24,12 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace xargs/xargs.c --replace 'char default_cmd[] = "echo";' 'char default_cmd[] = "${coreutils}/bin/echo";'
   '';
 
-  patches = [ ./no-install-statedir.patch ];
+  patches = [
+    # Skip trying to create install directories:
+    # 1. We already have them
+    # 2. This installer is trying to create /var/cache
+    ./no-install-statedir.patch
+  ];
 
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
   buildInputs = [ coreutils ]; # bin/updatedb script needs to call sort
