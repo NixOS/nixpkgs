@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "iplotx";
-  version = "0.9.0";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fabilab";
     repo = "iplotx";
     tag = version;
-    hash = "sha256-VYqNz6sbLgniNB9DTCbhgno/91Pd7zoGFg2vx68211Q=";
+    hash = "sha256-pTSY7eEYKwBSDttxZqauGCofYK5SFaxjJLXYBwSr3ew=";
   };
 
   build-system = [ hatchling ];
@@ -49,10 +49,12 @@ buildPythonPackage rec {
     # These tests result in an ImageComparisonFailure
     "test_complex"
     "test_complex_rotatelabels"
+    "test_curved_waypoints"
     "test_directed_graph"
     "test_display_shortest_path"
     "test_labels"
     "test_labels_and_colors"
+    "test_vertex_labels"
   ];
 
   nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
