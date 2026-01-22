@@ -14,12 +14,12 @@
   uutf,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "multipart_form";
   version = "0.7.0";
 
   src = fetchurl {
-    url = "https://github.com/dinosaure/multipart_form/releases/download/v${version}/multipart_form-${version}.tbz";
+    url = "https://github.com/dinosaure/multipart_form/releases/download/v${finalAttrs.version}/multipart_form-${finalAttrs.version}.tbz";
     hash = "sha256-IqGGnDJtE0OKrtt+ah1Cy9zx4wavEl9eXXjZSh/M2JE=";
   };
 
@@ -42,4 +42,4 @@ buildDunePackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
   };
-}
+})
