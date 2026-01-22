@@ -12,7 +12,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "iplotx";
   version = "1.6.0";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fabilab";
     repo = "iplotx";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-pTSY7eEYKwBSDttxZqauGCofYK5SFaxjJLXYBwSr3ew=";
   };
 
@@ -57,7 +57,10 @@ buildPythonPackage rec {
     "test_vertex_labels"
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "iplotx" ];
 
@@ -67,4 +70,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jboy ];
   };
-}
+})
