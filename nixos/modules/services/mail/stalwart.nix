@@ -45,7 +45,7 @@ in
       inherit (configFormat) type;
       default = { };
       description = ''
-        Configuration options for the Stalwart collaboration and e-mail server.
+        Configuration options for the Stalwart server.
         See <https://stalw.art/docs/category/configuration> for available options.
 
         By default, the module is configured to store everything locally.
