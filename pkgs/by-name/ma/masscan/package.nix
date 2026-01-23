@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     install -Dm444 -t $out/share/licenses/masscan LICENSE
 
     wrapProgram $out/bin/masscan \
-      --prefix LD_LIBRARY_PATH : "${libpcap}/lib"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libpcap ]}"
   '';
 
   doInstallCheck = true;
