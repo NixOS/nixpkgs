@@ -1,27 +1,31 @@
 {
-  lib,
-  stdenv,
+  check,
   fetchFromGitHub,
+  lib,
   libxkbcommon,
+  meson,
+  ninja,
   pkg-config,
-  cmake,
+  stdenv,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libtsm";
-  version = "4.0.2-unstable-2023-12-24";
+  version = "4.4.1";
 
   src = fetchFromGitHub {
-    owner = "Aetf";
+    owner = "kmscon";
     repo = "libtsm";
-    rev = "69922bde02c7af83b4d48a414cc6036af7388626";
-    sha256 = "sha256-Rug3OWSbbiIivItULPNNptClIZ/PrXdQeUypAAxrUY8=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-8db/amwcV1a5Ho0dymQxKtOFsTN6nLUnwSobuAowSwk=";
   };
 
   buildInputs = [ libxkbcommon ];
 
   nativeBuildInputs = [
-    cmake
+    check
+    meson
+    ninja
     pkg-config
   ];
 
@@ -29,7 +33,7 @@ stdenv.mkDerivation {
     description = "Terminal-emulator State Machine";
     homepage = "https://www.freedesktop.org/wiki/Software/kmscon/libtsm/";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ gaelj ];
     platforms = lib.platforms.linux;
   };
-}
+})
