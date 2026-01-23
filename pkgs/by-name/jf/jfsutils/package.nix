@@ -46,8 +46,8 @@ stdenv.mkDerivation rec {
 
   # this required for wipefreespace
   postInstall = ''
-    install -Dm644 include/*.h -t $out/include
-    install -Dm644 ./libfs/libfs.a -t $out/lib
+    install -Dm644 include/*.h -t ''${!outputDev}/include
+    install -Dm644 ./libfs/libfs.a -t ''${!outputLib}/lib
   '';
 
   meta = {
