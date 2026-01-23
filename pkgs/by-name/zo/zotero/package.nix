@@ -4,7 +4,6 @@
   fetchFromGitHub,
   buildNpmPackage,
   nodejs_22,
-  git,
   perl,
   python3,
   zip,
@@ -29,9 +28,8 @@ let
     owner = "zotero";
     repo = "zotero";
     tag = version;
-    hash = "sha256-vjGTlb4LM7wjOZqD/VsHXX59EA1f9a3LDz+Mgo4wHb0=";
+    hash = "sha256-SG5fTsQgtVX8Pmla2W91sETSR1D7ThmnrdUQwycNsPA=";
     fetchSubmodules = true;
-    leaveDotGit = true;
   };
 
   pdf-js = buildNpmPackage {
@@ -164,7 +162,6 @@ buildNpmPackage rec {
   npmDepsHash = "sha256-IVaT/O83kCGT7MGsTSblMKfVWeNBIpA9VJIWyikJrpk=";
 
   nativeBuildInputs = [
-    git
     perl
     python3
     zip
@@ -176,6 +173,7 @@ buildNpmPackage rec {
   ];
 
   patches = [
+    ./avoid-git.patch
     ./js-build-fixes.patch
     ./avoid-xulrunner-fetch.patch
     ./build-fixes.patch
