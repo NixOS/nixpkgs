@@ -50,6 +50,13 @@ stdenv.mkDerivation rec {
     install -Dm644 ./libfs/libfs.a -t ''${!outputLib}/lib
   '';
 
+  outputs = [
+    "out"
+    "man"
+    "dev"
+    "lib"
+  ];
+
   meta = {
     description = "IBM JFS utilities";
     homepage = "https://jfs.sourceforge.net";
