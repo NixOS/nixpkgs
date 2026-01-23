@@ -15766,12 +15766,6 @@
     githubId = 36235154;
     name = "Sean Haugh";
   };
-  maaslalani = {
-    email = "maaslalani0@gmail.com";
-    github = "maaslalani";
-    githubId = 42545625;
-    name = "Maas Lalani";
-  };
   mabster314 = {
     name = "Max Haland";
     email = "max@haland.org";

@@ -35,7 +35,7 @@ buildGoModule rec {
     homepage = "https://github.com/maaslalani/slides";
     changelog = "https://github.com/maaslalani/slides/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ maaslalani ];
+    maintainers = [ ];
     mainProgram = "slides";
   };
 }
