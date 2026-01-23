@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
 
   postFixup =
     if stdenv.hostPlatform.isDarwin then
-      ''install_name_tool -id $out/lib/libtdb.dylib $out/lib/libtdb.dylib''
+      "install_name_tool -id $out/lib/libtdb.dylib $out/lib/libtdb.dylib"
     else
       null;
 

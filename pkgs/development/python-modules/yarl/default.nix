@@ -9,6 +9,7 @@
   multidict,
   propcache,
   hypothesis,
+  pydantic,
   pytest-codspeed,
   pytest-cov-stub,
   pytest-xdist,
@@ -17,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "yarl";
-  version = "1.22.0";
+  version = "1.23.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "yarl";
     tag = "v${version}";
-    hash = "sha256-IkP6AxLT260NN2X2bd7b5LGVGFUjo7eQiuWxvMtcb8g=";
+    hash = "sha256-274uVOCTLUihDIJTG62hL2mOBaYDNvRLdTjMcasDFsw=";
   };
 
   build-system = [
@@ -46,6 +47,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     hypothesis
+    pydantic
     pytest-codspeed
     pytest-cov-stub
     pytest-xdist

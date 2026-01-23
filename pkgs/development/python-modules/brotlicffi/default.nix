@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "brotlicffi";
-  version = "1.1.0.0";
+  version = "1.2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-hyper";
     repo = "brotlicffi";
-    rev = "v${version}";
-    sha256 = "sha256-oW4y1WBJ7+4XwNwwSSR0qUqN03cZYXUYQ6EAwce9dzI=";
+    tag = "v${version}";
+    hash = "sha256-3/68qBfsFtH+7h3gPxUdkyHwG6qLbh+bVLrxzsb3bc4=";
   };
 
   build-system = [ setuptools ];
@@ -47,6 +47,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "brotlicffi" ];
 
   meta = {
+    changelog = "https://github.com/python-hyper/brotlicffi/blob/${src.tag}/HISTORY.rst";
     description = "Python CFFI bindings to the Brotli library";
     homepage = "https://github.com/python-hyper/brotlicffi";
     license = lib.licenses.mit;

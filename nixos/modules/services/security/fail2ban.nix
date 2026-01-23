@@ -442,7 +442,7 @@ in
           // {
             # Miscellaneous options
             inherit (cfg) banaction maxretry bantime;
-            ignoreip = ''127.0.0.1/8 ${lib.optionalString config.networking.enableIPv6 "::1"} ${lib.concatStringsSep " " cfg.ignoreIP}'';
+            ignoreip = "127.0.0.1/8 ${lib.optionalString config.networking.enableIPv6 "::1"} ${lib.concatStringsSep " " cfg.ignoreIP}";
             backend = "systemd";
             # Actions
             banaction_allports = cfg.banaction-allports;

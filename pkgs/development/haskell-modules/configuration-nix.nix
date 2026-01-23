@@ -1005,6 +1005,11 @@ builtins.intersectAttrs super {
     '';
   }) super.sbv;
 
+  # Don't use vendored (and outdated) c-blosc library
+  hblosc = addPkgconfigDepends [
+    pkgs.c-blosc
+  ] (enableCabalFlag "externalBlosc" super.hblosc);
+
   # The test-suite requires a running PostgreSQL server.
   Frames-beam = dontCheck super.Frames-beam;
 
@@ -1156,6 +1161,11 @@ builtins.intersectAttrs super {
           hinotify = if pkgs.stdenv.hostPlatform.isLinux then self.hinotify else self.fsnotify;
         }
       );
+
+  # Don't use vendored copy of zxcvbn-c
+  zxcvbn-c = addBuildDepends [
+    pkgs.zxcvbn-c
+  ] (enableCabalFlag "use-shared-lib" super.zxcvbn-c);
 
   # The test suite has undeclared dependencies on git.
   githash = dontCheck super.githash;
@@ -1727,6 +1737,9 @@ builtins.intersectAttrs super {
   # Tries to access network
   aws-sns-verify = dontCheck super.aws-sns-verify;
 
+  # Wants anthropic API key
+  claude = dontCheck super.claude;
+
   # Test suite requires network access
   minicurl = dontCheck super.minicurl;
 
@@ -1967,6 +1980,7 @@ builtins.intersectAttrs super {
     gi-gtksource5
     gi-gsk
     gi-adwaita
+    gi-ostree
     sdl2-ttf
     sdl2
     dear-imgui
@@ -2141,6 +2155,21 @@ builtins.intersectAttrs super {
   cpython = doJailbreak super.cpython;
 
   botan-bindings = super.botan-bindings.override { botan = pkgs.botan3; };
+
+  # Avoids a cycle by disabling use of the external interpreter for the packages that are dependencies of iserv-proxy.
+  # These in particular can't rely on template haskell for cross-compilation anyway as they can't rely on iserv-proxy.
+  inherit
+    (
+      let
+        noExternalInterpreter = overrideCabal {
+          enableExternalInterpreter = false;
+        };
+      in
+      lib.mapAttrs (_: noExternalInterpreter) { inherit (super) iserv-proxy network; }
+    )
+    iserv-proxy
+    network
+    ;
 
   # Workaround for flaky test: https://github.com/basvandijk/threads/issues/10
   threads = appendPatch ./patches/threads-flaky-test.patch super.threads;

@@ -27,12 +27,12 @@
 
 buildPythonPackage rec {
   pname = "werkzeug";
-  version = "3.1.3";
+  version = "3.1.4";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YHI86UXBkyhnl5DjKCzHWKpKYEDkuzMPU9MPpUbUR0Y=";
+    hash = "sha256-zTzZixuS3Dt7OZUDiCbGgJfcsW+bqmOr418g6v65/l4=";
   };
 
   build-system = [ flit-core ];

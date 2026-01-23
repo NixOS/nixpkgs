@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Examine the contents of the IE's cookie files for forensic purposes";
     mainProgram = "galleta";
     homepage = "https://sourceforge.net/projects/odessa/files/Galleta";
-    maintainers = with lib.maintainers; [ d3vil0p3r ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     license = lib.licenses.bsd3;
   };
