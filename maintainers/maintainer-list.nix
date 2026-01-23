@@ -8540,6 +8540,11 @@
     github = "felixdorn";
     githubId = 55788595;
   };
+  FelixLusseau = {
+    name = "Félix Lusseau";
+    github = "FelixLusseau";
+    githubId = 94113911;
+  };
   felixscheinost = {
     name = "Felix Scheinost";
     email = "felix.scheinost@posteo.de";
