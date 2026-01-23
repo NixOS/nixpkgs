@@ -95,11 +95,6 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postCheck
   '';
 
-  postFixup = ''
-    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
-    moveToOutput share/doc/libshumate-1.0 "$devdoc"
-  '';
-
   strictDeps = true;
 
   passthru = {
