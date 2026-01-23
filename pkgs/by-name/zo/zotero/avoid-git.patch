@@ -1,16 +1,13 @@
 diff --git a/app/scripts/dir_build b/app/scripts/dir_build
-index 493288ad47..e357770ced 100755
+index 493288ad47..ccabb3722b 100755
 --- a/app/scripts/dir_build
 +++ b/app/scripts/dir_build
-@@ -84,9 +84,9 @@ else
- 	fi
- fi
+@@ -86,7 +86,7 @@ fi
  
--CHANNEL="source"
-+CHANNEL="release"
+ CHANNEL="source"
  
 -hash=$(git -C "$ROOT_DIR" rev-parse --short HEAD)
-+hash=""
++hash="0000000000000000000000000000000000000000"
  
  build_dir=$(mktemp -d)
  cleanup() { rm -rf "$build_dir"; }
