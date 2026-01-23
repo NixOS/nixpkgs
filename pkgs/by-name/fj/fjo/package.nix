@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   rustPlatform,
   openssl,
   pkg-config,
@@ -11,8 +11,7 @@ rustPlatform.buildRustPackage rec {
   pname = "fjo";
   version = "0.3.5";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "VoiDD";
     repo = "fjo";
     rev = "v${version}";

@@ -1,7 +1,7 @@
 {
   lib,
   python3,
-  fetchFromGitea,
+  fetchFromCodeberg,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -9,8 +9,7 @@ python3.pkgs.buildPythonApplication rec {
   version = "1.8.0";
   pyproject = true;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "MartijnBraam";
     repo = "TurboCase";
     rev = version;

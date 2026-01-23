@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   cmake,
   git,
   pkg-config,
@@ -24,8 +24,7 @@ stdenv.mkDerivation {
   pname = "curv";
   version = "0.5-unstable-2026-01-17";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "doug-moen";
     repo = "curv";
     rev = "1c2eb68e47e3c61a98e39cd3c50f90691c5a268d";

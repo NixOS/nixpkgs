@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   stdenvNoCC,
 }:
 
@@ -8,8 +8,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cat9";
   version = "0-unstable-2025-12-26";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "letoram";
     repo = "cat9";
     rev = "8d2b30545c3e87c8f2e161d755b53c23a48bcf05";

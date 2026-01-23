@@ -1,14 +1,13 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitea,
+  fetchFromCodeberg,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "xdg-terminal-exec-mkhl";
   version = "0.2.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "mkhl";
     repo = "xdg-terminal-exec";
     rev = "v${version}";

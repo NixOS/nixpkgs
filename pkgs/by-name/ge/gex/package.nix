@@ -1,7 +1,7 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitea,
+  fetchFromCodeberg,
   pkg-config,
   libgit2,
   nix-update-script,
@@ -13,8 +13,7 @@ rustPlatform.buildRustPackage rec {
   pname = "gex";
   version = "0.6.4";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "Piturnah";
     repo = "gex";
     tag = "v${version}";

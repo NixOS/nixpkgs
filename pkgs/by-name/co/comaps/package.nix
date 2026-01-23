@@ -2,7 +2,7 @@
   lib,
   organicmaps,
   fetchurl,
-  fetchFromGitea,
+  fetchFromCodeberg,
   boost,
   gtest,
   glm,
@@ -38,8 +38,7 @@ organicmaps.overrideAttrs (oldAttrs: rec {
   pname = "comaps";
   version = "2025.11.07-2";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "comaps";
     repo = "comaps";
     tag = "v${version}";

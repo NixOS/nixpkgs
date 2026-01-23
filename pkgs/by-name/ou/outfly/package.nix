@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   rustPlatform,
   makeDesktopItem,
   pkg-config,
@@ -18,8 +18,7 @@
 rustPlatform.buildRustPackage rec {
   pname = "outfly";
   version = "0.14.0";
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "outfly";
     repo = "outfly";
     tag = "v${version}";

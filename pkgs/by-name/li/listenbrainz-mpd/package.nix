@@ -1,7 +1,7 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitea,
+  fetchFromCodeberg,
   pkg-config,
   stdenv,
   openssl,
@@ -15,8 +15,7 @@ rustPlatform.buildRustPackage rec {
   pname = "listenbrainz-mpd";
   version = "2.3.9";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "elomatreb";
     repo = "listenbrainz-mpd";
     rev = "v${version}";

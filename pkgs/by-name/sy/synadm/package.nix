@@ -1,7 +1,7 @@
 {
   lib,
   python3Packages,
-  fetchFromGitea,
+  fetchFromCodeberg,
   nix-update-script,
 }:
 
@@ -10,8 +10,7 @@ python3Packages.buildPythonApplication rec {
   version = "0.49.2";
   pyproject = true;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "synadm";
     repo = "synadm";
     tag = "v${version}";

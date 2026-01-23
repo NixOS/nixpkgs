@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   autoreconfHook,
   fig2dev,
   readline,
@@ -14,8 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "x11basic";
   version = "1.28-65";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "kollo";
     repo = "X11Basic";
     tag = finalAttrs.version;

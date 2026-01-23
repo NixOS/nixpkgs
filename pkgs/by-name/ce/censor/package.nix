@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   python3Packages,
   wrapGAppsHook4,
   gobject-introspection,
@@ -16,8 +16,7 @@ python3Packages.buildPythonApplication rec {
   version = "0.3.0";
   pyproject = false;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "censor";
     repo = "Censor";
     tag = "v${version}";

@@ -1,5 +1,5 @@
 {
-  fetchFromGitea,
+  fetchFromCodeberg,
   meson,
   ninja,
   pkg-config,
@@ -22,8 +22,7 @@ python3Packages.buildPythonApplication rec {
   version = "4.2.0";
   pyproject = false;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "WhyNotHugo";
     repo = "caffeine-ng";
     rev = "v${version}";

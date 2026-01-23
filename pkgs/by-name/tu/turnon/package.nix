@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   rustPlatform,
   cairo,
   pango,
@@ -20,8 +20,7 @@ rustPlatform.buildRustPackage {
   pname = "turnon";
   version = version;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "swsnr";
     repo = "turnon";
     rev = "v${version}";

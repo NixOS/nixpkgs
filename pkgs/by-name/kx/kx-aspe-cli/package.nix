@@ -1,7 +1,7 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitea,
+  fetchFromCodeberg,
   pkg-config,
   openssl,
 }:
@@ -10,8 +10,7 @@ rustPlatform.buildRustPackage rec {
   pname = "kx-aspe-cli";
   version = "0-unstable-2024-04-06";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "keyoxide";
     repo = "kx-aspe-cli";
     rev = "492df7edae95a8636bb59c4e5c1607053dab2c78";

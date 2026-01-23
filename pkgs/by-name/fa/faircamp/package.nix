@@ -1,7 +1,7 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitea,
+  fetchFromCodeberg,
   makeWrapper,
   pkg-config,
   glib,
@@ -17,8 +17,7 @@ rustPlatform.buildRustPackage rec {
   pname = "faircamp";
   version = "1.7.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "simonrepp";
     repo = "faircamp";
     rev = version;

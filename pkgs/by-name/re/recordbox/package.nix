@@ -6,7 +6,7 @@
   cargo,
   dbus,
   desktop-file-utils,
-  fetchFromGitea,
+  fetchFromCodeberg,
   glib,
   libglycin,
   glycin-loaders,
@@ -31,8 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "recordbox";
   version = "0.10.4";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "edestcroix";
     repo = "Recordbox";
     tag = "v${finalAttrs.version}";

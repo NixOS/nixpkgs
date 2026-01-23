@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   buildGoModule,
   nix-update-script,
 }:
@@ -9,8 +9,7 @@ buildGoModule rec {
   pname = "codeberg-pages";
   version = "6.4";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "Codeberg";
     repo = "pages-server";
     rev = "v${version}";

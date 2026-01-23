@@ -2,7 +2,7 @@
   lib,
   stdenv,
   buildGoModule,
-  fetchFromGitea,
+  fetchFromCodeberg,
   installShellFiles,
   versionCheckHook,
   protobuf,
@@ -14,8 +14,7 @@ buildGoModule rec {
   pname = "cunicu";
   version = "0.12.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "cunicu";
     repo = "cunicu";
     rev = "v${version}";

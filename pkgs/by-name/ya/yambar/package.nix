@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   alsa-lib,
   bison,
   fcft,
@@ -34,8 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "yambar";
   version = "1.11.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "dnkl";
     repo = "yambar";
     rev = finalAttrs.version;

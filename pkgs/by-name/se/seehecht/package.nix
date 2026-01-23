@@ -1,15 +1,14 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitea,
+  fetchFromCodeberg,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "seehecht";
   version = "3.0.3";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "annaaurora";
     repo = "seehecht";
     rev = "v${version}";
