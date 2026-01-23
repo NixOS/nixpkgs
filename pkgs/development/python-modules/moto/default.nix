@@ -29,6 +29,7 @@
   pyyaml,
   requests,
   responses,
+  sagemaker,
   setuptools,
   werkzeug,
   xmltodict,
@@ -297,6 +298,7 @@ buildPythonPackage rec {
     pytest-order
     pytest-xdist
     pytestCheckHook
+    sagemaker
   ]
   ++ optional-dependencies.server;
 
