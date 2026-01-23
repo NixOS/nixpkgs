@@ -58,6 +58,14 @@
           };
         };
       };
+
+      specialisation.nonSocketActivated.configuration = {
+        imports = [ ../common/user-account.nix ];
+
+        services.phpfpm.pools."foobar" = {
+          socketActivation = false;
+        };
+      };
     };
   testScript =
     { ... }:
@@ -73,7 +81,19 @@
           assert ext in response, f"Missing {ext} extension"
           machine.succeed(f'test -n "$(php -m | grep -i {ext})"')
 
-      machine.succeed("/run/booted-system/specialisation/differentUser/bin/switch-to-configuration test 2>&1")
-      machine.fail("curl -fvvv -s http://127.0.0.1:80/")
+      with subtest("Socket not owned by nginx should refuse to connect"):
+          machine.succeed("/run/booted-system/specialisation/differentUser/bin/switch-to-configuration test 2>&1")
+          machine.fail("curl -fvvv -s http://127.0.0.1:80/")
+
+      with subtest("Non-socket-activated service should start automatically"):
+          machine.systemctl("stop phpfpm-foobar.socket")
+          machine.systemctl("stop phpfpm-foobar.service")
+          machine.succeed("/run/booted-system/specialisation/nonSocketActivated/bin/switch-to-configuration test 2>&1")
+
+          machine.systemctl("restart multi-user.target")
+          machine.wait_for_unit("phpfpm-foobar.service")
+
+          response = machine.succeed("curl -fvvv -s http://127.0.0.1:80/")
+          assert "PHP Version ${php.version}" in response, "PHP version not detected"
     '';
 }
