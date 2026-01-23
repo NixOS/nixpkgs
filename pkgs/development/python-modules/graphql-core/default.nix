@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail ', "setuptools>=59,<76"' ""
+      --replace-fail ', "setuptools>=59,<81"' ""
   '';
 
   build-system = [
