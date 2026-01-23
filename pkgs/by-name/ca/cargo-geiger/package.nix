@@ -13,14 +13,14 @@
   cargo-geiger,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-geiger";
   version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "geiger-rs";
     repo = "cargo-geiger";
-    tag = "cargo-geiger-${version}";
+    tag = "cargo-geiger-${finalAttrs.version}";
     hash = "sha256-dZ71WbTKsR6g5UhWuJNfNAAqNNxbTgwL5fsgkm50BaM=";
   };
 
@@ -83,7 +83,7 @@ rustPlatform.buildRustPackage rec {
       code is appropriate.
     '';
     homepage = "https://github.com/geiger-rs/cargo-geiger";
-    changelog = "https://github.com/geiger-rs/cargo-geiger/blob/cargo-geiger-${version}/CHANGELOG.md";
+    changelog = "https://github.com/geiger-rs/cargo-geiger/blob/cargo-geiger-${finalAttrs.version}/CHANGELOG.md";
     mainProgram = "cargo-geiger";
     license = with lib.licenses; [
       asl20 # or
@@ -96,4 +96,4 @@ rustPlatform.buildRustPackage rec {
       matthiasbeyer
     ];
   };
-}
+})
