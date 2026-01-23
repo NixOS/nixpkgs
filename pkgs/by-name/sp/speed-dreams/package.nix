@@ -108,7 +108,7 @@ stdenv.mkDerivation rec {
     makeWrapperArgs=(
       --prefix ${libPathVar} : "$out/lib/games/speed-dreams-2/lib:$out/lib:${runtimeLibPath}"
     )
-    ${lib.optionalString stdenv.isLinux ''makeWrapperArgs+=(--set SDL_VIDEODRIVER x11)''}
+    ${lib.optionalString stdenv.isLinux "makeWrapperArgs+=(--set SDL_VIDEODRIVER x11)"}
     makeWrapper "$out/games/speed-dreams-2" "$out/bin/speed-dreams" "''${makeWrapperArgs[@]}"
   '';
 
