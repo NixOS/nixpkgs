@@ -14,6 +14,7 @@
   firefox-esr-140-unwrapped,
   makeDesktopItem,
   copyDesktopItems,
+  nix-update-script,
   xvfb-run,
   doCheck ? false,
 }:
@@ -290,6 +291,8 @@ buildNpmPackage rec {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://www.zotero.org";
