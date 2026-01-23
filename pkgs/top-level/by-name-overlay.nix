@@ -32,14 +32,24 @@ let
       # Additionally in either of those alternatives, we would have to duplicate the hardcoding of "README.md"
       { }
     else
-      mapAttrs (name: _: baseDirectory + "/${shard}/${name}/package.nix") (
-        readDir (baseDirectory + "/${shard}")
-      );
+      lib.updateManyAttrsByPath (lib.mapAttrsToList (name: _: {
+        path = lib.splitString "." name;
+        update = _: baseDirectory + "/${shard}/${name}/package.nix";
+      }) (readDir (baseDirectory + "/${shard}"))) { };
+
+  topLevelNamesForShard = shard: type: lib.filterAttrs (_: lib.isPath) (namesForShard shard type);
+
+  secondLevelNamesForShard =
+    shard: type:
+    lib.mapAttrs (_: lib.filterAttrs (_: lib.isPath)) (
+      lib.filterAttrs (_: lib.isAttrs) (namesForShard shard type)
+    );
 
   # The attribute set mapping names to the package files defining them
   # This is defined up here in order to allow reuse of the value (it's kind of expensive to compute)
   # if the overlay has to be applied multiple times
-  packageFiles = mergeAttrsList (mapAttrsToList namesForShard (readDir baseDirectory));
+  packageFiles = mergeAttrsList (mapAttrsToList topLevelNamesForShard (readDir baseDirectory));
+  packageSetFiles = mergeAttrsList (mapAttrsToList secondLevelNamesForShard (readDir baseDirectory));
 in
 self: super:
 {
@@ -52,3 +62,11 @@ self: super:
   _internalCallByNamePackageFile = file: self.callPackage file { };
 }
 // mapAttrs (name: self._internalCallByNamePackageFile) packageFiles
+// mapAttrs (
+  _: setattrs:
+  (lib.recurseIntoAttrs (
+    lib.makeScope self.newScope (
+      setself: (mapAttrs (name: path: setself.callPackage path { }) setattrs)
+    )
+  ))
+) packageSetFiles
