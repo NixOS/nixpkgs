@@ -191,8 +191,12 @@ buildNpmPackage rec {
 
     # Place firefox files at the right place.
     # The correct firefox version can be found in zotero/app/config.sh at `GECKO_VERSION_LINUX`.
-    mkdir -p app/xulrunner/firefox-${stdenv.targetPlatform.parsed.kernel.name}-${stdenv.targetPlatform.parsed.cpu.name}
-    cp -r ${firefox-esr-140-unwrapped}/lib/firefox/. app/xulrunner/firefox-${stdenv.targetPlatform.parsed.kernel.name}-${stdenv.targetPlatform.parsed.cpu.name}
+    mkdir -p app/xulrunner/
+    if ${lib.boolToString stdenv.targetPlatform.isDarwin}; then
+      cp -r '${firefox-esr-140-unwrapped}/Applications/Firefox ESR.app' app/xulrunner/Firefox.app
+    else
+      cp -r '${firefox-esr-140-unwrapped}/lib/firefox' app/xulrunner/firefox-${stdenv.targetPlatform.parsed.kernel.name}-${stdenv.targetPlatform.parsed.cpu.name}
+    fi
     chmod -R u+w app/xulrunner/
 
     app/scripts/dir_build
@@ -233,18 +237,28 @@ buildNpmPackage rec {
   installPhase = ''
     runHook preInstall
 
-    # Copy package contents
-    mkdir -p $out/lib/ $out/bin/
-    cp -r app/staging/*/. $out/lib/
+    if ${lib.boolToString stdenv.targetPlatform.isDarwin}; then
 
-    # Add binary to bin/
-    ln -s ../lib/zotero $out/bin/zotero
+      # Copy package contents
+      mkdir -p $out/Applications
+      cp -r app/staging/Zotero.app $out/Applications/
 
-    # Install icons
-    for size in 32 64 128; do
-      install -Dm444 "app/linux/icons/icon$size.png" "$out/share/icons/hicolor/''${size}x$size/apps/zotero.png"
-    done
-    install -Dm444 "app/linux/icons/symbolic.svg" "$out/share/icons/hicolor/scalable/apps/zotero-symbolic.svg"
+    else
+
+      # Copy package contents
+      mkdir -p $out/lib/ $out/bin/
+      cp -r app/staging/*/. $out/lib/
+
+      # Add binary to bin/
+      ln -s ../lib/zotero $out/bin/zotero
+
+      # Install icons
+      for size in 32 64 128; do
+        install -Dm444 "app/linux/icons/icon$size.png" "$out/share/icons/hicolor/''${size}x$size/apps/zotero.png"
+      done
+      install -Dm444 "app/linux/icons/symbolic.svg" "$out/share/icons/hicolor/scalable/apps/zotero-symbolic.svg"
+
+    fi
 
     runHook postInstall
   '';

@@ -1,5 +1,5 @@
 diff --git a/app/scripts/fetch_xulrunner b/app/scripts/fetch_xulrunner
-index 30c3a9073d..fb7c2f367d 100755
+index 30c3a9073d..aa953744f8 100755
 --- a/app/scripts/fetch_xulrunner
 +++ b/app/scripts/fetch_xulrunner
 @@ -148,15 +148,6 @@ function modify_omni {
@@ -68,8 +68,7 @@ index 30c3a9073d..fb7c2f367d 100755
 -		echo
 -	fi
 -	
--	pushd Firefox.app/Contents/Resources
-+	pushd firefox
+ 	pushd Firefox.app/Contents/Resources
  	modify_omni mac
  	popd
 -	
@@ -90,20 +89,20 @@ index 30c3a9073d..fb7c2f367d 100755
  fi
  
  if [ $BUILD_WIN == 1 ]; then
-@@ -709,44 +639,9 @@ if [ $BUILD_WIN == 1 ]; then
+@@ -709,9 +639,6 @@ if [ $BUILD_WIN == 1 ]; then
  fi
  
  if [ $BUILD_LINUX == 1 ]; then
 -	GECKO_VERSION="$GECKO_VERSION_LINUX"
 -	DOWNLOAD_URL="https://ftp.mozilla.org/pub/firefox/releases/$GECKO_VERSION"
 -	
--	if [[ -n $arch ]]; then
--		arch_list=("$arch")
--	else
--		arch_list=(x86_64 arm64 i686)
--	fi
--	for arch in "${arch_list[@]}"; do
--		xdir="firefox-linux-$arch"
+ 	if [[ -n $arch ]]; then
+ 		arch_list=("$arch")
+ 	else
+@@ -719,33 +646,11 @@ if [ $BUILD_LINUX == 1 ]; then
+ 	fi
+ 	for arch in "${arch_list[@]}"; do
+ 		xdir="firefox-linux-$arch"
 -		rm -rf $xdir
 -		
 -		archived_file="firefox-$GECKO_VERSION-$arch.tar.xz"
@@ -123,17 +122,14 @@ index 30c3a9073d..fb7c2f367d 100755
 -
 -		tar xvf firefox-$GECKO_VERSION.tar.xz
 -		mv firefox $xdir
--
--		pushd $xdir
--		modify_omni $arch
-+	        pushd firefox-linux-x86_64
-+		modify_omni linux
+ 
+ 		pushd $xdir
+ 		modify_omni $arch
  		popd
--		
+ 		
 -		rm "firefox-$GECKO_VERSION.tar.xz"
 -		
 -		echo "$( $SCRIPT_DIR/xulrunner_hash -p l -a "$arch" )" > "hash-linux-${arch}"
--	done
+ 	done
  fi
  
- echo Done
