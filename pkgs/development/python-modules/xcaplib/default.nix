@@ -6,20 +6,18 @@
   lxml,
   twisted,
   python3-application,
-  unstableGitUpdater,
 }:
 
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "xcaplib";
-  # latest commit is needed for python 3.13 compat.
-  version = "2.0.1-unstable-2025-03-20";
+  version = "2.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AGProjects";
     repo = "python3-xcaplib";
-    rev = "925846f2520d823f0b83279ceca6202808a4ca4f";
-    hash = "sha256-8EtXwHMQcPzPfP8JpB6gTV7PADHz+bJIJMhvR3DkPkk=";
+    tag = finalAttrs.version;
+    hash = "sha256-/htvXj9rLlJxcgJoUh4OG8PcCVIJ46ghzzqLZicONVc=";
   };
 
   build-system = [
@@ -37,8 +35,6 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "xcaplib" ];
 
-  passthru.updateScript = unstableGitUpdater { };
-
   meta = {
     description = "XCAP (RFC4825) client library";
     homepage = "https://github.com/AGProjects/python3-xcaplib";
@@ -47,4 +43,4 @@ buildPythonPackage {
     maintainers = [ lib.maintainers.ethancedwards8 ];
     mainProgram = "xcapclient3";
   };
-}
+})
