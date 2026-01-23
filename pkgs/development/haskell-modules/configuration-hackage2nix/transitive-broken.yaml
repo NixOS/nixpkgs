@@ -672,8 +672,6 @@ dont-distribute-packages:
  - datadog-tracing
  - datafix
  - dataflow
- - dataframe-hasktorch
- - dataframe-persistent
  - datasets
  - date-conversions
  - dbjava
@@ -1788,7 +1786,6 @@ dont-distribute-packages:
  - ifscs
  - ige-mac-integration
  - igrf
- - ihaskell-dataframe
  - ihaskell-rlangqq
  - ihaskell-symtegration
  - ihttp
@@ -3399,7 +3396,6 @@ dont-distribute-packages:
  - symantic-http-test
  - symantic-lib
  - symbiote
- - symbolic-regression
  - symmetry-operations-symbols
  - Synapse
  - synapse
