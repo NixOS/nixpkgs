@@ -50,6 +50,20 @@ let
   ]
   ++ lib.optional cfg.enableMemoryLocking "-m"
   ++ cfg.extraFlags;
+
+  dispathcerScriptFile = pkgs.callPackage (
+    {
+      runCommand,
+      srcOnly,
+    }:
+    runCommand "10-chrony-onoffline" { } ''
+      cp ${srcOnly chronyPkg}/examples/chrony.nm-dispatcher.onoffline $out
+      substituteInPlace $out \
+        --replace-fail '/usr/bin/chronyc' '${chronyPkg}/bin/chronyc'
+      chmod +x $out
+      patchShebangs $out
+    ''
+  ) { };
 in
 {
   options = {
@@ -195,6 +209,16 @@ in
         description = "Directory where chrony state is stored.";
       };
 
+      dispatcherScript = lib.mkOption {
+        type = lib.types.bool;
+        default = config.networking.networkmanager.enable;
+        defaultText = lib.literalExpression "config.networking.networkmanager.enable";
+        description = ''
+          Whether to install the chrony NetworkManager dispatcher script
+          to handle connectivity changes.
+        '';
+      };
+
       extraConfig = lib.mkOption {
         type = lib.types.lines;
         default = "";
@@ -229,6 +253,13 @@ in
       description = "chrony daemon user";
       home = stateDir;
     };
+
+    networking.networkmanager.dispatcherScripts = lib.mkIf cfg.dispatcherScript [
+      {
+        type = "basic";
+        source = dispathcerScriptFile;
+      }
+    ];
 
     services.timesyncd.enable = lib.mkForce false;
 
