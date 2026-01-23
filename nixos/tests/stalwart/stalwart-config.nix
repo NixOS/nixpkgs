@@ -54,7 +54,7 @@ in
 
       store."rocksdb" = {
         type = "rocksdb";
-        path = "/var/lib/stalwart-mail/data";
+        path = "/var/lib/stalwart/data";
         compression = "lz4";
       };
 
