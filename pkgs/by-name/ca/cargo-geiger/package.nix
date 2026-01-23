@@ -26,6 +26,13 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-GgCmUNOwvyTB82Y/ddgJIAb1SpO4mRPjECqCagJ8GmE=";
 
+  postPatch = ''
+    # https://github.com/geiger-rs/cargo-geiger/pull/562
+    # Fix unused import warning which is treated as an error
+    substituteInPlace cargo-geiger/tests/integration_tests.rs \
+      --replace-fail "use std::env;" ""
+  '';
+
   buildInputs = [
     openssl
   ]
