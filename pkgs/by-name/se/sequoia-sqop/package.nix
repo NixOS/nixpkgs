@@ -9,7 +9,7 @@
   pkg-config,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sequoia-sqop";
   version = "0.37.3";
 
@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     # From some reason the repository is not sequoia-sqop - like the command
     # generated etc
     repo = "sequoia-sop";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-7fyItwtzNia97fbLJ1YkpkS7KmCo3I81uksh3lNvxwU=";
   };
 
@@ -60,4 +60,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ doronbehar ];
     mainProgram = "sqop";
   };
-}
+})
