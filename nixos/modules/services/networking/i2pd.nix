@@ -98,7 +98,7 @@ in
           mkOption {
             type = with types; nullOr (either int (attrEnum attrset));
             default = null;
-            description = mdDoc description;
+            inherit description;
           };
         # https://i2pd.readthedocs.io/en/latest/user-guide/tunnels/#i2cp-parameters
         i2cp = {
@@ -136,25 +136,25 @@ in
       };
     in
     {
-      enable = mkEnableOption (mdDoc "`i2pd` (I2P network router)");
+      enable = mkEnableOption "`i2pd` (I2P network router)";
       package = mkOption {
         type = types.package;
         default = pkgs.i2pd;
         defaultText = literalExpression "pkgs.i2pd";
-        description = mdDoc "i2pd package to use";
+        description = "i2pd package to use";
       };
       gracefulShutdown = mkEnableOption "" // {
-        description = mdDoc ''
+        description = ''
           If true, i2pd will wait for transit connections to close.
           Enabling this option **may delay system shutdown/reboot/rebuild-switch up to 10 minutes!**
         '';
       };
       autoRestart = mkEnableOption "" // {
         default = true;
-        description = mdDoc "If true, i2pd will be restarted on failure (does not affect clean exit)";
+        description = "If true, i2pd will be restarted on failure (does not affect clean exit)";
       };
       settings = mkOption {
-        description = mdDoc ''
+        description = ''
           Free-form main i2pd configuration. Options are passed to `i2pd.conf`.
           See `https://i2pd.readthedocs.io/en/latest/user-guide/configuration/`
         '';
@@ -170,7 +170,7 @@ in
                 "error"
               ];
               default = "error";
-              description = mdDoc "The log level";
+              description = "The log level";
             };
             bandwidth = mkOption {
               type =
@@ -191,7 +191,7 @@ in
                   })
                 ]);
               default = null;
-              description = mdDoc ''
+              description = ''
                 Set a router bandwidth limit: integer in KBps or alias.
                 Note that integer bandwidth will be rounded.
                 If not set, {command}`i2pd` defaults to `32KBps`.
@@ -219,7 +219,7 @@ in
 
       # Server/generic tunnels
       serverTunnels = mkOption {
-        description = mdDoc ''
+        description = ''
           Free-form "server" tunnels. Options are passed to `tunnels.conf`.
           Mnemonic: we serving some service to others.
           See `https://i2pd.readthedocs.io/en/latest/user-guide/tunnels/#servergeneric-tunnels`
@@ -230,11 +230,11 @@ in
             options = {
               host = mkOption {
                 type = types.either types.str credential.type;
-                description = mdDoc "IP address of server (on this address i2pd will send data from I2P)";
+                description = "IP address of server (on this address i2pd will send data from I2P)";
               };
               port = mkOption {
                 type = types.port;
-                description = mdDoc "Port of server tunnel (on this port i2pd will send data from I2P)";
+                description = "Port of server tunnel (on this port i2pd will send data from I2P)";
               };
               inherit (templates) signaturetype;
             }
@@ -248,10 +248,10 @@ in
 
       # Client tunnels
       clientTunnels = mkOption {
-        description = mdDoc ''
+        description = ''
           Free-form "client" tunnels. Options are passed to `tunnels.conf`.
           Mnemonic: we connect to someone as a client.
-          See `https://i2pd.readthedocs.io/en/latest/user-guide/tunnels/#client-tunnels`
+          See <https://i2pd.readthedocs.io/en/latest/user-guide/tunnels/#client-tunnels>
         '';
         type = types.attrsOf (
           types.submodule {
@@ -259,11 +259,11 @@ in
             options = {
               port = mkOption {
                 type = types.port;
-                description = mdDoc "Port of client tunnel (on this port i2pd will receive data)";
+                description = "Port of client tunnel (on this port i2pd will receive data)";
               };
               destination = mkOption {
                 type = types.either types.str credential.type;
-                description = mdDoc "Remote endpoint, I2P hostname or b32.i2p address";
+                description = "Remote endpoint, I2P hostname or b32.i2p address";
               };
               inherit (templates) signaturetype;
             }
@@ -287,7 +287,7 @@ in
             { "${credential.attributeName}" = path; }
           else
             throw "Argument is not of type `lib.types.path`";
-        description = mdDoc ''
+        description = ''
           Pass content of a file to any free-formed option at runtime.
           Files are read before service starts by `systemd` daemon (with root privileges, so file permissions are ignored).
         '';
