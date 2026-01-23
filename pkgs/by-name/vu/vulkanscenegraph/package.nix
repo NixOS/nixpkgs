@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Vulkan & C++17 based Scene Graph Project";
-    homepage = "http://www.vulkanscenegraph.org";
+    homepage = "https://www.vulkanscenegraph.org";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sikmir ];
     platforms = lib.platforms.unix;
