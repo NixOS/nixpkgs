@@ -117,7 +117,7 @@ let
   };
 in
 symlinkJoin {
-  name = "etcd-${version}";
+  pname = "etcd";
 
   inherit meta version;
 
