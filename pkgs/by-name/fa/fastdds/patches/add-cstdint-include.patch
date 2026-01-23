@@ -1,0 +1,10 @@
+--- a/src/cpp/rtps/security/common/SharedSecretHandle.cpp
++++ b/src/cpp/rtps/security/common/SharedSecretHandle.cpp
+@@ -17,6 +17,7 @@
+  * @file SharedSecretHandle.cpp
+  */
+
++#include <cstdint>
+ #include <rtps/security/common/SharedSecretHandle.h>
+
+ using namespace eprosima::fastdds::rtps::security;

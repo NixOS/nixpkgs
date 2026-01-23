@@ -24,6 +24,10 @@
             hash = "sha256-Qyn3Y1h7egCWxlAIfXae0U7BwMY/qLayjV7QDNhOvJk=";
           };
 
+          patches = [
+            ./patches/add-cstdint-include.patch
+          ];
+
           nativeBuildInputs = with pkgs; [
             cmake
             openjdk11
