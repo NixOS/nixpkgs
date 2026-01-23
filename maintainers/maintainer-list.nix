@@ -4930,6 +4930,11 @@
     githubId = 114656678;
     name = "Gabriel Hosquet";
   };
+  cizordj = {
+    github = "cizordj";
+    githubId = 32869222;
+    name = "Cézar Augusto";
+  };
   cizra = {
     email = "todurov+nix@gmail.com";
     github = "cizra";
