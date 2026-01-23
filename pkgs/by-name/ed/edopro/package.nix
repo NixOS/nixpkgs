@@ -396,7 +396,7 @@ let
   '';
 in
 symlinkJoin {
-  name = "edopro-application-${deps.edopro-version}";
+  pname = "edopro-application";
   version = deps.edopro-version;
   paths = [
     edopro-script
