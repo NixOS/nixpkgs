@@ -66,6 +66,15 @@ let
           example = "${runtimeDir}/<name>.sock";
         };
 
+        socketActivation = mkOption {
+          type = types.bool;
+          default = true;
+          example = false;
+          description = ''
+            Let the socket be managed by systemd.
+          '';
+        };
+
         listen = mkOption {
           type = types.str;
           default = "";
@@ -294,17 +303,20 @@ in
           Backlog = poolOpts.settings."listen.backlog";
         };
       }
-    ) cfg.pools;
+    ) (lib.filterAttrs (_: poolOpts: poolOpts.socketActivation) cfg.pools);
 
     systemd.services = mapAttrs' (
       pool: poolOpts:
       nameValuePair "phpfpm-${pool}" {
         description = "PHP FastCGI Process Manager service for pool ${pool}";
         after = [ "network.target" ];
-        wantedBy = [ "phpfpm.target" ];
+        wantedBy = [
+          "phpfpm.target"
+        ]
+        ++ (lib.optionals (!poolOpts.socketActivation) [ "multi-user.target" ]);
         partOf = [ "phpfpm.target" ];
         documentation = [ "man:php-fpm(8)" ];
-        environment.FPM_SOCKETS = "${poolOpts.socket}=3";
+        environment.FPM_SOCKETS = lib.mkIf poolOpts.socketActivation "${poolOpts.socket}=3";
         serviceConfig =
           let
             cfgFile = fpmCfgFile pool poolOpts;
