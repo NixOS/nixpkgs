@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
   setuptools-scm,
   pytest,
@@ -17,9 +17,11 @@ buildPythonPackage rec {
   version = "0.18.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-BMlJ6hJ4o4yj2NZ1hx9sWglYv+369P2L/U4l5YYXWac=";
+  src = fetchFromGitHub {
+    owner = "matplotlib";
+    repo = "pytest-mpl";
+    tag = "v${version}";
+    hash = "sha256-9fMhVgeEL4bjNIegmJV7lisrdzp27h0syn9pMwzX4Gg=";
   };
 
   build-system = [
