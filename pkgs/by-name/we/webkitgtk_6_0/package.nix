@@ -246,11 +246,6 @@ clangStdenv.mkDerivation (finalAttrs: {
     patchShebangs .
   '';
 
-  postFixup = ''
-    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
-    moveToOutput "share/doc" "$devdoc"
-  '';
-
   requiredSystemFeatures = [ "big-parallel" ];
 
   passthru = {
