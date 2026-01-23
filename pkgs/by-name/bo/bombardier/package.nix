@@ -42,7 +42,7 @@ buildGoModule rec {
     homepage = "https://github.com/codesenberg/bombardier";
     changelog = "https://github.com/codesenberg/bombardier/releases/tag/${src.rev}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.progrm_jarvis ];
     mainProgram = "bombardier";
   };
 }
