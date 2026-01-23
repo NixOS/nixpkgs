@@ -19,15 +19,15 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "qdelay";
-  version = "1.0.7";
+  pname = "filtr";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "tiagolr";
-    repo = "qdelay";
+    repo = "filtr";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-Pnta6KyvOPKsKp9wfofc6BnBGJdV7Of6tFeTgaCTu7c=";
+    hash = "sha256-LRVwJ/Eh+XeNGnlbd2c56hWV8StHZGhxy0XLjGZ0toY=";
   };
 
   nativeBuildInputs = [
@@ -78,16 +78,16 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/lib/vst3 $out/lib/lv2
 
-    cp -r "QDelay_artefacts/Release/LV2/QDelay.lv2" $out/lib/lv2
-    cp -r "QDelay_artefacts/Release/VST3/QDelay.vst3" $out/lib/vst3
+    cp -r "FILTR_artefacts/Release/LV2/FILT-R.lv2" $out/lib/lv2
+    cp -r "FILTR_artefacts/Release/VST3/FILT-R.vst3" $out/lib/vst3
 
     runHook postInstall
   '';
 
   meta = {
-    description = "Dual delay with more features than it should";
-    homepage = "https://github.com/tiagolr/qdelay";
-    changelog = "https://github.com/tiagolr/qdelay/releases/tag/v${finalAttrs.version}";
+    description = "Envelope based filter modulator";
+    homepage = "https://github.com/tiagolr/filtr";
+    changelog = "https://github.com/tiagolr/filtr/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ magnetophon ];
     platforms = lib.platforms.all;

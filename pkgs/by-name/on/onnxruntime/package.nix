@@ -317,28 +317,29 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "onnxruntime_USE_COMPOSABLE_KERNEL_CK_TILE" false)
   ];
 
-  env = {
-    NIX_LDFLAGS = "-z,noexecstack";
-  }
-  // lib.optionalAttrs rocmSupport {
-    MIOPEN_PATH = rocmPackages.miopen;
-    # HIP steps fail to find ROCm libs when not in HIPFLAGS, causing
-    # fatal error: 'rocrand/rocrand.h' file not found
-    HIPFLAGS = lib.concatMapStringsSep " " (pkg: "-I${lib.getInclude pkg}/include") [
-      rocmPackages.hipblas
-      rocmPackages.hipcub
-      rocmPackages.hiprand
-      rocmPackages.hipsparse
-      rocmPackages.rocblas
-      rocmPackages.rocprim
-      rocmPackages.rocrand
-      rocmPackages.rocthrust
-    ];
-  }
-  // lib.optionalAttrs effectiveStdenv.hostPlatform.isMusl {
-    NIX_CFLAGS_COMPILE = "-DFLATBUFFERS_LOCALE_INDEPENDENT=0";
-    GTEST_FILTER = "*:-ContribOpTest.StringNormalizer*";
-  };
+  env =
+    lib.optionalAttrs effectiveStdenv.hostPlatform.isLinux {
+      NIX_LDFLAGS = "-z,noexecstack";
+    }
+    // lib.optionalAttrs rocmSupport {
+      MIOPEN_PATH = rocmPackages.miopen;
+      # HIP steps fail to find ROCm libs when not in HIPFLAGS, causing
+      # fatal error: 'rocrand/rocrand.h' file not found
+      HIPFLAGS = lib.concatMapStringsSep " " (pkg: "-I${lib.getInclude pkg}/include") [
+        rocmPackages.hipblas
+        rocmPackages.hipcub
+        rocmPackages.hiprand
+        rocmPackages.hipsparse
+        rocmPackages.rocblas
+        rocmPackages.rocprim
+        rocmPackages.rocrand
+        rocmPackages.rocthrust
+      ];
+    }
+    // lib.optionalAttrs effectiveStdenv.hostPlatform.isMusl {
+      NIX_CFLAGS_COMPILE = "-DFLATBUFFERS_LOCALE_INDEPENDENT=0";
+      GTEST_FILTER = "*:-ContribOpTest.StringNormalizer*";
+    };
 
   doCheck =
     !(

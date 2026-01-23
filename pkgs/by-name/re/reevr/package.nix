@@ -19,15 +19,15 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "qdelay";
-  version = "1.0.7";
+  pname = "reevr";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "tiagolr";
-    repo = "qdelay";
+    repo = "reevr";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-Pnta6KyvOPKsKp9wfofc6BnBGJdV7Of6tFeTgaCTu7c=";
+    hash = "sha256-uOaImmc8MXhH6P3IN53LGntsWAbsVnqkz8TUk67aYcU=";
   };
 
   nativeBuildInputs = [
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "BUILD_STANDALONE" "OFF")
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "-DCMAKE_OSX_ARCHITECTURES=${stdenv.hostPlatform.darwinArch}"
+    (lib.cmakeFeature "CMAKE_OSX_ARCHITECTURES" "${stdenv.hostPlatform.darwinArch}")
   ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isLinux (toString [
@@ -78,16 +78,16 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/lib/vst3 $out/lib/lv2
 
-    cp -r "QDelay_artefacts/Release/LV2/QDelay.lv2" $out/lib/lv2
-    cp -r "QDelay_artefacts/Release/VST3/QDelay.vst3" $out/lib/vst3
+    cp -r "REEVR_artefacts/Release/LV2/REEV-R.lv2" $out/lib/lv2
+    cp -r "REEVR_artefacts/Release/VST3/REEV-R.vst3" $out/lib/vst3
 
     runHook postInstall
   '';
 
   meta = {
-    description = "Dual delay with more features than it should";
-    homepage = "https://github.com/tiagolr/qdelay";
-    changelog = "https://github.com/tiagolr/qdelay/releases/tag/v${finalAttrs.version}";
+    description = "Convolution reverb with pre and post modulation";
+    homepage = "https://github.com/tiagolr/reevr";
+    changelog = "https://github.com/tiagolr/reevr/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ magnetophon ];
     platforms = lib.platforms.all;

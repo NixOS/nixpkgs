@@ -6,22 +6,21 @@
   openssl,
   gzip,
   gitMinimal,
-  deno,
   nix-update-script,
   versionCheckHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fresh";
-  version = "0.1.86";
+  version = "0.1.87";
 
   src = fetchFromGitHub {
     owner = "sinelaw";
     repo = "fresh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-o67oowSU1V9Cy2RvLEaZ5J3CPX2kD7qByDOc+8gpDq8=";
+    hash = "sha256-th4wlkGP9WNdRRhJy3pBC5dcqRbkUooM65FoftQHqBE=";
   };
 
-  cargoHash = "sha256-I78sdf/p5TZZufMZF8rETRb91veklwNHHByHF1WbLgk=";
+  cargoHash = "sha256-6b4iDXJme3uanEfz/e4jI1kqljaH8iOqS+7p1MPwhY4=";
 
   nativeBuildInputs = [
     pkg-config
@@ -36,10 +35,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     openssl
   ];
-
-  # The v8 package will try to download a `librusty_v8.a` release at build time to our read-only filesystem
-  # To avoid this we pre-download the file and export it via RUSTY_V8_ARCHIVE
-  env.RUSTY_V8_ARCHIVE = deno.librusty_v8;
 
   preBuild = ''
     mkdir -p $out/share/fresh-editor/plugins/

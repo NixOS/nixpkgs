@@ -19,15 +19,15 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "qdelay";
-  version = "1.0.7";
+  pname = "gate12";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "tiagolr";
-    repo = "qdelay";
+    repo = "gate12";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-Pnta6KyvOPKsKp9wfofc6BnBGJdV7Of6tFeTgaCTu7c=";
+    hash = "sha256-dyeIWD315+aKZRwtkRYaWNOS8bNDFboMVPHHe7l+IIY=";
   };
 
   nativeBuildInputs = [
@@ -78,16 +78,16 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/lib/vst3 $out/lib/lv2
 
-    cp -r "QDelay_artefacts/Release/LV2/QDelay.lv2" $out/lib/lv2
-    cp -r "QDelay_artefacts/Release/VST3/QDelay.vst3" $out/lib/vst3
+    cp -r "GATE12_artefacts/Release/LV2/GATE-12.lv2" $out/lib/lv2
+    cp -r "GATE12_artefacts/Release/VST3/GATE-12.vst3" $out/lib/vst3
 
     runHook postInstall
   '';
 
   meta = {
-    description = "Dual delay with more features than it should";
-    homepage = "https://github.com/tiagolr/qdelay";
-    changelog = "https://github.com/tiagolr/qdelay/releases/tag/v${finalAttrs.version}";
+    description = "Trance gate / volume shaper";
+    homepage = "https://github.com/tiagolr/gate12";
+    changelog = "https://github.com/tiagolr/gate12/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ magnetophon ];
     platforms = lib.platforms.all;
