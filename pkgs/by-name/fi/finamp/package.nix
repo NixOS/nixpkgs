@@ -9,7 +9,7 @@
   makeDesktopItem,
 }:
 let
-  version = "0.9.21-beta";
+  version = "0.9.22-beta";
 in
 flutter338.buildFlutterApplication {
   inherit version;
@@ -18,7 +18,7 @@ flutter338.buildFlutterApplication {
     owner = "jmshrv";
     repo = "finamp";
     rev = version;
-    hash = "sha256-Mb9oC9SJnZovcqjOJzh0bpWxZhbkfQWzFG9moghCmrw=";
+    hash = "sha256-SPt1p9+uyvfSry8Ry2BJyLC7HyWZe43wfAPK9BVkcnc=";
   };
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
