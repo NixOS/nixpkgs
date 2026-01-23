@@ -237,10 +237,12 @@ in
           type = lib.types.enum [
             "local"
             "redis"
+            "postgres"
           ];
           default = "local";
           description = ''
-            Lock backend to use: 'local' (single instance), 'redis' (distributed).
+            Lock backend to use: 'local' (single instance), 'redis'
+            (distributed), or 'postgres' (distributed, requires PostgreSQL).
           '';
         };
 

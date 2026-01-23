@@ -33,20 +33,20 @@ let
 
   finalAttrs = {
     pname = "ncps";
-    version = "0.6.3";
+    version = "0.7.1";
 
     src = fetchFromGitHub {
       owner = "kalbasit";
       repo = "ncps";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-7fLtVloiTNOmPoVpESpiSUl7i+5SMLXRHbGPk9SilBc=";
+      hash = "sha256-U+97wTN7CxJZ+jOWxZHkN2IiNblb5WTPpnN5v98D2o8=";
     };
 
     ldflags = [
       "-X github.com/kalbasit/ncps/cmd.Version=v${finalAttrs.version}"
     ];
 
-    vendorHash = "sha256-GuUhJ0Zf2Zjfgstxcy6/DAs0Eq7PU4aiiJMSNcNqsqI=";
+    vendorHash = "sha256-nnt4HIG4Fs7RhHjVb7mYJ39UgvFKc46Cu42cURMmr1s=";
 
     subPackages = [ "." ];
 
