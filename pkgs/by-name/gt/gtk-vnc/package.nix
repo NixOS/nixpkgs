@@ -71,11 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dpulseaudio=disabled"
   ];
 
-  postFixup = ''
-    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
-    moveToOutput "share/doc" "$devdoc"
-  '';
-
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "gtk-vnc";
