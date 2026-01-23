@@ -15,6 +15,6 @@ patchELF() {
         if [[ "$i" =~ .build-id ]]; then continue; fi
         if ! isELF "$i"; then continue; fi
         echo "shrinking $i"
-        patchelf --shrink-rpath "$i" || true
+        patchelf --shrink-rpath "$i"
     done < <(find "$dir" -type f -print0)
 }
