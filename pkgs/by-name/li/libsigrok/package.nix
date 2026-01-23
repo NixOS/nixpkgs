@@ -17,7 +17,7 @@
   libieee1284,
   bluez,
   sigrok-firmware-fx2lafw,
-  fetchFromGitHub
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation {
