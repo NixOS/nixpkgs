@@ -221,7 +221,9 @@ buildNpmPackage rec {
     if ${lib.boolToString stdenv.targetPlatform.isDarwin}; then
       cp -r '${firefox-esr-140-unwrapped}/Applications/Firefox ESR.app' app/xulrunner/Firefox.app
     else
-      cp -r '${firefox-esr-140-unwrapped}/lib/firefox' app/xulrunner/firefox-${stdenv.targetPlatform.parsed.kernel.name}-${stdenv.targetPlatform.parsed.cpu.name}
+      cp -r '${firefox-esr-140-unwrapped}/lib/firefox' app/xulrunner/firefox-${stdenv.targetPlatform.parsed.kernel.name}-${
+        lib.replaceString "aarch64" "arm64" stdenv.targetPlatform.parsed.cpu.name
+      }
     fi
     chmod -R u+w app/xulrunner/
 
