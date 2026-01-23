@@ -13,7 +13,7 @@
   installShellFiles,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  name = "autotier";
+  pname = "autotier";
   version = "1.2.0";
   src = fetchFromGitHub {
     owner = "45Drives";
