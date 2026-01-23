@@ -2230,6 +2230,16 @@ in
   config = {
     assertions = [
       {
+        assertion =
+          (config.security.pam.services.sshd.googleAuthenticator.enable or false)
+          -> (config.services.openssh.settings.PasswordAuthentication != false);
+        message = ''
+          Using security.pam.services.sshd.googleAuthenticator requires
+          services.openssh.settings.PasswordAuthentication to not be disabled.
+          See https://github.com/NixOS/nixpkgs/issues/115044
+        '';
+      }
+      {
         assertion = config.users.motd == "" || config.users.motdFile == null;
         message = ''
           Only one of users.motd and users.motdFile can be set.
