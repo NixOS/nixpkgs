@@ -219,7 +219,7 @@
   xwd,
   xwininfo,
   xwud,
-# keep-sorted end
+  # keep-sorted end
 }:
 _:
 {

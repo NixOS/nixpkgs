@@ -26,15 +26,8 @@ stdenv.mkDerivation rec {
     owner = "owncloud";
     repo = "client";
     tag = "v${version}";
-    hash = "sha256-11ZqCqFKJexMRH73IEBRuNx5Dxf4aMHlShwull0z4hI=";
+    hash = "sha256-RNa3i+Qf/cPE+TvYFt5FjbQcHgep3z/XBzno/EyJ3EQ==";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/owncloud/client/commit/ef0791a727051191f0c0ff7bca78b10d5dd97e1e.patch";
-      hash = "sha256-r/TlRjmnZdPWXZ8Kn/9GgcisWiF/qOO5X8m2ReooKWo=";
-    })
-  ];
 
   nativeBuildInputs = [
     pkg-config

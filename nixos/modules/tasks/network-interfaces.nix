@@ -205,7 +205,7 @@ let
         tempAddress = mkOption {
           type = types.enum (lib.attrNames tempaddrValues);
           default = cfg.tempAddresses;
-          defaultText = literalExpression ''config.networking.tempAddresses'';
+          defaultText = literalExpression "config.networking.tempAddresses";
           description = ''
             When IPv6 is enabled with SLAAC, this option controls the use of
             temporary address (aka privacy extensions) on this
@@ -1770,13 +1770,9 @@ in
 
     environment.corePackages = [
       pkgs.host
-      pkgs.hostname-debian
+      pkgs.hostname
       pkgs.iproute2
-      pkgs.iputils
-    ]
-    ++ optionals config.networking.wireless.enable [
-      pkgs.wirelesstools # FIXME: obsolete?
-      pkgs.iw
+      pkgs.iputils # ping
     ]
     ++ bridgeStp;
 

@@ -228,7 +228,7 @@ in
           cfg.hostPlatform # make identical, so that `==` equality works; see https://github.com/NixOS/nixpkgs/issues/278001
         else
           elaborated;
-      defaultText = lib.literalExpression ''config.nixpkgs.hostPlatform'';
+      defaultText = lib.literalExpression "config.nixpkgs.hostPlatform";
       description = ''
         Specifies the platform on which NixOS should be built.
         By default, NixOS is built on the system where it runs, but you can
@@ -252,7 +252,7 @@ in
       # Make sure that the final value has all fields for sake of other modules
       # referring to this. TODO make `lib.systems` itself use the module system.
       apply = lib.systems.elaborate;
-      defaultText = lib.literalExpression ''config.nixpkgs.system'';
+      defaultText = lib.literalExpression "config.nixpkgs.system";
       description = ''
         Systems with a recently generated `hardware-configuration.nix`
         do not need to specify this option, unless cross-compiling, in which case

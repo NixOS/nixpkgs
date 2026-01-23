@@ -65,6 +65,8 @@ let
     "syslog.socket"
     "systemd-ask-password-console.path"
     "systemd-ask-password-console.service"
+    "systemd-factory-reset-complete.service"
+    "factory-reset-now.target"
     "systemd-fsck@.service"
     "systemd-halt.service"
     "systemd-hibernate-resume.service"
@@ -555,6 +557,7 @@ in
         "${cfg.package}/lib/systemd/systemd-sysctl"
         "${cfg.package}/lib/systemd/systemd-bsod"
         "${cfg.package}/lib/systemd/systemd-sysroot-fstab-check"
+        "${cfg.package}/lib/systemd/systemd-factory-reset"
 
         # generators
         "${cfg.package}/lib/systemd/system-generators/systemd-debug-generator"
@@ -562,6 +565,7 @@ in
         "${cfg.package}/lib/systemd/system-generators/systemd-gpt-auto-generator"
         "${cfg.package}/lib/systemd/system-generators/systemd-hibernate-resume-generator"
         "${cfg.package}/lib/systemd/system-generators/systemd-run-generator"
+        "${cfg.package}/lib/systemd/system-generators/systemd-factory-reset-generator"
 
         # utilities needed by systemd
         "${cfg.package.util-linux}/bin/mount"

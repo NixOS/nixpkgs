@@ -8,14 +8,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "bitbake-language-server";
-  version = "0.0.15";
+  version = "0.0.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Freed-Wu";
     repo = "bitbake-language-server";
     tag = version;
-    hash = "sha256-NLDQ2P5peweugkoNYskpCyCEgBwVFA7RTs8+NvH8fj8=";
+    hash = "sha256-Huk5fpuN5bNtxH52UX2I86T5s82LXynZreZOGKFVq/w=";
   };
 
   nativeBuildInputs = with python3.pkgs; [

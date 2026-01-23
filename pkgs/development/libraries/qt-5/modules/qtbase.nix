@@ -435,14 +435,14 @@ stdenv.mkDerivation (
         "-I"
         "${openssl.dev}/include"
         "-system-sqlite"
-        ''-${if mysqlSupport then "plugin" else "no"}-sql-mysql''
-        ''-${if libpq != null then "plugin" else "no"}-sql-psql''
+        "-${if mysqlSupport then "plugin" else "no"}-sql-mysql"
+        "-${if libpq != null then "plugin" else "no"}-sql-psql"
         "-system-libpng"
 
         "-make libs"
         "-make tools"
-        ''-${lib.optionalString (!buildExamples) "no"}make examples''
-        ''-${lib.optionalString (!buildTests) "no"}make tests''
+        "-${lib.optionalString (!buildExamples) "no"}make examples"
+        "-${lib.optionalString (!buildTests) "no"}make tests"
       ]
       ++ (
         if stdenv.hostPlatform.isDarwin then
@@ -471,7 +471,7 @@ stdenv.mkDerivation (
             "-I"
             "${libXrender.out}/include"
 
-            ''-${lib.optionalString (cups == null) "no-"}cups''
+            "-${lib.optionalString (cups == null) "no-"}cups"
             "-dbus-linked"
             "-glib"
           ]

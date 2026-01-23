@@ -154,7 +154,7 @@ in
     ''
     + lib.concatMapStrings (p: "Include ${p}/etc/apparmor.d\n") cfg.packages;
     # For aa-logprof
-    environment.etc."apparmor/apparmor.conf".text = '''';
+    environment.etc."apparmor/apparmor.conf".text = "";
     # For aa-logprof
     environment.etc."apparmor/severity.db".source = pkgs.apparmor-utils + "/etc/apparmor/severity.db";
     environment.etc."apparmor/logprof.conf".source =

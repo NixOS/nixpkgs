@@ -31,7 +31,7 @@ let
     # export passwords in environment variables in plaintext.
     ${concatMapStringsSep "\n" (
       x:
-      ''export SYNC_USER${toString x.i}=${escapeShellArg x.user.username}:${escapeShellArg x.user.password}''
+      "export SYNC_USER${toString x.i}=${escapeShellArg x.user.username}:${escapeShellArg x.user.password}"
     ) usersWithIndexesNoFile}
     exec ${lib.getExe cfg.package}
   '';

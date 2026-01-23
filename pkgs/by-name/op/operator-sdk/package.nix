@@ -4,27 +4,31 @@
   go,
   fetchFromGitHub,
   makeWrapper,
+  pkg-config,
+  gpgme,
 }:
 
 buildGoModule rec {
   pname = "operator-sdk";
-  version = "1.39.2";
+  version = "1.42.0";
 
   src = fetchFromGitHub {
     owner = "operator-framework";
     repo = "operator-sdk";
     tag = "v${version}";
-    hash = "sha256-2Kv6mDC1MndUgttRYODnI8DZ84RVz8jn3+RpXmOemq0=";
+    hash = "sha256-iXLAFFO7PCxA8QuQ9pMmQ/GBbVM5wBy9cVzSQRHHPrg=";
   };
 
-  vendorHash = "sha256-W+q9K2003dJfcjyoN4YMoY98cwBy+nfZCi3tHNLbm1w=";
+  vendorHash = "sha256-F2ZYEEFG8hqCcy16DUmP9ilG6e20nXBiJnB6U+wezAo=";
 
   nativeBuildInputs = [
     makeWrapper
+    pkg-config
   ];
 
   buildInputs = [
     go
+    gpgme
   ];
 
   doCheck = false;

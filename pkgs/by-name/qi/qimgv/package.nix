@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  libsForQt5,
+  kdePackages,
   exiv2,
   mpv,
   opencv4,
@@ -24,21 +24,23 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     cmake
     pkg-config
-    libsForQt5.wrapQtAppsHook
+    kdePackages.wrapQtAppsHook
   ];
 
   cmakeFlags = [
     "-DVIDEO_SUPPORT=ON"
+    "-DUSE_QT5=OFF"
   ];
 
   buildInputs = [
     exiv2
     mpv
     opencv4.cxxdev
-    libsForQt5.qtbase
-    libsForQt5.qtimageformats
-    libsForQt5.qtsvg
-    libsForQt5.qttools
+    kdePackages.qtbase
+    kdePackages.qtimageformats
+    kdePackages.qtsvg
+    kdePackages.qttools
+    kdePackages.kimageformats
   ];
 
   postPatch = ''
@@ -53,7 +55,7 @@ stdenv.mkDerivation {
   ];
 
   meta = {
-    description = "Qt5 image viewer with optional video support";
+    description = "Qt6 image viewer with optional video support";
     mainProgram = "qimgv";
     homepage = "https://github.com/easymodo/qimgv";
     license = lib.licenses.gpl3;

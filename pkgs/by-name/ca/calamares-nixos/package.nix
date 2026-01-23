@@ -7,7 +7,7 @@
 }:
 runCommand "calamares-wrapped"
   {
-    inherit (calamares) version meta;
+    inherit (calamares) pname version meta;
 
     nativeBuildInputs = [ makeWrapper ];
   }

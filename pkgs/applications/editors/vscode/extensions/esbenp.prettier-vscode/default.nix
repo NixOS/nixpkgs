@@ -7,8 +7,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "prettier-vscode";
     publisher = "esbenp";
-    version = "11.0.2";
-    hash = "sha256-PwP49p1gpxfx3AmGFhNvRBBc4SxWM2b9aaiUG/C+Uhg=";
+    version = "12.3.0";
+    hash = "sha256-Zi5ihki/risHm75ERQxUgqhiTbpM6fknHLMCAkXrEVo=";
   };
 
   meta = {

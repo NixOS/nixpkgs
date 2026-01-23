@@ -825,6 +825,8 @@ let
 
         httpaf-lwt-unix = callPackage ../development/ocaml-modules/httpaf/lwt-unix.nix { };
 
+        httpcats = callPackage ../development/ocaml-modules/httpcats { };
+
         httpun = callPackage ../development/ocaml-modules/httpun { };
 
         httpun-eio = callPackage ../development/ocaml-modules/httpun/eio.nix { };

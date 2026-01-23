@@ -90,7 +90,7 @@ let
       type = with lib.types; nullOr path;
       default = lib.getExe pkgs.ghostscript;
       defaultText = lib.literalExpression "lib.getExe pkgs.ghostscript";
-      example = lib.literalExpression ''''${pkgs.ghostscript}/bin/ps2pdf'';
+      example = lib.literalExpression "\${pkgs.ghostscript}/bin/ps2pdf";
       description = "location of GhostScript binary";
     };
   };

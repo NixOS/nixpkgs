@@ -166,15 +166,15 @@ in
   imports = [
     (lib.mkRenamedOptionModule
       [ "services" "apache-kafka" "brokerId" ]
-      [ "services" "apache-kafka" "settings" ''broker.id'' ]
+      [ "services" "apache-kafka" "settings" "broker.id" ]
     )
     (lib.mkRenamedOptionModule
       [ "services" "apache-kafka" "logDirs" ]
-      [ "services" "apache-kafka" "settings" ''log.dirs'' ]
+      [ "services" "apache-kafka" "settings" "log.dirs" ]
     )
     (lib.mkRenamedOptionModule
       [ "services" "apache-kafka" "zookeeper" ]
-      [ "services" "apache-kafka" "settings" ''zookeeper.connect'' ]
+      [ "services" "apache-kafka" "settings" "zookeeper.connect" ]
     )
 
     (lib.mkRemovedOptionModule [
