@@ -5,6 +5,7 @@
   testers,
   bombardier,
   versionCheckHook,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
@@ -37,6 +38,7 @@ buildGoModule (finalAttrs: {
   versionCheckProgramArg = "--version";
 
   passthru.tests = {
+    updateScript = nix-update-script { };
     version = testers.testVersion {
       package = bombardier;
     };
