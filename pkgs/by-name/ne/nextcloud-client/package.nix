@@ -23,7 +23,7 @@
 
 stdenv.mkDerivation rec {
   pname = "nextcloud-client";
-  version = "4.0.5";
+  version = "4.0.6";
 
   outputs = [
     "out"
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     owner = "nextcloud-releases";
     repo = "desktop";
     tag = "v${version}";
-    hash = "sha256-cEe1GTRFC+iGAAgddRm70uf5tXmpCat7Q7BptFEYKnE=";
+    hash = "sha256-GPNJ2zrHzHQgJvj1ANi6LYsTlkuc5splFAwC5XaR3+0=";
   };
 
   patches = [
