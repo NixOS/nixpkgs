@@ -45,6 +45,19 @@
           "pm.start_servers" = 2;
         };
       };
+
+      specialisation.differentUser.configuration = {
+        imports = [ ../common/user-account.nix ];
+
+        services.phpfpm.pools."foobar" = {
+          user = lib.mkForce "alice";
+          group = lib.mkForce "users";
+          settings = {
+            "listen.owner" = lib.mkForce "alice";
+            "listen.group" = lib.mkForce "users";
+          };
+        };
+      };
     };
   testScript =
     { ... }:
@@ -59,5 +72,8 @@
       for ext in ["json", "opcache", "pdo_mysql", "pdo_pgsql", "pdo_sqlite", "apcu"]:
           assert ext in response, f"Missing {ext} extension"
           machine.succeed(f'test -n "$(php -m | grep -i {ext})"')
+
+      machine.succeed("/run/booted-system/specialisation/differentUser/bin/switch-to-configuration test 2>&1")
+      machine.fail("curl -fvvv -s http://127.0.0.1:80/")
     '';
 }
