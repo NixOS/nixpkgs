@@ -303,9 +303,6 @@ stdenv.mkDerivation (finalAttrs: {
     for i in $dev/bin/*; do
       moveToOutput "share/man/man1/''${i##*/}.1.*" "$dev"
     done
-
-    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
-    moveToOutput "share/doc" "$devdoc"
   '';
 
   # Conditional necessary to break infinite recursion with passthru.tests
