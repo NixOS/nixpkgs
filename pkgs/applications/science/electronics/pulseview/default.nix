@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation {
   pname = "pulseview";
-  version = "0.4.2-unstable-2025-05-15";
+  version = "0.5.0-unstable-2025-11-10";
 
   src = fetchFromGitHub {
     owner = "sigrokproject";
     repo = "pulseview";
-    rev = "e2fe9dfb91c7de85c410922ee9268c3f526bcc54";
-    hash = "sha256-b9pqtsF5J9MA7XMIgFZltrVqi64ZPObBTiaws3zSDRg=";
+    rev = "af02198741b4e57c9f9b796bd5e6c0f2ae9f2f2b";
+    hash = "sha256-4K3sMCTlFnu8iiokMYc1O7jNVQ7vTtSiT2dCpLRC44s=";
   };
 
   nativeBuildInputs = [
