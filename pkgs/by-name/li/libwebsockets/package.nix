@@ -25,12 +25,12 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       name = "CVE-2025-11677.patch";
-      url = "https://libwebsockets.org/git/libwebsockets/patch?id=2f082ec31261f556969160143ba94875d783971a";
+      url = "https://github.com/warmcat/libwebsockets/commit/2f082ec31261f556969160143ba94875d783971a.patch";
       hash = "sha256-FeiZAbr1kpt+YNjhi2gfG2A6nXKiSssMFRmlALaneu4=";
     })
     (fetchpatch {
       name = "CVE-2025-11678.patch";
-      url = "https://libwebsockets.org/git/libwebsockets/patch?id=2bb9598562b37c942ba5b04bcde3f7fdf66a9d3a";
+      url = "https://github.com/warmcat/libwebsockets/commit/2bb9598562b37c942ba5b04bcde3f7fdf66a9d3a.patch";
       hash = "sha256-1uQUkoMbK+3E/QYMIBLlBZypwHBIrWBtm+KIW07WRj8=";
     })
   ];
