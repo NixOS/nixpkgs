@@ -559,8 +559,8 @@ in
       "sha256-NqNGcL3HfJgx2ScPLKMNNwpVS3bO4Cu7JpYlenSJwJg=";
 
   mypy-boto3-gamelift =
-    buildMypyBoto3Package "gamelift" "1.42.3"
-      "sha256-4LBhjln6mCxMSooGEV7mo1Fe7U6Jssxq+6JYwqnFhRs=";
+    buildMypyBoto3Package "gamelift" "1.42.33"
+      "sha256-ur7KFFOyPnCQWKW5JyyQrJ/kumcfE52C8u/J5yJ+kQQ=";
 
   mypy-boto3-glacier =
     buildMypyBoto3Package "glacier" "1.42.30"
