@@ -4625,6 +4625,10 @@ with pkgs;
   haxePackages = recurseIntoAttrs (callPackage ./haxe-packages.nix { });
   inherit (haxePackages) hxcpp;
 
+  heptagon = callPackage ../by-name/he/heptagon/package.nix {
+    ocamlPackages = ocaml-ng.ocamlPackages_5_3;
+  };
+
   dotnetPackages = recurseIntoAttrs (callPackage ./dotnet-packages.nix { });
 
   gopro-tool = callPackage ../by-name/go/gopro-tool/package.nix {
