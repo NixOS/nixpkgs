@@ -183,6 +183,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_INSTALL_PYTHONDIR" python3Packages.python.sitePackages)
   ];
 
+  # python binding libraries should be linked against installed libraries
+  preInstall = lib.optionalString pythonSupport ''
+    export adios2_DIR=$out/lib/cmake/adios2
+  '';
+
   # Tests are time-consuming and moved to passthru.tests.withCheck.
   doCheck = false;
   dontUseNinjaCheck = true;
