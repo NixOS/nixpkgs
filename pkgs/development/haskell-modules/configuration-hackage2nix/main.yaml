@@ -26,6 +26,9 @@
 # keep-sorted start skip_lines=1 case=no numeric=yes
 default-package-overrides:
   - chs-cabal == 0.1.1.2 # matches Cabal 3.12 (GHC 9.10)
+  # 2026-01-23: dataframe >= 0.3.3.7 uses random-1.3, which breaks dependency coherence on 25.11, whose default version is random-1.2
+  # TODO: when (likely in 25.x) Stackage bumps random to 1.3, review
+  - dataframe == 0.3.3.6
   # 2025-12-26: Needs to match egison-pattern-src from Stackage LTS
   - egison-pattern-src-th-mode < 0.2.2
   - extensions == 0.1.0.2 # matches Cabal 3.12 (GHC 9.10)
