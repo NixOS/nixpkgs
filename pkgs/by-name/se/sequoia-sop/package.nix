@@ -10,13 +10,11 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
-  pname = "sequoia-sqop";
+  pname = "sequoia-sop";
   version = "0.37.3";
 
   src = fetchFromGitLab {
     owner = "sequoia-pgp";
-    # From some reason the repository is not sequoia-sqop - like the command
-    # generated etc
     repo = "sequoia-sop";
     tag = "v${finalAttrs.version}";
     hash = "sha256-7fyItwtzNia97fbLJ1YkpkS7KmCo3I81uksh3lNvxwU=";
