@@ -33,7 +33,7 @@ python3Packages.buildPythonApplication {
     mkdir -p "$libdir"
     cp scripts/* "$libdir"
     chmod +x "$libdir/main.py"
-    wrapPythonProgramsIn "$libdir" "$pythonPath"
+    wrapPythonProgramsIn "$libdir" "''${pythonPath[*]}"
     mkdir -p $out/bin
     ln -s "$libdir/main.py" $out/bin/arubaotp-seed-extractor
   '';
