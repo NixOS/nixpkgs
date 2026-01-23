@@ -1,10 +1,4 @@
 {
-  channel,
-  version,
-  hash,
-}:
-
-{
   fetchFromGitHub,
   gns3-server,
   lib,
@@ -14,24 +8,33 @@
   stdenv,
   testers,
   util-linux,
+  writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication {
+python3Packages.buildPythonApplication rec {
   pname = "gns3-server";
-  inherit version;
-  format = "setuptools";
+  version = "2.2.55";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    inherit hash;
     owner = "GNS3";
     repo = "gns3-server";
     tag = "v${version}";
+    hash = "sha256-o04RrHYsa5sWYUBDLJ5xgcK4iJK8CfZ4YdAiZ4eV/o4=";
   };
 
   # GNS3 2.3.26 requires a static BusyBox for the Docker integration
   prePatch = ''
     cp ${pkgsStatic.busybox}/bin/busybox gns3server/compute/docker/resources/bin/busybox
   '';
+
+  pythonRelaxDeps = [
+    "aiohttp"
+    "aiohttp-cors"
+    "jsonschema"
+    "platformdirs"
+    "sentry-sdk"
+  ];
 
   build-system = with python3Packages; [ setuptools ];
 
@@ -40,6 +43,7 @@ python3Packages.buildPythonApplication {
     aiohttp
     aiohttp-cors
     async-generator
+    async-timeout
     distro
     jinja2
     jsonschema
@@ -60,18 +64,11 @@ python3Packages.buildPythonApplication {
   # util-linux (script program) is required for Docker support
   makeWrapperArgs = [ "--suffix PATH : ${lib.makeBinPath [ util-linux ]}" ];
 
-  doCheck = true;
-
-  # Otherwise tests will fail to create directory
-  # Permission denied: '/homeless-shelter'
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     pytest-aiohttp
     pytest-rerunfailures
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
 
   pytestFlags = [
@@ -94,7 +91,7 @@ python3Packages.buildPythonApplication {
   };
 
   meta = {
-    description = "Graphical Network Simulator 3 server (${channel} release)";
+    description = "Graphical Network Simulator 3 server";
     longDescription = ''
       The GNS3 server manages emulators such as Dynamips, VirtualBox or
       Qemu/KVM. Clients like the GNS3 GUI control the server using a HTTP REST
