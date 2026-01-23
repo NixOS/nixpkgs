@@ -29,7 +29,7 @@ flutter338.buildFlutterApplication {
   buildInputs = [ mpv-unwrapped ];
 
   gitHashes = {
-    balanced_text = "sha256-lSDR5dDjZ4garRbBPI+wSxC5iScg8wVSD5kymmLbYbk=";
+    balanced_text = "sha256-U+gtC9AaUFp3gVkUzYMWAUSuUV7kYB8ZE2BsclnxwkA=";
     isar_generator = "sha256-EthUFM+YI3bnM0U0sECoNOCRXpo4qjP71VXYBuO/u+I=";
     isar_flutter_libs = "sha256-Z5IdfiaZ7348XwYSQb81z0YZEoIHWmsSZr6mYqqz4Oo=";
     media_kit_libs_windows_audio = "sha256-p3hRq79whLFJLNUgL9atXyTGvOIqCbTRKVk1ie0Euqs=";
