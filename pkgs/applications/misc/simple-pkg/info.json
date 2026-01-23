@@ -1,0 +1,13 @@
+{
+  "fetcher": "fetchFromGitHub",
+  "fetcherArgs": {
+    "owner": "jlesquembre",
+    "repo": "simple-flake",
+    "hash": "sha256-x9BrU5hj6HsnRudt7a7qEJOTX2WU1UdAxiPK40NLvew=",
+    "rev": "v1.0"
+  },
+  "syncFiles": [
+    "pkgs/default.nix"
+  ],
+  "version": "1.0"
+}
