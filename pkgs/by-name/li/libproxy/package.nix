@@ -100,11 +100,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  postFixup = ''
-    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
-    moveToOutput "share/doc" "$devdoc"
-  '';
-
   passthru = {
     hardcodeGsettingsPatch = makeHardcodeGsettingsPatch {
       schemaIdToVariableMapping = {
