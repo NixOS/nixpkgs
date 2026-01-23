@@ -4,17 +4,15 @@
   pkgs,
   ...
 }:
-
-with lib;
 let
   cfg = config.services.i2pd;
   # Similar to types.enum of `attrNames attrset` but maps merged result to `attrset.${value}`
   attrEnum =
     attrset:
-    types.enum (attrNames attrset)
+    lib.types.enum (lib.attrNames attrset)
     // {
-      merge = loc: defs: attrset.${mergeEqualOption loc defs};
-      functor = types.enum.functor // {
+      merge = loc: defs: attrset.${lib.mergeEqualOption loc defs};
+      functor = lib.types.enum.functor // {
         type = attrEnum;
         payload = attrset;
         binOp = a: b: a // b;
@@ -33,11 +31,11 @@ let
   */
   credential = rec {
     attributeName = "_credentialFilePath";
-    type = types.addCheck types.attrs (hasAttr attributeName) // {
+    type = lib.types.addCheck lib.types.attrs (lib.hasAttr attributeName) // {
       merge = loc: defs: {
         ${attributeName} = rec {
           id = builtins.hashString "sha256" path;
-          path = (mergeEqualOption loc defs).${attributeName};
+          path = (lib.mergeEqualOption loc defs).${attributeName};
         };
       };
     };
@@ -45,9 +43,9 @@ let
     start = "@";
     stop = "@";
     # Substitute all credentials with placeholder
-    finalize = mapAttrsRecursiveCond (attrs: !type.check attrs) (
+    finalize = lib.mapAttrsRecursiveCond (attrs: !type.check attrs) (
       _: attrs:
-      if isAttrs attrs && type.check attrs then (start + attrs.${attributeName}.id + stop) else attrs
+      if lib.isAttrs attrs && type.check attrs then (start + attrs.${attributeName}.id + stop) else attrs
     );
   };
 in
@@ -66,7 +64,7 @@ in
       # Type for free-form configuration options
       settingsFormat = rec {
         type =
-          with types;
+          with lib.types;
           let
             base = [
               bool
@@ -95,8 +93,8 @@ in
       templates = rec {
         attrEnum' =
           attrset: description:
-          mkOption {
-            type = with types; nullOr (either int (attrEnum attrset));
+          lib.mkOption {
+            type = with lib.types; nullOr (either int (attrEnum attrset));
             default = null;
             inherit description;
           };
@@ -136,34 +134,29 @@ in
       };
     in
     {
-      enable = mkEnableOption "`i2pd` (I2P network router)";
-      package = mkOption {
-        type = types.package;
-        default = pkgs.i2pd;
-        defaultText = literalExpression "pkgs.i2pd";
-        description = "i2pd package to use";
-      };
-      gracefulShutdown = mkEnableOption "" // {
+      enable = lib.mkEnableOption "`i2pd` (I2P network router)";
+      package = lib.mkPackageOption pkgs "i2pd" { };
+      gracefulShutdown = lib.mkEnableOption "" // {
         description = ''
           If true, i2pd will wait for transit connections to close.
           Enabling this option **may delay system shutdown/reboot/rebuild-switch up to 10 minutes!**
         '';
       };
-      autoRestart = mkEnableOption "" // {
+      autoRestart = lib.mkEnableOption "" // {
         default = true;
         description = "If true, i2pd will be restarted on failure (does not affect clean exit)";
       };
-      settings = mkOption {
+      settings = lib.mkOption {
         description = ''
           Free-form main i2pd configuration. Options are passed to `i2pd.conf`.
           See `https://i2pd.readthedocs.io/en/latest/user-guide/configuration/`
         '';
         default = { };
-        type = types.submodule {
+        type = lib.types.submodule {
           freeformType = settingsFormat.type;
           options = {
-            loglevel = mkOption {
-              type = types.enum [
+            loglevel = lib.mkOption {
+              type = lib.types.enum [
                 "debug"
                 "info"
                 "warn"
@@ -172,9 +165,9 @@ in
               default = "error";
               description = "The log level";
             };
-            bandwidth = mkOption {
+            bandwidth = lib.mkOption {
               type =
-                with types;
+                with lib.types;
                 nullOr (oneOf [
                   int
                   (enum [
@@ -198,7 +191,7 @@ in
               '';
             };
           };
-          config = mapAttrsRecursive (_: mkDefault) {
+          config = lib.mapAttrsRecursive (_: lib.mkDefault) {
             http.enabled = true;
             httpproxy.enabled = true;
             socksproxy.enabled = true;
@@ -218,22 +211,22 @@ in
       };
 
       # Server/generic tunnels
-      serverTunnels = mkOption {
+      serverTunnels = lib.mkOption {
         description = ''
           Free-form "server" tunnels. Options are passed to `tunnels.conf`.
           Mnemonic: we serving some service to others.
           See `https://i2pd.readthedocs.io/en/latest/user-guide/tunnels/#servergeneric-tunnels`
         '';
-        type = types.attrsOf (
-          types.submodule {
+        type = lib.types.attrsOf (
+          lib.types.submodule {
             freeformType = settingsFormat.type;
             options = {
-              host = mkOption {
-                type = types.either types.str credential.type;
+              host = lib.mkOption {
+                type = lib.types.either lib.types.str credential.type;
                 description = "IP address of server (on this address i2pd will send data from I2P)";
               };
-              port = mkOption {
-                type = types.port;
+              port = lib.mkOption {
+                type = lib.types.port;
                 description = "Port of server tunnel (on this port i2pd will send data from I2P)";
               };
               inherit (templates) signaturetype;
@@ -247,22 +240,22 @@ in
       };
 
       # Client tunnels
-      clientTunnels = mkOption {
+      clientTunnels = lib.mkOption {
         description = ''
           Free-form "client" tunnels. Options are passed to `tunnels.conf`.
           Mnemonic: we connect to someone as a client.
           See <https://i2pd.readthedocs.io/en/latest/user-guide/tunnels/#client-tunnels>
         '';
-        type = types.attrsOf (
-          types.submodule {
+        type = lib.types.attrsOf (
+          lib.types.submodule {
             freeformType = settingsFormat.type;
             options = {
-              port = mkOption {
-                type = types.port;
+              port = lib.mkOption {
+                type = lib.types.port;
                 description = "Port of client tunnel (on this port i2pd will receive data)";
               };
-              destination = mkOption {
-                type = types.either types.str credential.type;
+              destination = lib.mkOption {
+                type = lib.types.either lib.types.str credential.type;
                 description = "Remote endpoint, I2P hostname or b32.i2p address";
               };
               inherit (templates) signaturetype;
@@ -276,14 +269,14 @@ in
       };
 
       # Interface function
-      mkSecret = mkOption {
-        type = types.anything // {
+      mkSecret = lib.mkOption {
+        type = lib.types.anything // {
           description = "Function that takes absolute path to runtime credential file";
         };
         readOnly = true;
         default =
           path:
-          if types.path.check path then
+          if lib.types.path.check path then
             { "${credential.attributeName}" = path; }
           else
             throw "Argument is not of type `lib.types.path`";
@@ -306,8 +299,8 @@ in
         (
           { config, ... }:
           {
-            config.assertions = forEach options (option: {
-              assertion = (!hasAttrByPath (splitString "." option) config);
+            config.assertions = lib.forEach options (option: {
+              assertion = (!lib.hasAttrByPath (lib.splitString "." option) config);
               message = "The option definition `config.${option}` no longer has any effect; please remove it.\n${message}";
             });
           }
@@ -341,16 +334,20 @@ in
       settingsFormat =
         let
           print =
-            v: if isList v then concatMapStringsSep "," print v else generators.mkValueStringDefault { } v;
+            v:
+            if lib.isList v then
+              lib.concatMapStringsSep "," print v
+            else
+              lib.generators.mkValueStringDefault { } v;
           unwrapPrefixes =
             attrset:
             let
               unwrap = (
                 prefix: attrset:
-                concatLists (
-                  mapAttrsToList (
+                lib.concatLists (
+                  lib.mapAttrsToList (
                     k: v:
-                    if isAttrs v then
+                    if lib.isAttrs v then
                       unwrap (prefix + k + ".") v
                     else
                       [
@@ -363,22 +360,22 @@ in
                 )
               );
             in
-            listToAttrs (unwrap "" attrset);
-          mkKeyValue = generators.mkKeyValueDefault { mkValueString = print; } " = ";
-          removeNulls = filterAttrsRecursive (_: v: !isNull v);
+            lib.listToAttrs (unwrap "" attrset);
+          mkKeyValue = lib.generators.mkKeyValueDefault { mkValueString = print; } " = ";
+          removeNulls = lib.filterAttrsRecursive (_: v: !isNull v);
         in
         {
           config.generate =
             name: attrs:
             let
-              toIni = attrset: generators.toINI { inherit mkKeyValue; } (removeNulls attrset);
+              toIni = attrset: lib.generators.toINI { inherit mkKeyValue; } (removeNulls attrset);
             in
             pkgs.writeText name (
-              strings.removePrefix "[general]\n" (toIni {
-                "general" = filterAttrs (_: v: !isAttrs v) attrs;
+              lib.strings.removePrefix "[general]\n" (toIni {
+                "general" = lib.filterAttrs (_: v: !lib.isAttrs v) attrs;
               })
               + "\n"
-              + (toIni (mapAttrs (_: v: unwrapPrefixes v) (filterAttrs (_: v: isAttrs v) attrs)))
+              + (toIni (lib.mapAttrs (_: v: unwrapPrefixes v) (lib.filterAttrs (_: v: lib.isAttrs v) attrs)))
             );
 
           tunnels.generate =
@@ -388,7 +385,7 @@ in
               inherit mkKeyValue;
             }).generate
               name
-              (mapAttrs (_: unwrapPrefixes) (removeNulls attrs));
+              (lib.mapAttrs (_: unwrapPrefixes) (removeNulls attrs));
         };
 
       # I2pd has no official config validator, but daemon prints an error and exits
@@ -407,23 +404,25 @@ in
       # List of all passed credentials: `[ { id = ...; path = ...; } ... ]`
       credentials =
         let
-          scan = attrs: forEach (collect (credential.type.check) attrs) (getAttr credential.attributeName);
+          scan =
+            attrs:
+            lib.forEach (lib.collect (credential.type.check) attrs) (lib.getAttr credential.attributeName);
         in
-        concatMap scan [
+        lib.concatMap scan [
           cfg.settings
           cfg.clientTunnels
           cfg.serverTunnels
         ];
 
     in
-    mkIf cfg.enable {
+    lib.mkIf cfg.enable {
       systemd.services.i2pd = {
         description = "Minimal I2P router";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
         # Ensure all credentials exist
         unitConfig = rec {
-          AssertPathExists = map (getAttr "path") credentials;
+          AssertPathExists = map (lib.getAttr "path") credentials;
           RequiresMountsFor = AssertPathExists;
         };
 
@@ -434,7 +433,7 @@ in
           StateDirectory = [ "i2pd" ];
 
           # Load credentials
-          LoadCredential = forEach credentials (cred: "${cred.id}:${cred.path}");
+          LoadCredential = lib.forEach credentials (cred: "${cred.id}:${cred.path}");
           ExecStartPre = "${pkgs.writeShellScriptBin "i2pd-load-credentials" ''
             set -o errexit -o nounset
 
@@ -458,7 +457,7 @@ in
               done
             done
           ''}/bin/i2pd-load-credentials ${
-            escapeShellArgs [
+            lib.escapeShellArgs [
               (
                 "%T/conf="
                 # "%T" is temporary directory (usually `/tmp`)
@@ -467,10 +466,10 @@ in
               (
                 "%T/tunconf="
                 + settingsFormat.tunnels.generate "i2pd-tunnels.conf" (
-                  mapAttrs' (k: v: nameValuePair "client-${k}" (v // { "type" = "client"; })) (
+                  lib.mapAttrs' (k: v: lib.nameValuePair "client-${k}" (v // { "type" = "client"; })) (
                     credential.finalize cfg.clientTunnels
                   )
-                  // mapAttrs' (k: v: nameValuePair "server-${k}" (v // { "type" = "server"; })) (
+                  // lib.mapAttrs' (k: v: lib.nameValuePair "server-${k}" (v // { "type" = "server"; })) (
                     credential.finalize cfg.serverTunnels
                   )
                 )
@@ -479,7 +478,7 @@ in
           }";
 
           ExecStart = "${cfg.package}/bin/i2pd ${
-            cli.toGNUCommandLineShell { } {
+            lib.cli.toGNUCommandLineShell { } {
               "datadir" = "%S/i2pd"; # "%S" is state directory (usually `/var/lib`)
               "conf" = "%T/conf";
               "tunconf" = "%T/tunconf";
