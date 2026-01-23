@@ -141,11 +141,6 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  postFixup = lib.optionalString withIntrospection ''
-    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
-    moveToOutput "share/doc" "$devdoc"
-  '';
-
   # The tests take an excessive amount of time (> 1.5 hours) and memory (> 6 GB).
   inherit doCheck;
 
