@@ -13,6 +13,7 @@
 
   # tests
   inline-snapshot,
+  pydantic,
   pytestCheckHook,
 }:
 
@@ -38,6 +39,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     inline-snapshot
+    pydantic
     pytestCheckHook
   ];
 
