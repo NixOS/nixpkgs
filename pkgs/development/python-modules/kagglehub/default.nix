@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
 
   # build-system
   hatchling,
@@ -39,14 +38,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "kagglehub";
-  version = "0.4.0";
+  version = "0.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Kaggle";
     repo = "kagglehub";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-R9yV29Yrq9it21K2GZLXMNM8MjBAG1iYb1o1azrAghM=";
+    hash = "sha256-eOAja95/G6Aod8jwQQ4Sxc3KxBrGBOPGrYZe5l6am+c=";
   };
 
   build-system = [
@@ -103,13 +102,6 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # Requires internet access
     "test_model_signing"
-  ]
-  ++ lib.optionals (pythonAtLeast "3.14") [
-    # TypeError: Pickler._batch_setitems() takes 2 positional arguments but 3 were given
-    "test_hf_dataset_succeeds"
-    "test_hf_dataset_with_other_loader_kwargs_prints_warning"
-    "test_hf_dataset_with_splits_succeeds"
-    "test_hf_dataset_with_valid_kwargs_succeeds"
   ];
 
   __darwinAllowLocalNetworking = true;
