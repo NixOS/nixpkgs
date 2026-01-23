@@ -41,6 +41,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "tenacity"
+    "websockets"
   ];
 
   dependencies = [
