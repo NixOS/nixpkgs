@@ -11,18 +11,18 @@
       cups
       gcc-unwrapped
       libGL
-      xorg.libSM
-      xorg.libICE
-      xorg.libX11
-      xorg.libXau
-      xorg.libXdamage
-      xorg.libXi
-      xorg.libXrender
-      xorg.libXrandr
-      xorg.libXcomposite
-      xorg.libXcursor
-      xorg.libXtst
-      xorg.libXScrnSaver
+      libsm
+      libice
+      libx11
+      libxau
+      libxdamage
+      libxi
+      libxrender
+      libxrandr
+      libxcomposite
+      libxcursor
+      libxtst
+      libxscrnsaver
     ]
   );
 }

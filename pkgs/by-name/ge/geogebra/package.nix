@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   libGL,
-  xorg,
+  libxxf86vm,
   jre,
   makeDesktopItem,
   makeWrapper,
@@ -92,7 +92,7 @@ let
         --prefix LD_LIBRARY_PATH : "${
           lib.makeLibraryPath [
             libGL
-            xorg.libXxf86vm
+            libxxf86vm
           ]
         }" \
         --set MESA_GL_VERSION_OVERRIDE 3.0 \

@@ -3767,7 +3767,7 @@ with pkgs;
   ttfautohint-nox = ttfautohint.override { enableGUI = false; };
 
   twilight = callPackage ../tools/graphics/twilight {
-    libX11 = xorg.libX11;
+    libx11 = libx11;
   };
 
   twitch-chat-downloader =
@@ -3841,7 +3841,7 @@ with pkgs;
   truecrack-cuda = truecrack.override { cudaSupport = true; };
 
   turbovnc = callPackage ../tools/admin/turbovnc {
-    # fontDirectories = [ xorg.fontadobe75dpi xorg.fontmiscmisc xorg.fontcursormisc xorg.fontbhlucidatypewriter75dpi ];
+    # fontDirectories = [ font-adobe-75dpi font-misc-misc font-cursor-misc font-bh-lucidatypewriter-75dpi ];
     libjpeg_turbo = libjpeg_turbo.override { enableJava = true; };
   };
 
@@ -7005,7 +7005,7 @@ with pkgs;
   };
 
   imlibsetroot = callPackage ../applications/graphics/imlibsetroot {
-    libXinerama = xorg.libXinerama;
+    libxinerama = libxinerama;
   };
 
   indilib = callPackage ../development/libraries/science/astronomy/indilib { };
@@ -8096,7 +8096,7 @@ with pkgs;
     libmagic = file;
   };
 
-  xcb-util-cursor = xorg.xcbutilcursor;
+  xcb-util-cursor = libxcb-cursor;
 
   xgboostWithCuda = xgboost.override { cudaSupport = true; };
 
@@ -9088,7 +9088,7 @@ with pkgs;
   xorg = recurseIntoAttrs (makeScopeWithSplicing' {
     otherSplices = generateSplicesForMkScope "xorg";
     # Use `lib.callPackageWith __splicedPackages` rather than plain `callPackage`
-    # so as not to have the newly bound xorg items already in scope,  which would
+    # so as not to have the newly bound libxcb-cursor,
     # have created a cycle.
     f = lib.callPackageWith __splicedPackages ../servers/x11/xorg { };
   });

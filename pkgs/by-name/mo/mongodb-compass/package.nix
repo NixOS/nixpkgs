@@ -8,7 +8,19 @@
   makeWrapper,
   runtimeShell,
   gtk3,
-  xorg,
+  libxtst,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  libxshmfence,
+  libxkbfile,
   glib,
   cairo,
   pango,
@@ -90,19 +102,19 @@ let
     pango
     stdenv.cc.cc
     systemd
-    xorg.libX11
-    xorg.libXScrnSaver
-    xorg.libXcomposite
-    xorg.libXcursor
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libXtst
-    xorg.libxkbfile
-    xorg.libxshmfence
+    libx11
+    libxscrnsaver
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxrandr
+    libxrender
+    libxtst
+    libxkbfile
+    libxshmfence
     (lib.getLib stdenv.cc.cc)
   ];
 in

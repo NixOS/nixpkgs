@@ -24,17 +24,17 @@ deployAndroidPackage {
       fontconfig
       fontconfig.lib
       stdenv.cc.cc.libgcc or null # fix for https://github.com/NixOS/nixpkgs/issues/226357
-      xorg.libX11
-      xorg.libXrender
-      xorg.libXext
+      libx11
+      libxrender
+      libxext
     ])
     ++ lib.optionals (os == "linux" && stdenv.isx86_64) (
       with pkgsi686Linux;
       [
         glibc
-        xorg.libX11
-        xorg.libXrender
-        xorg.libXext
+        libx11
+        libxrender
+        libxext
         fontconfig.lib
         freetype
         zlib
@@ -64,8 +64,8 @@ deployAndroidPackage {
         lib.makeLibraryPath (
           with pkgs;
           [
-            xorg.libX11
-            xorg.libXtst
+            libx11
+            libxtst
           ]
         )
       }

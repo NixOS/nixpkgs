@@ -2,7 +2,15 @@
   lib,
   stdenv,
   fetchurl,
-  xorg,
+  libxt,
+  libxft,
+  libxext,
+  libxaw,
+  libx11,
+  libsm,
+  libice,
+  xorgproto,
+  luit,
   ncurses,
   freetype,
   fontconfig,
@@ -37,17 +45,17 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    xorg.libXaw
-    xorg.xorgproto
-    xorg.libXt
-    xorg.libXext
-    xorg.libX11
-    xorg.libSM
-    xorg.libICE
+    libxaw
+    xorgproto
+    libxt
+    libxext
+    libx11
+    libsm
+    libice
     ncurses
     freetype
-    xorg.libXft
-    xorg.luit
+    libxft
+    luit
   ];
 
   configureFlags = [

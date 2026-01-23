@@ -4,7 +4,11 @@
   fetchurl,
   shhmsg,
   shhopt,
-  xorg,
+  libxt,
+  libxpm,
+  libxext,
+  libxaw,
+  libx11,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,11 +23,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     shhmsg
     shhopt
-    xorg.libX11
-    xorg.libXt
-    xorg.libXpm
-    xorg.libXaw
-    xorg.libXext
+    libx11
+    libxt
+    libxpm
+    libxaw
+    libxext
   ];
 
   preInstall = ''

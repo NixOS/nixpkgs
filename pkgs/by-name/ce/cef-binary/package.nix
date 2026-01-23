@@ -21,7 +21,14 @@
   libGL,
   udev,
   systemdLibs,
-  xorg,
+  libxrandr,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcomposite,
+  libx11,
+  libxshmfence,
+  libxcb,
   version ? "142.0.10",
   gitRevision ? "29548e2",
   chromiumVersion ? "142.0.7444.135",
@@ -55,14 +62,14 @@ let
     libGL
     udev
     systemdLibs
-    xorg.libxcb
-    xorg.libX11
-    xorg.libXcomposite
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXrandr
-    xorg.libxshmfence
+    libxcb
+    libx11
+    libxcomposite
+    libxdamage
+    libxext
+    libxfixes
+    libxrandr
+    libxshmfence
   ];
 
   selectSystem =

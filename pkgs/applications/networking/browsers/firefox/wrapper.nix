@@ -12,7 +12,12 @@
 
   ## various stuff that can be plugged in
   ffmpeg_7,
-  xorg,
+  libxxf86vm,
+  libxxf86dga,
+  libxt,
+  libxscrnsaver,
+  libxext,
+  libx11,
   alsa-lib,
   libpulseaudio,
   libcanberra-gtk3,
@@ -99,7 +104,7 @@ let
             libva
             libgbm
             libnotify
-            xorg.libXScrnSaver
+            libxscrnsaver
             cups
             pciutils
             vulkan-loader
@@ -112,11 +117,11 @@ let
         ++ lib.optional useGlvnd libglvnd
         ++ lib.optionals (cfg.enableQuakeLive or false) [
           stdenv.cc
-          xorg.libX11
-          xorg.libXxf86dga
-          xorg.libXxf86vm
-          xorg.libXext
-          xorg.libXt
+          libx11
+          libxxf86dga
+          libxxf86vm
+          libxext
+          libxt
           alsa-lib
           zlib
         ]

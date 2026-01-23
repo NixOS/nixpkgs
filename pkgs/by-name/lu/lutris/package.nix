@@ -26,27 +26,27 @@ let
     ];
   xorgDeps =
     pkgs: with pkgs; [
-      xorg.libX11
-      xorg.libXrender
-      xorg.libXrandr
-      xorg.libxcb
-      xorg.libXmu
-      xorg.libpthreadstubs
-      xorg.libXext
-      xorg.libXdmcp
-      xorg.libXxf86vm
-      xorg.libXinerama
-      xorg.libSM
-      xorg.libXv
-      xorg.libXaw
-      xorg.libXi
-      xorg.libXcursor
-      xorg.libXcomposite
-      xorg.libXfixes
-      xorg.libXtst
-      xorg.libXScrnSaver
-      xorg.libICE
-      xorg.libXt
+      libx11
+      libxrender
+      libxrandr
+      libxcb
+      libxmu
+      libpthread-stubs
+      libxext
+      libxdmcp
+      libxxf86vm
+      libxinerama
+      libsm
+      libxv
+      libxaw
+      libxi
+      libxcursor
+      libxcomposite
+      libxfixes
+      libxtst
+      libxscrnsaver
+      libice
+      libxt
     ];
   gstreamerDeps =
     pkgs: with pkgs.gst_all_1; [
@@ -177,7 +177,7 @@ buildFHSEnv {
       flex
 
       # WINE
-      xorg.xrandr
+      xrandr
       perl
       which
       p7zip

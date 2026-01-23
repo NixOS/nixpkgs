@@ -45,7 +45,22 @@
   xcbutilimage,
   xcbutilkeysyms,
   xkeyboard_config,
-  xorg,
+  libxtst,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxmu,
+  libxi,
+  libxinerama,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  libsm,
+  libice,
+  libxcb,
   zlib,
   # options
   cudaSupport,
@@ -115,22 +130,22 @@ stdenv.mkDerivation {
     xcbutilimage
     xcbutilkeysyms
     xkeyboard_config
-    xorg.libICE
-    xorg.libSM
-    xorg.libX11
-    xorg.libXScrnSaver
-    xorg.libXcomposite
-    xorg.libXcursor
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXi
-    xorg.libXinerama
-    xorg.libXmu
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libXtst
-    xorg.libxcb
+    libice
+    libsm
+    libx11
+    libxscrnsaver
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxinerama
+    libxmu
+    libxrandr
+    libxrender
+    libxtst
+    libxcb
   ]
   ++ lib.optional cudaSupport cudaEnv;
 

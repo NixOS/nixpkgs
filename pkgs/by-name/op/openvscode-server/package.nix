@@ -14,7 +14,8 @@
   node-gyp,
   libsecret,
   libkrb5,
-  xorg,
+  libx11,
+  libxkbfile,
   ripgrep,
   cctools,
   nixosTests,
@@ -110,8 +111,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     lib.optionals (!stdenv.hostPlatform.isDarwin) [ libsecret ]
     ++ [
-      xorg.libX11
-      xorg.libxkbfile
+      libx11
+      libxkbfile
       libkrb5
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [

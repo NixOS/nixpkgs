@@ -30,7 +30,7 @@
   qhull,
   onetbb,
   wxGTK32,
-  xorg,
+  libx11,
   libbgcode,
   heatshrink,
   catch2_3,
@@ -127,7 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
     qhull
     onetbb
     wxGTK-override'
-    xorg.libX11
+    libx11
     libbgcode
     heatshrink
     catch2_3

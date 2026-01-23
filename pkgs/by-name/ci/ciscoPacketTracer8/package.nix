@@ -20,7 +20,24 @@
   nspr,
   nss,
   wayland,
-  xorg,
+  libxcb-wm,
+  libxcb-render-util,
+  libxcb-keysyms,
+  libxcb-image,
+  libxtst,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  libsm,
+  libice,
+  libxcb,
   buildFHSEnv,
   copyDesktopItems,
   makeDesktopItem,
@@ -77,24 +94,24 @@ let
       nspr
       nss
       wayland
-      xorg.libICE
-      xorg.libSM
-      xorg.libX11
-      xorg.libXScrnSaver
-      xorg.libXcomposite
-      xorg.libXcursor
-      xorg.libXdamage
-      xorg.libXext
-      xorg.libXfixes
-      xorg.libXi
-      xorg.libXrandr
-      xorg.libXrender
-      xorg.libXtst
-      xorg.libxcb
-      xorg.xcbutilimage
-      xorg.xcbutilkeysyms
-      xorg.xcbutilrenderutil
-      xorg.xcbutilwm
+      libice
+      libsm
+      libx11
+      libxscrnsaver
+      libxcomposite
+      libxcursor
+      libxdamage
+      libxext
+      libxfixes
+      libxi
+      libxrandr
+      libxrender
+      libxtst
+      libxcb
+      libxcb-image
+      libxcb-keysyms
+      libxcb-render-util
+      libxcb-wm
     ];
 
     unpackPhase = ''

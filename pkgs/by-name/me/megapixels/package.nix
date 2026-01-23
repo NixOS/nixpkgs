@@ -13,7 +13,7 @@
   libepoxy,
   libmegapixels,
   libpulseaudio,
-  xorg,
+  libxrandr,
   zbar,
   tiffSupport ? true,
   libraw,
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     libepoxy
     libmegapixels
     libpulseaudio
-    xorg.libXrandr
+    libxrandr
     zbar
   ];
 

@@ -2,7 +2,8 @@
   lib,
   fetchFromGitHub,
   mkLibretroCore,
-  xorg,
+  libxext,
+  libx11,
 }:
 mkLibretroCore {
   core = "bsnes-hd-beta";
@@ -16,8 +17,8 @@ mkLibretroCore {
   };
 
   extraBuildInputs = [
-    xorg.libX11
-    xorg.libXext
+    libx11
+    libxext
   ];
 
   makefile = "GNUmakefile";

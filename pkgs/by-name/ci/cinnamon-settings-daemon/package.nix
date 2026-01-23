@@ -19,7 +19,9 @@
   polkit,
   librsvg,
   libwacom,
-  xorg,
+  libxi,
+  libxext,
+  libx11,
   fontconfig,
   tzdata,
   nss,
@@ -58,9 +60,9 @@ stdenv.mkDerivation rec {
     polkit
     librsvg
     libwacom
-    xorg.libXext
-    xorg.libX11
-    xorg.libXi
+    libxext
+    libx11
+    libxi
     fontconfig
     nss
     libgudev

@@ -17,7 +17,20 @@
   libGLU,
   libGL,
   pango,
-  xorg,
+  libxt,
+  libxtst,
+  libxrender,
+  libxrandr,
+  libxmu,
+  libxi,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libx11,
+  libsm,
+  libice,
+  libxkbfile,
+  libxcb,
   minizip,
   lsb-release,
   freetype,
@@ -63,20 +76,20 @@ stdenv.mkDerivation (finalAttrs: {
     polkit
     polkit_gnome
     pulseaudio
-    xorg.libxcb
-    xorg.libxkbfile
-    xorg.libX11
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXi
-    xorg.libXmu
-    xorg.libXrandr
-    xorg.libXtst
-    xorg.libXt
-    xorg.libICE
-    xorg.libSM
-    xorg.libXrender
+    libxcb
+    libxkbfile
+    libx11
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxmu
+    libxrandr
+    libxtst
+    libxt
+    libice
+    libsm
+    libxrender
   ];
 
   nativeBuildInputs = [

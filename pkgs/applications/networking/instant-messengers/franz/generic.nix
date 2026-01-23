@@ -5,7 +5,17 @@
   wrapGAppsHook3,
   autoPatchelfHook,
   dpkg,
-  xorg,
+  libxtst,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
   atk,
   glib,
   pango,
@@ -72,17 +82,17 @@ stdenv.mkDerivation (
     buildInputs =
       extraBuildInputs
       ++ [
-        xorg.libXi
-        xorg.libXcursor
-        xorg.libXdamage
-        xorg.libXrandr
-        xorg.libXcomposite
-        xorg.libXext
-        xorg.libXfixes
-        xorg.libXrender
-        xorg.libX11
-        xorg.libXtst
-        xorg.libXScrnSaver
+        libxi
+        libxcursor
+        libxdamage
+        libxrandr
+        libxcomposite
+        libxext
+        libxfixes
+        libxrender
+        libx11
+        libxtst
+        libxscrnsaver
       ]
       ++ [
         libgbm

@@ -28,22 +28,22 @@ let
       let
         xorgDeps =
           pkgs: with pkgs; [
-            xorg.libpthreadstubs
-            xorg.libSM
-            xorg.libX11
-            xorg.libXaw
-            xorg.libxcb
-            xorg.libXcomposite
-            xorg.libXcursor
-            xorg.libXdmcp
-            xorg.libXext
-            xorg.libXi
-            xorg.libXinerama
-            xorg.libXmu
-            xorg.libXrandr
-            xorg.libXrender
-            xorg.libXv
-            xorg.libXxf86vm
+            libpthread-stubs
+            libsm
+            libx11
+            libxaw
+            libxcb
+            libxcomposite
+            libxcursor
+            libxdmcp
+            libxext
+            libxi
+            libxinerama
+            libxmu
+            libxrandr
+            libxrender
+            libxv
+            libxxf86vm
           ];
         gstreamerDeps =
           pkgs: with pkgs.gst_all_1; [

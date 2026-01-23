@@ -42,6 +42,19 @@
   xauth,
   xdg-utils,
   xorg,
+  xkeyboard-config,
+  xf86-video-dummy,
+  libxtst,
+  libxres,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxdamage,
+  libxcomposite,
+  libx11,
+  xorgproto,
+  libxkbfile,
   xorgserver,
   xxHash,
   clang,
@@ -53,7 +66,7 @@
 let
   inherit (python3.pkgs) cython buildPythonApplication;
 
-  xf86videodummy = xorg.xf86videodummy.overrideDerivation (p: {
+  xf86videodummy = xf86-video-dummy.overrideDerivation (p: {
     patches = [
       # patch provided by Xpra upstream
       ./0002-Constant-DPI.patch
@@ -127,17 +140,17 @@ effectiveBuildPythonApplication rec {
   ++ lib.optional withNvenc cudatoolkit;
 
   buildInputs = [
-    xorg.libX11
-    xorg.libXcomposite
-    xorg.libXdamage
-    xorg.libXfixes
-    xorg.libXi
-    xorg.libxkbfile
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libXres
-    xorg.libXtst
-    xorg.xorgproto
+    libx11
+    libxcomposite
+    libxdamage
+    libxfixes
+    libxi
+    libxkbfile
+    libxrandr
+    libxrender
+    libxres
+    libxtst
+    xorgproto
   ]
   ++ (with gst_all_1; [
     gst-libav
@@ -236,7 +249,7 @@ effectiveBuildPythonApplication rec {
       "''${gappsWrapperArgs[@]}"
       --set XPRA_INSTALL_PREFIX "$out"
       --set XPRA_COMMAND "$out/bin/xpra"
-      --set XPRA_XKB_CONFIG_ROOT "${xorg.xkeyboardconfig}/share/X11/xkb"
+      --set XPRA_XKB_CONFIG_ROOT "${xkeyboard-config}/share/X11/xkb"
       --set XORG_CONFIG_PREFIX ""
       --prefix LD_LIBRARY_PATH : ${libfakeXinerama}/lib
       --prefix PATH : ${

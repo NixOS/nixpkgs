@@ -5,7 +5,7 @@
   libclthreads,
   libX11,
   libXft,
-  xorg,
+  xorgproto,
   pkg-config,
 }:
 
@@ -22,12 +22,12 @@ stdenv.mkDerivation rec {
     libclthreads
     libX11
     libXft
-    xorg.xorgproto
+    xorgproto
   ];
 
   nativeBuildInputs = [ pkg-config ];
 
-  env.NIX_CFLAGS_COMPILE = "-I${xorg.xorgproto}/include -I${libXft.dev}/include";
+  env.NIX_CFLAGS_COMPILE = "-I${xorgproto}/include -I${libXft.dev}/include";
 
   patchPhase = ''
     cd source

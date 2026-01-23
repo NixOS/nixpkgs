@@ -5,7 +5,11 @@
   wrapGAppsHook3,
   gtk3,
   librsvg,
-  xorg,
+  libxxf86vm,
+  libxrandr,
+  libxinerama,
+  libxext,
+  libx11,
   argyllcms,
 }:
 
@@ -41,11 +45,11 @@ python3.pkgs.buildPythonApplication rec {
   buildInputs = [
     gtk3
     librsvg
-    xorg.libX11
-    xorg.libXxf86vm
-    xorg.libXext
-    xorg.libXinerama
-    xorg.libXrandr
+    libx11
+    libxxf86vm
+    libxext
+    libxinerama
+    libxrandr
   ];
 
   # Workaround for eoyilmaz/displaycal-py3#261

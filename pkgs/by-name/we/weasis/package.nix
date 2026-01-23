@@ -8,7 +8,9 @@
   makeDesktopItem,
   makeBinaryWrapper,
   libGL,
-  xorg,
+  libxxf86vm,
+  libxrender,
+  libx11,
 }:
 
 let
@@ -24,9 +26,9 @@ let
 
   runtimeDeps = [
     libGL
-    xorg.libX11
-    xorg.libXrender
-    xorg.libXxf86vm
+    libx11
+    libxrender
+    libxxf86vm
   ];
 in
 stdenv.mkDerivation (finalAttrs: {

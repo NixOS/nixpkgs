@@ -5,7 +5,9 @@
   versionCheckHook,
   nix-update-script,
   pkg-config,
-  xorg,
+  libxrandr,
+  libxinerama,
+  libxft,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,9 +25,9 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
   buildInputs = [
-    xorg.libXft
-    xorg.libXrandr
-    xorg.libXinerama
+    libxft
+    libxrandr
+    libxinerama
   ];
 
   nativeInstallCheckInputs = [

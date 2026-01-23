@@ -13,7 +13,10 @@
   libpng,
   giflib,
   enableX11 ? true,
-  xorg,
+  libxrender,
+  libxext,
+  libx11,
+  xorgproto,
   enableSDL ? true,
   SDL,
 }:
@@ -87,10 +90,10 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional enableSDL SDL
   ++ lib.optionals enableX11 [
-    xorg.xorgproto
-    xorg.libX11
-    xorg.libXext
-    xorg.libXrender
+    xorgproto
+    libx11
+    libxext
+    libxrender
   ];
 
   env = {

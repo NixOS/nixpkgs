@@ -40,20 +40,20 @@ deployAndroidPackage {
       ]
     )
     ++ (with pkgs; [
-      xorg.libX11
-      xorg.libXext
-      xorg.libXdamage
-      xorg.libXfixes
-      xorg.libxcb
-      xorg.libXcomposite
-      xorg.libXcursor
-      xorg.libXi
-      xorg.libXrender
-      xorg.libXtst
-      xorg.libICE
-      xorg.libSM
-      xorg.libxkbfile
-      xorg.libxshmfence
+      libx11
+      libxext
+      libxdamage
+      libxfixes
+      libxcb
+      libxcomposite
+      libxcursor
+      libxi
+      libxrender
+      libxtst
+      libice
+      libsm
+      libxkbfile
+      libxshmfence
     ])
     ++ lib.optional (os == "linux" && stdenv.isx86_64) pkgsi686Linux.glibc;
   patchInstructions =
@@ -80,7 +80,7 @@ deployAndroidPackage {
           ]
         } \
         --set QT_XKB_CONFIG_ROOT ${pkgs.xkeyboard_config}/share/X11/xkb \
-        --set QTCOMPOSE ${pkgs.xorg.libX11.out}/share/X11/locale
+        --set QTCOMPOSE ${pkgs.libx11.out}/share/X11/locale
     '')
     + ''
       mkdir -p $out/bin

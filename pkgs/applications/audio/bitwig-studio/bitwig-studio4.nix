@@ -19,7 +19,12 @@
   pulseaudio,
   wrapGAppsHook3,
   xdg-utils,
-  xorg,
+  libxcb-util,
+  libxcb-wm,
+  libxtst,
+  libxcursor,
+  libx11,
+  libxcb,
   zlib,
 }:
 
@@ -52,16 +57,16 @@ stdenv.mkDerivation rec {
     libjack2
     # libjpeg8 is required for converting jpeg's to colour palettes
     libjpeg
-    xorg.libxcb
-    xorg.libXcursor
-    xorg.libX11
-    xorg.libXtst
+    libxcb
+    libxcursor
+    libx11
+    libxtst
     libxkbcommon
     pipewire
     pulseaudio
     (lib.getLib stdenv.cc.cc)
-    xorg.xcbutil
-    xorg.xcbutilwm
+    libxcb-util
+    libxcb-wm
     zlib
   ];
 

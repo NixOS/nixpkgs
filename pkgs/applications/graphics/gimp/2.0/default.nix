@@ -37,7 +37,7 @@
   gettext,
   makeWrapper,
   gtk-doc,
-  xorg,
+  libxpm,
   glib-networking,
   libmypaint,
   gexiv2,
@@ -202,7 +202,7 @@ stdenv.mkDerivation (finalAttrs: {
     libwebp
     libheif
     libexif
-    xorg.libXpm
+    libxpm
     glib-networking
     libmypaint
     mypaint-brushes1

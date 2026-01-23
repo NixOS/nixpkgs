@@ -6,7 +6,12 @@
   makeWrapper,
   cmake,
   pkg-config,
-  xorg ? null,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxext,
+  libxcursor,
+  libx11,
   libGL ? null,
 }:
 
@@ -31,12 +36,12 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     # glfw-sys dependencies:
-    xorg.libX11
-    xorg.libXrandr
-    xorg.libXinerama
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXext
+    libx11
+    libxrandr
+    libxinerama
+    libxcursor
+    libxi
+    libxext
   ];
 
   # FIXME: GLFW (X11) requires DISPLAY env variable for all tests

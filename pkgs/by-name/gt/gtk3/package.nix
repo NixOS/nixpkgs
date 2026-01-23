@@ -29,7 +29,16 @@
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
   compileSchemas ? stdenv.hostPlatform.emulatorAvailable buildPackages,
   fribidi,
-  xorg,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxfixes,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libsm,
+  libice,
   libepoxy,
   libxkbcommon,
   libxml2,
@@ -162,15 +171,15 @@ stdenv.mkDerivation (finalAttrs: {
     gsettings-desktop-schemas
   ]
   ++ lib.optionals x11Support [
-    xorg.libICE
-    xorg.libSM
-    xorg.libXcomposite
-    xorg.libXcursor
-    xorg.libXdamage
-    xorg.libXfixes
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libXrender
+    libice
+    libsm
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxfixes
+    libxi
+    libxrandr
+    libxrender
   ]
   ++ [
     # TODO: Reorder me on `staging`.
@@ -182,7 +191,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
   ]
   ++ lib.optionals xineramaSupport [
-    xorg.libXinerama
+    libxinerama
   ]
   ++ lib.optionals cupsSupport [
     cups

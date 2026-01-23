@@ -127,7 +127,7 @@ stdenv.mkDerivation (
         ++ lib.optional fontconfigSupport pkgs.fontconfig
         ++ lib.optional alsaSupport pkgs.alsa-lib
         ++ lib.optional pulseaudioSupport pkgs.libpulseaudio
-        ++ lib.optional (xineramaSupport && x11Support) pkgs.xorg.libXinerama
+        ++ lib.optional (xineramaSupport && x11Support) pkgs.libxinerama
         ++ lib.optional udevSupport pkgs.udev
         ++ lib.optional vulkanSupport (
           if stdenv.hostPlatform.isDarwin then moltenvk else pkgs.vulkan-loader
@@ -165,15 +165,15 @@ stdenv.mkDerivation (
         ++ lib.optionals x11Support (
           with pkgs;
           [
-            xorg.libX11
-            xorg.libXcomposite
-            xorg.libXcursor
-            xorg.libXext
-            xorg.libXfixes
-            xorg.libXi
-            xorg.libXrandr
-            xorg.libXrender
-            xorg.libXxf86vm
+            libx11
+            libxcomposite
+            libxcursor
+            libxext
+            libxfixes
+            libxi
+            libxrandr
+            libxrender
+            libxxf86vm
           ]
         )
         ++ lib.optionals waylandSupport (

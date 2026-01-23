@@ -1,7 +1,10 @@
 {
   lib,
   stdenv,
-  xorg,
+  libxrandr,
+  libxi,
+  libxext,
+  libx11,
   pkg-config,
   fetchFromGitHub,
   autoreconfHook,
@@ -19,10 +22,10 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    xorg.libX11
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libXext
+    libx11
+    libxi
+    libxrandr
+    libxext
   ];
   nativeBuildInputs = [
     pkg-config

@@ -7,7 +7,15 @@
   autoPatchelfHook,
   alsa-lib,
   ncurses5,
-  xorg,
+  libxxf86vm,
+  libxtst,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxft,
+  libxext,
+  libxcursor,
+  libx11,
 }:
 
 let
@@ -88,15 +96,15 @@ let
       alsa-lib
       ncurses5
       stdenv.cc.cc
-      xorg.libX11
-      xorg.libXcursor
-      xorg.libXext
-      xorg.libXft
-      xorg.libXi
-      xorg.libXrandr
-      xorg.libXrender
-      xorg.libXtst
-      xorg.libXxf86vm
+      libx11
+      libxcursor
+      libxext
+      libxft
+      libxi
+      libxrandr
+      libxrender
+      libxtst
+      libxxf86vm
     ];
 
     installPhase = ''

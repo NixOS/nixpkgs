@@ -13,7 +13,10 @@
   desktop-file-utils,
   imagemagick,
   twemoji-color-font,
-  xorg,
+  xkeyboard-config,
+  libxscrnsaver,
+  libxcursor,
+  libx11,
   libsodium,
   libopus,
   libGL,
@@ -52,10 +55,10 @@ mkDerivation rec {
     qtmultimedia
     qtwebsockets
     qtimageformats
-    xorg.libX11
-    xorg.libXScrnSaver
-    xorg.libXcursor
-    xorg.xkeyboardconfig
+    libx11
+    libxscrnsaver
+    libxcursor
+    xkeyboard-config
   ];
 
   fontsConf = makeFontsConf {
@@ -85,8 +88,8 @@ mkDerivation rec {
     makeQtWrapper $out/Ripcord $out/bin/ripcord \
       --chdir "$out" \
       --set FONTCONFIG_FILE "${fontsConf}" \
-      --prefix LD_LIBRARY_PATH ":" "${xorg.libXcursor}/lib" \
-      --prefix QT_XKB_CONFIG_ROOT ":" "${xorg.xkeyboardconfig}/share/X11/xkb" \
+      --prefix LD_LIBRARY_PATH ":" "${libxcursor}/lib" \
+      --prefix QT_XKB_CONFIG_ROOT ":" "${xkeyboard-config}/share/X11/xkb" \
       --set RIPCORD_ALLOW_UPDATES 0
 
     runHook postInstall

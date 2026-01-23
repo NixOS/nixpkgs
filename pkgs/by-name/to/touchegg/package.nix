@@ -8,7 +8,13 @@
   libinput,
   pugixml,
   cairo,
-  xorg,
+  libxtst,
+  libxrandr,
+  libxi,
+  libxdmcp,
+  libx11,
+  libpthread-stubs,
+  libxcb,
   gtk3-x11,
   pkg-config,
   cmake,
@@ -60,13 +66,13 @@ stdenv.mkDerivation (finalAttrs: {
     pugixml
     cairo
     gtk3-x11
-    xorg.libX11
-    xorg.libXtst
-    xorg.libXrandr
-    xorg.libXi
-    xorg.libXdmcp
-    xorg.libpthreadstubs
-    xorg.libxcb
+    libx11
+    libxtst
+    libxrandr
+    libxi
+    libxdmcp
+    libpthread-stubs
+    libxcb
   ];
 
   env.PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";

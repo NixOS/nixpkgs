@@ -10,7 +10,11 @@
   ngspice,
   tcl,
   tk,
-  xorg,
+  libxt,
+  libxpm,
+  libx11,
+  libsm,
+  libice,
   zlib,
 }:
 
@@ -46,11 +50,11 @@ stdenv.mkDerivation {
   buildInputs = [
     cairo
     ghostscript
-    xorg.libSM
-    xorg.libXt
-    xorg.libICE
-    xorg.libX11
-    xorg.libXpm
+    libsm
+    libxt
+    libice
+    libx11
+    libxpm
     tcl
     tk
     zlib

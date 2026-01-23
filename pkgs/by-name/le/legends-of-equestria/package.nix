@@ -27,7 +27,18 @@
   vulkan-loader,
   libasyncns,
   pango,
-  xorg,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxfixes,
+  libxext,
+  libxdmcp,
+  libxcursor,
+  libxau,
+  libx11,
+  libxcb,
   wayland,
 }:
 
@@ -66,18 +77,18 @@ let
     libGL
     vulkan-loader
     libasyncns
-    xorg.libX11
-    xorg.libxcb
-    xorg.libXau
-    xorg.libXdmcp
-    xorg.libXext
-    xorg.libXcursor
-    xorg.libXrender
-    xorg.libXfixes
-    xorg.libXinerama
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libXScrnSaver
+    libx11
+    libxcb
+    libxau
+    libxdmcp
+    libxext
+    libxcursor
+    libxrender
+    libxfixes
+    libxinerama
+    libxi
+    libxrandr
+    libxscrnsaver
   ];
 in
 stdenv.mkDerivation {

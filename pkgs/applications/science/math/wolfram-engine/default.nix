@@ -16,7 +16,18 @@
   openssl,
   unixODBC,
   xkeyboard_config,
-  xorg,
+  libxtst,
+  libxrender,
+  libxrandr,
+  libxmu,
+  libxi,
+  libxfixes,
+  libxext,
+  libxcursor,
+  libx11,
+  libsm,
+  libice,
+  libxcb,
   zlib,
   libxml2,
   libuuid,
@@ -63,18 +74,18 @@ stdenv.mkDerivation rec {
     zlib
     libGL
     libGLU
-    xorg.libX11
-    xorg.libXext
-    xorg.libXtst
-    xorg.libXi
-    xorg.libXmu
-    xorg.libXrender
-    xorg.libxcb
-    xorg.libXcursor
-    xorg.libXfixes
-    xorg.libXrandr
-    xorg.libICE
-    xorg.libSM
+    libx11
+    libxext
+    libxtst
+    libxi
+    libxmu
+    libxrender
+    libxcb
+    libxcursor
+    libxfixes
+    libxrandr
+    libice
+    libsm
   ];
 
   # some bundled libs are found through LD_LIBRARY_PATH

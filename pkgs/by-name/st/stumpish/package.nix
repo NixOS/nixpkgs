@@ -5,7 +5,7 @@
   fetchFromGitHub,
   gnused,
   ncurses,
-  xorg,
+  xprop,
   rlwrap,
 }:
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     gnused
-    xorg.xprop
+    xprop
     rlwrap
     ncurses
   ];
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   patches = [
     (replaceVars ./paths.patch {
       sed = "${gnused}/bin/sed";
-      xprop = "${xorg.xprop}/bin/xprop";
+      xprop = "${xprop}/bin/xprop";
       rlwrap = "${rlwrap}/bin/rlwrap";
       tput = "${ncurses}/bin/tput";
     })

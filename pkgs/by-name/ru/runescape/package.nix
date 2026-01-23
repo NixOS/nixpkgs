@@ -131,7 +131,7 @@ buildFHSEnv {
     pango
     SDL2
     xdg-utils
-    xorg.libX11
+    libx11
     xorg_sys_opengl
     zlib
   ];

@@ -21,7 +21,19 @@
   expat,
   udev,
   adwaita-icon-theme,
-  xorg,
+  libxtst,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  libxshmfence,
+  libxcb,
   mozjpeg,
   makeWrapper,
   wrapGAppsHook3,
@@ -60,20 +72,20 @@ stdenv.mkDerivation rec {
     cups
     expat
     udev
-    xorg.libX11
-    xorg.libxcb
-    xorg.libxshmfence
+    libx11
+    libxcb
+    libxshmfence
     libxkbcommon
-    xorg.libXi
-    xorg.libXcursor
-    xorg.libXdamage
-    xorg.libXrandr
-    xorg.libXcomposite
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXrender
-    xorg.libXtst
-    xorg.libXScrnSaver
+    libxi
+    libxcursor
+    libxdamage
+    libxrandr
+    libxcomposite
+    libxext
+    libxfixes
+    libxrender
+    libxtst
+    libxscrnsaver
     libuuid
     libdrm
     libgbm

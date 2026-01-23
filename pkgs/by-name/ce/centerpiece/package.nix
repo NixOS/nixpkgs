@@ -10,7 +10,10 @@
   libxkbcommon,
   wayland,
   enableX11 ? true,
-  xorg,
+  libxrandr,
+  libxi,
+  libxcursor,
+  libx11,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -35,10 +38,10 @@ rustPlatform.buildRustPackage rec {
     wayland
   ]
   ++ lib.optionals enableX11 [
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXrandr
+    libx11
+    libxcursor
+    libxi
+    libxrandr
   ];
 
   postFixup = lib.optional stdenv.hostPlatform.isLinux ''

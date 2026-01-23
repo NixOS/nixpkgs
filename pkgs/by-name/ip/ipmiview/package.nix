@@ -11,7 +11,11 @@
   gcc-unwrapped,
   iputils,
   psmisc,
-  xorg,
+  libxtst,
+  libxrender,
+  libxi,
+  libxext,
+  libx11,
 }:
 
 stdenv.mkDerivation rec {
@@ -43,11 +47,11 @@ stdenv.mkDerivation rec {
 
       patchelf --set-rpath "${
         lib.makeLibraryPath [
-          xorg.libX11
-          xorg.libXext
-          xorg.libXrender
-          xorg.libXtst
-          xorg.libXi
+          libx11
+          libxext
+          libxrender
+          libxtst
+          libxi
         ]
       }" ./jre/lib/libawt_xawt.so
       patchelf --set-rpath "${lib.makeLibraryPath [ freetype ]}" ./jre/lib/libfontmanager.so

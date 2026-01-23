@@ -1,5 +1,7 @@
 {
-  xorg,
+  libxi,
+  libxext,
+  libx11,
   lib,
   stdenv,
   libev,
@@ -21,9 +23,9 @@ stdenv.mkDerivation rec {
     "CC=${stdenv.cc.targetPrefix}cc"
   ];
   buildInputs = [
-    xorg.libX11
-    xorg.libXext
-    xorg.libXi
+    libx11
+    libxext
+    libxi
     libev
   ];
   nativeBuildInputs = [ pkg-config ];

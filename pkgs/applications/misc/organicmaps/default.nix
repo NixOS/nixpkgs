@@ -19,7 +19,9 @@
   icu,
   freetype,
   pugixml,
-  xorg,
+  libxrandr,
+  libxinerama,
+  libxcursor,
   nix-update-script,
 }:
 
@@ -79,9 +81,9 @@ stdenv.mkDerivation (finalAttrs: {
     icu
     freetype
     pugixml
-    xorg.libXrandr
-    xorg.libXinerama
-    xorg.libXcursor
+    libxrandr
+    libxinerama
+    libxcursor
   ];
 
   # Yes, this is PRE configure. The configure phase uses cmake

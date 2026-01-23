@@ -19,7 +19,10 @@
   libxslt,
   nspr,
   nss,
-  xorg,
+  libxscrnsaver,
+  libx11,
+  libsm,
+  libice,
   buildFHSEnv,
   copyDesktopItems,
   makeDesktopItem,
@@ -65,10 +68,10 @@ let
       libxslt
       nspr
       nss
-      xorg.libICE
-      xorg.libSM
-      xorg.libX11
-      xorg.libXScrnSaver
+      libice
+      libsm
+      libx11
+      libxscrnsaver
     ];
 
     unpackPhase = ''

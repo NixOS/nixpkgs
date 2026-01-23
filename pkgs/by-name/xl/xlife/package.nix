@@ -2,7 +2,9 @@
   lib,
   stdenv,
   fetchsvn,
-  xorg,
+  libx11,
+  imake,
+  gccmakedep,
 }:
 
 stdenv.mkDerivation {
@@ -16,10 +18,10 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
-    xorg.imake
-    xorg.gccmakedep
+    imake
+    gccmakedep
   ];
-  buildInputs = [ xorg.libX11 ];
+  buildInputs = [ libx11 ];
 
   hardeningDisable = [ "format" ];
   installPhase = ''

@@ -8,7 +8,20 @@
   pkg-config,
   ninja,
   cmake,
-  xorg,
+  libxxf86vm,
+  libxtst,
+  libxres,
+  libxrender,
+  libxmu,
+  libxi,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  xwininfo,
+  xprop,
+  libxcb,
   libdrm,
   libei,
   vulkan-loader,
@@ -128,8 +141,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     pipewire
     hwdata
-    xorg.libX11
-    xorg.libxcb
+    libx11
+    libxcb
     wayland
     wayland-protocols
     vulkan-loader
@@ -141,16 +154,16 @@ stdenv.mkDerivation (finalAttrs: {
     wlroots.buildInputs
     ++ [
       # gamescope uses a custom wlroots branch
-      xorg.libXcomposite
-      xorg.libXcursor
-      xorg.libXdamage
-      xorg.libXext
-      xorg.libXi
-      xorg.libXmu
-      xorg.libXrender
-      xorg.libXres
-      xorg.libXtst
-      xorg.libXxf86vm
+      libxcomposite
+      libxcursor
+      libxdamage
+      libxext
+      libxi
+      libxmu
+      libxrender
+      libxres
+      libxtst
+      libxxf86vm
       libavif
       libdrm
       libei
@@ -175,8 +188,8 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram "$out/bin/gamescope" \
       --prefix PATH : ${
         lib.makeBinPath [
-          xorg.xprop
-          xorg.xwininfo
+          xprop
+          xwininfo
         ]
       }
 

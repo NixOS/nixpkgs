@@ -5,7 +5,12 @@
   lib,
   dbus,
   kmod,
-  xorg,
+  libxt,
+  libxrandr,
+  libxmu,
+  libxfixes,
+  libxext,
+  libxcursor,
   zlib,
   patchelf,
   makeWrapper,
@@ -44,11 +49,11 @@ let
     }
     {
       name = "libXfixes.so";
-      pkg = xorg.libXfixes;
+      pkg = libxfixes;
     }
     {
       name = "libXrandr.so";
-      pkg = xorg.libXrandr;
+      pkg = libxrandr;
     }
     {
       name = "libwayland-client.so";
@@ -60,7 +65,7 @@ let
     }
     {
       name = "libXt.so";
-      pkg = xorg.libXt;
+      pkg = libxt;
     }
   ];
 in
@@ -103,12 +108,12 @@ stdenv.mkDerivation {
             stdenv.cc.cc
             stdenv.cc.libc
             zlib
-            xorg.libX11
-            xorg.libXt
-            xorg.libXext
-            xorg.libXmu
-            xorg.libXfixes
-            xorg.libXcursor
+            libx11
+            libxt
+            libxext
+            libxmu
+            libxfixes
+            libxcursor
           ]
         } $i
     done

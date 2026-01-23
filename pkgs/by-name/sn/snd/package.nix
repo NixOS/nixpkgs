@@ -7,7 +7,10 @@
   fftw,
   gsl,
   motif,
-  xorg,
+  libxt,
+  libxpm,
+  libxft,
+  libxext,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,10 +35,10 @@ stdenv.mkDerivation rec {
     alsa-lib
   ]
   ++ [
-    xorg.libXext
-    xorg.libXft
-    xorg.libXpm
-    xorg.libXt
+    libxext
+    libxft
+    libxpm
+    libxt
   ];
 
   configureFlags = [

@@ -6,7 +6,23 @@
   dpkg,
   nss,
   nspr,
-  xorg,
+  libxt,
+  libxtst,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxft,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  libsm,
+  libice,
+  libxshmfence,
+  libxcb,
   pango,
   zlib,
   atkmm,
@@ -72,23 +88,23 @@ let
     xcbutilimage
     xcbutilkeysyms
     xcbutilrenderutil
-    xorg.libX11
-    xorg.libXt
-    xorg.libXext
-    xorg.libSM
-    xorg.libICE
-    xorg.libxcb
+    libx11
+    libxt
+    libxext
+    libsm
+    libice
+    libxcb
     libxkbcommon
-    xorg.libxshmfence
-    xorg.libXi
-    xorg.libXft
-    xorg.libXcursor
-    xorg.libXfixes
-    xorg.libXScrnSaver
-    xorg.libXcomposite
-    xorg.libXdamage
-    xorg.libXtst
-    xorg.libXrandr
+    libxshmfence
+    libxi
+    libxft
+    libxcursor
+    libxfixes
+    libxscrnsaver
+    libxcomposite
+    libxdamage
+    libxtst
+    libxrandr
     libnotify
     atk
     atkmm
@@ -105,7 +121,7 @@ let
     libva
     freetype
     fontconfig
-    xorg.libXrender
+    libxrender
     libuuid
     expat
     glib

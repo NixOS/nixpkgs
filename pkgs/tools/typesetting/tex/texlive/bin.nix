@@ -38,6 +38,8 @@
   cairo,
   pixman,
   xorg,
+  libxi,
+  libxfixes,
   clisp,
   biber,
   woff2,
@@ -751,14 +753,14 @@ rec {
       core # kpathsea
       freetype
       ghostscript
-      xorg.libX11
-      xorg.libXaw
-      xorg.libXi
-      xorg.libXpm
-      xorg.libXmu
-      xorg.libXaw
-      xorg.libXext
-      xorg.libXfixes
+      libx11
+      libxaw
+      libxi
+      libxpm
+      libxmu
+      libxaw
+      libxext
+      libxfixes
     ];
 
     preConfigure = "cd texk/xdvik";

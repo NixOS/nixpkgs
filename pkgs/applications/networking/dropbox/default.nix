@@ -56,19 +56,19 @@ buildFHSEnv {
 
   targetPkgs =
     pkgs: with pkgs; [
-      xorg.libICE
-      xorg.libSM
-      xorg.libX11
-      xorg.libXcomposite
-      xorg.libXdamage
-      xorg.libXext
-      xorg.libXfixes
-      xorg.libXrender
-      xorg.libXmu
-      xorg.libXxf86vm
+      libice
+      libsm
+      libx11
+      libxcomposite
+      libxdamage
+      libxext
+      libxfixes
+      libxrender
+      libxmu
+      libxxf86vm
       libGL
-      xorg.libxcb
-      xorg.xkeyboardconfig
+      libxcb
+      xkeyboard-config
       curl
       dbus
       firefox-bin
@@ -83,8 +83,8 @@ buildFHSEnv {
       procps
       zlib
       libgbm
-      xorg.libxshmfence
-      xorg.libpthreadstubs
+      libxshmfence
+      libpthread-stubs
       libappindicator
     ];
 

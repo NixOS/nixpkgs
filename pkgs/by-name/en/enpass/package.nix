@@ -2,7 +2,17 @@
   stdenv,
   fetchurl,
   dpkg,
-  xorg,
+  libxcb-wm,
+  libxcb-render-util,
+  libxcb-keysyms,
+  libxcb-image,
+  libxscrnsaver,
+  libxrender,
+  libxi,
+  libx11,
+  libsm,
+  libice,
+  libxcb,
   glib,
   libGLU,
   libGL,
@@ -50,13 +60,13 @@ let
     libpulseaudio
     zlib
     dbus
-    xorg.libX11
-    xorg.libXi
-    xorg.libSM
-    xorg.libICE
-    xorg.libXrender
-    xorg.libXScrnSaver
-    xorg.libxcb
+    libx11
+    libxi
+    libsm
+    libice
+    libxrender
+    libxscrnsaver
+    libxcb
     libcap
     glib
     gtk3
@@ -64,10 +74,10 @@ let
     curl
     libuuid
     cups
-    xorg.xcbutilwm # libxcb-icccm.so.4
-    xorg.xcbutilimage # libxcb-image.so.0
-    xorg.xcbutilkeysyms # libxcb-keysyms.so.1
-    xorg.xcbutilrenderutil # libxcb-render-util.so.0
+    libxcb-wm # libxcb-icccm.so.4
+    libxcb-image # libxcb-image.so.0
+    libxcb-keysyms # libxcb-keysyms.so.1
+    libxcb-render-util # libxcb-render-util.so.0
     xz
     libxkbcommon
   ];

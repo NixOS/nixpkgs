@@ -17,7 +17,7 @@
   pango,
   bash,
   bison,
-  xorg,
+  libxrender,
   python3,
   withXorg ? true,
 
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     pango
     bash
   ]
-  ++ optionals withXorg [ xorg.libXrender ];
+  ++ optionals withXorg [ libxrender ];
 
   hardeningDisable = [ "fortify" ];
 

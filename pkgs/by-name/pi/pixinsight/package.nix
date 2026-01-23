@@ -27,7 +27,15 @@
   brotli,
   libxkbcommon,
   libxcb,
-  xorg,
+  libxtst,
+  libxrandr,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcomposite,
+  libx11,
+  xrandr,
+  libxkbfile,
   wayland,
   libudev0-shim,
   bubblewrap,
@@ -150,15 +158,15 @@ let
         brotli
         libxkbcommon
         libxcb
-        xorg.libX11
-        xorg.libXdamage
-        xorg.xrandr
-        xorg.libXtst
-        xorg.libXcomposite
-        xorg.libXext
-        xorg.libXfixes
-        xorg.libXrandr
-        xorg.libxkbfile
+        libx11
+        libxdamage
+        xrandr
+        libxtst
+        libxcomposite
+        libxext
+        libxfixes
+        libxrandr
+        libxkbfile
       ];
 
     profile = ''

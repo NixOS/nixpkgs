@@ -42,32 +42,32 @@ buildFHSEnv {
       ocl-icd # needed for opencl
       numactl # needed by hfs ocl backend
       zstd # needed from 20.0
-      xorg.libICE
-      xorg.libSM
-      xorg.libXmu
-      xorg.libXi
-      xorg.libXt
-      xorg.libXext
-      xorg.libX11
-      xorg.libXrender
-      xorg.libXcursor
-      xorg.libXfixes
-      xorg.libXrender
-      xorg.libXcomposite
-      xorg.libXdamage
-      xorg.libXtst
-      xorg.libxcb
-      xorg.libXScrnSaver
-      xorg.libXrandr
-      xorg.libxcb
-      xorg.libxkbfile
-      xorg.libxshmfence
-      xorg.xcbutil
-      xorg.xcbutilimage
-      xorg.xcbutilrenderutil
-      xorg.xcbutilcursor
-      xorg.xcbutilkeysyms
-      xorg.xcbutilwm
+      libice
+      libsm
+      libxmu
+      libxi
+      libxt
+      libxext
+      libx11
+      libxrender
+      libxcursor
+      libxfixes
+      libxrender
+      libxcomposite
+      libxdamage
+      libxtst
+      libxcb
+      libxscrnsaver
+      libxrandr
+      libxcb
+      libxkbfile
+      libxshmfence
+      libxcb-util
+      libxcb-image
+      libxcb-render-util
+      libxcb-cursor
+      libxcb-keysyms
+      libxcb-wm
     ];
 
   passthru = {

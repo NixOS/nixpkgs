@@ -9,7 +9,9 @@
   raylib,
   SDL2,
   tkrzw,
-  xorg,
+  libxinerama,
+  libxft,
+  libx11,
 }:
 
 # The following is list of overrides that take two arguments each:
@@ -106,9 +108,9 @@
     }:
     {
       buildInputs = buildInputs ++ [
-        xorg.libX11
-        xorg.libXft
-        xorg.libXinerama
+        libx11
+        libxft
+        libxinerama
       ];
     };
 

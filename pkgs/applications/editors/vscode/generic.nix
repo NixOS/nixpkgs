@@ -15,7 +15,14 @@
   libgbm,
   nss,
   nspr,
-  xorg,
+  libxrandr,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcomposite,
+  libx11,
+  libxkbfile,
+  libxcb,
   systemdLibs,
   fontconfig,
   imagemagick,
@@ -118,13 +125,13 @@ stdenv.mkDerivation (
               cups
               expat
               libxkbcommon
-              xorg.libX11
-              xorg.libXcomposite
-              xorg.libXdamage
-              xorg.libxcb
-              xorg.libXext
-              xorg.libXfixes
-              xorg.libXrandr
+              libx11
+              libxcomposite
+              libxdamage
+              libxcb
+              libxext
+              libxfixes
+              libxrandr
               cairo
               pango
               alsa-lib
@@ -243,7 +250,7 @@ stdenv.mkDerivation (
       nspr
       systemdLibs
       webkitgtk_4_1
-      xorg.libxkbfile
+      libxkbfile
     ];
 
     runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux [

@@ -39,7 +39,14 @@
   wayland-protocols,
   wayland-scanner,
   xcbutilkeysyms,
-  xorg,
+  libxxf86vm,
+  libxrandr,
+  libxfixes,
+  libxext,
+  libx11,
+  xorgproto,
+  libxshmfence,
+  libxcb,
   zstd,
   enablePatentEncumberedCodecs ? true,
   withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light,
@@ -266,13 +273,13 @@ stdenv.mkDerivation {
     libpng
     libunwind
     libva-minimal
-    xorg.libX11
-    xorg.libxcb
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXrandr
-    xorg.libxshmfence
-    xorg.libXxf86vm
+    libx11
+    libxcb
+    libxext
+    libxfixes
+    libxrandr
+    libxshmfence
+    libxxf86vm
     llvmPackages.clang
     llvmPackages.clang-unwrapped
     llvmPackages.libclc
@@ -285,7 +292,7 @@ stdenv.mkDerivation {
     wayland
     wayland-protocols
     xcbutilkeysyms
-    xorg.xorgproto
+    xorgproto
     zstd
   ]
   ++ lib.optionals withValgrind [

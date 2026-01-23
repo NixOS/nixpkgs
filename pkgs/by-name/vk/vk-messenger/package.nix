@@ -5,7 +5,10 @@
   rpmextract,
   undmg,
   autoPatchelfHook,
-  xorg,
+  libxtst,
+  libxscrnsaver,
+  libxdamage,
+  libxkbfile,
   gtk3,
   nss,
   alsa-lib,
@@ -62,10 +65,10 @@ let
       wrapGAppsHook3
     ];
     buildInputs = [
-      xorg.libXdamage
-      xorg.libXtst
-      xorg.libXScrnSaver
-      xorg.libxkbfile
+      libxdamage
+      libxtst
+      libxscrnsaver
+      libxkbfile
       gtk3
       nss
       alsa-lib

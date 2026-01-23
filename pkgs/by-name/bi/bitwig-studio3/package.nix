@@ -9,7 +9,12 @@
   glib,
   gtk3,
   lib,
-  xorg,
+  libxcb-util,
+  libxcb-wm,
+  libxtst,
+  libxcursor,
+  libx11,
+  libxcb,
   libglvnd,
   libjack2,
   ffmpeg,
@@ -46,17 +51,17 @@ stdenv.mkDerivation (finalAttrs: {
     gdk-pixbuf
     glib
     gtk3
-    xorg.libxcb
-    xorg.xcbutil
-    xorg.xcbutilwm
+    libxcb
+    libxcb-util
+    libxcb-wm
     zlib
-    xorg.libXtst
+    libxtst
     libxkbcommon
     pulseaudio
     libjack2
-    xorg.libX11
+    libx11
     libglvnd
-    xorg.libXcursor
+    libxcursor
     (lib.getLib stdenv.cc.cc)
   ];
 

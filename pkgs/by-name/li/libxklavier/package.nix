@@ -8,7 +8,11 @@
   gtk-doc,
   xkeyboard_config,
   libxml2,
-  xorg,
+  libxi,
+  libx11,
+  libice,
+  xkbcomp,
+  libxkbfile,
   docbook_xsl,
   glib,
   isocodes,
@@ -44,13 +48,13 @@ stdenv.mkDerivation rec {
 
   # TODO: enable xmodmap support, needs xmodmap DB
   propagatedBuildInputs = [
-    xorg.libX11
-    xorg.libXi
+    libx11
+    libxi
     xkeyboard_config
     libxml2
-    xorg.libICE
+    libice
     glib
-    xorg.libxkbfile
+    libxkbfile
     isocodes
   ];
 
@@ -69,7 +73,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-xkb-base=${xkeyboard_config}/etc/X11/xkb"
-    "--with-xkb-bin-base=${xorg.xkbcomp}/bin"
+    "--with-xkb-bin-base=${xkbcomp}/bin"
     "--disable-xmodmap-support"
     "${if withDoc then "--enable-gtk-doc" else "--disable-gtk-doc"}"
   ];

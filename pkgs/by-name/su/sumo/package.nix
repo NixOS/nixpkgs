@@ -26,7 +26,12 @@
   stdenv,
   swig,
   xercesc,
-  xorg,
+  libxrender,
+  libxrandr,
+  libxft,
+  libxfixes,
+  libxext,
+  libxcursor,
   zlib,
 }:
 
@@ -71,12 +76,12 @@ stdenv.mkDerivation rec {
     zlib
     python3
     libX11
-    xorg.libXcursor
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXft
-    xorg.libXrandr
-    xorg.libXrender
+    libxcursor
+    libxext
+    libxfixes
+    libxft
+    libxrandr
+    libxrender
   ];
 
   meta = {

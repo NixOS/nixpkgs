@@ -4,7 +4,13 @@
   fetchFromGitHub,
   pkg-config,
   libGL,
-  xorg,
+  libxxf86vm,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxext,
+  libxcursor,
+  libx11,
 }:
 
 buildGoModule rec {
@@ -26,13 +32,13 @@ buildGoModule rec {
 
   buildInputs = [
     libGL
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXext
-    xorg.libXi
-    xorg.libXinerama
-    xorg.libXrandr
-    xorg.libXxf86vm
+    libx11
+    libxcursor
+    libxext
+    libxi
+    libxinerama
+    libxrandr
+    libxxf86vm
   ];
 
   postInstall = ''

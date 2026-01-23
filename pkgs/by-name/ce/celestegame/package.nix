@@ -132,20 +132,20 @@ buildFHSEnv {
       libpulseaudio
       pipewire
       vulkan-loader
-      xorg.libX11
-      xorg.libXcomposite
-      xorg.libXdamage
-      xorg.libXfixes
-      xorg.libXext
-      xorg.libxcb
-      xorg.libXcursor
-      xorg.libXinerama
-      xorg.libXi
-      xorg.libXrandr
-      xorg.libXScrnSaver
-      xorg.libXxf86vm
-      xorg.libXau
-      xorg.libXdmcp
+      libx11
+      libxcomposite
+      libxdamage
+      libxfixes
+      libxext
+      libxcb
+      libxcursor
+      libxinerama
+      libxi
+      libxrandr
+      libxscrnsaver
+      libxxf86vm
+      libxau
+      libxdmcp
     ];
 
   targetPkgs = pkgs: [ celeste ];

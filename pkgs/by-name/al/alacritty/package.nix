@@ -17,7 +17,11 @@
   fontconfig,
   freetype,
   libGL,
-  xorg,
+  libxxf86vm,
+  libxi,
+  libxcursor,
+  libx11,
+  libxcb,
   libxkbcommon,
   wayland,
   xdg-utils,
@@ -34,11 +38,11 @@ let
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libGL
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXxf86vm
-    xorg.libxcb
+    libx11
+    libxcursor
+    libxi
+    libxxf86vm
+    libxcb
     libxkbcommon
     wayland
   ];
