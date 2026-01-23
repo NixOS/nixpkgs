@@ -14,10 +14,10 @@
   writeShellApplication,
   coreutils,
   makeBinaryWrapper,
-# TODO: Enable again when sommelier is not broken.
-# For now, don't give false impression of sommelier being supported.
-# sommelier,
-# withSommelier ? false,
+  # TODO: Enable again when sommelier is not broken.
+  # For now, don't give false impression of sommelier being supported.
+  # sommelier,
+  # withSommelier ? false,
 }:
 let
   # TODO: Setup setuid wrappers.

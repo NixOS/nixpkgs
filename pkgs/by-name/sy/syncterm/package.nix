@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   };
 
   # We can't use sourceRoot, as the cherry-picked patches apply to files outside of it.
-  postPatch = ''cd src/syncterm'';
+  postPatch = "cd src/syncterm";
 
   CFLAGS = [
     "-DHAS_INTTYPES_H"

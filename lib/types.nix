@@ -1411,7 +1411,7 @@ let
             else if builtins.isBool v then
               boolToString v
             else
-              ''<${builtins.typeOf v}>'';
+              "<${builtins.typeOf v}>";
         in
         mkOptionType rec {
           name = "enum";

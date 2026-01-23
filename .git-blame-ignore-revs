@@ -310,3 +310,6 @@ c283f32d296564fd649ef3ed268c1f1f7b199c49 # !autorebase nix-shell --run treefmt
 
 # treewide: clean up 'meta = with' pattern
 cca3b04b44a5c57502fe2440cc3d2114779cc40c
+
+# nixfmt 1.2.0
+d8233b866ba074173b4ccc2182ae1508b8363c2d # !autorebase nix-shell --run treefmt

@@ -87,7 +87,7 @@ buildPythonPackage rec {
   ]
   ++ optional-dependencies.torch;
 
-  preCheck = ''export HOME=$(mktemp -d)'';
+  preCheck = "export HOME=$(mktemp -d)";
 
   disabledTestPaths = [
     # requires `cpflows`, not in Nixpkgs
