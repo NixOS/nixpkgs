@@ -10,7 +10,7 @@ buildDunePackage (finalAttrs: {
   pname = "synchronizer";
   version = "0.2";
 
-  minimalOCamlVersion = "5.1";
+  minimalOCamlVersion = "5.2";
 
   src = fetchFromGitHub {
     owner = "OCamlPro";
