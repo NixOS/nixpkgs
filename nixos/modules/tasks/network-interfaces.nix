@@ -1770,13 +1770,9 @@ in
 
     environment.corePackages = [
       pkgs.host
-      pkgs.hostname-debian
+      pkgs.hostname
       pkgs.iproute2
-      pkgs.iputils
-    ]
-    ++ optionals config.networking.wireless.enable [
-      pkgs.wirelesstools # FIXME: obsolete?
-      pkgs.iw
+      pkgs.iputils # ping
     ]
     ++ bridgeStp;
 

@@ -224,7 +224,7 @@ def copy_closure(
         )
 
     match (to_host, from_host):
-        case (None, None):
+        case (x, y) if x == y:
             return
         case (Remote(_) as host, None) | (None, Remote(_) as host):
             nix_copy_closure(host, to=bool(to_host))

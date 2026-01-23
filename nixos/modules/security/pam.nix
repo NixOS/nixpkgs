@@ -322,6 +322,28 @@ let
           '';
         };
 
+        howdy = {
+          enable = lib.mkOption {
+            default = config.security.pam.howdy.enable;
+            defaultText = lib.literalExpression "config.security.pam.howdy.enable";
+            type = lib.types.bool;
+            description = ''
+              Whether to enable the Howdy PAM module.
+
+              If set, users can be authenticated using Howdy, the Windows
+              Hello™-style facial authentication service.
+            '';
+          };
+          control = lib.mkOption {
+            default = config.security.pam.howdy.control;
+            defaultText = lib.literalExpression "config.security.pam.howdy.control";
+            type = lib.types.str;
+            description = ''
+              This option sets the PAM "control" used for this module.
+            '';
+          };
+        };
+
         oathAuth = lib.mkOption {
           default = config.security.pam.oath.enable;
           defaultText = lib.literalExpression "config.security.pam.oath.enable";
@@ -950,6 +972,12 @@ let
                   enable = cfg.fprintAuth;
                   control = "sufficient";
                   modulePath = "${config.services.fprintd.package}/lib/security/pam_fprintd.so";
+                }
+                {
+                  name = "howdy";
+                  enable = cfg.howdy.enable;
+                  control = cfg.howdy.control;
+                  modulePath = "${config.services.howdy.package}/lib/security/pam_howdy.so";
                 }
               ]
               ++
@@ -1793,6 +1821,28 @@ in
         description = ''
           This controls the hostname for the 9front authentication server
           that users will be authenticated against.
+        '';
+      };
+    };
+
+    security.pam.howdy = {
+      enable = lib.mkOption {
+        default = config.services.howdy.enable;
+        defaultText = lib.literalExpression "config.services.howdy.enable";
+        type = lib.types.bool;
+        description = ''
+          Whether to enable the Howdy PAM module.
+
+          If set, users can be authenticated using Howdy, the Windows
+          Hello™-style facial authentication service.
+        '';
+      };
+      control = lib.mkOption {
+        default = config.services.howdy.control;
+        defaultText = lib.literalExpression "config.services.howdy.control";
+        type = lib.types.str;
+        description = ''
+          This option sets the PAM "control" used for this module.
         '';
       };
     };

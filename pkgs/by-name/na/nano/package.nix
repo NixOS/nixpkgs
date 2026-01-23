@@ -43,7 +43,9 @@ stdenv.mkDerivation rec {
 
   outputs = [
     "out"
+    "doc"
     "info"
+    "man"
   ];
 
   configureFlags = [
