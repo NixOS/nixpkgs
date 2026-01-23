@@ -12,10 +12,13 @@ let
     mkOption
     mkPackageOption
     optional
+    toInt
+    last
+    splitString
     ;
   inherit (lib.types)
+    nullOr
     bool
-    int
     port
     str
     submodule
@@ -23,6 +26,8 @@ let
   inherit (lib.generators) toYAML;
 
   freeformType = (pkgs.formats.yaml { }).type;
+
+  httpPort = toInt (last (splitString ":" cfg.settings.http_server.local_address));
 in
 {
   options.services.bitmagnet = {
@@ -44,10 +49,10 @@ in
             type = submodule {
               inherit freeformType;
               options = {
-                port = mkOption {
+                local_address = mkOption {
                   type = str;
                   default = ":3333";
-                  description = "HTTP server listen port";
+                  description = "HTTP server listen address";
                 };
               };
             };
@@ -95,6 +100,20 @@ in
               };
             };
           };
+          tmdb = mkOption {
+            default = { };
+            description = "TMDB api settings";
+            type = submodule {
+              inherit freeformType;
+              options = {
+                api_key = mkOption {
+                  type = nullOr str;
+                  default = null;
+                  description = "TMDB api key, to avoid api limits. Leave null to use the default shared key.";
+                };
+              };
+            };
+          };
         };
       };
     };
@@ -110,7 +129,7 @@ in
       default = "bitmagnet";
     };
     openFirewall = mkOption {
-      description = "Open DHT ports in firewall";
+      description = "Open HTTP & DHT ports in firewall";
       type = bool;
       default = false;
     };
@@ -130,6 +149,7 @@ in
       ]
       ++ optional cfg.useLocalPostgresDB "postgresql.target";
       requires = optional cfg.useLocalPostgresDB "postgresql.target";
+      restartTriggers = [ config.environment.etc."xdg/bitmagnet/config.yml".source ];
       serviceConfig = {
         Type = "simple";
         DynamicUser = true;
@@ -139,6 +159,7 @@ in
         Restart = "on-failure";
         WorkingDirectory = "/var/lib/bitmagnet";
         StateDirectory = "bitmagnet";
+        BindReadOnlyPaths = [ "/etc/xdg/bitmagnet/config.yml" ];
 
         # Sandboxing (sorted by occurrence in https://www.freedesktop.org/software/systemd/man/systemd.exec.html)
         ProtectSystem = "strict";
@@ -173,7 +194,10 @@ in
     };
     users.groups = mkIf (cfg.group == "bitmagnet") { bitmagnet = { }; };
     networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ cfg.settings.dht_server.port ];
+      allowedTCPPorts = [
+        cfg.settings.dht_server.port
+        httpPort
+      ];
       allowedUDPPorts = [ cfg.settings.dht_server.port ];
     };
     services.postgresql = mkIf cfg.useLocalPostgresDB {
