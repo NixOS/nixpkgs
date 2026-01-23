@@ -8,7 +8,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  name = "gdb-dashboard";
+  pname = "gdb-dashboard";
   version = "0.17.4";
 
   src = fetchFromGitHub {

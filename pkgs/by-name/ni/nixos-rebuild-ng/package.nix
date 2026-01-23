@@ -98,6 +98,7 @@ python3Packages.buildPythonApplication rec {
           # FIXME: this test is disabled since it times out in @ofborg
           # nixos-rebuild-install-bootloader
           nixos-rebuild-specialisations
+          nixos-rebuild-store-path
           nixos-rebuild-target-host
           ;
         repl = callPackage ./tests/repl.nix { };

@@ -185,7 +185,7 @@ in
       # If networkmanager is enabled, ask it to interface with resolved.
       networking.networkmanager.dns = "systemd-resolved";
 
-      networking.resolvconf.package = pkgs.systemd;
+      networking.resolvconf.package = config.systemd.package;
 
       nix.firewall.extraNftablesRules = [
         "ip daddr { 127.0.0.53, 127.0.0.54 } udp dport 53 accept comment \"systemd-resolved listening IPs\""
