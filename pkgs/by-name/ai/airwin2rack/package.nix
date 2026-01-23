@@ -163,7 +163,7 @@ stdenv.mkDerivation {
     ln -s ${clapJuceExtensions} src-juce/clap-juce-extensions
   '';
 
-  preConfigure = lib.optionalString enableVCVRack ''export RACK_DIR=${vcvRackSdk}'';
+  preConfigure = lib.optionalString enableVCVRack "export RACK_DIR=${vcvRackSdk}";
 
   buildPhase = ''
     runHook preBuild

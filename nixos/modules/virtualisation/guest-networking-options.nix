@@ -71,7 +71,7 @@ in
     virtualisation.vlans = lib.mkOption {
       type = types.listOf types.ints.unsigned;
       default = if cfg.interfaces == { } then [ 1 ] else [ ];
-      defaultText = lib.literalExpression ''if cfg.interfaces == {} then [ 1 ] else [ ]'';
+      defaultText = lib.literalExpression "if cfg.interfaces == {} then [ 1 ] else [ ]";
       example = [
         1
         2

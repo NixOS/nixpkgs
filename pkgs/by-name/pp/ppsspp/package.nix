@@ -119,29 +119,29 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = lib.concatStringsSep "\n" (
     [
-      ''runHook preInstall''
+      "runHook preInstall"
     ]
     ++ [
-      ''mkdir -p $out/share/{applications,ppsspp/bin,icons}''
+      "mkdir -p $out/share/{applications,ppsspp/bin,icons}"
     ]
     ++ (
       if enableQt then
         [
-          ''install -Dm555 PPSSPPQt $out/share/ppsspp/bin/''
+          "install -Dm555 PPSSPPQt $out/share/ppsspp/bin/"
         ]
       else
         [
-          ''install -Dm555 PPSSPPHeadless $out/share/ppsspp/bin/''
-          ''makeWrapper $out/share/ppsspp/bin/PPSSPPHeadless $out/bin/ppsspp-headless''
-          ''install -Dm555 PPSSPPSDL $out/share/ppsspp/bin/''
+          "install -Dm555 PPSSPPHeadless $out/share/ppsspp/bin/"
+          "makeWrapper $out/share/ppsspp/bin/PPSSPPHeadless $out/bin/ppsspp-headless"
+          "install -Dm555 PPSSPPSDL $out/share/ppsspp/bin/"
         ]
     )
     ++ [
-      ''mv assets $out/share/ppsspp''
-      ''mv ../icons/hicolor $out/share/icons''
+      "mv assets $out/share/ppsspp"
+      "mv ../icons/hicolor $out/share/icons"
     ]
     ++ [
-      ''runHook postInstall''
+      "runHook postInstall"
     ]
   );
 
@@ -164,7 +164,7 @@ stdenv.mkDerivation (finalAttrs: {
       );
       binToBeWrapped = if enableQt then "PPSSPPQt" else "PPSSPPSDL";
     in
-    ''makeWrapper $out/share/ppsspp/bin/${binToBeWrapped} $out/bin/ppsspp ${wrapperArgs}'';
+    "makeWrapper $out/share/ppsspp/bin/${binToBeWrapped} $out/bin/ppsspp ${wrapperArgs}";
 
   meta = {
     homepage = "https://www.ppsspp.org/";

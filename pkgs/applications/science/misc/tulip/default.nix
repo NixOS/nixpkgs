@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     libGL
   ];
 
-  qtWrapperArgs = [ ''--prefix PATH : ${lib.makeBinPath [ python3 ]}'' ];
+  qtWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ python3 ]}" ];
 
   env.NIX_CFLAGS_COMPILE =
     # error: invalid conversion from 'unsigned char*' to 'char*'
