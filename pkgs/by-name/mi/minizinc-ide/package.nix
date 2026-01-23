@@ -2,9 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  qtbase,
-  qmake,
-  qtwebsockets,
+  qt6,
   minizinc,
   makeWrapper,
   copyDesktopItems,
@@ -19,27 +17,28 @@ let
     else
       "$out/bin/MiniZincIDE";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "minizinc-ide";
   version = "2.9.4";
 
   src = fetchFromGitHub {
     owner = "MiniZinc";
     repo = "MiniZincIDE";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-ZESd83aqXr4vxEt9PvgarnELPi9BaEf68IUALYaTfzI=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
-    qmake
+    qt6.qmake
     makeWrapper
     copyDesktopItems
     imagemagick
   ];
+
   buildInputs = [
-    qtbase
-    qtwebsockets
+    qt6.qtbase
+    qt6.qtwebsockets
   ];
 
   desktopItems = [
@@ -47,7 +46,7 @@ stdenv.mkDerivation rec {
       name = "MiniZincIDE";
       desktopName = "MiniZincIDE";
       icon = "minizinc";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       exec = "MiniZincIDE";
       type = "Application";
       terminal = false;
@@ -59,7 +58,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  sourceRoot = "${src.name}/MiniZincIDE";
+  sourceRoot = "${finalAttrs.src.name}/MiniZincIDE";
 
   dontWrapQtApps = true;
 
@@ -71,11 +70,11 @@ stdenv.mkDerivation rec {
     + ''
       wrapProgram ${executableLoc} \
         --prefix PATH ":" ${lib.makeBinPath [ minizinc ]} \
-        --set QT_QPA_PLATFORM_PLUGIN_PATH "${qtbase}/lib/qt-6/plugins/platforms"
+        --set QT_QPA_PLATFORM_PLUGIN_PATH "${qt6.qtbase}/lib/qt-6/plugins/platforms"
 
       for size in 16 24 32 48 64 128 256 512; do
         mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
-        magick -background none ${src}/MiniZincIDE/images/mznicon.png -resize "$size"x"$size" $out/share/icons/hicolor/"$size"x"$size"/apps/minizinc.png
+        magick -background none ${finalAttrs.src}/MiniZincIDE/images/mznicon.png -resize "$size"x"$size" $out/share/icons/hicolor/"$size"x"$size"/apps/minizinc.png
       done
     '';
 
@@ -94,4 +93,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})
