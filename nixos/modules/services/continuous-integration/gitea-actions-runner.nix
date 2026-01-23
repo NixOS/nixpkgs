@@ -15,6 +15,7 @@ let
     hasInfix
     hasSuffix
     optionalAttrs
+    optionalString
     optionals
     literalExpression
     mapAttrs'
@@ -236,33 +237,38 @@ in
               RestartSec = 2;
 
               ExecStartPre = [
-                (pkgs.writeShellScript "gitea-register-runner-${name}" ''
-                  export INSTANCE_DIR="$STATE_DIRECTORY/${name}"
-                  mkdir -vp "$INSTANCE_DIR"
-                  cd "$INSTANCE_DIR"
+                (pkgs.writeShellScript "gitea-register-runner-${name}" (
+                  (optionalString (instance.tokenFile != null) ''
+                    TOKEN="$(cat "$CREDENTIALS_DIRECTORY/token")"
+                  '')
+                  + ''
+                    export INSTANCE_DIR="$STATE_DIRECTORY/${name}"
+                    mkdir -vp "$INSTANCE_DIR"
+                    cd "$INSTANCE_DIR"
 
-                  # force reregistration on changed labels
-                  export LABELS_FILE="$INSTANCE_DIR/.labels"
-                  export LABELS_WANTED="$(echo ${escapeShellArg (concatStringsSep "\n" instance.labels)} | sort)"
-                  export LABELS_CURRENT="$(cat $LABELS_FILE 2>/dev/null || echo 0)"
+                    # force reregistration on changed labels
+                    export LABELS_FILE="$INSTANCE_DIR/.labels"
+                    export LABELS_WANTED="$(echo ${escapeShellArg (concatStringsSep "\n" instance.labels)} | sort)"
+                    export LABELS_CURRENT="$(cat $LABELS_FILE 2>/dev/null || echo 0)"
 
-                  if [ ! -e "$INSTANCE_DIR/.runner" ] || [ "$LABELS_WANTED" != "$LABELS_CURRENT" ]; then
-                    # remove existing registration file, so that changing the labels forces a re-registration
-                    rm -v "$INSTANCE_DIR/.runner" || true
+                    if [ ! -e "$INSTANCE_DIR/.runner" ] || [ "$LABELS_WANTED" != "$LABELS_CURRENT" ]; then
+                      # remove existing registration file, so that changing the labels forces a re-registration
+                      rm -v "$INSTANCE_DIR/.runner" || true
 
-                    # perform the registration
-                    ${cfg.package}/bin/act_runner register --no-interactive \
-                      --instance ${escapeShellArg instance.url} \
-                      --token "$TOKEN" \
-                      --name ${escapeShellArg instance.name} \
-                      --labels ${escapeShellArg (concatStringsSep "," instance.labels)} \
-                      --config ${configFile}
+                      # perform the registration
+                      ${cfg.package}/bin/act_runner register --no-interactive \
+                        --instance ${escapeShellArg instance.url} \
+                        --token "$TOKEN" \
+                        --name ${escapeShellArg instance.name} \
+                        --labels ${escapeShellArg (concatStringsSep "," instance.labels)} \
+                        --config ${configFile}
 
-                    # and write back the configured labels
-                    echo "$LABELS_WANTED" > "$LABELS_FILE"
-                  fi
+                      # and write back the configured labels
+                      echo "$LABELS_WANTED" > "$LABELS_FILE"
+                    fi
 
-                '')
+                  ''
+                ))
               ];
               ExecStart = "${cfg.package}/bin/act_runner daemon --config ${configFile}";
               SupplementaryGroups =
@@ -274,7 +280,7 @@ in
                 ];
             }
             // optionalAttrs (instance.tokenFile != null) {
-              EnvironmentFile = instance.tokenFile;
+              LoadCredential = "token:${instance.tokenFile}";
             };
           };
       in
