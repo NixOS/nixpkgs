@@ -41,7 +41,7 @@
 let
   rev = "30a5d140aa5a789a362749d057754783fea83dde";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "guix";
   version = "1.4.0-unstable-2025-06-24";
 
@@ -127,7 +127,7 @@ stdenv.mkDerivation rec {
   ];
 
   preAutoreconf = ''
-    echo ${version} > .tarball-version
+    echo ${finalAttrs.version} > .tarball-version
     ./bootstrap
   '';
 
@@ -161,7 +161,7 @@ stdenv.mkDerivation rec {
       Guix is based on the Nix package manager.
     '';
     homepage = "https://guix.gnu.org/";
-    changelog = "https://codeberg.org/guix/guix/raw/commit/${rev}/NEWS";
+    changelog = "https://codeberg.org/guix/guix/raw/commit/${finalAttrs.version}/NEWS";
     license = lib.licenses.gpl3Plus;
     mainProgram = "guix";
     maintainers = with lib.maintainers; [
@@ -170,4 +170,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})
