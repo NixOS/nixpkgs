@@ -1,0 +1,92 @@
+diff --git a/daemon/gdm-local-display-factory.c b/daemon/gdm-local-display-factory.c
+index ad2e65cf7..61fb78db8 100644
+--- a/daemon/gdm-local-display-factory.c
++++ b/daemon/gdm-local-display-factory.c
+@@ -272,7 +272,7 @@ struct GdmDisplayServerConfiguration {
+         { "wayland", GDM_KEY_WAYLAND_ENABLE, NULL, "wayland" },
+ #endif
+ #ifdef ENABLE_X11_SUPPORT
+-        { "xorg", GDM_KEY_XORG_ENABLE, "/usr/bin/Xorg", "x11" },
++        { "xorg", GDM_KEY_XORG_ENABLE, "@xorgserver@/bin/Xorg", "x11" },
+ #endif
+         { NULL, NULL, NULL },
+ };
+diff --git a/daemon/gdm-manager.c b/daemon/gdm-manager.c
+index 457dcf88d..a71b89ba8 100644
+--- a/daemon/gdm-manager.c
++++ b/daemon/gdm-manager.c
+@@ -154,7 +154,7 @@ plymouth_is_running (void)
+         GError  *error;
+ 
+         error = NULL;
+-        res = g_spawn_command_line_sync ("plymouth --ping",
++        res = g_spawn_command_line_sync ("@plymouth@/bin/plymouth --ping",
+                                          NULL, NULL, &status, &error);
+         if (! res) {
+                 g_debug ("Could not ping plymouth: %s", error->message);
+@@ -172,7 +172,7 @@ plymouth_prepare_for_transition (void)
+         GError  *error;
+ 
+         error = NULL;
+-        res = g_spawn_command_line_sync ("plymouth deactivate",
++        res = g_spawn_command_line_sync ("@plymouth@/bin/plymouth deactivate",
+                                          NULL, NULL, NULL, &error);
+         if (! res) {
+                 g_warning ("Could not deactivate plymouth: %s", error->message);
+@@ -187,7 +187,7 @@ plymouth_quit_with_transition (void)
+         GError  *error;
+ 
+         error = NULL;
+-        res = g_spawn_command_line_async ("plymouth quit --retain-splash", &error);
++        res = g_spawn_command_line_async ("@plymouth@/bin/plymouth quit --retain-splash", &error);
+         if (! res) {
+                 g_warning ("Could not quit plymouth: %s", error->message);
+                 g_error_free (error);
+@@ -203,7 +203,7 @@ plymouth_quit_without_transition (void)
+         GError  *error;
+ 
+         error = NULL;
+-        res = g_spawn_command_line_async ("plymouth quit", &error);
++        res = g_spawn_command_line_async ("@plymouth@/bin/plymouth quit", &error);
+         if (! res) {
+                 g_warning ("Could not quit plymouth: %s", error->message);
+                 g_error_free (error);
+diff --git a/daemon/gdm-wayland-session.c b/daemon/gdm-wayland-session.c
+index d0404d2c1..e916c2723 100644
+--- a/daemon/gdm-wayland-session.c
++++ b/daemon/gdm-wayland-session.c
+@@ -136,7 +136,7 @@ spawn_bus (State        *state,
+ 
+         bus_address_fd_string = g_strdup_printf ("%d", BUS_ADDRESS_FILENO);
+ 
+-        g_ptr_array_add (arguments, "dbus-daemon");
++        g_ptr_array_add (arguments, "@dbus@/bin/dbus-daemon");
+ 
+         g_ptr_array_add (arguments, "--print-address");
+         g_ptr_array_add (arguments, bus_address_fd_string);
+diff --git a/daemon/gdm-x-session.c b/daemon/gdm-x-session.c
+index a998d1555..4fe50a2d0 100644
+--- a/daemon/gdm-x-session.c
++++ b/daemon/gdm-x-session.c
+@@ -463,7 +463,7 @@ spawn_bus (State        *state,
+ 
+         bus_address_fd_string = g_strdup_printf ("%d", BUS_ADDRESS_FILENO);
+ 
+-        g_ptr_array_add (arguments, "dbus-daemon");
++        g_ptr_array_add (arguments, "@dbus@/bin/dbus-daemon");
+ 
+         g_ptr_array_add (arguments, "--print-address");
+         g_ptr_array_add (arguments, bus_address_fd_string);
+diff --git a/data/gdm.service.in b/data/gdm.service.in
+index 17e8a8de8..afc709778 100644
+--- a/data/gdm.service.in
++++ b/data/gdm.service.in
+@@ -26,7 +26,7 @@ Restart=always
+ IgnoreSIGPIPE=no
+ BusName=org.gnome.DisplayManager
+ EnvironmentFile=-${LANG_CONFIG_FILE}
+-ExecReload=/bin/kill -SIGHUP $MAINPID
++ExecReload=@coreutils@/bin/kill -SIGHUP $MAINPID
+ KeyringMode=shared
+ 
+ [Install]

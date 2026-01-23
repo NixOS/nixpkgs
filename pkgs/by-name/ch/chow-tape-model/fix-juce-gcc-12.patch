@@ -1,0 +1,14 @@
+Submodule Plugin/modules/JUCE contains modified content
+diff --git a/Plugin/modules/JUCE/modules/juce_gui_basics/windows/juce_ComponentPeer.h b/Plugin/modules/JUCE/modules/juce_gui_basics/windows/juce_ComponentPeer.h
+index 06c0a729d..119f146b8 100644
+--- a/Plugin/modules/JUCE/modules/juce_gui_basics/windows/juce_ComponentPeer.h
++++ b/Plugin/modules/JUCE/modules/juce_gui_basics/windows/juce_ComponentPeer.h
+@@ -23,6 +23,8 @@
+   ==============================================================================
+ */
+ 
++#include <utility>
++
+ namespace juce
+ {
+ 

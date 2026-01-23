@@ -1,0 +1,20 @@
+--- a/1.0.0.rc16/tools/dmevent_tool.c.old	2024-12-26 18:39:04.294039876 -0700
++++ a/1.0.0.rc16/tools/dmevent_tool.c	2024-12-26 18:45:59.416784807 -0700
+@@ -123,7 +123,7 @@
+ }
+ 
+ /* Increment option counters. */
+-static _process_opt(int opt, const char *cmd)
++static int _process_opt(int opt, const char *cmd)
+ {
+ 	struct opt_def_struct {
+ 		const char opt;		/* Option character. */
+@@ -148,7 +148,7 @@
+ 
+ 			optc[o->type]++;
+ 			optc[OPT_SUM]++;
+-			return;
++			return 0;
+ 		}
+ 	}
+ 

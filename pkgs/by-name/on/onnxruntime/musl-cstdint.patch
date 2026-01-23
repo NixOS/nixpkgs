@@ -1,0 +1,24 @@
+diff --git a/include/onnxruntime/core/framework/tensor_shape.h b/include/onnxruntime/core/framework/tensor_shape.h
+index d4ee4a0e5e..c33bea9cf7 100644
+--- a/include/onnxruntime/core/framework/tensor_shape.h
++++ b/include/onnxruntime/core/framework/tensor_shape.h
+@@ -8,6 +8,7 @@
+ #include <iosfwd>
+ #include <string>
+ #include <vector>
++#include <cstdint>
+ 
+ #include <gsl/gsl>
+ #include "core/common/inlined_containers_fwd.h"
+diff --git a/onnxruntime/test/perftest/strings_helper.h b/onnxruntime/test/perftest/strings_helper.h
+index d6c6f6112a..8580c86db6 100644
+--- a/onnxruntime/test/perftest/strings_helper.h
++++ b/onnxruntime/test/perftest/strings_helper.h
+@@ -7,6 +7,7 @@
+ #include <unordered_map>
+ #include <unordered_set>
+ #include <vector>
++#include <cstdint>
+ 
+ namespace onnxruntime {
+ namespace perftest {

@@ -1,0 +1,96 @@
+From 0e2b9909fed24a682c8566f9df8bbac4e9347186 Mon Sep 17 00:00:00 2001
+From: Yu Watanabe <watanabe.yu+github@gmail.com>
+Date: Mon, 7 Jul 2025 14:11:19 +0900
+Subject: [PATCH 01/30] musl: meson: allow to choose libc implementation
+
+This also introduces skelton directories for storing musl specific code.
+---
+ meson.build               | 17 +++++++++++++++--
+ meson_options.txt         |  2 ++
+ src/libc/meson.build      |  2 ++
+ src/libc/musl/meson.build |  5 +++++
+ 4 files changed, 24 insertions(+), 2 deletions(-)
+ create mode 100644 src/libc/musl/meson.build
+
+diff --git a/meson.build b/meson.build
+index 238b935372..bea62f0eb6 100644
+--- a/meson.build
++++ b/meson.build
+@@ -72,7 +72,10 @@ conf.set10('SD_BOOT', false)
+ 
+ # Create a title-less summary section early, so it ends up first in the output.
+ # More items are added later after they have been detected.
+-summary({'build mode' : get_option('mode')})
++summary({
++        'libc'       : get_option('libc'),
++        'build mode' : get_option('mode'),
++})
+ 
+ #####################################################################
+ 
+@@ -2042,7 +2045,14 @@ dbus_programs = []
+ boot_stubs = []
+ 
+ # This is similar to system_includes below, but for passing custom_target().
+-system_include_args = [
++system_include_args = []
++if get_option('libc') == 'musl'
++        system_include_args += [
++                '-isystem', meson.project_build_root()  / 'src/include/musl',
++                '-isystem', meson.project_source_root() / 'src/include/musl',
++        ]
++endif
++system_include_args += [
+         '-isystem', meson.project_build_root()  / 'src/include/override',
+         '-isystem', meson.project_source_root() / 'src/include/override',
+         '-isystem', meson.project_build_root()  / 'src/include/uapi',
+@@ -2060,6 +2070,9 @@ system_includes = [
+                 is_system : true,
+         ),
+ ]
++if get_option('libc') == 'musl'
++        system_includes += include_directories('src/include/musl', is_system : true)
++endif
+ 
+ basic_includes = [
+         include_directories(
+diff --git a/meson_options.txt b/meson_options.txt
+index d8dec33ec4..ad203ba301 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -397,6 +397,8 @@ option('ima', type : 'boolean',
+ option('ipe', type : 'boolean',
+        description : 'IPE support')
+ 
++option('libc', type : 'combo', choices : ['glibc', 'musl'],
++       description : 'libc implementation to be used')
+ option('acl', type : 'feature', deprecated : { 'true' : 'enabled', 'false' : 'disabled' },
+        description : 'libacl support')
+ option('audit', type : 'feature', deprecated : { 'true' : 'enabled', 'false' : 'disabled' },
+diff --git a/src/libc/meson.build b/src/libc/meson.build
+index eeee98c9d6..306512ffd7 100644
+--- a/src/libc/meson.build
++++ b/src/libc/meson.build
+@@ -16,6 +16,8 @@ libc_wrapper_sources = files(
+         'xattr.c',
+ )
+ 
++subdir('musl')
++
+ sources += libc_wrapper_sources
+ 
+ libc_wrapper_static = static_library(
+diff --git a/src/libc/musl/meson.build b/src/libc/musl/meson.build
+new file mode 100644
+index 0000000000..a876230c67
+--- /dev/null
++++ b/src/libc/musl/meson.build
+@@ -0,0 +1,5 @@
++# SPDX-License-Identifier: LGPL-2.1-or-later
++
++if get_option('libc') != 'musl'
++        subdir_done()
++endif
+-- 
+2.51.0
+

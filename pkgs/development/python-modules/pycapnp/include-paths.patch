@@ -1,0 +1,14 @@
+--- a/capnp/lib/capnp.pyx
++++ b/capnp/lib/capnp.pyx
+@@ -4410,10 +4410,7 @@ def load(file_name, display_name=None, imports=[]):
+ # Automatically include the system and built-in capnp paths
+ # Highest priority at position 0
+ _capnp_paths = [
+-    # Common macOS brew location
+-    '/usr/local/include',
+-    # Common posix location
+-    '/usr/include',
++    '@capnproto@/include',
+ ]
+ 
+ class _Loader:

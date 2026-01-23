@@ -1,0 +1,23 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 9c133e0..1aa8a53 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -285,6 +285,9 @@ if(BUILD_HIP)
+     find_package_and_print_version(hipblas REQUIRED)
+     find_package_and_print_version(hiprand REQUIRED)
+     find_package_and_print_version(hipsparse REQUIRED)
++    find_package_and_print_version(rocblas REQUIRED)
++    find_package_and_print_version(hip REQUIRED)
++    find_package_and_print_version(hipcub REQUIRED)
+ 
+     ## hacky way of excluding hip::amdhip64 (with it linked many tests unexpectedly fail e.g. adam8bit because of inaccuracies)
+     set_target_properties(hip::host PROPERTIES INTERFACE_LINK_LIBRARIES "")
+@@ -293,7 +296,7 @@ if(BUILD_HIP)
+ 
+     target_include_directories(bitsandbytes PRIVATE ${CMAKE_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/include ${ROCM_PATH}/include /include)
+     target_link_directories(bitsandbytes PRIVATE ${ROCM_PATH}/lib /lib)
+-    target_link_libraries(bitsandbytes PUBLIC roc::hipblas hip::hiprand roc::hipsparse)
++    target_link_libraries(bitsandbytes PUBLIC roc::hipblas hip::hiprand roc::hipsparse roc::rocblas hip::device hip::hipcub)
+ 
+     target_compile_definitions(bitsandbytes PUBLIC BNB_USE_HIP)
+     set_source_files_properties(${HIP_FILES} PROPERTIES LANGUAGE HIP)

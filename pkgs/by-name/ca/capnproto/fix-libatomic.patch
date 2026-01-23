@@ -1,0 +1,35 @@
+From dfbbc505817bd0c3e01af5865196629c2a2a2b5e Mon Sep 17 00:00:00 2001
+From: Marie Ramlow <me@nycode.dev>
+Date: Wed, 10 Sep 2025 20:12:39 +0200
+Subject: [PATCH] Check if libatomic is needed
+
+---
+ c++/src/kj/CMakeLists.txt | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/c++/src/kj/CMakeLists.txt b/c++/src/kj/CMakeLists.txt
+index 7114ddb80e..8ce355b8b0 100644
+--- a/c++/src/kj/CMakeLists.txt
++++ b/c++/src/kj/CMakeLists.txt
+@@ -84,6 +84,21 @@ target_compile_features(kj PUBLIC cxx_std_20)
+ if(UNIX AND NOT ANDROID)
+   target_link_libraries(kj PUBLIC pthread)
+ endif()
++
++include(CheckCXXSourceCompiles)
++check_cxx_source_compiles("#include <atomic>
++int main() {
++  std::atomic<uint8_t> w1;
++  std::atomic<uint16_t> w2;
++  std::atomic<uint32_t> w4;
++  std::atomic<uint64_t> w8;
++  return ++w1 + ++w2 + ++w4 + ++w8;
++}" CAPNP_BUILDS_WITHOUT_LIBATOMIC)
++
++if(NOT CAPNP_BUILDS_WITHOUT_LIBATOMIC)
++  target_link_libraries(kj PUBLIC atomic)
++endif()
++
+ #make sure the lite flag propagates to all users (internal + external) of this library
+ target_compile_definitions(kj PUBLIC ${CAPNP_LITE_FLAG})
+ #make sure external consumers don't need to manually set the include dirs

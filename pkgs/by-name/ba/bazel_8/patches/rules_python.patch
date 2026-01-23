@@ -1,0 +1,14 @@
+diff --git python/private/runtime_env_toolchain.bzl python/private/runtime_env_toolchain.bzl
+--- python/private/runtime_env_toolchain.bzl
++++ python/private/runtime_env_toolchain.bzl
+@@ -42,7 +42,7 @@
+         name = "_runtime_env_py3_runtime",
+         interpreter = "//python/private:runtime_env_toolchain_interpreter.sh",
+         python_version = "PY3",
+-        stub_shebang = "#!/usr/bin/env python3",
++        stub_shebang = "#!@usrBinEnv@ python3",
+         visibility = ["//visibility:private"],
+         tags = ["manual"],
+     )
+
+

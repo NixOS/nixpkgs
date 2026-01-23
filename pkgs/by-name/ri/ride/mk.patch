@@ -1,0 +1,61 @@
+diff --git a/mk b/mk
+index a5baa0f..4ed2350 100644
+--- a/mk
++++ b/mk
+@@ -25,7 +25,7 @@ const rm = (x) => {
+ };
+ const pj = JSON.parse(rf('package.json'));
+ // v:version string - "x.y.z" where z is the number of commits since the beginning of the project
+-const v = `${pj.version.replace(/\.0$/, '')}.${sh('git rev-list --count HEAD')}`;
++const v = "@version@";
+ const isDyalogBuild = /^dyalog/.test(pj.name);
+ const tasks = { };
+ 
+@@ -36,8 +36,8 @@ const b = (f) => {
+   const vi = {
+     versionInfo: {
+       version: v,
+-      date: sh('git show -s HEAD --pretty=format:%ci'),
+-      rev: sh('git rev-parse HEAD'),
++      date: 'unknown',
++      rev: 'nixpkgs',
+     },
+   };
+   wf('_/version.js', `D=${JSON.stringify(vi)}`);
+@@ -53,8 +53,7 @@ const pkg = (x, y, f) => {
+   const tmpdir = `/tmp/ridebuild_${version}_${rq('os').userInfo().username}`;
+   rq('@electron/packager')({
+     dir: '.',
+-    platform: x,
+-    arch: y,
++    asar: true,
+     tmpdir,
+     out: `_/${pj.name}`,
+     overwrite: true,
+@@ -81,8 +80,8 @@ const pkg = (x, y, f) => {
+       ProductName: 'Ride',
+       InternalName: 'Ride',
+     },
+-  }).then(() => {
+-    const d = `_/${pj.name}/${pj.productName}-${x}-${y}`;
++  }).then(paths => {
++    const d = paths[0];
+     rm(`${d}/version`);
+     fs.existsSync(`${d}/LICENSE`) && mv(`${d}/LICENSE`, `${d}/LICENSE.electron`);
+     generateLicenses(`${d}/ThirdPartyNotices.txt`);
+@@ -90,6 +89,7 @@ const pkg = (x, y, f) => {
+   }, e => f(e));
+ };
+ 
++const self = (f) => { b(e => (e ? f(e) : pkg(undefined, undefined, f))); };
+ const l = (f) => { b(e => (e ? f(e) : pkg('linux', 'x64', f))); };
+ const la= (f) => { b(e => (e ? f(e) : pkg('linux', 'arm64', f))); };
+ const w = (f) => { b(e => (e ? f(e) : pkg('win32', 'ia32', f))); };
+@@ -113,6 +113,7 @@ tasks.ma=ma; tasks.masarm = ma;
+ tasks.a = a; tasks.arm = a;
+ tasks.d = d; tasks.dist = d;
+ tasks.c = c; tasks.clean = c;
++tasks.self = self;
+ 
+ async.each(
+   process.argv.length > 2 ? process.argv.slice(2) : ['build'],

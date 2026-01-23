@@ -1,0 +1,30 @@
+diff -uNr pam_mount-2.15_old/src/mtcrypt.c pam_mount-2.15/src/mtcrypt.c
+--- pam_mount-2.15_old/src/mtcrypt.c	2015-07-04 16:00:12.917943336 +0200
++++ pam_mount-2.15/src/mtcrypt.c	2015-07-04 16:03:45.685302493 +0200
+@@ -534,7 +534,7 @@
+ 
+ 	/* candidate for replacement by some libmount calls, I guess. */
+ 	argk = 0;
+-	mount_args[argk++] = "mount";
++	mount_args[argk++] = "@@NIX_UTILLINUX@@/mount";
+ 	if (opt->fstype != NULL) {
+ 		mount_args[argk++] = "-t";
+ 		mount_args[argk++] = opt->fstype;
+@@ -668,7 +668,7 @@
+ 
+ 	if (!opt->no_update)
+ 		pmt_smtab_remove(mntpt, SMTABF_MOUNTPOINT);
+-	rmt_args[argk++] = "mount";
++	rmt_args[argk++] = "@@NIX_UTILLINUX@@/mount";
+ 	rmt_args[argk++] = "-o";
+ 	rmt_args[argk++] = opt->extra_opts;
+ 	rmt_args[argk++] = mntpt;
+@@ -749,7 +749,7 @@
+ 		pmt_smtab_remove(mountpoint, SMTABF_MOUNTPOINT);
+ 	pmt_cmtab_remove(mountpoint);
+ 
+-	umount_args[argk++] = "umount";
++	umount_args[argk++] = "@@NIX_UTILLINUX@@/umount";
+ 	umount_args[argk++] = "-i";
+ 	umount_args[argk++] = mountpoint;
+ 	umount_args[argk]   = NULL;

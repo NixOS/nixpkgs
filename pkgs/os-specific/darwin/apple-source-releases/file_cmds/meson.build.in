@@ -1,0 +1,390 @@
+# Build settings based on the upstream Xcode project.
+# See: https://github.com/apple-oss-distributions/file_cmds/blob/main/file_cmds.xcodeproj/project.pbxproj
+
+# Project settings
+project('file_cmds', 'c', version : '@version@')
+add_global_arguments(
+    # These are not defined automatically by Clang. Not having them defined causes compilation failures.
+    '-DTARGET_OS_BRIDGE=0',
+    '-DTARGET_OS_EXCLAVECORE=0',
+    '-DTARGET_OS_EXCLAVEKIT=0',
+    language : 'c',
+)
+
+# Dependencies
+cc = meson.get_compiler('c')
+
+core_foundation = dependency('appleframeworks', modules : 'CoreFoundation')
+
+bzip2 = dependency('bzip2')
+xz = dependency('liblzma')
+libmd = dependency('libmd')
+libxo = dependency('libxo')
+zlib = dependency('zlib')
+
+copyfile = cc.find_library('copyfile')
+removefile = cc.find_library('removefile')
+libutil = cc.find_library('util')
+
+
+# Binaries
+executable(
+    'chflags',
+    install : true,
+    sources: [ 'chflags/chflags.c' ],
+)
+install_man('chflags/chflags.1')
+
+executable(
+    'chmod',
+    install : true,
+    sources: [
+        'chmod/chmod.c',
+        'chmod/chmod_acl.c',
+    ]
+)
+install_man('chmod/chmod.1')
+
+executable(
+    'chown',
+    install : true,
+    sources: [ 'chown/chown.c' ],
+)
+install_man('chown/chown.8')
+
+install_symlink(
+    'chgrp',
+    install_dir : get_option('bindir'),
+    pointing_to : 'chown',
+)
+install_man('chown/chgrp.1')
+
+executable(
+    'cksum',
+    install : true,
+    sources: [
+        'cksum/cksum.c',
+        'cksum/crc.c',
+        'cksum/crc32.c',
+        'cksum/print.c',
+        'cksum/sum1.c',
+        'cksum/sum2.c',
+    ]
+)
+install_man('cksum/cksum.1')
+
+install_symlink(
+    'sum',
+    install_dir : get_option('bindir'),
+    pointing_to : 'cksum',
+)
+install_man('cksum/sum.1')
+
+executable(
+    'compress',
+    install : true,
+    sources: [
+        'compress/compress.c',
+        'compress/zopen.c',
+    ]
+)
+install_man('compress/compress.1')
+
+install_symlink(
+    'uncompress',
+    install_dir : get_option('bindir'),
+    pointing_to : 'compress',
+)
+install_man('compress/uncompress.1')
+
+install_man('compress/zopen.3')
+
+executable(
+    'cp',
+    dependencies : [ copyfile ],
+    install : true,
+    sources: [
+        'cp/cp.c',
+        'cp/utils.c',
+    ]
+)
+install_man('cp/cp.1')
+
+executable(
+    'dd',
+    dependencies : [ libutil ],
+    install : true,
+    sources: [
+        'dd/args.c',
+        'dd/conv.c',
+        'dd/conv_tab.c',
+        'dd/dd.c',
+         # 'dd/gen.c', # Not compiled in the Xcode project. Building it causes a duplicate symbol error when linking.
+        'dd/misc.c',
+        'dd/position.c',
+    ]
+)
+install_man('dd/dd.1')
+
+executable(
+    'df',
+    dependencies : [ libutil, libxo ],
+    install : true,
+    sources: [ 'df/df.c' ],
+)
+install_man('df/df.1')
+
+executable(
+    'du',
+    dependencies : [ libutil ],
+    install : true,
+    sources: [ 'du/du.c' ],
+)
+install_man('du/du.1')
+
+executable(
+    'gzip',
+    c_args : [ '-DGZIP_APPLE_VERSION="@version@"' ],
+    dependencies : [ bzip2, copyfile, xz, zlib ],
+    install : true,
+    sources: [
+        'gzip/futimens.c',
+        'gzip/gzip.c',
+        # Apple only builds with gzip support
+        # 'gzip/unbzip2.c',
+        # 'gzip/unlz.c',
+        # 'gzip/unpack.c',
+        # 'gzip/unxz.c',
+        # 'gzip/zuncompress.c',
+    ]
+)
+install_man('gzip/gzip.1')
+
+foreach cmd : [ 'gzexe', 'zdiff', 'zforce', 'zmore', 'znew' ]
+    install_data(
+        f'gzip/@cmd@',
+        install_dir : get_option('bindir'),
+        install_mode : 'r-xr-xr-x',
+    )
+    install_man(f'gzip/@cmd@.1')
+endforeach
+
+install_symlink(
+    'zless',
+    install_dir : get_option('bindir'),
+    pointing_to : 'zmore',
+)
+
+executable(
+    'install-bin', # Meson reserves the name “install”, so use a different name and rename in install phase.
+    dependencies : [ copyfile, libmd ],
+    install : true,
+    sources: [
+        'install/xinstall.c',
+    ],
+)
+install_man('install/install.1')
+
+executable(
+    'ipcrm',
+    install : true,
+    sources: [ 'ipcrm/ipcrm.c' ],
+)
+install_man('ipcrm/ipcrm.1')
+
+executable(
+    'ipcs',
+    install : true,
+    sources: [ 'ipcs/ipcs.c' ],
+)
+install_man('ipcs/ipcs.1')
+
+executable(
+    'ln',
+    install : true,
+    sources: [ 'ln/ln.c' ],
+)
+install_man('ln/ln.1')
+
+install_symlink(
+    'link',
+    install_dir : get_option('bindir'),
+    pointing_to : 'ln',
+)
+install_man('ln/link.1')
+
+install_man(f'ln/symlink.7')
+
+executable(
+    'ls',
+    c_args : [
+        # https://github.com/apple-oss-distributions/xnu/blob/94d3b452840153a99b38a3a9659680b2a006908e/bsd/sys/stat.h#L520
+        '-DSF_DATALESS=0x40000000',
+    ],
+    dependencies : [ libutil ],
+    install : true,
+    sources: [
+        'ls/cmp.c',
+        'ls/util.c',
+        'ls/ls.c',
+        'ls/print.c',
+    ]
+)
+install_man('ls/ls.1')
+
+executable(
+    'mkdir',
+    install : true,
+    sources: [ 'mkdir/mkdir.c' ],
+)
+install_man('mkdir/mkdir.1')
+
+executable(
+    'mkfifo',
+    install : true,
+    sources: [ 'mkfifo/mkfifo.c' ],
+)
+install_man('mkfifo/mkfifo.1')
+
+executable(
+    'mknod',
+    install : true,
+    sources: [
+        'mknod/mknod.c',
+        'mknod/pack_dev.c',
+    ],
+)
+install_man('mknod/mknod.8')
+
+executable(
+    'mtree',
+    dependencies : [ core_foundation, removefile ],
+    install : true,
+    sources: [
+        'cksum/crc.c',
+        'mtree/commoncrypto.c',
+        'mtree/compare.c',
+        'mtree/create.c',
+        'mtree/excludes.c',
+        'mtree/metrics.c',
+        'mtree/misc.c',
+        'mtree/mtree.c',
+        'mtree/spec.c',
+        'mtree/specspec.c',
+        'mtree/verify.c',
+    ]
+)
+install_man('mtree/mtree.8')
+
+executable(
+    'mv',
+    dependencies : [ copyfile ],
+    install : true,
+    sources: [
+        'mv/mv.c',
+    ],
+)
+install_man('mv/mv.1')
+
+executable(
+    'pathchk',
+    install : true,
+    sources: [ 'pathchk/pathchk.c' ],
+)
+install_man('pathchk/pathchk.1')
+
+executable(
+    'pax',
+    dependencies : [ copyfile ],
+    install : true,
+    sources: [
+        'pax/ar_io.c',
+        'pax/ar_subs.c',
+        'pax/buf_subs.c',
+        'pax/cache.c',
+        'pax/cpio.c',
+        'pax/file_subs.c',
+        'pax/ftree.c',
+        'pax/gen_subs.c',
+        'pax/getoldopt.c',
+        'pax/options.c',
+        'pax/pat_rep.c',
+        'pax/pax.c',
+        'pax/pax_format.c',
+        'pax/sel_subs.c',
+        'pax/tables.c',
+        'pax/tar.c',
+        'pax/tty_subs.c',
+    ]
+)
+install_man('pax/pax.1')
+
+executable(
+    'rm',
+    dependencies : [ removefile ],
+    install : true,
+    sources: [
+        'rm/rm.c',
+    ],
+)
+install_man('rm/rm.1')
+
+install_symlink(
+    'unlink',
+    install_dir : get_option('bindir'),
+    pointing_to : 'rm',
+)
+install_man('rm/unlink.1')
+
+executable(
+    'rmdir',
+    install : true,
+    sources: [ 'rmdir/rmdir.c' ],
+)
+install_man('rmdir/rmdir.1')
+
+install_data(
+    'shar/shar.sh',
+    install_dir : get_option('bindir'),
+    install_mode : 'r-xr-xr-x',
+    rename : 'shar',
+)
+install_man('shar/shar.1')
+
+executable(
+    'stat',
+    install : true,
+    sources: [ 'stat/stat.c' ],
+)
+install_man('stat/stat.1')
+
+install_symlink(
+    'readlink',
+    install_dir : get_option('bindir'),
+    pointing_to : 'stat',
+)
+install_man('stat/readlink.1')
+
+executable(
+    'touch',
+    install : true,
+    sources: [
+        'touch/touch.c',
+    ],
+)
+install_man('touch/touch.1')
+
+executable(
+    'truncate',
+    dependencies : [ libutil ],
+    install : true,
+    sources: [ 'truncate/truncate.c' ],
+)
+install_man('truncate/truncate.1')
+
+executable(
+    'xattr',
+    install : true,
+    sources: [ 'xattr/xattr.c' ],
+)
+install_man('xattr/xattr.1')

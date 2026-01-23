@@ -1,0 +1,39 @@
+diff --git a/ddgs/base.py b/ddgs/base.py
+index 11111acc7a..b71ee337d9 100644
+--- a/ddgs/base.py
++++ b/ddgs/base.py
+@@ -9,7 +9,7 @@
+ from lxml import html
+ from lxml.etree import HTMLParser as LHTMLParser
+ 
+-from .http_client import HttpClient
++from .http_client2 import HttpClient2 as HttpClient
+ from .results import BooksResult, ImagesResult, NewsResult, TextResult, VideosResult
+ 
+ logger = logging.getLogger(__name__)
+diff --git a/ddgs/cli.py b/ddgs/cli.py
+index 36cf2f373c..7cf0b2f35d 100644
+--- a/ddgs/cli.py
++++ b/ddgs/cli.py
+@@ -9,11 +9,11 @@
+ from urllib.parse import unquote
+ 
+ import click
+-import primp
+ 
+ from . import __version__
+ from .ddgs import DDGS
+ from .utils import _expand_proxy_tb_alias
++from .http_client2 import HttpClient2
+ 
+ logger = logging.getLogger(__name__)
+ 
+@@ -103,7 +103,7 @@
+ 
+ def _download_file(url: str, dir_path: str, filename: str, proxy: str | None, *, verify: bool) -> None:
+     try:
+-        resp = primp.Client(proxy=proxy, impersonate="random", impersonate_os="random", timeout=10, verify=verify).get(
++        resp = HttpClient2(proxy=proxy, timeout=10, verify=verify).get(
+             url,
+         )
+         if resp.status_code == 200:

@@ -1,0 +1,2 @@
+[*.{conf,in}]
+trim_trailing_whitespace = unset

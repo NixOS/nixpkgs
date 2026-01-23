@@ -1,0 +1,30 @@
+From 807d9b0efe86e85a54cd2daf7da2ba1591b39f14 Mon Sep 17 00:00:00 2001
+From: uku <hi@uku.moe>
+Date: Sat, 27 Dec 2025 19:25:42 +0100
+Subject: [PATCH] fix: dismiss warning about window position being unavailable
+
+In addition to the other glfw patches, this one is required on certain
+compositors such as niri and waywall to be able to launch Minecraft at
+all.
+---
+ src/wl_window.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/wl_window.c b/src/wl_window.c
+index ad39b2e0..38f86a17 100644
+--- a/src/wl_window.c
++++ b/src/wl_window.c
+@@ -2293,8 +2293,8 @@ void _glfwGetWindowPosWayland(_GLFWwindow* window, int* xpos, int* ypos)
+     // A Wayland client is not aware of its position, so just warn and leave it
+     // as (0, 0)
+ 
+-    _glfwInputError(GLFW_FEATURE_UNAVAILABLE,
+-                    "Wayland: The platform does not provide the window position");
++    fprintf(stderr,
++            "[GLFW] Wayland: The platform does not provide the window position\n");
+ }
+ 
+ void _glfwSetWindowPosWayland(_GLFWwindow* window, int xpos, int ypos)
+-- 
+2.51.2
+

@@ -1,0 +1,8 @@
+[workspace.package]
+version = "1.0.0"
+
+[workspace.dependencies]
+foo = { version = "1.0.0", features = ["meow"] }
+
+[workspace.lints]
+dbg_macro = "warn"

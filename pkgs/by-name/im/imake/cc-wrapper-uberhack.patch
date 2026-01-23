@@ -1,0 +1,13 @@
+diff --git a/imake.c b/imake.c
+index c20cd4a..ec2589b 100644
+--- a/imake.c
++++ b/imake.c
+@@ -959,7 +959,7 @@ get_libc_version(FILE *inFile)
+ {
+   char aout[4096], *tmpdir;
+   FILE *fp;
+-  const char *format = "%s -o %s -x c -";
++  const char *format = "f=$(mktemp imakeXXXXXX.c); cat > $f; %s $f -o %s";
+   char *cc;
+   int len;
+   char *command;

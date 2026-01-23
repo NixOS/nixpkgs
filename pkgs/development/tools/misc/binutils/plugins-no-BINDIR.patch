@@ -1,0 +1,25 @@
+Avoid `lib -> out -> lib` reference. Normally `bfd-plugins` does not
+need to know binutils' BINDIR at all. It's an absolute path where
+libraries are stored.
+--- a/bfd/plugin.c
++++ b/bfd/plugin.c
+@@ -493,7 +493,7 @@ build_plugin_list (bfd *abfd)
+      when configuring binutils using --libdir.  Search in the proper
+      path first, then the old one for backwards compatibility.  */
+   static const char *path[]
+-    = { LIBDIR "/bfd-plugins", BINDIR "/../lib/bfd-plugins" };
++    = { LIBDIR "/bfd-plugins", };
+   struct stat last_st;
+   unsigned int i;
+ 
+@@ -508,9 +508,7 @@ build_plugin_list (bfd *abfd)
+   last_st.st_ino = 0;
+   for (i = 0; i < sizeof (path) / sizeof (path[0]); i++)
+     {
+-      char *plugin_dir = make_relative_prefix (plugin_program_name,
+-					       BINDIR,
+-					       path[i]);
++      char *plugin_dir = xstrdup (path[i]);
+       if (plugin_dir)
+ 	{
+ 	  struct stat st;

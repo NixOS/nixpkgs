@@ -1,0 +1,48 @@
+diff --git a/linphone-app/src/components/call/CallModel.cpp b/linphone-app/src/components/call/CallModel.cpp
+index d0286a89a..483bc35e4 100644
+--- a/linphone-app/src/components/call/CallModel.cpp
++++ b/linphone-app/src/components/call/CallModel.cpp
+@@ -289,7 +289,7 @@ void CallModel::setRecordFile (const shared_ptr<linphone::CallParams> &callParam
+ 	callParams->setRecordFile(Utils::appStringToCoreString(
+ 								  CoreManager::getInstance()->getSettingsModel()->getSavedCallsFolder()
+ 								  .append(generateSavedFilename())
+-								  .append(".mkv")
++								  .append(".wav")
+ 								  ));
+ }
+ 
+@@ -303,7 +303,7 @@ void CallModel::setRecordFile (const shared_ptr<linphone::CallParams> &callParam
+ 	callParams->setRecordFile(Utils::appStringToCoreString(
+ 								  CoreManager::getInstance()->getSettingsModel()->getSavedCallsFolder()
+ 								  .append(generateSavedFilename(from, to))
+-								  .append(".mkv")
++								  .append(".wav")
+ 								  ));
+ }
+ 
+diff --git a/linphone-app/src/components/conference/ConferenceProxyModel.cpp b/linphone-app/src/components/conference/ConferenceProxyModel.cpp
+index 0cf654dd4..931c0e5cf 100644
+--- a/linphone-app/src/components/conference/ConferenceProxyModel.cpp
++++ b/linphone-app/src/components/conference/ConferenceProxyModel.cpp
+@@ -84,7 +84,7 @@ void ConferenceProxyModel::startRecording () {
+ 
+ 
+   mLastRecordFile = 
+-      QStringLiteral("%1%2.mkv")
++      QStringLiteral("%1%2.wav")
+         .arg(coreManager->getSettingsModel()->getSavedCallsFolder())
+         .arg(QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss"));
+   conference->startRecording(Utils::appStringToCoreString(mLastRecordFile) );
+diff --git a/linphone-app/src/components/recorder/RecorderModel.cpp b/linphone-app/src/components/recorder/RecorderModel.cpp
+index 0d17ff6f8..5c6d7c679 100644
+--- a/linphone-app/src/components/recorder/RecorderModel.cpp
++++ b/linphone-app/src/components/recorder/RecorderModel.cpp
+@@ -83,7 +83,7 @@ QDateTime RecorderModel::getDateTimeSavedFilename(const QString& filename){
+ 
+ void RecorderModel::start(){
+ 	bool soFarSoGood;
+-	QString filename = QStringLiteral("vocal_%1.mkv")
++	QString filename = QStringLiteral("vocal_%1.wav")
+ 			.arg(QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss-zzz"));
+ 	const QString safeFilePath = Utils::getSafeFilePath(
+ 				QStringLiteral("%1%2")

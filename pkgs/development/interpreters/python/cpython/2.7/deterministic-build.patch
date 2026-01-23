@@ -1,0 +1,36 @@
+diff -ur orig/Lib/py_compile.py new/Lib/py_compile.py
+--- orig/Lib/py_compile.py
++++ new/Lib/py_compile.py
+@@ -122,7 +122,10 @@
+         cfile = file + (__debug__ and 'c' or 'o')
+     with open(cfile, 'wb') as fc:
+         fc.write('\0\0\0\0')
+-        wr_long(fc, timestamp)
++        if "DETERMINISTIC_BUILD" in os.environ:
++            fc.write('\0\0\0\0')
++        else:
++            wr_long(fc, timestamp)
+         marshal.dump(codeobject, fc)
+         fc.flush()
+         fc.seek(0, 0)
+diff -ur orig/Python/import.c new/Python/import.c
+--- orig/Python/import.c
++++ new/Python/import.c
+@@ -939,10 +939,12 @@
+         return;
+     }
+     /* Now write the true mtime (as a 32-bit field) */
+-    fseek(fp, 4L, 0);
+-    assert(mtime <= 0xFFFFFFFF);
+-    PyMarshal_WriteLongToFile((long)mtime, fp, Py_MARSHAL_VERSION);
+-    fflush(fp);
++    if (Py_GETENV("DETERMINISTIC_BUILD") == NULL) {
++        fseek(fp, 4L, 0);
++        assert(mtime <= 0xFFFFFFFF);
++        PyMarshal_WriteLongToFile((long)mtime, fp, Py_MARSHAL_VERSION);
++        fflush(fp);
++    }
+     fclose(fp);
+     if (Py_VerboseFlag)
+         PySys_WriteStderr("# wrote %s\n", cpathname);
+

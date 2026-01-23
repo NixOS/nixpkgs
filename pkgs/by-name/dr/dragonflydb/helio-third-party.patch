@@ -1,0 +1,150 @@
+diff --git a/helio/cmake/third_party.cmake b/helio/cmake/third_party.cmake
+index 810a8fa..8b11922 100644
+--- a/helio/cmake/third_party.cmake
++++ b/helio/cmake/third_party.cmake
+@@ -151,7 +151,7 @@ endfunction()
+ 
+ FetchContent_Declare(
+   gtest
+-  URL https://github.com/google/googletest/archive/v1.15.2.tar.gz
++  DOWNLOAD_COMMAND true
+ )
+ 
+ FetchContent_GetProperties(gtest)
+@@ -162,7 +162,7 @@ endif ()
+ 
+ FetchContent_Declare(
+   benchmark
+-  URL https://github.com/google/benchmark/archive/v1.9.1.tar.gz
++  DOWNLOAD_COMMAND true
+ )
+ 
+ FetchContent_GetProperties(benchmark)
+@@ -181,7 +181,7 @@ endif ()
+ 
+ FetchContent_Declare(
+   abseil_cpp
+-  URL https://github.com/abseil/abseil-cpp/releases/download/20250512.1/abseil-cpp-20250512.1.tar.gz
++  DOWNLOAD_COMMAND true
+   PATCH_COMMAND patch -p1 < "${CMAKE_CURRENT_LIST_DIR}/../patches/abseil-20250512.1.patch"
+ )
+ 
+@@ -204,11 +204,7 @@ if (LEGACY_GLOG)
+ 
+   FetchContent_Declare(
+     glog
+-    GIT_REPOSITORY https://github.com/romange/glog
+-    GIT_TAG Absl
+-
+-    GIT_PROGRESS    TRUE
+-    GIT_SHALLOW     TRUE
++    DOWNLOAD_COMMAND true
+   )
+ 
+   FetchContent_GetProperties(glog)
+@@ -278,7 +274,7 @@ if (WITH_GPERF)
+ 
+   add_third_party(
+     gperf
+-    URL https://github.com/gperftools/gperftools/archive/gperftools-2.16.tar.gz
++    DOWNLOAD_COMMAND cp -r ${CMAKE_CURRENT_BINARY_DIR}/deps-nixpkgs/gperf/. <SOURCE_DIR>
+ 
+     # GIT_SHALLOW TRUE
+     # Remove building the unneeded programs (they fail on macos)
+@@ -312,9 +308,7 @@ set(MIMALLOC_INCLUDE_DIR ${THIRD_PARTY_LIB_DIR}/mimalloc/include)
+ set (MIMALLOC_PATCH_COMMAND patch -p1 -d ${THIRD_PARTY_DIR}/mimalloc/ -i ${CMAKE_CURRENT_LIST_DIR}/../patches/mimalloc-v2.1.6.patch)
+ 
+ add_third_party(mimalloc
+-   #GIT_REPOSITORY https://github.com/microsoft/mimalloc.git
+-   #GIT_TAG 0f6d8293c74796fa913e4b5eb4361f1e4734f7c6
+-   URL https://github.com/microsoft/mimalloc/archive/refs/tags/v2.1.6.tar.gz
++   DOWNLOAD_COMMAND cp -r ${CMAKE_CURRENT_BINARY_DIR}/deps-nixpkgs/mimalloc216/. <SOURCE_DIR>
+    PATCH_COMMAND "${MIMALLOC_PATCH_COMMAND}"
+    # -DCMAKE_BUILD_TYPE=Release
+    # Add -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS=-O0 to debug
+@@ -328,7 +322,7 @@ add_third_party(mimalloc
+ )
+ 
+ add_third_party(jemalloc
+-  URL https://github.com/jemalloc/jemalloc/releases/download/5.2.1/jemalloc-5.2.1.tar.bz2
++  DOWNLOAD_COMMAND cp -r ${CMAKE_CURRENT_BINARY_DIR}/deps-nixpkgs/jemalloc/. <SOURCE_DIR>
+   PATCH_COMMAND ./autogen.sh
+   CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${THIRD_PARTY_LIB_DIR}/jemalloc --with-jemalloc-prefix=je_ --disable-libdl
+ )
+@@ -336,7 +330,7 @@ add_third_party(jemalloc
+ 
+ add_third_party(
+   xxhash
+-  URL https://github.com/Cyan4973/xxHash/archive/v0.8.3.tar.gz
++  DOWNLOAD_COMMAND cp -r ${CMAKE_CURRENT_BINARY_DIR}/deps-nixpkgs/xxhash/. <SOURCE_DIR>
+ 
+   # A bug in xxhash 0.8.1 that searches for a file that doesn't exist
+   PATCH_COMMAND touch <SOURCE_DIR>/xxhsum.1
+@@ -347,7 +341,7 @@ add_third_party(
+ 
+ add_third_party(
+   uring
+-  URL https://github.com/axboe/liburing/archive/refs/tags/liburing-2.8.tar.gz
++  DOWNLOAD_COMMAND cp -r ${CMAKE_CURRENT_BINARY_DIR}/deps-nixpkgs/uring/. <SOURCE_DIR>
+ 
+   CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${THIRD_PARTY_LIB_DIR}/uring
+   BUILD_COMMAND make -C src
+@@ -356,7 +350,7 @@ add_third_party(
+ 
+ add_third_party(
+   pugixml
+-  URL https://github.com/zeux/pugixml/archive/refs/tags/v1.15.tar.gz
++  DOWNLOAD_COMMAND cp -r ${CMAKE_CURRENT_BINARY_DIR}/deps-nixpkgs/pugixml/. <SOURCE_DIR>
+ )
+ 
+ if (WITH_AWS)
+@@ -364,9 +358,7 @@ if (WITH_AWS)
+ 
+   add_third_party(
+     aws
+-    GIT_REPOSITORY https://github.com/aws/aws-sdk-cpp.git
+-    GIT_TAG 3e51fa016655eeb6b6610bdf8fe7cf33ebbf3e00
+-    GIT_SHALLOW TRUE
++    DOWNLOAD_COMMAND cp -r ${CMAKE_CURRENT_BINARY_DIR}/deps-nixpkgs/aws-sdk-cpp/. <SOURCE_DIR>
+     PATCH_COMMAND "${AWS_PATCH_COMMAND}"
+     CMAKE_PASS_FLAGS "-DBUILD_ONLY=s3 -DNO_HTTP_CLIENT=ON -DENABLE_TESTING=OFF  -DAUTORUN_UNIT_TESTS=OFF -DBUILD_SHARED_LIBS=OFF -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+     LIB libaws-cpp-sdk-s3.a libaws-cpp-sdk-core.a libaws-crt-cpp.a libaws-c-mqtt.a libaws-c-event-stream.a libaws-c-s3.a libaws-c-auth.a  libaws-c-http.a libaws-c-io.a libs2n.a libaws-c-compression.a libaws-c-cal.a libaws-c-sdkutils.a libaws-checksums.a libaws-c-common.a
+@@ -376,8 +368,7 @@ endif()
+ if (WITH_GCP)
+   add_third_party(
+     rapidjson
+-    GIT_REPOSITORY https://github.com/Tencent/rapidjson.git
+-    GIT_TAG ab1842a
++    DOWNLOAD_COMMAND cp -r ${CMAKE_BINARY_DIR}/deps-nixpkgs/rapidjson/. <SOURCE_DIR>
+     CMAKE_PASS_FLAGS "-DRAPIDJSON_BUILD_TESTS=OFF -DRAPIDJSON_BUILD_EXAMPLES=OFF \
+                       -DRAPIDJSON_BUILD_DOC=OFF -DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+     LIB "none"
+@@ -386,24 +377,23 @@ endif()
+ 
+ add_third_party(
+   cares
+-  URL https://codeload.github.com/c-ares/c-ares/tar.gz/refs/tags/v1.34.5
++  DOWNLOAD_COMMAND cp -r ${CMAKE_CURRENT_BINARY_DIR}/deps-nixpkgs/cares/. <SOURCE_DIR>
+   CMAKE_PASS_FLAGS "-DCARES_SHARED:BOOL=OFF -DCARES_STATIC:BOOL=ON -DCARES_STATIC_PIC:BOOL=ON \
+                     -DCMAKE_INSTALL_LIBDIR=lib"
+ )
+ 
+ add_third_party(
+   zstd
+-  URL https://github.com/facebook/zstd/releases/download/v1.5.7/zstd-1.5.7.tar.zst
++  DOWNLOAD_COMMAND cp -r ${CMAKE_CURRENT_BINARY_DIR}/deps-nixpkgs/zstd/. <SOURCE_DIR>
+   SOURCE_SUBDIR "build/cmake"
+-  
++
+   # for debug pass : "CFLAGS=-fPIC -O0 -ggdb"
+   CMAKE_PASS_FLAGS "-DZSTD_BUILD_SHARED=OFF -DZSTD_BUILD_PROGRAMS=OFF -DZSTD_BUILD_TESTS=OFF"
+ )
+ 
+ add_third_party(
+   expected
+-  GIT_REPOSITORY https://github.com/martinmoene/expected-lite.git
+-  GIT_TAG f17940fabae07063cabb67abf2c8d164d3146044 # Important fixes for monadic functions
++  DOWNLOAD_COMMAND cp -r ${CMAKE_CURRENT_BINARY_DIR}/deps-nixpkgs/expected/. <SOURCE_DIR>
+   CMAKE_PASS_FLAGS "-DEXPECTED_LITE_OPT_BUILD_TESTS=0"
+   LIB "none"
+ )

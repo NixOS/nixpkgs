@@ -1,0 +1,22 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b0e7aac6f8f3..af17e62588fe 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -57,7 +57,7 @@ if( LIBCLC_STANDALONE_BUILD OR CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DI
+   # Import required tools
+   if( NOT EXISTS ${LIBCLC_CUSTOM_LLVM_TOOLS_BINARY_DIR} )
+     foreach( tool IN ITEMS clang llvm-as llvm-link opt )
+-      find_program( LLVM_TOOL_${tool} ${tool} PATHS ${LLVM_TOOLS_BINARY_DIR} NO_DEFAULT_PATH )
++    find_program( LLVM_TOOL_${tool} ${tool} PATHS ${LLVM_TOOLS_BINARY_DIR} )
+       set( ${tool}_exe ${LLVM_TOOL_${tool}} )
+       set( ${tool}_target )
+     endforeach()
+@@ -93,7 +93,7 @@ if( EXISTS ${LIBCLC_CUSTOM_LLVM_TOOLS_BINARY_DIR} )
+   # and custom tools.
+   foreach( tool IN ITEMS clang llvm-as llvm-link opt )
+     find_program( LLVM_CUSTOM_TOOL_${tool} ${tool}
+-      PATHS ${LIBCLC_CUSTOM_LLVM_TOOLS_BINARY_DIR} NO_DEFAULT_PATH )
++      PATHS ${LIBCLC_CUSTOM_LLVM_TOOLS_BINARY_DIR} )
+     set( ${tool}_exe ${LLVM_CUSTOM_TOOL_${tool}} )
+     set( ${tool}_target )
+   endforeach()

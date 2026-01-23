@@ -1,0 +1,30 @@
+diff --git a/wt b/wt
+index 7166bf2..cdbebab 100755
+--- a/wt
++++ b/wt
+@@ -48,7 +48,6 @@ help_message() {
+ 	echo -e "\twt -i: interactively select a worktree using fzf."
+ 	echo -e "\twt list: list out all the git worktrees."
+ 	echo -e "\twt names: list out only the git worktree names."
+-	echo -e "\twt update: update to the latest release of worktree switcher."
+ 	echo -e "\twt version: show the CLI version."
+ 	echo -e "\twt init <shell>: print the init script for <shell>."
+ 	echo -e "\twt help: shows this help message."
+@@ -189,9 +188,6 @@ names)
+ 	echo -e '\033[0;31mThe '\''names'\'' option is deprecated and will be removed in future versions.\033[0m' >&2
+ 	echo -e '\033[0;31mUse '\''list'\'' instead.\033[0m' >&2
+ 	;;
+-update)
+-	update
+-	;;
+ help)
+ 	help_message
+ 	;;
+@@ -202,7 +198,6 @@ init)
+ 	init
+ 	;;
+ *)
+-	auto_check_update
+ 	if [[ "$is_interactive" == true ]]; then
+ 		directory=$(git worktree list --porcelain |
+ 		awk '/worktree/ {wt=$2} /branch/ {sub("refs/heads/", "", $2); print wt " [" $2 "]"}' |

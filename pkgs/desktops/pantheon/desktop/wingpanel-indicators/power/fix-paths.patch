@@ -1,0 +1,13 @@
+diff --git a/src/Widgets/DeviceList.vala b/src/Widgets/DeviceList.vala
+index 0c56f46..33d97b3 100644
+--- a/src/Widgets/DeviceList.vala
++++ b/src/Widgets/DeviceList.vala
+@@ -39,7 +39,7 @@ public class Power.Widgets.DeviceList : Gtk.ListBox {
+             string device_path = path_entries.@get (value);
+             try {
+                 AppInfo statistics_app = AppInfo.create_from_commandline (
+-                    "gnome-power-statistics --device " + device_path,
++                    "@gnome_power_manager@/bin/gnome-power-statistics --device " + device_path,
+                     "",
+                     AppInfoCreateFlags.NONE
+                 );

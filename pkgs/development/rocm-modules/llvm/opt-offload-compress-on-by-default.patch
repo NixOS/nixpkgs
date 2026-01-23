@@ -1,0 +1,22 @@
+From 762511ad9c9cac7769a795cc4df888a1559dca02 Mon Sep 17 00:00:00 2001
+From: Luna Nova <git@lunnova.dev>
+Date: Mon, 16 Dec 2024 14:56:57 -0800
+Subject: [PATCH] [AMDGPU] CommonArgs: Enable offload compression by default
+
+---
+ clang/lib/Driver/ToolChains/CommonArgs.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/clang/lib/Driver/ToolChains/CommonArgs.cpp b/clang/lib/Driver/ToolChains/CommonArgs.cpp
+index 33f12fb2d075d..ba35f65210c7a 100644
+--- a/lib/Driver/ToolChains/CommonArgs.cpp
++++ b/lib/Driver/ToolChains/CommonArgs.cpp
+@@ -2914,7 +2914,7 @@ void tools::addHIPRuntimeLibArgs(const ToolChain &TC, Compilation &C,
+ void tools::addOffloadCompressArgs(const llvm::opt::ArgList &TCArgs,
+                                    llvm::opt::ArgStringList &CmdArgs) {
+   if (TCArgs.hasFlag(options::OPT_offload_compress,
+-                     options::OPT_no_offload_compress, false))
++                     options::OPT_no_offload_compress, true))
+     CmdArgs.push_back("-compress");
+   if (TCArgs.hasArg(options::OPT_v))
+     CmdArgs.push_back("-verbose");

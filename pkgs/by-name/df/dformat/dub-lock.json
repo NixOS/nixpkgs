@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "libdparse": {
+      "version": "0.25.0",
+      "sha256": "012ihzwhikvpd7crr3ql38hs32lfy9gnkg9qvjgpd7ar3xbsa5sz"
+    }
+  }
+}

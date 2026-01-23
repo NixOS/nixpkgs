@@ -1,0 +1,33 @@
+From bf081e60a7f604d2e71cf5c315dd90c48dd96808 Mon Sep 17 00:00:00 2001
+From: Fabian Affolter <mail@fabian-affolter.ch>
+Date: Thu, 26 Jan 2023 15:35:47 +0100
+Subject: [PATCH] Update autogen.sh
+
+---
+ autogen.sh | 9 ---------
+ 1 file changed, 9 deletions(-)
+
+diff --git a/autogen.sh b/autogen.sh
+index f5e065b35..b6cef5bf9 100755
+--- a/autogen.sh
++++ b/autogen.sh
+@@ -37,11 +37,6 @@ if ! [ -x "$(command -v convert)" ]; then
+   exit 1
+ fi
+ 
+-if ! [ -x "$(command -v black)" ]; then
+-  echo 'black is not installed'
+-  exit 1
+-fi
+-
+ # preprocess the resources
+ for pvd in "${providers[@]}"; do
+   # convert the svg to png for azure provider
+@@ -75,7 +70,3 @@ python -m scripts.generate "custom"
+ # copy icons across to website
+ echo "copying icons to website static folder"
+ cp -r resources website/static/img/
+-
+-# run black
+-echo "linting the all the diagram modules"
+-black "$app_root_dir"/**/*.py

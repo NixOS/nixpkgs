@@ -1,0 +1,50 @@
+From 121ba93b2860b7ee6bbe2430c818bba2da822a8e Mon Sep 17 00:00:00 2001
+From: zjeffer <4633209+zjeffer@users.noreply.github.com>
+Date: Sun, 29 Dec 2024 20:15:29 +0100
+Subject: [PATCH] Fixes & improvements
+
+---
+ zsh_history_to_fish/command.py | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
+
+diff --git a/zsh_history_to_fish/command.py b/zsh_history_to_fish/command.py
+index 4d8a12d..136c553 100644
+--- a/zsh_history_to_fish/command.py
++++ b/zsh_history_to_fish/command.py
+@@ -19,7 +19,12 @@
+ 
+ def read_history(input_file):
+     command = ZSH_HISTORY_READER.format(input_file)
+-    p = subprocess.run(command, capture_output=True, shell=True, encoding='utf8')
++    lines: list[str] = []
++    try:
++        p = subprocess.run(command, capture_output=True, shell=True, encoding='utf8', check=True)
++    except Exception as e:
++        print(f'An exception occurred while reading history: {e}')
++        sys.exit(1)
+     lines = p.stdout.splitlines()
+     yield from map(lambda x: x.replace('\\n', '\n'), lines)
+ 
+@@ -48,11 +53,11 @@ def display_changed(zsh, fish):
+ def writer_factory(output_file, dry_run):
+     if dry_run:
+         yield lambda x: None
+-        print(f'No file has been written.')
++        print('No file has been written.')
+         return
+ 
+-    with open(output_file, 'a') as out:
+-        yield lambda x: out.write(x)
++    with open(output_file, 'a', encoding='utf8') as out:
++        yield out.write
+     print(f'\nFile "{output_file}" has been written successfully.')
+ 
+ 
+@@ -74,6 +79,7 @@ def exporter(input_file, output_file, dry_run, no_convert):
+     converter = (lambda x: x) if no_convert else naive_zsh_to_fish
+     changed = []
+     with writer_factory(output_file, dry_run) as writer:
++        i = 0
+         for i, (timestamp, command_zsh) in enumerate(parse_history(input_file)):
+             command_fish = converter(command_zsh)
+             fish_history = f'- cmd: {command_fish}\n  when: {timestamp}\n'

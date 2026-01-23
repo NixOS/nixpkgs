@@ -1,0 +1,68 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Philip Taron <philip.taron@gmail.com>
+Date: Wed, 11 Jun 2025 10:41:42 -0700
+Subject: [PATCH] setup.py: remove self-reference and DEVELOPER_MODE
+
+Signed-off-by: Philip Taron <philip.taron@gmail.com>
+---
+ setup.py | 33 ++-------------------------------
+ 1 file changed, 2 insertions(+), 31 deletions(-)
+
+diff --git a/setup.py b/setup.py
+index 00f6e9b120525d63fbc17949b2804785f1286118..b5582bcc366148d9c0a442abade65a6127ef2d3c 100755
+--- a/setup.py
++++ b/setup.py
+@@ -26,15 +26,7 @@ from setuptools.command.test import test as TestCommand
+ 
+ faulthandler.enable()
+ 
+-basedir = os.path.abspath(os.path.dirname(sys.argv[0]))
+-DEVELOPER_MODE = os.path.exists(os.path.join(basedir, 'MANIFEST.in'))
+-if DEVELOPER_MODE:
+-    print('MANIFEST.in exists, running in developer mode')
+-
+-# Add S3QL sources
+-sys.path.insert(0, os.path.join(basedir, 'src'))
+-sys.path.insert(0, os.path.join(basedir, 'util'))
+-import s3ql
++basedir = "/build/source"
+ 
+ 
+ class pytest(TestCommand):
+@@ -52,27 +44,6 @@ def main():
+ 
+     compile_args = ['-Wall', '-Wextra', '-Wconversion', '-Wsign-compare']
+ 
+-    # Enable all fatal warnings only when compiling from Mercurial tip.
+-    # (otherwise we break forward compatibility because compilation with newer
+-    # compiler may fail if additional warnings are added)
+-    if DEVELOPER_MODE:
+-        if os.environ.get('CI') != 'true':
+-            compile_args.append('-Werror')
+-
+-        # Value-changing conversions should always be explicit.
+-        compile_args.append('-Werror=conversion')
+-
+-        # Note that (i > -1) is false if i is unsigned (-1 will be converted to
+-        # a large positive value). We certainly don't want to do this by
+-        # accident.
+-        compile_args.append('-Werror=sign-compare')
+-
+-        # These warnings have always been harmless, and have always been due to
+-        # issues in Cython code rather than S3QL. Cython itself warns if there
+-        # are unused variables in .pyx code.
+-        compile_args.append('-Wno-unused-parameter')
+-        compile_args.append('-Wno-unused-function')
+-
+     required_pkgs = [
+         'apsw >= 3.42.0',  # https://github.com/rogerbinns/apsw/issues/459
+         'cryptography',
+@@ -88,7 +59,7 @@ def main():
+     setuptools.setup(
+         name='s3ql',
+         zip_safe=False,
+-        version=s3ql.VERSION,
++        version="@version@",
+         description='a full-featured file system for online data storage',
+         long_description=long_desc,
+         author='Nikolaus Rath',

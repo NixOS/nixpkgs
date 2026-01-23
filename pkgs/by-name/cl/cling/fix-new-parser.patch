@@ -1,0 +1,54 @@
+From cd4d1d8c4963620a6a84834948845df81fbbd70b Mon Sep 17 00:00:00 2001
+From: Jonas Hahnfeld <jonas.hahnfeld@cern.ch>
+Date: Tue, 17 Dec 2024 14:54:18 +0100
+Subject: [PATCH] Use single Parser for LookupHelper
+
+It is the only construction of a temporary parser, and it seems not
+necessary (anymore).
+---
+ include/cling/Interpreter/LookupHelper.h |  2 +-
+ lib/Interpreter/Interpreter.cpp          | 11 ++++-------
+ 2 files changed, 5 insertions(+), 8 deletions(-)
+
+diff --git a/include/cling/Interpreter/LookupHelper.h b/include/cling/Interpreter/LookupHelper.h
+index 6e6e281470..cd79b2a65c 100644
+--- a/include/cling/Interpreter/LookupHelper.h
++++ b/include/cling/Interpreter/LookupHelper.h
+@@ -56,7 +56,7 @@ namespace cling {
+       WithDiagnostics
+     };
+   private:
+-    std::unique_ptr<clang::Parser> m_Parser;
++    clang::Parser* m_Parser;
+     Interpreter* m_Interpreter; // we do not own.
+     std::array<const clang::Type*, kNumCachedStrings> m_StringTy = {{}};
+     /// A map containing the hash of the lookup buffer. This allows us to avoid
+diff --git a/lib/Interpreter/Interpreter.cpp b/lib/Interpreter/Interpreter.cpp
+index 13c8409cc5..f04695439b 100644
+--- a/lib/Interpreter/Interpreter.cpp
++++ b/lib/Interpreter/Interpreter.cpp
+@@ -265,13 +265,6 @@ namespace cling {
+     }
+ 
+     Sema& SemaRef = getSema();
+-    Preprocessor& PP = SemaRef.getPreprocessor();
+-
+-    m_LookupHelper.reset(new LookupHelper(new Parser(PP, SemaRef,
+-                                                     /*SkipFunctionBodies*/false,
+-                                                     /*isTemp*/true), this));
+-    if (!m_LookupHelper)
+-      return;
+ 
+     if (!isInSyntaxOnlyMode() && !m_Opts.CompilerOpts.CUDADevice) {
+       m_Executor.reset(new IncrementalExecutor(SemaRef.Diags, *getCI(),
+@@ -317,6 +310,10 @@ namespace cling {
+       return;
+     }
+ 
++    m_LookupHelper.reset(new LookupHelper(m_IncrParser->getParser(), this));
++    if (!m_LookupHelper)
++      return;
++
+     // When not using C++ modules, we now have a PCH and we can safely setup
+     // our callbacks without fearing that they get overwritten by clang code.
+     // The modules setup is handled above.

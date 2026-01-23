@@ -1,0 +1,26 @@
+From 474521f42376b8a374382994313484aa4bba9c85 Mon Sep 17 00:00:00 2001
+From: LATex <leandro.recebe@gmail.com>
+Date: Sat, 11 Oct 2025 20:34:31 -0300
+Subject: [PATCH] Fix implicit autoref errors in ui/mod.rs for Rust 1.80+
+
+---
+ front-end/src/ui/mod.rs | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/front-end/src/ui/mod.rs b/front-end/src/ui/mod.rs
+index 81a56e001a7b892d24eeb0404d2bc069fe9c07a3..296fd4711db0d9380b74e07ae933df161b437b36 100644
+--- a/front-end/src/ui/mod.rs
++++ b/front-end/src/ui/mod.rs
+@@ -215,9 +215,9 @@ pub fn draw_ui(state: &mut Arc<Mutex<State>>, cvar: &mut Arc<Condvar>) {
+                 let state_ptr = &mut state_unlocked as *mut std::sync::MutexGuard<'_, State<'_>>;
+                 let (mut music_state, mut playlist_state, mut artist_state);
+                 unsafe {
+-                    music_state = &mut (*state_ptr).musicbar.1;
+-                    playlist_state = &mut (*state_ptr).playlistbar.1;
+-                    artist_state = &mut (*state_ptr).artistbar.1;
++                    music_state = &mut (&mut (*state_ptr)).musicbar.1;
++                    playlist_state = &mut (&mut (*state_ptr)).playlistbar.1;
++                    artist_state = &mut (&mut (*state_ptr)).artistbar.1;
+                 }
+ 
+                 let music_table = MiddleLayout::get_music_container(&mut state_unlocked);

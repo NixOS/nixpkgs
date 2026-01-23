@@ -1,0 +1,76 @@
+{
+  fetchFromGitHub,
+  lib,
+  pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  stdenvNoCC,
+  nodejs,
+  nix-update-script,
+  fetchpatch,
+}:
+stdenvNoCC.mkDerivation (finalAttrs: {
+  pname = "sketchybar-app-font";
+  version = "2.0.51";
+
+  src = fetchFromGitHub {
+    owner = "kvndrsslr";
+    repo = "sketchybar-app-font";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5HJ5dusFyWIljT6V2/hizwbkdBfFeMHrSJ1cyT+Xtno=";
+  };
+
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    pnpm = pnpm_9;
+    fetcherVersion = 1;
+    hash = "sha256-43VIPcLNPCUMxDmWnt3fRuriOKFp7w5rzxVHdjEz3lU=";
+  };
+
+  nativeBuildInputs = [
+    nodejs
+    pnpmConfigHook
+    pnpm_9
+  ];
+
+  buildPhase = ''
+    runHook preBuild
+
+    pnpm i
+    pnpm run build
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 dist/sketchybar-app-font.ttf "$out/share/fonts/truetype/sketchybar-app-font.ttf"
+    install -Dm755 dist/icon_map.sh "$out/bin/icon_map.sh"
+    install -Dm644 dist/icon_map.lua "$out/lib/sketchybar-app-font/icon_map.lua"
+
+    runHook postInstall
+  '';
+
+  patches = [
+    # TODO: remove on next release
+    (fetchpatch {
+      name = "lua-regression-patch";
+      url = "https://github.com/kvndrsslr/sketchybar-app-font/commit/f6735ef0acacc700b84b31b2cc3f430bf0f01f6e.patch";
+      hash = "sha256-Fj3oqRdEvRcM0Bz6E97lN02H+nRx5vonW1p2jcSig7s=";
+    })
+  ];
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    description = "Ligature-based symbol font and a mapping function for sketchybar";
+    longDescription = ''
+      A ligature-based symbol font and a mapping function for sketchybar, inspired by simple-bar's usage of community-contributed minimalistic app icons.
+    '';
+    homepage = "https://github.com/kvndrsslr/sketchybar-app-font";
+    license = lib.licenses.cc0;
+    maintainers = with lib.maintainers; [ khaneliman ];
+    platforms = lib.platforms.all;
+  };
+})
