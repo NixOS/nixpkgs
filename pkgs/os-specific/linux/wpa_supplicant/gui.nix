@@ -10,7 +10,7 @@
 
 mkDerivation {
   pname = "wpa_gui";
-  inherit (wpa_supplicant) version src;
+  inherit (wpa_supplicant) version src patches;
 
   buildInputs = [ qtbase ];
   nativeBuildInputs = [
@@ -34,11 +34,11 @@ mkDerivation {
     cp -av icons/hicolor $out/share/icons
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Qt-based GUI for wpa_supplicant";
     mainProgram = "wpa_gui";
     homepage = "https://hostap.epitest.fi/wpa_supplicant/";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
   };
 }

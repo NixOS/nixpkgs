@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "filelock";
-  version = "3.20.0";
+  version = "3.20.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cR6UO07GvkLh1OZpC0jcF1yCKWdGa7McDCk/NDNME/Q=";
+    hash = "sha256-uDYJSLNRuA9CCHjYUWUZoiBLB6783P0kkSpdMxJ/GIw=";
   };
 
   build-system = [
@@ -39,11 +39,11 @@ buildPythonPackage rec {
     "tests/test_virtualenv.py"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/tox-dev/py-filelock/releases/tag/${version}";
     description = "Platform independent file lock for Python";
     homepage = "https://github.com/benediktschmitt/py-filelock";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ hyphon81 ];
+    license = lib.licenses.unlicense;
+    maintainers = [ ];
   };
 }

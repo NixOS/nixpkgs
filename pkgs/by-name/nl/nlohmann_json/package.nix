@@ -61,11 +61,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = "rm -rf $out/lib64";
 
-  meta = with lib; {
+  meta = {
     description = "JSON for Modern C++";
     homepage = "https://json.nlohmann.me";
     changelog = "https://github.com/nlohmann/json/blob/develop/ChangeLog.md";
-    license = licenses.mit;
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
   };
 })

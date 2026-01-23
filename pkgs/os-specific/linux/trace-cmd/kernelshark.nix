@@ -62,11 +62,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-DTT_FONT_FILE=${freefont_ttf}/share/fonts/truetype/FreeSans.ttf"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "GUI for trace-cmd which is an interface for the Linux kernel ftrace subsystem";
     homepage = "https://kernelshark.org/";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ basvandijk ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ basvandijk ];
   };
 })

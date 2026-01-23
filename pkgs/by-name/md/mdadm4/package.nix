@@ -3,6 +3,7 @@
   stdenv,
   util-linux,
   coreutils,
+  fetchgit,
   fetchurl,
   groff,
   system-sendmail,
@@ -16,9 +17,10 @@ stdenv.mkDerivation rec {
   pname = "mdadm";
   version = "4.4";
 
-  src = fetchurl {
-    url = "mirror://kernel/linux/utils/raid/mdadm/mdadm-${version}.tar.xz";
-    sha256 = "sha256-m0iPNe0VPfmZJLX+Qe7TgOhRLejxihGGKMrN1oGx1XM=";
+  src = fetchgit {
+    url = "https://git.kernel.org/pub/scm/utils/mdadm/mdadm.git";
+    tag = "mdadm-${version}";
+    hash = "sha256-jGmc8fkJM0V9J7V7tQPXSF/WD0kzyEAloBAwaAFenS0=";
   };
 
   patches = [
@@ -89,12 +91,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Programs for managing RAID arrays under Linux";
     homepage = "https://git.kernel.org/pub/scm/utils/mdadm/mdadm.git";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "mdadm";
-    maintainers = with maintainers; [ ekleog ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

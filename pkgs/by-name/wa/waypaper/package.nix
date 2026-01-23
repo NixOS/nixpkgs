@@ -5,6 +5,7 @@
   gobject-introspection,
   wrapGAppsHook3,
   killall,
+  socat,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -35,7 +36,10 @@ python3Packages.buildPythonApplication rec {
     screeninfo
   ];
 
-  propagatedBuildInputs = [ killall ];
+  propagatedBuildInputs = [
+    killall
+    socat
+  ];
 
   # has no tests
   doCheck = false;

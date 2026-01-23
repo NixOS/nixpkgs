@@ -34,6 +34,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-a5dX9ZK3UYtJAutq9+VFcL3Mujeocf3bLTCuOGNRHBM=";
   };
 
+  patches = [
+    # Backport e49b934 "Fix underspecified `getenv()` prototype." for non-glibc systems with C23
+    # This can be dropped in the next release, when the local getopt implementation in libgroff is removed
+    ./fix-underspecified-getenv-prototype.patch
+  ];
+
   outputs = [
     "out"
     "man"
@@ -154,12 +160,12 @@ stdenv.mkDerivation rec {
     find $perl/ -type f -print0 | xargs --null sed -i 's|${buildPackages.perl}|${perl}|'
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnu.org/software/groff/";
     description = "GNU Troff, a typesetting package that reads plain text and produces formatted output";
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ pSub ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ pSub ];
 
     longDescription = ''
       groff is the GNU implementation of troff, a document formatting

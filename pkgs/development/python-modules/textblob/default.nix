@@ -25,11 +25,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "textblob" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/sloria/TextBlob/releases/tag/${version}";
     description = "Simplified Text processing";
     homepage = "https://textblob.readthedocs.io/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ idlip ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ idlip ];
   };
 }

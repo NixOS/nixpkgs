@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     description = "Deepmagic Information Gathering Tool";
     mainProgram = "dmitry";
     homepage = "https://github.com/jaygreig86/dmitry";
-    maintainers = with lib.maintainers; [ d3vil0p3r ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
   };

@@ -6,16 +6,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-variables";
-  version = "0.2.4";
+  version = "0.4.1";
 
   src = fetchFromGitLab {
     owner = "tglman";
     repo = "mdbook-variables";
     rev = version;
-    hash = "sha256-whvRCV1g2avKegfQpMgYi+E6ETxT2tQqVS2SWRpAqF8=";
+    hash = "sha256-DMfVviMVizxtkunu3DygL1t0vTW6a+frfFfVl8h7Urw=";
   };
 
-  cargoHash = "sha256-WLHXeYNfALa7GfFAHEO9PAlFKB2lbDefgAYCn6G0U6Y=";
+  cargoHash = "sha256-q8UbL1zBb1InYutgM3ZE7z9NdJKi68yjR2Za/o0jg9c=";
 
   nativeInstallCheckInputs = [
     versionCheckHook

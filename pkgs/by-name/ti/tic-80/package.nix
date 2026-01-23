@@ -21,7 +21,7 @@
 }:
 let
   # git rev-list HEAD --count
-  revision = "3042";
+  revision = "3049";
   year = "2025";
 in
 
@@ -29,18 +29,18 @@ stdenv.mkDerivation {
   pname = "tic-80";
   # use an untagged version until upstream tags a new version. We want
   # 'PREFER_SYSTEM_LIBRARIES', and without it tic-80 won't build
-  version = "1.1-unstable-2025-10-21";
+  version = "1.1-unstable-2025-12-30";
 
   src = fetchFromGitHub {
     owner = "nesbox";
     repo = "TIC-80";
-    rev = "a2c875f7275541e7724199ce8e504fb578b819a6";
+    rev = "881828910e77c799c1a6894cadc2d05a5c2f3f70";
     # TIC-80 vendors its dependencies as submodules. For the following dependencies,
     # there are no (or no compatible) packages in nixpkgs yet, so we use the vendored
     # ones as a fill-in: wasm, squirrel, pocketpy, argparse, naett,
     # sdlgpu, mruby.
     fetchSubmodules = true;
-    hash = "sha256-S/v1WHrvVndW4qHFWRJc3dcQkjw5vCU1/mN0PW9Wfkc=";
+    hash = "sha256-bqLVoLJpT62k9d+WZUgIu4ClcJNUvURB7j+NE/fzWNk=";
   };
 
   # TIC-80 tries to determine the revision part of the version using its Git history.

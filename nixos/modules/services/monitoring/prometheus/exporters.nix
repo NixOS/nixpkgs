@@ -127,6 +127,7 @@ let
         "storagebox"
         "surfboard"
         "systemd"
+        "tailscale"
         "tibber"
         "unbound"
         "unpoller"
@@ -568,16 +569,6 @@ in
     ++ [
       (mkIf config.services.postfix.enable {
         services.prometheus.exporters.postfix.group = mkDefault config.services.postfix.setgidGroup;
-      })
-    ]
-    ++ [
-      (mkIf config.services.prometheus.exporters.deluge.enable {
-        system.activationScripts = {
-          deluge-exported.text = ''
-            mkdir -p /etc/deluge-exporter
-            echo "DELUGE_PASSWORD=$(cat ${config.services.prometheus.exporters.deluge.delugePasswordFile})" > /etc/deluge-exporter/password
-          '';
-        };
       })
     ]
     ++ (mapAttrsToList (

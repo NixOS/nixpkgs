@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchPypi,
   minikerberos,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "winsspi";
   version = "0.0.11";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -25,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "winsspi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for ACL/ACE/Security descriptor manipulation";
     homepage = "https://github.com/skelsec/winsspi";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

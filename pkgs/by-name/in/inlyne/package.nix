@@ -11,6 +11,7 @@
   wayland,
   libGL,
   openssl,
+  oniguruma,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -42,7 +43,11 @@ rustPlatform.buildRustPackage rec {
     wayland
     libxkbcommon
     openssl
+    oniguruma
   ];
+
+  # use system oniguruma since the bundled one fails to build with gcc15
+  env.RUSTONIG_SYSTEM_LIBONIG = 1;
 
   checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     # time out on darwin
@@ -71,11 +76,11 @@ rustPlatform.buildRustPackage rec {
       }
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GPU powered browserless markdown viewer";
     homepage = "https://github.com/Inlyne-Project/inlyne";
     changelog = "https://github.com/Inlyne-Project/inlyne/releases/tag/${src.rev}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "inlyne";
   };

@@ -27,6 +27,6 @@ buildGoModule rec {
     changelog = "https://github.com/kubernetes/code-generator/releases/tag/v${version}";
     description = "Kubernetes code generation";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ urandom ];
+    maintainers = [ ];
   };
 }

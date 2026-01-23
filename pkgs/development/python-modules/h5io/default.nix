@@ -55,6 +55,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/h5io/h5io";
     changelog = "https://github.com/h5io/h5io/releases/tag/h5io-${version}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ mbalatsko ];
+    maintainers = [ ];
   };
 }

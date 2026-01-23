@@ -37,12 +37,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnucash";
-  version = "5.13";
+  version = "5.14";
 
   # raw source code doesn't work out of box; fetchFromGitHub not usable
   src = fetchurl {
     url = "https://github.com/Gnucash/gnucash/releases/download/${finalAttrs.version}/gnucash-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-CC7swzK3IvIj0/JRJibr5e9j+UqvXECeh1JsZURkrvU=";
+    hash = "sha256-DG/SAhTahqmgRDNZ97YtmivU7YAv1oCFPaS3V6NxrJE=";
   };
 
   nativeBuildInputs = [
@@ -58,6 +58,22 @@ stdenv.mkDerivation (finalAttrs: {
     "-DWITH_PYTHON=\"ON\""
     "-DPYTHON_SYSCONFIG_BUILD=\"$out\""
   ];
+
+  env = {
+    # https://github.com/Gnucash/gnucash/commit/e680a87a66b8ec17132f186e222cbc94ad52b3d0
+    GNC_DBD_DIR = "${libdbiDrivers}/lib/dbd";
+
+    # this needs to be an environment variable and not a cmake flag to suppress
+    # guile warning
+    GUILE_AUTO_COMPILE = "0";
+
+    NIX_CFLAGS_COMPILE = toString (
+      lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
+        # Needed with GCC 12 but breaks on darwin (with clang) or older gcc
+        "-Wno-error=use-after-free"
+      ]
+    );
+  };
 
   buildInputs = [
     aqbanking
@@ -98,42 +114,37 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
+    find . -name '._*' -type f -delete
+
     substituteInPlace bindings/python/__init__.py \
       --subst-var-by gnc_dbd_dir "${libdbiDrivers}/lib/dbd" \
       --subst-var-by gsettings_schema_dir ${glib.makeSchemaPath "$out" "gnucash-${finalAttrs.version}"};
   '';
 
-  # this needs to be an environment variable and not a cmake flag to suppress
-  # guile warning
-  env.GUILE_AUTO_COMPILE = "0";
-
-  env.NIX_CFLAGS_COMPILE = toString (
-    lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
-      # Needed with GCC 12 but breaks on darwin (with clang) or older gcc
-      "-Wno-error=use-after-free"
-    ]
-  );
-
   doCheck = true;
   enableParallelChecking = true;
   checkTarget = "check";
 
-  passthru.docs = stdenv.mkDerivation {
-    pname = "gnucash-docs";
-    inherit (finalAttrs) version;
+  passthru = {
+    docs = stdenv.mkDerivation {
+      pname = "gnucash-docs";
+      inherit (finalAttrs) version;
 
-    src = fetchFromGitHub {
-      owner = "Gnucash";
-      repo = "gnucash-docs";
-      tag = finalAttrs.version;
-      hash = "sha256-EVK36JzK8BPe6St4FhhZEqdc07oaiePJ/EH2NHm3r1U=";
+      src = fetchFromGitHub {
+        owner = "Gnucash";
+        repo = "gnucash-docs";
+        tag = finalAttrs.version;
+        hash = "sha256-KaUkpqBSQnrWR/ynZC6DuUUnbCURxwFBVg+f4HVwy3Q=";
+      };
+
+      nativeBuildInputs = [ cmake ];
+      buildInputs = [
+        libxml2
+        libxslt
+      ];
     };
 
-    nativeBuildInputs = [ cmake ];
-    buildInputs = [
-      libxml2
-      libxslt
-    ];
+    updateScript = ./update.sh;
   };
 
   preFixup = ''
@@ -174,8 +185,6 @@ stdenv.mkDerivation (finalAttrs: {
     chmod +x $out/share/gnucash/python/pycons/*.py
     patchShebangs $out/share/gnucash/python/pycons/*.py
   '';
-
-  passthru.updateScript = ./update.sh;
 
   meta = {
     homepage = "https://www.gnucash.org/";

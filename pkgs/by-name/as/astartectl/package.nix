@@ -27,11 +27,11 @@ buildGoModule rec {
       --zsh <($out/bin/astartectl completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/astarte-platform/astartectl";
     description = "Astarte command line client utility";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "astartectl";
-    maintainers = with maintainers; [ noaccos ];
+    maintainers = with lib.maintainers; [ noaccos ];
   };
 }

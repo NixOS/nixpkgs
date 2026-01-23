@@ -31,10 +31,7 @@ let
 
   fwMarkFromHexOrNum =
     fwMark:
-    if (lib.hasPrefix "0x" fwMark) then
-      lib.fromHexString fwMark
-    else
-      (builtins.fromTOML "v=${fwMark}").v;
+    if (lib.hasPrefix "0x" fwMark) then lib.fromHexString fwMark else (fromTOML "v=${fwMark}").v;
 
   privateKeyCredential = interfaceName: escapeCredentialName "wireguard-${interfaceName}-private-key";
   presharedKeyCredential =
@@ -77,10 +74,12 @@ let
       PersistentKeepalive = peer.persistentKeepalive;
     };
 
-  generateNetwork = name: interface: {
-    matchConfig.Name = name;
-    address = interface.ips;
-  };
+  generateNetwork =
+    name: interface:
+    nameValuePair "40-${name}" {
+      matchConfig.Name = name;
+      address = interface.ips;
+    };
 
   cfg = config.networking.wireguard;
 
@@ -236,7 +235,7 @@ in
     systemd.network = {
       enable = true;
       netdevs = mapAttrs' generateNetdev cfg.interfaces;
-      networks = mapAttrs generateNetwork cfg.interfaces;
+      networks = mapAttrs' generateNetwork cfg.interfaces;
     };
 
     environment.etc = mapAttrs' generateRefreshNetdevMode refreshEnabledInterfaces;

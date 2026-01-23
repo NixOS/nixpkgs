@@ -25,12 +25,12 @@ buildGoModule rec {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Byzantine-Fault Tolerant State Machines. Or Blockchain, for short";
     homepage = "https://tendermint.com/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ alexfmpe ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ alexfmpe ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "tendermint";
   };
 }

@@ -105,22 +105,31 @@ let
       # network
       network = callLibs ./network;
 
-      # TODO: For consistency, all builtins should also be available from a sub-library;
-      # these are the only ones that are currently not
       inherit (builtins)
-        addErrorContext
-        isPath
-        trace
-        typeOf
-        unsafeGetAttrPos
+        getContext
+        hasContext
+        convertHash
+        hashString
+        hasFile
+        parseDrvName
+        placeholder
+        fromJSON
+        fromTOML
+        toFile
+        toJSON
+        toString
+        toXML
+        tryEval
         ;
       inherit (self.trivial)
         id
         const
         pipe
         concat
-        or
+        "or"
         and
+        mul
+        div
         xor
         bitAnd
         bitOr
@@ -172,6 +181,8 @@ let
         pathExists
         genericClosure
         readFile
+        ceil
+        floor
         ;
       inherit (self.fixedPoints)
         fix
@@ -303,6 +314,8 @@ let
         elem
         elemAt
         isList
+        concatAttrValues
+        replaceElemAt
         ;
       inherit (self.strings)
         concatStrings
@@ -350,6 +363,7 @@ let
         toUpper
         toCamelCase
         toSentenceCase
+        typeOf
         addContextFrom
         splitString
         splitStringBy
@@ -425,6 +439,9 @@ let
         pathType
         pathIsDirectory
         pathIsRegularFile
+        baseNameOf
+        dirOf
+        isPath
         packagesFromDirectoryRecursive
         ;
       inherit (self.sources)
@@ -439,6 +456,7 @@ let
         pathIsGitRepo
         revOrTag
         repoRevToName
+        filterSource
         ;
       inherit (self.modules)
         evalModules
@@ -517,6 +535,7 @@ let
         assertOneOf
         ;
       inherit (self.debug)
+        trace
         traceIf
         traceVal
         traceValFn
@@ -527,6 +546,8 @@ let
         traceValSeqN
         traceValSeqNFn
         traceFnSeqN
+        addErrorContext
+        unsafeGetAttrPos
         runTests
         testAllTrue
         ;
@@ -566,6 +587,7 @@ let
         imap
         ;
       inherit (self.versions)
+        compareVersions
         splitVersion
         ;
       inherit (self.network.ipv6)

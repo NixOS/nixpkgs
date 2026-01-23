@@ -19,14 +19,21 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-XGds9lDfSiY0D8RhYG4TGyjYEVvVYuAfNSv9+VxiJEs=";
   };
 
-  postPatch = ''
-    sed -i -e '/add_subdirectory(mt32emu)/d' CMakeLists.txt
-    # This directly resolves the 'The dependency target "mt32emu" ... does not exist' error.
-    sed -i -e '/add_dependencies(mt32emu-smf2wav mt32emu)/d' CMakeLists.txt
-
-    substituteInPlace {./,mt32emu_smf2wav/,mt32emu_smf2wav/libsmf/}CMakeLists.txt \
-      --replace-fail "cmake_minimum_required(VERSION 2.8.12)" "cmake_minimum_required(VERSION 3.10)"
-  '';
+  postPatch =
+    # Make sure system-installed libmt32emu is used
+    # Don't depend on in-tree mt32emu to be used
+    ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail 'add_subdirectory(mt32emu)' "" \
+        --replace-fail 'add_dependencies(mt32emu-smf2wav mt32emu)' ""
+    ''
+    # Bump CMake minimum to something our CMake supports
+    # Fixed treewide in https://github.com/munt/munt/commit/e6af0c7e5d63680716ab350467207c938054a0df
+    # Remove when version > 1.9.0
+    + ''
+      substituteInPlace {./,mt32emu_smf2wav/,mt32emu_smf2wav/libsmf/}CMakeLists.txt \
+        --replace-fail 'cmake_minimum_required(VERSION 2.8.12)' 'cmake_minimum_required(VERSION 2.8.12...3.27)'
+    '';
 
   nativeBuildInputs = [
     cmake
@@ -39,8 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-Dmunt_WITH_MT32EMU_QT=OFF"
-    "-Dmunt_WITH_MT32EMU_SMF2WAV=ON"
+    (lib.cmakeBool "munt_WITH_MT32EMU_QT" false)
+    (lib.cmakeBool "munt_WITH_MT32EMU_SMF2WAV" true)
   ];
 
   meta = {

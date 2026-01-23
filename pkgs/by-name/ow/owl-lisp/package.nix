@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
   # tests are run as part of the compilation process
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Functional Scheme for world domination";
     homepage = "https://gitlab.com/owl-lisp/owl";
-    license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = lib.platforms.unix;
   };
 }

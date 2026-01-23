@@ -47,9 +47,9 @@ mkCoqDerivation {
     mathcomp-real-closed
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Abel - Galois and Abel - Ruffini Theorems";
-    license = licenses.cecill-b;
-    maintainers = [ maintainers.cohencyril ];
+    license = lib.licenses.cecill-b;
+    maintainers = [ lib.maintainers.cohencyril ];
   };
 }

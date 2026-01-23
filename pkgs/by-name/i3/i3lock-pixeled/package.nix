@@ -38,12 +38,12 @@ stdenv.mkDerivation rec {
        --replace playerctl "${playerctl}/bin/playerctl"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple i3lock helper which pixels a screenshot by scaling it down and up to get a pixeled version of the screen when the lock is active";
     mainProgram = "i3lock-pixeled";
     homepage = "https://gitlab.com/Ma27/i3lock-pixeled";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ma27 ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ma27 ];
   };
 }

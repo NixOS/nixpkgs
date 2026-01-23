@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mcpp";
-  version = "2.7.2.2";
+  version = "2.7.2.3";
 
   src = fetchFromGitHub {
     owner = "museoa";
     repo = "mcpp";
     rev = finalAttrs.version;
-    hash = "sha256-wz225bhBF0lFerOAhl8Rwmw8ItHd9BXQceweD9BqvEQ=";
+    hash = "sha256-g+dqyC9Aik9vxqmixRKzV5GCLiw2tk8mJDHJ/HyiHKw=";
   };
 
   env = lib.optionalAttrs stdenv.cc.isGNU {
@@ -25,12 +25,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [ "--enable-mcpplib" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/museoa/mcpp";
     description = "Matsui's C preprocessor";
     mainProgram = "mcpp";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

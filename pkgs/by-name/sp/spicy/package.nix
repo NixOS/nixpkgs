@@ -22,14 +22,14 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Nintendo 64 segment assembler";
     longDescription = ''
       An open-source version of the Nintendo64 sdk's mild.exe. Assembles
       segments into an n64-compatible rom.
     '';
     homepage = "https://github.com/trhodeos/spicy";
-    license = licenses.mit;
-    maintainers = with maintainers; [ _414owen ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ _414owen ];
   };
 }

@@ -4,7 +4,6 @@
   fetchFromGitHub,
   git,
   pytestCheckHook,
-  pythonOlder,
   distutils,
   setuptools-scm,
   writeScript,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "setuptools-odoo";
   version = "3.3.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "acsone";
@@ -73,11 +70,11 @@ buildPythonPackage rec {
     "test_odoo_addon5_wheel"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Setuptools plugin for Odoo addons";
     homepage = "https://github.com/acsone/setuptools-odoo";
     changelog = "https://github.com/acsone/setuptools-odoo/blob/${version}/CHANGES.rst";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ yajo ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ yajo ];
   };
 }

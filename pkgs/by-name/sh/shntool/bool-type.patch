@@ -1,0 +1,48 @@
+diff --git a/include/format.h b/include/format.h
+index 567993e..ab293f8 100644
+--- a/include/format.h
++++ b/include/format.h
+@@ -35,7 +35,7 @@ void tagcpy(unsigned char *,unsigned char *);
+ int tagcmp(unsigned char *,unsigned char *);
+ 
+ /* function to check if a file name is about to be clobbered, and if so, asks whether this is OK */
+-int clobber_check(char *);
++bool clobber_check(char *);
+ 
+ /* find an output format module with the given name */
+ format_module *find_format(char *);
+diff --git a/include/mode.h b/include/mode.h
+index a9c8cd0..fc13d4f 100644
+--- a/include/mode.h
++++ b/include/mode.h
+@@ -78,7 +78,7 @@ void create_output_filename(char *,char *,char *);
+ FILE *open_output_stream(char *,proc_info *);
+ 
+ /* function to determine if two filenames point to the same file */
+-int files_are_identical(char *,char *);
++bool files_are_identical(char *,char *);
+ 
+ /* function to remove a file if it exists */
+ void remove_file(char *);
+diff --git a/include/module-types.h b/include/module-types.h
+index c49c661..2d7b0a3 100644
+--- a/include/module-types.h
++++ b/include/module-types.h
+@@ -23,6 +23,8 @@
+ #ifndef __MODULE_TYPES_H__
+ #define __MODULE_TYPES_H__
+ 
++#include <stdbool.h>
++
+ #ifdef HAVE_CONFIG_H
+ #include "config.h"
+ #endif
+@@ -44,8 +46,6 @@
+ #define PATHSEPCHAR '/'
+ #endif
+ 
+-/* boolean type */
+-typedef int bool;
+ 
+ /* wtypes */
+ typedef unsigned long wlong;

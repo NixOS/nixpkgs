@@ -76,12 +76,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "High level library for the Linux Kernel seccomp filter";
     mainProgram = "scmp_sys_resolver";
     homepage = "https://github.com/seccomp/libseccomp";
-    license = licenses.lgpl21Only;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Only;
+    platforms = lib.platforms.linux;
     badPlatforms = [
       "alpha-linux"
       "m68k-linux"
@@ -91,6 +91,6 @@ stdenv.mkDerivation rec {
       "sparc-linux"
       "sparc64-linux"
     ];
-    maintainers = with maintainers; [ thoughtpolice ];
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
 }

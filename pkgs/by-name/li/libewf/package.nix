@@ -31,6 +31,13 @@ stdenv.mkDerivation rec {
     "ac_cv_openssl_xts_duplicate_keys=yes"
   ];
 
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+    "man"
+  ];
+
   meta = {
     description = "Library for support of the Expert Witness Compression Format";
     homepage = "https://sourceforge.net/projects/libewf/";

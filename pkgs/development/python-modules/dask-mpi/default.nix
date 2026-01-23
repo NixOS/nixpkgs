@@ -6,15 +6,12 @@
   dask,
   distributed,
   mpi4py,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dask-mpi";
   version = "2022.4.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
@@ -41,11 +38,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dask_mpi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Deploy Dask using mpi4py";
     mainProgram = "dask-mpi";
     homepage = "https://github.com/dask/dask-mpi";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

@@ -57,15 +57,15 @@ stdenv.mkDerivation {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ bluez ];
 
-  meta = with lib; {
+  meta = {
     description = "Qt-based LA/scope/MSO GUI for sigrok (a signal analysis software suite)";
     mainProgram = "pulseview";
     homepage = "https://sigrok.org/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       bjornfor
       vifino
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

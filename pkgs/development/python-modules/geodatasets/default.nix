@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
 
   geopandas,
   pooch,
@@ -13,20 +12,19 @@
 
 buildPythonPackage rec {
   pname = "geodatasets";
-  version = "2024.8.0";
+  version = "2026.1.0";
   pyproject = true;
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "geopandas";
     repo = "geodatasets";
     tag = version;
-    hash = "sha256-GJ7RyFlohlRz0RbQ80EewZUmIX9CJkSfUMY/uMNTtEM=";
+    hash = "sha256-fLhlXuqcArMb0PtFCKKqL78Z5A/j33Fzov8fg7PGvaQ=";
   };
 
   build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [ pooch ];
+  dependencies = [ pooch ];
 
   nativeCheckInputs = [
     geopandas

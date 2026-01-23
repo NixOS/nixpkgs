@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "nvchecker";
-  version = "2.19";
+  version = "2.20";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lilydjwg";
     repo = "nvchecker";
     tag = "v${version}";
-    hash = "sha256-C8g8uhuWOl3zPCjTaGs21yJ8k3tmvZE8U9LzSXoDSxE=";
+    hash = "sha256-udwflm3C7C6Q7rSA0x0+8uf1F5quy2okf2IyZqKtA3E=";
   };
 
   __darwinAllowLocalNetworking = true;

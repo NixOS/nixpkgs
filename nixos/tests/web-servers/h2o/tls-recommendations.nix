@@ -90,9 +90,9 @@ in
     { nodes, ... }:
     let
       inherit (nodes) server_modern server_intermediate server_old;
-      modernPortStr = builtins.toString server_modern.services.h2o.hosts.${domain}.tls.port;
-      intermediatePortStr = builtins.toString server_intermediate.services.h2o.hosts.${domain}.tls.port;
-      oldPortStr = builtins.toString server_old.services.h2o.hosts.${domain}.tls.port;
+      modernPortStr = toString server_modern.services.h2o.hosts.${domain}.tls.port;
+      intermediatePortStr = toString server_intermediate.services.h2o.hosts.${domain}.tls.port;
+      oldPortStr = toString server_old.services.h2o.hosts.${domain}.tls.port;
     in
     # python
     ''

@@ -3,22 +3,28 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   setuptools,
 
   # dependencies
-  accelerate,
-  datasets,
   huggingface-hub,
-  optimum,
-  pillow,
   scikit-learn,
   scipy,
   torch,
   tqdm,
   transformers,
   typing-extensions,
+
+  # optional-dependencies
+  # image
+  pillow,
+  # train
+  accelerate,
+  datasets,
+  # onnx
+  optimum-onnx,
 
   # tests
   pytestCheckHook,
@@ -27,21 +33,20 @@
 
 buildPythonPackage rec {
   pname = "sentence-transformers";
-  version = "5.1.2";
+  version = "5.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "sentence-transformers";
     tag = "v${version}";
-    hash = "sha256-FNJ4mWBcgy3J8ZJtHt+uBgNmvMnqphj+sLMmBvgdB1k=";
+    hash = "sha256-WD5uTfAbDYYeSXlgznSs4XyN1fAILxILmmSHmLosmV4=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     huggingface-hub
-    pillow
     scikit-learn
     scipy
     torch
@@ -51,12 +56,15 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
+    image = [
+      pillow
+    ];
     train = [
       accelerate
       datasets
     ];
-    onnx = [ optimum ] ++ optimum.optional-dependencies.onnxruntime;
-    # onnx-gpu = [ optimum ] ++ optimum.optional-dependencies.onnxruntime-gpu;
+    onnx = [ optimum-onnx ] ++ optimum-onnx.optional-dependencies.onnxruntime;
+    # onnx-gpu = [ optimum-onnx ] ++ optimum-onnx.optional-dependencies.onnxruntime-gpu;
     # openvino = [ optimum-intel ] ++ optimum-intel.optional-dependencies.openvino;
   };
 
@@ -64,7 +72,7 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "sentence_transformers" ];
 
@@ -121,6 +129,17 @@ buildPythonPackage rec {
     # NameError: name 'ParallelismConfig' is not defined
     "test_hf_argument_parser"
     "test_hf_argument_parser_incorrect_string_arguments"
+
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # TypeError: Pickler._batch_setitems() takes 2 positional arguments but 3 were given
+    # https://github.com/huggingface/sentence-transformers/issues/3606
+    "test_group_by_label_batch_sampler_label_a"
+    "test_group_by_label_batch_sampler_label_b"
+    "test_group_by_label_batch_sampler_uneven_dataset"
+    "test_proportional_no_duplicates"
+    "test_round_robin_batch_sampler"
+    "test_round_robin_batch_sampler_vallue_error"
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin) [
     # These sparse tests also time out, on x86_64-darwin.

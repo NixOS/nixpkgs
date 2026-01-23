@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   setuptools,
   setuptools-scm,
   pillow,
@@ -21,6 +22,14 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-B8jrFQh5swDMfYjdMcY0Hh2VAzknDwarDKVAML6F2r4=";
   };
+
+  patches = [
+    # fix compatibility with pypdfium2 5.x: https://github.com/miikanissi/zebrafy/pull/20
+    (fetchpatch {
+      url = "https://github.com/miikanissi/zebrafy/pull/20/commits/cc15c4a28d9e8aec022d22397ff752600b9ede52.patch";
+      hash = "sha256-KAjfKPqmTvfoQN7YPLayPyq2sueDASyU/lMCgLCl1RU=";
+    })
+  ];
 
   build-system = [
     setuptools

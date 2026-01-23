@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mekuteriya";
-  version = "0.1.5";
+  version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "frectonz";
     repo = "mek-ut-er-ya";
     rev = version;
-    hash = "sha256-bWp2UNrhCHY2DQWusGS9L9/jI2r23F34yLpuE6nuOD0=";
+    hash = "sha256-u3NK5KL3GjGekcFd4cB/z0omsL2FgiX8dMpcVl5h9s0=";
   };
 
-  cargoHash = "sha256-YIsM2IVtV1jG/JzCR9gQPqnKhtxJYdCWdTw4FlK3Y9w=";
+  cargoHash = "sha256-pmy0jXFA6qt8U69CQBmpVWYr+Ifn0Z+Dj0hRHxHPBoQ=";
 
   meta = {
     description = "Ethiopian Calendar CLI";

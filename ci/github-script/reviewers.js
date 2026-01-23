@@ -14,7 +14,7 @@ async function handleReviewers({
   const pull_number = pull_request.number
 
   const requested_reviewers = new Set(
-    pull_request.requested_reviewers.map(({ login }) => login),
+    pull_request.requested_reviewers.map(({ login }) => login.toLowerCase()),
   )
   log(
     'reviewers - requested_reviewers',
@@ -22,7 +22,7 @@ async function handleReviewers({
   )
 
   const existing_reviewers = new Set(
-    reviews.map(({ user }) => user?.login).filter(Boolean),
+    reviews.map(({ user }) => user?.login.toLowerCase()).filter(Boolean),
   )
   log(
     'reviewers - existing_reviewers',
@@ -42,10 +42,18 @@ async function handleReviewers({
   }
 
   const users = new Set([
-    ...(await Promise.all(
-      maintainers.map(async (id) => (await getUser(id)).login),
-    )),
-    ...owners.filter((handle) => handle && !handle.includes('/')),
+    ...(
+      await Promise.all(
+        maintainers.map(async (id) => {
+          const user = await getUser(id)
+          // User may have deleted their account
+          return user?.login?.toLowerCase()
+        }),
+      )
+    ).filter(Boolean),
+    ...owners
+      .filter((handle) => handle && !handle.includes('/'))
+      .map((handle) => handle.toLowerCase()),
   ])
   log('reviewers - users', Array.from(users).join(', '))
 
@@ -60,14 +68,14 @@ async function handleReviewers({
   const team_members = new Set(
     (await Promise.all(Array.from(teams, getTeamMembers)))
       .flat(1)
-      .map(({ login }) => login),
+      .map(({ login }) => login.toLowerCase()),
   )
   log('reviewers - team_members', Array.from(team_members).join(', '))
 
   const new_reviewers = users
     .union(team_members)
     // We can't request a review from the author.
-    .difference(new Set([pull_request.user?.login]))
+    .difference(new Set([pull_request.user?.login.toLowerCase()]))
   log('reviewers - new_reviewers', Array.from(new_reviewers).join(', '))
 
   // Filter users to repository collaborators. If they're not, they can't be requested

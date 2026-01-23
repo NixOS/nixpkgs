@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "statik";
-  version = "0.1.7";
+  version = "0.1.8";
 
   src = fetchFromGitHub {
     owner = "rakyll";
     repo = "statik";
     rev = "v${version}";
-    sha256 = "ahsNiac/3I2+PUqc90E73Brb99M68ewh9nWXoupfE3g=";
+    sha256 = "sha256-GfXYlkzPESu9Szl+g90oB2ldrCS5aAOt9m+WPOOXhIE=";
   };
 
   vendorHash = null;
@@ -27,10 +27,10 @@ buildGoModule rec {
   # which is not the case once entered the nix store
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/rakyll/statik";
     description = "Embed files into a Go executable";
     mainProgram = "statik";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

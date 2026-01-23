@@ -9,7 +9,6 @@
   flask,
   mock,
   pytestCheckHook,
-  pythonOlder,
   tornado,
 }:
 
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "apispec-webframeworks";
   version = "1.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "marshmallow-code";
@@ -42,11 +39,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "apispec_webframeworks" ];
 
-  meta = with lib; {
+  meta = {
     description = "Web framework plugins for apispec";
     homepage = "https://github.com/marshmallow-code/apispec-webframeworks";
     changelog = "https://github.com/marshmallow-code/apispec-webframeworks/blob/${version}/CHANGELOG.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

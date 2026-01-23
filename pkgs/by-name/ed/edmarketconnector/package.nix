@@ -18,19 +18,19 @@ let
       })
       semantic-version
       psutil
+      tomli-w
     ];
-    ignoreCollisions = true;
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "edmarketconnector";
-  version = "5.13.2";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "EDCD";
     repo = "EDMarketConnector";
     tag = "Release/${finalAttrs.version}";
-    hash = "sha256-BqzrW5pV9ty1MBaILQir+iOda2xQoJeTq8eZG0x6+90=";
+    hash = "sha256-MBbm6537HEYKql42//EzEy1Iwi6W3rX/4hFYrRVaAbw=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     longDescription = "Downloads commodity market and other station data from the game Elite: Dangerous for use with all popular online and offline trading tools.";
     changelog = "https://github.com/EDCD/EDMarketConnector/releases/tag/Release%2F${finalAttrs.version}";
     license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.x86_64;
+    platforms = lib.platforms.linux;
     mainProgram = "edmarketconnector";
     maintainers = with lib.maintainers; [
       jiriks74

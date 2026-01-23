@@ -2,10 +2,14 @@
   lib,
   buildNpmPackage,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   fetchFromGitHub,
   unstableGitUpdater,
 }:
-
+let
+  pnpm = pnpm_9;
+in
 buildNpmPackage rec {
   pname = "piped";
   version = "0-unstable-2024-11-04";
@@ -17,7 +21,8 @@ buildNpmPackage rec {
     hash = "sha256-o3TwE0s5rim+0VKR+oW9Rv3/eQRf2dgRQK4xjZ9pqCE=";
   };
 
-  npmConfigHook = pnpm_9.configHook;
+  nativeBuildInputs = [ pnpm_9 ];
+  npmConfigHook = pnpmConfigHook;
 
   installPhase = ''
     runHook preInstall
@@ -26,8 +31,13 @@ buildNpmPackage rec {
   '';
 
   npmDeps = pnpmDeps;
-  pnpmDeps = pnpm_9.fetchDeps {
-    inherit pname version src;
+  pnpmDeps = fetchPnpmDeps {
+    inherit
+      pname
+      version
+      src
+      ;
+    pnpm = pnpm_9;
     fetcherVersion = 1;
     hash = "sha256-WtZfRZFRV9I1iBlAoV69GGFjdiQhTSBG/iiEadPVcys=";
   };

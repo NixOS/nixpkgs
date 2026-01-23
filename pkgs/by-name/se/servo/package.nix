@@ -63,15 +63,15 @@ let
   );
 in
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "servo";
-  version = "0.0.1-unstable-2025-11-12";
+  version = "0.0.3";
 
   src = fetchFromGitHub {
     owner = "servo";
     repo = "servo";
-    rev = "59526928afc81c840f9890eb0a653b16e8128ba6";
-    hash = "sha256-BidSQ/c4dST5qJLHZX5Sbcnw7JxfQl/mlI2F6qg0fxw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-XMDt3q3LgKtGCgwuf/+0ZF2EfkUENM+mp4icZAyqGiw=";
     # Breaks reproducibility depending on whether the picked commit
     # has other ref-names or not, which may change over time, i.e. with
     # "ref-names: HEAD -> main" as long this commit is the branch HEAD
@@ -81,7 +81,7 @@ rustPlatform.buildRustPackage {
     '';
   };
 
-  cargoHash = "sha256-qVpQ/LK8aAy2MrcuY4Hr3cv6+xh/vtxQZfN8Et3yPik=";
+  cargoHash = "sha256-FR9/5aZ7e2ekYYCFQMr55JXuJScqjDKb4o+w6nNr4yo=";
 
   # set `HOME` to a temp dir for write access
   # Fix invalid option errors during linking (https://github.com/mozilla/nixpkgs-mozilla/commit/c72ff151a3e25f14182569679ed4cd22ef352328)
@@ -160,7 +160,7 @@ rustPlatform.buildRustPackage {
   '';
 
   passthru = {
-    updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+    updateScript = nix-update-script { };
     tests = { inherit (nixosTests) servo; };
   };
 
@@ -178,4 +178,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "servo";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

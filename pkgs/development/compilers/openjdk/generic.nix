@@ -412,10 +412,16 @@ stdenv.mkDerivation (finalAttrs: {
       if atLeast17 then
         "-Wno-error"
       else if atLeast11 then
-        # Workaround for
-        # `cc1plus: error: '-Wformat-security' ignored without '-Wformat' [-Werror=format-security]`
-        # when building jtreg
-        "-Wformat"
+        lib.concatStringsSep " " (
+          # Workaround for
+          # `cc1plus: error: '-Wformat-security' ignored without '-Wformat' [-Werror=format-security]`
+          # when building jtreg
+          [ "-Wformat" ]
+          ++ lib.optionals (stdenv.cc.isGNU && featureVersion == "11") [
+            # Fix build with gcc15
+            "-std=gnu17"
+          ]
+        )
       else
         lib.concatStringsSep " " (
           [
@@ -435,6 +441,10 @@ stdenv.mkDerivation (finalAttrs: {
             # error by default in GCC 14
             "-Wno-error=int-conversion"
             "-Wno-error=incompatible-pointer-types"
+          ]
+          ++ lib.optionals (stdenv.cc.isGNU && featureVersion == "8") [
+            # Fix build with gcc15
+            "-std=gnu17"
           ]
         );
 
@@ -471,6 +481,18 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString atLeast25 ''
     chmod +x make/scripts/*.{template,sh,pl}
     patchShebangs --build make/scripts
+  ''
+  + lib.optionalString (!atLeast11) ''
+    # Fix build w/ glibc-2.42. Oldest backport target of this fix was
+    # JDK 11.
+    # See https://bugs.openjdk.org/browse/JDK-8354941
+    substituteInPlace \
+      hotspot/src/cpu/aarch64/vm/stubGenerator_aarch64.cpp \
+      hotspot/src/cpu/aarch64/vm/assembler_aarch64.hpp \
+      hotspot/src/cpu/aarch64/vm/assembler_aarch64.cpp \
+      hotspot/src/share/vm/opto/mulnode.cpp \
+      hotspot/src/share/vm/utilities/globalDefinitions.hpp \
+      --replace-fail "uabs" "g_uabs"
   '';
 
   installPhase = ''
@@ -606,7 +628,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://openjdk.java.net/";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
-      edwtjo
       infinidoge
     ];
     teams = [ lib.teams.java ];

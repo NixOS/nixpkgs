@@ -7,12 +7,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.0.30";
+  version = "0.0.74";
   pname = "kythe";
 
   src = fetchurl {
     url = "https://github.com/kythe/kythe/releases/download/v${version}/${pname}-v${version}.tar.gz";
-    sha256 = "12bwhqkxfbkh3mm4wfvqflwhmbzpmlhlfykdpy6h7p9ih9ky8w6r";
+    sha256 = "sha256-UqnG6BESNwQ7jQthJ2N/DrjSujp3bkdJsDbpEew1Kc4=";
   };
 
   buildInputs = [ binutils ];
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     ln -s $out/tools $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Pluggable, (mostly) language-agnostic ecosystem for building tools that work with code";
     longDescription = ''
       The Kythe project was founded to provide and support tools and standards
@@ -51,9 +51,9 @@ stdenv.mkDerivation rec {
         analyses, editors, code-review applications, and more — to share
         information with each other smoothly.  '';
     homepage = "https://kythe.io/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.asl20;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.mpickering ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.mpickering ];
   };
 }

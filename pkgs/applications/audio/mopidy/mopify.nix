@@ -30,10 +30,10 @@ pythonPackages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "mopidy_mopify" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/dirkgroenen/mopidy-mopify";
     description = "Mopidy webclient based on the Spotify webbased interface";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.Gonzih ];
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.Gonzih ];
   };
 }

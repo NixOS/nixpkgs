@@ -38,10 +38,10 @@ buildPythonPackage {
   # Don't run integration tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Extensible server fixures for py.test";
     homepage = "https://github.com/manahl/pytest-plugins";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

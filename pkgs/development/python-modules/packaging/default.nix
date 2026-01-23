@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 
   # build-system
   flit-core,
@@ -17,8 +16,6 @@ let
     pname = "packaging";
     version = "25.0";
     pyproject = true;
-
-    disabled = pythonOlder "3.7";
 
     src = fetchPypi {
       inherit pname version;
@@ -48,17 +45,17 @@ let
       doCheck = true;
     });
 
-    meta = with lib; {
+    meta = {
       changelog = "https://github.com/pypa/packaging/blob/${version}/CHANGELOG.rst";
       description = "Core utilities for Python packages";
       downloadPage = "https://github.com/pypa/packaging";
       homepage = "https://packaging.pypa.io/";
-      license = with licenses; [
+      license = with lib.licenses; [
         bsd2
         asl20
       ];
-      maintainers = with maintainers; [ bennofs ];
-      teams = [ teams.python ];
+      maintainers = with lib.maintainers; [ bennofs ];
+      teams = [ lib.teams.python ];
     };
   };
 in

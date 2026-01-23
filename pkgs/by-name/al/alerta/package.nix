@@ -25,12 +25,10 @@ python3.pkgs.buildPythonApplication rec {
 
   doCheck = false;
 
-  disabled = python3.pythonOlder "3.6";
-
-  meta = with lib; {
+  meta = {
     homepage = "https://alerta.io";
     description = "Alerta Monitoring System command-line interface";
     mainProgram = "alerta";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

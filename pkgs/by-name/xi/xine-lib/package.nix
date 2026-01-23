@@ -32,12 +32,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xine-lib";
-  version = "1.2.13-unstable-2024-06-29";
+  version = "1.2.13-unstable-2025-11-03";
 
   src = fetchhg {
     url = "http://hg.code.sf.net/p/xine/xine-lib-1.2";
-    rev = "53845e2f6b1f3b69328de5c030c0ab27eb8f043d";
-    hash = "sha256-O5lIYmNC2TpoY4QbPMsDWxNOoxdw61967Q4QG9d/+Bg=";
+    rev = "405a16a848927ed9861d6ac177c7e9624ecf58d1";
+    hash = "sha256-Q+PcpVMgV2b+htEhTlUK63ZpuJ9Vz+dlmBhNiO8PC2A=";
   };
 
   outputs = [

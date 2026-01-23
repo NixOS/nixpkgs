@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
     domain = "codeberg.org";
     owner = "outfly";
     repo = "outfly";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-FRvu3FgbT3i5888ll573nhb7naYx04Oi8nrcfgEHxUo=";
   };
 

@@ -4,18 +4,14 @@
   fetchPypi,
   hatch-vcs,
   hatchling,
-  importlib-resources,
   pytestCheckHook,
-  pythonOlder,
   referencing,
 }:
 
 buildPythonPackage rec {
   pname = "jsonschema-specifications";
   version = "2025.4.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "jsonschema_specifications";
@@ -30,17 +26,16 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     referencing
-  ]
-  ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "jsonschema_specifications" ];
 
-  meta = with lib; {
+  meta = {
     description = "Support files exposing JSON from the JSON Schema specifications";
     homepage = "https://github.com/python-jsonschema/jsonschema-specifications";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 }

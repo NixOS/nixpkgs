@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "1.3.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "agronholm";
     repo = "exceptiongroup";
@@ -31,13 +29,19 @@ buildPythonPackage rec {
 
   doCheck = pythonAtLeast "3.11"; # infinite recursion with pytest
 
+  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+    # RecursionError not raised
+    "test_deep_split"
+    "test_deep_subgroup"
+  ];
+
   pythonImportsCheck = [ "exceptiongroup" ];
 
-  meta = with lib; {
+  meta = {
     description = "Backport of PEP 654 (exception groups)";
     homepage = "https://github.com/agronholm/exceptiongroup";
     changelog = "https://github.com/agronholm/exceptiongroup/blob/${version}/CHANGES.rst";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

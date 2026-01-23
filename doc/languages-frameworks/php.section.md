@@ -307,7 +307,7 @@ stdenvNoCC.mkDerivation (
     src = fetchFromGitHub {
       owner = "git-owner";
       repo = "git-repo";
-      rev = finalAttrs.version;
+      tag = finalAttrs.version;
       hash = "sha256-VcQRSss2dssfkJ+iUb5qT+FJ10GHiFDzySigcmuVI+8=";
     };
   in

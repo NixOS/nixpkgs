@@ -24,6 +24,7 @@
   capstone,
   tree-sitter,
   zstd,
+  binutils,
 }:
 
 let
@@ -107,6 +108,7 @@ let
       xxHash
       xz
       zstd
+      binutils
     ];
 
     postPatch = ''
@@ -115,6 +117,11 @@ let
       # https://github.com/mesonbuild/meson/pull/9904
       substituteInPlace meson.build \
         --replace "import('python').find_installation()" "find_program('python3')"
+
+      substituteInPlace \
+        librz/arch/p/asm/asm_x86_as.c \
+        librz/arch/p/asm/asm_ppc_as.c \
+        --replace '"as"' '"${binutils}/bin/as"'
     '';
 
     passthru = rec {

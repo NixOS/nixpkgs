@@ -3,7 +3,6 @@
   buildPythonApplication,
   fetchFromGitHub,
   isPyPy,
-  pythonOlder,
   lib,
   defusedxml,
   packaging,
@@ -31,7 +30,7 @@ buildPythonApplication rec {
   version = "4.3.3";
   pyproject = true;
 
-  disabled = isPyPy || pythonOlder "3.9";
+  disabled = isPyPy;
 
   src = fetchFromGitHub {
     owner = "nicolargo";

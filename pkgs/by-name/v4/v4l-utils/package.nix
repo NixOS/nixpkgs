@@ -18,6 +18,7 @@
   udevCheckHook,
   withUtils ? true,
   withGUI ? true,
+  withBPF ? true,
   alsa-lib,
   libGLU,
   qt6Packages,
@@ -62,14 +63,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "gconv" stdenv.hostPlatform.isGnu)
     (lib.mesonEnable "qv4l2" withQt)
     (lib.mesonEnable "qvidcap" withQt)
+    (lib.mesonEnable "bpf" withBPF)
     (lib.mesonOption "udevdir" "${placeholder "out"}/lib/udev")
   ]
   ++ lib.optionals stdenv.hostPlatform.isGnu [
     (lib.mesonOption "gconvsysdir" "${glibc.out}/lib/gconv")
-  ]
-  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    # BPF support fail to cross compile, unable to find `linux/lirc.h`
-    (lib.mesonOption "bpf" "disabled")
   ];
 
   postFixup = ''
@@ -78,7 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [
-    clang
     doxygen
     meson
     ninja
@@ -86,15 +83,18 @@ stdenv.mkDerivation (finalAttrs: {
     perl
     udevCheckHook
   ]
+  ++ lib.optional withBPF clang
   ++ lib.optional withQt qt6Packages.wrapQtAppsHook;
 
   buildInputs = [
     json_c
-    libbpf
-    libelf
     udev
   ]
   ++ lib.optional (!stdenv.hostPlatform.isGnu) argp-standalone
+  ++ lib.optionals withBPF [
+    libbpf
+    libelf
+  ]
   ++ lib.optionals withQt [
     alsa-lib
     qt6Packages.qt5compat
@@ -120,18 +120,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "V4L utils and libv4l, provide common image formats regardless of the v4l device";
     homepage = "https://linuxtv.org/projects.php";
     changelog = "https://git.linuxtv.org/v4l-utils.git/plain/ChangeLog?h=v4l-utils-${finalAttrs.version}";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl21Plus
       gpl2Plus
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       codyopel
       yarny
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

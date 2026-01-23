@@ -17,10 +17,9 @@
   libogg,
   libtheora,
   which,
-  autoconf,
-  automake,
   libtool,
   xorg,
+  cmake,
 }:
 
 stdenv.mkDerivation rec {
@@ -36,8 +35,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-    autoconf
-    automake
+    cmake
   ];
   buildInputs = [
     SDL2
@@ -59,28 +57,52 @@ stdenv.mkDerivation rec {
     libGL
   ];
 
-  preConfigure = "$shell ./platform/unix/automagic";
-
-  configureFlags = [
-    (if stdenv.isDarwin then "--with-lua=lua" else "--with-lua=luajit")
+  # Use CMake instead of autotools on all platforms for uniformity
+  # On Darwin, autotools doesn't compile macOS-specific module (src/common/macosx.mm),
+  # leading to stubbed functions and segfaults
+  cmakeFlags = [
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5" # Required by LÖVE's CMakeLists.txt
+    "-DCMAKE_SKIP_BUILD_RPATH=ON" # Don't include build directory in RPATH
+    "-DCMAKE_BUILD_WITH_INSTALL_RPATH=ON" # Use install RPATH even during build
   ];
 
   env.NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg"; # needed since luajit-2.1.0-beta3
 
-  # Fix Darwin bundle/dylib linking and macOS function calls
-  preBuild = lib.optionalString stdenv.isDarwin ''
-    # Fix libtool to use dynamiclib instead of bundle for Darwin
-    substituteInPlace libtool \
-      --replace "-bundle" "-dynamiclib" \
-      --replace "-Wl,-bundle" "-Wl,-dynamiclib"
+  # CMake doesn't define install target for LÖVE, so install manually
+  installPhase = ''
+    runHook preInstall
 
-    substituteInPlace src/love.cpp \
-      --replace "love::macosx::checkDropEvents()" "std::string(\"\")" \
-      --replace "love::macosx::getLoveInResources()" "std::string(\"\")"
+    mkdir -p $out/bin $out/lib
+    cp love $out/bin/
+    cp libliblove.* $out/lib/
+
+    # Install man page (both Linux and Darwin)
+    mkdir -p $out/share/man/man1
+    cp $src/platform/unix/love.6 $out/share/man/man1/love.1
+    gzip -9n $out/share/man/man1/love.1
+  ''
+  + lib.optionalString stdenv.isLinux ''
+    # Install Linux-specific files (desktop, mime, icons)
+    mkdir -p $out/share/applications
+    mkdir -p $out/share/mime/packages
+    mkdir -p $out/share/pixmaps
+    mkdir -p $out/share/icons/hicolor/scalable/mimetypes
+
+    # Generate desktop file from template
+    substitute $src/platform/unix/love.desktop.in $out/share/applications/love.desktop \
+      --replace-fail '@bindir@' "$out/bin"
+
+    cp $src/platform/unix/love.xml $out/share/mime/packages/
+    cp $src/platform/unix/love.svg $out/share/pixmaps/
+    cp $src/platform/unix/application-x-love-game.svg $out/share/icons/hicolor/scalable/mimetypes/
+  ''
+  + ''
+    runHook postInstall
   '';
 
   postFixup = lib.optionalString stdenv.isDarwin ''
-    install_name_tool -change ".libs/liblove-11.5.so" "$out/lib/liblove-11.5.so" "$out/bin/love"
+    # Fix rpath so love binary can find libliblove.dylib
+    install_name_tool -change "@rpath/libliblove.dylib" "$out/lib/libliblove.dylib" "$out/bin/love"
   '';
 
   meta = {

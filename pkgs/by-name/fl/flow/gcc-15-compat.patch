@@ -1,0 +1,12 @@
+diff --git a/src/third-party/fuzzy-path/vendor/MatcherBase.h b/src/third-party/fuzzy-path/vendor/MatcherBase.h
+index fbaabc3d92..57c0c58fb2 100644
+--- a/src/third-party/fuzzy-path/vendor/MatcherBase.h
++++ b/src/third-party/fuzzy-path/vendor/MatcherBase.h
+@@ -1,6 +1,7 @@
+ #pragma once
+ 
+ #include <memory>
++#include <cstdint>
+ #include <string>
+ #include <unordered_map>
+ #include <vector>

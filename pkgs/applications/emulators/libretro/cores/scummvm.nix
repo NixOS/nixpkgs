@@ -25,13 +25,13 @@ let
 in
 mkLibretroCore {
   core = "scummvm";
-  version = "0-unstable-2025-07-03";
+  version = "0-unstable-2025-12-24";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "scummvm";
-    rev = "686cdd13719b92554fa46b264c512ca7deec7a96";
-    hash = "sha256-3w1rYVPX7ENGUgKdrFRQShWoEXfagxdtzd98m1hKeYU=";
+    rev = "b56c0d796ebcb4a3a8ea966cc3b8ec3e02b452be";
+    hash = "sha256-CPYKOqyEDRdA2D1+eomrsb7w8pDWyxtqmGZF8j15OJU=";
   };
 
   extraBuildInputs = [
@@ -49,6 +49,9 @@ mkLibretroCore {
     cp -a ${libretro-common-src}/* deps/libretro-common
     cp -a ${libretro-deps-src}/* deps/libretro-deps
     chmod -R u+w deps/
+
+    # Fix conflicts with glibc index/rindex functions
+    sed -i 's/\bindex\b/faad_index/g; s/\brindex\b/faad_rindex/g' deps/libretro-deps/libfaad/libfaad/common.h
 
     patchShebangs ./scripts/*
   '';

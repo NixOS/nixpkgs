@@ -36,35 +36,32 @@ python3Packages.buildPythonApplication rec {
     setuptools
   ];
 
-  dependencies =
-    with python3Packages;
-    [
-      ifuse
-      libimobiledevice
-      # Python dependencies
-      pyqt5
-      pygobject3
-      gphoto2
-      pyzmq
-      tornado
-      psutil
-      pyxdg
-      arrow
-      python-dateutil
-      easygui
-      babel
-      colour
-      pillow
-      pymediainfo
-      sortedcontainers
-      requests
-      colorlog
-      pyprind
-      setuptools
-      show-in-file-manager
-      tenacity
-    ]
-    ++ lib.optional (pythonOlder "3.8") importlib-metadata;
+  dependencies = with python3Packages; [
+    ifuse
+    libimobiledevice
+    # Python dependencies
+    pyqt5
+    pygobject3
+    gphoto2
+    pyzmq
+    tornado
+    psutil
+    pyxdg
+    arrow
+    python-dateutil
+    easygui
+    babel
+    colour
+    pillow
+    pymediainfo
+    sortedcontainers
+    requests
+    colorlog
+    pyprind
+    setuptools
+    show-in-file-manager
+    tenacity
+  ];
 
   postPatch = ''
     # Drop broken version specifier

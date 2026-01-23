@@ -6,15 +6,15 @@
 }:
 let
   inherit (stdenvNoCC.hostPlatform) system;
-  version = "2.0.4-19887";
+  version = "2.0.5-19905";
   sourceData = {
     aarch64-darwin = {
       arch = "arm64";
-      hash = "sha256-uog0B1Dro5lkSMDWr+FOvmeH/ue3NoNNvIUR/+FZENs=";
+      hash = "sha256-YBiJVRzf3H/u4Ui3/bBID6C6XA2wvo8cBH/IQIhqdXE=";
     };
     x86_64-darwin = {
       arch = "amd64";
-      hash = "sha256-lLj4BlSG01CMYCVBWuASjxCjrczv7mbC1iXM0WgWHtw=";
+      hash = "sha256-qFj6Lc0m9/dc1/mcJO0aafRZs5vyCQyCb5l+zJwdF+s=";
     };
   };
   sources = lib.mapAttrs (

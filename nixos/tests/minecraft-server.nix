@@ -6,7 +6,6 @@ in
 { lib, pkgs, ... }:
 {
   name = "minecraft-server";
-  meta.maintainers = with lib.maintainers; [ nequissimus ];
 
   node.pkgsReadOnly = false;
 

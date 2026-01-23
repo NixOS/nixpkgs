@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pytestCheckHook,
   setuptools,
   wcwidth,
@@ -12,10 +12,11 @@ buildPythonPackage rec {
   version = "3.0.52";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "prompt_toolkit";
-    inherit version;
-    hash = "sha256-KM3hkpKcjnMh3oXeHdvnNvE3UUiwLy4X7dhABCsb6FU=";
+  src = fetchFromGitHub {
+    owner = "prompt-toolkit";
+    repo = "python-prompt-toolkit";
+    tag = version;
+    hash = "sha256-ggCy7xTvOkjy6DgsO/rPNtQiAQ4FjsK4ShrvkIHioNQ=";
   };
 
   postPatch = ''
@@ -38,7 +39,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "prompt_toolkit" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for building powerful interactive command lines";
     longDescription = ''
       prompt_toolkit could be a replacement for readline, but it can be
@@ -47,8 +48,8 @@ buildPythonPackage rec {
       with a nice interactive Python shell (called ptpython) built on top.
     '';
     homepage = "https://github.com/jonathanslenders/python-prompt-toolkit";
-    changelog = "https://github.com/prompt-toolkit/python-prompt-toolkit/blob/${version}/CHANGELOG";
-    license = licenses.bsd3;
-    maintainers = [ ];
+    changelog = "https://github.com/prompt-toolkit/python-prompt-toolkit/releases/tag/${src.tag}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ sarahec ];
   };
 }

@@ -33,11 +33,11 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = [ "web" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to easily work with timezone lookups via a binary, a library, or a server";
     homepage = "https://github.com/twitchax/rtz";
     changelog = "https://github.com/twitchax/rtz/releases/tag/${src.rev}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "rtz";
   };

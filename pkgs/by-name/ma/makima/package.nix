@@ -22,12 +22,12 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ udev ];
 
-  meta = with lib; {
+  meta = {
     description = "Linux daemon to remap and create macros for keyboards, mice and controllers";
     homepage = "https://github.com/cyber-sushi/makima";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ByteSudoer ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ ByteSudoer ];
+    platforms = lib.platforms.linux;
     mainProgram = "makima";
   };
 }

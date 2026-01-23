@@ -9,13 +9,13 @@
   cmdliner,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
 
   pname = "ocaml${ocaml.version}-b0";
   version = "0.0.5";
 
   src = fetchurl {
-    url = "${meta.homepage}/releases/b0-${version}.tbz";
+    url = "https://erratique.ch/software/b0/releases/b0-${finalAttrs.version}.tbz";
     sha256 = "sha256-ty04JQcP4RCme/VQw0ko2IBebWWX5cBU6nRTTeV1I/I=";
   };
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   inherit (topkg) buildPhase installPhase;
 
-  meta = with lib; {
+  meta = {
     description = "Software construction and deployment kit";
     longDescription = ''
       WARNING this package is unstable and work in progress, do not depend on
@@ -52,8 +52,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://erratique.ch/software/b0";
     inherit (ocaml.meta) platforms;
-    license = licenses.isc;
-    maintainers = [ maintainers.Julow ];
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.Julow ];
     broken = !(lib.versionAtLeast ocaml.version "4.08");
   };
-}
+})

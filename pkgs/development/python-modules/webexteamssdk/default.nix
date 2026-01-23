@@ -4,7 +4,6 @@
   fetchFromGitHub,
   future,
   pyjwt,
-  pythonOlder,
   requests,
   requests-toolbelt,
   setuptools,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "webexteamssdk";
   version = "1.6.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "CiscoDevNet";
@@ -51,11 +48,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "webexteamssdk" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for Webex Teams APIs";
     homepage = "https://github.com/CiscoDevNet/webexteamssdk";
     changelog = "https://github.com/WebexCommunity/WebexPythonSDK/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -18,12 +18,12 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-LKltHVig33zUSWoRgCb1BgeKiJsDnlYEuPfQfrnhafI=";
 
   # freshfetch depends on rust nightly features
-  RUSTC_BOOTSTRAP = 1;
+  env.RUSTC_BOOTSTRAP = 1;
 
-  meta = with lib; {
+  meta = {
     description = "Fresh take on neofetch";
     homepage = "https://github.com/k4rakara/freshfetch";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "freshfetch";
   };

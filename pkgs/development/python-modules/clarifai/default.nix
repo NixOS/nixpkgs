@@ -17,7 +17,6 @@
   pydantic-core,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   rich,
   ruff,
@@ -34,8 +33,6 @@ buildPythonPackage rec {
   pname = "clarifai";
   version = "11.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Clarifai";
@@ -121,12 +118,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "clarifai" ];
 
-  meta = with lib; {
+  meta = {
     description = "Clarifai Python Utilities";
     homepage = "https://github.com/Clarifai/clarifai-python";
     changelog = "https://github.com/Clarifai/clarifai-python/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ natsukium ];
     mainProgram = "clarifai";
   };
 }

@@ -75,11 +75,11 @@ stdenv.mkDerivation rec {
 
   passthru.tests.snapcast = nixosTests.snapcast;
 
-  meta = with lib; {
+  meta = {
     description = "Synchronous multi-room audio player";
     homepage = "https://github.com/badaix/snapcast";
-    maintainers = with maintainers; [ fpletz ];
-    platforms = platforms.linux ++ platforms.darwin;
-    license = licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fpletz ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = lib.licenses.gpl3Plus;
   };
 }

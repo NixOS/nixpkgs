@@ -42,11 +42,11 @@ stdenv.mkDerivation {
     install -Dt $out/share/aitrack/models models/*
   '';
 
-  meta = with lib; {
+  meta = {
     description = "6DoF Head tracking software";
     mainProgram = "aitrack";
-    maintainers = with maintainers; [ ck3d ];
-    platforms = platforms.linux;
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ ck3d ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
   };
 }

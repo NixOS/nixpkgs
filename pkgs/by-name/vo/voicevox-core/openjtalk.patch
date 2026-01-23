@@ -1,0 +1,12 @@
+diff --git a/build.rs b/build.rs
+index 3f1b971..72f722f 100644
+--- a/build.rs
++++ b/build.rs
+@@ -6,6 +6,7 @@ use std::{
+ };
+ fn main() {
+     let mut cmake_conf = cmake::Config::new("open_jtalk");
++    cmake_conf.define("FETCHCONTENT_SOURCE_DIR_OPENJTALK", "@openjtalk_src@");
+     let target = env::var("TARGET").unwrap();
+     let mut include_dirs: Vec<PathBuf> = Vec::new();
+     let cmake_conf = if target.starts_with("i686") {

@@ -11,16 +11,14 @@
 
 buildPythonPackage rec {
   pname = "psutil";
-  version = "7.1.2";
+  version = "7.1.3";
   pyproject = true;
-
-  inherit stdenv;
 
   src = fetchFromGitHub {
     owner = "giampaolo";
     repo = "psutil";
     tag = "release-${version}";
-    hash = "sha256-LyGnLrq+SzCQmz8/P5DOugoNEyuH0IC7uIp8UAPwH0U=";
+    hash = "sha256-vMGUoiPr+QIe1N+I++d/DM9i2jeHTI68npGoJ2vKF10=";
   };
 
   postPatch = ''

@@ -13,8 +13,6 @@
   pexpect,
   python-daemon,
   pyyaml,
-  pythonOlder,
-  importlib-metadata,
 
   # tests
   addBinToPathHook,
@@ -58,8 +56,7 @@ buildPythonPackage rec {
     pexpect
     python-daemon
     pyyaml
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ];
 
   nativeCheckInputs = [
     addBinToPathHook
@@ -74,7 +71,6 @@ buildPythonPackage rec {
     versionCheckHook
     writableTmpDirAsHomeHook
   ];
-  versionCheckProgramArg = "--version";
 
   preCheck = ''
     # avoid coverage flags

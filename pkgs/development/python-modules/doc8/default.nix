@@ -7,7 +7,6 @@
   pbr,
   pygments,
   pytestCheckHook,
-  pythonOlder,
   restructuredtext-lint,
   setuptools-scm,
   stevedore,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "doc8";
   version = "2.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;

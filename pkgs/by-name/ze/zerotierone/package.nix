@@ -139,17 +139,17 @@ stdenv.mkDerivation {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Create flat virtual Ethernet networks of almost unlimited size";
     homepage = "https://www.zerotier.com";
-    license = if enableUnfree then licenses.unfree else licenses.mpl20;
-    maintainers = with maintainers; [
+    license = if enableUnfree then lib.licenses.unfree else lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [
       sjmackenzie
       zimbatm
       obadz
       danielfullmer
       mic92 # also can test darwin
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

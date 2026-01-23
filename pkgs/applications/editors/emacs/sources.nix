@@ -45,7 +45,7 @@ let
         homepage =
           {
             "mainline" = "https://www.gnu.org/software/emacs/";
-            "macport" = "https://bitbucket.org/mituharu/emacs-mac/";
+            "macport" = "https://github.com/jdtsmith/emacs-mac";
           }
           .${variant};
         description =
@@ -86,7 +86,6 @@ let
               adisbladis
               jwiegley
               lovek323
-              matthewbauer
               panchoh
             ];
             "macport" = with lib.maintainers; [

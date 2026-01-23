@@ -137,7 +137,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://gaphor.org/";
     changelog = "https://github.com/gaphor/gaphor/releases/tag/${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ normalcea ];
+    maintainers = [ ];
     teams = [ lib.teams.gnome-circle ];
     mainProgram = "gaphor";
     platforms = lib.platforms.linux;

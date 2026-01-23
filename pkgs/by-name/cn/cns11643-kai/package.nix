@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rypervenche";
     repo = "cns11643-fonts";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-A/4iwNvyzOYEpBzxKeq1xM/6aU6EOCATAr0lQlyckKQ=";
   };
 

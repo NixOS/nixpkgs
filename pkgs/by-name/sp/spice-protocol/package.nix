@@ -25,10 +25,10 @@ stdenv.mkDerivation rec {
     ln -sv ../share/pkgconfig $out/lib/pkgconfig
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Protocol headers for the SPICE protocol";
     homepage = "https://www.spice-space.org/";
-    license = licenses.bsd3;
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
   };
 }

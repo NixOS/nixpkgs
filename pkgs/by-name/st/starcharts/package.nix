@@ -25,12 +25,12 @@ buildGoModule rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Plot your repository stars over time";
     mainProgram = "starcharts";
     homepage = "https://github.com/caarlos0/starcharts";
     changelog = "https://github.com/caarlos0/starcharts/releases/tag/${src.rev}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

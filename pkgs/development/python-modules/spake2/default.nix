@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/warner/python-spake2/blob/v${version}/NEWS";
     description = "SPAKE2 password-authenticated key exchange library";
     homepage = "https://github.com/warner/python-spake2";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

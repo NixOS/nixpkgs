@@ -8,13 +8,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "plutovg";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "sammycage";
     repo = "plutovg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6UW+laVxTYvg+5qC12yA6U6gPKdFQeb7sdDunZ6gcd4=";
+    hash = "sha256-4TvbNsElDL7WX3yXLDM5nwHFCHQdUclk6HQ5MbPUEZE=";
   };
 
   cmakeFlags = [

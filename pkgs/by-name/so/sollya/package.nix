@@ -30,14 +30,18 @@ stdenv.mkDerivation rec {
     "--with-xml2-config=${lib.getExe' (lib.getDev libxml2) "xml2-config"}"
   ];
 
+  makeFlags = [
+    "CFLAGS=-std=c17"
+  ];
+
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Tool environment for safe floating-point code development";
     mainProgram = "sollya";
     homepage = "https://www.sollya.org/";
-    license = licenses.cecill-c;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ wegank ];
+    license = lib.licenses.cecill-c;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ wegank ];
   };
 }

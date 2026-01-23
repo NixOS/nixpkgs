@@ -65,15 +65,17 @@ in
 {
   imports = [
     (lib.mkRemovedOptionModule [ "services" "keyd" "ids" ]
-      ''Use keyboards.<filename>.ids instead. If you don't need a multi-file configuration, just add keyboards.default before the ids. See https://github.com/NixOS/nixpkgs/pull/243271.''
+      "Use keyboards.<filename>.ids instead. If you don't need a multi-file configuration, just add keyboards.default before the ids. See https://github.com/NixOS/nixpkgs/pull/243271."
     )
     (lib.mkRemovedOptionModule [ "services" "keyd" "settings" ]
-      ''Use keyboards.<filename>.settings instead. If you don't need a multi-file configuration, just add keyboards.default before the settings. See https://github.com/NixOS/nixpkgs/pull/243271.''
+      "Use keyboards.<filename>.settings instead. If you don't need a multi-file configuration, just add keyboards.default before the settings. See https://github.com/NixOS/nixpkgs/pull/243271."
     )
   ];
 
   options.services.keyd = {
     enable = lib.mkEnableOption "keyd, a key remapping daemon";
+
+    package = lib.mkPackageOption pkgs "keyd" { };
 
     keyboards = lib.mkOption {
       type = lib.types.attrsOf (lib.types.submodule keyboardOptions);
@@ -138,7 +140,7 @@ in
       environment.KEYD_SOCKET = "/run/keyd/keyd.sock";
 
       serviceConfig = {
-        ExecStart = "${pkgs.keyd}/bin/keyd";
+        ExecStart = lib.getExe' cfg.package "keyd";
         Restart = "always";
 
         # TODO investigate why it doesn't work propeprly with DynamicUser
@@ -152,7 +154,10 @@ in
         RuntimeDirectory = "keyd";
 
         # Hardening
-        CapabilityBoundingSet = [ "CAP_SYS_NICE" ];
+        CapabilityBoundingSet = [
+          "CAP_SYS_NICE"
+          "CAP_IPC_LOCK"
+        ];
         DeviceAllow = [
           "char-input rw"
           "/dev/uinput rw"
@@ -170,7 +175,6 @@ in
         ProtectKernelTunables = true;
         ProtectControlGroups = true;
         MemoryDenyWriteExecute = true;
-        RestrictRealtime = true;
         LockPersonality = true;
         ProtectProc = "invisible";
         SystemCallFilter = [

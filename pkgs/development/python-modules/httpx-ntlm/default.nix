@@ -4,15 +4,12 @@
   fetchPypi,
   httpx,
   pyspnego,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "httpx-ntlm";
   version = "1.4.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "httpx_ntlm";
@@ -30,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "httpx_ntlm" ];
 
-  meta = with lib; {
+  meta = {
     description = "NTLM authentication support for HTTPX";
     homepage = "https://github.com/ulodciv/httpx-ntlm";
     changelog = "https://github.com/ulodciv/httpx-ntlm/releases/tag/${version}";
-    license = licenses.isc;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

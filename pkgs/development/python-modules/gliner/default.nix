@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "gliner";
-  version = "0.2.22";
+  version = "0.2.24";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "urchade";
     repo = "GLiNER";
     tag = "v${version}";
-    hash = "sha256-UyqKn4cvrLUtSnfZoivgj7tw/mH/c8kmFwRQFrTIwhU=";
+    hash = "sha256-6kSt+c2UT0rvJDFHzRPTDffBG9X/2Mxs7RSZVgWG7jo=";
   };
 
   build-system = [

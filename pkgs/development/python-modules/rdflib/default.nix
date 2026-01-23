@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   pythonOlder,
 
   # builds
@@ -28,23 +27,15 @@
 
 buildPythonPackage rec {
   pname = "rdflib";
-  version = "7.2.1";
+  version = "7.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "RDFLib";
     repo = "rdflib";
     tag = version;
-    hash = "sha256-FisMiBTiL6emJS0d7UmlwGUzayA+CME5GGWgw/owfhc=";
+    hash = "sha256-jZ5mbTz/ra/ZHAFyMmtqaM4RZw851gfTCBCRuPcGeYA=";
   };
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/RDFLib/rdflib/commit/0ab817f86b5733c9a3b4ede7ef065b8d79e53fc5.diff";
-      hash = "sha256-+yWzQ3MyH0wihgiQRMMXV/FpG8WlXaIBhpsDF4e3rbY=";
-    })
-  ];
 
   build-system = [ poetry-core ];
 
@@ -84,6 +75,10 @@ buildPythonPackage rec {
     "test_example"
     "test_guess_format_for_parse"
     "rdflib.extras.infixowl"
+    # Upstream don't seem worried about these two tests failing
+    # https://github.com/RDFLib/rdflib/issues/2649#issuecomment-2443482119
+    "test_sparqleval"
+    "test_parser"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Require loopback network access
@@ -92,10 +87,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rdflib" ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/RDFLib/rdflib/blob/${src.tag}/CHANGELOG.md";
     description = "Python library for working with RDF";
     homepage = "https://rdflib.readthedocs.io";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

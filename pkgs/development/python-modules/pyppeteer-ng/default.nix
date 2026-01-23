@@ -4,6 +4,7 @@
   aiohttp,
   appdirs,
   buildPythonPackage,
+  gitUpdater,
   certifi,
   diff-match-patch,
   fetchFromGitHub,
@@ -21,7 +22,7 @@
   pyee,
   pylint,
   pytest,
-  pytest-cov,
+  pytest-cov-stub,
   pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
@@ -40,16 +41,14 @@
 
 buildPythonPackage rec {
   pname = "pyppeteer-ng";
-  version = "2.0.0rc10";
+  version = "2.0.0rc11";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dgtlmoon";
     repo = "pyppeteer-ng";
     tag = version;
-    hash = "sha256-NpxjKsh12pr/MCZ4gfoaa+3jTYyvQzHgSno1+rw2Wk0=";
+    hash = "sha256-vhsqz/2wNLqjtwVdLyLyO+JX7g2sz5MEMoHOnsDl/KQ=";
   };
 
   postPatch = ''
@@ -96,7 +95,7 @@ buildPythonPackage rec {
     pydocstyle
     pylint
     pytest
-    pytest-cov
+    pytest-cov-stub
     pytest-timeout
     pytest-xdist
     readme-renderer
@@ -149,12 +148,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyppeteer" ];
 
-  meta = with lib; {
+  passthru.updateScript = gitUpdater { };
+
+  meta = {
     description = "Headless chrome/chromium automation library (unofficial port of puppeteer)";
     mainProgram = "pyppeteer-install";
     homepage = "https://github.com/dgtlmoon/pyppeteer-ng";
     changelog = "https://github.com/dgtlmoon/pyppeteer-ng/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ thanegill ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ thanegill ];
   };
 }

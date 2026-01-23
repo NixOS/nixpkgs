@@ -34,12 +34,12 @@ buildPythonPackage rec {
     withPlugins = throw "Use pkgs.mdformat.withPlugins, i.e. the top-level attribute.";
   };
 
-  meta = with lib; {
+  meta = {
     description = "CommonMark compliant Markdown formatter";
     homepage = "https://mdformat.rtfd.io/";
     changelog = "https://github.com/executablebooks/mdformat/blob/${version}/docs/users/changelog.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       fab
       aldoborrero
     ];

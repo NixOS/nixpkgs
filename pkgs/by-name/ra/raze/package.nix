@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "raze";
-  version = "1.11.0";
+  version = "1.11.0-unstable-2025-11-19";
 
   src = fetchFromGitHub {
     owner = "ZDoom";
     repo = "Raze";
-    tag = finalAttrs.version;
-    hash = "sha256-P8iwCkLch8054PwnGmgqTPWA8O2yyMruDeUDJGxDI2Q=";
+    rev = "76fe82f5eb318fdeb30ba9fb27093a9a10bc3821";
+    hash = "sha256-QCxszreIExqWVVJL8GFNzfayeSwaelhGpimqn3spEJY=";
     leaveDotGit = true;
     postFetch = ''
       cd $out

@@ -46,5 +46,10 @@ in
     };
   };
 
-  meta.maintainers = lib.teams.uzinfocom.members;
+  meta.maintainers = with lib.maintainers; [
+    orzklv
+    shakhzodkudratov
+    bahrom04
+    bemeritus
+  ];
 }

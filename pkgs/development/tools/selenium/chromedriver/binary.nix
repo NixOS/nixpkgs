@@ -48,7 +48,7 @@ stdenv.mkDerivation {
 
   passthru.tests.version = testers.testVersion { package = chromedriver; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://chromedriver.chromium.org/";
     description = "WebDriver server for running Selenium tests on Chrome";
     longDescription = ''
@@ -57,12 +57,12 @@ stdenv.mkDerivation {
       input, JavaScript execution, and more. ChromeDriver is a standalone
       server that implements the W3C WebDriver standard.
     '';
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.bsd3;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.bsd3;
     maintainers = [ ];
     # Note from primeos: By updating Chromium I also update Google Chrome and
     # ChromeDriver.
-    platforms = platforms.darwin;
+    platforms = lib.platforms.darwin;
     mainProgram = "chromedriver";
   };
 }

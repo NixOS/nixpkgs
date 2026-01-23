@@ -24,18 +24,11 @@
   wrapGAppsHook4,
   zig_0_14,
 
-  # Usually you would override `zig.hook` with this, but we do that internally
-  # since upstream recommends a non-default level
+  # Upstream recommends a non-default level
   # https://github.com/ghostty-org/ghostty/blob/4b4d4062dfed7b37424c7210d1230242c709e990/PACKAGING.md#build-options
   optimizeLevel ? "ReleaseFast",
 }:
-let
-  zig = zig_0_14;
 
-  zig_hook = zig.hook.overrideAttrs {
-    zig_default_flags = "-Dcpu=baseline -Doptimize=${optimizeLevel} --color off";
-  };
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ghostty";
   version = "1.2.3";
@@ -66,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     pandoc
     pkg-config
     removeReferencesTo
-    zig_hook
+    zig_0_14
 
     # GTK frontend
     glib # Required for `glib-compile-schemas`
@@ -93,10 +86,14 @@ stdenv.mkDerivation (finalAttrs: {
     harfbuzz
   ];
 
+  dontSetZigDefaultFlags = true;
+
   zigBuildFlags = [
     "--system"
     "${finalAttrs.deps}"
     "-Dversion-string=${finalAttrs.version}"
+    "-Dcpu=baseline"
+    "-Doptimize=${optimizeLevel}"
   ]
   ++ lib.mapAttrsToList (name: package: "-fsys=${name} --search-prefix ${lib.getLib package}") {
     inherit glslang;
@@ -142,7 +139,6 @@ stdenv.mkDerivation (finalAttrs: {
     rmdir $out/share/vim
     ln -s $vim $out/share/vim-plugins
 
-
     remove-references-to -t ${finalAttrs.deps} $out/bin/.ghostty-wrapped
   '';
 
@@ -151,8 +147,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doInstallCheck = true;
-
-  versionCheckProgramArg = "--version";
 
   passthru = {
     tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {

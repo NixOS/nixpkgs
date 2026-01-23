@@ -211,7 +211,7 @@ rec {
           ${context} ("${toString value}") is a string-like value, but it should be a file set or a path instead.
               Paths represented as strings are not supported by `lib.fileset`, use `lib.sources` or derivations instead.''
       else
-        error ''${context} is of type ${typeOf value}, but it should be a file set or a path instead.''
+        error "${context} is of type ${typeOf value}, but it should be a file set or a path instead."
     else if !pathExists value then
       error ''
         ${context} (${toString value}) is a path that does not exist.

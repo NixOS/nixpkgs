@@ -51,11 +51,11 @@ buildPythonPackage rec {
     "test_write_if_different"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Helpers to assist with building Python packages with compiled C/Cython extensions";
     homepage = "https://github.com/astropy/extension-helpers";
     changelog = "https://github.com/astropy/extension-helpers/blob/${src.tag}/CHANGES.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

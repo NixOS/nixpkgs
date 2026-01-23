@@ -73,7 +73,7 @@ buildPythonPackage rec {
     torchvision
     writableTmpDirAsHomeHook
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # network access

@@ -1,24 +1,24 @@
 {
   lib,
-  buildGo124Module,
+  buildGoModule,
   fetchFromGitHub,
   nixosTests,
   testers,
   dex-oidc,
 }:
 
-buildGo124Module rec {
+buildGoModule (finalAttrs: {
   pname = "dex";
-  version = "2.43.0";
+  version = "2.44.0";
 
   src = fetchFromGitHub {
     owner = "dexidp";
     repo = "dex";
-    rev = "v${version}";
-    sha256 = "sha256-ELklXlB691xcUdCi+B1Vwd9yvS1Txg+X+QKBMGP8354=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-wpy7pZBpqAaPjWbnsqtnE+65a58IGg0pyp4CEUnmmc4=";
   };
 
-  vendorHash = "sha256-td15lXx6h4SFfTQdc4Whe2bbOpXK57OD8fyDzRvas8M=";
+  vendorHash = "sha256-3ef2G4+UlLGsBW09ZM20qU82uj/hVlMAnujcd2BulGg=";
 
   subPackages = [
     "cmd/dex"
@@ -27,7 +27,7 @@ buildGo124Module rec {
   ldflags = [
     "-w"
     "-s"
-    "-X main.version=${src.rev}"
+    "-X main.version=${finalAttrs.src.rev}"
   ];
 
   postInstall = ''
@@ -40,18 +40,18 @@ buildGo124Module rec {
     version = testers.testVersion {
       package = dex-oidc;
       command = "dex version";
-      version = "v${version}";
+      version = "v${finalAttrs.version}";
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "OpenID Connect and OAuth2 identity provider with pluggable connectors";
     homepage = "https://github.com/dexidp/dex";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       benley
       techknowlogick
     ];
     mainProgram = "dex";
   };
-}
+})

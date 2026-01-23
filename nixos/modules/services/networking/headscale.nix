@@ -19,8 +19,6 @@ let
   };
 
   settingsFormat = pkgs.formats.yaml { };
-  configFile = settingsFormat.generate "headscale.yaml" cfg.settings;
-  cliConfigFile = settingsFormat.generate "headscale.yaml" cliConfig;
 
   assertRemovedOption = option: message: {
     assertion = !lib.hasAttrByPath option cfg;
@@ -34,6 +32,16 @@ in
       enable = lib.mkEnableOption "headscale, Open Source coordination server for Tailscale";
 
       package = lib.mkPackageOption pkgs "headscale" { };
+
+      configFile = lib.mkOption {
+        type = lib.types.path;
+        readOnly = true;
+        default = settingsFormat.generate "headscale.yaml" cfg.settings;
+        defaultText = lib.literalExpression ''(pkgs.formats.yaml { }).generate "headscale.yaml" config.services.headscale.settings'';
+        description = ''
+          Path to the configuration file of headscale.
+        '';
+      };
 
       user = lib.mkOption {
         default = "headscale";
@@ -621,7 +629,7 @@ in
     environment = {
       # Headscale CLI needs a minimal config to be able to locate the unix socket
       # to talk to the server instance.
-      etc."headscale/config.yaml".source = cliConfigFile;
+      etc."headscale/config.yaml".source = settingsFormat.generate "headscale.yaml" cliConfig;
 
       systemPackages = [ cfg.package ];
     };
@@ -646,7 +654,7 @@ in
           export HEADSCALE_DATABASE_POSTGRES_PASS="$(head -n1 ${lib.escapeShellArg cfg.settings.database.postgres.password_file})"
         ''}
 
-        exec ${lib.getExe cfg.package} serve --config ${configFile}
+        exec ${lib.getExe cfg.package} serve --config ${cfg.configFile}
       '';
 
       serviceConfig =

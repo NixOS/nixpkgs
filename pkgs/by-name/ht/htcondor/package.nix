@@ -56,12 +56,12 @@ stdenv.mkDerivation rec {
     "-DWITH_PYTHON_BINDINGS=false"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://htcondor.org/";
     description = "Software system that creates a High-Throughput Computing (HTC) environment";
-    platforms = platforms.linux;
-    license = licenses.asl20;
-    maintainers = with maintainers; [ evey ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ evey ];
     # On Aarch64: ld: cannot find -lpthread: No such file or directory
     # On x86_64:  ld: cannot find -ldl:      No such file or directory
     broken = true;

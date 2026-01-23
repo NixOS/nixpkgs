@@ -365,7 +365,7 @@ in
       modules = mkOption {
         type = types.listOf types.path;
         default = [ ];
-        example = literalExpression "[ pkgs.xf86_input_wacom ]";
+        example = literalExpression "[ pkgs.xf86-input-wacom ]";
         description = "Packages to be added to the module search path of the X server.";
       };
 
@@ -1021,7 +1021,8 @@ in
 
     fonts.packages = [
       (if cfg.upscaleDefaultCursor then fontcursormisc_hidpi else pkgs.xorg.fontcursormisc)
-      pkgs.xorg.fontmiscmisc
+      pkgs.font-misc-misc
+      pkgs.font-alias
     ];
 
   };

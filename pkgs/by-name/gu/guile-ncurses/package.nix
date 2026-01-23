@@ -5,15 +5,15 @@
   pkg-config,
   guile,
   libffi,
-  ncurses,
+  ncurses5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "guile-ncurses";
   version = "3.1";
 
   src = fetchurl {
-    url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/${finalAttrs.pname}/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     hash = "sha256-7onozq/Kud0O8/wazJsQ9NIbpLJW0ynYQtYYPmP41zM=";
   };
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     guile
     libffi
-    ncurses
+    ncurses5
   ];
 
   configureFlags = [
@@ -37,14 +37,13 @@ stdenv.mkDerivation rec {
   postFixup = ''
     for f in $out/${guile.siteDir}/ncurses/**.scm; do \
       substituteInPlace $f \
-        --replace "libguile-ncurses" "$out/lib/guile/${guile.effectiveVersion}/libguile-ncurses"; \
+        --replace-fail "libguile-ncurses" "$out/lib/guile/${guile.effectiveVersion}/libguile-ncurses"; \
     done
   '';
 
-  # XXX: 1 of 65 tests failed.
-  doCheck = false;
+  doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnu.org/software/guile-ncurses/";
     description = "Scheme interface to the NCurses libraries";
     mainProgram = "guile-ncurses-shell";
@@ -54,8 +53,8 @@ stdenv.mkDerivation rec {
       interface functionality is built on the ncurses libraries: curses, form,
       panel, and menu.
     '';
-    license = licenses.lgpl3Plus;
+    license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
     platforms = guile.meta.platforms;
   };
-}
+})

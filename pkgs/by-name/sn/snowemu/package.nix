@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "snowemu";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "twvd";
     repo = "snow";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-m3CPKswOB2j2r/BTf9RzCvwPVq3gbKemtk11HKS1nHk=";
+    hash = "sha256-oBMzkN4cHk0KywIiKLcjE58T/9lOIM6fRbCZOR6zON8=";
     fetchSubmodules = true;
   };
-  cargoHash = "sha256-+FS5785F8iWPt6Db+IKRbOFAYNEfHC+jvPVdwkLZ5YI=";
+  cargoHash = "sha256-cuxbjyjdQNkluRfPQtro9OPr4V/trT1VqgbHjfZUScQ=";
 
   nativeBuildInputs = [
     pkg-config

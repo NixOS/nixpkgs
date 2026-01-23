@@ -38,7 +38,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/github-release/github-release";
     maintainers = with lib.maintainers; [
       ardumont
-      j03
     ];
   };
 })

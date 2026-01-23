@@ -32,12 +32,11 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ gnutls ];
 
-  meta = with lib; {
+  meta = {
     description = "XML parser for jabber";
 
     homepage = "https://github.com/timothytylee/iksemel-1.4";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ disassembler ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

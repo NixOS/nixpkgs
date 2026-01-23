@@ -23,14 +23,14 @@
 }:
 buildPythonPackage rec {
   pname = "qpsolvers";
-  version = "4.8.1";
+  version = "4.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "qpsolvers";
     repo = "qpsolvers";
     tag = "v${version}";
-    hash = "sha256-wiFDsTE+L0J+6GsDz27Xh20eXvtV6KDa2CLGQDYzIGM=";
+    hash = "sha256-+W8UJ5oXFw4V+gY/ofzjmO1DwZrZjcycaZH+WKC/9CI=";
   };
 
   build-system = [ flit-core ];
@@ -77,11 +77,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ unittestCheckHook ] ++ optional-dependencies.open_source_solvers;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/qpsolvers/qpsolvers/blob/${src.tag}/CHANGELOG.md";
     description = "Quadratic programming solvers in Python with a unified API";
     homepage = "https://github.com/qpsolvers/qpsolvers";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ renesat ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ renesat ];
   };
 }

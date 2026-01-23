@@ -20,7 +20,7 @@
 buildPythonPackage rec {
   pname = "sphinx-tabs";
   version = "3.4.7";
-  format = "pyproject";
+  pyproject = true;
 
   outputs = [
     "out"
@@ -52,10 +52,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sphinx_tabs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Sphinx extension for creating tabbed content when building HTML";
     homepage = "https://github.com/executablebooks/sphinx-tabs";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kaction ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kaction ];
   };
 }

@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "reedsolo";
   version = "1.7.0";
-  format = "pyproject";
+  pyproject = true;
 
   # Pypi does not have the tests
   src = fetchFromGitHub {
@@ -35,10 +35,10 @@ buildPythonPackage rec {
     "tests/test_creedsolo.py" # TODO: package creedsolo
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Pure-python universal errors-and-erasures Reed-Solomon Codec";
     homepage = "https://github.com/tomerfiliba/reedsolomon";
-    license = licenses.publicDomain;
-    maintainers = with maintainers; [ yorickvp ];
+    license = lib.licenses.publicDomain;
+    maintainers = with lib.maintainers; [ yorickvp ];
   };
 }

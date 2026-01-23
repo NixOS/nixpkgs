@@ -21,6 +21,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-KUr9PS651bccPQ6I/fGetRO/24Q7KNNcBVLkrgYoJ6E=";
   };
 
+  patches = [
+    # ncurses 6.6 moved the termios.h include inside #ifdef NCURSES_INTERNALS in term.h,
+    # so applications can no longer rely on term.h to provide termios symbols.
+    ./0001-console-include-termios.h-explicitly.patch
+  ];
+
   # libtool.m4 only matches macOS 10.*
   postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
     substituteInPlace configure \
@@ -68,17 +74,17 @@ stdenv.mkDerivation rec {
     ln -s $out/sbin/* $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Enterprise ready, Network Backup Tool";
     homepage = "http://bacula.org/";
-    license = with licenses; [
+    license = with lib.licenses; [
       agpl3Only
       bsd2
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       lovek323
       eleanor
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

@@ -40,16 +40,16 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "magic-wormhole";
-  version = "0.21.1";
+  version = "0.22.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "magic-wormhole";
     repo = "magic-wormhole";
-    tag = version;
-    hash = "sha256-HZ6ZS2dkJoW+yL6F3U9WguUHicfG2KWnk4/YuNPwpUc=";
+    tag = finalAttrs.version;
+    hash = "sha256-22UFwBcpuutFDRPFJAS9MBwoTdIx2xW0DSpR44DJ1lU=";
   };
 
   postPatch =
@@ -103,7 +103,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-twisted
   ]
-  ++ optional-dependencies.dilation
+  ++ finalAttrs.finalPackage.optional-dependencies.dilation
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ unixtools.locale ];
 
   __darwinAllowLocalNetworking = true;
@@ -112,7 +112,7 @@ buildPythonPackage rec {
     install -Dm644 docs/wormhole.1 $out/share/man/man1/wormhole.1
 
     # https://github.com/magic-wormhole/magic-wormhole/issues/619
-    installShellCompletion --cmd ${meta.mainProgram} \
+    installShellCompletion --cmd ${finalAttrs.meta.mainProgram} \
       --bash wormhole_complete.bash \
       --fish wormhole_complete.fish \
       --zsh wormhole_complete.zsh
@@ -122,11 +122,11 @@ buildPythonPackage rec {
   passthru.updateScript = gitUpdater { };
 
   meta = {
-    changelog = "https://github.com/magic-wormhole/magic-wormhole/blob/${version}/NEWS.md";
+    changelog = "https://github.com/magic-wormhole/magic-wormhole/blob/${finalAttrs.src.rev}/NEWS.md";
     description = "Securely transfer data between computers";
     homepage = "https://magic-wormhole.readthedocs.io/";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.mjoerg ];
     mainProgram = "wormhole";
   };
-}
+})

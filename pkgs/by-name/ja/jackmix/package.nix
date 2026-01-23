@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pkg-config,
   scons,
-  lash,
   libjack2,
   jack ? libjack2,
   alsa-lib,
@@ -14,22 +13,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jackmix";
-  version = "0.6.0";
+  version = "0.6.1-unstable-2024-03-26";
 
   src = fetchFromGitHub {
     owner = "kampfschlaefer";
     repo = "jackmix";
-    tag = finalAttrs.version;
-    sha256 = "0p59411vk38lccn24r7nih10jpgg9i46yc26zpc3x13amxwwpd4h";
+    rev = "f0f29a7111f704f369f1ecd6c29a713ce21f767a";
+    hash = "sha256-6dz7U6umkdBOLx1MQOEeY51OrEtKlFpVMBudBTe6ehM=";
   };
 
   patches = [
     ./no_error.patch
-    (fetchpatch {
-      name = "sconstruct-python3.patch";
-      url = "https://github.com/kampfschlaefer/jackmix/commit/3a0c868b267728fdbc69cc3dc1941edac27d97f6.patch";
-      hash = "sha256-MLgxIiZ0+C1IVEci9Q347DR+SJUlPG2N3iPvuhRptJU=";
-    })
   ];
 
   nativeBuildInputs = [
@@ -39,7 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [
     libsForQt5.qtbase
-    lash
     jack
     alsa-lib
   ];
@@ -48,12 +41,11 @@ stdenv.mkDerivation (finalAttrs: {
     install -D jackmix/jackmix $out/bin/jackmix
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Matrix-Mixer for the Jack-Audio-connection-Kit";
     mainProgram = "jackmix";
     homepage = "https://github.com/kampfschlaefer/jackmix";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ kampfschlaefer ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
   };
 })

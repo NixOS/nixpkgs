@@ -29,12 +29,12 @@ buildGoModule rec {
     rm -f $out/bin/print-cache
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Uploads rss feeds as e-mails onto an IMAP server";
     mainProgram = "feed2imap-go";
     homepage = "https://github.com/Necoro/feed2imap-go";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [
       nomeata
       Necoro
     ];

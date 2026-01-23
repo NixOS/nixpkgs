@@ -4,7 +4,6 @@
   fetchPypi,
   buildPythonPackage,
   isPyPy,
-  pythonOlder,
 
   # build-system
   certifi,
@@ -38,9 +37,6 @@
   pillow,
   pyparsing,
   python-dateutil,
-
-  # optional
-  importlib-resources,
 
   # GTK3
   enableGtk3 ? false,
@@ -83,8 +79,6 @@ buildPythonPackage rec {
   version = "3.10.5";
   pname = "matplotlib";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
@@ -147,7 +141,6 @@ buildPythonPackage rec {
     pyparsing
     python-dateutil
   ]
-  ++ lib.optionals (pythonOlder "3.10") [ importlib-resources ]
   ++ lib.optionals enableGtk3 [
     pycairo
     pygobject3
@@ -197,15 +190,15 @@ buildPythonPackage rec {
     cd $out
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python plotting library, making publication quality plots";
     homepage = "https://matplotlib.org/";
     changelog = "https://github.com/matplotlib/matplotlib/releases/tag/v${version}";
-    license = with licenses; [
+    license = with lib.licenses; [
       psfl
       bsd0
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       lovek323
       veprbl
     ];

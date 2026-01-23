@@ -34,7 +34,6 @@ buildGoModule rec {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/woke";
-  versionCheckProgramArg = "--version";
 
   meta = {
     changelog = "https://github.com/get-woke/woke/releases/tag/${src.tag}";

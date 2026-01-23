@@ -25,12 +25,12 @@ stdenv.mkDerivation rec {
     cp ministat.1 $out/share/man/man1/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple tool for statistical comparison of data sets";
     homepage = "https://git.decadent.org.uk/gitweb/?p=ministat.git";
-    license = licenses.beerware;
-    maintainers = [ maintainers.dezgeg ];
-    platforms = platforms.all;
+    license = lib.licenses.beerware;
+    maintainers = [ lib.maintainers.dezgeg ];
+    platforms = lib.platforms.all;
     mainProgram = "ministat";
   };
 }

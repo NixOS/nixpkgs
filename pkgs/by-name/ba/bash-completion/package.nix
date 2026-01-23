@@ -72,11 +72,11 @@ stdenv.mkDerivation rec {
     sed -i -e 's/readlink -f/readlink/g' bash_completion completions/*
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/scop/bash-completion";
     description = "Programmable completion for the bash shell";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ philiptaron ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ philiptaron ];
   };
 }

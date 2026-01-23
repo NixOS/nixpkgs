@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cgal";
-  version = "6.0.2";
+  version = "6.1";
 
   src = fetchurl {
     url = "https://github.com/CGAL/cgal/releases/download/v${finalAttrs.version}/CGAL-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-8wxb58JaKj6iS8y6q1z2P6/aY8AnnzTX5/izISgh/tY=";
+    sha256 = "sha256-YY2oqLP1vka08KR6Hvs8nmwD1qqw9VMdVtNV0ycB158=";
   };
 
   patches = [ ./cgal_path.patch ];

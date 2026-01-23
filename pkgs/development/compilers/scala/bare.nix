@@ -36,13 +36,13 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Scala 3 compiler, also known as Dotty";
     homepage = "https://scala-lang.org/";
-    license = licenses.asl20;
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
     mainProgram = "scala";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       virusdave
       kashw2
       natsukagami

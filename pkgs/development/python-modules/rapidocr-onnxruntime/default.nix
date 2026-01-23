@@ -1,5 +1,6 @@
 {
   lib,
+  config,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -19,6 +20,9 @@
 
   pytestCheckHook,
   requests,
+
+  cudaSupport ? config.cudaSupport,
+  rapidocr-onnxruntime,
 }:
 let
   version = "1.4.4";
@@ -115,9 +119,26 @@ buildPythonPackage {
     "test_long_img"
   ];
 
+  # Tests require access to a physical GPU to work, otherwise the interpreter crashes:
+  # Fatal Python error: Aborted
+  # File "/nix/store/..onnxruntime/capi/onnxruntime_inference_collection.py", line 561 in _create_inference_session
+  doCheck = !cudaSupport;
+
   # rapidocr-onnxruntime has been renamed to rapidocr by upstream since 2.0.0. However, some packages like open-webui still requires rapidocr-onnxruntime 1.4.4. Therefore we set no auto update here.
   # nixpkgs-update: no auto update
   passthru.skipBulkUpdate = true;
+
+  passthru.gpuCheck = rapidocr-onnxruntime.overridePythonAttrs (old: {
+    requiredSystemFeatures = [ "cuda" ];
+    doCheck = true;
+
+    disabledTests =
+      (old.disabledTests or [ ])
+      ++ lib.optionals cudaSupport [
+        # IndexError: list index out of range
+        "test_ort_cuda_warning"
+      ];
+  });
 
   meta = {
     changelog = "https://github.com/RapidAI/RapidOCR/releases/tag/${src.tag}";

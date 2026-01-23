@@ -81,13 +81,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "amnezia-vpn";
-  version = "4.8.11.0";
+  version = "4.8.11.4";
 
   src = fetchFromGitHub {
     owner = "amnezia-vpn";
     repo = "amnezia-client";
     tag = finalAttrs.version;
-    hash = "sha256-JZ6cGqLybHgy6xIklH3A//XNXiXlsM4NixGmk0KoubU=";
+    hash = "sha256-LNzXYNhW1fbQhEkailqmX69MgPGJfJAu6KhGh5oSlJc=";
     fetchSubmodules = true;
   };
 
@@ -175,13 +175,13 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Amnezia VPN Client";
     downloadPage = "https://amnezia.org/en/downloads";
     homepage = "https://github.com/amnezia-vpn/amnezia-client";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     mainProgram = "AmneziaVPN";
-    maintainers = with maintainers; [ sund3RRR ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ sund3RRR ];
+    platforms = lib.platforms.linux;
   };
 })

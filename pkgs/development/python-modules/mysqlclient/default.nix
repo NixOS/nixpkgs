@@ -23,9 +23,9 @@ buildPythonPackage rec {
     hash = "sha256-JK4itZQW1fzOfpnJ03VINQtFZbqsgvleFJysbOQWOEU=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Python interface to MySQL";
     homepage = "https://github.com/PyMySQL/mysqlclient-python";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
   };
 }

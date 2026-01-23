@@ -431,39 +431,42 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkMerge [
+    (lib.mkIf cfg.enable {
+      services.udev.packages = [ pkgs.libinput.out ];
+    })
 
-    services.xserver.modules = [ pkgs.xorg.xf86inputlibinput ];
+    (lib.mkIf (cfg.enable && config.services.xserver.enable) {
+      services.xserver.modules = [ pkgs.xorg.xf86inputlibinput ];
 
-    environment.systemPackages = [ pkgs.xorg.xf86inputlibinput ];
+      # for man pages
+      environment.systemPackages = [ pkgs.xorg.xf86inputlibinput ];
 
-    environment.etc =
-      let
-        cfgPath = "X11/xorg.conf.d/40-libinput.conf";
-      in
-      {
-        ${cfgPath} = {
-          source = pkgs.xorg.xf86inputlibinput.out + "/share/" + cfgPath;
-        };
-      };
-
-    services.udev.packages = [ pkgs.libinput.out ];
-
-    services.xserver.inputClassSections = [
-      (mkX11ConfigForDevice "mouse" "Pointer")
-      (mkX11ConfigForDevice "touchpad" "Touchpad")
-    ];
-
-    assertions = [
-      # already present in synaptics.nix
-      /*
+      environment.etc =
+        let
+          cfgPath = "X11/xorg.conf.d/40-libinput.conf";
+        in
         {
-          assertion = !config.services.xserver.synaptics.enable;
-          message = "Synaptics and libinput are incompatible, you cannot enable both (in services.xserver).";
-        }
-      */
-    ];
+          ${cfgPath} = {
+            source = pkgs.xorg.xf86inputlibinput.out + "/share/" + cfgPath;
+          };
+        };
 
-  };
+      services.xserver.inputClassSections = [
+        (mkX11ConfigForDevice "mouse" "Pointer")
+        (mkX11ConfigForDevice "touchpad" "Touchpad")
+      ];
+
+      assertions = [
+        # already present in synaptics.nix
+        /*
+          {
+            assertion = !config.services.xserver.synaptics.enable;
+            message = "Synaptics and libinput are incompatible, you cannot enable both (in services.xserver).";
+          }
+        */
+      ];
+    })
+  ];
 
 }

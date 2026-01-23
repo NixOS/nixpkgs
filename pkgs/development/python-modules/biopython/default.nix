@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   numpy,
 }:
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "biopython";
   version = "1.85";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;

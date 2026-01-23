@@ -4,7 +4,7 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cbeams";
   version = "1.0.3";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   disabled = !python3Packages.isPy3k;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-8Q2sWsAc39Mu34K1wWOKOJERKzBStE4GmtuzOs2T7Kk=";
   };
 
@@ -41,4 +41,4 @@ python3Packages.buildPythonApplication rec {
       sigmanificient
     ];
   };
-}
+})

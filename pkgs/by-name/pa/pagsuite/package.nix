@@ -31,10 +31,10 @@ stdenv.mkDerivation {
   # make[2]: ***  No rule to make target 'lib/libpag.dylib', needed by 'bin/osr'.  Stop.
   enableParallelBuilding = false;
 
-  meta = with lib; {
+  meta = {
     description = "Optimization tools for the (P)MCM problem";
     homepage = "https://gitlab.com/kumm/pagsuite";
-    maintainers = with maintainers; [ wegank ];
-    license = licenses.unfree;
+    maintainers = with lib.maintainers; [ wegank ];
+    license = lib.licenses.unfree;
   };
 }

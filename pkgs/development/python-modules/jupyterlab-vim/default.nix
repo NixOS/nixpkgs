@@ -31,11 +31,11 @@ buildPythonPackage rec {
   # has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Vim notebook cell bindings for JupyterLab";
     homepage = "https://github.com/jupyterlab-contrib/jupyterlab-vim";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ mart-mihkel ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ mart-mihkel ];
   };
 }

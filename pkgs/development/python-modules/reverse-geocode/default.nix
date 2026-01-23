@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
-  pythonOlder,
   numpy,
   scipy,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "reverse-geocode";
   version = "1.6.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     pname = "reverse_geocode";

@@ -14,7 +14,7 @@ diff --git a/elixir/mix.exs b/elixir/mix.exs
 index df90739df..5c53e4383 100644
 --- a/elixir/mix.exs
 +++ b/elixir/mix.exs
-@@ -50,7 +50,9 @@ defmodule Firezone.MixProject do
+@@ -50,6 +50,8 @@ defmodule Firezone.MixProject do
        # Formatter doesn't track dependencies of children applications
        {:phoenix, "~> 1.7.0"},
        {:phoenix_live_view, "~> 1.0.0-rc.0"},
@@ -24,7 +24,26 @@ index df90739df..5c53e4383 100644
 +      {:mail, "~> 0.3.0"}
      ]
    end
- 
+diff --git a/elixir/config/runtime.exs b/elixir/config/runtime.exs
+index abb3171bf77..f9d903e040f 100644
+--- a/elixir/config/runtime.exs
++++ b/elixir/config/runtime.exs
+@@ -324,5 +324,12 @@ if config_env() == :prod do
+          Domain.Mailer,
+          [
+            adapter: env_var_to_config!(:outbound_email_adapter),
+-           from_email: env_var_to_config!(:outbound_email_from)
++           from_email: env_var_to_config!(:outbound_email_from),
++           protocol: String.to_atom(System.get_env("OUTBOUND_EMAIL_SMTP_PROTOCOL")),
++           relay: System.get_env("OUTBOUND_EMAIL_SMTP_HOST"),
++           port: String.to_integer(System.get_env("OUTBOUND_EMAIL_SMTP_PORT")),
++           auth: [
++             username: System.get_env("OUTBOUND_EMAIL_SMTP_USERNAME"),
++             password: System.get_env("OUTBOUND_EMAIL_SMTP_PASSWORD")
++           ]
+          ] ++ env_var_to_config!(:outbound_email_adapter_opts)
+
+   config :workos, WorkOS.Client,
 diff --git a/elixir/mix.lock b/elixir/mix.lock
 index 0b03b58d0..eefb202f4 100644
 --- a/elixir/mix.lock
@@ -43,4 +62,3 @@ index 0b03b58d0..eefb202f4 100644
    "multipart": {:hex, :multipart, "0.4.0", "634880a2148d4555d050963373d0e3bbb44a55b2badd87fa8623166172e9cda0", [:mix], [{:mime, "~> 1.2 or ~> 2.0", [hex: :mime, repo: "hexpm", optional: false]}], "hexpm", "3c5604bc2fb17b3137e5d2abdf5dacc2647e60c5cc6634b102cf1aef75a06f0a"},
    "nimble_csv": {:hex, :nimble_csv, "1.3.0", "b7f998dc62b222bce9596e46f028c7a5af04cb5dde6df2ea197c583227c54971", [:mix], [], "hexpm", "41ccdc18f7c8f8bb06e84164fc51635321e80d5a3b450761c4997d620925d619"},
    "nimble_options": {:hex, :nimble_options, "1.1.1", "e3a492d54d85fc3fd7c5baf411d9d2852922f66e69476317787a7b2bb000a61b", [:mix], [], "hexpm", "821b2470ca9442c4b6984882fe9bb0389371b8ddec4d45a9504f00a66f650b44"},
-

@@ -64,6 +64,9 @@ insert_final_newline = unset
 end_of_line = unset
 trim_trailing_whitespace = unset
 
+[*.json]
+insert_final_newline = unset
+
 [*.lock]
 indent_size = unset
 

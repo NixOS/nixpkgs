@@ -24,10 +24,10 @@ buildPythonPackage rec {
   doCheck = false; # No tests in package or GitHub
   pythonImportsCheck = [ "ipyvue" ];
 
-  meta = with lib; {
+  meta = {
     description = "Jupyter widgets base for Vue libraries";
     homepage = "https://github.com/mariobuikhuizen/ipyvue";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

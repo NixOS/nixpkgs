@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   msrest,
   azure-common,
@@ -11,8 +10,6 @@
 buildPythonPackage rec {
   pname = "azure-mgmt-msi";
   version = "7.0.0";
-
-  disabled = pythonOlder "3.6";
 
   format = "setuptools";
 
@@ -35,10 +32,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "azure.mgmt.msi" ];
 
-  meta = with lib; {
+  meta = {
     description = "This is the Microsoft Azure MSI Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/resources/azure-mgmt-msi";
-    license = licenses.mit;
-    maintainers = with maintainers; [ maxwilson ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ maxwilson ];
   };
 }

@@ -1,0 +1,22 @@
+From 76e3ce46eb930dbc51c3e7aeb832a9db6194fd34 Mon Sep 17 00:00:00 2001
+From: sandroid <sandroid@posteo.net>
+Date: Sun, 9 Nov 2025 22:12:03 +0100
+Subject: [PATCH] fix(crates/server): remove unnecessary parentheses
+
+---
+ crates/server/src/snippets/mod.rs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/crates/server/src/snippets/mod.rs b/crates/server/src/snippets/mod.rs
+index 00759b1e..8a43c326 100644
+--- a/crates/server/src/snippets/mod.rs
++++ b/crates/server/src/snippets/mod.rs
+@@ -39,7 +39,7 @@ async fn load(config: &config::SnippetConfig) -> HashMap<ClipEntry, Option<PathB
+                 clipcat_base::utils::fs::read_dir_recursively_async(&path)
+                     .await
+                     .into_iter()
+-                    .map(|file| (async move { (tokio::fs::read(&file).await.ok(), file) })),
++                    .map(|file| async move { (tokio::fs::read(&file).await.ok(), file) }),
+             )
+             .await
+             .into_iter()

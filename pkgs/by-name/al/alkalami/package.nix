@@ -23,11 +23,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://software.sil.org/alkalami/";
     description = "Font for Arabic-based writing systems in the Kano region of Nigeria and in Niger";
-    license = licenses.ofl;
-    maintainers = [ maintainers.vbgl ];
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    maintainers = [ lib.maintainers.vbgl ];
+    platforms = lib.platforms.all;
   };
 }

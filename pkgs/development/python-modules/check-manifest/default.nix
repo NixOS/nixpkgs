@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "0.51";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "mgedmin";
     repo = "check-manifest";
@@ -49,12 +47,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "check_manifest" ];
 
-  meta = with lib; {
+  meta = {
     description = "Check MANIFEST.in in a Python source package for completeness";
     homepage = "https://github.com/mgedmin/check-manifest";
     changelog = "https://github.com/mgedmin/check-manifest/blob/${version}/CHANGES.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lewo ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lewo ];
     mainProgram = "check-manifest";
   };
 }

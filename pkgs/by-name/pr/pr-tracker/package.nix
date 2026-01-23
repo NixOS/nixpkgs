@@ -8,14 +8,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pr-tracker";
-  version = "1.9.0";
+  version = "1.10.0";
 
   src = fetchzip {
     url = "https://git.qyliss.net/pr-tracker/snapshot/pr-tracker-${version}.tar.xz";
-    hash = "sha256-8ZA+FjTO/8GdzYFskz8G0ihxtddsiZ9W44cXbExllZE=";
+    hash = "sha256-lAraMuhAvTV/PX0R/SSga3bebuK0lizcyEK7Qo3iUmc=";
   };
 
-  cargoHash = "sha256-dFyJX2X+bR3h/opAETTJpvy1vDAmBYQ/gq4ywVRnWaM=";
+  cargoHash = "sha256-gD2J3yp2ICNU9bQSXp2ks5GV+vL76t278WwiWCsAT8k=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];

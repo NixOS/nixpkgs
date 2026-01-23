@@ -52,13 +52,13 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gnome.updateScript { packageName = "gnome-nibbles"; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Guide a worm around a maze";
     mainProgram = "gnome-nibbles";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-nibbles";
     changelog = "https://gitlab.gnome.org/GNOME/gnome-nibbles/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
-    license = licenses.gpl2Plus;
-    teams = [ teams.gnome ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
 })

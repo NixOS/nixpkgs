@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "inql";
   version = "4.0.6";
-  format = "pyproject";
+  pyproject = true;
   src = fetchFromGitHub {
     owner = "doyensec";
     repo = "inql";

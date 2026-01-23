@@ -11,7 +11,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "eye-witness";
   version = "20230525.1";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "redsiege";
@@ -64,13 +64,13 @@ python3Packages.buildPythonApplication rec {
     runHook postFixup
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Take screenshots of websites, and identify admin interfaces";
     homepage = "https://github.com/redsiege/EyeWitness";
     changelog = "https://github.com/redsiege/EyeWitness/blob/${src.rev}/CHANGELOG";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ tochiaha ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ tochiaha ];
     mainProgram = "eye-witness";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

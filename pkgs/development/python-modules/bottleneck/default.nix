@@ -5,15 +5,12 @@
   numpy,
   pytestCheckHook,
   python,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "bottleneck";
   version = "1.6.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
@@ -31,10 +28,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bottleneck" ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast NumPy array functions";
     homepage = "https://github.com/pydata/bottleneck";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
   };
 }

@@ -70,12 +70,12 @@ python3Packages.buildPythonApplication rec {
     installManPage twitch-dl.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool for downloading videos from Twitch";
     homepage = "https://github.com/ihabunek/twitch-dl";
     changelog = "https://github.com/ihabunek/twitch-dl/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       pbsds
       hausken
     ];

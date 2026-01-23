@@ -24,11 +24,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   installFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://himitsustore.org/";
     description = "Secret storage manager";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ auchter ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ auchter ];
     inherit (hareHook.meta) platforms badPlatforms;
   };
 })

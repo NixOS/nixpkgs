@@ -8,7 +8,7 @@
 python3.pkgs.buildPythonApplication {
   pname = "adcskiller";
   version = "0-unstable-2024-05-19";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "grimlockx";

@@ -10,11 +10,11 @@ let
   owner = "superseriousbusiness";
   repo = "gotosocial";
 
-  version = "0.20.1";
+  version = "0.20.2";
 
   web-assets = fetchurl {
     url = "https://${domain}/${owner}/${repo}/releases/download/v${version}/${repo}_${version}_web-assets.tar.gz";
-    hash = "sha256-0WvaPUVTMYd1tz7Rtmlp37vx/co4efhDdSWBc4gUzAU=";
+    hash = "sha256-85tFn3LsuMbLoiH6FFtBK60GhclfTsSiI7K/iNLadjY=";
   };
 in
 buildGo124Module rec {
@@ -24,7 +24,7 @@ buildGo124Module rec {
   src = fetchFromGitea {
     inherit domain owner repo;
     tag = "v${version}";
-    hash = "sha256-8z2tBiEVcof0/G41gpc0S8Dye5nynwHSJpTzo/ZseFs=";
+    hash = "sha256-H5+1BZ1jIISU6EPszIuOhqowoMe9WF36BGwV7TpAqj8=";
   };
 
   vendorHash = null;
@@ -73,7 +73,10 @@ buildGo124Module rec {
       advertised to! A light-weight alternative to Mastodon
       and Pleroma, with support for clients!
     '';
-    maintainers = with lib.maintainers; [ blakesmith ];
+    maintainers = with lib.maintainers; [
+      blakesmith
+      cherrykitten
+    ];
     license = lib.licenses.agpl3Only;
   };
 }

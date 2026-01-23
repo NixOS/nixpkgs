@@ -181,9 +181,10 @@ let
     "machines.target"
     "systemd-machined.service"
   ]
-  ++ [
+  ++ optionals cfg.package.withNspawn [
     "systemd-nspawn@.service"
-
+  ]
+  ++ [
     # Misc.
     "systemd-sysctl.service"
     "systemd-machine-id-commit.service"
@@ -212,6 +213,12 @@ let
     # Capsule support
     "capsule@.service"
     "capsule.slice"
+
+    # Factory reset
+    "factory-reset.target"
+    "systemd-factory-reset-request.service"
+    "systemd-factory-reset-reboot.service"
+    "systemd-tpm2-clear.service"
   ]
   ++ cfg.additionalUpstreamSystemUnits;
 
@@ -221,6 +228,7 @@ let
     "local-fs.target.wants"
     "multi-user.target.wants"
     "timers.target.wants"
+    "factory-reset.target.wants"
   ];
 
   proxy_env = config.networking.proxy.envVars;

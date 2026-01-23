@@ -72,11 +72,11 @@ stdenv.mkDerivation rec {
     "-Dgtk3=${lib.boolToString (!withGtk4)}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.freedesktop.org/software/colord/intro.html";
-    license = licenses.lgpl21Plus;
-    teams = [ teams.gnome ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
     mainProgram = "cd-convert";
   };
 }

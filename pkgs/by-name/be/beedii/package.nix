@@ -29,7 +29,7 @@ stdenvNoCC.mkDerivation rec {
 
     # This version does not include font files in the released assets.
     # https://github.com/webkul/beedii/issues/1
-    ignoredVersions = "^1\.2\.0$";
+    ignoredVersions = "^1\\.2\\.0$";
   };
 
   meta = {

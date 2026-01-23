@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "qasync";
   version = "0.27.1";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CabbageDevelopment";

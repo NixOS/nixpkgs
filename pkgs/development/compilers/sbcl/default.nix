@@ -30,8 +30,8 @@ let
     "2.4.10".sha256 = "sha256-zus5a2nSkT7uBIQcKva+ylw0LOFGTD/j5FPy3hDF4vg=";
     # By unofficial and very loose convention we keep the latest version of
     # SBCL, and the previous one in case someone quickly needs to roll back.
-    "2.5.7".sha256 = "sha256-xPr+t5VpnVvP+QhQkazHYtz15V+FI1Yl89eu8SyJ0dM=";
-    "2.5.9".sha256 = "sha256-0bGQItQ9xJPtyXK25ZyTrmaEyWP90rQTsJZeGM1r0eI=";
+    "2.5.10".sha256 = "sha256-v1+0nypC82s+AD0uTSNDhq3fB9ndjKhjRlaSfMls4SU=";
+    "2.6.0".sha256 = "sha256-CkvVsByI5rRcLwWWBdJyirk3emUpsupiKnq7W6LWkcY=";
   };
   # Collection of pre-built SBCL binaries for platforms that need them for
   # bootstrapping. Ideally these are to be avoided.  If ECL (or any other
@@ -255,6 +255,11 @@ stdenv.mkDerivation (self: {
   # Fails to find `O_LARGEFILE` otherwise.
   env.NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE";
 
+  # Set minimum macOS version to 10.12 for x86_64-darwin to support clock_gettime()
+  env.SBCL_MACOSX_VERSION_MIN = lib.optionalString (
+    stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
+  ) "10.12";
+
   buildPhase = ''
     runHook preBuild
 
@@ -310,13 +315,13 @@ stdenv.mkDerivation (self: {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Common Lisp compiler";
     homepage = "https://sbcl.org";
-    license = licenses.publicDomain; # and FreeBSD
+    license = lib.licenses.publicDomain; # and FreeBSD
     mainProgram = "sbcl";
     teams = [ lib.teams.lisp ];
-    platforms = attrNames bootstrapBinaries ++ [
+    platforms = lib.attrNames bootstrapBinaries ++ [
       # These aren’t bootstrapped using the binary distribution but compiled
       # using a separate (lisp) host
       "x86_64-darwin"

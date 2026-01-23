@@ -12,6 +12,7 @@
 
   "system-monitor@gnome-shell-extensions.gcampax.github.com" = "system-monitor";
   "System_Monitor@bghome.gmail.com" = "system-monitor-2";
+  "system-monitor@axet.github.com" = "system-monitor-3";
 
   "FuzzyClock@fire-man-x" = "fuzzy-clock-3";
   "FuzzyClock@johngoetz" = "fuzzy-clock";

@@ -51,14 +51,14 @@
 
 buildPythonPackage rec {
   pname = "aiohttp";
-  version = "3.13.2";
+  version = "3.13.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiohttp";
     tag = "v${version}";
-    hash = "sha256-LqYGrrWgSZazk0hjQvTFwqtU/PtMEaPi+m1Ya8Ds+pU=";
+    hash = "sha256-V+digrfigdA3hwd2xW47BACh3r07j6pGE8WFAGivZnA=";
   };
 
   postPatch = ''
@@ -103,8 +103,10 @@ buildPythonPackage rec {
 
   optional-dependencies.speedups = [
     aiodns
-    backports-zstd
     (if isPyPy then brotlicffi else brotli)
+  ]
+  ++ lib.optionals (pythonOlder "3.14") [
+    backports-zstd
   ];
 
   nativeCheckInputs = [
@@ -164,11 +166,11 @@ buildPythonPackage rec {
     export TMPDIR="/tmp"
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://docs.aiohttp.org/en/${src.tag}/changes.html";
     description = "Asynchronous HTTP Client/Server for Python and asyncio";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://github.com/aio-libs/aiohttp";
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

@@ -16,14 +16,14 @@ rustPlatform.buildRustPackage rec {
   cargoVendorDir = "vendor";
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Trinsic CLI";
     longDescription = ''
       Command line interface for Trinsic Ecosystems
     '';
     homepage = "https://trinsic.id/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ tmarkovski ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ tmarkovski ];
     mainProgram = "trinsic";
   };
 }

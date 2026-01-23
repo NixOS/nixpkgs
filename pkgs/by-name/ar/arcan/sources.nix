@@ -1,5 +1,6 @@
 {
   fetchFromGitHub,
+  fetchFromGitea,
 }:
 
 {
@@ -7,13 +8,14 @@
     let
       self = {
         pname = "arcan";
-        version = "0.7.0.1";
+        version = "0.7.1";
 
-        src = fetchFromGitHub {
+        src = fetchFromGitea {
+          domain = "codeberg.org";
           owner = "letoram";
           repo = "arcan";
           tag = self.version;
-          hash = "sha256-AbIMZOyEvRQzlmNetImLnBBoSaFUsy4k1NNSO0mI8FI=";
+          hash = "sha256-rADO6xLkUa3iIOSOR96fr1mR7wAUJpsSPoVn+CTNyOo=";
         };
       };
     in

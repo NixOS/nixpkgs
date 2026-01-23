@@ -29,12 +29,12 @@ buildGoModule rec {
 
   subPackages = [ "cmd/mlr" ];
 
-  meta = with lib; {
+  meta = {
     description = "Like awk, sed, cut, join, and sort for data formats such as CSV, TSV, JSON, JSON Lines, and positionally-indexed";
     homepage = "https://github.com/johnkerl/miller";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ mstarzyk ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ mstarzyk ];
     mainProgram = "mlr";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

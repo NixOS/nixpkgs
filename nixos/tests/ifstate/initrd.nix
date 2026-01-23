@@ -2,7 +2,7 @@ let
   mkIfStateConfig = id: {
     enable = true;
     settings.interfaces.eth1 = {
-      addresses = [ "2001:0db8::${builtins.toString id}/64" ];
+      addresses = [ "2001:0db8::${toString id}/64" ];
       link = {
         state = "up";
         kind = "physical";
@@ -26,12 +26,16 @@ in
       };
 
       boot.initrd = {
+        # otherwise the interfaces do not get created
+        kernelModules = [ "virtio_net" ];
+
         network = {
           enable = true;
           ifstate = mkIfStateConfig 1 // {
             allowIfstateToDrasticlyIncreaseInitrdSize = true;
           };
         };
+
         systemd = {
           enable = true;
           network.enable = false;

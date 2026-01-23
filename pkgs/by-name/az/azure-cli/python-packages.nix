@@ -197,7 +197,7 @@ let
         pname = "azure-mgmt-resource-all";
         inherit version;
 
-        format = "other"; # we're not building from sdist/wheel
+        pyproject = false; # we're not building from sdist/wheel
 
         src = py.pkgs.azure-mgmt-resource.src;
 

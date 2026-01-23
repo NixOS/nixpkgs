@@ -106,8 +106,6 @@ with haskellLib;
   # Test suite issues
   #
 
-  call-stack = dontCheck super.call-stack; # https://github.com/sol/call-stack/issues/19
-
   relude = dontCheck super.relude;
 
   # https://gitlab.haskell.org/ghc/ghc/-/issues/25930
@@ -126,7 +124,5 @@ with haskellLib;
   # Test failure because of GHC bug:
   #   https://gitlab.haskell.org/ghc/ghc/-/issues/25937
   #   https://github.com/sol/interpolate/issues/20
-  interpolate =
-    assert super.ghc.version == "9.12.2";
-    dontCheck super.interpolate;
+  interpolate = dontCheckIf (lib.versionOlder self.ghc.version "9.12.3") super.interpolate;
 }

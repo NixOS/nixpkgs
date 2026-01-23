@@ -24,8 +24,10 @@
   libxkbcommon,
   libsciter,
   xdotool,
+  openssl,
   pam,
   pango,
+  perl,
   zlib,
   zstd,
   stdenv,
@@ -36,17 +38,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustdesk";
-  version = "1.4.3";
+  version = "1.4.5";
 
   src = fetchFromGitHub {
     owner = "rustdesk";
     repo = "rustdesk";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-TCy1AyqBHqrIlip2ZqdzIaYHjIYddThI+YmbcQHaDqQ=";
+    hash = "sha256-FRtYafsIKHnGPV8NaiaHxIHkon8/T2P83uq9taUD1Xc=";
   };
 
-  cargoHash = "sha256-AOKsTPuq1VD6MR4z1K9l2Clbl8d/7IijTsnMRgBXvyw=";
+  cargoHash = "sha256-mEtTo1ony5w/dzJcHieG9WywHirBoQ/C0WpiAr7pUVc=";
 
   patches = [
     ./make-build-reproducible.patch
@@ -67,6 +69,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     copyDesktopItems
+    perl
     pkg-config
     rustPlatform.bindgenHook
     wrapGAppsHook3
@@ -96,6 +99,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libopus
     libaom
     libxkbcommon
+    openssl
     pam
     pango
     zlib
@@ -106,6 +110,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     alsa-lib
     xdotool
   ];
+
+  postPatch = ''
+    sed -e '1i #include <cstdint>' -i $cargoDepsCopy/webm-1.1.0/src/sys/libwebm/mkvparser/mkvparser.cc
+    sed -e '1i #include <cstdint>' -i $cargoDepsCopy/webm-sys-1.0.4/libwebm/mkvparser/mkvparser.cc
+  '';
 
   # Add static ui resources and libsciter to same folder as binary so that it
   # can find them.

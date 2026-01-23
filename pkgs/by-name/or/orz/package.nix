@@ -35,10 +35,10 @@ rustPlatform.buildRustPackage {
     mv $out/lib "$lib"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "High performance, general purpose data compressor written in rust";
     homepage = "https://github.com/richox/orz";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "orz";
   };

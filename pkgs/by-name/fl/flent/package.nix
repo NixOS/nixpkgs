@@ -9,7 +9,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "flent";
   version = "2.2.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

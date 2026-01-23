@@ -20,11 +20,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libpng" + whenPatched "-apng";
-  version = "1.6.50";
+  version = "1.6.53";
 
   src = fetchurl {
     url = "mirror://sourceforge/libpng/libpng-${finalAttrs.version}.tar.xz";
-    hash = "sha256-TfOWUYYgp6o2UUQ+h9Gyhi5OiMrRNai5NCPgFwYjIwc=";
+    hash = "sha256-HT+4zMKTLQSqNmPiLvXvSQJENw9OVo14UBZQaHeNmNQ=";
   };
   postPatch =
     whenPatched "gunzip < ${patch_src} | patch -Np1"
@@ -50,17 +50,17 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
-  meta = with lib; {
+  meta = {
     description =
       "Official reference implementation for the PNG file format" + whenPatched " with animation patch";
     homepage = "http://www.libpng.org/pub/png/libpng.html";
     changelog = "https://github.com/pnggroup/libpng/blob/v${finalAttrs.version}/CHANGES";
-    license = licenses.libpng2;
+    license = lib.licenses.libpng2;
     pkgConfigModules = [
       "libpng"
       "libpng16"
     ];
-    platforms = platforms.all;
-    maintainers = with maintainers; [ vcunat ];
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ vcunat ];
   };
 })

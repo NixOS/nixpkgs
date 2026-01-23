@@ -30,10 +30,11 @@ in
     ];
     extraMeta = {
       maintainers = with lib.maintainers; [
-        philiptaron
+        das_j
+        helsinki-Jo
         numinit
+        philiptaron
       ];
-      teams = [ lib.teams.helsinki-systems ];
     };
   };
 

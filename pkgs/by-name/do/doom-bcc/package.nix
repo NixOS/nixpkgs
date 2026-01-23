@@ -27,10 +27,10 @@ stdenv.mkDerivation {
     cp -av lib $out/lib/bcc
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Compiler for Doom/Hexen scripts (ACS, BCS)";
     mainProgram = "bcc";
     homepage = "https://github.com/wormt/bcc";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

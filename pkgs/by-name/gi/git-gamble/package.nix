@@ -8,19 +8,16 @@
   nix-update-script,
 }:
 
-let
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "git-gamble";
   version = "2.11.0";
 
   src = fetchFromGitLab {
     owner = "pinage404";
     repo = "git-gamble";
-    rev = "version/${version}";
+    rev = "version/${finalAttrs.version}";
     hash = "sha256-b7jGrt8uJ9arH4EEsOOPCIcQmhwrrJb8uXcSsZPFrNQ=";
   };
-in
-rustPlatform.buildRustPackage {
-  pname = "git-gamble";
-  inherit version src;
 
   cargoHash = "sha256-lf66me4ot5lvrz2JTj8MreaHyVwOcFSVfPGX9lBTKug=";
 
@@ -53,15 +50,20 @@ rustPlatform.buildRustPackage {
     installManPage git-gamble.1
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "version/(.*)"
+    ];
+  };
 
   meta = {
     description = "Tool that blends TDD (Test Driven Development) + TCR (`test && commit || revert`)";
     homepage = "https://git-gamble.is-cool.dev";
-    changelog = "https://gitlab.com/pinage404/git-gamble/-/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://gitlab.com/pinage404/git-gamble/-/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.isc;
     sourceProvenance = [ lib.sourceTypes.fromSource ];
     maintainers = [ lib.maintainers.pinage404 ];
     mainProgram = "git-gamble";
   };
-}
+})

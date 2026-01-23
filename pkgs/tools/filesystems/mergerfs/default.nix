@@ -15,14 +15,22 @@
 
 stdenv.mkDerivation rec {
   pname = "mergerfs";
-  version = "2.40.2";
+  version = "2.41.1";
 
   src = fetchFromGitHub {
     owner = "trapexit";
     repo = pname;
     rev = version;
-    sha256 = "sha256-3DfSGuTtM+h0IdtsIhLVXQxX5/Tj9G5Qcha3DWmyyq4=";
+    sha256 = "sha256-pXge+/5Ti4+e0aSbWLg6roIcg+3foAvSHP/Obd0EiE4=";
   };
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=unused-result"
+    "-Wno-error=maybe-uninitialized"
+
+    # NOTE: _FORTIFY_SOURCE requires compiling with optimization (-O)
+    "-O"
+  ];
 
   nativeBuildInputs = [
     automake
@@ -33,9 +41,7 @@ stdenv.mkDerivation rec {
     pandoc
     which
   ];
-  prePatch = ''
-    sed -i -e '/chown/d' -e '/chmod/d' libfuse/Makefile
-  '';
+
   buildInputs = [
     attr
     libiconv
@@ -50,6 +56,8 @@ stdenv.mkDerivation rec {
     "XATTR_AVAILABLE=1"
     "PREFIX=/"
     "SBINDIR=/bin"
+    "CHMOD=true"
+    "CHOWN=true"
   ];
   enableParallelBuilding = true;
 

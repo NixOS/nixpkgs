@@ -10,57 +10,26 @@
   pkgsBuildTarget,
   targetPackages,
   # for testing
-  testers,
-  runCommand,
-  bintools,
-  skopeo,
-  clickhouse-backup,
   buildGo125Module,
+  callPackage,
 }:
 
 let
   goBootstrap = buildPackages.callPackage ./bootstrap122.nix { };
-
-  skopeoTest = skopeo.override { buildGoModule = buildGo125Module; };
-  clickhouse-backupTest = clickhouse-backup.override { buildGoModule = buildGo125Module; };
 
   # We need a target compiler which is still runnable at build time,
   # to handle the cross-building case where build != host == target
   targetCC = pkgsBuildTarget.targetPackages.stdenv.cc;
 
   isCross = stdenv.buildPlatform != stdenv.targetPlatform;
-
-  # go-default-pie.patch tries to enable position-independent codegen (PIE) only when the platform
-  # reports support (via BuildModeSupported(..., "pie", ...)).
-  #
-  # In order for buildmode=pie to work either Go's internal linker must know how
-  # to produce position-independent executables or Go must be using an external linker.
-  #
-  # That probe is not fully reliable: for example, `pkgsi686Linux.go` can fail during bootstrap
-  # with message 'default PIE binary requires external (cgo) linking, but cgo is not enabled'
-  # despite CGO being enabled. (we set `CGO_ENABLED=1`).
-  #
-  # To avoid such breakage, limit this patch to a small set of explicitly tested platforms
-  # rather than relying on the general BuildModeSupported("pie") check.
-  supportsDefaultPie =
-    let
-      hasPie = {
-        "amd64" = true;
-        "arm64" = true;
-        "ppc64le" = true;
-        "riscv64" = true;
-      };
-    in
-    hasPie.${stdenv.hostPlatform.go.GOARCH} or false
-    && hasPie.${stdenv.targetPlatform.go.GOARCH} or false;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "go";
-  version = "1.25.3";
+  version = "1.25.5";
 
   src = fetchurl {
     url = "https://go.dev/dl/go${finalAttrs.version}.src.tar.gz";
-    hash = "sha256-qBpLpZPQAV4QxR4mfeP/B8eskU38oDfZUX0ClRcJd5U=";
+    hash = "sha256-IqX9CpHvzSihsFNxBrmVmygEth9Zw3WLUejlQpwalU8=";
   };
 
   strictDeps = true;
@@ -94,42 +63,40 @@ stdenv.mkDerivation (finalAttrs: {
     ./remove-tools-1.11.patch
     ./go_no_vendor_checks-1.23.patch
     ./go-env-go_ldso.patch
-  ]
-  ++ lib.optionals supportsDefaultPie [
-    (replaceVars ./go-default-pie.patch {
-      inherit (stdenv.targetPlatform.go) GOARCH;
-    })
   ];
 
-  inherit (stdenv.targetPlatform.go) GOOS GOARCH GOARM;
-  # GOHOSTOS/GOHOSTARCH must match the building system, not the host system.
-  # Go will nevertheless build a for host system that we will copy over in
-  # the install phase.
-  GOHOSTOS = stdenv.buildPlatform.go.GOOS;
-  GOHOSTARCH = stdenv.buildPlatform.go.GOARCH;
+  env = {
+    inherit (stdenv.targetPlatform.go) GOOS GOARCH GOARM;
+    # GOHOSTOS/GOHOSTARCH must match the building system, not the host system.
+    # Go will nevertheless build a for host system that we will copy over in
+    # the install phase.
+    GOHOSTOS = stdenv.buildPlatform.go.GOOS;
+    GOHOSTARCH = stdenv.buildPlatform.go.GOARCH;
 
-  # {CC,CXX}_FOR_TARGET must be only set for cross compilation case as go expect those
-  # to be different from CC/CXX
-  CC_FOR_TARGET = if isCross then "${targetCC}/bin/${targetCC.targetPrefix}cc" else null;
-  CXX_FOR_TARGET = if isCross then "${targetCC}/bin/${targetCC.targetPrefix}c++" else null;
+    GO386 = "softfloat"; # from Arch: don't assume sse2 on i686
+    # Wasi does not support CGO
+    # ppc64/linux CGO is incomplete/borked, and will likely not receive any further improvements
+    # https://github.com/golang/go/issues/8912
+    # https://github.com/golang/go/issues/13192
+    CGO_ENABLED =
+      if
+        (
+          stdenv.targetPlatform.isWasi
+          || (stdenv.targetPlatform.isPower64 && stdenv.targetPlatform.isBigEndian)
+        )
+      then
+        0
+      else
+        1;
 
-  GO386 = "softfloat"; # from Arch: don't assume sse2 on i686
-  # Wasi does not support CGO
-  # ppc64/linux CGO is incomplete/borked, and will likely not receive any further improvements
-  # https://github.com/golang/go/issues/8912
-  # https://github.com/golang/go/issues/13192
-  CGO_ENABLED =
-    if
-      (
-        stdenv.targetPlatform.isWasi
-        || (stdenv.targetPlatform.isPower64 && stdenv.targetPlatform.isBigEndian)
-      )
-    then
-      0
-    else
-      1;
-
-  GOROOT_BOOTSTRAP = "${goBootstrap}/share/go";
+    GOROOT_BOOTSTRAP = "${goBootstrap}/share/go";
+  }
+  // lib.optionalAttrs isCross {
+    # {CC,CXX}_FOR_TARGET must be only set for cross compilation case as go expect those
+    # to be different from CC/CXX
+    CC_FOR_TARGET = "${targetCC}/bin/${targetCC.targetPrefix}cc";
+    CXX_FOR_TARGET = "${targetCC}/bin/${targetCC.targetPrefix}c++";
+  };
 
   buildPhase = ''
     runHook preBuild
@@ -149,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
       # interpreter for cross
       # When CGO is not supported we rely on static binaries being built
       # since they don't need an ELF interpreter
-      export GO_EXTLINK_ENABLED=${toString finalAttrs.CGO_ENABLED}
+      export GO_EXTLINK_ENABLED=${toString finalAttrs.env.CGO_ENABLED}
     ''}
     ulimit -a
 
@@ -170,9 +137,13 @@ stdenv.mkDerivation (finalAttrs: {
         mv bin/*_*/* bin
         rmdir bin/*_*
         ${lib.optionalString
-          (!(finalAttrs.GOHOSTARCH == finalAttrs.GOARCH && finalAttrs.GOOS == finalAttrs.GOHOSTOS))
+          (
+            !(
+              finalAttrs.env.GOHOSTARCH == finalAttrs.env.GOARCH && finalAttrs.env.GOOS == finalAttrs.env.GOHOSTOS
+            )
+          )
           ''
-            rm -rf pkg/${finalAttrs.GOHOSTOS}_${finalAttrs.GOHOSTARCH} pkg/tool/${finalAttrs.GOHOSTOS}_${finalAttrs.GOHOSTARCH}
+            rm -rf pkg/${finalAttrs.env.GOHOSTOS}_${finalAttrs.env.GOHOSTARCH} pkg/tool/${finalAttrs.env.GOHOSTOS}_${finalAttrs.env.GOHOSTARCH}
           ''
         }
       ''
@@ -180,9 +151,13 @@ stdenv.mkDerivation (finalAttrs: {
       lib.optionalString (stdenv.hostPlatform.system != stdenv.targetPlatform.system) ''
         rm -rf bin/*_*
         ${lib.optionalString
-          (!(finalAttrs.GOHOSTARCH == finalAttrs.GOARCH && finalAttrs.GOOS == finalAttrs.GOHOSTOS))
+          (
+            !(
+              finalAttrs.env.GOHOSTARCH == finalAttrs.env.GOARCH && finalAttrs.env.GOOS == finalAttrs.env.GOHOSTOS
+            )
+          )
           ''
-            rm -rf pkg/${finalAttrs.GOOS}_${finalAttrs.GOARCH} pkg/tool/${finalAttrs.GOOS}_${finalAttrs.GOARCH}
+            rm -rf pkg/${finalAttrs.env.GOOS}_${finalAttrs.env.GOARCH} pkg/tool/${finalAttrs.env.GOOS}_${finalAttrs.env.GOARCH}
           ''
         }
       ''
@@ -200,41 +175,23 @@ stdenv.mkDerivation (finalAttrs: {
   disallowedReferences = [ goBootstrap ];
 
   passthru = {
-    inherit goBootstrap skopeoTest;
-    tests = {
-      skopeo = testers.testVersion { package = skopeoTest; };
-      version = testers.testVersion {
-        package = finalAttrs.finalPackage;
-        command = "go version";
-        version = "go${finalAttrs.version}";
-      };
-      # Picked clickhouse-backup as a package that sets CGO_ENABLED=0
-      # Running and outputting the right version proves a working ELF interpreter was picked
-      clickhouse-backup = testers.testVersion { package = clickhouse-backupTest; };
-      clickhouse-backup-is-pie = runCommand "has-pie" { meta.broken = stdenv.hostPlatform.isStatic; } ''
-        ${lib.optionalString (!isCross) ''
-          if ${lib.getExe' bintools "readelf"} -p .comment ${lib.getExe clickhouse-backup} | grep -Fq "GCC: (GNU)"; then
-            echo "${lib.getExe clickhouse-backup} has a GCC .comment, but it should have used the internal go linker"
-            exit 1
-          fi
-        ''}
-        if ${lib.getExe' bintools "readelf"} -h ${lib.getExe clickhouse-backup} | grep -q "Type:.*DYN"; then
-          touch $out
-        else
-          echo "ERROR: clickhouse-backup is NOT PIE"
-          exit 1
-        fi
-      '';
+    inherit goBootstrap;
+    tests = callPackage ./tests.nix {
+      go = finalAttrs.finalPackage;
+      buildGoModule = buildGo125Module;
     };
   };
 
-  meta = with lib; {
+  __structuredAttrs = true;
+
+  meta = {
     changelog = "https://go.dev/doc/devel/release#go${lib.versions.majorMinor finalAttrs.version}";
     description = "Go Programming language";
     homepage = "https://go.dev/";
-    license = licenses.bsd3;
-    teams = [ teams.golang ];
-    platforms = platforms.darwin ++ platforms.linux ++ platforms.wasi ++ platforms.freebsd;
+    license = lib.licenses.bsd3;
+    teams = [ lib.teams.golang ];
+    platforms =
+      lib.platforms.darwin ++ lib.platforms.linux ++ lib.platforms.wasi ++ lib.platforms.freebsd;
     badPlatforms = [
       # Support for big-endian POWER < 8 was dropped in 1.9, but POWER8 users have less of a reason to run in big-endian mode than pre-POWER8 ones
       # So non-LE ppc64 is effectively unsupported, and Go SIGILLs on affordable ppc64 hardware

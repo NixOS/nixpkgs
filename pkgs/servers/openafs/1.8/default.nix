@@ -1,5 +1,6 @@
 {
   lib,
+  callPackage,
   stdenv,
   buildPackages,
   fetchurl,
@@ -103,7 +104,7 @@ stdenv.mkDerivation {
     )
   ''
   + optionalString withTsm ''
-    export XBSA_CFLAGS="-Dxbsa -DNEW_XBSA -I${tsm-client}/lib64/sample -DXBSA_TSMLIB=\\\"${tsm-client}/lib64/libApiTSM64.so\\\""
+    export XBSA_CFLAGS="-Dxbsa -DNEW_XBSA -I${tsm-client}/opt/tivoli/tsm/client/api/bin64/sample -DXBSA_TSMLIB=\\\"${tsm-client}/lib64/libApiTSM64.so\\\""
   '';
 
   buildFlags = [ "all_nolibafs" ];
@@ -143,7 +144,9 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = with lib; {
+  passthru.cellservdb = callPackage ../cellservdb.nix { };
+
+  meta = {
     outputsToInstall = [
       "out"
       "doc"
@@ -151,10 +154,10 @@ stdenv.mkDerivation {
     ];
     description = "Open AFS client";
     homepage = "https://www.openafs.org";
-    license = licenses.ipl10;
-    platforms = platforms.linux;
+    license = lib.licenses.ipl10;
+    platforms = lib.platforms.linux;
     maintainers = [
-      maintainers.spacefrogg
+      lib.maintainers.spacefrogg
     ];
   };
 }

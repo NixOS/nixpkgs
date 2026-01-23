@@ -42,12 +42,12 @@ buildGoModule rec {
       --zsh <($out/bin/qc completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "QOwnNotes command-line snippet manager";
     mainProgram = "qc";
     homepage = "https://github.com/qownnotes/qc";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       pbek
       totoroot
     ];

@@ -5,7 +5,6 @@
   mypy-extensions,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   ruamel-yaml,
   schema-salad,
   setuptools,
@@ -13,16 +12,14 @@
 
 buildPythonPackage rec {
   pname = "cwl-upgrader";
-  version = "1.2.12";
+  version = "1.2.14";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "common-workflow-language";
     repo = "cwl-upgrader";
     tag = "v${version}";
-    hash = "sha256-cfEd1XAu31u+NO27d3RNA5lhCpRpYK8NeaCxhQ/1GNU=";
+    hash = "sha256-bkICax7HIEo8ypttXgDmCl82JfVkV2T11fLRK1/0hz8=";
   };
 
   postPatch = ''
@@ -46,12 +43,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cwlupgrader" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to upgrade CWL syntax to a newer version";
-    mainProgram = "cwl-upgrader";
     homepage = "https://github.com/common-workflow-language/cwl-upgrader";
-    changelog = "https://github.com/common-workflow-language/cwl-upgrader/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/common-workflow-language/cwl-upgrader/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "cwl-upgrader";
   };
 }

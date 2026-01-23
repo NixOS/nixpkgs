@@ -1,0 +1,13 @@
+diff --git a/hw/xquartz/bundle/meson.build b/hw/xquartz/bundle/meson.build
+index 22941203b..4d3f159cf 100644
+--- a/hw/xquartz/bundle/meson.build
++++ b/hw/xquartz/bundle/meson.build
+@@ -38,7 +38,7 @@ install_data('Resources/X11.icns',
+     install_mode: 'rw-r--r--')
+ 
+ custom_target('Info.plist',
+-    command: [cpp, '-P', cpp_defs, '@INPUT@'],
++    command: ['clang', '-E', '-P', cpp_defs, '@INPUT@'],
+     capture: true,
+     input: 'Info.plist.cpp',
+     output: 'Info.plist',

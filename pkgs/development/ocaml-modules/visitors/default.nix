@@ -33,10 +33,10 @@ buildDunePackage {
     result
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.inria.fr/fpottier/visitors";
     changelog = "https://gitlab.inria.fr/fpottier/visitors/-/raw/${version}/CHANGES.md";
-    license = licenses.lgpl21;
+    license = lib.licenses.lgpl21;
     description = "OCaml syntax extension (technically, a ppx_deriving plugin) which generates object-oriented visitors for traversing and transforming data structures";
     maintainers = [ ];
   };

@@ -59,11 +59,11 @@ stdenv.mkDerivation rec {
     install -Dm755 -T ../contrib/examples/git-credential-lastpass $out/bin/git-credential-lastpass
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Stores, retrieves, generates, and synchronizes passwords securely";
     homepage = "https://github.com/lastpass/lastpass-cli";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ vinylen ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ vinylen ];
   };
 }

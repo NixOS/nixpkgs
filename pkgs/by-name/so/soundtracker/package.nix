@@ -9,7 +9,7 @@
   SDL,
   jack2,
   audiofile,
-  goocanvas, # graphical envelope editing
+  goocanvas_1, # graphical envelope editing
   libxml2,
   libsndfile,
   libpulseaudio,
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace configure.ac \
       --replace-fail 'AM_PATH_XML2(2.6.0, [], AC_MSG_ERROR(Fatal error: Need libxml2 >= 2.6.0))' \
           'PKG_CHECK_MODULES([XML], [libxml-2.0 >= 2.6.0])' \
-      --replace-fail 'XML_CPPFLAGS' 'XML_CFLAGS' \
+      --replace-fail 'XML_CPPFLAGS' 'XML_CFLAGS'
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Darwin binutils don't support D option for ar
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL # found by AM_PATH_SDL
     jack2
     audiofile
-    goocanvas
+    goocanvas_1
     libxml2 # found by PKG_CHECK_MODULES
     libsndfile
   ]

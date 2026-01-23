@@ -21,7 +21,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "bada-bib";
   version = "0.8.1";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "RogerCrocker";
@@ -72,11 +72,11 @@ python3Packages.buildPythonApplication rec {
     wrapPythonProgramsIn "$out/libexec" "$out $pythonPath"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/RogerCrocker/BadaBib";
     description = "Simple BibTeX Viewer and Editor";
     mainProgram = "badabib";
-    maintainers = [ maintainers.Cogitri ];
-    license = licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.Cogitri ];
+    license = lib.licenses.gpl3Plus;
   };
 }

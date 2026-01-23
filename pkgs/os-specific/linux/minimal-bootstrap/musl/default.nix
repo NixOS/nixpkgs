@@ -14,11 +14,11 @@
 }:
 let
   inherit (import ./common.nix { inherit lib; }) pname meta;
-  version = "1.2.4";
+  version = "1.2.5";
 
   src = fetchurl {
     url = "https://musl.libc.org/releases/musl-${version}.tar.gz";
-    hash = "sha256-ejXq4z1TcqfA2hGI3nmHJvaIJVE7euPr6XqqpSEU8Dk=";
+    hash = "sha256-qaEYu+hNh2TaDqDSizqz+uhHf8fkCF2QECuFlvx8deQ=";
   };
 in
 bash.runCommand "${pname}-${version}"

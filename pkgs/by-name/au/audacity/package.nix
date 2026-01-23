@@ -33,7 +33,6 @@
   libuuid,
   ffmpeg,
   soundtouch,
-  pcre,
   portaudio, # given up fighting their portaudio.patch?
   portmidi,
   linuxHeaders,
@@ -61,13 +60,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "audacity";
-  version = "3.7.5";
+  version = "3.7.7";
 
   src = fetchFromGitHub {
     owner = "audacity";
     repo = "audacity";
     rev = "Audacity-${finalAttrs.version}";
-    hash = "sha256-gTky+wORQ6n3EepOUA8Y2zc8AocqjGP42N42G6FXRS8=";
+    hash = "sha256-UyQffN9vOSD3uDk4jpYGsjH577pU4V7FpFAu0xdsXUA=";
   };
 
   patches = [
@@ -115,7 +114,6 @@ stdenv.mkDerivation (finalAttrs: {
     lv2
     mpg123
     opusfile
-    pcre
     portmidi
     rapidjson
     serd

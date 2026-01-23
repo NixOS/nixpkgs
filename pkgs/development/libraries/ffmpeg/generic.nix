@@ -8,7 +8,6 @@
   pkg-config,
   perl,
   texinfo,
-  texinfo6,
   nasm,
 
   # You can fetch any upstream version using this derivation by specifying version and hash
@@ -226,10 +225,10 @@
     || buildSwscale,
   # Documentation options
   withDocumentation ? withHtmlDoc || withManPages || withPodDoc || withTxtDoc,
-  withHtmlDoc ? withHeadlessDeps, # HTML documentation pages
-  withManPages ? withHeadlessDeps, # Man documentation pages
-  withPodDoc ? withHeadlessDeps, # POD documentation pages
-  withTxtDoc ? withHeadlessDeps, # Text documentation pages
+  withHtmlDoc ? withHeadlessDeps && lib.versionAtLeast version "6", # HTML documentation pages
+  withManPages ? withHeadlessDeps && lib.versionAtLeast version "6", # Man documentation pages
+  withPodDoc ? withHeadlessDeps && lib.versionAtLeast version "6", # POD documentation pages
+  withTxtDoc ? withHeadlessDeps && lib.versionAtLeast version "6", # Text documentation pages
   # Whether a "doc" output will be produced. Note that withManPages does not produce
   # a "doc" output because its files go to "man".
   withDoc ? withDocumentation && (withHtmlDoc || withPodDoc || withTxtDoc),
@@ -412,7 +411,8 @@ assert
   -> buildAvcodec && buildAvfilter && buildAvformat && (buildSwresample || buildAvresample);
 assert
   buildFfplay
-  -> buildAvcodec && buildAvformat && buildSwscale && (buildSwresample || buildAvresample);
+  ->
+    buildAvcodec && buildAvformat && buildSwscale && (buildSwresample || buildAvresample) && withSdl2;
 assert buildFfprobe -> buildAvcodec && buildAvformat;
 # Library dependencies
 assert buildAvcodec -> buildAvutil; # configure flag since 0.6
@@ -452,6 +452,11 @@ stdenv.mkDerivation (
       ]
       ++ optionals (lib.versionAtLeast version "5.1") [
         ./nvccflags-cpp14.patch
+        (fetchpatch2 {
+          name = "unbreak-hardcoded-tables.patch";
+          url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/1d47ae65bf6df91246cbe25c997b25947f7a4d1d";
+          hash = "sha256-ulB5BujAkoRJ8VHou64Th3E94z6m+l6v9DpG7/9nYsM=";
+        })
       ]
       ++ optionals (lib.versionAtLeast version "6.1" && lib.versionOlder version "6.2") [
         (fetchpatch2 {
@@ -484,6 +489,8 @@ stdenv.mkDerivation (
           url = "https://gitlab.archlinux.org/archlinux/packaging/packages/ffmpeg/-/raw/a02c1a15706ea832c0d52a4d66be8fb29499801a/add-av_stream_get_first_dts-for-chromium.patch";
           hash = "sha256-DbH6ieJwDwTjKOdQ04xvRcSLeeLP2Z2qEmqeo8HsPr4=";
         })
+      ]
+      ++ optionals (lib.versionAtLeast version "7.1" && lib.versionOlder version "8.0") [
         (fetchpatch2 {
           name = "lcevcdec-4.0.0-compat.patch";
           url = "https://code.ffmpeg.org/FFmpeg/FFmpeg/commit/fa23202cc7baab899894e8d22d82851a84967848.patch";
@@ -825,7 +832,7 @@ stdenv.mkDerivation (
     ]
     ++ optionals stdenv.hostPlatform.isx86 [ nasm ]
     # Texinfo version 7.1 introduced breaking changes, which older versions of ffmpeg do not handle.
-    ++ (if versionOlder version "5" then [ texinfo6 ] else [ texinfo ])
+    ++ optionals (lib.versionAtLeast version "6") [ texinfo ]
     ++ optionals withCudaLLVM [ clang ]
     ++ optionals withCudaNVCC [ cuda_nvcc ];
 
@@ -978,7 +985,8 @@ stdenv.mkDerivation (
       ];
     };
 
-    doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+    # tests linking broken with shaderc after https://github.com/NixOS/nixpkgs/pull/477464/changes/5a47b12dfcd1b909ba35778a866394430054319a
+    doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform && !withShaderc;
 
     # Fails with SIGABRT otherwise FIXME: Why?
     checkPhase =
@@ -1036,7 +1044,7 @@ stdenv.mkDerivation (
 
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-    meta = with lib; {
+    meta = {
       description = "Complete, cross-platform solution to record, convert and stream audio and video";
       homepage = "https://www.ffmpeg.org/";
       changelog = "https://github.com/FFmpeg/FFmpeg/blob/n${version}/Changelog";
@@ -1048,7 +1056,7 @@ stdenv.mkDerivation (
         a corporation.
       '';
       license =
-        with licenses;
+        with lib.licenses;
         [ lgpl21Plus ]
         ++ optional withGPL gpl2Plus
         ++ optional withVersion3 lgpl3Plus
@@ -1066,10 +1074,10 @@ stdenv.mkDerivation (
         ++ optional buildPostproc "libpostproc"
         ++ optional buildSwresample "libswresample"
         ++ optional buildSwscale "libswscale";
-      platforms = platforms.all;
+      platforms = lib.platforms.all;
       # See https://github.com/NixOS/nixpkgs/pull/295344#issuecomment-1992263658
       broken = stdenv.hostPlatform.isMinGW && stdenv.hostPlatform.is64bit;
-      maintainers = with maintainers; [
+      maintainers = with lib.maintainers; [
         atemu
         jopejoe1
         emily

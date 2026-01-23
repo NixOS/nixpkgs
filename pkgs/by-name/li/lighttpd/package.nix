@@ -106,12 +106,12 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) lighttpd;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight high-performance web server";
     homepage = "http://www.lighttpd.net/";
     license = lib.licenses.bsd3;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [
       bjornfor
       brecht
     ];

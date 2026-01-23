@@ -16,7 +16,7 @@ buildPythonApplication {
   pname = "vim-plugins-updater";
   version = "0.1";
 
-  format = "other";
+  pyproject = false;
 
   nativeBuildInputs = [
     makeWrapper

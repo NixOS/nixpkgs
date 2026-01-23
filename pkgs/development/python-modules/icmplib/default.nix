@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pbr,
-  pythonOlder,
   requests,
 }:
 
@@ -11,7 +10,6 @@ buildPythonPackage rec {
   pname = "icmplib";
   version = "3.0.4";
   format = "setuptools";
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ValentinBELYN";
@@ -29,10 +27,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "icmplib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation of the ICMP protocol";
     homepage = "https://github.com/ValentinBELYN/icmplib";
-    license = with licenses; [ lgpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ lgpl3Plus ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

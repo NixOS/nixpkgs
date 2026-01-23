@@ -56,10 +56,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "oslo_metrics" ];
 
-  meta = with lib; {
+  meta = {
     description = "OpenStack library for collecting metrics from Oslo libraries";
     homepage = "https://opendev.org/openstack/oslo.metrics";
-    license = licenses.asl20;
-    teams = [ teams.openstack ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

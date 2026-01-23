@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "pysubs2";
   version = "1.8.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tkarabela";
@@ -24,11 +24,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pysubs2" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tkarabela/pysubs2";
     description = "Python library for editing subtitle files";
     mainProgram = "pysubs2";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

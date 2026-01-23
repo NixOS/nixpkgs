@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "palantir";
     repo = "conjure-python-client";
-    tag = "${version}";
+    tag = version;
     hash = "sha256-dfoP0/v0yFAyBo4wADDGGTggVuFBoG53e5WTBvKQaS0=";
   };
 

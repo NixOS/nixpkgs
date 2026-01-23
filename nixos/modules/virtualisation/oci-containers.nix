@@ -30,7 +30,7 @@ let
         };
 
         imageFile = mkOption {
-          type = with types; nullOr package;
+          type = with types; nullOr pathInStore;
           default = null;
           description = ''
             Path to an image file to load before running the image. This can
@@ -555,7 +555,7 @@ in
       backend = "docker";
       containers = lib.mapAttrs (
         n: v:
-        builtins.removeAttrs (
+        removeAttrs (
           v
           // {
             extraOptions = v.extraDockerOptions or [ ];

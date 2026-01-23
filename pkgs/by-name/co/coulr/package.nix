@@ -17,7 +17,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "coulr";
-  version = "2.1.0";
+  version = "2.2.0";
 
   pyproject = false;
   dontWrapGApps = true;
@@ -26,7 +26,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "Huluti";
     repo = "Coulr";
     tag = version;
-    hash = "sha256-1xnL5AWl/rLQu3i9m6uxbS4QT+690hmEW8kYTwkg7Gw=";
+    hash = "sha256-ATKD2PmNz8QRIqGHEuNNe8ZGjcvAU8qpqQtXWR2JBSA=";
   };
 
   nativeBuildInputs = [

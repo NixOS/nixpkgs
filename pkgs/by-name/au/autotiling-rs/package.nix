@@ -17,12 +17,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-+5GibhSkiKmgRrESKrliKLrrtUQ7iv2sFz46OFwAIwE=";
 
-  meta = with lib; {
+  meta = {
     description = "Autotiling for sway (and possibly i3)";
     homepage = "https://github.com/ammgws/autotiling-rs";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ dit7ya ];
     mainProgram = "autotiling-rs";
   };
 }

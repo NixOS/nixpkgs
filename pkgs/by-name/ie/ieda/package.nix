@@ -28,30 +28,21 @@
 let
   rootSrc = stdenv.mkDerivation {
     pname = "iEDA-src";
-    version = "2025-09-10";
+    version = "2025-12-16";
     src = fetchgit {
       url = "https://gitee.com/oscc-project/iEDA";
-      rev = "614a91b4d18ba7dc561315f2d5fdae4a5451f486";
-      sha256 = "sha256-xn1hpnSyO+jauYYhlsKjBkkD3RJ1GqbHtnWRe/My1R0=";
+      rev = "b73be0f1909294b56b2dbb27dba04b6cd9e0070d";
+      sha256 = "sha256-bvSHfQXDk7caTELtjgpSZhJdYfRzfk9VmFm2iBW2lRw=";
     };
 
     patches = [
-      # This patch is to fix the build error caused by the missing of the header file,
-      # and remove some libs or path that they hard-coded in the source code.
+      # This patch is to fix the build system to properly find and link against rust libraries.
       # Due to the way they organized the source code, it's hard to upstream this patch.
       # So we have to maintain this patch locally.
       (fetchpatch {
-        url = "https://github.com/Emin017/iEDA/commit/c6b642f3db6c156eaf4f1203612592c86e49e1b5.patch";
-        hash = "sha256-L0bmW7kadmLLng9rZOT1NpvniBpuD8SUqCfeH2cCrdg=";
+        url = "https://github.com/Emin017/iEDA/commit/e5f3ce024965df5e1d400b6a1d7f8b5b307a4bf3.patch";
+        hash = "sha256-YJnY+r9A887WT0a/H/Zf++r1PpD7t567NpkesDmIsD0=";
       })
-      # Comment out the iCTS test cases that will fail due to some linking issues on aarch64-linux
-      (fetchpatch {
-        url = "https://github.com/Emin017/iEDA/commit/87c5dded74bc452249e8e69f4a77dd1bed7445c2.patch";
-        hash = "sha256-1Hd0DYnB5lVAoAcB1la5tDlox4cuQqApWDiiWtqWN0Q=";
-      })
-      # Fix CMake version requirement to support newer CMake versions,
-      # Should be removed once upstream fixed it.
-      ./fix-cmake-require.patch
     ];
 
     dontBuild = true;
@@ -66,7 +57,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "iEDA";
-  version = "0.1.0-unstable-2025-09-10";
+  version = "0.1.0-unstable-2025-12-16";
 
   src = rootSrc;
 

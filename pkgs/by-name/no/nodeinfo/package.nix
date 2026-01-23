@@ -12,7 +12,7 @@ buildGoModule rec {
     domain = "codeberg.org";
     owner = "thefederationinfo";
     repo = "nodeinfo-go";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-XwK3QeVDQMZD5G79XPJTAJyilVgYFVgZORHYTBI0gIQ=";
   };
 

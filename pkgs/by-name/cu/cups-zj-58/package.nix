@@ -30,20 +30,22 @@ stdenv.mkDerivation {
     --replace-fail "cmake_minimum_required ( VERSION 3.0 )" "cmake_minimum_required ( VERSION 3.10 )"
   '';
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+
   installPhase = ''
     install -D ppd/zj80.ppd $out/share/cups/model/zjiang/zj80.ppd
     install -D ppd/zj58.ppd $out/share/cups/model/zjiang/zj58.ppd
     install -D rastertozj $out/lib/cups/filter/rastertozj
   '';
 
-  meta = with lib; {
+  meta = {
     description = "CUPS filter for thermal printer Zjiang ZJ-58";
     homepage = "https://github.com/klirichek/zj-58";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       makefu
       deimelias
     ];
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
   };
 }

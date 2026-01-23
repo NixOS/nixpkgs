@@ -62,12 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
     passthru.isReleaseTarball = true;
   };
 
-  hardeningDisable = optionals stdenv.cc.isClang [
-    # remove once https://github.com/NixOS/nixpkgs/issues/318674 is
-    # addressed properly
-    "zerocallusedregs"
-  ];
-
   __darwinAllowLocalNetworking = true;
 
   # rustc complains about modified source files otherwise
@@ -82,33 +76,35 @@ stdenv.mkDerivation (finalAttrs: {
   # See: https://github.com/NixOS/nixpkgs/pull/56540#issuecomment-471624656
   stripDebugList = [ "bin" ];
 
-  NIX_LDFLAGS = toString (
-    # when linking stage1 libstd: cc: undefined reference to `__cxa_begin_catch'
-    # This doesn't apply to cross-building for FreeBSD because the host
-    # uses libstdc++, but the target (used for building std) uses libc++
-    optional (
-      stdenv.hostPlatform.isLinux && !withBundledLLVM && !stdenv.targetPlatform.isFreeBSD && !useLLVM
-    ) "--push-state --as-needed -lstdc++ --pop-state"
-    ++
-      optional
-        (stdenv.hostPlatform.isLinux && !withBundledLLVM && !stdenv.targetPlatform.isFreeBSD && useLLVM)
-        "--push-state --as-needed -L${llvmPackages.libcxx}/lib -lc++ -lc++abi -lLLVM-${lib.versions.major llvmPackages.llvm.version} --pop-state"
-    ++ optional (stdenv.hostPlatform.isDarwin && !withBundledLLVM) "-lc++ -lc++abi"
-    ++ optional stdenv.hostPlatform.isDarwin "-rpath ${llvmSharedForHost.lib}/lib"
-  );
+  env = {
+    NIX_LDFLAGS = toString (
+      # when linking stage1 libstd: cc: undefined reference to `__cxa_begin_catch'
+      # This doesn't apply to cross-building for FreeBSD because the host
+      # uses libstdc++, but the target (used for building std) uses libc++
+      optional (
+        stdenv.hostPlatform.isLinux && !withBundledLLVM && !stdenv.targetPlatform.isFreeBSD && !useLLVM
+      ) "--push-state --as-needed -lstdc++ --pop-state"
+      ++
+        optional
+          (stdenv.hostPlatform.isLinux && !withBundledLLVM && !stdenv.targetPlatform.isFreeBSD && useLLVM)
+          "--push-state --as-needed -L${llvmPackages.libcxx}/lib -lc++ -lc++abi -lLLVM-${lib.versions.major llvmPackages.llvm.version} --pop-state"
+      ++ optional (stdenv.hostPlatform.isDarwin && !withBundledLLVM) "-lc++ -lc++abi"
+      ++ optional stdenv.hostPlatform.isDarwin "-rpath ${llvmSharedForHost.lib}/lib"
+    );
 
-  RUSTFLAGS = lib.concatStringsSep " " (
-    [
-      # Increase codegen units to introduce parallelism within the compiler.
-      "-Ccodegen-units=10"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.rust.rustcTargetSpec == "x86_64-unknown-linux-gnu") [
-      # Upstream defaults to lld on x86_64-unknown-linux-gnu, we want to use our linker
-      "-Clinker-features=-lld"
-      "-Clink-self-contained=-linker"
-    ]
-  );
-  RUSTDOCFLAGS = "-A rustdoc::broken-intra-doc-links";
+    RUSTFLAGS = lib.concatStringsSep " " (
+      [
+        # Increase codegen units to introduce parallelism within the compiler.
+        "-Ccodegen-units=10"
+      ]
+      ++ lib.optionals (stdenv.hostPlatform.rust.rustcTargetSpec == "x86_64-unknown-linux-gnu") [
+        # Upstream defaults to lld on x86_64-unknown-linux-gnu, we want to use our linker
+        "-Clinker-features=-lld"
+        "-Clink-self-contained=-linker"
+      ]
+    );
+    RUSTDOCFLAGS = "-A rustdoc::broken-intra-doc-links";
+  };
 
   # We need rust to build rust. If we don't provide it, configure will try to download it.
   # Reference: https://github.com/rust-lang/rust/blob/master/src/bootstrap/configure.py
@@ -238,8 +234,22 @@ stdenv.mkDerivation (finalAttrs: {
       # doesn't work) to build a linker.
       "--disable-llvm-bitcode-linker"
     ]
+    ++ optionals (!fastCross && stdenv.targetPlatform.config != "wasm32-unknown-none") [
+      # See https://github.com/rust-lang/rust/issues/132802
+      "--set=target.wasm32-unknown-unknown.optimized-compiler-builtins=false"
+      "--set=target.wasm32v1-none.optimized-compiler-builtins=false"
+    ]
     ++ optionals (stdenv.targetPlatform.isLinux && !(stdenv.targetPlatform.useLLVM or false)) [
       "--enable-profiler" # build libprofiler_builtins
+    ]
+    ++ optionals stdenv.targetPlatform.isDarwin [
+      # potentially other llvm targets work with the same fix?
+      "--enable-profiler" # build libprofiler_builtins
+      # Disable profiler for targets that don't support it
+      "--set=target.wasm32-unknown-unknown.profiler=false"
+      "--set=target.wasm32v1-none.profiler=false"
+      "--set=target.bpfel-unknown-none.profiler=false"
+      "--set=target.bpfeb-unknown-none.profiler=false"
     ]
     ++ optionals stdenv.buildPlatform.isMusl [
       "${setBuild}.musl-root=${pkgsBuildBuild.targetPackages.stdenv.cc.libc}"
@@ -255,7 +265,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
       # https://github.com/rust-lang/rust/issues/92173
-      "--set rust.jemalloc"
+      "--set=rust.jemalloc"
     ]
     ++ optionals (useLLVM && !stdenv.targetPlatform.isFreeBSD) [
       # https://github.com/NixOS/nixpkgs/issues/311930
@@ -271,7 +281,7 @@ stdenv.mkDerivation (finalAttrs: {
       # applies to functions that can be immediately compiled when building
       # std. Generic functions that do codegen when called in user code obey
       # -Cforce-frame-pointers specified then, if any)
-      "--set rust.frame-pointers"
+      "--set=rust.frame-pointers"
     ];
 
   # if we already have a rust compiler for build just compile the target std
@@ -281,12 +291,13 @@ stdenv.mkDerivation (finalAttrs: {
       ''
         runHook preBuild
 
-        mkdir -p build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-{std,rustc}/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/
+        mkdir -p build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage{0,1}-{std,rustc}/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/
         ln -s ${rustc.unwrapped}/lib/rustlib/${stdenv.hostPlatform.rust.rustcTargetSpec}/libstd-*.so build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-std/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/libstd.so
         ln -s ${rustc.unwrapped}/lib/rustlib/${stdenv.hostPlatform.rust.rustcTargetSpec}/librustc_driver-*.so build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-rustc/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/librustc.so
         ln -s ${rustc.unwrapped}/bin/rustc build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-rustc/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/rustc-main
+        ln -s ${rustc.unwrapped}/bin/rustc build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage1-rustc/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/rustc-main
         touch build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-std/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/.libstd-stamp
-        touch build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-rustc/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/.librustc-stamp
+        touch build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage{0,1}-rustc/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/.librustc-stamp
         python ./x.py --keep-stage=0 --stage=1 build library
 
         runHook postBuild
@@ -442,14 +453,15 @@ stdenv.mkDerivation (finalAttrs: {
     // lib.optionalAttrs stdenv.hostPlatform.isLinux { inherit firefox thunderbird; };
   };
 
-  meta = with lib; {
+  __structuredAttrs = true;
+
+  meta = {
     homepage = "https://www.rust-lang.org/";
     description = "Safe, concurrent, practical language";
-    maintainers = with maintainers; [ havvy ];
-    teams = [ teams.rust ];
+    teams = [ lib.teams.rust ];
     license = [
-      licenses.mit
-      licenses.asl20
+      lib.licenses.mit
+      lib.licenses.asl20
     ];
     platforms = rustc.targetPlatformsWithHostTools;
     # If rustc can't target a platform, we also can't build rustc for

@@ -17,6 +17,7 @@ let
     mkIf
     maintainers
     escape
+    replaceString
     collect
     mapAttrsRecursive
     optionals
@@ -43,7 +44,9 @@ let
           collect isString (
             mapAttrsRecursive (
               path: value:
-              "${escape [ sep ] (concatStringsSep "\\" ([ k ] ++ path))}${sep}${mkValueStringDefault { } value}"
+              "${escape [ sep ] (concatStringsSep "\\" ([ k ] ++ path))}${sep}${
+                replaceString "\n" "\\n" (mkValueStringDefault { } value)
+              }"
             ) v
           )
         )

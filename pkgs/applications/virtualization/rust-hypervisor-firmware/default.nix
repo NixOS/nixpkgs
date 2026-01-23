@@ -44,22 +44,23 @@ rustPlatform.buildRustPackage rec {
   # https://github.com/cloud-hypervisor/rust-hypervisor-firmware/issues/249
   auditable = false;
 
-  RUSTC_BOOTSTRAP = 1;
+  env = {
+    RUSTC_BOOTSTRAP = 1;
+    RUSTFLAGS = "-C linker=lld -C linker-flavor=ld.lld";
+  };
 
   nativeBuildInputs = [
     lld
   ];
 
-  RUSTFLAGS = "-C linker=lld -C linker-flavor=ld.lld";
-
   # Tests don't work for `no_std`. See https://os.phil-opp.com/testing/
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/cloud-hypervisor/rust-hypervisor-firmware";
     description = "Simple firmware that is designed to be launched from anything that supports loading ELF binaries and running them with the PVH booting standard";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ astro ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ astro ];
     platforms = [ "x86_64-none" ];
     mainProgram = "hypervisor-fw";
   };

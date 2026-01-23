@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  pythonOlder,
   unittestCheckHook,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage {
   pname = "contextlib2";
   version = "21.6.0-unstable-2024-05-23";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "jazzband";

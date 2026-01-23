@@ -30,10 +30,10 @@ stdenv.mkDerivation rec {
   ];
   propagatedBuildInputs = [ libgcrypt ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.cypherpunks.ca/otr/";
-    license = licenses.lgpl21;
+    license = lib.licenses.lgpl21;
     description = "Library for Off-The-Record Messaging";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

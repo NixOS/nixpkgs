@@ -4,7 +4,6 @@
   fetchPypi,
   setuptools,
   pyopenssl,
-  pythonOlder,
   requests,
   six,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "paypalrestsdk";
   version = "1.13.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

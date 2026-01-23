@@ -9,29 +9,15 @@
   pkg-config,
   alsa-lib,
   xorg,
+  fontconfig,
   freetype,
-  libGLU,
   libjack2,
   juce,
-  webkitgtk_4_1,
-  libsysprof-capture,
-  pcre2,
-  util-linux,
-  libselinux,
-  libsepol,
-  libthai,
-  libxkbcommon,
-  libdatrie,
-  libepoxy,
   libsoup_3,
-  lerc,
-  sqlite,
   libdeflate,
   xz,
   libwebp,
   glib,
-  gtk3-x11,
-  curl,
   vcv-rack,
   jansson,
   glew,
@@ -49,14 +35,14 @@ let
   clapJuceExtensions = fetchFromGitHub {
     owner = "free-audio";
     repo = "clap-juce-extensions";
-    rev = "4f33b4930b6af806018c009f0f24b3a50808af99";
-    hash = "sha256-M+T7ll3Ap6VIP5ub+kfEKwT2RW2IxxY4wUPRQKFIotk=";
+    rev = "645ed2fd0949d36639e3d63333f26136df6df769";
+    hash = "sha256-Lx88nyEFjPLA5yh8rrqBdyZIxe/j0FgIHoyKcbjuuI4=";
     fetchSubmodules = true;
   };
 
   vcvRackSdk = srcOnly vcv-rack;
   pname = "airwin2rack";
-  version = "2.13.0-unstable-2025-09-14";
+  version = "2.13.0-unstable-2026-01-19";
 in
 stdenv.mkDerivation {
   inherit pname;
@@ -65,8 +51,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "baconpaul";
     repo = "airwin2rack";
-    rev = "fc75563323bd9d8e46b1d58d89830e0bf760f0e8";
-    hash = "sha256-7jCDNbGMfJBo2xvRsDYdlEKSpAiRDNm6N4jTYCu+kKs=";
+    rev = "ed3700c223be0fd5eddf6d57b66216fff8389c2c";
+    hash = "sha256-JHARxie6y3mD/ZLEMGmfK8/b5GBcN/7lHpm7kI5BpTs=";
     fetchSubmodules = true;
   };
 
@@ -105,27 +91,11 @@ stdenv.mkDerivation {
     xorg.libXinerama
     xorg.libXrandr
     xorg.libXrender
-    xorg.libXtst
-    xorg.libXdmcp
-    libGLU
+    fontconfig
     libjack2
     freetype
-    webkitgtk_4_1
     glib
-    gtk3-x11
-    curl
-    libsysprof-capture
-    pcre2
-    util-linux
-    libselinux
-    libsepol
-    libthai
-    libxkbcommon
-    libdatrie
-    libepoxy
     libsoup_3
-    lerc
-    sqlite
     libdeflate
     xz # liblzma
     libwebp
@@ -163,7 +133,7 @@ stdenv.mkDerivation {
     ln -s ${clapJuceExtensions} src-juce/clap-juce-extensions
   '';
 
-  preConfigure = lib.optionalString enableVCVRack ''export RACK_DIR=${vcvRackSdk}'';
+  preConfigure = lib.optionalString enableVCVRack "export RACK_DIR=${vcvRackSdk}";
 
   buildPhase = ''
     runHook preBuild
@@ -208,14 +178,12 @@ stdenv.mkDerivation {
       "-lXinerama"
       "-lXrandr"
       "-lXrender"
-      "-lXtst"
-      "-lXdmcp"
     ]
   );
 
   meta = {
     description = "JUCE Plugin Version of Airwindows Consolidated";
-    homepage = "https://airwindows.com/";
+    homepage = "https://github.com/baconpaul/airwin2rack";
     platforms = [ "x86_64-linux" ];
     license =
       with lib.licenses;

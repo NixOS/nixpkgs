@@ -77,12 +77,12 @@ rec {
   isOption = lib.isType "option";
 
   /**
-    Creates an Option attribute set. mkOption accepts an attribute set with the following keys:
+    Creates an Option declaration for use with the module system.
 
     # Inputs
 
-    Structured attribute set
-    : Attribute set containing none or some of the following attributes.
+    Attribute set
+    : containing none or some of the following attributes.
 
       `default`
       : Optional default value used when no definition is given in the configuration.
@@ -122,16 +122,16 @@ rec {
       `readOnly`
       : Optional boolean indicating whether the option can be set only once.
 
-      `...` (any other attribute)
-      : Any other attribute is passed through to the resulting option attribute set.
-
     # Examples
     :::{.example}
     ## `lib.options.mkOption` usage example
 
     ```nix
-    mkOption { }  // => { _type = "option"; }
-    mkOption { default = "foo"; } // => { _type = "option"; default = "foo"; }
+    mkOption { }
+    # => Empty option; type = types.anything
+
+    mkOption { default = "foo"; }
+    # => Same as above, with a default value
     ```
 
     :::
@@ -152,7 +152,7 @@ rec {
     attrs // { _type = "option"; };
 
   /**
-    Creates an option declaration with a default value of ´false´, and can be defined to ´true´.
+    Creates an option declaration with a default value of `false`, and can be defined to `true`.
 
     # Inputs
 
@@ -433,7 +433,7 @@ rec {
     else if all isAttrs list then
       foldl' lib.mergeAttrs { } list
     else if all isBool list then
-      foldl' lib.or false list
+      foldl' lib."or" false list
     else if all isString list then
       lib.concatStrings list
     else if all isInt list && all (x: x == head list) list then
@@ -444,14 +444,18 @@ rec {
   /**
     Require a single definition.
 
-    WARNING: Does not perform nested checks, as this does not run the merge function!
+    ::: {.warning}
+    Does not perform nested checks, as this does not run the merge function!
+    :::
   */
   mergeOneOption = mergeUniqueOption { message = ""; };
 
   /**
     Require a single definition.
 
-    NOTE: When the type is not checked completely by check, pass a merge function for further checking (of sub-attributes, etc).
+    ::: {.note}
+    When the type is not checked completely by check, pass a merge function for further checking (of sub-attributes, etc).
+    :::
 
     # Inputs
 
@@ -516,7 +520,7 @@ rec {
       ) (head defs) (tail defs)).value;
 
   /**
-    Extracts values of all "value" keys of the given list.
+    Extracts values of all `value` keys of the given list.
 
     # Type
 
@@ -538,7 +542,7 @@ rec {
   getValues = map (x: x.value);
 
   /**
-    Extracts values of all "file" keys of the given list
+    Extracts values of all `file` keys of the given list
 
     # Type
 
@@ -615,7 +619,7 @@ rec {
     (on the order of megabytes) and is not actually used by the
     manual generator.
 
-    This function was made obsolete by renderOptionValue and is kept for
+    This function was made obsolete by `renderOptionValue` and is kept for
     compatibility with out-of-tree code.
 
     # Inputs
@@ -668,11 +672,30 @@ rec {
     is necessary for complex values, e.g. functions, or values that depend on
     other values or packages.
 
+    # Examples
+    :::{.example}
+    ## `literalExpression` usage example
+
+    ```nix
+    llvmPackages = mkOption {
+      type = types.str;
+      description = ''
+        Version of llvm packages to use for
+        this module
+      '';
+      example = literalExpression ''
+        llvmPackages = pkgs.llvmPackages_20;
+      '';
+    };
+    ```
+
+    :::
+
     # Inputs
 
     `text`
 
-    : 1\. Function argument
+    : The text to render as a Nix expression
   */
   literalExpression =
     text:
@@ -683,6 +706,49 @@ rec {
         _type = "literalExpression";
         inherit text;
       };
+
+  /**
+    For use in the `defaultText` and `example` option attributes. Causes the
+    given string to be rendered verbatim in the documentation as a code
+    block with the language bassed on the provided input tag.
+
+    If you wish to render Nix code, please see `literalExpression`.
+
+    # Examples
+    :::{.example}
+    ## `literalCode` usage example
+
+    ```nix
+    myPythonScript = mkOption {
+      type = types.str;
+      description = ''
+        Example python script used by a module
+      '';
+      example = literalCode "python" ''
+        print("Hello world!")
+      '';
+    };
+    ```
+
+    :::
+
+    # Inputs
+
+    `languageTag`
+
+    : The language tag to use when producing the code block (i.e. `js`, `rs`, etc).
+
+    `text`
+
+    : The text to render as a Nix expression
+  */
+  literalCode =
+    languageTag: text:
+    lib.literalMD ''
+      ```${languageTag}
+      ${text}
+      ```
+    '';
 
   /**
     For use in the `defaultText` and `example` option attributes. Causes the

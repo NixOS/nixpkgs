@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "pyicloud";
-  version = "2.1.0";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "timlaing";
     repo = "pyicloud";
     tag = version;
-    hash = "sha256-bGS5yAizdaZUdwKNoZPKP/DSpJs5XI70hyTLfJg9QmI=";
+    hash = "sha256-Lkabmeh+D+nv30DyVRTQhnoyEt6cp2003uGn/GyOrHs=";
   };
 
   build-system = [
@@ -59,12 +59,12 @@ buildPythonPackage rec {
     "test_storage"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to interact with iCloud webservices";
     mainProgram = "icloud";
     homepage = "https://github.com/timlaing/pyicloud";
     changelog = "https://github.com/timlaing/pyicloud/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = [ maintainers.mic92 ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.mic92 ];
   };
 }

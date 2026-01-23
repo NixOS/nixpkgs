@@ -7,14 +7,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  name = "sxcs";
+  pname = "sxcs";
   version = "1.1.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "NRK";
     repo = "sxcs";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-rYmbbdZjeLCvGvNocI3+KVU2KBkYvRisayTyScTRay8=";
   };
 

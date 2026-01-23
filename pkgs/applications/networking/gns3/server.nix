@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication {
     inherit hash;
     owner = "GNS3";
     repo = "gns3-server";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
   };
 
   # GNS3 2.3.26 requires a static BusyBox for the Docker integration
@@ -35,28 +35,23 @@ python3Packages.buildPythonApplication {
 
   build-system = with python3Packages; [ setuptools ];
 
-  dependencies =
-    with python3Packages;
-    [
-      aiofiles
-      aiohttp
-      aiohttp-cors
-      async-generator
-      distro
-      jinja2
-      jsonschema
-      multidict
-      platformdirs
-      prompt-toolkit
-      psutil
-      py-cpuinfo
-      sentry-sdk
-      truststore
-      yarl
-    ]
-    ++ lib.optionals (pythonOlder "3.9") [
-      importlib-resources
-    ];
+  dependencies = with python3Packages; [
+    aiofiles
+    aiohttp
+    aiohttp-cors
+    async-generator
+    distro
+    jinja2
+    jsonschema
+    multidict
+    platformdirs
+    prompt-toolkit
+    psutil
+    py-cpuinfo
+    sentry-sdk
+    truststore
+    yarl
+  ];
 
   postInstall = lib.optionalString (!stdenv.hostPlatform.isWindows) ''
     rm $out/bin/gns3loopback

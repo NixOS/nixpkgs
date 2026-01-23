@@ -35,11 +35,11 @@ python3.pkgs.buildPythonApplication rec {
     "test_get_ipv4"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "CloudFlare Dynamic DNS client";
     homepage = "https://github.com/kissgyorgy/cloudflare-dyndns";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lovesegfault ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lovesegfault ];
     mainProgram = "cloudflare-dyndns";
   };
 }

@@ -27,11 +27,11 @@ buildGoModule rec {
     rm -f $out/bin/{cmd,tkrelease}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command line tool for shopify themes";
     mainProgram = "theme";
     homepage = "https://shopify.github.io/themekit/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ _1000101 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ _1000101 ];
   };
 }

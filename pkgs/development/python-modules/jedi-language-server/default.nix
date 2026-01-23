@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   poetry-core,
@@ -11,9 +10,9 @@
   # dependencies
   docstring-to-markdown,
   jedi,
-  lsprotocol_2025,
+  lsprotocol,
   cattrs,
-  pygls_2,
+  pygls,
 
   # tests
   pytestCheckHook,
@@ -26,8 +25,6 @@ buildPythonPackage rec {
   pname = "jedi-language-server";
   version = "0.46.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pappasam";
@@ -43,9 +40,9 @@ buildPythonPackage rec {
   dependencies = [
     docstring-to-markdown
     jedi
-    lsprotocol_2025
+    lsprotocol
     cattrs
-    pygls_2
+    pygls
   ];
 
   nativeCheckInputs = [

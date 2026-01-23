@@ -1,6 +1,5 @@
 {
   lib,
-  pythonOlder,
   fetchFromGitHub,
   buildPythonPackage,
   pytestCheckHook,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "pysunspec2";
   version = "1.3.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "sunspec";
@@ -40,11 +37,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sunspec2" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for interfacing with SunSpec devices";
     homepage = "https://github.com/sunspec/pysunspec2";
     changelog = "https://github.com/sunspec/pysunspec2/releases/tag/${src.tag}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.cheriimoya ];
   };
 }

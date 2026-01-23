@@ -54,6 +54,11 @@ let
             gst-plugins-bad
             gst-libav
           ];
+        waylandDeps =
+          pkgs: with pkgs; [
+            libxkbcommon
+            wayland
+          ];
       in
       pkgs:
       with pkgs;
@@ -106,11 +111,12 @@ let
       ]
       ++ xorgDeps pkgs
       ++ gstreamerDeps pkgs
-      ++ extraLibraries pkgs;
+      ++ extraLibraries pkgs
+      ++ waylandDeps pkgs;
   };
 in
 symlinkJoin {
-  name = "bottles";
+  pname = "bottles";
   paths = [
     (buildFHSEnv (
       fhsEnv
@@ -133,5 +139,5 @@ symlinkJoin {
     ln -s ${bottles-unwrapped}/share/icons $out/share
   '';
 
-  inherit (bottles-unwrapped) meta;
+  inherit (bottles-unwrapped) meta version;
 }

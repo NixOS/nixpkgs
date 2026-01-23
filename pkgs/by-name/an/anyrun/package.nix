@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   wrapGAppsHook4,
+  anyrun-provider,
   cairo,
   gdk-pixbuf,
   glib,
@@ -16,16 +17,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "anyrun";
-  version = "25.9.3";
+  version = "25.12.0";
 
   src = fetchFromGitHub {
     owner = "anyrun-org";
     repo = "anyrun";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IlnFA/a9Clgbt+FuavIKWtauhtH4Fo/rGJIjJDDeYRs=";
+    hash = "sha256-KEEJLERvo04AsPo/SWHFJUmHaGGOVjUoGwA9e8GVIQQ=";
   };
 
-  cargoHash = "sha256-gP324zqfoNSYKIuTJFTWRr2fKBreVZFfZNR+jUasp/8=";
+  cargoHash = "sha256-IDrDgmksDdKw5JYY/kw+CCEIDJ6S2KARxUDSul713pw=";
 
   strictDeps = true;
   enableParallelBuilding = true;
@@ -48,6 +49,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   preFixup = ''
     gappsWrapperArgs+=(
+     --prefix PATH ":" ${lib.makeBinPath [ anyrun-provider ]}
      --prefix ANYRUN_PLUGINS : $out/lib
     )
   '';
@@ -56,7 +58,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     install -Dm444 anyrun/res/style.css examples/config.ron -t $out/share/doc/anyrun/examples/
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    # This is used for detecting whether or not an Anyrun package has the provider
+    inherit anyrun-provider;
+  };
 
   meta = {
     description = "Wayland-native, highly customizable runner";

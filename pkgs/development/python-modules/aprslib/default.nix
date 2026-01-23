@@ -31,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aprslib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for accessing APRS-IS and parsing APRS packets";
     homepage = "https://github.com/rossengeorgiev/aprs-python";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

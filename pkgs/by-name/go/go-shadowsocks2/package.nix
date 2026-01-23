@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-RrHksWET5kicbdQ5HRDWhNxx4rTi2zaVeaPoLdg4uQw=";
 
-  meta = with lib; {
+  meta = {
     description = "Fresh implementation of Shadowsocks in Go";
     homepage = "https://github.com/shadowsocks/go-shadowsocks2/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ oxzi ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ oxzi ];
     mainProgram = "go-shadowsocks2";
   };
 }

@@ -11,7 +11,6 @@
   pytest-xdist,
   pytest,
   pytestCheckHook,
-  pythonOlder,
   requests,
   selenium,
   tenacity,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "pytest-selenium";
   version = "4.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pytest-dev";

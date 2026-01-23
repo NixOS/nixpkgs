@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-rE7SErOhl2fcmvLairq+mvdnbDIk1aPo3eYqwRx5kkA=";
 
   # See https://github.com/mikedilger/gossip/blob/0.9/README.md.
-  RUSTFLAGS = "--cfg tokio_unstable";
+  env.RUSTFLAGS = "--cfg tokio_unstable";
 
   # Some users might want to add "rustls-tls(-native)" for Rust TLS instead of OpenSSL.
   buildFeatures = [

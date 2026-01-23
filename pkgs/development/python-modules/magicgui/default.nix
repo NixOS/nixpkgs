@@ -9,7 +9,6 @@
   psygnal,
   pyside2,
   pytestCheckHook,
-  pythonOlder,
   superqt,
   typing-extensions,
 }:
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "magicgui";
   version = "0.10.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pyapp-kit";
@@ -49,11 +46,11 @@ buildPythonPackage rec {
     inherit napari;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Build GUIs from python functions, using magic.  (napari/magicgui)";
     homepage = "https://github.com/pyapp-kit/magicgui";
     changelog = "https://github.com/pyapp-kit/magicgui/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SomeoneSerge ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ SomeoneSerge ];
   };
 }

@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "undertime";
-  version = "4.3.0";
+  version = "4.3.1";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "anarcat";
     repo = "undertime";
     tag = version;
-    hash = "sha256-sQI+fpg5PFGCsS9xikMTi4Ad76TayP13UgZag6CRBxE=";
+    hash = "sha256-TOrsQIi+ZcUQUGhb+iX8seuwNfKrrBL2DIcLK9wyjn0=";
   };
 
   nativeBuildInputs = with python3Packages; [

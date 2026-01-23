@@ -41,12 +41,12 @@ stdenv.mkDerivation {
 
   passthru.tests.quicktun = nixosTests.quicktun;
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Very simple, yet secure VPN software";
     homepage = "http://wiki.ucis.nl/QuickTun";
-    maintainers = with maintainers; [ h7x4 ];
-    platforms = platforms.unix;
-    license = licenses.bsd2;
+    maintainers = with lib.maintainers; [ h7x4 ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.bsd2;
   };
 }

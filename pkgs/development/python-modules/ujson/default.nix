@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
 }:
 
@@ -11,7 +10,6 @@ buildPythonPackage rec {
   pname = "ujson";
   version = "5.10.0";
   format = "setuptools";
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -24,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ujson" ];
 
-  meta = with lib; {
+  meta = {
     description = "Ultra fast JSON encoder and decoder";
     homepage = "https://github.com/ultrajson/ultrajson";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

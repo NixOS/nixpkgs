@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-Dfinite=isfinite")
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Computational Morphometry Toolkit";
     mainProgram = "cmtk";
     longDescription = ''
@@ -51,9 +51,9 @@ stdenv.mkDerivation (finalAttrs: {
       biomedical images, CMTK comprises a set of command line tools and a
       back-end general-purpose library for processing and I/O
     '';
-    maintainers = with maintainers; [ tbenst ];
-    platforms = platforms.all;
-    license = licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ tbenst ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.gpl3Plus;
     homepage = "https://www.nitrc.org/projects/cmtk/";
   };
 })

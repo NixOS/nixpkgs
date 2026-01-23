@@ -4,15 +4,12 @@
   fetchFromGitHub,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "wakeonlan";
   version = "3.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "remcohaszing";
@@ -29,12 +26,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "wakeonlan" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for wake on lan";
     mainProgram = "wakeonlan";
     homepage = "https://github.com/remcohaszing/pywakeonlan";
     changelog = "https://github.com/remcohaszing/pywakeonlan/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ peterhoeg ];
   };
 }

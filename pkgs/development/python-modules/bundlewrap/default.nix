@@ -54,7 +54,6 @@ buildPythonPackage {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/bw";
-  versionCheckProgramArg = "--version";
 
   enabledTestPaths = [
     # only unit tests as integration tests need a OpenSSH client/server setup

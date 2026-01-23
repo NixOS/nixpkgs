@@ -21,7 +21,7 @@ buildGoModule rec {
 
   subPackages = [ "cmd/mod" ];
 
-  meta = with lib; {
+  meta = {
     description = "Automated Semantic Import Versioning Upgrades for Go";
     mainProgram = "mod";
     longDescription = ''
@@ -29,8 +29,8 @@ buildGoModule rec {
       Modules.
     '';
     homepage = "https://github.com/marwan-at-work/mod";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kalbasit ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kalbasit ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

@@ -2,31 +2,34 @@
   lib,
   stdenv,
   chromium,
-  nodejs,
-  fetchYarnDeps,
   fetchNpmDeps,
   fetchpatch,
-  fixup-yarn-lock,
-  npmHooks,
-  yarn,
-  libnotify,
-  unzip,
+
   pkgsBuildHost,
-  pipewire,
-  libsecret,
-  libpulseaudio,
-  speechd-minimal,
-  info,
   gclient2nix,
+  nodejs,
+  npmHooks,
+  yarn-berry_4,
+  unzip,
+
+  libnotify,
+  libpulseaudio,
+  libsecret,
+  pipewire,
+  speechd-minimal,
+
+  info,
 }:
 
 let
   gclientDeps = gclient2nix.importGclientDeps info.deps;
+  yarn-berry = yarn-berry_4;
 in
 
 ((chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
   packageName = "electron";
   inherit (info) version;
+
   buildTargets = [
     "electron:copy_node_headers"
     "electron:electron_dist_zip"
@@ -41,19 +44,16 @@ in
   moveToDev = false;
 
   nativeBuildInputs = base.nativeBuildInputs ++ [
-    nodejs
-    yarn
-    fixup-yarn-lock
-    unzip
-    npmHooks.npmConfigHook
     gclient2nix.gclientUnpackHook
+    nodejs
+    npmHooks.npmConfigHook
+    yarn-berry
+    yarn-berry.yarnBerryConfigHook
+    unzip
   ];
+
   buildInputs = base.buildInputs ++ [ libnotify ];
 
-  electronOfflineCache = fetchYarnDeps {
-    yarnLock = gclientDeps."src/electron".path + "/yarn.lock";
-    sha256 = info.electron_yarn_hash;
-  };
   npmDeps = fetchNpmDeps rec {
     src = gclientDeps."src".path;
     # Assume that the fetcher always unpack the source,
@@ -61,6 +61,16 @@ in
     sourceRoot = "${src.name}/third_party/node";
     hash = info.chromium_npm_hash;
   };
+
+  npmRoot = "third_party/node";
+
+  yarnOfflineCache = yarn-berry.fetchYarnBerryDeps {
+    src = gclientDeps."src/electron".path;
+    hash = info.electron_yarn_hash;
+  };
+
+  dontYarnBerryInstallDeps = true; # we'll run the hook manually
+
   inherit gclientDeps;
   unpackPhase = null; # prevent chromium's unpackPhase from being used
   sourceRoot = "src";
@@ -106,9 +116,35 @@ in
         url = "https://github.com/chromium/chromium/commit/23d818d3c7fba4658248f17fd7b8993199242aa9.patch";
         hash = "sha256-JVv36PgU/rr34jrhgCyf4Pp8o5j2T8fD1xBVH1avT48=";
       })
+      # Fix build with Rust 1.91.0
+      # https://chromium-review.googlesource.com/c/chromium/src/+/6949745
+      (fetchpatch {
+        name = "Remove-unicode_width-from-rust-dependencies.patch";
+        url = "https://github.com/chromium/chromium/commit/0420449584e2afb7473393f536379efe194ba23c.patch";
+        hash = "sha256-2x1QoKkZEBfJw0hBjaErN/E47WrVfZvDngAXSIDzJs4=";
+      })
+      (fetchpatch {
+        name = "CrabbyAvif-Switch-from-no_sanitize-cfi-to-sanitize-cfi-off-1.patch";
+        url = "https://github.com/webmproject/CrabbyAvif/commit/4c70b98d1ebc8a210f2919be7ccabbcf23061cb5.patch";
+        extraPrefix = "third_party/crabbyavif/src/";
+        stripLen = 1;
+        hash = "sha256-E8/PmL+8+ZSoDO6L0/YOygIsliCDmcaBptXsi2L6ETQ=";
+      })
+      # backport of https://github.com/webmproject/CrabbyAvif/commit/3ba05863e84fd3acb4f4af2b4545221b317a2e55
+      ./CrabbyAvif-Switch-from-no_sanitize-cfi-to-sanitize-cfi-off-2.patch
+      # https://chromium-review.googlesource.com/c/chromium/src/+/6879484
+      (fetchpatch {
+        name = "crabbyavif-BUILD-gn-Temporarily-remove-disable_cfi-feature.patch";
+        url = "https://github.com/chromium/chromium/commit/e46275404d8f8a65ed84b3e583e9b78e4298acc7.patch";
+        hash = "sha256-2Dths53ervzCPKFbAVxeBHxtPHckxYhesJhaYZbxGSA=";
+      })
+      # https://chromium-review.googlesource.com/c/chromium/src/+/6960510
+      (fetchpatch {
+        name = "crabbyavif-BUILD-gn-Enable-disable_cfi-feature.patch";
+        url = "https://github.com/chromium/chromium/commit/9415f40bc6f853547f791e633be638c71368ce56.patch";
+        hash = "sha256-+M4gI77SoQ4dYIe/iGFgIwF1fS/6KQ8s16vj8ht/rik=";
+      })
     ];
-
-  npmRoot = "third_party/node";
 
   postPatch = ''
     mkdir -p third_party/jdk/current/bin
@@ -158,15 +194,10 @@ in
     EOF
   ''
   + ''
-
     (
       cd electron
-      export HOME=$TMPDIR/fake_home
-      yarn config --offline set yarn-offline-mirror $electronOfflineCache
-      fixup-yarn-lock yarn.lock
-      yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
+      YARN_ENABLE_SCRIPTS=0 yarnBerryConfigHook
     )
-
     (
       cd ..
       PATH=$PATH:${
@@ -290,15 +321,15 @@ in
     inherit info;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Cross platform desktop application shell";
     homepage = "https://github.com/electron/electron";
     platforms = lib.platforms.linux;
-    license = licenses.mit;
-    teams = [ teams.electron ];
+    license = lib.licenses.mit;
+    teams = [ lib.teams.electron ];
     mainProgram = "electron";
     hydraPlatforms =
-      lib.optionals (!(hasInfix "alpha" info.version) && !(hasInfix "beta" info.version))
+      lib.optionals (!(lib.hasInfix "alpha" info.version) && !(lib.hasInfix "beta" info.version))
         [
           "aarch64-linux"
           "x86_64-linux"

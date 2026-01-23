@@ -58,10 +58,10 @@ buildPythonPackage rec {
   # test_absolute_paths_made_relative (hieroglyph.tests.test_path_fixing.PostProcessImageTests) ... ERROR
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Generate HTML presentations from plain text sources";
     homepage = "https://github.com/nyergler/hieroglyph/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ juliendehos ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ juliendehos ];
   };
 }

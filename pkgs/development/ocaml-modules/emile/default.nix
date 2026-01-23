@@ -36,10 +36,10 @@ buildDunePackage rec {
   doCheck = true;
   checkInputs = [ alcotest ];
 
-  meta = with lib; {
+  meta = {
     description = "Parser of email address according RFC822";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/dinosaure/emile";
-    maintainers = [ maintainers.sternenseemann ];
+    maintainers = [ lib.maintainers.sternenseemann ];
   };
 }

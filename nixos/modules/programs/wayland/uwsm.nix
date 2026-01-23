@@ -107,33 +107,39 @@ in
           binPath = "/run/current-system/sw/bin/sway";
         };
       '';
+      default = { };
     };
   };
 
-  config = lib.mkIf cfg.enable {
-    environment.systemPackages = [ cfg.package ];
-    systemd.packages = [ cfg.package ];
-    environment.pathsToLink = [ "/share/uwsm" ];
+  config = lib.mkIf cfg.enable (
+    lib.mkMerge [
+      {
+        environment.systemPackages = [ cfg.package ];
+        systemd.packages = [ cfg.package ];
+        environment.pathsToLink = [ "/share/uwsm" ];
 
-    # UWSM recommends dbus broker for better compatibility
-    services.dbus.implementation = "broker";
+        # UWSM recommends dbus broker for better compatibility
+        services.dbus.implementation = "broker";
 
-    services.displayManager = {
-      enable = true;
-      sessionPackages = lib.mapAttrsToList (
-        name: value:
-        mk_uwsm_desktop_entry {
-          inherit name;
-          inherit (value)
-            prettyName
-            comment
-            binPath
-            extraArgs
-            ;
-        }
-      ) cfg.waylandCompositors;
-    };
-  };
+        services.displayManager.enable = true;
+      }
+
+      (lib.mkIf (cfg.waylandCompositors != { }) {
+        services.displayManager.sessionPackages = lib.mapAttrsToList (
+          name: value:
+          mk_uwsm_desktop_entry {
+            inherit name;
+            inherit (value)
+              prettyName
+              comment
+              binPath
+              extraArgs
+              ;
+          }
+        ) cfg.waylandCompositors;
+      })
+    ]
+  );
 
   meta.maintainers = with lib.maintainers; [
     johnrtitor

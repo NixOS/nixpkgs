@@ -10,7 +10,7 @@
 
 let
   pname = "sphinx-autodoc-typehints";
-  version = "3.4.0";
+  version = "3.5.2";
 in
 
 buildPythonPackage {
@@ -20,7 +20,7 @@ buildPythonPackage {
   src = fetchPypi {
     pname = "sphinx_autodoc_typehints";
     inherit version;
-    hash = "sha256-oknrcmSdBbS4fUKgykIln1UEmg/xVTk0FGP1nkslasU=";
+    hash = "sha256-X81KPreqiUJMHi4yvtymbtw4NnVpyRaagPSz6TQXH9s=";
   };
 
   pythonRelaxDeps = [ "sphinx" ];
@@ -39,11 +39,11 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "sphinx_autodoc_typehints" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/tox-dev/sphinx-autodoc-typehints/releases/tag/${version}";
     description = "Type hints (PEP 484) support for the Sphinx autodoc extension";
     homepage = "https://github.com/tox-dev/sphinx-autodoc-typehints";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

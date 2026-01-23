@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-iam-logging";
-  version = "1.5.0";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_iam_logging";
     inherit version;
-    hash = "sha256-CmUvHm1DVA/bRejKm+T8VonVlHy6Dmk1uytz3tfAVGk=";
+    hash = "sha256-/D0OLN0NsthrbamI9Sc0SOoCenSEHdezVNjn1OFenIA=";
   };
 
   build-system = [ setuptools ];
@@ -44,11 +44,11 @@ buildPythonPackage rec {
     "google.cloud.iam_logging_v1"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "IAM Service Logging client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-iam-logging";
     changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-iam-logging-v${version}/packages/google-cloud-iam-logging/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

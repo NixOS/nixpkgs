@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "scdoc";
-  version = "1.11.3";
+  version = "1.11.4";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "scdoc";
     rev = finalAttrs.version;
-    hash = "sha256-MbLDhLn/JY6OcdOz9/mIPAQRp5TZ6IKuQ/FQ/R3wjGc=";
+    hash = "sha256-gldCHzLigeLKDFDcE3TYrNOEWoSt/uYIg9aTg6wwW54=";
   };
 
   outputs = [
@@ -21,11 +21,6 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
     "dev"
   ];
-
-  postPatch = ''
-    substituteInPlace Makefile \
-      --replace "LDFLAGS+=-static" "LDFLAGS+="
-  '';
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"

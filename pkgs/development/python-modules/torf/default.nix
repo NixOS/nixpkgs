@@ -17,7 +17,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "torf";
   version = "4.3.0";
   pyproject = true;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rndusr";
     repo = "torf";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-vJapB4Tbn3tLLUIH9LemU9kTqG7TsByiotkWM52lsno=";
   };
 
@@ -67,4 +67,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ ambroisie ];
   };
-}
+})

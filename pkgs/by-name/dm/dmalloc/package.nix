@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     package = dmalloc;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Debug Malloc memory allocation debugging C library";
     longDescription = ''
       The debug memory allocation or "dmalloc" library has been designed as a
@@ -38,9 +38,9 @@ stdenv.mkDerivation rec {
       reporting, and general logging of statistics.
     '';
     homepage = "https://dmalloc.com";
-    license = licenses.isc;
-    maintainers = with maintainers; [ azahi ];
-    platforms = platforms.all;
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ azahi ];
+    platforms = lib.platforms.all;
     mainProgram = "dmalloc";
   };
 }

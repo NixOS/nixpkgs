@@ -7,13 +7,11 @@
   django,
   fetchFromGitHub,
   httpx,
-  importlib-metadata,
   jsonpickle,
   pymysql,
   pytest-asyncio_0,
   pynamodb,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
   sqlalchemy,
@@ -25,8 +23,6 @@ buildPythonPackage rec {
   pname = "aws-xray-sdk";
   version = "2.14.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "aws";
@@ -42,8 +38,7 @@ buildPythonPackage rec {
     jsonpickle
     requests
     wrapt
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ];
 
   nativeCheckInputs = [
     aiohttp
@@ -70,11 +65,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aws_xray_sdk" ];
 
-  meta = with lib; {
+  meta = {
     description = "AWS X-Ray SDK for the Python programming language";
     homepage = "https://github.com/aws/aws-xray-sdk-python";
     changelog = "https://github.com/aws/aws-xray-sdk-python/blob/${version}/CHANGELOG.rst";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

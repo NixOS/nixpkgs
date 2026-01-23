@@ -2,6 +2,7 @@
   mkDerivation,
   include,
   libcMinimal,
+  libsys,
   libgcc,
   libthr,
   csu,
@@ -26,6 +27,7 @@ mkDerivation {
     libcMinimal
     libgcc
     libthr
+    libsys
   ];
 
   preBuild = ''

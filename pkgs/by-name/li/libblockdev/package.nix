@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   autoreconfHook,
   pkg-config,
   gtk-doc,
@@ -36,22 +35,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libblockdev";
-  version = "3.3.0";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "storaged-project";
     repo = "libblockdev";
-    rev = finalAttrs.version;
-    hash = "sha256-Q7610i+2PQi+Oza3c2SwPneljrb+1cuFA4K4DQTpt8A=";
+    tag = finalAttrs.version;
+    hash = "sha256-KvcGvMsASgEKTerhh/lSPjQoXYDMBvbaPSdc6f5p7wc=";
   };
-
-  patches = [
-    # CVE-2025-6019: https://www.openwall.com/lists/oss-security/2025/06/17/5
-    (fetchpatch {
-      url = "https://github.com/storaged-project/libblockdev/commit/4e35eb93e4d2672686789b9705623cc4f9f85d02.patch";
-      hash = "sha256-3pQxvbFX6jmT5LCaePoVfvPTNPoTPPhT0GcLaGkVVso=";
-    })
-  ];
 
   outputs = [
     "out"
@@ -69,6 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--with-python_prefix=${placeholder "python"}"
   ];
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     autoconf-archive
@@ -112,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/storaged-project/libblockdev/raw/${finalAttrs.src.rev}/NEWS.rst";
+    changelog = "https://github.com/storaged-project/libblockdev/raw/${finalAttrs.src.tag}/NEWS.rst";
     description = "Library for manipulating block devices";
     homepage = "http://storaged.org/libblockdev/";
     license = with lib.licenses; [

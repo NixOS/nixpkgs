@@ -854,7 +854,7 @@ runBuildTests {
     format = formats.nixConf {
       package = pkgs.nix;
       version = pkgs.nix.version;
-      extraOptions = ''ignore-try = false'';
+      extraOptions = "ignore-try = false";
     };
     input = {
       auto-optimise-store = true;

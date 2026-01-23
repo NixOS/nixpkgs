@@ -15,7 +15,7 @@ const keys = require("ramda/src/keys");
  */
 
 const mapObjIndexedReturnArray = _curry2((fn, obj) =>
-  _map(key => fn(obj[key], key, obj), keys(obj))
+  _map((key) => fn(obj[key], key, obj), keys(obj)),
 );
 
 module.exports = mapObjIndexedReturnArray;

@@ -23,22 +23,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "direwolf";
-  version = "1.7";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "wb2osz";
     repo = "direwolf";
     tag = finalAttrs.version;
-    hash = "sha256-Vbxc6a6CK+wrBfs15dtjfRa1LJDKKyHMrg8tqsF7EX4=";
+    hash = "sha256-CCJr3l4RxYZLrdCRwio64EzpDyErlV9JDOXD6TH8p9o=";
   };
-
-  patches = [
-    # Fix the build with CMake 4.
-    (fetchpatch {
-      url = "https://github.com/wb2osz/direwolf/commit/c499496bbc237d0efdcacec5786607f5e17c1c7e.patch";
-      hash = "sha256-/gKi5dswMQM2nGHS3P72gAcHaT0nEF9O91heF8xmy2Y=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -66,15 +58,17 @@ stdenv.mkDerivation (finalAttrs: {
     echo "" > scripts/CMakeLists.txt
   '';
 
+  # TODO: It would be great if we could make these configurable
   postPatch = ''
     substituteInPlace conf/CMakeLists.txt \
-      --replace-fail /etc/udev/rules.d/ $out/lib/udev/rules.d/
+      --replace-fail /etc/udev/rules.d/ $out/lib/udev/rules.d/ \
+      --replace-fail /usr/lib/udev/rules.d/ $out/lib/udev/rules.d/
     substituteInPlace src/symbols.c \
       --replace-fail /usr/share/direwolf/symbols-new.txt $out/share/direwolf/symbols-new.txt \
       --replace-fail /opt/local/share/direwolf/symbols-new.txt $out/share/direwolf/symbols-new.txt
-    substituteInPlace src/decode_aprs.c \
-      --replace-fail /usr/share/direwolf/tocalls.txt $out/share/direwolf/tocalls.txt \
-      --replace-fail /opt/local/share/direwolf/tocalls.txt $out/share/direwolf/tocalls.txt
+    substituteInPlace src/deviceid.c \
+      --replace-fail /usr/share/direwolf/tocalls.yaml $out/share/direwolf/tocalls.yaml \
+      --replace-fail /opt/local/share/direwolf/tocalls.yaml $out/share/direwolf/tocalls.yaml
     substituteInPlace cmake/cpack/direwolf.desktop.in \
       --replace-fail 'Terminal=false' 'Terminal=true' \
       --replace-fail 'Exec=@APPLICATION_DESKTOP_EXEC@' 'Exec=direwolf'
@@ -82,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString extraScripts ''
     patchShebangs scripts/dwespeak.sh
     substituteInPlace scripts/dwespeak.sh \
-      --replace-fail espeak ${espeak}/bin/espeak
+      --replace-fail espeak ${lib.getBin espeak}
   '';
 
   doInstallCheck = true;

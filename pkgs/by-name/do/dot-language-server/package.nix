@@ -19,11 +19,11 @@ buildNpmPackage rec {
 
   npmBuildScript = "compile";
 
-  meta = with lib; {
+  meta = {
     description = "Language server for the DOT language";
     mainProgram = "dot-language-server";
     homepage = "https://github.com/nikeee/dot-language-server";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -25,11 +25,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/linuxmint/mint-cursor-themes/";
     description = "Linux Mint cursor themes";
-    license = licenses.gpl3Plus;
-    teams = [ teams.cinnamon ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.cinnamon ];
+    platforms = lib.platforms.linux;
   };
 }

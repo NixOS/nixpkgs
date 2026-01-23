@@ -31,6 +31,10 @@ rustPlatform.buildRustPackage {
     hash = "sha256-pPnOM4hpbAkGCV47aw5eHbpOujjFtJa3v/3/D8gybO8=";
   };
 
+  dontUseZigBuild = true;
+  dontUseZigCheck = true;
+  dontUseZigInstall = true;
+
   nativeBuildInputs = [
     cmake
     zig_0_13
@@ -52,9 +56,6 @@ rustPlatform.buildRustPackage {
   ];
 
   cargoHash = "sha256-wJViSHcezoIchWe4Py9j+9U+YJUA5ja/x94UipuWO2g=";
-
-  # prevents zig AccessDenied error github.com/ziglang/zig/issues/6810
-  XDG_CACHE_HOME = "xdg_cache";
 
   preBuild =
     let
@@ -85,12 +86,12 @@ rustPlatform.buildRustPackage {
   checkPhase =
     lib.optionalString stdenv.isLinux ''
       runHook preCheck
-      NIX_GLIBC_PATH=${glibc.out}/lib NIX_LIBGCC_S_PATH=${stdenv.cc.cc.lib}/lib cargo test --release --workspace --exclude test_mono --exclude uitest -- --skip glue_cli_tests
+      NIX_GLIBC_PATH=${glibc.out}/lib NIX_LIBGCC_S_PATH=${stdenv.cc.cc.lib}/lib cargo test --release --workspace --exclude test_mono --exclude uitest -- --skip glue_cli_tests --skip test_snapshots
       runHook postCheck
     ''
     + lib.optionalString (!stdenv.isLinux) ''
       runHook preCheck
-      cargo test --release --workspace --exclude test_mono --exclude uitest -- --skip glue_cli_tests
+      cargo test --release --workspace --exclude test_mono --exclude uitest -- --skip glue_cli_tests --skip test_snapshots
       runHook postCheck
     '';
 

@@ -5,15 +5,12 @@
   argparse-addons,
   humanfriendly,
   pyelftools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "bincopy";
   version = "20.1.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -28,12 +25,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bincopy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Mangling of various file formats that conveys binary information (Motorola S-Record, Intel HEX, TI-TXT, ELF and binary files)";
     mainProgram = "bincopy";
     homepage = "https://github.com/eerimoq/bincopy";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       frogamic
       sbruder
     ];

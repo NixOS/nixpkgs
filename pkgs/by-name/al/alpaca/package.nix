@@ -22,7 +22,6 @@
   pipewire,
   glib-networking,
   bash,
-  fetchpatch,
 }:
 
 let
@@ -34,23 +33,15 @@ let
 in
 pythonPackages.buildPythonApplication rec {
   pname = "alpaca";
-  version = "8.3.1";
+  version = "8.5.1";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "Jeffser";
     repo = "Alpaca";
     tag = version;
-    hash = "sha256-X3kITzZBcpN3kYDiT2PTu9UvuWQ/XSq3tVYYMa1btnY=";
+    hash = "sha256-Sqs6xXnh1I8fhrxVS8p5r7PRqI5rxK0pJWhDQ2qddks=";
   };
-
-  # TODO: remove in the next release
-  patches = [
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/Jeffser/Alpaca/pull/1043.patch";
-      hash = "sha256-y0NiT0FvyB/fKvi+5E0hSzDs1Ds2ydqRO1My83bnmYY=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace src/widgets/activities/terminal.py \
@@ -96,7 +87,7 @@ pythonPackages.buildPythonApplication rec {
       gst-python
       opencv4
     ]
-    ++ lib.flatten (builtins.attrValues optional-dependencies);
+    ++ lib.concatAttrValues optional-dependencies;
 
   optional-dependencies = with pythonPackages; {
     speech-to-text = [
@@ -135,6 +126,7 @@ pythonPackages.buildPythonApplication rec {
       }
       ```
       Or using `pkgs.ollama-rocm` for AMD GPUs.
+      For a vendor agnostic solution, use: `pkgs.ollama-vulkan`.
     '';
     homepage = "https://jeffser.com/alpaca";
     license = lib.licenses.gpl3Plus;

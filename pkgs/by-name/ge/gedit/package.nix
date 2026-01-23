@@ -28,7 +28,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gedit";
-  version = "48.2";
+  version = "49.0";
 
   outputs = [
     "out"
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     repo = "gedit";
     tag = version;
     fetchSubmodules = true;
-    hash = "sha256-M8ZyjY4wSogEjhEx9sOKfuGkbiypDmZoU0H4ja+TgaY=";
+    hash = "sha256-IW3zBQOq/eeIjJbgJooHlOd+6/ZHOG6DUspHUlopG8A=";
   };
 
   patches = [
@@ -87,12 +87,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { ignoredVersions = "(alpha|beta|rc).*"; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/World/gedit/gedit";
     description = "Former GNOME text editor";
-    maintainers = with maintainers; [ bobby285271 ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ bobby285271 ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
     mainProgram = "gedit";
   };
 }

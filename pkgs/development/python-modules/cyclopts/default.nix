@@ -4,27 +4,32 @@
   buildPythonPackage,
   docstring-parser,
   fetchFromGitHub,
-  hatchling,
   hatch-vcs,
+  hatchling,
+  markdown,
+  mkdocs,
   pydantic,
+  pymdown-extensions,
   pytest-mock,
   pytestCheckHook,
   pyyaml,
   rich-rst,
   rich,
+  sphinx,
+  syrupy,
   trio,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cyclopts";
-  version = "4.2.1";
+  version = "4.4.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "BrianPugh";
     repo = "cyclopts";
-    tag = "v${version}";
-    hash = "sha256-dBI7ax7ljmCrE7ymcMa/B9uMtLyRTC42unrKBJ9QYQg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-DX/mh1vgoSQoqzKRQg+NcCjfPPwy8WDJG7AfMYtPUSA=";
   };
 
   build-system = [
@@ -42,20 +47,29 @@ buildPythonPackage rec {
   optional-dependencies = {
     trio = [ trio ];
     yaml = [ pyyaml ];
+    docs = [ sphinx ];
+    mkdocs = [
+      mkdocs
+      markdown
+      pymdown-extensions
+    ];
   };
 
   nativeCheckInputs = [
     pydantic
     pytest-mock
     pytestCheckHook
+    syrupy
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "cyclopts" ];
 
   disabledTests = [
     # Test requires bash
     "test_positional_not_treated_as_command"
+    # Building docs
+    "build_succeeds"
   ];
 
   disabledTestPaths = [
@@ -63,11 +77,11 @@ buildPythonPackage rec {
     "tests/test_sphinx_ext.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to create CLIs based on Python type hints";
     homepage = "https://github.com/BrianPugh/cyclopts";
-    changelog = "https://github.com/BrianPugh/cyclopts/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/BrianPugh/cyclopts/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

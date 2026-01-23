@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "memorado";
-  version = "0.5";
+  version = "0.6";
 
   src = fetchFromGitHub {
     owner = "wbernard";
     repo = "Memorado";
     tag = version;
-    hash = "sha256-HNZdWRATjSfMk0e99CERPuR891549+wS/WeA7XGFxto=";
+    hash = "sha256-pHbZ8zBfgAHLmCaMRS4MS/awFat41OG++hSSHz3k2KM=";
   };
 
   nativeBuildInputs = [
@@ -45,10 +45,10 @@ stdenv.mkDerivation rec {
     ))
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple and clean flashcard memorizing app";
     homepage = "https://github.com/wbernard/Memorado";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

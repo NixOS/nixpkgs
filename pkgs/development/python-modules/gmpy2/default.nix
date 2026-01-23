@@ -17,7 +17,7 @@
   sage,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gmpy2";
   version = "2.2.1";
   pyproject = true;
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aleaxit";
     repo = "gmpy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-wrMN3kqLnjItoybKYeo4Pp2M0uma7Kg0JEQM8lr6OI0=";
   };
 
@@ -66,10 +66,10 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/aleaxit/gmpy/blob/${src.rev}/docs/history.rst";
+    changelog = "https://github.com/aleaxit/gmpy/blob/${finalAttrs.src.rev}/docs/history.rst";
     description = "Interface to GMP, MPFR, and MPC for Python 3.7+";
     homepage = "https://github.com/aleaxit/gmpy/";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ tomasajt ];
   };
-}
+})

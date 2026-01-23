@@ -9,6 +9,8 @@
 
   # buildInputs
   fmt,
+  libbfd,
+  libunwind,
   rsync,
 
   versionCheckHook,
@@ -17,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lua-language-server";
-  version = "3.15.0";
+  version = "3.17.0";
 
   src = fetchFromGitHub {
     owner = "luals";
     repo = "lua-language-server";
     tag = finalAttrs.version;
-    hash = "sha256-frsq5OA3giLOJ/KPcAqVhme+0CtJuZrS3F4zHN1PnFM=";
+    hash = "sha256-jeO01VvukzpVPP/ob/p/br51uy6eVdAFqRTIo/DttR0=";
     fetchSubmodules = true;
   };
 
@@ -34,6 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     fmt
+    libbfd
+    libunwind
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     rsync
@@ -122,7 +126,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
@@ -134,7 +137,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       gepbird
-      sei40kr
     ];
     mainProgram = "lua-language-server";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

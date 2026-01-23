@@ -1,25 +1,27 @@
 {
-  lib,
-  stdenv,
   callPackage,
-  fetchFromGitLab,
-  replaceVars,
-  qt5,
-  SDL2,
-  discord-rpc,
-  libgcrypt,
-  sqlite,
-  findutils,
-  xdg-utils,
   coreutils,
+  discord-rpc,
   dosfstools,
+  fetchFromGitLab,
+  findutils,
+  lib,
+  libgcrypt,
+  libgpg-error,
+  parallel-launcher,
+  qt6,
+  replaceVars,
+  retroarch-assets,
+  SDL2,
+  sqlite,
+  stdenv,
   vulkan-loader,
   wrapRetroArch,
-  retroarch-assets,
-  parallel-launcher,
+  xdg-utils,
+  zlib,
   # Allow overrides for the RetroArch core and declarative settings
-  parallel-n64-core ? parallel-launcher.passthru.parallel-n64-core,
   extraRetroArchSettings ? { },
+  parallel-n64-core ? parallel-launcher.passthru.parallel-n64-core,
   withDiscordRpc ? false,
 }:
 let
@@ -53,13 +55,13 @@ stdenv.mkDerivation (
   in
   {
     pname = "parallel-launcher";
-    version = "8.3.0"; # Check ./parallel-n64-next.nix for updates when updating, too
+    version = "9.0.2"; # Check ./parallel-n64-next.nix for updates when updating, too
 
     src = fetchFromGitLab {
       owner = "parallel-launcher";
       repo = "parallel-launcher";
       tag = reformatVersion finalAttrs.version;
-      hash = "sha256-Zp/QTPREfpOG0zgnP1Lg5FgT9u+OEhoqBgnxWMu451A=";
+      hash = "sha256-JrZy60xWgrUlFcyGNVBUfHg/diM5TG5mIbbOXpee/2U=";
     };
 
     patches =
@@ -73,6 +75,8 @@ stdenv.mkDerivation (
           inherit retroArchAssetsPath retroArchCoresPath;
           retroArchExePath = lib.getExe retroarch';
           parallelN64CorePath = "${retroArchCoresPath}/parallel_n64_next_libretro${suffix}";
+          # Manually substituted later since we need to reference PL's $out
+          sharePath = null;
         })
         # Bypass update checks and hardcode internal version checks to ours
         (replaceVars ./fix-version-checks.patch {
@@ -82,39 +86,59 @@ stdenv.mkDerivation (
       ];
 
     nativeBuildInputs = [
-      qt5.wrapQtAppsHook
-      qt5.qttools
-      qt5.qmake
+      qt6.wrapQtAppsHook
+      qt6.qttools
+      qt6.qmake
     ];
 
     buildInputs = [
-      SDL2
       libgcrypt
+      libgpg-error
+      qt6.qtbase
+      qt6.qtsvg
+      SDL2
       sqlite
-      qt5.qtbase
-      qt5.qtsvg
-    ]
-    ++ lib.optional withDiscordRpc discord-rpc;
+      zlib
+    ];
 
     qtWrapperArgs = [
       "--prefix PATH : ${
         lib.makeBinPath [
-          findutils
-          xdg-utils
           coreutils
           dosfstools
+          findutils
+          xdg-utils
         ]
       }"
       "--prefix LD_LIBRARY_PATH : ${
-        lib.makeLibraryPath [
-          vulkan-loader
-        ]
+        lib.makeLibraryPath (
+          [
+            vulkan-loader
+          ]
+          ++ lib.optional withDiscordRpc discord-rpc
+        )
       }"
+    ];
+
+    qmakeFlags = [
+      "DEFINES+=RETROARCH_XWAYLAND"
     ];
 
     # Our patches result in unused params.
     # Ignoring the warning is easier to maintain than more invasive patching.
     env.NIX_CFLAGS_COMPILE = "-Wno-error=unused-parameter";
+
+    postPatch =
+      let
+        sharePath = "${placeholder "out"}/share/parallel-launcher";
+      in
+      ''
+        substituteInPlace src/main.cpp \
+          --replace-fail '@sharePath@' '${sharePath}'
+
+        substituteInPlace src/polyfill/base-directory.cpp \
+          --replace-fail '@sharePath@' '${sharePath}'
+      '';
 
     preConfigure = ''
       lrelease app.pro

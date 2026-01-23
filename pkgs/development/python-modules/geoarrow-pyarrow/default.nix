@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   geoarrow-c,
   pyarrow,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "geoarrow-pyarrow";
   version = "0.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     repo = "geoarrow-python";
@@ -71,11 +68,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "geoarrow.pyarrow" ];
 
-  meta = with lib; {
+  meta = {
     description = "PyArrow implementation of geospatial data types";
     homepage = "https://github.com/geoarrow/geoarrow-python";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       cpcloud
     ];
     teams = [ lib.teams.geospatial ];

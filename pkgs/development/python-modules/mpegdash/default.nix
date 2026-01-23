@@ -7,14 +7,14 @@
 }:
 buildPythonPackage rec {
   pname = "mpegdash";
-  version = "0.4.0";
+  version = "0.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sangwonl";
     repo = "python-mpegdash";
     rev = version;
-    hash = "sha256-eKtJ+QzeoMog5X1r1ix9vrmGTi/9KzdJiu80vrTX14I=";
+    hash = "sha256-WrsTxI6zdPCvzU4bW41kuPpR6B1DcDRUFDbAb9JZnK8=";
   };
 
   nativeBuildInputs = [ setuptools ];

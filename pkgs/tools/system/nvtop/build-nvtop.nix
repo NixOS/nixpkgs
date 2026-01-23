@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "htop-like task monitor for AMD, Adreno, Intel and NVIDIA GPUs";
     longDescription = ''
       Nvtop stands for Neat Videocard TOP, a (h)top like task monitor for AMD, Adreno, Intel and NVIDIA GPUs.
@@ -106,9 +106,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/Syllo/nvtop";
     changelog = "https://github.com/Syllo/nvtop/releases/tag/${finalAttrs.version}";
-    license = licenses.gpl3Only;
-    platforms = if apple then platforms.darwin else platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    platforms = if apple then lib.platforms.darwin else lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       gbtb
       anthonyroussel
       moni

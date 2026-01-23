@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
     cd daemontools-${version}
 
-    sed -i -e '1 s_$_ -include ${glibc.dev}/include/errno.h_' src/conf-cc
+    sed -i -e '1 s_$_ -include ${glibc.dev}/include/errno.h -std=gnu17_' src/conf-cc
 
     substituteInPlace src/Makefile \
       --replace-fail '/bin/sh' '${bash}/bin/bash -oxtrace'

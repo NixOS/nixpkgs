@@ -14,14 +14,14 @@
 
 stdenv.mkDerivation {
   pname = "mmlgui";
-  version = "210420-preview-unstable-2024-04-15";
+  version = "210420-preview-unstable-2026-01-09";
 
   src = fetchFromGitHub {
     owner = "superctr";
     repo = "mmlgui";
-    rev = "e49f225ac2b2d46056b2c45a5d31c544227c4968";
+    rev = "9803a154c5fdbe6e88956e391ea0d5c4eae18cdc";
     fetchSubmodules = true;
-    hash = "sha256-hj2k1BrE8AA2HTBEO03RammlZV2U4KW0gLJmFNiaSvI=";
+    hash = "sha256-3HMSVSgqusIhFf7jheyC2ytoJqSsJA8yYUnhxvdteq0=";
   };
 
   postPatch = ''
@@ -86,12 +86,12 @@ stdenv.mkDerivation {
     url = "https://github.com/superctr/mmlgui.git";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/superctr/mmlgui";
     description = "MML (Music Macro Language) editor and compiler GUI, powered by the ctrmml framework";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = lib.platforms.all;
     mainProgram = "mmlgui";
   };
 }

@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "pytesseract";
   version = "0.3.13";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "madmaze";
@@ -44,9 +44,9 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pypi.org/project/pytesseract/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     description = "Python wrapper for Google Tesseract";
     mainProgram = "pytesseract";
     maintainers = [ ];

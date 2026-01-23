@@ -48,14 +48,14 @@ buildPythonPackage rec {
     popd
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation of FastDTW (Dynamic Time Warping)";
     longDescription = ''
       FastDTW is an approximate Dynamic Time Warping (DTW) algorithm that provides
       optimal or near-optimal alignments with an O(N) time and memory complexity.
     '';
     homepage = "https://github.com/slaypni/fastdtw";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

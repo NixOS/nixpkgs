@@ -23,11 +23,11 @@ buildGoModule rec {
     "-X golift.io/version.Version=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Extracts downloads for Radarr, Sonarr, Lidarr - Deletes extracted files after import";
     homepage = "https://github.com/davidnewhall/unpackerr";
     maintainers = [ ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "unpackerr";
   };
 }

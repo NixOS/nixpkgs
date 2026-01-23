@@ -30,7 +30,6 @@ in
 {
   meta.maintainers = with lib.maintainers; [
     cole-h
-    grahamc
   ];
 
   options = {

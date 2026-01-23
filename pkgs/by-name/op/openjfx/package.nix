@@ -1,12 +1,11 @@
 {
-  featureVersion ? "17",
+  featureVersion ? "21",
 
   lib,
   stdenv,
   pkgs,
 
   gradle_8,
-  gradle_7,
   perl,
   pkg-config,
   cmake,
@@ -20,9 +19,10 @@
   libXxf86vm,
   glib,
   alsa-lib,
-  ffmpeg,
-  ffmpeg-headless,
+  ffmpeg_7,
+  ffmpeg_7-headless,
 
+  fetchpatch2,
   writeText,
 
   _experimental-update-script-combinators,
@@ -54,8 +54,6 @@ let
 
   atLeast21 = lib.versionAtLeast featureVersion "21";
   atLeast23 = lib.versionAtLeast featureVersion "23";
-
-  gradle_openjfx = if atLeast21 then gradle_8 else gradle_7;
 in
 
 assert lib.assertMsg (lib.pathExists sourceFile)
@@ -76,11 +74,28 @@ stdenv.mkDerivation {
       [
         ./17/patches/backport-ffmpeg-6-support-jfx11.patch
         ./17/patches/backport-ffmpeg-7-support-jfx11.patch
+
+        # Build with Gradle 8
+        (fetchpatch2 {
+          # Yes, this patch taken from the jfx21u repo is intended to be
+          # applied to jfx17.
+          url = "https://github.com/openjdk/jfx21u/commit/7f704c24c2238f9d7bb744a20667a8c1337decc6.patch?full_index=1";
+          excludes = [
+            # The patch fails to apply to these files, but with the exception
+            # of build.properties (which is patched in postPatch), none of them
+            # matter.
+            "build.properties"
+            "gradle/legal/gradle.md"
+            "gradle/wrapper/gradle-wrapper.properties"
+            "gradlew"
+          ];
+          hash = "sha256-WuJtzPy0IV4xvn+i5xeDqekWO0VR2GIfsYKkEmh8KKU=";
+        })
       ]
   );
 
   nativeBuildInputs = [
-    gradle_openjfx
+    gradle_8
     perl
     pkg-config
     cmake
@@ -96,10 +111,10 @@ stdenv.mkDerivation {
     libXxf86vm
     glib
     alsa-lib
-    (if atLeast21 then ffmpeg else ffmpeg-headless)
+    (if atLeast21 then ffmpeg_7 else ffmpeg_7-headless)
   ];
 
-  mitmCache = gradle_openjfx.fetchDeps {
+  mitmCache = gradle_8.fetchDeps {
     attrPath = "openjfx${featureVersion}";
     pkg = pkgs."openjfx${featureVersion}".override { withWebKit = true; };
     data = ./. + "/${featureVersion}/deps.json";
@@ -132,6 +147,10 @@ stdenv.mkDerivation {
            modules/javafx.web/src/main/native/Source/bmalloc/bmalloc/IsoSharedPageInlines.h
 
     ''
+    + lib.optionalString (!atLeast21) ''
+      substituteInPlace build.properties \
+        --replace-fail jfx.gradle.version=7.3 jfx.gradle.version=8.4
+    ''
     + ''
       ln -s $config gradle.properties
     '';
@@ -156,7 +175,7 @@ stdenv.mkDerivation {
 
   disallowedReferences = [
     jdk-bootstrap
-    gradle_openjfx.jdk
+    gradle_8.jdk
   ];
 
   passthru.updateScript = _experimental-update-script-combinators.sequence [

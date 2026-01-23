@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication rec {
     chmod -x src/clients/jackpatch/main_loop.py
   '';
 
-  format = "other";
+  pyproject = false;
 
   nativeBuildInputs = [
     python3Packages.pyqt5 # pyuic5 and pyrcc5 to build resources.
@@ -64,7 +64,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/Houston4444/RaySession";
     description = "Session manager for Linux musical programs";
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ orivej ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

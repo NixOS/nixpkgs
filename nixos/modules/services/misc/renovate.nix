@@ -169,7 +169,7 @@ in
 
       script = ''
         ${lib.concatStringsSep "\n" (
-          builtins.map (name: ''
+          map (name: ''
             ${name}="$(systemd-creds cat 'SECRET-${name}')"
             export ${name}
           '') (lib.attrNames cfg.credentials)

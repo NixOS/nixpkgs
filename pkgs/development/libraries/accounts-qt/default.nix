@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "accounts-sso";
     repo = "libaccounts-qt";
-    rev = "refs/tags/VERSION_${finalAttrs.version}";
+    tag = "VERSION_${finalAttrs.version}";
     hash = "sha256-mPZgD4r7vlUP6wklvZVknGqTXZBckSOtNzK7p6e2qSA=";
   };
 
@@ -45,11 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
     rev-prefix = "VERSION_";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Qt library for accessing the online accounts database";
     mainProgram = "accountstest";
     homepage = "https://gitlab.com/accounts-sso/libaccounts-qt";
-    license = licenses.lgpl21;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21;
+    platforms = lib.platforms.linux;
   };
 })

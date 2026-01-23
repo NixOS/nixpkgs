@@ -56,24 +56,24 @@
 
 let
   pname = "gitkraken";
-  version = "11.5.1";
+  version = "11.6.0";
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   srcs = {
     x86_64-linux = fetchzip {
       url = "https://api.gitkraken.dev/releases/production/linux/x64/${version}/gitkraken-amd64.tar.gz";
-      hash = "sha256-ctwkU8AWCuOKFetgCIPp6npk1ZO8ozfELrRp4PR3Xjs=";
+      hash = "sha256-MU/WB4RsNViEulvE6fB7S4QTjjMI/50enlyCIX+xar4=";
     };
 
     x86_64-darwin = fetchzip {
       url = "https://api.gitkraken.dev/releases/production/darwin/x64/${version}/GitKraken-v${version}.zip";
-      hash = "sha256-7wXpMwFGQeLgT7ObrZ5nUd84jzVArAIQ8vgp+fYDgsw=";
+      hash = "sha256-Ty+eRZJ6bnBsrs1VtGem1+m9WDZZf/PgiOvFIazQF6I=";
     };
 
     aarch64-darwin = fetchzip {
       url = "https://api.gitkraken.dev/releases/production/darwin/arm64/${version}/GitKraken-v${version}.zip";
-      hash = "sha256-YkY6izRicIapNF9yMCL+YHJoxrWDdVwrcpj8N99tQCs=";
+      hash = "sha256-mpJNhvKIBYt3Yd+RjxSgzRP6AfnfHPRbQ0dzd5kQQIQ=";
     };
   };
 
@@ -154,11 +154,12 @@ let
 
     desktopItems = [
       (makeDesktopItem {
-        name = "GitKraken Desktop";
+        name = "gitkraken";
         exec = "gitkraken";
         icon = "gitkraken";
         desktopName = "GitKraken Desktop";
         genericName = "Git Client";
+        startupWMClass = "GitKraken";
         categories = [ "Development" ];
         comment = "Unleash your repo";
       })

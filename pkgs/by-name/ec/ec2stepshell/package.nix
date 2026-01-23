@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "ec2stepshell";
   version = "0-unstable-2023-04-07";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "saw-your-packet";

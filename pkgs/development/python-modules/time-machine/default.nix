@@ -47,11 +47,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "time_machine" ];
 
-  meta = with lib; {
+  meta = {
     description = "Travel through time in your tests";
     homepage = "https://github.com/adamchainz/time-machine";
     changelog = "https://github.com/adamchainz/time-machine/blob/${src.rev}/CHANGELOG.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

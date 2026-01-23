@@ -38,11 +38,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pygtfs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for GTFS";
     mainProgram = "gtfs2db";
     homepage = "https://github.com/jarondl/pygtfs";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

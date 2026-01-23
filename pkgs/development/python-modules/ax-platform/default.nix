@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "ax-platform";
-  version = "1.2.0";
+  version = "1.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "ax";
     tag = version;
-    hash = "sha256-HZRo7jo5f3nnAha3evLTmI3caLhz7kIbP9CA6zaH4Zg=";
+    hash = "sha256-WjJhBSj5lKt1ygrJ2QdxUxEvCrfnanLY8yWs7qy/GIY=";
   };
 
   env.ALLOW_BOTORCH_LATEST = "1";

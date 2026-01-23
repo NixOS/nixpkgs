@@ -2,50 +2,56 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  cmake,
   z3,
-  zlib,
 }:
 
-stdenv.mkDerivation rec {
+let
+  z3_4_14_0 = z3.overrideAttrs rec {
+    version = "4.14.0";
+    src = fetchFromGitHub {
+      owner = "Z3Prover";
+      repo = "z3";
+      rev = "z3-${version}";
+      hash = "sha256-Bv7+0J7ilJNFM5feYJqDpYsOjj7h7t1Bx/4OIar43EI=";
+    };
+  };
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "vampire";
-  version = "4.9";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "vprover";
     repo = "vampire";
-    tag = "v${version}casc2024";
-    hash = "sha256-NHAlPIy33u+TRmTuFoLRlPCvi3g62ilTfJ0wleboMNU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-jRzVh1KirWi9GpOkzSGoIBUExDN1rV0b3AGwa6gWb3I=";
+    fetchSubmodules = true;
   };
 
+  nativeBuildInputs = [ cmake ];
   buildInputs = [
-    z3
-    zlib
+    z3_4_14_0
   ];
 
-  makeFlags = [
-    "vampire_z3_rel"
-    "CC:=$(CC)"
-    "CXX:=$(CXX)"
-  ];
-
-  postPatch = ''
-    patch -p1 -i ${./minisat-fenv.patch} -d Minisat || true
-  '';
+  cmakeFlags = [ (lib.cmakeFeature "Z3_DIR" "${z3_4_14_0.dev}/lib/cmake") ];
 
   enableParallelBuilding = true;
 
-  fixupPhase = ''
-    runHook preFixup
-
+  prePatch = ''
     rm -rf z3
-
-    runHook postFixup
   '';
 
   installPhase = ''
     runHook preInstall
 
-    install -m0755 -D vampire_z3_rel* $out/bin/vampire
+    # some versions place the binary at ./ while others at bin/
+    if test -n "$(find . -maxdepth 1 -name 'vampire*' -print -quit)"
+    then
+      install -m0755 -D vampire* $out/bin/vampire
+    else
+      install -m0755 -D bin/vampire* $out/bin/vampire
+    fi
 
     runHook postInstall
   '';
@@ -56,6 +62,6 @@ stdenv.mkDerivation rec {
     mainProgram = "vampire";
     platforms = lib.platforms.unix;
     license = lib.licenses.bsd3;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ sempiternal-aurora ];
   };
-}
+})

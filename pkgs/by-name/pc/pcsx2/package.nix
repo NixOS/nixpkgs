@@ -35,8 +35,8 @@ let
   pcsx2_patches = fetchFromGitHub {
     owner = "PCSX2";
     repo = "pcsx2_patches";
-    rev = "9b193aa0a61f5e93d3bd4124b111e8f296ef9fa8";
-    hash = "sha256-1hhdjFxJCNfeO/FIAnjRHESfiyzkErYddZqpRxzG7VQ=";
+    rev = "39c64ed2151155a9e7b9cc41129618c1ba0ad04f";
+    hash = "sha256-C5diPrIXvzOvskKQFjYWOfjQUkb/Omw2IN3K4b3nsK4=";
   };
 
   inherit (qt6)
@@ -49,30 +49,28 @@ let
 in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "pcsx2";
-  version = "2.4.0";
+  version = "2.6.2";
   src = fetchFromGitHub {
     pname = "pcsx2-source";
     owner = "PCSX2";
     repo = "pcsx2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-R+BdywkZKxR/+Z+o1512O3A1mg9A6s7i+JZjFyUbJVs=";
+    hash = "sha256-cv7En9DgamohWYZPPyL6etaqi/P3yxAuVUQfsZwjIzQ=";
   };
 
   patches = [
-    # Remove PCSX2_GIT_REV
-    ./0000-define-rev.patch
-
     ./remove-cubeb-vendor.patch
-
-    # Based on https://github.com/PCSX2/pcsx2/commit/8dffc857079e942ca77b091486c20c3c6530e4ed which doesn't apply cleanly
-    ./fix-qt-6.10.patch
   ];
+
+  postPatch = ''
+    substituteInPlace cmake/Pcsx2Utils.cmake \
+      --replace-fail 'set(PCSX2_GIT_TAG "")' 'set(PCSX2_GIT_TAG "${finalAttrs.src.tag}")'
+  '';
 
   cmakeFlags = [
     (lib.cmakeBool "PACKAGE_MODE" true)
     (lib.cmakeBool "DISABLE_ADVANCE_SIMD" true)
     (lib.cmakeBool "USE_LINKED_FFMPEG" true)
-    (lib.cmakeFeature "PCSX2_GIT_REV" finalAttrs.src.tag)
   ];
 
   nativeBuildInputs = [
@@ -160,7 +158,6 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     mainProgram = "pcsx2-qt";
     maintainers = with lib.maintainers; [
       _0david0mp
-      hrdinka
       govanify
       matteopacini
     ];

@@ -28,13 +28,13 @@ rustPlatform.buildRustPackage rec {
   ];
 
   # uses currently unstable tokio features
-  RUSTFLAGS = "--cfg tokio_unstable";
+  env.RUSTFLAGS = "--cfg tokio_unstable";
 
   checkFlags = [
     # tests depend upon git repository at test execution time
-    "--skip bootstrap"
-    "--skip config::tests::args_example_changed"
-    "--skip config::tests::toml_example_changed"
+    "--skip=bootstrap"
+    "--skip=config::tests::args_example_changed"
+    "--skip=config::tests::toml_example_changed"
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -44,11 +44,11 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/tokio-console --log-dir $(mktemp -d) gen-completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Debugger for asynchronous Rust code";
     homepage = "https://github.com/tokio-rs/console";
     mainProgram = "tokio-console";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ max-niederman ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ max-niederman ];
   };
 }

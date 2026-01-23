@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   python,
-  pythonOlder,
   setuptools,
   sgmllib3k,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "feedparser";
   version = "6.0.12";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
@@ -35,11 +32,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "feedparser" ];
 
-  meta = with lib; {
+  meta = {
     description = "Universal feed parser";
     homepage = "https://github.com/kurtmckee/feedparser";
     changelog = "https://feedparser.readthedocs.io/en/latest/changelog.html";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
   };
 }

@@ -14,7 +14,6 @@
   pytest-datadir,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   tomli,
 }:
 
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "diff-cover";
   version = "9.7.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "diff_cover";
@@ -63,11 +60,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "diff_cover" ];
 
-  meta = with lib; {
+  meta = {
     description = "Automatically find diff lines that need test coverage";
     homepage = "https://github.com/Bachmann1234/diff-cover";
     changelog = "https://github.com/Bachmann1234/diff_cover/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dzabraev ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dzabraev ];
   };
 }

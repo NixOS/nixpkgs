@@ -86,7 +86,7 @@ in
       This can be used for adding package attributes, such as `tests`.
 
     `outputs`
-    : Optional list of assumed outputs. Default: ["out"]
+    : Optional list of assumed outputs. Default: `[ "out" ]`
 
       This must match the set of outputs that the returned derivation has.
       You must use this when the derivation has multiple outputs.

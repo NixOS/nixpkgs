@@ -42,13 +42,12 @@ buildNimPackage (finalAttrs: {
   };
 
   meta =
-    with lib;
-    finalAttrs.src.meta
-    // {
+
+    finalAttrs.src.meta // {
       description = "Nim based tiling window manager";
-      platforms = platforms.linux;
-      license = [ licenses.gpl2 ];
-      maintainers = [ maintainers.marcusramberg ];
+      platforms = lib.platforms.linux;
+      license = [ lib.licenses.gpl2 ];
+      maintainers = [ lib.maintainers.marcusramberg ];
       mainProgram = "nimdow";
     };
 })

@@ -138,7 +138,7 @@ rec {
   toIntBaseDetected =
     value:
     assert (match "[0-9]+|0x[0-9a-fA-F]+" value) != null;
-    (builtins.fromTOML "v=${value}").v;
+    (fromTOML "v=${value}").v;
 
   hexChars = stringToCharacters "0123456789abcdefABCDEF";
 

@@ -8,15 +8,12 @@
   poetry-core,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "ld2410-ble";
   version = "0.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "930913";
@@ -40,11 +37,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ld2410_ble" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for the LD2410B modules from HiLinks";
     homepage = "https://github.com/930913/ld2410-ble";
     changelog = "https://github.com/930913/ld2410-ble/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

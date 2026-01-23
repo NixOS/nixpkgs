@@ -95,8 +95,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     xvfb-run
-  ]
-  ++ testDeps;
+  ];
+
+  checkInputs = testDeps;
 
   propagatedBuildInputs = [
     glib
@@ -104,12 +105,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+    (lib.mesonBool "skip_gtk_tests" (!finalAttrs.finalPackage.doCheck))
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isMusl) [
     "-Dprofiler=disabled"
   ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;
+
+  strictDeps = true;
 
   postPatch = ''
     patchShebangs build/choose-tests-locale.sh
@@ -169,12 +173,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "JavaScript bindings for GNOME";
     homepage = "https://gitlab.gnome.org/GNOME/gjs/blob/master/doc/Home.md";
-    license = licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
     mainProgram = "gjs";
-    teams = [ teams.gnome ];
+    teams = [ lib.teams.gnome ];
     inherit (gobject-introspection.meta) platforms badPlatforms;
   };
 })

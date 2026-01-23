@@ -10,7 +10,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "yaxmldiff";
   version = "0.2.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "latk";
     repo = "yaxmldiff.py";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-AOXnK1d+b/ae50ofBfgxiDS6Dj6TIeHMrE9ME95Yj1Q=";
   };
 
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Yet Another XML Differ";
     homepage = "https://github.com/latk/yaxmldiff.py";
-    changelog = "https://https://github.com/latk/yaxmldiff.py/blob/v${src.tag}/CHANGELOG.md";
+    changelog = "https://https://github.com/latk/yaxmldiff.py/blob/v${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
-}
+})

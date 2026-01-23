@@ -6,8 +6,8 @@
   pixman,
   fetchFromGitHub,
   buildNpmPackage,
-  prisma,
-  prisma-engines,
+  prisma_6,
+  prisma-engines_6,
   vips,
   pkg-config,
   cairo,
@@ -34,9 +34,9 @@ buildNpmPackage {
 
   env.PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = "1";
 
-  env.PRISMA_QUERY_ENGINE_LIBRARY = "${prisma-engines}/lib/libquery_engine.node";
-  env.PRISMA_QUERY_ENGINE_BINARY = "${prisma-engines}/bin/query-engine";
-  env.PRISMA_SCHEMA_ENGINE_BINARY = "${prisma-engines}/bin/schema-engine";
+  env.PRISMA_QUERY_ENGINE_LIBRARY = "${prisma-engines_6}/lib/libquery_engine.node";
+  env.PRISMA_QUERY_ENGINE_BINARY = "${prisma-engines_6}/bin/query-engine";
+  env.PRISMA_SCHEMA_ENGINE_BINARY = "${prisma-engines_6}/bin/schema-engine";
   env.TURBO_NO_UPDATE_NOTIFIER = "true";
   env.TURBO_FORCE = "true";
   env.TURBO_REMOTE_CACHE_ENABLED = "false";
@@ -81,11 +81,11 @@ buildNpmPackage {
           cat > $out/bin/${pname} <<EOF
     #!${bash}/bin/bash
     export PKG_CONFIG_PATH=${openssl.dev}/lib/pkgconfig;
-    export PRISMA_QUERY_ENGINE_LIBRARY=${prisma-engines}/lib/libquery_engine.node
-    export PRISMA_QUERY_ENGINE_BINARY=${prisma-engines}/bin/query-engine
-    export PRISMA_SCHEMA_ENGINE_BINARY=${prisma-engines}
+    export PRISMA_QUERY_ENGINE_LIBRARY=${prisma-engines_6}/lib/libquery_engine.node
+    export PRISMA_QUERY_ENGINE_BINARY=${prisma-engines_6}/bin/query-engine
+    export PRISMA_SCHEMA_ENGINE_BINARY=${prisma-engines_6}
     cd $out/apps/remix
-    ${prisma}/bin/prisma migrate deploy --schema ../../packages/prisma/schema.prisma
+    ${prisma_6}/bin/prisma migrate deploy --schema ../../packages/prisma/schema.prisma
     ${nodejs}/bin/node build/server/main.js
     EOF
           chmod +x $out/bin/${pname}
@@ -115,12 +115,12 @@ buildNpmPackage {
     rm -Rf $out/lib/node_modules/@documenso/root/node_modules/@documenso/auth
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open Source DocuSign Alternative";
     homepage = "https://github.com/documenso/documenso";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ happysalada ];
-    platforms = platforms.unix;
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ happysalada ];
+    platforms = lib.platforms.unix;
     mainProgram = pname;
   };
 }

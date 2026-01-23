@@ -16,23 +16,14 @@
 
 stdenv.mkDerivation rec {
   pname = "focuswriter";
-  version = "1.8.11";
+  version = "1.8.13";
 
   src = fetchFromGitHub {
     owner = "gottcode";
     repo = "focuswriter";
     rev = "v${version}";
-    hash = "sha256-oivhrDF3HikbEtS1cOlHwmQYNYf3IkX+gQGW0V55IWU=";
+    hash = "sha256-lKhgfFPEcipQcW1S2+ntglVacH6dEcGpnNHvwgeVIzI=";
   };
-
-  patches = [
-    # Fix build, remove at next version bump
-    # https://github.com/gottcode/focuswriter/pull/208
-    (fetchpatch {
-      url = "https://github.com/gottcode/focuswriter/commit/dd74ed4559a141653a06e7984c1251b992925775.diff";
-      hash = "sha256-1bxa91xnkF1MIQlA8JgwPHW/A80ThbVVdVtusmzd22I=";
-    })
-  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -50,14 +41,14 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "INSTALL_ROOT=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple, distraction-free writing environment";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       madjar
       kashw2
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     homepage = "https://gottcode.org/focuswriter/";
     mainProgram = "focuswriter";
   };

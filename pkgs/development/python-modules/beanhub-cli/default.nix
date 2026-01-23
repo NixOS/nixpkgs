@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   hatchling,
 
   # dependencies
@@ -43,8 +42,6 @@ buildPythonPackage rec {
   version = "3.0.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "LaunchPlatform";
     repo = "beanhub-cli";
@@ -72,7 +69,7 @@ buildPythonPackage rec {
     starlette-wtf
     uvicorn
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   optional-dependencies = {
     login = [
@@ -100,7 +97,7 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "beanhub_cli" ];
 

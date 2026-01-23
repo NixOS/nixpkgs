@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "pyngrok";
-  version = "7.4.1";
+  version = "7.5.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rYY3c4ztW9uIwosIf+o5ylUoYMLTAASsAQM8D460824=";
+    hash = "sha256-L+kcuiwlMez7EktQcfN3gIthpooUyjyZ/Lfz/a4FJ48=";
   };
 
   build-system = [

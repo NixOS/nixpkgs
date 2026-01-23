@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "atproto-goat";
-  version = "0.1.2";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "bluesky-social";
     repo = "goat";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xbvSO3keFheklnzPNEceS01CjIG3pPB+8e2M+3PD85U=";
+    hash = "sha256-ECkazbwg25L8W8w7B6hlKD1rEAjGBRKaZ76rKSfR0vI=";
   };
 
   postPatch = ''
@@ -22,7 +22,7 @@ buildGoModule (finalAttrs: {
       --replace-fail '"github.com/earthboundkid/versioninfo/v2"' ""
   '';
 
-  vendorHash = "sha256-hLsMme054E23NV8GDHsmZTYh/vY/w8gKWvpVIPeAiCY=";
+  vendorHash = "sha256-t35Y+llIr2vpBr/LA6WurqxUH7fVTgT9Y8OHX8v8xP4=";
 
   passthru.updateScript = nix-update-script { };
 

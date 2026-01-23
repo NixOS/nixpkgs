@@ -39,11 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "OpenSSL Provider for TPM2 integration";
     homepage = "https://github.com/tpm2-software/tpm2-openssl";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ stv0g ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ stv0g ];
+    platforms = lib.platforms.linux;
   };
 })

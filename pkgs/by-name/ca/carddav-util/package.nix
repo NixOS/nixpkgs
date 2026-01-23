@@ -44,11 +44,11 @@ stdenv.mkDerivation {
       --prefix PATH : "$prefix/bin:$PATH"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ljanyst/carddav-util";
     description = "CardDAV import/export utility";
     mainProgram = "carddav-util.py";
-    platforms = platforms.unix;
-    license = licenses.isc;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.isc;
   };
 }

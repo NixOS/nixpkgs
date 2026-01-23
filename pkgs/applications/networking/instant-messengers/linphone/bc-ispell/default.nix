@@ -44,6 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+
   meta = {
     description = "Interactive spelling checker";
     homepage = "https://gitlab.linphone.org/BC/public/external/ispell";

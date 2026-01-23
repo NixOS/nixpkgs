@@ -11,7 +11,6 @@
   pysingleton,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   tag-expressions,
 }:
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "radish-bdd";
   version = "0.18.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = pname;
@@ -49,12 +46,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "radish" ];
 
-  meta = with lib; {
+  meta = {
     description = "Behaviour-Driven-Development tool for python";
     homepage = "https://radish-bdd.github.io/";
     changelog = "https://github.com/radish-bdd/radish/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       kalbasit
       l33tname
     ];

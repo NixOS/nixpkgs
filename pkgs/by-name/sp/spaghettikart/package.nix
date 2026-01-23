@@ -64,8 +64,8 @@ let
   prism = fetchFromGitHub {
     owner = "KiritoDv";
     repo = "prism-processor";
-    rev = "7ae724a6fb7df8cbf547445214a1a848aefef747";
-    hash = "sha256-G7koDUxD6PgZWmoJtKTNubDHg6Eoq8I+AxIJR0h3i+A=";
+    rev = "bbcbc7e3f890a5806b579361e7aa0336acd547e7";
+    hash = "sha256-jRPwO1Vub0cH12YMlME6kd8zGzKmcfIrIJZYpQJeOks=";
   };
 
   stb_impl = writeTextFile {
@@ -117,13 +117,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "spaghettikart";
-  version = "0-unstable-2025-08-07";
+  version = "0.9.9.1-unstable-2025-11-14";
 
   src = fetchFromGitHub {
     owner = "HarbourMasters";
     repo = "SpaghettiKart";
-    rev = "334fdeafd26c15e03b4f198002ad86b8422c0e2f";
-    hash = "sha256-0nDaX34C7stg7S2mzPChz0fRz/t7yyevKEAPmIR+lak=";
+    rev = "fffd3f7fe92c6eb45b68c0ca522066bf9c54abb2";
+    hash = "sha256-cYFNkVPthqTGT3YiK2MxepAzfVpV8/o2xnZ/zrmmZog=";
     fetchSubmodules = true;
     deepClone = true;
     postFetch = ''
@@ -217,6 +217,10 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace CMakeLists.txt \
     --replace-fail "COMMAND git describe --tags" "COMMAND echo $(cat PROJECT_VERSION)" \
     --replace-fail "COMMAND git log --pretty=format:%h -1" "COMMAND echo $(cat PROJECT_VERSION_PATCH)"
+
+    # We need to use GetAppDirectoryPath on nix or else it crashes
+    substituteInPlace src/port/GameExtractor.cpp \
+    --replace-fail "const std::string assets_path = Ship::Context::GetAppBundlePath();" "const std::string assets_path = Ship::Context::GetAppDirectoryPath();"
   '';
 
   postBuild = ''

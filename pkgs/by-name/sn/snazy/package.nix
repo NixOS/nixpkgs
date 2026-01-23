@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Snazzy json log viewer";
     mainProgram = "snazy";
     longDescription = ''
@@ -45,8 +45,8 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/chmouel/snazy/";
     changelog = "https://github.com/chmouel/snazy/releases/tag/${src.rev}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       jk
     ];
   };

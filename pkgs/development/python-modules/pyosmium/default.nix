@@ -10,7 +10,6 @@
   bzip2,
   zlib,
   pybind11,
-  pythonOlder,
   pytest-httpserver,
   pytestCheckHook,
   setuptools,
@@ -26,7 +25,7 @@ buildPythonPackage rec {
   version = "4.0.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7" || isPyPy;
+  disabled = isPyPy;
 
   src = fetchFromGitHub {
     owner = "osmcode";

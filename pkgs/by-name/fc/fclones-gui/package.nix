@@ -7,6 +7,7 @@
   gdk-pixbuf,
   gtk4,
   libadwaita,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -40,12 +41,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     install -Dm 0644 snap/gui/fclones-gui.png -t $out/share/icons/hicolor/256x256/apps
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Interactive duplicate file remover";
     mainProgram = "fclones-gui";
     homepage = "https://github.com/pkolaczk/fclones-gui";
     changelog = "https://github.com/pkolaczk/fclones-gui/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.progrm_jarvis ];
   };
 })

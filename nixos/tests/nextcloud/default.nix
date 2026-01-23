@@ -75,8 +75,7 @@ let
           inherit (config) test-helpers;
         in
         mkBefore ''
-          nextcloud.start()
-          client.start()
+          start_all()
           nextcloud.wait_for_unit("multi-user.target")
 
           ${test-helpers.init}
@@ -136,6 +135,7 @@ let
         ./with-mysql-and-memcached.nix
         ./with-postgresql-and-redis.nix
         ./with-objectstore.nix
+        ./with-mail.nix
       ]
       ++ (pkgs.lib.optional (version >= 32) ./without-admin-user.nix)
     );

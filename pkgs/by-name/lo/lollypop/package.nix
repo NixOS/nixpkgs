@@ -30,7 +30,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "lollypop";
   version = "1.4.40";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";

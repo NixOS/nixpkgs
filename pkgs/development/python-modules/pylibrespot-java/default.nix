@@ -29,7 +29,7 @@ buildPythonPackage rec {
   meta = {
     description = "Simple library to interface with a librespot-java server";
     homepage = "https://github.com/uvjustin/pylibrespot-java";
-    changelog = "https://github.com/uvjustin/pylibrespot-java/tag/v${version}";
+    changelog = "https://github.com/uvjustin/pylibrespot-java/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       hensoko

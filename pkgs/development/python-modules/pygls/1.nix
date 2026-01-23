@@ -7,7 +7,6 @@
   poetry-core,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   typeguard,
   websockets,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "pygls";
   version = "1.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "openlawlibrary";
@@ -62,6 +59,7 @@ buildPythonPackage rec {
   passthru.skipBulkUpdate = true;
 
   meta = {
+    broken = lib.versionAtLeast lsprotocol.version "2024";
     description = "Pythonic generic implementation of the Language Server Protocol";
     homepage = "https://github.com/openlawlibrary/pygls";
     changelog = "https://github.com/openlawlibrary/pygls/blob/${version}/CHANGELOG.md";

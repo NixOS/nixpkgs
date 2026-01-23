@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "0e4ef622";
     repo = "wine-discord-ipc-bridge";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-jzsbOKMakNQ6RNMlioX088fGzFBDxOP45Atlsfm2RKg=";
   };
 
@@ -27,11 +27,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Enable games running under wine to use Discord Rich Presence";
     homepage = "https://github.com/0e4ef622/wine-discord-ipc-bridge";
-    license = licenses.mit;
-    maintainers = [ maintainers.uku3lig ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.uku3lig ];
     mainProgram = "winediscordipcbridge";
     platforms = [ "i686-windows" ];
   };

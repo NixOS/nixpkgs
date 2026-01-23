@@ -720,15 +720,6 @@ in
         "xen-blkback"
         "xen-netback"
         "xen-pciback"
-        "evtchn"
-        "gntdev"
-        "netbk"
-        "blkbk"
-        "xen-scsibk"
-        "usbbk"
-        "pciback"
-        "xen-acpi-processor"
-        "blktap2"
         "tun"
         "netxen_nic"
         "xen_wdt"
@@ -907,13 +898,17 @@ in
           wantedBy = [ "multi-user.target" ];
           serviceConfig = {
             PIDFile = cfg.qemu.pidFile;
-            ExecStart = ''
-              ${cfg.qemu.package}/${cfg.qemu.package.qemu-system-i386} \
-              -xen-domid 0 -xen-attach -name dom0 -nographic -M xenpv \
-              -daemonize -monitor /dev/null -serial /dev/null -parallel \
-              /dev/null -nodefaults -no-user-config -pidfile \
-              ${cfg.qemu.pidFile}
-            '';
+            overrideStrategy = "asDropin";
+            ExecStart = [
+              ""
+              ''
+                ${cfg.qemu.package}/${cfg.qemu.package.qemu-system-i386} \
+                -xen-domid 0 -xen-attach -name dom0 -nographic -M xenpv \
+                -daemonize -monitor /dev/null -serial /dev/null -parallel \
+                /dev/null -nodefaults -no-user-config -pidfile \
+                ${cfg.qemu.pidFile}
+              ''
+            ];
           };
         };
 

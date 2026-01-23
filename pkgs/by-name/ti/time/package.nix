@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchpatch,
   fetchurl,
 }:
 
@@ -41,5 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.gnu.org/software/time/";
     platforms = lib.platforms.unix;
     mainProgram = "time";
+    maintainers = with lib.maintainers; [ mdaniels5757 ];
   };
 })

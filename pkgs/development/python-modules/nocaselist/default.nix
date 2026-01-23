@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   six,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "nocaselist";
   version = "2.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
@@ -32,11 +29,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nocaselist" ];
 
-  meta = with lib; {
+  meta = {
     description = "Case-insensitive list for Python";
     homepage = "https://github.com/pywbem/nocaselist";
     changelog = "https://github.com/pywbem/nocaselist/blob/${version}/docs/changes.rst";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ freezeboy ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = [ ];
   };
 }

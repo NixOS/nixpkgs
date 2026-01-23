@@ -56,6 +56,16 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # Jax 0.8.2 incompatibility (reported at https://github.com/google-deepmind/chex/issues/422)
+    # AssertionError: AssertionError not raised
+    "test_assert_tree_is_on_device"
+    # AssertionError: "\[Chex\]\ [\s\S]*sharded arrays are disallowed" does not match ...
+    "test_assert_tree_is_on_host"
+    # AssertionError: [Chex] Assertion assert_tree_is_sharded failed: ...
+    "test_assert_tree_is_sharded"
+  ];
+
   meta = {
     description = "Library of utilities for helping to write reliable JAX code";
     homepage = "https://github.com/deepmind/chex";

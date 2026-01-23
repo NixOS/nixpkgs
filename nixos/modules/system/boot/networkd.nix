@@ -1281,7 +1281,7 @@ let
         (assertValueOneOf "EmitRouter" boolValues)
         (assertValueOneOf "EmitTimezone" boolValues)
         (assertValueOneOf "BindToInterface" boolValues)
-        (assertValueOneOf "PersistLeases" boolValues)
+        (assertValueOneOf "PersistLeases" (boolValues ++ [ "runtime" ]))
       ];
 
       sectionIPv6SendRA = checkUnitConfig "IPv6SendRA" [

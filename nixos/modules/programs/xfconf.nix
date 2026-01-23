@@ -22,11 +22,11 @@ in
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [
-      pkgs.xfce.xfconf
+      pkgs.xfconf
     ];
 
     services.dbus.packages = [
-      pkgs.xfce.xfconf
+      pkgs.xfconf
     ];
   };
 }

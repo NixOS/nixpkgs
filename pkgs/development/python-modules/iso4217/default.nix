@@ -3,10 +3,8 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchurl,
-  importlib-resources,
   pytestCheckHook,
   python,
-  pythonOlder,
   setuptools,
 }:
 let
@@ -18,21 +16,17 @@ let
 in
 buildPythonPackage rec {
   pname = "iso4217";
-  version = "1.14";
+  version = "1.15";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "dahlia";
     repo = "iso4217";
     tag = version;
-    hash = "sha256-lGXNSUBv/So3UgqXQ5AksqrCJVoyU8icDCfOda7Y5BE=";
+    hash = "sha256-YhYCCGMj5q+QeXWElysONbFkCVkcQeOPy/Tk4+fyNLk=";
   };
 
   build-system = [ setuptools ];
-
-  dependencies = lib.optionals (pythonOlder "3.9") [ importlib-resources ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -52,10 +46,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "iso4217" ];
 
-  meta = with lib; {
+  meta = {
     description = "ISO 4217 currency data package for Python";
     homepage = "https://github.com/dahlia/iso4217";
-    license = with licenses; [ publicDomain ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ publicDomain ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -106,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Advanced cross-platform rhythm game focused on keyboard play";
     homepage = "https://etternaonline.com";
-    changelog = "https://github.com/etternagame/etterna/release/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/etternagame/etterna/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ alikindsys ];
     mainProgram = "etterna";

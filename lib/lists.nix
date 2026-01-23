@@ -9,9 +9,8 @@ let
     min
     id
     warn
-    pipe
     ;
-  inherit (lib.attrsets) mapAttrs attrNames;
+  inherit (lib.attrsets) mapAttrs attrNames attrValues;
   inherit (lib) max;
 in
 rec {
@@ -144,10 +143,13 @@ rec {
     fold' 0;
 
   /**
-    `fold` is an alias of `foldr` for historic reasons
+    `fold` is an alias of `foldr` for historic reasons.
+
+    ::: {.warning}
+    This function will be removed in 26.05.
+    :::
   */
-  # FIXME(Profpatsch): deprecate?
-  fold = foldr;
+  fold = warn "fold has been deprecated, use foldr instead" foldr;
 
   /**
     “left fold”, like `foldr`, but from the left:
@@ -437,7 +439,7 @@ rec {
   flatten = x: if isList x then concatMap (y: flatten y) x else [ x ];
 
   /**
-    Remove elements equal to 'e' from a list.  Useful for buildInputs.
+    Remove elements equal to `e` from a list.  Useful for `buildInputs`.
 
     # Inputs
 
@@ -1924,7 +1926,7 @@ rec {
   allUnique = list: (length (unique list) == length list);
 
   /**
-    Intersects list 'list1' and another list (`list2`).
+    Intersects list `list1` and another list (`list2`).
 
     O(nm) complexity.
 
@@ -1952,7 +1954,7 @@ rec {
   intersectLists = e: filter (x: elem x e);
 
   /**
-    Subtracts list 'e' from another list (`list2`).
+    Subtracts list `e` from another list (`list2`).
 
     O(nm) complexity.
 
@@ -1981,7 +1983,7 @@ rec {
 
   /**
     Test if two lists have no common element.
-    It should be slightly more efficient than (intersectLists a b == [])
+    It should be slightly more efficient than `intersectLists a b == []`.
 
     # Inputs
 
@@ -1995,4 +1997,63 @@ rec {
   */
   mutuallyExclusive = a: b: length a == 0 || !(any (x: elem x a) b);
 
+  /**
+    Concatenate all attributes of an attribute set.
+    This assumes that every attribute of the set is a list.
+
+    # Inputs
+
+    `set`
+
+    : Attribute set with attributes that are lists
+
+    # Examples
+    :::{.example}
+    ## `lib.concatAttrValues` usage example
+
+    ```nix
+    concatAttrValues { a = [ 1 2 ]; b = [ 3 ]; }
+    => [ 1 2 3 ]
+    ```
+
+    :::
+  */
+  concatAttrValues = set: concatLists (attrValues set);
+
+  /**
+    Replaces a list's nth element with a new element
+
+    # Inputs
+
+    `list`
+    : Input list
+
+    `idx`
+    : index to replace
+
+    `newElem`
+    : new element to replace with
+
+    # Type
+
+    ```
+    replaceElemAt :: [a] -> int - b -> [a]
+    ```
+
+    # Examples
+    :::{.example}
+    ## `replaceElemAt` usage example
+
+    ```nix
+    lib.replaceElemAt` [1 2 3] 0 "a"
+    => ["a" 2 3]
+    ```
+
+    :::
+  */
+  replaceElemAt =
+    list: idx: newElem:
+    assert lib.assertMsg (idx >= 0 && idx < length list)
+      "'lists.replaceElemAt' called with index ${toString idx} on a list of size ${toString (length list)}";
+    genList (i: if i == idx then newElem else elemAt list i) (length list);
 }

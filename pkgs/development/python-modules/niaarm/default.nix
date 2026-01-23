@@ -52,15 +52,14 @@ buildPythonPackage rec {
   ]
   ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # Prevents 'Fatal Python error: Aborted' on darwin during checkPhase
+    MPLBACKEND = "Agg";
+  };
+
   disabledTests = [
     # Test requires extra nltk data dependency
     "test_text_mining"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Fatal Python error: Aborted
-    # matplotlib/backend_bases.py", line 2654 in create_with_canvas
-    "test_hill_slopes"
-    "test_two_key_plot"
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];

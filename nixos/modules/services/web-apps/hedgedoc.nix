@@ -294,7 +294,7 @@ in
       description = "HedgeDoc Service";
       documentation = [ "https://docs.hedgedoc.org/" ];
       wantedBy = [ "multi-user.target" ];
-      after = [ "networking.target" ];
+      after = [ "network.target" ];
       preStart =
         let
           configFile = settingsFormat.generate "hedgedoc-config.json" {

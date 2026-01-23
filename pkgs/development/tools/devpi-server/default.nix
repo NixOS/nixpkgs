@@ -3,7 +3,6 @@
   fetchFromGitHub,
   buildPythonApplication,
   gitUpdater,
-  pythonOlder,
   aiohttp,
   appdirs,
   beautifulsoup4,
@@ -35,8 +34,6 @@ buildPythonApplication rec {
   pname = "devpi-server";
   version = "6.15.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "devpi";
@@ -131,11 +128,11 @@ buildPythonApplication rec {
     rev-prefix = "server-";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "http://doc.devpi.net";
     description = "Github-style pypi index server and packaging meta tool";
     changelog = "https://github.com/devpi/devpi/blob/${src.rev}/server/CHANGELOG";
-    license = licenses.mit;
-    maintainers = with maintainers; [ makefu ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ makefu ];
   };
 }

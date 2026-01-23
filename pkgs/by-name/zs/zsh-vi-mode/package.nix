@@ -23,11 +23,11 @@ stdenv.mkDerivation rec {
     cp *.zsh $out/share/zsh-vi-mode/
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jeffreytse/zsh-vi-mode";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     description = "Better and friendly vi(vim) mode plugin for ZSH";
-    maintainers = with maintainers; [ kyleondy ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ kyleondy ];
+    platforms = lib.platforms.all;
   };
 }

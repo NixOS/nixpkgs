@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "nextinspace";
   version = "2.0.5";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "not-stirred";
@@ -36,11 +36,11 @@ python3.pkgs.buildPythonApplication rec {
     "nextinspace"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Print upcoming space-related events in your terminal";
     mainProgram = "nextinspace";
     homepage = "https://github.com/The-Kid-Gid/nextinspace";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ penguwin ];
+    license = lib.licenses.gpl3Only;
+    maintainers = [ ];
   };
 }

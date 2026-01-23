@@ -30,12 +30,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Decrypt password stored in cmos used to access BIOS SETUP";
     mainProgram = "cmospwd";
     homepage = "https://www.cgsecurity.org/wiki/CmosPwd";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ t4ccer ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ t4ccer ];
     platforms = [ "x86_64-linux" ];
   };
 })

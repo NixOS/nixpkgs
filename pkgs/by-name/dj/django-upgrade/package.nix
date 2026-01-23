@@ -26,8 +26,6 @@ python3Packages.buildPythonApplication rec {
     versionCheckHook
   ];
 
-  versionCheckProgramArg = "--version";
-
   pythonImportsCheck = [ "django_upgrade" ];
 
   meta = {

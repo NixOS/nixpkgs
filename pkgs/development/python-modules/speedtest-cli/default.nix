@@ -19,11 +19,11 @@ buildPythonPackage rec {
   # tests require working internet connection
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Command line interface for testing internet bandwidth using speedtest.net";
     homepage = "https://github.com/sivel/speedtest-cli";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       makefu
     ];
   };

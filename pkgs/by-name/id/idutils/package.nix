@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./nix-mapping.patch ];
 
-  meta = with lib; {
+  meta = {
     description = "Text searching utility";
 
     longDescription = ''
@@ -75,9 +75,9 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://www.gnu.org/software/idutils/";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
-    maintainers = with maintainers; [ gfrascadorio ];
+    maintainers = with lib.maintainers; [ gfrascadorio ];
     platforms = lib.platforms.all;
   };
 }

@@ -30,19 +30,21 @@ stdenv.mkDerivation (finalAttrs: {
   # Version from https://skia.googlesource.com/skia/+/refs/heads/main/RELEASE_NOTES.md
   # or https://chromiumdash.appspot.com/releases
   # plus date of the tip of the corresponding chrome/m$version branch
-  version = "129-unstable-2024-09-18";
+  version = "144-unstable-2025-12-02";
 
   src = fetchgit {
     url = "https://skia.googlesource.com/skia.git";
     # Tip of the chrome/m$version branch
-    rev = "dda581d538cb6532cda841444e7b4ceacde01ec9";
-    hash = "sha256-NZiZFsABebugszpYsBusVlTYnYda+xDIpT05cZ8Jals=";
+    rev = "ee20d565acb08dece4a32e3f209cdd41119015ca";
+    hash = "sha256-0LiFK/8873gei70iVhNGRlcFeGIp7tjDEfxTBz1LYv8=";
   };
 
   postPatch = ''
+    substituteInPlace BUILD.gn \
+      --replace-fail 'rebase_path("//bin/gn")' '"gn"'
     # System zlib detection bug workaround
     substituteInPlace BUILD.gn \
-      --replace-fail 'deps = [ "//third_party/zlib" ]' 'deps = []'
+      --replace-fail '"//third_party/zlib",' ""
   '';
 
   strictDeps = true;

@@ -331,7 +331,7 @@ in
     testAttrs = {
       expectedError = {
         type = "ThrownError";
-        msg = ''A definition for option `foo' is not of type `string or signed integer convertible to it.*'';
+        msg = "A definition for option `foo' is not of type `string or signed integer convertible to it.*";
       };
     };
   };

@@ -75,13 +75,13 @@ python.pkgs.buildPythonApplication rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/zenhack/simp_le";
     description = "Simple Let's Encrypt client";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
       makefu
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

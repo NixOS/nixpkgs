@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   pkg-config,
-  goocanvas2,
+  goocanvas_2,
   gtkmm3,
   gnome,
 }:
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [
     gtkmm3
-    goocanvas2
+    goocanvas_2
   ];
 
   enableParallelBuilding = true;
@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "C++ bindings for GooCanvas";
     homepage = "https://gitlab.gnome.org/Archive/goocanvasmm";
-    license = licenses.lgpl2;
+    license = lib.licenses.lgpl2;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

@@ -18,10 +18,10 @@ let
     hash = "sha256-UrzH9xmhVq12TcSUQ1AihCG1sNGcy/N8LDsZINVKFkY=";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/talaia-labs/rust-teos";
-    license = licenses.mit;
-    maintainers = with maintainers; [ seberm ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ seberm ];
   };
   updateScript = ./update.sh;
 in

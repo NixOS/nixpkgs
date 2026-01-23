@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "wassima";
-  version = "2.0.2";
+  version = "2.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jawah";
     repo = "wassima";
     tag = version;
-    hash = "sha256-Ro0PWNJDjspEtVgA/Gj3UlqbRDCiqrk9nEqx1ljbvRI=";
+    hash = "sha256-6tNmJwnOtl+luN1qgu93LXEfBZ0oieEpLa9Q9N6Gsag=";
   };
 
   build-system = [ hatchling ];

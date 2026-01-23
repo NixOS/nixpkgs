@@ -5,14 +5,12 @@
   requests,
   tqdm,
   websocket-client,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "python-mpv-jsonipc";
   version = "1.2.1";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "iwalton3";
@@ -32,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "python_mpv_jsonipc" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/iwalton3/python-mpv-jsonipc";
     description = "Python API to MPV using JSON IPC";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
   };
 }

@@ -34,6 +34,8 @@
   tenacity,
   tiktoken,
   tqdm,
+  # dscrim_eval
+  statsmodels,
   # hf_transfer
   hf-transfer,
   # ifeval
@@ -62,16 +64,16 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lm-eval";
-  version = "0.4.9.1";
+  version = "0.4.9.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "EleutherAI";
     repo = "lm-evaluation-harness";
-    tag = "v${version}";
-    hash = "sha256-N5NRRabjWxPchwOIkjqYTCKInCmVSY6T5cAmdxNbCkU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Foz49XfIIzGJkgzjBu9P1J9cwYjl3fjAAJG9GKRwfq8=";
   };
 
   build-system = [
@@ -108,6 +110,7 @@ buildPythonPackage rec {
       tiktoken
       tqdm
     ];
+    discrim_eval = [ statsmodels ];
     hf_transfer = [ hf-transfer ];
     ifeval = [
       immutabledict
@@ -144,7 +147,7 @@ buildPythonPackage rec {
     pytestCheckHook
     writableTmpDirAsHomeHook
   ]
-  ++ optional-dependencies.api;
+  ++ finalAttrs.passthru.optional-dependencies.api;
 
   disabledTests = [
     "test_deepsparse" # deepsparse is not available
@@ -156,6 +159,7 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # attempts to download models
+    "tests/models/test_bos_handling.py"
     "tests/models/test_huggingface.py"
     "tests/test_evaluator.py"
     "tests/test_include_path.py"
@@ -172,10 +176,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/EleutherAI/lm-evaluation-harness/releases/tag/${src.tag}";
+    changelog = "https://github.com/EleutherAI/lm-evaluation-harness/releases/tag/${finalAttrs.src.tag}";
     description = "Framework for few-shot evaluation of language models";
     homepage = "https://github.com/EleutherAI/lm-evaluation-harness";
     license = [ lib.licenses.mit ];
     maintainers = [ lib.maintainers.booxter ];
   };
-}
+})

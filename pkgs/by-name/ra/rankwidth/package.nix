@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "rankwidth";
-  version = "0.9";
+  version = "0.10";
 
   src = fetchurl {
-    url = "mirror://sageupstream/rw/rw-${version}.tar.gz";
-    sha256 = "sha256-weA1Bv4lzfy0KMBR/Fay0q/7Wwb7o/LOdWYxRmvvtEE=";
+    url = "mirror://sourceforge/rankwidth/rw-${version}.tar.gz";
+    hash = "sha256-iajtNkiTrBtwq3ChUuPn2zzzSLtpCYqm27lpY535J9s=";
   };
 
   configureFlags = [
@@ -20,10 +20,10 @@ stdenv.mkDerivation rec {
   # check phase is empty for now (as of version 0.9)
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Calculates rank-width and rank-decompositions";
-    license = with licenses; [ gpl2Plus ];
-    teams = [ teams.sage ];
-    platforms = platforms.unix;
+    license = with lib.licenses; [ gpl2Plus ];
+    teams = [ lib.teams.sage ];
+    platforms = lib.platforms.unix;
   };
 }

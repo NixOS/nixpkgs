@@ -58,7 +58,7 @@ python3.pkgs.buildPythonApplication {
     # Essentially: all tags from 1.40 onwards start with `debian/`,
     # then the version, and then an optional suffix (usually reserved for backports).
     # We want to ignore the backport versions, and strip the `debian/` prefix.
-    extraArgs = [ "--version-regex=(?:debian\/)?(\d+(?:\.\d+)*)(?:[_\+].*)?" ];
+    extraArgs = [ "--version-regex=(?:debian/)?(\\d+(?:\\.\\d+)*)(?:[_+].*)?" ];
   };
 
   meta = {

@@ -36,11 +36,11 @@ buildGoModule rec {
       --zsh <($out/bin/hyprkeys completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple, scriptable keybind retrieval utility for Hyprland";
     homepage = "https://github.com/hyprland-community/Hyprkeys";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       NotAShelf
       donovanglover
     ];

@@ -8,15 +8,12 @@
   libXrandr,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "screeninfo";
   version = "0.8.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rr-";
@@ -45,11 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "screeninfo" ];
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Fetch location and size of physical screens";
     homepage = "https://github.com/rr-/screeninfo";
-    license = licenses.mit;
-    maintainers = with maintainers; [ nickhu ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nickhu ];
   };
 }

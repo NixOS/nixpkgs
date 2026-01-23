@@ -53,12 +53,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "watson" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jazzband/Watson";
     description = "Wonderful CLI to track your time";
     mainProgram = "watson";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       mguentner
       nathyong
       oxzi

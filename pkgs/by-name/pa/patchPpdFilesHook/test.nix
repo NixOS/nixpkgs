@@ -1,4 +1,5 @@
 {
+  lib,
   replaceVars,
   diffutils,
   stdenv,
@@ -6,6 +7,8 @@
 }:
 
 let
+  inherit (lib.meta) getExe';
+
   input = replaceVars ./test.ppd {
     keep = "cmp";
     patch = "cmp";
@@ -15,9 +18,9 @@ let
 
   output = replaceVars ./test.ppd {
     keep = "cmp";
-    patch = "${diffutils}/bin/cmp";
+    patch = getExe' diffutils "cmp";
     pathkeep = "/bin/cmp";
-    pathpatch = "${diffutils}/bin/cmp";
+    pathpatch = getExe' diffutils "cmp";
   };
 in
 
@@ -33,10 +36,10 @@ stdenv.mkDerivation {
   ppdFileCommands = [ "cmp" ];
   preFixup = ''
     install -D "${input}" "${placeholder "out"}/share/cups/model/test.ppd"
-    install -D "${input}" "${placeholder "out"}/share/ppds/test.ppd"
+    install -D "${input}" "${placeholder "out"}/share/ppd/test.ppd"
   '';
   postFixup = ''
     diff --color --report-identical-files "${output}" "${placeholder "out"}/share/cups/model/test.ppd"
-    diff --color --report-identical-files "${output}" "${placeholder "out"}/share/ppds/test.ppd"
+    diff --color --report-identical-files "${output}" "${placeholder "out"}/share/ppd/test.ppd"
   '';
 }

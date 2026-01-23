@@ -4,6 +4,7 @@
   fetchurl,
   electron,
   dpkg,
+  libva,
   makeWrapper,
   commandLineArgs ? "",
 }:
@@ -37,11 +38,16 @@ stdenv.mkDerivation {
 
     mkdir -p $out/bin
     cp -r usr/share $out/share
-    sed -i "s|Exec=.*|Exec=$out/bin/bilibili|" $out/share/applications/*.desktop
+    substituteInPlace $out/share/applications/*.desktop --replace-fail "/opt/apps/io.github.msojocs.bilibili/files/bin//bin/bilibili" "$out/bin/bilibili"
     cp -r opt/apps/io.github.msojocs.bilibili/files/bin/app $out/opt
     makeWrapper ${lib.getExe electron} $out/bin/bilibili \
       --argv0 "bilibili" \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libva ]} \
       --add-flags "$out/opt/app.asar" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+      --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
+      --set-default ELECTRON_IS_DEV 0 \
+      --add-flags "--enable-features=AcceleratedVideoDecodeLinuxGL,AcceleratedVideoDecodeLinuxZeroCopyGL" \
       --add-flags ${lib.escapeShellArg commandLineArgs}
 
     runHook postInstall

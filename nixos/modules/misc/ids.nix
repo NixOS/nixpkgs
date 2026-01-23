@@ -84,7 +84,7 @@ in
       tor = 35;
       cups = 36;
       foldingathome = 37;
-      sabnzbd = 38;
+      #sabnzbd = 38; # dropped in 25.11
       #kdm = 39; # dropped in 17.03
       #ghostone = 40; # dropped in 18.03
       git = 41;
@@ -570,7 +570,7 @@ in
       lambdabot = 191;
       asterisk = 192;
       plex = 193;
-      sabnzbd = 194;
+      #sabnzbd = 194; # dropped in 25.11
       #grafana = 196; #unused
       #skydns = 197; #unused
       # ripple-rest = 198; # unused, removed 2017-08-12

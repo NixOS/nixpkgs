@@ -1,0 +1,50 @@
+From 711aa33dbc75c68ce2184d7c9ed522c0b0358cc6 Mon Sep 17 00:00:00 2001
+From: Dominique Martinet <asmadeus@codewreck.org>
+Date: Sat, 8 Nov 2025 07:09:39 +0900
+Subject: [PATCH] install-onlyoffice.sh: fix --check for new install_version
+ function
+
+---
+ install-onlyoffice.sh | 20 +++++++++++++++-----
+ 1 file changed, 15 insertions(+), 5 deletions(-)
+
+diff --git a/install-onlyoffice.sh b/install-onlyoffice.sh
+index 757be5437a74..c26d98d73b48 100755
+--- a/install-onlyoffice.sh
++++ b/install-onlyoffice.sh
+@@ -271,17 +271,27 @@ install_old_version() {
+ }
+ 
+ install_version() {
+-    ensure_command_available curl
+-    ensure_command_available sha512sum
+-    ensure_command_available unzip
+-
+     local DIR=$1
+     local VERSION=$2
+     local HASH=$3
+     local FULL_DIR=$OO_DIR/$DIR
+     local LAST_DIR=$(pwd)
+ 
+-    if [ ! -e "$FULL_DIR"/.version ] || [ "$(cat "$FULL_DIR"/.version)" != "$VERSION" ]; then
++    local ACTUAL_VERSION="not installed"
++    if [ -e "$FULL_DIR"/.version ]; then
++        ACTUAL_VERSION="$(cat "$FULL_DIR"/.version)"
++    fi
++
++    if [ "$ACTUAL_VERSION" != "$VERSION" ]; then
++        if [ ${CHECK+x} ]; then
++            echo "Wrong version in $FULL_DIR. Expected: $VERSION. Found: $ACTUAL_VERSION"
++            exit 1
++        fi
++
++        ensure_command_available sha512sum
++        ensure_command_available curl
++        ensure_command_available unzip
++
+         rm -rf "$FULL_DIR"
+         mkdir -p "$FULL_DIR"
+ 
+-- 
+2.51.1
+

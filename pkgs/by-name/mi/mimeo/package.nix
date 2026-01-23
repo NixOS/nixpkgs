@@ -36,12 +36,12 @@ python3Packages.buildPythonApplication {
     $out/bin/mimeo --help > /dev/null
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open files by MIME-type or file name using regular expressions";
     homepage = "https://xyne.dev/projects/mimeo/";
-    license = [ licenses.gpl2Only ];
-    maintainers = [ maintainers.rycee ];
-    platforms = platforms.unix;
+    license = [ lib.licenses.gpl2Only ];
+    maintainers = [ lib.maintainers.rycee ];
+    platforms = lib.platforms.unix;
     mainProgram = "mimeo";
   };
 }

@@ -14,7 +14,7 @@
 python3.pkgs.buildPythonApplication {
   pname = "easyabc";
   version = "1.3.8.7-unstable-2025-01-12";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "jwdj";

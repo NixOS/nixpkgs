@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   rustPlatform,
@@ -22,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "datafusion";
-  version = "50.0.0";
+  version = "50.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -32,12 +33,12 @@ buildPythonPackage rec {
     tag = version;
     # Fetch arrow-testing and parquet-testing (tests assets)
     fetchSubmodules = true;
-    hash = "sha256-to1GJQqI4aJOW8pGhWvU44ePrRo0cgeNwEGRJlb9grM=";
+    hash = "sha256-+r3msFc9yu3aJBDRI66A/AIctCbLxfZB3Ur/raDV3x8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname src version;
-    hash = "sha256-ZACp7bBLYKmuZVAWEa2YxoCbQqwALv2bWf+zz6jbV9w=";
+    hash = "sha256-XJ2x/EtMZu/fdS6XB/IydMfHmlaxEWJ3XJPY73WoGqs=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -73,6 +74,10 @@ buildPythonPackage rec {
   disabledTests = [
     # Exception: DataFusion error (requires internet access)
     "test_register_http_csv"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Flaky: Failed: Query was not interrupted; got error: None
+    "test_collect_interrupted"
   ];
 
   meta = {

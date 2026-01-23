@@ -56,13 +56,13 @@ stdenv.mkDerivation (finalAttrs: {
   # The error occurs when using catch2_3 in nixpkgs, not when fetching catch2_3 using CMake
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  meta = {
     description = "SystemVerilog compiler and language services";
     homepage = "https://github.com/MikePopoloski/slang";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sharzy ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sharzy ];
     mainProgram = "slang";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin;
   };
 })

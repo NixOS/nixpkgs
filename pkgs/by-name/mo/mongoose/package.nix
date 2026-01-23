@@ -64,12 +64,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Graph Coarsening and Partitioning Library";
     mainProgram = "suitesparse_mongoose";
     homepage = "https://github.com/DrTimothyAldenDavis/SuiteSparse/tree/dev/Mongoose";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ wegank ];
-    platforms = with platforms; unix;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ wegank ];
+    platforms = with lib.platforms; unix;
   };
 }

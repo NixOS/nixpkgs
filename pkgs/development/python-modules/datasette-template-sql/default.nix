@@ -3,15 +3,12 @@
   buildPythonPackage,
   datasette,
   fetchFromGitHub,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "datasette-template-sql";
   version = "1.0.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "simonw";
@@ -27,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "datasette_template_sql" ];
 
-  meta = with lib; {
+  meta = {
     description = "Datasette plugin for executing SQL queries from templates";
     homepage = "https://datasette.io/plugins/datasette-template-sql";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ MostAwesomeDude ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ MostAwesomeDude ];
   };
 }

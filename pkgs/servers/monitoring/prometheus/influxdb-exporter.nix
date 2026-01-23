@@ -31,12 +31,12 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) influxdb; };
 
-  meta = with lib; {
+  meta = {
     description = "Prometheus exporter that accepts InfluxDB metrics";
     mainProgram = "influxdb_exporter";
     homepage = "https://github.com/prometheus/influxdb_exporter";
     changelog = "https://github.com/prometheus/influxdb_exporter/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

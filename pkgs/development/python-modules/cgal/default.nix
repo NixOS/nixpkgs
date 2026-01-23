@@ -4,6 +4,7 @@
   python,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchurl,
   setuptools,
   boost,
   cgal,
@@ -19,6 +20,16 @@
   withLAS ? false, # unfree
 }:
 
+let
+  # Use CGAL 6.0.1 for compatibility with cgal-swig-bindings
+  cgal_6_0_1 = cgal.overrideAttrs (oldAttrs: {
+    version = "6.0.1";
+    src = fetchurl {
+      url = "https://github.com/CGAL/cgal/releases/download/v6.0.1/CGAL-6.0.1.tar.xz";
+      hash = "sha256-Cs378xfFVmMN1SbzJTeA8ptuyXE+6SkD6Btck8D1m38=";
+    };
+  });
+in
 buildPythonPackage rec {
   pname = "cgal";
   version = "6.0.1.post202410241521";
@@ -40,7 +51,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
-    cgal
+    cgal_6_0_1
     gmp
     mpfr
     boost

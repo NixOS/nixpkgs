@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "coloquinte";
-  version = "0.3.1";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "coloquinte";
     repo = "PlaceRoute";
     rev = finalAttrs.version;
-    hash = "sha256-bPDXaNZCNBM0qiu+46cL/zH/41lwqHPqfqTzJaERgVQ=";
+    hash = "sha256-BQg2rVYe1wJOX7YnvgDVpmN6hwBJZKH0fxm+8HC8bvY=";
   };
 
   nativeBuildInputs = [
@@ -34,6 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Coloquinte/PlaceRoute";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.coloquinte ];
+    maintainers = [ ];
   };
 })

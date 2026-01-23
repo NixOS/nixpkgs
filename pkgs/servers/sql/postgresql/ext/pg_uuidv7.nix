@@ -20,7 +20,7 @@ postgresqlBuildExtension (finalAttrs: {
     description = "Tiny Postgres extension to create version 7 UUIDs";
     homepage = "https://github.com/fboulnois/pg_uuidv7";
     changelog = "https://github.com/fboulnois/pg_uuidv7/blob/main/CHANGELOG.md";
-    maintainers = with lib.maintainers; [ gaelreyrol ];
+    maintainers = [ ];
     platforms = postgresql.meta.platforms;
     license = lib.licenses.mpl20;
   };

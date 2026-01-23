@@ -56,12 +56,12 @@ stdenv.mkDerivation rec {
     runHook postConfigure
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Terminal mixer for PulseAudio inspired by pavucontrol";
     homepage = "https://github.com/fulhax/ncpamixer";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    teams = [ teams.c3d2 ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
     mainProgram = "ncpamixer";
   };
 }

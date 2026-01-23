@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-6/rQ4xNfzJQwJgrpvFRuirqlx6fVn7sLXfVRFsG3fUw=";
   };
 
-  nativeBuildInputs = [ zig.hook ];
+  nativeBuildInputs = [ zig ];
 
   passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 

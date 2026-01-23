@@ -111,7 +111,9 @@ let
 
       # Enable crashkernel support
       PROC_VMCORE = yes;
-      HIGHMEM4G = lib.mkIf (stdenv.hostPlatform.isx86 && stdenv.hostPlatform.is32bit) yes;
+      HIGHMEM4G = lib.mkIf (stdenv.hostPlatform.isx86 && stdenv.hostPlatform.is32bit) (
+        whenAtLeast "6.15" yes
+      );
 
       # Track memory leaks and performance issues related to allocations.
       MEM_ALLOC_PROFILING = whenAtLeast "6.10" yes;
@@ -562,19 +564,21 @@ let
         DRM_DP_CEC = whenOlder "6.10" yes;
         DRM_DISPLAY_DP_AUX_CEC = whenAtLeast "6.10" yes;
       }
+      //
+        lib.optionalAttrs
+          (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux")
+          {
+            # Enable Hyper-V guest stuff
+            HYPERV = whenAtLeast "6.18" yes;
+            # Enable Hyper-V Synthetic DRM Driver
+            DRM_HYPERV = whenAtLeast "5.14" module;
+            # And disable the legacy framebuffer driver when we have the new one
+            FB_HYPERV = whenAtLeast "5.14" no;
+          }
       // lib.optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {
         # Intel GVT-g graphics virtualization supports 64-bit only
         DRM_I915_GVT = yes;
         DRM_I915_GVT_KVMGT = module;
-        # Enable Hyper-V guest stuff
-        HYPERV = lib.mkMerge [
-          (whenOlder "6.18" module)
-          (whenAtLeast "6.18" yes)
-        ];
-        # Enable Hyper-V Synthetic DRM Driver
-        DRM_HYPERV = whenAtLeast "5.14" module;
-        # And disable the legacy framebuffer driver when we have the new one
-        FB_HYPERV = whenAtLeast "5.14" no;
       }
       // lib.optionalAttrs (stdenv.hostPlatform.system == "aarch64-linux") {
         # enable HDMI-CEC on RPi boards
@@ -676,6 +680,8 @@ let
       TMPFS = yes;
       TMPFS_POSIX_ACL = yes;
       FS_ENCRYPTION = yes;
+      FS_VERITY = yes;
+      FS_VERITY_BUILTIN_SIGNATURES = yes;
 
       EXT2_FS_XATTR = yes;
       EXT2_FS_POSIX_ACL = yes;
@@ -691,9 +697,9 @@ let
       NTFS3_LZX_XPRESS = whenAtLeast "5.15" yes;
       NTFS3_FS_POSIX_ACL = whenAtLeast "5.15" yes;
 
-      REISERFS_FS_XATTR = option yes;
-      REISERFS_FS_POSIX_ACL = option yes;
-      REISERFS_FS_SECURITY = option yes;
+      REISERFS_FS_XATTR = whenOlder "6.13" (option yes);
+      REISERFS_FS_POSIX_ACL = whenOlder "6.13" (option yes);
+      REISERFS_FS_SECURITY = whenOlder "6.13" (option yes);
 
       JFS_POSIX_ACL = option yes;
       JFS_SECURITY = option yes;
@@ -787,6 +793,12 @@ let
       # The goal of Landlock is to enable to restrict ambient rights (e.g. global filesystem access) for a set of processes.
       # This does not have any effect if a program does not support it
       SECURITY_LANDLOCK = whenAtLeast "5.13" yes;
+
+      # IPE (Integrity Policy Enforcement) - LSM that can enforce file integrity based on
+      # fs-verity measurements or dm-verity. Useful for verified boot and immutable /nix/store.
+      SECURITY_IPE = whenAtLeast "6.12" yes;
+      IPE_PROP_FS_VERITY = whenAtLeast "6.12" yes;
+      IPE_PROP_FS_VERITY_BUILTIN_SIG = whenAtLeast "6.12" yes;
 
       DEVKMEM = lib.mkIf (!stdenv.hostPlatform.isAarch64) (whenOlder "5.13" no); # Disable /dev/kmem
 
@@ -926,6 +938,7 @@ let
       BPF_EVENTS = yes;
       FUNCTION_PROFILER = yes;
       RING_BUFFER_BENCHMARK = no;
+      FUNCTION_GRAPH_RETVAL = whenAtLeast "6.5" yes;
     };
 
     perf = {
@@ -947,7 +960,7 @@ let
       KSM = yes;
       VIRT_DRIVERS = yes;
       # We need 64 GB (PAE) support for Xen guest support
-      HIGHMEM64G = {
+      HIGHMEM64G = whenOlder "6.15" {
         optional = true;
         tristate = lib.mkIf (!stdenv.hostPlatform.is64bit) "y";
       };
@@ -980,6 +993,10 @@ let
       # passthrough.
       VFIO_DEVICE_CDEV = whenAtLeast "6.6" yes;
       VFIO_NOIOMMU = whenAtLeast "6.6" yes;
+
+      # Loongson Binary Translation extension, required for running
+      # x86 and x86_64 binaries via LATX or similar emulators
+      CPU_HAS_LBT = lib.mkIf stdenv.hostPlatform.isLoongArch64 (option yes);
     };
 
     media = {
@@ -1219,6 +1236,7 @@ let
 
         KEXEC_FILE = option yes;
         KEXEC_JUMP = option yes;
+        KEXEC_HANDOVER = whenAtLeast "6.16" (option yes);
 
         PARTITION_ADVANCED = yes; # Needed for LDM_PARTITION
         # Windows Logical Disk Manager (Dynamic Disk) support
@@ -1318,6 +1336,14 @@ let
         HOTPLUG_PCI_ACPI = yes; # PCI hotplug using ACPI
         HOTPLUG_PCI_PCIE = yes; # PCI-Expresscard hotplug support
 
+        # Enable all available thermal governors
+        THERMAL_GOV_BANG_BANG = yes;
+        THERMAL_GOV_FAIR_SHARE = yes;
+        THERMAL_GOV_POWER_ALLOCATOR = yes;
+        THERMAL_GOV_STEP_WISE = yes;
+        THERMAL_GOV_USER_SPACE = yes;
+        DEVFREQ_THERMAL = yes;
+
         # Enable AMD's ROCm GPU compute stack
         HSA_AMD = lib.mkIf stdenv.hostPlatform.is64bit yes;
         ZONE_DEVICE = lib.mkIf (
@@ -1344,6 +1370,8 @@ let
         X86_AMD_PLATFORM_DEVICE = lib.mkIf stdenv.hostPlatform.isx86 yes;
         X86_PLATFORM_DRIVERS_DELL = lib.mkIf stdenv.hostPlatform.isx86 (whenAtLeast "5.12" yes);
         X86_PLATFORM_DRIVERS_HP = lib.mkIf stdenv.hostPlatform.isx86 (whenAtLeast "6.1" yes);
+
+        ARM64_PMEM = lib.mkIf stdenv.hostPlatform.isAarch64 yes;
 
         LIRC = yes;
 
@@ -1401,6 +1429,10 @@ let
         # Enable generic kernel watch queues
         # See https://docs.kernel.org/core-api/watch_queue.html
         WATCH_QUEUE = yes;
+
+        # Enable coreboot firmware drivers.
+        # While these are called CONFIG_GOOGLE_*, they apply to coreboot systems in general.
+        GOOGLE_FIRMWARE = yes;
       }
       //
         lib.optionalAttrs

@@ -4,7 +4,6 @@
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
-  pythonOlder,
   yara,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "yara-python";
   version = "4.5.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "VirusTotal";
@@ -41,11 +38,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "yara" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface for YARA";
     homepage = "https://github.com/VirusTotal/yara-python";
     changelog = "https://github.com/VirusTotal/yara-python/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

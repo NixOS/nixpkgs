@@ -1,0 +1,22 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: r-vdp <ramses@well-founded.dev>
+Date: Mon, 28 Oct 2024 12:08:49 +0100
+Subject: [PATCH] Get the efi app from fwupd-efi
+
+---
+ meson.build | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/meson.build b/meson.build
+index 16c7cad40..81804bf3b 100644
+--- a/meson.build
++++ b/meson.build
+@@ -657,7 +657,7 @@ endif
+ 
+ # EFI
+ if build_standalone
+-  efi_app_location = join_paths(libexecdir, 'fwupd', 'efi')
++  efi_app_location = join_paths(dependency('fwupd-efi').get_variable(pkgconfig: 'prefix'), 'libexec', 'fwupd', 'efi')
+   conf.set_quoted('EFI_APP_LOCATION', efi_app_location)
+ endif
+ 

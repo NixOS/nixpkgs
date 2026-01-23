@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   umodbus,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pysolarmanv5";
   version = "3.0.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jmccrohan";

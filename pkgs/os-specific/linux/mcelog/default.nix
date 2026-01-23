@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mcelog";
-  version = "207";
+  version = "208";
 
   src = fetchFromGitHub {
     owner = "andikleen";
     repo = "mcelog";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZHhY7pqDuez3QtbhjDr2D/isw+gsoVdfB5WRRchdh6E=";
+    hash = "sha256-UBWgdRrSNkocreyFs61IxtdbUrL1UGn2gJswqXjWhlY=";
   };
 
   postPatch = ''

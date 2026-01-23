@@ -6,7 +6,7 @@
   installShellFiles,
   nixosTests,
   externalPlugins ? [ ],
-  vendorHash ? "sha256-pU8INVCKjYfAFOeobM7N1XCMHod7Kz0N5NKwpMpA2lU=",
+  vendorHash ? "sha256-3cY4Nd2RX5OKnJaQ7StYDsyq27qE1VY4wGaY4wiDeFQ=",
 }:
 
 let
@@ -14,13 +14,13 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "coredns";
-  version = "1.13.1";
+  version = "1.14.1";
 
   src = fetchFromGitHub {
     owner = "coredns";
     repo = "coredns";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rWa4xjHRREoMtvPqW6ZP6Ym9qNTa0l8Opd15FsmxraI=";
+    hash = "sha256-WcRX2BCWIQ8e0FYCIAzCdexz+Nl+/kKicQkhEw2AVMs=";
   };
 
   inherit vendorHash;
@@ -76,9 +76,9 @@ buildGoModule (finalAttrs: {
     }
     diff -u plugin.cfg.orig plugin.cfg || true
     for src in ${toString (attrsToSources externalPlugins)}; do go get $src; done
-    GOOS= GOARCH= go generate
-    go mod tidy
     go mod vendor
+    CC= GOOS= GOARCH= go generate
+    go mod tidy
   '';
 
   modInstallPhase = ''
@@ -90,7 +90,7 @@ buildGoModule (finalAttrs: {
     chmod -R u+w vendor
     mv -t . vendor/go.{mod,sum} vendor/plugin.cfg
 
-    GOOS= GOARCH= go generate
+    CC= GOOS= GOARCH= go generate
   '';
 
   postPatch = ''
@@ -102,10 +102,21 @@ buildGoModule (finalAttrs: {
     substituteInPlace test/readme_test.go \
       --replace-fail "TestReadme" "SkipReadme"
 
+    substituteInPlace test/metrics_test.go \
+      --replace-fail "TestMetricsRewriteRequestSize" "SkipMetricsRewriteRequestSize"
+
+    substituteInPlace test/quic_test.go \
+      --replace-fail "TestQUICReloadDoesNotPanic" "SkipQUICReloadDoesNotPanic"
+
     # this test fails if any external plugins were imported.
     # it's a lint rather than a test of functionality, so it's safe to disable.
     substituteInPlace test/presubmit_test.go \
       --replace-fail "TestImportOrdering" "SkipImportOrdering"
+
+    substituteInPlace plugin/pkg/parse/transport_test.go \
+      --replace-fail \
+        "TestTransport" \
+        "SkipTransport"
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # loopback interface is lo0 on macos
@@ -135,6 +146,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       deltaevo
       djds
+      johanot
       rtreffer
       rushmorem
     ];

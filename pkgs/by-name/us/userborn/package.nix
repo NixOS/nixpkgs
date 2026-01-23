@@ -37,6 +37,7 @@ rustPlatform.buildRustPackage rec {
         userborn-mutable-etc
         userborn-immutable-users
         userborn-immutable-etc
+        userborn-static
         ;
     };
   };

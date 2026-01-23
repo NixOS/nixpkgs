@@ -3,6 +3,7 @@
   buildHomeAssistantComponent,
   fetchFromGitHub,
   beautifulsoup4,
+  cloudscraper,
   icalendar,
   icalevents,
   lxml,
@@ -13,17 +14,18 @@
 buildHomeAssistantComponent rec {
   owner = "mampfes";
   domain = "waste_collection_schedule";
-  version = "2.10.0";
+  version = "2.11.0";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "hacs_waste_collection_schedule";
     tag = version;
-    hash = "sha256-qFeo2VE0sgBq4dwOUm26Vkgi+rv/0PsOyQhlVEJ45aE=";
+    hash = "sha256-+yt6kjUV+fqbOa7jj603XdGX7XtI8mXnCnmUjYFNA7c=";
   };
 
   dependencies = [
     beautifulsoup4
+    cloudscraper
     icalendar
     icalevents
     lxml
@@ -31,11 +33,11 @@ buildHomeAssistantComponent rec {
     pypdf
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/mampfes/hacs_waste_collection_schedule/releases/tag/${version}";
     description = "Home Assistant integration framework for (garbage collection) schedules";
     homepage = "https://github.com/mampfes/hacs_waste_collection_schedule";
-    maintainers = with maintainers; [ jamiemagee ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ jamiemagee ];
+    license = lib.licenses.mit;
   };
 }

@@ -19,14 +19,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pavucontrol";
-  version = "6.1";
+  version = "6.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "pulseaudio";
     repo = "pavucontrol";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-cru4I+LljYKIpIr7gSolnuLuUIXgc8l+JUmPrme4+YA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-If76Qt2BFgGMYt2PSzDQWmNPsbzneZ6zW9yYnS3lo84=";
   };
 
   buildInputs = [
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     "--prefix=${placeholder "out"}"
-    (lib.mesonBool "lynx" false)
+    (lib.mesonEnable "lynx" false)
   ];
 
   enableParallelBuilding = true;

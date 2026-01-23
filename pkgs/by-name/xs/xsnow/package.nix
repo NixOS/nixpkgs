@@ -12,11 +12,11 @@
 }:
 stdenv.mkDerivation rec {
   pname = "xsnow";
-  version = "3.8.5";
+  version = "3.9.0";
 
   src = fetchurl {
     url = "https://ratrabbit.nl/downloads/xsnow/xsnow-${version}.tar.gz";
-    sha256 = "sha256-NkoD/oMxdJwnx9QCBM8dwFOTPg7YzOZLnNiEOQt36cU=";
+    sha256 = "sha256-PMZsxZUmVHZwU6+KBPMq8sjyt42jlrXazgk7DGc9bvo=";
   };
 
   nativeBuildInputs = [
@@ -40,17 +40,17 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "X-windows application that will let it snow on the root, in between and on windows";
     mainProgram = "xsnow";
     homepage = "https://ratrabbit.nl/ratrabbit/xsnow/";
     changelog = "https://ratrabbit.nl/ratrabbit/xsnow/changelog/index.html";
     downloadPage = "https://ratrabbit.nl/ratrabbit/xsnow/downloads/index.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       robberer
       griffi-gh
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

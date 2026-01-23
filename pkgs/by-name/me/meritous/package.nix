@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "meritous";
     repo = "meritous";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-6KK2anjX+fPsYf4HSOHQ0EQBINqZiVbxo1RmBR6pslg=";
   };
 
@@ -53,13 +53,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Action-adventure dungeon crawl game";
     homepage = "https://gitlab.com/meritous/meritous";
     changelog = "https://gitlab.com/meritous/meritous/-/blob/master/NEWS";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = "meritous";
-    maintainers = [ maintainers.alexvorobiev ];
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.alexvorobiev ];
+    platforms = lib.platforms.linux;
   };
 })

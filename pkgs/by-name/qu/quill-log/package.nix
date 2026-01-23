@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "quill-log";
-  version = "10.2.0";
+  version = "11.0.2";
 
   src = fetchFromGitHub {
     owner = "odygrd";
     repo = "quill";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BgUKxUKAaDRGm8OazhMDAfzbJSGXyScpJ5YR8lz5u6c=";
+    hash = "sha256-b5kHxvjmTea5HU9gTvizFwhG2zwOJSPlf30XKEhxe8w=";
   };
 
   nativeBuildInputs = [ cmake ];

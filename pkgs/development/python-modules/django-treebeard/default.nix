@@ -5,15 +5,12 @@
   fetchPypi,
   pytest-django,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "django-treebeard";
   version = "4.7.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -29,10 +26,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "treebeard" ];
 
-  meta = with lib; {
+  meta = {
     description = "Efficient tree implementations for Django";
     homepage = "https://tabo.pe/projects/django-treebeard/";
     changelog = "https://github.com/django-treebeard/django-treebeard/blob/${version}/CHANGES.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

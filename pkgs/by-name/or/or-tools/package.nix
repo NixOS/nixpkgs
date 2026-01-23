@@ -43,7 +43,6 @@ let
       ninja
       numpy
       pytestCheckHook
-      pythonOlder
       setuptools
       ;
     python = python3;
@@ -64,31 +63,13 @@ let
   scipopt-scip' = scipopt-scip.overrideAttrs (old: {
     patches = old.patches or [ ] ++ [
       # from https://github.com/google/or-tools/commit/77a28070b9c4c83995ac6bbfa9544722ff3342ce#diff-c95174a817e73db366d414af1e329c1856f70e5158ed3994d43da88765ccc98f
+      # and updated with https://github.com/google/or-tools/pull/4932/files#diff-e6b0a69b2e4b97ec922abc459d909483d440a1e0d2868bed263927b106b6efe6
       ./scip.patch
     ];
     # Their patch forgets to find_package() soplex, bring it back.
     postPatch = (old.postPatch or "") + ''
       substituteInPlace CMakeLists.txt \
-        --replace-fail 'message(STATUS "Finding Soplex...")' 'find_package(SOPLEX CONFIG HINTS ''${SOPLEX_DIR})'
-    '';
-  });
-
-  # local revert of 58daf511687f191829238fc7f571e08dc9dedf56,
-  # working around https://github.com/google/or-tools/issues/4911
-  highs' = highs.overrideAttrs (old: rec {
-    version = "1.10.0";
-    src = fetchFromGitHub {
-      owner = "ERGO-Code";
-      repo = "HiGHS";
-      rev = "v${version}";
-      hash = "sha256-CzHE2d0CtScexdIw95zHKY1Ao8xFodtfSNNkM6dNCac=";
-    };
-    # CMake Error in CMakeLists.txt:
-    #   Imported target "highs::highs" includes non-existent path
-    #     "/include"
-    #   in its INTERFACE_INCLUDE_DIRECTORIES.
-    postPatch = ''
-      sed -i "/CMAKE_CUDA_PATH/d" src/CMakeLists.txt
+        --replace-fail 'message(STATUS "Finding Soplex")' 'find_package(SOPLEX CONFIG HINTS ''${SOPLEX_DIR})'
     '';
   });
 
@@ -124,6 +105,23 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/google/or-tools/commit/8442c7b1c219b0c8d58ee96d266d81b7c3a19ad2.patch";
       hash = "sha256-HrV9wU3PFMdb3feGt8i5UJNgHuitMRBF9cNrH5RRENQ=";
     })
+    # Fix compatibility with highs 1.12.0
+    # https://github.com/google/or-tools/issues/4911
+    (fetchpatch {
+      url = "https://github.com/google/or-tools/commit/6c7c1e7cb5bab2701e5b3b00c0f8397273654d2b.patch";
+      includes = [ "ortools/math_opt/solvers/highs_solver_test.cc" ];
+      hash = "sha256-/dFk/F/3/BwH5IwIwNU4Ua+4sROPXYCjO8R6jpoZpgo=";
+    })
+    # Fix compatibility with SCIP 10.0
+    # https://github.com/google/or-tools/issues/4912
+    (fetchpatch {
+      url = "https://github.com/google/or-tools/pull/4932.patch";
+      includes = [ "ortools/linear_solver/proto_solver/scip_proto_solver.cc" ];
+      hash = "sha256-1jw/r3yAjIpq9o8mqAbNorQgmT1E5nt809N+Gb+D9ZI=";
+    })
+    # Compatibility with SCIP 10.0 also needs the following patch adjusted for or-tools 9.14
+    # https://github.com/google/or-tools/pull/4932/files#diff-9559febee3c6051bab4def3c102cb78cbf8a57fc2be4058ace32f89436c784a9
+    ./gscip-scip10.patch
   ];
 
   # or-tools normally attempts to build Protobuf for the build platform when
@@ -185,7 +183,7 @@ stdenv.mkDerivation (finalAttrs: {
     glpk
     gbenchmark
     gtest
-    highs'
+    highs
     python3.pkgs.absl-py
     pybind11'
     pybind11-abseil'
@@ -199,7 +197,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   propagatedBuildInputs = [
     abseil-cpp'
-    highs'
+    highs
     protobuf'
     python-protobuf'
     python3.pkgs.immutabledict

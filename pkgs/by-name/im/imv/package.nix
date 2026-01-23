@@ -9,15 +9,18 @@
   meson,
   ninja,
   pkg-config,
+  tinyxxd,
   icu,
   pango,
   inih,
   withWindowSystem ? if stdenv.hostPlatform.isLinux then "all" else "x11",
   xorg,
   libxkbcommon,
-  libGLU,
+  libGL,
   wayland,
   wayland-protocols,
+  wayland-scanner,
+  versionCheckHook,
   withBackends ? [
     "farbfeld"
     "libjxl"
@@ -41,14 +44,12 @@
   libnsbmp,
   libwebp,
   qoi,
-  wayland-scanner,
 }:
 
 let
   windowSystems = {
     all = windowSystems.x11 ++ windowSystems.wayland;
     x11 = [
-      libGLU
       xorg.libxcb
       xorg.libX11
     ];
@@ -75,9 +76,7 @@ let
     libjpeg = libjpeg_turbo;
   };
 
-  backendFlags = map (
-    b: if builtins.elem b withBackends then "-D${b}=enabled" else "-D${b}=disabled"
-  ) (builtins.attrNames backends);
+  backendFlags = map (b: lib.mesonEnable b (lib.elem b withBackends)) (lib.attrNames backends);
 in
 
 # check that given window system is valid
@@ -89,7 +88,7 @@ assert builtins.all (
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "imv";
-  version = "5.0.0";
+  version = "5.0.1";
   outputs = [
     "out"
     "man"
@@ -99,13 +98,13 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "~exec64";
     repo = "imv";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sOlWSv1GqdYzooTvcJjXxJI3pwWWJnlUpbGZgUAFYm0=";
+    hash = "sha256-2JTs/hj6t9wEZKoUpcLDFulbdU/grDlQkuEAE7uayDs=";
   };
 
   mesonFlags = [
-    "-Dwindows=${withWindowSystem}"
-    "-Dtest=enabled"
-    "-Dman=enabled"
+    (lib.mesonOption "windows" withWindowSystem)
+    (lib.mesonEnable "test" finalAttrs.finalPackage.doCheck)
+    (lib.mesonEnable "man" true)
   ]
   ++ backendFlags;
 
@@ -121,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    cmocka
+    libGL
     icu
     libxkbcommon
     pango
@@ -130,16 +129,17 @@ stdenv.mkDerivation (finalAttrs: {
   ++ windowSystems."${withWindowSystem}"
   ++ map (b: backends."${b}") withBackends;
 
-  postFixup = lib.optionalString (withWindowSystem == "all") ''
-    # The `bin/imv` script assumes imv-wayland or imv-x11 in PATH,
-    # so we have to fix those to the binaries we installed into the /nix/store
-
-    substituteInPlace "$out/bin/imv" \
-      --replace-fail "imv-wayland" "$out/bin/imv-wayland" \
-      --replace-fail "imv-x11" "$out/bin/imv-x11"
-  '';
-
   doCheck = true;
+  nativeCheckInputs = [
+    tinyxxd
+  ];
+  checkInputs = [
+    cmocka
+  ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-v";
 
   meta = {
     description = "Command line image viewer for tiling window managers";

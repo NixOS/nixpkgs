@@ -224,7 +224,6 @@ let
       license = lib.licenses.unfree;
       maintainers = with lib.maintainers; [
         Baughn
-        elitak
         priegger
         lukegb
       ];

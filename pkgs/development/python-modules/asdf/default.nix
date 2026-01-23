@@ -15,7 +15,6 @@
   psutil,
   pytest-remotedata,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   requests,
   semantic-version,
@@ -27,8 +26,6 @@ buildPythonPackage rec {
   pname = "asdf";
   version = "4.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "asdf-format";
@@ -71,10 +68,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "asdf" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python tools to handle ASDF files";
     homepage = "https://github.com/asdf-format/asdf";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

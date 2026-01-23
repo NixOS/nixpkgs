@@ -7,15 +7,12 @@
   pytestCheckHook,
   cffi,
   lmdb,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "lmdb";
   version = "1.7.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

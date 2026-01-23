@@ -54,6 +54,14 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # The LZ4 patch updates cmake_minimum_required to 3.12, but only for non-clang builds.
+  # For clang builds (like Darwin), we need to manually update it.
+  # ref. https://github.com/flann-lib/flann/pull/526 not merged yet
+  postPatch = lib.optionalString stdenv.cc.isClang ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.6)" "cmake_minimum_required(VERSION 3.5)"
+  '';
+
   cmakeFlags = [
     "-DBUILD_EXAMPLES:BOOL=OFF"
     "-DBUILD_TESTS:BOOL=OFF"

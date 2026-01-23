@@ -78,12 +78,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Note editor designed to remain simple to use";
     mainProgram = "bijiben";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-notes";
-    license = licenses.gpl3;
-    teams = [ teams.gnome ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
 }

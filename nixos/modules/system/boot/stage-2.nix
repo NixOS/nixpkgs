@@ -17,9 +17,8 @@ let
     replacements = {
       shell = "${pkgs.bash}/bin/bash";
       systemConfig = null; # replaced in ../activation/top-level.nix
-      inherit (config.boot) systemdExecutable;
+      inherit (config.boot) systemdExecutable stage2Greeting;
       nixStoreMountOpts = lib.concatStringsSep " " (map lib.escapeShellArg config.boot.nixStoreMountOpts);
-      inherit (config.system.nixos) distroName;
       inherit useHostResolvConf;
       inherit (config.system.build) earlyMountScript;
       path = lib.makeBinPath (
@@ -84,6 +83,15 @@ in
         type = types.str;
         description = ''
           The program to execute to start systemd.
+        '';
+      };
+
+      stage2Greeting = mkOption {
+        type = types.str;
+        default = "<<< ${config.system.nixos.distroName} Stage 2 >>>";
+        defaultText = literalExpression ''"<<< ''${config.system.nixos.distroName} Stage 2 >>>"'';
+        description = ''
+          The greeting message displayed during NixOS stage 2 boot.
         '';
       };
 

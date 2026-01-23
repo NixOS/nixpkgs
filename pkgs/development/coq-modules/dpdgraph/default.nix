@@ -19,6 +19,7 @@ in
       case = case: out: { inherit case out; };
     in
     lib.switch coq.coq-version [
+      (case "9.1" "1.0+9.1")
       (case "9.0" "1.0+9.0")
       (case "8.20" "1.0+8.20")
       (case "8.19" "1.0+8.19")
@@ -36,6 +37,7 @@ in
       (case "8.7" "0.6.2")
     ] null;
 
+  release."1.0+9.1".hash = "sha256-6bQsXcY8ouxP7pfJrT3leD9kuhNjpskJKpTv6oHZaTE=";
   release."1.0+9.0".sha256 = "sha256-gXy70fj2bAkE0did4gI0wTyWp9AIvOo4xTTihaFIpZ0=";
   release."1.0+8.20".sha256 = "sha256-szfH/OksCH3SCbcFjwEvLwHE5avmHp1vYiJM6KAXFqs=";
   release."1.0+8.19".sha256 = "sha256-L1vjEydYiwDFTXES3sgfdaO/D50AbTJKBXUKUCgbpto=";
@@ -74,10 +76,10 @@ in
 
   extraInstallFlags = [ "BINDIR=$(out)/bin" ];
 
-  meta = with lib; {
+  meta = {
     description = "Build dependency graphs between Coq objects";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ vbgl ];
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ vbgl ];
   };
 }).overrideAttrs
   (

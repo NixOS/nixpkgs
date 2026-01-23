@@ -5,9 +5,6 @@ let
 in
 {
   name = "iscsi";
-  meta = {
-    maintainers = pkgs.lib.teams.deshaw.members;
-  };
 
   nodes = {
     target =

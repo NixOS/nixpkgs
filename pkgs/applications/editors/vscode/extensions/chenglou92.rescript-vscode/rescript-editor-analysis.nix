@@ -26,7 +26,7 @@ ocamlPackages.buildDunePackage rec {
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--version-regex"
-      "([0-9]+\.[0-9]+\.[0-9]+)"
+      "([0-9]+\\.[0-9]+\\.[0-9]+)"
     ];
   };
 
@@ -35,7 +35,6 @@ ocamlPackages.buildDunePackage rec {
     homepage = "https://github.com/rescript-lang/rescript-vscode";
     changelog = "https://github.com/rescript-lang/rescript-vscode/releases/tag/${version}";
     maintainers = with lib.maintainers; [
-      dlip
       jayesh-bhoot
       RossSmyth
     ];

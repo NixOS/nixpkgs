@@ -7,6 +7,7 @@
   nix-update-script,
   stdenv,
   testers,
+  validatePkgConfig,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,6 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    validatePkgConfig
   ];
   buildInputs = [
     libuv
@@ -36,7 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     tests.pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
-      moduleNames = [ "uvwasi" ];
     };
   };
 
@@ -47,5 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ aduh95 ];
     platforms = lib.platforms.all;
+    pkgConfigModules = [ "uvwasi" ];
   };
 })

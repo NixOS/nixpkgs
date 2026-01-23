@@ -59,6 +59,10 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://sources.debian.org/data/main/l/lincity/1.13.1-16/debian/patches/map-max-draw";
       hash = "sha256-9qLPrmEKMMrSVwqtEvoiyjPPo1eLO3u6bCJslubmBJU=";
     })
+    (fetchpatch {
+      url = "https://sources.debian.org/data/main/l/lincity/1.13.1-17/debian/patches/function-pointer-1097300";
+      hash = "sha256-6fwDIX88dCpAFE02Z4Ts5gsMf3wwxrToEwpy0DwZ6H4=";
+    })
   ];
 
   # Workaround build failure on -fno-common toolchains like upstream
@@ -80,6 +84,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xlincity";
     license = lib.licenses.gpl2Plus;
     homepage = "https://sourceforge.net/projects/lincity";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ iedame ];
   };
 })

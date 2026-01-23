@@ -435,14 +435,14 @@ stdenv.mkDerivation (
         "-I"
         "${openssl.dev}/include"
         "-system-sqlite"
-        ''-${if mysqlSupport then "plugin" else "no"}-sql-mysql''
-        ''-${if libpq != null then "plugin" else "no"}-sql-psql''
+        "-${if mysqlSupport then "plugin" else "no"}-sql-mysql"
+        "-${if libpq != null then "plugin" else "no"}-sql-psql"
         "-system-libpng"
 
         "-make libs"
         "-make tools"
-        ''-${lib.optionalString (!buildExamples) "no"}make examples''
-        ''-${lib.optionalString (!buildTests) "no"}make tests''
+        "-${lib.optionalString (!buildExamples) "no"}make examples"
+        "-${lib.optionalString (!buildTests) "no"}make tests"
       ]
       ++ (
         if stdenv.hostPlatform.isDarwin then
@@ -471,7 +471,7 @@ stdenv.mkDerivation (
             "-I"
             "${libXrender.out}/include"
 
-            ''-${lib.optionalString (cups == null) "no-"}cups''
+            "-${lib.optionalString (cups == null) "no-"}cups"
             "-dbus-linked"
             "-glib"
           ]
@@ -537,19 +537,18 @@ stdenv.mkDerivation (
 
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-      meta = with lib; {
+      meta = {
         homepage = "https://www.qt.io/";
         description = "Cross-platform application framework for C++";
-        license = with licenses; [
+        license = with lib.licenses; [
           fdl13Plus
           gpl2Plus
           lgpl21Plus
           lgpl3Plus
         ];
-        maintainers = with maintainers; [
+        maintainers = with lib.maintainers; [
           qknight
           ttuegel
-          periklis
           bkchr
         ];
         pkgConfigModules = [
@@ -571,7 +570,7 @@ stdenv.mkDerivation (
           "Qt5Widgets"
           "Qt5Xml"
         ];
-        platforms = platforms.unix;
+        platforms = lib.platforms.unix;
       };
 
     }

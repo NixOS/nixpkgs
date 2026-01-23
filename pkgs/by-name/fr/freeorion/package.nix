@@ -81,14 +81,14 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix LD_LIBRARY_PATH : $out/lib/freeorion
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Free, open source, turn-based space empire and galactic conquest (4X) computer game";
     homepage = "https://www.freeorion.org/";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Only
       cc-by-sa-30
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 })

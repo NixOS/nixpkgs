@@ -6,12 +6,13 @@ let
   evalConfig = import ../lib/eval-config.nix;
 
   nixos = evalConfig {
+    system = null;
     modules = [
       {
         system.stateVersion = "25.05";
         fileSystems."/".device = "/dev/null";
         boot.loader.grub.device = "nodev";
-        nixpkgs.hostPlatform = pkgs.system;
+        nixpkgs.hostPlatform = pkgs.stdenv.hostPlatform.system;
         virtualisation.vmVariant.networking.hostName = "vm";
         virtualisation.vmVariantWithBootLoader.networking.hostName = "vm-w-bl";
       }

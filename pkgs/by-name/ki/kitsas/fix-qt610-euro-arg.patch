@@ -1,0 +1,23 @@
+diff --git a/kitsas/kirjaus/kirjauswg.cpp b/kitsas/kirjaus/kirjauswg.cpp
+--- a/kitsas/kirjaus/kirjauswg.cpp
++++ b/kitsas/kirjaus/kirjauswg.cpp
+@@ -499,7 +499,7 @@ void KirjausWg::paivita(bool muokattu, int virheet, const Euro &debet, const Eu
+     } else if( virheet & Tosite::EITASMAAPVM) {
+         ui->varoTeksti->setText( tr("Debet ja kredit eivät täsmää jokaisella päivämäärällä."));
+     }  else if( debet ) {
+-        ui->varoTeksti->setText( tr("Summa %L1 €").arg(debet,0,'f',2) );
++        ui->varoTeksti->setText( tr("Summa %L1 €").arg(debet.toDouble(),0,'f',2) );
+     }
+
+
+diff --git a/kitsas/selaus/tositeselausmodel.cpp b/kitsas/selaus/tositeselausmodel.cpp
+--- a/kitsas/selaus/tositeselausmodel.cpp
++++ b/kitsas/selaus/tositeselausmodel.cpp
+@@ -18,6 +18,7 @@
+ #include <QSqlQuery>
+
+ #include <QDebug>
++#include <QJsonValue>
+ #include <QSqlError>
+
+ #include "db/yhteysmodel.h"

@@ -45,13 +45,13 @@ let
         ./test_physfs --version
       '';
 
-      meta = with lib; {
+      meta = {
         homepage = "https://icculus.org/physfs/";
         description = "Library to provide abstract access to various archives";
         mainProgram = "test_physfs";
         changelog = "https://github.com/icculus/physfs/releases/tag/release-${version}";
-        license = licenses.zlib;
-        platforms = platforms.all;
+        license = lib.licenses.zlib;
+        platforms = lib.platforms.all;
       };
     };
 

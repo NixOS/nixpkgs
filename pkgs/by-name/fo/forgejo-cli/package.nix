@@ -13,17 +13,17 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "forgejo-cli";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
-    owner = "Cyborus";
+    owner = "forgejo-contrib";
     repo = "forgejo-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8KPR7Fx26hj5glKDjczCLP6GgQBUsA5TpjhO5UZOpik=";
+    hash = "sha256-EJr/7me2wiOBSFw0VFSxyqnQKy3kpOMGJmxD7wxmWPc=";
   };
 
-  cargoHash = "sha256-kW7Pexydkosaufk1e8P5FaY+dgkeeTG5qgJxestWkVs=";
+  cargoHash = "sha256-DpQt76o3ZnIJwHR1DQ/mn9f8XiWHKVB4h3NNbvCIMZ8=";
 
   nativeBuildInputs = [
     pkg-config
@@ -52,8 +52,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "CLI application for interacting with Forgejo";
-    homepage = "https://codeberg.org/Cyborus/forgejo-cli";
-    changelog = "https://codeberg.org/Cyborus/forgejo-cli/releases/tag/v${finalAttrs.version}";
+    homepage = "https://codeberg.org/forgejo-contrib/forgejo-cli";
+    changelog = "https://codeberg.org/forgejo-contrib/forgejo-cli/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       asl20
       mit

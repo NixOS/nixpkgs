@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "fennewald";
     repo = "nu_plugin_net";
-    tag = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-HiNydU40FprxVmRRZtnXom2kFYI04mbeuGTq8+BMh7o=";
   };
 

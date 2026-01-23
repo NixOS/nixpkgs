@@ -10,7 +10,7 @@ python3Packages.buildPythonApplication {
   version = "0-unstable-2025-03-04";
   # upstream pyproject.toml is nonsense. Copied from another project
   # without customizing it for this project.
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "swarbler";

@@ -3,7 +3,6 @@
   stdenvNoCC,
   fetchFromGitHub,
   nixosTests,
-  nix-update-script,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -26,7 +25,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = nixosTests.privatebin;
-    updateScript = nix-update-script { };
+    updateScript = ./update.sh;
   };
 
   meta = {

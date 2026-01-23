@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     wayland
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://hg.sr.ht/~scoopta/rootbar";
     description = "Bar for Wayland WMs";
     mainProgram = "rootbar";
@@ -44,9 +44,9 @@ stdenv.mkDerivation {
       Root Bar is a bar for wlroots based wayland compositors such as sway and
       was designed to address the lack of good bars for wayland.
     '';
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

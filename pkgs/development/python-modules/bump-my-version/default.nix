@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "bump-my-version";
-  version = "1.2.4";
+  version = "1.2.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "callowayproject";
     repo = "bump-my-version";
     tag = version;
-    hash = "sha256-VICFz9scVPmoRDORcxq7V1ijipkg8w7uuMRRl0ReseI=";
+    hash = "sha256-/YaaVWddBAQlDvHqsDfYd5Dv+2VLkFrtuTfCGih4XBo=";
   };
 
   build-system = [
@@ -75,8 +75,6 @@ buildPythonPackage rec {
     pytestCheckHook
     versionCheckHook
   ];
-
-  versionCheckProgramArg = "--version";
 
   __darwinAllowLocalNetworking = true;
 

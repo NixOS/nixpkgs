@@ -30,6 +30,6 @@ buildGoModule rec {
     changelog = "https://github.com/vitessio/vitess/releases/tag/v${version}";
     description = "Database clustering system for horizontal scaling of MySQL";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ urandom ];
+    maintainers = [ ];
   };
 }

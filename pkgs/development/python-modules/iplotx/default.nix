@@ -55,7 +55,7 @@ buildPythonPackage rec {
     "test_labels_and_colors"
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "iplotx" ];
 

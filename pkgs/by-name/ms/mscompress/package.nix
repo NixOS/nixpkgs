@@ -24,10 +24,10 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm444 -t $out/share/doc/mscompress ChangeLog README TODO
   '';
 
-  meta = with lib; {
+  meta = {
     description = ''Microsoft "compress.exe/expand.exe" compatible (de)compressor'';
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = lib.platforms.all;
   };
 })

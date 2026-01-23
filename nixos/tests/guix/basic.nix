@@ -9,7 +9,7 @@ import ../make-test-python.nix (
   { lib, pkgs, ... }:
   {
     name = "guix-basic";
-    meta.maintainers = with lib.maintainers; [ foo-dogsquared ];
+    meta.maintainers = [ ];
 
     nodes.machine =
       { config, ... }:

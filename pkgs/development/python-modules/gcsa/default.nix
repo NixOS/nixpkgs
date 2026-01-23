@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   pyfakefs,
   tzlocal,
@@ -17,7 +16,6 @@ buildPythonPackage rec {
   pname = "gcsa";
   version = "2.6.0";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "kuzmoyev";
@@ -41,10 +39,10 @@ buildPythonPackage rec {
   ];
   pythonImportsCheck = [ "gcsa" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pythonic wrapper for the Google Calendar API";
     homepage = "https://github.com/kuzmoyev/google-calendar-simple-api";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mbalatsko ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

@@ -68,17 +68,16 @@ stdenvNoCC.mkDerivation {
       ''
   );
 
-  meta = with lib; {
+  meta = {
     homepage = "https://fonts.google.com";
     description = "Font files available from Google Fonts";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       ofl
       ufl
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     hydraPlatforms = [ ];
-    maintainers = with maintainers; [ manveru ];
-    sourceProvenance = [ sourceTypes.binaryBytecode ];
+    sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
   };
 }

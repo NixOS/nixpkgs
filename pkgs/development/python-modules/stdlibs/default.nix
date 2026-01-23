@@ -24,11 +24,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "stdlibs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Overview of the Python stdlib";
     homepage = "https://github.com/omnilib/stdlibs";
     changelog = "https://github.com/omnilib/stdlibs/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -22,10 +22,10 @@ rustPlatform.buildRustPackage rec {
     ln -s $out/bin/seh $out/bin/seehecht
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to quickly open a markdown document with already filled out frontmatter";
-    license = licenses.lgpl3Only;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ annaaurora ];
+    license = lib.licenses.lgpl3Only;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ annaaurora ];
   };
 }

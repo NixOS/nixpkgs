@@ -62,14 +62,13 @@ buildGoModule rec {
 
   passthru.updateScript = (./. + "/update-${channel}.sh");
 
-  meta = with lib; {
+  meta = {
     description = "Simple Kubernetes service mesh that improves security, observability and reliability";
     mainProgram = "linkerd";
     downloadPage = "https://github.com/linkerd/linkerd2/";
     homepage = "https://linkerd.io/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
-      bryanasdev000
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       Gonzih
     ];
   };

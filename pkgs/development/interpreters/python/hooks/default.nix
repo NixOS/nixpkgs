@@ -138,6 +138,7 @@ in
           propagatedBuildInputs = [ installer ];
           substitutions = {
             inherit pythonInterpreter pythonSitePackages;
+            python = python.interpreter;
           };
         } ./pypa-install-hook.sh
       )
@@ -439,20 +440,6 @@ in
         setuptools_has_parallel = setuptools != null && lib.versionAtLeast setuptools.version "69";
       };
     } ./setuptools-build-hook.sh
-  ) { };
-
-  setuptoolsRustBuildHook = callPackage (
-    { makePythonHook, setuptools-rust }:
-    makePythonHook {
-      name = "setuptools-rust-setup-hook";
-      propagatedBuildInputs = [ setuptools-rust ];
-      substitutions = {
-        pyLibDir = "${python}/lib/${python.libPrefix}";
-        cargoBuildTarget = stdenv.hostPlatform.rust.rustcTargetSpec;
-        cargoLinkerVar = stdenv.hostPlatform.rust.cargoEnvVarTarget;
-        targetLinker = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
-      };
-    } ./setuptools-rust-hook.sh
   ) { };
 
   unittestCheckHook = callPackage (

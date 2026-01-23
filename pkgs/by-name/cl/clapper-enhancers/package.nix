@@ -9,6 +9,8 @@
   libpeas2,
   json-glib,
   libsoup_3,
+  libmicrodns,
+  sqlite,
   glib,
   clapper-unwrapped,
   gst_all_1,
@@ -17,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clapper-enhancers";
-  version = "0.8.3";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "Rafostar";
     repo = "clapper-enhancers";
     tag = finalAttrs.version;
-    hash = "sha256-uj0ZZrS2Y896EDWeBsU3Q3S2kFdEg5FQkBOcI97FFWc=";
+    hash = "sha256-9ix58RlJKpNXq7L6hRBySaNA9umxcg52tJmqyv1x1Wg=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
     libpeas2
     json-glib
     libsoup_3
+    libmicrodns # for feature "control-hub"
+    sqlite # for feature "recall"
     glib
     clapper-unwrapped
     gst_all_1.gstreamer

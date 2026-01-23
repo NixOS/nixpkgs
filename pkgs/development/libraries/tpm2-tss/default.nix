@@ -115,6 +115,11 @@ stdenv.mkDerivation (finalAttrs: {
     done
     substituteInPlace src/tss2-fapi/ifapi_config.c \
       --replace-fail 'SYSCONFDIR' '"/etc"'
+
+    # https://github.com/tpm2-software/tpm2-tss/pull/3041
+    substituteInPlace test/unit/tcti-libtpms.c \
+      --replace-fail 'check_expected_ptr(st);' 'check_expected(st);' \
+      --replace-fail 'check_expected_ptr(buf_len);' 'check_expected(buf_len);'
   ''
   # tcti tests rely on mocking function calls, which appears not to be supported
   # on clang
@@ -166,12 +171,12 @@ stdenv.mkDerivation (finalAttrs: {
   # before we could run tests, so we make turn checkPhase into installCheckPhase
   installCheckTarget = "check";
 
-  meta = with lib; {
+  meta = {
     description = "OSS implementation of the TCG TPM2 Software Stack (TSS2)";
     homepage = "https://github.com/tpm2-software/tpm2-tss";
-    license = licenses.bsd2;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       baloo
       scottstephens
     ];

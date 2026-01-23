@@ -11,16 +11,14 @@ bundlerApp {
 
   passthru.updateScript = bundlerUpdateScript "pt";
 
-  meta = with lib; {
+  meta = {
     description = "Minimalist command-line Pivotal Tracker client";
     homepage = "http://www.github.com/raul/pt";
-    license = licenses.mit;
-    maintainers = with maintainers; [
-      ebzzry
-      manveru
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       nicknovitski
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "pt";
   };
 }

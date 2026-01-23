@@ -24,11 +24,11 @@ buildDunePackage rec {
 
   doCheck = false; # requires `tezt`
 
-  meta = with lib; {
+  meta = {
     homepage = "https://deducteam.github.io";
     description = "Logical framework based on the λΠ-calculus modulo rewriting";
-    license = licenses.cecill-b;
+    license = lib.licenses.cecill-b;
     changelog = "https://github.com/Deducteam/Dedukti/raw/${version}/CHANGELOG.md";
-    maintainers = with maintainers; [ bcdarwin ];
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

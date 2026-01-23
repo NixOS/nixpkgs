@@ -76,7 +76,11 @@ stdenv.mkDerivation rec {
     (lib.enableFeature enableStatic "static")
     (lib.enableFeature enableShared "shared")
   ]
-  ++ lib.optional stdenv.hostPlatform.isFreeBSD "--with-pic";
+  ++ lib.optional stdenv.hostPlatform.isFreeBSD "--with-pic"
+  # Work around build failure caused by the gnulib workaround for
+  # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=114870.
+  # remove after gnulib is updated
+  ++ lib.optional stdenv.hostPlatform.isCygwin "gl_cv_clean_version_stddef=yes";
 
   passthru = { inherit setupHooks; };
 

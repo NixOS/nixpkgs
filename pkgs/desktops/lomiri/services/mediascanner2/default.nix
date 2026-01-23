@@ -5,9 +5,7 @@
   gitUpdater,
   nixosTests,
   testers,
-  # dbus-cpp not compatible with Boost 1.87
-  # https://gitlab.com/ubports/development/core/lib-cpp/dbus-cpp/-/issues/8
-  boost186,
+  boost,
   cmake,
   cmake-extras,
   dbus,
@@ -60,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    boost186
+    boost
     cmake-extras
     dbus
     dbus-cpp

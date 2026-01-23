@@ -52,12 +52,19 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-e7Wjda+CobYatblvVCGkMAO2aWrdSCp7q+qIEGnGDCY=";
   };
 
-  # Fix hangs in tests, hopefully
-  # FIXME: remove in next release
   patches = [
+    # Fix hangs in tests, hopefully
+    # FIXME: remove in next release
     (fetchpatch {
       url = "https://gitlab.com/sane-project/backends/-/commit/8acc267d5f4049d8438456821137ae56e91baea9.patch";
       hash = "sha256-IyupDeH1MPvEBnGaUzBbCu106Gp7zXxlPGFAaiiINQI=";
+    })
+    # Fix multipages scanning
+    # https://gitlab.com/sane-project/backends/-/merge_requests/883
+    (fetchpatch {
+      url = "https://gitlab.com/sane-project/backends/-/commit/fbf80b0fc1d262ed40d4b49dd53c14707083ef60.patch";
+      hash = "sha256-9KKTr7p1vCgvGr6hFY83K5gbL7Ilm4Uzc86JIxv+ahI=";
+      revert = true;
     })
   ];
 

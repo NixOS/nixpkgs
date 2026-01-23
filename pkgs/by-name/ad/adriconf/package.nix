@@ -28,6 +28,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-0XTsYeS4tNAnGhuJ81fmjHhFS6fVq1lirui5b+ojxTQ=";
   };
 
+  # fix build with c23
+  #    error: 'uint16_t' does not name a type
+  postPatch = ''
+    sed -i '1i #include <cstdint>' adriconf/ValueObject/GPUInfo.h
+  '';
+
   nativeBuildInputs = [
     cmake
     gettext # msgfmt

@@ -3,9 +3,9 @@
   buildPythonPackage,
   fetchPypi,
   google-api-core,
+  google-auth,
   google-cloud-testutils,
   grpcio,
-  grpcio-status,
   mock,
   proto-plus,
   protobuf,
@@ -29,11 +29,12 @@ buildPythonPackage rec {
 
   dependencies = [
     google-api-core
+    google-auth
     grpcio
-    grpcio-status
     proto-plus
     protobuf
-  ];
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     google-cloud-testutils
@@ -47,11 +48,11 @@ buildPythonPackage rec {
     "google.ai.generativelanguage_v1beta2"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Google Ai Generativelanguage API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-ai-generativelanguage";
     changelog = "https://github.com/googleapis/google-cloud-python/blob/google-ai-generativelanguage-v${version}/packages/google-ai-generativelanguage/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

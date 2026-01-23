@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "batinfo";
   version = "0.4.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "nicolargo";
@@ -39,11 +36,11 @@ buildPythonPackage rec {
     "test_batinfo_name_default"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to retrieve battery information";
     homepage = "https://github.com/nicolargo/batinfo";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ koral ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ koral ];
+    platforms = lib.platforms.linux;
   };
 }

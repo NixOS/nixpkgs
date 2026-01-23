@@ -10,7 +10,6 @@
   gnupg,
   pbr,
   pexpect,
-  pythonAtLeast,
   pytestCheckHook,
   setuptools,
   replaceVars,
@@ -41,8 +40,7 @@ buildPythonPackage rec {
     })
   ];
 
-  # Remove enum34 requirement if Python >= 3.4
-  pythonRemoveDeps = lib.optionals (pythonAtLeast "3.4") [
+  pythonRemoveDeps = [
     "enum34"
   ];
 

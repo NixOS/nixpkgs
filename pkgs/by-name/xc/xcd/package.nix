@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Colorized hexdump tool";
     homepage = "https://www.muppetlabs.com/~breadbox/software/xcd.html";
-    maintainers = [ maintainers.xfnw ];
-    license = licenses.mit;
-    platforms = platforms.unix;
+    maintainers = [ lib.maintainers.xfnw ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
     mainProgram = "xcd";
   };
 }

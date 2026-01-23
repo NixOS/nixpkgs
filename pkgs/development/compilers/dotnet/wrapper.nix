@@ -33,6 +33,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       license
       maintainers
       platforms
+      broken
       ;
   };
 

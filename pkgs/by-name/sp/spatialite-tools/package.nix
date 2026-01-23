@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
 
   env = {
     NIX_LDFLAGS = toString [
+      "-lm"
       "-lxml2"
       (lib.optionalString stdenv.hostPlatform.isDarwin "-liconv")
     ];

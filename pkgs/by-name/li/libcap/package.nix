@@ -3,6 +3,7 @@
   lib,
   buildPackages,
   fetchurl,
+  fetchpatch,
   runtimeShell,
   pkgsBuildHost,
   usePam ? !isStatic,
@@ -22,17 +23,19 @@
   squid,
   tor,
   uwsgi,
+  testers,
+  libcap,
 }:
 
 assert usePam -> pam != null;
 
 stdenv.mkDerivation rec {
   pname = "libcap";
-  version = "2.76";
+  version = "2.77";
 
   src = fetchurl {
     url = "mirror://kernel/linux/libs/security/linux-privs/libcap2/${pname}-${version}.tar.xz";
-    hash = "sha256-Yp2kqymQDQ9/zDYicHN0MRmSX9cRyZoWibv1ybQMjm8=";
+    hash = "sha256-iXvBi0Svwmxw54zq09uzHhVKzCS+4IWloJB5qI2/b1I=";
   };
 
   outputs = [
@@ -63,7 +66,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals withGo [
     "GOLANG=yes"
-    ''GOCACHE=''${TMPDIR}/go-cache''
+    "GOCACHE=\${TMPDIR}/go-cache"
     "GOFLAGS=-trimpath"
     "GOARCH=${pkgsBuildHost.go.GOARCH}"
     "GOOS=${pkgsBuildHost.go.GOOS}"
@@ -71,6 +74,13 @@ stdenv.mkDerivation rec {
   ++ lib.optionals isStatic [
     "SHARED=no"
     "LIBCSTATIC=yes"
+  ];
+
+  patches = [
+    (fetchpatch {
+      url = "https://git.kernel.org/pub/scm/libs/libcap/libcap.git/patch/?id=d628b3bfe40338d4efff6b0ae50f250a0eb884c7";
+      hash = "sha256-Eiv/BOJZkduL+hOEJd8K1LQd9wvOeCKchE2GaLcerVc=";
+    })
   ];
 
   postPatch = ''
@@ -86,11 +96,6 @@ stdenv.mkDerivation rec {
       --replace 'lib_prefix=$(exec_prefix)' "lib_prefix=$lib" \
       --replace 'inc_prefix=$(prefix)' "inc_prefix=$dev" \
       --replace 'man_prefix=$(prefix)' "man_prefix=$doc"
-  ''
-  + lib.optionalString withGo ''
-    # disable cross compilation for artifacts which are run as part of the build
-    substituteInPlace go/Makefile \
-      --replace-fail '$(GO) run' 'GOOS= GOARCH= $(GO) run'
   '';
 
   installFlags = [ "RAISE_SETFCAP=no" ];
@@ -124,6 +129,9 @@ stdenv.mkDerivation rec {
       tor
       uwsgi
       ;
+    pkg-config = testers.hasPkgConfigModules {
+      package = libcap;
+    };
   };
 
   meta = {
@@ -131,5 +139,9 @@ stdenv.mkDerivation rec {
     homepage = "https://sites.google.com/site/fullycapable";
     platforms = lib.platforms.linux;
     license = lib.licenses.bsd3;
+    pkgConfigModules = [
+      "libcap"
+      "libpsx"
+    ];
   };
 }

@@ -183,12 +183,12 @@ in
 
     adapter = mkOption {
       default =
-        if ((cfg.configFile != configFile) || (builtins.baseNameOf cfg.configFile) == "Caddyfile") then
+        if ((cfg.configFile != configFile) || (baseNameOf cfg.configFile) == "Caddyfile") then
           "caddyfile"
         else
           null;
       defaultText = literalExpression ''
-        if ((cfg.configFile != configFile) || (builtins.baseNameOf cfg.configFile) == "Caddyfile") then "caddyfile" else null
+        if ((cfg.configFile != configFile) || (baseNameOf cfg.configFile) == "Caddyfile") then "caddyfile" else null
       '';
       example = literalExpression "nginx";
       type = with types; nullOr str;
@@ -421,9 +421,9 @@ in
 
       serviceConfig =
         let
-          runOptions = ''--config ${configPath} ${
+          runOptions = "--config ${configPath} ${
             optionalString (cfg.adapter != null) "--adapter ${cfg.adapter}"
-          }'';
+          }";
         in
         {
           # Override the `ExecStart` line from upstream's systemd unit file by our own:
@@ -431,7 +431,7 @@ in
           # If the empty string is assigned to this option, the list of commands to start is reset, prior assignments of this option will have no effect.
           ExecStart = [
             ""
-            ''${lib.getExe cfg.package} run ${runOptions} ${optionalString cfg.resume "--resume"}''
+            "${lib.getExe cfg.package} run ${runOptions} ${optionalString cfg.resume "--resume"}"
           ];
           # Validating the configuration before applying it ensures we’ll get a proper error that will be reported when switching to the configuration
           ExecReload = [

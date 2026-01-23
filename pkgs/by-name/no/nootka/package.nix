@@ -57,7 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       mmlb
-      orivej
     ];
     platforms = lib.platforms.linux;
   };

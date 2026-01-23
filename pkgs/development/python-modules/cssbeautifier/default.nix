@@ -4,7 +4,6 @@
   editorconfig,
   fetchPypi,
   jsbeautifier,
-  pythonOlder,
   setuptools,
   six,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "cssbeautifier";
   version = "1.15.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -34,12 +31,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cssbeautifier" ];
 
-  meta = with lib; {
+  meta = {
     description = "CSS unobfuscator and beautifier";
     mainProgram = "css-beautify";
     homepage = "https://github.com/beautifier/js-beautify";
     changelog = "https://github.com/beautifier/js-beautify/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ traxys ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ traxys ];
   };
 }

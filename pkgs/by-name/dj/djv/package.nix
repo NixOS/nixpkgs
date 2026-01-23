@@ -6,7 +6,7 @@
   pkg-config,
   bzip2,
   feather-tk,
-  ffmpeg,
+  ffmpeg_7,
   freetype,
   glfw,
   imath,
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     bzip2
     feather-tk
-    ffmpeg
+    ffmpeg_7
     freetype
     glfw
     imath

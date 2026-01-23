@@ -1,25 +1,25 @@
 {
   lib,
-  flutter332,
+  flutter338,
   fetchFromGitHub,
   copyDesktopItems,
   makeDesktopItem,
 }:
 
-flutter332.buildFlutterApplication rec {
+flutter338.buildFlutterApplication rec {
   pname = "windsend";
-  version = "1.5.5";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "doraemonkeys";
     repo = "WindSend";
     tag = "v${version}";
-    hash = "sha256-u82VmMuc7+tbc1Qgs5lbyFlNTauJm6E9KFXPHBdTryA=";
+    hash = "sha256-KCtYV7z+QqufXiHzuEoX8XVIPfNPBdp0F1FLiPq+PDM=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  gitHashes = lib.importJSON ./gitHashes.json;
+  gitHashes = lib.importJSON ./git-hashes.json;
 
   sourceRoot = "${src.name}/flutter/wind_send";
 

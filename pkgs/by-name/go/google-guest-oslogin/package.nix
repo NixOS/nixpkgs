@@ -52,11 +52,11 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) google-oslogin;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/GoogleCloudPlatform/compute-image-packages";
     description = "OS Login Guest Environment for Google Compute Engine";
-    license = licenses.asl20;
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

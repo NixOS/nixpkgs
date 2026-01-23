@@ -26,16 +26,15 @@ let
             echo "parseconfig: removing $NAME"
             sed -i /^$NAME=/d .config
 
-            #if test "$OPTION" != n; then
-                echo "parseconfig: setting $NAME=$OPTION"
-                echo "$NAME=$OPTION" >> .config
-            #fi
+            echo "parseconfig: setting $NAME=$OPTION"
+            echo "$NAME=$OPTION" >> .config
         done
         set +x
     }
   '';
 
   # UCLIBC_SUSV4_LEGACY defines 'tmpnam', needed for gcc libstdc++ builds.
+  # 'ftw' needed to build acl, a coreutils dependency
   nixConfig = ''
     RUNTIME_PREFIX "/"
     DEVEL_PREFIX "/"
@@ -52,27 +51,33 @@ let
   + lib.optionalString (stdenv.hostPlatform.gcc.float or "" == "soft") ''
     UCLIBC_HAS_FPU n
   ''
-  + lib.optionalString (stdenv.hostPlatform.isAarch32 && isCross) ''
+  + lib.optionalString stdenv.hostPlatform.isEabi ''
     CONFIG_ARM_EABI y
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLittleEndian ''
     ARCH_WANTS_BIG_ENDIAN n
     ARCH_BIG_ENDIAN n
     ARCH_WANTS_LITTLE_ENDIAN y
     ARCH_LITTLE_ENDIAN y
-    UCLIBC_HAS_FPU n
+  ''
+  + lib.optionalString stdenv.hostPlatform.isBigEndian ''
+    ARCH_WANTS_BIG_ENDIAN y
+    ARCH_BIG_ENDIAN y
+    ARCH_WANTS_LITTLE_ENDIAN n
+    ARCH_LITTLE_ENDIAN n
   '';
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "uclibc-ng";
-  version = "1.0.55";
+  version = "1.0.56";
 
   src = fetchurl {
     url = "https://downloads.uclibc-ng.org/releases/${finalAttrs.version}/uClibc-ng-${finalAttrs.version}.tar.xz";
-    hash = "sha256-X386r92yygj7KVvkVWHAGIQHED10Rs/SZLm4Iv7T7S0=";
+    hash = "sha256-I8nKtUwRPgIPsgudwGvkpJVg33kbePy8LKiZpujyE90=";
   };
 
-  # 'ftw' needed to build acl, a coreutils dependency
   configurePhase = ''
-    make defconfig
+    make defconfig ARCH=${stdenv.hostPlatform.linuxArch}
     ${configParser}
     cat << EOF | parseconfig
     ${nixConfig}
@@ -92,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [
     "ARCH=${stdenv.hostPlatform.linuxArch}"
     "TARGET_ARCH=${stdenv.hostPlatform.linuxArch}"
-    "VERBOSE=1"
+    "V=1"
   ]
   ++ lib.optionals isCross [
     "CROSS=${stdenv.cc.targetPrefix}"
@@ -144,9 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
       experimental and need more testing.
     '';
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [
-      rasendubi
-    ];
+    maintainers = with lib.maintainers; [ aleclearmind ];
     platforms = lib.platforms.linux;
     badPlatforms = lib.platforms.aarch64;
   };

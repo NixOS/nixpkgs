@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "kondo";
-  version = "0.8";
+  version = "0.9";
 
   src = fetchFromGitHub {
     owner = "tbillington";
     repo = "kondo";
     rev = "v${version}";
-    hash = "sha256-OqOmOujnyLTqwzNvLWudQi+xa5v37JTtyUXaItnpnfs=";
+    hash = "sha256-lbj1usgwfp7IiCNPtmHSHvX3ARGY5UpJYT89U3+kTuk=";
   };
 
-  cargoHash = "sha256-jmN7mtQ3CXfyeYrYD+JBE6ppln8+VJRBzygmczo8M04=";
+  cargoHash = "sha256-IrUUAz4XEw3rxj8SuWMvBZu9pzCxOm5NZfiWp8i8MMo=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -28,11 +28,10 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/kondo --completions zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Save disk space by cleaning unneeded files from software projects";
     homepage = "https://github.com/tbillington/kondo";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne ];
+    license = lib.licenses.mit;
     mainProgram = "kondo";
   };
 }

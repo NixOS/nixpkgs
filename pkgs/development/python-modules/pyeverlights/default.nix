@@ -23,10 +23,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "pyeverlights" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for interfacing with an EverLights control box";
     homepage = "https://github.com/joncar/pyeverlights";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

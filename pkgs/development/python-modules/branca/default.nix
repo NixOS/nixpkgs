@@ -4,7 +4,6 @@
   fetchFromGitHub,
   jinja2,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
   selenium,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "branca";
   version = "0.8.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "python-visualization";
@@ -50,11 +47,11 @@ buildPythonPackage rec {
     "test_rendering_figure_notebook"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Generate complex HTML+JS pages with Python";
     homepage = "https://github.com/python-visualization/branca";
     changelog = "https://github.com/python-visualization/branca/blob/v${version}/CHANGES.txt";
-    license = with licenses; [ mit ];
+    license = with lib.licenses; [ mit ];
     maintainers = [ ];
   };
 }

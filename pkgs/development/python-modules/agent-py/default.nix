@@ -39,10 +39,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "agent" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper around the Agent REST API";
     homepage = "https://github.com/ispysoftware/agent-py";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jamiemagee ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jamiemagee ];
   };
 }

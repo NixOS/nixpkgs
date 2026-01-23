@@ -33,6 +33,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-3+6g4KbybWckxK8B2pp7iEh62y2Bunxy/K9S21IsmtQ=";
   };
 
+  postPatch = ''
+    sed -e '1i#include <cstdint>' -i src/cli/cli.h
+  '';
+
   nativeBuildInputs = [
     python3
     docutils
@@ -88,15 +92,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Cryptographic algorithms library";
     homepage = "https://botan.randombit.net";
     mainProgram = "botan";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       raskin
     ];
-    platforms = platforms.unix;
-    license = licenses.bsd2;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.bsd2;
     knownVulnerabilities = lib.optional (
       !enableForMonotone
     ) "Botan2 is EOL and its full interface surface contains unpatched vulnerabilities";

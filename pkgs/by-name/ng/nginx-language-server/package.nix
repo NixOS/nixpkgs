@@ -6,7 +6,15 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+let
+  pythonPackages = python3Packages.overrideScope (
+    self: super: {
+      lsprotocol = self.lsprotocol_2023;
+      pygls = self.pygls_1;
+    }
+  );
+in
+pythonPackages.buildPythonApplication rec {
   pname = "nginx-language-server";
   version = "0.9.0";
   pyproject = true;
@@ -18,7 +26,7 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-v9+Y8NBvN8HvTdNrK9D9YQuqDB3olIu5LfYapjlVlAM=";
   };
 
-  build-system = with python3Packages; [
+  build-system = with pythonPackages; [
     poetry-core
   ];
 
@@ -26,7 +34,7 @@ python3Packages.buildPythonApplication rec {
     "pydantic"
   ];
 
-  dependencies = with python3Packages; [
+  dependencies = with pythonPackages; [
     crossplane
     lsprotocol
     pydantic
@@ -39,7 +47,6 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
 
   passthru = {
     updateScript = nix-update-script { };

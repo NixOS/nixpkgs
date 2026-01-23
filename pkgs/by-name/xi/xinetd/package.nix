@@ -19,6 +19,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   buildInputs = [
     libtirpc
   ];

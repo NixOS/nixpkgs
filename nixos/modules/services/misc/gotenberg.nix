@@ -351,6 +351,4 @@ in
       // optionalAttrs (cfg.environmentFile != null) { EnvironmentFile = cfg.environmentFile; };
     };
   };
-
-  meta.maintainers = with lib.maintainers; [ pyrox0 ];
 }

@@ -4,15 +4,12 @@
   snap7,
   fetchFromGitHub,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "python-snap7";
   version = "2.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "gijzelaerr";
@@ -36,11 +33,11 @@ buildPythonPackage rec {
     "snap7.util"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for the snap7 PLC communication library";
     mainProgram = "snap7-server";
     homepage = "https://github.com/gijzelaerr/python-snap7";
-    license = licenses.mit;
-    maintainers = with maintainers; [ freezeboy ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-statuses";
-  version = "0.6.2";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "bircni";
     repo = "git-statuses";
     tag = finalAttrs.version;
-    hash = "sha256-ZjlLpPFd+T3NIK2lrzaCfNI7308n3wOco+scGJhxFNI=";
+    hash = "sha256-R0PQIgZ6dXzXmBacNMV9Xc4zwkViKBvEtW1BP/X5Res=";
   };
 
-  cargoHash = "sha256-30WX9dCvrjvPUhn2oIn6unAWEkTB8U2mCEXmixYVIkk=";
+  cargoHash = "sha256-WU8fRtmoYHsvEw2DhDhLX50PzynDJJt3pTpnFvH3G4g=";
 
   # Needed to get openssl-sys to use pkg-config.
   env.OPENSSL_NO_VENDOR = 1;

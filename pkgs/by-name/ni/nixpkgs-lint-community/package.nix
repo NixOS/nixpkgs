@@ -17,13 +17,13 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-wK2ZMqxgSLGhM7TsztFkZHB2+WnT+8Tjd3UrFdIvGpI=";
 
-  meta = with lib; {
+  meta = {
     description = "Fast semantic linter for Nix using tree-sitter";
     mainProgram = "nixpkgs-lint";
     homepage = "https://github.com/nix-community/nixpkgs-lint";
     changelog = "https://github.com/nix-community/nixpkgs-lint/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       artturin
     ];
   };

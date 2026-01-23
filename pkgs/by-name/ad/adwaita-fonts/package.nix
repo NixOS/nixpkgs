@@ -31,7 +31,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Adwaita Sans, a variation of Inter, and Adwaita Mono, Iosevka customized to match Inter";
     homepage = "https://gitlab.gnome.org/GNOME/adwaita-fonts";
     license = lib.licenses.ofl;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.qxrein ];
     teams = [ lib.teams.gnome ];
   };

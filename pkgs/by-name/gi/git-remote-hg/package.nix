@@ -13,7 +13,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "git-remote-hg";
   version = "1.0.4";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mnauw";

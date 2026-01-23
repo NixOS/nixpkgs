@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libnbd";
-  version = "1.22.1";
+  version = "1.22.5";
 
   src = fetchurl {
     url = "https://download.libguestfs.org/libnbd/${lib.versions.majorMinor version}-stable/${pname}-${version}.tar.gz";
-    hash = "sha256-9oVJrU2YcXGnKaDf8SoHKGtG7vpH5355/DKIiYrchHI=";
+    hash = "sha256-y/Ria/R8jC+Zu5bHnlqM7JozNzyt6i/Bu/4E5uFbbjw=";
   };
 
   nativeBuildInputs = [
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     substituteAllInPlace $LIBNBD_PYTHON_METADATA
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.com/nbdkit/libnbd";
     description = "Network Block Device client library in userspace";
     longDescription = ''
@@ -82,11 +82,11 @@ stdenv.mkDerivation rec {
       - Bindings in several programming languages.
       - Shell (nbdsh) for command line and scripting.
     '';
-    license = with licenses; lgpl21Plus;
-    maintainers = with maintainers; [
+    license = with lib.licenses; lgpl21Plus;
+    maintainers = with lib.maintainers; [
       humancalico
     ];
-    platforms = with platforms; linux;
+    platforms = with lib.platforms; linux;
     broken = buildOcamlBindings && !lib.versionAtLeast ocamlPackages.ocaml.version "4.05";
   };
 }

@@ -39,14 +39,14 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Modern, parallel SAT solver (${
       if enableUnfree then "parallel" else "sequential"
     } version)";
     mainProgram = "glucose";
     homepage = "https://www.labri.fr/perso/lsimon/research/glucose/";
-    license = if enableUnfree then licenses.unfreeRedistributable else licenses.mit;
-    platforms = platforms.unix;
+    license = if enableUnfree then lib.licenses.unfreeRedistributable else lib.licenses.mit;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 }

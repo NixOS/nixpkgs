@@ -42,10 +42,10 @@
     "version": "3.2.1"
   },
   "cookie-notice": {
-    "path": "cookie-notice/tags/2.5.6",
-    "rev": "3262965",
-    "sha256": "1h7avy7mni4cfvh672vnk6n4npz57mpgm8xssp089hn8vqj2d1zx",
-    "version": "2.5.6"
+    "path": "cookie-notice/tags/2.5.11",
+    "rev": "3416491",
+    "sha256": "0g9xy3dgywnqv2v0wd34rixdqavkrp8zkv6bm8h6kh5q77n168a5",
+    "version": "2.5.11"
   },
   "disable-xml-rpc": {
     "path": "disable-xml-rpc/tags/1.0.1",

@@ -5,15 +5,12 @@
   pytestCheckHook,
   setuptools,
   flask,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "flask-httpauth";
   version = "4.8.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "Flask-HTTPAuth";
@@ -29,11 +26,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ] ++ flask.optional-dependencies.async;
 
-  meta = with lib; {
+  meta = {
     description = "Extension that provides HTTP authentication for Flask routes";
     homepage = "https://github.com/miguelgrinberg/Flask-HTTPAuth";
     changelog = "https://github.com/miguelgrinberg/Flask-HTTPAuth/blob/v${version}/CHANGES.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ oxzi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ oxzi ];
   };
 }

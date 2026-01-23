@@ -14,6 +14,9 @@
   numpy,
   pytest,
   makeSetupHook,
+  # Build tests to verify cross-compilation works, but only when CPU bit
+  # depth matches (otherwise Python headers cause LONG_BIT mismatch errors)
+  buildTests ? stdenv.hostPlatform.parsed.cpu.bits == stdenv.buildPlatform.parsed.cpu.bits,
 }:
 let
   setupHook = makeSetupHook {
@@ -44,9 +47,7 @@ buildPythonPackage rec {
     pybind11.passthru.scikit-build-core-no-tests
   ];
 
-  buildInputs = [
-    # Used only for building tests - something we do even when cross
-    # compiling.
+  buildInputs = lib.optionals buildTests [
     catch2
     boost
     eigen
@@ -65,13 +66,11 @@ buildPythonPackage rec {
   ];
 
   cmakeFlags = [
-    # Always build tests, because even when cross compiling building the tests
-    # is another confirmation that everything is OK.
-    (lib.cmakeBool "BUILD_TESTING" true)
+    (lib.cmakeBool "BUILD_TESTING" buildTests)
 
     # Override the `PYBIND11_NOPYTHON = true` in `pyproject.toml`. This
     # is required to build the tests.
-    (lib.cmakeBool "PYBIND11_NOPYTHON" false)
+    (lib.cmakeBool "PYBIND11_NOPYTHON" (!buildTests))
   ];
 
   dontUseCmakeConfigure = true;

@@ -34,10 +34,10 @@ buildPythonPackage rec {
   # Use nothing due to a cyclic dependency on snakemake
   pythonImportsCheck = [ ];
 
-  meta = with lib; {
+  meta = {
     description = "Snakemake storage plugin that reads and writes from a locally mounted filesystem using rsync";
     homepage = "https://github.com/snakemake/snakemake-storage-plugin-fs";
-    license = licenses.mit;
-    maintainers = with maintainers; [ veprbl ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

@@ -73,18 +73,18 @@ let
           ];
         };
 
-        meta = with lib; {
+        meta = {
           inherit description license;
           longDescription = ''
             This package provides a kana-to-kanji conversion dictionary for the
             SKK Japanese input method.
           '';
           homepage = "https://github.com/skk-dev/dict";
-          maintainers = with maintainers; [
+          maintainers = with lib.maintainers; [
             yuriaisaka
             midchildan
           ];
-          platforms = platforms.all;
+          platforms = lib.platforms.all;
         };
       };
     };

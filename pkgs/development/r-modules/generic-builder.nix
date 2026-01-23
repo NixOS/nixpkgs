@@ -10,7 +10,6 @@
 }:
 
 {
-  name,
   buildInputs ? [ ],
   requireX ? false,
   ...
@@ -78,6 +77,6 @@ stdenv.mkDerivation (
   }
   // attrs
   // {
-    name = "r-" + name;
+    name = "r-${attrs.name or "${attrs.pname}-${attrs.version}"}";
   }
 )

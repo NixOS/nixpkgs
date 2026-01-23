@@ -7,16 +7,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dix";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "faukah";
     repo = "dix";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-X+yFRLorfq9jvyMCvVCYUCh1pVN207XqTDr2FM1C+QE=";
+    hash = "sha256-p02luVvo02zFTpXUoIK86xIiLKdnhjzGaLJkZ3RSUdw=";
   };
 
-  cargoHash = "sha256-Y9cTncgTfv+mr5izioLF3wb6ZRBWe0eKAZ2iqcsf/Tk=";
+  cargoHash = "sha256-DBswUOoUMvTy9CijUJF2VGLTkx9WiT1ebdntl9+ytY4=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

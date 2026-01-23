@@ -39,7 +39,6 @@
   PlackMiddlewareReverseProxy,
   PlackTestExternalServer,
   Xapian,
-  TestSimple13,
   TimeDate,
   URI,
   XMLTreePP,
@@ -145,7 +144,6 @@ buildPerlPackage rec {
     xapian
     EmailMIME
     PlackTestExternalServer
-    TestSimple13
     XMLTreePP
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -181,13 +179,13 @@ buildPerlPackage rec {
     nixos-public-inbox = nixosTests.public-inbox;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://public-inbox.org/";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [
       julm
       qyliss
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

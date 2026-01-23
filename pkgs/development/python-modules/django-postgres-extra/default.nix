@@ -6,21 +6,14 @@
   django,
   python-dateutil,
   # test dependencies
-  coverage,
   dj-database-url,
   freezegun,
   postgresql,
   psycopg2,
-  pytest,
-  pytest-benchmark,
-  pytest-cov,
   pytest-django,
   pytest-freezegun,
   pytest-lazy-fixture,
   pytestCheckHook,
-  syrupy,
-  tox,
-  types-psycopg2,
 }:
 buildPythonPackage rec {
   pname = "django-postgres-extra";
@@ -42,21 +35,14 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    coverage
     dj-database-url
     freezegun
     postgresql
     psycopg2
-    pytest
-    pytest-benchmark
-    pytest-cov
     pytest-django
     pytest-freezegun
     pytest-lazy-fixture
     pytestCheckHook
-    syrupy
-    tox
-    types-psycopg2
   ];
 
   preCheck = ''
@@ -97,11 +83,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "psqlextra" ];
 
-  meta = with lib; {
+  meta = {
     description = "Bringing all of PostgreSQL's awesomeness to Django";
     homepage = "https://github.com/SectorLabs/django-postgres-extra";
     changelog = "https://github.com/SectorLabs/django-postgres-extra/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ b4dm4n ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ b4dm4n ];
   };
 }

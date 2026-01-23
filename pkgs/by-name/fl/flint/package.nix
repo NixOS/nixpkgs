@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   windows,
   autoconf,
   automake,
@@ -26,11 +25,11 @@ assert
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flint";
-  version = "3.3.1";
+  version = "3.4.0";
 
   src = fetchurl {
     url = "https://flintlib.org/download/flint-${finalAttrs.version}.tar.gz";
-    hash = "sha256-ZNcOUTB2z6lx4EELWMHaXTURKRPppWtE4saBtFnT6vs=";
+    hash = "sha256-lJdnmATerZJuOv/rjUxYc50cdoTWDCwSgnVQ0o5FSjM=";
   };
 
   patches = [

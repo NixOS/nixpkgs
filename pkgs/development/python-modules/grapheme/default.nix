@@ -2,15 +2,12 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "grapheme";
   version = "0.6.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -23,10 +20,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "grapheme" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python package for grapheme aware string handling";
     homepage = "https://github.com/alvinlindstam/grapheme";
-    license = licenses.mit;
-    maintainers = with maintainers; [ creator54 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ creator54 ];
   };
 }

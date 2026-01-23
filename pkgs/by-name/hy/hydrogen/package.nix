@@ -6,7 +6,6 @@
   pkg-config,
   alsa-lib,
   ladspa-sdk,
-  lash,
   libarchive,
   libjack2,
   liblo,
@@ -35,7 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     alsa-lib
     ladspa-sdk
-    lash
     libarchive
     libjack2
     liblo
@@ -58,6 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://www.hydrogen-music.org";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ orivej ];
+    maintainers = [ ];
   };
 })

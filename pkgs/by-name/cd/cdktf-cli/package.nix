@@ -14,6 +14,7 @@
   removeReferencesTo,
   testers,
   yarn,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -101,6 +102,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
+    bash ./tools/align-version.sh
+
     faketty yarn --offline build
 
     runHook postBuild
@@ -139,12 +142,15 @@ stdenv.mkDerivation (finalAttrs: {
       "$out/lib/node_modules/cdktf-cli/node_modules/@cdktf/hcl2json/main.wasm"
   '';
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-    };
-    updateScript = nix-update-script { };
-  };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
+  # Tries to write to /var/empty/.terraform.d on darwin
+  # even with writableTmpDirAsHomeHook and CHECKPOINT_DISABLE=1
+  doInstallCheck = stdenv.hostPlatform.isLinux;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "CDK for Terraform CLI";

@@ -33,7 +33,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-p1gqom9saNEIm6FXinEuIJtMGwjGfQx9uLpR2kb46Uw=";
   };
 
-  format = "other";
+  pyproject = false;
 
   patches = [ ./update-compatible-with-non-flatpak-env.patch ];
   postPatch = ''
@@ -88,12 +88,12 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://getfrog.app/";
     description = "Intuitive text extraction tool (OCR) for GNOME desktop";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "frog";
-    maintainers = with maintainers; [ foo-dogsquared ];
-    platforms = platforms.linux;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -11,7 +11,6 @@
   pyspnego,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   requests,
   requests-credssp,
@@ -21,9 +20,7 @@
 buildPythonPackage rec {
   pname = "pypsrp";
   version = "0.8.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jborean93";
@@ -64,11 +61,11 @@ buildPythonPackage rec {
     "test_psrp_multiple_commands"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "PowerShell Remoting Protocol Client library";
     homepage = "https://github.com/jborean93/pypsrp";
     changelog = "https://github.com/jborean93/pypsrp/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

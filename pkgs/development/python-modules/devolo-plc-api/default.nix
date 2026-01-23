@@ -8,7 +8,6 @@
   pytest-httpx,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   segno,
   setuptools-scm,
   syrupy,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "devolo-plc-api";
   version = "1.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "2Fake";
@@ -62,11 +59,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "devolo_plc_api" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to interact with Devolo PLC devices";
     homepage = "https://github.com/2Fake/devolo_plc_api";
     changelog = "https://github.com/2Fake/devolo_plc_api/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

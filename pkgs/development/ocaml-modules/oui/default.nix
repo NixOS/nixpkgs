@@ -15,15 +15,15 @@
 
 buildDunePackage (finalAttrs: {
   pname = "oui";
-  version = "0-unstable-2025-10-08";
+  version = "0-unstable-2025-12-02";
 
-  minimalOCamlVersion = "4.10";
+  minimalOCamlVersion = "4.13";
 
   src = fetchFromGitHub {
     owner = "OCamlPro";
     repo = "ocaml-universal-installer";
-    rev = "2fe2e33c3f8e1744fdd4dab04458043451bf9f62";
-    hash = "sha256-ALQIQ3Ab1Gs2xST9OwsO5IxixzgKlUg7uHZvfHMbv7Q=";
+    rev = "202dae889c4850674f7b40ca8d541f98afa2ba0f";
+    hash = "sha256-pwvp6bJF18NzKh/JSet05VHoJNZ7FKr0Hsi/RJ/TK4U=";
   };
 
   nativeBuildInputs = [

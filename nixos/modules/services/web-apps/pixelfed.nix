@@ -140,7 +140,7 @@ in
               "pics.''${config.networking.domain}"
             ];
             enableACME = true;
-            forceHttps = true;
+            forceSSL = true;
           }
         '';
         description = ''

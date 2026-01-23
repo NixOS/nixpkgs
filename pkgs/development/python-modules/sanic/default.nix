@@ -12,7 +12,6 @@
   multidict,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   sanic-ext,
   sanic-routing,
   sanic-testing,
@@ -29,8 +28,6 @@ buildPythonPackage rec {
   pname = "sanic";
   version = "25.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sanic-org";
@@ -123,12 +120,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sanic" ];
 
-  meta = with lib; {
+  meta = {
     description = "Web server and web framework";
     homepage = "https://github.com/sanic-org/sanic/";
     changelog = "https://github.com/sanic-org/sanic/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ p0lyw0lf ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ p0lyw0lf ];
     mainProgram = "sanic";
   };
 }

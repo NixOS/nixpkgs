@@ -3,7 +3,6 @@
   buildPythonPackage,
   docopt,
   fetchFromGitHub,
-  pythonOlder,
   pytz,
   requests,
   setuptools,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "epion";
   version = "0.0.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "devenzo-com";
@@ -36,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "epion" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to access Epion sensor data";
     homepage = "https://github.com/devenzo-com/epion_python";
     changelog = "https://github.com/devenzo-com/epion_python/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

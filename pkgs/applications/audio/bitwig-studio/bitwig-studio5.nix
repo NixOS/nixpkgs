@@ -92,11 +92,7 @@ stdenv.mkDerivation rec {
     # Removing it will force it to use our version.
     rm $out/libexec/lib/bitwig-studio/libxcb-imdkit.so.1
 
-    substitute usr/share/applications/com.bitwig.BitwigStudio.desktop \
-      $out/share/applications/com.bitwig.BitwigStudio.desktop \
-      --replace-fail "Exec=bitwig-studio" "Exec=$out/bin/bitwig-studio"
-
-      runHook postInstall
+    runHook postInstall
   '';
 
   postFixup = ''

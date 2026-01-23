@@ -556,7 +556,7 @@ in
             "/" = {
               priority = 1;
               index = "doku.php";
-              extraConfig = ''try_files $uri $uri/ @dokuwiki;'';
+              extraConfig = "try_files $uri $uri/ @dokuwiki;";
             };
 
             "@dokuwiki" = {
@@ -609,9 +609,9 @@ in
               rewrite @allow_media /lib/exe/fetch.php?media=/{http.regexp.path.1}
 
               @allow_detail   {
-                path /_detail*
+                path_regexp path ^/_detail/(.*)$
               }
-              rewrite @allow_detail /lib/exe/detail.php?media={path}
+              rewrite @allow_detail /lib/exe/detail.php?media=/{http.regexp.path.1}
 
               @allow_export   {
                 path /_export*

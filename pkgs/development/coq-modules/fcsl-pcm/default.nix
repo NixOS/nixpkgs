@@ -37,9 +37,9 @@ mkCoqDerivation {
     stdlib
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Coq library of Partial Commutative Monoids";
-    license = licenses.asl20;
-    maintainers = [ maintainers.proux01 ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.proux01 ];
   };
 }

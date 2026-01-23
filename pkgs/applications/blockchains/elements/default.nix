@@ -26,22 +26,14 @@
 
 stdenv.mkDerivation rec {
   pname = if withGui then "elements" else "elementsd";
-  version = "23.2.4";
+  version = "23.3.1";
 
   src = fetchFromGitHub {
     owner = "ElementsProject";
     repo = "elements";
     rev = "elements-${version}";
-    sha256 = "sha256-UNjYkEZBjGuhkwBxSkNXjBBcLQqoan/afCLhoR2lOY4=";
+    sha256 = "sha256-hqHKH9B6EITwZ4F+YdPJI4n3Z3EeXdPYbzRoNODlThY=";
   };
-
-  patches = [
-    # upnp: fix build with miniupnpc 2.2.8
-    (fetchpatch2 {
-      url = "https://github.com/bitcoin/bitcoin/commit/8acdf66540834b9f9cf28f16d389e8b6a48516d5.patch?full_index=1";
-      hash = "sha256-oDvHUvwAEp0LJCf6QBESn38Bu359TcPpLhvuLX3sm6M=";
-    })
-  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -107,7 +99,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Open Source implementation of advanced blockchain features extending the Bitcoin protocol";
     longDescription = ''
       The Elements blockchain platform is a collection of feature experiments and extensions to the
@@ -116,8 +108,8 @@ stdenv.mkDerivation rec {
       tokens.
     '';
     homepage = "https://www.github.com/ElementsProject/elements";
-    maintainers = with maintainers; [ prusnak ];
-    license = licenses.mit;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ prusnak ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

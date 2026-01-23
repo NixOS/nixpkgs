@@ -13,14 +13,14 @@
 }:
 buildPythonPackage rec {
   pname = "tidalapi";
-  version = "0.8.8";
+  version = "0.8.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "EbbLabs";
     repo = "python-tidal";
     tag = "v${version}";
-    hash = "sha256-+O+U8QZhaOdUgPONv1tb5ctiK8NmD2NJK0hokmNtUZM=";
+    hash = "sha256-5IGMSiDwEGCnMtTARmx8Z9nfc3BaCe6z32m5j2FFBAI=";
   };
 
   build-system = [

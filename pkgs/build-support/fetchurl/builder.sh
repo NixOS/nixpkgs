@@ -1,4 +1,15 @@
+source "$NIX_ATTRS_SH_FILE"
 source $mirrorsFile
+
+# Normalize `curlOpts` as a string.
+# If defined as a list (deprecated), it would be a bash array.
+if [[ "$(declare -p curlOpts 2&>/dev/null || true)" =~ ^"declare -a" ]]; then
+    unset _temp
+    _temp="${curlOpts[*]}"
+    unset curlOpts
+    curlOpts=$_temp
+    unset _temp
+fi
 
 curlVersion=$(curl -V | head -1 | cut -d' ' -f2)
 
@@ -22,16 +33,22 @@ if ! [ -f "$SSL_CERT_FILE" ]; then
     curl+=(--insecure)
 fi
 
-eval "curl+=($curlOptsList)"
+# NOTE:
+# `netrcPhase` should not attempt to access builder.sh implementation details (e.g., the `${curl[@]}` array),
+# The implementation detail could change in any Nixpkgs revision, including backports.
+if [[ -n "${netrcPhase-}" ]]; then
+    runPhase netrcPhase
+    curl+=(--netrc-file "$PWD/netrc")
+fi
 
 curl+=(
+    "${curlOptsList[@]}"
     $curlOpts
     $NIX_CURL_FLAGS
 )
 
 downloadedFile="$out"
 if [ -n "$downloadToTemp" ]; then downloadedFile="$TMPDIR/file"; fi
-
 
 tryDownload() {
     local url="$1"
@@ -107,10 +124,10 @@ tryHashedMirrors() {
 # URL list may contain ?. No glob expansion for that, please
 set -o noglob
 
-urls2=
-for url in $urls; do
+resolvedUrls=()
+for url in "${urls[@]}"; do
     if test "${url:0:9}" != "mirror://"; then
-        urls2="$urls2 $url"
+        resolvedUrls+=("$url")
     else
         url2="${url:9}"; echo "${url2/\// }" > split; read site fileName < split
         #varName="mirror_$site"
@@ -125,18 +142,17 @@ for url in $urls; do
             if test -n "${!varName}"; then mirrors="${!varName}"; fi
 
             for url3 in $mirrors; do
-                urls2="$urls2 $url3$fileName";
+                resolvedUrls+=("$url3$fileName");
             done
         fi
     fi
 done
-urls="$urls2"
 
 # Restore globbing settings
 set +o noglob
 
 if test -n "$showURLs"; then
-    echo "$urls" > $out
+    echo "${resolvedUrls[*]}" > $out
     exit 0
 fi
 
@@ -148,7 +164,7 @@ fi
 set -o noglob
 
 success=
-for url in $urls; do
+for url in "${resolvedUrls[@]}"; do
     if [ -z "$postFetch" ]; then
        case "$url" in
            https://github.com/*/archive/*)

@@ -30,10 +30,10 @@ buildPythonPackage rec {
     "pip_system_certs.bootstrap"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Live patches pip and requests to use system certs by default";
     homepage = "https://gitlab.com/alelec/pip-system-certs";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ slotThe ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ slotThe ];
   };
 }

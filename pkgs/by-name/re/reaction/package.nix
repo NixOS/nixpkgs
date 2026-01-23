@@ -1,9 +1,12 @@
 {
   lib,
-  fetchFromGitLab,
+  stdenv,
+  nixosTests,
   rustPlatform,
-  nix-update-script,
+  fetchFromGitLab,
+  versionCheckHook,
   installShellFiles,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "reaction";
@@ -19,9 +22,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-Bf9XmlY0IMPY4Convftd0Hv8mQbYoiE8WrkkAeaS6Z8=";
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
+
+  # cross compiling for linux target
+  buildInputs =
+    lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform && stdenv.hostPlatform.isLinux)
+      [
+        stdenv.cc.libc
+        (stdenv.cc.libc.static or null)
+      ];
 
   checkFlags = [
     # Those time-based tests behave poorly in low-resource environments (CI...)
@@ -41,9 +50,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --bash $releaseDir/reaction.bash \
       --fish $releaseDir/reaction.fish \
       --zsh $releaseDir/_reaction
+    mkdir -p $out/share/examples
+    install -Dm444 config/example* config/README.md $out/share/examples
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
   passthru.updateScript = nix-update-script { };
+  passthru.tests = { inherit (nixosTests) reaction reaction-firewall; };
 
   meta = {
     description = "Scan logs and take action: an alternative to fail2ban";
@@ -52,6 +68,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.agpl3Plus;
     mainProgram = "reaction";
     maintainers = with lib.maintainers; [ ppom ];
+    teams = [ lib.teams.ngi ];
     platforms = lib.platforms.unix;
   };
 })

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   cargo,
   rustPlatform,
   rustc,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "cryptg";
   version = "0.5.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "cher-nov";
@@ -49,10 +46,10 @@ buildPythonPackage rec {
     substituteInPlace pyproject.toml --replace-fail "setuptools[core]" "setuptools"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Official Telethon extension to provide much faster cryptography for Telegram API requests";
     homepage = "https://github.com/cher-nov/cryptg";
-    license = licenses.cc0;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.cc0;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 }

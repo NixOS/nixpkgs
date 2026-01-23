@@ -2,6 +2,7 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 buildNpmPackage (finalAttrs: {
@@ -16,6 +17,8 @@ buildNpmPackage (finalAttrs: {
   };
 
   npmDepsHash = "sha256-ow9viEFfyBUM2yDa63+pQCg6R5cAmznanqfI131fRxc=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Docker language server extension using dockerfile-language-server-nodejs for coc.nvim";

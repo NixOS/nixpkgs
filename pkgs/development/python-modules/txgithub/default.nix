@@ -35,10 +35,10 @@ buildPythonPackage rec {
   # No tests distributed
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "GitHub API client implemented using Twisted";
     homepage = "https://github.com/tomprince/txgithub";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

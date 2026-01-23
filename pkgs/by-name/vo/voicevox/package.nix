@@ -11,44 +11,45 @@
   makeWrapper,
   moreutils,
   nodejs,
-  pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  pnpm,
 
   _7zz,
   electron,
   voicevox-engine,
 }:
 
-let
-  pnpm = pnpm_9;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "voicevox";
-  version = "0.24.2";
+  version = "0.25.1";
 
   src = fetchFromGitHub {
     owner = "VOICEVOX";
     repo = "voicevox";
     tag = finalAttrs.version;
-    hash = "sha256-ploFrzxIseyUD7LINnFmshrg3QJV8KUkdbvDoJ/VkRk=";
+    hash = "sha256-l9aFuhOylcQrHa+0R0P4Jy5iL2gA6xJsUJt8KvWIMuM=";
   };
 
   patches = [
     (replaceVars ./hardcode-paths.patch {
+      electron_path = lib.getExe electron;
       sevenzip_path = lib.getExe _7zz;
       voicevox_engine_path = lib.getExe voicevox-engine;
     })
   ];
 
   postPatch = ''
-    # unlock the overly specific pnpm package version pin
-    jq 'del(.packageManager)' package.json | sponge package.json
+    # don't fail if node version doesn't fit the constraint
+    substituteInPlace .npmrc \
+      --replace-fail "engine-strict=true" ""
 
-    substituteInPlace package.json \
-      --replace-fail "999.999.999" "$version" \
-      --replace-fail ' && electron-builder --config electron-builder.config.cjs --publish never' ""
+    # unlock the overly specific pnpm package version pin
+    # and also set version to a proper value
+    jq "del(.packageManager) | .version = \"$version\"" package.json | sponge package.json
   '';
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
@@ -64,8 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
       moreutils
     ];
 
-    fetcherVersion = 1;
-    hash = "sha256-RKgqFmHQnjHS7yeUIbH9awpNozDOCCHplc/bmfxmMyg=";
+    fetcherVersion = 2;
+    hash = "sha256-U1hW6j1WRyuh2rUgMxwF8LCRk7wgSlV6cqapBoXvAdU=";
   };
 
   nativeBuildInputs = [
@@ -74,7 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     moreutils
     nodejs
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     copyDesktopItems
@@ -96,11 +98,11 @@ stdenv.mkDerivation (finalAttrs: {
     chmod -R u+w electron-dist
 
     # note: we patched out the call to electron-builder in postPatch
-    pnpm run electron:build
+    pnpm run electron:build:compile
 
     pnpm exec electron-builder \
       --dir \
-      --config electron-builder.config.cjs \
+      --config ./build/electronBuilderConfigLoader.cjs \
       -c.electronDist=electron-dist \
       -c.electronVersion=${electron.version}
 

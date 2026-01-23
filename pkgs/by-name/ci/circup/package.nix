@@ -45,12 +45,12 @@ python3.pkgs.buildPythonApplication rec {
     "test_install_auto_file_bad"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "CircuitPython library updater";
     homepage = "https://github.com/adafruit/circup";
     changelog = "https://github.com/adafruit/circup/releases/tag/${src.tag}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "circup";
   };
 }

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   perl,
   # Update the enabled crypt scheme ids in passthru when the enabled hashes change
   enableHashes ? "strong",
@@ -12,12 +13,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxcrypt";
-  version = "4.4.38";
+  version = "4.5.2";
 
   src = fetchurl {
     url = "https://github.com/besser82/libxcrypt/releases/download/v${finalAttrs.version}/libxcrypt-${finalAttrs.version}.tar.xz";
-    hash = "sha256-gDBLnDBup5kyfwHZp1Sb2ygxd4kYJjHxtU9FEbQgbdY=";
+    hash = "sha256-cVE6McAaQovM1TZ6Mv2V8RXW2sUPtbYMd51ceUKuwHE=";
   };
+
+  patches = [
+    # https://github.com/besser82/libxcrypt/pull/221
+    ./fix-symver-on-non-elf.patch
+  ];
 
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
   # necessary for FreeBSD code path in configure
@@ -36,7 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--disable-failure-tokens"
     # required for musl, android, march=native
     "--disable-werror"
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isCygwin "--disable-symvers";
 
   makeFlags =
     let
@@ -44,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     in
     [ ]
     # fixes: can't build x86_64-w64-mingw32 shared library unless -no-undefined is specified
-    ++ lib.optionals stdenv.hostPlatform.isWindows [ "LDFLAGS+=-no-undefined" ]
+    ++ lib.optionals stdenv.hostPlatform.isPE [ "LDFLAGS+=-no-undefined" ]
 
     # lld 17 sets `--no-undefined-version` by default and `libxcrypt`'s
     # version script unconditionally lists legacy compatibility symbols, even
@@ -78,9 +85,10 @@ stdenv.mkDerivation (finalAttrs: {
       '';
     };
     enabledCryptSchemeIds = [
-      # https://github.com/besser82/libxcrypt/blob/v4.4.35/lib/hashes.conf
+      # https://github.com/besser82/libxcrypt/blob/v4.5.0/lib/hashes.conf
       "y" # yescrypt
       "gy" # gost_yescrypt
+      "sm3y" # sm3_yescrypt
       "7" # scrypt
       "2b" # bcrypt
       "2y" # bcrypt_y
@@ -89,15 +97,15 @@ stdenv.mkDerivation (finalAttrs: {
     ];
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/besser82/libxcrypt/blob/v${finalAttrs.version}/NEWS";
     description = "Extended crypt library for descrypt, md5crypt, bcrypt, and others";
     homepage = "https://github.com/besser82/libxcrypt/";
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       dottedmag
       hexa
     ];
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
   };
 })

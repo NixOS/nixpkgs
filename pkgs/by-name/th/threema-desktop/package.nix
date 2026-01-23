@@ -14,7 +14,7 @@ let
   electronSrc = fetchFromGitHub {
     owner = "threema-ch";
     repo = "threema-web-electron";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-u1rzKFDrLxU/o7Oc2o/WBwbAncNWKJ9GAUBaNDPViZI=";
   };
 
@@ -25,7 +25,7 @@ let
     src = fetchFromGitHub {
       owner = "threema-ch";
       repo = "threema-web";
-      rev = "refs/tags/v${version}";
+      tag = "v${version}";
       hash = "sha256-GmyWKJdDgiRS7XxNjCyvt92Bn48kpP3+ZsfRouyUCM0=";
     };
 
@@ -118,10 +118,10 @@ buildNpmPackage rec {
       --add-flags $out/opt/threema/dist/src/main.js
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Desktop client for Threema, a privacy-focused end-to-end encrypted mobile messenger";
     homepage = "https://threema.ch";
-    license = licenses.agpl3Only;
+    license = lib.licenses.agpl3Only;
     mainProgram = "threema";
     maintainers = [ lib.maintainers.jonhermansen ];
     platforms = [ "x86_64-linux" ];

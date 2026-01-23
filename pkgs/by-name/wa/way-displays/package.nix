@@ -44,12 +44,12 @@ stdenv.mkDerivation rec {
     "CXX:=$(CXX)"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/alex-courtis/way-displays";
     description = "Auto Manage Your Wayland Displays";
-    license = licenses.mit;
-    maintainers = with maintainers; [ simoneruffini ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ simoneruffini ];
+    platforms = lib.platforms.linux;
     mainProgram = "way-displays";
   };
 }

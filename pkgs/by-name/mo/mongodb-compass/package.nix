@@ -40,7 +40,7 @@
 
 let
   pname = "mongodb-compass";
-  version = "1.48.1";
+  version = "1.49.0";
 
   selectSystem =
     attrs:
@@ -55,9 +55,9 @@ let
       }
     }";
     hash = selectSystem {
-      x86_64-linux = "sha256-C+0IezU2kAQzju3Ev2xl82ybQeB8B8ViXDHoRXPHIus=";
-      x86_64-darwin = "sha256-LtiXq1chSRUj/hgVRvHwS1KvJKiQW838K8EVSdmNSQk=";
-      aarch64-darwin = "sha256-P0VfIRmBgF65BcxoRNIh6e6ccqztO/BG7qtYP528YDI=";
+      x86_64-linux = "sha256-XbVgFYkamZWCVcik3Hh0MiuwCHCi2NDKusT/CRO+q0E=";
+      x86_64-darwin = "sha256-mqnVYJ1wsC1qekEM9CYkZ05DTKHTDUHnoVytm/5QMw4=";
+      aarch64-darwin = "sha256-fVnW4mygJOgpqIHlO2qjMt9zdQaVBqFLKX4CL31KvXg=";
     };
   };
 
@@ -179,7 +179,6 @@ stdenv.mkDerivation (finalAttrs: {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "mongodb-compass";
     maintainers = with lib.maintainers; [
-      bryanasdev000
       friedow
       iamanaws
     ];

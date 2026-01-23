@@ -107,15 +107,15 @@ effectiveStdenv.mkDerivation rec {
     "library"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://faculty.cse.tamu.edu/davis/suitesparse.html";
     description = "Suite of sparse matrix algorithms";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd2
       gpl2Plus
       lgpl21Plus
     ];
-    maintainers = with maintainers; [ ttuegel ];
-    platforms = with platforms; unix;
+    maintainers = with lib.maintainers; [ ttuegel ];
+    platforms = with lib.platforms; unix;
   };
 }

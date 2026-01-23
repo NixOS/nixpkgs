@@ -63,10 +63,10 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "http://horms.net/projects/kexec/kexec-tools";
     description = "Tools related to the kexec Linux feature";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     badPlatforms = [
       "microblaze-linux"
       "microblazeel-linux"
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
       "sparc64-linux"
       "powerpc-linux"
     ];
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     mainProgram = "kexec";
   };
 }

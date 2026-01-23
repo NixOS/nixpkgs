@@ -8,13 +8,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "faustPhysicalModeling";
-  version = "2.79.3";
+  version = "2.83.1";
 
   src = fetchFromGitHub {
     owner = "grame-cncm";
     repo = "faust";
     rev = version;
-    sha256 = "sha256-j5ADlKZriwLARpEJ/4xgvyAhF5ld9Hl2gXZS3NPJJj8=";
+    sha256 = "sha256-c1I5ha9QvnC7jKdycAhW/iAzUcEA7NopXAquIS001Y8=";
   };
 
   nativeBuildInputs = [
@@ -54,12 +54,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Physical models included with faust compiled as jack standalone and lv2 instruments";
     homepage = "https://github.com/grame-cncm/faust/tree/master-dev/examples/physicalModeling";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ magnetophon ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ magnetophon ];
     # compiles stuff for the build platform, difficult to do properly
     broken = stdenv.hostPlatform != stdenv.buildPlatform;
   };

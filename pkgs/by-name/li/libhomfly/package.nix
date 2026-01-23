@@ -29,11 +29,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/miguelmarco/libhomfly/";
     description = "Library to compute the homfly polynomial of knots and links";
-    license = licenses.unlicense;
-    teams = [ teams.sage ];
-    platforms = platforms.all;
+    license = lib.licenses.unlicense;
+    teams = [ lib.teams.sage ];
+    platforms = lib.platforms.all;
   };
 }

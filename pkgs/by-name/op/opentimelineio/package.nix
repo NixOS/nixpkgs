@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "opentimelineio";
-  version = "0.17.0";
+  version = "0.18.1";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "OpenTimelineIO";
     rev = "v${version}";
-    hash = "sha256-53KXjbhHxuEtu6iRGWrirvFamuZ/WbOTcKCfs1iqKmM=";
+    hash = "sha256-PEqQraLx6wiJecytp37q15VayOn2fvaSlOeLs3qrRqo=";
   };
 
   nativeBuildInputs = [

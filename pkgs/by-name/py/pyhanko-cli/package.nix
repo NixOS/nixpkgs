@@ -38,7 +38,7 @@ python3Packages.buildPythonApplication rec {
       click
       platformdirs
     ]
-    ++ lib.flatten (lib.attrValues pyhanko.optional-dependencies);
+    ++ lib.concatAttrValues pyhanko.optional-dependencies;
 
   nativeCheckInputs = with python3Packages; [
     pytestCheckHook

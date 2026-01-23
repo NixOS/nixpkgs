@@ -20,7 +20,7 @@
 buildPythonPackage rec {
   pname = "torchsde";
   version = "0.2.6";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google-research";
@@ -54,11 +54,11 @@ buildPythonPackage rec {
     "test_adjoint"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/google-research/torchsde/releases/tag/v${version}";
     description = "Differentiable SDE solvers with GPU support and efficient sensitivity analysis";
     homepage = "https://github.com/google-research/torchsde";
-    license = licenses.asl20;
-    teams = [ teams.tts ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.tts ];
   };
 }

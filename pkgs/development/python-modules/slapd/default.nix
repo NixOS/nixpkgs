@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   hatchling,
   openldap,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "slapd";
   version = "0.1.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   # Pypi tarball doesn't include tests/
   src = fetchFromGitHub {
@@ -37,12 +34,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "slapd" ];
 
-  meta = with lib; {
+  meta = {
     description = "Controls a slapd process in a pythonic way";
     homepage = "https://github.com/python-ldap/python-slapd";
     changelog = "https://github.com/python-ldap/python-slapd/blob/${src.tag}/CHANGES.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ erictapen ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ erictapen ];
   };
 
 }

@@ -38,7 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     boost
-    cmake
     onetbb
   ];
 

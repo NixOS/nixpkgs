@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ptcollab";
-  version = "0.6.4.9";
+  version = "0.6.4.10";
 
   src = fetchFromGitHub {
     owner = "yuxshao";
     repo = "ptcollab";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-1fVhimwBAYtC+HnuxA7ywfEnVlqHnlzwfKT9+H/ZG0k=";
+    hash = "sha256-8CllDcbbVXmDyD5jyKVoNq96wqWtfoPM2CEN13KYptQ=";
   };
 
   nativeBuildInputs = [
@@ -53,13 +53,13 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Experimental pxtone editor where you can collaborate with friends";
     mainProgram = "ptcollab";
     homepage = "https://yuxshao.github.io/ptcollab/";
     changelog = "https://github.com/yuxshao/ptcollab/releases/tag/v${finalAttrs.version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = lib.platforms.all;
   };
 })

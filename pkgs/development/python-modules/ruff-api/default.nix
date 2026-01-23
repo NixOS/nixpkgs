@@ -11,19 +11,19 @@
 
 buildPythonPackage rec {
   pname = "ruff-api";
-  version = "0.2.0";
+  version = "0.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "amyreese";
     repo = "ruff-api";
     tag = "v${version}";
-    hash = "sha256-+tGBaHEau2OjAjj452wEAQ4gyxczg6Fb+NJ42oIkKQY=";
+    hash = "sha256-4ekNPgOOqRIVjIR8LNSALE7fByjMEn8y25y9Rdvf+ms=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-cpW2XsrQvFC5wkGF8hBQ7xFp5oLEJpbHuHBLi6VFkEo=";
+    hash = "sha256-SqouHcEDehxNnNPdrkDUYx8AieHiPMs04RgrkdqYcpU=";
   };
 
   nativeBuildInputs = [

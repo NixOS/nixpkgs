@@ -21,7 +21,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "accerciser";
   version = "3.48.0";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchurl {
     url = "mirror://gnome/sources/accerciser/${lib.versions.majorMinor version}/accerciser-${version}.tar.xz";
