@@ -50,11 +50,6 @@ stdenv.mkDerivation rec {
   # https://gitlab.gnome.org/GNOME/jsonrpc-glib/issues/2
   doCheck = false;
 
-  postFixup = ''
-    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
-    moveToOutput "share/doc" "$devdoc"
-  '';
-
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
