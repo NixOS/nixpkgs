@@ -4,16 +4,17 @@
   fetchFromGitHub,
   testers,
   bombardier,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "bombardier";
   version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "codesenberg";
     repo = "bombardier";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-FoaiUky0WcipkGN8KIpSd+iizinlqtHC5lskvNCnx/Y=";
   };
 
@@ -26,10 +27,14 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=${version}"
+    "-X=main.version=${finalAttrs.version}"
   ];
 
   __darwinAllowLocalNetworking = true;
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   passthru.tests = {
     version = testers.testVersion {
@@ -40,9 +45,9 @@ buildGoModule rec {
   meta = {
     description = "Fast cross-platform HTTP benchmarking tool written in Go";
     homepage = "https://github.com/codesenberg/bombardier";
-    changelog = "https://github.com/codesenberg/bombardier/releases/tag/${src.rev}";
+    changelog = "https://github.com/codesenberg/bombardier/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.progrm_jarvis ];
     mainProgram = "bombardier";
   };
-}
+})
