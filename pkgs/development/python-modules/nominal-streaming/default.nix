@@ -2,21 +2,12 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  python-dateutil,
+  openssl,
   pkg-config,
+  python-dateutil,
   rustPlatform,
   typing-extensions,
-  openssl,
 }:
-let
-  version = "0.5.8";
-  nominal-streaming-src = fetchFromGitHub {
-    owner = "nominal-io";
-    repo = "nominal-streaming";
-    tag = "v${version}";
-    hash = "sha256-Lp4WziVtqYKpew8VhviKbImhMjXAeIZlxj/uEV9wqdE=";
-  };
-in
 
 # Nominal packages should be updated together
 # to ensure compatibility.
@@ -26,7 +17,12 @@ buildPythonPackage rec {
   version = "0.5.8";
   pyproject = true;
 
-  src = nominal-streaming-src;
+  src = fetchFromGitHub {
+    owner = "nominal-io";
+    repo = "nominal-streaming";
+    tag = "v${version}";
+    hash = "sha256-Lp4WziVtqYKpew8VhviKbImhMjXAeIZlxj/uEV9wqdE=";
+  };
   sourceRoot = "source/py-nominal-streaming";
 
   patchPhase = ''
@@ -41,7 +37,7 @@ buildPythonPackage rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    src = nominal-streaming-src;
+    inherit src;
     patches = [ ];
     hash = "sha256-xjanEdZpX2kWJqi0dYXuvoJem9MBTWoU12uAzajsj84=";
   };
