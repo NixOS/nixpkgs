@@ -374,11 +374,11 @@
       "dependency": "direct main",
       "description": {
         "name": "meta",
-        "sha256": "23f08335362185a5ea2ad3a4e597f1375e78bce8a040df5c600c8d3552ef2394",
+        "sha256": "1741988757a65eb6b36abe716829688cf01910bbf91c34354ff7ec1c3de2b349",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.17.0"
+      "version": "1.18.0"
     },
     "mime": {
       "dependency": "transitive",
@@ -494,21 +494,21 @@
       "dependency": "direct main",
       "description": {
         "name": "protobuf",
-        "sha256": "2fcc8a202ca7ec17dab7c97d6b6d91cf03aa07fe6f65f8afbb6dfa52cc5bd902",
+        "sha256": "75ec242d22e950bdcc79ee38dd520ce4ee0bc491d7fadc4ea47694604d22bf06",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "5.1.0"
+      "version": "6.0.0"
     },
     "protoc_plugin": {
       "dependency": "direct dev",
       "description": {
         "name": "protoc_plugin",
-        "sha256": "d43d92eeec74bf1da8e790570c1ef7cf00cdc47566ad62e2455f1deaab03a22b",
+        "sha256": "d1ea363e9118f954d9d482c2f7281c5ff5149b059e68672d1faa564d49091f05",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "24.0.0"
+      "version": "25.0.0"
     },
     "pub_api_client": {
       "dependency": "direct dev",
