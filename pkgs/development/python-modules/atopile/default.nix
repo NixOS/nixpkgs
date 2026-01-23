@@ -64,7 +64,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "atopile";
-  version = "0.12.4";
+  version = "0.12.5";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -73,16 +73,8 @@ buildPythonPackage (finalAttrs: {
     owner = "atopile";
     repo = "atopile";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SB6D1738t3kQJI+V9ClVsByHm6BsLl078N/wDAHJE6E=";
+    hash = "sha256-/1vkYGG3OHyeFpzbvRoAxUtLQLePKE2jwQx8o/CTErQ=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "migrate-to-pygls-v2.patch";
-      url = "https://github.com/atopile/atopile/pull/1533.patch";
-      hash = "sha256-yyRtYFwwcwliz38l7WkzT+zvi+uxWzHdZ06cl8q09Ec=";
-    })
-  ];
 
   build-system = [
     hatchling
@@ -140,7 +132,6 @@ buildPythonPackage (finalAttrs: {
   pythonRelaxDeps = [
     "posthog"
     "prompt-toolkit"
-    "zstd"
   ];
 
   pythonImportsCheck = [ "atopile" ];

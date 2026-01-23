@@ -46,7 +46,7 @@ in
       maintainers = mkOption {
         type = listOfMaintainers;
         default = [ ];
-        example = lib.literalExpression ''[ lib.maintainers.alice lib.maintainers.bob ]'';
+        example = lib.literalExpression "[ lib.maintainers.alice lib.maintainers.bob ]";
         description = ''
           List of maintainers of each module.
           This option should be defined at most once per module.

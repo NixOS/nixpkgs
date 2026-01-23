@@ -90,7 +90,6 @@ buildGoModule (finalAttrs: {
       knightpp
       soopyc
       ryand56
-      sigmasquadron
       defelo
     ];
     mainProgram = "anubis";

@@ -91,10 +91,10 @@ stdenv.mkDerivation rec {
     let
       setOptionalSupport = name: var: "support_${name}=" + (if var then "1" else "");
       makeOptsCommon = [
-        ''-j$NIX_BUILD_CORES''
-        ''root.version=${src.rev}''
-        ''system.zlib=1''
-        ''platform=${platformName}''
+        "-j$NIX_BUILD_CORES"
+        "root.version=${src.rev}"
+        "system.zlib=1"
+        "platform=${platformName}"
         ''includes.dirs.${platformName}="${lib.makeSearchPathOutput "dev" "include" buildInputs}"''
         ''libraries.dirs.${platformName}="${lib.makeLibraryPath staticBuildInputs}"''
         ''ld_flags="-Wl,-rpath=\"${lib.makeLibraryPath dlopenBuildInputs}\""''
@@ -108,9 +108,9 @@ stdenv.mkDerivation rec {
         (setOptionalSupport "pulseaudio" withPulse)
       ];
       makeOptsQt = [
-        ''tools.uic=${qt5.qtbase.dev}/bin/uic''
-        ''tools.moc=${qt5.qtbase.dev}/bin/moc''
-        ''tools.rcc=${qt5.qtbase.dev}/bin/rcc''
+        "tools.uic=${qt5.qtbase.dev}/bin/uic"
+        "tools.moc=${qt5.qtbase.dev}/bin/moc"
+        "tools.rcc=${qt5.qtbase.dev}/bin/rcc"
       ];
     in
     ''

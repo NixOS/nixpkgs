@@ -35,7 +35,7 @@ let
         let
           a = cfg.tcp.anonymousClients.allowedIpRanges;
         in
-        lib.optional (a != [ ]) ''auth-ip-acl=${lib.concatStringsSep ";" a}'';
+        lib.optional (a != [ ]) "auth-ip-acl=${lib.concatStringsSep ";" a}";
       port = lib.optional (!(isNull cfg.tcp.port)) "port=${toString cfg.tcp.port}";
     in
     pkgs.writeTextFile {

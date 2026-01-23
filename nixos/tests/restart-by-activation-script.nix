@@ -51,7 +51,7 @@
       specialisation.longscript.configuration = {
         system.activationScripts.long = {
           supportsDryActivation = true;
-          text = lib.concatStringsSep "\n" (lib.genList (i: ''# line number ${toString i}'') 1000000);
+          text = lib.concatStringsSep "\n" (lib.genList (i: "# line number ${toString i}") 1000000);
         };
       };
     };

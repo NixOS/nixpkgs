@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Extract e-mail messages from Outlook Express DBX files";
     homepage = "https://github.com/ZungBang/undbx";
-    maintainers = with lib.maintainers; [ d3vil0p3r ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl3Plus;
     mainProgram = "undbx";

@@ -180,7 +180,6 @@ let
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
       octodi
-      d3vil0p3r
       blackzeshi
     ];
     platforms = [
