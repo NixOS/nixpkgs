@@ -8,7 +8,7 @@
 }:
 
 let
-  ocamlPackages = ocaml-ng.ocamlPackages.overrideScope (
+  ocamlPackages = ocaml-ng.ocamlPackages_5_3.overrideScope (
     self: super: {
       ppxlib = super.ppxlib.override { version = "0.34.0"; };
     }
