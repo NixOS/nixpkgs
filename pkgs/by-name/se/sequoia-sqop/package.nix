@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     # From some reason the repository is not sequoia-sqop - like the command
     # generated etc
     repo = "sequoia-sop";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-7fyItwtzNia97fbLJ1YkpkS7KmCo3I81uksh3lNvxwU=";
   };
 
