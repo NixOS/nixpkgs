@@ -11,7 +11,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "azure-sdk-for-cpp-storage-common";
-  version = "12.11.0";
+  version = "12.12.0";
   outputs = [
     "out"
     "dev"
@@ -20,8 +20,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "azure-sdk-for-cpp";
-    tag = "azure-storage-common_12.11.0";
-    hash = "sha256-u+zaMoX64GcTKE7QIF5WyENTogLBMTCenoI8hPY7m08=";
+    tag = "azure-storage-common_${finalAttrs.version}";
+    hash = "sha256-cycBXSvc3G8TdLnI4Ht1lBd9ndPOjxWFQA54a24iUsY=";
   };
   sourceRoot = "${finalAttrs.src.name}/sdk/storage/azure-storage-common";
 
