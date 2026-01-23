@@ -88,11 +88,6 @@ stdenv.mkDerivation rec {
     (lib.mesonBool "docs" (variant != "qt5")) # requires introspection=true
   ];
 
-  postFixup = ''
-    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
-    moveToOutput "share/doc" "$devdoc"
-  '';
-
   # we don't have any binaries
   dontWrapQtApps = true;
 
