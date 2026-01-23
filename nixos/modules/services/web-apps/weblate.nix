@@ -130,8 +130,12 @@ let
     inherit (finalPackage) GI_TYPELIB_PATH;
   };
 
+  # Packages needed at runtime
   weblatePath = with pkgs; [
     gitSVN
+    subversion
+    gettext
+    fontconfig
     borgbackup
 
     #optional
@@ -141,6 +145,7 @@ let
     mercurial
     openssh
   ];
+
 in
 {
 
