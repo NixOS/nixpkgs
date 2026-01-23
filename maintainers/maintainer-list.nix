@@ -9832,6 +9832,11 @@
     githubId = 6179496;
     name = "Grayson Head";
   };
+  graysontinker = {
+    github = "GraysonTinker";
+    githubId = 146041509;
+    name = "Grayson Tinker";
+  };
   greaka = {
     email = "git@greaka.de";
     github = "greaka";
