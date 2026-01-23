@@ -12,7 +12,7 @@
 .Op Fl -verbose | v
 .Op Fl I Ar path
 .Op Fl -root Ar root
-.Op Fl -system | -closure Ar path
+.Op Fl -system | -closure | -store-path Ar path
 .Op Fl -flake Ar flake-uri
 .Op Fl -file | f Ar path
 .Op Fl -attr | A Ar attrPath
@@ -94,7 +94,7 @@ Defaults to
 .Ar root
 as the root of the NixOS installation.
 .
-.It Fl -system Ar path , Fl -closure Ar path
+.It Fl -system Ar path , Fl -closure Ar path , Fl -store-path Ar path
 If one of those options is provided,
 .Nm
 will install the specified closure rather than attempt to build one from
