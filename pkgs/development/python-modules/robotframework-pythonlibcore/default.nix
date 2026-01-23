@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "robotframework-pythonlibcore";
-  version = "4.4.1";
+  version = "4.5.0";
 
   pyproject = true;
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "robotframework";
     repo = "PythonLibCore";
     tag = "v${version}";
-    hash = "sha256-5RUi65+DljCqWoB8vZxc0hyIefEFOWuKluplXrD0SkI=";
+    hash = "sha256-tkPESNRO34q5yH5Y2iHMQe/z18QiAvvzhjhMafxxUWI=";
   };
 
   build-system = [ setuptools ];
