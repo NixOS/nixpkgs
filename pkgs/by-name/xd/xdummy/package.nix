@@ -1,7 +1,6 @@
 {
   writeText,
   writeScriptBin,
-  xorg,
   xorg-server,
   xf86-video-dummy,
   font-misc-misc,

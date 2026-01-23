@@ -15,7 +15,7 @@
   patchelf,
   makeWrapper,
   wayland,
-  libX11,
+  libx11,
 }:
 let
   virtualboxVersion = "7.2.4";
@@ -61,7 +61,7 @@ let
     }
     {
       name = "libX11.so";
-      pkg = libX11;
+      pkg = libx11;
     }
     {
       name = "libXt.so";

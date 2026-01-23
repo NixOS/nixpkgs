@@ -14,7 +14,7 @@
   nativefiledialog-extended,
   nlohmann_json,
   plutovg,
-  xvfb,
+  xvfb-run,
   zlib,
   python3Packages ? null,
   enableNFD ? true,

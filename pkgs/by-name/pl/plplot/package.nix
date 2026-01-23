@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     ];
 
   passthru = {
-    inherit (xorg) libX11;
+    libX11 = libx11;
     inherit
       enableWX
       enableXWin

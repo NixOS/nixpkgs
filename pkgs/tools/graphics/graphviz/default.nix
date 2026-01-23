@@ -68,7 +68,8 @@ stdenv.mkDerivation rec {
     "--with-ltdl-lib=${libtool.lib}/lib"
     "--with-ltdl-include=${libtool}/include"
   ]
-  ++ optional (xorg == null) "--without-x";
+  # TODO: this should probably be !withXorg instead of false, however it causes 17k rebuilds
+  ++ optional false "--without-x";
 
   enableParallelBuilding = true;
 

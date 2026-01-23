@@ -41,7 +41,6 @@
   libyuv,
   xauth,
   xdg-utils,
-  xorg,
   xkeyboard-config,
   xf86-video-dummy,
   libxtst,

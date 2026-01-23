@@ -1,6 +1,5 @@
 {
   stdenv,
-  xorg,
   font-alias,
   mkfontscale,
   fontDirs,

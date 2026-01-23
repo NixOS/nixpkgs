@@ -3766,9 +3766,7 @@ with pkgs;
 
   ttfautohint-nox = ttfautohint.override { enableGUI = false; };
 
-  twilight = callPackage ../tools/graphics/twilight {
-    libx11 = libx11;
-  };
+  twilight = callPackage ../tools/graphics/twilight { };
 
   twitch-chat-downloader =
     python3Packages.callPackage ../applications/misc/twitch-chat-downloader
@@ -7004,9 +7002,7 @@ with pkgs;
     x11Support = false;
   };
 
-  imlibsetroot = callPackage ../applications/graphics/imlibsetroot {
-    libxinerama = libxinerama;
-  };
+  imlibsetroot = callPackage ../applications/graphics/imlibsetroot { };
 
   indilib = callPackage ../development/libraries/science/astronomy/indilib { };
   indi-3rdparty = recurseIntoAttrs (
@@ -9088,7 +9084,7 @@ with pkgs;
   xorg = recurseIntoAttrs (makeScopeWithSplicing' {
     otherSplices = generateSplicesForMkScope "xorg";
     # Use `lib.callPackageWith __splicedPackages` rather than plain `callPackage`
-    # so as not to have the newly bound libxcb-cursor,
+    # so as not to have the newly bound xorg items already in scope,  which would
     # have created a cycle.
     f = lib.callPackageWith __splicedPackages ../servers/x11/xorg { };
   });

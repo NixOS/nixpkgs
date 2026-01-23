@@ -14,13 +14,12 @@
   libpulseaudio,
   libSM,
   libXxf86vm,
-  libX11,
+  libx11,
   openssl_1_1,
   pango,
   SDL2,
   wrapGAppsHook3,
   xdg-utils,
-  xorg,
   xorg_sys_opengl,
   zlib,
 }:
@@ -51,7 +50,7 @@ let
       gtk2-x11
       libSM
       libXxf86vm
-      libX11
+      libx11
       openssl_1_1
       pango
       zlib
@@ -126,7 +125,7 @@ buildFHSEnv {
     libpulseaudio
     libSM
     libXxf86vm
-    libX11
+    libx11
     openssl_1_1
     pango
     SDL2

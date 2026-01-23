@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  xorg,
   libxres,
   libxext,
   libx11,

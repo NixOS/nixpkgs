@@ -8,6 +8,7 @@
   xorg-server,
   tab-window-manager,
   libxpm,
+  font-alias,
   font-util,
   font-misc-misc,
   font-cursor-misc,
@@ -150,7 +151,12 @@ let
     ];
   };
   fonts = import ./system-fonts.nix {
-    inherit stdenv xorg fontDirs;
+    inherit
+      stdenv
+      font-alias
+      mkfontscale
+      fontDirs
+      ;
   };
   # any X related programs expected to be available via $PATH
   pkgs = [
