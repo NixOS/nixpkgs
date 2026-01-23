@@ -1039,7 +1039,8 @@ in
     imports = [ ./ncps.nix ];
     defaults.services.ncps.cache.storage.local = "/path/to/ncps";
   };
-  ncps-ha = runTest ./ncps-ha.nix;
+  ncps-ha-pg = runTest ./ncps-ha-pg.nix;
+  ncps-ha-pg-redis = runTest ./ncps-ha-pg-redis.nix;
   ndppd = runTest ./ndppd.nix;
   nebula-lighthouse-service = runTest ./nebula-lighthouse-service.nix;
   nebula.connectivity = runTest ./nebula/connectivity.nix;
