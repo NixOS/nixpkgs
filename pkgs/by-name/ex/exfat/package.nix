@@ -24,6 +24,11 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ fuse ];
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   meta = {
     description = "Free exFAT file system implementation";
     inherit (src.meta) homepage;
