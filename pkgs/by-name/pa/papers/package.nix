@@ -133,11 +133,6 @@ stdenv.mkDerivation (finalAttrs: {
     install_name_tool -add_rpath "$out/lib" "$out/bin/papers"
   '';
 
-  postFixup = ''
-    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
-    moveToOutput "share/doc" "$devdoc"
-  '';
-
   passthru = {
     updateScript =
       let
