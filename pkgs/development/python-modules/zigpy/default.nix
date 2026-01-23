@@ -58,6 +58,8 @@ buildPythonPackage rec {
   ]
   ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
+  pythonRelaxDeps = [ "aiosqlite" ];
+
   nativeCheckInputs = [
     aioresponses
     filelock
