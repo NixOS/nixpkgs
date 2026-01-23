@@ -32,6 +32,9 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-e++Ogy91Sv7gGLMdAqZaBzbH/UmPWZ4GAt7VDCA66aU=";
   };
+  patches = [
+    ./0001-fix-unneccessary-reloads.patch
+  ];
 
   nativeBuildInputs = [
     cmake
