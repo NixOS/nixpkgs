@@ -36,11 +36,11 @@ with lib;
 
   fileSystems."/" = {
     fsType = "ext4";
-    device = "/dev/sda";
+    device = "/dev/disk/by-label/nixos";
     autoResize = true;
   };
 
-  swapDevices = mkDefault [ { device = "/dev/sdb"; } ];
+  swapDevices = mkDefault [ { label = "linode-swap"; } ];
 
   # Enable LISH and Linode Booting w/ GRUB
   boot = {
