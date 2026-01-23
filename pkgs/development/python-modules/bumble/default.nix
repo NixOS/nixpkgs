@@ -45,6 +45,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "libusb-package"
+    "tomli"
   ];
 
   dependencies = [
