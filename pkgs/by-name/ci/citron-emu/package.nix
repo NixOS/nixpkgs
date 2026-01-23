@@ -160,7 +160,13 @@ stdenv.mkDerivation rec {
     description = "Nintendo Switch emulator for PC";
     mainProgram = "citron";
     platforms = [ "x86_64-linux" ];
-    license = lib.licenses.gpl3;
+    license = with lib.licenses; [
+      gpl3Plus
+      # Icons
+      asl20
+      mit
+      cc0
+    ];
     maintainers = with lib.maintainers; [ samemrecebi ];
   };
 }
