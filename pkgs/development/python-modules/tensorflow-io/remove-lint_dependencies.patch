@@ -1,0 +1,24 @@
+diff --git a/WORKSPACE b/WORKSPACE
+index 66edd1c1..bcaa0cde 100644
+--- a/WORKSPACE
++++ b/WORKSPACE
+@@ -102,17 +102,12 @@ http_archive(
+     ],
+ )
+ 
+-load("@rules_python//python:pip.bzl", "pip_import")
++load("@rules_python//python:pip.bzl", "pip_install")
+ 
+-pip_import(
+-    name = "lint_dependencies",
++pip_install(
+     requirements = "//tools/lint:requirements.txt",
+ )
+ 
+-load("@lint_dependencies//:requirements.bzl", "pip_install")
+-
+-pip_install()
+-
+ http_archive(
+     name = "org_tensorflow",
+     sha256 = "99c732b92b1b37fc243a559e02f9aef5671771e272758aa4aec7f34dc92dac48",
