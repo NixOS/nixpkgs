@@ -7,7 +7,8 @@
   nix-update-script,
   versionCheckHook,
   writableTmpDirAsHomeHook,
-}: let
+}:
+let
   pname = "better-context";
   version = "1.0.51";
 
@@ -40,7 +41,7 @@
 
   platformInfo =
     platformMap.${stdenv.hostPlatform.system}
-    or (throw "Unsupported platform: ${stdenv.hostPlatform.system}");
+      or (throw "Unsupported platform: ${stdenv.hostPlatform.system}");
 
   node_modules = stdenvNoCC.mkDerivation {
     pname = "${pname}-node_modules";
@@ -82,76 +83,81 @@
     outputHashMode = "recursive";
   };
 in
-  stdenv.mkDerivation (finalAttrs: {
-    inherit pname version src node_modules;
+stdenv.mkDerivation (finalAttrs: {
+  inherit
+    pname
+    version
+    src
+    node_modules
+    ;
 
-    nativeBuildInputs = [
-      bun
-      writableTmpDirAsHomeHook
-    ];
+  nativeBuildInputs = [
+    bun
+    writableTmpDirAsHomeHook
+  ];
 
-    configurePhase = ''
-      runHook preConfigure
+  configurePhase = ''
+    runHook preConfigure
 
-      cp -R ${node_modules}/. .
+    cp -R ${node_modules}/. .
 
-      chmod -R u+w node_modules/.bin 2>/dev/null || true
-      rm -f node_modules/.bin/turbo
+    chmod -R u+w node_modules/.bin 2>/dev/null || true
+    rm -f node_modules/.bin/turbo
 
-      cp ${./build-binaries.ts} apps/cli/scripts/build-binaries.ts
+    cp ${./build-binaries.ts} apps/cli/scripts/build-binaries.ts
 
-      runHook postConfigure
-    '';
+    runHook postConfigure
+  '';
 
-    buildPhase = ''
-      runHook preBuild
+  buildPhase = ''
+    runHook preBuild
 
-      bun run --cwd apps/cli scripts/build-binaries.ts ${platformInfo.bunTarget} ${version}
+    bun run --cwd apps/cli scripts/build-binaries.ts ${platformInfo.bunTarget} ${version}
 
-      runHook postBuild
-    '';
+    runHook postBuild
+  '';
 
-    # Don't strip the binary - it breaks bun compiled executables
-    dontStrip = true;
+  # Don't strip the binary - it breaks bun compiled executables
+  dontStrip = true;
 
-    installPhase = ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-      # Install the platform-specific binary
-      install -Dm755 apps/cli/dist/${platformInfo.binary} $out/bin/btca
+    # Install the platform-specific binary
+    install -Dm755 apps/cli/dist/${platformInfo.binary} $out/bin/btca
 
-      runHook postInstall
-    '';
+    runHook postInstall
+  '';
 
-    nativeInstallCheckInputs = [
-      versionCheckHook
-      writableTmpDirAsHomeHook
-    ];
-    doInstallCheck = true;
-    versionCheckProgramArg = "--version";
-    versionCheckKeepEnvironment = ["HOME"];
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "--version";
+  versionCheckKeepEnvironment = [ "HOME" ];
 
-    passthru = {
-      updateScript = nix-update-script {
-        extraArgs = [
-          "--subpackage"
-          "node_modules"
-        ];
-      };
-    };
-
-    meta = {
-      description = "A better way to get up to date context on libraries/technologies in your projects";
-      homepage = "https://github.com/davis7dotsh/better-context";
-      license = lib.licenses.mit;
-      maintainers = with lib.maintainers; [EloToJaa];
-      sourceProvenance = with lib.sourceTypes; [fromSource];
-      platforms = [
-        "x86_64-linux"
-        "aarch64-linux"
-        "x86_64-darwin"
-        "aarch64-darwin"
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "node_modules"
       ];
-      mainProgram = "btca";
     };
-  })
+  };
+
+  meta = {
+    description = "A better way to get up to date context on libraries/technologies in your projects";
+    homepage = "https://github.com/davis7dotsh/better-context";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ EloToJaa ];
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
+    mainProgram = "btca";
+  };
+})
