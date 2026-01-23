@@ -4,6 +4,7 @@
   fetchFromGitHub,
   buildNpmPackage,
   nodejs_20,
+  git,
   perl,
   python3,
   zip,
@@ -28,8 +29,9 @@ let
     owner = "zotero";
     repo = "zotero";
     tag = version;
-    hash = "sha256-SG5fTsQgtVX8Pmla2W91sETSR1D7ThmnrdUQwycNsPA=";
+    hash = "sha256-vjGTlb4LM7wjOZqD/VsHXX59EA1f9a3LDz+Mgo4wHb0=";
     fetchSubmodules = true;
+    leaveDotGit = true;
   };
 
   pdf-js = buildNpmPackage {
@@ -134,6 +136,7 @@ buildNpmPackage rec {
   npmDepsHash = "sha256-IVaT/O83kCGT7MGsTSblMKfVWeNBIpA9VJIWyikJrpk=";
 
   nativeBuildInputs = [
+    git
     perl
     python3
     zip
@@ -145,7 +148,7 @@ buildNpmPackage rec {
   ];
 
   patches = [
-    ./git-revs.patch
+    ./js-build-fixes.patch
     ./avoid-xulrunner-fetch.patch
     ./build-fixes.patch
   ];
@@ -153,12 +156,15 @@ buildNpmPackage rec {
   postPatch = ''
     rm -rf reader
     cp -r ${pdf-reader} reader
+    chmod -R u+w reader
 
     rm -rf pdf-worker
     cp -r ${pdf-worker} pdf-worker
+    chmod -R u+w pdf-worker
 
     rm -rf note-editor
     cp -r ${note-editor} note-editor
+    chmod -R u+w note-editor
 
     patchShebangs --build app/ test/
 
