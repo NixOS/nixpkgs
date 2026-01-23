@@ -90,11 +90,6 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # tests try to access USB
 
-  postFixup = ''
-    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
-    moveToOutput "share/doc" "$devdoc"
-  '';
-
   meta = {
     description = "GLib libusb wrapper";
     mainProgram = "gusbcmd";
