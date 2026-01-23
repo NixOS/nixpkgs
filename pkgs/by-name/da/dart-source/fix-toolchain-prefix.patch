@@ -1,0 +1,58 @@
+diff --git a/build/toolchain/linux/BUILD.gn b/build/toolchain/linux/BUILD.gn
+index 5ff6db3d..30f06824 100644
+--- a/build/toolchain/linux/BUILD.gn
++++ b/build/toolchain/linux/BUILD.gn
+@@ -63,7 +63,7 @@ template("gcc_toolchain_suite") {
+ }
+ 
+ gcc_toolchain_suite("arm") {
+-  prefix = "arm-linux-gnueabihf-"
++  prefix = ""
+   if (arm_toolchain_prefix != "") {
+     prefix = arm_toolchain_prefix
+   }
+@@ -106,7 +106,7 @@ gcc_toolchain_suite("clang_arm") {
+ }
+ 
+ gcc_toolchain_suite("arm64") {
+-  prefix = "aarch64-linux-gnu-"
++  prefix = ""
+   if (arm64_toolchain_prefix != "") {
+     prefix = arm64_toolchain_prefix
+   }
+@@ -171,7 +171,7 @@ gcc_toolchain_suite("clang_x86") {
+ }
+ 
+ gcc_toolchain_suite("x86") {
+-  prefix = "i686-linux-gnu-"
++  prefix = ""
+   if (ia32_toolchain_prefix != "") {
+     prefix = ia32_toolchain_prefix
+   }
+@@ -213,7 +213,7 @@ gcc_toolchain_suite("clang_x64") {
+ }
+ 
+ gcc_toolchain_suite("x64") {
+-  prefix = "x86_64-linux-gnu-"
++  prefix = ""
+   if (x64_toolchain_prefix != "") {
+     prefix = x64_toolchain_prefix
+   }
+@@ -233,7 +233,7 @@ gcc_toolchain_suite("x64") {
+ }
+ 
+ gcc_toolchain_suite("riscv32") {
+-  prefix = "riscv32-linux-gnu-"
++  prefix = ""
+   if (riscv32_toolchain_prefix != "") {
+     prefix = riscv32_toolchain_prefix
+   }
+@@ -276,7 +276,7 @@ gcc_toolchain_suite("clang_riscv32") {
+ }
+ 
+ gcc_toolchain_suite("riscv64") {
+-  prefix = "riscv64-linux-gnu-"
++  prefix = ""
+   if (riscv64_toolchain_prefix != "") {
+     prefix = riscv64_toolchain_prefix
+   }

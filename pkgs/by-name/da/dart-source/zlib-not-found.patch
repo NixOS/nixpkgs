@@ -1,0 +1,10 @@
+--- ./runtime/bin/BUILD.gn.orig
++++ ./runtime/bin/BUILD.gn
+@@ -1013,6 +1013,7 @@
+   deps = [
+     "../vm:libprotozero",  # for timeline_test
+     "//third_party/boringssl",  # for secure_socket_utils_test
++    "//third_party/zlib",  # for gzip
+   ]
+ 
+   if (is_fuchsia) {
