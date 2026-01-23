@@ -64,12 +64,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     INSTALL_PATH=$out/lib64/doublecmd
 
-    install -vDm 555 ${lib.getLib lua}/lib/liblua.so.5.2.4 $INSTALL_PATH
+    install -vDm 555 ${lib.getLib lua}/lib/liblua.so.${lua.version} $INSTALL_PATH
 
     cd $INSTALL_PATH
 
-    ln -vs ./liblua.so.5.2.4 ./liblua.so
-    ln -vs ./liblua.so.5.2.4 ./liblua.so.5.2
+    ln -vs ./liblua.so.${lua.version} ./liblua.so
+    ln -vs ./liblua.so.${lua.version} ./liblua.so.${lib.versions.majorMinor lua.version}
 
     runHook postInstall
   '';
