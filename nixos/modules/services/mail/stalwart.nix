@@ -180,7 +180,7 @@ in
     ];
 
     systemd = {
-      services.stalwart-mail = {
+      services.stalwart = {
         description = "Stalwart Server";
         wantedBy = [ "multi-user.target" ];
         after = [
@@ -220,8 +220,8 @@ in
           StateDirectory = if useLegacyDefault then "stalwart-mail" else "stalwart";
 
           # Upstream uses "stalwart" as the username since 0.12.0
-          User = if useLegacyDefault then "stalwart-mail" else "${cfg.user}";
-          Group = if useLegacyDefault then "stalwart-mail" else "${cfg.group}";
+          User = "${cfg.user}";
+          Group = "${cfg.group}";
 
           # Bind standard privileged ports
           AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
