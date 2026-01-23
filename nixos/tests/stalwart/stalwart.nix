@@ -72,7 +72,7 @@ in
 
       main.succeed("test-imap-read")
 
-      main.succeed("test -d /var/cache/stalwart/STALWART_WEBADMIN")
+      main.succeed("test -d /var/cache/stalwart-mail/STALWART_WEBADMIN || test -d /var/cache/stalwart/STALWART_WEBADMIN")
       main.succeed("curl --fail http://localhost")
     '';
 

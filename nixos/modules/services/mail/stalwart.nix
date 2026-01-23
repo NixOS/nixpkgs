@@ -154,7 +154,7 @@ in
           );
         in
         {
-          path = "/var/cache/stalwart";
+          path = if useLegacyDefault then "/var/cache/stalwart-mail" else "/var/cache/stalwart";
           resource = lib.mkIf hasHttpListener (lib.mkDefault "file://${cfg.package.webadmin}/webadmin.zip");
         };
     };
