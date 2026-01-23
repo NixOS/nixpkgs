@@ -232,7 +232,12 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     cmake . -DBUILD_EXAMPLES=OFF -DBUILD_PYTHON=OFF -DBUILD_SAMPLES=OFF
     cmake --install .
-    pip install --prefix="$python" python/
+
+    # Install the Python bindings.
+    # --no-build-isolation: Required because Nix provides build tools (setuptools/wheel)
+    #   locally; without this, pip tries to download them from the internet.
+    # --no-index: Prevents pip from searching PyPI for packages.
+    pip install --no-index --no-build-isolation --prefix="$python" python/
   '';
 
   outputs = [
@@ -249,5 +254,10 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "fzn-cp-sat";
     maintainers = with lib.maintainers; [ andersk ];
     platforms = with lib.platforms; linux ++ darwin;
+
+    # Only version 9.15 adds support for Python 3.14: https://github.com/google/or-tools/releases/tag/v9.15
+    # Also this package is tied to pybind 2.13.6, and only 3.0.0 supports Python 3.14: https://github.com/pybind/pybind11/releases/tag/v3.0.0
+    # Also, nix review fails to build python314Packages.ortools
+    broken = python3.pythonAtLeast "3.14";
   };
 })
