@@ -1450,10 +1450,6 @@ with pkgs;
 
   arpack-mpi = arpack.override { useMpi = true; };
 
-  authelia = callPackage ../servers/authelia {
-    buildGoModule = buildGo124Module;
-  };
-
   authentik-outposts = recurseIntoAttrs (callPackages ../by-name/au/authentik/outposts.nix { });
 
   autoflake = with python3.pkgs; toPythonApplication autoflake;
@@ -2797,10 +2793,6 @@ with pkgs;
   highlight = callPackage ../tools/text/highlight {
     lua = lua5;
   };
-
-  hockeypuck = callPackage ../servers/hockeypuck/server.nix { };
-
-  hockeypuck-web = callPackage ../servers/hockeypuck/web.nix { };
 
   host = bind.host;
 
@@ -8587,8 +8579,6 @@ with pkgs;
 
   dcnnt = python3Packages.callPackage ../servers/dcnnt { };
 
-  deconz = qt5.callPackage ../servers/deconz { };
-
   dict = callPackage ../servers/dict {
     flex = flex_2_5_35;
     libmaa = callPackage ../servers/dict/libmaa.nix { };
@@ -8598,18 +8588,12 @@ with pkgs;
 
   dictDBCollector = callPackage ../servers/dict/dictd-db-collector.nix { };
 
-  diod = callPackage ../servers/diod { lua = lua5_1; };
-
   dodgy = with python3Packages; toPythonApplication dodgy;
 
   prosody = callPackage ../servers/xmpp/prosody {
     withExtraLibs = [ ];
     withExtraLuaPackages = _: [ ];
   };
-
-  felix = callPackage ../servers/felix { };
-
-  felix_remoteshell = callPackage ../servers/felix/remoteshell.nix { };
 
   inherit (callPackages ../servers/firebird { })
     firebird_4
@@ -9340,10 +9324,6 @@ with pkgs;
   fuse = fuse2;
   fuse2 = lowPrio (if stdenv.hostPlatform.isDarwin then macfuse-stubs else fusePackages.fuse_2);
   fuse3 = fusePackages.fuse_3;
-
-  gpm = callPackage ../servers/gpm {
-    withNcurses = false; # Keep curses disabled for lack of value
-  };
 
   gpm-ncurses = gpm.override { withNcurses = true; };
 
@@ -11904,10 +11884,6 @@ with pkgs;
     vscode-generic = ../applications/editors/vscode/generic.nix;
   };
 
-  code-server = callPackage ../servers/code-server {
-    nodejs = nodejs_20;
-  };
-
   kiro = callPackage ../by-name/ki/kiro/package.nix {
     vscode-generic = ../applications/editors/vscode/generic.nix;
   };
@@ -12229,8 +12205,6 @@ with pkgs;
   anki-utils = callPackage ../by-name/an/anki/addons/anki-utils.nix { };
   ankiAddons = recurseIntoAttrs (callPackage ../by-name/an/anki/addons { });
 
-  arx-libertatis = libsForQt5.callPackage ../games/arx-libertatis { };
-
   beancount-ing-diba = callPackage ../applications/office/beancount/beancount-ing-diba.nix {
     inherit (python3Packages) beancount beangulp;
   };
@@ -12245,28 +12219,20 @@ with pkgs;
 
   cataclysm-dda-git = cataclysmDDA.git.tiles;
 
-  cockatrice = libsForQt5.callPackage ../games/cockatrice {
-    protobuf = protobuf_21;
-  };
-
-  construoBase = lowPrio (
-    callPackage ../games/construo {
-      libGL = null;
-      libGLU = null;
-      libglut = null;
-    }
-  );
-
-  construo = construoBase.override {
-    inherit libGL libGLU libglut;
+  construoBase = construo.override {
+    withLibGL = false;
+    withLibGLU = false;
+    withLibglut = false;
   };
 
   crawlTiles = callPackage ../by-name/cr/crawl/package.nix {
     tileMode = true;
   };
 
-  curseofwar = callPackage ../games/curseofwar { SDL = null; };
-  curseofwar-sdl = callPackage ../games/curseofwar { ncurses = null; };
+  curseofwar-sdl = curseofwar.override {
+    withSDL = true;
+    ncurses = null;
+  };
 
   ddnet-server = ddnet.override { buildClient = false; };
 
@@ -12399,39 +12365,11 @@ with pkgs;
 
   openra = openraPackages.engines.release;
 
-  openttd = callPackage ../games/openttd {
-    zlib = zlib.override {
-      static = true;
-    };
-  };
-  openttd-jgrpp = callPackage ../games/openttd/jgrpp.nix {
-    zlib = zlib.override {
-      static = true;
-    };
-  };
-  openttd-grfcodec = callPackage ../games/openttd/grfcodec.nix { };
-  openttd-nml = callPackage ../games/openttd/nml.nix { };
-
-  openxray = callPackage ../games/openxray {
-    # Builds with Clang, but hits an assertion failure unless GCC is used
-    # https://github.com/OpenXRay/xray-16/issues/1224
-    stdenv = gccStdenv;
-  };
-
   papermcServers = callPackages ../games/papermc { };
 
   papermc = papermcServers.papermc;
 
-  pentobi = libsForQt5.callPackage ../games/pentobi { };
-
-  pokerth = libsForQt5.callPackage ../games/pokerth {
-    protobuf = protobuf_21;
-  };
-
-  pokerth-server = libsForQt5.callPackage ../games/pokerth {
-    target = "server";
-    protobuf = protobuf_21;
-  };
+  pokerth-server = pokerth.override { target = "server"; };
 
   inherit (import ../games/quake3 pkgs.callPackage)
     quake3wrapper
@@ -13148,11 +13086,6 @@ with pkgs;
   gajim = callPackage ../applications/networking/instant-messengers/gajim {
     inherit (gst_all_1) gstreamer gst-plugins-base gst-libav;
     gst-plugins-good = gst_all_1.gst-plugins-good.override { gtkSupport = true; };
-  };
-
-  gnuk = callPackage ../misc/gnuk {
-    gcc-arm-embedded = pkgsCross.arm-embedded.buildPackages.gcc;
-    binutils-arm-embedded = pkgsCross.arm-embedded.buildPackages.binutils;
   };
 
   helmfile-wrapped = helmfile.override {
