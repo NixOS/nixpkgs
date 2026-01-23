@@ -2982,8 +2982,8 @@ let
         mktplcRef = {
           name = "rainbow-csv";
           publisher = "mechatroner";
-          version = "3.24.0";
-          hash = "sha256-g9xY6JDx8RZyl4KFgIAVvQKydbwcEHLaUJPinUR89zM=";
+          version = "3.24.1";
+          hash = "sha256-xZpK6pJNXnxudauzJihEi9VASRXi89+hn7vfF33qRgY=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/mechatroner.rainbow-csv/changelog";
