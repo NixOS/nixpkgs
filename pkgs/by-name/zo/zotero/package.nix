@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   buildNpmPackage,
-  nodejs_20,
+  nodejs_22,
   git,
   perl,
   python3,
@@ -19,8 +19,8 @@
   doCheck ? false,
 }:
 let
-  # note-editor needs nodejs 20. Any newer version fails to build zotero's fork of @benrbray/prosemirror-math during npm install.
-  nodejs = nodejs_20;
+  # note-editor needs nodejs 22. Any newer version fails to build zotero's fork of @benrbray/prosemirror-math during npm install.
+  nodejs = nodejs_22;
 
   pname = "zotero";
   version = "8.0.0";
@@ -40,13 +40,21 @@ let
     src = "${src}/pdf-worker/pdf.js";
     npmDepsHash = "sha256-KeYAY6EWBZVd3QucDEDtI6lwtTahCEFBFf2Ebib9HKg=";
     buildPhase = ''
+      runHook preBuild
+
       npm exec gulp lib-legacy
       npm exec gulp generic-legacy
       npm exec gulp minified-legacy
+
+      runHook postBuild
     '';
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out
       cp -r . $out
+
+      runHook postInstall
     '';
   };
 
@@ -56,12 +64,20 @@ let
     src = "${src}/reader/epubjs/epub.js";
     npmDepsHash = "sha256-6XY6uczPOpMpRHDQbkQRHKBDDRQ/MXIVepGBx1V+h5Q=";
     buildPhase = ''
+      runHook preBuild
+
       npm run compile
       npm run build
+
+      runHook postBuild
     '';
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out
       cp -r . $out
+
+      runHook postInstall
     '';
   };
 
@@ -84,8 +100,12 @@ let
       cp -r ${src}/chrome/locale/en-US/zotero/* locales/en-US/
     '';
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out
       cp -r . $out
+
+      runHook postInstall
     '';
   };
 
@@ -102,8 +122,12 @@ let
       cp -r ${pdf-js} pdf.js
     '';
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out
       cp -r . $out
+
+      runHook postInstall
     '';
   };
 
@@ -119,8 +143,12 @@ let
       cp -r ${src}/chrome/locale/en-US/zotero/* locales/en-US/
     '';
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out
       cp -r . $out
+
+      runHook postInstall
     '';
   };
 
@@ -206,7 +234,7 @@ buildNpmPackage rec {
 
   inherit doCheck;
   # Build with test support if `doCheck` is enabled.
-  ZOTERO_TEST = doCheck;
+  env.ZOTERO_TEST = doCheck;
 
   nativeCheckInputs = [
     xvfb-run

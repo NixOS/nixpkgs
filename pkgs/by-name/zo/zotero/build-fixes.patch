@@ -1,5 +1,5 @@
 diff --git a/app/build.sh b/app/build.sh
-index de092bde16..af6008e25c 100755
+index de092bde16..2e58b687e7 100755
 --- a/app/build.sh
 +++ b/app/build.sh
 @@ -644,11 +644,6 @@ if [ $BUILD_MAC == 1 ]; then
@@ -30,7 +30,7 @@ index de092bde16..af6008e25c 100755
  		cp -RH "$CALLDIR/modules/zotero-libreoffice-integration/install" "$APPDIR/integration/libreoffice"
  		
  		# Copy icons
-+		mkdir "$APPDIR/icons/"
++		mkdir -p "$APPDIR/icons/"
  		cp "$CALLDIR/linux/icons/icon32.png" "$APPDIR/icons/"
  		cp "$CALLDIR/linux/icons/icon64.png" "$APPDIR/icons/"
  		cp "$CALLDIR/linux/icons/icon128.png" "$APPDIR/icons/"
