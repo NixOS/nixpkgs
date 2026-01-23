@@ -13063,6 +13063,8 @@ self: super: with self; {
 
   pybase64 = callPackage ../development/python-modules/pybase64 { };
 
+  pybatfish = callPackage ../development/python-modules/pybatfish { };
+
   pybbox = callPackage ../development/python-modules/pybbox { };
 
   pybcj = callPackage ../development/python-modules/pybcj { };
