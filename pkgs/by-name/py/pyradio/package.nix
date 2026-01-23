@@ -44,6 +44,12 @@ python3Packages.buildPythonApplication rec {
 
   postInstall = ''
     installManPage *.1
+
+    install -Dm644 $src/devel/pyradio.desktop \
+      "$out/share/applications/pyradio.desktop"
+
+    install -Dm644 "$src/pyradio/icons/pyradio.png" \
+      "$out/share/icons/hicolor/512x512/apps/pyradio.png"
   '';
 
   meta = {
@@ -54,6 +60,7 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       contrun
+      magicquark
       yayayayaka
     ];
   };
