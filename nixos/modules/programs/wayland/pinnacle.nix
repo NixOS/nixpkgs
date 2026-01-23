@@ -6,8 +6,8 @@
 }:
 let
   cfg = config.programs.pinnacle;
+  inherit (lib.options) mkEnableOption mkPackageOption;
 in
-with lib.options;
 {
   options.programs.pinnacle = {
     enable = mkEnableOption "pinnacle";
@@ -16,14 +16,10 @@ with lib.options;
       example = "pkgs.pinnacle";
       extraDescription = "package containing the pinnacle server binary";
     };
-    xdg-portals.enable = mkEnableOption ''
-      enable xdg-portals for pinnacle
-    '';
+    xdg-portals.enable = mkEnableOption "enable xdg-portals for pinnacle";
     withUWSM = mkEnableOption ''
       manage the pinnacle session with [UWSM](https://github.com/Vladimir-csp/uwsm) instead
       of independent systemd services and targets.
-
-      if you enable this, make sure to disable the systemd option in the home-manager module
     '';
   };
 
@@ -31,7 +27,6 @@ with lib.options;
     lib.mkMerge [
       {
         environment.systemPackages = [ cfg.package ];
-        services.dbus.enable = true;
         xdg.portal = lib.mkIf cfg.xdg-portals.enable {
           enable = true;
           wlr.enable = true;

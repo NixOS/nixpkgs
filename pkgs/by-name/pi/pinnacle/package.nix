@@ -33,7 +33,7 @@ let
   pinnacle-src = fetchFromGitHub {
     owner = "pinnacle-comp";
     repo = "pinnacle";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-cs1R+5kCUnHVz+XQNocs9XzQbre6B6MJbyvIdGDG4tQ=";
   };
   buildRustConfig = callPackage ./pinnacle-config.nix { inherit pinnacle-src; };
