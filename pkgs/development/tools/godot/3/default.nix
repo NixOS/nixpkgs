@@ -28,14 +28,14 @@
 
 stdenv.mkDerivation (self: {
   pname = "godot3";
-  version = "3.6";
+  version = "3.6.2";
   godotBuildDescription = "X11 tools";
 
   src = fetchFromGitHub {
     owner = "godotengine";
     repo = "godot";
     rev = "${self.version}-stable";
-    sha256 = "sha256-4WQYO1BBDK9+eyblpI8qRgbBG4+qPRVZMjeAFAtot+0=";
+    hash = "sha256-loNjE+NmHniZ827Eb9MHSNo27F2LrURhWURjUq4d8xw=";
   };
 
   # Fix PIE hardening: https://github.com/godotengine/godot/pull/50737
@@ -83,9 +83,6 @@ stdenv.mkDerivation (self: {
     # of the OS. This isn't as surgical as just fixing the PATH, but it seems to work, and
     # seems to be the Nix community's current strategy when using Scons.
     /SConstruct/dontClobberEnvironment.patch
-    # Fix compile error with mono 6.14
-    # https://github.com/godotengine/godot/pull/106578
-    /move-MonoGCHandle-into-gdmono-namespace.patch
   ];
 
   enableParallelBuilding = true;

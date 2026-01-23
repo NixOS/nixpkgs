@@ -38,7 +38,7 @@ buildPythonPackage {
     chmod +w dist
   '';
 
-  env = {
+  env = lib.optionalAttrs stdenv.hostPlatform.isLinux {
     NIX_LDFLAGS = "-z,noexecstack";
   };
 

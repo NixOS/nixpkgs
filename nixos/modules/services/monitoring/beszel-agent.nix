@@ -19,6 +19,29 @@ in
     openFirewall = (lib.mkEnableOption "") // {
       description = "Whether to open the firewall port (default 45876).";
     };
+    smartmon = {
+      enable = lib.mkOption {
+        default = false;
+        example = true;
+        description = "Include services.beszel.agent.smartmon.package in the Beszel agent path for disk monitoring and add the agent to the disk group.";
+        type = lib.types.bool;
+      };
+      package = lib.mkPackageOption pkgs "smartmontools" { };
+      deviceAllow = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        example = [
+          "/dev/sda"
+          "/dev/sdb"
+          "/dev/nvme0"
+        ];
+        description = ''
+          List of device paths to allow access to for SMART monitoring.
+          This is only needed if the ambient capabilities are not sufficient.
+          Devices will be granted read-only access.
+        '';
+      };
+    };
 
     environment = lib.mkOption {
       type = lib.types.attrsOf lib.types.str;
@@ -47,6 +70,11 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    services.udev.extraRules = lib.optionalString cfg.smartmon.enable ''
+      # Change NVMe devices to disk group ownership for S.M.A.R.T. monitoring
+      KERNEL=="nvme[0-9]*", GROUP="disk", MODE="0660"
+    '';
+
     systemd.services.beszel-agent = {
       description = "Beszel Server Monitoring Agent";
 
@@ -57,6 +85,7 @@ in
       environment = cfg.environment;
       path =
         cfg.extraPath
+        ++ lib.optionals cfg.smartmon.enable [ cfg.smartmon.package ]
         ++ lib.optionals (builtins.elem "nvidia" config.services.xserver.videoDrivers) [
           (lib.getBin config.hardware.nvidia.package)
         ]
@@ -79,14 +108,32 @@ in
           lib.optionals config.virtualisation.docker.enable [ "docker" ]
           ++ lib.optionals (
             config.virtualisation.podman.enable && config.virtualisation.podman.dockerSocket.enable
-          ) [ "podman" ];
+          ) [ "podman" ]
+          ++ lib.optionals cfg.smartmon.enable [ "disk" ];
 
         DynamicUser = true;
         User = "beszel-agent";
+
+        # Capabilities needed for SMART monitoring
+        AmbientCapabilities = lib.mkIf cfg.smartmon.enable [
+          "CAP_SYS_RAWIO"
+          "CAP_SYS_ADMIN"
+        ];
+        CapabilityBoundingSet = lib.mkIf cfg.smartmon.enable [
+          "CAP_SYS_RAWIO"
+          "CAP_SYS_ADMIN"
+        ];
+
+        # Device access for SMART monitoring
+        DeviceAllow = lib.mkIf (cfg.smartmon.enable && cfg.smartmon.deviceAllow != [ ]) (
+          map (device: "${device} r") cfg.smartmon.deviceAllow
+        );
+
         LockPersonality = true;
-        NoNewPrivileges = true;
+        NoNewPrivileges = !cfg.smartmon.enable;
+        PrivateDevices = !cfg.smartmon.enable;
         PrivateTmp = true;
-        PrivateUsers = true;
+        PrivateUsers = !cfg.smartmon.enable;
         ProtectClock = true;
         ProtectControlGroups = "strict";
         ProtectHome = "read-only";
