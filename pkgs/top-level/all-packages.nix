@@ -1204,8 +1204,6 @@ with pkgs;
       ;
   };
 
-  qgit = qt6Packages.callPackage ../applications/version-management/qgit { };
-
   svn-all-fast-export =
     libsForQt5.callPackage ../applications/version-management/svn-all-fast-export
       { };
@@ -1554,8 +1552,6 @@ with pkgs;
   foxdot = with python3Packages; toPythonApplication foxdot;
 
   fluffychat-web = fluffychat.override { targetFlutterPlatform = "web"; };
-
-  gammaray = qt6Packages.callPackage ../development/tools/gammaray { };
 
   gams = callPackage ../tools/misc/gams (config.gams or { });
 
@@ -2964,8 +2960,6 @@ with pkgs;
 
   kzipmix = pkgsi686Linux.callPackage ../tools/compression/kzipmix { };
 
-  maskromtool = qt6Packages.callPackage ../tools/graphics/maskromtool { };
-
   matrix-synapse-plugins = recurseIntoAttrs matrix-synapse-unwrapped.plugins;
 
   maubot = with python3Packages; toPythonApplication maubot;
@@ -3562,8 +3556,6 @@ with pkgs;
 
   ratarmount = with python3Packages; toPythonApplication ratarmount;
 
-  retext = qt6Packages.callPackage ../applications/editors/retext { };
-
   inherit (callPackage ../tools/security/rekor { })
     rekor-cli
     rekor-server
@@ -3752,10 +3744,6 @@ with pkgs;
     extraFonts = true;
   };
 
-  texmaker = qt6Packages.callPackage ../applications/editors/texmaker { };
-
-  texworks = qt6Packages.callPackage ../applications/editors/texworks { };
-
   tiled = libsForQt5.callPackage ../applications/editors/tiled { };
 
   tinc = callPackage ../tools/networking/tinc { };
@@ -3785,8 +3773,6 @@ with pkgs;
   ttp = with python3.pkgs; toPythonApplication ttp;
 
   trace-cmd = callPackage ../os-specific/linux/trace-cmd { };
-
-  kernelshark = qt6Packages.callPackage ../os-specific/linux/trace-cmd/kernelshark.nix { };
 
   translatelocally-models = recurseIntoAttrs (callPackages ../misc/translatelocally-models { });
 
@@ -6106,11 +6092,7 @@ with pkgs;
 
   dot2tex = with python3.pkgs; toPythonApplication dot2tex;
 
-  doxygen = callPackage ../development/tools/documentation/doxygen {
-    qt6 = null;
-  };
-
-  doxygen_gui = lowPrio (doxygen.override { inherit qt6; });
+  doxygen_gui = lowPrio (doxygen.override { withGui = true; });
 
   drake = callPackage ../development/tools/build-managers/drake { };
 
@@ -6216,7 +6198,6 @@ with pkgs;
     );
 
   minizinc = callPackage ../development/tools/minizinc { };
-  minizincide = qt6Packages.callPackage ../development/tools/minizinc/ide.nix { };
 
   mkdocs = with python3Packages; toPythonApplication mkdocs;
 
@@ -6325,11 +6306,6 @@ with pkgs;
   pycobertura = with python3Packages; toPythonApplication pycobertura;
 
   pycritty = with python3Packages; toPythonApplication pycritty;
-
-  qtcreator = qt6Packages.callPackage ../development/tools/qtcreator {
-    llvmPackages = llvmPackages_21;
-    stdenv = llvmPackages_21.stdenv;
-  };
 
   qxmledit = libsForQt5.callPackage ../applications/editors/qxmledit { };
 
@@ -6764,9 +6740,6 @@ with pkgs;
   ghp-import = with python3Packages; toPythonApplication ghp-import;
 
   ghcid = haskellPackages.ghcid.bin;
-
-  graphia = qt6Packages.callPackage ../applications/science/misc/graphia { };
-
   glfw = glfw3;
 
   glfw3-minecraft = callPackage ../by-name/gl/glfw3/package.nix {
@@ -9909,8 +9882,6 @@ with pkgs;
 
   papis = with python3Packages; toPythonApplication papis;
 
-  polychromatic = qt6Packages.callPackage ../applications/misc/polychromatic { };
-
   ricochet-refresh = callPackage ../by-name/ri/ricochet-refresh/package.nix {
     protobuf = protobuf_21; # https://github.com/blueprint-freespeech/ricochet-refresh/issues/178
   };
@@ -10027,8 +9998,6 @@ with pkgs;
 
   bambootracker-qt6 = bambootracker.override { withQt6 = true; };
 
-  ausweisapp = qt6Packages.callPackage ../applications/misc/ausweisapp { };
-
   awesome = callPackage ../applications/window-managers/awesome {
     cairo = cairo.override { xcbSupport = true; };
     inherit (texFunctions) fontsConf;
@@ -10076,8 +10045,6 @@ with pkgs;
 
   breezy = with python3Packages; toPythonApplication breezy;
 
-  calcmysky = qt6Packages.callPackage ../applications/science/astronomy/calcmysky { };
-
   # calico-felix and calico-node have not been packaged due to libbpf, linking issues
   inherit (callPackage ../applications/networking/cluster/calico { })
     calico-apiserver
@@ -10108,8 +10075,6 @@ with pkgs;
   communi = libsForQt5.callPackage ../applications/networking/irc/communi { };
 
   confclerk = libsForQt5.callPackage ../applications/misc/confclerk { };
-
-  copyq = qt6Packages.callPackage ../applications/misc/copyq { };
 
   codeblocksFull = codeblocks.override { contribPlugins = true; };
 
@@ -10243,10 +10208,6 @@ with pkgs;
 
   espeakedit = callPackage ../applications/audio/espeak/edit.nix { };
 
-  input-leap = qt6Packages.callPackage ../applications/misc/input-leap {
-    avahi = avahi.override { withLibdnssdCompat = true; };
-  };
-
   evolution-data-server-gtk4 = evolution-data-server.override {
     withGtk3 = false;
     withGtk4 = true;
@@ -10266,8 +10227,6 @@ with pkgs;
   fldigi = callPackage ../applications/radio/fldigi {
     hamlib = hamlib_4;
   };
-
-  focuswriter = qt6Packages.callPackage ../applications/editors/focuswriter { };
 
   fossil = callPackage ../applications/version-management/fossil {
     sqlite = sqlite.override { enableDeserialize = true; };
@@ -10311,20 +10270,10 @@ with pkgs;
     fftw = fftwSinglePrec;
   };
 
-  welle-io = qt6Packages.callPackage ../applications/radio/welle-io { };
-
-  wireshark = qt6Packages.callPackage ../applications/networking/sniffers/wireshark {
-    libpcap = libpcap.override { withBluez = stdenv.hostPlatform.isLinux; };
-  };
-  wireshark-qt = wireshark;
-
   qtwirediff = qt6Packages.callPackage ../applications/networking/sniffers/qtwirediff { };
 
   tshark = wireshark-cli;
-  wireshark-cli = wireshark.override {
-    withQt = false;
-    libpcap = libpcap.override { withBluez = stdenv.hostPlatform.isLinux; };
-  };
+  wireshark-cli = wireshark.override { withQt = false; };
 
   buildMozillaMach =
     opts: callPackage (import ../build-support/build-mozilla-mach/default.nix opts) { };
