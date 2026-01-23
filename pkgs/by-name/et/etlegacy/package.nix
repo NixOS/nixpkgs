@@ -8,7 +8,7 @@
 }:
 
 symlinkJoin {
-  name = "etlegacy";
+  pname = "etlegacy";
   version = "2.83.2";
 
   paths = [
