@@ -16,7 +16,12 @@ let
 
   configFile = pkgs.writeText "chrony.conf" ''
     ${lib.concatMapStringsSep "\n" (
-      server: "server " + server + " " + cfg.serverOption + lib.optionalString (cfg.enableNTS) " nts"
+      server:
+      (if lib.strings.hasInfix "pool" server then "pool " else "server ")
+      + server
+      + " "
+      + cfg.serverOption
+      + lib.optionalString (cfg.enableNTS) " nts"
     ) cfg.servers}
 
     ${lib.optionalString (
