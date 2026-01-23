@@ -9664,6 +9664,16 @@ self: super: with self; {
 
   migen = callPackage ../development/python-modules/migen { };
 
+  litex = callPackage ../development/python-modules/litex { };
+
+  litex-boards = callPackage ../development/python-modules/litex-boards { };
+
+  litespi = callPackage ../development/python-modules/litespi { };
+
+  pythondata-cpu-vexriscv = callPackage ../development/python-modules/pythondata-cpu-vexriscv { };
+  pythondata-software-picolibc = callPackage ../development/python-modules/pythondata-software-picolibc { };
+  pythondata-software-compiler_rt = callPackage ../development/python-modules/pythondata-software-compiler_rt { };
+
   mike = callPackage ../development/python-modules/mike { };
 
   milc = callPackage ../development/python-modules/milc { };
