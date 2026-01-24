@@ -32,9 +32,7 @@ let
       # Additionally in either of those alternatives, we would have to duplicate the hardcoding of "README.md"
       { }
     else
-      mapAttrs (name: _: baseDirectory + "/${shard}/${name}/package.nix") (
-        readDir (baseDirectory + "/${shard}")
-      );
+      mapAttrs (name: _: baseDirectory + "/${shard}/${name}") (readDir (baseDirectory + "/${shard}"));
 
   # The attribute set mapping names to the package files defining them
   # This is defined up here in order to allow reuse of the value (it's kind of expensive to compute)
@@ -51,4 +49,12 @@ self: super:
   # Because at that point the code in ./stage.nix can be changed to not allow definitions in `all-packages.nix` to override ones from `pkgs/by-name` anymore and throw an error if that happens instead.
   _internalCallByNamePackageFile = file: self.callPackage file { };
 }
-// mapAttrs (name: self._internalCallByNamePackageFile) packageFiles
+// mapAttrs (
+  name: path:
+  if lib.pathIsRegularFile (path + "/.packageset") then
+    lib.recurseIntoAttrs (
+      lib.makeScope self.newScope (setself: import ./by-name-overlay.nix path setself { })
+    )
+  else
+    self._internalCallByNamePackageFile (path + "/package.nix")
+) packageFiles
