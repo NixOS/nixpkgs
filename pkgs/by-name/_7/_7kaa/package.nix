@@ -51,12 +51,12 @@ gccStdenv.mkDerivation (finalAttrs: {
     autoreconfHook
     autoconf-archive
     pkg-config
+    SDL2
   ];
 
   buildInputs = [
     openal
     enet
-    SDL2
     curl
     gettext
     libiconv
