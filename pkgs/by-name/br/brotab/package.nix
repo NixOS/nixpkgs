@@ -1,30 +1,20 @@
 {
   lib,
   fetchFromGitHub,
-  fetchpatch,
   python3Packages,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "brotab";
-  version = "1.4.2";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "balta2ar";
     repo = "brotab";
     tag = version;
-    hash = "sha256-HKKjiW++FwjdorqquSCIdi1InE6KbMbFKZFYHBxzg8Q=";
+    hash = "sha256-Pv5tEDL11brc/n3TuFcad9kTr7Jb/Bt7JFb29HuX/28=";
   };
-
-  patches = [
-    # https://github.com/balta2ar/brotab/pull/102
-    (fetchpatch {
-      name = "remove-unnecessary-pip-import.patch";
-      url = "https://github.com/balta2ar/brotab/commit/825cd48f255c911aabbfb495f6b8fc73f27d3fe5.patch";
-      hash = "sha256-IN28AOLPKPUc3KkxIGFMpZNNXA1+O12NxS+Hl4KMXbg=";
-    })
-  ];
 
   build-system = with python3Packages; [
     setuptools
@@ -34,6 +24,7 @@ python3Packages.buildPythonApplication rec {
     flask
     psutil
     requests
+    werkzeug
     setuptools
   ];
 
@@ -41,6 +32,8 @@ python3Packages.buildPythonApplication rec {
     "flask"
     "psutil"
     "requests"
+    "werkzeug"
+    "setuptools"
   ];
 
   postInstall = ''
@@ -50,6 +43,8 @@ python3Packages.buildPythonApplication rec {
     mv $out/config/firefox_mediator.json $out/lib/mozilla/native-messaging-hosts
     mkdir -p $out/etc/chromium/native-messaging-hosts
     mv $out/config/chromium_mediator.json $out/etc/chromium/native-messaging-hosts
+    mkdir -p $out/lib/albert
+    mv $out/config/Brotab.qss $out/lib/albert
     rmdir $out/config
   '';
 
