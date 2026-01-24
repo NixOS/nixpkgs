@@ -44,9 +44,15 @@ let
     in
     lib.forEach options (i: "options ${i.driver} index=${toList i.ids} id=${toList i.names}");
 
-  defaultDeviceVars = {
+  pluginsPath = pkgs.symlinkJoin {
+    name = "alsa-with-plugins";
+    paths = cfg.plugins;
+  };
+
+  alsaVariables = {
     "ALSA_AUDIO_OUT" = cfg.defaultDevice.playback;
     "ALSA_AUDIO_IN" = cfg.defaultDevice.capture;
+    "ALSA_PLUGIN_DIR" = lib.mkIf (cfg.plugins != [ ]) "${pluginsPath}/lib/alsa-lib";
   };
 
 in
@@ -106,6 +112,8 @@ in
 
     enableOSSEmulation = lib.mkEnableOption "the OSS emulation";
 
+    enableBluetooth = lib.mkEnableOption "Bluetooth audio support via BlueALSA";
+
     enableRecorder = lib.mkOption {
       type = lib.types.bool;
       default = false;
@@ -122,6 +130,15 @@ in
         device using `hardware.alsa.config`.
         See the generated /etc/asound.conf for its definition.
         :::
+      '';
+    };
+
+    plugins = lib.mkOption {
+      type = lib.types.listOf lib.types.package;
+      default = [ ];
+      example = lib.literalExpression "[ pkgs.bluez-alsa ]";
+      description = ''
+        List of ALSA plugins to be added to the search path.
       '';
     };
 
@@ -392,8 +409,8 @@ in
       };
 
       # Set default PCM devices
-      environment.sessionVariables = defaultDeviceVars;
-      systemd.globalEnvironment = defaultDeviceVars;
+      environment.sessionVariables = alsaVariables;
+      systemd.globalEnvironment = alsaVariables;
 
       environment.etc."asound.conf".text = cfg.config;
 
@@ -410,6 +427,33 @@ in
 
       # Provide alsamixer, aplay, arecord, etc.
       environment.systemPackages = [ pkgs.alsa-utils ];
+    })
+
+    (lib.mkIf (cfg.enable && cfg.enableBluetooth) {
+
+      users.users.bluealsa = {
+        description = "BlueALSA daemons user";
+        isSystemUser = true;
+        group = "audio";
+      };
+
+      # Link ALSA configuration
+      environment.etc."alsa/conf.d/20-bluealsa.conf".source =
+        "${pkgs.bluez-alsa}/etc/alsa/conf.d/20-bluealsa.conf";
+
+      # Install plugin
+      hardware.alsa.plugins = [ pkgs.bluez-alsa ];
+
+      # Install CLI tools and systemd units
+      environment.systemPackages = [ pkgs.bluez-alsa ];
+      systemd.packages = [ pkgs.bluez-alsa ];
+
+      # See Nixpkgs issue #81138
+      systemd.services."bluealsa".wantedBy = [ "bluetooth.target" ];
+
+      # Note: bluealsa-aplay is available but we don't start it
+      # by default, it's only needed to make the machine act as
+      # bluetooth speaker
     })
 
     (lib.mkIf config.hardware.alsa.enablePersistence {
