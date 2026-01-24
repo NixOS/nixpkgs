@@ -50,12 +50,17 @@ buildPythonPackage rec {
     requests
     tqdm
     xxhash
-  ];
+  ]
+  ++ fsspec.optional-dependencies.http;
 
   pythonRelaxDeps = [
     # https://github.com/huggingface/datasets/blob/a256b85cbc67aa3f0e75d32d6586afc507cf535b/setup.py#L117
     # "pin until dill has official support for determinism"
     "dill"
+    # https://github.com/huggingface/datasets/blob/4.5.0/setup.py#L127
+    "multiprocess"
+    # https://github.com/huggingface/datasets/blob/4.5.0/setup.py#L130
+    "fsspec"
   ];
 
   # Tests require pervasive internet access
