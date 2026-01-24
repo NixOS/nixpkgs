@@ -1194,8 +1194,7 @@ builtins.intersectAttrs super {
   http-download = dontCheck super.http-download;
   http-download_0_2_1_0 = doDistribute (dontCheck super.http-download_0_2_1_0);
   pantry = dontCheck super.pantry;
-  pantry_0_9_3_1 = dontCheck super.pantry_0_9_3_1;
-  pantry_0_10_0 = dontCheck super.pantry_0_10_0;
+  pantry_0_11_2 = doDistribute (dontCheck super.pantry_0_11_2);
 
   # gtk2hs-buildtools is listed in setupHaskellDepends, but we
   # need it during the build itself, too.
