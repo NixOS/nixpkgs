@@ -2982,8 +2982,8 @@ let
         mktplcRef = {
           name = "rainbow-csv";
           publisher = "mechatroner";
-          version = "3.24.0";
-          hash = "sha256-g9xY6JDx8RZyl4KFgIAVvQKydbwcEHLaUJPinUR89zM=";
+          version = "3.24.1";
+          hash = "sha256-xZpK6pJNXnxudauzJihEi9VASRXi89+hn7vfF33qRgY=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/mechatroner.rainbow-csv/changelog";
@@ -4218,8 +4218,8 @@ let
         mktplcRef = {
           publisher = "shopify";
           name = "ruby-lsp";
-          version = "0.9.32";
-          hash = "sha256-b8VFojeIkplnr48D8el0HeEtN47al/tgqgq52ozjw9M=";
+          version = "0.9.33";
+          hash = "sha256-Dkx4ecPFXTX1ilerkcnUc6Pu/mnXpswYVnHWqR4TYOA=";
         };
         meta = {
           description = "VS Code plugin for connecting with the Ruby LSP";

@@ -33,13 +33,13 @@ let
 
   finalAttrs = {
     pname = "ncps";
-    version = "0.7.1";
+    version = "0.7.2";
 
     src = fetchFromGitHub {
       owner = "kalbasit";
       repo = "ncps";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-U+97wTN7CxJZ+jOWxZHkN2IiNblb5WTPpnN5v98D2o8=";
+      hash = "sha256-qc6h1gnU7dFyb0GiBq++E2yf49K7mO86Vwdf8y3817U=";
     };
 
     ldflags = [
