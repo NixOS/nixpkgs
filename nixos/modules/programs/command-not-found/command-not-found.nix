@@ -12,23 +12,18 @@
 
 let
   cfg = config.programs.command-not-found;
-  commandNotFound = pkgs.replaceVarsWith {
-    name = "command-not-found";
-    dir = "bin";
-    src = ./command-not-found.pl;
-    isExecutable = true;
-    replacements = {
-      inherit (cfg) dbPath;
-      perl = pkgs.perl.withPackages (p: [
-        p.DBDSQLite
-        p.StringShellQuote
-      ]);
-    };
-  };
-
 in
-
 {
+  imports = [
+    (lib.mkRemovedOptionModule
+      [
+        "programs"
+        "command-not-found"
+        "dbPath"
+      ]
+      "Use programs.command-not-found.package = pkgs.command-not-found.override { dbPath = \"\"; } instead."
+    )
+  ];
   options.programs.command-not-found = {
 
     enable = lib.mkOption {
@@ -46,39 +41,38 @@ in
       '';
     };
 
-    dbPath = lib.mkOption {
-      default = "/nix/var/nix/profiles/per-user/root/channels/nixos/programs.sqlite";
-      description = ''
-        Absolute path to programs.sqlite.
+    package = lib.mkPackageOption pkgs "command-not-found" {
+      extraDescription = ''
+        To specify a custom `programs.sqlite` file, you can override the package as follows:
 
-        By default this file will be provided by your channel
-        (nixexprs.tar.xz).
+        package = pkgs.command-not-found.override { dbPath = "/absolute/path/to/programs.sqlite"; };
+
+        By default, this file is provided by your channel via `nixexprs.tar.xz`.
       '';
-      type = lib.types.path;
     };
   };
 
   config = lib.mkIf cfg.enable {
     programs.bash.interactiveShellInit = ''
       command_not_found_handle() {
-        '${commandNotFound}/bin/command-not-found' "$@"
+        '${lib.getExe cfg.package}' "$@"
       }
     '';
 
     programs.zsh.interactiveShellInit = ''
       command_not_found_handler() {
-        '${commandNotFound}/bin/command-not-found' "$@"
+        '${lib.getExe cfg.package}' "$@"
       }
     '';
 
     # NOTE: Fish by itself checks for nixos command-not-found, let's instead makes it explicit.
     programs.fish.interactiveShellInit = ''
       function fish_command_not_found
-         "${commandNotFound}/bin/command-not-found" $argv
+         "${lib.getExe cfg.package}" $argv
       end
     '';
 
-    environment.systemPackages = [ commandNotFound ];
+    environment.systemPackages = [ cfg.package ];
   };
 
 }
