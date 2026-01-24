@@ -9,8 +9,18 @@
 let
   cfg = config.services.pretalx;
   format = pkgs.formats.ini { };
+  removeByPath = pathList: set:
+    lib.updateManyAttrsByPath [
+      {
+        path = lib.init pathList;
+        update = old:
+          lib.filterAttrs (n: v: n != (lib.last pathList)) old;
+       }
+     ] set;
+  removeEmptyByPath = pathList: set:
+    if (lib.attrByPath pathList {} set == {}) then (removeByPath pathList set) else set;
 
-  configFile = format.generate "pretalx.cfg" cfg.settings;
+  configFile = format.generate "pretalx.cfg" (removeEmptyByPath ["mail"] ( removeByPath [ "mail" "password_file"] cfg.settings ));
 
   inherit (cfg) finalPackage;
 
@@ -265,6 +275,16 @@ in
             };
           };
 
+          mail = {
+            password_file = lib.mkOption {
+              type = with lib.types; nullOr path;
+              default = null;
+              description = ''
+                Path to the secret file to read the mail password from
+              '';
+            };
+          };
+
           redis = {
             location = lib.mkOption {
               type = with lib.types; nullOr str;
@@ -469,7 +489,16 @@ in
               fi
             '';
           serviceConfig = {
-            ExecStart = "${lib.getExe' pythonEnv "gunicorn"} --bind unix:/run/pretalx/pretalx.sock ${cfg.gunicorn.extraArgs} pretalx.wsgi";
+            ExecStart = pkgs.writeShellScript "pretalx-start" ''
+              ${
+                if cfg.settings.mail.password_file != null then
+                  "export PRETALX_MAIL_PASSWORD=$(cat " + cfg.settings.mail.password_file + ")"
+                else
+                  ""
+              }
+              ${lib.getExe' pythonEnv "gunicorn"} --bind unix:/run/pretalx/pretalx.sock ${cfg.gunicorn.extraArgs} pretalx.wsgi
+            '';
+            # ExecStart = "${lib.getExe' pythonEnv "gunicorn"} --bind unix:/run/pretalx/pretalx.sock ${cfg.gunicorn.extraArgs} pretalx.wsgi";
             RuntimeDirectory = "pretalx";
           };
         };
