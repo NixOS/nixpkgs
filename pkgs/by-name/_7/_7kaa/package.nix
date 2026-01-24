@@ -40,6 +40,9 @@ gccStdenv.mkDerivation (finalAttrs: {
   pname = "7kaa";
   inherit version;
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchgit {
     url = "https://git.code.sf.net/p/skfans/7kaa";
     tag = "v${finalAttrs.version}";
@@ -51,12 +54,12 @@ gccStdenv.mkDerivation (finalAttrs: {
     autoconf-archive
     makeWrapper
     pkg-config
+    SDL2
   ];
 
   buildInputs = [
     openal
     enet
-    SDL2
     curl
     gettext
     libiconv
