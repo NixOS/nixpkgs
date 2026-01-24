@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "pyicloud";
-  version = "2.2.0";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "timlaing";
     repo = "pyicloud";
     tag = version;
-    hash = "sha256-Lkabmeh+D+nv30DyVRTQhnoyEt6cp2003uGn/GyOrHs=";
+    hash = "sha256-sejOJOzgZD531U5tHMoTwDH0ZkAi0sZ/nPp7uQDIZvU=";
   };
 
   build-system = [
