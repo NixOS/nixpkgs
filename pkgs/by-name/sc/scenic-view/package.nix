@@ -42,7 +42,7 @@ let
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   inherit pname version src;
   nativeBuildInputs = [
     gradle
@@ -88,4 +88,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ wirew0rm ];
     platforms = lib.platforms.all;
   };
-}
+})
