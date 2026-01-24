@@ -106,63 +106,7 @@ let
 
     passthru = {
       inherit src;
-
-      updateScript = writeScript "update-hytale-launcher" ''
-        #!/usr/bin/env nix-shell
-        #!nix-shell --pure -i bash -p bash curl cacert jq nix common-updater-scripts coreutils
-
-        set -euo pipefail
-
-        launcherJson=$(curl -s https://launcher.hytale.com/version/release/launcher.json)
-
-        launcherJq() {
-          echo "$launcherJson" | jq --raw-output "$1"
-        }
-
-        latestVersion="$(launcherJq '.version')"
-        currentVersion="$(NIXPKGS_ALLOW_UNFREE=1 nix eval --impure --raw -f . hytale-launcher.version)"
-
-        if [[ "$latestVersion" == "$currentVersion" ]]; then
-          echo "package is up-to-date"
-          exit 0
-        fi
-
-        update() {
-          system="$1"
-          upstreamHexHash="$2"
-          url="$3"
-
-          echo "updating $system..."
-
-          # download zip and verify against upstream hash
-          zipBase32="$(nix-prefetch-url "$url" 2>/dev/null)"
-          zipSri="$(nix hash convert --to sri "sha256:$zipBase32")"
-          upstreamSri="$(nix hash convert --hash-algo sha256 --to sri "$upstreamHexHash")"
-
-          if [[ "$zipSri" != "$upstreamSri" ]]; then
-            echo "error: zip hash mismatch for $system"
-            echo "  expected: $upstreamSri"
-            echo "  got:      $zipSri"
-            exit 1
-          fi
-          echo "  zip hash verified: $upstreamSri"
-
-          # get the unpacked hash for fetchzip
-          unpackedBase32="$(nix-prefetch-url --unpack "$url" 2>/dev/null)"
-          sriHash="$(nix hash convert --to sri "sha256:$unpackedBase32")"
-          echo "  fetchzip hash: $sriHash"
-
-          update-source-version --system="$system" --ignore-same-version hytale-launcher "$latestVersion" "$sriHash"
-        }
-
-        update "x86_64-linux" \
-          "$(launcherJq '.download_url.linux.amd64.sha256')" \
-          "$(launcherJq '.download_url.linux.amd64.url')"
-
-        update "aarch64-darwin" \
-          "$(launcherJq '.download_url.darwin.arm64.sha256')" \
-          "$(launcherJq '.download_url.darwin.arm64.url')"
-      '';
+      updateScript = ./update.sh;
     };
 
     meta = {
