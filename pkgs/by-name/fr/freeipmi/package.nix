@@ -3,6 +3,7 @@
   fetchurl,
   lib,
   stdenv,
+  argp-standalone,
   libgcrypt,
   readline,
   libgpg-error,
@@ -17,12 +18,22 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-W872u562gOSbSjYjV5kwrOeJn1OSWyBF/p+RrWkEER0=";
   };
 
+  postPatch = lib.optionalString stdenv.cc.isClang ''
+    substituteInPlace man/Makefile.in \
+      --replace-fail \
+        '$(CPP_FOR_BUILD) -nostdinc -w -C -P -I. -I$(top_srcdir)/man $@.pre $@' \
+        '$(CPP_FOR_BUILD) -nostdinc -w -C -P -I. -I$(top_srcdir)/man -o $@ $@.pre'
+  '';
+
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   buildInputs = [
     libgcrypt
     readline
     libgpg-error
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    argp-standalone
   ];
 
   configureFlags = [
@@ -63,6 +74,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
 
     maintainers = with lib.maintainers; [ raskin ];
-    platforms = lib.platforms.gnu ++ lib.platforms.linux; # arbitrary choice
+    platforms = lib.platforms.gnu ++ lib.platforms.unix;
   };
 }
