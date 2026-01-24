@@ -77,7 +77,7 @@ let
   };
 in
 symlinkJoin {
-  name = "${pname}-${version}";
+  inherit pname version;
 
   paths = [
     wrapper
