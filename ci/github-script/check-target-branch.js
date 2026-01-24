@@ -18,6 +18,19 @@ const reviewKey = 'check-target-branch'
  * }} CheckTargetBranchProps
  */
 async function checkTargetBranch({ github, context, core, dry }) {
+  /**
+   * @type {{
+   *  attrdiff: {
+   *   added: string[],
+   *   changed: string[],
+   *   removed: string[],
+   *  },
+   *  labels: Record<string, boolean>,
+   *  rebuildCountByKernel: Record<string, number>,
+   *  rebuildsByKernel: Record<string, string[]>,
+   *  rebuildsByPlatform: Record<string, string[]>,
+   * }}
+   */
   const changed = JSON.parse(
     await readFile('comparison/changed-paths.json', 'utf-8'),
   )
