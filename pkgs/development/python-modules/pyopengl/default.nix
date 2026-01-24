@@ -32,7 +32,6 @@ buildPythonPackage rec {
       # so pyopengl can find them at runtime.
       substituteInPlace OpenGL/platform/glx.py \
         --replace-fail "'OpenGL'"  '"${pkgs.libGL}/lib/libOpenGL${ext}"' \
-        --replace-fail '"GL",' '"${pkgs.libGL}/lib/libGL${ext}",' \
         --replace-fail "'GL'"  '"${pkgs.libGL}/lib/libGL${ext}"' \
         --replace-fail '"GLU",' '"${pkgs.libGLU}/lib/libGLU${ext}",' \
         --replace-fail "'GLX'" '"${pkgs.libglvnd}/lib/libGLX${ext}"' \
