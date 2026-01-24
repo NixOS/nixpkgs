@@ -1,17 +1,11 @@
 {
-  channel,
-  version,
-  hash,
-}:
-
-{
   fetchFromGitHub,
   gns3-gui,
   lib,
   python3Packages,
   qt5,
   testers,
-  wrapQtAppsHook,
+  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -23,21 +17,26 @@ let
 in
 pythonPackages.buildPythonApplication rec {
   pname = "gns3-gui";
-  inherit version;
-  format = "setuptools";
+  version = "2.2.55";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    inherit hash;
     owner = "GNS3";
     repo = "gns3-gui";
     tag = "v${version}";
+    hash = "sha256-6jblQakNpoSQXfy5pU68Aedg661VcwpqQilvqOV15pQ";
   };
 
-  nativeBuildInputs = [ wrapQtAppsHook ];
+  pythonRelaxDeps = [
+    "jsonschema"
+    "sentry-sdk"
+  ];
+
+  nativeBuildInputs = [ qt5.wrapQtAppsHook ];
+
+  buildInputs = [ qt5.qtwayland ];
 
   build-system = with pythonPackages; [ setuptools ];
-
-  propagatedBuildInputs = [ qt5.qtwayland ];
 
   dependencies = with pythonPackages; [
     distro
@@ -53,17 +52,17 @@ pythonPackages.buildPythonApplication rec {
   dontWrapQtApps = true;
 
   preFixup = ''
-    wrapQtApp "$out/bin/gns3"
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
-  doCheck = true;
-
-  checkInputs = with pythonPackages; [ pytestCheckHook ];
+  nativeCheckInputs = with pythonPackages; [
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+  ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
-    export QT_PLUGIN_PATH="${qt5.qtbase.bin}/${qt5.qtbase.qtPluginPrefix}"
-    export QT_QPA_PLATFORM_PLUGIN_PATH="${qt5.qtbase.bin}/lib/qt-${qt5.qtbase.version}/plugins";
+    export QT_PLUGIN_PATH="${lib.getBin qt5.qtbase}/${qt5.qtbase.qtPluginPrefix}"
+    export QT_QPA_PLATFORM_PLUGIN_PATH="${lib.getBin qt5.qtbase}/lib/qt-${qt5.qtbase.version}/plugins";
     export QT_QPA_PLATFORM=offscreen
   '';
 
@@ -73,7 +72,7 @@ pythonPackages.buildPythonApplication rec {
   };
 
   meta = {
-    description = "Graphical Network Simulator 3 GUI (${channel} release)";
+    description = "Graphical Network Simulator 3 GUI";
     longDescription = ''
       Graphical user interface for controlling the GNS3 network simulator. This
       requires access to a local or remote GNS3 server (it's recommended to
