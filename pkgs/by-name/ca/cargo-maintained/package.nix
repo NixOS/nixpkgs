@@ -1,8 +1,9 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  openssl,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -15,6 +16,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     sha256 = "sha256-YKwQjeJf4vZQO6r8ngG0faxVAmxmlKmMhsA9nbdtsbg=";
   };
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    openssl
+  ];
 
   cargoHash = "sha256-BJ0Mky86kf+KDiPh2HuLsaY/ixxUL96P0mcywC7/iCc=";
 
