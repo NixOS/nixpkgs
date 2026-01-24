@@ -12,7 +12,7 @@
   unstableGitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "scalp";
   version = "0-unstable-2024-08-28";
 
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     ];
 
   cmakeFlags = [
-    (lib.cmakeBool "BUILD_TESTS" doCheck)
+    (lib.cmakeBool "BUILD_TESTS" finalAttrs.doCheck)
   ]
   ++ lib.optionals withGurobi [
     (lib.cmakeFeature "GUROBI_ROOT_DIR" "${gurobi}")
@@ -77,4 +77,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ wegank ];
   };
-}
+})
