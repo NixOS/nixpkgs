@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "gh-poi";
-  version = "0.14.1";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "seachicken";
     repo = "gh-poi";
     rev = "v${version}";
-    hash = "sha256-HwFmSeDPpX1zbJh+0laekphmpnAsEdFBhgoLfT7CCYY=";
+    hash = "sha256-AAYpm9TSF/PdKMDwbzNQt6Q49neiwJdsS3OlNI/eIwk=";
   };
 
   ldflags = [
@@ -20,10 +20,10 @@ buildGoModule rec {
     "-w"
   ];
 
-  vendorHash = "sha256-ciOJpVqSPJJLX/sqrztqB3YSoMUrEnn52gGddE80rV0=";
+  vendorHash = "sha256-UHkNSTRH9m6H8Wh7S7uUy5SHuGe0uAmmYuoeR76C7m0=";
 
   # Skip checks because some of test suites require fixture.
-  # See: https://github.com/seachicken/gh-poi/blob/v0.14.1/.github/workflows/contract-test.yml#L28-L29
+  # See: https://github.com/seachicken/gh-poi/blob/v0.15.1/.github/workflows/contract-test.yml#L28-L29
   doCheck = false;
 
   meta = {
