@@ -30,13 +30,13 @@
 
 let
   # fork of pypresence, to be reverted if/when there's an upstream release
-  lynxpresence = python3Packages.buildPythonPackage rec {
+  lynxpresence = python3Packages.buildPythonPackage (finalAttrs: {
     pname = "lynxpresence";
     version = "4.6.2";
     pyproject = true;
 
     src = fetchPypi {
-      inherit pname version;
+      inherit (finalAttrs) pname version;
       hash = "sha256-w4WShLTTSf4JGQVL4lTkbOLL8C7cjnf8WwHyfwKK2zA=";
     };
 
@@ -44,9 +44,9 @@ let
 
     doCheck = false; # tests require internet connection
     pythonImportsCheck = [ "lynxpresence" ];
-  };
+  });
 in
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "tauon";
   version = "8.2.2";
   pyproject = true;
@@ -54,7 +54,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Taiko2k";
     repo = "Tauon";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-d7bEC68ZJthJE/AlcUqBSNM4L4YAjwHXTiWDCtKf598=";
   };
 
@@ -158,9 +158,9 @@ python3Packages.buildPythonApplication rec {
     description = "Linux desktop music player from the future";
     mainProgram = "tauon";
     homepage = "https://tauonmusicbox.rocks/";
-    changelog = "https://github.com/Taiko2k/Tauon/releases/tag/v${version}";
+    changelog = "https://github.com/Taiko2k/Tauon/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ jansol ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

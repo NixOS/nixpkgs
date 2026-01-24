@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "meerk40t-camera";
   version = "0.1.9";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-uGCBHdgWoorVX2XqMCg0YBweb00sQ9ZSbJe8rlGeovs=";
   };
 
@@ -33,4 +33,4 @@ python3Packages.buildPythonPackage rec {
     license = lib.licenses.mit;
     homepage = "https://github.com/meerk40t/meerk40t-camera";
   };
-}
+})

@@ -25,7 +25,7 @@ let
     cargoHash = "sha256-YUYo2B5hzzmDeNiWUC+198Qbz+JPgUJfpAqyPWAXTRA=";
   };
 in
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "scuba";
   inherit src version;
   pyproject = true;
@@ -43,7 +43,7 @@ python3Packages.buildPythonPackage rec {
     # Version detection fails
     # Patch in the version instead
     substituteInPlace scuba/version.py \
-      --replace-fail "__version__ = get_version()" "__version__ = \"${version}\""
+      --replace-fail "__version__ = get_version()" "__version__ = \"${finalAttrs.version}\""
 
     # Disable calling cargo through the make file
     # scubainit has already been built
@@ -65,4 +65,4 @@ python3Packages.buildPythonPackage rec {
     maintainers = with lib.maintainers; [ tbaldwin ];
     mainProgram = "scuba";
   };
-}
+})

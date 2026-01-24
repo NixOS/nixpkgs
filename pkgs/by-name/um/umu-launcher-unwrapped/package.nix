@@ -12,19 +12,19 @@
   versionCheckHook,
   nix-update-script,
 }:
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "umu-launcher-unwrapped";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "Open-Wine-Components";
     repo = "umu-launcher";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ELFOffP3KabvyOu4Fl7Z4zvPhamZrmhuuqz1aTYdbnE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
+    inherit (finalAttrs) src;
     hash = "sha256-qGkEc4VPShMMNgSB4JmSf7Mq4jEOxEK+BqlR680ZO9k=";
   };
 
@@ -72,7 +72,7 @@ python3Packages.buildPythonPackage rec {
     "PYTHONDIR=$(PREFIX)/${python3Packages.python.sitePackages}"
     "PYTHON_INTERPRETER=${lib.getExe python3Packages.python}"
     # Override RELEASEDIR to avoid running `git describe`
-    "RELEASEDIR=${pname}-${version}"
+    "RELEASEDIR=umu-launcher-unwrapped-${finalAttrs.version}"
     "SHELL_INTERPRETER=${lib.getExe bash}"
   ];
 
@@ -94,7 +94,7 @@ python3Packages.buildPythonPackage rec {
 
   meta = {
     description = "Unified launcher for Windows games on Linux using the Steam Linux Runtime and Tools";
-    changelog = "https://github.com/Open-Wine-Components/umu-launcher/releases/tag/${version}";
+    changelog = "https://github.com/Open-Wine-Components/umu-launcher/releases/tag/${finalAttrs.version}";
     homepage = "https://github.com/Open-Wine-Components/umu-launcher";
     license = lib.licenses.gpl3;
     mainProgram = "umu-run";
@@ -105,4 +105,4 @@ python3Packages.buildPythonPackage rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

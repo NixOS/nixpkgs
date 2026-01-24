@@ -4,7 +4,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "opsdroid";
   version = "0.30.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "opsdroid";
     repo = "opsdroid";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-7H44wdhJD4Z6OP1sUmSGlepuvx+LlwKLq7iR8cwqR24=";
   };
 
@@ -66,10 +66,10 @@ python3Packages.buildPythonPackage rec {
   meta = {
     description = "Open source chat-ops bot framework";
     homepage = "https://opsdroid.dev";
-    changelog = "https://github.com/opsdroid/opsdroid/releases/tag/v${version}";
+    changelog = "https://github.com/opsdroid/opsdroid/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "opsdroid";
   };
-}
+})

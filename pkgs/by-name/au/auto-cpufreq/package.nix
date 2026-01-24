@@ -10,7 +10,7 @@
   nixosTests,
 }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "auto-cpufreq";
   version = "2.6.0";
   pyproject = true;
@@ -18,14 +18,14 @@ python3Packages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "AdnanHodzic";
     repo = "auto-cpufreq";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-DEs6jbWYJFJgpaPtF5NT3DQs3erjzdm2brLNHpjrEPA=";
   };
 
   patches = [
     # hardcodes version output
     (replaceVars ./fix-version-output.patch {
-      inherit version;
+      inherit (finalAttrs) version;
     })
 
     # patch to prevent script copying and to disable install
@@ -117,4 +117,4 @@ python3Packages.buildPythonPackage rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ sarcasticadmin ];
   };
-}
+})

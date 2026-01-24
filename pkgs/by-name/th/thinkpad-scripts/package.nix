@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "thinkpad-scripts";
   version = "4.12.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "martin-ueding";
     repo = "thinkpad-scripts";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-foraZWLYV/Rg+TcKy3atAwhXqCBeQeXs+orzWzLqTSE=";
   };
 
@@ -30,4 +30,4 @@ python3Packages.buildPythonPackage rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ dawidsowa ];
   };
-}
+})
