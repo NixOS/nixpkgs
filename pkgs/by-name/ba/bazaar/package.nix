@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bazaar";
-  version = "0.7.3";
+  version = "0.7.5";
 
   src = fetchFromGitHub {
     owner = "kolunmi";
     repo = "bazaar";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-T0HQ1bjH2nd9+BJAvhSNcpYp25Jt0sNZxKeTY7EfsSw=";
+    hash = "sha256-c6mAWnX0iKXJqOxe/kgUqmXXVKO7ZEI+vKoYLKOuNos=";
   };
 
   nativeBuildInputs = [
