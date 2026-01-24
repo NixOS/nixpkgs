@@ -43,6 +43,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "389-ds-base";
   version = "3.3.0";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "389ds";
     repo = "389-ds-base";
@@ -72,7 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
     rustc
     rustPlatform.cargoSetupHook
   ]
-  ++ lib.optional withCockpit rsync;
+  ++ lib.optional withCockpit rsync
+  ++ lib.optional withNetSnmp net-snmp;
 
   buildInputs = [
     cracklib
@@ -92,8 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional withSystemd systemd
   ++ lib.optional withOpenldap openldap
-  ++ lib.optional withBdb db
-  ++ lib.optional withNetSnmp net-snmp;
+  ++ lib.optional withBdb db;
 
   postPatch = ''
     patchShebangs ./buildnum.py ./ldap/servers/slapd/mkDBErrStrs.py
@@ -112,7 +115,9 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
   ]
   ++ lib.optionals withOpenldap [
-    "--with-openldap"
+    "--with-openldap-inc=${lib.getDev openldap}/include"
+    "--with-openldap-lib=${lib.getLib openldap}/lib"
+    "--with-openldap-bin=${openldap}/bin"
   ]
   ++ lib.optionals withBdb [
     "--with-db-inc=${lib.getDev db}/include"
