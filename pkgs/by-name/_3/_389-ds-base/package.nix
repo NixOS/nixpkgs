@@ -139,8 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-debug"
   ];
 
-  enableParallelBuilding = true;
-  # Disable parallel builds as those lack some dependencies:
+  # Disable parallel installation as those lack some dependencies:
   #   ld: cannot find -lslapd: No such file or directory
   # https://hydra.nixos.org/log/h38bj77gav0r6jbi4bgzy1lfjq22k2wy-389-ds-base-2.3.1.drv
   enableParallelInstalling = false;

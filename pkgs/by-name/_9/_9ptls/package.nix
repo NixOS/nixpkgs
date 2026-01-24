@@ -5,10 +5,8 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  inherit (tlsclient) src version enableParallelBuilding;
+  inherit (tlsclient) src version;
   pname = "9ptls";
-
-  strictDeps = true;
 
   buildFlags = [ "mount.9ptls" ];
   installFlags = [

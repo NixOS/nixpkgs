@@ -1,21 +1,19 @@
 {
   fetchFromGitHub,
   lib,
-  lz4,
-  lzop,
   nix-update-script,
   rustPlatform,
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "3cpio";
   version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "bdrung";
     repo = "3cpio";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-4ERSH5Kz/e2MuIIgi3XQVnhW0csBPDIvdmEw05OdREA=";
   };
 
@@ -36,4 +34,4 @@ rustPlatform.buildRustPackage rec {
     # https://github.com/rust-lang/libc/issues/4360
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

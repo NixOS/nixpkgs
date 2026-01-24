@@ -4,7 +4,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "20kly";
   version = "1.5.0";
 
@@ -13,13 +13,13 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "20kly";
     repo = "20kly";
-    tag = "v${version}";
-    sha256 = "1zxsxg49a02k7zidx3kgk2maa0vv0n1f9wrl5vch07sq3ghvpphx";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Hd674RtYHwDZLjTz5IIFewOlqphvjt7iP1MAlcjruv8=";
   };
 
   patchPhase = ''
     substituteInPlace lightyears \
-      --replace \
+      --replace-fail \
         "LIGHTYEARS_DIR = \".\"" \
         "LIGHTYEARS_DIR = \"$out/share\""
   '';
@@ -45,4 +45,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ fgaz ];
   };
-}
+})

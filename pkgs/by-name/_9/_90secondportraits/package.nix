@@ -17,7 +17,7 @@ let
 
   icon = fetchurl {
     url = "http://tangramgames.dk/img/thumb/90secondportraits.png";
-    sha256 = "13k6cq8s7jw77j81xfa5ri41445m778q6iqbfplhwdpja03c6faw";
+    hash = "sha256-XDnDBlDyNg7pdQtHg9E5tRASSMxFuR6QPIfLoxFmZo4=";
   };
 
   desktopItems = [
@@ -33,14 +33,14 @@ let
   ];
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   inherit pname desktopItems;
   version = "1.01b";
 
   src = fetchFromGitHub {
     owner = "SimonLarsen";
     repo = "90-Second-Portraits";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-xxgB8Aw7QTK9lPus7Q4E7iP2/rRfCwwiYbk5NqzujHI=";
     fetchSubmodules = true;
   };
@@ -88,5 +88,4 @@ stdenv.mkDerivation rec {
     ];
     downloadPage = "http://tangramgames.dk/games/90secondportraits";
   };
-
-}
+})

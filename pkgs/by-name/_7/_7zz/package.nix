@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = lib.optionalString stdenv.hostPlatform.isMinGW ''
     substituteInPlace CPP/7zip/7zip_gcc.mak C/7zip_gcc_c.mak \
-      --replace windres.exe ${stdenv.cc.targetPrefix}windres
+      --replace-fail windres.exe ${stdenv.cc.targetPrefix}windres
   '';
 
   env.NIX_CFLAGS_COMPILE = toString (
@@ -100,8 +100,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = lib.optionals useUasm [ uasm ];
 
   setupHook = ./setup-hook.sh;
-
-  enableParallelBuilding = true;
 
   preBuild = "cd CPP/7zip/Bundles/Alone2";
 
