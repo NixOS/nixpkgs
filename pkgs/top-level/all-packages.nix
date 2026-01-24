@@ -10657,10 +10657,6 @@ with pkgs;
 
   wmfocus = callPackage ../applications/window-managers/i3/wmfocus.nix { };
 
-  ii = callPackage ../applications/networking/irc/ii {
-    stdenv = gccStdenv;
-  };
-
   ikiwiki = callPackage ../applications/misc/ikiwiki {
     inherit
       (perlPackages.override {
