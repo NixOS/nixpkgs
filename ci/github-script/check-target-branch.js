@@ -91,6 +91,23 @@ async function checkTargetBranch({ github, context, core, dry }) {
   const rebuildsAllTests =
     changed.attrdiff.changed.includes('nixosTests.simple')
 
+  // https://github.com/NixOS/nixpkgs/pull/481205#issuecomment-3790123921
+  // These should go to staging-nixos instead of master,
+  // but release-xx.xx (not staging-xx.xx) when backported
+  let isExemptKernelUpdate = false
+  if (prInfo.changed_files === 1 && base.startsWith('release-')) {
+    const changedFiles = (
+      await github.rest.pulls.listFiles({
+        ...context.repo,
+        pull_number,
+      })
+    ).data
+    isExemptKernelUpdate =
+      changedFiles.length === 1 &&
+      changedFiles[0].filename ===
+        'pkgs/os-specific/linux/kernel/kernels-org.json'
+  }
+
   // https://github.com/NixOS/nixpkgs/pull/483194#issuecomment-3793393218
   const isExemptHomeAssistantUpdate =
     maxRebuildCount <= 1500 && head === 'wip-home-assistant'
@@ -100,6 +117,7 @@ async function checkTargetBranch({ github, context, core, dry }) {
       `checkTargetBranch: this PR:`,
       `  * causes ${maxRebuildCount} rebuilds`,
       `  * ${rebuildsAllTests ? 'rebuilds' : 'does not rebuild'} all NixOS tests`,
+      `  * ${isExemptKernelUpdate ? 'is' : 'is not'} an exempt kernel update`,
       `  * ${isExemptHomeAssistantUpdate ? 'is' : 'is not'} an exempt home-assistant update`,
     ].join('\n'),
   )
@@ -124,7 +142,7 @@ async function checkTargetBranch({ github, context, core, dry }) {
     })
 
     throw new Error('This PR is against the wrong branch.')
-  } else if (rebuildsAllTests) {
+  } else if (rebuildsAllTests && !isExemptKernelUpdate) {
     let branchText
     if (base === 'master' && maxRebuildCount >= 500) {
       branchText = '(probably either `staging-nixos` or `staging`)'
@@ -152,7 +170,11 @@ async function checkTargetBranch({ github, context, core, dry }) {
     })
 
     throw new Error('This PR is against the wrong branch.')
-  } else if (maxRebuildCount >= 500 && !isExemptHomeAssistantUpdate) {
+  } else if (
+    maxRebuildCount >= 500 &&
+    !isExemptKernelUpdate &&
+    !isExemptHomeAssistantUpdate
+  ) {
     const stagingBranch =
       base === 'master' ? 'staging' : `staging-${split(base).version}`
     const body = [
