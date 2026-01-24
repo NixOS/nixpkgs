@@ -22,7 +22,7 @@
   # tests
   pytestCheckHook,
   pytest-django,
-  pytz
+  pytz,
 }:
 
 buildPythonPackage (finalAttrs: {
