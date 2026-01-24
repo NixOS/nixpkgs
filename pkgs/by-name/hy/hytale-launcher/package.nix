@@ -124,7 +124,10 @@ let
       license = lib.licenses.unfreeRedistributable;
       maintainers = with lib.maintainers; [ karol-broda ];
       mainProgram = "hytale-launcher";
-      platforms = [ "x86_64-linux" ];
+      platforms = [
+        "x86_64-linux"
+        "aarch64-darwin"
+      ];
       sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     };
   };
@@ -143,25 +146,7 @@ let
       runHook postInstall
     '';
 
-    inherit (fhsEnv) passthru;
-
-    meta = {
-      description = "Official launcher for Hytale";
-      longDescription = ''
-        Official launcher for Hytale, an upcoming block-based game from Hypixel Studios.
-
-        Note: The launcher's built-in auto-update mechanism will not work due to
-        the immutable nature of the Nix store. Updates must be applied by updating
-        the nixpkgs package.
-      '';
-      homepage = "https://hytale.com";
-      license = lib.licenses.unfreeRedistributable;
-      maintainers = with lib.maintainers; [ karol-broda ];
-      mainProgram = "hytale-launcher";
-      platforms = [ "aarch64-darwin" ];
-      sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    };
+    inherit (fhsEnv) passthru meta;
   };
-
 in
 if stdenv.hostPlatform.isDarwin then darwinPackage else fhsEnv
