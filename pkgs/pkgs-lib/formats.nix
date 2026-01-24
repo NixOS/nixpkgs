@@ -30,19 +30,18 @@ let
     ;
 
   inherit (lib.generators)
+    mkLuaInline
     mkValueStringDefault
     toGitINI
     toINI
     toINIWithGlobalSection
     toKeyValue
     toLua
-    mkLuaInline
+    toPlist
     ;
 
   inherit (lib.types)
-    serializableValueWith
     attrsOf
-    atom
     bool
     coercedTo
     either
@@ -55,6 +54,7 @@ let
     nullOr
     oneOf
     path
+    serializableValueWith
     str
     submodule
     ;
@@ -388,7 +388,7 @@ optionalAttrs allowAliases aliases
     // {
       generate =
         name: value:
-        lib.warn
+        warn
           "Direct use of `pkgs.formats.systemd` has been deprecated, please use `pkgs.formats.systemd { }` instead."
           rawFormat.generate
           name
@@ -801,7 +801,7 @@ optionalAttrs allowAliases aliases
             ''
         ) { };
       # Alias for mkLuaInline
-      lib.mkRaw = lib.mkLuaInline;
+      lib.mkRaw = mkLuaInline;
     };
 
   nixConf =
@@ -874,7 +874,7 @@ optionalAttrs allowAliases aliases
             ${mkKeyValuePairs (filterAttrs (key: _: isExtra key) value)}
             ${extraOptions}
           '';
-          checkPhase = lib.optionalString checkConfig (
+          checkPhase = optionalString checkConfig (
             if pkgs.stdenv.hostPlatform != pkgs.stdenv.buildPlatform then
               ''
                 echo "Ignoring validation for cross-compilation"
@@ -1051,6 +1051,6 @@ optionalAttrs allowAliases aliases
         in
         valueType;
 
-      generate = name: value: pkgs.writeText name (lib.generators.toPlist { inherit escape; } value);
+      generate = name: value: pkgs.writeText name (toPlist { inherit escape; } value);
     };
 }
