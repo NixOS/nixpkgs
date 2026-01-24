@@ -105,6 +105,9 @@ let
       # network
       network = callLibs ./network;
 
+      # flakes
+      flakes = callLibs ./flakes.nix;
+
       inherit (builtins)
         getContext
         hasContext
@@ -390,6 +393,8 @@ let
         toInt
         toIntBase10
         fileContents
+        appendContext
+        unsafeDiscardStringContext
         ;
       inherit (self.stringsWithDeps)
         textClosureList
@@ -414,7 +419,13 @@ let
         renameCrossIndexTo
         mapCrossIndex
         ;
-      inherit (self.derivations) lazyDerivation optionalDrvAttr warnOnInstantiate;
+      inherit (self.derivations)
+        lazyDerivation
+        optionalDrvAttr
+        warnOnInstantiate
+        addDrvOutputDependencies
+        unsafeDiscardOutputDependency
+        ;
       inherit (self.generators) mkLuaInline;
       inherit (self.meta)
         addMetaAttrs
@@ -442,6 +453,9 @@ let
         dirOf
         isPath
         packagesFromDirectoryRecursive
+        hashFile
+        readDir
+        readFileType
         ;
       inherit (self.sources)
         cleanSourceFilter
@@ -591,6 +605,10 @@ let
         ;
       inherit (self.network.ipv6)
         mkEUI64Suffix
+        ;
+      inherit (self.flakes)
+        parseFlakeRef
+        flakeRefToString
         ;
     }
   );
