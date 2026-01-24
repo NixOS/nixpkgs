@@ -121,7 +121,7 @@ let
 in
 runCommand "${unwrapped.name}-wrapped"
   {
-    inherit (unwrapped) meta;
+    inherit (unwrapped) meta pname version;
     paths = [ unwrapped ];
     nativeBuildInputs = [
       makeWrapper

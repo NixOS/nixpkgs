@@ -8,6 +8,7 @@
   libbfd,
   libbfd_2_38,
   elfutils,
+  openssl,
   readline,
   zlib,
   python3,
@@ -50,6 +51,7 @@ stdenv.mkDerivation rec {
     ++ [
       elfutils
       zlib
+      openssl
       readline
     ];
 

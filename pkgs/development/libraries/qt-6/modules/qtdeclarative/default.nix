@@ -44,6 +44,11 @@ qtModule {
       hash = "sha256-KMFurA9Q84qwuyBraU3ZdoFWs8uO3uoUcinfcfh/ps8=";
     })
 
+    # Backport of https://codereview.qt-project.org/c/qt/qtdeclarative/+/704031
+    # Fixes common Plasma crash
+    # FIXME: remove in 6.10.3
+    ./another-crash-fix.patch
+
     # https://qt-project.atlassian.net/browse/QTBUG-137440
     (fetchpatch {
       name = "rb-dialogs-link-labsfolderlistmodel-into-quickdialogs2quickimpl.patch";

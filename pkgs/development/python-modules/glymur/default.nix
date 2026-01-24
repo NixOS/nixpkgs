@@ -3,37 +3,39 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
-  glibc,
+  replaceVars,
+  openjpeg,
   libtiff,
+  glibc,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
   lxml,
   numpy,
-  openjpeg,
+  pillow,
+
+  # tests
+  addBinToPathHook,
   pytestCheckHook,
   scikit-image,
-  setuptools,
-  replaceVars,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "glymur";
-  version = "0.13.6";
+  version = "0.14.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "quintusdias";
     repo = "glymur";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tIvDhlFPpDxC3CgBDT0RN9MM8ycY+J1hjcLXzx14Zhs=";
+    hash = "sha256-9CvsknpvBIHe2HEqwN43RRhRxh8D0eHQ/T9W3/eVJlQ=";
   };
 
   patches = [
-    # Numpy 2.x compatibility, https://github.com/quintusdias/glymur/pull/675
-    (fetchpatch {
-      name = "numpy2-compat.patch";
-      url = "https://github.com/quintusdias/glymur/commit/89b159299035ebb05776c3b90278f410ca6dba64.patch";
-      hash = "sha256-C/Q5WZmW5YtN3U8fxKljfqwKHtFLfR2LQ69Tj8SuIWg=";
-    })
     (replaceVars ./set-lib-paths.patch {
       openjp2_lib = "${lib.getLib openjpeg}/lib/libopenjp2${stdenv.hostPlatform.extensions.sharedLibrary}";
       tiff_lib = "${lib.getLib libtiff}/lib/libtiff${stdenv.hostPlatform.extensions.sharedLibrary}";
@@ -41,27 +43,30 @@ buildPythonPackage (finalAttrs: {
   ];
 
   postPatch = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-    substituteInPlace glymur/lib/tiff.py \
-        --replace-fail "glymur_config('c')" "ctypes.CDLL('${lib.getLib glibc}/lib/libc.so.6')"
+    substituteInPlace glymur/lib/_tiff.py \
+        --replace-fail \
+          'glymur_config("c")' \
+          'ctypes.CDLL("${lib.getLib glibc}/lib/libc.so.6")'
   '';
 
   __propagatedImpureHostDeps = lib.optional stdenv.hostPlatform.isDarwin "/usr/lib/libc.dylib";
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     lxml
     numpy
+    pillow
   ];
 
   nativeCheckInputs = [
+    addBinToPathHook
     pytestCheckHook
     scikit-image
   ];
-
-  preCheck = ''
-    export PATH="$out/bin:$PATH"
-  '';
 
   disabledTestPaths = [
     # this test involves glymur's different ways of finding the openjpeg path on
@@ -74,7 +79,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Tools for accessing JPEG2000 files";
     homepage = "https://github.com/quintusdias/glymur";
-    changelog = "https://github.com/quintusdias/glymur/blob/${finalAttrs.src.rev}/CHANGES.txt";
+    changelog = "https://github.com/quintusdias/glymur/blob/${finalAttrs.src.tag}/CHANGES.txt";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tomasajt ];
   };

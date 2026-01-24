@@ -1,6 +1,6 @@
 {
   lib,
-  flutter335,
+  flutter338,
   fetchFromGitHub,
   imagemagick,
   alsa-lib,
@@ -10,24 +10,27 @@
   yq-go,
   _experimental-update-script-combinators,
   nix-update-script,
+  dart,
 }:
 
 let
   pname = "interstellar";
 
-  version = "0.11.0";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "interstellar-app";
     repo = "interstellar";
     tag = "v${version}";
-    hash = "sha256-5CFl5pvxentbKCPHkPDj4d5i3d2S3UxkQ56OX14Y8gY=";
+    hash = "sha256-ZhZBy/KECz/Gs3RSuuXmTtI5pKPBMFQNG/kS8JvEaFc=";
   };
 in
-flutter335.buildFlutterApplication {
+flutter338.buildFlutterApplication {
   inherit pname version src;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
+
+  gitHashes = lib.importJSON ./git-hashes.json;
 
   nativeBuildInputs = [ imagemagick ];
 
@@ -72,6 +75,16 @@ flutter335.buildFlutterApplication {
           supportedFeatures = [ ];
         }
       )
+      {
+        command = [
+          dart.fetchGitHashesScript
+          "--input"
+          ./pubspec.lock.json
+          "--output"
+          ./git-hashes.json
+        ];
+        supportedFeatures = [ ];
+      }
     ];
   };
 

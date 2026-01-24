@@ -529,4 +529,6 @@ in
 
     trace
     ;
+
+  inherit (builtins) filterSource;
 }

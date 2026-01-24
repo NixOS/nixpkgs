@@ -40,6 +40,9 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     homepage = "https://www.mediawiki.org/";
     platforms = lib.platforms.all;
-    teams = with lib.maintainers; [ SuperSandro2000 ];
+    maintainers = with lib.maintainers; [
+      # for the C3D2
+      SuperSandro2000
+    ];
   };
 }

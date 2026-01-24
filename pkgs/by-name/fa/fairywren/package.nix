@@ -41,7 +41,7 @@ lib.checkListOfEnum "${pname}: colorVariants" colorVariantList colorVariants
     meta = {
       description = "FairyWren Icon Set";
       homepage = "https://gitlab.com/aiyahm/FairyWren-Icons";
-      maintainers = with lib.maintainers; [ d3vil0p3r ];
+      maintainers = [ ];
       platforms = lib.platforms.all;
       license = with lib.licenses; [ gpl3Plus ];
     };

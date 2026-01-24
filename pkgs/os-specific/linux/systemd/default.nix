@@ -207,13 +207,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "258.2";
+  version = "258.3";
 
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "systemd";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-1iWeuNefDOIEUSTzxzvt+jfcs6sSMPhxQfdwp0mqUjQ=";
+    hash = "sha256-wpg/0z7xrB8ysPaa/zNp1mz+yYRCGyXz0ODZcKapovM=";
   };
 
   # On major changes, or when otherwise required, you *must* :
@@ -957,7 +957,6 @@ stdenv.mkDerivation (finalAttrs: {
             systemd-initrd-luks-empty-passphrase
             systemd-initrd-luks-password
             systemd-initrd-luks-tpm2
-            systemd-initrd-luks-unl0kr
             systemd-initrd-modprobe
             systemd-initrd-shutdown
             systemd-initrd-simple

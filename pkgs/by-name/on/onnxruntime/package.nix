@@ -5,6 +5,7 @@
   fetchFromGitHub,
   applyPatches,
   fetchpatch,
+  fetchurl,
   abseil-cpp_202407,
   cmake,
   cpuinfo,
@@ -151,6 +152,20 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/microsoft/onnxruntime/commit/8ebd0bf1cf02414584d15d7244b07fa97d65ba02.patch";
       hash = "sha256-vX+kaFiNdmqWI91JELcLpoaVIHBb5EPbI7rCAMYAx04=";
     })
+
+    # Skip execinfo include on musl
+    # https://github.com/microsoft/onnxruntime/pull/25726
+    ./musl-execinfo.patch
+    # Add missing include which is only needed on musl (is implied in other includes on glibc)
+    # https://github.com/microsoft/onnxruntime/pull/26969
+    ./musl-cstdint.patch
+
+    # Fix build of unit tests with musl libc
+    # https://github.com/microsoft/onnxruntime/issues/9155
+    (fetchurl {
+      url = "https://gitlab.alpinelinux.org/alpine/aports/-/raw/462dfe0eb4b66948fe48de44545cc22bb64fdf9f/community/onnxruntime/0001-Remove-MATH_NO_EXCEPT-macro.patch";
+      hash = "sha256-BdeGYevZExWWCuJ1lSw0Roy3h+9EbJgFF8qMwVxSn1A=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -253,6 +268,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals pythonSupport [ "dist" ];
 
+  separateDebugInfo = true;
+
   enableParallelBuilding = true;
 
   cmakeDir = "../cmake";
@@ -300,21 +317,29 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "onnxruntime_USE_COMPOSABLE_KERNEL_CK_TILE" false)
   ];
 
-  env = lib.optionalAttrs rocmSupport {
-    MIOPEN_PATH = rocmPackages.miopen;
-    # HIP steps fail to find ROCm libs when not in HIPFLAGS, causing
-    # fatal error: 'rocrand/rocrand.h' file not found
-    HIPFLAGS = lib.concatMapStringsSep " " (pkg: "-I${lib.getInclude pkg}/include") [
-      rocmPackages.hipblas
-      rocmPackages.hipcub
-      rocmPackages.hiprand
-      rocmPackages.hipsparse
-      rocmPackages.rocblas
-      rocmPackages.rocprim
-      rocmPackages.rocrand
-      rocmPackages.rocthrust
-    ];
-  };
+  env =
+    lib.optionalAttrs effectiveStdenv.hostPlatform.isLinux {
+      NIX_LDFLAGS = "-z,noexecstack";
+    }
+    // lib.optionalAttrs rocmSupport {
+      MIOPEN_PATH = rocmPackages.miopen;
+      # HIP steps fail to find ROCm libs when not in HIPFLAGS, causing
+      # fatal error: 'rocrand/rocrand.h' file not found
+      HIPFLAGS = lib.concatMapStringsSep " " (pkg: "-I${lib.getInclude pkg}/include") [
+        rocmPackages.hipblas
+        rocmPackages.hipcub
+        rocmPackages.hiprand
+        rocmPackages.hipsparse
+        rocmPackages.rocblas
+        rocmPackages.rocprim
+        rocmPackages.rocrand
+        rocmPackages.rocthrust
+      ];
+    }
+    // lib.optionalAttrs effectiveStdenv.hostPlatform.isMusl {
+      NIX_CFLAGS_COMPILE = "-DFLATBUFFERS_LOCALE_INDEPENDENT=0";
+      GTEST_FILTER = "*:-ContribOpTest.StringNormalizer*";
+    };
 
   doCheck =
     !(
@@ -334,6 +359,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   hardeningEnable = lib.optionals (effectiveStdenv.hostPlatform.system == "loongarch64-linux") [
     "nostrictaliasing"
   ];
+  hardeningDisable = lib.optional effectiveStdenv.hostPlatform.isMusl "fortify";
 
   postPatch = ''
     substituteInPlace cmake/libonnxruntime.pc.cmake.in \
@@ -371,6 +397,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     remove-references-to -t "${lib.getBin cuda_nvcc}" ''${!outputLib}/lib/libonnxruntime_providers_cuda.so
   '';
   disallowedRequisites = lib.optionals cudaSupport [ (lib.getBin cuda_nvcc) ];
+
+  __structuredAttrs = true;
 
   passthru = {
     inherit cudaSupport cudaPackages ncclSupport; # for the python module

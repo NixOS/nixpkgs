@@ -59,7 +59,7 @@ python3.pkgs.buildPythonApplication rec {
     "\${qtWrapperArgs[@]}"
   ]
   ++ lib.optionals archiveSupport [
-    ''--prefix PATH : ${lib.makeBinPath [ p7zip ]}''
+    "--prefix PATH : ${lib.makeBinPath [ p7zip ]}"
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];

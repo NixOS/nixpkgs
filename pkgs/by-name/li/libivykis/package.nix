@@ -27,6 +27,12 @@ stdenv.mkDerivation rec {
     protobufc
   ];
 
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
+
   meta = {
     homepage = "https://libivykis.sourceforge.net/";
     description = ''

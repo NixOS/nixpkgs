@@ -8,7 +8,7 @@
 }:
 let
   # Requires an /etc/os-release file, so we override it with this.
-  osRelease = writeText "os-release" ''ID=NixOS'';
+  osRelease = writeText "os-release" "ID=NixOS";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openapv";

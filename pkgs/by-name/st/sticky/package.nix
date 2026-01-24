@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gitUpdater {
-      ignoredVersions = ''master.*'';
+      ignoredVersions = "master.*";
     };
   };
 

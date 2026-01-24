@@ -164,7 +164,7 @@ in
       '';
       type = types.bool;
       default = config.node.pkgs != null;
-      defaultText = literalExpression ''node.pkgs != null'';
+      defaultText = literalExpression "node.pkgs != null";
     };
 
     node.specialArgs = mkOption {

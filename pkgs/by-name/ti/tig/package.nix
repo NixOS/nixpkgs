@@ -77,6 +77,12 @@ stdenv.mkDerivation rec {
       --prefix PATH ':' "${git}/bin"
   '';
 
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
+
   meta = {
     homepage = "https://jonas.github.io/tig/";
     description = "Text-mode interface for git";

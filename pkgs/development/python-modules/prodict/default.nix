@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   # make setuptools happy on case-sensitive filesystems
-  postPatch = ''if [[ ! -f README.md ]]; then mv README.MD README.md; fi'';
+  postPatch = "if [[ ! -f README.md ]]; then mv README.MD README.md; fi";
 
   nativeCheckInputs = [ pytestCheckHook ];
 

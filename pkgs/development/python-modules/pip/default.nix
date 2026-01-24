@@ -5,9 +5,8 @@
   pythonAtLeast,
 
   # build-system
+  flit-core,
   installShellFiles,
-  wheel,
-  setuptools,
 
   # docs
   sphinx,
@@ -32,14 +31,14 @@
 let
   self = buildPythonPackage rec {
     pname = "pip";
-    version = "25.0.1";
+    version = "25.3";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "pypa";
       repo = "pip";
       tag = version;
-      hash = "sha256-V069rAL6U5KBnSc09LRCu0M7qQCH5NbMghVttlmIoRY=";
+      hash = "sha256-aHV4j9OMLD6I6Fe6A04bE7xk6eS5CxeUEw4Psqj7xz0=";
     };
 
     postPatch = ''
@@ -49,9 +48,8 @@ let
     '';
 
     nativeBuildInputs = [
+      flit-core
       installShellFiles
-      setuptools
-      wheel
     ]
     ++ lib.optionals (pythonAtLeast "3.11") [
       # docs

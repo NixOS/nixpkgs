@@ -14975,7 +14975,7 @@ with self;
       hash = "sha256-DFiMUH7tXmLRLtHMHkkcb/Oh9ZxPs9Q14UIUs3qzklE=";
     };
     propagatedBuildInputs = [
-      pkgs.goocanvas
+      pkgs.goocanvas_1
       pkgs.gtk2
       Gtk2
     ];
@@ -14998,7 +14998,7 @@ with self;
     };
     buildInputs = [ pkgs.gtk3 ];
     propagatedBuildInputs = [
-      pkgs.goocanvas2
+      pkgs.goocanvas_2
       Gtk3
     ];
     meta = {
@@ -15018,7 +15018,7 @@ with self;
       hash = "sha256-uoBnNuvMnePYFBp2Omgr3quxy4cCveKZrf1XSs6HUFI=";
     };
     propagatedBuildInputs = [
-      pkgs.goocanvas2
+      pkgs.goocanvas_2
       Gtk3
     ];
     meta = {

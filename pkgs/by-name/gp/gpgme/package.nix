@@ -17,9 +17,10 @@
   libsForQt5,
   qt6Packages,
   python3,
+  testers,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gpgme";
   version = "2.0.1";
 
@@ -32,9 +33,15 @@ stdenv.mkDerivation rec {
   outputBin = "dev"; # gpgme-config; not so sure about gpgme-tool
 
   src = fetchurl {
-    url = "mirror://gnupg/gpgme/gpgme-${version}.tar.bz2";
+    url = "mirror://gnupg/gpgme/gpgme-${finalAttrs.version}.tar.bz2";
     hash = "sha256-ghqwaVyELqtRdSqBmAySsEEMfq3QQQP3kdXSpSZ4SWY=";
   };
+
+  postPatch = ''
+    # remove -unknown suffix from pkgconfig version
+    substituteInPlace autogen.sh \
+      --replace-fail 'tmp="-unknown"' 'tmp=""'
+  '';
 
   patches = [
     # Don't use deprecated LFS64 APIs (removed in musl 1.2.4)
@@ -92,6 +99,10 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     inherit gpa;
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+      versionCheck = true;
+    };
     python = python3.pkgs.gpgme;
     qt5 = libsForQt5.qgpgme;
     qt6 = qt6Packages.qgpgme;
@@ -99,7 +110,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://gnupg.org/software/gpgme/index.html";
-    changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;f=NEWS;hb=gpgme-${version}";
+    changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;f=NEWS;hb=gpgme-${finalAttrs.version}";
     description = "Library for making GnuPG easier to use";
     longDescription = ''
       GnuPG Made Easy (GPGME) is a library designed to make access to GnuPG
@@ -111,7 +122,11 @@ stdenv.mkDerivation rec {
       lgpl21Plus
       gpl3Plus
     ];
+    pkgConfigModules = [
+      "gpgme"
+      "gpgme-glib"
+    ];
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

@@ -10,7 +10,7 @@
 # with older documents/templates/etc.
 
 stdenvNoCC.mkDerivation rec {
-  name = "source-sans-pro-${version}";
+  pname = "source-sans-pro";
   version = "3.006";
 
   src = fetchzip {

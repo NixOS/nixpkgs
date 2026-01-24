@@ -130,7 +130,12 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://lore.kernel.org/git/20251201031040.1120091-1-brianmlyles@gmail.com/raw";
       hash = "sha256-vvhbvg74OIMzfksHiErSnjOZ+W0M/T9J8GOQ4E4wKbU=";
     })
-
+    # Fixes t8020 test on big-endian
+    (fetchurl {
+      name = "last-modified-fix-bug-caused-by-inproper-initialized-memory.patch";
+      url = "https://lore.kernel.org/git/20251128-toon-big-endian-ci-v1-1-80da0f629c1e@iotcl.com/raw";
+      hash = "sha256-WdewOwD7hMhnahhUUEYAlM58tT3MkxUlBa3n8IwrESU=";
+    })
   ]
   ++ lib.optionals withSsh [
     # Hard-code the ssh executable to ${pkgs.openssh}/bin/ssh instead of

@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation rec {
   pname = "bison";
-  version = "3.8.2";
+  version = "3.8.2"; # Check the note above doInstallCheck before updating.
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
@@ -46,7 +46,9 @@ stdenv.mkDerivation rec {
 
   # Normal check and install check largely execute the same test suite
   doCheck = false;
-  doInstallCheck = true;
+  # Tests were disabled on LLVM/Darwin due to https://github.com/NixOS/nixpkgs/issues/463659
+  # TODO: enable doInstallCheck unconditionally when fixed upstream.
+  doInstallCheck = !stdenv.cc.isClang;
 
   meta = {
     homepage = "https://www.gnu.org/software/bison/";

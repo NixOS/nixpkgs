@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  preCheck = ''rm -rf openslide/'';
+  preCheck = "rm -rf openslide/";
 
   meta = {
     description = "Python bindings to the OpenSlide library for reading whole-slide microscopy images";

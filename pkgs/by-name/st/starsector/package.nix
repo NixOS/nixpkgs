@@ -106,6 +106,7 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [
       bbigras
       rafaelrc
+      sigmasquadron
     ];
   };
 }

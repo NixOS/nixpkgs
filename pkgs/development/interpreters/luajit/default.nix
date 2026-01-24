@@ -93,10 +93,24 @@ stdenv.mkDerivation (finalAttrs: {
     "CROSS=${stdenv.cc.targetPrefix}"
     "HOST_CC=${buildStdenv.cc}/bin/cc"
   ]
+  # LuaJIT's build system needs an explicit target on MinGW, otherwise it can
+  # emit ELF-specific assembler directives (e.g. .hidden/.type/.size) that the
+  # PE/COFF toolchain doesn't accept.
+  ++ lib.optionals stdenv.hostPlatform.isMinGW [
+    "TARGET_SYS=Windows"
+  ]
   ++ lib.optional enableJITDebugModule "INSTALL_LJLIBD=$(INSTALL_LMOD)"
   ++ lib.optional stdenv.hostPlatform.isStatic "BUILDMODE=static";
   enableParallelBuilding = true;
   env.NIX_CFLAGS_COMPILE = toString XCFLAGS;
+
+  # The LuaJIT build produces `src/luajit.exe` on Windows targets, but the
+  # upstream install rule expects `src/luajit`. Provide a compatibility copy.
+  preInstall = lib.optionalString stdenv.hostPlatform.isMinGW ''
+    if [[ -e src/luajit.exe && ! -e src/luajit ]]; then
+      cp -p src/luajit.exe src/luajit
+    fi
+  '';
 
   postInstall = ''
     mkdir -p $out/nix-support
@@ -152,7 +166,9 @@ stdenv.mkDerivation (finalAttrs: {
       description = "High-performance JIT compiler for Lua 5.1";
       homepage = "https://luajit.org/";
       license = lib.licenses.mit;
-      platforms = lib.platforms.linux ++ lib.platforms.darwin;
+      # MSYS2 ships LuaJIT for mingw-w64, and nixpkgs consumers (like phosphor)
+      # need it in Windows cross builds.
+      platforms = lib.platforms.linux ++ lib.platforms.darwin ++ lib.platforms.windows;
       badPlatforms = [
         "loongarch64-linux" # See https://github.com/LuaJIT/LuaJIT/issues/1278
         "riscv64-linux" # See https://github.com/LuaJIT/LuaJIT/issues/628

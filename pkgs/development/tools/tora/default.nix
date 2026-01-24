@@ -71,7 +71,7 @@ mkDerivation {
   NIX_LDFLAGS = "-lgvc -lmysqlclient -lecpg -lssl -L${libmysqlclient}/lib/mariadb";
 
   qtWrapperArgs = [
-    ''--prefix PATH : ${lib.getBin graphviz}/bin''
+    "--prefix PATH : ${lib.getBin graphviz}/bin"
   ];
 
   postPatch = ''

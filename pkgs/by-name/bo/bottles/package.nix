@@ -116,7 +116,7 @@ let
   };
 in
 symlinkJoin {
-  name = "bottles";
+  pname = "bottles";
   paths = [
     (buildFHSEnv (
       fhsEnv
@@ -139,5 +139,5 @@ symlinkJoin {
     ln -s ${bottles-unwrapped}/share/icons $out/share
   '';
 
-  inherit (bottles-unwrapped) meta;
+  inherit (bottles-unwrapped) meta version;
 }

@@ -293,60 +293,34 @@ stdenv.mkDerivation (
           ''
         +
           # fails when run in sandbox
-          optionalString (!stdenv.hostPlatform.isx86) ''
+          ''
             substituteInPlace unittests/Support/VirtualFileSystemTest.cpp \
               --replace-fail "PhysicalFileSystemWorkingDirFailure" "DISABLED_PhysicalFileSystemWorkingDirFailure"
           ''
+        +
+          # Fails on macOS ≥ 26 due to the changed OS version scheme.
+          #
+          # This was fixed upstream in LLVM 21 with
+          # 88f041f3e05e26617856cc096d2e2864dfaa1c7b, but it’s too
+          # painful to backport all the way.
+          lib.optionalString
+            (
+              lib.versionOlder release_version "21"
+              ||
+                # Rebuild avoidance; TODO: clean up on `staging`.
+                stdenv.hostPlatform.isx86
+            )
+            ''
+              substituteInPlace unittests/TargetParser/Host.cpp \
+                --replace-fail "getMacOSHostVersion" "DISABLED_getMacOSHostVersion"
+            ''
+        +
+          # This test fails with a `dysmutil` crash; have not yet dug into what's
+          # going on here (TODO(@rrbutani)).
+          lib.optionalString (stdenv.hostPlatform.isx86 && lib.versionOlder release_version "19") ''
+            rm test/tools/dsymutil/ARM/obfuscated.test
+          ''
       )
-      +
-        # dup of above patch with different conditions
-        optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86)
-          # fails when run in sandbox
-          (
-            ''
-              substituteInPlace unittests/Support/VirtualFileSystemTest.cpp \
-                --replace-fail "PhysicalFileSystemWorkingDirFailure" "DISABLED_PhysicalFileSystemWorkingDirFailure"
-            ''
-            +
-              # This test fails on darwin x86_64 because `sw_vers` reports a different
-              # macOS version than what LLVM finds by reading
-              # `/System/Library/CoreServices/SystemVersion.plist` (which is passed into
-              # the sandbox on macOS).
-              #
-              # The `sw_vers` provided by nixpkgs reports the macOS version associated
-              # with the `CoreFoundation` framework with which it was built. Because
-              # nixpkgs pins the SDK for `aarch64-darwin` and `x86_64-darwin` what
-              # `sw_vers` reports is not guaranteed to match the macOS version of the host
-              # that's building this derivation.
-              #
-              # Astute readers will note that we only _patch_ this test on aarch64-darwin
-              # (to use the nixpkgs provided `sw_vers`) instead of disabling it outright.
-              # So why does this test pass on aarch64?
-              #
-              # Well, it seems that `sw_vers` on aarch64 actually links against the _host_
-              # CoreFoundation framework instead of the nixpkgs provided one.
-              #
-              # Not entirely sure what the right fix is here. I'm assuming aarch64
-              # `sw_vers` doesn't intentionally link against the host `CoreFoundation`
-              # (still digging into how this ends up happening, will follow up) but that
-              # aside I think the more pertinent question is: should we be patching LLVM's
-              # macOS version detection logic to use `sw_vers` instead of reading host
-              # paths? This *is* a way in which details about builder machines can creep
-              # into the artifacts that are produced, affecting reproducibility, but it's
-              # not clear to me when/where/for what this even gets used in LLVM.
-              #
-              # TODO(@rrbutani): fix/follow-up
-              ''
-                substituteInPlace unittests/TargetParser/Host.cpp \
-                  --replace-fail "getMacOSHostVersion" "DISABLED_getMacOSHostVersion"
-              ''
-            +
-              # This test fails with a `dysmutil` crash; have not yet dug into what's
-              # going on here (TODO(@rrbutani)).
-              lib.optionalString (lib.versionOlder release_version "19") ''
-                rm test/tools/dsymutil/ARM/obfuscated.test
-              ''
-          )
 
       +
         # FileSystem permissions tests fail with various special bits
@@ -453,9 +427,9 @@ stdenv.mkDerivation (
       '';
 
     # E.g. Mesa uses the build-id as a cache key (see #93946):
-    LDFLAGS = optionalString (
-      enableSharedLibraries && !stdenv.hostPlatform.isDarwin
-    ) "-Wl,--build-id=sha1";
+    env = lib.optionalAttrs (enableSharedLibraries && !stdenv.hostPlatform.isDarwin) {
+      LDFLAGS = "-Wl,--build-id=sha1";
+    };
 
     cmakeBuildType = "Release";
 

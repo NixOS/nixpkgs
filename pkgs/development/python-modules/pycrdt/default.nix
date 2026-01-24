@@ -12,7 +12,6 @@
   pydantic,
   pytestCheckHook,
   trio,
-  y-py,
 
   nix-update-script,
 }:
@@ -50,7 +49,6 @@ buildPythonPackage rec {
     pydantic
     pytestCheckHook
     trio
-    y-py
   ];
 
   pytestFlags = [

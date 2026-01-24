@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "asyncmy";
-  version = "0.2.10";
+  version = "0.2.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "long2ice";
     repo = "asyncmy";
     tag = "v${version}";
-    hash = "sha256-pWAUvHWtmpPlKh6YGJqhubQzIUSB0LeVanqfziOMWIM=";
+    hash = "sha256-+6sXXlSAZr09nPuJtZH8S2UfijFthDpRA/AdGOyIfxU=";
   };
 
   nativeBuildInputs = [

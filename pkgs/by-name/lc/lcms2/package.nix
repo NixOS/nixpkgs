@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   ];
 
   # See https://trac.macports.org/ticket/60656
-  LDFLAGS = if stdenv.hostPlatform.isDarwin then "-Wl,-w" else null;
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin { LDFLAGS = "-Wl,-w"; };
 
   meta = {
     description = "Color management engine";

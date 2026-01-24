@@ -188,7 +188,7 @@ in
                 --runner-name ${lib.escapeShellArg instance.runnerName} \
                 ${lib.optionalString (
                   instance.runnerDescription != null
-                ) ''--runner-description ${lib.escapeShellArg instance.runnerDescription}''}
+                ) "--runner-description ${lib.escapeShellArg instance.runnerDescription}"}
 
               # Kill the server
               kill $!

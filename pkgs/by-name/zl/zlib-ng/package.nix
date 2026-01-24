@@ -10,19 +10,18 @@
 
 stdenv.mkDerivation rec {
   pname = "zlib-ng";
-  version = "2.2.5";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "zlib-ng";
     repo = "zlib-ng";
     rev = version;
-    hash = "sha256-c2RYqHi3hj/ViBzJcYWoNib27GAbq/B1SJUfvG7CPG4=";
+    hash = "sha256-lO6fO18Z74+wKF0O/JjfrhS8lyaNQ37eamWGThb39F8=";
   };
 
   outputs = [
     "out"
     "dev"
-    "bin"
   ];
 
   strictDeps = true;
@@ -43,7 +42,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DCMAKE_INSTALL_PREFIX=/"
     "-DBUILD_SHARED_LIBS=ON"
-    "-DINSTALL_UTILS=ON"
+    "-DINSTALL_UTILS=OFF"
   ]
   ++ lib.optionals withZlibCompat [ "-DZLIB_COMPAT=ON" ]
   ++ lib.optional (

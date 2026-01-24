@@ -434,7 +434,7 @@ pkgs/by-name/fo/forgejo/                @adamcstephens @bendlas @emilylange
 
 # Node.js
 /pkgs/build-support/node/build-npm-package      @winterqt
-/pkgs/build-support/node/fetch-npm-deps         @winterqt
+/pkgs/build-support/node/prefetch-npm-deps      @winterqt
 /doc/languages-frameworks/javascript.section.md @winterqt
 /pkgs/development/tools/pnpm                    @Scrumplex @gepbird
 /pkgs/build-support/node/fetch-pnpm-deps        @Scrumplex @gepbird
@@ -504,7 +504,7 @@ pkgs/development/interpreters/elixir/   @NixOS/beam
 pkgs/development/interpreters/lfe/      @NixOS/beam
 
 # Authelia
-pkgs/servers/authelia/ @06kellyjac @dit7ya @nicomem
+pkgs/by-name/au/authelia/ @06kellyjac @dit7ya @nicomem
 
 # OctoDNS
 pkgs/by-name/oc/octodns/ @anthonyroussel

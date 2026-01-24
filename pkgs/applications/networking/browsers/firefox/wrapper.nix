@@ -357,13 +357,13 @@ let
       ]
       ++ lib.optionals (!hasMozSystemDirPatch && allNativeMessagingHosts != [ ]) [
         "--run"
-        ''mkdir -p ''${MOZ_HOME:-~/.mozilla}/native-messaging-hosts''
+        "mkdir -p \${MOZ_HOME:-~/.mozilla}/native-messaging-hosts"
 
       ]
       ++ lib.optionals (!hasMozSystemDirPatch) (
         lib.concatMap (ext: [
           "--run"
-          ''ln -sfLt ''${MOZ_HOME:-~/.mozilla}/native-messaging-hosts ${ext}/lib/mozilla/native-messaging-hosts/*''
+          "ln -sfLt \${MOZ_HOME:-~/.mozilla}/native-messaging-hosts ${ext}/lib/mozilla/native-messaging-hosts/*"
         ]) allNativeMessagingHosts
       );
 

@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.cs.uit.no/~daniels/PingTunnel";
     license = lib.licenses.bsd3;
     mainProgram = "ptunnel";
-    maintainers = with lib.maintainers; [ d3vil0p3r ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

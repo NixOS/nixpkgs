@@ -32,7 +32,6 @@ buildGoModule rec {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       jackr
-      sigmasquadron
       water-sucks
     ];
     platforms = lib.platforms.linux;

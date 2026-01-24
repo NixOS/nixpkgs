@@ -13,12 +13,12 @@
   rresult,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ocaml${ocaml.version}-bos";
   version = "0.2.1";
 
   src = fetchurl {
-    url = "https://erratique.ch/software/bos/releases/bos-${version}.tbz";
+    url = "https://erratique.ch/software/bos/releases/bos-${finalAttrs.version}.tbz";
     sha256 = "sha256-2NYueGsQ1pfgRXIFqO7eqifrzJDxhV8Y3xkMrC49jzc=";
   };
 
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.vbgl ];
     inherit (ocaml.meta) platforms;
   };
-}
+})

@@ -2383,6 +2383,8 @@ self: super: with self; {
 
   cachy = callPackage ../development/python-modules/cachy { };
 
+  cadwyn = callPackage ../development/python-modules/cadwyn { };
+
   caffe = toPythonModule (
     pkgs.caffe.override {
       pythonSupport = true;
@@ -6576,6 +6578,8 @@ self: super: with self; {
 
   green = callPackage ../development/python-modules/green { };
 
+  greenback = callPackage ../development/python-modules/greenback { };
+
   greeneye-monitor = callPackage ../development/python-modules/greeneye-monitor { };
 
   # built-in for pypi
@@ -7577,6 +7581,8 @@ self: super: with self; {
   isoweek = callPackage ../development/python-modules/isoweek { };
 
   israel-rail-api = callPackage ../development/python-modules/israel-rail-api { };
+
+  issubclass = callPackage ../development/python-modules/issubclass { };
 
   itables = callPackage ../development/python-modules/itables { };
 
@@ -14963,6 +14969,8 @@ self: super: with self; {
 
   pytest-filter-subpackage = callPackage ../development/python-modules/pytest-filter-subpackage { };
 
+  pytest-fixture-classes = callPackage ../development/python-modules/pytest-fixture-classes { };
+
   pytest-fixture-config = callPackage ../development/python-modules/pytest-fixture-config { };
 
   pytest-flake8 = callPackage ../development/python-modules/pytest-flake8 { };
@@ -16466,6 +16474,8 @@ self: super: with self; {
 
   result = callPackage ../development/python-modules/result { };
 
+  resvg-py = callPackage ../development/python-modules/resvg-py { };
+
   rethinkdb = callPackage ../development/python-modules/rethinkdb { };
 
   retinaface = callPackage ../development/python-modules/retinaface { };
@@ -16475,6 +16485,8 @@ self: super: with self; {
   retry-decorator = callPackage ../development/python-modules/retry-decorator { };
 
   retry2 = callPackage ../development/python-modules/retry2 { };
+
+  retryhttp = callPackage ../development/python-modules/retryhttp { };
 
   retrying = callPackage ../development/python-modules/retrying { };
 
@@ -18406,6 +18418,8 @@ self: super: with self; {
 
   sv-ttk = callPackage ../development/python-modules/sv-ttk { };
 
+  svcs = callPackage ../development/python-modules/svcs { };
+
   svg-path = callPackage ../development/python-modules/svg-path { };
 
   svg-py = callPackage ../development/python-modules/svg-py { };
@@ -19482,6 +19496,8 @@ self: super: with self; {
   typer = callPackage ../development/python-modules/typer { };
 
   typer-config = callPackage ../development/python-modules/typer-config { };
+
+  typer-injector = callPackage ../development/python-modules/typer-injector { };
 
   typer-shell = callPackage ../development/python-modules/typer-shell { };
 
@@ -20952,8 +20968,6 @@ self: super: with self; {
 
   xyzservices = callPackage ../development/python-modules/xyzservices { };
 
-  y-py = callPackage ../development/python-modules/y-py { };
-
   yabadaba = callPackage ../development/python-modules/yabadaba { };
 
   yacs = callPackage ../development/python-modules/yacs { };
@@ -21051,8 +21065,6 @@ self: super: with self; {
   yowsup = callPackage ../development/python-modules/yowsup { };
 
   yoyo-migrations = callPackage ../development/python-modules/yoyo-migrations { };
-
-  ypy-websocket = callPackage ../development/python-modules/ypy-websocket { };
 
   yq = callPackage ../development/python-modules/yq { inherit (pkgs) jq; };
 

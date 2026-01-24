@@ -10,12 +10,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyrdfa3";
-  version = "3.6.4";
+  version = "3.6.5";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-ZHEtGkvyGCllKzlxW62m58A7zxnLSfliwZCjj0YXIkM=";
+    hash = "sha256-D8KP8UJq+AWxAK/3Fi22pD+iFeN/krzpsRO0Zf61Y+o=";
   };
 
   build-system = [ setuptools ];

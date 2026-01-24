@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "bloodyad";
-  version = "2.5.2";
+  version = "2.5.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CravateRouge";
     repo = "bloodyAD";
     tag = "v${version}";
-    hash = "sha256-RWh73ZlzvTn1nGjQm9Keacvgm0AP0MGCYo/fM45nsmk=";
+    hash = "sha256-xevh8bPTyroZEiYqG5tbcjhhxjjQWencZTV4Iy/0U28=";
   };
 
   pythonRelaxDeps = [ "cryptography" ];

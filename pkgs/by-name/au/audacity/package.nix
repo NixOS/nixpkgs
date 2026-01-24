@@ -33,7 +33,6 @@
   libuuid,
   ffmpeg,
   soundtouch,
-  pcre,
   portaudio, # given up fighting their portaudio.patch?
   portmidi,
   linuxHeaders,
@@ -115,7 +114,6 @@ stdenv.mkDerivation (finalAttrs: {
     lv2
     mpg123
     opusfile
-    pcre
     portmidi
     rapidjson
     serd

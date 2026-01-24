@@ -554,7 +554,6 @@ in
 
   meta.maintainers = with lib.maintainers; [
     jackr
-    sigmasquadron
     water-sucks
   ];
 }

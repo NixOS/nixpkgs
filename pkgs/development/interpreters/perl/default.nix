@@ -12,6 +12,7 @@ let
       perlOnHostForHost,
       perlOnTargetForTarget,
       perlAttr ? null,
+      tests ? { },
       self, # is perlOnHostForTarget
     }:
     let
@@ -64,6 +65,8 @@ let
         inherit overrides;
         self = perlOnBuild;
       };
+
+      inherit tests;
     };
 
 in

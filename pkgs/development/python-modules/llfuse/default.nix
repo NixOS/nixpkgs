@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "llfuse";
-  version = "1.5.1";
+  version = "1.5.2";
 
   pyproject = true;
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "python-llfuse";
     repo = "python-llfuse";
     tag = "release-${version}";
-    hash = "sha256-wni/b1hEn6/G0RszCJi+wmBHx6F0Ov1cZ/sRf8PLmps=";
+    hash = "sha256-PFnY+gmm1tjZhptc27XTE9yxF0IaJ+U4Ng/OGhNDDPI=";
   };
 
   nativeBuildInputs = [

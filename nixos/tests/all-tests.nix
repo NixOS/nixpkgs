@@ -386,6 +386,7 @@ in
   collectd = runTest ./collectd.nix;
   commafeed = runTest ./commafeed.nix;
   connman = runTest ./connman.nix;
+  console-xkb-and-i18n = runTest ./console-xkb-and-i18n.nix;
   consul = runTest ./consul.nix;
   consul-template = runTest ./consul-template.nix;
   containers-bridge = runTest ./containers-bridge.nix;
@@ -1105,6 +1106,9 @@ in
   ] ./nixos-rebuild-install-bootloader.nix { };
   nixos-rebuild-specialisations = runTestOn [ "x86_64-linux" ] {
     imports = [ ./nixos-rebuild-specialisations.nix ];
+  };
+  nixos-rebuild-store-path = runTestOn [ "x86_64-linux" ] {
+    imports = [ ./nixos-rebuild-store-path.nix ];
   };
   nixos-rebuild-target-host = runTest {
     imports = [ ./nixos-rebuild-target-host.nix ];

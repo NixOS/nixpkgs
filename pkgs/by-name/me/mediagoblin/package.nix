@@ -175,6 +175,9 @@ python.pkgs.buildPythonApplication rec {
     description = "Free software media publishing platform that anyone can run";
     homepage = "https://mediagoblin.org/";
     license = lib.licenses.agpl3Plus;
-    teams = with lib.maintainers; [ SuperSandro2000 ];
+    maintainers = with lib.maintainers; [
+      # for the C3D2
+      SuperSandro2000
+    ];
   };
 }

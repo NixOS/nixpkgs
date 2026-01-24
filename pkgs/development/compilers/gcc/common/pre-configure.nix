@@ -80,6 +80,19 @@ lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
       export inhibit_libc=true
     ''
 
+# We need to reconfigure the build system in case it has been patched. Since
+# gcc is patched quite often, reconfiguring it unconditionally makes sense.
+# This is also good practice for a couple other reasons.
+# See <https://wiki.debian.org/Autoreconf>.
++ ''
+  for i in */configure.ac; do
+    pushd "$(dirname "$i")"
+    echo "Running autoreconf in $PWD"
+    autoconf -f
+    popd
+  done
+''
+
 + lib.optionalString (
   (!lib.systems.equals targetPlatform hostPlatform) && withoutTargetLibc && enableShared
 ) (import ./libgcc-buildstuff.nix { inherit lib stdenv; })

@@ -41,7 +41,6 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [
       fab
       jackr
-      sigmasquadron
       water-sucks
     ];
     mainProgram = "newt";

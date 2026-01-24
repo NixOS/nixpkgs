@@ -49,9 +49,9 @@
 }@args:
 
 let
-  version = "2.40";
-  patchSuffix = "-66";
-  sha256 = "sha256-GaiQF16SY9dI9ieZPeb0sa+c0h4D8IDkv7Oh+sECBaI=";
+  version = "2.42";
+  patchSuffix = "-47";
+  sha256 = "sha256-0XdeMuRijmTvkw9DW2e7Y691may2viszW58Z8WUJ8X8=";
 in
 
 assert withLinuxHeaders -> linuxHeaders != null;
@@ -68,17 +68,17 @@ stdenv.mkDerivation (
       /*
         No tarballs for stable upstream branch, only https://sourceware.org/git/glibc.git and using git would complicate bootstrapping.
          $ git fetch --all -p && git checkout origin/release/2.40/master && git describe
-         glibc-2.40-142-g2eb180377b
-         $ git show --minimal --reverse glibc-2.40.. ':!ADVISORIES' > 2.40-master.patch
+         glibc-2.42-47-ga1d3294a5b
+         $ git show --minimal --reverse glibc-2.42.. ':!ADVISORIES' > 2.42-master.patch
 
         To compare the archive contents zdiff can be used.
-         $ diff -u 2.40-master.patch ../nixpkgs/pkgs/development/libraries/glibc/2.40-master.patch
+         $ diff -u 2.42-master.patch ../nixpkgs/pkgs/development/libraries/glibc/2.42-master.patch
 
         Please note that each commit has changes to the file ADVISORIES excluded since
         that conflicts with the directory advisories/ making cross-builds from
         hosts with case-insensitive file-systems impossible.
       */
-      ./2.40-master.patch
+      ./2.42-master.patch
 
       # Allow NixOS and Nix to handle the locale-archive.
       ./nix-locale-archive.patch
@@ -164,15 +164,6 @@ stdenv.mkDerivation (
       -#define LIBIDN2_SONAME "libidn2.so.0"
       +#define LIBIDN2_SONAME "${lib.getLib libidn2}/lib/libidn2.so.0"
       EOF
-    ''
-    # For some reason, with gcc-15 build fails with the following error:
-    #
-    #     zic.c:3767:1: note: did you mean to specify it after ')' following function parameters?
-    #     zic.c:3781:1: error: standard 'reproducible' attribute can only be applied to function declarators or type specifiers with function type []
-    + ''
-      for path in timezone/zic.c timezone/zdump.c ; do
-        substituteInPlace $path  --replace-fail "ATTRIBUTE_REPRODUCIBLE" ""
-      done
     '';
 
     configureFlags = [
@@ -299,13 +290,13 @@ stdenv.mkDerivation (
             sed -i "$i" -e "s^/bin/pwd^$PWD_P^g"
         done
 
-        mkdir ../build
-        cd ../build
+        mkdir build
+        cd build
 
-        configureScript="`pwd`/../$sourceRoot/configure"
+        configureScript="`pwd`/../configure"
       ''
       + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
-        sed -i s/-lgcc_eh//g "../$sourceRoot/Makeconfig"
+        sed -i s/-lgcc_eh//g ../Makeconfig
 
         cat > config.cache << "EOF"
         libc_cv_forced_unwind=yes

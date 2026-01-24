@@ -148,6 +148,8 @@ buildPythonPackage (finalAttrs: {
   ++ lib.optionals (pythonAtLeast "3.14") [
     # DeprecationWarning: '_UnionGenericAlias' is deprecated and slated for removal in Python 3.17
     "-Wignore::DeprecationWarning"
+    # Multiple tests with warnings fail without it
+    "-Wignore::pytest.PytestUnraisableExceptionWarning"
   ];
 
   enabledTestMarks = testBackends ++ [ "core" ];

@@ -20,18 +20,19 @@
   tomli,
   tomlkit,
   typing-extensions,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pylint";
-  version = "4.0.2";
+  version = "4.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pylint-dev";
     repo = "pylint";
-    tag = "v${version}";
-    hash = "sha256-DzS5ORhFWmA+eEhGDdpXdHLgWTfw198S7pQueBk44Cw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mKI/sRYl2ZwZ3JklmqBTs7vRG9EA4zDHaW61d/Xozb4=";
   };
 
   build-system = [ setuptools ];
@@ -55,6 +56,7 @@ buildPythonPackage rec {
     pytest7CheckHook
     requests
     typing-extensions
+    writableTmpDirAsHomeHook
   ];
 
   pytestFlags = [
@@ -65,10 +67,6 @@ buildPythonPackage rec {
     "-Wignore::DeprecationWarning"
     "-v"
   ];
-
-  preCheck = ''
-    export HOME=$TEMPDIR
-  '';
 
   disabledTestPaths = [
     "tests/benchmark"
@@ -106,7 +104,7 @@ buildPythonPackage rec {
   meta = {
     description = "Bug and style checker for Python";
     homepage = "https://pylint.readthedocs.io/en/stable/";
-    changelog = "https://github.com/pylint-dev/pylint/releases/tag/v${version}";
+    changelog = "https://github.com/pylint-dev/pylint/releases/tag/${finalAttrs.src.tag}";
     longDescription = ''
       Pylint is a Python static code analysis tool which looks for programming errors,
       helps enforcing a coding standard, sniffs for code smells and offers simple
@@ -120,4 +118,4 @@ buildPythonPackage rec {
     maintainers = [ ];
     mainProgram = "pylint";
   };
-}
+})

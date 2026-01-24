@@ -75,6 +75,10 @@ buildPythonPackage rec {
     "test_example"
     "test_guess_format_for_parse"
     "rdflib.extras.infixowl"
+    # Upstream don't seem worried about these two tests failing
+    # https://github.com/RDFLib/rdflib/issues/2649#issuecomment-2443482119
+    "test_sparqleval"
+    "test_parser"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Require loopback network access

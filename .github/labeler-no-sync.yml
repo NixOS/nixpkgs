@@ -26,7 +26,7 @@
   - all:
       - changed-files:
           - any-glob-to-any-file:
-              - .github/actions/*
+              - .github/actions/**/*
               - .github/workflows/*
               - .github/labeler*.yml
               - ci/**/*.*

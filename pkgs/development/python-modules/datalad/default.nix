@@ -41,6 +41,7 @@
   pythonOlder,
   typing-extensions,
   # tests
+  pytest-retry,
   pytest-xdist,
   pytestCheckHook,
   p7zip,
@@ -48,16 +49,16 @@
   httpretty,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "datalad";
-  version = "1.2.3";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "datalad";
     repo = "datalad";
-    tag = version;
-    hash = "sha256-C3e9k4RDFfDMaimZ/7TtAJNzdlfVrKoTHVl0zKL9EjI=";
+    tag = finalAttrs.version;
+    hash = "sha256-aTpiwcwRJyUF68+OsT+u9j/cibZEDhmL45I1MSY3Q7E=";
   };
 
   postPatch = ''
@@ -76,7 +77,9 @@ buildPythonPackage rec {
   ];
 
   dependencies =
-    optional-dependencies.core ++ optional-dependencies.downloaders ++ optional-dependencies.publish;
+    finalAttrs.passthru.optional-dependencies.core
+    ++ finalAttrs.passthru.optional-dependencies.downloaders
+    ++ finalAttrs.passthru.optional-dependencies.publish;
 
   optional-dependencies = {
     core = [
@@ -124,113 +127,43 @@ buildPythonPackage rec {
 
   preCheck = ''
     export HOME=$TMPDIR
+    export DATALAD_TESTS_NONETWORK=1
+    export PATH="$PATH:$out/bin"
   '';
 
-  # tests depend on apps in $PATH which only will get installed after the test
+  disabledTestMarks = [
+    "flaky"
+  ];
+
   disabledTests = [
-    # No such file or directory: 'datalad'
-    "test_script_shims"
-    "test_cfg_override"
-    "test_completion"
-    "test_nested_pushclone_cycle_allplatforms"
-    "test_create_sub_gh3463"
-    "test_create_sub_dataset_dot_no_path"
-    "test_cfg_passthrough"
-    "test_addurls_stdin_input_command_line"
-    "test_run_datalad_help"
-    "test_status_custom_summary_no_repeats"
-    "test_quoting"
-
-    #  No such file or directory: 'git-annex-remote-[...]"
-    "test_create"
-    "test_ensure_datalad_remote_maybe_enable"
-
-    # "git-annex: unable to use external special remote git-annex-remote-datalad"
-    "test_ria_postclonecfg"
-    "test_ria_postclone_noannex"
-    "test_ria_push"
-    "test_basic_scenario"
-    "test_annex_get_from_subdir"
-    "test_ensure_datalad_remote_init_and_enable_needed"
-    "test_ensure_datalad_remote_maybe_enable[False]"
-    "test_ensure_datalad_remote_maybe_enable[True]"
-    "test_create_simple"
-    "test_create_alias"
-    "test_storage_only"
-    "test_initremote"
-    "test_read_access"
-    "test_ephemeral"
-    "test_initremote_basic_fileurl"
-    "test_initremote_basic_httpurl"
-    "test_remote_layout"
-    "test_version_check"
-    "test_gitannex_local"
-    "test_push_url"
-    "test_url_keys"
-    "test_obtain_permission_root"
-    "test_source_candidate_subdataset"
-    "test_update_fetch_all"
-    "test_add_archive_dirs"
-    "test_add_archive_content"
-    "test_add_archive_content_strip_leading"
-    "test_add_archive_content_zip"
-    "test_add_archive_content_absolute_path"
-    "test_add_archive_use_archive_dir"
-    "test_add_archive_single_file"
-    "test_add_delete"
-    "test_add_archive_leading_dir"
-    "test_add_delete_after_and_drop"
-    "test_add_delete_after_and_drop_subdir"
-    "test_override_existing_under_git"
-    "test_copy_file_datalad_specialremote"
-    "test_download_url_archive"
-    "test_download_url_archive_from_subdir"
-    "test_download_url_archive_trailing_separator"
-    "test_download_url_need_datalad_remote"
-    "test_datalad_credential_helper - assert False"
-
-    # need internet access
-    "test_clone_crcns"
-    "test_clone_datasets_root"
+    # Tries to run `git` and fails
     "test_reckless"
-    "test_autoenabled_remote_msg"
-    "test_ria_http_storedataladorg"
-    "test_gin_cloning"
-    "test_nonuniform_adjusted_subdataset"
-    "test_install_datasets_root"
-    "test_install_simple_local"
-    "test_install_dataset_from_just_source"
-    "test_install_dataset_from_just_source_via_path"
-    "test_datasets_datalad_org"
-    "test_get_cached_dataset"
-    "test_cached_dataset"
-    "test_cached_url"
-    "test_anonymous_s3"
-    "test_protocols"
-    "test_get_versioned_url_anon"
-    "test_install_recursive_github"
-    "test_failed_install_multiple"
+    "test_create"
+    "test_subsuperdataset_save"
 
+    # Tries to spawn a subshell and fails
+    "test_shell_completion_source"
+
+    # Times out
+    "test_rerun_unrelated_nonrun_left_run_right"
+
+    # Top five slowest (2/3 of total runtime)
+    "test_files_split"
+    "test_gitannex_local"
+    "test_save_hierarchy"
+    "test_recurse_existing"
+    "test_source_candidate_subdataset"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # pbcopy not found
     "test_wtf"
-
-    # CommandError: 'git -c diff.ignoreSubmodules=none -c core.quotepath=false ls-files -z -m -d' failed with exitcode 128
-    "test_subsuperdataset_save"
-  ]
-  ++ lib.optionals (pythonAtLeast "3.14") [
-    # For all: https://github.com/datalad/datalad/issues/7781
-    # AssertionError: `assert 1 == 0` (refcount error)
-    "test_GitRepo_flyweight"
-    "test_Dataset_flyweight"
-    "test_AnnexRepo_flyweight"
-    # TypeError: cannot pickle '_thread.lock' object
-    "test_popen_invocation"
-    # datalad.runner.exception.CommandError: '/python3.14 -i -u -q -']' timed out after 0.5 seconds
-    "test_asyncio_loop_noninterference1"
+    # hangs
+    "test_keyring"
   ];
 
   nativeCheckInputs = [
     p7zip
+    pytest-retry
     pytest-xdist
     pytestCheckHook
     git-annex
@@ -243,15 +176,20 @@ buildPythonPackage rec {
     "-Wignore::DeprecationWarning"
   ];
 
+  # Tests use ports on localhost
+  __darwinAllowLocalNetworking = true;
+
   pythonImportsCheck = [ "datalad" ];
 
   meta = {
     description = "Keep code, data, containers under control with git and git-annex";
     homepage = "https://www.datalad.org";
+    changelog = "https://github.com/datalad/datalad/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       renesat
       malik
+      sarahec
     ];
   };
-}
+})

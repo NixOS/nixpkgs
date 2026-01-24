@@ -8,7 +8,7 @@
   meson,
   ninja,
   withJava ? false,
-  jdk21_headless, # Newer JDK's depend on a release with a fix for https://code.videolan.org/videolan/libbluray/-/issues/46
+  jdk21, # Newer JDK's depend on a release with a fix for https://code.videolan.org/videolan/libbluray/-/issues/46
   ant,
   stripJavaArchivesHook,
   withAACS ? false,
@@ -34,13 +34,21 @@ stdenv.mkDerivation rec {
     hash = "sha256-d5N7rwfq3aSysxHPOvTFAmnS6jFlBB9YQ9lkdsTJJ3c=";
   };
 
+  postPatch =
+    lib.optionalString withAACS ''
+      substituteInPlace src/libbluray/disc/aacs.c --replace-fail 'getenv("LIBAACS_PATH")' '"${libaacs}/lib/libaacs"'
+    ''
+    + lib.optionalString withBDplus ''
+      substituteInPlace src/libbluray/disc/bdplus.c --replace-fail 'getenv("LIBBDPLUS_PATH")' '"${libbdplus}/lib/libbdplus"'
+    '';
+
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
   ]
   ++ lib.optionals withJava [
-    jdk21_headless
+    jdk21
     ant
     stripJavaArchivesHook
   ];
@@ -53,13 +61,13 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = lib.optional withAACS libaacs;
 
-  env.JAVA_HOME = lib.optionalString withJava jdk21_headless.home; # Fails at runtime without this
   env.NIX_LDFLAGS =
     lib.optionalString withAACS "-L${libaacs}/lib -laacs"
     + lib.optionalString withBDplus " -L${libbdplus}/lib -lbdplus";
 
   mesonFlags =
     lib.optional (!withJava) "-Dbdj_jar=disabled"
+    ++ lib.optional withJava "-Djdk_home=${jdk21.home}"
     ++ lib.optional (!withMetadata) "-dlibxml2=disabled"
     ++ lib.optional (!withFonts) "-Dfreetype=disabled";
 
@@ -67,7 +75,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.videolan.org/developers/libbluray.html";
     description = "Library to access Blu-Ray disks for video playback";
     license = lib.licenses.lgpl21;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.amarshall ];
     platforms = lib.platforms.unix;
   };
 

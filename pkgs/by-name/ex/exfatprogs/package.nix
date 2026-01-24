@@ -24,6 +24,11 @@ stdenv.mkDerivation rec {
     file
   ];
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   meta = {
     description = "exFAT filesystem userspace utilities";
     homepage = "https://github.com/exfatprogs/exfatprogs";

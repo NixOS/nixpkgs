@@ -16,14 +16,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-edit";
-  version = "1.0.2";
+  version = "1.0.3";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-edit";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-ZqyaCryXNljJ00qD3ZksfKszANke3HqYgHoGNCHOUqI=";
+    hash = "sha256-4+GfIAsjzo1jr+wa9JjuIUvW3P3r03avP2W5hZJYXHU=";
   };
 
   cargoHash = "sha256-ydI/DTbGlgwc9l/XsW1SbTOfSyTdcjM0i0jXLua4+f8=";

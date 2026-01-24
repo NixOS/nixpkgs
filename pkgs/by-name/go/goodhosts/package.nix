@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "goodhosts";
-  version = "1.1.2";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "goodhosts";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-ZasS7AYGYPV+nzp9JbJC5pD0yQ+ik+QnuL+3qC1uqFk=";
+    hash = "sha256-+KlAJV+CeycQHwxrRI9kMkKlDLs8bS+/QwaYv70LEfU=";
   };
 
   ldflags = [
@@ -24,7 +24,7 @@ buildGoModule rec {
     mv $out/bin/cli $out/bin/goodhosts
   '';
 
-  vendorHash = "sha256-t/pdJWz6rLnBbH8iq9Nqy+E+DD2770UCEcowwStPdqM=";
+  vendorHash = "sha256-FsjCpwvehmRm67Tqwld+0vn4IFO6E46SJnLwRjKVAiw=";
 
   meta = {
     description = "CLI tool for managing hostfiles";

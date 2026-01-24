@@ -393,6 +393,7 @@ in
     buildInputs = old.buildInputs ++ [
       gnulib
     ];
+    meta.broken = isLuaJIT;
   });
 
   lrexlib-oniguruma = prev.lrexlib-oniguruma.overrideAttrs {
@@ -418,6 +419,10 @@ in
       glibc.dev
     ];
   });
+
+  lua-cmsgpack = prev.lua-cmsgpack.overrideAttrs {
+    meta.broken = isLuaJIT;
+  };
 
   lua-curl = prev.lua-curl.overrideAttrs (old: {
     buildInputs = old.buildInputs ++ [

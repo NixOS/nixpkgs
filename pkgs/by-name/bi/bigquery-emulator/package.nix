@@ -13,7 +13,7 @@ buildGoModule.override
     stdenv = pkgs.clangStdenv;
   }
   {
-    name = pname;
+    inherit pname version;
 
     src = fetchFromGitHub {
       owner = "goccy";

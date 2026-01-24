@@ -8,13 +8,13 @@
 
 buildGoModule {
   pname = "swgp-go";
-  version = "1.8.0-0-unstable-2026-01-18";
+  version = "1.8.0-0-unstable-2026-01-24";
 
   src = fetchFromGitHub {
     owner = "database64128";
     repo = "swgp-go";
-    rev = "e8ed210b0a016c450ba371ee43041f2f53444841";
-    hash = "sha256-LDYNQwc6vdVkI0bqD96p64D25fz0aGclFDc8SqvCdJQ=";
+    rev = "12be9c3ac0ea2c39b167cde708192935f7263a76";
+    hash = "sha256-0W7yioZc86xfjrJKeCAPT4mLWyrQDaBa9QbGjrR/Tpc=";
   };
 
   vendorHash = "sha256-Ghv5FwSPQSUFQ1t2zWTXpFggCA4/qrQmnVYkYBF8AQ4=";

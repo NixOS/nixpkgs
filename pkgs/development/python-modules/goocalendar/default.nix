@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   gobject-introspection,
-  goocanvas2,
+  goocanvas_2,
   gtk3,
   pkg-config,
   pygobject3,
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   buildInputs = [
     gtk3
-    goocanvas2
+    goocanvas_2
   ];
 
   # No upstream tests available

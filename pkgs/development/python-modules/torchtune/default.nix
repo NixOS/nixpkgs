@@ -35,7 +35,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "torchtune";
   version = "0.6.1";
   pyproject = true;
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "meta-pytorch";
     repo = "torchtune";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-evhQBpZiUXriL0PAYkEzGypH21iRs37Ix6Nl5YAyeQ0=";
   };
 
@@ -134,11 +134,11 @@ buildPythonPackage rec {
   meta = {
     description = "PyTorch native post-training library";
     homepage = "https://github.com/meta-pytorch/torchtune";
-    changelog = "https://github.com/meta-pytorch/torchtune/releases/tag/${src.tag}";
+    changelog = "https://github.com/meta-pytorch/torchtune/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       GaetanLepage
       sarahec
     ];
   };
-}
+})

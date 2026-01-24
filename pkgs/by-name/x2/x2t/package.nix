@@ -137,8 +137,6 @@ let
     # workaround for https://github.com/NixOS/nixpkgs/issues/477803
     nodejs = nodejs_22;
 
-    #src = /home/aengelen/d/onlyoffice/documentserver/web-apps;
-    #sourceRoot = "/build/web-apps/build";
     src = fetchFromGitHub {
       owner = "ONLYOFFICE";
       repo = "web-apps";
@@ -182,11 +180,6 @@ let
       runHook preInstall
 
       cp -r ../deploy/web-apps $out
-
-      ## see usr/bin/documentserver-flush-cache.sh
-      chmod u+w $out/apps/api/documents
-      substituteInPlace $out/apps/api/documents/api.js \
-        --replace-fail '{{HASH_POSTFIX}}' "$(basename $out | cut -d '-' -f 1)"
 
       runHook postInstall
     '';
@@ -362,6 +355,7 @@ let
   graphics = buildCoreComponent "DesktopEditor/graphics/pro" {
     patches = [
       ./cximage-types.patch
+      ./core-fontengine-custom-fonts-paths.patch
     ];
     buildInputs = [
       unicodeConverter
@@ -469,12 +463,6 @@ let
         --replace-fail "is_tree_valid" "valid_tree"
       chmod u+w $BUILDRT/Common/3dParty/apple/libetonyek/src/lib
       cp $BUILDRT/Common/3dParty/apple/headers/* $BUILDRT/Common/3dParty/apple/libetonyek/src/lib
-    '';
-    installPhase = ''
-      runHook preInstall
-      mkdir -p $out/lib
-      mv ../build/lib/*/* $out/lib
-      runHook postInstall
     '';
     doCheck = true;
     passthru.tests = buildCoreTests "Apple/test" {
@@ -601,7 +589,6 @@ let
     patches = [
       # https://github.com/ONLYOFFICE/core/pull/1631
       ./doctrenderer-format-security.patch
-      ./doctrenderer-config-dir.patch
       ./doctrenderer-v8-iterator.patch
       ./fontengine-format-security.patch
       ./v8_updates.patch
@@ -731,7 +718,7 @@ let
       runHook preInstall
 
       mkdir -p $out/bin
-      cp $BUILDRT/build/bin/*/* $BUILDRT/build/bin/*/*/* $out/bin
+      find $BUILDRT/build -type f -exec cp {} $out/bin \;
 
       runHook postInstall
     '';
@@ -757,7 +744,7 @@ let
       runHook preInstall
 
       mkdir -p $out/bin
-      cp $BUILDRT/build/bin/*/* $BUILDRT/build/bin/*/*/* $out/bin
+      find $BUILDRT/build -type f -exec cp {} $out/bin \;
 
       runHook postInstall
     '';
@@ -835,22 +822,16 @@ buildCoreComponent "X2tConverter/build/Qt" {
     mkdir -p $out/bin
     find $BUILDRT/build -type f -exec cp {} $out/bin \;
 
-    mkdir $out/etc
-    cat >$out/etc/DoctRenderer.config <<EOF
-          <Settings>
-            <file>${sdkjs}/common/Native/native.js</file>
-            <file>${sdkjs}//common/Native/jquery_native.js</file>
-            <allfonts>${allfonts}/converter/AllFonts.js</allfonts>
-            <file>${web-apps}/vendor/xregexp/xregexp-all-min.js</file>
-            <sdkjs>${sdkjs}</sdkjs>
-            <dictionaries>${dictionaries}</dictionaries>
-          </Settings>
+    cat >$out/bin/DoctRenderer.config <<EOF
+      <Settings>
+        <file>${sdkjs}/common/Native/native.js</file>
+        <file>${sdkjs}/common/Native/jquery_native.js</file>
+        <allfonts>${allfonts}/converter/AllFonts.js</allfonts>
+        <file>${web-apps}/vendor/xregexp/xregexp-all-min.js</file>
+        <sdkjs>${sdkjs}</sdkjs>
+        <dictionaries>${dictionaries}</dictionaries>
+      </Settings>
     EOF
-
-    # TODO when allthemesgen invokes x2t as the converter, it
-    # hard-codes expecting DoctRenderer.config in the same dir
-    # the x2t binary is located:
-    ln -s $out/etc/DoctRenderer.config $out/bin/DoctRenderer.config
 
     runHook postInstall
   '';

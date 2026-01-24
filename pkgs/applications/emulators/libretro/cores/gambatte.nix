@@ -5,13 +5,13 @@
 }:
 mkLibretroCore {
   core = "gambatte";
-  version = "0-unstable-2025-12-19";
+  version = "0-unstable-2026-01-16";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "gambatte-libretro";
-    rev = "308255e4a3acb38a054ebb42a5e2fe5c50eebd66";
-    hash = "sha256-a75F7kfrVfIVt5yvYIu+oVmpXlOdTDTs5IX1Q5NB8WU=";
+    rev = "9fe223d9c4b615c55840170c6e85e6e9fa4bd1d2";
+    hash = "sha256-BBFT8+TLf5qbwo36BudPjeMRPLdSj2+0m4RnfeFrlOc=";
   };
 
   meta = {
