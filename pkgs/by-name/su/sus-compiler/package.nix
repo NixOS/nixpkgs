@@ -9,17 +9,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sus-compiler";
-  version = "0.3.0-unstable-2025-08-28";
+  version = "0.3.7";
 
   src = fetchFromGitHub {
     owner = "pc2";
     repo = "sus-compiler";
-    rev = "bc46d911a71d0248a88586c10057206ffadc82ca";
-    hash = "sha256-Wnj303B4G09qGOecZfFsicjNcfRkISfo9JDYJeFubVM=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-O4aBVN7jbPm7iqMpxCRYWJ+89zcMCZTKyhRLBcQDKa8=";
     fetchSubmodules = true;
     leaveDotGit = true;
 
     # Manual patch phase with replacement of Git details just before they're deleted.
+    # Also ensures reproducibility by removing build time.
     postFetch = ''
       cp ${./build.rs.patch} build.rs.patch
       PATCH="$(realpath build.rs.patch)"
@@ -42,7 +43,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoLock.lockFile = ./Cargo.lock;
 
   preBuild = ''
-    export HOME="$TMPDIR";
+    export INSTALL_SUS_HOME="$out/share/sus-compiler";
+    mkdir -p "$INSTALL_SUS_HOME"
   '';
 
   postPatch = ''
