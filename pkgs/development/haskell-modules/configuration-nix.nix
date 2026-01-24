@@ -503,8 +503,12 @@ builtins.intersectAttrs super {
   # Tries accessing the GitHub API
   github-app-token = dontCheck super.github-app-token;
 
-  # The curl executable is required for withApplication tests.
-  warp = addTestToolDepend pkgs.curl super.warp;
+  warp = lib.pipe super.warp [
+    # The curl executable is required for withApplication tests.
+    (addTestToolDepend pkgs.curl)
+    # Avoids much closure size of downstream deps on macOS: https://github.com/yesodweb/wai/pull/1044
+    (disableCabalFlag "include-warp-version")
+  ];
 
   lz4-frame-conduit = addTestToolDepends [ pkgs.lz4 ] super.lz4-frame-conduit;
 
