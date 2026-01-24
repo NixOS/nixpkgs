@@ -11,12 +11,12 @@
 let
   maps = callPackage ./maps.nix { inherit licenseAccepted; };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "4.7.1";
   pname = "sc2-headless";
 
   src = fetchurl {
-    url = "https://blzdistsc2-a.akamaihd.net/Linux/SC2.${version}.zip";
+    url = "https://blzdistsc2-a.akamaihd.net/Linux/SC2.${finalAttrs.version}.zip";
     sha256 = "0q1ry9bd3dm8y4hvh57yfq7s05hl2k2sxi2wsl6h0r3w690v1kdd";
   };
 
@@ -71,4 +71,4 @@ stdenv.mkDerivation rec {
     };
     maintainers = [ ];
   };
-}
+})
