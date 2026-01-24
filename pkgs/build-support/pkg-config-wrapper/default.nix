@@ -5,6 +5,9 @@
   stdenvNoCC,
   lib,
   buildPackages,
+  replaceVars,
+  makeSetupHook,
+  expand-response-params,
   pkg-config,
   baseBinName ? "pkg-config",
   propagateDoc ? pkg-config != null && pkg-config ? man,
@@ -35,6 +38,7 @@ let
   # See description in cc-wrapper.
   suffixSalt = replaceStrings [ "-" "." ] [ "_" "_" ] targetPlatform.config;
 
+  wrapperName = "PKG_CONFIG_WRAPPER";
   wrapperBinName = "${targetPrefix}${baseBinName}";
 in
 
@@ -48,50 +52,90 @@ stdenv.mkDerivation {
 
   outputs = [ "out" ] ++ optionals propagateDoc ([ "man" ] ++ optional (pkg-config ? doc) "doc");
 
-  passthru = {
-    inherit targetPrefix suffixSalt;
-    inherit pkg-config;
-  };
-
   strictDeps = true;
   dontBuild = true;
   dontConfigure = true;
   dontUnpack = true;
 
-  # Additional flags passed to pkg-config.
-  env.addFlags = optionalString stdenv.targetPlatform.isStatic "--static";
+  installPhase =
+    let
+      addFlags = optionalString stdenv.targetPlatform.isStatic "--static";
+      shell = getBin stdenvNoCC.shell + stdenvNoCC.shell.shellPath or "";
+      prog = "${getBin pkg-config}/bin/${baseBinName}";
+    in
+    ''
+      mkdir -p $out/bin $out/nix-support
+      wrap() {
+        local dst="$1"
+        local wrapper="$2"
+        export prog="$3"
+        # Do not take variables from env but substitute them explicitly
+        # to prepare for structuredAttrs
+        # Avoid using a nested derivation since we need to substitute $out
+        substitute "$wrapper" "$out/bin/$dst" \
+          --replace-fail "@suffixSalt@" "${suffixSalt}" \
+          --replace-fail "@shell@" "${shell}" \
+          --replace-fail "@prog@" "$prog" \
+          --replace-fail "@out@" "$out" \
+          --replace-fail "@addFlags@" "${addFlags}"
 
-  installPhase = ''
-    mkdir -p $out/bin $out/nix-support
+        chmod +x "$out/bin/$dst"
+      }
 
-    wrap() {
-      local dst="$1"
-      local wrapper="$2"
-      export prog="$3"
-      substituteAll "$wrapper" "$out/bin/$dst"
-      chmod +x "$out/bin/$dst"
-    }
+      echo $pkg-config > $out/nix-support/orig-pkg-config
 
-    echo $pkg-config > $out/nix-support/orig-pkg-config
+      wrap ${wrapperBinName} ${./pkg-config-wrapper.sh} "${getBin pkg-config}/bin/${baseBinName}"
+    ''
+    # symlink in share for autoconf to find macros
 
-    wrap ${wrapperBinName} ${./pkg-config-wrapper.sh} "${getBin pkg-config}/bin/${baseBinName}"
-  ''
-  # symlink in share for autoconf to find macros
+    # TODO(@Ericson2314): in the future just make the unwrapped pkg-config a
+    # propagated dep once we can rely on downstream deps coming first in
+    # search paths. (https://github.com/NixOS/nixpkgs/pull/31414 took a crack
+    # at this.)
+    + ''
+      ln -s ${pkg-config}/share $out/share
+    '';
 
-  # TODO(@Ericson2314): in the future just make the unwrapped pkg-config a
-  # propagated dep once we can rely on downstream deps coming first in
-  # search paths. (https://github.com/NixOS/nixpkgs/pull/31414 took a crack
-  # at this.)
-  + ''
-    ln -s ${pkg-config}/share $out/share
-  '';
-
-  setupHooks = [
-    ../setup-hooks/role.bash
-    ./setup-hook.sh
-  ];
+  setupHooks =
+    let
+      roleHook = makeSetupHook rec {
+        name = "pkg-config-role-hook";
+        substitutions = {
+          inherit
+            name
+            suffixSalt
+            wrapperName
+            ;
+        };
+      } ../setup-hooks/role.bash;
+      setupHook = makeSetupHook {
+        name = "pkgs-config-setup-hook";
+        substitutions = {
+          inherit
+            targetPrefix
+            baseBinName
+            ;
+        };
+      } ./setup-hook.sh;
+    in
+    [
+      "${roleHook}/nix-support/setup-hook"
+      "${setupHook}/nix-support/setup-hook"
+    ];
 
   postFixup =
+    let
+      addFlags = replaceVars ./add-flags.sh { inherit suffixSalt; };
+      utils = replaceVars ../wrapper-common/utils.bash {
+        inherit
+          suffixSalt
+          wrapperName
+          ;
+        inherit (targetPlatform) darwinMinVersion;
+        expandResponseParams = "${expand-response-params}/bin/expand-response-params";
+      };
+
+    in
     ##
     ## User env support
     ##
@@ -115,8 +159,8 @@ stdenv.mkDerivation {
     )
 
     + ''
-      substituteAll ${./add-flags.sh} $out/nix-support/add-flags.sh
-      substituteAll ${../wrapper-common/utils.bash} $out/nix-support/utils.bash
+      install -m444 -T ${addFlags} $out/nix-support/add-flags.sh
+      install -m444 -T ${utils} $out/nix-support/utils.bash
     ''
 
     ##
@@ -124,10 +168,14 @@ stdenv.mkDerivation {
     ##
     + extraBuildCommands;
 
-  env = {
-    shell = getBin stdenvNoCC.shell + stdenvNoCC.shell.shellPath or "";
-    wrapperName = "PKG_CONFIG_WRAPPER";
-    inherit targetPrefix suffixSalt baseBinName;
+  passthru = {
+    inherit
+      targetPrefix
+      suffixSalt
+      pkg-config
+      baseBinName
+      wrapperName
+      ;
   };
 
   meta =
