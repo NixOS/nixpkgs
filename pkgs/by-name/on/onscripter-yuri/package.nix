@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     description = "An enhancement ONScripter project porting to many platforms, especially web";
     homepage = "https://github.com/YuriSizuku/OnscripterYuri";
     license = licenses.gpl2Only;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ itsmyowninvention ];
     platforms = platforms.linux;
   };
 }
