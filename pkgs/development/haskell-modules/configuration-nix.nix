@@ -500,6 +500,17 @@ builtins.intersectAttrs super {
   mustache = dontCheck super.mustache;
   arch-web = dontCheck super.arch-web;
 
+  # Some test cases require network access
+  hpack_0_39_1 = doDistribute (
+    overrideCabal (drv: {
+      testFlags = drv.testFlags or [ ] ++ [
+        "--skip=/EndToEnd/hpack/defaults/fails if defaults don't exist/"
+        "--skip=/Hpack.Defaults/ensureFile/downloads file if missing/"
+        "--skip=/Hpack.Defaults/ensureFile/with 404/does not create any files/"
+      ];
+    }) super.hpack_0_39_1
+  );
+
   # Tries accessing the GitHub API
   github-app-token = dontCheck super.github-app-token;
 
