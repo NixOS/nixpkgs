@@ -1,0 +1,30 @@
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+}:
+
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "cargo-maintained";
+  version = "0.3.0";
+
+  src = fetchFromGitHub {
+    owner = "JonathanWoollett-Light";
+    repo = "cargo-maintained";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-111yjFUV+o7vv5bYD8nxSWHOXOBnDEk36xze90wYuNg=";
+  };
+
+  cargoHash = "sha256-11vtc/CwV1aHeREzmzO8k1FcebbEp3FKMAJb0v2aQig=";
+
+  meta = {
+    description = "tool to check crates are up to date";
+    homepage = "https://github.com/JonathanWoollett-Light/cargo-maintained";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      matthiasbeyer
+    ];
+    mainProgram = "cargo-maintained";
+  };
+})
