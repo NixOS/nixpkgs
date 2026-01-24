@@ -76,6 +76,18 @@
   "module-services-tandoor-recipes-migrating-media-option-disallow-access": [
     "index.html#module-services-tandoor-recipes-migrating-media-option-disallow-access"
   ],
+  "module-virtualisation-xen": [
+    "index.html#module-virtualisation-xen"
+  ],
+  "module-virtualisation-xen-installation-dom0": [
+    "index.html#module-virtualisation-xen-installation-dom0"
+  ],
+  "module-virtualisation-xen-installation-domU": [
+    "index.html#module-virtualisation-xen-installation-domU"
+  ],
+  "module-virtualisation-xen-introduction": [
+    "index.html#module-virtualisation-xen-introduction"
+  ],
   "sec-override-nixos-test": [
     "index.html#sec-override-nixos-test"
   ],
