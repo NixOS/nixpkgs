@@ -38,6 +38,9 @@ buildPythonPackage (finalAttrs: {
     versioneer
   ];
 
+  pythonRelaxDeps = [
+    "pytensor"
+  ];
   dependencies = [
     arviz
     cachetools
