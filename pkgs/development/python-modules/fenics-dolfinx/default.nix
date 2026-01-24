@@ -63,6 +63,10 @@ buildPythonPackage (finalAttrs: {
   pname = "fenics-dolfinx";
   pyproject = true;
 
+  hardeningEnable = [ "glibcxxassertions" ];
+
+  pytestFlags = [ "-s" ];
+
   pythonRelaxDeps = [
     "fenics-ufl"
   ];
