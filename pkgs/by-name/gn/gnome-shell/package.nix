@@ -111,6 +111,15 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://src.fedoraproject.org/rpms/gnome-shell/raw/dcd112d9708954187e7490564c2229d82ba5326f/f/0001-gdm-Work-around-failing-fingerprint-auth.patch";
       hash = "sha256-mgXty5HhiwUO1UV3/eDgWtauQKM0cRFQ0U7uocST25s=";
     })
+
+    # Fix crash when switching to hands-free mode on a bluetooth headset
+    (fetchpatch {
+      name = "fix-bluetooth-handsfree-crash.patch";
+      url = "https://gitlab.gnome.org/GNOME/libgnome-volume-control/-/merge_requests/31.patch";
+      hash = "sha256-jFbItlXT05nnp825R/HvsWDFxAMzL4z36CsxhQ2sEIY=";
+      stripLen = 1;
+      extraPrefix = "subprojects/gvc/";
+    })
   ];
 
   nativeBuildInputs = [
