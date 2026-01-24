@@ -19,11 +19,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-TNIAdxOmAgZOGe3aBcKmeEzuGP8LuhGNDMNY/MUwiTw=";
 
-  postPatch = ''
-    substituteInPlace Cargo.toml \
-      --replace-fail 'rust-version = "1.92"' 'rust-version = "1.91"'
-  '';
-
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
 
