@@ -437,7 +437,7 @@ in
     virtualisation.bootLoaderDevice = mkOption {
       type = types.path;
       default = "/dev/disk/by-id/virtio-${rootDriveSerialAttr}";
-      defaultText = literalExpression ''/dev/disk/by-id/virtio-${rootDriveSerialAttr}'';
+      defaultText = literalExpression "/dev/disk/by-id/virtio-${rootDriveSerialAttr}";
       example = "/dev/disk/by-id/virtio-boot-loader-device";
       description = ''
         The path (inside th VM) to the device to boot from when legacy booting.
@@ -469,7 +469,7 @@ in
     virtualisation.rootDevice = mkOption {
       type = types.nullOr types.path;
       default = "/dev/disk/by-label/${rootFilesystemLabel}";
-      defaultText = literalExpression ''/dev/disk/by-label/${rootFilesystemLabel}'';
+      defaultText = literalExpression "/dev/disk/by-label/${rootFilesystemLabel}";
       example = "/dev/disk/by-label/nixos";
       description = ''
         The path (inside the VM) to the device containing the root filesystem.
@@ -682,7 +682,7 @@ in
     virtualisation.vlans = mkOption {
       type = types.listOf types.ints.unsigned;
       default = if config.virtualisation.interfaces == { } then [ 1 ] else [ ];
-      defaultText = lib.literalExpression ''if config.virtualisation.interfaces == {} then [ 1 ] else [ ]'';
+      defaultText = lib.literalExpression "if config.virtualisation.interfaces == {} then [ 1 ] else [ ]";
       example = [
         1
         2

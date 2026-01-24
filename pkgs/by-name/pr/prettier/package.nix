@@ -121,7 +121,7 @@ let
         ${plugin.pname}: error context, tried finding entry point under;
         pathAbsoluteNaive -> ${pathAbsoluteNaive}
         pathAbsoluteFallback -> ${pathAbsoluteFallback}
-      '' throw ''${plugin.pname}: does not provide parse-able entry point'';
+      '' throw "${plugin.pname}: does not provide parse-able entry point";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prettier";

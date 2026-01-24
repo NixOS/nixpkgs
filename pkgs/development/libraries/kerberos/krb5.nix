@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     "--enable-static"
     "--disable-shared"
   ]
-  ++ lib.optional stdenv.hostPlatform.isFreeBSD ''WARN_CFLAGS=''
+  ++ lib.optional stdenv.hostPlatform.isFreeBSD "WARN_CFLAGS="
   ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "krb5_cv_attr_constructor_destructor=yes,yes"
     "ac_cv_func_regcomp=yes"

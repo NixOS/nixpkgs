@@ -222,28 +222,28 @@ in
             ${cfg.package}/bin/geth \
               --nousb \
               --ipcdisable \
-              ${lib.optionalString (cfg.network != null) ''--${cfg.network}''} \
+              ${lib.optionalString (cfg.network != null) "--${cfg.network}"} \
               --syncmode ${cfg.syncmode} \
               --gcmode ${cfg.gcmode} \
               --port ${toString cfg.port} \
               --maxpeers ${toString cfg.maxpeers} \
-              ${lib.optionalString cfg.http.enable ''--http --http.addr ${cfg.http.address} --http.port ${toString cfg.http.port}''} \
+              ${lib.optionalString cfg.http.enable "--http --http.addr ${cfg.http.address} --http.port ${toString cfg.http.port}"} \
               ${
-                lib.optionalString (cfg.http.apis != null) ''--http.api ${lib.concatStringsSep "," cfg.http.apis}''
+                lib.optionalString (cfg.http.apis != null) "--http.api ${lib.concatStringsSep "," cfg.http.apis}"
               } \
-              ${lib.optionalString cfg.websocket.enable ''--ws --ws.addr ${cfg.websocket.address} --ws.port ${toString cfg.websocket.port}''} \
+              ${lib.optionalString cfg.websocket.enable "--ws --ws.addr ${cfg.websocket.address} --ws.port ${toString cfg.websocket.port}"} \
               ${
                 lib.optionalString (
                   cfg.websocket.apis != null
-                ) ''--ws.api ${lib.concatStringsSep "," cfg.websocket.apis}''
+                ) "--ws.api ${lib.concatStringsSep "," cfg.websocket.apis}"
               } \
-              ${lib.optionalString cfg.metrics.enable ''--metrics --metrics.addr ${cfg.metrics.address} --metrics.port ${toString cfg.metrics.port}''} \
+              ${lib.optionalString cfg.metrics.enable "--metrics --metrics.addr ${cfg.metrics.address} --metrics.port ${toString cfg.metrics.port}"} \
               --authrpc.addr ${cfg.authrpc.address} --authrpc.port ${toString cfg.authrpc.port} --authrpc.vhosts ${lib.concatStringsSep "," cfg.authrpc.vhosts} \
               ${
                 if (cfg.authrpc.jwtsecret != "") then
-                  ''--authrpc.jwtsecret ${cfg.authrpc.jwtsecret}''
+                  "--authrpc.jwtsecret ${cfg.authrpc.jwtsecret}"
                 else
-                  ''--authrpc.jwtsecret ${dataDir}/geth/jwtsecret''
+                  "--authrpc.jwtsecret ${dataDir}/geth/jwtsecret"
               } \
               ${lib.escapeShellArgs cfg.extraArgs} \
               --datadir ${dataDir}

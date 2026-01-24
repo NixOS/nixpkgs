@@ -72,7 +72,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   # Prevent importing from build during test collection:
-  preCheck = ''rm -rf pillow_jpls'';
+  preCheck = "rm -rf pillow_jpls";
 
   pythonImportsCheck = [ "pillow_jpls" ];
 

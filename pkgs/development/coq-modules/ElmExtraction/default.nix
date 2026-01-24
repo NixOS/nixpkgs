@@ -46,7 +46,7 @@ mkCoqDerivation {
     metacoq
   ];
 
-  postPatch = ''patchShebangs ./tests/process-extraction-examples.sh'';
+  postPatch = "patchShebangs ./tests/process-extraction-examples.sh";
 
   meta = {
     description = "Framework for extracting Coq programs to Elm";

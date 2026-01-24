@@ -20,11 +20,11 @@
   libXScrnSaver,
   libusb1,
   pkg-config,
-# #FIXME: Could not get cmake to pick up on these dependencies
-# Ommiting them prevents cmake from building the OCR video capabilities
-# Everything else should work it's just missing this one plugin
-# tesseract,
-# leptonica,
+  # #FIXME: Could not get cmake to pick up on these dependencies
+  # Ommiting them prevents cmake from building the OCR video capabilities
+  # Everything else should work it's just missing this one plugin
+  # tesseract,
+  # leptonica,
 }:
 let
   httplib-src = fetchFromGitHub {

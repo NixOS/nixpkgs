@@ -278,10 +278,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "19sz075liiqim98jvnb3jawxdpd8kk146bwvqzwvmimbgdzf8xfr";
+      sha256 = "1yx8q8v5ri2j7h7slpkk4plnrgc098l9avxnaavibj14fri3z26n";
       type = "gem";
     };
-    version = "0.18.0";
+    version = "0.18.1";
   };
   psych = {
     dependencies = [

@@ -154,7 +154,7 @@ rec {
       cp *.rng $out/share
       cp README.md $doc/share/${pname}
     '';
-    checkPhase = '''';
+    checkPhase = "";
   };
 
   zlib =
