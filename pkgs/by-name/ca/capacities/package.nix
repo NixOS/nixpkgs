@@ -7,11 +7,11 @@
 }:
 let
   pname = "capacities";
-  version = "1.52.6";
+  version = "1.57.24";
 
   src = fetchurl {
-    url = "https://web.archive.org/web/20250519011655/https://capacities-desktop-app.fra1.cdn.digitaloceanspaces.com/capacities-${version}.AppImage";
-    hash = "sha256-M5K2TxrB2Ut/wYKasl8EqbzLjFJrqjWfPIJTZV4fi4s=";
+    url = "https://web.archive.org/web/20260110164323/https://capacities-desktop-app.fra1.cdn.digitaloceanspaces.com/Capacities-1.57.24.AppImage";
+    hash = "sha256-BWan10ItF/hKEMGG/m32QgjySLReqJnrtq5z0k9oYcA=";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -32,7 +32,7 @@ appimageTools.wrapType2 {
   extraInstallCommands = ''
     source "${makeWrapper}/nix-support/setup-hook"
     wrapProgram $out/bin/capacities \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+      --add-flags "--ozone-platform-hint=auto"
 
     # Check for required desktop file
     if [ ! -f ${appimageContents}/capacities.desktop ]; then
@@ -41,6 +41,8 @@ appimageTools.wrapType2 {
     else
       # Install and modify the desktop file
       install -m 444 -D ${appimageContents}/capacities.desktop $out/share/applications/capacities.desktop
+      substituteInPlace $out/share/applications/capacities.desktop \
+        --replace-fail "Exec=AppRun" "Exec=capacities"
     fi
 
     # Check for required icon file

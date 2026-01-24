@@ -1,16 +1,16 @@
 {
   lib,
-  stdenv,
+  gccStdenv,
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+gccStdenv.mkDerivation (finalAttrs: {
   pname = "ii";
   version = "2.0";
 
   src = fetchurl {
-    url = "https://dl.suckless.org/tools/${pname}-${version}.tar.gz";
-    sha256 = "sha256-T2evzSCMB5ObiKrb8hSXpwKtCgf5tabOhh+fOf/lQls=";
+    url = "https://dl.suckless.org/tools/ii-${finalAttrs.version}.tar.gz";
+    hash = "sha256-T2evzSCMB5ObiKrb8hSXpwKtCgf5tabOhh+fOf/lQls=";
   };
 
   makeFlags = [ "CC:=$(CC)" ];
@@ -24,4 +24,4 @@ stdenv.mkDerivation rec {
     mainProgram = "ii";
     platforms = lib.platforms.unix;
   };
-}
+})

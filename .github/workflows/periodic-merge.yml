@@ -65,5 +65,5 @@ jobs:
         with:
           issue-number: 105153
           body: |
-            Periodic merge from `${{ inputs.from }}` into `${{ inputs.into }}` has [failed](https://github.com/NixOS/nixpkgs/actions/runs/${{ github.run_id }}).
+            Periodic merge from `${{ inputs.from }}` into `[${{ inputs.into }}](https://github.com/NixOS/nixpkgs/tree/${{ inputs.into }})` has [failed](https://github.com/NixOS/nixpkgs/actions/runs/${{ github.run_id }}).
           token: ${{ steps.app-token.outputs.token }}
