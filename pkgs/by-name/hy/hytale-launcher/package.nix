@@ -127,7 +127,10 @@ let
       '';
       homepage = "https://hytale.com";
       license = lib.licenses.unfreeRedistributable;
-      maintainers = with lib.maintainers; [ karol-broda ];
+      maintainers = with lib.maintainers; [
+        gepbird
+        karol-broda
+      ];
       mainProgram = "hytale-launcher";
       platforms = [
         "x86_64-linux"
