@@ -11738,6 +11738,12 @@
     githubId = 1358764;
     name = "Jamie Magee";
   };
+  janhencic = {
+    name = "Jan Hencic";
+    email = "jan@hencic.com";
+    github = "janhencic";
+    githubId = 61284133;
+  };
   jankaifer = {
     name = "Jan Kaifer";
     email = "jan@kaifer.cz";
