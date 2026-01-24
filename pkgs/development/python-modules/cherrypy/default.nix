@@ -80,6 +80,8 @@ buildPythonPackage rec {
     "test_basic_request"
     "test_3_Redirect"
     "test_4_File_deletion"
+    # excepts a tcp reset for the 16th connection, but doesn't get it
+    "test_queue_full"
   ]
   ++ lib.optionals (pythonAtLeast "3.11") [
     "testErrorHandling"
