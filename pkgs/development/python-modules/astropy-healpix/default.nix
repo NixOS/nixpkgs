@@ -24,14 +24,14 @@ buildPythonPackage rec {
     hash = "sha256-9SDYOr6CFdPo4aN7K9kRce42pvVfEQ1aLbhj112Bs7c=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     extension-helpers
     numpy
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     astropy
   ];
