@@ -81,10 +81,11 @@ let
         # This cannot be removed, it is used by some extensions.
         installPrefix = "share/vscode/extensions/${vscodeExtUniqueId}";
 
-        nativeBuildInputs =
-          [ unpackVsixSetupHook ]
-          ++ lib.optional (signatureArchive != null) verifyVsixSignatureSetupHook
-          ++ nativeBuildInputs;
+        nativeBuildInputs = [
+          unpackVsixSetupHook
+        ]
+        ++ lib.optional (signatureArchive != null) verifyVsixSignatureSetupHook
+        ++ nativeBuildInputs;
 
         # Pass signature archive path to the verification hook
         inherit signatureArchive;
