@@ -52,6 +52,7 @@ buildPythonPackage rec {
   meta = {
     description = "BSD-licensed HEALPix for Astropy";
     homepage = "https://github.com/astropy/astropy-healpix";
+    changelog = "https://github.com/astropy/astropy-healpix/blob/v${version}/CHANGES.rst";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.smaret ];
   };
