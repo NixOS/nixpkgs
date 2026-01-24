@@ -19,7 +19,7 @@
   pytest-cov-stub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "yourdfpy";
   version = "0.0.60";
   pyproject = true;
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "clemense";
     repo = "yourdfpy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-tXFrwtxjLvHNxT/MhrAiV2CGcbKj1JRi/Yo8Qt6UBfk=";
   };
 
@@ -55,9 +55,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python parser for URDFs";
     homepage = "https://github.com/clemense/yourdfpy/";
-    changelog = "https://github.com/clemense/yourdfpy/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/clemense/yourdfpy/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nim65s ];
     mainProgram = "yourdfpy";
   };
-}
+})
