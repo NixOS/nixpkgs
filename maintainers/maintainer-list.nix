@@ -15616,6 +15616,14 @@
     githubId = 591860;
     name = "Lionello Lunesu";
   };
+  liquidnya = {
+    name = "Alice ✨🌙 Luna";
+    github = "liquidnya";
+    githubId = 7364785;
+    email = "alice@liquidnya.dev";
+    matrix = "@liquidnya:matrix.org";
+    keys = [ { fingerprint = "7C2D E075 FA93 D61C C9A7  876F 7966 C19E 32F9 EF06"; } ];
+  };
   lisanna-dettwyler = {
     email = "lisanna.dettwyler@gmail.com";
     github = "lisanna-dettwyler";
