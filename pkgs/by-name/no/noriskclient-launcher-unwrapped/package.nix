@@ -18,13 +18,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "noriskclient-launcher-unwrapped";
-  version = "0.6.16";
+  version = "0.6.17";
 
   src = fetchFromGitHub {
     owner = "NoRiskClient";
     repo = "noriskclient-launcher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xYbQC7KLYKB2nU+bTl8jMMkfSuq7p8RNr8nJyLEQb1c=";
+    hash = "sha256-N61/O2cCMIwqkNEwBO3QtHveNiZKXbwehybXFRrTsA0=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
