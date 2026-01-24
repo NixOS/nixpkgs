@@ -19,6 +19,7 @@
   bash,
   buildPackages,
   nix-update-script,
+  nixosTests,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "kmscon";
@@ -63,7 +64,10 @@ stdenv.mkDerivation (finalAttrs: {
     ./sandbox.patch # Generate system units where they should be (nix store) instead of /etc/systemd/system
   ];
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
+  passthru = {
+    tests.kmscon = nixosTests.kmscon;
+    updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
+  };
 
   meta = {
     description = "KMS/DRM based System Console";
