@@ -78,6 +78,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
+    changelog = "https://github.com/NoRiskClient/noriskclient-launcher/blob/v3/changelogs/${finalAttrs.version}.txt";
     description = "Minecraft Launcher for NoRisk Client";
     homepage = "https://norisk.gg";
     license = lib.licenses.gpl3Only;
