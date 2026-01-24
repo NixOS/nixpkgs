@@ -1,5 +1,5 @@
 {
-  stdenvNoCC,
+  mkFont,
   lib,
   fetchzip,
   variants ? [
@@ -68,17 +68,10 @@ let
         variants;
 
 in
-stdenvNoCC.mkDerivation {
+mkFont {
   pname = "komika-fonts";
   version = "0-unstable-2001-06-16";
-  sourceRoot = ".";
-
   srcs = map (variant: fetchFont fontMap.${variant}) selectedFonts;
-  installPhase = ''
-    runHook preInstall
-    install -Dm444 **/*.ttf -t $out/share/fonts/ttf
-    runHook postInstall
-  '';
 
   meta = {
     homepage = "https://pedroreina.net/apostrophiclab/";
