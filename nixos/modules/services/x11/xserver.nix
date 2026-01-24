@@ -849,35 +849,10 @@ in
 
     environment.pathsToLink = [ "/share/X11" ];
 
-    systemd.services.display-manager = {
-      description = "Display Manager";
-
-      after = [
-        "acpid.service"
-        "systemd-logind.service"
-        "systemd-user-sessions.service"
-      ];
-
-      restartIfChanged = false;
-
-      environment = config.services.displayManager.environment;
-
-      preStart = ''
-        ${config.services.displayManager.preStart}
-
-        rm -f /tmp/.X0-lock
-      '';
-
-      # Stop restarting if the display manager stops (crashes) 2 times
-      # in one minute. Starting X typically takes 3-4s.
-      startLimitIntervalSec = 30;
-      startLimitBurst = 3;
-      serviceConfig = {
-        Restart = "always";
-        RestartSec = "200ms";
-        SyslogIdentifier = "display-manager";
-      };
-    };
+    # FIXME: what
+    services.displayManager.generic.preStart = ''
+      rm -f /tmp/.X0-lock
+    '';
 
     services.xserver.displayManager.xserverArgs = [
       "-config ${configFile}"

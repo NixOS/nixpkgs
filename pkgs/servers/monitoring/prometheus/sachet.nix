@@ -10,8 +10,8 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "messagebird";
-    repo = pname;
-    rev = version;
+    repo = "sachet";
+    tag = version;
     hash = "sha256-zcFViE1/B+wrkxZ3YIyfy2IBbxLvXOf8iK/6eqZb1ZQ=";
   };
 

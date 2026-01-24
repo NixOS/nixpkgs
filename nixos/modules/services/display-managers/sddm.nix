@@ -361,7 +361,10 @@ in
 
     services.displayManager = {
       enable = true;
-      execCmd = "exec /run/current-system/sw/bin/sddm";
+      generic = {
+        enable = true;
+        execCmd = "exec /run/current-system/sw/bin/sddm";
+      };
     };
 
     security.pam.services = {

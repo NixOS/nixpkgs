@@ -6,16 +6,16 @@
   makeDesktopItem,
 }:
 let
-  version = "2.29.0";
-  commit = "f78ece";
+  version = "2.36.1";
+  commit = "ad089d";
 
   src = fetchzip {
-    name = "StatusIm-Desktop-v${version}-${commit}-x86_64.AppImage";
-    url = "https://github.com/status-im/status-desktop/releases/download/${version}/StatusIm-Desktop-v${version}-${commit}-x86_64.tar.gz";
-    hash = "sha256-i91E1eaN6paM+uZ8EvO1+Wj0Po9KnzQorG0tWKF4hn8=";
+    name = "StatusIm-Desktop-${version}-${commit}-x86_64.AppImage";
+    url = "https://github.com/status-im/status-desktop/releases/download/${version}/StatusIm-Desktop-${version}-${commit}-x86_64.tar.gz";
+    hash = "sha256-urBk1CqVRuBpXc8WAVyyzP1devK8NwbpbBJ+FPX1Awg=";
     stripRoot = false;
     postFetch = ''
-      mv $out/StatusIm-Desktop-v${version}-${commit}-x86_64.AppImage $TMPDIR/tmp
+      mv $out/StatusIm-Desktop-${version}-${commit}-x86_64.AppImage $TMPDIR/tmp
       rm -rf $out
       mv $TMPDIR/tmp $out
     '';

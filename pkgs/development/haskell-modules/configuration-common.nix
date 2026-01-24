@@ -1851,7 +1851,6 @@ with haskellLib;
       # PATH.
       deps = [
         pkgs.git
-        pkgs.nix
         pkgs.nix-prefetch-git
       ];
     in
@@ -1865,7 +1864,9 @@ with haskellLib;
           wrapProgram "$out/bin/update-nix-fetchgit" --prefix 'PATH' ':' "${lib.makeBinPath deps}"
         '';
       }))
-      (addTestToolDepends deps)
+      # pkgs.nix is not added to the wrapper since we can resonably expect it to be installed
+      # and we don't know which implementation the eventual user prefers
+      (addTestToolDepends (deps ++ [ pkgs.nix ]))
       # Patch for hnix compat.
       (appendPatches [
         (fetchpatch {
@@ -2035,6 +2036,7 @@ with haskellLib;
   cli-git = addBuildTool pkgs.git super.cli-git;
 
   cli-nix = addBuildTools [
+    # Required due to https://github.com/obsidiansystems/cli-nix/issues/11
     pkgs.nix
     pkgs.nix-prefetch-git
   ] super.cli-nix;

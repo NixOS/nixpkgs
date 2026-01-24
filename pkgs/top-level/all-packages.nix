@@ -1154,8 +1154,6 @@ with pkgs;
 
   cgit = callPackage ../applications/version-management/cgit { };
 
-  cgit-pink = callPackage ../applications/version-management/cgit/pink.nix { };
-
   datalad = with python3Packages; toPythonApplication datalad;
 
   datalad-gooey = with python3Packages; toPythonApplication datalad-gooey;
@@ -1687,7 +1685,6 @@ with pkgs;
       wrapProgram $out/bin/cabal2nix \
         --prefix PATH ":" "${
           lib.makeBinPath [
-            nix
             nix-prefetch-scripts
           ]
         }"
@@ -10659,10 +10656,6 @@ with pkgs;
   workstyle = callPackage ../applications/window-managers/i3/workstyle.nix { };
 
   wmfocus = callPackage ../applications/window-managers/i3/wmfocus.nix { };
-
-  ii = callPackage ../applications/networking/irc/ii {
-    stdenv = gccStdenv;
-  };
 
   ikiwiki = callPackage ../applications/misc/ikiwiki {
     inherit

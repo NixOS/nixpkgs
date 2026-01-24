@@ -3,22 +3,23 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  nix-update-script,
   pandoc,
   go,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "checkmake";
-  version = "0.2.2";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
-    owner = "mrtazz";
+    owner = "checkmake";
     repo = "checkmake";
-    tag = version;
-    hash = "sha256-Ql8XSQA/w7wT9GbmYOM2vG15GVqj9LxOGIu8Wqp9Wao=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-W+4bKERQL4nsPxrcCP19uYAwSw+tK9mAQp/fufzYcYg=";
   };
 
-  vendorHash = null;
+  vendorHash = "sha256-Iv3MFhHnwDLIuUH7G6NYyQUSAaivBYqYDWephHnBIho=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -28,11 +29,13 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=${version}"
+    "-X=main.version=${finalAttrs.version}"
     "-X=main.buildTime=1970-01-01T00:00:00Z"
     "-X=main.builder=nixpkgs"
     "-X=main.goversion=go${go.version}"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   postPatch = ''
     substituteInPlace man/man1/checkmake.1.md \
@@ -48,14 +51,14 @@ buildGoModule rec {
   '';
 
   meta = {
-    description = "Experimental tool for linting and checking Makefiles";
+    description = "Linter and analyzer for Makefiles";
     mainProgram = "checkmake";
-    homepage = "https://github.com/mrtazz/checkmake";
-    changelog = "https://github.com/mrtazz/checkmake/releases/tag/${src.rev}";
+    homepage = "https://github.com/checkmake/checkmake";
+    changelog = "https://github.com/checkmake/checkmake/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     longDescription = ''
-      checkmake is an experimental tool for linting and checking
-      Makefiles. It may not do what you want it to.
+      checkmake is a linter for Makefiles. It scans Makefiles for potential issues based on configurable rules.
     '';
+    maintainers = with lib.maintainers; [ lafrenierejm ];
   };
-}
+})
