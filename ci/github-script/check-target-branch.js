@@ -90,11 +90,21 @@ async function checkTargetBranch({ github, context, core, dry }) {
   )
   const rebuildsAllTests =
     changed.attrdiff.changed.includes('nixosTests.simple')
+
+  // https://github.com/NixOS/nixpkgs/pull/483194#issuecomment-3793393218
+  const isExemptHomeAssistantUpdate =
+    maxRebuildCount <= 1500 && head === 'wip-home-assistant'
+
   core.info(
-    `checkTargetBranch: PR causes ${maxRebuildCount} rebuilds and ${rebuildsAllTests ? 'does' : 'does not'} rebuild all NixOS tests.`,
+    [
+      `checkTargetBranch: this PR:`,
+      `  * causes ${maxRebuildCount} rebuilds`,
+      `  * ${rebuildsAllTests ? 'rebuilds' : 'does not rebuild'} all NixOS tests`,
+      `  * ${isExemptHomeAssistantUpdate ? 'is' : 'is not'} an exempt home-assistant update`,
+    ].join('\n'),
   )
 
-  if (maxRebuildCount >= 1000) {
+  if (maxRebuildCount >= 1000 && !isExemptHomeAssistantUpdate) {
     const desiredBranch =
       base === 'master' ? 'staging' : `staging-${split(base).version}`
     const body = [
@@ -142,7 +152,7 @@ async function checkTargetBranch({ github, context, core, dry }) {
     })
 
     throw new Error('This PR is against the wrong branch.')
-  } else if (maxRebuildCount >= 500) {
+  } else if (maxRebuildCount >= 500 && !isExemptHomeAssistantUpdate) {
     const stagingBranch =
       base === 'master' ? 'staging' : `staging-${split(base).version}`
     const body = [
