@@ -7,13 +7,13 @@
 
 buildNpmPackage {
   pname = "coc-rust-analyzer";
-  version = "0-unstable-2026-01-06";
+  version = "0-unstable-2026-01-20";
 
   src = fetchFromGitHub {
     owner = "fannheyward";
     repo = "coc-rust-analyzer";
-    rev = "35615c7feafbc8005e160e7609888a97f5d3b031";
-    hash = "sha256-Kj3gUKFsfgUVVWuz7nuc7djRvfyvXc3wkHt1DxYIw30=";
+    rev = "edde4d30f76bb6ff2e0684be4da496ed5d8166c4";
+    hash = "sha256-cBpGhkpqAnzjUHyzuTWkUxMpFjGIdxrXu7TZRbomK9A=";
   };
 
   npmDepsHash = "sha256-PgMgpVoKmhuqtSV73wSdqdQ5Bt5AeRwbn71mIulBh8Y=";
