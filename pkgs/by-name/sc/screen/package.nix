@@ -9,12 +9,12 @@
   pam ? null,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "screen";
   version = "5.0.1";
 
   src = fetchurl {
-    url = "mirror://gnu/screen/screen-${version}.tar.gz";
+    url = "mirror://gnu/screen/screen-${finalAttrs.version}.tar.gz";
     hash = "sha256-La429Ns3n/zRS2kVlrpuwYrDqeIrxHrCOXiatYQJhp0=";
   };
 
@@ -73,4 +73,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})
