@@ -202,6 +202,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/odamex/odamex/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = with lib.maintainers; [ eljamm ];
     mainProgram = "odalaunch";
   };
