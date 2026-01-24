@@ -3866,7 +3866,7 @@ let
           homepage = "https://github.com/redhat-developer/vscode-java";
           changelog = "https://marketplace.visualstudio.com/items/redhat.java/changelog";
           license = lib.licenses.epl20;
-          maintainers = [ ];
+          maintainers = [ lib.maintainers.frontear ];
           broken = lib.versionOlder jdk.version "17";
         };
       };
