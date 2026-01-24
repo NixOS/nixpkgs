@@ -12,16 +12,20 @@
   pkgsCross,
   gitUpdater,
   enableDecLocator ? true,
+  gnused,
+  gawk,
+  glibc,
+  bashNonInteractive,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xterm";
   version = "406";
 
   src = fetchurl {
     urls = [
-      "https://invisible-island.net/archives/xterm/${pname}-${version}.tgz"
-      "https://invisible-mirror.net/archives/xterm/${pname}-${version}.tgz"
+      "https://invisible-island.net/archives/xterm/${finalAttrs.pname}-${finalAttrs.version}.tgz"
+      "https://invisible-mirror.net/archives/xterm/${finalAttrs.pname}-${finalAttrs.version}.tgz"
     ];
     hash = "sha256-Bm6y1mQwiX/h2t0nFVTM2uM9d8USEmp1j8TeN7EUh5k=";
   };
@@ -48,6 +52,8 @@ stdenv.mkDerivation rec {
     freetype
     xorg.libXft
     xorg.luit
+    # for the sake of `patchShebangs`
+    bashNonInteractive
   ];
 
   configureFlags = [
@@ -87,7 +93,18 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     for bin in $out/bin/*; do
-      wrapProgram $bin --set XAPPLRESDIR $out/lib/X11/app-defaults/
+      wrapProgramArgs=(--set XAPPLRESDIR $out/lib/X11/app-defaults/)
+      if [[ $bin =~ (u|koi8r)xterm ]]; then
+        wrapProgramArgs+=(--prefix PATH : $out/bin:${
+          lib.makeBinPath [
+            gnused
+            gawk
+            glibc
+            bashNonInteractive
+          ]
+        })
+      fi
+      wrapProgram $bin "''${wrapProgramArgs[@]}"
     done
 
     install -D -t $out/share/applications xterm.desktop
@@ -111,10 +128,21 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
+    description = "Terminal emulator for the X Window System";
+    longDescription = ''
+      The xterm program is a terminal emulator for the X Window System. It
+      provides DEC VT102/VT220 and selected features from higher-level
+      terminals such as VT320/VT420/VT520 (VTxxx). It also provides Tektronix
+      4014 emulation for programs that cannot use the window system directly.
+      If the underlying operating system supports terminal resizing
+      capabilities (for example, the SIGWINCH signal in systems derived from
+      4.3bsd), xterm will use the facilities to notify programs running in the
+      window whenever it is resized.
+    '';
     homepage = "https://invisible-island.net/xterm";
     license = with lib.licenses; [ mit ];
     platforms = with lib.platforms; linux ++ darwin;
-    changelog = "https://invisible-island.net/xterm/xterm.log.html";
+    changelog = "https://invisible-island.net/xterm/xterm.log.html#xterm_${finalAttrs.version}";
     mainProgram = "xterm";
   };
-}
+})
