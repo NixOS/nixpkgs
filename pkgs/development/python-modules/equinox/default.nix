@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -39,12 +38,6 @@ buildPythonPackage rec {
       --replace-fail "speed < 0.5" "speed < 1" \
       --replace-fail "speed < 1" "speed < 20" \
       --replace-fail "speed < 2" "speed < 20"
-  ''
-  # Fix jax 0.8.2 compat
-  # Fix submitted upstream: https://github.com/patrick-kidger/equinox/pull/1162
-  + ''
-    substituteInPlace equinox/_ad.py equinox/internal/_primitive.py \
-      --replace-fail "jax.core.get_aval(" "jax.typeof("
   '';
 
   build-system = [ hatchling ];
@@ -69,12 +62,11 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # Failed: DID NOT WARN. No warnings of type (<class 'Warning'>,) were emitted.
-    "test_jax_transform_warn"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # SystemError: nanobind::detail::nb_func_error_except(): exception could not be translated!
-    "test_filter"
+    #  ValueError: The spec of NamedSharding passed to with_sharding_constraint can only refer to
+    # Auto axes of the mesh.
+    # https://github.com/patrick-kidger/equinox/issues/1171
+    "test_sharding_no_inside_jit"
+    "test_sharding_only_inside_jit"
   ];
 
   pythonImportsCheck = [ "equinox" ];
