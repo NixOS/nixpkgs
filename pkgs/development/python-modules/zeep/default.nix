@@ -38,8 +38,6 @@ buildPythonPackage rec {
     hash = "sha256-mGX61fAbFwheamOgK5lq/A/3FmTCuv0UfAlhOUwX2zg=";
   };
 
-  patches = [ ./httpx-compat.patch ];
-
   build-system = [ setuptools ];
 
   dependencies = [
