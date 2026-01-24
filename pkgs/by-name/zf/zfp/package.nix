@@ -6,6 +6,7 @@
   lib,
   llvmPackages,
   python3Packages,
+  cudaPackages,
   stdenv,
   config,
   enableCfp ? true,
@@ -14,9 +15,14 @@
   enableOpenMP ? true,
   enablePython ? true,
   enableUtilities ? true,
-}:
+}@inputs:
 
-stdenv.mkDerivation (finalAttrs: {
+let
+  stdenv = throw "Use effectiveStdenv instead";
+  effectiveStdenv = if enableCuda then cudaPackages.backendStdenv else inputs.stdenv;
+in
+
+effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "zfp";
   version = "1.0.1";
 
