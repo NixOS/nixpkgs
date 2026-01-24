@@ -29,16 +29,16 @@ in
 
 buildNpmPackage (finalAttrs: {
   pname = "pangolin";
-  version = "1.13.1";
+  version = "1.15.1";
 
   src = fetchFromGitHub {
     owner = "fosrl";
     repo = "pangolin";
     tag = finalAttrs.version;
-    hash = "sha256-rDysze915lmgbl/nz2NaPrFgNHAVOYRY4sVMnoYB3xE=";
+    hash = "sha256-SItYudhY+4JQ8Qrm2FgR5se9blETE5y0i1nnjZNQli4=";
   };
 
-  npmDepsHash = "sha256-mSSzrkGZ0ZPYINRahzrbrO6oLDhmu8HWHfHzZKMroCg=";
+  npmDepsHash = "sha256-4uGIR0KnVl0SvTnD14bavqlv00aX91s2caPPLPdlhO4=";
 
   nativeBuildInputs = [
     esbuild
@@ -49,12 +49,12 @@ buildNpmPackage (finalAttrs: {
   # Based on pkgs.nextjs-ollama-llm-ui.
   postPatch = ''
     substituteInPlace src/app/layout.tsx --replace-fail \
-      "{ Inter } from \"next/font/google\"" \
+      "{ Geist, Inter, Manrope, Open_Sans } from \"next/font/google\"" \
       "localFont from \"next/font/local\""
 
     substituteInPlace src/app/layout.tsx --replace-fail \
-      "Inter({ subsets: [\"latin\"] })" \
-      "localFont({ src: './Inter.ttf' })"
+      "const font = Inter({${"\n"}    subsets: [\"latin\"]${"\n"}});" \
+      "const font = localFont({ src: './Inter.ttf' });"
 
     cp "${inter}/share/fonts/truetype/InterVariable.ttf" src/app/Inter.ttf
   '';
@@ -91,6 +91,8 @@ buildNpmPackage (finalAttrs: {
     cp -r init $out/share/pangolin/dist/init
 
     cp server/db/names.json $out/share/pangolin/dist/names.json
+    cp server/db/ios_models.json $out/share/pangolin/dist/ios_models.json
+    cp server/db/mac_models.json $out/share/pangolin/dist/mac_models.json
 
     runHook postInstall
   '';
