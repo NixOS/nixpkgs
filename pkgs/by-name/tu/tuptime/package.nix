@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tuptime";
-  version = "5.2.4";
+  version = "5.2.5";
 
   src = fetchFromGitHub {
     owner = "rfmoz";
     repo = "tuptime";
     rev = version;
-    sha256 = "sha256-pYGtgv9hPBG/URD2nOWg6qJYYLtlqLW+t5mCLpzKlEc=";
+    sha256 = "sha256-FlY8zW4AR/uczAHfF1AW/BuOtQgLcPOcl9WGiSFOAYk=";
   };
 
   nativeBuildInputs = [
