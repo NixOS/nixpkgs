@@ -37,10 +37,6 @@ buildPythonPackage rec {
     hash = "sha256-kghfF2ihEvyMPEGO1m9BquCdeBsYRoPyIljdLL1hToQ=";
   };
 
-  patches = [
-    ./only-test-in-memory.patch
-  ];
-
   postPatch = ''
     substituteInPlace pytest.ini \
       --replace-fail "-K" ""
@@ -96,6 +92,22 @@ buildPythonPackage rec {
     "test_moving_window_memcached"
     # Flaky: compares time to magic value
     "test_sliding_window_counter_previous_window"
+  ];
+
+  disabledTestMarks = [
+    "flaky"
+    "memcached"
+    "mongodb"
+    "redis"
+    "redis_cluster"
+    "redis_sentinel"
+    "valkey"
+    "valkey_cluster"
+  ];
+
+  disabledTestPaths = [
+    # docker
+    "tests/benchmarks/test_storage.py"
   ];
 
   pythonImportsCheck = [ "limits" ];
