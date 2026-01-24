@@ -5073,14 +5073,14 @@ final: prev: {
   };
 
   evergarden-nvim = buildVimPlugin {
-    pname = "nvim";
-    version = "0-unstable-2026-01-11";
+    pname = "evergarden-nvim";
+    version = "0-unstable-2026-01-21";
     src = fetchgit {
       url = "https://codeberg.org/evergarden/nvim";
-      rev = "124f7d142ed328fe413888b10ae39d94ee695560";
-      hash = "sha256-TeWsXdiCbNCFWMgCixDIu2yQ7R8uTWVScben6rOPsx8=";
+      rev = "b49ee5bef999955e688ea883a1f7b14cd41de8b4";
+      hash = "sha256-55iIlWrwqtaAaOPbgmKXd5d9U4Y9ICBRJudh2VSNRxg=";
     };
-    meta.homepage = "https://codeberg.org/everviolet/nvim";
+    meta.homepage = "https://codeberg.org/evergarden/nvim";
     meta.hydraPlatforms = [ ];
   };
 
@@ -22802,6 +22802,19 @@ final: prev: {
       hash = "sha256-jbLwoZLD6jL9QMIuUXiCbA4nP0Caw+iiHuCCGaxLZQU=";
     };
     meta.homepage = "https://github.com/gelguy/wilder.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  wildfire-nvim = buildVimPlugin {
+    pname = "wildfire.nvim";
+    version = "0-unstable-2025-10-14";
+    src = fetchFromGitHub {
+      owner = "SUSTech-data";
+      repo = "wildfire.nvim";
+      rev = "918a1873c2b8010baa034f373cf28c53ce4f038f";
+      hash = "sha256-HGNBUuUFtZU9ozFsM0X5QadfnK+cEiosQfnnrI6bdtI=";
+    };
+    meta.homepage = "https://github.com/SUSTech-data/wildfire.nvim/";
     meta.hydraPlatforms = [ ];
   };
 
