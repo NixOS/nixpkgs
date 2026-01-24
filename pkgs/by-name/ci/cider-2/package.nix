@@ -16,12 +16,12 @@
   nss,
   widevine-cdm,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cider-2";
   version = "3.1.8";
 
   src = fetchurl {
-    url = "https://repo.cider.sh/apt/pool/main/cider-v${version}-linux-x64.deb";
+    url = "https://repo.cider.sh/apt/pool/main/cider-v${finalAttrs.version}-linux-x64.deb";
     hash = "sha256-cYtUVoDSESzElmmvhTPhLBXjiZF6fo3cJaw1QYCtVCg=";
   };
 
@@ -74,15 +74,15 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    makeWrapper $out/lib/cider/Cider $out/bin/${pname} \
+    makeWrapper $out/lib/cider/Cider $out/bin/cider-2 \
       --add-flags "\$\{NIXOS_OZONE_WL:+\$\{WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true\}\}" \
       --add-flags "--no-sandbox --disable-gpu-sandbox" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}"
 
-    mv $out/share/applications/cider.desktop $out/share/applications/${pname}.desktop
-    substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace-warn 'Exec=cider' 'Exec=${pname}' \
-      --replace-warn 'Exec=/usr/lib/cider/Cider' 'Exec=${pname}'
+    mv $out/share/applications/cider.desktop $out/share/applications/cider-2.desktop
+    substituteInPlace $out/share/applications/cider-2.desktop \
+      --replace-warn 'Exec=cider' 'Exec=cider-2' \
+      --replace-warn 'Exec=/usr/lib/cider/Cider' 'Exec=cider-2'
 
     install -Dm444 $out/share/pixmaps/cider.png \
       $out/share/icons/hicolor/256x256/apps/cider.png
@@ -102,4 +102,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})
