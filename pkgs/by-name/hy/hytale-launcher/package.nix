@@ -16,9 +16,14 @@
   xdg-utils,
   temurin-bin-25,
   libGL,
-  xorg,
   alsa-lib,
   udev,
+  libx11,
+  libxcursor,
+  libxrandr,
+  libxi,
+  icu,
+  openssl,
 }:
 
 let
@@ -61,31 +66,31 @@ let
 
     targetPkgs = pkgs: [
       # launcher dependencies (webkit/tauri)
-      pkgs.gtk3
-      pkgs.nss
-      pkgs.libsecret
-      pkgs.libsoup_3
-      pkgs.gdk-pixbuf
-      pkgs.glib
-      pkgs.webkitgtk_4_1
-      pkgs.xdg-utils
+      gtk3
+      nss
+      libsecret
+      libsoup_3
+      gdk-pixbuf
+      glib
+      webkitgtk_4_1
+      xdg-utils
       # java runtime for the game (temurin 25 recommended by official docs)
-      pkgs.temurin-bin-25
+      temurin-bin-25
       # graphics
-      pkgs.libGL
+      libGL
       # audio
-      pkgs.alsa-lib
+      alsa-lib
       # input/display
-      pkgs.udev
-      pkgs.xorg.libX11
-      pkgs.xorg.libXcursor
-      pkgs.xorg.libXrandr
-      pkgs.xorg.libXi
+      udev
+      libx11
+      libxcursor
+      libxrandr
+      libxi
       # .NET runtime dependencies :(
-      pkgs.icu
-      pkgs.openssl
+      icu
+      openssl
       # misc
-      pkgs.stdenv.cc.cc.lib
+      stdenv.cc.cc.lib
     ];
 
     runScript = "${src}/hytale-launcher";
