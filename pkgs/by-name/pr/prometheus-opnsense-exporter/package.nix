@@ -6,13 +6,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "prometheus-opnsense-exporter";
-  version = "0.0.11";
+  version = "0.0.12";
 
   src = fetchFromGitHub {
-    owner = "athennamind";
+    owner = "AthennaMind";
     repo = "opnsense-exporter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-j16ATUeFqPiPElUqCPwylcujN/qiD9GrrBOXelAbgNs=";
+    hash = "sha256-k+o7zvCJypzbBdZQWlTosauvdk1E207H75+fjtE/Ckk=";
   };
 
   ldflags = [
@@ -29,9 +29,9 @@ buildGoModule (finalAttrs: {
   doInstallCheck = true;
   meta = {
     changelog = "https://github.com/AthennaMind/opnsense-exporter/releases/tag/v${finalAttrs.version}";
-    homepage = "https://githbub.com/AthennaMind/opnsense-exporter";
+    homepage = "https://github.com/AthennaMind/opnsense-exporter";
     description = "Prometheus exporter for opnsense firewall appliances";
-    license = lib.licenses.mit;
+    license = lib.licenses.asl20;
     mainProgram = "opnsense-exporter";
     maintainers = with lib.maintainers; [ paepcke ];
   };
