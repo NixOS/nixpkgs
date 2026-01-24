@@ -11,6 +11,7 @@
   gitUpdater,
   glib,
   harfbuzzFull,
+  libicns,
   lib,
   libGL,
   libjpeg,
@@ -68,6 +69,9 @@ clangStdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     pkg-config
+  ]
+  ++ lib.optionals clangStdenv.hostPlatform.isDarwin [
+    libicns
   ];
 
   buildInputs = [
@@ -108,10 +112,10 @@ clangStdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/ver/CMakeLists.txt \
       --replace-fail '"1.x-dev"' '"${finalAttrs.version}"'
 
-    # Using substituteInPlace because no upstream patch for GCC 15 was found for this bundled library.
-    substituteInPlace third_party/json11/json11.cpp \
-      --replace-fail "#include <cmath>" "#include <cmath>
-    #include <cstdint>"
+    # Fix build on Darwin with `-Werror=format-security`
+    # (NSLog requires a string-literal format)
+    substituteInPlace laf/os/osx/logger.mm \
+      --replace-fail 'NSLog([NSString stringWithUTF8String:error]);' 'NSLog(@"%@", [NSString stringWithUTF8String:error]);'
   '';
 
   cmakeFlags = [
@@ -139,6 +143,10 @@ clangStdenv.mkDerivation (finalAttrs: {
     "-DSKIA_LIBRARY_DIR=${skia-aseprite}/lib"
   ];
 
+  # `libskia.a` is static, so its deps must be linked explicitly on Darwin
+  # (otherwise we hit undefined `_jpeg_*`/`_WebP*` symbols, e.g. in the thumbnailer).
+  env.NIX_LDFLAGS = lib.optionalString clangStdenv.hostPlatform.isDarwin "-ljpeg -lwebp -lwebpdemux -lwebpmux";
+
   postInstall = ''
     # Install desktop icons.
     src="$out/share/aseprite/data/icons"
@@ -149,6 +157,30 @@ clangStdenv.mkDerivation (finalAttrs: {
     done
     # Delete unneeded artifacts of bundled libraries.
     rm -rf "$out"/{include,lib,man}
+  ''
+  + lib.optionalString clangStdenv.hostPlatform.isDarwin ''
+    install -d "$out/Applications"
+    if [ -d "$out/bin/aseprite.app" ]; then
+      rm -rf "$out/Applications/Aseprite.app"
+      mv "$out/bin/aseprite.app" "$out/Applications/Aseprite.app"
+    fi
+    # Generate the `.icns` files referenced by Info.plist from the shipped PNGs.
+    res="$out/Applications/Aseprite.app/Contents/Resources"
+    icons="$res/data/icons"
+    if [ -d "$icons" ] && command -v png2icns >/dev/null; then
+      for spec in "Aseprite ase" "Document doc" "Extension ext"; do
+        set -- $spec
+        name="$1"
+        prefix="$2"
+        png2icns "$res/$name.icns" \
+          "$icons/''${prefix}16.png" \
+          "$icons/''${prefix}32.png" \
+          "$icons/''${prefix}128.png" \
+          "$icons/''${prefix}256.png"
+      done
+    fi
+    # Keep $out/bin clean on Darwin; the bundle lives under $out/Applications.
+    rmdir "$out/bin" 2>/dev/null || true
   '';
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
@@ -159,20 +191,19 @@ clangStdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.unfree;
     longDescription = ''
       Aseprite is a program to create animated sprites. Its main features are:
-
-                - Sprites are composed by layers & frames (as separated concepts).
-                - Supported color modes: RGBA, Indexed (palettes up to 256 colors), and Grayscale.
-                - Load/save sequence of PNG files and GIF animations (and FLC, FLI, JPG, BMP, PCX, TGA).
-                - Export/import animations to/from Sprite Sheets.
-                - Tiled drawing mode, useful to draw patterns and textures.
-                - Undo/Redo for every operation.
-                - Real-time animation preview.
-                - Multiple editors support.
-                - Pixel-art specific tools like filled Contour, Polygon, Shading mode, etc.
-                - Onion skinning.
+        - Sprites are composed by layers & frames (as separated concepts).
+        - Supported color modes: RGBA, Indexed (palettes up to 256 colors), and Grayscale.
+        - Load/save sequence of PNG files and GIF animations (and FLC, FLI, JPG, BMP, PCX, TGA).
+        - Export/import animations to/from Sprite Sheets.
+        - Tiled drawing mode, useful to draw patterns and textures.
+        - Undo/Redo for every operation.
+        - Real-time animation preview.
+        - Multiple editors support.
+        - Pixel-art specific tools like filled Contour, Polygon, Shading mode, etc.
+        - Onion skinning.
     '';
-    maintainers = [ ];
-    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.iamanaws ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "aseprite";
   };
 })

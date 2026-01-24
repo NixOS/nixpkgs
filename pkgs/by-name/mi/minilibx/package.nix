@@ -42,6 +42,8 @@ stdenv.mkDerivation {
     "CC=${stdenv.cc.targetPrefix}cc"
   ];
 
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-std=gnu17";
+
   installPhase = ''
     runHook preInstall
 

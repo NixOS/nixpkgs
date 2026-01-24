@@ -198,7 +198,6 @@ stdenv.mkDerivation rec {
       fpletz
       tadfisher
       globin
-      ma27
       ryan4yin
     ];
     platforms = lib.platforms.unix;
