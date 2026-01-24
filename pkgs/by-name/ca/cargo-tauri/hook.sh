@@ -92,8 +92,17 @@ tauriInstallHook() {
     echo "Finished tauriInstallHook"
 }
 
+tauriFixupHook() {
+  # NOTE: This runs as a preFixupPhase and does not replace the original hook.
+  @fixupScript@
+}
+
 if [ -z "${dontTauriBuild:-}" ] && [ -z "${buildPhase:-}" ]; then
     buildPhase=tauriBuildHook
+fi
+
+if [ -z "${dontTauriFixup:-}" ] && [ -z "${fixupPhase:-}" ]; then
+    preFixupPhases+=(tauriFixupHook)
 fi
 
 if [ -z "${dontTauriInstall:-}" ] && [ -z "${installPhase:-}" ]; then
