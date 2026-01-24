@@ -1,3 +1,5 @@
+// @ts-check
+
 const eventToState = {
   COMMENT: 'COMMENTED',
   REQUEST_CHANGES: 'CHANGES_REQUESTED',
@@ -6,13 +8,17 @@ const eventToState = {
 /**
  * @param {{
  *  github: InstanceType<import('@actions/github/lib/utils').GitHub>,
- *  context: import('@actions/github/lib/context').Context
- *  core: import('@actions/core')
- *  dry: boolean
- * }} CheckTargetBranchProps
+ *  context: import('@actions/github/lib/context').Context,
+ *  core: import('@actions/core'),
+ *  dry: boolean,
+ * }} DismissReviewsProps
  */
-async function dismissReviews({ github, context, dry }) {
-  const pull_number = context.payload.pull_request.number
+async function dismissReviews({ github, context, core, dry }) {
+  const pull_number = context.payload.pull_request?.number
+  if (!pull_number) {
+    core.warning('dismissReviews called outside of pull_request context')
+    return
+  }
 
   if (dry) {
     return
@@ -49,6 +55,16 @@ async function dismissReviews({ github, context, dry }) {
   )
 }
 
+/**
+ * @param {{
+ *  github: InstanceType<import('@actions/github/lib/utils').GitHub>,
+ *  context: import('@actions/github/lib/context').Context
+ *  core: import('@actions/core'),
+ *  dry: boolean,
+ *  body: string,
+ *  event: keyof eventToState,
+ * }} PostReviewProps
+ */
 async function postReview({
   github,
   context,
@@ -57,7 +73,11 @@ async function postReview({
   body,
   event = 'REQUEST_CHANGES',
 }) {
-  const pull_number = context.payload.pull_request.number
+  const pull_number = context.payload.pull_request?.number
+  if (!pull_number) {
+    core.warning('postReview called outside of pull_request context')
+    return
+  }
 
   const pendingReview = (
     await github.paginate(github.rest.pulls.listReviews, {
@@ -67,8 +87,6 @@ async function postReview({
   ).find(
     (review) =>
       review.user?.login === 'github-actions[bot]' &&
-      // If a review is still pending, we can just update this instead
-      // of posting a new one.
       review.state === eventToState[event],
   )
 
