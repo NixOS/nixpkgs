@@ -58,7 +58,7 @@ in
     assertions = [
       {
         assertion = cfg.automatic -> config.nix.enable;
-        message = ''nix.optimise.automatic requires nix.enable'';
+        message = "nix.optimise.automatic requires nix.enable";
       }
     ];
 

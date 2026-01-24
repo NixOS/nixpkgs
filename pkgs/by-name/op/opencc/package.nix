@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   python3,
   opencc,
@@ -19,6 +20,14 @@ stdenv.mkDerivation rec {
     rev = "ver.${version}";
     sha256 = "sha256-JBTegQs9ALp4LdKKYMNp9GYEgqR9O8IkX6LqatvaTic=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2025-15536.patch";
+      url = "https://github.com/BYVoid/OpenCC/commit/345c9a50ab07018f1b4439776bad78a0d40778ec.patch";
+      hash = "sha256-lwzVRcCkMjHniaOQeoicO9fpEhyku2yhiPREk0WoXVM=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

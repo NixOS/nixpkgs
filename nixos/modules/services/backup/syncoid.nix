@@ -240,7 +240,7 @@ in
                 '';
               };
 
-              recursive = lib.mkEnableOption ''the transfer of child datasets'';
+              recursive = lib.mkEnableOption "the transfer of child datasets";
 
               sshKey = lib.mkOption {
                 type = with lib.types; nullOr (coercedTo path toString str);

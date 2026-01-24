@@ -8,7 +8,7 @@
   symlinkJoin,
   writeTextDir,
   yt-dlp,
-# the unwrapped mpv derivation
+  # the unwrapped mpv derivation
 }:
 
 let

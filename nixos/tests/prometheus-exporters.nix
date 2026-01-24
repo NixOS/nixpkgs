@@ -1544,7 +1544,7 @@ let
     shelly = {
       exporterConfig = {
         enable = true;
-        metrics-file = "${pkgs.writeText "test.json" ''{}''}";
+        metrics-file = "${pkgs.writeText "test.json" "{}"}";
       };
       exporterTest = ''
         wait_for_unit("prometheus-shelly-exporter.service")

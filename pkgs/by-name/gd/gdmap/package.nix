@@ -9,6 +9,7 @@
   pkg-config,
   libxml2,
   gettext,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation {
@@ -26,6 +27,7 @@ stdenv.mkDerivation {
     meson
     ninja
     pkg-config
+    wrapGAppsHook3
   ];
   buildInputs = [
     gtk3

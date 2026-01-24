@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   ];
 
   qtWrapperArgs = [
-    ''--prefix PATH : ${
+    "--prefix PATH : ${
       lib.makeBinPath [
         cryfs
         encfs
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
         securefs
         sshfs
       ]
-    }''
+    }"
   ];
 
   doCheck = true;

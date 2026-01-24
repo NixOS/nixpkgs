@@ -126,8 +126,15 @@ let
   ];
   teams = [ lib.teams.nix ];
 
-  # FIXME: https://github.com/NixOS/nixpkgs/issues/476794
-  patches_common = lib.optional (stdenv.system == "aarch64-darwin") ./patches/skip-nix-shell.patch;
+  # Disables tests that have been flaky due to the darwin sandbox and fork safety
+  # with missing shebangs.
+  # See:
+  # - https://github.com/NixOS/nix/pull/14778
+  # - https://github.com/NixOS/nixpkgs/issues/476794
+  # - https://github.com/NixOS/nix/issues/13106
+  patches_common = lib.optional (
+    stdenv.system == "aarch64-darwin"
+  ) ./patches/skip-flaky-darwin-tests.patch;
 in
 lib.makeExtensible (
   self:
@@ -202,17 +209,19 @@ lib.makeExtensible (
 
       nix_2_32 = addTests "nix_2_32" self.nixComponents_2_32.nix-everything;
 
-      nixComponents_git = nixDependencies.callPackage ./modular/packages.nix rec {
-        version = "2.33pre20251107_${lib.substring 0 8 src.rev}";
-        inherit maintainers teams;
-        otherSplices = generateSplicesForNixComponents "nixComponents_git";
-        src = fetchFromGitHub {
-          owner = "NixOS";
-          repo = "nix";
-          rev = "479b6b73a9576452c14ca66b7f3cd4873969077e";
-          hash = "sha256-eBjgsauQXFz2yeiNoPEzgkf7uyV+S8HYCQgZhPVx/9I=";
-        };
-      };
+      nixComponents_git =
+        (nixDependencies.callPackage ./modular/packages.nix rec {
+          version = "2.33pre20251107_${lib.substring 0 8 src.rev}";
+          inherit maintainers teams;
+          otherSplices = generateSplicesForNixComponents "nixComponents_git";
+          src = fetchFromGitHub {
+            owner = "NixOS";
+            repo = "nix";
+            rev = "479b6b73a9576452c14ca66b7f3cd4873969077e";
+            hash = "sha256-eBjgsauQXFz2yeiNoPEzgkf7uyV+S8HYCQgZhPVx/9I=";
+          };
+        }).appendPatches
+          patches_common;
 
       git = addTests "git" self.nixComponents_git.nix-everything;
 

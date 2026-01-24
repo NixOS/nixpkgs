@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals withGo [
     "GOLANG=yes"
-    ''GOCACHE=''${TMPDIR}/go-cache''
+    "GOCACHE=\${TMPDIR}/go-cache"
     "GOFLAGS=-trimpath"
     "GOARCH=${pkgsBuildHost.go.GOARCH}"
     "GOOS=${pkgsBuildHost.go.GOOS}"
