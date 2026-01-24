@@ -17,18 +17,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "aws-cdk-cli";
-  version = "2.1100.1";
+  version = "2.1102.0";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cdk-cli";
     tag = "cdk@v${finalAttrs.version}";
-    hash = "sha256-GIW6y2njqZExAiegDXNWUQB0HzNvXlg02L9DBo4oQnI=";
+    hash = "sha256-nExzlzew2FGvu9IE9bV6tZ71kD9AJ1AlnqhBDGivq24=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-oUsH7ccuHFgZw9cnwhIq/mbEgNdJJv9GzBh6HsJT+kU=";
+    hash = "sha256-6ABAjdkkgjYE0W4hiudQgzdJflYmFAiD5ErjGrql2tg=";
   };
 
   nativeBuildInputs = [
