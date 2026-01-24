@@ -299,7 +299,7 @@ in
 
 buildPythonPackage rec {
   pname = "vllm";
-  version = "0.11.2";
+  version = "0.14.1";
   pyproject = true;
 
   stdenv = torch.stdenv;
@@ -307,8 +307,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vllm-project";
     repo = "vllm";
-    tag = "v${version}";
-    hash = "sha256-DoSlkFmR3KKEtfSfdRB++0CZeeXgxmM3zZjONlxbe8U=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-qoC3RpjnqbMR3JwkJfquIyuXhLyW+uGG+zSCCek4G2U=";
   };
 
   patches = [
