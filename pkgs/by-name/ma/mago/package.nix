@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Toolchain for PHP that aims to provide a set of tools to help developers write better code";
     homepage = "https://github.com/carthage-software/mago";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ hythera ];
     mainProgram = "mago";
   };
 })
