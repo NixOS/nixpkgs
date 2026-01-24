@@ -5,18 +5,18 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "crowdsec";
-  version = "1.7.2";
+  version = "1.7.6";
 
   src = fetchFromGitHub {
     owner = "crowdsecurity";
     repo = "crowdsec";
-    tag = "v${version}";
-    hash = "sha256-f0SxOXxXqKft3Nnf9y7itpPXJOjBrEpImbPANFNx4BM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Qd5EHn7G7bTV+S4bVXfHytoCI5L/gHxAKB9emeKoSLc=";
   };
 
-  vendorHash = "sha256-v1UECFfgx1zFCzSyazxFRWMP/0fayVnrC+pJHio5z+Q=";
+  vendorHash = "sha256-txiZmUd/GQQu7XiI4iE25aCmOLe2sC0uQ8Gne76cw+Q=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -28,9 +28,9 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/crowdsecurity/go-cs-lib/version.Version=v${version}"
+    "-X github.com/crowdsecurity/go-cs-lib/version.Version=v${finalAttrs.version}"
     "-X github.com/crowdsecurity/go-cs-lib/version.BuildDate=1970-01-01_00:00:00"
-    "-X github.com/crowdsecurity/go-cs-lib/version.Tag=v${version}"
+    "-X github.com/crowdsecurity/go-cs-lib/version.Tag=v${finalAttrs.version}"
     "-X github.com/crowdsecurity/crowdsec/pkg/cwversion.Codename=alphaga"
     "-X github.com/crowdsecurity/crowdsec/pkg/csconfig.defaultConfigDir=/etc/crowdsec"
     "-X github.com/crowdsecurity/crowdsec/pkg/csconfig.defaultDataDir=/var/lib/crowdsec/data"
@@ -56,7 +56,7 @@ buildGoModule rec {
   preCheck = ''
     version=$($GOPATH/bin/cscli version 2>&1 | sed -nE 's/^version: (.*)/\1/p')
 
-    if [ "$version" != "v${version}" ]; then
+    if [ "$version" != "v${finalAttrs.version}" ]; then
         echo "Invalid version string: '$version'"
         exit 1
     fi
@@ -64,7 +64,7 @@ buildGoModule rec {
 
   meta = {
     homepage = "https://crowdsec.net/";
-    changelog = "https://github.com/crowdsecurity/crowdsec/releases/tag/v${version}";
+    changelog = "https://github.com/crowdsecurity/crowdsec/releases/tag/v${finalAttrs.version}";
     description = "Free, open-source and collaborative IPS";
     longDescription = ''
       CrowdSec is a free, modern & collaborative behavior detection engine,
@@ -82,4 +82,4 @@ buildGoModule rec {
       jk
     ];
   };
-}
+})
