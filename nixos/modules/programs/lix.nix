@@ -111,6 +111,19 @@ in
     # Set up the environment variables for running Nix.
     environment.sessionVariables = cfg.envVars;
 
+    assertions = [
+      {
+        assertion =
+          cfg.settings.auto-allocate-uids or false
+          -> builtins.elem "auto-allocate-uids" (
+            cfg.settings.experimental-features or [ ] ++ cfg.settings.extra-experimental-features or [ ]
+          );
+        message = ''
+          Cannot enable `auto-allocate-uids` for Lix when experimental feature `auto-allocate-uids` isn't enabled!
+        '';
+      }
+    ];
+
     nix.nrBuildUsers = lib.mkDefault (
       if cfg.settings.auto-allocate-uids or false then
         0
