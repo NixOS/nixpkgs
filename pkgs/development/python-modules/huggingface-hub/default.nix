@@ -10,10 +10,13 @@
   filelock,
   fsspec,
   hf-xet,
+  httpx,
   packaging,
   pyyaml,
   requests,
+  shellingham,
   tqdm,
+  typer-slim,
   typing-extensions,
 
   # optional-dependencies
@@ -59,10 +62,13 @@ buildPythonPackage rec {
     filelock
     fsspec
     hf-xet
+    httpx
     packaging
     pyyaml
     requests
+    shellingham
     tqdm
+    typer-slim
     typing-extensions
   ];
 
