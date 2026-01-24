@@ -34,6 +34,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Python client for the Compit iNext API";
     homepage = "https://github.com/Przemko92/compit-inext-api";
+    changelog = "https://github.com/Przemko92/compit-inext-api/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.dotlambda ];
   };
