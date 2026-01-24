@@ -14,12 +14,12 @@
 
 stdenv.mkDerivation {
   pname = "rootbar";
-  version = "unstable-2020-11-13";
+  version = "unstable-2024-08-07";
 
   src = fetchhg {
     url = "https://hg.sr.ht/~scoopta/rootbar";
-    rev = "a018e10cfc5e";
-    sha256 = "sha256-t6oDIYCVaCxaYy4bS1vxESaFDNxsx5JQLQK77eVuafE=";
+    rev = "36333af9fd8d";
+    sha256 = "sha256-CpORCSJyHZhcK14EhjxoPt/h0026NU5J/kicL1dX96o=";
   };
 
   nativeBuildInputs = [
