@@ -14,7 +14,7 @@ let
 
   src = fetchFromGitHub {
     owner = "davis7dotsh";
-    repo = pname;
+    repo = "better-context";
     tag = "v${version}";
     hash = "sha256-N8fZBnA7HGz89Oj3cnjEMCd3koo/Dm07yoeUTlRGlyI=";
   };
@@ -151,7 +151,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/davis7dotsh/better-context";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ EloToJaa ];
-    sourceProvenance = with lib.sourceTypes; [ fromSource ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
