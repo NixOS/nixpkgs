@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "compit-inext-api";
   version = "0.5.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Przemko92";
     repo = "compit-inext-api";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-DlNkDfV3fp/7DetiIDx3yi8SfJHV4sFIMHEam5rcYrg=";
   };
 
@@ -37,4 +37,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})
