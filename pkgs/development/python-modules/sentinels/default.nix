@@ -2,21 +2,30 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
+  hatchling,
+  hatch-vcs,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "sentinels";
   version = "1.1.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-PC9k91QYfBngoaApsUi3TPWN0S7Ce04ZwOXW4itamoY=";
+    hash = "sha256-PC9k91QYfBngoaApsUi3TPWN0S7Ce04ZwOXW4itamoY=";
   };
 
-  propagatedBuildInputs = [ setuptools ];
+  postPatch = ''
+    # https://github.com/vmalloc/sentinels/pull/10
+    sed -i "/testpaths/d" pyproject.toml
+  '';
+
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
