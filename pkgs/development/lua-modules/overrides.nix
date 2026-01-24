@@ -75,14 +75,10 @@ in
   # keep-sorted start block=yes case=no newline_separated=yes
   argparse = prev.argparse.overrideAttrs {
     doCheck = true;
-    nativeCheckInputs = [ final.busted ];
+    nativeCheckInputs = [ final.bustedCheckHook ];
 
-    checkPhase = ''
-      runHook preCheck
-      export LUA_PATH="src/?.lua;$LUA_PATH"
-      busted spec/
-      runHook postCheck
-    '';
+    preCheck = ''LUA_PATH="src/?.lua;$LUA_PATH"'';
+    bustedFlags = [ "spec/" ];
   };
 
   busted = prev.busted.overrideAttrs (old: {
@@ -195,12 +191,8 @@ in
 
   fzy = prev.fzy.overrideAttrs {
     doCheck = true;
-    nativeCheckInputs = [ final.busted ];
-    # Until https://github.com/swarn/fzy-lua/pull/8 is merged,
-    # we have to invoke busted manually
-    checkPhase = ''
-      busted
-    '';
+    nativeCheckInputs = [ final.bustedCheckHook ];
+    # bustedFlags = [ "." ];
   };
 
   grug-far-nvim = prev.grug-far-nvim.overrideAttrs {
@@ -241,14 +233,9 @@ in
     doCheck = lua.luaversion == "5.1";
     nativeCheckInputs = [
       final.nlua
-      final.busted
+      final.bustedCheckHook
       writableTmpDirAsHomeHook
     ];
-    checkPhase = ''
-      runHook preCheck
-      busted --lua=nlua
-      runHook postCheck
-    '';
   };
 
   image-nvim = prev.image-nvim.overrideAttrs {
@@ -584,16 +571,19 @@ in
   lualine-nvim = prev.lualine-nvim.overrideAttrs (_: {
     doCheck = lua.luaversion == "5.1";
     nativeCheckInputs = [
-      final.nlua
-      final.busted
       final.nvim-web-devicons
+      final.bustedCheckHook
+      final.nlua
       gitMinimal
       writableTmpDirAsHomeHook
     ];
-    checkPhase = ''
-      runHook preCheck
-      busted --lua=nlua --lpath='lua/?.lua' --lpath='lua/?/init.lua' tests/
-      runHook postCheck
+
+    bustedFlags = [
+      "tests/"
+    ];
+
+    preCheck = ''
+      LUA_PATH="lua/?.lua;lua/?/init.lua;$LUA_PATH"
     '';
   });
 
@@ -764,44 +754,27 @@ in
     doCheck = lua.luaversion == "5.1";
     nativeCheckInputs = [
       final.nlua
-      final.busted
+      final.bustedCheckHook
       writableTmpDirAsHomeHook
     ];
-    checkPhase = ''
-      runHook preCheck
-      busted --lua=nlua
-      runHook postCheck
-    '';
   };
 
   lze = prev.lze.overrideAttrs {
     doCheck = lua.luaversion == "5.1";
     nativeCheckInputs = [
       final.nlua
-      final.busted
+      final.bustedCheckHook
       writableTmpDirAsHomeHook
     ];
-    checkPhase = ''
-      runHook preCheck
-      busted --lua=nlua
-      runHook postCheck
-    '';
   };
 
   lzextras = prev.lzextras.overrideAttrs {
     doCheck = lua.luaversion == "5.1";
-    checkInputs = [
-      final.lze
-    ];
     nativeCheckInputs = [
       final.nlua
-      final.busted
+      lua.pkgs.bustedCheckHook
+      final.lze
     ];
-    checkPhase = ''
-      runHook preCheck
-      busted --lua=nlua
-      runHook postCheck
-    '';
   };
 
   magick = prev.magick.overrideAttrs (old: {
@@ -885,16 +858,17 @@ in
     doCheck = lua.luaversion == "5.1";
     nativeCheckInputs = [
       final.nlua
-      final.busted
+      # upstream uses PlenaryBusted which is a pain, run busted directly instead
+      final.bustedCheckHook
       writableTmpDirAsHomeHook
     ];
 
-    # upstream uses PlenaryBusted which is a pain to setup
-    checkPhase = ''
-      runHook preCheck
-      busted --lua=nlua --lpath='lua/?.lua' --lpath='lua/?/init.lua' tests/
-      runHook postCheck
+    preCheck = ''
+      LUA_PATH="lua/?.lua;lua/?/init.lua;$LUA_PATH"
     '';
+    bustedFlags = [
+      "tests/"
+    ];
   };
 
   orgmode = prev.orgmode.overrideAttrs {
@@ -1010,13 +984,9 @@ in
     doCheck = luaOlder "5.2";
     nativeCheckInputs = [
       final.nlua
-      final.busted
+      final.bustedCheckHook
     ];
-    checkPhase = ''
-      runHook preCheck
-      busted spec
-      runHook postCheck
-    '';
+    bustedFlags = [ "spec" ];
   };
 
   rocks-nvim = prev.rocks-nvim.overrideAttrs (oa: {
@@ -1033,39 +1003,27 @@ in
       "bootstrap" # tries to install luarocks from network
     ];
 
-    checkPhase = ''
-      runHook preCheck
-      busted --run=offline
-      runHook postCheck
-    '';
+    bustedFlags = [
+      "--run=offline"
+    ];
   });
 
   rtp-nvim = prev.rtp-nvim.overrideAttrs {
     doCheck = lua.luaversion == "5.1";
     nativeCheckInputs = [
       final.nlua
-      final.busted
+      final.bustedCheckHook
       writableTmpDirAsHomeHook
     ];
-    checkPhase = ''
-      runHook preCheck
-      busted --lua=nlua
-      runHook postCheck
-    '';
   };
 
   rustaceanvim = prev.rustaceanvim.overrideAttrs {
     doCheck = lua.luaversion == "5.1";
     nativeCheckInputs = [
       final.nlua
-      final.busted
+      final.bustedCheckHook
       writableTmpDirAsHomeHook
     ];
-    checkPhase = ''
-      runHook preCheck
-      busted --lua=nlua
-      runHook postCheck
-    '';
   };
 
   sofa = prev.sofa.overrideAttrs (old: {
