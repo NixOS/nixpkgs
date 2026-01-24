@@ -43,6 +43,16 @@ python3Packages.buildPythonApplication rec {
     "requests"
   ];
 
+  postInstall = ''
+    substituteInPlace $out/config/*json \
+      --replace-fail '$PWD/brotab_mediator.py' $out/bin/bt_mediator
+    mkdir -p $out/lib/mozilla/native-messaging-hosts
+    mv $out/config/firefox_mediator.json $out/lib/mozilla/native-messaging-hosts
+    mkdir -p $out/etc/chromium/native-messaging-hosts
+    mv $out/config/chromium_mediator.json $out/etc/chromium/native-messaging-hosts
+    rmdir $out/config
+  '';
+
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = with python3Packages; [
