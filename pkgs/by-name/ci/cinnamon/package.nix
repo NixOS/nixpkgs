@@ -72,14 +72,14 @@ let
     ]
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cinnamon";
   version = "6.6.5";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-i+eUSEz6Zgfm8HISSuxQ04lz86Rrp99NWaWAplJCLCs=";
   };
 
@@ -215,4 +215,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     teams = [ lib.teams.cinnamon ];
   };
-}
+})
