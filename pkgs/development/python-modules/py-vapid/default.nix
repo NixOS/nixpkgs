@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
+  hatchling,
   mock,
   pytestCheckHook,
   cryptography,
@@ -19,13 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-oAQCNWDLxU40/AY4CgWA8E/8x4joT7bRnpM57rZVGig=";
   };
 
-  patches = [
-    # Fix tests with latest cryptography
-    # Upstream PR: https://github.com/web-push-libs/vapid/pull/110
-    ./cryptography.patch
-  ];
-
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [ cryptography ];
 
