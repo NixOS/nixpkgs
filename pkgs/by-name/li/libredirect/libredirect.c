@@ -120,8 +120,10 @@ WRAPPER(int, bind)(int socket, const struct sockaddr *addr, socklen_t addr_len)
         struct sockaddr_un real_addr_un = *(struct sockaddr_un *)addr;
         const char *sun_path = rewrite(real_addr_un.sun_path, buf);
         if (sun_path != real_addr_un.sun_path) {
-            strncpy(real_addr_un.sun_path, buf, sizeof(real_addr_un.sun_path) - 1);
-            real_addr_un.sun_path[sizeof(real_addr_un.sun_path) - 1] = '\0';
+            int n = snprintf(real_addr_un.sun_path, sizeof(real_addr_un.sun_path), "%s", buf);
+            if (n < 0 || n >= sizeof(real_addr_un.sun_path)) {
+                abort();
+            }
             real_addr = (struct sockaddr *)&real_addr_un;
             addr_len = offsetof(struct sockaddr_un, sun_path) + strlen(real_addr_un.sun_path) + 1;
         }
@@ -139,8 +141,10 @@ WRAPPER(int, connect)(int socket, const struct sockaddr *addr, socklen_t addr_le
         struct sockaddr_un real_addr_un = *(struct sockaddr_un *)addr;
         const char *sun_path = rewrite(real_addr_un.sun_path, buf);
         if (sun_path != real_addr_un.sun_path) {
-            strncpy(real_addr_un.sun_path, buf, sizeof(real_addr_un.sun_path) - 1);
-            real_addr_un.sun_path[sizeof(real_addr_un.sun_path) - 1] = '\0';
+            int n = snprintf(real_addr_un.sun_path, sizeof(real_addr_un.sun_path), "%s", buf);
+            if (n < 0 || n >= sizeof(real_addr_un.sun_path)) {
+                abort();
+            }
             real_addr = (struct sockaddr *)&real_addr_un;
             addr_len = offsetof(struct sockaddr_un, sun_path) + strlen(real_addr_un.sun_path) + 1;
         }
