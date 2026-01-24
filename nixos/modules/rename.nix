@@ -468,6 +468,9 @@ in
     (mkRemovedOptionModule [ "virtualisation" "multipass" ] ''
       virtualisation.multipass has been removed since it was unmaintained in nixpkgs
     '')
+    (mkRemovedOptionModule [ "programs" "spacefm" ] ''
+      spacefm has been removed since it was unmaintained upstream.
+    '')
     # Do NOT add any option renames here, see top of the file
   ];
 }
