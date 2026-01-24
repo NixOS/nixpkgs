@@ -75,6 +75,9 @@ buildPythonPackage rec {
 
     # https://github.com/pygame/pygame/pull/4651
     ./0001-Use-SDL_AllocFormat-instead-of-creating-it-manually.patch
+
+    # test_make_surface__subclassed_surface fails in headless environment
+    ./skip-pixelarray-test.patch
   ];
 
   postPatch = ''
