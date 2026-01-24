@@ -109,7 +109,10 @@ in
 
       displayManager = {
         enable = true;
-        execCmd = "exec /run/current-system/sw/bin/ly";
+        generic = {
+          enable = true;
+          execCmd = "exec /run/current-system/sw/bin/ly";
+        };
 
         # Set this here instead of 'defaultConfig' so users get eval
         # errors when they change it.

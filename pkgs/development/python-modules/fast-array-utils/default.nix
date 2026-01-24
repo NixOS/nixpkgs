@@ -1,22 +1,48 @@
 {
+  lib,
   buildPythonPackage,
-  dask,
   fetchFromGitHub,
+
+  # build-system
   hatch-docstring-description,
   hatch-fancy-pypi-readme,
   hatch-min-requirements,
   hatch-vcs,
   hatchling,
-  lib,
-  numba,
+
+  # dependencies
   numpy,
+
+  # optional-dependencies
+  # accel
+  numba,
+  # dask
+  dask,
+  # doc
+  furo,
+  pytest,
+  sphinx,
+  sphinx-autodoc-typehints,
+  # full
+  h5py,
+  zarr,
+  # test
+  anndata,
+  numcodecs,
+  # test-min
+  coverage,
   pytest-codspeed,
   pytest-doctestplus,
+  pytest-xdist,
+  # testing
+  packaging,
+
+  # tests
   pytestCheckHook,
   scipy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fast-array-utils";
   version = "1.3.1";
   pyproject = true;
@@ -24,7 +50,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "scverse";
     repo = "fast-array-utils";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-FUzCdDFDqP+izlSWruWzslfPayzRN7MFx1LOikyMDss=";
   };
 
@@ -42,6 +68,53 @@ buildPythonPackage rec {
   dependencies = [
     numpy
   ];
+
+  optional-dependencies = lib.fix (self: {
+    accel = [
+      numba
+    ];
+    dask = [
+      dask
+    ];
+    doc = [
+      furo
+      pytest
+      # scanpydoc
+      sphinx
+      sphinx-autodoc-typehints
+      # sphinx-autofixture
+    ];
+    full = [
+      h5py
+      zarr
+    ]
+    ++ self.accel
+    ++ self.dask
+    ++ self.sparse;
+    sparse = [
+      scipy
+    ];
+    test = [
+      anndata
+      numcodecs
+      zarr
+    ]
+    ++ self.accel
+    ++ self.test-min;
+    test-min = [
+      coverage
+      pytest
+      pytest-codspeed
+      pytest-doctestplus
+      pytest-xdist
+    ]
+    ++ coverage.optional-dependencies.toml
+    ++ self.sparse
+    ++ self.testing;
+    testing = [
+      packaging
+    ];
+  });
 
   nativeCheckInputs = [
     dask
@@ -62,9 +135,10 @@ buildPythonPackage rec {
   meta = {
     description = "Fast array utilities";
     homepage = "https://icb-fast-array-utils.readthedocs-hosted.com";
+    changelog = "https://github.com/scverse/fast-array-utils/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
       samuela
     ];
   };
-}
+})

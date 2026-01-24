@@ -2,6 +2,7 @@
   aseprite,
   clangStdenv,
   expat,
+  cctools,
   fetchFromGitHub,
   fetchgit,
   fontconfig,
@@ -38,6 +39,10 @@ clangStdenv.mkDerivation (finalAttrs: {
     gn
     ninja
     python3
+  ]
+  ++ lib.optionals clangStdenv.hostPlatform.isDarwin [
+    # Skia's build invokes `libtool -static` on Darwin to create `.a` archives.
+    cctools.libtool
   ];
 
   # Using substituteInPlace because no clean upstream backport for GCC 15 exists for this version of Skia, newer versions fix this with large refactorings.
@@ -68,13 +73,15 @@ clangStdenv.mkDerivation (finalAttrs: {
     expat
     fontconfig
     harfbuzzFull
-    libglvnd
     libjpeg
     libpng
     libwebp
+    zlib
+  ]
+  ++ lib.optionals clangStdenv.hostPlatform.isLinux [
+    libglvnd
     libX11
     libgbm
-    zlib
   ];
 
   buildPhase = ''

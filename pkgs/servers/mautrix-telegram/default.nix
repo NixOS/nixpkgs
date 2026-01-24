@@ -86,7 +86,6 @@ python.pkgs.buildPythonPackage rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       nyanloutre
-      ma27
       nickcao
     ];
     mainProgram = "mautrix-telegram";
