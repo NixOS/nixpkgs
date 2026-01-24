@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
 
   cmake,
   copyDesktopItems,
@@ -52,25 +51,15 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "odamex";
-  version = "11.2.0";
+  version = "12.1.0";
 
   src = fetchFromGitHub {
     owner = "odamex";
     repo = "odamex";
     tag = finalAttrs.version;
-    hash = "sha256-f9st852Sqmdmb/qNP1ioBY9MApt9Ruw8dBjkkyGM5Qs=";
+    hash = "sha256-kLI1gdGH5NXJ8YI1tR0N5W6yvGZ+7302z0QLl2j+b0k=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # fix file-open panel on Darwin
-    # https://github.com/odamex/odamex/pull/1402
-    # TODO: remove on next release
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/odamex/odamex/pull/1402.patch";
-      hash = "sha256-JrcQ0rYkaFP5aKNWeXbrY2TN4r8nHpue19qajNXJXg4=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -208,10 +197,12 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    homepage = "http://odamex.net/";
+    homepage = "https://odamex.net";
     description = "Client/server port for playing old-school Doom online";
+    changelog = "https://github.com/odamex/odamex/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = with lib.maintainers; [ eljamm ];
     mainProgram = "odalaunch";
   };
