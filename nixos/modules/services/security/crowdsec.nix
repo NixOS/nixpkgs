@@ -5,26 +5,52 @@
   ...
 }:
 let
-
-  format = pkgs.formats.yaml { };
-
-  rootDir = "/var/lib/crowdsec";
-  stateDir = "${rootDir}/state";
-  confDir = "/etc/crowdsec/";
-  hubDir = "${stateDir}/hub/";
-  notificationsDir = "${confDir}/notifications/";
-  pluginDir = "${confDir}/plugins/";
-  parsersDir = "${confDir}/parsers/";
-  localPostOverflowsDir = "${confDir}/postoverflows/";
-  localPostOverflowsS01WhitelistDir = "${localPostOverflowsDir}/s01-whitelist/";
-  localScenariosDir = "${confDir}/scenarios/";
-  localParsersS00RawDir = "${parsersDir}/s00-raw/";
-  localParsersS01ParseDir = "${parsersDir}/s01-parse/";
-  localParsersS02EnrichDir = "${parsersDir}/s02-enrich/";
-  localContextsDir = "${confDir}/contexts/";
-
+  cfg = config.services.crowdsec;
+  yaml = pkgs.formats.yaml { };
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [
+      "services"
+      "crowdsec"
+      "localConfig"
+    ] "Please move options from `services.crowdsec.localConfig` to `services.crowdsec.settings`.")
+
+    (lib.mkChangedOptionModule
+      [ "services" "crowdsec" "enrollKeyFile" ]
+      [ "services" "crowdsec" "settings" "console" "enrollKeyFile" ]
+      (config: config.services.crowdsec.enrollKeyFile)
+    )
+
+    (lib.mkChangedOptionModule
+      [ "services" "crowdsec" "settings" "capi" "credentialsFile" ]
+      [
+        "services"
+        "crowdsec"
+        "settings"
+        "config"
+        "api"
+        "server"
+        "online_client"
+        "credentials_path"
+      ]
+      (config: config.services.crowdsec.settings.capi.credentialsFile)
+    )
+
+    (lib.mkChangedOptionModule
+      [ "services" "crowdsec" "settings" "lapi" "credentialsFile" ]
+      [
+        "services"
+        "crowdsec"
+        "settings"
+        "config"
+        "api"
+        "client"
+        "credentials_path"
+      ]
+      (config: config.services.crowdsec.settings.lapi.credentialsFile)
+    )
+  ];
 
   options.services.crowdsec = {
     enable = lib.mkEnableOption "CrowdSec Security Engine";
@@ -63,18 +89,242 @@ in
       defaultText = lib.literalExpression "config.networking.hostName";
     };
 
-    localConfig = lib.mkOption {
+    hub = lib.mkOption {
+      description = ''
+        Hub collections, parsers, AppSec rules, etc.
+      '';
       type = lib.types.submodule {
         options = {
-          acquisitions = lib.mkOption {
-            type = lib.types.listOf format.type;
+          collections = lib.mkOption {
+            type = lib.types.listOf lib.types.str;
             default = [ ];
-            description = ''
-              A list of acquisition specifications, which define the data sources you want to be parsed.
+            description = "List of hub collections to install";
+            example = [ "crowdsecurity/linux" ];
+          };
 
-              See <https://docs.crowdsec.net/docs/data_sources/intro> for details.
+          scenarios = lib.mkOption {
+            type = lib.types.listOf lib.types.str;
+            default = [ ];
+            description = "List of hub scenarios to install";
+            example = [ "crowdsecurity/ssh-bf" ];
+          };
+
+          parsers = lib.mkOption {
+            type = lib.types.listOf lib.types.str;
+            default = [ ];
+            description = "List of hub parsers to install";
+            example = [ "crowdsecurity/sshd-logs" ];
+          };
+
+          postoverflows = lib.mkOption {
+            type = lib.types.listOf lib.types.str;
+            default = [ ];
+            description = "List of hub postoverflows to install";
+            example = [ "crowdsecurity/auditd-nix-wrappers-whitelist-process" ];
+          };
+
+          appsec-configs = lib.mkOption {
+            type = lib.types.listOf lib.types.str;
+            default = [ ];
+            description = "List of hub appsec configurations to install";
+            example = [ "crowdsecurity/appsec-default" ];
+          };
+
+          appsec-rules = lib.mkOption {
+            type = lib.types.listOf lib.types.str;
+            default = [ ];
+            description = "List of hub appsec rules to install";
+            example = [ "crowdsecurity/base-config" ];
+          };
+        };
+      };
+      default = { };
+    };
+
+    settings = lib.mkOption {
+      description = "Config options for the main config file.";
+      type = lib.types.submodule {
+        options = {
+          config = lib.mkOption {
+            description = ''
+              Settings for the main CrowdSec configuration file.
+
+              Defaults are _mostly_ equal to the default linux config file: <https://github.com/crowdsecurity/crowdsec/blob/master/config/config.yaml>.
+
+              See here for possible values: <https://docs.crowdsec.net/docs/configuration/crowdsec_configuration/#configuration-directives>.
             '';
-            example = [
+            type = lib.types.submodule {
+              freeformType = yaml.type;
+              options =
+                let
+                  config_paths = cfg.settings.config.config_paths;
+                in
+                {
+                  common = {
+                    log_media = lib.mkOption {
+                      type = lib.types.enum [
+                        "stdout"
+                        "file"
+                      ];
+                      default = "stdout";
+                      description = "Log media";
+                    };
+                  };
+
+                  config_paths = {
+                    config_dir = lib.mkOption {
+                      type = lib.types.path;
+                      default = "/etc/crowdsec";
+                      description = "Main configuration directory of crowdsec.";
+                    };
+
+                    data_dir = lib.mkOption {
+                      type = lib.types.path;
+                      default = "/var/lib/crowdsec";
+                      description = "This is where crowdsec is going to store data, such as files downloaded by scenarios, geolocalisation database, metabase configuration database, or even SQLite database.";
+                    };
+
+                    hub_dir = lib.mkOption {
+                      type = lib.types.path;
+                      default = "${config_paths.data_dir}/hub";
+                      defaultText = lib.literalExpression "\${config.services.crowdsec.settings.config.config_paths.data_dir}/hub";
+                      description = "Directory where `cscli` will store parsers, scenarios, collections and such.";
+                    };
+
+                    index_path = lib.mkOption {
+                      type = lib.types.path;
+                      default = "${config_paths.hub_dir}/.index.json";
+                      defaultText = lib.literalExpression "\${config.services.crowdsec.settings.config.config_paths.hub_dir}/.index.json";
+                      description = "Path to the `.index.json` file downloaded by `cscli` to know the list of available configurations.";
+                    };
+
+                    plugin_dir = lib.mkOption {
+                      type = lib.types.path;
+                      default = "${config_paths.data_dir}/plugins";
+                      defaultText = lib.literalExpression "\${config.services.crowdsec.settings.config.config_paths.data_dir}/plugins";
+                      description = "Path to directory where the plugin binaries/scripts are located.";
+                    };
+
+                    notification_dir = lib.mkOption {
+                      type = lib.types.path;
+                      default = "${config_paths.config_dir}/notifications";
+                      defaultText = lib.literalExpression "\${config.services.crowdsec.settings.config.config_dir}/notifications";
+                      description = "Path to directory where configuration files for notification plugins are kept.";
+                    };
+
+                    simulation_path = lib.mkOption {
+                      type = lib.types.path;
+                      default = yaml.generate "simulation.yaml" cfg.settings.simulation;
+                      defaultText = "Path to the nixos generated file.";
+                      description = ''
+                        NOTE: This file is generated from `config.services.crowdsec.settings.simulation`.
+                        If you change this path then `config.services.crowdsec.settings.simulation` will be ignored so you have to
+                        write the content this file on your own.
+                      '';
+                    };
+
+                    pattern_dir = lib.mkOption {
+                      type = lib.types.path;
+                      default = pkgs.buildPackages.symlinkJoin {
+                        name = "crowdsec-patterns";
+                        paths = [
+                          cfg.settings.patterns
+                          "${lib.attrsets.getOutput "out" cfg.package}/share/crowdsec/config/patterns/"
+                        ];
+                      };
+                      defaultText = ''
+                        A directory which contains the patterns of `config.services.crowdsec.settings.patterns` and the patterns
+                        from this directory: <https://github.com/crowdsecurity/crowdsec/tree/master/config/patterns>.
+                      '';
+                      description = "Path to directory where pattern files are located.";
+                    };
+                  };
+
+                  db_config = {
+                    db_path = lib.mkOption {
+                      type = lib.types.path;
+                      default = "${config_paths.data_dir}/crowdsec.db";
+                      defaultText = lib.literalExpression "\${config.services.crowdsec.settings.config.config_paths.data_dir}/crowdsec.db";
+                      description = "The path to the database file (only if the type of database is `sqlite`) or path to socket file (only if the type of database is `mysql|pgx`)";
+                    };
+                  };
+
+                  crowdsec_service = {
+                    acquisition_dir = lib.mkOption {
+                      type = lib.types.path;
+                      default = "${config_paths.config_dir}/acquis.d";
+                      defaultText = lib.literalExpression "\${config.services.crowdsec.settings.config.config_paths.config_dir}/acquis.d";
+                      description = ''
+                        Path to a directory where each yaml is considered as a acquisition configuration file containing logs that needs to be read.
+                        If both acquisition_dir and acquisition_path are specified, the entries are merged alltogether.
+                      '';
+                    };
+                  };
+
+                  api = {
+                    client.credentials_path = lib.mkOption {
+                      type = lib.types.path;
+                      default = "${config_paths.data_dir}/local_api_credentials.yaml";
+                      defaultText = lib.literalExpression "\${config.services.crowdsec.settings.config.config_paths.data_dir}/local_api_credentials.yaml";
+                      description = "Path to the credential files (contains API url + login/password).";
+                    };
+
+                    server = {
+                      enable = lib.mkOption {
+                        type = lib.types.bool;
+                        default = true;
+                        description = "Enable or disable the CrowdSec Local API (`true` by default).";
+                      };
+
+                      console_path = lib.mkOption {
+                        type = lib.types.path;
+                        default = "${config_paths.data_dir}/console.yaml";
+                        defaultText = lib.literalExpression "\${config.services.crowdsec.settings.config.config_paths.data_dir}/console.yaml";
+                        description = "The path to the console configuration.";
+                      };
+
+                      online_client.credentials_path = lib.mkOption {
+                        type = lib.types.nullOr lib.types.path;
+                        default = null;
+                        description = "Path to a file containing credentials for the Central API.";
+                      };
+                    };
+                  };
+
+                  cscli.hub_branch = lib.mkOption {
+                    type = lib.types.nonEmptyStr;
+                    default = "master";
+                    description = ''
+                      The git branch on which cscli is going to fetch configurations.
+
+                      See <https://docs.crowdsec.net/docs/configuration/crowdsec_configuration/#hub_branch> for more information.
+                    '';
+                  };
+
+                  prometheus = {
+                    listen_port = lib.mkOption {
+                      type = lib.types.port;
+                      default = 6060;
+                      description = "Prometheus listen port.";
+                    };
+                  };
+                };
+            };
+          };
+
+          simulation = lib.mkOption {
+            type = yaml.type;
+            default = {
+              simulation = false;
+            };
+            description = ''
+              Attributes inside the simulation.yaml file.
+            '';
+          };
+
+          acquisitions = lib.mkOption {
+            type = lib.types.listOf yaml.type;
+            default = [
               {
                 source = "journalctl";
                 journalctl_filter = [ "_SYSTEMD_UNIT=sshd.service" ];
@@ -83,14 +333,20 @@ in
                 };
               }
             ];
+            description = ''
+              A list of acquisition specifications, which define the data sources you want to be parsed.
+
+              See <https://docs.crowdsec.net/u/getting_started/post_installation/acquisition/> for details.
+            '';
           };
+
           scenarios = lib.mkOption {
-            type = lib.types.listOf format.type;
+            type = lib.types.listOf yaml.type;
             default = [ ];
             description = ''
               A list of scenarios specifications.
 
-              See <https://docs.crowdsec.net/docs/scenarios/intro> for details.
+              See <https://docs.crowdsec.net/docs/next/log_processor/scenarios/create/> for details.
             '';
             example = [
               {
@@ -108,21 +364,21 @@ in
             type = lib.types.submodule {
               options = {
                 s00Raw = lib.mkOption {
-                  type = lib.types.listOf format.type;
+                  type = lib.types.listOf yaml.type;
                   default = [ ];
                   description = ''
                     A list of stage s00-raw specifications. Most of the time, those are already included in the hub, but are presented here anyway.
 
-                    See <https://docs.crowdsec.net/docs/parsers/intro> for details.
+                    See <https://docs.crowdsec.net/docs/next/log_processor/parsers/intro/#s00-raw> for details.
                   '';
                 };
                 s01Parse = lib.mkOption {
-                  type = lib.types.listOf format.type;
+                  type = lib.types.listOf yaml.type;
                   default = [ ];
                   description = ''
                     A list of stage s01-parse specifications.
 
-                    See <https://docs.crowdsec.net/docs/parsers/intro> for details.
+                    See <https://docs.crowdsec.net/docs/next/log_processor/parsers/intro/#s01-parse> for details.
                   '';
                   example = [
                     {
@@ -145,12 +401,12 @@ in
                   ];
                 };
                 s02Enrich = lib.mkOption {
-                  type = lib.types.listOf format.type;
+                  type = lib.types.listOf yaml.type;
                   default = [ ];
                   description = ''
                     A list of stage s02-enrich specifications. Inside this list, you can specify Parser Whitelists.
 
-                    See <https://docs.crowdsec.net/docs/whitelist/intro> for details.
+                    See <https://docs.crowdsec.net/docs/next/log_processor/parsers/intro/#s01-parse> for details.
                   '';
                   example = [
                     {
@@ -173,7 +429,7 @@ in
             description = ''
               The set of parser specifications.
 
-              See <https://docs.crowdsec.net/docs/parsers/intro> for details.
+              See <https://docs.crowdsec.net/docs/next/log_processor/parsers/intro/> for details.
             '';
             default = { };
           };
@@ -181,12 +437,12 @@ in
             type = lib.types.submodule {
               options = {
                 s01Whitelist = lib.mkOption {
-                  type = lib.types.listOf format.type;
+                  type = lib.types.listOf yaml.type;
                   default = [ ];
                   description = ''
                     A list of stage s01-whitelist specifications. Inside this list, you can specify Postoverflows Whitelists.
 
-                    See <https://docs.crowdsec.net/docs/whitelist/intro> for details.
+                    See <https://docs.crowdsec.net/docs/next/log_processor/parsers/intro/#postoverflows> for details.
                   '';
                   example = [
                     {
@@ -211,7 +467,7 @@ in
             default = { };
           };
           contexts = lib.mkOption {
-            type = lib.types.listOf format.type;
+            type = lib.types.listOf yaml.type;
             description = ''
               A list of additional contexts to specify.
 
@@ -230,11 +486,11 @@ in
             default = [ ];
           };
           notifications = lib.mkOption {
-            type = lib.types.listOf format.type;
+            type = lib.types.listOf yaml.type;
             description = ''
               A list of notifications to enable and use in your profiles. Note that for now, only the plugins shipped by default with CrowdSec are supported.
 
-              See <https://docs.crowdsec.net/docs/notification_plugins/intro> for details.
+              See <https://docs.crowdsec.net/docs/next/local_api/notification_plugins/intro> for details.
             '';
             example = [
               {
@@ -251,40 +507,12 @@ in
             default = [ ];
           };
           profiles = lib.mkOption {
-            type = lib.types.listOf format.type;
+            type = lib.types.listOf yaml.type;
             description = ''
               A list of profiles to enable.
 
-              See <https://docs.crowdsec.net/docs/profiles/intro> for more details.
+              See <https://docs.crowdsec.net/u/getting_started/post_installation/profiles> for more details.
             '';
-            example = [
-              {
-                name = "default_ip_remediation";
-                filters = [
-                  "Alert.Remediation == true && Alert.GetScope() == 'Ip'"
-                ];
-                decisions = [
-                  {
-                    type = "ban";
-                    duration = "4h";
-                  }
-                ];
-                on_success = "break";
-              }
-              {
-                name = "default_range_remediation";
-                filters = [
-                  "Alert.Remediation == true && Alert.GetScope() == 'Range'"
-                ];
-                decisions = [
-                  {
-                    type = "ban";
-                    duration = "4h";
-                  }
-                ];
-                on_success = "break";
-              }
-            ];
             default = [
               {
                 name = "default_ip_remediation";
@@ -318,167 +546,27 @@ in
             type = lib.types.listOf lib.types.package;
             description = ''
               A list of files containing custom grok patterns.
+
+              See <https://docs.crowdsec.net/docs/next/log_processor/parsers/format/#patterns-documentation> for more details.
             '';
             default = [ ];
             example = lib.literalExpression ''
               [ (pkgs.writeTextDir "custom_service_logs" (builtins.readFile ./custom_service_logs)) ]
             '';
           };
-        };
-      };
-      description = ''
-        The configuration for a crowdsec security engine.
-      '';
-      default = { };
-    };
 
-    hub = lib.mkOption {
-      type = lib.types.submodule {
-        options = {
-          collections = lib.mkOption {
-            type = lib.types.listOf lib.types.str;
-            default = [ ];
-            description = "List of hub collections to install";
-            example = [ "crowdsecurity/linux" ];
-          };
-
-          scenarios = lib.mkOption {
-            type = lib.types.listOf lib.types.str;
-            default = [ ];
-            description = "List of hub scenarios to install";
-            example = [ "crowdsecurity/ssh-bf" ];
-          };
-
-          parsers = lib.mkOption {
-            type = lib.types.listOf lib.types.str;
-            default = [ ];
-            description = "List of hub parsers to install";
-            example = [ "crowdsecurity/sshd-logs" ];
-          };
-
-          postOverflows = lib.mkOption {
-            type = lib.types.listOf lib.types.str;
-            default = [ ];
-            description = "List of hub postoverflows to install";
-            example = [ "crowdsecurity/auditd-nix-wrappers-whitelist-process" ];
-          };
-
-          appSecConfigs = lib.mkOption {
-            type = lib.types.listOf lib.types.str;
-            default = [ ];
-            description = "List of hub appsec configurations to install";
-            example = [ "crowdsecurity/appsec-default" ];
-          };
-
-          appSecRules = lib.mkOption {
-            type = lib.types.listOf lib.types.str;
-            default = [ ];
-            description = "List of hub appsec rules to install";
-            example = [ "crowdsecurity/base-config" ];
-          };
-
-          branch = lib.mkOption {
-            type = lib.types.str;
-            default = "master";
-            description = ''
-              The git branch on which cscli is going to fetch configurations.
-
-              See `https://docs.crowdsec.net/docs/configuration/crowdsec_configuration/#hub_branch` for more information.
-            '';
-            example = [
-              "master"
-              "v1.4.3"
-              "v1.4.2"
-            ];
-          };
-        };
-      };
-      default = { };
-      description = ''
-        Hub collections, parsers, AppSec rules, etc.
-      '';
-    };
-
-    settings = lib.mkOption {
-      type = lib.types.submodule {
-        options = {
-          general = lib.mkOption {
-            description = ''
-              Settings for the main CrowdSec configuration file.
-
-              Refer to the defaults at <https://github.com/crowdsecurity/crowdsec/blob/master/config/config.yaml>.
-            '';
-            type = format.type;
-            default = { };
-          };
-          simulation = lib.mkOption {
-            type = format.type;
-            default = {
-              simulation = false;
-            };
-            description = ''
-              Attributes inside the simulation.yaml file.
-            '';
-          };
-
-          lapi = lib.mkOption {
-            type = lib.types.submodule {
-              options = {
-                credentialsFile = lib.mkOption {
-                  type = lib.types.nullOr lib.types.path;
-                  example = "/run/crowdsec/lapi.yaml";
-                  description = ''
-                    The LAPI credential file to use.
-                  '';
-                  default = null;
-                };
-              };
-            };
-            description = ''
-              LAPI Configuration attributes
-            '';
-            default = { };
-          };
-          capi = lib.mkOption {
-            type = lib.types.submodule {
-              options = {
-                credentialsFile = lib.mkOption {
-                  type = lib.types.nullOr lib.types.path;
-                  example = "/run/crowdsec/capi.yaml";
-                  description = ''
-                    The CAPI credential file to use.
-                  '';
-                  default = null;
-                };
-              };
-            };
-            description = ''
-              CAPI Configuration attributes
-            '';
-            default = { };
-          };
           console = lib.mkOption {
             type = lib.types.submodule {
               options = {
-                tokenFile = lib.mkOption {
+                enrollKeyFile = lib.mkOption {
                   type = lib.types.nullOr lib.types.path;
                   example = "/run/crowdsec/console_token.yaml";
                   description = ''
                     The Console Token file to use.
+
+                    Normally you'd have to do `cscli enroll <token>`. You can put this `<token>` in a file instead and pass a path to this file into this option.
                   '';
                   default = null;
-                };
-                configuration = lib.mkOption {
-                  type = format.type;
-                  default = {
-                    share_manual_decisions = false;
-                    share_custom = false;
-                    share_tainted = false;
-                    share_context = false;
-                  };
-                  description = ''
-                    Attributes inside the console.yaml file.
-                  '';
                 };
               };
             };
@@ -489,473 +577,345 @@ in
           };
         };
       };
-      description = ''
-        Set of various configuration attributes
-      '';
     };
   };
+
   config =
     let
-      cfg = config.services.crowdsec;
-      configFile = format.generate "crowdsec.yaml" cfg.settings.general;
-      simulationFile = format.generate "simulation.yaml" cfg.settings.simulation;
-      consoleFile = format.generate "console.yaml" cfg.settings.console.configuration;
-      patternsDir = pkgs.buildPackages.symlinkJoin {
-        name = "crowdsec-patterns";
-        paths = [
-          cfg.localConfig.patterns
-          "${lib.attrsets.getOutput "out" cfg.package}/share/crowdsec/config/patterns/"
-        ];
+      cscli = pkgs.writeShellScriptBin "cscli" ''
+        ${lib.getExe' cfg.package "cscli"} -c="${cfg.settings.config.config_paths.config_dir}/config.yaml" -c="${cfg.settings.config.config_paths.config_dir}/config.yaml.local" "$@"
+      '';
+
+      setupScript = pkgs.writeShellApplication {
+        name = "crowdsec-setup";
+        runtimeInputs = [ cscli ];
+        text =
+          let
+            argString = arg: lib.concatMapStringsSep " " lib.escapeShellArg arg;
+            maybeInstall =
+              x:
+              lib.optionalString (
+                builtins.isList cfg.hub.${x} && cfg.hub.${x} != [ ]
+              ) "cscli ${lib.toLower x} install ${argString cfg.hub.${x}}";
+
+            installNotificationPlugin = name: ''
+              install -o ${cfg.user} -g ${cfg.group} -m 0750 -D ${cfg.package}/libexec/crowdsec/plugins/${name} ${cfg.settings.config.config_paths.data_dir}/plugins/${name}
+            '';
+          in
+          ''
+            cscli hub update
+
+            ${maybeInstall "collections"}
+            ${maybeInstall "scenarios"}
+            ${maybeInstall "parsers"}
+            ${maybeInstall "postoverflows"}
+            ${maybeInstall "appsec-configs"}
+            ${maybeInstall "appsec-rules"}
+
+            # to be able to create notifications
+            ${installNotificationPlugin "notification-dummy"}
+            ${installNotificationPlugin "notification-email"}
+            ${installNotificationPlugin "notification-file"}
+            ${installNotificationPlugin "notification-http"}
+            ${installNotificationPlugin "notification-sentinel"}
+            ${installNotificationPlugin "notification-slack"}
+            ${installNotificationPlugin "notification-splunk"}
+
+            ${lib.optionalString cfg.settings.config.api.server.enable ''
+              if [ ! -f ${cfg.settings.config.api.client.credentials_path} ]; then
+                echo "No local API credentials currently created. Generating local API credentials..."
+                cscli machines add "${cfg.name}" --auto --file ${cfg.settings.config.api.client.credentials_path}
+              fi
+            ''}
+
+            ${lib.optionalString (cfg.settings.config.api.server.online_client.credentials_path != null) ''
+              if [ -e "${cfg.settings.config.api.server.online_client.credentials_path}" ]; then
+                cscli capi register
+              fi
+            ''}
+
+            ${lib.optionalString (cfg.settings.console.enrollKeyFile != null) ''
+              if [ -e "$CREDENTIALS_DIRECTORY/enrollKeyFile" ]; then
+                cscli console enroll "$CREDENTIALS_DIRECTORY/enrollKeyFile" --name ${cfg.name}
+              fi
+            ''}
+          '';
       };
 
-      cscli = pkgs.writeShellScriptBin "cscli" ''
-        set -euo pipefail
-        # cscli needs crowdsec on it's path in order to be able to run `cscli explain`
-        export PATH="$PATH:${lib.makeBinPath [ cfg.package ]}"
-                sudo=exec
-        if [ "$USER" != "${cfg.user}" ]; then
-          ${
-            if config.security.sudo.enable then
-              "sudo='exec ${config.security.wrapperDir}/sudo -u ${cfg.user}'"
-            else
-              ">&2 echo 'Aborting, cscli must be run as user `${cfg.user}`!'; exit 2"
-          }
-        fi
-        $sudo ${lib.getExe' cfg.package "cscli"} -c=${configFile} "$@"
-      '';
-
-      localScenariosMap = (map (format.generate "scenario.yaml") cfg.localConfig.scenarios);
-      localParsersS00RawMap = (
-        map (format.generate "parsers-s00-raw.yaml") cfg.localConfig.parsers.s00Raw
-      );
-      localParsersS01ParseMap = (
-        map (format.generate "parsers-s01-parse.yaml") cfg.localConfig.parsers.s01Parse
-      );
-      localParsersS02EnrichMap = (
-        map (format.generate "parsers-s02-enrich.yaml") cfg.localConfig.parsers.s02Enrich
-      );
-      localPostOverflowsS01WhitelistMap = (
-        map (format.generate "postoverflows-s01-whitelist.yaml") cfg.localConfig.postOverflows.s01Whitelist
-      );
-      localContextsMap = (map (format.generate "context.yaml") cfg.localConfig.contexts);
-      localNotificationsMap = (map (format.generate "notification.yaml") cfg.localConfig.notifications);
-      localProfilesFile = pkgs.writeText "local_profiles.yaml" ''
-        ---
-        ${lib.strings.concatMapStringsSep "\n---\n" builtins.toJSON cfg.localConfig.profiles}
-        ---
-      '';
-      localAcquisisionFile = pkgs.writeText "local_acquisisions.yaml" ''
-        ---
-        ${lib.strings.concatMapStringsSep "\n---\n" builtins.toJSON cfg.localConfig.acquisitions}
-        ---
-      '';
-
-      scriptArray = [
-        "set -euo pipefail"
-        "${lib.getExe' pkgs.coreutils "mkdir"} -p '${hubDir}'"
-        "${lib.getExe cscli} hub update"
-      ]
-      ++ lib.optionals (cfg.hub.collections != [ ]) [
-        "${lib.getExe cscli} collections install ${
-          lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.collections
-        }"
-      ]
-      ++ lib.optionals (cfg.hub.scenarios != [ ]) [
-        "${lib.getExe cscli} scenarios install ${
-          lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.scenarios
-        }"
-      ]
-      ++ lib.optionals (cfg.hub.parsers != [ ]) [
-        "${lib.getExe cscli} parsers install ${
-          lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.parsers
-        }"
-      ]
-      ++ lib.optionals (cfg.hub.postOverflows != [ ]) [
-        "${lib.getExe cscli} postoverflows install ${
-          lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.postOverflows
-        }"
-      ]
-      ++ lib.optionals (cfg.hub.appSecConfigs != [ ]) [
-        "${lib.getExe cscli} appsec-configs install ${
-          lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.appSecConfigs
-        }"
-      ]
-      ++ lib.optionals (cfg.hub.appSecRules != [ ]) [
-        "${lib.getExe cscli} appsec-rules install ${
-          lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.appSecRules
-        }"
-      ]
-      ++ lib.optionals (cfg.settings.general.api.server.enable) [
-        ''
-          if [ ! -s "${cfg.settings.general.api.client.credentials_path}" ]; then
-            ${lib.getExe cscli} machine add "${cfg.name}" --auto
-          fi
-        ''
-      ]
-      ++ lib.optionals (cfg.settings.capi.credentialsFile != null) [
-        ''
-          if ! ${lib.getExe pkgs.gnugrep} -q password "${cfg.settings.capi.credentialsFile}" ]; then
-            ${lib.getExe cscli} capi register
-          fi
-        ''
-      ]
-      ++ lib.optionals (cfg.settings.console.tokenFile != null) [
-        ''
-          if [ ! -e "${cfg.settings.console.tokenFile}" ]; then
-            ${lib.getExe cscli} console enroll "$(cat ${cfg.settings.console.tokenFile})" --name ${cfg.name}
-          fi
-        ''
-      ];
-
-      setupScript = pkgs.writeShellScriptBin "crowdsec-setup" (
-        lib.strings.concatStringsSep "\n" scriptArray
-      );
-
+      # for files and dirs belonging to crowdsec
+      entry_permissions = {
+        user = cfg.user;
+        group = cfg.group;
+        mode = "0750";
+      };
     in
     lib.mkIf (cfg.enable) {
 
       warnings =
         [ ]
-        ++ lib.optionals (cfg.localConfig.profiles == [ ]) [
-          "By not specifying profiles in services.crowdsec.localConfig.profiles, CrowdSec will not react to any alert by default."
+        ++ lib.optionals (cfg.settings.profiles == [ ]) [
+          "By not specifying profiles in services.crowdsec.settings.profiles, CrowdSec will not react to any alert by default."
         ]
-        ++ lib.optionals (cfg.localConfig.acquisitions == [ ]) [
-          "By not specifying acquisitions in services.crowdsec.localConfig.acquisitions, CrowdSec will not look for any data source."
+        ++ lib.optionals (cfg.settings.acquisitions == [ ]) [
+          "By not specifying acquisitions in services.crowdsec.settings.acquisitions, CrowdSec will not look for any data source."
+        ]
+        ++ lib.optionals (builtins.hasAttr "daemonize" cfg.settings.config.common) [
+          "[`services.crowdsec.settings.config.common.daemonize`]: It's deprecated. See <https://doc.crowdsec.net/u/bouncers/firewall/#daemonize>"
         ];
 
-      services.crowdsec.settings.general = {
-        common = {
-          log_media = "stdout";
-        };
-        config_paths = {
-          config_dir = confDir;
-          data_dir = stateDir;
-          simulation_path = simulationFile;
-          hub_dir = hubDir;
-          index_path = lib.strings.normalizePath "${stateDir}/hub/.index.json";
-          notification_dir = notificationsDir;
-          plugin_dir = pluginDir;
-          pattern_dir = patternsDir;
-        };
-        db_config = {
-          type = lib.mkDefault "sqlite";
-          db_path = lib.mkDefault (lib.strings.normalizePath "${stateDir}/crowdsec.db");
-          use_wal = lib.mkDefault true;
-        };
-        crowdsec_service = {
-          enable = lib.mkDefault true;
-          acquisition_path = lib.mkDefault localAcquisisionFile;
-        };
-        api = {
-          client = {
-            credentials_path = cfg.settings.lapi.credentialsFile;
+      assertions = [
+        # `cfg.settings.config.api.server` needs to be set up if the user wants
+        # to pull things from the hub. See:
+        # https://github.com/NixOS/nixpkgs/pull/446307#issuecomment-3533763091
+        {
+          assertion =
+            let
+              usesHub =
+                let
+                  cfg-hub-lists = builtins.filter (value: builtins.typeOf value == "list") (
+                    builtins.attrValues cfg.hub
+                  );
+                  lists-are-not-empty = builtins.all (list: list != [ ]) cfg-hub-lists;
+                in
+                lists-are-not-empty;
+
+              onlineApiCredentialsAreSet =
+                builtins.hasAttr "api" cfg.settings.config
+                && builtins.hasAttr "server" cfg.settings.config.api
+                && builtins.hasAttr "online_client" cfg.settings.config.api.server
+                && builtins.hasAttr "credentials_path" cfg.settings.config.api.server.online_client;
+            in
+            !usesHub || (usesHub && onlineApiCredentialsAreSet);
+
+          message = "`config.services.crowdsec.settings.config.api.server.online_client.credentials_path` needs to be set.";
+        }
+      ];
+
+      environment = {
+        systemPackages =
+          let
+            cscliWrapper = pkgs.writeShellScriptBin "cscli" ''
+              exec systemd-run \
+                --quiet \
+                --pty \
+                --wait \
+                --collect \
+                --pipe \
+                --property=User=${cfg.user} \
+                --property=Group=${cfg.group} \
+                --property=DynamicUser=true \
+                --property=StateDirectory="crowdsec crowdsec/hub" \
+                --property=StateDirectoryMode="0750" \
+                --property=ConfigurationDirectory="crowdsec crowdsec/acquis.d" \
+                --property=ConfigurationDirectoryMode="0750" \
+                -- \
+                ${lib.getExe cscli} "$@"
+            '';
+          in
+          [ cscliWrapper ];
+
+        etc =
+          let
+            config_dir = "crowdsec";
+
+            start = lib.mapAttrs (name: value: lib.mergeAttrs value entry_permissions) {
+              "${config_dir}/config.yaml".source = "${cfg.package}/share/crowdsec/config/config.yaml";
+              "${config_dir}/config.yaml.local".source = yaml.generate "config.yaml.local" cfg.settings.config;
+              "${config_dir}/acquis.d/00-nixos-generated.yaml".source = pkgs.writeText "aquisitions.yaml" ''
+                ---
+                ${lib.strings.concatMapStringsSep "\n---\n" (lib.generators.toYAML { }) cfg.settings.acquisitions}
+                ---
+              '';
+              "${config_dir}/profiles.yaml".source = pkgs.writeText "profiles.yaml" ''
+                ---
+                ${lib.strings.concatMapStringsSep "\n---\n" (lib.generators.toYAML { }) cfg.settings.profiles}
+                ---
+              '';
+            };
+
+            attrListToEntries =
+              attrList: target_dir: generated_file_name:
+              let
+                file_paths = map (yaml.generate generated_file_name) attrList;
+
+                # Example usage:
+                #   enumerated_entries 0 ["path1" "path2"]
+                #   =>
+                #     [
+                #         { name = "${target_dir}/0-nixos-generated.yaml"; source = path1; }
+                #         { name = "${target_dir}/1-nixos-generated.yaml"; source = path2; }
+                #     ]
+                enumerated_entries =
+                  idx: paths:
+                  if paths == [ ] then
+                    [ ]
+                  else
+                    let
+                      dst_path = "${target_dir}/${builtins.toString idx}-nixos-generated.yaml";
+
+                      src_path = builtins.head paths;
+                      rest = builtins.tail paths;
+
+                      entry = {
+                        name = dst_path;
+
+                        value = lib.mergeAttrs entry_permissions {
+                          source = src_path;
+                        };
+                      };
+                    in
+                    [ entry ] ++ (enumerated_entries (idx + 1) rest);
+              in
+              builtins.listToAttrs (enumerated_entries 0 file_paths);
+
+          in
+          builtins.foldl' lib.mergeAttrs start [
+            (attrListToEntries cfg.settings.scenarios "${config_dir}/scenarios" "scenario.yaml")
+            (attrListToEntries cfg.settings.parsers.s00Raw "${config_dir}/parsers/s00-raw"
+              "parsers-s00-raw.yaml"
+            )
+            (attrListToEntries cfg.settings.parsers.s01Parse "${config_dir}/parsers/s01-parse"
+              "parsers-s01-parse.yaml"
+            )
+            (attrListToEntries cfg.settings.parsers.s02Enrich "${config_dir}/parsers/s02-enrich"
+              "parsers-s02-enrich.yaml"
+            )
+            (attrListToEntries cfg.settings.postOverflows.s01Whitelist
+              "${config_dir}/postoverflows/s01-whitelist"
+              "postoverflows-s01-whitelist.yaml"
+            )
+            (attrListToEntries cfg.settings.contexts "${config_dir}/contexts" "context.yaml")
+            (attrListToEntries cfg.settings.notifications "${config_dir}/notifications" "notification.yaml")
+          ];
+      };
+
+      systemd =
+        let
+          createServiceConfig =
+            attrs:
+            lib.recursiveUpdate {
+              User = cfg.user;
+              Group = cfg.group;
+              UMask = "0077";
+
+              DynamicUser = true;
+              ProtectHome = true;
+              PrivateDevices = true;
+              ProtectHostname = "true:${cfg.name}";
+              ProtectClock = true;
+              ProtectKernelTunables = true;
+              ProtectKernelModules = true;
+              ProtectKernelLogs = true;
+              ProtectControlGroups = "strict";
+              ProtectProc = "invisible";
+
+              LockPersonality = true;
+              RestrictRealtime = true;
+              RestrictNamespaces = true;
+
+              LoadCredential = lib.optional (
+                cfg.settings.console.enrollKeyFile != null
+              ) "enrollKeyFile:${cfg.settings.console.enrollKeyFile}";
+
+              SystemCallFilter = [ "@system-service" ];
+
+              SystemCallErrorNumber = "EPERM";
+              SystemCallArchitectures = "native";
+              RestrictAddressFamilies = [
+                "AF_UNIX"
+                "AF_INET"
+                "AF_INET6"
+              ];
+
+              StateDirectory = "crowdsec crowdsec/hub";
+              StateDirectoryMode = "0750";
+              ConfigurationDirectory = "crowdsec crowdsec/acquis.d";
+              ConfigurationDirectoryMode = "0750";
+            } attrs;
+        in
+        {
+          packages = [ cfg.package ];
+
+          timers.crowdsec-update-hub = lib.mkIf (cfg.autoUpdateService) {
+            description = "Update the crowdsec hub index";
+            wantedBy = [ "timers.target" ];
+            after = [ ];
+            timerConfig = {
+              OnCalendar = "daily";
+              RandomizedDelaySec = 300;
+              Persistent = "yes";
+              Unit = "crowdsec-update-hub.service";
+            };
           };
-          server = {
-            enable = lib.mkDefault false;
-            listen_uri = lib.mkDefault "127.0.0.1:8080";
 
-            console_path = lib.mkDefault consoleFile;
-            profiles_path = lib.mkDefault localProfilesFile;
+          tmpfiles.settings.crowdsec = {
+            # Reason(#1): `environment.etc` is faster than `systemd.services.crowdsec.serviceConfig.ConfigurationDirectoryMode`
+            # and creates the directory with 0755 mode.
+            #
+            # For whatever reason this doesn't really work.
+            # The user needs to execute `sudo systemd-tmpfiles --create` manually after crowdsec has started to fix the permissions...
+            "${cfg.settings.config.config_paths.config_dir}".d = entry_permissions;
+            "${cfg.settings.config.crowdsec_service.acquisition_dir}".d = entry_permissions;
+          };
 
-            online_client = lib.mkDefault {
-              sharing = lib.mkDefault true;
-              pull = lib.mkDefault {
-                community = lib.mkDefault true;
-                blocklists = lib.mkDefault true;
+          services = {
+            crowdsec-update-hub = lib.mkIf (cfg.autoUpdateService) {
+              description = "Update the crowdsec hub index";
+
+              serviceConfig = createServiceConfig {
+                Type = "oneshot";
+                ExecStart = [
+                  "${lib.getExe cscli} --warning hub update"
+                  "${lib.getExe cscli} --warning hub upgrade"
+                ];
+                ExecStartPost = "+systemctl reload crowdsec.service";
               };
-              credentials_path = cfg.settings.capi.credentialsFile;
+            };
+
+            crowdsec-setup = {
+              description = "CrowdSec setup service";
+              wantedBy = [ "multi-user.target" ];
+              wants = [ "network-online.target" ];
+              before = [ "crowdsec.service" ];
+              serviceConfig = createServiceConfig {
+                Type = "oneshot";
+                ExecStart = lib.getExe setupScript;
+              };
+            };
+
+            crowdsec = {
+              description = "CrowdSec Security Engine";
+              wantedBy = [ "multi-user.target" ];
+              wants = [ "network-online.target" ];
+              after = [
+                "network-online.target"
+                "crowdsec-setup.service"
+
+                # See Reason(#1)
+                "systemd-tmpfiles-setup.service"
+                "systemd-tmpfiles-setup-dev-early.service"
+                "systemd-tmpfiles-setup-dev.service"
+                "systemd-tmpfiles-clean.service"
+                "systemd-tmpfiles-clean.timer"
+              ];
+
+              environment = {
+                LC_ALL = "C";
+                LANG = "C";
+              };
+
+              serviceConfig = createServiceConfig {
+                Type = "notify";
+                RestartSec = 60;
+
+                ProtectKernelLogs = false;
+
+                ExecStart = "${lib.getExe' cfg.package "crowdsec"} -c ${cfg.settings.config.config_paths.config_dir}/config.yaml -info";
+                ExecStartPre = "${lib.getExe' cfg.package "crowdsec"} -c ${cfg.settings.config.config_paths.config_dir}/config.yaml -t -error";
+              };
             };
           };
         };
-        prometheus = {
-          enabled = lib.mkDefault true;
-          level = lib.mkDefault "full";
-          listen_addr = lib.mkDefault "127.0.0.1";
-          listen_port = lib.mkDefault 6060;
-        };
-        cscli = {
-          hub_branch = cfg.hub.branch;
-        };
-      };
-
-      environment = {
-        systemPackages = [ cscli ];
-      };
-
-      systemd.packages = [ cfg.package ];
-
-      systemd.timers.crowdsec-update-hub = lib.mkIf (cfg.autoUpdateService) {
-        description = "Update the crowdsec hub index";
-        wantedBy = [ "timers.target" ];
-        timerConfig = {
-          OnCalendar = "daily";
-          RandomizedDelaySec = 300;
-          Persistent = "yes";
-          Unit = "crowdsec-update-hub.service";
-        };
-      };
-      systemd.services = {
-        crowdsec-update-hub = lib.mkIf (cfg.autoUpdateService) {
-          description = "Update the crowdsec hub index";
-          serviceConfig = {
-            Type = "oneshot";
-            User = cfg.user;
-            Group = cfg.group;
-            LimitNOFILE = 65536;
-            NoNewPrivileges = true;
-            LockPersonality = true;
-            RemoveIPC = true;
-            ReadWritePaths = [
-              rootDir
-              confDir
-            ];
-            ProtectSystem = "strict";
-            PrivateUsers = true;
-            ProtectHome = true;
-            PrivateTmp = true;
-            PrivateDevices = true;
-            ProtectHostname = true;
-            UMask = "0077";
-            ProtectKernelTunables = true;
-            ProtectKernelModules = true;
-            ProtectControlGroups = true;
-            ProtectProc = "invisible";
-            SystemCallFilter = [
-              " " # This is needed to clear the SystemCallFilter existing definitions
-              "~@reboot"
-              "~@swap"
-              "~@obsolete"
-              "~@mount"
-              "~@module"
-              "~@debug"
-              "~@cpu-emulation"
-              "~@clock"
-              "~@raw-io"
-              "~@privileged"
-              "~@resources"
-            ];
-            CapabilityBoundingSet = [
-              " " # Reset all capabilities to an empty set
-            ];
-            RestrictAddressFamilies = [
-              " " # This is needed to clear the RestrictAddressFamilies existing definitions
-              "none" # Remove all addresses families
-              "AF_UNIX"
-              "AF_INET"
-              "AF_INET6"
-            ];
-            DevicePolicy = "closed";
-            ProtectKernelLogs = true;
-            SystemCallArchitectures = "native";
-            RestrictNamespaces = true;
-            RestrictRealtime = true;
-            RestrictSUIDSGID = true;
-            ExecStart = "${lib.getExe cscli} --error hub update";
-            ExecStartPost = "systemctl reload crowdsec.service";
-            DynamicUser = true;
-          };
-        };
-
-        crowdsec = {
-          description = "CrowdSec agent";
-          wantedBy = [ "multi-user.target" ];
-          after = [ "network-online.target" ];
-          wants = [ "network-online.target" ];
-          path = lib.mkForce [ ];
-          environment = {
-            LC_ALL = "C";
-            LANG = "C";
-          };
-          serviceConfig = {
-            User = cfg.user;
-            Group = cfg.group;
-            Type = "notify";
-            RestartSec = 60;
-            LimitNOFILE = 65536;
-            NoNewPrivileges = true;
-            LockPersonality = true;
-            RemoveIPC = true;
-            ReadWritePaths = [
-              rootDir
-              confDir
-            ];
-            ProtectSystem = "strict";
-            PrivateUsers = true;
-            ProtectHome = true;
-            PrivateTmp = true;
-            PrivateDevices = true;
-            ProtectHostname = true;
-            ProtectClock = true;
-            UMask = "0077";
-            ProtectKernelTunables = true;
-            ProtectKernelModules = true;
-            ProtectControlGroups = true;
-            ProtectProc = "invisible";
-            SystemCallFilter = [
-              " " # This is needed to clear the SystemCallFilter existing definitions
-              "~@reboot"
-              "~@swap"
-              "~@obsolete"
-              "~@mount"
-              "~@module"
-              "~@debug"
-              "~@cpu-emulation"
-              "~@clock"
-              "~@raw-io"
-              "~@privileged"
-              "~@resources"
-            ];
-            CapabilityBoundingSet = [
-              " " # Reset all capabilities to an empty set
-              "CAP_SYSLOG" # Add capability to read syslog
-            ];
-            RestrictAddressFamilies = [
-              " " # This is needed to clear the RestrictAddressFamilies existing definitions
-              "none" # Remove all addresses families
-              "AF_UNIX"
-              "AF_INET"
-              "AF_INET6"
-            ];
-            DevicePolicy = "closed";
-            ProtectKernelLogs = true;
-            SystemCallArchitectures = "native";
-            DynamicUser = true;
-            RestrictNamespaces = true;
-            RestrictRealtime = true;
-            RestrictSUIDSGID = true;
-            ExecReload = [
-              " " # This is needed to clear the ExecReload definitions from upstream
-            ];
-            ExecStart = [
-              " " # This is needed to clear the ExecStart definitions from upstream
-              "${lib.getExe' cfg.package "crowdsec"} -c ${configFile} -info"
-            ];
-            ExecStartPre = [
-              " " # This is needed to clear the ExecStartPre definitions from upstream
-              "${lib.getExe setupScript}"
-              "${lib.getExe' cfg.package "crowdsec"} -c ${configFile} -t -error"
-            ];
-          };
-        };
-      };
-
-      systemd.tmpfiles.settings = {
-        "10-crowdsec" =
-
-          builtins.listToAttrs (
-            map
-              (dirName: {
-                inherit cfg;
-                name = lib.strings.normalizePath dirName;
-                value = {
-                  d = {
-                    user = cfg.user;
-                    group = cfg.group;
-                    mode = "0750";
-                  };
-                };
-              })
-              [
-                stateDir
-                hubDir
-                confDir
-                localScenariosDir
-                localPostOverflowsDir
-                localPostOverflowsS01WhitelistDir
-                parsersDir
-                localParsersS00RawDir
-                localParsersS01ParseDir
-                localParsersS02EnrichDir
-                localContextsDir
-                notificationsDir
-                pluginDir
-              ]
-          )
-          // builtins.listToAttrs (
-            map (scenarioFile: {
-              inherit cfg;
-              name = lib.strings.normalizePath "${localScenariosDir}/${builtins.unsafeDiscardStringContext (baseNameOf scenarioFile)}";
-              value = {
-                link = {
-                  type = "L+";
-                  argument = "${scenarioFile}";
-                };
-              };
-            }) localScenariosMap
-          )
-          // builtins.listToAttrs (
-            map (parser: {
-              inherit cfg;
-              name = lib.strings.normalizePath "${localParsersS00RawDir}/${builtins.unsafeDiscardStringContext (baseNameOf parser)}";
-              value = {
-                link = {
-                  type = "L+";
-                  argument = "${parser}";
-                };
-              };
-            }) localParsersS00RawMap
-          )
-          // builtins.listToAttrs (
-            map (parser: {
-              inherit cfg;
-              name = lib.strings.normalizePath "${localParsersS01ParseDir}/${builtins.unsafeDiscardStringContext (baseNameOf parser)}";
-              value = {
-                link = {
-                  type = "L+";
-                  argument = "${parser}";
-                };
-              };
-            }) localParsersS01ParseMap
-          )
-          // builtins.listToAttrs (
-            map (parser: {
-              inherit cfg;
-              name = lib.strings.normalizePath "${localParsersS02EnrichDir}/${builtins.unsafeDiscardStringContext (baseNameOf parser)}";
-              value = {
-                link = {
-                  type = "L+";
-                  argument = "${parser}";
-                };
-              };
-            }) localParsersS02EnrichMap
-          )
-          // builtins.listToAttrs (
-            map (postoverflow: {
-              inherit cfg;
-              name = lib.strings.normalizePath "${localPostOverflowsS01WhitelistDir}/${builtins.unsafeDiscardStringContext (baseNameOf postoverflow)}";
-              value = {
-                link = {
-                  type = "L+";
-                  argument = "${postoverflow}";
-                };
-              };
-            }) localPostOverflowsS01WhitelistMap
-          )
-          // builtins.listToAttrs (
-            map (context: {
-              inherit cfg;
-              name = lib.strings.normalizePath "${localContextsDir}/${builtins.unsafeDiscardStringContext (baseNameOf context)}";
-              value = {
-                link = {
-                  type = "L+";
-                  argument = "${context}";
-                };
-              };
-            }) localContextsMap
-          )
-          // builtins.listToAttrs (
-            map (notification: {
-              inherit cfg;
-              name = lib.strings.normalizePath "${notificationsDir}/${builtins.unsafeDiscardStringContext (baseNameOf notification)}";
-              value = {
-                link = {
-                  type = "L+";
-                  argument = "${notification}";
-                };
-              };
-            }) localNotificationsMap
-          );
-      };
 
       users.users.${cfg.user} = {
         name = cfg.user;
@@ -965,7 +925,7 @@ in
         extraGroups = [ "systemd-journal" ];
       };
 
-      users.groups.${cfg.group} = lib.mapAttrs (name: lib.mkDefault) { };
+      users.groups.${cfg.group} = lib.mapAttrs (name: lib.mkOptionDefault) { };
 
       networking.firewall.allowedTCPPorts =
         let
@@ -976,8 +936,8 @@ in
             );
         in
         lib.mkIf cfg.openFirewall [
-          cfg.settings.general.prometheus.listen_port
-          (parsePortFromURLOption cfg.settings.general.api.server.listen_uri "config.services.crowdsec.settings.general.api.server.listen_uri")
+          cfg.settings.config.prometheus.listen_port
+          (parsePortFromURLOption cfg.settings.config.api.server.listen_uri "config.services.crowdsec.settings.config.api.server.listen_uri")
         ];
     };
 
