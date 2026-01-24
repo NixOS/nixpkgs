@@ -19,6 +19,7 @@
   isabelle-components,
   symlinkJoin,
   fetchhg,
+  withEmacsIntegration ? false,
 }:
 
 let
@@ -84,6 +85,13 @@ let
     '';
   };
 
+  isabelle-emacs-src = fetchFromGitHub {
+    owner = "m-fleury";
+    repo = "isabelle-emacs";
+    rev = "Isabelle2025-vsce";
+    hash = "sha256-L9yKm0qrK/BJzoTTwlaX30actZTg6P4+gt2j+JKQ+oo=";
+  };
+
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "isabelle";
@@ -128,6 +136,13 @@ stdenv.mkDerivation (finalAttrs: {
   postUnpack = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mv $sourceRoot ${finalAttrs.dirname}
     sourceRoot=${finalAttrs.dirname}
+  '';
+
+  prePatch = lib.optionalString withEmacsIntegration ''
+    rm -rf src/
+    cp -r ${isabelle-emacs-src}/src ./
+    cp ${isabelle-emacs-src}/etc/build.props etc/
+    chmod -R +w ./src
   '';
 
   postPatch = ''
