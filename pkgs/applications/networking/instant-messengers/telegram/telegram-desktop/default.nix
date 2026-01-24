@@ -51,14 +51,18 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   qtWrapperArgs = lib.optionals (stdenv.hostPlatform.isLinux && withWebkit) [
-    "--prefix"
-    "LD_LIBRARY_PATH"
-    ":"
-    (lib.makeLibraryPath [
-      geoclue2
-      webkitgtk_4_1
-    ])
+    [
+      "--prefix"
+      "LD_LIBRARY_PATH"
+      ":"
+      (lib.makeLibraryPath [
+        geoclue2
+        webkitgtk_4_1
+      ])
+    ]
   ];
+
+  __structuredAttrs = true;
 
   dontUnpack = true;
   dontWrapGApps = true;
