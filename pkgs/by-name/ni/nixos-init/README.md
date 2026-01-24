@@ -29,7 +29,7 @@ robust.
   writing correct software easier and should improve the quality of the NixOS
   boot code.
 - Most things can be started much later than one might assume. Because systemd
-  services are parallelized, this should improve start up time.
+  services are parallelized, this should improve startup time.
 
 ## Invariants
 
@@ -50,7 +50,7 @@ closure. Currently nixos-init comes in at ~500 KiB.
 - `initrd-init`: Initializes the system on boot, setting up the tree for
   systemd to start.
 - `find-etc`: Finds the `/etc` paths in `/sysroot` so that the initrd doesn't
-  directly depend on the toplevel reducing the need to rebuild the initrd on
+  directly depend on the toplevel, reducing the need to rebuild the initrd on
   every generation.
 - `chroot-realpath`: Figures out the canonical path inside a chroot.
 

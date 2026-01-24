@@ -111,7 +111,7 @@ This syntax is taken from [MyST](https://myst-parser.readthedocs.io/en/latest/us
 #### HTML
 
 Inlining HTML is not allowed.
-Parts of the documentation gets rendered to various non-HTML formats, such as man pages in the case of NixOS manual.
+Parts of the documentation get rendered to various non-HTML formats, such as man pages in the case of NixOS manual.
 
 #### Roles
 
@@ -407,7 +407,7 @@ To define a referenceable figure use the following fencing:
 :::
 ```
 
-Defining figures through the `figure` fencing class adds them to a `List  of Figures` after the `Table of Contents`.
+Defining figures through the `figure` fencing class adds them to a `List of Figures` after the `Table of Contents`.
 Though this is not shown in the rendered documentation on nixos.org.
 
 #### Footnotes

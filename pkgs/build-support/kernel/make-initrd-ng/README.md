@@ -74,7 +74,7 @@ initrd to a minimum.
   in less than a second, and the code is substantially easier to work
   with.
 
-- This will not require end users to install a rust toolchain to use
+- This will not require end users to install a Rust toolchain to use
   NixOS, as long as this tool is cached by Hydra. And if you're
   bootstrapping NixOS from source, rustc is already required anyway.
 

@@ -1,7 +1,7 @@
 # RKE2 Version
 
-RKE2, Kubernetes, and other clustered software has the property of not being able to update
-atomically. Most software in nixpkgs, like for example bash, can be updated as part of a
+RKE2, Kubernetes, and other clustered software have the property of not being able to update
+atomically. Most software in Nixpkgs, like for example bash, can be updated as part of a
 `nixos-rebuild switch` without having to worry about the old and the new bash interacting in some
 way. RKE2/Kubernetes, on the other hand, is typically run across several machines, and each machine
 is updated independently. As such, different versions of the package and NixOS module must maintain
@@ -9,7 +9,7 @@ compatibility with each other through temporary version skew during updates. The
 project documents this in their
 [version-skew policy](https://kubernetes.io/releases/version-skew-policy/#supported-component-upgrade-order).
 
-Within nixpkgs, we strive to maintain a valid "upgrade path" that does not run afoul of the upstream
+Within Nixpkgs, we strive to maintain a valid "upgrade path" that does not run afoul of the upstream
 version skew policy.
 
 > [!NOTE]
@@ -18,13 +18,13 @@ version skew policy.
 
 ## Release Maintenance
 
-This section describes how new RKE2 releases are published in nixpkgs.
+This section describes how new RKE2 releases are published in Nixpkgs.
 
 Before contributing new RKE2 packages or updating existing packages, make sure that
 
 - New packages build (e.g. `nix-build -A rke2_1_34`)
 - All tests pass (e.g. `nix-build -A rke2_1_34.tests`)
-- You respect the nixpkgs [contributing guidelines](/CONTRIBUTING.md)
+- You respect the Nixpkgs [contributing guidelines](/CONTRIBUTING.md)
 
 ### Release Channels
 
@@ -95,7 +95,7 @@ In order to remove a versioned RKE2 package, create a PR achieving the following
    [pkgs/top-level/all-packages.nix](/pkgs/top-level/all-packages.nix)
 4. Add a deprecation notice in [pkgs/top-level/aliases.nix](/pkgs/top-level/aliases.nix)
    - Such as
-     `rke2_1_34 = throw "'rke2_1_34' has been removed from nixpkgs as it has reached end of life"; # Added 2026-10-27`
+     `rke2_1_34 = throw "'rke2_1_34' has been removed from Nixpkgs as it has reached end of life"; # Added 2026-10-27`
 
 #### Handling EOL on stable
 
