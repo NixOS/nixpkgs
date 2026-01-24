@@ -17,6 +17,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     sha256 = "sha256-YKwQjeJf4vZQO6r8ngG0faxVAmxmlKmMhsA9nbdtsbg=";
   };
 
+  cargoHash = "sha256-BJ0Mky86kf+KDiPh2HuLsaY/ixxUL96P0mcywC7/iCc=";
+
   nativeBuildInputs = [
     pkg-config
   ];
@@ -25,7 +27,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     openssl
   ];
 
-  cargoHash = "sha256-BJ0Mky86kf+KDiPh2HuLsaY/ixxUL96P0mcywC7/iCc=";
+  # requires directories that are not present in nix builds
+  doCheck = false;
 
   meta = {
     description = "tool to check crates are up to date";
