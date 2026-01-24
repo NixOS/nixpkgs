@@ -13,19 +13,19 @@ with python3Packages;
 
 buildPythonApplication rec {
   pname = "isso";
-  version = "0.13.0";
+  version = "0.13.1.dev0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "posativ";
     repo = pname;
     tag = version;
-    sha256 = "sha256-kZNf7Rlb1DZtQe4dK1B283OkzQQcCX+pbvZzfL65gsA=";
+    sha256 = "sha256-8G10UiD5eAuuRce8wpdCpp+1xRd66dk+uWIFlcHddEI=";
   };
 
   npmDeps = fetchNpmDeps {
     inherit src;
-    hash = "sha256-RBpuhFI0hdi8bB48Pks9Ac/UdcQ/DJw+WFnNj5f7IYE=";
+    hash = "sha256-rhPOUvWRZBc4r/pzy2D2KL4UuRBdbJTjGLHJrQfkZKs=";
   };
 
   outputs = [
