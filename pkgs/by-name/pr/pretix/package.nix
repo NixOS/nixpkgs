@@ -90,6 +90,7 @@ python.pkgs.buildPythonApplication rec {
     "django-formset-js-improved"
     "django-i18nfield"
     "django-localflavor"
+    "django-otp"
     "django-phonenumber-field"
     "dnspython"
     "drf_ujson2"
