@@ -28,14 +28,14 @@
   upower,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cinnamon-control-center";
   version = "6.6.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon-control-center";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-TjTwtTFbiC4A4qe9TIyZJtGrSymujhEgM8SpZQ92RZA=";
   };
 
@@ -85,4 +85,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     teams = [ lib.teams.cinnamon ];
   };
-}
+})
