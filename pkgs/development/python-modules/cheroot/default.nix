@@ -13,6 +13,7 @@
   requests,
   requests-toolbelt,
   requests-unixsocket,
+  setuptools,
   setuptools-scm,
   six,
 }:
@@ -20,27 +21,19 @@
 buildPythonPackage rec {
   pname = "cheroot";
   version = "11.1.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-v7cMSWY/Y7BEDytU28aw0WUOVt/k4mQfWbLG9ye0Sso=";
   };
 
-  # remove setuptools-scm-git-archive dependency
-  # https://github.com/cherrypy/cheroot/commit/f0c51af263e20f332c6f675aa90ec6705ae4f5d1
-  # there is a difference between the github source and the pypi tarball source,
-  # and it is not easy to apply patches.
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace '"setuptools_scm_git_archive>=1.1",' ""
-    substituteInPlace setup.cfg \
-      --replace "setuptools_scm_git_archive>=1.0" ""
-  '';
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+  ];
 
-  nativeBuildInputs = [ setuptools-scm ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     jaraco-functools
     more-itertools
     six
