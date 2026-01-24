@@ -89,7 +89,7 @@ async function checkTargetBranch({ github, context, core, dry }) {
     ...Object.values(changed.rebuildCountByKernel),
   )
   const rebuildsAllTests =
-    changed.attrdiff.changed.includes('nixosTests.simple') ?? false
+    changed.attrdiff.changed.includes('nixosTests.simple')
   core.info(
     `checkTargetBranch: PR causes ${maxRebuildCount} rebuilds and ${rebuildsAllTests ? 'does' : 'does not'} rebuild all NixOS tests.`,
   )
