@@ -7,13 +7,13 @@
   qtbase,
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "dialogbox";
   version = "1.0+unstable=2020-11-16";
 
   src = fetchFromGitHub {
     owner = "martynets";
-    repo = pname;
+    repo = "dialogbox";
     rev = "6989740746f376becc989ab2698e77d14186a0f9";
     hash = "sha256-paTas3KbV4yZ0ePnrOH1S3bLLHDddFml1h6b6azK4RQ=";
   };
