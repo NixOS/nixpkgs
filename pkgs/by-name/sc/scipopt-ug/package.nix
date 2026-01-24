@@ -9,7 +9,7 @@
   gmp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "scipopt-ug";
   version = "1.0.0";
 
@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
 
   # Take the SCIPOptSuite source since no other source exists publicly.
   src = fetchzip {
-    url = "https://github.com/scipopt/scip/releases/download/v${scipVersion}/scipoptsuite-${scipVersion}.tgz";
+    url = "https://github.com/scipopt/scip/releases/download/v${finalAttrs.scipVersion}/scipoptsuite-${finalAttrs.scipVersion}.tgz";
     hash = "sha256-Nskb8quLsox7igz1UZCfd+VjR9Q8/oa8dZBYjAdc1EU=";
   };
 
-  sourceRoot = "${src.name}/ug";
+  sourceRoot = "${finalAttrs.src.name}/ug";
 
   nativeBuildInputs = [
     cmake
@@ -37,9 +37,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     maintainers = with lib.maintainers; [ fettgoenner ];
-    changelog = "https://scipopt.org/doc-${scipVersion}/html/RN${lib.versions.major scipVersion}.php";
+    changelog = "https://scipopt.org/doc-${finalAttrs.scipVersion}/html/RN${lib.versions.major finalAttrs.scipVersion}.php";
     description = "Ubiquity Generator framework to parallelize branch-and-bound based solvers";
     license = lib.licenses.lgpl3Plus;
     homepage = "https://ug.zib.de";
   };
-}
+})
