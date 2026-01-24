@@ -7,6 +7,7 @@
   fetchFromGitHub,
   nix-update-script,
   installShellFiles,
+  withTerminalSupport ? true,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "app2unit";
@@ -49,7 +50,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   dontPatchShebangs = true;
   postFixup = ''
     substituteInPlace $out/bin/app2unit \
-      --replace-fail '#!/bin/sh' '#!${lib.getExe dash}' \
+      --replace-fail '#!/bin/sh' '#!${lib.getExe dash}'
+  ''
+  + lib.optionalString withTerminalSupport ''
+    substituteInPlace $out/bin/app2unit \
       --replace-fail 'A2U__TERMINAL_HANDLER=xdg-terminal-exec' \
                      'A2U__TERMINAL_HANDLER=${lib.getExe xdg-terminal-exec}'
   '';
