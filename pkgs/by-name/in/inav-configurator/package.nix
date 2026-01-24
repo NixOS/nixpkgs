@@ -4,19 +4,19 @@
   fetchurl,
   makeDesktopItem,
   copyDesktopItems,
-  nwjs,
+  electron,
   wrapGAppsHook3,
   gsettings-desktop-schemas,
   gtk3,
+  unzip,
 }:
-
 stdenv.mkDerivation rec {
   pname = "inav-configurator";
-  version = "5.1.0";
+  version = "9.0.0";
 
   src = fetchurl {
-    url = "https://github.com/iNavFlight/inav-configurator/releases/download/${version}/INAV-Configurator_linux64_${version}.tar.gz";
-    sha256 = "sha256-ZvZxQICa5fnJBTx0aW/hqQCuhQW9MkcVa2sOjPYaPXM=";
+    url = "https://github.com/iNavFlight/inav-configurator/releases/download/${version}/INAV-Configurator_linux_x64_${version}.zip";
+    sha256 = "sha256-n56QE0ZJ2slL0WZbnBl2pEgAUoDMuh467gWt+eRwa9c=";
   };
 
   icon = fetchurl {
@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     copyDesktopItems
     wrapGAppsHook3
+    unzip
   ];
 
   buildInputs = [
@@ -34,17 +35,19 @@ stdenv.mkDerivation rec {
     gtk3
   ];
 
+  unpackCmd = "unzip $src";
+
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/bin \
-             $out/opt/${pname}
+             $out/opt/inav-configurator
 
-    cp -r inav-configurator $out/opt/inav-configurator/
+    cp -r "." $out/opt/inav-configurator/
     install -m 444 -D $icon $out/share/icons/hicolor/128x128/apps/${pname}.png
 
     chmod +x $out/opt/inav-configurator/inav-configurator
-    makeWrapper ${nwjs}/bin/nw $out/bin/${pname} --add-flags $out/opt/inav-configurator/inav-configurator
+    makeWrapper ${electron}/bin/electron $out/bin/inav-configurator --add-flags $out/opt/inav-configurator/resources/app
 
     runHook postInstall
   '';
