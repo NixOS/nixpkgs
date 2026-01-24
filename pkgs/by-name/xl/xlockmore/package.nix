@@ -11,12 +11,12 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xlockmore";
   version = "5.86";
 
   src = fetchurl {
-    url = "http://sillycycle.com/xlock/xlockmore-${version}.tar.xz";
+    url = "http://sillycycle.com/xlock/xlockmore-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-fvsR499tYAlTj9Ld8SpGpAbvh4iT5+USmZllCU3S9Fw=";
     curlOpts = "--user-agent 'Mozilla/5.0'";
   };
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   postPatch =
     let
-      makePath = p: lib.concatMapStringsSep " " (x: x + "/" + p) buildInputs;
+      makePath = p: lib.concatMapStringsSep " " (x: x + "/" + p) finalAttrs.buildInputs;
       inputs = "${makePath "lib"} ${makePath "include"}";
     in
     ''
@@ -60,4 +60,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "xlock";
   };
-}
+})
