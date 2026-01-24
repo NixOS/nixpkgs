@@ -93,9 +93,9 @@ let
 in
 rec {
   garage_1 = generic {
-    version = "1.3.0";
-    hash = "sha256-6w+jun0UmQHmoXcokGpPM95BbQyOKefTeAelAFKxNCM=";
-    cargoHash = "sha256-mWLsOTWxzMdDfzEDu+WHJ12SVscEVfBVuOTVFbfnk0g=";
+    version = "1.3.1";
+    hash = "sha256-wkCnJmbulnhzwHvzdpzh9MRceOzmPdhOogffwhqNGPg=";
+    cargoHash = "sha256-jfYe2A6zkVgTLrWBDbahICSKCRO3FwsBPNSVFapH0Rs=";
   };
 
   garage_2 = generic {
