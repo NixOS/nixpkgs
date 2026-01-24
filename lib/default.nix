@@ -110,7 +110,6 @@ let
         hasContext
         convertHash
         hashString
-        hasFile
         parseDrvName
         placeholder
         fromJSON
