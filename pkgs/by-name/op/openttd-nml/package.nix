@@ -4,16 +4,16 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "openttd-nml";
-  version = "0.8.0";
+  version = "0.8.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "OpenTTD";
     repo = "nml";
-    tag = version;
-    hash = "sha256-LZhkyYTtolB9/1ZvwYa+TJJRBIifyuqlMawK7vhPV0k=";
+    tag = finalAttrs.version;
+    hash = "sha256-swAkUhduIhcfbAvKsPaJNBXcv8T6GDaxk3KKLLa9GQ8=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -27,4 +27,4 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ ToxicFrog ];
   };
-}
+})
