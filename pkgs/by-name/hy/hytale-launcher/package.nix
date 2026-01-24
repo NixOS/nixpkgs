@@ -50,25 +50,9 @@ let
     sources.${stdenv.hostPlatform.system}
       or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 
-  unwrapped = stdenv.mkDerivation {
-    pname = "hytale-launcher-unwrapped";
-    inherit version;
-
-    src = fetchzip {
-      inherit (currentSource) url hash;
-      stripRoot = false;
-    };
-
-    dontStrip = true;
-    dontPatchELF = true;
-
-    installPhase = ''
-      runHook preInstall
-      mkdir -p $out/opt/hytale-launcher
-      cp -r . $out/opt/hytale-launcher/
-      chmod +x $out/opt/hytale-launcher/hytale-launcher
-      runHook postInstall
-    '';
+  src = fetchzip {
+    inherit (currentSource) url hash;
+    stripRoot = false;
   };
 
   fhsEnv = buildFHSEnv {
@@ -76,7 +60,6 @@ let
     inherit version;
 
     targetPkgs = pkgs: [
-      unwrapped
       # launcher dependencies (webkit/tauri)
       pkgs.gtk3
       pkgs.nss
@@ -105,7 +88,7 @@ let
       pkgs.stdenv.cc.cc.lib
     ];
 
-    runScript = "/opt/hytale-launcher/hytale-launcher";
+    runScript = "${src}/hytale-launcher";
 
     extraBwrapArgs = [
       "--setenv __NV_DISABLE_EXPLICIT_SYNC 1"
@@ -122,7 +105,7 @@ let
     '';
 
     passthru = {
-      inherit unwrapped;
+      inherit src;
 
       updateScript = writeScript "update-hytale-launcher" ''
         #!/usr/bin/env nix-shell
@@ -204,12 +187,7 @@ let
 
   darwinPackage = stdenv.mkDerivation {
     pname = "hytale-launcher";
-    inherit version;
-
-    src = fetchzip {
-      inherit (currentSource) url hash;
-      stripRoot = false;
-    };
+    inherit version src;
 
     nativeBuildInputs = [ makeWrapper ];
 
@@ -221,10 +199,7 @@ let
       runHook postInstall
     '';
 
-    passthru = {
-      inherit unwrapped;
-      updateScript = fhsEnv.passthru.updateScript;
-    };
+    inherit (fhsEnv) passthru;
 
     meta = {
       description = "Official launcher for Hytale";
