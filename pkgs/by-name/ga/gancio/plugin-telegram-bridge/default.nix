@@ -19,7 +19,7 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gancio-plugin-telegram-bridge";
   version = "1.0.6";
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     domain = "framagit.org";
     owner = "bcn.convocala";
     repo = "gancio-plugin-telegram-bridge";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-J7FIfJjounrq/hPQk58mYXigjD7BZQWoE4aGi0eJ4sY=";
   };
 
@@ -64,4 +64,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ jbgi ];
   };
-}
+})

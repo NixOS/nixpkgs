@@ -9,17 +9,17 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gaw3";
   version = "20250128";
 
   # https://www.rvq.fr/php/ndl.php?id=gaw.*
   # https://www.rvq.fr/php/ndl.php?id=gaw3-20250128.tar.gz
   src =
-    runCommandLocal "gaw3-${version}.tar.gz"
+    runCommandLocal "gaw3-${finalAttrs.version}.tar.gz"
       {
         BASE = "https://www.rvq.fr/php/ndl.php";
-        FNAME = "gaw3-${version}.tar.gz";
+        FNAME = "gaw3-${finalAttrs.version}.tar.gz";
 
         nativeBuildInputs = [
           htmlq
@@ -92,4 +92,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ fbeffa ];
     platforms = lib.platforms.linux;
   };
-}
+})

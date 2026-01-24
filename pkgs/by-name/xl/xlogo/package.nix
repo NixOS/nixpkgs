@@ -8,7 +8,7 @@
   util-macros,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xlogo";
   version = "1.0.7";
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     group = "xorg";
     owner = "app";
     repo = "xlogo";
-    tag = "xlogo-${version}";
+    tag = "xlogo-${finalAttrs.version}";
     hash = "sha256-KjJhuiFVn34vEZbC7ds4MrcXCHq9PcIpAuaCGBX/EXc=";
   };
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     mainProgram = "xlogo";
   };
-}
+})
