@@ -37,12 +37,11 @@ python3Packages.buildPythonApplication rec {
     setuptools
   ];
 
-  postPatch = ''
-    substituteInPlace requirements/base.txt \
-      --replace-fail "Flask==2.0.2" "Flask>=2.0.2" \
-      --replace-fail "psutil==5.8.0" "psutil>=5.8.0" \
-      --replace-fail "requests==2.24.0" "requests>=2.24.0"
-  '';
+  pythonRelaxDeps = [
+    "flask"
+    "psutil"
+    "requests"
+  ];
 
   __darwinAllowLocalNetworking = true;
 
