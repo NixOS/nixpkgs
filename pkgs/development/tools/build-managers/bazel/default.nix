@@ -63,6 +63,7 @@ let
     #        ],
     #     )
     [
+      bash
       coreutils
       diffutils
       file
