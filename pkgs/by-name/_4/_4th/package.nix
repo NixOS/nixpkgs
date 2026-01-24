@@ -21,7 +21,8 @@ stdenv.mkDerivation (finalAttrs: {
   dontConfigure = true;
 
   makeFlags = [
-    "-C sources"
+    "-C"
+    "sources"
     "CC:=$(CC)"
     "AR:=$(AR)"
   ];
