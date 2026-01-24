@@ -36,6 +36,7 @@
   libjack2,
   makeWrapper,
   buildPackages,
+  versionCheckHook,
 }:
 
 let
@@ -111,6 +112,9 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     libjack2
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   strictDeps = true;
 
