@@ -6,7 +6,7 @@
   nix-update-script,
 }:
 let
-  version = "2.17.0";
+  version = "2.17.1";
 in
 buildGoLatestModule {
   pname = "wakapi";
@@ -16,10 +16,10 @@ buildGoLatestModule {
     owner = "muety";
     repo = "wakapi";
     tag = version;
-    hash = "sha256-aQh1Jn718sk/Wvsjk9xFJ5NBSmsF6OOYtj22g6kwY8k=";
+    hash = "sha256-/7jYfLs9IcAWYVWISdDeXWV+PfHGFjkxcFkpqH2lxS8=";
   };
 
-  vendorHash = "sha256-wlpTC050EYEjA5fteaGOGVKonMNOr7Ym2uoGUj0fw/M=";
+  vendorHash = "sha256-AA9gIIUsoJG4RnDZ1fAJu+iqeXXbRbprBVxuVvR1tzo=";
 
   # Not a go module required by the project, contains development utilities
   excludedPackages = [ "scripts" ];

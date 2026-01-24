@@ -625,7 +625,6 @@ in
 
       services.crowdsec.settings.general = {
         common = {
-          daemonize = false;
           log_media = "stdout";
         };
         config_paths = {
