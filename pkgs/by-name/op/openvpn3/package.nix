@@ -119,7 +119,7 @@ stdenv.mkDerivation rec {
     wrapPythonProgramsIn "$out/libexec/openvpn3-linux" "$out ${pythonPath}"
   '';
 
-  NIX_LDFLAGS = "-lpthread";
+  env.NIX_LDFLAGS = "-lpthread";
 
   passthru.updateScript = nix-update-script { };
 
