@@ -15769,6 +15769,8 @@ self: super: with self; {
 
   pytorch-msssim = callPackage ../development/python-modules/pytorch-msssim { };
 
+  pytorch-ocl = callPackage ../development/python-modules/pytorch-ocl { };
+
   pytorch-pfn-extras = callPackage ../development/python-modules/pytorch-pfn-extras { };
 
   pytorch-tabnet = callPackage ../development/python-modules/pytorch-tabnet { };
