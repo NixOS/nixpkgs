@@ -23,20 +23,20 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "shorewall";
-  version = "5.2.3.3";
+  version = "5.2.8";
 
   srcs = [
     (fetchurl {
-      url = "http://www.shorewall.net/pub/shorewall/5.2/shorewall-5.2.3/shorewall-core-${version}.tar.bz2";
-      sha256 = "1gg2yfxzm3y9qqjrrg5nq2ggi1c6yfxx0s7fvwjw70b185mwa5p5";
+      url = "https://shorewall.org/pub/shorewall/5.2/shorewall-5.2.8/shorewall-core-${version}.tar.bz2";
+      hash = "sha256-OZlrlpeiAXlHBJrT8DyyeOj5Of+SSyu0vyoLwXxZmI4=";
     })
     (fetchurl {
-      url = "http://www.shorewall.net/pub/shorewall/5.2/shorewall-5.2.3/shorewall-${version}.tar.bz2";
-      sha256 = "1ka70pa3s0cnvc83rlm57r05cdv9idnxnq0vmxi6nr7razak5f3b";
+      url = "https://shorewall.org/pub/shorewall/5.2/shorewall-5.2.8/shorewall-${version}.tar.bz2";
+      hash = "sha256-+7WrSS7TcuqvAoF8xzD4LEmoHFpfXO5LyPG86EbyMG0=";
     })
     (fetchurl {
-      url = "http://www.shorewall.net/pub/shorewall/5.2/shorewall-5.2.3/shorewall6-${version}.tar.bz2";
-      sha256 = "0mhs4m6agwk082h1n69gnyfsjpycdd8215r4r9rzb3czs5xi087n";
+      url = "https://shorewall.org/pub/shorewall/5.2/shorewall-5.2.8/shorewall6-${version}.tar.bz2";
+      hash = "sha256-6Cw6lTi2VIGVOY3DnIOwG89m61oigUyRWpJLmtwIjNE=";
     })
   ];
   sourceRoot = ".";
@@ -107,7 +107,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://www.shorewall.net/";
+    homepage = "https://shorewall.org/";
     description = "IP gateway/firewall configuration tool for GNU/Linux";
     longDescription = ''
       Shorewall is a high-level tool for configuring Netfilter. You describe your
