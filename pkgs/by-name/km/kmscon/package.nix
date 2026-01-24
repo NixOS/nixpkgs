@@ -10,24 +10,25 @@
   libGLU,
   libGL,
   pango,
-  pixman,
   pkg-config,
   docbook_xsl,
   libxslt,
   libgbm,
   ninja,
   check,
+  bash,
   buildPackages,
+  nix-update-script,
 }:
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kmscon";
-  version = "9.0.0-unstable-2025-01-09";
+  version = "9.3.0";
 
   src = fetchFromGitHub {
-    owner = "Aetf";
+    owner = "kmscon";
     repo = "kmscon";
-    rev = "a81941f4464e6f9cee75bfb8a1db88c253ede33d";
-    sha256 = "sha256-l7Prt7CsYi4VCnp9xktvqqNT+4djSdO2GvP1JdxhNSI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vdM/3n3Y2FM+PLDgVuU10kkNLCSzTrFI35CaY5NxWks=";
   };
 
   strictDeps = true;
@@ -43,10 +44,11 @@ stdenv.mkDerivation {
     libtsm
     libxkbcommon
     pango
-    pixman
     systemdLibs
     libgbm
     check
+    # Needed for autoPatchShebangs when strictDeps = true
+    bash
   ];
 
   nativeBuildInputs = [
@@ -57,22 +59,18 @@ stdenv.mkDerivation {
     libxslt # xsltproc
   ];
 
-  env.NIX_CFLAGS_COMPILE =
-    lib.optionalString stdenv.cc.isGNU "-O "
-    + "-Wno-error=maybe-uninitialized -Wno-error=unused-result -Wno-error=implicit-function-declaration";
-
-  enableParallelBuilding = true;
-
   patches = [
     ./sandbox.patch # Generate system units where they should be (nix store) instead of /etc/systemd/system
   ];
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
 
   meta = {
     description = "KMS/DRM based System Console";
     mainProgram = "kmscon";
     homepage = "https://www.freedesktop.org/wiki/Software/kmscon/";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ ccicnce113424 ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -201,18 +201,33 @@ in
               server.succeed("systemctl --no-pager -l status apparmor.service")
               server.wait_for_unit("apparmor.service")
         ''
-    +
-      lib.optionalString cfg.feature.user # python
-        ''
-          with subtest("incus-user allows restricted access for users"):
-              server.fail("incus project show user-1000")
-              server.succeed("su - testuser bash -c 'incus list'")
-              # a project is created dynamically for the user
-              server.succeed("incus project show user-1000")
-              # users shouldn't be able to list storage pools
-              server.fail("su - testuser bash -c 'incus storage list'")
-              # user can create an instance
-              server.succeed("su - testuser bash -c 'incus create --empty'")
-        ''
+    + lib.optionalString cfg.feature.user (
+      # python
+      ''
+        with subtest("incus-user allows restricted access for users"):
+            server.fail("incus project show user-1000")
+            server.succeed("su - testuser bash -c 'incus list'")
+            # a project is created dynamically for the user
+            server.succeed("incus project show user-1000")
+            # user can create an instance
+            server.succeed("su - testuser bash -c 'incus create --empty'")
+      ''
+      + lib.optionalString (lib.versionOlder cfg.package.version "6.21") ''
+        # users shouldn't be able to list storage pools
+        server.fail("su - testuser bash -c 'incus storage list'")
+      ''
+      + lib.optionalString (lib.versionAtLeast cfg.package.version "6.21") ''
+        # users shouldn't be able to read storage pools
+        server.succeed("su - testuser bash -c 'incus storage list'")
+
+        # pre-check that there is a pool source
+        pool_source = server.succeed("incus storage get default source").strip()
+        assert pool_source == "/var/lib/incus/storage-pools/default", f"Expected pool source /var/lib/incus/storage-pools/default, got {pool_source}"
+
+        # users shouldn't be able to read storage pool config
+        code, pool_source = server.execute("su - testuser bash -c 'incus storage get default source'")
+        assert pool_source.strip() == "", f"Expected empty string, got {pool_source}"
+      ''
+    )
     + instanceScript;
 }

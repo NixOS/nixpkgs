@@ -3,18 +3,18 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  sfml,
+  sfml_2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "csfml";
-  version = "3.0.0";
+  version = "2.6.1";
 
   src = fetchFromGitHub {
     owner = "SFML";
     repo = "CSFML";
     tag = finalAttrs.version;
-    hash = "sha256-8CRS+dV/hVQNTmgkxyFKcyTj/HWRks5bie4n6N/RWYM=";
+    hash = "sha256-ECt0ySDpYWF0zuDBSnQzDwUm4Xj4z1+XSC55D6yivac=";
   };
 
   # Fix incorrect path joining in cmake
@@ -27,9 +27,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ sfml ];
+  buildInputs = [ sfml_2 ];
   cmakeFlags = [
-    (lib.cmakeFeature "CMAKE_MODULE_PATH" "${sfml}/share/SFML/cmake/Modules/")
+    (lib.cmakeFeature "CMAKE_MODULE_PATH" "${sfml_2}/share/SFML/cmake/Modules/")
   ];
 
   meta = {
