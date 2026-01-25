@@ -2796,6 +2796,8 @@ self: super: with self; {
 
   cachy = callPackage ../development/python-modules/cachy { };
 
+  cadquery = callPackage ../development/python-modules/cadquery { };
+
   cadquery-ocp = callPackage ../development/python-modules/cadquery-ocp { };
 
   cadwyn = callPackage ../development/python-modules/cadwyn { };
