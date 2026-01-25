@@ -433,7 +433,11 @@ in
               RestrictSUIDSGID = true;
               RootDirectory = "/run/syncoid/${escapeUnitName name}";
               RootDirectoryStartOnly = true;
-              BindPaths = [ "/dev/zfs" ];
+              BindPaths = [
+                "/dev/zfs"
+                # Required if outside of /var
+                config.users.users.syncoid.home
+              ];
               BindReadOnlyPaths = [
                 builtins.storeDir
                 "/etc"
