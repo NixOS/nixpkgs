@@ -161,26 +161,6 @@ stdenv.mkDerivation (finalAttrs: {
     uim
   ];
 
-  #bad configure.ac and Makefile.in everywhere
-  preConfigure = ''
-    sed -i -e 's;-L/usr/local/lib -R/usr/local/lib;;g' \
-      main/Makefile.in \
-      tool/mlfc/Makefile.in \
-      tool/mlimgloader/Makefile.in \
-      tool/mlconfig/Makefile.in \
-      uitoolkit/libtype/Makefile.in \
-      uitoolkit/libotl/Makefile.in
-    sed -i -e 's;cd ..srcdir. && rm -f ...lang..gmo.*;;g' \
-      tool/mlconfig/po/Makefile.in.in
-    #utmp and mlterm-fb
-    substituteInPlace configure.in \
-      --replace "-m 2755 -g utmp" " " \
-      --replace "-m 4755 -o root" " "
-    substituteInPlace configure \
-      --replace "-m 2755 -g utmp" " " \
-      --replace "-m 4755 -o root" " "
-  '';
-
   env = {
     NIX_CFLAGS_COMPILE =
       (lib.optionalString stdenv.cc.isClang "-Wno-error=int-conversion -Wno-error=incompatible-function-pointer-types ")
