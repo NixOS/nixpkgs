@@ -32,6 +32,9 @@ buildPythonPackage rec {
   version = "2.6.1";
   pyproject = true;
 
+  # https://github.com/NixOS/nixpkgs/pull/475917
+  disabled = pythonAtLeast "3.14";
+
   src = fetchFromGitHub {
     owner = "pygame";
     repo = "pygame";
