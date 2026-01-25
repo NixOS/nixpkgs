@@ -4,6 +4,8 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
+  cmake,
+  git,
   makeBinaryWrapper,
   nix-update-script,
   pkg-config,
@@ -28,6 +30,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-FIjNADpaJdhr56mBa5sBac6uHnIsoJv8wQu3FdkP7yo=";
 
   nativeBuildInputs = [
+    cmake
+    git
     installShellFiles
     makeBinaryWrapper
     pkg-config
