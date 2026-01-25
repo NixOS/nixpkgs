@@ -5,14 +5,8 @@
     "io.github.jackgruber.backup": {
       "name": "joplin-plugin-backup",
       "url": "https://github.com/JackGruber/joplin-plugin-backup/archive/2c3da7056e7ac39c86c2051a4fdb99d9534dd0a1.tar.gz",
-      "hash": "sha256-fivuaggp8WX9aEjt+ga4Pz/Tx+JHrQWla8Ef2rpoOzs=",
-      "npmDepsHash": "sha256-xpE3YJBZu+Uv17cNLYYxQOFiZVe1tqReGYJRSAG6rYk="
-    },
-    "io.github.personalizedrefrigerator.js-draw": {
-      "name": "joplin-plugin-freehand-drawing",
-      "url": "https://github.com/personalizedrefrigerator/joplin-plugin-freehand-drawing/archive/refs/tags/v4.2.0.tar.gz",
-      "hash": "sha256-PVpwcy0uDwmOsnzmeKfFNTniePddA2rrqfufaQEi/X4=",
-      "npmDepsHash": "sha256-B1deBNProLghMTjlV6AX258YQJyr1GIjlUO8f6h1nek="
+      "hash": "sha256-rPmBg/+mJH7Fp26gVzuSGFxi1Y4MtfRT+hqppk3tHdY=",
+      "npmDepsHash": "sha256-xZJ0Oir1A6sLe0ztIyBu39Yy3D6sNrVaciOYG0k85l0="
     }
   },
   "deps_hash": "sha256-9xJmudcpUw1xmTvJD3TFrfzYEi+LupZGSzsA5zUOemI="
