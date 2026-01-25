@@ -1594,6 +1594,12 @@
     github = "an-empty-string";
     githubId = 681716;
   };
+  anakin4747 = {
+    name = "Anakin Childerhose";
+    email = "anakin@childerhose.ca";
+    github = "anakin4747";
+    githubId = 65310735;
+  };
   ananthb = {
     name = "Ananth Bhaskararaman";
     email = "nixos-maint@devhuman.net";
