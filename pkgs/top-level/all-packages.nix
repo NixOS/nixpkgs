@@ -287,7 +287,9 @@ with pkgs;
   updateAutotoolsGnuConfigScriptsHook = makeSetupHook {
     name = "update-autotools-gnu-config-scripts-hook";
     substitutions = {
-      gnu_config = gnu-config;
+      gnu_config = gnu-config.override {
+        runtimeShell = targetPackages.stdenv.shell;
+      };
     };
   } ../build-support/setup-hooks/update-autotools-gnu-config-scripts.sh;
 

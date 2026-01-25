@@ -1069,7 +1069,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
           )
           ++ lib.optionals localSystem.isAarch64 [
             prevStage.updateAutotoolsGnuConfigScriptsHook
-            prevStage.gnu-config
+            prevStage.updateAutotoolsGnuConfigScriptsHook.gnu_config
           ]
           ++ lib.optionals localSystem.isx86_64 [ prevStage.darwin.Csu ]
           ++ (with prevStage.darwin; [
