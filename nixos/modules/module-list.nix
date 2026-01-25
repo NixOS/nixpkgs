@@ -254,6 +254,7 @@
   ./programs/lazygit.nix
   ./programs/less.nix
   ./programs/liboping.nix
+  ./programs/librepods.nix
   ./programs/light.nix
   ./programs/lix.nix
   ./programs/localsend.nix
