@@ -22,6 +22,8 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
+  pythonRelaxDeps = [ "markdown-it-py" ];
+
   dependencies = [
     markdown-it-py
     pytest
