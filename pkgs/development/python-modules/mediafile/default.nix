@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
+  poetry-core,
   filetype,
   mutagen,
   pytestCheckHook,
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-D5LRGncdeGcmJkrHVvI2cevov4SFO0wuhLxMqP+Ryb8=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     filetype
