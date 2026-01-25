@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "equinox";
-  version = "0.13.2";
+  version = "0.13.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "patrick-kidger";
     repo = "equinox";
     tag = "v${version}";
-    hash = "sha256-d7IqRuohcZ3IYpbjm76Ir6I33zI5dnHvX5eX2WjSJQk=";
+    hash = "sha256-Vx9Qu5v5wLNx37UFsAIlZHN707GB9DkGf7RbZFKd6w8=";
   };
 
   # Relax speed constraints on tests that can fail on busy builders
@@ -59,14 +59,6 @@ buildPythonPackage rec {
   pytestFlags = [
     # DeprecationWarning: The default axis_types will change in JAX v0.9.0 to jax.sharding.AxisType.Explicit.
     "-Wignore::DeprecationWarning"
-  ];
-
-  disabledTests = [
-    #  ValueError: The spec of NamedSharding passed to with_sharding_constraint can only refer to
-    # Auto axes of the mesh.
-    # https://github.com/patrick-kidger/equinox/issues/1171
-    "test_sharding_no_inside_jit"
-    "test_sharding_only_inside_jit"
   ];
 
   pythonImportsCheck = [ "equinox" ];
