@@ -97,7 +97,8 @@ stdenv.mkDerivation {
     homepage = "https://codeberg.org/doug-moen/curv";
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
-    broken = stdenv.hostPlatform.isDarwin;
+    # aarch64 fails installCheckPhase: https://hydra.nixos.org/build/319705783
+    broken = stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isAarch64;
     maintainers = with lib.maintainers; [ pbsds ];
     mainProgram = "curv";
   };
