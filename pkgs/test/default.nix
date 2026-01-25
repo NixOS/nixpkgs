@@ -227,6 +227,8 @@ in
 
   buildFHSEnv = recurseIntoAttrs (callPackages ./buildFHSEnv { });
 
+  auto-patchelf-structured-log = callPackage ./auto-patchelf-structured-log { };
+
   auto-patchelf-hook = callPackage ./auto-patchelf-hook { };
 
   auto-patchelf-hook-preserve-origin = callPackage ./auto-patchelf-hook-preserve-origin { };
