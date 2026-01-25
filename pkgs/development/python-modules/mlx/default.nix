@@ -52,8 +52,9 @@ buildPythonPackage (finalAttrs: {
   };
 
   patches = [
-    # Use system nanobind instead of fetching its sources
+    # Use nix packages instead of fetching their sources
     ./dont-fetch-nanobind.patch
+    ./dont-fetch-json.patch
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (replaceVars ./darwin-build-fixes.patch {
@@ -88,7 +89,7 @@ buildPythonPackage (finalAttrs: {
       (lib.cmakeBool "MLX_BUILD_METAL" false)
       (lib.cmakeBool "USE_SYSTEM_FMT" true)
       (lib.cmakeOptionType "filepath" "FETCHCONTENT_SOURCE_DIR_GGUFLIB" "${gguf-tools}")
-      (lib.cmakeOptionType "filepath" "FETCHCONTENT_SOURCE_DIR_JSON" "${nlohmann_json.src}")
+      (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-I${lib.getDev nlohmann_json}/include/nlohmann")
 
       # Cmake cannot find nanobind-config.cmake by itself
       (lib.cmakeFeature "nanobind_DIR" "${nanobind}/${python.sitePackages}/nanobind/cmake")
