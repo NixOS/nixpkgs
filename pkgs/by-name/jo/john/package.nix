@@ -141,7 +141,6 @@ stdenv.mkDerivation {
     ++ lib.optionals enableUnfree [ lib.licenses.unfreeRedistributable ];
     homepage = "https://github.com/openwall/john/";
     maintainers = with lib.maintainers; [
-      offline
       cherrykitten
     ];
     platforms = lib.platforms.unix;

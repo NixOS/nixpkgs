@@ -32,7 +32,6 @@ buildGoModule rec {
     homepage = "https://github.com/flannel-io/flannel";
     maintainers = with lib.maintainers; [
       johanot
-      offline
     ];
     platforms = with lib.platforms; linux;
     mainProgram = "flannel";

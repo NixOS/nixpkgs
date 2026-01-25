@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/iBotPeaches/Apktool/releases/tag/v${version}";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ offline ];
+    maintainers = [ ];
     platforms = with lib.platforms; unix;
   };
 }

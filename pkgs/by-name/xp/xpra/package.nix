@@ -290,7 +290,6 @@ effectiveBuildPythonApplication rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
-      offline
       numinit
       mvnetbiz
       lucasew

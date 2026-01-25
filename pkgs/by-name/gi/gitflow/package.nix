@@ -44,6 +44,6 @@ stdenv.mkDerivation rec {
     '';
     license = lib.licenses.bsd2;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ offline ];
+    maintainers = [ ];
   };
 }

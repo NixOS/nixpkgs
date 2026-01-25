@@ -58,6 +58,6 @@ stdenv.mkDerivation rec {
     downloadPage = "https://github.com/Ferdi265/numix-solarized-gtk-theme/releases";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.offline ];
+    maintainers = [ ];
   };
 }

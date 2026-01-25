@@ -121,7 +121,6 @@ buildGoModule rec {
     license = lib.licenses.mit;
     changelog = "https://github.com/influxdata/kapacitor/blob/master/CHANGELOG.md";
     maintainers = with lib.maintainers; [
-      offline
       totoroot
     ];
   };

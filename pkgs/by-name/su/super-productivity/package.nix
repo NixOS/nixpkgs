@@ -172,7 +172,6 @@ buildNpmPackage rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
-      offline
       pineapplehunter
       tebriel
     ];

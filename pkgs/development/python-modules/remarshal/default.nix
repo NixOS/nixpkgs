@@ -52,7 +52,7 @@ buildPythonPackage rec {
     description = "Convert between TOML, YAML and JSON";
     license = lib.licenses.mit;
     homepage = "https://github.com/dbohdan/remarshal";
-    maintainers = with lib.maintainers; [ offline ];
+    maintainers = [ ];
     mainProgram = "remarshal";
   };
 }

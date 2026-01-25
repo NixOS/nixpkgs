@@ -326,7 +326,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/coder/code-server";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      offline
       henkery
       code-asher
     ];

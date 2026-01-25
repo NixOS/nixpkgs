@@ -80,7 +80,6 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [
       rushmorem
       lnl7
-      offline
       Chili-Man
       techknowlogick
     ];

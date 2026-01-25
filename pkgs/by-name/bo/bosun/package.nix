@@ -32,7 +32,7 @@ buildGoModule {
     description = "Time Series Alerting Framework";
     license = lib.licenses.mit;
     homepage = "https://bosun.org";
-    maintainers = with lib.maintainers; [ offline ];
+    maintainers = [ ];
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

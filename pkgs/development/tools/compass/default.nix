@@ -19,7 +19,6 @@ bundlerEnv {
     homepage = "https://github.com/Compass/compass";
     license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [
-      offline
       nicknovitski
     ];
     mainProgram = "compass";

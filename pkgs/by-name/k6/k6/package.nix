@@ -42,7 +42,6 @@ buildGoModule rec {
     changelog = "https://github.com/grafana/k6/releases/tag/v${version}";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [
-      offline
       kashw2
     ];
   };
