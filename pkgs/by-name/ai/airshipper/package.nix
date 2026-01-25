@@ -109,6 +109,7 @@ rustPlatform.buildRustPackage {
         libXrandr
         libXi
         libXcursor
+        alsa-lib
       ];
     in
     ''
