@@ -2,16 +2,16 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools-scm,
+  hatchling,
+  hatch-vcs,
   html5tagger,
-  setuptools,
   python,
 }:
 
 buildPythonPackage rec {
   pname = "tracerite";
   version = "2.3.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sanic-org";
@@ -20,7 +20,10 @@ buildPythonPackage rec {
     hash = "sha256-UXIQc5rXVaZuZj5xu2X9H38vKWAM+AoKrKfudovUhwA=";
   };
 
-  build-system = [ setuptools-scm ];
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
   dependencies = [
     html5tagger
