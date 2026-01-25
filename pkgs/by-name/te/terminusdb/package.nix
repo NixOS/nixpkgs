@@ -14,6 +14,7 @@
   pkg-config,
   callPackage,
   applyPatches,
+  installShellFiles,
 }:
 let
   tusVersion = "0.0.16";
@@ -109,6 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
       bindgenHook # provides libclang
     ])
     cargo
+    installShellFiles
     protobuf
     swi-prologWithDeps
   ];
@@ -153,7 +155,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    install -Dm755 terminusdb -t $out/bin
+    installBin terminusdb
+    installManPage $src/docs/terminusdb.1
     runHook postInstall
   '';
 
