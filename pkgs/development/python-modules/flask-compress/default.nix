@@ -5,6 +5,7 @@
   isPyPy,
   setuptools,
   setuptools-scm,
+  backports-zstd,
   flask,
   flask-caching,
   zstandard,
@@ -31,8 +32,8 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    backports-zstd
     flask
-    zstandard
   ]
   ++ lib.optionals (!isPyPy) [ brotli ]
   ++ lib.optionals isPyPy [ brotlicffi ];
