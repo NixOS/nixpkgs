@@ -128,7 +128,7 @@ let
       src = fetchHex {
         pkg = "p1_pgsql";
         version = "1.1.38";
-        sha256 = "";
+        sha256 = "sha256-Bs9kQwCBeOujh7ou6STTYgBBuuTaGyyWloAoSgXMdZ4=";
       };
       beamDeps = [ xmpp ];
     };
@@ -148,7 +148,7 @@ let
       src = fetchHex {
         pkg = "p1_mysql";
         version = "1.0.27";
-        sha256 = "";
+        sha256 = "sha256-BmBR8kACenZzJUfmnZagl05w3BTe2UU77yYyIYQe2ps=";
       };
       beamDeps = [ ];
     };
@@ -261,6 +261,17 @@ let
         p1_utils
         stun
       ];
+    };
+    erlydtl = builder {
+      name = "erlydtl";
+      version = "git";
+      src = fetchFromGitHub {
+        owner = "erlydtl";
+        repo = "erlydtl";
+        rev = "aae414692b6052e96d890e03bbeeeca0f4dc01c2";
+        sha256 = "00p194jgmvzqza7xr7fdm2n091ymkyy66aj4gc82n0kzdlh03vbm";
+      };
+      beamDeps = [ ];
     };
     eredis = builder {
       name = "eredis";

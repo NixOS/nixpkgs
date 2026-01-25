@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
     libXtst
   ];
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+
   makeFlags = [
     "sysconfdir=/etc"
     "ETCDIR=/etc"

@@ -31,6 +31,7 @@ python.pkgs.toPythonModule (
       "flask-babel"
       "httpx-socks"
       "lxml"
+      "markdown-it-py"
       "msgspec"
       "typer-slim"
       "whitenoise"
