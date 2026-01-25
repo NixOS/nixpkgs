@@ -7,7 +7,7 @@ import shutil
 
 from pathlib import Path
 
-from plumbum.cmd import nurl, nix_build, yarn, chmod, yarn_berry_fetcher, prefetch_npm_deps, diff, git
+from plumbum.cmd import nurl, nix_build, yarn, chmod, yarn_berry_fetcher, prefetch_npm_deps, diff, git, nix
 
 HERE = Path(__file__).parent
 NIXPKGS_ROOT = git.with_cwd(HERE)["rev-parse", "--show-toplevel"]().strip()
@@ -70,44 +70,26 @@ default_plugins_dir = Path(src_dir).joinpath("packages/default-plugins")
 with default_plugins_dir.joinpath("pluginRepositories.json").open() as fd:
     plugin_repositories = json.load(fd)
 
-with default_plugins_dir.joinpath("package.json").open() as fd:
-    plugins_packagejson = json.load(fd)
-
 release["plugins"] = dict()
 
 for key, value in plugin_repositories.items():
+    if "package" in value:
+        print("skipping npm-packaged plugin", key)
+        continue
+
     print(key)
 
     plugin = {
-        "name": "",
-        "url": "",
-        "hash": "",
-        "npmDepsHash": "",
+        "name": value["cloneUrl"].split("/")[-1].removesuffix(".git"),
+        "url": f"{value["cloneUrl"].removesuffix('.git')}/archive/{value["commit"]}.tar.gz",
     }
 
-    plugin["name"] = value["cloneUrl"].split("/")[-1].removesuffix(".git")
+    fetched_src = json.loads(
+        nix["store", "prefetch-file", "--json", "--unpack", plugin["url"]]()
+    )
+    plugin["hash"] = fetched_src["hash"]
 
-    if "package" in value:
-        ref = "refs/tags/v" + plugins_packagejson["devDependencies"][value["package"]]
-    else:
-        ref = value["commit"]
-
-    plugin["url"] = f"{value["cloneUrl"].removesuffix('.git')}/archive/{ref}.tar.gz"
-
-    plugin_src = lambda plugin : f"((import {NIXPKGS_ROOT}/. {{}}).callPackage ./buildPlugin.nix {dict_to_argstr(plugin)}).src"
-
-    plugin["hash"] = nurl.with_cwd(HERE)[
-        "-e",
-        plugin_src(plugin)
-    ]().strip()
-    print(plugin["hash"])
-
-    plugin_src = nix_build.with_cwd(HERE)[
-        "--no-out-link",
-        "-E",
-        plugin_src(plugin)
-    ]().strip()
-    plugin["npmDepsHash"] = prefetch_npm_deps(Path(plugin_src).joinpath("package-lock.json")).strip()
+    plugin["npmDepsHash"] = prefetch_npm_deps(Path(fetched_src["storePath"]).joinpath("package-lock.json")).strip()
 
     release["plugins"][key] = plugin
 
