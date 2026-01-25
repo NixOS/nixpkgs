@@ -15,8 +15,6 @@
   pytest-asyncio,
   time-machine,
   werkzeug,
-  awscli,
-  boto3,
   httpx,
   setuptools,
   pytestCheckHook,
@@ -24,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "aiobotocore";
-  version = "2.24.2";
+  version = "3.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiobotocore";
     tag = version;
-    hash = "sha256-Kt/+LboMMurZ00gVYSDCPLJXKPtuyXOTtOgSCUIR9Ho=";
+    hash = "sha256-/Yf2rt/5FH1WiD2VV2hEksM1XleEl4YRBqGQI4GVa8Q=";
   };
 
   # Relax version constraints: aiobotocore works with newer botocore versions
@@ -54,8 +52,6 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    awscli = [ awscli ];
-    boto3 = [ boto3 ];
     httpx = [ httpx ];
   };
 
