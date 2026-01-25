@@ -3627,13 +3627,6 @@ with pkgs;
 
   sasview = callPackage ../applications/science/misc/sasview { };
 
-  saunafs = callPackage ../by-name/sa/saunafs/package.nix {
-    fmt = fmt_11;
-    spdlog = spdlog.override {
-      fmt = fmt_11;
-    };
-  };
-
   segger-jlink-headless = callPackage ../by-name/se/segger-jlink/package.nix { headless = true; };
 
   semgrep = python3.pkgs.toPythonApplication python3.pkgs.semgrep;
