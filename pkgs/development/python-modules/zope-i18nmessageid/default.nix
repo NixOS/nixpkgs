@@ -4,6 +4,7 @@
   fetchFromGitHub,
   setuptools,
   unittestCheckHook,
+  zope-interface,
 }:
 
 buildPythonPackage rec {
@@ -19,6 +20,10 @@ buildPythonPackage rec {
   };
 
   build-system = [ setuptools ];
+
+  dependencies = [
+    zope-interface
+  ];
 
   nativeCheckInputs = [
     unittestCheckHook
