@@ -74,7 +74,7 @@ vimUtils.buildVimPlugin {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       GaetanLepage
-      bridgesense
+      saadndm
     ];
   };
 }
