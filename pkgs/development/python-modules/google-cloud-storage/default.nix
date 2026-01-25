@@ -75,6 +75,9 @@ buildPythonPackage rec {
     "test_restore_bucket"
     "test_set_api_request_attr"
     "upload"
+    "test_update_user_agent_when_default_clientinfo_provided"
+    "test_update_user_agent_when_none_clientinfo_provided"
+    "test_update_user_agent_with_existing_user_agent"
   ];
 
   disabledTestPaths = [
