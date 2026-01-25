@@ -84,9 +84,5 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/ml-explore/mlx-lm";
     changelog = "https://github.com/ml-explore/mlx-lm/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    badPlatforms = [
-      # Building for x86_64 on macOS is not supported by mlx (dependency)
-      "x86_64-darwin"
-    ];
   };
 })

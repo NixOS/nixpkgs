@@ -80,19 +80,24 @@ buildPythonPackage (finalAttrs: {
 
   env = {
     PYPI_RELEASE = 1;
-    CMAKE_ARGS = toString [
-      # NOTE The `metal` command-line utility used to build the Metal kernels is not open-source.
-      # To build mlx with Metal support in Nix, you'd need to use one of the sandbox escape
-      # hatches which let you interact with a native install of Xcode, such as `composeXcodeWrapper`
-      # or by changing the upstream (e.g., https://github.com/zed-industries/zed/discussions/7016).
-      (lib.cmakeBool "MLX_BUILD_METAL" false)
-      (lib.cmakeBool "USE_SYSTEM_FMT" true)
-      (lib.cmakeOptionType "filepath" "FETCHCONTENT_SOURCE_DIR_GGUFLIB" "${gguf-tools}")
-      (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-I${lib.getDev nlohmann_json}/include/nlohmann")
+    CMAKE_ARGS = toString (
+      [
+        # NOTE The `metal` command-line utility used to build the Metal kernels is not open-source.
+        # To build mlx with Metal support in Nix, you'd need to use one of the sandbox escape
+        # hatches which let you interact with a native install of Xcode, such as `composeXcodeWrapper`
+        # or by changing the upstream (e.g., https://github.com/zed-industries/zed/discussions/7016).
+        (lib.cmakeBool "MLX_BUILD_METAL" false)
+        (lib.cmakeBool "USE_SYSTEM_FMT" true)
+        (lib.cmakeOptionType "filepath" "FETCHCONTENT_SOURCE_DIR_GGUFLIB" "${gguf-tools}")
+        (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-I${lib.getDev nlohmann_json}/include/nlohmann")
 
-      # Cmake cannot find nanobind-config.cmake by itself
-      (lib.cmakeFeature "nanobind_DIR" "${nanobind}/${python.sitePackages}/nanobind/cmake")
-    ];
+        # Cmake cannot find nanobind-config.cmake by itself
+        (lib.cmakeFeature "nanobind_DIR" "${nanobind}/${python.sitePackages}/nanobind/cmake")
+      ]
+      ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+        (lib.cmakeBool "MLX_ENABLE_X64_MAC" true)
+      ]
+    );
   };
 
   build-system = [
@@ -177,10 +182,6 @@ buildPythonPackage (finalAttrs: {
       booxter
       cameronyule
       viraptor
-    ];
-    badPlatforms = [
-      # Building for x86_64 on macOS is not supported
-      "x86_64-darwin"
     ];
   };
 })
