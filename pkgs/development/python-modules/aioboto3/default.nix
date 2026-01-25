@@ -16,18 +16,15 @@
 
 buildPythonPackage rec {
   pname = "aioboto3";
-  version = "15.1.0";
+  version = "15.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "terricain";
     repo = "aioboto3";
     tag = "v${version}";
-    hash = "sha256-H/hAfFyBfeBoR6nW0sv3/AzFPATUl2uJ+JbzNB5xemo=";
+    hash = "sha256-yGKjcZlXs1f72OGX5rUWvfDKZAYU3ZV2RVQnd0InxBQ=";
   };
-
-  # https://github.com/terricain/aioboto3/pull/377
-  patches = [ ./boto3-compat.patch ];
 
   pythonRelaxDeps = [
     "aiobotocore"
