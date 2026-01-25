@@ -10,8 +10,8 @@
   pytest-rerunfailures,
   pythonOlder,
   setuptools,
-  toml,
   tomli,
+  tomli-w,
 }:
 
 buildPythonPackage rec {
@@ -27,15 +27,16 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    # Because the .git dir is missing, it falls back to using version 0.0.1
-    # Instead we use the version specified in the derivation
-    substituteInPlace setup.py --replace-fail \
-      'version=version_from_git(root=here, dev_template="{tag}.post{ccount}")' \
-      "version='${version}'"
+    substituteInPlace pyproject.toml \
+      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
   build-system = [
+    packaging
     setuptools
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [
+    tomli
   ];
 
   dependencies = [
@@ -52,7 +53,7 @@ buildPythonPackage rec {
     git
     pytestCheckHook
     pytest-rerunfailures
-    toml
+    tomli-w
   ];
 
   preCheck = ''
