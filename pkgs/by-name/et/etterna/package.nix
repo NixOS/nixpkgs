@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeDesktopItem,
-  copyDesktopItems,
-  # deps
-  cmake,
-  pkg-config,
-  openssl,
-  libGLU,
-  xorg,
-  alsa-lib,
-  libjack2,
-  libpulseaudio,
-  libogg,
-  sse2neon,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeDesktopItem
+, copyDesktopItems
+, # deps
+  cmake
+, pkg-config
+, openssl
+, libGLU
+, xorg
+, alsa-lib
+, libjack2
+, libpulseaudio
+, libogg
+, sse2neon
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "etterna";
@@ -32,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # https://github.com/etternagame/etterna/pull/1396
     ./0001-Add-aarch64-linux-support.patch
+    ./0002-change-replay-dirs.patch
   ];
 
   nativeBuildInputs = [
