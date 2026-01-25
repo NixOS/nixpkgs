@@ -38,7 +38,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "pytools"
-    "pytools.batchjob"
     "pytools.lex"
   ];
 
