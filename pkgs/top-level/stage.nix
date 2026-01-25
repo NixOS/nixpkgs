@@ -16,6 +16,9 @@ let
   # this value gets reused even if this file is imported multiple times,
   # thanks to Nix's import-value cache.
   autoCalledPackages = import ./by-name-overlay.nix ../by-name;
+
+  # An overlay to call package sets in ../sets.
+  packageSets = import ./packagesets.nix;
 in
 
 {
@@ -341,6 +344,7 @@ let
       trivialBuilders
       splice
       autoCalledPackages
+      packageSets
       allPackages
       otherPackageSets
       aliases
