@@ -4,6 +4,7 @@
   fetchFromGitHub,
   buildPythonPackage,
   replaceVars,
+  fetchpatch,
 
   # nativeBuildInputs
   setuptools,
@@ -83,7 +84,25 @@ buildPythonPackage (finalAttrs: {
     llvmlite
   ];
 
-  patches = lib.optionals cudaSupport [
+  patches = [
+    # Support Numpy 2.4, see:
+    #
+    # - https://github.com/numba/numba/pull/10393
+    # - https://github.com/numba/numba/issues/10263
+    (fetchpatch {
+      url = "https://github.com/numba/numba/commit/7ec267efb80d87f0652c00535e8843f35d006f20.patch";
+      hash = "sha256-oAOZa2/m2qs8CeX13/0lmRTg/lQj5aDIaaQeDeLAghc=";
+      excludes = [
+        "azure-pipelines.yml"
+        "buildscripts/azure/azure-windows.yml"
+      ];
+    })
+    # The above doesn't fix the source's build and run time checks of Numpy's
+    # version, it only fixes the tests and API. Upstream puts these checks only
+    # in release tarballs, and hence the patch has to be vendored.
+    ./numpy2.4.patch
+  ]
+  ++ lib.optionals cudaSupport [
     (replaceVars ./cuda_path.patch {
       cuda_toolkit_path = cudatoolkit;
       cuda_toolkit_lib_path = lib.getLib cudatoolkit;
