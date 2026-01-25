@@ -34,6 +34,11 @@ in
 
   sourceRoot = if hostPlatform.isDarwin then "Antigravity.app" else "Antigravity";
 
+  # Editing files within the app bundle causes the bundle's signature to be invalidated,
+  # which prevents launching starting with macOS Ventura for notarized apps.
+  # See https://eclecticlight.co/2022/06/17/app-security-changes-coming-in-ventura/ for more information.
+  dontFixup = stdenv.hostPlatform.isDarwin;
+
   # When running inside an FHS environment, try linking Google Chrome or Chromium
   # to the hardcoded Playwright search path: /opt/google/chrome/chrome
   buildFHSEnv =
@@ -80,14 +85,15 @@ in
     ];
   };
 }).overrideAttrs
-  (oldAttrs: {
-    # Disable update checks
-    nativeBuildInputs = (oldAttrs.nativeBuildInputs or [ ]) ++ [ jq ];
-    postPatch = (oldAttrs.postPatch or "") + ''
-      productJson="${
-        if stdenv.hostPlatform.isDarwin then "Contents/Resources" else "resources"
-      }/app/product.json"
-      data=$(jq 'del(.updateUrl)' "$productJson")
-      echo "$data" > "$productJson"
-    '';
-  })
+  (
+    oldAttrs:
+    lib.optionalAttrs (!hostPlatform.isDarwin) {
+      # Disable update checks
+      nativeBuildInputs = (oldAttrs.nativeBuildInputs or [ ]) ++ [ jq ];
+      postPatch = (oldAttrs.postPatch or "") + ''
+        productJson="resources/app/product.json"
+        data=$(jq 'del(.updateUrl)' "$productJson")
+        echo "$data" > "$productJson"
+      '';
+    }
+  )
