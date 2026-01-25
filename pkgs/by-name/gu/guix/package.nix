@@ -38,17 +38,14 @@
   storeDir ? "/gnu/store",
   confDir ? "/etc",
 }:
-let
-  rev = "30a5d140aa5a789a362749d057754783fea83dde";
-in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "guix";
-  version = "1.4.0-unstable-2025-06-24";
+  version = "1.5.0";
 
   src = fetchgit {
     url = "https://codeberg.org/guix/guix.git";
-    inherit rev;
-    hash = "sha256-QsOYApnwA2hb1keSv6p3EpMT09xCs9uyoSeIdXzftF0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/g8JMUGM5GaZjtPLnl4vlrBNYMxSTjsHUDdhKLtHaQA=";
   };
 
   patches = [
@@ -124,10 +121,13 @@ stdenv.mkDerivation rec {
     "--localstatedir=${stateDir}"
     "--sysconfdir=${confDir}"
     "--with-bash-completion-dir=$(out)/etc/bash_completion.d"
+    "--with-zsh-completion-dir=$(out)/share/zsh/site-functions"
+    "--with-fish-completion-dir=$(out)/share/fish/vendor_completions.d"
+    "--with-apparmor-profile-dir=$(out)/etc/apparmor.d"
   ];
 
   preAutoreconf = ''
-    echo ${version} > .tarball-version
+    echo ${finalAttrs.version} > .tarball-version
     ./bootstrap
   '';
 
@@ -161,7 +161,7 @@ stdenv.mkDerivation rec {
       Guix is based on the Nix package manager.
     '';
     homepage = "https://guix.gnu.org/";
-    changelog = "https://codeberg.org/guix/guix/raw/commit/${rev}/NEWS";
+    changelog = "https://codeberg.org/guix/guix/raw/tag/v${finalAttrs.version}/NEWS";
     license = lib.licenses.gpl3Plus;
     mainProgram = "guix";
     maintainers = with lib.maintainers; [
@@ -170,4 +170,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})
