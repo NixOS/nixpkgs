@@ -17,6 +17,9 @@
   scipy,
   trove-classifiers,
 
+  # passthru
+  bitsandbytes,
+
   cudaSupport ? torch.cudaSupport,
   cudaPackages ? torch.cudaPackages,
   rocmSupport ? torch.rocmSupport,
@@ -26,12 +29,9 @@
 }:
 
 let
-  pname = "bitsandbytes";
-  version = "0.49.1";
-
   brokenConditions = lib.attrsets.filterAttrs (_: cond: cond) {
     "CUDA and ROCm are mutually exclusive" = cudaSupport && rocmSupport;
-    "CUDA is not targeting Linux" = cudaSupport && !stdenv.hostPlatform.isLinux;
+    "CUDA is not targeting Linux" = cudaSupport && !effectiveStdenv.hostPlatform.isLinux;
   };
 
   inherit (cudaPackages) cudaMajorMinorVersion;
@@ -72,15 +72,18 @@ let
     name = "cuda-redist-${cudaMajorMinorVersion}";
     paths = cuda-common-redist;
   };
+  effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else stdenv;
 in
-buildPythonPackage {
-  inherit pname version;
+buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
+  pname = "bitsandbytes";
+  version = "0.49.1";
+
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bitsandbytes-foundation";
     repo = "bitsandbytes";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-nNhxDJITXNIZMXuZdzpF5dl1K1kFEVQ0gbTqZnOf/sI=";
   };
 
@@ -196,16 +199,21 @@ buildPythonPackage {
     updateScript = gitUpdater {
       ignoredVersions = "continuous-release.*";
     };
+
+    gpuCheck = bitsandbytes.overridePythonAttrs {
+      requiredSystemFeatures = [ "cuda" ];
+      doCheck = true;
+    };
   };
 
   meta = {
     description = "8-bit CUDA functions for PyTorch";
     homepage = "https://github.com/bitsandbytes-foundation/bitsandbytes";
-    changelog = "https://github.com/bitsandbytes-foundation/bitsandbytes/releases/tag/${version}";
+    changelog = "https://github.com/bitsandbytes-foundation/bitsandbytes/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       bcdarwin
       jk
     ];
   };
-}
+})
