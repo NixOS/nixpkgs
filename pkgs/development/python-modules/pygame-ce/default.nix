@@ -60,8 +60,8 @@ buildPythonPackage rec {
       );
     })
 
-    # Can be removed after the SDL 3.4.0 bump.
-    ./skip-rle-tests.patch
+    # https://github.com/pygame-community/pygame-ce/pull/3680#issuecomment-3796052119
+    ./skip-failing-tests.patch
   ];
 
   postPatch = ''
