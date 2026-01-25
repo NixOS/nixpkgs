@@ -42,6 +42,9 @@ buildPythonPackage rec {
   ]
   ++ home-assistant-chip-wheels.propagatedBuildInputs;
 
+  # only used for testing purposes, unsafe to use in production
+  pythonRemoveDeps = [ "ecdsa" ];
+
   pythonNamespaces = [
     "chip"
     "chip.clusters"
