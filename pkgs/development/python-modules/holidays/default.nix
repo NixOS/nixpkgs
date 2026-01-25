@@ -8,6 +8,7 @@
   numpy,
   polib,
   pytest-cov-stub,
+  pytest-xdist,
   pytestCheckHook,
   python-dateutil,
   setuptools,
@@ -36,6 +37,10 @@ buildPythonPackage rec {
 
   postPatch = ''
     patchShebangs scripts/l10n/*.py
+
+    # generating l10n files imports holidays before distinfo metadata exists
+    substituteInPlace holidays/version.py \
+      --replace-fail 'version("holidays")' '"${version}"'
   '';
 
   preBuild = ''
@@ -51,6 +56,7 @@ buildPythonPackage rec {
     numpy
     polib
     pytest-cov-stub
+    pytest-xdist
     pytestCheckHook
   ];
 
