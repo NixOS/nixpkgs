@@ -64,8 +64,7 @@ buildPythonPackage rec {
     # mixer queue test returns busy queue when it shouldn't
     ./skip-mixer-test.patch
 
-    # Can be removed with the next SDL3 bump.
-    ./skip-rle-tests.patch
+    ./skip-failing-tests.patch
 
     # https://github.com/pygame/pygame/pull/4497
     ./0001-Use-SDL_HasSurfaceRLE-when-available.patch
