@@ -126,8 +126,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs =
     lib.optional mpiSupport mpi
-    ++ lib.optional pythonSupport python3Packages.numpy
-    ++ lib.optional (mpiSupport && pythonSupport) adios2Packages.mpi4py;
+    # create meta package providing dist-info for python3Pacakges.adios2
+    ++ lib.optional pythonSupport (
+      python3Packages.mkPythonMetaPackage {
+        inherit (finalAttrs) pname version meta;
+        dependencies = [
+          python3Packages.numpy
+        ]
+        ++ lib.optional mpiSupport adios2Packages.mpi4py;
+      }
+    );
 
   cmakeFlags = [
     # adios2 builtin modules
