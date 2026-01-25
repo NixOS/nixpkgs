@@ -18,18 +18,18 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "equibop";
-  version = "3.1.6";
+  version = "3.1.7";
 
   src = fetchFromGitHub {
     owner = "Equicord";
     repo = "Equibop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-apxRd0ak89K+hCzNLdstdhFWLNST2Afw96rX3xCzT04=";
+    hash = "sha256-AzXBANUcm/DYYkNlO7q++/Dx826o5Hg/1cYJ84rMY0U=";
   };
 
   postPatch = ''
     substituteInPlace scripts/build/build.mts \
-      --replace-fail 'gitHash = execSync("git rev-parse HEAD", { encoding: "utf-8" }).trim();' 'gitHash = "${lib.fakeHash}"'
+      --replace-fail 'gitHash = execSync("git rev-parse HEAD", { encoding: "utf-8" }).trim();' 'gitHash = "${finalAttrs.src.hash}"'
 
     # disable auto updates
     substituteInPlace src/main/updater.ts \
