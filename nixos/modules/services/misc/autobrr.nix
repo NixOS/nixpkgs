@@ -9,7 +9,10 @@ let
   cfg = config.services.autobrr;
   configFormat = pkgs.formats.toml { };
   configTemplate = configFormat.generate "autobrr.toml" cfg.settings;
-  templaterCmd = ''${lib.getExe pkgs.dasel} put -f '${configTemplate}' -v "$(${config.systemd.package}/bin/systemd-creds cat sessionSecret)" -o %S/autobrr/config.toml "sessionSecret"'';
+  templaterCmd = ''
+    SESSION_SECRET="$(${config.systemd.package}/bin/systemd-creds cat sessionSecret)"
+    ${lib.getExe pkgs.dasel} query --root -i toml -o toml 'sessionSecret = $SESSION_SECRET' < '${configTemplate}' > %S/autobrr/config.toml
+  '';
 in
 {
   options = {
@@ -75,7 +78,7 @@ in
         DynamicUser = true;
         LoadCredential = "sessionSecret:${cfg.secretFile}";
         StateDirectory = "autobrr";
-        ExecStartPre = "${lib.getExe pkgs.bash} -c '${templaterCmd}'";
+        ExecStartPre = "${lib.getExe pkgs.bash} -c ${lib.escapeShellArg templaterCmd}";
         ExecStart = "${lib.getExe cfg.package} --config %S/autobrr";
         Restart = "on-failure";
       };
