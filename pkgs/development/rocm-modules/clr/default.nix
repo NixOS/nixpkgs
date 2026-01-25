@@ -70,7 +70,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "clr";
-  version = "7.0.2";
+  version = "7.1.1";
 
   outputs = [
     "out"
@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "clr";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-zajb/iTtF/ECRScdcQ85HPgq8DdIGqSinJoVyyi89bw=";
+    hash = "sha256-ofsq1uqMixtum5C6cp/UgTDpgGPfj+rAd6PoDx5iLLw=";
   };
 
   nativeBuildInputs = [
@@ -147,14 +147,10 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./cmake-find-x11-libgl.patch
     (fetchpatch {
-      # [PATCH] improve rocclr isa compatibility check
-      sha256 = "sha256-/QpB3Wqdhcq6lzyO/zOWzwQC0oYpesCICxnVx5CqbWg=";
-      url = "https://github.com/GZGavinZhao/clr/commit/733ee38ef8ad5c84926970981821f446dfcb00af.patch";
-    })
-    (fetchpatch {
-      # [PATCH] improve hipamd isa compatibility check
-      sha256 = "sha256-FvZInw8PqB68ePxAGu45cWT/whD1xmprIA5wZb5OLcE=";
-      url = "https://github.com/GZGavinZhao/clr/commit/1f0b54ee9b0de08f4dc8cd38b6728928b180048a.patch";
+      # [PATCH] rocclr: Extend HIP ISA compatibility checks
+      sha256 = "sha256-InUSIFI1MgkfocBEoZjO2BCgXNyfF10ehh9jkTtAPXs=";
+      url = "https://github.com/GZGavinZhao/rocm-systems/commit/937dcfdd316b589509c061809186fe5451d22431.patch";
+      relative = "projects/clr";
     })
   ];
 
@@ -174,10 +170,6 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace opencl/khronos/icd/loader/icd_platform.h \
       --replace-fail '#define ICD_VENDOR_PATH "/etc/OpenCL/vendors/";' \
                      '#define ICD_VENDOR_PATH "/run/opengl-driver/etc/OpenCL/vendors/";'
-
-    # new unbundler has better error messages, defaulting it on
-    substituteInPlace rocclr/utils/flags.hpp \
-      --replace-fail "HIP_ALWAYS_USE_NEW_COMGR_UNBUNDLING_ACTION, false" "HIP_ALWAYS_USE_NEW_COMGR_UNBUNDLING_ACTION, true"
   '';
 
   postInstall = ''
@@ -245,7 +237,7 @@ stdenv.mkDerivation (finalAttrs: {
       "1100"
       "1101"
       "1102"
-      # 7.x "1150"
+      "1150" # Strix Point
       "1151" # Strix Halo
       # "12-generic"
       "1200" # RX 9060

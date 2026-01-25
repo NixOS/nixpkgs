@@ -17,13 +17,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-core";
-  version = "7.0.2";
+  version = "7.1.1";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-core";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-TKHNtY3XoLznOi1aVHdxFk3bedtLKkrFy0NVm0ad6ZY=";
+    hash = "sha256-3WQPR7v7LRoo4ioCXzkUEqnJdXA3uxSgoZZQvEG5Gqg=";
   };
 
   patches = [

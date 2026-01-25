@@ -1144,6 +1144,8 @@ in
       ++ [
         lua.pkgs.luarocks-build-treesitter-parser-cpp
       ];
+
+    meta.broken = lua.luaversion != "5.1";
   });
 
   tree-sitter-orgmode = prev.tree-sitter-orgmode.overrideAttrs (old: {
@@ -1157,11 +1159,14 @@ in
       old.propagatedBuildInputs
       ++ [
         lua.pkgs.luarocks-build-treesitter-parser
-        tree-sitter
       ];
     nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [
       writableTmpDirAsHomeHook
+      tree-sitter
     ];
+
+    # should be fixed upstream
+    meta.broken = lua.luaversion != "5.1";
   });
 
   vstruct = prev.vstruct.overrideAttrs (_: {
