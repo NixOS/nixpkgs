@@ -19,16 +19,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "equinox";
-  version = "0.13.2";
+  version = "0.13.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "patrick-kidger";
     repo = "equinox";
-    tag = "v${version}";
-    hash = "sha256-d7IqRuohcZ3IYpbjm76Ir6I33zI5dnHvX5eX2WjSJQk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-OETWXAcCp945mMrpC8U4gSBvEeQX8RoUGZR4irBs7Ak=";
   };
 
   # Relax speed constraints on tests that can fail on busy builders
@@ -62,20 +62,18 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    #  ValueError: The spec of NamedSharding passed to with_sharding_constraint can only refer to
-    # Auto axes of the mesh.
-    # https://github.com/patrick-kidger/equinox/issues/1171
-    "test_sharding_no_inside_jit"
-    "test_sharding_only_inside_jit"
+    # Failed: DID NOT WARN. No warnings of type (<class 'Warning'>,) were emitted.
+    # Reported upstream: https://github.com/patrick-kidger/equinox/issues/1186
+    "test_jax_transform_warn"
   ];
 
   pythonImportsCheck = [ "equinox" ];
 
   meta = {
     description = "JAX library based around a simple idea: represent parameterised functions (such as neural networks) as PyTrees";
-    changelog = "https://github.com/patrick-kidger/equinox/releases/tag/v${version}";
+    changelog = "https://github.com/patrick-kidger/equinox/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/patrick-kidger/equinox";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})
