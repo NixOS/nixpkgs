@@ -22,7 +22,7 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-Yh9WvescLgV7DmxGBTGKsb29+eRzF9qjZMg0DQQyLyY=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   checkPhase = ''
     runHook preCheck
@@ -39,7 +39,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Serialize all of python (almost)";
     homepage = "https://github.com/uqfoundation/dill/";
-    changelog = "https://github.com/uqfoundation/dill/releases/tag/dill-${finalAttrs.version}";
+    changelog = "https://github.com/uqfoundation/dill/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
   };
 })
