@@ -163,6 +163,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       getchoo
       hythera
+      encode42
     ];
     mainProgram = "ModrinthApp";
     platforms = with lib; platforms.linux ++ platforms.darwin;
