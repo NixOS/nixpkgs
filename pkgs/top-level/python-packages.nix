@@ -20963,6 +20963,8 @@ self: super: with self; {
 
   trame-components = callPackage ../development/python-modules/trame-components { };
 
+  trame-server = callPackage ../development/python-modules/trame-server { };
+
   trampoline = callPackage ../development/python-modules/trampoline { };
 
   transaction = callPackage ../development/python-modules/transaction { };
