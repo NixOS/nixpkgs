@@ -39,6 +39,11 @@ buildPythonPackage rec {
       url = "https://github.com/scrapinghub/dateparser/commit/6b23348b9367d43bebc9a40b00dda3363eb2acd5.patch";
       hash = "sha256-LriRbGdYxF51Nwrm7Dp4kivyMikzmhytNQo0txMGsVI=";
     })
+    (fetchpatch {
+      url = "https://github.com/scrapinghub/dateparser/commit/cbe29797c463c7939234df2923af310ed10aeb4f.patch";
+      includes = [ "dateparser_scripts/write_complete_data.py" ];
+      hash = "sha256-mDHDZlWU2G/NU2W+dxSRb6rRb/bp2PoTbgz8wXhaNCo=";
+    })
   ];
 
   nativeBuildInputs = [ setuptools ];
