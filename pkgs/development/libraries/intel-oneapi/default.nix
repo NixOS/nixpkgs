@@ -76,10 +76,7 @@
             depsByComponent.${shortName comp} or [ ]
         ) components;
 
-        phases = [
-          "installPhase"
-          "fixupPhase"
-        ];
+        dontUnpack = true;
 
         # See https://software.intel.com/content/www/us/en/develop/documentation/installation-guide-for-intel-oneapi-toolkits-linux/top/installation/install-with-command-line.html
         installPhase = ''
