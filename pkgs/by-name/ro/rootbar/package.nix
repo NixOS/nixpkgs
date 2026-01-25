@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  gcc14Stdenv,
   fetchhg,
   pkg-config,
   meson,
@@ -12,7 +12,7 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation {
+gcc14Stdenv.mkDerivation {
   pname = "rootbar";
   version = "unstable-2024-08-07";
 
@@ -47,6 +47,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin;
+    broken = gcc14Stdenv.hostPlatform.isDarwin;
   };
 }
