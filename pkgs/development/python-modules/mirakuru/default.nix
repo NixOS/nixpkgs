@@ -5,6 +5,7 @@
   fetchFromGitHub,
   pytestCheckHook,
   pytest-rerunfailures,
+  pytest-xdist,
   setuptools,
   psutil,
   netcat,
@@ -33,8 +34,12 @@ buildPythonPackage rec {
     ps
     python-daemon
     pytest-rerunfailures
+    pytest-xdist
     pytestCheckHook
   ];
+
+  # socket bind races, but requires xdist_group
+  dontUsePytestXdist = true;
 
   pythonImportsCheck = [ "mirakuru" ];
 
