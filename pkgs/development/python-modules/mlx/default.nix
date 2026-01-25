@@ -15,7 +15,6 @@
   apple-sdk,
   fmt,
   nlohmann_json,
-  pybind11,
   # linux-only
   openblas,
 
@@ -105,7 +104,6 @@ buildPythonPackage (finalAttrs: {
   buildInputs = [
     fmt
     nlohmann_json
-    pybind11
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     openblas
