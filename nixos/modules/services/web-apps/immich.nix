@@ -463,7 +463,7 @@ in
         IMMICH_HOST = "localhost";
         IMMICH_PORT = "3003";
       };
-      systemd.services.immich-machine-learning = mkIf cfg.machine-learning.enable {
+      systemd.services.immich-machine-learning = {
         description = "immich machine learning";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
