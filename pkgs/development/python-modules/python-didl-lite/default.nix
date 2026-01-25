@@ -10,8 +10,7 @@
 buildPythonPackage rec {
   pname = "python-didl-lite";
   version = "1.5.0";
-  format = "setuptools";
-  pyroject = true;
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "StevenLooman";
@@ -20,7 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-pdXdGRycMB6M6qnPl+Z+ezRw6td45IqYkEpx4YtL1rQ=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   propagatedBuildInputs = [ defusedxml ];
 
