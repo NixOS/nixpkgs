@@ -39,13 +39,13 @@ assert (!withHyperscan) || (!withVectorscan);
 
 stdenv.mkDerivation rec {
   pname = "rspamd";
-  version = "3.14.2";
+  version = "3.14.3";
 
   src = fetchFromGitHub {
     owner = "rspamd";
     repo = "rspamd";
     rev = version;
-    hash = "sha256-XpCdjS6c9nLi1ngeSPBldmK3HmMFfDNW+tNpxdrUoKg=";
+    hash = "sha256-ntWBcwcPZwRRSTUO4a0JUNd6kc49fm+0/x+fqcZIA/o=";
   };
 
   patches = [
