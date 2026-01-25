@@ -128,7 +128,7 @@ let
       src = fetchHex {
         pkg = "p1_pgsql";
         version = "1.1.38";
-        sha256 = "";
+        sha256 = "sha256-Bs9kQwCBeOujh7ou6STTYgBBuuTaGyyWloAoSgXMdZ4=";
       };
       beamDeps = [ xmpp ];
     };
@@ -148,7 +148,7 @@ let
       src = fetchHex {
         pkg = "p1_mysql";
         version = "1.0.27";
-        sha256 = "";
+        sha256 = "sha256-BmBR8kACenZzJUfmnZagl05w3BTe2UU77yYyIYQe2ps=";
       };
       beamDeps = [ ];
     };
