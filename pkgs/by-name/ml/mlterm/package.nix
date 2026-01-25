@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   autoconf,
   makeDesktopItem,
@@ -110,6 +111,16 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-YogapVTmW4HAyVgvhR4ZvW4Q6v0kGiW11CCxN6SpPCY=";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/arakiken/mlterm/commit/819366f9c3c015d1be501d626ca954ce3ce38a60.patch";
+      hash = "sha256-xI0CzXN3gfXZXrL1/tFgQDtpY5hnzGLPruidOuMrbPQ=";
+      excludes = [
+        "ChangeLog"
+      ];
+    })
+  ];
+
   nativeBuildInputs = [
     pkg-config
     autoconf
@@ -163,10 +174,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   env = {
     NIX_CFLAGS_COMPILE =
-      (lib.optionalString stdenv.cc.isClang "-Wno-error=int-conversion -Wno-error=incompatible-function-pointer-types ")
       # GCC15 defaults to C23 which is stricter about prototypes
       # There are upstream fixes, but they are not in 3.9.4 release
-      + (lib.optionalString stdenv.cc.isGNU " -std=c17 ");
+      lib.optionalString stdenv.cc.isGNU " -std=c17 ";
   };
 
   configureFlags = [
@@ -231,7 +241,5 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.all;
     mainProgram = desktopBinary;
-    # https://github.com/arakiken/mlterm/issues/157
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })
