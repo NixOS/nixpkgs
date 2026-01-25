@@ -6,14 +6,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "newt";
   version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "fosrl";
     repo = "newt";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Ya+OVSChGmiZ8JTAfl/im8fOhLCC+r6JKSlH+CnSwP8=";
   };
 
@@ -24,7 +24,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.newtVersion=${version}"
+    "-X=main.newtVersion=${finalAttrs.version}"
   ];
 
   doInstallCheck = true;
@@ -36,7 +36,7 @@ buildGoModule rec {
   meta = {
     description = "Tunneling client for Pangolin";
     homepage = "https://github.com/fosrl/newt";
-    changelog = "https://github.com/fosrl/newt/releases/tag/${src.tag}";
+    changelog = "https://github.com/fosrl/newt/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       fab
@@ -45,4 +45,4 @@ buildGoModule rec {
     ];
     mainProgram = "newt";
   };
-}
+})
