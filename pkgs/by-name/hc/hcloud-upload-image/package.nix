@@ -28,7 +28,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     for shell in bash fish zsh; do
       $out/bin/hcloud-upload-image completion $shell > hcloud.$shell
       installShellCompletion hcloud.$shell
