@@ -104,7 +104,6 @@ buildPythonPackage (finalAttrs: {
 
   buildInputs = [
     fmt
-    gguf-tools
     nlohmann_json
     pybind11
   ]
