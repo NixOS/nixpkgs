@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pydevccu";
   version = "0.1.21";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SukramJ";
     repo = "pydevccu";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-RroFOnGOU7JDpe2mv44jKhyduT4jg8ySYtdhhPrSfvw=";
   };
 
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "HomeMatic CCU XML-RPC Server with fake devices";
     homepage = "https://github.com/SukramJ/pydevccu";
-    changelog = "https://github.com/SukramJ/pydevccu/releases/tag/${src.tag}";
+    changelog = "https://github.com/SukramJ/pydevccu/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
