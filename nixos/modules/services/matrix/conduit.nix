@@ -106,8 +106,8 @@ in
               "sqlite"
               "rocksdb"
             ];
-            default = "sqlite";
-            example = "rocksdb";
+            default = if lib.versionAtLeast config.system.stateVersion "26.05" then "rocksdb" else "sqlite";
+            defaultText = lib.literalExpression ''if lib.versionAtLeast config.system.stateVersion "26.05" then "rocksdb" else "sqlite"'';
             description = ''
               The database backend for the service. Switching it on an existing
               instance will require manual migration of data.
