@@ -11,6 +11,7 @@
   fetchFromGitHub,
   freezegun,
   grpcio,
+  icmplib,
   josepy,
   litellm,
   pycognito,
@@ -65,6 +66,7 @@ buildPythonPackage rec {
     ciso8601
     cryptography
     grpcio
+    icmplib
     josepy
     litellm
     pycognito
