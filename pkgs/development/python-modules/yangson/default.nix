@@ -29,6 +29,9 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "elementpath" ];
 
+  # only used for docs build
+  pythonRemoveDeps = [ "sphinxcontrib-shtest" ];
+
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "yangson" ];
