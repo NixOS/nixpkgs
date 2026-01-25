@@ -90,6 +90,18 @@ let
       ]
       ++ lib.optional stdenv.hostPlatform.is64bit "--enable-64bit";
 
+    buildFlags = lib.optionals stdenv.hostPlatform.isStatic [
+      # Don't use the default Make target for static,
+      # since it builds shared libraries for bundled packages.
+      "binaries"
+      "libraries"
+      "doc"
+    ];
+
+    makeFlags = lib.optionals stdenv.hostPlatform.isStatic [
+      "INSTALL_PACKAGE_TARGETS="
+    ];
+
     enableParallelBuilding = true;
 
     postInstall =
