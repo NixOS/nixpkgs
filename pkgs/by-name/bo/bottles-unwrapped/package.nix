@@ -32,13 +32,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "bottles-unwrapped";
-  version = "60.1";
+  version = "61.1";
 
   src = fetchFromGitHub {
     owner = "bottlesdevs";
     repo = "bottles";
     tag = version;
-    hash = "sha256-d9nRT6AvFxnhI/theJtPg79EdmA+9UFS4OWDlkV03sA=";
+    hash = "sha256-LW+os+5DtdUBZWONu2YX4FYMtAYg4BDlKbnVF64T2xI=";
   };
 
   patches = [
@@ -96,6 +96,7 @@ python3Packages.buildPythonApplication rec {
       urllib3
       certifi
       pefile
+      yara-python
     ]
     ++ [
       cabextract
