@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "securetar";
-  version = "2025.12.0";
+  version = "2025.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pvizeli";
     repo = "securetar";
     tag = version;
-    hash = "sha256-wCm4WBuzkqYWDGoyDyML1tdUyOdT2hy/qFk2DU4h/tQ=";
+    hash = "sha256-uVzyVgS8bWxS7jhwVyv7wTNF8REW+dJIhkRaS/8/FmY=";
   };
 
   build-system = [ setuptools ];
