@@ -28,6 +28,8 @@ buildPythonPackage rec {
 
   buildInputs = [ pytest ];
 
+  pythonRelaxDeps = [ "pytest" ];
+
   postInstall = ''
     mkdir $testout
     cp -R tests $testout/tests

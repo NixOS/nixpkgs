@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "testtools";
-  version = "2.7.2";
+  version = "2.8.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-W+W7wfD6D4tgrKbO7AeEXUHQxHXPRFv6200sRew5fqM=";
+    hash = "sha256-tcczMkVv9UFSBi1HpYvE8V+OI1FK/sToR3WvEk+320M=";
   };
 
   nativeBuildInputs = [

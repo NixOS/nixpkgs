@@ -12,7 +12,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "4.2.4";
+  version = "5.0.0";
   pname = "fints";
   pyproject = true;
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "raphaelm";
     repo = "python-fints";
     tag = "v${version}";
-    hash = "sha256-la5vpWBoZ7hZsAyjjCqHpFfOykDVosI/S9amox1dmzY=";
+    hash = "sha256-ll2+PtcGQiY5nbQTKVetd2ecDBVSXgzWP4Vzzri1Trs=";
   };
 
   pythonRemoveDeps = [ "enum-tools" ];

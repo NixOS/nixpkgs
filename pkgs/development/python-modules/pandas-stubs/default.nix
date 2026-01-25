@@ -35,14 +35,14 @@
 
 buildPythonPackage rec {
   pname = "pandas-stubs";
-  version = "2.3.2.250926";
+  version = "2.3.3.260113";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pandas-dev";
     repo = "pandas-stubs";
     tag = "v${version}";
-    hash = "sha256-nyyuDvhF9GY+vKGHpup7nrsrNf+Y3dYNawXyfxGPEpQ=";
+    hash = "sha256-DJS3aG79IZowiTqHeOEgDdlH9Z1SXrbZ7yplCrFTtzw=";
   };
 
   build-system = [ poetry-core ];

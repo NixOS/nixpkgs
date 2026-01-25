@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "atenpdu";
-  version = "0.6.3";
+  version = "0.7.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BcCw5y5LB0jLp9dRP0ZsAObTZ07kS+h+Hm8PZ0NwU3E=";
+    hash = "sha256-+UQVCizqpyVe7nuQUYwSBOtiTwW+0LVH1HaaucnIg9k=";
   };
 
   build-system = [ poetry-core ];

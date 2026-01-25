@@ -34,14 +34,14 @@
 
 buildPythonPackage rec {
   pname = "napalm";
-  version = "5.0.0";
+  version = "5.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "napalm-automation";
     repo = "napalm";
     tag = version;
-    hash = "sha256-Abw3h69qTFwOOFeAfivqAIWLozErJ1yZZfx7CbMy1AI=";
+    hash = "sha256-kIQgr5W9xkdcQkscJkOiABJ5HBxZOT9D7jSKWGNoBGA=";
   };
 
   patches = [

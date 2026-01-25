@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "py-multicodec";
-  version = "0.2.1";
+  version = "1.0.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "multiformats";
     repo = "py-multicodec";
     tag = "v${version}";
-    hash = "sha256-2aK+bfhqCMqSO+mtrHIfNQmQpQHpwd7yHseI/3O7Sp4=";
+    hash = "sha256-0s2ICkPkfF+D7HRrnPS2IRm380UhdVg5NCS7VFTP1P4=";
   };
 
   # Error when not substituting:

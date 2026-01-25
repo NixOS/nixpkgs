@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "pyqwikswitch";
-  version = "0.94";
+  version = "1.0.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-IpyWz+3EMr0I+xULBJJhBgdnQHNPJIM1SqKFLpszhQc=";
+    hash = "sha256-wtHFDT/oUxnJYuEENmlF1kTVvl1TGfEAL4DthhXVESQ=";
   };
 
   patches = [

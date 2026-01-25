@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pyuptimerobot";
-  version = "23.1.0";
+  version = "24.0.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ludeeus";
     repo = "pyuptimerobot";
     tag = version;
-    hash = "sha256-hy/hmXxxEb44X8JUszoA1YF/41y7GkQqC4uS+Pax6WA=";
+    hash = "sha256-vlEXUwGCmscasdWyCxF1bFjA3weR74Zf3RCk5W5ljFg=";
   };
 
   postPatch = ''
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python API wrapper for Uptime Robot";
     homepage = "https://github.com/ludeeus/pyuptimerobot";
-    changelog = "https://github.com/ludeeus/pyuptimerobot/releases/tag/${version}";
+    changelog = "https://github.com/ludeeus/pyuptimerobot/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "cfn-lint";
-  version = "1.41.0";
+  version = "1.43.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws-cloudformation";
     repo = "cfn-lint";
     tag = "v${version}";
-    hash = "sha256-AudCeFMbCQucANLLAknCKC7gzi0vvFh9c9k7ll0a1MM=";
+    hash = "sha256-tolQ7O6J/pfmtw29t8SGBDEDGiTOsJdc/mI3ulUseKo=";
   };
 
   build-system = [ setuptools ];

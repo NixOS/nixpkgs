@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "pgsanity";
-  version = "0.2.9";
+  version = "0.3.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "de0bbd6fe4f98bf5139cb5f466eac2e2abaf5a7b050b9e4867b87bf360873173";
+    sha256 = "sha256-Po/DPQpk54w1gWOL9aArN6I8dmMb7uRYxuRMI6MIDKU=";
   };
 
   nativeCheckInputs = [

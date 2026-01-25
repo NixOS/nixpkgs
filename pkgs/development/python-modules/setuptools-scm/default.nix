@@ -19,13 +19,13 @@
 
 buildPythonPackage rec {
   pname = "setuptools-scm";
-  version = "9.0.1";
+  version = "9.2.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "setuptools_scm";
     inherit version;
-    hash = "sha256-RuHPfooJZSthP5uk/ptV8vSW56Iz5OANJafLQflMPAs=";
+    hash = "sha256-HGdKtGZWhqCIfX4kwDqyXyQgHCE+guponS8+Fp7371c=";
   };
 
   postPatch =

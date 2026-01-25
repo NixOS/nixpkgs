@@ -7,6 +7,8 @@
   etcd3,
   fetchFromGitHub,
   flaky,
+  hatchling,
+  hatch-vcs,
   hiro,
   importlib-resources,
   motor,
@@ -18,47 +20,32 @@
   pytest-cov-stub,
   pytest-lazy-fixtures,
   pytestCheckHook,
-  pythonOlder,
   redis,
-  setuptools,
   typing-extensions,
   valkey,
 }:
 
 buildPythonPackage rec {
   pname = "limits";
-  version = "5.4.0";
+  version = "5.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alisaifee";
     repo = "limits";
     tag = version;
-    # Upstream uses versioneer, which relies on git attributes substitution.
-    # This leads to non-reproducible archives on github. Remove the substituted
-    # file here, and recreate it later based on our version info.
-    hash = "sha256-EHLqkd5Muazr52/oYaLklFVvF+AzJWGbFaaIG+T0ulE=";
-    postFetch = ''
-      rm "$out/limits/_version.py"
-    '';
+    hash = "sha256-kghfF2ihEvyMPEGO1m9BquCdeBsYRoPyIljdLL1hToQ=";
   };
-
-  patches = [
-    ./only-test-in-memory.patch
-  ];
 
   postPatch = ''
     substituteInPlace pytest.ini \
       --replace-fail "-K" ""
-
-    substituteInPlace setup.py \
-      --replace-fail "versioneer.get_version()" "'${version}'"
-
-    # Recreate _version.py, deleted at fetch time due to non-reproducibility.
-    echo 'def get_versions(): return {"version": "${version}"}' > limits/_version.py
   '';
 
-  build-system = [ setuptools ];
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
   dependencies = [
     deprecated
@@ -105,6 +92,22 @@ buildPythonPackage rec {
     "test_moving_window_memcached"
     # Flaky: compares time to magic value
     "test_sliding_window_counter_previous_window"
+  ];
+
+  disabledTestMarks = [
+    "flaky"
+    "memcached"
+    "mongodb"
+    "redis"
+    "redis_cluster"
+    "redis_sentinel"
+    "valkey"
+    "valkey_cluster"
+  ];
+
+  disabledTestPaths = [
+    # docker
+    "tests/benchmarks/test_storage.py"
   ];
 
   pythonImportsCheck = [ "limits" ];

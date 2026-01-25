@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "py-dactyl";
-  version = "2.1.0";
+  version = "2.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "iamkubi";
     repo = "pydactyl";
     tag = "v${version}";
-    hash = "sha256-1bvdJ9ATF0cRy7WE8H2IV2WIMbiSnRnelGpWIN7VBRQ=";
+    hash = "sha256-/bmk4RIS8pEi+RbJ+6tOchwFj246hdoTXv6WBNisKuc=";
   };
 
   build-system = [ setuptools ];

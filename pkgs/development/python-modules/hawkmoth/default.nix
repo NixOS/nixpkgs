@@ -17,14 +17,14 @@ let
 in
 buildPythonPackage rec {
   pname = "hawkmoth";
-  version = "0.21.0";
+  version = "0.22.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jnikula";
     repo = "hawkmoth";
     tag = "v${version}";
-    hash = "sha256-ePi7whsibStYwG75Eso7A0GkSbn8JesacaDU5IRF9iE=";
+    hash = "sha256-iFyTayPC4TWOfTZrfJJILJyi5BWrsVLwnSFnSeMpB2c=";
   };
 
   build-system = [ hatchling ];
@@ -45,7 +45,7 @@ buildPythonPackage rec {
   meta = {
     description = "Sphinx Autodoc for C";
     homepage = "https://jnikula.github.io/hawkmoth/";
-    changelog = "https://github.com/jnikula/hawkmoth/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/jnikula/hawkmoth/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.cynerd ];
   };

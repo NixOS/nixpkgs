@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "fastjsonschema";
-  version = "2.21.1";
+  version = "2.21.2";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     repo = "python-fastjsonschema";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-H/jmvm5U4RB9KuD5EgCedbc499Fl8L2S9Y5SXy51JP0=";
+    hash = "sha256-EV7/vPYeJSG2uTLpENso9WhcR98/ZTbanKffJfmfZz4=";
   };
 
   build-system = [ setuptools ];

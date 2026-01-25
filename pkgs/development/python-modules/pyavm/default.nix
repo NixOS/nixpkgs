@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "pyavm";
-  version = "0.9.6";
+  version = "0.9.8";
   pyproject = true;
 
   src = fetchPypi {
     pname = "PyAVM";
     inherit version;
-    hash = "sha256-s7eLPoAHDbY9tPt3RA5zJg+NuTtVV/SqpUUR3NrG8m0=";
+    hash = "sha256-zhHCeex1vfgj0MOGEkoVKKXns2+l3U0mSZInk58Rf4g=";
   };
 
   nativeBuildInputs = [

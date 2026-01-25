@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "tblib";
-  version = "3.1.0";
+  version = "3.2.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BkBMLJ8H9m/uLX1q1DrMxG+cM2FxTZuEJuf0fllc1lI=";
+    hash = "sha256-6aZSaS2Rv090PUoVvBdMC3avx1D+jHttGVzBwdbSzOw=";
   };
 
   nativeBuildInputs = [ setuptools ];

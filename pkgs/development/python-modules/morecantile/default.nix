@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "morecantile";
-  version = "6.2.0";
+  version = "7.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "developmentseed";
     repo = "morecantile";
     tag = version;
-    hash = "sha256-ohTSgkjgaANS/Pli4fao+THA4ltts6svj5CdJEgorz0=";
+    hash = "sha256-VDe39J4z5aSmdARaYknon4BK7OpovEzni0OVCxKRAkE=";
   };
 
   build-system = [ flit ];

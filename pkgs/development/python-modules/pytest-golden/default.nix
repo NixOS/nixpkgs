@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-golden";
-  version = "0.2.2";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "oprypin";
     repo = "pytest-golden";
     tag = "v${version}";
-    hash = "sha256-l5fXWDK6gWJc3dkYFTokI9tWvawMRnF0td/lSwqkYXE=";
+    hash = "sha256-mjb8lBAoZxwUCN4AIMK/n70aC41Y4IV/+hrW11S9rcw=";
   };
 
   postPatch = ''

@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "slh-dsa";
-  version = "0.1.3";
+  version = "0.2.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "slh_dsa";
     inherit version;
-    hash = "sha256-0OtjlI/w3F0OWu+fsQI9M3lIQY0Nx48YbvoGcQ0AJ1Y=";
+    hash = "sha256-p4eWMVayOFiEjFtlnsmmtH6HMfcIeYIpgdfjuB4mmAY=";
   };
 
   build-system = [ pdm-backend ];

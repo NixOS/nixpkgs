@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "python-keycloak";
-  version = "4.0.0";
+  version = "7.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "marcospereirampj";
     repo = "python-keycloak";
     tag = "v${version}";
-    hash = "sha256-ZXS29bND4GsJNhTGiUsLo+4FYd8Tubvg/+PJ33tqovY=";
+    hash = "sha256-3JHmVfGd5X5aEZt8O7Aj/UfYpLtDsI6MPwWxLo7SGBs=";
   };
 
   postPatch = ''
@@ -44,7 +44,7 @@ buildPythonPackage rec {
   meta = {
     description = "Provides access to the Keycloak API";
     homepage = "https://github.com/marcospereirampj/python-keycloak";
-    changelog = "https://github.com/marcospereirampj/python-keycloak/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/marcospereirampj/python-keycloak/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };

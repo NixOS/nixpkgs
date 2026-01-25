@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "srsly";
-  version = "2.5.1";
+  version = "2.5.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qxtL9s8+Kdoj2uBJPdFRf7eHB1IGUSNRQhuJtPwnx34=";
+    hash = "sha256-QJK8hDxxt1lcbJCgMCoZeFjFuf5DBn9irmpFvDuqHBk=";
   };
 
   build-system = [

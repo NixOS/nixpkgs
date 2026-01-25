@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "django-pydantic-field";
-  version = "0.4.1";
+  version = "0.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "surenkov";
     repo = "django-pydantic-field";
     tag = "v${version}";
-    hash = "sha256-AyI58ij6bMs0i1bwgpBTpEqjYxVo0qC6xBz43iJiHrc=";
+    hash = "sha256-ip8izfITsf15GaukXr8N4DcErq22LJzM7nlGBhfLkpU=";
   };
 
   build-system = [ setuptools ];

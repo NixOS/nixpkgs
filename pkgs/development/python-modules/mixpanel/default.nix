@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "mixpanel";
-  version = "4.10.1";
+  version = "5.1.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mixpanel";
     repo = "mixpanel-python";
     tag = "v${version}";
-    hash = "sha256-i5vT5FTnw+BanHHrlRsPJ3EooZjQcaosbaHoh/uPRmQ=";
+    hash = "sha256-B87i6wwI/JpZXY58mk7CC+9+Q0w6UwxYX/h/fp2m9aQ=";
   };
 
   propagatedBuildInputs = [

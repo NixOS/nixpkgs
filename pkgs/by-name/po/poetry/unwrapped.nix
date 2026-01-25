@@ -32,18 +32,19 @@
   httpretty,
   pytest-mock,
   pytest-xdist,
+  responses,
 }:
 
 buildPythonPackage rec {
   pname = "poetry";
-  version = "2.2.1";
+  version = "2.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-poetry";
     repo = "poetry";
     tag = version;
-    hash = "sha256-oPHRDYci4lrZBY3MC4QU1juwbMJYFDJjARg1Y8us4FQ=";
+    hash = "sha256-JhSseoXoNc4NZ/fuvf3ztQD6MhyaErE2pqmLLeBf0ak=";
   };
 
   build-system = [
@@ -105,6 +106,7 @@ buildPythonPackage rec {
     httpretty
     pytest-mock
     pytest-xdist
+    responses
   ];
 
   preCheck = (

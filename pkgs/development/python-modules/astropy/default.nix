@@ -55,7 +55,7 @@
 
 buildPythonPackage rec {
   pname = "astropy";
-  version = "7.1.1";
+  version = "7.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -64,7 +64,7 @@ buildPythonPackage rec {
     owner = "astropy";
     repo = "astropy";
     tag = "v${version}";
-    hash = "sha256-cvwwTa6eJYncB2V6UCuBrQ5WRRvjgZF5/z4d7Z/uHc8=";
+    hash = "sha256-U9kCzyOZcttlUP0DUGkhJVkk96sBM/Gm/s5ZPJZcEoA=";
   };
 
   env = lib.optionalAttrs stdenv.cc.isClang {
@@ -147,6 +147,10 @@ buildPythonPackage rec {
   preCheck = ''
     export HOME="$(mktemp -d)"
     export OMP_NUM_THREADS=$(( $NIX_BUILD_CORES / 4 ))
+    if [ $OMP_NUM_THREADS -eq 0 ]; then
+      export OMP_NUM_THREADS=1
+    fi
+
     # See https://github.com/astropy/astropy/issues/17649 and see
     # --hypothesis-profile=ci pytest flag below.
     cp conftest.py $out/

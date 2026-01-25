@@ -44,7 +44,7 @@
 
 buildPythonPackage rec {
   pname = "pyannote-audio";
-  version = "4.0.1";
+  version = "4.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     repo = "pyannote-audio";
     tag = version;
     fetchSubmodules = true;
-    hash = "sha256-hYrwpph+Powt+AuQjKo0kkBW+5jJGfzGTILzL9j22YI=";
+    hash = "sha256-tgXYcqkmMaEgFU55TQ5ESMNrZiBQkiVLmIoR1bhCOKI=";
   };
 
   build-system = [

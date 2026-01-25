@@ -4,7 +4,7 @@
   buildPythonPackage,
   click,
   fetchFromGitHub,
-  grapheme,
+  graphemeu,
   pytestCheckHook,
   python,
   setuptools,
@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "alive-progress";
-  version = "3.1.5";
+  version = "3.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rsalmei";
     repo = "alive-progress";
     tag = "v${version}";
-    hash = "sha256-yJhl0QrMHET9ISDc/D5AEQ7dTJkmcV2SWqy/xmG18uY=";
+    hash = "sha256-DxyTGY72uVKHqZZQ4jj4jVdfZAKkgAtHJ7VBI/dM6DQ=";
   };
 
   postInstall = ''
@@ -27,14 +27,17 @@ buildPythonPackage rec {
     mv $out/LICENSE $out/share/doc/python${python.pythonVersion}-$pname-$version/
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     about-time
-    grapheme
+    graphemeu
   ];
 
-  pythonRelaxDeps = [ "about_time" ];
+  pythonRelaxDeps = [
+    "about_time"
+    "graphemeu"
+  ];
 
   nativeCheckInputs = [
     click
@@ -46,7 +49,7 @@ buildPythonPackage rec {
   meta = {
     description = "New kind of Progress Bar, with real-time throughput, ETA, and very cool animations";
     homepage = "https://github.com/rsalmei/alive-progress";
-    changelog = "https://github.com/rsalmei/alive-progress/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/rsalmei/alive-progress/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ thiagokokada ];
   };

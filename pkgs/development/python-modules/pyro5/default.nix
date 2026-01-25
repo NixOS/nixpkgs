@@ -2,23 +2,27 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  setuptools,
   serpent,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyro5";
-  version = "5.15";
-  format = "setuptools";
+  version = "5.16";
+  pyproject = true;
 
-  src = fetchPypi {
-    pname = "Pyro5";
-    inherit version;
-    hash = "sha256-gsPfyYYLSfiXso/yT+ZxbIQWcsYAr4/kDQ46f6yaP14=";
+  src = fetchFromGitHub {
+    owner = "irmen";
+    repo = "Pyro5";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-8ORwfzPpcNQdGRNe1EnY0A/+9itmSY3ouvreOcc18u8=";
   };
 
-  propagatedBuildInputs = [ serpent ];
+  build-system = [ setuptools ];
+
+  dependencies = [ serpent ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -41,8 +45,8 @@ buildPythonPackage rec {
   meta = {
     description = "Distributed object middleware for Python (RPC)";
     homepage = "https://github.com/irmen/Pyro5";
-    changelog = "https://github.com/irmen/Pyro5/releases/tag/v${version}";
+    changelog = "https://github.com/irmen/Pyro5/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ peterhoeg ];
   };
-}
+})

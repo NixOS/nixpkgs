@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "helion";
-  version = "0.2.1";
+  version = "0.2.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "helion";
     tag = "v${version}";
-    hash = "sha256-JuuVPz8FPKtaGxbJM4omUzIjY9chtGZFGXwEMX34/Y0=";
+    hash = "sha256-kZyay9X2RcN3by+2oFAjt17Zuu34i3p+MeApBuhejmg=";
   };
 
   build-system = [
@@ -75,7 +75,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python-embedded DSL that makes it easy to write fast, scalable ML kernels with minimal boilerplate";
     homepage = "https://github.com/pytorch/helion";
-    changelog = "https://github.com/pytorch/helion/releases/tag/v${version}";
+    changelog = "https://github.com/pytorch/helion/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     # This package explicitly requires CUDA-enabled pytorch

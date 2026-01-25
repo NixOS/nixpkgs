@@ -10,7 +10,6 @@
   pytest-aio,
   pytest-mypy,
   pytest-mypy-plugins,
-  pytest-subtests,
   pytestCheckHook,
   setuptools,
   trio,
@@ -55,7 +54,6 @@ buildPythonPackage rec {
     pytest-aio
     pytest-mypy
     pytest-mypy-plugins
-    pytest-subtests
     setuptools
     trio
   ];

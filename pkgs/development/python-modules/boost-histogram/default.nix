@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "boost-histogram";
-  version = "1.5.2";
+  version = "1.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "boost-histogram";
     tag = "v${version}";
-    hash = "sha256-kduE5v1oQT76MRxMuGo+snCBdJ+yOjkOJFO45twcUIs=";
+    hash = "sha256-c2zREASzWfXhNTyygGxj3354l58pT/9zygmRou2bUNE=";
     fetchSubmodules = true;
   };
 

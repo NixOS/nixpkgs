@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "paddlex";
-  version = "3.3.12";
+  version = "3.3.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PaddlePaddle";
     repo = "PaddleX";
     tag = "v${version}";
-    hash = "sha256-IK+Mk2IWrDGCLH3nw5/WR0uPIFBAsb/h4/MMmSlxT9s=";
+    hash = "sha256-ZihftxrU2Ydo8S6CWum0l6xHxeyl6X4urHtV8zo3vpg=";
   };
 
   build-system = [ setuptools ];

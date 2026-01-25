@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "av";
-  version = "16.0.1";
+  version = "16.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PyAV-Org";
     repo = "PyAV";
     tag = "v${version}";
-    hash = "sha256-iFKDDOJzCynaqwHIjykfh82diGiuOjWytwU3dq1J9PA=";
+    hash = "sha256-mz0VI72lqtur5HdCkPNxInk0pUWxji0boIZnfvdrxIs=";
   };
 
   build-system = [
@@ -94,7 +94,7 @@ buildPythonPackage rec {
     description = "Pythonic bindings for FFmpeg";
     mainProgram = "pyav";
     homepage = "https://github.com/PyAV-Org/PyAV";
-    changelog = "https://github.com/PyAV-Org/PyAV/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/PyAV-Org/PyAV/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.bsd2;
     maintainers = [ ];
   };

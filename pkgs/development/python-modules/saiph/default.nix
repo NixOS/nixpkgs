@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "saiph";
-  version = "2.0.3";
+  version = "2.0.7";
 
   src = fetchFromGitHub {
     owner = "octopize";
     repo = "saiph";
     tag = "saiph-v${version}";
-    hash = "sha256-8AbV3kjPxjZo28CgahfbdNl9+ESWOfUt8YT+mWwbo5Q=";
+    hash = "sha256-KBef23kv3oylSNyo1Q6pQFlhX7HJCV37d8EEs0MubDw=";
   };
 
   pyproject = true;

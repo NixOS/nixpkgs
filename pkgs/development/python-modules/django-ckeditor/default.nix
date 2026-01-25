@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "django-ckeditor";
-  version = "6.7.1";
+  version = "6.7.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-ckeditor";
     repo = "django-ckeditor";
     tag = version;
-    hash = "sha256-tPwWXQAKoHPpZDZ+fnEoOA29at6gUXBw6CcPdireTr8=";
+    hash = "sha256-EqauGFy3VKWHV/MaHhga1lGZhmbHcz6nvc5I87RQ4Dc=";
   };
 
   build-system = [ setuptools-scm ];
@@ -49,7 +49,7 @@ buildPythonPackage rec {
   meta = {
     description = "Django admin CKEditor integration";
     homepage = "https://github.com/django-ckeditor/django-ckeditor";
-    changelog = "https://github.com/django-ckeditor/django-ckeditor/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/django-ckeditor/django-ckeditor/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ onny ];
     knownVulnerabilities = [

@@ -7,6 +7,7 @@
   python-dateutil,
   sqlite-fts4,
   tabulate,
+  pip,
   pluggy,
   pytestCheckHook,
   hypothesis,
@@ -16,7 +17,7 @@
 }:
 buildPythonPackage rec {
   pname = "sqlite-utils";
-  version = "3.38";
+  version = "3.39";
   pyproject = true;
 
   build-system = [ setuptools ];
@@ -24,16 +25,17 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "sqlite_utils";
-    hash = "sha256-Gud7kxOEBSIFoVR41ClGT2xno6w7Tq/TxnSskA9iOqs=";
+    hash = "sha256-v6Lqwps+PrXJZHKDeXUn/rz079Spu7Mdl5oUoR75280=";
   };
 
   dependencies = [
     click
     click-default-group
+    pip
+    pluggy
     python-dateutil
     sqlite-fts4
     tabulate
-    pluggy
   ];
 
   nativeCheckInputs = [

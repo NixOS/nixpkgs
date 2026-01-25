@@ -33,14 +33,14 @@
 
 buildPythonPackage rec {
   pname = "sphinx-markdown-builder";
-  version = "0.6.8";
+  version = "0.6.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "liran-funaro";
     repo = "sphinx-markdown-builder";
     tag = version;
-    hash = "sha256-dPMOOG3myh9i2ez9uhasqLnlV0BEsE9CHEbZ57VWzAo=";
+    hash = "sha256-DTc+yVFOGLXFyrgkwfgY3X60chyU3UDs0GwuPCzff28=";
   };
 
   patches = [

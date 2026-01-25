@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "xgrammar";
-  version = "0.1.24";
+  version = "0.1.31";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     repo = "xgrammar";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-K+GCHuWKF449JaGWr7FQrDeJS3pxmVKnGf68L53LrK0=";
+    hash = "sha256-Baa/DiRoNcIv4UOC+msi4PgfRWnwprnZpLG2v7qB2h4=";
   };
 
   patches = [

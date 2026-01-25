@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-resource-path";
-  version = "1.4.0";
+  version = "1.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yukihiko-shinoda";
     repo = "pytest-resource-path";
     tag = "v${version}";
-    hash = "sha256-9OBO9b02RrXilXUucerQQMTaQIRXtbcKCHqwwp9tBto=";
+    hash = "sha256-f0jN6V6tQRbr/DHOKKTrFCb1EBUUxZAQRckMy2iiVqI=";
   };
 
   postPatch = ''

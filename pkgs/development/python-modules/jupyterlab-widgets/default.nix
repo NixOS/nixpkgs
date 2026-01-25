@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "jupyterlab-widgets";
-  version = "3.0.15";
+  version = "3.0.16";
   pyproject = true;
 
   src = fetchPypi {
     pname = "jupyterlab_widgets";
     inherit version;
-    hash = "sha256-KSCIigwpIjUakgKBeVemjAfZlnNQTWzTc0UpnpcbsIs=";
+    hash = "sha256-Qj2gUHHVXPJ6nmAiFtNaOmWj5BzfnF07ZDuBTOOMGeA=";
   };
 
   # jupyterlab is required to build from source but we use the pre-build package

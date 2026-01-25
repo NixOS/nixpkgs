@@ -17,13 +17,13 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-automl";
-  version = "2.17.0";
+  version = "2.18.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_automl";
     inherit version;
-    hash = "sha256-Fnd7X75kt2+HN665ZFQYv9+ST3wso1Dx/VViUyggfpw=";
+    hash = "sha256-F9JU0usvIFAxWQem49LpoD4KbJ+yaq1akoCJ7qUhRXI=";
   };
 
   build-system = [ setuptools ];

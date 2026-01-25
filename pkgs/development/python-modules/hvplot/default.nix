@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "hvplot";
-  version = "0.11.3";
+  version = "0.12.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "holoviz";
     repo = "hvplot";
     tag = "v${version}";
-    hash = "sha256-V1KJtv1FCGITHdgxRWq1LWEgmWOU0N0iW60Wk0O5gC8=";
+    hash = "sha256-hJ9lgpM3AVyDeFxobUKDNYO39NKEejSDywOgnHPEm2c=";
   };
 
   build-system = [

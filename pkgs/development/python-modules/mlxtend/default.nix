@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "mlxtend";
-  version = "0.23.4";
+  version = "0.24.0";
   pyproject = true;
 
   disabled = isPy27;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "rasbt";
     repo = "mlxtend";
     tag = "v${version}";
-    hash = "sha256-xoAHYRmqN5SrEWlc18ntTZ6WAznBlVZdf+x5Yev3ysE=";
+    hash = "sha256-zDMFfm8VqEfAQd11PZNp7HsoLcqrj3nMqnvKhXaeA04=";
   };
 
   build-system = [ setuptools ];

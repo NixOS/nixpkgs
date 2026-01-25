@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "sphinx-better-theme";
-  version = "0.1.5";
+  version = "0.13";
   format = "setuptools";
   outputs = [
     "out"
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "irskep";
     repo = "sphinx-better-theme";
-    rev = "v${version}";
-    sha256 = "07lhfmsjcfzcchsjzh6kxdq5s47j2a6lb5wv3m1kmv2hcm3gvddh";
+    tag = "v${version}";
+    sha256 = "sha256-eFA1U2jMeOH7xabonYg/bV6eTAFBew6+WaK2uKWlsUc=";
   };
 
   nativeBuildInputs = [ sphinxHook ];

@@ -29,6 +29,11 @@ buildPythonPackage rec {
       url = "https://github.com/pypa/readme_renderer/commit/04d5cfe76850192364eff344be7fe27730af8484.patch";
       hash = "sha256-QBU3zL3DB8gYYwtKrIC8+H8798pU9Sz3T9e/Q/dXksw=";
     })
+    (fetchpatch2 {
+      name = "docutils-0.22-compat.patch";
+      url = "https://github.com/pypa/readme_renderer/commit/d047a29755a204afca8873a6ecf30e686ccf6a27.patch";
+      hash = "sha256-GHTfRuOZr5c4mwu4s8K5IpvG1ZP1o/qd0U4H09BzhE8=";
+    })
   ];
 
   build-system = [ setuptools ];

@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "telethon";
-  version = "1.41.1";
+  version = "1.42.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LonamiWebs";
     repo = "Telethon";
     tag = "v${version}";
-    hash = "sha256-V38enxg1ZW1zd87xRLr0GHv+t1NK7fwDFxXDqPvCf2U=";
+    hash = "sha256-NMHJkSTGR3/tck0k97EfVN9f85PAWst+EZ6G7Tgrt5s=";
   };
 
   patches = [

@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "sfepy";
-  version = "2024.4";
+  version = "2025.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sfepy";
     repo = "sfepy";
     tag = "release_${version}";
-    hash = "sha256-3XQqPoAM1Qw/fZ649Xk+ceaeBkZ3ypI1FSRxtYbIrxw=";
+    hash = "sha256-rC/jqii2VpRbcvhsc6rLqlpki/y2R1lcGD7WMr41U0A=";
   };
 
   postPatch = ''

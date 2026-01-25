@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-plantuml";
-  version = "0.30";
+  version = "0.31";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KhJmykO930RkCuRBBwA99EkN4rPDFUoNYnz7Y+mhab8=";
+    hash = "sha256-/XR1L46gcOZBw/ikAvzPodSkBW4JZ7VgM9KnYoLZ+VY=";
   };
 
   build-system = [ setuptools ];

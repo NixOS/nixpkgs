@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "pylzma";
-  version = "0.5.0";
+  version = "0.6.0";
   format = "setuptools";
 
   # This vendors an old LZMA SDK
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   # xz, and uefi-firmware-parser also does this
   src = fetchPypi {
     inherit pname version;
-    sha256 = "074anvhyjgsv2iby2ql1ixfvjgmhnvcwjbdz8gk70xzkzcm1fx5q";
+    sha256 = "sha256-OwCniSKNBaBvqZXNK0H/SpZXhKoZSKBthLPKa4cwQfA=";
   };
 
   patches = [

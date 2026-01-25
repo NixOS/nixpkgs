@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pyeclib";
-  version = "1.6.4";
+  version = "1.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "pyeclib";
     tag = version;
-    hash = "sha256-oRitXlQunfqLSKMaSW3E1BnL0otA4UPj/y6bbiN0kPM=";
+    hash = "sha256-wYzZUtr80KgVTznD0ISy7qhGngm4Xmt8Mauu9lP+2T4=";
   };
 
   postPatch = ''
