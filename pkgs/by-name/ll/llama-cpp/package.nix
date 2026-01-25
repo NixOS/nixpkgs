@@ -74,13 +74,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "7815";
+  version = "7823";
 
   src = fetchFromGitHub {
     owner = "ggml-org";
     repo = "llama.cpp";
     tag = "b${finalAttrs.version}";
-    hash = "sha256-KeLi/DsbSbTNK7EwDOugsJaYEAU3JLOYno59hgJgXhc=";
+    hash = "sha256-3NLIX2bAxaxkpPRMzxWfcEhJDke2q4TWAyWjXIa/Wpk=";
     leaveDotGit = true;
     postFetch = ''
       git -C "$out" rev-parse --short HEAD > $out/COMMIT
