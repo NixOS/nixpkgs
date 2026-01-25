@@ -24,11 +24,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "karing";
-  version = "1.2.11.1406";
+  version = "1.2.12.1505";
 
   src = fetchurl {
     url = "https://github.com/KaringX/karing/releases/download/v${finalAttrs.version}/karing_${finalAttrs.version}_linux_amd64.deb";
-    hash = "sha256-RfUzPDT6x2e8J+IazjcPRZ+yY3UEHEdAUNxs1cQlGaE=";
+    hash = "sha256-Kli4aNupnNiWqFXo2su/M7emZvsTODlsj9psZyGc7/Q=";
   };
 
   nativeBuildInputs = [
