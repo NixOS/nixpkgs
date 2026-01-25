@@ -33,7 +33,11 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
-  configureFlags = lib.optional enableStatic "--disable-shared";
+  configureFlags =
+    lib.optional enableStatic "--disable-shared"
+    # If cygpath isn't available, libtool tries to run cmd.exe for this test,
+    # but neither are in stdenv.
+    ++ lib.optional stdenv.buildPlatform.isCygwin "lt_cv_cmd_slashes=one";
 
   enableParallelBuilding = true;
   doCheck = true;
