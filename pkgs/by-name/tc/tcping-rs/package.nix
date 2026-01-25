@@ -4,6 +4,7 @@
   fetchFromGitHub,
   nix-update-script,
 }:
+
 rustPlatform.buildRustPackage rec {
   pname = "tcping-rs";
   version = "1.2.24";
@@ -27,6 +28,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "TCP Ping (tcping) Utility for Port Reachability";
     homepage = "https://github.com/lvillis/tcping-rs";
+    changelog = "https://github.com/lvillis/tcping-rs/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     mainProgram = "tcping";
     maintainers = with lib.maintainers; [ heitorPB ];
