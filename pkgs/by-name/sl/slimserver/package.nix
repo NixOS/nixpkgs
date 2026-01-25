@@ -45,100 +45,59 @@ perlPackages.buildPerlPackage rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
+  # slimserver vendors quite a few CPAN packages
+  # this list is intended to only replace compiled modules
+  # which can be found in CPAN/arch in the slimserver repo
+  # replacements are added here AND removed in prePatch to
+  # avoid module mismatches
   buildInputs =
     with perlPackages;
     [
-      AnyEvent
-      ArchiveZip
-      AsyncUtil
       AudioScan
-      CarpAssert
-      CarpClan
-      CGI
-      ClassAccessor
-      ClassAccessorChained
-      ClassC3
-      # ClassC3Componentised # Error: DBIx::Class::Row::throw_exception(): DBIx::Class::Relationship::BelongsTo::belongs_to(): Can't infer join condition for track
-      ClassDataInheritable
-      ClassInspector
-      ClassISA
-      ClassMember
-      ClassSingleton
-      ClassVirtual
       ClassXSAccessor
-      CompressRawZlib
-      CryptOpenSSLRSA
-      DataDump
-      DataPage
-      DataURIEncode
       DBDSQLite
       DBI
-      # DBIxClass # https://github.com/LMS-Community/slimserver/issues/138
       DigestSHA1
       EncodeDetect
       EV
-      ExporterLite
-      FileBOM
-      FileCopyRecursive
-      # FileNext # https://github.com/LMS-Community/slimserver/pull/1140
-      FileReadBackwards
-      FileSlurp
-      FileWhich
       HTMLParser
-      HTTPCookies
-      HTTPDaemon
-      HTTPMessage
       ImageScale
       IOAIO
       IOInterface
       IOSocketSSL
-      IOString
       JSONXS
       JSONXSVersionOneAndTwo
-      # LogLog4perl # Internal error: Root Logger not initialized.
-      LWP
-      LWPProtocolHttps
       MP3CutGapless
-      NetHTTP
-      NetHTTPSNB
-      PathClass
-      ProcBackground
-      # SQLAbstract # DBI Exception: DBD::SQLite::db prepare_cached failed: no such function: ARRAY
-      SQLAbstractLimit
       SubName
       TemplateToolkit
-      TextUnidecode
-      TieCacheLRU
-      TieCacheLRUExpires
-      TieRegexpHash
-      TimeDate
-      URI
-      URIFind
-      UUIDTiny
       XMLParser
-      XMLSimple
       YAMLLibYAML
     ]
-    # ++ (lib.optional stdenv.hostPlatform.isDarwin perlPackages.MacFSEvents)
-    ++ (lib.optional stdenv.hostPlatform.isLinux perlPackages.LinuxInotify2);
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      LinuxInotify2
+    ];
 
   prePatch = ''
     # remove vendored binaries
     rm -rf Bin
 
-    # remove most vendored modules, keeping necessary ones
-    mkdir -p CPAN_used/Class/C3/ CPAN_used/SQL/ CPAN_used/File/
-    rm -r CPAN/SQL/Abstract/Limit.pm
-    cp -rv CPAN/Class/C3/Componentised.pm CPAN_used/Class/C3/
-    cp -rv CPAN/DBIx CPAN_used/
-    cp -rv CPAN/File/Next.pm CPAN_used/File/
-    cp -rv CPAN/Log CPAN_used/
-    cp -rv CPAN/SQL/* CPAN_used/SQL/
-    rm -r CPAN
-    mv CPAN_used CPAN
-
-    # another set of vendored/modified modules exist in lib, more selectively cleaned for now
-    rm -rf lib/Audio
+    # remove precompiled cpan modules
+    rm -rf CPAN/arch
+    # remove the precompiled modules, they come from buildInputs
+    rm -rf CPAN/Class/XSAccessor{,.pm}
+    rm -rf CPAN/DBD{,.pm}
+    rm -rf CPAN/DBI{,.pm}
+    rm -rf CPAN/Digest/SHA1{,.pm}
+    rm -rf CPAN/Encode/Detect{,.pm}
+    rm -rf CPAN/HTML/Parser{,.pm}
+    rm -rf CPAN/Image{,.pm}
+    rm -rf CPAN/IO/AIO{,.pm}
+    rm -rf CPAN/IO/Interface{,.pm}
+    rm -rf CPAN/JSON/XS{,.pm}
+    rm -rf CPAN/MP3/Cut/Gapless{,.pm}
+    rm -rf CPAN/Sub/Name{,.pm}
+    rm -rf CPAN/XML/Parser{,.pm}
+    rm -rf CPAN/YAML/XS{,.pm}
 
     ${lib.optionalString (!enableUnfreeFirmware) ''
       # remove unfree firmware
