@@ -6,14 +6,14 @@
   lwt,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "ocsipersist-lib";
   version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "ocsigen";
     repo = "ocsipersist";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-7CKKwJxqxUpCMNs4xGbsMZ6Qud9AnczBStTXS+N21DU=";
   };
 
@@ -26,4 +26,4 @@ buildDunePackage rec {
     maintainers = [ lib.maintainers.vbgl ];
     homepage = "https://github.com/ocsigen/ocsipersist/";
   };
-}
+})

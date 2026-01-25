@@ -15,12 +15,12 @@
   libXrandr,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "raylib";
   version = "1.4.0";
 
   src = fetchurl {
-    url = "https://github.com/tjammer/raylib-ocaml/releases/download/${version}/raylib-${version}.tbz";
+    url = "https://github.com/tjammer/raylib-ocaml/releases/download/${finalAttrs.version}/raylib-${finalAttrs.version}.tbz";
     hash = "sha256-/SeKgQOrhsAgMNk6ODAZlopL0mL0lVfCTx1ugmV1P/s=";
   };
 
@@ -58,4 +58,4 @@ buildDunePackage rec {
     maintainers = with lib.maintainers; [ r17x ];
     license = lib.licenses.mit;
   };
-}
+})

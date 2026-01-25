@@ -5,14 +5,14 @@
   dune-configurator,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "parmap";
   version = "1.2.5";
 
   src = fetchFromGitHub {
     owner = "rdicosmo";
-    repo = pname;
-    rev = version;
+    repo = "parmap";
+    rev = finalAttrs.version;
     hash = "sha256-tBu7TGtDOe5FbxLZuz6nl+65aN9FHIngq/O4dJWzr3Q=";
   };
 
@@ -31,4 +31,4 @@ buildDunePackage rec {
     license = lib.licenses.lgpl2;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

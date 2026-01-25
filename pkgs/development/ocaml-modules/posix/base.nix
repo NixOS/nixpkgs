@@ -6,14 +6,14 @@
   integers,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "posix-base";
   version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-posix";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-JKJIiuo4lW8DmcK1mJlT22784J1NS2ig860jDbRIjIo=";
   };
 
@@ -30,4 +30,4 @@ buildDunePackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
   };
-}
+})

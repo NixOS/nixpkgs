@@ -11,14 +11,14 @@
   alcotest,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "mirage-logs";
   version = "2.1.0";
 
   duneVersion = "3";
 
   src = fetchurl {
-    url = "https://github.com/mirage/mirage-logs/releases/download/v${version}/mirage-logs-${version}.tbz";
+    url = "https://github.com/mirage/mirage-logs/releases/download/v${finalAttrs.version}/mirage-logs-${finalAttrs.version}.tbz";
     hash = "sha256-rorCsgw7QCQmjotr465KShQGWdoUM88djpwgqwBGnLs=";
   };
 
@@ -42,4 +42,4 @@ buildDunePackage rec {
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.vbgl ];
   };
-}
+})
