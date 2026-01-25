@@ -24,6 +24,7 @@ let
       // lib.optionalAttrs (i.matchSetting != null) {
         match_setting = i.matchSetting;
       }
+      // lib.optionalAttrs (i.trim != null) { trim = i.trim; }
     ) cfg.ensureProfiles.secrets.entries;
   };
   nmFileSecretAgentConfigFile = toml.generate "config.toml" nmFileSecretAgentConfig;
@@ -107,6 +108,11 @@ in
               file = lib.mkOption {
                 description = "file from which the secret value is read";
                 type = lib.types.str;
+              };
+              trim = lib.mkOption {
+                description = "whether leading and trailing whitespace should be stripped from the files content before being passed to NetworkManager";
+                type = lib.types.nullOr lib.types.bool;
+                default = null;
               };
             };
           }
