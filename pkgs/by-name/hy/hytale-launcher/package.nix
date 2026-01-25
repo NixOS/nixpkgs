@@ -130,6 +130,7 @@ let
       maintainers = with lib.maintainers; [
         gepbird
         karol-broda
+        liquidnya
       ];
       mainProgram = "hytale-launcher";
       platforms = [
