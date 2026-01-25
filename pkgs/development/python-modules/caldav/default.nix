@@ -11,7 +11,7 @@
   python,
   radicale,
   recurring-ical-events,
-  requests,
+  niquests,
   hatchling,
   hatch-vcs,
   proxy-py,
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   dependencies = [
     dnspython
     lxml
-    requests
+    niquests
     icalendar
     icalendar-searcher
     recurring-ical-events
