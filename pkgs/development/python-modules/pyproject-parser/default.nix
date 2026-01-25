@@ -11,6 +11,7 @@
   domdf-python-tools,
   hatchling,
   hatch-requirements-txt,
+  license-expression,
   natsort,
   packaging,
   readme-renderer,
@@ -39,6 +40,7 @@ buildPythonPackage rec {
     attrs
     dom-toml
     domdf-python-tools
+    license-expression
     natsort
     packaging
     shippinglabel
