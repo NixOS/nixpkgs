@@ -546,6 +546,7 @@
   ./services/databases/redis.nix
   ./services/databases/rethinkdb.nix
   ./services/databases/surrealdb.nix
+  ./services/databases/terminusdb.nix
   ./services/databases/tigerbeetle.nix
   ./services/databases/victorialogs.nix
   ./services/databases/victoriametrics.nix
