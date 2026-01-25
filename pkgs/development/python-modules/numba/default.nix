@@ -2,19 +2,23 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  python,
   buildPythonPackage,
-  setuptools,
-  numpy,
-  numpy_1,
-  llvmlite,
   replaceVars,
-  writers,
+
+  # nativeBuildInputs
+  setuptools,
+
+  # dependencies
+  llvmlite,
+  numpy,
+
+  # tests
   numba,
   pytestCheckHook,
   writableTmpDirAsHomeHook,
-
-  config,
+  numpy_1,
+  writers,
+  python,
 
   # CUDA-only dependencies:
   addDriverRunpath,
@@ -22,6 +26,7 @@
   cudaPackages,
 
   # CUDA flags:
+  config,
   cudaSupport ? config.cudaSupport,
   testsWithoutSandbox ? false,
   doFullCheck ? false,
