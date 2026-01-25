@@ -1,6 +1,16 @@
 defmodule Provision do
-  alias Domain.{Repo, Accounts, Auth, Actors, Resources, Tokens, Gateways, Relays, Policies}
+  alias Portal.{Repo, Account, Auth, Actor, Resource, Site, Group, Policy, Membership}
+  alias Portal.EmailOTP.AuthProvider, as: EmailOTPAuthProvider
+  alias Portal.AuthProvider
   require Logger
+  import Ecto.Query
+
+  # Helper for casting resource filters (matches Portal.Resource's private implementation)
+  defp filter_changeset(struct, attrs) do
+    struct
+    |> Ecto.Changeset.cast(attrs, [:protocol, :ports])
+    |> Ecto.Changeset.validate_required([:protocol])
+  end
 
   # UUID Mapping handling
   defmodule UuidMapping do
@@ -116,94 +126,76 @@ defmodule Provision do
   end
 
   defp cleanup_account(uuid) do
-    case Accounts.fetch_account_by_id_or_slug(uuid) do
-      {:ok, value} when value.deleted_at == nil ->
-        Logger.info("Deleting removed account #{value.slug}")
-        value |> Ecto.Changeset.change(%{ deleted_at: DateTime.utc_now() }) |> Repo.update!()
-      _ -> :ok
+    case Repo.get(Account, uuid) do
+      nil ->
+        :ok
+      account ->
+        Logger.info("Deleting removed account #{account.slug}")
+        account |> Ecto.Changeset.change(%{deleted_at: DateTime.utc_now()}) |> Repo.update!()
     end
   end
 
-  defp cleanup_actor(uuid, subject) do
-    case Actors.fetch_actor_by_id(uuid, subject) do
-      {:ok, value} ->
-        Logger.info("Deleting removed actor #{value.name}")
-        {:ok, _} = Actors.delete_actor(value, subject)
-      _ -> :ok
+  defp cleanup_actor(uuid, account) do
+    case Repo.get_by(Actor, account_id: account.id, id: uuid) do
+      nil ->
+        :ok
+      actor ->
+        Logger.info("Deleting removed actor #{actor.name}")
+        Repo.delete!(actor)
     end
   end
 
-  defp cleanup_provider(uuid, subject) do
-    case Auth.fetch_provider_by_id(uuid, subject) do
-      {:ok, value} ->
-        Logger.info("Deleting removed provider #{value.name}")
-        {:ok, _} = Auth.delete_provider(value, subject)
-      _ -> :ok
+  defp cleanup_provider(uuid, account) do
+    case Repo.get_by(AuthProvider, account_id: account.id, id: uuid) do
+      nil ->
+        :ok
+      provider ->
+        Logger.info("Deleting removed provider")
+        Repo.delete!(provider)
     end
   end
 
-  defp cleanup_gateway_group(uuid, subject) do
-    case Gateways.fetch_group_by_id(uuid, subject) do
-      {:ok, value} ->
-        Logger.info("Deleting removed gateway group #{value.name}")
-        {:ok, _} = Gateways.delete_group(value, subject)
-      _ -> :ok
+  defp cleanup_site(uuid, account) do
+    case Repo.get_by(Site, account_id: account.id, id: uuid) do
+      nil ->
+        :ok
+      site ->
+        Logger.info("Deleting removed site #{site.name}")
+        Repo.delete!(site)
     end
   end
 
-  defp cleanup_relay_group(uuid, subject) do
-    case Relays.fetch_group_by_id(uuid, subject) do
-      {:ok, value} ->
-        Logger.info("Deleting removed relay group #{value.name}")
-        {:ok, _} = Relays.delete_group(value, subject)
-      _ -> :ok
+  defp cleanup_group(uuid, account) do
+    case Repo.get_by(Group, account_id: account.id, id: uuid) do
+      nil ->
+        :ok
+      group ->
+        Logger.info("Deleting removed group #{group.name}")
+        Repo.delete!(group)
     end
   end
 
-  defp cleanup_actor_group(uuid, subject) do
-    case Actors.fetch_group_by_id(uuid, subject) do
-      {:ok, value} ->
-        Logger.info("Deleting removed actor group #{value.name}")
-        {:ok, _} = Actors.delete_group(value, subject)
-      _ -> :ok
+  defp cleanup_resource(uuid, account) do
+    case Repo.get_by(Resource, account_id: account.id, id: uuid) do
+      nil ->
+        :ok
+      resource ->
+        Logger.info("Deleting removed resource #{resource.name}")
+        Repo.delete!(resource)
     end
   end
 
-  # Fetch resource by uuid, but follow the chain of replacements if any
-  defp fetch_resource(uuid, subject) do
-    case Resources.fetch_resource_by_id(uuid, subject) do
-      {:ok, resource} when resource.replaced_by_resource_id != nil -> fetch_resource(resource.replaced_by_resource_id, subject)
-      v -> v
+  defp cleanup_policy(uuid, account) do
+    case Repo.get_by(Policy, account_id: account.id, id: uuid) do
+      nil ->
+        :ok
+      policy ->
+        Logger.info("Deleting removed policy #{policy.description}")
+        Repo.delete!(policy)
     end
   end
 
-  defp cleanup_resource(uuid, subject) do
-    case fetch_resource(uuid, subject) do
-      {:ok, value} when value.deleted_at == nil ->
-        Logger.info("Deleting removed resource #{value.name}")
-        {:ok, _} = Resources.delete_resource(value, subject)
-      _ -> :ok
-    end
-  end
-
-  # Fetch policy by uuid, but follow the chain of replacements if any
-  defp fetch_policy(uuid, subject) do
-    case Policies.fetch_policy_by_id(uuid, subject) do
-      {:ok, policy} when policy.replaced_by_policy_id != nil -> fetch_policy(policy.replaced_by_policy_id, subject)
-      v -> v
-    end
-  end
-
-  defp cleanup_policy(uuid, subject) do
-    case fetch_policy(uuid, subject) do
-      {:ok, value} when value.deleted_at == nil ->
-        Logger.info("Deleting removed policy #{value.description}")
-        {:ok, _} = Policies.delete_policy(value, subject)
-      _ -> :ok
-    end
-  end
-
-  defp cleanup_entity_type(account_slug, entity_type, cleanup_fn, temp_admin_subject) do
+  defp cleanup_entity_type(account_slug, entity_type, cleanup_fn, account) do
     # Get mapping for this entity type
     existing_entities = UuidMapping.get_entities(account_slug, entity_type)
     # Get current entities from account data
@@ -216,7 +208,7 @@ defmodule Provision do
       case existing_entities[entity_id] do
         nil -> :ok
         uuid ->
-          cleanup_fn.(uuid, temp_admin_subject)
+          cleanup_fn.(uuid, account)
           UuidMapping.remove_entity(account_slug, entity_type, entity_id)
       end
     end)
@@ -226,61 +218,42 @@ defmodule Provision do
     %{
       "actors" => Map.keys(account_data["actors"] || %{}),
       "providers" => Map.keys(account_data["auth"] || %{}),
-      "gateway_groups" => Map.keys(account_data["gatewayGroups"] || %{}),
-      "relay_groups" => Map.keys(account_data["relayGroups"] || %{}),
-      "actor_groups" => Map.keys(account_data["groups"] || %{}) ++ ["everyone"],
+      "sites" => Map.keys(account_data["gatewayGroups"] || %{}),  # JSON key is still "gatewayGroups"
+      # relay_groups removed - no longer tracked
+      "groups" => Map.keys(account_data["groups"] || %{}) ++ ["everyone"],  # Renamed from actor_groups
       "resources" => Map.keys(account_data["resources"] || %{}),
       "policies" => Map.keys(account_data["policies"] || %{})
     }
   end
 
-  defp nil_if_deleted_or_not_found(value) do
-    case value do
-      nil -> nil
-      {:error, :not_found} -> nil
-      {:ok, value} when value.deleted_at != nil -> nil
-      v -> v
-    end
-  end
+  defp create_temp_admin(account, _email_provider) do
+    # Create temporary admin actor (no identity/token needed in new system)
+    temp_admin_actor = %Actor{
+      account_id: account.id,
+      type: :account_admin_user,
+      name: "Provisioning",
+      email: "firezone-provision@localhost.local"
+    } |> Repo.insert!()
 
-  defp create_temp_admin(account, email_provider) do
-    temp_admin_actor_email = "firezone-provision@localhost.local"
-    temp_admin_actor_context = %Auth.Context{
-      type: :browser,
-      user_agent: "Unspecified/0.0",
-      remote_ip: {127, 0, 0, 1},
-      remote_ip_location_region: "N/A",
-      remote_ip_location_city: "N/A",
-      remote_ip_location_lat: 0.0,
-      remote_ip_location_lon: 0.0
+    # Create synthetic subject without persisted token
+    temp_admin_subject = %Auth.Subject{
+      account: account,
+      actor: temp_admin_actor,
+      credential: %Auth.Credential{type: :portal_session, id: Ecto.UUID.generate()},
+      expires_at: DateTime.utc_now() |> DateTime.add(1, :hour),
+      context: %Auth.Context{
+        type: :portal,
+        remote_ip: {127, 0, 0, 1},
+        user_agent: "provision/1"
+      }
     }
 
-    {:ok, temp_admin_actor} =
-      Actors.create_actor(account, %{
-        type: :account_admin_user,
-        name: "Provisioning"
-      })
-
-    {:ok, temp_admin_actor_email_identity} =
-      Auth.create_identity(temp_admin_actor, email_provider, %{
-        provider_identifier: temp_admin_actor_email,
-        provider_identifier_confirmation: temp_admin_actor_email
-      })
-
-    {:ok, temp_admin_actor_token} =
-      Auth.create_token(temp_admin_actor_email_identity, temp_admin_actor_context, "temporarynonce", DateTime.utc_now() |> DateTime.add(1, :hour))
-
-    {:ok, temp_admin_subject} =
-      Auth.build_subject(temp_admin_actor_token, temp_admin_actor_context)
-
-    {temp_admin_subject, temp_admin_actor, temp_admin_actor_email_identity, temp_admin_actor_token}
+    {temp_admin_subject, temp_admin_actor}
   end
 
-  defp cleanup_temp_admin(temp_admin_actor, temp_admin_actor_email_identity, temp_admin_actor_token, subject) do
+  defp cleanup_temp_admin(temp_admin_actor) do
     Logger.info("Cleaning up temporary admin actor")
-    {:ok, _} = Tokens.delete_token(temp_admin_actor_token, subject)
-    {:ok, _} = Auth.delete_identity(temp_admin_actor_email_identity, subject)
-    {:ok, _} = Actors.delete_actor(temp_admin_actor, subject)
+    Repo.delete!(temp_admin_actor)
   end
 
   def provision() do
@@ -319,32 +292,66 @@ defmodule Provision do
 
       multi = multi
         |> Ecto.Multi.run({:account, slug}, fn repo, _changes ->
-          case Accounts.fetch_account_by_id_or_slug(slug) do
-            {:ok, acc} ->
-              Logger.info("Updating existing account #{slug}")
-              updated_acc = acc |> Ecto.Changeset.change(account_attrs) |> repo.update!()
-              {:ok, {:existing, updated_acc}}
-            _ ->
+          case Repo.get_by(Account, slug: slug) do
+            nil ->
               Logger.info("Creating new account #{slug}")
-              {:ok, account} = Accounts.create_account(account_attrs)
+              # legal_name defaults to name if not provided
+              account_attrs_with_legal = Map.put_new(account_attrs, :legal_name, account_attrs[:name])
+              account = %Account{}
+                |> Ecto.Changeset.cast(account_attrs_with_legal, [:name, :slug, :legal_name])
+                |> Ecto.Changeset.cast_embed(:features)
+                |> Ecto.Changeset.cast_embed(:limits)
+                |> Ecto.Changeset.cast_embed(:metadata)
+                |> repo.insert!()
 
-              Logger.info("Creating internet gateway group")
-              {:ok, internet_site} = Gateways.create_internet_group(account)
+              Logger.info("Creating internet site")
+              internet_site = %Site{
+                account_id: account.id,
+                name: "Internet",
+                managed_by: :system
+              } |> repo.insert!()
 
               Logger.info("Creating internet resource")
-              {:ok, _internet_resource} = Resources.create_internet_resource(account, internet_site)
+              _internet_resource = %Resource{
+                account_id: account.id,
+                name: "Internet",
+                type: :internet,
+                site_id: internet_site.id
+              } |> repo.insert!()
+
+              # Create default Userpass auth provider for new accounts
+              Logger.info("Creating default Userpass auth provider")
+              provider_id = Ecto.UUID.generate()
+              repo.insert!(%AuthProvider{
+                id: provider_id,
+                account_id: account.id,
+                type: :userpass
+              })
+              repo.insert!(%Portal.Userpass.AuthProvider{
+                id: provider_id,
+                account_id: account.id,
+                name: "Username & Password"
+              })
 
               # Store mapping of slug to UUID
               UuidMapping.update_account(slug, account.id)
               {:ok, {:new, account}}
+            acc ->
+              Logger.info("Updating existing account #{slug}")
+              updated_acc = acc |> Ecto.Changeset.change(account_attrs) |> repo.update!()
+              {:ok, {:existing, updated_acc}}
           end
         end)
-        |> Ecto.Multi.run({:everyone_group, slug}, fn _repo, changes ->
+        |> Ecto.Multi.run({:everyone_group, slug}, fn repo, changes ->
           case Map.get(changes, {:account, slug}) do
             {:new, account} ->
               Logger.info("Creating everyone group for new account")
-              {:ok, actor_group} = Actors.create_managed_group(account, %{name: "Everyone"})
-              UuidMapping.update_entities(slug, "actor_groups", %{"everyone" => actor_group.id})
+              actor_group = %Group{
+                account_id: account.id,
+                name: "Everyone",
+                type: :managed
+              } |> repo.insert!()
+              UuidMapping.update_entities(slug, "groups", %{"everyone" => actor_group.id})
               {:ok, actor_group}
             {:existing, _account} ->
               {:ok, :skipped}
@@ -352,14 +359,17 @@ defmodule Provision do
         end)
         |> Ecto.Multi.run({:email_provider, slug}, fn _repo, changes ->
           case Map.get(changes, {:account, slug}) do
-            {:new, account} ->
-              Logger.info("Creating default email provider for new account")
-              Auth.create_provider(account, %{name: "Email", adapter: :email, adapter_config: %{}})
+            {:new, _account} ->
+              # For new accounts, email provider should not exist yet
+              # It will be created if needed, but for now we just return nil
+              {:ok, nil}
             {:existing, account} ->
-              Auth.Provider.Query.not_disabled()
-              |> Auth.Provider.Query.by_adapter(:email)
-              |> Auth.Provider.Query.by_account_id(account.id)
-              |> Repo.fetch(Auth.Provider.Query, [])
+              # Query for existing email provider
+              result = from(p in EmailOTPAuthProvider,
+                join: base in AuthProvider, on: base.id == p.id,
+                where: base.account_id == ^account.id
+              ) |> Repo.one()
+              {:ok, result}
           end
         end)
         |> Ecto.Multi.run({:temp_admin, slug}, fn _repo, changes ->
@@ -368,10 +378,10 @@ defmodule Provision do
           {:ok, create_temp_admin(account, email_provider)}
         end)
 
-      # Clean up removed entities for this account after we have an admin subject
+      # Clean up removed entities for this account
       multi = multi
         |> Ecto.Multi.run({:cleanup_entities, slug}, fn _repo, changes ->
-          {temp_admin_subject, _, _, _} = changes[{:temp_admin, slug}]
+          {_, account} = changes[{:account, slug}]
 
           # Store current entities in process dictionary for our helper function
           current_entities = collect_current_entities(account_data)
@@ -381,16 +391,16 @@ defmodule Provision do
           entity_types = [
             {"actors", &cleanup_actor/2},
             {"providers", &cleanup_provider/2},
-            {"gateway_groups", &cleanup_gateway_group/2},
-            {"relay_groups", &cleanup_relay_group/2},
-            {"actor_groups", &cleanup_actor_group/2},
+            {"sites", &cleanup_site/2},        # Changed from gateway_groups
+            # relay_groups removed - no longer persisted
+            {"groups", &cleanup_group/2},      # Changed from actor_groups
             {"resources", &cleanup_resource/2},
             {"policies", &cleanup_policy/2}
           ]
 
           # Clean up each entity type
           Enum.each(entity_types, fn {entity_type, cleanup_fn} ->
-            cleanup_entity_type(slug, entity_type, cleanup_fn, temp_admin_subject)
+            cleanup_entity_type(slug, entity_type, cleanup_fn, account)
           end)
 
           {:ok, :cleaned}
@@ -398,155 +408,116 @@ defmodule Provision do
 
       # Create or update actors
       multi = Enum.reduce(account_data["actors"] || %{}, multi, fn {external_id, actor_data}, multi ->
-        actor_attrs = atomize_keys(%{
-          name: actor_data["name"],
-          type: String.to_atom(actor_data["type"])
-        })
-
-        Ecto.Multi.run(multi, {:actor, slug, external_id}, fn _repo, changes ->
+        Ecto.Multi.run(multi, {:actor, slug, external_id}, fn repo, changes ->
           {_, account} = changes[{:account, slug}]
-          {temp_admin_subject, _, _, _} = changes[{:temp_admin, slug}]
           uuid = UuidMapping.get_entity(slug, "actors", external_id)
-          case uuid && Actors.fetch_actor_by_id(uuid, temp_admin_subject) |> nil_if_deleted_or_not_found() do
+          case uuid && Repo.get_by(Actor, account_id: account.id, id: uuid) do
             nil ->
               Logger.info("Creating new actor #{actor_data["name"]}")
-              {:ok, actor} = Actors.create_actor(account, actor_attrs)
-              # Update the mapping without manually handling Process.get/put.
+              actor_type = String.to_existing_atom(actor_data["type"])
+              # service_account and api_client must NOT have email (constraint requirement)
+              # account_user and account_admin_user MUST have email
+              actor_attrs = case actor_type do
+                type when type in [:service_account, :api_client] ->
+                  %{account_id: account.id, type: type, name: actor_data["name"]}
+                _ ->
+                  %{account_id: account.id, type: actor_type, name: actor_data["name"], email: actor_data["email"]}
+              end
+              actor = struct(Actor, actor_attrs) |> repo.insert!()
               UuidMapping.update_entities(slug, "actors", %{external_id => actor.id})
-              {:ok, {:new, actor}}
-            {:ok, existing_actor} ->
+              {:ok, actor}
+            existing_actor ->
               Logger.info("Updating existing actor #{actor_data["name"]}")
-              {:ok, updated_act} = Actors.update_actor(existing_actor, actor_attrs, temp_admin_subject)
-              {:ok, {:existing, updated_act}}
-          end
-        end)
-        |> Ecto.Multi.run({:actor_identity, slug, external_id}, fn repo, changes ->
-          email_provider = changes[{:email_provider, slug}]
-          case Map.get(changes, {:actor, slug, external_id}) do
-            {:new, actor} ->
-              Logger.info("Creating actor email identity")
-              Auth.create_identity(actor, email_provider, %{
-                provider_identifier: actor_data["email"],
-                provider_identifier_confirmation: actor_data["email"]
-              })
-            {:existing, actor} ->
-              Logger.info("Updating actor email identity")
-              {:ok, identity} = Auth.Identity.Query.not_deleted()
-              |> Auth.Identity.Query.by_actor_id(actor.id)
-              |> Auth.Identity.Query.by_provider_id(email_provider.id)
-              |> Repo.fetch(Auth.Identity.Query, [])
-
-              {:ok, identity |> Ecto.Changeset.change(%{
-                provider_identifier: actor_data["email"]
-              }) |> repo.update!()}
+              # Only set email for account_user and account_admin_user types
+              update_attrs = case existing_actor.type do
+                type when type in [:service_account, :api_client] ->
+                  %{name: actor_data["name"]}
+                _ ->
+                  %{name: actor_data["name"], email: actor_data["email"]}
+              end
+              updated_actor = existing_actor
+                |> Ecto.Changeset.change(update_attrs)
+                |> repo.update!()
+              {:ok, updated_actor}
           end
         end)
       end)
 
-      # Create or update providers
+      # Provider management through JSON config is deprecated in the new Portal architecture
+      # Providers should be created through the web interface or via direct database operations
       multi = Enum.reduce(account_data["auth"] || %{}, multi, fn {external_id, provider_data}, multi ->
-        Ecto.Multi.run(multi, {:provider, slug, external_id}, fn repo, changes ->
-          provider_attrs = %{
-            name: provider_data["name"],
-            adapter: String.to_atom(provider_data["adapter"]),
-            adapter_config: provider_data["adapter_config"]
-          }
-
+        Ecto.Multi.run(multi, {:provider, slug, external_id}, fn _repo, changes ->
           {_, account} = changes[{:account, slug}]
-          {temp_admin_subject, _, _, _} = changes[{:temp_admin, slug}]
           uuid = UuidMapping.get_entity(slug, "providers", external_id)
-          case uuid && Auth.fetch_provider_by_id(uuid, temp_admin_subject) |> nil_if_deleted_or_not_found() do
+          case uuid && Repo.get_by(AuthProvider, account_id: account.id, id: uuid) do
             nil ->
-              Logger.info("Creating new provider #{provider_data["name"]}")
-              {:ok, provider} = Auth.create_provider(account, provider_attrs)
-              UuidMapping.update_entities(slug, "providers", %{external_id => provider.id})
-              {:ok, provider}
-            {:ok, existing} ->
-              Logger.info("Updating existing provider #{provider_data["name"]}")
-              {:ok, existing |> Ecto.Changeset.change(provider_attrs) |> repo.update!()}
+              Logger.warning("Provider #{provider_data["name"]} not found. Provider creation through provision-state.json is no longer supported. Please create providers through the web interface.")
+              {:ok, nil}
+            existing ->
+              Logger.info("Found existing provider #{external_id}")
+              {:ok, existing}
           end
         end)
       end)
 
-      # Create or update gateway_groups
-      multi = Enum.reduce(account_data["gatewayGroups"] || %{}, multi, fn {external_id, gateway_group_data}, multi ->
-        Ecto.Multi.run(multi, {:gateway_group, slug, external_id}, fn _repo, changes ->
-          gateway_group_attrs = %{
-            name: gateway_group_data["name"],
-            tokens: [%{}]
-          }
-
+      # Create or update sites (formerly gateway groups)
+      # Note: JSON key is still "gatewayGroups" for backward compatibility
+      multi = Enum.reduce(account_data["gatewayGroups"] || %{}, multi, fn {external_id, site_data}, multi ->
+        Ecto.Multi.run(multi, {:site, slug, external_id}, fn repo, changes ->
           {_, account} = changes[{:account, slug}]
-          {temp_admin_subject, _, _, _} = changes[{:temp_admin, slug}]
-          uuid = UuidMapping.get_entity(slug, "gateway_groups", external_id)
-          case uuid && Gateways.fetch_group_by_id(uuid, temp_admin_subject) |> nil_if_deleted_or_not_found() do
+          uuid = UuidMapping.get_entity(slug, "sites", external_id)
+          case uuid && Repo.get_by(Site, account_id: account.id, id: uuid) do
             nil ->
-              Logger.info("Creating new gateway group #{gateway_group_data["name"]}")
-              gateway_group = account
-                |> Gateways.Group.Changeset.create(gateway_group_attrs, temp_admin_subject)
-                |> Repo.insert!()
-              UuidMapping.update_entities(slug, "gateway_groups", %{external_id => gateway_group.id})
-              {:ok, gateway_group}
-            {:ok, existing} ->
-              # Nothing to update
+              Logger.info("Creating new site #{site_data["name"]}")
+              site = %Site{
+                account_id: account.id,
+                name: site_data["name"],
+                managed_by: :account
+              } |> repo.insert!()
+              UuidMapping.update_entities(slug, "sites", %{external_id => site.id})
+              {:ok, site}
+            existing ->
+              # Nothing to update for sites
               {:ok, existing}
           end
         end)
       end)
 
-      # Create or update relay_groups
-      multi = Enum.reduce(account_data["relayGroups"] || %{}, multi, fn {external_id, relay_group_data}, multi ->
-        Ecto.Multi.run(multi, {:relay_group, slug, external_id}, fn _repo, changes ->
-          relay_group_attrs = %{
-            name: relay_group_data["name"]
-          }
-
-          {temp_admin_subject, _, _, _} = changes[{:temp_admin, slug}]
-          uuid = UuidMapping.get_entity(slug, "relay_groups", external_id)
-          existing_relay_group = uuid && Relays.fetch_group_by_id(uuid, temp_admin_subject)
-          case existing_relay_group do
-            v when v in [nil, {:error, :not_found}] ->
-              Logger.info("Creating new relay group #{relay_group_data["name"]}")
-              {:ok, relay_group} = Relays.create_group(relay_group_attrs, temp_admin_subject)
-              UuidMapping.update_entities(slug, "relay_groups", %{external_id => relay_group.id})
-              {:ok, relay_group}
-            {:ok, existing} ->
-              # Nothing to update
-              {:ok, existing}
-          end
-        end)
-      end)
+      # Relay groups are now deprecated (ephemeral in new Firezone)
+      # Log warning if any are defined in the JSON
+      multi = if map_size(account_data["relayGroups"] || %{}) > 0 do
+        Logger.warning("Relay groups in provision-state.json are deprecated and will be ignored. Relays are now global and ephemeral.")
+        multi
+      else
+        multi
+      end
 
       # Create or update actor_groups
       multi = Enum.reduce(account_data["groups"] || %{}, multi, fn {external_id, actor_group_data}, multi ->
-        Ecto.Multi.run(multi, {:actor_group, slug, external_id}, fn _repo, changes ->
-          actor_group_attrs = %{
-            name: actor_group_data["name"],
-            type: :static
-          }
-
-          {temp_admin_subject, _, _, _} = changes[{:temp_admin, slug}]
-          uuid = UuidMapping.get_entity(slug, "actor_groups", external_id)
-          case uuid && Actors.fetch_group_by_id(uuid, temp_admin_subject) |> nil_if_deleted_or_not_found() do
+        Ecto.Multi.run(multi, {:group, slug, external_id}, fn repo, changes ->
+          {_, account} = changes[{:account, slug}]
+          uuid = UuidMapping.get_entity(slug, "groups", external_id)
+          case uuid && Repo.get_by(Group, account_id: account.id, id: uuid) do
             nil ->
-              Logger.info("Creating new actor group #{actor_group_data["name"]}")
-              {:ok, actor_group} = Actors.create_group(actor_group_attrs, temp_admin_subject)
-              UuidMapping.update_entities(slug, "actor_groups", %{external_id => actor_group.id})
-              {:ok, actor_group}
-            {:ok, existing} ->
-              # Nothing to update
+              Logger.info("Creating new group #{actor_group_data["name"]}")
+              group = %Group{
+                account_id: account.id,
+                name: actor_group_data["name"],
+                type: :static
+              } |> repo.insert!()
+              UuidMapping.update_entities(slug, "groups", %{external_id => group.id})
+              {:ok, group}
+            existing ->
               {:ok, existing}
           end
         end)
-        |> Ecto.Multi.run({:actor_group_members, slug, external_id}, fn repo, changes ->
+        |> Ecto.Multi.run({:group_members, slug, external_id}, fn repo, changes ->
           {_, account} = changes[{:account, slug}]
-          group_uuid = UuidMapping.get_entity(slug, "actor_groups", external_id)
+          group_uuid = UuidMapping.get_entity(slug, "groups", external_id)
 
           memberships =
-            Actors.Membership.Query.all()
-            |> Actors.Membership.Query.by_group_id(group_uuid)
-            |> Actors.Membership.Query.returning_all()
-            |> Repo.all()
+            from(m in Membership, where: m.group_id == ^group_uuid)
+            |> repo.all()
 
           existing_members = Enum.map(memberships, fn membership -> membership.actor_id end)
           desired_members = Enum.map(actor_group_data["members"] || [], fn member ->
@@ -560,22 +531,24 @@ defmodule Provision do
           missing_members = desired_members -- existing_members
           untracked_members = existing_members -- desired_members
 
-          Logger.info("Updating members for actor group #{external_id}")
+          Logger.info("Updating members for group #{external_id}")
           Enum.each(missing_members || [], fn actor_uuid ->
             Logger.info("Adding member #{external_id}")
-            Actors.Membership.Changeset.upsert(account.id, %Actors.Membership{}, %{
+            %Membership{
+              account_id: account.id,
               group_id: group_uuid,
               actor_id: actor_uuid
-            })
+            }
             |> repo.insert!()
           end)
 
           if actor_group_data["forceMembers"] == true do
             # Remove untracked members
-            to_delete = Enum.map(untracked_members, fn actor_uuid -> {group_uuid, actor_uuid} end)
-            if to_delete != [] do
-              Actors.Membership.Query.by_group_id_and_actor_id({:in, to_delete})
-                |> repo.delete_all()
+            if untracked_members != [] do
+              from(m in Membership,
+                where: m.group_id == ^group_uuid and m.actor_id in ^untracked_members
+              )
+              |> repo.delete_all()
             end
           end
 
@@ -585,109 +558,97 @@ defmodule Provision do
 
       # Create or update resources
       multi = Enum.reduce(account_data["resources"] || %{}, multi, fn {external_id, resource_data}, multi ->
-        Ecto.Multi.run(multi, {:resource, slug, external_id}, fn _repo, changes ->
+        Ecto.Multi.run(multi, {:resource, slug, external_id}, fn repo, changes ->
+          {_, account} = changes[{:account, slug}]
+
+          # Convert gatewayGroups array to single site_id (take first element)
+          gateway_groups = resource_data["gatewayGroups"] || []
+          site_id = case gateway_groups do
+            [] ->
+              Logger.warning("Resource #{resource_data["name"]} has no gateway groups, skipping")
+              nil
+            [first | rest] ->
+              if length(rest) > 0 do
+                Logger.warning("Resource #{resource_data["name"]} has multiple gateway groups, using first: #{first}")
+              end
+              UuidMapping.get_entity(slug, "sites", first)
+          end
+
           resource_attrs = %{
-            type: String.to_atom(resource_data["type"]),
+            type: String.to_existing_atom(resource_data["type"]),
             name: resource_data["name"],
             address: resource_data["address"],
             address_description: resource_data["address_description"],
-            connections: Enum.map(resource_data["gatewayGroups"] || [], fn group ->
-              %{gateway_group_id: UuidMapping.get_entity(slug, "gateway_groups", group)}
-            end),
+            site_id: site_id,
             filters: Enum.map(resource_data["filters"] || [], fn filter ->
+              # Convert port integers to strings as required by Portal.Types.Int4Range
+              ports = Enum.map(filter["ports"] || [], fn port ->
+                if is_integer(port), do: Integer.to_string(port), else: port
+              end)
               %{
-                ports: filter["ports"] || [],
-                protocol: String.to_atom(filter["protocol"])
+                ports: ports,
+                protocol: String.to_existing_atom(filter["protocol"])
               }
             end)
           }
 
-          {temp_admin_subject, _, _, _} = changes[{:temp_admin, slug}]
           uuid = UuidMapping.get_entity(slug, "resources", external_id)
-          case uuid && fetch_resource(uuid, temp_admin_subject) |> nil_if_deleted_or_not_found() do
+          case uuid && Repo.get_by(Resource, account_id: account.id, id: uuid) do
             nil ->
               Logger.info("Creating new resource #{resource_data["name"]}")
-              {:ok, resource} = Resources.create_resource(resource_attrs, temp_admin_subject)
+              resource = %Resource{account_id: account.id}
+                |> Ecto.Changeset.cast(resource_attrs, [:type, :name, :address, :address_description, :site_id])
+                |> Ecto.Changeset.cast_embed(:filters, with: &filter_changeset/2)
+                |> Resource.changeset()
+                |> repo.insert!()
               UuidMapping.update_entities(slug, "resources", %{external_id => resource.id})
               {:ok, resource}
-            {:ok, existing} ->
-              existing = Repo.preload(existing, :connections)
+            existing ->
               Logger.info("Updating existing resource #{resource_data["name"]}")
-              only_updated_attrs = resource_attrs
-                |> Enum.reject(fn {key, value} ->
-                  case key do
-                    # Compare connections by gateway_group_id only
-                    :connections -> value == Enum.map(existing.connections || [], fn conn -> Map.take(conn, [:gateway_group_id]) end)
-                    # Compare filters by ports and protocol only
-                    :filters -> value == Enum.map(existing.filters || [], fn filter -> Map.take(filter, [:ports, :protocol]) end)
-                    _ -> Map.get(existing, key) == value
-                  end
-                end)
-                |> Enum.into(%{})
-
-              if only_updated_attrs == %{} do
-                {:ok, existing}
-              else
-                resource = case existing |> Resources.update_resource(resource_attrs, temp_admin_subject) do
-                  {:replaced, _old, new} ->
-                    UuidMapping.update_entities(slug, "resources", %{external_id => new.id})
-                    new
-                  {:updated, value} -> value
-                  x -> x
-                end
-
-                {:ok, resource}
-              end
+              updated_resource = existing
+                |> Ecto.Changeset.cast(resource_attrs, [:type, :name, :address, :address_description, :site_id])
+                |> Ecto.Changeset.cast_embed(:filters, with: &filter_changeset/2)
+                |> Resource.changeset()
+                |> repo.update!()
+              {:ok, updated_resource}
           end
         end)
       end)
 
       # Create or update policies
       multi = Enum.reduce(account_data["policies"] || %{}, multi, fn {external_id, policy_data}, multi ->
-        Ecto.Multi.run(multi, {:policy, slug, external_id}, fn _repo, changes ->
+        Ecto.Multi.run(multi, {:policy, slug, external_id}, fn repo, changes ->
+          {_, account} = changes[{:account, slug}]
+
           policy_attrs = %{
             description: policy_data["description"],
-            actor_group_id: UuidMapping.get_entity(slug, "actor_groups", policy_data["group"]),
+            group_id: UuidMapping.get_entity(slug, "groups", policy_data["group"]),
             resource_id: UuidMapping.get_entity(slug, "resources", policy_data["resource"])
           }
 
-          {temp_admin_subject, _, _, _} = changes[{:temp_admin, slug}]
           uuid = UuidMapping.get_entity(slug, "policies", external_id)
-          case uuid && fetch_policy(uuid, temp_admin_subject) |> nil_if_deleted_or_not_found() do
+          case uuid && Repo.get_by(Policy, account_id: account.id, id: uuid) do
             nil ->
               Logger.info("Creating new policy #{policy_data["name"]}")
-              {:ok, policy} = Policies.create_policy(policy_attrs, temp_admin_subject)
+              policy = %Policy{account_id: account.id}
+                |> Ecto.Changeset.cast(policy_attrs, [:description, :group_id, :resource_id])
+                |> repo.insert!()
               UuidMapping.update_entities(slug, "policies", %{external_id => policy.id})
               {:ok, policy}
-            {:ok, existing} ->
+            existing ->
               Logger.info("Updating existing policy #{policy_data["name"]}")
-              only_updated_attrs = policy_attrs
-                |> Enum.reject(fn {key, value} -> Map.get(existing, key) == value end)
-                |> Enum.into(%{})
-
-              if only_updated_attrs == %{} do
-                {:ok, existing}
-              else
-                policy = case existing |> Policies.update_policy(policy_attrs, temp_admin_subject) do
-                  {:replaced, _old, new} ->
-                    UuidMapping.update_entities(slug, "policies", %{external_id => new.id})
-                    new
-                  {:updated, value} -> value
-                  x -> x
-                end
-
-                {:ok, policy}
-              end
+              updated_policy = existing
+                |> Ecto.Changeset.cast(policy_attrs, [:description, :group_id, :resource_id])
+                |> repo.update!()
+              {:ok, updated_policy}
           end
         end)
       end)
 
       # Clean up temporary admin after all operations
       multi |> Ecto.Multi.run({:cleanup_temp_admin, slug}, fn _repo, changes ->
-        {temp_admin_subject, temp_admin_actor, temp_admin_actor_email_identity, temp_admin_actor_token} =
-          changes[{:temp_admin, slug}]
-
-        cleanup_temp_admin(temp_admin_actor, temp_admin_actor_email_identity, temp_admin_actor_token, temp_admin_subject)
+        {_temp_admin_subject, temp_admin_actor} = changes[{:temp_admin, slug}]
+        cleanup_temp_admin(temp_admin_actor)
         {:ok, :cleaned}
       end)
     end)
