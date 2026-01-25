@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "gwcs";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "spacetelescope";
     repo = "gwcs";
     tag = version;
-    hash = "sha256-aiC+uJ5S2HggBsou4vbjxxNtilRVC4eklRgML/lLK+4=";
+    hash = "sha256-0iUnapBn8yDCx1tqHD10Ljid15yBuqlICyFuva2LNPk=";
   };
 
   build-system = [
