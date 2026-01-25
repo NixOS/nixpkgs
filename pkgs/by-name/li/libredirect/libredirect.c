@@ -117,14 +117,16 @@ WRAPPER(int, bind)(int socket, const struct sockaddr *addr, socklen_t addr_len)
     char buf[PATH_MAX];
     const struct sockaddr *real_addr = addr;
     if (addr->sa_family == AF_UNIX) {
-	    struct sockaddr_un real_addr_un = *(struct sockaddr_un *)addr;
-	    const char *sun_path = rewrite(real_addr_un.sun_path, buf);
-	    if (sun_path != real_addr_un.sun_path) {
-		    strncpy(real_addr_un.sun_path, buf, sizeof(real_addr_un.sun_path) - 1);
-		    real_addr_un.sun_path[sizeof(real_addr_un.sun_path) - 1] = '\0';
-		    real_addr = (struct sockaddr *)&real_addr_un;
-		    addr_len = offsetof(struct sockaddr_un, sun_path) + strlen(real_addr_un.sun_path) + 1;
-	    }
+        struct sockaddr_un real_addr_un = *(struct sockaddr_un *)addr;
+        const char *sun_path = rewrite(real_addr_un.sun_path, buf);
+        if (sun_path != real_addr_un.sun_path) {
+            int n = snprintf(real_addr_un.sun_path, sizeof(real_addr_un.sun_path), "%s", buf);
+            if (n < 0 || n >= sizeof(real_addr_un.sun_path)) {
+                abort();
+            }
+            real_addr = (struct sockaddr *)&real_addr_un;
+            addr_len = offsetof(struct sockaddr_un, sun_path) + strlen(real_addr_un.sun_path) + 1;
+        }
     }
     return bind_real(socket, real_addr, addr_len);
 }
@@ -136,14 +138,16 @@ WRAPPER(int, connect)(int socket, const struct sockaddr *addr, socklen_t addr_le
     char buf[PATH_MAX];
     const struct sockaddr *real_addr = addr;
     if (addr->sa_family == AF_UNIX) {
-	    struct sockaddr_un real_addr_un = *(struct sockaddr_un *)addr;
-	    const char *sun_path = rewrite(real_addr_un.sun_path, buf);
-	    if (sun_path != real_addr_un.sun_path) {
-		    strncpy(real_addr_un.sun_path, buf, sizeof(real_addr_un.sun_path) - 1);
-		    real_addr_un.sun_path[sizeof(real_addr_un.sun_path) - 1] = '\0';
-		    real_addr = (struct sockaddr *)&real_addr_un;
-		    addr_len = offsetof(struct sockaddr_un, sun_path) + strlen(real_addr_un.sun_path) + 1;
-	    }
+        struct sockaddr_un real_addr_un = *(struct sockaddr_un *)addr;
+        const char *sun_path = rewrite(real_addr_un.sun_path, buf);
+        if (sun_path != real_addr_un.sun_path) {
+            int n = snprintf(real_addr_un.sun_path, sizeof(real_addr_un.sun_path), "%s", buf);
+            if (n < 0 || n >= sizeof(real_addr_un.sun_path)) {
+                abort();
+            }
+            real_addr = (struct sockaddr *)&real_addr_un;
+            addr_len = offsetof(struct sockaddr_un, sun_path) + strlen(real_addr_un.sun_path) + 1;
+        }
     }
     return connect_real(socket, real_addr, addr_len);
 }
@@ -384,9 +388,29 @@ WRAPPER(DIR *, opendir)(const char * path)
 WRAPPER_DEF(opendir)
 
 #if !defined(__APPLE__)
+WRAPPER(ssize_t, getxattr)(const char * path, const char * name, void * value, size_t size)
+{
+    ssize_t (*getxattr_real) (const char *, const char *, void *, size_t) = LOOKUP_REAL(getxattr);
+    char buf[PATH_MAX];
+    return getxattr_real(rewrite(path, buf), name, value, size);
+}
+WRAPPER_DEF(getxattr);
+#endif
+
+#if !defined(__APPLE__)
+WRAPPER(ssize_t, lgetxattr)(const char * path, const char * name, void * value, size_t size)
+{
+    ssize_t (*lgetxattr_real) (const char *, const char *, void *, size_t) = LOOKUP_REAL(lgetxattr);
+    char buf[PATH_MAX];
+    return lgetxattr_real(rewrite(path, buf), name, value, size);
+}
+WRAPPER_DEF(lgetxattr);
+#endif
+
+#if !defined(__APPLE__)
 WRAPPER(ssize_t, listxattr)(const char * path, char * list, size_t size)
 {
-    int (*listxattr_real) (const char *, char *, size_t) = LOOKUP_REAL(listxattr);
+    ssize_t (*listxattr_real) (const char *, char *, size_t) = LOOKUP_REAL(listxattr);
     char buf[PATH_MAX];
     return listxattr_real(rewrite(path, buf), list, size);
 }
@@ -396,11 +420,51 @@ WRAPPER_DEF(listxattr);
 #if !defined(__APPLE__)
 WRAPPER(ssize_t, llistxattr)(const char * path, char * list, size_t size)
 {
-    int (*llistxattr_real) (const char *, char *, size_t) = LOOKUP_REAL(llistxattr);
+    ssize_t (*llistxattr_real) (const char *, char *, size_t) = LOOKUP_REAL(llistxattr);
     char buf[PATH_MAX];
     return llistxattr_real(rewrite(path, buf), list, size);
 }
 WRAPPER_DEF(llistxattr);
+#endif
+
+#if !defined(__APPLE__)
+WRAPPER(int, setxattr)(const char * path, const char * name, const void * value, size_t size, int flags)
+{
+    int (*setxattr_real) (const char *, const char *, const void *, size_t, int) = LOOKUP_REAL(setxattr);
+    char buf[PATH_MAX];
+    return setxattr_real(rewrite(path, buf), name, value, size, flags);
+}
+WRAPPER_DEF(setxattr);
+#endif
+
+#if !defined(__APPLE__)
+WRAPPER(int, lsetxattr)(const char * path, const char * name, const void * value, size_t size, int flags)
+{
+    int (*lsetxattr_real) (const char *, const char *, const void *, size_t, int) = LOOKUP_REAL(lsetxattr);
+    char buf[PATH_MAX];
+    return lsetxattr_real(rewrite(path, buf), name, value, size, flags);
+}
+WRAPPER_DEF(setxattr);
+#endif
+
+#if !defined(__APPLE__)
+WRAPPER(int, removexattr)(const char * path, const char * name)
+{
+    int (*removexattr_real) (const char *, const char *) = LOOKUP_REAL(removexattr);
+    char buf[PATH_MAX];
+    return removexattr_real(rewrite(path, buf), name);
+}
+WRAPPER_DEF(removexattr);
+#endif
+
+#if !defined(__APPLE__)
+WRAPPER(int, lremovexattr)(const char * path, const char * name)
+{
+    int (*lremovexattr_real) (const char *, const char *) = LOOKUP_REAL(lremovexattr);
+    char buf[PATH_MAX];
+    return lremovexattr_real(rewrite(path, buf), name);
+}
+WRAPPER_DEF(lremovexattr);
 #endif
 
 #define SYSTEM_CMD_MAX 512
