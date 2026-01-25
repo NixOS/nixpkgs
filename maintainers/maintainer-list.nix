@@ -6145,6 +6145,11 @@
     githubId = 1279939;
     name = "Daniel Beckwith";
   };
+  dbeley = {
+    github = "dbeley";
+    githubId = 6568955;
+    name = "David Beley";
+  };
   dbirks = {
     email = "david@birks.dev";
     github = "dbirks";
