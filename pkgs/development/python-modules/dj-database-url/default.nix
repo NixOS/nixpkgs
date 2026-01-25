@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   django,
-  setuptools,
+  uv-build,
 }:
 
 buildPythonPackage rec {
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     hash = "sha256-zQiyEtDTFZHwuEIfRZHdgszyfsRSayFqPv9MIS4Ip6s=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ uv-build ];
 
   dependencies = [ django ];
 
