@@ -7,7 +7,7 @@
   ninja,
   python3,
   hwdata,
-  v4l-utils,
+  libv4l,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     pkg-config
     ninja
-    v4l-utils
+    libv4l
     hwdata
     python3
   ];
