@@ -113,9 +113,5 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ delafthi ];
-    badPlatforms = [
-      # error: Invalid DNS result order
-      "x86_64-darwin"
-    ];
   };
 })
