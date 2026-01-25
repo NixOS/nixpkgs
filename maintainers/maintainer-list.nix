@@ -10402,6 +10402,13 @@
     githubId = 982322;
     name = "Henrik Olsson";
   };
+  henriquelay = {
+    email = "nixpkgs@layber.bulc.club";
+    github = "henriquelay";
+    githubId = 37563861;
+    name = "Henrique Layber";
+    keys = [ { fingerprint = "B390 3EAC 57AD 1331 995C  D962 0284 3DDA 217C 9D81"; } ];
+  };
   henrirosten = {
     email = "henri.rosten@unikie.com";
     github = "henrirosten";
