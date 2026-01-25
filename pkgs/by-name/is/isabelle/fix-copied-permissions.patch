@@ -1,0 +1,10 @@
+--- a/src/Pure/System/isabelle_system.scala
++++ b/src/Pure/System/isabelle_system.scala
+@@ -214,6 +214,7 @@ object Isabelle_System {
+         Files.copy(src.toPath, target.toPath,
+           StandardCopyOption.COPY_ATTRIBUTES,
+           StandardCopyOption.REPLACE_EXISTING)
++        target.setWritable(true)
+       }
+       catch {
+         case ERROR(msg) =>
