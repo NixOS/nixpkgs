@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pythonOlder,
   aioquic,
-  cacert,
   h11,
   h2,
   httpx,
@@ -12,7 +11,7 @@
   trio,
   uvloop,
   wsproto,
-  poetry-core,
+  pdm-backend,
   pytest-asyncio,
   pytest-trio,
   pytestCheckHook,
@@ -36,7 +35,7 @@ buildPythonPackage rec {
     sed -i "/^addopts/d" pyproject.toml
   '';
 
-  build-system = [ poetry-core ];
+  build-system = [ pdm-backend ];
 
   dependencies = [
     h11
