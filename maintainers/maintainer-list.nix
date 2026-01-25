@@ -11718,6 +11718,12 @@
     github = "jali-clarke";
     githubId = 17733984;
   };
+  JalilArfaoui = {
+    email = "jalil@arfaoui.net";
+    github = "JalilArfaoui";
+    githubId = 3037833;
+    name = "Jalil Arfaoui";
+  };
   jamalam = {
     email = "james@jamalam.tech";
     name = "jamalam";
