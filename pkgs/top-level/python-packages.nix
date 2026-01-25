@@ -9461,6 +9461,8 @@ self: super: with self; {
 
   mdformat-footnote = callPackage ../development/python-modules/mdformat-footnote { };
 
+  mdformat-front-matters = callPackage ../development/python-modules/mdformat-front-matters { };
+
   mdformat-frontmatter = callPackage ../development/python-modules/mdformat-frontmatter { };
 
   mdformat-gfm = callPackage ../development/python-modules/mdformat-gfm { };
