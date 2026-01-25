@@ -8,12 +8,14 @@
   oslo-i18n,
   oslo-utils,
   pbr,
+  pythonAtLeast,
   requests,
   requests-mock,
   setuptools,
   stdenv,
   stestr,
   stevedore,
+  writeText,
 }:
 
 buildPythonPackage rec {
@@ -56,15 +58,26 @@ buildPythonPackage rec {
     stestr
   ];
 
-  checkPhase = ''
-    stestr run -e <(echo "
-    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
-      osc_lib.tests.test_shell.TestShellCli.test_shell_args_cloud_public
-      osc_lib.tests.test_shell.TestShellCli.test_shell_args_precedence
-      osc_lib.tests.test_shell.TestShellCliPrecedence.test_shell_args_precedence_1
-      osc_lib.tests.test_shell.TestShellCliPrecedence.test_shell_args_precedence_2
-    ''}")
-  '';
+  checkPhase =
+    let
+      disabledTests =
+        lib.optionals stdenv.hostPlatform.isDarwin [
+          "osc_lib.tests.test_shell.TestShellCli.test_shell_args_cloud_public"
+          "osc_lib.tests.test_shell.TestShellCli.test_shell_args_precedence"
+          "osc_lib.tests.test_shell.TestShellCliPrecedence.test_shell_args_precedence_1"
+          "osc_lib.tests.test_shell.TestShellCliPrecedence.test_shell_args_precedence_2"
+        ]
+        ++ lib.optionals (pythonAtLeast "3.14") [
+          # Disable test incompatible with Python 3.14+
+          # See upstream issue: https://bugs.launchpad.net/python-openstackclient/+bug/2138684
+          "osc_lib.tests.utils.test_tags.TestTagHelps"
+        ];
+    in
+    ''
+      runHook preCheck
+      stestr run -e <(echo "${lib.concatStringsSep "\n" disabledTests}")
+      runHook postCheck
+    '';
 
   pythonImportsCheck = [ "osc_lib" ];
 
