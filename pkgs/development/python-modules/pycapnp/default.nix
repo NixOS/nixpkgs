@@ -3,7 +3,6 @@
   buildPythonPackage,
   replaceVars,
   fetchFromGitHub,
-  fetchpatch2,
   setuptools,
   wheel,
   capnproto,
@@ -36,11 +35,6 @@ buildPythonPackage rec {
     # other than the builtin schemas (based on quick GitHub code search), so I don't
     # think it's worthwhile.
     (replaceVars ./include-paths.patch { inherit capnproto; })
-    (fetchpatch2 {
-      name = "cython-3.patch";
-      url = "https://github.com/capnproto/pycapnp/pull/334.diff?full_index=1";
-      hash = "sha256-we7v4RaL7c1tePWl+oYfzMHAfnvnpdMkQgVu9YLwC6Y=";
-    })
   ];
 
   build-system = [
