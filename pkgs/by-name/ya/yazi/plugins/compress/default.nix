@@ -5,13 +5,13 @@
 }:
 mkYaziPlugin {
   pname = "compress.yazi";
-  version = "0-unstable-2026-01-10";
+  version = "25.12.29-unstable-2026-01-24";
 
   src = fetchFromGitHub {
     owner = "KKV9";
     repo = "compress.yazi";
-    rev = "e6007f7c3f364cdb7146f5b6b282790948fb0bd6";
-    hash = "sha256-m5FfN2gnTHsbwP2aYaE+K6kNGfAC7HBVtCyy6HzNRrE=";
+    rev = "cb6e8ec0141915dc319ccd6b904dcd2f03502576";
+    hash = "sha256-D/EpcRDIc3toeyjHqi+vGw0v9B22HVvKJua5EVEAc0U=";
   };
 
   meta = {

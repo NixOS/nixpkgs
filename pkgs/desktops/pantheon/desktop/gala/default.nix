@@ -26,15 +26,17 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gala";
-  version = "8.4.0";
+  version = "8.4.0-unstable-2026-01-06";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "gala";
-    tag = version;
-    hash = "sha256-Tb6+NfJ2/WRJb3R/W8oBJ5HIT8vwQUxiwqKul2hzlXY=";
+    # Contains crash fixes for mutter 48.
+    # nixpkgs-update: no auto update
+    rev = "8fb60a9c9b04245913733208df1c061d6c353a35";
+    hash = "sha256-GBNrcUAC7UBdyrqoja81bD1oVHjLXWhnDz3gtjMbjII=";
   };
 
   depsBuildBuild = [ pkg-config ];
