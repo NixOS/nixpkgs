@@ -1,30 +1,20 @@
 {
   lib,
   fetchFromGitHub,
-  fetchpatch,
   python3Packages,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "brotab";
-  version = "1.4.2";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "balta2ar";
     repo = "brotab";
     tag = version;
-    hash = "sha256-HKKjiW++FwjdorqquSCIdi1InE6KbMbFKZFYHBxzg8Q=";
+    hash = "sha256-Pv5tEDL11brc/n3TuFcad9kTr7Jb/Bt7JFb29HuX/28=";
   };
-
-  patches = [
-    # https://github.com/balta2ar/brotab/pull/102
-    (fetchpatch {
-      name = "remove-unnecessary-pip-import.patch";
-      url = "https://github.com/balta2ar/brotab/commit/825cd48f255c911aabbfb495f6b8fc73f27d3fe5.patch";
-      hash = "sha256-IN28AOLPKPUc3KkxIGFMpZNNXA1+O12NxS+Hl4KMXbg=";
-    })
-  ];
 
   build-system = with python3Packages; [
     setuptools
@@ -34,14 +24,28 @@ python3Packages.buildPythonApplication rec {
     flask
     psutil
     requests
+    werkzeug
     setuptools
   ];
 
-  postPatch = ''
-    substituteInPlace requirements/base.txt \
-      --replace-fail "Flask==2.0.2" "Flask>=2.0.2" \
-      --replace-fail "psutil==5.8.0" "psutil>=5.8.0" \
-      --replace-fail "requests==2.24.0" "requests>=2.24.0"
+  pythonRelaxDeps = [
+    "flask"
+    "psutil"
+    "requests"
+    "werkzeug"
+    "setuptools"
+  ];
+
+  postInstall = ''
+    substituteInPlace $out/config/*json \
+      --replace-fail '$PWD/brotab_mediator.py' $out/bin/bt_mediator
+    mkdir -p $out/lib/mozilla/native-messaging-hosts
+    mv $out/config/firefox_mediator.json $out/lib/mozilla/native-messaging-hosts
+    mkdir -p $out/etc/chromium/native-messaging-hosts
+    mv $out/config/chromium_mediator.json $out/etc/chromium/native-messaging-hosts
+    mkdir -p $out/lib/albert
+    mv $out/config/Brotab.qss $out/lib/albert
+    rmdir $out/config
   '';
 
   __darwinAllowLocalNetworking = true;

@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "tensile";
-  version = "7.0.2";
+  version = "7.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "Tensile";
     rev = "rocm-${version}";
-    hash = "sha256-1G6qp/VBJL67QW9t2VB5KK5lwn+PbY0hqHq8DzyK2fg=";
+    hash = "sha256-uYLlbtXrc8m8/RpMbP7WaS7VYGIUm2LHYzv00DZAzvE=";
   };
 
   # TODO: It should be possible to run asm caps test ONCE for all supported arches
