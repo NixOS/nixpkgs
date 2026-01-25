@@ -41,6 +41,12 @@ stdenv.mkDerivation (finalAttrs: {
     cp ./include/amd_smi/impl/amd_hsmp.h ./esmi_ib_library/include/asm/amd_hsmp.h
   '';
 
+  patches = [
+    # Fix error: redefinition of 'struct drm_color_ctm_3x4'
+    # https://github.com/ROCm/amdsmi/pull/165
+    ./drm-struct-redefinition-fix.patch
+  ];
+
   nativeBuildInputs = [
     cmake
     pkg-config
