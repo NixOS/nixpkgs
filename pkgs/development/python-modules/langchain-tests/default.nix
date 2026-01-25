@@ -48,7 +48,9 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
+    "pytest"
     "syrupy"
+    "vcrpy"
   ];
 
   dependencies = [
