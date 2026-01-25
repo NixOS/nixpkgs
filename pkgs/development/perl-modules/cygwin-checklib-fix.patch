@@ -1,0 +1,13 @@
+diff --git a/inc/Devel/CheckLib.pm b/inc/Devel/CheckLib.pm
+index 36a451a..a7554dc 100644
+--- a/inc/Devel/CheckLib.pm
++++ b/inc/Devel/CheckLib.pm
+@@ -379,7 +379,7 @@ sub _findcc {
+     my @cc = split( /\s+/, $Config{cc} );
+     return ( [ @cc, @ccflags ], \@ldflags ) if -x $cc[0];
+     foreach my $path (@paths) {
+-        my $compiler = File::Spec->catfile( $path, $cc[0] ) . $Config{_exe};
++        my $compiler = File::Spec->catfile( $path, $cc[0] );
+         return ( [ $compiler, @cc[ 1 .. $#cc ], @ccflags ], \@ldflags )
+           if -x $compiler;
+     }

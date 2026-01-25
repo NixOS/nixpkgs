@@ -1,0 +1,12 @@
+diff --git a/globals.c b/globals.c
+index e0b05a2..546c8be 100644
+--- a/globals.c
++++ b/globals.c
+@@ -347,6 +347,7 @@ const xmlSAXLocator xmlDefaultSAXLocator = {
+  *
+  * Default old SAX v1 handler for HTML, builds the DOM tree
+  */
++XMLPUBVAR const xmlSAXHandlerV1 htmlDefaultSAXHandler;
+ const xmlSAXHandlerV1 htmlDefaultSAXHandler = {
+     xmlSAX2InternalSubset,
+     NULL,

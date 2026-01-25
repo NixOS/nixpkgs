@@ -1,0 +1,26 @@
+diff --git a/unix/unxcfg.h b/unix/unxcfg.h
+index bcdfe16..0e00744 100644
+--- a/unix/unxcfg.h
++++ b/unix/unxcfg.h
+@@ -107,6 +107,8 @@ typedef struct stat z_stat;
+ #  ifndef timezone
+ #    define timezone _timezone
+ #  endif
++#  include <utime.h>
++#  define GOT_UTIMBUF
+ #endif
+ 
+ #ifdef BSD
+diff --git a/unix/Makefile b/unix/Makefile
+index a0a6270..51f243d 100644
+--- a/unix/Makefile
++++ b/unix/Makefile
+@@ -125,7 +125,7 @@ prefix = /usr/local
+ BINDIR = $(prefix)/bin#			where to install executables
+ MANDIR = $(prefix)/man/man$(manext)#	where to install man pages
+ INSTALLEDBIN = $(BINDIR)/funzip$E $(BINDIR)/unzip$E $(BINDIR)/unzipsfx$E \
+-	$(BINDIR)/zipgrep$E $(BINDIR)/zipinfo$E
++	$(BINDIR)/zipgrep $(BINDIR)/zipinfo$E
+ INSTALLEDMAN = $(MANDIR)/funzip.$(manext) $(MANDIR)/unzip.$(manext) \
+ 	$(MANDIR)/unzipsfx.$(manext) $(MANDIR)/zipgrep.$(manext) \
+ 	$(MANDIR)/zipinfo.$(manext)

@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./uintptr_t.patch
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isCygwin ./fix-cygwin-build.patch;
 
   nativeBuildInputs = [ cmake ];
 

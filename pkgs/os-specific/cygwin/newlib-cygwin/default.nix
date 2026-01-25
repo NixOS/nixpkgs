@@ -1,30 +1,51 @@
 {
   lib,
-  stdenv,
   stdenvNoCC,
   stdenvNoLibc,
   autoreconfHook,
   bison,
   buildPackages,
-  cocom-tool-set,
   flex,
   perl,
   w32api,
   w32api-headers,
+  newlib-cygwin-headers,
 
   headersOnly ? false,
 }:
 
-(if headersOnly then stdenvNoCC else stdenvNoLibc).mkDerivation (
+let
+  stdenv =
+    let
+      bintools = stdenvNoLibc.cc.bintools.override {
+        libc = newlib-cygwin-headers;
+        noLibc = false;
+      };
+    in
+    # we only want to do this on cygwin because newlib-cygwin-headers doesn't
+    # evaluate on other platforms
+    stdenvNoLibc.override (
+      lib.optionalAttrs stdenvNoLibc.hostPlatform.isCygwin {
+        cc = stdenvNoLibc.cc.override {
+          libc = newlib-cygwin-headers;
+          noLibc = false;
+          inherit bintools;
+        };
+      }
+    );
+
+in
+(if headersOnly then stdenvNoCC else stdenv).mkDerivation (
   finalAttrs:
   {
     pname = "newlib-cygwin${lib.optionalString headersOnly "-headers"}";
     version = "3.6.4";
 
     src = buildPackages.fetchgit {
-      url = "https://cygwin.com/git/newlib-cygwin.git";
+      url = "git://cygwin.com/git/newlib-cygwin";
       rev = "cygwin-${finalAttrs.version}";
       hash = "sha256-+WYKwqcDAc7286GzbgKKAxNJCOf3AeNnF8XEVPoor+g=";
+      fetchSubmodules = false;
     };
 
     outputs = [
@@ -46,6 +67,9 @@
       # This is required for boost coroutines to work. After we get to the point
       # where nix runs on cygwin, we can attempt to upstream this again.
       ./store-tls-pointer-in-win32-tls.patch
+      ./Cygwin-only-use-native-symlinks-when-they-preserve-t.patch
+      # This fixes the nix libutil MonitorFdHup.shouldNotBlock test
+      ./fix-missing-POLLHUP-when-write-pipe-is-closed.patch
     ]
     # After cygwin hosted builds are working, we should upstream this
     ++ lib.optional (
@@ -114,10 +138,13 @@
         nativeBuildInputs = [
           autoreconfHook
           bison
-          cocom-tool-set
           flex
           perl
         ];
+
+        # -lintl from gettext breaks link on cygwin
+        ${if stdenv.buildPlatform.isCygwin then "dontAddExtraLibs" else null} =
+          stdenv.buildPlatform.isCygwin;
 
         buildInputs = [ w32api ];
 

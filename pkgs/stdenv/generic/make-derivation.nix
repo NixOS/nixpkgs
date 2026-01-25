@@ -476,6 +476,7 @@ let
           ++ optional separateDebugInfo' ../../build-support/setup-hooks/separate-debug-info.sh
           ++ optional isWindows ../../build-support/setup-hooks/win-dll-link.sh
           ++ optional isCygwin ../../build-support/setup-hooks/cygwin-dll-link.sh
+          ++ optional (isCygwin && canExecuteHostOnBuild) ../../build-support/setup-hooks/cygwin-dll-path.sh
           ++ optionals doCheck nativeCheckInputs
           ++ optionals doInstallCheck nativeInstallCheckInputs;
 
@@ -705,7 +706,6 @@ let
               allowedImpureDLLs
               ++ lib.optionals isCygwin [
                 "KERNEL32.dll"
-                "cygwin1.dll"
               ];
           }
           // (

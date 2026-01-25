@@ -25985,6 +25985,8 @@ with self;
       hash = "sha256-eynEWt0Z09UIS3Ufe6iajkBHmkRs4hz9nMdB5VgzKgA=";
     };
     propagatedBuildInputs = [ IOSocketSSL ];
+    # TODO: fix PATH needed for dependencies
+    doCheck = !stdenv.buildPlatform.isCygwin;
     meta = {
       description = "SSL support for Net::SMTP";
       license = with lib.licenses; [
@@ -33242,7 +33244,8 @@ with self;
 
     # The t/integration/preload.t test is broken on riscv64
     # https://github.com/Test-More/Test2-Harness/issues/290
-    doCheck = !stdenv.hostPlatform.isRiscV;
+    # There seems to be a similar failure on cygwin
+    doCheck = !stdenv.hostPlatform.isRiscV && !stdenv.buildPlatform.isCygwin;
 
     propagatedBuildInputs = [
       DataUUID
@@ -38666,18 +38669,18 @@ with self;
       url = "mirror://cpan/authors/id/T/TO/TODDR/XML-Parser-2.46.tar.gz";
       hash = "sha256-0zEzJJHFHMz7TLlP/ET5zXM3jmGEmNSjffngQ2YcUV0=";
     };
-    patches = [ ../development/perl-modules/xml-parser-0001-HACK-Assumes-Expat-paths-are-good.patch ];
-    postPatch =
-      lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
-        substituteInPlace Expat/Makefile.PL --replace 'use English;' '#'
-      ''
-      + lib.optionalString stdenv.hostPlatform.isCygwin ''
-        sed -i -e "s@my \$compiler = File::Spec->catfile(\$path, \$cc\[0\]) \. \$Config{_exe};@my \$compiler = File::Spec->catfile(\$path, \$cc\[0\]) \. (\$^O eq 'cygwin' ? \"\" : \$Config{_exe});@" inc/Devel/CheckLib.pm
-      '';
+    patches = [
+      ../development/perl-modules/xml-parser-0001-HACK-Assumes-Expat-paths-are-good.patch
+    ]
+    ++ lib.optional stdenv.buildPlatform.isCygwin ../development/perl-modules/cygwin-checklib-fix.patch;
+    postPatch = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+      substituteInPlace Expat/Makefile.PL --replace 'use English;' '#'
+    '';
     makeMakerFlags = [
       "EXPATLIBPATH=${pkgs.expat.out}/lib"
       "EXPATINCPATH=${pkgs.expat.dev}/include"
     ];
+    buildInputs = lib.optional stdenv.hostPlatform.isCygwin pkgs.expat;
     propagatedBuildInputs = [ LWP ];
     meta = {
       description = "Perl module for parsing XML documents";

@@ -1,0 +1,619 @@
+From 3b266a8b33a4b1090a7d87662b6d1e23187c96d3 Mon Sep 17 00:00:00 2001
+From: David McFarland <corngood@gmail.com>
+Date: Wed, 8 Oct 2025 15:37:12 -0300
+Subject: [PATCH] fix cygwin build
+
+---
+ generic/tcl.h             |  2 +-
+ generic/tclCmdAH.c        |  2 +-
+ generic/tclDecls.h        |  2 +-
+ generic/tclFCmd.c         |  2 +-
+ generic/tclIOSock.c       |  2 +-
+ generic/tclIntPlatDecls.h | 12 ++++++------
+ generic/tclPanic.c        |  8 ++++----
+ generic/tclPlatDecls.h    |  8 ++++----
+ generic/tclStubInit.c     | 10 +++++-----
+ tools/genStubs.tcl        |  9 ---------
+ unix/Makefile.in          |  5 +----
+ unix/tcl.m4               | 15 ++++++++++++++-
+ unix/tclUnixFCmd.c        | 37 +++++--------------------------------
+ unix/tclUnixFile.c        |  4 ++--
+ unix/tclUnixInit.c        |  6 +++---
+ unix/tclUnixNotfy.c       | 22 +++++++++++-----------
+ unix/tclUnixPort.h        |  2 +-
+ 17 files changed, 61 insertions(+), 87 deletions(-)
+
+diff --git a/generic/tcl.h b/generic/tcl.h
+index fc772d5b3c..539f7ce300 100644
+--- a/generic/tcl.h
++++ b/generic/tcl.h
+@@ -462,7 +462,7 @@ typedef unsigned TCL_WIDE_INT_TYPE	Tcl_WideUInt;
+ #   else
+ 	typedef struct _stat32i64 Tcl_StatBuf;
+ #   endif /* _MSC_VER < 1400 */
+-#elif defined(__CYGWIN__)
++#elif 0
+     typedef struct {
+ 	unsigned st_dev;
+ 	unsigned short st_ino;
+diff --git a/generic/tclCmdAH.c b/generic/tclCmdAH.c
+index adbe9a699d..f0933d12a2 100644
+--- a/generic/tclCmdAH.c
++++ b/generic/tclCmdAH.c
+@@ -1788,7 +1788,7 @@ FileAttrIsOwnedCmd(
+     int objc,
+     Tcl_Obj *const objv[])
+ {
+-#ifdef __CYGWIN__
++#if 0
+ #define geteuid() (short)(geteuid)()
+ #endif
+ #if !defined(_WIN32)
+diff --git a/generic/tclDecls.h b/generic/tclDecls.h
+index 27b4edc4cd..925050ddf1 100644
+--- a/generic/tclDecls.h
++++ b/generic/tclDecls.h
+@@ -4055,7 +4055,7 @@ extern const TclStubs *tclStubsPtr;
+ 		    *(t) = _t.now; \
+ 		} while (0)
+ #   endif
+-#   if defined(__CYGWIN__) && defined(TCL_WIDE_INT_IS_LONG)
++#   if 0
+ /* On Cygwin64, long is 64-bit while on Win64 long is 32-bit. Therefore
+  * we have to make sure that all stub entries on Cygwin64 follow the
+  * Win64 signature. Cygwin64 stubbed extensions cannot use those stub
+diff --git a/generic/tclFCmd.c b/generic/tclFCmd.c
+index e55088209c..c6b9e1881c 100644
+--- a/generic/tclFCmd.c
++++ b/generic/tclFCmd.c
+@@ -523,7 +523,7 @@ CopyRenameOneFile(
+ 	 * 16 bits and we get collisions. See bug #2015723.
+ 	 */
+ 
+-#if !defined(_WIN32) && !defined(__CYGWIN__)
++#if !defined(_WIN32)
+ 	if ((sourceStatBuf.st_ino != 0) && (targetStatBuf.st_ino != 0)) {
+ 	    if ((sourceStatBuf.st_ino == targetStatBuf.st_ino) &&
+ 		    (sourceStatBuf.st_dev == targetStatBuf.st_dev)) {
+diff --git a/generic/tclIOSock.c b/generic/tclIOSock.c
+index 64139609a5..b75fc18158 100644
+--- a/generic/tclIOSock.c
++++ b/generic/tclIOSock.c
+@@ -104,7 +104,7 @@ TclSockGetPort(
+  *----------------------------------------------------------------------
+  */
+ 
+-#if !defined(_WIN32) && !defined(__CYGWIN__)
++#if !defined(_WIN32)
+ #   define SOCKET int
+ #endif
+ 
+diff --git a/generic/tclIntPlatDecls.h b/generic/tclIntPlatDecls.h
+index 5bd4828441..5d8c43dce3 100644
+--- a/generic/tclIntPlatDecls.h
++++ b/generic/tclIntPlatDecls.h
+@@ -40,7 +40,7 @@ extern "C" {
+  * Exported function declarations:
+  */
+ 
+-#if !defined(_WIN32) && !defined(__CYGWIN__) && !defined(MAC_OSX_TCL) /* UNIX */
++#if !defined(_WIN32) && !defined(MAC_OSX_TCL) /* UNIX */
+ /* 0 */
+ EXTERN void		TclGetAndDetachPids(Tcl_Interp *interp,
+ 				Tcl_Channel chan);
+@@ -116,7 +116,7 @@ EXTERN int		TclUnixOpenTemporaryFile(Tcl_Obj *dirObj,
+ 				Tcl_Obj *basenameObj, Tcl_Obj *extensionObj,
+ 				Tcl_Obj *resultingNameObj);
+ #endif /* UNIX */
+-#if defined(_WIN32) || defined(__CYGWIN__) /* WIN */
++#if defined(_WIN32) /* WIN */
+ /* 0 */
+ EXTERN void		TclWinConvertError(DWORD errCode);
+ /* 1 */
+@@ -272,7 +272,7 @@ typedef struct TclIntPlatStubs {
+     int magic;
+     void *hooks;
+ 
+-#if !defined(_WIN32) && !defined(__CYGWIN__) && !defined(MAC_OSX_TCL) /* UNIX */
++#if !defined(_WIN32) && !defined(MAC_OSX_TCL) /* UNIX */
+     void (*tclGetAndDetachPids) (Tcl_Interp *interp, Tcl_Channel chan); /* 0 */
+     int (*tclpCloseFile) (TclFile file); /* 1 */
+     Tcl_Channel (*tclpCreateCommandChannel) (TclFile readFile, TclFile writeFile, TclFile errorFile, int numPids, Tcl_Pid *pidPtr); /* 2 */
+@@ -305,7 +305,7 @@ typedef struct TclIntPlatStubs {
+     int (*tclWinCPUID) (unsigned int index, unsigned int *regs); /* 29 */
+     int (*tclUnixOpenTemporaryFile) (Tcl_Obj *dirObj, Tcl_Obj *basenameObj, Tcl_Obj *extensionObj, Tcl_Obj *resultingNameObj); /* 30 */
+ #endif /* UNIX */
+-#if defined(_WIN32) || defined(__CYGWIN__) /* WIN */
++#if defined(_WIN32) /* WIN */
+     void (*tclWinConvertError) (DWORD errCode); /* 0 */
+     void (*tclWinConvertWSAError) (DWORD errCode); /* 1 */
+     struct servent * (*tclWinGetServByName) (const char *nm, const char *proto); /* 2 */
+@@ -385,7 +385,7 @@ extern const TclIntPlatStubs *tclIntPlatStubsPtr;
+  * Inline function declarations:
+  */
+ 
+-#if !defined(_WIN32) && !defined(__CYGWIN__) && !defined(MAC_OSX_TCL) /* UNIX */
++#if !defined(_WIN32) && !defined(MAC_OSX_TCL) /* UNIX */
+ #define TclGetAndDetachPids \
+ 	(tclIntPlatStubsPtr->tclGetAndDetachPids) /* 0 */
+ #define TclpCloseFile \
+@@ -441,7 +441,7 @@ extern const TclIntPlatStubs *tclIntPlatStubsPtr;
+ #define TclUnixOpenTemporaryFile \
+ 	(tclIntPlatStubsPtr->tclUnixOpenTemporaryFile) /* 30 */
+ #endif /* UNIX */
+-#if defined(_WIN32) || defined(__CYGWIN__) /* WIN */
++#if defined(_WIN32) /* WIN */
+ #define TclWinConvertError \
+ 	(tclIntPlatStubsPtr->tclWinConvertError) /* 0 */
+ #define TclWinConvertWSAError \
+diff --git a/generic/tclPanic.c b/generic/tclPanic.c
+index 56c8fbcbae..aea7121cad 100644
+--- a/generic/tclPanic.c
++++ b/generic/tclPanic.c
+@@ -14,7 +14,7 @@
+  */
+ 
+ #include "tclInt.h"
+-#if defined(_WIN32) || defined(__CYGWIN__)
++#if defined(_WIN32)
+     MODULE_SCOPE TCL_NORETURN void tclWinDebugPanic(const char *format, ...);
+ #endif
+ 
+@@ -23,7 +23,7 @@
+  * procedure.
+  */
+ 
+-#if defined(__CYGWIN__)
++#if 0
+ static Tcl_PanicProc *panicProc = tclWinDebugPanic;
+ #else
+ static Tcl_PanicProc *panicProc = NULL;
+@@ -52,7 +52,7 @@ Tcl_SetPanicProc(
+ #if defined(_WIN32)
+     /* tclWinDebugPanic only installs if there is no panicProc yet. */
+     if ((proc != tclWinDebugPanic) || (panicProc == NULL))
+-#elif defined(__CYGWIN__)
++#elif 0
+     if (proc == NULL)
+ 	panicProc = tclWinDebugPanic;
+     else
+@@ -107,7 +107,7 @@ Tcl_PanicVA(
+ 	fprintf(stderr, "\n");
+ 	fflush(stderr);
+     }
+-#if defined(_WIN32) || defined(__CYGWIN__)
++#if defined(_WIN32)
+ #if defined(__GNUC__)
+     __builtin_trap();
+ #elif defined(_WIN64)
+diff --git a/generic/tclPlatDecls.h b/generic/tclPlatDecls.h
+index 46181a1d61..b11e851dbf 100644
+--- a/generic/tclPlatDecls.h
++++ b/generic/tclPlatDecls.h
+@@ -31,7 +31,7 @@
+  * TCHAR is needed here for win32, so if it is not defined yet do it here.
+  * This way, we don't need to include <tchar.h> just for one define.
+  */
+-#if (defined(_WIN32) || defined(__CYGWIN__)) && !defined(_TCHAR_DEFINED)
++#if defined(_WIN32) && !defined(_TCHAR_DEFINED)
+ #   if defined(_UNICODE)
+ 	typedef wchar_t TCHAR;
+ #   else
+@@ -50,7 +50,7 @@ extern "C" {
+  * Exported function declarations:
+  */
+ 
+-#if defined(_WIN32) || defined(__CYGWIN__) /* WIN */
++#if defined(_WIN32) /* WIN */
+ /* 0 */
+ EXTERN TCHAR *		Tcl_WinUtfToTChar(const char *str, int len,
+ 				Tcl_DString *dsPtr);
+@@ -81,7 +81,7 @@ typedef struct TclPlatStubs {
+     int magic;
+     void *hooks;
+ 
+-#if defined(_WIN32) || defined(__CYGWIN__) /* WIN */
++#if defined(_WIN32) /* WIN */
+     TCHAR * (*tcl_WinUtfToTChar) (const char *str, int len, Tcl_DString *dsPtr); /* 0 */
+     char * (*tcl_WinTCharToUtf) (const TCHAR *str, int len, Tcl_DString *dsPtr); /* 1 */
+     void (*reserved2)(void);
+@@ -106,7 +106,7 @@ extern const TclPlatStubs *tclPlatStubsPtr;
+  * Inline function declarations:
+  */
+ 
+-#if defined(_WIN32) || defined(__CYGWIN__) /* WIN */
++#if defined(_WIN32) /* WIN */
+ #define Tcl_WinUtfToTChar \
+ 	(tclPlatStubsPtr->tcl_WinUtfToTChar) /* 0 */
+ #define Tcl_WinTCharToUtf \
+diff --git a/generic/tclStubInit.c b/generic/tclStubInit.c
+index cd6d46b2dd..f0966d9b7f 100644
+--- a/generic/tclStubInit.c
++++ b/generic/tclStubInit.c
+@@ -139,7 +139,7 @@ static const char *TclGetStartupScriptFileName(void)
+     return Tcl_GetString(path);
+ }
+ 
+-#if defined(_WIN32) || defined(__CYGWIN__)
++#if defined(_WIN32)
+ #undef TclWinNToHS
+ #define TclWinNToHS winNToHS
+ static unsigned short TclWinNToHS(unsigned short ns) {
+@@ -169,7 +169,7 @@ TclWinConvertError_(unsigned errCode) {
+ #   define TclUnixOpenTemporaryFile 0
+ #   define TclpReaddir 0
+ #   define TclpIsAtty 0
+-#elif defined(__CYGWIN__)
++#elif 0
+ #   define TclpIsAtty isatty
+ #   define TclWinSetInterfaces (void (*) (int))(void *)doNothing
+ #   define TclWinAddProcess (void (*) (void *, unsigned int))(void *)doNothing
+@@ -764,7 +764,7 @@ static const TclIntStubs tclIntStubs = {
+ static const TclIntPlatStubs tclIntPlatStubs = {
+     TCL_STUB_MAGIC,
+     0,
+-#if !defined(_WIN32) && !defined(__CYGWIN__) && !defined(MAC_OSX_TCL) /* UNIX */
++#if !defined(_WIN32) && !defined(MAC_OSX_TCL) /* UNIX */
+     TclGetAndDetachPids, /* 0 */
+     TclpCloseFile, /* 1 */
+     TclpCreateCommandChannel, /* 2 */
+@@ -797,7 +797,7 @@ static const TclIntPlatStubs tclIntPlatStubs = {
+     TclWinCPUID, /* 29 */
+     TclUnixOpenTemporaryFile, /* 30 */
+ #endif /* UNIX */
+-#if defined(_WIN32) || defined(__CYGWIN__) /* WIN */
++#if defined(_WIN32) /* WIN */
+     TclWinConvertError, /* 0 */
+     TclWinConvertWSAError, /* 1 */
+     TclWinGetServByName, /* 2 */
+@@ -868,7 +868,7 @@ static const TclIntPlatStubs tclIntPlatStubs = {
+ static const TclPlatStubs tclPlatStubs = {
+     TCL_STUB_MAGIC,
+     0,
+-#if defined(_WIN32) || defined(__CYGWIN__) /* WIN */
++#if defined(_WIN32) /* WIN */
+     Tcl_WinUtfToTChar, /* 0 */
+     Tcl_WinTCharToUtf, /* 1 */
+     0, /* 2 */
+diff --git a/tools/genStubs.tcl b/tools/genStubs.tcl
+index 3c9964556f..416a89e14a 100644
+--- a/tools/genStubs.tcl
++++ b/tools/genStubs.tcl
+@@ -299,9 +299,6 @@ proc genStubs::addPlatformGuard {plat iftxt {eltxt {}} {withCygwin 0}} {
+     switch $plat {
+ 	win {
+ 	    append text "#if defined(_WIN32)"
+-	    if {$withCygwin} {
+-		append text " || defined(__CYGWIN__)"
+-	    }
+ 	    append text " /* WIN */\n${iftxt}"
+ 	    if {$eltxt ne ""} {
+ 		append text "#else /* WIN */\n${eltxt}"
+@@ -310,9 +307,6 @@ proc genStubs::addPlatformGuard {plat iftxt {eltxt {}} {withCygwin 0}} {
+ 	}
+ 	unix {
+ 	    append text "#if !defined(_WIN32)"
+-	    if {$withCygwin} {
+-		append text " && !defined(__CYGWIN__)"
+-	    }
+ 	    append text " && !defined(MAC_OSX_TCL)\
+ 		    /* UNIX */\n${iftxt}"
+ 	    if {$eltxt ne ""} {
+@@ -336,9 +330,6 @@ proc genStubs::addPlatformGuard {plat iftxt {eltxt {}} {withCygwin 0}} {
+ 	}
+ 	x11 {
+ 	    append text "#if !(defined(_WIN32)"
+-	    if {$withCygwin} {
+-		append text " || defined(__CYGWIN__)"
+-	    }
+ 	    append text " || defined(MAC_OSX_TK))\
+ 		    /* X11 */\n${iftxt}"
+ 	    if {$eltxt ne ""} {
+diff --git a/unix/Makefile.in b/unix/Makefile.in
+index bc743b3892..dc80d61c2f 100644
+--- a/unix/Makefile.in
++++ b/unix/Makefile.in
+@@ -358,7 +358,7 @@ NOTIFY_OBJS = tclUnixNotfy.o
+ 
+ MAC_OSX_OBJS = tclMacOSXBundle.o tclMacOSXFCmd.o tclMacOSXNotify.o
+ 
+-CYGWIN_OBJS = tclWinError.o
++CYGWIN_OBJS =
+ 
+ DTRACE_OBJ = tclDTrace.o
+ 
+@@ -637,9 +637,6 @@ ${LIB_FILE}: ${STUB_LIB_FILE} ${OBJS}
+ 	@MAKE_LIB@
+ 
+ ${STUB_LIB_FILE}: ${STUB_LIB_OBJS}
+-	@if test "x${LIB_FILE}" = "xlibtcl${MAJOR_VERSION}.${MINOR_VERSION}.dll"; then \
+-	    (cd ${TOP_DIR}/win; ${MAKE} winextensions); \
+-	fi
+ 	rm -f $@
+ 	@MAKE_STUB_LIB@
+ 
+diff --git a/unix/tcl.m4 b/unix/tcl.m4
+index 7f5464e651..febae32214 100644
+--- a/unix/tcl.m4
++++ b/unix/tcl.m4
+@@ -1183,7 +1183,20 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
+ 	    CC_SEARCH_FLAGS=""
+ 	    LD_SEARCH_FLAGS=""
+ 	    ;;
+-	CYGWIN_*|MINGW32_*|MSYS_*)
++	CYGWIN_*)
++	    SHLIB_CFLAGS=""
++	    SHLIB_LD='${CC} -shared'
++	    SHLIB_SUFFIX=".dll"
++	    DL_OBJS="tclLoadDl.o"
++	    DL_LIBS="-ldl"
++	    CC_SEARCH_FLAGS=""
++	    LD_SEARCH_FLAGS=""
++	    TCL_NEEDS_EXP_FILE=1
++	    TCL_EXPORT_FILE_SUFFIX='${VERSION}\$\{DBGX\}.dll.a'
++	    SHLIB_LD_LIBS="${SHLIB_LD_LIBS} -Wl,--out-implib,\$[@].a"
++	    do64bit_ok=yes
++	    ;;
++	MINGW32_*|MSYS_*)
+ 	    SHLIB_CFLAGS="-fno-common"
+ 	    SHLIB_LD='${CC} -shared'
+ 	    SHLIB_SUFFIX=".dll"
+diff --git a/unix/tclUnixFCmd.c b/unix/tclUnixFCmd.c
+index 3d44124e8b..40e3a8a666 100644
+--- a/unix/tclUnixFCmd.c
++++ b/unix/tclUnixFCmd.c
+@@ -91,7 +91,7 @@ static int		SetPermissionsAttribute(Tcl_Interp *interp,
+ 			    Tcl_Obj *attributePtr);
+ static int		GetModeFromPermString(Tcl_Interp *interp,
+ 			    const char *modeStringPtr, mode_t *modePtr);
+-#if defined(HAVE_CHFLAGS) && defined(UF_IMMUTABLE) || defined(__CYGWIN__)
++#if defined(HAVE_CHFLAGS) && defined(UF_IMMUTABLE)
+ static int		GetUnixFileAttributes(Tcl_Interp *interp, int objIndex,
+ 			    Tcl_Obj *fileName, Tcl_Obj **attributePtrPtr);
+ static int		SetUnixFileAttributes(Tcl_Interp *interp, int objIndex,
+@@ -124,20 +124,11 @@ extern const char *const tclpFileAttrStrings[];
+ 
+ #else /* !DJGPP */
+ enum {
+-#if defined(__CYGWIN__)
+-    UNIX_ARCHIVE_ATTRIBUTE,
+-#endif
+     UNIX_GROUP_ATTRIBUTE,
+-#if defined(__CYGWIN__)
+-    UNIX_HIDDEN_ATTRIBUTE,
+-#endif
+     UNIX_OWNER_ATTRIBUTE, UNIX_PERMISSIONS_ATTRIBUTE,
+-#if defined(HAVE_CHFLAGS) && defined(UF_IMMUTABLE) || defined(__CYGWIN__)
++#if defined(HAVE_CHFLAGS) && defined(UF_IMMUTABLE)
+     UNIX_READONLY_ATTRIBUTE,
+ #endif
+-#if defined(__CYGWIN__)
+-    UNIX_SYSTEM_ATTRIBUTE,
+-#endif
+ #ifdef MAC_OSX_TCL
+     MACOSX_CREATOR_ATTRIBUTE, MACOSX_TYPE_ATTRIBUTE, MACOSX_HIDDEN_ATTRIBUTE,
+     MACOSX_RSRCLENGTH_ATTRIBUTE,
+@@ -147,20 +138,11 @@ enum {
+ 
+ MODULE_SCOPE const char *const tclpFileAttrStrings[];
+ const char *const tclpFileAttrStrings[] = {
+-#if defined(__CYGWIN__)
+-    "-archive",
+-#endif
+     "-group",
+-#if defined(__CYGWIN__)
+-    "-hidden",
+-#endif
+     "-owner", "-permissions",
+-#if defined(HAVE_CHFLAGS) && defined(UF_IMMUTABLE) || defined(__CYGWIN__)
++#if defined(HAVE_CHFLAGS) && defined(UF_IMMUTABLE)
+     "-readonly",
+ #endif
+-#if defined(__CYGWIN__)
+-    "-system",
+-#endif
+ #ifdef MAC_OSX_TCL
+     "-creator", "-type", "-hidden", "-rsrclength",
+ #endif
+@@ -169,19 +151,10 @@ const char *const tclpFileAttrStrings[] = {
+ 
+ MODULE_SCOPE const TclFileAttrProcs tclpFileAttrProcs[];
+ const TclFileAttrProcs tclpFileAttrProcs[] = {
+-#if defined(__CYGWIN__)
+-    {GetUnixFileAttributes, SetUnixFileAttributes},
+-#endif
+     {GetGroupAttribute, SetGroupAttribute},
+-#if defined(__CYGWIN__)
+-    {GetUnixFileAttributes, SetUnixFileAttributes},
+-#endif
+     {GetOwnerAttribute, SetOwnerAttribute},
+     {GetPermissionsAttribute, SetPermissionsAttribute},
+-#if defined(HAVE_CHFLAGS) && defined(UF_IMMUTABLE) || defined(__CYGWIN__)
+-    {GetUnixFileAttributes, SetUnixFileAttributes},
+-#endif
+-#if defined(__CYGWIN__)
++#if defined(HAVE_CHFLAGS) && defined(UF_IMMUTABLE)
+     {GetUnixFileAttributes, SetUnixFileAttributes},
+ #endif
+ #ifdef MAC_OSX_TCL
+@@ -2273,7 +2246,7 @@ DefaultTempDir(void)
+     return TCL_TEMPORARY_FILE_DIRECTORY;
+ }
+ 
+-#if defined(__CYGWIN__)
++#if 0
+ 
+ static void
+ StatError(
+diff --git a/unix/tclUnixFile.c b/unix/tclUnixFile.c
+index 9769b1338f..530b40a556 100644
+--- a/unix/tclUnixFile.c
++++ b/unix/tclUnixFile.c
+@@ -39,7 +39,7 @@ TclpFindExecutable(
+     const char *argv0)		/* The value of the application's argv[0]
+ 				 * (native). */
+ {
+-#ifdef __CYGWIN__
++#if 0
+     int length;
+     wchar_t buf[PATH_MAX] = L"";
+     char name[PATH_MAX * 3 + 1];
+@@ -1179,7 +1179,7 @@ TclpUtime(
+     return utime((const char *)Tcl_FSGetNativePath(pathPtr), tval);
+ }
+ 
+-#ifdef __CYGWIN__
++#if 0
+ 
+ int
+ TclOSstat(
+diff --git a/unix/tclUnixInit.c b/unix/tclUnixInit.c
+index c7b2efe811..ecd94fe7e0 100644
+--- a/unix/tclUnixInit.c
++++ b/unix/tclUnixInit.c
+@@ -32,7 +32,7 @@
+ #   endif
+ #endif
+ 
+-#ifdef __CYGWIN__
++#if 0
+ #ifdef __cplusplus
+ extern "C" {
+ #endif
+@@ -786,7 +786,7 @@ void
+ TclpSetVariables(
+     Tcl_Interp *interp)
+ {
+-#ifdef __CYGWIN__
++#if 0
+     SYSTEM_INFO sysInfo;
+     static OSVERSIONINFOW osInfo;
+     static int osInfoInitialized = 0;
+@@ -873,7 +873,7 @@ TclpSetVariables(
+ #endif
+ 
+     unameOK = 0;
+-#ifdef __CYGWIN__
++#if 0
+ 	unameOK = 1;
+     if (!osInfoInitialized) {
+ 	void *handle = GetModuleHandleW(L"NTDLL");
+diff --git a/unix/tclUnixNotfy.c b/unix/tclUnixNotfy.c
+index 0bee2f1cfa..087e58b0c5 100644
+--- a/unix/tclUnixNotfy.c
++++ b/unix/tclUnixNotfy.c
+@@ -93,7 +93,7 @@ typedef struct ThreadSpecificData {
+ 				 * from these pointers. You must hold the
+ 				 * notifierMutex lock before accessing these
+ 				 * fields. */
+-#ifdef __CYGWIN__
++#if 0
+     void *event;		/* Any other thread alerts a notifier that an
+ 				 * event is ready to be processed by sending
+ 				 * this event. */
+@@ -211,7 +211,7 @@ static int	FileHandlerEventProc(Tcl_Event *evPtr, int flags);
+  * Import of Windows API when building threaded with Cygwin.
+  */
+ 
+-#if defined(TCL_THREADS) && defined(__CYGWIN__)
++#if 0
+ typedef struct {
+     void *hwnd;			/* Messaging window. */
+     unsigned int *message;	/* Message payload. */
+@@ -339,7 +339,7 @@ Tcl_InitNotifier(void)
+ 	 * Initialize thread specific condition variable for this thread.
+ 	 */
+ 	if (tsdPtr->waitCVinitialized == 0) {
+-#ifdef __CYGWIN__
++#if 0
+ 	    WNDCLASSW clazz;
+ 
+ 	    clazz.style = 0;
+@@ -453,7 +453,7 @@ Tcl_FinalizeNotifier(
+ 	 * Clean up any synchronization objects in the thread local storage.
+ 	 */
+ 
+-#ifdef __CYGWIN__
++#if 0
+ 	DestroyWindow(tsdPtr->hwnd);
+ 	CloseHandle(tsdPtr->event);
+ #else /* __CYGWIN__ */
+@@ -499,7 +499,7 @@ Tcl_AlertNotifier(
+ 	pthread_mutex_lock(&notifierMutex);
+ 	tsdPtr->eventReady = 1;
+ 
+-#   ifdef __CYGWIN__
++#   if 0
+ 	PostMessageW(tsdPtr->hwnd, 1024, 0, 0);
+ #   else
+ 	pthread_cond_broadcast(&tsdPtr->waitCV);
+@@ -812,7 +812,7 @@ FileHandlerEventProc(
+     return 1;
+ }
+ 
+-#if defined(TCL_THREADS) && defined(__CYGWIN__)
++#if 0
+ 
+ static unsigned int __stdcall
+ NotifierProc(
+@@ -868,7 +868,7 @@ Tcl_WaitForEvent(
+ 	ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
+ #ifdef TCL_THREADS
+ 	int waitForFiles;
+-#   ifdef __CYGWIN__
++#   if 0
+ 	MSG msg;
+ #   endif /* __CYGWIN__ */
+ #else /* !TCL_THREADS */
+@@ -983,7 +983,7 @@ Tcl_WaitForEvent(
+ 	FD_ZERO(&tsdPtr->readyMasks.exception);
+ 
+ 	if (!tsdPtr->eventReady) {
+-#ifdef __CYGWIN__
++#if 0
+ 	    if (!PeekMessageW(&msg, NULL, 0, 0, 0)) {
+ 		unsigned int timeout;
+ 
+@@ -1014,7 +1014,7 @@ Tcl_WaitForEvent(
+ 	}
+ 	tsdPtr->eventReady = 0;
+ 
+-#ifdef __CYGWIN__
++#if 0
+ 	while (PeekMessageW(&msg, NULL, 0, 0, 0)) {
+ 	    /*
+ 	     * Retrieve and dispatch the message.
+@@ -1304,7 +1304,7 @@ NotifierThreadProc(
+ 		    tsdPtr->onList = 0;
+ 		    tsdPtr->pollState = 0;
+ 		}
+-#ifdef __CYGWIN__
++#if 0
+ 		PostMessageW(tsdPtr->hwnd, 1024, 0, 0);
+ #else /* __CYGWIN__ */
+ 		pthread_cond_broadcast(&tsdPtr->waitCV);
+@@ -1454,7 +1454,7 @@ AtForkChild(void)
+ 	     * The tsdPtr from before the fork is copied as well.  But since
+ 	     * we are paranoiac, we don't trust its condvar and reset it.
+ 	     */
+-#ifdef __CYGWIN__
++#if 0
+ 	    DestroyWindow(tsdPtr->hwnd);
+ 	    tsdPtr->hwnd = CreateWindowExW(NULL, NotfyClassName,
+ 		    NotfyClassName, 0, 0, 0, 0, 0, NULL, NULL,
+diff --git a/unix/tclUnixPort.h b/unix/tclUnixPort.h
+index 486fa23e38..63d8c51383 100644
+--- a/unix/tclUnixPort.h
++++ b/unix/tclUnixPort.h
+@@ -85,7 +85,7 @@ typedef off_t		Tcl_SeekOffset;
+ #   define TclOSopen		open
+ #endif
+ 
+-#ifdef __CYGWIN__
++#if 0
+ #ifdef __cplusplus
+ extern "C" {
+ #endif
+-- 
+2.50.1
+

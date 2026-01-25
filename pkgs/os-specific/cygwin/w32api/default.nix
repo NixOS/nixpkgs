@@ -4,11 +4,33 @@
   stdenvNoLibc,
   autoreconfHook,
   windows,
+  newlib-cygwin-headers,
 
   headersOnly ? false,
 }:
 
-(if headersOnly then stdenvNoCC else stdenvNoLibc).mkDerivation (
+let
+  stdenv =
+    let
+      bintools = stdenvNoLibc.cc.bintools.override {
+        libc = newlib-cygwin-headers;
+        noLibc = false;
+      };
+    in
+    # we only want to do this on cygwin because newlib-cygwin-headers doesn't
+    # evaluate on other platforms
+    stdenvNoLibc.override (
+      lib.optionalAttrs stdenvNoLibc.hostPlatform.isCygwin {
+        cc = stdenvNoLibc.cc.override {
+          libc = newlib-cygwin-headers;
+          noLibc = false;
+          inherit bintools;
+        };
+      }
+    );
+
+in
+(if headersOnly then stdenvNoCC else stdenv).mkDerivation (
   {
     pname = "w32api${lib.optionalString headersOnly "-headers"}";
 
@@ -27,8 +49,8 @@
     enableParallelBuilding = true;
 
     passthru = {
-      incdir = "/include/w32api/";
-      libdir = "/lib/w32api/";
+      incdir = "/include/w32api";
+      libdir = "/lib/w32api";
     };
 
     meta = {
@@ -51,7 +73,7 @@
       }
     else
       {
-        nativeBuildInputs = [ autoreconfHook ];
+        # nativeBuildInputs = [ autoreconfHook ];
 
         hardeningDisable = [
           "stackprotector"

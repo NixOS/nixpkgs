@@ -1,0 +1,145 @@
+diff --git a/Makefile.pre.in b/Makefile.pre.in
+index a7dc9709d62..c37f735b676 100644
+--- a/Makefile.pre.in
++++ b/Makefile.pre.in
+@@ -43,6 +43,7 @@ SOABI=		@SOABI@
+ ABIFLAGS=	@ABIFLAGS@
+ ABI_THREAD=	@ABI_THREAD@
+ LDVERSION=	@LDVERSION@
++BLIBPYTHON=@BLIBPYTHON@
+ LIBPYTHON=@LIBPYTHON@
+ GITVERSION=	@GITVERSION@
+ GITTAG=		@GITTAG@
+diff --git a/Misc/python.pc.in b/Misc/python.pc.in
+index 027dba38585..6414141e15e 100644
+--- a/Misc/python.pc.in
++++ b/Misc/python.pc.in
+@@ -9,5 +9,5 @@ Description: Build a C extension for Python
+ Requires:
+ Version: @VERSION@
+ Libs.private: @LIBS@
+-Libs: -L${libdir} @LIBPYTHON@
++Libs: @LIBPYTHON@
+ Cflags: -I${includedir}/python@VERSION@@ABIFLAGS@
+diff --git a/Modules/makesetup b/Modules/makesetup
+index 8bb971b152a..cedc9ce6471 100755
+--- a/Modules/makesetup
++++ b/Modules/makesetup
+@@ -274,7 +274,7 @@ sed -e 's/[ 	]*#.*//' -e '/^[ 	]*$/d' |
+ 				;;
+ 			esac
+ 			rule="$file: $objs"
+-			rule="$rule; \$(BLDSHARED) $objs $libs \$(LIBPYTHON) -o $file"
++			rule="$rule; \$(BLDSHARED) $objs $libs \$(BLIBPYTHON) -o $file"
+ 			echo "$rule" >>$rulesf
+ 		done
+ 	done
+diff --git a/Modules/timemodule.c b/Modules/timemodule.c
+index 49626d32fd3..fd741628894 100644
+--- a/Modules/timemodule.c
++++ b/Modules/timemodule.c
+@@ -187,7 +187,7 @@ time_clockid_converter(PyObject *obj, clockid_t *p)
+ {
+ #ifdef _AIX
+     long long clk_id = PyLong_AsLongLong(obj);
+-#elif defined(__DragonFly__)
++#elif defined(__DragonFly__) || defined(__CYGWIN__)
+     long clk_id = PyLong_AsLong(obj);
+ #else
+     int clk_id = PyLong_AsInt(obj);
+diff --git a/Python/dynload_shlib.c b/Python/dynload_shlib.c
+index 5a37a83805b..3b6dec254ed 100644
+--- a/Python/dynload_shlib.c
++++ b/Python/dynload_shlib.c
+@@ -36,6 +36,10 @@
+ 
+ const char *_PyImport_DynLoadFiletab[] = {
+ #ifdef __CYGWIN__
++    "." SOABI ".dll",
++#ifdef ALT_SOABI
++    "." ALT_SOABI ".dll",
++#endif
+     ".dll",
+ #else  /* !__CYGWIN__ */
+     "." SOABI ".so",
+diff --git a/configure.ac b/configure.ac
+index 597a44b331a..e271a9bfdf0 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -325,7 +325,7 @@ then
+ 		ac_sys_system=Linux
+ 		;;
+ 	*-*-cygwin*)
+-		ac_sys_system=Cygwin
++		ac_sys_system=CYGWIN
+ 		;;
+ 	*-apple-ios*)
+ 		ac_sys_system=iOS
+@@ -3540,8 +3540,8 @@ then
+ 			dnl not implemented yet
+ 		]);;
+ 	CYGWIN*)
+-		LDSHARED="gcc -shared -Wl,--enable-auto-image-base"
+-		LDCXXSHARED="g++ -shared -Wl,--enable-auto-image-base";;
++		LDSHARED='$(CC) -shared -Wl,--enable-auto-image-base'
++		LDCXXSHARED='$(CXX) -shared -Wl,--enable-auto-image-base';;
+ 	*)	LDSHARED="ld";;
+ 	esac
+ fi
+@@ -6307,26 +6307,6 @@ AC_MSG_CHECKING([LDVERSION])
+ LDVERSION='$(VERSION)$(ABIFLAGS)'
+ AC_MSG_RESULT([$LDVERSION])
+ 
+-# Configure the flags and dependencies used when compiling shared modules.
+-# Do not rename LIBPYTHON - it's accessed via sysconfig by package build
+-# systems (e.g. Meson) to decide whether to link extension modules against
+-# libpython.
+-AC_SUBST([MODULE_DEPS_SHARED])
+-AC_SUBST([LIBPYTHON])
+-MODULE_DEPS_SHARED='$(MODULE_DEPS_STATIC) $(EXPORTSYMS)'
+-LIBPYTHON=''
+-
+-# On Android and Cygwin the shared libraries must be linked with libpython.
+-if test "$PY_ENABLE_SHARED" = "1" && ( test -n "$ANDROID_API_LEVEL" || test "$MACHDEP" = "cygwin"); then
+-  MODULE_DEPS_SHARED="$MODULE_DEPS_SHARED \$(LDLIBRARY)"
+-  LIBPYTHON="\$(BLDLIBRARY)"
+-fi
+-
+-# On iOS the shared libraries must be linked with the Python framework
+-if test "$ac_sys_system" = "iOS"; then
+-  MODULE_DEPS_SHARED="$MODULE_DEPS_SHARED \$(PYTHONFRAMEWORKDIR)/\$(PYTHONFRAMEWORK)"
+-fi
+-
+ 
+ AC_SUBST([BINLIBDEST])
+ BINLIBDEST='$(LIBDIR)/python$(VERSION)$(ABI_THREAD)'
+@@ -6368,6 +6348,29 @@ else
+ fi
+ AC_SUBST([LIBPL])
+ 
++# Configure the flags and dependencies used when compiling shared modules.
++# Do not rename LIBPYTHON - it's accessed via sysconfig by package build
++# systems (e.g. Meson) to decide whether to link extension modules against
++# libpython.
++AC_SUBST([MODULE_DEPS_SHARED])
++AC_SUBST([BLIBPYTHON])
++AC_SUBST([LIBPYTHON])
++MODULE_DEPS_SHARED='$(MODULE_DEPS_STATIC) $(EXPORTSYMS)'
++BLIBPYTHON=''
++LIBPYTHON=''
++
++# On Android and Cygwin the shared libraries must be linked with libpython.
++if test "$PY_ENABLE_SHARED" = "1" && ( test -n "$ANDROID_API_LEVEL" || test "$MACHDEP" = "cygwin"); then
++MODULE_DEPS_SHARED="$MODULE_DEPS_SHARED \$(LDLIBRARY)"
++BLIBPYTHON="\$(BLDLIBRARY)"
++LIBPYTHON="-L\"$prefix\"/${PLATLIBDIR}/python${VERSION}${ABI_THREAD}/config-${VERSION}${ABIFLAGS}${PLATFORM_TRIPLET+-$PLATFORM_TRIPLET} -lpython${VERSION}${ABIFLAGS}"
++fi
++
++# On iOS the shared libraries must be linked with the Python framework
++if test "$ac_sys_system" = "iOS"; then
++  MODULE_DEPS_SHARED="$MODULE_DEPS_SHARED \$(PYTHONFRAMEWORKDIR)/\$(PYTHONFRAMEWORK)"
++fi
++
+ # Check for --with-wheel-pkg-dir=PATH
+ AC_SUBST([WHEEL_PKG_DIR])
+ WHEEL_PKG_DIR=""

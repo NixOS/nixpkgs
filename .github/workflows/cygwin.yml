@@ -1,0 +1,55 @@
+name: cygwin
+
+permissions: {}
+
+on:
+  push:
+
+jobs:
+  build-tarball:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          persist-credentials: false
+      - uses: DeterminateSystems/nix-installer-action@c5a866b6ab867e88becbed4467b93592bce69f8a
+      - uses: DeterminateSystems/magic-nix-cache-action@b4ad0b1e587499958543d6e793cd46510a21e7c2
+      - name: build tarball
+        run: nix build -f nixos/release.nix cygwinTarball.x86_64-linux
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: tarball
+          path: result
+  build-bootstrap:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          persist-credentials: false
+      - uses: DeterminateSystems/nix-installer-action@c5a866b6ab867e88becbed4467b93592bce69f8a
+      - uses: DeterminateSystems/magic-nix-cache-action@b4ad0b1e587499958543d6e793cd46510a21e7c2
+      - name: build bootstrap
+        run: nix build -f pkgs/top-level/release-cross.nix bootstrapTools.x86_64-pc-cygwin.unpack -o unpack.nar.xz
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: bootstrap
+          path: unpack.nar.xz
+  test:
+    runs-on: windows-latest
+    needs: build-tarball
+    steps:
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        with:
+          name: tarball
+      - name: install
+        run: tarball/install.ps1 cygwin
+      - name: get-info
+        shell: pwsh cygwin/cygwin.ps1 {0}
+        run: nix-info
+    # - name: build
+    #   shell: pwsh cygwin/cygwin.ps1 {0}
+    #   run: nix build --no-sandbox nixpkgs#hello
+    # - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+    #   with:
+    #     name: tarball
+    #     path: result

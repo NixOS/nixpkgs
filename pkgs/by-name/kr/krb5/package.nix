@@ -174,6 +174,9 @@ stdenv.mkDerivation rec {
     homepage = "http://web.mit.edu/kerberos/";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix ++ lib.platforms.windows;
+    # configure: error: Shared libraries are not yet supported on this platform.
+    # cygwin has a large patchset for this package
+    broken = stdenv.hostPlatform.isCygwin;
   };
 
   passthru = {

@@ -25,7 +25,12 @@ stdenv.mkDerivation rec {
       excludes = [ ".github/workflows/main.yml" ];
       hash = "sha256-kOBy0om6MPM2vLXZjNLXiezZqVgNr/viBI7mXrOZts8=";
     })
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isCygwin (fetchpatch {
+    name = "doctest-fix-cygwin-tests.patch";
+    url = "https://github.com/doctest/doctest/commit/0e174a246558a8f5ef7299a3fd870c30281fd8d1.patch";
+    hash = "sha256-M7ByNFHCUb0ahsfNr4oUGTbR45qfdS9d5N8bGdQl/+Q=";
+  });
 
   nativeBuildInputs = [ cmake ];
 

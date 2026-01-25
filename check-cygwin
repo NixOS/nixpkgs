@@ -1,0 +1,14 @@
+#!/bin/sh
+set -eo pipefail
+echo BAD:
+nix derivation show -r .#cygwinSystem.config.system.build.tarball.stdenvDeps \
+    | jq -r 'map_values(select(.system == "x86_64-cygwin")) | keys_unsorted .[]'
+
+nix derivation show -r -f. --argstr system x86_64-cygwin nix \
+    | jq -r 'map_values(select(.system == "x86_64-linux")) | keys_unsorted .[]' \
+    | sort > target
+nix derivation show -r .#cygwinSystem.config.system.build.tarball.stdenvDeps \
+    | jq -r 'map_values(select(.system == "x86_64-linux")) | keys_unsorted .[]' \
+    | sort > bootstrap
+echo MISSING:
+comm -13 bootstrap target

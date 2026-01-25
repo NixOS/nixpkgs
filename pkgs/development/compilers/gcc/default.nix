@@ -36,7 +36,9 @@
   libucontext ? null,
   gnat-bootstrap ? null,
   enableMultilib ? false,
-  enablePlugin ? (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform), # Whether to support user-supplied plug-ins
+  enablePlugin ? (
+    lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform && !stdenv.hostPlatform.isPE
+  ), # Whether to support user-supplied plug-ins
   name ? "gcc",
   libcCross ? null,
   threadsCross ? { }, # for MinGW

@@ -95,6 +95,7 @@
 
   # tests
   testers,
+  runCommand,
 
   # allow pythonMinimal to prevent accidental dependencies it doesn't want
   # Having this as an option is useful to allow overriding, eg. adding things to
@@ -211,7 +212,8 @@ let
   ++
     optionals
       (
-        (!stdenv.hostPlatform.isDarwin && !withMinimalDeps)
+        # on cygwin this is needed for fix-cygwin-build.patch
+        (!stdenv.hostPlatform.isDarwin && !withMinimalDeps || stdenv.hostPlatform.isCygwin)
         || (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.isFreeBSD)
       )
       [
@@ -435,7 +437,8 @@ stdenv.mkDerivation (finalAttrs: {
       "mingw-python3_setenv.patch"
       "mingw-python3_win-modules.patch"
     ])
-  );
+  )
+  ++ optionals stdenv.hostPlatform.isCygwin [ ./fix-cygwin-build.patch ];
 
   postPatch =
     optionalString (!stdenv.hostPlatform.isWindows) ''
@@ -728,6 +731,9 @@ stdenv.mkDerivation (finalAttrs: {
 
       echo linking DLLs for python’s compiled librairies
       linkDLLsInfolder $out/lib/python*/lib-dynload/
+    ''
+    + optionalString stdenv.hostPlatform.isCygwin ''
+      linkDLLsDir="$out"/bin linkDLLs "$out"/lib/python*/lib-dynload/*.cpython-*.dll
     '';
 
   preFixup = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
@@ -737,34 +743,40 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Add CPython specific setup-hook that configures distutils.sysconfig to
   # always load sysconfigdata from host Python.
-  postFixup = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-    # https://github.com/python/cpython/blob/e488e300f5c01289c10906c2e53a8e43d6de32d8/configure.ac#L78
-    sysconfigdataName="$(make --eval $'print-sysconfigdata-name:
-    \t@echo _sysconfigdata_$(ABIFLAGS)_$(MACHDEP)_$(MULTIARCH) ' print-sysconfigdata-name)"
+  postFixup =
+    lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+      # https://github.com/python/cpython/blob/e488e300f5c01289c10906c2e53a8e43d6de32d8/configure.ac#L78
+      sysconfigdataName="$(make --eval $'print-sysconfigdata-name:
+      \t@echo _sysconfigdata_$(ABIFLAGS)_$(MACHDEP)_$(MULTIARCH) ' print-sysconfigdata-name)"
 
-    # The CPython interpreter contains a _sysconfigdata_<platform specific suffix>
-    # module that is imported by the sysconfig and distutils.sysconfig modules.
-    # The sysconfigdata module is generated at build time and contains settings
-    # required for building Python extension modules, such as include paths and
-    # other compiler flags. By default, the sysconfigdata module is loaded from
-    # the currently running interpreter (ie. the build platform interpreter), but
-    # when cross-compiling we want to load it from the host platform interpreter.
-    # This can be done using the _PYTHON_SYSCONFIGDATA_NAME environment variable.
-    # The _PYTHON_HOST_PLATFORM variable also needs to be set to get the correct
-    # platform suffix on extension modules. The correct values for these variables
-    # are not documented, and must be derived from the configure script (see links
-    # below).
-    cat <<EOF >> "$out/nix-support/setup-hook"
-    sysconfigdataHook() {
-      if [ "\$1" = '$out' ]; then
-        export _PYTHON_HOST_PLATFORM='${pythonHostPlatform}'
-        export _PYTHON_SYSCONFIGDATA_NAME='$sysconfigdataName'
-      fi
-    }
+      # The CPython interpreter contains a _sysconfigdata_<platform specific suffix>
+      # module that is imported by the sysconfig and distutils.sysconfig modules.
+      # The sysconfigdata module is generated at build time and contains settings
+      # required for building Python extension modules, such as include paths and
+      # other compiler flags. By default, the sysconfigdata module is loaded from
+      # the currently running interpreter (ie. the build platform interpreter), but
+      # when cross-compiling we want to load it from the host platform interpreter.
+      # This can be done using the _PYTHON_SYSCONFIGDATA_NAME environment variable.
+      # The _PYTHON_HOST_PLATFORM variable also needs to be set to get the correct
+      # platform suffix on extension modules. The correct values for these variables
+      # are not documented, and must be derived from the configure script (see links
+      # below).
+      cat <<EOF >> "$out/nix-support/setup-hook"
+      sysconfigdataHook() {
+        if [ "\$1" = '$out' ]; then
+          export _PYTHON_HOST_PLATFORM='${pythonHostPlatform}'
+          export _PYTHON_SYSCONFIGDATA_NAME='$sysconfigdataName'
+        fi
+      }
 
-    addEnvHooks "\$hostOffset" sysconfigdataHook
-    EOF
-  '';
+      addEnvHooks "\$hostOffset" sysconfigdataHook
+      EOF
+    ''
+    # borrowed from cygwin python39.cygport
+    # this is needed for the flags in python3.pc to work
+    + optionalString stdenv.hostPlatform.isCygwin ''
+      cp libpython*.dll.a "$out"/lib
+    '';
 
   # Enforce that we don't have references to the OpenSSL -dev package, which we
   # explicitly specify in our configure flags above.
@@ -821,9 +833,24 @@ stdenv.mkDerivation (finalAttrs: {
       ];
     };
 
-    tests = passthru.tests // {
-      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-    };
+    tests =
+      passthru.tests
+      // {
+        pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      }
+      // (
+        let
+          testPython =
+            name: script:
+            runCommand "python-test-${name}" {
+              inherit script;
+            } ''"${lib.getExe finalAttrs.finalPackage}" -c "$script" > "$out"'';
+        in
+        {
+          sax = testPython "sax" "import xml.sax;xml.sax.make_parser()";
+          semaphore = testPython "semaphore" "from _multiprocessing import SemLock";
+        }
+      );
   };
 
   enableParallelBuilding = true;
@@ -852,7 +879,11 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.psfl;
     pkgConfigModules = [ "python3" ];
     platforms =
-      lib.platforms.linux ++ lib.platforms.darwin ++ lib.platforms.windows ++ lib.platforms.freebsd;
+      lib.platforms.linux
+      ++ lib.platforms.darwin
+      ++ lib.platforms.windows
+      ++ lib.platforms.cygwin
+      ++ lib.platforms.freebsd;
     mainProgram = executable;
     teams = [ lib.teams.python ];
     # static build on x86_64-darwin/aarch64-darwin breaks with:

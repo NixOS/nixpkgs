@@ -38,7 +38,8 @@ tcl.mkTclDerivation rec {
     ./fix-darwin-bsd-clang16.patch
     # Remove some code which causes it to link against a file that does not exist at build time on native FreeBSD
     ./freebsd-unversioned.patch
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isCygwin ./fix-cygwin-build.patch;
 
   postPatch = ''
     sed -i "s,/bin/stty,$(type -p stty),g" configure.in

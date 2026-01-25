@@ -135,6 +135,24 @@ in
 
   options = {
     nix = {
+      enable = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = ''
+          Whether to enable Nix.
+          Disabling Nix makes the system hard to modify and the Nix programs and configuration will not be made available by NixOS itself.
+        '';
+      };
+
+      package = lib.mkOption {
+        type = lib.types.package;
+        default = pkgs.nix;
+        defaultText = lib.literalExpression "pkgs.nix";
+        description = ''
+          This option specifies the Nix package instance to use throughout the system.
+        '';
+      };
+
       checkConfig = mkOption {
         type = types.bool;
         default = true;

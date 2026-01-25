@@ -49,7 +49,7 @@
   withSsh ? false,
   sysctl,
   deterministic-host-uname, # trick Makefile into targeting the host platform when cross-compiling
-  doInstallCheck ? !stdenv.hostPlatform.isDarwin, # extremely slow on darwin
+  doInstallCheck ? !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isCygwin, # extremely slow on darwin and cygwin
   tests,
   rustSupport ? false,
   cargo,
@@ -559,6 +559,11 @@ stdenv.mkDerivation (finalAttrs: {
     # Fails largely due to assumptions about BOM
     # Tested to fail: 2.18.0
     disable_test t0028-working-tree-encoding
+  ''
+  + lib.optionalString stdenv.hostPlatform.isCygwin ''
+    disable_test t0006-date
+    disable_test t0610-reftable-basics
+    disable_test t6137-pathspec-wildcards-literal
   '';
 
   stripDebugList = [

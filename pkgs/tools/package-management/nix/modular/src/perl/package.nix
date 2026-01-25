@@ -29,7 +29,19 @@ perl.pkgs.toPerlModule (
       nix-store
       bzip2
       libsodium
-    ];
+    ]
+    ++ lib.optional stdenv.hostPlatform.isCygwin perl;
+
+    env = lib.optionalAttrs stdenv.hostPlatform.isCygwin {
+      NIX_CFLAGS_COMPILE = toString (
+        lib.optionals stdenv.hostPlatform.isCygwin [
+          # longjmp, siginfo_t
+          "-D_POSIX_C_SOURCE=199309L"
+          # putenv
+          "-D_XOPEN_SOURCE"
+        ]
+      );
+    };
 
     # `perlPackages.Test2Harness` is marked broken for Darwin
     doCheck = !stdenv.isDarwin;

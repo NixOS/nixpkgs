@@ -1,0 +1,37 @@
+diff --git a/configure b/configure
+index bd6d039..64d1b17 100755
+--- a/configure
++++ b/configure
+@@ -5706,13 +5706,7 @@ if test $xnet = yes; then
+    SPECIAL_LINK_OPTION="$SPECIAL_LINK_OPTION -lxnet"
+ fi
+ 
+-if test "$cross_compiling" = yes; then
+-  { { echo "$as_me:$LINENO: error: cannot run test program while cross compiling
+-See \`config.log' for more details." >&5
+-echo "$as_me: error: cannot run test program while cross compiling
+-See \`config.log' for more details." >&2;}
+-   { (exit 1); exit 1; }; }
+-else
++if true; then
+   cat >conftest.$ac_ext <<_ACEOF
+ /* confdefs.h.  */
+ _ACEOF
+@@ -5775,7 +5775,7 @@ if test x$dino_shlib = x; then
+   echo +++We will not use DINO shared library
+   DINO_GCC_FPIC=-DNO_DINO_SHLIB
+   DINO_LIB_SUFFIX=a
+-  DINO_MAKELIB="ar rc \\\$\$0"
++  DINO_MAKELIB="$AR rc \\\$\$0"
+   DINO_AFTER_MAKELIB="$RANLIB \\\$\$0;echo \\\$\$0"
+   DINO_ADDITIONAL_LIBS="$DINO_LIB_NAME.$DINO_LIB_SUFFIX"
+   if test x$no_extern_shlib = x; then
+@@ -5790,7 +5790,7 @@ if test x$no_extern_shlib != x; then
+   EXTERN_GCC_FPIC=-DNO_EXTERN_SHLIB
+   DINO_GCC_FPIC="$DINO_GCC_FPIC -DNO_EXTERN_SHLIB"
+   EXTERN_LIB_SUFFIX=a
+-  EXTERN_MAKELIB="ar rc \\\$\$0"
++  EXTERN_MAKELIB="$AR rc \\\$\$0"
+   EXTERN_AFTER_MAKELIB="$RANLIB \\\$\$0;echo \\\$\$0"
+   DINO_ADDITIONAL_LIBS="$DINO_ADDITIONAL_LIBS mpi.$EXTERN_LIB_SUFFIX ieee.$EXTERN_LIB_SUFFIX ipcerr.$EXTERN_LIB_SUFFIX socket.$EXTERN_LIB_SUFFIX gmp.$EXTERN_LIB_SUFFIX"
+ else

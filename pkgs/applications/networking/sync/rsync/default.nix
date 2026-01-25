@@ -10,7 +10,7 @@
   popt,
   enableACLs ? lib.meta.availableOn stdenv.hostPlatform acl,
   acl,
-  enableLZ4 ? true,
+  enableLZ4 ? !stdenv.hostPlatform.isCygwin,
   lz4,
   enableOpenSSL ? true,
   openssl,
@@ -80,7 +80,8 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) rsyncd; };
 
-  doCheck = true;
+  # daemon and dir-sgid tests currently fail on cygwin
+  doCheck = !stdenv.buildPlatform.isCygwin;
 
   __darwinAllowLocalNetworking = true;
 

@@ -106,7 +106,9 @@ stdenv.mkDerivation {
     libiconv
     gawk
   ]
-  ++ optional interactive ncurses;
+  ++ optional interactive ncurses
+  # cygwin needs this so the perl DLL is in HOST_PATH for XS
+  ++ optional (!crossBuildTools && stdenv.hostPlatform.isCygwin) perl;
 
   configureFlags = [
     "PERL=${buildPackages.perl}/bin/perl"

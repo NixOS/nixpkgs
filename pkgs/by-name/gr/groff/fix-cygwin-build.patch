@@ -1,0 +1,159 @@
+diff --git a/Makefile.am b/Makefile.am
+index f7ab410..2b26b93 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -564,9 +564,9 @@ endif
+ 
+ # Path to binaries and flags used by contribs and doc to generated doc.
+ # These may be overridden if cross-compiling.
+-GROFFBIN = $(abs_top_builddir)/groff
++GROFFBIN = $(abs_top_builddir)/groff$(EXEEXT)
+ GROFF_BIN_PATH = $(abs_top_builddir)
+-PDFMOMBIN = $(abs_top_builddir)/pdfmom
++PDFMOMBIN = $(abs_top_builddir)/pdfmom$(EXEEXT)
+ # Search for macro files and device/font description directories in
+ # source _and_ build trees; some of each are generated.
+ FFLAG=-F$(abs_top_builddir)/font -F$(abs_top_srcdir)/font
+diff --git a/contrib/hdtbl/hdtbl.am b/contrib/hdtbl/hdtbl.am
+index 3dd60cf..e0dfa0c 100644
+--- a/contrib/hdtbl/hdtbl.am
++++ b/contrib/hdtbl/hdtbl.am
+@@ -119,8 +119,8 @@ SUFFIXES += .roff .in .ps
+ 	       -e "s|[@]EGREP[@]|$(EGREP)|" $< >$@
+ 
+ 
+-$(HDTBLPROCESSEDEXAMPLEFILES): $(DOC_GNU_EPS) groff troff eqn pic tbl \
+-  grops font/devps/stamp contrib/hdtbl/examples/common.roff
++$(HDTBLPROCESSEDEXAMPLEFILES): $(DOC_GNU_EPS) groff$(EXEEXT) troff$(EXEEXT) eqn$(EXEEXT) pic$(EXEEXT) tbl$(EXEEXT) \
++  grops$(EXEEXT) font/devps/stamp contrib/hdtbl/examples/common.roff
+ 
+ uninstall_groffdirs: uninstall-hdtbl-hook
+ uninstall-hdtbl-hook:
+diff --git a/contrib/mom/mom.am b/contrib/mom/mom.am
+index 3bbbc9a..7813699 100644
+--- a/contrib/mom/mom.am
++++ b/contrib/mom/mom.am
+@@ -145,7 +145,7 @@ SUFFIXES += .mom .pdf
+ 	&& LC_ALL=C $(MOMPDFMOM) $< >$@
+ 
+ $(MOMPROCESSEDEXAMPLEFILES): $(MOMNORMALFILES) \
+-  groff troff gropdf pdfmom penguin.ps penguin.pdf font/devpdf/stamp
++  groff$(EXEEXT) troff$(EXEEXT) gropdf$(EXEEXT) pdfmom$(EXEEXT) penguin.ps penguin.pdf font/devpdf/stamp
+ 
+ penguin.ps:
+ 	$(AM_V_at)cp $(mom_srcdir)/examples/penguin.ps $@
+diff --git a/contrib/pdfmark/pdfmark.am b/contrib/pdfmark/pdfmark.am
+index 15eec8c..2135450 100644
+--- a/contrib/pdfmark/pdfmark.am
++++ b/contrib/pdfmark/pdfmark.am
+@@ -68,7 +68,7 @@ contrib/pdfmark/pdfmark.pdf: contrib/pdfmark/pdfmark.ms
+ 	  $(top_srcdir)/contrib/pdfmark/pdfmark.ms >$@
+ 
+ # The pdf files use the local script to generate.
+-$(PDFDOCFILES): pdfroff groff troff gropdf
++$(PDFDOCFILES): pdfroff$(EXEEXT) groff$(EXEEXT) troff$(EXEEXT) gropdf$(EXEEXT)
+ $(PDFDOCFILES): $(dist_devpsfont_DATA) $(nodist_devpsfont_DATA) \
+   $(DOC_GNU_EPS)
+ 
+diff --git a/contrib/sboxes/sboxes.am b/contrib/sboxes/sboxes.am
+index 7786337..b2b93bb 100644
+--- a/contrib/sboxes/sboxes.am
++++ b/contrib/sboxes/sboxes.am
+@@ -54,7 +54,7 @@ $(sboxes_builddir)/msboxes.ms: $(SBOXES_EXAMPLEFILES) $(sboxesnotquine)
+ 	$(AM_V_GEN)mv $@.tmp $@
+ 
+ $(sboxes_builddir)/msboxes.pdf: $(sboxes_builddir)/msboxes.ms \
+-  $(dist_sboxestmac_DATA) groff troff gropdf font/devpdf/stamp
++  $(dist_sboxestmac_DATA) groff$(EXEEXT) troff$(EXEEXT) gropdf$(EXEEXT) font/devpdf/stamp
+ 	$(GROFF_V)$(DOC_GROFF) -M$(sboxes_srcdir) -ms -msboxes -Tpdf \
+ 	  $(sboxes_builddir)/msboxes.ms > $@
+ 
+diff --git a/doc/doc.am b/doc/doc.am
+index cddc519..a42622a 100644
+--- a/doc/doc.am
++++ b/doc/doc.am
+@@ -81,11 +81,11 @@ PROCESSEDDOCFILES = \
+   $(PROCESSEDDOCFILES_TXT)
+ 
+ # Declare minimal dependencies for documents by output driver.
+-PROCESSEDFILES_DEPS_HTML = pre-grohtml groff troff post-grohtml \
++PROCESSEDFILES_DEPS_HTML = pre-grohtml$(EXEEXT) groff$(EXEEXT) troff$(EXEEXT) post-grohtml$(EXEEXT) \
+   font/devhtml/stamp font/devps/stamp
+-PROCESSEDFILES_DEPS_PS = groff troff grops font/devps/stamp
+-PROCESSEDFILES_DEPS_PDF = groff troff gropdf font/devpdf/stamp
+-PROCESSEDFILES_DEPS_TXT = groff troff grotty font/devutf8/stamp
++PROCESSEDFILES_DEPS_PS = groff$(EXEEXT) troff$(EXEEXT) grops$(EXEEXT) font/devps/stamp
++PROCESSEDFILES_DEPS_PDF = groff$(EXEEXT) troff$(EXEEXT) gropdf$(EXEEXT) font/devpdf/stamp
++PROCESSEDFILES_DEPS_TXT = groff$(EXEEXT) troff$(EXEEXT) grotty$(EXEEXT) font/devutf8/stamp
+ 
+ if USE_GROHTML
+ $(PROCESSEDDOCFILES_HTML): $(PROCESSEDFILES_DEPS_HTML)
+@@ -254,7 +254,7 @@ man-clean:
+ # We embed the fonts (-P-e) to (1) honor the current PDF standard, (2)
+ # ensure consistent rendering of the document, and (3) exercise this
+ # feature of gropdf.
+-doc/groff-man-pages.pdf: $(GROFF_MAN_PAGES_ALL) eqn pic tbl \
++doc/groff-man-pages.pdf: $(GROFF_MAN_PAGES_ALL) eqn$(EXEEXT) pic$(EXEEXT) tbl$(EXEEXT) \
+   $(TMAC_PACKAGE_MAN) $(TMAC_PACKAGE_MDOC) font/devps/freeeuro.pfa
+ 	$(GROFF_V)$(DOC_GROFF) -pet -mandoc -dHF=HB -rC1 \
+ 	  -rCHECKSTYLE=3 -Tpdf -P-e \
+@@ -262,7 +262,7 @@ doc/groff-man-pages.pdf: $(GROFF_MAN_PAGES_ALL) eqn pic tbl \
+ 	  $(tmac_srcdir)/sv.tmac $(GROFF_MAN_PAGES2) \
+ 	  $(tmac_srcdir)/en.tmac $(GROFF_MAN_PAGES3) > $@
+ 
+-doc/groff-man-pages.utf8.txt: $(GROFF_MAN_PAGES_ALL) eqn pic tbl \
++doc/groff-man-pages.utf8.txt: $(GROFF_MAN_PAGES_ALL) eqn$(EXEEXT) pic$(EXEEXT) tbl$(EXEEXT) \
+   $(TMAC_PACKAGE_MAN) $(TMAC_PACKAGE_MDOC)
+ 	$(GROFF_V)$(DOC_GROFF) -pet -Tutf8 -mandoc \
+ 	  -rCHECKSTYLE=3 $(GROFF_MAN_PAGES1) \
+@@ -270,7 +270,7 @@ doc/groff-man-pages.utf8.txt: $(GROFF_MAN_PAGES_ALL) eqn pic tbl \
+ 	  $(tmac_srcdir)/en.tmac $(GROFF_MAN_PAGES3) > $@
+ 
+ doc/grnexmpl.ps: $(doc_srcdir)/grnexmpl.me $(doc_srcdir)/grnexmpl.g \
+-  grn eqn
++  grn$(EXEEXT) eqn$(EXEEXT)
+ 	$(GROFF_V)$(MKDIR_P) `dirname $@` \
+ 	&& $(DOC_GROFF) -Tps -ge -me $(doc_srcdir)/grnexmpl.me >$@
+ 
+@@ -334,19 +334,19 @@ SUFFIXES += .me.in .me
+ 
+ # Use '-K utf8', not '-k', in case 'configure' didn't find uchardet.
+ # The French translation uses tbl; its English counterpart does not.
+-doc/meintro_fr.ps: doc/meintro_fr.me preconv
++doc/meintro_fr.ps: doc/meintro_fr.me preconv$(EXEEXT)
+ 	$(GROFF_V)$(MKDIR_P) `dirname $@` \
+ 	&& $(DOC_GROFF) -K utf8 -t -Tps -me -mfr $< >$@
+ 
+-doc/ms.ps: $(doc_srcdir)/ms.ms eqn tbl
++doc/ms.ps: $(doc_srcdir)/ms.ms eqn$(EXEEXT) tbl$(EXEEXT)
+ 	$(GROFF_V)$(MKDIR_P) `dirname $@` \
+ 	&& $(DOC_GROFF) -et -Tps -ms $(doc_srcdir)/ms.ms >$@
+ 
+-doc/pic.ps: $(doc_srcdir)/pic.ms eqn pic tbl
++doc/pic.ps: $(doc_srcdir)/pic.ms eqn$(EXEEXT) pic$(EXEEXT) tbl$(EXEEXT)
+ 	$(GROFF_V)$(MKDIR_P) `dirname $@` \
+ 	&& $(DOC_GROFF) -pet -Tps -ms $(doc_srcdir)/pic.ms >$@
+ 
+-doc/webpage.ps: $(DOC_GNU_EPS) tmac/www.tmac tbl
++doc/webpage.ps: $(DOC_GNU_EPS) tmac/www.tmac tbl$(EXEEXT)
+ doc/webpage.ps: $(doc_srcdir)/webpage.ms
+ 	$(GROFF_V)$(MKDIR_P) `dirname $@` \
+ 	&& $(DOC_GROFF) -I $(doc_srcdir) -I $(doc_builddir) -t -Tps \
+@@ -357,7 +357,7 @@ doc/webpage.ps: $(doc_srcdir)/webpage.ms
+ #	$(GROFF_V)$(MKDIR_P) `dirname $@` \
+ #	&& $(DOC_GROFF) -Tps -ms $< >$@
+ 
+-doc/pic.html: eqn pic tbl
++doc/pic.html: eqn$(EXEEXT) pic$(EXEEXT) tbl$(EXEEXT)
+ doc/pic.html: tmac/www.tmac
+ doc/pic.html: $(doc_srcdir)/pic.ms
+ 	$(GROFF_V)$(MKDIR_P) $(doc_builddir) \
+@@ -365,7 +365,7 @@ doc/pic.html: $(doc_srcdir)/pic.ms
+ 	&& $(DOC_GROFF) -pet -P-Ipic -P-Dimg -P-jpic -Thtml -ms \
+ 	  $(doc_srcdir)/pic.ms > pic.html
+ 
+-doc/webpage.html: tbl
++doc/webpage.html: tbl$(EXEEXT)
+ doc/webpage.html: tmac/www.tmac
+ doc/webpage.html: $(DOC_GNU_EPS)
+ doc/webpage.html: $(doc_srcdir)/groff.css

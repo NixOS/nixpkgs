@@ -38,7 +38,8 @@ stdenv.mkDerivation rec {
     # Backport e49b934 "Fix underspecified `getenv()` prototype." for non-glibc systems with C23
     # This can be dropped in the next release, when the local getopt implementation in libgroff is removed
     ./fix-underspecified-getenv-prototype.patch
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isCygwin ./fix-cygwin-build.patch;
 
   outputs = [
     "out"
@@ -116,7 +117,9 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
       "gl_cv_func_signbit=yes"
-    ];
+    ]
+    # src/libs/libgroff/getopt.c:125:14: error: conflicting types for 'getenv'; have 'char *(void)'
+    ++ lib.optional stdenv.hostPlatform.isCygwin "CFLAGS=-std=gnu17";
 
   makeFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     # Trick to get the build system find the proper 'native' groff

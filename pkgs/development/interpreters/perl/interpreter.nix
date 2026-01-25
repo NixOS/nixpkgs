@@ -77,7 +77,8 @@ let
   # binary as early.
   #
   # Some more details: https://arsv.github.io/perl-cross/modules.html
-  ++ lib.optional crossCompiling ./cross.patch;
+  ++ lib.optional crossCompiling ./cross.patch
+  ++ lib.optional (crossCompiling && stdenv.hostPlatform.isCygwin) ./fix-cygwin-cross.patch;
 
   libc = if stdenv.cc.libc or null != null then stdenv.cc.libc else "/usr";
   libcInc = lib.getDev libc;
@@ -137,10 +138,18 @@ stdenv.mkDerivation (
           ''
       )
       +
-      # Perl's build system uses the src variable, and its value may end up in
-      # the output in some cases (when cross-compiling)
-      ''
-        unset src
+        # Perl's build system uses the src variable, and its value may end up in
+        # the output in some cases (when cross-compiling)
+        ''
+          unset src
+        ''
+      + lib.optionalString stdenv.buildPlatform.isCygwin ''
+        substituteInPlace hints/cygwin.sh \
+          --replace-fail "PATH='.:/usr/bin/'" ""
+        substituteInPlace cpan/Win32/Makefile.PL haiku/Haiku/Makefile.PL \
+          --replace-fail '/lib/w32api' '${lib.getLib stdenv.cc.libc.w32api}${
+            stdenv.cc.libc.w32api.libdir or "/lib/w32api"
+          }'
       '';
 
     # Build a thread-safe Perl with a dynamic libperl.so.  We need the
@@ -157,6 +166,24 @@ stdenv.mkDerivation (
             "-Ddefault_inc_excludes_dot"
             # https://github.com/arsv/perl-cross/issues/158
             "-Dd_gnulibc=define"
+          ]
+          # these currently can't be configured automatically on non-elf systems
+          # other archs will need verification
+          ++ lib.optional (stdenv.hostPlatform.isCygwin && stdenv.hostPlatform.isx86_64) [
+            "-Dcharsize=1"
+            "-Dshortsize=2"
+            "-Dintsize=4"
+            "-Dlongsize=8"
+            "-Ddoublesize=8"
+            "-Dptrsize=8"
+            "-Dlongdblsize=16"
+            "-Dlonglongsize=8"
+            "-Dsizesize=8"
+            "-Dfpossize=8"
+            "-Dlseeksize=8"
+            "-Duidsize=4"
+            "-Dgidsize=4"
+            "-Dtimesize=8"
           ]
         else
           (
@@ -266,6 +293,18 @@ stdenv.mkDerivation (
 
     # Default perl does not support --host= & co.
     configurePlatforms = [ ];
+
+    allowedImpureDLLs = [
+      "ADVAPI32.dll"
+      "NETAPI32.dll"
+      "SHELL32.dll"
+      "USER32.dll"
+      "USERENV.dll"
+      "VERSION.dll"
+      "WINHTTP.dll"
+      "ntdll.dll"
+      "ole32.dll"
+    ];
 
     setupHook = ./setup-hook.sh;
 
@@ -400,5 +439,10 @@ stdenv.mkDerivation (
 
     # TODO merge setup hooks
     setupHook = ./setup-hook-cross.sh;
+  }
+  // lib.optionalAttrs (stdenv.hostPlatform.isCygwin) {
+    # in cygwin we need PATH and HOST_PATH set up for these dependencies
+    buildInputs = [ zlib ];
+    nativeBuildInputs = lib.optional (!crossCompiling && enableCrypt) libxcrypt;
   }
 )

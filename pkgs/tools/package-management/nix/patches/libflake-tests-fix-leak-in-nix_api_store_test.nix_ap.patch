@@ -1,0 +1,25 @@
+From 7fa550aac32900720af1004187b0a087eec8ce79 Mon Sep 17 00:00:00 2001
+From: David McFarland <corngood@gmail.com>
+Date: Fri, 9 Jan 2026 16:27:19 -0400
+Subject: [PATCH] libflake-tests: fix leak in
+ nix_api_store_test.nix_api_load_flake_with_flags
+
+---
+ src/libflake-tests/nix_api_flake.cc | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/libflake-tests/nix_api_flake.cc b/src/libflake-tests/nix_api_flake.cc
+index 45f3d9b29..063dfc4d7 100644
+--- a/src/libflake-tests/nix_api_flake.cc
++++ b/src/libflake-tests/nix_api_flake.cc
+@@ -377,6 +377,7 @@ TEST_F(nix_api_store_test, nix_api_load_flake_with_flags)
+     assert_ctx_ok();
+     ASSERT_EQ("Claire", helloStr);
+ 
++    nix_locked_flake_free(lockedFlake);
+     nix_flake_reference_parse_flags_free(parseFlags);
+     nix_flake_lock_flags_free(lockFlags);
+     nix_flake_reference_free(flakeReference);
+-- 
+2.52.0
+

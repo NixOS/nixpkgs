@@ -1,0 +1,27 @@
+diff --git a/cnf/configure_tool.sh b/cnf/configure_tool.sh
+index 2f5492e..85c9715 100644
+--- a/cnf/configure_tool.sh
++++ b/cnf/configure_tool.sh
+@@ -246,6 +246,10 @@ if not hinted 'osname'; then
+ 			define osname "MSWin32"
+ 			result "MSWin32"
+ 			;;
++		*-cygwin)
++			define osname "cygwin"
++			result "Cygwin"
++			;;
+ 		*-android|*-androideabi)
+ 			define osname "android"
+ 			result "Android"
+diff --git a/cnf/configure_func.sh b/cnf/configure_func.sh
+index b24fe03..00a217f 100644
+--- a/cnf/configure_func.sh
++++ b/cnf/configure_func.sh
+@@ -191,6 +191,7 @@ checkfunc d_msgrcv 'msgrcv' '0,NULL,0,0,0' 'sys/msg.h'
+ checkfunc d_msgsnd 'msgsnd' '0,NULL,0,0' 'sys/msg.h'
+ checkfunc d_msync 'msync' 'NULL,0,0' 'sys/mman.h'
+ checkfunc d_munmap 'munmap' 'NULL,0' 'sys/mman.h'
++checkfunc d_nanosleep 'nanosleep' 'NULL,NULL' 'time.h'
+ checkfunc d_newlocale 'newlocale' '0,NULL,0' 'locale.h'
+ checkfunc d_nice 'nice' '0' 'unistd.h'
+ checkfunc d_nl_langinfo 'nl_langinfo' '0' 'langinfo.h'

@@ -1,0 +1,90 @@
+diff --git a/winsup/cygwin/local_includes/fhandler.h b/winsup/cygwin/local_includes/fhandler.h
+index bdd87ebb7..3c505e545 100644
+--- a/winsup/cygwin/local_includes/fhandler.h
++++ b/winsup/cygwin/local_includes/fhandler.h
+@@ -456,6 +456,7 @@ public:
+   virtual class fhandler_timerfd *is_timerfd () { return NULL; }
+   virtual class fhandler_mqueue *is_mqueue () { return NULL; }
+   virtual int is_windows () {return 0; }
++  virtual bool is_hung_up () { return false; }
+ 
+   virtual void raw_read (void *ptr, size_t& ulen);
+   virtual ssize_t raw_write (const void *ptr, size_t ulen);
+@@ -723,6 +724,8 @@ class fhandler_socket_wsock: public fhandler_socket
+ 
+   fhandler_socket_wsock *is_wsock_socket () { return this; }
+ 
++  bool is_hung_up () { return saw_shutdown_read(); }
++
+   ssize_t recvfrom (void *ptr, size_t len, int flags,
+ 		    struct sockaddr *from, int *fromlen);
+   ssize_t recvmsg (struct msghdr *msg, int flags);
+@@ -1221,12 +1224,15 @@ class fhandler_pipe: public fhandler_pipe_fifo
+ {
+ private:
+   pid_t popen_pid;
++  bool hung_up = false;
+   void release_select_sem (const char *);
+ public:
+   fhandler_pipe ();
+ 
+   bool ispipe() const { return true; }
+   void set_pipe_buf_size ();
++  bool is_hung_up () { return hung_up; }
++  void set_hung_up () { hung_up = true; }
+ 
+   void set_popen_pid (pid_t pid) {popen_pid = pid;}
+   pid_t get_popen_pid () const {return popen_pid;}
+diff --git a/winsup/cygwin/poll.cc b/winsup/cygwin/poll.cc
+index a67507bbd..039958b1e 100644
+--- a/winsup/cygwin/poll.cc
++++ b/winsup/cygwin/poll.cc
+@@ -58,8 +58,7 @@ poll (struct pollfd *fds, nfds_t nfds, int timeout)
+ 	    FD_SET(fds[i].fd, read_fds);
+ 	  if (fds[i].events & POLLOUT)
+ 	    FD_SET(fds[i].fd, write_fds);
+-	  if (fds[i].events & POLLPRI)
+-	    FD_SET(fds[i].fd, except_fds);
++	  FD_SET(fds[i].fd, except_fds);
+ 	}
+       else if (fds[i].fd >= 0)
+ 	{
+@@ -99,9 +98,8 @@ poll (struct pollfd *fds, nfds_t nfds, int timeout)
+ 	  /* Check if the descriptor has been closed, or if shutdown for the
+ 	     read side has been called on a socket. */
+ 	  if (cygheap->fdtab.not_open (fds[i].fd)
+-	      || ((sock = cygheap->fdtab[fds[i].fd]->is_wsock_socket ())
+-		  && sock->saw_shutdown_read ()))
+-	    fds[i].revents = POLLHUP;
++				|| cygheap->fdtab[fds[i].fd]->is_hung_up())
++	    fds[i].revents |= POLLHUP;
+ 	  else
+ 	    {
+ 	      if ((fds[i].events & POLLIN) && FD_ISSET(fds[i].fd, read_fds))
+diff --git a/winsup/cygwin/select.cc b/winsup/cygwin/select.cc
+index 8a94ac076..6830669b8 100644
+--- a/winsup/cygwin/select.cc
++++ b/winsup/cygwin/select.cc
+@@ -749,6 +749,7 @@ peek_pipe (select_record *s, bool from_select)
+       if (n == PDA_ERROR)
+ 	{
+ 	  select_printf ("read: %s, n %d", fh->get_name (), n);
++	  ((fhandler_pipe *) fh)->set_hung_up ();
+ 	  if (s->except_selected)
+ 	    gotone += s->except_ready = true;
+ 	  if (s->read_selected)
+@@ -786,6 +787,14 @@ out:
+       if (n == PDA_ERROR && s->except_selected)
+ 	gotone += s->except_ready = true;
+     }
++
++  if (!s->read_selected && dev == FH_PIPER) {
++      ssize_t n = pipe_data_available (s->fd, fh, h, PDA_READ);
++      if (n == PDA_ERROR) {
++	((fhandler_pipe *) fh)->set_hung_up ();
++	gotone += s->except_ready = true;
++      }
++  }
+   return gotone;
+ }
+ 

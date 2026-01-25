@@ -377,12 +377,12 @@ stdenvNoCC.mkDerivation {
       fi
     ''
 
-    + optionalString hostPlatform.isCygwin ''
-      hardening_unsupported_flags+=" pic"
+    + optionalString (targetPlatform.isAvr || targetPlatform.isWindows || targetPlatform.isCygwin) ''
+      hardening_unsupported_flags+=" relro bindnow"
     ''
 
-    + optionalString (targetPlatform.isAvr || targetPlatform.isWindows) ''
-      hardening_unsupported_flags+=" relro bindnow"
+    + optionalString targetPlatform.isCygwin ''
+      cp ${./cygwin-ld-wrapper-hook.sh} $out/nix-support/ld-wrapper-hook
     ''
 
     + optionalString (libc != null && targetPlatform.isAvr) ''

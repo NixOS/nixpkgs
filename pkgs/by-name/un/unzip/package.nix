@@ -67,7 +67,8 @@ stdenv.mkDerivation rec {
     url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/app-arch/unzip/files/unzip-6.0-natspec.patch?id=56bd759df1d0c750a065b8c845e93d5dfa6b549d";
     name = "unzip-6.0-natspec.patch";
     sha256 = "67ab260ae6adf8e7c5eda2d1d7846929b43562943ec4aff629bd7018954058b1";
-  });
+  })
+  ++ lib.optional stdenv.hostPlatform.isCygwin ./fix-cygwin-build.patch;
 
   # gcc-15 uses c23 standard, which removed non-prototype function declarations.
   postPatch = ''
@@ -96,7 +97,8 @@ stdenv.mkDerivation rec {
 
   installFlags = [
     "prefix=${placeholder "out"}"
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isCygwin "E=.exe";
 
   setupHook = ./setup-hook.sh;
 

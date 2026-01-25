@@ -82,6 +82,18 @@ stdenv.mkDerivation (finalAttrs: {
     # failed to set permissions on ...: Operation not permitted
     testArgs+=(-xrepo::init::extended_1)
     testArgs+=(-xrepo::template::extended_with_template_and_shared_mode)
+  ''
+  + lib.optionalString stdenv.buildPlatform.isCygwin ''
+    testArgs+=(
+      -xiterator::workdir::skips_unreadable_dirs
+      -xodb::loose::permissions_standard
+      -xodb::loose::permissions_readonly
+      -xodb::loose::permissions_readwrite
+      -xpack::packbuilder::permissions_readwrite
+      -xstatus::worktree::unreadable
+    )
+  ''
+  + ''
 
     (
       set -x

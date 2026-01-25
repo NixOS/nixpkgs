@@ -66,7 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./RAND_egd.libressl.patch
     ./https.patch
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isCygwin ./fix-cygwin-build.patch;
 
   postPatch = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     ln -s ${mktable}/bin/mktable mktable
@@ -116,6 +117,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   enableParallelBuilding = false;
+
+  allowedImpureDLLs = [
+    "USER32.dll"
+    "GDI32.dll"
+    "gdiplus.dll"
+  ];
 
   passthru.tests.version = testers.testVersion {
     inherit (finalAttrs) version;

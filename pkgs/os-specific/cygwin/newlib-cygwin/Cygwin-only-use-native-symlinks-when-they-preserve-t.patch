@@ -1,0 +1,52 @@
+From cc2ba5ca9926d696f3a4e1a431a67357e378eba7 Mon Sep 17 00:00:00 2001
+From: David McFarland <corngood@gmail.com>
+Date: Mon, 6 Oct 2025 19:53:32 -0300
+Subject: [PATCH] Cygwin: only use native symlinks when they preserve the
+ target
+
+We want readlink() to return the original target string as much as
+possible. Currently it'll be changed in some common cases:
+
+x/ -> x
+x/../x -> x
+
+This doesn't normally break the links, but it means the link will change
+when archived. With Nix, this can change the hash of a NAR packed tree.
+---
+ winsup/cygwin/path.cc | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+
+diff --git a/winsup/cygwin/path.cc b/winsup/cygwin/path.cc
+index 310876b5a..9af599572 100644
+--- a/winsup/cygwin/path.cc
++++ b/winsup/cygwin/path.cc
+@@ -1937,6 +1937,26 @@ symlink_native (const char *oldpath, path_conv &win32_newpath)
+   flags = win32_oldpath.isdir () ? SYMBOLIC_LINK_FLAG_DIRECTORY : 0;
+   if (wincap.has_unprivileged_createsymlink ())
+     flags |= SYMBOLIC_LINK_FLAG_ALLOW_UNPRIVILEGED_CREATE;
++
++  {
++    char nfpath[SYMLINK_MAX + 1];
++    symlink_info sym;
++    int res = sys_wcstombs (nfpath, SYMLINK_MAX, final_oldpath->Buffer);
++    if (res > SYMLINK_MAX)
++      {
++	SetLastError (ERROR_FILE_NOT_FOUND);
++        final_newpath->Buffer[1] = L'?';
++        return -1;
++      }
++    res = sym.posixify (nfpath);
++    if (strcmp (sym.content (), oldpath))
++      {
++        SetLastError (ERROR_FILE_NOT_FOUND);
++        final_newpath->Buffer[1] = L'?';
++        return -1;
++      }
++  }
++
+   if (!CreateSymbolicLinkW (final_newpath->Buffer, final_oldpath->Buffer,
+ 			    flags))
+     {
+-- 
+2.50.1
+

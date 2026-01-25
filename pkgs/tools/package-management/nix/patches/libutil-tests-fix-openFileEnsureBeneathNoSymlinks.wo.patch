@@ -1,0 +1,32 @@
+From 88b985ab6857625e1f79df64f7b5b8bf6893239d Mon Sep 17 00:00:00 2001
+From: David McFarland <corngood@gmail.com>
+Date: Thu, 8 Jan 2026 13:27:55 -0400
+Subject: [PATCH] libutil-tests: fix openFileEnsureBeneathNoSymlinks.works on
+ cygwin
+
+---
+ src/libutil-tests/file-system.cc | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/src/libutil-tests/file-system.cc b/src/libutil-tests/file-system.cc
+index 1551227cb..3d1670813 100644
+--- a/src/libutil-tests/file-system.cc
++++ b/src/libutil-tests/file-system.cc
+@@ -369,9 +369,14 @@ TEST(openFileEnsureBeneathNoSymlinks, works)
+     EXPECT_THROW(open("a/absolute_symlink/c/d", O_RDONLY), SymlinkNotAllowed);
+     EXPECT_THROW(open("a/relative_symlink/c", O_RDONLY), SymlinkNotAllowed);
+     EXPECT_THROW(open("a/b/c/d", O_RDONLY), SymlinkNotAllowed);
++#ifdef __CYGWIN__
++    // this returns ELOOP on cygwin when O_NOFOLLOW is used
++    EXPECT_THROW(open("a/broken_symlink", O_CREAT | O_WRONLY | O_EXCL, 0666), SymlinkNotAllowed);
++#else
+     EXPECT_EQ(open("a/broken_symlink", O_CREAT | O_WRONLY | O_EXCL, 0666), INVALID_DESCRIPTOR);
+     /* Sanity check, no symlink shenanigans and behaves the same as regular openat with O_EXCL | O_CREAT. */
+     EXPECT_EQ(errno, EEXIST);
++#endif
+     EXPECT_THROW(open("a/absolute_symlink/broken_symlink", O_CREAT | O_WRONLY | O_EXCL, 0666), SymlinkNotAllowed);
+     EXPECT_EQ(open("c/d/regular/a", O_RDONLY), INVALID_DESCRIPTOR);
+     EXPECT_EQ(open("c/d/regular", O_RDONLY | O_DIRECTORY), INVALID_DESCRIPTOR);
+-- 
+2.52.0
+

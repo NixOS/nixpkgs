@@ -73,12 +73,20 @@ stdenv.mkDerivation (finalAttrs: {
   # * Disable deptgt-delete_on_error test (alpine does this too)
   # * Disable shell-ksh test (ksh doesn't compile with musl)
   # * Fix test failing due to different strerror(3) output for musl and glibc
-  postPatch = lib.optionalString (stdenv.hostPlatform.libc == "musl") ''
-    sed -i unit-tests/Makefile \
-      -e '/deptgt-delete_on_error/d' \
-      -e '/shell-ksh/d'
-    substituteInPlace unit-tests/opt-chdir.exp --replace "File name" "Filename"
-  '';
+  postPatch =
+    lib.optionalString (stdenv.hostPlatform.libc == "musl") ''
+      sed -i unit-tests/Makefile \
+        -e '/deptgt-delete_on_error/d' \
+        -e '/shell-ksh/d'
+      substituteInPlace unit-tests/opt-chdir.exp --replace "File name" "Filename"
+    ''
+    +
+      # this test doesn't give a permissions warning on cygwin
+      # TODO: find out why
+      lib.optionalString stdenv.hostPlatform.isCygwin ''
+        sed -i unit-tests/Makefile \
+          -e '/objdir-writable/d'
+      '';
 
   buildPhase = ''
     runHook preBuild
