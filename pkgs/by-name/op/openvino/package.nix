@@ -2,8 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
-  fetchurl,
   cudaSupport ? opencv.cudaSupport or false,
 
   # build
