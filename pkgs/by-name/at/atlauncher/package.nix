@@ -33,11 +33,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-x8ch8BdUckweuwEvsOxYG2M5UmbW4fRjF/jJ6feIjIA=";
   };
 
-  postPatch = ''
-    # exclude UI tests
-    sed -i "/test {/a\    exclude '**/BasicLauncherUiTest.class'" build.gradle
-  '';
-
   nativeBuildInputs = [
     gradle
     makeWrapper
