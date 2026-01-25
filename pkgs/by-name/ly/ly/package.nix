@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://codeberg.org/fairyglade/ly";
     license = lib.licenses.wtfpl;
     mainProgram = "ly";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ yiyu ];
     platforms = lib.platforms.unix;
   };
 })
