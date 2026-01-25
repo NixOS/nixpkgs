@@ -8,7 +8,7 @@
 
   # tests
   pytest-cov-stub,
-  pytestCheckHook,
+  pytest8_3CheckHook,
   pexpect,
 }:
 
@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-cov-stub
-    pytestCheckHook
+    pytest8_3CheckHook
     pexpect
   ];
 
