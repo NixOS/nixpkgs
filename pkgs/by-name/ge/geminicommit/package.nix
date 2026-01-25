@@ -29,8 +29,8 @@ buildGoModule (finalAttrs: {
       cmd = finalAttrs.meta.mainProgram;
       goDefaultCmd = finalAttrs.pname;
     in
-    # The official github released binary is renamed since v0.7.0,
-    # see: https://github.com/tfkhdyt/geminicommit/releases/tag/v0.7.0
+    # The official github released binary is renamed since v0.4.1,
+    # see: https://github.com/tfkhdyt/geminicommit/releases/tag/v0.4.1
     # Here we link the old name (which is also the `go build` default name)
     # for backward compatibility:
     ''
