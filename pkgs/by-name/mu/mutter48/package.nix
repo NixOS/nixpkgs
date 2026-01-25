@@ -8,13 +8,16 @@
   gobject-introspection,
   cairo,
   colord,
+  docutils,
   lcms2,
   pango,
   libstartup_notification,
   libcanberra,
   ninja,
   xvfb-run,
+  libadwaita,
   libxcvt,
+  libGL,
   libICE,
   libX11,
   libXcomposite,
@@ -27,7 +30,6 @@
   libxkbfile,
   xkeyboard_config,
   libxkbcommon,
-  libXrender,
   libxcb,
   libXrandr,
   libXinerama,
@@ -69,7 +71,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mutter";
-  version = "46.8";
+  version = "48.7";
 
   outputs = [
     "out"
@@ -80,13 +82,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.major finalAttrs.version}/mutter-${finalAttrs.version}.tar.xz";
-    hash = "sha256-+8CDVEr7O4Vn18pobCF/g3sG+UeNbiV0FZ/5ocjhyWI=";
+    hash = "sha256-7BAqo8uw45ABIGYnrKMFUxRVX3BgneXmwrfvzR+pDyA=";
   };
 
   mesonFlags = [
     "-Degl_device=true"
     "-Dinstalled_tests=false" # TODO: enable these
-    "-Dtests=false"
+    "-Dtests=disabled"
+    # For NVIDIA proprietary driver up to 470.
+    # https://src.fedoraproject.org/rpms/mutter/pull-request/49
     "-Dwayland_eglstream=true"
     "-Dprofiler=true"
     "-Dxwayland_path=${lib.getExe xwayland}"
@@ -104,13 +108,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     desktop-file-utils
+    docutils # for rst2man
     gettext
+    glib
     libxcvt
     meson
     ninja
     xvfb-run
     pkg-config
     python3
+    python3.pkgs.argcomplete # for register-python-argcomplete
     wayland-scanner
     wrapGAppsHook4
     gi-docgen
@@ -134,6 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
     libgbm
     libei
     libdisplay-info
+    libGL
     libgudev
     libinput
     libstartup_notification
@@ -162,36 +170,43 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbfile
     xkeyboard_config
     libxkbcommon
-    libXrender
     libxcb
     libXrandr
     libXinerama
     libXau
+
+    # for gdctl shebang
+    (python3.withPackages (pp: [
+      pp.pygobject3
+      pp.argcomplete
+    ]))
   ];
 
   postPatch = ''
     patchShebangs src/backends/native/gen-default-modes.py
-  '';
 
-  postInstall = ''
-    ${glib.dev}/bin/glib-compile-schemas "$out/share/glib-2.0/schemas"
+    # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/3981
+    substituteInPlace src/frames/main.c \
+      --replace-fail "libadwaita-1.so.0" "${libadwaita}/lib/libadwaita-1.so.0"
   '';
 
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     # TODO: Move this into a directory devhelp can find.
-    moveToOutput "share/mutter-14/doc" "$devdoc"
+    moveToOutput "share/mutter-${finalAttrs.passthru.libmutter_api_version}/doc" "$devdoc"
   '';
 
   # Install udev files into our own tree.
   env.PKG_CONFIG_UDEV_UDEVDIR = "${placeholder "out"}/lib/udev";
 
   separateDebugInfo = true;
+  strictDeps = true;
 
   doInstallCheck = true;
 
   passthru = {
-    libdir = "${finalAttrs.finalPackage}/lib/mutter-14";
+    libmutter_api_version = "16"; # bumped each dev cycle
+    libdir = "${finalAttrs.finalPackage}/lib/mutter-${finalAttrs.passthru.libmutter_api_version}";
 
     tests = {
       libdirExists = runCommand "mutter-libdir-exists" { } ''
@@ -208,6 +223,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Window manager for GNOME";
     mainProgram = "mutter";
     homepage = "https://gitlab.gnome.org/GNOME/mutter";
+    changelog = "https://gitlab.gnome.org/GNOME/mutter/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     license = lib.licenses.gpl2Plus;
     teams = [ lib.teams.pantheon ];
     platforms = lib.platforms.linux;
