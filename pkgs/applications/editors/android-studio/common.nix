@@ -80,11 +80,11 @@
 }:
 
 let
-  drvName = "android-studio-${channel}-${version}";
   filename = "android-studio-${version}-linux.tar.gz";
 
   androidStudio = stdenv.mkDerivation {
-    name = "${drvName}-unwrapped";
+    pname = "${pname}-unwrapped";
+    inherit version;
 
     src = fetchurl {
       url = "https://dl.google.com/dl/android/studio/ide-zips/${version}/${filename}";
@@ -228,7 +228,7 @@ let
   # (e.g. `mksdcard`) have `/lib/ld-linux.so.2` set as the interpreter. An FHS
   # environment is used as a work around for that.
   fhsEnv = buildFHSEnv {
-    pname = "${drvName}-fhs-env";
+    pname = "${pname}-fhs-env";
     inherit version;
     multiPkgs = pkgs: [
       ncurses5
@@ -245,8 +245,9 @@ let
       androidStudio,
       androidSdk ? null,
     }:
-    runCommand drvName
+    runCommand "${pname}-${version}"
       {
+        inherit pname version;
         startScript =
           let
             hasAndroidSdk = androidSdk != null;
@@ -283,7 +284,7 @@ let
                 unset ANDROID_HOME
               fi
             ''}
-            exec ${fhsEnv}/bin/${drvName}-fhs-env ${lib.getExe androidStudio} "$@"
+            exec ${lib.getExe fhsEnv} ${lib.getExe androidStudio} "$@"
           '';
         preferLocalBuild = true;
         allowSubstitutes = false;
@@ -292,7 +293,6 @@ let
             withSdk = androidSdk: mkAndroidStudioWrapper { inherit androidStudio androidSdk; };
           in
           {
-            inherit version;
             unwrapped = androidStudio;
             full = withSdk androidenv.androidPkgs.androidsdk;
             inherit withSdk;
