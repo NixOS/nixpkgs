@@ -20,6 +20,11 @@ buildPythonPackage rec {
     hash = "sha256-TN0shf9HcBCO2vSP7fGYiM+Vb/N04ul+QPhBKwSMruY=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "Cython ==" "Cython >="
+  '';
+
   build-system = [
     cython
     setuptools
