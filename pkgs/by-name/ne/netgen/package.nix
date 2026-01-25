@@ -79,6 +79,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace ng/Togl2.1/CMakeLists.txt \
       --replace-fail "/usr/bin/gcc" "$CC"
+
+    # Fix UB when size == 0, otherwise test_archive will fail when hardening enable glibcxxassertions
+    substituteInPlace libsrc/core/archive.hpp \
+      --replace-fail "Do(&v[0], size);" "Do(v.data(), size);"
   ''
   + lib.optionalString (!stdenv.hostPlatform.isx86_64) ''
     # mesh generation differs on x86_64 and aarch64 platform
