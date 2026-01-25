@@ -19,6 +19,6 @@ buildFishPlugin rec {
     description = "Make your prompt asynchronous to improve the reactivity";
     homepage = "https://github.com/acomagu/fish-async-prompt";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.samasaur ];
   };
 }
