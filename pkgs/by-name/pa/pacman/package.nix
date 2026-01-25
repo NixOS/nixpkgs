@@ -34,6 +34,9 @@
   gnugrep,
   gnupg,
 
+  # makepkg requires compgen to work
+  bashInteractive,
+
   # Tells pacman where to find ALPM hooks provided by packages.
   # This path is very likely to be used in an Arch-like root.
   sysHookDir ? "/usr/share/libalpm/hooks/",
@@ -55,6 +58,7 @@ stdenv.mkDerivation (final: {
 
   nativeBuildInputs = [
     asciidoc
+    bashInteractive
     gettext
     installShellFiles
     libarchive
