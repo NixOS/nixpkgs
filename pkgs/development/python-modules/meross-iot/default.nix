@@ -9,7 +9,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "meross-iot";
   version = "0.4.10.4";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "albertogeniola";
     repo = "MerossIot";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-9y8/q218hD7BZIbjJvzwmc9bEzWZI+OrA8ERW36ya3w=";
   };
 
@@ -39,8 +39,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library to interact with Meross devices";
     homepage = "https://github.com/albertogeniola/MerossIot";
-    changelog = "https://github.com/albertogeniola/MerossIot/releases/tag/${version}";
+    changelog = "https://github.com/albertogeniola/MerossIot/releases/tag/${finalAttrs.src.tag}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
