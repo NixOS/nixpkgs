@@ -435,7 +435,7 @@ let
 
       substituteInPlace backend/cpp/llama-cpp/grpc-server.cpp \
         --replace-warn "params.fit_params_target = 1024 * 1024 * 1024;" \
-          "params.fit_params_target.assign(params.fit_params_target.size(), 1024ull * 1024 * 1024);"
+          "params.fit_params_target.assign(params.fit_params_target.size(), 1024 * 1024 * 1024);"
       substituteInPlace backend/cpp/llama-cpp/grpc-server.cpp \
         --replace-warn "params.fit_params_target = static_cast<size_t>(std::stoi(optval_str)) * 1024 * 1024;" \
           "params.fit_params_target.assign(params.fit_params_target.size(), static_cast<size_t>(std::stoi(optval_str)) * 1024 * 1024);"
