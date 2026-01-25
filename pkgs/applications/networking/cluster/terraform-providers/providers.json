@@ -310,11 +310,11 @@
     "vendorHash": null
   },
   "digitalocean_digitalocean": {
-    "hash": "sha256-SmpbPDlJxsXT63d4KnUSzbPLSG5c2mPy6SCA8TCpxe4=",
+    "hash": "sha256-inPOojpjliZpEN3Bk67mPdmq0XDCFHFpwthwuJjyIZg=",
     "homepage": "https://registry.terraform.io/providers/digitalocean/digitalocean",
     "owner": "digitalocean",
     "repo": "terraform-provider-digitalocean",
-    "rev": "v2.73.0",
+    "rev": "v2.74.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -382,11 +382,11 @@
     "vendorHash": "sha256-M5cX70GwfdEJ22V8CwoaNEdEWb1CX7wsBgvj3GvjE0Q="
   },
   "exoscale_exoscale": {
-    "hash": "sha256-8FIZO+iRqYa7y5Li8GoGnFT069vx4q4KczCgEB4SKuk=",
+    "hash": "sha256-V7mG584wyr99myizr/jx9AadkAnBCZvUvAKF0sX/CIA=",
     "homepage": "https://registry.terraform.io/providers/exoscale/exoscale",
     "owner": "exoscale",
     "repo": "terraform-provider-exoscale",
-    "rev": "v0.67.1",
+    "rev": "v0.67.2",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -472,13 +472,13 @@
     "vendorHash": "sha256-mzDFyk2oImRXt72kFV5Ln++ScgoecpJEJtzUKjvCaws="
   },
   "grafana_grafana": {
-    "hash": "sha256-gfS+sJREaObaXSgfVK7oUAgm05EqSRhiLauGP6V9Vhw=",
+    "hash": "sha256-EO18AHTtuchRpHxcXa5shmCpoLR91Ows8doBUTjollI=",
     "homepage": "https://registry.terraform.io/providers/grafana/grafana",
     "owner": "grafana",
     "repo": "terraform-provider-grafana",
-    "rev": "v4.23.0",
+    "rev": "v4.25.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-sP86GbNZUmltn5a7AREyw54Fa3eFNwW/lMIFZIEj/Bo="
+    "vendorHash": "sha256-5+nBYEAdiyNYsZsWvghciCYixQB3ojRlpSiSdjNWDHY="
   },
   "gridscale_gridscale": {
     "hash": "sha256-FAKvQ/MEod5Ck0PG4ffQ+gQp6zZ0JDRXPOrOiDpWMls=",
@@ -923,13 +923,13 @@
     "vendorHash": "sha256-5cqj1O57snU+NoVqmWc/KIGnowQNMww+rJxYfIPvHWU="
   },
   "mongodb_mongodbatlas": {
-    "hash": "sha256-yVkhW1cYH+1biC1kUI6MdAK00QpiCyG/sGbOOxTEmm8=",
+    "hash": "sha256-PACDH+CIEzUC/LYmppXin93vi0xp+1fMev2xn9iroRo=",
     "homepage": "https://registry.terraform.io/providers/mongodb/mongodbatlas",
     "owner": "mongodb",
     "repo": "terraform-provider-mongodbatlas",
-    "rev": "v2.4.0",
+    "rev": "v2.5.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-5xHm81ribxzdgSkMPAY7JEnlwf7wN/QGD8UyxUx2FOQ="
+    "vendorHash": "sha256-3LMym5LFcrtEPA1exhrqbn3lqur7Vh8RP9wOwWChuKc="
   },
   "namecheap_namecheap": {
     "hash": "sha256-fHH9sHI1mqQ9q9nX9DHJ0qfEfmDB4/2uzyVvUuIAF18=",
