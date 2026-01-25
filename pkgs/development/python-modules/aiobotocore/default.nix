@@ -10,9 +10,9 @@
   multidict,
   urllib3,
   wrapt,
+  anyio,
   dill,
   moto,
-  pytest-asyncio,
   time-machine,
   werkzeug,
   awscli,
@@ -60,9 +60,9 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    anyio
     dill
     moto
-    pytest-asyncio
     time-machine
     werkzeug
     pytestCheckHook
