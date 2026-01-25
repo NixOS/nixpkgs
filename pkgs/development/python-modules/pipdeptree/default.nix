@@ -25,13 +25,6 @@ buildPythonPackage rec {
     hash = "sha256-nDCd4Bk5P65+fnFM/kC3cbfPanj5P35/bta86/E65i0=";
   };
 
-  postPatch = ''
-    # only set to ensure py3.13 compat
-    # https://github.com/tox-dev/pipdeptree/pull/406
-    substituteInPlace pyproject.toml \
-      --replace-fail '"pip>=24.2"' '"pip"'
-  '';
-
   build-system = [
     hatchling
     hatch-vcs
