@@ -8,6 +8,7 @@
   lxml,
   oauthlib,
   pyjwt,
+  pytest-cov-stub,
   pytest-xdist,
   pytestCheckHook,
   python-jose,
@@ -54,6 +55,7 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    pytest-cov-stub
     pytest-xdist
     pytestCheckHook
     httpretty
