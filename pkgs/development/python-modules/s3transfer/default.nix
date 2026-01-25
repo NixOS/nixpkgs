@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "s3transfer";
-  version = "0.13.1";
+  version = "0.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "boto";
     repo = "s3transfer";
     tag = version;
-    hash = "sha256-NDm1Lc0PXW1hbNftwdM2b87wFXSCBPCxZmwcRFmIyY8=";
+    hash = "sha256-dpDlsZtLjd6r4kLkIDPG6ZPFFs6/4elYiHk2HDpa9+4=";
   };
 
   build-system = [
