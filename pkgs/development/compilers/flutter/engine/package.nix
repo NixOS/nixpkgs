@@ -19,7 +19,18 @@
   patchelf,
   gn,
   openbox,
-  xorg,
+  xorg-server,
+  libxxf86vm,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxfixes,
+  libxext,
+  libxcursor,
+  libx11,
+  xorgproto,
+  libxcb,
   libglvnd,
   libepoxy,
   wayland,
@@ -114,17 +125,17 @@ stdenv.mkDerivation (finalAttrs: {
               harfbuzz
               pango
               cairo
-              xorg.libxcb
-              xorg.libX11
-              xorg.libXcursor
-              xorg.libXrandr
-              xorg.libXrender
-              xorg.libXinerama
-              xorg.libXi
-              xorg.libXext
-              xorg.libXfixes
-              xorg.libXxf86vm
-              xorg.xorgproto
+              libxcb
+              libx11
+              libxcursor
+              libxrandr
+              libxrender
+              libxinerama
+              libxi
+              libxext
+              libxfixes
+              libxxf86vm
+              xorgproto
               zlib
             ]
             ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
@@ -156,7 +167,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional (!isOptimized) "-U_FORTIFY_SOURCE";
 
   nativeCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    xorg.xorgserver
+    xorg-server
     openbox
   ];
 

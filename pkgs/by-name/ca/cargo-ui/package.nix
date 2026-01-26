@@ -9,7 +9,11 @@
   expat,
   fontconfig,
   libGL,
-  xorg,
+  libxrandr,
+  libxi,
+  libxcursor,
+  libx11,
+  libxcb,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -35,11 +39,11 @@ rustPlatform.buildRustPackage rec {
     expat
     fontconfig
     libGL
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libxcb
+    libx11
+    libxcursor
+    libxi
+    libxrandr
+    libxcb
   ];
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''

@@ -1,6 +1,6 @@
 {
   fetchFromGitHub,
-  xorg,
+  mkfontscale,
   lib,
   stdenv,
 }:
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-W5Wqsm5rpzzcbJl2lv6ORAznaAwLcmJ2S6Qo2zIoq9I=";
   };
 
-  nativeBuildInputs = [ xorg.mkfontscale ];
+  nativeBuildInputs = [ mkfontscale ];
 
   installPhase = ''
     install -m 644 -D otb/*.otb pcf/*.pcf -t "$out/share/fonts/misc"

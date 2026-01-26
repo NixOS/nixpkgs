@@ -14,7 +14,10 @@
   vulkan-loader,
   wayland,
   xdg-utils,
-  xorg,
+  libxi,
+  libxcursor,
+  libx11,
+  libxcb,
   zlib,
   makeWrapper,
   waylandSupport ? false,
@@ -62,10 +65,10 @@ let
       stdenv.cc.libc
       vulkan-loader
       xdg-utils
-      xorg.libX11
-      xorg.libxcb
-      xorg.libXcursor
-      xorg.libXi
+      libx11
+      libxcb
+      libxcursor
+      libxi
     ]
     ++ lib.optionals waylandSupport [ wayland ];
 

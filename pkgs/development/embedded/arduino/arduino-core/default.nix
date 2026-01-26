@@ -19,7 +19,12 @@
   # Packages needed for Teensyduino
   upx,
   fontconfig,
-  xorg,
+  libxxf86vm,
+  libxinerama,
+  libxft,
+  libxext,
+  libx11,
+  libsm,
   gcc,
   atk,
   glib,
@@ -74,12 +79,12 @@ let
     libusb-compat-0_1
     pango
     udev
-    xorg.libSM
-    xorg.libX11
-    xorg.libXext
-    xorg.libXft
-    xorg.libXinerama
-    xorg.libXxf86vm
+    libsm
+    libx11
+    libxext
+    libxft
+    libxinerama
+    libxxf86vm
     zlib
   ];
   teensy_architecture =

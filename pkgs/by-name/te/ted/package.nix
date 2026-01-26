@@ -5,7 +5,10 @@
   pkg-config,
   zlib,
   pcre,
-  xorg,
+  libxpm,
+  libx11,
+  libsm,
+  libice,
   libjpeg,
   libtiff,
   libpng,
@@ -87,10 +90,10 @@ stdenv.mkDerivation rec {
   buildInputs = [
     zlib
     pcre
-    xorg.libX11
-    xorg.libICE
-    xorg.libSM
-    xorg.libXpm
+    libx11
+    libice
+    libsm
+    libxpm
     libjpeg
     libtiff
     libpng

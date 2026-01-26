@@ -22,7 +22,7 @@
   pango,
   pkg-config,
   which,
-  xorg,
+  libxrender,
   xorgproto,
   gitUpdater,
 }:
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     libpng
     librsvg
     pango
-    xorg.libXrender
+    libxrender
     xorgproto
   ];
 

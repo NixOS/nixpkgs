@@ -14,7 +14,8 @@
   xz,
   pkg-config,
   which,
-  xorg,
+  xorg-server,
+  xrandr,
   yasm,
   patchelf,
   makeself,
@@ -48,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     which
     yasm
     makeself
-    xorg.xorgserver
+    xorg-server
     openssl
     linuxHeaders
     xz
@@ -89,8 +90,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace ./src/VBox/Additions/common/VBoxGuest/lib/VBoxGuestR3LibDrmClient.cpp --replace-fail /usr/bin/VBoxDRMClient /run/current-system/sw/bin/VBoxDRMClient
     substituteInPlace ./src/VBox/Additions/common/VBoxGuest/lib/VBoxGuestR3LibDrmClient.cpp --replace-fail /usr/bin/VBoxClient /run/current-system/sw/bin/VBoxClient
-    substituteInPlace ./src/VBox/Additions/x11/VBoxClient/display.cpp --replace-fail /usr/X11/bin/xrandr ${xorg.xrandr}/bin/xrandr
-    substituteInPlace ./src/VBox/Additions/x11/vboxvideo/Makefile.kmk --replace-fail /usr/include/xorg "${xorg.xorgserver.dev}/include/xorg "
+    substituteInPlace ./src/VBox/Additions/x11/VBoxClient/display.cpp --replace-fail /usr/X11/bin/xrandr ${xrandr}/bin/xrandr
+    substituteInPlace ./src/VBox/Additions/x11/vboxvideo/Makefile.kmk --replace-fail /usr/include/xorg "${xorg-server.dev}/include/xorg "
   '';
 
   configurePhase = ''

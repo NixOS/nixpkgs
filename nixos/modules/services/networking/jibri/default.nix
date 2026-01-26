@@ -355,7 +355,7 @@ in
 
         StateDirectory = "jibri";
 
-        ExecStart = "${pkgs.xorg.xorgserver}/bin/Xorg -nocursor -noreset +extension RANDR +extension RENDER -config ${pkgs.jibri}/etc/jitsi/jibri/xorg-video-dummy.conf -logfile /dev/null :0";
+        ExecStart = "${pkgs.xorg-server}/bin/Xorg -nocursor -noreset +extension RANDR +extension RENDER -config ${pkgs.jibri}/etc/jitsi/jibri/xorg-video-dummy.conf -logfile /dev/null :0";
       };
     };
 

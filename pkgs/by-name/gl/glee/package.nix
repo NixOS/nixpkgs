@@ -5,7 +5,7 @@
   cmake,
   libGLU,
   libGL,
-  xorg,
+  libx11,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libGLU
     libGL
-    xorg.libX11
+    libx11
   ];
 
   postPatch = ''

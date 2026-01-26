@@ -7,7 +7,9 @@
   wrapGAppsHook3,
   glew,
   gtk3,
-  xorg,
+  libxrandr,
+  libxi,
+  libxcursor,
   nix-update-script,
 }:
 
@@ -47,9 +49,9 @@ buildDotnetModule rec {
   runtimeDeps = [
     # For Avalonia UI
     glew
-    xorg.libXrandr
-    xorg.libXi
-    xorg.libXcursor
+    libxrandr
+    libxi
+    libxcursor
     # For file dialogs
     gtk3
   ];

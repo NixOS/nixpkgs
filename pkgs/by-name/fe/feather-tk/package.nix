@@ -14,7 +14,7 @@
   nativefiledialog-extended,
   nlohmann_json,
   plutovg,
-  xorg,
+  xvfb-run,
   zlib,
   python3Packages ? null,
   enableNFD ? true,
@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = enableTests;
 
   nativeCheckInputs = lib.optionals (enableTests && stdenv.isLinux) [
-    xorg.xvfb-run
+    xvfb-run
   ];
 
   checkPhase = lib.optionalString enableTests ''

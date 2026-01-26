@@ -7,7 +7,6 @@
   enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
   systemdMinimal,
   audit,
-  libcap_ng,
   libapparmor,
   dbus,
   docbook_xml_dtd_44,
@@ -17,8 +16,10 @@
   ninja,
   python3,
   x11Support ? (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin),
-  xorg,
   writeText,
+  libx11,
+  libsm,
+  libice,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -71,20 +72,17 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     expat
   ]
-  ++ lib.optionals x11Support (
-    with xorg;
-    [
-      libX11
-      libICE
-      libSM
-    ]
-  )
+  ++ lib.optionals x11Support [
+    libx11
+    libice
+    libsm
+  ]
   ++ lib.optional enableSystemd systemdMinimal
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     audit
-    libcap_ng
     libapparmor
   ];
+  # ToDo: optional selinux?
 
   __darwinAllowLocalNetworking = true;
 

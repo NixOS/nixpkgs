@@ -10,7 +10,11 @@
   ngspice,
   tcl,
   tk,
-  xorg,
+  libxt,
+  libxpm,
+  libx11,
+  libsm,
+  libice,
   zlib,
 }:
 
@@ -43,14 +47,14 @@ stdenv.mkDerivation {
     ./declare-missing-prototype.patch
   ];
 
-  buildInputs = with xorg; [
+  buildInputs = [
     cairo
     ghostscript
-    libSM
-    libXt
-    libICE
-    libX11
-    libXpm
+    libsm
+    libxt
+    libice
+    libx11
+    libxpm
     tcl
     tk
     zlib

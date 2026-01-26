@@ -3,7 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   stdenv,
-  xorg,
+  libxcb,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-BSWUWB8OrdmDtU+cGCVp75hakpdd9G3cs9ythDn4nnY=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    xorg.libxcb
+    libxcb
   ];
 
   checkFlags = [

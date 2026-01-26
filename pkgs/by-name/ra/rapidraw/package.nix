@@ -16,7 +16,14 @@
   libappindicator,
   cairo,
   pango,
-  xorg,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxcursor,
+  libx11,
+  libxcb,
   libxkbcommon,
   vulkan-loader,
   libjpeg,
@@ -77,14 +84,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gdk-pixbuf
     cairo
     pango
-    xorg.libX11
-    xorg.libXi
-    xorg.libXcursor
-    xorg.libXext
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libxcb
-    xorg.libXfixes
+    libx11
+    libxi
+    libxcursor
+    libxext
+    libxrandr
+    libxrender
+    libxcb
+    libxfixes
     libxkbcommon
     vulkan-loader
     libjpeg

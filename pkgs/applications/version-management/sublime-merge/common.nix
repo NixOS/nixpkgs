@@ -9,7 +9,7 @@
   fetchurl,
   lib,
   stdenv,
-  xorg,
+  libx11,
   glib,
   libGL,
   glibcLocales,
@@ -48,7 +48,7 @@ let
   versionFile = toString ./default.nix;
 
   neededLibraries = [
-    xorg.libX11
+    libx11
     glib
     gtk3
     cairo

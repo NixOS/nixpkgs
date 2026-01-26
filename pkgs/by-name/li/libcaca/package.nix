@@ -4,7 +4,8 @@
   fetchFromGitHub,
   autoreconfHook,
   imlib2,
-  xorg,
+  libxext,
+  libx11,
   ncurses,
   pkg-config,
   zlib,
@@ -33,8 +34,8 @@ stdenv.mkDerivation rec {
     (imlib2.override { inherit x11Support; })
   ]
   ++ lib.optionals x11Support [
-    xorg.libX11
-    xorg.libXext
+    libx11
+    libxext
   ];
 
   outputs = [

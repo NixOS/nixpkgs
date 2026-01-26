@@ -26,7 +26,7 @@
   x264,
   curl,
   wayland,
-  xorg,
+  libx11,
   pkg-config,
   libvlc,
   libGL,
@@ -215,7 +215,7 @@ stdenv.mkDerivation (finalAttrs: {
   preFixup =
     let
       wrapperLibraries = [
-        xorg.libX11
+        libx11
         libvlc
         libGL
       ]

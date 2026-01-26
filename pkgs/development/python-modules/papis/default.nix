@@ -122,6 +122,8 @@ buildPythonPackage rec {
   disabledTests = [
     # Require network access
     "test_yaml_unicode_dump"
+    # FileNotFoundError: Command not found: 'init'
+    "test_git_cli"
   ];
 
   patches = [

@@ -6,11 +6,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "itsycal";
-  version = "0.15.8";
+  version = "0.15.10";
 
   src = fetchzip {
     url = "https://itsycal.s3.amazonaws.com/Itsycal-${finalAttrs.version}.zip";
-    hash = "sha256-zo77yCfIzb2ZmExJslQ64GPQqakXtiRmm0UYEgj+3eM=";
+    hash = "sha256-6+E/4SbRIChJMc2VDMNYongsAWRtcFxtIj6lvTiexrU=";
   };
 
   installPhase = ''

@@ -44,7 +44,7 @@ let
             stdenvNoCC
             texinfo
             unionfs-fuse
-            xorg.lndir
+            lndir
 
             # These are used in the configure-from-userdata tests
             # for EC2. Httpd and valgrind are requested by the

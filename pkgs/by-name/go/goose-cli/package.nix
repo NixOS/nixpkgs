@@ -5,7 +5,7 @@
   fetchurl,
   rustPlatform,
   dbus,
-  xorg,
+  libxcb,
   pkg-config,
   protobuf,
   openssl,
@@ -55,7 +55,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     dbus
     openssl
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ xorg.libxcb ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libxcb ];
 
   env.LIBCLANG_PATH = "${lib.getLib llvmPackages.libclang}/lib";
 

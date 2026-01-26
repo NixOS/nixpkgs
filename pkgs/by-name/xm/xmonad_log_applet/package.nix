@@ -7,7 +7,7 @@
   glib,
   dbus-glib,
   desktopSupport ? "gnomeflashback",
-  xorg,
+  libxcb-wm,
   gtk2,
   gtk3,
   gnome-panel,
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     dbus-glib
-    xorg.xcbutilwm
+    libxcb-wm
   ]
   ++ lib.optionals (desktopSupport == "gnomeflashback") [
     gtk3

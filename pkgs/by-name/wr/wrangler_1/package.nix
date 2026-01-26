@@ -41,6 +41,9 @@ rustPlatform.buildRustPackage rec {
     description = "CLI tool designed for folks who are interested in using Cloudflare Workers";
     mainProgram = "wrangler";
     homepage = "https://github.com/cloudflare/wrangler";
+    knownVulnerabilities = [
+      "CVE-2026-0933: Malicious backdoor via a command injection allowing unauthorized remote code execution"
+    ];
     license = with lib.licenses; [
       asl20 # or
       mit

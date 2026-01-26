@@ -4,7 +4,7 @@
   qtbase,
   libvncserver,
   pipewire,
-  xorg,
+  libxdamage,
 }:
 mkKdeDerivation {
   pname = "krfb";
@@ -17,6 +17,6 @@ mkKdeDerivation {
   extraBuildInputs = [
     libvncserver
     pipewire
-    xorg.libXdamage
+    libxdamage
   ];
 }

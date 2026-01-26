@@ -24,7 +24,7 @@
   stdenv,
   texliveSmall,
   v4l-utils,
-  xorg,
+  libpthread-stubs,
   zbar,
   zlib,
 }:
@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     openblas
     opencv
     python3Packages.numpy
-    xorg.libpthreadstubs
+    libpthread-stubs
     zbar
     zlib
   ]

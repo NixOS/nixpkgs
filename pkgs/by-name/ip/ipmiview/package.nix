@@ -11,7 +11,11 @@
   gcc-unwrapped,
   iputils,
   psmisc,
-  xorg,
+  libxtst,
+  libxrender,
+  libxi,
+  libxext,
+  libx11,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,7 +33,6 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
   buildPhase =
-    with xorg;
     let
       stunnelBinary =
         if stdenv.hostPlatform.system == "x86_64-linux" then
@@ -44,11 +47,11 @@ stdenv.mkDerivation rec {
 
       patchelf --set-rpath "${
         lib.makeLibraryPath [
-          libX11
-          libXext
-          libXrender
-          libXtst
-          libXi
+          libx11
+          libxext
+          libxrender
+          libxtst
+          libxi
         ]
       }" ./jre/lib/libawt_xawt.so
       patchelf --set-rpath "${lib.makeLibraryPath [ freetype ]}" ./jre/lib/libfontmanager.so

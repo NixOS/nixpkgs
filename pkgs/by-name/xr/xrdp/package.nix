@@ -17,7 +17,11 @@
   libjpeg,
   libopus,
   nasm,
-  xorg,
+  xorg-server,
+  libxrandr,
+  libxfixes,
+  libx11,
+  xauth,
   lame,
   pixman,
   libjpeg_turbo,
@@ -48,7 +52,7 @@ let
     ];
 
     buildInputs = [
-      xorg.xorgserver
+      xorg-server
       libdrm
     ];
 
@@ -109,13 +113,13 @@ let
       pam
       pixman
       systemd
-      xorg.libX11
-      xorg.libXfixes
-      xorg.libXrandr
+      libx11
+      libxfixes
+      libxrandr
     ];
 
     postPatch = ''
-      substituteInPlace sesman/sesexec/xauth.c --replace "xauth -q" "${xorg.xauth}/bin/xauth -q"
+      substituteInPlace sesman/sesexec/xauth.c --replace "xauth -q" "${xauth}/bin/xauth -q"
 
       substituteInPlace configure.ac --replace /usr/include/ ""
     '';
@@ -163,9 +167,9 @@ let
       cat >> $out/etc/xrdp/sesman.ini <<EOF
 
       [Xorg]
-      param=${xorg.xorgserver}/bin/Xorg
+      param=${xorg-server}/bin/Xorg
       param=-modulepath
-      param=${xorgxrdp}/lib/xorg/modules,${xorg.xorgserver}/lib/xorg/modules
+      param=${xorgxrdp}/lib/xorg/modules,${xorg-server}/lib/xorg/modules
       param=-config
       param=${xorgxrdp}/etc/X11/xrdp/xorg.conf
       param=-noreset

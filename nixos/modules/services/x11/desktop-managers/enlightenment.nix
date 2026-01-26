@@ -61,7 +61,7 @@ in
       enlightenment.ephoto
       enlightenment.rage
       enlightenment.terminology
-      xorg.xcursorthemes
+      xcursor-themes
     ]) config.environment.enlightenment.excludePackages;
 
     environment.pathsToLink = [

@@ -7,7 +7,11 @@
   libtool,
   makeWrapper,
   perlPackages,
-  xorg,
+  libxtst,
+  libxi,
+  libx11,
+  libsm,
+  libice,
   libcap,
   alsa-lib,
   glib,
@@ -140,11 +144,11 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optional jackaudioSupport libjack2
     ++ lib.optionals x11Support [
-      xorg.libICE
-      xorg.libSM
-      xorg.libX11
-      xorg.libXi
-      xorg.libXtst
+      libice
+      libsm
+      libx11
+      libxi
+      libxtst
     ]
     ++ lib.optional useSystemd systemd
     ++ lib.optionals stdenv.hostPlatform.isLinux [

@@ -42,7 +42,7 @@ let
     term_restore_cursor_cmd = "${pkgs.ncurses}/bin/tput cnorm";
     waylandsessions = "${dmcfg.sessionData.desktops}/share/wayland-sessions";
     xsessions = "${dmcfg.sessionData.desktops}/share/xsessions";
-    xauth_cmd = lib.optionalString xcfg.enable "${pkgs.xorg.xauth}/bin/xauth";
+    xauth_cmd = lib.optionalString xcfg.enable "${pkgs.xauth}/bin/xauth";
     x_cmd = lib.optionalString xcfg.enable xserverWrapper;
     setup_cmd = dmcfg.sessionData.wrapper;
     brightness_up_cmd = "${lib.getExe pkgs.brightnessctl} -q -n s +10%";
