@@ -87,7 +87,7 @@ buildNpmPackage rec {
       command = "env HOME=/tmp ${meta.mainProgram} --version";
     };
     updateScript = nix-update-script {
-      extraArgs = [ "--version-regex=^(\\d+\\.\\d+\\.\\d+)$" ];
+      extraArgs = [ "--version-regex=^v(\\d+\\.\\d+\\.\\d+)$" ];
     };
   };
 
