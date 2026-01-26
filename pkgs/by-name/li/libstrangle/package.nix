@@ -1,13 +1,14 @@
 {
   lib,
-  stdenv,
+  stdenv_32bit,
+  stdenv' ? stdenv_32bit,
   fetchFromGitLab,
   fetchpatch,
   libGL,
   libX11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv'.mkDerivation rec {
   pname = "libstrangle";
   version = "unstable-202202022";
 
