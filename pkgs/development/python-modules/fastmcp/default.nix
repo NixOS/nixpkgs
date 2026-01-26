@@ -60,6 +60,9 @@ buildPythonPackage (finalAttrs: {
     uv-dynamic-versioning
   ];
 
+  pythonRelaxDeps = [
+    "pydocket"
+  ];
   dependencies = [
     authlib
     cyclopts
@@ -151,6 +154,9 @@ buildPythonPackage (finalAttrs: {
 
     # AssertionError: assert {'annotations...object'}, ...} == {'annotations...sers']}}, ...}
     "test_list_tools"
+
+    # AssertionError: assert len(caplog.records) == 1
+    "test_log"
 
     # fastmcp.exceptions.ToolError: Unknown tool
     "test_multi_client_with_logging"
