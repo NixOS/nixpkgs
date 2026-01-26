@@ -57,10 +57,10 @@ let
 
   # Map video driver names to driver packages. FIXME: move into card-specific modules.
   videoDrivers =
-    mapAttrs' (name: value: rec {
+    mapAttrs' (name: value: {
       name = removePrefix "xf86-video-" value.pname;
       value = {
-        modules = value;
+        modules = [ value ];
       };
     }) knownVideoDriverPackages
     // videoDriverAliases
