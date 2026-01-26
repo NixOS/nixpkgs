@@ -12,7 +12,7 @@
 with python3Packages;
 buildPythonApplication {
   pname = "gnomecast";
-  version = "unstable-2022-04-23";
+  version = "OSXv1.4.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
