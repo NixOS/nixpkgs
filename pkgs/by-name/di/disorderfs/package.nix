@@ -5,7 +5,7 @@
   pkg-config,
   fuse,
   attr,
-  asciidoc,
+  asciidoc-full,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-    asciidoc
+    asciidoc-full
   ];
 
   buildInputs = [

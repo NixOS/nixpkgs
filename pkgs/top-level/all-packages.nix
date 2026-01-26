@@ -1748,10 +1748,6 @@ with pkgs;
     plugins = lib.filter (p: p ? pluginName) (builtins.attrValues discourse.plugins);
   };
 
-  disorderfs = callPackage ../tools/filesystems/disorderfs {
-    asciidoc = asciidoc-full;
-  };
-
   dino = callPackage ../applications/networking/instant-messengers/dino {
     inherit (gst_all_1)
       gstreamer
