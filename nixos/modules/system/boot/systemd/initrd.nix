@@ -733,17 +733,6 @@ in
               cfg.package.util-linux
               config.system.nixos-init.package
             ];
-            environment = {
-              FIRMWARE = "${config.hardware.firmware}/lib/firmware";
-              MODPROBE_BINARY = "${pkgs.kmod}/bin/modprobe";
-              NIX_STORE_MOUNT_OPTS = lib.concatStringsSep "," config.boot.nixStoreMountOpts;
-            }
-            // lib.optionalAttrs (config.environment.usrbinenv != null) {
-              ENV_BINARY = config.environment.usrbinenv;
-            }
-            // lib.optionalAttrs (config.environment.binsh != null) {
-              SH_BINARY = config.environment.binsh;
-            };
             serviceConfig = {
               ExecStart = [
                 ""
