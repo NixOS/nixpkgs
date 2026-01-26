@@ -36,11 +36,11 @@
 assert builtins.isBool enableDefaultConfig;
 
 let
-  version = "2.7.16.a597230";
+  version = "2.7.18.fb3bf78";
 
   platformio-deps-native = fetchzip {
     url = "https://github.com/meshtastic/firmware/releases/download/v${version}/platformio-deps-native-tft-${version}.zip";
-    hash = "sha256-Jo7e6zsCaiJs6NyIRmD6BWJFwbs0xVlUih206ePUpwk=";
+    hash = "sha256-rud8F+aYVljNw2rpApIkjuN8ob/ZxvcXNJ+oAVSeMpE=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "meshtastic";
     repo = "firmware";
-    hash = "sha256-oU3Z8qjBNeNGPGT74VStAPHgsGqsQJKngHJR6m2CBa0=";
+    hash = "sha256-RI1U0xZDy22C+YO5gKbxo5YWDzVeRWJ8u6tTyDdwqGU=";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
   };
@@ -118,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     install -Dm644 bin/org.meshtastic.meshtasticd.svg -t $out/share/icons/hicolor/scalable/apps/
     install -Dm644 bin/org.meshtastic.meshtasticd.desktop -t $out/share/applications/
-    install -Dm755 .pio/build/native-tft/program $out/bin/meshtasticd
+    install -Dm755 .pio/build/native-tft/meshtasticd -t $out/bin
 
     install -Dm644 bin/99-meshtasticd-udev.rules -t $out/etc/udev/rules.d
   ''
