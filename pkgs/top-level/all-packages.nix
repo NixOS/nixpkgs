@@ -1085,14 +1085,6 @@ with pkgs;
     };
   };
 
-  yabridge = callPackage ../tools/audio/yabridge {
-    wine = wineWowPackages.yabridge;
-  };
-
-  yabridgectl = callPackage ../tools/audio/yabridgectl {
-    wine = wineWowPackages.yabridge;
-  };
-
   yafetch = callPackage ../tools/misc/yafetch {
     stdenv = clangStdenv;
   };
