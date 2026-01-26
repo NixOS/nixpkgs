@@ -3751,8 +3751,6 @@ with pkgs;
     withRedis = true;
   };
 
-  unrar-wrapper = python3Packages.callPackage ../tools/archivers/unrar-wrapper { };
-
   ugarit = callPackage ../tools/backup/ugarit {
     inherit (chickenPackages_4) eggDerivation fetchegg;
   };
