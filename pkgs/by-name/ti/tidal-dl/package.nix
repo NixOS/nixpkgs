@@ -1,11 +1,10 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchPypi,
-  aigpy,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "tidal-dl";
   version = "2022.10.31.1";
   format = "setuptools";
@@ -15,7 +14,7 @@ buildPythonApplication rec {
     hash = "sha256-b2AAsiI3n2/v6HC37fMI/d8UcxZxsWM+fnWvdajHrOg=";
   };
 
-  propagatedBuildInputs = [ aigpy ];
+  propagatedBuildInputs = with python3Packages; [ aigpy ];
 
   meta = {
     homepage = "https://github.com/yaronzz/Tidal-Media-Downloader";
