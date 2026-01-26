@@ -1,8 +1,8 @@
 {
   lib,
   stdenv,
+  buildPackages,
   fetchFromGitHub,
-  fetchpatch,
   uthash,
   meson,
   ninja,
@@ -12,32 +12,25 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libdicom";
-  version = "1.0.5";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "ImagingDataCommons";
     repo = "libdicom";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-9n0Gp9+fmTM/shgWC8zpwt1pic9BrvDubOt7f+ZDMeE=";
+    sha256 = "sha256-YaCN2QuL+yGfSYw3/wxgu9hut98UYa5tMTzTs2NGP1A=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "CVE-2024-24793.CVE-2024-24794.patch";
-      url = "https://github.com/ImagingDataCommons/libdicom/commit/3661aa4cdbe9c39f67d38ae87520f9e3ed50ab16.patch";
-      excludes = [ "CHANGELOG.md" ];
-      hash = "sha256-/KTp0nKYk6jX4phNHY+nzjEptUBHKM2JkOftS5vHsEw=";
-    })
-  ];
-
-  buildInputs = [ uthash ];
+  buildInputs = [ uthash ] ++ lib.optionals (finalAttrs.finalPackage.doCheck) [ check ];
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-  ]
-  ++ lib.optionals (finalAttrs.finalPackage.doCheck) [ check ];
+  ];
+
+  # fix build for pkgsLLVM. Related: https://github.com/NixOS/nixpkgs/issues/265121
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   mesonBuildType = "release";
 
