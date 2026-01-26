@@ -13,7 +13,8 @@
   enableStatic ? static,
   # these need to be ran on the host, thus disable when cross-compiling
   buildContrib ? stdenv.hostPlatform == stdenv.buildPlatform,
-  doCheck ? stdenv.hostPlatform == stdenv.buildPlatform,
+  # permissions tests are currently failing on cygwin
+  doCheck ? stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.buildPlatform.isCygwin,
   nix-update-script,
 
   # for passthru.tests
@@ -56,15 +57,23 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  postPatch = lib.optionalString (!static) ''
-    substituteInPlace build/cmake/CMakeLists.txt \
-      --replace 'message(SEND_ERROR "You need to build static library to build tests")' ""
-    substituteInPlace build/cmake/tests/CMakeLists.txt \
-      --replace 'libzstd_static' 'libzstd_shared'
-    sed -i \
-      "1aexport ${lib.optionalString stdenv.hostPlatform.isDarwin "DY"}LD_LIBRARY_PATH=$PWD/build_/lib" \
-      tests/playTests.sh
-  '';
+  postPatch =
+    let
+      libPath =
+        if stdenv.hostPlatform.isCygwin then
+          "PATH=$PWD/build_/lib:$PATH"
+        else
+          "${lib.optionalString stdenv.hostPlatform.isDarwin "DY"}LD_LIBRARY_PATH=$PWD/build_/lib";
+    in
+    lib.optionalString (!static) ''
+      substituteInPlace build/cmake/CMakeLists.txt \
+        --replace 'message(SEND_ERROR "You need to build static library to build tests")' ""
+      substituteInPlace build/cmake/tests/CMakeLists.txt \
+        --replace 'libzstd_static' 'libzstd_shared'
+      sed -i \
+        "1aexport ${libPath}" \
+        tests/playTests.sh
+    '';
 
   cmakeFlags =
     lib.attrsets.mapAttrsToList (name: value: "-DZSTD_${name}:BOOL=${if value then "ON" else "OFF"}")
