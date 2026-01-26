@@ -6909,12 +6909,12 @@ final: prev: {
 
   indent-tools-nvim = buildVimPlugin {
     pname = "indent-tools.nvim";
-    version = "0.5.1-unstable-2023-10-28";
+    version = "0.5.2-unstable-2026-01-23";
     src = fetchFromGitHub {
       owner = "arsham";
       repo = "indent-tools.nvim";
-      rev = "31b839d65aa04b568fabe5e100a63cc44ef3f5d5";
-      hash = "sha256-F0Q7UvvOGulkLce1JiT9GvB+itCtwnJLzMpETm+Sg28=";
+      rev = "9b6a33be70c72da562c83d1e741ebe1ce6c20a3c";
+      hash = "sha256-jJOG6t18egq1uDGegDKvbz9NGmqiuHg7b2EyJZh3TMM=";
     };
     meta.homepage = "https://github.com/arsham/indent-tools.nvim/";
     meta.hydraPlatforms = [ ];
