@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -31,10 +32,17 @@ buildGoModule (finalAttrs: {
     "-X main.version=${finalAttrs.version}"
   ];
 
-  postInstall = ''
-    install -Dm444 shell/functions.shell -t $out/share/lazyworktree
-    installManPage lazyworktree.1
-  '';
+  postInstall =
+    ''
+      install -Dm444 shell/functions.shell -t $out/share/lazyworktree
+      installManPage lazyworktree.1
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd lazyworktree \
+        --bash <($out/bin/lazyworktree completion bash --code) \
+        --zsh <($out/bin/lazyworktree completion zsh --code) \
+        --fish <($out/bin/lazyworktree completion fish --code)
+    '';
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
