@@ -58,7 +58,7 @@ let
   # Map video driver names to driver packages. FIXME: move into card-specific modules.
   videoDrivers =
     mapAttrs' (name: value: rec {
-      name = removePrefix "xf86-video-" builtins.trace value value.pname;
+      name = removePrefix "xf86-video-" (builtins.trace value value.pname);
       value = {
         modules = value;
       };
