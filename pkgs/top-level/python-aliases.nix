@@ -236,7 +236,6 @@ mapAliases {
   jupyter_core = throw "'jupyter_core' has been renamed to/replaced by 'jupyter-core'"; # Converted to throw 2025-10-29
   jupyter_server = throw "'jupyter_server' has been renamed to/replaced by 'jupyter-server'"; # Converted to throw 2025-10-29
   jupyterlab_server = throw "'jupyterlab_server' has been renamed to/replaced by 'jupyterlab-server'"; # Converted to throw 2025-10-29
-  kafka-python = throw "'kafka-python' has been renamed to/replaced by 'kafka-python-ng'"; # Converted to throw 2025-10-29
   Kajiki = throw "'Kajiki' has been renamed to/replaced by 'kajiki'"; # Converted to throw 2025-10-29
   keepkey_agent = throw "'keepkey_agent' has been renamed to/replaced by 'keepkey-agent'"; # Converted to throw 2025-10-29
   Keras = throw "'Keras' has been renamed to/replaced by 'keras'"; # Converted to throw 2025-10-29
