@@ -9,7 +9,7 @@
   postgresql,
   pythonOlder,
   pytest-xdist,
-  pytestCheckHook,
+  pytest8_3CheckHook,
   setuptools,
   distro,
 }:
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     postgresql
     postgresql.pg_config
     pytest-xdist
-    pytestCheckHook
+    pytest8_3CheckHook
     distro
   ];
 
