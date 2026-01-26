@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "planetary-computer";
-  version = "1.0.0.post0";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "planetary-computer-sdk-for-python";
     tag = "v${version}";
-    hash = "sha256-NPHUxThSZzENw4W91WAOqChyIl6Z/Afi4mddz+lXlXA=";
+    hash = "sha256-FcTEXtZ2zZQ3i4zmwecaZHdaHni7UbHSF9TDKP/k4sw=";
   };
 
   build-system = [
