@@ -27,7 +27,7 @@
   pkg-config,
   symlinkJoin,
   nltk-data,
-  xorg,
+  lndir,
 }:
 let
   version = "2.20.5";
@@ -167,7 +167,7 @@ python.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [
     gettext
-    xorg.lndir
+    lndir
   ];
 
   pythonRelaxDeps = [

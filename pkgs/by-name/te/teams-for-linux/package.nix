@@ -16,16 +16,16 @@
 
 buildNpmPackage rec {
   pname = "teams-for-linux";
-  version = "2.6.19";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "IsmaelMartinez";
     repo = "teams-for-linux";
     tag = "v${version}";
-    hash = "sha256-LWoMMfvIZ0+t1kzhv9uOLj7kTTFp3gzHOT1j+wYN1mM=";
+    hash = "sha256-WGxbUekGJ8P5D0WrI6ZC1z5ZQneH+ruo6CDQWOmsKzM=";
   };
 
-  npmDepsHash = "sha256-Bc/l8cKxN/wc4SVDJw0E32W2pErBuHIOopYfqSaLuyo=";
+  npmDepsHash = "sha256-VBvQbAiZ7aOIQB6ab9zzIarPU8BVlIbZeKZdJ6vL+LQ=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -91,7 +91,7 @@ buildNpmPackage rec {
         ]
       } \
       --add-flags "$out/share/teams-for-linux/app.asar" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations,WebRTCPipeWireCapturer --enable-wayland-ime=true}}"
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications

@@ -24,7 +24,14 @@
   gobject-introspection,
   fribidi,
   harfbuzz,
-  xorg,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxdamage,
+  libxcursor,
+  libsm,
+  libice,
   libepoxy,
   libxkbcommon,
   libpng,
@@ -141,16 +148,14 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-bad
     fribidi
     harfbuzz
+    libice
+    libsm
+    libxcursor
+    libxdamage
+    libxi
+    libxrandr
+    libxrender
   ]
-  ++ (with xorg; [
-    libICE
-    libSM
-    libXcursor
-    libXdamage
-    libXi
-    libXrandr
-    libXrender
-  ])
   ++ lib.optionals trackerSupport [
     tinysparql
   ]
@@ -160,7 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
   ]
   ++ lib.optionals xineramaSupport [
-    xorg.libXinerama
+    libxinerama
   ]
   ++ lib.optionals cupsSupport [
     cups

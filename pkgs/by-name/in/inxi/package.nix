@@ -25,7 +25,9 @@
   pciutils,
   withRecommendedDisplayInformationPrograms ? withRecommends,
   mesa-demos,
-  xorg,
+  xrandr,
+  xprop,
+  xdpyinfo,
 }:
 
 let
@@ -46,14 +48,12 @@ let
     upower
     pciutils
   ];
-  recommendedDisplayInformationPrograms = lib.optionals withRecommendedDisplayInformationPrograms (
-    [ mesa-demos ]
-    ++ (with xorg; [
-      xdpyinfo
-      xprop
-      xrandr
-    ])
-  );
+  recommendedDisplayInformationPrograms = lib.optionals withRecommendedDisplayInformationPrograms [
+    mesa-demos
+    xdpyinfo
+    xprop
+    xrandr
+  ];
   programs = [
     ps
     dnsutils

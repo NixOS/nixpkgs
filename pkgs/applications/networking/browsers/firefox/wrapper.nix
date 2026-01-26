@@ -12,7 +12,12 @@
 
   ## various stuff that can be plugged in
   ffmpeg_7,
-  xorg,
+  libxxf86vm,
+  libxxf86dga,
+  libxt,
+  libxscrnsaver,
+  libxext,
+  libx11,
   alsa-lib,
   libpulseaudio,
   libcanberra-gtk3,
@@ -31,6 +36,7 @@
   sndio,
   libjack2,
   speechd-minimal,
+  zlib,
 }:
 
 ## configurability of the wrapper itself
@@ -98,7 +104,7 @@ let
             libva
             libgbm
             libnotify
-            xorg.libXScrnSaver
+            libxscrnsaver
             cups
             pciutils
             vulkan-loader
@@ -109,19 +115,16 @@ let
         ++ lib.optional ffmpegSupport ffmpeg_7
         ++ lib.optional gssSupport libkrb5
         ++ lib.optional useGlvnd libglvnd
-        ++ lib.optionals (cfg.enableQuakeLive or false) (
-          with xorg;
-          [
-            stdenv.cc
-            libX11
-            libXxf86dga
-            libXxf86vm
-            libXext
-            libXt
-            alsa-lib
-            zlib
-          ]
-        )
+        ++ lib.optionals (cfg.enableQuakeLive or false) [
+          stdenv.cc
+          libx11
+          libxxf86dga
+          libxxf86vm
+          libxext
+          libxt
+          alsa-lib
+          zlib
+        ]
         ++ lib.optional (config.pulseaudio or (!isDarwin)) libpulseaudio
         ++ lib.optional alsaSupport alsa-lib
         ++ lib.optional sndioSupport sndio

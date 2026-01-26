@@ -9,7 +9,9 @@
   libxcb,
   lv2,
   pkg-config,
-  xorg,
+  libxdmcp,
+  libpthread-stubs,
+  libxshmfence,
 }:
 stdenv.mkDerivation rec {
   pname = "eq10q";
@@ -28,9 +30,9 @@ stdenv.mkDerivation rec {
     gtkmm2
     libxcb
     lv2
-    xorg.libpthreadstubs
-    xorg.libXdmcp
-    xorg.libxshmfence
+    libpthread-stubs
+    libxdmcp
+    libxshmfence
   ];
 
   patches = [

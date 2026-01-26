@@ -27,6 +27,7 @@
   lib,
   stdenv,
   buildPythonPackage,
+  pythonAtLeast,
   fetchFromGitHub,
 
   # build-system
@@ -119,6 +120,8 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-H3jcEHyK13+RHVlV4zp+8M3LZ0Jc2FdmAbLpekGozLA=";
   };
   pyproject = true;
+  # Waiting for https://github.com/beetbox/beets/pull/6267
+  disabled = pythonAtLeast "3.14";
 
   patches = [
     # Bash completion fix for Nix

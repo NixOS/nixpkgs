@@ -4,7 +4,7 @@
   fetchFromGitHub,
   makeBinaryWrapper,
   acl,
-  xorg,
+  xhost,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postInstall = ''
-    wrapProgram $out/bin/ego --prefix PATH : ${lib.makeBinPath [ xorg.xhost ]}
+    wrapProgram $out/bin/ego --prefix PATH : ${lib.makeBinPath [ xhost ]}
   '';
 
   meta = {

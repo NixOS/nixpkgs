@@ -19,7 +19,10 @@
   libxslt,
   nspr,
   nss,
-  xorg,
+  libxscrnsaver,
+  libx11,
+  libsm,
+  libice,
   buildFHSEnv,
   copyDesktopItems,
   makeDesktopItem,
@@ -65,13 +68,11 @@ let
       libxslt
       nspr
       nss
-    ]
-    ++ (with xorg; [
-      libICE
-      libSM
-      libX11
-      libXScrnSaver
-    ]);
+      libice
+      libsm
+      libx11
+      libxscrnsaver
+    ];
 
     unpackPhase = ''
       runHook preUnpack

@@ -9,7 +9,7 @@
   SDL2,
   SDL2_image,
   SDL2_mixer,
-  xorg,
+  libsm,
 }:
 
 stdenv.mkDerivation {
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
     SDL2
     SDL2_image
     SDL2_mixer
-    xorg.libSM
+    libsm
   ];
   strictDeps = true;
 

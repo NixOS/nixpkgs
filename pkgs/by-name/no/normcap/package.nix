@@ -7,7 +7,7 @@
   leptonica,
   wl-clipboard,
   libnotify,
-  xorg,
+  xvfb,
   makeDesktopItem,
   copyDesktopItems,
 }:
@@ -112,7 +112,7 @@ ps.buildPythonApplication rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       ps.pytest-xvfb
-      xorg.xvfb
+      xvfb
     ];
 
   preCheck = ''

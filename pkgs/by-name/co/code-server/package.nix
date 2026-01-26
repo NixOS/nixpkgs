@@ -16,7 +16,8 @@
   nodejs_20,
   node-gyp,
   libsecret,
-  xorg,
+  libx11,
+  libxkbfile,
   ripgrep,
   cctools,
   xcbuild,
@@ -137,8 +138,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    xorg.libX11
-    xorg.libxkbfile
+    libx11
+    libxkbfile
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libsecret

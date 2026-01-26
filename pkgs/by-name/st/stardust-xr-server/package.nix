@@ -11,7 +11,8 @@
   libgbm,
   openxr-loader,
   pkg-config,
-  xorg,
+  libxfixes,
+  libx11,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -39,8 +40,8 @@ rustPlatform.buildRustPackage rec {
     libxkbcommon
     libgbm
     openxr-loader
-    xorg.libX11
-    xorg.libXfixes
+    libx11
+    libxfixes
   ];
 
   CPM_SOURCE_CACHE = "./build";

@@ -13,7 +13,7 @@ let
   jdk = jdk8;
 in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "DisnixWebService";
+  pname = "disnix-web-service";
   version = "0.10.1";
 
   src = fetchFromGitHub {
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   env = {
-    PREFIX = "\${env.out}";
+    PREFIX = placeholder "out";
     AXIS2_LIB = "${axis2}/lib";
     AXIS2_WEBAPP = "${axis2}/webapps/axis2";
     DBUS_JAVA_LIB = "${dbus_java}/share/java";
@@ -49,9 +49,9 @@ stdenv.mkDerivation (finalAttrs: {
     # add modificationtime="0" to the <jar> and <war> tasks to achieve reproducibility
     xmlstarlet ed -L -a "//jar|//war" -t attr -n "modificationtime" -v "0" build.xml
 
-    sed -i -e "s|#JAVA_HOME=|JAVA_HOME=${jdk}|" \
-       -e "s|#AXIS2_LIB=|AXIS2_LIB=${axis2}/lib|" \
-        scripts/disnix-soap-client
+    substituteInPlace scripts/disnix-soap-client \
+      --replace-fail "#JAVA_HOME=" ${lib.escapeShellArg "JAVA_HOME=${jdk}"} \
+      --replace-fail "#AXIS2_LIB=" "AXIS2_LIB=$AXIS2_LIB"
   '';
 
   buildPhase = ''

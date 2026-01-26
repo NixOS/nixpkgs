@@ -17,7 +17,20 @@
   libGLU,
   libGL,
   pango,
-  xorg,
+  libxt,
+  libxtst,
+  libxrender,
+  libxrandr,
+  libxmu,
+  libxi,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libx11,
+  libsm,
+  libice,
+  libxkbfile,
+  libxcb,
   minizip,
   lsb-release,
   freetype,
@@ -63,23 +76,21 @@ stdenv.mkDerivation (finalAttrs: {
     polkit
     polkit_gnome
     pulseaudio
-  ]
-  ++ (with xorg; [
     libxcb
     libxkbfile
-    libX11
-    libXdamage
-    libXext
-    libXfixes
-    libXi
-    libXmu
-    libXrandr
-    libXtst
-    libXt
-    libICE
-    libSM
-    libXrender
-  ]);
+    libx11
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxmu
+    libxrandr
+    libxtst
+    libxt
+    libice
+    libsm
+    libxrender
+  ];
 
   nativeBuildInputs = [
     copyDesktopItems

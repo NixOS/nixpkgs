@@ -9,7 +9,14 @@
   libxcb,
   libxkbcommon,
   xinput,
-  xorg,
+  libxt,
+  libxtst,
+  libxi,
+  libxinerama,
+  libxext,
+  libxdmcp,
+  libxau,
+  libxkbfile,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,24 +35,20 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) (
-    [
-      libX11
-      libxcb
-      libxkbcommon
-      xinput
-    ]
-    ++ (with xorg; [
-      libXau
-      libXdmcp
-      libXi
-      libXinerama
-      libXt
-      libXtst
-      libXext
-      libxkbfile
-    ])
-  );
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libX11
+    libxcb
+    libxkbcommon
+    xinput
+    libxau
+    libxdmcp
+    libxi
+    libxinerama
+    libxt
+    libxtst
+    libxext
+    libxkbfile
+  ];
 
   outputs = [
     "out"

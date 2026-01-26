@@ -71,7 +71,7 @@ in
     };
   ezxdisp =
     old:
-    (addToBuildInputsWithPkgConfig pkgs.xorg.libX11 old)
+    (addToBuildInputsWithPkgConfig pkgs.libx11 old)
     // {
       env.NIX_CFLAGS_COMPILE = toString [
         "-Wno-error=implicit-function-declaration"
@@ -193,7 +193,7 @@ in
     );
   uuid-lib = addToBuildInputs pkgs.libuuid;
   ws-client = addToBuildInputs pkgs.zlib;
-  xlib = addToPropagatedBuildInputs pkgs.xorg.libX11;
+  xlib = addToPropagatedBuildInputs pkgs.libx11;
   yaml = addToBuildInputs pkgs.libyaml;
   zlib = addToBuildInputs pkgs.zlib;
   zmq = addToBuildInputs pkgs.zeromq;

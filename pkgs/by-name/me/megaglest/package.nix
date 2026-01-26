@@ -21,7 +21,10 @@
   libpng,
   fontconfig,
   freetype,
-  xorg,
+  libxext,
+  libx11,
+  libsm,
+  libice,
   makeWrapper,
   bash,
   which,
@@ -37,10 +40,10 @@ let
     name = "megaglest-lib-env";
     paths = [
       SDL2
-      xorg.libSM
-      xorg.libICE
-      xorg.libX11
-      xorg.libXext
+      libsm
+      libice
+      libx11
+      libxext
       xercesc
       openal
       libvorbis
@@ -117,7 +120,7 @@ stdenv.mkDerivation {
   buildInputs = [
     curl
     SDL2
-    xorg.libX11
+    libx11
     xercesc
     openal
     lua

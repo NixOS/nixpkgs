@@ -11,7 +11,7 @@
   cacert,
   llvmPackages,
   musl,
-  xorg,
+  libx11,
   jq,
   moreutils,
   nix-update-script,
@@ -19,13 +19,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wrangler";
-  version = "4.59.3";
+  version = "4.60.0";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "workers-sdk";
     rev = "wrangler@${finalAttrs.version}";
-    hash = "sha256-DKKngT58p8x+Qzl550468JDOQuymQmzPwkLL/iB7Aa4=";
+    hash = "sha256-lRdQrUgEr7KS/05BXZW7h3JS91d3gM8w+RLlaLC98RU=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux) [
     musl # not used, but requires extra work to remove
-    xorg.libX11 # for the clipboardy package
+    libx11 # for the clipboardy package
   ];
 
   nativeBuildInputs = [

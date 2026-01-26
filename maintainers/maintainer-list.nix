@@ -8424,6 +8424,12 @@
     name = "A Frederick Christensen";
     keys = [ { fingerprint = "5A49 F4F9 3EDC 21E9 B7CC  4E94 9EEF 4142 5355 8AC4"; } ];
   };
+  fayash = {
+    email = "akafayash@icloud.com";
+    name = "Fay Ash";
+    github = "yaoshiu";
+    githubId = 56054933;
+  };
   fazzi = {
     email = "faaris.ansari@proton.me";
     github = "fxzzi";
@@ -12544,6 +12550,12 @@
     githubId = 3967312;
     name = "Jocelyn Thode";
   };
+  jocimsus = {
+    email = "joe.susatiyo@gmail.com";
+    github = "JocimSus";
+    githubId = 123136424;
+    name = "Joachim Susatiyo";
+  };
   joedevivo = {
     github = "joedevivo";
     githubId = 55951;
@@ -16150,6 +16162,12 @@
     name = "Marius Kimmina";
     github = "mariuskimmina";
     githubId = 38843153;
+  };
+  mariusknaust = {
+    name = "Marius Knaust";
+    email = "marius.knaust@gmail.com";
+    github = "mariusknaust";
+    githubId = 17125376;
   };
   markasoftware = {
     name = "Mark Polyakov";

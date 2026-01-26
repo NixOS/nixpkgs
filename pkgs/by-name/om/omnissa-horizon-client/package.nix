@@ -102,17 +102,17 @@ let
           pixman
           udev
           omnissaHorizonClientFiles
-          xorg.libX11
-          xorg.libXau
-          xorg.libXcursor
-          xorg.libXext
-          xorg.libXi
-          xorg.libXinerama
-          xorg.libxkbfile
-          xorg.libXrandr
-          xorg.libXrender
-          xorg.libXScrnSaver
-          xorg.libXtst
+          libx11
+          libxau
+          libxcursor
+          libxext
+          libxi
+          libxinerama
+          libxkbfile
+          libxrandr
+          libxrender
+          libxscrnsaver
+          libxtst
           zlib
           libxml2_13
 

@@ -213,8 +213,8 @@ def main():
         for plugin_name in os.listdir(directory):
             process_repo(os.path.join(directory, plugin_name), official)
 
-    if os.path.isdir("pkgs/tools/networking/maubot/plugins"):
-        generated = "pkgs/tools/networking/maubot/plugins/generated.json"
+    if os.path.isdir("pkgs/development/python-modules/maubot/plugins"):
+        generated = "pkgs/development/python-modules/maubot/plugins/generated.json"
     else:
         script_dir = os.path.dirname(os.path.realpath(__file__))
         generated = os.path.join(script_dir, "generated.json")

@@ -22,7 +22,7 @@
   wayland-scanner,
   libwebp,
   enchant,
-  xorg,
+  libx11,
   libxkbcommon,
   libavif,
   libepoxy,
@@ -186,7 +186,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     libseccomp
     libmanette
     wayland
-    xorg.libX11
+    libx11
   ]
   ++ lib.optionals systemdSupport [
     systemdLibs

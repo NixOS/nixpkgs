@@ -16,7 +16,9 @@
   gnused,
   imagemagick,
   procps,
-  xorg,
+  xset,
+  xrandr,
+  xdpyinfo,
 }:
 
 let
@@ -30,9 +32,9 @@ let
     gnused
     imagemagick
     procps
-    xorg.xdpyinfo
-    xorg.xrandr
-    xorg.xset
+    xdpyinfo
+    xrandr
+    xset
   ]
   ++ lib.optionals withDunst [ dunst ];
 in

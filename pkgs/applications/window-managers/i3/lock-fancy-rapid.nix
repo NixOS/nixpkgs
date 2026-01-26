@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  xorg,
+  libx11,
   i3lock,
 }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     hash = "sha256-EoX8ts0yV/zkb4wgEh4P8noU+UraRS4w9pp+76v+Nm0=";
   };
 
-  buildInputs = [ xorg.libX11 ];
+  buildInputs = [ libx11 ];
 
   propagatedBuildInputs = [ i3lock ];
 

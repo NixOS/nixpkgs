@@ -31,7 +31,9 @@
   stdenv,
   vulkan-headers,
   xbyak,
-  xorg,
+  libxext,
+  libx11,
+  libxcb,
   enableQtTranslations ? true,
   qt6,
   gtk3,
@@ -112,9 +114,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals stdenv.hostPlatform.isLinux [
     pipewire
     qt6.qtwayland
-    xorg.libX11
-    xorg.libxcb
-    xorg.libXext
+    libx11
+    libxcb
+    libxext
   ]
   ++ optionals stdenv.hostPlatform.isDarwin [
     moltenvk
