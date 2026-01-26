@@ -1,25 +1,23 @@
 {
   lib,
   stdenv,
-  fetchgit,
+  fetchFromGitHub,
   cmake,
   ninja,
   pkg-config,
   pandoc,
-  wrapQtAppsHook,
-  qtbase,
-  qtmultimedia,
-  qttools,
+  qt6,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "bino";
-  version = "2.5";
+  pname = "bino3d";
+  version = "2.6";
 
-  src = fetchgit {
-    url = "https://git.marlam.de/git/bino.git";
-    rev = "bino-${finalAttrs.version}";
-    hash = "sha256-vGPbSYTfRy414xVcLIvOnN4Te36HWVz7DQegNhYb3u4=";
+  src = fetchFromGitHub {
+    owner = "marlam";
+    repo = "bino";
+    tag = "bino-${finalAttrs.version}";
+    hash = "sha256-izgiAmMou/EW5KOzC8HuPaH4uVFLajoDhVwkJkzXdP0=";
   };
 
   nativeBuildInputs = [
@@ -27,13 +25,13 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     pandoc
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qtmultimedia
-    qttools
+    qt6.qtbase
+    qt6.qtmultimedia
+    qt6.qttools
     # The optional QVR dependency is not currently packaged.
   ];
 
