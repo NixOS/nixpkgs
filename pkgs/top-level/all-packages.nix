@@ -11201,10 +11201,6 @@ with pkgs;
 
   myfitnesspal = with python3Packages; toPythonApplication myfitnesspal;
 
-  libstrangle = callPackage ../tools/X11/libstrangle {
-    stdenv = stdenv_32bit;
-  };
-
   lightdm_qt = lightdm.override { withQt5 = true; };
 
   curaengine_stable = callPackage ../applications/misc/curaengine/stable.nix { };
