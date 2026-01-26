@@ -8,13 +8,13 @@
 stdenv.mkDerivation rec {
   pname = "secp256k1";
 
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "bitcoin-core";
     repo = "secp256k1";
     tag = "v${version}";
-    sha256 = "sha256-pCSNUSrPyN/lLYZm7zK/b9LICkThXOr6JAyFvHZSPW0=";
+    sha256 = "sha256-V9hm96NJl6ppE9TPCo7/ezs6bw0CEQMFMfIAo0WzDLQ=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
