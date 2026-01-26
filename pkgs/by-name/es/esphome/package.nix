@@ -33,14 +33,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2026.1.0";
+  version = "2026.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "esphome";
     tag = version;
-    hash = "sha256-TDXOftuj0ls+1TF6LXoX2Q+PzicL0nJP+1SJHi6qvMA=";
+    hash = "sha256-PSm9KbKKH0BI4/VIwtQ3NPfZFOFeiDkuIfLdb0d85y4=";
   };
 
   patches = [
