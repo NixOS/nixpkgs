@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "proxmoxer";
-  version = "2.2.0-unstable-2025-02-18";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
