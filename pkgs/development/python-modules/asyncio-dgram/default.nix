@@ -3,24 +3,24 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  hatchling,
   pytest-asyncio,
   pytestCheckHook,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "asyncio-dgram";
-  version = "2.2.0";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jsbronder";
     repo = "asyncio-dgram";
     tag = "v${version}";
-    hash = "sha256-9aO3xFmoR74uZSzxBPRVvz0QSW15TAdWEszLBX8AUR4=";
+    hash = "sha256-08XQHx+ArduVdkK5ZYq2lL2OWF9CvdSWcNLfc7ey2wI=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   nativeCheckInputs = [
     pytest-asyncio
