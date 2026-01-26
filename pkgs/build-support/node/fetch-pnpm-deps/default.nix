@@ -157,9 +157,9 @@ in
             # See https://github.com/NixOS/nixpkgs/pull/350063
             # See https://github.com/NixOS/nixpkgs/issues/422889
             if [[ ${toString fetcherVersion} -ge 2 ]]; then
-              find $storePath -type f -name "*-exec" -print0 | xargs -0 chmod 555
-              find $storePath -type f -not -name "*-exec" -print0 | xargs -0 chmod 444
-              find $storePath -type d -print0 | xargs -0 chmod 555
+              find $storePath -type f -name "*-exec" -print0 | xargs --no-run-if-empty -0 chmod 555
+              find $storePath -type f -not -name "*-exec" -print0 | xargs --no-run-if-empty -0 chmod 444
+              find $storePath -type d -print0 | xargs --no-run-if-empty -0 chmod 555
             fi
 
             if [[ ${toString fetcherVersion} -ge 3 ]]; then
