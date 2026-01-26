@@ -2952,6 +2952,8 @@ self: super: with self; {
 
   colcon-output = callPackage ../development/python-modules/colcon-output { };
 
+  colcon-override-check = callPackage ../development/python-modules/colcon-override-check { };
+
   colcon-package-information =
     callPackage ../development/python-modules/colcon-package-information
       { };
