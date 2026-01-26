@@ -11,15 +11,15 @@
   requests,
 }:
 
-buildPythonPackage rec {
-  version = "1.6.3";
+buildPythonPackage (finalAttrs: {
   pname = "pysmi";
+  version = "1.6.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lextudio";
     repo = "pysmi";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-TpDrsBGym07JPIcnytyWI7Ebx9RR+7Ia36zOzWMWqPM=";
   };
 
@@ -46,8 +46,8 @@ buildPythonPackage rec {
   meta = {
     description = "SNMP MIB parser";
     homepage = "https://github.com/lextudio/pysmi";
-    changelog = "https://github.com/lextudio/pysmi/blob/v${version}/CHANGES.rst";
+    changelog = "https://github.com/lextudio/pysmi/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
