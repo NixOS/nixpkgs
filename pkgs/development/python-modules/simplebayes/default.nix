@@ -9,7 +9,7 @@
 
 buildPythonPackage {
   pname = "simplebayes";
-  version = "1.5.8";
+  version = "1.5.7";
   format = "setuptools";
 
   # Use GitHub instead of pypi, because it contains tests.
