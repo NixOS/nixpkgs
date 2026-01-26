@@ -1,11 +1,11 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
   unar,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "unrar-wrapper";
   version = "1.0.0";
   format = "setuptools";
