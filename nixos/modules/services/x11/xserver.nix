@@ -57,10 +57,10 @@ let
 
   # Map video driver names to driver packages. FIXME: move into card-specific modules.
   videoDrivers =
-    mapAttrs' (name: value: rec {
+    mapAttrs' (name: value: {
       name = removePrefix "xf86-video-" value.pname;
       value = {
-        modules = value;
+        modules = [ value ];
       };
     }) knownVideoDriverPackages
     // videoDriverAliases
@@ -877,7 +877,7 @@ in
           cfgPath = "X11/xorg.conf.d/10-evdev.conf";
         in
         {
-          ${cfgPath}.source = xf86-input-evdev.out + "/share/" + cfgPath;
+          ${cfgPath}.source = pkgs.xf86-input-evdev.out + "/share/" + cfgPath;
         }
       );
 

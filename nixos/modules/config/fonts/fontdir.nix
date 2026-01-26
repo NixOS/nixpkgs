@@ -21,7 +21,6 @@ let
         nativeBuildInputs = [
           gzip
           mkfontscale
-          mkfontscale
         ];
       }
       ''
