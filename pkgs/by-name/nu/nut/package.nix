@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   version = "2.8.4";
 
   src = fetchurl {
-    url = "https://networkupstools.org/source/${lib.versions.majorMinor version}/${pname}-${version}.tar.gz";
+    url = "https://networkupstools.org/source/${lib.versions.majorMinor version}/nut-${version}.tar.gz";
     sha256 = "sha256-ATC6gup58Euk80xSSahZQ5d+/ZhO199q7BpRjVo1lPg=";
   };
 

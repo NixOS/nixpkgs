@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   version = "1.1.2-2";
 
   src = fetchurl {
-    url = "https://download.brother.com/welcome/dlf006168/${pname}-${version}.i386.deb";
+    url = "https://download.brother.com/welcome/dlf006168/mfc5890cnlpr-${version}.i386.deb";
     sha256 = "119h3s1p9pv83mrfv6cmxpc0v33xf8c9nw5clj9yafv3aizxy6dp";
   };
 

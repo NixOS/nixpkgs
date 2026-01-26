@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   version = "2.2.0";
 
   src = fetchurl {
-    url = "https://pdfgrep.org/download/${pname}-${version}.tar.gz";
+    url = "https://pdfgrep.org/download/pdfgrep-${version}.tar.gz";
     hash = "sha256-BmHlMeTA7wl5Waocl3N5ZYXbOccshKAv+H0sNjfGIMs=";
   };
 

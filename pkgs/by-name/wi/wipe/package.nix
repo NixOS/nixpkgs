@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "2.3.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/wipe/${version}/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/wipe/${version}/wipe-${version}.tar.bz2";
     hash = "sha256-RjkWNw+bNbs0QZwsCuPcTApHHbMuhZWvodFMAze2GqA=";
   };
 

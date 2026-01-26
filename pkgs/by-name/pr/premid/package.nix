@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   version = "2.3.4";
 
   src = fetchurl {
-    url = "https://github.com/premid/Linux/releases/download/v${version}/${pname}.tar.gz";
+    url = "https://github.com/premid/Linux/releases/download/v${version}/premid.tar.gz";
     sha256 = "sha256-ime6SCxm+fhMR2wagv1RItqwLjPxvJnVziW3DZafP50=";
   };
 

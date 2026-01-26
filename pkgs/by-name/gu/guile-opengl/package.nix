@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "0.2.0";
 
   src = fetchurl {
-    url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/guile-opengl/guile-opengl-${version}.tar.gz";
     hash = "sha256-uPCH7CiCPQmfuELDupQQS7BPqecIFmSHpHGYnhwXbGU=";
   };
 

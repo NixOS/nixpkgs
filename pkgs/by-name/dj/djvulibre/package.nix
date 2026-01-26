@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   version = "3.5.29";
 
   src = fetchurl {
-    url = "mirror://sourceforge/djvu/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/djvu/djvulibre-${version}.tar.gz";
     hash = "sha256-07SwOuK9yoUWo2726ye3d/BSjJ7aJnRdmWKCSj/f7M8=";
   };
 

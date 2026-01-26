@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   version = "3.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/hamlib/hamlib-${version}.tar.gz";
     sha256 = "10788mgrhbc57zpzakcxv5aqnr2819pcshml6fbh8zvnkja562y9";
   };
 

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "0.7.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/wake-on-lan/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/wake-on-lan/wol-${version}.tar.gz";
     sha256 = "08i6l5lr14mh4n3qbmx6kyx7vjqvzdnh3j9yfvgjppqik2dnq270";
   };
 

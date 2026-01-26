@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "5.10.1";
 
   src = fetchurl {
-    url = "mirror://gnu/rcs/${pname}-${version}.tar.lz";
+    url = "mirror://gnu/rcs/rcs-${version}.tar.lz";
     sha256 = "sha256-Q93+EHJKi4XiRo9kA7YABzcYbwHmDgvWL95p2EIjTMU=";
   };
 

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   inherit version;
 
   src = fetchurl {
-    url = "https://support.reiner-sct.de/downloads/LINUX/V${version}_${suffix}/${pname}_${tarBall}.tar.bz2";
+    url = "https://support.reiner-sct.de/downloads/LINUX/V${version}_${suffix}/pcsc-cyberjack_${tarBall}.tar.bz2";
     sha256 = "sha256-rLfCgyRQcYdWcTdnxLPvUAgy1lLtUbNRELkQsR69Rno=";
   };
 

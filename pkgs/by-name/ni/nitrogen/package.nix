@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "1.6.1";
 
   src = fetchurl {
-    url = "http://projects.l3ib.org/nitrogen/files/${pname}-${version}.tar.gz";
+    url = "http://projects.l3ib.org/nitrogen/files/nitrogen-${version}.tar.gz";
     sha256 = "0zc3fl1mbhq0iyndy4ysmy8vv5c7xwf54rbgamzfhfvsgdq160pl";
   };
 

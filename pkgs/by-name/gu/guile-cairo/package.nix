@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   version = "1.11.2";
 
   src = fetchurl {
-    url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
+    url = "mirror://savannah/guile-cairo/guile-cairo-${version}.tar.gz";
     hash = "sha256-YjLU3Cxb2dMxE5s7AfQ0PD4fucp4mDYaaZIGcwlBoHs=";
   };
 

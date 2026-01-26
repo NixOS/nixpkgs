@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "1.3.18";
 
   src = fetchurl {
-    url = "http://enet.bespin.org/download/${pname}-${version}.tar.gz";
+    url = "http://enet.bespin.org/download/enet-${version}.tar.gz";
     sha256 = "sha256-KooMU2DWi7T80R8uTEfGmXbo0shbEJ3X1gsRgaT4XTY=";
   };
 

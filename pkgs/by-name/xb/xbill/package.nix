@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "http://www.xbill.org/download/${pname}-${version}.tar.gz";
+    url = "http://www.xbill.org/download/xbill-${version}.tar.gz";
     hash = "sha256-Dv3/8c4t9wt6FWActIjNey65GNIdeOh3vXc/ESlFYI0=";
   };
 

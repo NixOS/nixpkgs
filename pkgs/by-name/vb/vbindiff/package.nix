@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses ];
 
   src = fetchurl {
-    url = "https://www.cjmweb.net/vbindiff/${pname}-${version}.tar.gz";
+    url = "https://www.cjmweb.net/vbindiff/vbindiff-${version}.tar.gz";
     sha256 = "1f1kj4jki08bnrwpzi663mjfkrx4wnfpzdfwd2qgijlkx5ysjkgh";
   };
 

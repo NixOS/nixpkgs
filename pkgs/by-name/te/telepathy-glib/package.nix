@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "${meta.homepage}/releases/telepathy-glib/${pname}-${version}.tar.gz";
+    url = "${meta.homepage}/releases/telepathy-glib/telepathy-glib-${version}.tar.gz";
     sha256 = "sKN013HN0IESXzjDq9B5ZXZCMBxxpUPVVeK/IZGSc/A=";
   };
 

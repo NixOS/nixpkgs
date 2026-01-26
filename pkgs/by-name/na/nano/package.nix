@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   version = "8.7";
 
   src = fetchurl {
-    url = "mirror://gnu/nano/${pname}-${version}.tar.xz";
+    url = "mirror://gnu/nano/nano-${version}.tar.xz";
     hash = "sha256-r9KHqmcsSLjhqT/bbGWIRT1SdRDZZoIraH8oNfDZhuk=";
   };
 

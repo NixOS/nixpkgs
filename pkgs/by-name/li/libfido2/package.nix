@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   # releases on https://developers.yubico.com/libfido2/Releases/ are signed
   src = fetchurl {
-    url = "https://developers.yubico.com/${pname}/Releases/${pname}-${version}.tar.gz";
+    url = "https://developers.yubico.com/libfido2/Releases/libfido2-${version}.tar.gz";
     hash = "sha256-jCtvsnm1tC6aySrecYMuSFhSZHtTYHxDuqr7vOzqBOQ=";
   };
 

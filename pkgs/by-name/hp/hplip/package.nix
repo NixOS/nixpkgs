@@ -38,12 +38,12 @@ let
   version = "3.25.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/hplip/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/hplip/hplip-${version}.tar.gz";
     hash = "sha256-6HL/KOslF3Balfbhg576HlCnejOq6JBSeN8r2CCRllM=";
   };
 
   plugin = fetchurl {
-    url = "https://www.openprinting.org/download/printdriver/auxfiles/HP/plugins/${pname}-${version}-plugin.run";
+    url = "https://www.openprinting.org/download/printdriver/auxfiles/HP/plugins/hplip-${version}-plugin.run";
     hash = "sha256-miz41WYehGVI27tZUjGlRIpctjcpzJPfjR9lLf0WelQ=";
   };
 

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ntfs3g ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ fuse3 ];
 
   src = fetchurl {
-    url = "https://wimlib.net/downloads/${pname}-${version}.tar.gz";
+    url = "https://wimlib.net/downloads/wimlib-${version}.tar.gz";
     hash = "sha256-NjPbK2yLJV64bTvz3zBZeWvR8I5QuMlyjH62ZmLlEwA=";
   };
 

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "0.0.12";
 
   src = fetchurl {
-    url = "https://github.com/superhighfives/${pname}/releases/download/${version}/Pika-${version}.dmg";
+    url = "https://github.com/superhighfives/pika/releases/download/${version}/Pika-${version}.dmg";
     sha256 = "sha256-hcP2bETEx9RQW43I9nvdRPi9lbWwKW6mhRx5H6RxhjM=";
   };
 

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://files.janikrabe.com/pub/oidentd/releases/${version}/${pname}-${version}.tar.gz";
+    url = "https://files.janikrabe.com/pub/oidentd/releases/${version}/oidentd-${version}.tar.gz";
     sha256 = "sha256-yyvcnabxNkcIMOiZBjvoOm/pEjrGXFt4W4SG5lprkbc=";
   };
 

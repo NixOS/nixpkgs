@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "3.3";
 
   src = fetchurl {
-    url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/gperf/gperf-${version}.tar.gz";
     hash = "sha256-/Yfgq6fkOuBUg3r9bNTbA6PyaT3rNhkIXm7Z2NlgStg=";
   };
 

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "1.5";
 
   src = fetchurl {
-    url = "https://gitlab.freedesktop.org/vdpau/vdpauinfo/-/archive/${version}/${pname}-${version}.tar.bz2";
+    url = "https://gitlab.freedesktop.org/vdpau/vdpauinfo/-/archive/${version}/vdpauinfo-${version}.tar.bz2";
     hash = "sha256-uOs/r8Ow7KvSpY1NhD2A+D4Qs6iWJe4fZGfVj6nIiCw=";
   };
 

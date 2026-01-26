@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   version = "1.4.8";
 
   src = fetchurl {
-    url = "https://www.netfilter.org/projects/conntrack-tools/files/${pname}-${version}.tar.xz";
+    url = "https://www.netfilter.org/projects/conntrack-tools/files/conntrack-tools-${version}.tar.xz";
     hash = "sha256-BnZ39MX2VkgZ547TqdSomAk16pJz86uyKkIOowq13tY=";
   };
 

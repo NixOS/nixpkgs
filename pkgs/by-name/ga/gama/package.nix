@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "2.28";
 
   src = fetchurl {
-    url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/gama/gama-${version}.tar.gz";
     sha256 = "sha256-Xcc/4JB7hyM+KHeO32+JlQWUBfH8RXuOL3Z2P0imaxo=";
   };
 

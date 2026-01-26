@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "1.2";
 
   src = fetchurl {
-    url = "mirror://gnu/libxmi/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/libxmi/libxmi-${version}.tar.gz";
     sha256 = "03d4ikh29l38rl1wavb0icw7m5pp7yilnv7bb2k8qij1dinsymlx";
   };
 

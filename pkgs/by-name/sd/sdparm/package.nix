@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "1.12";
 
   src = fetchurl {
-    url = "http://sg.danny.cz/sg/p/${pname}-${version}.tar.xz";
+    url = "http://sg.danny.cz/sg/p/sdparm-${version}.tar.xz";
     sha256 = "sha256-xMnvr9vrZi4vlxJwfsSQkyvU0BC7ESmueplSZUburb4=";
   };
 

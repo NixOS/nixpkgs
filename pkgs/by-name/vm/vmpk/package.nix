@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   version = "0.9.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${version}/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/vmpk/${version}/vmpk-${version}.tar.bz2";
     hash = "sha256-FUVI6Ioe4zmQa84pqGlw/my2Rw8fpMcZi9bZu/gzIGA=";
   };
 

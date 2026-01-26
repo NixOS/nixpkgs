@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   version = "1.5.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/fuse-emulator/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/fuse-emulator/libspectrum-${version}.tar.gz";
     sha256 = "sha256-o1PLRumxooEGHYFjU+oBDQpv545qF6oLe3QnHKXkrPw=";
   };
 

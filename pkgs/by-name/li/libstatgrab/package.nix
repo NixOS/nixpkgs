@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "0.92.1";
 
   src = fetchurl {
-    url = "https://ftp.i-scream.org/pub/i-scream/libstatgrab/${pname}-${version}.tar.gz";
+    url = "https://ftp.i-scream.org/pub/i-scream/libstatgrab/libstatgrab-${version}.tar.gz";
     sha256 = "sha256-VoiqSmhVR9cXSoo3PqnY7pJ+dm48wwK97jRSPCxdbBE=";
   };
 

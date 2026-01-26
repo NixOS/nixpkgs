@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "http://openbox.org/dist/openbox/${pname}-${version}.tar.gz";
+    url = "http://openbox.org/dist/openbox/openbox-${version}.tar.gz";
     sha256 = "1xvyvqxlhy08n61rjkckmrzah2si1i7nmc7s8h07riqq01vc0jlb";
   };
 

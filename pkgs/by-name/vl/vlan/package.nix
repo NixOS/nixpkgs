@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "1.9";
 
   src = fetchurl {
-    url = "https://www.candelatech.com/~greear/${pname}/${pname}.${version}.tar.gz";
+    url = "https://www.candelatech.com/~greear/vlan/vlan.${version}.tar.gz";
     sha256 = "1jjc5f26hj7bk8nkjxsa8znfxcf8pgry2ipnwmj2fr6ky0dhm3rv";
   };
 

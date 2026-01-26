@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "17";
 
   src = fetchurl {
-    url = "http://knackered.knackered.org/angus/download/${pname}/${pname}-p${version}.tar.gz";
+    url = "http://knackered.knackered.org/angus/download/psutils/psutils-p${version}.tar.gz";
     hash = "sha256-OFPreVhLqPvieoFUJbZan38Vsljg1DoFqFa9t11YiuQ=";
   };
 

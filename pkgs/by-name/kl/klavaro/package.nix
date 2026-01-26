@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   version = "3.14";
 
   src = fetchurl {
-    url = "mirror://sourceforge/klavaro/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/klavaro/klavaro-${version}.tar.bz2";
     hash = "sha256-hxh+SdMBxRDmlkCYzbYSEmvwMNKodf15nq3K0+rlbas=";
   };
 

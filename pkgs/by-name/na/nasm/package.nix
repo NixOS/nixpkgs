@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "3.01";
 
   src = fetchurl {
-    url = "https://www.nasm.us/pub/nasm/releasebuilds/${version}/${pname}-${version}.tar.xz";
+    url = "https://www.nasm.us/pub/nasm/releasebuilds/${version}/nasm-${version}.tar.xz";
     hash = "sha256-tzJMvobnZ7ZfJvRn7YsSrYDhJOPMuJB2hVyY5Dqe3dQ=";
   };
 

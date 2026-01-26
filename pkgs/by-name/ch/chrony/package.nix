@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   version = "4.8";
 
   src = fetchurl {
-    url = "https://chrony-project.org/releases/${pname}-${version}.tar.gz";
+    url = "https://chrony-project.org/releases/chrony-${version}.tar.gz";
     hash = "sha256-M+qOsqTa6qUG6Pyv1dbYkCftby8GCWRcbxSbVg0wFwY=";
   };
 

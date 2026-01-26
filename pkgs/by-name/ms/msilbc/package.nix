@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "2.1.2";
 
   src = fetchurl {
-    url = "mirror://savannah/linphone/plugins/sources/${pname}-${version}.tar.gz";
+    url = "mirror://savannah/linphone/plugins/sources/msilbc-${version}.tar.gz";
     sha256 = "07j02y994ybh274fp7ydjvi76h34y2c34ndwjpjfcwwr03b48cfp";
   };
 

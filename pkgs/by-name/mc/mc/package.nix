@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   version = "4.8.33";
 
   src = fetchurl {
-    url = "https://ftp.osuosl.org/pub/midnightcommander/${pname}-${version}.tar.xz";
+    url = "https://ftp.osuosl.org/pub/midnightcommander/mc-${version}.tar.xz";
     hash = "sha256-yuFJ1C+ETlGF2MgdfbOROo+iFMZfhSIAqdiWtGivFkw=";
   };
 

@@ -8,7 +8,7 @@ let
   pname = "Vial";
 
   src = fetchurl {
-    url = "https://github.com/vial-kb/vial-gui/releases/download/v${version}/${pname}-v${version}-x86_64.AppImage";
+    url = "https://github.com/vial-kb/vial-gui/releases/download/v${version}/Vial-v${version}-x86_64.AppImage";
     hash = "sha256-sN8i/MOPhaLZ4iJNKz/MdpRIGTZVV/G5qD7o+ID8dAM=";
   };
 

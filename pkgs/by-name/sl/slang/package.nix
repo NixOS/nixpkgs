@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   version = "2.3.3";
 
   src = fetchurl {
-    url = "https://www.jedsoft.org/releases/slang/${pname}-${version}.tar.bz2";
+    url = "https://www.jedsoft.org/releases/slang/slang-${version}.tar.bz2";
     sha256 = "sha256-+RRQVK4TGXPGEgjqgkhtXdEOPFza0jt8SgYXdDyPWhg=";
   };
 

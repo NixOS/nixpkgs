@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   pname = "clustal-omega";
 
   src = fetchurl {
-    url = "http://www.clustal.org/omega/${pname}-${version}.tar.gz";
+    url = "http://www.clustal.org/omega/clustal-omega-${version}.tar.gz";
     sha256 = "1vm30mzncwdv881vrcwg11vzvrsmwy4wg80j5i0lcfk6dlld50w6";
   };
 

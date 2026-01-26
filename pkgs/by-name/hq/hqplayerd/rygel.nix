@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/rygel/${lib.versions.majorMinor version}/rygel-${version}.tar.xz";
     sha256 = "c22K2+hhX2y8j8//mEXcmF/RDhZinaI2tLUtvt8KNIs=";
   };
 

@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "1.5.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gputils/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/gputils/gputils-${version}.tar.bz2";
     sha256 = "sha256-j7iCCzHXwffHdhQcyzxPBvQK+RXaY3QSjXUtHu463fI=";
   };
 

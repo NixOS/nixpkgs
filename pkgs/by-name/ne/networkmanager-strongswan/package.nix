@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   version = "1.6.4";
 
   src = fetchurl {
-    url = "https://download.strongswan.org/NetworkManager/${pname}-${version}.tar.bz2";
+    url = "https://download.strongswan.org/NetworkManager/NetworkManager-strongswan-${version}.tar.bz2";
     sha256 = "sha256-X9ftnoogw2W+p9ZTdgoECfmyEkRABtQ2UzK7zFGPbBU=";
   };
 

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "0.33.8";
 
   src = fetchurl {
-    url = "https://update.rascal-mpl.org/console/${pname}-${version}.jar";
+    url = "https://update.rascal-mpl.org/console/rascal-${version}.jar";
     sha256 = "sha256-8m7+ME0mu9LEMzklkz1CZ9s7ZCMjoA5oreICFSpb4S8=";
   };
 

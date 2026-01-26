@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "3.52.16";
 
   src = fetchurl {
-    url = "mirror://sourceforge/iodbc/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/iodbc/libiodbc-${version}.tar.gz";
     sha256 = "sha256-OJizLQeWE2D28s822zYDa3GaIw5HZGklioDzIkPoRfo=";
   };
 

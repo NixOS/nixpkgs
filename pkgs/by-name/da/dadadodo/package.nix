@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "1.04";
 
   src = fetchurl {
-    url = "https://www.jwz.org/dadadodo/${pname}-${version}.tar.gz";
+    url = "https://www.jwz.org/dadadodo/dadadodo-${version}.tar.gz";
     sha256 = "1pzwp3mim58afjrc92yx65mmgr1c834s1v6z4f4gyihwjn8bn3if";
   };
 

@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   version = "1.16.7";
 
   src = fetchurl {
-    url = "https://github.com/lwindolf/${pname}/releases/download/v${version}/${pname}-${version}.tar.bz2";
+    url = "https://github.com/lwindolf/liferea/releases/download/v${version}/liferea-${version}.tar.bz2";
     hash = "sha256-571mxEqnPVvuJ/r8hU4brtJhiVPxbBOPXhWL3XWmUTI=";
   };
 
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.updateScript = gitUpdater {
-    url = "https://github.com/lwindolf/${pname}";
+    url = "https://github.com/lwindolf/liferea";
     rev-prefix = "v";
   };
 

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   pname = "nload";
 
   src = fetchurl {
-    url = "http://www.roland-riegel.de/nload/${pname}-${version}.tar.gz";
+    url = "http://www.roland-riegel.de/nload/nload-${version}.tar.gz";
     sha256 = "1rb9skch2kgqzigf19x8bzk211jdfjfdkrcvaqyj89jy2pkm3h61";
   };
 

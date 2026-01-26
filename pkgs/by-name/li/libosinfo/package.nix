@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   version = "1.12.0";
 
   src = fetchurl {
-    url = "https://releases.pagure.org/${pname}/${pname}-${version}.tar.xz";
+    url = "https://releases.pagure.org/libosinfo/libosinfo-${version}.tar.xz";
     sha256 = "sha256-rYVX7OJnk9pD0m3lZePWjOLua/uNARO3zH3+B/a/xrY=";
   };
 

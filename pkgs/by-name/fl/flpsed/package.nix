@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "0.7.3";
 
   src = fetchurl {
-    url = "http://www.flpsed.org/${pname}-${version}.tar.gz";
+    url = "http://www.flpsed.org/flpsed-${version}.tar.gz";
     sha256 = "0vngqxanykicabhfdznisv82k5ypkxwg0s93ms9ribvhpm8vf2xp";
   };
 

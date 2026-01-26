@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   version = "1.25.1";
 
   src = fetchurl {
-    url = "https://www.pgbouncer.org/downloads/files/${version}/${pname}-${version}.tar.gz";
+    url = "https://www.pgbouncer.org/downloads/files/${version}/pgbouncer-${version}.tar.gz";
     hash = "sha256-blZq6S/j739qG54m1gSffXyjnEDinns49tVQCuFdhGU=";
   };
 

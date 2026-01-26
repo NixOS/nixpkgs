@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   version = "1.2.5";
 
   src = fetchurl {
-    url = "https://musl.libc.org/releases/${pname}-${version}.tar.gz";
+    url = "https://musl.libc.org/releases/musl-${version}.tar.gz";
     sha256 = "qaEYu+hNh2TaDqDSizqz+uhHf8fkCF2QECuFlvx8deQ=";
   };
 

@@ -28,7 +28,7 @@ stdenv.mkDerivation (
     version = "1.55";
 
     src = fetchurl {
-      url = "mirror://gnupg/${pname}/${pname}-${version}.tar.bz2";
+      url = "mirror://gnupg/libgpg-error/libgpg-error-${version}.tar.bz2";
       hash = "sha256-lbF4FIhj8H1F3wzqZ+iAp5ue9x9dIwut3ABxEoUW73g=";
     };
 

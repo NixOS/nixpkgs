@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchurl {
-    url = "http://www.hyperrealm.com/${pname}/${pname}-${version}.tar.gz";
+    url = "http://www.hyperrealm.com/talkfilters/talkfilters-${version}.tar.gz";
     sha256 = "19nc5vq4bnkjvhk8srqddzhcs93jyvpm9r6lzjzwc1mgf08yg0a6";
   };
 

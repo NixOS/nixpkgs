@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
   pyproject = false;
 
   src = fetchurl {
-    url = "mirror://sourceforge/thetimelineproj/${pname}-${version}.zip";
+    url = "mirror://sourceforge/thetimelineproj/timeline-${version}.zip";
     sha256 = "sha256-XJ5Gu3nFLtSaEedzxBZERtPydIFMWWGi5frXWmgKxVA=";
   };
 

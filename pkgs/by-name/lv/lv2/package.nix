@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://lv2plug.in/spec/${pname}-${version}.tar.xz";
+    url = "https://lv2plug.in/spec/lv2-${version}.tar.xz";
     hash = "sha256-eMUbzyG1Tli7Yymsy7Ta4Dsu15tSD5oB5zS9neUwlT8=";
   };
 

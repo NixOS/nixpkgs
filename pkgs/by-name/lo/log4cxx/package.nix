@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   version = "1.6.0";
 
   src = fetchurl {
-    url = "mirror://apache/logging/log4cxx/${version}/apache-${pname}-${version}.tar.gz";
+    url = "mirror://apache/logging/log4cxx/${version}/apache-log4cxx-${version}.tar.gz";
     hash = "sha256-R9doxXZcVyHPJ9Ug+H7ycikboPTg0yHHJzXVrshwGKc=";
   };
 

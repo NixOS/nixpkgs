@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "0.8";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/cbrowser/cbrowser-${version}.tar.gz";
     sha256 = "1050mirjab23qsnq3lp3a9vwcbavmh9kznzjm7dr5vkx8b7ffcji";
   };
 

@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchgit {
-    url = "https://git.code.sf.net/p/${pname}/git";
+    url = "https://git.code.sf.net/p/minidlna/git";
     rev = "v${builtins.replaceStrings [ "." ] [ "_" ] version}";
     hash = "sha256-InsSguoGi1Gp8R/bd4/c16xqRuk0bRsgw7wvcbokgKo=";
   };

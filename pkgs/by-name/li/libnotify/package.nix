@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/libnotify/${lib.versions.majorMinor version}/libnotify-${version}.tar.xz";
     hash = "sha256-S+FSAuxBhPzhrBWZfs5VMNK+Mv6Vc4da6xDjtXOFh0g=";
   };
 

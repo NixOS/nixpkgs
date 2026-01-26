@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "0.9.8";
 
   src = fetchurl {
-    url = "http://www.codesink.org/download/${pname}-${version}.tar.gz";
+    url = "http://www.codesink.org/download/mimetic-${version}.tar.gz";
     sha256 = "003715lvj4nx23arn1s9ss6hgc2yblkwfy5h94li6pjz2a6xc1rs";
   };
 

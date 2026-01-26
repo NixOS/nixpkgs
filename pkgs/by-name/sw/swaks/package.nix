@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "20240103.0";
 
   src = fetchurl {
-    url = "https://www.jetmore.org/john/code/swaks/files/${pname}-${version}.tar.gz";
+    url = "https://www.jetmore.org/john/code/swaks/files/swaks-${version}.tar.gz";
     sha256 = "sha256-DlMbTRZAWIAucmaxT03BiXCZ0Jb5MIIN4vm16wjc2+g=";
   };
 

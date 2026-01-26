@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "0.6.3";
 
   src = fetchurl {
-    url = "https://www.gropp.org/bwm-ng/${pname}-${version}.tar.gz";
+    url = "https://www.gropp.org/bwm-ng/bwm-ng-${version}.tar.gz";
     sha256 = "0ikzyvnb73msm9n7ripg1dsw9av1i0c7q2hi2173xsj8zyv559f1";
   };
 

@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://www.opensmtpd.org/archives/${pname}-${version}.tar.gz";
+    url = "https://www.opensmtpd.org/archives/opensmtpd-${version}.tar.gz";
     hash = "sha256-QDTeLpLGH6g+7a2x2Ni9/mXlfrUM6WeeAUCVDjTKSrc=";
   };
 

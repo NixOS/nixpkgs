@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   pname = "libnftnl";
 
   src = fetchurl {
-    url = "https://netfilter.org/projects/${pname}/files/${pname}-${version}.tar.xz";
+    url = "https://netfilter.org/projects/libnftnl/files/libnftnl-${version}.tar.xz";
     hash = "sha256-YH2ijbpm+97M+O8Tld3tkHfo0Z8plfmk1FqcLwvP+6g=";
   };
 

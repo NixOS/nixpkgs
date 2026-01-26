@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "1.60.05";
 
   src = fetchurl {
-    url = "mirror://sourceforge/xmlrpc-c/${pname}-${version}.tgz";
+    url = "mirror://sourceforge/xmlrpc-c/xmlrpc-c-${version}.tgz";
     hash = "sha256-Z9hgBiRZ6ieEwHtNeRMxnZU5+nKfU0N46OQciRjyrfY=";
   };
 

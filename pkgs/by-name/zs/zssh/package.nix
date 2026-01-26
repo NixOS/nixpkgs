@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   inherit version;
 
   src = fetchurl {
-    url = "mirror://sourceforge/zssh/${pname}-${version}.tgz";
+    url = "mirror://sourceforge/zssh/zssh-${version}.tgz";
     sha256 = "06z73iq59lz8ibjrgs7d3xl39vh9yld1988yx8khssch4pw41s52";
   };
 

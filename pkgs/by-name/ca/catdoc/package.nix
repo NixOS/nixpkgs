@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "0.95";
 
   src = fetchurl {
-    url = "http://ftp.wagner.pp.ru/pub/catdoc/${pname}-${version}.tar.gz";
+    url = "http://ftp.wagner.pp.ru/pub/catdoc/catdoc-${version}.tar.gz";
     sha256 = "514a84180352b6bf367c1d2499819dfa82b60d8c45777432fa643a5ed7d80796";
   };
 

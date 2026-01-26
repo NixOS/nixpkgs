@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnu/gsl/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/gsl/gsl-${version}.tar.gz";
     hash = "sha256-apnu7RVjLGNUiVsd1ULtWoVcDxXZrRMmxv4rLJ5CMZA=";
   };
 

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   pname = "ripmime";
   version = "1.4.0.10";
   src = fetchurl {
-    url = "https://pldaniels.com/${pname}/${pname}-${version}.tar.gz";
+    url = "https://pldaniels.com/ripmime/ripmime-${version}.tar.gz";
     sha256 = "0sj06ibmlzy34n8v0mnlq2gwidy7n2aqcwgjh0xssz3vi941aqc9";
   };
 

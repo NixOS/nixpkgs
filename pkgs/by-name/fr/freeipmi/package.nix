@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   pname = "freeipmi";
 
   src = fetchurl {
-    url = "mirror://gnu/freeipmi/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/freeipmi/freeipmi-${version}.tar.gz";
     sha256 = "sha256-W872u562gOSbSjYjV5kwrOeJn1OSWyBF/p+RrWkEER0=";
   };
 

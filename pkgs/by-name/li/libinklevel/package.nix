@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "0.9.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/libinklevel/libinklevel-${version}.tar.gz";
     sha256 = "sha256-J0cEaC5v4naO4GGUzdfV55kB7KzA+q+v64i5y5Xbp9Q=";
   };
 

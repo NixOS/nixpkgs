@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   pname = "zita-njbridge";
 
   src = fetchurl {
-    url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/${pname}-${version}.tar.bz2";
+    url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/zita-njbridge-${version}.tar.bz2";
     sha256 = "sha256-EBF2oL1AfKt7/9Mm6NaIbBtlshK8M/LvuXsD+SbEeQc=";
   };
 

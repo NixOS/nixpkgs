@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "0.17.0";
 
   src = fetchurl {
-    url = "mirror://apache/pig/${pname}-${version}/${pname}-${version}.tar.gz";
+    url = "mirror://apache/pig/pig-${version}/pig-${version}.tar.gz";
     sha256 = "1wwpg0w47f49rnivn2d26vrxgyfl9gpqx3vmzbl5lhx6x5l3fqbd";
 
   };

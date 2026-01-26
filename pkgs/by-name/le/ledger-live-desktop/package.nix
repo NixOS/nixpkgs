@@ -11,7 +11,7 @@ let
   version = "2.137.0";
 
   src = fetchurl {
-    url = "https://download.live.ledger.com/${pname}-${version}-linux-x86_64.AppImage";
+    url = "https://download.live.ledger.com/ledger-live-desktop-${version}-linux-x86_64.AppImage";
     hash = "sha256-G9wuefSt4OEFIM8rHLSyBY8t+jxgKPt4T+KQF6Jh3Tk=";
   };
 

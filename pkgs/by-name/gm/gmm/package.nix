@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "5.4.4";
 
   src = fetchurl {
-    url = "mirror://savannah/getfem/stable/${pname}-${version}.tar.gz";
+    url = "mirror://savannah/getfem/stable/gmm-${version}.tar.gz";
     sha256 = "sha256-FesZQwEbkmZaqzsC7PPO3hz4nqFakAb4HyuizWYqoCs=";
   };
 

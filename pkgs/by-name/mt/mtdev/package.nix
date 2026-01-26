@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "1.1.7";
 
   src = fetchurl {
-    url = "https://bitmath.org/code/mtdev/${pname}-${version}.tar.bz2";
+    url = "https://bitmath.org/code/mtdev/mtdev-${version}.tar.bz2";
     hash = "sha256-oQetrSEB/srFSsf58OCg3RVdlUGT2lXCNAyX8v8dgU4=";
   };
 

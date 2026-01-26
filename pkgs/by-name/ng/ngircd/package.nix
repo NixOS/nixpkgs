@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "27";
 
   src = fetchurl {
-    url = "https://ngircd.barton.de/pub/ngircd/${pname}-${version}.tar.xz";
+    url = "https://ngircd.barton.de/pub/ngircd/ngircd-${version}.tar.xz";
     sha256 = "sha256-aJeIAxndXi5zwckBlhNQn4jrW42qWCGjb7yj14XCR7g=";
   };
 

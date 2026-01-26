@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   version = "1.14.0";
 
   src = fetchurl {
-    url = "https://fc-solve.shlomifish.org/downloads/fc-solve/${pname}-${version}.tar.xz";
+    url = "https://fc-solve.shlomifish.org/downloads/fc-solve/black-hole-solver-${version}.tar.xz";
     sha256 = "sha256-XEe9CT27Fg9LCQ/WcKt8ErQ3HTmxezu9jGxKEpdVV8A=";
   };
 

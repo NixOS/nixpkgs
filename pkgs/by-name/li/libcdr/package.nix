@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   version = "0.1.8";
 
   src = fetchurl {
-    url = "https://dev-www.libreoffice.org/src/${pname}-${version}.tar.xz";
+    url = "https://dev-www.libreoffice.org/src/libcdr-${version}.tar.xz";
     hash = "sha256-ztZ3yDALKckdMAS7Hd3wuZdhv1VEmRwmwu6PQn6HGTw=";
   };
 

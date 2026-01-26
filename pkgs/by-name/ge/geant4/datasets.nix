@@ -18,7 +18,7 @@ let
       geant_version = geant4.version;
 
       src = fetchurl {
-        url = "https://cern.ch/geant4-data/datasets/${pname}.${version}.tar.gz";
+        url = "https://cern.ch/geant4-data/datasets/G4NDL.${version}.tar.gz";
         inherit sha256;
       };
 

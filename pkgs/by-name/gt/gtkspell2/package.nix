@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   version = "2.0.16";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gtkspell/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/gtkspell/gtkspell-${version}.tar.gz";
     sha256 = "00hdv28bp72kg1mq2jdz1sdw2b8mb9iclsp7jdqwpck705bdriwg";
   };
 

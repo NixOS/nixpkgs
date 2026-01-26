@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   version = "2.0.1";
 
   src = fetchurl {
-    url = "mirror://gnu/pspp/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/pspp/pspp-${version}.tar.gz";
     sha256 = "sha256-jtuw8J6M+AEMrZ4FWeAjDX/FquRyHHVsNQVU3zMCTAA=";
   };
 

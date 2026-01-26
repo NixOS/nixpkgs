@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   pname = "flrig";
 
   src = fetchurl {
-    url = "mirror://sourceforge/fldigi/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/fldigi/flrig-${version}.tar.gz";
     sha256 = "sha256-dvUh7PEGKvJ21aw4BFBLKDosE4RVtZPWb9XVHJRk9Z0=";
   };
 

@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   pname = "commons-compress";
 
   src = fetchurl {
-    url = "mirror://apache/commons/compress/binaries/${pname}-${version}-bin.tar.gz";
+    url = "mirror://apache/commons/compress/binaries/commons-compress-${version}-bin.tar.gz";
     sha256 = "sha256-VfAt77mP79azaGiP4+aY5rg2dUFhr59woL6tv2eza5I=";
   };
 

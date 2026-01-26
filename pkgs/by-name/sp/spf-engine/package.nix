@@ -10,7 +10,7 @@ python3Packages.buildPythonApplication rec {
   pyproject = true;
 
   src = fetchurl {
-    url = "https://launchpad.net/${pname}/${lib.versions.majorMinor version}/${version}/+download/spf-engine-${version}.tar.gz";
+    url = "https://launchpad.net/spf-engine/${lib.versions.majorMinor version}/${version}/+download/spf-engine-${version}.tar.gz";
     hash = "sha256-HUuMxYFCqItLFgMSnrkwfmJWqgFGyI1RWgmljb+jkWk=";
   };
 

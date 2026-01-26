@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "0.2.12";
 
   src = fetchurl {
-    url = "https://libspectre.freedesktop.org/releases/${pname}-${version}.tar.gz";
+    url = "https://libspectre.freedesktop.org/releases/libspectre-${version}.tar.gz";
     hash = "sha256-VadRfNNXK9JWXfDPRQlEoE1Sc7J567NpqJU5GVfw+WA=";
   };
 

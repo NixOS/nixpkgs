@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
   pname = "mupdf";
 
   src = fetchurl {
-    url = "https://mupdf.com/downloads/archive/${pname}-${version}-source.tar.gz";
+    url = "https://mupdf.com/downloads/archive/freeglut-mupdf-${version}-source.tar.gz";
     hash = "sha256-FlPzW9j72XDwVSPv3H+G5B6XKOJWSjKVKW4Dz1mlFDc=";
   };
 

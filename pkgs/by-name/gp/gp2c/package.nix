@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "0.0.14";
 
   src = fetchurl {
-    url = "https://pari.math.u-bordeaux.fr/pub/pari/GP2C/${pname}-${version}.tar.gz";
+    url = "https://pari.math.u-bordeaux.fr/pub/pari/GP2C/gp2c-${version}.tar.gz";
     hash = "sha256-r2ESzAKUBFfiOdpEM9Gg2Npg7u8p98xyL2TNSsALezA=";
   };
 

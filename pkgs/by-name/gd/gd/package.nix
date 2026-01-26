@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   version = "2.3.3";
 
   src = fetchurl {
-    url = "https://github.com/libgd/libgd/releases/download/${pname}-${version}/libgd-${version}.tar.xz";
+    url = "https://github.com/libgd/libgd/releases/download/gd-${version}/libgd-${version}.tar.xz";
     sha256 = "0qas3q9xz3wgw06dm2fj0i189rain6n60z1vyq50d5h7wbn25s1z";
   };
 

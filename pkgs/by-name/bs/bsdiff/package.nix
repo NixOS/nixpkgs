@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "4.3";
 
   src = fetchurl {
-    url = "https://www.daemonology.net/bsdiff/${pname}-${version}.tar.gz";
+    url = "https://www.daemonology.net/bsdiff/bsdiff-${version}.tar.gz";
     sha256 = "0j2zm3z271x5aw63mwhr3vymzn45p2vvrlrpm9cz2nywna41b0hq";
   };
 

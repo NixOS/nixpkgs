@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   version = "3.8.2"; # Check the note above doInstallCheck before updating.
 
   src = fetchurl {
-    url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/bison/bison-${version}.tar.gz";
     sha256 = "sha256-BsnhO99+sk1M62tZIFpPZ8LH5yExGWREMP6C+9FKCrs=";
   };
 

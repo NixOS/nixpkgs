@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   pname = "fatsort";
 
   src = fetchurl {
-    url = "mirror://sourceforge/fatsort/${pname}-${version}.tar.xz";
+    url = "mirror://sourceforge/fatsort/fatsort-${version}.tar.xz";
     sha256 = "sha256-Yw7OVtnrOlVSSvCuw6reeFQ2DrqUkXKmz7R2jLj75C4=";
   };
 

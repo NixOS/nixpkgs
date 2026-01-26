@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   version = "2.1";
 
   src = fetchurl {
-    url = "http://viznut.fi/${pname}/${pname}-${version}-src.tar.gz";
+    url = "http://viznut.fi/unscii/unscii-${version}-src.tar.gz";
     sha256 = "0msvqrq7x36p76a2n5bzkadh95z954ayqa08wxd017g4jpa1a4jd";
   };
 

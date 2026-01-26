@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "6.6";
 
   src = fetchzip {
-    url = "https://www.languagetool.org/download/${pname}-${version}.zip";
+    url = "https://www.languagetool.org/download/LanguageTool-${version}.zip";
     sha256 = "sha256-BNiUIk5h38oEM4IliHdy8rNmZY0frQ1RaFeJ7HI5nOI=";
   };
   nativeBuildInputs = [ makeWrapper ];

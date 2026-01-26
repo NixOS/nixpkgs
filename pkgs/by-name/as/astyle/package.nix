@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "3.6.13";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/astyle/astyle-${version}.tar.bz2";
     hash = "sha256-BIt0sUxuAff66OY7dn2jMwOrOdkCKv4zBVzkueVvFi0=";
   };
 

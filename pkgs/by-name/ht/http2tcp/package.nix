@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "0.5";
 
   src = fetchurl {
-    url = "https://www.linta.de/~aehlig/http2tcp/${pname}-${version}.tar.gz";
+    url = "https://www.linta.de/~aehlig/http2tcp/http2tcp-${version}.tar.gz";
     sha256 = "34fb83c091689dee398ca80db76487e0c39abb17cef390d845ffd888009a5caa";
   };
 

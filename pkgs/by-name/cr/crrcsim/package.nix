@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   inherit version;
 
   src = fetchurl {
-    url = "mirror://sourceforge/crrcsim/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/crrcsim/crrcsim-${version}.tar.gz";
     sha256 = "abe59b35ebb4322f3c48e6aca57dbf27074282d4928d66c0caa40d7a97391698";
   };
 

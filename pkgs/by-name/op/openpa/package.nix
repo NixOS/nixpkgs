@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "1.0.4";
 
   src = fetchurl {
-    url = "https://trac.mpich.org/projects/${pname}/raw-attachment/wiki/Downloads/${pname}-${version}.tar.gz";
+    url = "https://trac.mpich.org/projects/openpa/raw-attachment/wiki/Downloads/openpa-${version}.tar.gz";
     sha256 = "0flyi596hm6fv7xyw2iykx3s65p748s62bf15624xcnwpfrh8ncy";
   };
 

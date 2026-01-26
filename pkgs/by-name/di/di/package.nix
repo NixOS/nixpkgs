@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "6.0.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/diskinfo-di/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/diskinfo-di/di-${version}.tar.gz";
     sha256 = "sha256-e2Y+TbBEsfpJhr0Bj4J8GOlv5tH5o2cy3LsEUOf1GMs=";
   };
 

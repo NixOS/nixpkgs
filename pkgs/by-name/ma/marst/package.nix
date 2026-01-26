@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "2.8";
 
   src = fetchurl {
-    url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/marst/marst-${version}.tar.gz";
     hash = "sha256-139HA7C0S1C+V5CPnVVu5sO+3ZfWOMQpSdauyE+AcLo=";
   };
 

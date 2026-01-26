@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "7.1";
 
   src = fetchurl {
-    url = "http://fy.chalmers.se/~appro/linux/DVD+RW/tools/${pname}-${version}.tar.gz";
+    url = "http://fy.chalmers.se/~appro/linux/DVD+RW/tools/dvd+rw-tools-${version}.tar.gz";
     sha256 = "1jkjvvnjcyxpql97xjjx0kwvy70kxpiznr2zpjy2hhci5s10zmpq";
   };
 

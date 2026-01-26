@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   version = "5.7";
 
   src = fetchurl {
-    url = "https://github.com/tpm2-software/${pname}/releases/download/${version}/${pname}-${version}.tar.gz";
+    url = "https://github.com/tpm2-software/tpm2-tools/releases/download/${version}/tpm2-tools-${version}.tar.gz";
     sha256 = "sha256-OBDTa1B5JW9PL3zlUuIiE9Q7EDHBMVON+KLbw8VwmDo=";
   };
 

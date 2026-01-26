@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   version = "0.7.4";
 
   src = fetchurl {
-    url = "https://www.freedesktop.org/software/vaapi/releases/${pname}/${pname}-${version}.tar.bz2";
+    url = "https://www.freedesktop.org/software/vaapi/releases/libva-vdpau-driver/libva-vdpau-driver-${version}.tar.bz2";
     sha256 = "1fcvgshzyc50yb8qqm6v6wn23ghimay23ci0p8sm8gxcy211jp0m";
   };
 

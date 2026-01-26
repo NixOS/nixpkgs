@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   version = "1.6.27";
 
   src = fetchurl {
-    url = "https://www.hepforge.org/archive/applgrid/${pname}-${version}.tgz";
+    url = "https://www.hepforge.org/archive/applgrid/applgrid-${version}.tgz";
     hash = "sha256-h+ZNGj33FIwg4fOCyfGJrUKM2vDDQl76JcLhtboAOtc=";
   };
 

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "3.4.06";
 
   src = fetchurl {
-    url = "https://www.cs.hmc.edu/~geoff/tars/${pname}-${version}.tar.gz";
+    url = "https://www.cs.hmc.edu/~geoff/tars/ispell-${version}.tar.gz";
     sha256 = "sha256-F8kWM9TIB1rMUDFjoWRj/FSrHHRTKArTnNPbdceD66Y=";
   };
 

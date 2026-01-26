@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "1.42";
 
   src = fetchurl {
-    url = "mirror://sourceforge/tinyscheme/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/tinyscheme/tinyscheme-${version}.tar.gz";
     sha256 = "sha256-F7Cxv/0i89SdWDPiKhILM5A50s/aC0bW/FHdLwG0B60=";
   };
 

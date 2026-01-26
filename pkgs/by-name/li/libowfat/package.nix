@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "0.34";
 
   src = fetchurl {
-    url = "https://www.fefe.de/libowfat/${pname}-${version}.tar.xz";
+    url = "https://www.fefe.de/libowfat/libowfat-${version}.tar.xz";
     sha256 = "sha256-1DMNNzrJWBs5e8JKIq0ff11Yp/422dI5/jUs7/xdMEs=";
   };
 

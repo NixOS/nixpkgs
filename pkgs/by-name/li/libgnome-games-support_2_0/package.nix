@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   version = "2.0.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/libgnome-games-support/${lib.versions.majorMinor version}/libgnome-games-support-${version}.tar.xz";
     sha256 = "grvHTwj5i4M6m2REuEeeG9hN7QoHQl0Fe0XzjoeD5b0=";
   };
 

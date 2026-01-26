@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "1.2.2";
 
   src = fetchurl {
-    url = "mirror://gnu/wdiff/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/wdiff/wdiff-${version}.tar.gz";
     sha256 = "0sxgg0ms5lhi4aqqvz1rj4s77yi9wymfm3l3gbjfd1qchy66kzrl";
   };
 

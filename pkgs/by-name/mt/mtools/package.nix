@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "4.0.49";
 
   src = fetchurl {
-    url = "mirror://gnu/mtools/${pname}-${version}.tar.bz2";
+    url = "mirror://gnu/mtools/mtools-${version}.tar.bz2";
     hash = "sha256-b+UZNYPW58Wdp15j1yNPdsCwfK8zsQOJT0b2aocf/J8=";
   };
 

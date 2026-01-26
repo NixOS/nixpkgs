@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   version = "6.6.14";
 
   src = fetchurl {
-    url = "mirror://gnu/global/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/global/global-${version}.tar.gz";
     hash = "sha256-9uf9C2iu0pLoW7aGYWuvZVHVyUJK3N3KEdgIujGMsyA=";
   };
 

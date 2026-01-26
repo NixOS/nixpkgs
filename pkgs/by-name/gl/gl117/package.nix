@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   version = "1.3.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/gl-117/gl-117/GL-117%20Source/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/project/gl-117/gl-117/GL-117%20Source/gl-117-${version}.tar.bz2";
     sha256 = "1yvg1rp1yijv0b45cz085b29x5x0g5fkm654xdv5qwh2l6803gb4";
   };
 

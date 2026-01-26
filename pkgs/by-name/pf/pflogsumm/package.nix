@@ -9,7 +9,7 @@ perlPackages.buildPerlPackage rec {
   version = "1.1.3";
 
   src = fetchurl {
-    url = "https://jimsun.linxnet.com/downloads/${pname}-${version}.tar.gz";
+    url = "https://jimsun.linxnet.com/downloads/pflogsumm-${version}.tar.gz";
     sha256 = "0hkim9s5f1yg5sfs5048jydhy3sbxafls496wcjk0cggxb113py4";
   };
 

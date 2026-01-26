@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "0.99";
   pname = "barcode";
   src = fetchurl {
-    url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
+    url = "mirror://gnu/barcode/barcode-${version}.tar.xz";
     sha256 = "1indapql5fjz0bysyc88cmc54y8phqrbi7c76p71fgjp45jcyzp8";
   };
   patches = [

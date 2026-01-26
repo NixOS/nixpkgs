@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "7.21.7";
 
   src = fetchzip {
-    url = "mirror://sourceforge/${pname}/${pname}/${version}/${pname}.zip";
+    url = "mirror://sourceforge/libpgf/libpgf/${version}/libpgf.zip";
     hash = "sha256-TAWIuikijfyeTRetZWoMMdB/FeGAR7ZjNssVxUevlVg=";
   };
 
