@@ -51,7 +51,7 @@
   deterministic-host-uname, # trick Makefile into targeting the host platform when cross-compiling
   doInstallCheck ? !stdenv.hostPlatform.isDarwin, # extremely slow on darwin
   tests,
-  rustSupport ? false,
+  rustSupport ? lib.meta.availableOn stdenv.hostPlatform rustc,
   cargo,
   rustc,
 }:
