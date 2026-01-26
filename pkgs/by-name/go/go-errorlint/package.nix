@@ -1,7 +1,7 @@
 {
   lib,
   buildGoModule,
-  fetchFromGitea,
+  fetchFromCodeberg,
   nix-update-script,
 }:
 
@@ -9,8 +9,7 @@ buildGoModule rec {
   pname = "go-errorlint";
   version = "1.9.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "polyfloyd";
     repo = "go-errorlint";
     rev = "v${version}";

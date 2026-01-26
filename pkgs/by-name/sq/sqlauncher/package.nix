@@ -1,6 +1,6 @@
 {
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   cmake,
   ninja,
   qt6,
@@ -11,8 +11,7 @@ stdenv.mkDerivation {
   pname = "sqlauncher";
   version = "0.0.0-unstable-2025-12-30";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "ItsZariep";
     repo = "SQLauncher";
     rev = "4a82d0f5d1394f3ff850297939b62357f7f3ce0f";

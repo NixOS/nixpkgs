@@ -1,7 +1,7 @@
 {
   lib,
   python3,
-  fetchFromGitea,
+  fetchFromCodeberg,
   gobject-introspection,
   libadwaita,
   modemmanager,
@@ -15,8 +15,7 @@ python3.pkgs.buildPythonApplication rec {
 
   pyproject = true;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "tpikonen";
     repo = "satellite";
     tag = version;

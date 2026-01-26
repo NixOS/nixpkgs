@@ -1,7 +1,7 @@
 {
   lib,
   python3Packages,
-  fetchFromGitea,
+  fetchFromCodeberg,
   ninja,
   meson,
   pkg-config,
@@ -21,8 +21,7 @@ python3Packages.buildPythonApplication {
   inherit version;
   pyproject = false;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "lo-vely";
     repo = "nucleus";
     tag = "v${version}";

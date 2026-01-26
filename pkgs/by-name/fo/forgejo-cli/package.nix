@@ -2,7 +2,7 @@
   lib,
   stdenv,
   rustPlatform,
-  fetchFromGitea,
+  fetchFromCodeberg,
   pkg-config,
   installShellFiles,
   writableTmpDirAsHomeHook,
@@ -15,8 +15,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "forgejo-cli";
   version = "0.4.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "forgejo-contrib";
     repo = "forgejo-cli";
     tag = "v${finalAttrs.version}";

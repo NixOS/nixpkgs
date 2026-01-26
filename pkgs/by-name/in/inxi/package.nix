@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   perl,
   perlPackages,
   makeWrapper,
@@ -65,8 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "inxi";
   version = "3.3.39-1";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "smxi";
     repo = "inxi";
     tag = finalAttrs.version;

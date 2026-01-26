@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   linux-pam,
   libxcb,
   makeBinaryWrapper,
@@ -15,8 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "ly";
   version = "1.3.1";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "fairyglade";
     repo = "ly";
     tag = "v${finalAttrs.version}";

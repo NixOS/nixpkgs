@@ -2,7 +2,7 @@
   lib,
   bash,
   buildGoModule,
-  fetchFromGitea,
+  fetchFromCodeberg,
   installShellFiles,
   perl,
 }:
@@ -11,8 +11,7 @@ buildGoModule rec {
   pname = "ssh-tools";
   version = "1.9";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "vaporup";
     repo = "ssh-tools";
     tag = "v${version}";

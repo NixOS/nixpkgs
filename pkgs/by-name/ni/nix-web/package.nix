@@ -2,7 +2,7 @@
   lib,
   stdenv,
   rustPlatform,
-  fetchFromGitea,
+  fetchFromCodeberg,
   pkg-config,
   openssl,
   nixVersions,
@@ -19,8 +19,7 @@ rustPlatform.buildRustPackage rec {
   pname = "nix-web";
   version = "0.4.2";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "gorgon";
     repo = "gorgon";
     rev = "nix-web-v${version}";

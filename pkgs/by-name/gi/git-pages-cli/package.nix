@@ -1,6 +1,6 @@
 {
   buildGoModule,
-  fetchFromGitea,
+  fetchFromCodeberg,
   lib,
   nix-update-script,
   versionCheckHook,
@@ -10,8 +10,7 @@ buildGoModule (finalAttrs: {
   pname = "git-pages-cli";
   version = "1.5.2";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "git-pages";
     repo = "git-pages-cli";
     rev = "v${finalAttrs.version}";

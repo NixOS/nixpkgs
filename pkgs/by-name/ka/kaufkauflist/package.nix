@@ -3,7 +3,7 @@
   buildPackages,
   fetchFromGitHub,
   buildNpmPackage,
-  fetchFromGitea,
+  fetchFromCodeberg,
   nix-update-script,
 }:
 
@@ -30,8 +30,7 @@ buildNpmPackage rec {
   pname = "kaufkauflist";
   version = "4.0.2";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "annaaurora";
     repo = "kaufkauflist";
     rev = "v${version}";

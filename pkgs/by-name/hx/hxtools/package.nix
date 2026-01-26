@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   pkg-config,
   autoreconfHook,
   bash,
@@ -15,8 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "hxtools";
   version = "20251011";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     tag = "rel-${finalAttrs.version}";
     owner = "jengelh";
     repo = "hxtools";

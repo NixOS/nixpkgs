@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   giflib,
   imlib2Full,
   libXft,
@@ -15,8 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "nsxiv";
   version = "33";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "nsxiv";
     repo = "nsxiv";
     rev = "v${finalAttrs.version}";

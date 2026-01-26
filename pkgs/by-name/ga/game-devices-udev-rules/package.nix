@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   bash,
   udevCheckHook,
 }:
@@ -10,8 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "game-devices-udev-rules";
   version = "0.25";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "fabiscafe";
     repo = "game-devices-udev";
     tag = finalAttrs.version;

@@ -1,7 +1,7 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitea,
+  fetchFromCodeberg,
   pkg-config,
   udevCheckHook,
   xz,
@@ -11,8 +11,7 @@ rustPlatform.buildRustPackage rec {
   pname = "rwedid";
   version = "0.3.2";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "ral";
     repo = "rwedid";
     rev = version;

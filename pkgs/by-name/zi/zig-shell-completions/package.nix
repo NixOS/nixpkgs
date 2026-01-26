@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   installShellFiles,
   unstableGitUpdater,
 }:
@@ -10,8 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "zig-shell-completions";
   version = "0-unstable-2025-11-25";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "ziglang";
     repo = "shell-completions";
     rev = "c2983a75dcbcaf3a1df74ab563a9bd3c8e7f448e";

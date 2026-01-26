@@ -1,5 +1,5 @@
 {
-  fetchFromGitea,
+  fetchFromCodeberg,
   lib,
   nix-update-script,
   rustPlatform,
@@ -10,8 +10,7 @@ rustPlatform.buildRustPackage rec {
   pname = "bibiman";
   version = "0.15.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "lukeflo";
     repo = "bibiman";
     tag = "v${version}";

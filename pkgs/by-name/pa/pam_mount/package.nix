@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   autoreconfHook,
   perl,
   pkg-config,
@@ -19,8 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "pam_mount";
   version = "2.22";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     tag = "v${finalAttrs.version}";
     owner = "jengelh";
     repo = "pam_mount";

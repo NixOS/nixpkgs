@@ -1,15 +1,14 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   ppp,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "rp-pppoe";
   version = "4.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "dskoll";
     repo = "rp-pppoe";
     tag = finalAttrs.version;

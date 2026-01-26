@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   desktop-file-utils,
   gettext,
   glib,
@@ -27,8 +27,7 @@ python3.pkgs.buildPythonApplication rec {
   version = "1.100.0";
   pyproject = false;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "valos";
     repo = "Komikku";
     tag = "v${version}";

@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   testers,
   cmake,
   libX11,
@@ -23,8 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "gummy";
   version = "0.6.1";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "fusco";
     repo = "gummy";
     rev = finalAttrs.version;

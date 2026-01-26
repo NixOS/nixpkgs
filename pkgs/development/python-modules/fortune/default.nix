@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitea,
+  fetchFromCodeberg,
   setuptools,
 }:
 let
@@ -12,8 +12,7 @@ buildPythonPackage {
   inherit version;
   pyproject = true;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "jamesansley";
     repo = "fortune";
     tag = "v${version}";

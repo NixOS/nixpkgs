@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   qt6,
   udev,
   pkg-config,
@@ -12,8 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.13.0-unstable-2025-10-18";
   baseVersion = lib.head (lib.splitString "-" finalAttrs.version);
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "LazyT";
     repo = "ubpm";
     rev = "748ce8504185ae96dbdbd1cff5352d1eef2c046d";

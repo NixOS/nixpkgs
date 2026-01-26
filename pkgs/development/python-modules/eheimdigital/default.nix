@@ -1,7 +1,7 @@
 {
   aiohttp,
   buildPythonPackage,
-  fetchFromGitea,
+  fetchFromCodeberg,
   hatchling,
   lib,
   yarl,
@@ -12,8 +12,7 @@ buildPythonPackage rec {
   version = "1.5.0";
   pyproject = true;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "autinerd";
     repo = "eheimdigital";
     tag = version;

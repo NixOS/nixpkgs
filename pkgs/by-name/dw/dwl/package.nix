@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   installShellFiles,
   libX11,
   libinput,
@@ -41,8 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "dwl";
   version = "0.7";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "dwl";
     repo = "dwl";
     rev = "v${finalAttrs.version}";

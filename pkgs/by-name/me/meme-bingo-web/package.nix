@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   rustPlatform,
   makeWrapper,
   nix-update-script,
@@ -10,8 +10,7 @@ rustPlatform.buildRustPackage rec {
   pname = "meme-bingo-web";
   version = "1.2.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "annaaurora";
     repo = "meme-bingo-web";
     rev = "v${version}";
