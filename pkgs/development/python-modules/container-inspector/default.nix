@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "container-inspector";
-  version = "33.0.1";
+  version = "33.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nexB";
     repo = "container-inspector";
     tag = "v${version}";
-    hash = "sha256-bXJ4UIDVhiU0DurEeRiyLlSUrNRgwoMqAxXxGb/CcJs=";
+    hash = "sha256-uwfqPh4e5zNO0K5rKZ2pxgOkX/KF9pzCsKdYbQuw9MA=";
   };
 
   dontConfigure = true;
