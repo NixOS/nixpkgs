@@ -213,7 +213,15 @@ fn remap_multilib_path(root: &Path, p: &Path) -> Option<PathBuf> {
         return Some(PathBuf::from("usr/").join(libdir).join(no_lib));
     }
 
-    if p.starts_with("etc/") || p.starts_with("opt/") {
+    if p.starts_with("etc/") {
+        return Some(p.into());
+    }
+
+    if p.starts_with("usr/")  || p.starts_with("opt/") {
+        // Useful when proprietary code has a hardcoded path dependency.
+        // They are often put in places like
+        // /opt/FOO  /usr/local/ /usr/FOO etc
+        // Should really make these paths configurable through ATTRS file.
         return Some(p.into());
     }
 
