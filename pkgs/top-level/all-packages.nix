@@ -5381,45 +5381,26 @@ with pkgs;
   phpExtensions = recurseIntoAttrs php.extensions;
   phpPackages = recurseIntoAttrs php.packages;
 
-  # Import PHP85 interpreter, extensions and packages
-  php85 = callPackage ../development/interpreters/php/8.5.nix {
-    stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
-    pcre2 = pcre2.override {
-      withJitSealloc = false; # See https://bugs.php.net/bug.php?id=78927 and https://bugs.php.net/bug.php?id=78630
-    };
-  };
-  php85Extensions = recurseIntoAttrs php85.extensions;
-  php85Packages = recurseIntoAttrs php85.packages;
+  # Import PHP interpreters
+  inherit (callPackage ./../development/interpreters/php { })
+    php82
+    php83
+    php84
+    php85
+    ;
 
-  # Import PHP84 interpreter, extensions and packages
-  php84 = callPackage ../development/interpreters/php/8.4.nix {
-    stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
-    pcre2 = pcre2.override {
-      withJitSealloc = false; # See https://bugs.php.net/bug.php?id=78927 and https://bugs.php.net/bug.php?id=78630
-    };
-  };
-  php84Extensions = recurseIntoAttrs php84.extensions;
-  php84Packages = recurseIntoAttrs php84.packages;
+  # PHP Extensions and Packages
+  php82Extensions = recurseIntoAttrs php82.extensions;
+  php82Packages = recurseIntoAttrs php82.packages;
 
-  # Import PHP83 interpreter, extensions and packages
-  php83 = callPackage ../development/interpreters/php/8.3.nix {
-    stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
-    pcre2 = pcre2.override {
-      withJitSealloc = false; # See https://bugs.php.net/bug.php?id=78927 and https://bugs.php.net/bug.php?id=78630
-    };
-  };
   php83Extensions = recurseIntoAttrs php83.extensions;
   php83Packages = recurseIntoAttrs php83.packages;
 
-  # Import PHP82 interpreter, extensions and packages
-  php82 = callPackage ../development/interpreters/php/8.2.nix {
-    stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
-    pcre2 = pcre2.override {
-      withJitSealloc = false; # See https://bugs.php.net/bug.php?id=78927 and https://bugs.php.net/bug.php?id=78630
-    };
-  };
-  php82Extensions = recurseIntoAttrs php82.extensions;
-  php82Packages = recurseIntoAttrs php82.packages;
+  php84Extensions = recurseIntoAttrs php84.extensions;
+  php84Packages = recurseIntoAttrs php84.packages;
+
+  php85Extensions = recurseIntoAttrs php85.extensions;
+  php85Packages = recurseIntoAttrs php85.packages;
 
   polyml = callPackage ../development/compilers/polyml { };
   polyml56 = callPackage ../development/compilers/polyml/5.6.nix { };
