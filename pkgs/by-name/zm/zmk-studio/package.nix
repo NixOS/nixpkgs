@@ -83,7 +83,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    makeWrapper "$out/Application/ZMK Studio.app/Contents/MacOS/zmk-studio" "$out/bin/zmk-studio"
+    makeWrapper "$out/Applications/ZMK Studio.app/Contents/MacOS/zmk-studio" "$out/bin/zmk-studio"
   '';
 
   meta = {
