@@ -7,7 +7,7 @@
   djangorestframework,
   pytestCheckHook,
   pytest-django,
-  pytest-lazy-fixture,
+  pytest-lazy-fixtures,
   pytz,
 }:
 
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     djangorestframework
     pytestCheckHook
     pytest-django
-    pytest-lazy-fixture
+    pytest-lazy-fixtures
     pytz
   ];
 
