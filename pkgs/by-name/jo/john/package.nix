@@ -96,6 +96,7 @@ stdenv.mkDerivation {
       dpkt
       scapy
       lxml
+      pyasn1
     ])
     ++ (with perlPackages; [
       # For pass_gen.pl
