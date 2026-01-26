@@ -24,14 +24,14 @@
 }:
 buildDunePackage rec {
   pname = "ocamlformat-mlx-lib";
-  version = "0.28.1.1";
+  version = "0.28.1.2";
   minimalOcamlVersion = "4.08";
 
   src = fetchFromGitHub {
     owner = "ocaml-mlx";
     repo = "ocamlformat-mlx";
     tag = version;
-    hash = "sha256-WmY8H8Ved7/f8gTnOxoogokC0Up4BOBdM0Q6mQmZGvc=";
+    hash = "sha256-IxX8FD7v9evHFTCnTJBtnUMUUTWI34zIifpciuJCuhs=";
   };
 
   propagatedBuildInputs = [
