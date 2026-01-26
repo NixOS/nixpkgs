@@ -3,7 +3,7 @@
   buildPythonPackage,
   django,
   fetchFromGitHub,
-  hatchling,
+  uv-build,
   oracledb,
   pytest-mypy-plugins,
   pytest-xdist,
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     ln -s ../scripts
   '';
 
-  build-system = [ hatchling ];
+  build-system = [ uv-build ];
 
   dependencies = [
     django
