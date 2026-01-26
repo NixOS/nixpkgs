@@ -2,7 +2,9 @@
   stdenv,
   lib,
   virtualglLib,
-  virtualglLib_i686 ? null,
+  pkgsi686Linux,
+  virtualglLib_i686 ?
+    if stdenv.hostPlatform.system == "x86_64-linux" then pkgsi686Linux.virtualglLib else null,
   makeWrapper,
   vulkan-loader,
   addDriverRunpath,

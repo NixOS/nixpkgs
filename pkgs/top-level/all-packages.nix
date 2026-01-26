@@ -11705,15 +11705,6 @@ with pkgs;
     }
   );
 
-  virtualglLib = callPackage ../tools/X11/virtualgl/lib.nix {
-    fltk = fltk_1_3;
-  };
-
-  virtualgl = callPackage ../tools/X11/virtualgl {
-    virtualglLib_i686 =
-      if stdenv.hostPlatform.system == "x86_64-linux" then pkgsi686Linux.virtualglLib else null;
-  };
-
   vlc-bin-universal = vlc-bin.override { variant = "universal"; };
 
   libvlc = vlc.override {
