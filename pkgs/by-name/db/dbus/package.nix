@@ -106,9 +106,12 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dsystemd_user_unitdir=${placeholder "out"}/etc/systemd/user"
     (lib.mesonEnable "x11_autolaunch" x11Support)
     (lib.mesonEnable "apparmor" stdenv.hostPlatform.isLinux)
+    (lib.mesonEnable "epoll" stdenv.hostPlatform.isLinux)
+    (lib.mesonEnable "inotify" stdenv.hostPlatform.isLinux)
     (lib.mesonEnable "libaudit" stdenv.hostPlatform.isLinux)
     (lib.mesonEnable "kqueue" (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isBSD))
     (lib.mesonEnable "launchd" stdenv.hostPlatform.isDarwin)
+    (lib.mesonEnable "systemd" enableSystemd)
     "-Dselinux=disabled"
   ]
   ++ lib.optionals enableSystemd [
