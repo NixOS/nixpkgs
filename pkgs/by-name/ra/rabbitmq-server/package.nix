@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # when updating, consider bumping elixir version in all-packages.nix
   src = fetchurl {
-    url = "https://github.com/rabbitmq/rabbitmq-server/releases/download/v${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
+    url = "https://github.com/rabbitmq/rabbitmq-server/releases/download/v${finalAttrs.version}/rabbitmq-server-${finalAttrs.version}.tar.xz";
     hash = "sha256-R1PtbkZs0aaJYUN8vZnJHG9Z+2SPOIRiaFOTz703LcA=";
   };
 

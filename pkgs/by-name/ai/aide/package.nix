@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     # We specifically want the tar.gz, so fetchFromGitHub is not suitable here
-    url = "https://github.com/aide/aide/releases/download/v${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    url = "https://github.com/aide/aide/releases/download/v${finalAttrs.version}/aide-${finalAttrs.version}.tar.gz";
     hash = "sha256-I3YrBfRhEe3rPIoFAWyHMcAb24wfkb5IwVbDGrhedMQ=";
   };
 

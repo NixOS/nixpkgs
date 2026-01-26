@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.1";
 
   src = fetchurl {
-    url = "mirror://gnu/${finalAttrs.pname}/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    url = "mirror://gnu/c-intro-and-ref/c-intro-and-ref-${finalAttrs.version}.tar.gz";
     hash = "sha256-45mtnlyz2RuYUk4Jza+lZGGBxezpiRS/v70xx1iKxEQ=";
   };
 
