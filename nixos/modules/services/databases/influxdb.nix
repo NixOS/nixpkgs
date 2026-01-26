@@ -188,7 +188,7 @@ in
         '';
     };
 
-    users.users = lib.optionalAttrs (cfg.user == "influxdb") {
+    users.users = lib.mkIf (cfg.user == "influxdb") {
       influxdb = {
         uid = config.ids.uids.influxdb;
         group = "influxdb";
@@ -196,7 +196,7 @@ in
       };
     };
 
-    users.groups = lib.optionalAttrs (cfg.group == "influxdb") {
+    users.groups = lib.mkIf (cfg.group == "influxdb") {
       influxdb.gid = config.ids.gids.influxdb;
     };
   };
