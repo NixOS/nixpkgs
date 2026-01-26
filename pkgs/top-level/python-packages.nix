@@ -9122,6 +9122,8 @@ self: super: with self; {
 
   logster = callPackage ../development/python-modules/logster { };
 
+  logurich = callPackage ../development/python-modules/logurich { };
+
   loguru = callPackage ../development/python-modules/loguru { };
 
   loguru-logging-intercept = callPackage ../development/python-modules/loguru-logging-intercept { };
