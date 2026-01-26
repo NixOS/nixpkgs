@@ -14,7 +14,7 @@
 
 buildPythonPackage {
   pname = "python-etcd";
-  version = "0.5.0-unstable-2023-10-31";
+  version = "0.4.5";
   pyproject = true;
 
   src = fetchFromGitHub {
