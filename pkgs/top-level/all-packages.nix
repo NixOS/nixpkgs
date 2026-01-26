@@ -1892,9 +1892,7 @@ with pkgs;
           throw "mesonEmulatorHook may only be added to nativeBuildInputs when the target binaries can't be executed; however you are attempting to use it in a situation where ${stdenv.hostPlatform.config} can execute ${stdenv.targetPlatform.config}. Consider only adding mesonEmulatorHook according to a conditional based canExecute in your package expression."
       );
 
-  mkspiffs = callPackage ../tools/filesystems/mkspiffs { };
-
-  mkspiffs-presets = recurseIntoAttrs (callPackages ../tools/filesystems/mkspiffs/presets.nix { });
+  mkspiffs-presets = recurseIntoAttrs (callPackages ../by-name/mk/mkspiffs/presets.nix { });
 
   mobilizon = callPackage ../servers/mobilizon {
     beamPackages = beam.packages.erlang_27.extend (self: super: { elixir = self.elixir_1_18; });
