@@ -5,6 +5,7 @@
   fetchFromGitHub,
   glib,
   gtk3,
+  gtk-layer-shell,
   libgee,
   libgtop,
   libpeas2,
@@ -43,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     budgie-desktop
     glib
     gtk3
+    gtk-layer-shell
     libgee
     libgtop
     libpeas2
@@ -53,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/prateekmedia/budgie-systemmonitor-applet/issues/4
     substituteInPlace meson.build \
       --replace-fail "dependency('libpeas-1.0', version: '>= 1.8.0')" "dependency('libpeas-2')" \
-      --replace-fail "dependency('budgie-1.0', version: '>= 2')" "dependency('budgie-2.0')"
+      --replace-fail "dependency('budgie-1.0', version: '>= 2')" "dependency('budgie-3.0')"
   '';
 
   passthru = {
