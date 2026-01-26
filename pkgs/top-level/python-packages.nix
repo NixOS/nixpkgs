@@ -9535,6 +9535,8 @@ self: super: with self; {
 
   meld3 = callPackage ../development/python-modules/meld3 { };
 
+  mellea = callPackage ../development/python-modules/mellea { };
+
   melnor-bluetooth = callPackage ../development/python-modules/melnor-bluetooth { };
 
   memestra = callPackage ../development/python-modules/memestra { };
