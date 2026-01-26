@@ -1,0 +1,53 @@
+diff --git a/package.json b/package.json
+index 80ff4d3..4c54077 100644
+--- a/package.json
++++ b/package.json
+@@ -159,6 +159,7 @@
+     "vite-plugin-svgr": "^4.3.0"
+   },
+   "resolutions": {
++    "node-abi": "3.87.0",
+     "ts-morph": "17.0.1"
+   }
+ }
+diff --git a/pnpm-lock.yaml b/pnpm-lock.yaml
+index a9e85b9..11d677c 100644
+--- a/pnpm-lock.yaml
++++ b/pnpm-lock.yaml
+@@ -6,6 +6,7 @@ settings:
+ 
+ overrides:
+   ts-morph: 17.0.1
++  node-abi: 3.87.0
+ 
+ patchedDependencies:
+   '@types/node@22.15.18':
+@@ -4469,8 +4471,8 @@ packages:
+   no-case@3.0.4:
+     resolution: {integrity: sha512-fgAN3jGAh+RoxUGZHTSOLJIqUc2wmoBwGR4tbpNAKmmovFoWq0OdRkb0VkldReO2a2iBT/OEulG9XSUc10r3zg==}
+ 
+-  node-abi@3.75.0:
+-    resolution: {integrity: sha512-OhYaY5sDsIka7H7AtijtI9jwGYLyl29eQn/W623DiN/MIv5sUqc4g7BIDThX+gb7di9f6xK02nkp8sdfFWZLTg==}
++  node-abi@3.87.0:
++    resolution: {integrity: sha512-+CGM1L1CgmtheLcBuleyYOn7NWPVu0s0EJH2C4puxgEZb9h8QpR9G2dBfZJOAUhi7VQxuBPMd0hiISWcTyiYyQ==}
+     engines: {node: '>=10'}
+ 
+   node-addon-api@1.7.2:
+@@ -6376,7 +6380,7 @@ snapshots:
+       detect-libc: 2.0.4
+       fs-extra: 10.1.0
+       got: 11.8.6
+-      node-abi: 3.75.0
++      node-abi: 3.87.0
+       node-api-version: 0.2.1
+       ora: 5.4.1
+       read-binary-file-arch: 1.0.6
+@@ -11110,7 +11114,7 @@ snapshots:
+       lower-case: 2.0.2
+       tslib: 2.8.1
+ 
+-  node-abi@3.75.0:
++  node-abi@3.87.0:
+     dependencies:
+       semver: 7.7.2
+ 

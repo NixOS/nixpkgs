@@ -10,8 +10,9 @@
   nodejs,
   python3,
   makeWrapper,
-  # Electron updates frequently break Heroic, so pin same version as upstream, or newest non-EOL.
-  electron_37,
+  # Electron updates can break Heroic, so try to use same version as upstream.
+  # If the used electron version is higher than upstream's then the node-abi package might need to be updated
+  electron_39,
   vulkan-helper,
   gogdl,
   nile,
@@ -20,10 +21,12 @@
 }:
 
 let
+  pnpm = pnpm_10;
+  electron = electron_39;
+
   legendary = callPackage ./legendary.nix { };
   epic-integration = callPackage ./epic-integration.nix { };
   comet-gog = comet-gog_heroic;
-  electron = electron_37;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "heroic-unwrapped";
@@ -37,16 +40,21 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   pnpmDeps = fetchPnpmDeps {
-    inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10;
-    fetcherVersion = 1;
-    hash = "sha256-F8H0eYltIJ0S8AX+2S3cR+v8dvePw09VWToVOLM8qII=";
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      patches
+      ;
+    inherit pnpm;
+    fetcherVersion = 3;
+    hash = "sha256-+NNX4Mq0LY2vFI6GOYccWSX4TI+tJR+WokT0dAjbgm4=";
   };
 
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
-    pnpm_10
+    pnpm
     python3
     makeWrapper
   ];
@@ -56,6 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
     ./fix-non-steam-shortcuts.patch
     # Fixes incorrect path to GalaxyCommunication.exe
     ./pr-4885.patch
+    # Add support for compiling with electron_39 headers
+    ./bump-node-abi.patch
   ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
