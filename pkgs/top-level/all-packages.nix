@@ -1978,18 +1978,6 @@ with pkgs;
 
   apc-temp-fetch = with python3.pkgs; callPackage ../tools/networking/apc-temp-fetch { };
 
-  asciidoc = callPackage ../tools/typesetting/asciidoc {
-    inherit (python3.pkgs)
-      pygments
-      matplotlib
-      numpy
-      aafigure
-      recursive-pth-loader
-      ;
-    w3m = w3m-batch;
-    enableStandardFeatures = false;
-  };
-
   asciidoc-full = asciidoc.override {
     enableStandardFeatures = true;
   };
