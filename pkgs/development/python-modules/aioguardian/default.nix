@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "aioguardian";
-  version = "2025.02.0";
+  version = "2026.01.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = "aioguardian";
     tag = version;
-    hash = "sha256-RoVD2O/OAk4l96kYEq7ZM/2QuckcPxDluf1MT4HdKc4=";
+    hash = "sha256-p0rSN00CxTJsoo5iD3jsnTPUIl3G/fDc6tMjj0H0MuE=";
   };
 
   postPatch = ''
