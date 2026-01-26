@@ -99,15 +99,17 @@ python3Packages.buildPythonApplication rec {
   ];
 
   postInstall = ''
-    wrapProgram "$out/bin/CodeChecker" --prefix PATH : ${
-      lib.makeBinPath (
-        [ ]
-        ++ lib.optional withClang clang
-        ++ lib.optional withClangTools clang-tools
-        ++ lib.optional withCppcheck cppcheck
-        ++ lib.optional withGcc gcc
-      )
-    }
+    wrapProgram "$out/bin/CodeChecker" \
+      --prefix PATH : ${
+        lib.makeBinPath (
+          [ ]
+          ++ lib.optional withClang clang
+          ++ lib.optional withClangTools clang-tools
+          ++ lib.optional withCppcheck cppcheck
+          ++ lib.optional withGcc gcc
+        )
+      } \
+      ${lib.optionalString withClangTools "--set CC_ANALYZER_BIN clang-tidy:${lib.getExe' clang-tools "clang-tidy"}"}
   '';
 
   meta = {
