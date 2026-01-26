@@ -28,7 +28,10 @@ buildGoModule (finalAttrs: {
     description = "Command line interface to LiveKit";
     homepage = "https://livekit.io/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ mgdelacroix ];
+    maintainers = with lib.maintainers; [
+      mgdelacroix
+      faukah
+    ];
     mainProgram = "lk";
   };
 })
