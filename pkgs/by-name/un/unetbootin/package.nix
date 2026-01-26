@@ -5,10 +5,7 @@
   fetchFromGitHub,
   mtools,
   p7zip,
-  wrapQtAppsHook,
-  qtbase,
-  qttools,
-  qmake,
+  qt5,
   syslinux,
   util-linux,
   which,
@@ -30,12 +27,12 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    qtbase
-    qttools
-    qmake
+    qt5.qtbase
+    qt5.qttools
+    qt5.qmake
   ];
 
-  nativeBuildInputs = [ wrapQtAppsHook ];
+  nativeBuildInputs = [ qt5.wrapQtAppsHook ];
 
   # Lots of nice hard-coded paths...
   postPatch = ''
