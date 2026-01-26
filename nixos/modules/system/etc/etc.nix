@@ -312,7 +312,9 @@ in
                   ${
                     if config.system.etc.overlay.mutable then
                       ''
-                        if [[ -f "$mountPoint" ]]; then
+                        if [[ -L "$mountPoint" ]]; then
+                          ln -s . "$tmpMountPoint"
+                        elif [[ -f "$mountPoint" ]]; then
                           touch "$tmpMountPoint"
                         elif [[ -d "$mountPoint" ]]; then
                           mkdir -p "$tmpMountPoint"
@@ -326,7 +328,7 @@ in
                         fi
                       ''
                   }
-                mount --bind "$mountPoint" "$tmpMountPoint"
+                mount --bind -o X-mount.nocanonicalize "$mountPoint" "$tmpMountPoint"
               done
 
               # Move the new temporary /etc mount underneath the current /etc mount.
