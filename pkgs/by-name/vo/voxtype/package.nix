@@ -9,6 +9,7 @@
   alsa-lib,
   libclang,
   makeWrapper,
+  dotool,
   wtype,
   wl-clipboard,
   ydotool,
@@ -16,16 +17,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "voxtype";
-  version = "0.4.9";
+  version = "0.4.16";
 
   src = fetchFromGitHub {
     owner = "peteonrails";
     repo = "voxtype";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DSxn41dNlxyNot7btnx2yErp0Ehj3zUZ9F1e+mhZvM0=";
+    hash = "sha256-4sIiZi/VDMamGMRZZSrMcOwTk8mOvKkwQGtRYUhKfLE=";
   };
 
-  cargoHash = "sha256-/KShjpQe3d5lbE9UzkGIFmf31Xb3vdxiFKRS8wtWf1M=";
+  cargoHash = "sha256-M7XTk/f20m3OHzns3Pnk/I7wWH6GUUCzgVLHvH9xznw=";
 
   nativeBuildInputs = [
     pkg-config
@@ -48,6 +49,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wrapProgram $out/bin/voxtype \
       --prefix PATH : ${
         lib.makeBinPath [
+          dotool
           wtype
           wl-clipboard
           ydotool
