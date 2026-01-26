@@ -49,6 +49,8 @@ buildPythonPackage rec {
   disabledTests = [
     # https://github.com/astropy/extension-helpers/issues/43
     "test_write_if_different"
+    # ValueError: Unrecognized abi version for limited API: invalid
+    "test_limited_api_invalid_abi"
   ];
 
   meta = {
