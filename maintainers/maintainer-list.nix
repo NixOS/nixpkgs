@@ -10661,6 +10661,12 @@
     githubId = 130903;
     name = "Ana Hobden";
   };
+  howtonotwin = {
+    email = "rasheeqhere@gmail.com";
+    github = "howtonotwin";
+    githubId = 15616055;
+    name = "Rasheeq Azad";
+  };
   hpfr = {
     email = "liam@hpfr.net";
     github = "hpfr";
