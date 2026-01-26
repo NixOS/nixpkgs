@@ -7561,14 +7561,13 @@ final: prev: {
 
   leap-nvim = buildVimPlugin {
     pname = "leap.nvim";
-    version = "0-unstable-2025-12-08";
-    src = fetchFromGitHub {
-      owner = "ggandor";
-      repo = "leap.nvim";
-      rev = "f19d43590c4b6d31188ee1ea2954d2b7558a9e11";
-      hash = "sha256-u8G8aGqZ5ovUCV+yaaj+zy6emz9h59lVBhzsxEFcPhg=";
+    version = "0-unstable-2026-01-25";
+    src = fetchgit {
+      url = "https://codeberg.org/andyg/leap.nvim/";
+      rev = "572fbcfd2cca5f7b3e56b1ac1d720861f2a4db78";
+      hash = "sha256-k9Uj6VOGc+LWyec6yk7tiCg+gVHjBMifxg/G3nxzT6g=";
     };
-    meta.homepage = "https://github.com/ggandor/leap.nvim/";
+    meta.homepage = "https://codeberg.org/andyg/leap.nvim/";
     meta.hydraPlatforms = [ ];
   };
 
