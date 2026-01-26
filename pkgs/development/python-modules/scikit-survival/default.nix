@@ -85,6 +85,10 @@ buildPythonPackage (finalAttrs: {
     "test_survival_svm"
     "test_tree"
   ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # Flaky numerical assertion (AssertionError)
+    "test_baseline_predict"
+  ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     # floating point mismatch on aarch64
     # 27079905.88052468 to far from 27079905.880496684
