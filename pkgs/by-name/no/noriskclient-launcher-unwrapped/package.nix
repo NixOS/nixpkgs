@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "NoRiskClient";
     repo = "noriskclient-launcher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-N61/O2cCMIwqkNEwBO3QtHveNiZKXbwehybXFRrTsA0=";
+    hash = "sha256-SihBoCh8QRU0UkgMyjm9fmiq+9GuUAhpvHC6UOjSkxA=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
