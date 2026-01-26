@@ -10,14 +10,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "coqui-tts";
-  version = "0.26.2";
+  version = "0.27.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "idiap";
     repo = "coqui-ai-TTS";
     tag = "v${version}";
-    hash = "sha256-U/U3aXFvqnaV/Msy5wyzAKCUw9XUNplugig6nv5nfZY=";
+    hash = "sha256-CPge6RJOM1CyW4bjjmNiCjOmxktcvcBgM9EDdjQTk7A=";
   };
 
   postPatch =
