@@ -6,21 +6,26 @@
   which,
   pkg-config,
   libjpeg,
-  ocamlPackages,
+  ocaml-ng,
+  ocamlPackages' ? ocaml-ng.ocamlPackages_4_14,
   awscli2,
   bubblewrap,
   curl,
   dune,
-  ffmpeg,
+  ffmpeg_6-full,
+  ffmpeg' ? ffmpeg_6-full,
   yt-dlp,
   runtimePackages ? [
     awscli2
     bubblewrap
     curl
-    ffmpeg
+    ffmpeg'
     yt-dlp
   ],
 }:
+let
+  ocamlPackages = ocamlPackages';
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "liquidsoap";
   version = "2.4.2";
