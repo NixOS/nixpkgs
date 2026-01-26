@@ -8,12 +8,14 @@
   meson,
   ninja,
   pkg-config,
-  wine,
+  wineWowPackages,
   libxcb,
   nix-update-script,
 }:
 
 let
+  wine = wineWowPackages.yabridge;
+
   # Derived from subprojects/asio.wrap
   asio = fetchFromGitHub {
     owner = "chriskohlhoff";

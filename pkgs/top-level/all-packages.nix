@@ -1067,14 +1067,6 @@ with pkgs;
 
   winbox = winbox3;
 
-  yabridge = callPackage ../tools/audio/yabridge {
-    wine = wineWowPackages.yabridge;
-  };
-
-  yabridgectl = callPackage ../tools/audio/yabridgectl {
-    wine = wineWowPackages.yabridge;
-  };
-
   ### APPLICATIONS/VERSION-MANAGEMENT
 
   # The full-featured Git.
