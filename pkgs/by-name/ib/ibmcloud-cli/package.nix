@@ -1,11 +1,12 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchurl,
   installShellFiles,
   writableTmpDirAsHomeHook,
 }:
 let
+  stdenv = stdenvNoCC;
   arch =
     with stdenv.hostPlatform;
     if isx86_64 then

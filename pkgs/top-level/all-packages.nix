@@ -12022,8 +12022,6 @@ with pkgs;
 
   freeciv_gtk = freeciv;
 
-  ibmcloud-cli = callPackage ../tools/admin/ibmcloud-cli { stdenv = stdenvNoCC; };
-
   # used as base package for iortcw forks
   iortcw_sp = callPackage ../by-name/io/iortcw/sp.nix { };
 
