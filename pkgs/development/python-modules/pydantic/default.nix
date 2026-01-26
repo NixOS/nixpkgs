@@ -1,9 +1,28 @@
 {
+  stdenv,
   lib,
   python,
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
+
+  # documentation
+  autoflake,
+  beautifulsoup4,
+  build,
+  mike,
+  mkdocs,
+  mkdocs-exclude,
+  mkdocs-material,
+  mkdocs-redirects,
+  mkdocstrings,
+  mkdocstrings-python,
+  pydantic-extra-types,
+  pydantic-settings,
+  pyupgrade,
+  ruff,
+  tomli,
+  pydantic,
 
   # build-system
   hatchling,
@@ -83,6 +102,71 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "pydantic" ];
+
+  passthru = {
+    # Can't build the documentation as output of the main derivation, since
+    # "mkdocstrings-python" indirectly depends on pydantic, causing infinite
+    # recursion.
+    #
+    # Adjust "name" output derivation to replicate look-and-feel of "doc" output,
+    # though.
+    doc = stdenv.mkDerivation {
+      inherit (pydantic) src version;
+      name = "${pydantic.name}-doc";
+
+      nativeBuildInputs = [
+        autoflake
+        beautifulsoup4
+        build
+        mike
+        mkdocs
+        mkdocs-exclude
+        mkdocs-material
+        mkdocs-material.optional-dependencies.imaging
+        mkdocs-redirects
+        mkdocstrings
+        mkdocstrings-python
+        pydantic
+        pydantic-core
+        pydantic-extra-types
+        pydantic-settings
+        python
+        pyupgrade
+        ruff
+        tomli
+      ];
+
+      #  * Patch-out LLM plugin for mkdocs which is not packaged in nixpkgs.
+      #  * Patch-out social plugin that tries to download fonts from goodle.
+      #  * Patch upstream build system to get "pydantic-settings" documentation
+      #    from the source of another package, and not from github.
+      postPatch = ''
+        awk '/^-/         { skip = 0 }
+             /^- social/  { skip = 1 }
+             /^- llmstxt/ { skip = 1 }
+                          { if (!skip) print; }
+        ' mkdocs.yml > mkdocs.yml~
+        mv mkdocs.yml~ mkdocs.yml
+        cat << EOF >> docs/plugins/main.py
+        def render_pydantic_settings(markdown: str, page: Page) -> str | None:
+            if page.file.src_uri != 'concepts/pydantic_settings.md':
+                return None
+            with open("${pydantic-settings.src}/docs/index.md") as fp:
+                return re.sub(r'{{ *pydantic_settings *}}', fp.read(), markdown)
+        EOF
+      '';
+
+      buildPhase = ''
+        mkdocs build --no-strict
+      '';
+
+      # Follow the "sphinxHook" conventions.
+      installPhase = ''
+        mkdir -p $out/share/doc
+        cp -r ./site $out/share/doc/${pydantic.name}
+      '';
+    };
+  };
 
   meta = {
     description = "Data validation and settings management using Python type hinting";
