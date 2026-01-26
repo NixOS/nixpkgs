@@ -1,7 +1,7 @@
 {
   lib,
   fetchurl,
-  stdenv,
+  mkFont,
 }:
 
 let
@@ -22,16 +22,11 @@ let
   ];
 
 in
-stdenv.mkDerivation {
+mkFont {
   inherit pname version;
   srcs = fonts;
-  sourceRoot = ".";
 
-  dontUnpack = true;
-
-  installPhase = ''
-    install -D $srcs -t $out/share/fonts/truetype/
-  '';
+  noUnpackFonts = true;
 
   meta = {
     description = "TrueType monospaced typeface designed for X environments";
