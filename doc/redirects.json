@@ -2933,25 +2933,32 @@
   "sec-chicken-override-scope": [
     "index.html#sec-chicken-override-scope"
   ],
-  "sec-language-coq": [
+  "sec-language-rocq": [
+    "index.html#sec-language-rocq",
     "index.html#sec-language-coq"
   ],
-  "coq-derivation-coq": [
+  "rocq-derivation-rocq": [
+    "index.html#rocq-derivation-rocq",
     "index.html#coq-derivation-coq"
   ],
-  "coq-packages-attribute-sets-coqpackages": [
+  "rocq-packages-attribute-sets-rocqpackages": [
+    "index.html#rocq-packages-attribute-sets-rocqpackages",
     "index.html#coq-packages-attribute-sets-coqpackages"
   ],
-  "coq-overriding-packages": [
+  "rocq-overriding-packages": [
+    "index.html#rocq-overriding-packages",
     "index.html#coq-overriding-packages"
   ],
-  "coq-override": [
+  "rocq-override": [
+    "index.html#rocq-override",
     "index.html#coq-override"
   ],
-  "coq-overrideCoqDerivation": [
+  "rocq-overrideRocqDerivation": [
+    "index.html#rocq-overrideRocqDerivation",
     "index.html#coq-overrideCoqDerivation"
   ],
-  "coq-overrideAttrs": [
+  "rocq-overrideAttrs": [
+    "index.html#rocq-overrideAttrs",
     "index.html#coq-overrideAttrs"
   ],
   "crystal": [
