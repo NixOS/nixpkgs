@@ -13,7 +13,7 @@
 
 buildPythonPackage {
   pname = "opuslib";
-  version = "3.0.3";
+  version = "3.0.1";
   pyproject = true;
 
   disabled = isPy27;
