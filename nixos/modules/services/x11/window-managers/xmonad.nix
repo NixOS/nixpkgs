@@ -53,7 +53,7 @@ let
           --set XMONAD_GHC "${xmonadEnv}/bin/ghc" \
         ''
         + ''
-          --set XMONAD_XMESSAGE "${pkgs.xorg.xmessage}/bin/xmessage"
+          --set XMONAD_XMESSAGE "${pkgs.xmessage}/bin/xmessage"
         ''
       );
 

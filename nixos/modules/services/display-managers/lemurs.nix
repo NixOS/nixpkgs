@@ -90,8 +90,8 @@ in
             system_shell = lib.mkDefault "${pkgs.bash}/bin/bash";
             initial_path = lib.mkDefault "/run/current-system/sw/bin";
             x11 = {
-              xauth_path = lib.mkDefault "${pkgs.xorg.xauth}/bin/xauth";
-              xserver_path = lib.mkDefault "${pkgs.xorg.xorgserver}/bin/X";
+              xauth_path = lib.mkDefault "${pkgs.xauth}/bin/xauth";
+              xserver_path = lib.mkDefault "${pkgs.xorg-server}/bin/X";
               xsessions_path = lib.mkDefault "${desktops}/share/xsessions";
               xsetup_path = lib.mkDefault config.services.displayManager.sessionData.wrapper;
             };
