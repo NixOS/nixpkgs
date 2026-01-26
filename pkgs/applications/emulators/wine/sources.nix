@@ -97,9 +97,9 @@ in
 rec {
 
   stable = fetchurl rec {
-    version = "10.0";
-    url = "https://dl.winehq.org/wine/source/10.0/wine-${version}.tar.xz";
-    hash = "sha256-xeCz9ffvr7MOnNTZxiS4XFgxcdM1SdkzzTQC80GsNgE=";
+    version = "11.0";
+    url = "https://dl.winehq.org/wine/source/11.0/wine-${version}.tar.xz";
+    hash = "sha256-wHpoV5M8H8YN/1RI1585ySSBwenbWqYo250DWERuBwE=";
 
     ## see http://wiki.winehq.org/Gecko
     gecko32 = fetchurl rec {
@@ -123,9 +123,7 @@ rec {
     patches = [
       # Also look for root certificates at $NIX_SSL_CERT_FILE
       ./cert-path.patch
-    ]
-    ++ patches-binutils-2_44-fix-wine-older-than-10_2
-    ++ patches-add-truncf-to-the-import-library;
+    ];
 
     updateScript = writeShellScript "update-wine-stable" ''
       ${updateScriptPreamble}
