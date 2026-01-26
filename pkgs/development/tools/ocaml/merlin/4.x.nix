@@ -19,8 +19,8 @@
     {
       "4.12.0" = "4.7-412";
       "4.12.1" = "4.7-412";
-      "4.13.0" = "4.7-413";
-      "4.13.1" = "4.7-413";
+      "4.13.0" = "4.7.1-413";
+      "4.13.1" = "4.7.1-413";
       "4.14.0" = "4.19-414";
       "4.14.1" = "4.19-414";
       "4.14.2" = "4.19-414";
@@ -39,7 +39,7 @@ let
 
   hashes = {
     "4.7-412" = "sha256-0U3Ia7EblKULNy8AuXFVKACZvGN0arYJv7BWiBRgT0Y=";
-    "4.7-413" = "sha256-aVmGWS4bJBLuwsxDKsng/n0A6qlyJ/pnDTcYab/5gyU=";
+    "4.7.1-413" = "sha256-owR9ooUoOrKLOpZbKYDm8Q2ZfDn6C8GJwUF/4HQVRcI=";
     "4.14-500" = "sha256-7CPzJPh1UgzYiX8wPMbU5ZXz1wAJFNQQcp8WuGrR1w4=";
     "4.16-414" = "sha256-xekZdfPfVoSeGzBvNWwxcJorE519V2NLjSHkcyZvzy0="; # Used by ocaml-lsp
     "4.16-501" = "sha256-2lvzCbBAZFwpKuRXLMagpwDb0rz8mWrBPI5cODbCHiY="; # Used by ocaml-lsp
