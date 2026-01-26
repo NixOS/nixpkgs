@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "databricks-cli";
-  version = "0.278.0";
+  version = "0.285.0";
 
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "cli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-b7aO0fgSjbQLDt2YeXnZy0xq/2T6CGmsiXxE5CgnvfI=";
+    hash = "sha256-hiRae4pb8WsWvQ4ucRhz6eY2+h6KIXjCkxNVOL2hUbA=";
   };
 
   # Otherwise these tests fail asserting that the version is 0.0.0-dev
@@ -25,13 +25,14 @@ buildGoModule (finalAttrs: {
       --replace-fail "cli/0.0.0-dev" "cli/${finalAttrs.version}"
   '';
 
-  vendorHash = "sha256-qLIJP2YYCckxzCAYNiBcXNpfKVFQQTwy9ysKrsYKGvI=";
+  vendorHash = "sha256-PIHy5XJEx5FAWhm5i4dTGlPMf5Gnxz98xE4OeWVyvnE=";
 
   excludedPackages = [
     "bundle/internal"
     "acceptance"
     "integration"
     "tools/testrunner"
+    "tools/testmask"
   ];
 
   ldflags = [
@@ -60,6 +61,8 @@ buildGoModule (finalAttrs: {
       # https://github.com/astral-sh/uv/issues/4450
       "TestVenvSuccess"
       "TestPatchWheel"
+      # Requires HOME to be set
+      "TestCacheDirEnvVar"
     ]);
 
   nativeCheckInputs = [
