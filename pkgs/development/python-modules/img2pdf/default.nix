@@ -5,7 +5,7 @@
   fetchFromGitHub,
   replaceVars,
   colord,
-  setuptools,
+  flit-core,
   pikepdf,
   pillow,
   stdenv,
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     })
   ];
 
-  build-system = [ setuptools ];
+  build-system = [ flit-core ];
 
   dependencies = [
     pikepdf
