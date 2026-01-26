@@ -1,6 +1,7 @@
 {
   lib,
-  stdenv,
+  clangStdenv,
+  stdenv' ? clangStdenv,
   fetchFromGitHub,
   installShellFiles,
   gnustep-base,
@@ -11,7 +12,9 @@
   wavpack,
   xcbuildHook,
 }:
-
+let
+  stdenv = stdenv';
+in
 stdenv.mkDerivation rec {
   pname = "unar";
   version = "1.10.8";
