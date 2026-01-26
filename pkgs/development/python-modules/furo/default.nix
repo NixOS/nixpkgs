@@ -14,6 +14,7 @@
   sphinx,
   sphinx-basic-ng,
   unzip,
+  useWebNative ? (lib.meta.availableOn stdenv.buildPlatform nodejs),
 }:
 
 let
@@ -76,7 +77,7 @@ let
     '';
   };
 
-  web = if (lib.meta.availableOn stdenv.buildPlatform nodejs) then web-native else web-bin;
+  web = if useWebNative then web-native else web-bin;
 in
 
 buildPythonPackage rec {
