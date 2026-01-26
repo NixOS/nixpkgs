@@ -3121,6 +3121,10 @@ with haskellLib;
     doJailbreak super.egison-pattern-src-th-mode
   );
 
+  # Missing test files, (and one the test suite needs stack)
+  # https://github.com/egison/egison/issues/283
+  egison = dontCheck super.egison;
+
   # 2025-12-27: doctests broken with -Wx-partial warning
   # https://github.com/junjihashimoto/th-cas/issues/1
   th-cas = overrideCabal {
