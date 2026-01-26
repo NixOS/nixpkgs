@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "es-client";
-  version = "8.18.2";
+  version = "8.19.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "untergeek";
     repo = "es_client";
     tag = "v${version}";
-    hash = "sha256-siB17xVRS/eeKOsJcWdh4foOHXbeV8wwRclXDHodADM=";
+    hash = "sha256-Jk50oBZVYyfTnzngboF08A9blLpko8a7tOy9xOwDfEw=";
   };
 
   pythonRelaxDeps = true;
