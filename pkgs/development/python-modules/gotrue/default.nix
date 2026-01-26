@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "gotrue";
-  version = "2.12.3";
+  version = "2.12.4";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+HTPnQsvAzW/vQ1uKeP3r/eZmM0cFNKtgU24wGzuOFI=";
+    hash = "sha256-NdLljgZkhjIfTf8AM7MKU9BXx/Q2wVKHEi+gy4MwKbE=";
   };
 
   build-system = [ poetry-core ];
