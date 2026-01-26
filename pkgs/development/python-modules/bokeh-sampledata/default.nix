@@ -5,7 +5,6 @@
 
   # build-system
   setuptools,
-  setuptools-git-versioning,
 
   # dependencies
   icalendar,
@@ -23,9 +22,14 @@ buildPythonPackage rec {
     hash = "sha256-a4dK9bh45w8WEzaVrAfhXeOGQvqfrf33I/fUIzOWevQ=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail ', "setuptools-git-versioning"' "" \
+      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
+  '';
+
   build-system = [
     setuptools
-    setuptools-git-versioning
   ];
 
   dependencies = [
