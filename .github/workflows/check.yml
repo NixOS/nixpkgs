@@ -87,7 +87,7 @@ jobs:
 
       - uses: cachix/install-nix-action@4e002c8ec80594ecd40e759629461e26c8abed15 # v31
 
-      - uses: cachix/cachix-action@0fc020193b5a1fa3ac4575aa3a7d3aa6a35435ad # v16
+      - uses: cachix/cachix-action@3ba601ff5bbb07c7220846facfa2cd81eeee15a1 # v16
         continue-on-error: true
         with:
           # The nixpkgs-gha cache should not be trusted or used outside of Nixpkgs and its forks' CI.
