@@ -8,6 +8,7 @@
   udev,
   nix-update-script,
   versionCheckHook,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,12 +22,15 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-Hv+W8yFw6zAKwrV6gf9fWOkR/LFNgAD7WwQsHBqTnPI=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
 
   buildInputs = [
     libusb1
-    udev
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ udev ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -43,8 +47,8 @@ rustPlatform.buildRustPackage rec {
       mit # or
       asl20
     ];
-    platforms = with lib.platforms; linux ++ darwin ++ windows;
-    broken = !stdenv.hostPlatform.isLinux;
+    platforms = with lib.platforms; linux ++ lib.platforms.darwin ++ windows;
+    broken = stdenv.hostPlatform.isWindows;
     maintainers = with lib.maintainers; [ jwillikers ];
     mainProgram = "wlink";
   };
