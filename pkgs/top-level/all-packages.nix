@@ -3742,10 +3742,6 @@ with pkgs;
 
   libxfs = xfsprogs.dev;
 
-  xmlto = callPackage ../tools/typesetting/xmlto {
-    w3m = w3m-batch;
-  };
-
   xorriso = libisoburn;
 
   xvfb-run = callPackage ../tools/misc/xvfb-run {

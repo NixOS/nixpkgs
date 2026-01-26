@@ -17,7 +17,7 @@
   makeWrapper,
   stdenv,
   testers,
-  w3m,
+  w3m-batch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
            libxslt
            libxml2
            getopt
-           w3m
+           w3m-batch
          ]
        }"
   '';
