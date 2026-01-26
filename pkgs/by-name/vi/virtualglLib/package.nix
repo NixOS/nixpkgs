@@ -9,7 +9,7 @@
   libXtst,
   libXi,
   libjpeg_turbo,
-  fltk,
+  fltk_1_3,
   libxcb-keysyms,
   opencl-headers,
   opencl-clhpp,
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     libjpeg_turbo
     libGL
     libGLU
-    fltk
+    fltk_1_3
     libXv
     libXtst
     libXi

@@ -2,10 +2,11 @@
   stdenv,
   lib,
   virtualglLib,
-  virtualglLib_i686 ? null,
+  pkgsi686Linux,
   makeWrapper,
   vulkan-loader,
   addDriverRunpath,
+  usei686VirtualglLib ? stdenv.hostPlatform.system == "x86_64-linux",
 }:
 
 stdenv.mkDerivation {
@@ -25,7 +26,7 @@ stdenv.mkDerivation {
       --prefix LD_LIBRARY_PATH : "${
         lib.makeLibraryPath [
           virtualglLib
-          virtualglLib_i686
+          (if usei686VirtualglLib then pkgsi686Linux.virtualglLib else null) # TODO use lib.optional(s) for this
 
           addDriverRunpath.driverLink
 
@@ -34,8 +35,8 @@ stdenv.mkDerivation {
         ]
       }"
   ''
-  + lib.optionalString (virtualglLib_i686 != null) ''
-    ln -sf ${virtualglLib_i686}/bin/.vglrun.vars32 $out/bin
+  + lib.optionalString usei686VirtualglLib ''
+    ln -sf ${pkgsi686Linux.virtualglLib}/bin/.vglrun.vars32 $out/bin
   '';
 
   meta = {
