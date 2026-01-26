@@ -6,7 +6,7 @@
   e2fsprogs,
   perl,
   pkg-config,
-  ocamlPackages,
+  ocaml-ng,
   glibc,
 }:
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     perl
     pkg-config
   ]
-  ++ (with ocamlPackages; [
+  ++ (with ocaml-ng.ocamlPackages_4_14; [
     findlib
     ocaml
   ]);
