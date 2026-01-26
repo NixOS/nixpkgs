@@ -9,16 +9,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deepcool-digital-linux";
-  version = "0.8.3-alpha";
+  version = "0.10.1-alpha";
 
   src = fetchFromGitHub {
     owner = "Nortank12";
     repo = "deepcool-digital-linux";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Whmjd6NCOUkE7hM3FaN7grMwcC/suL7AJDVSgnZSKzM=";
+    hash = "sha256-PWf59hF9sBONYj8/SNoy/kaAscPDr8/nIfPrS8zQHXo=";
   };
 
-  cargoHash = "sha256-K1pEbUyENPUS4QK0lztWmw8ov1fGrx8KHdODmSByfek=";
+  cargoHash = "sha256-R8E1SMRz4efFFKnjjfm+qLuKJlIMbElLcjQy8K+qb/w=";
 
   buildInputs = [ libudev-zero ];
 
