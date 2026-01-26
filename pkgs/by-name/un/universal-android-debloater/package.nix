@@ -6,6 +6,7 @@
   fontconfig,
   freetype,
   lib,
+  stdenv,
   libglvnd,
   libxkbcommon,
   makeWrapper,
@@ -48,23 +49,27 @@ rustPlatform.buildRustPackage (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
-  postInstall = ''
-    wrapProgram $out/bin/uad-ng --prefix LD_LIBRARY_PATH : ${
-      lib.makeLibraryPath [
-        fontconfig
-        freetype
-        libglvnd
-        libxkbcommon
-        wayland
-        xorg.libX11
-        xorg.libXcursor
-        xorg.libXi
-        xorg.libXrandr
-      ]
-    } --suffix PATH : ${lib.makeBinPath [ android-tools ]}
-  '';
-
   passthru.updateScript = nix-update-script { };
+
+  postInstall = ''
+    wrapProgram $out/bin/uad-ng \
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath (
+          [
+            fontconfig
+            freetype
+            libglvnd
+            libxkbcommon
+            xorg.libX11
+            xorg.libXcursor
+            xorg.libXi
+            xorg.libXrandr
+          ]
+          ++ lib.optionals stdenv.hostPlatform.isLinux [ wayland ]
+        )
+      } \
+      --suffix PATH : ${lib.makeBinPath [ android-tools ]}
+  '';
 
   meta = {
     changelog = "https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation/releases/tag/v${finalAttrs.version}";
@@ -73,6 +78,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.gpl3Only;
     mainProgram = "uad-ng";
     maintainers = with lib.maintainers; [ lavafroth ];
-    platforms = lib.platforms.linux;
+    broken = with stdenv.hostPlatform; isDarwin && isx86_64;
+    platforms = with lib.platforms; linux ++ darwin;
   };
 })
