@@ -8,17 +8,18 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "nb-cli";
-  version = "1.4.2";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "nb_cli";
     inherit version;
-    hash = "sha256-HZey1RVpx/fHNxdEue1LczYbwYUxEb3i3fHpkKHhn+8=";
+    hash = "sha256-IbYyPZuhTkr4RInIR1lpMzl2+VYzu4IFQt2pOko92ZQ=";
   };
 
   pythonRelaxDeps = [
     "watchfiles"
+    "noneprompt"
   ];
 
   build-system = [
@@ -35,8 +36,11 @@ python3.pkgs.buildPythonApplication rec {
     importlib-metadata
     jinja2
     noneprompt
+    nonestorage
+    packaging
     pydantic
     pyfiglet
+    textual
     tomlkit
     typing-extensions
     virtualenv

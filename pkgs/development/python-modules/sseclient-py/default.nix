@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "sseclient-py";
   version = "1.8.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mpetazzoni";
@@ -26,11 +23,11 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "tests/unittests.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pure-Python Server Side Events (SSE) client";
     homepage = "https://github.com/mpetazzoni/sseclient";
     changelog = "https://github.com/mpetazzoni/sseclient/releases/tag/sseclient-py-${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jamiemagee ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jamiemagee ];
   };
 }

@@ -8,21 +8,20 @@
   gtk3,
   lcms2,
   libcanberra-gtk3,
-  libgnomekbd,
   libnotify,
-  libxklavier,
   wrapGAppsHook3,
   pkg-config,
   lib,
   stdenv,
   systemd,
   upower,
-  dconf,
   cups,
   polkit,
   librsvg,
   libwacom,
-  xorg,
+  libxi,
+  libxext,
+  libx11,
   fontconfig,
   tzdata,
   nss,
@@ -33,13 +32,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-settings-daemon";
-  version = "6.4.3";
+  version = "6.6.3";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon-settings-daemon";
-    rev = version;
-    hash = "sha256-L7+OgymYoYBdprw66RW8tiGA7XGWjTBpDpXhli8Fjoo=";
+    tag = version;
+    hash = "sha256-sa3DYH4/yRycHyrAG8IfCCpHhFNKwq8yOgLoKHprGfk=";
   };
 
   patches = [
@@ -54,20 +53,16 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     lcms2
     libcanberra-gtk3
-    libgnomekbd
     libnotify
-    libxklavier
     systemd
     upower
-    dconf
     cups
     polkit
     librsvg
     libwacom
-    xorg.libXext
-    xorg.libX11
-    xorg.libXi
-    xorg.libXfixes
+    libxext
+    libx11
+    libxi
     fontconfig
     nss
     libgudev
@@ -100,11 +95,11 @@ stdenv.mkDerivation rec {
     ln -s $out/libexec/csd-backlight-helper $out/bin/cinnamon-settings-daemon/csd-backlight-helper
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/linuxmint/cinnamon-settings-daemon";
     description = "Settings daemon for the Cinnamon desktop";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    teams = [ teams.cinnamon ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
   };
 }

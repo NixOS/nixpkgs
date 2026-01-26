@@ -5,12 +5,12 @@
 }:
 stdenvNoCC.mkDerivation {
   pname = "nzp-assets";
-  version = "0-unstable-2024-09-28";
+  version = "0-unstable-2025-11-25";
 
   src = fetchFromGitHub {
     owner = "nzp-team";
     repo = "assets";
-    rev = "4a7b1b787061c1c7c17ab3b59a8e0e0f44c9546f";
+    rev = "96dd29602d6d8af0cce9208910e7ab68bfc95019";
     hash = "sha256-gCTC/76r0ITIDLIph9uivq0ZJGaPUmlBGizdCUxJrng=";
   };
 

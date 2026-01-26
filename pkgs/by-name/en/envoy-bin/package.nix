@@ -8,7 +8,7 @@
   versionCheckHook,
 }:
 let
-  version = "1.35.2";
+  version = "1.37.0";
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "envoy-bin is not available for ${system}.";
 
@@ -21,8 +21,8 @@ let
 
   hash =
     {
-      aarch64-linux = "sha256-XfV0d4l8yTsEF9hDXAFnd0wgtu+Hm6VaEfPfXHF9wdE=";
-      x86_64-linux = "sha256-6Uo9Gya7lpkb5GAiB8yxIX81Yw1BWurBUF1ooDuJc9w=";
+      aarch64-linux = "sha256-9KEqySEbwO53yN2oaXIrbSih6dm2LNuX7I8g3oIA+ig=";
+      x86_64-linux = "sha256-Clcp7k6YDTRuvO6A8Y5+/lIyuRFBu0x3bsOtzKeG5gw=";
     }
     .${system} or throwSystem;
 in
@@ -51,7 +51,6 @@ stdenv.mkDerivation {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/envoy";
-  versionCheckProgramArg = "--version";
 
   passthru = {
     tests.envoy-bin = nixosTests.envoy-bin;

@@ -2,7 +2,8 @@
   lib,
   stdenv,
   fetchurl,
-  xorg,
+  mkfontscale,
+  fonttosfnt,
   libfaketime,
 }:
 
@@ -16,8 +17,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    xorg.fonttosfnt
-    xorg.mkfontscale
+    fonttosfnt
+    mkfontscale
     libfaketime
   ];
 
@@ -36,9 +37,9 @@ stdenv.mkDerivation rec {
     mkfontdir "$fontDir"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Unicode font";
-    license = licenses.mit;
-    maintainers = [ maintainers.raskin ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.raskin ];
   };
 }

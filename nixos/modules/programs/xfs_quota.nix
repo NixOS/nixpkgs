@@ -85,13 +85,13 @@ in
 
     environment.etc.projects.source = pkgs.writeText "etc-project" (
       builtins.concatStringsSep "\n" (
-        lib.mapAttrsToList (name: opts: "${builtins.toString opts.id}:${opts.path}") cfg.projects
+        lib.mapAttrsToList (name: opts: "${toString opts.id}:${opts.path}") cfg.projects
       )
     );
 
     environment.etc.projid.source = pkgs.writeText "etc-projid" (
       builtins.concatStringsSep "\n" (
-        lib.mapAttrsToList (name: opts: "${name}:${builtins.toString opts.id}") cfg.projects
+        lib.mapAttrsToList (name: opts: "${name}:${toString opts.id}") cfg.projects
       )
     );
 

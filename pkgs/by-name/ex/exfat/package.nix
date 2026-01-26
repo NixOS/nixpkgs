@@ -24,11 +24,16 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ fuse ];
 
-  meta = with lib; {
+  outputs = [
+    "out"
+    "man"
+  ];
+
+  meta = {
     description = "Free exFAT file system implementation";
     inherit (src.meta) homepage;
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ dywedir ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ dywedir ];
+    platforms = lib.platforms.unix;
   };
 }

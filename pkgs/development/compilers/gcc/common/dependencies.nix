@@ -7,6 +7,7 @@
   texinfo,
   which,
   gettext,
+  autoconf269,
   gnused,
   patchelf,
   gmp,
@@ -41,6 +42,7 @@ in
     texinfo
     which
     gettext
+    autoconf269
   ]
   ++ optionals (perl != null) [ perl ]
   ++ optionals (with stdenv.targetPlatform; isVc4 || isRedox || isSnapshot && flex != null) [ flex ]

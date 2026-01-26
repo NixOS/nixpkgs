@@ -1,7 +1,7 @@
 { pkgs, ... }:
 {
   name = "sogo";
-  meta = with pkgs.lib.maintainers; {
+  meta = {
     maintainers = [ ];
   };
 

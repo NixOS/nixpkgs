@@ -29,7 +29,7 @@ tmpdir=$(mktemp -d)
 trap 'rm -rf "$tmpdir"' EXIT
 
 pushd "$tmpdir"
-wget "${TOKEN_ARGS[@]}" "$package_src/vue/yarn.lock"
+wget "${TOKEN_ARGS[@]}" "$package_src/vue3/yarn.lock"
 yarn_hash=$(prefetch-yarn-deps yarn.lock)
 popd
 

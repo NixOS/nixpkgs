@@ -71,12 +71,12 @@ stdenv.mkDerivation rec {
     ln -s $out/lib/zdoom/zdoom $out/bin/zdoom
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://zdoom.org/";
     description = "Enhanced port of the official DOOM source code";
     # Doom source license, MAME license
-    license = licenses.unfreeRedistributable;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ lassulus ];
+    license = lib.licenses.unfreeRedistributable;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ lassulus ];
   };
 }

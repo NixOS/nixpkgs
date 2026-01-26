@@ -40,11 +40,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Level metering according to the EBU R-128 recommendation";
     homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/index.html";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ orivej ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 }

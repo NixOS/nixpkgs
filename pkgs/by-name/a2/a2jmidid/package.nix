@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     domain = "gitea.ladish.org";
     owner = "LADI";
     repo = "a2jmidid";
-    rev = "refs/tags/${version}";
+    tag = version;
     fetchSubmodules = true;
     hash = "sha256-PZKGhHmPMf0AucPruOLB9DniM5A3BKdghFCrd5pTzeM=";
   };
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     description = "Daemon for exposing legacy ALSA sequencer applications in JACK MIDI system";
     homepage = "https://a2jmidid.ladish.org/";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = [
       "i686-linux"
       "x86_64-linux"

@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "extra-container";
-  version = "0.13";
+  version = "0.14";
 
   src = fetchFromGitHub {
     owner = "erikarvstedt";
     repo = "extra-container";
     rev = version;
-    hash = "sha256-vgh3TqfkFdnPxREBedw4MQehIDc3N8YyxBOB45n+AvU=";
+    hash = "sha256-XGp4HHH6D6ZKiO5RnMzqYJYnZB538EnEflvlTsOKpvo=";
   };
 
   buildCommand = ''

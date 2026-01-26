@@ -56,10 +56,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "webargs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Declarative parsing and validation of HTTP request objects, with built-in support for popular web frameworks";
     homepage = "https://github.com/marshmallow-code/webargs";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cript0nauta ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cript0nauta ];
   };
 }

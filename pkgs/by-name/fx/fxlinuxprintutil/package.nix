@@ -8,7 +8,7 @@
   cups,
   tcl,
   tk,
-  xorg,
+  libx11,
   makeWrapper,
 }:
 let
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     # replaces the code that looks for X11’s locale.alias in /usr/share/X11/locale or
     # /usr/lib/X11/locale with /nix/store/libX11/share/X11/locale
     (replaceVars ./fxlocalechk.tcl.patch {
-      inherit (xorg) libX11;
+      libX11 = libx11;
     })
   ];
 
@@ -76,12 +76,12 @@ stdenv.mkDerivation rec {
     }
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Optional configuration tool for fxlinuxprint";
     homepage = "https://onlinesupport.fujixerox.com";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

@@ -12,14 +12,13 @@
   typing-extensions,
 
   # buildInputs
-  imath,
   isl,
 
   # tests
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "islpy";
   version = "2025.2.5";
   pyproject = true;
@@ -27,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "inducer";
     repo = "islpy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-E3DRj1WpMr79BVFUeJftp1JZafP2+Zn6yyf9ClfdWqI=";
   };
 
@@ -41,18 +40,16 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
-    imath
     isl
   ];
 
   dontUseCmakeConfigure = true;
 
   cmakeFlags = [
-    "-DUSE_SHIPPED_ISL=OFF"
-    "-DUSE_SHIPPED_IMATH=OFF"
-    "-DUSE_BARVINOK=OFF"
-    "-DISL_INC_DIRS:LIST='${lib.getDev isl}/include'"
-    "-DISL_LIB_DIRS:LIST='${lib.getLib isl}/lib'"
+    (lib.cmakeBool "USE_SHIPPED_ISL" false)
+    (lib.cmakeBool "USE_BARVINOK" false)
+    (lib.cmakeOptionType "list" "ISL_INC_DIRS" "${lib.getDev isl}/include")
+    (lib.cmakeOptionType "list" "ISL_LIB_DIRS" "${lib.getLib isl}/lib")
   ];
 
   # Force resolving the package from $out to make generated ext files usable by tests
@@ -67,8 +64,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python wrapper around isl, an integer set library";
     homepage = "https://github.com/inducer/islpy";
-    changelog = "https://github.com/inducer/islpy/releases/tag/v${version}";
+    changelog = "https://github.com/inducer/islpy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tomasajt ];
   };
-}
+})

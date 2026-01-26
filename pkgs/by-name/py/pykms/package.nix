@@ -48,7 +48,7 @@ pypkgs.buildPythonApplication rec {
   sourceRoot = "${src.name}/py-kms";
 
   propagatedBuildInputs = with pypkgs; [
-    systemd
+    systemd-python
     pytz
     tzlocal
     dnspython
@@ -61,7 +61,7 @@ pypkgs.buildPythonApplication rec {
       --replace "'KmsDataBase.xml'" "'$siteDir/KmsDataBase.xml'"
   '';
 
-  format = "other";
+  pyproject = false;
 
   # there are no tests
   doCheck = false;
@@ -92,11 +92,11 @@ pypkgs.buildPythonApplication rec {
 
   passthru.tests = { inherit (nixosTests) pykms; };
 
-  meta = with lib; {
+  meta = {
     description = "Windows KMS (Key Management Service) server written in Python";
     homepage = "https://github.com/Py-KMS-Organization/py-kms";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [
       peterhoeg
       zopieux
     ];

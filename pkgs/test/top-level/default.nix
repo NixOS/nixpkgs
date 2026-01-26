@@ -61,7 +61,7 @@ lib.recurseIntoAttrs {
       pkgsLocal = map nixpkgsFun configsLocal;
       pkgsCross = map nixpkgsFun configsCross;
     in
-    assert lib.all (p: p.buildPlatform == p.hostPlatform) pkgsLocal;
-    assert lib.all (p: p.buildPlatform != p.hostPlatform) pkgsCross;
+    assert lib.all (p: p.stdenv.buildPlatform == p.stdenv.hostPlatform) pkgsLocal;
+    assert lib.all (p: p.stdenv.buildPlatform != p.stdenv.hostPlatform) pkgsCross;
     pkgs.emptyFile;
 }

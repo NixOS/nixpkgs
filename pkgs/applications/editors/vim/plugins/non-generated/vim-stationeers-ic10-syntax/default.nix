@@ -6,13 +6,13 @@
 }:
 vimUtils.buildVimPlugin {
   pname = "vim-ic10";
-  version = "0-unstable-2025-01-08";
+  version = "0-unstable-2025-11-02";
 
   src = fetchFromGitLab {
     owner = "LittleMorph";
     repo = "vim-ic10";
-    rev = "7c1f13b198cfe122fb52f6abfb8dc95d5ca51013";
-    hash = "sha256-4Q1JiDA7PBUWNBNfCIZC6nImhe2FJzOqrslHazAOs18=";
+    rev = "74446a16078ef4f3d2088136b32af939fb6bc2a4";
+    hash = "sha256-YCxrSB7eRQ54iZhpcsAR930Uccj+2ZyogpYGKbcSlys=";
   };
 
   passthru.updateScript = nix-update-script {

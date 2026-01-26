@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "gphoto2";
-  version = "2.6.2";
+  version = "2.6.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jim-easterbrook";
     repo = "python-gphoto2";
     tag = "v${version}";
-    hash = "sha256-Z480HR9AlwJQI1yi8+twzHV9PMcTKWqtvoNw6ohV+6M=";
+    hash = "sha256-inxKfZ/u7b9Kx1ytmEKJsK2PnnrhSI54A2Dm6Mtxnmc=";
   };
 
   build-system = [

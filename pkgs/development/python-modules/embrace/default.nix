@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromSourcehut,
   pytestCheckHook,
-  pythonOlder,
   sqlparse,
   wrapt,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "embrace";
   version = "4.2.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromSourcehut {
     vc = "hg";
@@ -37,10 +34,10 @@ buildPythonPackage rec {
   # should remain usable. (https://todo.sr.ht/~olly/embrace-sql/4)
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  meta = {
     description = "Embrace SQL keeps your SQL queries in SQL files";
     homepage = "https://pypi.org/project/embrace/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ euxane ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ euxane ];
   };
 }

@@ -6,7 +6,6 @@
   gobject-introspection,
   gtk3,
   gtksourceview4,
-  importlib-metadata,
   lib,
   ndspy,
   nest-asyncio,
@@ -14,7 +13,6 @@
   pycairo,
   pygobject3,
   pygtkspellcheck,
-  pythonOlder,
   range-typed-integers,
   skytemple-files,
   skytemple-icons,
@@ -56,17 +54,16 @@ buildPythonPackage rec {
     skytemple-files
     skytemple-icons
     skytemple-ssb-emulator
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ];
 
   doCheck = false; # requires Pokémon Mystery Dungeon ROM
   pythonImportsCheck = [ "skytemple_ssb_debugger" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/SkyTemple/skytemple-ssb-debugger";
     description = "Script Engine Debugger for Pokémon Mystery Dungeon Explorers of Sky";
     mainProgram = "skytemple-ssb-debugger";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ marius851000 ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ marius851000 ];
   };
 }

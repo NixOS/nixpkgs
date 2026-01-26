@@ -1,7 +1,10 @@
 {
   lib,
   stdenv,
-  xorg,
+  libxrandr,
+  libxi,
+  libxext,
+  libx11,
   pkg-config,
   fetchFromGitHub,
   autoreconfHook,
@@ -18,23 +21,23 @@ stdenv.mkDerivation rec {
     sha256 = "11vjr69prrs4ir9c267zwq4g9liipzrqi0kmw1zg95dbn7r7zmql";
   };
 
-  buildInputs = with xorg; [
-    libX11
-    libXi
-    libXrandr
-    libXext
+  buildInputs = [
+    libx11
+    libxi
+    libxrandr
+    libxext
   ];
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/troglobit/xplugd";
     description = "UNIX daemon that executes a script on X input and RandR changes";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ akho ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ akho ];
     mainProgram = "xplugd";
   };
 }

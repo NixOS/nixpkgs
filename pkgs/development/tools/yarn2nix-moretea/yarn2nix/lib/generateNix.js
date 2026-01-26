@@ -12,7 +12,7 @@ const { execFileSync } = require("child_process");
 //
 // to
 //
-// builtins.fetchGit {
+// fetchGit {
 //   url = "https://github.com/srghma/node-shell-quote.git";
 //   ref = "without_unlicenced_jsonify";
 //   rev = "1234commit";
@@ -26,7 +26,7 @@ const { execFileSync } = require("child_process");
 //
 // to
 //
-// builtins.fetchGit {
+// fetchGit {
 //   url = "https://1234user:1234pass@git.graphile.com/git/users/1234user/postgraphile-supporter.git";
 //   ref = "master";
 //   rev = "1234commit";
@@ -39,15 +39,15 @@ function prefetchgit(url, rev) {
       ["--rev", rev, url, "--fetch-submodules"],
       {
         stdio: ["ignore", "pipe", "ignore"],
-        timeout: 60000
-      }
-    )
+        timeout: 60000,
+      },
+    ),
   ).sha256;
 }
 
 function fetchgit(fileName, url, rev, branch, builtinFetchGit) {
   const repo = builtinFetchGit
-    ? `builtins.fetchGit ({
+    ? `fetchGit ({
          url = "${url}";
          ref = "${branch}";
          rev = "${rev}";
@@ -90,18 +90,18 @@ function parseIntegrity(maybeIntegrity, fallbackHash) {
     }
   }
 
-  algo = integrities.pickAlgorithm();
-  hash = integrities[algo][0].digest;
+  const algo = integrities.pickAlgorithm();
+  const hash = integrities[algo][0].digest;
   return { algo, hash };
 }
 
 function fetchLockedDep(builtinFetchGit) {
-  return function(pkg) {
+  return function (pkg) {
     const { integrity, nameWithVersion, resolved } = pkg;
 
     if (!resolved) {
       console.error(
-        `yarn2nix: can't find "resolved" field for package ${nameWithVersion}, you probably required it using "file:...", this feature is not supported, ignoring`
+        `yarn2nix: can't find "resolved" field for package ${nameWithVersion}, you probably required it using "file:...", this feature is not supported, ignoring`,
       );
       return "";
     }
@@ -122,7 +122,7 @@ function fetchLockedDep(builtinFetchGit) {
         githubUrl,
         githubRev,
         branch || "master",
-        builtinFetchGit
+        builtinFetchGit,
       );
     }
 
@@ -138,7 +138,7 @@ function fetchLockedDep(builtinFetchGit) {
         urlForGit,
         rev,
         branch || "master",
-        builtinFetchGit
+        builtinFetchGit,
       );
     }
 
@@ -165,12 +165,12 @@ const HEAD = `
 function generateNix(pkgs, builtinFetchGit) {
   const nameWithVersionAndPackageNix = R.map(
     fetchLockedDep(builtinFetchGit),
-    pkgs
+    pkgs,
   );
 
   const packagesDefinition = R.join(
     "\n",
-    R.values(nameWithVersionAndPackageNix)
+    R.values(nameWithVersionAndPackageNix),
   );
 
   return R.join("\n", [HEAD, packagesDefinition, "  ];", "}"]);

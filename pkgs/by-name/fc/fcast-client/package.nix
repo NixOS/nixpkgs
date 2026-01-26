@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
       receiver devices or integrate the FCast protocol into their own apps.
     '';
     mainProgram = "fcast";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

@@ -1,7 +1,7 @@
 diff --git a/forge-gui-desktop/pom.xml b/forge-gui-desktop/pom.xml
 --- a/forge-gui-desktop/pom.xml
 +++ b/forge-gui-desktop/pom.xml
-@@ -71,62 +71,6 @@
+@@ -69,62 +69,6 @@
                  </executions>
              </plugin>
              <plugin>

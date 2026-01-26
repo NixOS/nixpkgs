@@ -6,15 +6,12 @@
   hatch-vcs,
   hatchling,
   python,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "django-pwa";
   version = "2.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "silviolleite";
@@ -38,11 +35,11 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Django app to include a manifest.json and Service Worker instance to enable progressive web app behavior";
     homepage = "https://github.com/silviolleite/django-pwa";
     changelog = "https://github.com/silviolleite/django-pwa/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ derdennisop ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ derdennisop ];
   };
 }

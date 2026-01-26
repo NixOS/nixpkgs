@@ -47,12 +47,12 @@
 
 buildPythonPackage rec {
   pname = "fontbakery";
-  version = "1.0.1";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-OPOUNKy70sm/kqrxRi61MjfQp74AdqZh6Gt93LdlmU0=";
+    hash = "sha256-cLQNjrpk8m3Rm1VBC4FNGB7e/E+hjIqcStFSDqfVIk4=";
   };
 
   env.PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
@@ -161,12 +161,12 @@ buildPythonPackage rec {
 
   passthru.tests.simple = callPackage ./tests.nix { };
 
-  meta = with lib; {
+  meta = {
     description = "Tool for checking the quality of font projects";
     homepage = "https://github.com/googlefonts/fontbakery";
     changelog = "https://github.com/fonttools/fontbakery/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "fontbakery";
-    maintainers = with maintainers; [ danc86 ];
+    maintainers = with lib.maintainers; [ danc86 ];
   };
 }

@@ -5,7 +5,9 @@
   fetchpatch,
   pkg-config,
   libpng,
-  xorg,
+  libxcursor,
+  libx11,
+  xorgproto,
 }:
 
 stdenv.mkDerivation rec {
@@ -43,17 +45,17 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libpng
-    xorg.libX11
-    xorg.libXcursor
-    xorg.xorgproto
+    libx11
+    libxcursor
+    xorgproto
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/eworm-de/xcur2png/releases";
     description = "Convert X cursors to PNG images";
-    license = licenses.gpl3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ romildo ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ romildo ];
     mainProgram = "xcur2png";
   };
 }

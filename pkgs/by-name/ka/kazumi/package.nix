@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  flutter335,
+  flutter338,
   fetchFromGitHub,
   autoPatchelfHook,
   alsa-lib,
@@ -11,28 +11,29 @@
   mpv-unwrapped,
   webkitgtk_4_1,
   _experimental-update-script-combinators,
-  gitUpdater,
+  nix-update-script,
   runCommand,
   yq-go,
+  dart,
 }:
 
 let
-  version = "1.7.8";
+  version = "1.9.4";
 
   src = fetchFromGitHub {
     owner = "Predidit";
     repo = "Kazumi";
     tag = version;
-    hash = "sha256-EHrTI+jy8ryvGwLUJNVbYlinKsBxh12zboHqpiGuRk0=";
+    hash = "sha256-xWbk81y+cA/iJCttZAKR1EfSkA7u9+aLFnty548Bv0g=";
   };
 in
-flutter335.buildFlutterApplication {
+flutter338.buildFlutterApplication {
   pname = "kazumi";
   inherit version src;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  gitHashes = lib.importJSON ./gitHashes.json;
+  gitHashes = lib.importJSON ./git-hashes.json;
 
   customSourceBuilders = {
     # unofficial media_kit_libs_linux
@@ -65,10 +66,11 @@ flutter335.buildFlutterApplication {
         inherit (src) passthru;
 
         postPatch = ''
-          sed -i '/set(LIBMPV_ZIP_URL/,/if(MEDIA_KIT_LIBS_AVAILABLE)/{//!d; /set(LIBMPV_ZIP_URL/d}' media_kit_video/linux/CMakeLists.txt
-          sed -i '/if(MEDIA_KIT_LIBS_AVAILABLE)/i set(LIBMPV_HEADER_UNZIP_DIR "${mpv-unwrapped.dev}/include/mpv")' media_kit_video/linux/CMakeLists.txt
-          sed -i '/if(MEDIA_KIT_LIBS_AVAILABLE)/i set(LIBMPV_PATH "${mpv-unwrapped}/lib")' media_kit_video/linux/CMakeLists.txt
-          sed -i '/if(MEDIA_KIT_LIBS_AVAILABLE)/i set(LIBMPV_UNZIP_DIR "${mpv-unwrapped}/lib")' media_kit_video/linux/CMakeLists.txt
+          sed -i '/if(ARCH_NAME STREQUAL "x86_64")/,/if(MEDIA_KIT_LIBS_AVAILABLE)/{ /if(MEDIA_KIT_LIBS_AVAILABLE)/!d; /set(LIBMPV_ZIP_URL/d }' media_kit_video/linux/CMakeLists.txt
+          sed -i '/if(MEDIA_KIT_LIBS_AVAILABLE)/i \
+            set(LIBMPV_UNZIP_DIR "${mpv-unwrapped}/lib")\n\
+            set(LIBMPV_PATH "${mpv-unwrapped}/lib")\n\
+            set(LIBMPV_HEADER_UNZIP_DIR "${mpv-unwrapped.dev}/include/mpv")' media_kit_video/linux/CMakeLists.txt
         '';
 
         installPhase = ''
@@ -113,11 +115,22 @@ flutter335.buildFlutterApplication {
           yq eval --output-format=json --prettyPrint $src/pubspec.lock > "$out"
         '';
     updateScript = _experimental-update-script-combinators.sequence [
-      (gitUpdater { })
-      (_experimental-update-script-combinators.copyAttrOutputToFile "kazumi.pubspecSource" ./pubspec.lock.json)
+      (nix-update-script { })
+      (
+        (_experimental-update-script-combinators.copyAttrOutputToFile "kazumi.pubspecSource" ./pubspec.lock.json)
+        // {
+          supportedFeatures = [ ];
+        }
+      )
       {
-        command = [ ./update-gitHashes.py ];
-        supportedFeatures = [ "silent" ];
+        command = [
+          dart.fetchGitHashesScript
+          "--input"
+          ./pubspec.lock.json
+          "--output"
+          ./git-hashes.json
+        ];
+        supportedFeatures = [ ];
       }
     ];
   };
@@ -127,7 +140,7 @@ flutter335.buildFlutterApplication {
     homepage = "https://github.com/Predidit/Kazumi";
     mainProgram = "kazumi";
     license = lib.licenses.gpl3Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ lonerOrz ];
     platforms = lib.platforms.linux;
   };
 }

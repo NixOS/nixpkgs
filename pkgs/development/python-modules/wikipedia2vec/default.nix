@@ -10,7 +10,6 @@
   marisa-trie,
   mwparserfromhell,
   numpy,
-  pythonOlder,
   scipy,
   setuptools,
   tqdm,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "wikipedia2vec";
   version = "2.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "wikipedia2vec";
@@ -54,12 +51,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "wikipedia2vec" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for learning vector representations of words and entities from Wikipedia";
     mainProgram = "wikipedia2vec";
     homepage = "https://wikipedia2vec.github.io/wikipedia2vec/";
     changelog = "https://github.com/wikipedia2vec/wikipedia2vec/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ derdennisop ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ derdennisop ];
   };
 }

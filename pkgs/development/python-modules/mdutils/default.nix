@@ -7,14 +7,14 @@
 }:
 buildPythonPackage rec {
   pname = "mdutils";
-  version = "1.8.0";
+  version = "1.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "didix21";
     repo = "mdutils";
     tag = "v${version}";
-    hash = "sha256-UBq6xSGG49zaRVWe2RmsCDkpa3vZFqKRJZQEVUegTSM=";
+    hash = "sha256-qUCiiFzbOccS7wy0LqgyZH04KlwG/FzE3a+R3z7tPF8=";
   };
 
   build-system = [ setuptools ];

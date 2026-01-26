@@ -5,7 +5,6 @@
   fetchFromGitHub,
   python,
   python-fsutil,
-  pythonOlder,
   setuptools,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "django-maintenance-mode";
   version = "0.22.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "fabiocaccamo";
@@ -40,11 +37,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "maintenance_mode" ];
 
-  meta = with lib; {
+  meta = {
     description = "Shows a 503 error page when maintenance-mode is on";
     homepage = "https://github.com/fabiocaccamo/django-maintenance-mode";
     changelog = "https://github.com/fabiocaccamo/django-maintenance-mode/releases/tag/${src.tag}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ mrmebelman ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ mrmebelman ];
   };
 }

@@ -10,7 +10,11 @@
   ngspice,
   tcl,
   tk,
-  xorg,
+  libxt,
+  libxpm,
+  libx11,
+  libsm,
+  libice,
   zlib,
 }:
 
@@ -43,26 +47,26 @@ stdenv.mkDerivation {
     ./declare-missing-prototype.patch
   ];
 
-  buildInputs = with xorg; [
+  buildInputs = [
     cairo
     ghostscript
-    libSM
-    libXt
-    libICE
-    libX11
-    libXpm
+    libsm
+    libxt
+    libice
+    libx11
+    libxpm
     tcl
     tk
     zlib
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Generic drawing program tailored to circuit diagrams";
     mainProgram = "xcircuit";
     homepage = "http://opencircuitdesign.com/xcircuit";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       john-shaffer
       spacefrogg
       thoughtpolice

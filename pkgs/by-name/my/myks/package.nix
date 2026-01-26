@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "myks";
-  version = "4.11.4";
+  version = "5.6.0";
 
   src = fetchFromGitHub {
     owner = "mykso";
     repo = "myks";
     tag = "v${version}";
-    hash = "sha256-1tJPYLo14LPwd7mtNTvr6YMGz0s+K6aN9Hung/N9lrM=";
+    hash = "sha256-0bK5ZnzGhQc0s0nQiNTGe5Z45BpwqXiv8kt0ne8EkpE=";
   };
 
-  vendorHash = "sha256-k/EeQdThF8pgeY9RI012kjlEZkVVcnanL6L8UBrQTUI=";
+  vendorHash = "sha256-jNPo6TotuBhG2GW9vHu1zC6BYCIRfyqRZB6vbtCNCpI=";
 
   subPackages = ".";
 
@@ -49,7 +49,7 @@ buildGoModule rec {
     description = "Configuration framework for Kubernetes applications";
     license = lib.licenses.mit;
     homepage = "https://github.com/mykso/myks";
-    maintainers = with lib.maintainers; [
+    maintainers = [
       lib.maintainers.kbudde
       lib.maintainers.zebradil
     ];

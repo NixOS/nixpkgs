@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell --pure -i bash -p bash curl cacert ripgrep nix nix-update
+#!nix-shell --pure -i bash -p bash curl cacert ripgrep nix nix-update git
 set -euo pipefail
 
 latest_version=$(
@@ -18,4 +18,4 @@ if [[ "$latest_version" == "$current_version" ]]; then
     exit 0
 fi
 
-nix-update teamspeak6-client --version $latest_version
+nix-update teamspeak6-client --version "$latest_version"

@@ -1,5 +1,5 @@
 {
-  "tarballHash": "sha256-irvbvBrENVa+7C0Vm7bQMcUoirwxwha4BoOiLhD7F4Y=",
-  "artifactsUrl": "https://builds.dotnet.microsoft.com/source-built-artifacts/assets/Private.SourceBuilt.Artifacts.10.0.100-rc.1.25420.111.centos.10-x64.tar.gz",
-  "artifactsHash": "sha256-vXoVORa2ZB7HQ3gUy1L9xZaqBDO/fbTcMt0HlqmcWGA="
+  "tarballHash": "sha256-zFRPNX42dPP00XDIL3gfb5QGdg6Lrb4fvK8EZX4VVNQ=",
+  "artifactsUrl": "https://builds.dotnet.microsoft.com/dotnet/source-build/Private.SourceBuilt.Artifacts.10.0.101-servicing.25569.105.centos.10-x64.tar.gz",
+  "artifactsHash": "sha256-lVf2cu7N65kA40y2kl0KZ88Aam+aXF9L/nroExn1fKQ="
 }

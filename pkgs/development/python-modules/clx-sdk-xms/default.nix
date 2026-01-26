@@ -10,12 +10,13 @@
 
 buildPythonPackage {
   pname = "clx-sdk-xms";
-  version = "0-unstable-2017-01-23";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "clxcommunications";
     repo = "sdk-xms-python";
+    # https://github.com/clxcommunications/sdk-xms-python/issues/4
     rev = "8d629cd7bcaf91eaafee265a825e3c52191f1425";
     hash = "sha256-qMR9OT+QAKZGwDuoZVAtfKD3PQB7rEU/iTRjgACVGBs=";
   };

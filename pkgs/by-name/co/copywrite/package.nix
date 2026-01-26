@@ -12,14 +12,14 @@ let
   commitHash = "d5bc935e4801a02fdbd953f8f0ae7989eaef50cf"; # matches tag release
   shortCommitHash = builtins.substring 0 7 commitHash;
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "copywrite";
   version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "copywrite";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-gPVlHgFlLxoAj4pkg3OxD4CGQaLdAL312/Zn/pJ+7fg=";
   };
 
@@ -28,7 +28,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/hashicorp/copywrite/cmd.version=${version}"
+    "-X github.com/hashicorp/copywrite/cmd.version=${finalAttrs.version}"
     "-X github.com/hashicorp/copywrite/cmd.commit=${shortCommitHash}"
   ];
 
@@ -65,8 +65,8 @@ buildGoModule rec {
     description = "Automate copyright headers and license files at scale";
     mainProgram = "copywrite";
     homepage = "https://github.com/hashicorp/copywrite";
-    changelog = "https://github.com/hashicorp/copywrite/releases/tag/v${version}";
+    changelog = "https://github.com/hashicorp/copywrite/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ dvcorreia ];
   };
-}
+})

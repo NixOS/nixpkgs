@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 }:
 
@@ -9,8 +8,6 @@ buildPythonPackage rec {
   pname = "somfy-mylink-synergy";
   version = "1.0.6";
   format = "setuptools";
-
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "bendews";
@@ -24,10 +21,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "somfy_mylink_synergy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API to utilise the Somfy Synergy JsonRPC API";
     homepage = "https://github.com/bendews/somfy-mylink-synergy";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

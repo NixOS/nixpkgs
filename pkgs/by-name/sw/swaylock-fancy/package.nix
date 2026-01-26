@@ -57,12 +57,12 @@ stdenv.mkDerivation {
       --prefix PATH : "${depsPath}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "swaylock bash script that takes a screenshot of the desktop, blurs the background and adds a lock icon and text";
     homepage = "https://github.com/Big-B/swaylock-fancy";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ frogamic ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ frogamic ];
     inherit mainProgram;
   };
 }

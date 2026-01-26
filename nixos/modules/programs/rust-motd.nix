@@ -113,7 +113,7 @@ in
       }
     ];
     systemd.services.rust-motd = {
-      path = with pkgs; [ bash ];
+      path = with pkgs; [ bash ] ++ lib.optional (cfg.settings.fail_2_ban or { } != { }) fail2ban;
       documentation = [
         "https://github.com/rust-motd/rust-motd/blob/v${pkgs.rust-motd.version}/README.md"
       ];

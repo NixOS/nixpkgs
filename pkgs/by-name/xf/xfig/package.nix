@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   makeWrapper,
   imagemagick,
   libXpm,
@@ -36,6 +37,18 @@ stdenv.mkDerivation rec {
     Xaw3d
     libXaw
     libXft
+  ];
+
+  # Upstream-accepted patches for C23 compatibility from Gentoo and Debian
+  patches = [
+    (fetchpatch {
+      url = "https://www-user.tu-chemnitz.de/~hamari/distfiles/xfig-3.2.9a-modern-c.patch";
+      hash = "sha256-brUonsrWP97QnIkHnAHa2PSAiV9JUVOzmu0kvuLNFGw=";
+    })
+    (fetchpatch {
+      url = "https://sources.debian.org/data/main/x/xfig/1%3A3.2.9a-4/debian/patches/19_boolean.patch";
+      hash = "sha256-cMUyp/93bCva4gT349IThhuYmOGZBd0EZ38Y4JrxZn8=";
+    })
   ];
 
   postPatch = ''

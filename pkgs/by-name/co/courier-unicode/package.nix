@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "courier-unicode";
-  version = "2.3.2";
+  version = "2.5.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/courier/courier-unicode/${version}/courier-unicode-${version}.tar.bz2";
-    sha256 = "sha256-tkXS8AqrvGgjIO3mlspQIBJm9xChvOxKxQQmlcmef2k=";
+    hash = "sha256-Xsp6U2UWEg745d5gFOaQcRvGs/saG9V9LxkDxU3ts+A=";
   };
 
   nativeBuildInputs = [

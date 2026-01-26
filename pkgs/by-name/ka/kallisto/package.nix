@@ -21,6 +21,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-hfdeztEyHvuOnLS71oSv8sPqFe2UCX5KlANqrT/Gfx8=";
   };
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt ext/bifrost/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.0.0)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   nativeBuildInputs = [
     autoconf
     cmake
@@ -41,7 +46,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Near-optimal quantification of transcripts from RNA-seq data";
     longDescription = ''
       kallisto is a program for quantifying abundances of transcripts
@@ -53,8 +58,8 @@ stdenv.mkDerivation rec {
     '';
     mainProgram = "kallisto";
     homepage = "https://pachterlab.github.io/kallisto";
-    license = licenses.bsd2;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.arcadio ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.arcadio ];
   };
 }

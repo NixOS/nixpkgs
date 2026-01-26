@@ -3,7 +3,8 @@
   stdenv,
   fetchurl,
   libfaketime,
-  xorg,
+  mkfontscale,
+  fonttosfnt,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,8 +18,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     libfaketime
-    xorg.fonttosfnt
-    xorg.mkfontscale
+    fonttosfnt
+    mkfontscale
   ];
 
   unpackPhase = ''
@@ -46,13 +47,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = ''
       Readable bitmap font inspired by Envy Code R
     '';
     homepage = "http://ywstd.fr/p/pj/#envypn";
-    license = licenses.miros;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ erdnaxe ];
+    license = lib.licenses.miros;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ erdnaxe ];
   };
 }

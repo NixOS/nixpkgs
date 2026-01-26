@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mrtrix";
-  version = "3.0.7";
+  version = "3.0.8";
 
   src = fetchFromGitHub {
     owner = "MRtrix3";
     repo = "mrtrix3";
     rev = finalAttrs.version;
-    hash = "sha256-cPI6Ac1Yp5yb07zv9r5O7ZbsHpjrv5BkzbAW1qgj3gQ=";
+    hash = "sha256-X/slZuDyVzfsfq3F2uZ0tqOUmK+qEqSwGy8eAJ1bVbg=";
     fetchSubmodules = true;
   };
 
@@ -126,12 +126,12 @@ stdenv.mkDerivation (finalAttrs: {
         done
       '';
 
-  meta = with lib; {
+  meta = {
     broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     homepage = "https://github.com/MRtrix3/mrtrix3";
     description = "Suite of tools for diffusion imaging";
-    maintainers = with maintainers; [ bcdarwin ];
-    platforms = platforms.linux;
-    license = licenses.mpl20;
+    maintainers = with lib.maintainers; [ bcdarwin ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mpl20;
   };
 })

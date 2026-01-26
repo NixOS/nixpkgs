@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "compose2nix";
-  version = "0.3.2";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "aksiksi";
     repo = "compose2nix";
     rev = "v${version}";
-    hash = "sha256-3i49IyYDwyVQffjHrHPmtPJl4ZkT1VpiFVDmX/dHcKw=";
+    hash = "sha256-0QCYgzxg0upnrVGDXbX9GgSHyzeMP3yqNor2t8DVwiU=";
   };
 
-  vendorHash = "sha256-ckN4nK2A0micl+iBtvxwf5iMchrcGdC0xzjQta6Jges=";
+  vendorHash = "sha256-8boWHIGvenGugKq+8ysPCsUib7QQ0ov+jbKFDKpls3g=";
 
   passthru.tests = {
     version = testers.testVersion {

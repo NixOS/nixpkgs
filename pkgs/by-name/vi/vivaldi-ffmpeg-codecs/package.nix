@@ -42,12 +42,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Additional support for proprietary codecs for Vivaldi and other chromium based tools";
     homepage = "https://ffmpeg.org/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [
       betaboon
       cawilliamson
       fptje

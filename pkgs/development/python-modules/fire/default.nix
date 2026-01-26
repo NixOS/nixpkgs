@@ -9,15 +9,13 @@
   levenshtein,
   pytestCheckHook,
   termcolor,
-  pythonOlder,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
   pname = "fire";
   version = "0.7.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "google";
@@ -40,9 +38,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+    # RuntimeError: There is no current event loop in thread 'MainThread'
+    "testFireAsyncio"
+  ];
+
   pythonImportsCheck = [ "fire" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for automatically generating command line interfaces";
     longDescription = ''
       Python Fire is a library for automatically generating command line
@@ -64,7 +67,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/google/python-fire";
     changelog = "https://github.com/google/python-fire/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ leenaars ];
+    license = lib.licenses.asl20;
   };
 }

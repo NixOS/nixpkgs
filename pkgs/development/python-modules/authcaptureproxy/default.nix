@@ -57,13 +57,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "authcaptureproxy" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/alandtse/auth_capture_proxy/releases/tag/v${version}";
     description = "Proxy to capture authentication information from a webpage";
     mainProgram = "auth_capture_proxy";
     homepage = "https://github.com/alandtse/auth_capture_proxy";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       graham33
       hexa
     ];

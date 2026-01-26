@@ -51,10 +51,10 @@ buildPythonPackage {
     pytweening
   ];
 
-  meta = with lib; {
+  meta = {
     description = "PyAutoGUI lets Python control the mouse and keyboard, and other GUI automation tasks";
     homepage = "https://github.com/asweigart/pyautogui";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ lucasew ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ lucasew ];
   };
 }

@@ -61,6 +61,6 @@ buildPythonPackage rec {
     description = "Set of utility libraries related to user authentication in applications and services based on the use of Keycloak and OpenID Connect";
     homepage = "https://gitlab.softwareheritage.org/swh/devel/swh-auth";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

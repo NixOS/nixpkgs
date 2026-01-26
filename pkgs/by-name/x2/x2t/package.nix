@@ -7,28 +7,34 @@
   fetchFromGitHub,
   glibc,
   harfbuzz,
+  libheif,
+  nixosTests,
+  optipng,
+  x265,
+  libde265,
   icu,
   jdk,
   lib,
-  nodejs,
-  nodePackages,
+  nodejs_22,
   # needs to be static and built with MD2 support!
   openssl,
   pkg-config,
+  python3,
   qt5,
   runCommand,
   stdenv,
+  writers,
   writeScript,
   x2t,
+  grunt-cli,
 }:
 
 let
   qmake = qt5.qmake;
-  libv8 = nodejs.libv8;
   fixIcu = writeScript "fix-icu.sh" ''
     substituteInPlace \
       $BUILDRT/Common/3dParty/icu/icu.pri \
-      --replace-fail "ICU_MAJOR_VER = 58" "ICU_MAJOR_VER = ${lib.versions.major icu.version}"
+      --replace-fail "ICU_MAJOR_VER = 74" "ICU_MAJOR_VER = ${lib.versions.major icu.version}"
 
     mkdir $BUILDRT/Common/3dParty/icu/linux_64
     ln -s ${icu}/lib $BUILDRT/Common/3dParty/icu/linux_64/build
@@ -39,6 +45,13 @@ let
     "QMAKE_LFLAGS+=-licudata"
     "QMAKE_LFLAGS+=-L${icu}/lib"
   ];
+  # see core/Common/3dParty/html/fetch.py
+  gumbo-parser-src = fetchFromGitHub {
+    owner = "google";
+    repo = "gumbo-parser";
+    rev = "aa91b27b02c0c80c482e24348a457ed7c3c088e0";
+    hash = "sha256-+607iXJxeWKoCwb490pp3mqRZ1fWzxec0tJOEFeHoCs=";
+  };
   # see core/Common/3dParty/html/fetch.sh
   katana-parser-src = fetchFromGitHub {
     owner = "jasenhuang";
@@ -61,12 +74,33 @@ let
     rev = "73dd2967c8e1e4f6d7334ee9e539a323d6e66cbd";
     hash = "sha256-WIHpSkOwHkhMvEKxOlgf6gsPs9T3xkzguD8ONXARf1U=";
   };
-  # see core/Common/3dParty/html/fetch.py
-  gumbo-parser-src = fetchFromGitHub {
-    owner = "google";
-    repo = "gumbo-parser";
-    rev = "aa91b27b02c0c80c482e24348a457ed7c3c088e0";
-    hash = "sha256-+607iXJxeWKoCwb490pp3mqRZ1fWzxec0tJOEFeHoCs=";
+  # core/Common/3dParty/md/fetch.py
+  md4c-src = fetchFromGitHub {
+    owner = "mity";
+    repo = "md4c";
+    rev = "481fbfbdf72daab2912380d62bb5f2187d438408";
+    hash = "sha256-zhInM3R0CJUqnzh6wRxMwlUdErovplbZQ5IwXe9XzZ4=";
+  };
+  # core/Common/3dParty/apple/fetch.py
+  glm-src = fetchFromGitHub {
+    owner = "g-truc";
+    repo = "glm";
+    rev = "33b4a621a697a305bc3a7610d290677b96beb181";
+    hash = "sha256-wwGI17vlQzL/x1O0ANr5+KgU1ETnATpLw3njpKfjnKQ=";
+  };
+  # core/Common/3dParty/apple/fetch.py
+  mdds-src = fetchFromGitHub {
+    owner = "kohei-us";
+    repo = "mdds";
+    rev = "0783158939c6ce4b0b1b89e345ab983ccb0f0ad0";
+    hash = "sha256-HMGMxMRO6SadisUjZ0ZNBGQqksNDFkEh3yaQGet9rc0=";
+  };
+  # core/Common/3dParty/apple/fetch.py
+  librevenge-src = fetchFromGitHub {
+    owner = "DistroTech";
+    repo = "librevenge";
+    rev = "becd044b519ab83893ad6398e3cbb499a7f0aaf4";
+    hash = "sha256-2YRxuMYzKvvQHiwXH08VX6GRkdXnY7q05SL05Vbn0Vs=";
   };
   # core/Common/3dParty/apple/fetch.py
   libodfgen-src = fetchFromGitHub {
@@ -75,24 +109,7 @@ let
     rev = "8ef8c171ebe3c5daebdce80ee422cf7bb96aa3bc";
     hash = "sha256-Bv/smZFmZn4PEAcOlXD2Z4k96CK7A7YGDHFDsqZpuiE=";
   };
-  mdds-src = fetchFromGitHub {
-    owner = "kohei-us";
-    repo = "mdds";
-    rev = "0783158939c6ce4b0b1b89e345ab983ccb0f0ad0";
-    hash = "sha256-HMGMxMRO6SadisUjZ0ZNBGQqksNDFkEh3yaQGet9rc0=";
-  };
-  glm-src = fetchFromGitHub {
-    owner = "g-truc";
-    repo = "glm";
-    rev = "33b4a621a697a305bc3a7610d290677b96beb181";
-    hash = "sha256-wwGI17vlQzL/x1O0ANr5+KgU1ETnATpLw3njpKfjnKQ=";
-  };
-  librevenge-src = fetchFromGitHub {
-    owner = "DistroTech";
-    repo = "librevenge";
-    rev = "becd044b519ab83893ad6398e3cbb499a7f0aaf4";
-    hash = "sha256-2YRxuMYzKvvQHiwXH08VX6GRkdXnY7q05SL05Vbn0Vs=";
-  };
+  # core/Common/3dParty/apple/fetch.py
   libetonyek-src = fetchFromGitHub {
     owner = "LibreOffice";
     repo = "libetonyek";
@@ -102,30 +119,120 @@ let
   #qmakeFlags = [ "CONFIG+=debug" ];
   qmakeFlags = [ ];
   dontStrip = false;
-  core-rev = "d257c68d5fdd71a33776a291914f2c856426c259";
+
+  # x2t is not 'directly' versioned, so we version it after the version
+  # of documentserver it's pulled into as a submodule
+  version = "9.2.1";
+  core-rev = "a22f0bfb6032e91f218951ef1c0fc29f6d1ceb36";
   core = fetchFromGitHub {
     owner = "ONLYOFFICE";
     repo = "core";
     # rev that the 'core' submodule in documentserver points at
     rev = core-rev;
-    hash = "sha256-EXeqG8MJWS1asjFihnuMnDSHeKt2x+Ui+8MYK50AnSY=";
+    hash = "sha256-RSoCRcUGnavcNdZEfmBdtxJbEXhiOvbA8IwSeGBkWcs=";
   };
-  web-apps = buildNpmPackage (finalAttrs: {
-    name = "onlyoffice-core-webapps";
+  # mini implementation of https://github.com/kentcdodds/cross-env
+  # because that was not trivial to package and we don't need most
+  # of its functionality anyway
+  cross-env = writers.writePython3Bin "cross-env" { } ''
+    import os
+    import subprocess
+    import sys
 
-    #src = /home/aengelen/d/onlyoffice/documentserver/web-apps;
-    #sourceRoot = "/build/web-apps/build";
+    env = os.environ
+    cmd = []
+
+    for k in sys.argv[1:]:
+        if '=' in k:
+            env[k.split('=')[0]] = k.split('=')[1]
+        else:
+            cmd += [k]
+
+    subprocess.run(cmd, env=env)
+  '';
+  # rev that the 'web-apps' submodule in documentserver points at
+  web-apps-rev = "c2074bbff69902490d49fa7fb511801a11c581f4";
+  web-apps-hash = "sha256-i+m8a1b8RaVmyUAC+FiEdSyXmPWse9XaJaaLL7iq73o=";
+  web-apps-mobile = buildNpmPackage (finalAttrs: {
+    name = "web-apps-mobile";
+
+    src = fetchFromGitHub {
+      owner = "ONLYOFFICE";
+      repo = "web-apps";
+      rev = web-apps-rev;
+      hash = web-apps-hash;
+    };
+
+    patches = [
+      # the spinner floods the output to the point of
+      # exhausting memory...
+      ./web-apps-mobile-no-spinner.patch
+    ];
+
+    sourceRoot = "${finalAttrs.src.name}/vendor/framework7-react";
+
+    npmDepsHash = "sha256-EBUseLFZ5Hc1DHRWL/2erOjlxfm4wHgyIURi5XTXNP8=";
+
+    dontNpmBuild = true;
+
+    preBuild = ''
+      export PRODUCT_VERSION=${version}
+      # 'd' is for 'debug'
+      export BUILD_NUMBER=$(echo "${web-apps-rev}" | tr d _)
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      chmod u+wx ../../apps/*/mobile
+
+      npm run deploy-word
+      mkdir -p $out/documenteditor/mobile
+      mv ../../apps/documenteditor/mobile/css $out/documenteditor/mobile
+      mv ../../apps/documenteditor/mobile/dist $out/documenteditor/mobile
+      mv ../../apps/documenteditor/mobile/index.html $out/documenteditor/mobile
+
+      npm run deploy-cell
+      mkdir -p $out/spreadsheeteditor/mobile
+      mv ../../apps/spreadsheeteditor/mobile/css $out/spreadsheeteditor/mobile
+      mv ../../apps/spreadsheeteditor/mobile/dist $out/spreadsheeteditor/mobile
+      mv ../../apps/spreadsheeteditor/mobile/index.html $out/spreadsheeteditor/mobile
+
+      npm run deploy-slide
+      mkdir -p $out/presentationeditor/mobile
+      mv ../../apps/presentationeditor/mobile/css $out/presentationeditor/mobile
+      mv ../../apps/presentationeditor/mobile/dist $out/presentationeditor/mobile
+      mv ../../apps/presentationeditor/mobile/index.html $out/presentationeditor/mobile
+
+      npm run deploy-visio
+      mkdir -p $out/visioeditor/mobile
+      mv ../../apps/visioeditor/mobile/css $out/visioeditor/mobile
+      mv ../../apps/visioeditor/mobile/dist $out/visioeditor/mobile
+      mv ../../apps/visioeditor/mobile/index.html $out/visioeditor/mobile
+
+      runHook postInstall
+    '';
+  });
+  web-apps = buildNpmPackage (finalAttrs: {
+    name = "onlyoffice-core-web-apps";
+
+    # workaround for https://github.com/NixOS/nixpkgs/issues/477803
+    nodejs = nodejs_22;
+
     src = fetchFromGitHub {
       owner = "ONLYOFFICE";
       repo = "web-apps";
       # rev that the 'web-apps' submodule in documentserver points at
-      rev = "5255c27b1af64f6edf08d1aba20a23b8149e338c";
-      hash = "sha256-49v2h+ILQ0X/gNHny6LQcj94A6h7nS99liUAnLRNxzw=";
+      rev = web-apps-rev;
+      hash = web-apps-hash;
     };
     sourceRoot = "${finalAttrs.src.name}/build";
 
     patches = [
       ./web-apps-avoid-phantomjs.patch
+      # mobile resources are created separately
+      # in the web-apps-mobile derivation
+      ./web-apps-no-mobile.patch
     ];
 
     npmDepsHash = "sha256-Uen7gl6w/0A4MDk+7j+exkdwfCYqMSPJidad8AM60eQ=";
@@ -133,22 +240,42 @@ let
     nativeBuildInputs = [
       autoconf
       automake
-      nodePackages.grunt-cli
+      grunt-cli
+      optipng
     ];
 
     dontNpmBuild = true;
+
+    preBuild = ''
+      export PRODUCT_VERSION=${version}
+
+      # for device_scale.js
+      chmod u+rwx ../..
+      ln -s ${sdkjs.src} ../../sdkjs
+    '';
 
     postBuild = ''
       chmod u+w ..
       mkdir ../deploy
       chmod u+w -R ../apps
-      grunt --force
+
+      mkdir -p ./node_modules/optipng-bin/vendor
+      ln -s ${optipng}/bin/optipng ./node_modules/optipng-bin/vendor/optipng
+
+      grunt
     '';
 
     installPhase = ''
       runHook preInstall
 
-      cp -r ../deploy/web-apps $out
+      mv ../deploy/web-apps $out
+
+      for component in documenteditor spreadsheeteditor presentationeditor visioeditor; do
+        ln -s ${web-apps-mobile}/$component/mobile/css $out/apps/$component/mobile/css
+        rm -r $out/apps/$component/mobile/dist
+        ln -s ${web-apps-mobile}/$component/mobile/dist $out/apps/$component/mobile/dist
+        ln -s ${web-apps-mobile}/$component/mobile/index.html $out/apps/$component/mobile/index.html
+      done
 
       runHook postInstall
     '';
@@ -159,8 +286,8 @@ let
       owner = "ONLYOFFICE";
       repo = "sdkjs";
       # rev that the 'sdkjs' submodule in documentserver points at
-      rev = "0e50652cb08c7753a9ab72d0558560ada5d43046";
-      hash = "sha256-fApr34aT0X8ffPwbsUEWnA3SK8pT5RKNan3YxzhvtAU=";
+      rev = "1e81e7e844fcc602c639067cce7d7726749dc11b";
+      hash = "sha256-9vDGU8paLUAk3GtLbawhog2EDtCVHzNPBjkryxyg6Gs=";
     };
     sourceRoot = "${finalAttrs.src.name}/build";
 
@@ -168,12 +295,12 @@ let
       cp npm-shrinkwrap.json package-lock.json
     '';
 
-    npmDepsHash = "sha256-Hpf+z3RGqZ1LTdow6xP00hNmWf4xs+KnVBj4NbPW4uM=";
+    npmDepsHash = "sha256-C+qp5d4wYmlrEGjIeBsjRhpivy6wKBppJWbcj1z9fbM=";
 
     dontNpmBuild = true;
 
     nativeBuildInputs = [
-      nodePackages.grunt-cli
+      grunt-cli
       jdk
     ];
 
@@ -189,7 +316,8 @@ let
     installPhase = ''
       runHook preInstall
 
-      cp -r ../deploy/sdkjs $out
+      mv ../deploy/sdkjs $out
+      cp ../common/device_scale.js $out/common
 
       runHook postInstall
     '';
@@ -197,8 +325,8 @@ let
   dictionaries = fetchFromGitHub {
     owner = "ONLYOFFICE";
     repo = "dictionaries";
-    tag = "v8.2.0.103";
-    hash = "sha256-3BwWAvnw0RCD6fxTCRstJSrF5QgfVNVBe8rN1hHhCoU=";
+    rev = "d3223bbb777883db66ac3cd249f71c6ebdc992c7";
+    hash = "sha256-7hvztNYnYjyOl3ynGP0vqtx9jLPp09XVDNIow1RYuWM=";
   };
   buildCoreComponent =
     rootdir: attrs:
@@ -324,13 +452,26 @@ let
   graphics = buildCoreComponent "DesktopEditor/graphics/pro" {
     patches = [
       ./cximage-types.patch
+      ./core-fontengine-custom-fonts-paths.patch
     ];
     buildInputs = [
       unicodeConverter
       kernel
+      libheif.lib
+      x265
+      libde265
     ];
     preConfigure = ''
       ln -s ${katana-parser-src} $BUILDRT/Common/3dParty/html/katana-parser
+
+      mkdir -p $BUILDRT/Common/3dParty/heif/libheif/libheif
+      ln -s ${libheif.dev}/include $BUILDRT/Common/3dParty/heif/libheif/libheif/api
+      mkdir -p $BUILDRT/Common/3dParty/heif/libheif/build/linux_64/release
+      ln -s ${libheif.lib}/lib $BUILDRT/Common/3dParty/heif/libheif/build/linux_64/release/libheif
+      mkdir -p $BUILDRT/Common/3dParty/heif/x265_git/build/linux_64
+      ln -s ${x265}/lib $BUILDRT/Common/3dParty/heif/x265_git/build/linux_64/release
+      mkdir -p $BUILDRT/Common/3dParty/heif/libde265/build/linux_64/release
+      ln -s ${libde265}/lib $BUILDRT/Common/3dParty/heif/libde265/build/linux_64/release/libde265
 
       # Common/3dParty/harfbuzz/make.py
       cat >$BUILDRT/Common/3dParty/harfbuzz/harfbuzz.pri <<EOL
@@ -420,12 +561,6 @@ let
       chmod u+w $BUILDRT/Common/3dParty/apple/libetonyek/src/lib
       cp $BUILDRT/Common/3dParty/apple/headers/* $BUILDRT/Common/3dParty/apple/libetonyek/src/lib
     '';
-    installPhase = ''
-      runHook preInstall
-      mkdir -p $out/lib
-      mv ../build/lib/*/* $out/lib
-      runHook postInstall
-    '';
     doCheck = true;
     passthru.tests = buildCoreTests "Apple/test" {
       buildInputs = [
@@ -453,6 +588,28 @@ let
       graphics
     ];
   };
+  ofdfile = buildCoreComponent "OFDFile" {
+    buildInputs = [
+      boost
+      unicodeConverter
+      graphics
+      kernel
+      pdffile
+    ];
+    passthru.tests = buildCoreTests "OFDFile/test" {
+      buildInputs = [
+        unicodeConverter
+        ofdfile
+        graphics
+        kernel
+      ];
+      patches = [ ./ofdfile-test.patch ];
+      qmakeFlags = qmakeFlags ++ icuQmakeFlags;
+      preConfigure = ''
+        source ${fixIcu}
+      '';
+    };
+  };
   pdffile = buildCoreComponent "PdfFile" {
     buildInputs = [
       graphics
@@ -461,6 +618,9 @@ let
       cryptopp
       network
     ];
+    patches = [
+      ./pdffile-limits-include.patch
+    ];
   };
   djvufile = buildCoreComponent "DjVuFile" {
     buildInputs = [
@@ -468,6 +628,13 @@ let
       kernel
       graphics
       pdffile
+    ];
+  };
+  textcommandrenderer = buildCoreComponent "DocxRenderer/test/TextCommandRenderer" {
+    buildInputs = [
+      unicodeConverter
+      kernel
+      graphics
     ];
   };
   docxrenderer = buildCoreComponent "DocxRenderer" {
@@ -486,6 +653,7 @@ let
         djvufile
         xpsfile
         docxrenderer
+        textcommandrenderer
       ];
       preConfigure = ''
         # (not as patch because of line endings)
@@ -518,7 +686,7 @@ let
     patches = [
       # https://github.com/ONLYOFFICE/core/pull/1631
       ./doctrenderer-format-security.patch
-      ./doctrenderer-config-dir.patch
+      ./doctrenderer-v8-iterator.patch
       ./fontengine-format-security.patch
       ./v8_updates.patch
       ./common-v8-no-compress-pointers.patch
@@ -562,8 +730,9 @@ let
 
       echo "== v8 =="
       mkdir -p Common/3dParty/v8_89/v8/out.gn/linux_64
-      ln -s ${libv8}/lib Common/3dParty/v8_89/v8/out.gn/linux_64/obj
-      tar xf ${libv8.src} --one-top-level=/tmp/xxxxx
+      # using nodejs_22 here is a workaround for https://github.com/NixOS/nixpkgs/issues/477805
+      ln -s ${nodejs_22.libv8}/lib Common/3dParty/v8_89/v8/out.gn/linux_64/obj
+      tar xf ${nodejs_22.libv8.src} --one-top-level=/tmp/xxxxx
       for i in /tmp/xxxxx/*/deps/v8/*; do
         cp -r $i Common/3dParty/v8_89/v8/
       done
@@ -573,6 +742,7 @@ let
     passthru.tests = lib.attrsets.genAttrs [ "embed/external" "embed/internal" "js_internal" "json" ] (
       test:
       buildCoreTests "DesktopEditor/doctrenderer/test/${test}" {
+        patches = [ ./doctrenderer-v8-test.patch ];
         buildInputs = [ doctrenderer ];
         preConfigure = ''
           ln -s ${googletest-src} $BUILDRT/Common/3dParty/googletest/googletest
@@ -591,6 +761,7 @@ let
     preConfigure = ''
       ln -s ${katana-parser-src} $BUILDRT/Common/3dParty/html/katana-parser
       ln -s ${gumbo-parser-src} $BUILDRT/Common/3dParty/html/gumbo-parser
+      ln -s ${md4c-src} $BUILDRT/Common/3dParty/md/md4c
     '';
   };
   epubfile = buildCoreComponent "EpubFile" {
@@ -634,6 +805,7 @@ let
       unicodeConverter
       kernel
       graphics
+      libheif.lib
     ];
     qmakeFlags = qmakeFlags ++ icuQmakeFlags;
     preConfigure = ''
@@ -644,7 +816,33 @@ let
       runHook preInstall
 
       mkdir -p $out/bin
-      cp $BUILDRT/build/bin/*/* $BUILDRT/build/bin/*/*/* $out/bin
+      find $BUILDRT/build -type f -exec cp {} $out/bin \;
+
+      runHook postInstall
+    '';
+  };
+  allthemesgen = buildCoreComponent "DesktopEditor/allthemesgen" {
+    buildInputs = [
+      unicodeConverter
+      kernel
+      graphics
+      network
+      doctrenderer
+      docxrenderer
+      pdffile
+      xpsfile
+      djvufile
+    ];
+    qmakeFlags = qmakeFlags ++ icuQmakeFlags;
+    preConfigure = ''
+      source ${fixIcu}
+    '';
+    dontStrip = true;
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/bin
+      find $BUILDRT/build -type f -exec cp {} $out/bin \;
 
       runHook postInstall
     '';
@@ -652,8 +850,8 @@ let
   core-fonts = fetchFromGitHub {
     owner = "ONLYOFFICE";
     repo = "core-fonts";
-    rev = "d5d80e6ae15800ccf31e1c4dbb1ae3385992e0c2";
-    hash = "sha256-daJG/4tcdRVVmlMCUW4iuoUkEEfY7sx5icYWMva4o+c=";
+    rev = "7030c6681fb5bbed560675cb42422f91df15d5c9";
+    hash = "sha256-yNUDyIJ09Ejbyt/kMrOpDbT15QTDOe7GTQChRU5+QY4=";
   };
   allfonts = runCommand "allfonts" { } ''
     mkdir -p $out/web
@@ -671,9 +869,7 @@ let
 in
 buildCoreComponent "X2tConverter/build/Qt" {
   pname = "x2t";
-  # x2t is not 'directly' versioned, so we version it after the version
-  # of documentserver it's pulled into as a submodule
-  version = "8.3.2";
+  inherit version;
 
   buildInputs = [
     unicodeConverter
@@ -702,6 +898,7 @@ buildCoreComponent "X2tConverter/build/Qt" {
     docxrenderer
     iworkfile
     hwpfile
+    ofdfile
     vbaformatlib
     odfformatlib
   ];
@@ -723,16 +920,15 @@ buildCoreComponent "X2tConverter/build/Qt" {
     mkdir -p $out/bin
     find $BUILDRT/build -type f -exec cp {} $out/bin \;
 
-    mkdir -p $out/etc
-    cat >$out/etc/DoctRenderer.config <<EOF
-          <Settings>
-            <file>${sdkjs}/common/Native/native.js</file>
-            <file>${sdkjs}//common/Native/jquery_native.js</file>
-            <allfonts>${allfonts}/converter/AllFonts.js</allfonts>
-            <file>${web-apps}/vendor/xregexp/xregexp-all-min.js</file>
-            <sdkjs>${sdkjs}</sdkjs>
-            <dictionaries>${dictionaries}</dictionaries>
-          </Settings>
+    cat >$out/bin/DoctRenderer.config <<EOF
+      <Settings>
+        <file>${sdkjs}/common/Native/native.js</file>
+        <file>${sdkjs}/common/Native/jquery_native.js</file>
+        <allfonts>${allfonts}/converter/AllFonts.js</allfonts>
+        <file>${web-apps}/vendor/xregexp/xregexp-all-min.js</file>
+        <sdkjs>${sdkjs}</sdkjs>
+        <dictionaries>${dictionaries}</dictionaries>
+      </Settings>
     EOF
 
     runHook postInstall
@@ -744,14 +940,18 @@ buildCoreComponent "X2tConverter/build/Qt" {
     iworkfile = iworkfile.tests;
     docxrenderer = docxrenderer.tests;
     doctrenderer = doctrenderer.tests;
+    ofdfile = ofdfile.tests;
     x2t = runCommand "x2t-test" { } ''
       (${x2t}/bin/x2t || true) | grep "OOX/binary file converter." && mkdir -p $out
     '';
+    nixos-module = nixosTests.onlyoffice;
   };
   passthru.components = {
     inherit
       allfontsgen
+      allthemesgen
       allfonts
+      core-fonts
       unicodeConverter
       kernel
       graphics
@@ -766,6 +966,8 @@ buildCoreComponent "X2tConverter/build/Qt" {
       fb2file
       iworkfile
       web-apps
+      web-apps-mobile
+      cross-env
       sdkjs
       dictionaries
       ;

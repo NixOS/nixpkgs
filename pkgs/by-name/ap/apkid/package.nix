@@ -35,12 +35,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "apkid" ];
 
-  meta = with lib; {
+  meta = {
     description = "Android Application Identifier";
     homepage = "https://github.com/rednaga/APKiD";
     changelog = "https://github.com/rednaga/APKiD/releases/tag/${src.tag}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "apkid";
   };
 }

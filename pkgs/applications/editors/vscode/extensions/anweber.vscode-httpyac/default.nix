@@ -23,6 +23,6 @@ vscode-utils.buildVscodeMarketplaceExtension {
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=anweber.vscode-httpyac";
     homepage = "https://github.com/AnWeber/vscode-httpyac/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

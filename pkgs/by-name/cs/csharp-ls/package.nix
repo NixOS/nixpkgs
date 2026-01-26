@@ -6,14 +6,14 @@
   nix-update-script,
 }:
 let
-  dotnet-sdk = dotnetCorePackages.sdk_9_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
 in
 
 buildDotnetGlobalTool rec {
   pname = "csharp-ls";
-  version = "0.19.0";
+  version = "0.21.0";
 
-  nugetHash = "sha256-Xd4DTSvhOyz+pqk4bpUCAz69WG5hby5yJsd/lO6Cs/Y=";
+  nugetHash = "sha256-XFzTJ7UWaFQEmFmdY/zY4zjKZaKK9aUq4Zbt3h+19bg=";
 
   inherit dotnet-sdk;
   dotnet-runtime = dotnet-sdk;
@@ -21,7 +21,6 @@ buildDotnetGlobalTool rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

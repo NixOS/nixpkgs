@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "url-parser";
-  version = "2.1.10";
+  version = "2.1.13";
 
   src = fetchFromGitHub {
     owner = "thegeeklab";
     repo = "url-parser";
     tag = "v${version}";
-    hash = "sha256-5QpcioReUAO11QOLbU+KtUd4Zs+hi/lvNvEzDpDQbhU=";
+    hash = "sha256-/eu3smf3CeAO+cwhKTL0DB7UVJJ4AJjFjZbNyBbwIZg=";
   };
 
-  vendorHash = "sha256-3TOUdwBq6TgzZIDtaoIoi2ur83DmAjBfi1ILJIGpyJU=";
+  vendorHash = "sha256-bcMcooi5dYWs5bIOwSC/rOeb3+FBSFnWjaflTeaA4OU=";
 
   ldflags = [
     "-s"

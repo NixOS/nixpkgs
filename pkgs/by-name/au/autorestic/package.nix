@@ -28,11 +28,11 @@ buildGoModule rec {
          --zsh <($out/bin/autorestic completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "High level CLI utility for restic";
     homepage = "https://github.com/cupcakearmy/autorestic";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ renesat ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ renesat ];
     mainProgram = "autorestic";
   };
 }

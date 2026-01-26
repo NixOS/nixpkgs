@@ -5,7 +5,7 @@
   fetchFromGitLab,
   libGL,
   stdenv,
-  xorg,
+  libx11,
 }:
 stdenv.mkDerivation rec {
   pname = "animatch";
@@ -18,6 +18,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-zBV45WMAXtCpPPbDpr04K/a9UtZ4KLP9nUauBlbhrFo=";
   };
 
+  postPatch = ''
+    substituteInPlace libsuperderpy/src/3rdparty/cimgui/CMakeLists.txt --replace-fail \
+      'cmake_minimum_required(VERSION 3.1)' \
+      'cmake_minimum_required(VERSION 4.0)'
+  '';
+
   nativeBuildInputs = [
     cmake
   ];
@@ -25,12 +31,14 @@ stdenv.mkDerivation rec {
   buildInputs = [
     allegro5
     libGL
-    xorg.libX11
+    libx11
   ];
 
   cmakeFlags = [
     "-DLIBSUPERDERPY_STATIC=ON" # recommended by upstream for coexistence with other superderpy games
   ];
+
+  strictDeps = true;
 
   meta = {
     homepage = "https://gitlab.com/HolyPangolin/animatch/";

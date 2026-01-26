@@ -8,25 +8,25 @@
 
 stdenv.mkDerivation rec {
   pname = "microcom";
-  version = "2023.09.0";
+  version = "2025.11.0";
 
   src = fetchFromGitHub {
     owner = "pengutronix";
     repo = "microcom";
     rev = "v${version}";
-    hash = "sha256-CT/myxOK4U3DzliGsa45WMIFcYLjcoxx6w5S1NL5c7Y=";
+    hash = "sha256-drQpUOl+QLBvwT++bEBk9Bt+tTQxrnFgfuoGIW5Bcyw=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ readline ];
 
-  meta = with lib; {
+  meta = {
     description = "Minimalistic terminal program for communicating
     with devices over a serial connection";
     inherit (src.meta) homepage;
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ emantor ];
-    platforms = with platforms; linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ emantor ];
+    platforms = with lib.platforms; linux;
     mainProgram = "microcom";
   };
 }

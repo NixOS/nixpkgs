@@ -67,11 +67,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "freeipa";
-  version = "4.12.4";
+  version = "4.12.5";
 
   src = fetchurl {
     url = "https://releases.pagure.org/freeipa/freeipa-${version}.tar.gz";
-    hash = "sha256-Nn3dHoaAt6+MZ0gMFCJniXginq4guNM8HjChren9adY=";
+    hash = "sha256-jvXS9Hx9VGFccFL19HogfH15JVIW7pc3/TY1pOvJglM=";
   };
 
   patches = [
@@ -171,10 +171,9 @@ stdenv.mkDerivation rec {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Identity, Policy and Audit system";
     longDescription = ''
       IPA is an integrated solution to provide centrally managed Identity (users,
@@ -184,12 +183,12 @@ stdenv.mkDerivation rec {
       and integration with Active Directory based infrastructures (Trusts).
     '';
     homepage = "https://www.freeipa.org/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       s1341
       benley
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "ipa";
   };
 }

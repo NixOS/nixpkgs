@@ -15,6 +15,8 @@ setComposerEnvVariables() {
   export COMPOSER_MIRROR_PATH_REPOS=1
   export COMPOSER_HTACCESS_PROTECT=0
   export COMPOSER_FUND=0
+  COMPOSER_VENDOR_DIR=$(composer config vendor-dir)
+  export COMPOSER_VENDOR_DIR
 }
 
 checkComposerValidate() {

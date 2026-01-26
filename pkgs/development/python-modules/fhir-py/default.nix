@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   flit-core,
   aiohttp,
   pytz,
@@ -16,16 +15,14 @@
 
 buildPythonPackage rec {
   pname = "fhir-py";
-  version = "2.0.15";
+  version = "2.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "beda-software";
     repo = "fhir-py";
     tag = "v${version}";
-    hash = "sha256-XZC3cLjAy1VZfMsHy/QmwJXKiW/WxVous1LrbkGOeRs=";
+    hash = "sha256-C6ttVEYsnOzA4PFtq0wHfXrGSvpXOj0/oTuVDtx19qc=";
   };
 
   build-system = [ flit-core ];
@@ -50,11 +47,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fhirpy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Async/sync API for FHIR resources";
     homepage = "https://github.com/beda-software/fhir-py";
     changelog = "https://github.com/beda-software/fhir-py/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

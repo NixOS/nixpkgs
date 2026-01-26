@@ -6,7 +6,7 @@
   boost,
   jemalloc,
   c-blosc,
-  tbb,
+  onetbb,
   zlib,
 }:
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     boost
-    tbb
+    onetbb
     jemalloc
     c-blosc
     zlib
@@ -47,12 +47,12 @@ stdenv.mkDerivation rec {
       --replace \''${OPENVDB_INCLUDEDIR} $dev/include
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open framework for voxel";
     mainProgram = "vdb_print";
     homepage = "https://www.openvdb.org";
-    maintainers = [ maintainers.guibou ];
-    platforms = platforms.unix;
-    license = licenses.asl20;
+    maintainers = [ lib.maintainers.guibou ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.asl20;
   };
 }

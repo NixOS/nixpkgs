@@ -4,17 +4,18 @@
   fetchFromGitHub,
   buildGoModule,
   testers,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "podman-tui";
-  version = "1.8.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman-tui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lTgILCaisnCXMnNL6DSGIszJBC3GiPStZzol3dCm/7s=";
+    hash = "sha256-Nm0vf+/DfFMFRYrxI48EoIeQZz19LUSJC9260+Vtynk=";
   };
 
   vendorHash = null;
@@ -47,6 +48,8 @@ buildGoModule (finalAttrs: {
     command = "HOME=$(mktemp -d) podman-tui version";
     version = "v${finalAttrs.version}";
   };
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/containers/podman-tui";

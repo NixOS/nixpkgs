@@ -27,7 +27,7 @@ rec {
   phraseDirective =
     solution: env: name: val:
     if builtins.isInt val then
-      builtins.toString val
+      toString val
     else if builtins.isString val then
       name
     else if true == val then
@@ -200,9 +200,6 @@ rec {
             )
           ))
         }
-      ''
-      + lib.optionalString (partialSolution.interpreter != "none") ''
-        ${partialSolution.interpreter} -n $out
       '';
     };
   writeScriptBin =
@@ -220,9 +217,6 @@ rec {
             }
           )
         )}
-      ''
-      + lib.optionalString (partialSolution.interpreter != "none") ''
-        ${partialSolution.interpreter} -n $out/bin/${name}
       '';
     };
   mkDerivation =
@@ -232,6 +226,7 @@ rec {
       version,
       passthru ? { },
       solutions,
+      postResholve ? "",
       ...
     }@attrs:
     let
@@ -285,6 +280,8 @@ rec {
         # supports default python.logging levels
         # LOGLEVEL="INFO";
         preFixup = phraseSolutions solutions unresholved;
+
+        postFixup = postResholve;
 
         # don't break the metadata...
         meta = unresholved.meta;

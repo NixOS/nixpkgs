@@ -46,10 +46,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "electrum_ecc" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pure python ctypes wrapper for libsecp256k1";
     homepage = "https://github.com/spesmilo/electrum-ecc";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

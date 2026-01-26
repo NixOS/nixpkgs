@@ -70,7 +70,7 @@ let
       '';
       license = lib.licenses.mit;
       mainProgram = "revup";
-      maintainers = with lib.maintainers; [ ];
+      maintainers = [ ];
     };
   };
 in

@@ -53,7 +53,7 @@ buildPythonPackage {
     postPatch
     ;
 
-  format = "pyproject";
+  pyproject = true;
 
   buildInputs = dotnetCorePackages.sdk_8_0.packages ++ dotnet-build.nugetDeps;
 
@@ -89,10 +89,10 @@ buildPythonPackage {
 
   passthru.fetch-deps = dotnet-build.fetch-deps;
 
-  meta = with lib; {
+  meta = {
     description = "Generic pure Python loader for .NET runtimes";
     homepage = "https://pythonnet.github.io/clr-loader/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mdarocha ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mdarocha ];
   };
 }

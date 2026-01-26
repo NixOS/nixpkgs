@@ -5,15 +5,12 @@
   setuptools,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "shellingham";
   version = "1.5.4";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sarugaku";
@@ -31,11 +28,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "shellingham" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to detect the surrounding shell";
     homepage = "https://github.com/sarugaku/shellingham";
     changelog = "https://github.com/sarugaku/shellingham/blob/${version}/CHANGELOG.rst";
-    license = licenses.isc;
-    maintainers = with maintainers; [ mbode ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ mbode ];
   };
 }

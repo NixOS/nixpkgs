@@ -22,12 +22,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Ethereum Virtual Machine (EVM) assembler and disassembler";
     mainProgram = "evmasm";
     homepage = "https://github.com/crytic/pyevmasm";
     changelog = "https://github.com/crytic/pyevmasm/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ arturcygan ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ arturcygan ];
   };
 }

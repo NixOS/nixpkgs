@@ -1,0 +1,36 @@
+From a8209a45e73f4c8b1f4e4e174d2d5fbc8a9ac4df Mon Sep 17 00:00:00 2001
+From: Yu Watanabe <watanabe.yu+github@gmail.com>
+Date: Tue, 22 Jul 2025 03:37:37 +0900
+Subject: [PATCH 21/30] musl: avoid conflict between fcntl.h and our forward.h
+
+glibc defines AT_FDCWD as -100, but musl defines it as (-100).
+In forward.h, we also define AT_FDCWD as -100, hence musl's fcntl.h
+conflicts with forward.h. This is for avoiding the conflict.
+---
+ src/include/musl/fcntl.h | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+ create mode 100644 src/include/musl/fcntl.h
+
+diff --git a/src/include/musl/fcntl.h b/src/include/musl/fcntl.h
+new file mode 100644
+index 0000000000..e69f13087d
+--- /dev/null
++++ b/src/include/musl/fcntl.h
+@@ -0,0 +1,14 @@
++/* SPDX-License-Identifier: LGPL-2.1-or-later */
++#pragma once
++
++/* glibc defines AT_FDCWD as -100, but musl defines it as (-100). Hence, musl's fcntl.h conflicts with
++ * forward.h. To avoid the conflict, here temporary undef AT_FDCWD before including fcntl.h. */
++#ifdef AT_FDCWD
++#undef AT_FDCWD
++#endif
++
++#include_next <fcntl.h>
++
++/* Then, undef AT_FDCWD by fcntl.h and redefine it as consistent with forward.h */
++#undef AT_FDCWD
++#define AT_FDCWD -100
+-- 
+2.51.0
+

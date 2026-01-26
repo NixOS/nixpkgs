@@ -17,7 +17,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-tlFCovCzqgaLcxcGmWXLYUjaAvFG0o11ei8uMzWJs6Q=";
 
-  meta = with lib; {
+  meta = {
     description = "Recon tool that allows searching shortened URLs";
     mainProgram = "urlhunter";
     longDescription = ''
@@ -25,7 +25,7 @@ buildGoModule rec {
       exposed via shortener services such as bit.ly and goo.gl.
     '';
     homepage = "https://github.com/utkusen/urlhunter";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

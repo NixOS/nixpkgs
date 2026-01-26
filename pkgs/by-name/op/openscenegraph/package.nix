@@ -135,18 +135,28 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # ref. https://github.com/openscenegraph/OpenSceneGraph/pull/1373
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "CMAKE_MINIMUM_REQUIRED(VERSION 2.8.0 FATAL_ERROR)" \
+      "CMAKE_MINIMUM_REQUIRED(VERSION 3.10)"
+  '';
+
   cmakeFlags =
     lib.optional (!withApps) "-DBUILD_OSG_APPLICATIONS=OFF"
     ++ lib.optional withExamples "-DBUILD_OSG_EXAMPLES=ON";
 
-  meta = with lib; {
+  meta = {
     description = "3D graphics toolkit";
     homepage = "http://www.openscenegraph.org/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       aanderse
       raskin
     ];
-    platforms = with platforms; linux ++ darwin;
-    license = "OpenSceneGraph Public License - free LGPL-based license";
+    platforms = with lib.platforms; linux ++ darwin;
+    license = with lib.licenses; [
+      lgpl21Only
+      wxWindowsException31
+    ];
   };
 }

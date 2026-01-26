@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     changelog = "https://git.sr.ht/~steef/snixembed/refs/${version}";
     license = lib.licenses.isc;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "snixembed";
   };
 }

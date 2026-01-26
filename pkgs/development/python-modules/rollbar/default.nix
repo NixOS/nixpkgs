@@ -10,7 +10,6 @@
   pytestCheckHook,
   requests,
   six,
-  pythonOlder,
   webob,
 }:
 
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "rollbar";
   version = "1.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -49,11 +46,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rollbar" ];
 
-  meta = with lib; {
+  meta = {
     description = "Error tracking and logging from Python to Rollbar";
     mainProgram = "rollbar";
     homepage = "https://github.com/rollbar/pyrollbar";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

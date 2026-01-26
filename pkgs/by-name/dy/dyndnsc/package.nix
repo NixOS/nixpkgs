@@ -63,7 +63,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/infothrill/python-dyndnsc";
     changelog = "https://github.com/infothrill/python-dyndnsc/releases/tag/${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "dyndnsc";
     platforms = lib.platforms.unix;
   };

@@ -31,7 +31,6 @@ melpaBuild {
         pyte
         psutil
       ];
-    eafOtherDeps = [ ];
   };
 
   meta = {

@@ -15,7 +15,7 @@ let
     pname = "Mojo-Log-Clearable";
     version = "1.001";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DB/DBOOK/${pname}-${version}.tar.gz";
+      url = "mirror://cpan/authors/id/D/DB/DBOOK/Mojo-Log-Clearable-${version}.tar.gz";
       hash = "sha256-guBqKdWemc4mC/xp77Wd7qeV2iRqY4wrQ5NRsHtsCnI=";
     };
     buildInputs = with perl.pkgs; [ ModuleBuildTiny ];
@@ -70,14 +70,14 @@ stdenv.mkDerivation (finalAttrs: {
     $out/bin/znapzend --version
   '';
 
-  meta = with lib; {
+  meta = {
     description = "High performance open source ZFS backup with mbuffer and ssh support";
     homepage = "https://www.znapzend.org";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
       otwieracz
       ma27
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

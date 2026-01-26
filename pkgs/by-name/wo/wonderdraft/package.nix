@@ -3,7 +3,11 @@
   stdenv,
   requireFile,
   dpkg,
-  xorg,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxcursor,
+  libx11,
   libGL,
   alsa-lib,
   pulseaudio,
@@ -39,11 +43,11 @@ stdenv.mkDerivation rec {
   preFixup =
     let
       libPath = lib.makeLibraryPath [
-        xorg.libXcursor
-        xorg.libXinerama
-        xorg.libXrandr
-        xorg.libX11
-        xorg.libXi
+        libxcursor
+        libxinerama
+        libxrandr
+        libx11
+        libxi
         libGL
         alsa-lib
         pulseaudio
@@ -56,12 +60,12 @@ stdenv.mkDerivation rec {
         $out/opt/Wonderdraft/Wonderdraft.x86_64
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://wonderdraft.net/";
     description = "Mapmaking tool for Tabletop Roleplaying Games, designed for city, region, or world scale";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ jsusk ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    maintainers = with lib.maintainers; [ jsusk ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }

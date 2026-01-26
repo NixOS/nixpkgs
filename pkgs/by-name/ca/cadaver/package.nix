@@ -6,6 +6,7 @@
   pkg-config,
   zlib,
   openssl,
+  readline,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,6 +30,7 @@ stdenv.mkDerivation rec {
     neon
     openssl
     zlib
+    readline
   ];
 
   meta = {

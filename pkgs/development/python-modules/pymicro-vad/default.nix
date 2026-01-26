@@ -32,11 +32,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pymicro_vad" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/rhasspy/pymicro-vad/releases/tag/${version}";
     description = "Self-contained voice activity detector";
     homepage = "https://github.com/rhasspy/pymicro-vad";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   hatchling,
   pydantic,
   python-dotenv,
@@ -16,8 +15,6 @@ let
     pname = "pydantic-settings";
     version = "2.10.1";
     pyproject = true;
-
-    disabled = pythonOlder "3.8";
 
     src = fetchFromGitHub {
       owner = "pydantic";
@@ -57,10 +54,10 @@ let
       pytest = self.overridePythonAttrs { doCheck = true; };
     };
 
-    meta = with lib; {
+    meta = {
       description = "Settings management using pydantic";
       homepage = "https://github.com/pydantic/pydantic-settings";
-      license = licenses.mit;
+      license = lib.licenses.mit;
       broken = lib.versionOlder pydantic.version "2.0.0";
       maintainers = [ ];
     };

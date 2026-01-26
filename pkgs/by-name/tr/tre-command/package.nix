@@ -32,11 +32,11 @@ rustPlatform.buildRustPackage rec {
     "respect_git_ignore"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tree command, improved";
     homepage = "https://github.com/dduan/tre";
-    license = licenses.mit;
-    maintainers = [ maintainers.dduan ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.dduan ];
     mainProgram = "tre";
   };
 }

@@ -1,6 +1,5 @@
 {
   lib,
-  pythonOlder,
   fetchFromGitHub,
   buildPythonPackage,
   setuptools,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   version = "0.1.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "DigitalTrustCenter";
     repo = "PGPy_dtc";
@@ -28,6 +25,13 @@ buildPythonPackage rec {
   dependencies = [
     pyasn1
     cryptography
+  ];
+
+  patches = [
+    # NOTE: This is the same patch file as Fix-compat-with-current-cryptography.patch
+    #       from the pgpy packaging, with the base directory modified for pgpy-dtc.
+    # https://github.com/SecurityInnovation/PGPy/pull/474
+    ./Fix-compat-with-current-cryptography.patch
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];

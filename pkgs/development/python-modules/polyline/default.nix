@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pytestCheckHook,
   pytest-cov-stub,
-  pythonOlder,
   setuptools,
   wheel,
 }:
@@ -12,9 +11,7 @@
 buildPythonPackage rec {
   pname = "polyline";
   version = "2.0.3";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frederickjansen";
@@ -35,7 +32,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "polyline" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation of Google's Encoded Polyline Algorithm Format";
     longDescription = ''
       polyline is a Python implementation of Google's Encoded Polyline Algorithm Format. It is
@@ -43,7 +40,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/frederickjansen/polyline";
     changelog = "https://github.com/frederickjansen/polyline/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ersin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ersin ];
   };
 }

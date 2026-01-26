@@ -46,11 +46,11 @@ buildPythonPackage rec {
 
   pytestFlags = [ "--snapshot-update" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to access the FYTA API";
     homepage = "https://github.com/dontinelli/fyta_cli";
     changelog = "https://github.com/dontinelli/fyta_cli/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

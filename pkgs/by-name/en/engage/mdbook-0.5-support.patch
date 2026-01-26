@@ -1,0 +1,16 @@
+--- a/book.toml
++++ b/book.toml
+@@ -1,6 +1,5 @@
+ [book]
+ language = "en"
+-multilingual = false
+ src = "book"
+ title = "Engage"
+
+@@ -8,5 +7,5 @@ build-dir = "public"
+
+ [output.html]
+-git-repository-icon = "fa-git-square"
++git-repository-icon = "fab-square-git"
+ git-repository-url = "https://gitlab.computer.surgery/charles/engage"
+

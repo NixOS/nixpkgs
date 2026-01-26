@@ -53,7 +53,7 @@ mkDerivation {
   makeFlags = [
     "STRIP=-s" # flag to install, not command
     "MK_WERROR=no"
-    "TESTSDIR=${builtins.placeholder "test"}"
+    "TESTSDIR=${placeholder "test"}"
   ]
   ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
     "BOOTSTRAPPING=1"

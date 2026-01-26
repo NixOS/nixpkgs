@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "smpmgr";
-  version = "0.13.2";
+  version = "0.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "intercreate";
     repo = "smpmgr";
     tag = version;
-    hash = "sha256-0yb6PNrC6+u/iX/5xVvXq5gdLF7Hol8VOsmY22Ka8B8=";
+    hash = "sha256-EWvTt0bfkHA+E9nkoI8u17j6zevbDofGUxHpFXoUGyo=";
   };
 
   build-system = with python3Packages; [
@@ -37,7 +37,6 @@ python3Packages.buildPythonApplication rec {
     pytestCheckHook
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
 
   pythonImportsCheck = [ "smpmgr" ];
 

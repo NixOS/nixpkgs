@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "simpleitk";
-  version = "2.5.2";
+  version = "2.5.3";
 
   src = fetchFromGitHub {
     owner = "SimpleITK";
     repo = "SimpleITK";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6jEPO8pM5EDVFgeq8hSpJ0pWn2/Iph4Xcs2hs41kxAI=";
+    hash = "sha256-lHpoYGrL7HHOLcYdMKsAPhh7g0hLVsgkRxk1fsmvAzQ=";
   };
 
   nativeBuildInputs = [
@@ -37,12 +37,12 @@ stdenv.mkDerivation (finalAttrs: {
     "-DSimpleITK_USE_ELASTIX=ON"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.simpleitk.org";
     description = "Simplified interface to ITK";
     changelog = "https://github.com/SimpleITK/SimpleITK/releases/tag/v${finalAttrs.version}";
-    maintainers = with maintainers; [ bcdarwin ];
-    platforms = platforms.linux;
-    license = licenses.asl20;
+    maintainers = with lib.maintainers; [ bcdarwin ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.asl20;
   };
 })

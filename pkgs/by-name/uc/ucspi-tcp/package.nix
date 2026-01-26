@@ -10,6 +10,9 @@ stdenv.mkDerivation rec {
   pname = "ucspi-tcp";
   version = "0.88";
 
+  # Uses K&R C style function declarations which GCC 14+ rejects
+  env.NIX_CFLAGS_COMPILE = "-std=gnu89";
+
   src = fetchurl {
     url = "https://cr.yp.to/ucspi-tcp/ucspi-tcp-${version}.tar.gz";
     sha256 = "171yl9kfm8w7l17dfxild99mbf877a9k5zg8yysgb1j8nz51a1ja";
@@ -57,7 +60,7 @@ stdenv.mkDerivation rec {
     cp $debian/ucspi-tcp-man/*.1 "$out/share/man/man1"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tools for building TCP client-server applications";
     longDescription = ''
       tcpserver waits for incoming connections and, for each connection, runs a
@@ -87,8 +90,8 @@ stdenv.mkDerivation rec {
       different networks.
     '';
     homepage = "http://cr.yp.to/ucspi-tcp.html";
-    license = licenses.publicDomain;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    license = lib.licenses.publicDomain;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.bjornfor ];
   };
 }

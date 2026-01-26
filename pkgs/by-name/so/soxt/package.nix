@@ -1,5 +1,5 @@
 {
-  fetchhg,
+  fetchFromGitHub,
   lib,
   stdenv,
   cmake,
@@ -11,15 +11,16 @@
   libGL,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "soxt";
-  version = "unstable-2019-06-14";
+  version = "1.4.2";
 
-  src = fetchhg {
-    url = "https://bitbucket.org/Coin3D/soxt";
-    rev = "85e135bb266fbb17e47fc336b876a576a239c15c";
-    sha256 = "0vk5cgn53yqf7csqdnlnyyhi4mbgx4wlsq70613p5fgxlvxzhcym";
-    fetchSubrepos = true;
+  src = fetchFromGitHub {
+    owner = "coin3d";
+    repo = "soxt";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ji3rukL8QOErsjx06A61d65O5wxhw4jkEEKIa4EDhUg=";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake ];
@@ -32,11 +33,14 @@ stdenv.mkDerivation {
     libXmu
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://bitbucket.org/Coin3D/coin/wiki/Home";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     description = "GUI binding for using Open Inventor with Xt/Motif";
-    maintainers = with maintainers; [ tmplt ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [
+      tmplt
+      skohtv
+    ];
+    platforms = lib.platforms.linux;
   };
-}
+})

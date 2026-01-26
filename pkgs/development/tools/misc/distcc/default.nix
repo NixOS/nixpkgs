@@ -100,10 +100,10 @@ let
     meta = {
       description = "Fast, free distributed C/C++ compiler";
       homepage = "http://distcc.org";
-      license = "GPL";
+      license = lib.licenses.gpl2Only;
 
-      platforms = lib.platforms.linux;
-      maintainers = with lib.maintainers; [ anderspapitto ];
+      platforms = lib.platforms.linux ++ lib.platforms.darwin;
+      maintainers = with lib.maintainers; [ pascalj ];
     };
   };
 in

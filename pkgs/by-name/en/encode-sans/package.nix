@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Versatile sans serif font family";
     longDescription = ''
       The Encode Sans family is a versatile workhorse. Featuring a huge range of
@@ -33,8 +33,8 @@ stdenvNoCC.mkDerivation rec {
       Designed by Pablo Impallari and Andres Torresi.
     '';
     homepage = "https://github.com/impallari/Encode-Sans";
-    license = licenses.ofl;
-    maintainers = with maintainers; [ cmfwyp ];
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    maintainers = [ ];
+    platforms = lib.platforms.all;
   };
 }

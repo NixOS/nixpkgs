@@ -8,7 +8,7 @@
   qtbase,
   qtwayland,
   qt5,
-  xorg,
+  libxcb,
   useQt6 ? false,
 }:
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     qtbase
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    xorg.libxcb
+    libxcb
   ]
   ++ lib.optionals (!useQt6) [
     qt5.qtx11extras
@@ -63,11 +63,11 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Style to bend Qt applications to look like they belong into GNOME Shell";
     homepage = "https://github.com/FedoraQt/adwaita-qt";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

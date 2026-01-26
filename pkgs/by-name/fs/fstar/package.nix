@@ -17,15 +17,15 @@ let
 
   fstarZ3 = callPackage ./z3 { };
 in
-ocamlPackages.buildDunePackage rec {
+ocamlPackages.buildDunePackage (finalAttrs: {
   pname = "fstar";
-  version = "2025.08.07";
+  version = "2025.12.15";
 
   src = fetchFromGitHub {
     owner = "FStarLang";
     repo = "FStar";
-    rev = "v${version}";
-    hash = "sha256-IfwMLMbyC1+iPIG48zm6bzhKCHKPOpVaHdlLhU5g3co=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-UuwDX6178YMhEQqpEOATswzoUNpEECq7Nyh2yk5gKRg=";
   };
 
   nativeBuildInputs = [
@@ -105,7 +105,7 @@ ocamlPackages.buildDunePackage rec {
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
-        "v(\d{4}\.\d{2}\.\d{2})$"
+        "v(\\d{4}\\.\\d{2}\\.\\d{2})$"
       ];
     };
     z3 = fstarZ3;
@@ -114,7 +114,7 @@ ocamlPackages.buildDunePackage rec {
   meta = {
     description = "ML-like functional programming language aimed at program verification";
     homepage = "https://www.fstar-lang.org";
-    changelog = "https://github.com/FStarLang/FStar/raw/v${version}/CHANGES.md";
+    changelog = "https://github.com/FStarLang/FStar/raw/v${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       numinit
@@ -122,4 +122,4 @@ ocamlPackages.buildDunePackage rec {
     mainProgram = "fstar.exe";
     platforms = with lib.platforms; darwin ++ linux;
   };
-}
+})

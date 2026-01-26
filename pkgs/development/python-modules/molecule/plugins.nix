@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "molecule-plugins";
   version = "23.5.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -34,10 +34,10 @@ buildPythonPackage rec {
   # Tests require container runtimes
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Collection on molecule plugins";
     homepage = "https://github.com/ansible-community/molecule-plugins";
-    maintainers = with maintainers; [ dawidd6 ];
-    license = licenses.mit;
+    maintainers = [ ];
+    license = lib.licenses.mit;
   };
 }

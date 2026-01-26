@@ -21,17 +21,17 @@ let
     owner = "hashicorp";
     repo = "vagrant";
     rev = "v${version}";
-    hash = "sha256-xlL0YLY5yG9Q2L93Ag1pO/F8LOp+JdcgrvWyw+bZP/I=";
+    hash = "sha256-8csEIkXI5LPf5aZUuKYKALgwtG/skXFvMBimbCerEPY=";
   };
 
   ruby = ruby_3_4;
 
   deps = bundlerEnv rec {
-    name = "${pname}-${version}";
     pname = "vagrant";
     inherit version;
 
     inherit ruby;
+    gemdir = src;
     gemfile = writeText "Gemfile" "";
     lockfile = writeText "Gemfile.lock" "";
     gemset = lib.recursiveUpdate (import ./gemset.nix) (
@@ -135,11 +135,11 @@ buildRubyGem rec {
     inherit ruby deps;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool for building complete development environments";
     homepage = "https://www.vagrantup.com/";
-    license = licenses.bsl11;
-    maintainers = with maintainers; [ tylerjl ];
-    platforms = with platforms; linux ++ darwin;
+    license = lib.licenses.bsl11;
+    maintainers = with lib.maintainers; [ tylerjl ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

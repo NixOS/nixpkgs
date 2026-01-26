@@ -54,6 +54,9 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${axios} ThirdPartyDownloads/axios-0.19.0.tar.gz
     ln -s ${font-awesome} ThirdPartyDownloads/Font-Awesome-4.7.0.tar.gz
     ln -s ${babel-polyfill} ThirdPartyDownloads/babel-polyfill-6.26.0.min.js.gz
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   SourceRoot = "${finalAttrs.src.name}/Build";

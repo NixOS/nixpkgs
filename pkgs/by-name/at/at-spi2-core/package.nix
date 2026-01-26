@@ -7,11 +7,13 @@
   pkg-config,
   gobject-introspection,
   buildPackages,
+  withDconf ? !stdenv.hostPlatform.isDarwin && lib.meta.availableOn stdenv.hostPlatform dconf,
   withIntrospection ?
     lib.meta.availableOn stdenv.hostPlatform gobject-introspection
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
   gsettings-desktop-schemas,
   makeWrapper,
+  python3,
   dbus,
   glib,
   dconf,
@@ -27,7 +29,7 @@
 
 stdenv.mkDerivation rec {
   pname = "at-spi2-core";
-  version = "2.56.2";
+  version = "2.58.2";
 
   outputs = [
     "out"
@@ -37,7 +39,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/at-spi2-core/${lib.versions.majorMinor version}/at-spi2-core-${version}.tar.xz";
-    hash = "sha256-4bHJg2qJR4UvdEDDLiMXkjTHa9mM2cxAAfN2QF+LeDs=";
+    hash = "sha256-ooI7li7RbN1csfxTZQKf0hg5TYUqzUCYsyGFS9ZpL24=";
   };
 
   nativeBuildInputs = [
@@ -46,6 +48,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     makeWrapper
+    python3
   ]
   ++ lib.optionals withIntrospection [
     gobject-introspection
@@ -88,6 +91,13 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals (!systemdSupport) [
     "-Duse_systemd=false"
+  ]
+  ++ lib.optionals (!withIntrospection) [
+    (lib.mesonEnable "introspection" false)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isStatic [
+    # The adaptor is only available as a shared object, as gtk2 loads it dynamically
+    (lib.mesonBool "gtk2_atk_adaptor" false)
   ];
 
   passthru = {
@@ -100,16 +110,16 @@ stdenv.mkDerivation rec {
   postFixup = ''
     # Cannot use wrapGAppsHook'due to a dependency cycle
     wrapProgram $out/libexec/at-spi-bus-launcher \
-      --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules" \
+      ${lib.optionalString withDconf ''--prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules"''} \
       --prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Assistive Technology Service Provider Interface protocol definitions and daemon for D-Bus";
     homepage = "https://gitlab.gnome.org/GNOME/at-spi2-core";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ raskin ];
-    teams = [ teams.gnome ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ raskin ];
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.unix;
   };
 }

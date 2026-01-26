@@ -8,7 +8,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "andcli";
-  version = "2.4.1";
+  version = "2.4.3";
 
   subPackages = [ "cmd/andcli" ];
 
@@ -16,10 +16,10 @@ buildGoModule (finalAttrs: {
     owner = "tjblackheart";
     repo = "andcli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-T5XapWiQFZlSKBCqE9sv2pY4okXkeZEKuG6UOK/XyaI=";
+    hash = "sha256-OhMycd1L52hkrXbKwi21zh063FqPRQrBCcXcmy2ljdA=";
   };
 
-  vendorHash = "sha256-652JLCdxDDvhQIz3EbfoI7h+41Er3TiuJXi1cqbA4nI=";
+  vendorHash = "sha256-XZcSD7/vIA5XibWCI7PorqB300r6/gWhItgUq7v92m4=";
 
   ldflags = [
     "-s"
@@ -32,7 +32,6 @@ buildGoModule (finalAttrs: {
     writableTmpDirAsHomeHook
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   versionCheckKeepEnvironment = [ "HOME" ];
   doInstallCheck = true;
 

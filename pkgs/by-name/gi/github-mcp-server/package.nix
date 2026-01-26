@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "github-mcp-server";
-  version = "0.15.0";
+  version = "0.28.1";
 
   src = fetchFromGitHub {
     owner = "github";
     repo = "github-mcp-server";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-D6oEnaHrGnFfuO6NXRYbJ665OlWcwHo+JLfCPrdDkE4=";
+    hash = "sha256-lcDVa0w7+Ht80ClL9V8mpefbEoBOL+7MMYCVTzaJsZk=";
   };
 
-  vendorHash = "sha256-0QqgyjK3QID72aMI6l6ofXAUt94PYFqO8dWech7yaFw=";
+  vendorHash = "sha256-V5JHwgryCPyEOheJfPU+WY32oBU60VhCXGFx+rQ+qNw=";
 
   ldflags = [
     "-s"
@@ -31,7 +31,6 @@ buildGoModule (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 
@@ -41,6 +40,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/github/github-mcp-server";
     license = lib.licenses.mit;
     mainProgram = "github-mcp-server";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ logger ];
   };
 })

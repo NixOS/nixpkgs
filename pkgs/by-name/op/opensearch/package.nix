@@ -61,7 +61,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Open Source, Distributed, RESTful Search Engine";
     homepage = "https://github.com/opensearch-project/OpenSearch";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     sourceProvenance = with lib.sourceTypes; [
       binaryBytecode

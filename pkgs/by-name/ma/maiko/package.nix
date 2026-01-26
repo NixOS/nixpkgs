@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  xorg,
+  libx11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ xorg.libX11 ];
+  buildInputs = [ libx11 ];
 
   installPhase = ''
     runHook preInstall
@@ -32,6 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://interlisp.org/";
     changelog = "https://github.com/Interlisp/maiko/releases";
     license = lib.licenses.mit;
-    inherit (xorg.libX11.meta) platforms;
+    inherit (libx11.meta) platforms;
   };
 })

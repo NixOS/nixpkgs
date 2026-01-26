@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  fetchpatch,
   fetchurl,
   autoreconfHook,
   ...

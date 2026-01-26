@@ -62,7 +62,6 @@ mkKdeDerivation {
 
   meta = {
     maintainers = with lib.maintainers; [
-      ebzzry
       zraexy
       sigmasquadron
     ];

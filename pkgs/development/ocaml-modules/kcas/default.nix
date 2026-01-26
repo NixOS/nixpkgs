@@ -2,6 +2,7 @@
   lib,
   buildDunePackage,
   fetchurl,
+  ocaml,
   domain-local-await,
   domain-local-timeout,
   alcotest,
@@ -15,8 +16,6 @@ buildDunePackage rec {
   pname = "kcas";
   version = "0.7.0";
 
-  minimalOCamlVersion = "4.13.0";
-
   src = fetchurl {
     url = "https://github.com/ocaml-multicore/kcas/releases/download/${version}/kcas-${version}.tbz";
     hash = "sha256-mo/otnkB79QdyVgLw1sZFfkR/Z/l15cRVfEYPPd6H5E=";
@@ -29,7 +28,7 @@ buildDunePackage rec {
     backoff
   ];
 
-  doCheck = true;
+  doCheck = lib.versionAtLeast ocaml.version "5.1" && !lib.versionAtLeast ocaml.version "5.4";
   nativeCheckInputs = [ mdx.bin ];
   checkInputs = [
     alcotest

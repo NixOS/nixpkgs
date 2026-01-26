@@ -17,11 +17,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-SOeyk2uWCdO99ooQc2L1eXlV77lR4DLBK6PnV6Ur49A=";
 
-  meta = with lib; {
+  meta = {
     description = "Simple command line tool for converting Chinese characters to space-separate pinyin words";
     mainProgram = "pinyin-tool";
     homepage = "https://github.com/briankung/pinyin-tool";
-    license = licenses.mit;
-    maintainers = with maintainers; [ neonfuz ];
+    license = lib.licenses.mit;
   };
 }

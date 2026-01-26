@@ -1,9 +1,11 @@
 {
   lib,
+  stdenv,
   bison,
   buildPythonPackage,
   click,
   fetchFromGitHub,
+  fetchpatch2,
   flex,
   gnupg,
   meson,
@@ -24,6 +26,19 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-XWTgaBvB4/SONL44afvprZwJUVrkoda5XLGNxad0kec=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "accept-date-range-error-message-from-py3.14";
+      url = "https://salsa.debian.org/python-team/packages/beancount/-/raw/debian/sid/debian/patches/0003-Accept-date-range-error-message-from-py3.14.patch";
+      hash = "sha256-wqMTGSi4Gn5VADjV4MjZhFNWB3ThUhxvLYK7sentScQ=";
+    })
+    (fetchpatch2 {
+      name = "skip-ref-count-test-with-py3.14";
+      url = "https://salsa.debian.org/python-team/packages/beancount/-/raw/debian/sid/debian/patches/0004-Skip-refcount-test-with-py3.14.patch";
+      hash = "sha256-6P9xe15WBGaWpVYB2HfGfFHLMMmGkfnDwdjdktlSNxk=";
+    })
+  ];
 
   build-system = [
     meson
@@ -50,6 +65,12 @@ buildPythonPackage rec {
     # avoid local paths, relative imports wont resolve correctly
     mv beancount tests
   '';
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Cannot run the gpg-agent. If needed, implement as passthru tests.
+    "test_read_encrypted_file"
+    "test_include_encrypted"
+  ];
 
   pythonImportsCheck = [ "beancount" ];
 

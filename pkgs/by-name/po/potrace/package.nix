@@ -21,11 +21,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://potrace.sourceforge.net/";
     description = "Tool for tracing a bitmap, which means, transforming a bitmap into a smooth, scalable image";
-    platforms = platforms.unix;
-    maintainers = [ maintainers.pSub ];
-    license = licenses.gpl2;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.pSub ];
+    license = lib.licenses.gpl2;
   };
 }

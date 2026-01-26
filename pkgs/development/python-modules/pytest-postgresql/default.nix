@@ -7,6 +7,7 @@
   pytest-cov-stub,
   setuptools,
   mirakuru,
+  packaging,
   port-for,
   psycopg,
   pytest,
@@ -15,21 +16,21 @@
 
 buildPythonPackage rec {
   pname = "pytest-postgresql";
-  version = "6.0.0";
+  version = "7.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "ClearcodeHQ";
+    owner = "dbfixtures";
     repo = "pytest-postgresql";
     tag = "v${version}";
-    hash = "sha256-6D9QNcfq518ORQDYCH5G+LLJ7tVWPFwB6ylZR3LOZ5g=";
+    hash = "sha256-/EekUveW3wb8NlcKacMJpjjU7bpFvnNMpAuZ9h0sbpw=";
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml  \
-      --replace-fail "--max-worker-restart=0" ""
     sed -i 's#/usr/lib/postgresql/.*/bin/pg_ctl#${postgresql}/bin/pg_ctl#' pytest_postgresql/plugin.py
   '';
+
+  build-system = [ setuptools ];
 
   buildInputs = [ pytest ];
 
@@ -37,7 +38,7 @@ buildPythonPackage rec {
     mirakuru
     port-for
     psycopg
-    setuptools # requires 'pkg_resources' at runtime
+    packaging
   ];
 
   nativeCheckInputs = [
@@ -50,12 +51,14 @@ buildPythonPackage rec {
   ];
   disabledTestPaths = [ "tests/docker/test_noproc_docker.py" ]; # requires Docker
   disabledTests = [
-    # permissions issue running pg as Nixbld user
-    "test_executor_init_with_password"
     # "ValueError: Pytest terminal summary report not found"
+    "test_postgres_drop_test_database"
     "test_postgres_loader_in_cli"
+    "test_postgres_loader_in_ini"
     "test_postgres_options_config_in_cli"
     "test_postgres_options_config_in_ini"
+    "test_postgres_port_search_count_in_cli_is_int"
+    "test_postgres_port_search_count_in_ini_is_int"
   ];
   pythonImportsCheck = [
     "pytest_postgresql"
@@ -69,7 +72,7 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://pypi.python.org/pypi/pytest-postgresql";
     description = "Pytest plugin that enables you to test code on a temporary PostgreSQL database";
-    changelog = "https://github.com/ClearcodeHQ/pytest-postgresql/blob/v${version}/CHANGES.rst";
+    changelog = "https://github.com/dbfixtures/pytest-postgresql/blob/v${version}/CHANGES.rst";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };

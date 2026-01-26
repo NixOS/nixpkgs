@@ -51,15 +51,15 @@ assert builtins.elem gpuBackend [
 ];
 assert enablePython -> pythonPackages != null;
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "SIRIUS";
-  version = "7.8.0-unstable-2025-07-23";
+  version = "7.10.0";
 
   src = fetchFromGitHub {
     owner = "electronic-structure";
     repo = "SIRIUS";
-    rev = "258c8c6543af0350ac002a52fbe18221ea275590";
-    hash = "sha256-HHt3iw3muIGz86NmI9p6yuv7jrXoiz/83qTTueU7Lpk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-cq4ajtAJXfIH1B866FYhgROMSwd7nsbXf/6kbSwJAso=";
   };
 
   outputs = [
@@ -175,11 +175,11 @@ stdenv.mkDerivation {
     ctestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Domain specific library for electronic structure calculations";
     homepage = "https://github.com/electronic-structure/SIRIUS";
-    license = licenses.bsd2;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.sheepforce ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})

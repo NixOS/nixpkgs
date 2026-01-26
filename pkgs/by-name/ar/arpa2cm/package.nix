@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with lib; {
+  meta = {
     description = "CMake Module library for the ARPA2 project";
     longDescription = ''
       The CMake module library for the ARPA2 project, including the LillyDAP,
@@ -32,9 +32,8 @@ stdenv.mkDerivation rec {
       the ARPA2 software stack.
     '';
     homepage = "https://gitlab.com/arpa2/arpa2cm";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [
-      leenaars
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [
       fufexan
     ];
   };

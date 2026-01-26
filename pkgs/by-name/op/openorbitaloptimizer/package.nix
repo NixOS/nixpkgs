@@ -2,50 +2,46 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  gfortran,
   cmake,
   pkg-config,
   armadillo,
-  blas,
-  lapack,
+  libxc,
+  integratorxx,
+  nlohmann_json,
 }:
 
 stdenv.mkDerivation rec {
-  pname = "OpenOrbitalOptimizer";
-  version = "0.1.0";
+  pname = "openorbitaloptimizer";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
-    owner = "susilethola";
+    owner = "susilehtola";
     repo = "openorbitaloptimizer";
-    rev = "v${version}";
-    hash = "sha256-otIs2Y79KoEL4ut8YQe7Y27LpmpId8h/X8B6GIg8l+E=";
+    tag = "v${version}";
+    hash = "sha256-naZwe56c1wsng4L/Q1waPiACeEiEAMhvzr5XMwC1uoY=";
   };
 
   nativeBuildInputs = [
     pkg-config
     cmake
-    gfortran
   ];
 
   buildInputs = [
     armadillo
-    blas
-    lapack
+    libxc
   ];
 
-  outputs = [
-    "out"
-    "dev"
+  checkInputs = [
+    integratorxx
+    nlohmann_json
   ];
+  doCheck = true;
 
-  # Uses a hacky python setup run by cmake, which is hard to get running
-  doCheck = false;
-
-  meta = with lib; {
+  meta = {
     description = "Common orbital optimisation algorithms for quantum chemistry";
-    license = [ licenses.mpl20 ];
+    license = [ lib.licenses.mpl20 ];
     homepage = "https://github.com/susilehtola/OpenOrbitalOptimizer";
-    platforms = platforms.linux;
-    maintainers = [ maintainers.sheepforce ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.sheepforce ];
   };
 }

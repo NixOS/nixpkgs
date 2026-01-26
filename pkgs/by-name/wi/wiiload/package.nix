@@ -25,11 +25,11 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./autogen.sh";
 
-  meta = with lib; {
+  meta = {
     description = "Load homebrew apps over network/usbgecko to your Wii";
     mainProgram = "wiiload";
     homepage = "https://wiibrew.org/wiki/Wiiload";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ tomsmeets ];
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ tomsmeets ];
   };
 }

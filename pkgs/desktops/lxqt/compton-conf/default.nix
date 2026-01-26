@@ -43,15 +43,20 @@ stdenv.mkDerivation rec {
       --replace-fail "DESTINATION \"\''${LXQT_ETC_XDG_DIR}" "DESTINATION \"etc/xdg" \
   '';
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://github.com/lxqt/compton-conf";
     description = "GUI configuration tool for compton X composite manager";
     mainProgram = "compton-conf";
-    license = licenses.lgpl21Plus;
-    platforms = with platforms; unix;
-    teams = [ teams.lxqt ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = with lib.platforms; unix;
+    teams = [ lib.teams.lxqt ];
   };
 }

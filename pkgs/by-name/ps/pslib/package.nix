@@ -21,6 +21,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-gaWNvBLuUUy0o+HWCOyG6KmzxDrYCY6PV3WbA/jjH64=";
   };
 
+  patches = [
+    ./cmake4.patch
+  ];
+
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -32,10 +36,6 @@ stdenv.mkDerivation rec {
     giflib
     libtiff
   ];
-
-  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
-  };
 
   doCheck = true;
 
@@ -59,12 +59,12 @@ stdenv.mkDerivation rec {
     cp -r ../doc/. $doc/share/doc/${pname}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "C-library for generating multi page PostScript documents";
     homepage = "https://pslib.sourceforge.net/";
     changelog = "https://sourceforge.net/p/pslib/git/ci/master/tree/pslib/ChangeLog";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ ShamrockLee ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ ShamrockLee ];
+    platforms = lib.platforms.unix;
   };
 }

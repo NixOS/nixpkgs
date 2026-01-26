@@ -29,7 +29,7 @@ in
   nodes.discourse =
     { nodes, ... }:
     {
-      virtualisation.memorySize = 2048;
+      virtualisation.memorySize = 4096;
       virtualisation.cores = 4;
       virtualisation.useNixStoreImage = true;
       virtualisation.writableStore = false;
@@ -188,7 +188,7 @@ in
       )
 
       client.wait_for_unit("postfix.service")
-      client.wait_for_unit("dovecot2.service")
+      client.wait_for_unit("dovecot.service")
 
       discourse.succeed(
           "sudo -u discourse discourse-rake api_key:create_master[master] >api_key",

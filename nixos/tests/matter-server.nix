@@ -16,6 +16,7 @@ in
         services.matter-server = {
           enable = true;
           port = 1234;
+          openFirewall = true;
         };
       };
   };
@@ -42,6 +43,9 @@ in
 
         with subtest("Check storage directory is created"):
             machine.succeed("ls /var/lib/matter-server/chip.json")
+
+        with subtest("Check dashboard loads"):
+            machine.succeed("curl -f 127.0.0.1:1234")
 
         with subtest("Check systemd hardening"):
             _, output = machine.execute("systemd-analyze security matter-server.service | grep -v '✓'")

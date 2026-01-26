@@ -74,7 +74,6 @@ buildPythonApplication rec {
     versionCheckHook
     writableTmpDirAsHomeHook
   ];
-  versionCheckProgramArg = "--version";
 
   disabledTests = [
     # this test wants access to the internet
@@ -111,7 +110,6 @@ buildPythonApplication rec {
     description = "Python Development Workflow for Humans";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ berdario ];
     mainProgram = "pipenv";
   };
 }

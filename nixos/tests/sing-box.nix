@@ -139,7 +139,6 @@ in
 
         services.nginx = {
           enable = true;
-          package = pkgs.nginxQuic;
 
           virtualHosts."${target_host}" = {
             onlySSL = true;
@@ -249,7 +248,7 @@ in
         ];
 
         environment.systemPackages = [
-          pkgs.curlHTTP3
+          pkgs.curl
           pkgs.iproute2
         ];
 
@@ -308,7 +307,7 @@ in
         ];
 
         environment.systemPackages = [
-          pkgs.curlHTTP3
+          pkgs.curl
           pkgs.iproute2
         ];
 
@@ -369,7 +368,7 @@ in
           (builtins.readFile ./common/acme/server/ca.cert.pem)
         ];
 
-        environment.systemPackages = [ pkgs.curlHTTP3 ];
+        environment.systemPackages = [ pkgs.curl ];
 
         systemd.services.sing-box.serviceConfig.ExecStartPost = [
           "+${tproxyPost}/bin/exe"

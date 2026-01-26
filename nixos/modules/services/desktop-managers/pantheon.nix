@@ -43,6 +43,8 @@ in
         enable = mkEnableOption "contractor, a desktop-wide extension service used by Pantheon";
       };
 
+      parental-controls.enable = mkEnableOption "Pantheon parental controls daemon";
+
       apps.enable = mkEnableOption "Pantheon default applications";
 
     };
@@ -162,6 +164,7 @@ in
       ];
       services.pantheon.apps.enable = mkDefault true;
       services.pantheon.contractor.enable = mkDefault true;
+      services.pantheon.parental-controls.enable = mkDefault true;
       services.gnome.at-spi2-core.enable = true;
       services.gnome.evolution-data-server.enable = true;
       services.gnome.glib-networking.enable = true;
@@ -193,6 +196,7 @@ in
         pantheon.gala
         pantheon.gnome-settings-daemon
         pantheon.elementary-session-settings
+        pantheon.elementary-settings-daemon
       ];
       programs.dconf.enable = true;
       networking.networkmanager.enable = mkDefault true;
@@ -204,12 +208,26 @@ in
         "org.gnome.SettingsDaemon.XSettings.service"
       ];
 
+      # https://github.com/elementary/settings-daemon/issues/217
+      systemd.user.services.elementary-settings-daemon = {
+        description = "elementary Settings Daemon";
+        wantedBy = [ "gnome-session-initialized.target" ];
+        after = [ "gnome-session-initialized.target" ];
+
+        # The daemon might launch external applications via g_app_info_launch.
+        environment.PATH = lib.mkForce null;
+
+        serviceConfig = {
+          Slice = "session.slice";
+          ExecStart = "${pkgs.pantheon.elementary-settings-daemon}/bin/io.elementary.settings-daemon";
+          Restart = "on-failure";
+        };
+      };
+
       # Global environment
       environment.systemPackages =
         (with pkgs.pantheon; [
-          elementary-bluetooth-daemon
           elementary-session-settings
-          elementary-settings-daemon
           gala
           gnome-settings-daemon
           (switchboard-with-plugs.override {
@@ -226,7 +244,6 @@ in
             gnome-menus
             adwaita-icon-theme
             gtk3.out # for gtk-launch program
-            onboard
             sound-theme-freedesktop
             xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
           ])
@@ -243,8 +260,10 @@ in
             elementary-shortcut-overlay
 
             # Services
+            elementary-bluetooth-daemon
             elementary-capnet-assist
             elementary-notifications
+            elementary-settings-daemon
             pantheon-agent-geoclue2
             pantheon-agent-polkit
           ])
@@ -259,14 +278,17 @@ in
       xdg.icons.enable = true;
 
       xdg.portal.enable = true;
-      xdg.portal.extraPortals = [
-        pkgs.xdg-desktop-portal-gtk
-      ]
-      ++ (with pkgs.pantheon; [
-        elementary-files
-        elementary-settings-daemon
-        xdg-desktop-portal-pantheon
-      ]);
+      xdg.portal.extraPortals = utils.removePackagesByName (
+        [
+          pkgs.xdg-desktop-portal-gtk
+        ]
+        ++ (with pkgs.pantheon; [
+          elementary-files
+          elementary-settings-daemon
+          # https://github.com/elementary/portals/issues/157
+          # xdg-desktop-portal-pantheon
+        ])
+      ) config.environment.pantheon.excludePackages;
 
       xdg.portal.configPackages = mkDefault [ pkgs.pantheon.elementary-default-settings ];
 
@@ -306,11 +328,11 @@ in
 
     (mkIf serviceCfg.apps.enable {
       programs.evince.enable = mkDefault (notExcluded pkgs.evince);
-      programs.file-roller.enable = mkDefault (notExcluded pkgs.file-roller);
 
       environment.systemPackages = utils.removePackagesByName (
         [
           pkgs.gnome-font-viewer
+          pkgs.file-roller
         ]
         ++ (
           with pkgs.pantheon;
@@ -321,6 +343,8 @@ in
             elementary-code
             elementary-files
             elementary-mail
+            elementary-maps
+            elementary-monitor
             elementary-music
             elementary-photos
             elementary-screenshot
@@ -355,5 +379,14 @@ in
       ];
     })
 
+    (mkIf serviceCfg.parental-controls.enable {
+      services.malcontent.enable = mkDefault true;
+
+      environment.systemPackages = [ pkgs.pantheon.switchboard-plug-parental-controls ];
+
+      services.dbus.packages = [ pkgs.pantheon.switchboard-plug-parental-controls ];
+
+      systemd.packages = [ pkgs.pantheon.switchboard-plug-parental-controls ];
+    })
   ];
 }

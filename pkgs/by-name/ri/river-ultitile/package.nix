@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    zig.hook
+    zig
     pkg-config
     wayland
     wayland-scanner

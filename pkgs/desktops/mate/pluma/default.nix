@@ -1,39 +1,52 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
+  autoconf-archive,
+  autoreconfHook,
   pkg-config,
   gettext,
   perl,
   itstool,
   isocodes,
   enchant,
+  gtk-doc,
   libxml2,
+  mate-common,
   python3,
   gtksourceview4,
   libpeas,
   mate-desktop,
   wrapGAppsHook3,
-  mateUpdateScript,
+  yelp-tools,
+  gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pluma";
-  version = "1.28.0";
+  version = "1.28.1";
 
-  src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "qorflYk0UJOlDjCyft5KeKJCHRcnwn9GX8h8Q1llodQ=";
+  src = fetchFromGitHub {
+    owner = "mate-desktop";
+    repo = "pluma";
+    tag = "v${finalAttrs.version}";
+    fetchSubmodules = true;
+    hash = "sha256-+3zY3A7JRc7utYMNiQBnsy0lZr1PuDSOtdP+iigNRDQ=";
   };
 
   nativeBuildInputs = [
+    autoconf-archive
+    autoreconfHook
     gettext
     isocodes
     itstool
+    gtk-doc
+    mate-common # mate-common.m4 macros
     perl
     pkg-config
     python3.pkgs.wrapPython
     wrapGAppsHook3
+    yelp-tools
   ];
 
   buildInputs = [
@@ -49,7 +62,6 @@ stdenv.mkDerivation rec {
 
   pythonPath = with python3.pkgs; [
     pycairo
-    six
   ];
 
   postFixup = ''
@@ -57,18 +69,21 @@ stdenv.mkDerivation rec {
     patchPythonScript $out/lib/pluma/plugins/snippets/Snippet.py
   '';
 
-  passthru.updateScript = mateUpdateScript { inherit pname; };
+  passthru.updateScript = gitUpdater {
+    odd-unstable = true;
+    rev-prefix = "v";
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Powerful text editor for the MATE desktop";
     mainProgram = "pluma";
     homepage = "https://mate-desktop.org";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       lgpl2Plus
       fdl11Plus
     ];
-    platforms = platforms.unix;
-    teams = [ teams.mate ];
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.mate ];
   };
-}
+})

@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    maintainers = [ lib.maintainers.linquize ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
     description = "Open source, cross platform, free C, C++ and Fortran IDE";
     longDescription = ''

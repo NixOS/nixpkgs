@@ -30,9 +30,8 @@ stdenv.mkDerivation rec {
            -e "s|install: install-bin install-man install-doc|install: install-bin|" Makefile
   '';
 
-  meta = with lib; {
-    platforms = platforms.linux;
-    maintainers = [ maintainers.sander ];
-    license = licenses.afl21;
+  meta = {
+    platforms = lib.platforms.linux;
+    license = lib.licenses.afl21;
   };
 }

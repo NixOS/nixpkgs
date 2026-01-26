@@ -8,7 +8,10 @@
   gnome,
   gsettings-desktop-schemas,
   wrapGAppsHook3,
-  xorg,
+  libxtst,
+  libxfixes,
+  libxcursor,
+  libx11,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,10 +32,10 @@ stdenv.mkDerivation rec {
     glib
     gtk3
     gsettings-desktop-schemas
-    xorg.libX11
-    xorg.libXtst
-    xorg.libXfixes
-    xorg.libXcursor
+    libx11
+    libxtst
+    libxfixes
+    libxcursor
   ];
 
   passthru = {
@@ -41,7 +44,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Provides mouse accessibility enhancements for the GNOME desktop";
     longDescription = ''
       Mousetweaks provides mouse accessibility enhancements for the GNOME
@@ -58,9 +61,9 @@ stdenv.mkDerivation rec {
       panel of the GNOME Control Center.
     '';
     homepage = "https://gitlab.gnome.org/Archive/mousetweaks";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.johnazoidberg ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.johnazoidberg ];
     mainProgram = "mousetweaks";
   };
 }

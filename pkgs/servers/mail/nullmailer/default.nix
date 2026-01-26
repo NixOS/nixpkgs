@@ -53,6 +53,6 @@ stdenv.mkDerivation rec {
     '';
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ sargon ];
+    maintainers = [ ];
   };
 }

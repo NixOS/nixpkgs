@@ -16,14 +16,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "hydrus";
-  version = "631";
-  format = "other";
+  version = "653";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "hydrusnetwork";
     repo = "hydrus";
     tag = "v${version}";
-    hash = "sha256-YZnlQIiq0dUGEnQgVCTvNS+kuSpXlaAN5UvZAQ3xeZM=";
+    hash = "sha256-OH07OvN5EaEsjlUHUJMqproiVcN75yL9u7lnCjXSITo=";
   };
 
   nativeBuildInputs = [
@@ -165,6 +165,7 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [
       dandellion
       evanjs
+      KunyaKud
     ];
   };
 }

@@ -77,10 +77,10 @@ buildDunePackage rec {
   ];
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "OCaml TCP/IP networking stack, used in MirageOS";
     homepage = "https://github.com/mirage/mirage-tcpip";
-    maintainers = [ maintainers.sternenseemann ];
-    license = licenses.isc;
+    maintainers = [ lib.maintainers.sternenseemann ];
+    license = lib.licenses.isc;
   };
 }

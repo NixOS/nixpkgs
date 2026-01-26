@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "universal-silabs-flasher";
-  version = "0.0.32";
+  version = "0.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "NabuCasa";
     repo = "universal-silabs-flasher";
     tag = "v${version}";
-    hash = "sha256-AnZhs9uR0lHY8CxYlbfblnftahnbC2LgwtyDVQCYizI=";
+    hash = "sha256-VBMxm953xp0qt4MIfOSjFNQu2jOh52uQ9Zz94NWy3dY=";
   };
 
   postPatch = ''
@@ -67,12 +67,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "universal_silabs_flasher" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/NabuCasa/universal-silabs-flasher/releases/tag/${src.tag}";
     description = "Flashes Silicon Labs radios running EmberZNet or CPC multi-pan firmware";
     mainProgram = "universal-silabs-flasher";
     homepage = "https://github.com/NabuCasa/universal-silabs-flasher";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

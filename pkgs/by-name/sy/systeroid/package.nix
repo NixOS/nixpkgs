@@ -3,7 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   linux-doc,
-  xorg,
+  libxcb,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -25,22 +25,21 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-Gce7DqhGD0CeBTPEqKhzdQ3IIHA6kjoWrejj4V8gT1I=";
 
   buildInputs = [
-    xorg.libxcb
+    libxcb
   ];
 
   # tries to access /sys/
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "More powerful alternative to sysctl(8) with a terminal user interface";
     homepage = "https://github.com/orhun/systeroid";
     changelog = "https://github.com/orhun/systeroid/blob/${src.rev}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [
-      figsoda
+    maintainers = with lib.maintainers; [
       matthiasbeyer
     ];
   };

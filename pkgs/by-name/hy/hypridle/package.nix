@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  gcc15Stdenv,
   fetchFromGitHub,
   pkg-config,
   cmake,
@@ -16,7 +16,7 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+gcc15Stdenv.mkDerivation (finalAttrs: {
   pname = "hypridle";
   version = "0.1.7";
 
@@ -53,9 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Hyprland's idle daemon";
     homepage = "https://github.com/hyprwm/hypridle";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [
-      iogamaster
-    ];
     teams = [ lib.teams.hyprland ];
     mainProgram = "hypridle";
     platforms = [

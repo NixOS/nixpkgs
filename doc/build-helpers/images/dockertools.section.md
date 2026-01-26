@@ -1,6 +1,6 @@
 # pkgs.dockerTools {#sec-pkgs-dockerTools}
 
-`pkgs.dockerTools` is a set of functions for creating and manipulating Docker images according to the [Docker Image Specification v1.3.0](https://github.com/moby/moby/blob/46f7ab808b9504d735d600e259ca0723f76fb164/image/spec/spec.md#image-json-field-descriptions).
+`pkgs.dockerTools` is a set of functions for creating and manipulating Docker images according to the [Docker Image Specification v1.3.1](https://github.com/moby/docker-image-spec/blob/v1.3.1/spec.md).
 Docker itself is not used to perform any of the operations done by these functions.
 
 ## buildImage {#ssec-pkgs-dockerTools-buildImage}
@@ -130,7 +130,7 @@ Similarly, if you encounter errors similar to `Error_Protocol ("certificate has 
 `config` (Attribute Set or Null; _optional_)
 
 : Used to specify the configuration of the containers that will be started off the generated image.
-  Must be an attribute set, with each attribute as listed in the [Docker Image Specification v1.3.0](https://github.com/moby/moby/blob/46f7ab808b9504d735d600e259ca0723f76fb164/image/spec/spec.md#image-json-field-descriptions).
+  Must be an attribute set, with each attribute as listed in the [Docker Image Specification v1.3.1](https://github.com/moby/docker-image-spec/blob/v1.3.1/spec.md#image-json-field-descriptions).
 
   _Default value:_ `null`.
 
@@ -138,7 +138,7 @@ Similarly, if you encounter errors similar to `Error_Protocol ("certificate has 
 
 : Used to specify the image architecture.
   This is useful for multi-architecture builds that don't need cross compiling.
-  If specified, its value should follow the [OCI Image Configuration Specification](https://github.com/opencontainers/image-spec/blob/main/config.md#properties), which should still be compatible with Docker.
+  If specified, its value should follow the [OCI Image Configuration Specification](https://github.com/opencontainers/image-spec/blob/v1.1.1/config.md#properties), which should still be compatible with Docker.
   According to the linked specification, all possible values for `$GOARCH` in [the Go docs](https://go.dev/doc/install/source#environment) should be valid, but will commonly be one of `386`, `amd64`, `arm`, or `arm64`.
 
   _Default value:_ the same value from `pkgs.go.GOARCH`.
@@ -201,6 +201,10 @@ Similarly, if you encounter errors similar to `Error_Protocol ("certificate has 
   :::
 
   _Default value:_ `false`.
+
+`meta` (Attribute Set)
+
+: The `meta` attribute of the resulting derivation, as in `stdenv.mkDerivation`. Accepts `description`, `maintainers` and any other `meta` attributes.
 
 `contents` **DEPRECATED**
 
@@ -634,6 +638,10 @@ This allows the function to produce reproducible images.
   :::
 
   _Default value:_ `false`.
+
+`meta` (Attribute Set)
+
+: The `meta` attribute of the resulting derivation, as in `stdenv.mkDerivation`. Accepts `description`, `maintainers` and any other `meta` attributes.
 
 `passthru` (Attribute Set; _optional_)
 
@@ -1186,7 +1194,7 @@ This is currently implemented by linking to the `env` binary from the `coreutils
 
 ### binSh {#sssec-pkgs-dockerTools-helpers-binSh}
 
-This provides a `/bin/sh` link to the `bash` binary from the `bashInteractive` package.
+This provides a `/bin/sh` link to the `bash` binary from the `bash` package.
 Because of this, it supports cases such as running a command interactively in a container (for example by running `docker container run -it <image_name>`).
 
 ### caCertificates {#sssec-pkgs-dockerTools-helpers-caCertificates}
@@ -1490,7 +1498,7 @@ The environment in the image doesn't match `nix-shell` or `nix-build` exactly, a
   This shell is started when running the image.
   This can be seen as an equivalent of the `NIX_BUILD_SHELL` [environment variable](https://nixos.org/manual/nix/stable/command-ref/nix-shell.html#environment-variables) for {manpage}`nix-shell(1)`.
 
-  _Default value:_ the `bash` binary from the `bashInteractive` package.
+  _Default value:_ the `bash` binary from the `bash` package.
 
 `command` (String or Null; _optional_)
 

@@ -14,7 +14,7 @@ in
 rec {
 
   /**
-    Throw if pred is false, else return pred.
+    Throw if `pred` is false, else return `pred`.
     Intended to be used to augment asserts with helpful error messages.
 
     # Inputs
@@ -47,7 +47,7 @@ rec {
     :::
   */
   # TODO(Profpatsch): add tests that check stderr
-  assertMsg = pred: msg: pred || builtins.throw msg;
+  assertMsg = pred: msg: pred || throw msg;
 
   /**
     Specialized `assertMsg` for checking if `val` is one of the elements

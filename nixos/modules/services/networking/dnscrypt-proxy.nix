@@ -67,7 +67,7 @@ in
             ${
               if cfg.upstreamDefaults then
                 ''
-                  ${pkgs.buildPackages.remarshal}/bin/toml2json ${pkgs.dnscrypt-proxy.src}/dnscrypt-proxy/example-dnscrypt-proxy.toml > example.json
+                  ${pkgs.buildPackages.remarshal}/bin/toml2json ${pkgs.dnscrypt-proxy}/etc/dnscrypt-proxy/dnscrypt-proxy.toml > example.json
                   ${pkgs.buildPackages.jq}/bin/jq --slurp add example.json $jsonPath > config.json # merges the two
                 ''
               else

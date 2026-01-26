@@ -15,18 +15,18 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "rofimoji";
-  version = "6.5.0";
+  version = "6.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fdw";
     repo = "rofimoji";
     tag = version;
-    hash = "sha256-CY+ddF2Rth92R22QKqOb/Us+rZhvWTaU/jKy8fljWqQ=";
+    hash = "sha256-8Y28jlmlKFyqT/OGn/jKjvivMc2U7TQvYmaTX1vCvXQ=";
   };
 
   nativeBuildInputs = [
-    python3Packages.poetry-core
+    python3Packages.hatchling
     installShellFiles
   ];
 
@@ -54,13 +54,13 @@ python3Packages.buildPythonApplication rec {
     installManPage src/picker/docs/rofimoji.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple emoji and character picker for rofi";
     mainProgram = "rofimoji";
     homepage = "https://github.com/fdw/rofimoji";
     changelog = "https://github.com/fdw/rofimoji/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ justinlovinger ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ justinlovinger ];
   };
 }

@@ -80,8 +80,8 @@
 }:
 mkDerivation {
   pname = "hercules-ci-agent";
-  version = "0.10.6";
-  sha256 = "5551c8eda390b48da6801f8f8580dc770e6e2fa2adf467ea7afd174748816fd6";
+  version = "0.10.8";
+  sha256 = "0f8d5xfix0bsxdvanf6zn1l2qs80aivva86qf3j1clfr2dny4g59";
   isLibrary = true;
   isExecutable = true;
   setupHaskellDepends = [
@@ -251,5 +251,5 @@ mkDerivation {
   testToolDepends = [ hspec-discover ];
   homepage = "https://docs.hercules-ci.com";
   description = "Runs Continuous Integration tasks on your machines";
-  license = lib.licenses.asl20;
+  license = lib.licensesSpdx."Apache-2.0";
 }

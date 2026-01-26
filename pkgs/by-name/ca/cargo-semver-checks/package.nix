@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-semver-checks";
-  version = "0.44.0";
+  version = "0.46.0";
 
   src = fetchFromGitHub {
     owner = "obi1kenobi";
     repo = "cargo-semver-checks";
     tag = "v${version}";
-    hash = "sha256-QU8vLdq129gcGi8/VfjflY6zkIXXam/Ri2zjbO3sPNg=";
+    hash = "sha256-y2tkTPctit5rx6OyohPPVo117sGICg6UEDg7RWFmtMA=";
   };
 
-  cargoHash = "sha256-0oPAIhhBcCwZT8sD2PWJ5ZDuMMFvmwxhyOXJWA9+jZg=";
+  cargoHash = "sha256-lP4yXCuJ89NqUBZR6zgGi5B570y+5IaabWyzd9qqa3o=";
 
   nativeBuildInputs = [
     cmake
@@ -34,10 +34,8 @@ rustPlatform.buildRustPackage rec {
     # requires internet access
     "--skip=detects_target_dependencies"
     "--skip=query::tests_lints::feature_missing"
-    # platform specific snapshots
-    "--skip=query::tests_lints::trait_method_target_feature_removed"
-    "--skip=query::tests_lints::unsafe_trait_method_requires_more_target_features"
-    "--skip=query::tests_lints::unsafe_trait_method_target_feature_added"
+    # platform specific tests
+    "--skip=target_feature"
   ];
 
   preCheck = ''
@@ -68,8 +66,8 @@ rustPlatform.buildRustPackage rec {
       asl20
     ];
     maintainers = with lib.maintainers; [
-      figsoda
       matthiasbeyer
+      chrjabs
     ];
   };
 }

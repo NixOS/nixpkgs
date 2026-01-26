@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   fetchpatch,
-  pythonOlder,
 
   # build-system
   setuptools,
@@ -31,8 +30,6 @@ buildPythonPackage rec {
   # upgrade may break sage, please test the sage build or ping @timokau on upgrade
   version = "3.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

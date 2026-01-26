@@ -2,12 +2,36 @@
   lib,
   stdenv,
   fetchurl,
-  openssl,
+  fetchpatch2,
+  fetchFromGitHub,
   python,
-  zlib,
+  ada,
+  brotli,
+  c-ares,
   libuv,
+  llhttp,
+  nghttp2,
+  nghttp3,
+  ngtcp2,
+  openssl,
+  simdjson,
+  simdutf,
+  simdutf_6 ? (
+    simdutf.overrideAttrs {
+      version = "6.5.0";
+
+      src = fetchFromGitHub {
+        owner = "simdutf";
+        repo = "simdutf";
+        rev = "v6.5.0";
+        hash = "sha256-bZ4r62GMz2Dkd3fKTJhelitaA8jUBaDjG6jOysEg8Nk=";
+      };
+    }
+  ),
   sqlite,
-  http-parser,
+  uvwasi,
+  zlib,
+  zstd,
   icu,
   bash,
   ninja,
@@ -99,19 +123,47 @@ let
       null;
   # TODO: also handle MIPS flags (mips_arch, mips_fpu, mips_float_abi).
 
-  useSharedHttpParser =
-    !stdenv.hostPlatform.isDarwin && lib.versionOlder "${majorVersion}.${minorVersion}" "11.4";
-  useSharedSQLite = lib.versionAtLeast version "22.5";
+  useSharedAdaAndSimd = !stdenv.hostPlatform.isStatic && lib.versionAtLeast version "22.2";
+  useSharedSQLite = !stdenv.hostPlatform.isStatic && lib.versionAtLeast version "22.5";
+  useSharedZstd = !stdenv.hostPlatform.isStatic && lib.versionAtLeast version "22.15";
 
-  sharedLibDeps = {
-    inherit openssl zlib libuv;
-  }
-  // (lib.optionalAttrs useSharedHttpParser {
-    inherit http-parser;
-  })
-  // (lib.optionalAttrs useSharedSQLite {
-    inherit sqlite;
-  });
+  sharedLibDeps =
+    (lib.optionalAttrs (!stdenv.hostPlatform.isStatic) {
+      inherit
+        brotli
+        libuv
+        nghttp3
+        ngtcp2
+        openssl
+        uvwasi
+        zlib
+        ;
+      cares = c-ares;
+      http-parser = llhttp;
+      nghttp2 = nghttp2.overrideAttrs {
+        patches = [
+          (fetchpatch2 {
+            url = "https://github.com/nghttp2/nghttp2/commit/7784fa979d0bcf801a35f1afbb25fb048d815cd7.patch?full_index=1";
+            hash = "sha256-RG87Qifjpl7HTP9ac2JwHj2XAbDlFgOpAnpZX3ET6gU=";
+            excludes = [ "lib/includes/nghttp2/nghttp2.h" ];
+            revert = true;
+          })
+        ];
+      };
+    })
+    // (lib.optionalAttrs useSharedAdaAndSimd {
+      inherit
+        ada
+        simdjson
+        ;
+      simdutf = if lib.versionAtLeast version "25" then simdutf else simdutf_6;
+    })
+    // (lib.optionalAttrs useSharedSQLite {
+      inherit sqlite;
+    })
+    // (lib.optionalAttrs useSharedZstd {
+      inherit zstd;
+    });
 
   copyLibHeaders = map (name: "${lib.getDev sharedLibDeps.${name}}/include/*") (
     builtins.attrNames sharedLibDeps
@@ -188,14 +240,10 @@ let
       # wrappers over the corresponding JS scripts. There are some packages though
       # that use bash wrappers, e.g. polaris-web.
       buildInputs = [
-        zlib
-        libuv
-        openssl
-        http-parser
-        icu
         bash
+        icu
       ]
-      ++ lib.optionals useSharedSQLite [ sqlite ];
+      ++ builtins.attrValues sharedLibDeps;
 
       nativeBuildInputs = [
         installShellFiles
@@ -387,9 +435,17 @@ let
               "test-runner-run"
               "test-runner-watch-mode"
               "test-watch-mode-files_watcher"
+
+              # fail on openssl 3.6.0
+              "test-http2-server-unknown-protocol"
+              "test-tls-ocsp-callback"
             ]
             ++ lib.optionals (!lib.versionAtLeast version "22") [
               "test-tls-multi-key"
+            ]
+            ++ lib.optionals useSharedAdaAndSimd [
+              # Different versions of Ada affect the WPT tests
+              "test-url"
             ]
             ++ lib.optionals stdenv.hostPlatform.is32bit [
               # utime (actually utimensat) fails with EINVAL on 2038 timestamp
@@ -409,6 +465,9 @@ let
 
               # Those are annoyingly flaky, but not enough to be marked as such upstream.
               "test-wasi"
+
+              # This is failing on newer macOS versions, no fix has yet been provided upstream:
+              "test-cluster-dgram-1"
             ]
             ++ lib.optionals stdenv.hostPlatform.isMusl [
               # Doesn't work in sandbox on x86_64.
@@ -427,6 +486,9 @@ let
             ]
             # Those are annoyingly flaky, but not enough to be marked as such upstream.
             ++ lib.optional (majorVersion == "22") "test-child-process-stdout-flush-exit"
+            ++ lib.optional (
+              majorVersion == "22" && stdenv.buildPlatform.isDarwin
+            ) "test/sequential/test-http-server-request-timeouts-mixed.js"
           )
         }"
       ];
@@ -547,18 +609,23 @@ let
         inherit majorVersion;
       };
 
-      meta = with lib; {
+      meta = {
         description = "Event-driven I/O framework for the V8 JavaScript engine";
         homepage = "https://nodejs.org";
         changelog = "https://github.com/nodejs/node/releases/tag/v${version}";
-        license = licenses.mit;
-        maintainers = with maintainers; [ aduh95 ];
-        platforms = platforms.linux ++ platforms.darwin ++ platforms.freebsd;
+        license = lib.licenses.mit;
+        maintainers = with lib.maintainers; [ aduh95 ];
+        # https://github.com/nodejs/node/blob/732ab9d658e057af5191d4ecd156d38487509462/BUILDING.md#platform-list
+        platforms =
+          (lib.lists.intersectLists (
+            lib.platforms.linux ++ lib.platforms.darwin ++ lib.platforms.freebsd
+          ) lib.platforms.littleEndian)
+          ++ [ "s390x-linux" ];
         # This broken condition is likely too conservative. Feel free to loosen it if it works.
         broken =
           !canExecute && !canEmulate && (stdenv.buildPlatform.parsed.cpu != stdenv.hostPlatform.parsed.cpu);
         mainProgram = "node";
-        knownVulnerabilities = optional (versionOlder version "18") "This NodeJS release has reached its end of life. See https://nodejs.org/en/about/releases/.";
+        knownVulnerabilities = lib.optional (lib.versionOlder version "18") "This NodeJS release has reached its end of life. See https://nodejs.org/en/about/releases/.";
       };
 
       passthru.python = python; # to ensure nodeEnv uses the same version

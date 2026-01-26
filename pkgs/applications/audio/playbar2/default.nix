@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "2.5";
 
   src = fetchFromGitHub {
-    owner = "audoban";
+    owner = "jsmitar";
     repo = "PlayBar2";
     rev = "v${version}";
     sha256 = "0iv2m4flgaz2r0k7f6l0ca8p6cw8j8j2gin1gci2pg3l5g5khbch";
@@ -31,11 +31,16 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  meta = with lib; {
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
+  meta = {
     description = "Mpris2 Client for Plasma5";
-    homepage = "https://github.com/audoban/PlayBar2";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ pjones ];
+    homepage = "https://github.com/jsmitar/PlayBar2";
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ pjones ];
   };
 }

@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation {
   pname = "urn-timer";
-  version = "0-unstable-2025-08-07";
+  version = "0-unstable-2025-10-18";
 
   src = fetchFromGitHub {
     owner = "paoloose";
     repo = "urn";
-    rev = "7acdab69eaec05f173d95eff190e5d7a03db8847";
-    hash = "sha256-jFatHlkQr6O9E2pKroFWk6F2BccnfSr1pq43Q5qQbC4=";
+    rev = "cae0763f7d5c0d895faf6d2ab7448d1b05b60dff";
+    hash = "sha256-jG+Xibdsu53/aycUf/TzsQtegGY/buwswJ9ediZIJ4w=";
   };
 
   nativeBuildInputs = [
@@ -43,11 +43,11 @@ stdenv.mkDerivation {
 
   passthru.tests.nixosTest = nixosTests.urn-timer;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/paoloose/urn";
     description = "Split tracker / timer for speedrunning with GTK+ frontend";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fgaz ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fgaz ];
     mainProgram = "urn-gtk";
   };
 }

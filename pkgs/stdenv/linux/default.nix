@@ -23,7 +23,7 @@
 # Stages are described below along with their definitions.
 #
 # Debugging stdenv dependency graph:
-# An useful tool to explore dependencies across stages is to use
+# A useful tool to explore dependencies across stages is to use
 # '__bootPackages' attribute of 'stdenv. Examples of last 3 stages:
 # - stdenv
 # - stdenv.__bootPackages.stdenv
@@ -430,6 +430,11 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
               #   ...-binutils-patchelfed-ld-2.40/bin/ld: ...-xgcc-13.0.0/libexec/gcc/x86_64-unknown-linux-gnu/13.0.1/liblto_plugin.so:
               #     error loading plugin: ...-bootstrap-tools/lib/libpthread.so.0: undefined symbol: __libc_vfork, version GLIBC_PRIVATE
               enableLTO = false;
+
+              # relocatable libs may not be available in the bootstrap
+              # which will cause compilation to fail with
+              # configure: error: C compiler cannot create executables
+              enableDefaultPie = false;
             }
           )).overrideAttrs
             (a: {

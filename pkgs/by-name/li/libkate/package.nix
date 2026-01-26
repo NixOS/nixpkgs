@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.4.3";
 
   src = fetchFromGitLab {
-    domain = "gitlab.xiph.org/";
+    domain = "gitlab.xiph.org";
     owner = "xiph";
     repo = "kate";
     tag = "kate-${finalAttrs.version}";

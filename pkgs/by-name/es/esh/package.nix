@@ -54,12 +54,12 @@ stdenv.mkDerivation rec {
     execer can bin/esh
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple templating engine based on shell";
     mainProgram = "esh";
     homepage = "https://github.com/jirutka/esh";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mnacamura ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mnacamura ];
+    platforms = lib.platforms.unix;
   };
 }

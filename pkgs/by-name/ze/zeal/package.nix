@@ -23,6 +23,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-9tlo7+namWNWrWVQNqaOvtK4NQIdb0p8qvFrrbUamOo=";
   };
 
+  patches = [ ./qt6_10.patch ];
+
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
@@ -44,6 +46,16 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "ZEAL_RELEASE_BUILD" true)
   ];
+
+  installPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    runHook preInstall
+
+    mkdir -p $out/{Applications,bin}
+    cp -r Zeal.app $out/Applications
+    ln -s $out/Applications/Zeal.app/Contents/MacOS/Zeal $out/bin/zeal
+
+    runHook postInstall
+  '';
 
   meta = {
     description = "Simple offline API documentation browser";

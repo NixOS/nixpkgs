@@ -14,20 +14,22 @@
   stdenv,
   systemd,
   xkeyboard_config,
-  xorg,
+  libxrandr,
+  libxext,
+  libxkbfile,
   wrapGAppsHook3,
   glib,
 }:
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-desktop";
-  version = "6.4.2";
+  version = "6.6.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon-desktop";
-    rev = version;
-    hash = "sha256-kNxVdPtCQtz4TSyCc6uKHmAGWm2nlWnLwC3Cm0E42Jc=";
+    tag = version;
+    hash = "sha256-AcUJ9anKuvUAJKaQVHbkYShmrlSHG35gV/NIkPgJojk=";
   };
 
   outputs = [
@@ -46,9 +48,9 @@ stdenv.mkDerivation rec {
     isocodes
     systemd
     xkeyboard_config
-    xorg.libxkbfile
-    xorg.libXext
-    xorg.libXrandr
+    libxkbfile
+    libxext
+    libxrandr
   ];
 
   nativeBuildInputs = [
@@ -67,7 +69,7 @@ stdenv.mkDerivation rec {
     sed "s|/usr/share|/run/current-system/sw/share|g" -i ./schemas/* # NOTE: unless this causes a circular dependency, we could link it to cinnamon/share/cinnamon
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/linuxmint/cinnamon-desktop";
     description = "Library and data for various Cinnamon modules";
 
@@ -80,10 +82,10 @@ stdenv.mkDerivation rec {
     '';
 
     license = [
-      licenses.gpl2
-      licenses.lgpl2
+      lib.licenses.gpl2
+      lib.licenses.lgpl2
     ];
-    platforms = platforms.linux;
-    teams = [ teams.cinnamon ];
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
   };
 }

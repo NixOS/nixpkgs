@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "micronaut";
-  version = "4.9.3";
+  version = "4.10.0";
 
   src = fetchzip {
     url = "https://github.com/micronaut-projects/micronaut-starter/releases/download/v${version}/micronaut-cli-${version}.zip";
-    sha256 = "sha256-y4ktyf/ydkL20k8ifgQfHJqZ2NhhNzPM0qWgEjbnZnI=";
+    sha256 = "sha256-FYky14Lnl5B+zLgulFJdRdaDIQi+FhoUjce+LKYaMKE=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Modern, JVM-based, full-stack framework for building microservice applications";
     longDescription = ''
       Micronaut is a modern, JVM-based, full stack microservices framework
@@ -42,9 +42,9 @@ stdenv.mkDerivation rec {
       not bound to the size of your codebase.
     '';
     homepage = "https://micronaut.io/";
-    license = licenses.asl20;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ moaxcp ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ moaxcp ];
     mainProgram = "mn";
   };
 }

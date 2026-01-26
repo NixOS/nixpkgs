@@ -6,7 +6,7 @@
   libGL,
   libGLU,
   pkg-config,
-  xorg,
+  libx11,
   autoreconfHook,
   wrapGAppsHook4,
 }:
@@ -31,21 +31,21 @@ stdenv.mkDerivation rec {
     wxGTK32
     libGL
     libGLU
-    xorg.libX11
-    xorg.libX11.dev
+    libx11
+    libx11.dev
   ];
 
   configureFlags = [ "LDFLAGS=-lGL" ];
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Graphical user interface for GAMESS-US";
     mainProgram = "wxmacmolplt";
     homepage = "https://brettbode.github.io/wxmacmolplt/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       sheepforce
       markuskowa
     ];

@@ -26,14 +26,14 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "pre-commit";
-  version = "4.3.0";
+  version = "4.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pre-commit";
     repo = "pre-commit";
     tag = "v${version}";
-    hash = "sha256-vypzvO00pic5F7c3D3ABBMXLrBSEB9n6og3EsBLZNCs=";
+    hash = "sha256-3E/haU7TzTr+Qj3KadC7BYwuECZPa2Q+NvG5e4SSKSA=";
   };
 
   patches = [
@@ -85,7 +85,6 @@ python3Packages.buildPythonApplication rec {
     # Node.js-related tests that are currently disabled on i686-linux.
     nodejs
   ];
-  versionCheckProgramArg = "--version";
 
   postPatch = ''
     substituteInPlace pre_commit/resources/hook-tmpl \
@@ -179,6 +178,26 @@ python3Packages.buildPythonApplication rec {
     "test_swift_language"
     "test_run_example_executable"
     "test_run_dep"
+    "test_control_c_control_c_on_install"
+    "test_healthy_default_creator"
+    "test_healthy_venv_creator"
+    "test_invalidated_virtualenv"
+    "test_language_versioned_python_hook"
+    "test_local_python_repo"
+    "test_local_repo_with_other_artifacts"
+    "test_python_hook_weird_setup_cfg"
+    "test_really_long_file_paths"
+    "test_reinstall"
+    "test_repository_state_compatibility[v1]"
+    "test_repository_state_compatibility[v2]"
+    "test_simple_python_hook_default_version"
+    "test_simple_python_hook"
+    "test_unhealthy_old_virtualenv"
+    "test_unhealthy_python_goes_missing"
+    "test_unhealthy_system_version_changes"
+    "test_unhealthy_then_replaced"
+    "test_unhealthy_unexpected_pyvenv"
+    "test_unhealthy_with_version_change"
 
     # i don't know why these fail
     "test_install_existing_hooks_no_overwrite"
@@ -222,7 +241,10 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://pre-commit.com/";
     changelog = "https://github.com/pre-commit/pre-commit/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ borisbabic ];
+    maintainers = with lib.maintainers; [
+      borisbabic
+      savtrip
+    ];
     mainProgram = "pre-commit";
   };
 }

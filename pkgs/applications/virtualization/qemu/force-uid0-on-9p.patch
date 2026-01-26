@@ -9,7 +9,7 @@ index 45e9a1f9b0..494ee00c66 100644
 +static int is_in_store_path(const char *path)
 +{
 +    static char *store_path = NULL;
-+    int store_path_len = -1;
++    static ssize_t store_path_len = -1;
 +
 +    if (store_path_len == -1) {
 +        if ((store_path = getenv("NIX_STORE")) != NULL)
@@ -19,7 +19,7 @@ index 45e9a1f9b0..494ee00c66 100644
 +    }
 +
 +    if (store_path_len > 0)
-+        return strncmp(path, store_path, strlen(store_path)) == 0;
++        return strncmp(path, store_path, store_path_len) == 0;
 +    return 0;
 +}
 +

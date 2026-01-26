@@ -101,11 +101,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.brother.com/";
     description = "Brother HLL2375DW printer driver";
-    license = licenses.unfree;
-    platforms = builtins.map (arch: "${arch}-linux") arches;
-    maintainers = [ maintainers.gador ];
+    license = lib.licenses.unfree;
+    platforms = map (arch: "${arch}-linux") arches;
+    maintainers = [ lib.maintainers.gador ];
   };
 }

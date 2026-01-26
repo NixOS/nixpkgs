@@ -20,11 +20,11 @@ buildGoModule rec {
     "-s"
     "-w"
   ];
-  meta = with lib; {
+  meta = {
     description = "Command supervisor for coordinated Kubernetes pod container termination";
     mainProgram = "kubexit";
     homepage = "https://github.com/karlkfi/kubexit/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ qjoly ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ qjoly ];
   };
 }

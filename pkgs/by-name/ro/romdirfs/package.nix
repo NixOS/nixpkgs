@@ -24,11 +24,16 @@ gccStdenv.mkDerivation rec {
   ];
   buildInputs = [ fuse ];
 
-  meta = with lib; {
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
+  meta = {
     description = "FUSE for access Playstation 2 IOP IOPRP images and BIOS dumps";
     homepage = "https://github.com/mlafeldt/romdirfs";
-    license = licenses.gpl3;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
     mainProgram = "romdirfs";
   };

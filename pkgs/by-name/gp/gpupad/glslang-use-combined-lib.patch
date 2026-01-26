@@ -10,6 +10,7 @@ index a05c447..20a5c98 100644
 -    glslang::MachineIndependent glslang::GenericCodeGen glslang::glslang-default-resource-limits 
 +target_link_libraries(${PROJECT_NAME} PRIVATE glslang::glslang 
 +    glslang::glslang-default-resource-limits 
-     glslang::SPVRemapper glslang::SPIRV)
+-    glslang::SPVRemapper glslang::SPIRV)
++    glslang::SPIRV)
  
  # link SPIRV-Cross

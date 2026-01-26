@@ -14,7 +14,8 @@
   libpng,
   fribidi,
   harfbuzzFull,
-  xorg,
+  libxdmcp,
+  libpthread-stubs,
   util-linux,
   curl,
   SDL2,
@@ -49,8 +50,8 @@ stdenv.mkDerivation {
     libpng
     fribidi
     harfbuzzFull
-    xorg.libpthreadstubs
-    xorg.libXdmcp
+    libpthread-stubs
+    libxdmcp
     curl
     SDL2
     SDL2_image
@@ -61,12 +62,12 @@ stdenv.mkDerivation {
   ];
   hardeningDisable = [ "format" ];
 
-  meta = with lib; {
+  meta = {
     description = "GTKv2 client for the Crossfire free MMORPG";
     mainProgram = "crossfire-client-gtk2";
     homepage = "http://crossfire.real-time.com/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ToxicFrog ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ToxicFrog ];
   };
 }

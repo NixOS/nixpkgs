@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "python-smarttub";
-  version = "0.0.44";
+  version = "0.0.46";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mdz";
     repo = "python-smarttub";
     tag = "v${version}";
-    hash = "sha256-ozOnCJXv99gne59HQEdQfCKZe8HhK2q9vShMuBlSWE8=";
+    hash = "sha256-Hx5WVQWB5zk22jExFeka3fzfexBFC/ZWjM7S5WWxxXU=";
   };
 
   build-system = [
@@ -45,11 +45,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "smarttub" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for SmartTub enabled hot tubs";
     homepage = "https://github.com/mdz/python-smarttub";
     changelog = "https://github.com/mdz/python-smarttub/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

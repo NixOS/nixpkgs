@@ -9,13 +9,13 @@
 
 buildDotnetModule rec {
   pname = "sbom-tool";
-  version = "4.1.2";
+  version = "4.1.5";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "sbom-tool";
     tag = "v${version}";
-    hash = "sha256-rC77sbq2qhs+K2VZv9QBnhU5647Qg2TR609ovnCY69k=";
+    hash = "sha256-MIsCgUBHhaHobKfq3O/hL7+bXZVHgvtig7h4JIN8Gws=";
   };
 
   projectFile = "src/Microsoft.Sbom.Tool/Microsoft.Sbom.Tool.csproj";
@@ -37,7 +37,6 @@ buildDotnetModule rec {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = [ "--version" ];
 
   passthru = {
     updateScript = nix-update-script { };

@@ -29,19 +29,19 @@
   prometheus-client,
   polib,
   python,
-  xorg,
+  lndir,
 }:
 
 buildPythonPackage rec {
   pname = "libretranslate";
-  version = "1.7.3";
+  version = "1.8.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LibreTranslate";
     repo = "LibreTranslate";
     tag = "v${version}";
-    hash = "sha256-eX/CZlHqUkarrilE4UoTMF8U/b7hn6F3nMxYnDPQ238=";
+    hash = "sha256-nWm0h/ceGDtoUVqYPkIC+anXrneJsxlZ4DN3Wge0NCk=";
   };
 
   build-system = [
@@ -95,7 +95,7 @@ buildPythonPackage rec {
         {
           nativeBuildInputs = [
             pkgs.brotli
-            xorg.lndir
+            lndir
           ];
         }
         ''
@@ -109,11 +109,11 @@ buildPythonPackage rec {
         '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Free and Open Source Machine Translation API. Self-hosted, no limits, no ties to proprietary services";
     homepage = "https://libretranslate.com";
     changelog = "https://github.com/LibreTranslate/LibreTranslate/releases/tag/${src.tag}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ misuzu ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ misuzu ];
   };
 }

@@ -17,7 +17,7 @@ let
       if lib.isString value || lib.isPath value then
         "output ${name} ${value}"
       else if lib.isInt value then
-        "output ${name} ${builtins.toString value}"
+        "output ${name} ${toString value}"
       else if lib.isBool value then
         lib.optionalString value "output ${name}"
       else if value == null then

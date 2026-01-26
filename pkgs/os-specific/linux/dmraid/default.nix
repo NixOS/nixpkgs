@@ -18,6 +18,10 @@ stdenv.mkDerivation rec {
   patches = [
     ./hardening-format.patch
     ./fix-dmevent_tool.patch
+
+    # Fix build with gcc15, based on
+    # https://gitlab.alpinelinux.org/alpine/aports/-/raw/dc5b3135517ede55f5e3530e538ca75048d26565/main/dmraid/008-gcc15.patch
+    ./dmraid-fix-build-with-gcc15.patch
   ]
   ++ lib.optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {

@@ -2,7 +2,7 @@
   lib,
   python3,
   fetchFromGitHub,
-  ffmpeg-headless,
+  ffmpeg_7-headless,
   nixosTests,
   replaceVars,
   providers ? [ ],
@@ -15,13 +15,13 @@ let
       music-assistant-frontend = self.callPackage ./frontend.nix { };
 
       music-assistant-models = super.music-assistant-models.overridePythonAttrs (oldAttrs: rec {
-        version = "1.1.45";
+        version = "1.1.86";
 
         src = fetchFromGitHub {
           owner = "music-assistant";
           repo = "models";
           tag = version;
-          hash = "sha256-R1KkMe9dVl5J1DjDsFhSYVebpiqBkXZSqkLrd7T8gFg=";
+          hash = "sha256-dQwFsuelp/3s2CO/5jxNrZcmWxE9xYhrpx0O37Tq/TQ=";
         };
 
         postPatch = ''
@@ -47,20 +47,20 @@ assert
 
 python.pkgs.buildPythonApplication rec {
   pname = "music-assistant";
-  version = "2.5.8";
+  version = "2.7.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "server";
     tag = version;
-    hash = "sha256-7Q+BYw7wnT7QdqrDjagaxupzD0iKTc26z4TfxNtugdA=";
+    hash = "sha256-iWdOGdmPJO7Pjdn8UjuSOhWnRGBFjmARFsuHmP6IP58=";
   };
 
   patches = [
     (replaceVars ./ffmpeg.patch {
-      ffmpeg = "${lib.getBin ffmpeg-headless}/bin/ffmpeg";
-      ffprobe = "${lib.getBin ffmpeg-headless}/bin/ffprobe";
+      ffmpeg = "${lib.getBin ffmpeg_7-headless}/bin/ffmpeg";
+      ffprobe = "${lib.getBin ffmpeg_7-headless}/bin/ffprobe";
     })
 
     # Look up librespot from PATH at runtime
@@ -68,11 +68,28 @@ python.pkgs.buildPythonApplication rec {
 
     # Disable interactive dependency resolution, which clashes with the immutable Python environment
     ./dont-install-deps.patch
+
+    # Fix running the built-in snapcast server
+    ./builtin-snapcast-server.patch
+
+    # Fix running the webserver pytests in our nix sandbox, which only has a loopback interface,
+    # by not skipping over its loopback IPv4 address:
+    #
+    #     """Return all Config Entries for this core module (if any)."""
+    #     ip_addresses = await get_ip_addresses()
+    # >   default_publish_ip = ip_addresses[0]
+    #                          ^^^^^^^^^^^^^^^
+    # E   IndexError: tuple index out of range
+    ./fix-webserver-tests-in-sandbox.patch
   ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "0.0.0" "${version}"
+
+    # get-mac is a deprecated alias of getmac since 2018
+    substituteInPlace pyproject.toml \
+      --replace-fail "get-mac" "getmac"
 
     rm -rv music_assistant/providers/spotify/bin
   '';
@@ -84,12 +101,16 @@ python.pkgs.buildPythonApplication rec {
   pythonRelaxDeps = [
     "aiohttp"
     "aiosqlite"
+    "aiovban" # PyPi and GitHub versioning is out of sync
     "certifi"
     "colorlog"
     "cryptography"
+    "getmac"
     "mashumaro"
     "orjson"
     "pillow"
+    "podcastparser"
+    "pycares"
     "xmltodict"
     "zeroconf"
   ];
@@ -99,68 +120,73 @@ python.pkgs.buildPythonApplication rec {
     "uv"
   ];
 
-  dependencies =
-    with python.pkgs;
-    [
-      aiohttp
-      chardet
-      mashumaro
-      orjson
-    ]
-    ++ optional-dependencies.server;
+  dependencies = with python.pkgs; [
+    # Only packages required in pyproject.toml
+    aiodns
+    aiofiles
+    aiohttp
+    aiohttp-asyncmdnsresolver
+    aiohttp-fast-zlib
+    aiortc
+    aiorun
+    aiosqlite
+    aiovban
+    awesomeversion
+    brotli
+    certifi
+    chardet
+    colorlog
+    cryptography
+    getmac
+    gql
+    ifaddr
+    librosa
+    mashumaro
+    music-assistant-frontend
+    music-assistant-models
+    mutagen
+    orjson
+    pillow
+    podcastparser
+    propcache
+    python-slugify
+    shortuuid
+    unidecode
+    xmltodict
+    zeroconf
+
+    # Used in music_assistant/controllers/webserver/helpers/auth_providers.py
+    # but somehow not part of pyproject.toml
+    hass-client
+  ];
 
   optional-dependencies = with python.pkgs; {
-    server = [
-      aiodns
-      aiofiles
-      aiohttp
-      aiorun
-      aiosqlite
-      asyncio-throttle
-      brotli
-      certifi
-      colorlog
-      cryptography
-      eyed3
-      faust-cchardet
-      ifaddr
-      mashumaro
-      memory-tempfile
-      music-assistant-frontend
-      music-assistant-models
-      mutagen
-      orjson
-      pillow
-      podcastparser
-      python-slugify
-      shortuuid
-      unidecode
-      xmltodict
-      zeroconf
+    # Required subset of optional-dependencies in pyproject.toml
+    test = [
+      pytest-aiohttp
+      pytest-cov-stub
+      syrupy
     ];
   };
 
   nativeCheckInputs =
     with python.pkgs;
     [
-      pytest-aiohttp
-      pytest-cov-stub
-      pytest-timeout
       pytestCheckHook
-      syrupy
-      pytest-timeout
     ]
-    ++ lib.flatten (lib.attrValues optional-dependencies)
+    ++ lib.concatAttrValues optional-dependencies
     ++ (providerPackages.jellyfin python.pkgs)
-    ++ (providerPackages.opensubsonic python.pkgs);
+    ++ (providerPackages.opensubsonic python.pkgs)
+    ++ (providerPackages.tidal python.pkgs);
 
   disabledTestPaths = [
-    # blocks in poll()
+    # no multicast support in build sandbox:
+    # "OSError: [Errno 19] No such device"
     "tests/providers/jellyfin/test_init.py::test_initial_sync"
     "tests/core/test_server_base.py::test_start_and_stop_server"
     "tests/core/test_server_base.py::test_events"
-    # not compatible with the required py-subsonic version
-    "tests/providers/opensubsonic/test_parsers.py"
+    # provider is missing dependencies
+    "tests/providers/nicovideo"
   ];
 
   pythonImportsCheck = [ "music_assistant" ];
@@ -190,7 +216,10 @@ python.pkgs.buildPythonApplication rec {
     '';
     homepage = "https://github.com/music-assistant/server";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ hexa ];
+    maintainers = with lib.maintainers; [
+      hexa
+      emilylange
+    ];
     mainProgram = "mass";
   };
 }

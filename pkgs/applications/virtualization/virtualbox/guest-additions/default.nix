@@ -4,17 +4,23 @@
   callPackage,
   lib,
   dbus,
-  xorg,
+  kmod,
+  libxt,
+  libxrandr,
+  libxmu,
+  libxfixes,
+  libxext,
+  libxcursor,
   zlib,
   patchelf,
   makeWrapper,
   wayland,
-  libX11,
+  libx11,
 }:
 let
-  virtualboxVersion = "7.2.0";
+  virtualboxVersion = "7.2.4";
   virtualboxSubVersion = "";
-  virtualboxSha256 = "4f2804ff27848ea772aee6b637bb1e10ee74ec2da117c257413e2d2c4f670ba0";
+  virtualboxSha256 = "d281ec981b5f580211a0cedd1b75a1adcb0fbfcbb768d8c2bf4429f4763e8bbd";
 
   platform =
     if stdenv.hostPlatform.isAarch64 then
@@ -43,11 +49,11 @@ let
     }
     {
       name = "libXfixes.so";
-      pkg = xorg.libXfixes;
+      pkg = libxfixes;
     }
     {
       name = "libXrandr.so";
-      pkg = xorg.libXrandr;
+      pkg = libxrandr;
     }
     {
       name = "libwayland-client.so";
@@ -55,11 +61,11 @@ let
     }
     {
       name = "libX11.so";
-      pkg = libX11;
+      pkg = libx11;
     }
     {
       name = "libXt.so";
-      pkg = xorg.libXt;
+      pkg = libxt;
     }
   ];
 in
@@ -81,6 +87,7 @@ stdenv.mkDerivation {
     patchelf
     makeWrapper
     virtualBoxNixGuestAdditionsBuilder
+    kmod
   ]
   ++ kernel.moduleBuildDependencies;
 
@@ -101,12 +108,12 @@ stdenv.mkDerivation {
             stdenv.cc.cc
             stdenv.cc.libc
             zlib
-            xorg.libX11
-            xorg.libXt
-            xorg.libXext
-            xorg.libXmu
-            xorg.libXfixes
-            xorg.libXcursor
+            libx11
+            libxt
+            libxext
+            libxmu
+            libxfixes
+            libxcursor
           ]
         } $i
     done
@@ -140,6 +147,11 @@ stdenv.mkDerivation {
     # libGL.so (which we can't), and Oracle doesn't plan on supporting libglvnd
     # either. (#18457)
 
+    mkdir -p $out/etc/depmod.d
+    for mod in $out/lib/modules/*/misc/*; do
+      echo "override $(modinfo -F name "$mod") * misc" >> $out/etc/depmod.d/vbox.conf
+    done
+
     runHook postInstall
   '';
 
@@ -164,7 +176,6 @@ stdenv.mkDerivation {
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     license = lib.licenses.gpl3Only;
     maintainers = [
-      lib.maintainers.sander
       lib.maintainers.friedrichaltheide
     ];
     platforms = [

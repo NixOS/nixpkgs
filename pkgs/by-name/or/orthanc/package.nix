@@ -112,7 +112,6 @@ stdenv.mkDerivation (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
@@ -127,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.orthanc-server.com/";
     license = lib.licenses.gpl3Plus;
     mainProgram = "Orthanc";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

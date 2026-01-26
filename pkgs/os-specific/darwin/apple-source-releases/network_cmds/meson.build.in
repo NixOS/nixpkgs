@@ -14,6 +14,10 @@ add_global_arguments(
     '-DUSE_RFC2292BIS=1',
     '-D__APPLE_USE_RFC_3542=1',
     '-D__APPLE_API_OBSOLETE=1',
+    # Define flexible array member attribute macros as nothing. Unfortunately, Apple’s usage does not work with
+    # the C23 attributes supported by Clang.
+    '-D__counted_by_or_null(N)=',
+    '-D__sized_by_or_null(N)=',
     language : 'c',
 )
 
@@ -23,6 +27,8 @@ cc = meson.get_compiler('c')
 
 libipsec = cc.find_library('ipsec')
 libresolv = cc.find_library('resolv')
+libutil = cc.find_library('util')
+
 libpcap = dependency('pcap')
 openssl = dependency('openssl')
 
@@ -200,7 +206,7 @@ executable(
     dependencies : [ libnetwork_cmds ],
     install : true,
     sources : [
-        # 'netstat.tproj/bpf.c',
+        'netstat.tproj/bpf.c',
         'netstat.tproj/data.c',
         'netstat.tproj/if.c',
         'netstat.tproj/inet.c',
@@ -276,29 +282,31 @@ executable(
 )
 install_man('route.tproj/route.8')
 
-# Depends on a bunch of IPv6 stuff from later SDKs (>11.3). Package once those become the default.
-# executable(
-#     'rtadvd',
-#     c_args : [
-#        '-DINET6',
-#        '-DHAVE_GETIFADDRS',
-#     ],
-#     install : true,
-#     sources : [
-#         'rtadvd.tproj/advcap.c',
-#         'rtadvd.tproj/config.c',
-#         'rtadvd.tproj/dump.c',
-#         'rtadvd.tproj/if.c',
-#         'rtadvd.tproj/rrenum.c',
-#         'rtadvd.tproj/rtadvd.c',
-#         'rtadvd.tproj/rtadvd_logging.c',
-#         'rtadvd.tproj/timer.c',
-#     ],
-# )
-# install_man(
-#   'rtadvd.tproj/rtadvd.8',
-#   'rtadvd.tproj/rtadvd.conf.5',
-# )
+executable(
+    'rtadvd',
+    c_args : [
+       '-DINET6',
+       '-DHAVE_GETIFADDRS',
+        # Required for `_COMM_PAGE_CPU_CAPABILITIES` in <machine/cpu_capabilities.h>
+       '-DPRIVATE',
+    ],
+    dependencies : libutil,
+    install : true,
+    sources : [
+        'rtadvd.tproj/advcap.c',
+        'rtadvd.tproj/config.c',
+        'rtadvd.tproj/dump.c',
+        'rtadvd.tproj/if.c',
+        'rtadvd.tproj/rrenum.c',
+        'rtadvd.tproj/rtadvd.c',
+        'rtadvd.tproj/rtadvd_logging.c',
+        'rtadvd.tproj/timer.c',
+    ],
+)
+install_man(
+  'rtadvd.tproj/rtadvd.8',
+  'rtadvd.tproj/rtadvd.conf.5',
+)
 
 executable(
     'rtsol',

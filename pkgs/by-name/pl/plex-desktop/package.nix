@@ -13,6 +13,7 @@
   libva,
   libxkbcommon,
   libxml2_13,
+  makeDesktopItem,
   makeShellWrapper,
   minizip,
   nss,
@@ -20,7 +21,18 @@
   stdenv,
   writeShellScript,
   xkeyboard_config,
-  xorg,
+  libxcb-wm,
+  libxcb-render-util,
+  libxcb-keysyms,
+  libxcb-image,
+  libxtst,
+  libxrender,
+  libxrandr,
+  libxinerama,
+  libxdamage,
+  libxcomposite,
+  xrandr,
+  libxshmfence,
 }:
 let
   pname = "plex-desktop";
@@ -39,6 +51,15 @@ let
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
     mainProgram = "plex-desktop";
+  };
+  desktopItem = makeDesktopItem {
+    name = "plex-desktop";
+    desktopName = "Plex";
+    exec = "plex-desktop";
+    icon = "plex-desktop";
+    terminal = false;
+    categories = [ "AudioVideo" ];
+    startupWMClass = "Plex";
   };
   plex-desktop = stdenv.mkDerivation {
     inherit pname version meta;
@@ -65,18 +86,18 @@ let
       minizip
       nss
       stdenv.cc.cc
-      xorg.libXcomposite
-      xorg.libXdamage
-      xorg.libXinerama
-      xorg.libXrandr
-      xorg.libXrender
-      xorg.libXtst
-      xorg.libxshmfence
-      xorg.xcbutilimage
-      xorg.xcbutilkeysyms
-      xorg.xcbutilrenderutil
-      xorg.xcbutilwm
-      xorg.xrandr
+      libxcomposite
+      libxdamage
+      libxinerama
+      libxrandr
+      libxrender
+      libxtst
+      libxshmfence
+      libxcb-image
+      libxcb-keysyms
+      libxcb-render-util
+      libxcb-wm
+      xrandr
     ];
 
     strictDeps = true;
@@ -133,11 +154,8 @@ buildFHSEnv {
 
   extraInstallCommands = ''
     mkdir -p $out/share/applications $out/share/icons/hicolor/scalable/apps
-    install -m 444 -D ${plex-desktop}/meta/gui/plex-desktop.desktop $out/share/applications/plex-desktop.desktop
-    substituteInPlace $out/share/applications/plex-desktop.desktop \
-      --replace-fail \
-      'Icon=''${SNAP}/meta/gui/icon.png' \
-      'Icon=${plex-desktop}/meta/gui/icon.png'
+    install -m 444 -D ${desktopItem}/share/applications/plex-desktop.desktop $out/share/applications/plex-desktop.desktop
+    install -m 444 -D ${plex-desktop}/meta/gui/icon.png $out/share/icons/hicolor/scalable/apps/plex-desktop.png
   '';
 
   runScript = writeShellScript "plex-desktop.sh" ''

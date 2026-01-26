@@ -24,11 +24,11 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests) webhook; };
 
-  meta = with lib; {
+  meta = {
     description = "Incoming webhook server that executes shell commands";
     mainProgram = "webhook";
     homepage = "https://github.com/adnanh/webhook";
-    license = licenses.mit;
-    maintainers = with maintainers; [ azahi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ azahi ];
   };
 }

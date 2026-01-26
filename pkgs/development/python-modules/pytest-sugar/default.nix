@@ -5,15 +5,12 @@
   setuptools,
   termcolor,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-sugar";
   version = "1.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -30,11 +27,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Plugin that changes the default look and feel of pytest";
     homepage = "https://github.com/Frozenball/pytest-sugar";
     changelog = "https://github.com/Teemu/pytest-sugar/releases/tag/v${version}";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

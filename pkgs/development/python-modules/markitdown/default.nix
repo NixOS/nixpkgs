@@ -1,15 +1,22 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   hatchling,
+
+  # dependencies
   beautifulsoup4,
   defusedxml,
   ffmpeg-headless,
+  lxml,
   magika,
   mammoth,
   markdownify,
   numpy,
+  olefile,
   openai,
   openpyxl,
   pandas,
@@ -20,30 +27,38 @@
   python-pptx,
   requests,
   speechrecognition,
-  youtube-transcript-api,
-  olefile,
   xlrd,
-  lxml,
+  youtube-transcript-api,
+
+  # tests
   pytestCheckHook,
+
+  # passthru
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+let
+  isNotAarch64Linux = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
+in
+buildPythonPackage (finalAttrs: {
   pname = "markitdown";
-  version = "0.1.3";
+  version = "0.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "markitdown";
-    tag = "v${version}";
-    hash = "sha256-bHnJsv4ln1W0lVbWwLmCzQ15KOGJZ9gF2yx4TDuBqBI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-WKA2eY8wY3SM9xZ7Cek5eUcJbO5q6eMDx2aTKfQnFvE=";
   };
 
-  sourceRoot = "${src.name}/packages/markitdown";
+  sourceRoot = "${finalAttrs.src.name}/packages/markitdown";
 
   build-system = [ hatchling ];
 
+  pythonRelaxDeps = [
+    "magika"
+  ];
   dependencies = [
     beautifulsoup4
     defusedxml
@@ -68,7 +83,12 @@ buildPythonPackage rec {
     youtube-transcript-api
   ];
 
-  pythonImportsCheck = [ "markitdown" ];
+  # aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox:
+  # terminate called after throwing an instance of 'onnxruntime::OnnxRuntimeException'
+  #
+  # -> Skip all tests that require importing markitdown
+  pythonImportsCheck = lib.optionals isNotAarch64Linux [ "markitdown" ];
+  doCheck = isNotAarch64Linux;
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -85,7 +105,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python tool for converting files and office documents to Markdown";
     homepage = "https://github.com/microsoft/markitdown";
+    changelog = "https://github.com/microsoft/markitdown/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
-}
+})

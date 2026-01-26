@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   cmake,
+  oniguruma,
   openssl,
   zlib,
   perl,
@@ -56,9 +57,13 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = [
+    oniguruma
     openssl
     zlib
   ];
+
+  # use system oniguruma since the bundled one fails to build with gcc15
+  env.RUSTONIG_SYSTEM_LIBONIG = 1;
 
   cargoBuildFlags = [ "-p lsp-ai" ];
 

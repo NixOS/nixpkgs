@@ -39,18 +39,18 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "PREFIX=$(out)"
-    "OPENSSL_BASE=${openssl.dev}"
-    "LIBEVENT_BASE=${libevent.dev}"
-    "LIBPCAP_BASE=${libpcap}"
-    "LIBNET_BASE=${libnet}"
+    "OPENSSL_BASE=${lib.getDev openssl}"
+    "LIBEVENT_BASE=${lib.getDev libevent}"
+    "LIBPCAP_BASE=${lib.getDev libpcap}"
+    "LIBNET_BASE=${lib.getDev libnet}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Transparent SSL/TLS interception";
     homepage = "https://www.roe.ch/SSLsplit";
-    platforms = platforms.all;
-    maintainers = with maintainers; [ contrun ];
-    license = with licenses; [
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ contrun ];
+    license = with lib.licenses; [
       bsd2
       mit
       unlicense

@@ -52,6 +52,7 @@ let
   };
 in
 
-lib.optional (failures != [ ]) (
-  throw "The following systemd unit tests failed: ${lib.generators.toPretty { } failures}"
-)
+lib.debug.throwTestFailures {
+  inherit failures;
+  description = "systemd unit tests";
+}

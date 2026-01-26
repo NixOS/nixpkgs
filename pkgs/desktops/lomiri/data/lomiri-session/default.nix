@@ -83,13 +83,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Integrates Lomiri desktop/touch sessions into display / session managers";
     homepage = "https://gitlab.com/ubports/development/core/lomiri-session";
     changelog = "https://gitlab.com/ubports/development/core/lomiri-session/-/blob/${finalAttrs.version}/ChangeLog";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = "lomiri-session";
-    teams = [ teams.lomiri ];
-    platforms = platforms.linux;
+    teams = [ lib.teams.lomiri ];
+    platforms = lib.platforms.linux;
   };
 })

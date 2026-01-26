@@ -3,7 +3,7 @@
   lib,
   glib,
   wrapGAppsHook3,
-  xorg,
+  lndir,
   caja,
   cajaExtensions,
   extensions ? [ ],
@@ -15,13 +15,14 @@ let
 in
 stdenv.mkDerivation {
   pname = "${caja.pname}-with-extensions";
-  version = caja.version;
+  inherit (caja) version outputs;
 
   src = null;
 
   nativeBuildInputs = [
     glib
     wrapGAppsHook3
+    lndir
   ];
 
   buildInputs =
@@ -41,7 +42,8 @@ stdenv.mkDerivation {
     runHook preInstall
 
     mkdir -p $out
-    ${xorg.lndir}/bin/lndir -silent ${caja} $out
+    lndir -silent ${caja.out} $out
+    lndir -silent ${caja.man} $out
 
     dbus_service_path="share/dbus-1/services/org.mate.freedesktop.FileManager1.service"
     rm -f $out/share/applications/* "$out/$dbus_service_path"

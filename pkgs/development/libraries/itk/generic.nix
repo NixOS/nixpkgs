@@ -94,6 +94,18 @@ stdenv.mkDerivation {
     ln -sr ${itkAdaptiveDenoisingSrc} Modules/External/ITKAdaptiveDenoising
     ln -sr ${itkSimpleITKFiltersSrc} Modules/External/ITKSimpleITKFilters
     ln -sr ${rtkSrc} Modules/Remote/RTK
+
+    # fix build with GCC 15
+    substituteInPlace Modules/ThirdParty/GoogleTest/src/itkgoogletest/googletest/src/gtest-death-test.cc \
+      --replace-fail \
+        '#include <utility>' \
+        '#include <utility>
+        #include <cstdint>'
+    substituteInPlace Modules/Core/Common/include/itkFloatingPointExceptions.h \
+      --replace-fail \
+        '#include "itkSingletonMacro.h"' \
+        '#include "itkSingletonMacro.h"
+        #include <cstdint>'
   '';
 
   cmakeFlags = [
@@ -124,7 +136,8 @@ stdenv.mkDerivation {
     "-DITK_USE_SYSTEM_SWIG=ON"
     "-DPY_SITE_PACKAGES_PATH=${placeholder "out"}/${python.sitePackages}"
   ]
-  ++ lib.optionals withVtk [ "-DModule_ITKVtkGlue=ON" ];
+  ++ lib.optionals withVtk [ "-DModule_ITKVtkGlue=ON" ]
+  ++ lib.optionals (lib.versionOlder version "5.4") [ "-DCMAKE_POLICY_VERSION_MINIMUM=3.5" ];
 
   nativeBuildInputs = [
     cmake

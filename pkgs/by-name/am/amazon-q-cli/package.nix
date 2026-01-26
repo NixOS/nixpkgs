@@ -3,24 +3,27 @@
   fetchFromGitHub,
   rustPlatform,
   versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "amazon-q-cli";
-  version = "1.14.1";
+  version = "1.19.7";
+
+  passthru.updateScript = nix-update-script { };
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "amazon-q-developer-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RZUe08hPcfPuovfDqndytjz+OVwd3SGvAhWp5XMm+jU=";
+    hash = "sha256-KeYSZB3/eVKOVGYA92QwVweLPvamcizcSBtj08HtcCU=";
   };
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
   ];
 
-  cargoHash = "sha256-qcuxJf038260hr/1Mi5hgWC4Nwmj2xkt4XFkdfgs4QQ=";
+  cargoHash = "sha256-BlHdEMt3Z/dBnU8PevH9/g/64G1Vz5lwAps0gv60cmw=";
 
   cargoBuildFlags = [
     "-p"
@@ -69,7 +72,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/amazon-q";
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Amazon Q Developer AI coding agent CLI";

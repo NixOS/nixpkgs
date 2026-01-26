@@ -3,8 +3,12 @@
   stdenv,
   fetchurl,
   cmake,
-  boost,
+  boost186,
 }:
+
+let
+  boost = boost186;
+in
 
 stdenv.mkDerivation rec {
   pname = "ispike";
@@ -17,6 +21,11 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -i "1i #include <map>" include/iSpike/YarpConnection.hpp
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "CMAKE_MINIMUM_REQUIRED (VERSION 2.6.2)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace src/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   nativeBuildInputs = [ cmake ];

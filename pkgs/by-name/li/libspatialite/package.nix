@@ -45,7 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     validatePkgConfig
-    geos # for geos-config
   ];
 
   buildInputs = [
@@ -60,6 +59,10 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
+  ];
+
+  configureFlags = [
+    "--with-geosconfig=${lib.getExe' (lib.getDev geos) "geos-config"}"
   ];
 
   enableParallelBuilding = true;

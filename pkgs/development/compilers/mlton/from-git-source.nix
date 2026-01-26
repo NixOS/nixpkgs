@@ -1,4 +1,5 @@
 {
+  lib,
   fetchgit,
   gmp,
   mltonBootstrap,
@@ -8,11 +9,12 @@
   stdenv,
   version,
   which,
+  doCheck ? true,
 }:
 
 stdenv.mkDerivation {
   pname = "mlton";
-  inherit version;
+  inherit version doCheck;
 
   src = fetchgit {
     inherit url rev sha256;
@@ -43,7 +45,5 @@ stdenv.mkDerivation {
       )
   '';
 
-  doCheck = true;
-
-  meta = import ./meta.nix;
+  meta = import ./meta.nix { inherit lib; };
 }

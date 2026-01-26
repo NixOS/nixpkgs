@@ -9,7 +9,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "gogdl";
   version = "1.1.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Heroic-Games-Launcher";
@@ -18,8 +18,6 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-pK6JeTJeBq9qVfflNSYs3s4HuD0Kz6k9DDUVHL81FV0=";
   };
 
-  disabled = python3Packages.pythonOlder "3.8";
-
   propagatedBuildInputs = with python3Packages; [
     setuptools
     requests
@@ -27,12 +25,12 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "gogdl" ];
 
-  meta = with lib; {
+  meta = {
     description = "GOG Downloading module for Heroic Games Launcher";
     mainProgram = "gogdl";
     homepage = "https://github.com/Heroic-Games-Launcher/heroic-gogdl";
-    license = with licenses; [ gpl3 ];
-    maintainers = with maintainers; [ aidalgol ];
+    license = with lib.licenses; [ gpl3 ];
+    maintainers = [ ];
   };
 
   # Upstream no longer create git tags when bumping the version, so we have to

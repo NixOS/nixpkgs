@@ -33,8 +33,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     (fetchpatch {
-      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libmspub/-/raw/main/buildfix.diff?ref_type=heads";
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libmspub/-/raw/8721a52e09e14f905311abd3d5f2ad9bb3fe78a2/buildfix.diff";
       hash = "sha256-evxEoQ0a6YHoymR+SEJwqfr7rkWp3JnsWOD1tfYfZOw=";
+    })
+    (fetchpatch {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libmspub/-/raw/9d565015753364fa458da19e5dd4ce8224cf9246/includes.patch";
+      hash = "sha256-oHXEWSOSod9VnOrFtdMQcHYm7EdKkG+S7Q9rfM0DaTg=";
     })
   ];
 

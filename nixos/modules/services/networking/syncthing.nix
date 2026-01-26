@@ -72,6 +72,7 @@ let
   ) (filterAttrs (_: folder: folder.enable) cfg.settings.folders);
 
   jq = "${pkgs.jq}/bin/jq";
+  grep = lib.getExe pkgs.gnugrep;
   updateConfig = pkgs.writers.writeBash "merge-syncthing-config" (
     ''
       set -efu
@@ -92,6 +93,61 @@ let
               --retry 1000 --retry-delay 1 --retry-all-errors \
               "$@"
       }
+
+      # Before version 2.0.0, Syncthing used LevelDB. In version 2.0.0,
+      # Syncthing started using SQLite. If you upgrade from an older version of
+      # Syncthing that uses LevelDB to a newer version of Syncthing that uses
+      # SQLite, then Syncthing will automatically do a one time database
+      # migration [1]. While the migration is happening, the regular Syncthing
+      # REST API is not available. Instead, a temporary API is made available
+      # in its place.
+      #
+      # The rest of this script depends on Syncthing’s regular REST API. This
+      # next part checks to see if Syncthing is currently providing the
+      # temporary API. If it is, this next part will wait until the regular API
+      # is available.
+      #
+      # [1]: <https://github.com/syncthing/syncthing/releases/tag/v2.0.0>
+      while true
+      do
+        # We can use pretty much any API endpoint here. I chose to use
+        # /rest/noauth/health because it doesn’t return a lot of data and
+        # because doing a “health check” seems like an appropriate way to check
+        # to see if the regular API is “alive” or not.
+        content_type="$(curl \
+          -o /dev/null \
+          -w '%header{Content-Type}' \
+          ${curlAddressArgs "/rest/noauth/health"}
+        )"
+        # The “($|([ \t]*;.*))” part at the end allows us to not worry about
+        # whether or not the Content-Type contains any parameters. “$” matches
+        # the end of the string which indicates that no parameters were used
+        # [1][2]. The “[ \t]*;” part matches OWS [3] followed by a semicolon
+        # which indicates that at least one parameter was used [4].
+        #
+        # We use “grep -i” here because media types are case-insensitive [2].
+        #
+        # [1]: <https://httpwg.org/specs/rfc9110.html#field.content-type>
+        # [2]: <https://httpwg.org/specs/rfc9110.html#media.type>
+        # [3]: <https://httpwg.org/specs/rfc9110.html#whitespace>
+        # [4]: <https://httpwg.org/specs/rfc9110.html#parameter>
+        if printf %s "$content_type" | ${lib.escapeShellArg grep} -qiP '^text/plain($|([ \t]*;.*))'
+        then
+          echo Waiting for Syncthing to finish its database migration…
+          sleep 30
+        # TODO: This next regex pattern can be simplified if this Syncthing bug gets fixed [1].
+        #
+        # [1]: <https://github.com/syncthing/syncthing/issues/10500>
+        elif printf %s "$content_type" | ${lib.escapeShellArg grep} -qiP '^application/json($|([ \t]*;.*))'
+        then
+          echo 'Syncthing is not doing a database migration (anymore).'
+          break
+        else
+          printf 'ERROR: Syncthing responded with an unexpected Content-Type: %s\n' "$content_type"
+          # This is the EX_PROTOCOL exit status from <man:sysexits.h(3head)>.
+          exit 76
+        fi
+      done
     ''
     +
 
@@ -117,6 +173,7 @@ let
             override = cfg.overrideFolders;
             conf = folders;
             baseAddress = curlAddressArgs "/rest/config/folders";
+            ignoreAddress = curlAddressArgs "/rest/db/ignores";
           };
         }
         [
@@ -142,7 +199,8 @@ let
                 let
                   jsonPreSecretsFile = pkgs.writeTextFile {
                     name = "${conf_type}-${new_cfg.id}-conf-pre-secrets.json";
-                    text = builtins.toJSON new_cfg;
+                    # Remove the ignorePatterns attribute, it is handled separately
+                    text = builtins.toJSON (removeAttrs new_cfg [ "ignorePatterns" ]);
                   };
                   injectSecretsJqCmd =
                     {
@@ -209,6 +267,13 @@ let
                 ''
                   ${injectSecretsJqCmd} ${jsonPreSecretsFile} | curl --json @- -X POST ${s.baseAddress}
                 ''
+                /*
+                  Check if we are configuring a folder which has ignore patterns.
+                  If it does, write the ignore patterns to the rest API.
+                */
+                + lib.optionalString ((conf_type == "dirs") && (new_cfg.ignorePatterns != null)) ''
+                  curl -d '{"ignore": ${builtins.toJSON new_cfg.ignorePatterns}}' -X POST ${s.ignoreAddress}?folder=${new_cfg.id}
+                ''
               ))
               (lib.concatStringsSep "\n")
             ]
@@ -236,13 +301,14 @@ let
     +
       /*
         Now we update the other settings defined in cleanedConfig which are not
-        "folders" or "devices".
+        "folders", "devices", or "guiPasswordFile".
       */
       (lib.pipe cleanedConfig [
         builtins.attrNames
         (lib.subtractLists [
           "folders"
           "devices"
+          "guiPasswordFile"
         ])
         (map (subOption: ''
           curl -X PUT -d ${
@@ -251,6 +317,12 @@ let
         ''))
         (lib.concatStringsSep "\n")
       ])
+    +
+      # Now we hash the contents of guiPasswordFile and use the result to update the gui password
+      (lib.optionalString (cfg.guiPasswordFile != null) ''
+        ${pkgs.mkpasswd}/bin/mkpasswd -m bcrypt --stdin <"${cfg.guiPasswordFile}" | tr -d "\n" > "$RUNTIME_DIRECTORY/password_bcrypt"
+        curl -X PATCH --variable "pw_bcrypt@$RUNTIME_DIRECTORY/password_bcrypt" --expand-json '{ "password": "{{pw_bcrypt}}" }' ${curlAddressArgs "/rest/config/gui"}
+      '')
     + ''
       # restart Syncthing if required
       if curl ${curlAddressArgs "/rest/config/restart-required"} |
@@ -282,6 +354,14 @@ in
         description = ''
           Path to the `key.pem` file, which will be copied into Syncthing's
           [configDir](#opt-services.syncthing.configDir).
+        '';
+      };
+
+      guiPasswordFile = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Path to file containing the plaintext password for Syncthing's GUI.
         '';
       };
 
@@ -535,12 +615,7 @@ in
                                     '';
                                   };
                                   encryptionPasswordFile = mkOption {
-                                    type = types.nullOr (
-                                      types.pathWith {
-                                        inStore = false;
-                                        absolute = true;
-                                      }
-                                    );
+                                    type = types.nullOr types.externalPath;
                                     default = null;
                                     description = ''
                                       Path to encryption password. If set, the file will be read during
@@ -633,6 +708,26 @@ in
                           On Unix systems, tries to copy file/folder ownership from the parent directory (the directory it’s located in).
                           Requires running Syncthing as a privileged user, or granting it additional capabilities (e.g. CAP_CHOWN on Linux).
                         '';
+                      };
+
+                      ignorePatterns = mkOption {
+                        type = types.nullOr (types.listOf types.str);
+                        default = null;
+                        description = ''
+                          Syncthing can be configured to ignore certain files in a folder using ignore patterns.
+                          Enter them as a list of strings, one string per line.
+                          See the Syncthing documentation for syntax: <https://docs.syncthing.net/users/ignoring.html>
+                          Patterns set using the WebUI will be overridden if you define this option.
+                          If you want to override the ignore patterns to be empty, use `ignorePatterns = []`.
+                          Deleting the `ignorePatterns` option will not remove the patterns from Syncthing automatically
+                          because patterns are only handled by the module if this option is defined. Either use
+                          `ignorePatterns = []` before deleting the option or remove the patterns afterwards using the WebUI.
+                        '';
+                        example = [
+                          "// This is a comment"
+                          "*.part // Firefox downloads and other things"
+                          "*.crdownload // Chrom(ium|e) downloads"
+                        ];
                       };
                     };
                   }
@@ -837,6 +932,12 @@ in
           from the configuration, creating path conflicts.
         '';
       }
+      {
+        assertion = (lib.hasAttrByPath [ "gui" "password" ] cfg.settings) -> cfg.guiPasswordFile == null;
+        message = ''
+          Please use only one of services.syncthing.settings.gui.password or services.syncthing.guiPasswordFile.
+        '';
+      }
     ];
 
     networking.firewall = mkIf cfg.openDefaultPorts {
@@ -897,7 +998,7 @@ in
           ExecStart =
             let
               args = lib.escapeShellArgs (
-                (lib.cli.toGNUCommandLine { } {
+                (lib.cli.toCommandLineGNU { } {
                   "no-browser" = true;
                   "gui-address" = (if isUnixGui then "unix://" else "") + cfg.guiAddress;
                   "config" = cfg.configDir;

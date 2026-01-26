@@ -107,7 +107,7 @@ lib.makeOverridable (
   in
 
   stdenv.mkDerivation (
-    (builtins.removeAttrs attrs [ "source" ])
+    (removeAttrs attrs [ "source" ])
     // {
       inherit ruby;
       inherit dontBuild;

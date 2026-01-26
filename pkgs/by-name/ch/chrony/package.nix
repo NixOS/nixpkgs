@@ -62,8 +62,6 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   doCheck = true;
 
-  hardeningEnable = lib.optionals (!stdenv.hostPlatform.isDarwin) [ "pie" ];
-
   passthru.tests = {
     inherit (nixosTests) chrony chrony-ptp;
   };

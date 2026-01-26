@@ -1,8 +1,9 @@
 {
   lib,
   stdenv,
+  fetchFromGitHub,
+  autoconf-archive,
   autoreconfHook,
-  fetchurl,
   pkg-config,
   gettext,
   glib,
@@ -12,15 +13,18 @@
   gtk-doc,
   libsoup_3,
   tzdata,
-  mateUpdateScript,
+  mate-common,
+  gitUpdater,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libmateweather";
-  version = "1.28.0";
+  version = "1.28.2";
 
-  src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "VUNz3rWzk7nYSydd0spmyaSi0ObskgRPq4qlPjAy0rU=";
+  src = fetchFromGitHub {
+    owner = "mate-desktop";
+    repo = "libmateweather";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-D9A9zHd0stCV5Lynyb0N9LuenBk1eJa4ZdQcZQf6UpU=";
   };
 
   patches = [
@@ -31,12 +35,15 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   nativeBuildInputs = [
+    autoconf-archive
     autoreconfHook # the libsoup patch changes the autoconf file
     pkg-config
     gettext
     glib # glib-compile-schemas
+    gtk3 # gtk-update-icon-cache
     gtk-doc # required for autoconf
     libxml2 # xmllint
+    mate-common # mate-compiler-flags.m4 macros
   ];
 
   buildInputs = [
@@ -59,13 +66,17 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname; };
+  passthru.updateScript = gitUpdater {
+    url = "https://git.mate-desktop.org/libmateweather";
+    odd-unstable = true;
+    rev-prefix = "v";
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Library to access weather information from online services for MATE";
     homepage = "https://github.com/mate-desktop/libmateweather";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    teams = [ teams.mate ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.mate ];
   };
-}
+})

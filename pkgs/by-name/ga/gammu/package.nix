@@ -44,6 +44,12 @@ stdenv.mkDerivation rec {
     cmake
   ];
 
+  cmakeFlags = [
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+    # Fix build with CMake 4
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10")
+  ];
+
   strictDeps = true;
 
   buildInputs = [
@@ -61,11 +67,11 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals postgresSupport [ libpq ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://wammu.eu/gammu/";
     description = "Command line utility and library to control mobile phones";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.coroa ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
   };
 }

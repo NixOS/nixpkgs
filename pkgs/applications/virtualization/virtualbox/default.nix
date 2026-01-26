@@ -72,13 +72,13 @@ let
   buildType = "release";
   # Use maintainers/scripts/update.nix to update the version and all related hashes or
   # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
-  virtualboxVersion = "7.2.0";
+  virtualboxVersion = "7.2.4";
   virtualboxSubVersion = "";
-  virtualboxSha256 = "4f2804ff27848ea772aee6b637bb1e10ee74ec2da117c257413e2d2c4f670ba0";
+  virtualboxSha256 = "d281ec981b5f580211a0cedd1b75a1adcb0fbfcbb768d8c2bf4429f4763e8bbd";
 
-  kvmPatchVboxVersion = "7.2.0";
-  kvmPatchVersion = "20250903";
-  kvmPatchHash = "sha256-JTE9Kr+nJ6HLeDrzL2EVyDQhxzn3UsoQVIQ6zNCwioY=";
+  kvmPatchVboxVersion = "7.2.4";
+  kvmPatchVersion = "20251103";
+  kvmPatchHash = "sha256-VhSuRYiZLg8hIGatf27u/nBBBtB1zz4ePxtiRYy84Hw=";
 
   # The KVM build is not compatible to VirtualBox's kernel modules. So don't export
   # modsrc at all.
@@ -216,10 +216,6 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/VBox/Devices/Graphics/DevVGA-SVGA3d-glLdr.cpp \
       --replace-fail \"libGL.so.1\" \"${libGL.out}/lib/libGL.so.1\"
 
-    # this works in conjunction with fix-graphics-driver-loading.patch
-    substituteInPlace src/VBox/Devices/Graphics/DevVGA-SVGA3d-dx-dx11.cpp \
-      --replace-fail \"VBoxDxVk\" \"$out/libexec/virtualbox/VBoxDxVk.so\"
-
     export USER=nix
     set +x
   '';
@@ -234,6 +230,14 @@ stdenv.mkDerivation (finalAttrs: {
       (fetchpatch {
         url = "https://salsa.debian.org/pkg-virtualbox-team/virtualbox/-/raw/8028d88e6876ca5977de13c58b54e243229efe98/debian/patches/16-no-update.patch";
         hash = "sha256-AGtFsRjwd8Yw296eqX3NC2TUptAhpFTRaOMutiheQ6Y=";
+      })
+      # NAT network shouldn't fully saturate one CPU
+      # https://github.com/VirtualBox/virtualbox/issues/356
+      (fetchpatch {
+        name = "vbox-nat-cpu.patch";
+        url = "https://github.com/VirtualBox/virtualbox/commit/efa378dadd192af8fbce331e9ec66fb36d65ad3d.diff";
+        hash = "sha256-7u3kSszv77leZdMs911TzAchU5mBqmNpgvuZDQaY9To=";
+        hunks = [ "2-" ];
       })
     ]
     ++ [ ./extra_symbols.patch ]
@@ -260,6 +264,11 @@ stdenv.mkDerivation (finalAttrs: {
       ./qt-dependency-paths.patch
       # https://github.com/NixOS/nixpkgs/issues/123851
       ./fix-audio-driver-loading.patch
+      # curl 8.16 upgrade breakage
+      (fetchpatch {
+        url = "https://salsa.debian.org/pkg-virtualbox-team/virtualbox/-/raw/dbf9a6ef75380ebd2705df0198c6ac8073d0b4cb/debian/patches/new-curl.patch";
+        hash = "sha256-WWnCWdXlJo9jTr8yXA0NxcDQBScryuu/53wyX0rhszk=";
+      })
     ];
 
   postPatch = ''
@@ -315,7 +324,7 @@ stdenv.mkDerivation (finalAttrs: {
       ${optionalString (!enable32bitGuests) "--disable-vmmraw"} \
       ${optionalString enableWebService "--enable-webservice"} \
       ${optionalString (open-watcom-bin != null) "--with-ow-dir=${open-watcom-bin}"} \
-      ${optionalString (enableKvm) "--with-kvm"} \
+      ${optionalString enableKvm "--with-kvm"} \
       ${extraConfigureFlags} \
       --disable-kmods
     sed -e 's@PKG_CONFIG_PATH=.*@PKG_CONFIG_PATH=${glib.dev}/lib/pkgconfig@' \
@@ -418,7 +427,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     homepage = "https://www.virtualbox.org/";
     maintainers = with lib.maintainers; [
-      sander
       friedrichaltheide
       blitz
     ];

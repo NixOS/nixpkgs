@@ -164,6 +164,16 @@ in
           "vboxnetflt"
         ];
         boot.extraModulePackages = [ kernelModules ];
+        # See https://github.com/VirtualBox/virtualbox/issues/188
+        boot.kernelParams =
+          lib.mkIf
+            (
+              lib.versionAtLeast config.boot.kernelPackages.kernel.version "6.12"
+              && lib.versionOlder config.boot.kernelPackages.kernel.version "6.16"
+            )
+            [
+              "kvm.enable_virt_at_load=0"
+            ];
 
         services.udev.extraRules = ''
           KERNEL=="vboxdrv",    OWNER="root", GROUP="vboxusers", MODE="0660", TAG+="systemd"

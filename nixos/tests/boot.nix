@@ -8,7 +8,7 @@ with import ../lib/testing-python.nix { inherit system pkgs; };
 
 let
   lib = pkgs.lib;
-  qemu-common = import ../lib/qemu-common.nix { inherit lib pkgs; };
+  qemu-common = import ../lib/qemu-common.nix { inherit (pkgs) lib stdenv; };
 
   mkStartCommand =
     {

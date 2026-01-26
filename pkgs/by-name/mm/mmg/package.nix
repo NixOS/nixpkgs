@@ -1,43 +1,66 @@
 {
-  stdenv,
   lib,
+  stdenv,
   fetchFromGitHub,
-  unstableGitUpdater,
   cmake,
   perl,
+  scotch,
+  vtk,
+  withVtk ? false,
+  testers,
 }:
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mmg";
-  version = "5.7.3-unstable-2024-05-31";
+  version = "5.8.0";
 
   src = fetchFromGitHub {
     owner = "MmgTools";
     repo = "mmg";
-    rev = "5a73683f84fe422031921bef4ced8905d8b9eb7e";
-    hash = "sha256-8m4iDsJdjlzuXatfIIZCY8RgrEp4BQihhmQfytu8aaU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-jiOScvzyO+bN2wYwcQmWhLkLSkTWVplMrXKRFttGisw=";
   };
 
-  passthru.updateScript = unstableGitUpdater { };
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
+
+  postPatch = ''
+    patchShebangs --build scripts
+  '';
 
   nativeBuildInputs = [
     cmake
-    perl
+    perl # required for generating fortran headers
   ];
 
-  preConfigure = ''
-    patchShebangs ./
-  '';
+  propagatedBuildInputs = [
+    scotch
+  ]
+  ++ lib.optional withVtk vtk;
 
   cmakeFlags = [
-    "-DBUILD_SHARED_LIBS:BOOL=TRUE"
-    "-DMMG_INSTALL_PRIVATE_HEADERS=ON"
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "MMG_INSTALL_PRIVATE_HEADERS" true) # required by downstream parmmg
+    (lib.cmakeBool "USE_ELAS" false)
+    (lib.cmakeBool "USE_SCOTCH" true)
+    (lib.cmakeBool "USE_VTK" withVtk)
+    (lib.cmakeBool "PMMG_CALL" vtk.mpiSupport)
   ];
 
-  meta = with lib; {
+  passthru.tests = {
+    cmake-config = testers.hasCmakeConfigModules {
+      moduleNames = [ "mmg" ];
+      package = finalAttrs.finalPackage;
+    };
+  };
+
+  meta = {
     description = "Open source software for bidimensional and tridimensional remeshing";
     homepage = "http://www.mmgtools.org/";
-    platforms = platforms.unix;
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ mkez ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ mkez ];
   };
-}
+})

@@ -42,6 +42,7 @@ let
       deviceinfo = callPackage ./development/deviceinfo { };
       geonames = callPackage ./development/geonames { };
       gmenuharness = callPackage ./development/gmenuharness { };
+      gsettings-qt = callPackage ./development/gsettings-qt { };
       libusermetrics = callPackage ./development/libusermetrics { };
       lomiri-api = callPackage ./development/lomiri-api { };
       lomiri-app-launch = callPackage ./development/lomiri-app-launch { };

@@ -45,11 +45,10 @@ buildPythonPackage rec {
   ];
   propagatedBuildInputs = [ pkgs.parted ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/dcantrell/pyparted/";
     description = "Python interface for libparted";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ lsix ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "15.0.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "aaugustin";
     repo = "websockets";
@@ -65,11 +63,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "websockets" ];
 
-  meta = with lib; {
+  meta = {
     description = "WebSocket implementation in Python";
     homepage = "https://websockets.readthedocs.io/";
     changelog = "https://github.com/aaugustin/websockets/blob/${src.tag}/docs/project/changelog.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

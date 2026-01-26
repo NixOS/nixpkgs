@@ -17,17 +17,16 @@ let
 
   gypPatches =
     if stdenv.buildPlatform.isDarwin then
-      callPackage ./gyp-patches.nix { patch_tools_catch_oserror = false; }
-      ++ [
-        ./gyp-patches-set-fallback-value-for-CLT.patch
+      [
+        ./gyp-patches-set-fallback-value-for-CLT-darwin.patch
       ]
     else
       [ ];
 in
 buildNodejs {
   inherit enableNpm;
-  version = "24.8.0";
-  sha256 = "1c03b362ebf4740d4758b9a3d3087e3de989f54823650ec80b47090ef414b2e0";
+  version = "24.13.0";
+  sha256 = "320fe909cbb347dcf516201e4964ef177b8138df9a7f810d0d54950481b3158b";
   patches =
     (
       if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
@@ -68,5 +67,11 @@ buildNodejs {
         hash = "sha256-BBBShQwU20TSY8GtPehQ9i3AH4ZKUGIr8O0bRsgrpNo=";
         revert = true;
       })
+    ]
+    ++ lib.optionals stdenv.is32bit [
+      # see: https://github.com/nodejs/node/issues/58458
+      ./v24-32bit.patch
+      # see: https://github.com/nodejs/node/issues/61025
+      ./sab-test-32bit.patch
     ];
 }

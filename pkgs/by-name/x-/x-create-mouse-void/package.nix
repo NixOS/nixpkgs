@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  xorg,
+  libx11,
   fetchFromGitHub,
 }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "151pv4gmzz9g6nd1xw94hmawlb5z8rgs1jb3x1zpvn3znd7f355c";
   };
 
-  buildInputs = [ xorg.libX11 ];
+  buildInputs = [ libx11 ];
 
   installPhase = ''
     runHook preInstall
@@ -25,12 +25,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/cas--/XCreateMouseVoid";
     description = "Creates an undecorated black window and prevents the mouse from entering that window";
-    platforms = platforms.unix;
-    license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [ eigengrau ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.unfreeRedistributable;
+    maintainers = with lib.maintainers; [ eigengrau ];
     mainProgram = "x-create-mouse-void";
   };
 }

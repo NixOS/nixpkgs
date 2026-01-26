@@ -45,13 +45,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "ultrastardx";
-  version = "2025.9.0";
+  version = "2025.12.1";
 
   src = fetchFromGitHub {
     owner = "UltraStar-Deluxe";
     repo = "USDX";
     rev = "v${version}";
-    hash = "sha256-SQqmcFchXaYNKzQHjBcisZTjAN9TTWuKXv657yWGghw=";
+    hash = "sha256-NwYFsd15nUgEnzQaoZdp7Au1H1QrrpoZX8PmnQ9URVA=";
   };
 
   nativeBuildInputs = [
@@ -75,15 +75,15 @@ stdenv.mkDerivation rec {
   # dlopened libgcc requires the rpath not to be shrinked
   dontPatchELF = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://usdx.eu/";
     description = "Free and open source karaoke game";
     mainProgram = "ultrastardx";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       diogotcorreia
       Profpatsch
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

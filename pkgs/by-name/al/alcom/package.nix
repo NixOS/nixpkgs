@@ -18,13 +18,13 @@
 }:
 let
   pname = "alcom";
-  version = "1.1.4";
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "vrc-get";
     repo = "vrc-get";
     tag = "gui-v${version}";
-    hash = "sha256-pGWDMQIS2WgtnqRoOXRZrc25kJ5c6TY6UE2aZtpxN/s=";
+    hash = "sha256-xucU8nXskniHOiuwrtVoZM2FIKNKU45i4DNo6iLjZvM=";
   };
 
   subdir = "vrc-get-gui";
@@ -55,7 +55,7 @@ rustPlatform.buildRustPackage {
     webkitgtk_4_1
   ];
 
-  cargoHash = "sha256-JuZHfpOYuLNdb03srECx73GK5ajgL6bHlbKbiuMN2NE=";
+  cargoHash = "sha256-MeCx3BoEXckMZfecyBcwwVE8+6V9Di6ULkIhUvUFZIA=";
   buildAndTestSubdir = subdir;
 
   npmDeps = fetchNpmDeps {

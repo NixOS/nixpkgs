@@ -4,7 +4,7 @@ let
   serverDomain = certs.domain;
 
   # copy certs to store to work around mount namespacing
-  certsPath = pkgs.runCommandNoCC "snakeoil-certs" { } ''
+  certsPath = pkgs.runCommand "snakeoil-certs" { } ''
     mkdir $out
     cp ${certs."${serverDomain}".cert} $out/snakeoil.crt
     cp ${certs."${serverDomain}".key} $out/snakeoil.key
@@ -18,7 +18,7 @@ in
   name = "kanidm-provisioning-${kanidmPackage.version}";
   meta.maintainers = with pkgs.lib.maintainers; [ oddlama ];
 
-  _module.args.kanidmPackage = pkgs.lib.mkDefault pkgs.kanidmWithSecretProvisioning;
+  _module.args.kanidmPackage = pkgs.lib.mkDefault pkgs.kanidmWithSecretProvisioning_1_7;
 
   nodes.provision =
     { pkgs, lib, ... }:

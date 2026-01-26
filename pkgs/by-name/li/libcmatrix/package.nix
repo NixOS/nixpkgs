@@ -17,14 +17,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libcmatrix";
-  version = "0.0.3";
+  version = "0.0.4";
 
   src = fetchFromGitLab {
     domain = "source.puri.sm";
     owner = "Librem5";
     repo = "libcmatrix";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Usaqkb6zClVtYCL1VUv4iNeKs2GZECO9sOdPk3N8iLM=";
+    hash = "sha256-MyjgxOJmaDylPA2AENZPR+dfh2UN1H93ZOLMlycEmTw=";
   };
 
   nativeBuildInputs = [

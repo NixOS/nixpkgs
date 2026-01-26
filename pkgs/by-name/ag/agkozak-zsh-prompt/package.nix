@@ -26,11 +26,11 @@ stdenvNoCC.mkDerivation rec {
     cp -r -- lib/*.zsh agkozak-zsh-prompt.plugin.zsh prompt_agkozak-zsh-prompt_setup "$plugindir"/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast, asynchronous Zsh prompt";
     homepage = "https://github.com/agkozak/agkozak-zsh-prompt";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ ambroisie ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ ambroisie ];
   };
 }

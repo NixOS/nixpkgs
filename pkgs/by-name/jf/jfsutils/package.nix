@@ -46,16 +46,21 @@ stdenv.mkDerivation rec {
 
   # this required for wipefreespace
   postInstall = ''
-    mkdir -p $out/include
-    cp include/*.h $out/include
-    mkdir -p $out/lib
-    cp ./libfs/libfs.a $out/lib
+    install -Dm644 include/*.h -t ''${!outputDev}/include
+    install -Dm644 ./libfs/libfs.a -t ''${!outputLib}/lib
   '';
 
-  meta = with lib; {
+  outputs = [
+    "out"
+    "man"
+    "dev"
+    "lib"
+  ];
+
+  meta = {
     description = "IBM JFS utilities";
     homepage = "https://jfs.sourceforge.net";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
   };
 }

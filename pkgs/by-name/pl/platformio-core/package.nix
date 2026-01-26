@@ -1,6 +1,6 @@
 {
   lib,
-  python3Packages,
+  python3,
   fetchFromGitHub,
   fetchpatch,
   installShellFiles,
@@ -11,6 +11,23 @@
   udevCheckHook,
 }:
 
+let
+  python = python3.override {
+    self = python;
+    packageOverrides = self: super: {
+      marshmallow = super.marshmallow.overridePythonAttrs (oldAttrs: rec {
+        version = "3.26.1";
+        src = fetchFromGitHub {
+          owner = "marshmallow-code";
+          repo = "marshmallow";
+          tag = version;
+          hash = "sha256-l5pEhv8D6jRlU24SlsGQEkXda/b7KUdP9mAqrZCbl38=";
+        };
+      });
+    };
+  };
+  python3Packages = python.pkgs;
+in
 with python3Packages;
 buildPythonApplication rec {
   pname = "platformio";
@@ -79,6 +96,7 @@ buildPythonApplication rec {
     marshmallow
     pip
     pyelftools
+    pyparsing
     pyserial
     pyyaml
     requests
@@ -215,13 +233,13 @@ buildPythonApplication rec {
     python = python3Packages.python;
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/platformio/platformio-core/releases/tag/${src.tag}";
     description = "Open source ecosystem for IoT development";
     downloadPage = "https://github.com/platformio/platformio-core";
     homepage = "https://platformio.org";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       mog
       makefu
     ];

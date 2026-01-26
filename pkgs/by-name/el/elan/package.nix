@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     makeWrapper
   ];
 
-  OPENSSL_NO_VENDOR = 1;
+  env.OPENSSL_NO_VENDOR = 1;
   buildInputs = [
     curl
     zlib
@@ -89,7 +89,7 @@ rustPlatform.buildRustPackage rec {
       asl20 # or
       mit
     ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "elan";
   };
 }

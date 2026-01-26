@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "heisenbridge";
-  version = "1.15.3";
-  format = "pyproject";
+  version = "1.15.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hifi";
     repo = "heisenbridge";
     tag = "v${version}";
-    sha256 = "sha256-wH3IZcY4CtawEicKCkFMh055SM0chYHsPKxYess9II0=";
+    sha256 = "sha256-Aan3dtixy1xT9kPU/XxgbUvri9NS/WKiO/atmpPY/m8=";
   };
 
   postPatch = ''
@@ -42,11 +42,11 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Bouncer-style Matrix-IRC bridge";
     homepage = "https://github.com/hifi/heisenbridge";
-    license = licenses.mit;
-    maintainers = [ maintainers.sumnerevans ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.sumnerevans ];
     mainProgram = "heisenbridge";
   };
 }

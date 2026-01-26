@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  gcc15Stdenv,
   cmake,
   fetchFromGitHub,
   hwdata,
@@ -21,15 +21,15 @@
   wayland-protocols,
   wayland-scanner,
 }:
-stdenv.mkDerivation (finalAttrs: {
+gcc15Stdenv.mkDerivation (finalAttrs: {
   pname = "aquamarine";
-  version = "0.9.4";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "aquamarine";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-POePremlUY5GyA1zfbtic6XLxDaQcqHN6l+bIxdT5gc=";
+    hash = "sha256-XnkWjCpeXfip9tqYdL0b0zzBDjq+dgdISvEdSVGdVyA=";
   };
 
   nativeBuildInputs = [

@@ -19,7 +19,7 @@ buildPythonPackage {
     meta
     ;
 
-  format = "pyproject";
+  pyproject = true;
 
   sourceRoot = "${autodock-vina.src.name}/build/python";
 
@@ -29,7 +29,7 @@ buildPythonPackage {
     substituteInPlace setup.py \
       --replace "python_requires='>=3.5.*'" "python_requires='>=3.5'"
 
-    # setupPyBuildFlags are not applied with `format = "pyproject"`
+    # setupPyBuildFlags are not applied with `pyproject = true`
     substituteInPlace setup.py \
       --replace "= locate_boost()" "= '${lib.getDev boost}/include', '${boost}/lib'"
 

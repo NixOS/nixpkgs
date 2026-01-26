@@ -10,7 +10,7 @@
   ffmpeg,
   lua5_4,
   qt5,
-  xorg,
+  libxi,
   file,
   binutils,
   makeDesktopItem,
@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
       } \
       --suffix LD_LIBRARY_PATH : ${
         lib.makeLibraryPath [
-          xorg.libXi
+          libxi
           ffmpeg.lib
         ]
       } \
@@ -92,12 +92,12 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://clementgallet.github.io/libTAS/";
     changelog = "https://github.com/clementgallet/libTAS/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "GNU/Linux software to give TAS tools to games";
     license = lib.licenses.gpl3Only;
-    maintainers = with maintainers; [ skyrina ];
+    maintainers = with lib.maintainers; [ skyrina ];
     mainProgram = "libTAS";
     platforms = [
       "i686-linux"

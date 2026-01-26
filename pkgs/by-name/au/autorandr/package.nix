@@ -12,7 +12,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "autorandr";
   version = "1.15";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "phillipberndt";
@@ -78,12 +78,12 @@ python3.pkgs.buildPythonApplication rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/phillipberndt/autorandr/";
     description = "Automatically select a display configuration based on connected devices";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ coroa ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
     mainProgram = "autorandr";
   };
 }

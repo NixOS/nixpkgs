@@ -49,7 +49,6 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       dotlambda
-      urandom
     ];
     mainProgram = "imaginary";
   };

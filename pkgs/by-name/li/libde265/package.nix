@@ -47,6 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "dec265";
     license = lib.licenses.lgpl3;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 })

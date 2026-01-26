@@ -12,30 +12,39 @@
 }:
 let
   pname = "netcoredbg";
-  build = "1054";
-  release = "3.1.2";
+  build = "1062";
+  release = "3.1.3";
   version = "${release}-${build}";
-  hash = "sha256-WORGZXbq6d3sxGqyG8oZSwcBoVaD3D56t9K6PJoKFsM=";
+  hash = "sha256-Ci4GwHYTCn7BoEG73WsjxyplCCThSF5uVi39lLVZDXY=";
 
-  coreclr-version = "v8.0.16";
+  coreclr-version = "v10.0.1";
   coreclr-src = fetchFromGitHub {
     owner = "dotnet";
     repo = "runtime";
     rev = coreclr-version;
-    hash = "sha256-/fSKCIugR3UhqxBxtQRw+Bw+UpaSjB4xj0iBiXJaiR4=";
+    hash = "sha256-pVcLvew3THRqXgKMVO6jTZyPP06R46KZPMpYdiM3yXU=";
+    name = "coreclr";
   };
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
 
   src = fetchFromGitHub {
     owner = "Samsung";
     repo = "netcoredbg";
     rev = version;
+    name = pname;
     inherit hash;
   };
 
   unmanaged = clangStdenv.mkDerivation {
-    inherit src pname version;
+    inherit pname version;
+
+    srcs = [
+      src
+      coreclr-src
+    ];
+
+    sourceRoot = pname;
 
     nativeBuildInputs = [
       cmake
@@ -46,13 +55,14 @@ let
 
     preConfigure = ''
       export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
-    '';
 
-    cmakeFlags = [
-      "-DCORECLR_DIR=${coreclr-src}/src/coreclr"
-      "-DDOTNET_DIR=${dotnet-sdk}/share/dotnet"
-      "-DBUILD_MANAGED=0"
-    ];
+      chmod -R u+w ../coreclr
+      cmakeFlagsArray+=(
+        "-DCORECLR_DIR=''${NIX_BUILD_TOP}/coreclr/src/coreclr"
+        "-DDOTNET_DIR=${dotnet-sdk}/share/dotnet"
+        "-DBUILD_MANAGED=0"
+      )
+    '';
   };
 
   managed = buildDotnetModule {
@@ -101,13 +111,13 @@ stdenv.mkDerivation {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Managed code debugger with MI interface for CoreCLR";
     homepage = "https://github.com/Samsung/netcoredbg";
-    license = licenses.mit;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
     mainProgram = "netcoredbg";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       leo60228
       konradmalik
     ];

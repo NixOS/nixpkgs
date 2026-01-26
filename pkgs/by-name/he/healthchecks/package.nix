@@ -16,7 +16,7 @@ in
 py.pkgs.buildPythonApplication rec {
   pname = "healthchecks";
   version = "3.11.2";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "healthchecks";
@@ -93,10 +93,10 @@ py.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/healthchecks/healthchecks";
     description = "Cron monitoring tool written in Python & Django";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

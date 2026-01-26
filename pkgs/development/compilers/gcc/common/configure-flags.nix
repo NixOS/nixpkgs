@@ -20,6 +20,7 @@
   enablePlugin,
   disableGdbPlugin ? !enablePlugin,
   enableShared,
+  enableDefaultPie,
   targetPrefix,
 
   langC,
@@ -258,7 +259,7 @@ let
     ++ lib.optional (
       lib.systems.equals targetPlatform hostPlatform && targetPlatform.isx86_32
     ) "--with-arch=${stdenv.hostPlatform.parsed.cpu.name}"
-    ++ lib.optional targetPlatform.isNetBSD "--disable-libssp" # Provided by libc.
+    ++ lib.optional (targetPlatform.isNetBSD || targetPlatform.isCygwin) "--disable-libssp" # Provided by libc.
     ++ lib.optionals hostPlatform.isSunOS [
       "--enable-long-long"
       "--enable-libssp"
@@ -278,6 +279,9 @@ let
       "--disable-symvers"
       "libat_cv_have_ifunc=no"
       "--disable-gnu-indirect-function"
+    ]
+    ++ lib.optionals enableDefaultPie [
+      "--enable-default-pie"
     ]
     ++ lib.optionals langJit [
       "--enable-host-shared"

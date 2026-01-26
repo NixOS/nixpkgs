@@ -38,12 +38,12 @@ stdenv.mkDerivation {
     install -Dm755 90-micro-3d-local.rules $out/lib/udev/rules.d/90-micro-3d-local.rules
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/donovan6000/M3D-Linux";
     description = "Linux program that can communicate with the Micro 3D printer";
     mainProgram = "m33-linux";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

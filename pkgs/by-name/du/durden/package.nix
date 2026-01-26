@@ -1,18 +1,19 @@
 {
   lib,
   stdenvNoCC,
-  fetchFromGitHub,
+  fetchFromGitea,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "durden";
-  version = "0-unstable-2024-06-23";
+  version = "0.6.3";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitea {
+    domain = "codeberg.org";
     owner = "letoram";
     repo = "durden";
-    rev = "dffb94b69355ffa9cda074c1d0a48af74b78c220";
-    hash = "sha256-sBhlBk4vAYwedw4VerUfY80SXbVoEDid54si6qwDeXs=";
+    tag = finalAttrs.version;
+    hash = "sha256-dWLOLOICcVjqYTw8KAPM2/xgB9mTSEdGGIHD1WSrIvA=";
   };
 
   dontConfigure = true;
@@ -38,7 +39,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       of the desktop environment spectrum.
     '';
     license = with lib.licenses; [ bsd3 ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

@@ -16,10 +16,10 @@ buildKodiAddon rec {
     hash = "sha256-s/h/KKlGYGMvf7RdI9ONk4S+NCzlaDX5w3CdNfbC2KE=";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jurialmunkey/resource.font.robotocjksc";
     description = "Roboto CJKSC fonts";
-    license = licenses.asl20;
-    teams = [ teams.kodi ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.kodi ];
   };
 }

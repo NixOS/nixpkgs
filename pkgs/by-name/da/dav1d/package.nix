@@ -27,13 +27,13 @@ assert useVulkan -> withExamples;
 
 stdenv.mkDerivation rec {
   pname = "dav1d";
-  version = "1.5.1";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "videolan";
     repo = "dav1d";
     rev = version;
-    hash = "sha256-qcs9QoZ/uWEQ8l1ChZ8nYctZnnWJ0VvCw1q2rEktC9g=";
+    hash = "sha256-E3da/LJ8HNy1osExmupovqnL8JHgVNzPUCG5F8TJKXQ=";
   };
 
   outputs = [
@@ -88,6 +88,6 @@ stdenv.mkDerivation rec {
     # More technical: https://code.videolan.org/videolan/dav1d/blob/${version}/NEWS
     license = lib.licenses.bsd2;
     platforms = lib.platforms.unix ++ lib.platforms.windows;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

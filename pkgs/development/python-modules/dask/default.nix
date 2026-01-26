@@ -2,9 +2,11 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   setuptools,
+  setuptools-scm,
 
   # dependencies
   click,
@@ -31,6 +33,7 @@
   pytest-cov-stub,
   pytest-mock,
   pytest-rerunfailures,
+  pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
   versionCheckHook,
@@ -38,30 +41,26 @@
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2025.7.0";
+  version = "2025.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask";
     tag = version;
-    hash = "sha256-bwM4Q95YTEp9pDz6LmBLOeYjmi8nH8Cc/srZlXfEIlg=";
+    hash = "sha256-oGBOt2ULLn0Kx1rOVNWaC3l1ECotMC2yNeCHya9Tx+s=";
   };
 
-  postPatch = ''
-    # versioneer hack to set version of GitHub package
-    echo "def get_versions(): return {'dirty': False, 'error': None, 'full-revisionid': None, 'version': '${version}'}" > dask/_version.py
-
-    substituteInPlace setup.py \
-      --replace-fail "import versioneer" "" \
-      --replace-fail "version=versioneer.get_version()," "version='${version}'," \
-      --replace-fail "cmdclass=versioneer.get_cmdclass()," ""
-
-    substituteInPlace pyproject.toml \
-      --replace-fail ', "versioneer[toml]==0.29"' ""
+  # https://github.com/dask/dask/issues/12043
+  postPatch = lib.optionalString (pythonAtLeast "3.14") ''
+    substituteInPlace dask/dataframe/dask_expr/tests/_util.py \
+      --replace-fail "except AttributeError:" "except (AttributeError, pickle.PicklingError):"
   '';
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     click
@@ -103,13 +102,13 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytest-mock
     pytest-rerunfailures
+    pytest-timeout
     pytest-xdist
     pytestCheckHook
     versionCheckHook
   ]
   ++ optional-dependencies.array
   ++ optional-dependencies.dataframe;
-  versionCheckProgramArg = "--version";
 
   pytestFlags = [
     # Rerun failed tests up to three times
@@ -121,9 +120,9 @@ buildPythonPackage rec {
     "network"
   ];
 
-  disabledTests = [
-    # UserWarning: Insufficient elements for `head`. 10 elements requested, only 5 elements available. Try passing larger `npartitions` to `head`.
-    "test_set_index_head_nlargest_string"
+  # https://github.com/dask/dask/issues/12042
+  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+    "test_multiple_repartition_partition_size"
   ];
 
   __darwinAllowLocalNetworking = true;

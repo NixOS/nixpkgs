@@ -30,7 +30,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-desktop";
-  version = "44.3";
+  version = "44.4";
 
   outputs = [
     "out"
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-desktop/${lib.versions.major finalAttrs.version}/gnome-desktop-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-QO+pqo1Q7/7ZIno9cGceMuncNeIPMxyrO1YpdZePT40=";
+    sha256 = "sha256-HYy5xqMo62ibDBJpz1ODTMhNhR1+cZcM2ruoJwa0SYQ=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isLinux [
@@ -102,14 +102,14 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library with common API for various GNOME modules";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-desktop";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       lgpl2Plus
     ];
-    platforms = platforms.unix;
-    teams = [ teams.gnome ];
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.gnome ];
   };
 })

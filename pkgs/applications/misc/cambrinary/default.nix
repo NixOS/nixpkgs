@@ -10,7 +10,7 @@
 buildPythonApplication {
   pname = "cambrinary";
   version = "unstable-2023-07-16";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xueyuanl";
@@ -30,12 +30,12 @@ buildPythonApplication {
 
   pythonImportsCheck = [ "cambrinary" ];
 
-  meta = with lib; {
+  meta = {
     description = "Cambridge dictionary in a terminal";
     mainProgram = "cambrinary";
     homepage = "https://github.com/xueyuanl/cambrinary";
-    license = licenses.gpl3Only;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 }

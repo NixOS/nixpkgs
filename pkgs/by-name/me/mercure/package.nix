@@ -9,18 +9,18 @@
 
 buildGoModule rec {
   pname = "mercure";
-  version = "0.20.0";
+  version = "0.21.6";
 
   src = fetchFromGitHub {
     owner = "dunglas";
     repo = "mercure";
     rev = "v${version}";
-    hash = "sha256-JBvfNzsOP4ggJ7D2+5yW8837QsN15wO6EbFrTKVensU=";
+    hash = "sha256-hCEoEs6NiShssKER1Z8IVQPF+Ir7wbreGInWmcdnqzE=";
   };
 
   sourceRoot = "${src.name}/caddy";
 
-  vendorHash = "sha256-ZCvIgyGw4F4VGbnuan5O+to5n969ThRZNFezu+byKWg=";
+  vendorHash = "sha256-GTHJtNO4JqTEDxVMe0yTgnjhfK2aGZpjMTfSFtL29IU=";
 
   subPackages = [ "mercure" ];
   excludedPackages = [ "../cmd/mercure" ];
@@ -47,7 +47,7 @@ buildGoModule rec {
     homepage = "https://github.com/dunglas/mercure";
     changelog = "https://github.com/dunglas/mercure/releases/tag/v${version}";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ gaelreyrol ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "mercure";
   };

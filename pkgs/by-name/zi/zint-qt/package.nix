@@ -12,7 +12,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "zint${lib.optionalString withGUI "-qt"}";
-  version = "2.15.0";
+  version = "2.16.0";
 
   outputs = [
     "out"
@@ -24,14 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "zint";
     repo = "zint";
     tag = finalAttrs.version;
-    hash = "sha256-+dXIU66HIS2mE0pa99UemMMFBGCYjupUX8P7q3G7Nis=";
+    hash = "sha256-5zVGtnm6QdehDL+R7ZNq7AdgUIOIySPWGlS6GbJK+/4=";
   };
-
-  patches = [
-    # Fix cmake file installation
-    # https://github.com/zint/zint/pull/8
-    ./fix-installation-of-cmake-files.patch
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -68,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm644 -t $out/share/icons/hicolor/scalable/apps $src/frontend_qt/images/scalable/zint-qt.svg
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Barcode generating tool and library";
     longDescription = ''
       The Zint project aims to provide a complete cross-platform open source
@@ -78,9 +72,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://www.zint.org.uk";
     changelog = "https://github.com/zint/zint/blob/${finalAttrs.src.rev}/ChangeLog";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.azahi ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = "zint${lib.optionalString withGUI "-qt"}";
   };
 })

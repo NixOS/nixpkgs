@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     homepage = "https://pgmoneta.github.io/";
     changelog = "https://github.com/pgmoneta/pgmoneta/releases/tag/${version}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

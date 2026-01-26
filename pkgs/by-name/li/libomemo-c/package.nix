@@ -2,29 +2,44 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  cmake,
+  meson,
+  ninja,
+  pkg-config,
   openssl,
+  protobuf_25,
+  protobufc,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libomemo-c";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "dino";
     repo = "libomemo-c";
     rev = "v${version}";
-    hash = "sha256-GvHMp0FWoApbYLMhKfNxSBel1xxWWF3TZ4lnkLvu2s4=";
+    hash = "sha256-HoZykdGVDsj4L5yN3SHGF5tjMq5exJyC15zTLBlpX/c=";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildsInputs = [ openssl ];
-  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    protobuf_25
+    protobufc
+  ];
+  buildInputs = [
+    openssl
+    protobufc
+  ];
+  mesonFlags = [
+    "-Dtests=false"
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Fork of libsignal-protocol-c adding support for OMEMO XEP-0384 0.5.0+";
     homepage = "https://github.com/dino/libomemo-c";
-    license = licenses.gpl3Only;
-    maintainers = [ maintainers.astro ];
+    license = lib.licenses.gpl3Only;
+    maintainers = [ lib.maintainers.astro ];
   };
 }

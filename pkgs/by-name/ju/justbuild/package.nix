@@ -2,8 +2,9 @@
   gccStdenv,
   fetchFromGitHub,
   fetchurl,
+  fetchpatch2,
 
-  fmt_10,
+  fmt,
   nlohmann_json,
   cli11,
   microsoft-gsl,
@@ -38,7 +39,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "just-buildsystem";
     repo = "justbuild";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ZTwe6S0AH1yQt5mABtIeWuMbiVSKeOZWMFI26fthLsM=";
   };
 
@@ -52,6 +53,14 @@ stdenv.mkDerivation rec {
     hash = "sha256:1r33jj8yipxjgiarddcxr1yc5kmn98rwrjl9qxfx0fzn1bsg04q5";
   };
 
+  patches = [
+    (fetchpatch2 {
+      name = "blob-tree-add-hash.patch";
+      url = "https://github.com/just-buildsystem/justbuild/commit/c54a46de7df0c6b26b7d8f4a10d380103da634fb.patch?full_index=1";
+      hash = "sha256-hAi4YJmNAwfSl2SWjVCWBhk7VbQeNN1JhmHS9dy2GdU=";
+    })
+  ];
+
   nativeBuildInputs = [
     # Tools for the bootstrap process
     jq
@@ -63,12 +72,7 @@ stdenv.mkDerivation rec {
 
     # Dependencies of just
     cli11
-    # Using fmt 10 because this is the same version upstream currently
-    # uses for bundled builds
-    # For future updates: The currently used version can be found in the file
-    # etc/repos.in.json: https://github.com/just-buildsystem/justbuild/blob/master/etc/repos.in.json
-    # under the key .repositories.fmt
-    fmt_10
+    fmt
     microsoft-gsl
     nlohmann_json
 

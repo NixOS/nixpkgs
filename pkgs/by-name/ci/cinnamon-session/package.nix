@@ -17,7 +17,13 @@
   systemd,
   wrapGAppsHook3,
   xapp,
-  xorg,
+  libxtst,
+  libxrender,
+  libxext,
+  libxcomposite,
+  libxau,
+  libx11,
+  xtrans,
   libexecinfo,
   pango,
 }:
@@ -33,13 +39,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "cinnamon-session";
-  version = "6.4.2";
+  version = "6.6.1";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon-session";
-    rev = version;
-    hash = "sha256-zv1X1MLZBg+Bayd4hjsmrdXkFTRkH4kz7PJe6mFTBqc=";
+    tag = version;
+    hash = "sha256-zPfyPBKN9Qqs2UndW0vYzBqmeFla3ytvdcv/X2dv1zs=";
   };
 
   buildInputs = [
@@ -49,17 +55,17 @@ stdenv.mkDerivation rec {
     glib
     libcanberra
     pango
-    xorg.libX11
-    xorg.libXext
+    libx11
+    libxext
     xapp
-    xorg.libXau
-    xorg.libXcomposite
+    libxau
+    libxcomposite
 
     systemd
 
-    xorg.libXtst
-    xorg.libXrender
-    xorg.xtrans
+    libxtst
+    libxrender
+    xtrans
 
     # other (not meson.build)
     cinnamon-settings-daemon
@@ -95,11 +101,11 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/linuxmint/cinnamon-session";
     description = "Cinnamon session manager";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    teams = [ teams.cinnamon ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
   };
 }

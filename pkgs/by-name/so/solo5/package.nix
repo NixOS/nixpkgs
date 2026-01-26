@@ -40,8 +40,6 @@ stdenv.mkDerivation {
     hash = "sha256-KbeY667Y/ZPUuRIGYOZMMAuVEVJ7Kn9UDUSThX5zfII=";
   };
 
-  hardeningEnable = [ "pie" ];
-
   configurePhase = ''
     runHook preConfigure
     sh configure.sh --prefix=/
@@ -91,11 +89,11 @@ stdenv.mkDerivation {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Sandboxed execution environment";
     homepage = "https://github.com/solo5/solo5";
-    license = licenses.isc;
-    platforms = mapCartesianProduct ({ arch, os }: "${arch}-${os}") {
+    license = lib.licenses.isc;
+    platforms = lib.mapCartesianProduct ({ arch, os }: "${arch}-${os}") {
       arch = [
         "aarch64"
         "x86_64"

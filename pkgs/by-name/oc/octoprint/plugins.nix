@@ -37,11 +37,11 @@ in
       sha256 = "1w6h4hia286lbz2gy33rslq02iypx067yqn413xcipb07ivhvdq7";
     };
 
-    meta = with lib; {
+    meta = {
       description = "Changes the \"Motors off\" button in octoprint's control tab to issue an M84 command to allow compatibility with Repetier firmware Resources";
       homepage = "https://github.com/ntoff/OctoPrint-M84MotOff";
-      license = licenses.agpl3Only;
-      maintainers = with maintainers; [ stunkymonkey ];
+      license = lib.licenses.agpl3Only;
+      maintainers = with lib.maintainers; [ stunkymonkey ];
     };
   };
 
@@ -58,11 +58,11 @@ in
       sha256 = "0ij3rvdwya1sbymwm5swlh2j4jagb6fal945g88zrzh5xf26hzjh";
     };
 
-    meta = with lib; {
+    meta = {
       description = "Marlin auto bed leveling control, mesh correction, and z probe handling";
       homepage = "https://framagit.org/razer/Octoprint_ABL_Expert/";
-      license = licenses.agpl3Only;
-      maintainers = with maintainers; [ WhittlesJr ];
+      license = lib.licenses.agpl3Only;
+      maintainers = with lib.maintainers; [ WhittlesJr ];
     };
   };
 
@@ -78,11 +78,11 @@ in
       sha256 = "sha256-6JcYvYgEmphp5zz4xZi4G0yTo4FCIR6Yh+MXYK7H7+w=";
     };
 
-    meta = with lib; {
+    meta = {
       description = "Displays 3D mesh of bed topography report";
       homepage = "https://github.com/jneilliii/OctoPrint-BedLevelVisualizer";
-      license = licenses.mit;
-      maintainers = with maintainers; [ lovesegfault ];
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ lovesegfault ];
     };
   };
 
@@ -98,11 +98,11 @@ in
       sha256 = "sha256-04OPa/RpM8WehUmOp195ocsAjAvKdVY7iD5ybzQO7Dg=";
     };
 
-    meta = with lib; {
+    meta = {
       description = "Plugin to display the estimated print cost for the loaded model";
       homepage = "https://github.com/OllisGit/OctoPrint-CostEstimation";
-      license = licenses.agpl3Only;
-      maintainers = with maintainers; [ stunkymonkey ];
+      license = lib.licenses.agpl3Only;
+      maintainers = with lib.maintainers; [ stunkymonkey ];
     };
   };
 
@@ -118,10 +118,10 @@ in
       sha256 = "sha256-54siSmzgPlnCRpkpZhXU9theNQ3hqL3j+Ip4Ie2w2vA=";
     };
 
-    meta = with lib; {
+    meta = {
       description = "Plugin for slicing via Cura Legacy from within OctoPrint";
       homepage = "https://github.com/OctoPrint/OctoPrint-CuraEngineLegacy";
-      license = licenses.agpl3Only;
+      license = lib.licenses.agpl3Only;
       maintainers = [ ];
     };
   };
@@ -138,11 +138,11 @@ in
       sha256 = "080prvfwggl4vkzyi369vxh1n8231hrl8a44f399laqah3dn5qw4";
     };
 
-    meta = with lib; {
+    meta = {
       description = "Displays the job progress on the printer's display";
       homepage = "https://github.com/OctoPrint/OctoPrint-DisplayProgress";
-      license = licenses.agpl3Only;
-      maintainers = with maintainers; [ stunkymonkey ];
+      license = lib.licenses.agpl3Only;
+      maintainers = with lib.maintainers; [ stunkymonkey ];
     };
   };
 
@@ -158,11 +158,11 @@ in
       sha256 = "sha256-hhHc2SPixZCPJzCP8enMMWNYaYbNZAU0lNSx1B0d++4=";
     };
 
-    meta = with lib; {
+    meta = {
       description = "OctoPrint-Plugin that sends the current progress of a print via M117 command";
       homepage = "https://github.com/OllisGit/OctoPrint-DisplayLayerProgress";
-      license = licenses.agpl3Only;
-      maintainers = with maintainers; [ j0hax ];
+      license = lib.licenses.agpl3Only;
+      maintainers = with lib.maintainers; [ j0hax ];
     };
   };
 
@@ -178,11 +178,11 @@ in
       sha256 = "03bc2zbffw4ksk8if90kxhs3179nbhb4xikp4f0adm3lrnvxkd3s";
     };
 
-    meta = with lib; {
+    meta = {
       description = "Fixes the double temperature reporting from the Creality Ender-3 v2 printer";
       homepage = "https://github.com/SimplyPrint/OctoPrint-Creality2xTemperatureReportingFix";
-      license = licenses.mit;
-      maintainers = with maintainers; [ illustris ];
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ illustris ];
     };
   };
 
@@ -200,11 +200,11 @@ in
 
     propagatedBuildInputs = with super; [ pyserial ];
 
-    meta = with lib; {
+    meta = {
       description = "Printer Firmware Updater";
       homepage = "https://github.com/OctoPrint/OctoPrint-FirmwareUpdater";
-      license = licenses.agpl3Only;
-      maintainers = with maintainers; [ tri-ler ];
+      license = lib.licenses.agpl3Only;
+      maintainers = with lib.maintainers; [ tri-ler ];
     };
   };
 
@@ -220,11 +220,11 @@ in
       sha256 = "sha256-Z8twpj+gqgbiWWxNd9I9qflEAln5Obpb3cn34KwSc5A=";
     };
 
-    meta = with lib; {
+    meta = {
       description = "Open webcam in fullscreen mode";
       homepage = "https://github.com/BillyBlaze/OctoPrint-FullScreen";
-      license = licenses.agpl3Only;
-      maintainers = with maintainers; [ tri-ler ];
+      license = lib.licenses.agpl3Only;
+      maintainers = with lib.maintainers; [ tri-ler ];
     };
   };
 
@@ -240,11 +240,11 @@ in
       sha256 = "sha256-1Sk2ri3DKW8q8VJ/scFjpRsz65Pwt8OEURP1k70aydE=";
     };
 
-    meta = with lib; {
+    meta = {
       description = "Edit gcode on OctoPrint";
       homepage = "https://github.com/ieatacid/OctoPrint-GcodeEditor";
-      license = licenses.agpl3Only;
-      maintainers = with maintainers; [ WhittlesJr ];
+      license = lib.licenses.agpl3Only;
+      maintainers = with lib.maintainers; [ WhittlesJr ];
     };
   };
 
@@ -260,11 +260,11 @@ in
       sha256 = "sha256-3ay6iCxZk8QkFM/2Y14VTpPoxr6NXq14BFSHofn3q7I=";
     };
 
-    meta = with lib; {
+    meta = {
       description = "Displays GCode documentation for Marlin in the Octoprint terminal command line";
       homepage = "https://github.com/costas-basdekis/MarlinGcodeDocumentation";
-      license = licenses.agpl3Only;
-      maintainers = with maintainers; [ lovesegfault ];
+      license = lib.licenses.agpl3Only;
+      maintainers = with lib.maintainers; [ lovesegfault ];
     };
   };
 
@@ -282,11 +282,11 @@ in
 
     propagatedBuildInputs = with super; [ paho-mqtt ];
 
-    meta = with lib; {
+    meta = {
       description = "Publish printer status MQTT";
       homepage = "https://github.com/OctoPrint/OctoPrint-MQTT";
-      license = licenses.agpl3Only;
-      maintainers = with maintainers; [ peterhoeg ];
+      license = lib.licenses.agpl3Only;
+      maintainers = with lib.maintainers; [ peterhoeg ];
     };
   };
 
@@ -304,11 +304,11 @@ in
 
     propagatedBuildInputs = with super; [ jsonpath-ng ];
 
-    meta = with lib; {
+    meta = {
       description = "Enables Chamber temperature reporting via subscribing to an MQTT topic";
       homepage = "https://github.com/synman/OctoPrint-MqttChamberTemperature";
-      license = licenses.wtfpl;
-      maintainers = with maintainers; [ tri-ler ];
+      license = lib.licenses.wtfpl;
+      maintainers = with lib.maintainers; [ tri-ler ];
     };
   };
 
@@ -324,11 +324,11 @@ in
       sha256 = "sha256-ZPpTx+AadRffUb53sZbMUbCZa7xYGQW/5si7UB8mnVI=";
     };
 
-    meta = with lib; {
+    meta = {
       description = "Displays temperatures on navbar";
       homepage = "https://github.com/imrahil/OctoPrint-NavbarTemp";
-      license = licenses.agpl3Only;
-      maintainers = with maintainers; [ tri-ler ];
+      license = lib.licenses.agpl3Only;
+      maintainers = with lib.maintainers; [ tri-ler ];
     };
   };
 
@@ -351,11 +351,11 @@ in
       distro
     ];
 
-    meta = with lib; {
+    meta = {
       description = "Monitor Octoprint-connected printers with Obico";
       homepage = "https://www.obico.io/";
-      license = licenses.agpl3Only;
-      maintainers = with maintainers; [ tri-ler ];
+      license = lib.licenses.agpl3Only;
+      maintainers = with lib.maintainers; [ tri-ler ];
     };
   };
 
@@ -373,11 +373,11 @@ in
 
     propagatedBuildInputs = with super; [ pillow ];
 
-    meta = with lib; {
+    meta = {
       description = "OctoPod extension for OctoPrint";
       homepage = "https://github.com/gdombiak/OctoPrint-OctoPod";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ tri-ler ];
+      license = lib.licenses.asl20;
+      maintainers = with lib.maintainers; [ tri-ler ];
     };
   };
 
@@ -404,10 +404,10 @@ in
       sed 's@"{}.{}".format(binary_base_name, machine)@"${marlin-calc}/bin/marlin-calc"@' -i */analyzers/analyze_progress.py
     '';
 
-    meta = with lib; {
+    meta = {
       description = "Better print time estimation for OctoPrint";
       homepage = "https://github.com/eyal0/OctoPrint-PrintTimeGenius";
-      license = licenses.agpl3Only;
+      license = lib.licenses.agpl3Only;
       maintainers = [ ];
     };
   };
@@ -426,11 +426,11 @@ in
 
     propagatedBuildInputs = with super; [ psutil ];
 
-    meta = with lib; {
+    meta = {
       description = "Plugin that extracts thumbnails from uploaded gcode files sliced by PrusaSlicer";
       homepage = "https://github.com/jneilliii/OctoPrint-PrusaSlicerThumbnails";
-      license = licenses.agpl3Only;
-      maintainers = with maintainers; [ tri-ler ];
+      license = lib.licenses.agpl3Only;
+      maintainers = with lib.maintainers; [ tri-ler ];
     };
   };
 
@@ -455,10 +455,10 @@ in
       sed /RPi.GPIO/d -i requirements.txt
     '';
 
-    meta = with lib; {
+    meta = {
       description = "OctoPrint plugin to control ATX/AUX power supply";
       homepage = "https://github.com/kantlivelong/OctoPrint-PSUControl";
-      license = licenses.agpl3Only;
+      license = lib.licenses.agpl3Only;
       maintainers = [ ];
     };
   };
@@ -477,11 +477,11 @@ in
 
     propagatedBuildInputs = with super; [ psutil ];
 
-    meta = with lib; {
+    meta = {
       description = "Plugin to view the current CPU and RAM usage on your system";
       homepage = "https://github.com/Renaud11232/OctoPrint-Resource-Monitor";
-      license = licenses.mit;
-      maintainers = with maintainers; [ tri-ler ];
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ tri-ler ];
     };
   };
 
@@ -497,11 +497,11 @@ in
       sha256 = "sha256-MbP3cKa9FPElQ/M8ykYh9kVXl8hNvmGiCHDvjgWvm9k=";
     };
 
-    meta = with lib; {
+    meta = {
       description = "Simple plugin that add an emergency stop buton on NavBar of OctoPrint";
       homepage = "https://github.com/Sebclem/OctoPrint-SimpleEmergencyStop";
-      license = licenses.agpl3Only;
-      maintainers = with maintainers; [ WhittlesJr ];
+      license = lib.licenses.agpl3Only;
+      maintainers = with lib.maintainers; [ WhittlesJr ];
     };
   };
 
@@ -513,14 +513,14 @@ in
     src = fetchFromGitHub {
       owner = "jneilliii";
       repo = "OctoPrint-STLViewer";
-      rev = "refs/tags/${version}";
+      tag = version;
       sha256 = "sha256-S7zjEbyo59OJpa7INCv1o4ybQ+Sy6a3EJ5AJ6wiBe1Y=";
     };
 
-    meta = with lib; {
+    meta = {
       description = "Simple stl viewer tab for OctoPrint";
       homepage = "https://github.com/jneilliii/Octoprint-STLViewer";
-      license = licenses.agpl3Only;
+      license = lib.licenses.agpl3Only;
       maintainers = [ ];
     };
   };
@@ -539,11 +539,11 @@ in
 
     propagatedBuildInputs = with super; [ pillow ];
 
-    meta = with lib; {
+    meta = {
       description = "Plugin to send status messages and receive commands via Telegram messenger";
       homepage = "https://github.com/fabianonline/OctoPrint-Telegram";
-      license = licenses.agpl3Only;
-      maintainers = with maintainers; [ stunkymonkey ];
+      license = lib.licenses.agpl3Only;
+      maintainers = with lib.maintainers; [ stunkymonkey ];
     };
   };
 
@@ -559,11 +559,11 @@ in
       sha256 = "sha256-om9IUSmxU8y0x8DrodW1EU/pilAN3+PbtYck6KfROEg=";
     };
 
-    meta = with lib; {
+    meta = {
       description = "Beautiful themes for OctoPrint";
       homepage = "https://github.com/birkbjo/OctoPrint-Themeify";
-      license = licenses.agpl3Only;
-      maintainers = with maintainers; [ lovesegfault ];
+      license = lib.licenses.agpl3Only;
+      maintainers = with lib.maintainers; [ lovesegfault ];
     };
   };
 
@@ -579,11 +579,11 @@ in
       sha256 = "sha256-XS4m4KByScGTPfVE4kuRLw829gNE2CdM0RyhRqGGxyw=";
     };
 
-    meta = with lib; {
+    meta = {
       description = "Automatically deletes timelapses that are older than configured timeframe";
       homepage = "https://github.com/jneilliii/OctoPrint-TimelapsePurger";
-      license = licenses.agpl3Only;
-      maintainers = with maintainers; [ tri-ler ];
+      license = lib.licenses.agpl3Only;
+      maintainers = with lib.maintainers; [ tri-ler ];
     };
   };
 
@@ -599,10 +599,10 @@ in
       sha256 = "10nxjrixg0i6n6x8ghc1ndshm25c97bvkcis5j9kmlkkzs36i2c6";
     };
 
-    meta = with lib; {
+    meta = {
       description = "Show printers status in window title";
       homepage = "https://github.com/MoonshineSG/OctoPrint-TitleStatus";
-      license = licenses.agpl3Only;
+      license = lib.licenses.agpl3Only;
       maintainers = [ ];
     };
   };
@@ -619,10 +619,10 @@ in
       sha256 = "sha256-PNDCjY7FhfnwK7Nd86el9ZQ00G4uMANH2Sk080iMYXw=";
     };
 
-    meta = with lib; {
+    meta = {
       description = "Touch friendly interface for a small TFT module or phone for OctoPrint";
       homepage = "https://github.com/BillyBlaze/OctoPrint-TouchUI";
-      license = licenses.agpl3Only;
+      license = lib.licenses.agpl3Only;
       maintainers = [ ];
     };
   };
@@ -639,59 +639,11 @@ in
       sha256 = "sha256-6r5jJDSR0DxlDQ/XWmQgYUgeL1otNNBnwurX7bbcThg=";
     };
 
-    meta = with lib; {
+    meta = {
       description = "Plugin for a better integration of Klipper into OctoPrint";
       homepage = "https://github.com/AliceGrey/OctoprintKlipperPlugin";
-      license = licenses.agpl3Only;
-      maintainers = with maintainers; [ lovesegfault ];
-    };
-  };
-
-  octolapse = buildPlugin rec {
-    pname = "octolapse";
-    version = "0.4.2";
-    format = "setuptools";
-
-    src = fetchFromGitHub {
-      owner = "FormerLurker";
-      repo = "Octolapse";
-      rev = "v${version}";
-      sha256 = "sha256-QP6PkKWKUv4uIaYdqTAsZmK7DVes94Q9K/DrBYrWxzY=";
-    };
-
-    patches = [
-      # fix version constraint
-      # https://github.com/FormerLurker/Octolapse/pull/894
-      (fetchpatch {
-        url = "https://github.com/FormerLurker/Octolapse/commit/0bd7db2430aef370f2665c6c7011fc3bb559122e.patch";
-        hash = "sha256-z2aEq5sJGarGtIDbTRCvXdSj+kq8HIVvLRWpKutmJNY=";
-      })
-    ];
-
-    # Test fails due to code executed on import, see #136513
-    #pythonImportsCheck = [ "octoprint_octolapse" ];
-
-    propagatedBuildInputs = with super; [
-      awesome-slugify
-      setuptools
-      pillow
-      sarge
-      six
-      pillow
-      psutil
-      file-read-backwards
-    ];
-
-    meta = with lib; {
-      description = "Stabilized timelapses for Octoprint";
-      homepage = "https://github.com/FormerLurker/OctoLapse";
-      license = licenses.agpl3Plus;
-      maintainers = with maintainers; [
-        illustris
-        j0hax
-      ];
-      # requires pillow >=6.2.0,<7.0.0
-      broken = true;
+      license = lib.licenses.agpl3Only;
+      maintainers = with lib.maintainers; [ lovesegfault ];
     };
   };
 
@@ -707,14 +659,15 @@ in
       sha256 = "sha256-hLHT3Uze/6PlOCEICVZ2ieFTyXgcqCvgHOlIIEquujg=";
     };
 
-    meta = with lib; {
+    meta = {
       description = "Dashboard for Octoprint";
       homepage = "https://github.com/StefanCohen/OctoPrint-Dashboard";
-      license = licenses.agpl3Plus;
-      maintainers = with maintainers; [ j0hax ];
+      license = lib.licenses.agpl3Plus;
+      maintainers = with lib.maintainers; [ j0hax ];
     };
   };
 }
 // lib.optionalAttrs config.allowAliases {
+  octolapse = throw "octoprint.python.pkgs.octolapse has been removed because it has been marked as broken since at least November 2024."; # Added 2025-09-29
   octoprint-dashboard = super.dashboard;
 }

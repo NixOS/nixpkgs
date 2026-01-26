@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "types-docutils";
-  version = "0.22.1.20250923";
+  version = "0.22.3.20251115";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types_docutils";
     inherit version;
-    hash = "sha256-93VMfuq0QUQJXih7s6/LltaTbcP6Myz/Tl71UzuqGY8=";
+    hash = "sha256-D3nqanvU0S1WyfgkoAkP+uDqQgQgPrAAY5KQaFCRPhY=";
   };
 
   build-system = [ setuptools ];
@@ -23,10 +23,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "docutils-stubs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Typing stubs for docutils";
     homepage = "https://github.com/python/typeshed";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

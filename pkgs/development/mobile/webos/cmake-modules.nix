@@ -29,9 +29,16 @@ stdenv.mkDerivation rec {
 
   setupHook = ./cmake-setup-hook.sh;
 
-  meta = with lib; {
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.7)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace webOS/webOS.cmake \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.7)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
+  meta = {
     description = "CMake modules needed to build Open WebOS components";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

@@ -11,21 +11,20 @@
   openimageio,
   imath,
   python,
-  apple-sdk_14,
 }:
 
 buildPythonPackage rec {
   pname = "materialx";
-  version = "1.39.3";
+  version = "1.39.4";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "MaterialX";
     rev = "v${version}";
-    hash = "sha256-ceVYD/dyb3SEEENoJZxjn94DGmUj6IYSNLjsJvmPM84=";
+    hash = "sha256-XNfXOC76zM5Ns2DyyE3mKCJ1iJaszs1M0rBdVLRDo8E=";
   };
 
-  format = "other";
+  pyproject = false;
 
   nativeBuildInputs = [
     cmake
@@ -36,9 +35,6 @@ buildPythonPackage rec {
     openimageio
     imath
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_14
-  ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libX11
     libXt
@@ -46,6 +42,7 @@ buildPythonPackage rec {
   ];
 
   cmakeFlags = [
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
     (lib.cmakeBool "MATERIALX_BUILD_OIIO" true)
     (lib.cmakeBool "MATERIALX_BUILD_SHARED_LIBS" true)
     (lib.cmakeBool "MATERIALX_BUILD_PYTHON" true)

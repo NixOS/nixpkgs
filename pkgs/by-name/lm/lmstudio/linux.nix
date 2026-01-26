@@ -9,6 +9,7 @@
   stdenv,
   lib,
   passthru,
+  graphicsmagick,
 }:
 let
   src = fetchurl { inherit url hash; };
@@ -24,11 +25,21 @@ appimageTools.wrapType2 {
     passthru
     ;
 
+  nativeBuildInputs = [ graphicsmagick ];
+
   extraPkgs = pkgs: [ pkgs.ocl-icd ];
 
   extraInstallCommands = ''
     mkdir -p $out/share/applications
-    cp -r ${appimageContents}/usr/share/icons $out/share
+
+    # setup icons (see https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=lmstudio#n55 for how Arch solved this; approach adapted to here)
+    src_icon="${appimageContents}/usr/share/icons/hicolor/0x0/apps/lm-studio.png"
+    sizes=("16x16" "32x32" "48x48" "64x64" "128x128" "256x256")
+    for size in "''${sizes[@]}"; do
+      install -dm755 "$out/share/icons/hicolor/$size/apps"
+      gm convert "$src_icon" -resize "$size" "$out/share/icons/hicolor/$size/apps/lm-studio.png"
+    done
+
     install -m 444 -D ${appimageContents}/lm-studio.desktop -t $out/share/applications
 
     # Rename the main executable from lmstudio to lm-studio

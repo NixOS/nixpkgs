@@ -13,8 +13,8 @@ buildRubyGem rec {
   inherit ruby;
   name = "${gemName}-${version}";
   gemName = "tmuxinator";
-  version = "3.3.5";
-  source.sha256 = "sha256-lkP0gCjMCcc8MpOA7aLrQut7jkpaZt9v9GWqh4C/JyE=";
+  version = "3.3.7";
+  source.sha256 = "sha256-z0E/zS6o8MXW4Gi6KqtusRtPpUBa5XhGMAsNJGZxL7I=";
 
   erubi = buildRubyGem rec {
     inherit ruby;
@@ -52,14 +52,14 @@ buildRubyGem rec {
     installShellCompletion $GEM_HOME/gems/${gemName}-${version}/completion/tmuxinator.{bash,zsh,fish}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Manage complex tmux sessions easily";
     homepage = "https://github.com/tmuxinator/tmuxinator";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       auntie
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "tmuxinator";
   };
 }

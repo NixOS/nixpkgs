@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   rustPlatform,
   fetchFromGitHub,
@@ -41,7 +42,9 @@ rustPlatform.buildRustPackage rec {
       asl20 # or
       mit
     ];
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "sic";
+    # The last successful Darwin Hydra build was in 2024
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 }

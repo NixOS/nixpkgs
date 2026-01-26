@@ -7,7 +7,8 @@
   stdenv,
   withSixel ? false,
   libsixel,
-  xorg,
+  libxrandr,
+  libx11,
   withSki ? true,
 }:
 
@@ -28,13 +29,10 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs =
     lib.optional withSixel libsixel
-    ++ lib.optionals stdenv.hostPlatform.isLinux (
-      with xorg;
-      [
-        libX11
-        libXrandr
-      ]
-    );
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libx11
+      libxrandr
+    ];
 
   buildNoDefaultFeatures = !withSki;
   buildFeatures = lib.optional withSixel "sixel";
@@ -54,7 +52,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://menyoki.cli.rs/";
     changelog = "https://github.com/orhun/menyoki/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "menyoki";
   };
 }

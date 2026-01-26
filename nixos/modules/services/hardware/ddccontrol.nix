@@ -10,31 +10,52 @@ let
 in
 
 {
+  meta.maintainers = with lib.maintainers; [ doronbehar ];
+
   ###### interface
 
   options = {
     services.ddccontrol = {
-      enable = lib.mkEnableOption "ddccontrol for controlling displays";
+      enable = lib.mkEnableOption ''
+        ddccontrol for controlling displays.
+
+        This [enables `hardware.i2c`](#opt-hardware.i2c.enable), so note to add
+        yourself to [`hardware.i2c.group`](#opt-hardware.i2c.group).
+      '';
+      package =
+        lib.mkPackageOption pkgs
+          "package with which to control brightness; added also to [services.dbus.packages](#opt-services.dbus.packages)."
+          {
+            default = [ "ddccontrol" ];
+            example = [ "ddcutil-service" ];
+          };
     };
   };
 
   ###### implementation
 
   config = lib.mkIf cfg.enable {
+    boot.kernelModules = [
+      "ddcci_backlight"
+    ];
+    boot.extraModulePackages = [
+      config.boot.kernelPackages.ddcci-driver
+    ];
     # Load the i2c-dev module
-    boot.kernelModules = [ "i2c_dev" ];
+    hardware.i2c = {
+      enable = true;
+    };
 
-    # Give users access to the "gddccontrol" tool
     environment.systemPackages = [
-      pkgs.ddccontrol
+      cfg.package
     ];
 
     services.dbus.packages = [
-      pkgs.ddccontrol
+      cfg.package
     ];
 
     systemd.packages = [
-      pkgs.ddccontrol
+      cfg.package
     ];
   };
 }

@@ -232,6 +232,9 @@ in
         + lib.optionalString (cfg.socket != null) ''
           --socket=${cfg.socket} \
         ''
+        + lib.optionalString (cfg.socketMode != null) ''
+          --socket-mode=${cfg.socketMode} \
+        ''
         + lib.optionalString (cfg.userDataDir != null) ''
           --user-data-dir=${cfg.userDataDir} \
         ''

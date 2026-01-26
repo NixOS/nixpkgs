@@ -14,7 +14,7 @@
   libexif,
   pam,
   xkeyboard_config,
-  udisks2,
+  udisks,
   waylandSupport ? false,
   wayland-protocols,
   xwayland,
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     libexif
     pam
     xkeyboard_config
-    udisks2 # for removable storage mounting/unmounting
+    udisks # for removable storage mounting/unmounting
   ]
   ++ lib.optional bluetoothSupport bluez5 # for bluetooth configuration and control
   ++ lib.optional pulseSupport libpulseaudio # for proper audio device control and redirection
@@ -81,15 +81,15 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = directoryListingUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Compositing Window Manager and Desktop Shell";
     homepage = "https://www.enlightenment.org";
-    license = licenses.bsd2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       matejc
       ftrvxmtrx
     ];
-    teams = [ teams.enlightenment ];
+    teams = [ lib.teams.enlightenment ];
   };
 }

@@ -37,6 +37,6 @@ buildPythonPackage rec {
     mainProgram = "gawd";
     homepage = "https://github.com/pooya-rostami/gawd";
     license = lib.licenses.lgpl3Only;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

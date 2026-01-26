@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-m17n";
-  version = "5.1.4";
+  version = "5.1.5";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    hash = "sha256-TJMJGjO9V6EOzxt6Z7rwOfIQWK38XolDhUKbjbNUGhA=";
+    hash = "sha256-gvR//H+Kf/pYv6Avr0No8PZO7hAnOHj16v6n+tDXgkU=";
   };
 
   nativeBuildInputs = [
@@ -40,11 +40,11 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) fcitx5;
   };
 
-  meta = with lib; {
+  meta = {
     description = "m17n support for Fcitx5";
     homepage = "https://github.com/fcitx/fcitx5-m17n";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ Technical27 ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ Technical27 ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -3,7 +3,9 @@
   lib,
   fetchFromGitHub,
   motif,
-  xorg,
+  libxt,
+  libxext,
+  libx11,
   withAudioTracking ? false,
   libpulseaudio,
   aubio,
@@ -34,21 +36,21 @@ stdenv.mkDerivation {
 
   buildInputs = [
     motif
-    xorg.libX11
-    xorg.libXext
-    xorg.libXt
+    libx11
+    libxext
+    libxt
   ]
   ++ lib.optionals withAudioTracking [
     libpulseaudio
     aubio
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://codefromabove.com/2014/05/catclock/";
     description = "Analog / Digital / Cat clock for X";
-    license = with licenses; mit;
-    maintainers = with maintainers; [ ramkromberg ];
+    license = with lib.licenses; mit;
+    maintainers = with lib.maintainers; [ ramkromberg ];
     mainProgram = "xclock";
-    platforms = with platforms; linux ++ darwin;
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

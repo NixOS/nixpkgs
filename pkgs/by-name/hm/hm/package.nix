@@ -44,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.cc.isClang [
       "-Wno-error=bitwise-instead-of-logical"
       "-Wno-error=missing-braces"
+      "-Wno-error=nontrivial-memcall"
     ]
   );
 
@@ -58,7 +59,10 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   passthru = {
-    updateScript = gitUpdater { rev-prefix = "HM-"; };
+    updateScript = gitUpdater {
+      rev-prefix = "HM-";
+      ignoredVersions = "rc";
+    };
   };
 
   meta = {

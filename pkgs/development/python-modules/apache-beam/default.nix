@@ -19,6 +19,7 @@
   # dependencies
   beartype,
   crcmod,
+  cryptography,
   dill,
   fastavro,
   fasteners,
@@ -58,19 +59,20 @@
   sqlalchemy,
   tenacity,
   testcontainers,
+  which,
   pythonAtLeast,
 }:
 
 buildPythonPackage rec {
   pname = "apache-beam";
-  version = "2.68.0";
+  version = "2.70.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "beam";
     tag = "v${version}";
-    hash = "sha256-ENtvgu9qT1OPsDqFJQzKgIATE7F+S5I+AfoBT2iEL8M=";
+    hash = "sha256-sySHoknK2FmiAEOpRdF9i3vA6NvnDrZyBCghVoyEzLw=";
   };
 
   sourceRoot = "${src.name}/sdks/python";
@@ -85,8 +87,10 @@ buildPythonPackage rec {
   '';
 
   pythonRelaxDeps = [
+    "beartype"
     "grpcio"
     "jsonpickle"
+    "objsize"
 
     # As of apache-beam v2.55.1, the requirement is cloudpickle~=2.2.1, but
     # the current (2024-04-20) nixpkgs's pydot version is 3.0.0.
@@ -123,6 +127,7 @@ buildPythonPackage rec {
   dependencies = [
     beartype
     crcmod
+    cryptography
     dill
     fastavro
     fasteners
@@ -168,6 +173,7 @@ buildPythonPackage rec {
     sqlalchemy
     tenacity
     testcontainers
+    which
   ];
 
   # Make sure we're running the tests for the actually installed
@@ -194,6 +200,9 @@ buildPythonPackage rec {
     #     E   NameError: name 'MySqlContainer' is not defined
     #
     "apache_beam/io/external/xlang_jdbcio_it_test.py"
+
+    # AttributeError: '_TruncatingFileHandle' object has no attribute 'close'.
+    "apache_beam/ml/rag/ingestion/milvus_search_it_test.py"
 
     # These tests depend on the availability of specific servers backends.
     "apache_beam/runners/portability/flink_runner_test.py"
@@ -254,9 +263,14 @@ buildPythonPackage rec {
     "test_reshuffle_custom_window_preserves_metadata_1"
     "test_reshuffle_default_window_preserves_metadata_1"
 
-    # AttributeError: 'MaybeReshuffle' object has no attribute 'side_inputs'
-    # https://github.com/apache/beam/issues/33854
+    # Dill version 0.3.1.1 is required when using pickle_library=dill.
+    # Other versions of dill are untested with Apache Beam.
+    "LocalCombineFnLifecycleTest_0_dill"
+    "LocalCombineFnLifecycleTest_2_dill"
     "test_runner_overrides_default_pickler"
+
+    # Require internet access
+    "test_local_jar_fallback_to_google_maven_mirror"
 
     # AssertionError: Lists differ
     "test_default_resources"

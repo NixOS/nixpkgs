@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
       lgpl2Plus
       mpl11
     ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 }

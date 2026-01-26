@@ -5,7 +5,9 @@
   autoreconfHook,
   aalib,
   ncurses,
-  xorg,
+  libxdmcp,
+  libxau,
+  libx11,
   libmikmod,
 }:
 
@@ -29,9 +31,9 @@ stdenv.mkDerivation rec {
     aalib
     ncurses
     libmikmod
-    xorg.libXau
-    xorg.libXdmcp
-    xorg.libX11
+    libxau
+    libxdmcp
+    libx11
   ];
 
   # regparm attribute is not supported by clang
@@ -40,12 +42,12 @@ stdenv.mkDerivation rec {
       --replace-fail "__attribute__ ((regparm(n)))" ""
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://aa-project.sourceforge.net/bb";
     description = "AA-lib demo";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.rnhmjoj ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.rnhmjoj ];
+    platforms = lib.platforms.unix;
     mainProgram = "bb";
   };
 }

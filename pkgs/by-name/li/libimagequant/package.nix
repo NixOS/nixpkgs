@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  rust,
+  buildPackages,
   rustPlatform,
   cargo-c,
   python3,
@@ -15,13 +15,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "libimagequant";
-  version = "4.3.4";
+  version = "4.4.1";
 
   src = fetchFromGitHub {
     owner = "ImageOptim";
     repo = "libimagequant";
     rev = version;
-    hash = "sha256-2P8FiRfOuCHxJrB+rnDDOFsrFjPv5GMBK/5sq7eb32w=";
+    hash = "sha256-A7idjAAJ+syqIahyU+LPZBF+MLxVDymY+M3HM7d/qk0=";
   };
 
   cargoLock = {
@@ -37,13 +37,13 @@ rustPlatform.buildRustPackage rec {
 
   postBuild = ''
     pushd imagequant-sys
-    ${rust.envVars.setEnv} cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
+    ${buildPackages.rust.envVars.setEnv} cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
     popd
   '';
 
   postInstall = ''
     pushd imagequant-sys
-    ${rust.envVars.setEnv} cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
+    ${buildPackages.rust.envVars.setEnv} cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
     popd
   '';
 
@@ -57,12 +57,12 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pngquant.org/lib/";
     description = "Image quantization library";
     longDescription = "Small, portable C library for high-quality conversion of RGBA images to 8-bit indexed-color (palette) images.";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ ma9e ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ ma9e ];
   };
 }

@@ -3,23 +3,22 @@
   stdenv,
   fetchFromGitHub,
   buildNpmPackage,
-  python3,
   nodejs,
   nixosTests,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "uptime-kuma";
-  version = "1.23.16";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "louislam";
     repo = "uptime-kuma";
-    rev = version;
-    hash = "sha256-+bhKnyZnGd+tNlsxvP96I9LXOca8FmOPhIFHp7ijmyA=";
+    tag = finalAttrs.version;
+    hash = "sha256-zW5sl1g96PvDK3S6XhJ6F369/NSnvU9uSQORCQugfvs=";
   };
 
-  npmDepsHash = "sha256-5i1NxwHqOahkioyM4wSu2X5KeMu7CdC4BqoUooAshn4=";
+  npmDepsHash = "sha256-EmSZJUbtD4FW7Rzdpue6/bV8oZt7RUL11tFBXGJQthg=";
 
   patches = [
     # Fixes the permissions of the database being not set correctly
@@ -27,15 +26,11 @@ buildNpmPackage rec {
     ./fix-database-permissions.patch
   ];
 
-  nativeBuildInputs = [ python3 ];
-
-  CYPRESS_INSTALL_BINARY = 0; # Stops Cypress from trying to download binaries
-
   postInstall = ''
     cp -r dist $out/lib/node_modules/uptime-kuma/
 
     # remove references to nodejs source
-    rm -r $out/lib/node_modules/uptime-kuma/node_modules/@louislam/sqlite3/build-tmp-napi-v6
+    rm -r $out/lib/node_modules/uptime-kuma/node_modules/@louislam/sqlite3/build-tmp-napi-v*
   '';
 
   postFixup = ''
@@ -50,10 +45,10 @@ buildNpmPackage rec {
     description = "Fancy self-hosted monitoring tool";
     mainProgram = "uptime-kuma-server";
     homepage = "https://github.com/louislam/uptime-kuma";
-    changelog = "https://github.com/louislam/uptime-kuma/releases/tag/${version}";
+    changelog = "https://github.com/louislam/uptime-kuma/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ julienmalka ];
     # FileNotFoundError: [Errno 2] No such file or directory: 'xcrun'
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

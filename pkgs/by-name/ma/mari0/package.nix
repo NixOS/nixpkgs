@@ -10,7 +10,7 @@
   zip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mari0";
   version = "1.6.2-unstable-2023-08-08";
 
@@ -49,11 +49,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Crossover between Super Mario Bros. and Portal";
     mainProgram = "mari0";
-    platforms = platforms.linux;
-    license = licenses.mit;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
     downloadPage = "https://stabyourself.net/mari0/";
   };
 

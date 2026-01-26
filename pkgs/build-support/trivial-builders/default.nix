@@ -71,7 +71,7 @@ rec {
       derivationArgs ? { },
       # name of the resulting derivation
       name,
-    # TODO(@Artturin): enable strictDeps always
+      # TODO(@Artturin): enable strictDeps always
     }:
     buildCommand:
     stdenv.mkDerivation (
@@ -94,7 +94,7 @@ rec {
         preferLocalBuild = true;
         allowSubstitutes = false;
       })
-      // builtins.removeAttrs derivationArgs [ "passAsFile" ]
+      // removeAttrs derivationArgs [ "passAsFile" ]
     );
 
   # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
@@ -170,9 +170,9 @@ rec {
     name: text:
     # TODO: To fully deprecate, replace the assertion with `lib.isString` and remove the warning
     assert lib.assertMsg (lib.strings.isConvertibleWithToString text)
-      ''pkgs.writeText ${lib.strings.escapeNixString name}: The second argument should be a string, but it's a ${builtins.typeOf text} instead.'';
+      "pkgs.writeText ${lib.strings.escapeNixString name}: The second argument should be a string, but it's a ${builtins.typeOf text} instead.";
     lib.warnIf (!lib.isString text)
-      ''pkgs.writeText ${lib.strings.escapeNixString name}: The second argument should be a string, but it's a ${builtins.typeOf text} instead, which is deprecated. Use `toString` to convert the value to a string first.''
+      "pkgs.writeText ${lib.strings.escapeNixString name}: The second argument should be a string, but it's a ${builtins.typeOf text} instead, which is deprecated. Use `toString` to convert the value to a string first."
       writeTextFile
       { inherit name text; };
 
@@ -182,7 +182,7 @@ rec {
     path: text:
     writeTextFile {
       inherit text;
-      name = builtins.baseNameOf path;
+      name = baseNameOf path;
       destination = "/${path}";
     };
 
@@ -350,12 +350,10 @@ rec {
         ${lib.concatMapStringsSep "\n" (option: "set -o ${option}") bashOptions}
       ''
       + lib.optionalString (runtimeEnv != null) (
-        lib.concatStrings (
-          lib.mapAttrsToList (name: value: ''
-            ${lib.toShellVar name value}
-            export ${name}
-          '') runtimeEnv
-        )
+        lib.concatMapAttrsStringSep "" (name: value: ''
+          ${lib.toShellVar name value}
+          export ${name}
+        '') runtimeEnv
       )
       + lib.optionalString (runtimeInputs != [ ]) ''
 
@@ -958,7 +956,6 @@ rec {
       outputHashAlgo = hashAlgo_;
       outputHash = hash_;
       preferLocalBuild = true;
-      allowSubstitutes = false;
       builder = writeScript "restrict-message" ''
         source ${stdenvNoCC}/setup
         cat <<_EOF_
@@ -983,7 +980,7 @@ rec {
 
   # TODO: move copyPathsToStore docs to the Nixpkgs manual
   # Copy a list of paths to the Nix store.
-  copyPathsToStore = builtins.map copyPathToStore;
+  copyPathsToStore = map copyPathToStore;
 
   # TODO: move applyPatches docs to the Nixpkgs manual
   /*
@@ -1009,7 +1006,7 @@ rec {
       name ?
         (
           if builtins.typeOf src == "path" then
-            builtins.baseNameOf src
+            baseNameOf src
           else if builtins.isAttrs src && builtins.hasAttr "name" src then
             src.name
           else

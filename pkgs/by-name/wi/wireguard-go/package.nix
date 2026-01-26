@@ -1,74 +1,62 @@
 {
   lib,
   buildGoModule,
-  fetchzip,
-  testers,
-  wireguard-go,
+  fetchgit,
+  versionCheckHook,
 }:
 
-buildGoModule (
-  finalAttrs:
-  let
-    rev = "12269c2761734b15625017d8565745096325392f";
-    shortVer = "${finalAttrs.version} (${lib.substring 0 7 rev})";
-  in
-  {
-    pname = "wireguard-go";
-    version = "0-unstable-2023-12-11";
+buildGoModule (finalAttrs: {
+  pname = "wireguard-go";
+  version = "0.0.20250522";
 
-    src = fetchzip {
-      url = "https://git.zx2c4.com/wireguard-go/snapshot/wireguard-go-${rev}.tar.xz";
-      hash = "sha256-br7/dwr/e4HvBGJXh+6lWqxBUezt5iZNy9BFqEA1bLk=";
-    };
+  src = fetchgit {
+    url = "https://git.zx2c4.com/wireguard-go";
+    tag = finalAttrs.version;
+    hash = "sha256-GRr8NKKb4SHd0WxmNL84eiofFHcauDDmSyNNrXermcA=";
+  };
 
-    postPatch = ''
-      # Skip formatting tests
-      rm -f format_test.go
+  postPatch = ''
+    # Skip formatting tests
+    rm -f format_test.go
+  '';
 
-      # Inject version
-      printf 'package main\n\nconst Version = "${shortVer}"' > version.go
-    '';
+  vendorHash = "sha256-sCajxTV26jjlmgmbV4GG6hg9NkLGS773ZbFyKucvuBE=";
 
-    vendorHash = "sha256-RqZ/3+Xus5N1raiUTUpiKVBs/lrJQcSwr1dJib2ytwc=";
+  subPackages = [ "." ];
 
-    subPackages = [ "." ];
+  ldflags = [ "-s" ];
 
-    ldflags = [ "-s" ];
+  # No tests besides the formatting one are in root.
+  # We can't override subPackages per-phase (and we don't
+  # want to needlessly build packages that have build
+  # constraints), so just use the upstream Makefile (that
+  # runs `go test ./...`) to actually run the tests.
+  checkPhase = ''
+    runHook preCheck
+    export GOFLAGS=''${GOFLAGS//-trimpath/}
+    make test
+    runHook postCheck
+  '';
 
-    # No tests besides the formatting one are in root.
-    # We can't override subPackages per-phase (and we don't
-    # want to needlessly build packages that have build
-    # constraints), so just use the upstream Makefile (that
-    # runs `go test ./...`) to actually run the tests.
-    checkPhase = ''
-      runHook preCheck
-      export GOFLAGS=''${GOFLAGS//-trimpath/}
-      make test
-      runHook postCheck
-    '';
+  # Tests require networking.
+  __darwinAllowLocalNetworking = finalAttrs.doCheck;
 
-    # Tests require networking.
-    __darwinAllowLocalNetworking = finalAttrs.doCheck;
+  postInstall = ''
+    mv $out/bin/wireguard $out/bin/wireguard-go
+  '';
 
-    postInstall = ''
-      mv $out/bin/wireguard $out/bin/wireguard-go
-    '';
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
-    passthru.tests.version = testers.testVersion {
-      package = wireguard-go;
-      version = "v${shortVer}";
-    };
-
-    meta = with lib; {
-      description = "Userspace Go implementation of WireGuard";
-      homepage = "https://git.zx2c4.com/wireguard-go/about/";
-      license = licenses.mit;
-      maintainers = with maintainers; [
-        kirelagin
-        winter
-        zx2c4
-      ];
-      mainProgram = "wireguard-go";
-    };
-  }
-)
+  meta = {
+    description = "Userspace Go implementation of WireGuard";
+    homepage = "https://git.zx2c4.com/wireguard-go/about/";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      kirelagin
+      winter
+      zx2c4
+    ];
+    mainProgram = "wireguard-go";
+  };
+})

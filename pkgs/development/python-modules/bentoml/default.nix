@@ -57,6 +57,7 @@
   pyyaml,
   questionary,
   rich,
+  rich-toolkit,
   schema,
   simple-di,
   starlette,
@@ -79,7 +80,7 @@
 }:
 
 let
-  version = "1.4.23";
+  version = "1.4.29";
   aws = [ fs-s3fs ];
   grpc = [
     grpcio
@@ -129,7 +130,7 @@ let
     owner = "bentoml";
     repo = "BentoML";
     tag = "v${version}";
-    hash = "sha256-p9d8TyN09jJ2VotaAvbC9jxJ5kNC2S7VhkatzrDJ1TY=";
+    hash = "sha256-humzefKjnFpbWp9QVcUGPD0+3l2bOyFA35reZLtwFt4=";
   };
 in
 buildPythonPackage {
@@ -148,6 +149,7 @@ buildPythonPackage {
     "opentelemetry-sdk"
     "opentelemetry-semantic-conventions"
     "opentelemetry-util-http"
+    "rich-toolkit"
   ];
 
   build-system = [
@@ -195,6 +197,7 @@ buildPythonPackage {
     pyyaml
     questionary
     rich
+    rich-toolkit
     schema
     simple-di
     starlette
@@ -244,12 +247,12 @@ buildPythonPackage {
   ]
   ++ optional-dependencies.grpc;
 
-  meta = with lib; {
+  meta = {
     description = "Build Production-Grade AI Applications";
     homepage = "https://github.com/bentoml/BentoML";
     changelog = "https://github.com/bentoml/BentoML/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       happysalada
       natsukium
     ];

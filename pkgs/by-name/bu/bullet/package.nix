@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   libGLU,
   libGL,
@@ -15,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "bulletphysics";
     repo = "bullet3";
-    rev = version;
+    tag = version;
     sha256 = "sha256-AGP05GoxLjHqlnW63/KkZe+TjO3IKcgBi+Qb/osQuCM=";
   };
 
@@ -24,6 +25,14 @@ stdenv.mkDerivation rec {
     libGLU
     libGL
     libglut
+  ];
+
+  patches = [
+    # fix for CMake v4, merged upstream
+    (fetchpatch {
+      url = "https://github.com/bulletphysics/bullet3/commit/d1a4256b3a019117f2bb6cb8c63d6367aaf512e2.patch";
+      hash = "sha256-FklMKYw5dKUcR5kZOkqv+KVLcWL/7r/0SAdYolmrn5A=";
+    })
   ];
 
   postPatch = ''
@@ -44,15 +53,15 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=argument-outside-range -Wno-error=c++11-narrowing";
 
-  meta = with lib; {
+  meta = {
     description = "Professional free 3D Game Multiphysics Library";
     longDescription = ''
       Bullet 3D Game Multiphysics Library provides state of the art collision
       detection, soft body and rigid body dynamics.
     '';
     homepage = "http://bulletphysics.org";
-    license = licenses.zlib;
-    maintainers = with maintainers; [ aforemny ];
-    platforms = platforms.unix;
+    license = lib.licenses.zlib;
+    maintainers = with lib.maintainers; [ aforemny ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "trzsz-ssh";
-  version = "0.1.22";
+  version = "0.1.24";
 
   src = fetchFromGitHub {
     owner = "trzsz";
     repo = "trzsz-ssh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VvPdWRP+lrhho+Bk5rT9pktEvKe01512WoDfAu5d868=";
+    hash = "sha256-mcGsCPW8YHKCm5c+OWlKMp6k+J7ibvd6zN/76Ws5eUE=";
   };
 
-  vendorHash = "sha256-EllXxDyWI4Dy5E6KnzYFxuYDQcdk9+01v5svpARZU44=";
+  vendorHash = "sha256-RhmWoULbJZdYYFxLlj+ekca4u8+DQTH3QmZlpnUeZ2Y=";
 
   ldflags = [
     "-s"
@@ -27,7 +27,6 @@ buildGoModule (finalAttrs: {
   nativeCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 

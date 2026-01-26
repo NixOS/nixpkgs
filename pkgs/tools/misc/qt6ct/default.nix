@@ -12,14 +12,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qt6ct";
-  version = "0.10";
+  version = "0.11";
 
   src = fetchFromGitLab {
     domain = "www.opencode.net";
     owner = "trialuser";
     repo = "qt6ct";
     tag = finalAttrs.version;
-    hash = "sha256-o2k/b4AGiblS1CkNInqNrlpM1Y7pydIJzEVgVd3ao50=";
+    hash = "sha256-aQmqLpM0vogMsYaDS9OeKVI3N53uY4NBC4FF10hK8Uw=";
   };
 
   nativeBuildInputs = [
@@ -34,10 +34,9 @@ stdenv.mkDerivation (finalAttrs: {
     qtwayland
   ];
 
-  postPatch = ''
-    substituteInPlace src/qt6ct-qtplugin/CMakeLists.txt src/qt6ct-style/CMakeLists.txt \
-      --replace-fail "\''${PLUGINDIR}" "$out/${qtbase.qtPluginPrefix}"
-  '';
+  cmakeFlags = [
+    (lib.cmakeFeature "PLUGINDIR" "${placeholder "out"}/${qtbase.qtPluginPrefix}")
+  ];
 
   meta = {
     description = "Qt6 Configuration Tool";

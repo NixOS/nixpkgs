@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage {
     description = "Generate impressive-looking terminal output to look busy when stakeholders walk by";
     homepage = "https://github.com/giacomo-b/rust-stakeholder";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.awwpotato ];
+    maintainers = [ lib.maintainers.da157 ];
     mainProgram = "rust-stakeholder";
   };
 }

@@ -42,6 +42,6 @@ buildPythonPackage rec {
     description = "MkDocs plugin to help generate your plantuml images locally or remotely as files (NOT inline)";
     homepage = "https://github.com/christo-ph/mkdocs_build_plantuml";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

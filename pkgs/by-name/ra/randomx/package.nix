@@ -18,12 +18,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-dfImzwbEfJQcaPZCoWypHiI6dishVRdqS/r+n3tfjvM=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Proof of work algorithm based on random code execution";
     homepage = "https://github.com/tevador/RandomX";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ rnhmjoj ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ rnhmjoj ];
+    platforms = lib.platforms.unix;
   };
 
 }

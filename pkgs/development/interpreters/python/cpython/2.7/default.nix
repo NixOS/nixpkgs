@@ -87,6 +87,10 @@ let
       pythonOnBuildForTarget = pkgsBuildTarget.${pythonAttr};
       pythonOnHostForHost = pkgsHostHost.${pythonAttr};
       pythonOnTargetForTarget = pkgsTargetTarget.${pythonAttr} or { };
+      pythonABITags = [
+        "none"
+        "cp${sourceVersion.major}${sourceVersion.minor}"
+      ];
     }
     // {
       inherit ucsEncoding;
@@ -292,7 +296,7 @@ let
 
   # Python 2.7 needs this
   crossCompileEnv = lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
-    _PYTHON_HOST_PLATFORM = stdenv.hostPlatform.config;
+    env._PYTHON_HOST_PLATFORM = stdenv.hostPlatform.config;
   };
 
   # Build the basic Python interpreter without modules that have
@@ -314,13 +318,15 @@ stdenv.mkDerivation (
       configureFlags
       ;
 
-    LDFLAGS = lib.optionalString (!stdenv.hostPlatform.isDarwin) "-lgcc_s";
-    inherit (mkPaths buildInputs) C_INCLUDE_PATH LIBRARY_PATH;
-
-    env.NIX_CFLAGS_COMPILE =
-      lib.optionalString (stdenv.targetPlatform.system == "x86_64-darwin") "-msse2"
-      + lib.optionalString stdenv.hostPlatform.isMusl " -DTHREAD_STACK_SIZE=0x100000";
-    DETERMINISTIC_BUILD = 1;
+    env = {
+      LDFLAGS = lib.optionalString (!stdenv.hostPlatform.isDarwin) "-lgcc_s";
+      inherit (mkPaths buildInputs) C_INCLUDE_PATH LIBRARY_PATH;
+      NIX_CFLAGS_COMPILE =
+        lib.optionalString (stdenv.targetPlatform.system == "x86_64-darwin") "-msse2"
+        + lib.optionalString stdenv.hostPlatform.isMusl " -DTHREAD_STACK_SIZE=0x100000"
+        + " -std=gnu17";
+      DETERMINISTIC_BUILD = 1;
+    };
 
     setupHook = python-setup-hook sitePackages;
 
@@ -392,6 +398,8 @@ stdenv.mkDerivation (
     enableParallelBuilding = true;
 
     doCheck = false; # expensive, and fails
+
+    __structuredAttrs = true;
 
     meta = {
       homepage = "http://python.org";

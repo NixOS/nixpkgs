@@ -46,9 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
   dontConfigure = true;
   dontBuild = true;
 
-  nativeBuildInputs = [
+  nativeBuildInputs = (lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ]) ++ [
     makeWrapper
-    autoPatchelfHook
   ];
   buildInputs = [ stdenv.cc.cc ];
 

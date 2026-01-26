@@ -6,21 +6,21 @@
 
 buildGoModule rec {
   pname = "dstask";
-  version = "0.26";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "naggie";
     repo = "dstask";
     rev = "v${version}";
-    sha256 = "sha256-xZFQQDK+yGAv4IbuNe2dvNa3GDASeJY2mOYw94goAIM=";
+    sha256 = "sha256-/SXQz+HDkKWGrIArqEjti93mo6Els9haitV0FfWfVTQ=";
   };
 
-  # Set vendorHash to null because dstask vendors its dependencies (meaning
+  # Set vendorHash to "sha256-HSqAbxkkjuMulFymeqApWr/JZ+a7OUTu5EYLGPL/j2U=" because dstask vendors its dependencies (meaning
   # that third party dependencies are stored in the repository).
   #
   # Ref <https://github.com/NixOS/nixpkgs/pull/87383#issuecomment-633204382>
   # and <https://github.com/NixOS/nixpkgs/blob/d4226e3a4b5fcf988027147164e86665d382bbfa/pkgs/development/go-modules/generic/default.nix#L18>
-  vendorHash = null;
+  vendorHash = "sha256-HSqAbxkkjuMulFymeqApWr/JZ+a7OUTu5EYLGPL/j2U=";
 
   doCheck = false;
 
@@ -35,11 +35,11 @@ buildGoModule rec {
     "-X github.com/naggie/dstask.GIT_COMMIT=v${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command line todo list with super-reliable git sync";
     homepage = src.meta.homepage;
-    license = licenses.mit;
-    maintainers = with maintainers; [ stianlagstad ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ stianlagstad ];
+    platforms = lib.platforms.linux;
   };
 }

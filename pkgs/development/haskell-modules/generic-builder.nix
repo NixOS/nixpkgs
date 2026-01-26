@@ -10,11 +10,59 @@
   runCommandCC,
   ghcWithHoogle,
   ghcWithPackages,
+  haskellLib,
+  iserv-proxy,
   nodejs,
+  writeShellScriptBin,
 }:
 
 let
   isCross = stdenv.buildPlatform != stdenv.hostPlatform;
+
+  crossSupport = rec {
+    emulator = stdenv.hostPlatform.emulator buildPackages;
+
+    canProxyTH =
+      # iserv-proxy currently does not build on GHC 9.6
+      lib.versionAtLeast ghc.version "9.8" && stdenv.hostPlatform.emulatorAvailable buildPackages;
+
+    iservWrapper =
+      let
+        wrapperScript =
+          enableProfiling:
+          let
+            overrides = haskellLib.overrideCabal {
+              enableLibraryProfiling = enableProfiling;
+              enableExecutableProfiling = enableProfiling;
+            };
+            buildProxy = lib.getExe' iserv-proxy.build "iserv-proxy";
+            hostProxy = lib.getExe' (overrides iserv-proxy.host) "iserv-proxy-interpreter";
+          in
+          buildPackages.writeShellScriptBin ("iserv-wrapper" + lib.optionalString enableProfiling "-prof") ''
+            set -euo pipefail
+            PORT=$((5000 + $RANDOM % 5000))
+            (>&2 echo "---> Starting interpreter on port $PORT")
+            ${emulator} ${hostProxy} tmp $PORT &
+            RISERV_PID="$!"
+            trap "kill $RISERV_PID" EXIT # Needs cleanup when building without sandbox
+            ${buildProxy} $@ 127.0.0.1 "$PORT"
+            (>&2 echo "---> killing interpreter...")
+          '';
+
+        # GHC will add `-prof` to the external interpreter when doing a profiled build.
+        # Since a single derivation can build with both profiling and non-profiling versions
+        # we need both versions made available
+        both = buildPackages.symlinkJoin {
+          name = "iserv-wrapper-both";
+          paths = map wrapperScript [
+            false
+            true
+          ];
+        };
+
+      in
+      "${both}/bin/iserv-wrapper";
+  };
 
   # Pass the "wrong" C compiler rather than none at all so packages that just
   # use the C preproccessor still work, see
@@ -96,14 +144,14 @@ in
   libraryFrameworkDepends ? [ ],
   executableFrameworkDepends ? [ ],
   homepage ? "https://hackage.haskell.org/package/${pname}",
-  platforms ? with lib.platforms; all, # GHC can cross-compile
+  platforms ? lib.platforms.all, # GHC can cross-compile
   badPlatforms ? lib.platforms.none,
   hydraPlatforms ? null,
   hyperlinkSource ? true,
   isExecutable ? false,
   isLibrary ? !isExecutable,
   jailbreak ? false,
-  license,
+  license ? null,
   enableParallelBuilding ? true,
   maintainers ? null,
   teams ? null,
@@ -157,6 +205,7 @@ in
   coreSetup ? false, # Use only core packages to build Setup.hs.
   useCpphs ? false,
   hardeningDisable ? null,
+  enableObjectDeterminism ? lib.versionAtLeast ghc.version "9.12",
   enableSeparateBinOutput ? false,
   enableSeparateDataOutput ? false,
   enableSeparateDocOutput ? doHaddock,
@@ -184,6 +233,11 @@ in
   # See https://nixos.org/manual/nixpkgs/unstable/#haskell-packaging-helpers
   # or its source doc/languages-frameworks/haskell.section.md
   disallowGhcReference ? false,
+  # By default we convert the `.cabal` file to Unix line endings to work around
+  # Hackage converting them to DOS line endings when revised, see
+  # <https://github.com/haskell/hackage-server/issues/316>.
+  # Pass `true` to disable this behavior.
+  dontConvertCabalFileToUnix ? false,
   # Cabal 3.8 which is shipped by default for GHC >= 9.3 always calls
   # `pkg-config --libs --static` as part of the configure step. This requires
   # Requires.private dependencies of pkg-config dependencies to be present in
@@ -200,9 +254,14 @@ in
   # of `meta.pkgConfigModules`. This option defaults to false for now, since
   # this metadata is far from complete in nixpkgs.
   __onlyPropagateKnownPkgConfigModules ? false,
+
+  enableExternalInterpreter ? isCross && crossSupport.canProxyTH,
 }@args:
 
 assert editedCabalFile != null -> revision != null;
+
+# We only use iserv-proxy for the external interpreter
+assert enableExternalInterpreter -> crossSupport.canProxyTH;
 
 # --enable-static does not work on windows. This is a bug in GHC.
 # --enable-static will pass -staticlib to ghc, which only works for mach-o and elf.
@@ -293,11 +352,17 @@ let
     "--hsc2hs-option=--cross-compile"
     (optionalString enableHsc2hsViaAsm "--hsc2hs-option=--via-asm")
   ]
-  ++ optional (allPkgconfigDepends != [ ]) "--with-pkg-config=${pkg-config.targetPrefix}pkg-config";
+  ++ optional (allPkgconfigDepends != [ ]) "--with-pkg-config=${pkg-config.targetPrefix}pkg-config"
+
+  ++ optionals enableExternalInterpreter (
+    map (opt: "--ghc-option=${opt}") [
+      "-fexternal-interpreter"
+      "-pgmi"
+      crossSupport.iservWrapper
+    ]
+  );
 
   makeGhcOptions = opts: lib.concatStringsSep " " (map (opt: "--ghc-option=${opt}") opts);
-
-  buildFlagsString = optionalString (buildFlags != [ ]) (" " + concatStringsSep " " buildFlags);
 
   defaultConfigureFlags = [
     "--verbose"
@@ -350,6 +415,9 @@ let
     (enableFeature (!dontStrip) "library-stripping")
     (enableFeature (!dontStrip) "executable-stripping")
   ]
+  ++ optionals enableObjectDeterminism [
+    "--ghc-option=-fobject-determinism"
+  ]
   ++ optionals isCross (
     [
       "--configure-option=--host=${stdenv.hostPlatform.config}"
@@ -392,9 +460,9 @@ let
       # closePropagationFast.
       propagatePlainBuildInputs =
         drvs:
-        builtins.map (i: i.val) (
+        map (i: i.val) (
           builtins.genericClosure {
-            startSet = builtins.map (drv: {
+            startSet = map (drv: {
               key = drv.outPath;
               val = drv;
             }) (builtins.filter propagateValue drvs);
@@ -549,8 +617,10 @@ let
   }
   // env
   # Implicit pointer to integer conversions are errors by default since clang 15.
-  # Works around https://gitlab.haskell.org/ghc/ghc/-/issues/23456.
-  // optionalAttrs (stdenv.hasCC && stdenv.cc.isClang) {
+  # Works around https://gitlab.haskell.org/ghc/ghc/-/issues/23456. krank:ignore-line
+  # A fix was included in GHC 9.10.* and backported to 9.6.5 and 9.8.2 (but we no longer
+  # ship 9.8.1).
+  // optionalAttrs (lib.versionOlder ghc.version "9.6.5" && stdenv.hasCC && stdenv.cc.isClang) {
     NIX_CFLAGS_COMPILE =
       "-Wno-error=int-conversion"
       + lib.optionalString (env ? NIX_CFLAGS_COMPILE) (" " + env.NIX_CFLAGS_COMPILE);
@@ -601,12 +671,18 @@ lib.fix (
           echo "Replace Cabal file with edited version from ${newCabalFileUrl}."
           cp ${newCabalFile} ${pname}.cabal
         ''
-        + prePatch;
+        + prePatch
+        + "\n"
+        # cabal2nix-generated expressions run hpack not until prePatch to create
+        # the .cabal file (if necessary)
+        + lib.optionalString (!dontConvertCabalFileToUnix) ''
+          sed -i -e 's/\r$//' *.cabal
+        '';
 
       postPatch =
         optionalString jailbreak ''
           echo "Run jailbreak-cabal to lift version restrictions on build inputs."
-          ${jailbreak-cabal}/bin/jailbreak-cabal ${pname}.cabal
+          ${jailbreak-cabal}/bin/jailbreak-cabal *.cabal
         ''
         + postPatch;
 
@@ -722,19 +798,13 @@ lib.fix (
 
       # Cabal takes flags like `--configure-option=--host=...` instead
       configurePlatforms = [ ];
-      inherit configureFlags;
+      inherit configureFlags buildFlags;
 
       # Note: the options here must be always added, regardless of whether the
       # package specifies `hardeningDisable`.
       hardeningDisable =
         lib.optionals (args ? hardeningDisable) hardeningDisable
-        ++ lib.optional (ghc.isHaLVM or false) "all"
-        # Static libraries (ie. all of pkgsStatic.haskellPackages) fail to build
-        # because by default Nix adds `-pie` to the linker flags: this
-        # conflicts with the `-r` and `-no-pie` flags added by GHC (see
-        # https://gitlab.haskell.org/ghc/ghc/-/issues/19580). hardeningDisable
-        # changes the default Nix behavior regarding adding "hardening" flags.
-        ++ lib.optional enableStaticLibraries "pie";
+        ++ lib.optional (ghc.isHaLVM or false) "all";
 
       configurePhase = ''
         runHook preConfigure
@@ -762,7 +832,7 @@ lib.fix (
         find dist/build -exec touch -d '1970-01-01T00:00:00Z' {} +
       ''
       + ''
-        ${setupCommand} build ${buildTarget}${buildFlagsString}
+        ${setupCommand} build ${buildTarget} $buildFlags
         runHook postBuild
       '';
 
@@ -784,7 +854,7 @@ lib.fix (
         checkFlagsArray+=(
           "--show-details=streaming"
           "--test-wrapper=${testWrapperScript}"
-          ${lib.escapeShellArgs (builtins.map (opt: "--test-option=${opt}") testFlags)}
+          ${lib.escapeShellArgs (map (opt: "--test-option=${opt}") testFlags)}
         )
         export NIX_GHC_PACKAGE_PATH_FOR_TEST="''${NIX_GHC_PACKAGE_PATH_FOR_TEST:-$packageConfDir:}"
         ${setupCommand} test ${testTargetsString} $checkFlags ''${checkFlagsArray:+"''${checkFlagsArray[@]}"}
@@ -798,6 +868,8 @@ lib.fix (
             ${optionalString doHoogle "--hoogle"} \
             ${optionalString doHaddockQuickjump "--quickjump"} \
             ${optionalString (isLibrary && hyperlinkSource) "--hyperlink-source"} \
+            ${optionalString enableParallelBuilding "--haddock-option=-j$NIX_BUILD_CORES"} \
+            --haddock-option=--no-tmp-comp-dir \
             ${lib.concatStringsSep " " haddockFlags}
         ''}
         runHook postHaddock
@@ -1029,10 +1101,11 @@ lib.fix (
       };
 
       meta = {
-        inherit homepage license platforms;
+        inherit homepage platforms;
       }
       // optionalAttrs (args ? broken) { inherit broken; }
       // optionalAttrs (args ? description) { inherit description; }
+      // optionalAttrs (args ? license) { inherit license; }
       // optionalAttrs (args ? maintainers) { inherit maintainers; }
       // optionalAttrs (args ? teams) { inherit teams; }
       // optionalAttrs (args ? hydraPlatforms) { inherit hydraPlatforms; }

@@ -23,7 +23,8 @@
   fontconfig,
   dbus,
   libX11,
-  xorg,
+  libxshmfence,
+  libxcb,
   libXi,
   libXcursor,
   libXdamage,
@@ -92,12 +93,12 @@ let
   });
 
   noto-emoji-sheet-32 = fetchurl {
-    url = "https://raw.githubusercontent.com/iamcal/emoji-data/refs/tags/v15.1.2/sheet_google_32.png";
-    hash = "sha256-S03NCTbvB5yeQl62WpLNjNGhjNErtgaOB6tAj/X8vPc=";
+    url = "https://raw.githubusercontent.com/iamcal/emoji-data/refs/tags/v16.0.0/sheet_google_32.png";
+    hash = "sha256-tBfp9s1LvBBla7/V4TtumiVFtV5qTPcxLXW+H6qjSVI=";
   };
   noto-emoji-sheet-64 = fetchurl {
-    url = "https://raw.githubusercontent.com/iamcal/emoji-data/refs/tags/v15.1.2/sheet_google_64.png";
-    hash = "sha256-kZYStR5xAuausSpOD6wJZRJZ1K6nPpweE3aYSgWntS4=";
+    url = "https://raw.githubusercontent.com/iamcal/emoji-data/refs/tags/v16.0.0/sheet_google_64.png";
+    hash = "sha256-eVoMWY0WLJpKriPyGIxge4ybwZEst9hDgkWfjekaOuE=";
   };
 in
 stdenv.mkDerivation rec {
@@ -187,8 +188,8 @@ stdenv.mkDerivation rec {
     nss
     pango
     systemdLibs
-    xorg.libxcb
-    xorg.libxshmfence
+    libxcb
+    libxshmfence
   ];
 
   runtimeDependencies = [
@@ -263,8 +264,7 @@ stdenv.mkDerivation rec {
 
     # Fix the desktop link
     substituteInPlace $out/share/applications/signal-desktop.desktop \
-      --replace-fail "/${bindir}/signal-desktop" ${meta.mainProgram} \
-      --replace-fail "StartupWMClass=Signal" "StartupWMClass=signal"
+      --replace-fail "/${bindir}/signal-desktop" ${meta.mainProgram}
 
     mv $out/share/applications/signal{-desktop,}.desktop
 
@@ -297,9 +297,9 @@ stdenv.mkDerivation rec {
       lib.licenses.mit # emoji-data
     ];
     maintainers = with lib.maintainers; [
+      eclairevoyant
       mic92
       equirosa
-      urandom
       bkchr
       emily
       Gliczy

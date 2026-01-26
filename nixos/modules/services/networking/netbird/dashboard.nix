@@ -135,10 +135,12 @@ in
                 "$AUTH_SUPPORTED_SCOPES"
                 "$NETBIRD_DRAG_QUERY_PARAMS"
                 "$NETBIRD_GOOGLE_ANALYTICS_ID"
+                "$NETBIRD_GOOGLE_TAG_MANAGER_ID"
                 "$NETBIRD_HOTJAR_TRACK_ID"
                 "$NETBIRD_MGMT_API_ENDPOINT"
                 "$NETBIRD_MGMT_GRPC_API_ENDPOINT"
                 "$NETBIRD_TOKEN_SOURCE"
+                "$NETBIRD_WASM_PATH"
                 "$USE_AUTH0"
               ];
             }

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 
   # propagates
   packaging,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "qtpy";
   version = "2.4.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -44,10 +41,10 @@ buildPythonPackage rec {
     "qtpy/tests/test_uic.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Abstraction layer for PyQt5/PyQt6/PySide2/PySide6";
     mainProgram = "qtpy";
     homepage = "https://github.com/spyder-ide/qtpy";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

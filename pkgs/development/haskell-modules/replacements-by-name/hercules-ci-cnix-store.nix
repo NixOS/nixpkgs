@@ -24,8 +24,8 @@
 }:
 mkDerivation {
   pname = "hercules-ci-cnix-store";
-  version = "0.3.7.0";
-  sha256 = "6feba2a6e1a267bc69b67962ed6eaa3510b1ae31c411fdb4e6670763d175d3b1";
+  version = "0.4.1.0";
+  sha256 = "0jy7p69jhv81rg8xikd7smgpg3vwccjzly3k8hs7ipdp2mprwffc";
   setupHaskellDepends = [
     base
     Cabal
@@ -61,5 +61,5 @@ mkDerivation {
   testToolDepends = [ hspec-discover ];
   homepage = "https://docs.hercules-ci.com";
   description = "Haskell bindings for Nix's libstore";
-  license = lib.licenses.asl20;
+  license = lib.licensesSpdx."Apache-2.0";
 }

@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "goose";
-  version = "3.25.0";
+  version = "3.26.0";
 
   src = fetchFromGitHub {
     owner = "pressly";
     repo = "goose";
     rev = "v${version}";
-    hash = "sha256-ouyvxlnJQIMqRZt4nsR01+9p227FGBlHoCMAq6Ufh7A=";
+    hash = "sha256-3F9dnlu7fJ08Pcr64q6V3oRkDpm+N0Ot8drRp9m5YhU=";
   };
 
   proxyVendor = true;
@@ -43,10 +43,10 @@ buildGoModule rec {
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  meta = {
     description = "Database migration tool which supports SQL migrations and Go functions";
     homepage = "https://pressly.github.io/goose/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
     mainProgram = "goose";
   };

@@ -13,13 +13,13 @@ in
 
 llvmPackages.stdenv.mkDerivation {
   pname = "c2ffi-${c2ffiBranch}";
-  version = "0-unstable-2024-04-20";
+  version = "0-unstable-2026-01-04";
 
   src = fetchFromGitHub {
     owner = "rpav";
     repo = "c2ffi";
-    rev = "0de81efb64acc82c08c5eee4a7108ddcb1b00d86";
-    hash = "sha256-q81Vxq/6h/5jgQ1Leq15klN/8L+UiavlxkARGo2SrJ0=";
+    rev = "d6eba0d91dfd58831e5c3133e868c62892595680";
+    hash = "sha256-9bRHsVdj0VOeJyEE9sdN4xKIRSrB05viAOoxjeqWW2Q=";
   };
 
   passthru.updateScript = unstableGitUpdater {
@@ -51,11 +51,11 @@ llvmPackages.stdenv.mkDerivation {
   # undefined reference to `typeinfo for clang::ASTConsumer'
   env.CXXFLAGS = "-fno-rtti";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/rpav/c2ffi";
     description = "LLVM based tool for extracting definitions from C, C++, and Objective C header files for use with foreign function call interfaces";
     mainProgram = "c2ffi";
-    license = licenses.lgpl21Only;
+    license = lib.licenses.lgpl21Only;
     maintainers = [ ];
   };
 }

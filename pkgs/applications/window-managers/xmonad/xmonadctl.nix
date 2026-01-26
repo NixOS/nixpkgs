@@ -25,12 +25,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
-    platforms = platforms.unix;
+  meta = {
+    platforms = lib.platforms.unix;
     description = "Send commands to a running instance of xmonad";
     mainProgram = "xmonadctl";
     homepage = "https://github.com/xmonad/xmonad-contrib";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.ajgrf ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.ajgrf ];
   };
 }

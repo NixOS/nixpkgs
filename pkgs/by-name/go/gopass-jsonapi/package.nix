@@ -1,19 +1,18 @@
 {
   lib,
-  stdenv,
   makeWrapper,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  writableTmpDirAsHomeHook,
   jq,
   gnupg,
   gopass,
-  apple-sdk_14,
+  versionCheckHook,
 }:
 
 let
-
-  # https://github.com/gopasspw/gopass-jsonapi/blob/v1.15.18/internal/jsonapi/manifest/manifest_path_linux.go
+  # https://github.com/gopasspw/gopass-jsonapi/blob/v1.16.0/internal/jsonapi/manifest/manifest_path_linux.go
   manifestPaths = {
     firefox = "$out/lib/mozilla/native-messaging-hosts/com.justwatch.gopass.json";
     chrome = "$out/etc/opt/chrome/native-messaging-hosts/com.justwatch.gopass.json";
@@ -23,43 +22,37 @@ let
     iridium = "$out/etc/iridium-browser/native-messaging-hosts/com.justwatch.gopass.json";
     slimjet = "$out/etc/opt/slimjet/native-messaging-hosts/com.justwatch.gopass.json";
   };
-
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gopass-jsonapi";
-  version = "1.15.18";
+  version = "1.16.1";
 
   src = fetchFromGitHub {
     owner = "gopasspw";
     repo = "gopass-jsonapi";
-    rev = "v${version}";
-    hash = "sha256-TN6GC+T2S3xdUGtQFbsSnFtdb+DsERLjLMCPCb8Q+2c=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JN/SC7lvPVTONNbOUmgu//xK/GaR5Tljxn99Zb1J/kQ=";
   };
 
-  vendorHash = "sha256-PJOGnx0zSxK95bWbweF/VoSfyXkkmru8XYToSh48YOw=";
+  vendorHash = "sha256-Ki0gzhDkoUvgTCN4bYrqvN0u3AgdG22MWxcVHIE9lUQ=";
 
   subPackages = [ "." ];
 
   nativeBuildInputs = [
     installShellFiles
     makeWrapper
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    # For ScreenCaptureKit.h, see https://github.com/NixOS/nixpkgs/pull/358760#discussion_r1858327365
-    apple-sdk_14
+    writableTmpDirAsHomeHook
   ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
-    "-X main.commit=${src.rev}"
+    "-X main.version=${finalAttrs.version}"
+    "-X main.commit=${finalAttrs.src.rev}"
   ];
 
   postInstall = ''
     # Generate native messaging manifests for Chrome and Firefox.
-    export HOME=$(mktemp -d)
     ${gnupg}/bin/gpg --batch --passphrase "" --quick-generate-key "user <user@localhost>"
     ${gopass}/bin/gopass setup --name "user" --email "user@localhost"
 
@@ -70,9 +63,9 @@ buildGoModule rec {
       in
       # The options after `--print=false` are of no effect, but if missing
       # `gopass-jsonapi configure` will ask for them. (`--libpath` and `--global`
-      # are overriden by `--manifest-path`. `--libpath` is only used to
+      # are overridden by `--manifest-path`. `--libpath` is only used to
       # compute Firefox's global manifest path. See
-      # https://github.com/gopasspw/gopass-jsonapi/blob/v1.15.18/setup_others.go#L33-L46)
+      # https://github.com/gopasspw/gopass-jsonapi/blob/v1.16.0/setup_others.go#L33-L46)
       #
       # `gopass-jsonapi configure` ask for confirmation before writing any files,
       # `echo y` gives it.
@@ -102,10 +95,16 @@ buildGoModule rec {
       --prefix PATH : "${gopass.wrapperPath}"
   '';
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckKeepEnvironment = [ "HOME" ];
+
   meta = {
     description = "Enables communication with gopass via JSON messages";
     homepage = "https://github.com/gopasspw/gopass-jsonapi";
-    changelog = "https://github.com/gopasspw/gopass-jsonapi/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/gopasspw/gopass-jsonapi/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       maxhbr
@@ -113,4 +112,4 @@ buildGoModule rec {
     ];
     mainProgram = "gopass-jsonapi";
   };
-}
+})

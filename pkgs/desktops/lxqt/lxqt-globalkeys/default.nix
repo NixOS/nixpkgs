@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lxqt-globalkeys";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "lxqt-globalkeys";
     rev = version;
-    hash = "sha256-xVirPi0UD4lzOA1+Gw7SgUvFRIc1KYFUJtljNA7xAWo=";
+    hash = "sha256-ahRKkWmr6BkSByE5Vm5oqkkgQQ0Hyh4Ka7PYI8Es7AY=";
   };
 
   nativeBuildInputs = [
@@ -42,11 +42,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lxqt/lxqt-globalkeys";
     description = "LXQt service for global keyboard shortcuts registration";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    teams = [ teams.lxqt ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.lxqt ];
   };
 }

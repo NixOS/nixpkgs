@@ -22,7 +22,6 @@ buildNpmPackage rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
   passthru = {
     updateScript = nix-update-script { };
@@ -34,7 +33,7 @@ buildNpmPackage rec {
     homepage = "https://github.com/anweber/httpyac";
     license = lib.licenses.mit;
     mainProgram = "httpyac";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 }

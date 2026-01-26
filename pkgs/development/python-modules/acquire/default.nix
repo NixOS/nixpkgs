@@ -8,7 +8,6 @@
   minio,
   pycryptodome,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-toolbelt,
   rich,
@@ -18,16 +17,14 @@
 
 buildPythonPackage rec {
   pname = "acquire";
-  version = "3.20";
+  version = "3.21";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "acquire";
     tag = version;
-    hash = "sha256-BfY7LKSP82QnRz3QdfUNFvz7epw5RwGT/H2S43MSvVk=";
+    hash = "sha256-CVwPMMQFGqvyxm5tK7JMEX8/dgiF25wwRNaLNfLLWto=";
   };
 
   build-system = [
@@ -65,11 +62,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "acquire" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to quickly gather forensic artifacts from disk images or a live system";
     homepage = "https://github.com/fox-it/acquire";
-    changelog = "https://github.com/fox-it/acquire/releases/tag/${version}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/fox-it/acquire/releases/tag/${src.tag}";
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

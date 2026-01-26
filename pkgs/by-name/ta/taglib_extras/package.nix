@@ -29,15 +29,17 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
+  cmakeFlags = [ (lib.strings.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5") ];
+
   # Workaround for upstream bug https://bugs.kde.org/show_bug.cgi?id=357181
   preConfigure = ''
     sed -i -e 's/STRLESS/VERSION_LESS/g' cmake/modules/FindTaglib.cmake
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Additional taglib plugins";
     mainProgram = "taglib-extras-config";
-    platforms = platforms.unix;
-    license = licenses.lgpl2;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.lgpl2;
   };
 }

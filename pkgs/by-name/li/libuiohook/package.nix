@@ -9,7 +9,14 @@
   libxcb,
   libxkbcommon,
   xinput,
-  xorg,
+  libxt,
+  libxtst,
+  libxi,
+  libxinerama,
+  libxext,
+  libxdmcp,
+  libxau,
+  libxkbfile,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,24 +35,20 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) (
-    [
-      libX11
-      libxcb
-      libxkbcommon
-      xinput
-    ]
-    ++ (with xorg; [
-      libXau
-      libXdmcp
-      libXi
-      libXinerama
-      libXt
-      libXtst
-      libXext
-      libxkbfile
-    ])
-  );
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libX11
+    libxcb
+    libxkbcommon
+    xinput
+    libxau
+    libxdmcp
+    libxi
+    libxinerama
+    libxt
+    libxtst
+    libxext
+    libxkbfile
+  ];
 
   outputs = [
     "out"
@@ -65,12 +68,12 @@ stdenv.mkDerivation rec {
     cp ./uiohook_tests $test/share
   '';
 
-  meta = with lib; {
+  meta = {
     description = "C library to provide global keyboard and mouse hooks from userland";
     homepage = "https://github.com/kwhat/libuiohook";
-    license = licenses.gpl3Only;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ anoa ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ anoa ];
   };
 
   passthru.tests.libuiohook = nixosTests.libuiohook;

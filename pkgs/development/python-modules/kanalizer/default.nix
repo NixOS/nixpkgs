@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "kanalizer";
   version = "0.1.1";
   pyproject = true;
@@ -15,11 +15,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "VOICEVOX";
     repo = "kanalizer";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-6GxTVlc0Ec80LYQoGgLVRVoi05u6vwt5WGkd4UYX2Lg=";
   };
 
-  sourceRoot = "${src.name}/infer";
+  sourceRoot = "${finalAttrs.src.name}/infer";
 
   model =
     let
@@ -32,13 +32,13 @@ buildPythonPackage rec {
 
   prePatch = ''
     substituteInPlace Cargo.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
+      --replace-fail 'version = "0.0.0"' 'version = "${finalAttrs.version}"'
 
     ln -s "$model" crates/kanalizer-rs/models/model-c2k.safetensors
   '';
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit
+    inherit (finalAttrs)
       pname
       version
       src
@@ -68,4 +68,4 @@ buildPythonPackage rec {
       binaryNativeCode # the model file
     ];
   };
-}
+})

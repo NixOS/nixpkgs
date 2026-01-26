@@ -6,11 +6,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "itsycal";
-  version = "0.15.6";
+  version = "0.15.10";
 
   src = fetchzip {
     url = "https://itsycal.s3.amazonaws.com/Itsycal-${finalAttrs.version}.zip";
-    hash = "sha256-e1h81Lsi9mC/3HfUbCk9JkLztGZSVRG6NeQb9voPDk0=";
+    hash = "sha256-6+E/4SbRIChJMc2VDMNYongsAWRtcFxtIj6lvTiexrU=";
   };
 
   installPhase = ''
@@ -22,14 +22,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  passthru = {
+    updateScript = ./update.sh;
+  };
+
   meta = {
     changelog = "https://www.mowglii.com/itsycal/versionhistory.html";
     description = "Tiny menu bar calendar";
     homepage = "https://www.mowglii.com/itsycal/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+      eclairevoyant
       FlameFlag
-      iedame
     ];
     platforms = lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

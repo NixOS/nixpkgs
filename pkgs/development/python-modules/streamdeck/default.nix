@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "streamdeck";
-  version = "0.9.7";
+  version = "0.9.8";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jVhuZihvjuA5rwl55JAmtFq+h/f5M68Vo44jh8HjUI4=";
+    hash = "sha256-rO5K0gekDUzCJW06TCK59ZHjw5DvvlFeQ5zlGLMdASU=";
   };
 
   patches = [
@@ -27,10 +27,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "StreamDeck" ];
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Python library to control the Elgato Stream Deck";
     homepage = "https://github.com/abcminiuser/python-elgato-streamdeck";
-    license = licenses.mit;
-    maintainers = with maintainers; [ majiir ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ majiir ];
   };
 }

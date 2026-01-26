@@ -39,13 +39,13 @@
 
 let
   pname = "pcloud";
-  version = "1.14.16";
-  code = "XZbJvD5ZfXtwygX5xg7F9ywtRup5H5sBvfhy";
+  version = "1.14.18";
+  code = "XZ2gJM5Z8pdJVlCT0s5FI1aTKxxgt48aEr8k";
 
   # Archive link's codes: https://www.pcloud.com/release-notes/linux.html
   src = fetchzip {
     url = "https://api.pcloud.com/getpubzip?code=${code}&filename=pcloud-${version}.zip";
-    hash = "sha256-6K7QPr3MtZvRZt84N8+i8QZBaKHHeTY1bXMdO+wUCr0=";
+    hash = "sha256-YDXmna1SZaDLK1EEdHvWm9+PgYKjYUsa2lvdzFGmyIU=";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -118,12 +118,13 @@ stdenv.mkDerivation {
     ln -snf $out/share/icons/hicolor/512x512/apps/pcloud.png $out/app/pcloud.png
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Secure and simple to use cloud storage for your files; pCloud Drive, Electron Edition";
     homepage = "https://www.pcloud.com/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [ patryk27 ];
+    changelog = "https://www.pcloud.com/release-notes/linux.html";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ patryk27 ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "pcloud";
   };

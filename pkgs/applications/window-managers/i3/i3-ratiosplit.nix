@@ -20,12 +20,12 @@ rustPlatform.buildRustPackage rec {
   # Currently no tests are implemented, so we avoid building the package twice
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Resize newly created windows";
     mainProgram = "i3-ratiosplit";
     homepage = "https://github.com/333fred/i3-ratiosplit";
-    license = licenses.mit;
-    maintainers = with maintainers; [ svrana ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ svrana ];
+    platforms = lib.platforms.linux;
   };
 }

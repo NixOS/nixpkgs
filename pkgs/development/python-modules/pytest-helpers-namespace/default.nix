@@ -30,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_helpers_namespace" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/saltstack/pytest-helpers-namespace";
     description = "PyTest Helpers Namespace";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

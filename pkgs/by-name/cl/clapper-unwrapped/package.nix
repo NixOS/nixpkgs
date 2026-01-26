@@ -18,11 +18,12 @@
   libmicrodns,
   glib-networking,
   libpeas2,
+  graphviz,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clapper-unwrapped";
-  version = "0.8.0";
+  version = "0.10.0";
 
   outputs = [
     "out"
@@ -34,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Rafostar";
     repo = "clapper";
     tag = finalAttrs.version;
-    hash = "sha256-Yb2fWsdd8jhxkGWKanLn7CAuF4MjyQ27XTrO8ja3hfs=";
+    hash = "sha256-WU004/ea3H0eBYd6XPDsEQaoAuShvZzOu3QOweFvdIo=";
   };
 
   nativeBuildInputs = [
@@ -62,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsoup_3
     libmicrodns
     libpeas2
+    graphviz # for feature "pipeline-preview"
   ];
 
   postPatch = ''

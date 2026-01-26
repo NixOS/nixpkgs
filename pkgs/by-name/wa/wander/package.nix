@@ -33,9 +33,9 @@ buildGoModule rec {
       --zsh <($out/bin/wander completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Terminal app/TUI for HashiCorp Nomad";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/robinovitch61/wander";
     mainProgram = "wander";
   };

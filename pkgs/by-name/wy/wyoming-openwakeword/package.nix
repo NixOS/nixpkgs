@@ -1,24 +1,19 @@
 {
   lib,
-  python312Packages,
+  python3Packages,
   fetchFromGitHub,
 }:
 
-let
-  # tensorflow-bin unsupported on Python 3.13
-  python3Packages = python312Packages;
-in
-
 python3Packages.buildPythonApplication rec {
   pname = "wyoming-openwakeword";
-  version = "1.10.0";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "wyoming-openwakeword";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-5suYJ+Z6ofVAysoCdHi5b5K0JTYaqeFZ32Cm76wC5LU=";
+    tag = "v${version}";
+    hash = "sha256-yYDZ1wOhCTdYGeRmtbOgx5/zkF0Baxmha7eO/i0p49g=";
   };
 
   build-system = with python3Packages; [
@@ -29,12 +24,8 @@ python3Packages.buildPythonApplication rec {
     "wyoming"
   ];
 
-  pythonRemoveDeps = [
-    "tflite-runtime-nightly"
-  ];
-
   dependencies = with python3Packages; [
-    tensorflow-bin
+    pyopen-wakeword
     wyoming
   ];
 

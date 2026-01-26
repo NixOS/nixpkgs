@@ -9,7 +9,13 @@
   gnutar,
 
   ### Libs
-  xorg,
+  libxrandr,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcomposite,
+  libx11,
+  libxcb,
   libxkbcommon,
   glib,
   nss,
@@ -28,11 +34,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "deezer-enhanced";
-  version = "1.3.0";
+  version = "1.4.2";
 
   src = fetchurl {
     url = "https://github.com/duzda/deezer-enhanced/releases/download/v${version}/deezer-enhanced_${version}_amd64.deb";
-    hash = "sha256-zHgrLzPByAPww0aSEDETsddX71O/GU80AZH729YjQQ0=";
+    hash = "sha256-PRq5R0AXCsW+cEuf1EU+o7g6oa8K5jGAphoNC8cSNFw=";
   };
 
   nativeBuildInputs = [
@@ -47,13 +53,13 @@ stdenvNoCC.mkDerivation rec {
   buildInputs = [
 
     ### Xorg libs
-    xorg.libX11
-    xorg.libXcomposite
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXrandr
-    xorg.libxcb
+    libx11
+    libxcomposite
+    libxdamage
+    libxext
+    libxfixes
+    libxrandr
+    libxcb
 
     ### Systemd libs
     systemdLibs
@@ -90,13 +96,13 @@ stdenvNoCC.mkDerivation rec {
       --set LD_LIBRARY_PATH ${
         lib.makeLibraryPath [
           ### Xorg libs
-          xorg.libX11
-          xorg.libXcomposite
-          xorg.libXdamage
-          xorg.libXext
-          xorg.libXfixes
-          xorg.libXrandr
-          xorg.libxcb
+          libx11
+          libxcomposite
+          libxdamage
+          libxext
+          libxfixes
+          libxrandr
+          libxcb
 
           ### Systemd libs
           systemdLibs

@@ -3,7 +3,7 @@
   feature,
 }:
 
-pkgs.runCommandNoCC "${feature}-present-structured"
+pkgs.runCommand "${feature}-present-structured"
   {
     __structuredAttrs = true;
     requiredSystemFeatures = [ feature ];

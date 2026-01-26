@@ -10,14 +10,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-show-asm";
-  version = "0.2.52";
+  version = "0.2.55";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-tQX2A09tnQwq3rr/eQUfTHma4JMpGC89Loy2lH4bAEk=";
+    hash = "sha256-ZSPlFDnLVQp1uz1VrbXmw8bAM1/ZWojAv7PSFG+k2Pw=";
   };
 
-  cargoHash = "sha256-DsK2eKr2eimkwLURij2n7hdOPej6NSi5hNOaLhKRPbA=";
+  cargoHash = "sha256-M4nn9MnFtyHh9QX12CHGGOL4gkTy9lozd87Rph4+OBA=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -46,9 +46,9 @@ rustPlatform.buildRustPackage rec {
       mit
     ];
     maintainers = with lib.maintainers; [
-      figsoda
       oxalica
       matthiasbeyer
+      chrjabs
     ];
     mainProgram = "cargo-asm";
   };

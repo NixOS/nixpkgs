@@ -5,11 +5,13 @@
   makeWrapper,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   autoPatchelfHook,
   cacert,
   llvmPackages,
   musl,
-  xorg,
+  libx11,
   jq,
   moreutils,
   nix-update-script,
@@ -17,24 +19,25 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wrangler";
-  version = "4.38.0";
+  version = "4.60.0";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "workers-sdk";
     rev = "wrangler@${finalAttrs.version}";
-    hash = "sha256-4avSdp68ecDnY5ZhtVCjq9+u8bmNRpq2XTbnapmY+S0=";
+    hash = "sha256-lRdQrUgEr7KS/05BXZW7h3JS91d3gM8w+RLlaLC98RU=";
   };
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
       src
       postPatch
       ;
+    pnpm = pnpm_9;
     fetcherVersion = 2;
-    hash = "sha256-oavyEIDsGCsX0cZu0fI3vpjFc/BwHNre9hNantu/wCk=";
+    hash = "sha256-r3J4xNZJlWmNtnpLfx/eKK3TDKcrjZmR7oxp6TDuwxg=";
   };
   # pnpm packageManager version in workers-sdk root package.json may not match nixpkgs
   postPatch = ''
@@ -53,13 +56,14 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux) [
     musl # not used, but requires extra work to remove
-    xorg.libX11 # for the clipboardy package
+    libx11 # for the clipboardy package
   ];
 
   nativeBuildInputs = [
     makeWrapper
     nodejs
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_9
     jq
     moreutils
   ]
@@ -71,6 +75,9 @@ stdenv.mkDerivation (finalAttrs: {
   # so I simply removed it
   postBuild = ''
     mv packages/vitest-pool-workers packages/~vitest-pool-workers
+
+    NODE_ENV="production" pnpm --filter unenv-preset run build
+    NODE_ENV="production" pnpm --filter workers-utils run build
     NODE_ENV="production" pnpm --filter workers-shared run build
     NODE_ENV="production" pnpm --filter miniflare run build
     NODE_ENV="production" pnpm --filter wrangler run build
@@ -87,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
     mkdir -p $out/{bin,lib}
     mv packages/~vitest-pool-workers packages/vitest-pool-workers
-    cp -r {fixtures,packages,node_modules,vendor} $out/lib
+    cp -r {fixtures,packages,node_modules} $out/lib
     cp -r tools $out/lib/tools
     rm -rf node_modules/typescript node_modules/eslint node_modules/prettier node_modules/bin node_modules/.bin node_modules/**/bin node_modules/**/.bin
     rm -rf $out/lib/**/bin $out/lib/**/.bin

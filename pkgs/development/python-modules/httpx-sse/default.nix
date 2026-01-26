@@ -9,18 +9,19 @@
   setuptools-scm,
   setuptools,
   sse-starlette,
+  starlette,
 }:
 
 buildPythonPackage rec {
   pname = "httpx-sse";
-  version = "0.4.1";
+  version = "0.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "florimondmanca";
     repo = "httpx-sse";
     tag = version;
-    hash = "sha256-bSozSZmbRU5sc3jvVUOAXQWVBA8GhzM2R26uPdabS+w=";
+    hash = "sha256-6DPbfJlbLmws9GkQ2zePGp4g0at4M32vrIDtmUPDkX4=";
   };
 
   build-system = [
@@ -37,13 +38,14 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytestCheckHook
     sse-starlette
+    starlette
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Consume Server-Sent Event (SSE) messages with HTTPX";
     homepage = "https://github.com/florimondmanca/httpx-sse";
     changelog = "https://github.com/florimondmanca/httpx-sse/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ natsukium ];
   };
 }

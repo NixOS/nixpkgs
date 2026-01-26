@@ -13,14 +13,14 @@ in
 python.pkgs.toPythonModule (
   python.pkgs.buildPythonApplication rec {
     pname = "searxng";
-    version = "0-unstable-2025-09-11";
+    version = "0-unstable-2026-01-11";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "searxng";
       repo = "searxng";
-      rev = "7c1ebc01489a5b96d4abb0ad9c1180701eb4456c";
-      hash = "sha256-nOIt4PyO6DALz7gw5Hh1w1ZDyEAsQAVp4O/eFOLYZ0A=";
+      rev = "cf74e1d9e9ad662aef450ddd79aedee43554dc3c";
+      hash = "sha256-hKnfZBPr8rJyZAYBtVXpyzXwBQqg2DPFwqzH08qCITs=";
     };
 
     nativeBuildInputs = with python.pkgs; [ pythonRelaxDepsHook ];
@@ -31,6 +31,8 @@ python.pkgs.toPythonModule (
       "flask-babel"
       "httpx-socks"
       "lxml"
+      "markdown-it-py"
+      "msgspec"
       "typer-slim"
       "whitenoise"
     ];
@@ -60,9 +62,7 @@ python.pkgs.toPythonModule (
       with python.pkgs;
       [
         babel
-        brotli
         certifi
-        cryptography
         fasttext-predict
         flask
         flask-babel
@@ -76,13 +76,14 @@ python.pkgs.toPythonModule (
         pygments
         python-dateutil
         pyyaml
-        setproctitle
+        sniffio
         typer-slim
-        uvloop
+        typing-extensions
         valkey
         whitenoise
       ]
       ++ httpx.optional-dependencies.http2
+      ++ httpx.optional-dependencies.socks
       ++ httpx-socks.optional-dependencies.asyncio;
 
     # tests try to connect to network
@@ -104,12 +105,12 @@ python.pkgs.toPythonModule (
       updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
     };
 
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/searxng/searxng";
       description = "Fork of Searx, a privacy-respecting, hackable metasearch engine";
-      license = licenses.agpl3Plus;
+      license = lib.licenses.agpl3Plus;
       mainProgram = "searxng-run";
-      maintainers = with maintainers; [
+      maintainers = with lib.maintainers; [
         SuperSandro2000
         _999eagle
       ];

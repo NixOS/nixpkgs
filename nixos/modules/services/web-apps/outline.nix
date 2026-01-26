@@ -679,7 +679,7 @@ in
         description = "Outline wiki and knowledge base";
         wantedBy = [ "multi-user.target" ];
         after = [
-          "networking.target"
+          "network.target"
         ]
         ++ lib.optional (cfg.databaseUrl == "local") "postgresql.target"
         ++ lib.optional (cfg.redisUrl == "local") "redis-outline.service";
@@ -696,12 +696,12 @@ in
 
             REDIS_URL = if cfg.redisUrl == "local" then localRedisUrl else cfg.redisUrl;
             URL = cfg.publicUrl;
-            PORT = builtins.toString cfg.port;
+            PORT = toString cfg.port;
 
             CDN_URL = cfg.cdnUrl;
-            FORCE_HTTPS = builtins.toString cfg.forceHttps;
-            ENABLE_UPDATES = builtins.toString cfg.enableUpdateCheck;
-            WEB_CONCURRENCY = builtins.toString cfg.concurrency;
+            FORCE_HTTPS = toString cfg.forceHttps;
+            ENABLE_UPDATES = toString cfg.enableUpdateCheck;
+            WEB_CONCURRENCY = toString cfg.concurrency;
             DEBUG = cfg.debugOutput;
             GOOGLE_ANALYTICS_ID = lib.optionalString (cfg.googleAnalyticsId != null) cfg.googleAnalyticsId;
             SENTRY_DSN = lib.optionalString (cfg.sentryDsn != null) cfg.sentryDsn;
@@ -709,13 +709,13 @@ in
             TEAM_LOGO = lib.optionalString (cfg.logo != null) cfg.logo;
             DEFAULT_LANGUAGE = cfg.defaultLanguage;
 
-            RATE_LIMITER_ENABLED = builtins.toString cfg.rateLimiter.enable;
-            RATE_LIMITER_REQUESTS = builtins.toString cfg.rateLimiter.requests;
-            RATE_LIMITER_DURATION_WINDOW = builtins.toString cfg.rateLimiter.durationWindow;
+            RATE_LIMITER_ENABLED = toString cfg.rateLimiter.enable;
+            RATE_LIMITER_REQUESTS = toString cfg.rateLimiter.requests;
+            RATE_LIMITER_DURATION_WINDOW = toString cfg.rateLimiter.durationWindow;
 
             FILE_STORAGE = cfg.storage.storageType;
-            FILE_STORAGE_IMPORT_MAX_SIZE = builtins.toString cfg.maximumImportSize;
-            FILE_STORAGE_UPLOAD_MAX_SIZE = builtins.toString cfg.storage.uploadMaxSize;
+            FILE_STORAGE_IMPORT_MAX_SIZE = toString cfg.maximumImportSize;
+            FILE_STORAGE_UPLOAD_MAX_SIZE = toString cfg.storage.uploadMaxSize;
             FILE_STORAGE_LOCAL_ROOT_DIR = cfg.storage.localRootDir;
           }
 
@@ -724,7 +724,7 @@ in
             AWS_REGION = cfg.storage.region;
             AWS_S3_UPLOAD_BUCKET_URL = cfg.storage.uploadBucketUrl;
             AWS_S3_UPLOAD_BUCKET_NAME = cfg.storage.uploadBucketName;
-            AWS_S3_FORCE_PATH_STYLE = builtins.toString cfg.storage.forcePathStyle;
+            AWS_S3_FORCE_PATH_STYLE = toString cfg.storage.forcePathStyle;
             AWS_S3_ACL = cfg.storage.acl;
           })
 
@@ -757,7 +757,7 @@ in
 
           (lib.mkIf (cfg.slackIntegration != null) {
             SLACK_APP_ID = cfg.slackIntegration.appId;
-            SLACK_MESSAGE_ACTIONS = builtins.toString cfg.slackIntegration.messageActions;
+            SLACK_MESSAGE_ACTIONS = toString cfg.slackIntegration.messageActions;
           })
 
           (lib.mkIf (cfg.discordAuthentication != null) {
@@ -768,12 +768,12 @@ in
 
           (lib.mkIf (cfg.smtp != null) {
             SMTP_HOST = cfg.smtp.host;
-            SMTP_PORT = builtins.toString cfg.smtp.port;
+            SMTP_PORT = toString cfg.smtp.port;
             SMTP_USERNAME = cfg.smtp.username;
             SMTP_FROM_EMAIL = cfg.smtp.fromEmail;
             SMTP_REPLY_EMAIL = cfg.smtp.replyEmail;
             SMTP_TLS_CIPHERS = cfg.smtp.tlsCiphers;
-            SMTP_SECURE = builtins.toString cfg.smtp.secure;
+            SMTP_SECURE = toString cfg.smtp.secure;
           })
         ];
 
@@ -788,48 +788,62 @@ in
         '';
 
         script = ''
-          export SECRET_KEY="$(head -n1 ${lib.escapeShellArg cfg.secretKeyFile})"
-          export UTILS_SECRET="$(head -n1 ${lib.escapeShellArg cfg.utilsSecretFile})"
+          SECRET_KEY="$(head -n1 ${lib.escapeShellArg cfg.secretKeyFile})"
+          export SECRET_KEY
+          UTILS_SECRET="$(head -n1 ${lib.escapeShellArg cfg.utilsSecretFile})"
+          export UTILS_SECRET
           ${lib.optionalString (cfg.storage.storageType == "s3") ''
-            export AWS_SECRET_ACCESS_KEY="$(head -n1 ${lib.escapeShellArg cfg.storage.secretKeyFile})"
+            AWS_SECRET_ACCESS_KEY="$(head -n1 ${lib.escapeShellArg cfg.storage.secretKeyFile})"
+            export AWS_SECRET_ACCESS_KEY
           ''}
           ${lib.optionalString (cfg.slackAuthentication != null) ''
-            export SLACK_CLIENT_SECRET="$(head -n1 ${lib.escapeShellArg cfg.slackAuthentication.secretFile})"
+            SLACK_CLIENT_SECRET="$(head -n1 ${lib.escapeShellArg cfg.slackAuthentication.secretFile})"
+            export SLACK_CLIENT_SECRET
           ''}
           ${lib.optionalString (cfg.googleAuthentication != null) ''
-            export GOOGLE_CLIENT_SECRET="$(head -n1 ${lib.escapeShellArg cfg.googleAuthentication.clientSecretFile})"
+            GOOGLE_CLIENT_SECRET="$(head -n1 ${lib.escapeShellArg cfg.googleAuthentication.clientSecretFile})"
+            export GOOGLE_CLIENT_SECRET
           ''}
           ${lib.optionalString (cfg.azureAuthentication != null) ''
-            export AZURE_CLIENT_SECRET="$(head -n1 ${lib.escapeShellArg cfg.azureAuthentication.clientSecretFile})"
+            AZURE_CLIENT_SECRET="$(head -n1 ${lib.escapeShellArg cfg.azureAuthentication.clientSecretFile})"
+            export AZURE_CLIENT_SECRET
           ''}
           ${lib.optionalString (cfg.oidcAuthentication != null) ''
-            export OIDC_CLIENT_SECRET="$(head -n1 ${lib.escapeShellArg cfg.oidcAuthentication.clientSecretFile})"
+            OIDC_CLIENT_SECRET="$(head -n1 ${lib.escapeShellArg cfg.oidcAuthentication.clientSecretFile})"
+            export OIDC_CLIENT_SECRET
           ''}
           ${lib.optionalString (cfg.discordAuthentication != null) ''
-            export DISCORD_CLIENT_SECRET="$(head -n1 ${lib.escapeShellArg cfg.discordAuthentication.clientSecretFile})"
+            DISCORD_CLIENT_SECRET="$(head -n1 ${lib.escapeShellArg cfg.discordAuthentication.clientSecretFile})"
+            export DISCORD_CLIENT_SECRET
           ''}
           ${lib.optionalString (cfg.sslKeyFile != null) ''
-            export SSL_KEY="$(head -n1 ${lib.escapeShellArg cfg.sslKeyFile})"
+            SSL_KEY="$(head -n1 ${lib.escapeShellArg cfg.sslKeyFile})"
+            export SSL_KEY
           ''}
           ${lib.optionalString (cfg.sslCertFile != null) ''
-            export SSL_CERT="$(head -n1 ${lib.escapeShellArg cfg.sslCertFile})"
+            SSL_CERT="$(head -n1 ${lib.escapeShellArg cfg.sslCertFile})"
+            export SSL_CERT
           ''}
           ${lib.optionalString (cfg.slackIntegration != null) ''
-            export SLACK_VERIFICATION_TOKEN="$(head -n1 ${lib.escapeShellArg cfg.slackIntegration.verificationTokenFile})"
+            SLACK_VERIFICATION_TOKEN="$(head -n1 ${lib.escapeShellArg cfg.slackIntegration.verificationTokenFile})"
+            export SLACK_VERIFICATION_TOKEN
           ''}
           ${lib.optionalString (cfg.smtp != null) ''
-            export SMTP_PASSWORD="$(head -n1 ${lib.escapeShellArg cfg.smtp.passwordFile})"
+            SMTP_PASSWORD="$(head -n1 ${lib.escapeShellArg cfg.smtp.passwordFile})"
+            export SMTP_PASSWORD
           ''}
 
           ${
             if (cfg.databaseUrl == "local") then
               ''
-                export DATABASE_URL=${lib.escapeShellArg localPostgresqlUrl}
+                DATABASE_URL=${lib.escapeShellArg localPostgresqlUrl}
+                export DATABASE_URL
                 export PGSSLMODE=disable
               ''
             else
               ''
-                export DATABASE_URL=${lib.escapeShellArg cfg.databaseUrl}
+                DATABASE_URL=${lib.escapeShellArg cfg.databaseUrl}
+                export DATABASE_URL
               ''
           }
 

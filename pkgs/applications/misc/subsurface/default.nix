@@ -30,14 +30,14 @@
 }:
 
 let
-  version = "6.0.5436";
+  version = "6.0.5504";
 
   subsurfaceSrc = (
     fetchFromGitHub {
       owner = "Subsurface";
       repo = "subsurface";
-      rev = "2d3f73c2e1dd5d1f42419708866e40d973989d24";
-      hash = "sha256-dB7KKXbQOmyzlzAKDlFTGJDa/XIKQeKsiCt+dPeP9EU=";
+      rev = "28ad7132d2283a3fc06872de6526bc19c077d203";
+      hash = "sha256-PQwBfm4oPGLU1HRFIcbgTYOYLeVhmEBgN5U8fnUMMlQ=";
       fetchSubmodules = true;
     }
   );
@@ -64,12 +64,12 @@ let
 
     enableParallelBuilding = true;
 
-    meta = with lib; {
+    meta = {
       homepage = "https://www.libdivecomputer.org";
       description = "Cross-platform and open source library for communication with dive computers from various manufacturers";
-      maintainers = with maintainers; [ mguentner ];
-      license = licenses.lgpl21;
-      platforms = platforms.all;
+      maintainers = with lib.maintainers; [ mguentner ];
+      license = lib.licenses.lgpl21;
+      platforms = lib.platforms.all;
     };
   };
 
@@ -103,12 +103,12 @@ let
       mv lib $out/
     '';
 
-    meta = with lib; {
+    meta = {
       inherit (src.meta) homepage;
       description = "QtLocation plugin for Google maps tile API";
-      maintainers = with maintainers; [ orivej ];
-      license = licenses.mit;
-      platforms = platforms.all;
+      maintainers = [ ];
+      license = lib.licenses.mit;
+      platforms = lib.platforms.all;
     };
   };
 
@@ -177,7 +177,7 @@ stdenv.mkDerivation {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Divelog program";
     mainProgram = "subsurface";
     longDescription = ''
@@ -187,8 +187,8 @@ stdenv.mkDerivation {
       names of other divers, and lets users rate dives and provide additional notes.
     '';
     homepage = "https://subsurface-divelog.org";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ mguentner ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ mguentner ];
+    platforms = lib.platforms.all;
   };
 }

@@ -23,6 +23,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/antonWetzel/prettypst";
     license = lib.licenses.mit;
     mainProgram = "prettypst";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -31,15 +31,15 @@ lib.checkListOfEnum "${pname}: color variants"
   colorVariants
 
   stdenvNoCC.mkDerivation
-  rec {
+  {
     inherit pname;
-    version = "0-unstable-2023-05-13";
+    version = "0-unstable-2025-11-14";
 
     src = fetchFromGitHub {
       owner = "yeyushengfan258";
       repo = "reversal-icon-theme";
-      rev = "bdae2ea365731b25a869fc2c8c6a1fb849eaf5b2";
-      hash = "sha256-Cd+1ggyS+Y2Sk8w5zifc4IFOwbFrbjL6S6awES/W0EE=";
+      rev = "26b97f00640cd9eaeb8f196eda3a8d298158a08f";
+      hash = "sha256-ahnp25wTCTrOtJUbAIv7vvVC2am+idEokoRomRe5aKU=";
     };
 
     nativeBuildInputs = [
@@ -73,7 +73,7 @@ lib.checkListOfEnum "${pname}: color variants"
       mkdir -p $out/share/icons
 
       name= ./install.sh \
-        ${if allColorVariants then "-a" else builtins.toString colorVariants} \
+        ${if allColorVariants then "-a" else toString colorVariants} \
         -d $out/share/icons
 
       rm $out/share/icons/*/{AUTHORS,COPYING}
@@ -85,11 +85,11 @@ lib.checkListOfEnum "${pname}: color variants"
 
     passthru.updateScript = gitUpdater { };
 
-    meta = with lib; {
+    meta = {
       description = "Colorful Design Rectangle icon theme";
       homepage = "https://github.com/yeyushengfan258/Reversal-icon-theme";
-      license = licenses.gpl3Plus;
-      platforms = platforms.all;
-      maintainers = with maintainers; [ romildo ];
+      license = lib.licenses.gpl3Plus;
+      platforms = lib.platforms.all;
+      maintainers = with lib.maintainers; [ romildo ];
     };
   }

@@ -9,7 +9,7 @@
   libnotify,
   librsvg,
   python3Packages,
-  udisks2,
+  udisks,
   wrapGAppsHook3,
   testers,
   udiskie,
@@ -17,15 +17,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "udiskie";
-  version = "2.5.8";
+  version = "2.6.1";
 
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "coldfix";
     repo = "udiskie";
-    rev = "v${version}";
-    hash = "sha256-FFp1+7cCfkMI74rEAez8aJsaplEUa3madoSx+lwplzE=";
+    tag = "v${version}";
+    hash = "sha256-1/qQS2bAxoHbWWmMkDoV5QNSUVYCQfer6lWM9ptG+Vk=";
   };
 
   patches = [
@@ -54,7 +54,7 @@ python3Packages.buildPythonApplication rec {
     libappindicator-gtk3
     libnotify
     librsvg # SVG icons
-    udisks2
+    udisks
   ];
 
   dependencies = with python3Packages; [
@@ -88,9 +88,9 @@ python3Packages.buildPythonApplication rec {
     package = udiskie;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/coldfix/udiskie";
-    changelog = "https://github.com/coldfix/udiskie/blob/${src.rev}/CHANGES.rst";
+    changelog = "https://github.com/coldfix/udiskie/blob/${src.tag}/CHANGES.rst";
     description = "Removable disk automounter for udisks";
     longDescription = ''
       udiskie is a udisks2 front-end that allows to manage removeable media such
@@ -106,7 +106,7 @@ python3Packages.buildPythonApplication rec {
       - loop devices (mounting iso archives)
       - password caching (requires python keyutils 0.3)
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

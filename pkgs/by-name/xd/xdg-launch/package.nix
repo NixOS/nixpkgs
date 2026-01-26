@@ -9,7 +9,8 @@
   perl,
   pkg-config,
   glib,
-  xorg,
+  libxrandr,
+  libx11,
 }:
 stdenv.mkDerivation rec {
   pname = "xdg-launch";
@@ -34,8 +35,8 @@ stdenv.mkDerivation rec {
   preConfigure = "./autogen.sh";
 
   buildInputs = [
-    xorg.libX11
-    xorg.libXrandr
+    libx11
+    libxrandr
     glib # can be optional
   ];
 
@@ -48,11 +49,11 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/bbidulock/xdg-launch";
     description = "Command line XDG compliant launcher and tools";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.ck3d ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.ck3d ];
   };
 }

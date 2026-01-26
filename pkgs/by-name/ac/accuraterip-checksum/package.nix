@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     description = "Program for computing the AccurateRip checksum of singletrack WAV files";
     homepage = "https://github.com/leo-bogert/accuraterip-checksum";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "accuraterip-checksum";
   };

@@ -14,24 +14,22 @@
   pytest-cov-stub,
   pytest-timeout,
   pytestCheckHook,
-  pythonOlder,
+  python-jsonpath,
   respx,
   syrupy,
   tenacity,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyenphase";
-  version = "2.3.1";
+  version = "2.4.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "pyenphase";
     repo = "pyenphase";
-    tag = "v${version}";
-    hash = "sha256-Z6txaTkIkUTYWVWbsmvoI/huDTZKX5DxePqM5rsmIWY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JJtkfN3udslcNYMXGGRXjyPqP3hjix9bg7GcGNOoMbM=";
   };
 
   pythonRelaxDeps = [ "tenacity" ];
@@ -54,6 +52,7 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytest-timeout
     pytestCheckHook
+    python-jsonpath
     respx
     syrupy
   ];
@@ -65,11 +64,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyenphase" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to control enphase envoy";
     homepage = "https://github.com/pyenphase/pyenphase";
-    changelog = "https://github.com/pyenphase/pyenphase/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/pyenphase/pyenphase/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

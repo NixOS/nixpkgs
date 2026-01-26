@@ -26,7 +26,7 @@
 }:
 buildPythonPackage rec {
   pname = "nanobind";
-  version = "2.9.2";
+  version = "2.10.2";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     repo = "nanobind";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-cC+sf2FUm1jdGMRdDoaQK8rjUVkWjn/53c1HQ5gsUWs=";
+    hash = "sha256-io44YhN+VpfHFWyvvLWSanRgbzA0whK8WlDNRi3hahU=";
   };
 
   build-system = [

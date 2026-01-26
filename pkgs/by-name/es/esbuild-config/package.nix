@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-OQ7zlcWVu3sS/u0B+Ew6VUS4zxntKU2LF63ZcPRUKW0=";
 
-  meta = with lib; {
+  meta = {
     description = "Config files for esbuild";
     homepage = "https://github.com/bpierre/esbuild-config";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "esbuild-config";
   };
 }

@@ -29,20 +29,21 @@
 assert (!blas.isILP64) && (!lapack.isILP64);
 assert (blas.isILP64 == arpack.isILP64);
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "octopus";
-  version = "16.0";
+  version = "16.2";
 
   src = fetchFromGitLab {
     owner = "octopus-code";
     repo = "octopus";
-    rev = version;
-    hash = "sha256-sByiRTgAntJtSeL4h+49Mi9Rcxw2wK/BvXvsePa77HE=";
+    tag = finalAttrs.version;
+    hash = "sha256-L97igB+bdZ19zpbffHi8DVSJXKtUyDqauUB+l5zzFwQ=";
   };
 
-  patches = [
-    # Discover all MPI languages components to avoid scalpack discovery failure
-    ./scalapack-mpi-alias.patch
+  outputs = [
+    "out"
+    "dev"
+    "testsuite"
   ];
 
   nativeBuildInputs = [
@@ -78,11 +79,11 @@ stdenv.mkDerivation rec {
     (lib.cmakeBool "OCTOPUS_MPI" enableMpi)
     (lib.cmakeBool "OCTOPUS_ScaLAPACK" enableMpi)
     (lib.cmakeBool "OCTOPUS_OpenMP" true)
+    (lib.cmakeBool "OCTOPUS_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
   ];
 
-  nativeCheckInputs = lib.optional.enableMpi mpi;
-  doCheck = false;
-  checkTarget = "check-short";
+  nativeCheckInputs = lib.optional enableMpi mpi;
+  doCheck = false; # requires installed data
 
   postPatch = ''
     patchShebangs ./
@@ -92,15 +93,20 @@ stdenv.mkDerivation rec {
     patchShebangs testsuite/oct-run_testsuite.sh
   '';
 
+  postInstall = ''
+    mkdir -p $testsuite
+    moveToOutput share/octopus/testsuite $testsuite
+  '';
+
   enableParallelBuilding = true;
 
   passthru = lib.attrsets.optionalAttrs enableMpi { inherit mpi; };
 
-  meta = with lib; {
+  meta = {
     description = "Real-space time dependent density-functional theory code";
     homepage = "https://octopus-code.org";
-    maintainers = with maintainers; [ markuskowa ];
-    license = with licenses; [
+    maintainers = with lib.maintainers; [ markuskowa ];
+    license = with lib.licenses; [
       gpl2Only
       asl20
       lgpl3Plus
@@ -108,4 +114,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

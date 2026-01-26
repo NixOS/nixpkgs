@@ -19,7 +19,8 @@
   tk,
   gnome2,
   gd,
-  xorg,
+  libxrender,
+  libxmu,
 }:
 
 stdenv.mkDerivation rec {
@@ -43,7 +44,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk2
     dbus
-    xorg.libXrender
+    libxrender
     freetype
     fontconfig
     libGLU
@@ -53,18 +54,18 @@ stdenv.mkDerivation rec {
     tk
     gnome2.gtkglext
     gd
-    xorg.libXmu
+    libxmu
   ];
 
   configureFlags = [
     "--disable-update-desktop-database"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Printed Circuit Board editor";
     homepage = "https://sourceforge.net/projects/pcb/";
-    maintainers = with maintainers; [ mog ];
-    platforms = platforms.linux;
-    license = licenses.gpl2;
+    maintainers = with lib.maintainers; [ mog ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2;
   };
 }

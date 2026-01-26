@@ -7,7 +7,6 @@
   curl,
   fetchFromGitHub,
   ffmpeg,
-  freeimage,
   gcc-unwrapped,
   icu,
   libmediainfo,
@@ -19,7 +18,6 @@
   pkg-config,
   readline,
   sqlite,
-  withFreeImage ? false, # default to false because freeimage is insecure
 }:
 
 let
@@ -71,8 +69,7 @@ stdenv.mkDerivation {
       pcre-cpp
       readline
       sqlite
-    ]
-    ++ lib.optionals withFreeImage [ freeimage ];
+    ];
 
   configureFlags = [
     "--disable-examples"
@@ -88,8 +85,8 @@ stdenv.mkDerivation {
     "--with-readline"
     "--with-sodium"
     "--with-termcap"
-  ]
-  ++ (if withFreeImage then [ "--with-freeimage" ] else [ "--without-freeimage" ]);
+    "--without-freeimage"
+  ];
 
   # On darwin, some macros defined in AssertMacros.h (from apple-sdk) are conflicting.
   postConfigure = ''

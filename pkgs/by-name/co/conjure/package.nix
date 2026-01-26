@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
   pname = "conjure";
   version = "0.1.2";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "nate-xyz";
@@ -56,7 +56,7 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Magically transform your images";
     mainProgram = "conjure";
     longDescription = ''
@@ -67,7 +67,7 @@ python3Packages.buildPythonApplication rec {
       bindings from Wand.
     '';
     homepage = "https://github.com/nate-xyz/conjure";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ sund3RRR ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ sund3RRR ];
   };
 }

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "autotrace";
     repo = "autotrace";
-    rev = version;
+    tag = version;
     hash = "sha256-PbEK5+7jcYIwYmgxBIOpNyj2KJNPfqKBKb+wYwoLKSo=";
   };
 
@@ -38,12 +38,12 @@ stdenv.mkDerivation rec {
     pstoedit
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/autotrace/autotrace";
     description = "Utility for converting bitmap into vector graphics";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ hodapp ];
-    license = licenses.gpl2;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ hodapp ];
+    license = lib.licenses.gpl2;
     mainProgram = "autotrace";
   };
 }

@@ -16,7 +16,7 @@
   unstableGitUpdater,
   wayland,
   wayland-protocols,
-  wlroots,
+  wlroots_0_19,
   xwayland,
 }:
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     udev
     wayland
     wayland-protocols
-    wlroots
+    wlroots_0_19
     xwayland
   ];
 
@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = with lib.licenses; [ bsd3 ];
     mainProgram = "wio";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     inherit (wayland.meta) platforms;
   };
 })

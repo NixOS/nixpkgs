@@ -8,6 +8,8 @@
   nodejs,
   pkg-config,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   wails,
   webkitgtk_4_1,
   makeDesktopItem,
@@ -16,20 +18,20 @@
 
 let
   pname = "gui-for-clash";
-  version = "1.9.10";
+  version = "1.18.0";
 
   src = fetchFromGitHub {
     owner = "GUI-for-Cores";
     repo = "GUI.for.Clash";
     tag = "v${version}";
-    hash = "sha256-odASuy0zaXf6vvd5CRVtuuVIX1EgEO7GsMgXWUR+fxk=";
+    hash = "sha256-M5M3o7RIXszMW2KGv2UDyR002dNOL3FFj0zM4w4D+U0=";
   };
 
   metaCommon = {
     homepage = "https://github.com/GUI-for-Cores/GUI.for.Clash";
     hydraPlatforms = [ ]; # https://gui-for-cores.github.io/guide/#note
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 
   frontend = stdenv.mkDerivation (finalAttrs: {
@@ -39,18 +41,20 @@ let
 
     nativeBuildInputs = [
       nodejs
-      pnpm_10.configHook
+      pnpmConfigHook
+      pnpm_10
     ];
 
-    pnpmDeps = pnpm_10.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs)
         pname
         version
         src
         sourceRoot
         ;
+      pnpm = pnpm_10;
       fetcherVersion = 2;
-      hash = "sha256-AuBUneWOR9oCuj811iCB3l5dlpeKhxt6KrF7KDs27a0=";
+      hash = "sha256-AHGPAYw/6FRKO2FY1J84NrLcp+bZOclOF6UFY61npFI=";
     };
 
     buildPhase = ''
@@ -80,13 +84,7 @@ buildGoModule {
 
   patches = [ ./xdg-path-and-restart-patch.patch ];
 
-  # As we need the $out reference, we can't use `replaceVars` here.
-  postPatch = ''
-    substituteInPlace bridge/bridge.go \
-      --subst-var out
-  '';
-
-  vendorHash = "sha256-UArCB5U2bF5HXFDU1oCfm+SaURe6e9gyCx+UjtWI/ug=";
+  vendorHash = "sha256-xQ6TeVoBe8906+/5X1q4e5QHVo+KHymB+yoxM+Obk18=";
 
   nativeBuildInputs = [
     autoPatchelfHook

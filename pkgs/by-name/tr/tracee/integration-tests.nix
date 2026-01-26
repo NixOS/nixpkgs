@@ -3,9 +3,9 @@
   tracee,
   makeWrapper,
 }:
-tracee.overrideAttrs (oa: {
-  pname = oa.pname + "-integration";
-  postPatch = oa.postPatch or "" + ''
+tracee.overrideAttrs (old: {
+  pname = old.pname + "-integration";
+  postPatch = old.postPatch or "" + ''
     # fix the test to look at nixos paths for running programs
       # --replace-fail '"integration.tes"' '"tracee-integrat"' \
     substituteInPlace tests/integration/event_filters_test.go \
@@ -22,7 +22,7 @@ tracee.overrideAttrs (oa: {
     substituteInPlace tests/testutils/tracee.go \
       --replace-fail "../../dist/tracee" "${lib.getExe tracee}"
   '';
-  nativeBuildInputs = oa.nativeBuildInputs or [ ] ++ [ makeWrapper ];
+  nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [ makeWrapper ];
   buildPhase = ''
     runHook preBuild
     # copy existing built object to dist
@@ -45,7 +45,7 @@ tracee.overrideAttrs (oa: {
   doInstallCheck = false;
 
   outputs = [ "out" ];
-  meta = oa.meta // {
+  meta = old.meta // {
     outputsToInstall = [ "out" ];
   };
 })

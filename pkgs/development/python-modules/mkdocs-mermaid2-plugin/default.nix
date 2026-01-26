@@ -9,21 +9,18 @@
   pymdown-extensions,
   pyyaml,
   requests,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "mkdocs-mermaid2-plugin";
-  version = "1.2.2";
+  version = "1.2.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "fralau";
     repo = "mkdocs-mermaid2-plugin";
     tag = "v${version}";
-    hash = "sha256-4WuE9fO4o0uN48W2Rwd4gKa6pK9bqyrcGjFLEkfJ0E4=";
+    hash = "sha256-EsfcOnfjZpAndYccN8WTpfLoUAlc5JQkgoy1ro1hMRo=";
   };
 
   propagatedBuildInputs = [
@@ -41,11 +38,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mermaid2" ];
 
-  meta = with lib; {
+  meta = {
     description = "MkDocs plugin for including mermaid graphs in markdown sources";
     homepage = "https://github.com/fralau/mkdocs-mermaid2-plugin";
     changelog = "https://github.com/fralau/mkdocs-mermaid2-plugin/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -42,21 +42,17 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace 'CMAKE_INSTALL_PREFIX "/usr"' "CMAKE_INSTALL_PREFIX $out"
+      --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)" \
+      --replace-fail 'CMAKE_INSTALL_PREFIX "/usr"' "CMAKE_INSTALL_PREFIX $out"
     substituteInPlace data/CMakeLists.txt \
-      --replace 'DESTINATION usr/share' "DESTINATION share"
+      --replace-fail 'DESTINATION usr/share' "DESTINATION share"
   '';
 
-  postConfigure = ''
-    substituteInPlace cmake_install.cmake \
-      --replace "/var/empty" "/usr"
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Full configuration manager for JWM";
     homepage = "https://joewing.net/projects/jwm";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

@@ -7,7 +7,7 @@
   alsa-lib ? null,
   carla ? null,
   fftwFloat,
-  fltk13,
+  fltk_1_3,
   fluidsynth ? null,
   lame ? null,
   libgig ? null,
@@ -47,7 +47,7 @@ mkDerivation rec {
     carla
     alsa-lib
     fftwFloat
-    fltk13
+    fltk_1_3
     fluidsynth
     lame
     libgig
@@ -70,17 +70,28 @@ mkDerivation rec {
     })
   ];
 
-  cmakeFlags = [ "-DWANT_QT5=ON" ];
+  prePatch = ''
+    # Update CMake minimum required version and policies
+    substituteInPlace CMakeLists.txt --replace 'CMAKE_MINIMUM_REQUIRED(VERSION 2.8.7)' 'CMAKE_MINIMUM_REQUIRED(VERSION 3.10)'
+    substituteInPlace CMakeLists.txt --replace 'CMAKE_POLICY(SET CMP0026 OLD)' 'CMAKE_POLICY(SET CMP0026 NEW)'
+    substituteInPlace CMakeLists.txt --replace 'CMAKE_POLICY(SET CMP0050 OLD)' 'CMAKE_POLICY(SET CMP0050 NEW)'
+    substituteInPlace CMakeLists.txt --replace 'GET_TARGET_PROPERTY(BIN2RES bin2res LOCATION)' 'SET(BIN2RES $<TARGET_FILE:bin2res>)'
+  '';
 
-  meta = with lib; {
+  cmakeFlags = [
+    "-DWANT_QT5=ON"
+  ]
+  ++ lib.optionals (lib.versionOlder version "11.4") [
+    # Fix the build with CMake 4.
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+  ];
+
+  meta = {
     description = "DAW similar to FL Studio (music production software)";
     mainProgram = "lmms";
     homepage = "https://lmms.io";
-    license = licenses.gpl2Plus;
-    platforms = [
-      "x86_64-linux"
-      "i686-linux"
-    ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

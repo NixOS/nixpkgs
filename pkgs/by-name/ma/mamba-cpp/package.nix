@@ -41,12 +41,12 @@ stdenv.mkDerivation {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Reimplementation of the conda package manager";
     homepage = "https://github.com/mamba-org/mamba";
-    license = licenses.bsd3;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ klchen0112 ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ klchen0112 ];
     mainProgram = "mamba";
   };
 }

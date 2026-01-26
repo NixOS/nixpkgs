@@ -103,17 +103,17 @@ buildPythonPackage rec {
   };
 
   preCheck = lib.optionalString (cudaSupport && !testCudaRuntime) ''
-    addToSearchPath LD_LIBRARY_PATH ${lib.getLib cudaPackages.cuda_cudart}/lib/stubs
+    addToSearchPath LD_LIBRARY_PATH ${lib.getOutput "stubs" cudaPackages.cuda_cudart}/lib/stubs
   '';
 
   # If neither rocmSupport or cudaSupport is enabled, no tests are selected
   dontUsePytestCheck = !(rocmSupport || cudaSupport) && (!testOpenclRuntime);
 
-  meta = with lib; {
+  meta = {
     description = "Ctypes wrappers for HIP, CUDA, and OpenCL";
     homepage = "https://github.com/tinygrad/gpuctypes";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       GaetanLepage
       matthewcroughan
       wozeparrot

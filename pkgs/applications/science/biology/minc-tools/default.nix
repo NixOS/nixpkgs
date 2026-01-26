@@ -16,14 +16,21 @@
 
 stdenv.mkDerivation {
   pname = "minc-tools";
-  version = "2.3.06-unstable-2023-08-12";
+  version = "2.3.06-unstable-2024-11-28";
 
   src = fetchFromGitHub {
     owner = "BIC-MNI";
     repo = "minc-tools";
-    rev = "c86a767dbb63aaa05ee981306fa09f6133bde427";
-    hash = "sha256-PLNcuDU0ht1PcjloDhrPzpOpE42gbhPP3rfHtP7WnM4=";
+    rev = "a72077d92266f9ea4c49b6dd3efd5766b81a104c";
+    hash = "sha256-YafO5UjeADO/658Xm973JtqldRYkGQ4v8m1oNJoZrbM=";
   };
+
+  # Fix for CMake > 4 in which the old policy for CMP0026 was removed.
+  # Note this breaks the tests, but they are not enabled anyway.
+  # Upstream issue: https://github.com/BIC-MNI/minc-tools/issues/123
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail "SET CMP0026 OLD" "SET CMP0026 NEW"
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -58,12 +65,12 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/BIC-MNI/minc-tools";
     description = "Command-line utilities for working with MINC files";
-    maintainers = with maintainers; [ bcdarwin ];
-    platforms = platforms.unix;
-    license = licenses.free;
+    maintainers = with lib.maintainers; [ bcdarwin ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.free;
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

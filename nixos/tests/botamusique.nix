@@ -1,39 +1,30 @@
 {
-  pkgs,
-  lib,
-  ...
-}:
-
-{
   name = "botamusique";
-  meta.maintainers = with lib.maintainers; [ hexa ];
 
   nodes = {
-    machine =
-      { config, ... }:
-      {
-        networking.extraHosts = ''
-          127.0.0.1 all.api.radio-browser.info
-        '';
+    machine = {
+      networking.extraHosts = ''
+        127.0.0.1 all.api.radio-browser.info
+      '';
 
-        services.murmur = {
-          enable = true;
-          registerName = "NixOS tests";
-        };
+      services.murmur = {
+        enable = true;
+        registerName = "NixOS tests";
+      };
 
-        services.botamusique = {
-          enable = true;
-          settings = {
-            server = {
-              channel = "NixOS tests";
-            };
-            bot = {
-              version = false;
-              auto_check_update = false;
-            };
+      services.botamusique = {
+        enable = true;
+        settings = {
+          server = {
+            channel = "NixOS tests";
+          };
+          bot = {
+            version = false;
+            auto_check_update = false;
           };
         };
       };
+    };
   };
 
   testScript = ''

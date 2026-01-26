@@ -22,11 +22,11 @@ buildGoModule {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = ''Generate "if err != nil {" block'';
     homepage = "https://github.com/koron/iferr";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kalbasit ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kalbasit ];
     mainProgram = "iferr";
   };
 }

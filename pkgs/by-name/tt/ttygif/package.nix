@@ -4,7 +4,7 @@
   fetchFromGitHub,
   makeWrapper,
   imagemagick,
-  xorg,
+  xwd,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,17 +29,17 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${
         lib.makeBinPath [
           imagemagick
-          xorg.xwd
+          xwd
         ]
       }
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/icholy/ttygif";
     description = "Convert terminal recordings to animated gifs";
-    platforms = platforms.unix;
-    license = licenses.mit;
-    maintainers = with maintainers; [ moaxcp ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ moaxcp ];
     mainProgram = "ttygif";
   };
 }

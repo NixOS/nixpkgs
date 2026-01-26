@@ -1,11 +1,9 @@
 # similar to interpreters/python/default.nix
 {
   stdenv,
-  config,
   lib,
   callPackage,
   fetchFromGitHub,
-  fetchurl,
   makeBinaryWrapper,
 }:
 
@@ -62,12 +60,7 @@ let
                 selfTargetTarget = luaOnTargetForTarget.pkgs or { };
               };
 
-              aliases =
-                final: prev:
-                lib.optionalAttrs config.allowAliases (import ../../lua-modules/aliases.nix lib final prev);
-
               extensions = lib.composeManyExtensions [
-                aliases
                 generatedPackages
                 overriddenPackages
                 overrides
@@ -109,6 +102,21 @@ let
 in
 
 rec {
+  lua5_5 = callPackage ./interpreter.nix {
+    self = lua5_5;
+    version = "5.5.0";
+    hash = "sha256-V8zDK7vQBcq3W8xSREBSU1r2kXiduiuQFtXFBkDWiz0=";
+    makeWrapper = makeBinaryWrapper;
+    inherit passthruFun;
+
+    patches = lib.optional stdenv.hostPlatform.isDarwin ./5.5.darwin.patch;
+  };
+
+  lua5_5_compat = lua5_5.override {
+    self = lua5_5_compat;
+    compat = true;
+  };
+
   lua5_4 = callPackage ./interpreter.nix {
     self = lua5_4;
     version = "5.4.7";
@@ -119,10 +127,10 @@ rec {
     patches = lib.optional stdenv.hostPlatform.isDarwin ./5.4.darwin.patch;
   };
 
-  lua5_4_compat = lua5_4.override ({
+  lua5_4_compat = lua5_4.override {
     self = lua5_4_compat;
     compat = true;
-  });
+  };
 
   lua5_3 = callPackage ./interpreter.nix {
     self = lua5_3;
@@ -134,10 +142,10 @@ rec {
     patches = lib.optionals stdenv.hostPlatform.isDarwin [ ./5.2.darwin.patch ];
   };
 
-  lua5_3_compat = lua5_3.override ({
+  lua5_3_compat = lua5_3.override {
     self = lua5_3_compat;
     compat = true;
-  });
+  };
 
   lua5_2 = callPackage ./interpreter.nix {
     self = lua5_2;
@@ -151,10 +159,10 @@ rec {
     ++ lib.optional stdenv.hostPlatform.isDarwin ./5.2.darwin.patch;
   };
 
-  lua5_2_compat = lua5_2.override ({
+  lua5_2_compat = lua5_2.override {
     self = lua5_2_compat;
     compat = true;
-  });
+  };
 
   lua5_1 = callPackage ./interpreter.nix {
     self = lua5_1;

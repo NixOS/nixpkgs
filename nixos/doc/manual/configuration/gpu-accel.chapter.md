@@ -91,16 +91,7 @@ All successfully loaded drivers are exposed to the application as
 different GPUs. In NixOS, there are two ways to make ICD files visible
 to Vulkan applications: an environment variable and a module option.
 
-The first option is through the `VK_ICD_FILENAMES` environment variable.
-This variable can contain multiple JSON files, separated by `:`. For
-example:
-
-```ShellSession
-$ export \
-  VK_ICD_FILENAMES=`nix-build '<nixpkgs>' --no-out-link -A amdvlk`/share/vulkan/icd.d/amd_icd64.json
-```
-
-The second mechanism is to add the Vulkan driver package to
+The way to do this is to add the Vulkan driver package to
 [](#opt-hardware.graphics.extraPackages).
 This links the ICD file under `/run/opengl-driver`, where it will be
 visible to the ICD loader.
@@ -129,25 +120,7 @@ vulkan-tools package.
 
 Modern AMD [Graphics Core
 Next](https://en.wikipedia.org/wiki/Graphics_Core_Next) (GCN) GPUs are
-supported through either radv, which is part of mesa, or the amdvlk
-package. Adding the amdvlk package to
-[](#opt-hardware.graphics.extraPackages)
-makes amdvlk the default driver and hides radv and lavapipe from the device list.
-A specific driver can be forced as follows:
-
-```nix
-{
-  hardware.graphics.extraPackages = [ pkgs.amdvlk ];
-
-  # To enable Vulkan support for 32-bit applications, also add:
-  hardware.graphics.extraPackages32 = [ pkgs.driversi686Linux.amdvlk ];
-
-  # Force radv
-  environment.variables.AMD_VULKAN_ICD = "RADV";
-  # Or
-  environment.variables.VK_ICD_FILENAMES = "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
-}
-```
+supported through the RADV driver, which is part of mesa.
 
 ## VA-API {#sec-gpu-accel-va-api}
 

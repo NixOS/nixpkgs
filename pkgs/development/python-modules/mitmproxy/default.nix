@@ -3,6 +3,7 @@
   aioquic,
   argon2-cffi,
   asgiref,
+  bcrypt,
   brotli,
   buildPythonPackage,
   certifi,
@@ -17,7 +18,7 @@
   ldap3,
   mitmproxy-rs,
   msgpack,
-  passlib,
+  nixosTests,
   publicsuffix2,
   pyopenssl,
   pyparsing,
@@ -38,26 +39,23 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "12.1.2";
+  version = "12.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "mitmproxy";
     tag = "v${version}";
-    hash = "sha256-XYZ14JlVYG/OLlEze+C1L/HP3HD5GEW+jG2YYSXW/8Y=";
+    hash = "sha256-z3JJOql4JacXSeo6dRbKOaL+kLlSnpKQkeXzZdzLQJo=";
   };
 
   pythonRelaxDeps = [
-    "cryptography"
-    "flask"
-    "h2"
-    "kaitaistruct"
-    "passlib"
-    "pyopenssl"
-    "tornado"
+    "zstandard"
+
+    # requested by maintainer
+    "brotli"
+    # just keep those
     "typing-extensions"
-    "urwid"
   ];
 
   build-system = [ setuptools ];
@@ -67,6 +65,7 @@ buildPythonPackage rec {
     argon2-cffi
     asgiref
     brotli
+    bcrypt
     certifi
     cryptography
     flask
@@ -77,7 +76,6 @@ buildPythonPackage rec {
     ldap3
     mitmproxy-rs
     msgpack
-    passlib
     publicsuffix2
     pyopenssl
     pyparsing
@@ -127,6 +125,9 @@ buildPythonPackage rec {
     "test_errorcheck"
     "test_dns"
     "test_order"
+    # fails in pytest asyncio internals
+    "test_decorator"
+    "test_exception_handler"
   ];
 
   disabledTestPaths = [
@@ -144,11 +145,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mitmproxy" ];
 
-  meta = with lib; {
+  passthru.tests = {
+    inherit (nixosTests) mitmproxy;
+  };
+
+  meta = {
     description = "Man-in-the-middle proxy";
     homepage = "https://mitmproxy.org/";
     changelog = "https://github.com/mitmproxy/mitmproxy/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    mainProgram = "mitmproxy";
   };
 }

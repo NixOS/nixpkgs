@@ -44,10 +44,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "requests_oauthlib" ];
 
-  meta = with lib; {
+  meta = {
     description = "OAuthlib authentication support for Requests";
     homepage = "https://github.com/requests/requests-oauthlib";
-    license = with licenses; [ isc ];
-    maintainers = with maintainers; [ prikhi ];
+    license = with lib.licenses; [ isc ];
+    maintainers = with lib.maintainers; [ prikhi ];
   };
 }

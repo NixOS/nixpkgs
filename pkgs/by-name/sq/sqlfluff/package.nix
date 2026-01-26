@@ -1,53 +1,53 @@
 {
   lib,
   fetchFromGitHub,
-  python3,
+  python3Packages,
+  versionCheckHook,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "sqlfluff";
-  version = "3.4.2";
+  version = "3.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sqlfluff";
     repo = "sqlfluff";
     tag = version;
-    hash = "sha256-Cf4nrINpe5Kr2JYwcTYx1oO+E6ydlBs0W7F4Mh7ITAs=";
+    hash = "sha256-fO4a1DCDM5RCeaPUHtPPGgTtZPRHOl9nuxbipDJZy7A=";
   };
 
-  build-system = with python3.pkgs; [ setuptools ];
+  build-system = with python3Packages; [ setuptools ];
 
-  dependencies =
-    with python3.pkgs;
-    [
-      appdirs
-      cached-property
-      chardet
-      click
-      colorama
-      configparser
-      diff-cover
-      jinja2
-      oyaml
-      pathspec
-      platformdirs
-      pytest
-      regex
-      tblib
-      toml
-      tqdm
-      typing-extensions
-    ]
-    ++ lib.optionals (pythonOlder "3.8") [
-      backports.cached-property
-      importlib_metadata
-    ];
+  pythonRelaxDeps = [
+    "click"
+  ];
+  dependencies = with python3Packages; [
+    appdirs
+    cached-property
+    chardet
+    click
+    colorama
+    configparser
+    diff-cover
+    jinja2
+    oyaml
+    pathspec
+    platformdirs
+    pytest
+    regex
+    tblib
+    toml
+    tqdm
+    typing-extensions
+  ];
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     hypothesis
     pytestCheckHook
+    versionCheckHook
   ];
+  versionCheckProgramArg = "--version";
 
   disabledTestPaths = [
     # Don't run the plugin related tests

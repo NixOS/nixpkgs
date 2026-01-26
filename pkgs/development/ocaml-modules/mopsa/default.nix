@@ -5,7 +5,7 @@
   clang,
   libclang,
   libllvm,
-  flint3,
+  flint,
   mpfr,
   pplite,
   ocaml,
@@ -39,14 +39,14 @@ buildDunePackage rec {
   buildInputs = [
     arg-complete
     camlidl
-    flint3
-    libclang
     mpfr
-    pplite
   ];
 
   propagatedBuildInputs = [
     apron
+    flint
+    libclang
+    pplite
     yojson
     zarith
   ];

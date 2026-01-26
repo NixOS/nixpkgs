@@ -17,11 +17,11 @@ buildGoModule {
 
   vendorHash = "sha256-j0UzucZ6kDwM+6U0ZyIW9u8XG/Bn+VUCO2vV1BbnQo0=";
 
-  meta = with lib; {
+  meta = {
     description = "IP lookups for open ports and vulnerabilities from internetdb.shodan.io";
     mainProgram = "sdlookup";
     homepage = "https://github.com/j3ssie/sdlookup";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

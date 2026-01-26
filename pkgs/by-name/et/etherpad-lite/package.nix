@@ -4,22 +4,21 @@
   fetchFromGitHub,
   nix-update-script,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   makeWrapper,
   nodejs,
 }:
 
-let
-  pnpm = pnpm_9;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "etherpad-lite";
-  version = "2.5.0";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "ether";
     repo = "etherpad-lite";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-11fNDAR6zmHv1O5nL0GhGJj6eHwDc8zT0Tvrba7qBpw=";
+    hash = "sha256-zsW4hBilhhkP9H0rTLDr6S0BZBGb9XqGNKcftkoivOs=";
   };
 
   patches = [
@@ -29,14 +28,16 @@ stdenv.mkDerivation (finalAttrs: {
     ./dont-fail-on-plugins-json.patch
   ];
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    pnpm = pnpm_9;
     fetcherVersion = 1;
-    hash = "sha256-PZD55V/3dvNLx39tD4I00IzURhuyqMX4uObnQfnSBtk=";
+    hash = "sha256-2nNjFdirgnciOf5kXwM4MXoBeidnnis4oi2AbYQvTHo=";
   };
 
   nativeBuildInputs = [
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm_9
     makeWrapper
   ];
 
@@ -69,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper ${lib.getExe nodejs} $out/bin/etherpad-lite \
       --inherit-argv0 \
       --add-flags "--require tsx/cjs $out/lib/etherpad-lite/node_modules/ep_etherpad-lite/node/server.ts" \
-      --suffix PATH : "${lib.makeBinPath [ pnpm ]}" \
+      --suffix PATH : "${lib.makeBinPath [ pnpm_9 ]}" \
       --set NODE_PATH "$out/lib/node_modules:$out/lib/etherpad-lite/node_modules/ep_etherpad-lite/node_modules" \
       --set-default NODE_ENV production
     find $out/lib -xtype l -delete

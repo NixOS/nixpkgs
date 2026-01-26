@@ -16,7 +16,7 @@ buildPythonPackage rec {
     domain = "salsa.debian.org";
     owner = "apt-team";
     repo = "python-apt";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-3mRMqbhKy5CYwpSttq8MgXY147Ov3lPuZaTjUMtmHik=";
   };
 

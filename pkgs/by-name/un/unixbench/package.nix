@@ -6,7 +6,9 @@
   pandoc,
   installShellFiles,
   perl,
-  xorg,
+  libxext,
+  libx11,
+  x11perf,
   libGLX,
   coreutils,
   unixtools,
@@ -52,8 +54,8 @@ stdenv.mkDerivation rec {
     perl
   ]
   ++ lib.optionals withGL [
-    xorg.libX11
-    xorg.libXext
+    libx11
+    libxext
     libGLX
   ];
 
@@ -66,7 +68,7 @@ stdenv.mkDerivation rec {
     gawk
   ]
   ++ lib.optionals withX11perf [
-    xorg.x11perf
+    x11perf
   ];
 
   makeFlags = [
@@ -105,12 +107,12 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${lib.makeBinPath runtimeDependencies}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Basic indicator of the performance of a Unix-like system";
     homepage = "https://github.com/kdlucas/byte-unixbench";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "ubench";
-    maintainers = with maintainers; [ aleksana ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ aleksana ];
+    platforms = lib.platforms.unix;
   };
 }

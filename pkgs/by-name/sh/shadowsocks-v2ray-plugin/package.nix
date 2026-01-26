@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "shadowsocks-v2ray-plugin";
   version = "1.3.2-unstable-2025-09-05";
 

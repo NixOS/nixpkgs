@@ -15,7 +15,6 @@
 let
   inherit (python3Packages)
     buildPythonApplication
-    isPy3k
     dbus-python
     pygobject3
     mpd2
@@ -24,17 +23,15 @@ let
 in
 buildPythonApplication rec {
   pname = "sonata";
-  version = "1.7.1";
+  version = "1.7.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "multani";
     repo = "sonata";
     tag = "v${version}";
-    sha256 = "sha256-80F2dVaRawnI0E+GzaxRUudaLWWHGUjICCEbXHVGy+E=";
+    hash = "sha256-eyB+DHcAg1nYjE415VjpPnqZC9embYRhnwXhN2ZVN0o=";
   };
-
-  disabled = !isPy3k;
 
   nativeBuildInputs = [
     gettext
@@ -93,7 +90,9 @@ buildPythonApplication rec {
        - Available in 24 languages
     '';
     homepage = "https://www.nongnu.org/sonata/";
-    license = lib.licenses.gpl3;
+    changelog = "https://github.com/multani/sonata/blob/${src.tag}/CHANGELOG";
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

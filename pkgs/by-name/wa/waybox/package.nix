@@ -17,7 +17,7 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
-  wlroots,
+  wlroots_0_17,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     udev
     wayland
     wayland-protocols
-    wlroots
+    wlroots_0_17
   ];
 
   strictDeps = true;
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Openbox clone on Wayland";
     license = lib.licenses.mit;
     mainProgram = "waybox";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     inherit (wayland.meta) platforms;
   };
 })

@@ -21,13 +21,13 @@ assert
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "box64";
-  version = "0.3.6";
+  version = "0.3.8";
 
   src = fetchFromGitHub {
     owner = "ptitSeb";
     repo = "box64";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-Z8r7aonVj7VSifgLKx/L7VRdGNnQtTvS4mjI+2+uPxY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-PVzv1790UhWbqLmw/93+mU3Gw8lQek7NBls4LXks4wQ=";
   };
 
   # Setting cpu doesn't seem to work (or maybe isn't enough / gets overwritten by the wrapper's arch flag?), errors about unsupported instructions for target

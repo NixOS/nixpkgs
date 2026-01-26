@@ -16,13 +16,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "fcitx5-qt${majorVersion}";
-  version = "5.1.10";
+  version = "5.1.12";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = "fcitx5-qt";
     rev = version;
-    hash = "sha256-JhmaAAJ1fevCPItVnneUCAalnDDaCjjkAl9QRhSkBk4=";
+    hash = "sha256-Nrt49TltV3Us93MWUX4tBs0576jEC1kRX+T9IddVgZk=";
   };
 
   postPatch = ''
@@ -51,14 +51,14 @@ stdenv.mkDerivation rec {
     wayland
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fcitx5 Qt Library";
     homepage = "https://github.com/fcitx/fcitx5-qt";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl21Plus
       bsd3
     ];
-    maintainers = with maintainers; [ poscat ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ poscat ];
+    platforms = lib.platforms.linux;
   };
 }

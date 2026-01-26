@@ -6,7 +6,7 @@ import sys, os, json, base64, re, argparse, urllib.request, time
 from typing import Dict, Optional, Tuple
 from pathlib import Path
 
-DEFAULT_JSON = "https://raw.githubusercontent.com/mozilla/gecko-dev/master/toolkit/content/gmp-sources/widevinecdm.json"
+DEFAULT_JSON = "https://raw.githubusercontent.com/mozilla-firefox/firefox/refs/heads/main/toolkit/content/gmp-sources/widevinecdm.json"
 ARCH_PATTERNS = {
     "linux_x86_64": ["Linux_x86_64-gcc3"],
     "linux_aarch64": ["Linux_aarch64-gcc3"]

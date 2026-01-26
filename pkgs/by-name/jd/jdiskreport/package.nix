@@ -56,16 +56,16 @@ stdenv.mkDerivation rec {
 
   desktopItems = [ desktopItem ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.jgoodies.com/freeware/jdiskreport/";
     description = "Graphical utility to visualize disk usage";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.unfreeRedistributable; # TODO freedist, libs under BSD-3
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.unfreeRedistributable; # TODO freedist, libs under BSD-3
     platforms = [
       "x86_64-linux"
       "x86_64-darwin"
     ];
-    maintainers = with maintainers; [ kylesferrazza ];
+    maintainers = with lib.maintainers; [ kylesferrazza ];
     mainProgram = "jdiskreport";
   };
 }

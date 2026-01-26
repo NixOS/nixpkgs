@@ -7,13 +7,13 @@
 
 postgresqlBuildExtension (finalAttrs: {
   pname = "pg_partman";
-  version = "5.2.4";
+  version = "5.4.0";
 
   src = fetchFromGitHub {
     owner = "pgpartman";
     repo = "pg_partman";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-i/o+JZEXnJRO17kfdTw87aca28+I8pvuFZsPMA/kf+w=";
+    hash = "sha256-4z5B9jiG4EaOm2jz2BSNRi28at9aqpgNGXbJM3ZtBC8=";
   };
 
   meta = {

@@ -10,16 +10,17 @@
   libgudev,
   libusb1,
   libdrm,
-  xorg,
+  libxrandr,
+  libxext,
 }:
 
 stdenv.mkDerivation rec {
   pname = "ddcutil";
-  version = "2.2.1";
+  version = "2.2.3";
 
   src = fetchurl {
     url = "https://www.ddcutil.com/tarballs/ddcutil-${version}.tar.gz";
-    hash = "sha256-cch2DDg91fohgXg5uGuYUKxtVY4TPi1v6ojfrwREiuY=";
+    hash = "sha256-4XvAUqYvnqhS2eOLpPHtfnNmVnoOGdvhpDnuca2+BqA=";
   };
 
   nativeBuildInputs = [
@@ -34,8 +35,8 @@ stdenv.mkDerivation rec {
     libgudev
     libusb1
     udev
-    xorg.libXext
-    xorg.libXrandr
+    libxext
+    libxrandr
   ];
 
   enableParallelBuilding = true;

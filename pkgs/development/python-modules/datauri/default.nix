@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pydantic,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   typing-extensions,
   cached-property,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "datauri";
   version = "3.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "fcurella";
@@ -38,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "datauri" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for Data URI manipulation";
     homepage = "https://github.com/fcurella/python-datauri";
     changelog = "https://github.com/fcurella/python-datauri/releases/tag/${src.tag}";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.unlicense;
+    maintainers = [ ];
   };
 }

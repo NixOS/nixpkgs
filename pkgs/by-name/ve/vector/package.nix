@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   rustPlatform,
   pkg-config,
   openssl,
@@ -21,21 +20,22 @@
   nixosTests,
   nix-update-script,
   darwin,
+  versionCheckHook,
   zlib,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vector";
-  version = "0.50.0";
+  version = "0.52.0";
 
   src = fetchFromGitHub {
     owner = "vectordotdev";
     repo = "vector";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vyRvBCpWOKeI7Y+RbxCdVCAF45vWjC7ZD4PCS0QloPg=";
+    hash = "sha256-jwEJ+myovZYcohvxH1VvvOW8xok3HSLvhtMsLC2M3KY=";
   };
 
-  cargoHash = "sha256-4Nsq5Ta08wlHuevOfrr1mPi+qY+49q9S+AtbY35sfEM=";
+  cargoHash = "sha256-EfgDL5asygFqr8pVcTR9BsYU3fcG28xhrCn5nCkVfcA=";
 
   nativeBuildInputs = [
     pkg-config
@@ -60,6 +60,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     coreutils
     zlib
   ];
+
+  # Fix build with gcc 15
+  # https://github.com/vectordotdev/vector/issues/22888
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
 
   # Without this, we get SIGSEGV failure
   RUST_MIN_STACK = 33554432;
@@ -112,6 +116,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail "#[tokio::test]" ""
   '';
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
   passthru = {
     tests = {
       inherit (nixosTests) vector;
@@ -119,16 +128,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "High-performance observability data pipeline";
     homepage = "https://github.com/vectordotdev/vector";
     changelog = "https://github.com/vectordotdev/vector/releases/tag/v${finalAttrs.version}";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [
+      adamcstephens
       thoughtpolice
       happysalada
     ];
-    platforms = with platforms; all;
+    platforms = with lib.platforms; all;
     mainProgram = "vector";
   };
 })

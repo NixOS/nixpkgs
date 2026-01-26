@@ -92,7 +92,7 @@ let
     # The following line guarantees that the output of this function
     # is a well-formed platform with no missing fields.  It will be
     # uncommented in a separate PR, in case it breaks the build.
-    #(x: lib.trivial.pipe x [ (x: builtins.removeAttrs x [ "_type" ]) lib.systems.parse.mkSystem ])
+    #(x: lib.trivial.pipe x [ (x: removeAttrs x [ "_type" ]) lib.systems.parse.mkSystem ])
     (
       parsed
       // {
@@ -134,8 +134,7 @@ let
       inherit lib;
       inherit (self) config;
       inherit (self) runtimeShell stdenv stdenvNoCC;
-      inherit (self.pkgsBuildHost) jq shellcheck-minimal;
-      inherit (self.pkgsBuildHost.xorg) lndir;
+      inherit (self.pkgsBuildHost) jq shellcheck-minimal lndir;
     };
 
   stdenvBootstappingAndPlatforms =
@@ -309,7 +308,7 @@ let
 
     # Fully static packages.
     # Currently uses Musl on Linux (couldn’t get static glibc to work).
-    pkgsStatic = nixpkgsFun ({
+    pkgsStatic = nixpkgsFun {
       overlays = [
         (self': super': {
           pkgsStatic = super';
@@ -328,7 +327,7 @@ let
           lib.optionalAttrs (stdenv.hostPlatform.system == "powerpc64-linux") { abi = "elfv2"; }
           // stdenv.hostPlatform.gcc or { };
       };
-    });
+    };
   };
 
   # The complete chain of package set builders, applied from top to bottom.

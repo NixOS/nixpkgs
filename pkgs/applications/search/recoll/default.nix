@@ -75,11 +75,11 @@ in
 
 mkDerivation rec {
   pname = "recoll";
-  version = "1.43.5";
+  version = "1.43.9";
 
   src = fetchurl {
     url = "https://www.recoll.org/${pname}-${version}.tar.gz";
-    hash = "sha256-Px3uK7I/MkrJbAOmV2ipVct/+p05SST6TLTYoDaLNdQ=";
+    hash = "sha256-irloDtMO9CBvtI+oEicUOy2myrGskieWoqNk5eapzU8=";
   };
 
   mesonFlags = [
@@ -164,9 +164,9 @@ mkDerivation rec {
       if [[ ! "$f" =~ \.zip$ ]]; then
   ''
   + lib.concatStrings (
-    lib.mapAttrsToList (k: v: (''
+    lib.mapAttrsToList (k: v: ''
       substituteInPlace $f --replace '"${k}"'  '"${lib.getBin v}/bin/${k}"'
-    '')) filters
+    '') filters
   )
   + ''
         substituteInPlace $f --replace '"pstotext"'  '"${lib.getBin ghostscript}/bin/ps2ascii"'
@@ -197,7 +197,7 @@ mkDerivation rec {
 
   enableParallelBuilding = false; # XXX: -j44 tried linking befoire librecoll had been created
 
-  meta = with lib; {
+  meta = {
     description = "Full-text search tool";
     longDescription = ''
       Recoll is an Xapian frontend that can search through files, archive
@@ -205,9 +205,9 @@ mkDerivation rec {
     '';
     homepage = "https://www.recoll.org";
     changelog = "https://www.recoll.org/pages/release-history.html";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       jcumming
     ];
 

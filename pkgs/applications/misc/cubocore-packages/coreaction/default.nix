@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "coreaction";
     homepage = "https://gitlab.com/cubocore/coreapps/coreaction";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

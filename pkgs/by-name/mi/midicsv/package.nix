@@ -19,11 +19,11 @@ stdenv.mkDerivation rec {
       --replace gcc "${stdenv.cc.targetPrefix}cc"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Losslessly translate MIDI to CSV and back";
     homepage = "https://www.fourmilab.ch/webtools/midicsv/";
-    license = licenses.publicDomain;
-    maintainers = with maintainers; [ orivej ];
-    platforms = platforms.all;
+    license = lib.licenses.publicDomain;
+    maintainers = [ ];
+    platforms = lib.platforms.all;
   };
 }

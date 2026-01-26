@@ -12,11 +12,12 @@
   appstream-glib,
   blueprint-compiler,
   libadwaita,
-  libportal,
+  libportal-gtk4,
+  gtksourceview5,
   nix-update-script,
 }:
 let
-  version = "1.0.5";
+  version = "1.1.0";
 in
 python3Packages.buildPythonApplication {
   pname = "rewaita";
@@ -27,7 +28,7 @@ python3Packages.buildPythonApplication {
     owner = "SwordPuffin";
     repo = "Rewaita";
     tag = "v${version}";
-    hash = "sha256-Q4HUly78liI0OfmD9llR+00qUKE+mioeNE0TIypCB9k=";
+    hash = "sha256-B3CxtGKLvlGORae1b7vMDFbvNntVO24yrzbiHzOP28k=";
   };
 
   postPatch = ''
@@ -51,12 +52,16 @@ python3Packages.buildPythonApplication {
 
   dependencies = with python3Packages; [
     pygobject3
+    pillow
+    numpy
+    fortune
   ];
 
   buildInputs = [
     libadwaita
     gtk4
-    libportal
+    libportal-gtk4
+    gtksourceview5
   ];
 
   dontWrapGApps = true;
@@ -72,7 +77,7 @@ python3Packages.buildPythonApplication {
     mainProgram = "rewaita";
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
-      awwpotato
+      da157
       getchoo
     ];
   };

@@ -17,7 +17,8 @@
   curl,
   enet,
   ffmpeg,
-  fmt_10,
+  fmt,
+  glslang,
   gtest,
   hidapi,
   libXdmcp,
@@ -26,15 +27,15 @@
   libusb1,
   lz4,
   lzo,
-  mbedtls_2,
   miniupnpc,
   minizip-ng,
   openal,
   pugixml,
-  SDL2,
+  sdl3,
   sfml,
   xxHash,
   xz,
+  zlib-ng,
   # linux-only
   alsa-lib,
   bluez,
@@ -54,13 +55,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dolphin-emu";
-  version = "2509";
+  version = "2512";
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
     tag = finalAttrs.version;
-    hash = "sha256-ZTNg8DRgtC1jS3MoYK1wwzjJbMkLNdkRub+KOg3NmYM=";
+    hash = "sha256-VmDhYZfYyzf08FXZTeBYmdEp9P8AugUpiOxNj8aEJqw=";
     fetchSubmodules = true;
     leaveDotGit = true;
     postFetch = ''
@@ -89,7 +90,8 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     enet
     ffmpeg
-    fmt_10
+    fmt
+    glslang
     gtest
     hidapi
     libXdmcp
@@ -98,19 +100,18 @@ stdenv.mkDerivation (finalAttrs: {
     libusb1
     lz4
     lzo
-    mbedtls_2
+    #mbedtls_2 # Use vendored, as using nixpkgs' would mark the package unsafe
     miniupnpc
     minizip-ng
     openal
     pugixml
     qt6.qtbase
     qt6.qtsvg
-    SDL2
+    sdl3
     sfml
     xxHash
     xz
-    # Causes linker errors with minizip-ng, prefer vendored. Possible reason why: https://github.com/dolphin-emu/dolphin/pull/12070#issuecomment-1677311838
-    #zlib-ng
+    zlib-ng
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
@@ -132,6 +133,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "DISTRIBUTOR" "NixOS")
     (lib.cmakeFeature "DOLPHIN_WC_DESCRIBE" finalAttrs.version)
     (lib.cmakeFeature "DOLPHIN_WC_BRANCH" "master")
+    # CMake 4 dropped support of versions lower than 3.5,
+    # versions lower than 3.10 are deprecated.
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10")
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (lib.cmakeBool "OSX_USE_DEFAULT_SEARCH_PATH" true)
@@ -150,16 +154,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   qtWrapperArgs = lib.optionals stdenv.hostPlatform.isLinux [
     "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}"
-    # https://bugs.dolphin-emu.org/issues/11807
-    # The .desktop file should already set this, but Dolphin may be launched in other ways
-    "--set QT_QPA_PLATFORM xcb"
   ];
 
   doInstallCheck = true;
 
   postInstall =
     lib.optionalString stdenv.hostPlatform.isLinux ''
-      install -D $src/Data/51-usb-device.rules $out/etc/udev/rules.d/51-usb-device.rules
+      install -Dm644 $src/Data/51-usb-device.rules $out/etc/udev/rules.d/51-usb-device.rules
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # Only gets installed automatically if the standalone executable is used

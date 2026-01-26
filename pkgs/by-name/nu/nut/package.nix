@@ -49,11 +49,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "nut";
-  version = "2.8.3";
+  version = "2.8.4";
 
   src = fetchurl {
     url = "https://networkupstools.org/source/${lib.versions.majorMinor version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-1soX8LOQA7rHZJ6xerSnE+TV/KqP0a7cooNX1Z3wle0=";
+    sha256 = "sha256-ATC6gup58Euk80xSSahZQ5d+/ZhO199q7BpRjVo1lPg=";
   };
 
   patches = [
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     (replaceVars ./hardcode-paths.patch {
       avahi = "${avahi}/lib";
       freeipmi = "${freeipmi}/lib";
-      libgpiod = "${libgpiod_1}/lib";
+      libgpiod = if stdenv.hostPlatform.isLinux then "${libgpiod_1}/lib" else "/homeless-shelter";
       libusb = "${libusb1}/lib";
       neon = "${neon}/lib";
       libmodbus = "${modbus}/lib";
@@ -76,18 +76,20 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    neon
-    libusb1
-    openssl
-    udev
     avahi
     freeipmi
-    libgpiod_1
-    libtool
-    i2c-tools
-    net-snmp
     gd
+    libtool
+    libusb1
     modbus
+    neon
+    net-snmp
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    i2c-tools
+    libgpiod_1
+    udev
   ];
 
   nativeBuildInputs = [
@@ -98,14 +100,18 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
   configureFlags = [
+    "--enable-docs-changelog=no" # TODO: add required build deps
     "--with-all"
     "--with-ssl"
     "--without-powerman" # Until we have it ...
+    "--with-pynut=app" # avoid attempts to install python modules to python store path
     "--with-systemdsystempresetdir=$(out)/lib/systemd/system-preset"
     "--with-systemdsystemunitdir=$(out)/lib/systemd/system"
     "--with-systemdshutdowndir=$(out)/lib/systemd/system-shutdown"
     "--with-systemdtmpfilesdir=$(out)/lib/tmpfiles.d"
     "--with-udev-dir=$(out)/etc/udev"
+    "--with-user=nutmon"
+    "--with-group=nutmon"
   ]
   ++ (lib.lists.optionals withApcModbus [
     "--with-modbus+usb"
@@ -125,7 +131,7 @@ stdenv.mkDerivation rec {
     "sbin"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace $out/lib/systemd/system-shutdown/nutshutdown \
       --replace /bin/sed "${gnused}/bin/sed" \
       --replace /bin/sleep "${coreutils}/bin/sleep" \
@@ -143,7 +149,7 @@ stdenv.mkDerivation rec {
     rm $out/etc/udev/rules.d/52-nut-ipmipsu.rules
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Network UPS Tools";
     longDescription = ''
       Network UPS Tools is a collection of programs which provide a common
@@ -151,9 +157,9 @@ stdenv.mkDerivation rec {
       It uses a layered approach to connect all of the parts.
     '';
     homepage = "https://networkupstools.org/";
-    platforms = platforms.linux;
-    maintainers = [ maintainers.pierron ];
-    license = with licenses; [
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.pierron ];
+    license = with lib.licenses; [
       gpl1Plus
       gpl2Plus
       gpl3Plus

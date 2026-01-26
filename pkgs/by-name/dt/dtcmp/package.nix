@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ mpi ];
 
-  meta = with lib; {
+  meta = {
     description = "MPI datatype comparison library";
     homepage = "https://github.com/LLNL/dtcmp";
-    platforms = platforms.linux;
-    license = licenses.bsd3;
-    maintainers = [ maintainers.markuskowa ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.markuskowa ];
   };
 }

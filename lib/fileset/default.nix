@@ -101,6 +101,7 @@ let
 
   inherit (import ./internal.nix { inherit lib; })
     _coerce
+    _coerceResult
     _singleton
     _coerceMany
     _toSourceFilter
@@ -190,7 +191,7 @@ in
       if isStringLike path then
         throw ''lib.fileset.maybeMissing: Argument ("${toString path}") is a string-like value, but it should be a path instead.''
       else
-        throw ''lib.fileset.maybeMissing: Argument is of type ${typeOf path}, but it should be a path instead.''
+        throw "lib.fileset.maybeMissing: Argument is of type ${typeOf path}, but it should be a path instead."
     else if !pathExists path then
       _emptyWithoutBase
     else
@@ -442,7 +443,7 @@ in
           lib.fileset.toSource: `root` (${toString root}) is a string-like value, but it should be a path instead.
               Paths in strings are not supported by `lib.fileset`, use `lib.sources` or derivations instead.''
       else
-        throw ''lib.fileset.toSource: `root` is of type ${typeOf root}, but it should be a path instead.''
+        throw "lib.fileset.toSource: `root` is of type ${typeOf root}, but it should be a path instead."
     # Currently all Nix paths have the same filesystem root, but this could change in the future.
     # See also ../path/README.md
     else if !fileset._internalIsEmptyWithoutBase && rootFilesystemRoot != filesetFilesystemRoot then
@@ -452,7 +453,7 @@ in
             `fileset`: Filesystem root is "${toString filesetFilesystemRoot}"
             Different filesystem roots are not supported.''
     else if !pathExists root then
-      throw ''lib.fileset.toSource: `root` (${toString root}) is a path that does not exist.''
+      throw "lib.fileset.toSource: `root` (${toString root}) is a path that does not exist."
     else if pathType root != "directory" then
       throw ''
         lib.fileset.toSource: `root` (${toString root}) is a file, but it should be a directory instead. Potential solutions:
@@ -618,7 +619,7 @@ in
   unions =
     filesets:
     if !isList filesets then
-      throw ''lib.fileset.unions: Argument is of type ${typeOf filesets}, but it should be a list instead.''
+      throw "lib.fileset.unions: Argument is of type ${typeOf filesets}, but it should be a list instead."
     else
       pipe filesets [
         # Annotate the elements with context, used by _coerceMany for better errors
@@ -807,16 +808,16 @@ in
   fileFilter =
     predicate: path:
     if !isFunction predicate then
-      throw ''lib.fileset.fileFilter: First argument is of type ${typeOf predicate}, but it should be a function instead.''
+      throw "lib.fileset.fileFilter: First argument is of type ${typeOf predicate}, but it should be a function instead."
     else if !isPath path then
       if path._type or "" == "fileset" then
         throw ''
           lib.fileset.fileFilter: Second argument is a file set, but it should be a path instead.
               If you need to filter files in a file set, use `intersection fileset (fileFilter pred ./.)` instead.''
       else
-        throw ''lib.fileset.fileFilter: Second argument is of type ${typeOf path}, but it should be a path instead.''
+        throw "lib.fileset.fileFilter: Second argument is of type ${typeOf path}, but it should be a path instead."
     else if !pathExists path then
-      throw ''lib.fileset.fileFilter: Second argument (${toString path}) is a path that does not exist.''
+      throw "lib.fileset.fileFilter: Second argument (${toString path}) is a path that does not exist."
     else
       _fileFilter predicate path;
 
@@ -895,9 +896,9 @@ in
           lib.fileset.fromSource: The source origin of the argument is a string-like value ("${toString path}"), but it should be a path instead.
               Sources created from paths in strings cannot be turned into file sets, use `lib.sources` or derivations instead.''
       else
-        throw ''lib.fileset.fromSource: The source origin of the argument is of type ${typeOf path}, but it should be a path instead.''
+        throw "lib.fileset.fromSource: The source origin of the argument is of type ${typeOf path}, but it should be a path instead."
     else if !pathExists path then
-      throw ''lib.fileset.fromSource: The source origin (${toString path}) of the argument is a path that does not exist.''
+      throw "lib.fileset.fromSource: The source origin (${toString path}) of the argument is a path that does not exist."
     else if isFiltered then
       _fromSourceFilter path source.filter
     else
@@ -1005,4 +1006,49 @@ in
         {
           submodules = recurseSubmodules;
         };
+
+  /**
+    The empty fileset. It can be useful as a default value or as starting accumulator for a folding operation.
+
+    # Type
+
+    ```
+    empty :: FileSet
+    ```
+  */
+  empty = _emptyWithoutBase;
+
+  /**
+    Tests whether a given value is a fileset, or can be used in place of a fileset.
+
+    # Inputs
+
+    `value`
+
+    : The value to test
+
+    # Type
+
+    ```
+    isFileset :: Any -> Bool
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.fileset.isFileset` usage example
+
+    ```nix
+    isFileset ./.
+    => true
+
+    isFileset (unions [  ])
+    => true
+
+    isFileset 1
+    => false
+    ```
+
+    :::
+  */
+  isFileset = x: (_coerceResult "" x).success;
 }

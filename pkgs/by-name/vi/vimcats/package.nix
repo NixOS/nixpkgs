@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
 
   passthru.tests.version = testers.testVersion { package = vimcats; };
 
-  meta = with lib; {
+  meta = {
     description = "CLI to generate vim/nvim help doc from LuaCATS. Forked from lemmy-help";
     longDescription = ''
       `vimcats` is a LuaCATS parser as well as a CLI which takes that parsed tree and converts it into vim help docs.
@@ -31,8 +31,8 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/mrcjkb/vimcats";
     changelog = "https://github.com/mrcjkb/vimcats/CHANGELOG.md";
-    license = with licenses; [ gpl2Plus ];
-    maintainers = with maintainers; [ mrcjkb ];
+    license = with lib.licenses; [ gpl2Plus ];
+    maintainers = with lib.maintainers; [ mrcjkb ];
     mainProgram = "vimcats";
   };
 }

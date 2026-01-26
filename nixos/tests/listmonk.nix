@@ -10,10 +10,6 @@ import ./make-test-python.nix (
         services.mailhog.enable = true;
         services.listmonk = {
           enable = true;
-          settings = {
-            admin_username = "listmonk";
-            admin_password = "hunter2";
-          };
           database = {
             createLocally = true;
             # https://github.com/knadh/listmonk/blob/174a48f252a146d7e69dab42724e3329dbe25ebe/internal/messenger/email/email.go#L18-L27
@@ -34,11 +30,10 @@ import ./make-test-python.nix (
 
       start_all()
 
-      basic_auth = "listmonk:hunter2"
       def generate_listmonk_request(type, url, data=None):
          if data is None: data = {}
          json_data = json.dumps(data)
-         return f'curl -u "{basic_auth}" -X {type} "http://localhost:9000/api/{url}" -H "Content-Type: application/json; charset=utf-8" --data-raw \'{json_data}\'''
+         return f'curl -j -b cookies.txt -X {type} "http://localhost:9000/api/{url}" -H "Content-Type: application/json; charset=utf-8" --data-raw \'{json_data}\'''
 
       machine.wait_for_unit("mailhog.service")
       machine.wait_for_unit("postgresql.target")
@@ -47,6 +42,7 @@ import ./make-test-python.nix (
       machine.wait_for_open_port(8025)
       machine.wait_for_open_port(9000)
       machine.succeed("[[ -f /var/lib/listmonk/.db_settings_initialized ]]")
+      machine.succeed('curl -c cookies.txt -X POST "http://localhost:9000/admin/login" --data email=listmonk@test.local --data username=listmonk --data password=hunter22 --data password2=hunter22')
 
       assert json.loads(machine.succeed(generate_listmonk_request("GET", 'health')))['data'], 'Health endpoint returned unexpected value'
 

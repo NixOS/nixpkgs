@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "focus-stack";
-  version = "1.4";
+  version = "1.5";
 
   src = fetchFromGitHub {
     owner = "PetteriAimonen";
     repo = "focus-stack";
     rev = version;
-    hash = "sha256-SoECgBMjWI+n7H6p3hf8J5E9UCLHGiiz5WAsEEioJsU=";
+    hash = "sha256-hIaK8hjeuu6w/8nh9DHOffqZufQdqB1/VQRezCPQIPk=";
   };
 
   nativeBuildInputs = [
@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "prefix=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast and easy focus stacking";
     homepage = "https://github.com/PetteriAimonen/focus-stack";
-    license = licenses.mit;
-    maintainers = with maintainers; [ paperdigits ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ paperdigits ];
     mainProgram = "focus-stack";
   };
 }

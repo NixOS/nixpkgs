@@ -23,7 +23,18 @@
   nspr,
   nss,
   pango,
-  xorg,
+  libxtst,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  libxcb,
   systemd,
 }:
 let
@@ -47,18 +58,18 @@ let
     nspr
     nss
     pango
-    xorg.libX11
-    xorg.libxcb
-    xorg.libXScrnSaver
-    xorg.libXcomposite
-    xorg.libXcursor
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libXtst
+    libx11
+    libxcb
+    libxscrnsaver
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxrandr
+    libxrender
+    libxtst
     (lib.getLib stdenv.cc.cc)
     stdenv.cc.cc
   ];
@@ -123,17 +134,17 @@ stdenv.mkDerivation rec {
         --prefix LD_LIBRARY_PATH : $out/opt/pencil
     '';
 
-  meta = with lib; {
+  meta = {
     description = "GUI prototyping/mockup tool";
     mainProgram = "pencil";
     homepage = "https://pencil.evolus.vn/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.gpl2; # Commercial license is also available
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.gpl2; # Commercial license is also available
+    maintainers = with lib.maintainers; [
       bjornfor
       prikhi
       mrVanDalo
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

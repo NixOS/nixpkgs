@@ -12,14 +12,14 @@ in
 
 ocamlPackages.buildDunePackage {
   pname = "seppo";
-  version = "0-unstable-2025-06-03";
+  version = "0-unstable-2025-08-07";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "seppo";
     repo = "seppo";
-    rev = "33ae3e9f61d596fb91d3ab1a91fc26ae80981a93";
-    hash = "sha256-tOIIfYBLcZqQzoPxAVkE8RGX0sugUmDGpxIhIZ5Wy+w=";
+    rev = "d927311cae64883fe2b88f5a1c7e17c8cc525bad";
+    hash = "sha256-Lb2w0mRNNamCltAwdxOyAYh02wkN7yKJGBzqBIPKE8k=";
   };
 
   # Provide git sha to avoid git dependency

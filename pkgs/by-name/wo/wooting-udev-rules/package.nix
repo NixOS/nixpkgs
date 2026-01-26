@@ -23,12 +23,13 @@ stdenv.mkDerivation {
     install -Dpm644 $src $out/lib/udev/rules.d/70-wooting.rules
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://help.wooting.io/article/147-configuring-device-access-for-wootility-under-linux-udev-rules";
     description = "udev rules that give NixOS permission to communicate with Wooting keyboards";
-    platforms = platforms.linux;
-    license = "unknown";
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    # We think they are so simple that they are uncopyrightable
+    license = lib.licenses.publicDomain;
+    maintainers = with lib.maintainers; [
       returntoreality
     ];
   };

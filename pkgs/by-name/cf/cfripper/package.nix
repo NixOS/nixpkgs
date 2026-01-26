@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cfripper";
-  version = "1.18.0";
+  version = "1.19.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Skyscanner";
     repo = "cfripper";
     tag = "v${version}";
-    hash = "sha256-9cnOy7XBN3BRjUh6ST9RsKpAPJ8wrzJHtKMKhp7sg1g=";
+    hash = "sha256-7lFHtdicpoZ3ZhwKeRhjex3tK+0aOzKD44Q7njOR2l4=";
   };
 
   pythonRelaxDeps = [
@@ -25,7 +25,7 @@ python3.pkgs.buildPythonApplication rec {
     setuptools-scm
   ];
 
-  nativeBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = [
   ];
 
   dependencies = with python3.pkgs; [
@@ -59,12 +59,12 @@ python3.pkgs.buildPythonApplication rec {
     "cfripper"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for analysing CloudFormation templates";
     homepage = "https://github.com/Skyscanner/cfripper";
     changelog = "https://github.com/Skyscanner/cfripper/releases/tag/${src.tag}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "cfripper";
   };
 }

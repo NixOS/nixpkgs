@@ -1,5 +1,9 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i bash --pure --keep GITHUB_TOKEN -p nix git curl cacert nix-prefetch-git gzip
+#! nix-shell -i bash --pure -p nix curl cacert gzip
+
+set -euo pipefail
+
+cd "$(dirname "$(readlink -f "$0")")"
 
 base_url_suffix="https://pro-store-packages.uniontech.com/appstore/dists/eagle/appstore/binary-"
 base_url_appendix="/Packages.gz"
@@ -39,8 +43,8 @@ do
         }
     }
     ')
-    url+=("https://pro-store-packages.uniontech.com/appstore/pool/appstore/c/com.xunlei.download/com.xunlei.download_"$version"_"$i".deb")
-    hash+=("$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 $sha256sum)")
+    url+=("https://archive2.kylinos.cn/DEB/KYLIN_DEB/pool/all/com.xunlei.download_"$version"_"$i".deb")
+    hash+=("$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 "$(nix-prefetch-url "${url[-1]}")")")
 done
 
 cat >sources.nix <<EOF

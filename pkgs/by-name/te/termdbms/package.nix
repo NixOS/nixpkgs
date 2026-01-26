@@ -25,11 +25,11 @@ buildGoModule rec {
     "-X=main.Version=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mathaou/termdbms/";
     description = "TUI for viewing and editing database files";
-    license = licenses.mit;
-    maintainers = with maintainers; [ izorkin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ izorkin ];
     mainProgram = "sqlite3-viewer";
   };
 }

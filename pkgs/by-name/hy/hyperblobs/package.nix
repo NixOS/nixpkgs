@@ -42,6 +42,6 @@ buildNpmPackage (finalAttrs: {
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
     teams = with lib.teams; [ ngi ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 })

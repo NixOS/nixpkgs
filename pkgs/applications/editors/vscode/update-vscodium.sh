@@ -18,6 +18,7 @@ for i in \
     "x86_64-linux linux-x64 tar.gz" \
     "aarch64-linux linux-arm64 tar.gz" \
     "armv7l-linux linux-armhf tar.gz" \
+    "loongarch64-linux linux-loong64 tar.gz" \
     "aarch64-darwin darwin-arm64 zip" \
     "x86_64-darwin darwin-x64 zip"; do
     set -- $i

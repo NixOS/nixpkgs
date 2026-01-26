@@ -18,7 +18,15 @@
   libgbm,
   nss,
   nspr,
-  xorg,
+  libxrandr,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcomposite,
+  libx11,
+  libxshmfence,
+  libxkbfile,
+  libxcb,
   libdrm,
   libsecret,
   libxkbcommon,
@@ -62,23 +70,23 @@ let
     nss
     nspr
     libdrm
-    xorg.libX11
-    xorg.libxcb
-    xorg.libXcomposite
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXrandr
-    xorg.libxshmfence
+    libx11
+    libxcb
+    libxcomposite
+    libxdamage
+    libxext
+    libxfixes
+    libxrandr
+    libxshmfence
     libxkbcommon
-    xorg.libxkbfile
+    libxkbfile
     pango
     stdenv.cc.cc
     systemd
   ];
 
   # Hunspell
-  hunspellDirs = builtins.map (lang: "${hunspellDicts.${lang}}/share/hunspell") languages;
+  hunspellDirs = map (lang: "${hunspellDicts.${lang}}/share/hunspell") languages;
   hunspellTargetDirs = "$out/opt/Pulsar/resources/app.asar.unpacked/node_modules/spellchecker/vendor/hunspell_dictionaries";
   hunspellCopyCommands = lib.concatMapStringsSep "\n" (
     lang: "cp -r ${lang}/* ${hunspellTargetDirs};"
@@ -102,7 +110,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     gtk3
-    xorg.libxkbfile
+    libxkbfile
   ];
 
   dontBuild = true;

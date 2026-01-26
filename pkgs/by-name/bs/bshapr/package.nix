@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  xorg,
+  libx11,
   cairo,
   lv2,
   pkg-config,
@@ -21,18 +21,18 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    xorg.libX11
+    libx11
     cairo
     lv2
   ];
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/sjaehn/BShapr";
     description = "Beat / envelope shaper LV2 plugin";
-    maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.linux;
-    license = licenses.gpl3;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3;
   };
 }

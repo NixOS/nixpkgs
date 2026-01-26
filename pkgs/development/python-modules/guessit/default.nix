@@ -5,8 +5,6 @@
   python-dateutil,
   babelfish,
   rebulk,
-  pythonOlder,
-  importlib-resources,
   py,
   pytestCheckHook,
   pytest-mock,
@@ -28,8 +26,7 @@ buildPythonPackage rec {
     rebulk
     babelfish
     python-dateutil
-  ]
-  ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
+  ];
 
   nativeCheckInputs = [
     py
@@ -43,12 +40,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "guessit" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library that extracts as much information as possible from a video filename";
     mainProgram = "guessit";
     homepage = "https://guessit-io.github.io/guessit/";
     changelog = "https://github.com/guessit-io/guessit/raw/v${version}/CHANGELOG.md";
-    license = licenses.lgpl3Only;
+    license = lib.licenses.lgpl3Only;
     maintainers = [ ];
   };
 }

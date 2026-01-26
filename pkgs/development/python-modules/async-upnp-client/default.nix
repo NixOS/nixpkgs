@@ -9,7 +9,6 @@
 
   # dependencies
   aiohttp,
-  async-timeout,
   defusedxml,
   python-didl-lite,
   voluptuous,
@@ -22,26 +21,20 @@
 
 buildPythonPackage rec {
   pname = "async-upnp-client";
-  version = "0.45.0";
+  version = "0.46.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "StevenLooman";
     repo = "async_upnp_client";
     tag = version;
-    hash = "sha256-bRUEnedPDFBgpJeDPRG6e6fQUJ/R2RaasVKHZX7COp8=";
+    hash = "sha256-Ez7UnZjSA0JYrqY5SV4q9myrbXCQzg/plrQ9P941b6E=";
   };
-
-  pythonRelaxDeps = [
-    "async-timeout"
-    "defusedxml"
-  ];
 
   build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
-    async-timeout
     defusedxml
     python-didl-lite
     voluptuous
@@ -54,8 +47,6 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    "test_decode_ssdp_packet"
-    "test_microsoft_butchers_ssdp"
     # socket.gaierror: [Errno -2] Name or service not known
     "test_async_get_local_ip"
     "test_get_local_ip"

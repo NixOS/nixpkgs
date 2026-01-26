@@ -18,16 +18,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tangara-companion";
-  version = "0.5.0";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "haileys";
     repo = "tangara-companion";
     tag = "v${version}";
-    hash = "sha256-7uTcTAQy5ozIeXfSZ2SbeepFnZJtWBsWIfnezTnUgtM=";
+    hash = "sha256-x/xB+itr1GVcaTEre3u6Lchg9VcSzWiNyWVGv5Aczgw=";
   };
 
-  cargoHash = "sha256-lvd9M81j69qFWWD8BZyAU7pisnw8EnU3pTvugoRAqnY=";
+  cargoHash = "sha256-PVTfAG2AOioW1zVXtXB5SBJX2sJoWVRQO3NafUOAleo=";
 
   nativeBuildInputs = [
     copyDesktopItems

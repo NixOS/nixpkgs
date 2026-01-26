@@ -49,22 +49,21 @@ stdenv.mkDerivation rec {
       mkdir -pv "$out/bin"
       wrapProgram "$out/share/ganttproject/ganttproject" \
         --set JAVA_HOME "${jre}" \
-        --prefix _JAVA_OPTIONS " " "${builtins.toString javaOptions}"
+        --prefix _JAVA_OPTIONS " " "${toString javaOptions}"
 
       mv -v "$out/share/ganttproject/ganttproject" "$out/bin"
 
       cp -rv "${desktopItem}/share/applications" "$out/share"
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Project scheduling and management";
     homepage = "https://www.ganttproject.biz/";
     downloadPage = "https://www.ganttproject.biz/download";
     # GanttProject itself is GPL3+. All bundled libraries are declared
     # ‘GPL3-compatible’. See ${downloadPage} for detailed information.
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.vidbina ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     mainProgram = "ganttproject";
   };
 }

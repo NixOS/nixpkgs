@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  fetchpatch2,
   fetchPypi,
   pythonOlder,
 
@@ -42,6 +43,15 @@ buildPythonPackage rec {
     hash = "sha256-cmkz/ZyVYfpz4yOxghsXPF4PhRluwqSXo1CcwvwkXFg=";
   };
 
+  patches = [
+    # https://github.com/marimo-team/marimo/pull/6714
+    (fetchpatch2 {
+      name = "uv-build.patch";
+      url = "https://github.com/Prince213/marimo/commit/b1c690e82e8117c451a74fdf172eb51a4861853d.patch?full_index=1";
+      hash = "sha256-iFS5NSGjaGdECRk0LCRSA8XzRb1/sVSZCTRLy6taHNU=";
+    })
+  ];
+
   build-system = [ uv-build ];
 
   dependencies = [
@@ -71,7 +81,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Reactive Python notebook that's reproducible, git-friendly, and deployable as scripts or apps";

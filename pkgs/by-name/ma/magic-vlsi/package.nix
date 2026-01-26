@@ -2,7 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  git,
+  fetchpatch,
+  gitMinimal,
   python3,
   m4,
   cairo,
@@ -16,21 +17,35 @@
   fixDarwinDylibNames,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "magic-vlsi";
-  version = "8.3.552";
+  version = "8.3.573";
 
   src = fetchFromGitHub {
     owner = "RTimothyEdwards";
     repo = "magic";
-    tag = "${version}";
-    sha256 = "sha256-rCT/w2Y6eV0oc/dOoQitzOpy7xFcUC7tUpkzWRf/QAc=";
+    tag = finalAttrs.version;
+    hash = "sha256-P5qfMsn3DGHjeF7zsZWeG9j38C6j5UEwUqGyjaEVO1E=";
     leaveDotGit = true;
   };
 
+  patches = [
+    (fetchpatch {
+      name = "fix-buffer-overflow-runstats.patch";
+      url = "https://github.com/RTimothyEdwards/magic/commit/6a07bc172b4bdae8bc22f51905194cdd427912cc.patch";
+      hash = "sha256-QPVl+SfUWj51u/G+EjTCVQZdG7tTdOlEFN/hS7E1Ojg=";
+    })
+
+    (fetchpatch {
+      name = "neuer-fix-name.patch";
+      url = "https://github.com/RTimothyEdwards/magic/commit/a70ca249c3a4e7a256a4482bd887452267c8cd52.patch";
+      hash = "sha256-sNQDz4/hBtwJeDrOCe+LfJkuaB0zRzX7w1aDv8ZD7Pw=";
+    })
+  ];
+
   nativeBuildInputs = [
     python3
-    git
+    gitMinimal
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     fixDarwinDylibNames
@@ -87,13 +102,14 @@ stdenv.mkDerivation rec {
     install_name_tool -add_rpath ${mesa_glu.out}/lib $out/lib/magic/tcl/magicexec
   '';
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
+  # gnu89 is needed for GCC 15 that is more strict about K&R style prototypes
+  env.NIX_CFLAGS_COMPILE = "-std=gnu89 -Wno-implicit-function-declaration";
   env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-headerpad_max_install_names";
 
-  meta = with lib; {
+  meta = {
     description = "VLSI layout tool written in Tcl";
     homepage = "http://opencircuitdesign.com/magic/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ thoughtpolice ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
-}
+})

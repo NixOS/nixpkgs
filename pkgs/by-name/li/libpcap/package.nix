@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libpcap";
-  version = "1.10.5";
+  version = "1.10.6";
 
   __structuredAttrs = true;
 
   src = fetchurl {
     url = "https://www.tcpdump.org/release/${pname}-${version}.tar.gz";
-    hash = "sha256-N87ZChmjAqfzLkWCJKAMNlwReQXCzTWsVEtogKgUiPA=";
+    hash = "sha256-hy3REzf+GrAq2dT+4EfJ2iRNaVxt3zTi67cz79Ttiqk=";
   };
 
   outputs = [
@@ -94,12 +94,12 @@ stdenv.mkDerivation rec {
     haskell-pcap = haskellPackages.pcap;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.tcpdump.org";
     description = "Packet Capture Library";
     mainProgram = "pcap-config";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ fpletz ];
-    license = licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ fpletz ];
+    license = lib.licenses.bsd3;
   };
 }

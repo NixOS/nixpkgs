@@ -21,8 +21,8 @@ let
 in
 buildMongoDB {
   inherit avxSupport;
-  version = "7.0.22";
-  sha256 = "sha256-Je4vPG8tz1vqCEXzWyYi5KWQaxzlH0hOKSpWBgPs0Hs=";
+  version = "7.0.28";
+  hash = "sha256-28IouDQ+uzRoUm+PvESFkX1oz0dbFURd7JMsI7orYsc=";
   patches = [
     # ModuleNotFoundError: No module named 'mongo_tooling_metrics':
     # NameError: name 'SConsToolingMetrics' is not defined:

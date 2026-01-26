@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "openxr-loader";
-  version = "1.1.51";
+  version = "1.1.54";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "OpenXR-SDK-Source";
     tag = "release-${version}";
-    hash = "sha256-NEArzegPZNL0zRbnUHrNbNhBtj0IJP+uha1ehzwB7wA=";
+    hash = "sha256-7aip1ymZqQ7XQottD9jVb7SBPAlGaj6e27tH6aXYc2I=";
   };
 
   nativeBuildInputs = [
@@ -65,11 +65,11 @@ stdenv.mkDerivation rec {
     mv "$out/lib/libXrApiLayer"* "$layers/lib"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Khronos OpenXR loader";
     homepage = "https://www.khronos.org/openxr";
-    platforms = platforms.linux;
-    license = licenses.asl20;
-    maintainers = [ maintainers.ralith ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.ralith ];
   };
 }

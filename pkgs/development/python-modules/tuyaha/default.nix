@@ -23,10 +23,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "tuyaha" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module with the Tuya API";
     homepage = "https://github.com/PaulAnnekov/tuyaha";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

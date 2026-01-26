@@ -66,7 +66,7 @@
 
 stdenv.mkDerivation rec {
   pname = "vivaldi";
-  version = "7.6.3797.55";
+  version = "7.7.3851.67";
 
   suffix =
     {
@@ -79,8 +79,8 @@ stdenv.mkDerivation rec {
     url = "https://downloads.vivaldi.com/stable/vivaldi-stable_${version}-1_${suffix}.deb";
     hash =
       {
-        aarch64-linux = "sha256-eznFA+ljcNCxUCtlXBxaV73Hnum4j6x7LWBV55fft2E=";
-        x86_64-linux = "sha256-lP3dQvSYGuMOEdvnulIr6D6CEXJ+2ciUSohMZFUjPys=";
+        aarch64-linux = "sha256-oNElLW9J010JIhvbocVd+mbK8w2oZVnbfmyi5DjjouQ=";
+        x86_64-linux = "sha256-bvc5QVt+Qcaw9Za36S6TugfXLAj75bu8F72nS6F0pvE=";
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
@@ -202,7 +202,7 @@ stdenv.mkDerivation rec {
     substituteInPlace "$out"/share/applications/*.desktop \
       --replace-fail vivaldi-stable vivaldi
     local d
-    for d in 16 22 24 32 48 64 128 256; do
+    for d in 16 24 32 48 64 128 256; do
       mkdir -p "$out"/share/icons/hicolor/''${d}x''${d}/apps
       ln -s \
         "$out"/opt/vivaldi/product_logo_''${d}.png \

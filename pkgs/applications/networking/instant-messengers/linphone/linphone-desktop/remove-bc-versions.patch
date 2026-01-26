@@ -1,0 +1,15 @@
+diff --git a/linphone-app/CMakeLists.txt b/linphone-app/CMakeLists.txt
+index d40842fa2..7d7bc57d8 100644
+--- a/linphone-app/CMakeLists.txt
++++ b/linphone-app/CMakeLists.txt
+@@ -40,10 +40,8 @@ set(version_minor)
+ set(version_patch)
+ set(identifiers )
+ set(metadata )
+-bc_parse_full_version("${LINPHONEAPP_VERSION}" version_major version_minor version_patch identifiers metadata)
+ 
+ 
+-project(linphoneqt VERSION "${version_major}.${version_minor}.${version_patch}")
+ 
+ if(ENABLE_BUILD_VERBOSE)
+ 	#message("CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH}")

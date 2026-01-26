@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ipyxact" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/olofk/ipyxact";
     description = "IP-XACT parser";
     mainProgram = "ipxact2v";
-    maintainers = with maintainers; [ genericnerdyusername ];
-    license = licenses.mit;
+    maintainers = [ ];
+    license = lib.licenses.mit;
   };
 }

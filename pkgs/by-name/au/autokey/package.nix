@@ -14,7 +14,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "autokey";
   version = "0.96.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "autokey";
@@ -47,6 +47,7 @@ python3Packages.buildPythonApplication rec {
     xlib
     pygobject3
     packaging
+    standard-imghdr
   ];
 
   runtimeDeps = [

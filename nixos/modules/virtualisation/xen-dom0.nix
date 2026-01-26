@@ -720,15 +720,6 @@ in
         "xen-blkback"
         "xen-netback"
         "xen-pciback"
-        "evtchn"
-        "gntdev"
-        "netbk"
-        "blkbk"
-        "xen-scsibk"
-        "usbbk"
-        "pciback"
-        "xen-acpi-processor"
-        "blktap2"
         "tun"
         "netxen_nic"
         "xen_wdt"
@@ -750,22 +741,14 @@ in
 
       # Xen Bootspec extension. This extension allows NixOS bootloaders to
       # fetch the dom0 kernel paths and access the `cfg.boot.params` option.
-      bootspec.extensions = {
-        # Bootspec extension v1 is deprecated, and will be removed in 26.05
-        # It is present for backwards compatibility
-        "org.xenproject.bootspec.v1" = {
-          xen = cfg.boot.efi.path;
-          xenParams = cfg.boot.params;
-        };
-        # Bootspec extension v2 includes more detail,
-        # including supporting multiboot, and is the current supported
-        # bootspec extension
-        "org.xenproject.bootspec.v2" = {
-          efiPath = cfg.boot.efi.path;
-          multibootPath = cfg.boot.bios.path;
-          version = cfg.package.version;
-          params = cfg.boot.params;
-        };
+      # Bootspec extension v2 includes more detail,
+      # including supporting multiboot, and is the current supported
+      # bootspec extension
+      bootspec.extensions."org.xenproject.bootspec.v2" = {
+        efiPath = cfg.boot.efi.path;
+        multibootPath = cfg.boot.bios.path;
+        version = cfg.package.version;
+        params = cfg.boot.params;
       };
 
       # See the `xenBootBuilder` script in the main `let...in` statement of this file.
@@ -907,13 +890,17 @@ in
           wantedBy = [ "multi-user.target" ];
           serviceConfig = {
             PIDFile = cfg.qemu.pidFile;
-            ExecStart = ''
-              ${cfg.qemu.package}/${cfg.qemu.package.qemu-system-i386} \
-              -xen-domid 0 -xen-attach -name dom0 -nographic -M xenpv \
-              -daemonize -monitor /dev/null -serial /dev/null -parallel \
-              /dev/null -nodefaults -no-user-config -pidfile \
-              ${cfg.qemu.pidFile}
-            '';
+            overrideStrategy = "asDropin";
+            ExecStart = [
+              ""
+              ''
+                ${cfg.qemu.package}/${cfg.qemu.package.qemu-system-i386} \
+                -xen-domid 0 -xen-attach -name dom0 -nographic -M xenpv \
+                -daemonize -monitor /dev/null -serial /dev/null -parallel \
+                /dev/null -nodefaults -no-user-config -pidfile \
+                ${cfg.qemu.pidFile}
+              ''
+            ];
           };
         };
 

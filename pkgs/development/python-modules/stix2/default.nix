@@ -52,11 +52,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "stix2" ];
 
-  meta = with lib; {
+  meta = {
     description = "Produce and consume STIX 2 JSON content";
     homepage = "https://stix2.readthedocs.io/en/latest/";
     changelog = "https://github.com/oasis-open/cti-python-stix2/blob/v${version}/CHANGELOG";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ PapayaJackal ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ PapayaJackal ];
   };
 }

@@ -3,7 +3,9 @@
   stdenv,
   fetchurl,
   pkg-config,
-  xorg,
+  libxext,
+  libx11,
+  xorgproto,
   mesa,
   meson,
   ninja,
@@ -29,12 +31,12 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
   ];
-  buildInputs = with xorg; [
+  buildInputs = [
     xorgproto
-    libXext
+    libxext
   ];
 
-  propagatedBuildInputs = [ xorg.libX11 ];
+  propagatedBuildInputs = [ libx11 ];
 
   mesonFlags = lib.optionals stdenv.hostPlatform.isLinux [
     "-Dmoduledir=${mesa.driverLink}/lib/vdpau"
@@ -48,11 +50,11 @@ stdenv.mkDerivation rec {
     patchelf $out/lib/libvdpau.so --add-rpath $out/lib
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.freedesktop.org/wiki/Software/VDPAU/";
     description = "Library to use the Video Decode and Presentation API for Unix (VDPAU)";
-    license = licenses.mit; # expat version
-    platforms = platforms.unix;
-    maintainers = [ maintainers.vcunat ];
+    license = lib.licenses.mit; # expat version
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.vcunat ];
   };
 }

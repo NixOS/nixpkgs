@@ -24,8 +24,8 @@ mkLibretroCore {
   makefile = "Makefile";
 
   meta = {
-    description = "QuickNES libretro port";
-    homepage = "https://github.com/libretro/QuickNES_Core";
+    description = "SameBoy libretro port";
+    homepage = "https://github.com/libretro/SameBoy";
     license = lib.licenses.mit;
   };
 }

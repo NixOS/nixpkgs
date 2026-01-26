@@ -162,7 +162,7 @@ the last category is only available after the `imports` have been resolved.
   It is exposed as a module argument due to how the module system is implemented, which cannot be avoided without breaking compatibility.
 
   It is a good practice not to rely on `_prefix`. A module should not make assumptions about its location in the configuration tree.
-  For example, the root of a NixOS configuration may have a non-empty prefix, for example when it is a specialisation, or when it is part of a larger, multi-host configuration such as a [NixOS test](https://nixos.org/manual/nixos/unstable/#sec-nixos-tests).
+  For example, the root of a NixOS configuration may have a non-empty prefix, for example when it is a specialisation, or when it is part of a larger, multi-host configuration, such as a [NixOS test](https://nixos.org/manual/nixos/unstable/#sec-nixos-tests).
   Instead of depending on `_prefix` use explicit options, whose default definitions can be provided by the module that imports them.
 
 <!-- markdown link aliases -->

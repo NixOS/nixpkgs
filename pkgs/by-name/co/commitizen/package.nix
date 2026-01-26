@@ -1,34 +1,40 @@
 {
   lib,
+  python3Packages,
   fetchFromGitHub,
   gitMinimal,
   stdenv,
   installShellFiles,
   nix-update-script,
-  python3Packages,
   versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonPackage rec {
   pname = "commitizen";
-  version = "4.9.1";
+  version = "4.11.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "commitizen-tools";
     repo = "commitizen";
     tag = "v${version}";
-    hash = "sha256-4hsKCBJHeRjc519h7KO/X8BJhGuw0N6XmC6u+QEiAnc=";
+    hash = "sha256-7KF7qzBWF8OQLHxXYWHI+zcjBWV7KogMr0FYhitPSTw=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build >= 0.9.17, <0.10.0" "uv-build"
+  '';
 
   pythonRelaxDeps = [
     "argcomplete"
     "decli"
+    "prompt-toolkit"
     "termcolor"
   ];
 
-  build-system = with python3Packages; [ poetry-core ];
+  build-system = with python3Packages; [ uv-build ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -41,6 +47,7 @@ python3Packages.buildPythonPackage rec {
     importlib-metadata
     jinja2
     packaging
+    prompt-toolkit
     pyyaml
     questionary
     termcolor
@@ -58,7 +65,7 @@ python3Packages.buildPythonPackage rec {
     pytest-freezer
     pytest-mock
     pytest-regressions
-    pytest7CheckHook
+    pytestCheckHook
   ]);
 
   versionCheckProgramArg = "version";

@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   preferLocalBuild = true;
   allowSubstitutes = false;
 
-  meta = with lib; {
+  meta = {
     description = "Configurable blue light filter";
     mainProgram = "blucontrol";
     longDescription = ''
@@ -31,9 +31,9 @@ stdenv.mkDerivation {
       Configuration is done in Haskell in the style of xmonad.
       Blucontrol makes use of monad transformers and allows monadic calculation of gamma values and recoloring. The user chooses, what will be captured in the monadic state.
     '';
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     homepage = "https://github.com/jumper149/blucontrol";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ jumper149 ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ jumper149 ];
   };
 }

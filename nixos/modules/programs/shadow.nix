@@ -158,6 +158,8 @@ in
         This must not be a store path, since the path is
         used outside the store (in particular in /etc/passwd).
       '';
+      # /bin/sh is also the compiled in default of the shadow package.
+      default = "/bin/sh";
       example = lib.literalExpression "pkgs.zsh";
       type = lib.types.either lib.types.path lib.types.shellPackage;
     };

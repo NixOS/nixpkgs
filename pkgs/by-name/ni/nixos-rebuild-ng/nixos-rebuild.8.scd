@@ -18,13 +18,11 @@ nixos-rebuild - reconfigure a NixOS machine
 # SYNOPSIS
 
 ; document here only non-deprecated flags
-_nixos-rebuild_ \[--verbose] [--max-jobs MAX_JOBS] [--cores CORES] [--log-format LOG_FORMAT] [--keep-going] [--keep-failed] [--fallback] [--repair] [--option OPTION OPTION] [--builders BUILDERS]++
-	\[--include INCLUDE] [--quiet] [--print-build-logs] [--show-trace] [--accept-flake-config] [--refresh] [--impure] [--offline] [--no-net] [--recreate-lock-file]++
-	\[--no-update-lock-file] [--no-write-lock-file] [--no-registries] [--commit-lock-file] [--update-input UPDATE_INPUT] [--override-input OVERRIDE_INPUT OVERRIDE_INPUT]++
-	\[--no-build-output] [--use-substitutes] [--help] [--file FILE] [--attr ATTR] [--flake [FLAKE]] [--no-flake] [--install-bootloader] [--profile-name PROFILE_NAME]++
-	\[--specialisation SPECIALISATION] [--rollback] [--upgrade] [--upgrade-all] [--json] [--ask-sudo-password] [--sudo] [--no-reexec]++
-	\[--image-variant VARIANT]++
-	\[--build-host BUILD_HOST] [--target-host TARGET_HOST]++
+_nixos-rebuild_ \[--verbose] [--quiet] [--max-jobs MAX_JOBS] [--cores CORES] [--log-format LOG_FORMAT] [--keep-going] [--keep-failed] [--fallback] [--repair] [--option OPTION OPTION] [--builders BUILDERS] [--include INCLUDE]++
+	\[--print-build-logs] [--show-trace] [--accept-flake-config] [--refresh] [--impure] [--offline] [--no-net] [--recreate-lock-file] [--no-update-lock-file] [--no-write-lock-file] [--no-registries] [--commit-lock-file]++
+	\[--update-input UPDATE_INPUT] [--override-input OVERRIDE_INPUT OVERRIDE_INPUT] [--no-build-output] [--use-substitutes] [--help] [--debug] [--file FILE] [--attr ATTR] [--flake [FLAKE]] [--no-flake] [--install-bootloader]++
+	\[--profile-name PROFILE_NAME] [--specialisation SPECIALISATION] [--rollback] [--store-path STORE_PATH] [--upgrade] [--upgrade-all] [--json] [--ask-sudo-password] [--sudo] [--no-reexec]++
+	\[--build-host BUILD_HOST] [--target-host TARGET_HOST] [--no-build-nix] [--image-variant IMAGE_VARIANT]++
 	\[{switch,boot,test,build,edit,repl,dry-build,dry-run,dry-activate,build-image,build-vm,build-vm-with-bootloader,list-generations}]
 
 # DESCRIPTION
@@ -184,6 +182,20 @@ It must be one of the following:
 	(The previous configuration is defined as the one before the “current”
 	generation of the Nix profile _/nix/var/nix/profiles/system_.)
 
+*--store-path* _path_
+	Use a pre-built NixOS system store path at _path_ instead of evaluating
+	and building from the configuration. This skips the evaluation and build
+	phases entirely. The path must be a valid NixOS system closure
+	(containing _nixos-version_ and _bin/switch-to-configuration_).
+
+	This is useful for deploying closures that were built elsewhere, such as
+	in CI systems or on remote build machines.
+
+	Can only be used with *switch*, *boot*, *test*, and *dry-activate*
+	actions. Mutually exclusive with *--rollback*, *--flake*, *--file*, and
+	*--attr*. The *--build-host* option is ignored when *--store-path* is
+	specified.
+
 *--builders* _builder-spec_
 	Allow ad-hoc remote builders for building the new system. This requires
 	the user executing *nixos-rebuild* (usually root) to be configured as a
@@ -260,9 +272,10 @@ It must be one of the following:
 	When set, *nixos-rebuild* prefixes activation commands with sudo.
 	Setting this option allows deploying as a non-root user.
 
-*--ask-sudo-password*
+*--ask-sudo-password*, *-S*
 	When set, *nixos-rebuild* will ask for sudo password for remote
 	activation (i.e.: on *--target-host*) at the start of the build process.
+	Implies *--sudo*.
 
 *--file* _path_, *-f* _path_
 	Enable and build the NixOS system from the specified file. The file must
@@ -280,7 +293,7 @@ It must be one of the following:
 	attribute path from file specified by the *--file* option. If specified
 	without *--file* option, uses _default.nix_ in current directory.
 
-*--flake* _flake-uri[#name]_
+*--flake* _flake-uri[#name]_, *-F* _flake-uri[#name]_
 	Build the NixOS system from the specified flake. It defaults to the
 	directory containing the target of the symlink _/etc/nixos/flake.nix_,
 	if it exists. The flake must contain an output named
@@ -305,9 +318,9 @@ Flake-related options:
 Builder options:
 
 *--verbose,*  *-v*,  *--quiet*,  *--log-format*,  *--no-build-output*, *-Q*,
-*--max-jobs*, *-j*, *--cores*, *--keep-going*, *-k*, *--keep-failed*, *-K*,
-*--fallback*, *--include*, *-I*, *--option*, *--repair*, *--builders*,
-*--print-build-logs*, *-L*, *--show-trace*
+*--no-link*, *--max-jobs*, *-j*, *--cores*, *--keep-going*, *-k*,
+*--keep-failed*, *-K*, *--fallback*, *--include*, *-I*, *--option*, *--repair*,
+*--builders*, *--print-build-logs*, *-L*, *--show-trace*
 
 See the Nix manual, *nix flake lock --help* or *nix-build --help* for details.
 

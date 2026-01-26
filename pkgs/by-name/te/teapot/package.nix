@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchzip,
   cmake,
   libtirpc,
   ncurses,
@@ -11,16 +11,10 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "teapot";
   version = "2.3.0";
 
-  src = fetchFromGitHub {
-    owner = "museoa";
-    repo = "teapot";
-    tag = finalAttrs.version;
-    hash = "sha256-38XFjRzOGasr030f+mRYT+ptlabpnVJfa+1s7ZAjS+k=";
+  src = fetchzip {
+    url = "https://www.syntax-k.de/projekte/teapot/teapot-${finalAttrs.version}.tar.gz";
+    hash = "sha256-wzAwZwOMeTsuR5LhfjspGdejT6X1V8YJ8B7v9pcbxaY=";
   };
-
-  prePatch = ''
-    cd src
-  '';
 
   patches = [
     # include a local file in order to make cc happy
@@ -42,9 +36,10 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
   NIX_LDFLAGS = [ "-ltirpc" ];
 
-  cmakeConfigureFlags = [
-    "-DENABLE_HELP=OFF"
-  ];
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
+  '';
 
   meta = {
     description = "Table Editor And Planner, Or: Teapot";
@@ -70,11 +65,11 @@ stdenv.mkDerivation (finalAttrs: {
       systems.
     '';
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "teapot";
-    homepage = "https://github.com/museoa/teapot";
-    changelog = "https://github.com/museoa/teapot/releases/tag/${finalAttrs.version}";
+    homepage = "https://www.syntax-k.de/projekte/teapot/";
+    changelog = "https://www.syntax-k.de/projekte/teapot/";
   };
 })
 # TODO: patch/fix FLTK building

@@ -12,7 +12,7 @@
   gtk4,
   gobject-introspection,
   libadwaita,
-  webkitgtk,
+  webkitgtk_6_0,
   coreutils,
   makeShellWrapper,
   wrapGAppsHook4,
@@ -24,14 +24,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "biblioteca";
-  version = "1.6";
+  version = "1.7";
 
   src = fetchFromGitHub {
     owner = "workbenchdev";
     repo = "Biblioteca";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-9AL8obvXB/bgqhTw8VE30OytNFQmxvJ6TYGN8ir+NfI=";
+    hash = "sha256-PRm/4t0f8AExOFXCcV7S+JIKkJgYP1gego2xTUbj7FY=";
   };
 
   patches = [
@@ -41,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     meson
     ninja
+    blueprint-compiler
     desktop-file-utils
     makeShellWrapper
     gjs
@@ -53,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk4
     gobject-introspection
     libadwaita
-    webkitgtk
+    webkitgtk_6_0
     glib-networking
   ];
 
@@ -63,16 +64,13 @@ stdenv.mkDerivation (finalAttrs: {
       gtk4.devdoc
       glib.devdoc
       libadwaita.devdoc
-      webkitgtk.devdoc
+      webkitgtk_6_0.devdoc
       gobject-introspection.devdoc
     ]
     ++ extraDocsPackage;
   };
 
   postPatch = ''
-    substituteInPlace src/meson.build \
-      --replace-fail "/app/bin/blueprint-compiler" "${lib.getExe blueprint-compiler}" \
-
     patchShebangs .
 
     substituteInPlace build-aux/build-index.js \

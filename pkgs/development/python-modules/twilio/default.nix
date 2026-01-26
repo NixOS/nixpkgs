@@ -12,25 +12,21 @@
   pyjwt,
   pyngrok,
   pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
   pytz,
   requests,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "twilio";
-  version = "9.8.1";
+  version = "9.10.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "twilio";
     repo = "twilio-python";
-    tag = version;
-    hash = "sha256-zJiezLn2zEbSGPSRT4yNp7GaJnjArCo+QJDaGD0wyVM=";
+    tag = finalAttrs.version;
+    hash = "sha256-DJxyDnAv3wKcujBFCE808PJ9NZe/PN8+Z9J2o49n0HU=";
   };
 
   build-system = [ setuptools ];
@@ -67,11 +63,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "twilio" ];
 
-  meta = with lib; {
+  meta = {
     description = "Twilio API client and TwiML generator";
     homepage = "https://github.com/twilio/twilio-python/";
-    changelog = "https://github.com/twilio/twilio-python/blob/${src.tag}/CHANGES.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/twilio/twilio-python/blob/${finalAttrs.src.tag}/CHANGES.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

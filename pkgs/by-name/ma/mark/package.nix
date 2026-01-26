@@ -8,16 +8,16 @@
 # https://github.com/kovetskiy/mark/pull/581#issuecomment-2797872996
 buildGoModule rec {
   pname = "mark";
-  version = "14.1.1";
+  version = "15.3.0";
 
   src = fetchFromGitHub {
     owner = "kovetskiy";
     repo = "mark";
-    rev = "${version}";
-    sha256 = "sha256-jKc5QugqfdjSQjK7SbLG02a9+YdFcweS+91LhdR0Dzg=";
+    rev = "v${version}";
+    sha256 = "sha256-tQmoTvZO/Las8QDJqcmW7upAciFEQqVFVKEVx6Zg7Mg=";
   };
 
-  vendorHash = "sha256-AHtIVp2n5v4YoYfWAsE7eD1QcEFKdjSqzGIlR7+mnxg=";
+  vendorHash = "sha256-Pk56hx2GRq+4NmCVx0S8Mr2Jgnn44aSRNfhtZIH9Lxk=";
 
   ldflags = [
     "-s"
@@ -37,12 +37,12 @@ buildGoModule rec {
       "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$"
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for syncing your markdown documentation with Atlassian Confluence pages";
     mainProgram = "mark";
     homepage = "https://github.com/kovetskiy/mark";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       rguevara84
       wrbbz
     ];

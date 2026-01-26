@@ -96,7 +96,7 @@ stdenv.mkDerivation {
     description = "Brother MFC-L2750DW printer driver";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
-    platforms = builtins.map (arch: "${arch}-linux") arches;
+    platforms = map (arch: "${arch}-linux") arches;
     maintainers = [ lib.maintainers.luftmensch-luftmensch ];
   };
 }

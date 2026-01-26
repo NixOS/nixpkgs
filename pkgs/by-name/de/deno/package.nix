@@ -29,27 +29,19 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deno";
-  version = "2.5.2";
+  version = "2.6.5";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "deno";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true; # required for tests
-    hash = "sha256-wpn79xY+Gsn48C5mYF1lryrgZZsr1YJayd+Rl0gbPXY=";
+    hash = "sha256-oNZXPBW61IQdA3MFS1gxNoInSCt6mUitedAXx+tuFaw=";
   };
 
-  cargoHash = "sha256-KAHLZS6BfRgPBlBW0LSdHwPP6sRUN9kksMo0KuDtb5s=";
+  cargoHash = "sha256-H1vX/aiB5inK6Fo0l3sEZnvqgRImTpjkxRZHLBPgz0U=";
 
   patches = [
-    # Patch out the remote upgrade (deno update) check.
-    # Not a blocker in the build sandbox, since implementation and tests are
-    # considerately written for no external networking, but removing brings
-    # in-line with common nixpkgs practice.
-    ./patches/0000-remove-deno-upgrade-check.patch
-    # Patch out the upgrade sub-command since that wouldn't correctly upgrade
-    # deno from nixpkgs.
-    ./patches/0001-remove-deno-upgrade.patch
     ./patches/0002-tests-replace-hardcoded-paths.patch
     ./patches/0003-tests-linux-no-chown.patch
     ./patches/0004-tests-darwin-fixes.patch
@@ -84,6 +76,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildFlags = [ "--package=cli" ];
+
+  # Disable the default feature `upgrade` (which controls the self-update subcommand and update checks)
+  buildNoDefaultFeatures = true;
+  buildFeatures = [
+    "__vendored_zlib_ng"
+  ];
 
   # work around "error: unknown warning group '-Wunused-but-set-parameter'"
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unknown-warning-option";
@@ -130,7 +128,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoTestFlags = [
     "--lib" # unit tests
-    "--test integration_tests"
+    "--test=integration_tests"
     # Test targets not included here:
     # - node_compat: there are tons of network access in them and it's not trivial to skip test cases.
     # - specs: this target uses a custom test harness that doesn't implement the --skip flag.
@@ -169,6 +167,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # Use of VSOCK, might not be available on all platforms
     "--skip=js_unit_tests::serve_test"
     "--skip=js_unit_tests::fetch_test"
+
+    # We disable the upgrade feature on purpose
+    "--skip=upgrade::upgrade_prompt"
+    "--skip=upgrade::upgrade_invalid_lockfile"
+
+    # Wants to access /etc/group
+    "--skip=node_unit_tests::process_test"
+
+    # sqlite extension tests are in a separate Cargo crate and therefore are not handled by the nixpkgs Cargo tooling
+    "--skip=sqlite_extension_test"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Expects specific shared libraries from macOS to be linked
@@ -178,6 +186,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=watcher"
     "--skip=node_unit_tests::_fs_watch_test"
     "--skip=js_unit_tests::fs_events_test"
+    "--skip=js_unit_tests::utime_test"
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     # Wants to access /etc/resolv.conf: https://github.com/hickory-dns/hickory-dns/issues/2959
@@ -222,10 +231,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     runHook postInstallCheck
   '';
 
-  passthru.updateScript = ./update/update.ts;
-  passthru.tests = callPackage ./tests { };
+  passthru = {
+    updateScript = ./update/update.ts;
+    tests = callPackage ./tests { };
+    inherit librusty_v8;
+  };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://deno.land/";
     changelog = "https://github.com/denoland/deno/releases/tag/v${finalAttrs.version}";
     description = "Secure runtime for JavaScript and TypeScript";
@@ -238,9 +250,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
       Among other things, Deno is a great replacement for utility scripts that may have been historically written with
       bash or python.
     '';
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "deno";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       jk
       ofalvai
     ];

@@ -32,5 +32,7 @@ stdenv.mkDerivation rec {
     description = "Virtual filesystem that allows browsing of compressed files";
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2Only;
+    # The last successful Darwin Hydra build was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

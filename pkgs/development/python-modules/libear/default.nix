@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "libear";
   inherit (clang-unwrapped) version;
 
-  format = "other";
+  pyproject = false;
 
   src = clang-unwrapped.lib + "/lib/libear";
 

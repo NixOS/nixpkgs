@@ -12,18 +12,24 @@
 
 buildGoModule rec {
   pname = "vault";
-  version = "1.20.3";
+  version = "1.21.1";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "vault";
     rev = "v${version}";
-    hash = "sha256-q7Uz8gq092JU1v6sEQvraV6wxgBEGGnZFCBEw2f9GMw=";
+    hash = "sha256-Vkn3l4blbUhT2D1ParNacVwwt/aDQlm12peoHvPNbk4=";
   };
 
-  vendorHash = "sha256-504WH4KaL1ecsuwXlELKhpbHHK67IcaI+I4DvEQerwA=";
+  vendorHash = "sha256-8IK8M328dXWk+NHjK7d+Zj8ltLQqJOofvLDfDieDFnk=";
 
   proxyVendor = true;
+
+  postPatch = ''
+    # Remove defunct github.com/hashicorp/go-cmp dependency
+    sed -i '/github\.com\/hashicorp\/go-cmp/d' go.mod
+    sed -i '/github\.com\/hashicorp\/go-cmp/d' go.sum
+  '';
 
   subPackages = [ "." ];
 

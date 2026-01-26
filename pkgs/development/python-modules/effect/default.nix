@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
   six,
   testtools,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "effect";
   version = "1.1.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -37,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "effect" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pure effects for Python";
     homepage = "https://effect.readthedocs.io/";
     changelog = "https://github.com/python-effect/effect/releases/tag/${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

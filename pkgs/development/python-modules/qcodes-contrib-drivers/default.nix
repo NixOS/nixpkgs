@@ -23,7 +23,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "qcodes-contrib-drivers";
   version = "0.23.0";
   pyproject = true;
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "QCoDeS";
     repo = "Qcodes_contrib_drivers";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-m2idBaQl2OVhrY5hcLTeXY6BycGf0ufa/ySgxaU2L/4=";
   };
 
@@ -71,8 +71,8 @@ buildPythonPackage rec {
   meta = {
     description = "User contributed drivers for QCoDeS";
     homepage = "https://github.com/QCoDeS/Qcodes_contrib_drivers";
-    changelog = "https://github.com/QCoDeS/Qcodes_contrib_drivers/releases/tag/v${version}";
+    changelog = "https://github.com/QCoDeS/Qcodes_contrib_drivers/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ evilmav ];
   };
-}
+})

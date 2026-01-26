@@ -21,11 +21,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "oscscreen" ];
 
-  meta = with lib; {
+  meta = {
     description = "Framework for developing console applications using Python and curses";
     homepage = "https://github.com/outscale/npyscreen";
     changelog = "https://github.com/outscale/npyscreen/blob/${src.rev}/CHANGELOG";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ nicolas-goudry ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ nicolas-goudry ];
   };
 }

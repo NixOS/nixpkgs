@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "liblxqt";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "liblxqt";
     rev = version;
-    hash = "sha256-04t6wssTuSKlqSuUTmcDU66NVGikWh7p2irWBngN494=";
+    hash = "sha256-KAteTQRJ7xfh21tYcNoZjvLfWSiUYboasqL5D4YKARo=";
   };
 
   nativeBuildInputs = [
@@ -53,12 +53,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Core utility library for all LXQt components";
     mainProgram = "lxqt-backlight_backend";
     homepage = "https://github.com/lxqt/liblxqt";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    teams = [ teams.lxqt ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.lxqt ];
   };
 }

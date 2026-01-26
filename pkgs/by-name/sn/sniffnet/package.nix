@@ -14,7 +14,10 @@
   expat,
   fontconfig,
   vulkan-loader,
-  xorg,
+  libxrandr,
+  libxi,
+  libxcursor,
+  libx11,
 
   # wrapper
   libxkbcommon,
@@ -26,16 +29,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sniffnet";
-  version = "1.4.1";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "gyulyvgc";
     repo = "sniffnet";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EgnFDF+K8qGjunWB20VA8bXLzNvyGzcIaim+smhW5fU=";
+    hash = "sha256-LqEEh+YqFJkseLdFRfCTIK7Q3Xs0M1u+vVcxpNJntCA=";
   };
 
-  cargoHash = "sha256-22P1EeZ2FqwIHjr23oJCKvg3ggT1Me93goELwZ/B9S4=";
+  cargoHash = "sha256-iSQZxZTuSCNIB/725TO9UcvzKyA49DARoYcZh87y1Xs=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -48,10 +51,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     expat
     fontconfig
     vulkan-loader
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXrandr
+    libx11
+    libxcursor
+    libxi
+    libxrandr
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     rustPlatform.bindgenHook
@@ -78,7 +81,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --add-rpath ${
         lib.makeLibraryPath [
           vulkan-loader
-          xorg.libX11
+          libx11
           libxkbcommon
           wayland
         ]
@@ -88,7 +91,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   meta = {
@@ -99,7 +101,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       mit # or
       asl20
     ];
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
     teams = [ lib.teams.ngi ];
     mainProgram = "sniffnet";
   };

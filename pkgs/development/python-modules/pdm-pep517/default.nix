@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "pdm-pep517";
   version = "1.1.4";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -30,10 +30,10 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pdm-project/pdm-pep517";
     description = "Yet another PEP 517 backend";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cpcloud ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cpcloud ];
   };
 }

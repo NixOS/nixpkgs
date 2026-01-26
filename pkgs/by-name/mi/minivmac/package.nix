@@ -4,7 +4,7 @@
   fetchFromGitHub,
   buildPackages,
   alsa-lib,
-  xorg,
+  libx11,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-iiEE0ioXh3keKUPfAB+YcE1iggGLpxT9N8LSVFDhttE=";
   };
 
-  buildInputs = [ xorg.libX11 ];
+  buildInputs = [ libx11 ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
@@ -46,12 +46,12 @@ stdenv.mkDerivation rec {
     patchelf --add-rpath "${lib.getLib alsa-lib}/lib" $out/bin/minivmac
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Miniature early Macintosh emulator (fork from erichelgeson)";
     homepage = "https://github.com/erichelgeson/minivmac";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.flokli ];
-    platforms = platforms.linux;
-    sourceProvenance = [ sourceTypes.fromSource ];
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.flokli ];
+    platforms = lib.platforms.linux;
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
   };
 }

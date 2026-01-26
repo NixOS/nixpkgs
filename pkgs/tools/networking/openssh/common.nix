@@ -18,6 +18,9 @@
   fetchurl,
   fetchpatch,
   autoreconfHook,
+  withAudit ? false,
+  audit,
+  libcap_ng,
   zlib,
   openssl,
   softhsm,
@@ -36,7 +39,7 @@
   nixosTests,
   withSecurityKey ? !stdenv.hostPlatform.isStatic,
   withFIDO ? stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isMusl && withSecurityKey,
-  withPAM ? stdenv.hostPlatform.isLinux,
+  withPAM ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isStatic,
   # Attempts to mlock the entire sshd process on startup to prevent swapping.
   # Currently disabled when PAM support is enabled due to crashes
   # See https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1103418
@@ -45,11 +48,20 @@
   isNixos ? stdenv.hostPlatform.isLinux,
 }:
 
+# libaudit support requires Linux
+assert withAudit -> stdenv.hostPlatform.isLinux;
+
 # FIDO support requires SK support
 assert withFIDO -> withSecurityKey;
 
 stdenv.mkDerivation (finalAttrs: {
   inherit pname version src;
+
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
 
   patches = [
     # Making openssh pass the LOCALE_ARCHIVE variable to the forked session processes,
@@ -59,6 +71,36 @@ stdenv.mkDerivation (finalAttrs: {
 
     # See discussion in https://github.com/NixOS/nixpkgs/pull/16966
     ./dont_create_privsep_path.patch
+
+    # See discussion in https://github.com/NixOS/nixpkgs/issues/466049 and
+    # https://gitlab.archlinux.org/archlinux/packaging/packages/openssh/-/issues/23
+    (fetchpatch {
+      name = "pkcs11-fetchkey-error-to-debug.patch";
+      url = "https://github.com/openssh/openssh-portable/commit/607f337637f2077b34a9f6f96fc24237255fe175.patch";
+      hunks = [ "2-" ];
+      hash = "sha256-rdvKL6/rwrdhGKlcmdy6fxVgJgaaRsmngX0KkShXAhQ=";
+    })
+    (fetchpatch {
+      name = "pkcs11-fix-pinentry.patch";
+      url = "https://github.com/openssh/openssh-portable/commit/434ba7684054c0637ce8f2486aaacafe65d9b8aa.patch";
+      # only applies to Makefile.in (which doesn't have a date header) so no hunks= needed
+      hash = "sha256-3JQ3IJurngXclORrfC2Bx7xvmGA6w2nIh+eZ0zd0bLY=";
+    })
+
+    # See discussion in https://github.com/NixOS/nixpkgs/issues/453782 and
+    # https://github.com/openssh/openssh-portable/pull/602
+    (fetchpatch {
+      name = "pkcs11-tests-allow-module-path.patch";
+      url = "https://github.com/openssh/openssh-portable/commit/5e7c3f33b2693b668ecfbac84b85f2c0c84410c2.patch";
+      hunks = [ "2-" ];
+      hash = "sha256-mGpRGXurg8K9Wp8qoojG5MQ+3sZW2XKy2z0RDXLHaEc=";
+    })
+    (fetchpatch {
+      name = "ssh-agent-tests-increase-timeout.patch";
+      url = "https://github.com/openssh/openssh-portable/commit/1fdc3c61194819c16063dc430eeb84b81bf42dcf.patch";
+      hunks = [ "2-" ];
+      hash = "sha256-b9YCOav32kY5VEvIG3W1fyD87HaQxof6Zwq9Oo+/Lac=";
+    })
   ]
   ++ extraPatches;
 
@@ -66,7 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
     # On Hydra this makes installation fail (sometimes?),
     # and nix store doesn't allow such fancy permission bits anyway.
     ''
-      substituteInPlace Makefile.in --replace '$(INSTALL) -m 4711' '$(INSTALL) -m 0711'
+      substituteInPlace Makefile.in --replace-fail '$(INSTALL) -m 4711' '$(INSTALL) -m 0711'
     '';
 
   strictDeps = true;
@@ -87,7 +129,11 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withFIDO libfido2
   ++ lib.optional withKerberos krb5
   ++ lib.optional withLdns ldns
-  ++ lib.optional withPAM pam;
+  ++ lib.optional withPAM pam
+  ++ lib.optionals withAudit [
+    audit
+    libcap_ng
+  ];
 
   preConfigure = ''
     # Setting LD causes `configure' and `make' to disagree about which linker
@@ -95,11 +141,22 @@ stdenv.mkDerivation (finalAttrs: {
     unset LD
   '';
 
-  env = lib.optionalAttrs isNixos {
-    # openssh calls passwd to allow the user to reset an expired password, but nixos
-    # doesn't ship it at /usr/bin/passwd.
-    PATH_PASSWD_PROG = "/run/wrappers/bin/passwd";
-  };
+  env =
+    lib.optionalAttrs isNixos {
+      # openssh calls passwd to allow the user to reset an expired password, but nixos
+      # doesn't ship it at /usr/bin/passwd.
+      PATH_PASSWD_PROG = "/run/wrappers/bin/passwd";
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isStatic {
+      NIX_LDFLAGS = lib.concatStringsSep " " (
+        lib.optional withKerberos "-lkeyutils"
+        ++ lib.optional withLdns "-lcrypto"
+        ++ lib.optionals withAudit [
+          "-laudit"
+          "-lcap-ng"
+        ]
+      );
+    };
 
   # I set --disable-strip because later we strip anyway. And it fails to strip
   # properly when cross building.
@@ -124,19 +181,12 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withLdns "--with-ldns"
   ++ lib.optional stdenv.hostPlatform.isOpenBSD "--with-bsd-auth"
   ++ lib.optional withLinuxMemlock "--with-linux-memlock-onfault"
+  ++ lib.optional withAudit "--with-audit=linux"
   ++ extraConfigureFlags;
-
-  ${if stdenv.hostPlatform.isStatic then "NIX_LDFLAGS" else null} = [
-    "-laudit"
-  ]
-  ++ lib.optional withKerberos "-lkeyutils"
-  ++ lib.optional withLdns "-lcrypto";
 
   buildFlags = [ "SSH_KEYSIGN=ssh-keysign" ];
 
   enableParallelBuilding = true;
-
-  hardeningEnable = [ "pie" ];
 
   doCheck = false;
   enableParallelChecking = false;
@@ -163,9 +213,7 @@ stdenv.mkDerivation (finalAttrs: {
       # invoked directly and those invoked by the "remote" session
       cat > ~/.ssh/environment.base <<EOF
       NIX_REDIRECTS=/etc/passwd=$DUMMY_PASSWD
-      ${lib.optionalString (
-        !stdenv.buildPlatform.isStatic
-      ) "LD_PRELOAD=${libredirect}/lib/libredirect.so"}
+      ${lib.optionalString (!stdenv.hostPlatform.isStatic) "LD_PRELOAD=${libredirect}/lib/libredirect.so"}
       EOF
 
       # use an ssh environment file to ensure environment is set
@@ -181,13 +229,13 @@ stdenv.mkDerivation (finalAttrs: {
 
       # explicitly enable the PermitUserEnvironment feature
       substituteInPlace regress/test-exec.sh \
-        --replace \
+        --replace-fail \
           'cat << EOF > $OBJ/sshd_config' \
           $'cat << EOF > $OBJ/sshd_config\n\tPermitUserEnvironment yes'
 
       # some tests want to use files under /bin as example files
       for f in regress/sftp-cmds.sh regress/forwarding.sh; do
-        substituteInPlace $f --replace '/bin' "$(dirname $(type -p ls))"
+        substituteInPlace $f --replace-fail '/bin' "$(dirname $(type -p ls))"
       done
 
       # set up NIX_REDIRECTS for direct invocations
@@ -196,7 +244,7 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isMusl) ''
       # The extra tests check PKCS#11 interactions, which softhsm emulates with software only
       substituteInPlace regress/test-exec.sh \
-        --replace /usr/local/lib/softhsm/libsofthsm2.so ${lib.getLib softhsm}/lib/softhsm/libsofthsm2.so
+        --replace-fail /usr/local/lib/softhsm/libsofthsm2.so ${lib.getLib softhsm}/lib/softhsm/libsofthsm2.so
     ''
   );
   # integration tests hard to get working on darwin with its shaky
@@ -218,7 +266,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Install ssh-copy-id, it's very useful.
     cp contrib/ssh-copy-id $out/bin/
     chmod +x $out/bin/ssh-copy-id
-    cp contrib/ssh-copy-id.1 $out/share/man/man1/
+    cp contrib/ssh-copy-id.1 $man/share/man/man1/
   '';
 
   installTargets = [ "install-nokeys" ];
@@ -235,15 +283,25 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit withKerberos;
-    tests = {
-      borgbackup-integration = nixosTests.borgbackup;
-      nixosTest = nixosTests.openssh;
-      initrd-network-openssh = nixosTests.initrd-network-ssh;
-      openssh = finalAttrs.finalPackage.overrideAttrs (previousAttrs: {
-        pname = previousAttrs.pname + "-test";
-        doCheck = true;
-      });
-    };
+    tests =
+      let
+        withThisSsh =
+          test:
+          test.extendNixOS {
+            module = {
+              services.openssh.package = lib.mkForce finalAttrs.finalPackage;
+            };
+          };
+      in
+      {
+        borgbackup-integration = withThisSsh nixosTests.borgbackup;
+        nixosTest = withThisSsh nixosTests.openssh;
+        initrd-network-openssh = withThisSsh nixosTests.initrd-network-ssh;
+        openssh = finalAttrs.finalPackage.overrideAttrs (previousAttrs: {
+          pname = previousAttrs.pname + "-test";
+          doCheck = true;
+        });
+      };
   };
 
   meta = {

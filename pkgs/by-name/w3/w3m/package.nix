@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromSourcehut,
-  fetchpatch,
   ncurses,
   boehmgc,
   gettext,
@@ -66,11 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./RAND_egd.libressl.patch
-    (fetchpatch {
-      name = "https.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/https.patch?h=w3m-mouse&id=5b5f0fbb59f674575e87dd368fed834641c35f03";
-      sha256 = "08skvaha1hjyapsh8zw5dgfy433mw2hk7qy9yy9avn8rjqj7kjxk";
-    })
+    ./https.patch
   ];
 
   postPatch = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
@@ -105,9 +100,12 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--with-ssl=${openssl.dev}"
     "--with-gc=${boehmgc.dev}"
+    # The code won't compile in c23 mode.
+    # https://gcc.gnu.org/gcc-15/porting_to.html#c23-fn-decls-without-parameters
+    "CFLAGS=-std=gnu17"
   ]
   ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "ac_cv_func_setpgrp_void=${if stdenv.hostPlatform.isBSD then "no" else "yes"}"
+    "ac_cv_func_setpgrp_void=${lib.boolToYesNo (!stdenv.hostPlatform.isBSD)}"
   ]
   ++ lib.optional graphicsSupport "--enable-image=${lib.optionalString x11Support "x11,"}fb"
   ++ lib.optional (graphicsSupport && !x11Support) "--without-x";

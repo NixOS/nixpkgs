@@ -11,23 +11,23 @@
   sfml_2,
   fluidsynth,
   curl,
-  freeimage,
   ftgl,
   glew,
   lua,
   mpg123,
   wrapGAppsHook3,
+  libwebp,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "slade";
-  version = "3.2.7";
+  version = "3.2.11";
 
   src = fetchFromGitHub {
     owner = "sirjuddington";
     repo = "SLADE";
     tag = finalAttrs.version;
-    hash = "sha256-+i506uzO2q/9k7en6CKs4ui9gjszrMOYwW+V9W5Lvns=";
+    hash = "sha256-kZ6KyhI2oZH0SeymcHge9+rbq/ZGfhKXGdfOlje2zqM=";
   };
 
   nativeBuildInputs = [
@@ -44,11 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
     sfml_2
     fluidsynth
     curl
-    freeimage
     ftgl
     glew
     lua
     mpg123
+    libwebp
   ];
 
   cmakeFlags = [

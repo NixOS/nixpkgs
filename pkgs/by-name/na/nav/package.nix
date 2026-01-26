@@ -8,14 +8,14 @@
 
 stdenv.mkDerivation rec {
   pname = "nav";
-  version = "1.4.1";
+  version = "1.5.0";
 
   src = fetchurl {
     url = "https://github.com/Jojo4GH/nav/releases/download/v${version}/nav-${stdenv.hostPlatform.parsed.cpu.name}-unknown-linux-gnu.tar.gz";
     sha256 =
       {
-        x86_64-linux = "sha256-w9OF5elej9//Ldb58gLIZudn3sZAcUkIab2bPMR6MuI=";
-        aarch64-linux = "sha256-GGwbxzg8QkCi3Gc2Ivhjzr87TLKs+nmEElsAOcxx2m0=";
+        x86_64-linux = "sha256-LQdw8/V1KFNM6TY1rFt/RiZuiRQXM+8HNGkJXDrE/mw=";
+        aarch64-linux = "sha256-SMcdnUxKbJ5GXB358WglIMiPHWsn1uVnjN9UiL3V6dk=";
       }
       .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
   };

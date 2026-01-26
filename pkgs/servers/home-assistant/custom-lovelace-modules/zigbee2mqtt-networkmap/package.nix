@@ -1,44 +1,35 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   fetchYarnDeps,
-  mkYarnPackage,
+  yarnConfigHook,
+  yarnBuildHook,
+  nodejs,
+  nix-update-script,
 }:
 
-mkYarnPackage rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zigbee2mqtt-networkmap";
   version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "azuwis";
     repo = "zigbee2mqtt-networkmap";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-S4iUTjI+pFfa8hg1/lJSI1tl2nEIh+LO2WTYhWWLh/s=";
   };
 
-  packageJSON = ./package.json;
-
   offlineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
+    inherit (finalAttrs) src;
     hash = "sha256-yo+K3vUJH6WwyNj/UuvbhhmhdqzJ3XUzX+cKUueutjE=";
   };
 
-  configurePhase = ''
-    runHook preConfigure
-
-    cp -r $node_modules node_modules
-    chmod +w node_modules
-
-    runHook postConfigure
-  '';
-
-  buildPhase = ''
-    runHook preBuild
-
-    yarn --offline build
-
-    runHook postBuild
-  '';
+  nativeBuildInputs = [
+    yarnConfigHook
+    yarnBuildHook
+    nodejs
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -51,16 +42,14 @@ mkYarnPackage rec {
 
   dontFixup = true;
 
-  doDist = false;
-
   passthru.entrypoint = "zigbee2mqtt-networkmap.js";
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
-    changelog = "https://github.com/azuwis/zigbee2mqtt-networkmap/releases/tag/v${version}";
+  meta = {
+    changelog = "https://github.com/azuwis/zigbee2mqtt-networkmap/releases/tag/v${finalAttrs.version}";
     description = "Home Assistant Custom Card to show Zigbee2mqtt network map";
     homepage = "https://github.com/azuwis/zigbee2mqtt-networkmap";
-    maintainers = with maintainers; [ azuwis ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ azuwis ];
+    license = lib.licenses.mit;
   };
-}
+})

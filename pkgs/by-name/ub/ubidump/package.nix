@@ -24,11 +24,11 @@ python3.pkgs.buildPythonApplication {
     crcmod
   ];
 
-  meta = with lib; {
+  meta = {
     description = "View or extract the contents of UBIFS images";
     homepage = "https://github.com/nlitsme/ubidump";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sgo ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sgo ];
     mainProgram = "ubidump";
   };
 }

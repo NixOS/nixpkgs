@@ -7,26 +7,28 @@
   wrapGAppsHook3,
   glew,
   gtk3,
-  xorg,
+  libxrandr,
+  libxi,
+  libxcursor,
   nix-update-script,
 }:
 
 buildDotnetModule rec {
   pname = "libation";
-  version = "12.5.3";
+  version = "13.1.3";
 
   src = fetchFromGitHub {
     owner = "rmcrackan";
     repo = "Libation";
     tag = "v${version}";
-    hash = "sha256-4XBbpjxcC5SWLGz0SLKF70G6Gk5bKqKvEwD/My7siUA=";
+    hash = "sha256-gK0UZ+3EZGVEiy+O47GhU4wsHmdPIbrHWyHnUOtWrm8=";
   };
 
   sourceRoot = "${src.name}/Source";
 
-  dotnet-sdk = dotnetCorePackages.sdk_9_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
 
-  dotnet-runtime = dotnetCorePackages.runtime_9_0;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0;
 
   nugetDeps = ./deps.json;
 
@@ -47,9 +49,9 @@ buildDotnetModule rec {
   runtimeDeps = [
     # For Avalonia UI
     glew
-    xorg.libXrandr
-    xorg.libXi
-    xorg.libXcursor
+    libxrandr
+    libxi
+    libxcursor
     # For file dialogs
     gtk3
   ];
@@ -57,8 +59,6 @@ buildDotnetModule rec {
   postInstall = ''
     install -Dm644 LoadByOS/LinuxConfigApp/libation_glass.svg $out/share/icons/hicolor/scalable/apps/libation.svg
     install -Dm644 LoadByOS/LinuxConfigApp/Libation.desktop $out/share/applications/libation.desktop
-    substituteInPlace $out/share/applications/libation.desktop \
-      --replace-fail "/usr/bin/libation" "libation"
   '';
 
   # wrap manually, because we need lower case executables
@@ -78,6 +78,9 @@ buildDotnetModule rec {
     homepage = "https://github.com/rmcrackan/Libation";
     license = lib.licenses.gpl3Plus;
     mainProgram = "libation";
-    maintainers = with lib.maintainers; [ tomasajt ];
+    maintainers = with lib.maintainers; [
+      tomasajt
+      tebriel
+    ];
   };
 }

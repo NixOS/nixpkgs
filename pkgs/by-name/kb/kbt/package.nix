@@ -4,7 +4,7 @@
   fetchFromGitHub,
   stdenv,
   pkg-config,
-  xorg,
+  libx11,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -25,14 +25,14 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    xorg.libX11
+    libx11
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Keyboard tester in terminal";
     homepage = "https://github.com/bloznelis/kbt";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "kbt";
   };
 }

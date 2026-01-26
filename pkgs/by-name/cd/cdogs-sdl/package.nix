@@ -59,12 +59,12 @@ stdenv.mkDerivation rec {
   # inlining failed in call to 'tinydir_open': --param max-inline-insns-single limit reached
   hardeningDisable = [ "fortify3" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://cxong.github.io/cdogs-sdl";
     description = "Open source classic overhead run-and-gun game";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ nixinator ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ nixinator ];
+    platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/cdogs-sdl.x86_64-darwin
   };
 }

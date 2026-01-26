@@ -57,6 +57,8 @@ let
         MIX_DEBUG = if enableDebugInfo then 1 else 0;
         HEX_OFFLINE = 1;
 
+        __darwinAllowLocalNetworking = true;
+
         ERL_COMPILER_OPTIONS =
           let
             options = erlangCompilerOptions ++ lib.optionals erlangDeterministicBuilds [ "deterministic" ];

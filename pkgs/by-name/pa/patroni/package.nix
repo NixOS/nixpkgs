@@ -10,14 +10,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "patroni";
-  version = "4.0.6";
+  version = "4.1.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "zalando";
     repo = "patroni";
     tag = "v${version}";
-    sha256 = "sha256-8EodiPVmdDekdsTbv+23ZLHZd8+BQ5v5sQf/SyM1b7Y=";
+    sha256 = "sha256-iY5QLbJXfQtfkzpQxvqSOzYQwgfFsBh8HPYujqxU44k=";
   };
 
   dependencies = with python3Packages; [
@@ -50,7 +50,6 @@ python3Packages.buildPythonApplication rec {
     versionCheckHook
     writableTmpDirAsHomeHook
   ];
-  versionCheckProgramArg = "--version";
 
   __darwinAllowLocalNetworking = true;
 
@@ -66,6 +65,9 @@ python3Packages.buildPythonApplication rec {
     changelog = "https://github.com/patroni/patroni/blob/v${version}/docs/releases.rst";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
-    teams = [ lib.teams.deshaw ];
+    maintainers = with lib.maintainers; [
+      de11n
+      despsyched
+    ];
   };
 }

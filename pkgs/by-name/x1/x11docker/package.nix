@@ -4,7 +4,12 @@
   fetchFromGitHub,
   makeWrapper,
   nx-libs,
-  xorg,
+  xrandr,
+  xinit,
+  xhost,
+  xdpyinfo,
+  xauth,
+  libxcvt,
   getopt,
   gnugrep,
   gawk,
@@ -20,7 +25,7 @@
   weston,
   xwayland,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "x11docker";
   version = "7.6.0-unstable-2024-04-04";
   src = fetchFromGitHub {
@@ -46,18 +51,18 @@ stdenv.mkDerivation rec {
           mount
           iproute2
           nx-libs
-          xorg.xdpyinfo
-          xorg.xhost
-          xorg.xinit
+          xdpyinfo
+          xhost
+          xinit
           python3
           jq
-          xorg.libxcvt
+          libxcvt
           wmctrl
           xdotool
           xclip
           xpra
-          xorg.xrandr
-          xorg.xauth
+          xrandr
+          xauth
           weston
           xwayland
         ]

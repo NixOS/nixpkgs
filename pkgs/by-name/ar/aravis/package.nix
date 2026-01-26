@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
       gst-plugins-bad
     ]
   )
-  ++ lib.optionals (enableViewer) [ gtk3 ];
+  ++ lib.optionals enableViewer [ gtk3 ];
 
   mesonFlags = [
   ]

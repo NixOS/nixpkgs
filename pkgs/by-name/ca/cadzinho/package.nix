@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "zecruel";
     repo = "CadZinho";
-    rev = version;
+    tag = version;
     hash = "sha256-AHojy6lYLEyeBaYiIzo6MdQCM3jX5ENNTKgU+PGSD00=";
   };
 
@@ -57,12 +57,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Minimalist computer aided design (CAD) software";
     homepage = "https://github.com/zecruel/CadZinho";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sikmir ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sikmir ];
+    platforms = lib.platforms.unix;
     mainProgram = "cadzinho";
   };
 }

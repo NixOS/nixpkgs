@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "ament-package";
-  version = "0.18.1";
+  version = "0.18.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ament";
     repo = "ament_package";
     tag = version;
-    hash = "sha256-M2SSGmzxlOITNzWTZ92/PtTVGtKMU/IwJG0VMhzDLR8=";
+    hash = "sha256-m0tDgbjytBKhdqZrSmhKHRm69BZK54NHWmo+O5J8m6Q=";
   };
 
   build-system = [

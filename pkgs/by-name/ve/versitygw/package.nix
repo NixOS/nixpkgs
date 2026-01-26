@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "versitygw";
-  version = "1.0.18";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "versity";
     repo = "versitygw";
     tag = "v${version}";
-    hash = "sha256-IZWcRlVfXAZjkgwD9sdIX6Z2YEshkV+q4vUwPFSB5P4=";
+    hash = "sha256-mjtW5Jyx5hDGAony3ZPK8u4QgDdXbP+RCCTglUc7AR0=";
   };
 
-  vendorHash = "sha256-L7cxMkPJVDG91PXWA3eu0hWRcDfbp3U3HKXc1IziCBM=";
+  vendorHash = "sha256-3M2LOWEszQlfSvnIBN/mQ966qizOtUwa68ugTSvvw8U=";
 
   doCheck = false; # Require access to online S3 services
 

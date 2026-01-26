@@ -12,7 +12,8 @@
   nss,
   nspr,
   systemd,
-  xorg,
+  libxtst,
+  libxscrnsaver,
 }:
 let
   desktopItem = makeDesktopItem {
@@ -61,8 +62,8 @@ stdenv.mkDerivation rec {
     alsa-lib
     nss
     nspr
-    xorg.libXScrnSaver
-    xorg.libXtst
+    libxscrnsaver
+    libxtst
     systemd
   ];
 
@@ -87,12 +88,12 @@ stdenv.mkDerivation rec {
       "''${gappsWrapperArgs[@]}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Manga & Anime Downloader";
     homepage = "https://sourceforge.net/projects/hakuneko/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unlicense;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [
       nloomans
     ];
     platforms = [

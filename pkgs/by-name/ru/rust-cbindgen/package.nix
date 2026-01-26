@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-cbindgen";
-  version = "0.29.0";
+  version = "0.29.2";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "cbindgen";
     rev = "v${version}";
-    hash = "sha256-wCl2GpHqF7wKIE8UFyZRY0M1hxonZek2FN6+5x/jGWI=";
+    hash = "sha256-P2A+XSLrcuYsI48gnZSNNs5qX+EatiuEJSEJbMvMSxg=";
   };
 
-  cargoHash = "sha256-BErgOnmatxpfF5Ip44WOqnEWOzOJaVP6vfhXPsF9wuc=";
+  cargoHash = "sha256-DbmlpjiOraLWPh5RgJqCIGIYzE1h82MH2S6gpLH+CIQ=";
 
   nativeCheckInputs = [
     cmake
@@ -33,16 +33,16 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [
     # Disable tests that require rust unstable features
     # https://github.com/eqrion/cbindgen/issues/338
-    "--skip test_expand"
-    "--skip test_bitfield"
-    "--skip lib_default_uses_debug_build"
-    "--skip lib_explicit_debug_build"
-    "--skip lib_explicit_release_build"
+    "--skip=test_expand"
+    "--skip=test_bitfield"
+    "--skip=lib_default_uses_debug_build"
+    "--skip=lib_explicit_debug_build"
+    "--skip=lib_explicit_release_build"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # WORKAROUND: test_body fails when using clang
     # https://github.com/eqrion/cbindgen/issues/628
-    "--skip test_body"
+    "--skip=test_body"
   ];
 
   passthru.tests = {

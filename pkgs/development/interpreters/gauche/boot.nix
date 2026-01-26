@@ -56,12 +56,12 @@ stdenv.mkDerivation rec {
   # TODO: Fix tests that fail in sandbox build
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "R7RS Scheme scripting engine (released version)";
     homepage = "https://practical-scheme.net/gauche/";
     mainProgram = "gosh";
-    maintainers = with maintainers; [ mnacamura ];
-    license = licenses.bsd3;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ mnacamura ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
   };
 }

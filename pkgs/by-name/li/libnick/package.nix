@@ -9,9 +9,9 @@
   openssl,
   sqlcipher,
   boost,
-  cpr,
   curl,
   glib,
+  libcpr,
   libsecret,
   libmaddy-markdown,
   testers,
@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libnick";
-  version = "2025.8.0";
+  version = "2025.10.0";
 
   src = fetchFromGitHub {
     owner = "NickvisionApps";
     repo = "libnick";
     tag = finalAttrs.version;
-    hash = "sha256-LgvU5a3W5Oii6pRAAKZo28yOyPRUMjxwEXDZ2jXJPGM=";
+    hash = "sha256-nxh9WyIP86rnkUgFRMEbO2jw6dtfPR4mcHeGplmL6mc=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [
     curl
-    cpr
+    libcpr
     libsecret
     libmaddy-markdown
     sqlcipher
@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Cross-platform development base for native Nickvision applications";
     homepage = "https://github.com/NickvisionApps/libnick";
     license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.normalcea ];
+    maintainers = [ ];
     platforms = lib.platforms.unix ++ lib.platforms.windows;
     pkgConfigModules = [ "libnick" ];
   };

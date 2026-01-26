@@ -21,10 +21,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "arpy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for accessing the archive files and reading the contents";
     homepage = "https://github.com/viraptor/arpy";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ thornycrackers ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ thornycrackers ];
   };
 }

@@ -48,9 +48,9 @@
   makeHardcodeGsettingsPatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "evolution-data-server";
-  version = "3.56.2";
+  version = "3.58.2";
 
   outputs = [
     "out"
@@ -58,8 +58,8 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/evolution-data-server/${lib.versions.majorMinor version}/evolution-data-server-${version}.tar.xz";
-    hash = "sha256-307CmVDymnbqxvvg+BTEjSzvfT/bkFACpKiD3XYc6Tw=";
+    url = "mirror://gnome/sources/evolution-data-server/${lib.versions.majorMinor finalAttrs.version}/evolution-data-server-${finalAttrs.version}.tar.xz";
+    hash = "sha256-aULs/Dnrs2sLQ2Ot/wB3HBwt+jT1ToDsksO6o/6wIPs=";
   };
 
   patches = [
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     substitute ${./hardcode-gsettings.patch} hardcode-gsettings.patch \
-      --subst-var-by EDS ${glib.makeSchemaPath "$out" "evolution-data-server-${version}"} \
+      --subst-var-by EDS ${glib.makeSchemaPath "$out" "evolution-data-server-${finalAttrs.version}"} \
       --subst-var-by GDS ${glib.getSchemaPath gsettings-desktop-schemas}
     patches="$patches $PWD/hardcode-gsettings.patch"
   '';
@@ -179,7 +179,7 @@ stdenv.mkDerivation rec {
         "org.gnome.evolution-data-server" = "EDS";
         "org.gnome.desktop.interface" = "GDS";
       };
-      inherit src patches;
+      inherit (finalAttrs) src patches;
     };
     updateScript =
       let
@@ -198,9 +198,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Unified backend for programs that work with contacts, tasks, and calendar information";
     homepage = "https://gitlab.gnome.org/GNOME/evolution-data-server";
-    changelog = "https://gitlab.gnome.org/GNOME/evolution-data-server/-/blob/${version}/NEWS?ref_type=tags";
+    changelog = "https://gitlab.gnome.org/GNOME/evolution-data-server/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     license = lib.licenses.lgpl2Plus;
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.linux; # requires libuuid
   };
-}
+})

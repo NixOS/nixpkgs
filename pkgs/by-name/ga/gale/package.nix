@@ -7,6 +7,8 @@
   jq,
   moreutils,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs,
   cargo-tauri,
   pkg-config,
@@ -17,37 +19,45 @@
   openssl,
   webkitgtk_4_1,
 }:
-
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gale";
-  version = "1.9.7";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "Kesomannen";
     repo = "gale";
     tag = finalAttrs.version;
-    hash = "sha256-XEc8h7A1q+WfPl2HojFt2oIlAnNswq3X0o6jMZrEjCQ=";
+    hash = "sha256-SnPYuMYdoY69CWMztuDxw0ohRDU2uECNhBs46hLg+eA=";
+  };
+
+  patches = [ ./fix-frontend-backend-tauri-version-mismatch.patch ];
+
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      patches
+      ;
+    pnpm = pnpm_10;
+    fetcherVersion = 1;
+    hash = "sha256-ILhAhpY9a50a0KKWs5Y+G3jDyWuySHw8QcOJlYePzmc=";
   };
 
   postPatch = ''
     jq '.bundle.createUpdaterArtifacts = false' src-tauri/tauri.conf.json | sponge src-tauri/tauri.conf.json
   '';
 
-  pnpmDeps = pnpm_10.fetchDeps {
-    inherit (finalAttrs) pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-QQXP/x7AjDtUpe6h+pC6vUsIAptv1kN/1MJZjHAIdMo=";
-  };
-
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  cargoHash = "sha256-zaTbb1+JK9mA9Tvnatw8lse5PBhKknDM48mN/sWLQ6w=";
+  cargoHash = "sha256-tWQRYD6hMU7cvtelGryLdpfoEnUKYt7yYNwHTFZ4pLw=";
 
   nativeBuildInputs = [
     jq
     moreutils
-    pnpm_10.configHook
+    pnpmConfigHook
+    pnpm_10
     nodejs
     cargo-tauri.hook
     pkg-config

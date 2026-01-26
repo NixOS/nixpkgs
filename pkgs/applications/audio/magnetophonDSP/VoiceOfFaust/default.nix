@@ -5,7 +5,6 @@
   faust2jack,
   faust2lv2,
   helmholtz,
-  mrpeach,
   puredata-with-plugins,
   jack-example-tools,
 }:
@@ -22,7 +21,6 @@ stdenv.mkDerivation rec {
 
   plugins = [
     helmholtz
-    mrpeach
   ];
 
   pitchTracker = puredata-with-plugins plugins;
@@ -31,10 +29,6 @@ stdenv.mkDerivation rec {
     faust2jack
     faust2lv2
   ];
-
-  # ld: crtbegin.o: relocation R_X86_64_32 against hidden symbol `__TMC_END__' can not be used when making a PIE object
-  # ld: failed to set dynamic section sizes: bad value
-  hardeningDisable = [ "pie" ];
 
   enableParallelBuilding = true;
 

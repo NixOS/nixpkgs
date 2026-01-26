@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "corearchiver";
     homepage = "https://gitlab.com/cubocore/coreapps/corearchiver";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

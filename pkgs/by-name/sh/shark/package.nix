@@ -26,6 +26,9 @@ stdenv.mkDerivation (finalAttrs: {
   # Remove explicitly setting C++11, because boost::math headers need C++14 since Boost187.
   postPatch = ''
     sed -i '/CXX_STANDARD/d' src/CMakeLists.txt
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'cmake_minimum_required( VERSION 3.1 FATAL_ERROR)' 'cmake_minimum_required(VERSION 3.10)'
   '';
 
   # https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/blob/develop/SuperBuild/CMake/External_shark.cmake?ref_type=heads

@@ -11,18 +11,18 @@
 }:
 
 let
-  ocamlPackages = ocaml-ng.ocamlPackages_5_2;
+  ocamlPackages = ocaml-ng.ocamlPackages_5_3;
 in
-ocamlPackages.buildDunePackage rec {
+ocamlPackages.buildDunePackage {
   pname = "owi";
-  version = "0.2-unstable-2025-09-17";
+  version = "0.2-unstable-2026-01-21";
 
   src = fetchFromGitHub {
     owner = "ocamlpro";
     repo = "owi";
-    rev = "a0b11f9463a7f9dc8dd84f15405dd197b8fdc9ba";
+    rev = "66e4d2ddaa03ee441dc6156b681ad832522ff2cf";
     fetchSubmodules = true;
-    hash = "sha256-PQgXfFsaB9EwzHhxpvfCbnvppy0YHtcb6WB2kF5jz8Q=";
+    hash = "sha256-KTeCDI67BGkoDBBeBG96BJrvO9kPX+Vztgk1S1PoyIM=";
   };
 
   nativeBuildInputs = with ocamlPackages; [
@@ -42,24 +42,21 @@ ocamlPackages.buildDunePackage rec {
     bos
     cmdliner
     digestif
-    dolmen_type
     dune-build-info
     dune-site
-    hc
-    integers
     menhirLib
     ocaml_intrinsics
-    patricia-tree
+    ocamlgraph
     prelude
     processor
     scfg
     sedlex
     smtml
+    synchronizer
     uutf
     xmlm
     yojson
     z3
-    zarith
   ];
 
   postInstall = ''
@@ -86,7 +83,10 @@ ocamlPackages.buildDunePackage rec {
     homepage = "https://ocamlpro.github.io/owi/";
     downloadPage = "https://github.com/OCamlPro/owi";
     license = lib.licenses.agpl3Plus;
-    maintainers = [ lib.maintainers.ethancedwards8 ];
+    maintainers = with lib.maintainers; [
+      ethancedwards8
+      redianthus
+    ];
     teams = with lib.teams; [ ngi ];
     mainProgram = "owi";
     badPlatforms = lib.platforms.darwin;

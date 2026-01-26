@@ -12,20 +12,18 @@
   wrapGAppsHook4,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mpris-timer";
-  version = "2.1.1";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "efogdev";
     repo = "mpris-timer";
-    tag = version;
-    hash = "sha256-uFQJSKQ9k0fiOhzydJ7frs2kns9pSdZGILPGCW3QA1w=";
+    tag = finalAttrs.version;
+    hash = "sha256-JuOBLm7+/zOSNhH+sBqvUQV0+AhTAmr+UxhPFtt0NU8=";
   };
 
-  vendorHash = "sha256-vCzQiQsljNyI7nBYvq+C/dv0T186Lsj7rOq5xHMs3c0=";
-
-  strictDeps = true;
+  vendorHash = "sha256-Htni2cMc1vYewVL8oOXL2gPS4h+S3d5y4i5yAZdqFJo=";
 
   nativeBuildInputs = [
     pkg-config
@@ -45,13 +43,10 @@ buildGoModule rec {
     "-w"
   ];
 
-  tags = [
-    "wayland"
-  ];
+  tags = [ "wayland" ];
 
   postInstall = ''
-    mv $out/bin/cmd $out/bin/mpris-timer
-
+    mv $out/bin/{cmd,mpris-timer}
     install -Dm644 internal/ui/res/icon.svg $out/share/icons/hicolor/scalable/apps/io.github.efogdev.mpris-timer.svg
     install -Dm644 misc/io.github.efogdev.mpris-timer.desktop -t $out/share/applications
     install -Dm644 misc/io.github.efogdev.mpris-timer.metainfo.xml -t $out/share/metainfo
@@ -59,9 +54,7 @@ buildGoModule rec {
     glib-compile-schemas $out/share/glib-2.0/schemas
   '';
 
-  passthru = {
-    updateScript = nix-update-script { };
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Timer app with seamless GNOME integration";
@@ -72,7 +65,6 @@ buildGoModule rec {
       getchoo
     ];
     mainProgram = "mpris-timer";
-    # Always uses ALSA
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux; # Always uses ALSA
   };
-}
+})

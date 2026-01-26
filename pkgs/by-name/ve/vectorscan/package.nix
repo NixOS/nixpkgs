@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
     substituteInPlace libhs.pc.in \
       --replace-fail "libdir=@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@" "libdir=@CMAKE_INSTALL_LIBDIR@" \
       --replace-fail "includedir=@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_INCLUDEDIR@" "includedir=@CMAKE_INSTALL_INCLUDEDIR@"
+    substituteInPlace cmake/cflags-generic.cmake \
+      --replace-fail "-Werror" ""
     substituteInPlace cmake/build_wrapper.sh \
       --replace-fail 'nm' '${stdenv.cc.targetPrefix}nm' \
       --replace-fail 'objcopy' '${stdenv.cc.targetPrefix}objcopy'
@@ -99,7 +101,7 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Portable fork of the high-performance regular expression matching library";
     longDescription = ''
       A fork of Intel's Hyperscan, modified to run on more platforms. Currently
@@ -115,13 +117,13 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.vectorcamp.gr/vectorscan/";
     changelog = "https://github.com/VectorCamp/vectorscan/blob/${src.rev}/CHANGELOG-vectorscan.md";
-    platforms = platforms.unix;
-    license = with licenses; [
+    platforms = lib.platforms.unix;
+    license = with lib.licenses; [
       bsd3 # and
       bsd2 # and
-      licenses.boost
+      lib.licenses.boost
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       tnias
       vlaci
     ];

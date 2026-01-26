@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   pkg-config,
   unzip,
@@ -69,7 +70,7 @@
   tesseract,
   leptonica,
   enableTbb ? false,
-  tbb,
+  onetbb,
   enableOvis ? false,
   ogre,
   enableGPhoto2 ? false,
@@ -121,14 +122,14 @@ let
     owner = "opencv";
     repo = "opencv_contrib";
     tag = version;
-    hash = "sha256-YNd96qFJ8SHBgDEEsoNps888myGZdELbbuYCae9pW3M=";
+    hash = "sha256-3tbscRFryjCynIqh0OWec8CUjXTeIDxOGJkHTK2aIao=";
   };
 
   testDataSrc = fetchFromGitHub {
     owner = "opencv";
     repo = "opencv_extra";
     tag = version;
-    hash = "sha256-EqlGlemztYlk03MX1LAviArWT+OA3/qL3jfgHYC+SP8=";
+    hash = "sha256-f8PZyFLdfixt1ApjMc9Cvj9nfEaDRUszSeEfCsWziis=";
   };
 
   # Contrib must be built in order to enable Tesseract support:
@@ -292,12 +293,30 @@ effectiveStdenv.mkDerivation {
   cudaPropagateToOutput = "cxxdev";
 
   postUnpack = optionalString buildContrib ''
-    cp --no-preserve=mode -r "${contribSrc}/modules" "$NIX_BUILD_TOP/source/opencv_contrib"
+    cp --no-preserve=mode -r "${contribSrc}/modules" "$NIX_BUILD_TOP/${src.name}/opencv_contrib"
   '';
 
   # Ensures that we use the system OpenEXR rather than the vendored copy of the source included with OpenCV.
   patches = [
     ./cmake-don-t-use-OpenCVFindOpenEXR.patch
+    ./0001-cmake-OpenCVUtils.cmake-invalidate-Nix-store-paths-b.patch
+    (fetchpatch {
+      name = "ffmpeg-8-support.patch";
+      url = "https://github.com/opencv/opencv/commit/90c444abd387ffa70b2e72a34922903a2f0f4f5a.patch";
+      hash = "sha256-iRRparDJoNhrvELH6cAagWcVzpiE2lfivHVxvZyi3ik=";
+    })
+    (fetchpatch {
+      name = "fix-ffmpeg-8-support.patch";
+      url = "https://github.com/opencv/opencv/commit/dbb622b7f59c3f0e5bd3487252ef37cf72dcdcdb.patch";
+      hash = "sha256-MS9WizZQu0Gxw/daDDFmETxcDJYRTyhSq/xK0X5lAZM=";
+    })
+    # Backport upstream fix for reproducible builds
+    # https://github.com/opencv/opencv/pull/27962
+    (fetchpatch {
+      name = "support-reproducible-builds.patch";
+      url = "https://github.com/opencv/opencv/commit/7224bced8bff9d16d5e869d44f90f95ad8fdfe25.patch";
+      hash = "sha256-DIlTQaIVWpPgJgPktY+0vd3BWJoS38YZn5aFS7DqsNM=";
+    })
   ]
   ++ optionals enableCuda [
     ./cuda_opt_flow.patch
@@ -313,18 +332,13 @@ effectiveStdenv.mkDerivation {
     installExtraFile ade
     + optionalString enableIpp (installExtraFiles ippicv)
     + (optionalString buildContrib ''
-      cmakeFlagsArray+=("-DOPENCV_EXTRA_MODULES_PATH=$NIX_BUILD_TOP/source/opencv_contrib")
+      cmakeFlagsArray+=("-DOPENCV_EXTRA_MODULES_PATH=$NIX_BUILD_TOP/${src.name}/opencv_contrib")
 
       ${installExtraFiles vgg}
       ${installExtraFiles boostdesc}
       ${installExtraFiles face}
       ${installExtraFiles wechat_qrcode}
     '');
-
-  postConfigure = ''
-    [ -e modules/core/version_string.inc ]
-    echo '"(build info elided)"' > modules/core/version_string.inc
-  '';
 
   buildInputs = [
     boost
@@ -406,7 +420,7 @@ effectiveStdenv.mkDerivation {
     leptonica
   ]
   ++ optionals enableTbb [
-    tbb
+    onetbb
   ]
   ++ optionals effectiveStdenv.hostPlatform.isDarwin [
     bzip2
@@ -460,6 +474,7 @@ effectiveStdenv.mkDerivation {
   OpenBLAS = optionalString withOpenblas openblas_;
 
   cmakeFlags = [
+    (cmakeBool "BUILD_INFO_SKIP_SYSTEM_VERSION" true)
     (cmakeBool "OPENCV_GENERATE_PKGCONFIG" true)
     (cmakeBool "WITH_OPENMP" true)
     (cmakeBool "BUILD_PROTOBUF" false)
@@ -632,7 +647,7 @@ effectiveStdenv.mkDerivation {
         inherit opencv4;
       };
     }
-    // optionalAttrs (enableCuda) {
+    // optionalAttrs enableCuda {
       no-libstdcxx-errors = callPackage ./libstdcxx-test.nix { attrName = "opencv4"; };
     };
   }

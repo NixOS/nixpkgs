@@ -15,7 +15,11 @@
   pixman,
   libcap,
   libgbm,
-  xorg,
+  libxcb-wm,
+  libxcb-render-util,
+  libxcb-image,
+  libxcb-errors,
+  libx11,
   hwdata,
   seatd,
   vulkan-loader,
@@ -88,11 +92,11 @@ let
         vulkan-loader
         wayland
         wayland-protocols
-        xorg.libX11
-        xorg.xcbutilerrors
-        xorg.xcbutilimage
-        xorg.xcbutilrenderutil
-        xorg.xcbutilwm
+        libx11
+        libxcb-errors
+        libxcb-image
+        libxcb-render-util
+        libxcb-wm
       ]
       ++ lib.optional finalAttrs.enableXWayland xwayland
       ++ extraBuildInputs;
@@ -132,6 +136,7 @@ let
         maintainers = with lib.maintainers; [
           synthetica
           wineee
+          doronbehar
         ];
         pkgConfigModules = [
           (
@@ -145,7 +150,7 @@ let
     });
 
 in
-rec {
+{
   wlroots_0_17 = generic {
     version = "0.17.4";
     hash = "sha256-AzmXf+HMX/6VAr0LpfHwfmDB9dRrrLQHt7l35K98MVo=";
@@ -161,16 +166,16 @@ rec {
   };
 
   wlroots_0_18 = generic {
-    version = "0.18.2";
-    hash = "sha256-vKvMWRPPJ4PRKWVjmKKCdNSiqsQm+uQBoBnBUFElLNA=";
+    version = "0.18.3";
+    hash = "sha256-D8RapSeH+5JpTtq+OU8PyVZubLhjcebbCBPuSO5Q7kU=";
     extraBuildInputs = [
       lcms2
     ];
   };
 
   wlroots_0_19 = generic {
-    version = "0.19.1";
-    hash = "sha256-Q4x6obwzYYncgoUzqFVzn/scjxsiUeAIlEWY43emdvA=";
+    version = "0.19.2";
+    hash = "sha256-8VOhSaH9D0GkqyIP42W3uGcDT5ixPVDMT/OLlMXBNXA=";
     extraBuildInputs = [
       lcms2
     ];

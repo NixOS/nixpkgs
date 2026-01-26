@@ -101,7 +101,7 @@ in
         name = config.boot.uki.name;
         version = config.boot.uki.version;
         versionInfix = if version != null then "_${version}" else "";
-        triesInfix = if cfg.tries != null then "+${builtins.toString cfg.tries}" else "";
+        triesInfix = if cfg.tries != null then "+${toString cfg.tries}" else "";
       in
       name + versionInfix + triesInfix + ".efi";
 

@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "aircrack-ng";
     repo = "aircrack-ng";
-    rev = version;
+    tag = version;
     hash = "sha256-niQDwiqi5GtBW5HIn0endnqPb/MqllcjsjXw4pTyFKY=";
   };
 
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
       ethtool
       pciutils
     ]
-    ++ lib.optional (stdenv.hostPlatform.isCygwin && stdenv.hostPlatform.isClang) libiconv
+    ++ lib.optional (stdenv.hostPlatform.isCygwin && stdenv.cc.isClang) libiconv
     ++ lib.optional enableAirolib sqlite
     ++ lib.optional enableRegex pcre2
     ++ lib.optional useAirpcap airpcap-sdk;

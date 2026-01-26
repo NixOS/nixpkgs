@@ -11,7 +11,6 @@
   pystache,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   redis,
   requests,
@@ -23,8 +22,6 @@ buildPythonPackage rec {
   pname = "cement";
   version = "3.0.14";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "datafolklabs";
@@ -57,7 +54,7 @@ buildPythonPackage rec {
     pytestCheckHook
     requests
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "cement" ];
 
@@ -76,12 +73,12 @@ buildPythonPackage rec {
     "tests/ext/test_ext_smtp.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "CLI Application Framework for Python";
     homepage = "https://builtoncement.com/";
     changelog = "https://github.com/datafolklabs/cement/blob/${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ eqyiel ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ eqyiel ];
     mainProgram = "cement";
   };
 }

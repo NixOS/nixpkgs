@@ -1,5 +1,6 @@
 {
   lib,
+  ocaml,
   buildDunePackage,
   fetchurl,
   alcotest,
@@ -13,6 +14,11 @@ buildDunePackage rec {
   version = "1.0.1";
 
   minimalOCamlVersion = "5.0";
+
+  # Fix build with gcc15
+  env = lib.optionalAttrs (lib.versions.majorMinor ocaml.version == "5.0") {
+    NIX_CFLAGS_COMPILE = "-std=gnu11";
+  };
 
   src = fetchurl {
     url = "https://github.com/ocaml-multicore/${pname}/releases/download/${version}/${pname}-${version}.tbz";

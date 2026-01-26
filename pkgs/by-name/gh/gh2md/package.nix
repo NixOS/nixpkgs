@@ -6,12 +6,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gh2md";
-  version = "2.3.1";
-  format = "pyproject";
+  version = "2.5.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-B7IB1TWfZ0StH2zo/tXfDAaPlgLvr4ciIv7B8EQyp8w=";
+    hash = "sha256-01r/x9SrxCUN/wrEAWopHDAEEJdwKiWL9mERylaNAlA=";
   };
 
   build-system = with python3Packages; [
@@ -29,11 +29,11 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "gh2md" ];
 
-  meta = with lib; {
+  meta = {
     description = "Export Github repository issues to markdown files";
     mainProgram = "gh2md";
     homepage = "https://github.com/mattduck/gh2md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ artturin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ artturin ];
   };
 }

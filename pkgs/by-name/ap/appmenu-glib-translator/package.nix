@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Library for translating from DBusMenu to GMenuModel";
     homepage = "https://gitlab.com/vala-panel-project/vala-panel-appmenu/-/tree/${finalAttrs.version}/subprojects/appmenu-glib-translator";
     license = lib.licenses.lgpl3Plus;
-    maintainers = with lib.maintainers; [ perchun ];
+    maintainers = with lib.maintainers; [ PerchunPak ];
     platforms = lib.platforms.linux;
   };
 })

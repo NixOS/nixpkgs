@@ -3,21 +3,22 @@
   fetchFromGitHub,
   buildGoModule,
   buildNpmPackage,
-  pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  nodejs_24,
+  pnpm_10,
   nix-update-script,
   nixosTests,
 }:
 
 let
-  version = "2.42.5";
-
-  pnpm = pnpm_9;
+  version = "2.55.0";
 
   src = fetchFromGitHub {
     owner = "filebrowser";
     repo = "filebrowser";
     rev = "v${version}";
-    hash = "sha256-6AZwWdYQlaQ30Q5ohi9ovlUJZZ+u7Wqc5mfRW/3t7Zs=";
+    hash = "sha256-1ZzTATJEVBr76+CMk8OzxdpWGqFHPPhyC7z2MgfqN+M=";
   };
 
   frontend = buildNpmPackage rec {
@@ -26,18 +27,21 @@ let
 
     sourceRoot = "${src.name}/frontend";
 
-    npmConfigHook = pnpm.configHook;
+    nativeBuildInputs = [ pnpm_10 ];
+    npmConfigHook = pnpmConfigHook;
     npmDeps = pnpmDeps;
+    nodejs = nodejs_24;
 
-    pnpmDeps = pnpm.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit
         pname
         version
         src
         sourceRoot
         ;
-      fetcherVersion = 2;
-      hash = "sha256-uGEw6Wt6hXEcYQzXYzfgo3fcCX7Hj39bLHsT1rsGy74=";
+      fetcherVersion = 3;
+      pnpm = pnpm_10;
+      hash = "sha256-iv0LZoEyF5fASqBKNkTJhLMY0Xpa6x0i4csDoHmGU+g=";
     };
 
     installPhase = ''
@@ -55,7 +59,7 @@ buildGoModule {
   pname = "filebrowser";
   inherit version src;
 
-  vendorHash = "sha256-aVtL64Cm+nqum/qHFvplpEawgMXM2S6l8QFrJBzLVtU=";
+  vendorHash = "sha256-4WDggP5eL7IPUWTxewxV2JUZZ3kV0PwewQQothz7AC8=";
 
   excludedPackages = [ "tools" ];
 
@@ -75,11 +79,11 @@ buildGoModule {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Web application for managing files and directories";
     homepage = "https://filebrowser.org";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ oakenshield ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ oakenshield ];
     mainProgram = "filebrowser";
   };
 }

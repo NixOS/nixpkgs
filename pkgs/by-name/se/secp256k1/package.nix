@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Optimized C library for EC operations on curve secp256k1";
     longDescription = ''
       Optimized C library for EC operations on curve secp256k1. Part of
@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
       to research best practices. Use at your own risk.
     '';
     homepage = "https://github.com/bitcoin-core/secp256k1";
-    license = with licenses; [ mit ];
+    license = with lib.licenses; [ mit ];
     maintainers = [ ];
-    platforms = with platforms; all;
+    platforms = with lib.platforms; all;
   };
 }

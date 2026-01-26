@@ -50,19 +50,19 @@ buildFHSEnv rec {
       ))
       # quartus requirements
       glib
-      xorg.libICE
-      xorg.libSM
-      xorg.libXau
-      xorg.libXdmcp
-      xorg.libXScrnSaver
+      libice
+      libsm
+      libxau
+      libxdmcp
+      libxscrnsaver
       libudev0-shim
       bzip2
       brotli
       expat
       dbus
       # qsys requirements
-      xorg.libXtst
-      xorg.libXi
+      libxtst
+      libxi
       dejavu_fonts
       gnumake
     ];
@@ -78,7 +78,7 @@ buildFHSEnv rec {
       # This seems ugly - can we override `libpng = libpng12` for all `pkgs`?
       freetype = pkgs.freetype.override { libpng = libpng12; };
       fontconfig = pkgs.fontconfig.override { inherit freetype; };
-      libXft = pkgs.xorg.libXft.override { inherit freetype fontconfig; };
+      libXft = pkgs.libxft.override { inherit freetype fontconfig; };
     in
     [
       # questa requirements
@@ -89,9 +89,9 @@ buildFHSEnv rec {
       # common requirements
       freetype
       fontconfig
-      xorg.libX11
-      xorg.libXext
-      xorg.libXrender
+      libx11
+      libxext
+      libxrender
       libxcrypt-legacy
     ];
 

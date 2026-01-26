@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "depyf";
-  version = "0.19.0";
+  version = "0.20.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "thuml";
     repo = "depyf";
     tag = "v${version}";
-    hash = "sha256-AGM5Pm0hhqOX9CY7dFijZLqhWmY7xnmKWakh4MUtOMs=";
+    hash = "sha256-GFNlJeD7Nyxr7Ya3aSA6+0AZJSaeDyqXYPEsvhPN1wg=";
   };
 
   # don't try to read git commit

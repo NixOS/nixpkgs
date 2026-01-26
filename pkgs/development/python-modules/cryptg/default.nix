@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   cargo,
   rustPlatform,
   rustc,
@@ -12,21 +11,19 @@
 
 buildPythonPackage rec {
   pname = "cryptg";
-  version = "0.5.1";
+  version = "0.5.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "cher-nov";
     repo = "cryptg";
     rev = "v${version}";
-    hash = "sha256-jrJy51AfMmLjAyi9FXT3mCi8q1OIpuAdrSS9tmrv3fA=";
+    hash = "sha256-4WerXUEkdkIkVEyZB4EzM1HITvNbO7a1Cfi3bpJGUVA=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-yOfpFGAy7VsDQrkd13H+ha0AzfXQmzmkIuvzsvY9rfk=";
+    hash = "sha256-kR92lvyBCFxEvIlzRX796XQn71ARrlsfK+fAKrwimEo=";
   };
 
   build-system = [
@@ -49,10 +46,10 @@ buildPythonPackage rec {
     substituteInPlace pyproject.toml --replace-fail "setuptools[core]" "setuptools"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Official Telethon extension to provide much faster cryptography for Telegram API requests";
     homepage = "https://github.com/cher-nov/cryptg";
-    license = licenses.cc0;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.cc0;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 }

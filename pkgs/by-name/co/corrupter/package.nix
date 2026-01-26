@@ -26,11 +26,11 @@ buildGoModule {
     tagPrefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple image glitcher suitable for producing lockscreens";
     homepage = "https://github.com/r00tman/corrupter";
-    license = licenses.bsd2;
-    maintainers = [ maintainers.ivan770 ];
+    license = lib.licenses.bsd2;
+    maintainers = [ lib.maintainers.ivan770 ];
     mainProgram = "corrupter";
   };
 }

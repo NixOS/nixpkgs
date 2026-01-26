@@ -15,7 +15,16 @@
   gtk3,
   libGL,
   libva,
-  xorg,
+  libxtst,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  libxcb,
   libgbm,
   pango,
   pciutils,
@@ -34,7 +43,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.zotero.org/client/release/${version}/Zotero-${version}_linux-x86_64.tar.bz2";
-    hash = "sha256-L2Mvi11X4YBU4ezHDJosl7qHClmzUwmghvXG8TChA8c=";
+    hash = "sha256-uV0R0L8EoZt59hMKXFlJ+EhONArPpRbb/tIV+wZKLgY=";
   };
 
   dontPatchELF = true;
@@ -51,16 +60,16 @@ stdenv.mkDerivation rec {
         gtk3
         libGL
         libva
-        xorg.libX11
-        xorg.libXcomposite
-        xorg.libXcursor
-        xorg.libXdamage
-        xorg.libXext
-        xorg.libXfixes
-        xorg.libXi
-        xorg.libXrandr
-        xorg.libXtst
-        xorg.libxcb
+        libx11
+        libxcomposite
+        libxcursor
+        libxdamage
+        libxext
+        libxfixes
+        libxi
+        libxrandr
+        libxtst
+        libxcb
         libgbm
         pango
         pciutils

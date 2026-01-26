@@ -23,6 +23,6 @@ buildGoModule rec {
     homepage = "https://elfinfo.roboticoverlords.org/";
     changelog = "https://github.com/xyproto/elfinfo/releases/tag/${version}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

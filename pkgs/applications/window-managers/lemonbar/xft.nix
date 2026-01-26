@@ -29,12 +29,12 @@ stdenv.mkDerivation {
     "PREFIX="
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight xcb based bar with XFT-support";
     mainProgram = "lemonbar";
     homepage = "https://github.com/drscream/lemonbar-xft";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ moni ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ moni ];
   };
 }

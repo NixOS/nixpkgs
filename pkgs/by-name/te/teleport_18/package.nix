@@ -6,11 +6,11 @@
   extPatches ? [ ],
 }:
 
-buildTeleport rec {
-  version = "18.2.0";
-  hash = "sha256-JWgGRv9pK76u7IxwqnBcuAI93XIKfIVvme7l+a/3J7c=";
-  vendorHash = "sha256-oPi/rIuwze2ZlyHfZ2MdDHHvdIaF2IZ2aklEVNRgoLo=";
-  pnpmHash = "sha256-wW4RT1uqOTpy8wKIsAOfIlxoOamTzPqEbFQRAub+sn4=";
+buildTeleport {
+  version = "18.6.1";
+  hash = "sha256-Jtjy2qmlm7zsl0a8o4/4jWdnse1yFR++oq3FcDuQOJo=";
+  vendorHash = "sha256-PW8UP1YuUssw//1qb3oUN/FrbLUwt6D+c4q6jrm09Xk=";
+  pnpmHash = "sha256-xjAqyReWRdty67LWaNX1jG4/uCeQtUMH/BKLIHUx6+0=";
   cargoHash = "sha256-ia4We4IfIkqz82aFMVvXdzjDXw0w+OJSPVdutfau6PA=";
 
   wasm-bindgen-cli = wasm-bindgen-cli_0_2_99;

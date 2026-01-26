@@ -3,7 +3,8 @@
   stdenv,
   fetchFromGitLab,
   pkg-config,
-  xorg,
+  libxext,
+  libx11,
   imlib2,
   makeWrapper,
 }:
@@ -25,8 +26,8 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     imlib2
-    xorg.libX11
-    xorg.libXext
+    libx11
+    libxext
   ];
 
   patches = [
@@ -51,11 +52,11 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/xteddy --chdir "$out/share/images/"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cuddly teddy bear for your X desktop";
     homepage = "https://weber.itn.liu.se/~stegu/xteddy/";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.xaverdh ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.xaverdh ];
+    platforms = lib.platforms.linux;
   };
 }

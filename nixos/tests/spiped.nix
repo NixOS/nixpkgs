@@ -4,7 +4,7 @@ let
 in
 {
   name = "spiped";
-  meta = with pkgs.lib.maintainers; {
+  meta = {
     maintainers = [ ];
   };
 

@@ -6,24 +6,25 @@
   dotnetCorePackages,
   zlib,
   openssl,
+  nix-update-script,
   nixosTests,
 }:
 buildDotnetModule rec {
   pname = "wasabibackend";
-  version = "2.0.2.1";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
-    owner = "zkSNACKs";
+    owner = "WalletWasabi";
     repo = "WalletWasabi";
     tag = "v${version}";
-    hash = "sha512-JuCl3SyejzwUd2n8Fy7EdxUuO4bIcGb8yMWZQOhZzsY4fvg9prFOnVZEquxahD0a41MLKHRNA1R2N3NMapcc0A==";
+    hash = "sha256-vOvNumR/0agf9Mof0UD3KjJVgN18y6R/OrgLOXwL3K8=";
   };
 
   projectFile = "WalletWasabi.Backend/WalletWasabi.Backend.csproj";
   nugetDeps = ./deps.json;
 
-  dotnet-sdk = dotnetCorePackages.sdk_7_0-bin;
-  dotnet-runtime = dotnetCorePackages.aspnetcore_7_0-bin;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
 
   buildInputs = [
     (lib.getLib stdenv.cc.cc)
@@ -35,26 +36,32 @@ buildDotnetModule rec {
     zlib
   ];
 
-  preConfigure = ''
-    makeWrapperArgs+=(
-      --chdir "$out/lib/${pname}"
-    )
-  '';
+  executables = [ "WalletWasabi.Backend" ];
 
   postFixup = ''
     mv $out/bin/WalletWasabi.Backend $out/bin/WasabiBackend
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) wasabibackend;
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      inherit (nixosTests) wasabibackend;
+    };
   };
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/WalletWasabi/WalletWasabi/releases/tag/${src.tag}";
     description = "Backend for the Wasabi Wallet";
     homepage = "https://wasabiwallet.io/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.mit;
-    maintainers = with maintainers; [ mmahut ];
+    license = lib.licenses.mit;
+    mainProgram = "WasabiBackend";
+    maintainers = with lib.maintainers; [
+      mmahut
+    ];
     platforms = [ "x86_64-linux" ];
+    sourceProvenance = with lib.sourceTypes; [
+      binaryNativeCode # contains binaries in WalletWasabi/Microservices/Binaries
+      fromSource
+    ];
   };
 }

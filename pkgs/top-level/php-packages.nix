@@ -1,5 +1,6 @@
 {
   stdenv,
+  fetchpatch,
   config,
   callPackages,
   lib,
@@ -10,7 +11,7 @@
   bzip2,
   curl,
   cyrus_sasl,
-  enchant2,
+  enchant,
   freetds,
   gd,
   gettext,
@@ -115,7 +116,7 @@ lib.makeScope pkgs.newScope (
         ...
       }@args:
       stdenv.mkDerivation (
-        (builtins.removeAttrs args [ "name" ])
+        (removeAttrs args [ "name" ])
         // {
           pname = "php-${name}";
           extensionName = extName;
@@ -250,14 +251,13 @@ lib.makeScope pkgs.newScope (
 
       phpspy = callPackage ../development/php-packages/phpspy { };
 
-      phpstan = callPackage ../development/php-packages/phpstan { };
-
       psalm = callPackage ../development/php-packages/psalm { };
     }
     // lib.optionalAttrs config.allowAliases {
       deployer = throw "`php8${lib.versions.minor php.version}Packages.deployer` has been removed, use `deployer`";
       phpcbf = throw "`php8${lib.versions.minor php.version}Packages.phpcbf` has been removed, use `php-codesniffer` instead which contains both `phpcs` and `phpcbf`.";
       phpcs = throw "`php8${lib.versions.minor php.version}Packages.phpcs` has been removed, use `php-codesniffer` instead which contains both `phpcs` and `phpcbf`.";
+      phpstan = throw "`php8${lib.versions.minor php.version}Packages.phpstan` has been removed, use `phpstan` instead.";
       psysh = throw "`php8${lib.versions.minor php.version}Packages.psysh` has been removed, use `psysh`";
     };
 
@@ -407,6 +407,7 @@ lib.makeScope pkgs.newScope (
       }
       // lib.optionalAttrs config.allowAliases {
         php-spx = throw "php-spx is deprecated, use spx instead";
+        openssl-legacy = throw "openssl-legacy has been removed";
       }
       // (
         # Core extensions
@@ -448,7 +449,7 @@ lib.makeScope pkgs.newScope (
             }
             {
               name = "enchant";
-              buildInputs = [ enchant2 ];
+              buildInputs = [ enchant ];
               configureFlags = [ "--with-enchant" ];
               doCheck = false;
             }
@@ -596,16 +597,6 @@ lib.makeScope pkgs.newScope (
             {
               name = "openssl";
               buildInputs = [ openssl ];
-              configureFlags = [ "--with-openssl" ];
-              doCheck = false;
-            }
-            # This provides a legacy OpenSSL PHP extension
-            # For situations where OpenSSL 3 do not support a set of features
-            # without a specific openssl.cnf file
-            {
-              name = "openssl-legacy";
-              extName = "openssl";
-              buildInputs = [ openssl_1_1 ];
               configureFlags = [ "--with-openssl" ];
               doCheck = false;
             }
@@ -845,7 +836,7 @@ lib.makeScope pkgs.newScope (
           # [ { name = <name>; value = <extension drv>; } ... ]
           #
           # which we later use listToAttrs to make all attrs available by name.
-          namedExtensions = builtins.map (drv: {
+          namedExtensions = map (drv: {
             name = drv.name;
             value = mkExtension drv;
           }) extensionData;

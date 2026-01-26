@@ -31,12 +31,12 @@ appimageTools.wrapType2 {
       --replace 'Exec=AppRun' 'Exec=${pname}'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Desktop client for IRCCloud";
     mainProgram = "irccloud";
     homepage = "https://www.irccloud.com";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ lightbulbjim ];
+    maintainers = with lib.maintainers; [ lightbulbjim ];
   };
 }

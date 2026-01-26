@@ -3,17 +3,18 @@
   rustPlatform,
   fetchFromGitHub,
   systemd,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nix-store-veritysetup-generator";
-  version = "0.1.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "nikstur";
     repo = "nix-store-veritysetup-generator";
     rev = version;
-    hash = "sha256-kQ+mFBnvxmEH2+z1sDaehGInEsBpfZu8LMAseGjZ3/I=";
+    hash = "sha256-RTGdcLn4zuZAcC1Td4gJcywIerCYyaD0JYz8g5ybmho=";
   };
 
   sourceRoot = "${src.name}/rust";
@@ -34,10 +35,14 @@ rustPlatform.buildRustPackage rec {
 
   stripAllList = [ "bin" ];
 
-  meta = with lib; {
+  passthru.tests = {
+    inherit (nixosTests) nix-store-veritysetup;
+  };
+
+  meta = {
     description = "Systemd unit generator for a verity protected Nix Store";
     homepage = "https://github.com/nikstur/nix-store-veritysetup-generator";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nikstur ];
     mainProgram = "nix-store-veritysetup-generator";
   };

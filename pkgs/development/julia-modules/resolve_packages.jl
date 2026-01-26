@@ -36,7 +36,7 @@ assert_can_add(ctx, pkgs)
 for (i, pkg) in pairs(pkgs)
     entry = Pkg.Types.manifest_info(ctx.env.manifest, pkg.uuid)
     is_dep = any(uuid -> uuid == pkg.uuid, [uuid for (name, uuid) in ctx.env.project.deps])
-    if VERSION >= VersionNumber("1.11")
+    if VERSION >= VersionNumber("1.11") && VERSION < VersionNumber("1.12")
         pkgs[i] = update_package_add(ctx, pkg, entry, nothing, nothing, is_dep)
     else
         pkgs[i] = update_package_add(ctx, pkg, entry, is_dep)

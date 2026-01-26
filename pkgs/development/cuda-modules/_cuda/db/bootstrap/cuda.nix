@@ -100,10 +100,27 @@
         }
       )
       {
+        # Tesla K40
+        "3.5" = {
+          archName = "Kepler";
+          minCudaMajorMinorVersion = "10.0";
+          dontDefaultAfterCudaMajorMinorVersion = "11.0";
+          maxCudaMajorMinorVersion = "11.8";
+        };
+
+        # Tesla K80
+        "3.7" = {
+          archName = "Kepler";
+          minCudaMajorMinorVersion = "10.0";
+          dontDefaultAfterCudaMajorMinorVersion = "11.0";
+          maxCudaMajorMinorVersion = "11.8";
+        };
+
         # Tesla/Quadro M series
         "5.0" = {
           archName = "Maxwell";
           minCudaMajorMinorVersion = "10.0";
+          maxCudaMajorMinorVersion = "12.9";
           dontDefaultAfterCudaMajorMinorVersion = "11.0";
         };
 
@@ -111,6 +128,7 @@
         "5.2" = {
           archName = "Maxwell";
           minCudaMajorMinorVersion = "10.0";
+          maxCudaMajorMinorVersion = "12.9";
           dontDefaultAfterCudaMajorMinorVersion = "11.0";
         };
 
@@ -118,6 +136,7 @@
         "6.0" = {
           archName = "Pascal";
           minCudaMajorMinorVersion = "10.0";
+          maxCudaMajorMinorVersion = "12.9";
           # Removed from TensorRT 10.0, which corresponds to CUDA 12.4 release.
           # https://docs.nvidia.com/deeplearning/tensorrt/archives/tensorrt-1001/support-matrix/index.html
           dontDefaultAfterCudaMajorMinorVersion = "12.3";
@@ -128,6 +147,7 @@
         "6.1" = {
           archName = "Pascal";
           minCudaMajorMinorVersion = "10.0";
+          maxCudaMajorMinorVersion = "12.9";
           # Removed from TensorRT 10.0, which corresponds to CUDA 12.4 release.
           # https://docs.nvidia.com/deeplearning/tensorrt/archives/tensorrt-1001/support-matrix/index.html
           dontDefaultAfterCudaMajorMinorVersion = "12.3";
@@ -137,9 +157,20 @@
         "7.0" = {
           archName = "Volta";
           minCudaMajorMinorVersion = "10.0";
+          maxCudaMajorMinorVersion = "12.9";
           # Removed from TensorRT 10.5, which corresponds to CUDA 12.6 release.
           # https://docs.nvidia.com/deeplearning/tensorrt/archives/tensorrt-1050/support-matrix/index.html
           dontDefaultAfterCudaMajorMinorVersion = "12.5";
+        };
+
+        # Jetson AGX Xavier, Drive AGX Pegasus, Xavier NX
+        "7.2" = {
+          archName = "Volta";
+          minCudaMajorMinorVersion = "10.0";
+          # Note: without `cuda_compat`, maxCudaMajorMinorVersion is 11.8
+          # https://docs.nvidia.com/cuda/cuda-for-tegra-appnote/index.html#deployment-considerations-for-cuda-upgrade-package
+          maxCudaMajorMinorVersion = "12.2";
+          isJetson = true;
         };
 
         # GTX/RTX Turing – GTX 1660 Ti, RTX 2060, RTX 2070, RTX 2080, Titan RTX, Quadro RTX 4000,
@@ -163,12 +194,22 @@
           minCudaMajorMinorVersion = "11.2";
         };
 
-        # Jetson AGX Orin and Drive AGX Orin only
+        # Tegra T234 (Jetson Orin)
         "8.7" = {
           archName = "Ampere";
-          minCudaMajorMinorVersion = "11.5";
+          minCudaMajorMinorVersion = "11.4";
           isJetson = true;
         };
+
+        # Tegra T239 (Switch 2?)
+        # "8.8" = {
+        #   archName = "Ampere";
+        #   minCudaMajorMinorVersion = "13.0";
+        #   # It's not a Jetson device, but it does use the same architecture.
+        #   isJetson = true;
+        #   # Should never be default.
+        #   dontDefaultAfterCudaMajorMinorVersion = "13.0";
+        # };
 
         # NVIDIA GeForce RTX 4090, RTX 4080, RTX 6000, Tesla L40
         "8.9" = {
@@ -176,7 +217,7 @@
           minCudaMajorMinorVersion = "11.8";
         };
 
-        # NVIDIA H100 (GH100)
+        # NVIDIA H100, H200, GH200
         "9.0" = {
           archName = "Hopper";
           minCudaMajorMinorVersion = "11.8";
@@ -187,7 +228,7 @@
           minCudaMajorMinorVersion = "12.0";
         };
 
-        # NVIDIA B100
+        # NVIDIA B200, GB200
         "10.0" = {
           archName = "Blackwell";
           minCudaMajorMinorVersion = "12.7";
@@ -203,26 +244,33 @@
           minCudaMajorMinorVersion = "12.9";
         };
 
-        # NVIDIA Jetson Thor Blackwell
+        # NVIDIA Jetson Thor Blackwell, T4000, T5000 (CUDA 12.7-12.9)
+        # Okay, so:
+        # - Support for Thor was added in CUDA 12.7, which was never released but is referenced in docs
+        # - NVIDIA changed the compute capability from 10.0 to 11.0 in CUDA 13.0
+        # - From CUDA 13.0 and on, 10.1 is no longer a valid compute capability
         "10.1" = {
           archName = "Blackwell";
           minCudaMajorMinorVersion = "12.7";
+          maxCudaMajorMinorVersion = "12.9";
           isJetson = true;
         };
 
         "10.1a" = {
           archName = "Blackwell";
           minCudaMajorMinorVersion = "12.7";
+          maxCudaMajorMinorVersion = "12.9";
           isJetson = true;
         };
 
         "10.1f" = {
           archName = "Blackwell";
           minCudaMajorMinorVersion = "12.9";
+          maxCudaMajorMinorVersion = "12.9";
           isJetson = true;
         };
 
-        # NVIDIA ???
+        # NVIDIA B300
         "10.3" = {
           archName = "Blackwell";
           minCudaMajorMinorVersion = "12.9";
@@ -236,6 +284,25 @@
         "10.3f" = {
           archName = "Blackwell";
           minCudaMajorMinorVersion = "12.9";
+        };
+
+        # NVIDIA Jetson Thor Blackwell, T4000, T5000 (CUDA 13.0+)
+        "11.0" = {
+          archName = "Blackwell";
+          minCudaMajorMinorVersion = "13.0";
+          isJetson = true;
+        };
+
+        "11.0a" = {
+          archName = "Blackwell";
+          minCudaMajorMinorVersion = "13.0";
+          isJetson = true;
+        };
+
+        "11.0f" = {
+          archName = "Blackwell";
+          minCudaMajorMinorVersion = "13.0";
+          isJetson = true;
         };
 
         # NVIDIA GeForce RTX 5090 (GB202) etc.
@@ -254,7 +321,7 @@
           minCudaMajorMinorVersion = "12.9";
         };
 
-        # NVIDIA ???
+        # NVIDIA DGX Spark
         "12.1" = {
           archName = "Blackwell";
           minCudaMajorMinorVersion = "12.9";

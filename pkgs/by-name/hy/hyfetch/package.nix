@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hyfetch";
-  version = "2.0.2";
+  version = "2.0.5";
 
   src = fetchFromGitHub {
     owner = "hykilpikonna";
     repo = "hyfetch";
     tag = finalAttrs.version;
-    hash = "sha256-Y9v2vrpTPlsgFRoo33NDVoyQSgUD/stKQLJXzUxFesA=";
+    hash = "sha256-vrTmjg6CZczImueN3JxKg1vYXAaEDYHYG7UaZeupYPU=";
   };
 
-  cargoHash = "sha256-auOeH/1KtxS7a1APOtCMwNTdEQ976BL/jEKj2ADaakQ=";
+  cargoHash = "sha256-SieVB0zwer9Ksio3l87gUZkVJMwb+Da/NjBi5f57tJc=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -56,7 +56,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   versionCheckKeepEnvironment = [ "PATH" ];
   doInstallCheck = true;
 

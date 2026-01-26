@@ -23,7 +23,7 @@
 
 stdenv.mkDerivation rec {
   pname = "json-glib";
-  version = "1.10.6";
+  version = "1.10.8";
 
   outputs = [
     "out"
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-d/S8v5M5Uo8Wa4BzRYaT8KILd7cFnbwtthdGoZKLApM=";
+    hash = "sha256-VcXBQaVkJFuPj752mGY8h6RaczPCosVvBvgRq3OyEt0=";
   };
 
   patches = [
@@ -102,11 +102,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library providing (de)serialization support for the JavaScript Object Notation (JSON) format";
     homepage = "https://gitlab.gnome.org/GNOME/json-glib";
-    license = licenses.lgpl21Plus;
-    teams = [ teams.gnome ];
-    platforms = with platforms; unix;
+    license = lib.licenses.lgpl21Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = with lib.platforms; unix;
   };
 }

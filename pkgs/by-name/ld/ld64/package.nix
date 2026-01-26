@@ -6,6 +6,7 @@
   fetchFromGitHub,
   libtapi,
   llvm,
+  libxml2,
   meson,
   ninja,
   openssl,
@@ -113,9 +114,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     llvm
+    libxml2
     openssl
     xar
   ];
+
+  # ld built with this fails to link glib's gio on x86_64 darwin
+  hardeningDisable = [ "libcxxhardeningfast" ];
 
   dontUseCmakeConfigure = true; # CMake is only needed because it’s used by Meson to find LLVM.
 

@@ -27,17 +27,17 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sqlite${lib.optionalString interactive "-interactive"}";
-  version = "3.50.2";
+  version = "3.51.2";
 
   # nixpkgs-update: no auto update
   # NB! Make sure to update ./tools.nix src (in the same directory).
   src = fetchurl {
-    url = "https://sqlite.org/2025/sqlite-autoconf-${archiveVersion version}.tar.gz";
-    hash = "sha256-hKYW/9MXOORZC2W6uzqeHvk3DzY4422yIO4Oc/itIVY=";
+    url = "https://sqlite.org/2026/sqlite-autoconf-${archiveVersion version}.tar.gz";
+    hash = "sha256-+9ifhmsUA7tmoUMGVEAInddhAPIjgxTZInSggtTyt7s=";
   };
   docsrc = fetchurl {
-    url = "https://sqlite.org/2025/sqlite-doc-${archiveVersion version}.zip";
-    hash = "sha256-n4uitTo6oskWbUagLZEbhdO4sLhAxJHTIdX8YhUONBk=";
+    url = "https://sqlite.org/2026/sqlite-doc-${archiveVersion version}.zip";
+    hash = "sha256-xuMNB8XpwSaQHFTY18kKnBo3B4JFUX8GCzxpxN5Dv10=";
   };
 
   outputs = [
@@ -144,15 +144,15 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://www.sqlite.org/releaselog/${lib.replaceStrings [ "." ] [ "_" ] version}.html";
     description = "Self-contained, serverless, zero-configuration, transactional SQL database engine";
     downloadPage = "https://sqlite.org/download.html";
     homepage = "https://www.sqlite.org/";
-    license = licenses.publicDomain;
+    license = lib.licenses.publicDomain;
     mainProgram = "sqlite3";
-    maintainers = with maintainers; [ np ];
-    platforms = platforms.unix ++ platforms.windows;
+    maintainers = with lib.maintainers; [ np ];
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
     pkgConfigModules = [ "sqlite3" ];
   };
 }

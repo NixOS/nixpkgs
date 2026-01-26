@@ -5,16 +5,16 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "responder";
-  version = "3.1.7.0";
-  format = "other";
+  version = "3.2.1.0";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "lgandx";
     repo = "Responder";
-    tag = "v${version}";
-    hash = "sha256-ZC74VFnixSc97fRkRSOJmc39YLIP95qAUFydIcyzNdo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ajVG4ZUw1GB4dgOztnOfZJ+9wpsrupZuHh8FLRZVZ24=";
   };
 
   nativeBuildInputs = [
@@ -55,4 +55,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "responder";
   };
-}
+})

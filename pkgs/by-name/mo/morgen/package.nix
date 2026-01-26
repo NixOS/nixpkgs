@@ -16,12 +16,12 @@
 
 stdenv.mkDerivation rec {
   pname = "morgen";
-  version = "3.6.17";
+  version = "3.6.19";
 
   src = fetchurl {
     name = "morgen-${version}.deb";
     url = "https://dl.todesktop.com/210203cqcj00tw1/versions/${version}/linux/deb";
-    hash = "sha256-k1JaAYE63bLMwTBH+TmhHa8KBY5YL12GhXrRS0WiilA=";
+    hash = "sha256-9zIs5Z6o9cH7dcVGGCKfCBr/9rR9wvQbs6BZJC3KFiQ=";
   };
 
   nativeBuildInputs = [
@@ -64,13 +64,13 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "All-in-one Calendars, Tasks and Scheduler";
     homepage = "https://morgen.so/";
     mainProgram = "morgen";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [ justanotherariel ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ justanotherariel ];
     platforms = [ "x86_64-linux" ];
   };
 }

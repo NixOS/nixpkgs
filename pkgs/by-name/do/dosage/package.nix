@@ -2,15 +2,16 @@
   lib,
   python3Packages,
   fetchPypi,
+  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "dosage";
-  version = "3.0";
+  version = "3.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-mHV/U9Vqv7fSsLYNrCXckkJ1YpsccLd8HsJ78IwLX0Y=";
+    sha256 = "sha256-MHikoqbsQ2WkDi+S+1fhHuJy/cwzHu6PVy/JfALNJUI=";
   };
 
   pyproject = true;
@@ -24,21 +25,16 @@ python3Packages.buildPythonApplication rec {
   build-system = [ python3Packages.setuptools-scm ];
 
   dependencies = with python3Packages; [
-    colorama
+    brotli
     imagesize
     lxml
-    requests
-    six
     platformdirs
+    requests
+    rich
+    zstandard
   ];
 
-  disabledTests = [
-    # need network connect to api.github.com
-    "test_update_available"
-    "test_no_update_available"
-    "test_update_broken"
-    "test_current"
-  ];
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Comic strip downloader and archiver";

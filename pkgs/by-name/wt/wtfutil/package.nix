@@ -46,7 +46,6 @@ buildGoModule rec {
   doInstallCheck = true;
   # Darwin Error: mkdir /var/empty: file exists
   nativeInstallCheckInputs = lib.optional (!stdenv.hostPlatform.isDarwin) [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 

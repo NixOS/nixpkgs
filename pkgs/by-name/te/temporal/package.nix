@@ -5,20 +5,28 @@
   nixosTests,
   testers,
   temporal,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "temporal";
-  version = "1.28.1";
+  version = "1.29.2";
 
   src = fetchFromGitHub {
     owner = "temporalio";
     repo = "temporal";
-    rev = "v${version}";
-    hash = "sha256-I1Xh9F9c/h6GZxyE75Q3WN7BPN79QuKlB0XKR30vuwg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-WiiezZ/2FgRte4BStIGHQhb5bHtfldi3TaIRG0xFtW0=";
   };
 
-  vendorHash = "sha256-T90mj+EVqlHJVGaUOGwD8acHTbYH6g8NEzKGFwjKu4M=";
+  vendorHash = "sha256-CdzcOE/J0gqUbq7BXPpLFyNPNbFTziR5j9GPdYPzv50=";
+
+  overrideModAttrs = old: {
+    # netdb.go allows /etc/protocols and /etc/services to not exist and happily proceeds, but it panic()s if they exist but return permission denied.
+    postBuild = ''
+      patch -p0 < ${./darwin-sandbox-fix.patch}
+    '';
+  };
 
   excludedPackages = [ "./build" ];
 
@@ -47,6 +55,12 @@ buildGoModule rec {
     runHook postInstall
   '';
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
   passthru.tests = {
     inherit (nixosTests) temporal;
     version = testers.testVersion {
@@ -57,9 +71,9 @@ buildGoModule rec {
   meta = {
     description = "Microservice orchestration platform which enables developers to build scalable applications without sacrificing productivity or reliability";
     homepage = "https://temporal.io";
-    changelog = "https://github.com/temporalio/temporal/releases/tag/v${version}";
+    changelog = "https://github.com/temporalio/temporal/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jpds ];
     mainProgram = "temporal-server";
   };
-}
+})

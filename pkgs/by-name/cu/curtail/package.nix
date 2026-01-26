@@ -22,14 +22,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "curtail";
-  version = "1.13.0";
-  format = "other";
+  version = "1.14.0";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Huluti";
     repo = "Curtail";
     tag = version;
-    sha256 = "sha256-JfioWtd0jGTyaD5uELAqH6J+h04MOrfEqdR7GWgXyMw=";
+    sha256 = "sha256-AxQe7abHZp4SRp90fkFbmXf3ZQH3VmxQVkpxRcit+54=";
   };
 
   nativeBuildInputs = [
@@ -81,11 +81,11 @@ python3.pkgs.buildPythonApplication rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple & useful image compressor";
     mainProgram = "curtail";
     homepage = "https://github.com/Huluti/Curtail";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     teams = [ lib.teams.gnome-circle ];
   };
 }

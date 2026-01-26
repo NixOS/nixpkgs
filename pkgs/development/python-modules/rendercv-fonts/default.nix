@@ -3,22 +3,19 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   hatchling,
 }:
 
 buildPythonPackage rec {
   pname = "rendercv-fonts";
-  version = "0.4.0";
+  version = "0.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "rendercv";
     repo = "rendercv-fonts";
     tag = "v${version}";
-    hash = "sha256-fQ9iNN3hRCrhut+1F6q3dJEWoKUQyPol0/SyTPUPK1c=";
+    hash = "sha256-rwMiDoa/93FY3DFDxzR3sPyB8tCJzOnNbMZq8mBcx7M=";
   };
 
   build-system = [ hatchling ];

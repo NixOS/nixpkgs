@@ -4,7 +4,6 @@
   fetchFromGitHub,
   paho-mqtt,
   pycryptodome,
-  pythonOlder,
   requests,
   websocket-client,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "tuya-iot-py-sdk";
   version = "0.6.6";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "tuya";
@@ -35,10 +32,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tuya_iot" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tuya IoT Python SDK for Tuya Open API";
     homepage = "https://github.com/tuya/tuya-iot-python-sdk";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

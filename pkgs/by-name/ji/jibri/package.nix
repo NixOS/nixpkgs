@@ -6,17 +6,18 @@
   jdk11_headless,
   makeWrapper,
   writeText,
-  xorg,
+  xorg-server,
+  xf86-video-dummy,
   nixosTests,
 }:
 
 let
   xorgModulePaths = writeText "module-paths" ''
     Section "Files"
-      ModulePath "${xorg.xorgserver}/lib/xorg/modules
-      ModulePath "${xorg.xorgserver}/lib/xorg/extensions
-      ModulePath "${xorg.xorgserver}/lib/xorg/drivers
-      ModulePath "${xorg.xf86videodummy}/lib/xorg/modules/drivers
+      ModulePath "${xorg-server}/lib/xorg/modules
+      ModulePath "${xorg-server}/lib/xorg/extensions
+      ModulePath "${xorg-server}/lib/xorg/drivers
+      ModulePath "${xf86-video-dummy}/lib/xorg/modules/drivers
     EndSection
   '';
 
@@ -53,7 +54,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) jibri; };
 
-  meta = with lib; {
+  meta = {
     description = "JItsi BRoadcasting Infrastructure";
     mainProgram = "jibri";
     longDescription = ''
@@ -64,9 +65,9 @@ stdenv.mkDerivation rec {
       supported on a single jibri.
     '';
     homepage = "https://github.com/jitsi/jibri";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.asl20;
-    teams = [ teams.jitsi ];
-    platforms = platforms.linux;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.jitsi ];
+    platforms = lib.platforms.linux;
   };
 }

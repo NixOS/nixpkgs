@@ -3,8 +3,8 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
+  pytest-asyncio,
   pythonAtLeast,
-  pythonOlder,
   defusedxml,
   setuptools,
   sphinx,
@@ -14,14 +14,12 @@
 
 buildPythonPackage rec {
   pname = "uqbar";
-  version = "0.9.5";
+  version = "0.9.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MHSnuPiJu2p3NiG/bV6qFUO90xQEFcyQrcxMY0hw8E8=";
+    hash = "sha256-BaycnI00SgZzpvHPueXAAzV/yWDJEeaViWRSZkJofaY=";
   };
 
   postPatch = ''
@@ -37,7 +35,10 @@ buildPythonPackage rec {
     sphinx
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-asyncio
+  ];
 
   checkInputs = [
     defusedxml
@@ -66,11 +67,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "uqbar" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tools for creating Sphinx and Graphviz documentation";
     homepage = "https://github.com/josiah-wolf-oberholtzer/uqbar";
     changelog = "https://github.com/josiah-wolf-oberholtzer/uqbar/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ davisrichard437 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ davisrichard437 ];
   };
 }

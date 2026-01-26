@@ -28,13 +28,13 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fishnet";
-  version = "2.10.0";
+  version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "lichess-org";
     repo = "fishnet";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BtOPLqfE6SjCr8/HS5oev1j3R26+wkWw051gZwDyCM0=";
+    hash = "sha256-35/izbCfDA5R+HudL8gdk7CVmwu+GLuVtwTuYAwSBDg=";
     fetchSubmodules = true;
   };
 
@@ -45,14 +45,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cp -v '${nnueSmall}' 'Fairy-Stockfish/src/${nnueSmallFile}'
   '';
 
-  cargoHash = "sha256-1Pk9vXo1ivE8H6ctS8PEsCEv/EKFxFtgnmrvik6Gwug=";
+  cargoHash = "sha256-cBNooWIVRk3DsXuF03mSOPYrgadxg8gEhG2aReeUkGs=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
-  versionCheckProgramArg = "--version";
 
   passthru = {
     updateScript = lib.getExe (writeShellApplication {
@@ -67,7 +66,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
       runtimeEnv = {
         PNAME = finalAttrs.pname;
-        PKG_FILE = builtins.toString ./package.nix;
+        PKG_FILE = toString ./package.nix;
         GITHUB_REPOSITORY = "${finalAttrs.src.owner}/${finalAttrs.src.repo}";
         NNUE_BIG_FILE = nnueBigFile;
         NNUE_BIG_HASH = nnueBigHash;
@@ -79,11 +78,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     });
   };
 
-  meta = with lib; {
+  meta = {
     description = "Distributed Stockfish analysis for lichess.org";
     homepage = "https://github.com/lichess-org/fishnet";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       tu-maurice
       thibaultd
     ];

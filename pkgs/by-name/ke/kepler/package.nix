@@ -35,11 +35,11 @@ rustPlatform.buildRustPackage {
     ZSTD_SYS_USE_PKG_CONFIG = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "NIST-based CVE lookup store and API powered by Rust";
     homepage = "https://github.com/Exein-io/kepler";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "kepler";
   };
 }

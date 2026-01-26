@@ -11,6 +11,7 @@
         useBootLoader = true;
         # Booting off the TPM2-encrypted device requires an available init script
         mountHostNixStore = true;
+        efi.OVMF = pkgs.OVMFFull; # this really should be the default. Only OVMFFull contains TCG
         useEFIBoot = true;
         tpm.enable = true;
       };

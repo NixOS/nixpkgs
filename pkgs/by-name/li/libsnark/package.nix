@@ -41,6 +41,13 @@ stdenv.mkDerivation {
     fetchSubmodules = true;
   };
 
+  postPatch = ''
+    substituteInPlace {,depends/{libff,libfqfft}/}CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace depends/gtest/{,googlemock/,googletest/}CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.6.4)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   meta = {
     broken = withProcps; # Despite procps having a valid pkg-config file, CMake doesn't seem to be able to find it.
     description = "C++ library for zkSNARKs";

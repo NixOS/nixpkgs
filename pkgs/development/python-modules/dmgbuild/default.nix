@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dmgbuild";
     repo = "dmgbuild";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-PozYxmXumFnptIgb4FM4b/Q5tx0MIS2bVw2kCuGucA8=";
   };
 

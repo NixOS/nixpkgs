@@ -81,6 +81,12 @@ stdenv.mkDerivation rec {
   postPatch = ''
     sed -i 's,^wget .*,cp $devPak "$PAK_NAME",' Resources/downloadpak.sh
     patchShebangs Resources
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)" \
+      --replace-fail "cmake_policy(SET CMP0054 OLD)" ""
+    substituteInPlace Sources/AngelScript/projects/{cmake,cmake_addons}/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   postInstall = ''
@@ -89,13 +95,13 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_LINK = "-lopenal";
 
-  meta = with lib; {
+  meta = {
     description = "Compatible client of Ace of Spades 0.75";
     mainProgram = "openspades";
     homepage = "https://github.com/yvt/openspades/";
-    license = licenses.gpl3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       azahi
     ];
     # never built on aarch64-linux since first introduction in nixpkgs

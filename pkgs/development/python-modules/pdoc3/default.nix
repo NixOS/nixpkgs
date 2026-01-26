@@ -44,6 +44,5 @@ buildPythonPackage rec {
     homepage = "https://pdoc3.github.io/pdoc/";
     license = lib.licenses.agpl3Plus;
     mainProgram = "pdoc";
-    maintainers = with lib.maintainers; [ catern ];
   };
 }

@@ -1,96 +1,98 @@
 {
   lib,
-  stdenv,
+  gcc15Stdenv,
   fetchFromGitHub,
   cmake,
+  hyprwayland-scanner,
+  hyprwire,
+  pkg-config,
+  wayland-scanner,
+  aquamarine,
   cairo,
-  bash,
   expat,
   file,
   fribidi,
+  hyprgraphics,
   hyprlang,
-  libdatrie,
+  hyprutils,
+  hyprtoolkit,
   libGL,
+  libdatrie,
+  libdrm,
   libjpeg,
   libjxl,
   libselinux,
   libsepol,
   libthai,
   libwebp,
-  libXdmcp,
+  libxdmcp,
   pango,
   pcre,
   pcre2,
-  pkg-config,
-  util-linux,
   wayland,
   wayland-protocols,
-  wayland-scanner,
-  hyprwayland-scanner,
-  hyprutils,
-  hyprgraphics,
+  util-linux,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+gcc15Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprpaper";
-  version = "0.7.5";
+  version = "0.8.1-unstable-2026-01-08";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprpaper";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-Q5gDH48MqkiglGvRtD0Uj653kYzu46j27JIB0h1ecEg=";
+    rev = "2953d963bec2ea63b4303e269b472524db46a121";
+    hash = "sha256-vxAZg+NzAKuWZv2yDrTcXrU+klpAcGFo1FvjYb/CqZ8=";
   };
 
   prePatch = ''
     substituteInPlace src/main.cpp \
       --replace-fail GIT_COMMIT_HASH '"${finalAttrs.src.rev}"'
   '';
-  postPatch = ''
-    substituteInPlace src/helpers/MiscFunctions.cpp \
-      --replace-fail '/bin/bash' '${bash}/bin/bash'
-  '';
 
   nativeBuildInputs = [
     cmake
-    pkg-config
     hyprwayland-scanner
+    hyprwire
+    pkg-config
     wayland-scanner
   ];
 
   buildInputs = [
+    aquamarine
     cairo
-    bash
     expat
     file
     fribidi
+    hyprgraphics
     hyprlang
-    libdatrie
+    hyprutils
+    hyprtoolkit
     libGL
+    libdatrie
+    libdrm
     libjpeg
     libjxl
     libselinux
     libsepol
     libthai
     libwebp
-    libXdmcp
+    libxdmcp
     pango
     pcre
     pcre2
-    util-linux
     wayland
     wayland-protocols
-    hyprutils
-    hyprgraphics
+    util-linux
   ];
 
-  meta = with lib; {
+  meta = {
     inherit (finalAttrs.src.meta) homepage;
     description = "Blazing fast wayland wallpaper utility";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     teams = [ lib.teams.hyprland ];
     inherit (wayland.meta) platforms;
-    broken = stdenv.hostPlatform.isDarwin;
+    broken = gcc15Stdenv.hostPlatform.isDarwin;
     mainProgram = "hyprpaper";
   };
 })

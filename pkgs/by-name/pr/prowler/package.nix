@@ -9,7 +9,7 @@ let
     packageOverrides = self: super: {
 
       # Doesn't work with latest pydantic
-      py-ocsf-models = super.py-ocsf-models.overridePythonAttrs (oldAttrs: rec {
+      py-ocsf-models = super.py-ocsf-models.overridePythonAttrs (oldAttrs: {
         dependencies = [
           python3.pkgs.pydantic_1
           python3.pkgs.cryptography
@@ -21,14 +21,14 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "prowler";
-  version = "5.12.2";
+  version = "5.12.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "prowler-cloud";
     repo = "prowler";
     tag = version;
-    hash = "sha256-HSMlWuwYc8m6WUNy0Ja5VuC2lbC3mbK2bPHNQY+nk0U=";
+    hash = "sha256-6RPtld95MauhCmSLrgncr4+s16z0PfmiiC6eAph8ZmI=";
   };
 
   pythonRelaxDeps = true;
@@ -95,12 +95,12 @@ py.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "prowler" ];
 
-  meta = with lib; {
+  meta = {
     description = "Security tool for AWS, Azure and GCP to perform Cloud Security best practices assessments";
     homepage = "https://github.com/prowler-cloud/prowler";
     changelog = "https://github.com/prowler-cloud/prowler/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "prowler";
   };
 }

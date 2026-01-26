@@ -5,8 +5,6 @@
   buildPackages,
   boost,
   gperftools,
-  pcre2,
-  pcre-cpp,
   snappy,
   zlib,
   yaml-cpp,
@@ -18,6 +16,7 @@
   curl,
   cctools,
   xz,
+  versionCheckHook,
 }:
 
 # Note:
@@ -26,7 +25,7 @@
 
 {
   version,
-  sha256,
+  hash,
   patches ? [ ],
   license ? lib.licenses.sspl,
   avxSupport ? stdenv.hostPlatform.avxSupport,
@@ -49,6 +48,7 @@ let
 
   system-libraries = [
     "boost"
+    #pcre2 -- breaks on pcre2-10.46 with at least version 7.0.24
     "snappy"
     "yaml"
     "zlib"
@@ -57,25 +57,19 @@ let
     #"valgrind" -- mongodb only requires valgrind.h, which is vendored in the source.
     #"wiredtiger"
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ "tcmalloc" ]
-  ++ lib.optionals (lib.versionOlder version "7.0") [
-    "pcre"
-  ]
-  ++ lib.optionals (lib.versionAtLeast version "7.0") [
-    "pcre2"
-  ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ "tcmalloc" ];
   inherit (lib) systems subtractLists;
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   inherit version passthru;
   pname = "mongodb";
 
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "mongo";
-    rev = "r${version}";
-    inherit sha256;
+    tag = "r${finalAttrs.version}";
+    inherit hash;
   };
 
   nativeBuildInputs = [
@@ -92,17 +86,15 @@ stdenv.mkDerivation rec {
     yaml-cpp
     openssl
     openldap
-    pcre2
-    pcre-cpp
     sasl
     snappy
+    xz
     zlib
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     cctools
   ]
-  ++ lib.optional stdenv.hostPlatform.isLinux net-snmp
-  ++ [ xz ];
+  ++ lib.optional stdenv.hostPlatform.isLinux net-snmp;
 
   # MongoDB keeps track of its build parameters, which tricks nix into
   # keeping dependencies to build inputs in the final output.
@@ -112,14 +104,14 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # fix environment variable reading
     substituteInPlace SConstruct \
-        --replace "env = Environment(" "env = Environment(ENV = os.environ,"
+        --replace-fail "env = Environment(" "env = Environment(ENV = os.environ,"
   ''
   + ''
     # Fix debug gcc 11 and clang 12 builds on Fedora
     # https://github.com/mongodb/mongo/commit/e78b2bf6eaa0c43bd76dbb841add167b443d2bb0.patch
-    substituteInPlace src/mongo/db/query/plan_summary_stats.h --replace '#include <string>' '#include <optional>
+    substituteInPlace src/mongo/db/query/plan_summary_stats.h --replace-fail '#include <string>' '#include <optional>
     #include <string>'
-    substituteInPlace src/mongo/db/exec/plan_stats.h --replace '#include <string>' '#include <optional>
+    substituteInPlace src/mongo/db/exec/plan_stats.h --replace-fail '#include <string>' '#include <optional>
     #include <string>'
   ''
   + lib.optionalString (!avxSupport) ''
@@ -139,7 +131,7 @@ stdenv.mkDerivation rec {
     "--disable-warnings-as-errors"
     "VARIANT_DIR=nixos" # Needed so we don't produce argument lists that are too long for gcc / ld
     "--link-model=static"
-    "MONGO_VERSION=${version}"
+    "MONGO_VERSION=${finalAttrs.version}"
   ]
   ++ map (lib: "--use-system-${lib}") system-libraries;
 
@@ -166,11 +158,9 @@ stdenv.mkDerivation rec {
   '';
 
   doInstallCheck = true;
-  installCheckPhase = ''
-    runHook preInstallCheck
-    "$out/bin/mongo" --version
-    runHook postInstallCheck
-  '';
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/mongo";
+  versionCheckProgramArg = "--version";
 
   installTargets = "install-devcore";
 
@@ -178,16 +168,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  hardeningEnable = [ "pie" ];
-
-  meta = with lib; {
+  meta = {
     description = "Scalable, high-performance, open source NoSQL database";
     homepage = "http://www.mongodb.org";
     inherit license;
 
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       offline
     ];
     platforms = subtractLists systems.doubles.i686 systems.doubles.unix;
   };
-}
+})

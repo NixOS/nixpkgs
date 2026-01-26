@@ -24,11 +24,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-4dMZwkLHS14OGQVPq5VaT/aEpHEJ/4b2P6q3/WiDicM=";
 
-  meta = with lib; {
+  meta = {
     description = "Simple, fun and transparent SSH (and telnet) bastion server";
     homepage = "https://manfred.life/sshportal";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ zaninime ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ zaninime ];
     mainProgram = "sshportal";
   };
 }

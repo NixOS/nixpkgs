@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   poetry-core,
   packaging,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "rmscene";
   version = "0.7.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "ricklupton";

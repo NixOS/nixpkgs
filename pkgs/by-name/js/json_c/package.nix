@@ -23,7 +23,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with lib; {
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_APPS" false)
+  ];
+
+  meta = {
     description = "JSON implementation in C";
     longDescription = ''
       JSON-C implements a reference counting object model that allows you to
@@ -33,8 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/json-c/json-c/wiki";
     changelog = "https://github.com/json-c/json-c/blob/${finalAttrs.src.rev}/ChangeLog";
-    maintainers = with maintainers; [ lovek323 ];
-    platforms = platforms.unix;
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ lovek323 ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.mit;
   };
 })

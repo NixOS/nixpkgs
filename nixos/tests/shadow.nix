@@ -10,9 +10,6 @@ in
 { pkgs, ... }:
 {
   name = "shadow";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ nequissimus ];
-  };
 
   nodes.shadow =
     { pkgs, ... }:

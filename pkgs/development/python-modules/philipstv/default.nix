@@ -2,9 +2,8 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
-  poetry-core,
-  poetry-dynamic-versioning,
+  hatchling,
+  hatch-vcs,
   installShellFiles,
   pytestCheckHook,
   requests-mock,
@@ -18,21 +17,19 @@
 
 buildPythonPackage rec {
   pname = "philipstv";
-  version = "2.1.1";
+  version = "3.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bcyran";
     repo = "philipstv";
     tag = version;
-    hash = "sha256-BvQurZls9NjtHhTXLQ9t8fHkAF/QU/c6mmRvNmE0v90=";
+    hash = "sha256-UJYxQ3R1bEoNkhm5FiFqQC4PbeEqsBKZYdqv5i5H7rg=";
   };
 
   build-system = [
-    poetry-core
-    poetry-dynamic-versioning
+    hatchling
+    hatch-vcs
   ];
 
   nativeBuildInputs = [
@@ -65,7 +62,7 @@ buildPythonPackage rec {
   meta = {
     description = "CLI and library to control Philips Android-powered TVs";
     homepage = "https://github.com/bcyran/philipstv";
-    changelog = "https://github.com/bcyran/philipstv/releases/tag/${version}";
+    changelog = "https://github.com/bcyran/philipstv/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     mainProgram = "philipstv";
     maintainers = with lib.maintainers; [ bcyran ];

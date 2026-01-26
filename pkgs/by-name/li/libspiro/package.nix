@@ -22,10 +22,10 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library that simplifies the drawing of beautiful curves";
     homepage = "https://github.com/fontforge/libspiro";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.erictapen ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.erictapen ];
   };
 }

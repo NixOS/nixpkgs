@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   hatchling,
   hatch-jupyter-builder,
   hatch-nodejs-version,
@@ -15,7 +14,6 @@ buildPythonPackage rec {
   version = "0.4.5";
 
   pyproject = true;
-  disabled = pythonOlder "3.6";
 
   # using pypi archive which includes pre-built assets
   src = fetchPypi {
@@ -38,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jupysql_plugin" ];
 
-  meta = with lib; {
+  meta = {
     description = "Better SQL in Jupyter";
     homepage = "https://github.com/ploomber/jupysql-plugin";
     changelog = "https://github.com/ploomber/jupysql-plugin/blob/${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ euxane ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ euxane ];
   };
 }

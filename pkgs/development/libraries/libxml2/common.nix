@@ -5,19 +5,11 @@
   pkg-config,
   autoreconfHook,
   python3,
+  doxygen,
   ncurses,
   findXMLCatalogs,
   libiconv,
-  # Python limits cross-compilation to an allowlist of host OSes.
-  # https://github.com/python/cpython/blob/dfad678d7024ab86d265d84ed45999e031a03691/configure.ac#L534-L562
-  pythonSupport ?
-    enableShared
-    && (
-      stdenv.hostPlatform == stdenv.buildPlatform
-      || stdenv.hostPlatform.isCygwin
-      || stdenv.hostPlatform.isLinux
-      || stdenv.hostPlatform.isWasi
-    ),
+  pythonSupport ? false,
   icuSupport ? false,
   icu,
   zlibSupport ? false,
@@ -52,27 +44,21 @@ stdenv'.mkDerivation (finalAttrs: {
     "bin"
     "dev"
     "out"
-    "devdoc"
   ]
   ++ lib.optional pythonSupport "py"
   ++ lib.optional (enableStatic && enableShared) "static";
   outputMan = "bin";
 
-  patches = [
-    # Unmerged ABI-breaking patch required to fix the following security issues:
-    # - https://gitlab.gnome.org/GNOME/libxslt/-/issues/139
-    # - https://gitlab.gnome.org/GNOME/libxslt/-/issues/140
-    # See also https://gitlab.gnome.org/GNOME/libxml2/-/issues/906
-    # Source: https://github.com/chromium/chromium/blob/4fb4ae8ce3daa399c3d8ca67f2dfb9deffcc7007/third_party/libxml/chromium/xml-attr-extra.patch
-    ./xml-attr-extra.patch
-  ]
-  ++ extraPatches;
+  patches = [ ] ++ extraPatches;
 
   strictDeps = true;
 
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
+  ]
+  ++ lib.optionals pythonSupport [
+    doxygen
   ];
 
   buildInputs =
@@ -87,9 +73,12 @@ stdenv'.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [
     findXMLCatalogs
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isMinGW) [
-    libiconv
-  ]
+  ++
+    lib.optionals
+      (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isMinGW || stdenv.hostPlatform.isCygwin)
+      [
+        libiconv
+      ]
   ++ lib.optionals icuSupport [
     icu
   ];
@@ -101,10 +90,10 @@ stdenv'.mkDerivation (finalAttrs: {
     (lib.withFeature icuSupport "icu")
     (lib.withFeature pythonSupport "python")
     (lib.optionalString pythonSupport "PYTHON=${python3.pythonOnBuildForHost.interpreter}")
-  ]
-  # avoid rebuilds, can be merged into list in version bumps
-  ++ lib.optional enableHttp "--with-http"
-  ++ lib.optional zlibSupport "--with-zlib";
+    (lib.withFeature enableHttp "http")
+    (lib.withFeature zlibSupport "zlib")
+    (lib.withFeature false "docs") # docs are built with xsltproc, which would be a cyclic dependency
+  ];
 
   installFlags = lib.optionals pythonSupport [
     "pythondir=\"${placeholder "py"}/${python3.sitePackages}\""
@@ -114,9 +103,14 @@ stdenv'.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   doCheck = (stdenv.hostPlatform == stdenv.buildPlatform) && stdenv.hostPlatform.libc != "musl";
-  preCheck = lib.optional stdenv.hostPlatform.isDarwin ''
-    export DYLD_LIBRARY_PATH="$PWD/.libs:$DYLD_LIBRARY_PATH"
-  '';
+  preCheck =
+    lib.optional stdenv.hostPlatform.isDarwin ''
+      export DYLD_LIBRARY_PATH="$PWD/.libs:$DYLD_LIBRARY_PATH"
+    ''
+    # cyg prefix doesn't work for python modules
+    ++ lib.optional (stdenv.hostPlatform.isCygwin && pythonSupport) ''
+      ln -s cygxml2mod.dll python/.libs/libxml2mod.dll
+    '';
 
   preConfigure = lib.optionalString (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
     MACOSX_DEPLOYMENT_TARGET=10.16
@@ -132,6 +126,12 @@ stdenv'.mkDerivation (finalAttrs: {
   ''
   + lib.optionalString (enableStatic && enableShared) ''
     moveToOutput lib/libxml2.a "$static"
+  ''
+  # cyg prefix doesn't work for python modules
+  + lib.optionalString (stdenv.hostPlatform.isCygwin && pythonSupport) ''
+    for packages in "$py"/lib/python*/site-packages; do
+      ln -s cygxml2mod.dll "$packages"/libxml2mod.dll
+    done
   '';
 
   passthru = {
@@ -159,6 +159,19 @@ stdenv'.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     pkgConfigModules = [ "libxml-2.0" ];
+    # Python limits cross-compilation to an allowlist of host OSes.
+    # https://github.com/python/cpython/blob/dfad678d7024ab86d265d84ed45999e031a03691/configure.ac#L534-L562
+    broken =
+      pythonSupport
+      && !(
+        enableShared
+        && (
+          stdenv.hostPlatform == stdenv.buildPlatform
+          || stdenv.hostPlatform.isCygwin
+          || stdenv.hostPlatform.isLinux
+          || stdenv.hostPlatform.isWasi
+        )
+      );
   }
   // extraMeta;
 })

@@ -8,25 +8,25 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gitlab-ci-ls";
-  version = "1.2.1";
+  version = "1.2.5";
   src = fetchFromGitHub {
     owner = "alesbrelih";
     repo = "gitlab-ci-ls";
     rev = "${version}";
-    hash = "sha256-WVwRV5STQlyPhUESHV8ICnQFJfa2TCvOW5HFtuDfTRw=";
+    hash = "sha256-Ly4pk+16RCr3r33VrYPTZGUXfUNd5IJHfA+uj7Ef3bk=";
   };
 
-  cargoHash = "sha256-d8X4EuXJjgQ4vPhqMJR+w/pSu/muqYtpoNXKxvPLUkA=";
+  cargoHash = "sha256-/w5inDL6ECs2Ce8Bdfr4sOKhGeFC0tE5SrW3aIXjHnA=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/alesbrelih/gitlab-ci-ls";
     description = "GitLab CI Language Server (gitlab-ci-ls)";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ma27 ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ma27 ];
+    platforms = lib.platforms.unix;
     mainProgram = "gitlab-ci-ls";
   };
 }

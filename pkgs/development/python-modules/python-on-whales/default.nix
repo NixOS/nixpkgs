@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "python-on-whales";
-  version = "0.78.0";
+  version = "0.80.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gabrieldemarmiesse";
     repo = "python-on-whales";
     tag = "v${version}";
-    hash = "sha256-mpCBqFxxFxljhoTveLmk4XfqngiQPsufqr927hSwNfA=";
+    hash = "sha256-79Hprg01/kP0JtRUPx6CO0comN+YjZ6h/OUIvkrkjIs=";
   };
 
   build-system = [ setuptools ];

@@ -34,8 +34,10 @@
   versionCheckHook,
   vulkan-loader,
   wayland,
-  xfce,
-  xorg,
+  xfconf,
+  libxext,
+  libxdmcp,
+  libxau,
   yyjson,
   zlib,
   zfs,
@@ -59,13 +61,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastfetch";
-  version = "2.53.0";
+  version = "2.58.0";
 
   src = fetchFromGitHub {
     owner = "fastfetch-cli";
     repo = "fastfetch";
     tag = finalAttrs.version;
-    hash = "sha256-Cq6Nq7UpeW7MFi6VjsWmU2M3FjzDiAyhwnl4yTQFRnA=";
+    hash = "sha256-kWMR2qtwgzpYZmbqkpNkII6MuMFb13jkBtI/1pdgSgE=";
   };
 
   outputs = [
@@ -169,13 +171,13 @@ stdenv.mkDerivation (finalAttrs: {
           libXrandr
           libxcb
           # Required by libxcb messages
-          xorg.libXau
-          xorg.libXdmcp
-          xorg.libXext
+          libxau
+          libxdmcp
+          libxext
         ]
         ++ lib.optionals xfceSupport [
           #  Needed for XFWM theme and XFCE Terminal font.
-          xfce.xfconf
+          xfconf
         ]
         ++ lib.optionals zfsSupport [
           # Needed for zpool module
@@ -257,7 +259,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

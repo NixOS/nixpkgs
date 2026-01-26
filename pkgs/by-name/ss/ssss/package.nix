@@ -36,11 +36,11 @@ stdenv.mkDerivation rec {
     installManPage ssss.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Shamir Secret Sharing Scheme";
     homepage = "http://point-at-infinity.org/ssss/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 }

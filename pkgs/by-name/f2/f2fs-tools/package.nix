@@ -48,6 +48,13 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  outputs = [
+    "out"
+    "man"
+    "dev"
+    "lib"
+  ];
+
   enableParallelBuilding = true;
 
   meta = {
@@ -55,8 +62,6 @@ stdenv.mkDerivation rec {
     description = "Userland tools for the f2fs filesystem";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [
-      jagajaga
-    ];
+    maintainers = [ ];
   };
 }

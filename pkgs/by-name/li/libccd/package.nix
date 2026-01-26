@@ -26,13 +26,21 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # fix for CMake v4
+  # ref https://github.com/danfis/libccd/pull/82, not merged yet
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "cmake_minimum_required(VERSION 2.8.11)" \
+      "cmake_minimum_required(VERSION 3.12)"
+  '';
+
   nativeBuildInputs = [ cmake ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for collision detection between two convex shapes";
     homepage = "https://github.com/danfis/libccd";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ lopsided98 ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ lopsided98 ];
+    platforms = lib.platforms.unix;
   };
 }

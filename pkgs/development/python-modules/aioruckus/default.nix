@@ -7,7 +7,6 @@
   fetchFromGitHub,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   xmltodict,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "aioruckus";
   version = "0.42";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "ms264556";
@@ -54,10 +51,10 @@ buildPythonPackage rec {
     "test_r1_connect_no_webserver_error"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for Ruckus Unleashed and Ruckus ZoneDirector";
     homepage = "https://github.com/ms264556/aioruckus";
-    license = licenses.bsd0;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd0;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

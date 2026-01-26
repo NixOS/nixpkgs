@@ -12,10 +12,10 @@
   libevent,
   zeromq,
   zlib,
-  db48,
   sqlite,
   qrencode,
   libsystemtap,
+  capnproto,
   qtbase ? null,
   qttools ? null,
   python3,
@@ -30,9 +30,10 @@
   builderKeys ? [
     "152812300785C96444D3334D17565732E08E5E41" # achow101.gpg
     "9EDAFF80E080659604F4A76B2EBB056FD847F8A7" # Emzy.gpg
-    "71A3B16735405025D447E8F274810B012346C9A6" # laanwj.gpg
-    "6B002C6EA3F91B1B0DF0C9BC8F617F1200A6D25C" # glozow.gpg
+    # "6B002C6EA3F91B1B0DF0C9BC8F617F1200A6D25C" # glozow.gpg (not signed 30.2)
     "D1DBF2C4B96F2DEBF4C16654410108112E7EA81F" # hebasto.gpg
+    # "71A3B16735405025D447E8F274810B012346C9A6" # laanwj.gpg (not signed 30.2)
+    # "67AA5B46E7AF78053167FE343B8F814A784218F8" # willcl-ark.gpg (not signed 30.2)
   ],
 }:
 
@@ -45,14 +46,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = if withGui then "bitcoin" else "bitcoind";
-  version = "29.1";
+  version = "30.2";
 
   src = fetchurl {
     urls = [
       "https://bitcoincore.org/bin/bitcoin-core-${finalAttrs.version}/bitcoin-${finalAttrs.version}.tar.gz"
     ];
     # hash retrieved from signed SHA256SUMS
-    sha256 = "067f624ae273b0d85a1554ffd7c098923351a647204e67034df6cc1dfacfa06b";
+    sha256 = "6fd00b8c42883d5c963901ad4109a35be1e5ec5c2dc763018c166c21a06c84cb";
   };
 
   nativeBuildInputs = [
@@ -71,11 +72,10 @@ stdenv.mkDerivation (finalAttrs: {
     libevent
     zeromq
     zlib
+    capnproto
   ]
   ++ lib.optionals enableTracing [ libsystemtap ]
   ++ lib.optionals withWallet [ sqlite ]
-  # building with db48 (for legacy descriptor wallet support) is broken on Darwin
-  ++ lib.optionals (withWallet && !stdenv.hostPlatform.isDarwin) [ db48 ]
   ++ lib.optionals withGui [
     qrencode
     qtbase
@@ -87,18 +87,18 @@ stdenv.mkDerivation (finalAttrs: {
       publicKeys = fetchFromGitHub {
         owner = "bitcoin-core";
         repo = "guix.sigs";
-        rev = "a788388207bd244d5ab07b31ecd6c126f213a6c6";
-        sha256 = "sha256-gbenuEWP6pqY9ywPd/yZy6QfWI7jvSObwto27DRXjGI=";
+        rev = "8427342623f66a98e4b2503e5e15eb41485200d2";
+        sha256 = "sha256-X1mA1iPAb0OE9RNP9O5rFe9rzsui+BWQ2zMcV7SghXE=";
       };
 
       checksums = fetchurl {
         url = "https://bitcoincore.org/bin/bitcoin-core-${finalAttrs.version}/SHA256SUMS";
-        hash = "sha256-teQ02vm875Isks9sBC2HV3Zo78W+UkXGH9zgyNhOnQs=";
+        hash = "sha256-ERE/QO2elj++mON3UYGJKaLdU86gWIRS/AufuyS/JAU=";
       };
 
       signatures = fetchurl {
         url = "https://bitcoincore.org/bin/bitcoin-core-${finalAttrs.version}/SHA256SUMS.asc";
-        hash = "sha256-hyk57QyGJnrjuuGRmvfOhVAx9Nru93e8bfah5fSVcmg=";
+        hash = "sha256-69TMNzKJQRDC+2YU6bKI23c8Jx44m5B1zz823SQtiyg=";
       };
 
       verifyBuilderKeys =
@@ -109,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
             echo "OK"
           '';
         in
-        builtins.concatStringsSep "\n" (builtins.map script builderKeys);
+        builtins.concatStringsSep "\n" (map script builderKeys);
     in
     ''
       pushd $(mktemp -d)
@@ -151,8 +151,6 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "BUILD_BENCH" false)
     (lib.cmakeBool "WITH_ZMQ" true)
-    # building with db48 (for legacy wallet support) is broken on Darwin
-    (lib.cmakeBool "WITH_BDB" (withWallet && !stdenv.hostPlatform.isDarwin))
     (lib.cmakeBool "WITH_USDT" enableTracing)
   ]
   ++ lib.optionals (!finalAttrs.doCheck) [
@@ -190,7 +188,6 @@ stdenv.mkDerivation (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/bitcoin-cli";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.tests = {

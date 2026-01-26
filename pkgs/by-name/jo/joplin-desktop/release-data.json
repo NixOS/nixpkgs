@@ -1,19 +1,13 @@
 {
-  "version": "3.4.12",
-  "hash": "sha256-p9MY7E0qa7LcXBpGs/DmX2A2jXQoOPYiRo/nEzkkQd0=",
+  "version": "3.5.12",
+  "hash": "sha256-NUWb2y8sTIzKTURJymb0Bvidz1tl+u3Q7o1UvEnIUtI=",
   "plugins": {
     "io.github.jackgruber.backup": {
       "name": "joplin-plugin-backup",
-      "url": "https://github.com/JackGruber/joplin-plugin-backup/archive/abb58175e2d2bf34899f1b32cb74137e5c788bf9.tar.gz",
-      "hash": "sha256-3J7TP3UClLDH402UqppQMsc1WmFjYIpIQ4uwGlTsyBs=",
-      "npmDepsHash": "sha256-Grn4KQck6o+k8fj6qPxmx7S+4PTWvY5N4pE7Bj+47ps="
-    },
-    "io.github.personalizedrefrigerator.js-draw": {
-      "name": "joplin-plugin-freehand-drawing",
-      "url": "https://github.com/personalizedrefrigerator/joplin-plugin-freehand-drawing/archive/63b6d3f185b5b3664632e498df7c7ad7824038d0.tar.gz",
-      "hash": "sha256-4sl+ktdMQ8PSELAeWMv9Ezgwrx5YDcC/7ou2ZSF2OyQ=",
-      "npmDepsHash": "sha256-qwhVFSDafTnKihcwZtLK5fS/Nc15e+ezAso47T1LGec="
+      "url": "https://github.com/JackGruber/joplin-plugin-backup/archive/2c3da7056e7ac39c86c2051a4fdb99d9534dd0a1.tar.gz",
+      "hash": "sha256-rPmBg/+mJH7Fp26gVzuSGFxi1Y4MtfRT+hqppk3tHdY=",
+      "npmDepsHash": "sha256-xZJ0Oir1A6sLe0ztIyBu39Yy3D6sNrVaciOYG0k85l0="
     }
   },
-  "deps_hash": "sha256-7sZX39OtNNPq5RE7+Oj58QqHhcrTY8FOdncKp3b40jQ="
+  "deps_hash": "sha256-9xJmudcpUw1xmTvJD3TFrfzYEi+LupZGSzsA5zUOemI="
 }

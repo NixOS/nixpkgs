@@ -1,9 +1,6 @@
 {
 
-  # Content-addressable Nix mirrors
-  hashedMirrors = [
-    "https://tarballs.nixos.org"
-  ];
+  hashedMirrors = throw "Use config.hashedMirrors instead of (import ./pkgs/build-support/fetchurl/mirrors.nix).hashedMirrors";
 
   # Mirrors for mirror://site/filename URIs, where "site" is
   # "sourceforge", "gnu", etc.

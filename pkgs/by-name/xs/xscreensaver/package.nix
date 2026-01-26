@@ -23,7 +23,7 @@
   makeWrapper,
   pam,
   perlPackages,
-  xorg,
+  appres,
   pkg-config,
   systemd,
   forceInstallAllHacks ? true,
@@ -35,11 +35,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xscreensaver";
-  version = "6.12";
+  version = "6.13";
 
   src = fetchurl {
     url = "https://www.jwz.org/xscreensaver/xscreensaver-${finalAttrs.version}.tar.gz";
-    hash = "sha256-T/Z5ghfju7w8cza+7afoPq+/AzAawpsiNtpmoPExdkM=";
+    hash = "sha256-pzFI3SFifP8udRMcjgwbCV8zTGiyLgnzbTfMJ5YRZ7c=";
   };
 
   outputs = [
@@ -110,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
           lib.makeBinPath [
             coreutils
             perlPackages.perl
-            xorg.appres
+            appres
           ]
         }" \
         --prefix PERL5LIB ':' $PERL5LIB

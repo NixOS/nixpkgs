@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     inherit version;
     inherit (src.meta) homepage;
     description = "Storage load analysis tool for OpenZFS";
@@ -52,9 +52,9 @@ stdenv.mkDerivation rec {
       systems -- particularly those with many VMs or containers operating
       essentially independent workloads.
     '';
-    license = licenses.bsd2;
-    platforms = with platforms; linux ++ freebsd;
-    maintainers = with maintainers; [ numinit ];
+    license = lib.licenses.bsd2;
+    platforms = with lib.platforms; linux ++ freebsd;
+    maintainers = with lib.maintainers; [ numinit ];
     mainProgram = "ioztat";
   };
 }

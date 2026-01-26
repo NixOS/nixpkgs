@@ -94,7 +94,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   installCheckPhase = ''
     runHook preInstallCheck
 

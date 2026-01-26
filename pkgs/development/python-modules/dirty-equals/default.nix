@@ -6,7 +6,6 @@
   pydantic,
   pytest-examples,
   pytestCheckHook,
-  pythonOlder,
   pytz,
 }:
 
@@ -15,8 +14,6 @@ let
     pname = "dirty-equals";
     version = "0.9.0";
     pyproject = true;
-
-    disabled = pythonOlder "3.8";
 
     src = fetchFromGitHub {
       owner = "samuelcolvin";
@@ -41,12 +38,12 @@ let
 
     pythonImportsCheck = [ "dirty_equals" ];
 
-    meta = with lib; {
+    meta = {
       description = "Module for doing dirty (but extremely useful) things with equals";
       homepage = "https://github.com/samuelcolvin/dirty-equals";
       changelog = "https://github.com/samuelcolvin/dirty-equals/releases/tag/${src.tag}";
-      license = with licenses; [ mit ];
-      maintainers = with maintainers; [ fab ];
+      license = with lib.licenses; [ mit ];
+      maintainers = with lib.maintainers; [ fab ];
     };
   };
 in

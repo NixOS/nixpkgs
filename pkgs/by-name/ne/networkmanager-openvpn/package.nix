@@ -56,8 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   configureFlags = [
-    "--with-gnome=${if withGnome then "yes" else "no"}"
-    "--with-gtk4=${if withGnome then "yes" else "no"}"
+    "--with-gnome=${lib.boolToYesNo withGnome}"
+    "--with-gtk4=${lib.boolToYesNo withGnome}"
     "--localstatedir=/" # needed for the management socket under /run/NetworkManager
     "--enable-absolute-paths"
   ];

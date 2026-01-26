@@ -23,11 +23,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/rastikerdar/sahel-font";
     description = "Persian (farsi) Font - فونت (قلم) فارسی ساحل";
-    license = licenses.ofl;
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
 }

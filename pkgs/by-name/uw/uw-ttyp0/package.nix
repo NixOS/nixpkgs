@@ -5,7 +5,8 @@
   perl,
   bdftopcf,
   bdf2psf,
-  xorg,
+  mkfontscale,
+  fonttosfnt,
   targetsDat ? null,
   variantsDat ? null,
 }:
@@ -23,8 +24,8 @@ stdenv.mkDerivation rec {
     perl
     bdftopcf
     bdf2psf
-    xorg.fonttosfnt
-    xorg.mkfontdir
+    fonttosfnt
+    mkfontscale
   ];
 
   # configure sizes, encodings and variants
@@ -67,14 +68,14 @@ stdenv.mkDerivation rec {
     runHook postConfigure
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Monospace bitmap screen fonts for X11";
     homepage = "https://people.mpi-inf.mpg.de/~uwe/misc/uw-ttyp0/";
-    license = with licenses; [
+    license = with lib.licenses; [
       free
       mit
     ];
-    maintainers = with maintainers; [ rnhmjoj ];
+    maintainers = with lib.maintainers; [ rnhmjoj ];
   };
 
 }

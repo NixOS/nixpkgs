@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "spam-filter";
-  version = "2.0.3";
+  version = "2.0.5";
 
   src = fetchFromGitHub {
     owner = "stalwartlabs";
     repo = "spam-filter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NhD/qUiGhgESwR2IOzAHfDATRlgWMcCktlktvVfDONk=";
+    hash = "sha256-2D/0mnkV4G/Gyr48rbMGTo6uTL7pe+AT+DNKqkBTIbA=";
   };
 
   buildPhase = ''

@@ -14,12 +14,13 @@
   portaudio,
   imath,
   qt6,
+  fmt_10,
 }:
 
 let
   # https://github.com/olive-editor/olive/issues/2284
   # we patch support for 2.3+, but 2.5 fails
-  openimageio' = openimageio.overrideAttrs (old: rec {
+  openimageio' = (openimageio.override { fmt = fmt_10; }).overrideAttrs (old: rec {
     version = "2.4.15.0";
     src = (
       old.src.override {
@@ -35,7 +36,7 @@ in
 
 stdenv.mkDerivation {
   pname = "olive-editor";
-  version = "unstable-2023-06-12";
+  version = "0.1.2-unstable-2023-06-12";
 
   src = fetchFromGitHub {
     fetchSubmodules = true;
@@ -56,6 +57,11 @@ stdenv.mkDerivation {
       url = "https://github.com/olive-editor/olive/commit/311eeb72944f93f873d1cd1784ee2bf423e1e7c2.patch";
       hash = "sha256-lswWn4DbXGH1qPvPla0jSgUJQXuqU7LQGHIPoXAE8ag=";
     })
+
+    # Fix build of `kddockwidgets` with qt6-6.10, adapted from:
+    # https://github.com/KDAB/KDDockWidgets/pull/615
+    # https://github.com/KDAB/KDDockWidgets/commit/f2b50fff29bd4b49acdfed3ed8fc42eb0a502032
+    ./olive-editor-kddockwidgets-fix-build-with-qt-6_10.patch
   ];
 
   # https://github.com/olive-editor/olive/issues/2200

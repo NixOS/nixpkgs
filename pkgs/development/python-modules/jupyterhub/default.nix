@@ -29,9 +29,6 @@
   sqlalchemy,
   tornado,
   traitlets,
-  pythonOlder,
-  async-generator,
-  importlib-metadata,
 
   # tests
   addBinToPathHook,
@@ -51,19 +48,19 @@
 
 buildPythonPackage rec {
   pname = "jupyterhub";
-  version = "5.3.0";
+  version = "5.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jupyterhub";
     repo = "jupyterhub";
-    rev = "refs/tags/${version}";
-    hash = "sha256-FAVNS7GPvglFuSTDTAUtZ6ZzY4yH+eo34KhUQ4C3b4I=";
+    tag = version;
+    hash = "sha256-2LxbLwkEXpMBE5Fy7+3vQGO+CEKM50Ou5vATT6JtA8s=";
   };
 
   npmDeps = fetchNpmDeps {
     inherit src;
-    hash = "sha256-1ffF3i/IgE+J+0M+z6bzwZ9H8u0EYcYXTiBD9Jj7HdQ=";
+    hash = "sha256-IlY0dRHXsrEWNfBqUSk7hwU+CmlUfGPtXTPNcOBT8Bw=";
   };
 
   postPatch = ''
@@ -104,10 +101,6 @@ buildPythonPackage rec {
     sqlalchemy
     tornado
     traitlets
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [
-    async-generator
-    importlib-metadata
   ];
 
   pythonImportsCheck = [ "jupyterhub" ];
@@ -128,7 +121,7 @@ buildPythonPackage rec {
         version = "0.21.2";
         src = fetchFromGitHub {
           inherit (prev.src) owner repo;
-          rev = "refs/tags/v${final.version}";
+          tag = "v${final.version}";
           hash = "sha256-AVVvdo/CDF9IU6l779sLc7wKz5h3kzMttdDNTPLYxtQ=";
         };
       }
@@ -138,7 +131,6 @@ buildPythonPackage rec {
     versionCheckHook
     virtualenv
   ];
-  versionCheckProgramArg = "--version";
 
   disabledTests = [
     # Tries to install older versions through pip

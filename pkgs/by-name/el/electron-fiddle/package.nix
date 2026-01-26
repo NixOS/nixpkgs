@@ -129,28 +129,28 @@ buildFHSEnv {
       nspr
       nss
       pango
-      xorg.libX11
-      xorg.libXcomposite
-      xorg.libXdamage
-      xorg.libXext
-      xorg.libXfixes
-      xorg.libXrandr
-      xorg.libxcb
+      libx11
+      libxcomposite
+      libxdamage
+      libxext
+      libxfixes
+      libxrandr
+      libxcb
 
       # for running Electron before 18.3.5/19.0.5/20.0.0 inside
       gdk-pixbuf
 
       # for running Electron before 16.0.0 inside
-      xorg.libxshmfence
+      libxshmfence
 
       # for running Electron before 11.0.0 inside
-      xorg.libXcursor
-      xorg.libXi
-      xorg.libXrender
-      xorg.libXtst
+      libxcursor
+      libxi
+      libxrender
+      libxtst
 
       # for running Electron before 10.0.0 inside
-      xorg.libXScrnSaver
+      libxscrnsaver
 
       # for running Electron before 8.0.0 inside
       libuuid
@@ -165,12 +165,12 @@ buildFHSEnv {
       # https://github.com/electron/electron/issues/13972
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Easiest way to get started with Electron";
     homepage = "https://www.electronjs.org/fiddle";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "electron-fiddle";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       andersk
       tomasajt
     ];

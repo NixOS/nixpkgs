@@ -22,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cdblib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for working with constant databases";
     homepage = "https://python-pure-cdb.readthedocs.io/en/latest";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kaction ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kaction ];
   };
 }

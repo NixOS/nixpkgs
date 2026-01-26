@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
-    install -D ${pname} $out/bin/${pname}
-    wrapProgram $out/bin/${pname} \
+    install -D johnny $out/bin/johnny
+    wrapProgram $out/bin/johnny \
       --prefix PATH : ${lib.makeBinPath [ john ]}
-    install -D README $out/share/doc/${pname}/README
-    install -D LICENSE $out/share/licenses/${pname}/LICENSE
-    install -D resources/icons/${pname}_128.png $out/share/pixmaps/${pname}.png
+    install -D README $out/share/doc/johnny/README
+    install -D LICENSE $out/share/licenses/johnny/LICENSE
+    install -D resources/icons/johnny_128.png $out/share/pixmaps/johnny.png
     runHook postInstall
   '';
 
@@ -46,8 +46,8 @@ stdenv.mkDerivation rec {
       name = "Johnny";
       desktopName = "Johnny";
       comment = "A GUI for John the Ripper";
-      icon = pname;
-      exec = pname;
+      icon = "johnny";
+      exec = "johnny";
       terminal = false;
       categories = [
         "Application"
@@ -57,12 +57,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://openwall.info/wiki/john/johnny";
     description = "Open Source GUI frontend for John the Ripper";
     mainProgram = "johnny";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ Misaka13514 ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ Misaka13514 ];
+    platforms = lib.platforms.linux;
   };
 }

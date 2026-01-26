@@ -7,7 +7,6 @@
   pkgs,
   pyahocorasick,
   pytest7CheckHook,
-  pythonOlder,
   pyyaml,
   requests,
   responses,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "detect-secrets";
   version = "1.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Yelp";
@@ -64,11 +61,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "detect_secrets" ];
 
-  meta = with lib; {
+  meta = {
     description = "Enterprise friendly way of detecting and preventing secrets in code";
     homepage = "https://github.com/Yelp/detect-secrets";
     changelog = "https://github.com/Yelp/detect-secrets/releases/tag/${src.tag}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

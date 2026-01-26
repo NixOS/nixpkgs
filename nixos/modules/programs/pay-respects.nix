@@ -16,7 +16,7 @@ let
     mkOption
     mkPackageOption
     optionalString
-    replaceChars
+    replaceStrings
     substring
     toLower
     types
@@ -142,7 +142,7 @@ in
               description = "The model used by `pay-respects` to generate command corrections.";
             };
             locale = mkOption {
-              default = toLower (replaceChars [ "_" ] [ "-" ] (substring 0 5 config.i18n.defaultLocale));
+              default = toLower (replaceStrings [ "_" ] [ "-" ] (substring 0 5 config.i18n.defaultLocale));
               example = "nl-be";
               type = str;
               description = ''

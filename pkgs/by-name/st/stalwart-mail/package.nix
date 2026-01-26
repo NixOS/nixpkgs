@@ -16,23 +16,28 @@
   callPackage,
   withFoundationdb ? false,
   stalwartEnterprise ? false,
+  buildPackages,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stalwart-mail" + (lib.optionalString stalwartEnterprise "-enterprise");
-  version = "0.13.2";
+  version = "0.15.4";
 
   src = fetchFromGitHub {
     owner = "stalwartlabs";
     repo = "stalwart";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VdeHb1HVGXA5RPenhhK4r/kkQiLG8/4qhdxoJ3xIqR4=";
+    hash = "sha256-MIy1/8r5CMrTbVTjLFuUneoL3J38kZIgUMweoeaf3L0=";
   };
 
-  cargoHash = "sha256-Wu6skjs3Stux5nCX++yoQPeA33Qln67GoKcob++Ldng=";
+  cargoHash = "sha256-jVD11wz9Ab1E9KdNG4kp8Jqm2rJ2aUWuFTAOBga6Fgg=";
+
+  depsBuildBuild = [
+    pkg-config
+    zstd
+  ];
 
   nativeBuildInputs = [
-    pkg-config
     protobuf
     rustPlatform.bindgenHook
   ];
@@ -45,6 +50,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && withFoundationdb) [ foundationdb ];
 
+  nativeCheckInputs = [
+    openssl
+  ];
+
   # Issue: https://github.com/stalwartlabs/stalwart/issues/1104
   buildNoDefaultFeatures = true;
   buildFeatures = [
@@ -52,9 +61,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "postgres"
     "mysql"
     "rocks"
-    "elastic"
     "s3"
     "redis"
+    "azure"
+    "nats"
   ]
   ++ lib.optionals withFoundationdb [ "foundationdb" ]
   ++ lib.optionals stalwartEnterprise [ "enterprise" ];
@@ -78,7 +88,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mkdir -p $out/lib/systemd/system
 
     substitute resources/systemd/stalwart-mail.service $out/lib/systemd/system/stalwart-mail.service \
-      --replace "__PATH__" "$out"
+      --replace-fail "__PATH__" "$out"
   '';
 
   checkFlags = lib.forEach [
@@ -160,6 +170,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     #   left: ElementEnd
     #  right: Bytes([...])
     "responses::tests::parse_responses"
+    # thread 'store::search_tests' (912386) panicked at tests/src/store/mod.rs:116:10:
+    # Missing store type. Try running `STORE=<store_type> cargo test`: NotPresent
+    "store::search_tests"
   ] (test: "--skip=${test}");
 
   doCheck = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
@@ -169,7 +182,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     inherit rocksdb; # make used rocksdb version available (e.g., for backup scripts)
-    webadmin = callPackage ./webadmin.nix { };
+    webadmin = buildPackages.callPackage ./webadmin.nix { };
     spam-filter = callPackage ./spam-filter.nix { };
     updateScript = nix-update-script { };
     tests.stalwart-mail = nixosTests.stalwart-mail;

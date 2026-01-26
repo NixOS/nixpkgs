@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   numpy,
   pykwalify,
@@ -16,9 +15,7 @@
 buildPythonPackage rec {
   pname = "pyradiomics";
   version = "3.1.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AIM-Harvard";
@@ -58,12 +55,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "radiomics" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pyradiomics.readthedocs.io";
     description = "Extraction of Radiomics features from 2D and 3D images and binary masks";
     mainProgram = "pyradiomics";
     changelog = "https://github.com/AIM-Harvard/pyradiomics/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

@@ -12,7 +12,7 @@
   brotli,
   tailwindcss_3,
   esbuild,
-  ...
+  buildPackages,
 }:
 
 let
@@ -159,8 +159,10 @@ beamPackages.mixRelease rec {
     cp --no-preserve=mode -r ${assets} assets
     cp -r ${tracker} tracker
 
+    # Fix cross-compilation with buildPackages
+    # since tailwindcss_3 is not available for RiscV
     cat >> config/config.exs <<EOF
-    config :tailwind, path: "${lib.getExe tailwindcss_3}"
+    config :tailwind, path: "${lib.getExe buildPackages.tailwindcss_3}"
     config :esbuild, path: "${lib.getExe esbuild}"
     EOF
   '';
@@ -180,7 +182,10 @@ beamPackages.mixRelease rec {
     changelog = "https://github.com/plausible/analytics/blob/${src.rev}/CHANGELOG.md";
     description = "Simple, open-source, lightweight (< 1 KB) and privacy-friendly web analytics alternative to Google Analytics";
     mainProgram = "plausible";
-    teams = with lib.teams; [ cyberus ];
+    maintainers = with lib.maintainers; [
+      e1mo
+      xanderio
+    ];
     platforms = lib.platforms.unix;
   };
 }

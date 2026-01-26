@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "yoda";
-  version = "2.1.0";
+  version = "2.1.2";
 
   src = fetchFromGitLab {
     owner = "hepcedar";
     repo = "yoda";
     rev = "yoda-${version}";
-    hash = "sha256-cYJNB4Nk6r9EbTbMrhUFvj6s0VR/QH2o9wl/cUw9jQ0=";
+    hash = "sha256-cgThoxqPX6dVyGNTLXatW3uQV+41o38fTfkvHXsDs9A=";
   };
 
   nativeBuildInputs = with python3.pkgs; [

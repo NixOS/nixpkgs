@@ -51,12 +51,11 @@ stdenv.mkDerivation rec {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/STAR";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Spliced Transcripts Alignment to a Reference";
     longDescription = ''
       STAR (Spliced Transcripts Alignment to a Reference) is a fast RNA-seq
@@ -64,8 +63,8 @@ stdenv.mkDerivation rec {
     '';
     mainProgram = "STAR";
     homepage = "https://github.com/alexdobin/STAR";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.arcadio ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.arcadio ];
   };
 }

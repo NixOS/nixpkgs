@@ -30,8 +30,8 @@
 }:
 mkDerivation {
   pname = "hercules-ci-cnix-expr";
-  version = "0.4.0.0";
-  sha256 = "ba6dadda0a14e456780df018a610209ef288ed6562ad5843cb8d19d38fc026ed";
+  version = "0.5.1.0";
+  sha256 = "01m6l915yy3v6qpc53xq48kp3mi39bclsjdwswvgwvp9z9hjvg0p";
   setupHaskellDepends = [
     base
     Cabal
@@ -78,5 +78,5 @@ mkDerivation {
   testToolDepends = [ hspec-discover ];
   homepage = "https://docs.hercules-ci.com";
   description = "Bindings for the Nix evaluator";
-  license = lib.licenses.asl20;
+  license = lib.licensesSpdx."Apache-2.0";
 }

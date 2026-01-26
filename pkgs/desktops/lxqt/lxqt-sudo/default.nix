@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lxqt-sudo";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "lxqt-sudo";
     rev = version;
-    hash = "sha256-H2uprArYfiX1KyoWx3RRHkLcA0z9LKGDeghD+085VC4=";
+    hash = "sha256-skxPI6KEHXJReadxQinBArkCx/FjpTYDFdEpRRiqx8E=";
   };
 
   nativeBuildInputs = [
@@ -46,11 +46,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lxqt/lxqt-sudo";
     description = "GUI frontend for sudo/su";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    teams = [ teams.lxqt ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.lxqt ];
   };
 }

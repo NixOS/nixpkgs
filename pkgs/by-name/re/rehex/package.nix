@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rehex";
-  version = "0.63.3";
+  version = "0.63.4";
 
   src = fetchFromGitHub {
     owner = "solemnwarning";
     repo = "rehex";
     tag = version;
-    hash = "sha256-o/ff0V0pMomXRu1DrD/m+M6364NisUI+8+RwryIsSLc=";
+    hash = "sha256-Iy87iEadK9fXApeYpJbG0jV437wGJxlOoiJLfaUTkVs=";
   };
 
   nativeBuildInputs = [

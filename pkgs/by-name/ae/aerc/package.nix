@@ -11,6 +11,7 @@
   dante,
   gawk,
   versionCheckHook,
+  bashNonInteractive,
   nix-update-script,
 }:
 
@@ -52,6 +53,7 @@ buildGoModule (finalAttrs: {
   buildInputs = [
     python3Packages.python
     gawk
+    bashNonInteractive
   ]
   ++ lib.optional withNotmuch notmuch;
 
@@ -73,18 +75,9 @@ buildGoModule (finalAttrs: {
           dante
         ]
       }
-    wrapProgram $out/libexec/aerc/filters/html-unsafe \
-      --prefix PATH : ${
-        lib.makeBinPath [
-          w3m
-          dante
-        ]
-      }
-    patchShebangs $out/libexec/aerc/filters
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

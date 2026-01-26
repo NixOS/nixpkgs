@@ -114,7 +114,8 @@ rec {
 
     Note that jailbreaking at this time, doesn't lift bounds on
     conditional branches.
-    https://github.com/peti/jailbreak-cabal/issues/7 has further details.
+    https://github.com/peti/jailbreak-cabal/issues/7 (krank:ignore-line)
+    has further details.
   */
   doJailbreak = overrideCabal (drv: {
     jailbreak = true;
@@ -481,10 +482,11 @@ rec {
     overrideCabal (drv: {
       src = "${sdistTarball pkg}/${pkg.pname}-${pkg.version}.tar.gz";
 
-      # Revising and jailbreaking the cabal file has been handled in sdistTarball
+      # Revising, jailbreaking and patches have been handled in sdistTarball
       revision = null;
       editedCabalFile = null;
       jailbreak = false;
+      patches = [ ];
     }) pkg;
 
   /*
@@ -662,9 +664,9 @@ rec {
       # closePropagationFast.
       propagatedPlainBuildInputs =
         drvs:
-        builtins.map (i: i.val) (
+        map (i: i.val) (
           builtins.genericClosure {
-            startSet = builtins.map (drv: {
+            startSet = map (drv: {
               key = drv.outPath;
               val = drv;
             }) drvs;

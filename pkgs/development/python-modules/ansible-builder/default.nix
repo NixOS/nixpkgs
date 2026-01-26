@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "ansible-builder";
-  version = "3.1.0";
+  version = "3.1.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "ansible_builder";
     inherit version;
-    hash = "sha256-0txXPianvVCV6YrrN+6bALyfUAWr6nFH10IpwPNCb8s=";
+    hash = "sha256-nYi8FazH0xBW0MUZFKYQLayOWtc/ny01upg3jIlxTtI=";
   };
 
   patchPhase = ''
@@ -41,10 +41,10 @@ buildPythonPackage rec {
     packaging
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Ansible execution environment builder";
     homepage = "https://ansible-builder.readthedocs.io/en/stable/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ melkor333 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ melkor333 ];
   };
 }

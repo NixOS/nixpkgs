@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mpdris2-rs";
@@ -22,6 +23,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     install -Dm644 misc/mpdris2-rs.service -t $out/lib/systemd/user
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Exposing MPRIS V2.2 D-Bus interface for MPD";

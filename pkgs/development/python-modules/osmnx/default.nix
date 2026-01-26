@@ -5,35 +5,32 @@
   folium,
   gdal,
   geopandas,
-  hatchling,
   matplotlib,
   networkx,
   numpy,
   pandas,
-  pythonOlder,
   rasterio,
   requests,
   rtree,
   scikit-learn,
   scipy,
   shapely,
+  uv-build,
 }:
 
 buildPythonPackage rec {
   pname = "osmnx";
-  version = "2.0.0";
+  version = "2.0.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "gboeing";
     repo = "osmnx";
     tag = "v${version}";
-    hash = "sha256-5IvohqEYYvFqAKOYreEsEKjzfJaqShYck2xCSQXXfyQ=";
+    hash = "sha256-XIvwLUvpl+AgrtR9mOkRXhxLc8mtSPk3+5779i/F+2s=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [ uv-build ];
 
   dependencies = [
     geopandas

@@ -21,11 +21,11 @@
 
 stdenv.mkDerivation rec {
   pname = "btrfs-progs";
-  version = "6.16";
+  version = "6.17.1";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${version}.tar.xz";
-    hash = "sha256-Makw+HN8JhioJK1L0f3YP1QQPg6qFaqtxIT/rjNGb8U=";
+    hash = "sha256-pL4Kbrs8R2Qn+12Xss8CewzNtrDFX/FjIzIMHoy3dlg=";
   };
 
   nativeBuildInputs = [
@@ -78,6 +78,13 @@ stdenv.mkDerivation rec {
   ];
 
   makeFlags = [ "udevruledir=$(out)/lib/udev/rules.d" ];
+
+  outputs = [
+    "out"
+    "dev"
+    "man"
+    "lib"
+  ];
 
   enableParallelBuilding = true;
 

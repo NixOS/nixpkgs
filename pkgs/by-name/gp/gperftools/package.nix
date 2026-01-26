@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gperftools";
-  version = "2.17";
+  version = "2.17.2";
 
   src = fetchFromGitHub {
     owner = "gperftools";
     repo = "gperftools";
     tag = "gperftools-${finalAttrs.version}";
-    sha256 = "sha256-Tm+sYKwFSHAxOALgr9UGv7vBMlWqUymXsvNu7Sku6Kk=";
+    hash = "sha256-WCEuiSjNIX/KhEBWndyVhrKlWs7H60mcHoPlWd7YWC4=";
   };
 
   patches = [
@@ -25,6 +25,9 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://src.fedoraproject.org/rpms/gperftools/raw/88ce8ee43a12b1a8146781a1b4d9abbd8df8af0e/f/gperftools-2.17-disable-generic-dynamic-tls.patch";
       hash = "sha256-IOLUf9mCEA+fVSJKU94akcnXTIm7+t+S9cjBHsEDwFA=";
     })
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isMinGW [
+    ./mingw-disable-benchmarks.patch
   ];
 
   nativeBuildInputs = [ autoreconfHook ];

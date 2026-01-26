@@ -12,17 +12,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-files";
-  version = "1.0.0-beta.1.1";
+  version = "1.0.3";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-files";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-pSjmsWsGGhjCekMTX8iiNVbF5X33zg5YVDWtemjIDWU=";
+    hash = "sha256-aHNu6IedGWag6u+uRg2IFfcb8fTu5o4XfGwBXJBOkSM=";
   };
 
-  cargoHash = "sha256-7RANj+aXdmBVO66QDgcNrrU4qEGK4Py4+ZctYWU1OO8=";
+  cargoHash = "sha256-kzyyKzkuCYqEsaaKhAVH31ztbww4k8XZ5HyBQeYO/Nc=";
 
   nativeBuildInputs = [
     just
@@ -40,11 +40,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "prefix"
     (placeholder "out")
     "--set"
-    "bin-src"
-    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-files"
-    "--set"
-    "applet-src"
-    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-files-applet"
+    "cargo-target-dir"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
   # This is needed since by setting cargoBuildFlags, it would build both the applet and the main binary
@@ -86,10 +83,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
         cosmic-autologin-noxwayland
         ;
     };
+
     updateScript = nix-update-script {
       extraArgs = [
-        "--version"
-        "unstable"
         "--version-regex"
         "epoch-(.*)"
       ];

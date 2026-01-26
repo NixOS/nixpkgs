@@ -17,17 +17,17 @@ let
   base = {
     pname = "firebird";
 
-    meta = with lib; {
+    meta = {
       description = "SQL relational database management system";
       downloadPage = "https://github.com/FirebirdSQL/firebird/";
       homepage = "https://firebirdsql.org/";
       changelog = "https://github.com/FirebirdSQL/firebird/blob/master/CHANGELOG.md";
-      license = [
-        "IDPL"
-        "Interbase-1.0"
+      license = with lib.licenses; [
+        mpl11
+        interbase
       ];
-      platforms = platforms.linux;
-      maintainers = with maintainers; [
+      platforms = lib.platforms.linux;
+      maintainers = with lib.maintainers; [
         bbenno
         marcweber
       ];

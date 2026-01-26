@@ -26,11 +26,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "drawilleplot" ];
 
-  meta = with lib; {
+  meta = {
     description = "Matplotlib backend for graph output in unicode terminals using drawille";
     homepage = "https://github.com/gooofy/drawilleplot";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ nobbz ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ nobbz ];
+    platforms = lib.platforms.all;
   };
 }

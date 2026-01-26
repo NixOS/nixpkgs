@@ -16,7 +16,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "anime-dl";
     repo = "anime-downloader";
-    rev = version;
+    tag = version;
     sha256 = "sha256-Uk2mtsSrb8fCD9JCFzvLBzMEB7ViVDrKPSOKy9ALJ6o=";
   };
 
@@ -54,11 +54,11 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/anime-dl/anime-downloader";
     description = "Simple but powerful anime downloader and streamer";
-    license = licenses.unlicense;
-    platforms = platforms.linux;
+    license = lib.licenses.unlicense;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
     mainProgram = "anime";
   };

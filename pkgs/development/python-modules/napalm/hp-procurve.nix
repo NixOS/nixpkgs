@@ -7,7 +7,6 @@
   pip,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   standard-telnetlib,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "napalm-hp-procurve";
   version = "0.7.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "napalm-automation-community";
@@ -62,11 +59,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "napalm_procurve" ];
 
-  meta = with lib; {
+  meta = {
     description = "HP ProCurve Driver for NAPALM automation frontend";
     homepage = "https://github.com/napalm-automation-community/napalm-hp-procurve";
     changelog = "https://github.com/napalm-automation-community/napalm-hp-procurve/releases/tag/${src.tag}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

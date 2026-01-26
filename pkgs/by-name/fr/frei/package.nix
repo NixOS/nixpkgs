@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  meta = with lib; {
+  meta = {
     description = "Modern replacement for free";
     homepage = "https://github.com/alexcoder04/frei";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ infinidoge ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ infinidoge ];
     mainProgram = "frei";
   };
 }

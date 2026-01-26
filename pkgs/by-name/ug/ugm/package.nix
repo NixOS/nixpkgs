@@ -36,6 +36,6 @@ buildGo125Module (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "ugm";
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 })

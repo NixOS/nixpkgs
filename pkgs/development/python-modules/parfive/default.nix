@@ -21,18 +21,22 @@
   tqdm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "parfive";
   version = "2.2.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Cadair";
     repo = "parfive";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-DIjS2q/SOrnLspomLHk8ZJ+krdzMyQfbIpXxad30s1k=";
   };
 
-  pyproject = true;
+  patches = [
+    # SyntaxError: 'return' in a 'finally' block
+    ./fix-python-3-14-compat.patch
+  ];
 
   build-system = [ setuptools-scm ];
 
@@ -72,8 +76,8 @@ buildPythonPackage rec {
     description = "HTTP and FTP parallel file downloader";
     mainProgram = "parfive";
     homepage = "https://parfive.readthedocs.io/";
-    changelog = "https://github.com/Cadair/parfive/releases/tag/${src.tag}";
+    changelog = "https://github.com/Cadair/parfive/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.sarahec ];
   };
-}
+})

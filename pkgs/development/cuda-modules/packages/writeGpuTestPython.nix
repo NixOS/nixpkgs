@@ -3,11 +3,13 @@
   runCommand,
   python3Packages,
   makeWrapper,
+  writableTmpDirAsHomeHook,
 }:
 {
   feature ? "cuda",
   name ? if feature == null then "cpu" else feature,
   libraries ? [ ], # [PythonPackage] | (PackageSet -> [PythonPackage])
+  gpuCheckArgs ? { },
   ...
 }@args:
 
@@ -28,6 +30,7 @@ let
     runCommand "tester-${name}"
       (
         lib.removeAttrs args [
+          "gpuCheckArgs"
           "libraries"
           "name"
         ]
@@ -52,10 +55,18 @@ let
   tester' = tester.overrideAttrs (oldAttrs: {
     passthru.gpuCheck =
       runCommand "test-${name}"
-        {
-          nativeBuildInputs = [ tester' ];
-          requiredSystemFeatures = lib.optionals (feature != null) [ feature ];
-        }
+        (
+          gpuCheckArgs
+          // {
+            nativeBuildInputs = [
+              tester'
+            ]
+            ++ gpuCheckArgs.nativeBuildInputs or [ ];
+
+            requiredSystemFeatures =
+              lib.optionals (feature != null) [ feature ] ++ gpuCheckArgs.requiredSystemFeatures or [ ];
+          }
+        )
         ''
           set -e
           ${tester.meta.mainProgram or (lib.getName tester')}

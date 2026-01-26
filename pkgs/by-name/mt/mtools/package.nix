@@ -19,6 +19,12 @@ stdenv.mkDerivation rec {
   # fails to find X on darwin
   configureFlags = lib.optional stdenv.hostPlatform.isDarwin "--without-x";
 
+  outputs = [
+    "out"
+    "info"
+    "man"
+  ];
+
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   enableParallelBuilding = true;
@@ -29,10 +35,10 @@ stdenv.mkDerivation rec {
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnu.org/software/mtools/";
     description = "Utilities to access MS-DOS disks";
-    platforms = platforms.unix;
-    license = licenses.gpl3;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl3;
   };
 }

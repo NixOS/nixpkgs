@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "1.4.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiosignal";
@@ -42,11 +40,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiosignal" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python list of registered asynchronous callbacks";
     homepage = "https://github.com/aio-libs/aiosignal";
     changelog = "https://github.com/aio-libs/aiosignal/blob/v${version}/CHANGES.rst";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

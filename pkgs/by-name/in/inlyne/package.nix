@@ -6,11 +6,16 @@
   stdenv,
   pkg-config,
   fontconfig,
-  xorg,
+  libxrandr,
+  libxi,
+  libxcursor,
+  libx11,
+  libxcb,
   libxkbcommon,
   wayland,
   libGL,
   openssl,
+  oniguruma,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -35,14 +40,18 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     fontconfig
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libxcb
+    libxcursor
+    libxi
+    libxrandr
+    libxcb
     wayland
     libxkbcommon
     openssl
+    oniguruma
   ];
+
+  # use system oniguruma since the bundled one fails to build with gcc15
+  env.RUSTONIG_SYSTEM_LIBONIG = 1;
 
   checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     # time out on darwin
@@ -50,29 +59,33 @@ rustPlatform.buildRustPackage rec {
     "--skip=watcher::tests::the_gauntlet"
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd inlyne \
-      --bash completions/inlyne.bash \
-      --fish completions/inlyne.fish \
-      --zsh completions/_inlyne
-  '';
+  postInstall =
+    lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd inlyne \
+        --bash completions/inlyne.bash \
+        --fish completions/inlyne.fish \
+        --zsh completions/_inlyne
+    ''
+    + ''
+      install -Dm444 assets/inlyne.desktop -t $out/share/applications
+    '';
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf $out/bin/inlyne \
       --add-rpath ${
         lib.makeLibraryPath [
           libGL
-          xorg.libX11
+          libx11
         ]
       }
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GPU powered browserless markdown viewer";
     homepage = "https://github.com/Inlyne-Project/inlyne";
     changelog = "https://github.com/Inlyne-Project/inlyne/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "inlyne";
   };
 }

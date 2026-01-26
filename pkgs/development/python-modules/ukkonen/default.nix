@@ -4,15 +4,12 @@
   fetchFromGitHub,
   cffi,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "ukkonen";
   version = "1.0.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "asottile";
@@ -27,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ukkonen" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation of bounded Levenshtein distance (Ukkonen)";
     homepage = "https://github.com/asottile/ukkonen";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

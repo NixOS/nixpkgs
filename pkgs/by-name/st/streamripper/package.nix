@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   fetchDebianPatch,
   glib,
   pkg-config,
@@ -34,6 +35,13 @@ stdenv.mkDerivation rec {
       patch = "873964-http";
       hash = "sha256-D6koUCbnJHtRuq2zZy9VrxymuGXN1COacbQhphgB8qo=";
     })
+    # fix SR_ERROR_INVALID_METADATA caused by HTTP chunking
+    # (https://sourceforge.net/p/streamripper/bugs/193/#6a82)
+    (fetchpatch {
+      name = "streamripper-http-1.0.patch";
+      url = "https://sourceforge.net/p/streamripper/bugs/_discuss/thread/df13e77a/6a82/attachment/streamripper-http-1.0.patch";
+      hash = "sha256-EhkxAqMcRJ4IJ6BLrpSQu6FomfEbxvgAu12vaDdNqEU=";
+    })
   ];
 
   nativeBuildInputs = [ pkg-config ];
@@ -44,10 +52,10 @@ stdenv.mkDerivation rec {
     libmad
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://streamripper.sourceforge.net/";
     description = "Application that lets you record streaming mp3 to your hard drive";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     mainProgram = "streamripper";
   };
 }

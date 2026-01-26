@@ -25,10 +25,10 @@ buildPythonPackage rec {
 
   doCheck = false; # upstream has no tests
 
-  meta = with lib; {
+  meta = {
     description = "Python logging handler that allows multiple processes to safely write to the same log file concurrently";
     homepage = "https://github.com/Preston-Landers/concurrent-log-handler";
-    license = licenses.asl20;
-    maintainers = [ maintainers.bbjubjub ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.bbjubjub ];
   };
 }

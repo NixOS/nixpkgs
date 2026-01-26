@@ -5,14 +5,18 @@
   pkg-config,
   zlib,
   pcre,
-  xorg,
+  libxpm,
+  libx11,
+  libsm,
+  libice,
   libjpeg,
   libtiff,
   libpng,
-  gtk2,
+  gtk2-x11,
   libpaper,
   makeWrapper,
   ghostscript,
+  libXft,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +25,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://ftp.nluug.nl/pub/editors/${pname}/${pname}-${version}.src.tar.gz";
-    sha256 = "0v1ipynyjklb3chd1vq26a21sjjg66sir57gi2kkrbwnpk195a9z";
+    hash = "sha256-P6mSwryWrzyniO+UHLUxT0odhDIC79AgG4tO6a2/MWw=";
   };
 
   preConfigure = ''
@@ -56,6 +60,8 @@ stdenv.mkDerivation rec {
     "compile.shared"
   ];
 
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-liconv";
+
   installPhase = ''
     runHook preInstall
 
@@ -84,18 +90,19 @@ stdenv.mkDerivation rec {
   buildInputs = [
     zlib
     pcre
-    xorg.libX11
-    xorg.libICE
-    xorg.libSM
-    xorg.libXpm
+    libx11
+    libice
+    libsm
+    libxpm
     libjpeg
     libtiff
     libpng
-    gtk2
+    gtk2-x11
     libpaper
+    libXft
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Easy rich text processor";
     longDescription = ''
       Ted is a text processor running under X Windows on Unix/Linux systems.
@@ -109,10 +116,9 @@ stdenv.mkDerivation rec {
       MS-Word. Additionally, Ted also is an RTF to PostScript and an RTF to
       Acrobat PDF converter.
     '';
-    homepage = "https://nllgg.nl/Ted/";
-    license = licenses.gpl2Only;
-    platforms = platforms.all;
-    broken = stdenv.hostPlatform.isDarwin;
-    maintainers = with maintainers; [ obadz ];
+    homepage = "https://ftp.nluug.nl/pub/editors/ted/";
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ obadz ];
   };
 }

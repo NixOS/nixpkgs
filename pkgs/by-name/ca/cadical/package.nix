@@ -4,7 +4,7 @@
   fetchFromGitHub,
   copyPkgconfigItems,
   makePkgconfigItem,
-  version ? "2.1.3",
+  version ? "3.0.0",
 }:
 
 stdenv.mkDerivation rec {
@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     rev = "rel-${version}";
     hash =
       {
+        "3.0.0" = "sha256-pymbSC6bwQQ0YCtJd3xWZiC22UEkFiKSLObSOnoQj9I=";
+        "2.2.1" = "sha256-dYRaw9DI63Nqz0IJkfQYU4y00KSfq1Xv0xZuL1G15CY=";
         "2.1.3" = "sha256-W3kO+6nVzkmJXyHJU+NZWP0oatK3gon4EWF1/03rgL4=";
         "2.0.0" = "sha256-qoeEM9SdpuFuBPeQlCzuhPLcJ+bMQkTUTGiT8QdU8rc=";
       }
@@ -84,6 +86,8 @@ stdenv.mkDerivation rec {
     install -Dm0755 build/mobical "$out/bin/mobical"
     install -Dm0644 src/ccadical.h "$dev/include/ccadical.h"
     install -Dm0644 src/cadical.hpp "$dev/include/cadical.hpp"
+    install -Dm0644 src/cadical.hpp "$dev/include/cadical/cadical.hpp"
+    install -Dm0644 src/tracer.hpp "$dev/include/cadical/tracer.hpp"
     install -Dm0644 build/libcadical.a "$lib/lib/libcadical.a"
     mkdir -p "$out/share/doc/${pname}/"
     install -Dm0755 {LICEN?E,README*,VERSION} "$out/share/doc/${pname}/"
@@ -91,11 +95,14 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simplified Satisfiability Solver";
-    maintainers = with maintainers; [ shnarazk ];
-    platforms = platforms.unix;
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [
+      shnarazk
+      chrjabs
+    ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.mit;
     homepage = "https://fmv.jku.at/cadical/";
   };
 }

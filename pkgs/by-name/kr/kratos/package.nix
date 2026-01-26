@@ -6,7 +6,7 @@
 }:
 let
   pname = "kratos";
-  version = "1.3.1";
+  version = "25.4.0";
 in
 buildGoModule {
   inherit pname version;
@@ -15,10 +15,10 @@ buildGoModule {
     owner = "ory";
     repo = "kratos";
     rev = "v${version}";
-    hash = "sha256-FJrBwjWBYwoiy8rWXn+jaVc1b35So1Rb9SjkUlNwAqE=";
+    hash = "sha256-f/K86B5h7xM7Zsbr5w2rZgsyNlCSemrBkqtMRQq/Xws=";
   };
 
-  vendorHash = "sha256-zZwunp/433oIYI5ZA3Pznq9jfvIZE5ZUJKxboVef8g0=";
+  vendorHash = "sha256-ayL3V8TQ+9Tk2Wkhvn+Tft9AqxiFegznKXD0eBkFbhs=";
 
   subPackages = [ "." ];
 

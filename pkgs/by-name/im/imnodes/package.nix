@@ -6,7 +6,7 @@
   cmake,
   imgui,
   SDL2,
-  xorg,
+  libxext,
   imnodes,
   withExamples ? false,
 }:
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
   ]
   ++ lib.optionals withExamples [
     SDL2
-    xorg.libXext
+    libxext
   ];
 
   cmakeFlags = [ (lib.cmakeBool "IMNODES_EXAMPLES" withExamples) ];

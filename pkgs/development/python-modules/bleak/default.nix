@@ -1,41 +1,62 @@
 {
   lib,
-  async-timeout,
-  bluez,
+  stdenv,
   buildPythonPackage,
-  dbus-fast,
   fetchFromGitHub,
-  poetry-core,
-  pytest-asyncio,
-  pytestCheckHook,
+  bluez,
   pythonOlder,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
+  bumble,
+  dbus-fast,
+  pyobjc-core,
+  pyobjc-framework-CoreBluetooth,
+  pyobjc-framework-libdispatch,
   typing-extensions,
+  async-timeout,
+
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "bleak";
-  version = "1.1.1";
+  version = "2.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "hbldh";
     repo = "bleak";
     tag = "v${version}";
-    hash = "sha256-z0Mxr1pUQWNEK01PKMV/CzpW+GeCRcv/+9BADts1FuU=";
+    hash = "sha256-UrKJoEyLa75HMCOgxmOqJi1z+32buMra+dwVe5qbBds=";
   };
 
-  postPatch = ''
+  postPatch =
     # bleak checks BlueZ's version with a call to `bluetoothctl --version`
-    substituteInPlace bleak/backends/bluezdbus/version.py \
-      --replace-fail \"bluetoothctl\" \"${bluez}/bin/bluetoothctl\"
-  '';
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      substituteInPlace bleak/backends/bluezdbus/version.py \
+        --replace-fail \
+          '"bluetoothctl"' \
+          '"${lib.getExe' bluez "bluetoothctl"}"'
+    '';
 
   build-system = [ poetry-core ];
 
   dependencies = [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     dbus-fast
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    pyobjc-core
+    pyobjc-framework-CoreBluetooth
+    pyobjc-framework-libdispatch
+  ]
+  ++ lib.optionals (pythonOlder "3.12") [
     typing-extensions
   ]
   ++ lib.optionals (pythonOlder "3.11") [
@@ -43,18 +64,20 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    bumble
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "bleak" ];
 
-  meta = with lib; {
+  meta = {
     description = "Bluetooth Low Energy platform agnostic client";
     homepage = "https://github.com/hbldh/bleak";
     changelog = "https://github.com/hbldh/bleak/blob/${src.tag}/CHANGELOG.rst";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ oxzi ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ oxzi ];
   };
 }

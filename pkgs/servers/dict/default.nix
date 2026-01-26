@@ -8,6 +8,7 @@
   libmaa,
   zlib,
   libtool,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
@@ -46,6 +47,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     install -Dm444 -t $out/share/doc/${pname} NEWS README
   '';
+
+  passthru.tests.nixos = nixosTests.dictd;
 
   meta = {
     description = "Dict protocol server and client";

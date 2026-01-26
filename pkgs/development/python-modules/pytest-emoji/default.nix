@@ -4,15 +4,12 @@
   fetchFromGitHub,
   pytest,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-emoji";
   version = "0.2.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "hackebrot";
@@ -34,11 +31,11 @@ buildPythonPackage rec {
     "test_emoji_enabled_custom_verbose"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytest plugin that adds emojis to test result report";
     homepage = "https://github.com/hackebrot/pytest-emoji";
     changelog = "https://github.com/hackebrot/pytest-emoji/releases/tag/0.2.0";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

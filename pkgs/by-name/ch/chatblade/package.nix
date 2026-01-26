@@ -7,7 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "chatblade";
   version = "0.7.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -33,11 +33,11 @@ python3Packages.buildPythonApplication rec {
     tiktoken
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/npiv/chatblade/";
     description = "CLI Swiss Army Knife for ChatGPT";
     mainProgram = "chatblade";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ deejayem ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ deejayem ];
   };
 }

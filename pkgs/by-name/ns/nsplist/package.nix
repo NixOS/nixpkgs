@@ -27,10 +27,15 @@ stdenv.mkDerivation {
     flex -o src/NSPlistLexer.cpp <(tail --lines=+17 src/NSPlistLexer.l)
   '';
 
-  meta = with lib; {
-    maintainers = with maintainers; [ matthewbauer ];
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
+  meta = {
+    maintainers = [ ];
     description = "Parses .plist files";
-    license = licenses.mit;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

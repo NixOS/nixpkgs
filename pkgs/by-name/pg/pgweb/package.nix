@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "pgweb";
-  version = "0.16.2";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "sosedoff";
     repo = "pgweb";
     rev = "v${version}";
-    hash = "sha256-gZK8+H3dBMzSVyE96E7byihKMR4+1YlVFZJtCTGUZwI=";
+    hash = "sha256-3UWld72AN504+Bo8aIY31qMO1xIRL3MXG5ImzMeSoU8=";
   };
 
   postPatch = ''
@@ -23,7 +23,7 @@ buildGoModule rec {
     rm -f pkg/client/{client,dump}_test.go
   '';
 
-  vendorHash = "sha256-Jpvf6cST3kBvYzCQLoJ1fijUC/hP1ouptd2bQZ1J/Lo=";
+  vendorHash = "sha256-7gfziA+rKwS6u63I6DaA2Fi/wvtr1rAJupSNJZB72dU=";
 
   ldflags = [
     "-s"

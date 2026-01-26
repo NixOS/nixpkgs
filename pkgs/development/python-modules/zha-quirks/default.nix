@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "zha-quirks";
-  version = "0.0.145";
+  version = "0.0.152";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "zha-device-handlers";
     tag = version;
-    hash = "sha256-CJiva7ZFm9jjWoQ1qjRUIbk5UHb2o9qdbVHDK+wIZKw=";
+    hash = "sha256-b0px65f/M1Lm7FUh6NLnF90tK5FKytMEPHdMenrpsso=";
   };
 
   postPatch = ''
@@ -45,10 +45,6 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # RuntimeError: no running event loop
-    "test_mfg_cluster_events"
-    "test_co2_sensor"
-    "test_smart_air_sensor"
     # AssertionError: expected call not found
     "test_moes"
     "test_tuya_mcu_set_time"
@@ -61,12 +57,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "zhaquirks" ];
 
-  meta = with lib; {
+  meta = {
     description = "ZHA Device Handlers are custom quirks implementations for Zigpy";
     homepage = "https://github.com/dmulcahey/zha-device-handlers";
     changelog = "https://github.com/zigpy/zha-device-handlers/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
+    platforms = lib.platforms.linux;
   };
 }

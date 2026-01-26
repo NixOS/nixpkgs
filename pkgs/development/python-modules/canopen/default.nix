@@ -18,6 +18,8 @@ buildPythonPackage rec {
     hash = "sha256-IKhLxJizTa3XnOzkZ9O74ZWRwcAqjzkzG8xgZcTYsus=";
   };
 
+  __darwinAllowLocalNetworking = true;
+
   build-system = [ setuptools-scm ];
 
   dependencies = [ python-can ];
@@ -30,11 +32,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "canopen" ];
 
-  meta = with lib; {
+  meta = {
     description = "CANopen stack implementation";
     homepage = "https://github.com/christiansandberg/canopen/";
     changelog = "https://github.com/christiansandberg/canopen/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sorki ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sorki ];
   };
 }

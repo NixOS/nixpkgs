@@ -17,29 +17,32 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchFromGitea {
-    domain = "git.osgeo.org/gitea";
+    domain = "git.osgeo.org";
     owner = "rttopo";
     repo = "librttopo";
     rev = "librttopo-${version}";
-    sha256 = "0h7lzlkn9g4xky6h81ndy0aa6dxz8wb6rnl8v3987jy1i6pr072p";
+    hash = "sha256-VxyQr4nBy4PS2IjabBZHvzejFPDNBgSNn528ZCf99EA=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
     validatePkgConfig
-    geos # for geos-config
   ];
 
   buildInputs = [ geos ];
 
+  configureFlags = [
+    "--with-geosconfig=${lib.getExe' (lib.getDev geos) "geos-config"}"
+  ];
+
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "RT Topology Library";
-    homepage = "https://git.osgeo.org/gitea/rttopo/librttopo";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ dotlambda ];
-    teams = [ teams.geospatial ];
-    platforms = platforms.unix;
+    homepage = "https://git.osgeo.org/rttopo/librttopo";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ dotlambda ];
+    teams = [ lib.teams.geospatial ];
+    platforms = lib.platforms.unix;
   };
 }

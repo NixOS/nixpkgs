@@ -43,11 +43,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "percona-server";
-  version = "8.0.42-33";
+  version = "8.0.44-35";
 
   src = fetchurl {
-    url = "https://www.percona.com/downloads/Percona-Server-8.0/Percona-Server-${finalAttrs.version}/source/tarball/percona-server-${finalAttrs.version}.tar.gz";
-    hash = "sha256-UDdmBz1RVjX/kRivvk69GPdtjLjWTglKxteiLxXKQGc=";
+    url = "https://downloads.percona.com/downloads/Percona-Server-8.0/Percona-Server-${finalAttrs.version}/source/tarball/percona-server-${finalAttrs.version}.tar.gz";
+    hash = "sha256-4eiNKzXzc5TAhsdIKQvyhQknsOiVSSkbZXDFY+qInYE=";
   };
 
   nativeBuildInputs = [
@@ -63,8 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ rpcsvc-proto ];
 
   patches = [
-    # adapted from mysql80's llvm 19 fixes
-    ./libcpp-fixes.patch
     # fixes using -DWITH_SSL=system with CMAKE_PREFIX_PATH on darwin
     # https://github.com/Homebrew/homebrew-core/pull/204799
     (fetchpatch {
@@ -201,15 +199,18 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.percona.com/software/mysql-database/percona-server";
     description = ''
       A free, fully compatible, enhanced, open source drop-in replacement for
       MySQL® that provides superior performance, scalability and instrumentation.
       Long-term support release.
     '';
-    license = licenses.gpl2Only;
-    teams = [ teams.flyingcircus ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = [
+      lib.maintainers.leona
+      lib.maintainers.osnyx
+    ];
+    platforms = lib.platforms.unix;
   };
 })

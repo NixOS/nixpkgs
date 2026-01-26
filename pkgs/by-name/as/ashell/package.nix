@@ -14,16 +14,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "ashell";
-  version = "0.5.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "MalpenZibo";
     repo = "ashell";
     tag = version;
-    hash = "sha256-4OJHnYy3LcABDaSraqoXdTpdfcjRQd+B4hc2AOM/oi8=";
+    hash = "sha256-nQrBW2pfsExHERGZzJqMG7MskzsJ3zwVyoX6wJZBils=";
   };
 
-  cargoHash = "sha256-6NNWdAUZQY2yPW8OGeQUjOCV+REI+LU2wpJGitqq5hI=";
+  cargoHash = "sha256-F8oh8uQFthx5gex/ovKADO+ukqzIbmlBM5+shej/OTA=";
 
   nativeBuildInputs = [
     pkg-config

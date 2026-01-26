@@ -96,10 +96,10 @@ let
   // optionalAttrs xcfg.enable {
     X11 = {
       ServerPath = toString xserverWrapper;
-      XephyrPath = "${pkgs.xorg.xorgserver.out}/bin/Xephyr";
+      XephyrPath = "${pkgs.xorg-server.out}/bin/Xephyr";
       SessionCommand = toString dmcfg.sessionData.wrapper;
       SessionDir = "${dmcfg.sessionData.desktops}/share/xsessions";
-      XauthPath = "${pkgs.xorg.xauth}/bin/xauth";
+      XauthPath = "${pkgs.xauth}/bin/xauth";
       DisplayCommand = toString Xsetup;
       DisplayStopCommand = toString Xstop;
       EnableHiDPI = cfg.enableHidpi;
@@ -257,6 +257,7 @@ in
       theme = mkOption {
         type = types.str;
         default = "";
+        example = lib.literalExpression "\"\${pkgs.where-is-my-sddm-theme.override { variants = [ \"qt5\" ]; }}/share/sddm/themes/where_is_my_sddm_theme_qt5\"";
         description = ''
           Greeter theme to use.
         '';
@@ -360,7 +361,10 @@ in
 
     services.displayManager = {
       enable = true;
-      execCmd = "exec /run/current-system/sw/bin/sddm";
+      generic = {
+        enable = true;
+        execCmd = "exec /run/current-system/sw/bin/sddm";
+      };
     };
 
     security.pam.services = {

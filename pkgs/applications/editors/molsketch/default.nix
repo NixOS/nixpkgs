@@ -54,12 +54,12 @@ stdenv.mkDerivation rec {
     desktop-file-utils
   ];
 
-  meta = with lib; {
+  meta = {
     description = "2D molecule editor";
     homepage = "https://sourceforge.net/projects/molsketch/";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.moni ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.moni ];
     mainProgram = "molsketch";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

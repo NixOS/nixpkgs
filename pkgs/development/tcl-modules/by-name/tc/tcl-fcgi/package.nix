@@ -13,7 +13,7 @@ mkTclDerivation {
     owner = "mpcjanssen";
     repo = "tcl-fcgi";
     rev = "62452dbf3177ba9458fbb42457834ca77bdf5a82";
-    sha256 = "sha256-RLuV4ARmGWCJTmhs7DbMWENQGj3d5ZXWb821WrgG0qA=";
+    hash = "sha256-RLuV4ARmGWCJTmhs7DbMWENQGj3d5ZXWb821WrgG0qA=";
   };
 
   buildInputs = [
@@ -25,11 +25,11 @@ mkTclDerivation {
     cp -r $src/tcl-src/* $out/lib/tcl-fcgi/
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mpcjanssen/tcl-fcgi";
     description = "Tcl interface for the FastCGI protocol";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     platforms = tclx.meta.platforms;
-    maintainers = with maintainers; [ nat-418 ];
+    maintainers = with lib.maintainers; [ nat-418 ];
   };
 }

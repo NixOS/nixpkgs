@@ -34,12 +34,12 @@ stdenv.mkDerivation rec {
     libsForQt5.qtbase
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/vigri/scantailor-advanced";
     description = "Interactive post-processing tool for scanned pages (vigri's fork)";
     mainProgram = "scantailor";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
-    platforms = with platforms; gnu ++ linux ++ darwin;
+    platforms = with lib.platforms; gnu ++ linux ++ darwin;
   };
 }

@@ -7,8 +7,9 @@
   hatchling,
 
   # dependencies
-  immutabledict,
+  constantdict,
   pytools,
+  typing-extensions,
 
   # optional-dependencies
   matchpy,
@@ -18,23 +19,24 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pymbolic";
-  version = "2024.2.2";
+  version = "2025.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "inducer";
     repo = "pymbolic";
-    tag = "v${version}";
-    hash = "sha256-07RWdEPhO+n9/FOvIWe4nm9fGekut9X6Tz4HlIkBSpo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-cn2EdhMn5qjK854AF5AY4Hv4M5Ib6gPRJk+kQvsFWRk=";
   };
 
   build-system = [ hatchling ];
 
   dependencies = [
-    immutabledict
+    constantdict
     pytools
+    typing-extensions
   ];
 
   optional-dependencies = {
@@ -42,15 +44,18 @@ buildPythonPackage rec {
     numpy = [ numpy ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "pymbolic" ];
 
   meta = {
     description = "Package for symbolic computation";
     homepage = "https://documen.tician.de/pymbolic/";
-    changelog = "https://github.com/inducer/pymbolic/releases/tag/v${version}";
+    changelog = "https://github.com/inducer/pymbolic/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ qbisi ];
   };
-}
+})

@@ -3,36 +3,57 @@
   stdenv,
   fetchFromGitHub,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs,
   electron,
+  rustPlatform,
+  cargo,
+  rustc,
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
   nix-update-script,
 }:
-stdenv.mkDerivation (final: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "splayer";
-  version = "3.0.0-beta.2";
+  version = "3.0.0-beta.8.2025";
 
   src = fetchFromGitHub {
     owner = "imsyy";
     repo = "SPlayer";
-    tag = "v${final.version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = false;
-    hash = "sha256-q4jMwIILuz9Uci/1m429Y5tHE2rkfxctu9QCA8jrJkk=";
+    hash = "sha256-LS9Z+dfL50ICaF8WskiKswl3LD7aSrpJHu6DY9m6ByE=";
   };
 
-  pnpm = pnpm_10;
-
-  pnpmDeps = final.pnpm.fetchDeps {
-    inherit (final) pname version src;
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      ;
+    pnpm = pnpm_10;
     fetcherVersion = 2;
-    hash = "sha256-lA08+i+SpMB95MAi/N5mxbcBed0FRchroT5e2nwnXuA=";
+    hash = "sha256-t1pZJ7j+VyvXSTctNVg2XkoQ4CA6DlkxOlK9akDghUU=";
+  };
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      ;
+    hash = "sha256-LJuY9BFI+/GSckilZCXs3cw1EEG5Oy/iSljIABqsD/E=";
   };
 
   nativeBuildInputs = [
-    final.pnpm.configHook
+    pnpmConfigHook
+    pnpm_10
     nodejs
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
     makeWrapper
     copyDesktopItems
   ];
@@ -43,6 +64,12 @@ stdenv.mkDerivation (final: {
     cp .env.example .env
   '';
 
+  postPatch = ''
+    # Workaround for https://github.com/electron/electron/issues/31121
+    substituteInPlace electron/main/utils/native-loader.ts \
+      --replace-fail 'process.resourcesPath' "'$out/share/splayer/resources'"
+  '';
+
   buildPhase = ''
     runHook preBuild
 
@@ -50,7 +77,7 @@ stdenv.mkDerivation (final: {
 
     npm exec electron-builder -- \
         --dir \
-        --config electron-builder.yml \
+        --config electron-builder.config.ts \
         -c.electronDist=${electron.dist} \
         -c.electronVersion=${electron.version}
 
@@ -93,6 +120,8 @@ stdenv.mkDerivation (final: {
         "Audio"
         "Music"
       ];
+      mimeTypes = [ "x-scheme-handler/orpheus" ];
+      extraConfig.X-KDE-Protocols = "orpheus";
     })
   ];
 

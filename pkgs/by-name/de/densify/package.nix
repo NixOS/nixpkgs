@@ -5,7 +5,7 @@
   gtk3,
   gobject-introspection,
   wrapGAppsHook3,
-  xorg,
+  xrandr,
   gnugrep,
   ghostscript,
   libnotify,
@@ -14,7 +14,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "densify";
   version = "0.3.2";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "hkdb";
@@ -44,7 +44,7 @@ python3Packages.buildPythonApplication rec {
         lib.makeBinPath [
           ghostscript
           gnugrep
-          xorg.xrandr
+          xrandr
           libnotify
         ]
       }"

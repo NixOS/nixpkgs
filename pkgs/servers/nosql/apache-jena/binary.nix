@@ -8,10 +8,10 @@
 
 stdenv.mkDerivation rec {
   pname = "apache-jena";
-  version = "5.5.0";
+  version = "5.6.0";
   src = fetchurl {
     url = "mirror://apache/jena/binaries/apache-jena-${version}.tar.gz";
-    hash = "sha256-atRcW9U3PjX/E3QhTa6dBfvb19Rb3n6ROpLeGinGD1U=";
+    hash = "sha256-s5qmzKBrED7U1Qm0Lu5RI5QIiFnfK1NnqFiSe/H85yg=";
   };
   nativeBuildInputs = [
     makeWrapper
@@ -22,11 +22,11 @@ stdenv.mkDerivation rec {
       wrapProgram "$i" --prefix "PATH" : "${java}/bin/"
     done
   '';
-  meta = with lib; {
+  meta = {
     description = "RDF database";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.unix;
     homepage = "https://jena.apache.org";
     downloadPage = "https://archive.apache.org/dist/jena/binaries/";
   };

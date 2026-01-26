@@ -1,5 +1,5 @@
 ## build described at https://wiki.winehq.org/Building_Wine#Shared_WoW64
-preFlags="${configureFlags}"
+preFlags="${configureFlags[@]}"
 
 unpackPhase
 cd $TMP/$sourceRoot
@@ -10,7 +10,7 @@ mkdir -p $TMP/wine-wow $TMP/wine64
 
 cd $TMP/wine64
 sourceRoot=`pwd`
-configureFlags="${preFlags} --enable-win64"
+configureFlags=($preFlags --enable-win64)
 configurePhase
 buildPhase
 # checkPhase
@@ -37,7 +37,7 @@ PKG_CONFIG_PATH=$(IFS=":"; echo "${NEW_LIST_ARRAY[*]}")
 
 cd $TMP/wine-wow
 sourceRoot=`pwd`
-configureFlags="${preFlags} --with-wine64=../wine64"
+configureFlags=($preFlags --with-wine64=../wine64)
 configurePhase
 buildPhase
 # checkPhase

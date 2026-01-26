@@ -46,11 +46,11 @@ let
       libxml2,
       linux-pam,
       numactl,
-      fmt_11,
+      fmt,
       withStorageMroonga ? true,
       kytea,
       libsodium,
-      msgpack,
+      msgpack-cxx,
       zeromq,
       withStorageRocks ? true,
       withEmbedded ? false,
@@ -116,10 +116,15 @@ let
         prePatch = ''
           sed -i 's,[^"]*/var/log,/var/log,g' storage/mroonga/vendor/groonga/CMakeLists.txt
         '';
-        env = lib.optionalAttrs (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isGnu) {
-          # MariaDB uses non-POSIX fopen64, which musl only conditionally defines.
-          NIX_CFLAGS_COMPILE = "-D_LARGEFILE64_SOURCE";
-        };
+        env =
+          lib.optionalAttrs (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isGnu) {
+            # MariaDB uses non-POSIX fopen64, which musl only conditionally defines.
+            NIX_CFLAGS_COMPILE = "-D_LARGEFILE64_SOURCE";
+          }
+          // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) {
+            # Detection of netdb.h doesnt work for some reason on x86_64-darwin
+            NIX_CFLAGS_COMPILE = "-DHAVE_NETDB_H";
+          };
 
         patches = [
           ./patch/cmake-includedir.patch
@@ -211,13 +216,17 @@ let
             mysql-replication = nixosTests.mysql-replication.${testVersion};
           };
 
-        meta = with lib; {
+        meta = {
           description = "Enhanced, drop-in replacement for MySQL";
           homepage = "https://mariadb.org/";
-          license = licenses.gpl2Plus;
-          maintainers = with maintainers; [ thoughtpolice ];
-          teams = [ teams.helsinki-systems ];
-          platforms = platforms.all;
+          license = lib.licenses.gpl2Plus;
+          maintainers = with lib.maintainers; [
+            conni2461
+            das_j
+            helsinki-Jo
+            thoughtpolice
+          ];
+          platforms = lib.platforms.all;
         };
       };
 
@@ -231,7 +240,7 @@ let
           ];
 
           buildInputs =
-            common.buildInputs ++ lib.optionals (lib.versionAtLeast common.version "10.11") [ fmt_11 ];
+            common.buildInputs ++ lib.optionals (lib.versionAtLeast common.version "10.11") [ fmt ];
 
           cmakeFlags = common.cmakeFlags ++ [
             "-DPLUGIN_AUTH_PAM=NO"
@@ -283,10 +292,10 @@ let
           ++ lib.optionals withStorageMroonga [
             kytea
             libsodium
-            msgpack
+            msgpack-cxx
             zeromq
           ]
-          ++ lib.optionals (lib.versionAtLeast common.version "10.11") [ fmt_11 ];
+          ++ lib.optionals (lib.versionAtLeast common.version "10.11") [ fmt ];
 
         propagatedBuildInputs = lib.optional withNuma numactl;
 

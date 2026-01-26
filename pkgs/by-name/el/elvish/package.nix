@@ -50,6 +50,6 @@ buildGoModule {
       status, it is already suitable for most daily interactive use.
     '';
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

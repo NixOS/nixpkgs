@@ -8,17 +8,17 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
-  version = "0.10.0";
+  version = "0.13.0";
   pname = "sccache";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "sccache";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-VEDMeRFQKNPS3V6/DhMWxHR7YWsCzAXTzp0lO+COl08=";
+    sha256 = "sha256-3NdqnK1/vs2Z3SnLDzJBP69E+okqVZaI6dZHEylgcPU=";
   };
 
-  cargoHash = "sha256-1kfKBN4uRbU5LjbC0cLgMqoGnOSEAdC0S7EzXlfaDPo=";
+  cargoHash = "sha256-aC1FXjE6aj1YUIyXoTIjFHJfTtK40ZaXOl4uV/IgqMs=";
 
   buildFeatures = lib.optionals distributed [
     "dist-client"
@@ -43,7 +43,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/mozilla/sccache/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [
       doronbehar
-      figsoda
     ];
     license = lib.licenses.asl20;
   };

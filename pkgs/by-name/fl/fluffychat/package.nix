@@ -7,7 +7,9 @@
   libgbm,
   libdrm,
   flutter332,
+  flutter335,
   pulseaudio,
+  webkitgtk_4_1,
   copyDesktopItems,
   makeDesktopItem,
 
@@ -28,23 +30,22 @@ let
     sha256 = "sha256-lRfymTSfoNUtR5tSUiAptAvrrTwbB8p+SaYQeOevMzA=";
   };
 in
-flutter332.buildFlutterApplication (
+flutter335.buildFlutterApplication (
   rec {
     pname = "fluffychat-${targetFlutterPlatform}";
-    version = "2.1.1";
+    version = "2.3.1";
 
     src = fetchFromGitHub {
       owner = "krille-chan";
       repo = "fluffychat";
       tag = "v${version}";
-      hash = "sha256-Gk3PtIb90rmrEIq52aL+vBHhRG6LoyfG2jrAGH5Iyqo=";
+      hash = "sha256-jQdWy/oo8WS6DU7VD4n4smL6P+aoqJvN+Yb2gt3hpyY=";
     };
 
     inherit pubspecLock;
 
     gitHashes = {
       flutter_web_auth_2 = "sha256-3aci73SP8eXg6++IQTQoyS+erUUuSiuXymvR32sxHFw=";
-      flutter_typeahead = "sha256-ZGXbbEeSddrdZOHcXE47h3Yu3w6oV7q+ZnO6GyW7Zg8=";
       flutter_secure_storage_linux = "sha256-cFNHW7dAaX8BV7arwbn68GgkkBeiAgPfhMOAFSJWlyY=";
     };
 
@@ -69,6 +70,7 @@ flutter332.buildFlutterApplication (
     nativeBuildInputs = [
       imagemagick
       copyDesktopItems
+      webkitgtk_4_1
     ];
 
     runtimeDependencies = [ pulseaudio ];
@@ -114,6 +116,15 @@ flutter332.buildFlutterApplication (
           '';
         };
     };
+
+    # Temporary fix for json deprecation error
+    # https://github.com/juliansteenbakker/flutter_secure_storage/issues/965
+    postPatch = ''
+      substituteInPlace linux/CMakeLists.txt \
+        --replace-fail \
+        "PRIVATE -Wall -Werror" \
+        "PRIVATE -Wall -Werror -Wno-deprecated"
+    '';
 
     postInstall = ''
       FAV=$out/app/fluffychat-linux/data/flutter_assets/assets/favicon.png

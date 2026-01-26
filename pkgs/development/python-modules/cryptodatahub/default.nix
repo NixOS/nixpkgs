@@ -7,7 +7,6 @@
   fetchFromGitLab,
   pyfakefs,
   python-dateutil,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   unittestCheckHook,
@@ -16,16 +15,14 @@
 
 buildPythonPackage rec {
   pname = "cryptodatahub";
-  version = "1.0.0";
+  version = "1.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitLab {
     owner = "coroner";
     repo = "cryptodatahub";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-taYpSYkfucc9GQpVDiAZgCt/D3Akld20LkFEhsdKH0Q=";
+    tag = "v${version}";
+    hash = "sha256-DQspaa9GsnRjETKUca2i91iBPbT4qATmKiL8M0nBP/A=";
   };
 
   build-system = [
@@ -51,16 +48,15 @@ buildPythonPackage rec {
   preCheck = ''
     # failing tests
     rm test/updaters/test_common.py
-    rm test/common/test_key.py
     # Tests require network access
     rm test/common/test_utils.py
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Repository of cryptography-related data";
     homepage = "https://gitlab.com/coroner/cryptodatahub";
-    changelog = "https://gitlab.com/coroner/cryptodatahub/-/blob/${version}/CHANGELOG.rst";
-    license = licenses.mpl20;
-    maintainers = [ ];
+    changelog = "https://gitlab.com/coroner/cryptodatahub/-/blob/${src.tag}/CHANGELOG.rst";
+    license = lib.licenses.mpl20;
+    teams = with lib.teams; [ ngi ];
   };
 }

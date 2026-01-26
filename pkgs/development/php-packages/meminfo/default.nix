@@ -24,6 +24,6 @@ buildPecl rec {
     description = "PHP extension to get insight about memory usage";
     homepage = "https://github.com/BitOne/php-meminfo";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

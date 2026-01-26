@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  gitUpdater,
   substitute,
   cmake,
   coreutils,
@@ -22,7 +21,8 @@
   doxygen,
   ncurses,
   graphviz,
-  xorg,
+  libxi,
+  libx11,
   gmp,
   libspatialindex,
   leveldb,
@@ -34,18 +34,22 @@
   buildClient ? true,
   buildServer ? true,
   SDL2,
-  useSDL2 ? true,
+  sdl3,
+  # Use SDL3 (experimental) instead of SDL2
+  useSdl3 ? false,
+
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "luanti";
-  version = "5.13.0";
+  version = "5.15.0";
 
   src = fetchFromGitHub {
     owner = "luanti-org";
     repo = "luanti";
     tag = finalAttrs.version;
-    hash = "sha256-TvI0+G7bRwwkEegv/AN4aBIN05M1AnWsaYD4lr3VTb8=";
+    hash = "sha256-ooZyyVFbf8OreYYs3XZlTht10cpdzsRgbOUWyaqX4jw=";
   };
 
   patches = [
@@ -68,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_SERVER" buildServer)
     (lib.cmakeBool "BUILD_UNITTESTS" (finalAttrs.finalPackage.doCheck or false))
     (lib.cmakeBool "ENABLE_PROMETHEUS" buildServer)
-    (lib.cmakeBool "USE_SDL2" useSDL2)
+    (lib.cmakeBool "USE_SDL3" useSdl3)
     # Ensure we use system libraries
     (lib.cmakeBool "ENABLE_SYSTEM_GMP" true)
     (lib.cmakeBool "ENABLE_SYSTEM_JSONCPP" true)
@@ -76,14 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_UPDATE_CHECKER" false)
     # ...but make it clear that this is a nix package
     (lib.cmakeFeature "VERSION_EXTRA" "NixOS")
-
-    # Remove when https://github.com/NixOS/nixpkgs/issues/144170 is fixed
-    (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "bin")
-    (lib.cmakeFeature "CMAKE_INSTALL_DATADIR" "share")
-    (lib.cmakeFeature "CMAKE_INSTALL_DOCDIR" "share/doc/luanti")
-    (lib.cmakeFeature "CMAKE_INSTALL_MANDIR" "share/man")
-    (lib.cmakeFeature "CMAKE_INSTALL_LOCALEDIR" "share/locale")
-
   ];
 
   nativeBuildInputs = [
@@ -115,13 +111,11 @@ stdenv.mkDerivation (finalAttrs: {
     openal
     libogg
     libvorbis
-  ]
-  ++ lib.optionals (buildClient && useSDL2) [
-    SDL2
+    (if useSdl3 then sdl3 else SDL2)
   ]
   ++ lib.optionals (buildClient && !stdenv.hostPlatform.isDarwin) [
-    xorg.libX11
-    xorg.libXi
+    libx11
+    libxi
   ]
   ++ lib.optionals buildServer [
     leveldb
@@ -141,17 +135,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  passthru.updateScript = gitUpdater {
-    allowedVersions = "\\.";
-    ignoredVersions = "-android$";
-  };
+  passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.luanti.org/";
     description = "Open source voxel game engine (formerly Minetest)";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [
       fpletz
       fgaz
       jk

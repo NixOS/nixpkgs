@@ -48,12 +48,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Program for the generation of high-energy physics events";
     mainProgram = "pythia8-config";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     homepage = "https://pythia.org";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ veprbl ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

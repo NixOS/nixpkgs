@@ -9,13 +9,13 @@
 }:
 let
   pname = "open-webui";
-  version = "0.6.30";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-0gQlzqHFVcayN1/Z5Ou1Gv1+VQMMwk7QrvVXV92EFp0=";
+    hash = "sha256-BS/EB64y/ytHqfKdAmTV0ahT6HQPo96cs+O1CYwd8Rs=";
   };
 
   frontend = buildNpmPackage rec {
@@ -32,7 +32,7 @@ let
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-AYChUMU8vLNaJPfIbX1SThx01uV3V6QpN6OjYrerg5U=";
+    npmDepsHash = "sha256-OH0TuHN324Ef7ZX2JpWVi5q0ycgf1E+UXJj2b3ubMd4=";
 
     # See https://github.com/open-webui/open-webui/issues/15880
     npmFlags = [
@@ -106,16 +106,15 @@ python3Packages.buildPythonApplication rec {
       beautifulsoup4
       black
       boto3
+      chardet
       chromadb
       cryptography
       ddgs
       docx2txt
       einops
-      extract-msg
       fake-useragent
       fastapi
       faster-whisper
-      firecrawl-py
       fpdf2
       ftfy
       google-api-python-client
@@ -126,14 +125,17 @@ python3Packages.buildPythonApplication rec {
       google-generativeai
       googleapis-common-protos
       httpx
-      iso-639
       itsdangerous
       langchain
+      langchain-classic
       langchain-community
+      langchain-text-splitters
       langdetect
       ldap3
       loguru
       markdown
+      msoffcrypto-tool
+      mcp
       nltk
       onnxruntime
       openai
@@ -151,9 +153,7 @@ python3Packages.buildPythonApplication rec {
       opentelemetry-instrumentation-logging
       opentelemetry-instrumentation-httpx
       opentelemetry-instrumentation-aiohttp-client
-      oracledb
       pandas
-      passlib
       peewee
       peewee-migrate
       pgvector
@@ -169,6 +169,7 @@ python3Packages.buildPythonApplication rec {
       pypdf
       python-dotenv
       python-jose
+      python-mimeparse
       python-multipart
       python-pptx
       python-socketio
@@ -183,7 +184,7 @@ python3Packages.buildPythonApplication rec {
       sentencepiece
       soundfile
       starlette-compress
-      tencentcloud-sdk-python
+      starsessions
       tiktoken
       transformers
       unstructured
@@ -192,7 +193,8 @@ python3Packages.buildPythonApplication rec {
       xlrd
       youtube-transcript-api
     ]
-    ++ pyjwt.optional-dependencies.crypto;
+    ++ pyjwt.optional-dependencies.crypto
+    ++ starsessions.optional-dependencies.redis;
 
   optional-dependencies = with python3Packages; rec {
     postgres = [
@@ -201,16 +203,19 @@ python3Packages.buildPythonApplication rec {
     ];
 
     all = [
+      azure-search-documents
       colbert-ai
       elasticsearch
-      moto
+      firecrawl-py
       gcp-storage-emulator
-      playwright
+      moto
       oracledb
       pinecone-client
+      playwright
       pymilvus
       pymongo
       qdrant-client
+      weaviate-client
     ]
     ++ moto.optional-dependencies.s3
     ++ postgres;

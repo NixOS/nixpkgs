@@ -55,7 +55,7 @@ python3Packages.buildPythonApplication rec {
     python3-application
     python3-eventlib
     python3-gnutls
-    sipsimple
+    python3-sipsimple
     sqlobject
     standard-imghdr
     xcaplib

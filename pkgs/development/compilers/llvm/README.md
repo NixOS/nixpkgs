@@ -74,7 +74,7 @@ We are making it use these variables.
 For the older LLVM versions, these patches live in https://github.com/Ericson2314/llvm-project branches `split-prefix`.
 Instead of applying the patches to the worktree per the above instructions, one can checkout those directly and rebase those instead.
 
-For newer LLVM versions, enough has has been upstreamed,
+For newer LLVM versions, enough has been upstreamed,
 (see https://reviews.llvm.org/differential/query/5UAfpj_9zHwY/ for my progress upstreaming),
 that I have just assembled new gnu-install-dirs patches from the remaining unmerged patches instead of rebasing from the prior LLVM's gnu install dirs patch.
 

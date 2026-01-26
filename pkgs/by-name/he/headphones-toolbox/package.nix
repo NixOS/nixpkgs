@@ -12,7 +12,7 @@
   yarnConfigHook,
 }:
 
-rustPlatform.buildRustPackage (rec {
+rustPlatform.buildRustPackage rec {
   pname = "headphones-toolbox";
   version = "0.0.7";
   tag = "test-tauri-v2-2";
@@ -57,4 +57,4 @@ rustPlatform.buildRustPackage (rec {
     ];
     platforms = lib.platforms.linux;
   };
-})
+}

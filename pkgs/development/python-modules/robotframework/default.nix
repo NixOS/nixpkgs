@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   jsonschema,
@@ -10,16 +9,14 @@
 
 buildPythonPackage rec {
   pname = "robotframework";
-  version = "7.3.2";
+  version = "7.4.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "robotframework";
     repo = "robotframework";
     tag = "v${version}";
-    hash = "sha256-JxZI0i9Aj/TX4BkIi+jeBdTy0ckv5Fdy5tHRI9vQ8Ss=";
+    hash = "sha256-AnYIdRRwYUsgaOZw+vcpDB69DOg13kU1jA3ObRDLyWk=";
   };
 
   build-system = [ setuptools ];

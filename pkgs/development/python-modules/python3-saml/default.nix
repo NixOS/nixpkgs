@@ -7,7 +7,6 @@
   isodate,
   lxml,
   pytestCheckHook,
-  pythonOlder,
   poetry-core,
   xmlsec,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "python3-saml";
   version = "1.16.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "onelogin";
@@ -62,11 +59,11 @@ buildPythonPackage rec {
     "OneLogin_Saml2_Logout_Request_Test"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "OneLogin's SAML Python Toolkit";
     homepage = "https://github.com/onelogin/python3-saml";
     changelog = "https://github.com/SAML-Toolkits/python3-saml/blob/v${version}/changelog.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ zhaofengli ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ zhaofengli ];
   };
 }

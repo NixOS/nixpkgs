@@ -42,16 +42,21 @@ fn setup_modprobe(modprobe_binary: impl AsRef<Path>) -> Result<()> {
     // a procfs in a chroot would.
     const MODPROBE_PATH: &str = "/proc/sys/kernel/modprobe";
 
-    fs::write(
-        MODPROBE_PATH,
-        modprobe_binary.as_ref().as_os_str().as_encoded_bytes(),
-    )
-    .with_context(|| {
-        format!(
-            "Failed to populate modprobe path with {}",
-            modprobe_binary.as_ref().display()
+    if Path::new(MODPROBE_PATH).exists() {
+        fs::write(
+            MODPROBE_PATH,
+            modprobe_binary.as_ref().as_os_str().as_encoded_bytes(),
         )
-    })?;
+        .with_context(|| {
+            format!(
+                "Failed to populate modprobe path with {}",
+                modprobe_binary.as_ref().display()
+            )
+        })?;
+    } else {
+        log::info!("{MODPROBE_PATH} doesn't exist. Not populating it...");
+    }
+
     Ok(())
 }
 
@@ -74,6 +79,8 @@ fn setup_firmware_search_path(firmware: impl AsRef<Path>) -> Result<()> {
                 firmware.as_ref().display()
             )
         })?;
+    } else {
+        log::info!("{FIRMWARE_SERCH_PATH} doesn't exist. Not populating it...");
     }
 
     Ok(())

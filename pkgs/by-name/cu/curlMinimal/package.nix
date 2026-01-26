@@ -17,7 +17,8 @@
   gssSupport ?
     with stdenv.hostPlatform;
     (
-      !isWindows
+      # krb5 is broken on cygwin
+      !(isWindows || isCygwin)
       &&
         # disable gss because of: undefined reference to `k5_bcmp'
         # a very sad story re static: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=439039
@@ -34,7 +35,6 @@
   http3Support ? false,
   nghttp3,
   ngtcp2,
-  quictls,
   websocketSupport ? false,
   idnSupport ? false,
   libidn2,
@@ -85,13 +85,9 @@ assert
     ]) > 1
   );
 
-let
-  openssl' = if http3Support then quictls else openssl;
-in
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "curl";
-  version = "8.14.1";
+  version = "8.17.0";
 
   src = fetchurl {
     urls = [
@@ -100,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
         builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
       }/curl-${finalAttrs.version}.tar.xz"
     ];
-    hash = "sha256-9GGaHiR0xLv+3IinwhkSCcgzS0j6H05T/VhMwS6RIN0=";
+    hash = "sha256-lV9ucprWs1ZiYOj+9oYg52ujwxrPChhSRBahhaz3eZI=";
   };
 
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
@@ -137,7 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     # See https://github.com/curl/curl/pull/16928
-    openssl'
+    openssl
   ];
 
   # Zlib and OpenSSL must be propagated because `libcurl.la' contains
@@ -156,7 +152,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optional idnSupport libidn2
     ++ lib.optional ldapSupport openldap
-    ++ lib.optional opensslSupport openssl'
+    ++ lib.optional opensslSupport openssl
     ++ lib.optional pslSupport libpsl
     ++ lib.optional rtmpSupport rtmpdump
     ++ lib.optional scpSupport libssh2
@@ -179,8 +175,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature ldapSupport "ldap")
     (lib.enableFeature ldapSupport "ldaps")
     (lib.enableFeature websocketSupport "websockets")
-    # --with-ca-fallback is only supported for openssl and gnutls https://github.com/curl/curl/blame/curl-8_0_1/acinclude.m4#L1640
-    (lib.withFeature (opensslSupport || gnutlsSupport) "ca-fallback")
+    # --with-ca-fallback is only supported for openssl https://github.com/curl/curl/blame/curl-8_16_0/acinclude.m4#L1258
+    (lib.withFeature opensslSupport "ca-fallback")
     (lib.withFeature http3Support "nghttp3")
     (lib.withFeature http3Support "ngtcp2")
     (lib.withFeature rtmpSupport "librtmp")
@@ -190,7 +186,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeatureAs brotliSupport "brotli" (lib.getDev brotli))
     (lib.withFeatureAs gnutlsSupport "gnutls" (lib.getDev gnutls))
     (lib.withFeatureAs idnSupport "libidn2" (lib.getDev libidn2))
-    (lib.withFeatureAs opensslSupport "openssl" (lib.getDev openssl'))
+    (lib.withFeatureAs opensslSupport "openssl" (lib.getDev openssl))
     (lib.withFeatureAs scpSupport "libssh2" (lib.getDev libssh2))
     (lib.withFeatureAs wolfsslSupport "wolfssl" (lib.getDev wolfssl))
   ]
@@ -255,8 +251,7 @@ stdenv.mkDerivation (finalAttrs: {
       useThisCurl = attr: attr.override { curl = finalAttrs.finalPackage; };
     in
     {
-      inherit opensslSupport;
-      openssl = openssl';
+      inherit opensslSupport openssl;
       tests = {
         withCheck = finalAttrs.finalPackage.overrideAttrs (_: {
           doCheck = true;

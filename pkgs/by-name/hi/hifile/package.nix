@@ -2,8 +2,8 @@
   lib,
   appimageTools,
   fetchurl,
-  version ? "0.9.12.1",
-  hash ? "sha256-6Lun0HyfAi7anivgGsGdUPPX9kZrWwh8fq+qvVL/CdU=",
+  version ? "0.9.15.1",
+  hash ? "sha256-MvzvTa+05oTBVHgoKyGwsC/Ab02RABL2rcUguNICr2o=",
 }:
 
 let
@@ -27,6 +27,7 @@ appimageTools.wrapType2 {
     install -m 444 -D ${appimageContents}/HiFile.png $out/share/icons/hicolor/512x512/apps/HiFile.png
     substituteInPlace $out/share/applications/HiFile.desktop \
       --replace-fail 'Exec=HiFile' 'Exec=hifile'
+    echo "StartupWMClass=app.hifile.www.HiFile" >> $out/share/applications/HiFile.desktop
   '';
 
   passthru.updateScript = ./update.sh;

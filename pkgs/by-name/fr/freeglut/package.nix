@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "freeglut";
-  version = "3.6.0";
+  version = "3.8.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/freeglut/freeglut-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-nD1NZRb7+gKA7ck8d2mPtzA+RDwaqvN9Jp4yiKbD6lI=";
+    hash = "sha256-Z03K/yUBDgnkUK7EWLiHDZ6YxG+ZU420V6tlmzIdmYk=";
   };
 
   outputs = [
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     description = "Create and manage windows containing OpenGL contexts";
     longDescription = ''
       FreeGLUT is an open source alternative to the OpenGL Utility Toolkit
@@ -56,9 +56,9 @@ stdenv.mkDerivation (finalAttrs: {
       differences.
     '';
     homepage = "https://freeglut.sourceforge.net/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     pkgConfigModules = [ "glut" ];
-    platforms = platforms.all;
-    maintainers = [ maintainers.bjornfor ];
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.bjornfor ];
   };
 })

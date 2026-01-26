@@ -16,9 +16,9 @@
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aioguardian";
-  version = "2025.02.0";
+  version = "2026.01.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -26,8 +26,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bachya";
     repo = "aioguardian";
-    tag = version;
-    hash = "sha256-RoVD2O/OAk4l96kYEq7ZM/2QuckcPxDluf1MT4HdKc4=";
+    tag = finalAttrs.version;
+    hash = "sha256-p0rSN00CxTJsoo5iD3jsnTPUIl3G/fDc6tMjj0H0MuE=";
   };
 
   postPatch = ''
@@ -64,15 +64,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aioguardian" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to interact with Elexa Guardian devices";
     longDescription = ''
       aioguardian is an asyncio-focused library for interacting with the
       Guardian line of water valves and sensors from Elexa.
     '';
     homepage = "https://github.com/bachya/aioguardian";
-    changelog = "https://github.com/bachya/aioguardian/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/bachya/aioguardian/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

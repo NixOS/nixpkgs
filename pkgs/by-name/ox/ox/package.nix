@@ -24,7 +24,6 @@ rustPlatform.buildRustPackage rec {
   ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
-  versionCheckProgramArg = "--version";
 
   passthru = {
     updateScript = nix-update-script { };
@@ -37,7 +36,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       moni
-      kachick
     ];
     mainProgram = "ox";
   };

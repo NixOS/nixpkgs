@@ -35,11 +35,11 @@ buildGoModule {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cli that exposes your local resources to kubernetes";
     mainProgram = "ktunnel";
     homepage = "https://github.com/omrikiei/ktunnel";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

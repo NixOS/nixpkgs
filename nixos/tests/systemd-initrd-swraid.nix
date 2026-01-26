@@ -48,7 +48,7 @@
 
   testScript = ''
     # Create RAID
-    machine.succeed("mdadm --create --force /dev/md0 -n 2 --level=raid1 /dev/vdb /dev/vdc --metadata=0.90")
+    machine.succeed("mdadm --create --force /dev/md0 -n 2 --level=raid1 /dev/vdb /dev/vdc --metadata=0.90 --bitmap=internal")
     machine.succeed("mkfs.ext4 -L testraid /dev/md0")
     machine.succeed("mkdir -p /mnt && mount /dev/md0 /mnt && echo hello > /mnt/test && umount /mnt")
 

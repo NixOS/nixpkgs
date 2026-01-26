@@ -87,7 +87,7 @@ makeScopeWithSplicing' {
       };
       qcoro = callPackage ../development/libraries/qcoro { };
       qcustomplot = callPackage ../development/libraries/qcustomplot { };
-      qgpgme = callPackage ../development/libraries/gpgme { };
+      qgpgme = callPackage ../development/libraries/qgpgme { };
       qhotkey = callPackage ../development/libraries/qhotkey { };
       qmlbox2d = callPackage ../development/libraries/qmlbox2d { };
       packagekit-qt = callPackage ../tools/package-management/packagekit/qt.nix { };
@@ -138,6 +138,7 @@ makeScopeWithSplicing' {
         callPackage ../development/libraries/sailfish-access-control-plugin
           { };
 
+      sddm-unwrapped = kdePackages.callPackage ../applications/display-managers/sddm/unwrapped.nix { };
       sddm = kdePackages.callPackage ../applications/display-managers/sddm { };
 
       sierra-breeze-enhanced =
@@ -151,8 +152,6 @@ makeScopeWithSplicing' {
       waylib = callPackage ../development/libraries/waylib { };
 
       wayqt = callPackage ../development/libraries/wayqt { };
-
-      xwaylandvideobridge = kdePackages.callPackage ../tools/wayland/xwaylandvideobridge { };
     }
   );
 }

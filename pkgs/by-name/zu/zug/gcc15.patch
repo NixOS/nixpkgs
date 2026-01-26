@@ -1,0 +1,15 @@
+diff --git a/zug/sequence.hpp b/zug/sequence.hpp
+index d7ac093..bffb771 100644
+--- a/zug/sequence.hpp
++++ b/zug/sequence.hpp
+@@ -76,8 +76,9 @@ struct sequence_data
+ 
+     sequence_data& operator=(sequence_data&& other)
+     {
+-        impl_ = std::move(other.impl);
++        impl_ = std::move(other.impl_);
+         impl_.reductor.current(this);
++        return *this;
+     }
+ 
+     sequence_data& operator=(const sequence_data& other)

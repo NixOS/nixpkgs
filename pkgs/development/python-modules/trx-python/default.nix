@@ -60,6 +60,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/tee-ar-ex/trx-python";
     changelog = "https://github.com/tee-ar-ex/trx-python/releases/tag/${version}";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

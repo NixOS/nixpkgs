@@ -19,20 +19,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "treedome";
-  version = "0.5.4";
+  version = "0.6.1";
 
   src = fetchgit {
     url = "https://codeberg.org/solver-orgz/treedome";
     rev = version;
-    hash = "sha256-fJnrM9I11JKqzrprXa51mJiz9oO5hDp6u69FqJs5l8o=";
+    hash = "sha256-qa87pgNHGRhP1G4TEFHYrkiJ9AHWG7PUdgxEF4X9EM8=";
     fetchLFS = true;
   };
 
-  cargoHash = "sha256-scCF4xpc1COdlg57/eNTPdgY7/cJkdcc2s1YNraXzXk=";
+  cargoHash = "sha256-Rg65BiHQF7bBBCtc5F+gY31yhcuI0+IDfxr3pFmxT+w=";
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-in1A1XcfZK5F/EV5CYgfqig+8vKsxd6XhzfSv7Z0nNQ=";
+    hash = "sha256-Q0xsi1xymQne6qN0oxm4YkaDLnGL17iuj70CTdQlxzM=";
   };
 
   postPatch = ''

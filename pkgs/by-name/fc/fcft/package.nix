@@ -33,14 +33,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "fcft";
-  version = "3.3.2";
+  version = "3.3.3";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "dnkl";
     repo = "fcft";
     rev = version;
-    hash = "sha256-a+lELkEjMtqeBYGj6yl+OoQ+I6neyJt6a1T83B2KWOk=";
+    hash = "sha256-MkGlph9WpqH4daov5ZZPO2ua2mUbrsuo8Xk6GoKhoxg=";
   };
 
   depsBuildBuild = [ pkg-config ];
@@ -65,9 +65,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     (lib.mesonEnable "system-nanosvg" true)
   ]
-  ++ builtins.map (
-    t: lib.mesonEnable "${t}-shaping" (lib.elem t withShapingTypes)
-  ) availableShapingTypes;
+  ++ map (t: lib.mesonEnable "${t}-shaping" (lib.elem t withShapingTypes)) availableShapingTypes;
 
   doCheck = true;
 

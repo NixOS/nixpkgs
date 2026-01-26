@@ -17,6 +17,9 @@ stdenv.mkDerivation rec {
 
   patches = [ ./autotools-define-conflict-debian-fix.patch ];
 
+  # Fix build with gcc15
+  configureFlags = [ "CFLAGS=-std=gnu17" ];
+
   meta = {
     description = "Hash algorithms library";
     longDescription = ''
@@ -26,7 +29,7 @@ stdenv.mkDerivation rec {
       which are based on hash algorithms.
     '';
     homepage = "https://mhash.sourceforge.net";
-    license = "LGPL";
+    license = lib.licenses.lgpl2Only;
     platforms = lib.platforms.unix;
   };
 }

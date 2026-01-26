@@ -43,8 +43,22 @@ rec {
 
     All other attributes in the set remain as-is.
 
-    # Example
+    # Type
+    ```
+    normalizeHash :: { hashTypes :: List String, required :: Bool } -> AttrSet -> AttrSet
+    ```
 
+    # Arguments
+
+    hashTypes
+    : the set of attribute names accepted as hash inputs, in addition to `hash`
+
+    required
+    : whether to throw if no hash was present in the input; otherwise returns the original input, unmodified
+
+    # Example
+    ::: {.example}
+    ## `lib.fetchers.normalizeHash` usage example
     ```nix
     normalizeHash { } { hash = ""; foo = "bar"; }
     =>
@@ -72,19 +86,7 @@ rec {
       outputHashAlgo = "sha512";
     }
     ```
-
-    # Type
-    ```
-    normalizeHash :: { hashTypes :: List String, required :: Bool } -> AttrSet -> AttrSet
-    ```
-
-    # Arguments
-
-    hashTypes
-    : the set of attribute names accepted as hash inputs, in addition to `hash`
-
-    required
-    : whether to throw if no hash was present in the input; otherwise returns the original input, unmodified
+    :::
   */
   normalizeHash =
     {

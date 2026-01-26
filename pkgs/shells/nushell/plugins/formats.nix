@@ -27,7 +27,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       viraptor
-      aidalgol
     ];
   };
 })

@@ -103,14 +103,14 @@ stdenv.mkDerivation rec {
     mv GoldenDict.app $out/Applications
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://goldendict.org/";
     description = "Feature-rich dictionary lookup program";
-    platforms = with platforms; linux ++ darwin;
+    platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "goldendict";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       sikmir
     ];
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
   };
 }

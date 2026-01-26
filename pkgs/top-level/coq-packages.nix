@@ -5,7 +5,6 @@
   fetchzip,
   callPackage,
   newScope,
-  recurseIntoAttrs,
   ocamlPackages_4_09,
   ocamlPackages_4_10,
   ocamlPackages_4_12,
@@ -25,12 +24,12 @@ let
     self: coq:
     let
       callPackage = self.callPackage;
-    in
-    {
-      inherit coq lib;
       coqPackages = self // {
         recurseForDerivations = false;
       };
+    in
+    {
+      inherit coqPackages lib;
 
       metaFetch = import ../build-support/coq/meta-fetch/default.nix {
         inherit
@@ -42,7 +41,18 @@ let
       };
       mkCoqDerivation = lib.makeOverridable (callPackage ../build-support/coq { });
 
-      contribs = recurseIntoAttrs (callPackage ../development/coq-modules/contribs { });
+      coq = coq.overrideAttrs (oldAttrs: {
+        passthru = (oldAttrs.passthru or { }) // {
+          withPackages =
+            f:
+            (callPackage ../applications/science/logic/coq/with-packages.nix {
+              inherit coq;
+            })
+              (f self);
+        };
+      });
+
+      contribs = lib.recurseIntoAttrs (callPackage ../development/coq-modules/contribs { });
 
       aac-tactics = callPackage ../development/coq-modules/aac-tactics { };
       addition-chains = callPackage ../development/coq-modules/addition-chains { };
@@ -61,9 +71,9 @@ let
       Cheerios = callPackage ../development/coq-modules/Cheerios { };
       coinduction = callPackage ../development/coq-modules/coinduction { };
       CoLoR = callPackage ../development/coq-modules/CoLoR (
-        (lib.optionalAttrs (lib.versions.isEq self.coq.coq-version "8.13") {
+        lib.optionalAttrs (lib.versions.isEq self.coq.coq-version "8.13") {
           bignums = self.bignums.override { version = "8.13.0"; };
-        })
+        }
       );
       compcert = callPackage ../development/coq-modules/compcert {
         inherit
@@ -85,9 +95,9 @@ let
       coq-record-update = callPackage ../development/coq-modules/coq-record-update { };
       coq-tactical = callPackage ../development/coq-modules/coq-tactical { };
       coqeal = callPackage ../development/coq-modules/coqeal (
-        (lib.optionalAttrs (lib.versions.range "8.13" "8.14" self.coq.coq-version) {
+        lib.optionalAttrs (lib.versions.range "8.13" "8.14" self.coq.coq-version) {
           bignums = self.bignums.override { version = "${self.coq.coq-version}.0"; };
-        })
+        }
       );
       coqhammer = callPackage ../development/coq-modules/coqhammer { };
       coqide = callPackage ../development/coq-modules/coqide { };
@@ -303,40 +313,40 @@ rec {
     in
     self.filterPackages (!coq.dontFilter or false);
 
-  coq_8_7 = mkCoq "8.7" { };
-  coq_8_8 = mkCoq "8.8" { };
-  coq_8_9 = mkCoq "8.9" { };
-  coq_8_10 = mkCoq "8.10" { };
-  coq_8_11 = mkCoq "8.11" { };
-  coq_8_12 = mkCoq "8.12" { };
-  coq_8_13 = mkCoq "8.13" { };
-  coq_8_14 = mkCoq "8.14" { };
-  coq_8_15 = mkCoq "8.15" { };
-  coq_8_16 = mkCoq "8.16" { };
-  coq_8_17 = mkCoq "8.17" { };
-  coq_8_18 = mkCoq "8.18" { };
-  coq_8_19 = mkCoq "8.19" { };
-  coq_8_20 = mkCoq "8.20" { };
-  coq_9_0 = mkCoq "9.0" rocqPackages_9_0;
-  coq_9_1 = mkCoq "9.1" rocqPackages_9_1;
+  coqPackages_8_7 = mkCoqPackages (mkCoq "8.7" { });
+  coqPackages_8_8 = mkCoqPackages (mkCoq "8.8" { });
+  coqPackages_8_9 = mkCoqPackages (mkCoq "8.9" { });
+  coqPackages_8_10 = mkCoqPackages (mkCoq "8.10" { });
+  coqPackages_8_11 = mkCoqPackages (mkCoq "8.11" { });
+  coqPackages_8_12 = mkCoqPackages (mkCoq "8.12" { });
+  coqPackages_8_13 = mkCoqPackages (mkCoq "8.13" { });
+  coqPackages_8_14 = mkCoqPackages (mkCoq "8.14" { });
+  coqPackages_8_15 = mkCoqPackages (mkCoq "8.15" { });
+  coqPackages_8_16 = mkCoqPackages (mkCoq "8.16" { });
+  coqPackages_8_17 = mkCoqPackages (mkCoq "8.17" { });
+  coqPackages_8_18 = mkCoqPackages (mkCoq "8.18" { });
+  coqPackages_8_19 = mkCoqPackages (mkCoq "8.19" { });
+  coqPackages_8_20 = mkCoqPackages (mkCoq "8.20" { });
+  coqPackages_9_0 = mkCoqPackages (mkCoq "9.0" rocqPackages_9_0);
+  coqPackages_9_1 = mkCoqPackages (mkCoq "9.1" rocqPackages_9_1);
 
-  coqPackages_8_7 = mkCoqPackages coq_8_7;
-  coqPackages_8_8 = mkCoqPackages coq_8_8;
-  coqPackages_8_9 = mkCoqPackages coq_8_9;
-  coqPackages_8_10 = mkCoqPackages coq_8_10;
-  coqPackages_8_11 = mkCoqPackages coq_8_11;
-  coqPackages_8_12 = mkCoqPackages coq_8_12;
-  coqPackages_8_13 = mkCoqPackages coq_8_13;
-  coqPackages_8_14 = mkCoqPackages coq_8_14;
-  coqPackages_8_15 = mkCoqPackages coq_8_15;
-  coqPackages_8_16 = mkCoqPackages coq_8_16;
-  coqPackages_8_17 = mkCoqPackages coq_8_17;
-  coqPackages_8_18 = mkCoqPackages coq_8_18;
-  coqPackages_8_19 = mkCoqPackages coq_8_19;
-  coqPackages_8_20 = mkCoqPackages coq_8_20;
-  coqPackages_9_0 = mkCoqPackages coq_9_0;
-  coqPackages_9_1 = mkCoqPackages coq_9_1;
+  coq_8_7 = coqPackages_8_7.coq;
+  coq_8_8 = coqPackages_8_8.coq;
+  coq_8_9 = coqPackages_8_9.coq;
+  coq_8_10 = coqPackages_8_10.coq;
+  coq_8_11 = coqPackages_8_11.coq;
+  coq_8_12 = coqPackages_8_12.coq;
+  coq_8_13 = coqPackages_8_13.coq;
+  coq_8_14 = coqPackages_8_14.coq;
+  coq_8_15 = coqPackages_8_15.coq;
+  coq_8_16 = coqPackages_8_16.coq;
+  coq_8_17 = coqPackages_8_17.coq;
+  coq_8_18 = coqPackages_8_18.coq;
+  coq_8_19 = coqPackages_8_19.coq;
+  coq_8_20 = coqPackages_8_20.coq;
+  coq_9_0 = coqPackages_9_0.coq;
+  coq_9_1 = coqPackages_9_1.coq;
 
-  coqPackages = recurseIntoAttrs coqPackages_9_0;
+  coqPackages = lib.recurseIntoAttrs coqPackages_9_0;
   coq = coqPackages.coq;
 }

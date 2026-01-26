@@ -29,15 +29,22 @@
   vulkan-loader,
   wrapGAppsHook3,
   xdg-utils,
-  xorg,
+  libxtst,
+  libxrandr,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcomposite,
+  libx11,
+  libxcb,
 }:
 stdenv.mkDerivation rec {
   pname = "plasticity";
-  version = "25.2.8";
+  version = "25.2.11";
 
   src = fetchurl {
     url = "https://github.com/nkallen/plasticity/releases/download/v${version}/Plasticity-${version}-1.x86_64.rpm";
-    hash = "sha256-jJzERpVCAQtTxuC2J7F9SHq9NuyihLzQjLzIcSfXziE=";
+    hash = "sha256-aqc6CDR3yBOGaRr+VjXQrTXZKvr9kqzaqcu5y30clCA=";
   };
 
   passthru.updateScript = ./update.sh;
@@ -77,14 +84,14 @@ stdenv.mkDerivation rec {
     systemd
     libglvnd
     vulkan-loader # may help with nvidia users
-    xorg.libX11
-    xorg.libxcb
-    xorg.libXcomposite
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXrandr
-    xorg.libXtst
+    libx11
+    libxcb
+    libxcomposite
+    libxdamage
+    libxext
+    libxfixes
+    libxrandr
+    libxtst
   ];
 
   dontUnpack = true;
@@ -120,13 +127,13 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(--add-flags "--use-gl=egl")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "CAD for artists";
     homepage = "https://www.plasticity.xyz";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     mainProgram = "Plasticity";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ imadnyc ];
+    maintainers = with lib.maintainers; [ imadnyc ];
     platforms = [ "x86_64-linux" ];
   };
 }

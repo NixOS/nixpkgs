@@ -7,7 +7,7 @@
 }:
 buildGoModule rec {
   pname = "sesh";
-  version = "2.17.1";
+  version = "2.20.0";
 
   nativeBuildInputs = [
     go-mockery
@@ -16,13 +16,13 @@ buildGoModule rec {
     owner = "joshmedeski";
     repo = "sesh";
     rev = "v${version}";
-    hash = "sha256-olt61AR/Tq8lLh65V0/+GDrWjCi9hrkNbHR9LOX7kY0=";
+    hash = "sha256-YfgxXM8FPRAUk4jxUnQNNB8hMjiB5ZCRY2/S+OgzECs=";
   };
 
   preBuild = ''
     mockery
   '';
-  vendorHash = "sha256-TLl8HZnsVvtx6jqusTETP0l3zTmzYmuV4NJIM958VcQ=";
+  vendorHash = "sha256-GEWtbhZhgussFzfg1wNEU0Gr5zhXmwlsgH6d1cXOwvc=";
 
   ldflags = [
     "-s"

@@ -10,34 +10,33 @@
   fastapi,
   fetchPypi,
   logging-journald,
-  poetry-core,
+  setuptools,
+  setuptools-scm,
   pytestCheckHook,
-  pythonOlder,
   raven,
   rich,
   setproctitle,
-  typing-extensions,
   uvloop,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiomisc";
-  version = "17.9.4";
+  version = "17.10.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-oSwMhomcPIN2JYterJuBUcmJtUx3rayADH1ugah+pI8=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-24ka982Wx4Bk2TlWuw6pvfRLh47l8QJvHD+sc+LOxVY=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     colorlog
   ]
-  ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ logging-journald ];
 
   nativeCheckInputs = [
@@ -47,7 +46,7 @@ buildPythonPackage rec {
     pytestCheckHook
     setproctitle
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   optional-dependencies = {
     aiohttp = [ aiohttp ];
@@ -73,11 +72,11 @@ buildPythonPackage rec {
   #   "tests/test_raven_service.py"
   # ];
 
-  meta = with lib; {
+  meta = {
     description = "Miscellaneous utils for asyncio";
     homepage = "https://github.com/aiokitchen/aiomisc";
     changelog = "https://github.com/aiokitchen/aiomisc/blob/master/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

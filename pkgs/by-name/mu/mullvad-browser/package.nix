@@ -40,7 +40,7 @@
   libGL,
 
   mediaSupport ? true,
-  ffmpeg,
+  ffmpeg_7,
 
   audioSupport ? mediaSupport,
 
@@ -94,10 +94,10 @@ let
     ++ lib.optionals pipewireSupport [ pipewire ]
     ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
     ++ lib.optionals libvaSupport [ libva ]
-    ++ lib.optionals mediaSupport [ ffmpeg ]
+    ++ lib.optionals mediaSupport [ ffmpeg_7 ]
   );
 
-  version = "14.5.7";
+  version = "15.0.4";
 
   sources = {
     x86_64-linux = fetchurl {
@@ -109,7 +109,7 @@ let
         "https://tor.eff.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
       ];
-      hash = "sha256-/PR0CDQByiUWlU5lP8QlJ7IQUWiXGTwrZbn9Cbe5xEg=";
+      hash = "sha256-l41Sn69hvQXwb13T1o6ukIWOxpXuARA+J8+QjNh+bdo=";
     };
   };
 
@@ -296,12 +296,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Privacy-focused browser made in a collaboration between The Tor Project and Mullvad";
     mainProgram = "mullvad-browser";
     homepage = "https://mullvad.net/en/browser";
-    platforms = attrNames sources;
-    maintainers = with maintainers; [
+    platforms = lib.attrNames sources;
+    maintainers = with lib.maintainers; [
       felschr
       panicgh
       sigmasquadron
@@ -309,12 +309,12 @@ stdenv.mkDerivation rec {
     # MPL2.0+, GPL+, &c.  While it's not entirely clear whether
     # the compound is "libre" in a strict sense (some components place certain
     # restrictions on redistribution), it's free enough for our purposes.
-    license = with licenses; [
+    license = with lib.licenses; [
       mpl20
       lgpl21Plus
       lgpl3Plus
       free
     ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }

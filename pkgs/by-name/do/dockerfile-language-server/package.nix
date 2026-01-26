@@ -6,20 +6,20 @@
 
 buildNpmPackage rec {
   pname = "dockerfile-language-server";
-  version = "0.14.1";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "rcjsuen";
     repo = "dockerfile-language-server";
     tag = "v${version}";
-    hash = "sha256-oPU9XVxD9GbXMWkeGKncriFi1oP3YlkWnjxzltaz/iU=";
+    hash = "sha256-olgOUbVHHj9vD7upswqVJYBRIRb+kg6uXC2y5shnM+g=";
   };
 
   preBuild = ''
     npm run prepublishOnly
   '';
 
-  npmDepsHash = "sha256-p5BBKoq+ANR8z4YWsjmKaNqkyQGETwG5OmdapasLk+c=";
+  npmDepsHash = "sha256-cJ11l2NF/sCzPw/eQNFon5oKRM+KPoy4lxLz0yivHTo=";
 
   meta = {
     changelog = "https://github.com/rcjsuen/dockerfile-language-server/blob/${src.tag}/CHANGELOG.md";

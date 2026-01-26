@@ -4,28 +4,28 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "makejinja";
-  version = "2.8.1";
+  version = "2.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mirkolenz";
     repo = "makejinja";
-    tag = "v${version}";
-    hash = "sha256-vK5MJb4n3/NmkohpJ1shEexvjHlEAfwZJWy2oL+rzRk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-TH4pgohh6yIgsPtsHnYSUr17Apk8C02KD+8sNO5GOf8=";
   };
 
-  build-system = with python3Packages; [ setuptools ];
+  build-system = with python3Packages; [ uv-build ];
 
   dependencies =
     with python3Packages;
     [
+      frozendict
       jinja2
       pyyaml
       rich-click
       typed-settings
-      immutables
     ]
     ++ typed-settings.optional-dependencies.attrs
     ++ typed-settings.optional-dependencies.cattrs
@@ -46,6 +46,6 @@ python3Packages.buildPythonApplication rec {
       mirkolenz
     ];
     platforms = lib.platforms.darwin ++ lib.platforms.linux;
-    changelog = "https://github.com/mirkolenz/makejinja/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/mirkolenz/makejinja/blob/${finalAttrs.src.rev}/CHANGELOG.md";
   };
-}
+})

@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation {
   pname = "iprover";
-  version = "3.8.1";
+  version = "3.9.2";
 
   src = fetchFromGitLab {
     owner = "korovin";
     repo = "iprover";
-    rev = "f61edb113b705606c7314dc4dce0687832c3169f";
-    hash = "sha256-XXqbEoYKjoktE3ZBEIEFjLhA1B75zhnfPszhe8SvbI8=";
+    rev = "v3.9.2";
+    hash = "sha256-CbqPtP2pKLFgo67EF0IhvIdv1dAog2vb3Es0asmmSyY=";
   };
 
   postPatch = ''
@@ -45,6 +45,10 @@ stdenv.mkDerivation {
 
   preConfigure = "patchShebangs .";
 
+  env = {
+    NIX_CFLAGS_COMPILE = "-std=gnu17";
+  };
+
   installPhase = ''
     runHook preInstall
     mkdir -p "$out/bin"
@@ -55,13 +59,13 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Automated first-order logic theorem prover";
     homepage = "http://www.cs.man.ac.uk/~korovink/iprover/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       raskin
     ];
-    platforms = platforms.linux;
-    license = licenses.gpl3;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3;
   };
 }

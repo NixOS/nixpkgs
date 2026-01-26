@@ -17,11 +17,11 @@ stdenv.mkDerivation rec {
   # Needs to be propagated for the .pc file to work
   propagatedBuildInputs = [ zeromq ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://czmq.zeromq.org/";
     description = "High-level C Binding for ZeroMQ";
     mainProgram = "zmakecert";
-    license = licenses.mpl20;
-    platforms = platforms.all;
+    license = lib.licenses.mpl20;
+    platforms = lib.platforms.all;
   };
 }

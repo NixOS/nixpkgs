@@ -1,0 +1,62 @@
+diff --git a/nextest-runner/Cargo.toml b/nextest-runner/Cargo.toml
+index 776c9341..06196bd2 100644
+--- a/nextest-runner/Cargo.toml
++++ b/nextest-runner/Cargo.toml
+@@ -118,7 +118,7 @@ nix.workspace = true
+ #
+ # Also, usdt 0.6.0 fails to compile on x86_64-apple-darwin, so restrict it to
+ # aarch64-apple-darwin.
+-[target.'cfg(any(all(target_arch = "x86_64", any(target_os = "linux", target_os = "freebsd", target_os = "illumos")), all(target_arch = "aarch64", any(target_os = "macos", target_os = "freebsd", target_os = "illumos"))))'.dependencies]
++[target.'cfg(any(all(target_arch = "x86_64", any(target_os = "linux", target_os = "freebsd", target_os = "illumos")), all(target_arch = "aarch64", any(target_os = "freebsd", target_os = "illumos"))))'.dependencies]
+ usdt = "0.6.0"
+ 
+ [target.'cfg(windows)'.dependencies]
+diff --git a/nextest-runner/src/usdt.rs b/nextest-runner/src/usdt.rs
+index 7732eeb4..af69015b 100644
+--- a/nextest-runner/src/usdt.rs
++++ b/nextest-runner/src/usdt.rs
+@@ -28,7 +28,7 @@ use serde::Serialize;
+     ),
+     all(
+         target_arch = "aarch64",
+-        any(target_os = "macos", target_os = "freebsd", target_os = "illumos")
++        any(target_os = "freebsd", target_os = "illumos")
+     )
+ ))]
+ pub fn register_probes() -> Result<(), usdt::Error> {
+@@ -43,7 +43,7 @@ pub fn register_probes() -> Result<(), usdt::Error> {
+     ),
+     all(
+         target_arch = "aarch64",
+-        any(target_os = "macos", target_os = "freebsd", target_os = "illumos")
++        any(target_os = "freebsd", target_os = "illumos")
+     )
+ )))]
+ pub fn register_probes() -> Result<(), std::convert::Infallible> {
+@@ -57,7 +57,7 @@ pub fn register_probes() -> Result<(), std::convert::Infallible> {
+     ),
+     all(
+         target_arch = "aarch64",
+-        any(target_os = "macos", target_os = "freebsd", target_os = "illumos")
++        any(target_os = "freebsd", target_os = "illumos")
+     )
+ ))]
+ #[usdt::provider(provider = "nextest")]
+@@ -135,7 +135,7 @@ pub mod usdt_probes {
+     ),
+     all(
+         target_arch = "aarch64",
+-        any(target_os = "macos", target_os = "freebsd", target_os = "illumos")
++        any(target_os = "freebsd", target_os = "illumos")
+     )
+ ))]
+ #[macro_export]
+@@ -246,7 +246,7 @@ macro_rules! fire_usdt {
+     ),
+     all(
+         target_arch = "aarch64",
+-        any(target_os = "macos", target_os = "freebsd", target_os = "illumos")
++        any(target_os = "freebsd", target_os = "illumos")
+     )
+ )))]
+ #[macro_export]

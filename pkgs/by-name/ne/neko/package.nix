@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
       lib.licenses.zlib # zlib.ndll
       lib.licenses.asl20 # mod_neko, mod_tora, mbedTLS
       lib.licenses.mit # overall, other libs
-      "https://github.com/HaxeFoundation/neko/blob/v2-3-0/LICENSE#L24-L40" # boehm gc
+      lib.licenses.boehmGC # boehm gc
     ];
     maintainers = with lib.maintainers; [
       marcweber

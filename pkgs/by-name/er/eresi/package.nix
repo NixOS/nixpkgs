@@ -84,6 +84,8 @@ stdenv.mkDerivation rec {
 
   installTargets = lib.singleton "install" ++ lib.optional stdenv.hostPlatform.is64bit "install64";
 
+  __structuredAttrs = true;
+
   meta = {
     description = "ERESI Reverse Engineering Software Interface";
     license = lib.licenses.gpl2Only;

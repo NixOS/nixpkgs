@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication {
   pname = "smbscan";
   version = "0-unstable-2022-05-26";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "jeffhacks";
@@ -33,11 +33,11 @@ python3.pkgs.buildPythonApplication {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to enumerate file shares";
     homepage = "https://github.com/jeffhacks/smbscan";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl3Only ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "smbscan";
   };
 }

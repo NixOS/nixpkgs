@@ -32,15 +32,15 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     substituteInPlace "$out"/lib/pkgconfig/codecserver.pc \
-      --replace '=''${prefix}//' '=/' \
-      --replace '=''${exec_prefix}//' '=/'
+      --replace-fail '=''${prefix}//' '=/' \
+      --replace-fail '=''${exec_prefix}//' '=/'
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jketterl/codecserver";
     description = "Modular audio codec server";
-    license = licenses.gpl3Only;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.unix;
     mainProgram = "codecserver";
   };
 }

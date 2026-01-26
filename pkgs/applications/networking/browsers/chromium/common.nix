@@ -96,8 +96,8 @@
   ungoogled-chromium,
   # Optional dependencies:
   libgcrypt ? null, # cupsSupport
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdLibs,
 }:
 
 buildFun:
@@ -157,7 +157,11 @@ let
     # "snappy"
     "flac"
     "libjpeg"
+  ]
+  ++ lib.optionals needsLibpng [
     "libpng"
+  ]
+  ++ [
     # Use the vendored libwebp for M124+ until we figure out how to solve:
     # Running phase: configurePhase
     # ERROR Unresolved dependencies.
@@ -192,6 +196,14 @@ let
       }
     );
 
+  rustTools = symlinkJoin {
+    name = "rustTools";
+    paths = [
+      buildPackages.rust-bindgen
+      buildPackages.rustfmt
+    ];
+  };
+
   chromiumRosettaStone = {
     cpu =
       platform:
@@ -217,6 +229,9 @@ let
 
   isElectron = packageName == "electron";
   rustcVersion = buildPackages.rustc.version;
+  # libpng has been replaced by the png rust crate
+  # https://github.com/image-rs/image-png/discussions/562
+  needsLibpng = !chromiumVersionAtLeast "143";
 
   chromiumDeps = lib.mapAttrs (
     path: args:
@@ -256,7 +271,7 @@ let
           ''
         else
           ''
-            mkdir -p ${builtins.dirOf path}
+            mkdir -p ${dirOf path}
             cp -r ${dep}/. ${path}
           ''
       )
@@ -321,8 +336,10 @@ let
     # maintain a separate list of buildPlatform-dependencies, we
     # simply throw in the kitchen sink.
     # ** Because of overrides, we have to copy the list as it otherwise mess with splicing **
-    ++ [
+    ++ lib.optionals needsLibpng [
       (buildPackages.libpng.override { apngSupport = false; }) # https://bugs.chromium.org/p/chromium/issues/detail?id=752403
+    ]
+    ++ [
       (buildPackages.libopus.override { withCustomModes = true; })
       bzip2
       flac
@@ -370,7 +387,7 @@ let
       libffi
       libevdev
     ]
-    ++ lib.optional systemdSupport systemd
+    ++ lib.optional systemdSupport systemdLibs
     ++ lib.optionals cupsSupport [
       libgcrypt
       cups
@@ -378,7 +395,11 @@ let
     ++ lib.optional pulseSupport libpulseaudio;
 
     buildInputs = [
+    ]
+    ++ lib.optionals needsLibpng [
       (libpng.override { apngSupport = false; }) # https://bugs.chromium.org/p/chromium/issues/detail?id=752403
+    ]
+    ++ [
       (libopus.override { withCustomModes = true; })
       bzip2
       flac
@@ -427,7 +448,7 @@ let
       libffi
       libevdev
     ]
-    ++ lib.optional systemdSupport systemd
+    ++ lib.optional systemdSupport systemdLibs
     ++ lib.optionals cupsSupport [
       libgcrypt
       cups
@@ -438,12 +459,6 @@ let
       ./patches/cross-compile.patch
       # Optional patch to use SOURCE_DATE_EPOCH in compute_build_timestamp.py (should be upstreamed):
       ./patches/no-build-timestamps.patch
-    ]
-    ++ lib.optionals (!chromiumVersionAtLeast "136") [
-      # Fix build with Pipewire 1.4
-      # Submitted upstream: https://webrtc-review.googlesource.com/c/src/+/380500
-      # Got merged, started shipping with M136+.
-      ./patches/webrtc-pipewire-1.4.patch
     ]
     ++ lib.optionals (packageName == "chromium") [
       # This patch is limited to chromium and ungoogled-chromium because electron-source sets
@@ -473,10 +488,13 @@ let
       # Chromium reads initial_preferences from its own executable directory
       # This patch modifies it to read /etc/chromium/initial_preferences
       ./patches/chromium-initial-prefs.patch
+    ]
+    ++ lib.optionals (!chromiumVersionAtLeast "142") [
       # https://github.com/chromium/chromium/commit/02b6456643700771597c00741937e22068b0f956
       # https://github.com/chromium/chromium/commit/69736ffe943ff996d4a88d15eb30103a8c854e29
       # Rebased variant of patch to build M126+ with LLVM 17.
       # staging-next will bump LLVM to 18, so we will be able to drop this soon.
+      # Started failing to apply with M142, but this is no longer needed anyway.
       ./patches/chromium-126-llvm-17.patch
     ]
     ++ lib.optionals (!chromiumVersionAtLeast "140") [
@@ -484,33 +502,15 @@ let
       # allowing us to use our rustc and our clang.
       ./patches/chromium-129-rust.patch
     ]
-    ++ lib.optionals (chromiumVersionAtLeast "140") [
+    ++ lib.optionals (versionRange "140" "141") [
       # Rebased variant of the patch above due to
       # https://chromium-review.googlesource.com/c/chromium/src/+/6665907
       ./patches/chromium-140-rust.patch
     ]
-    ++ lib.optionals (!ungoogled && !chromiumVersionAtLeast "136") [
-      # Note: We since use LLVM v19.1+ on unstable *and* release-24.11 for all version and as such
-      # no longer need this patch. We opt to arbitrarily limit it to versions prior to M136 just
-      # because that's when this revert stopped applying cleanly and defer fully dropping it for
-      # the next cleanup to bundle rebuilding all of chromium and electron.
-      #
-      # Our rustc.llvmPackages is too old for std::hardware_destructive_interference_size
-      # and std::hardware_constructive_interference_size.
-      # So let's revert the change for now and hope that our rustc.llvmPackages and
-      # nixpkgs-stable catch up sooner than later.
-      # https://groups.google.com/a/chromium.org/g/cxx/c/cwktrFxxUY4
-      # https://chromium-review.googlesource.com/c/chromium/src/+/5767325
-      # Note: We exclude the changes made to the partition_allocator (PA), as the revert
-      # would otherwise not apply because upstream reverted those changes to PA already
-      # in https://chromium-review.googlesource.com/c/chromium/src/+/5841144
-      # Note: ungoogled-chromium already reverts this as part of its patchset.
-      (githubPatch {
-        commit = "fc838e8cc887adbe95110045d146b9d5885bf2a9";
-        hash = "sha256-NNKzIp6NYdeZaqBLWDW/qNxiDB1VFRz7msjMXuMOrZ8=";
-        excludes = [ "base/allocator/partition_allocator/src/partition_alloc/*" ];
-        revert = true;
-      })
+    ++ lib.optionals (chromiumVersionAtLeast "141") [
+      # Rebased variant of the patch above due to
+      # https://chromium-review.googlesource.com/c/chromium/src/+/6897026
+      ./patches/chromium-141-rust.patch
     ]
     ++ lib.optionals stdenv.hostPlatform.isAarch64 [
       # Reverts decommit pooled pages which causes random crashes of tabs on systems
@@ -528,7 +528,7 @@ let
         hash = "sha256-PuinMLhJ2W4KPXI5K0ujw85ENTB1wG7Hv785SZ55xnY=";
       })
     ]
-    ++ lib.optionals (chromiumVersionAtLeast "136") [
+    ++ [
       # Modify the nodejs version check added in https://chromium-review.googlesource.com/c/chromium/src/+/6334038
       # to look for the minimal version, not the exact version (major.minor.patch). The linked CL makes a case for
       # preventing compilations of chromium with versions below their intended version, not about running the very
@@ -552,6 +552,65 @@ let
       # Rebased variant of the patch above for
       # electron 35 (M134) and 36 (M136)
       ./patches/chromium-134-rust-1.86-mismatched_lifetime_syntaxes.patch
+    ]
+    ++ lib.optionals (versionRange "141" "142") [
+      (fetchpatch {
+        # Fix "invalid application of 'sizeof' to an incomplete type 'blink::CSSStyleSheet'"
+        # by reverting https://chromium-review.googlesource.com/c/chromium/src/+/6892157
+        name = "chromium-141-Revert-Remove-unnecessary-include-in-tree_scope.h.patch";
+        url = "https://chromium.googlesource.com/chromium/src/+/0fc0e71aa1ca0419fae6d14255025543980d2cba^!?format=TEXT";
+        decode = "base64 -d";
+        revert = true;
+        hash = "sha256-pnEus2NHpNWZ6ZSXLgdTn+it7oy1MPZPbD8SOAKLWbw=";
+      })
+    ]
+    ++ lib.optionals (chromiumVersionAtLeast "142" && lib.versionOlder rustcVersion "1.90") [
+      (fetchpatch {
+        # Fix "ld.lld: error: undefined symbol: __rustc::__rust_alloc_error_handler_should_panic'"
+        # with Rust < 1.90 by reverting https://chromium-review.googlesource.com/c/chromium/src/+/6935385
+        name = "chromium-142-Revert-rust-Remove-the-old-__rust_alloc_error_handler_should_panic-symbol.patch";
+        url = "https://chromium.googlesource.com/chromium/src/+/e33287758f2234d6aabfc5d4e011c4e81e3a47cf^!?format=TEXT";
+        decode = "base64 -d";
+        revert = true;
+        hash = "sha256-0vRDz7wwGCsqm38fVvkLLzOOtEtd8CnqyjDLgGofh/o=";
+      })
+    ]
+    ++ lib.optionals (versionRange "142" "143") [
+      (fetchpatch {
+        # Fix https://issues.chromium.org/issues/450752866 by backporting
+        # https://chromium-review.googlesource.com/c/chromium/src/+/7030724 from M143
+        name = "chromium-142-Backport-Add-missing-include-for-FormFieldData-type-completeness.patch";
+        url = "https://chromium.googlesource.com/chromium/src/+/069d424e41f42c6f4a4551334eafc7cfaed6e880^!?format=TEXT";
+        decode = "base64 -d";
+        hash = "sha256-0ueOCHYheSFHRFzEat3TDhnU3Avf0TcNBBBpTkz+saw=";
+      })
+    ]
+    ++ lib.optionals (chromiumVersionAtLeast "142" && lib.versionOlder rustcVersion "1.91") [
+      # Fix the following error when compiling CrabbyAvif with Rust < 1.91 due to
+      # https://github.com/rust-lang/rust/pull/142681 by reverting
+      # https://github.com/webmproject/CrabbyAvif/pull/663 and
+      # https://github.com/webmproject/CrabbyAvif/pull/654 and
+      # https://chromium-review.googlesource.com/c/chromium/src/+/6960510
+      #
+      #  error: cannot find attribute `sanitize` in this scope
+      #    --> ../../third_party/crabbyavif/src/src/capi/io.rs:210:41
+      #      |
+      #  210 |     #[cfg_attr(feature = "disable_cfi", sanitize(cfi = "off"))]
+      #      |                                         ^^^^^^^^
+      #
+      ./patches/chromium-142-crabbyavif-rust-no_sanitize.patch
+      (fetchpatch {
+        name = "chromium-142-crabbyavif-Revert-Enable-disable_cfi-feature.patch";
+        url = "https://chromium.googlesource.com/chromium/src/+/9415f40bc6f853547f791e633be638c71368ce56^!?format=TEXT";
+        decode = "base64 -d";
+        revert = true;
+        hash = "sha256-bYcJqPMbE7hMvhZVnzqHok1crUAdqrzqxr+4IHNzAtg=";
+      })
+    ]
+    ++ lib.optionals (chromiumVersionAtLeast "144") [
+      # Patch rustc_nightly_capability to eval to false instead of true.
+      # https://chromium-review.googlesource.com/c/chromium/src/+/7022369
+      ./patches/chromium-144-rustc_nightly_capability.patch
     ];
 
     postPatch =
@@ -562,8 +621,6 @@ let
         chmod u+w build/config/gclient_args.gni
         echo 'checkout_mutter = false' >> build/config/gclient_args.gni
         echo 'checkout_glic_e2e_tests = false' >> build/config/gclient_args.gni
-      ''
-      + lib.optionalString (!isElectron && chromiumVersionAtLeast "140") ''
         echo 'checkout_clusterfuzz_data = false' >> build/config/gclient_args.gni
       ''
       + lib.optionalString (!isElectron) ''
@@ -583,13 +640,24 @@ let
         /* Generated by lastchange.py, do not edit.*/
         #ifndef SKIA_EXT_SKIA_COMMIT_HASH_H_
         #define SKIA_EXT_SKIA_COMMIT_HASH_H_
-        #define SKIA_COMMIT_HASH "${upstream-info.DEPS."src/third_party/skia".rev}-"
+        #define SKIA_COMMIT_HASH "${upstream-info.DEPS."src/third_party/skia".rev}${
+          lib.optionalString (!chromiumVersionAtLeast "142") "-"
+        }"
         #endif  // SKIA_EXT_SKIA_COMMIT_HASH_H_
         EOF
 
         echo -n '${upstream-info.DEPS."src/third_party/dawn".rev}' > gpu/webgpu/DAWN_VERSION
 
         mkdir -p third_party/jdk/current/bin
+      ''
+      + lib.optionalString (!isElectron && chromiumVersionAtLeast "142") ''
+        cat << EOF > gpu/webgpu/dawn_commit_hash.h
+        /* Generated by lastchange.py, do not edit.*/
+        #ifndef GPU_WEBGPU_DAWN_COMMIT_HASH_H_
+        #define GPU_WEBGPU_DAWN_COMMIT_HASH_H_
+        #define DAWN_COMMIT_HASH "${upstream-info.DEPS."src/third_party/dawn".rev}"
+        #endif  // GPU_WEBGPU_DAWN_COMMIT_HASH_H_
+        EOF
       ''
       + ''
         # Workaround/fix for https://bugs.chromium.org/p/chromium/issues/detail?id=1313361:
@@ -644,10 +712,6 @@ let
             '${glibc}/share/locale/'
 
       ''
-      + lib.optionalString systemdSupport ''
-        sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${lib.getLib systemd}/lib/\1!' \
-          device/udev_linux/udev?_loader.cc
-      ''
       + ''
         # Allow to put extensions into the system-path.
         sed -i -e 's,/usr,/run/current-system/sw,' chrome/common/chrome_paths.cc
@@ -660,7 +724,7 @@ let
 
         patchShebangs .
       ''
-      + lib.optionalString (ungoogled) ''
+      + lib.optionalString ungoogled ''
         # Prune binaries (ungoogled only) *before* linking our own binaries:
         ${ungoogler}/utils/prune_binaries.py . ${ungoogler}/pruning.list || echo "some errors"
       ''
@@ -767,23 +831,25 @@ let
         # Disable PGO because the profile data requires a newer compiler version (LLVM 14 isn't sufficient):
         chrome_pgo_phase = 0;
         clang_base_path = "${llvmCcAndBintools}";
-
-        use_qt5 = false;
-        use_qt6 = false;
       }
-      // lib.optionalAttrs (chromiumVersionAtLeast "136") {
-        # LLVM < v21 does not support --warning-suppression-mappings yet:
-        clang_warning_suppression_file = "";
+      // lib.optionalAttrs (chromiumVersionAtLeast "141") {
+        # TODO: remove opt-out of https://chromium.googlesource.com/chromium/src/+/main/docs/modules.md
+        use_clang_modules = false;
       }
       // {
+        use_qt5 = false;
+        use_qt6 = false;
+
+        # LLVM < v21 does not support --warning-suppression-mappings yet:
+        clang_warning_suppression_file = "";
+
         # To fix the build as we don't provide libffi_pic.a
         # (ld.lld: error: unable to find library -l:libffi_pic.a):
         use_system_libffi = true;
         # Use nixpkgs Rust compiler instead of the one shipped by Chromium.
         rust_sysroot_absolute = "${buildPackages.rustc}";
-        rust_bindgen_root = "${buildPackages.rust-bindgen}";
-      }
-      // {
+        rust_bindgen_root =
+          if chromiumVersionAtLeast "144" then "${rustTools}" else "${buildPackages.rust-bindgen}";
         enable_rust = true;
         # While we technically don't need the cache-invalidation rustc_version provides, rustc_version
         # is still used in some scripts (e.g. build/rust/std/find_std_rlibs.py).
@@ -841,9 +907,7 @@ let
     # Mute some warnings that are enabled by default. This is useful because
     # our Clang is always older than Chromium's and the build logs have a size
     # of approx. 25 MB without this option (and this saves e.g. 66 %).
-    env.NIX_CFLAGS_COMPILE =
-      "-Wno-unknown-warning-option"
-      + lib.optionalString (chromiumVersionAtLeast "135") " -Wno-unused-command-line-argument -Wno-shadow";
+    env.NIX_CFLAGS_COMPILE = "-Wno-unknown-warning-option -Wno-unused-command-line-argument -Wno-shadow";
     env.BUILD_CC = "$CC_FOR_BUILD";
     env.BUILD_CXX = "$CXX_FOR_BUILD";
     env.BUILD_AR = "$AR_FOR_BUILD";
@@ -856,7 +920,12 @@ let
           TERM=dumb ninja -C "${buildPath}" -j$NIX_BUILD_CORES "${target}"
           bash -s << EOL
           (
-            source chrome/installer/linux/common/installer.include
+            source ${
+              if chromiumVersionAtLeast "144" then
+                "remoting/host/installer/linux/"
+              else
+                "chrome/installer/linux/common"
+            }/installer.include
             PACKAGE=$packageName
             MENUNAME="Chromium"
             process_template chrome/app/resources/manpage.1.in "${buildPath}/chrome.1"

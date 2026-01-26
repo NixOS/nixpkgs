@@ -3,47 +3,46 @@
   buildGoModule,
   fetchFromGitHub,
   versionCheckHook,
+  nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "newt";
-  version = "1.5.0";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "fosrl";
     repo = "newt";
-    tag = version;
-    hash = "sha256-uIlBAqe93MqMSN0Nghlfa1cLbMlcg3iMCzIu0U16h5o=";
+    tag = finalAttrs.version;
+    hash = "sha256-Ya+OVSChGmiZ8JTAfl/im8fOhLCC+r6JKSlH+CnSwP8=";
   };
 
-  vendorHash = "sha256-FeDNv1mLTvXYUDOHzyPP7uA+fOt/j0VT7CM6IyoMuTQ=";
-
-  postPatch = ''
-    substituteInPlace main.go \
-      --replace-fail "version_replaceme" "${version}"
-  '';
+  vendorHash = "sha256-Sib6AUCpMgxlMpTc2Esvs+UU0yduVOxWUgT44FHAI+k=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   ldflags = [
     "-s"
     "-w"
+    "-X=main.newtVersion=${finalAttrs.version}"
   ];
 
   doInstallCheck = true;
 
   versionCheckProgramArg = [ "-version" ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Tunneling client for Pangolin";
     homepage = "https://github.com/fosrl/newt";
-    changelog = "https://github.com/fosrl/newt/releases/tag/${src.tag}";
+    changelog = "https://github.com/fosrl/newt/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       fab
       jackr
-      sigmasquadron
+      water-sucks
     ];
     mainProgram = "newt";
   };
-}
+})

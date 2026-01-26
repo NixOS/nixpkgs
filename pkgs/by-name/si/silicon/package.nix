@@ -5,6 +5,7 @@
   fetchFromGitHub,
   pkg-config,
   cmake,
+  oniguruma,
   expat,
   freetype,
   libxcb,
@@ -28,12 +29,18 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-MpmGLhg00quz4mYkidLofpcZTVwxbgIThg5v2r4HIfs=";
 
+  # Fix build with gcc15
+  #   regparse.c:588:5: error: initialization of 'int (*)(void)' from incompatible pointer type 'int (*)(st_str_end_key *, st_str_end_key *)' [-Wincompatible-pointer-types]
+  #   regparse.c:678:5: error: initialization of 'int (*)(void)' from incompatible pointer type 'int (*)(st_callout_name_key *, st_callout_name_key *)' [-Wincompatible-pointer-types]
+  env.RUSTONIG_SYSTEM_LIBONIG = true;
+
   buildInputs = [
     expat
     freetype
     fira-code
     fontconfig
     harfbuzz
+    oniguruma
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ libxcb ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -51,14 +58,14 @@ rustPlatform.buildRustPackage rec {
     export HOME=$TMPDIR
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Create beautiful image of your source code";
     homepage = "https://github.com/Aloxaf/silicon";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # or
       asl20
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       evanjs
       _0x4A6F
     ];

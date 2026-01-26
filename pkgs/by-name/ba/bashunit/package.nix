@@ -12,13 +12,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "bashunit";
-  version = "0.24.0";
+  version = "0.26.0";
 
   src = fetchFromGitHub {
     owner = "TypedDevs";
     repo = "bashunit";
     tag = finalAttrs.version;
-    hash = "sha256-TIt1EG/KQCslwZH9seF5SUgH242ZkUkWf8HWqNBIrD0=";
+    hash = "sha256-cZ2fcm4OxA3Ly8QRkOQSjaSZW80/Pu2z10+iN4pDFOs=";
     forceFetchGit = true; # needed to include the tests directory for the check phase
   };
 
@@ -62,7 +62,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 

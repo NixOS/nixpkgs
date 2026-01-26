@@ -14,7 +14,7 @@ buildGoModule {
   src = fetchFromGitLab {
     owner = "gaincoder";
     repo = "invidious-router";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-YcMtZq4VMHr6XqHcsAAEmMF6jF1j1wb7Lq4EK42QAEo=";
   };
 

@@ -6,10 +6,10 @@
 }:
 let
   pname = "saleae-logic-2";
-  version = "2.4.29";
+  version = "2.4.40";
   src = fetchurl {
     url = "https://downloads2.saleae.com/logic2/Logic-${version}-linux-x64.AppImage";
-    hash = "sha256-eCG2Al6MmWTCiYtaO6qIoNji4QreMryoZRcfKjk5d1c=";
+    hash = "sha256-TG7fH8b0L/O8RjlMB3QJM3/8my49uBX2RwufrVWDgpI=";
   };
   desktopItem = makeDesktopItem {
     name = "saleae-logic-2";
@@ -41,16 +41,16 @@ appimageTools.wrapType2 {
       wget
       unzip
       glib
-      xorg.libX11
-      xorg.libxcb
-      xorg.libXcomposite
-      xorg.libXcursor
-      xorg.libXdamage
-      xorg.libXext
-      xorg.libXfixes
-      xorg.libXi
-      xorg.libXrender
-      xorg.libXtst
+      libx11
+      libxcb
+      libxcomposite
+      libxcursor
+      libxdamage
+      libxext
+      libxfixes
+      libxi
+      libxrender
+      libxtst
       nss
       nspr
       dbus
@@ -60,21 +60,21 @@ appimageTools.wrapType2 {
       atk
       cairo
       expat
-      xorg.libXrandr
-      xorg.libXScrnSaver
+      libxrandr
+      libxscrnsaver
       alsa-lib
       at-spi2-core
       cups
       libxcrypt-legacy
     ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.saleae.com/";
     changelog = "https://ideas.saleae.com/f/changelog/";
     description = "Software for Saleae logic analyzers";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       j-hui
       newam
     ];

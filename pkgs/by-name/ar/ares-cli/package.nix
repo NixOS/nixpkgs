@@ -3,7 +3,9 @@
   buildNpmPackage,
   fetchFromGitHub,
   nix-update-script,
+  nodejs_22,
 }:
+
 buildNpmPackage rec {
   pname = "ares-cli";
   version = "3.2.1";
@@ -14,9 +16,7 @@ buildNpmPackage rec {
     hash = "sha256-L8suZDtXVchVyvp7KCv0UaceJqqGBdfopd5tZzwj3MY=";
   };
 
-  postPatch = ''
-    ln -s npm-shrinkwrap.json package-lock.json
-  '';
+  nodejs = nodejs_22;
 
   dontNpmBuild = true;
   npmDepsHash = "sha256-ATIxe/sulfOpz5KiWauDAPZrlfUOFyiTa+5ECFbVd+0=";

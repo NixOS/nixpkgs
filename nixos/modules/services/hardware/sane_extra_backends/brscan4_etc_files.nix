@@ -65,11 +65,11 @@ stdenv.mkDerivation {
   dontStrip = true;
   dontPatchELF = true;
 
-  meta = with lib; {
+  meta = {
     description = "Brother brscan4 sane backend driver etc files";
     homepage = "http://www.brother.com";
-    platforms = platforms.linux;
-    license = licenses.unfree;
-    maintainers = with maintainers; [ jraygauthier ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ jraygauthier ];
   };
 }

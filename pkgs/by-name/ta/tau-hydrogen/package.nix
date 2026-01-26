@@ -5,7 +5,7 @@
   meson,
   ninja,
   librsvg,
-  xorg,
+  xcursorgen,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,14 +23,14 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     librsvg
-    xorg.xcursorgen
+    xcursorgen
   ];
 
-  meta = with lib; {
+  meta = {
     description = "GTK icon theme for tauOS";
     homepage = "https://github.com/tau-OS/tau-hydrogen";
-    license = licenses.gpl3Only;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 })

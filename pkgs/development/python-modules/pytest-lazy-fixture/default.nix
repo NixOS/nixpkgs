@@ -28,10 +28,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Helps to use fixtures in pytest.mark.parametrize";
     homepage = "https://github.com/tvorog/pytest-lazy-fixture";
-    license = licenses.mit;
-    maintainers = with maintainers; [ tobim ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ tobim ];
   };
 }

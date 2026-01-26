@@ -16,16 +16,16 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "halftone";
-  version = "0.7.0";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "tfuxu";
     repo = "halftone";
     tag = version;
-    hash = "sha256-UpYdOYQa98syDI353+c/JN9/68PraQ8bg05GES46C+A=";
+    hash = "sha256-5hT6ulmUlOrFVL4nV0tfvgkKdYGusp+1rBINQy3ZvpI=";
   };
 
-  format = "other";
+  pyproject = false;
   dontWrapGApps = true;
 
   nativeBuildInputs = [
@@ -53,12 +53,12 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tfuxu/halftone";
     description = "Simple app for giving images that pixel-art style";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "halftone";
-    maintainers = with maintainers; [ foo-dogsquared ];
-    platforms = platforms.linux;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 }

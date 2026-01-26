@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   flit-core,
   freezegun,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "itsdangerous";
   version = "2.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
@@ -27,10 +24,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/pallets/itsdangerous/blob/${version}/CHANGES.rst";
     description = "Safely pass data to untrusted environments and back";
     homepage = "https://itsdangerous.palletsprojects.com";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

@@ -39,6 +39,6 @@ buildPythonPackage rec {
     description = "Plugin for adding backlinks to mkdocs";
     homepage = "https://github.com/danodic-dev/mkdocs-backlinks/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   requests,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "goveelights";
   version = "0.1.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -25,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "goveelights" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for interacting with the Govee API";
     homepage = "https://github.com/arcanearronax/govee_lights";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

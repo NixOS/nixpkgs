@@ -37,10 +37,10 @@ stdenv.mkDerivation rec {
     cp -r Tambura.lv2/ $out/lib/lv2
   '';
 
-  meta = with lib; {
+  meta = {
     description = "FAUST patch inspired by the Indian Tambura/Tanpura - a four string drone instrument, known for its unique rich harmonic timbre";
     homepage = "https://github.com/olilarkin/Tambura";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.magnetophon ];
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.magnetophon ];
   };
 }

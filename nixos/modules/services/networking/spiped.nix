@@ -21,7 +21,7 @@ in
 
       config = mkOption {
         type = types.attrsOf (
-          types.submodule ({
+          types.submodule {
             options = {
               encrypt = mkOption {
                 type = types.bool;
@@ -138,7 +138,7 @@ in
                 description = "Disable target address re-resolution.";
               };
             };
-          })
+          }
         );
 
         default = { };

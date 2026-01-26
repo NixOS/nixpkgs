@@ -13,7 +13,6 @@
   pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   transitions,
 }:
 
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "pysnooz";
   version = "0.10.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "AustinBrunkhorst";
@@ -63,11 +60,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pysnooz" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to control SNOOZ white noise machines";
     homepage = "https://github.com/AustinBrunkhorst/pysnooz";
     changelog = "https://github.com/AustinBrunkhorst/pysnooz/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

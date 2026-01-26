@@ -24,7 +24,7 @@ let
     hash = "sha256-+6cHKujNEzmJbpN9Uan6kZKsPdwxRRzT3ZazDnCNi3s=";
   };
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyopenjtalk";
   version = "0.4.1";
   pyproject = true;
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "r9y9";
     repo = "pyopenjtalk";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-f0JNiMCeKpTY+jH3/9LuCkX2DRb9U8sN0SezT6OTm/E=";
     fetchSubmodules = true;
   };
@@ -70,10 +70,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pyopenjtalk" ];
 
   meta = {
-    changelog = "https://github.com/r9y9/pyopenjtalk/releases/tag/${src.tag}";
+    changelog = "https://github.com/r9y9/pyopenjtalk/releases/tag/${finalAttrs.src.tag}";
     description = "Python wrapper for OpenJTalk";
     homepage = "https://github.com/r9y9/pyopenjtalk";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tomasajt ];
   };
-}
+})

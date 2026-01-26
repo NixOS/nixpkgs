@@ -20,7 +20,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   meta = {
     changelog = "https://github.com/kpcyrd/repro-env/releases/tag/v${finalAttrs.version}";
@@ -30,7 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       asl20
       mit
     ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "repro-env";
   };
 })

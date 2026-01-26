@@ -17,7 +17,8 @@
   pcre,
   util-linux,
   wayland,
-  xorg,
+  libxtst,
+  libxdmcp,
 
   cmake,
   doxygen,
@@ -49,8 +50,8 @@ mkDerivation {
     pcre
     util-linux
     wayland
-    xorg.libXdmcp
-    xorg.libXtst
+    libxdmcp
+    libxtst
   ];
 
   nativeBuildInputs = [
@@ -65,11 +66,11 @@ mkDerivation {
     "-DQT5_PLUGINS_INSTALL_DIR=${placeholder "out"}/${qtbase.qtPluginPrefix}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Core libraries of Maliit and server";
     mainProgram = "maliit-server";
     homepage = "http://maliit.github.io/";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
   };
 }

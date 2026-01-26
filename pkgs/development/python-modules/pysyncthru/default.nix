@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   aiohttp,
@@ -12,8 +11,6 @@
 buildPythonPackage rec {
   pname = "pysyncthru";
   version = "0.8.0";
-
-  disabled = pythonOlder "3.7";
 
   pyproject = true;
 
@@ -35,10 +32,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pysyncthru" ];
 
-  meta = with lib; {
+  meta = {
     description = "Automated JSON API based communication with Samsung SyncThru Web Service";
     homepage = "https://github.com/nielstron/pysyncthru";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

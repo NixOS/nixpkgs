@@ -3,9 +3,7 @@
   stdenv,
   config,
   alsa-lib,
-  apple-sdk_11,
   cmake,
-  darwinMinVersionHook,
   dbus,
   fetchFromGitHub,
   ibusMinimal,
@@ -19,6 +17,15 @@
   libusb1,
   libxkbcommon,
   libgbm,
+  libX11,
+  libxcb,
+  libXScrnSaver,
+  libXcursor,
+  libXext,
+  libXfixes,
+  libXi,
+  libXrandr,
+  libxtst,
   ninja,
   nix-update-script,
   nixosTests,
@@ -31,7 +38,6 @@
   vulkan-loader,
   wayland,
   wayland-scanner,
-  xorg,
   zenity,
   # for passthru.tests
   SDL_compat,
@@ -62,7 +68,7 @@ assert lib.assertMsg (ibusSupport -> dbusSupport) "SDL3 requires dbus support to
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdl3";
-  version = "3.2.20";
+  version = "3.4.0";
 
   outputs = [
     "lib"
@@ -75,24 +81,34 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libsdl-org";
     repo = "SDL";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-ESYjTN2prkAeHcTYurZaWeM3RgEKtwCZrt9gSMcOAe0=";
+    hash = "sha256-/A1y/NaZVebzI58F4TlwtDwuzlcA33Y1YuZqd5lz/Sk=";
   };
 
   postPatch =
     # Tests timeout on Darwin
-    # `testtray` loads assets from a relative path, which we are patching to be absolute
     lib.optionalString (finalAttrs.finalPackage.doCheck) ''
       substituteInPlace test/CMakeLists.txt \
         --replace-fail 'set(noninteractive_timeout 10)' 'set(noninteractive_timeout 30)'
-
-      substituteInPlace test/testtray.c \
-        --replace-warn '../test/' '${placeholder "installedTests"}/share/assets/'
     ''
     + lib.optionalString waylandSupport ''
-      substituteInPlace src/video/wayland/SDL_waylandmessagebox.c \
+      substituteInPlace src/dialog/unix/SDL_zenitymessagebox.c \
         --replace-fail '"zenity"' '"${lib.getExe zenity}"'
       substituteInPlace src/dialog/unix/SDL_zenitydialog.c \
         --replace-fail '"zenity"' '"${lib.getExe zenity}"'
+    ''
+    # https://github.com/libsdl-org/SDL/issues/14805
+    + ''
+      substituteInPlace src/video/x11/SDL_x11vulkan.c \
+                        src/video/wayland/SDL_waylandvulkan.c \
+                        src/video/offscreen/SDL_offscreenvulkan.c \
+                        src/video/kmsdrm/SDL_kmsdrmvulkan.c \
+                        src/video/vivante/SDL_vivantevulkan.c \
+                        src/video/android/SDL_androidvulkan.c \
+        --replace-fail 'libvulkan.so' '${lib.getLib vulkan-loader}/lib/libvulkan.so'
+    ''
+    + lib.optionalString x11Support ''
+      substituteInPlace src/video/x11/SDL_x11vulkan.c \
+        --replace-fail 'libX11-xcb.so' '${lib.getLib libX11}/lib/libX11-xcb.so'
     '';
 
   strictDeps = true;
@@ -105,23 +121,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional waylandSupport wayland-scanner;
 
   buildInputs =
-    finalAttrs.dlopenBuildInputs
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # error: 'MTLPixelFormatASTC_4x4_LDR' is unavailable: not available on macOS
-      (darwinMinVersionHook "11.0")
-
-      apple-sdk_11
-    ]
-    ++ lib.optionals ibusSupport [
-      # sdl3 only uses some constants of the ibus headers
-      # it never actually loads the library
-      # thus, it also does not have to care about gtk integration,
-      # so using ibusMinimal avoids an unnecessarily large closure here.
-      ibusMinimal
-    ]
-    ++ lib.optional waylandSupport zenity;
-
-  dlopenBuildInputs =
     lib.optionals stdenv.hostPlatform.isLinux [
       libusb1
     ]
@@ -146,21 +145,27 @@ stdenv.mkDerivation (finalAttrs: {
       wayland
     ]
     ++ lib.optionals x11Support [
-      xorg.libX11
-      xorg.libxcb
-      xorg.libXScrnSaver
-      xorg.libXcursor
-      xorg.libXext
-      xorg.libXfixes
-      xorg.libXi
-      xorg.libXrandr
+      libX11
+      libxcb
+      libXScrnSaver
+      libXcursor
+      libXext
+      libXfixes
+      libXi
+      libXrandr
+      libxtst
     ]
     ++ [
       vulkan-headers
       vulkan-loader
     ]
-    ++ lib.optional (openglSupport && !stdenv.hostPlatform.isDarwin) libGL
-    ++ lib.optional x11Support xorg.libX11;
+    ++ lib.optionals ibusSupport [
+      # sdl3 only uses some constants of the ibus headers
+      # it never actually loads the library
+      # thus, it also does not have to care about gtk integration,
+      # so using ibusMinimal avoids an unnecessarily large closure here.
+      ibusMinimal
+    ];
 
   cmakeFlags = [
     (lib.cmakeBool "SDL_ALSA" alsaSupport)
@@ -181,20 +186,19 @@ stdenv.mkDerivation (finalAttrs: {
 
     (lib.cmakeBool "SDL_TESTS" true)
     (lib.cmakeBool "SDL_INSTALL_TESTS" true)
+    (lib.cmakeBool "SDL_DEPS_SHARED" false)
+
+    # Only ppc64le baseline guarantees AltiVec
+    (lib.cmakeBool "SDL_ALTIVEC" (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian))
+
+    (lib.cmakeBool "SDL_UNIX_CONSOLE_BUILD" (
+      stdenv.hostPlatform.isUnix
+      && !(stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isAndroid)
+      && !(x11Support || waylandSupport)
+    ))
   ];
 
   doCheck = true;
-
-  # See comment below. We actually *do* need these RPATH entries
-  dontPatchELF = true;
-
-  env = {
-    # Many dependencies are not directly linked to, but dlopen()'d at runtime. Adding them to the RPATH
-    # helps them be found
-    NIX_LDFLAGS = lib.optionalString (
-      stdenv.hostPlatform.hasSharedLibraries && stdenv.hostPlatform.extensions.sharedLibrary == ".so"
-    ) "-rpath ${lib.makeLibraryPath (finalAttrs.dlopenBuildInputs)}";
-  };
 
   postInstall = ''
     moveToOutput "share/installed-tests" "$installedTests"
@@ -239,7 +243,10 @@ stdenv.mkDerivation (finalAttrs: {
           sdl3-image
           sdl3-ttf
           ;
-        pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
+        pkg-config = testers.hasPkgConfigModules {
+          package = finalAttrs.finalPackage;
+          versionCheck = true;
+        };
         inherit (finalAttrs.passthru) debug-text-example;
       }
       // lib.optionalAttrs stdenv.hostPlatform.isLinux {

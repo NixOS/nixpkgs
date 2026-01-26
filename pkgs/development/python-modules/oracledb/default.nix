@@ -4,7 +4,6 @@
   cryptography,
   cython,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   wheel,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "oracledb";
   version = "3.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "oracle";

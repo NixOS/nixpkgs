@@ -66,13 +66,13 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Clone of the classic game 'Paradroid' on Commodore 64";
     mainProgram = "freedroid";
     homepage = "https://github.com/ReinhardPrix/FreedroidClassic";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ iblech ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ iblech ];
+    platforms = lib.platforms.unix;
     # Builds but fails to render to the screen at runtime.
     broken = stdenv.hostPlatform.isDarwin;
   };

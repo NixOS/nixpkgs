@@ -9,8 +9,6 @@
   pyface,
   pygments,
   pyqt5,
-  pythonOlder,
-  pythonAtLeast,
   traitsui,
   vtk,
   wrapQtAppsHook,
@@ -20,8 +18,6 @@ buildPythonPackage rec {
   pname = "mayavi";
   version = "4.8.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -56,13 +52,11 @@ buildPythonPackage rec {
   # stripping the ico file on macos cause segfault
   stripExclude = [ "*.ico" ];
 
-  meta = with lib; {
+  meta = {
     description = "3D visualization of scientific data in Python";
     homepage = "https://github.com/enthought/mayavi";
-    license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.bsdOriginal;
+    maintainers = [ ];
     mainProgram = "mayavi2";
-    # segfault
-    broken = pythonAtLeast "3.13";
   };
 }

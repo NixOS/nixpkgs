@@ -83,10 +83,7 @@ let
   secretPathOption =
     with lib.types;
     lib.mkOption {
-      type = nullOr (pathWith {
-        inStore = false;
-        absolute = true;
-      });
+      type = nullOr externalPath;
       default = null;
       internal = true;
     };
@@ -142,10 +139,7 @@ in
               };
 
               options.sftp-private-key-file = lib.mkOption {
-                type = nullOr (pathWith {
-                  inStore = false;
-                  absolute = true;
-                });
+                type = nullOr externalPath;
                 default = null;
                 description = ''
                   SFTP private key file.

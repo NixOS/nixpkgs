@@ -71,12 +71,12 @@ stdenv.mkDerivation rec {
       }
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Brother MFC-5890CN LPR printer driver";
     homepage = "http://www.brother.com/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [ martinramm ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ martinramm ];
     platforms = [
       "i686-linux"
       "x86_64-linux"

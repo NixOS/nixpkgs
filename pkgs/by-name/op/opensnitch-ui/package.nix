@@ -1,6 +1,6 @@
 {
   python3Packages,
-  qt5,
+  qt6,
   lib,
   opensnitch,
 }:
@@ -12,29 +12,21 @@ python3Packages.buildPythonApplication {
   inherit (opensnitch) src version;
   sourceRoot = "${opensnitch.src.name}/ui";
 
-  patches = [
-    # https://github.com/evilsocket/opensnitch/pull/1413
-    # unicode-slugify has failing tests and is overall unmaintained and broken.
-    # python-slugify is a preferrable replacement
-    ./use_python_slugify.patch
-  ];
-
   postPatch = ''
     substituteInPlace opensnitch/utils/__init__.py \
       --replace-fail /usr/lib/python3/dist-packages/data ${python3Packages.pyasn}/${python3Packages.python.sitePackages}/pyasn/data
   '';
 
   nativeBuildInputs = [
-    qt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qt5.qtwayland
+    qt6.qtwayland
   ];
 
   build-system = with python3Packages; [
     setuptools
-    pyqt5
   ];
 
   dependencies = with python3Packages; [
@@ -43,7 +35,7 @@ python3Packages.buildPythonApplication {
     packaging
     pyasn
     pyinotify
-    pyqt5
+    pyqt6
     qt-material
     python-slugify
     unidecode
@@ -52,7 +44,6 @@ python3Packages.buildPythonApplication {
   preBuild = ''
     make -C ../proto ../ui/opensnitch/ui_pb2.py
     # sourced from ui/Makefile
-    pyrcc5 -o opensnitch/resources_rc.py opensnitch/res/resources.qrc
     sed -i 's/^import ui_pb2/from . import ui_pb2/' opensnitch/proto/ui_pb2*
   '';
 

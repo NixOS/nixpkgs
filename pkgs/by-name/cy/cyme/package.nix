@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cyme";
-  version = "2.2.5";
+  version = "2.2.8";
 
   src = fetchFromGitHub {
     owner = "tuna-f1sh";
     repo = "cyme";
     rev = "v${version}";
-    hash = "sha256-1a+8e9sVij9o1G/XlSf7tTECZOHTwqO9rORcYsVjp6Y=";
+    hash = "sha256-PHYzaynxzKYYNTB/pJVuSZoiN3/zwixjqoxXzbxToVc=";
   };
 
-  cargoHash = "sha256-HMPjsaHrd3UdazPiAyrHs9Emh0XdjQ/qkaZm6kxOyq4=";
+  cargoHash = "sha256-NTsiAW9SLN6vuNtbdrXqtvutnI/2DLCgMjYxG6tTtFM=";
 
   nativeBuildInputs = [
     pkg-config
@@ -52,17 +52,16 @@ rustPlatform.buildRustPackage rec {
   ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tuna-f1sh/cyme";
     changelog = "https://github.com/tuna-f1sh/cyme/releases/tag/${src.rev}";
     description = "Modern cross-platform lsusb";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ h7x4 ];
-    platforms = platforms.linux ++ platforms.darwin ++ platforms.windows;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ h7x4 ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin ++ lib.platforms.windows;
     mainProgram = "cyme";
   };
 }

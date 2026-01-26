@@ -82,6 +82,16 @@ let
     })
   ];
 
+  # Fix build with GCC 15
+  # https://bugs.winehq.org/show_bug.cgi?id=58191
+  patches-add-truncf-to-the-import-library = [
+    (pkgs.fetchpatch {
+      name = "add-truncf-to-the-import-library.patch";
+      url = "https://gitlab.winehq.org/wine/wine/-/commit/ed66bd5c97ecc17c42a4942dafac7d406c1e5120.patch";
+      hash = "sha256-mn0fRZ840MYk1WZsBLcachUzyNmBUSlvf50t9jFGXp0=";
+    })
+  ];
+
   inherit (pkgs) writeShellScript;
 in
 rec {
@@ -114,9 +124,10 @@ rec {
       # Also look for root certificates at $NIX_SSL_CERT_FILE
       ./cert-path.patch
     ]
-    ++ patches-binutils-2_44-fix-wine-older-than-10_2;
+    ++ patches-binutils-2_44-fix-wine-older-than-10_2
+    ++ patches-add-truncf-to-the-import-library;
 
-    updateScript = writeShellScript "update-wine-stable" (''
+    updateScript = writeShellScript "update-wine-stable" ''
       ${updateScriptPreamble}
       major=''${UPDATE_NIX_OLD_VERSION%%.*}
       latest_stable=$(get_latest_wine_version "$major.0")
@@ -128,14 +139,14 @@ rec {
       fi
 
       do_update
-    '');
+    '';
   };
 
   unstable = fetchurl rec {
     # NOTE: Don't forget to change the hash for staging as well.
-    version = "10.15";
+    version = "10.20";
     url = "https://dl.winehq.org/wine/source/10.x/wine-${version}.tar.xz";
-    hash = "sha256-MH4hI3xui96iZvlG0x8J7SexlX35oDUW2Ccf0T4cJh0=";
+    hash = "sha256-gbShU5WPYkf+UEHV32Xq3Lvuoba6jNok6349fOLR/jw=";
 
     patches = [
       # Also look for root certificates at $NIX_SSL_CERT_FILE
@@ -145,7 +156,7 @@ rec {
     # see https://gitlab.winehq.org/wine/wine-staging
     staging = fetchFromGitLab {
       inherit version;
-      hash = "sha256-VzHM4Qm0XDP7suCT5dmJgoDJmZ1DLg6qqOUVQzNc0g4=";
+      hash = "sha256-Ys0VNYj568qMHq56ZCprnsbpb/iqtiDlU3w0er8Ol5g=";
       domain = "gitlab.winehq.org";
       owner = "wine";
       repo = "wine-staging";
@@ -168,9 +179,9 @@ rec {
 
     ## see http://wiki.winehq.org/Mono
     mono = fetchurl rec {
-      version = "10.2.0";
+      version = "10.3.0";
       url = "https://dl.winehq.org/wine/wine-mono/${version}/wine-mono-${version}-x86.msi";
-      hash = "sha256-Th7T8C6S0FMTPQPd++/PbbSk3CMamu0zZ7FxF6iIR9g=";
+      hash = "sha256-zs5cYxgAlN/98B0PvjYqS2BuUoC5jN/RuFaM35tXL5g=";
     };
 
     updateScript = writeShellScript "update-wine-unstable" ''
@@ -204,7 +215,8 @@ rec {
       # Also look for root certificates at $NIX_SSL_CERT_FILE
       ./cert-path.patch
     ]
-    ++ patches-binutils-2_44-fix-wine-older-than-10_2;
+    ++ patches-binutils-2_44-fix-wine-older-than-10_2
+    ++ patches-add-truncf-to-the-import-library;
 
     # see https://gitlab.winehq.org/wine/wine-staging
     staging = fetchFromGitLab {

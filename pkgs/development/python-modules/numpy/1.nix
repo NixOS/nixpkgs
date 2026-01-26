@@ -5,7 +5,6 @@
   python,
   numpy_1,
   pythonAtLeast,
-  pythonOlder,
   buildPythonPackage,
   writeTextFile,
 
@@ -61,7 +60,7 @@ buildPythonPackage rec {
   pname = "numpy";
   version = "1.26.4";
   pyproject = true;
-  disabled = pythonOlder "3.9" || pythonAtLeast "3.13";
+  disabled = pythonAtLeast "3.13";
 
   src = fetchPypi {
     inherit pname version;

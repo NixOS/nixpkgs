@@ -28,12 +28,12 @@ in
       description = "Encrypted devices that need to be unlocked at boot using Clevis";
       default = { };
       type = lib.types.attrsOf (
-        lib.types.submodule ({
+        lib.types.submodule {
           options.secretFile = lib.mkOption {
             description = "Clevis JWE file used to decrypt the device at boot, in concert with the chosen pin (one of TPM2, Tang server, or SSS).";
             type = lib.types.path;
           };
-        })
+        }
       );
     };
 
@@ -59,7 +59,7 @@ in
               || (fs.fsType == "zfs" && lib.hasPrefix "${device}/" fs.device)
             ) config.system.build.fileSystems)
             || (lib.hasAttr device config.boot.initrd.luks.devices);
-          message = ''No filesystem or LUKS device with the name ${device} is declared in your configuration.'';
+          message = "No filesystem or LUKS device with the name ${device} is declared in your configuration.";
         }) cfg.devices
       )
     );

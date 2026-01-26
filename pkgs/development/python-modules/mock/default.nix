@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   pytestCheckHook,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "mock";
   version = "5.2.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
@@ -22,11 +19,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mock" ];
 
-  meta = with lib; {
+  meta = {
     description = "Rolling backport of unittest.mock for all Pythons";
     homepage = "https://github.com/testing-cabal/mock";
     changelog = "https://github.com/testing-cabal/mock/blob/${version}/CHANGELOG.rst";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
   };
 }

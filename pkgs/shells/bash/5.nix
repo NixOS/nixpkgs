@@ -5,7 +5,11 @@
   fetchurl,
   updateAutotoolsGnuConfigScriptsHook,
   bison,
-  util-linux,
+  util-linuxMinimal,
+  coreutils,
+  libredirect,
+  glibcLocales,
+  gnused,
 
   interactive ? true,
   readline,
@@ -29,13 +33,13 @@ lib.warnIf (withDocs != null)
     bash: `.override { withDocs = true; }` is deprecated, the docs are always included.
   ''
   stdenv.mkDerivation
-  rec {
+  (fa: {
     pname = "bash${lib.optionalString interactive "-interactive"}";
-    version = "5.3${patch_suffix}";
+    version = "5.3${fa.patch_suffix}";
     patch_suffix = "p${toString (builtins.length upstreamPatches)}";
 
     src = fetchurl {
-      url = "mirror://gnu/bash/bash-${lib.removeSuffix patch_suffix version}.tar.gz";
+      url = "mirror://gnu/bash/bash-${lib.removeSuffix fa.patch_suffix fa.version}.tar.gz";
       hash = "sha256-DVzYaWX4aaJs9k9Lcb57lvkKO6iz104n6OnZ1VUPMbo=";
     };
 
@@ -45,7 +49,7 @@ lib.warnIf (withDocs != null)
     # bionic libc is super weird and has issues with fortify outside of its own libc, check this comment:
     # https://github.com/NixOS/nixpkgs/pull/192630#discussion_r978985593
     # or you can check libc/include/sys/cdefs.h in bionic source code
-    ++ lib.optional (stdenv.hostPlatform.libc == "bionic") "fortify";
+    ++ lib.optionals (stdenv.hostPlatform.libc == "bionic") [ "fortify" ];
 
     outputs = [
       "out"
@@ -69,7 +73,23 @@ lib.warnIf (withDocs != null)
     + ''
       -DNON_INTERACTIVE_LOGIN_SHELLS
       -DSSH_SOURCE_BASHRC
-    '';
+    ''
+    # Bash's configure script assumes that CC and CC_FOR_BUILD have the
+    # same default -std=... flags. But at this moment, for FreeBSD, we
+    # have CC_FOR_BUILD that defaults to c23, and a CC that default to
+    # something older, perhaps c17. This breaks the build because of
+    # bash's faulty assumptions.
+    #
+    # To fix, we simply force the standard to be the higher for CC to
+    # match CC_FOR_BUILD.
+    #
+    # Once FreeBSD is built with a newer version of Clang, this hack
+    # should be removed.
+    +
+      lib.optionalString (stdenv.hostPlatform.isFreeBSD && stdenv.hostPlatform != stdenv.buildPlatform)
+        ''
+          -std=c23
+        '';
 
     patchFlags = [ "-p0" ];
 
@@ -99,16 +119,13 @@ lib.warnIf (withDocs != null)
       # default is fine for static linking on Linux (weak symbols?) but
       # not with BSDs, when it does clash with the regular `getenv`.
       "bash_cv_getenv_redef=${
-        if !(with stdenv.hostPlatform; isStatic && (isOpenBSD || isFreeBSD)) then "yes" else "no"
+        lib.boolToYesNo (!(with stdenv.hostPlatform; isStatic && (isOpenBSD || isFreeBSD)))
       }"
     ]
     ++ lib.optionals stdenv.hostPlatform.isCygwin [
-      "--without-libintl-prefix"
-      "--without-libiconv-prefix"
-      "--with-installed-readline"
       "bash_cv_dev_stdin=present"
       "bash_cv_dev_fd=standard"
-      "bash_cv_termcap_lib=libncurses"
+      "gt_cv_func_printf_posix=yes"
     ]
     ++ lib.optionals (stdenv.hostPlatform.libc == "musl") [
       "--disable-nls"
@@ -126,22 +143,16 @@ lib.warnIf (withDocs != null)
       updateAutotoolsGnuConfigScriptsHook
       bison
     ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin stdenv.cc.bintools;
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ stdenv.cc.bintools ];
 
-    buildInputs = lib.optional interactive readline;
+    buildInputs = lib.optionals interactive [ readline ];
 
     enableParallelBuilding = true;
 
-    makeFlags = lib.optionals stdenv.hostPlatform.isCygwin [
-      "LOCAL_LDFLAGS=-Wl,--export-all,--out-implib,libbash.dll.a"
-      "SHOBJ_LIBS=-lbash"
-    ];
-
-    nativeCheckInputs = [ util-linux ];
-    doCheck = false; # dependency cycle, needs to be interactive
+    doCheck = false; # Can't be enabled by default due to dependency cycle, use passthru.tests.withChecks instead
 
     postInstall = ''
-      ln -s bash "$out/bin/sh"
+      ln -s bash${stdenv.hostPlatform.extensions.executable} "$out/bin/sh"
       rm -f $out/lib/bash/Makefile.inc
     '';
 
@@ -160,9 +171,99 @@ lib.warnIf (withDocs != null)
     passthru = {
       shellPath = "/bin/bash";
       tests.static = pkgsStatic.bash;
+      tests.withChecks = fa.finalPackage.overrideAttrs (attrs: {
+        doCheck = true;
+
+        nativeCheckInputs = attrs.nativeCheckInputs or [ ] ++ [
+          util-linuxMinimal
+          libredirect.hook
+          glibcLocales
+          gnused
+        ];
+
+        meta = attrs.meta // {
+          # Ignore Darwin for now, because the tests fail in many more ways than on Linux
+          broken = attrs.meta.broken or false || stdenv.buildPlatform.isDarwin;
+        };
+
+        patches = attrs.patches or [ ] ++ [
+          # See commit comment, also submitted upstream: https://lists.gnu.org/archive/html/bug-bash/2025-10/msg00054.html
+          ./fail-tests.patch
+          # See commit comment, also submitted upstream: https://lists.gnu.org/archive/html/bug-bash/2025-10/msg00055.html
+          ./failed-tests-output.patch
+          # The run-builtins test _almost_ succeeds, only has a bit of PATH trouble
+          # and some odd terminal column mismatch
+          ./fix-builtins-tests.patch
+          # The run-invocation test _almost_ succeeds, only has a bit of PATH trouble
+          ./fix-invocation-tests.patch
+        ];
+
+        preCheck = attrs.preCheck or "" + ''
+          # Allows looking at actual outputs for failed tests
+          export BASH_TSTOUT_KEEPDIR=$(mktemp -d)
+          export HOME=$(mktemp -d)
+          export NIX_REDIRECTS=${
+            lib.concatMapAttrsStringSep ":" (name: value: "${name}=${value}") {
+              "/bin/echo" = lib.getExe' coreutils "echo";
+              "/bin/cat" = lib.getExe' coreutils "cat";
+              "/bin/rm" = lib.getExe' coreutils "rm";
+              "/usr" = "$(mktemp -d)";
+            }
+          }
+
+          disabled_checks=(
+            # Unsets PATH and breaks, not clear
+            run-execscript
+
+            # Fails on ZFS & needs a ja_JP.SJIS locale, which glibcLocales doesn't have
+            run-intl
+
+            # These error with "echo: write error: Broken pipe"
+            run-histexpand
+            run-lastpipe
+            run-comsub
+            run-comsub2
+
+            # For some reason has an extra 'declare -x version="5.2p37"'
+            run-nameref
+
+            # These print some extra 'trap -- ''' SIGPIPE'
+            run-trap
+            run-varenv
+
+            # These rely on /dev/tty
+            run-read
+            run-test
+            run-vredir
+
+            # Might also be related to not having a tty: "Inappropriate ioctl for device"
+            run-history
+
+            # Can be enabled in 5.4
+            run-printf
+
+            # This is probably fixable without too much trouble, but just not having a hardcoded PATH in type5.sub doesn't cut it
+            # 142,143c142,147
+            # < type5.sub: line 23: mkdir: command not found
+            # < type5.sub: line 24: cd: /build/type-23722: No such file or directory
+            # ---
+            # > cat is /bin/cat
+            # > cat is aliased to `echo cat'
+            # > /bin/cat
+            # > break is a shell builtin
+            # > break is a special shell builtin
+            # > ./e
+            run-type
+          )
+          for check in "''${disabled_checks[@]}"; do
+            # Exit before running the test script
+            sed -i "1iecho 'Skipping test $check' >&2 && exit 0" "tests/$check"
+          done
+        '';
+      });
     };
 
-    meta = with lib; {
+    meta = {
       homepage = "https://www.gnu.org/software/bash/";
       description =
         "GNU Bourne-Again Shell, the de facto standard shell on Linux"
@@ -177,15 +278,15 @@ lib.warnIf (withDocs != null)
         interactive use.  In addition, most sh scripts can be run by
         Bash without modification.
       '';
-      license = licenses.gpl3Plus;
-      platforms = platforms.all;
+      license = lib.licenses.gpl3Plus;
+      platforms = lib.platforms.all;
       # https://github.com/NixOS/nixpkgs/issues/333338
       badPlatforms = [ lib.systems.inspect.patterns.isMinGW ];
-      maintainers = [ ];
+      maintainers = with lib.maintainers; [ infinisil ];
       mainProgram = "bash";
       identifiers.cpeParts =
         let
-          versionSplit = lib.split "p" version;
+          versionSplit = lib.split "p" fa.version;
         in
         {
           vendor = "gnu";
@@ -194,4 +295,4 @@ lib.warnIf (withDocs != null)
           update = lib.elemAt versionSplit 2;
         };
     };
-  }
+  })

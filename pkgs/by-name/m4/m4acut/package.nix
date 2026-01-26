@@ -20,15 +20,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ l-smash ];
 
-  meta = with lib; {
+  meta = {
     description = "Losslessly & gaplessly cut m4a (AAC in MP4) files";
     homepage = "https://github.com/nu774/m4acut";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsdOriginal
       zlib
     ];
-    maintainers = [ maintainers.chkno ];
-    platforms = platforms.all;
+    maintainers = [ lib.maintainers.chkno ];
+    platforms = lib.platforms.all;
     mainProgram = "m4acut";
   };
 }

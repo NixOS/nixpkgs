@@ -6,17 +6,24 @@
   lib,
   llvmPackages,
   python3Packages,
+  cudaPackages,
   stdenv,
   config,
+  testers,
   enableCfp ? true,
   enableCuda ? config.cudaSupport,
   enableFortran ? builtins.elem stdenv.hostPlatform.system gfortran.meta.platforms,
   enableOpenMP ? true,
   enablePython ? true,
   enableUtilities ? true,
-}:
+}@inputs:
 
-stdenv.mkDerivation (finalAttrs: {
+let
+  stdenv = throw "Use effectiveStdenv instead";
+  effectiveStdenv = if enableCuda then cudaPackages.backendStdenv else inputs.stdenv;
+in
+
+effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "zfp";
   version = "1.0.1";
 
@@ -38,7 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     lib.optional enableCuda cudatoolkit
     ++ lib.optional enableFortran gfortran
-    ++ lib.optional enableOpenMP llvmPackages.openmp
     ++ lib.optionals enablePython (
       with python3Packages;
       [
@@ -47,6 +53,10 @@ stdenv.mkDerivation (finalAttrs: {
         python
       ]
     );
+
+  propagatedBuildInputs = lib.optionals (enableOpenMP && effectiveStdenv.cc.isClang) [
+    llvmPackages.openmp
+  ];
 
   # compile CUDA code for all extant GPUs so the binary will work with any GPU
   # and driver combination. to be ultimately solved upstream:
@@ -65,9 +75,16 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional enableFortran "-DBUILD_ZFORP=ON"
   ++ lib.optional enableOpenMP "-DZFP_WITH_OPENMP=ON"
   ++ lib.optional enablePython "-DBUILD_ZFPY=ON"
-  ++ ([ "-DBUILD_UTILITIES=${if enableUtilities then "ON" else "OFF"}" ]);
+  ++ [ "-DBUILD_UTILITIES=${if enableUtilities then "ON" else "OFF"}" ];
 
   doCheck = true;
+
+  passthru.tests = {
+    cmake-config = testers.hasCmakeConfigModules {
+      moduleNames = [ "zfp" ];
+      package = finalAttrs.finalPackage;
+    };
+  };
 
   meta = {
     homepage = "https://computing.llnl.gov/projects/zfp";

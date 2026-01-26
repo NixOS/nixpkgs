@@ -16,19 +16,19 @@
   boost183,
   nlohmann_json,
   nanodbc,
-  fmt_9,
+  fmt,
   spdlog,
 }:
 
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "irods";
-  version = "5.0.1";
+  version = "5.0.2";
 
   src = fetchFromGitHub {
     owner = "irods";
     repo = "irods";
     tag = finalAttrs.version;
-    hash = "sha256-/mcuqukgDoMc89FL/TfOhHWglsfdLmQbAnQYT8vTFsY=";
+    hash = "sha256-gYwuXWRf5MZv3CTUq/RDlU9Ekbw4jZJmSgWRBKqdKJo=";
   };
 
   nativeBuildInputs = [
@@ -54,12 +54,8 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     boost183
     nlohmann_json
     nanodbc
-    # Tracking issue for `fmt_11`:
-    # <https://github.com/irods/irods/issues/8454>
-    fmt_9
-    (spdlog.override {
-      fmt = fmt_9;
-    })
+    fmt
+    spdlog
   ];
 
   cmakeFlags = finalAttrs.passthru.commonCmakeFlags ++ [

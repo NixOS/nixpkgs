@@ -16,15 +16,15 @@
 
 buildPythonPackage rec {
   pname = "shapely";
-  version = "2.1.1";
+  version = "2.1.2";
   pyproject = true;
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "shapely";
     repo = "shapely";
     tag = version;
-    hash = "sha256-qIITlPym92wfq0byqjRxofpmYYg7vohbi1qPVEu6hRg=";
+    hash = "sha256-tnnOJsAI3v52ngFOIUIkeDuRIu2JlZGuHreVv4W8LeE=";
   };
 
   nativeBuildInputs = [

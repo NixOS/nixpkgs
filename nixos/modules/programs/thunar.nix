@@ -22,7 +22,7 @@ in
         default = [ ];
         type = lib.types.listOf lib.types.package;
         description = "List of thunar plugins to install.";
-        example = lib.literalExpression "with pkgs.xfce; [ thunar-archive-plugin thunar-volman ]";
+        example = lib.literalExpression "with pkgs; [ thunar-archive-plugin thunar-volman ]";
       };
 
     };
@@ -30,7 +30,7 @@ in
 
   config = lib.mkIf cfg.enable (
     let
-      package = pkgs.xfce.thunar.override { thunarPlugins = cfg.plugins; };
+      package = pkgs.thunar.override { thunarPlugins = cfg.plugins; };
 
     in
     {

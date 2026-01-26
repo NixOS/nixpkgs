@@ -55,6 +55,7 @@ sets are
 * `pkgs.python312Packages`
 * `pkgs.python313Packages`
 * `pkgs.python314Packages`
+* `pkgs.python315Packages`
 * `pkgs.pypy27Packages`
 * `pkgs.pypy310Packages`
 
@@ -98,13 +99,14 @@ The following is an example:
   hypothesis,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest";
   version = "3.3.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
+
     hash = "sha256-z4Q23FnYaVNG/NOrKW3kZCXsqwDWQJbOvnn7Ueyy65M=";
   };
 
@@ -129,7 +131,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ hypothesis ];
 
   meta = {
-    changelog = "https://github.com/pytest-dev/pytest/releases/tag/${version}";
+    changelog = "https://github.com/pytest-dev/pytest/releases/tag/${finalAttrs.version}";
     description = "Framework for writing tests";
     homepage = "https://github.com/pytest-dev/pytest";
     license = lib.licenses.mit;
@@ -139,7 +141,7 @@ buildPythonPackage rec {
       lsix
     ];
   };
-}
+})
 ```
 
 The `buildPythonPackage` mainly does four things:
@@ -191,7 +193,7 @@ following are specific to `buildPythonPackage`:
   When `__structuredAttrs = false`, the attribute `makeWrapperArgs` is passed as a space-separated string to the build script. Developers should use `prependToVar` or `appendToVar` to add arguments to it in build phases, or use `__structuredAttrs = true` to ensure that `makeWrapperArgs` is passed as a Bash array.
 
   For compatibility purposes,
-  when `makeWrapperArgs` shell variable is specified as a space-separated string (instead of a Bash array) in the build script, the string content is Bash-expanded before concatenated into the `wrapProgram` command. Still, developers should not rely on such behaviours, but use `__structuredAttrs = true` to specify flags containing spaces (e.g. `makeWrapperArgs = [ "--set" "GREETING" "Hello, world!" ]`), or use -pre and -post phases to specify flags with Bash-expansions (e.g. `preFixup = ''makeWrapperArgs+=(--prefix PATH : "$SOME_PATH")`'').
+  when `makeWrapperArgs` shell variable is specified as a space-separated string (instead of a Bash array) in the build script, the string content is Bash-expanded before concatenated into the `wrapProgram` command. Still, developers should not rely on such behaviours, but use `__structuredAttrs = true` to specify flags containing spaces (e.g. `makeWrapperArgs = [ "--set" "GREETING" "Hello, world!" ]`), or use -pre and -post phases to specify flags with Bash-expansions (e.g. `preFixup = ''makeWrapperArgs+=(--prefix PATH : "$SOME_PATH")''`).
   :::
 
 * `namePrefix`: Prepends text to `${name}` parameter. In case of libraries, this
@@ -303,13 +305,13 @@ specifying an interpreter version), like this:
   fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "luigi";
   version = "2.7.9";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Pe229rT0aHwA98s+nTHQMEFKZPo/yw6sot8MivFDvAw=";
   };
 
@@ -323,7 +325,7 @@ python3Packages.buildPythonApplication rec {
   meta = {
     # ...
   };
-}
+})
 ```
 
 This is then added to `pkgs/by-name` just as any other application would be.
@@ -555,6 +557,19 @@ are used in [`buildPythonPackage`](#buildpythonpackage-function).
 - `wheelUnpackHook` to move a wheel to the correct folder so it can be installed
   with the `pipInstallHook`.
 - `unittestCheckHook` will run tests with `python -m unittest discover`. See [example usage](#using-unittestcheckhook).
+
+#### Overriding build helpers {#overriding-python-build-helpers}
+
+Like many of the build helpers provided by Nixpkgs, Python build helpers typically provide a `<function>.override` attribute.
+It works like [`<pkg>.override`](#sec-pkg-override), and can be used to override the dependencies of each build helper.
+
+This allows specifying the stdenv to be used by `buildPythonPackage` or `buildPythonApplication`. The default (`python.stdenv`) can be overridden as follows:
+
+```nix
+buildPythonPackage.override { stdenv = customStdenv; } {
+  # package attrs...
+}
+```
 
 ## User Guide {#user-guide}
 
@@ -914,13 +929,13 @@ building Python libraries is [`buildPythonPackage`](#buildpythonpackage-function
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "toolz";
   version = "0.10.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-CP3V73yWSArRHBLUct4hrNMjWZlvaaUlkpm1QP66RWA=";
   };
 
@@ -936,12 +951,12 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/pytoolz/toolz/releases/tag/${version}";
+    changelog = "https://github.com/pytoolz/toolz/releases/tag/${finalAttrs.version}";
     homepage = "https://github.com/pytoolz/toolz";
     description = "List processing tools and functional utilities";
     license = lib.licenses.bsd3;
   };
-}
+})
 ```
 
 What happens here? The function [`buildPythonPackage`](#buildpythonpackage-function) is called and as argument
@@ -971,13 +986,13 @@ with import <nixpkgs> { };
 
 (
   let
-    my_toolz = python313.pkgs.buildPythonPackage rec {
+    my_toolz = python313.pkgs.buildPythonPackage (finalAttrs: {
       pname = "toolz";
       version = "0.10.0";
       pyproject = true;
 
       src = fetchPypi {
-        inherit pname version;
+        inherit (finalAttrs) pname version;
         hash = "sha256-CP3V73yWSArRHBLUct4hrNMjWZlvaaUlkpm1QP66RWA=";
       };
 
@@ -991,7 +1006,7 @@ with import <nixpkgs> { };
         description = "List processing tools and functional utilities";
         # [...]
       };
-    };
+    });
 
   in
   python313.withPackages (
@@ -1018,7 +1033,7 @@ that we introduced with the `let` expression.
 #### Handling dependencies {#handling-dependencies}
 
 Our example, `toolz`, does not have any dependencies on other Python packages or system libraries.
-[`buildPythonPackage`](#buildpythonpackage-function) uses the the following arguments in the following circumstances:
+[`buildPythonPackage`](#buildpythonpackage-function) uses the following arguments in the following circumstances:
 
 - `dependencies` - For Python runtime dependencies.
 - `build-system` - For Python build-time requirements.
@@ -1048,13 +1063,13 @@ order to build [`datashape`](https://github.com/blaze/datashape).
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "datashape";
   version = "0.4.7";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-FLLvdm1MllKrgTGC6Gb0k0deZeVYvtCCLji/B7uhong=";
   };
 
@@ -1069,12 +1084,12 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
-    changelog = "https://github.com/blaze/datashape/releases/tag/${version}";
+    changelog = "https://github.com/blaze/datashape/releases/tag/${finalAttrs.version}";
     homepage = "https://github.com/ContinuumIO/datashape";
     description = "Data description language";
     license = lib.licenses.bsd2;
   };
-}
+})
 ```
 
 We can see several runtime dependencies, `numpy`, `multipledispatch`, and
@@ -1097,13 +1112,13 @@ when building the bindings and are therefore added as [`buildInputs`](#var-stden
   libxslt,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lxml";
   version = "3.4.4";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-s9NiusRxFydHzaNRMjjxFcvWxfi45jGb9ql6eJJyQJk=";
   };
 
@@ -1123,13 +1138,13 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/lxml/lxml/releases/tag/lxml-${version}";
+    changelog = "https://github.com/lxml/lxml/releases/tag/lxml-${finalAttrs.version}";
     description = "Pythonic binding for the libxml2 and libxslt libraries";
     homepage = "https://lxml.de";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ sjourdois ];
   };
-}
+})
 ```
 
 In this example `lxml` and Nix are able to work out exactly where the relevant
@@ -1159,13 +1174,13 @@ therefore we have to set `LDFLAGS` and `CFLAGS`.
   scipy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyfftw";
   version = "0.9.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-9ru2r6kwhUCaskiFoaPNuJCfCVoUL01J40byvRt4kHQ=";
   };
 
@@ -1193,7 +1208,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pyfftw" ];
 
   meta = {
-    changelog = "https://github.com/pyFFTW/pyFFTW/releases/tag/v${version}";
+    changelog = "https://github.com/pyFFTW/pyFFTW/releases/tag/v${finalAttrs.version}";
     description = "Pythonic wrapper around FFTW, the FFT library, presenting a unified interface for all the supported transforms";
     homepage = "http://hgomersall.github.com/pyFFTW";
     license = with lib.licenses; [
@@ -1201,7 +1216,7 @@ buildPythonPackage rec {
       bsd3
     ];
   };
-}
+})
 ```
 
 Note also the line [`doCheck = false;`](#var-stdenv-doCheck), we explicitly disabled running the test-suite.
@@ -1595,13 +1610,13 @@ We first create a function that builds `toolz` in `~/path/to/toolz/release.nix`
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "toolz";
   version = "0.10.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-CP3V73yWSArRHBLUct4hrNMjWZlvaaUlkpm1QP66RWA=";
   };
 
@@ -1613,7 +1628,7 @@ buildPythonPackage rec {
     description = "List processing tools and functional utilities";
     license = lib.licenses.bsd3;
   };
-}
+})
 ```
 
 It takes an argument [`buildPythonPackage`](#buildpythonpackage-function). We now call this function using

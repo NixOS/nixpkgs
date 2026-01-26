@@ -12,7 +12,7 @@
   python3,
   libarchive,
   libmsym,
-  msgpack,
+  jkqtplotter,
   qttools,
   wrapQtAppsHook,
 }:
@@ -29,32 +29,32 @@ let
   moleculesRepo = fetchFromGitHub {
     owner = "OpenChemistry";
     repo = "molecules";
-    tag = "1.101.0";
+    tag = "1.102.1";
     hash = "sha256-hMLf0gYYnQpjSGKcPy4tihNbmpRR7UxnXF/hyhforgI=";
   };
   crystalsRepo = fetchFromGitHub {
     owner = "OpenChemistry";
     repo = "crystals";
-    tag = "1.101.0";
+    tag = "1.102.1";
     hash = "sha256-WhzFldaOt/wJy1kk+ypOkw1OYFT3hqD7j5qGdq9g+IY=";
   };
   fragmentsRepo = fetchFromGitHub {
     owner = "OpenChemistry";
     repo = "fragments";
-    tag = "1.101.0";
+    tag = "1.102.1";
     hash = "sha256-x10jGl3lAEfm8OxUZJnjXRJCQg8RLQZTstjwnt5B2bw=";
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "avogadrolibs";
-  version = "1.101.0";
+  version = "1.102.1";
 
   src = fetchFromGitHub {
     owner = "OpenChemistry";
     repo = "avogadrolibs";
-    tag = version;
-    hash = "sha256-0DJU40Etse90rdX8xByjQeUiBsJtEQozZQQsWsc4vxk=";
+    tag = finalAttrs.version;
+    hash = "sha256-RmGRdCy1ubwAkEJlfldscR84NLOMBx33OdHdcq1R1gg=";
   };
 
   postUnpack = ''
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     glew
     libarchive
     libmsym
-    msgpack
+    jkqtplotter
     qttools
   ];
 
@@ -91,11 +91,11 @@ stdenv.mkDerivation rec {
       --replace "_IMPORT_PREFIX}/$out" "_IMPORT_PREFIX}/"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Molecule editor and visualizer";
-    maintainers = with maintainers; [ sheepforce ];
+    maintainers = with lib.maintainers; [ sheepforce ];
     homepage = "https://github.com/OpenChemistry/avogadrolibs";
-    platforms = platforms.linux;
-    license = licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Only;
   };
-}
+})

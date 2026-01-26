@@ -59,17 +59,17 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Enables a Java Application to be run as a Windows Service or Unix Daemon";
     homepage = "https://wrapper.tanukisoftware.com/";
     changelog = "https://wrapper.tanukisoftware.com/doc/english/release-notes.html#${finalAttrs.version}";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     platforms = [
       "x86_64-linux"
       "i686-linux"
       "aarch64-linux"
     ];
-    maintainers = [ maintainers.suhr ];
+    maintainers = [ lib.maintainers.suhr ];
     mainProgram = "wrapper";
     # Broken for Musl at 2024-01-17. Errors as:
     # logger.c:81:12: fatal error: gnu/libc-version.h: No such file or directory

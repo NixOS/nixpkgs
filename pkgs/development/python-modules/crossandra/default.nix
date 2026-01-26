@@ -7,7 +7,7 @@
   mypy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "crossandra";
   version = "2.2.1";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "trag1c";
     repo = "crossandra";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-/JhrjXRH7Rs2bUil9HRneBC9wlVYEyfwivjzb+eyRv8=";
   };
 
@@ -33,10 +33,10 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    changelog = "https://github.com/trag1c/crossandra/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/trag1c/crossandra/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Fast and simple enum/regex-based tokenizer with decent configurability";
     license = lib.licenses.mit;
     homepage = "https://trag1c.github.io/crossandra";
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
-}
+})

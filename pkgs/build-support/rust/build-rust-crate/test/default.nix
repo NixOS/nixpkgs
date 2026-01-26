@@ -91,7 +91,7 @@ let
   mkTest =
     crateArgs:
     let
-      crate = mkHostCrate (builtins.removeAttrs crateArgs [ "expectedTestOutput" ]);
+      crate = mkHostCrate (removeAttrs crateArgs [ "expectedTestOutput" ]);
       hasTests = crateArgs.buildTests or false;
       expectedTestOutputs = crateArgs.expectedTestOutputs or null;
       binaries = map (v: lib.escapeShellArg v.name) (crateArgs.crateBin or [ ]);
@@ -182,7 +182,7 @@ let
     assert (builtins.isList expectedFiles);
 
     let
-      crate = mkCrate (builtins.removeAttrs crateArgs [ "expectedTestOutput" ]);
+      crate = mkCrate (removeAttrs crateArgs [ "expectedTestOutput" ]);
       crateOutput = if output == null then crate else crate."${output}";
       expectedFilesFile = writeTextFile {
         name = "expected-files-${name}";
@@ -228,7 +228,7 @@ let
 in
 rec {
 
-  tests =
+  tests = lib.recurseIntoAttrs (
     let
       cases = rec {
         libPath = {
@@ -706,7 +706,7 @@ rec {
 
         rustCargoTomlInTopDir =
           let
-            withoutCargoTomlSearch = builtins.removeAttrs rustCargoTomlInSubDir [ "workspace_member" ];
+            withoutCargoTomlSearch = removeAttrs rustCargoTomlInSubDir [ "workspace_member" ];
           in
           withoutCargoTomlSearch
           // {
@@ -774,6 +774,7 @@ rec {
           # On Darwin, the debug symbols are in a separate directory.
           "./bin/test_binary1.dSYM/Contents/Info.plist"
           "./bin/test_binary1.dSYM/Contents/Resources/DWARF/test_binary1"
+          "./bin/test_binary1.dSYM/Contents/Resources/Relocations/${stdenv.hostPlatform.rust.platform.arch}/test_binary1.yml"
         ];
       };
 
@@ -910,13 +911,14 @@ rec {
                 test -x '${pkg}/bin/rcgen' && touch $out
               ''
           );
-    };
+    }
+  );
   test = releaseTools.aggregate {
     name = "buildRustCrate-tests";
     meta = {
       description = "Test cases for buildRustCrate";
       maintainers = [ ];
     };
-    constituents = builtins.attrValues tests;
+    constituents = builtins.attrValues (lib.filterAttrs (_: v: lib.isDerivation v) tests);
   };
 }

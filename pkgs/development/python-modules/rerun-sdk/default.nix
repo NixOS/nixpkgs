@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  pkgs,
   buildPythonPackage,
   rerun,
   python,
@@ -19,7 +20,11 @@
 
   # tests
   datafusion,
+  inline-snapshot,
+  polars,
+  pytest-snapshot,
   pytestCheckHook,
+  tomli,
   torch,
 }:
 
@@ -35,9 +40,10 @@ buildPythonPackage {
     ;
 
   nativeBuildInputs = [
+    pkgs.protobuf # for protoc
+    rerun
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
-    rerun
   ];
 
   dependencies = [
@@ -66,20 +72,44 @@ buildPythonPackage {
 
   nativeCheckInputs = [
     datafusion
+    inline-snapshot
+    polars
+    pytest-snapshot
     pytestCheckHook
+    tomli
     torch
   ];
 
   inherit (rerun) addDlopenRunpaths addDlopenRunpathsPhase;
   postPhases = lib.optionals stdenv.hostPlatform.isLinux [ "addDlopenRunpathsPhase" ];
 
+  disabledTests = [
+    # ConnectionError: Connection: connecting to server: transport error
+    "test_isolated_streams"
+    "test_send_dataframe_roundtrip"
+    "test_server_with_dataset_files"
+    "test_server_with_dataset_prefix"
+    "test_server_with_multiple_datasets"
+
+    # TypeError: 'Snapshot' object is not callable
+    "test_schema_recording"
+  ];
+
   disabledTestPaths = [
     # "fixture 'benchmark' not found"
     "tests/python/log_benchmark/test_log_benchmark.py"
 
-    # ConnectionError: Connection error: transport error
-    "rerun_py/tests/unit/test_datafusion_tables.py"
+    # ValueError: Failed to start Rerun server: Error loading RRD: couldn't decode "/build/source/tests/assets/rrd/dataset/file4.rrd"
+    "rerun_py/tests/e2e_redap_tests"
+
+    # ConnectionError: Connection: connecting to server: transport error
+    "rerun_py/tests/api_sandbox/"
+
+    # RuntimeError: Failed to load URDF file: No elements found
+    "rerun_py/tests/unit/test_urdf_tree.py"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Python bindings for `rerun` (an interactive visualization tool for stream data)";

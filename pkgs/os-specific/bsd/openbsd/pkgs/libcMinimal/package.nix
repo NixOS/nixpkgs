@@ -57,7 +57,7 @@ mkDerivation {
     csu
   ];
 
-  env.NIX_CFLAGS_COMPILE = builtins.toString [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-B${csu}/lib"
     "-Wno-error"
   ];

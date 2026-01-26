@@ -35,3 +35,7 @@ elif [[ $0 != *cpp ]]; then
         extraBefore+=(-mabi=@explicitAbiValue@)
     fi
 fi
+
+if [[ "@darwinMinVersion@" ]]; then
+    extraBefore+=(-Werror=unguarded-availability)
+fi

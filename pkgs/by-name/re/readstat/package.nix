@@ -39,6 +39,12 @@ stdenv.mkDerivation rec {
       url = "https://github.com/WizardMac/ReadStat/commit/718d49155e327471ed9bf4a8c157f849f285b46c.patch";
       hash = "sha256-9hmuFa05b4JlxSzquIxXArOGhbi27A+3y5gH1IDg+R0=";
     })
+
+    # fix stringop-truncation warning
+    (fetchpatch {
+      url = "https://github.com/WizardMac/ReadStat/commit/43d4cdec6783b29d0f1d0ae9564507739cd27567.patch";
+      hash = "sha256-LZtdFdru2y89NvmLqa1sryhfzZX09jEeC2qWJpDS/kI=";
+    })
   ];
 
   nativeBuildInputs = [

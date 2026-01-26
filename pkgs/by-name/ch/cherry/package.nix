@@ -2,7 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  xorg,
+  mkfontscale,
+  fonttosfnt,
 }:
 
 stdenv.mkDerivation rec {
@@ -12,13 +13,13 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "turquoise-hexagon";
     repo = "cherry";
-    rev = version;
+    tag = version;
     sha256 = "13zkxwp6r6kcxv4x459vwscr0n0sik4a3kcz5xnmlpvcdnbxi586";
   };
 
   nativeBuildInputs = [
-    xorg.fonttosfnt
-    xorg.mkfontdir
+    fonttosfnt
+    mkfontscale
   ];
 
   buildPhase = ''
@@ -34,11 +35,11 @@ stdenv.mkDerivation rec {
     mkfontdir $out/share/fonts/misc
   '';
 
-  meta = with lib; {
+  meta = {
     description = "cherry font";
     homepage = "https://github.com/turquoise-hexagon/cherry";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

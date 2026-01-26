@@ -17,6 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "WITH_KDE" false)
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
   ];
 
   nativeBuildInputs = [ cmake ];

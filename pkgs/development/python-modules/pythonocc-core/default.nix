@@ -8,10 +8,10 @@
   freetype,
   libGL,
   libGLU,
-  libX11,
-  libXext,
-  libXi,
-  libXmu,
+  libx11,
+  libxext,
+  libxi,
+  libxmu,
   opencascade-occt,
   numpy,
   rapidjson,
@@ -39,10 +39,10 @@ stdenv.mkDerivation rec {
     freetype
     libGL
     libGLU
-    libX11
-    libXext
-    libXmu
-    libXi
+    libx11
+    libxext
+    libxmu
+    libxi
     fontconfig
     numpy
     rapidjson
@@ -60,12 +60,12 @@ stdenv.mkDerivation rec {
     skipBulkUpdate = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for the OpenCASCADE 3D modeling kernel";
     homepage = "https://github.com/tpaviot/pythonocc-core";
     changelog = "https://github.com/tpaviot/pythonocc-core/releases/tag/${version}";
-    license = licenses.lgpl3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
   };
 }

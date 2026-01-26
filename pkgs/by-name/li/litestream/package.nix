@@ -27,11 +27,11 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests) litestream; };
 
-  meta = with lib; {
+  meta = {
     description = "Streaming replication for SQLite";
     mainProgram = "litestream";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://litestream.io/";
-    maintainers = with maintainers; [ fbrs ];
+    maintainers = with lib.maintainers; [ fbrs ];
   };
 }

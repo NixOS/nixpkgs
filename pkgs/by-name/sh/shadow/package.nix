@@ -19,6 +19,7 @@
   libbsd,
   withTcb ? lib.meta.availableOn stdenv.hostPlatform tcb,
   tcb,
+  cmocka,
 }:
 let
   glibc' =
@@ -30,14 +31,14 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "shadow";
   version = "4.18.0";
 
   src = fetchFromGitHub {
     owner = "shadow-maint";
     repo = "shadow";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-M7We3JboNpr9H0ELbKcFtMvfmmVYaX9dYcsQ3sVX0lM=";
   };
 
@@ -68,10 +69,17 @@ stdenv.mkDerivation rec {
   ++ lib.optional withTcb tcb;
 
   patches = [
+    # Don't set $PATH to /bin:/usr/bin but inherit the $PATH of the caller.
     ./keep-path.patch
     # Obtain XML resources from XML catalog (patch adapted from gtk-doc)
     ./respect-xml-catalog-files-var.patch
+    # Avoid a chown during install to fix installation with tcb enabled
+    # Would have to be done as part of the NixOS modules,
+    # see https://github.com/NixOS/nixpkgs/issues/109457
     ./fix-install-with-tcb.patch
+    # This unit test fails: https://github.com/shadow-maint/shadow/issues/1382
+    # Can be removed after the next release
+    ./disable-xaprintf-test.patch
   ];
 
   postPatch = ''
@@ -86,7 +94,7 @@ stdenv.mkDerivation rec {
 
   # `AC_FUNC_SETPGRP' is not cross-compilation capable.
   preConfigure = ''
-    export ac_cv_func_setpgrp_void=${if stdenv.hostPlatform.isBSD then "no" else "yes"}
+    export ac_cv_func_setpgrp_void=${lib.boolToYesNo (!stdenv.hostPlatform.isBSD)}
     export shadow_cv_logdir=/var/log
   '';
 
@@ -104,6 +112,11 @@ stdenv.mkDerivation rec {
     substituteInPlace lib/nscd.c --replace /usr/sbin/nscd ${glibc'.bin}/bin/nscd
   '';
 
+  doCheck = true;
+  nativeCheckInputs = [
+    cmocka
+  ];
+
   postInstall = ''
     # Move the su binary into the su package
     mkdir -p $su/bin
@@ -116,15 +129,17 @@ stdenv.mkDerivation rec {
     stdenv.buildPlatform != stdenv.hostPlatform
   ) stdenv.shellPackage;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/shadow-maint/shadow";
     description = "Suite containing authentication-related tools such as passwd and su";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ mdaniels5757 ];
+    platforms = lib.platforms.linux;
   };
 
   passthru = {
     shellPath = "/bin/nologin";
+    # TODO: Run system tests: https://github.com/shadow-maint/shadow/blob/master/doc/contributions/tests.md#system-tests
     tests = { inherit (nixosTests) shadow; };
   };
-}
+})

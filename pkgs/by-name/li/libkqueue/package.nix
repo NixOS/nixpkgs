@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mheily/libkqueue";
     changelog = "https://github.com/mheily/libkqueue/raw/v${version}/ChangeLog";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

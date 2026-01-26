@@ -1,0 +1,445 @@
+diff --git a/Pdf4QtLibCore/sources/pdfblpainter.cpp b/Pdf4QtLibCore/sources/pdfblpainter.cpp
+index 6ccedc625239bfeccf938d1ff78f71abd4c8c914..59a90a7e165c7ba161d23043b7d834c945a37242 100644
+--- a/Pdf4QtLibCore/sources/pdfblpainter.cpp
++++ b/Pdf4QtLibCore/sources/pdfblpainter.cpp
+@@ -222,19 +222,19 @@ bool PDFBLPaintEngine::begin(QPaintDevice*)
+     if (m_isMultithreaded)
+     {
+         info.flags = BL_CONTEXT_CREATE_FLAG_FALLBACK_TO_SYNC;
+-        info.threadCount = QThread::idealThreadCount();
++        info.thread_count = QThread::idealThreadCount();
+     }
+ 
+-    m_blContext->setHint(BL_CONTEXT_HINT_RENDERING_QUALITY, BL_RENDERING_QUALITY_MAX_VALUE);
++    m_blContext->set_hint(BL_CONTEXT_HINT_RENDERING_QUALITY, BL_RENDERING_QUALITY_MAX_VALUE);
+ 
+-    m_blOffscreenBuffer->createFromData(m_qtOffscreenBuffer.width(), m_qtOffscreenBuffer.height(), BL_FORMAT_PRGB32, m_qtOffscreenBuffer.bits(), m_qtOffscreenBuffer.bytesPerLine());
++    m_blOffscreenBuffer->create_from_data(m_qtOffscreenBuffer.width(), m_qtOffscreenBuffer.height(), BL_FORMAT_PRGB32, m_qtOffscreenBuffer.bits(), m_qtOffscreenBuffer.bytesPerLine());
+     if (m_blContext->begin(m_blOffscreenBuffer.value(), info) == BL_SUCCESS)
+     {
+-        m_blContext->clearAll();
++        m_blContext->clear_all();
+ 
+         qreal devicePixelRatio = m_qtOffscreenBuffer.devicePixelRatioF();
+         m_blContext->scale(devicePixelRatio);
+-        m_blContext->userToMeta();
++        m_blContext->user_to_meta();
+ 
+         setBLPen(m_blContext.value(), m_currentPen);
+         setBLBrush(m_blContext.value(), m_currentBrush);
+@@ -296,18 +296,18 @@ void PDFBLPaintEngine::updateState(const QPaintEngineState& updatedState)
+ 
+     if (updatedState.state().testFlag(QPaintEngine::DirtyCompositionMode))
+     {
+-        m_blContext->setCompOp(getBLCompOp(updatedState.compositionMode()));
++        m_blContext->set_comp_op(getBLCompOp(updatedState.compositionMode()));
+     }
+ 
+     if (updatedState.state().testFlag(QPaintEngine::DirtyOpacity))
+     {
+-        m_blContext->setGlobalAlpha(updatedState.opacity());
++        m_blContext->set_global_alpha(updatedState.opacity());
+     }
+ 
+     if (updatedState.state().testFlag(QPaintEngine::DirtyTransform))
+     {
+         m_currentTransform = updatedState.transform();
+-        m_blContext->setTransform(getBLMatrix(updatedState.transform()));
++        m_blContext->set_transform(getBLMatrix(updatedState.transform()));
+     }
+ 
+     if (updatedState.state().testFlag(QPaintEngine::DirtyFont))
+@@ -381,12 +381,12 @@ void PDFBLPaintEngine::drawRects(const QRect* rects, int rectCount)
+ 
+     if (isFillActive())
+     {
+-        m_blContext->fillRectArray(blRects.view());
++        m_blContext->fill_rect_array(blRects.view());
+     }
+ 
+     if (isStrokeActive())
+     {
+-        m_blContext->strokeRectArray(blRects.view());
++        m_blContext->stroke_rect_array(blRects.view());
+     }
+ }
+ 
+@@ -427,12 +427,12 @@ void PDFBLPaintEngine::drawRects(const QRectF* rects, int rectCount)
+ 
+     if (isFillActive())
+     {
+-        m_blContext->fillRectArray(blRects.view());
++        m_blContext->fill_rect_array(blRects.view());
+     }
+ 
+     if (isStrokeActive())
+     {
+-        m_blContext->strokeRectArray(blRects.view());
++        m_blContext->stroke_rect_array(blRects.view());
+     }
+ }
+ 
+@@ -482,7 +482,7 @@ void PDFBLPaintEngine::drawLines(const QLine* lines, int lineCount)
+             }
+         }
+ 
+-        m_blContext->strokeLine(line.x1(), line.y1(), line.x2(), line.y2());
++        m_blContext->stroke_line(line.x1(), line.y1(), line.x2(), line.y2());
+     }
+ }
+ 
+@@ -531,7 +531,7 @@ void PDFBLPaintEngine::drawLines(const QLineF* lines, int lineCount)
+             }
+         }
+ 
+-        m_blContext->strokeLine(line.x1(), line.y1(), line.x2(), line.y2());
++        m_blContext->stroke_line(line.x1(), line.y1(), line.x2(), line.y2());
+     }
+ }
+ 
+@@ -585,8 +585,8 @@ void PDFBLPaintEngine::drawPathImpl(const QPainterPath& path, bool enableStroke,
+                 if (!fillPath.isEmpty())
+                 {
+                     m_blContext->save();
+-                    m_blContext->resetTransform();
+-                    m_blContext->fillPath(getBLPath(fillPath));
++                    m_blContext->reset_transform();
++                    m_blContext->fill_path(getBLPath(fillPath));
+                     m_blContext->restore();
+                 }
+             }
+@@ -601,9 +601,9 @@ void PDFBLPaintEngine::drawPathImpl(const QPainterPath& path, bool enableStroke,
+                 if (!finalTransformedStrokedPath.isEmpty())
+                 {
+                     m_blContext->save();
+-                    m_blContext->resetTransform();
++                    m_blContext->reset_transform();
+                     setBLBrush(m_blContext.value(), m_currentPen.brush());
+-                    m_blContext->fillPath(getBLPath(finalTransformedStrokedPath));
++                    m_blContext->fill_path(getBLPath(finalTransformedStrokedPath));
+                     m_blContext->restore();
+                 }
+             }
+@@ -616,19 +616,19 @@ void PDFBLPaintEngine::drawPathImpl(const QPainterPath& path, bool enableStroke,
+ 
+     if ((isFillActive() && enableFill) || forceFill)
+     {
+-        m_blContext->fillPath(blPath);
++        m_blContext->fill_path(blPath);
+     }
+ 
+     if (isStrokeActive() && enableStroke)
+     {
+-        m_blContext->strokePath(blPath);
++        m_blContext->stroke_path(blPath);
+     }
+ }
+ 
+ void PDFBLPaintEngine::drawPoints(const QPointF* points, int pointCount)
+ {
+     m_blContext->save();
+-    m_blContext->setFillStyle(BLRgba32(m_currentPen.color().rgba()));
++    m_blContext->set_fill_style(BLRgba32(m_currentPen.color().rgba()));
+ 
+     for (int i = 0; i < pointCount; ++i)
+     {
+@@ -640,7 +640,7 @@ void PDFBLPaintEngine::drawPoints(const QPointF* points, int pointCount)
+         }
+ 
+         BLEllipse blEllipse(c.x(), c.y(), m_currentPen.widthF() * 0.5, m_currentPen.widthF() * 0.5);
+-        m_blContext->fillEllipse(blEllipse);
++        m_blContext->fill_ellipse(blEllipse);
+     }
+ 
+     m_blContext->restore();
+@@ -649,7 +649,7 @@ void PDFBLPaintEngine::drawPoints(const QPointF* points, int pointCount)
+ void PDFBLPaintEngine::drawPoints(const QPoint* points, int pointCount)
+ {
+     m_blContext->save();
+-    m_blContext->setFillStyle(BLRgba32(m_currentPen.color().rgba()));
++    m_blContext->set_fill_style(BLRgba32(m_currentPen.color().rgba()));
+ 
+     for (int i = 0; i < pointCount; ++i)
+     {
+@@ -661,7 +661,7 @@ void PDFBLPaintEngine::drawPoints(const QPoint* points, int pointCount)
+         }
+ 
+         BLEllipse blEllipse(c.x(), c.y(), m_currentPen.widthF() * 0.5, m_currentPen.widthF() * 0.5);
+-        m_blContext->fillEllipse(blEllipse);
++        m_blContext->fill_ellipse(blEllipse);
+     }
+ 
+     m_blContext->restore();
+@@ -716,10 +716,10 @@ void PDFBLPaintEngine::drawTiledPixmap(const QRectF& r, const QPixmap& pixmap, c
+     int tilesY = qCeil(r.height() / pixmap.height());
+ 
+     BLImage blImage;
+-    blImage.createFromData(image.width(), image.height(), BL_FORMAT_PRGB32, image.bits(), image.bytesPerLine());
++    blImage.create_from_data(image.width(), image.height(), BL_FORMAT_PRGB32, image.bits(), image.bytesPerLine());
+ 
+     BLImage blDrawImage;
+-    blDrawImage.assignDeep(blImage);
++    blDrawImage.assign_deep(blImage);
+ 
+     for (int x = 0; x < tilesX; ++x)
+     {
+@@ -730,7 +730,7 @@ void PDFBLPaintEngine::drawTiledPixmap(const QRectF& r, const QPixmap& pixmap, c
+ 
+             if (tilePos.x() < r.right() && tilePos.y() < r.bottom())
+             {
+-                m_blContext->blitImage(getBLPoint(tilePos), blDrawImage);
++                m_blContext->blit_image(getBLPoint(tilePos), blDrawImage);
+             }
+         }
+     }
+@@ -776,12 +776,12 @@ void PDFBLPaintEngine::drawImage(const QRectF& r, const QImage& pm, const QRectF
+     }
+ 
+     BLImage blImage;
+-    blImage.createFromData(image.width(), image.height(), BL_FORMAT_PRGB32, image.bits(), image.bytesPerLine());
++    blImage.create_from_data(image.width(), image.height(), BL_FORMAT_PRGB32, image.bits(), image.bytesPerLine());
+ 
+     BLImage blDrawImage;
+-    blDrawImage.assignDeep(blImage);
++    blDrawImage.assign_deep(blImage);
+ 
+-    m_blContext->blitImage(BLRect(r.x(), r.y(), r.width(), r.height()),
++    m_blContext->blit_image(BLRect(r.x(), r.y(), r.width(), r.height()),
+                            blDrawImage,
+                            BLRectI(sr.x(), sr.y(), sr.width(), sr.height()));
+ }
+@@ -838,11 +838,11 @@ BLPath PDFBLPaintEngine::getBLPath(const QPainterPath& path)
+         switch (element.type)
+         {
+         case QPainterPath::MoveToElement:
+-            blPath.moveTo(element.x, element.y);
++            blPath.move_to(element.x, element.y);
+             break;
+ 
+         case QPainterPath::LineToElement:
+-            blPath.lineTo(element.x, element.y);
++            blPath.line_to(element.x, element.y);
+             break;
+ 
+         case QPainterPath::CurveToElement:
+@@ -851,7 +851,7 @@ BLPath PDFBLPaintEngine::getBLPath(const QPainterPath& path)
+                 const QPainterPath::Element& ctrlPoint1 = path.elementAt(i++);
+                 const QPainterPath::Element& ctrlPoint2 = path.elementAt(i++);
+                 const QPainterPath::Element& endPoint = path.elementAt(i);
+-                blPath.cubicTo(ctrlPoint1.x, ctrlPoint1.y, ctrlPoint2.x, ctrlPoint2.y, endPoint.x, endPoint.y);
++                blPath.cubic_to(ctrlPoint1.x, ctrlPoint1.y, ctrlPoint2.x, ctrlPoint2.y, endPoint.x, endPoint.y);
+             }
+             break;
+ 
+@@ -875,20 +875,20 @@ void PDFBLPaintEngine::setBLPen(BLContext& context, const QPen& pen)
+     const QList<qreal> customDashPattern = pen.dashPattern();
+     const Qt::PenStyle penStyle = pen.style();
+ 
+-    context.setStrokeAlpha(pen.color().alphaF());
+-    context.setStrokeWidth(width);
+-    context.setStrokeMiterLimit(miterLimit);
++    context.set_stroke_alpha(pen.color().alphaF());
++    context.set_stroke_width(width);
++    context.set_stroke_miter_limit(miterLimit);
+ 
+     switch (capStyle)
+     {
+     case Qt::FlatCap:
+-        context.setStrokeCaps(BL_STROKE_CAP_BUTT);
++        context.set_stroke_caps(BL_STROKE_CAP_BUTT);
+         break;
+     case Qt::SquareCap:
+-        context.setStrokeCaps(BL_STROKE_CAP_SQUARE);
++        context.set_stroke_caps(BL_STROKE_CAP_SQUARE);
+         break;
+     case Qt::RoundCap:
+-        context.setStrokeCaps(BL_STROKE_CAP_ROUND);
++        context.set_stroke_caps(BL_STROKE_CAP_ROUND);
+         break;
+     }
+ 
+@@ -899,69 +899,69 @@ void PDFBLPaintEngine::setBLPen(BLContext& context, const QPen& pen)
+         dashArray.append(value);
+     }
+ 
+-    context.setStrokeDashOffset(dashOffset);
+-    context.setStrokeDashArray(dashArray);
++    context.set_stroke_dash_offset(dashOffset);
++    context.set_stroke_dash_array(dashArray);
+ 
+     switch (joinStyle)
+     {
+     case Qt::MiterJoin:
+-        context.setStrokeJoin(BL_STROKE_JOIN_MITER_CLIP);
++        context.set_stroke_join(BL_STROKE_JOIN_MITER_CLIP);
+         break;
+     case Qt::BevelJoin:
+-        context.setStrokeJoin(BL_STROKE_JOIN_BEVEL);
++        context.set_stroke_join(BL_STROKE_JOIN_BEVEL);
+         break;
+     case Qt::RoundJoin:
+-        context.setStrokeJoin(BL_STROKE_JOIN_ROUND);
++        context.set_stroke_join(BL_STROKE_JOIN_ROUND);
+         break;
+     case Qt::SvgMiterJoin:
+-        context.setStrokeJoin(BL_STROKE_JOIN_MITER_CLIP);
++        context.set_stroke_join(BL_STROKE_JOIN_MITER_CLIP);
+         break;
+     }
+ 
+-    context.setStrokeStyle(BLRgba32(color.rgba()));
++    context.set_stroke_style(BLRgba32(color.rgba()));
+ 
+-    BLStrokeOptions strokeOptions = context.strokeOptions();
++    BLStrokeOptions strokeOptions = context.stroke_options();
+ 
+     switch (penStyle)
+     {
+     case Qt::SolidLine:
+-        strokeOptions.dashArray.clear();
+-        strokeOptions.dashOffset = 0.0;
++        strokeOptions.dash_array.clear();
++        strokeOptions.dash_offset = 0.0;
+         break;
+ 
+     case Qt::DashLine:
+     {
+         constexpr double dashPattern[] = {4, 4};
+-        strokeOptions.dashArray.assignData(dashPattern, std::size(dashPattern));
++        strokeOptions.dash_array.assign_data(dashPattern, std::size(dashPattern));
+         break;
+     }
+ 
+     case Qt::DotLine:
+     {
+         constexpr double dashPattern[] = {1, 3};
+-        strokeOptions.dashArray.assignData(dashPattern, std::size(dashPattern));
++        strokeOptions.dash_array.assign_data(dashPattern, std::size(dashPattern));
+         break;
+     }
+ 
+     case Qt::DashDotLine:
+     {
+         constexpr double dashPattern[] = {4, 2, 1, 2};
+-        strokeOptions.dashArray.assignData(dashPattern, std::size(dashPattern));
++        strokeOptions.dash_array.assign_data(dashPattern, std::size(dashPattern));
+         break;
+     }
+ 
+     case Qt::DashDotDotLine:
+     {
+         constexpr double dashPattern[] = {4, 2, 1, 2, 1, 2};
+-        strokeOptions.dashArray.assignData(dashPattern, std::size(dashPattern));
++        strokeOptions.dash_array.assign_data(dashPattern, std::size(dashPattern));
+         break;
+     }
+ 
+     case Qt::CustomDashLine:
+     {
+         auto dashPattern = pen.dashPattern();
+-        strokeOptions.dashArray.assignData(dashPattern.data(), dashPattern.size());
+-        strokeOptions.dashOffset = pen.dashOffset();
++        strokeOptions.dash_array.assign_data(dashPattern.data(), dashPattern.size());
++        strokeOptions.dash_offset = pen.dashOffset();
+         break;
+     }
+ 
+@@ -969,7 +969,7 @@ void PDFBLPaintEngine::setBLPen(BLContext& context, const QPen& pen)
+         break;
+     }
+ 
+-    context.setStrokeOptions(strokeOptions);
++    context.set_stroke_options(strokeOptions);
+ }
+ 
+ void PDFBLPaintEngine::setBLBrush(BLContext& context, const QBrush& brush)
+@@ -981,7 +981,7 @@ void PDFBLPaintEngine::setBLBrush(BLContext& context, const QBrush& brush)
+         {
+             stops.append(BLGradientStop(stop.first, BLRgba32(stop.second.red(), stop.second.green(), stop.second.blue(), stop.second.alpha())));
+         }
+-        blGradient.assignStops(stops.constData(), stops.size());
++        blGradient.assign_stops(stops.constData(), stops.size());
+     };
+ 
+     switch (brush.style())
+@@ -991,7 +991,7 @@ void PDFBLPaintEngine::setBLBrush(BLContext& context, const QBrush& brush)
+         {
+             QColor color = brush.color();
+             BLRgba32 blColor = BLRgba32(color.red(), color.green(), color.blue(), color.alpha());
+-            context.setFillStyle(blColor);
++            context.set_fill_style(blColor);
+             break;
+         }
+         case Qt::LinearGradientPattern:
+@@ -1007,7 +1007,7 @@ void PDFBLPaintEngine::setBLBrush(BLContext& context, const QBrush& brush)
+                 blLinearGradient.y1 = linearGradient->finalStop().y();
+                 BLGradient blGradient(blLinearGradient);
+                 setGradientStops(blGradient, *gradient);
+-                context.setFillStyle(blGradient);
++                context.set_fill_style(blGradient);
+             }
+             break;
+         }
+@@ -1025,7 +1025,7 @@ void PDFBLPaintEngine::setBLBrush(BLContext& context, const QBrush& brush)
+                 blRadialGradientValues.r0 = radialGradient->radius();
+                 BLGradient blGradient(blRadialGradientValues);
+                 setGradientStops(blGradient, *gradient);
+-                context.setFillStyle(blGradient);
++                context.set_fill_style(blGradient);
+             }
+             break;
+         }
+@@ -1037,12 +1037,12 @@ bool PDFBLPaintEngine::loadBLFont(BLFont& font, QString fontName, PDFReal fontSi
+     QByteArray data = PDFSystemFont::getFontData(fontName.toLatin1());
+ 
+     BLFontData blFontData;
+-    if (blFontData.createFromData(data.data(), data.size()) == BL_SUCCESS)
++    if (blFontData.create_from_data(data.data(), data.size()) == BL_SUCCESS)
+     {
+         BLFontFace fontFace;
+-        if (fontFace.createFromData(blFontData, 0) == BL_SUCCESS)
++        if (fontFace.create_from_data(blFontData, 0) == BL_SUCCESS)
+         {
+-            if (font.createFromFace(fontFace, fontSize) == BL_SUCCESS)
++            if (font.create_from_face(fontFace, fontSize) == BL_SUCCESS)
+             {
+                 return true;
+             }
+@@ -1154,7 +1154,7 @@ void PDFBLPaintEngine::updateClipping(std::optional<QRegion> clipRegion,
+             m_finalClipPath.reset();
+             m_finalClipPathBoundingBox = QRectF();
+             m_clipSingleRect = false;
+-            m_blContext->restoreClipping();
++            m_blContext->restore_clipping();
+             return;
+ 
+         case Qt::ReplaceClip:
+@@ -1188,14 +1188,14 @@ void PDFBLPaintEngine::updateClipping(std::optional<QRegion> clipRegion,
+ 
+     if (m_clipSingleRect)
+     {
+-        BLMatrix2D matrix = m_blContext->userTransform();
+-        m_blContext->resetTransform();
+-        m_blContext->clipToRect(getBLRect(m_finalClipPath->boundingRect()));
+-        m_blContext->setTransform(matrix);
++        BLMatrix2D matrix = m_blContext->user_transform();
++        m_blContext->reset_transform();
++        m_blContext->clip_to_rect(getBLRect(m_finalClipPath->boundingRect()));
++        m_blContext->set_transform(matrix);
+     }
+     else
+     {
+-        m_blContext->restoreClipping();
++        m_blContext->restore_clipping();
+     }
+ }
+ 
+@@ -1312,7 +1312,7 @@ void PDFBLPaintEngine::setFillRule(Qt::FillRule fillRule)
+         break;
+     }
+ 
+-    m_blContext->setFillRule(blFillRule);
++    m_blContext->set_fill_rule(blFillRule);
+ }
+ 
+ }   // namespace pdf

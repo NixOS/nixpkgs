@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     homepage = "https://michaelrsweet.github.io/htmldoc";
     changelog = "https://github.com/michaelrsweet/htmldoc/releases/tag/v${version}";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
 
     longDescription = ''

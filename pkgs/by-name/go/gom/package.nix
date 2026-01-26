@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gom";
-  version = "0.5.3";
+  version = "0.5.5";
 
   outputs = [
     "out"
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gom/${lib.versions.majorMinor version}/gom-${version}.tar.xz";
-    sha256 = "Bp0JCfvca00n7feoeTZhlOOrUIsDVIv1uJ/2NUbSAXc=";
+    sha256 = "rWHwWvIxenqxdx/PqBaYn7ujsYlX0uC13t6e9F8JtTQ=";
   };
 
   patches = [
@@ -58,11 +58,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "GObject to SQLite object mapper";
     homepage = "https://gitlab.gnome.org/GNOME/gom";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.unix;
-    teams = [ teams.gnome ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.gnome ];
   };
 }

@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   setuptools,
   pytestCheckHook,
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "braceexpand";
   version = "0.1.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit version pname;

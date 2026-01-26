@@ -47,11 +47,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pkg_about" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python metadata sharing at runtime";
     homepage = "https://github.com/karpierz/pkg_about/";
     changelog = "https://github.com/karpierz/pkg_about/blob/${version}/CHANGES.rst";
-    license = licenses.zlib;
-    teams = [ teams.ororatech ];
+    license = lib.licenses.zlib;
   };
 }

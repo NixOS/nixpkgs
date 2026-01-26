@@ -4,7 +4,7 @@
   fetchFromGitHub,
   libjack2,
   lv2,
-  xorg,
+  libx11,
   liblo,
   libGL,
   libXcursor,
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libjack2
     lv2
-    xorg.libX11
+    libx11
     liblo
     libGL
     libXcursor
@@ -55,11 +55,11 @@ stdenv.mkDerivation rec {
     cp -r bin/wolf-shaper        $out/bin/
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://wolf-plugins.github.io/wolf-shaper/";
     description = "Waveshaper plugin with spline-based graph editor";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.magnetophon ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.magnetophon ];
     platforms = [
       "i686-linux"
       "x86_64-linux"

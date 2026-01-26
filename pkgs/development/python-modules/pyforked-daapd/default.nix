@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   aiohttp,
   pytestCheckHook,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pyforked-daapd";
   version = "0.1.14";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -39,11 +36,11 @@ buildPythonPackage rec {
   # Tests require a running forked-daapd server
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Python interface for forked-daapd";
     homepage = "https://github.com/uvjustin/pyforked-daapd";
     changelog = "https://github.com/uvjustin/pyforked-daapd/blob/v${version}/CHANGES.txt";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

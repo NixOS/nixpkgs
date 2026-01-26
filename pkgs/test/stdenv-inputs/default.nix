@@ -70,4 +70,7 @@ stdenv.mkDerivation {
   '';
 
   meta.platforms = lib.platforms.all;
+  passthru = {
+    inherit foo bar;
+  };
 }

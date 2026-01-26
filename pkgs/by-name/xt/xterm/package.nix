@@ -2,7 +2,15 @@
   lib,
   stdenv,
   fetchurl,
-  xorg,
+  libxt,
+  libxft,
+  libxext,
+  libxaw,
+  libx11,
+  libsm,
+  libice,
+  xorgproto,
+  luit,
   ncurses,
   freetype,
   fontconfig,
@@ -16,14 +24,14 @@
 
 stdenv.mkDerivation rec {
   pname = "xterm";
-  version = "401";
+  version = "406";
 
   src = fetchurl {
     urls = [
-      "ftp://ftp.invisible-island.net/xterm/${pname}-${version}.tgz"
+      "https://invisible-island.net/archives/xterm/${pname}-${version}.tgz"
       "https://invisible-mirror.net/archives/xterm/${pname}-${version}.tgz"
     ];
-    hash = "sha256-PaK15ky0mwOqEwV9heYuHy5k98dEcZwA0zjRHNPmyho=";
+    hash = "sha256-Bm6y1mQwiX/h2t0nFVTM2uM9d8USEmp1j8TeN7EUh5k=";
   };
 
   patches = [ ./sixel-256.support.patch ];
@@ -37,17 +45,17 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    xorg.libXaw
-    xorg.xorgproto
-    xorg.libXt
-    xorg.libXext
-    xorg.libX11
-    xorg.libSM
-    xorg.libICE
+    libxaw
+    xorgproto
+    libxt
+    libxext
+    libx11
+    libsm
+    libice
     ncurses
     freetype
-    xorg.libXft
-    xorg.luit
+    libxft
+    luit
   ];
 
   configureFlags = [
@@ -113,7 +121,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://invisible-island.net/xterm";
     license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ nequissimus ];
     platforms = with lib.platforms; linux ++ darwin;
     changelog = "https://invisible-island.net/xterm/xterm.log.html";
     mainProgram = "xterm";

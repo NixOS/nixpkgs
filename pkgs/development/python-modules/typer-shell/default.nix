@@ -6,7 +6,6 @@
   fetchFromGitHub,
   hatchling,
   iterfzf,
-  pythonOlder,
   pyyaml,
   rich,
   typer,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "typer-shell";
   version = "1.0.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "FergusFettes";
@@ -48,10 +45,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "typer_shell" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for making beautiful shells/REPLs with Typer";
     homepage = "https://github.com/FergusFettes/typer-shell";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

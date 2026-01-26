@@ -20,10 +20,14 @@
   wl-clipboard,
   wxGTK32,
   makeWrapper,
+  securityWrapperPath ? null,
+  nix-update-script,
   stdenv,
   waylandSupport ? false,
   x11Support ? stdenv.hostPlatform.isLinux,
   testers,
+  nixosTests,
+  fetchpatch,
 }:
 # espanso does not support building with both X11 and Wayland support at the same time
 assert stdenv.hostPlatform.isLinux -> x11Support != waylandSupport;
@@ -31,16 +35,16 @@ assert stdenv.hostPlatform.isDarwin -> !x11Support;
 assert stdenv.hostPlatform.isDarwin -> !waylandSupport;
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "espanso";
-  version = "2.2-unstable-2024-05-14";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "espanso";
     repo = "espanso";
-    rev = "8daadcc949c35a7b7aa20b7f544fdcff83e2c5f7";
-    hash = "sha256-4MArENBmX6tDVLZE1O8cuJe7A0R+sLZoxBkDvIwIVZ4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-WvFV+WZxwaGCfMVEbfHrQZS0LtgJElmOtSXK9jEeaDk=";
   };
 
-  cargoHash = "sha256-2Hf492/xZ/QGqDYbjiZep/FX8bPyEuoxkMJ4qnMqu+c=";
+  cargoHash = "sha256-E3z8NfKZiQsaYqDKXSIltETa4cSL0ShHnUMymjH5pas=";
 
   nativeBuildInputs = [
     extra-cmake-modules
@@ -86,19 +90,29 @@ rustPlatform.buildRustPackage (finalAttrs: {
     xdotool
   ];
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace scripts/create_bundle.sh \
-      --replace-fail target/mac/ $out/Applications/ \
-      --replace-fail /bin/echo ${coreutils}/bin/echo
-    patchShebangs scripts/create_bundle.sh
-    substituteInPlace espanso/src/res/macos/Info.plist \
-      --replace-fail "<string>espanso</string>" "<string>${placeholder "out"}/Applications/Espanso.app/Contents/MacOS/espanso</string>"
-    substituteInPlace espanso/src/path/macos.rs  espanso/src/path/linux.rs \
-      --replace-fail '"/usr/local/bin/espanso"' '"${placeholder "out"}/bin/espanso"'
+  patches = [
+    # remove when version > 2.3.0
+    (fetchpatch {
+      name = "fix-welcome-screen-expansion.patch";
+      url = "https://github.com/espanso/espanso/commit/5d5fc84df695d628d1d9c3e7e3854c2991a64d64.patch";
+      hash = "sha256-dhoqq0V8b8mGvZvPInHiHKGmGDDFO/SH5HqMY7EA134=";
+    })
+  ];
 
-    substituteInPlace espanso-modulo/build.rs \
-      --replace-fail '"--with-libpng=builtin"' '"--with-libpng=sys"'
-  '';
+  postPatch =
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace scripts/create_bundle.sh \
+        --replace-fail target/mac/ $out/Applications/ \
+        --replace-fail /bin/echo ${coreutils}/bin/echo
+      substituteInPlace espanso/src/path/macos.rs  espanso/src/path/linux.rs \
+        --replace-fail '"/usr/local/bin/espanso"' '"${placeholder "out"}/bin/espanso"'
+    ''
+    + lib.optionalString (securityWrapperPath != null) ''
+      substituteInPlace espanso/src/cli/daemon/mod.rs \
+        --replace-fail \
+          'std::env::current_exe().expect("unable to obtain espanso executable location");' \
+          'std::ffi::OsString::from("${securityWrapperPath}/espanso");'
+    '';
 
   # Some tests require networking
   doCheck = false;
@@ -106,7 +120,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall =
     if stdenv.hostPlatform.isDarwin then
       ''
-        EXEC_PATH=$out/bin/espanso BUILD_ARCH=current ${stdenv.shell} ./scripts/create_bundle.sh
+        ${stdenv.shell} ./scripts/create_bundle.sh $out/bin/espanso
       ''
     else
       ''
@@ -127,23 +141,27 @@ rustPlatform.buildRustPackage (finalAttrs: {
           }
       '';
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-    # remove when updating to a release version
-    version = "2.2.1";
+  passthru = {
+    inherit waylandSupport;
+    tests = nixosTests.espanso // {
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        inherit (finalAttrs) version;
+      };
+    };
+    updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform Text Expander written in Rust";
     mainProgram = "espanso";
     homepage = "https://espanso.org";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       kimat
       n8henrie
     ];
-    platforms = platforms.unix;
-
+    platforms = lib.platforms.unix;
     longDescription = ''
       Espanso detects when you type a keyword and replaces it while you're typing.
     '';

@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "flame";
     repo = "blis";
-    rev = version;
+    tag = version;
     sha256 = "sha256-+n8SbiiEJDN4j1IPmZfI5g1i2J+jWrUXh7S48JEDTAE=";
   };
 
@@ -58,11 +58,11 @@ stdenv.mkDerivation rec {
     ln -s $out/lib/libcblas.so.3 $out/lib/libcblas.so
   '';
 
-  meta = with lib; {
+  meta = {
     description = "BLAS-compatible linear algebra library";
     homepage = "https://github.com/flame/blis";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ stephen-huan ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ stephen-huan ];
     platforms = [ "x86_64-linux" ];
   };
 }

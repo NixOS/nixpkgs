@@ -12,19 +12,19 @@
 
 buildPythonPackage rec {
   pname = "fastbencode";
-  version = "0.3.6";
+  version = "0.3.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "breezy-team";
     repo = "fastbencode";
     tag = "v${version}";
-    hash = "sha256-Vn9NcJQaSF+k2TyRTAA9yMWiV+kYrfw6RIbIe99CCsg=";
+    hash = "sha256-vpo8OVhIm9/niMY6A878FRJ+zU98z9CJe/p5UxmvrLo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-r229xfSrkbDEfm/nGFuQshyP4o04US0xJiRK4oXtaYE=";
+    hash = "sha256-N4diwjHZkJk+Tzu609ueRipfIXyNhXhLG7hpnG1gRa4=";
   };
 
   nativeBuildInputs = [
@@ -46,11 +46,11 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast implementation of bencode";
     homepage = "https://github.com/breezy-team/fastbencode";
     changelog = "https://github.com/breezy-team/fastbencode/releases/tag/v${version}";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
   };
 }

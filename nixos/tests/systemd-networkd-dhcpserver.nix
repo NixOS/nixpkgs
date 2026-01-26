@@ -10,7 +10,7 @@
 { pkgs, ... }:
 {
   name = "systemd-networkd-dhcpserver";
-  meta = with pkgs.lib.maintainers; {
+  meta = {
     maintainers = [ ];
   };
   nodes = {

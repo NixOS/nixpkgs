@@ -94,8 +94,13 @@
   addDriverRunpath,
   undmg,
 
-  # For QT support
+  # Enables Chrome's "Use QT" appearance to introspect the user's Plasma theme
+  plasmaSupport ? false,
   qt6,
+  kdePackages,
+
+  # Create a symlink at $out/bin/google-chrome
+  withSymlink ? true,
 }:
 
 let
@@ -164,17 +169,21 @@ let
   ++ [
     gtk3
     gtk4
+  ]
+  ++ lib.optionals plasmaSupport [
     qt6.qtbase
     qt6.qtwayland
+    kdePackages.plasma-integration
+    kdePackages.breeze
   ];
 
   linux = stdenvNoCC.mkDerivation (finalAttrs: {
     inherit pname meta passthru;
-    version = "140.0.7339.185";
+    version = "144.0.7559.96";
 
     src = fetchurl {
       url = "https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${finalAttrs.version}-1_amd64.deb";
-      hash = "sha256-cPAbDVevr/vtBwLn+bcPmQHNfLrh+Ogw3rDKV5pwB2M=";
+      hash = "sha256-tPM+bbT3AreOPZdeHfO2ktBXvFGicH1+oz/a2R+MbEE=";
     };
 
     # With strictDeps on, some shebangs were not being patched correctly
@@ -230,9 +239,6 @@ let
         --replace-fail /usr/bin/google-chrome-$dist $exe
       substituteInPlace $out/share/gnome-control-center/default-apps/google-$appname.xml \
         --replace-fail /opt/google/$appname/google-$appname $exe
-      substituteInPlace $out/share/menu/google-$appname.menu \
-        --replace-fail /opt $out/share \
-        --replace-fail $out/share/google/$appname/google-$appname $exe
 
       for icon_file in $out/share/google/chrome*/product_logo_[0-9]*.png; do
         num_and_suffix="''${icon_file##*logo_}"
@@ -249,9 +255,13 @@ let
 
       # "--simulate-outdated-no-au" disables auto updates and browser outdated popup
       makeWrapper "$out/share/google/$appname/google-$appname" "$exe" \
-        --prefix QT_PLUGIN_PATH  : "${qt6.qtbase}/lib/qt-6/plugins" \
-        --prefix QT_PLUGIN_PATH  : "${qt6.qtwayland}/lib/qt-6/plugins" \
-        --prefix NIXPKGS_QT6_QML_IMPORT_PATH : "${qt6.qtwayland}/lib/qt-6/qml" \
+        ${lib.optionalString plasmaSupport ''
+          --prefix QT_PLUGIN_PATH  : "${qt6.qtbase}/lib/qt-6/plugins" \
+          --prefix QT_PLUGIN_PATH  : "${qt6.qtwayland}/lib/qt-6/plugins" \
+          --prefix QT_PLUGIN_PATH  : "${kdePackages.plasma-integration}/lib/qt-6/plugins" \
+          --prefix QT_PLUGIN_PATH  : "${kdePackages.breeze}/lib/qt-6/plugins" \
+          --prefix NIXPKGS_QT6_QML_IMPORT_PATH : "${qt6.qtwayland}/lib/qt-6/qml" \
+        ''} \
         --prefix LD_LIBRARY_PATH : "$rpath" \
         --prefix PATH            : "$binpath" \
         --suffix PATH            : "${lib.makeBinPath [ xdg-utils ]}" \
@@ -271,15 +281,19 @@ let
 
       runHook postInstall
     '';
+
+    postInstall = lib.optionalString withSymlink ''
+      ln -s $out/bin/google-chrome-stable $out/bin/google-chrome
+    '';
   });
 
   darwin = stdenvNoCC.mkDerivation (finalAttrs: {
     inherit pname meta passthru;
-    version = "140.0.7339.186";
+    version = "144.0.7559.97";
 
     src = fetchurl {
-      url = "http://dl.google.com/release2/chrome/acyk4e3hewde2niid4gmhjus7t7q_140.0.7339.186/GoogleChrome-140.0.7339.186.dmg";
-      hash = "sha256-ygXHbTJ4z7knRzTQG9uEgas7360wHgV9vaYYm0iyGOg=";
+      url = "http://dl.google.com/release2/chrome/acs3ozv33k7hgpukzi2nuehve3aa_144.0.7559.97/GoogleChrome-144.0.7559.97.dmg";
+      hash = "sha256-uhNWvAnifxbNMPR9QiXSgpDK9tnim39q2bLMCM9Q93w=";
     };
 
     dontPatch = true;
@@ -308,6 +322,10 @@ let
         --add-flags ${lib.escapeShellArg commandLineArgs}
       runHook postInstall
     '';
+
+    postInstall = lib.optionalString withSymlink ''
+      ln -s $out/bin/google-chrome-stable $out/bin/google-chrome
+    '';
   });
 
   passthru.updateScript = ./update.sh;
@@ -318,7 +336,7 @@ let
     homepage = "https://www.google.com/chrome/browser/";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
-      johnrtitor
+      mdaniels5757
     ];
     platforms = lib.platforms.darwin ++ [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

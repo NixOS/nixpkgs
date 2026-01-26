@@ -12,19 +12,20 @@
   libnotify,
   slurp,
   wl-clipboard,
+  unixtools,
   bash,
   nix-update-script,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "grimblast";
-  version = "0.1-unstable-2025-09-22";
+  version = "0.1-unstable-2026-01-14";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "contrib";
-    rev = "de79078fd59140067e53cd00ebdf17f96ce27846";
-    hash = "sha256-iRv5afKzuu6SkwztqMwZ33161CzBJsyeRHp0uviN9TI=";
+    rev = "541628cebe42792ddf5063c4abd6402c2f1bd68f";
+    hash = "sha256-CopNx3j//gZ2mE0ggEK9dZ474UcbDhpTw+KMor8mSxI=";
   };
 
   strictDeps = true;
@@ -54,16 +55,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           libnotify
           slurp
           wl-clipboard
+          unixtools.getopt
         ]
       }"
   '';
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
-  meta = with lib; {
+  meta = {
     description = "Helper for screenshots within Hyprland, based on grimshot";
-    license = licenses.mit;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
     teams = [ lib.teams.hyprland ];
     mainProgram = "grimblast";
   };

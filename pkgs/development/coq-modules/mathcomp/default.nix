@@ -35,6 +35,7 @@ let
       inherit (lib.versions) range;
     in
     lib.switch coq.coq-version [
+      (case (range "8.20" "9.1") "2.5.0")
       (case (range "8.20" "9.1") "2.4.0")
       (case (range "8.19" "9.0") "2.3.0")
       (case (range "8.17" "8.20") "2.2.0")
@@ -56,6 +57,7 @@ let
       (case (range "8.5" "8.7") "1.6.4")
     ] null;
   release = {
+    "2.5.0".sha256 = "sha256-M/6IP4WhTQ4j2Bc8nXBXjSjWO08QzNIYI+a2owfOh+8=";
     "2.4.0".sha256 = "sha256-A1XgLLwZRvKS8QyceCkSQa7ue6TYyf5fMft5gSx9NOs=";
     "2.3.0".sha256 = "sha256-wa6OBig8rhAT4iwupSylyCAMhO69rADa0MQIX5zzL+Q=";
     "2.2.0".sha256 = "sha256-SPyWSI5kIP5w7VpgnQ4vnK56yEuWnJylNQOT7M77yoQ=";
@@ -97,6 +99,15 @@ let
     "character" = [ "field" ];
     "all" = [ "character" ];
   };
+  meta = {
+    homepage = "https://math-comp.github.io/";
+    license = lib.licenses.cecill-b;
+    maintainers = with lib.maintainers; [
+      vbgl
+      jwiegley
+      cohencyril
+    ];
+  };
 
   mathcomp_ =
     package:
@@ -119,6 +130,7 @@ let
             releaseRev
             repo
             owner
+            meta
             ;
 
           mlPlugin = lib.versions.isLe "8.6" coq.coq-version;
@@ -145,16 +157,6 @@ let
             cd ${pkgpath} || cd ssreflect  # before 2.5, boot didn't exist, make it behave as ssreflect
           ''
           + lib.optionalString (package == "all") pkgallMake;
-
-          meta = {
-            homepage = "https://math-comp.github.io/";
-            license = lib.licenses.cecill-b;
-            maintainers = with lib.maintainers; [
-              vbgl
-              jwiegley
-              cohencyril
-            ];
-          };
         }
         // lib.optionalAttrs (package != "single") { passthru = lib.mapAttrs (p: _: mathcomp_ p) packages; }
         // lib.optionalAttrs withDoc {
@@ -242,4 +244,40 @@ let
     in
     patched-derivation5;
 in
-mathcomp_ (if single then "single" else "all")
+# this is just a wrapper for rocqPackages.mathcomp for Rocq >= 9.0
+if coq.rocqPackages ? mathcomp && version != "2.3.0" && version != "2.4.0" then
+  let
+    mc = coq.rocqPackages.mathcomp.override {
+      inherit version withDoc single;
+      inherit
+        ncurses
+        graphviz
+        lua
+        fetchzip
+        hierarchy-builder
+        ;
+      inherit (coq.rocqPackages) rocq-core;
+    };
+  in
+  mc
+  // {
+    ssreflect = mkCoqDerivation {
+      inherit
+        version
+        defaultVersion
+        release
+        releaseRev
+        repo
+        owner
+        meta
+        ;
+      pname = "mathcomp-ssreflect";
+      propagatedBuildInputs = [
+        mc.boot
+        mc.order
+      ];
+      preBuild = "cd ssreflect";
+    };
+  }
+else
+  mathcomp_ (if single then "single" else "all")

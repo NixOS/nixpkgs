@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lxqt-notificationd";
-  version = "2.2.0";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "lxqt-notificationd";
     rev = version;
-    hash = "sha256-pMBshwqfG/8tvpwuR3wCQ/N5IT1rXJl+nZfcSqxMjM0=";
+    hash = "sha256-TfTOuarMq2m5rAdcfiKqjyGeJzKyUSvhkJ2EoGUMTUQ=";
   };
 
   nativeBuildInputs = [
@@ -46,11 +46,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lxqt/lxqt-notificationd";
     description = "LXQt notification daemon";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    teams = [ teams.lxqt ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.lxqt ];
   };
 }

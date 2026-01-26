@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "fertilizer";
   version = "0.3.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "moleculekayak";
     repo = "fertilizer";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-sDoAjEiKxHf+HtFLZr6RwuXN+rl0ZQnFUoQ09QiE6Xc=";
   };
 
@@ -40,4 +40,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ ambroisie ];
     mainProgram = "fertilizer";
   };
-}
+})

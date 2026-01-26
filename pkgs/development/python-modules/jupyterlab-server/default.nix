@@ -2,10 +2,8 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   hatchling,
   babel,
-  importlib-metadata,
   jinja2,
   json5,
   jsonschema,
@@ -22,15 +20,13 @@
 
 buildPythonPackage rec {
   pname = "jupyterlab-server";
-  version = "2.27.3";
+  version = "2.28.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "jupyterlab_server";
     inherit version;
-    hash = "sha256-6zbKylnnRHGYjwriXHeUVhC4h/d3JVqiH4Bl3vnlHtQ=";
+    hash = "sha256-NbqoGJixX5NXPi3spQ0RrArkB+u2iCmdOlITJlAzcSw=";
   };
 
   postPatch = ''
@@ -47,8 +43,7 @@ buildPythonPackage rec {
     jupyter-server
     packaging
     requests
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ];
 
   optional-dependencies = {
     openapi = [

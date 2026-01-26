@@ -19,14 +19,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-commander";
-  version = "1.18.3";
+  version = "1.18.4";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "gnome-commander";
     tag = finalAttrs.version;
-    hash = "sha256-rSaj1Fg2seZKlzlERZZmz80kxJT1vZ+INiJlWfZ9m6g=";
+    hash = "sha256-4l+hw9zPYhkaOpXMEnn4vXF1q0JLE0CB4oRGr2iXqtw=";
   };
 
   # hard-coded schema paths

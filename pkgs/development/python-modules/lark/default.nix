@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "lark";
   version = "1.2.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lark-parser";
@@ -33,11 +33,11 @@ buildPythonPackage rec {
   # Js2py is needed for tests but it's unmaintained and insecure
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Modern parsing library for Python, implementing Earley & LALR(1) and an easy interface";
     homepage = "https://lark-parser.readthedocs.io/";
     changelog = "https://github.com/lark-parser/lark/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ drewrisinger ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

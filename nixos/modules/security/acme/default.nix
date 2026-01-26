@@ -51,6 +51,12 @@ let
     ''
     + script;
 
+  # We need to collect all the ACME webroots to grant them write
+  # access in the systemd service.
+  webroots = lib.remove null (
+    lib.unique (map (certAttrs: certAttrs.webroot) (lib.attrValues config.security.acme.certs))
+  );
+
   # There are many services required to make cert renewals work.
   # They all follow a common structure:
   #   - They inherit this commonServiceConfig
@@ -69,7 +75,9 @@ let
     ReadWritePaths = [
       "/var/lib/acme"
       lockdir
-    ];
+    ]
+    # Prevent runtime breakage by only adding non-overlapping paths.
+    ++ (lib.filter (x: !(lib.strings.hasPrefix "/var/lib/acme/" x)) webroots);
     PrivateTmp = true;
 
     WorkingDirectory = "/tmp";
@@ -203,7 +211,7 @@ let
       # Create hashes for cert data directories based on configuration
       # Flags are separated to avoid collisions
       hashData =
-        with builtins;
+
         ''
           ${lib.concatStringsSep " " data.extraLegoFlags} -
           ${lib.concatStringsSep " " data.extraLegoRunFlags} -
@@ -211,7 +219,8 @@ let
           ${toString acmeServer} ${toString data.dnsProvider}
           ${toString data.ocspMustStaple} ${data.keyType}
         ''
-        + (lib.optionalString (data.csr != null) (" - " + data.csr));
+        + lib.optionalString (data.csr != null) " - ${data.csr}"
+        + lib.optionalString (data.profile != null) " - ${data.profile}";
       certDir = mkHash hashData;
       # TODO remove domainHash usage entirely. Waiting on go-acme/lego#1532
       domainHash = mkHash "${lib.concatStringsSep " " extraDomains} ${data.domain}";
@@ -284,6 +293,7 @@ let
         commonOpts
         ++ [ "run" ]
         ++ lib.optionals data.ocspMustStaple [ "--must-staple" ]
+        ++ lib.optionals (data.profile != null) [ "--profile=${data.profile}" ]
         ++ data.extraLegoRunFlags
       );
       renewOpts = lib.escapeShellArgs (
@@ -293,13 +303,8 @@ let
           "--no-random-sleep"
         ]
         ++ lib.optionals data.ocspMustStaple [ "--must-staple" ]
+        ++ lib.optionals (data.profile != null) [ "--profile=${data.profile}" ]
         ++ data.extraLegoRenewFlags
-      );
-
-      # We need to collect all the ACME webroots to grant them write
-      # access in the systemd service.
-      webroots = lib.remove null (
-        lib.unique (builtins.map (certAttrs: certAttrs.webroot) (lib.attrValues config.security.acme.certs))
       );
 
       certificateKey = if data.csrKey != null then "${data.csrKey}" else "certificates/${keyName}.key";
@@ -465,8 +470,6 @@ let
               "acme/.lego/${cert}/${certDir}"
               "acme/.lego/accounts/${accountHash}"
             ];
-
-            ReadWritePaths = commonServiceConfig.ReadWritePaths ++ webroots;
 
             # Needs to be space separated, but can't use a multiline string because that'll include newlines
             BindPaths = [
@@ -796,6 +799,14 @@ let
 
             - <https://blog.apnic.net/2019/01/15/is-the-web-ready-for-ocsp-must-staple/>
             - <https://blog.hboeck.de/archives/886-The-Problem-with-OCSP-Stapling-and-Must-Staple-and-why-Certificate-Revocation-is-still-broken.html>
+          '';
+        };
+
+        profile = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
+          inherit (defaultAndText "profile" null) default defaultText;
+          description = ''
+            The certificate profile to choose if the CA offers multiple profiles.
           '';
         };
 

@@ -22,7 +22,7 @@ click_log.basic_config(logger)
 
 
 class GitLabRepo:
-    version_regex = re.compile(r"^v\d+\.\d+\.\d+(\-rc\d+)?(\-ee)?(\-gitlab)?")
+    version_regex = re.compile(r"^v\d+\.\d+\.\d+(\-rc\d+)?(\-ee)?(\-gitlab)?$")
 
     def __init__(self, owner: str = "gitlab-org", repo: str = "gitlab"):
         self.owner = owner
@@ -62,10 +62,10 @@ class GitLabRepo:
             .strip()
         )
 
-    def get_yarn_hash(self, rev: str):
+    def get_yarn_hash(self, rev: str, yarn_lock_path="yarn.lock"):
         with tempfile.TemporaryDirectory() as tmp_dir:
             with open(tmp_dir + "/yarn.lock", "w") as f:
-                f.write(self.get_file("yarn.lock", rev))
+                f.write(self.get_file(yarn_lock_path, rev))
             return (
                 subprocess.check_output(["prefetch-yarn-deps", tmp_dir + "/yarn.lock"])
                 .decode("utf-8")
@@ -101,6 +101,7 @@ class GitLabRepo:
             v: self.get_file(v, rev).strip()
             for v in [
                 "GITALY_SERVER_VERSION",
+                "GITLAB_KAS_VERSION",
                 "GITLAB_PAGES_VERSION",
                 "GITLAB_SHELL_VERSION",
                 "GITLAB_ELASTICSEARCH_INDEXER_VERSION",
@@ -112,6 +113,7 @@ class GitLabRepo:
             version=self.rev2version(rev),
             repo_hash=self.get_git_hash(rev),
             yarn_hash=self.get_yarn_hash(rev),
+            frontend_islands_yarn_hash=self.get_yarn_hash(rev, "/ee/frontend_islands/yarn.lock"),
             owner=self.owner,
             repo=self.repo,
             rev=rev,
@@ -272,6 +274,15 @@ def update_gitlab_pages():
     _call_nix_update("gitlab-pages", gitlab_pages_version)
 
 
+@cli.command("update-gitlab-kas")
+def update_gitlab_kas():
+    """Update gitlab-kas"""
+    logger.info("Updating gitlab-kas")
+    data = _get_data_json()
+    gitlab_kas_version = data["passthru"]["GITLAB_KAS_VERSION"]
+    _call_nix_update("gitlab-kas", gitlab_kas_version)
+
+
 def get_container_registry_version() -> str:
     """Returns the version attribute of gitlab-container-registry"""
     return subprocess.check_output(
@@ -404,6 +415,7 @@ def commit_gitlab(old_version: str, new_version: str, new_rev: str) -> None:
             "pkgs/by-name/gi/gitlab",
             "pkgs/by-name/gi/gitaly",
             "pkgs/by-name/gi/gitlab-elasticsearch-indexer",
+            "pkgs/by-name/gi/gitlab-kas",
             "pkgs/by-name/gi/gitlab-pages",
         ],
         cwd=NIXPKGS_PATH,

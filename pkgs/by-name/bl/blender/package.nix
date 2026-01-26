@@ -16,14 +16,13 @@
   embree,
   fetchzip,
   fetchFromGitHub,
-  ffmpeg,
+  ffmpeg_7,
   fftw,
   fftwFloat,
   freetype,
   gettext,
   glew,
   gmp,
-  hipSupport ? false,
   jackaudioSupport ? false,
   jemalloc,
   lib,
@@ -67,14 +66,16 @@
   pkg-config,
   potrace,
   pugixml,
-  python3Packages, # must use instead of python3.pkgs, see https://github.com/NixOS/nixpkgs/issues/211340
-  rocmPackages, # comes with a significantly larger closure size
+  python311Packages, # must use python3Packages instead of python3.pkgs, see https://github.com/NixOS/nixpkgs/issues/211340
+  rocmPackages,
+  rocmSupport ? config.rocmSupport,
+  rubberband,
   runCommand,
   shaderc,
   spaceNavSupport ? stdenv.hostPlatform.isLinux,
   sse2neon,
   stdenv,
-  tbb_2022,
+  onetbb,
   vulkan-headers,
   vulkan-loader,
   wayland,
@@ -94,6 +95,7 @@ let
     (!stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) || stdenv.hostPlatform.isDarwin;
   vulkanSupport = !stdenv.hostPlatform.isDarwin;
 
+  python3Packages = python311Packages;
   python3 = python3Packages.python;
   pyPkgsOpenusd = python3Packages.openusd.override (old: {
     opensubdiv = old.opensubdiv.override { inherit cudaSupport; };
@@ -112,19 +114,20 @@ let
     tag = "v8.0.0";
     hash = "sha256-SXkXZHzQH8JOkXypjjxNvT/lUlWZkCuhh6hNCHE7FkY=";
   };
-
-  tbb = tbb_2022;
 in
 
 stdenv'.mkDerivation (finalAttrs: {
   pname = "blender";
-  version = "4.5.3";
+  version = "5.0.1";
 
   src = fetchzip {
     name = "source";
     url = "https://download.blender.org/source/blender-${finalAttrs.version}.tar.xz";
-    hash = "sha256-DNVZUZpysCyB/Xt8yB352gO+UK8Cd4aDFGYuUDKyIrs=";
+    hash = "sha256-fNnQRfGfNc7rbk8npkcYtoAqRjJc6MaV4mqtSJxd0EM=";
   };
+
+  # Minimal backport of hiprt 3.x support from https://projects.blender.org/blender/blender/pulls/144889
+  patches = lib.optional rocmSupport ./hiprt-3-compat.patch;
 
   postPatch =
     (lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -139,7 +142,7 @@ stdenv'.mkDerivation (finalAttrs: {
         --replace-fail '${"$"}{LIBDIR}/brotli/lib/libbrotlidec-static.a' \
                   '${lib.getLib brotli}/lib/libbrotlidec.dylib'
     '')
-    + (lib.optionalString hipSupport ''
+    + (lib.optionalString rocmSupport ''
       substituteInPlace extern/hipew/src/hipew.c --replace-fail '"/opt/rocm/hip/lib/libamdhip64.so.${lib.versions.major rocmPackages.clr.version}"' '"${rocmPackages.clr}/lib/libamdhip64.so"'
       substituteInPlace extern/hipew/src/hipew.c --replace-fail '"opt/rocm/hip/bin"' '"${rocmPackages.clr}/bin"'
       substituteInPlace extern/hipew/src/hiprtew.cc --replace-fail '"/opt/rocm/lib/libhiprt64.so"' '"${rocmPackages.hiprt}/lib/libhiprt64.so"'
@@ -148,68 +151,63 @@ stdenv'.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = "-I${python3}/include/${python3.libPrefix}";
 
   cmakeFlags = [
-    "-DMaterialX_DIR=${python3Packages.materialx}/lib/cmake/MaterialX"
-    "-DPYTHON_INCLUDE_DIR=${python3}/include/${python3.libPrefix}"
-    "-DPYTHON_LIBPATH=${python3}/lib"
-    "-DPYTHON_LIBRARY=${python3.libPrefix}"
-    "-DPYTHON_NUMPY_INCLUDE_DIRS=${python3Packages.numpy_1}/${python3.sitePackages}/numpy/core/include"
-    "-DPYTHON_NUMPY_PATH=${python3Packages.numpy_1}/${python3.sitePackages}"
-    "-DPYTHON_VERSION=${python3.pythonVersion}"
-    "-DWITH_ALEMBIC=ON"
-    "-DWITH_ASSERT_ABORT=OFF"
-    "-DWITH_BUILDINFO=OFF"
-    "-DWITH_CODEC_FFMPEG=ON"
-    "-DWITH_CODEC_SNDFILE=ON"
-    "-DWITH_CPU_CHECK=OFF"
-    "-DWITH_CYCLES_DEVICE_HIP=${if hipSupport then "ON" else "OFF"}"
-    "-DWITH_CYCLES_DEVICE_OPTIX=${if cudaSupport then "ON" else "OFF"}"
-    "-DWITH_CYCLES_EMBREE=${if embreeSupport then "ON" else "OFF"}"
-    "-DWITH_CYCLES_OSL=OFF"
-    "-DWITH_FFTW3=ON"
-    "-DWITH_HYDRA=${if openUsdSupport then "ON" else "OFF"}"
-    "-DWITH_IMAGE_OPENJPEG=ON"
-    "-DWITH_INSTALL_PORTABLE=OFF"
-    "-DWITH_JACK=${if jackaudioSupport then "ON" else "OFF"}"
-    "-DWITH_LIBS_PRECOMPILED=OFF"
-    "-DWITH_MOD_OCEANSIM=ON"
-    "-DWITH_OPENCOLLADA=${if colladaSupport then "ON" else "OFF"}"
-    "-DWITH_OPENCOLORIO=ON"
-    "-DWITH_OPENIMAGEDENOISE=${if openImageDenoiseSupport then "ON" else "OFF"}"
-    "-DWITH_OPENSUBDIV=ON"
-    "-DWITH_OPENVDB=ON"
-    "-DWITH_PIPEWIRE=OFF"
-    "-DWITH_PULSEAUDIO=OFF"
-    "-DWITH_PYTHON_INSTALL=OFF"
-    "-DWITH_PYTHON_INSTALL_NUMPY=OFF"
-    "-DWITH_PYTHON_INSTALL_REQUESTS=OFF"
-    "-DWITH_SDL=OFF"
-    "-DWITH_STRICT_BUILD_OPTIONS=ON"
-    "-DWITH_TBB=ON"
-    "-DWITH_USD=${if openUsdSupport then "ON" else "OFF"}"
+    "-C../build_files/cmake/config/blender_release.cmake"
+
+    (lib.cmakeFeature "MaterialX_DIR" "${python3Packages.materialx}/lib/cmake/MaterialX")
+    (lib.cmakeFeature "PYTHON_INCLUDE_DIR" "${python3}/include/${python3.libPrefix}")
+    (lib.cmakeFeature "PYTHON_LIBPATH" "${python3}/lib")
+    (lib.cmakeFeature "PYTHON_LIBRARY" "${python3.libPrefix}")
+    (lib.cmakeFeature "PYTHON_NUMPY_INCLUDE_DIRS" "${python3Packages.numpy_1}/${python3.sitePackages}/numpy/core/include")
+    (lib.cmakeFeature "PYTHON_NUMPY_PATH" "${python3Packages.numpy_1}/${python3.sitePackages}")
+    (lib.cmakeFeature "PYTHON_VERSION" "${python3.pythonVersion}")
+
+    (lib.cmakeBool "WITH_BUILDINFO" false)
+    (lib.cmakeBool "WITH_CPU_CHECK" false)
+    (lib.cmakeBool "WITH_CYCLES_CUDA_BINARIES" cudaSupport)
+    (lib.cmakeBool "WITH_CYCLES_DEVICE_HIP" rocmSupport)
+    (lib.cmakeBool "WITH_CYCLES_DEVICE_ONEAPI" false)
+    (lib.cmakeBool "WITH_CYCLES_DEVICE_OPTIX" cudaSupport)
+    (lib.cmakeBool "WITH_CYCLES_EMBREE" embreeSupport)
+    (lib.cmakeBool "WITH_CYCLES_OSL" false)
+    (lib.cmakeBool "WITH_HYDRA" openUsdSupport)
+    (lib.cmakeBool "WITH_INSTALL_PORTABLE" false)
+    (lib.cmakeBool "WITH_JACK" jackaudioSupport)
+    (lib.cmakeBool "WITH_LIBS_PRECOMPILED" false)
+    (lib.cmakeBool "WITH_OPENCOLLADA" colladaSupport)
+    (lib.cmakeBool "WITH_OPENIMAGEDENOISE" openImageDenoiseSupport)
+    (lib.cmakeBool "WITH_PIPEWIRE" false)
+    (lib.cmakeBool "WITH_PULSEAUDIO" false)
+    (lib.cmakeBool "WITH_PYTHON_INSTALL" false)
+    (lib.cmakeBool "WITH_PYTHON_INSTALL_NUMPY" false)
+    (lib.cmakeBool "WITH_PYTHON_INSTALL_REQUESTS" false)
+    (lib.cmakeBool "WITH_STRICT_BUILD_OPTIONS" true)
+    (lib.cmakeBool "WITH_USD" openUsdSupport)
 
     # Blender supplies its own FindAlembic.cmake (incompatible with the Alembic-supplied config file)
-    "-DALEMBIC_INCLUDE_DIR=${lib.getDev alembic}/include"
-    "-DALEMBIC_LIBRARY=${lib.getLib alembic}/lib/libAlembic${stdenv.hostPlatform.extensions.sharedLibrary}"
+    (lib.cmakeFeature "ALEMBIC_INCLUDE_DIR" "${lib.getDev alembic}/include")
+    (lib.cmakeFeature "ALEMBIC_LIBRARY" "${lib.getLib alembic}/lib/libAlembic${stdenv.hostPlatform.extensions.sharedLibrary}")
   ]
   ++ lib.optionals cudaSupport [
-    "-DOPTIX_ROOT_DIR=${optix}"
-    "-DWITH_CYCLES_CUDA_BINARIES=ON"
+    (lib.cmakeFeature "OPTIX_ROOT_DIR" "${optix}")
+    (lib.cmakeBool "WITH_CYCLES_CUDA_BINARIES" true)
   ]
-  ++ lib.optionals hipSupport [
-    "-DHIPRT_INCLUDE_DIR=${rocmPackages.hiprt}/include"
-    "-DWITH_CYCLES_DEVICE_HIPRT=ON"
-    "-DWITH_CYCLES_HIP_BINARIES=ON"
+  ++ lib.optionals rocmSupport [
+    (lib.cmakeFeature "HIPRT_INCLUDE_DIR" "${rocmPackages.hiprt}/include")
+    (lib.cmakeBool "WITH_CYCLES_DEVICE_HIPRT" true)
+    (lib.cmakeBool "WITH_CYCLES_HIP_BINARIES" true)
   ]
   ++ lib.optionals waylandSupport [
-    "-DWITH_GHOST_WAYLAND=ON"
-    "-DWITH_GHOST_WAYLAND_DBUS=ON"
-    "-DWITH_GHOST_WAYLAND_DYNLOAD=OFF"
-    "-DWITH_GHOST_WAYLAND_LIBDECOR=ON"
+    (lib.cmakeBool "WITH_GHOST_WAYLAND" true)
+    (lib.cmakeBool "WITH_GHOST_WAYLAND_DBUS" true)
+    (lib.cmakeBool "WITH_GHOST_WAYLAND_DYNLOAD" false)
+    (lib.cmakeBool "WITH_GHOST_WAYLAND_LIBDECOR" true)
   ]
-  ++ lib.optional stdenv.cc.isClang "-DPYTHON_LINKFLAGS=" # Clang doesn't support "-export-dynamic"
+  ++ lib.optionals stdenv.cc.isClang [
+    (lib.cmakeFeature "PYTHON_LINKFLAGS" "") # Clang doesn't support "-export-dynamic"
+  ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "-DLIBDIR=/does-not-exist"
-    "-DSSE2NEON_INCLUDE_DIR=${sse2neon}/lib"
+    (lib.cmakeFeature "LIBDIR" "/does-not-exist")
+    (lib.cmakeFeature "SSE2NEON_INCLUDE_DIR" "${sse2neon}/include")
   ];
 
   preConfigure = ''
@@ -241,7 +239,7 @@ stdenv'.mkDerivation (finalAttrs: {
   buildInputs = [
     alembic
     boost
-    ffmpeg
+    ffmpeg_7
     fftw
     fftwFloat
     freetype
@@ -262,20 +260,21 @@ stdenv'.mkDerivation (finalAttrs: {
     openexr
     openimageio
     openjpeg
-    (openpgl.override { inherit tbb; })
+    openpgl
     (opensubdiv.override { inherit cudaSupport; })
-    (openvdb.override { inherit tbb; })
+    openvdb
+    onetbb
     potrace
     pugixml
     python3
     python3Packages.materialx
-    tbb
+    rubberband
     zlib
     zstd
   ]
   ++ lib.optional embreeSupport embree
-  ++ lib.optional hipSupport rocmPackages.clr
-  ++ lib.optional openImageDenoiseSupport (openimagedenoise.override { inherit cudaSupport tbb; })
+  ++ lib.optional rocmSupport rocmPackages.clr
+  ++ lib.optional openImageDenoiseSupport (openimagedenoise.override { inherit cudaSupport; })
   ++ (
     if (!stdenv.hostPlatform.isDarwin) then
       [
@@ -436,9 +435,7 @@ stdenv'.mkDerivation (finalAttrs: {
     # They comment two licenses: GPLv2 and Blender License, but they
     # say: "We've decided to cancel the BL offering for an indefinite period."
     # OptiX, enabled with cudaSupport, is non-free.
-    license =
-      with lib.licenses;
-      [ gpl2Plus ] ++ lib.optional cudaSupport (unfree // { shortName = "NVidia OptiX EULA"; });
+    license = with lib.licenses; [ gpl2Plus ] ++ lib.optional cudaSupport nvidiaCudaRedist;
 
     platforms = [
       "aarch64-linux"

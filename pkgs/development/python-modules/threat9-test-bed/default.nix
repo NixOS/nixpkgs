@@ -9,7 +9,6 @@
   pyopenssl,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   requests,
   setuptools-scm,
   standard-telnetlib,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "threat9-test-bed";
   version = "0.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "threat9";
@@ -52,11 +49,11 @@ buildPythonPackage rec {
     "test_http_service_mock_random_port"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for adding unittests.mock as view functions";
     homepage = "https://github.com/threat9/threat9-test-bed";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "test-bed";
   };
 }

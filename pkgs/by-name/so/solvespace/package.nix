@@ -26,19 +26,21 @@
   pangomm,
   pcre,
   util-linuxMinimal, # provides libmount
-  xorg,
+  libxtst,
+  libxdmcp,
+  libpthread-stubs,
   zlib,
 }:
 
 stdenv.mkDerivation rec {
   pname = "solvespace";
-  version = "3.1";
+  version = "3.2";
 
   src = fetchFromGitHub {
     owner = "solvespace";
     repo = "solvespace";
     rev = "v${version}";
-    hash = "sha256-sSDht8pBrOG1YpsWfC/CLTTWh2cI5pn2PXGH900Z0yA=";
+    hash = "sha256-+ZSAC7wDOaN51RjbSAqaQOp10JzxSME3g0ln4VdkwcA=";
     fetchSubmodules = true;
   };
 
@@ -70,9 +72,9 @@ stdenv.mkDerivation rec {
     pangomm
     pcre
     util-linuxMinimal
-    xorg.libpthreadstubs
-    xorg.libXdmcp
-    xorg.libXtst
+    libpthread-stubs
+    libxdmcp
+    libxtst
     zlib
   ];
 
@@ -90,7 +92,11 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  cmakeFlags = [ "-DENABLE_OPENMP=ON" ];
+  cmakeFlags = [
+    "-DENABLE_OPENMP=ON"
+    # CMake 4 needs a minimum version
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+  ];
 
   meta = {
     description = "Parametric 3d CAD program";

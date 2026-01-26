@@ -1,13 +1,12 @@
 import argparse
 import logging
-import os
 import sys
 from subprocess import CalledProcessError, run
 from typing import Final, assert_never
 
 from . import nix, services
-from .constants import EXECUTABLE, WITH_REEXEC, WITH_SHELL_FILES
-from .models import Action, BuildAttr, Flake, Profile
+from .constants import EXECUTABLE, WITH_SHELL_FILES
+from .models import Action, BuildAttr, Flake, GroupedNixArgs, Profile
 from .process import Remote
 from .utils import LogFormatter
 
@@ -56,7 +55,9 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
     flake_common_flags.add_argument("--override-input", nargs=2, action="append")
 
     classic_build_flags = argparse.ArgumentParser(add_help=False, allow_abbrev=False)
-    classic_build_flags.add_argument("--no-build-output", "-Q", action="store_true")
+    classic_build_flags.add_argument(
+        "--no-build-output", "--no-link", "-Q", action="store_true"
+    )
 
     copy_flags = argparse.ArgumentParser(add_help=False, allow_abbrev=False)
     copy_flags.add_argument(
@@ -99,6 +100,7 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
     )
     main_parser.add_argument(
         "--flake",
+        "-F",
         nargs="?",
         const=True,
         help="Build the NixOS system from the specified flake",
@@ -135,6 +137,11 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
         help="Roll back to the previous configuration",
     )
     main_parser.add_argument(
+        "--store-path",
+        metavar="PATH",
+        help="Use a pre-built NixOS system store path instead of building",
+    )
+    main_parser.add_argument(
         "--upgrade",
         action="store_true",
         help="Update the root user's channel named 'nixos' before rebuilding "
@@ -152,6 +159,7 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
     )
     main_parser.add_argument(
         "--ask-sudo-password",
+        "-S",
         action="store_true",
         help="Asks for sudo password for remote activation, implies --sudo",
     )
@@ -196,13 +204,15 @@ def get_main_parser() -> argparse.ArgumentParser:
 
 def parse_args(
     argv: list[str],
-) -> tuple[argparse.Namespace, dict[str, argparse.Namespace]]:
+) -> tuple[argparse.Namespace, GroupedNixArgs]:
     parser, sub_parsers = get_parser()
     args = parser.parse_args(argv[1:])
-    args_groups = {
-        group: parser.parse_known_args(argv[1:])[0]
-        for group, parser in sub_parsers.items()
-    }
+    grouped_nix_args = GroupedNixArgs.from_parsed_args_groups(
+        {
+            group: parser.parse_known_args(argv[1:])[0]
+            for group, parser in sub_parsers.items()
+        }
+    )
 
     if args.help or args.action is None:
         if WITH_SHELL_FILES:
@@ -264,18 +274,27 @@ def parse_args(
     if args.flake and (args.file or args.attr):
         parser.error("--flake cannot be used with --file or --attr")
 
-    return args, args_groups
+    if args.store_path:
+        if args.rollback:
+            parser.error("--store-path and --rollback are mutually exclusive")
+        if args.flake or args.file or args.attr:
+            parser.error("--store-path cannot be used with --flake, --file, or --attr")
+        if args.action not in (
+            Action.SWITCH.value,
+            Action.BOOT.value,
+            Action.TEST.value,
+            Action.DRY_ACTIVATE.value,
+        ):
+            parser.error(f"--store-path cannot be used with '{args.action}'")
+        if args.flake is None:
+            # Disable flake auto-detection since we're using a pre-built store path
+            args.flake = False
+
+    return args, grouped_nix_args
 
 
 def execute(argv: list[str]) -> None:
-    args, args_groups = parse_args(argv)
-
-    common_flags = vars(args_groups["common_flags"])
-    common_build_flags = common_flags | vars(args_groups["common_build_flags"])
-    build_flags = common_build_flags | vars(args_groups["classic_build_flags"])
-    flake_common_flags = common_flags | vars(args_groups["flake_common_flags"])
-    flake_build_flags = common_build_flags | flake_common_flags
-    copy_flags = common_flags | vars(args_groups["copy_flags"])
+    args, grouped_nix_args = parse_args(argv)
 
     if args.upgrade or args.upgrade_all:
         nix.upgrade_channels(args.upgrade_all, args.sudo)
@@ -290,13 +309,8 @@ def execute(argv: list[str]) -> None:
 
     # Re-exec to a newer version of the script before building to ensure we get
     # the latest fixes
-    if (
-        WITH_REEXEC
-        and can_run
-        and not args.no_reexec
-        and not os.environ.get("_NIXOS_REBUILD_REEXEC")
-    ):
-        services.reexec(argv, args, build_flags, flake_build_flags)
+    if can_run and not args.no_reexec:
+        services.reexec(argv, args, grouped_nix_args)
 
     profile = Profile.from_arg(args.profile_name)
     target_host = Remote.from_arg(args.target_host, args.ask_sudo_password)
@@ -304,8 +318,8 @@ def execute(argv: list[str]) -> None:
     build_attr = BuildAttr.from_arg(args.attr, args.file)
     flake = Flake.from_arg(args.flake, target_host)
 
-    if can_run and not flake:
-        services.write_version_suffix(build_flags)
+    if can_run and not flake and not args.store_path:
+        services.write_version_suffix(grouped_nix_args)
 
     match action:
         case (
@@ -327,15 +341,11 @@ def execute(argv: list[str]) -> None:
                 profile=profile,
                 flake=flake,
                 build_attr=build_attr,
-                build_flags=build_flags,
-                common_flags=common_flags,
-                copy_flags=copy_flags,
-                flake_build_flags=flake_build_flags,
-                flake_common_flags=flake_common_flags,
+                grouped_nix_args=grouped_nix_args,
             )
 
         case Action.EDIT:
-            services.edit(flake=flake, flake_build_flags=flake_build_flags)
+            services.edit(flake=flake, grouped_nix_args=grouped_nix_args)
 
         case Action.DRY_RUN:
             raise AssertionError("DRY_RUN should be a DRY_BUILD alias")
@@ -347,8 +357,7 @@ def execute(argv: list[str]) -> None:
             services.repl(
                 flake=flake,
                 build_attr=build_attr,
-                flake_build_flags=flake_build_flags,
-                build_flags=build_flags,
+                grouped_nix_args=grouped_nix_args,
             )
 
         case _:

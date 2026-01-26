@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
-  pythonOlder,
   reflex,
   pytestCheckHook,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "reflex-chakra";
   version = "0.8.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "reflex-dev";

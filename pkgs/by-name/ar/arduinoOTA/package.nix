@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "arduino";
     repo = "arduinoOTA";
-    rev = version;
+    tag = version;
     hash = "sha256-HaNMkeV/PDEotYp8+rUKFaBxGbZO8qA99Yp2sa6glz8=";
   };
 
@@ -24,12 +24,12 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/arduino/arduinoOTA";
     description = "Tool for uploading programs to Arduino boards over a network";
     mainProgram = "arduinoOTA";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ poelzi ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ poelzi ];
+    platforms = lib.platforms.all;
   };
 }

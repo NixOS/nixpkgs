@@ -70,12 +70,12 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GTK4 / Libadwaita Reddit client written in C++";
     homepage = "https://gitlab.com/caveman250/Headlines";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ chuangzhu ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ chuangzhu ];
     mainProgram = "headlines";
   };
 }

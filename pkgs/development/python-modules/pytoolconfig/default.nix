@@ -22,8 +22,6 @@ buildPythonPackage rec {
   version = "1.3.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "bagel897";
     repo = "pytoolconfig";
@@ -65,14 +63,14 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
-  meta = with lib; {
+  meta = {
     description = "Python tool configuration";
     homepage = "https://github.com/bagel897/pytoolconfig";
     changelog = "https://github.com/bagel897/pytoolconfig/releases/tag/v${version}";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [
       fab
       hexa
     ];

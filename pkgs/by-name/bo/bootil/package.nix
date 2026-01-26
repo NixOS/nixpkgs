@@ -40,14 +40,14 @@ stdenv.mkDerivation {
     cp -r include $out
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Garry Newman's personal utility library";
     homepage = "https://github.com/garrynewman/bootil";
     # License unsure - see https://github.com/garrynewman/bootil/issues/21
-    license = licenses.free;
-    maintainers = with maintainers; [ abigailbuccaneer ];
+    license = lib.licenses.free;
+    maintainers = with lib.maintainers; [ abigailbuccaneer ];
     # Build uses `-msse` and `-mfpmath=sse`
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     badPlatforms = [ "aarch64-linux" ];
   };
 }

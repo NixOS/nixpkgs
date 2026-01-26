@@ -19,13 +19,14 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-Dmomentum:STRING=GEV"
     "-Dlength:STRING=MM"
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "HepMC package is an object oriented event record written in C++ for High Energy Physics Monte Carlo Generators";
-    license = licenses.lgpl21;
+    license = lib.licenses.lgpl21;
     homepage = "http://hepmc.web.cern.ch/hepmc/";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ veprbl ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

@@ -73,10 +73,10 @@ buildPythonPackage rec {
     "windows_hello_ctap_user_verifier"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "CTAP (client-to-authenticator-protocol) device backed by python's keyring library";
     homepage = "https://github.com/dany74q/ctap-keyring-device";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jbgosselin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jbgosselin ];
   };
 }

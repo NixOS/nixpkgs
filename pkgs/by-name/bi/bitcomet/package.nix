@@ -6,25 +6,26 @@
   fetchurl,
   desktop-file-utils,
   dpkg,
-  webkitgtk_4_0,
-  runScript ? "BitComet",
+  runScript ? "bitcometd",
+  writeShellScript,
+  nix-update,
 }:
 
 let
   pname = "bitcomet";
-  version = "2.15.0";
+  version = "2.19.2";
 
   meta = {
     homepage = "https://www.bitcomet.com";
     description = "BitTorrent download client";
-    mainProgram = "BitComet";
+    mainProgram = "bitcometd";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     platforms = [
       "aarch64-linux"
       "x86_64-linux"
     ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 
   bitcomet = stdenvNoCC.mkDerivation {
@@ -44,8 +45,8 @@ let
       fetchurl {
         url = "https://download.bitcomet.com/linux/${arch}/BitComet-${version}-${arch}.deb";
         hash = selectSystem {
-          x86_64-linux = "sha256-YmcHcrqw4Ue8uyQqYcLWTYS5WYQro3kk7VLY8pfIsRQ=";
-          aarch64-linux = "sha256-Bfg20aKU90Ap8scn4eHtf451uxPfWcnQCrh5gWRQmsU=";
+          x86_64-linux = "sha256-26hpKNCetqV0whfzNo950EAmK+LKC1RsN5f/9HU9zKs=";
+          aarch64-linux = "sha256-VrrjQ4dcj0XL2xmNspo2mJ+3BVy9vKyVw6QaHkha0LY=";
         };
       };
 
@@ -69,28 +70,22 @@ let
   };
 in
 buildFHSEnv {
-  inherit
-    pname
-    version
-    runScript
-    meta
-    ;
+  inherit pname version meta;
 
-  executableName = "BitComet";
+  executableName = "bitcometd";
 
-  targetPkgs =
-    pkgs:
-    [
-      bitcomet
-      webkitgtk_4_0
-    ]
-    ++ appimageTools.defaultFhsEnvArgs.targetPkgs pkgs;
+  runScript = "bitcometd";
+
+  targetPkgs = pkgs: [ bitcomet ] ++ appimageTools.defaultFhsEnvArgs.targetPkgs pkgs;
 
   multiPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;
 
-  extraInstallCommands = ''
-    mkdir -p $out/share
-    ln -s ${bitcomet}/share/applications $out/share/applications
-    ln -s ${bitcomet}/share/icons $out/share/icons
-  '';
+  passthru = {
+    inherit bitcomet;
+    updateScript = writeShellScript "update-bitcomet" ''
+      latestVersion=$(curl --fail --silent https://www.cometbbs.com/t/linux%E5%86%85%E6%B5%8B%E7%89%88/88604 | grep -oP 'BitComet-\K[0-9]+\.[0-9]+\.[0-9]+(?=-x86_64\.deb)' | head -n1)
+      ${lib.getExe nix-update} pkgsCross.gnu64.bitcomet.bitcomet --version $latestVersion
+      ${lib.getExe nix-update} pkgsCross.aarch64-multiplatform.bitcomet.bitcomet --version skip
+    '';
+  };
 }

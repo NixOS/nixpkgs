@@ -8,7 +8,6 @@
   coreapi,
   pytest-mypy-plugins,
   pytestCheckHook,
-  pythonOlder,
   requests,
   types-pyyaml,
   setuptools,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "djangorestframework-stubs";
   version = "3.16.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "typeddjango";
@@ -57,18 +54,18 @@ buildPythonPackage rec {
     pytest-mypy-plugins
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   # Upstream recommends mypy > 1.7 which we don't have yet, thus all tests are failing with 3.14.5 and below
   doCheck = false;
 
   pythonImportsCheck = [ "rest_framework-stubs" ];
 
-  meta = with lib; {
+  meta = {
     description = "PEP-484 stubs for Django REST Framework";
     homepage = "https://github.com/typeddjango/djangorestframework-stubs";
     changelog = "https://github.com/typeddjango/djangorestframework-stubs/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nsgenbind";
-  version = "0.8";
+  version = "0.9";
 
   src = fetchurl {
     url = "http://download.netsurf-browser.org/libs/releases/nsgenbind-${finalAttrs.version}-src.tar.gz";
-    hash = "sha256-TY1TrQAK2nEncjZeanPrj8XOl1hK+chlrFsmohh/HLM=";
+    hash = "sha256-Iyzg9my8LD7tYoiuJt4sVnu/u8Adiw9vxsHBZJ1LOF0=";
   };
 
   nativeBuildInputs = [

@@ -42,7 +42,6 @@
   makeFontsConf,
   useFixedHashes ? true,
   extraMirrors ? [ ],
-  recurseIntoAttrs,
   nixfmt,
   luajit,
 }:
@@ -254,7 +253,7 @@ let
   };
   toSpecifiedNV = p: rec {
     name = value.tlOutputName;
-    value = builtins.removeAttrs p [ "pkgs" ] // {
+    value = removeAttrs p [ "pkgs" ] // {
       outputSpecified = true;
       tlOutputName = tlTypeToOut.${p.tlType};
     };
@@ -262,10 +261,10 @@ let
   toTLPkgSet =
     pname: drvs:
     let
-      set = lib.listToAttrs (builtins.map toSpecifiedNV drvs);
+      set = lib.listToAttrs (map toSpecifiedNV drvs);
       mainDrv = set.out or set.tex or set.tlpkg or set.texdoc or set.texsource;
     in
-    builtins.removeAttrs mainDrv [ "outputSpecified" ];
+    removeAttrs mainDrv [ "outputSpecified" ];
   toTLPkgSets = { pkgs, ... }: lib.mapAttrsToList toTLPkgSet (lib.groupBy (p: p.pname) pkgs);
 
   # export TeX packages as { pkgs = [ ... ]; } in the top attribute set
@@ -543,7 +542,7 @@ let
     license = licenses.scheme-infraonly;
   };
 
-  combined = recurseIntoAttrs (
+  combined = lib.recurseIntoAttrs (
     lib.genAttrs
       [
         "scheme-basic"

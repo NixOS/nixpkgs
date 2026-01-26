@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/schrodinger/maeparser";
     description = "Maestro file parser";
-    maintainers = [ maintainers.rmcgibbo ];
-    license = licenses.mit;
-    platforms = platforms.unix;
+    maintainers = [ lib.maintainers.rmcgibbo ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

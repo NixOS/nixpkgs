@@ -10,16 +10,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "squawk";
-  version = "2.26.0";
+  version = "2.34.0";
 
   src = fetchFromGitHub {
     owner = "sbdchd";
     repo = "squawk";
     tag = "v${version}";
-    hash = "sha256-X1vr2WAWkv9puO5CCM6TrFg/5H5buemcplvIeYtk6Qo=";
+    hash = "sha256-SdCtZ+A4MuHhTrL5v65uDb47FeIBaGweHRXhD9crx2k=";
   };
 
-  cargoHash = "sha256-eyQQ7bdbu/o5UQ7edjgs3ZLiya/q5c+jgLSWQfAs5ck=";
+  cargoHash = "sha256-r12pNc7C4mNYzIaE/99jrWBQ/YPqR30k90TFx1hBGR4=";
 
   nativeBuildInputs = [
     pkg-config
@@ -31,9 +31,11 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
-  OPENSSL_NO_VENDOR = 1;
+  env = {
+    OPENSSL_NO_VENDOR = 1;
 
-  LIBPG_QUERY_PATH = libpg_query;
+    LIBPG_QUERY_PATH = libpg_query;
+  };
 
   checkFlags = [
     # depends on the PostgreSQL version
@@ -49,6 +51,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://squawkhq.com";
     changelog = "https://github.com/sbdchd/squawk/blob/v${version}/CHANGELOG.md";
     license = with lib.licenses; [ gpl3Only ];
-    maintainers = with lib.maintainers; [ andrewsmith ];
+    maintainers = [ ];
   };
 }

@@ -2,7 +2,9 @@
   lib,
   stdenv,
   fetchurl,
-  xorg,
+  libxres,
+  libxext,
+  libx11,
   pkg-config,
   ncurses,
 }:
@@ -18,18 +20,18 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    xorg.libX11
-    xorg.libXres
-    xorg.libXext
+    libx11
+    libxres
+    libxext
     ncurses
   ];
 
-  meta = with lib; {
+  meta = {
     description = "'top' like tool for monitoring X Client server resource usage";
     homepage = "https://gitlab.freedesktop.org/xorg/app/xrestop";
-    maintainers = with maintainers; [ qyliss ];
-    platforms = platforms.unix;
-    license = licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ qyliss ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "xrestop";
   };
 }

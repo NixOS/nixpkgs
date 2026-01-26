@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   unittestCheckHook,
 }:
@@ -9,7 +8,6 @@
 buildPythonPackage rec {
   pname = "pyotp";
   version = "2.9.0";
-  disabled = pythonOlder "3.7";
 
   format = "setuptools";
 
@@ -22,11 +20,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyotp" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/pyauth/pyotp/blob/v${version}/Changes.rst";
     description = "Python One Time Password Library";
     homepage = "https://github.com/pyauth/pyotp";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

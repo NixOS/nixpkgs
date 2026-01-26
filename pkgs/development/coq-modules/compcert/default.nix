@@ -138,12 +138,12 @@ let
       "man"
     ];
 
-    meta = with lib; {
+    meta = {
       description = "Formally verified C compiler";
       homepage = "https://compcert.org";
-      license = licenses.inria-compcert;
+      license = lib.licenses.inria-compcert;
       platforms = builtins.attrNames targets;
-      maintainers = with maintainers; [
+      maintainers = with lib.maintainers; [
         thoughtpolice
         jwiegley
         vbgl
@@ -300,6 +300,19 @@ let
               (fetchpatch {
                 url = "https://github.com/AbsInt/CompCert/commit/e524b0a19ae5140f64047b1cba6ebbe1d16d5bbf.patch";
                 hash = "sha256-24kt0hA75ooyXymH+kNS5VlsuXMHbkqTw4m+BzNUwrw=";
+              })
+            ];
+          }
+          {
+            cases = [
+              (isEq "9.0")
+              (isEq "3.16")
+            ];
+            out = [
+              # Support for Coq 9.0.1
+              (fetchpatch {
+                url = "https://github.com/AbsInt/CompCert/commit/a962ef9da0fb4ef2a4314ccedd111eb248e42cf2.patch";
+                hash = "sha256-ipYqcfcgz3cKyI1NGSgfOgiVdV1WUwlv6DVB1S1hJvw=";
               })
             ];
           }

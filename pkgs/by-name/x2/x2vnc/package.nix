@@ -2,7 +2,10 @@
   lib,
   stdenv,
   fetchurl,
-  xorg,
+  libxrandr,
+  libxext,
+  libx11,
+  xorgproto,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,20 +19,20 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-std=gnu89";
 
-  buildInputs = with xorg; [
-    libX11
+  buildInputs = [
+    libx11
     xorgproto
-    libXext
-    libXrandr
+    libxext
+    libxrandr
   ];
 
   hardeningDisable = [ "format" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://fredrik.hubbe.net/x2vnc.html";
     description = "Program to control a remote VNC server";
-    platforms = platforms.unix;
-    license = licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "x2vnc";
   };
 }

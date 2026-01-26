@@ -19,16 +19,16 @@ let
     }:
     buildGoModule rec {
       pname = stname;
-      version = "2.0.8";
+      version = "2.0.12";
 
       src = fetchFromGitHub {
         owner = "syncthing";
         repo = "syncthing";
         tag = "v${version}";
-        hash = "sha256-QkCLFztzaH9MvgP6HWUr5Z8yIrKlY6/t2VaZwai/H8Q=";
+        hash = "sha256-bWClKODxzcSbKiKFcgDKbRGih8KaSeVpltiFDAE8sHM=";
       };
 
-      vendorHash = "sha256-iYTAnEy0MqJaTz/cdpteealyviwVrpwDzVigo8nnXqs=";
+      vendorHash = "sha256-Xiod2Bd+uXcOpZ0rt8my8jkNdkdUhuoz5fcce+6JMXY=";
 
       nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
         # Recent versions of macOS seem to require binaries to be signed when
@@ -67,8 +67,10 @@ let
         tests = {
           inherit (nixosTests)
             syncthing
+            syncthing-folders
+            syncthing-guiPassword
+            syncthing-guiPasswordFile
             syncthing-init
-            syncthing-many-devices
             syncthing-no-settings
             syncthing-relay
             ;

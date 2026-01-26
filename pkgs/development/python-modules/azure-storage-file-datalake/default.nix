@@ -48,6 +48,6 @@ buildPythonPackage rec {
     description = "Microsoft Azure File DataLake Storage Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/storage/azure-storage-file-datalake";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

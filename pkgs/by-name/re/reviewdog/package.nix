@@ -32,7 +32,7 @@ buildGoModule rec {
     mainProgram = "reviewdog";
     homepage = "https://github.com/reviewdog/reviewdog";
     changelog = "https://github.com/reviewdog/reviewdog/blob/v${version}/CHANGELOG.md";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     license = lib.licenses.mit;
   };
 }

@@ -23,7 +23,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libxmlb";
-  version = "0.3.23";
+  version = "0.3.24";
 
   outputs = [
     "out"
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     owner = "hughsie";
     repo = "libxmlb";
     rev = version;
-    hash = "sha256-hdF1yce9/ztXVV6BYocPGVAjoxJancID77rnHBJsKmM=";
+    hash = "sha256-3Yxq0KZMV9GRmNjZ19eIqGq+UJS4PGyVPS6HBcMEbHo=";
   };
 
   patches = [
@@ -85,12 +85,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library to help create and query binary XML blobs";
     mainProgram = "xb-tool";
     homepage = "https://github.com/hughsie/libxmlb";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

@@ -33,13 +33,13 @@
 
 stdenv.mkDerivation rec {
   pname = "workrave";
-  version = "1.10.53";
+  version = "1.10.54";
 
   src = fetchFromGitHub {
     repo = "workrave";
     owner = "rcaelers";
     rev = "v" + lib.concatStringsSep "_" (lib.splitVersion version);
-    sha256 = "sha256-Dt0KY6nchcGZLyiUGGS4pnVagreIhuQpSq2DdvWqtn8=";
+    sha256 = "sha256-pbMkzwxgKc4vjFhBeOf513hFytYiTPST19L8Nq4CVTg=";
   };
 
   nativeBuildInputs = [
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Program to help prevent Repetitive Strain Injury";
     mainProgram = "workrave";
     longDescription = ''
@@ -91,8 +91,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.workrave.org/";
     downloadPage = "https://github.com/rcaelers/workrave/releases";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ prikhi ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ prikhi ];
+    platforms = lib.platforms.linux;
   };
 }

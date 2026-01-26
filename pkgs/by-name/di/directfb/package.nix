@@ -13,7 +13,10 @@
   libpng,
   giflib,
   enableX11 ? true,
-  xorg,
+  libxrender,
+  libxext,
+  libx11,
+  xorgproto,
   enableSDL ? true,
   SDL,
 }:
@@ -86,15 +89,12 @@ stdenv.mkDerivation rec {
     libpng
   ]
   ++ lib.optional enableSDL SDL
-  ++ lib.optionals enableX11 (
-    with xorg;
-    [
-      xorgproto
-      libX11
-      libXext
-      libXrender
-    ]
-  );
+  ++ lib.optionals enableX11 [
+    xorgproto
+    libx11
+    libxext
+    libxrender
+  ];
 
   env = {
     NIX_LDFLAGS = "-lgcc_s";
@@ -127,7 +127,7 @@ stdenv.mkDerivation rec {
   # upstream fixes them.
   enableParallelBuilding = false;
 
-  meta = with lib; {
+  meta = {
     description = "Graphics and input library designed with embedded systems in mind";
     longDescription = ''
       DirectFB is a thin library that provides hardware graphics acceleration,
@@ -140,8 +140,8 @@ stdenv.mkDerivation rec {
       Linux.
     '';
     homepage = "https://github.com/deniskropp/DirectFB";
-    license = licenses.lgpl21;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    license = lib.licenses.lgpl21;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.bjornfor ];
   };
 }

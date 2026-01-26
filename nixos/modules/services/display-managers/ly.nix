@@ -42,9 +42,11 @@ let
     term_restore_cursor_cmd = "${pkgs.ncurses}/bin/tput cnorm";
     waylandsessions = "${dmcfg.sessionData.desktops}/share/wayland-sessions";
     xsessions = "${dmcfg.sessionData.desktops}/share/xsessions";
-    xauth_cmd = lib.optionalString xcfg.enable "${pkgs.xorg.xauth}/bin/xauth";
+    xauth_cmd = lib.optionalString xcfg.enable "${pkgs.xauth}/bin/xauth";
     x_cmd = lib.optionalString xcfg.enable xserverWrapper;
     setup_cmd = dmcfg.sessionData.wrapper;
+    brightness_up_cmd = "${lib.getExe pkgs.brightnessctl} -q -n s +10%";
+    brightness_down_cmd = "${lib.getExe pkgs.brightnessctl} -q -n s 10%-";
   };
 
   finalConfig = defaultConfig // cfg.settings;
@@ -65,13 +67,7 @@ in
       package = mkPackageOption pkgs [ "ly" ] { };
 
       settings = mkOption {
-        type =
-          with lib.types;
-          attrsOf (oneOf [
-            str
-            int
-            bool
-          ]);
+        type = with lib.types; attrsOf iniFmt.lib.types.atom;
         default = { };
         example = {
           load = false;
@@ -113,7 +109,10 @@ in
 
       displayManager = {
         enable = true;
-        execCmd = "exec /run/current-system/sw/bin/ly";
+        generic = {
+          enable = true;
+          execCmd = "exec /run/current-system/sw/bin/ly";
+        };
 
         # Set this here instead of 'defaultConfig' so users get eval
         # errors when they change it.

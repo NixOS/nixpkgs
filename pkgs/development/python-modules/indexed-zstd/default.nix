@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   cython,
   zstd,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "indexed_zstd";
   version = "1.6.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
@@ -34,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "indexed_zstd" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to seek within compressed zstd files";
     homepage = "https://github.com/martinellimarco/indexed_zstd";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mxmlnkn ];
   };
 }

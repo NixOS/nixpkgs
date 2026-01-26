@@ -7,7 +7,7 @@
   zlib,
   libGL,
   glib,
-  xorg,
+  libx11,
   libxkbcommon,
   xdg-utils,
   libXrender,
@@ -30,7 +30,7 @@ let
     stdenv.cc.cc
     zlib
     glib
-    xorg.libX11
+    libx11
     libxkbcommon
     libXmu
     libXi
@@ -113,7 +113,7 @@ stdenv.mkDerivation rec {
     rm $out/libexec/genymotion/libxkbcommon*
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast and easy Android emulation";
     longDescription = ''
       Genymotion is a relatively fast Android emulator which comes with
@@ -121,9 +121,9 @@ stdenv.mkDerivation rec {
       suitable for application testing.
     '';
     homepage = "https://www.genymotion.com/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = [ maintainers.puffnfresh ];
+    maintainers = [ lib.maintainers.puffnfresh ];
   };
 }

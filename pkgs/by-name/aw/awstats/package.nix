@@ -7,11 +7,11 @@
 
 perlPackages.buildPerlPackage rec {
   pname = "awstats";
-  version = "7.9";
+  version = "8.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/awstats/${pname}-${version}.tar.gz";
-    sha256 = "sha256-YVF47TE9NDFfFaUi2xpdEsqcOV43hbsGKAq/+V2aBUY=";
+    sha256 = "sha256-Pvdv+WxTmEd92KERNOJm5TikhwZ/aQajrIo4v9EcEeA=";
   };
 
   postPatch = ''
@@ -27,7 +27,10 @@ perlPackages.buildPerlPackage rec {
 
   propagatedBuildOutputs = [ ]; # otherwise out propagates bin -> cycle
 
-  buildInputs = with perlPackages; [ ]; # plugins will need some
+  buildInputs = with perlPackages; [
+    JSONXS
+    TryTiny
+  ];
 
   preConfigure = ''
     touch Makefile.PL
@@ -62,12 +65,12 @@ perlPackages.buildPerlPackage rec {
     mv docs "$doc/share/doc/awstats"
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://www.awstats.org/docs/awstats_changelog.txt";
     description = "Real-time logfile analyzer to get advanced statistics";
     homepage = "https://awstats.org";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
     mainProgram = "awstats";
   };
 }

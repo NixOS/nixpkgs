@@ -21,21 +21,23 @@
   python3,
   pam,
   cairo,
-  xapp,
   xdotool,
-  xorg,
+  libxrandr,
+  libxinerama,
+  libxext,
+  libx11,
   iso-flags-png-320x240,
 }:
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-screensaver";
-  version = "6.4.1";
+  version = "6.6.1";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon-screensaver";
-    rev = version;
-    hash = "sha256-CK4WP5IafNII81e8HxUNN3Vp36Ln78Xvv5lIMvL+nbk=";
+    tag = version;
+    hash = "sha256-NK33cIrcTicLs59eJ550FghjuWS93yD642ObAS55Dtk=";
   };
 
   patches = [
@@ -62,10 +64,10 @@ stdenv.mkDerivation rec {
     gtk3
     glib
 
-    xorg.libXext
-    xorg.libXinerama
-    xorg.libX11
-    xorg.libXrandr
+    libxext
+    libxinerama
+    libx11
+    libxrandr
 
     (python3.withPackages (
       pp: with pp; [
@@ -75,7 +77,6 @@ stdenv.mkDerivation rec {
         pycairo
       ]
     ))
-    xapp
     xdotool
     pam
     cairo
@@ -105,14 +106,14 @@ stdenv.mkDerivation rec {
     mv $out/libexec/cinnamon-screensaver/{.libcscreensaver.so-wrapped,libcscreensaver.so}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/linuxmint/cinnamon-screensaver";
     description = "Cinnamon screen locker and screensaver program";
     license = [
-      licenses.gpl2
-      licenses.lgpl2
+      lib.licenses.gpl2
+      lib.licenses.lgpl2
     ];
-    platforms = platforms.linux;
-    teams = [ teams.cinnamon ];
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
   };
 }

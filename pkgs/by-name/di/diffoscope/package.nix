@@ -84,6 +84,8 @@ let
   python = python3.override {
     self = python;
     packageOverrides = final: prev: {
+      # version 2 breaks dataset and thus androguard
+      sqlalchemy = prev.sqlalchemy_1_4;
       # version 4 or newer would log the following error but tests currently don't fail because radare2 is disabled
       # ValueError: argument TNULL is not a TLSH hex string
       tlsh = prev.tlsh.overridePythonAttrs (
@@ -106,12 +108,12 @@ in
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python.pkgs.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "303";
+  version = "309";
   pyproject = true;
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    hash = "sha256-kalURmsdYl0HOnzAkJ6aGRvYcjnb8BeWimokmpqE+Ds=";
+    hash = "sha256-VB7CBvHKIJWHanuDnoobSnvGcdxMFTUGLxRZgsNoLbQ=";
   };
 
   outputs = [

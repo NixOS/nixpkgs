@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   icmplib,
-  pythonOlder,
   requests,
   setuptools,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "fastdotcom";
   version = "0.0.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "fastdotcom";

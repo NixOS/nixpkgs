@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   wheel,
   numpy,
@@ -16,16 +15,14 @@
 
 buildPythonPackage rec {
   pname = "ubelt";
-  version = "1.3.7";
+  version = "1.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Erotemic";
     repo = "ubelt";
     tag = "v${version}";
-    hash = "sha256-LGcCJCP3iBjwDxMN/qqkvcUt1ry5OMEJ9xqTp27rk0A=";
+    hash = "sha256-9f22hNi/YrxAVoEOGojdziogUN/YNCrpUuOfib9nqfQ=";
   };
 
   nativeBuildInputs = [
@@ -61,11 +58,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Python utility library with a stdlib like feel and extra batteries. Paths, Progress, Dicts, Downloads, Caching, Hashing: ubelt makes it easy";
     homepage = "https://github.com/Erotemic/ubelt";
     changelog = "https://github.com/Erotemic/ubelt/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ natsukium ];
   };
 }

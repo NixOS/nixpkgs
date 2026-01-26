@@ -4,13 +4,16 @@
   mlt,
   glaxnimate,
   ffmpeg-full,
+  ffmpegthumbs,
   pkg-config,
   shared-mime-info,
   qtsvg,
   qtmultimedia,
   qtnetworkauth,
+  kddockwidgets,
   qqc2-desktop-style,
   libv4l,
+  kio-extras,
   opentimelineio,
   frei0r,
 }:
@@ -38,9 +41,12 @@ mkKdeDerivation {
     qtmultimedia
     qtnetworkauth
 
+    kddockwidgets
     qqc2-desktop-style
+    kio-extras
 
     ffmpeg-full
+    ffmpegthumbs
     libv4l
     mlt
     opentimelineio

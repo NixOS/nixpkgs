@@ -77,6 +77,8 @@ let
           "${nginxPort}/tcp" = { };
         };
       };
+
+      meta.description = "Basic nginx docker image example";
     };
 
 in
@@ -88,9 +90,11 @@ rec {
     tag = "latest";
     copyToRoot = pkgs.buildEnv {
       name = "image-root";
-      paths = [ pkgs.bashInteractive ];
+      paths = [ pkgs.bash ];
       pathsToLink = [ "/bin" ];
     };
+
+    meta.description = "Basic example image";
   };
 
   # 2. service example, layered on another image
@@ -138,6 +142,8 @@ rec {
         Retries = 3;
       };
     };
+
+    meta.description = "Service example, layered on another image";
   };
 
   # 3. another service example
@@ -204,6 +210,8 @@ rec {
         "USER=nobody"
       ];
     };
+
+    meta.description = "nix example to play with the container nix store";
   };
 
   # 7. example of adding something on top of an image pull by our
@@ -541,7 +549,7 @@ rec {
     tag = "latest";
     compressor = "none";
     # Not recommended. Use `buildEnv` between copy and packages to avoid file duplication.
-    copyToRoot = pkgs.bashInteractive;
+    copyToRoot = pkgs.bash;
   };
 
   bashZstdCompressed = pkgs.dockerTools.buildImage {
@@ -549,20 +557,20 @@ rec {
     tag = "latest";
     compressor = "zstd";
     # Not recommended. Use `buildEnv` between copy and packages to avoid file duplication.
-    copyToRoot = pkgs.bashInteractive;
+    copyToRoot = pkgs.bash;
   };
 
   # buildImage without explicit tag
   bashNoTag = pkgs.dockerTools.buildImage {
     name = "bash-no-tag";
     # Not recommended. Use `buildEnv` between copy and packages to avoid file duplication.
-    copyToRoot = pkgs.bashInteractive;
+    copyToRoot = pkgs.bash;
   };
 
   # buildLayeredImage without explicit tag
   bashNoTagLayered = pkgs.dockerTools.buildLayeredImage {
     name = "bash-no-tag-layered";
-    contents = pkgs.bashInteractive;
+    contents = pkgs.bash;
   };
 
   # buildLayeredImage without compression
@@ -570,7 +578,7 @@ rec {
     name = "bash-layered-uncompressed";
     tag = "latest";
     compressor = "none";
-    contents = pkgs.bashInteractive;
+    contents = pkgs.bash;
   };
 
   # buildLayeredImage with zstd compression
@@ -578,13 +586,13 @@ rec {
     name = "bash-layered-zstd";
     tag = "latest";
     compressor = "zstd";
-    contents = pkgs.bashInteractive;
+    contents = pkgs.bash;
   };
 
   # streamLayeredImage without explicit tag
   bashNoTagStreamLayered = pkgs.dockerTools.streamLayeredImage {
     name = "bash-no-tag-stream-layered";
-    contents = pkgs.bashInteractive;
+    contents = pkgs.bash;
   };
 
   # buildLayeredImage with non-root user
@@ -699,7 +707,7 @@ rec {
               " --program-prefix=layeredImageWithFakeRootCommands-"
             ];
             doCheck = false;
-            versionCheckProgram = "${builtins.placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
+            versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
             meta = prevAttrs.meta // {
               mainProgram = "layeredImageWithFakeRootCommands-hello";
             };
@@ -832,7 +840,7 @@ rec {
     tag = "latest";
     # Not recommended. Use `buildEnv` between copy and packages to avoid file duplication.
     copyToRoot = [
-      pkgs.bashInteractive
+      pkgs.bash
       ./test-dummy
     ];
   };
@@ -841,7 +849,7 @@ rec {
     name = "layered-image-with-path";
     tag = "latest";
     contents = [
-      pkgs.bashInteractive
+      pkgs.bash
       ./test-dummy
     ];
   };
@@ -852,7 +860,7 @@ rec {
     architecture = "arm64";
     # Not recommended. Use `buildEnv` between copy and packages to avoid file duplication.
     copyToRoot = [
-      pkgs.bashInteractive
+      pkgs.bash
       ./test-dummy
     ];
   };
@@ -862,7 +870,7 @@ rec {
     tag = "latest";
     architecture = "arm64";
     contents = [
-      pkgs.bashInteractive
+      pkgs.bash
       ./test-dummy
     ];
   };

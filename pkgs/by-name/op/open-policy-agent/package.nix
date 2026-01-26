@@ -10,20 +10,20 @@
 
 assert
   enableWasmEval && stdenv.hostPlatform.isDarwin
-  -> builtins.throw "building with wasm on darwin is failing in nixpkgs";
+  -> throw "building with wasm on darwin is failing in nixpkgs";
 
 buildGoModule (finalAttrs: {
   pname = "open-policy-agent";
-  version = "1.9.0";
+  version = "1.12.3";
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "opa";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VeN62lULKA+4Krd0as2B7LxaA43jcevamYV6S3OxB2o=";
+    hash = "sha256-PfOEjWy97COEdGpCcSHCdXVWZzJUwDAGoCi4kr2FWQs=";
   };
 
-  vendorHash = null;
+  vendorHash = "sha256-vlF4TBjfinaY48UNefXFWbrWenD7eYYYMkByI2M32X8=";
 
   nativeBuildInputs = [ installShellFiles ];
 

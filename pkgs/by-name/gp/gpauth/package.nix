@@ -6,22 +6,25 @@
   pkg-config,
   perl,
   webkitgtk_4_1,
+  stdenv,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "gpauth";
-  version = "2.4.1";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "yuezk";
     repo = "GlobalProtect-openconnect";
-    rev = "v${version}";
-    hash = "sha256-MY4JvftrC6sR8M0dFvnGZOkvHIhPRcyct9AG/8527gw=";
+    tag = "v${version}";
+    hash = "sha256-dxRqf5iOlgJegeAqtTwoVqNHXU3eOse5eMYFknhAh2M=";
+    fetchSubmodules = true;
   };
 
   buildAndTestSubdir = "apps/gpauth";
 
-  cargoHash = "sha256-8LSGuRnWRWeaY6t25GdZ2y4hGIJ+mP3UBXRjcvPuD6U=";
+  cargoHash = "sha256-VkDq98Y6uBSal7m4V9vjW1XermOPOWulo3Jo34QFRsA=";
 
   nativeBuildInputs = [
     perl
@@ -29,10 +32,14 @@ rustPlatform.buildRustPackage rec {
   ];
   buildInputs = [
     openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     webkitgtk_4_1
   ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     changelog = "https://github.com/${src.owner}/${src.repo}/blob/${src.rev}/changelog.md";
     description = "CLI for GlobalProtect VPN, based on OpenConnect, supports the SSO authentication method";
     longDescription = ''
@@ -43,14 +50,12 @@ rustPlatform.buildRustPackage rec {
       the same features as the GUI version.
     '';
     homepage = "https://github.com/${src.owner}/${src.repo}";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       binary-eater
+      booxter
       m1dugh
     ];
-    platforms = [
-      "aarch64-linux"
-      "x86_64-linux"
-    ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

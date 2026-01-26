@@ -33,7 +33,7 @@ let
             foo
           ''
         else
-          builtins.throw "Invalid scope: ${scope}";
+          throw "Invalid scope: ${scope}";
     in
     {
       name,

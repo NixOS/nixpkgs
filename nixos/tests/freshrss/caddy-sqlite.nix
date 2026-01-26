@@ -22,7 +22,7 @@
   testScript = ''
     machine.wait_for_unit("multi-user.target")
     machine.wait_for_open_port(80)
-    response = machine.succeed("curl -vvv -s -H 'Host: freshrss' http://localhost:80/i/")
+    response = machine.succeed("curl --fail-with-body --silent --header 'Host: freshrss' http://localhost:80/i/")
     assert '<title>Login · FreshRSS</title>' in response, "Login page didn't load successfully"
   '';
 }

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch2,
   cfitsio,
   cmake,
   curl,
@@ -22,11 +23,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kstars";
-  version = "3.7.8";
+  version = "3.8.0";
 
   src = fetchurl {
     url = "mirror://kde/stable/kstars/${finalAttrs.version}/kstars-${finalAttrs.version}.tar.xz";
-    hash = "sha256-VbOu8p7Bq6UJBr05PVZein4LWzpdLo4838G1jXGNLAw=";
+    hash = "sha256-npB0maYIdAZgHBVZqQ9lUe9VfvRkI3E1WSnG7RIYje4=";
   };
 
   nativeBuildInputs = with kdePackages; [
@@ -35,6 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
     cmake
   ];
+
   buildInputs = with kdePackages; [
     breeze-icons
     cfitsio
@@ -70,13 +72,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = with lib.strings; [
-    (cmakeBool "BUILD_QT5" false)
+    (cmakeBool "BUILD_WITH_QT6" true)
     (cmakeFeature "INDI_PREFIX" "${indi-full}")
     (cmakeFeature "XPLANET_PREFIX" "${xplanet}")
     (cmakeFeature "DATA_INSTALL_DIR" (placeholder "out") + "/share/kstars/")
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Virtual planetarium astronomy software";
     mainProgram = "kstars";
     homepage = "https://kde.org/applications/education/org.kde.kstars";
@@ -85,9 +87,9 @@ stdenv.mkDerivation (finalAttrs: {
       The display includes up to 100 million stars, 13.000 deep-sky objects, all 8 planets, the Sun and Moon, and thousands of comets, asteroids, supernovae, and satellites.
       For students and teachers, it supports adjustable simulation speeds in order to view phenomena that happen over long timescales, the KStars Astrocalculator to predict conjunctions, and many common astronomical calculations.
     '';
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       timput
       returntoreality
     ];

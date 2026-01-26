@@ -16,6 +16,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-pRlxqy5G8mxKXTIn4ruV/95TzpzNB/ArJX+WrEJRqW4=";
   };
 
+  # fix abs dir concatenation
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "$<INSTALL_PREFIX>/$""{CMAKE_INSTALL_INCLUDEDIR}" \
+      "$""{CMAKE_INSTALL_INCLUDEDIR}"
+  '';
+
   nativeBuildInputs = [
     cmake
   ];

@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "git-credential-oauth";
-  version = "0.15.1";
+  version = "0.17.2";
 
   src = fetchFromGitHub {
     owner = "hickford";
     repo = "git-credential-oauth";
     rev = "v${version}";
-    hash = "sha256-9AoIyQ05Y/usG0Tlehn7U8zjBxC1BYNjNVRtgWgzLbo=";
+    hash = "sha256-M4SsqF5RE2OZv7Ehf5o79lyeNmNlkiYDPyz2G6HYC88=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -24,7 +24,7 @@ buildGoModule rec {
     "-X main.version=${version}"
   ];
 
-  vendorHash = "sha256-g6HT0hmY2RQceSOigH2bVj1jXYhXq95xL0Qak7TMx0o=";
+  vendorHash = "sha256-ActdfhT4SOWFjXz9XXx1AAnfRQbdTeID79dI8L+WuIc=";
 
   postInstall = ''
     installManPage $src/git-credential-oauth.1
@@ -35,7 +35,7 @@ buildGoModule rec {
     homepage = "https://github.com/hickford/git-credential-oauth";
     changelog = "https://github.com/hickford/git-credential-oauth/releases/tag/${src.rev}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "git-credential-oauth";
   };
 }

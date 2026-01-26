@@ -19,7 +19,12 @@
   pulseaudio,
   wrapGAppsHook3,
   xdg-utils,
-  xorg,
+  libxcb-util,
+  libxcb-wm,
+  libxtst,
+  libxcursor,
+  libx11,
+  libxcb,
   zlib,
 }:
 
@@ -41,7 +46,7 @@ stdenv.mkDerivation rec {
   dontBuild = true;
   dontWrapGApps = true; # we only want $gappsWrapperArgs here
 
-  buildInputs = with xorg; [
+  buildInputs = [
     alsa-lib
     cairo
     freetype
@@ -53,15 +58,15 @@ stdenv.mkDerivation rec {
     # libjpeg8 is required for converting jpeg's to colour palettes
     libjpeg
     libxcb
-    libXcursor
-    libX11
-    libXtst
+    libxcursor
+    libx11
+    libxtst
     libxkbcommon
     pipewire
     pulseaudio
     (lib.getLib stdenv.cc.cc)
-    xcbutil
-    xcbutilwm
+    libxcb-util
+    libxcb-wm
     zlib
   ];
 
@@ -74,7 +79,7 @@ stdenv.mkDerivation rec {
     cp -r usr/share $out/share
     substitute usr/share/applications/com.bitwig.BitwigStudio.desktop \
       $out/share/applications/com.bitwig.BitwigStudio.desktop \
-      --replace /usr/bin/bitwig-studio $out/bin/bitwig-studio
+      --replace-fail "Exec=bitwig-studio" "Exec=$out/bin/bitwig-studio"
 
       runHook postInstall
   '';
@@ -105,7 +110,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Digital audio workstation";
     longDescription = ''
       Bitwig Studio is a multi-platform music-creation system for
@@ -113,9 +118,9 @@ stdenv.mkDerivation rec {
       editing tools and a super-fast workflow.
     '';
     homepage = "https://www.bitwig.com/";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       bfortz
       michalrus
       mrVanDalo

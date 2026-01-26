@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchurl,
+  fetchpatch,
   meson,
   ninja,
   gettext,
@@ -39,6 +40,15 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/totem/${lib.versions.major version}/totem-${version}.tar.xz";
     hash = "sha256-CwB9MPu5O5WmBPFISKSX9X/DM6dcLmOKJJly6ZwB5qQ=";
   };
+
+  patches = [
+    # Use girepository-2.0
+    # This will be ported to libpeas2 in https://gitlab.gnome.org/GNOME/totem/-/merge_requests/373
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/totem/raw/a213a514b7c2ac22d4e012e168e41eaf839e8112/f/girepository-2.0.patch";
+      hash = "sha256-D+i45yebZMbA7Ybfog3bwtOghoIHHVMqyXiUcZTkpxk=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson

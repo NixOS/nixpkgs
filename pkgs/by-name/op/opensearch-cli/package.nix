@@ -33,7 +33,7 @@ buildGoModule rec {
     homepage = "https://github.com/opensearch-project/opensearch-cli";
     license = lib.licenses.asl20;
     mainProgram = "opensearch-cli";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
   };

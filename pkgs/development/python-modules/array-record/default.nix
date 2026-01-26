@@ -11,28 +11,29 @@
 
 buildPythonPackage rec {
   pname = "array-record";
-  version = "0.7.2";
+  version = "0.8.3";
   format = "wheel";
 
-  disabled = pythonOlder "3.10" || pythonAtLeast "3.14";
+  disabled = pythonOlder "3.11" || pythonAtLeast "3.15";
 
   src =
     let
       pyShortVersion = "cp${builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion}";
     in
     fetchPypi {
-      inherit version format;
+      inherit version;
+      format = "wheel";
       pname = "array_record";
       dist = pyShortVersion;
       python = pyShortVersion;
       abi = pyShortVersion;
-      platform = "manylinux_2_17_x86_64.manylinux2014_x86_64";
+      platform = "manylinux2014_x86_64.manylinux_2_17_x86_64";
       hash =
         {
-          cp310 = "sha256-UmMEehSqMqgLy1TcYoKUX/tG4Tf8UM2xgnuUrXOiHGo=";
-          cp311 = "sha256-cUN9Ws8A1xIN/n+/oGfv3mGUfmlsojLS69iWRpA2meM=";
-          cp312 = "sha256-S+cV0NhXXlOzSTr2ED1oUuk6U1gQA0ZXoGPaWxGp/ZQ=";
-          cp313 = "sha256-C7UvwXV0/NXA5dhr7NbUCW/KeUWg5w5F18aN2oAUXAQ=";
+          cp311 = "sha256-9ABPzOt5YaLMAJACjmij7rkdP1s4wA1gtTP3AE0dP3s=";
+          cp312 = "sha256-RY9mWN6GyTabI//mTcsxOTqRm5GuLxUUfuK+sgELEio=";
+          cp313 = "sha256-E98a7Js4r+mJc79f489SP4PKkEsEI9hTGZMIdxRbjyg=";
+          cp314 = "sha256-idLPX0cJvjxsKzDA02YAUiM3VjP/zmbcsT2SegvcUig=";
         }
         .${pyShortVersion} or (throw "${pname} is missing hash for ${pyShortVersion}");
     };

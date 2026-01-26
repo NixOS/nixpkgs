@@ -18,11 +18,11 @@ replaceVarsWith {
     inherit coreutils getopt runtimeShell;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Prints certain LSB (Linux Standard Base) and Distribution information";
     mainProgram = "lsb_release";
-    license = [ licenses.mit ];
-    maintainers = with maintainers; [ ];
-    platforms = platforms.linux;
+    license = [ lib.licenses.mit ];
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 }

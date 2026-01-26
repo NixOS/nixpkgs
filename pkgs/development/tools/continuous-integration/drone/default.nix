@@ -25,14 +25,14 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Continuous Integration platform built on container technology";
     mainProgram = "drone-server";
     homepage = "https://github.com/harness/drone";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       vdemeester
       techknowlogick
     ];
-    license = with licenses; if enableUnfree then unfreeRedistributable else asl20;
+    license = with lib.licenses; if enableUnfree then unfreeRedistributable else asl20;
   };
 }

@@ -6,20 +6,17 @@
   fetchPypi,
   setuptools-scm,
   sshfs,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dvc-ssh";
-  version = "4.2.1";
+  version = "4.2.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "dvc_ssh";
     inherit version;
-    hash = "sha256-ld6uaAIA+8lHK/TjKtrjtmGKj5847SBMYYvKKN+MkS4=";
+    hash = "sha256-T6yTLF8ivZRE2H1Oez/9bAnMjlbZjrPG1LRDAdNTUBc=";
   };
 
   pythonRemoveDeps = [
@@ -52,11 +49,10 @@ buildPythonPackage rec {
   #  "dvc_ssh"
   # ];
 
-  meta = with lib; {
+  meta = {
     description = "SSH plugin for dvc";
     homepage = "https://pypi.org/project/dvc-ssh/${version}";
     changelog = "https://github.com/iterative/dvc-ssh/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ melling ];
+    license = lib.licenses.asl20;
   };
 }

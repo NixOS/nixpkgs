@@ -2,9 +2,10 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
-  xorg,
+  libxtst,
+  libxi,
+  libx11,
   stdenv,
-  apple-sdk_14,
 }:
 buildGoModule rec {
   pname = "1fps";
@@ -22,11 +23,10 @@ buildGoModule rec {
   vendorHash = "sha256-29x5Lh++NBAsg2O2Vr6pf9iRuVOvow2R5Iqz6twZGXA=";
 
   buildInputs = [
-    xorg.libX11
-    xorg.libXtst
-    xorg.libXi
-  ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin apple-sdk_14;
+    libx11
+    libxtst
+    libxi
+  ];
 
   meta = {
     description = "Encrypted Screen Sharing";

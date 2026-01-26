@@ -14,16 +14,16 @@
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "firedrake-fiat";
-  version = "2025.4.2";
+  version = "2025.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "firedrakeproject";
     repo = "fiat";
-    tag = version;
-    hash = "sha256-SIi/4JW9L4kyFxEmbG9pqe0QtY80UMOh7LSFLmrHhZY=";
+    tag = finalAttrs.version;
+    hash = "sha256-x1/gf/QVez6GxPUafxdhxqyT0MkL6w2Qz6VAxRNufdc=";
   };
 
   postPatch =
@@ -82,4 +82,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ qbisi ];
   };
-}
+})

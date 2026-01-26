@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "creds";
   version = "0.5.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ihebski";
@@ -38,12 +38,12 @@ python3.pkgs.buildPythonApplication rec {
   # Project has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Tool to search a collection of default credentials";
     mainProgram = "creds";
     homepage = "https://github.com/ihebski/DefaultCreds-cheat-sheet";
     changelog = "https://github.com/ihebski/DefaultCreds-cheat-sheet/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

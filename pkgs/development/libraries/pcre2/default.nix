@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pcre2";
-  version = "10.44";
+  version = "10.46";
 
   src = fetchurl {
     url = "https://github.com/PhilipHazel/pcre2/releases/download/pcre2-${version}/pcre2-${version}.tar.bz2";
-    hash = "sha256-008C4RPPcZOh6/J3DTrFJwiNSF1OBH7RDl0hfG713pY=";
+    hash = "sha256-FfvFq6a+7gsXrssEYCrjlDI5OroevY45t8q/fbiDKZ8=";
   };
 
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
@@ -41,12 +41,12 @@ stdenv.mkDerivation rec {
     moveToOutput bin/pcre2-config "$dev"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.pcre.org/";
     description = "Perl Compatible Regular Expressions";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ttuegel ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ ttuegel ];
+    platforms = lib.platforms.all;
     pkgConfigModules = [
       "libpcre2-posix"
       "libpcre2-8"

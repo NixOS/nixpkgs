@@ -168,7 +168,7 @@ let
       chmod "u${if setuid then "+" else "-"}s,g${if setgid then "+" else "-"}s,${permissions}" "$wrapperDir/${program}"
     '';
 
-  mkWrappedPrograms = builtins.map (
+  mkWrappedPrograms = map (
     opts: if opts.capabilities != "" then mkSetcapProgram opts else mkSetuidProgram opts
   ) (lib.attrValues wrappers);
 in
@@ -294,11 +294,11 @@ in
         where = parentWrapperDir;
         what = "tmpfs";
         type = "tmpfs";
-        options = lib.concatStringsSep "," ([
+        options = lib.concatStringsSep "," [
           "nodev"
           "mode=755"
           "size=${config.security.wrapperDirSize}"
-        ]);
+        ];
       }
     ];
 

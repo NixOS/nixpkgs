@@ -100,7 +100,7 @@ framework for Matrix.
            url: https://matrix.example.org
            secret: your-very-secret-key
    ```
-10. Restart Maubot after editing `/var/lib/maubot/config.yaml`,and
+10. Restart Maubot after editing `/var/lib/maubot/config.yaml`, and
     Maubot will be available at
     `https://matrix.example.org/_matrix/maubot`. If you want to use the
     `mbc` CLI, it's available using the `maubot` package (`nix-shell -p

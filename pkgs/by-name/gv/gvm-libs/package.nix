@@ -1,11 +1,12 @@
 {
   lib,
   stdenv,
+  cjson,
   cmake,
+  curl,
   doxygen,
   fetchFromGitHub,
   glib,
-  glib-networking,
   gnutls,
   gpgme,
   hiredis,
@@ -23,15 +24,15 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gvm-libs";
-  version = "22.11.0";
+  version = "22.35.2";
 
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "gvm-libs";
-    tag = "v${version}";
-    hash = "sha256-VYFAy6VVASNOBLs39qukePYr5pV0IR1qjztv+veNCVc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-DVYU+6hUps2nwgkTWu228wVYtke4oDFUqXM73DEN6LM=";
   };
 
   postPatch = ''
@@ -45,8 +46,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    cjson
+    curl
     glib
-    glib-networking
     gnutls
     gpgme
     hiredis
@@ -71,9 +73,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Libraries module for the Greenbone Vulnerability Management Solution";
     homepage = "https://github.com/greenbone/gvm-libs";
-    changelog = "https://github.com/greenbone/gvm-libs/releases/tag/v${version}";
-    license = with lib.licenses; [ gpl2Plus ];
+    changelog = "https://github.com/greenbone/gvm-libs/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ fab ];
     platforms = lib.platforms.linux;
   };
-}
+})

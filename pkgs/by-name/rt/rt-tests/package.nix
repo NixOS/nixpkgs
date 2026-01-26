@@ -9,12 +9,14 @@
 
 stdenv.mkDerivation rec {
   pname = "rt-tests";
-  version = "2.8";
+  version = "2.9";
 
   src = fetchurl {
     url = "https://git.kernel.org/pub/scm/utils/rt-tests/rt-tests.git/snapshot/${pname}-${version}.tar.gz";
-    sha256 = "sha256-iBpd7K9VpvUH5wXBKypyQl8NAHN3Om5/PcoJ8RH37mI=";
+    sha256 = "sha256-Zmb0RqGvS4bHy+6Krs3of1WUWOqJMOH0FHAXIqlteys=";
   };
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=format-overflow";
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
@@ -34,11 +36,11 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/determine_maximum_mpps.sh" --prefix PATH : $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://git.kernel.org/pub/scm/utils/rt-tests/rt-tests.git";
     description = "Suite of real-time tests - cyclictest, hwlatdetect, pip_stress, pi_stress, pmqtest, ptsematest, rt-migrate-test, sendme, signaltest, sigwaittest, svsematest";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ poelzi ];
-    license = licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ poelzi ];
+    license = lib.licenses.gpl2Only;
   };
 }

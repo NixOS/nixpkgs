@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "lighttigerXIV";
     repo = "catppuccinifier";
-    tag = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-e8sLYp+0YhC/vAn4vag9UUaw3VYDRERGnLD1RuW1TXE=";
   };
 

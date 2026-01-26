@@ -25,18 +25,23 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qttools ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.3 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   # Fix the broken CMake files to use the correct paths
   postInstall = ''
     substituteInPlace $out/lib/cmake/molequeue/MoleQueueConfig.cmake \
       --replace "$out/" ""
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Desktop integration of high performance computing resources";
     mainProgram = "molequeue";
-    maintainers = with maintainers; [ sheepforce ];
+    maintainers = with lib.maintainers; [ sheepforce ];
     homepage = "https://github.com/OpenChemistry/molequeue";
-    platforms = platforms.linux;
-    license = licenses.bsd3;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd3;
   };
 }

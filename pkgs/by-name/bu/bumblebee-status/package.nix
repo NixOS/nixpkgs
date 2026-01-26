@@ -22,7 +22,7 @@ in
 python3.pkgs.buildPythonPackage {
   pname = "bumblebee-status";
   inherit version;
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tobi-wan-kenobi";
@@ -79,12 +79,12 @@ python3.pkgs.buildPythonPackage {
     cp -r ./themes $out/${python3.sitePackages}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Modular, theme-able status line generator for the i3 window manager";
     homepage = "https://github.com/tobi-wan-kenobi/bumblebee-status";
     mainProgram = "bumblebee-status";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ jamerrq ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ jamerrq ];
   };
 }

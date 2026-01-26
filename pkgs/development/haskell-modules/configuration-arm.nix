@@ -53,9 +53,6 @@ self: super:
 // lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch64 {
   # AARCH64-SPECIFIC OVERRIDES
 
-  # Corrupted store path https://github.com/NixOS/nixpkgs/pull/272097#issuecomment-1848414265
-  cachix = triggerRebuild 1 super.cachix;
-
   # Doctests fail on aarch64 due to a GHCi linking bug
   # https://gitlab.haskell.org/ghc/ghc/-/issues/15275#note_295437
   # TODO: figure out if needed on aarch32 as well
@@ -120,10 +117,26 @@ self: super:
   # AARCH32-SPECIFIC OVERRIDES
 
   # KAT/ECB/D2 test segfaults on armv7l
-  # https://github.com/haskell-crypto/cryptonite/issues/367
+  # https://github.com/haskell-crypto/cryptonite/issues/367 krank:ignore-line
   cryptonite = dontCheck super.cryptonite;
 }
 // lib.optionalAttrs (with pkgs.stdenv.hostPlatform; isAarch && isAndroid) {
   # android is not currently allowed as 'supported-platforms' by hackage2nix
   android-activity = unmarkBroken super.android-activity;
+}
+// lib.optionalAttrs (with pkgs.stdenv.hostPlatform; !isDarwin) {
+  # 2026-01-09: RNG tests that need rng-instruction support fail on NixOS's
+  #             aarch64-linux build infrastructure
+  botan-low = overrideCabal (drv: {
+    testFlags =
+      drv.testFlags or [ ]
+      ++ (lib.concatMap (x: [ "--skip" ] ++ [ x ]) [
+        # botan-low-rng-tests
+        "/rdrand/rngInit/"
+        "/rdrand/rngGet/"
+        "/rdrand/rngReseed/"
+        "/rdrand/rngReseedFromRNGCtx/"
+        "/rdrand/rngAddEntropy/"
+      ]);
+  }) super.botan-low;
 }

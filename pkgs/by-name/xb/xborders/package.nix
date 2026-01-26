@@ -52,12 +52,12 @@ python3Packages.buildPythonPackage rec {
       ln -s ${setup} setup.py
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Active window border replacement for window managers";
     homepage = "https://github.com/deter0/xborder";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ elnudev ];
-    platforms = platforms.linux;
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [ elnudev ];
+    platforms = lib.platforms.linux;
     mainProgram = "xborders";
   };
 }

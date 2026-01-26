@@ -8,15 +8,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "capnproto-rust";
-  version = "0.21.4";
+  version = "0.25.0";
 
   src = fetchCrate {
     crateName = "capnpc";
     inherit version;
-    hash = "sha256-pJF0S6mRxPjpwa367eOUgc7GBeKgUwux1GgUIJE8JuI=";
+    hash = "sha256-2+GSM9oIT/he/Ra3SJH5YSrNUU/Jc+PE1N5TjK7OX28=";
   };
 
-  cargoHash = "sha256-nPDfBpY7WtNr1St6HAymWBLho5n0UXibqDjVA1vXeNg=";
+  cargoHash = "sha256-fVHLWBxB9PQhOx01G01qIyudnMQiHXj0BI8A6e7t1yQ=";
 
   postInstall = ''
     mkdir -p $out/include/capnp
@@ -29,11 +29,11 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Cap'n Proto codegen plugin for Rust";
     homepage = "https://github.com/capnproto/capnproto-rust";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       mikroskeem
       solson
     ];

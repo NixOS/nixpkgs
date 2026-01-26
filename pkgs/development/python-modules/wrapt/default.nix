@@ -36,10 +36,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "wrapt" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for decorators, wrappers and monkey patching";
     homepage = "https://github.com/GrahamDumpleton/wrapt";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
   };
 }

@@ -40,11 +40,11 @@ let
 in
 (if withQt then mkDerivation else stdenv.mkDerivation) rec {
   pname = "gnuplot";
-  version = "6.0.3";
+  version = "6.0.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnuplot/${pname}-${version}.tar.gz";
-    sha256 = "sha256-7FLjr4xAg9RTgVKz8T20f20pkpo/bs7FNlyDTnfyUas=";
+    sha256 = "sha256-RY2UdpYl5z1fYjJQD0nLrcsrGDOA1D0iZqD5cBrrnFs=";
   };
 
   nativeBuildInputs = [
@@ -119,20 +119,12 @@ in
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.gnuplot.info/";
     description = "Portable command-line driven graphing utility for many platforms";
-    platforms = platforms.linux ++ platforms.darwin;
-    license = {
-      # Essentially a BSD license with one modification:
-      # Permission to modify the software is granted, but not the right to
-      # distribute the complete modified source code.  Modifications are to
-      # be distributed as patches to the released version.  Permission to
-      # distribute binaries produced by compiling modified sources is granted,
-      # provided you: ...
-      url = "https://sourceforge.net/p/gnuplot/gnuplot-main/ci/master/tree/Copyright";
-    };
-    maintainers = with maintainers; [ lovek323 ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = lib.licenses.gnuplot;
+    maintainers = with lib.maintainers; [ lovek323 ];
     mainProgram = "gnuplot";
   };
 }

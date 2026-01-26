@@ -6,13 +6,13 @@
   kernelModuleMakeFlags,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fwts-efi-runtime";
   version = "${fwts.version}-${kernel.version}";
 
   inherit (fwts) src;
 
-  sourceRoot = "${src.name}/efi_runtime";
+  sourceRoot = "${fwts.sourceRoot}/efi_runtime";
 
   postPatch = ''
     substituteInPlace Makefile --replace \
@@ -28,10 +28,10 @@ stdenv.mkDerivation rec {
     "INSTALL_MOD_PATH=${placeholder "out"}"
   ];
 
-  meta = with lib; {
+  meta = {
     inherit (fwts.meta) homepage license;
     description = fwts.meta.description + "(efi-runtime kernel module)";
-    maintainers = with maintainers; [ dtzWill ];
-    platforms = platforms.linux;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
-}
+})

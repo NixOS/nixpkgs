@@ -40,11 +40,11 @@ stdenvNoCC.mkDerivation {
     "WP_DIR_LN=$(DESTDIR)/share/backgrounds/$(WP_NAME)"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/fedoradesign/backgrounds";
     description = "Set of default and supplemental wallpapers for Fedora";
-    license = licenses.cc-by-sa-40;
-    platforms = platforms.unix;
+    license = lib.licenses.cc-by-sa-40;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 }

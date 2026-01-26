@@ -35,6 +35,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Various text handling addons for KDE applications";
     homepage = "https://invent.kde.org/libraries/ktextaddons/";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 })

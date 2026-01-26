@@ -77,14 +77,20 @@ buildPythonPackage rec {
     "tests/test_threaded_socket_manager.py"
     "tests/test_threaded_stream.py"
     "tests/test_ws_api.py"
+    "tests/test_ids.py"
+    "tests/test_headers.py"
+    "tests/test_historical_klines.py"
+    "tests/test_init.py"
+    "tests/test_streams_options.py"
+    "tests/test_cryptography.py"
+    "tests/test_futures.py"
   ];
 
   pythonImportsCheck = [ "binance" ];
 
-  meta = with lib; {
+  meta = {
     description = "Binance Exchange API python implementation for automated trading";
     homepage = "https://github.com/sammchardy/python-binance";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bhipple ];
+    license = lib.licenses.mit;
   };
 }

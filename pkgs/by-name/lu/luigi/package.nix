@@ -42,6 +42,5 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/spotify/luigi";
     changelog = "https://github.com/spotify/luigi/releases/tag/${version}";
     license = [ lib.licenses.asl20 ];
-    maintainers = [ lib.maintainers.bhipple ];
   };
 }

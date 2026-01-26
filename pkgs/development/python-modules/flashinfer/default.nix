@@ -9,6 +9,7 @@
   config,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
 
   # build-system
   setuptools,
@@ -22,7 +23,7 @@
   click,
   einops,
   numpy,
-  pynvml,
+  nvidia-ml-py,
   tabulate,
   torch,
   tqdm,
@@ -40,6 +41,15 @@ buildPythonPackage rec {
     fetchSubmodules = true;
     hash = "sha256-e9PfLfU0DdoLKlXiHylCbGd125c7Iw9y4NDIOAP0xHs=";
   };
+
+  patches = [
+    # TODO: remove patch with update to v0.5.2+
+    # Switch pynvml to nvidia-ml-py
+    (fetchpatch2 {
+      url = "https://github.com/flashinfer-ai/flashinfer/commit/a42f99255d68d1a54b689bd4985339c6b44963a6.patch?full_index=1";
+      hash = "sha256-3XJFcdQeZ/c5fwiQvd95z4p9BzTn8pjle21WzeBxUgk=";
+    })
+  ];
 
   build-system = [ setuptools ];
 
@@ -86,7 +96,7 @@ buildPythonPackage rec {
     click
     einops
     numpy
-    pynvml
+    nvidia-ml-py
     tabulate
     torch
     tqdm
@@ -104,6 +114,9 @@ buildPythonPackage rec {
       scenarios.
     '';
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ breakds ];
+    maintainers = with lib.maintainers; [
+      breakds
+      daniel-fahey
+    ];
   };
 }

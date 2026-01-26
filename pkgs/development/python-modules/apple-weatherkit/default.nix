@@ -37,11 +37,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "apple_weatherkit" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for Apple WeatherKit";
     homepage = "https://github.com/tjhorner/python-weatherkit";
     changelog = "https://github.com/tjhorner/python-weatherkit/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

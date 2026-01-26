@@ -2,25 +2,30 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  iana-etc,
   installShellFiles,
+  libredirect,
   stdenv,
 }:
 
 buildGoModule rec {
   pname = "zarf";
-  version = "0.62.0";
+  version = "0.66.0";
 
   src = fetchFromGitHub {
     owner = "zarf-dev";
     repo = "zarf";
     tag = "v${version}";
-    hash = "sha256-mabp4G7LbtOmIVEmOK/YhjTX/RRM8ObAS6YXTJe2P/U=";
+    hash = "sha256-IveiGWOLEyxt8Dh/gGRv6eENRIQbroy5jkZk9cj6USE=";
   };
 
-  vendorHash = "sha256-As7xDEo+bMslv9Xd6CbHTqvf2XaXmO6Gp3f9+xD3kNU=";
+  vendorHash = "sha256-rW3CDHGYHmrxOdBNKFvWUvrpRJYaxi5XMzOZqiTxhY0=";
   proxyVendor = true;
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libredirect.hook ];
 
   preBuild = ''
     mkdir -p build/ui
@@ -43,24 +48,24 @@ buildGoModule rec {
     "k8s.io/component-base/version.buildDate=1970-01-01T00:00:00Z"
   ];
 
-  # Breaks with sandbox on Darwin because it wants to read /etc/protocols
   postInstall =
     lib.optionalString
-      ((stdenv.buildPlatform.canExecute stdenv.hostPlatform) && !stdenv.buildPlatform.isDarwin)
-      ''
-        export K9S_LOGS_DIR=$(mktemp -d)
-        installShellCompletion --cmd zarf \
-          --bash <($out/bin/zarf completion bash) \
-          --fish <($out/bin/zarf completion fish) \
-          --zsh  <($out/bin/zarf completion zsh)
-      '';
+      (stdenv.buildPlatform.canExecute stdenv.hostPlatform && stdenv.hostPlatform.isDarwin)
+      "export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/services=${iana-etc}/etc/services"
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      export K9S_LOGS_DIR=$(mktemp -d)
+      installShellCompletion --cmd zarf \
+        --bash <($out/bin/zarf completion bash) \
+        --fish <($out/bin/zarf completion fish) \
+        --zsh  <($out/bin/zarf completion zsh)
+    '';
 
-  meta = with lib; {
+  meta = {
     description = "DevSecOps for Air Gap & Limited-Connection Systems. https://zarf.dev";
     mainProgram = "zarf";
     homepage = "https://zarf.dev";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       ragingpastry
     ];
   };

@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rich-theme-manager";
   version = "0.11.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "RhetTbull";
     repo = "rich_theme_manager";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-nSNG+lWOPmh66I9EmPvWqbeceY/cu+zBpgVlDTNuHc0=";
   };
 
@@ -31,4 +31,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/RhetTbull/rich_theme_manager";
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
-}
+})

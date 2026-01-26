@@ -20,10 +20,28 @@
   nspr,
   nss,
   wayland,
-  xorg,
+  libxcb-wm,
+  libxcb-render-util,
+  libxcb-keysyms,
+  libxcb-image,
+  libxtst,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  libsm,
+  libice,
+  libxcb,
   buildFHSEnv,
   copyDesktopItems,
   makeDesktopItem,
+  libsForQt5,
   version ? "8.2.2",
   packetTracerSource ? null,
 }:
@@ -76,27 +94,25 @@ let
       nspr
       nss
       wayland
-    ]
-    ++ (with xorg; [
-      libICE
-      libSM
-      libX11
-      libXScrnSaver
-      libXcomposite
-      libXcursor
-      libXdamage
-      libXext
-      libXfixes
-      libXi
-      libXrandr
-      libXrender
-      libXtst
+      libice
+      libsm
+      libx11
+      libxscrnsaver
+      libxcomposite
+      libxcursor
+      libxdamage
+      libxext
+      libxfixes
+      libxi
+      libxrandr
+      libxrender
+      libxtst
       libxcb
-      xcbutilimage
-      xcbutilkeysyms
-      xcbutilrenderutil
-      xcbutilwm
-    ]);
+      libxcb-image
+      libxcb-keysyms
+      libxcb-render-util
+      libxcb-wm
+    ];
 
     unpackPhase = ''
       runHook preUnpack
@@ -111,6 +127,7 @@ let
       runHook preInstall
 
       makeWrapper "$out/opt/pt/bin/PacketTracer" "$out/bin/packettracer8" \
+        --set QT_QPA_PLATFORM xcb \
         --prefix LD_LIBRARY_PATH : "$out/opt/pt/bin"
 
       runHook postInstall
@@ -174,5 +191,12 @@ stdenvNoCC.mkDerivation {
     ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    knownVulnerabilities = [
+      ''
+        Cisco Packet Tracer 8 ships with qt5 qtwebengine.
+
+        ${lib.head libsForQt5.qtwebengine.meta.knownVulnerabilities}
+      ''
+    ];
   };
 }

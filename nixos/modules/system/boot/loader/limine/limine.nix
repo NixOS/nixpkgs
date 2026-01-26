@@ -22,9 +22,10 @@ let
       biosSupport = cfg.biosSupport;
       biosDevice = cfg.biosDevice;
       partitionIndex = cfg.partitionIndex;
-      forceMbr = cfg.forceMbr;
+      force = cfg.force;
       enrollConfig = cfg.enrollConfig;
       style = cfg.style;
+      resolution = cfg.resolution;
       maxGenerations = if cfg.maxGenerations == null then 0 else cfg.maxGenerations;
       hostArchitecture = pkgs.stdenv.hostPlatform.parsed.cpu;
       timeout = if config.boot.loader.timeout != null then config.boot.loader.timeout else 10;
@@ -42,6 +43,13 @@ in
   meta = {
     inherit (pkgs.limine.meta) maintainers;
   };
+
+  imports = [
+    (lib.mkRenamedOptionModule
+      [ "boot" "loader" "limine" "forceMbr" ]
+      [ "boot" "loader" "limine" "force" ]
+    )
+  ];
 
   options.boot.loader.limine = {
     enable = lib.mkEnableOption "the Limine Bootloader";
@@ -88,6 +96,27 @@ in
       '';
       description = ''
         A string which is appended to the end of limine.conf. The config format can be found [here](https://github.com/limine-bootloader/limine/blob/trunk/CONFIG.md).
+      '';
+    };
+
+    resolution = lib.mkOption {
+      default = null;
+      type = lib.types.nullOr lib.types.str;
+      example = "1920x1080x32";
+      description = ''
+        The framebuffer resolution to set when booting Linux entries.
+        This controls the GOP mode that Limine sets before handing off to the kernel,
+        which affects early boot graphics (e.g., simpledrm, efifb).
+
+        Format: `<width>x<height>` or `<width>x<height>x<bpp>`.
+        If bpp is omitted, defaults to 32.
+
+        Note: Refresh rate is not supported because the UEFI GOP protocol only
+        defines framebuffer dimensions and pixel format, not display timing.
+        Refresh rate is determined later by the GPU driver based on EDID.
+
+        This is distinct from {option}`boot.loader.limine.style.interface.resolution`
+        which only affects the Limine bootloader's own menu interface.
       '';
     };
 
@@ -169,9 +198,9 @@ in
       '';
     };
 
-    forceMbr = lib.mkEnableOption null // {
+    force = lib.mkEnableOption null // {
       description = ''
-        Force MBR detection to work even if the safety checks fail, use absolutely only if necessary!
+        Force installation even if the safety checks fail, use absolutely only if necessary!
       '';
     };
 
@@ -222,10 +251,10 @@ in
       };
 
       wallpaperStyle = lib.mkOption {
-        default = "streched";
+        default = "stretched";
         type = lib.types.enum [
           "centered"
-          "streched"
+          "stretched"
           "tiled"
         ];
         description = ''
@@ -368,7 +397,7 @@ in
     }
     (lib.mkIf (cfg.style.wallpapers == [ defaultWallpaper ]) {
       boot.loader.limine.style.backdrop = lib.mkDefault "2F302F";
-      boot.loader.limine.style.wallpaperStyle = lib.mkDefault "streched";
+      boot.loader.limine.style.wallpaperStyle = lib.mkDefault "stretched";
     })
     (lib.mkIf cfg.enable {
       assertions = [

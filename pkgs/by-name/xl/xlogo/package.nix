@@ -2,7 +2,12 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  xorg,
+  libxt,
+  libxmu,
+  libxext,
+  libxaw,
+  libx11,
+  libsm,
   autoreconfHook,
   pkg-config,
   util-macros,
@@ -17,7 +22,7 @@ stdenv.mkDerivation rec {
     group = "xorg";
     owner = "app";
     repo = "xlogo";
-    rev = "refs/tags/xlogo-${version}";
+    tag = "xlogo-${version}";
     hash = "sha256-KjJhuiFVn34vEZbC7ds4MrcXCHq9PcIpAuaCGBX/EXc=";
   };
 
@@ -30,20 +35,20 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-appdefaultdir=$out/share/X11/app-defaults" ];
 
   buildInputs = [
-    xorg.libX11
-    xorg.libXext
-    xorg.libSM
-    xorg.libXmu
-    xorg.libXaw
-    xorg.libXt
+    libx11
+    libxext
+    libsm
+    libxmu
+    libxaw
+    libxt
   ];
 
-  meta = with lib; {
+  meta = {
     description = "X Window System logo display demo";
     homepage = "https://gitlab.freedesktop.org/xorg/app/xlogo";
-    maintainers = with maintainers; [ raboof ];
-    platforms = platforms.unix;
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ raboof ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.mit;
     mainProgram = "xlogo";
   };
 }

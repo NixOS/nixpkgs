@@ -24,7 +24,7 @@
 
   # Arguments to include external libraries
   enableLibSM ? true,
-  xorg,
+  libsm,
   enableGnuTLS ? true,
   gnutls,
   enableEnchant ? enableSpellcheck,
@@ -179,7 +179,7 @@ let
     {
       flags = [ "libsm" ];
       enabled = enableLibSM;
-      deps = [ xorg.libSM ];
+      deps = [ libsm ];
     }
     {
       flags = [ "litehtml_viewer-plugin" ];
@@ -343,16 +343,14 @@ stdenv.mkDerivation rec {
     cp claws-mail.desktop $out/share/applications
   '';
 
-  meta = with lib; {
+  meta = {
     description = "User-friendly, lightweight, and fast email client";
     mainProgram = "claws-mail";
     homepage = "https://www.claws-mail.org/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       fpletz
-      globin
-      orivej
       oxzi
       ajs124
     ];

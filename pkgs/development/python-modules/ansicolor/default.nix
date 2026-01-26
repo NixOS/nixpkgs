@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "ansicolor";
   version = "0.3.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "numerodix";
@@ -27,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ansicolor" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to produce ansi color output and colored highlighting and diffing";
     homepage = "https://github.com/numerodix/ansicolor/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

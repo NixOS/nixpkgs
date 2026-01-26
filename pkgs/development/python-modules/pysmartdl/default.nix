@@ -43,11 +43,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pySmartDL" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/iTaybb/pySmartDL";
     description = "Smart Download Manager for Python";
     changelog = "https://github.com/iTaybb/pySmartDL/blob/${src.rev}/ChangeLog.txt";
-    license = licenses.unlicense;
+    license = lib.licenses.unlicense;
     maintainers = [ ];
   };
 }

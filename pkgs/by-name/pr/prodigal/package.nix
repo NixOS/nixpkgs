@@ -20,12 +20,12 @@ stdenv.mkDerivation rec {
     "INSTALLDIR=$(out)/bin"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast, reliable protein-coding gene prediction for prokaryotic genomes";
     mainProgram = "prodigal";
     homepage = "https://github.com/hyattpd/Prodigal";
-    license = licenses.gpl3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ luispedro ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ luispedro ];
   };
 }

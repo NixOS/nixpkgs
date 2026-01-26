@@ -165,6 +165,7 @@ in
       wireless = {
         enable = lib.mkIf (!enableIwd) true;
         dbusControlled = true;
+        autoDetectInterfaces = false;
         iwd = lib.mkIf enableIwd {
           enable = true;
         };

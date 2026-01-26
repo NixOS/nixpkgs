@@ -15,9 +15,9 @@
 let
   versionInfoTable = {
     "latest" = {
-      version = "0.3.1";
-      srcHash = "sha256-asg2xp9A5abmsF+CgOa+ScK2sQwSNFQXD5Qnm76Iyhg=";
-      cargoHash = "sha256-K0lQuk2PBwnVlkRpYNo4Z7to/Lx2fY6RIlkgmMjvEtc=";
+      version = "0.3.2";
+      srcHash = "sha256-DUkeOkUf9roZGKqdjoy/DfUL1OrVfSVjMhEvfACLEoo=";
+      cargoHash = "sha256-AiBoM7rywsuokz/fmLmye630N+t1GtwZsxkmtlH5MI8=";
     };
     # version pin that is compatible with heroic
     "heroic" = {
@@ -80,7 +80,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "comet";
     maintainers = with lib.maintainers; [
       tomasajt
-      aidalgol
     ];
   };
 })

@@ -58,11 +58,11 @@ stdenv.mkDerivation rec {
     substituteInPlace include/redefgen.sh --replace 'PATH=/bin:/usr/bin:/sbin:/usr/sbin' ""
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Circuit-level SOCKS client/server that can be used to provide convenient and secure network connectivity";
     homepage = "https://www.inet.no/dante/";
-    maintainers = [ maintainers.arobyn ];
-    license = licenses.bsdOriginal;
-    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = [ lib.maintainers.arobyn ];
+    license = lib.licenses.bsdOriginal;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

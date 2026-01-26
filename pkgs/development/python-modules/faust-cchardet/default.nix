@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "faust-cchardet";
   version = "2.1.19";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "faust-streaming";

@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchzip,
-  xorg,
+  libx11,
 }:
 stdenv.mkDerivation rec {
   pname = "xtris";
@@ -24,14 +24,14 @@ stdenv.mkDerivation rec {
     sed -i '28i#include <time.h>' xtserv.c
     sed -i '35i#include <time.h>' xtbot.c
   '';
-  buildInputs = [ xorg.libX11 ];
+  buildInputs = [ libx11 ];
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
-  meta = with lib; {
+  meta = {
     description = "Multi-player version of the classical game of Tetris, for the X Window system";
     homepage = "https://web.archive.org/web/20120315061213/http://www.iagora.com/~espel/xtris/xtris.html";
-    license = licenses.gpl2Only;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.unix;
   };
 }

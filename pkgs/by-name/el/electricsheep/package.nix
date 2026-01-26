@@ -8,7 +8,7 @@
   lua5_1,
   curl,
   libpng,
-  xorg,
+  libxrender,
   pkg-config,
   flam3,
   libgtop,
@@ -47,7 +47,7 @@ stdenv.mkDerivation {
     lua5_1
     curl
     libpng
-    xorg.libXrender
+    libxrender
     flam3
     libgtop
     boost
@@ -75,11 +75,11 @@ stdenv.mkDerivation {
     sed -i "s|/usr|$out|" Makefile
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Electric Sheep, a distributed screen saver for evolving artificial organisms";
     homepage = "https://electricsheep.org/";
     maintainers = [ ];
-    platforms = platforms.linux;
-    license = licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Only;
   };
 }

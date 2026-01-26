@@ -8,7 +8,10 @@ let
   cfg = config.hardware.opentabletdriver;
 in
 {
-  meta.maintainers = with lib.maintainers; [ thiagokokada ];
+  meta.maintainers = with lib.maintainers; [
+    gepbird
+    thiagokokada
+  ];
 
   options = {
     hardware.opentabletdriver = {
@@ -53,18 +56,22 @@ in
 
     boot.blacklistedKernelModules = cfg.blacklistedKernelModules;
 
-    systemd.user.services.opentabletdriver =
-      with pkgs;
-      lib.mkIf cfg.daemon.enable {
-        description = "Open source, cross-platform, user-mode tablet driver";
-        wantedBy = [ "graphical-session.target" ];
-        partOf = [ "graphical-session.target" ];
+    systemd.user.services.opentabletdriver = lib.mkIf cfg.daemon.enable {
+      description = "Open source, cross-platform, user-mode tablet driver";
+      wantedBy = [ "graphical-session.target" ];
+      partOf = [ "graphical-session.target" ];
 
-        serviceConfig = {
-          Type = "simple";
-          ExecStart = "${cfg.package}/bin/otd-daemon";
-          Restart = "on-failure";
-        };
+      serviceConfig = {
+        Type = "simple";
+        # workaround for https://github.com/NixOS/nixpkgs/issues/469340
+        ExecStartPre = pkgs.writeShellScript "disable-for-gdm-greeter" ''
+          if [[ "$USER" = "gdm-greeter"* ]]; then
+            exit 1
+          fi
+        '';
+        ExecStart = lib.getExe' cfg.package "otd-daemon";
+        Restart = "on-failure";
       };
+    };
   };
 }

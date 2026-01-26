@@ -12,9 +12,10 @@
   python-socks,
   rencode,
   setuptools,
+  fetchpatch,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiobtclientrpc";
   version = "5.0.1";
   pyproject = true;
@@ -23,17 +24,21 @@ buildPythonPackage rec {
     domain = "codeberg.org";
     owner = "plotski";
     repo = "aiobtclientrpc";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2nBrIMlYUI4PwirkiSJSkw5zw2Kc/KoVRyIIYYx4iYs=";
   };
 
-  pythonRelaxDeps = [
-    "async-timeout"
+  patches = [
+    # compatibility with python3.14: fix retrival of non-running event loop
+    (fetchpatch {
+      url = "https://codeberg.org/plotski/aiobtclientrpc/commit/1328e281d28f17c9b2c092539b4ab7402f1082b3.patch";
+      hash = "sha256-ixHyG/w2h7tkaVYxmvpInfNW4AxVTn4Bflztzt1TOwM=";
+    })
   ];
 
-  build-system = [
-    setuptools
-  ];
+  pythonRelaxDeps = [ "async-timeout" ];
+
+  build-system = [ setuptools ];
 
   dependencies = [
     async-timeout
@@ -63,6 +68,8 @@ buildPythonPackage rec {
     "test_timeout[rtorrent_http]"
     "test_event_subscriptions_survive_reconnecting[rtorrent_http]"
     "test_waiting_for_event[rtorrent_http]"
+    # Tests are outdated
+    "test_DelugeRPCRequest_equality"
   ];
 
   pythonImportsCheck = [ "aiobtclientrpc" ];
@@ -73,4 +80,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ ambroisie ];
   };
-}
+})

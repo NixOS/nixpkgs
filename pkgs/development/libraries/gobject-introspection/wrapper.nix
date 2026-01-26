@@ -16,13 +16,13 @@
 
 let
   # ensure that `.override` works
-  args = builtins.removeAttrs _args [
+  args = removeAttrs _args [
     "buildPackages"
     "targetPackages"
     "gobject-introspection-unwrapped"
   ];
   # passing this stdenv to `targetPackages...` breaks due to splicing not working in `.override``
-  argsForTarget = builtins.removeAttrs args [ "stdenv" ];
+  argsForTarget = removeAttrs args [ "stdenv" ];
 
   overriddenUnwrappedGir = gobject-introspection-unwrapped.override args;
   # if we have targetPackages.gobject-introspection then propagate that
@@ -50,7 +50,7 @@ then
       eval fixupPhase
       ${lib.concatMapStrings (output: ''
         mkdir -p ${"$" + "${output}"}
-        ${lib.getExe buildPackages.xorg.lndir} ${overriddenUnwrappedGir.${output}} ${"$" + "${output}"}
+        ${lib.getExe buildPackages.lndir} ${overriddenUnwrappedGir.${output}} ${"$" + "${output}"}
       '') overriddenUnwrappedGir.outputs}
 
       cp $dev/bin/g-ir-compiler $dev/bin/.g-ir-compiler-wrapped
@@ -109,7 +109,7 @@ else
       eval fixupPhase
       ${lib.concatMapStrings (output: ''
         mkdir -p ${"$" + "${output}"}
-        ${lib.getExe buildPackages.xorg.lndir} ${overriddenUnwrappedGir.${output}} ${"$" + "${output}"}
+        ${lib.getExe buildPackages.lndir} ${overriddenUnwrappedGir.${output}} ${"$" + "${output}"}
       '') overriddenUnwrappedGir.outputs}
     '';
   })

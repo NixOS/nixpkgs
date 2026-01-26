@@ -1,29 +1,31 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
   django,
-  pytestCheckHook,
-  pythonOlder,
+  fetchFromGitHub,
   pytest-django,
+  pytestCheckHook,
+  uv-build,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "model-bakery";
-  version = "1.20.5";
+  version = "1.23.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "model-bakers";
     repo = "model_bakery";
-    tag = version;
-    hash = "sha256-Rf1QpIjo94h3lfZCBJfzaOMggPqy37NUOFWUbLROcec=";
+    tag = finalAttrs.version;
+    hash = "sha256-AwdHsysCaxSS6+dH1gO7dyV2Q4PIA84Mc810KNrqP/g=";
   };
 
-  build-system = [ hatchling ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.9.26,<0.10.0" "uv_build"
+  '';
+
+  build-system = [ uv-build ];
 
   dependencies = [ django ];
 
@@ -34,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "model_bakery" ];
 
-  meta = with lib; {
+  meta = {
     description = "Object factory for Django";
     homepage = "https://github.com/model-bakers/model_bakery";
-    changelog = "https://github.com/model-bakers/model_bakery/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/model-bakers/model_bakery/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -8,7 +8,7 @@
   lib,
   libpng,
   libX11,
-  lua,
+  lua5_2,
   luajit,
   meson,
   ninja,
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     jsoncpp
     libpng
     libX11
-    lua
+    lua5_2
     luajit
     SDL2
     zlib
@@ -65,12 +65,12 @@ stdenv.mkDerivation rec {
 
   desktopItems = [ "resources/powder.desktop" ];
 
-  meta = with lib; {
+  meta = {
     description = "Free 2D physics sandbox game";
     homepage = "https://powdertoy.co.uk/";
-    platforms = platforms.unix;
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       siraben
     ];
     mainProgram = "powder";

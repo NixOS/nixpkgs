@@ -6,7 +6,6 @@
   portalocker,
   setuptools,
   stdenv,
-  pythonOlder,
   pytestCheckHook,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "msal-extensions";
   version = "1.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "AzureAD";
@@ -51,11 +48,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "msal_extensions" ];
 
-  meta = with lib; {
+  meta = {
     description = "Microsoft Authentication Library Extensions (MSAL-Extensions) for Python";
     homepage = "https://github.com/AzureAD/microsoft-authentication-extensions-for-python";
     changelog = "https://github.com/AzureAD/microsoft-authentication-extensions-for-python/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kamadorueda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 }

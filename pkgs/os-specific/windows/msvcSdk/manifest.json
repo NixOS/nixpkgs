@@ -1,51 +1,50 @@
 {
   "manifestVersion": "1.1",
   "info": {
-    "id": "VisualStudio.17.Release/17.14.13+36414.22.-august.2025-",
+    "id": "VisualStudio.17.Release/17.14.19+36623.8",
     "buildBranch": "d17.14",
-    "buildVersion": "17.14.36414.22",
-    "commitId": "1481a1f5e0b5858ec46c868f91b27039ed0d233d",
-    "communityOrLowerFlightId": "1f9f81a7bb554db",
+    "buildVersion": "17.14.36623.8",
+    "commitId": "8a9fda4969482fc6fc5ced0d2d47b928d1b82678",
+    "communityOrLowerFlightId": "4e87ee4468fd451",
     "localBuild": "build-lab",
     "manifestName": "VisualStudio.17.Release",
     "manifestType": "channel",
-    "productDisplayVersion": "17.14.13 (August 2025)",
+    "productDisplayVersion": "17.14.19",
     "productLine": "Dev17",
     "productLineVersion": "2022",
     "productMilestone": "RTW",
     "productMilestoneIsPreRelease": "False",
     "productName": "Visual Studio",
-    "productPatchVersion": "13",
+    "productPatchVersion": "19",
     "productPreReleaseMilestoneSuffix": "1.0",
-    "productReleaseNameSuffix": "(August 2025)",
-    "productSemanticVersion": "17.14.13+36414.22.-august.2025-",
-    "professionalOrGreaterFlightId": "39d353be42bf474",
-    "qBuildSessionId": "e533c3b6-eb6e-a0b2-8734-a13c66345cb8"
+    "productSemanticVersion": "17.14.19+36623.8",
+    "professionalOrGreaterFlightId": "4bb63b1960eb466",
+    "qBuildSessionId": "32622f7c-25ab-329b-fa1e-eebd68dbf0a2"
   },
   "channelItems": [
     {
       "id": "Microsoft.VisualStudio.Manifests.VisualStudio",
-      "version": "17.14.36414.22",
+      "version": "17.14.36623.8",
       "type": "Manifest",
       "payloads": [
         {
           "fileName": "VisualStudio.vsman",
-          "sha256": "0cacd8477885cc6f8d7c5de44af0f86e6a53ec9138a7c3d559e227ccacab8f46",
-          "size": 30484157,
-          "url": "https://download.visualstudio.microsoft.com/download/pr/89ee1303-1ba2-4f66-b07c-5099983fd1e4/0cacd8477885cc6f8d7c5de44af0f86e6a53ec9138a7c3d559e227ccacab8f46/VisualStudio.vsman"
+          "sha256": "b674dd46f83a684142689b3a86c73ba5f2e2477018087e4df218516214bbad58",
+          "size": 30425509,
+          "url": "https://download.visualstudio.microsoft.com/download/pr/5011a9cc-e8ef-42cb-ad72-87de1031accc/b674dd46f83a684142689b3a86c73ba5f2e2477018087e4df218516214bbad58/VisualStudio.vsman"
         }
       ]
     },
     {
       "id": "Microsoft.VisualStudio.Product.BuildTools",
-      "version": "17.14.36414.22",
+      "version": "17.14.36623.8",
       "type": "ChannelProduct",
       "icon": {
         "mimeType": "image/svg+xml",
         "base64": "PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2aWV3Qm94PSIwIDAgMjQgMjQiPg0KICA8ZGVmcz4NCiAgICA8c3R5bGU+LmNscy0xe2ZpbGw6IzVlNDM4Zjt9LmNscy0ye29wYWNpdHk6MC4xO2lzb2xhdGlvbjppc29sYXRlO30uY2xzLTN7ZmlsbDp1cmwoI2xpbmVhci1ncmFkaWVudCk7fS5jbHMtNHtmaWxsOnVybCgjbGluZWFyLWdyYWRpZW50LTIpO30uY2xzLTV7ZmlsbDojYzE4ZWYxO308L3N0eWxlPg0KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0ibGluZWFyLWdyYWRpZW50IiB4MT0iMy42MTIiIHkxPSItMTUuMzUyIiB4Mj0iMTkuNTc1IiB5Mj0iMS4zNjkiIGdyYWRpZW50VHJhbnNmb3JtPSJtYXRyaXgoMSwgMCwgMCwgLTEsIDAsIDQpIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+DQogICAgICA8c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM3MjUyYWEiLz4NCiAgICAgIDxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzcyNTJhYSIvPg0KICAgIDwvbGluZWFyR3JhZGllbnQ+DQogICAgPGxpbmVhckdyYWRpZW50IGlkPSJsaW5lYXItZ3JhZGllbnQtMiIgeDE9IjguODQ0IiB5MT0iMzguNjc5IiB4Mj0iMTMuODcxIiB5Mj0iMzMuMjE2IiBncmFkaWVudFRyYW5zZm9ybT0idHJhbnNsYXRlKDAgLTIyKSIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPg0KICAgICAgPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjYWU3ZmUyIi8+DQogICAgICA8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM5YTcwZDQiLz4NCiAgICA8L2xpbmVhckdyYWRpZW50Pg0KICA8L2RlZnM+DQogIDxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTQuNCwyMC4zbC00LTNhLjkxMS45MTEsMCwwLDEtLjQtLjh2LTlhLjkxMS45MTEsMCwwLDEsLjQtLjhsNC0zYS45MTEuOTExLDAsMCwwLS40Ljh2MTVBLjkxMS45MTEsMCwwLDAsNC40LDIwLjNaIi8+DQogIDxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTEuMSwxNy4yYS41MTcuNTE3LDAsMCwxLS40LjIuMzY2LjM2NiwwLDAsMS0uMy0uMWgwbDQsM2EuOTExLjkxMSwwLDAsMS0uNC0uOFYxMy44WiIvPg0KICA8cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik0uNCw2LjdoMGEuNS41LDAsMCwxLC42OTMuMDlMMS4xLDYuOCw0LDEwLjJWNC41YS45MTEuOTExLDAsMCwxLC40LS44WiIvPg0KICA8cGF0aCBjbGFzcz0iY2xzLTMiIGQ9Ik0yMy42LDQuMkExLjQyMywxLjQyMywwLDAsMCwyMyw0YS45MDguOTA4LDAsMCwwLS43LjNsLS4xLjFMMTgsOC40LDE0LjMsMTIsOS45LDE2LjIsNS44LDIwLjFsLS4xLjFhLjkwOC45MDgsMCwwLDEtLjcuMywxLjQyMywxLjQyMywwLDAsMS0uNi0uMmwtNC0zYTEuMDcxLDEuMDcxLDAsMCwwLDEuNC0uMUw0LDE0LjYsNi4yLDEyLDkuOCw3LjgsMTYuMi40QS45MTEuOTExLDAsMCwxLDE3LDBhMS40MjMsMS40MjMsMCwwLDEsLjYuMloiLz4NCiAgPHBvbHlnb24gY2xhc3M9ImNscy0yIiBwb2ludHM9IjEwLjIgNy40IDkuOCA3LjggNi4yIDEyIDUuOSAxMi40IDkuNSAxNi42IDkuNSAxNi42IDkuOCAxNi4yIDE0LjMgMTIgMTQuNiAxMS43IDEwLjIgNy40Ii8+DQogIDxwYXRoIGNsYXNzPSJjbHMtNCIgZD0iTTIzLjYsMTkuOGwtNiw0Yy0uMSwwLS4yLjEtLjMuMWgwYS45LjksMCwwLDEtMS0uM0w5LjksMTYuMiw2LjIsMTIsNCw5LjQsMS44LDYuOEExLjIwOCwxLjIwOCwwLDAsMCwuNCw2LjdsNC0zQTEuNDIzLDEuNDIzLDAsMCwxLDUsMy41YS45MDguOTA4LDAsMCwxLC43LjNsLjEuMUw5LjksNy44LDE0LjMsMTJsMy4yLDMuMS41LjUsNC4yLDQuMS4xLjFhLjkwOC45MDgsMCwwLDAsLjcuM1oiLz4NCiAgPHBhdGggY2xhc3M9ImNscy0yIiBkPSJNMjMuNiwxOS44bC02LDRjLS4xLDAtLjIuMS0uMy4xYS43NjIuNzYyLDAsMCwwLC4yLS40VjE1LjFsLjUuNSw0LjIsNC4xLjEuMWEuOTA4LjkwOCwwLDAsMCwuNy4zWiIvPg0KICA8cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik0xNy41LjJhLjM2Ni4zNjYsMCwwLDAtLjMtLjEuNTE3LjUxNywwLDAsMSwuMi40VjguOWwuNi0uNSw0LjItNC4xLjEtLjFBMS40NDgsMS40NDgsMCwwLDEsMjMsNGExLjQyMywxLjQyMywwLDAsMSwuNi4yWiIvPg0KICA8cGF0aCBjbGFzcz0iY2xzLTUiIGQ9Ik0yNCw1VjE5YTEsMSwwLDAsMS0uNDQ1LjgzNWwtNiw0QTEsMSwwLDAsMCwxOCwyM1YxYTEuMDEsMS4wMSwwLDAsMC0uNDYtLjgzNWw2LjAxNSw0QTEuMDA5LDEuMDA5LDAsMCwxLDI0LDVaIi8+DQo8L3N2Zz4="
       },
       "isHidden": true,
-      "releaseNotes": "https://docs.microsoft.com/en-us/visualstudio/releases/2022/release-notes-v17.14#17.14.13",
+      "releaseNotes": "https://docs.microsoft.com/en-us/visualstudio/releases/2022/release-notes-v17.14#17.14.19",
       "localizedResources": [
         {
           "language": "en-us",
@@ -135,7 +134,7 @@
     },
     {
       "id": "Microsoft.VisualStudio.Product.Community",
-      "version": "17.14.36414.22",
+      "version": "17.14.36623.8",
       "type": "ChannelProduct",
       "chip": "x64",
       "productArch": "arm64",
@@ -143,7 +142,7 @@
         "mimeType": "image/svg+xml",
         "base64": "PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2aWV3Qm94PSIwIDAgMjQgMjQiPg0KICA8ZGVmcz4NCiAgICA8c3R5bGU+LmNscy0xe2ZpbGw6IzVlNDM4Zjt9LmNscy0ye29wYWNpdHk6MC4xO2lzb2xhdGlvbjppc29sYXRlO30uY2xzLTN7ZmlsbDp1cmwoI2xpbmVhci1ncmFkaWVudCk7fS5jbHMtNHtmaWxsOnVybCgjbGluZWFyLWdyYWRpZW50LTIpO30uY2xzLTV7ZmlsbDojYzE4ZWYxO308L3N0eWxlPg0KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0ibGluZWFyLWdyYWRpZW50IiB4MT0iMy42MTIiIHkxPSItMTUuMzUyIiB4Mj0iMTkuNTc1IiB5Mj0iMS4zNjkiIGdyYWRpZW50VHJhbnNmb3JtPSJtYXRyaXgoMSwgMCwgMCwgLTEsIDAsIDQpIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+DQogICAgICA8c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM3MjUyYWEiLz4NCiAgICAgIDxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzcyNTJhYSIvPg0KICAgIDwvbGluZWFyR3JhZGllbnQ+DQogICAgPGxpbmVhckdyYWRpZW50IGlkPSJsaW5lYXItZ3JhZGllbnQtMiIgeDE9IjguODQ0IiB5MT0iMzguNjc5IiB4Mj0iMTMuODcxIiB5Mj0iMzMuMjE2IiBncmFkaWVudFRyYW5zZm9ybT0idHJhbnNsYXRlKDAgLTIyKSIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPg0KICAgICAgPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjYWU3ZmUyIi8+DQogICAgICA8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM5YTcwZDQiLz4NCiAgICA8L2xpbmVhckdyYWRpZW50Pg0KICA8L2RlZnM+DQogIDxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTQuNCwyMC4zbC00LTNhLjkxMS45MTEsMCwwLDEtLjQtLjh2LTlhLjkxMS45MTEsMCwwLDEsLjQtLjhsNC0zYS45MTEuOTExLDAsMCwwLS40Ljh2MTVBLjkxMS45MTEsMCwwLDAsNC40LDIwLjNaIi8+DQogIDxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTEuMSwxNy4yYS41MTcuNTE3LDAsMCwxLS40LjIuMzY2LjM2NiwwLDAsMS0uMy0uMWgwbDQsM2EuOTExLjkxMSwwLDAsMS0uNC0uOFYxMy44WiIvPg0KICA8cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik0uNCw2LjdoMGEuNS41LDAsMCwxLC42OTMuMDlMMS4xLDYuOCw0LDEwLjJWNC41YS45MTEuOTExLDAsMCwxLC40LS44WiIvPg0KICA8cGF0aCBjbGFzcz0iY2xzLTMiIGQ9Ik0yMy42LDQuMkExLjQyMywxLjQyMywwLDAsMCwyMyw0YS45MDguOTA4LDAsMCwwLS43LjNsLS4xLjFMMTgsOC40LDE0LjMsMTIsOS45LDE2LjIsNS44LDIwLjFsLS4xLjFhLjkwOC45MDgsMCwwLDEtLjcuMywxLjQyMywxLjQyMywwLDAsMS0uNi0uMmwtNC0zYTEuMDcxLDEuMDcxLDAsMCwwLDEuNC0uMUw0LDE0LjYsNi4yLDEyLDkuOCw3LjgsMTYuMi40QS45MTEuOTExLDAsMCwxLDE3LDBhMS40MjMsMS40MjMsMCwwLDEsLjYuMloiLz4NCiAgPHBvbHlnb24gY2xhc3M9ImNscy0yIiBwb2ludHM9IjEwLjIgNy40IDkuOCA3LjggNi4yIDEyIDUuOSAxMi40IDkuNSAxNi42IDkuNSAxNi42IDkuOCAxNi4yIDE0LjMgMTIgMTQuNiAxMS43IDEwLjIgNy40Ii8+DQogIDxwYXRoIGNsYXNzPSJjbHMtNCIgZD0iTTIzLjYsMTkuOGwtNiw0Yy0uMSwwLS4yLjEtLjMuMWgwYS45LjksMCwwLDEtMS0uM0w5LjksMTYuMiw2LjIsMTIsNCw5LjQsMS44LDYuOEExLjIwOCwxLjIwOCwwLDAsMCwuNCw2LjdsNC0zQTEuNDIzLDEuNDIzLDAsMCwxLDUsMy41YS45MDguOTA4LDAsMCwxLC43LjNsLjEuMUw5LjksNy44LDE0LjMsMTJsMy4yLDMuMS41LjUsNC4yLDQuMS4xLjFhLjkwOC45MDgsMCwwLDAsLjcuM1oiLz4NCiAgPHBhdGggY2xhc3M9ImNscy0yIiBkPSJNMjMuNiwxOS44bC02LDRjLS4xLDAtLjIuMS0uMy4xYS43NjIuNzYyLDAsMCwwLC4yLS40VjE1LjFsLjUuNSw0LjIsNC4xLjEuMWEuOTA4LjkwOCwwLDAsMCwuNy4zWiIvPg0KICA8cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik0xNy41LjJhLjM2Ni4zNjYsMCwwLDAtLjMtLjEuNTE3LjUxNywwLDAsMSwuMi40VjguOWwuNi0uNSw0LjItNC4xLjEtLjFBMS40NDgsMS40NDgsMCwwLDEsMjMsNGExLjQyMywxLjQyMywwLDAsMSwuNi4yWiIvPg0KICA8cGF0aCBjbGFzcz0iY2xzLTUiIGQ9Ik0yNCw1VjE5YTEsMSwwLDAsMS0uNDQ1LjgzNWwtNiw0QTEsMSwwLDAsMCwxOCwyM1YxYTEuMDEsMS4wMSwwLDAsMC0uNDYtLjgzNWw2LjAxNSw0QTEuMDA5LDEuMDA5LDAsMCwxLDI0LDVaIi8+DQo8L3N2Zz4="
       },
-      "releaseNotes": "https://docs.microsoft.com/en-us/visualstudio/releases/2022/release-notes-v17.14#17.14.13",
+      "releaseNotes": "https://docs.microsoft.com/en-us/visualstudio/releases/2022/release-notes-v17.14#17.14.19",
       "supportsDownloadThenUpdate": true,
       "localizedResources": [
         {
@@ -240,7 +239,7 @@
     },
     {
       "id": "Microsoft.VisualStudio.Product.Community",
-      "version": "17.14.36414.22",
+      "version": "17.14.36623.8",
       "type": "ChannelProduct",
       "chip": "x64",
       "productArch": "x64",
@@ -248,7 +247,7 @@
         "mimeType": "image/svg+xml",
         "base64": "PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2aWV3Qm94PSIwIDAgMjQgMjQiPg0KICA8ZGVmcz4NCiAgICA8c3R5bGU+LmNscy0xe2ZpbGw6IzVlNDM4Zjt9LmNscy0ye29wYWNpdHk6MC4xO2lzb2xhdGlvbjppc29sYXRlO30uY2xzLTN7ZmlsbDp1cmwoI2xpbmVhci1ncmFkaWVudCk7fS5jbHMtNHtmaWxsOnVybCgjbGluZWFyLWdyYWRpZW50LTIpO30uY2xzLTV7ZmlsbDojYzE4ZWYxO308L3N0eWxlPg0KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0ibGluZWFyLWdyYWRpZW50IiB4MT0iMy42MTIiIHkxPSItMTUuMzUyIiB4Mj0iMTkuNTc1IiB5Mj0iMS4zNjkiIGdyYWRpZW50VHJhbnNmb3JtPSJtYXRyaXgoMSwgMCwgMCwgLTEsIDAsIDQpIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+DQogICAgICA8c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM3MjUyYWEiLz4NCiAgICAgIDxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzcyNTJhYSIvPg0KICAgIDwvbGluZWFyR3JhZGllbnQ+DQogICAgPGxpbmVhckdyYWRpZW50IGlkPSJsaW5lYXItZ3JhZGllbnQtMiIgeDE9IjguODQ0IiB5MT0iMzguNjc5IiB4Mj0iMTMuODcxIiB5Mj0iMzMuMjE2IiBncmFkaWVudFRyYW5zZm9ybT0idHJhbnNsYXRlKDAgLTIyKSIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPg0KICAgICAgPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjYWU3ZmUyIi8+DQogICAgICA8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM5YTcwZDQiLz4NCiAgICA8L2xpbmVhckdyYWRpZW50Pg0KICA8L2RlZnM+DQogIDxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTQuNCwyMC4zbC00LTNhLjkxMS45MTEsMCwwLDEtLjQtLjh2LTlhLjkxMS45MTEsMCwwLDEsLjQtLjhsNC0zYS45MTEuOTExLDAsMCwwLS40Ljh2MTVBLjkxMS45MTEsMCwwLDAsNC40LDIwLjNaIi8+DQogIDxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTEuMSwxNy4yYS41MTcuNTE3LDAsMCwxLS40LjIuMzY2LjM2NiwwLDAsMS0uMy0uMWgwbDQsM2EuOTExLjkxMSwwLDAsMS0uNC0uOFYxMy44WiIvPg0KICA8cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik0uNCw2LjdoMGEuNS41LDAsMCwxLC42OTMuMDlMMS4xLDYuOCw0LDEwLjJWNC41YS45MTEuOTExLDAsMCwxLC40LS44WiIvPg0KICA8cGF0aCBjbGFzcz0iY2xzLTMiIGQ9Ik0yMy42LDQuMkExLjQyMywxLjQyMywwLDAsMCwyMyw0YS45MDguOTA4LDAsMCwwLS43LjNsLS4xLjFMMTgsOC40LDE0LjMsMTIsOS45LDE2LjIsNS44LDIwLjFsLS4xLjFhLjkwOC45MDgsMCwwLDEtLjcuMywxLjQyMywxLjQyMywwLDAsMS0uNi0uMmwtNC0zYTEuMDcxLDEuMDcxLDAsMCwwLDEuNC0uMUw0LDE0LjYsNi4yLDEyLDkuOCw3LjgsMTYuMi40QS45MTEuOTExLDAsMCwxLDE3LDBhMS40MjMsMS40MjMsMCwwLDEsLjYuMloiLz4NCiAgPHBvbHlnb24gY2xhc3M9ImNscy0yIiBwb2ludHM9IjEwLjIgNy40IDkuOCA3LjggNi4yIDEyIDUuOSAxMi40IDkuNSAxNi42IDkuNSAxNi42IDkuOCAxNi4yIDE0LjMgMTIgMTQuNiAxMS43IDEwLjIgNy40Ii8+DQogIDxwYXRoIGNsYXNzPSJjbHMtNCIgZD0iTTIzLjYsMTkuOGwtNiw0Yy0uMSwwLS4yLjEtLjMuMWgwYS45LjksMCwwLDEtMS0uM0w5LjksMTYuMiw2LjIsMTIsNCw5LjQsMS44LDYuOEExLjIwOCwxLjIwOCwwLDAsMCwuNCw2LjdsNC0zQTEuNDIzLDEuNDIzLDAsMCwxLDUsMy41YS45MDguOTA4LDAsMCwxLC43LjNsLjEuMUw5LjksNy44LDE0LjMsMTJsMy4yLDMuMS41LjUsNC4yLDQuMS4xLjFhLjkwOC45MDgsMCwwLDAsLjcuM1oiLz4NCiAgPHBhdGggY2xhc3M9ImNscy0yIiBkPSJNMjMuNiwxOS44bC02LDRjLS4xLDAtLjIuMS0uMy4xYS43NjIuNzYyLDAsMCwwLC4yLS40VjE1LjFsLjUuNSw0LjIsNC4xLjEuMWEuOTA4LjkwOCwwLDAsMCwuNy4zWiIvPg0KICA8cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik0xNy41LjJhLjM2Ni4zNjYsMCwwLDAtLjMtLjEuNTE3LjUxNywwLDAsMSwuMi40VjguOWwuNi0uNSw0LjItNC4xLjEtLjFBMS40NDgsMS40NDgsMCwwLDEsMjMsNGExLjQyMywxLjQyMywwLDAsMSwuNi4yWiIvPg0KICA8cGF0aCBjbGFzcz0iY2xzLTUiIGQ9Ik0yNCw1VjE5YTEsMSwwLDAsMS0uNDQ1LjgzNWwtNiw0QTEsMSwwLDAsMCwxOCwyM1YxYTEuMDEsMS4wMSwwLDAsMC0uNDYtLjgzNWw2LjAxNSw0QTEuMDA5LDEuMDA5LDAsMCwxLDI0LDVaIi8+DQo8L3N2Zz4="
       },
-      "releaseNotes": "https://docs.microsoft.com/en-us/visualstudio/releases/2022/release-notes-v17.14#17.14.13",
+      "releaseNotes": "https://docs.microsoft.com/en-us/visualstudio/releases/2022/release-notes-v17.14#17.14.19",
       "supportsDownloadThenUpdate": true,
       "localizedResources": [
         {
@@ -356,7 +355,7 @@
     },
     {
       "id": "Microsoft.VisualStudio.Product.Enterprise",
-      "version": "17.14.36414.22",
+      "version": "17.14.36623.8",
       "type": "ChannelProduct",
       "chip": "x64",
       "productArch": "arm64",
@@ -364,7 +363,7 @@
         "mimeType": "image/svg+xml",
         "base64": "PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2aWV3Qm94PSIwIDAgMjQgMjQiPg0KICA8ZGVmcz4NCiAgICA8c3R5bGU+LmNscy0xe2ZpbGw6IzVlNDM4Zjt9LmNscy0ye29wYWNpdHk6MC4xO2lzb2xhdGlvbjppc29sYXRlO30uY2xzLTN7ZmlsbDp1cmwoI2xpbmVhci1ncmFkaWVudCk7fS5jbHMtNHtmaWxsOnVybCgjbGluZWFyLWdyYWRpZW50LTIpO30uY2xzLTV7ZmlsbDojYzE4ZWYxO308L3N0eWxlPg0KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0ibGluZWFyLWdyYWRpZW50IiB4MT0iMy42MTIiIHkxPSItMTUuMzUyIiB4Mj0iMTkuNTc1IiB5Mj0iMS4zNjkiIGdyYWRpZW50VHJhbnNmb3JtPSJtYXRyaXgoMSwgMCwgMCwgLTEsIDAsIDQpIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+DQogICAgICA8c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM3MjUyYWEiLz4NCiAgICAgIDxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzcyNTJhYSIvPg0KICAgIDwvbGluZWFyR3JhZGllbnQ+DQogICAgPGxpbmVhckdyYWRpZW50IGlkPSJsaW5lYXItZ3JhZGllbnQtMiIgeDE9IjguODQ0IiB5MT0iMzguNjc5IiB4Mj0iMTMuODcxIiB5Mj0iMzMuMjE2IiBncmFkaWVudFRyYW5zZm9ybT0idHJhbnNsYXRlKDAgLTIyKSIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPg0KICAgICAgPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjYWU3ZmUyIi8+DQogICAgICA8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM5YTcwZDQiLz4NCiAgICA8L2xpbmVhckdyYWRpZW50Pg0KICA8L2RlZnM+DQogIDxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTQuNCwyMC4zbC00LTNhLjkxMS45MTEsMCwwLDEtLjQtLjh2LTlhLjkxMS45MTEsMCwwLDEsLjQtLjhsNC0zYS45MTEuOTExLDAsMCwwLS40Ljh2MTVBLjkxMS45MTEsMCwwLDAsNC40LDIwLjNaIi8+DQogIDxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTEuMSwxNy4yYS41MTcuNTE3LDAsMCwxLS40LjIuMzY2LjM2NiwwLDAsMS0uMy0uMWgwbDQsM2EuOTExLjkxMSwwLDAsMS0uNC0uOFYxMy44WiIvPg0KICA8cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik0uNCw2LjdoMGEuNS41LDAsMCwxLC42OTMuMDlMMS4xLDYuOCw0LDEwLjJWNC41YS45MTEuOTExLDAsMCwxLC40LS44WiIvPg0KICA8cGF0aCBjbGFzcz0iY2xzLTMiIGQ9Ik0yMy42LDQuMkExLjQyMywxLjQyMywwLDAsMCwyMyw0YS45MDguOTA4LDAsMCwwLS43LjNsLS4xLjFMMTgsOC40LDE0LjMsMTIsOS45LDE2LjIsNS44LDIwLjFsLS4xLjFhLjkwOC45MDgsMCwwLDEtLjcuMywxLjQyMywxLjQyMywwLDAsMS0uNi0uMmwtNC0zYTEuMDcxLDEuMDcxLDAsMCwwLDEuNC0uMUw0LDE0LjYsNi4yLDEyLDkuOCw3LjgsMTYuMi40QS45MTEuOTExLDAsMCwxLDE3LDBhMS40MjMsMS40MjMsMCwwLDEsLjYuMloiLz4NCiAgPHBvbHlnb24gY2xhc3M9ImNscy0yIiBwb2ludHM9IjEwLjIgNy40IDkuOCA3LjggNi4yIDEyIDUuOSAxMi40IDkuNSAxNi42IDkuNSAxNi42IDkuOCAxNi4yIDE0LjMgMTIgMTQuNiAxMS43IDEwLjIgNy40Ii8+DQogIDxwYXRoIGNsYXNzPSJjbHMtNCIgZD0iTTIzLjYsMTkuOGwtNiw0Yy0uMSwwLS4yLjEtLjMuMWgwYS45LjksMCwwLDEtMS0uM0w5LjksMTYuMiw2LjIsMTIsNCw5LjQsMS44LDYuOEExLjIwOCwxLjIwOCwwLDAsMCwuNCw2LjdsNC0zQTEuNDIzLDEuNDIzLDAsMCwxLDUsMy41YS45MDguOTA4LDAsMCwxLC43LjNsLjEuMUw5LjksNy44LDE0LjMsMTJsMy4yLDMuMS41LjUsNC4yLDQuMS4xLjFhLjkwOC45MDgsMCwwLDAsLjcuM1oiLz4NCiAgPHBhdGggY2xhc3M9ImNscy0yIiBkPSJNMjMuNiwxOS44bC02LDRjLS4xLDAtLjIuMS0uMy4xYS43NjIuNzYyLDAsMCwwLC4yLS40VjE1LjFsLjUuNSw0LjIsNC4xLjEuMWEuOTA4LjkwOCwwLDAsMCwuNy4zWiIvPg0KICA8cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik0xNy41LjJhLjM2Ni4zNjYsMCwwLDAtLjMtLjEuNTE3LjUxNywwLDAsMSwuMi40VjguOWwuNi0uNSw0LjItNC4xLjEtLjFBMS40NDgsMS40NDgsMCwwLDEsMjMsNGExLjQyMywxLjQyMywwLDAsMSwuNi4yWiIvPg0KICA8cGF0aCBjbGFzcz0iY2xzLTUiIGQ9Ik0yNCw1VjE5YTEsMSwwLDAsMS0uNDQ1LjgzNWwtNiw0QTEsMSwwLDAsMCwxOCwyM1YxYTEuMDEsMS4wMSwwLDAsMC0uNDYtLjgzNWw2LjAxNSw0QTEuMDA5LDEuMDA5LDAsMCwxLDI0LDVaIi8+DQo8L3N2Zz4="
       },
-      "releaseNotes": "https://docs.microsoft.com/en-us/visualstudio/releases/2022/release-notes-v17.14#17.14.13",
+      "releaseNotes": "https://docs.microsoft.com/en-us/visualstudio/releases/2022/release-notes-v17.14#17.14.19",
       "supportsDownloadThenUpdate": true,
       "localizedResources": [
         {
@@ -461,7 +460,7 @@
     },
     {
       "id": "Microsoft.VisualStudio.Product.Enterprise",
-      "version": "17.14.36414.22",
+      "version": "17.14.36623.8",
       "type": "ChannelProduct",
       "chip": "x64",
       "productArch": "x64",
@@ -469,7 +468,7 @@
         "mimeType": "image/svg+xml",
         "base64": "PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2aWV3Qm94PSIwIDAgMjQgMjQiPg0KICA8ZGVmcz4NCiAgICA8c3R5bGU+LmNscy0xe2ZpbGw6IzVlNDM4Zjt9LmNscy0ye29wYWNpdHk6MC4xO2lzb2xhdGlvbjppc29sYXRlO30uY2xzLTN7ZmlsbDp1cmwoI2xpbmVhci1ncmFkaWVudCk7fS5jbHMtNHtmaWxsOnVybCgjbGluZWFyLWdyYWRpZW50LTIpO30uY2xzLTV7ZmlsbDojYzE4ZWYxO308L3N0eWxlPg0KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0ibGluZWFyLWdyYWRpZW50IiB4MT0iMy42MTIiIHkxPSItMTUuMzUyIiB4Mj0iMTkuNTc1IiB5Mj0iMS4zNjkiIGdyYWRpZW50VHJhbnNmb3JtPSJtYXRyaXgoMSwgMCwgMCwgLTEsIDAsIDQpIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+DQogICAgICA8c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM3MjUyYWEiLz4NCiAgICAgIDxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzcyNTJhYSIvPg0KICAgIDwvbGluZWFyR3JhZGllbnQ+DQogICAgPGxpbmVhckdyYWRpZW50IGlkPSJsaW5lYXItZ3JhZGllbnQtMiIgeDE9IjguODQ0IiB5MT0iMzguNjc5IiB4Mj0iMTMuODcxIiB5Mj0iMzMuMjE2IiBncmFkaWVudFRyYW5zZm9ybT0idHJhbnNsYXRlKDAgLTIyKSIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPg0KICAgICAgPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjYWU3ZmUyIi8+DQogICAgICA8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM5YTcwZDQiLz4NCiAgICA8L2xpbmVhckdyYWRpZW50Pg0KICA8L2RlZnM+DQogIDxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTQuNCwyMC4zbC00LTNhLjkxMS45MTEsMCwwLDEtLjQtLjh2LTlhLjkxMS45MTEsMCwwLDEsLjQtLjhsNC0zYS45MTEuOTExLDAsMCwwLS40Ljh2MTVBLjkxMS45MTEsMCwwLDAsNC40LDIwLjNaIi8+DQogIDxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTEuMSwxNy4yYS41MTcuNTE3LDAsMCwxLS40LjIuMzY2LjM2NiwwLDAsMS0uMy0uMWgwbDQsM2EuOTExLjkxMSwwLDAsMS0uNC0uOFYxMy44WiIvPg0KICA8cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik0uNCw2LjdoMGEuNS41LDAsMCwxLC42OTMuMDlMMS4xLDYuOCw0LDEwLjJWNC41YS45MTEuOTExLDAsMCwxLC40LS44WiIvPg0KICA8cGF0aCBjbGFzcz0iY2xzLTMiIGQ9Ik0yMy42LDQuMkExLjQyMywxLjQyMywwLDAsMCwyMyw0YS45MDguOTA4LDAsMCwwLS43LjNsLS4xLjFMMTgsOC40LDE0LjMsMTIsOS45LDE2LjIsNS44LDIwLjFsLS4xLjFhLjkwOC45MDgsMCwwLDEtLjcuMywxLjQyMywxLjQyMywwLDAsMS0uNi0uMmwtNC0zYTEuMDcxLDEuMDcxLDAsMCwwLDEuNC0uMUw0LDE0LjYsNi4yLDEyLDkuOCw3LjgsMTYuMi40QS45MTEuOTExLDAsMCwxLDE3LDBhMS40MjMsMS40MjMsMCwwLDEsLjYuMloiLz4NCiAgPHBvbHlnb24gY2xhc3M9ImNscy0yIiBwb2ludHM9IjEwLjIgNy40IDkuOCA3LjggNi4yIDEyIDUuOSAxMi40IDkuNSAxNi42IDkuNSAxNi42IDkuOCAxNi4yIDE0LjMgMTIgMTQuNiAxMS43IDEwLjIgNy40Ii8+DQogIDxwYXRoIGNsYXNzPSJjbHMtNCIgZD0iTTIzLjYsMTkuOGwtNiw0Yy0uMSwwLS4yLjEtLjMuMWgwYS45LjksMCwwLDEtMS0uM0w5LjksMTYuMiw2LjIsMTIsNCw5LjQsMS44LDYuOEExLjIwOCwxLjIwOCwwLDAsMCwuNCw2LjdsNC0zQTEuNDIzLDEuNDIzLDAsMCwxLDUsMy41YS45MDguOTA4LDAsMCwxLC43LjNsLjEuMUw5LjksNy44LDE0LjMsMTJsMy4yLDMuMS41LjUsNC4yLDQuMS4xLjFhLjkwOC45MDgsMCwwLDAsLjcuM1oiLz4NCiAgPHBhdGggY2xhc3M9ImNscy0yIiBkPSJNMjMuNiwxOS44bC02LDRjLS4xLDAtLjIuMS0uMy4xYS43NjIuNzYyLDAsMCwwLC4yLS40VjE1LjFsLjUuNSw0LjIsNC4xLjEuMWEuOTA4LjkwOCwwLDAsMCwuNy4zWiIvPg0KICA8cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik0xNy41LjJhLjM2Ni4zNjYsMCwwLDAtLjMtLjEuNTE3LjUxNywwLDAsMSwuMi40VjguOWwuNi0uNSw0LjItNC4xLjEtLjFBMS40NDgsMS40NDgsMCwwLDEsMjMsNGExLjQyMywxLjQyMywwLDAsMSwuNi4yWiIvPg0KICA8cGF0aCBjbGFzcz0iY2xzLTUiIGQ9Ik0yNCw1VjE5YTEsMSwwLDAsMS0uNDQ1LjgzNWwtNiw0QTEsMSwwLDAsMCwxOCwyM1YxYTEuMDEsMS4wMSwwLDAsMC0uNDYtLjgzNWw2LjAxNSw0QTEuMDA5LDEuMDA5LDAsMCwxLDI0LDVaIi8+DQo8L3N2Zz4="
       },
-      "releaseNotes": "https://docs.microsoft.com/en-us/visualstudio/releases/2022/release-notes-v17.14#17.14.13",
+      "releaseNotes": "https://docs.microsoft.com/en-us/visualstudio/releases/2022/release-notes-v17.14#17.14.19",
       "supportsDownloadThenUpdate": true,
       "localizedResources": [
         {
@@ -577,7 +576,7 @@
     },
     {
       "id": "Microsoft.VisualStudio.Product.Professional",
-      "version": "17.14.36414.22",
+      "version": "17.14.36623.8",
       "type": "ChannelProduct",
       "chip": "x64",
       "productArch": "arm64",
@@ -585,7 +584,7 @@
         "mimeType": "image/svg+xml",
         "base64": "PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2aWV3Qm94PSIwIDAgMjQgMjQiPg0KICA8ZGVmcz4NCiAgICA8c3R5bGU+LmNscy0xe2ZpbGw6IzVlNDM4Zjt9LmNscy0ye29wYWNpdHk6MC4xO2lzb2xhdGlvbjppc29sYXRlO30uY2xzLTN7ZmlsbDp1cmwoI2xpbmVhci1ncmFkaWVudCk7fS5jbHMtNHtmaWxsOnVybCgjbGluZWFyLWdyYWRpZW50LTIpO30uY2xzLTV7ZmlsbDojYzE4ZWYxO308L3N0eWxlPg0KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0ibGluZWFyLWdyYWRpZW50IiB4MT0iMy42MTIiIHkxPSItMTUuMzUyIiB4Mj0iMTkuNTc1IiB5Mj0iMS4zNjkiIGdyYWRpZW50VHJhbnNmb3JtPSJtYXRyaXgoMSwgMCwgMCwgLTEsIDAsIDQpIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+DQogICAgICA8c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM3MjUyYWEiLz4NCiAgICAgIDxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzcyNTJhYSIvPg0KICAgIDwvbGluZWFyR3JhZGllbnQ+DQogICAgPGxpbmVhckdyYWRpZW50IGlkPSJsaW5lYXItZ3JhZGllbnQtMiIgeDE9IjguODQ0IiB5MT0iMzguNjc5IiB4Mj0iMTMuODcxIiB5Mj0iMzMuMjE2IiBncmFkaWVudFRyYW5zZm9ybT0idHJhbnNsYXRlKDAgLTIyKSIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPg0KICAgICAgPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjYWU3ZmUyIi8+DQogICAgICA8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM5YTcwZDQiLz4NCiAgICA8L2xpbmVhckdyYWRpZW50Pg0KICA8L2RlZnM+DQogIDxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTQuNCwyMC4zbC00LTNhLjkxMS45MTEsMCwwLDEtLjQtLjh2LTlhLjkxMS45MTEsMCwwLDEsLjQtLjhsNC0zYS45MTEuOTExLDAsMCwwLS40Ljh2MTVBLjkxMS45MTEsMCwwLDAsNC40LDIwLjNaIi8+DQogIDxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTEuMSwxNy4yYS41MTcuNTE3LDAsMCwxLS40LjIuMzY2LjM2NiwwLDAsMS0uMy0uMWgwbDQsM2EuOTExLjkxMSwwLDAsMS0uNC0uOFYxMy44WiIvPg0KICA8cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik0uNCw2LjdoMGEuNS41LDAsMCwxLC42OTMuMDlMMS4xLDYuOCw0LDEwLjJWNC41YS45MTEuOTExLDAsMCwxLC40LS44WiIvPg0KICA8cGF0aCBjbGFzcz0iY2xzLTMiIGQ9Ik0yMy42LDQuMkExLjQyMywxLjQyMywwLDAsMCwyMyw0YS45MDguOTA4LDAsMCwwLS43LjNsLS4xLjFMMTgsOC40LDE0LjMsMTIsOS45LDE2LjIsNS44LDIwLjFsLS4xLjFhLjkwOC45MDgsMCwwLDEtLjcuMywxLjQyMywxLjQyMywwLDAsMS0uNi0uMmwtNC0zYTEuMDcxLDEuMDcxLDAsMCwwLDEuNC0uMUw0LDE0LjYsNi4yLDEyLDkuOCw3LjgsMTYuMi40QS45MTEuOTExLDAsMCwxLDE3LDBhMS40MjMsMS40MjMsMCwwLDEsLjYuMloiLz4NCiAgPHBvbHlnb24gY2xhc3M9ImNscy0yIiBwb2ludHM9IjEwLjIgNy40IDkuOCA3LjggNi4yIDEyIDUuOSAxMi40IDkuNSAxNi42IDkuNSAxNi42IDkuOCAxNi4yIDE0LjMgMTIgMTQuNiAxMS43IDEwLjIgNy40Ii8+DQogIDxwYXRoIGNsYXNzPSJjbHMtNCIgZD0iTTIzLjYsMTkuOGwtNiw0Yy0uMSwwLS4yLjEtLjMuMWgwYS45LjksMCwwLDEtMS0uM0w5LjksMTYuMiw2LjIsMTIsNCw5LjQsMS44LDYuOEExLjIwOCwxLjIwOCwwLDAsMCwuNCw2LjdsNC0zQTEuNDIzLDEuNDIzLDAsMCwxLDUsMy41YS45MDguOTA4LDAsMCwxLC43LjNsLjEuMUw5LjksNy44LDE0LjMsMTJsMy4yLDMuMS41LjUsNC4yLDQuMS4xLjFhLjkwOC45MDgsMCwwLDAsLjcuM1oiLz4NCiAgPHBhdGggY2xhc3M9ImNscy0yIiBkPSJNMjMuNiwxOS44bC02LDRjLS4xLDAtLjIuMS0uMy4xYS43NjIuNzYyLDAsMCwwLC4yLS40VjE1LjFsLjUuNSw0LjIsNC4xLjEuMWEuOTA4LjkwOCwwLDAsMCwuNy4zWiIvPg0KICA8cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik0xNy41LjJhLjM2Ni4zNjYsMCwwLDAtLjMtLjEuNTE3LjUxNywwLDAsMSwuMi40VjguOWwuNi0uNSw0LjItNC4xLjEtLjFBMS40NDgsMS40NDgsMCwwLDEsMjMsNGExLjQyMywxLjQyMywwLDAsMSwuNi4yWiIvPg0KICA8cGF0aCBjbGFzcz0iY2xzLTUiIGQ9Ik0yNCw1VjE5YTEsMSwwLDAsMS0uNDQ1LjgzNWwtNiw0QTEsMSwwLDAsMCwxOCwyM1YxYTEuMDEsMS4wMSwwLDAsMC0uNDYtLjgzNWw2LjAxNSw0QTEuMDA5LDEuMDA5LDAsMCwxLDI0LDVaIi8+DQo8L3N2Zz4="
       },
-      "releaseNotes": "https://docs.microsoft.com/en-us/visualstudio/releases/2022/release-notes-v17.14#17.14.13",
+      "releaseNotes": "https://docs.microsoft.com/en-us/visualstudio/releases/2022/release-notes-v17.14#17.14.19",
       "supportsDownloadThenUpdate": true,
       "localizedResources": [
         {
@@ -682,7 +681,7 @@
     },
     {
       "id": "Microsoft.VisualStudio.Product.Professional",
-      "version": "17.14.36414.22",
+      "version": "17.14.36623.8",
       "type": "ChannelProduct",
       "chip": "x64",
       "productArch": "x64",
@@ -690,7 +689,7 @@
         "mimeType": "image/svg+xml",
         "base64": "PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2aWV3Qm94PSIwIDAgMjQgMjQiPg0KICA8ZGVmcz4NCiAgICA8c3R5bGU+LmNscy0xe2ZpbGw6IzVlNDM4Zjt9LmNscy0ye29wYWNpdHk6MC4xO2lzb2xhdGlvbjppc29sYXRlO30uY2xzLTN7ZmlsbDp1cmwoI2xpbmVhci1ncmFkaWVudCk7fS5jbHMtNHtmaWxsOnVybCgjbGluZWFyLWdyYWRpZW50LTIpO30uY2xzLTV7ZmlsbDojYzE4ZWYxO308L3N0eWxlPg0KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0ibGluZWFyLWdyYWRpZW50IiB4MT0iMy42MTIiIHkxPSItMTUuMzUyIiB4Mj0iMTkuNTc1IiB5Mj0iMS4zNjkiIGdyYWRpZW50VHJhbnNmb3JtPSJtYXRyaXgoMSwgMCwgMCwgLTEsIDAsIDQpIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+DQogICAgICA8c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM3MjUyYWEiLz4NCiAgICAgIDxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzcyNTJhYSIvPg0KICAgIDwvbGluZWFyR3JhZGllbnQ+DQogICAgPGxpbmVhckdyYWRpZW50IGlkPSJsaW5lYXItZ3JhZGllbnQtMiIgeDE9IjguODQ0IiB5MT0iMzguNjc5IiB4Mj0iMTMuODcxIiB5Mj0iMzMuMjE2IiBncmFkaWVudFRyYW5zZm9ybT0idHJhbnNsYXRlKDAgLTIyKSIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPg0KICAgICAgPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjYWU3ZmUyIi8+DQogICAgICA8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM5YTcwZDQiLz4NCiAgICA8L2xpbmVhckdyYWRpZW50Pg0KICA8L2RlZnM+DQogIDxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTQuNCwyMC4zbC00LTNhLjkxMS45MTEsMCwwLDEtLjQtLjh2LTlhLjkxMS45MTEsMCwwLDEsLjQtLjhsNC0zYS45MTEuOTExLDAsMCwwLS40Ljh2MTVBLjkxMS45MTEsMCwwLDAsNC40LDIwLjNaIi8+DQogIDxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTEuMSwxNy4yYS41MTcuNTE3LDAsMCwxLS40LjIuMzY2LjM2NiwwLDAsMS0uMy0uMWgwbDQsM2EuOTExLjkxMSwwLDAsMS0uNC0uOFYxMy44WiIvPg0KICA8cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik0uNCw2LjdoMGEuNS41LDAsMCwxLC42OTMuMDlMMS4xLDYuOCw0LDEwLjJWNC41YS45MTEuOTExLDAsMCwxLC40LS44WiIvPg0KICA8cGF0aCBjbGFzcz0iY2xzLTMiIGQ9Ik0yMy42LDQuMkExLjQyMywxLjQyMywwLDAsMCwyMyw0YS45MDguOTA4LDAsMCwwLS43LjNsLS4xLjFMMTgsOC40LDE0LjMsMTIsOS45LDE2LjIsNS44LDIwLjFsLS4xLjFhLjkwOC45MDgsMCwwLDEtLjcuMywxLjQyMywxLjQyMywwLDAsMS0uNi0uMmwtNC0zYTEuMDcxLDEuMDcxLDAsMCwwLDEuNC0uMUw0LDE0LjYsNi4yLDEyLDkuOCw3LjgsMTYuMi40QS45MTEuOTExLDAsMCwxLDE3LDBhMS40MjMsMS40MjMsMCwwLDEsLjYuMloiLz4NCiAgPHBvbHlnb24gY2xhc3M9ImNscy0yIiBwb2ludHM9IjEwLjIgNy40IDkuOCA3LjggNi4yIDEyIDUuOSAxMi40IDkuNSAxNi42IDkuNSAxNi42IDkuOCAxNi4yIDE0LjMgMTIgMTQuNiAxMS43IDEwLjIgNy40Ii8+DQogIDxwYXRoIGNsYXNzPSJjbHMtNCIgZD0iTTIzLjYsMTkuOGwtNiw0Yy0uMSwwLS4yLjEtLjMuMWgwYS45LjksMCwwLDEtMS0uM0w5LjksMTYuMiw2LjIsMTIsNCw5LjQsMS44LDYuOEExLjIwOCwxLjIwOCwwLDAsMCwuNCw2LjdsNC0zQTEuNDIzLDEuNDIzLDAsMCwxLDUsMy41YS45MDguOTA4LDAsMCwxLC43LjNsLjEuMUw5LjksNy44LDE0LjMsMTJsMy4yLDMuMS41LjUsNC4yLDQuMS4xLjFhLjkwOC45MDgsMCwwLDAsLjcuM1oiLz4NCiAgPHBhdGggY2xhc3M9ImNscy0yIiBkPSJNMjMuNiwxOS44bC02LDRjLS4xLDAtLjIuMS0uMy4xYS43NjIuNzYyLDAsMCwwLC4yLS40VjE1LjFsLjUuNSw0LjIsNC4xLjEuMWEuOTA4LjkwOCwwLDAsMCwuNy4zWiIvPg0KICA8cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik0xNy41LjJhLjM2Ni4zNjYsMCwwLDAtLjMtLjEuNTE3LjUxNywwLDAsMSwuMi40VjguOWwuNi0uNSw0LjItNC4xLjEtLjFBMS40NDgsMS40NDgsMCwwLDEsMjMsNGExLjQyMywxLjQyMywwLDAsMSwuNi4yWiIvPg0KICA8cGF0aCBjbGFzcz0iY2xzLTUiIGQ9Ik0yNCw1VjE5YTEsMSwwLDAsMS0uNDQ1LjgzNWwtNiw0QTEsMSwwLDAsMCwxOCwyM1YxYTEuMDEsMS4wMSwwLDAsMC0uNDYtLjgzNWw2LjAxNSw0QTEuMDA5LDEuMDA5LDAsMCwxLDI0LDVaIi8+DQo8L3N2Zz4="
       },
-      "releaseNotes": "https://docs.microsoft.com/en-us/visualstudio/releases/2022/release-notes-v17.14#17.14.13",
+      "releaseNotes": "https://docs.microsoft.com/en-us/visualstudio/releases/2022/release-notes-v17.14#17.14.19",
       "supportsDownloadThenUpdate": true,
       "localizedResources": [
         {
@@ -798,7 +797,7 @@
     },
     {
       "id": "Microsoft.VisualStudio.Product.TeamExplorer",
-      "version": "17.14.36414.22",
+      "version": "17.14.36623.8",
       "type": "ChannelProduct",
       "chip": "x64",
       "productArch": "x64",
@@ -807,7 +806,7 @@
         "base64": "PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2aWV3Qm94PSIwIDAgMjQgMjQiPg0KICA8ZGVmcz4NCiAgICA8c3R5bGU+LmNscy0xe2ZpbGw6IzVlNDM4Zjt9LmNscy0ye29wYWNpdHk6MC4xO2lzb2xhdGlvbjppc29sYXRlO30uY2xzLTN7ZmlsbDp1cmwoI2xpbmVhci1ncmFkaWVudCk7fS5jbHMtNHtmaWxsOnVybCgjbGluZWFyLWdyYWRpZW50LTIpO30uY2xzLTV7ZmlsbDojYzE4ZWYxO308L3N0eWxlPg0KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0ibGluZWFyLWdyYWRpZW50IiB4MT0iMy42MTIiIHkxPSItMTUuMzUyIiB4Mj0iMTkuNTc1IiB5Mj0iMS4zNjkiIGdyYWRpZW50VHJhbnNmb3JtPSJtYXRyaXgoMSwgMCwgMCwgLTEsIDAsIDQpIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+DQogICAgICA8c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM3MjUyYWEiLz4NCiAgICAgIDxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzcyNTJhYSIvPg0KICAgIDwvbGluZWFyR3JhZGllbnQ+DQogICAgPGxpbmVhckdyYWRpZW50IGlkPSJsaW5lYXItZ3JhZGllbnQtMiIgeDE9IjguODQ0IiB5MT0iMzguNjc5IiB4Mj0iMTMuODcxIiB5Mj0iMzMuMjE2IiBncmFkaWVudFRyYW5zZm9ybT0idHJhbnNsYXRlKDAgLTIyKSIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPg0KICAgICAgPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjYWU3ZmUyIi8+DQogICAgICA8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM5YTcwZDQiLz4NCiAgICA8L2xpbmVhckdyYWRpZW50Pg0KICA8L2RlZnM+DQogIDxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTQuNCwyMC4zbC00LTNhLjkxMS45MTEsMCwwLDEtLjQtLjh2LTlhLjkxMS45MTEsMCwwLDEsLjQtLjhsNC0zYS45MTEuOTExLDAsMCwwLS40Ljh2MTVBLjkxMS45MTEsMCwwLDAsNC40LDIwLjNaIi8+DQogIDxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTEuMSwxNy4yYS41MTcuNTE3LDAsMCwxLS40LjIuMzY2LjM2NiwwLDAsMS0uMy0uMWgwbDQsM2EuOTExLjkxMSwwLDAsMS0uNC0uOFYxMy44WiIvPg0KICA8cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik0uNCw2LjdoMGEuNS41LDAsMCwxLC42OTMuMDlMMS4xLDYuOCw0LDEwLjJWNC41YS45MTEuOTExLDAsMCwxLC40LS44WiIvPg0KICA8cGF0aCBjbGFzcz0iY2xzLTMiIGQ9Ik0yMy42LDQuMkExLjQyMywxLjQyMywwLDAsMCwyMyw0YS45MDguOTA4LDAsMCwwLS43LjNsLS4xLjFMMTgsOC40LDE0LjMsMTIsOS45LDE2LjIsNS44LDIwLjFsLS4xLjFhLjkwOC45MDgsMCwwLDEtLjcuMywxLjQyMywxLjQyMywwLDAsMS0uNi0uMmwtNC0zYTEuMDcxLDEuMDcxLDAsMCwwLDEuNC0uMUw0LDE0LjYsNi4yLDEyLDkuOCw3LjgsMTYuMi40QS45MTEuOTExLDAsMCwxLDE3LDBhMS40MjMsMS40MjMsMCwwLDEsLjYuMloiLz4NCiAgPHBvbHlnb24gY2xhc3M9ImNscy0yIiBwb2ludHM9IjEwLjIgNy40IDkuOCA3LjggNi4yIDEyIDUuOSAxMi40IDkuNSAxNi42IDkuNSAxNi42IDkuOCAxNi4yIDE0LjMgMTIgMTQuNiAxMS43IDEwLjIgNy40Ii8+DQogIDxwYXRoIGNsYXNzPSJjbHMtNCIgZD0iTTIzLjYsMTkuOGwtNiw0Yy0uMSwwLS4yLjEtLjMuMWgwYS45LjksMCwwLDEtMS0uM0w5LjksMTYuMiw2LjIsMTIsNCw5LjQsMS44LDYuOEExLjIwOCwxLjIwOCwwLDAsMCwuNCw2LjdsNC0zQTEuNDIzLDEuNDIzLDAsMCwxLDUsMy41YS45MDguOTA4LDAsMCwxLC43LjNsLjEuMUw5LjksNy44LDE0LjMsMTJsMy4yLDMuMS41LjUsNC4yLDQuMS4xLjFhLjkwOC45MDgsMCwwLDAsLjcuM1oiLz4NCiAgPHBhdGggY2xhc3M9ImNscy0yIiBkPSJNMjMuNiwxOS44bC02LDRjLS4xLDAtLjIuMS0uMy4xYS43NjIuNzYyLDAsMCwwLC4yLS40VjE1LjFsLjUuNSw0LjIsNC4xLjEuMWEuOTA4LjkwOCwwLDAsMCwuNy4zWiIvPg0KICA8cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik0xNy41LjJhLjM2Ni4zNjYsMCwwLDAtLjMtLjEuNTE3LjUxNywwLDAsMSwuMi40VjguOWwuNi0uNSw0LjItNC4xLjEtLjFBMS40NDgsMS40NDgsMCwwLDEsMjMsNGExLjQyMywxLjQyMywwLDAsMSwuNi4yWiIvPg0KICA8cGF0aCBjbGFzcz0iY2xzLTUiIGQ9Ik0yNCw1VjE5YTEsMSwwLDAsMS0uNDQ1LjgzNWwtNiw0QTEsMSwwLDAsMCwxOCwyM1YxYTEuMDEsMS4wMSwwLDAsMC0uNDYtLjgzNWw2LjAxNSw0QTEuMDA5LDEuMDA5LDAsMCwxLDI0LDVaIi8+DQo8L3N2Zz4="
       },
       "isHidden": true,
-      "releaseNotes": "https://docs.microsoft.com/en-us/visualstudio/releases/2022/release-notes-v17.14#17.14.13",
+      "releaseNotes": "https://docs.microsoft.com/en-us/visualstudio/releases/2022/release-notes-v17.14#17.14.19",
       "localizedResources": [
         {
           "language": "en-us",
@@ -914,14 +913,14 @@
     },
     {
       "id": "Microsoft.VisualStudio.Product.TestAgent",
-      "version": "17.14.36414.22",
+      "version": "17.14.36623.8",
       "type": "ChannelProduct",
       "icon": {
         "mimeType": "image/svg+xml",
         "base64": "PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MCA0MCI+DQogIDxzdHlsZT4uaWNvbi1jYW52YXMtdHJhbnNwYXJlbnR7b3BhY2l0eTowO2ZpbGw6I2Y2ZjZmNn0uYnJhbmQtdnNpZGV7ZmlsbDojODY1ZmM1fTwvc3R5bGU+DQogIDxwYXRoIGNsYXNzPSJpY29uLWNhbnZhcy10cmFuc3BhcmVudCIgZD0iTTQwIDQwSDBWMGg0MHY0MHoiIGlkPSJjYW52YXMiLz4NCiAgPHBhdGggY2xhc3M9ImJyYW5kLXZzaWRlIiBkPSJNMzAuMjIxLS4wMDJMMTMuODg3IDE2LjE2IDQuMDUyIDguNzQ2IDAgMTAuMTAyVjI5LjlsNC4wNTIgMS4zNTYgOS44MzUtNy40MTQgMTYuMzM0IDE2LjE2TDQwIDM1Ljg0MlY0LjE1OGwtOS43NzktNC4xNnpNNC4wNTIgMjUuODlWMTQuMTExTDEwLjAwNCAyMGwtNS45NTIgNS44OXpNMzAgMjguNDcyTDE4Ljk4MyAyMCAzMCAxMS41Mjh2MTYuOTQ0eiIvPg0KPC9zdmc+"
       },
       "isHidden": true,
-      "releaseNotes": "https://docs.microsoft.com/en-us/visualstudio/releases/2022/release-notes-v17.14#17.14.13",
+      "releaseNotes": "https://docs.microsoft.com/en-us/visualstudio/releases/2022/release-notes-v17.14#17.14.19",
       "localizedResources": [
         {
           "language": "en-us",
@@ -1011,14 +1010,14 @@
     },
     {
       "id": "Microsoft.VisualStudio.Product.TestController",
-      "version": "17.14.36414.22",
+      "version": "17.14.36623.8",
       "type": "ChannelProduct",
       "icon": {
         "mimeType": "image/svg+xml",
         "base64": "PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MCA0MCI+DQogIDxzdHlsZT4uaWNvbi1jYW52YXMtdHJhbnNwYXJlbnR7b3BhY2l0eTowO2ZpbGw6I2Y2ZjZmNn0uYnJhbmQtdnNpZGV7ZmlsbDojODY1ZmM1fTwvc3R5bGU+DQogIDxwYXRoIGNsYXNzPSJpY29uLWNhbnZhcy10cmFuc3BhcmVudCIgZD0iTTQwIDQwSDBWMGg0MHY0MHoiIGlkPSJjYW52YXMiLz4NCiAgPHBhdGggY2xhc3M9ImJyYW5kLXZzaWRlIiBkPSJNMzAuMjIxLS4wMDJMMTMuODg3IDE2LjE2IDQuMDUyIDguNzQ2IDAgMTAuMTAyVjI5LjlsNC4wNTIgMS4zNTYgOS44MzUtNy40MTQgMTYuMzM0IDE2LjE2TDQwIDM1Ljg0MlY0LjE1OGwtOS43NzktNC4xNnpNNC4wNTIgMjUuODlWMTQuMTExTDEwLjAwNCAyMGwtNS45NTIgNS44OXpNMzAgMjguNDcyTDE4Ljk4MyAyMCAzMCAxMS41Mjh2MTYuOTQ0eiIvPg0KPC9zdmc+"
       },
       "isHidden": true,
-      "releaseNotes": "https://docs.microsoft.com/en-us/visualstudio/releases/2022/release-notes-v17.14#17.14.13",
+      "releaseNotes": "https://docs.microsoft.com/en-us/visualstudio/releases/2022/release-notes-v17.14#17.14.19",
       "localizedResources": [
         {
           "language": "en-us",
@@ -1108,7 +1107,7 @@
     },
     {
       "id": "VisualStudio.17.Release",
-      "version": "17.14.36414.22",
+      "version": "17.14.36623.8",
       "type": "Channel",
       "localizedResources": [
         {
@@ -1120,61 +1119,61 @@
         {
           "language": "zh-cn",
           "title": "Current",
-          "description": "当前频道包括已可供生产使用的最新功能和修补程序。",
+          "description": "Current 频道包括已可供生产使用的最新功能和修补程序。",
           "channelSuffix": ""
         },
         {
           "language": "zh-tw",
           "title": "Current",
-          "description": "目前通道包含可供生產環境使用的最新功能和修正程式。",
+          "description": "Current 通道包含可供生產環境使用的最新功能和修正程式。",
           "channelSuffix": ""
         },
         {
           "language": "cs-cz",
           "title": "Current",
-          "description": "Aktuální kanál zahrnuje nejnovější funkce a opravy, které jsou připravené k použití v produkčním prostředí.",
+          "description": "Kanál Current zahrnuje nejnovější funkce a opravy, které jsou připravené k použití v produkčním prostředí.",
           "channelSuffix": ""
         },
         {
           "language": "de-de",
           "title": "Current",
-          "description": "Der aktuelle Kanal enthält die neuesten Features und Fixes, die für die Produktion bereit sind.",
+          "description": "Der Current-Kanal enthält die neuesten Features und Fixes, die zur Nutzung in der Produktion bereit sind.",
           "channelSuffix": ""
         },
         {
           "language": "es-es",
           "title": "Current",
-          "description": "El canal actual incluye las características y correcciones más recientes que están listas para el uso de producción.",
+          "description": "El canal Current incluye las características y correcciones más recientes que están listas para el uso de producción.",
           "channelSuffix": ""
         },
         {
           "language": "fr-fr",
           "title": "Current",
-          "description": "Le canal actuel inclut les dernières fonctionnalités et correctifs prêts pour une utilisation en production.",
+          "description": "Le canal Current inclut les dernières fonctionnalités et correctifs prêts pour une utilisation en production.",
           "channelSuffix": ""
         },
         {
           "language": "it-it",
           "title": "Current",
-          "description": "Il Canale corrente include le funzionalità e le correzioni più recenti pronte per l'uso in produzione.",
+          "description": "Il canale Current include le funzionalità e le correzioni più recenti pronte per l'uso in produzione.",
           "channelSuffix": ""
         },
         {
           "language": "ja-jp",
           "title": "Current",
-          "description": "現在のチャネルには、運用環境で使用する準備が整っている最新の機能と修正が含まれています。",
+          "description": "Current チャネルには、運用環境で使用する準備が整っている最新の機能と修正が含まれています。",
           "channelSuffix": ""
         },
         {
           "language": "ko-kr",
           "title": "Current",
-          "description": "현재 채널에는 프로덕션용으로 사용할 준비가 된 최신 기능과 수정 사항이 포함되어 있습니다.",
+          "description": "Current 채널에는 프로덕션용으로 사용할 준비가 된 최신 기능과 수정 사항이 포함되어 있습니다.",
           "channelSuffix": ""
         },
         {
           "language": "pl-pl",
           "title": "Current",
-          "description": "Bieżący kanał obejmuje najnowsze funkcje i poprawki, które są gotowe do użycia w środowisku produkcyjnym.",
+          "description": "Kanał Current obejmuje najnowsze funkcje i poprawki, które są gotowe do użycia w środowisku produkcyjnym.",
           "channelSuffix": ""
         },
         {
@@ -1186,28 +1185,28 @@
         {
           "language": "ru-ru",
           "title": "Current",
-          "description": "Актуальный канал включает последние функции и исправления, готовые к использованию в рабочей среде.",
+          "description": "Канал Current включает последние функции и исправления, готовые к использованию в рабочей среде.",
           "channelSuffix": ""
         },
         {
           "language": "tr-tr",
           "title": "Current",
-          "description": "Geçerli kanal, üretim kullanımı için hazır olan en son özellikleri ve düzeltmeleri içerir.",
+          "description": "Güncel kanal, üretim kullanımı için hazır olan en son özellikleri ve düzeltmeleri içerir.",
           "channelSuffix": ""
         }
       ]
     },
     {
       "id": "VisualStudio.17.Release.Bootstrappers.Setup",
-      "version": "3.14.2084.286130193",
+      "version": "3.14.2086.286130193",
       "type": "Bootstrapper",
-      "installerVersion": "3.14.2084.208",
+      "installerVersion": "3.14.2086.54749",
       "payloads": [
         {
           "fileName": "vs_Setup.exe",
-          "sha256": "1d6cf12ef1543d5e9e54731aec6f10b3931c910abb397f39466a30b6303314db",
-          "size": 4464984,
-          "url": "https://download.visualstudio.microsoft.com/download/pr/89ee1303-1ba2-4f66-b07c-5099983fd1e4/1d6cf12ef1543d5e9e54731aec6f10b3931c910abb397f39466a30b6303314db/vs_Setup.exe"
+          "sha256": "bf287d4f6e9ac7c97ec40c7a145d17da9c0af8c6178066205302e56d1840da66",
+          "size": 4459056,
+          "url": "https://download.visualstudio.microsoft.com/download/pr/5011a9cc-e8ef-42cb-ad72-87de1031accc/bf287d4f6e9ac7c97ec40c7a145d17da9c0af8c6178066205302e56d1840da66/vs_Setup.exe"
         }
       ]
     }
@@ -1216,32 +1215,32 @@
     "signInfo": {
       "signatureMethod": "sha256RSA_cng",
       "digestMethod": "sha256",
-      "digestValue": "lbYNxXS9fhWwdYlTA8367Q14VLuZk7VWROdUyhPwraI=",
+      "digestValue": "83F1SIxSq6LnHvmLy16/R1NTdTwucODN4ozLAdpmnZs=",
       "canonicalization": ""
     },
-    "signatureValue": "Y5Ni1cH09prdAaftGTIdPVSXAEUfVJILWtNJJbdM59Y33c9uGb+jU9JTQA1dl4Fj4ubmYO+6uxp4wYkNMb8eJY3ZAu76PzabU3duyLe8bsBHAW+3t8qi4raMUP4UXfzawIBKnO0GLAcGLka4NcjNq3vA57pdN5e98TsUZKCwgezqBMEkCjOeBkl26uedWjlrv+HCqTYxFarFargd+elD3IPIB/9RhPwwkyJ+divdoUgqclcoNWV7dC9+TWkJrInCBGVAudOpJEBbotu/nyWYN6AFoB90TuhXpV+LLidY1/i5iA8w0V6y61TsK2ERhJNZoIMFqdYLNeqDEWg7eto0MQ==",
+    "signatureValue": "SNXykEZvJLICsFwUje0R3Z9HJ/jDRP1fO6f6OqiV0cBh5Jh3cM+cRXA1vlUaTT7h7Dfu7Dn2Xe5qUNHcgQZdnStSRWvOPnALj/OfTO8IkNgF3IFpkGadHINv9Gf2XPCjof6yn85bjVfniHNoLkQ8DB4pPOwi82cFL5Fo8bbiEe5IbGIjy3l7T3wLMTbj9PGsyBzKZSzg9Bzl2Xj2Yim9sIyDx5n7qHp9Cg+pcMig8hSJs7NzmhtralBABCUJCweB9gdHJSmhvwP8+sFu9++9Fhsrjqwa2sQdAhXhF+gPHM3wmQJFLrOvMRVIfN2ypCFrG9LwvERzVbbYIRlGJvajCw==",
     "keyInfo": {
       "keyValue": {
         "rsaKeyValue": {
-          "modulus": "7XpKjCg5837MnNU9UKR3xba/q5Iq/JXcyzypjF20Q6LlVwLLwX3ehPNrT4+GM2kpbhg0KF9zaTCqKCnlRY4zUat+8sk/4dUEyzAfHaZrGf+9FDPlP7GMb7dT1lsS4zDSF6swfD4xuoux9mBYJOGDoXxknpL581td3SwLX4w9MIsERD7wjZYpUc+16BXXuSjtNXhYlnrXoePKlDqlGgJCM5wuFwd7BXdS1lJrqVxytOUHyUpp3ovamSQWE7fGYQKxg4e50J/mNYzgN6AYglCeJ9QjGlnQ4a4HTLrtNuqFgG3wt6a6pFJ/C1qdvB/tki3rTRuSkGWcL8t2XJ+/j0BpeQ==",
+          "modulus": "wEpIdXKb7lKn26sXpXuywkhxGplTQXxROLmNRZBrAHVBf7546RNXZwA/bzDqsuWTuPSC4T+I4j/z9j5/WqPuUw7SpnEPqWXc2xu7eN8kVyQt5170xkK6KHT4vVEkIvayPtIMLl0SgSCOy/pN5DJCi5ha7FlI84F1Qi2GumR+wQgCwHCVmU8Fj6Ik+B6akISXGCwe6X3rQFQngRFWQ/IrSkOkAOfy0EfvV+nZUo+FcbWuCZ6cb4Eq5I1ws/rZSeuwAWeedZcNt0VlNbsn4AnxBYQX4sj0dlko7JD5fWqeqq3/HzUNbBmLp9qeCXV8XlACn9YVWv900F47z04kVwpyTw==",
           "exponent": "AQAB"
         }
       },
       "x509Data": [
-        "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",
+        "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"
       ]
     },
     "counterSign": {
       "x509Data": [
-        "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",
+        "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"
       ],
-      "timestamp": "2025-08-14-07:37:33",
+      "timestamp": "2025-10-23-07:30:29",
       "counterSignatureMethod": "timeStamp",
-      "counterSignature": "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"
+      "counterSignature": "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"
     }
   }
 }

@@ -8,28 +8,28 @@
 
 buildGoModule rec {
   pname = "unflac";
-  version = "1.3";
+  version = "1.4";
 
   src = fetchFromSourcehut {
     owner = "~ft";
     repo = "unflac";
     rev = version;
-    sha256 = "sha256-xJEVrzooNcS3zEKeF6DB7ZRZEjHfC7dGKgQfswxbD+U=";
+    sha256 = "sha256-1Mpo1eBjfAudl7Lc6DUstEnWlY6G4ZFT9jm9JoWxPlk=";
   };
 
-  vendorHash = "sha256-IQHxEYv6l8ORoX+a3Szox9tS2fyBk0tpK+Q1AsWohX0=";
+  vendorHash = "sha256-rq+qfUiR8WJRyoLH/UQVKAorDmrbhHfNYRz6bL4uub4=";
 
   nativeBuildInputs = [ makeWrapper ];
   postFixup = ''
     wrapProgram $out/bin/unflac --prefix PATH : "${lib.makeBinPath [ ffmpeg ]}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command line tool for fast frame accurate audio image + cue sheet splitting";
     homepage = "https://sr.ht/~ft/unflac/";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ felipeqq2 ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ felipeqq2 ];
     mainProgram = "unflac";
   };
 }

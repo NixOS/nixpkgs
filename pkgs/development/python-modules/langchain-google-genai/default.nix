@@ -4,13 +4,13 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  hatchling,
 
   # dependencies
   filetype,
   google-api-core,
   google-auth,
-  google-generativeai,
+  google-genai,
   langchain-core,
   pydantic,
 
@@ -29,19 +29,19 @@
 
 buildPythonPackage rec {
   pname = "langchain-google-genai";
-  version = "2.1.10";
+  version = "4.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-google";
     tag = "libs/genai/v${version}";
-    hash = "sha256-kqII8RG1ep+n5CqKLY1v7Mc+zJh6kl1rAjMmkomfeqM=";
+    hash = "sha256-PqJyT6Z6XpDvbexLlrrfeeycS4mXNR3vpWz3vSy+iac=";
   };
 
   sourceRoot = "${src.name}/libs/genai";
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   pythonRelaxDeps = [
     # Each component release requests the exact latest core.
@@ -53,7 +53,7 @@ buildPythonPackage rec {
     filetype
     google-api-core
     google-auth
-    google-generativeai
+    google-genai
     langchain-core
     pydantic
   ];
@@ -68,7 +68,13 @@ buildPythonPackage rec {
     syrupy
   ];
 
-  pytestFlagsArray = [ "tests/unit_tests" ];
+  enabledTestPaths = [ "tests/unit_tests" ];
+
+  disabledTests = [
+    # Fails when langchain-core gets ahead of this package
+    "test_serdes"
+    "test_serialize"
+  ];
 
   pythonImportsCheck = [ "langchain_google_genai" ];
 
@@ -85,9 +91,9 @@ buildPythonPackage rec {
     description = "LangChain integrations for Google Gemini";
     homepage = "https://github.com/langchain-ai/langchain-google/tree/main/libs/genai";
     license = lib.licenses.mit;
-    maintainers = [
-      lib.maintainers.eu90h
-      lib.maintainers.sarahec
+    maintainers = with lib.maintainers; [
+      eu90h
+      sarahec
     ];
   };
 }

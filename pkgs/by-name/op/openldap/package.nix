@@ -108,14 +108,14 @@ stdenv.mkDerivation rec {
   ];
 
   postBuild = ''
-    for module in $extraContribModules; do
-      make $makeFlags CC=$CC -C contrib/slapd-modules/$module
+    for module in ''${extraContribModules[@]}; do
+      make ''${makeFlags[@]} CC=$CC -C contrib/slapd-modules/$module
     done
   '';
 
   preCheck = ''
     substituteInPlace tests/scripts/all \
-      --replace "/bin/rm" "rm"
+      --replace-fail "/bin/rm" "rm"
 
     # skip flaky tests
     # https://bugs.openldap.org/show_bug.cgi?id=8623
@@ -144,8 +144,8 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = lib.optionalString withModules ''
-    for module in $extraContribModules; do
-      make $installFlags install -C contrib/slapd-modules/$module
+    for module in ''${extraContribModules[@]}; do
+      make ''${installFlags[@]} install -C contrib/slapd-modules/$module
     done
     chmod +x "$out"/lib/*.{so,dylib}
   '';
@@ -155,12 +155,15 @@ stdenv.mkDerivation rec {
     kerberosWithLdap = nixosTests.kerberos.ldap;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.openldap.org/";
     description = "Open source implementation of the Lightweight Directory Access Protocol";
-    license = licenses.openldap;
-    maintainers = with maintainers; [ hexa ];
-    teams = [ teams.helsinki-systems ];
-    platforms = platforms.unix;
+    license = lib.licenses.openldap;
+    maintainers = with lib.maintainers; [
+      conni2461
+      das_j
+      helsinki-Jo
+    ];
+    platforms = lib.platforms.unix;
   };
 }

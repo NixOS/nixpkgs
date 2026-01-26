@@ -4,50 +4,48 @@
   fetchFromGitHub,
   setuptools,
   requests,
+  amazon-ion,
+  python-dateutil,
   pytestCheckHook,
+  pytest-mock,
   requests-mock,
 }:
-buildPythonPackage rec {
+
+buildPythonPackage (finalAttrs: {
   pname = "kestra";
-  version = "0.23.0";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kestra-io";
     repo = "libs";
-    tag = "v${version}";
-    hash = "sha256-WtwvOSgAcN+ly0CnkL0Y7lrO4UhSSiXmoAyGXP/hFtE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JpePlqwjIalbkVMIIqZ4z6YfkvjyuYUbhXcD2Z6hp/Y=";
   };
 
-  sourceRoot = "${src.name}/python";
+  sourceRoot = "${finalAttrs.src.name}/python";
 
-  build-system = [
-    setuptools
-  ];
-
-  preBuild = ''
-    # Required for building the library (https://github.com/kestra-io/libs/blob/v0.20.0/python/setup.py#L20)
-    # The path resolve to CWD, so README.md isn't picked in the parent folder
-    ln -s ../README.md README.md
-  '';
+  build-system = [ setuptools ];
 
   dependencies = [
     requests
+    amazon-ion
+    python-dateutil
   ];
 
-  pythonImportsCheck = [
-    "kestra"
-  ];
+  pythonImportsCheck = [ "kestra" ];
 
   nativeCheckInputs = [
     pytestCheckHook
     requests-mock
+    pytest-mock
   ];
 
   meta = {
     description = "Infinitely scalable orchestration and scheduling platform, creating, running, scheduling, and monitoring millions of complex pipelines";
     homepage = "https://github.com/kestra-io/libs";
+    changelog = "https://github.com/kestra-io/libs/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.apsl20;
     maintainers = with lib.maintainers; [ DataHearth ];
   };
-}
+})

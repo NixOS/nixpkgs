@@ -22,11 +22,11 @@ stdenv.mkDerivation rec {
     ninja
   ];
 
-  meta = with lib; {
+  meta = {
     description = "EGL External Platform interface";
     homepage = "https://github.com/NVIDIA/eglexternalplatform";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ hedning ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ hedning ];
   };
 }

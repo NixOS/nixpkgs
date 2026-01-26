@@ -51,6 +51,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/woodruffw/kbs2";
     changelog = "https://github.com/woodruffw/kbs2/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

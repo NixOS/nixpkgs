@@ -13,7 +13,6 @@
   python-jose,
   python3-openid,
   python3-saml,
-  pythonOlder,
   requests,
   requests-oauthlib,
   responses,
@@ -25,8 +24,6 @@ buildPythonPackage rec {
   pname = "social-auth-core";
   version = "4.7.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "python-social-auth";
@@ -63,7 +60,7 @@ buildPythonPackage rec {
     responses
     typing-extensions
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTestPaths = [
     # missing google-auth-stubs
@@ -76,11 +73,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "social_core" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for social authentication/registration mechanisms";
     homepage = "https://github.com/python-social-auth/social-core";
     changelog = "https://github.com/python-social-auth/social-core/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

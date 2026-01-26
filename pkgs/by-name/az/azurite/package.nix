@@ -1,21 +1,22 @@
 {
   lib,
-  buildNpmPackage,
-  fetchFromGitHub,
   stdenv,
+  buildNpmPackage,
+  clang_20,
+  fetchFromGitHub,
   libsecret,
+  nodejs,
   pkg-config,
-  python3,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "azurite";
   version = "3.35.0";
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "Azurite";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-sVYiHQJ3nR5vM+oPAHzr/MjuNBMY14afqCHpw32WCiQ=";
   };
 
@@ -23,18 +24,21 @@ buildNpmPackage rec {
 
   nativeBuildInputs = [
     pkg-config
-    python3
-  ];
+    nodejs.python
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ clang_20 ]; # clang_21 breaks @vscode/vsce's optional dependency keytar
+
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libsecret
   ];
 
   meta = {
-    description = "Open source Azure Storage API compatible server";
+    description = "Lightweight server clone of Azure Storage that simulates most of the commands supported by it with minimal dependencies";
     homepage = "https://github.com/Azure/Azurite";
-    changelog = "https://github.com/Azure/Azurite/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ danielalvsaaker ];
     mainProgram = "azurite";
+    maintainers = with lib.maintainers; [
+      danielalvsaaker
+    ];
   };
-}
+})

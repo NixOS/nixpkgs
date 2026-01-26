@@ -21,12 +21,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.8.0";
+  version = "2.8.2";
   pname = "dar";
 
   src = fetchzip {
     url = "mirror://sourceforge/dar/${pname}-${version}.tar.gz";
-    sha256 = "sha256-dmUNKhVEz5CpEVzKcDYPSKtYfOMXyXpzGJDJEebwLqU=";
+    sha256 = "sha256-x8WTJxpYzxvcN5Y6bAKE+JQ7n9dAbPkEosVnaFe2HoA=";
   };
 
   outputs = [
@@ -73,11 +73,11 @@ stdenv.mkDerivation rec {
     rm -r "$out"/share/dar
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://dar.linux.free.fr";
     description = "Disk ARchiver, allows backing up files into indexed archives";
-    maintainers = with maintainers; [ izorkin ];
-    license = licenses.gpl2Only;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ izorkin ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.unix;
   };
 }

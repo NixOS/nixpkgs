@@ -2,11 +2,13 @@
   lib,
   fetchFromGitLab,
   cpio,
+  cups,
   ddcutil,
   easyeffects,
   gjs,
   glib,
   gnome-menus,
+  gtk3,
   nautilus,
   gobject-introspection,
   hddtemp,
@@ -83,6 +85,20 @@ lib.trivial.pipe super [
     '';
   }))
 
+  (patchExtension "ding@rastersoft.com" (old: {
+    nativeBuildInputs = [ wrapGAppsHook3 ];
+    patches = [
+      (replaceVars ./extensionOverridesPatches/ding_at_rastersoft.com.patch {
+        inherit gjs;
+        util_linux = util-linux;
+        xdg_utils = xdg-utils;
+        gtk3_gsettings_path = glib.getSchemaPath gtk3;
+        nautilus_gsettings_path = glib.getSchemaPath nautilus;
+        typelib_path = "${gtk3}/lib/girepository-1.0";
+      })
+    ];
+  }))
+
   (patchExtension "display-brightness-ddcutil@themightydeity.github.com" (old: {
     # Make glib-compile-schemas available
     nativeBuildInputs = [ glib ];
@@ -121,16 +137,6 @@ lib.trivial.pipe super [
         nvmecli = nvme-cli;
       })
     ];
-  }))
-
-  (patchExtension "gnome-shell-screenshot@ttll.de" (old: {
-    # Requires gjs
-    # https://github.com/NixOS/nixpkgs/issues/136112
-    postPatch = ''
-      for file in *.js; do
-        substituteInPlace $file --replace "gjs" "${gjs}/bin/gjs"
-      done
-    '';
   }))
 
   (patchExtension "gtk4-ding@smedius.gitlab.com" (old: {
@@ -178,6 +184,14 @@ lib.trivial.pipe super [
       ];
     }
   ))
+
+  (patchExtension "printers@linux-man.org" (old: {
+    patches = [
+      (replaceVars ./extensionOverridesPatches/printers_at_linux-man.org.patch {
+        inherit cups;
+      })
+    ];
+  }))
 
   (patchExtension "system-monitor@gnome-shell-extensions.gcampax.github.com" (old: {
     patches = [

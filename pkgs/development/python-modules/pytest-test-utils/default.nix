@@ -6,15 +6,12 @@
   setuptools-scm,
   pytestCheckHook,
   pytest,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-test-utils";
   version = "0.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "iterative";
@@ -34,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_test_utils" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytest utilities for tests";
     homepage = "https://github.com/iterative/pytest-test-utils";
     changelog = "https://github.com/iterative/pytest-test-utils/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

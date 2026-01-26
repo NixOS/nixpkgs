@@ -4,7 +4,7 @@
 
 Nixpkgs includes Julia as the `julia` derivation.
 You can get specific versions by looking at the other `julia*` top-level derivations available.
-For example, `julia_19` corresponds to Julia 1.9.
+For example, `julia_112` corresponds to Julia 1.12.
 We also provide the current stable version as `julia-stable`, and an LTS version as `julia-lts`.
 
 Occasionally, a Julia version has been too difficult to build from source in Nixpkgs and has been fetched prebuilt instead.

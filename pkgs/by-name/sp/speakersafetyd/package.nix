@@ -65,7 +65,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "speakersafetyd";
     homepage = "https://github.com/AsahiLinux/speakersafetyd";
     maintainers = with lib.maintainers; [
-      normalcea
       flokli
       yuka
     ];

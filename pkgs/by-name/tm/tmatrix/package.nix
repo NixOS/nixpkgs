@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     installManPage ../tmatrix.6
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Terminal based replica of the digital rain from The Matrix";
     longDescription = ''
       TMatrix is a program that simulates the digital rain form The Matrix.
@@ -37,9 +37,8 @@ stdenv.mkDerivation rec {
       performant.
     '';
     homepage = "https://github.com/M4444/TMatrix";
-    license = licenses.gpl2;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ Br1ght0ne ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.all;
     mainProgram = "tmatrix";
   };
 }

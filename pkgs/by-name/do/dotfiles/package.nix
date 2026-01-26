@@ -7,7 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "dotfiles";
   version = "0.6.5";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit version pname;
@@ -23,10 +23,10 @@ python3Packages.buildPythonApplication rec {
 
   nativeCheckInputs = with python3Packages; [ pytest ];
 
-  meta = with lib; {
+  meta = {
     description = "Easily manage your dotfiles";
     mainProgram = "dotfiles";
     homepage = "https://github.com/jbernard/dotfiles";
-    license = licenses.isc;
+    license = lib.licenses.isc;
   };
 }

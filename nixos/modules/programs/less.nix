@@ -124,7 +124,7 @@ in
     environment.systemPackages = [ cfg.package ];
 
     environment.variables = {
-      LESSKEYIN_SYSTEM = builtins.toString lessKey;
+      LESSKEYIN_SYSTEM = toString lessKey;
     }
     // lib.optionalAttrs (cfg.lessopen != null) {
       LESSOPEN = cfg.lessopen;

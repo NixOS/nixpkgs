@@ -32,10 +32,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "wallet" ];
 
-  meta = with lib; {
+  meta = {
     description = "Passbook file generator";
     homepage = "https://pypi.org/project/wallet-py3k";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

@@ -4,7 +4,7 @@
   # The unwrapped libreoffice derivation
   unwrapped,
   makeWrapper,
-  xorg, # for lndir
+  lndir,
   runCommand,
   # For Emulating wrapGAppsHook3
   gsettings-desktop-schemas,
@@ -67,13 +67,11 @@ let
       "--prefix"
       "QT_PLUGIN_PATH"
       ":"
-      "${lib.makeSearchPath unwrapped.qtbase.qtPluginPrefix (
-        builtins.map lib.getBin unwrapped.qtPackages
-      )}"
+      "${lib.makeSearchPath unwrapped.qtbase.qtPluginPrefix (map lib.getBin unwrapped.qtPackages)}"
       "--prefix"
       "QML2_IMPORT_PATH"
       ":"
-      "${lib.makeSearchPath unwrapped.qtbase.qtQmlPrefix (builtins.map lib.getBin unwrapped.qmlPackages)}"
+      "${lib.makeSearchPath unwrapped.qtbase.qtQmlPrefix (map lib.getBin unwrapped.qmlPackages)}"
     ]
     ++ [
       # Add dictionaries from all NIX_PROFILES
@@ -123,11 +121,11 @@ let
 in
 runCommand "${unwrapped.name}-wrapped"
   {
-    inherit (unwrapped) meta;
+    inherit (unwrapped) meta pname version;
     paths = [ unwrapped ];
     nativeBuildInputs = [
       makeWrapper
-      xorg.lndir
+      lndir
     ];
     passthru = {
       inherit unwrapped;

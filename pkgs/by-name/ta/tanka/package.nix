@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "tanka";
-  version = "0.35.0";
+  version = "0.36.3";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "tanka";
     rev = "v${version}";
-    sha256 = "sha256-Jghw2KfHNl2VoGQYE/kadvcgXMIVP9SOsvT2ltWrQSs=";
+    sha256 = "sha256-ukWPmOEFOMnjwqTy9GkA8+WF3ItXUUvuh8EdKngLlT8=";
   };
 
-  vendorHash = "sha256-rms/aUchtcjsjeS51SB2eKPOTRoYOLDGbrmhRld6gUo=";
+  vendorHash = "sha256-nO0nv7tpUovtooeCr6zFA2mgCvuaLszrjU0EpcMMRmE=";
 
   doCheck = false;
   # Required for versions >= 0.28 as they introduce a gowork.sum file. This is only used for tests so we can safely disable GOWORK
@@ -61,11 +61,11 @@ buildGoModule rec {
       --zsh tk.zsh
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Flexible, reusable and concise configuration for Kubernetes";
     homepage = "https://tanka.dev";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mikefaille ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mikefaille ];
     mainProgram = "tk";
   };
 }

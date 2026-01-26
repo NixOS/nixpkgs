@@ -119,15 +119,18 @@ stdenv.mkDerivation rec {
 
   # provide correct configure answers for cross builds
   configureFlags = [
-    "ac_cv_func_setpgrp_void=${if stdenv.hostPlatform.isBSD then "no" else "yes"}"
+    "ac_cv_func_setpgrp_void=${lib.boolToYesNo (!stdenv.hostPlatform.isBSD)}"
   ];
 
-  env = lib.optionalAttrs stdenv.cc.isClang {
-    NIX_CFLAGS_COMPILE = toString [
+  env.NIX_CFLAGS_COMPILE = toString (
+    [
+      "-std=gnu17"
+    ]
+    ++ lib.optionals stdenv.cc.isClang [
       "-Wno-error=implicit-function-declaration"
       "-Wno-error=incompatible-function-pointer-types"
-    ];
-  };
+    ]
+  );
 
   enableParallelBuilding = true;
 
@@ -137,12 +140,12 @@ stdenv.mkDerivation rec {
     cp config/util/makestrs tools/wml/{wml,wmluiltok,.libs/wmldbcreate} "$out/lib/internals"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://motif.ics.com";
     description = "Unix standard widget-toolkit and window-manager";
-    platforms = platforms.unix;
-    license = with licenses; [ lgpl21Plus ];
-    maintainers = with maintainers; [ qyliss ];
+    platforms = lib.platforms.unix;
+    license = with lib.licenses; [ lgpl21Plus ];
+    maintainers = with lib.maintainers; [ qyliss ];
     broken = demoSupport && stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "16";
   };
 }

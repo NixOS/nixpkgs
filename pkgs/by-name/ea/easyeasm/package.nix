@@ -5,8 +5,9 @@
   makeWrapper,
   amass,
   alterx,
-  oam-tools,
   subfinder,
+  dnsx,
+  httpx,
 }:
 
 buildGoModule rec {
@@ -37,8 +38,9 @@ buildGoModule rec {
         lib.makeBinPath [
           amass
           alterx
-          oam-tools
           subfinder
+          dnsx
+          httpx
         ]
       }"
   '';

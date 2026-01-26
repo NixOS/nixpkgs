@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   threadingSupport ? true, # multi-threading
   openglSupport ? false,
@@ -44,6 +45,16 @@ stdenv.mkDerivation rec {
     hash = "sha256-7i4fGBTsTjAkBzCjVqXqX4n22j6dLgF/0mz4ajNA45U=";
   };
 
+  patches = [
+    # Fixes endianness-related behaviour in build result when targeting big-endian via CMake
+    # https://groups.google.com/a/webmproject.org/g/webp-discuss/c/wvBsO8n8BKA/m/eKpxLuagAQAJ
+    (fetchpatch {
+      name = "0001-libwebp-Fix-endianness-with-CMake.patch";
+      url = "https://github.com/webmproject/libwebp/commit/0e5f4ee3deaba5c4381877764005d981f652791f.patch";
+      hash = "sha256-VNiLv1y3cjSDCNen9KxqbdrldI6EhshTSnsq8g9x8HA=";
+    })
+  ];
+
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" true)
     (lib.cmakeBool "WEBP_USE_THREAD" threadingSupport)
@@ -84,12 +95,12 @@ stdenv.mkDerivation rec {
     pkg-config = testers.hasPkgConfigModules { package = libwebp; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tools and library for the WebP image format";
     homepage = "https://developers.google.com/speed/webp/";
-    license = licenses.bsd3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ ajs124 ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ ajs124 ];
     pkgConfigModules = [
       # configure_pkg_config() calls for these are unconditional
       "libwebp"

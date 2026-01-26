@@ -35,13 +35,13 @@ in
 stdenv.mkDerivation rec {
   pname = "aws-sdk-cpp";
   # nixpkgs-update: no auto update
-  version = "1.11.612";
+  version = "1.11.647";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-sdk-cpp";
-    rev = version;
-    hash = "sha256-W4eKgUvN2NLYEOO47HTJYJpEmyn10gNK29RIrvoXkek=";
+    tag = version;
+    hash = "sha256-RJKR0xw3HTNItaLGyYCjibmfK3UBDA4hfAZzQ0xYg9U=";
   };
 
   postPatch = ''
@@ -156,12 +156,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "C++ interface for Amazon Web Services";
     homepage = "https://github.com/aws/aws-sdk-cpp";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ orivej ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
     # building ec2 runs out of memory: cc1plus: out of memory allocating 33554372 bytes after a total of 74424320 bytes
     broken = stdenv.buildPlatform.is32bit && ((builtins.elem "ec2" apis) || (builtins.elem "*" apis));
   };

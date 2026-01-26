@@ -17,18 +17,23 @@
   wrapGAppsHook3,
   wayland,
   gobject-introspection,
-  xorg,
+  libxxf86vm,
+  libxrandr,
+  libxi,
+  libxcursor,
+  libx11,
+  libxcb,
 }:
 let
   rpathLibs = lib.optionals stdenv.hostPlatform.isLinux [
     libGL
     libxkbcommon
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libXxf86vm
-    xorg.libxcb
+    libx11
+    libxcursor
+    libxi
+    libxrandr
+    libxxf86vm
+    libxcb
     wayland
   ];
 in

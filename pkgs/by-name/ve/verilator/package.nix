@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   perl,
   flex,
   bison,
@@ -31,6 +32,14 @@ stdenv.mkDerivation rec {
     tag = "v${version}";
     hash = "sha256-S+cDnKOTPjLw+sNmWL3+Ay6+UM8poMadkyPSGd3hgnc=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "clang-V3hash-overload-fix.patch";
+      url = "https://github.com/verilator/verilator/commit/2aa260a03b67d3fe86bc64b8a59183f8dc21e117.patch";
+      hash = "sha256-waUsctWiAMG3lCpQi+VUUZ7qMw/kJGu/wNXPHZGuAoU=";
+    })
+  ];
 
   enableParallelBuilding = true;
   buildInputs = [
@@ -92,16 +101,16 @@ stdenv.mkDerivation rec {
     SYSTEMC_LIBDIR = "${lib.getLib systemc}/lib";
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/verilator/verilator/blob/${src.tag}/Changes";
     description = "Fast and robust (System)Verilog simulator/compiler and linter";
     homepage = "https://www.veripool.org/verilator";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl3Only
       artistic2
     ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       thoughtpolice
       amiloradovsky
     ];

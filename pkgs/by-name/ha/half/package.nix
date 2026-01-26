@@ -20,10 +20,10 @@ stdenv.mkDerivation rec {
     cp $src/{ChangeLog,LICENSE,README}.txt $out/share/doc/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "C++ library for half precision floating point arithmetics";
-    platforms = platforms.all;
-    license = licenses.mit;
+    platforms = lib.platforms.all;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

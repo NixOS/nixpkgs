@@ -71,8 +71,8 @@ in
       bindings =
         let
           light = "${pkgs.light}/bin/light";
-          step = builtins.toString cfg.brightnessKeys.step;
-          minBrightness = builtins.toString cfg.brightnessKeys.minBrightness;
+          step = toString cfg.brightnessKeys.step;
+          minBrightness = toString cfg.brightnessKeys.minBrightness;
         in
         [
           {

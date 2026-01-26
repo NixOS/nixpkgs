@@ -26,19 +26,24 @@
   stdenv,
   swig,
   xercesc,
-  xorg,
+  libxrender,
+  libxrandr,
+  libxft,
+  libxfixes,
+  libxext,
+  libxcursor,
   zlib,
 }:
 
 stdenv.mkDerivation rec {
   pname = "sumo";
-  version = "1.24.0";
+  version = "1.25.0";
 
   src = fetchFromGitHub {
-    owner = "eclipse";
+    owner = "eclipse-sumo";
     repo = "sumo";
     tag = "v${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-xf7/hUJpl+XmXx5MmFzYu2geFNe7JVaxDrraoqLrSuk=";
+    hash = "sha256-rUa5DpoBfnviSEmzPEiVnZU0KGavAIOFoysQ74uTll0=";
     fetchSubmodules = true;
   };
 
@@ -70,18 +75,16 @@ stdenv.mkDerivation rec {
     xercesc
     zlib
     python3
-  ]
-  ++ (with xorg; [
     libX11
-    libXcursor
-    libXext
-    libXfixes
-    libXft
-    libXrandr
-    libXrender
-  ]);
+    libxcursor
+    libxext
+    libxfixes
+    libxft
+    libxrandr
+    libxrender
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "SUMO traffic simulator";
     longDescription = ''
       Eclipse SUMO is an open source, highly
@@ -91,7 +94,8 @@ stdenv.mkDerivation rec {
       tools for scenario creation.
     '';
     homepage = "https://github.com/eclipse/sumo";
-    license = licenses.epl20;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.epl20;
+    maintainers = [ ];
+    teams = [ lib.teams.geospatial ];
   };
 }

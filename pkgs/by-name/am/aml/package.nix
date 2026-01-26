@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
     ninja
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Another main loop";
     inherit (src.meta) homepage;
-    license = licenses.isc;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.isc;
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
     broken = stdenv.hostPlatform.isDarwin;
   };
 }
