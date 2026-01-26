@@ -235,7 +235,7 @@ in
 
       downloadDirPermissions = mkOption {
         type = with types; nullOr str;
-        default = null;
+        default = "700";
         example = "770";
         description = ''
           If not `null`, is used as the permissions
@@ -359,8 +359,7 @@ in
     # because BindPaths= needs these directories before.
     system.activationScripts.transmission-daemon = ''
       install -d -m 700 -o '${cfg.user}' -g '${cfg.group}' '${cfg.home}/${settingsDir}'
-    ''
-    + optionalString (cfg.downloadDirPermissions != null) ''
+
       install -d -m '${cfg.downloadDirPermissions}' -o '${cfg.user}' -g '${cfg.group}' '${cfg.settings.download-dir}'
 
       ${optionalString cfg.settings.incomplete-dir-enabled ''
