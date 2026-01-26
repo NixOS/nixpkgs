@@ -10,13 +10,13 @@
 }:
 vimUtils.buildVimPlugin rec {
   pname = "codediff.nvim";
-  version = "2.9.3";
+  version = "2.13.1";
 
   src = fetchFromGitHub {
     owner = "esmuellert";
     repo = "codediff.nvim";
     tag = "v${version}";
-    hash = "sha256-hHBAGDWtw56gk1kWUtU9QEP2QqIATmPNeJ2lPD8dWIc=";
+    hash = "sha256-9pzEO5RzDTX0BVg06XA0AiD9gCmpp1eEqH3Adqptrrs=";
   };
 
   dependencies = [ vimPlugins.nui-nvim ];
