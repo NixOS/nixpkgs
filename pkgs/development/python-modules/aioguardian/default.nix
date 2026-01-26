@@ -16,7 +16,7 @@
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aioguardian";
   version = "2026.01.0";
   pyproject = true;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bachya";
     repo = "aioguardian";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-p0rSN00CxTJsoo5iD3jsnTPUIl3G/fDc6tMjj0H0MuE=";
   };
 
@@ -71,8 +71,8 @@ buildPythonPackage rec {
       Guardian line of water valves and sensors from Elexa.
     '';
     homepage = "https://github.com/bachya/aioguardian";
-    changelog = "https://github.com/bachya/aioguardian/releases/tag/${version}";
-    license = with lib.licenses; [ mit ];
+    changelog = "https://github.com/bachya/aioguardian/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
