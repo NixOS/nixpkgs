@@ -8,14 +8,14 @@
 }:
 buildPythonPackage rec {
   pname = "typecode-libmagic";
-  version = "21.5.31";
+  version = "1.0.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "aboutcode-org";
     repo = "scancode-plugins";
     tag = "v${version}";
-    hash = "sha256-nGgFjp1N1IM/Sm4xLJw5WiZncc369/LqNcwFJBS1EQs=";
+    hash = "sha256-5Wp2/yst+CscTYvVhlHu6pXjCHL4A4zYrciFly9+dFQ=";
   };
 
   sourceRoot = "${src.name}/builtins/typecode_libmagic-linux";
