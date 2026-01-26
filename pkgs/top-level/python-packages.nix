@@ -5145,6 +5145,8 @@ self: super: with self; {
 
   exrex = callPackage ../development/python-modules/exrex { };
 
+  exscript = callPackage ../development/python-modules/exscript { };
+
   extension-helpers = callPackage ../development/python-modules/extension-helpers { };
 
   extra-streamlit-components =
