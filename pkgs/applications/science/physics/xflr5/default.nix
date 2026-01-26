@@ -1,11 +1,12 @@
 {
-  mkDerivation,
   lib,
-  qmake,
+  stdenv,
   fetchsvn,
+  qmake,
+  wrapQtAppsHook,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "xflr5";
   version = "6.61";
 
@@ -16,7 +17,10 @@ mkDerivation rec {
     sha256 = "sha256-Uj6R15OT5i5tAJEYWqyFyN5Z51Wz5RjO26mWC3Y6QAI=";
   };
 
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = [
+    qmake
+    wrapQtAppsHook
+  ];
 
   meta = {
     description = "Analysis tool for airfoils, wings and planes";

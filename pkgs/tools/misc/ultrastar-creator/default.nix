@@ -1,10 +1,11 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   qmake,
   qtbase,
   pkg-config,
+  wrapQtAppsHook,
   taglib,
   libbass,
   libbass_fx,
@@ -15,7 +16,7 @@
 # there’s a WIP branch here:
 # https://github.com/UltraStar-Deluxe/UltraStar-Creator/commits/BASS_removed
 
-mkDerivation {
+stdenv.mkDerivation {
   pname = "ultrastar-creator";
   version = "2019-04-23";
 
@@ -45,6 +46,7 @@ mkDerivation {
   nativeBuildInputs = [
     qmake
     pkg-config
+    wrapQtAppsHook
   ];
   buildInputs = [
     qtbase

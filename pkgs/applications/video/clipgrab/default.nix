@@ -1,11 +1,12 @@
 {
   lib,
+  stdenv,
   fetchurl,
   makeDesktopItem,
   ffmpeg,
   qmake,
   qttools,
-  mkDerivation,
+  wrapQtAppsHook,
   qtbase,
   qtdeclarative,
   qtlocation,
@@ -15,7 +16,7 @@
   yt-dlp,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "clipgrab";
   version = "3.9.7";
 
@@ -37,6 +38,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     qmake
     qttools
+    wrapQtAppsHook
   ];
 
   patches = [

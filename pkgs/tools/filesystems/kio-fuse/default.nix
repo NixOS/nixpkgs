@@ -1,14 +1,15 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchgit,
   cmake,
   extra-cmake-modules,
+  wrapQtAppsHook,
   kio,
   fuse3,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "kio-fuse";
   version = "5.1.0";
 
@@ -21,6 +22,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
+    wrapQtAppsHook
   ];
 
   buildInputs = [

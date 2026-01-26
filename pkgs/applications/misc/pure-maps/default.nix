@@ -1,9 +1,10 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   cmake,
   qttools,
+  wrapQtAppsHook,
   kirigami2,
   qtquickcontrols2,
   qtlocation,
@@ -15,7 +16,7 @@
   pyotherside,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "pure-maps";
   version = "3.4.2";
 
@@ -32,6 +33,7 @@ mkDerivation rec {
     python3
     qttools
     python3.pkgs.wrapPython
+    wrapQtAppsHook
   ];
 
   buildInputs = [

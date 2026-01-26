@@ -1,17 +1,22 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   qmake,
+  wrapQtAppsHook,
   qtmultimedia,
   qtbase,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   version = "unstable-20-06-26";
   pname = "herqq";
 
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = [
+    qmake
+    wrapQtAppsHook
+  ];
+
   buildInputs = [
     qtbase
     qtmultimedia

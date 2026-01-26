@@ -9,7 +9,6 @@
   qmake,
   wrapGAppsHook3,
   wrapQtAppsHook,
-  mkDerivation,
 
   qttools,
   qtbase,
@@ -31,7 +30,7 @@ let
   commit = "nix-${version}";
 
 in
-mkDerivation {
+stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchFromGitHub {
@@ -47,6 +46,7 @@ mkDerivation {
     qmake
     qttools
     wrapGAppsHook3
+    wrapQtAppsHook
     wrapQtAppsHook
   ];
 

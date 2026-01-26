@@ -1,10 +1,11 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitLab,
   wafHook,
   pkg-config,
   cmake,
+  wrapQtAppsHook,
   qtbase,
   python3,
   qtwebengine,
@@ -23,7 +24,7 @@
   kdelibs4support,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "semantik";
   version = "1.2.10";
 
@@ -66,6 +67,7 @@ mkDerivation rec {
     pkg-config
     wafHook
     cmake
+    wrapQtAppsHook
   ];
 
   buildInputs = [

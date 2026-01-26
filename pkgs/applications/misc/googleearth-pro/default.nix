@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  mkDerivation,
   fetchurl,
   freetype,
   glib,
@@ -30,6 +29,7 @@
 
   xkeyboardconfig,
   autoPatchelfHook,
+  wrapQtAppsHook,
 }:
 let
   arch =
@@ -38,7 +38,7 @@ let
     else
       throw "Unsupported system ${stdenv.hostPlatform.system} ";
 in
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "googleearth-pro";
   version = "7.3.6.10201";
 
@@ -51,6 +51,7 @@ mkDerivation rec {
     dpkg
     makeWrapper
     autoPatchelfHook
+    wrapQtAppsHook
   ];
   propagatedBuildInputs = [ xkeyboardconfig ];
   buildInputs = [

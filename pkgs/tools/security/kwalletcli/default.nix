@@ -1,9 +1,10 @@
 {
-  mkDerivation,
   fetchFromGitHub,
   lib,
+  stdenv,
   makeWrapper,
   pkg-config,
+  wrapQtAppsHook,
   kcoreaddons,
   ki18n,
   kwallet,
@@ -11,7 +12,7 @@
   pinentry-qt,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "kwalletcli";
   version = "3.03";
 
@@ -42,6 +43,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     makeWrapper
     pkg-config
+    wrapQtAppsHook
   ];
   # if using just kwallet, cmake will be added as a buildInput and fail the build
   propagatedBuildInputs = [

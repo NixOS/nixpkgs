@@ -1,9 +1,11 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   fetchpatch,
   cmake,
   pkg-config,
+  wrapQtAppsHook,
   alsa-lib ? null,
   carla ? null,
   fftwFloat,
@@ -22,10 +24,9 @@
   qtx11extras,
   qttools,
   SDL ? null,
-  mkDerivation,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "lmms";
   version = "1.2.2";
 
@@ -41,6 +42,7 @@ mkDerivation rec {
     cmake
     qttools
     pkg-config
+    wrapQtAppsHook
   ];
 
   buildInputs = [

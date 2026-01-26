@@ -1,13 +1,13 @@
 {
   stdenv,
   lib,
-  mkDerivation,
   fetchFromGitHub,
   qmake,
+  wrapQtAppsHook,
   qtbase,
 }:
 
-mkDerivation {
+stdenv.mkDerivation {
   pname = "dialogbox";
   version = "1.0+unstable=2020-11-16";
 
@@ -20,6 +20,7 @@ mkDerivation {
 
   nativeBuildInputs = [
     qmake
+    wrapQtAppsHook
   ];
 
   buildInputs = [

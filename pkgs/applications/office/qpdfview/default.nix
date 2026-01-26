@@ -1,12 +1,13 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchurl,
   qmake,
-  qtbase,
   qttools,
-  qtsvg,
   pkg-config,
+  wrapQtAppsHook,
+  qtbase,
+  qtsvg,
   poppler,
   djvulibre,
   libspectre,
@@ -15,7 +16,7 @@
   ghostscript,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "qpdfview";
   version = "0.5.0";
 
@@ -28,6 +29,7 @@ mkDerivation rec {
     qmake
     qttools
     pkg-config
+    wrapQtAppsHook
   ];
 
   buildInputs = [

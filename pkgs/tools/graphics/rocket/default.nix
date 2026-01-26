@@ -1,12 +1,13 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchFromGitHub,
   qmake,
+  wrapQtAppsHook,
   qtbase,
 }:
 
-mkDerivation {
+stdenv.mkDerivation {
   pname = "rocket";
   version = "2018-06-09";
 
@@ -17,7 +18,10 @@ mkDerivation {
     sha256 = "13bdg2dc6ypk17sz39spqdlb3wai2y085bdb36pls2as2nf22drp";
   };
 
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = [
+    qmake
+    wrapQtAppsHook
+  ];
   buildInputs = [ qtbase ];
 
   dontConfigure = true;

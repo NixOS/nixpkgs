@@ -28,8 +28,8 @@
   gnused ? null,
   coreutils ? null,
   withQt ? false,
-  mkDerivation,
   qttools,
+  wrapQtAppsHook,
   qtbase,
   qtsvg,
 }:
@@ -38,7 +38,7 @@ assert libX11 != null -> (fontconfig != null && gnused != null && coreutils != n
 let
   withX = libX11 != null && !aquaterm && !stdenv.hostPlatform.isDarwin;
 in
-(if withQt then mkDerivation else stdenv.mkDerivation) rec {
+stdenv.mkDerivation rec {
   pname = "gnuplot";
   version = "6.0.4";
 
@@ -52,7 +52,10 @@ in
     pkg-config
     texinfo
   ]
-  ++ lib.optional withQt qttools;
+  ++ lib.optionals withQt [
+    qttools
+    wrapQtAppsHook
+  ];
 
   buildInputs = [
     cairo

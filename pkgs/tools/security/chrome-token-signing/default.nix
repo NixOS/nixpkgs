@@ -1,14 +1,15 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
+  pkg-config,
+  wrapQtAppsHook,
   qmake,
   pcsclite,
-  pkg-config,
   opensc,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "chrome-token-signing";
   version = "1.1.5";
 
@@ -19,7 +20,10 @@ mkDerivation rec {
     sha256 = "sha256-wKy/RVR7jx5AkMJgHXsuV+jlzyfH5nDRggcIUgh2ML4=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    wrapQtAppsHook
+  ];
   buildInputs = [
     qmake
     pcsclite

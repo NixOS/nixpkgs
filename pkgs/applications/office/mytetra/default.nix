@@ -1,14 +1,15 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   qmake,
   qtsvg,
   makeWrapper,
+  wrapQtAppsHook,
   xdg-utils,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "mytetra";
   version = "1.44.183";
 
@@ -22,6 +23,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     qmake
     makeWrapper
+    wrapQtAppsHook
   ];
   buildInputs = [ qtsvg ];
 
