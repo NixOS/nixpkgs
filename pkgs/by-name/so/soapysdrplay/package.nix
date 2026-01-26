@@ -8,16 +8,18 @@
   sdrplay,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "soapysdr-sdrplay3";
-  version = "0.4.0";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "pothosware";
     repo = "SoapySDRPlay3";
-    rev = "soapy-sdrplay3-${version}";
-    sha256 = "sha256-WMcAw0uR2o2SrQR4mBtdVEZlJ/ZXRqwo6zMJNsB/5U4=";
+    rev = "soapy-sdrplay3-${finalAttrs.version}";
+    hash = "sha256-5XBOUhI/37sMfdVEb19zWU00/j+Nb30wsP5CXjJ+sJY=";
   };
+
+  patches = [ ./cmake.patch ];
 
   nativeBuildInputs = [
     cmake
@@ -38,6 +40,11 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/pothosware/SoapySDRPlay3";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.pmenke ];
-    platforms = lib.platforms.linux;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
-}
+})
