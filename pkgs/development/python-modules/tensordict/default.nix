@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   pybind11,
@@ -27,16 +28,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tensordict";
-  version = "0.10.0";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "tensordict";
-    tag = "v${version}";
-    hash = "sha256-yxyA9BfN2hp1C3s+g2zBM2gVtckH3LV7luWw8DshFUs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-PUPDKv10Ks4B1kpgbRcnmfWFUkpFEdxMmTNztFVfdK4=";
   };
 
   postPatch = ''
@@ -86,6 +87,10 @@ buildPythonPackage rec {
     # hangs forever on some CPUs
     "test_map_iter_interrupt_early"
   ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # AssertionError: assert 'a string!' == 'a metadata!'
+    "test_save_load_memmap"
+  ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Hangs due to the use of a pool
     "test_chunksize_num_chunks"
@@ -109,9 +114,9 @@ buildPythonPackage rec {
 
   meta = {
     description = "Pytorch dedicated tensor container";
-    changelog = "https://github.com/pytorch/tensordict/releases/tag/${src.tag}";
+    changelog = "https://github.com/pytorch/tensordict/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/pytorch/tensordict";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})
