@@ -1,0 +1,80 @@
+diff --git a/src/animation.pl b/src/animation.pl
+index 342c669..68ea761 100644
+--- a/src/animation.pl
++++ b/src/animation.pl
+@@ -1,3 +1,5 @@
++:- encoding(utf8).
++
+ % MIT License, Copyright (c) 2023-2025 Barnabás Zahorán, see LICENSE
+ 
+ :- module(animation, []).
+diff --git a/src/fifo.pl b/src/fifo.pl
+index 9a38ec0..5ad204b 100644
+--- a/src/fifo.pl
++++ b/src/fifo.pl
+@@ -1,3 +1,5 @@
++:- encoding(utf8).
++
+ % MIT License, Copyright (c) 2023-2025 Barnabás Zahorán, see LICENSE
+ 
+ :- module(fifo, []).
+diff --git a/src/layout.pl b/src/layout.pl
+index df1ae00..c1d6fe3 100644
+--- a/src/layout.pl
++++ b/src/layout.pl
+@@ -1,3 +1,5 @@
++:- encoding(utf8).
++
+ % MIT License, Copyright (c) 2023-2025 Barnabás Zahorán, see LICENSE
+ 
+ :- module(layout, []).
+diff --git a/src/menu.pl b/src/menu.pl
+index ae773de..14669d6 100644
+--- a/src/menu.pl
++++ b/src/menu.pl
+@@ -1,3 +1,5 @@
++:- encoding(utf8).
++
+ % MIT License, Copyright (c) 2023-2025 Barnabás Zahorán, see LICENSE
+ 
+ :- module(menu, []).
+diff --git a/src/plwm.pl b/src/plwm.pl
+index 64098bd..3df7870 100644
+--- a/src/plwm.pl
++++ b/src/plwm.pl
+@@ -1,3 +1,5 @@
++:- encoding(utf8).
++
+ % MIT License, Copyright (c) 2023-2025 Barnabás Zahorán, see LICENSE
+ %
+ % plwm - an X11 window manager written in Prolog
+diff --git a/src/setting.pl b/src/setting.pl
+index 629c60a..bf6ab70 100644
+--- a/src/setting.pl
++++ b/src/setting.pl
+@@ -1,3 +1,5 @@
++:- encoding(utf8).
++
+ % MIT License, Copyright (c) 2023-2025 Barnabás Zahorán, see LICENSE
+ 
+ % This module contains settings related operations:
+diff --git a/src/utils.pl b/src/utils.pl
+index 212d41f..8cd8c82 100644
+--- a/src/utils.pl
++++ b/src/utils.pl
+@@ -1,3 +1,5 @@
++:- encoding(utf8).
++
+ % MIT License, Copyright (c) 2023-2025 Barnabás Zahorán, see LICENSE
+ 
+ % Generic helper utilities that any module can use
+diff --git a/src/xf86names.pl b/src/xf86names.pl
+index fcfc361..1802586 100644
+--- a/src/xf86names.pl
++++ b/src/xf86names.pl
+@@ -1,3 +1,5 @@
++:- encoding(utf8).
++
+ % MIT License, Copyright (c) 2023-2025 Barnabás Zahorán, see LICENSE
+ 
+ % Created from <X11/XF86keysym.h> on 2023-01-25 (commented out keymaps were not kept)
