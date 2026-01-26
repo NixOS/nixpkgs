@@ -2841,11 +2841,6 @@ with pkgs;
 
   limine-full = limine.override { enableAll = true; };
 
-  liquidsoap = callPackage ../tools/audio/liquidsoap/full.nix {
-    ffmpeg = ffmpeg_6-full;
-    ocamlPackages = ocaml-ng.ocamlPackages_4_14;
-  };
-
   loganalyzer = libsForQt5.callPackage ../development/tools/loganalyzer { };
 
   logstash7 = callPackage ../tools/misc/logstash/7.x.nix {
