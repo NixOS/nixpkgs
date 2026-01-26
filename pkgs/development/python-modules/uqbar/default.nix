@@ -63,6 +63,11 @@ buildPythonPackage rec {
   ++ lib.optional (pythonAtLeast "3.12") [
     # https://github.com/josiah-wolf-oberholtzer/uqbar/issues/93
     "objects.get_vars"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # https://github.com/josiah-wolf-oberholtzer/uqbar/issues/106
+    "test_04"
+    "SummarizingClassDocumenter"
   ];
 
   pythonImportsCheck = [ "uqbar" ];
