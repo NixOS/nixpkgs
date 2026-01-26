@@ -18,7 +18,7 @@
   pytestCheckHook,
   six,
   transitions,
-  yamlordereddictloader,
+  yamlloader,
 }:
 
 buildPythonPackage rec {
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     scp
     six
     transitions
-    yamlordereddictloader
+    yamlloader
   ];
 
   nativeCheckInputs = [
