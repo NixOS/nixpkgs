@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,6 +15,15 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "1bna0bj503xyn5inwzzsrsgi9qg8p20by4dfk7azj91ynw56pl41";
   };
+
+  patches = [
+    # Pull upstream gcc-15 build fix.
+    (fetchpatch {
+      name = "gcc-15.patch";
+      url = "https://github.com/dasm-assembler/dasm/commit/ed21db28a0e9693c455d6491cdc120a5936b007a.patch";
+      hash = "sha256-CR5/Cs82JN63TmMRt398iWlMdt0QaLL7N2bbOiCAz9s=";
+    })
+  ];
 
   configurePhase = false;
   installPhase = ''
