@@ -110,6 +110,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "kqueue" (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isBSD))
     (lib.mesonEnable "launchd" stdenv.hostPlatform.isDarwin)
     "-Dselinux=disabled"
+  ]
+  ++ lib.optionals enableSystemd [
     "--cross-file=${writeText "crossfile.ini" ''
       [binaries]
       systemctl = '${systemdMinimal}/bin/systemctl'
