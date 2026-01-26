@@ -1,0 +1,23 @@
+--- a/src/editor.rs	2025-07-23 20:30:32.660655526 +0900
++++ b/src/editor.rs	2025-07-23 21:07:23.847595927 +0900
+@@ -119,7 +119,7 @@
+ ) -> Option<Box<dyn Editor>> {
+     create_vizia_editor(editor_state, ViziaTheming::Custom, move |cx, context| {
+         assets::register_noto_sans_light(cx);
+-        cx.add_theme(include_str!("gui/style.css"));
++        cx.add_stylesheet(include_str!("gui/style.css")).unwrap();
+ 
+         UiData {
+             gui_context: context.clone(),
+@@ -165,9 +165,8 @@
+     let version_str = format!("v{}", VERSION);
+     VStack::new(cx, |cx| {
+         Label::new(cx, "hue")
+-            .font_family(vec![FamilyOwned::Name(String::from(
+-                assets::NOTO_SANS_LIGHT,
+-            ))])
++            .font_family(vec![FamilyOwned::Name(String::from(assets::NOTO_SANS))])
++            .font_weight(FontWeightKeyword::Light)
+             .font_size(40.0 * POINT_SCALE);
+         Label::new(cx, &version_str).font_size(15.0 * POINT_SCALE);
+     })
