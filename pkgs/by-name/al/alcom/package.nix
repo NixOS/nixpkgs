@@ -65,6 +65,13 @@ rustPlatform.buildRustPackage {
   };
   npmRoot = subdir;
 
+  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    gappsWrapperArgs+=(
+      # See https://github.com/NixOS/nixpkgs/issues/435243
+      --set WEBKIT_DISABLE_COMPOSITING_MODE 1
+    )
+  '';
+
   meta = {
     description = "Experimental GUI application to manage VRChat Unity Projects";
     homepage = "https://github.com/vrc-get/vrc-get";
