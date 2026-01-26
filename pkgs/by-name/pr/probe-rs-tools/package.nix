@@ -7,6 +7,7 @@
   pkg-config,
   libusb1,
   openssl,
+  probe-rs-udev-rules,
 }:
 
 let
@@ -41,6 +42,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     libusb1
     openssl
+    probe-rs-udev-rules
   ];
 
   postInstall = ''
