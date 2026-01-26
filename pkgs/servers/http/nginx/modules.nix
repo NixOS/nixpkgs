@@ -8,9 +8,11 @@
   fetchhg,
   runCommand,
   stdenv,
+  rustPlatform,
 
   arpa2common,
   brotli,
+  cargo,
   curl,
   expat,
   fdk_aac,
@@ -30,7 +32,9 @@
   msgpuck,
   openssl,
   pam,
+  pkg-config,
   psol,
+  rustc,
   which,
   yajl,
   zlib,
@@ -66,6 +70,59 @@ in
 
 let
   self = {
+    acme = rec {
+      name = "acme";
+      src =
+        let
+          src = fetchFromGitHub {
+            name = "acme";
+            owner = "nginx";
+            repo = "nginx-acme";
+            tag = "v0.3.1";
+            hash = "sha256-0oxpEI/+vQFgavjieqtgTabem78Y9ibCu/gK41tlaco=";
+          };
+          combined =
+            runCommand "vendored-repo"
+              {
+                nativeBuildInputs = [
+                  rustPlatform.cargoSetupHook
+                ];
+                cargoDeps = rustPlatform.importCargoLock {
+                  lockFile = "${src}/Cargo.lock";
+                };
+              }
+              ''
+                mkdir -p $out
+                cp -r ${src}/* $out/
+
+                runHook postUnpack
+                cp -r cargo-vendor-dir $out/
+                cp -r .cargo $out/
+              '';
+        in
+        combined;
+
+      preConfigure = ''
+        export NGX_RUSTC_OPT="--config ${src}/.cargo/config.toml"
+        export OPENSSL_NO_VENDOR=1
+      '';
+
+      inputs = [
+        openssl
+        cargo
+        rustPlatform.bindgenHook
+        rustc
+        pkg-config
+      ];
+
+      meta = with lib; {
+        description = "Implementation of the automatic certificate management (ACMEv2) protocol";
+        homepage = "https://github.com/nginx/nginx-acme";
+        license = with licenses; [ asl20 ];
+        maintainers = with maintainers; [ nyanloutre ];
+      };
+    };
+
     akamai-token-validate = {
       name = "akamai-token-validate";
       src = fetchFromGitHub {
