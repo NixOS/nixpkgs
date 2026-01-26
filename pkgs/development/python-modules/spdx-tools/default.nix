@@ -16,7 +16,7 @@
   xmltodict,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "spdx-tools";
   version = "0.8.4";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "spdx";
     repo = "tools-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-loD+YXRCEYRynOKf7Da43SA7JQVYP1IzJe2f7ssJTtI=";
   };
 
@@ -63,8 +63,8 @@ buildPythonPackage rec {
   meta = {
     description = "SPDX parser and tools";
     homepage = "https://github.com/spdx/tools-python";
-    changelog = "https://github.com/spdx/tools-python/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/spdx/tools-python/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
