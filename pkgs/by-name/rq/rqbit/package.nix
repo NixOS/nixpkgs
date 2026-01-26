@@ -8,6 +8,7 @@
   buildNpmPackage,
   nodejs_20,
   nix-update-script,
+  nixosTests,
 }:
 let
   pname = "rqbit";
@@ -64,13 +65,15 @@ rustPlatform.buildRustPackage {
 
   doCheck = false;
 
-  passthru.webui = rqbit-webui;
-
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--subpackage"
-      "webui"
-    ];
+  passthru = {
+    webui = rqbit-webui;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "webui"
+      ];
+    };
+    tests.testService = nixosTests.rqbit;
   };
 
   meta = {
