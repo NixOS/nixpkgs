@@ -3749,10 +3749,6 @@ with pkgs;
     withRedis = true;
   };
 
-  ugarit = callPackage ../tools/backup/ugarit {
-    inherit (chickenPackages_4) eggDerivation fetchegg;
-  };
-
   ugarit-manifest-maker = callPackage ../tools/backup/ugarit-manifest-maker {
     inherit (chickenPackages_4) eggDerivation fetchegg;
   };
