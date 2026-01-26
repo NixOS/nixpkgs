@@ -1,14 +1,14 @@
 { lib, options, ... }:
 let
-  foo =
-    type:
+  fooOf =
+    elemType:
     lib.mkOptionType {
       name = "foo";
       functor = {
         name = "foo";
-        inherit type;
+        type = payload: fooOf payload.elemType;
         binOp = a: _b: a;
-        payload = 10;
+        payload.elemType = elemType;
       };
     };
 in
@@ -16,12 +16,12 @@ in
   imports = [
     {
       options.foo = lib.mkOption {
-        type = foo foo;
+        type = fooOf lib.types.int;
       };
     }
     {
       options.foo = lib.mkOption {
-        type = foo foo;
+        type = fooOf lib.types.int;
       };
     }
   ];

@@ -154,15 +154,15 @@ rec {
       mergedWrapped = f.wrapped.typeMerge f'.wrapped.functor;
       mergedPayload = f.binOp f.payload f'.payload;
 
-      hasAttrNonNull = attr: set: set ? ${attr} && set.${attr} != null;
-
       hasPayload =
-        assert (hasAttrNonNull "payload" f') == (hasAttrNonNull "payload" f);
-        hasAttrNonNull "payload" f;
-
+        assert (f'.payload != null) == (f.payload != null);
+        f.payload != null;
       hasWrapped =
-        assert (hasAttrNonNull "wrapped" f') == (hasAttrNonNull "wrapped" f);
-        hasAttrNonNull "wrapped" f;
+        let
+          hasWrappedNonNull = set: set ? "wrapped" && set.wrapped != null;
+        in
+        assert (hasWrappedNonNull f') == (hasWrappedNonNull f);
+        hasWrappedNonNull f;
 
       typeFromPayload = if mergedPayload == null then null else f.type mergedPayload;
       typeFromWrapped = if mergedWrapped == null then null else f.type mergedWrapped;
