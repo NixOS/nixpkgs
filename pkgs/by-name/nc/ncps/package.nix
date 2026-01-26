@@ -42,16 +42,13 @@ let
       hash = "sha256-qc6h1gnU7dFyb0GiBq++E2yf49K7mO86Vwdf8y3817U=";
     };
 
-    ldflags = [
-      "-X github.com/kalbasit/ncps/cmd.Version=v${finalAttrs.version}"
-    ];
-
     vendorHash = "sha256-nnt4HIG4Fs7RhHjVb7mYJ39UgvFKc46Cu42cURMmr1s=";
 
-    subPackages = [ "." ];
+    ldflags = [
+      "-X github.com/kalbasit/ncps/pkg/ncps.Version=v${finalAttrs.version}"
+    ];
 
-    doCheck = true;
-    checkFlags = [ "-race" ];
+    subPackages = [ "." ];
 
     nativeBuildInputs = [
       curl # used for checking MinIO health check
@@ -65,6 +62,20 @@ let
       redis # Redis for distributed locking integration tests
       makeWrapper # For wrapping dbmate.
     ];
+
+    postInstall = ''
+      mkdir -p $out/share/ncps
+      cp -r db $out/share/ncps/db
+
+      makeWrapper ${dbmate-wrapper}/bin/dbmate-wrapper \
+        $out/bin/dbmate-ncps \
+        --prefix PATH : ${dbmate-real}/bin \
+        --set NCPS_DB_MIGRATIONS_DIR $out/share/ncps/db/migrations
+    '';
+
+    doCheck = true;
+
+    checkFlags = [ "-race" ];
 
     # pre and post checks
     preCheck = ''
@@ -81,16 +92,6 @@ let
       source $src/nix/packages/ncps/pre-check-mysql.sh
       source $src/nix/packages/ncps/pre-check-postgres.sh
       source $src/nix/packages/ncps/pre-check-redis.sh
-    '';
-
-    postInstall = ''
-      mkdir -p $out/share/ncps
-      cp -r db $out/share/ncps/db
-
-      makeWrapper ${dbmate-wrapper}/bin/dbmate-wrapper \
-        $out/bin/dbmate-ncps \
-        --prefix PATH : ${dbmate-real}/bin \
-        --set NCPS_DB_MIGRATIONS_DIR $out/share/ncps/db/migrations
     '';
 
     meta = {
