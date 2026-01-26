@@ -18,11 +18,6 @@ buildPythonPackage rec {
     hash = "sha256-43sziwJ/SDdpLHJyGXyI5nXEofbos2W+NV7DlOpWWa8=";
   };
 
-  patches = [
-    ./fix-packaging.patch
-    ./use-pytest.patch
-  ];
-
   build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
