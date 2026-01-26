@@ -870,6 +870,14 @@ checkConfigError 'A definition for option .* is not of type .*' config.addCheckF
 checkConfigOutput '^true$' config.result ./v2-check-coherence.nix
 
 
+# Option name suggestions
+checkConfigError 'Did you mean .set\.enable.\?' config.set ./error-typo-nested.nix
+checkConfigError 'Did you mean .set.\?' config ./error-typo-outside-with-nested.nix
+checkConfigError 'Did you mean .bar., .baz. or .foo.\?' config ./error-typo-multiple-suggestions.nix
+checkConfigError 'Did you mean .enable., .ebe. or .enabled.\?' config ./error-typo-large-attrset.nix
+checkConfigError 'Did you mean .services\.myservice\.port. or .services\.myservice\.enable.\?' config.services.myservice ./error-typo-submodule.nix
+checkConfigError 'Did you mean .services\.nginx\.virtualHosts\."example\.com"\.ssl\.certificate. or .services\.nginx\.virtualHosts\."example\.com"\.ssl\.certificateKey.\?' config.services.nginx.virtualHosts.\"example.com\" ./error-typo-deeply-nested.nix
+
 cat <<EOF
 ====== module tests ======
 $pass Pass
