@@ -99,6 +99,9 @@ perlPackages.buildPerlPackage rec {
     rm -rf CPAN/XML/Parser{,.pm}
     rm -rf CPAN/YAML/XS{,.pm}
 
+    # there's also a copy of AudioScan in lib...
+    rm -rf lib/Audio
+
     ${lib.optionalString (!enableUnfreeFirmware) ''
       # remove unfree firmware
       rm -rf Firmware

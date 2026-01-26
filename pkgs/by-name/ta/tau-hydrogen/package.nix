@@ -5,7 +5,7 @@
   meson,
   ninja,
   librsvg,
-  xorg,
+  xcursorgen,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     librsvg
-    xorg.xcursorgen
+    xcursorgen
   ];
 
   meta = {

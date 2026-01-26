@@ -86,15 +86,13 @@ let
         libGL
         expat
         libxkbcommon
-      ])
-      ++ (with pkgs.xorg; [
-        libX11
-        libXcursor
-        libXrandr
-        libXcomposite
-        libXdamage
-        libXext
-        libXfixes
+        libx11
+        libxcursor
+        libxrandr
+        libxcomposite
+        libxdamage
+        libxext
+        libxfixes
         libxcb
       ]);
     runScript = ''

@@ -4,7 +4,12 @@
   fetchFromGitHub,
   makeWrapper,
   nx-libs,
-  xorg,
+  xrandr,
+  xinit,
+  xhost,
+  xdpyinfo,
+  xauth,
+  libxcvt,
   getopt,
   gnugrep,
   gawk,
@@ -46,18 +51,18 @@ stdenv.mkDerivation {
           mount
           iproute2
           nx-libs
-          xorg.xdpyinfo
-          xorg.xhost
-          xorg.xinit
+          xdpyinfo
+          xhost
+          xinit
           python3
           jq
-          xorg.libxcvt
+          libxcvt
           wmctrl
           xdotool
           xclip
           xpra
-          xorg.xrandr
-          xorg.xauth
+          xrandr
+          xauth
           weston
           xwayland
         ]

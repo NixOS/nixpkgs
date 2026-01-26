@@ -6,7 +6,10 @@
   libxkbcommon,
   libGL,
   wayland,
-  xorg,
+  libxrandr,
+  libxi,
+  libxcursor,
+  libx11,
   makeWrapper,
   displayServer ? "x11",
   nixosTests,
@@ -43,10 +46,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libGL
   ]
   ++ lib.optionals (displayServer == "x11") [
-    xorg.libXcursor
-    xorg.libXrandr
-    xorg.libXi
-    xorg.libX11
+    libxcursor
+    libxrandr
+    libxi
+    libx11
   ]
   ++ lib.optionals (displayServer == "wayland") [
     wayland

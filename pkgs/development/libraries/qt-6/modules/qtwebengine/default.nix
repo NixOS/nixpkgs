@@ -15,7 +15,12 @@
   python3,
   which,
   nodejs,
-  xorg,
+  libxext,
+  libxdamage,
+  libxcomposite,
+  xrandr,
+  libxkbfile,
+  libpciaccess,
   libXcursor,
   libXScrnSaver,
   libXrandr,
@@ -254,19 +259,19 @@ qtModule {
     pciutils
 
     # X11 libs
-    xorg.xrandr
+    xrandr
     libXScrnSaver
     libXcursor
     libXrandr
-    xorg.libpciaccess
+    libpciaccess
     libXtst
-    xorg.libXcomposite
-    xorg.libXdamage
+    libxcomposite
+    libxdamage
     libdrm
-    xorg.libxkbfile
+    libxkbfile
     libxshmfence
     libXi
-    xorg.libXext
+    libxext
 
     # Pipewire
     pipewire

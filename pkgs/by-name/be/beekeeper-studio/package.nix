@@ -20,7 +20,13 @@
   gdk-pixbuf,
   nss,
   nspr,
-  xorg,
+  libxrandr,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcomposite,
+  libx11,
+  libxcb,
   alsa-lib,
   expat,
   libxkbcommon,
@@ -65,13 +71,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     (lib.getLib stdenv.cc.cc)
-    xorg.libX11
-    xorg.libXcomposite
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXrandr
-    xorg.libxcb
+    libx11
+    libxcomposite
+    libxdamage
+    libxext
+    libxfixes
+    libxrandr
+    libxcb
     libxkbcommon
     glibc
     gcc

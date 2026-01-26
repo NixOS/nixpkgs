@@ -3,7 +3,8 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
-  xorg,
+  libxrender,
+  libx11,
   libconfig,
 }:
 
@@ -20,8 +21,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    xorg.libX11
-    xorg.libXrender
+    libx11
+    libxrender
     libconfig
   ];
 

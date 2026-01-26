@@ -9,7 +9,13 @@
   stripJavaArchivesHook,
   xcbuild,
   udev,
-  xorg,
+  libxxf86vm,
+  libxt,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxcursor,
+  libx11,
   libgbm,
   coreutils,
 }:
@@ -77,13 +83,13 @@ stdenv.mkDerivation {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     udev
-    xorg.libX11
-    xorg.libXrandr
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXt
-    xorg.libXxf86vm
-    xorg.libXrender
+    libx11
+    libxrandr
+    libxcursor
+    libxi
+    libxt
+    libxxf86vm
+    libxrender
     libgbm
   ];
 

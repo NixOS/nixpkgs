@@ -7,7 +7,7 @@
   gst_all_1,
   poppler-utils,
   python3,
-  xorg,
+  lndir,
 }:
 
 let
@@ -76,7 +76,7 @@ python.pkgs.buildPythonApplication rec {
   nativeBuildInputs = [
     gobject-introspection
     python3.pkgs.babel
-    xorg.lndir
+    lndir
   ];
 
   build-system = with python.pkgs; [

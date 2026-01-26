@@ -831,7 +831,7 @@ in
             { port, addr, ... }:
             "ListenAddress ${addr}${lib.optionalString (port != null) (":" + toString port)}"
           ) cfg.listenAddresses
-          ++ lib.optional cfgc.setXAuthLocation "XAuthLocation ${lib.getExe pkgs.xorg.xauth}"
+          ++ lib.optional cfgc.setXAuthLocation "XAuthLocation ${lib.getExe pkgs.xauth}"
           ++ lib.optional cfg.allowSFTP "Subsystem sftp ${cfg.sftpServerExecutable} ${lib.concatStringsSep " " cfg.sftpFlags}"
           ++ [
             "AuthorizedKeysFile ${toString cfg.authorizedKeysFiles}"

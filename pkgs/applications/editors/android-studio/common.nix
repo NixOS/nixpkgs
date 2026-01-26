@@ -70,7 +70,8 @@
   runCommand,
   wayland,
   xkeyboard_config,
-  xorg,
+  libsm,
+  libice,
   zlib,
   makeDesktopItem,
   tiling_wm, # if we are using a tiling wm, need to set _JAVA_AWT_WM_NONREPARENTING in wrapper
@@ -175,8 +176,8 @@ let
             xcbutilkeysyms
             xcbutilimage
             xcbutilcursor
-            xorg.libICE
-            xorg.libSM
+            libice
+            libsm
             libxkbfile
             libXcomposite
             libXcursor

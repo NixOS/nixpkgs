@@ -4,7 +4,10 @@
   meson,
   fetchFromGitHub,
   pkg-config,
-  xorg,
+  libxrandr,
+  libxext,
+  libxcursor,
+  libx11,
   libGL,
   cairo,
   glslang,
@@ -45,13 +48,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXrandr
+    libx11
+    libxcursor
+    libxrandr
     libGL
     vulkan-loader
     vulkan-headers
-    xorg.libXext
+    libxext
     cairo
   ];
 

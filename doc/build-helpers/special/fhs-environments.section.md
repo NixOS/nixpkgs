@@ -47,11 +47,9 @@ You can create a simple environment using a `shell.nix` like this:
     (with pkgs; [
       udev
       alsa-lib
-    ])
-    ++ (with pkgs.xorg; [
-      libX11
-      libXcursor
-      libXrandr
+      libx11
+      libxcursor
+      libxrandr
     ]);
   multiPkgs =
     pkgs:

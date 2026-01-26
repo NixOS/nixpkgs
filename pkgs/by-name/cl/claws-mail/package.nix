@@ -24,7 +24,7 @@
 
   # Arguments to include external libraries
   enableLibSM ? true,
-  xorg,
+  libsm,
   enableGnuTLS ? true,
   gnutls,
   enableEnchant ? enableSpellcheck,
@@ -179,7 +179,7 @@ let
     {
       flags = [ "libsm" ];
       enabled = enableLibSM;
-      deps = [ xorg.libSM ];
+      deps = [ libsm ];
     }
     {
       flags = [ "litehtml_viewer-plugin" ];

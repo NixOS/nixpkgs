@@ -7,7 +7,7 @@
   typing-extensions,
 }:
 let
-  version = "6.2";
+  version = "7.0";
 in
 buildPythonPackage {
   pname = "coloraide";
@@ -18,7 +18,7 @@ buildPythonPackage {
     owner = "facelessuser";
     repo = "coloraide";
     tag = version;
-    hash = "sha256-WWqHYeFqdVAgBIiBgr5o8URI+ZyMIn7efnbTyelJgII=";
+    hash = "sha256-RjccFdsI7VAVieyVR2XbMTuG2SgPGCLzxjPrJ5G7tIo=";
   };
 
   build-system = [

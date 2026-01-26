@@ -7,7 +7,9 @@
   fontconfig,
   glib,
   libglvnd,
-  xorg,
+  libx11,
+  libsm,
+  libice,
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
@@ -45,9 +47,9 @@ buildDotnetModule rec {
 
   runtimeDeps = [
     libglvnd
-    xorg.libSM
-    xorg.libICE
-    xorg.libX11
+    libsm
+    libice
+    libx11
   ];
 
   postFixup = ''

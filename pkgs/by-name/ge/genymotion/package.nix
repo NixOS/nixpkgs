@@ -7,7 +7,7 @@
   zlib,
   libGL,
   glib,
-  xorg,
+  libx11,
   libxkbcommon,
   xdg-utils,
   libXrender,
@@ -30,7 +30,7 @@ let
     stdenv.cc.cc
     zlib
     glib
-    xorg.libX11
+    libx11
     libxkbcommon
     libXmu
     libXi

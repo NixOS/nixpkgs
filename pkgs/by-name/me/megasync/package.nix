@@ -27,7 +27,7 @@
   readline,
   sqlite,
   wget,
-  xorg,
+  xrdb,
   zlib,
 
   nix-update-script,
@@ -131,7 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   preFixup = ''
-    qtWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ xorg.xrdb ]})
+    qtWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ xrdb ]})
   '';
 
   passthru = {

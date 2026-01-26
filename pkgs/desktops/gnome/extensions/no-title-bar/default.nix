@@ -5,7 +5,8 @@
   replaceVars,
   glib,
   gettext,
-  xorg,
+  xwininfo,
+  xprop,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,8 +27,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     (replaceVars ./fix-paths.patch {
-      xprop = "${xorg.xprop}/bin/xprop";
-      xwininfo = "${xorg.xwininfo}/bin/xwininfo";
+      xprop = "${xprop}/bin/xprop";
+      xwininfo = "${xwininfo}/bin/xwininfo";
     })
   ];
 

@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchzip,
-  xorg,
+  libx11,
 }:
 stdenv.mkDerivation rec {
   pname = "xtris";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     sed -i '28i#include <time.h>' xtserv.c
     sed -i '35i#include <time.h>' xtbot.c
   '';
-  buildInputs = [ xorg.libX11 ];
+  buildInputs = [ libx11 ];
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 

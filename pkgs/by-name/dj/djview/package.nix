@@ -8,7 +8,7 @@
   pkg-config,
   djvulibre,
   libsForQt5,
-  xorg,
+  libxt,
   libtiff,
 }:
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     djvulibre
     libsForQt5.qtbase
-    xorg.libXt
+    libxt
     libtiff
   ];
 

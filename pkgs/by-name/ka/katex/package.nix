@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "katex";
-  version = "0.16.27";
+  version = "0.16.28";
 
   src = fetchFromGitHub {
     owner = "katex";
     repo = "katex";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-bw5W8TkM31aeqQ6eJae8voW75RvvUjeTdu7aPQ+lAa0=";
+    hash = "sha256-M9PqzSQkMcnfuL2n/eLwxnk3E9gSEVu0t6Tahiw7niI=";
   };
 
   offlineCache = yarn-berry.fetchYarnBerryDeps {

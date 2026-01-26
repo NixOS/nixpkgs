@@ -4,7 +4,7 @@
   fetchFromGitHub,
   libjack2,
   lv2,
-  xorg,
+  libx11,
   liblo,
   libGL,
   libXcursor,
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libjack2
     lv2
-    xorg.libX11
+    libx11
     liblo
     libGL
     libXcursor

@@ -4,7 +4,7 @@
   buildGoModule,
   fetchFromGitHub,
   libpcap,
-  xorg,
+  libx11,
 }:
 
 buildGoModule rec {
@@ -22,7 +22,7 @@ buildGoModule rec {
 
   buildInputs = [
     libpcap
-    xorg.libX11
+    libx11
   ];
 
   ldflags = [

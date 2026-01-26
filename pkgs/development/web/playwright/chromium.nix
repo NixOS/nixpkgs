@@ -31,7 +31,13 @@
   stdenv,
   systemd,
   vulkan-loader,
-  xorg,
+  libxrandr,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcomposite,
+  libx11,
+  libxcb,
   ...
 }:
 let
@@ -80,13 +86,13 @@ let
       pango
       stdenv.cc.cc.lib
       systemd
-      xorg.libX11
-      xorg.libXcomposite
-      xorg.libXdamage
-      xorg.libXext
-      xorg.libXfixes
-      xorg.libXrandr
-      xorg.libxcb
+      libx11
+      libxcomposite
+      libxdamage
+      libxext
+      libxfixes
+      libxrandr
+      libxcb
     ];
 
     installPhase = ''
