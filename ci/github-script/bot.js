@@ -332,13 +332,15 @@ module.exports = async ({ github, context, core, dry }) => {
         pull_number,
         per_page: 100,
       })
-      const commitMessages = prCommits.map((c) => c.commit.message)
+      const commitSubjects = prCommits.map(
+        (c) => c.commit.message.split('\n')[0],
+      )
 
       // Label new package PRs: "packagename: init at X.Y.Z"
       // Exclude NixOS module commits like "nixos/timekpr: init at 0.5.8"
-      const newPackagePattern = /(?<!nixos\/\S+): init at\b/
+      const newPackagePattern = /^(?<!nixos\/)\S+: init at\b/
       const hasNewPackages = changedPaths.attrdiff?.added?.length > 0
-      const commitsIndicateNewPackage = commitMessages.some((msg) =>
+      const commitsIndicateNewPackage = commitSubjects.some((msg) =>
         newPackagePattern.test(msg),
       )
       evalLabels['8.has: package (new)'] =
@@ -347,8 +349,9 @@ module.exports = async ({ github, context, core, dry }) => {
       // Label package update PRs: "packagename: X.Y.Z -> A.B.C"
       // Matches versions like: 1.2.3, 0-unstable-2024-01-15, 1.3rc1, alpha, unstable
       // Exclude NixOS module commits like "nixos/ncps: types.str -> types.path"
-      const updatePackagePattern = /(?<!nixos\/\S+): [\w.-]+ (->|→) [\w.-]+/
-      const commitsIndicateUpdate = commitMessages.some((msg) =>
+      const updatePackagePattern =
+        /^(?<!nixos\/)\S+: [\w.-]*\d[\w.-]* (->|→) [\w.-]*\d[\w.-]*$/
+      const commitsIndicateUpdate = commitSubjects.some((msg) =>
         updatePackagePattern.test(msg),
       )
       evalLabels['8.has: package (update)'] = commitsIndicateUpdate
