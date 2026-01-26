@@ -22,13 +22,13 @@ stdenv.mkDerivation {
 
   pname = "scarlett2";
 
-  version = "0-unstable-2024-04-06";
+  version = "1.0-unstable-2026-01-27";
 
   src = fetchFromGitHub {
     owner = "geoffreybennett";
     repo = "scarlett2";
-    rev = "1c262bcac11bceb6da8334b8f5b56d3c9331bfc8";
-    hash = "sha256-yhmXVfys300NwZ8UJ7WvOyNkGP3OkIVoRaToF+SenQA=";
+    rev = "f7a73c7237856e5a50d1fb24408c6c1f83b25db3";
+    hash = "sha256-GfWfIOQfH5SoBdExIT1p/OHXJG2pwzTW/RS8Rs4QSGQ=";
   };
 
   buildInputs = [
