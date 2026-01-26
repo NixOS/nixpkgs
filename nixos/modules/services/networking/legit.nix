@@ -142,6 +142,7 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ configFile ];
+      path = [ pkgs.git ];
 
       serviceConfig = {
         Type = "simple";
