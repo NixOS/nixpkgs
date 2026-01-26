@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "throttler";
-  version = "1.2.2";
+  version = "1.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "uburuntu";
     repo = "throttler";
     tag = "v${version}";
-    hash = "sha256-fE35zPjBUn4e1VRkkIUMtYJ/+LbnUxnxyfnU+UEPwr4=";
+    hash = "sha256-zcKhHA1PDEpfp+I/zHaGeg1x1F2LM0m7GxMLGDscCsw=";
   };
 
   build-system = [ setuptools ];
