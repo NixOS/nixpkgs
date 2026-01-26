@@ -4,14 +4,10 @@
   copyDesktopItems,
   makeDesktopItem,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   python3,
-  qtbase,
-  qttools,
-  qtwayland,
+  qt6,
   imagemagick,
-  wrapQtAppsHook,
   gitUpdater,
 }:
 
@@ -53,7 +49,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
     python3
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
@@ -73,10 +69,10 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    qtbase
-    qttools
+    qt6.qtbase
+    qt6.qttools
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ qtwayland ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ qt6.qtwayland ];
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";
