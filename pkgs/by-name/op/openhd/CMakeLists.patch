@@ -1,0 +1,215 @@
+diff --git a/ohd_common/CMakeLists.txt b/ohd_common/CMakeLists.txt
+index 1bb7de06..0437485d 100644
+--- a/ohd_common/CMakeLists.txt
++++ b/ohd_common/CMakeLists.txt
+@@ -28,23 +28,9 @@ endif()
+ #----------------------------------------------------------------------------------------------------------------------
+ # Dependencies: spdlog and nlohmann::json
+ #----------------------------------------------------------------------------------------------------------------------
+-set(SPDLOG_MASTER_PROJECT OFF)
+-set(SPDLOG_PROJECT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib/spdlog)
+-set(SPDLOG_SOURCES_DIRECTORY ${SPDLOG_PROJECT_DIRECTORY}/src)
+-
+-set(spdlog_sources
+-    "${SPDLOG_SOURCES_DIRECTORY}/bundled_fmtlib_format.cpp"
+-)
+-
+-target_precompile_headers(OHDCommonLib PRIVATE ${SPDLOG_PROJECT_DIRECTORY}/include/spdlog/spdlog.h)
+-target_include_directories(OHDCommonLib PUBLIC ${SPDLOG_PROJECT_DIRECTORY}/include)
+-
+-# Add nlohmann::json
+-add_subdirectory(lib/json)
+-target_link_libraries(OHDCommonLib PUBLIC nlohmann_json::nlohmann_json)
+-
+-# Add pthread support
+-find_package(Threads REQUIRED)
++find_package(spdlog CONFIG REQUIRED)
++find_package(nlohmann_json CONFIG REQUIRED)
++target_link_libraries(OHDCommonLib PUBLIC spdlog::spdlog nlohmann_json::nlohmann_json)
+ target_link_libraries(OHDCommonLib PUBLIC Threads::Threads)
+ 
+ #----------------------------------------------------------------------------------------------------------------------
+diff --git a/ohd_common/inc/openhd_tcp.h b/ohd_common/inc/openhd_tcp.h
+index bb8e556b..b3e5bd11 100644
+--- a/ohd_common/inc/openhd_tcp.h
++++ b/ohd_common/inc/openhd_tcp.h
+@@ -26,6 +26,7 @@
+ 
+ #include <deque>
+ #include <thread>
++#include <string>
+ 
+ #include "openhd_spdlog.h"
+ 
+diff --git a/ohd_common/src/openhd_action_handler.cpp b/ohd_common/src/openhd_action_handler.cpp
+index 46e02c3e..c2f014c9 100644
+--- a/ohd_common/src/openhd_action_handler.cpp
++++ b/ohd_common/src/openhd_action_handler.cpp
+@@ -25,6 +25,10 @@
+ 
+ #include "openhd_util_time.h"
+ 
++#include <spdlog/spdlog.h>
++
++#include <cassert>
++
+ openhd::ArmingStateHelper &openhd::ArmingStateHelper::instance() {
+   static openhd::ArmingStateHelper instance;
+   return instance;
+diff --git a/ohd_common/src/openhd_bitrate.cpp b/ohd_common/src/openhd_bitrate.cpp
+index c411c5f6..d980c64a 100644
+--- a/ohd_common/src/openhd_bitrate.cpp
++++ b/ohd_common/src/openhd_bitrate.cpp
+@@ -23,6 +23,10 @@
+ 
+ #include "openhd_bitrate.h"
+ 
++#include <spdlog/spdlog.h>
++
++#include <cassert>
++
+ openhd::BitrateDebugger::BitrateDebugger(std::string tag, bool debug_pps)
+     : m_debug_pps(debug_pps) {
+   m_console = openhd::log::create_or_get(tag);
+diff --git a/ohd_common/src/openhd_buttons.cpp b/ohd_common/src/openhd_buttons.cpp
+index 6eeb1812..3b9e887e 100644
+--- a/ohd_common/src/openhd_buttons.cpp
++++ b/ohd_common/src/openhd_buttons.cpp
+@@ -25,6 +25,8 @@
+ 
+ #include <thread>
+ 
++#include <spdlog/spdlog.h>
++
+ #include "openhd_platform.h"
+ #include "openhd_spdlog.h"
+ #include "openhd_util.h"
+diff --git a/ohd_common/src/openhd_external_device.cpp b/ohd_common/src/openhd_external_device.cpp
+index 8b8855eb..4a6e8b87 100644
+--- a/ohd_common/src/openhd_external_device.cpp
++++ b/ohd_common/src/openhd_external_device.cpp
+@@ -28,6 +28,10 @@
+ #include "openhd_spdlog.h"
+ #include "openhd_util.h"
+ 
++#include <spdlog/spdlog.h>
++
++#include <cassert>
++
+ openhd::ExternalDeviceManager::ExternalDeviceManager() {
+   // Here one can manually declare any IP addresses openhd should forward video
+   // / telemetry to
+diff --git a/ohd_common/src/openhd_platform.cpp b/ohd_common/src/openhd_platform.cpp
+index 785345d5..c3e2ce67 100644
+--- a/ohd_common/src/openhd_platform.cpp
++++ b/ohd_common/src/openhd_platform.cpp
+@@ -28,6 +28,8 @@
+ #include <regex>
+ #include <set>
+ 
++#include <spdlog/spdlog.h>
++
+ #include "openhd_spdlog.h"
+ #include "openhd_util.h"
+ #include "openhd_util_filesystem.h"
+diff --git a/ohd_common/src/openhd_settings_imp.cpp b/ohd_common/src/openhd_settings_imp.cpp
+index 27a4e7a0..370cb9a3 100644
+--- a/ohd_common/src/openhd_settings_imp.cpp
++++ b/ohd_common/src/openhd_settings_imp.cpp
+@@ -28,6 +28,8 @@
+ #include <map>
+ #include <sstream>
+ 
++#include <spdlog/spdlog.h>
++
+ #include "openhd_spdlog.h"
+ 
+ std::vector<openhd::Setting> openhd::testing::create_dummy_camera_settings() {
+diff --git a/ohd_common/src/openhd_tcp.cpp b/ohd_common/src/openhd_tcp.cpp
+index 5072c27a..2cbe5746 100644
+--- a/ohd_common/src/openhd_tcp.cpp
++++ b/ohd_common/src/openhd_tcp.cpp
+@@ -24,8 +24,11 @@
+ #include "openhd_tcp.h"
+ 
+ #include <arpa/inet.h>
++#include <errno.h>
++#include <spdlog/spdlog.h>
+ #include <unistd.h>
+ 
++#include <cassert>
+ #include <csignal>
+ #include <queue>
+ #include <utility>
+diff --git a/ohd_common/src/openhd_udp.cpp b/ohd_common/src/openhd_udp.cpp
+index 0a1c5d6c..110e0340 100644
+--- a/ohd_common/src/openhd_udp.cpp
++++ b/ohd_common/src/openhd_udp.cpp
+@@ -24,6 +24,7 @@
+ #include "openhd_udp.h"
+ 
+ #include <arpa/inet.h>
++#include <spdlog/spdlog.h>
+ #include <unistd.h>
+ 
+ #include <algorithm>
+diff --git a/ohd_common/src/openhd_util.cpp b/ohd_common/src/openhd_util.cpp
+index 30ef3c13..c9282c13 100644
+--- a/ohd_common/src/openhd_util.cpp
++++ b/ohd_common/src/openhd_util.cpp
+@@ -24,10 +24,12 @@
+ #include "openhd_util.h"
+ 
+ #include <arpa/inet.h>
++#include <spdlog/spdlog.h>
+ #include <unistd.h>
+ 
+ #include <cctype>
+ #include <chrono>
++#include <cmath>
+ #include <csignal>
+ #include <cstdlib>
+ #include <optional>
+diff --git a/ohd_common/src/openhd_util_async.cpp b/ohd_common/src/openhd_util_async.cpp
+index ac6f8d71..16ac86df 100644
+--- a/ohd_common/src/openhd_util_async.cpp
++++ b/ohd_common/src/openhd_util_async.cpp
+@@ -23,11 +23,14 @@
+ 
+ #include "openhd_util_async.h"
+ 
++#include <algorithm>
+ #include <utility>
+ 
+ #include "openhd_spdlog.h"
+ #include "openhd_util.h"
+ 
++#include <spdlog/spdlog.h>
++
+ openhd::AsyncHandle::AsyncHandle() {
+   m_watchdog_run = true;
+   m_watchdog_thread =
+diff --git a/ohd_common/src/openhd_util_filesystem.cpp b/ohd_common/src/openhd_util_filesystem.cpp
+index 76b6fabd..b3422c6b 100644
+--- a/ohd_common/src/openhd_util_filesystem.cpp
++++ b/ohd_common/src/openhd_util_filesystem.cpp
+@@ -25,6 +25,7 @@
+ 
+ #include <openhd_spdlog.h>
+ #include <openhd_util.h>
++#include <spdlog/spdlog.h>
+ #include <sys/stat.h>
+ #include <sys/types.h>
+ 
+diff --git a/ohd_common/src/openhd_util_time.cpp b/ohd_common/src/openhd_util_time.cpp
+index 02fe9fc5..a344a1fb 100644
+--- a/ohd_common/src/openhd_util_time.cpp
++++ b/ohd_common/src/openhd_util_time.cpp
+@@ -23,6 +23,7 @@
+ 
+ #include "openhd_util_time.h"
+ 
++#include <mutex>
+ #include <sstream>
+ 
+ std::string openhd::util::verbose_timespan(
