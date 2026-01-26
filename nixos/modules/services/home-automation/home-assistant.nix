@@ -66,13 +66,51 @@ let
         cp ${format.generate fn yaml} $out
         sed -i -e "s/'\!\([a-z_]\+\) \(.*\)'/\!\1 \2/;s/^\!\!/\!/;" $out
       '';
+  renderYAMLFileConfig =
+    fn: yaml: includeUIYaml:
+    let
+      newYaml = lib.filterAttrs (
+        name: value: name != "automation" && name != "script" && name != "scene"
+      ) yaml;
+      scriptYaml = yaml.script or { };
+      automationYaml = yaml.automation or [ ];
+      sceneYaml = yaml.scene or [ ];
+    in
+    pkgs.runCommand fn
+      {
+        preferLocalBuilds = true;
+      }
+      ''
+        mkdir -p $out
+        cp ${format.generate fn newYaml} $out/configuration.yaml
+        chmod +w $out/configuration.yaml
+        sed -i -e "s/'\!\([a-z_]\+\) \(.*\)'/\!\1 \2/;s/^\!\!/\!/;" $out/configuration.yaml
+        mkdir -p $out/automations
+        mkdir -p $out/scripts
+        mkdir -p $out/scenes
+        cp ${format.generate fn automationYaml} $out/automations/automations.yaml
+        cp ${format.generate fn scriptYaml} $out/scripts/scripts.yaml
+        cp ${format.generate fn sceneYaml} $out/scenes/scenes.yaml
+        ${optionalString includeUIYaml ''
+          ln -s ${cfg.configDir}/automations.yaml $out/automations/automations_ui.yaml
+          ln -s ${cfg.configDir}/scripts.yaml $out/scripts/scripts_ui.yaml
+          ln -s ${cfg.configDir}/scenes.yaml $out/scenes/scenes_ui.yaml
+        ''}
+
+        echo "script: !include_dir_merge_named $out/scripts" >> $out/configuration.yaml
+        echo "automation: !include_dir_merge_list $out/automations" >> $out/configuration.yaml
+        echo "scene: !include_dir_merge_list $out/scenes" >> $out/configuration.yaml
+        chmod -w $out/configuration.yaml
+
+      '';
 
   # Filter null values from the configuration, so that we can still advertise
   # optional options in the config attribute.
   filteredConfig = converge (filterAttrsRecursive (_: v: !elem v [ null ])) (
     recursiveUpdate customLovelaceModulesResources (cfg.config or { })
   );
-  configFile = renderYAMLFile "configuration.yaml" filteredConfig;
+  configFileDir = renderYAMLFileConfig "configurationDir" filteredConfig cfg.includeUIYaml;
+  configFile = "${configFileDir}/configuration.yaml";
 
   lovelaceConfigFile =
     if cfg.lovelaceConfig != null then
@@ -478,6 +516,14 @@ in
       '';
     };
 
+    includeUIYaml = mkOption {
+      default = false;
+      type = types.bool;
+      description = ''
+        Whether to include automations and scripts created from the UI in the {file}`configuration.yaml`.
+      '';
+    };
+
     configWritable = mkOption {
       default = false;
       type = types.bool;
@@ -662,6 +708,11 @@ in
                 rm -f "${cfg.configDir}/configuration.yaml"
                 ln -s /etc/home-assistant/configuration.yaml "${cfg.configDir}/configuration.yaml"
               '';
+          touchUIYaml = ''
+            touch ${cfg.configDir}/scripts.yaml
+            touch ${cfg.configDir}/automations.yaml
+            touch ${cfg.configDir}/scenes.yaml
+          '';
           copyLovelaceConfig =
             if cfg.lovelaceConfigWritable then
               ''
@@ -726,6 +777,7 @@ in
           );
         in
         (optionalString (cfg.config != null) copyConfig)
+        + (optionalString cfg.includeUIYaml touchUIYaml)
         + (optionalString (cfg.lovelaceConfig != null) copyLovelaceConfig)
         + copyCustomLovelaceModules
         + copyCustomComponents
