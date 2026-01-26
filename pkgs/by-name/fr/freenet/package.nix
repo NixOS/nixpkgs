@@ -26,8 +26,8 @@ let
     name = "freenet-seednodes";
     owner = "hyphanet";
     repo = "seedrefs";
-    rev = "8e8b3574b63e649e03f67d23d3dfa461b7a0ba4a";
-    hash = "sha256-OCXBfhgheOH8XZjUhvJpNQ1I73rCwUfgyl/xkZt3JeM=";
+    rev = "b34dbc4d021c58c4a108214a71a9e1ab986c4e14";
+    hash = "sha256-c04gKNPZtiIdmKmPJ71iXIEXzOoBMw32I2rAsN1+a8Q=";
     postFetch = ''
       cat $out/* > $out/seednodes.fref
     '';
@@ -36,13 +36,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "freenet";
-  version = "01503";
+  version = "01504";
 
   src = fetchFromGitHub {
-    owner = "freenet";
+    owner = "hyphanet";
     repo = "fred";
     tag = "build${version}";
-    hash = "sha256-SjHQssCwPjSoaxsLmaov4bRoz+6XSlHfiOoxWxlRn60=";
+    hash = "sha256-a+yRsJ4+gi2UiVeWLsbTgFbzekCSnOJO++9fLVWX0C0=";
   };
 
   nativeBuildInputs = [
