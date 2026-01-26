@@ -4,11 +4,13 @@
   fetchFromGitHub,
   fetchFromSourcehut,
   callPackage,
+  buildPackages,
   coreutils,
   curl,
   libarchive,
   libpkgconf,
   pkgconf,
+  replaceVars,
   samurai,
   zlib,
   embedSamurai ? false,
@@ -23,6 +25,12 @@
   pkg-config,
   python3,
   writableTmpDirAsHomeHook,
+
+  # HACK: just for the PR until I get it to build without link problems
+  meson,
+  mpd,
+  muonStandalone,
+  ninja,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "muon" + lib.optionalString embedSamurai "-embedded-samurai";
@@ -51,6 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
     libpkgconf
     zlib
   ];
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   strictDeps = true;
 
@@ -155,6 +165,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  setupHook = replaceVars ./setup-hook.sh {
+    embedSamurai = lib.boolToString embedSamurai;
+    isFreeBSD = lib.boolToString stdenv.hostPlatform.isFreeBSD;
+  };
+
   passthru.srcsAttrs = {
     muon-src = fetchFromSourcehut {
       name = "muon-src";
@@ -189,16 +204,48 @@ stdenv.mkDerivation (finalAttrs: {
     runTests = true;
   };
 
+  # HACK: just for the PR until I get it to build without link problems
+  passthru.tests.mpd =
+    let
+      # Remove packages associated with meson from the list, and replace them with muonStandalone.
+      mesonToMuon = inputs: (lib.subtractLists [ meson ninja ] inputs) ++ [ muonStandalone ];
+    in
+    mpd.overrideAttrs (prevAttrs: {
+      nativeBuildInputs = mesonToMuon prevAttrs.nativeBuildInputs;
+
+      muonAutoFeatures = prevAttrs.mesonAutoFeatures;
+
+      muonBuildFlags = [ "-v" ];
+
+      muonFlags =
+        # removes a flag that meson ignores, but muon fails on. zeroconf needs to be
+        # set to an implementation option ('avahi'|'zeroconf'), not just 'enabled'.
+        (lib.remove "-Dzeroconf=enabled" prevAttrs.mesonFlags)
+        # shelling out to pkg-config is required or a successful build.
+        ++ [ (lib.mesonOption "muon.pkgconfig" "exec") ];
+
+      # NOTE: for some reason, this shows one instance of
+      # `libstdc++.so.6 => /nix/store/...`
+      postBuild = ''
+        ldd /build/source/build/mpd | grep "libstdc++"
+      '';
+
+      # NOTE: and here, we have two instances:
+      # `libstdc++.so.6 => not found`
+      # `libstdc++.so.6 => /nix/store/...`
+      postInstall = ''
+        ldd $out/bin/mpd | grep "libstdc++"
+      '';
+    });
+
   passthru.updateScript = callPackage ./update.nix { };
 
   meta = {
     homepage = "https://muon.build";
     description = "Implementation of the meson build system in C99";
     license = lib.licenses.gpl3Only;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.nekowinston ];
     platforms = lib.platforms.unix;
     mainProgram = "muon";
   };
 })
-# TODO LIST:
-# 1. setup hook
