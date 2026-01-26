@@ -19,7 +19,19 @@ let
       lhs = optCall lhs_ { inherit lib pkgs; };
       rhs = optCall rhs_ { inherit lib pkgs; };
     in
-    lib.recursiveUpdate lhs rhs
+    (lib.zipAttrsWith
+      (
+        name: values:
+        let
+          rhs' = lib.elemAt values 0;
+        in
+        if builtins.isList rhs' then lib.concatLists values else rhs'
+      )
+      [
+        lhs
+        rhs
+      ]
+    )
     // lib.optionalAttrs (lhs ? packageOverrides) {
       packageOverrides =
         pkgs:
