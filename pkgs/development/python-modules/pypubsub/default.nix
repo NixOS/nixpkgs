@@ -8,7 +8,7 @@
 
 buildPythonPackage {
   pname = "pypubsub";
-  version = "4.0.3";
+  version = "rel_3.4.2";
   format = "setuptools";
   disabled = isPy27;
 
