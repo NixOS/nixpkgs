@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "asyncio-dgram";
   version = "3.0.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jsbronder";
     repo = "asyncio-dgram";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-08XQHx+ArduVdkK5ZYq2lL2OWF9CvdSWcNLfc7ey2wI=";
   };
 
@@ -41,8 +41,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python support for higher level Datagram";
     homepage = "https://github.com/jsbronder/asyncio-dgram";
-    changelog = "https://github.com/jsbronder/asyncio-dgram/blob/v${version}/ChangeLog";
+    changelog = "https://github.com/jsbronder/asyncio-dgram/blob/v${finalAttrs.src.tag}/ChangeLog";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
