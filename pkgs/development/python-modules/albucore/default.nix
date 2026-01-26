@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "albucore";
-  version = "0.0.24";
+  version = "0.0.36";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "albumentations-team";
     repo = "albucore";
     tag = version;
-    hash = "sha256-frVMPW3au/6vPRY89GIt7chCPkUMl13DpPqCPqIjz/o=";
+    hash = "sha256-6JXpK8hW296vXnEKjXzeV1cPPOz7sSoKLL/W4EjXC9M=";
   };
 
   pythonRelaxDeps = [ "opencv-python" ];
