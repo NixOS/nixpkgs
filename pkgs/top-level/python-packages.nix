@@ -3595,6 +3595,8 @@ self: super: with self; {
 
   datashaper = callPackage ../development/python-modules/datashaper { };
 
+  datasketch = callPackage ../development/python-modules/datasketch { };
+
   datatable = callPackage ../development/python-modules/datatable { };
 
   datauri = callPackage ../development/python-modules/datauri { };
@@ -13090,6 +13092,8 @@ self: super: with self; {
   pyblackbird = callPackage ../development/python-modules/pyblackbird { };
 
   pybloom-live = callPackage ../development/python-modules/pybloom-live { };
+
+  pybloomfiltermap3 = callPackage ../development/python-modules/pybloomfiltermap3 { };
 
   pyblu = callPackage ../development/python-modules/pyblu { };
 
