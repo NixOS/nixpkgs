@@ -176,6 +176,17 @@ let
     outputs = prevAttrs.outputs or [ "out" ] ++ [ "dev" ];
   };
 
+  fixupStaticLayer = finalAttrs: prevAttrs: {
+    postFixup =
+      prevAttrs.postFixup or ""
+      + lib.optionalString (stdenv.hostPlatform.isStatic) ''
+        # HACK: Otherwise the result will have the entire buildInputs closure
+        # injected by the pkgsStatic stdenv
+        # <https://github.com/NixOS/nixpkgs/issues/83667>
+        rm -f $out/nix-support/propagated-build-inputs
+      '';
+  };
+
   # Work around weird `--as-needed` linker behavior with BSD, see
   # https://github.com/mesonbuild/meson/issues/3593
   bsdNoLinkAsNeeded =
@@ -319,6 +330,7 @@ in
     scope.sourceLayer
     setVersionLayer
     mesonLayer
+    fixupStaticLayer
     scope.mesonComponentOverrides
   ];
   mkMesonExecutable = mkPackageBuilder [
@@ -328,6 +340,7 @@ in
     setVersionLayer
     mesonLayer
     mesonBuildLayer
+    fixupStaticLayer
     scope.mesonComponentOverrides
   ];
   mkMesonLibrary = mkPackageBuilder [
@@ -338,6 +351,7 @@ in
     setVersionLayer
     mesonBuildLayer
     mesonLibraryLayer
+    fixupStaticLayer
     scope.mesonComponentOverrides
   ];
 
