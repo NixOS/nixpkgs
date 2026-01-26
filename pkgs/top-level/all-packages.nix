@@ -3583,8 +3583,6 @@ with pkgs;
 
   tinc = callPackage ../tools/networking/tinc { };
 
-  tikzit = libsForQt5.callPackage ../tools/typesetting/tikzit { };
-
   tinc_pre = callPackage ../tools/networking/tinc/pre.nix { };
 
   tldr-hs = haskellPackages.tldr;
