@@ -1608,6 +1608,11 @@ with pkgs;
 
   babelfish = callPackage ../shells/fish/babelfish.nix { };
 
+  inherit (callPackage ../data/fonts/babelstone-pseudographica { })
+    babelstone-pseudographica
+    babelstone-pseudographica-colour
+    ;
+
   bat-extras = recurseIntoAttrs (lib.makeScope newScope (import ../tools/misc/bat-extras));
 
   beautysh = with python3.pkgs; toPythonApplication beautysh;
