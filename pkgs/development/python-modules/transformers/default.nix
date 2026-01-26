@@ -14,59 +14,87 @@
   packaging,
   pyyaml,
   regex,
-  requests,
-  tokenizers,
   safetensors,
+  tokenizers,
   tqdm,
+  typer-slim,
 
   # optional-dependencies
-  diffusers,
+  # sklearn
   scikit-learn,
-  tensorflow,
-  onnxconverter-common,
-  opencv4,
-  tf2onnx,
+  # torch
   torch,
   accelerate,
+  # hf_xet
+  hf-xet,
+  # retrieval
   faiss,
   datasets,
-  jax,
-  jaxlib,
-  flax,
-  optax,
+  # tokenizers
+  # ftfy
   ftfy,
-  onnxruntime,
-  onnxruntime-tools,
+  # modelcreation
   cookiecutter,
+  # sagemaker
   sagemaker,
-  fairscale,
+  # optuna
   optuna,
+  # ray
   ray,
+  # hub-kernels
+  kernels,
+  # serving
+  openai,
   pydantic,
   uvicorn,
   fastapi,
   starlette,
+  rich,
+  # audio
   librosa,
   phonemizer,
+  # speech
   torchaudio,
+  # vision
   pillow,
+  # timm
   timm,
+  # torch-vision
   torchvision,
+  # video
   av,
+  # num2words
+  num2words,
+  # sentencepiece
   sentencepiece,
-  hf-xet,
+  # tiktoken
+  tiktoken,
+  blobfile,
+  # mistral-common
+  mistral-common,
+  # chat_template
+  jinja2,
+  jmespath,
+  # quality
+  ruff,
+  gitpython,
+  urllib3,
+  libcst,
+  pandas,
+  # torchhub
+  importlib-metadata,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "transformers";
-  version = "4.57.6";
+  version = "5.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "transformers";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-a78ornUAYlOpr30iFdq1oUiWQTm6GeT0iq8ras5i3DQ=";
+    hash = "sha256-ART1ARd+hfC0GQNDa225SWF0zTFUKE4eDxFYbWFaTl8=";
   };
 
   build-system = [ setuptools ];
@@ -78,112 +106,112 @@ buildPythonPackage (finalAttrs: {
     packaging
     pyyaml
     regex
-    requests
-    tokenizers
     safetensors
+    tokenizers
     tqdm
+    typer-slim
   ];
 
-  optional-dependencies =
-    let
-      audio = [
-        librosa
-        # pyctcdecode
-        phonemizer
-        # kenlm
-      ];
-      vision = [ pillow ];
-    in
-    {
-      agents = [
-        diffusers
-        accelerate
-        datasets
-        torch
-        sentencepiece
-        opencv4
-        pillow
-      ];
-      ja = [
-        # fugashi
-        # ipadic
-        # rhoknp
-        # sudachidict_core
-        # sudachipy
-        # unidic
-        # unidic_lite
-      ];
-      sklearn = [ scikit-learn ];
-      tf = [
-        tensorflow
-        onnxconverter-common
-        tf2onnx
-        # tensorflow-text
-        # keras-nlp
-      ];
-      torch = [
-        torch
-        accelerate
-      ];
-      retrieval = [
-        faiss
-        datasets
-      ];
-      flax = [
-        jax
-        jaxlib
-        flax
-        optax
-      ];
-      hf_xet = [
-        hf-xet
-      ];
-      tokenizers = [ tokenizers ];
-      ftfy = [ ftfy ];
-      onnxruntime = [
-        onnxruntime
-        onnxruntime-tools
-      ];
-      onnx = [
-        onnxconverter-common
-        tf2onnx
-        onnxruntime
-        onnxruntime-tools
-      ];
-      modelcreation = [ cookiecutter ];
-      sagemaker = [ sagemaker ];
-      deepspeed = [
-        # deepspeed
-        accelerate
-      ];
-      fairscale = [ fairscale ];
-      optuna = [ optuna ];
-      ray = [ ray ] ++ ray.optional-dependencies.tune;
-      # sigopt = [ sigopt ];
-      # integrations = ray ++ optuna ++ sigopt;
-      serving = [
-        pydantic
-        uvicorn
-        fastapi
-        starlette
-      ];
-      audio = audio;
-      speech = [ torchaudio ] ++ audio;
-      torch-speech = [ torchaudio ] ++ audio;
-      tf-speech = audio;
-      flax-speech = audio;
-      timm = [ timm ];
-      torch-vision = [ torchvision ] ++ vision;
-      # natten = [ natten ];
-      # codecarbon = [ codecarbon ];
-      video = [
-        av
-      ];
-      sentencepiece = [
-        sentencepiece
-        protobuf
-      ];
-    };
+  optional-dependencies = lib.fix (self: {
+    ja = [
+      # fugashi
+      # ipadic
+      # unidic_lite
+      # unidic
+      # sudachipy
+      # sudachidict_core
+      # rhoknp
+    ];
+    sklearn = [ scikit-learn ];
+    torch = [
+      torch
+      accelerate
+    ];
+    accelerate = [ accelerate ];
+    hf_xet = [ hf-xet ];
+    retrieval = [
+      faiss
+      datasets
+    ];
+    tokenizers = [ tokenizers ];
+    ftfy = [ ftfy ];
+    modelcreation = [ cookiecutter ];
+    sagemaker = [ sagemaker ];
+    deepspeed = [
+      # deepspeed
+    ]
+    ++ self.accelerate;
+    optuna = [ optuna ];
+    ray = [ ray ] ++ ray.optional-dependencies.tune;
+    hub-kernels = [ kernels ];
+    integrations = self.hub-kernels ++ self.optuna ++ self.ray;
+    serving = [
+      openai
+      pydantic
+      uvicorn
+      fastapi
+      starlette
+      rich
+    ]
+    ++ self.torch;
+    audio = [
+      librosa
+      # pyctcdecode
+      phonemizer
+      # kenlm
+    ];
+    speech = [ torchaudio ] ++ self.audio;
+    torch-speech = [ torchaudio ] ++ self.audio;
+    vision = [ pillow ];
+    timm = [ timm ];
+    torch-vision = [ torchvision ] ++ self.vision;
+    natten = [
+      # natten
+    ];
+    codecarbon = [
+      # codecarbon
+    ];
+    video = [ av ];
+    num2words = [ num2words ];
+    sentencepiece = [
+      sentencepiece
+      protobuf
+    ];
+    tiktoken = [
+      tiktoken
+      blobfile
+    ];
+    mistral-common = [ mistral-common ] ++ mistral-common.optional-dependencies.image;
+    chat_template = [
+      jinja2
+      jmespath
+    ];
+    quality = [
+      datasets
+      ruff
+      gitpython
+      urllib3
+      libcst
+      rich
+      pandas
+    ];
+    torchhub = [
+      filelock
+      huggingface-hub
+      importlib-metadata
+      numpy
+      packaging
+      protobuf
+      regex
+      sentencepiece
+      torch
+      tokenizers
+      tqdm
+    ];
+    benchmark = [
+      # optimum-benchmark
+    ];
+  });
 
   # Many tests require internet access.
   doCheck = false;
