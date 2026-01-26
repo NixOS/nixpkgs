@@ -2723,6 +2723,8 @@ self: super: with self; {
 
   classify-imports = callPackage ../development/python-modules/classify-imports { };
 
+  claude-agent-sdk = callPackage ../development/python-modules/claude-agent-sdk { };
+
   cle = callPackage ../development/python-modules/cle { };
 
   clean-fid = callPackage ../development/python-modules/clean-fid { };
