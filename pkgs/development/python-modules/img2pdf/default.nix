@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "img2pdf";
-  version = "0.6.1";
+  version = "0.6.0";
   pyproject = true;
 
   # gitlab.mister-muffin.de produces a 500 error on 0.6.1
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "josch";
     repo = "img2pdf";
     tag = version;
-    hash = "sha256-71u6ex+UAEFPDtR9QI8Ezah5zCorn4gMdAnzFz4blsI=";
+    hash = "sha256-/nxXgGsnj5ktxUYt9X8/9tJzXgoU8idTjVgLh+8jol8=";
   };
 
   patches = [
