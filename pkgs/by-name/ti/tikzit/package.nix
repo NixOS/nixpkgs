@@ -1,16 +1,13 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
+  libsForQt5,
   fetchFromGitHub,
-  qmake,
-  qttools,
-  qtbase,
-  poppler,
   flex,
   bison,
 }:
 
-mkDerivation {
+stdenv.mkDerivation {
   pname = "tikzit";
   version = "2.1.6";
 
@@ -22,14 +19,15 @@ mkDerivation {
   };
 
   nativeBuildInputs = [
-    qmake
-    qttools
+    libsForQt5.qmake
+    libsForQt5.qttools
     flex
     bison
+    libsForQt5.wrapQtAppsHook
   ];
   buildInputs = [
-    qtbase
-    poppler
+    libsForQt5.qtbase
+    libsForQt5.poppler
   ];
 
   # src/data/tikzlexer.l:29:10: fatal error: tikzparser.parser.hpp: No such file or directory
