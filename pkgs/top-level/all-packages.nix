@@ -1077,9 +1077,6 @@ with pkgs;
   waydroid-nftables = waydroid.override { withNftables = true; };
 
   winbox = winbox3;
-  winbox3 = callPackage ../tools/admin/winbox {
-    wine = wineWowPackages.stable;
-  };
 
   x2t = callPackage ../by-name/x2/x2t/package.nix {
     openssl = openssl.override {
