@@ -163,6 +163,28 @@ buildRedist (finalAttrs: {
           "''${!outputBin:?}/bin/nvcc" \
           --prefix PATH : ${lib.makeBinPath [ backendStdenv.cc ]}
       ''
+      + ''
+        nixLog "Patching math_functions.h signatures to match glibc's ones"
+        substituteInPlace "''${!outputInclude:?}/include/crt/math_functions.h" \
+          --replace-fail \
+            "sinpi(double x);" \
+            "sinpi(double x) noexcept (true);" \
+          --replace-fail \
+            "sinpif(float x);" \
+            "sinpif(float x) noexcept (true);" \
+          --replace-fail \
+            "cospi(double x);" \
+            "cospi(double x) noexcept (true);" \
+          --replace-fail \
+            "cospif(float x);" \
+            "cospif(float x) noexcept (true);" \
+          --replace-fail \
+            "rsqrt(double x);" \
+            "rsqrt(double x) noexcept (true);" \
+          --replace-fail \
+            "rsqrtf(float x);" \
+            "rsqrtf(float x) noexcept (true);"
+      ''
     );
 
   brokenAssertions = [
