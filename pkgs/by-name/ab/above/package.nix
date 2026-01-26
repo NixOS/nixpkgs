@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "above";
-  version = "2.8";
+  version = "2.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "casterbyte";
     repo = "Above";
     tag = "v${version}";
-    hash = "sha256-kG+eaTT72jmeC9R9IKwfd/+9oLAzHLJoKfFJhJDJzDM=";
+    hash = "sha256-wyXWGfthzJeHZoJe4OKe9k2BIwLae/aOUtiJpT4SfHw=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
@@ -22,10 +22,6 @@ python3.pkgs.buildPythonApplication rec {
     colorama
     scapy
   ];
-
-  postFixup = ''
-    mv $out/bin/above.py $out/bin/$pname
-  '';
 
   # Project has no tests
   doCheck = false;
