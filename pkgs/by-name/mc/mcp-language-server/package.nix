@@ -9,7 +9,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "isaacphi";
-    repo = pname;
+    repo = "mcp-language-server";
     rev = "v${version}";
     hash = "sha256-T0wuPSShJqVW+CcQHQuZnh3JOwqUxAKv1OCHwZMr7KM=";
   };
@@ -20,13 +20,12 @@ buildGoModule rec {
 
   vendorHash = "sha256-niDJB3QhZjz9qIGSjUEcghRpEbPUgsSuK52ncZ21DS8=";
 
-  meta = with lib; {
+  meta = {
     description = "Model Context Protocol server to interact with language servers";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     homepage = "https://github.com/isaacphi/mcp-language-server";
     mainProgram = "mcp-language-server";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       fayash
     ];
   };
