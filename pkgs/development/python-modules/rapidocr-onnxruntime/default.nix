@@ -25,15 +25,6 @@
   rapidocr-onnxruntime,
 }:
 let
-  version = "1.4.4";
-
-  src = fetchFromGitHub {
-    owner = "RapidAI";
-    repo = "RapidOCR";
-    tag = "v${version}";
-    hash = "sha256-x0VELDKOffxbV3v0aDFJFuDC4YfsGM548XWgINmRc3M=";
-  };
-
   models =
     fetchzip {
       url = "https://github.com/RapidAI/RapidOCR/releases/download/v1.1.0/required_for_whl_v1.3.0.zip";
@@ -42,12 +33,19 @@ let
     }
     + "/required_for_whl_v1.3.0/resources/models";
 in
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "rapidocr-onnxruntime";
-  inherit version src;
+  version = "1.4.4";
   pyproject = true;
 
-  sourceRoot = "${src.name}/python";
+  src = fetchFromGitHub {
+    owner = "RapidAI";
+    repo = "RapidOCR";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-x0VELDKOffxbV3v0aDFJFuDC4YfsGM548XWgINmRc3M=";
+  };
+
+  sourceRoot = "${finalAttrs.src.name}/python";
 
   # HACK:
   # Upstream uses a very unconventional structure to organize the packages, and we have to coax the
@@ -61,7 +59,7 @@ buildPythonPackage {
   # hence we patch that out and get the version from the build environment directly.
   patches = [
     (replaceVars ./setup-py-override-version-checking.patch {
-      inherit version;
+      inherit (finalAttrs) version;
     })
   ];
 
@@ -141,11 +139,11 @@ buildPythonPackage {
   });
 
   meta = {
-    changelog = "https://github.com/RapidAI/RapidOCR/releases/tag/${src.tag}";
+    changelog = "https://github.com/RapidAI/RapidOCR/releases/tag/${finalAttrs.src.tag}";
     description = "Cross platform OCR Library based on OnnxRuntime";
     homepage = "https://github.com/RapidAI/RapidOCR";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ wrvsrx ];
     mainProgram = "rapidocr_onnxruntime";
   };
-}
+})
