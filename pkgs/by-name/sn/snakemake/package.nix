@@ -170,6 +170,13 @@ python3Packages.buildPythonApplication rec {
     #   pulp.apis.core.PulpSolverError: Pulp: cannot execute cbc cwd:
     # but pulp solver is not default
     "test_access_patterns"
+
+    # Hangs with no sandbox, skips due to no network with sandbox relaxed/on
+    "test_modules_meta_wrapper"
+
+    # Hangs
+    # https://github.com/snakemake/snakemake/issues/3939
+    "test_issue1331"
   ];
 
   pythonImportsCheck = [ "snakemake" ];
