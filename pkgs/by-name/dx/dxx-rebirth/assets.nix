@@ -8,11 +8,9 @@
 let
   generic =
     ver: source:
-    let
-      pname = "descent${toString ver}";
-    in
     stdenv.mkDerivation rec {
       name = "${pname}-assets-${version}";
+      pname = "descent${toString ver}";
       version = "2.0.0.7";
 
       src = requireFile rec {
