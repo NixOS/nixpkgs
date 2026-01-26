@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libetonyek";
-  version = "0.1.12";
+  version = "0.1.13";
 
   src = fetchFromGitHub {
     owner = "LibreOffice";
     repo = "libetonyek";
     rev = "libetonyek-${finalAttrs.version}";
-    hash = "sha256-dvYbV+7IakgOkGsZ+zaW+qgn/QoD6Jwq/juaE+7iYug=";
+    hash = "sha256-Dr4QhzZQzLNHf7OMMjUaR6WbnIQbu18LIiAjPD0sCsY=";
   };
 
   nativeBuildInputs = [
