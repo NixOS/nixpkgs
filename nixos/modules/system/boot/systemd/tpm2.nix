@@ -67,9 +67,7 @@
         boot.initrd.availableKernelModules = [
           "tpm-tis"
         ]
-        ++ lib.optional (
-          !(pkgs.stdenv.hostPlatform.isRiscV64 || pkgs.stdenv.hostPlatform.isArmv7)
-        ) "tpm-crb";
+        ++ lib.optional (config.boot.kernelPackages.kernel.config.isEnabled "TCG_CRB") "tpm-crb";
         boot.initrd.systemd.storePaths = [
           pkgs.tpm2-tss
           "${cfg.package}/lib/systemd/systemd-tpm2-setup"
