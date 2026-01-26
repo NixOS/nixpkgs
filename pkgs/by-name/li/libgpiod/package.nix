@@ -6,7 +6,10 @@
   autoreconfHook,
   autoconf-archive,
   pkg-config,
+  libgudev,
+  glib,
   enable-tools ? true,
+  enable-dbus ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,9 +28,17 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
+  buildInputs =
+    [ ]
+    ++ lib.optionals enable-dbus [
+      libgudev
+      glib
+    ];
+
   configureFlags = [
     "--enable-tools=${lib.boolToYesNo enable-tools}"
     "--enable-bindings-cxx"
+    (lib.enableFeature enable-dbus "dbus")
   ];
 
   passthru.updateScript = gitUpdater {
