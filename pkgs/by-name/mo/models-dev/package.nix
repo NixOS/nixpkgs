@@ -36,12 +36,15 @@ let
     buildPhase = ''
       runHook preBuild
 
-      bun install \
-        --cpu="*" \
-        --frozen-lockfile \
-        --ignore-scripts \
-        --no-progress \
-        --os="*"
+       export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
+
+       bun install \
+         --filter=./packages/web \
+         --force \
+         --frozen-lockfile \
+         --ignore-scripts \
+         --no-progress \
+         --production
 
       runHook postBuild
     '';
