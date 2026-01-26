@@ -66,6 +66,11 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/sshfs --prefix PATH : "${openssh}/bin"
   '';
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   # doCheck = true;
   checkPhase = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     # The tests need fusermount:
