@@ -1066,9 +1066,6 @@ with pkgs;
   waydroid-nftables = waydroid.override { withNftables = true; };
 
   winbox = winbox3;
-  winbox3 = callPackage ../tools/admin/winbox {
-    wine = wineWowPackages.stable;
-  };
 
   yabridge = callPackage ../tools/audio/yabridge {
     wine = wineWowPackages.yabridge;
