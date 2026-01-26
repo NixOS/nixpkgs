@@ -11,7 +11,6 @@
   opentelemetry-instrumentation,
   opentelemetry-instrumentation-requests,
   opentelemetry-sdk,
-  pytest,
   pytest-asyncio,
   pytest-trio,
   pytest8_3CheckHook,
