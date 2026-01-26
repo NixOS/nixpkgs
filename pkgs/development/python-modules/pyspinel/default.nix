@@ -7,7 +7,7 @@
 
 buildPythonPackage {
   pname = "pyspinel";
-  version = "unstable-2021-08-19";
+  version = "1.0.3";
   format = "setuptools";
 
   src = fetchFromGitHub {
