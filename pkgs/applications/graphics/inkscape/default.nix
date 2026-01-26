@@ -1,6 +1,7 @@
 {
   stdenv,
   lib,
+  adwaita-icon-theme,
   boehmgc,
   boost,
   cairo,
@@ -154,6 +155,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     librevenge
     librsvg # for loading icons
+    adwaita-icon-theme # prevent missing icons
     libsigcxx
     libvisio
     libwpg
