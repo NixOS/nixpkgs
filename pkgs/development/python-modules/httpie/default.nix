@@ -121,5 +121,6 @@ buildPythonPackage rec {
       antono
       relrod
     ];
+    mainProgram = "http";
   };
 }
