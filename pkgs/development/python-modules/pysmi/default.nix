@@ -12,7 +12,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.6.2";
+  version = "1.6.3";
   pname = "pysmi";
   pyproject = true;
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "lextudio";
     repo = "pysmi";
     tag = "v${version}";
-    hash = "sha256-GyG3J6qntEIszXrm1t623+x1cYbhJLbTEQl6N2h2LA0=";
+    hash = "sha256-TpDrsBGym07JPIcnytyWI7Ebx9RR+7Ia36zOzWMWqPM=";
   };
 
   build-system = [ flit-core ];
