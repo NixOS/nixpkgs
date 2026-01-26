@@ -5,14 +5,14 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "httpx";
   version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "httpx";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-hgeBZJqBFNWqcElfgGv8r1yAzifoD27GHPyxh6LpOaU=";
   };
 
@@ -42,9 +42,9 @@ buildGoModule rec {
       result reliability with increased threads.
     '';
     homepage = "https://github.com/projectdiscovery/httpx";
-    changelog = "https://github.com/projectdiscovery/httpx/releases/tag/v${version}";
+    changelog = "https://github.com/projectdiscovery/httpx/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "httpx";
   };
-}
+})
