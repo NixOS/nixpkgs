@@ -45,7 +45,7 @@ let
     vendorHash = "sha256-nnt4HIG4Fs7RhHjVb7mYJ39UgvFKc46Cu42cURMmr1s=";
 
     ldflags = [
-      "-X github.com/kalbasit/ncps/cmd.Version=v${finalAttrs.version}"
+      "-X github.com/kalbasit/ncps/pkg/ncps.Version=v${finalAttrs.version}"
     ];
 
     subPackages = [ "." ];
