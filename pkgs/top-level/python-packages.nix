@@ -4780,7 +4780,7 @@ self: super: with self; {
 
   ec2-metadata = callPackage ../development/python-modules/ec2-metadata { };
 
-  ec2instanceconnectcli = callPackage ../tools/virtualization/ec2instanceconnectcli { };
+  ec2instanceconnectcli = callPackage ../development/python-modules/ec2instanceconnectcli { };
 
   eccodes = toPythonModule (
     pkgs.eccodes.override {
@@ -6422,7 +6422,7 @@ self: super: with self; {
 
   google-cloud-workstations = callPackage ../development/python-modules/google-cloud-workstations { };
 
-  google-compute-engine = callPackage ../tools/virtualization/google-compute-engine { };
+  google-compute-engine = callPackage ../development/python-modules/google-compute-engine { };
 
   google-crc32c = callPackage ../development/python-modules/google-crc32c { inherit (pkgs) crc32c; };
 
@@ -9410,7 +9410,7 @@ self: super: with self; {
 
   mattermostdriver = callPackage ../development/python-modules/mattermostdriver { };
 
-  maubot = callPackage ../tools/networking/maubot { };
+  maubot = callPackage ../development/python-modules/maubot { };
 
   mautrix = callPackage ../development/python-modules/mautrix { };
 
@@ -21061,9 +21061,9 @@ self: super: with self; {
 
   youtokentome = callPackage ../development/python-modules/youtokentome { };
 
-  youtube-dl = callPackage ../tools/misc/youtube-dl { };
+  youtube-dl = callPackage ../development/python-modules/youtube-dl { };
 
-  youtube-dl-light = callPackage ../tools/misc/youtube-dl { ffmpegSupport = false; };
+  youtube-dl-light = callPackage ../development/python-modules/youtube-dl { ffmpegSupport = false; };
 
   youtube-search = callPackage ../development/python-modules/youtube-search { };
 
