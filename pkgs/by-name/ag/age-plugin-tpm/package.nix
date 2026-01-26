@@ -7,6 +7,7 @@
   swtpm,
   openssl,
   age,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
@@ -28,6 +29,7 @@ buildGoModule rec {
     age
     swtpm
   ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   buildInputs = [
     openssl
