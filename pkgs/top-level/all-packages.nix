@@ -1718,10 +1718,6 @@ with pkgs;
     plugins = lib.filter (p: p ? pluginName) (builtins.attrValues discourse.plugins);
   };
 
-  disorderfs = callPackage ../tools/filesystems/disorderfs {
-    asciidoc = asciidoc-full;
-  };
-
   dino = callPackage ../applications/networking/instant-messengers/dino { };
 
   dnschef = python3Packages.callPackage ../tools/networking/dnschef { };
