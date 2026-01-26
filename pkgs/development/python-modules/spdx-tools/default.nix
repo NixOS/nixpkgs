@@ -4,7 +4,6 @@
   buildPythonPackage,
   click,
   fetchFromGitHub,
-  fetchpatch,
   license-expression,
   ply,
   pytestCheckHook,
@@ -19,24 +18,15 @@
 
 buildPythonPackage rec {
   pname = "spdx-tools";
-  version = "0.8.3";
+  version = "0.8.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "spdx";
     repo = "tools-python";
     tag = "v${version}";
-    hash = "sha256-r7+RYGoq3LJYN1jYfwzb1r3fc/kL+CPd4pmGATFq8Pw=";
+    hash = "sha256-loD+YXRCEYRynOKf7Da43SA7JQVYP1IzJe2f7ssJTtI=";
   };
-
-  patches = [
-    # https://github.com/spdx/tools-python/issues/844
-    (fetchpatch {
-      name = "beartype-0.20-compat.patch";
-      url = "https://github.com/spdx/tools-python/pull/841/commits/3b13bd5af36a2b78f5c87fdbadc3f2601d2dcd8d.patch";
-      hash = "sha256-8sQNGRss4R1olsw+xGps3NICyimBxKv47TaSrCcnVhA=";
-    })
-  ];
 
   build-system = [
     setuptools
