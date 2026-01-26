@@ -13482,4 +13482,8 @@ with pkgs;
   gpac-unstable = callPackage ../by-name/gp/gpac/package.nix {
     releaseChannel = "unstable";
   };
+
+  kratix = callPackage ../by-name/kr/kratix/package.nix {
+    buildGoModule = buildGo125Module;
+  };
 }
