@@ -5,8 +5,10 @@
   fetchFromGitHub,
   buildFHSEnv,
   installShellFiles,
+  makeWrapper,
   writableTmpDirAsHomeHook,
   go-task,
+  python3,
 }:
 
 let
@@ -24,6 +26,7 @@ let
 
     nativeBuildInputs = [
       installShellFiles
+      makeWrapper
       writableTmpDirAsHomeHook
     ];
 
@@ -67,7 +70,10 @@ let
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ "-extldflags '-static'" ];
 
-    postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    postInstall = ''
+      wrapProgram $out/bin/arduino-cli --prefix PATH : ${lib.makeBinPath [ python3 ]}
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       installShellCompletion --cmd arduino-cli \
         --bash <($out/bin/arduino-cli completion bash) \
         --zsh <($out/bin/arduino-cli completion zsh) \
