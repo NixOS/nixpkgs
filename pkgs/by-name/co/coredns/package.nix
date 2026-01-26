@@ -78,6 +78,7 @@ buildGoModule (finalAttrs: {
     for src in ${toString (attrsToSources externalPlugins)}; do go get $src; done
     go mod vendor
     CC= GOOS= GOARCH= go generate
+    go mod vendor
     go mod tidy
   '';
 
@@ -134,6 +135,7 @@ buildGoModule (finalAttrs: {
   '';
 
   passthru.tests = {
+    coredns-external-plugins = nixosTests.coredns;
     kubernetes-single-node = nixosTests.kubernetes.dns-single-node;
     kubernetes-multi-node = nixosTests.kubernetes.dns-multi-node;
   };
