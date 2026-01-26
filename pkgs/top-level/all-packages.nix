@@ -1943,8 +1943,6 @@ with pkgs;
 
   pixcat = with python3Packages; toPythonApplication pixcat;
 
-  pyznap = python3Packages.callPackage ../tools/backup/pyznap { };
-
   psrecord = python3Packages.callPackage ../tools/misc/psrecord { };
 
   remarkable-mouse = python3Packages.callPackage ../applications/misc/remarkable/remarkable-mouse { };

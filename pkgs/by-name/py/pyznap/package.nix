@@ -1,11 +1,10 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchPypi,
-  setuptools,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "pyznap";
   version = "1.6.0";
   format = "setuptools";
@@ -15,7 +14,7 @@ buildPythonApplication rec {
     sha256 = "88bf1d6de2c11f14acbdfa01b61eb95c94f95d829ddebdaee3786b64ccb93ae3";
   };
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     setuptools
   ];
 
