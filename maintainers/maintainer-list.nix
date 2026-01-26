@@ -16163,6 +16163,12 @@
     github = "mariuskimmina";
     githubId = 38843153;
   };
+  mariusknaust = {
+    name = "Marius Knaust";
+    email = "marius.knaust@gmail.com";
+    github = "mariusknaust";
+    githubId = 17125376;
+  };
   markasoftware = {
     name = "Mark Polyakov";
     email = "mark@markasoftware.com";
