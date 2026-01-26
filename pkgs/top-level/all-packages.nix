@@ -6259,10 +6259,6 @@ with pkgs;
     stdenv = if stdenv.hostPlatform.isDarwin then gccStdenv else stdenv;
   };
 
-  swftools = callPackage ../tools/video/swftools {
-    stdenv = gccStdenv;
-  };
-
   teensyduino = arduino-core.override {
     withGui = true;
     withTeensyduino = true;
