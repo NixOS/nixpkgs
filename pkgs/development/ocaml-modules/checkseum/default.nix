@@ -13,14 +13,14 @@
   alcotest,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   version = "0.5.2";
   pname = "checkseum";
 
   minimalOCamlVersion = "4.07";
 
   src = fetchurl {
-    url = "https://github.com/mirage/checkseum/releases/download/v${version}/checkseum-${version}.tbz";
+    url = "https://github.com/mirage/checkseum/releases/download/v${finalAttrs.version}/checkseum-${finalAttrs.version}.tbz";
     hash = "sha256-nl5P1EBctKi03wCHdUMlGDPgimSZ70LMuNulgt8Nr8g=";
   };
 
@@ -47,4 +47,4 @@ buildDunePackage rec {
     maintainers = [ lib.maintainers.vbgl ];
     mainProgram = "checkseum.checkseum";
   };
-}
+})

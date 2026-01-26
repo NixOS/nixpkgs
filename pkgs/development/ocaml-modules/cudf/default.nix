@@ -7,7 +7,7 @@
   ounit2,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "cudf";
   version = "0.10";
 
@@ -15,8 +15,8 @@ buildDunePackage rec {
 
   src = fetchFromGitLab {
     owner = "irill";
-    repo = pname;
-    rev = "v${version}";
+    repo = "cudf";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-E4KXKnso/Q3ZwcYpKPgvswNR9qd/lafKljPMxfStedM=";
   };
 
@@ -36,4 +36,4 @@ buildDunePackage rec {
     license = lib.licenses.lgpl3;
     maintainers = [ ];
   };
-}
+})

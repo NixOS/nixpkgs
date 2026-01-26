@@ -10,14 +10,14 @@
   ipaddr-sexp,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "conduit";
   version = "8.0.0";
 
   minimalOCamlVersion = "4.13";
 
   src = fetchurl {
-    url = "https://github.com/mirage/ocaml-conduit/releases/download/v${version}/conduit-${version}.tbz";
+    url = "https://github.com/mirage/ocaml-conduit/releases/download/v${finalAttrs.version}/conduit-${finalAttrs.version}.tbz";
     hash = "sha256-CmPZEIZbVHOJOhcM2lH2E4j0iOz0xLLtf+nsTiz2b2E=";
   };
 
@@ -39,4 +39,4 @@ buildDunePackage rec {
     ];
     homepage = "https://github.com/mirage/ocaml-conduit";
   };
-}
+})
