@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "branca";
-  version = "0.8.1";
+  version = "0.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-visualization";
     repo = "branca";
     tag = "v${version}";
-    hash = "sha256-Gnr3ONqWpUNOGiOlyq77d9PxcDT8TjqTHYBGxH+V+xc=";
+    hash = "sha256-H5hHQI4r0QavygQZzEZAEp+cjra5R9m/OoGHQPtnBg0=";
   };
 
   postPatch = ''
