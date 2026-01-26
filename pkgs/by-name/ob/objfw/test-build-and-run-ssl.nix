@@ -6,12 +6,20 @@
 
 clangStdenv.mkDerivation {
   name = "ObjFW test";
-  buildInputs = [ objfw ];
+  buildInputs = [
+    (objfw.override { openSslSupport = true; })
+  ];
 
   src = writeTextDir "helloworld.m" ''
     #import <ObjFW/ObjFW.h>
     int main() {
         OFLog(@"Hello world from objc");
+
+        if (objc_getClass("OFTLSStream") == nil) {
+           OFLog(@"TLS not found");
+           return 1;
+        }
+
         return 0;
     }
   '';

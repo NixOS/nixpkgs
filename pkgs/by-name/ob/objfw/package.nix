@@ -3,27 +3,35 @@
   autogen,
   automake,
   clangStdenv,
-  fetchfossil,
+  fetchFromGitea,
   lib,
   objfw,
+  openssl,
   writeTextDir,
+  openSslSupport ? false,
 }:
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "objfw";
-  version = "1.3.2";
+  version = "1.4.1";
 
-  src = fetchfossil {
-    url = "https://objfw.nil.im/home";
-    rev = "${finalAttrs.version}-release";
-    hash = "sha256-cFYsiNG60FyDXAeiuBZn/u/1dEawVAxF7EDFBZRYt7w=";
+  src = fetchFromGitea {
+    domain = "git.nil.im";
+    owner = "ObjFW";
+    repo = "ObjFW";
+    tag = "${finalAttrs.version}-release";
+    hash = "sha256-XR0i8XEbWPIWRnfxtqOIrpAlM8DDiu/mvP63hvdDAK4=";
   };
 
   nativeBuildInputs = [
     automake
     autogen
     autoconf
-  ];
+  ]
+  ++ lib.optional openSslSupport openssl;
+
+  # ObjFW relies on codesign on darwin. It doesn't exist with Nix, and this works around it
+  ac_cv_prog_CODESIGN = true;
 
   preConfigure = "./autogen.sh";
   configureFlags = [
@@ -34,6 +42,9 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = {
     build-hello-world = (import ./test-build-and-run.nix) { inherit clangStdenv objfw writeTextDir; };
+    build-hello-world-ssl = (import ./test-build-and-run-ssl.nix) {
+      inherit clangStdenv objfw writeTextDir;
+    };
   };
 
   meta = {
@@ -41,6 +52,6 @@ clangStdenv.mkDerivation (finalAttrs: {
     homepage = "https://objfw.nil.im";
     license = lib.licenses.lgpl3;
     maintainers = [ lib.maintainers.steeleduncan ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
