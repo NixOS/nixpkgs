@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
 
   # build-system
   setuptools,
@@ -16,10 +16,11 @@ buildPythonPackage rec {
   version = "2025.0";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "bokeh_sampledata";
-    inherit version;
-    hash = "sha256-a4dK9bh45w8WEzaVrAfhXeOGQvqfrf33I/fUIzOWevQ=";
+  src = fetchFromGitHub {
+    owner = "bokeh";
+    repo = "bokeh_sampledata";
+    tag = version;
+    hash = "sha256-gAiiNm9t+4z0aFO6pr8FfYGF04pO7u6Wjsbou+I2blk=";
   };
 
   postPatch = ''
