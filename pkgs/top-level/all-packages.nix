@@ -10723,8 +10723,6 @@ with pkgs;
 
   mercurialFull = mercurial.override { fullBuild = true; };
 
-  meshcentral = callPackage ../tools/admin/meshcentral { };
-
   michabo = libsForQt5.callPackage ../applications/misc/michabo { };
 
   minitube = libsForQt5.callPackage ../applications/video/minitube { };
