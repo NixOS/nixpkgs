@@ -16,6 +16,7 @@
   gawk,
   gnutar,
   gzip,
+  unrar-free,
 }:
 
 stdenv.mkDerivation rec {
