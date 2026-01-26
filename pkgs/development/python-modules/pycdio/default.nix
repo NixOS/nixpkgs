@@ -43,6 +43,14 @@ buildPythonPackage (finalAttrs: {
 
   enabledTestPaths = [ "test/test-*.py" ];
 
+  disabledTests = [
+    # Test are depending on image files that are not there
+    "test_fs"
+    "test_bincue"
+    "test_read"
+    "test_cdda"
+  ];
+
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--version=branch" ];
   };
