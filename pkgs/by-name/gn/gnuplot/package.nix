@@ -28,23 +28,20 @@
   gnused ? null,
   coreutils ? null,
   withQt ? false,
-  mkDerivation,
-  qttools,
-  qtbase,
-  qtsvg,
+  libsForQt5,
 }:
 
 assert libX11 != null -> (fontconfig != null && gnused != null && coreutils != null);
 let
   withX = libX11 != null && !aquaterm && !stdenv.hostPlatform.isDarwin;
 in
-(if withQt then mkDerivation else stdenv.mkDerivation) rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnuplot";
   version = "6.0.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gnuplot/${pname}-${version}.tar.gz";
-    sha256 = "sha256-RY2UdpYl5z1fYjJQD0nLrcsrGDOA1D0iZqD5cBrrnFs=";
+    url = "mirror://sourceforge/gnuplot/gnuplot-${finalAttrs.version}.tar.gz";
+    hash = "sha256-RY2UdpYl5z1fYjJQD0nLrcsrGDOA1D0iZqD5cBrrnFs=";
   };
 
   nativeBuildInputs = [
@@ -52,7 +49,7 @@ in
     pkg-config
     texinfo
   ]
-  ++ lib.optional withQt qttools;
+  ++ lib.optional withQt libsForQt5.qttools;
 
   buildInputs = [
     cairo
@@ -72,8 +69,8 @@ in
     libXaw
   ]
   ++ lib.optionals withQt [
-    qtbase
-    qtsvg
+    libsForQt5.qtbase
+    libsForQt5.qtsvg
   ]
   ++ lib.optional withWxGTK wxGTK32;
 
@@ -127,4 +124,4 @@ in
     maintainers = with lib.maintainers; [ lovek323 ];
     mainProgram = "gnuplot";
   };
-}
+})
