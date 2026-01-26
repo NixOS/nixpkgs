@@ -1,0 +1,225 @@
+{
+  "depends": [
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/z2mfal6xlhn5plnh0qg3g3q1dpw2jk5y-source",
+      "rev": "edc6e19ddbe6b9e46c3384e9a4131d7063a3f610",
+      "sha256": "09h075sfr8c0lsgdzdm1qz18lwhw6njk5bwrv4g0rnnhv93sb6db",
+      "srcDir": "src",
+      "url": "https://github.com/treeform/bumpy/archive/edc6e19ddbe6b9e46c3384e9a4131d7063a3f610.tar.gz",
+      "subDir": "",
+      "packages": [
+        "bumpy"
+      ]
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/lk4hcmvwvliliyyidx7k3fk9yfijddc5-source",
+      "rev": "b2e71179174e040884ebf6a16cbac711c84620b9",
+      "sha256": "0pi6cq43ysm1wy5vva3i2dqvyh4dqppjjjl04yj9wfq7mngpqaa1",
+      "srcDir": "src",
+      "url": "https://github.com/treeform/chroma/archive/b2e71179174e040884ebf6a16cbac711c84620b9.tar.gz",
+      "subDir": "",
+      "packages": [
+        "chroma"
+      ]
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/w4rd1qpdhqq41gc57y49h6wvifis1df5-source",
+      "rev": "6f6cd154e88b33a21183e8f07edd253cf6dc00df",
+      "sha256": "0pfvd40dy5ysrzpmnkr788nr6r682nlzzk6z1l91jw3h886ff2gv",
+      "srcDir": "",
+      "url": "https://github.com/c-blake/cligen/archive/6f6cd154e88b33a21183e8f07edd253cf6dc00df.tar.gz",
+      "subDir": "",
+      "packages": [
+        "cligen"
+      ]
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/rb4r4bz7bm573vyvlm5mkji3f9cs2ya9-source",
+      "rev": "98eb6526982bb8aae8eec6e8781f4539fa19e049",
+      "sha256": "11iz2d23g3dwpw2ybx951c8ccikziaphr3515vw9c9930r5xmkci",
+      "srcDir": "src",
+      "url": "https://github.com/guzba/crunchy/archive/98eb6526982bb8aae8eec6e8781f4539fa19e049.tar.gz",
+      "subDir": "",
+      "packages": [
+        "crunchy"
+      ]
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/2h7ddrr0bmb5is42frcfvlsfv07b3icc-source",
+      "rev": "73f5fdb8e90cc95073e427c9403b8fa360846620",
+      "sha256": "0rrvr0fbcrk8zxsa2pa0082pcwhf8lvw21zkh07s0121s0w5l4q3",
+      "srcDir": "src",
+      "url": "https://github.com/Anuken/fau/archive/73f5fdb8e90cc95073e427c9403b8fa360846620.tar.gz",
+      "subDir": "",
+      "packages": [
+        "fau"
+      ]
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/vx0a8hw7hs5an0dnbrn6l16bd6is7hdr-source",
+      "rev": "07f6ba8ab96238e5bd1264cf0cea1d1746abb00c",
+      "sha256": "005nrldaasfl09zdsni1vi8s7dk0y85ijv6rm2wpj94435x66s36",
+      "srcDir": "src",
+      "url": "https://github.com/treeform/flatty/archive/07f6ba8ab96238e5bd1264cf0cea1d1746abb00c.tar.gz",
+      "subDir": "",
+      "packages": [
+        "flatty"
+      ]
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/2igvzn28dqrsdfsl7383d2dkfls8p71k-source",
+      "rev": "eac00f1d5df3b9f72d8bc00b8cb16190b0638dff",
+      "sha256": "0np02jhpca0bba35x3r9ygdb2drf3zlqycvmbi7vfdrv5x261pmy",
+      "srcDir": "src",
+      "url": "https://github.com/Anuken/glfm/archive/eac00f1d5df3b9f72d8bc00b8cb16190b0638dff.tar.gz",
+      "subDir": "",
+      "packages": [
+        "glfm"
+      ]
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/axiyv2ywazsmhgvxr7ib43dqs7170qyq-source",
+      "rev": "b8c0edbac379b0507c1967c56725ecf442cfd6d7",
+      "sha256": "0hyxmgqsx2sa68jk82bksk5dkkkl1q0ibsx9j0y3nzd8sny2n60i",
+      "srcDir": "src",
+      "url": "https://www.github.com/Anuken/jsony/archive/b8c0edbac379b0507c1967c56725ecf442cfd6d7.tar.gz",
+      "subDir": "",
+      "packages": [
+        "jsony"
+      ]
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/nprw4if1dhz8k8vyw1f2dkfawrz327yb-source",
+      "rev": "75d4d36e3fdbe17390e67931cb6c70d33c8770a0",
+      "sha256": "02avc4wj9sardjg3wahznfq0mi3jhkc3mnl6nlcg3q7y04b0vbj3",
+      "srcDir": "src",
+      "url": "https://github.com/planetis-m/mimalloc_nim/archive/75d4d36e3fdbe17390e67931cb6c70d33c8770a0.tar.gz",
+      "subDir": "",
+      "packages": [
+        "mimalloc"
+      ]
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/3qxib3f1pglhdymz3kbc4dg361vlfz3a-source",
+      "rev": "f4cc097ca9694f17feced9f82994f583ef7911fe",
+      "sha256": "041cshfzgb4fb1xhamyhrx22dvib74d86y7qnbp6rm1n56mkqpkq",
+      "srcDir": "src",
+      "url": "https://github.com/jangko/msgpack4nim/archive/f4cc097ca9694f17feced9f82994f583ef7911fe.tar.gz",
+      "subDir": "",
+      "packages": [
+        "msgpack4nim"
+      ]
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/bgbr0dgda0lhm0lbg2cljjh34wnw36zp-source",
+      "rev": "3f6b2668ffb0867d0bf786a658b817763e611350",
+      "sha256": "0frxqj34a12xwniac2nhlzdipc8w02m138k8gk6zf4s8yg5yvvhl",
+      "srcDir": "src",
+      "url": "https://github.com/guzba/nimsimd/archive/3f6b2668ffb0867d0bf786a658b817763e611350.tar.gz",
+      "subDir": "",
+      "packages": [
+        "nimsimd"
+      ]
+    },
+    {
+      "method": "git",
+      "path": "/nix/store/6ndsxzh74l47xcxv4658plingybwywx3-nimsoloud-c74878d",
+      "rev": "c74878dcb60fd2e2af84f894a8a8ffe901aecd51",
+      "sha256": "08lzvggv4sa61kk1r5bhk22gfn20mqfi3yvmi55dyfwx6d7kvhp7",
+      "srcDir": "src",
+      "url": "https://github.com/Anuken/nimsoloud",
+      "subDir": "",
+      "fetchSubmodules": true,
+      "leaveDotGit": false,
+      "packages": [
+        "nimsoloud"
+      ]
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/xjk8cg4dmja48rcswy0nphy3xhmf7nsz-source",
+      "rev": "f3e73f722fbb0e5d496fbc59ee860a9fd49983de",
+      "sha256": "12mqlczckhxcrg6il213fn7mcnqz3khwkh7i4bn57l55nzrhfvrh",
+      "srcDir": "src",
+      "url": "https://github.com/treeform/pixie/archive/f3e73f722fbb0e5d496fbc59ee860a9fd49983de.tar.gz",
+      "subDir": "",
+      "packages": [
+        "pixie"
+      ]
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/bblmnanbgk0zy0g6y8p6dx07h0w7zb88-source",
+      "rev": "170f1b22c1d13828ad9ef84237b9d4d408b77cc6",
+      "sha256": "0g66sslj2lrp53dgiz4na15fs6m3w1r0w5amn0mhnkvhbvghjibj",
+      "srcDir": "src",
+      "url": "https://github.com/Anuken/polymorph/archive/170f1b22c1d13828ad9ef84237b9d4d408b77cc6.tar.gz",
+      "subDir": "",
+      "packages": [
+        "polymorph"
+      ]
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/spba0pmyvfcky028h5jzscpj8awflcdh-source",
+      "rev": "d9636c0a565680044d187bee7b53bb4eaf4385b9",
+      "sha256": "10ignwna5cab04z38p4gfrp9yhb05ma7hf93xgg05cgmnqzb26if",
+      "srcDir": "src",
+      "url": "https://github.com/Anuken/staticglfw/archive/d9636c0a565680044d187bee7b53bb4eaf4385b9.tar.gz",
+      "subDir": "",
+      "packages": [
+        "staticglfw"
+      ]
+    },
+    {
+      "method": "git",
+      "path": "/nix/store/99l41kv7h7nb0rcwarnvkgjykm771h5w-stb_image-Nim-ba5f452",
+      "rev": "ba5f45286bfa9bed93d8d6b941949cd6218ec888",
+      "sha256": "13csi17rpaclvm7ji3rw1hcbb1z6x5270819nabinfw1x59al5yz",
+      "srcDir": "",
+      "url": "https://gitlab.com/define-private-public/stb_image-Nim.git",
+      "subDir": "",
+      "fetchSubmodules": true,
+      "leaveDotGit": false,
+      "packages": [
+        "stb_image"
+      ]
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/f9dp6njaay5rf32f6l9gkw0dm25gim47-source",
+      "rev": "7282ae1247f2f384ebeaec3826d7fa38fd0e1df1",
+      "sha256": "1plw9lfrm42qar01rnjhm0d9mkzsc7c3b8kz43w5pb8j8drx1lyn",
+      "srcDir": "src",
+      "url": "https://github.com/treeform/vmath/archive/7282ae1247f2f384ebeaec3826d7fa38fd0e1df1.tar.gz",
+      "subDir": "",
+      "packages": [
+        "vmath"
+      ]
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/zcd2hmjxlkp1bpb7c9xrpg153ssj3w0b-source",
+      "rev": "a99f6a7d8a8e3e0213b3cad0daf0ea974bf58e3f",
+      "sha256": "16qdnyql8d7nm7nwwpq0maflm3p6cpbb2jfaqx6xkld9xkc9lsbv",
+      "srcDir": "src",
+      "url": "https://github.com/guzba/zippy/archive/a99f6a7d8a8e3e0213b3cad0daf0ea974bf58e3f.tar.gz",
+      "subDir": "",
+      "packages": [
+        "zippy"
+      ]
+    }
+  ]
+}
+
