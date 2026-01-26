@@ -185,7 +185,9 @@ in
           ${lib.getExe cfg.package} -c "$STATE_DIRECTORY/AdGuardHome.yaml" --check-config
 
           # Writing directly to AdGuardHome.yaml results in empty file
-          ${lib.getExe pkgs.yaml-merge} "$STATE_DIRECTORY/AdGuardHome.yaml" "${configFile}" > "$STATE_DIRECTORY/AdGuardHome.yaml.tmp"
+          # sed operation needed to fix protection_disabled_until value changed by yaml-merge
+          ${lib.getExe pkgs.yaml-merge} "$STATE_DIRECTORY/AdGuardHome.yaml" "${configFile}" \
+          | sed -E "s/(protection_disabled_until: [0-9]{4}-[0-9]{2}-[0-9]{2}) /\1T/" > "$STATE_DIRECTORY/AdGuardHome.yaml.tmp"
           mv "$STATE_DIRECTORY/AdGuardHome.yaml.tmp" "$STATE_DIRECTORY/AdGuardHome.yaml"
         else
           cp --force "${configFile}" "$STATE_DIRECTORY/AdGuardHome.yaml"
