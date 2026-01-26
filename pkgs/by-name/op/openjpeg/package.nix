@@ -3,8 +3,10 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
+  buildPackages,
   cmake,
   pkg-config,
+  versionCheckHook,
   libpng,
   libtiff,
   zlib,
@@ -28,24 +30,14 @@
   vips,
 }:
 
-let
-  # may need to get updated with package
-  # https://github.com/uclouvain/openjpeg-data
-  test-data = fetchFromGitHub {
-    owner = "uclouvain";
-    repo = "openjpeg-data";
-    rev = "39524bd3a601d90ed8e0177559400d23945f96a9";
-    hash = "sha256-ckZHCZV5UJicVUoi/mZDwvCJneXC3X+NA8Byp6GLE0w=";
-  };
-in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openjpeg";
   version = "2.5.4";
 
   src = fetchFromGitHub {
     owner = "uclouvain";
     repo = "openjpeg";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-HSXGdpHUbwlYy5a+zKpcLo2d+b507Qf5nsaMghVBlZ8=";
   };
 
@@ -53,6 +45,14 @@ stdenv.mkDerivation rec {
     "out"
     "dev"
   ];
+
+  postPatch = lib.optionalString (lib.elem "dev" finalAttrs.outputs) ''
+    # Fix OPENJPEG_INSTALL_PACKAGE_DIR, the directory to install OpenJPEG cmake modules.
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        ${lib.escapeShellArg ''set(OPENJPEG_INSTALL_PACKAGE_DIR "''${CMAKE_INSTALL_LIBDIR}/cmake/''${OPENJPEG_INSTALL_SUBDIR}")''} \
+        ${lib.escapeShellArg ''set(OPENJPEG_INSTALL_PACKAGE_DIR "${placeholder "dev"}/lib/cmake/''${OPENJPEG_INSTALL_SUBDIR}")''}
+  '';
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
@@ -62,9 +62,9 @@ stdenv.mkDerivation rec {
     (lib.cmakeBool "BUILD_JPIP_SERVER" jpipServerSupport)
     "-DBUILD_VIEWER=OFF"
     "-DBUILD_JAVA=OFF"
-    (lib.cmakeBool "BUILD_TESTING" doCheck)
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.doCheck)
   ]
-  ++ lib.optional doCheck "-DOPJ_DATA_ROOT=${test-data}";
+  ++ lib.optional finalAttrs.doCheck "-DOPJ_DATA_ROOT=${finalAttrs.passthru.test-data}";
 
   nativeBuildInputs = [
     cmake
@@ -93,8 +93,48 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = lib.optional (
+    lib.match "[0-9]+\\.[0-9]+\\.[0-9]+" finalAttrs.version != null
+  ) versionCheckHook;
+
+  print-openjpeg-version = buildPackages.callPackage (
+    {
+      writeShellApplication,
+      gnugrep,
+    }:
+    writeShellApplication {
+      name = "print-openjpeg-version";
+      text = ''
+        cmakeListsTxt=$1
+        majorVersion=$(grep -oP '(?<=set[(]OPENJPEG_VERSION_MAJOR )[0-9]+(?=[)])' "$cmakeListsTxt")
+        minorVersion=$(grep -oP '(?<=set[(]OPENJPEG_VERSION_MINOR )[0-9]+(?=[)])' "$cmakeListsTxt")
+        patchVersion=$(grep -oP '(?<=set[(]OPENJPEG_VERSION_BUILD )[0-9]+(?=[)])' "$cmakeListsTxt")
+        echo "$majorVersion.$minorVersion.$patchVersion"
+      '';
+      runtimeInputs = [
+        gnugrep
+      ];
+    }
+  ) { };
+
+  versionCheckProgram = lib.getExe finalAttrs.print-openjpeg-version;
+
+  versionCheckProgramArg = "/build/${finalAttrs.src.name}/CMakeLists.txt";
+
   passthru = {
-    incDir = "openjpeg-${lib.versions.majorMinor version}";
+    incDir = "openjpeg-${lib.versions.majorMinor finalAttrs.version}";
+
+    # may need to get updated with package
+    # https://github.com/uclouvain/openjpeg-data
+    test-data = fetchFromGitHub {
+      owner = "uclouvain";
+      repo = "openjpeg-data";
+      rev = "39524bd3a601d90ed8e0177559400d23945f96a9";
+      hash = "sha256-ckZHCZV5UJicVUoi/mZDwvCJneXC3X+NA8Byp6GLE0w=";
+    };
+
     tests = {
       ffmpeg = ffmpeg.override { withOpenjpeg = true; };
       imagemagick = imagemagick.override { openjpegSupport = true; };
@@ -118,6 +158,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ codyopel ];
     platforms = lib.platforms.all;
-    changelog = "https://github.com/uclouvain/openjpeg/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/uclouvain/openjpeg/blob/v${finalAttrs.version}/CHANGELOG.md";
   };
-}
+})
