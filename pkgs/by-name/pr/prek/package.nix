@@ -1,7 +1,9 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   rustPlatform,
+  installShellFiles,
   git,
   uv,
   python312,
@@ -21,6 +23,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-KOpQ3P9cmcWYT3bPKtKpzHPagX4b9hH0EiWGpt98NnE=";
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
   nativeCheckInputs = [
     git
@@ -179,6 +185,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
         # We don't have git info; we run versionCheckHook instead
         "version_info"
       ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd prek \
+      --bash <(COMPLETE=bash $out/bin/prek) \
+      --fish <(COMPLETE=fish $out/bin/prek) \
+      --zsh <(COMPLETE=zsh $out/bin/prek)
+  '';
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
