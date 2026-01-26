@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "iterfzf";
-  version = "1.8.0.62.0";
+  version = "1.9.0.67.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dahlia";
     repo = "iterfzf";
     tag = version;
-    hash = "sha256-eLgF+9p+sqxWR1VkSoeL0NPDMamzUYbql4gMeG8fyNY=";
+    hash = "sha256-Giw5d0X8/1PXK1j428LJjg+Gqadm93C51mLfrYc5J94=";
   };
 
   postPatch = ''
