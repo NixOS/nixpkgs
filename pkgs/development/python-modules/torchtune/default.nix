@@ -71,8 +71,7 @@ buildPythonPackage (finalAttrs: {
     # Not explicitly listed as requirements, but effectively imported at runtime
     torchao
     torchvision
-  ]
-  ++ huggingface-hub.optional-dependencies.hf_transfer;
+  ];
 
   pythonImportsCheck = [ "torchtune" ];
 
