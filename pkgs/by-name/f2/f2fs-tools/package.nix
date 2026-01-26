@@ -48,6 +48,13 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  outputs = [
+    "out"
+    "man"
+    "dev"
+    "lib"
+  ];
+
   enableParallelBuilding = true;
 
   meta = {

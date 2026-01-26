@@ -38,6 +38,12 @@ stdenv.mkDerivation (finalAttrs: {
     "install_man"
   ];
 
+  outputs = [
+    "out"
+    "man"
+    "doc"
+  ];
+
   patches = [ ./install.patch ];
 
   meta = {
