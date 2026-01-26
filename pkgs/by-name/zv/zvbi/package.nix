@@ -7,6 +7,7 @@
   libintl,
   stdenv,
   testers,
+  tzdata,
   validatePkgConfig,
 }:
 
@@ -36,6 +37,10 @@ stdenv.mkDerivation (finalAttrs: {
     libintl
   ];
 
+  nativeCheckInputs = [
+    tzdata
+  ];
+
   outputs = [
     "out"
     "dev"
@@ -43,6 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   enableParallelBuilding = true;
+
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   passthru = {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
