@@ -16,10 +16,17 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-9gaue/XfxtU+5URYfg+uYaNcx8G3Eu9DgVEpj/lk8TY=";
   };
 
-  # Posted a PR for discussion upstream that can be followed:
-  # https://github.com/p0dalirius/ApacheTomcatScanner/pull/32
   postPatch = ''
-    sed -i '/apachetomcatscanner=apachetomcatscanner\.__main__:main/d' setup.py
+    replacement=$(printf 'try:\n    %s\nexcept AttributeError:\n    pass' \
+      'requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS += ":HIGH:!DH:!aNULL"')
+
+    for f in apachetomcatscanner/utils/network.py apachetomcatscanner/utils/scan.py; do
+      if [ -f "$f" ] && grep -Fq 'requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS' "$f"; then
+        substituteInPlace "$f" \
+          --replace-fail 'requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS += ":HIGH:!DH:!aNULL"' \
+          "$replacement"
+      fi
+    done
   '';
 
   pythonRelaxDeps = [
@@ -47,6 +54,6 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/p0dalirius/ApacheTomcatScanner/releases/tag/${version}";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ fab ];
-    mainProgram = "ApacheTomcatScanner";
+    mainProgram = "apachetomcatscanner";
   };
 }
