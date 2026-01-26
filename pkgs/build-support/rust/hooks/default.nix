@@ -92,6 +92,7 @@
               [
                 ''"-Ctarget-feature=${if stdenv.targetPlatform.isStatic then "+" else "-"}crt-static"''
               ]
+              ++ lib.optional (lib.strings.hasPrefix "thumbv" stdenv.targetPlatform.rust.rustcTarget) ''"-Clinker-flavor=gcc"''
               ++ lib.optional (!stdenv.targetPlatform.isx86_32) ''"-Cforce-frame-pointers=yes"''
             )
           } ]
