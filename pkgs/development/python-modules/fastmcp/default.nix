@@ -15,10 +15,12 @@
   cyclopts,
   exceptiongroup,
   httpx,
+  jsonref,
   jsonschema-path,
   mcp,
   openai,
   openapi-pydantic,
+  packaging,
   platformdirs,
   py-key-value-aio,
   pydantic,
@@ -39,20 +41,18 @@
   pytest-asyncio,
   pytest-httpx,
   pytestCheckHook,
-
-  pytest-timeout,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "fastmcp";
-  version = "2.14.3";
+  version = "2.14.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jlowin";
     repo = "fastmcp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vlwS4gpKMkmHh5Yr09ZMNFzpiEKjzJoJJNN3KxSBn3g=";
+    hash = "sha256-qJdOKLvxjenNCyya+XMrf3NGMaDL9LM9HsaQrhubXIY=";
   };
 
   build-system = [
@@ -65,9 +65,11 @@ buildPythonPackage (finalAttrs: {
     cyclopts
     exceptiongroup
     httpx
+    jsonref
     jsonschema-path
     mcp
     openapi-pydantic
+    packaging
     platformdirs
     py-key-value-aio
     pydantic
@@ -90,10 +92,6 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "fastmcp" ];
 
-  pytestFlags = [
-    "--timeout=30"
-  ];
-
   nativeCheckInputs = [
     dirty-equals
     email-validator
@@ -103,7 +101,6 @@ buildPythonPackage (finalAttrs: {
     psutil
     pytest-asyncio
     pytest-httpx
-    pytest-timeout
     pytestCheckHook
     writableTmpDirAsHomeHook
   ]
