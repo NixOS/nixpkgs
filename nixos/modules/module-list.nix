@@ -1185,7 +1185,6 @@
   ./services/networking/firezone/relay.nix
   ./services/networking/firezone/server.nix
   ./services/networking/flannel.nix
-  ./services/networking/freenet.nix
   ./services/networking/freeradius.nix
   ./services/networking/frp.nix
   ./services/networking/frr.nix
@@ -1213,6 +1212,7 @@
   ./services/networking/htpdate.nix
   ./services/networking/https-dns-proxy.nix
   ./services/networking/hylafax/default.nix
+  ./services/networking/hyphanet.nix
   ./services/networking/i2p.nix
   ./services/networking/i2pd.nix
   ./services/networking/icecream/daemon.nix

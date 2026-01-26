@@ -6,29 +6,29 @@
 }:
 
 let
-  cfg = config.services.freenet;
+  cfg = config.services.hyphanet;
   varDir = "/var/lib/freenet";
 in
 {
   options = {
-    services.freenet = {
-      enable = lib.mkEnableOption "Freenet daemon";
+    services.hyphanet = {
+      enable = lib.mkEnableOption "Hyphanet daemon";
 
       nice = lib.mkOption {
         type = lib.types.ints.between (-20) 19;
         default = 10;
-        description = "Set the nice level for the Freenet daemon";
+        description = "Set the nice level for the Hyphanet daemon";
       };
     };
   };
 
   config = lib.mkIf cfg.enable {
-    systemd.services.freenet = {
-      description = "Freenet daemon";
+    systemd.services.hyphanet = {
+      description = "Hyphanet daemon";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = lib.getExe pkgs.freenet;
+        ExecStart = lib.getExe pkgs.hyphanet;
         User = "freenet";
         UMask = "0007";
         WorkingDirectory = varDir;
@@ -38,7 +38,7 @@ in
 
     users.users.freenet = {
       group = "freenet";
-      description = "Freenet daemon user";
+      description = "Hyphanet daemon user";
       home = varDir;
       createHome = true;
       uid = config.ids.uids.freenet;

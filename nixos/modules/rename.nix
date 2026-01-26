@@ -209,6 +209,7 @@ in
     ] "The fourStoreEndpoint module has been removed")
     (mkRemovedOptionModule [ "services" "fprot" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "frab" ] "The frab module has been removed")
+    (mkRemovedOptionModule [ "services" "freenet" ] "The freenet module has been renamed to hyphanet.")
     (mkRemovedOptionModule
       [
         "services"
