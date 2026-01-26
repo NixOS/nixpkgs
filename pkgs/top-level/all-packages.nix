@@ -3739,11 +3739,6 @@ with pkgs;
 
   truecrack-cuda = truecrack.override { cudaSupport = true; };
 
-  turbovnc = callPackage ../tools/admin/turbovnc {
-    # fontDirectories = [ font-adobe-75dpi font-misc-misc font-cursor-misc font-bh-lucidatypewriter-75dpi ];
-    libjpeg_turbo = libjpeg_turbo.override { enableJava = true; };
-  };
-
   unbound-with-systemd = unbound.override {
     withSystemd = true;
   };
