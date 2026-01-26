@@ -12,6 +12,7 @@
   libGL,
   libgbm,
   libjpeg_turbo,
+  libjpeg_turbo' ? libjpeg_turbo.override { enableJava = true; },
   makeWrapper,
   mesa-gl-headers, # for built-in 3D software rendering using swrast
   openjdk, # for the client with Java GUI
@@ -84,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     libGL # for -DTVNC_SYSTEMX11=1
     libgbm
-    libjpeg_turbo
+    libjpeg_turbo'
     openssl
     pam
     perl
