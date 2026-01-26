@@ -9,12 +9,11 @@
   enableStandardFeatures ? false,
   sourceHighlight,
   highlight,
-  pygments,
   graphviz,
   texliveMinimal,
   dblatexFull,
   libxslt,
-  w3m,
+  w3m-batch,
   lynx,
   imagemagick,
   lilypond,
@@ -45,11 +44,7 @@
   enableQrcodeFilter ? false,
   qrencode,
   enableMatplotlibFilter ? false,
-  matplotlib,
-  numpy,
   enableAafigureFilter ? false,
-  aafigure,
-  recursive-pth-loader,
   # backends
   enableDeckjsBackend ? false,
   enableOdfBackend ? false,
@@ -61,6 +56,13 @@
 }:
 
 let
+  inherit (python3.pkgs)
+    pygments
+    matplotlib
+    numpy
+    aafigure
+    recursive-pth-loader
+    ;
 
   _enableDitaaFilter = (enableExtraPlugins && enableJava) || enableDitaaFilter;
   _enableMscgenFilter = enableExtraPlugins || enableMscgenFilter;
@@ -268,7 +270,7 @@ python3.pkgs.buildPythonApplication rec {
             -e "s|^XSLTPROC =.*|XSLTPROC = '${libxslt.bin}/bin/xsltproc'|" \
             -e "s|^DBLATEX =.*|DBLATEX = '${dblatexFull}/bin/dblatex'|" \
             ${lib.optionalString enableJava ''-e "s|^FOP =.*|FOP = '${fop}/bin/fop'|"''} \
-            -e "s|^W3M =.*|W3M = '${w3m}/bin/w3m'|" \
+            -e "s|^W3M =.*|W3M = '${w3m-batch}/bin/w3m'|" \
             -e "s|^LYNX =.*|LYNX = '${lynx}/bin/lynx'|" \
             -e "s|^XMLLINT =.*|XMLLINT = '${libxml2.bin}/bin/xmllint'|" \
             -e "s|^EPUBCHECK =.*|EPUBCHECK = '${epubcheck}/bin/epubcheck'|" \
