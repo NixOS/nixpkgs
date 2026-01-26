@@ -140,9 +140,9 @@ in
         User = cfg.user;
         Group = cfg.group;
         PermissionsStartOnly = true;
+        StateDirectory = [ "infinoted" ];
       };
       preStart = ''
-        mkdir -p /var/lib/infinoted
         install -o ${cfg.user} -g ${cfg.group} -m 0600 /dev/null /var/lib/infinoted/infinoted.conf
         cat >>/var/lib/infinoted/infinoted.conf <<EOF
         [infinoted]
