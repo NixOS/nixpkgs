@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "kanidm";
-  version = "1.2.0";
+  version = "1.8.5";
   pyproject = true;
 
   src = fetchFromGitHub {
