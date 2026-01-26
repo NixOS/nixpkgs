@@ -12842,6 +12842,12 @@
     githubId = 1767283;
     name = "Joris Engbers";
   };
+  jorritvanderheide = {
+    email = "jorrit.vanderheide@ru.nl";
+    github = "jorritvanderheide";
+    githubId = 35707261;
+    name = "Jorrit van der Heide";
+  };
   jorsn = {
     name = "Johannes Rosenberger";
     email = "johannes@jorsn.eu";
