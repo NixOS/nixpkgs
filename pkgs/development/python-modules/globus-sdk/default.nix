@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "globus-sdk";
-  version = "3.63.0";
+  version = "3.65.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "globus";
     repo = "globus-sdk-python";
     tag = version;
-    hash = "sha256-ucVDjOV1NmHguwXSWbomNz9gjrxpeGmoZqF/Je6BL/4=";
+    hash = "sha256-eFM8iK2Ek0TrEHjhReN6rRbTar6HRj0Rck/p2Ef/wnw=";
   };
 
   build-system = [ setuptools ];
@@ -41,6 +41,8 @@ buildPythonPackage rec {
     flaky
     responses
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "globus_sdk" ];
 

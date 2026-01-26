@@ -32,6 +32,8 @@ python3Packages.buildPythonApplication rec {
     requests
   ];
 
+  pythonRelaxDeps = [ "globus-sdk" ];
+
   nativeBuildInputs = [ installShellFiles ];
 
   nativeCheckInputs = with python3Packages; [
