@@ -29,11 +29,6 @@ buildPythonPackage rec {
     hash = "sha256-xqRm9vv/lD9HLX+ekdPgIGGwr5H7QZBATPx0CCjQAmw=";
   };
 
-  postPatch = ''
-    substituteInPlace django_q/tests/settings.py \
-      --replace-fail "HiredisParser" "_HiredisParser"
-  '';
-
   build-system = [
     poetry-core
   ];
