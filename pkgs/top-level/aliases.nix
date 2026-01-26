@@ -1929,6 +1929,8 @@ mapAliases {
   xorg-autoconf = util-macros; # Added 2025-08-18
   xorgdocs = xorg-docs; # Added 2026-01-19
   xorgsgmldoctools = xorg-sgml-doctools; # Added 2026-01-19
+  xp-pen-deco-01-v2-driver = warnAlias "'xp-pen-deco-01-v2-driver' has been replaced by 'xppen_4'. Consider using it with 'programs.xppen' module." xppen_4; # Added 2025-11-28
+  xp-pen-g430-driver = warnAlias "'xp-pen-g430-driver' has been replaced by 'xppen_3'. Consider using it with 'programs.xppen' module." xppen_3; # Added 2025-11-28
   xsw = throw "'xsw' has been removed due to lack of upstream maintenance"; # Added 2025-08-22
   xtrap = throw "XTrap was a proposed X11 extension that hasn't been in Xorg since X11R6 in 1994, it is deprecated and archived upstream."; # added 2025-12-13
   xulrunner = throw "'xulrunner' has been renamed to/replaced by 'firefox-unwrapped'"; # Converted to throw 2025-10-27

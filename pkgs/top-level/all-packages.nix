@@ -13461,8 +13461,6 @@ with pkgs;
 
   bcompare = libsForQt5.callPackage ../applications/version-management/bcompare { };
 
-  xp-pen-deco-01-v2-driver = libsForQt5.xp-pen-deco-01-v2-driver;
-
   newlib-nano = newlib.override {
     nanoizeNewlib = true;
   };
