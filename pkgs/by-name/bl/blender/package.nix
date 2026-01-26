@@ -130,6 +130,12 @@ stdenv'.mkDerivation (finalAttrs: {
   patches = lib.optional rocmSupport ./hiprt-3-compat.patch;
 
   postPatch =
+    ''
+      substituteInPlace source/creator/CMakeLists.txt \
+        --replace-fail '${"$"}{LIBDIR}/python/lib/python${"$"}{PYTHON_VERSION}/site-packages/${"$"}{_openvdb_filename}' \
+        '${openvdb}/${python3Packages.python.sitePackages}/${"$"}{_openvdb_filename}'
+      cat source/creator/CMakeLists.txt
+    '' +
     (lib.optionalString stdenv.hostPlatform.isDarwin ''
       : > build_files/cmake/platform/platform_apple_xcode.cmake
       substituteInPlace source/creator/CMakeLists.txt \
