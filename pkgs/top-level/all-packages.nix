@@ -3386,8 +3386,6 @@ with pkgs;
 
   pulumiPackages = recurseIntoAttrs pulumi.pkgs;
 
-  pulumi-bin = callPackage ../tools/admin/pulumi-bin { };
-
   patch = gnupatch;
 
   pcscliteWithPolkit = pcsclite.override {
