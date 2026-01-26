@@ -1,13 +1,10 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitea,
-  six,
-  sphinxHook,
-  sphinx-rtd-theme,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "cdist";
   version = "7.0.0";
   format = "setuptools";
@@ -25,7 +22,7 @@ buildPythonApplication rec {
     hash = "sha256-lIx0RtGQJdY2e00azI9yS6TV+5pCegpKOOD0dQmgMqA=";
   };
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with python3Packages; [
     six
     sphinxHook
     sphinx-rtd-theme
