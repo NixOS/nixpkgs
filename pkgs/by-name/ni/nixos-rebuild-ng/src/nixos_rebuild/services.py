@@ -43,7 +43,9 @@ def reexec(
         drv = nix.build_flake(
             NIXOS_REBUILD_ATTR,
             flake,
-            grouped_nix_args.flake_build_flags | {"no_link": True},
+            grouped_nix_args.flake_build_flags
+            | grouped_nix_args.flake_eval_flags
+            | {"no_link": True},
         )
     else:
         build_attr = BuildAttr.from_arg(args.attr, args.file)
@@ -101,7 +103,8 @@ def _get_system_attr(
         case Action.BUILD_IMAGE if flake:
             variants = nix.get_build_image_variants_flake(
                 flake,
-                eval_flags=grouped_nix_args.flake_common_flags,
+                eval_flags=grouped_nix_args.flake_build_flags
+                | grouped_nix_args.flake_eval_flags,
             )
             _validate_image_variant(args.image_variant, variants)
             attr = f"config.system.build.images.{args.image_variant}"
@@ -164,7 +167,8 @@ def _build_system(
                 attr,
                 flake,
                 build_host,
-                eval_flags=grouped_nix_args.flake_common_flags,
+                eval_flags=grouped_nix_args.flake_build_flags
+                | grouped_nix_args.flake_eval_flags,
                 flake_build_flags={"no_link": no_link, "dry_run": dry_run}
                 | grouped_nix_args.flake_build_flags,
                 copy_flags=grouped_nix_args.copy_flags,
@@ -174,7 +178,8 @@ def _build_system(
                 attr,
                 flake,
                 flake_build_flags={"no_link": no_link, "dry_run": dry_run}
-                | grouped_nix_args.flake_build_flags,
+                | grouped_nix_args.flake_build_flags
+                | grouped_nix_args.flake_eval_flags,
             )
         case (Remote(_), None):
             path_to_config = nix.build_remote(
@@ -259,7 +264,8 @@ def _activate_system(
                 image_name = nix.get_build_image_name_flake(
                     flake,
                     args.image_variant,
-                    eval_flags=grouped_nix_args.flake_common_flags,
+                    eval_flags=grouped_nix_args.flake_build_flags
+                    | grouped_nix_args.flake_eval_flags,
                 )
             else:
                 image_name = nix.get_build_image_name(
@@ -329,7 +335,10 @@ def build_and_activate_system(
 
 def edit(flake: Flake | None, grouped_nix_args: GroupedNixArgs) -> None:
     if flake:
-        nix.edit_flake(flake, grouped_nix_args.flake_build_flags)
+        nix.edit_flake(
+            flake,
+            grouped_nix_args.flake_build_flags | grouped_nix_args.flake_eval_flags,
+        )
     else:
         nix.edit()
 
@@ -360,7 +369,10 @@ def repl(
     grouped_nix_args: GroupedNixArgs,
 ) -> None:
     if flake:
-        nix.repl_flake(flake, grouped_nix_args.flake_build_flags)
+        nix.repl_flake(
+            flake,
+            grouped_nix_args.flake_build_flags | grouped_nix_args.flake_eval_flags,
+        )
     else:
         nix.repl(build_attr, grouped_nix_args.build_flags)
 
