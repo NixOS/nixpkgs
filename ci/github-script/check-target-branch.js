@@ -137,7 +137,7 @@ async function checkTargetBranch({ github, context, core, dry }) {
       core,
       dry,
       body,
-      event: 'REQUEST_CHANGES',
+      event: 'COMMENT',
       reviewKey,
     })
 
@@ -165,7 +165,7 @@ async function checkTargetBranch({ github, context, core, dry }) {
       core,
       dry,
       body,
-      event: 'REQUEST_CHANGES',
+      event: 'COMMENT',
       reviewKey,
     })
 
