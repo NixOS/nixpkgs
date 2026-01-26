@@ -15782,6 +15782,8 @@ self: super: with self; {
 
   pytorch-pfn-extras = callPackage ../development/python-modules/pytorch-pfn-extras { };
 
+  pytorch-scatter = callPackage ../development/python-modules/pytorch-scatter { };
+
   pytorch-tabnet = callPackage ../development/python-modules/pytorch-tabnet { };
 
   pytorch-tokenizers = callPackage ../development/python-modules/pytorch-tokenizers { };
