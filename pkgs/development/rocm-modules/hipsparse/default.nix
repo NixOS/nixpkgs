@@ -13,13 +13,13 @@
   buildTests ? false,
   buildBenchmarks ? false,
   buildSamples ? false,
-  gpuTargets ? [ ],
+  gpuTargets ? clr.localGpuTargets or [ ],
 }:
 
 # This can also use cuSPARSE as a backend instead of rocSPARSE
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipsparse";
-  version = "7.0.2";
+  version = "7.1.1";
 
   outputs = [
     "out"
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "hipSPARSE";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-hfC+QsOfDNKIZROgTZZsGbAG0yghc27PyVwCDr8MEJ8=";
+    hash = "sha256-zaMAsLfUYkMUiA2vnGiK0//+vZwugqt5T6xJU4FBrRo=";
   };
 
   nativeBuildInputs = [

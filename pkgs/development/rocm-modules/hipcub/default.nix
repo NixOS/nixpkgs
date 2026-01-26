@@ -11,13 +11,13 @@
   gbenchmark,
   buildTests ? false,
   buildBenchmarks ? false,
-  gpuTargets ? [ ],
+  gpuTargets ? clr.localGpuTargets or [ ],
 }:
 
 # CUB can also be used as a backend instead of rocPRIM.
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipcub";
-  version = "7.0.2";
+  version = "7.1.1";
 
   outputs = [
     "out"
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "hipCUB";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-Vx9h/DTZo7RfQrflVwXOCKiA7rt6dQQw/P/bllgtq8w=";
+    hash = "sha256-3/499pX7hFKJwbhSEH3/bMhNdyabK36jLv8s5TC2fuw=";
   };
 
   nativeBuildInputs = [

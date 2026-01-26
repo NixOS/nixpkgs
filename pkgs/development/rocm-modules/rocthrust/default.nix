@@ -10,12 +10,12 @@
   gtest,
   buildTests ? false,
   buildBenchmarks ? false,
-  gpuTargets ? [ ],
+  gpuTargets ? clr.localGpuTargets or [ ],
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocthrust";
-  version = "7.0.2";
+  version = "7.1.1";
 
   outputs = [
     "out"
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "rocThrust";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-tbGEZ8NXu7euPN8CaRYOjcmTmYq1SUP7LNKOjO0RICE=";
+    hash = "sha256-Gncy0wvN8M4JSmnjbxaED+M9rLo4A/7LCCq/6temiZU=";
   };
 
   nativeBuildInputs = [

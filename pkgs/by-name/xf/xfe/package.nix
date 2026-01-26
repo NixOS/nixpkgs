@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  fox,
+  fox_1_6,
   fontconfig,
   freetype,
   pkg-config,
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     intltool
   ];
   buildInputs = [
-    fox
+    fox_1_6
     gettext
     xcbutil
     gcc

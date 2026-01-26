@@ -8,6 +8,9 @@
   clr,
   libxml2,
   libedit,
+  rocm-comgr,
+  rocm-device-libs,
+  rocm-runtime,
   zstd,
   zlib,
   ncurses,
@@ -39,7 +42,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocmlir${suffix}";
-  version = "7.0.2";
+  version = "7.1.1";
 
   outputs = [
     "out"
@@ -52,10 +55,11 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "rocMLIR";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-0+vZ/Lkh1fC9oKyy83YjIX4xuMJEWErd8UpZZuaaXdI=";
+    hash = "sha256-A9vUvsEZrZlNEW4cscF66L48rJQ1zJYmIzwXQ2QzJ3s=";
   };
 
   nativeBuildInputs = [
+    clr
     cmake
     rocm-cmake
     python3Packages.python
@@ -65,6 +69,9 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libxml2
     libedit
+    rocm-comgr
+    rocm-runtime
+    rocm-device-libs
   ];
 
   propagatedBuildInputs = [
@@ -74,23 +81,28 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DLLVM_TARGETS_TO_BUILD=AMDGPU;${llvmNativeTarget}"
-    "-DCMAKE_BUILD_TYPE=Release"
-    "-DLLVM_USE_LINKER=lld"
-    "-DLLVM_ENABLE_ZSTD=FORCE_ON"
-    "-DLLVM_ENABLE_ZLIB=FORCE_ON"
-    "-DLLVM_ENABLE_LIBCXX=ON"
-    "-DLLVM_ENABLE_TERMINFO=ON"
-    "-DROCM_PATH=${clr}"
+    (lib.cmakeFeature "LLVM_TARGETS_TO_BUILD" "AMDGPU${
+      lib.optionalString (!buildRockCompiler) ";${llvmNativeTarget}"
+    }")
+    (lib.cmakeFeature "LLVM_USE_LINKER" "lld")
+    (lib.cmakeFeature "LLVM_ENABLE_ZSTD" "FORCE_ON")
+    (lib.cmakeFeature "LLVM_ENABLE_ZLIB" "FORCE_ON")
+    (lib.cmakeBool "LLVM_ENABLE_LIBCXX" true)
+    (lib.cmakeBool "LLVM_ENABLE_TERMINFO" true)
+    (lib.cmakeFeature "ROCM_PATH" "${clr}")
     # Manually define CMAKE_INSTALL_<DIR>
     # See: https://github.com/NixOS/nixpkgs/pull/197838
-    "-DCMAKE_INSTALL_BINDIR=bin"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
-    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "bin")
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
+    (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
+    (lib.cmakeBool "MLIR_ENABLE_ROCM_RUNNER" (!buildRockCompiler))
     (lib.cmakeBool "BUILD_FAT_LIBROCKCOMPILER" buildRockCompiler)
   ]
+  ++ lib.optionals buildRockCompiler [
+    (lib.cmakeBool "LLVM_INCLUDE_TESTS" false)
+  ]
   ++ lib.optionals (!buildRockCompiler) [
-    "-DROCM_TEST_CHIPSET=gfx000"
+    (lib.cmakeFeature "ROCM_TEST_CHIPSET" "gfx900")
   ];
 
   postPatch = ''

@@ -25,7 +25,7 @@
   useOpenCL ? false,
   useCPU ? false,
   buildDocs ? false, # Needs internet
-  gpuTargets ? [ ],
+  gpuTargets ? clr.localGpuTargets or [ ],
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -40,13 +40,13 @@ stdenv.mkDerivation (finalAttrs: {
         "cpu"
     );
 
-  version = "7.0.2";
+  version = "7.1.1";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "MIVisionX";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-SO0rE86UmX9f574ALdnnBDFceKGKTvJDQ8Lf7iSlJtA=";
+    hash = "sha256-aC6GUPK6ZSOAx+PHHB4gLPNAG5U/kapqX7YWilusDw8=";
   };
 
   patches = [

@@ -254,11 +254,11 @@
       "dependency": "transitive",
       "description": {
         "name": "camera_web",
-        "sha256": "595f28c89d1fb62d77c73c633193755b781c6d2e0ebcd8dc25b763b514e6ba8f",
+        "sha256": "57f49a635c8bf249d07fb95eb693d7e4dda6796dedb3777f9127fb54847beba7",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.3.5"
+      "version": "0.3.5+3"
     },
     "characters": {
       "dependency": "transitive",
@@ -547,11 +547,11 @@
       "dependency": "transitive",
       "description": {
         "name": "ffi",
-        "sha256": "289279317b4b16eb2bb7e271abccd4bf84ec9bdcbe999e278a94b804f5630418",
+        "sha256": "d07d37192dbf97461359c1518788f203b0c9102cfd2c35a716b823741219542c",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.1.4"
+      "version": "2.1.5"
     },
     "file": {
       "dependency": "transitive",
@@ -904,21 +904,21 @@
       "dependency": "transitive",
       "description": {
         "name": "hive_ce",
-        "sha256": "81d39a03c4c0ba5938260a8c3547d2e71af59defecea21793d57fc3551f0d230",
+        "sha256": "29f8791bf13fa6cf7435a58f1f82a7c9706973c867affa77c34d91e105762664",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.15.1"
+      "version": "2.17.0"
     },
     "hive_ce_flutter": {
       "dependency": "direct main",
       "description": {
         "name": "hive_ce_flutter",
-        "sha256": "26d656c9e8974f0732f1d09020e2d7b08ba841b8961a02dbfb6caf01474b0e9a",
+        "sha256": "2677e95a333ff15af43ccd06af7eb7abbf1a4f154ea071997f3de4346cae913a",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.3.3"
+      "version": "2.3.4"
     },
     "hive_ce_generator": {
       "dependency": "direct dev",
@@ -1034,11 +1034,11 @@
       "dependency": "transitive",
       "description": {
         "name": "isolate_channel",
-        "sha256": "f3d36f783b301e6b312c3450eeb2656b0e7d1db81331af2a151d9083a3f6b18d",
+        "sha256": "68191008e3a219bc87cc8cddbcd1e29810bd9f3a0fdc2108b574ccbd9aafda08",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.2.2+1"
+      "version": "0.3.0"
     },
     "isolate_contactor": {
       "dependency": "transitive",
@@ -2182,11 +2182,11 @@
       "dependency": "transitive",
       "description": {
         "name": "watcher",
-        "sha256": "592ab6e2892f67760543fb712ff0177f4ec76c031f02f5b4ff8d3fc5eb9fb61a",
+        "sha256": "1398c9f081a753f9226febe8900fce8f7d0a67163334e1c94a2438339d79d635",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.1.4"
+      "version": "1.2.1"
     },
     "web": {
       "dependency": "transitive",

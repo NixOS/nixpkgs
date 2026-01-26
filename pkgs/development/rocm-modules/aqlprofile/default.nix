@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation {
   pname = "aqlprofile";
-  version = "7.0.2";
+  version = "7.1.1";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "aqlprofile";
-    tag = "rocm-7.0.2";
-    hash = "sha256-A17SAkEUf3yAGwvZUWSdL7Tn5YAXB0YlD3T1DLTjDSg=";
+    tag = "rocm-7.1.1";
+    hash = "sha256-MAZUHo52gb0aZSFnKugMlXxcDkmMwhy1AFF1RDRgRVk=";
   };
 
   env.CXXFLAGS = "-DROCP_LD_AQLPROFILE=1";

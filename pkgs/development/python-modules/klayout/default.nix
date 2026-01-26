@@ -38,6 +38,10 @@ buildPythonPackage rec {
     fixDarwinDylibNames
   ];
 
+  # Ensure that there is enough space for the `fixDarwinDylibNames` hook to
+  # update the install names of the output dylibs.
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-headerpad_max_install_names";
+
   pythonImportsCheck = [ "klayout" ];
 
   meta = {

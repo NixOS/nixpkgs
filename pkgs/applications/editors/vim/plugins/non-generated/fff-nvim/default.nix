@@ -10,18 +10,18 @@
   vimUtils,
 }:
 let
-  version = "e3f788f-unstable-2025-12-13";
+  version = "6b01f95-unstable-2026-01-24";
   src = fetchFromGitHub {
     owner = "dmtrKovalenko";
     repo = "fff.nvim";
-    rev = "e3f788f87b014f61e39cd916edc766d10e563d73";
-    hash = "sha256-NSTo5zs9DvGDVUp6PJNHCQsSNPgdkJCTYvlA/IP12h4=";
+    rev = "6b01f95ca6305511ef28175c42b250925376f181";
+    hash = "sha256-vI1oOVzpTpYZ0ea6w0e2wyKa0TsyLFFauOZkhYbXLYM=";
   };
   fff-nvim-lib = rustPlatform.buildRustPackage {
     pname = "fff-nvim-lib";
     inherit version src;
 
-    cargoHash = "sha256-kNTJC+0KBQKt0nMY2HAUWnr55x8nTd5oRGeDuam8X30=";
+    cargoHash = "sha256-jch2snZVoDqPkbeuF++yc/3ikoWal29bTKZjkyDgVjU=";
 
     nativeBuildInputs = [
       pkg-config
@@ -49,9 +49,14 @@ vimUtils.buildVimPlugin {
   postPatch = ''
     substituteInPlace lua/fff/download.lua \
       --replace-fail \
-        "return plugin_dir .. '/../target'" \
+        "return plugin_dir .. '/../target/release'" \
         "return '${fff-nvim-lib}/lib'"
   '';
+
+  nvimSkipModule = [
+    # Skip single file dev config for testing fff.nvim locally
+    "empty_config"
+  ];
 
   passthru = {
     updateScript = nix-update-script {
@@ -69,6 +74,7 @@ vimUtils.buildVimPlugin {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       GaetanLepage
+      saadndm
     ];
   };
 }

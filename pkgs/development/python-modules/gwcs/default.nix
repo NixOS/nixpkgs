@@ -14,16 +14,16 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gwcs";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "spacetelescope";
     repo = "gwcs";
-    tag = version;
-    hash = "sha256-aiC+uJ5S2HggBsou4vbjxxNtilRVC4eklRgML/lLK+4=";
+    tag = finalAttrs.version;
+    hash = "sha256-0iUnapBn8yDCx1tqHD10Ljid15yBuqlICyFuva2LNPk=";
   };
 
   build-system = [
@@ -50,8 +50,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to manage the Generalized World Coordinate System";
     homepage = "https://github.com/spacetelescope/gwcs";
-    changelog = "https://github.com/spacetelescope/gwcs/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/spacetelescope/gwcs/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

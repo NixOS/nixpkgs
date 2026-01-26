@@ -15,13 +15,13 @@
   buildTests ? false,
   buildBenchmarks ? false,
   buildSamples ? false,
-  gpuTargets ? [ ],
+  gpuTargets ? clr.localGpuTargets or [ ],
 }:
 
 # Can also use cuFFT
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipfft";
-  version = "7.0.2";
+  version = "7.1.1";
 
   outputs = [
     "out"
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "hipFFT";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-cozwHUlqACq0IM3YToc/xFB694DJ3rPiEPUCTo0xuHY=";
+    hash = "sha256-6FyI9s6H/lHFhm8aUqB9+vvJ0CRIVWCFLNoJprvsI6o=";
     fetchSubmodules = true;
   };
 

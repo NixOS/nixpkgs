@@ -96,6 +96,9 @@
 
   # For QT support
   qt6,
+
+  # Create a symlink at $out/bin/google-chrome
+  withSymlink ? true,
 }:
 
 let
@@ -268,6 +271,10 @@ let
 
       runHook postInstall
     '';
+
+    postInstall = lib.optionalString withSymlink ''
+      ln -s $out/bin/google-chrome-stable $out/bin/google-chrome
+    '';
   });
 
   darwin = stdenvNoCC.mkDerivation (finalAttrs: {
@@ -305,6 +312,10 @@ let
         --add-flags ${lib.escapeShellArg commandLineArgs}
       runHook postInstall
     '';
+
+    postInstall = lib.optionalString withSymlink ''
+      ln -s $out/bin/google-chrome-stable $out/bin/google-chrome
+    '';
   });
 
   passthru.updateScript = ./update.sh;
@@ -315,7 +326,6 @@ let
     homepage = "https://www.google.com/chrome/browser/";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
-      johnrtitor
       mdaniels5757
     ];
     platforms = lib.platforms.darwin ++ [ "x86_64-linux" ];
