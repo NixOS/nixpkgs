@@ -8503,35 +8503,11 @@ self: super: with self; {
 
   libcloud = callPackage ../development/python-modules/libcloud { };
 
-  libcomps = lib.pipe pkgs.libcomps [
-    toPythonModule
-    (
-      p:
-      p.overrideAttrs (super: {
-        meta = super.meta // {
-          outputsToInstall = [ "py" ];
-        };
-      })
-    )
-    (p: p.override { python3 = python; })
-    (p: p.py)
-  ];
+  libcomps = toPythonModule (pkgs.libcomps.override { python3 = python; }).py;
 
   libcst = callPackage ../development/python-modules/libcst { };
 
-  libdnf = lib.pipe pkgs.libdnf [
-    toPythonModule
-    (
-      p:
-      p.overrideAttrs (super: {
-        meta = super.meta // {
-          outputsToInstall = [ "py" ];
-        };
-      })
-    )
-    (p: p.override { python3 = python; })
-    (p: p.py)
-  ];
+  libdnf = toPythonModule (pkgs.libdnf.override { python3 = python; }).py;
 
   libear = callPackage ../development/python-modules/libear { };
 
@@ -8576,20 +8552,7 @@ self: super: with self; {
 
   libmambapy = callPackage ../development/python-modules/libmambapy { };
 
-  libmodulemd = lib.pipe pkgs.libmodulemd [
-    toPythonModule
-    (
-      p:
-      p.overrideAttrs (super: {
-        meta = super.meta // {
-          outputsToInstall = [ "py" ]; # The package always builds python3 bindings
-          broken = (super.meta.broken or false) || !isPy3k;
-        };
-      })
-    )
-    (p: p.override { python3 = python; })
-    (p: p.py)
-  ];
+  libmodulemd = toPythonModule (pkgs.libmodulemd.override { python3 = python; }).py;
 
   libmr = callPackage ../development/python-modules/libmr { };
 
