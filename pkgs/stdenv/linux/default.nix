@@ -875,7 +875,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
           ++ lib.optionals (localSystem.libc == "musl") [ fortify-headers ]
           ++ [
             prevStage.updateAutotoolsGnuConfigScriptsHook
-            prevStage.gnu-config
+            prevStage.updateAutotoolsGnuConfigScriptsHook.gnu_config
           ]
           ++ [
             gcc-unwrapped.gmp
