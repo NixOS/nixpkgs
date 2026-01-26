@@ -3743,8 +3743,6 @@ with pkgs;
     withPython = true;
   };
 
-  unetbootin = libsForQt5.callPackage ../tools/cd-dvd/unetbootin { };
-
   unrpa = with python3Packages; toPythonApplication unrpa;
 
   usort = with python3Packages; toPythonApplication usort;
