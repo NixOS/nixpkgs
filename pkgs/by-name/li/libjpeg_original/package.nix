@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libjpeg";
-  version = "9f";
+  version = "10";
 
   src = fetchurl {
     url = "http://www.ijg.org/files/jpegsrc.v${finalAttrs.version}.tar.gz";
-    hash = "sha256-BHBcEQyyRpyqeftx+6PXv4NJFHBulkGkWJSFwfgyVls=";
+    hash = "sha256-i56qEyQmkOvQPhcoqx7fl6gaeO1ug2JNSTZV8xrJWrU=";
   };
 
   configureFlags = lib.optional static "--enable-static --disable-shared";
