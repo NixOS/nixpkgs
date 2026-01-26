@@ -8,6 +8,12 @@
   pam,
   makeDesktopItem,
   icoutils,
+
+  writeShellApplication,
+  nix-update,
+  curl,
+  jq,
+  gnused,
 }:
 
 let
@@ -71,6 +77,30 @@ stdenv.mkDerivation rec {
     wrapProgram "${pkg_path}/support/launch.sh" \
       --prefix PATH : ${lib.makeBinPath [ openjdk21 ]}
   '';
+
+  passthru = {
+    updateScript = lib.getExe (writeShellApplication {
+      name = "ghidra-bin-update";
+      runtimeInputs = [
+        curl
+        jq
+        gnused
+        nix-update
+      ];
+
+      text = ''
+        IFS=$'\n' read -d ''' -r version versiondate < <( \
+          curl 'https://api.github.com/repos/NationalSecurityAgency/ghidra/releases?per_page=1' | \
+            jq -r '(.[0].tag_name | capture("Ghidra_(?<v>.+)_build")).v,
+                   (.[0].assets[0].browser_download_url | capture("ghidra_.+_PUBLIC_(?<v>\\d+).zip")).v' \
+        ) || true
+        sed -i -E \
+          -e "s/versiondate = \"[0-9]+\"/versiondate = \"$versiondate\"/" \
+          pkgs/tools/security/ghidra/default.nix
+        nix-update --version "$version" ghidra-bin
+      '';
+    });
+  };
 
   meta = {
     description = "Software reverse engineering (SRE) suite of tools developed by NSA's Research Directorate in support of the Cybersecurity mission";
