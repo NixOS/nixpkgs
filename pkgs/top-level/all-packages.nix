@@ -1647,8 +1647,6 @@ with pkgs;
 
   clickgen = with python3Packages; toPythonApplication clickgen;
 
-  cloud-init = callPackage ../tools/virtualization/cloud-init { inherit systemd; };
-
   coloredlogs = with python3Packages; toPythonApplication coloredlogs;
 
   czkawka-full = czkawka.wrapper.override {
