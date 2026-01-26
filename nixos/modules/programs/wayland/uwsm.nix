@@ -120,8 +120,6 @@ in
 
         # UWSM recommends dbus broker for better compatibility
         services.dbus.implementation = "broker";
-
-        services.displayManager.enable = true;
       }
 
       (lib.mkIf (cfg.waylandCompositors != { }) {
