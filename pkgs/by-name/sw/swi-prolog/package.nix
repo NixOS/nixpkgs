@@ -10,7 +10,6 @@
   openssl,
   gmp,
   gperftools,
-  readline,
   libedit,
   libarchive,
 
@@ -78,7 +77,7 @@
 
 let
   # minorVersion is even for stable, odd for unstable
-  version = "9.2.9";
+  version = "10.0.0";
 
   # This package provides several with* options, which replaces the old extraLibraries option.
   # This error should help users that still use this option find their way to these flags.
@@ -125,7 +124,7 @@ stdenv.mkDerivation {
     owner = "SWI-Prolog";
     repo = "swipl";
     tag = "V${version}";
-    hash = "sha256-M0stUwiD3Auz5OsmgVJFWg2RAswu42UUp8bafqZOC7A=";
+    hash = "sha256-kJfwAAGg25fdFmGkrrC4QyleVLAflr+xDPaqw5OR33s=";
     fetchSubmodules = true;
   };
 
@@ -146,7 +145,6 @@ stdenv.mkDerivation {
     openssl
     gperftools
     gmp
-    readline
     libedit
   ]
   ++ optionalDependencies;
