@@ -7,7 +7,6 @@
 , "@tailwindcss/typography"
 , "alex"
 , "browserify"
-, "browser-sync"
 , "coc-go"
 , "coc-tsserver"
 , "dotenv-vault"

@@ -81,6 +81,7 @@ mapAliases {
   bitwarden-cli = pkgs.bitwarden-cli; # added 2023-07-25
   bower = throw "bower was removed because it was deprecated"; # added 2025-09-17
   inherit (pkgs) bower2nix; # added 2024-08-23
+  browser-sync = throw "'browser-sync' has been removed because it was unmaintained in nixpkgs"; # Added 2026-01-26
   inherit (pkgs) btc-rpc-explorer; # added 2023-08-17
   inherit (pkgs) carbon-now-cli; # added 2023-08-17
   inherit (pkgs) carto; # added 2023-08-17
