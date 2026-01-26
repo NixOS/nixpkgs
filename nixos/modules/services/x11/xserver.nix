@@ -877,7 +877,7 @@ in
           cfgPath = "X11/xorg.conf.d/10-evdev.conf";
         in
         {
-          ${cfgPath}.source = xf86-input-evdev.out + "/share/" + cfgPath;
+          ${cfgPath}.source = pkgs.xf86-input-evdev.out + "/share/" + cfgPath;
         }
       );
 
