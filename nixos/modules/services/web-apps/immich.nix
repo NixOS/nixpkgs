@@ -171,9 +171,9 @@ in
 
     machine-learning = {
       enable =
-        mkEnableOption "immich's machine-learning functionality to detect faces and search for objects"
+        mkEnableOption "immich's machine-learning functionality to detect faces and search for objects. Can be enabled without server"
         // {
-          default = true;
+          default = cfg.enable;
         };
       environment = mkOption {
         type = types.submodule { freeformType = types.attrsOf types.str; };
@@ -261,16 +261,19 @@ in
   config = mkMerge [
     (mkIf (cfg.enable || cfg.machine-learning.enable) {
       systemd.slices.system-immich = {
-        description = "Immich slice";
+        description = "Immich (self-hosted photo and video backup solution) slice";
+        documentation = [ "https://immich.app/docs" ];
       };
       users.users = mkIf (cfg.user == "immich") {
         immich = {
-          isSystemUser = true;
+          name = "immich";
           group = cfg.group;
+          isSystemUser = true;
         };
       };
       users.groups = mkIf (cfg.group == "immich") { immich = { }; };
     })
+
     (mkIf cfg.enable {
       assertions = [
         {
@@ -316,6 +319,7 @@ in
           search_path = "\"$user\", public, vectors";
         };
       };
+
       systemd.services.postgresql-setup.serviceConfig.ExecStartPost =
         let
           extensions = [
@@ -455,21 +459,22 @@ in
       };
 
     })
+
     (mkIf cfg.machine-learning.enable {
       services.immich.machine-learning.environment = {
         MACHINE_LEARNING_WORKERS = "1";
         MACHINE_LEARNING_WORKER_TIMEOUT = "120";
         MACHINE_LEARNING_CACHE_FOLDER = "/var/cache/immich";
+        XDG_CACHE_HOME = "/var/cache/immich";
         IMMICH_HOST = "localhost";
         IMMICH_PORT = "3003";
       };
       systemd.services.immich-machine-learning = {
         description = "immich machine learning";
-        after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
         inherit (cfg.machine-learning) environment;
         serviceConfig = commonServiceConfig // {
-          ExecStart = lib.getExe (cfg.package.machine-learning.override { immich = cfg.package; });
+          ExecStart = lib.getExe cfg.package.machine-learning;
           Slice = "system-immich.slice";
           CacheDirectory = "immich";
           User = cfg.user;
