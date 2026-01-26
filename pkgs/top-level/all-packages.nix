@@ -10943,8 +10943,6 @@ with pkgs;
 
   plover = recurseIntoAttrs (libsForQt5.callPackage ../applications/misc/plover { });
 
-  pokefinder = qt6Packages.callPackage ../tools/games/pokefinder { };
-
   pothos = libsForQt5.callPackage ../applications/radio/pothos { };
 
   # perhaps there are better apps for this task? It's how I had configured my previous system.
