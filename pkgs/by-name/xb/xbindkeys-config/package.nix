@@ -6,7 +6,6 @@
   pkg-config,
   procps,
   makeWrapper,
-  ...
 }:
 
 stdenv.mkDerivation rec {
