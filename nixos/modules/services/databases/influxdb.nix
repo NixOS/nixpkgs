@@ -17,11 +17,7 @@ in
 
     services.influxdb = {
 
-      enable = lib.mkOption {
-        default = false;
-        description = "Whether to enable the influxdb server";
-        type = lib.types.bool;
-      };
+      enable = lib.mkEnableOption "the influxdb server";
 
       package = lib.mkPackageOption pkgs "influxdb" { };
 
