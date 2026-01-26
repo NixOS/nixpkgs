@@ -6,14 +6,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "srt-live-server";
   version = "1.4.8";
 
   src = fetchFromGitHub {
     owner = "Edward-Wu";
     repo = "srt-live-server";
-    rev = "V${version}";
+    rev = "V${finalAttrs.version}";
     sha256 = "0x48sxpgxznb1ymx8shw437pcgk76ka5rx0zhn9b3cyi9jlq1yld";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ shamilton ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -4,13 +4,13 @@
   fetchgit,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   name = "ramfetch";
   version = "1.1.0a";
 
   src = fetchgit {
     url = "https://codeberg.org/jahway603/ramfetch.git";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-sUreZ6zm+a1N77OZszjnpS4mmo5wL1dhNGVldJCGoag=";
   };
 
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.markbeep ];
     mainProgram = "ramfetch";
   };
-}
+})

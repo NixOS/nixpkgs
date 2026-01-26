@@ -7,12 +7,12 @@
   SDL_image,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "airstrike";
   version = "pre6a";
 
   src = fetchurl {
-    url = "https://icculus.org/airstrike/airstrike-${version}-src.tar.gz";
+    url = "https://icculus.org/airstrike/airstrike-${finalAttrs.version}-src.tar.gz";
     sha256 = "1h6rv2zcp84ycmd0kv1pbpqjgwx57dw42x7878d2c2vnpi5jn8qi";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ pSub ];
     platforms = lib.platforms.linux;
   };
-}
+})

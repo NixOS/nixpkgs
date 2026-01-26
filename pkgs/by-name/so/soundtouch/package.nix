@@ -7,7 +7,7 @@
   libtool,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "soundtouch";
   version = "2.4.0";
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     domain = "codeberg.org";
     owner = "soundtouch";
     repo = "soundtouch";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-7JUBAFURKtPCZrcKqL1rOLdsYMd7kGe7wY0JUl2XPvw=";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     mainProgram = "soundstretch";
     platforms = lib.platforms.all;
   };
-}
+})

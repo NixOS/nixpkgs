@@ -17,7 +17,7 @@
 let
   jdk = jdk8;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "adoptopenjdk-icedtea-web";
 
   version = "1.8.8";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "AdoptOpenJDK";
     repo = "IcedTea-Web";
-    rev = "icedtea-web-${version}";
+    rev = "icedtea-web-${finalAttrs.version}";
     sha256 = "sha256-hpEVWG9ltNDL/0EFJjgQRRce+BLcCO4ZERULYZxyC1o=";
   };
 
@@ -88,4 +88,4 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/adoptopenjdk/icedtea-web";
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -5,14 +5,14 @@
   libX11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "devour";
   version = "12";
 
   src = fetchFromGitHub {
     owner = "salman-abedin";
     repo = "devour";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1qq5l6d0fn8azg7sj7a4m2jsmhlpswl5793clcxs1p34vy4wb2lp";
   };
 
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "devour";
   };
-}
+})

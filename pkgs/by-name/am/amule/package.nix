@@ -25,7 +25,7 @@
 # daemon and client are not build monolithic
 assert monolithic || (!monolithic && (enableDaemon || client || httpServer));
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname =
     "amule"
     + lib.optionalString httpServer "-web"
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "amule-project";
     repo = "amule";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "1nm4vxgmisn1b6l3drmz0q04x067j2i8lw5rnf0acaapwlp8qwvi";
   };
 
@@ -112,4 +112,4 @@ stdenv.mkDerivation rec {
     # Undefined symbols for architecture arm64: "_FSFindFolder"
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

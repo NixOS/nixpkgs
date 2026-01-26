@@ -14,14 +14,14 @@
   yt-dlp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hypnotix";
   version = "5.6";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "hypnotix";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-7CPrRMoVM1FaU8aJlnZigTkHa97bDPdwcu4JY7sERJQ=";
   };
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace usr/lib/hypnotix/hypnotix.py \
-      --replace __DEB_VERSION__ ${version} \
+      --replace __DEB_VERSION__ ${finalAttrs.version} \
       --replace /usr/bin/yt-dlp ${yt-dlp}/bin/yt-dlp \
       --replace /usr/share/circle-flags-svg ${circle-flags}/share/circle-flags-svg \
       --replace /usr/share/hypnotix $out/share/hypnotix
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "IPTV streaming application";
     homepage = "https://github.com/linuxmint/hypnotix";
-    changelog = "https://github.com/linuxmint/hypnotix/blob/${src.tag}/debian/changelog";
+    changelog = "https://github.com/linuxmint/hypnotix/blob/${finalAttrs.src.tag}/debian/changelog";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       dotlambda
@@ -98,4 +98,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "hypnotix";
   };
-}
+})

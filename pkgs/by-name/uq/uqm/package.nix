@@ -52,27 +52,27 @@ let
       ];
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "uqm";
   version = "0.8.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/sc2/uqm-${version}-src.tgz";
+    url = "mirror://sourceforge/sc2/uqm-${finalAttrs.version}-src.tgz";
     sha256 = "JPL325z3+vU7lfniWA5vWWIFqY7QwzXP6DTGR4WtT1o=";
   };
 
   content = fetchurl {
-    url = "mirror://sourceforge/sc2/uqm-${version}-content.uqm";
+    url = "mirror://sourceforge/sc2/uqm-${finalAttrs.version}-content.uqm";
     sha256 = "d9dawl5vt1WjPEujs4p7e8Qfy8AolokbDMmskhS3Lu8=";
   };
 
   voice = fetchurl {
-    url = "mirror://sourceforge/sc2/uqm-${version}-voice.uqm";
+    url = "mirror://sourceforge/sc2/uqm-${finalAttrs.version}-voice.uqm";
     sha256 = "ntv1HXfYtTM5nF86+1STFKghDXqrccosUbTySDIzekU=";
   };
 
   music = fetchurl {
-    url = "mirror://sourceforge/sc2/uqm-${version}-3domusic.uqm";
+    url = "mirror://sourceforge/sc2/uqm-${finalAttrs.version}-3domusic.uqm";
     sha256 = "RM087H6VabQRettNd/FSKJCXJWYmc5GuCWMUhdIx2Lk=";
   };
 
@@ -88,11 +88,11 @@ stdenv.mkDerivation rec {
   ];
 
   postUnpack = ''
-    mkdir -p uqm-${version}/content/packages
-    mkdir -p uqm-${version}/content/addons
-    ln -s "$content" "uqm-${version}/content/packages/uqm-${version}-content.uqm"
-    ln -s "$music" "uqm-${version}/content/addons/uqm-${version}-3domusic.uqm"
-    ln -s "$voice" "uqm-${version}/content/addons/uqm-${version}-voice.uqm"
+    mkdir -p uqm-${finalAttrs.version}/content/packages
+    mkdir -p uqm-${finalAttrs.version}/content/addons
+    ln -s "$content" "uqm-${finalAttrs.version}/content/packages/uqm-${finalAttrs.version}-content.uqm"
+    ln -s "$music" "uqm-${finalAttrs.version}/content/addons/uqm-${finalAttrs.version}-3domusic.uqm"
+    ln -s "$voice" "uqm-${finalAttrs.version}/content/addons/uqm-${finalAttrs.version}-voice.uqm"
   ''
   + lib.optionalString useRemixPacks (
     lib.concatMapStrings (disc: ''
@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
     '') remixPacks
   )
   + lib.optionalString use3DOVideos ''
-    ln -s "${videos}" "uqm-${version}/content/addons/3dovideo"
+    ln -s "${videos}" "uqm-${finalAttrs.version}/content/addons/3dovideo"
   '';
 
   postPatch = ''
@@ -152,4 +152,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = with lib.platforms; linux;
   };
-}
+})

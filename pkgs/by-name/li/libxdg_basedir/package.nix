@@ -5,14 +5,14 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libxdg-basedir";
   version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "devnev";
     repo = "libxdg-basedir";
-    tag = "libxdg-basedir-${version}";
+    tag = "libxdg-basedir-${finalAttrs.version}";
     hash = "sha256-ewtUKDdE6k9Q9hglWwhbTU3DTxvIN41t+zf2Gch9Dkk=";
   };
 
@@ -27,4 +27,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ nickcao ];
     platforms = lib.platforms.unix;
   };
-}
+})

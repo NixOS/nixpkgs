@@ -72,12 +72,12 @@ let
   );
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "postfix";
   version = "3.10.7";
 
   src = fetchurl {
-    url = "https://de.postfix.org/ftpmirror/official/postfix-${version}.tar.gz";
+    url = "https://de.postfix.org/ftpmirror/official/postfix-${finalAttrs.version}.tar.gz";
     hash = "sha256-/NP/cIBq5/CoLntcMB4vT8+mpomi27Oz8bXlIIEVeIo=";
   };
 
@@ -191,7 +191,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://www.postfix.org/";
-    changelog = "https://www.postfix.org/announcements/postfix-${version}.html";
+    changelog = "https://www.postfix.org/announcements/postfix-${finalAttrs.version}.html";
     description = "Fast, easy to administer, and secure mail server";
     license = with lib.licenses; [
       ipl10
@@ -203,4 +203,4 @@ stdenv.mkDerivation rec {
       lewo
     ];
   };
-}
+})

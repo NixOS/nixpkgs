@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "extrace";
   version = "0.9";
 
   src = fetchFromGitHub {
     owner = "leahneukirchen";
     repo = "extrace";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Jy/Ac3NcqBkW0kHyypMAVUGAQ41qWM96BbLAym06ogM=";
   };
 
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.leahneukirchen ];
   };
-}
+})

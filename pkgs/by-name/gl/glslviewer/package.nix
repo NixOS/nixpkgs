@@ -15,14 +15,14 @@
   ffmpeg_7,
   ncurses,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "glslviewer";
   version = "3.2.4";
   src = fetchFromGitHub {
     owner = "patriciogonzalezvivo";
     repo = "glslViewer";
     fetchSubmodules = true;
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Ve3wmX5+kABCu8IRe4ySrwsBJm47g1zvMqDbqrpQl88=";
   };
   nativeBuildInputs = [
@@ -53,4 +53,4 @@ stdenv.mkDerivation rec {
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

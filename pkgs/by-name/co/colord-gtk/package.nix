@@ -20,7 +20,7 @@
   lcms2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "colord-gtk";
   version = "0.3.1";
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://www.freedesktop.org/software/colord/releases/colord-gtk-${version}.tar.xz";
+    url = "https://www.freedesktop.org/software/colord/releases/colord-gtk-${finalAttrs.version}.tar.xz";
     sha256 = "wXa4ibdWMKF/Tj1+8kwJo+EjaOYzSWCHRZyLU6w6Ei0=";
   };
 
@@ -79,4 +79,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "cd-convert";
   };
-}
+})

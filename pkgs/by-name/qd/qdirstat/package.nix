@@ -11,14 +11,14 @@
   util-linux,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qdirstat";
   version = "1.9";
 
   src = fetchFromGitHub {
     owner = "shundhammer";
     repo = "qdirstat";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-pwdmltHDNwUMx1FNOoiXl5Pna0zlKqahmicBCN6UVSU=";
   };
 
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "qdirstat";
   };
-}
+})

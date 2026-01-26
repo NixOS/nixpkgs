@@ -23,7 +23,7 @@
   udev,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "waffle";
   version = "1.8.1";
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "Mesa";
     repo = "waffle";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Y7GRYLqSO572qA1eZ3jS8QlZ1X9xKpDtScaySTuPK/U=";
   };
 
@@ -91,4 +91,4 @@ stdenv.mkDerivation rec {
     inherit (libgbm.meta) platforms;
     maintainers = with lib.maintainers; [ Flakebi ];
   };
-}
+})

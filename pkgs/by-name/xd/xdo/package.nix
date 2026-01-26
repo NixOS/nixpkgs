@@ -7,14 +7,14 @@
   xcbutilwm,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xdo";
   version = "0.5.7";
 
   src = fetchFromGitHub {
     owner = "baskerville";
     repo = "xdo";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1h3jrygcjjbavdbkpx2hscsf0yf97gk487lzjdlvymd7dxdv9hy9";
   };
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "xdo";
   };
-}
+})

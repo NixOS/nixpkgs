@@ -5,14 +5,14 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libspf2";
   version = "2.2.13";
 
   src = fetchFromGitHub {
     owner = "helsinki-systems";
     repo = "libspf2";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-tkCHP3B1sBb0+scHBjX5lCvaeSrZryfaGKye02LFlYs=";
   };
 
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})

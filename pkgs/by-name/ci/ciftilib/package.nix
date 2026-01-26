@@ -9,14 +9,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ciftilib";
   version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "Washington-University";
     repo = "CiftiLib";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-xc2dpMse4SozYEV/w3rXCrh1LKpTThq5nHB2y5uAD0A=";
   };
 
@@ -53,4 +53,4 @@ stdenv.mkDerivation rec {
     broken = stdenv.hostPlatform.isDarwin;
     license = lib.licenses.bsd2;
   };
-}
+})

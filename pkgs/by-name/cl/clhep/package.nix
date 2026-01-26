@@ -5,12 +5,12 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "clhep";
   version = "2.4.7.1";
 
   src = fetchurl {
-    url = "https://proj-clhep.web.cern.ch/proj-clhep/dist1/clhep-${version}.tgz";
+    url = "https://proj-clhep.web.cern.ch/proj-clhep/dist1/clhep-${finalAttrs.version}.tgz";
     hash = "sha256-HIMEp3cqxrmRlfEwA3jG4930rQfIXWSgRQVlKruKVfk=";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ veprbl ];
     platforms = lib.platforms.unix;
   };
-}
+})

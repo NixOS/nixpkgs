@@ -8,14 +8,14 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hdf5-blosc";
   version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "Blosc";
     repo = "hdf5-blosc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-pM438hUEdzdZEGYxoKlBAHi1G27auj9uGSeiXwVPAE8=";
   };
 
@@ -62,4 +62,4 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Blosc/hdf5-blosc";
     license = lib.licenses.mit;
   };
-}
+})

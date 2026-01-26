@@ -23,14 +23,14 @@ let
       LDFLAGS=-s
     ''; # use linux flags by default
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tree";
   version = "2.2.1";
 
   src = fetchFromGitLab {
     owner = "OldManProgrammer";
     repo = "unix-tree";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-sC3XdZWJSXyCIYr/Y41ogz5bNBTfwKjOFtYwhayXPhY=";
   };
 
@@ -56,4 +56,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ nickcao ];
     mainProgram = "tree";
   };
-}
+})

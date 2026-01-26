@@ -6,19 +6,19 @@
   jre,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cfr";
   version = "0.152";
 
   src = fetchurl {
-    url = "http://www.benf.org/other/cfr/cfr_${version}.jar";
+    url = "http://www.benf.org/other/cfr/cfr_${finalAttrs.version}.jar";
     sha256 = "sha256-9obo897Td9e8h9IWqQ6elRLfQVbnWwbGVaFmSK6HZbI=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
   buildCommand = ''
-    jar=$out/share/java/cfr_${version}.jar
+    jar=$out/share/java/cfr_${finalAttrs.version}.jar
     install -Dm444 $src $jar
     makeWrapper ${jre}/bin/java $out/bin/cfr --add-flags "-jar $jar"
   '';
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
   };
-}
+})

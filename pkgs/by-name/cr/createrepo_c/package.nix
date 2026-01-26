@@ -21,14 +21,14 @@
   libmodulemd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "createrepo_c";
   version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "rpm-software-management";
     repo = "createrepo_c";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-2mvU2F9rvG4FtDgq+M9VXWg+c+AsW/+tDPaEj7zVmQ0=";
   };
 
@@ -72,4 +72,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

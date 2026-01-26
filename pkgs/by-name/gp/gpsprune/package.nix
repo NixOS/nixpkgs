@@ -9,12 +9,12 @@
   copyDesktopItems,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gpsprune";
   version = "25";
 
   src = fetchurl {
-    url = "https://activityworkshop.net/software/gpsprune/gpsprune_${version}.jar";
+    url = "https://activityworkshop.net/software/gpsprune/gpsprune_${finalAttrs.version}.jar";
     hash = "sha256-8FGOigjHIvj+CZwq0Lht7UZjtmrE5l2Aqx92gZjau44=";
   };
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       icon = "gpsprune";
       desktopName = "GpsPrune";
       genericName = "GPS Data Editor";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       categories = [
         "Education"
         "Geoscience"
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -Dm644 ${src} $out/share/java/gpsprune.jar
+    install -Dm644 ${finalAttrs.src} $out/share/java/gpsprune.jar
     makeWrapper ${jre}/bin/java $out/bin/gpsprune \
       --add-flags "-jar $out/share/java/gpsprune.jar"
     mkdir -p $out/share/pixmaps
@@ -68,4 +68,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "gpsprune";
   };
-}
+})

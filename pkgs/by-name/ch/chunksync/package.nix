@@ -6,12 +6,12 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.4";
   pname = "chunksync";
 
   src = fetchurl {
-    url = "https://chunksync.florz.de/chunksync_${version}.tar.gz";
+    url = "https://chunksync.florz.de/chunksync_${finalAttrs.version}.tar.gz";
     sha256 = "1gwqp1kjwhcmwhynilakhzpzgc0c6kk8c9vkpi30gwwrwpz3cf00";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux;
     maintainers = with lib.maintainers; [ yayayayaka ];
   };
-}
+})

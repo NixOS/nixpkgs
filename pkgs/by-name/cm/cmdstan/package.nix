@@ -10,14 +10,14 @@
   cmdstan,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cmdstan";
   version = "2.37.0";
 
   src = fetchFromGitHub {
     owner = "stan-dev";
     repo = "cmdstan";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-bKkzzFkMF8+Ufz/EdKLJdB290Fvc2t8b47xB8oPz/sk=";
   };
@@ -94,4 +94,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ wegank ];
     platforms = lib.platforms.unix;
   };
-}
+})

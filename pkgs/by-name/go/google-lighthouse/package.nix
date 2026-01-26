@@ -10,19 +10,19 @@
   nodejs,
   makeWrapper,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "google-lighthouse";
   version = "12.8.2";
 
   src = fetchFromGitHub {
     owner = "GoogleChrome";
     repo = "lighthouse";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-pluMFOyW352tEWjz28jhI4AZcKDB5jhoWIzTWyLxwGY=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
+    yarnLock = "${finalAttrs.src}/yarn.lock";
     hash = "sha256-yQT2JUsu/3ttJU8zUdtlhzUscepISNUr3wlxKHLaz3I=";
   };
 
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
     mainProgram = "lighthouse";
     maintainers = with lib.maintainers; [ theCapypara ];
   };
-}
+})

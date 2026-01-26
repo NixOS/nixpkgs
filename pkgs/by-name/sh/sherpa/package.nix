@@ -11,14 +11,14 @@
   autoPatchelfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sherpa";
   version = "3.0.3";
 
   src = fetchFromGitLab {
     owner = "sherpa-team";
     repo = "sherpa";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-bh5C0BYbuAkbPrp27P0oD0yoxd53ViRtmpUKfN7kZ90=";
   };
 
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
-}
+})

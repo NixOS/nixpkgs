@@ -5,14 +5,14 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libb64";
   version = "2.0.0.1";
 
   src = fetchFromGitHub {
     owner = "libb64";
     repo = "libb64";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-9loDftr769qnIi00MueO86kjha2EiG9pnCLogp0Iq3c=";
   };
 
@@ -65,4 +65,4 @@ stdenv.mkDerivation rec {
     mainProgram = "base64";
     platforms = lib.platforms.unix;
   };
-}
+})

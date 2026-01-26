@@ -15,12 +15,12 @@
   zxing-cpp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "photoqt";
   version = "5.1";
 
   src = fetchurl {
-    url = "https://photoqt.org/downloads/source/photoqt-${version}.tar.gz";
+    url = "https://photoqt.org/downloads/source/photoqt-${finalAttrs.version}.tar.gz";
     hash = "sha256-GQT0JDuhrtQh9u5R2DBIlYWEHsSJ8cvDp3+0s6I0iHY=";
   };
 
@@ -77,4 +77,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ wegank ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -7,14 +7,14 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mangareader";
   version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "g-fb";
     repo = "mangareader";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-e5mG286Pj4Ey1/VzRxzXsY3bqI3XA0IBtnFTXwas/0s=";
   };
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Qt manga reader for local files";
     homepage = "https://github.com/g-fb/mangareader";
-    changelog = "https://github.com/g-fb/mangareader/releases/tag/${src.rev}";
+    changelog = "https://github.com/g-fb/mangareader/releases/tag/${finalAttrs.src.rev}";
     mainProgram = "mangareader";
     platforms = lib.platforms.linux;
     license = with lib.licenses; [
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     ];
     maintainers = with lib.maintainers; [ zendo ];
   };
-}
+})

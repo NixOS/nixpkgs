@@ -10,14 +10,14 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.0.10";
   pname = "glyr";
 
   src = fetchFromGitHub {
     owner = "sahib";
     repo = "glyr";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1miwbqzkhg0v3zysrwh60pj9sv6ci4lzq2vq2hhc6pc6hdyh8xyr";
   };
 
@@ -53,4 +53,4 @@ stdenv.mkDerivation rec {
     mainProgram = "glyrc";
     platforms = lib.platforms.unix;
   };
-}
+})

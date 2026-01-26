@@ -18,14 +18,14 @@
 let
   blasIntSize = if blas64 then "64" else "32";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "blis";
   version = "2.0";
 
   src = fetchFromGitHub {
     owner = "flame";
     repo = "blis";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-+n8SbiiEJDN4j1IPmZfI5g1i2J+jWrUXh7S48JEDTAE=";
   };
 
@@ -65,4 +65,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ stephen-huan ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kona";
   version = "20211225";
 
   src = fetchFromGitHub {
     owner = "kevinlawler";
     repo = "kona";
-    rev = "Win64-${version}";
+    rev = "Win64-${finalAttrs.version}";
     sha256 = "sha256-m3a9conyKN0qHSSAG8zAb3kx8ir+7dqgxm1XGjCQcfk=";
   };
 
@@ -26,4 +26,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     license = lib.licenses.isc;
   };
-}
+})

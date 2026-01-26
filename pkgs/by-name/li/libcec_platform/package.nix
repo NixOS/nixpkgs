@@ -6,14 +6,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "p8-platform";
   version = "2.1.0.1";
 
   src = fetchFromGitHub {
     owner = "Pulse-Eight";
     repo = "platform";
-    rev = "p8-platform-${version}";
+    rev = "p8-platform-${finalAttrs.version}";
     hash = "sha256-zAI/AOLJAunv+cCQ6bOXrgkW+wl5frj3ktzx2cDeCCk=";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     teams = [ lib.teams.kodi ];
   };
-}
+})

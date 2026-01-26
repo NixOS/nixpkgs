@@ -12,14 +12,14 @@
   systemdMinimal,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "coturn";
   version = "4.8.0";
 
   src = fetchFromGitHub {
     owner = "coturn";
     repo = "coturn";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-YeEyEGtlzzltEssPez7BIS3Wcfd+HgDgmrKyxOVu9PA=";
   };
 
@@ -63,10 +63,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "TURN server";
     homepage = "https://coturn.net/";
-    changelog = "https://github.com/coturn/coturn/blob/${version}/ChangeLog";
+    changelog = "https://github.com/coturn/coturn/blob/${finalAttrs.version}/ChangeLog";
     license = with lib.licenses; [ bsd3 ];
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ _0x4A6F ];
     broken = stdenv.hostPlatform.isDarwin; # 2018-10-21
   };
-}
+})

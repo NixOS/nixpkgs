@@ -13,19 +13,19 @@
 let
   lua = lua5_1;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "diod";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "chaos";
     repo = "diod";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Fz+qvgw5ipyAcZlWBGkmSHuGrZ95i5OorLN3dkdsYKU=";
   };
 
   postPatch = ''
-    sed -i configure.ac -e '/git describe/c ${version})'
+    sed -i configure.ac -e '/git describe/c ${finalAttrs.version})'
   '';
 
   nativeBuildInputs = [
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
   };
-}
+})

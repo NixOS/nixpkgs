@@ -6,14 +6,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nifticlib";
   version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "NIFTI-Imaging";
     repo = "nifti_clib";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0hamm6nvbjdjjd5md4jahzvn5559frigxaiybnjkh59ckxwb1hy4";
   };
 
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.publicDomain;
   };
-}
+})

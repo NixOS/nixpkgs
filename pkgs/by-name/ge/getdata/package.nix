@@ -5,13 +5,13 @@
   autoreconfHook,
   libtool,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "getdata";
   version = "0.11.0";
   src = fetchFromGitHub {
     owner = "ketiltrout";
     repo = "getdata";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-fuFakbkxDwDp6Z9VITPIB8NiYRSp98Ub1y5SC6W5S1E=";
   };
 
@@ -25,4 +25,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.vbgl ];
     homepage = "https://getdata.sourceforge.net/";
   };
-}
+})

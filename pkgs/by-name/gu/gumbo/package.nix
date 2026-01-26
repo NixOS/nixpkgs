@@ -5,7 +5,7 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gumbo";
   version = "0.13.2";
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     domain = "codeberg.org";
     owner = "gumbo-parser";
     repo = "gumbo-parser";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-8mri7mLZkuIZgzE6p0yc41bNNyzGTV9V90OiA/9TkkU=";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux ++ darwin;
     license = lib.licenses.asl20;
   };
-}
+})

@@ -8,14 +8,14 @@
   ninja,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "slurm-nm";
   version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "mattthias";
     repo = "slurm";
-    rev = "upstream/${version}";
+    rev = "upstream/${finalAttrs.version}";
     hash = "sha256-w77SIXFctMwwNw9cQm0HQaEaMs/5NXQjn1LpvkpCCB8=";
   };
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ mikaelfangel ];
     mainProgram = "slurm";
   };
-}
+})

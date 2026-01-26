@@ -9,7 +9,7 @@
   installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "stenc";
   version = "2.0.1";
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "scsitape";
     repo = "stenc";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-M7b+T0mm2QTP1LqqjdKV/NWZ60DrueFEnN1unwCOeH4=";
   };
 
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ woffs ];
     platforms = lib.platforms.linux;
   };
-}
+})

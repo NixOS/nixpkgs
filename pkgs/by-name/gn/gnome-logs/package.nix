@@ -22,12 +22,12 @@
   gsettings-desktop-schemas,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-logs";
   version = "49.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-logs/${lib.versions.major version}/gnome-logs-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-logs/${lib.versions.major finalAttrs.version}/gnome-logs-${finalAttrs.version}.tar.xz";
     hash = "sha256-+PV56wu22ajWrl7hQj+UR6+RIAeFF4tQu63UrC0lXUU=";
   };
 
@@ -72,4 +72,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -19,14 +19,14 @@
   ueberzug,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ctpv";
   version = "1.1";
 
   src = fetchFromGitHub {
     owner = "NikitaIvanovV";
     repo = "ctpv";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-3BQi4m44hBmPkJBFNCg6d9YKRbDZwLxdzBb/NDWTQP4=";
   };
 
@@ -69,4 +69,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.wesleyjrz ];
   };
-}
+})

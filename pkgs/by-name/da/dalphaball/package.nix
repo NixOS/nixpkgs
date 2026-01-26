@@ -6,7 +6,7 @@
   gmp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dalphaball";
   version = "0-unstable-2023-06-15";
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-mUxEL9b67z/mG+0pcM5uQ/jPAfEUpJlXOXPmqDea+U4=";
   };
 
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
   strictDeps = true;
 
   nativeBuildInputs = [
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ aschleck ];
     platforms = lib.platforms.unix;
   };
-}
+})

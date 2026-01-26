@@ -6,14 +6,14 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libchardet";
   version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "Joungkyun";
     repo = "libchardet";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-JhEiWM3q8X+eEBHxv8k9yYOaTGoJOzI+/iFYC0gZJJs=";
   };
 
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

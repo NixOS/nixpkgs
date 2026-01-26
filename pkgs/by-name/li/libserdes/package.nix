@@ -12,14 +12,14 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libserdes";
   version = "8.1.0";
 
   src = fetchFromGitHub {
     owner = "confluentinc";
     repo = "libserdes";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-zEBJD7DOhpxfkAPypCZhygA6uaXIdK4yXZtDiuGA5Yg=";
   };
 
@@ -91,4 +91,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ liff ];
     platforms = lib.platforms.all;
   };
-}
+})

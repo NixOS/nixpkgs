@@ -6,12 +6,12 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "epubcheck";
   version = "5.3.0";
 
   src = fetchzip {
-    url = "https://github.com/w3c/epubcheck/releases/download/v${version}/epubcheck-${version}.zip";
+    url = "https://github.com/w3c/epubcheck/releases/download/v${finalAttrs.version}/epubcheck-${finalAttrs.version}.zip";
     sha256 = "sha256-wROsu/s0EuNQQsbMtxWVIwDZvDozBk/kfwxhivCIRAo=";
   };
 
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ eadwu ];
   };
-}
+})

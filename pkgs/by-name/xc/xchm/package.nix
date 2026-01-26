@@ -8,14 +8,14 @@
   desktopToDarwinBundle,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xchm";
   version = "1.37";
 
   src = fetchFromGitHub {
     owner = "rzvncj";
     repo = "xCHM";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-UMn8ds4nheuYSu0PesxdGoyxyn5AcKq9WByeRUxxx3k=";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "xchm";
   };
-}
+})

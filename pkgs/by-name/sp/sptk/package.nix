@@ -7,14 +7,14 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sptk";
   version = "4.4";
 
   src = fetchFromGitHub {
     owner = "sp-nitech";
     repo = "SPTK";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-QdaXIFsFXL9/CtUJlOaUKOTmG/nm6ibBEsVfzW9pT/U=";
   };
 
@@ -42,10 +42,10 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    changelog = "https://github.com/sp-nitech/SPTK/releases/tag/v${version}";
+    changelog = "https://github.com/sp-nitech/SPTK/releases/tag/v${finalAttrs.version}";
     description = "Suite of speech signal processing tools";
     homepage = "https://github.com/sp-nitech/SPTK";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

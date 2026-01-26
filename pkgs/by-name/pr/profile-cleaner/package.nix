@@ -9,14 +9,14 @@
   file,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "2.45";
   pname = "profile-cleaner";
 
   src = fetchFromGitHub {
     owner = "graysky2";
     repo = "profile-cleaner";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-10e1S+li7SXKJX2lETSdx84GavWqQYQqyLoBIVToTBI=";
   };
 
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.devhell ];
     mainProgram = "profile-cleaner";
   };
-}
+})

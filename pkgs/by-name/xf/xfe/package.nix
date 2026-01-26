@@ -15,12 +15,12 @@
   xorg,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xfe";
   version = "2.1.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/xfe/xfe-${version}.tar.xz";
+    url = "mirror://sourceforge/xfe/xfe-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-jgDgd/DOB92v19SAGqBnTHIYQE+EohgDvvFCwTNDJlE=";
   };
 
@@ -59,4 +59,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

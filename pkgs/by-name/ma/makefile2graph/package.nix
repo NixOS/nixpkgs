@@ -7,14 +7,14 @@
   gnumake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "makefile2graph";
   version = "2021.11.06";
 
   src = fetchFromGitHub {
     owner = "lindenb";
     repo = "makefile2graph";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-4jyftC0eCJ13X/L4uEWhT5FA5/UXUmSHSoba89GSySQ=";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
   };
-}
+})

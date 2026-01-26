@@ -10,14 +10,14 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cinnamon-menus";
   version = "6.6.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon-menus";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-vjgWPFNmRkJWynimvBuxCxLK5C7tQxqJ5Y4dkZXSDSA=";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     teams = [ lib.teams.cinnamon ];
   };
-}
+})

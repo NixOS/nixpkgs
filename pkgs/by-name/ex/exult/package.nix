@@ -16,14 +16,14 @@
   enableTools ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "exult";
   version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "exult";
     repo = "exult";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-SZwYaqTTWESNRphXefa3JyH988y3WiaIr12yORhiFow=";
   };
 
@@ -72,4 +72,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "exult";
   };
-}
+})

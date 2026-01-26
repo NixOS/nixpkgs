@@ -11,14 +11,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pcmsolver";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "PCMSolver";
     repo = "pcmsolver";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0jrxr8z21hjy7ik999hna9rdqy221kbkl3qkb06xw7g80rc9x9yr";
   };
 
@@ -63,4 +63,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})

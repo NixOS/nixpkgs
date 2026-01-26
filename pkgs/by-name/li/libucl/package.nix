@@ -25,14 +25,14 @@ let
     lua = [ lua ];
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libucl";
   version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "vstakhov";
     repo = "libucl";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-dub829xZ10sJ5qwegYUiGoyAVLiwg44GKSzz+BMLJis=";
   };
 
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ jpotier ];
   };
-}
+})

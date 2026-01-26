@@ -6,14 +6,14 @@
   installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "2.0.0-beta3";
   pname = "zfsnap";
 
   src = fetchFromGitHub {
     owner = "zfsnap";
     repo = "zfsnap";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0670a5sghvqx32c9gfsird15mg9nqcvwxsrfcjrwc0sj7br9bd2g";
   };
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ woffs ];
     platforms = lib.platforms.linux;
   };
-}
+})

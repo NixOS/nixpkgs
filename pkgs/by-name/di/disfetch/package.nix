@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "disfetch";
   version = "3.7";
 
   src = fetchFromGitHub {
     owner = "q60";
     repo = "disfetch";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-xzOE+Pnx0qb3B9vWWrF5Q0nhUo0QYBUO6j6al8N3deY=";
   };
 
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ vel ];
     mainProgram = "disfetch";
   };
-}
+})

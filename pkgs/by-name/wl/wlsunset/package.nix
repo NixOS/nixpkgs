@@ -11,14 +11,14 @@
   wayland-protocols,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wlsunset";
   version = "0.4.0";
 
   src = fetchFromSourcehut {
     owner = "~kennylevinsen";
     repo = "wlsunset";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-U/yROKkU9pOBLIIIsmkltF64tt5ZR97EAxxGgrFYwNg=";
   };
 
@@ -45,10 +45,10 @@ stdenv.mkDerivation rec {
       wlr-gamma-control-unstable-v1.
     '';
     homepage = "https://sr.ht/~kennylevinsen/wlsunset/";
-    changelog = "https://git.sr.ht/~kennylevinsen/wlsunset/refs/${version}";
+    changelog = "https://git.sr.ht/~kennylevinsen/wlsunset/refs/${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ wineee ];
     mainProgram = "wlsunset";
   };
-}
+})

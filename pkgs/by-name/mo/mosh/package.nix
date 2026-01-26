@@ -19,14 +19,14 @@
   withClient ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mosh";
   version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "mobile-shell";
     repo = "mosh";
-    rev = "mosh-${version}";
+    rev = "mosh-${finalAttrs.version}";
     hash = "sha256-tlSsHu7JnXO+sorVuWWubNUNdb9X0/pCaiGG5Y0X/g8=";
   };
 
@@ -101,4 +101,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ skeuchel ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -19,14 +19,14 @@
   buildClient ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "teeworlds";
   version = "0.7.5";
 
   src = fetchFromGitHub {
     owner = "teeworlds";
     repo = "teeworlds";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1l19ksmimg6b8zzjy0skyhh7z11ql7n5gvilkv7ay5x2b9ndbqwz";
     fetchSubmodules = true;
   };
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     # Quote nonsense is a workaround for https://github.com/NixOS/nix/issues/661
     substituteInPlace 'other/bundle/client/Info.plist.in' \
       --replace ${"'"}''${TARGET_CLIENT}' 'teeworlds' \
-      --replace ${"'"}''${PROJECT_VERSION}' '${version}'
+      --replace ${"'"}''${PROJECT_VERSION}' '${finalAttrs.version}'
 
     # Make sure some bundled dependencies are actually unbundled.
     # This will fail compilation if one of these dependencies could not
@@ -150,4 +150,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

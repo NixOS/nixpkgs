@@ -10,14 +10,14 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bspwm";
   version = "0.9.12";
 
   src = fetchFromGitHub {
     owner = "baskerville";
     repo = "bspwm";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-sEheWAZgKVDCEipQTtDLNfDSA2oho9zU9gK2d6W6WSU=";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux;
   };
-}
+})

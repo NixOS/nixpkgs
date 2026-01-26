@@ -7,12 +7,12 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ace";
   version = "7.0.11";
 
   src = fetchurl {
-    url = "https://download.dre.vanderbilt.edu/previous_versions/ACE-${version}.tar.bz2";
+    url = "https://download.dre.vanderbilt.edu/previous_versions/ACE-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-r+LRiu/u1qMcbrjkSr8ErnemX6zvhgvc5cLWu8AQhww=";
   };
 
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ nico202 ];
     platforms = lib.platforms.linux;
   };
-}
+})

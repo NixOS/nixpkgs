@@ -28,12 +28,12 @@
   pipewire,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-contacts";
   version = "49.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-contacts/${lib.versions.major version}/gnome-contacts-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-contacts/${lib.versions.major finalAttrs.version}/gnome-contacts-${finalAttrs.version}.tar.xz";
     hash = "sha256-JfIcZ7wp133vLZzT4i0oRg0StH/ySKIBdzG1TbSF5K8=";
   };
 
@@ -82,4 +82,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

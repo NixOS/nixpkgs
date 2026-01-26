@@ -15,15 +15,15 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "snobol4";
   version = "2.3.3";
 
   src = fetchurl {
     urls = [
-      "https://ftp.regressive.org/snobol4/snobol4-${version}.tar.gz"
+      "https://ftp.regressive.org/snobol4/snobol4-${finalAttrs.version}.tar.gz"
       # fallback for when the current version is moved to the old folder
-      "https://ftp.regressive.org/snobol4/old/snobol4-${version}.tar.gz"
+      "https://ftp.regressive.org/snobol4/old/snobol4-${finalAttrs.version}.tar.gz"
     ];
     hash = "sha256-v9UwcdaSg3dvWydk94ZdNUuJ03JWmFShiHjln1c4jtI=";
   };
@@ -78,4 +78,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ xworld21 ];
   };
-}
+})

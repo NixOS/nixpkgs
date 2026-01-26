@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "replace";
   version = "2.24";
 
   src = fetchurl {
-    url = "http://hpux.connect.org.uk/ftp/hpux/Users/replace-${version}/replace-${version}-src-11.31.tar.gz";
+    url = "http://hpux.connect.org.uk/ftp/hpux/Users/replace-${finalAttrs.version}/replace-${finalAttrs.version}-src-11.31.tar.gz";
     sha256 = "18hkwhaz25s6209n5mpx9hmkyznlzygqj488p2l7nvp9zrlxb9sf";
   };
 
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     mainProgram = "replace-literal";
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -28,12 +28,12 @@
   suil,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qtractor";
   version = "1.5.8";
 
   src = fetchurl {
-    url = "mirror://sourceforge/qtractor/qtractor-${version}.tar.gz";
+    url = "mirror://sourceforge/qtractor/qtractor-${finalAttrs.version}.tar.gz";
     hash = "sha256-nHN+bEfshFHBpmQLuQxffI7BcKigYpj3HzsFjGWlLtQ=";
   };
 
@@ -74,10 +74,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Audio/MIDI multi-track sequencer";
     homepage = "https://qtractor.sourceforge.io";
-    changelog = "https://github.com/rncbc/qtractor/blob/v${version}/ChangeLog";
+    changelog = "https://github.com/rncbc/qtractor/blob/v${finalAttrs.version}/ChangeLog";
     license = lib.licenses.gpl2Plus;
     mainProgram = "qtractor";
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

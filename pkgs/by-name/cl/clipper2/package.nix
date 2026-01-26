@@ -6,18 +6,18 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "clipper2";
   version = "1.5.4";
 
   src = fetchFromGitHub {
     owner = "AngusJohnson";
     repo = "Clipper2";
-    rev = "Clipper2_${version}";
+    rev = "Clipper2_${finalAttrs.version}";
     hash = "sha256-2vZXxT5hISz2xbWbvYNGTrq9QovTjNwUK103iVtz8ok=";
   };
 
-  sourceRoot = "${src.name}/CPP";
+  sourceRoot = "${finalAttrs.src.name}/CPP";
 
   nativeBuildInputs = [
     cmake
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.cadkin ];
     platforms = lib.platforms.all;
   };
-}
+})

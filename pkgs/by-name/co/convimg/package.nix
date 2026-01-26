@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "convimg";
   version = "9.4";
 
   src = fetchFromGitHub {
     owner = "mateoconlechuga";
     repo = "convimg";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-5insJ391Usef8GF3Yh74PEqE534zitQg9udFRPcz69g=";
     fetchSubmodules = true;
   };
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "convimg";
   };
-}
+})

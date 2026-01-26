@@ -11,14 +11,14 @@
   raspa,
   raspa-data,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "raspa";
   version = "2.0.47";
 
   src = fetchFromGitHub {
     owner = "iRASPA";
     repo = "RASPA2";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-i8Y+pejiOuyPNJto+/0CmRoAnMljCrnDFx8qDh4I/68=";
   };
 
@@ -76,4 +76,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ ShamrockLee ];
     mainProgram = "simulate";
   };
-}
+})

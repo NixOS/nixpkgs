@@ -11,14 +11,14 @@
   llvm,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kseexpr";
   version = "4.0.4.0";
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "graphics";
     repo = "kseexpr";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-XjFGAN7kK2b0bLouYG3OhajhOQk4AgC4EQRzseccGCE=";
   };
   patches = [
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ nek0 ];
     license = lib.licenses.lgpl3Plus;
   };
-}
+})

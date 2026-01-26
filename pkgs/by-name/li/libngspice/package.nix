@@ -12,12 +12,12 @@
   readline,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "${lib.optionalString withNgshared "lib"}ngspice";
   version = "45";
 
   src = fetchurl {
-    url = "mirror://sourceforge/ngspice/ngspice-${version}.tar.gz";
+    url = "mirror://sourceforge/ngspice/ngspice-${finalAttrs.version}.tar.gz";
     hash = "sha256-8arYq6woKKe3HaZkEd6OQGUk518wZuRnVUOcSQRC1zQ=";
   };
 
@@ -62,4 +62,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ bgamari ];
     platforms = lib.platforms.unix;
   };
-}
+})

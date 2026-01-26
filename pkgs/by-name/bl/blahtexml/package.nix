@@ -7,14 +7,14 @@
   xercesc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "blahtexml";
   version = "1.0";
 
   src = fetchFromGitHub {
     owner = "gvanas";
     repo = "blahtexml";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-DL5DyfARHHbwWBVHSa/VwHzNaAx/v7EDdnw1GLOk+y0=";
   };
 
@@ -77,4 +77,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.xworld21 ];
     platforms = lib.platforms.all;
   };
-}
+})

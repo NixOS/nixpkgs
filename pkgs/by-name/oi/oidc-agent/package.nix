@@ -13,14 +13,14 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "oidc-agent";
   version = "5.3.3";
 
   src = fetchFromGitHub {
     owner = "indigo-dc";
     repo = "oidc-agent";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-PV1aswfvEMtsgHWKfdtIo/BV+MHKKdul2vjFdyoT2Ic=";
   };
 
@@ -68,4 +68,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ xinyangli ];
     license = lib.licenses.mit;
   };
-}
+})

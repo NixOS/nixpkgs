@@ -11,7 +11,7 @@
   gtk-sharp-2_0,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gio-sharp";
   version = "0.3";
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "mono";
     repo = "gio-sharp";
 
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "13pc529pjabj7lq23dbndc26ssmg5wkhc7lfvwapm87j711m0zig";
   };
 
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
   };
-}
+})

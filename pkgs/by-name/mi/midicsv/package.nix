@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "midicsv";
   version = "1.1";
 
   src = fetchurl {
-    url = "https://www.fourmilab.ch/webtools/midicsv/midicsv-${version}.tar.gz";
+    url = "https://www.fourmilab.ch/webtools/midicsv/midicsv-${finalAttrs.version}.tar.gz";
     sha256 = "1vvhk2nf9ilfw0wchmxy8l13hbw9cnpz079nsx5srsy4nnd78nkw";
   };
 
@@ -26,4 +26,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

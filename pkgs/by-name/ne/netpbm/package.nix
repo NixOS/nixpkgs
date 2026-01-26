@@ -17,7 +17,7 @@
   buildPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   # Determine version and revision from:
   # https://sourceforge.net/p/netpbm/code/HEAD/log/?path=/advanced
   pname = "netpbm";
@@ -129,10 +129,10 @@ stdenv.mkDerivation rec {
   passthru.updateScript = ./update.sh;
 
   meta = {
-    changelog = "https://sourceforge.net/p/netpbm/code/${src.rev}/tree/advanced/doc/HISTORY";
+    changelog = "https://sourceforge.net/p/netpbm/code/${finalAttrs.src.rev}/tree/advanced/doc/HISTORY";
     homepage = "https://netpbm.sourceforge.net/";
     description = "Toolkit for manipulation of graphic images";
     license = lib.licenses.free; # http://netpbm.svn.code.sourceforge.net/p/netpbm/code/trunk/doc/copyright_summary
     platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

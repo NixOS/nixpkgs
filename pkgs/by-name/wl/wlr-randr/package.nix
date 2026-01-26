@@ -10,7 +10,7 @@
   wayland-scanner,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wlr-randr";
   version = "0.5.0";
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "emersion";
     repo = "wlr-randr";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-lHOGpY0IVnR8QdSqJbtIA4FkhmQ/zDiFNqqXyj8iw/s=";
   };
 
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "wlr-randr";
   };
-}
+})

@@ -21,12 +21,12 @@
   gtk-sharp-2_0,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libgpod";
   version = "0.8.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gtkpod/libgpod-${version}.tar.bz2";
+    url = "mirror://sourceforge/gtkpod/libgpod-${finalAttrs.version}.tar.bz2";
     hash = "sha256-Y4p5WdBOlfHmKrrQK9M3AuTo3++YSFrH2dUDlcN+lV0=";
   };
 
@@ -106,4 +106,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

@@ -12,12 +12,12 @@
   nix-update,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fasmg";
   version = "l04h";
 
   src = fetchzip {
-    url = "https://flatassembler.net/fasmg.${version}.zip";
+    url = "https://flatassembler.net/fasmg.${finalAttrs.version}.zip";
     sha256 = "sha256-LPRDNtkNVlA2RFvIncFWaCtJ/gH7uApqJPizeO7BmrM=";
     stripRoot = false;
   };
@@ -93,4 +93,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.iamanaws ];
     platforms = with lib.platforms; lib.intersectLists (linux ++ darwin) x86;
   };
-}
+})

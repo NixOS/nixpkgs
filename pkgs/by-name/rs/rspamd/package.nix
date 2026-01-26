@@ -37,14 +37,14 @@
 assert withHyperscan -> stdenv.hostPlatform.isx86_64;
 assert (!withHyperscan) || (!withVectorscan);
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rspamd";
   version = "3.14.2";
 
   src = fetchFromGitHub {
     owner = "rspamd";
     repo = "rspamd";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-XpCdjS6c9nLi1ngeSPBldmK3HmMFfDNW+tNpxdrUoKg=";
   };
 
@@ -115,4 +115,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = with lib.platforms; linux;
   };
-}
+})

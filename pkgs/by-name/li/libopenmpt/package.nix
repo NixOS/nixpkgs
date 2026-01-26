@@ -15,7 +15,7 @@
   libpulseaudio,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libopenmpt";
   version = "0.8.4";
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://lib.openmpt.org/files/libopenmpt/src/libopenmpt-${version}+release.autotools.tar.gz";
+    url = "https://lib.openmpt.org/files/libopenmpt/src/libopenmpt-${finalAttrs.version}+release.autotools.tar.gz";
     hash = "sha256-Yn+b8RqsrmFaHyyYLH6IyyHxGy1vAmeUb3yCxerklDs=";
   };
 
@@ -74,4 +74,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ OPNA2608 ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -10,14 +10,14 @@
   protobufc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libomemo-c";
   version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "dino";
     repo = "libomemo-c";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-HoZykdGVDsj4L5yN3SHGF5tjMq5exJyC15zTLBlpX/c=";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.astro ];
   };
-}
+})

@@ -5,12 +5,12 @@
   ladspaH,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cmt";
   version = "1.18";
 
   src = fetchurl {
-    url = "http://www.ladspa.org/download/cmt_${version}.tgz";
+    url = "http://www.ladspa.org/download/cmt_${finalAttrs.version}.tgz";
     sha256 = "sha256-qC+GNt4fSto4ahmaAXqc13Wkm0nnFrEejdP3I8k99so=";
   };
 
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ sjfloat ];
   };
-}
+})

@@ -7,14 +7,14 @@
   ladspaH,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "alsaequal";
   version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "bassdr";
     repo = "alsaequal";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-jI+w/jCFslQSNeIS7mwb+LZSawU4XjbSNNgpvuShH1g=";
   };
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ ymeister ];
   };
-}
+})

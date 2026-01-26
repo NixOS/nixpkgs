@@ -8,12 +8,12 @@
   fuse,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wiimms-iso-tools";
   version = "3.05a";
 
   src = fetchurl {
-    url = "https://download.wiimm.de/source/wiimms-iso-tools/wiimms-iso-tools.source-${version}.txz";
+    url = "https://download.wiimm.de/source/wiimms-iso-tools/wiimms-iso-tools.source-${finalAttrs.version}.txz";
     hash = "sha256-5aikiPJkZf9OwD8QmQ7ijhBOtFQpkIErvb6gOvEu2L0=";
   };
 
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ nilp0inter ];
   };
-}
+})

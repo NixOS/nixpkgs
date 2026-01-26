@@ -7,11 +7,11 @@
   libX11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ratmen";
   version = "2.2.3";
   src = fetchurl {
-    url = "http://www.update.uu.se/~zrajm/programs/ratmen/ratmen-${version}.tar.gz";
+    url = "http://www.update.uu.se/~zrajm/programs/ratmen/ratmen-${finalAttrs.version}.tar.gz";
     sha256 = "0gnfqhnch9x8jhr87gvdjcp1wsqhchfjilpnqcwx5j0nlqyz6wi6";
   };
   buildInputs = [
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     downloadPage = "http://www.update.uu.se/~zrajm/programs/ratmen/";
     mainProgram = "ratmen";
   };
-}
+})

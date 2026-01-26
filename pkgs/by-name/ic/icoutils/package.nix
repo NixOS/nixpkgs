@@ -10,12 +10,12 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "icoutils";
   version = "0.32.3";
 
   src = fetchurl {
-    url = "mirror://savannah/icoutils/icoutils-${version}.tar.bz2";
+    url = "mirror://savannah/icoutils/icoutils-${finalAttrs.version}.tar.bz2";
     sha256 = "1q66cksms4l62y0wizb8vfavhmf7kyfgcfkynil3n99s0hny1aqp";
   };
 
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

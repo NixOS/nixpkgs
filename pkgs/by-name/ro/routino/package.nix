@@ -8,12 +8,12 @@
   bzip2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "routino";
   version = "3.4.3";
 
   src = fetchurl {
-    url = "https://routino.org/download/routino-${version}.tgz";
+    url = "https://routino.org/download/routino-${finalAttrs.version}.tgz";
     hash = "sha256-TroGfTLJfKk4itbpfA9aPBDUiCk2ckDXjFE3XYzBHlQ=";
   };
 
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ dotlambda ];
     platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

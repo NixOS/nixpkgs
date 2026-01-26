@@ -5,14 +5,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "serialdv";
   version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "f4exb";
     repo = "serialdv";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-uswddoIpTXqsvjM2/ygdud9jZHTemLn9Dlv9FBXXKow=";
   };
 
@@ -26,4 +26,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ alkeryn ];
     license = lib.licenses.gpl3;
   };
-}
+})

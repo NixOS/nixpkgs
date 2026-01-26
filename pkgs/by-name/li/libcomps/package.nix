@@ -12,7 +12,7 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libcomps";
   version = "0.1.23";
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rpm-software-management";
     repo = "libcomps";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-6nX6Oa2ACVALOtXDxjowIGKaziZkGZbtkgZzDfuP4PE=";
   };
 
@@ -67,4 +67,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ katexochen ];
     platforms = lib.platforms.unix;
   };
-}
+})

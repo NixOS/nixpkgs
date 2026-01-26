@@ -8,14 +8,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "quadrafuzz";
   version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "jpcima";
     repo = "quadrafuzz";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "1kjsf7il9krihwlrq08gk2xvil4b4q5zd87nnm103hby2w7ws7z1";
     fetchSubmodules = true;
   };
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3Plus;
   };
-}
+})

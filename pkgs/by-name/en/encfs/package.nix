@@ -13,13 +13,13 @@
   gtest,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "encfs";
   version = "1.9.5";
 
   src = fetchFromGitHub {
     sha256 = "099rjb02knr6yz7przlnyj62ic0ag5ncs7vvcc36ikyqrmpqsdch";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     repo = "encfs";
     owner = "vgough";
   };
@@ -70,4 +70,4 @@ stdenv.mkDerivation rec {
     # The last successful Darwin Hydra build was in 2024
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

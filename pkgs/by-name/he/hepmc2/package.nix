@@ -5,12 +5,12 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hepmc";
   version = "2.06.11";
 
   src = fetchurl {
-    url = "http://hepmc.web.cern.ch/hepmc/releases/HepMC-${version}.tar.gz";
+    url = "http://hepmc.web.cern.ch/hepmc/releases/HepMC-${finalAttrs.version}.tar.gz";
     sha256 = "1pp89bs05nv60wjk1690ndwh4dsd5mk20bzsd4a2lklysdifvb6f";
   };
 
@@ -29,4 +29,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

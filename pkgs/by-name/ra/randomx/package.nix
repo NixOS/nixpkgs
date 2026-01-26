@@ -5,7 +5,7 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "randomX";
   version = "1.2.1";
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "tevador";
     repo = "randomX";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-dfImzwbEfJQcaPZCoWypHiI6dishVRdqS/r+n3tfjvM=";
   };
 
@@ -26,4 +26,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
   };
 
-}
+})

@@ -4,11 +4,11 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "repseek";
   version = "9Sep2014";
   src = fetchurl {
-    url = "https://bioinfo.mnhn.fr/abi/public/RepSeek/RepSeek.${version}.tgz";
+    url = "https://bioinfo.mnhn.fr/abi/public/RepSeek/RepSeek.${finalAttrs.version}.tgz";
     sha256 = "1jiknji3ivrv7zmrfbf2mccfpdwhin3lfxfsciaqwf69b3sda8nf";
   };
 
@@ -30,4 +30,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21;
   };
 
-}
+})

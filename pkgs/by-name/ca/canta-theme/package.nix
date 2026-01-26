@@ -12,14 +12,14 @@
   hicolor-icon-theme,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "canta-theme";
   version = "2021-09-08";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = "canta-theme";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "05h42nrggb6znzjcbh4lqqfcm41h4r85n3vwimp3l4lq5p90igr2";
   };
 
@@ -63,4 +63,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux; # numix-icon-theme-circle unavailable in darwin
     maintainers = [ lib.maintainers.romildo ];
   };
-}
+})

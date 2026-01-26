@@ -10,14 +10,14 @@
   pcre,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sngrep";
   version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "irontec";
     repo = "sngrep";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-nvuT//FWJAa6DzmjBsBW9s2p1M+6Zs4cVmpK4dVemnE=";
   };
 
@@ -56,4 +56,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ jorise ];
   };
-}
+})

@@ -14,14 +14,14 @@
   unixtools,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "acme.sh";
   version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "acmesh-official";
     repo = "acme.sh";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Fgik1TCWDlkyEI9QkXpc/94mGKb7U7hMoamdYU7nTJc=";
   };
 
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://acme.sh/";
-    changelog = "https://github.com/acmesh-official/acme.sh/releases/tag/${version}";
+    changelog = "https://github.com/acmesh-official/acme.sh/releases/tag/${finalAttrs.version}";
     description = "Pure Unix shell script implementing ACME client protocol";
     longDescription = ''
       An ACME Shell script: acme.sh
@@ -77,4 +77,4 @@ stdenv.mkDerivation rec {
     inherit (coreutils.meta) platforms;
     mainProgram = "acme.sh";
   };
-}
+})

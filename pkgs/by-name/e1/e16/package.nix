@@ -21,12 +21,12 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "e16";
   version = "1.0.31";
 
   src = fetchurl {
-    url = "mirror://sourceforge/enlightenment/e16-${version}.tar.xz";
+    url = "mirror://sourceforge/enlightenment/e16-${finalAttrs.version}.tar.xz";
     hash = "sha256-ZQTsIy/BiO/xUiCu+bc2n406F0unAinxyYLjVRfUSiQ=";
   };
 
@@ -70,4 +70,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.romildo ];
   };
-}
+})

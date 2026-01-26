@@ -21,7 +21,7 @@
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libxmlb";
   version = "0.3.24";
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "hughsie";
     repo = "libxmlb";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-3Yxq0KZMV9GRmNjZ19eIqGq+UJS4PGyVPS6HBcMEbHo=";
   };
 
@@ -93,4 +93,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -16,14 +16,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tig";
   version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "jonas";
     repo = "tig";
-    rev = "tig-${version}";
+    rev = "tig-${finalAttrs.version}";
     sha256 = "sha256-LJVK4y4C/TyM7sD/AZeHyavZ66SoeSh1y+hXnAAKMws=";
   };
 
@@ -96,4 +96,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "tig";
   };
-}
+})

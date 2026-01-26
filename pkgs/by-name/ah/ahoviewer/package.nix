@@ -21,14 +21,14 @@
 
 assert useUnrar -> unrar != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ahoviewer";
   version = "1.6.5";
 
   src = fetchFromGitHub {
     owner = "ahodesuka";
     repo = "ahoviewer";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "1avdl4qcpznvf3s2id5qi1vnzy4wgh6vxpnrz777a1s4iydxpcd8";
   };
 
@@ -76,4 +76,4 @@ stdenv.mkDerivation rec {
     # https://github.com/ahodesuka/ahoviewer/issues/62
     platforms = lib.platforms.linux;
   };
-}
+})

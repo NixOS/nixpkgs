@@ -8,14 +8,14 @@
   libusb1,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opencbm";
   version = "0.4.99.104";
 
   src = fetchFromGitHub {
     owner = "OpenCBM";
     repo = "OpenCBM";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-5lj5F79Gbhrvi9dxKGobdyDyBLGcptAtxx9SANhLrKw=";
   };
 
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -19,14 +19,14 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libmodsecurity";
   version = "3.0.14";
 
   src = fetchFromGitHub {
     owner = "owasp-modsecurity";
     repo = "ModSecurity";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-SaeBO3+WvPhHiJoiOmijB0G3/QYxjAdxgeCVqESS+4U=";
     fetchSubmodules = true;
   };
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     mkdir -p $out/share/modsecurity
-    cp ${src}/{AUTHORS,CHANGES,LICENSE,README.md,modsecurity.conf-recommended,unicode.mapping} $out/share/modsecurity
+    cp ${finalAttrs.src}/{AUTHORS,CHANGES,LICENSE,README.md,modsecurity.conf-recommended,unicode.mapping} $out/share/modsecurity
   '';
 
   enableParallelBuilding = true;
@@ -112,4 +112,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ izorkin ];
     mainProgram = "modsec-rules-check";
   };
-}
+})

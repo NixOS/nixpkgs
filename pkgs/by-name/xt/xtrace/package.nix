@@ -8,7 +8,7 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xtrace";
   version = "1.4.0";
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     domain = "salsa.debian.org";
     owner = "debian";
     repo = "xtrace";
-    rev = "xtrace-${version}";
+    rev = "xtrace-${finalAttrs.version}";
     sha256 = "1yff6x847nksciail9jly41mv70sl8sadh0m5d847ypbjmxcwjpq";
   };
 
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux;
     mainProgram = "xtrace";
   };
-}
+})

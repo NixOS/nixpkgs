@@ -11,14 +11,14 @@
   SDL2_mixer,
   SDL2_ttf,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "narsil";
   version = "1.4.0-112-gaa252eb26";
 
   src = fetchFromGitHub {
     owner = "NickMcConnell";
     repo = "NarSil";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-FqWoyq6FFCknT29Zkrkozi0+2JkrhJ2fKXVSbh5ZWXo=";
   };
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/NickMcConnell/NarSil/";
     description = "Unofficial rewrite of Sil, a roguelike influenced by Angband";
     mainProgram = "narsil";
-    changelog = "https://github.com/NickMcConnell/NarSil/releases/tag/${version}";
+    changelog = "https://github.com/NickMcConnell/NarSil/releases/tag/${finalAttrs.version}";
     longDescription = ''
       NarSil attempts to be an almost-faithful recreation of Sil 1.3.0,
       but based on the codebase of modern Angband.
@@ -56,4 +56,4 @@ stdenv.mkDerivation rec {
     ];
     license = lib.licenses.gpl2;
   };
-}
+})

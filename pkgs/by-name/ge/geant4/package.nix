@@ -37,12 +37,12 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "11.3.2";
   pname = "geant4";
 
   src = fetchurl {
-    url = "https://cern.ch/geant4-data/releases/geant4-v${version}.tar.gz";
+    url = "https://cern.ch/geant4-data/releases/geant4-v${finalAttrs.version}.tar.gz";
     hash = "sha256-iSrt10JSYqUKw9PHEX2BwMDaS0CMaIDbr1R4uTAeSIw=";
   };
 
@@ -152,4 +152,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

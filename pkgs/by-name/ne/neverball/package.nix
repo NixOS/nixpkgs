@@ -16,11 +16,11 @@
   makeBinaryWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "neverball";
   version = "1.6.0";
   src = fetchurl {
-    url = "https://neverball.org/neverball-${version}.tar.gz";
+    url = "https://neverball.org/neverball-${finalAttrs.version}.tar.gz";
     sha256 = "184gm36c6p6vaa6gwrfzmfh86klhnb03pl40ahsjsvprlk667zkk";
   };
   patches = [
@@ -113,4 +113,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ Rhys-T ];
     platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

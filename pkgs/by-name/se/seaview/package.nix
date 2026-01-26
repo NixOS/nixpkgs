@@ -7,12 +7,12 @@
   libjpeg,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "5.1";
   pname = "seaview";
 
   src = fetchurl {
-    url = "ftp://pbil.univ-lyon1.fr/pub/mol_phylogeny/seaview/archive/seaview_${version}.tar.gz";
+    url = "ftp://pbil.univ-lyon1.fr/pub/mol_phylogeny/seaview/archive/seaview_${finalAttrs.version}.tar.gz";
     sha256 = "sha256-tL9YQB4wgUOCyCWxOkw+6oyinDFO1cSh9DRZt47W+Ys=";
   };
 
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.iimog ];
     platforms = lib.platforms.linux;
   };
-}
+})

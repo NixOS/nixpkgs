@@ -12,14 +12,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dropwatch";
   version = "1.5.5";
 
   src = fetchFromGitHub {
     owner = "nhorman";
     repo = "dropwatch";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-+7bT1Gw4ncwLFkrxxbXjNs3KMM1sSQrCqXMYxKso9/4=";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ c0bw3b ];
   };
-}
+})

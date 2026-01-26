@@ -14,12 +14,12 @@
   docbook_xsl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libdatovka";
   version = "0.7.2";
 
   src = fetchurl {
-    url = "https://gitlab.nic.cz/datovka/libdatovka/-/archive/v${version}/libdatovka-v${version}.tar.gz";
+    url = "https://gitlab.nic.cz/datovka/libdatovka/-/archive/v${finalAttrs.version}/libdatovka-v${finalAttrs.version}.tar.gz";
     sha256 = "sha256-pct+COy7ibyNtwB8l/vDnEHBUEihlo5OaoXWXVRJBrQ=";
   };
 
@@ -53,4 +53,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.ovlach ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -6,14 +6,14 @@
   faust2jaqt,
   faust2lv2,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "faustPhysicalModeling";
   version = "2.83.1";
 
   src = fetchFromGitHub {
     owner = "grame-cncm";
     repo = "faust";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-c1I5ha9QvnC7jKdycAhW/iAzUcEA7NopXAquIS001Y8=";
   };
 
@@ -63,4 +63,4 @@ stdenv.mkDerivation rec {
     # compiles stuff for the build platform, difficult to do properly
     broken = stdenv.hostPlatform != stdenv.buildPlatform;
   };
-}
+})

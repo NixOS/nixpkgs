@@ -49,14 +49,14 @@
   kdePackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mixxx";
   version = "2.5.4";
 
   src = fetchFromGitHub {
     owner = "mixxxdj";
     repo = "mixxx";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-D/+ys7VE2/xHUiDG80/voc1BFxwp9M0V89gPWy57XA0=";
   };
 
@@ -147,7 +147,7 @@ stdenv.mkDerivation rec {
     homepage = "https://mixxx.org";
     description = "Digital DJ mixing software";
     mainProgram = "mixxx";
-    changelog = "https://github.com/mixxxdj/mixxx/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/mixxxdj/mixxx/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [
       benley
@@ -155,4 +155,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

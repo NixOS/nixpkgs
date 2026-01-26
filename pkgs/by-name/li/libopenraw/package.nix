@@ -12,12 +12,12 @@
   rustc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libopenraw";
   version = "0.3.7";
 
   src = fetchurl {
-    url = "https://libopenraw.freedesktop.org/download/libopenraw-${version}.tar.bz2";
+    url = "https://libopenraw.freedesktop.org/download/libopenraw-${finalAttrs.version}.tar.bz2";
     hash = "sha256-VRWyYQNh7zRYC2uXZjURn23ttPCnnVRmL6X+YYakXtU=";
   };
 
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.struan ];
   };
-}
+})

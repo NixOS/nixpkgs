@@ -17,12 +17,12 @@ let
     sha256 = "sha256-nU2nWI1wxZB/xlOKsZzdUjj+qiCTjO6GwEKYgZ5Risg=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "imagej";
   version = "153";
 
   src = fetchurl {
-    url = "https://wsr.imagej.net/distros/cross-platform/ij${version}.zip";
+    url = "https://wsr.imagej.net/distros/cross-platform/ij${finalAttrs.version}.zip";
     sha256 = "sha256-MGuUdUDuW3s/yGC68rHr6xxzmYScUjdXRawDpc1UQqw=";
   };
   nativeBuildInputs = [
@@ -89,4 +89,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ yuriaisaka ];
     mainProgram = "imagej";
   };
-}
+})

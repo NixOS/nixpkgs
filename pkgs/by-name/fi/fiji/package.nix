@@ -12,12 +12,12 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fiji";
   version = "20250408-1717";
 
   src = fetchurl {
-    url = "https://downloads.imagej.net/fiji/archive/${version}/fiji-nojre.zip";
+    url = "https://downloads.imagej.net/fiji/archive/${finalAttrs.version}/fiji-nojre.zip";
     sha256 = "sha256-bqVrTBKII58E7WSlQfRPE0Dxd4h/oJALFvIOdAAFZoI=";
   };
 
@@ -98,4 +98,4 @@ stdenv.mkDerivation rec {
     ];
     maintainers = with lib.maintainers; [ davisrichard437 ];
   };
-}
+})

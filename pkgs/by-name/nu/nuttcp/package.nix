@@ -5,12 +5,12 @@
   installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nuttcp";
   version = "8.2.2";
 
   src = fetchurl {
-    url = "http://nuttcp.net/nuttcp/nuttcp-${version}.tar.bz2";
+    url = "http://nuttcp.net/nuttcp/nuttcp-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-fq16ieeqoFnSDjQELFihmMKYHK1ylVDROI3fyQNtOYM=";
   };
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp nuttcp-${version} $out/bin/nuttcp
+    cp nuttcp-${finalAttrs.version} $out/bin/nuttcp
   '';
 
   postInstall = ''
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "nuttcp";
   };
-}
+})

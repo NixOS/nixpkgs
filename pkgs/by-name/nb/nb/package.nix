@@ -9,14 +9,14 @@
   bashInteractive,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nb";
   version = "7.24.0";
 
   src = fetchFromGitHub {
     owner = "xwmx";
     repo = "nb";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-oGVuBwnuKQqlhwW8gBWwhR09ZVBYV3vWzJxKu+KTlL8=";
   };
 
@@ -85,4 +85,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "nb";
   };
-}
+})

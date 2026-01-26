@@ -19,14 +19,14 @@
   glib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cinnamon-desktop";
   version = "6.6.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon-desktop";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-AcUJ9anKuvUAJKaQVHbkYShmrlSHG35gV/NIkPgJojk=";
   };
 
@@ -86,4 +86,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     teams = [ lib.teams.cinnamon ];
   };
-}
+})

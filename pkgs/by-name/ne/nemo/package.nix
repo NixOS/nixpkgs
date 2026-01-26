@@ -35,14 +35,14 @@ let
     ]
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nemo";
   version = "6.6.3";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "nemo";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-jsAKNKpNsheyugI6dVQAYYrOTmHLDjJCbjlWmAChFgU=";
   };
 
@@ -126,4 +126,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.cinnamon ];
     mainProgram = "nemo";
   };
-}
+})

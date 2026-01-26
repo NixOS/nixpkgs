@@ -8,14 +8,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "medusa";
   version = "2.3";
 
   src = fetchFromGitHub {
     owner = "jmk-foofus";
     repo = "medusa";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-devirQMmS8mtxT5H5XafRRvCyfcvwoWxtTp0V1SJeSM=";
   };
 
@@ -37,9 +37,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Speedy, parallel, and modular, login brute-forcer";
     homepage = "https://github.com/jmk-foofus/medusa";
-    changelog = "https://github.com/jmk-foofus/medusa/releases/tag/${src.tag}";
+    changelog = "https://github.com/jmk-foofus/medusa/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     mainProgram = "medusa";
   };
-}
+})

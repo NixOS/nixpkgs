@@ -12,14 +12,14 @@
   imlib2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "alock";
   version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "Arkq";
     repo = "alock";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-xfPhsXZrTlEqea75SvacDfjM9o21MTudrqfNN9xtdcg=";
   };
 
@@ -69,4 +69,4 @@ stdenv.mkDerivation rec {
     ];
     license = lib.licenses.mit;
   };
-}
+})

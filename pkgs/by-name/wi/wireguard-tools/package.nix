@@ -12,12 +12,12 @@
   wireguard-go,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wireguard-tools";
   version = "1.0.20250521";
 
   src = fetchzip {
-    url = "https://git.zx2c4.com/wireguard-tools/snapshot/wireguard-tools-${version}.tar.xz";
+    url = "https://git.zx2c4.com/wireguard-tools/snapshot/wireguard-tools-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-V9yKf4ZvxpOoVCFkFk18+130YBMhyeMt0641tn0O0e0=";
   };
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     "man"
   ];
 
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -94,4 +94,4 @@ stdenv.mkDerivation rec {
     mainProgram = "wg";
     platforms = lib.platforms.unix;
   };
-}
+})

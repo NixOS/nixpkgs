@@ -7,14 +7,14 @@
   libX11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "osmid";
   version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "llloret";
     repo = "osmid";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1s1wsrp6g6wb0y61xzxvaj59mwycrgy52r4h456086zkz10ls6hw";
   };
 
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ c0deaddict ];
     platforms = lib.platforms.linux;
   };
-}
+})

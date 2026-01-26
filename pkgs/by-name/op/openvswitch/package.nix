@@ -28,14 +28,14 @@
   which,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = if withDPDK then "openvswitch-dpdk" else "openvswitch";
   version = "3.6.1";
 
   src = fetchFromGitHub {
     owner = "openvswitch";
     repo = "ovs";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-I5ISLOu1MMT/mtyH4tcgdFe2zjSsutMWkJiPIbadbQI=";
   };
 
@@ -147,7 +147,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    changelog = "https://www.openvswitch.org/releases/NEWS-${version}.txt";
+    changelog = "https://www.openvswitch.org/releases/NEWS-${finalAttrs.version}.txt";
     description = "Multilayer virtual switch";
     longDescription = ''
       Open vSwitch is a production quality, multilayer virtual switch
@@ -174,4 +174,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

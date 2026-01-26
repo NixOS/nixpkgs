@@ -75,17 +75,17 @@ let
   runtimeLibPath = lib.makeLibraryPath runtimeLibs;
   libPathVar = if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "2.4.2";
   pname = "speed-dreams";
 
   src = fetchgit {
     url = "https://forge.a-lec.org/speed-dreams/speed-dreams-code.git";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-ZY/0tf0wFbepEUNqpaBA4qgkWDij/joqPtbiF/48oN4=";
     fetchSubmodules = true;
   };
-  NIX_CFLAGS_COMPILE = "-I${src}/src/libs/tgf -I${src}/src/libs/tgfdata -I${src}/src/interfaces -I${src}/src/libs/math -I${src}/src/libs/portability";
+  NIX_CFLAGS_COMPILE = "-I${finalAttrs.src}/src/libs/tgf -I${finalAttrs.src}/src/libs/tgfdata -I${finalAttrs.src}/src/interfaces -I${finalAttrs.src}/src/libs/math -I${finalAttrs.src}/src/libs/portability";
 
   patches = [
     ./darwin-gl-compat.patch
@@ -170,4 +170,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "speed-dreams";
   };
-}
+})

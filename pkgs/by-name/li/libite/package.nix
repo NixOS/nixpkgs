@@ -7,14 +7,14 @@
   libconfuse,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libite";
   version = "2.6.2";
 
   src = fetchFromGitHub {
     owner = "troglobit";
     repo = "libite";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-hm3cd7UnskfwEvcMRGHei8KLt0k+WlCzB1LMnZdYo+g=";
   };
 
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
       bsd3
     ];
   };
-}
+})

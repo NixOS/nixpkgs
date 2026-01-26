@@ -10,14 +10,14 @@
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yder";
   version = "1.4.20";
 
   src = fetchFromGitHub {
     owner = "babelouest";
     repo = "yder";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-BaCF1r5mOYxj0zKc11uoKI9gVKuxWd8GaneGcV+qIFg=";
   };
 
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ johnazoidberg ];
     platforms = lib.platforms.all;
   };
-}
+})

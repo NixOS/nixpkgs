@@ -4,11 +4,11 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "apache-felix";
   version = "7.0.5";
   src = fetchurl {
-    url = "mirror://apache/felix/org.apache.felix.main.distribution-${version}.tar.gz";
+    url = "mirror://apache/felix/org.apache.felix.main.distribution-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-N9mbkIzMkMV2RLONv15EiosJxMU9iEJvwPWEauPIEe8=";
   };
   buildCommand = ''
@@ -24,4 +24,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     mainProgram = "felix.jar";
   };
-}
+})

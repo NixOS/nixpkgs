@@ -8,14 +8,14 @@
   netcat,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "restream";
   version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "rien";
     repo = "restream";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-AXHKOfdIM3LsHF6u3M/lMhhcuPZADoEal7de3zlx7L4=";
   };
 
@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -D ${src}/restream.arm.static $out/libexec/restream.arm.static
-    install -D ${src}/reStream.sh $out/bin/restream
+    install -D ${finalAttrs.src}/restream.arm.static $out/libexec/restream.arm.static
+    install -D ${finalAttrs.src}/reStream.sh $out/bin/restream
 
     runHook postInstall
   '';
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.cpcloud ];
   };
-}
+})

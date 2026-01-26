@@ -13,14 +13,14 @@
   uthash,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "burp";
   version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "grke";
     repo = "burp";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-y6kRd1jD6t+Q6d5t7W9MDuk+m2Iq1THQkP50PJwI7Nc=";
   };
 
@@ -65,4 +65,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ arjan-s ];
     platforms = lib.platforms.all;
   };
-}
+})

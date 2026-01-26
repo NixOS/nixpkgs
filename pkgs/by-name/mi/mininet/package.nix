@@ -39,7 +39,7 @@ let
   ];
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mininet";
   version = "2.3.1b4";
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mininet";
     repo = "mininet";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Z7Vbfu0EJ4+rCpckXrt3hgxeB9N2nnyPIXgPBnpV4uw=";
   };
 
@@ -102,4 +102,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ teto ];
     mainProgram = "mnexec";
   };
-}
+})

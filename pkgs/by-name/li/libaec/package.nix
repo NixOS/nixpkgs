@@ -5,7 +5,7 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libaec";
   version = "1.1.4";
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.dkrz.de";
     owner = "k202009";
     repo = "libaec";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-MJFx0gErfrSK6EeeGDk8CQWj6j4PVvFPJEI/iys3bI8=";
   };
 
@@ -29,4 +29,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ tbenst ];
   };
-}
+})

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.3.1";
   pname = "snore";
 
   src = fetchFromGitHub {
     owner = "clamiax";
     repo = "snore";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-bKPGSePzp4XEZFY0QQr37fm3R1v3hLD6FeySFd7zNJc=";
   };
 
@@ -25,4 +25,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "snore";
   };
-}
+})

@@ -25,14 +25,14 @@
   qt6,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vulkan-tools-lunarg";
   version = "1.4.335.0";
 
   src = fetchFromGitHub {
     owner = "LunarG";
     repo = "VulkanTools";
-    rev = "vulkan-sdk-${version}";
+    rev = "vulkan-sdk-${finalAttrs.version}";
     hash = "sha256-2DUxlGH9Yco64Y74QByVniWXiYYy+e4MfyN4S+E6KKA=";
   };
 
@@ -97,4 +97,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

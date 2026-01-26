@@ -10,12 +10,12 @@
   libidn,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gloox";
   version = "1.0.28";
 
   src = fetchurl {
-    url = "https://camaya.net/download/gloox-${version}.tar.bz2";
+    url = "https://camaya.net/download/gloox-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-WRvRLCSe3gtQoe9rmawN6O+cG6T9Lhhvl6dAIVzFlmw=";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     # The last successful Darwin Hydra build was in 2023
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

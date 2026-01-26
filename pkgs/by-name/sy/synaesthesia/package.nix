@@ -6,12 +6,12 @@
   pkg-config,
   libSM,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "synaesthesia";
   version = "2.4";
 
   src = fetchzip {
-    url = "https://logarithmic.net/pfh-files/synaesthesia/synaesthesia-${version}.tar.gz";
+    url = "https://logarithmic.net/pfh-files/synaesthesia/synaesthesia-${finalAttrs.version}.tar.gz";
     sha256 = "0nzsdxbah0shm2vlziaaw3ilzlizd3d35rridkpg40nfxmq84qnx";
   };
 
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "synaesthesia";
   };
-}
+})

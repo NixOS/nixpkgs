@@ -8,12 +8,12 @@
 let
   libdvdread = libdvdread_4_9_9;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libdvdnav";
   version = "4.2.1";
 
   src = fetchurl {
-    url = "http://dvdnav.mplayerhq.hu/releases/libdvdnav-${version}.tar.xz";
+    url = "http://dvdnav.mplayerhq.hu/releases/libdvdnav-${finalAttrs.version}.tar.xz";
     sha256 = "7fca272ecc3241b6de41bbbf7ac9a303ba25cb9e0c82aa23901d3104887f2372";
   };
 
@@ -55,4 +55,4 @@ stdenv.mkDerivation rec {
   };
 
   passthru = { inherit libdvdread; };
-}
+})

@@ -6,14 +6,14 @@
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cconv";
   version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "xiaoyjy";
     repo = "cconv";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "RAFl/+I+usUfeG/l17F3ltThK7G4+TekyQGwzQIgeH8=";
   };
 
@@ -29,4 +29,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.redfish64 ];
   };
-}
+})

@@ -13,7 +13,7 @@
   gnutls,
   sane-backends,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sane-airscan";
   version = "0.99.36";
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "alexpevzner";
     repo = "sane-airscan";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-vpTUZVD5ONcQeDnjPmQDY9Qf/bmDqZMnxA+I8ALOB7Y=";
   };
 
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ zaninime ];
   };
-}
+})

@@ -9,14 +9,14 @@
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ft2-clone";
   version = "2.03";
 
   src = fetchFromGitHub {
     owner = "8bitbubsy";
     repo = "ft2-clone";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-kOSH9jEdS3wU2XAEh7fh5XIuIU7zqqWrpcBZqKEZM84=";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.littleEndian;
     mainProgram = "ft2-clone";
   };
-}
+})

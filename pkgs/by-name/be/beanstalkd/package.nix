@@ -6,14 +6,14 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.13";
   pname = "beanstalkd";
 
   src = fetchFromGitHub {
     owner = "kr";
     repo = "beanstalkd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-xoudhPad4diGGE8iZaY1/4LiENlKT2dYcIR6wlQdlTU=";
   };
 
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "beanstalkd";
   };
-}
+})

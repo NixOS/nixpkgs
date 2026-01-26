@@ -7,7 +7,7 @@
   boost,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bastet";
   version = "0.43.2";
   buildInputs = [
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "fph";
     repo = "bastet";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "09kamxapm9jw9przpsgjfg33n9k94bccv65w95dakj0br33a75wn";
   };
 
@@ -53,4 +53,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.dezgeg ];
     platforms = lib.platforms.linux;
   };
-}
+})

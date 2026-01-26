@@ -5,14 +5,14 @@
   udev,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libudev0-shim";
   version = "1";
 
   src = fetchFromGitHub {
     owner = "archlinux";
     repo = "libudev0-shim";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1460qm6rp1cqnns39lj24z7191m8sbpvbjabqbzb55dkdd2kw50z";
   };
 
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21;
     maintainers = [ ];
   };
-}
+})

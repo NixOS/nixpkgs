@@ -14,14 +14,14 @@
   udev,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libbladeRF";
   version = "2025.10";
 
   src = fetchFromGitHub {
     owner = "Nuand";
     repo = "bladeRF";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-gp+OnAlECGZs4+JEWNX5Gt7LYdTFJUItpmDdJgeoJO4=";
     fetchSubmodules = true;
   };
@@ -79,4 +79,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ markuskowa ];
     platforms = lib.platforms.unix;
   };
-}
+})

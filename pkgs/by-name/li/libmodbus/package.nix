@@ -5,14 +5,14 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libmodbus";
   version = "3.1.11";
 
   src = fetchFromGitHub {
     owner = "stephane";
     repo = "libmodbus";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-d/diR9yeV0WY0C6wqxYZfOjEKFeWTvN73MxcWtXPOJc=";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; unix ++ windows;
     maintainers = [ lib.maintainers.bjornfor ];
   };
-}
+})

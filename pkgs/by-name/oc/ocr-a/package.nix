@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "OCR-A";
   version = "1.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/ocr-a-font/OCR-A/${version}/OCRA.ttf";
+    url = "mirror://sourceforge/ocr-a-font/OCR-A/${finalAttrs.version}/OCRA.ttf";
     sha256 = "0kpmjjxwzm84z8maz6lq9sk1b0xv1zkvl28lwj7i0m2xf04qixd0";
   };
 
@@ -25,4 +25,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.publicDomain;
     maintainers = with lib.maintainers; [ V ];
   };
-}
+})

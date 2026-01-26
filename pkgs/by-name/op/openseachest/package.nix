@@ -4,14 +4,14 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openseachest";
   version = "25.05.3";
 
   src = fetchFromGitHub {
     owner = "Seagate";
     repo = "openSeaChest";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-huhdRF2K1AEDRX6Jyz8a/OpUEKFmH+FLNr5KHM/4Sk4=";
     fetchSubmodules = true;
   };
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ justinas ];
     platforms = with lib.platforms; freebsd ++ linux;
   };
-}
+})

@@ -10,13 +10,13 @@
   libevdevc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xf86-input-cmt";
   version = "2.0.2";
   src = fetchFromGitHub {
     owner = "hugegreenbug";
     repo = "xf86-input-cmt";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1cnwf518nc0ybc1r3rsgc1gcql1k3785khffv0i4v3akrm9wdw98";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     homepage = "https://www.github.com/hugegreenbug/xf86-input-cmt";
     maintainers = with lib.maintainers; [ kcalvinalvin ];
   };
-}
+})

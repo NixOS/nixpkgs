@@ -14,13 +14,13 @@ let
     sha256 = "06rcxkwgms9sxqr1swnnc4jnvgs0iahm4cksd475yd1bp5p1gq6j";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.3.0";
   pname = "sailsd";
   src = fetchFromGitHub {
     owner = "sails-simulator";
     repo = "sailsd";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1s4nlffp683binbdxwwzbsci61kbjylbcr1jf44sv1h1r5d5js05";
   };
 
@@ -55,4 +55,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "sailsd";
   };
-}
+})

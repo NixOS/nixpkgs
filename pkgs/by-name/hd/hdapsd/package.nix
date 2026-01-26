@@ -6,12 +6,12 @@
   udevCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hdapsd";
   version = "20250908";
 
   src = fetchurl {
-    url = "https://github.com/linux-thinkpad/hdapsd/releases/download/${version}/hdapsd-${version}.tar.gz";
+    url = "https://github.com/linux-thinkpad/hdapsd/releases/download/${finalAttrs.version}/hdapsd-${finalAttrs.version}.tar.gz";
     hash = "sha256-qENcOFJ9x5CkN72ZkTx/OL+gpwAYJlJomKvAjTklDYQ=";
   };
 
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

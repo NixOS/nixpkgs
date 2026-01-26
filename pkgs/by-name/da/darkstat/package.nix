@@ -8,14 +8,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "darkstat";
   version = "3.0.721";
 
   src = fetchFromGitHub {
     owner = "emikulic";
     repo = "darkstat";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-kKj4fCgphoe3lojJfARwpITxQh7E6ehUew9FVEW63uQ=";
   };
 
@@ -51,9 +51,9 @@ stdenv.mkDerivation rec {
       - Supports IPv6.
     '';
     homepage = "http://unix4lyfe.org/darkstat";
-    changelog = "https://github.com/emikulic/darkstat/releases/tag/${version}";
+    changelog = "https://github.com/emikulic/darkstat/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl2Only;
     platforms = with lib.platforms; unix;
     mainProgram = "darkstat";
   };
-}
+})

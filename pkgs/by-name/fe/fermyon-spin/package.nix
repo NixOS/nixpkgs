@@ -28,7 +28,7 @@ let
 
   packageHash = packageHashes.${system} or (throw "Unsupported system: ${system}");
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fermyon-spin";
   version = "3.5.0";
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   # and not by GitHub (and thus are stable) - this simplifies the update script
   # by allowing it to use the output of `nix store prefetch-file`.
   src = fetchurl {
-    url = "https://github.com/spinframework/spin/releases/download/v${version}/spin-v${version}-${platform}.tar.gz";
+    url = "https://github.com/spinframework/spin/releases/download/v${finalAttrs.version}/spin-v${finalAttrs.version}-${platform}.tar.gz";
     hash = packageHash;
   };
 
@@ -74,4 +74,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = builtins.attrNames packageHashes;
   };
-}
+})

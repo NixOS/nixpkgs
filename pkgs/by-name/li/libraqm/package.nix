@@ -10,14 +10,14 @@
   fribidi,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libraqm";
   version = "0.10.3";
 
   src = fetchFromGitHub {
     owner = "HOST-Oman";
     repo = "libraqm";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-URW29aEONbMN/DQ6mkKksnwtbIL+SGm5VvKsC9h5MH4=";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ sifmelcara ];
     platforms = lib.platforms.all;
   };
-}
+})

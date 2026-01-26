@@ -4,7 +4,7 @@
   fetchFromGitLab,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hostname-debian";
   version = "3.25";
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     domain = "salsa.debian.org";
     owner = "meskes";
     repo = "hostname";
-    tag = "debian/${version}";
+    tag = "debian/${finalAttrs.version}";
     hash = "sha256-Yq8P5bF/RRZnWuFW0y2u08oZrydAKfopOtbrwbeIu3w=";
   };
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    changelog = "https://salsa.debian.org/meskes/hostname/-/blob/${src.tag}/debian/changelog";
+    changelog = "https://salsa.debian.org/meskes/hostname/-/blob/${finalAttrs.src.tag}/debian/changelog";
     description = "Utility to set/show the host name or domain name";
     longDescription = ''
       This package provides commands which can be used to display the system's
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ posch ];
     platforms = lib.platforms.gnu;
   };
-}
+})

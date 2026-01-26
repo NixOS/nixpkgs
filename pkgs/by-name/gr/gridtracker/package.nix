@@ -7,14 +7,14 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gridtracker";
   version = "1.24.0922";
 
   src = fetchFromGitLab {
     owner = "gridtracker.org";
     repo = "gridtracker";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-6WgP13JVOzYnYtCDH3qCQXT70X9j4yqlUb18FFf1aSY=";
   };
 
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
   };
-}
+})

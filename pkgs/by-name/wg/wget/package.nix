@@ -23,12 +23,12 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wget";
   version = "1.25.0";
 
   src = fetchurl {
-    url = "mirror://gnu/wget/wget-${version}.tar.lz";
+    url = "mirror://gnu/wget/wget-${finalAttrs.version}.tar.lz";
     hash = "sha256-GSJcx1awoIj8gRSNxqQKDI8ymvf9hIPxx7L+UPTgih8=";
   };
 
@@ -123,4 +123,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ fpletz ];
     platforms = lib.platforms.all;
   };
-}
+})

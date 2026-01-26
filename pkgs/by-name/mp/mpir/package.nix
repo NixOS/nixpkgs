@@ -10,7 +10,7 @@
   buildPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mpir";
   version = "3.0.0";
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://mpir.org/mpir-${version}.tar.bz2";
+    url = "https://mpir.org/mpir-${finalAttrs.version}.tar.bz2";
     sha256 = "1fvmhrqdjs925hzr2i8bszm50h00gwsh17p2kn2pi51zrxck9xjj";
   };
 
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
     downloadPage = "https://mpir.org/downloads.html";
     homepage = "https://mpir.org/";
   };
-}
+})

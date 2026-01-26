@@ -7,14 +7,14 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "9pfs";
   version = "0.5";
 
   src = fetchFromGitHub {
     owner = "ftrvxmtrx";
     repo = "9pfs";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-NT8oIQK8Os3HRZLOH2OvauiCvh5bXZFbeEtTFbzNvrs=";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
       bsd2
     ];
   };
-}
+})

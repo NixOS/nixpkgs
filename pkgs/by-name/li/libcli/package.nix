@@ -6,14 +6,14 @@
   libxcrypt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libcli";
   version = "1.10.7";
 
   src = fetchFromGitHub {
     owner = "dparrish";
     repo = "libcli";
-    rev = "V${version}";
+    rev = "V${finalAttrs.version}";
     hash = "sha256-ItmZfclx2mprKUOk/MwlS2w4f0ukiiPA5/QaRdGfEO8=";
   };
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ wegank ];
     platforms = lib.platforms.linux;
   };
-}
+})

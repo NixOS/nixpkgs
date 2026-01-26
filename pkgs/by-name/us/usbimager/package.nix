@@ -12,18 +12,18 @@
   libX11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "usbimager";
   version = "1.0.10";
 
   src = fetchFromGitLab {
     owner = "bztsrc";
     repo = "usbimager";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-HTFopc2xrhp0XYubQtOwMKWTQ+3JSKAyL4mMyQ82kAs=";
   };
 
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   nativeBuildInputs = [
     pkg-config
@@ -70,4 +70,4 @@ stdenv.mkDerivation rec {
     broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
     mainProgram = "usbimager";
   };
-}
+})

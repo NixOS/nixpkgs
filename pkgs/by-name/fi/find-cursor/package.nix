@@ -11,14 +11,14 @@
   git,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "find-cursor";
   version = "1.8";
 
   src = fetchFromGitHub {
     owner = "arp242";
     repo = "find-cursor";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-/Dw4bOTCnpCbeI0YJ5DJ9Q2AGBognylUk7xYGn0KIA8=";
   };
 
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.yanganto ];
     mainProgram = "find-cursor";
   };
-}
+})

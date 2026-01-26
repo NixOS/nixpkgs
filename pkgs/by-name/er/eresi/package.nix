@@ -8,14 +8,14 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "eresi";
   version = "0.83-a3-phoenix";
 
   src = fetchFromGitHub {
     owner = "thorkill";
     repo = "eresi";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0a5a7mh2zw9lcdrl8n1mqccrc0xcgj7743l7l4kslkh722fxv625";
   };
 
@@ -92,4 +92,4 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/thorkill/eresi"; # Formerly http://www.eresi-project.org/
     platforms = lib.platforms.linux;
   };
-}
+})

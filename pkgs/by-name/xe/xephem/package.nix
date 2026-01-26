@@ -12,14 +12,14 @@
   xorg,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xephem";
   version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "XEphem";
     repo = "XEphem";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-TuzXrWoJOAHg31DrJObPcHBXgtqR/KWKFRsqddPzL4c=";
   };
 
@@ -109,4 +109,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ EstebanMacanek ];
     platforms = lib.platforms.unix;
   };
-}
+})
