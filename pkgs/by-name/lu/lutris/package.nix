@@ -25,28 +25,28 @@ let
       adwaita-icon-theme
     ];
   xorgDeps =
-    pkgs: with pkgs.xorg; [
-      libX11
-      libXrender
-      libXrandr
+    pkgs: with pkgs; [
+      libx11
+      libxrender
+      libxrandr
       libxcb
-      libXmu
-      libpthreadstubs
-      libXext
-      libXdmcp
-      libXxf86vm
-      libXinerama
-      libSM
-      libXv
-      libXaw
-      libXi
-      libXcursor
-      libXcomposite
-      libXfixes
-      libXtst
-      libXScrnSaver
-      libICE
-      libXt
+      libxmu
+      libpthread-stubs
+      libxext
+      libxdmcp
+      libxxf86vm
+      libxinerama
+      libsm
+      libxv
+      libxaw
+      libxi
+      libxcursor
+      libxcomposite
+      libxfixes
+      libxtst
+      libxscrnsaver
+      libice
+      libxt
     ];
   gstreamerDeps =
     pkgs: with pkgs.gst_all_1; [
@@ -177,7 +177,7 @@ buildFHSEnv {
       flex
 
       # WINE
-      xorg.xrandr
+      xrandr
       perl
       which
       p7zip

@@ -38,7 +38,7 @@
   onetbb,
   webkitgtk_4_1,
   wxGTK31,
-  xorg,
+  libx11,
   libnoise,
   withSystemd ? stdenv.hostPlatform.isLinux,
 }:
@@ -116,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
     onetbb
     webkitgtk_4_1
     wxGTK'
-    xorg.libX11
+    libx11
     opencv.cxxdev
     libnoise
   ]

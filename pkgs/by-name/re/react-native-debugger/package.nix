@@ -4,7 +4,18 @@
   fetchurl,
   unzip,
   cairo,
-  xorg,
+  libxtst,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  libxcb,
   gdk-pixbuf,
   fontconfig,
   pango,
@@ -52,18 +63,18 @@ let
     libxkbcommon
     libgbm
 
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXtst
-    xorg.libxcb
-    xorg.libXext
-    xorg.libXi
-    xorg.libXdamage
-    xorg.libXrandr
-    xorg.libXcomposite
-    xorg.libXfixes
-    xorg.libXrender
-    xorg.libXScrnSaver
+    libx11
+    libxcursor
+    libxtst
+    libxcb
+    libxext
+    libxi
+    libxdamage
+    libxrandr
+    libxcomposite
+    libxfixes
+    libxrender
+    libxscrnsaver
   ];
 in
 stdenv.mkDerivation rec {

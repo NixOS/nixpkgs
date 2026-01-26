@@ -21,7 +21,7 @@
   libepoxy,
   libpng,
   libaio,
-  xorg,
+  libx11,
   libvterm,
   vte,
   gsasl,
@@ -86,7 +86,7 @@ stdenv.mkDerivation {
     libepoxy
     libpng
     libaio
-    xorg.libX11
+    libx11
     libvterm
     vte
     gsasl

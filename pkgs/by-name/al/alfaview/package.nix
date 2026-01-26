@@ -22,7 +22,11 @@
   openssl,
   systemd,
   xcb-util-cursor,
-  xorg,
+  libxcb-wm,
+  libxcb-render-util,
+  libxcb-keysyms,
+  libxcb-image,
+  libx11,
 }:
 
 stdenv.mkDerivation rec {
@@ -61,11 +65,11 @@ stdenv.mkDerivation rec {
     stdenv.cc.cc
     systemd
     xcb-util-cursor
-    xorg.libX11
-    xorg.xcbutilwm
-    xorg.xcbutilimage
-    xorg.xcbutilkeysyms
-    xorg.xcbutilrenderutil
+    libx11
+    libxcb-wm
+    libxcb-image
+    libxcb-keysyms
+    libxcb-render-util
   ];
 
   libPath = lib.makeLibraryPath buildInputs;

@@ -6,7 +6,12 @@
   libpulseaudio,
   dotool,
   libGL,
-  xorg,
+  libxxf86vm,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxcursor,
+  libx11,
   libxkbcommon,
   wayland,
   lib,
@@ -38,12 +43,12 @@ buildGoModule (finalAttrs: {
     dotool
 
     libGL
-    xorg.libX11.dev
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXinerama
-    xorg.libXrandr
-    xorg.libXxf86vm
+    libx11.dev
+    libxcursor
+    libxi
+    libxinerama
+    libxrandr
+    libxxf86vm
     libxkbcommon
     wayland
   ];

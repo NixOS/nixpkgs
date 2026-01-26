@@ -6,7 +6,7 @@
   fetchFromGitHub,
   coreutils,
   libpng,
-  xorg,
+  libxft,
   freetype,
   zlib,
   libjpeg,
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     libX11
     libjpeg
     libpng
-    xorg.libXft
+    libxft
     freetype
     # ssl
     openssl

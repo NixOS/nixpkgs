@@ -17,7 +17,11 @@
   fontconfig,
   freetype,
   libffi,
-  xorg,
+  libxtst,
+  libxrender,
+  libxi,
+  libxext,
+  libx11,
   zlib,
   # runtime dependencies
   cups,
@@ -63,11 +67,11 @@ let
       fontconfig
       freetype
       (lib.getLib stdenv.cc.cc) # libstdc++.so.6
-      xorg.libX11
-      xorg.libXext
-      xorg.libXi
-      xorg.libXrender
-      xorg.libXtst
+      libx11
+      libxext
+      libxi
+      libxrender
+      libxtst
       zlib
     ]
     ++ lib.optional stdenv.hostPlatform.isAarch32 libffi;

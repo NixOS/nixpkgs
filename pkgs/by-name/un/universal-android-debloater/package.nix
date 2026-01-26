@@ -15,7 +15,10 @@
   rustPlatform,
   wayland,
   writableTmpDirAsHomeHook,
-  xorg,
+  libxrandr,
+  libxi,
+  libxcursor,
+  libx11,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -56,10 +59,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
         libglvnd
         libxkbcommon
         wayland
-        xorg.libX11
-        xorg.libXcursor
-        xorg.libXi
-        xorg.libXrandr
+        libx11
+        libxcursor
+        libxi
+        libxrandr
       ]
     } --suffix PATH : ${lib.makeBinPath [ android-tools ]}
   '';

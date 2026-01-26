@@ -5,7 +5,7 @@
   fetchFromGitLab,
   libGL,
   stdenv,
-  xorg,
+  libx11,
 }:
 stdenv.mkDerivation rec {
   pname = "animatch";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     allegro5
     libGL
-    xorg.libX11
+    libx11
   ];
 
   cmakeFlags = [

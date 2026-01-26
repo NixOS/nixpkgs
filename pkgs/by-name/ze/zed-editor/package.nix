@@ -19,7 +19,7 @@
   libxkbcommon,
   wayland,
   libglvnd,
-  xorg,
+  libxcb,
   stdenv,
   makeFontsConf,
   vulkan-loader,
@@ -170,7 +170,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     alsa-lib
     libxkbcommon
     wayland
-    xorg.libxcb
+    libxcb
     # required by livekit:
     libGL
     libX11

@@ -3,7 +3,7 @@
   fetchurl,
   makeDesktopItem,
   lib,
-  xorg,
+  libxshmfence,
   wayland,
   wayland-protocols,
 }:
@@ -42,7 +42,7 @@ appimageTools.wrapType2 {
   '';
 
   extraPkgs = _: [
-    xorg.libxshmfence
+    libxshmfence
     wayland
     wayland-protocols
   ];

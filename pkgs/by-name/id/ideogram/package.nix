@@ -13,7 +13,8 @@
   libgee,
   pantheon,
   desktop-file-utils,
-  xorg,
+  libxtst,
+  libx11,
   wrapGAppsHook3,
 }:
 
@@ -43,8 +44,8 @@ stdenv.mkDerivation rec {
     gtk3
     libgee
     pantheon.granite
-    xorg.libX11
-    xorg.libXtst
+    libx11
+    libxtst
   ];
 
   postPatch = ''

@@ -9,7 +9,17 @@
   x264,
   libva,
   gst_all_1,
-  xorg,
+  libxv,
+  libxtst,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxft,
+  libxfixes,
+  libxext,
+  libxcursor,
+  libxcomposite,
   libdrm,
   pkg-config,
   pango,
@@ -42,17 +52,17 @@ rustPlatform.buildRustPackage {
     dbus
     libva
     gst_all_1.gst-plugins-base
-    xorg.libXext
-    xorg.libXft
-    xorg.libXinerama
-    xorg.libXcursor
-    xorg.libXrender
-    xorg.libXfixes
-    xorg.libXtst
-    xorg.libXrandr
-    xorg.libXcomposite
-    xorg.libXi
-    xorg.libXv
+    libxext
+    libxft
+    libxinerama
+    libxcursor
+    libxrender
+    libxfixes
+    libxtst
+    libxrandr
+    libxcomposite
+    libxi
+    libxv
     pango
     libdrm
     wayland

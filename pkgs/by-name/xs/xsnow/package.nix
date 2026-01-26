@@ -6,7 +6,10 @@
   libxml2,
   wrapGAppsHook3,
   gtk3-x11,
-  xorg,
+  libxt,
+  libxtst,
+  libxpm,
+  libx11,
   libxkbcommon,
   gsl,
 }:
@@ -28,13 +31,11 @@ stdenv.mkDerivation rec {
     libxkbcommon
     libxml2
     gsl
-  ]
-  ++ (with xorg; [
-    libX11
-    libXpm
-    libXt
-    libXtst
-  ]);
+    libx11
+    libxpm
+    libxt
+    libxtst
+  ];
 
   makeFlags = [ "gamesdir=$(out)/bin" ];
 

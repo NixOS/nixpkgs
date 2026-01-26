@@ -5,7 +5,13 @@
   curlWithGnuTls,
   zlib,
   glib,
-  xorg,
+  libxrender,
+  libxi,
+  libxext,
+  libx11,
+  libsm,
+  libice,
+  libxcb,
   dbus,
   fontconfig,
   libGL,
@@ -49,13 +55,13 @@ stdenv.mkDerivation rec {
     stdenv.cc.cc
     zlib
     glib
-    xorg.libXi
-    xorg.libxcb
-    xorg.libXrender
-    xorg.libX11
-    xorg.libSM
-    xorg.libICE
-    xorg.libXext
+    libxi
+    libxcb
+    libxrender
+    libx11
+    libsm
+    libice
+    libxext
     dbus
     fontconfig
     freetype

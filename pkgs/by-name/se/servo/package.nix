@@ -34,7 +34,11 @@
   udev,
   vulkan-loader,
   wayland,
-  xorg,
+  libxrandr,
+  libxi,
+  libxcursor,
+  libx11,
+  libxcb,
   zlib,
 
   # tests
@@ -52,9 +56,9 @@ let
   );
   runtimePaths = lib.makeLibraryPath (
     lib.optionals (stdenv.hostPlatform.isLinux) [
-      xorg.libXcursor
-      xorg.libXrandr
-      xorg.libXi
+      libxcursor
+      libxrandr
+      libxi
       libxkbcommon
       vulkan-loader
       wayland
@@ -127,8 +131,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     wayland
-    xorg.libX11
-    xorg.libxcb
+    libx11
+    libxcb
     udev
     vulkan-loader
   ];

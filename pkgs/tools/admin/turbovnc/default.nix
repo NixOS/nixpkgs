@@ -25,7 +25,21 @@
   which,
   xkbcomp,
   xkeyboard_config,
-  xorg,
+  tab-window-manager,
+  libxi,
+  libxfont_2,
+  libxext,
+  libxdmcp,
+  libxdamage,
+  libx11,
+  libsm,
+  xtrans,
+  xorgproto,
+  xauth,
+  pixman,
+  libxshmfence,
+  libxkbfile,
+  libfontenc,
   xterm,
 }:
 
@@ -74,28 +88,26 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     pam
     perl
-  ]
-  ++ (with xorg; [
     libfontenc # for -DTVNC_SYSTEMX11=1
-    libSM
-    libX11
-    libXdamage # for -DTVNC_SYSTEMX11=1
-    libXdmcp # for -DTVNC_SYSTEMX11=1
-    libXext
-    libXfont2 # for -DTVNC_SYSTEMX11=1
+    libsm
+    libx11
+    libxdamage # for -DTVNC_SYSTEMX11=1
+    libxdmcp # for -DTVNC_SYSTEMX11=1
+    libxext
+    libxfont_2 # for -DTVNC_SYSTEMX11=1
     libxkbfile # for -DTVNC_SYSTEMX11=1
     libxshmfence
-    libXi
+    libxi
     mesa-gl-headers # for -DTVNC_SYSTEMX11=1
     pixman # for -DTVNC_SYSTEMX11=1
     xorgproto
     xtrans # for -DTVNC_SYSTEMX11=1
-  ]);
+  ];
 
   postPatch = ''
-    substituteInPlace unix/Xvnc/CMakeLists.txt --replace 'string(REGEX REPLACE "X11" "Xfont2" X11_Xfont2_LIB' 'set(X11_Xfont2_LIB ${xorg.libXfont2}/lib/libXfont2.so)  #'
-    substituteInPlace unix/Xvnc/CMakeLists.txt --replace 'string(REGEX REPLACE "X11" "fontenc" X11_Fontenc_LIB' 'set(X11_Fontenc_LIB ${xorg.libfontenc}/lib/libfontenc.so)  #'
-    substituteInPlace unix/Xvnc/CMakeLists.txt --replace 'string(REGEX REPLACE "X11" "pixman-1" X11_Pixman_LIB' 'set(X11_Pixman_LIB ${xorg.pixman}/lib/libpixman-1.so)  #'
+    substituteInPlace unix/Xvnc/CMakeLists.txt --replace 'string(REGEX REPLACE "X11" "Xfont2" X11_Xfont2_LIB' 'set(X11_Xfont2_LIB ${libxfont_2}/lib/libXfont2.so)  #'
+    substituteInPlace unix/Xvnc/CMakeLists.txt --replace 'string(REGEX REPLACE "X11" "fontenc" X11_Fontenc_LIB' 'set(X11_Fontenc_LIB ${libfontenc}/lib/libfontenc.so)  #'
+    substituteInPlace unix/Xvnc/CMakeLists.txt --replace 'string(REGEX REPLACE "X11" "pixman-1" X11_Pixman_LIB' 'set(X11_Pixman_LIB ${pixman}/lib/libpixman-1.so)  #'
   '';
 
   cmakeFlags = [
@@ -143,8 +155,8 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : ${
         lib.makeBinPath [
           which
-          xorg.twm
-          xorg.xauth
+          tab-window-manager
+          xauth
           xterm
         ]
       }

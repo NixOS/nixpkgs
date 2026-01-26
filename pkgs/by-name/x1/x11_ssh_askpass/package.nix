@@ -5,7 +5,10 @@
   fetchDebianPatch,
   autoreconfHook,
   pkg-config,
-  xorg,
+  libxt,
+  libx11,
+  libsm,
+  libice,
 }:
 
 stdenv.mkDerivation rec {
@@ -38,10 +41,10 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    xorg.libX11
-    xorg.libXt
-    xorg.libICE
-    xorg.libSM
+    libx11
+    libxt
+    libice
+    libsm
   ];
 
   meta = {

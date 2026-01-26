@@ -26,7 +26,12 @@
   wrapGAppsHook3,
   xcb-imdkit,
   xdg-utils,
-  xorg,
+  libxcb-util,
+  libxcb-wm,
+  libxtst,
+  libxcursor,
+  libx11,
+  libxcb,
   zlib,
 }:
 
@@ -64,10 +69,10 @@ stdenv.mkDerivation rec {
     # libjpeg8 is required for converting jpeg's to colour palettes
     libjpeg
     libnghttp2
-    xorg.libxcb
-    xorg.libXcursor
-    xorg.libX11
-    xorg.libXtst
+    libxcb
+    libxcursor
+    libx11
+    libxtst
     libxkbcommon
     libudev-zero
     pango
@@ -75,8 +80,8 @@ stdenv.mkDerivation rec {
     (lib.getLib stdenv.cc.cc)
     vulkan-loader
     xcb-imdkit
-    xorg.xcbutil
-    xorg.xcbutilwm
+    libxcb-util
+    libxcb-wm
     zlib
   ];
 

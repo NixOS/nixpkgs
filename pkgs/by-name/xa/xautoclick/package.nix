@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
-  xorg,
+  libxtst,
   pkg-config,
   cmake,
   libevdev,
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     libevdev
-    xorg.libXtst
+    libxtst
   ]
   ++ lib.optionals gtkSupport [
     gtk3

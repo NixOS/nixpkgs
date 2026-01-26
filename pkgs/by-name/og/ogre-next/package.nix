@@ -9,7 +9,11 @@
   pkg-config,
 
   SDL2,
-  xorg,
+  libxt,
+  libxrandr,
+  libxaw,
+  libx11,
+  libxcb,
   libGL,
   zlib,
   freetype,
@@ -54,11 +58,11 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libGL
-    xorg.libX11
-    xorg.libXaw
-    xorg.libXrandr
-    xorg.libXt
-    xorg.libxcb
+    libx11
+    libxaw
+    libxrandr
+    libxt
+    libxcb
   ];
 
   # TODO: Figure out Vulkan plugin deps

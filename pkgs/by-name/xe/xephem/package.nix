@@ -9,7 +9,9 @@
   motif,
   openssl,
   groff,
-  xorg,
+  libxt,
+  libxmu,
+  libxext,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,9 +34,9 @@ stdenv.mkDerivation rec {
   buildInputs = [
     motif
     openssl
-    xorg.libXmu
-    xorg.libXext
-    xorg.libXt
+    libxmu
+    libxext
+    libxt
   ];
 
   patches = [

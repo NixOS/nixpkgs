@@ -3,7 +3,7 @@
   wrapGAppsHook3,
   glib,
   stdenv,
-  xorg,
+  lndir,
   wingpanel,
   wingpanelIndicators,
   switchboard-with-plugs,
@@ -49,7 +49,7 @@ stdenv.mkDerivation {
   installPhase = ''
     mkdir -p $out
     for i in $(cat $pathsPath); do
-      ${xorg.lndir}/bin/lndir -silent $i $out
+      ${lndir}/bin/lndir -silent $i $out
     done
   '';
 

@@ -38,7 +38,11 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
-  xorg,
+  libxcb-wm,
+  libxcb-errors,
+  libxdmcp,
+  libxcursor,
+  libxcb,
   xwayland,
   debug ? false,
   enableXWayland ? true,
@@ -173,15 +177,15 @@ customStdenv.mkDerivation (finalAttrs: {
       tomlplusplus
       wayland
       wayland-protocols
-      xorg.libXcursor
+      libxcursor
     ]
     (optionals customStdenv.hostPlatform.isBSD [ epoll-shim ])
     (optionals customStdenv.hostPlatform.isMusl [ libexecinfo ])
     (optionals enableXWayland [
-      xorg.libxcb
-      xorg.libXdmcp
-      xorg.xcbutilerrors
-      xorg.xcbutilwm
+      libxcb
+      libxdmcp
+      libxcb-errors
+      libxcb-wm
       xwayland
     ])
     (optionals withSystemd [ systemd ])

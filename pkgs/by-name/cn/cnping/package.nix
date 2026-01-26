@@ -3,7 +3,9 @@
   stdenv,
   fetchFromGitHub,
   libglvnd,
-  xorg,
+  libxinerama,
+  libxext,
+  libx11,
 }:
 
 stdenv.mkDerivation {
@@ -20,9 +22,9 @@ stdenv.mkDerivation {
 
   buildInputs = [
     libglvnd
-    xorg.libXinerama
-    xorg.libXext
-    xorg.libX11
+    libxinerama
+    libxext
+    libx11
   ];
 
   # The "linuxinstall" target won't work for us:

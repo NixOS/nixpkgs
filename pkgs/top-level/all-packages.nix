@@ -3739,9 +3739,7 @@ with pkgs;
 
   ttfautohint-nox = ttfautohint.override { enableGUI = false; };
 
-  twilight = callPackage ../tools/graphics/twilight {
-    libX11 = xorg.libX11;
-  };
+  twilight = callPackage ../tools/graphics/twilight { };
 
   twitch-chat-downloader =
     python3Packages.callPackage ../applications/misc/twitch-chat-downloader
@@ -3814,7 +3812,7 @@ with pkgs;
   truecrack-cuda = truecrack.override { cudaSupport = true; };
 
   turbovnc = callPackage ../tools/admin/turbovnc {
-    # fontDirectories = [ xorg.fontadobe75dpi xorg.fontmiscmisc xorg.fontcursormisc xorg.fontbhlucidatypewriter75dpi ];
+    # fontDirectories = [ font-adobe-75dpi font-misc-misc font-cursor-misc font-bh-lucidatypewriter-75dpi ];
     libjpeg_turbo = libjpeg_turbo.override { enableJava = true; };
   };
 
@@ -6989,9 +6987,7 @@ with pkgs;
     x11Support = false;
   };
 
-  imlibsetroot = callPackage ../applications/graphics/imlibsetroot {
-    libXinerama = xorg.libXinerama;
-  };
+  imlibsetroot = callPackage ../applications/graphics/imlibsetroot { };
 
   indilib = callPackage ../development/libraries/science/astronomy/indilib { };
   indi-3rdparty = recurseIntoAttrs (
@@ -8081,7 +8077,7 @@ with pkgs;
     libmagic = file;
   };
 
-  xcb-util-cursor = xorg.xcbutilcursor;
+  xcb-util-cursor = libxcb-cursor;
 
   xgboostWithCuda = xgboost.override { cudaSupport = true; };
 

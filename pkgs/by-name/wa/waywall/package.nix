@@ -14,7 +14,7 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
-  xorg,
+  libxcb,
   xwayland,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     luajit
     wayland
     wayland-protocols
-    xorg.libxcb
+    libxcb
     xwayland
   ];
 
