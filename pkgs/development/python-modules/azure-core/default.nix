@@ -11,10 +11,9 @@
   opentelemetry-instrumentation,
   opentelemetry-instrumentation-requests,
   opentelemetry-sdk,
-  pytest,
   pytest-asyncio,
   pytest-trio,
-  pytestCheckHook,
+  pytest8_3CheckHook,
   requests,
   setuptools,
   six,
@@ -55,10 +54,9 @@ buildPythonPackage rec {
     opentelemetry-instrumentation
     opentelemetry-instrumentation-requests
     opentelemetry-sdk
-    pytest
     pytest-trio
     pytest-asyncio
-    pytestCheckHook
+    pytest8_3CheckHook
     trio
   ]
   ++ lib.concatAttrValues optional-dependencies;
