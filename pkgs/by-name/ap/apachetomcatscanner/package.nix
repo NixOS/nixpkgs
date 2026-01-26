@@ -16,18 +16,9 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-9gaue/XfxtU+5URYfg+uYaNcx8G3Eu9DgVEpj/lk8TY=";
   };
 
-  postPatch = ''
-    replacement=$(printf 'try:\n    %s\nexcept AttributeError:\n    pass' \
-      'requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS += ":HIGH:!DH:!aNULL"')
-
-    for f in apachetomcatscanner/utils/network.py apachetomcatscanner/utils/scan.py; do
-      if [ -f "$f" ] && grep -Fq 'requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS' "$f"; then
-        substituteInPlace "$f" \
-          --replace-fail 'requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS += ":HIGH:!DH:!aNULL"' \
-          "$replacement"
-      fi
-    done
-  '';
+  # Upstream: https://github.com/p0dalirius/ApacheTomcatScanner/issues/29
+  # (see also https://github.com/p0dalirius/ApacheTomcatScanner/pull/32)
+  patches = [ ./urllib3-default-ciphers-attributeerror.patch ];
 
   pythonRelaxDeps = [
     "requests"
