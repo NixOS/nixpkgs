@@ -1,0 +1,18 @@
+diff --git a/cmake/CPM.cmake b/cmake/CPM.cmake
+index c1c05320..91fb3417 100644
+--- a/cmake/CPM.cmake
++++ b/cmake/CPM.cmake
+@@ -778,11 +778,9 @@ function(CPMAddPackage)
+       # Application set a custom unique directory name
+       set(download_directory ${CPM_SOURCE_CACHE}/${lower_case_name}/${CPM_ARGS_CUSTOM_CACHE_KEY})
+     elseif(CPM_USE_NAMED_CACHE_DIRECTORIES)
+-      string(SHA1 origin_hash "${origin_parameters};NEW_CACHE_STRUCTURE_TAG")
+-      set(download_directory ${CPM_SOURCE_CACHE}/${lower_case_name}/${origin_hash}/${CPM_ARGS_NAME})
++      set(download_directory ${CPM_SOURCE_CACHE}/${lower_case_name}/NIX_ORIGIN_HASH_STUB/${CPM_ARGS_NAME})
+     else()
+-      string(SHA1 origin_hash "${origin_parameters}")
+-      set(download_directory ${CPM_SOURCE_CACHE}/${lower_case_name}/${origin_hash})
++      set(download_directory ${CPM_SOURCE_CACHE}/${lower_case_name}/NIX_ORIGIN_HASH_STUB)
+     endif()
+     # Expand `download_directory` relative path. This is important because EXISTS doesn't work for
+     # relative paths.
