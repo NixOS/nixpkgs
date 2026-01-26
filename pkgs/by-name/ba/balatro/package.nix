@@ -18,6 +18,13 @@ stdenv.mkDerivation (finalAttrs: {
   src = requireFile {
     name = "Balatro-${finalAttrs.version}.exe";
     url = "https://store.steampowered.com/app/2379780/Balatro/";
+    message = ''
+      Balatro cannot be automatically downloaded. Please download
+      it from Steam, locate the Balatro.exe on disk, likely in
+      ~/.local/share/Steam/steamapps/common/Balatro/, then upload it
+      to your nix store with nix-store --add-fixed sha256 Balatro.exe.
+    '';
+
     # Use `nix --extra-experimental-features nix-command hash file --sri --type sha256` to get the correct hash
     hash = "sha256-DXX+FkrM8zEnNNSzesmHiN0V8Ljk+buLf5DE5Z3pP0c=";
   };
