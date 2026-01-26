@@ -25,7 +25,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "scikit-survival";
   version = "0.26.0";
   pyproject = true;
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sebp";
     repo = "scikit-survival";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-xtrGFNRHF8bL8Q82gIQLayuCSDFMrBBkQ63F+Nmbdes=";
   };
 
@@ -94,8 +94,8 @@ buildPythonPackage rec {
   meta = {
     description = "Survival analysis built on top of scikit-learn";
     homepage = "https://github.com/sebp/scikit-survival";
-    changelog = "https://github.com/sebp/scikit-survival/releases/tag/v${version}";
+    changelog = "https://github.com/sebp/scikit-survival/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
   };
-}
+})
