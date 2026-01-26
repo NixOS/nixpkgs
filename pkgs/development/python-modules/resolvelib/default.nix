@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "resolvelib";
-  version = "1.2.0";
+  version = "1.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sarugaku";
     repo = "resolvelib";
     tag = version;
-    hash = "sha256-8ffJ1Jlb/hzKY4pfE3B95ip2e1CxUByiR0cul/ZnxxA=";
+    hash = "sha256-AxxW6z51fZGqs5UwY3NEBQL8894uQDuRyVrKzol3ny0=";
   };
 
   build-system = [ setuptools ];
