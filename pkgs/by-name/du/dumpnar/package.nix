@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp dumpnar $out/bin/
+    cp dumpnar${stdenv.hostPlatform.extensions.executable} $out/bin/
   '';
 
   meta = {
