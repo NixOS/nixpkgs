@@ -11606,6 +11606,12 @@
     githubId = 67414100;
     name = "Jachym Putta";
   };
+  jack-avery = {
+    email = "jack.avery.business@gmail.com";
+    github = "jack-avery";
+    githubId = 47289484;
+    name = "Jack Avery";
+  };
   jackcres = {
     email = "crespomerchano@gmail.com";
     github = "omarcresp";
