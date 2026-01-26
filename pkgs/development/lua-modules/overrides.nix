@@ -479,6 +479,13 @@ in
     buildInputs = old.buildInputs ++ [
       yajl
     ];
+    luarocksConfig = old.luarocksConfig // {
+      variables = {
+        # Since yajl's outputs are split, we need to help luarocks find the
+        # include directory.
+        YAJL_INCDIR = "${lib.getDev yajl}/include";
+      };
+    };
   });
 
   lua-zlib = prev.lua-zlib.overrideAttrs (old: {
