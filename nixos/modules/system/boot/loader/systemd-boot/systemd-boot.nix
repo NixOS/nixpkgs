@@ -102,6 +102,7 @@ let
 
   finalSystemdBootBuilder = pkgs.writeScript "install-systemd-boot.sh" ''
     #!${pkgs.runtimeShell}
+    ${cfg.extraPreInstallCommands}
     ${systemdBootBuilder}/bin/systemd-boot "$@"
     ${cfg.extraInstallCommands}
   '';
@@ -248,6 +249,20 @@ in
       description = ''
         Install the devicetree blob specified by `config.hardware.deviceTree.name`
         to the ESP and instruct systemd-boot to pass this DTB to linux.
+      '';
+    };
+
+    extraPreInstallCommands = mkOption {
+      default = "";
+      example = ''
+        export SYSTEMD_RELAX_ESP_CHECKS=1
+        export SYSTEMD_RELAX_XBOOTLDR_CHECKS=1
+      '';
+      type = types.lines;
+      description = ''
+        Additional shell commands inserted in the bootloader installer
+        script before calling `bootctl`. It can be used at pass extra
+        environment variables to `bootctl` or to prepare the ESP.
       '';
     };
 
