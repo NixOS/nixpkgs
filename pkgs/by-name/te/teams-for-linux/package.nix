@@ -5,7 +5,7 @@
   fetchFromGitHub,
   alsa-utils,
   copyDesktopItems,
-  electron_37,
+  electron_39,
   makeDesktopItem,
   makeWrapper,
   nix-update-script,
@@ -46,7 +46,7 @@ buildNpmPackage rec {
   buildPhase = ''
     runHook preBuild
 
-    cp -r ${electron_37.dist} electron-dist
+    cp -r ${electron_39.dist} electron-dist
     chmod -R u+w electron-dist
   ''
   # Electron builder complains about symlink in electron-dist
@@ -61,7 +61,7 @@ buildNpmPackage rec {
         -c.npmRebuild=true \
         -c.asarUnpack="**/*.node" \
         -c.electronDist=electron-dist \
-        -c.electronVersion=${electron_37.version} \
+        -c.electronVersion=${electron_39.version} \
         -c.mac.identity=null
 
     runHook postBuild
@@ -83,7 +83,7 @@ buildNpmPackage rec {
     popd
 
     # Linux needs 'aplay' for notification sounds
-    makeWrapper '${lib.getExe electron_37}' "$out/bin/teams-for-linux" \
+    makeWrapper '${lib.getExe electron_39}' "$out/bin/teams-for-linux" \
       --prefix PATH : ${
         lib.makeBinPath [
           alsa-utils
