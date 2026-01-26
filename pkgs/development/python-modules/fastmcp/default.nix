@@ -60,6 +60,9 @@ buildPythonPackage (finalAttrs: {
     uv-dynamic-versioning
   ];
 
+  pythonRelaxDeps = [
+    "pydocket"
+  ];
   dependencies = [
     authlib
     cyclopts
