@@ -18,6 +18,7 @@
   pypaInstallHook,
   pythonCatchConflictsHook,
   pythonImportsCheckHook,
+  pythonShebangsFixupHook,
   pythonNamespacesHook,
   pythonOutputDistHook,
   pythonRelaxDepsHook,
@@ -360,6 +361,9 @@ lib.extendMkDerivation {
       ++ optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
         # This is a test, however, it should be ran independent of the checkPhase and checkInputs
         pythonImportsCheckHook
+      ]
+      ++ optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+        pythonShebangsFixupHook
       ]
       ++ optionals (python.pythonAtLeast "3.3") [
         # Optionally enforce PEP420 for python3
