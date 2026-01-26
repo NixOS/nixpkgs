@@ -1,13 +1,14 @@
 {
   lib,
-  stdenv,
+  gccStdenv,
+  stdenv' ? gccStdenv,
   fetchurl,
   freetype,
   libjpeg,
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv'.mkDerivation rec {
   pname = "swftools";
   version = "0.9.2";
 
