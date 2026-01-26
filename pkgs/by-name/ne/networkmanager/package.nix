@@ -249,5 +249,6 @@ stdenv.mkDerivation (finalAttrs: {
       # Mandatory shared libraries.
       lib.systems.inspect.platformPatterns.isStatic
     ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnome" finalAttrs.version;
   };
 })

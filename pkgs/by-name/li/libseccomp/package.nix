@@ -92,5 +92,6 @@ stdenv.mkDerivation rec {
       "sparc64-linux"
     ];
     maintainers = with lib.maintainers; [ thoughtpolice ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "libseccomp_project" version;
   };
 }

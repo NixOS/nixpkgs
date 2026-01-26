@@ -155,5 +155,6 @@ stdenv.mkDerivation rec {
       gpl3Plus
     ];
     maintainers = with lib.maintainers; [ r-burns ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "elfutils_project" version;
   };
 }
