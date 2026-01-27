@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  fetchpatch,
   unstableGitUpdater,
   gtk3,
 }:
@@ -16,6 +17,12 @@ stdenvNoCC.mkDerivation {
     rev = "42f5c4817f47e2ef4b011080ebbb2f50a9a6955b";
     hash = "sha256-d7jxoqWPRlNX43CdIEihT6kxvke3k8GG9CJkmlkuRNw=";
   };
+
+  # Fix broken video-x-mng.svg symlink that crashes nix-index
+  # https://github.com/EliverLara/candy-icons/pull/761
+  postPatch = ''
+    ln -sf video-webm.svg mimetypes/scalable/video-x-mng.svg
+  '';
 
   nativeBuildInputs = [ gtk3 ];
 
