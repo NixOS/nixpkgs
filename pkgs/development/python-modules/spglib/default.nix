@@ -5,10 +5,11 @@
   pythonOlder,
 
   # build-system
+  cmake,
   scikit-build-core,
   numpy,
-  cmake,
   ninja,
+  pybind11,
   setuptools-scm,
 
   # dependencies
@@ -32,9 +33,10 @@ buildPythonPackage rec {
   };
 
   build-system = [
+    cmake
     scikit-build-core
     numpy
-    cmake
+    pybind11
     ninja
     setuptools-scm
   ];
