@@ -27704,6 +27704,13 @@
     githubId = 1486626;
     name = "Artyom Pertsovsky";
   };
+  veyndan = {
+    email = "veyndan@gmail.com";
+    github = "veyndan";
+    githubId = 6900601;
+    matrix = "@veyndan:matrix.org";
+    name = "Veyndan Stuart";
+  };
   vglfr = {
     email = "vf.velt@gmail.com";
     github = "vglfr";
