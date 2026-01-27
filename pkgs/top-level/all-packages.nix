@@ -4141,7 +4141,10 @@ with pkgs;
         allowedRequisites = null;
         # Remove libcxx/libcxxabi, and add clang for AS if on darwin (it uses
         # clang's internal assembler).
-        extraBuildInputs = lib.optional stdenv.hostPlatform.isDarwin clang.cc;
+        extraBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+          clang.cc
+          apple-sdk
+        ];
       };
 
   gcc13Stdenv = overrideCC gccStdenv buildPackages.gcc13;
