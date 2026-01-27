@@ -11,7 +11,7 @@ let
       "/var/run/varnishd";
 in
 {
-  name = "varnish";
+  name = "varnish-${package.version}";
   meta = {
     maintainers = [ ];
   };

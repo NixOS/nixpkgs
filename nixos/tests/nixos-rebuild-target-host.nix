@@ -1,4 +1,4 @@
-{ hostPkgs, ... }:
+{ hostPkgs, lib, ... }:
 {
   name = "nixos-rebuild-target-host";
 

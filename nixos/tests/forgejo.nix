@@ -30,7 +30,7 @@ let
     }:
 
     {
-      name = "forgejo-${type}";
+      name = "forgejo-${forgejoPackage.version}-${type}";
       meta.maintainers = lib.teams.forgejo.members;
 
       nodes = {
