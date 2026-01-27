@@ -14,27 +14,21 @@ let
     if ideName == null then
       with jetbrains;
       [
-        aqua
         clion
         datagrip
         dataspell
         gateway
         goland
-        idea-community-src
-        idea-community-bin
         idea-oss
         idea
         mps
         phpstorm
-        pycharm-community-src
-        pycharm-community-bin
         pycharm-oss
         pycharm
         rider
         ruby-mine
         rust-rover
         webstorm
-        writerside
       ]
     else
       [ (jetbrains.${ideName}) ];

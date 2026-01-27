@@ -453,10 +453,13 @@ jobs:
       - name: Install Nix
         uses: cachix/install-nix-action@4e002c8ec80594ecd40e759629461e26c8abed15 # v31
 
-      - name: Run misc eval tasks in parallel
+      - name: Ensure flake outputs on all systems still evaluate
+        run: nix flake check --all-systems --no-build './nixpkgs/untrusted?shallow=1'
+
+      - name: Query nixpkgs with aliases enabled to check for basic syntax errors
         run: |
-          # Ensure flake outputs on all systems still evaluate
-          nix flake check --all-systems --no-build './nixpkgs/untrusted?shallow=1' &
-          # Query nixpkgs with aliases enabled to check for basic syntax errors
-          nix-env -I ./nixpkgs/untrusted -f ./nixpkgs/untrusted -qa '*' --option restrict-eval true --option allow-import-from-derivation false >/dev/null &
-          wait
+          time nix-env -I ./nixpkgs/untrusted -f ./nixpkgs/untrusted -qa '*' --option restrict-eval true --option allow-import-from-derivation false >/dev/null
+
+      - name: Ensure NixOS modules meta is valid
+        run: |
+          time nix-instantiate -I ./nixpkgs/untrusted --strict --eval --json ./nixpkgs/untrusted/nixos --arg configuration '{}' --attr config.meta --option restrict-eval true --option allow-import-from-derivation false
