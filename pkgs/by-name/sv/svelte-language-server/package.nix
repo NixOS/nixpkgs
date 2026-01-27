@@ -11,13 +11,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "svelte-language-server";
-  version = "0.17.21";
+  version = "0.17.23";
 
   src = fetchFromGitHub {
     owner = "sveltejs";
     repo = "language-tools";
     tag = "svelte-language-server@${finalAttrs.version}";
-    hash = "sha256-HNd4M7bFTN0oFdO44w8Rgz45mDLrJ/ksZKB0iPw6t1s=";
+    hash = "sha256-rxm/yYPq54/Yv/zCFxDkRiGYsl8wwpa+s0xiE2MJf90=";
   };
 
   pnpmWorkspaces = [ "svelte-language-server..." ];
