@@ -926,5 +926,8 @@ in
       };
     };
   };
-  meta.maintainers = members;
+  meta = {
+    doc = ./xen.md;
+    maintainers = members;
+  };
 }
