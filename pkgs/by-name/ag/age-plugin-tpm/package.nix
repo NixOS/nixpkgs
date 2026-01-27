@@ -30,6 +30,7 @@ buildGoModule (finalAttrs: {
     swtpm
   ];
   nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   buildInputs = [
     openssl
