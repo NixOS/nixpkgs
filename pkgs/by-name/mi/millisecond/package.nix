@@ -49,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libadwaita
+    pythonEnv
   ];
 
   meta = {
