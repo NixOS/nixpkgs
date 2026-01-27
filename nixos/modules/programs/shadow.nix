@@ -254,24 +254,43 @@ in
 
       security.wrappers =
         let
-          mkSetuidRoot = source: {
-            setuid = true;
-            owner = "root";
-            group = "root";
-            inherit source;
-          };
+          mkWrapper =
+            name: settings:
+            {
+              owner = "root";
+              group = "root";
+              source = lib.getExe' cfg.package name;
+            }
+            // settings;
         in
-        {
-          su = mkSetuidRoot "${cfg.package.su}/bin/su";
-          sg = mkSetuidRoot "${cfg.package.out}/bin/sg";
-          newgrp = mkSetuidRoot "${cfg.package.out}/bin/newgrp";
-          newuidmap = mkSetuidRoot "${cfg.package.out}/bin/newuidmap";
-          newgidmap = mkSetuidRoot "${cfg.package.out}/bin/newgidmap";
-        }
-        // lib.optionalAttrs config.users.mutableUsers {
-          chsh = mkSetuidRoot "${cfg.package.out}/bin/chsh";
-          passwd = mkSetuidRoot "${cfg.package.out}/bin/passwd";
-        };
+        lib.mapAttrs mkWrapper (
+          {
+            su = {
+              source = "${cfg.package.su}/bin/su";
+              setuid = true;
+            };
+            sg = {
+              setuid = true;
+            };
+            newgrp = {
+              setuid = true;
+            };
+            newuidmap = {
+              capabilities = "cap_setuid+ep";
+            };
+            newgidmap = {
+              capabilities = "cap_setgid+ep";
+            };
+          }
+          // lib.optionalAttrs config.users.mutableUsers {
+            chsh = {
+              setuid = true;
+            };
+            passwd = {
+              setuid = true;
+            };
+          }
+        );
     })
   ];
 }
