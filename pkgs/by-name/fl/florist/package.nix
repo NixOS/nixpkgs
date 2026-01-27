@@ -7,7 +7,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "florist";
+  pname = "florist";
   version = "24.2";
 
   src = fetchFromGitHub {
