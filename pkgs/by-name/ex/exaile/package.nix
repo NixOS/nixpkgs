@@ -99,7 +99,6 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   preCheck = ''
-    substituteInPlace Makefile --replace "PYTHONPATH=$(shell pwd)" "PYTHONPATH=$PYTHONPATH:$(shell pwd)"
     export PYTEST="py.test"
     export XDG_CACHE_HOME=$(mktemp -d)
   '';
@@ -120,4 +119,10 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ ryneeverett ];
     platforms = lib.platforms.all;
   };
+}
+// lib.optionalAttrs translationSupport {
+  preBuild = ''
+    buildFlagsArray+=(all_no_locale)
+  '';
+  installTargets = "install_no_locale";
 }
