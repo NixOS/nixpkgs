@@ -23,6 +23,5 @@ let
 in
 nixosOptionsDoc {
   inherit (modules) options;
-  documentType = "none";
   transformOptions = opt: opt // { declarations = map transformDeclaration opt.declarations; };
 }
