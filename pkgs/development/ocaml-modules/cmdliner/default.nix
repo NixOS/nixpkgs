@@ -3,15 +3,21 @@
   stdenv,
   fetchurl,
   ocaml,
+  version ? "1.3.0",
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "cmdliner";
-  version = "1.0.4";
+  inherit version;
 
   src = fetchurl {
-    url = "https://erratique.ch/software/${pname}/releases/${pname}-${version}.tbz";
-    sha256 = "1h04q0zkasd0mw64ggh4y58lgzkhg6yhzy60lab8k8zq9ba96ajw";
+    url = "https://erratique.ch/software/cmdliner/releases/cmdliner-${version}.tbz";
+    hash =
+      {
+        "1.0.4" = "sha256-XCqT1Er4o4mWosD4D715cP5HUfEEvkcMr6BpNT/ABMA=";
+        "1.3.0" = "sha256-joGA9XO0QPanqMII2rLK5KgjhP7HMtInhNG7bmQWjLs=";
+      }
+      ."${version}";
   };
 
   nativeBuildInputs = [ ocaml ];
@@ -19,11 +25,11 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ];
   installTargets = "install install-doc";
   installFlags = [
-    "LIBDIR=$(out)/lib/ocaml/${ocaml.version}/site-lib/${pname}"
-    "DOCDIR=$(out)/share/doc/${pname}"
+    "LIBDIR=$(out)/lib/ocaml/${ocaml.version}/site-lib/cmdliner"
+    "DOCDIR=$(out)/share/doc/cmdliner"
   ];
   postInstall = ''
-    mv $out/lib/ocaml/${ocaml.version}/site-lib/${pname}/{opam,${pname}.opam}
+    mv $out/lib/ocaml/${ocaml.version}/site-lib/cmdliner/{opam,cmdliner.opam}
   '';
 
   meta = {
@@ -32,6 +38,5 @@ stdenv.mkDerivation rec {
     license = lib.licenses.isc;
     inherit (ocaml.meta) platforms;
     maintainers = [ lib.maintainers.vbgl ];
-    broken = !(lib.versionAtLeast ocaml.version "4.03");
   };
 }
