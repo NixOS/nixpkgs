@@ -269,6 +269,7 @@
   ./programs/miriway.nix
   ./programs/mosh.nix
   ./programs/mouse-actions.nix
+  ./programs/mpv.nix
   ./programs/msmtp.nix
   ./programs/mtr.nix
   ./programs/nano.nix
