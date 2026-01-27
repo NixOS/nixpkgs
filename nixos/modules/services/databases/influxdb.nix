@@ -28,8 +28,7 @@ let
       wal-partition-flush-delay = "2s";
     };
 
-    cluster = {
-      shard-writer-timeout = "5s";
+    coordinator = {
       write-timeout = "5s";
     };
 
@@ -153,6 +152,13 @@ in
   ###### implementation
 
   config = lib.mkIf config.services.influxdb.enable {
+
+    assertions = [
+      {
+        assertion = !(cfg.extraConfig ? cluster);
+        message = "services.influxdb.extraConfig: option 'cluster' has been replaced with 'coordinator'. Please update your configuration.";
+      }
+    ];
 
     systemd.tmpfiles.rules = [
       "d '${cfg.dataDir}' 0770 ${cfg.user} ${cfg.group} - -"
