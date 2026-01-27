@@ -43,6 +43,12 @@ stdenv.mkDerivation rec {
     libipuz
   ];
 
+  postInstall = ''
+    substituteInPlace $out/share/thumbnailers/crosswords.thumbnailer \
+      --replace-fail "TryExec=crosswords-thumbnailer" "TryExec=$out/bin/crosswords-thumbnailer" \
+      --replace-fail "Exec=crosswords-thumbnailer" "Exec=$out/bin/crosswords-thumbnailer"
+  '';
+
   passthru.updateScript = nix-update-script { };
 
   meta = {

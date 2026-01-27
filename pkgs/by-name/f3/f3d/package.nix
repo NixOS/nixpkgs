@@ -84,6 +84,14 @@ stdenv.mkDerivation rec {
     "-DF3D_PLUGIN_BUILD_USD=ON"
   ];
 
+  postInstall = ''
+    for thumbnailer in $out/share/thumbnailers/f3d-plugin-*.thumbnailer; do
+      substituteInPlace $thumbnailer \
+        --replace-fail "TryExec=f3d" "TryExec=$out/bin/f3d" \
+        --replace-fail "Exec=f3d" "Exec=$out/bin/f3d"
+    done
+  '';
+
   meta = {
     description = "Fast and minimalist 3D viewer using VTK";
     homepage = "https://f3d-app.github.io/f3d";

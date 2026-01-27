@@ -73,6 +73,11 @@ stdenv.mkDerivation rec {
 
   buildFlags = [ "translations" ];
 
+  postInstall = ''
+    substituteInPlace $out/share/thumbnailers/com.github.xournalpp.xournalpp.thumbnailer \
+      --replace-fail "Exec=xournalpp-thumbnailer" "Exec=$out/bin/xournalpp-thumbnailer"
+  '';
+
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix XDG_DATA_DIRS : "${adwaita-icon-theme}/share"

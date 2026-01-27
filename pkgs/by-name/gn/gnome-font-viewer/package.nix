@@ -48,6 +48,12 @@ stdenv.mkDerivation rec {
   # Do not run meson-postinstall.sh
   preConfigure = "sed -i '2,$ d'  meson-postinstall.sh";
 
+  postInstall = ''
+    substituteInPlace $out/share/thumbnailers/gnome-font-viewer.thumbnailer \
+      --replace-fail "TryExec=gnome-thumbnail-font" "TryExec=$out/bin/gnome-thumbnail-font" \
+      --replace-fail "Exec=gnome-thumbnail-font" "Exec=$out/bin/gnome-thumbnail-font"
+  '';
+
   env = lib.optionalAttrs stdenv.cc.isGNU {
     NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
   };

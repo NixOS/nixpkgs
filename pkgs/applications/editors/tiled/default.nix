@@ -83,6 +83,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  postInstall = ''
+    substituteInPlace $out/share/thumbnailers/tiled.thumbnailer \
+      --replace-fail "TryExec=tmxrasterizer" "TryExec=$out/bin/tmxrasterizer" \
+      --replace-fail "Exec=tmxrasterizer" "Exec=$out/bin/tmxrasterizer"
+  '';
+
   meta = {
     description = "Free, easy to use and flexible tile map editor";
     homepage = "https://www.mapeditor.org/";

@@ -161,6 +161,12 @@ buildPythonApplication rec {
     runHook postCheck
   '';
 
+  postInstall = ''
+    substituteInPlace $out/share/thumbnailers/mypaint-ora.thumbnailer \
+      --replace-fail "TryExec=mypaint-ora-thumbnailer" "TryExec=$out/bin/mypaint-ora-thumbnailer" \
+      --replace-fail "Exec=mypaint-ora-thumbnailer" "Exec=$out/bin/mypaint-ora-thumbnailer"
+  '';
+
   meta = {
     description = "Graphics application for digital painters";
     homepage = "http://mypaint.org/";
