@@ -2,6 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
+  fetchpatch,
   inkscape,
   poetry-core,
   cssselect,
@@ -24,6 +25,17 @@ buildPythonPackage {
   pyproject = true;
 
   inherit (inkscape) src;
+
+  patches = [
+    # Fix tests with newer libxml2
+    # https://gitlab.com/inkscape/extensions/-/merge_requests/712
+    (fetchpatch {
+      url = "https://gitlab.com/inkscape/extensions/-/commit/b04ab718b400778a264f2085bbc779faebc08368.patch";
+      hash = "sha256-BXRcfoeX7X8+x6CuKKBhrnzUHIwgnPay22Z8+rPZS54=";
+      stripLen = 1;
+      extraPrefix = "share/extensions/";
+    })
+  ];
 
   build-system = [ poetry-core ];
 
@@ -72,9 +84,6 @@ buildPythonPackage {
     "tests/test_inkex_gui_window.py"
     # Failed to find pixmap 'image-missing' in /build/source/tests/data/
     "tests/test_inkex_gui_pixmaps.py"
-    # Fails with libxml2 >= 2.15 with "lxml.etree was compiled without Schematron support"
-    "inkex/tester/test_inx_file.py"
-    "tests/test_inkex_inx.py"
   ];
 
   postPatch = ''
