@@ -17,11 +17,9 @@
   pango,
 }:
 
-let
-  pname = "ocaml-cairo";
-in
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  name = "ocaml${ocaml.version}-${pname}-${version}";
+  pname = "ocaml-cairo";
   version = "1.2.0";
 
   src = fetchurl {
