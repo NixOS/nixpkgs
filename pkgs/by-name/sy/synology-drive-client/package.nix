@@ -13,6 +13,7 @@
   gtk3,
   pango,
   libxcb,
+  nixosTests,
 }:
 let
   pname = "synology-drive-client";
@@ -36,7 +37,7 @@ let
     ];
     mainProgram = "synology-drive";
   };
-  passthru.updateScript = writeScript "update-synology-drive-client" ''
+  updateScript = writeScript "update-synology-drive-client" ''
     #!/usr/bin/env nix-shell
     #!nix-shell -i bash -p curl jq common-updater-scripts
 
@@ -58,7 +59,6 @@ let
       pname
       version
       meta
-      passthru
       ;
 
     src = fetchurl {
@@ -99,6 +99,11 @@ let
     postInstall = ''
       substituteInPlace $out/bin/synology-drive --replace /opt $out/opt
     '';
+
+    passthru = {
+      inherit updateScript;
+      tests = nixosTests.synology-drive-client;
+    };
   };
 
   darwin = stdenv.mkDerivation {
@@ -106,7 +111,6 @@ let
       pname
       version
       meta
-      passthru
       ;
 
     src = fetchurl {
@@ -132,6 +136,10 @@ let
       mkdir -p $out/Applications/
       cp -R 'Synology Drive Client.app' $out/Applications/
     '';
+
+    passthru = {
+      inherit updateScript;
+    };
   };
 in
 if stdenv.hostPlatform.isDarwin then darwin else linux

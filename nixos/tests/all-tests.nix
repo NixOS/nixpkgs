@@ -1509,6 +1509,7 @@ in
   syncthing-many-devices = runTest ./syncthing/many-devices.nix;
   syncthing-no-settings = runTest ./syncthing/no-settings.nix;
   syncthing-relay = runTest ./syncthing/relay.nix;
+  synology-drive-client = runTest ./synology-drive-client.nix;
   sysfs = runTest ./sysfs.nix;
   sysinit-reactivation = runTest ./sysinit-reactivation.nix;
   systemd = runTest ./systemd.nix;
