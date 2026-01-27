@@ -4,19 +4,20 @@
   buildNpmPackage,
   fetchurl,
   git,
+  makeBinaryWrapper,
   installShellFiles,
 }:
 
 buildNpmPackage rec {
   pname = "graphite-cli";
-  version = "1.7.2";
+  version = "1.7.5";
 
   src = fetchurl {
     url = "https://registry.npmjs.org/@withgraphite/graphite-cli/-/graphite-cli-${version}.tgz";
-    hash = "sha256-FoQvtywam4AXAavRtwfoTMaaMijW67hp317VLupCaCI=";
+    hash = "sha256-P9hqSriOe+UHF9tjJMiX2X0M7WGG5A+ZLYo3emvdP9Q=";
   };
 
-  npmDepsHash = "sha256-POWRxgrny27+7ymrhP5iFPBYzCmjCDWB8jGmOSieq0k=";
+  npmDepsHash = "sha256-HXdJAKfIMq4iclIxQHLHVOyHkab7j+7R+NayWKDw6S0=";
 
   postPatch = ''
     ln -s ${./package-lock.json} package-lock.json
@@ -24,12 +25,17 @@ buildNpmPackage rec {
 
   nativeBuildInputs = [
     git
+    makeBinaryWrapper
     installShellFiles
   ];
 
   dontNpmBuild = true;
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
+    wrapProgram $out/bin/gt \
+      --set GRAPHITE_DISABLE_UPGRADE_PROMPT 1
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd gt \
       --bash <($out/bin/gt completion) \
       --fish <(GT_PAGER= $out/bin/gt fish) \
