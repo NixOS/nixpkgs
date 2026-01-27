@@ -9,7 +9,6 @@
   cmake,
   fetchFromGitHub,
   fetchpatch,
-  fetchurl,
   gtest,
   zlib,
   version,
@@ -66,9 +65,9 @@ stdenv.mkDerivation (finalAttrs: {
       #
       # A specific consequence of this bug is a test failure when building onnxruntime with cudaSupport
       # See https://github.com/NixOS/nixpkgs/pull/450587#discussion_r2698215974
-      (fetchurl {
-        url = "https://raw.githubusercontent.com/conda-forge/protobuf-feedstock/737a13ea0680484c08e8e0ab0144dab82c10c1b3/recipe/patches/0010-Workaround-nvcc-bug-in-message_lite.h.patch";
-        hash = "sha256-uXm/j0r5ya/Hsc6/wAZDHLV2sn9Iv/79oOCmDjiU9UE=";
+      (fetchpatch {
+        url = "https://github.com/protocolbuffers/protobuf/commit/211f52431b9ec30d4d4a1c76aafd64bd78d93c43.patch";
+        hash = "sha256-2/vc4anc+kH7otfLHfBtW8dRowPyObiXZn0+HtQktak=";
       })
     ];
 
