@@ -1,44 +1,50 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
   wrapGAppsHook3,
   gobject-introspection,
   gtk3,
-  docutils,
-  gtksourceview,
+  gtksourceview4,
   gtkspell3,
   librsvg,
-  pygobject3,
   webkitgtk_4_1,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "formiko";
   version = "1.5.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ondratu";
     repo = "formiko";
-    tag = version;
-    sha256 = "sha256-slfpkckCvxHJ/jlBP7QAhzaf9TAcS6biDQBZcBTyTKI=";
+    tag = finalAttrs.version;
+    hash = "sha256-slfpkckCvxHJ/jlBP7QAhzaf9TAcS6biDQBZcBTyTKI=";
   };
+
+  build-system = [
+    python3Packages.setuptools
+  ];
 
   nativeBuildInputs = [
     wrapGAppsHook3
     gobject-introspection
     gtk3
   ];
-  propagatedBuildInputs = [
-    docutils
+
+  buildInputs = [
     gobject-introspection
     gtk3
-    gtksourceview
+    gtksourceview4
     gtkspell3
     librsvg
-    pygobject3
     webkitgtk_4_1
+  ];
+
+  dependencies = [
+    python3Packages.pygobject3
+    python3Packages.docutils
   ];
 
   # Needs a display
@@ -51,4 +57,4 @@ buildPythonApplication rec {
     maintainers = with lib.maintainers; [ shamilton ];
     platforms = lib.platforms.linux;
   };
-}
+})
