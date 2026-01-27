@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pyvlx";
-  version = "0.2.27";
+  version = "0.2.28";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Julius2342";
     repo = "pyvlx";
     tag = version;
-    hash = "sha256-FOchtl3HDByHIBRh0MXYnQYh6opzkcHOOYaINmMPu7w=";
+    hash = "sha256-l+Yfp8s6x+l/1ssL0wgyzd8QbA4ikr+ZUVMdTEaIjYE=";
   };
 
   build-system = [ setuptools ];
