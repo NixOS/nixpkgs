@@ -5,6 +5,7 @@
   pam,
   bison,
   flex,
+  enablePam ? lib.meta.availableOn stdenv.hostPlatform pam,
   enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
   systemdLibs,
   musl-fts,
@@ -24,6 +25,7 @@ stdenv.mkDerivation rec {
   };
 
   configureFlags = [
+    (lib.enableFeature enablePam "pam")
     (lib.enableFeature enableSystemd "systemd")
   ]
   # implicit declaration of function 'rpl_malloc', ; did you mean 'realloc'
@@ -40,11 +42,10 @@ stdenv.mkDerivation rec {
     bison
     flex
   ];
-  buildInputs = [
-    pam
-  ]
-  ++ lib.optional enableSystemd systemdLibs
-  ++ lib.optional stdenv.hostPlatform.isMusl musl-fts;
+  buildInputs =
+    lib.optional enablePam pam
+    ++ lib.optional enableSystemd systemdLibs
+    ++ lib.optional stdenv.hostPlatform.isMusl musl-fts;
 
   postPatch = ''
     substituteInPlace src/tools/Makefile.am \
