@@ -586,8 +586,8 @@ in
       "sha256-w3vOm8K/2rToF1CFWtAobCzswkv2d/gm1bzy6XiOFVA=";
 
   mypy-boto3-groundstation =
-    buildMypyBoto3Package "groundstation" "1.42.3"
-      "sha256-BrtHCaCwsfpaB5GA9kEhCFapQceZsjpyv3HVgpXUOFA=";
+    buildMypyBoto3Package "groundstation" "1.42.35"
+      "sha256-UIxD9R+oQjVmR90OfD8Dp7GW3E73zny6LFTkxrSdmNU=";
 
   mypy-boto3-guardduty =
     buildMypyBoto3Package "guardduty" "1.42.33"
