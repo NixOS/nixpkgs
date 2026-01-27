@@ -1,24 +1,23 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
   cmake,
+  fetchPypi,
   setuptools,
   wheel,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "opencc";
-  version = "1.1.9";
-  format = "setuptools";
+  version = "1.2.0";
+  pyproject = true;
 
   src = fetchPypi {
-    pname = "opencc";
-    inherit version;
-    hash = "sha256-itcig3MpUTAzkPrjOhztqYrJsDNoqPKRLtyTTXQHfko=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-K7kTx+04hGaybTivTIxLtBndtQMjXQcPDuGySZjvi8o=";
   };
 
-  nativeBuildInputs = [
+  build-input = [
     cmake
     setuptools
     wheel
@@ -26,14 +25,13 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
 
-  pythonImportsCheck = [
-    "opencc"
-  ];
+  pythonImportsCheck = [ "opencc" ];
 
   meta = {
     description = "Python bindings for OpenCC (Conversion between Traditional and Simplified Chinese)";
     homepage = "https://github.com/BYVoid/OpenCC";
+    changelog = "https://github.com/BYVoid/OpenCC/releases/tag/ver.${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ siraben ];
   };
-}
+})
