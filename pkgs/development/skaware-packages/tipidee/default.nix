@@ -1,4 +1,5 @@
 {
+  lib,
   skawarePackages,
   stdenv,
   skalibs,
@@ -25,10 +26,10 @@ skawarePackages.buildPackage {
     "--dynlibdir=\${lib}/lib"
     "--bindir=\${bin}/bin"
     "--includedir=\${dev}/include"
-    "--with-sysdeps=${skalibs.lib}/lib/skalibs/sysdeps"
+    "--with-sysdeps=${lib.getLib skalibs}/lib/skalibs/sysdeps"
     "--with-include=${skalibs.dev}/include"
-    "--with-lib=${skalibs.lib}/lib"
-    "--with-dynlib=${skalibs.lib}/lib"
+    "--with-lib=${lib.getLib skalibs}/lib"
+    "--with-dynlib=${lib.getLib skalibs}/lib"
 
     # we set sysconfdir to /etc here to allow tipidee-config
     # to look in the global paths for its configs.

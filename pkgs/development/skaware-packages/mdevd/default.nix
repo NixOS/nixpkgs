@@ -20,9 +20,9 @@ skawarePackages.buildPackage {
   ];
 
   configureFlags = [
-    "--with-sysdeps=${skalibs.lib}/lib/skalibs/sysdeps"
+    "--with-sysdeps=${lib.getLib skalibs}/lib/skalibs/sysdeps"
     "--with-include=${skalibs.dev}/include"
-    "--with-lib=${skalibs.lib}/lib"
+    "--with-lib=${lib.getLib skalibs}/lib"
   ];
 
   postInstall = ''
