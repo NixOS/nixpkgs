@@ -43,7 +43,8 @@ let
       overlappingNames = lib.intersectLists vmMachineNames containerMachineNames;
     in
     assert (
-      lib.asserts.assertMsg (overlappingNames == [ ]) "vm names and container names must not overlap"
+      lib.asserts.assertMsg (overlappingNames == [ ])
+        "Names of QEMU VM nodes and systemd-nspawn containers must not overlap. Overlapping names: ${toString overlappingNames}"
     );
     vmMachineNames ++ containerMachineNames;
 
