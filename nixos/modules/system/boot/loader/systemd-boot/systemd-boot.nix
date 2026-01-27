@@ -96,6 +96,12 @@ let
             ${pkgs.coreutils}/bin/install -D /dev/null "${bootMountPoint}/${nixosDir}/.extra-files/loader/entries/"${escapeShellArg n}
           '') cfg.extraEntries
         )}
+
+        ${concatStrings (
+          mapAttrsToList (n: v: ''
+            ${pkgs.coreutils}/bin/install -Dp "${v}" "${efiSysMountPoint}/"${escapeShellArg n}
+          '') cfg.extraEfiDrivers
+        )}
       '';
     };
   };
@@ -398,6 +404,19 @@ in
         Each attribute name denotes the destination file name in
         {file}`$BOOT`, while the corresponding
         attribute value specifies the source file.
+      '';
+    };
+
+    extraEfiDrivers = mkOption {
+      type = types.attrsOf types.path;
+      default = { };
+      example = literalExpression ''
+        { "ext4_x64.efi" = "''${pkgs.refind}/share/refind/drivers_x64/ext4_x64.efi"; }
+      '';
+      description = ''
+        A set of EFI drivers to be copied to {file}`$ESP/EFI/systemd/drivers`.
+        Each attribute name denotes the destination file name, while the
+        corresponding attribute value specifies the source file.
       '';
     };
 
