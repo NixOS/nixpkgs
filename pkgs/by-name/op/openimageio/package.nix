@@ -1,25 +1,27 @@
 {
   lib,
-  stdenv,
-  fetchFromGitHub,
   boost,
+  bzip2,
   cmake,
+  enablePython ? true,
+  fetchFromGitHub,
+  fmt,
   giflib,
+  libheif,
   libjpeg,
+  libjxl,
   libpng,
   libtiff,
-  libwebp,
-  libjxl,
-  libheif,
   libultrahdr,
+  libwebp,
   opencolorio,
   openexr,
   openjph,
-  robin-map,
-  unzip,
-  fmt,
-  bzip2,
   ptex,
+  python3Packages,
+  robin-map,
+  stdenv,
+  unzip,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -47,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     boost
+    bzip2
     giflib
     libheif
     libjpeg
@@ -58,17 +61,17 @@ stdenv.mkDerivation (finalAttrs: {
     opencolorio
     openexr
     openjph
-    robin-map
-    bzip2
     ptex
-  ];
+    robin-map
+  ]
+  ++ lib.optional enablePython python3Packages.pybind11;
 
   propagatedBuildInputs = [
     fmt
   ];
 
   cmakeFlags = [
-    "-DUSE_PYTHON=OFF"
+    (lib.cmakeBool "USE_PYTHON" enablePython)
     "-DUSE_QT=OFF"
     # GNUInstallDirs
     "-DCMAKE_INSTALL_LIBDIR=lib" # needs relative path for pkg-config
