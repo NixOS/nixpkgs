@@ -819,7 +819,7 @@ in
       };
 
       services.zfs.zed.settings = {
-        ZED_EMAIL_PROG = lib.mkIf cfgZED.enableMail (
+        ZED_EMAIL_PROG = lib.mkIf (cfgZED.enableMail && config.services.mail.sendmailSetuidWrapper.enable) (
           lib.mkDefault (
             config.security.wrapperDir + "/" + config.services.mail.sendmailSetuidWrapper.program
           )
