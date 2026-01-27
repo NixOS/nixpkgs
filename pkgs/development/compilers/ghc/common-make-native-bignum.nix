@@ -378,6 +378,16 @@ stdenv.mkDerivation (
       })
     ]
 
+    # Support for ELFv2 powerpc64-linux
+    ++ [
+      ./ghc-9.4-PPC-Support-ELF-v2-on-powerpc64-big-endian.patch
+      (fetchpatch {
+        name = "ghc-rts-Fix-compile-on-powerpc64-elf-v1.patch";
+        url = "https://gitlab.haskell.org/ghc/ghc/-/commit/05e5785a3157c71e327a8e9bdc80fa7082918739.patch";
+        hash = "sha256-xP5v3cKhXeTRSFvRiKEn9hPxGXgVgykjTILKjh/pdDU=";
+      })
+    ]
+
     ++ lib.optionals (stdenv.targetPlatform.isDarwin && stdenv.targetPlatform.isAarch64) [
       # Prevent the paths module from emitting symbols that we don't use
       # when building with separate outputs.
