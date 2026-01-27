@@ -3859,15 +3859,14 @@ let
           version = "1.51.0";
           hash = "sha256-uOTvQjLDkMjzTfc98cq+WlvKwRQfPpTrlXKbWG7Gy+c=";
         };
-        buildInputs = [ jdk ];
+
         meta = {
           description = "Java language support for VS Code via the Eclipse JDT Language Server";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=redhat.java";
           homepage = "https://github.com/redhat-developer/vscode-java";
           changelog = "https://marketplace.visualstudio.com/items/redhat.java/changelog";
           license = lib.licenses.epl20;
-          maintainers = [ ];
-          broken = lib.versionOlder jdk.version "17";
+          maintainers = [ lib.maintainers.frontear ];
         };
       };
 
