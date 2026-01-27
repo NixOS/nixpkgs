@@ -727,6 +727,18 @@
     };
   };
 
+  phpdoc = {
+    version = "0.1.8";
+    url = "github:claytonrcarter/tree-sitter-phpdoc";
+    hash = "sha256-X+ElKI0ZMLCmxEanKsDRL/1KzGZfBrG7zITsT+jSrtQ=";
+    meta = {
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [
+        Stebalien
+      ];
+    };
+  };
+
   pioasm = {
     version = "0-unstable-2024-10-12";
     url = "github:leo60228/tree-sitter-pioasm/afece58efdb30440bddd151ef1347fa8d6f744a9";
