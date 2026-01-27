@@ -18,4 +18,6 @@
   helm-schema = callPackage ./helm-schema.nix { };
 
   helm-unittest = callPackage ./helm-unittest.nix { };
+
+  helm-values-schema-json = callPackage ./helm-values-schema-json.nix { };
 }
