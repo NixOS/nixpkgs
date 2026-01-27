@@ -4,7 +4,7 @@
   fetchFromGitHub,
   django,
   setuptools,
-  python,
+  setuptools-scm,
   pytestCheckHook,
   pytest-django,
 }:
@@ -21,7 +21,10 @@ buildPythonPackage rec {
     hash = "sha256-AABJHWoEIcyJyRHv3sp1d1l6ZByF8Q5h+xEHJe/4uC0=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [ django ];
 
