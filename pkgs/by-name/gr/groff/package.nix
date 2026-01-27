@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchFromGitHub,
   perl,
   enableGhostscript ? false,
   ghostscript,
@@ -17,6 +18,7 @@
   iconv,
   enableLibuchardet ? false,
   libuchardet, # for detecting input file encoding in preconv(1)
+  enableUrwFonts ? false,
   buildPackages,
   autoreconfHook,
   pkg-config,
@@ -24,7 +26,15 @@
   bison,
   bashNonInteractive,
 }:
-
+let
+  urw-fonts = fetchFromGitHub {
+    name = "groff-urw-base35-fonts";
+    owner = "ArtifexSoftware";
+    repo = "urw-base35-fonts";
+    tag = "20200910";
+    hash = "sha256-YQl5IDtodcbTV3D6vtJi7CwxVtHHl58fG6qCAoSaP4U=";
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "groff";
   version = "1.24.1";
@@ -90,21 +100,23 @@ stdenv.mkDerivation (finalAttrs: {
   # Builds running without a chroot environment may detect the presence
   # of /usr/X11 in the host system, leading to an impure build of the
   # package. To avoid this issue, X11 support is explicitly disabled.
-  configureFlags =
-    lib.optionals (!enableGhostscript) [
-      "--without-x"
-    ]
-    ++ [
-      "ac_cv_path_PERL=${buildPackages.perl}/bin/perl"
-      "--enable-year2038"
-    ]
-    ++ lib.optionals enableGhostscript [
-      "--with-gs=${lib.getExe ghostscript}"
-      "--with-appdefdir=${placeholder "out"}/lib/X11/app-defaults"
-    ]
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-      "gl_cv_func_signbit=yes"
-    ];
+  configureFlags = [
+    "ac_cv_path_PERL=${buildPackages.perl}/bin/perl"
+    "--enable-year2038"
+  ]
+  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "gl_cv_func_signbit=yes"
+  ]
+  ++ lib.optionals enableGhostscript [
+    "--with-gs=${lib.getExe ghostscript}"
+    "--with-appdefdir=${placeholder "out"}/lib/X11/app-defaults"
+  ]
+  ++ lib.optionals (!enableGhostscript) [
+    "--without-x"
+  ]
+  ++ lib.optionals enableUrwFonts [
+    "--with-urw-fonts-dir=${urw-fonts}/fonts"
+  ];
 
   postConfigure = ''
     # Move mom docs instead of linking them to avoid dangling symlinks
