@@ -2,7 +2,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   lib,
-  poetry-core,
+  uv-build,
   pytestCheckHook,
   pyyaml,
 }:
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/python";
 
-  build-system = [ poetry-core ];
+  build-system = [ uv-build ];
 
   pythonImportsCheck = [ "cucumber_expressions" ];
 
