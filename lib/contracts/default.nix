@@ -43,5 +43,6 @@ let
     };
 in
 {
+  filebackup = importContract ./filebackup.nix;
   secrets = importContract ./secrets.nix;
 }
