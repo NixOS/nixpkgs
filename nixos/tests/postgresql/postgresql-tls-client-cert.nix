@@ -40,8 +40,15 @@ let
       nodes.server =
         { ... }:
         {
-          system.activationScripts = {
-            keyPlacement.text = ''
+          systemd.services.create-keys = {
+            wantedBy = [ "postgresql.target" ];
+
+            serviceConfig = {
+              Type = "oneshot";
+              RemainAfterExit = true;
+            };
+
+            script = ''
               mkdir -p '${serverKeyPath}'
               cp '${serverKey}' '${serverKeyPath}/server.key'
               chown postgres:postgres '${serverKeyPath}/server.key'
@@ -85,8 +92,15 @@ let
       nodes.client =
         { ... }:
         {
-          system.activationScripts = {
-            keyPlacement.text = ''
+          systemd.services.create-keys = {
+            wantedBy = [ "multi-user.target" ];
+
+            serviceConfig = {
+              Type = "oneshot";
+              RemainAfterExit = true;
+            };
+
+            script = ''
               mkdir -p '${clientKeyPath}'
               cp '${clientKey}' '${clientKeyPath}/client.key'
               chown root:root '${clientKeyPath}/client.key'
