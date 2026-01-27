@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   version = "1.64";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/srecord/srecord-${version}.tar.gz";
     sha256 = "1qk75q0k5vzmm3932q9hqz2gp8n9rrdfjacsswxc02656f3l3929";
   };
 

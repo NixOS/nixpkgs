@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "0.6.2";
 
   src = fetchurl {
-    url = "https://telepathy.freedesktop.org/releases/${pname}/${pname}-${version}.tar.gz";
+    url = "https://telepathy.freedesktop.org/releases/telepathy-farstream/telepathy-farstream-${version}.tar.gz";
     sha256 = "02ky12bb92prr5f6xmvmfq4yz2lj33li6nj4829a98hk5pr9k83g";
   };
 

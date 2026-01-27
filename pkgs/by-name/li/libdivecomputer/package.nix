@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "0.9.0";
 
   src = fetchurl {
-    url = "https://www.libdivecomputer.org/releases/${pname}-${version}.tar.gz";
+    url = "https://www.libdivecomputer.org/releases/libdivecomputer-${version}.tar.gz";
     sha256 = "sha256-p7gLkIOiETpDKA7ntR1I1m6lp3n8P+5X33xFHaAlHGU=";
   };
 

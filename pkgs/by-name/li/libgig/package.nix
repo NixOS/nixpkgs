@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   version = "4.5.0";
 
   src = fetchurl {
-    url = "https://download.linuxsampler.org/packages/${pname}-${version}.tar.bz2";
+    url = "https://download.linuxsampler.org/packages/libgig-${version}.tar.bz2";
     sha256 = "sha256-CHnSi5tjktpZhYJtvdjZyVeyoDKi8QGQUGrvLiLzxUo=";
   };
 

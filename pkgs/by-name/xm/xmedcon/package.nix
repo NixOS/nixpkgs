@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   version = "0.25.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/xmedcon/xmedcon-${version}.tar.bz2";
     sha256 = "sha256-9VrTQP614tIrmZRm9bSpmlXqCbMPzqvhv222eFiKS4M=";
   };
 

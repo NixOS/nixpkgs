@@ -21,11 +21,11 @@ perlPackages.buildPerlPackage rec {
   rulesRev = "r1916528";
 
   src = fetchurl {
-    url = "mirror://apache/spamassassin/source/Mail-${pname}-${version}.tar.bz2";
+    url = "mirror://apache/spamassassin/source/Mail-SpamAssassin-${version}.tar.bz2";
     hash = "sha256-l3XtdVnoPsPmwD7bK+j/x/FcxAX7E+hcFI6wvxkXIag=";
   };
   defaultRulesSrc = fetchurl {
-    url = "mirror://apache/spamassassin/source/Mail-${pname}-rules-${version}.${rulesRev}.tgz";
+    url = "mirror://apache/spamassassin/source/Mail-SpamAssassin-rules-${version}.${rulesRev}.tgz";
     hash = "sha256-OB6t/H5RPl9zU4m3gXPeWvRx89Bv5quPEpY0pmRLS/Q=";
   };
 

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   pname = "libthreadar";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libthreadar/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/libthreadar/libthreadar-${version}.tar.gz";
     sha256 = "sha256-wJAkIUGK7Ud6n2p1275vNkSx/W7LlgKWXQaDevetPko=";
   };
 

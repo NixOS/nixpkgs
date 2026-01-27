@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   version = "1.5.6";
 
   src = fetchurl {
-    url = "https://www.freetds.org/files/stable/${pname}-${version}.tar.bz2";
+    url = "https://www.freetds.org/files/stable/freetds-${version}.tar.bz2";
     hash = "sha256-2twI5prvFFI/2u4JFw1Z2vG2QT6NWFjQnJSWZ0ugjFc=";
   };
 

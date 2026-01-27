@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   version = "0.194";
 
   src = fetchurl {
-    url = "https://sourceware.org/elfutils/ftp/${version}/${pname}-${version}.tar.bz2";
+    url = "https://sourceware.org/elfutils/ftp/${version}/elfutils-${version}.tar.bz2";
     hash = "sha256-CeL/Az05uqiziKLX+8U5C/3pmuO3xnx9qvdDP7zw8B4=";
   };
 

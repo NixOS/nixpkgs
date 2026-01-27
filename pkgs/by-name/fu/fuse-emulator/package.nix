@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   version = "1.6.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/fuse-${version}.tar.gz";
+    url = "mirror://sourceforge/fuse-emulator/fuse-${version}.tar.gz";
     sha256 = "sha256-Oo/t8v/pR8VxVhusVaWa2tTFkzj3TkSbfnpn2coEcJY=";
   };
 

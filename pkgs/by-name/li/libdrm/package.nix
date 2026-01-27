@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   version = "2.4.131";
 
   src = fetchurl {
-    url = "https://dri.freedesktop.org/${pname}/${pname}-${version}.tar.xz";
+    url = "https://dri.freedesktop.org/libdrm/libdrm-${version}.tar.xz";
     hash = "sha256-RbqZg7UciWQGo9ZU3oHTE7lTt25jkeJ5cHPVQ8X2F9U=";
   };
 

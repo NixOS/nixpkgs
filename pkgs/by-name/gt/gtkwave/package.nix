@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   version = "3.3.126";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gtkwave/${pname}-gtk3-${version}.tar.gz";
+    url = "mirror://sourceforge/gtkwave/gtkwave-gtk3-${version}.tar.gz";
     sha256 = "sha256-llAZ10gpdGtdHTgqnPHiciRskRAdDhMfDaUSyUulgWo=";
   };
 

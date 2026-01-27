@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   pname = "jibri";
   version = "8.0-183-g7b406bf";
   src = fetchurl {
-    url = "https://download.jitsi.org/stable/${pname}_${version}-1_all.deb";
+    url = "https://download.jitsi.org/stable/jibri_${version}-1_all.deb";
     sha256 = "QF7BkLizAsEzjC6PdTyPFAFf82AzukTnxHxLHyz5Kco=";
   };
 

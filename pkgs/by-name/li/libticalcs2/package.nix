@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   pname = "libticalcs2";
   version = "1.1.9";
   src = fetchurl {
-    url = "mirror://sourceforge/tilp/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/tilp/libticalcs2-${version}.tar.bz2";
     sha256 = "08c9wgrdnyqcs45mx1bjb8riqq81bzfkhgaijxzn96rhpj40fy3n";
   };
 

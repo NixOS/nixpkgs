@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "1.0.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/tpmquotetools/${version}/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/project/tpmquotetools/${version}/tpm-quote-tools-${version}.tar.gz";
     sha256 = "1qjs83xb4np4yn1bhbjfhvkiika410v8icwnjix5ad96w2nlxp0h";
   };
 

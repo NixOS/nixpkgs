@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   version = "3.4.0";
 
   src = fetchurl {
-    url = "http://fcron.free.fr/archives/${pname}-${version}.src.tar.gz";
+    url = "http://fcron.free.fr/archives/fcron-${version}.src.tar.gz";
     sha256 = "sha256-9Of8VTzdcP9LO2rJE4s7fP+rkZi4wmbZevCodQbg4bU=";
   };
 

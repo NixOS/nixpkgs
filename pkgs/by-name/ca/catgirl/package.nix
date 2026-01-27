@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.2a";
 
   src = fetchurl {
-    url = "https://git.causal.agency/catgirl/snapshot/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    url = "https://git.causal.agency/catgirl/snapshot/catgirl-${finalAttrs.version}.tar.gz";
     hash = "sha256-xtdgqu4TTgUlht73qRA1Q/coH95lMfvLQQhkcHlCl8I=";
   };
 

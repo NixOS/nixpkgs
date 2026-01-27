@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   version = "1.22";
 
   src = fetchurl {
-    url = "https://github.com/samtools/htslib/releases/download/${version}/${pname}-${version}.tar.bz2";
+    url = "https://github.com/samtools/htslib/releases/download/${version}/htslib-${version}.tar.bz2";
     hash = "sha256-YlDB3yl9tHdRbmCsjfRe11plLR8lsPN/EvWxcmnq/ek=";
   };
 

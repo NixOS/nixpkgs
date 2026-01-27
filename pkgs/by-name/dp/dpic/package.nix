@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "2025.08.01";
 
   src = fetchurl {
-    url = "https://ece.uwaterloo.ca/~aplevich/dpic/${pname}-${version}.tar.gz";
+    url = "https://ece.uwaterloo.ca/~aplevich/dpic/dpic-${version}.tar.gz";
     sha256 = "sha256-Dzj1wekVGIJsssbpViSzkNGAjvrcBAL4ORFRLwznJsM=";
   };
 

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "0.7";
 
   src = fetchurl {
-    url = "https://www.codon.org.uk/~mjg59/gobi_loader/download/${pname}-${version}.tar.gz";
+    url = "https://www.codon.org.uk/~mjg59/gobi_loader/download/gobi_loader-${version}.tar.gz";
     sha256 = "0jkmpqkiddpxrzl2s9s3kh64ha48m00nn53f82m1rphw8maw5gbq";
   };
 

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   inherit version;
 
   src = fetchurl {
-    url = "https://www.fefe.de/gatling/${pname}-${version}.tar.xz";
+    url = "https://www.fefe.de/gatling/gatling-${version}.tar.xz";
     sha256 = "0nrnws5qrl4frqcsfa9z973vv5mifgr9z170qbvg3mq1wa7475jz";
   };
 

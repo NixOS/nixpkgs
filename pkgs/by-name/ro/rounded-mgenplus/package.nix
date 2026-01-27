@@ -10,7 +10,7 @@ stdenvNoCC.mkDerivation rec {
   version = "20150602";
 
   src = fetchurl {
-    url = "https://osdn.jp/downloads/users/8/8598/${pname}-${version}.7z";
+    url = "https://osdn.jp/downloads/users/8/8598/rounded-mgenplus-${version}.7z";
     hash = "sha256-7OpnZJc9k5NiOPHAbtJGMQvsMg9j81DCvbfo0f7uJcw=";
   };
 

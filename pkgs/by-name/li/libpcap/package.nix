@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   __structuredAttrs = true;
 
   src = fetchurl {
-    url = "https://www.tcpdump.org/release/${pname}-${version}.tar.gz";
+    url = "https://www.tcpdump.org/release/libpcap-${version}.tar.gz";
     hash = "sha256-hy3REzf+GrAq2dT+4EfJ2iRNaVxt3zTi67cz79Ttiqk=";
   };
 

@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation rec {
   version = "1.23.6";
 
   src = fetchurl {
-    url = "https://github.com/gotson/${pname}/releases/download/${version}/${pname}-${version}.jar";
+    url = "https://github.com/gotson/komga/releases/download/${version}/komga-${version}.jar";
     sha256 = "sha256-MU3U9vFtFVUBOKtynwteQfvsCCsyoGHIKwc+0XqDswY=";
   };
 

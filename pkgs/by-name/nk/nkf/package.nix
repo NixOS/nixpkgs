@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "2.1.5";
 
   src = fetchurl {
-    url = "mirror://osdn/nkf/70406/${pname}-${version}.tar.gz";
+    url = "mirror://osdn/nkf/70406/nkf-${version}.tar.gz";
     sha256 = "0i5dbcb9aipwr8ym4mhvgf1in3frl6y8h8x96cprz9s7b11xz9yi";
   };
 

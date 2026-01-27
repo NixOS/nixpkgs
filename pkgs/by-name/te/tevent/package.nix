@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   version = "0.17.1";
 
   src = fetchurl {
-    url = "mirror://samba/tevent/${pname}-${version}.tar.gz";
+    url = "mirror://samba/tevent/tevent-${version}.tar.gz";
     sha256 = "sha256-G+LepzfN4l/gZiH4SUXmPrcSWeDEPp+PXaSC2rGnvpI=";
   };
 

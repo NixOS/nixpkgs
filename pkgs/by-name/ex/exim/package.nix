@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   version = "4.99.1";
 
   src = fetchurl {
-    url = "https://ftp.exim.org/pub/exim/exim4/${pname}-${version}.tar.xz";
+    url = "https://ftp.exim.org/pub/exim/exim4/exim-${version}.tar.xz";
     hash = "sha256-6ulnvUml+HmTO4xuyIwwR1ocZkYjITXzfwW1XbxONEc=";
   };
 

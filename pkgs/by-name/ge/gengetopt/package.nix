@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "2.23";
 
   src = fetchurl {
-    url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
+    url = "mirror://gnu/gengetopt/gengetopt-${version}.tar.xz";
     sha256 = "1b44fn0apsgawyqa4alx2qj5hls334mhbszxsy6rfr0q074swhdr";
   };
 

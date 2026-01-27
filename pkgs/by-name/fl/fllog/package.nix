@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   pname = "fllog";
 
   src = fetchurl {
-    url = "mirror://sourceforge/fldigi/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/fldigi/fllog-${version}.tar.gz";
     sha256 = "sha256-3eJvT9PjHTrMn0/pArUDIIE7T7y1YnayG5PuGokwtRk=";
   };
 

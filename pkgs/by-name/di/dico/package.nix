@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   version = "2.12";
 
   src = fetchurl {
-    url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
+    url = "mirror://gnu/dico/dico-${version}.tar.xz";
     sha256 = "sha256-couJxQ4JC/+Dno97MEO1xwI/hhqSEckwSLQqtFWGavc=";
   };
 

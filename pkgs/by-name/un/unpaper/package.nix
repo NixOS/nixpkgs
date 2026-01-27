@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   version = "7.0.0";
 
   src = fetchurl {
-    url = "https://www.flameeyes.eu/files/${pname}-${version}.tar.xz";
+    url = "https://www.flameeyes.eu/files/unpaper-${version}.tar.xz";
     hash = "sha256-JXX7vybCJxnRy4grWWAsmQDH90cRisEwiD9jQZvkaoA=";
   };
 

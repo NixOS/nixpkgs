@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   version = "1.1.1";
 
   src = fetchurl {
-    url = "https://frippery.org/uml/${pname}-${version}.tgz";
+    url = "https://frippery.org/uml/zerofree-${version}.tgz";
     sha256 = "0rrqfa5z103ws89vi8kfvbks1cfs74ix6n1wb6vs582vnmhwhswm";
   };
 

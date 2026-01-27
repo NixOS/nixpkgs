@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   version = "0.15.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libgaminggear/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/libgaminggear/libgaminggear-${version}.tar.bz2";
     sha256 = "0jf5i1iv8j842imgiixbhwcr6qcwa93m27lzr6gb01ri5v35kggz";
   };
 

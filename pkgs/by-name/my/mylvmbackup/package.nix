@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "0.16";
 
   src = fetchurl {
-    url = "https://www.lenzg.net/mylvmbackup/${pname}-${version}.tar.gz";
+    url = "https://www.lenzg.net/mylvmbackup/mylvmbackup-${version}.tar.gz";
     sha256 = "sha256-vb7M3EPIrxIz6jUwm241fzaEz2czqdCObrFgSOSgJRU=";
   };
 

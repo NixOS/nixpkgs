@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   pname = "exonerate";
 
   src = fetchurl {
-    url = "http://ftp.ebi.ac.uk/pub/software/vertebrategenomics/exonerate/${pname}-${version}.tar.gz";
+    url = "http://ftp.ebi.ac.uk/pub/software/vertebrategenomics/exonerate/exonerate-${version}.tar.gz";
     sha256 = "0hj0m9xygiqsdxvbg79wq579kbrx1mdrabi2bzqz2zn9qwfjcjgq";
   };
 

@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   version = "0.7";
 
   src = fetchurl {
-    url = "mirror://savannah/fbi-improved/${pname}-${version}-trunk.tar.gz";
+    url = "mirror://savannah/fbi-improved/fim-${version}-trunk.tar.gz";
     sha256 = "sha256-/p7bjeZM46DJOQ9sgtebhkNpBPj2RJYY3dMXhzHnNmg=";
   };
 

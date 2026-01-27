@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   version = "4.3.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/pcb/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/pcb/pcb-${version}.tar.gz";
     sha256 = "sha256-roUvRq+Eq6f1HYE/uRb8f82+6kP3E08VBQcCThdD+14=";
   };
 

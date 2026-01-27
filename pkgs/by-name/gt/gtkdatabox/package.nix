@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "1.0.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gtkdatabox/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/gtkdatabox/gtkdatabox-${version}.tar.gz";
     sha256 = "1qykm551bx8j8pfgxs60l2vhpi8lv4r8va69zvn2594lchh71vlb";
   };
 

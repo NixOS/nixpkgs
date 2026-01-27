@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "0.9";
 
   src = fetchurl {
-    url = "https://hisham.hm/dit/releases/${version}/${pname}-${version}.tar.gz";
+    url = "https://hisham.hm/dit/releases/${version}/dit-${version}.tar.gz";
     hash = "sha256-p1uD0Q2kqB40fbAEk7/fdOVg9T7SW+2aACSn7hDAD+E=";
   };
 

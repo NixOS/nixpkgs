@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   version = "20251025";
 
   src = fetchurl {
-    url = "https://gareus.org/misc/x42-plugins/${pname}-${version}.tar.xz";
+    url = "https://gareus.org/misc/x42-plugins/x42-plugins-${version}.tar.xz";
     hash = "sha256-ZY9KGtkLqjdUVo2BCOO/gnVo+19Ewx2gkj1zsWKxUS8=";
   };
 

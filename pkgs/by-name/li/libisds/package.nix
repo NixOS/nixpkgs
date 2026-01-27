@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   version = "0.11.2";
 
   src = fetchurl {
-    url = "http://xpisar.wz.cz/${pname}/dist/${pname}-${version}.tar.xz";
+    url = "http://xpisar.wz.cz/libisds/dist/libisds-${version}.tar.xz";
     sha256 = "sha256-YUb4N7J7EaYHHiFI965kUhtNitRTJfmY/ns3MTfkGPs=";
   };
 

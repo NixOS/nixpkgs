@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   pname = "hitch";
 
   src = fetchurl {
-    url = "https://hitch-tls.org/source/${pname}-${version}.tar.gz";
+    url = "https://hitch-tls.org/source/hitch-${version}.tar.gz";
     sha256 = "sha256-38mUhLx//qJ6MWnoTWwheYjtpHsgirLlUk3Cpd0Vj04=";
   };
 

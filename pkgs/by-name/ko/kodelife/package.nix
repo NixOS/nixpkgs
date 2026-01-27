@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   src = fetchurl {
-    url = "https://hexler.net/pub/${pname}/${pname}-${version}-${suffix}.deb";
+    url = "https://hexler.net/pub/kodelife/kodelife-${version}-${suffix}.deb";
     hash =
       {
         aarch64-linux = "sha256-WPUWvgVZR+2Dg4zpk+iUemMBGlGBDtaGkUGrWuF5LBs=";

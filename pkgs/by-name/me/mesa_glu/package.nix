@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
       inherit (finalAttrs) pname version;
     in
     fetchurl {
-      url = "https://mesa.freedesktop.org/archive/${pname}/${pname}-${version}.tar.xz";
+      url = "https://mesa.freedesktop.org/archive/glu/glu-${version}.tar.xz";
       hash = "sha256-vUP+EvN0sRkusV/iDkX/RWubwmq1fw7ukZ+Wyg+KMw8=";
     };
 

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   version = "6.18";
 
   src = fetchurl {
-    url = "https://strace.io/files/${version}/${pname}-${version}.tar.xz";
+    url = "https://strace.io/files/${version}/strace-${version}.tar.xz";
     hash = "sha256-CtXcupc6aed5ZQ7xyzNbEu5gcW/HMmYJiVvTPm0qcyU=";
   };
 

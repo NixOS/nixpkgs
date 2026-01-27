@@ -30,9 +30,9 @@ let
     version = "2.2.11";
 
     # Packages: https://content.runescape.com/downloads/ubuntu/dists/trusty/non-free/binary-amd64/Packages
-    # upstream is https://content.runescape.com/downloads/ubuntu/pool/non-free/r/${pname}/${pname}_${version}_amd64.deb
+    # upstream is https://content.runescape.com/downloads/ubuntu/pool/non-free/r/runescape-launcher/runescape-launcher_${version}_amd64.deb
     src = fetchurl {
-      url = "https://archive.org/download/${pname}_${version}_amd64/${pname}_${version}_amd64.deb";
+      url = "https://archive.org/download/runescape-launcher_${version}_amd64/runescape-launcher_${version}_amd64.deb";
       sha256 = "0dyilgbsr28zqpf711wygg706vn7sqxklnsnbghwkxfzzjppz2xw";
     };
 

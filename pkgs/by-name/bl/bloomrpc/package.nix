@@ -9,7 +9,7 @@ let
   version = "1.5.3";
 
   src = fetchurl {
-    url = "https://github.com/uw-labs/${pname}/releases/download/${version}/BloomRPC-${version}.AppImage";
+    url = "https://github.com/uw-labs/bloomrpc/releases/download/${version}/BloomRPC-${version}.AppImage";
     name = "${pname}-${version}.AppImage";
     hash = "sha512-PebdYDpcplPN5y3mRu1mG6CXenYfYvBXNLgIGEr7ZgKnR5pIaOfJNORSNYSdagdGDb/B1sxuKfX4+4f2cqgb6Q==";
   };

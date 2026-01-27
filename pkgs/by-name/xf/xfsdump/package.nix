@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   version = "3.2.0";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/fs/xfs/${pname}/${pname}-${version}.tar.xz";
+    url = "mirror://kernel/linux/utils/fs/xfs/xfsdump/xfsdump-${version}.tar.xz";
     sha256 = "sha256-KRTbvh68iMfZOtiOIgqlfavEPSFuEfBiIcAe3zzBBzI=";
   };
 

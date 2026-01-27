@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://s3.amazonaws.com/ec2-downloads/${pname}-${version}.zip";
+    url = "https://s3.amazonaws.com/ec2-downloads/ec2-ami-tools-${version}.zip";
     sha256 = "sha256-vdpElL6n1V3/+ZVFndRwWpU/M2W7xp8DQwx5a1zB3X8=";
   };
 

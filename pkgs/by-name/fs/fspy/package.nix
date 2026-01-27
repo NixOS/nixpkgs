@@ -8,7 +8,7 @@ let
   version = "1.0.3";
 
   src = fetchurl {
-    url = "https://github.com/stuffmatic/fSpy/releases/download/v${version}/${pname}-${version}-x86_64.AppImage";
+    url = "https://github.com/stuffmatic/fSpy/releases/download/v${version}/fspy-${version}-x86_64.AppImage";
     sha256 = "sha256-L+qsSExuEkzZkjnV/J6rrZ3BXqWQd+IfsN6a3kvQF3A=";
   };
 

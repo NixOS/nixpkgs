@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   pname = "libticonv";
   version = "1.1.5";
   src = fetchurl {
-    url = "mirror://sourceforge/tilp/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/tilp/libticonv-${version}.tar.bz2";
     sha256 = "0y080v12bm81wgjm6fnw7q0yg7scphm8hhrls9njcszj7fkscv9i";
   };
 

@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "0.97";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/stund-${version}.tgz";
+    url = "mirror://sourceforge/stun/stund-${version}.tgz";
     sha256 = "1mxirnnqfqdwb9x8hfjjsscp6lx3468ph6ddx32l94ir46fbzqc3";
   };
 

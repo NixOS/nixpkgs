@@ -10,7 +10,7 @@ perlPackages.buildPerlPackage rec {
   version = "8.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/awstats/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/awstats/awstats-${version}.tar.gz";
     sha256 = "sha256-Pvdv+WxTmEd92KERNOJm5TikhwZ/aQajrIo4v9EcEeA=";
   };
 

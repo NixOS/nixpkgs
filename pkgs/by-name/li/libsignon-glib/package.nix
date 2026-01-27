@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchgit {
-    url = "https://gitlab.com/accounts-sso/${pname}";
+    url = "https://gitlab.com/accounts-sso/libsignon-glib";
     tag = version;
     sha256 = "0gnx9gqsh0hcfm1lk7w60g64mkn1iicga5f5xcy1j9a9byacsfd0";
     fetchSubmodules = true;

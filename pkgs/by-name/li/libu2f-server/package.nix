@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   pname = "libu2f-server";
   version = "1.1.0";
   src = fetchurl {
-    url = "https://developers.yubico.com/libu2f-server/Releases/${pname}-${version}.tar.xz";
+    url = "https://developers.yubico.com/libu2f-server/Releases/libu2f-server-${version}.tar.xz";
     sha256 = "0xx296nmmqa57w0v5p2kasl5zr1ms2gh6qi4lhv6xvzbmjp3rkcd";
   };
 

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "2.4";
 
   src = fetchurl {
-    url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/rush/rush-${version}.tar.gz";
     sha256 = "sha256-Jm80iJq2pwO/CJCItSN8gUo5ThxRQsG0Z5TYVtWSEts=";
   };
 

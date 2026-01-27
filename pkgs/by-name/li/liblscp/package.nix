@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "1.0.1";
 
   src = fetchurl {
-    url = "https://download.linuxsampler.org/packages/${pname}-${version}.tar.gz";
+    url = "https://download.linuxsampler.org/packages/liblscp-${version}.tar.gz";
     sha256 = "sha256-21SjPA5emMRKEQIukhg7r3uXfnByEpNkGhCepNu09sc=";
   };
 

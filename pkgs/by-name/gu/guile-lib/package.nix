@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   version = "0.2.8.1";
 
   src = fetchurl {
-    url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
+    url = "mirror://savannah/guile-lib/guile-lib-${version}.tar.gz";
     hash = "sha256-E3TC2Dnmoz0ZDNHavZx/h3U/g4T1W4ZvPhQhVcIrSbE=";
   };
 

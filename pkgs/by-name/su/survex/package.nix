@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   version = "1.4.19";
 
   src = fetchurl {
-    url = "https://survex.com/software/${version}/${pname}-${version}.tar.gz";
+    url = "https://survex.com/software/${version}/survex-${version}.tar.gz";
     hash = "sha256-X8FZCZTJ7DkZeYnrzaLCukRhs/kTHwre9F1TTRlK2ro=";
   };
 

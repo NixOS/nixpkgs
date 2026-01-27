@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "0.5.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libavc1394/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/libavc1394/libavc1394-${version}.tar.gz";
     sha256 = "0lsv46jdqvdx5hx92v0z2cz3yh6212pz9gk0k3513sbaa04zzcbw";
   };
 

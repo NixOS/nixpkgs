@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "0.1.8";
 
   src = fetchurl {
-    url = "mirror://sourceforge/mp3val/${pname}-${version}-src.tar.gz";
+    url = "mirror://sourceforge/mp3val/mp3val-${version}-src.tar.gz";
     sha256 = "17y3646ghr38r620vkrxin3dksxqig5yb3nn4cfv6arm7kz6x8cm";
   };
 

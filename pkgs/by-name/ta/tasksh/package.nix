@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "1.2.0";
 
   src = fetchurl {
-    url = "https://taskwarrior.org/download/${pname}-${version}.tar.gz";
+    url = "https://taskwarrior.org/download/tasksh-${version}.tar.gz";
     sha256 = "1z8zw8lld62fjafjvy248dncjk0i4fwygw0ahzjdvyyppx4zjhkf";
   };
 

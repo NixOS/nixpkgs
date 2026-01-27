@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   version = "0.32.6";
 
   src = fetchurl {
-    url = "https://digint.ch/download/btrbk/releases/${pname}-${version}.tar.xz";
+    url = "https://digint.ch/download/btrbk/releases/btrbk-${version}.tar.xz";
     sha256 = "AuKsZHyRhGMgLL5ge7lVV6T3/SNwaRJDM8VNpbK7t2s=";
   };
 

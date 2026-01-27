@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   version = "0.10.0";
 
   src = fetchurl {
-    url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/${pname}-${version}.tar.bz2";
+    url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/tetraproc-${version}.tar.bz2";
     sha256 = "sha256-rDnFyjWaFdHcEdREdIEUGK95xg1Ghpj7rADgGq5VOXw=";
   };
 

@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "0.1.20";
 
   src = fetchurl {
-    url = "${meta.homepage}/${pname}-${version}.tar.gz";
+    url = "${meta.homepage}/peg-${version}.tar.gz";
     sha256 = "sha256-uLcXvJOll2ijXWUlZ5pODOlOa/ZvkrrPKXnGR0VytFo=";
   };
 

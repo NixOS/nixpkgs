@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   version = "1.4.4";
 
   src = fetchurl {
-    url = "https://www.inet.no/dante/files/${pname}-${version}.tar.gz";
+    url = "https://www.inet.no/dante/files/dante-${version}.tar.gz";
     sha256 = "sha256-GXPHcy8fnwpMDM8sHORix8JQYLJWQ+qQ+bmPU6gT+uw=";
   };
 

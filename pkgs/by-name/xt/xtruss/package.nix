@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "20211025.c25bf48";
 
   src = fetchurl {
-    url = "https://www.chiark.greenend.org.uk/~sgtatham/xtruss/${pname}-${version}.tar.gz";
+    url = "https://www.chiark.greenend.org.uk/~sgtatham/xtruss/xtruss-${version}.tar.gz";
     sha256 = "sha256-ikuKHtXEn2UVLE62l7qD9qc9ZUk6jiAqj5ru36vgdHk=";
   };
 

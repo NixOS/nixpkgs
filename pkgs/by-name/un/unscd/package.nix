@@ -25,19 +25,19 @@ stdenv.mkDerivation rec {
   patches = [
     # Patches from Debian that have not (yet) been included upstream, but are useful to us
     (fetchpatch {
-      url = "https://sources.debian.org/data/main/u/${pname}/${version}-1/debian/patches/change_invalidate_request_info_output";
+      url = "https://sources.debian.org/data/main/u/unscd/${version}-1/debian/patches/change_invalidate_request_info_output";
       sha256 = "17whakazpisiq9nnw3zybaf7v3lqkww7n6jkx0igxv4z2r3mby6l";
     })
     (fetchpatch {
-      url = "https://sources.debian.org/data/main/u/${pname}/${version}-1/debian/patches/support_large_numbers_in_config";
+      url = "https://sources.debian.org/data/main/u/unscd/${version}-1/debian/patches/support_large_numbers_in_config";
       sha256 = "0jrqb4cwclwirpqfb6cvnmiff3sm2jhxnjwxa7h0wx78sg0y3bpp";
     })
     (fetchpatch {
-      url = "https://sources.debian.org/data/main/u/${pname}/${version}-1/debian/patches/no_debug_on_invalidate";
+      url = "https://sources.debian.org/data/main/u/unscd/${version}-1/debian/patches/no_debug_on_invalidate";
       sha256 = "0znwzb522zgikb0mm7awzpvvmy0wf5z7l3jgjlkdpgj0scxgz86w";
     })
     (fetchpatch {
-      url = "https://sources.debian.org/data/main/u/${pname}/${version}-1/debian/patches/notify_systemd_about_successful_startup";
+      url = "https://sources.debian.org/data/main/u/unscd/${version}-1/debian/patches/notify_systemd_about_successful_startup";
       sha256 = "1ipwmbfwm65yisy74nig9960vxpjx683l3skgxfgssfx1jb9z2mc";
     })
 

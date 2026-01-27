@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   version = "1.4.21";
 
   src = fetchurl {
-    url = "https://marlam.de/${pname}/releases/${pname}-${version}.tar.xz";
+    url = "https://marlam.de/mpop/releases/mpop-${version}.tar.xz";
     sha256 = "sha256-TKDR4NATZv4+DPSQ2I0VTfURJ4+1lWOHE748pnVmWFU=";
   };
 

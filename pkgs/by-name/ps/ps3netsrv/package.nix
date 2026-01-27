@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   version = "20220813";
 
   src = fetchzip {
-    url = "https://github.com/aldostools/webMAN-MOD/releases/download/${webManModVersion}/${pname}_${version}.zip";
+    url = "https://github.com/aldostools/webMAN-MOD/releases/download/${webManModVersion}/ps3netsrv_${version}.zip";
     hash = "sha256-ynFuCD+tp8E/DDdB/HU9BCmwKcmQy6NBx26MKnP4W0o=";
   };
 

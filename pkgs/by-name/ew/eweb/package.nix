@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "9.10";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/eweb/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/project/eweb/eweb-${version}.tar.bz2";
     sha256 = "1xy7vm2sj5q6s620fm25klmnwnz9xkrxmx4q2f8h6c85ydisayd5";
   };
 

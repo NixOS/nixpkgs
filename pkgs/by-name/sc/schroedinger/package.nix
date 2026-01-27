@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   version = "1.0.11";
 
   src = fetchurl {
-    url = "https://download.videolan.org/contrib/${pname}-${version}.tar.gz";
+    url = "https://download.videolan.org/contrib/schroedinger-${version}.tar.gz";
     sha256 = "04prr667l4sn4zx256v1z36a0nnkxfdqyln48rbwlamr6l3jlmqy";
   };
 

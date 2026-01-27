@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "7.5.2";
 
   src = fetchurl {
-    url = "https://waterlan.home.xs4all.nl/dos2unix/${pname}-${version}.tar.gz";
+    url = "https://waterlan.home.xs4all.nl/dos2unix/dos2unix-${version}.tar.gz";
     sha256 = "sha256-JkdCRGYIRC60j5bCCvbaMDyzqSs2TnLLfiT4gjnEvzo=";
   };
 

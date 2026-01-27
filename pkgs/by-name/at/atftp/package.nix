@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   version = "0.8.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/atftp/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/atftp/atftp-${version}.tar.gz";
     hash = "sha256-3yqgicdnD56rQOVZjl0stqWC3FGCkm6lC01pDk438xY=";
   };
 

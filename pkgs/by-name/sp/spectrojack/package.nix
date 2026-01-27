@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "0.4.1";
 
   src = fetchurl {
-    url = "http://sed.free.fr/spectrojack/${pname}-${version}.tar.gz";
+    url = "http://sed.free.fr/spectrojack/spectrojack-${version}.tar.gz";
     sha256 = "1kiwx0kag7kq7rhg0bvckfm8r7pqmbk76ppa39cq2980jb5v8rfp";
   };
   nativeBuildInputs = [ pkg-config ];

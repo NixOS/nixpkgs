@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional withDocs "devdoc";
 
   src = fetchurl {
-    url = "https://libvirt.org/sources/glib/${pname}-${version}.tar.xz";
+    url = "https://libvirt.org/sources/glib/libvirt-glib-${version}.tar.xz";
     sha256 = "m/7DRjgkFqNXXYcpm8ZBsqRkqlGf2bEofjGKpDovO4s=";
   };
 

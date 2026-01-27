@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "0.11alpha";
 
   src = fetchurl {
-    url = "https://www.cabextract.org.uk/libmspack/${pname}-${version}.tar.gz";
+    url = "https://www.cabextract.org.uk/libmspack/libmspack-${version}.tar.gz";
     hash = "sha256-cN0fsvCuzDZ5G3Gh4YQOYhcweeraoIEZLRwyOg7uohs=";
   };
 

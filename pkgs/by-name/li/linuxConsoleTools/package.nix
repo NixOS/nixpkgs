@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "1.8.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/linuxconsole/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/linuxconsole/linuxconsoletools-${version}.tar.bz2";
     sha256 = "sha256-TaKXRceCt9sY9fN8Sed78WMSHdN2Hi/HY2+gy/NcJFY=";
   };
 

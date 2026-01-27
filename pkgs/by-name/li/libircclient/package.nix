@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   pname = "libircclient";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}/${version}/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/libircclient/libircclient/${version}/libircclient-${version}.tar.gz";
     sha256 = "0b9wa0h3xc31wpqlvgxgnvqp5wgx3kwsf5s9432m5cj8ycx6zcmv";
   };
 

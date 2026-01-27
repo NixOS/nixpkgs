@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   pname = "kpcli";
 
   src = fetchurl {
-    url = "mirror://sourceforge/kpcli/${pname}-${version}.pl";
+    url = "mirror://sourceforge/kpcli/kpcli-${version}.pl";
     hash = "sha256-yRNj5OB/NSGoZ/aNtgLJW1PcFn5DZu5/8lQlK0F2xi8=";
   };
 

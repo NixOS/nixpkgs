@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "3.09b";
 
   src = fetchurl {
-    url = "http://lcamtuf.coredump.cx/p0f3/releases/${pname}-${version}.tgz";
+    url = "http://lcamtuf.coredump.cx/p0f3/releases/p0f-${version}.tgz";
     sha256 = "0zqfq3gdnha29ckvlqmyp36c0jhj7f69bhqqx31yb6vkirinhfsl";
   };
 

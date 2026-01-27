@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   version = "5.9.5.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/net-snmp/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/net-snmp/net-snmp-${version}.tar.gz";
     hash = "sha256-FnB3GfgzGEpLcoNdrDWa4YgSOwa15CgXwAeQ19wThL8=";
   };
 

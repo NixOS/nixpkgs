@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "0.9.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/omxil/omxil/Bellagio%20${version}/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/omxil/omxil/Bellagio%20${version}/libomxil-bellagio-${version}.tar.gz";
     sha256 = "0k6p6h4npn8p1qlgq6z3jbfld6n1bqswzvxzndki937gr0lhfg2r";
   };
 

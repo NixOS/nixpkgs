@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   pname = "commons-io";
 
   src = fetchurl {
-    url = "mirror://apache/commons/io/binaries/${pname}-${version}-bin.tar.gz";
+    url = "mirror://apache/commons/io/binaries/commons-io-${version}-bin.tar.gz";
     sha256 = "sha256-+hNGq8TV4g8w9Q2df9kpYniBg1h8dOX6mF/1kk4VLcw=";
   };
 

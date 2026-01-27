@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   pname = "spectmorph";
   version = "0.6.1";
   src = fetchurl {
-    url = "https://github.com/swesterfeld/spectmorph/releases/download/${version}/${pname}-${version}.tar.bz2";
+    url = "https://github.com/swesterfeld/spectmorph/releases/download/${version}/spectmorph-${version}.tar.bz2";
     hash = "sha256-H/PaczAkjxeu2Q6S/jazZ0PU9oCmhBzsLgbGLusxXm8=";
   };
 

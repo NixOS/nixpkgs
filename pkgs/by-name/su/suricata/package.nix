@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   version = "8.0.2";
 
   src = fetchurl {
-    url = "https://www.openinfosecfoundation.org/download/${pname}-${version}.tar.gz";
+    url = "https://www.openinfosecfoundation.org/download/suricata-${version}.tar.gz";
     hash = "sha256-nUUMosrb4QGZPpkDOmI0nSvanf2QpqzBvLbMbbdutVE=";
   };
 

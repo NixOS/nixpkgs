@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   version = "1.7.81";
 
   src = fetchurl {
-    url = "http://fox-toolkit.org/ftp/${pname}-${version}.tar.gz";
+    url = "http://fox-toolkit.org/ftp/fox-${version}.tar.gz";
     sha256 = "sha256-bu+IEqNkv9OAf96dPYre3CP759pjalVIbYyc3QSQW2w=";
   };
 

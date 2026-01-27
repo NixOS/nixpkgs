@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "http://ftp.mutt.org/pub/mutt/${pname}-${version}.tar.gz";
+    url = "http://ftp.mutt.org/pub/mutt/mutt-${version}.tar.gz";
     hash = "sha256-XV68QIQ/cVbV7eMOUAFnmKxzNkZ/etNH5xZRBRbMITA=";
   };
 

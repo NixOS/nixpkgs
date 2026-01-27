@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "1.13";
 
   src = fetchurl {
-    url = "https://bitbucket.org/nygcresearch/treemix/downloads/${pname}-${version}.tar.gz";
+    url = "https://bitbucket.org/nygcresearch/treemix/downloads/treemix-${version}.tar.gz";
     sha256 = "1nd3rzsdgk47r8b8k43mdfvaagln533sm08s1jr0dz8km8nlym7y";
   };
 

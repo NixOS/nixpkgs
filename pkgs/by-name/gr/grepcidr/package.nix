@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "2.0";
 
   src = fetchurl {
-    url = "http://www.pc-tools.net/files/unix/${pname}-${version}.tar.gz";
+    url = "http://www.pc-tools.net/files/unix/grepcidr-${version}.tar.gz";
     sha256 = "1yzpa1nigmmp4hir6377hrkpp0z6jnxgccaw2jbqgydbglvnm231";
   };
 

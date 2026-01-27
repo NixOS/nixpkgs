@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   version = "3.91.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gtksourceviewmm/${lib.versions.majorMinor version}/gtksourceviewmm-${version}.tar.xz";
     sha256 = "088p2ch1b4fvzl9416nw3waj0pqgp31cd5zj4lx5hzzrq2afgapy";
   };
 

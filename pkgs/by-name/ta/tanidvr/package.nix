@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "1.4.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/tanidvr/TaniDVR/${pname}-${version}/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/tanidvr/TaniDVR/tanidvr-${version}/tanidvr-${version}.tar.bz2";
     sha256 = "0irwwf6mb72n3y4xcrl3s081nbnldvdlc6ypjqxa4p32c1d0g6ql";
   };
 

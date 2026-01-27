@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   version = "1.4";
 
   src = fetchurl {
-    url = "https://www.ucw.cz/~hubicka/koules/packages/${pname}${version}-src.tar.gz";
+    url = "https://www.ucw.cz/~hubicka/koules/packages/koules${version}-src.tar.gz";
     hash = "sha256-w2+T/q/uvVmYO/RBACQOZ6hKi6yr1+5SjJMEbe/kohs=";
   };
 

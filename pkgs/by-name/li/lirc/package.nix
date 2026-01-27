@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   version = "0.10.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/lirc/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/lirc/lirc-${version}.tar.bz2";
     sha256 = "sha256-PUTsgnSIHPJi8WCAVkHwgn/8wgreDYXn5vO5Dg09Iio=";
   };
 

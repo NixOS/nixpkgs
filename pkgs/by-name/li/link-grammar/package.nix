@@ -25,7 +25,7 @@ let
     ];
 
     src = fetchurl {
-      url = "http://www.abisource.com/downloads/${pname}/${version}/${pname}-${version}.tar.gz";
+      url = "http://www.abisource.com/downloads/link-grammar/${version}/link-grammar-${version}.tar.gz";
       sha256 = "sha256-MkcQzYEyl1/5zLU1CXMvdVhHOxwZ8XiSAAo97bhhiu0=";
     };
 

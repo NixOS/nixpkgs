@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     sha256 = "0pvy4qirfjdfm8aj6x5rkbgl7hk3jfa2s21qkk8ic5dqfjjab75n";
-    url = "mirror://sourceforge/scanbd/${pname}-${version}.tgz";
+    url = "mirror://sourceforge/scanbd/scanbd-${version}.tgz";
   };
 
   nativeBuildInputs = [ pkg-config ];

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   pname = "mp3gain";
   version = "1.6.2";
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${
+    url = "mirror://sourceforge/mp3gain/mp3gain-${
       lib.replaceStrings [ "." ] [ "_" ] version
     }-src.zip";
     sha256 = "0varr6y7k8zarr56b42r0ad9g3brhn5vv3xjg1c0v19jxwr4gh2w";

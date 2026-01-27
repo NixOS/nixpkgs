@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "0.32";
 
   src = fetchurl {
-    url = "mirror://sourceforge/liblo/liblo/${version}/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/liblo/liblo/${version}/liblo-${version}.tar.gz";
     sha256 = "sha256-XfBfKgOV/FrJD2tTi4yCuyGUFAb9GnCnZcczakfXAgg=";
   };
 

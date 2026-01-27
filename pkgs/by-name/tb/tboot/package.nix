@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "1.11.9";
 
   src = fetchurl {
-    url = "mirror://sourceforge/tboot/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/tboot/tboot-${version}.tar.gz";
     hash = "sha256-uCbJatmt1qYLuWdCATeCS4mNrpJ+UUBJa1rDgjE37Z0=";
   };
 

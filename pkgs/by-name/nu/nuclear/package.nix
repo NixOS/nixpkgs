@@ -12,7 +12,7 @@ let
     # the package name. We also hardcode the host arch in the release name, but should upstream
     # provide more arches, we should use stdenv.hostPlatform to determine the arch and choose
     # source URL accordingly.
-    url = "https://github.com/nukeop/nuclear/releases/download/v${version}/${pname}-v${version}-x86_64.AppImage";
+    url = "https://github.com/nukeop/nuclear/releases/download/v${version}/nuclear-v${version}-x86_64.AppImage";
     hash = "sha256-k3qGWPn+O4kazsrrZAYHIvSrrix9LNnnJgZGJqlJbJE=";
   };
 

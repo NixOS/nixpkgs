@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "1.4.2";
 
   src = fetchurl {
-    url = "mirror://debian/pool/main/c/cramfsswap/${pname}_${version}.tar.xz";
+    url = "mirror://debian/pool/main/c/cramfsswap/cramfsswap_${version}.tar.xz";
     sha256 = "10mj45zx71inaa3l1d81g64f7yn1xcprvq4v4yzpdwbxqmqaikw1";
   };
   #  https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=996964

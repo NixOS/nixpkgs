@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "1.6.3";
 
   src = fetchurl {
-    url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/dejagnu/dejagnu-${version}.tar.gz";
     sha256 = "1qx2cv6qkxbiqg87jh217jb62hk3s7dmcs4cz1llm2wmsynfznl7";
   };
 

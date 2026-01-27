@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "1.5.22";
 
   src = fetchurl {
-    url = "https://www.seasip.info/Unix/LibDsk/${pname}-${version}.tar.gz";
+    url = "https://www.seasip.info/Unix/LibDsk/libdsk-${version}.tar.gz";
     sha256 = "sha256-gQ+AC8x2ZfTBs14ZquyzXzcptxKtHYBxBQWbS9sc8Ek=";
   };
 

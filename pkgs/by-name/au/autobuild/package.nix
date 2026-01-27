@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "5.3";
 
   src = fetchurl {
-    url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
+    url = "mirror://savannah/autobuild/autobuild-${version}.tar.gz";
     sha256 = "0gv7g61ja9q9zg1m30k4snqwwy1kq7b4df6sb7d2qra7kbdq8af1";
   };
 

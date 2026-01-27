@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   pname = "meterbridge";
 
   src = fetchurl {
-    url = "http://plugin.org.uk/meterbridge/${pname}-${version}.tar.gz";
+    url = "http://plugin.org.uk/meterbridge/meterbridge-${version}.tar.gz";
     sha256 = "0s7n3czfpil94vsd7iblv4xrck9c7zvsz4r3yfbkqcv85pjz1viz";
   };
 

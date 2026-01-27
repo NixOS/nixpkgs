@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
   pyproject = false;
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/bleachbit/bleachbit-${version}.tar.bz2";
     sha256 = "sha256-CU5IW8NVWuPl4PHu6mYpD5mOpRiDq6oZk9pDmuz8PjA=";
   };
 

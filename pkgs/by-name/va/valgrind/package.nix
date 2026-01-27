@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   version = "3.26.0";
 
   src = fetchurl {
-    url = "https://sourceware.org/pub/${pname}/${pname}-${version}.tar.bz2";
+    url = "https://sourceware.org/pub/valgrind/valgrind-${version}.tar.bz2";
     hash = "sha256-jVTHFwKRBvFkSq2vgCq5aS5T2T3QFcvRnnQZDrpha9c=";
   };
 

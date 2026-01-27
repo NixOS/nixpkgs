@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     # XXX: The author doesn't use the orthodox SF way to store tarballs.
-    url = "https://plib.sourceforge.net/dist/${pname}-${version}.tar.gz";
+    url = "https://plib.sourceforge.net/dist/plib-${version}.tar.gz";
     sha256 = "0cha71mflpa10vh2l7ipyqk67dq2y0k5xbafwdks03fwdyzj4ns8";
   };
 

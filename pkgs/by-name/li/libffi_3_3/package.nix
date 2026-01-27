@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "3.3";
 
   src = fetchurl {
-    url = "https://github.com/libffi/libffi/releases/download/v${version}/${pname}-${version}.tar.gz";
+    url = "https://github.com/libffi/libffi/releases/download/v${version}/libffi-${version}.tar.gz";
     hash = "sha256-cvunkicD3fp6Ao1ROsFahcjVTI1n9V+lpIAohdxlIFY=";
   };
 

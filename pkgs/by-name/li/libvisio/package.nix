@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://dev-www.libreoffice.org/src/libvisio/${pname}-${version}.tar.xz";
+    url = "https://dev-www.libreoffice.org/src/libvisio/libvisio-${version}.tar.xz";
     hash = "sha256-np7/dREtTZLZImKtf8JZnCHib4/FulSQDv3IPAUB5HI=";
   };
 

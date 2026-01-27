@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "0.9.9.9";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/mhash/mhash-${version}.tar.bz2";
     sha256 = "1w7yiljan8gf1ibiypi6hm3r363imm3sxl1j8hapjdq3m591qljn";
   };
 

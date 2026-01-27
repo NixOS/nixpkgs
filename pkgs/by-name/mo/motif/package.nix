@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   version = "2.3.8";
 
   src = fetchurl {
-    url = "mirror://sourceforge/motif/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/motif/motif-${version}.tar.gz";
     sha256 = "1rxwkrhmj8sfg7dwmkhq885valwqbh26d79033q7vb7fcqv756w5";
   };
 

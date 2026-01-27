@@ -15,7 +15,7 @@ let
       sha256,
     }:
     fetchurl {
-      url = "mirror://sourceforge/g15tools/${pname}/${version}/${pname}-${version}.tar.bz2";
+      url = "mirror://sourceforge/g15tools/libg15/${version}/libg15-${version}.tar.bz2";
       inherit sha256;
     };
 
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
   version = "1.9.5.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/G15Daemon%201.9x/${version}/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/libg15/G15Daemon%201.9x/${version}/libg15-${version}.tar.bz2";
     sha256 = "1613gsp5dgilwbshqxxhiyw73ksngnam7n1iw6yxdjkp9fyd2a3d";
   };
 
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
       patch =
         fname: sha256:
         fetchurl {
-          url = "https://raw.githubusercontent.com/archlinux/svntogit-community/c0b0b6d4d6d7b79eca68123b20e0c9fb82e1c6e1/g15daemon/trunk/${pname}-${version}-${fname}.patch";
+          url = "https://raw.githubusercontent.com/archlinux/svntogit-community/c0b0b6d4d6d7b79eca68123b20e0c9fb82e1c6e1/g15daemon/trunk/libg15-${version}-${fname}.patch";
           name = "${fname}.patch";
           inherit sha256;
         };

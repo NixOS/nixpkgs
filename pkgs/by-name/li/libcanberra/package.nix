@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   version = "0.30";
 
   src = fetchurl {
-    url = "http://0pointer.de/lennart/projects/libcanberra/${pname}-${version}.tar.xz";
+    url = "http://0pointer.de/lennart/projects/libcanberra/libcanberra-${version}.tar.xz";
     sha256 = "0wps39h8rx2b00vyvkia5j40fkak3dpipp1kzilqla0cgvk73dn2";
   };
 

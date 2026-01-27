@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   version = "0.8.2";
 
   src = fetchurl {
-    url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/${pname}-${version}.tar.bz2";
+    url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/zita-at1-${version}.tar.bz2";
     sha256 = "sha256-NSYTJmgOmL/CgGI/rBGQuqmccZEzvwYgchb7e4XqmmM=";
   };
 

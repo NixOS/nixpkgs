@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "20110606";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}_${version}.tar.xz";
+    url = "mirror://sourceforge/gnaural/gnaural_${version}.tar.xz";
     hash = "sha256-0a09DUMfHEIGYuIYSBGJalBiIHIgejr/KVDXCFgKBb8=";
   };
 

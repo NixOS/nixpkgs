@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   '';
 
   src = fetchurl {
-    url = "http://www.hping.org/wbox/${pname}-${version}.tar.gz";
+    url = "http://www.hping.org/wbox/wbox-${version}.tar.gz";
     sha256 = "06daxwbysppvbh1mwprw8fgsp6mbd3kqj7a978w7ivn8hdgdi28m";
   };
 

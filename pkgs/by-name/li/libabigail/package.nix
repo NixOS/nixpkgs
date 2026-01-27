@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://mirrors.kernel.org/sourceware/${pname}/${pname}-${version}.tar.xz";
+    url = "https://mirrors.kernel.org/sourceware/libabigail/libabigail-${version}.tar.xz";
     hash = "sha256-fPxOmwCuONh/sMY76rsyucv5zkEOUs7rWtWzxb6xEfM=";
   };
 

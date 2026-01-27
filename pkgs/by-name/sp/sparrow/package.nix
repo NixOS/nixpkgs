@@ -38,7 +38,7 @@ let
 
   # nixpkgs-update: no auto update
   src = fetchurl {
-    url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/sparrowwallet-${version}-${sparrowArch}.tar.gz";
+    url = "https://github.com/sparrowwallet/sparrow/releases/download/${version}/sparrowwallet-${version}-${sparrowArch}.tar.gz";
     hash =
       {
         x86_64-linux = "sha256-MsERgfJGpxRkQm4Ww30Tc95kThjlgI+nO4bq2zNGdeU=";
@@ -72,12 +72,12 @@ let
   };
 
   manifest = fetchurl {
-    url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/${pname}-${version}-manifest.txt";
+    url = "https://github.com/sparrowwallet/sparrow/releases/download/${version}/sparrow-${version}-manifest.txt";
     hash = "sha256-qPIllqFqe84BSIcYYYa+rKJvSpN/QnomHnsOoTxlyl4=";
   };
 
   manifestSignature = fetchurl {
-    url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/${pname}-${version}-manifest.txt.asc";
+    url = "https://github.com/sparrowwallet/sparrow/releases/download/${version}/sparrow-${version}-manifest.txt.asc";
     hash = "sha256-PpruG9l7MhI30b6dd96KAkkQvyMNuh36GtmEdYaRgac=";
   };
 

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "1.0.1";
 
   src = fetchurl {
-    url = "https://netfilter.org/projects/libnetfilter_cthelper/files/${pname}-${version}.tar.bz2";
+    url = "https://netfilter.org/projects/libnetfilter_cthelper/files/libnetfilter_cthelper-${version}.tar.bz2";
     sha256 = "sha256-FAc9VIcjOJc1XT/wTdwcjQPMW6jSNWI2qogWGp8tyRI=";
   };
 

@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "20170220";
 
   src = fetchurl {
-    url = "mirror://sageupstream/${pname}/${pname}-${version}.tar.bz2";
+    url = "mirror://sageupstream/polytopes_db/polytopes_db-${version}.tar.bz2";
     sha256 = "1q0cd811ilhax4dsj9y5p7z8prlalqr7k9mzq178c03frbgqny6b";
   };
 

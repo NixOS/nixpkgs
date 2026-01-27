@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "8.5";
 
   src = fetchurl {
-    url = "ftp://ftp.atnf.csiro.au/pub/software/wcslib/${pname}-${version}.tar.bz2";
+    url = "ftp://ftp.atnf.csiro.au/pub/software/wcslib/wcslib-${version}.tar.bz2";
     hash = "sha256-8f0bePv9ur2jY/gEXgxZ4yc17KRUgqUwIZHlb+Bi6s4=";
   };
 

@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   version = "1.13";
 
   src = fetchurl {
-    url = "mirror://gnu/libextractor/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/libextractor/libextractor-${version}.tar.gz";
     hash = "sha256-u48xLFHSAlciQ/ETxrYtghAwGrMMuu5gT5g32HjN91U=";
   };
 

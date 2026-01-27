@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   pname = "aften";
   version = "0.0.8";
   src = fetchurl {
-    url = "mirror://sourceforge/aften/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/aften/aften-${version}.tar.bz2";
     sha256 = "02hc5x9vkgng1v9bzvza9985ifrjd7fjr7nlpvazp4mv6dr89k47";
   };
 

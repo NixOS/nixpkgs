@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "0.9.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libdbi/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/libdbi/libdbi-${version}.tar.gz";
     sha256 = "00s5ra7hdlq25iv23nwf4h1v3kmbiyzx0v9bhggjiii4lpf6ryys";
   };
 

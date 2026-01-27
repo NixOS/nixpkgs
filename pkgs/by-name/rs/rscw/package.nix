@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "0.1e";
 
   src = fetchurl {
-    url = "https://www.pa3fwm.nl/software/${pname}/${pname}-${version}.tgz";
+    url = "https://www.pa3fwm.nl/software/rscw/rscw-${version}.tgz";
     sha256 = "1hxwxmqc5jinr14ya1idigqigc8qhy1vimzcwy2vmwdjay2sqik2";
   };
 

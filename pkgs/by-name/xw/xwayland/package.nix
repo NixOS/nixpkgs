@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
   version = "24.1.9";
 
   src = fetchurl {
-    url = "mirror://xorg/individual/xserver/${pname}-${version}.tar.xz";
+    url = "mirror://xorg/individual/xserver/xwayland-${version}.tar.xz";
     hash = "sha256-8pevJ6hFCNubgNHLvMacOAHaOOtkxy87W1D1gkWa/dA=";
   };
 

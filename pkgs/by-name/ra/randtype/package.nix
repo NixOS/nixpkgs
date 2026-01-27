@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "1.13";
 
   src = fetchzip {
-    url = "mirror://sourceforge/randtype/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/randtype/randtype-${version}.tar.gz";
     sha256 = "055xs02qwpgbkn2l57bwghbsrsysg1zhm2asp0byvjpz4sc4w1rd";
   };
 

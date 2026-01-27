@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   version = "4.8.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/eli-project/Eli/Eli%20${version}/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/project/eli-project/Eli/Eli%20${version}/eli-${version}.tar.bz2";
     sha256 = "1vran8583hbwrr5dciji4zkhz3f88w4mn8n9sdpr6zw0plpf1whj";
   };
 

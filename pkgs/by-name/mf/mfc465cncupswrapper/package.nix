@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   version = "1.0.1-1";
 
   src = fetchurl {
-    url = "https://download.brother.com/welcome/dlf006134/${pname}-${version}.i386.deb";
+    url = "https://download.brother.com/welcome/dlf006134/mfc465cncupswrapper-${version}.i386.deb";
     sha256 = "59a62ed3cf10f1565c08ace55832bd48bd5034f7067662870edf7ff3bf0cb76a";
   };
 

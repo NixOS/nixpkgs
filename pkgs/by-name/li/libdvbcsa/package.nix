@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "1.1.0";
 
   src = fetchurl {
-    url = "http://get.videolan.org/libdvbcsa/${version}/${pname}-${version}.tar.gz";
+    url = "http://get.videolan.org/libdvbcsa/${version}/libdvbcsa-${version}.tar.gz";
     sha256 = "4db78af5cdb2641dfb1136fe3531960a477c9e3e3b6ba19a2754d046af3f456d";
   };
 

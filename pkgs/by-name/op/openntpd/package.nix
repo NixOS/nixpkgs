@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "6.8p1";
 
   src = fetchurl {
-    url = "mirror://openbsd/OpenNTPD/${pname}-${version}.tar.gz";
+    url = "mirror://openbsd/OpenNTPD/openntpd-${version}.tar.gz";
     sha256 = "0ijsylc7a4jlpxsqa0jq1w1c7333id8pcakzl7a5749ria1xp0l5";
   };
 

@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "3.9.4.3";
 
   src = fetchurl {
-    url = "https://www.libxl.com/download/${pname}-lin-${version}.tar.gz";
+    url = "https://www.libxl.com/download/libxl-lin-${version}.tar.gz";
     sha256 = "sha256-U8hXoqBzjSGigOXc29LZQk3KrGiYvBPBJPg5qihcAsY=";
   };
 

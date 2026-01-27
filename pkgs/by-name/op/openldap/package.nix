@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   version = "2.6.9";
 
   src = fetchurl {
-    url = "https://www.openldap.org/software/download/OpenLDAP/openldap-release/${pname}-${version}.tgz";
+    url = "https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-${version}.tgz";
     hash = "sha256-LLfcc+nINA3/DZk1f7qleKvzDMZhnwUhlyxVVoHmsv8=";
   };
 

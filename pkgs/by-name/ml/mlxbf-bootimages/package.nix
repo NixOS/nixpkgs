@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "4.11.0-13611";
 
   src = fetchurl {
-    url = "https://linux.mellanox.com/public/repo/bluefield/${version}/bootimages/prod/${pname}-signed_${version}_arm64.deb";
+    url = "https://linux.mellanox.com/public/repo/bluefield/${version}/bootimages/prod/mlxbf-bootimages-signed_${version}_arm64.deb";
     hash = "sha256-bZpZ6qnC3Q/BuOngS4ZoU6vjeekPjVom0KdDoJF5iko=";
   };
 

@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "1.27";
 
   src = fetchurl {
-    url = "https://people.redhat.com/~rjones/virt-what/files/${pname}-${version}.tar.gz";
+    url = "https://people.redhat.com/~rjones/virt-what/files/virt-what-${version}.tar.gz";
     sha256 = "sha256-1Nm9nUrlkJVZdEP6xmNJUxXH60MwuHKqXwYt84rGm/E=";
   };
 

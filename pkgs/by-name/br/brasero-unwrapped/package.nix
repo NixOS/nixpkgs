@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   pname = "brasero";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/brasero/${major}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/brasero/${major}/brasero-${version}.tar.xz";
     hash = "sha256-h3SerjOhQSB9GwC+IzttgEWYLtMkntS5ja4fOpdf6hU=";
   };
 

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   pname = "kythe";
 
   src = fetchurl {
-    url = "https://github.com/kythe/kythe/releases/download/v${version}/${pname}-v${version}.tar.gz";
+    url = "https://github.com/kythe/kythe/releases/download/v${version}/kythe-v${version}.tar.gz";
     sha256 = "sha256-UqnG6BESNwQ7jQthJ2N/DrjSujp3bkdJsDbpEew1Kc4=";
   };
 
