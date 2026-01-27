@@ -1,11 +1,27 @@
 {
-  lib,
   buildPythonPackage,
   fetchPypi,
+  lib,
+  stdenv,
+
+  # build system
   hatchling,
   hatch-requirements-txt,
   setuptools,
+
+  # dependencies
   dnspython,
+
+  # optional dependencies
+  certifi,
+  cryptography,
+  pykerberos,
+  pymongo-auth-aws,
+  pyopenssl,
+  python-snappy,
+  requests,
+  service-identity,
+  zstandard,
 
   # for passthru.tests
   celery, # check-input only
@@ -16,13 +32,13 @@
   pymongo-inmemory,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pymongo";
   version = "4.13.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "pymongo";
     hash = "sha256-D2TGRpwjYpYubOlyWK4Tkau6FWapU6SSVi0pJLRIFcI=";
   };
@@ -34,6 +50,21 @@ buildPythonPackage rec {
   ];
 
   dependencies = [ dnspython ];
+
+  optional-dependencies = {
+    aws = [ pymongo-auth-aws ];
+    encryption = [ pymongo-auth-aws ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ certifi ];
+    gssapi = [ pykerberos ];
+    ocsp = [
+      cryptography
+      pyopenssl
+      requests
+      service-identity
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ certifi ];
+    snappy = [ python-snappy ];
+    zstd = [ zstandard ];
+  };
 
   # Tests call a running mongodb instance
   doCheck = false;
@@ -57,4 +88,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})
