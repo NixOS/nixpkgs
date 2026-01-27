@@ -11,6 +11,7 @@
   expat,
   gettext,
   glib,
+  autoconf-archive,
   autoreconfHook,
   libiconv,
   libevent,
@@ -142,6 +143,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postPatch = ''
+    # Remove the vendored ACX_PTHREAD macro in favor of the more up-to-date
+    # implementation from autoconf-archive, especially to support static builds.
+    rm common/acx_pthread.m4
+  '';
+
   depsBuildBuild = [
     pkg-config
   ];
@@ -150,6 +157,7 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     glib
+    autoconf-archive
     autoreconfHook
   ];
 
