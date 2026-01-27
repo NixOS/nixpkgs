@@ -5,23 +5,23 @@
   nodejs-slim_22,
   gitMinimal,
   gitSetupHook,
-  pnpm_8,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
   nix-update-script,
 }:
 let
-  pnpm' = pnpm_8.override { nodejs-slim = nodejs-slim_22; };
+  pnpm' = pnpm_11.override { nodejs-slim = nodejs-slim_22; };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vtsls";
-  version = "0.2.9";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "yioneko";
     repo = "vtsls";
     tag = "server-v${finalAttrs.version}";
-    hash = "sha256-vlw84nigvQqRB9OQBxOmrR9CClU9M4dNgF/nrvGN+sk=";
+    hash = "sha256-RuxaT3u9OOUMbDN6A2biIeUC+Z4leELF3OhKXxmCqbM=";
     fetchSubmodules = true;
   };
 
@@ -36,7 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ nodejs-slim_22 ];
 
-  pnpmWorkspaces = [ "@vtsls/language-server" ];
+  pnpmWorkspaces = [
+    "@vtsls/language-server"
+    "@vtsls/language-service"
+    "@vtsls/vscode-fuzzy"
+  ];
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
@@ -46,8 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
       version
       ;
     pnpm = pnpm';
-    fetcherVersion = 3;
-    hash = "sha256-1P2ph8ZX6/KptkLP4wk0dZzuvnYCLOWorM1b9+otKsE=";
+    fetcherVersion = 4;
+    hash = "sha256-jYh79MtcfW/p6twuDM1JDwukSnn2/TJQYvHBlut0QnE=";
   };
 
   # Patches to get submodule sha from file instead of 'git submodule status'
