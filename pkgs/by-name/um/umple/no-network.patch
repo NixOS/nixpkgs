@@ -1,0 +1,49 @@
+--- a/build.gradle
++++ b/build.gradle
+@@ -23,7 +23,7 @@ ext {
+     umpleCurrentJarBase = "umple-${rootProject.ext.umpleCurrentVersion}"
+     umpleCurrentJar = "${rootProject.projectDir.toString()}/dist/gradle/libs/${rootProject.ext.umpleCurrentJarBase}.jar"
+     umpleJarRemoteSource = "https://cruise.umple.org/umpleonline/scripts/umple.jar"
+-    umpleJarRemoteFile = "${rootProject.projectDir.toString()}/libs/umple-latest.jar"
++    umpleJarRemoteFile = "@UMPLE_JAR@"
+     generatedBaseDir = "${rootProject.projectDir.toString()}/dist/gradle/src-gen"
+     txlTranslaterFile = "${rootProject.projectDir.toString()}/UmpleToPython/txl/umpleJavaToPython.txl"
+     testBaseDir = "${rootProject.projectDir.toString()}/dist/gradle/test"
+@@ -154,12 +154,14 @@ dependencies {
+ apply plugin: 'de.undercouch.download'
+ 
+ task downloadUmpleJar(type: Download) {
++    enabled = false
+     onlyIfNewer true
+     overwrite true
+     src rootProject.ext.umpleJarRemoteSource
+     dest rootProject.ext.umpleJarRemoteFile
+ }
+ task downloadJOptSimpleVendorZip(type: Download) {
++    enabled = false
+     onlyIfNewer true
+     overwrite true
+     src "https://codeload.github.com/pholser/jopt-simple/zip/jopt-simple-4.4"
+@@ -167,11 +169,13 @@ task downloadJOptSimpleVendorZip(type: Download) {
+ }
+ 
+ task downloadAndUnzipJOptSimpleVendor(dependsOn: downloadJOptSimpleVendorZip, type: Copy) {
++    enabled = false
+     from zipTree(downloadJOptSimpleVendorZip.dest)
+     into "${rootProject.projectDir.toString()}/dist/gradle/libs/vendors/"
+ }
+ 
+ task prepareJOptSimpleVendor {
++    enabled = false
+     dependsOn downloadAndUnzipJOptSimpleVendor
+     doLast {
+         delete "${rootProject.projectDir.toString()}/dist/gradle/libs/vendors/jopt-simple-4.4.zip"
+@@ -358,7 +362,7 @@ sourceSets {
+         java {
+             srcDirs = [
+                 rootProject.ext.generatedBaseDir,
+-                "${rootProject.projectDir.toString()}/dist/gradle/libs/vendors/jopt-simple-jopt-simple-4.4/src/main/java/joptsimple"
++                "@JOPT_SIMPLE_PATH@"
+             ]
+             exclude '**/*.ump', '**/.git*'
+         }
