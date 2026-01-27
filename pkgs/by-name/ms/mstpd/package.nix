@@ -8,31 +8,40 @@
 
 stdenv.mkDerivation rec {
   pname = "mstpd";
-  version = "0.0.8";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "mstpd";
     repo = "mstpd";
     rev = version;
-    sha256 = "1xkfydxljdnj49p5r3mirk4k146428b6imfc9bkfps9yjn64mkgb";
+    hash = "sha256-m4gbVXAPIYGQvTFaSziFuOO6say5kgUsk7NSdqXgKmA=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "fix-strncpy-gcc9.patch";
-      url = "https://github.com/mstpd/mstpd/commit/d27d7e93485d881d8ff3a7f85309b545edbe1fc6.patch";
-      sha256 = "19456daih8l3y6m9kphjr7pj7slrqzbj6yacnlgznpxyd8y4d86y";
-    })
-  ];
 
   nativeBuildInputs = [ autoreconfHook ];
 
   configureFlags = [
     "--prefix=$(out)"
     "--sysconfdir=$(out)/etc"
-    "--sbindir=$(out)/sbin"
+    "--sbindir=$(out)/bin"
     "--libexecdir=$(out)/lib"
+    "--with-bashcompletiondir=$(out)/share/bash-completion/completions"
   ];
+
+  # bridge-stp is a helper called by kernel whenever STP is enabled/disabled on
+  # a bridge - we remove it, because it's not compatible with NixOS as the
+  # kernel is hard-coded to look for a binary in `/sbin` that we can't provide.
+  #
+  # Instead, users should call `mstpd addbridge ...` etc. by hand.
+  #
+  # - https://github.com/mstpd/mstpd/issues/140#issuecomment-1620437872
+  # - https://github.com/torvalds/linux/blob/928990631327cf00a9195e30fa22f7ae5f8d7e67/net/bridge/br_private.h#L51
+  postInstall = ''
+    rm $out/bin/bridge-stp
+
+    # Remove now-dangling symlinks, too
+    rm $out/bin/mstp_restart
+    rm $out/lib/mstpctl-utils/mstpctl_restart_config
+  '';
 
   meta = {
     description = "Multiple Spanning Tree Protocol daemon";
