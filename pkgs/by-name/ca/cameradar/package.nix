@@ -6,14 +6,14 @@
   pkg-config,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cameradar";
   version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "Ullaakut";
     repo = "cameradar";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-cWxclfu0ywmqKnBxsaWWz2sMFExC5Dcrf+rceAhIW2U=";
   };
 
@@ -28,8 +28,8 @@ buildGoModule rec {
   meta = {
     description = "RTSP stream access tool";
     homepage = "https://github.com/Ullaakut/cameradar";
-    changelog = "https://github.com/Ullaakut/cameradar/releases/tag/${src.tag}";
+    changelog = "https://github.com/Ullaakut/cameradar/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
