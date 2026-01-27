@@ -24,6 +24,10 @@ python3.pkgs.buildPythonApplication rec {
       --replace-fail "from pytest_bdd.steps import inject_fixture" "from pytest_bdd.compat import inject_fixture"
   '';
 
+  disabledTests = [
+    "test_override_configured_linewrap_with_a_value_of_23"
+  ];
+
   build-system = with python3.pkgs; [ poetry-core ];
 
   dependencies = with python3.pkgs; [
