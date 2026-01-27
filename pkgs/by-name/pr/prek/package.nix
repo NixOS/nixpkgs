@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "prek";
-  version = "0.2.30";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "j178";
     repo = "prek";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IqFUJNFs7a/M9IUNEwW40EZTAh+6a5Ov37xg5c9iwRc=";
+    hash = "sha256-J4onCCHZ6DT2CtZ8q0nrdOI74UGDJhVFG2nWj+p7moE=";
   };
 
-  cargoHash = "sha256-KOpQ3P9cmcWYT3bPKtKpzHPagX4b9hH0EiWGpt98NnE=";
+  cargoHash = "sha256-pR5NibzX5m8DcMxer0W1wowTJCesYaF852wpGiVboVg=";
 
   nativeCheckInputs = [
     git
@@ -75,6 +75,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "rust::remote_hooks_with_lib_deps"
     "unsupported::unsupported_language"
     "remote_hook_non_workspace"
+    "bun::additional_dependencies"
+    "bun::basic_bun"
     # "meta_hooks"
     "reuse_env"
     "docker::docker"
@@ -138,6 +140,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "no_commit_to_branch_hook_with_patterns"
     "check_executables_have_shebangs_various_cases"
     "check_executables_have_shebangs_hook"
+    "cache_gc_removes_unreferenced_entries"
     # does not properly use TMP
     "hook_impl"
     # problems with environment
@@ -156,6 +159,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # https://github.com/astral-sh/uv/issues/8635
     "alternate_config_file"
     "basic_discovery"
+    "cache_gc_keeps_local_hook_env"
     "color"
     "cookiecutter_template_directories_are_skipped"
     "empty_entry"
