@@ -4,24 +4,33 @@
   fetchFromGitHub,
   regex,
   setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "lark";
-  version = "1.2.2";
+  version = "1.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lark-parser";
     repo = "lark";
     tag = version;
-    hash = "sha256-02NX/2bHTYSVTDLLudJmEU2DcQNn0Ke+5ayilKLlwqA=";
+    hash = "sha256-JDtLSbVjypaHqamkknHDSql1GTMf1LA4TgJXqTn4Q20=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools-scm>=9.2.2" "setuptools-scm"
+  '';
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   # Optional import, but fixes some re known bugs & allows advanced regex features
-  propagatedBuildInputs = [ regex ];
+  dependencies = [ regex ];
 
   pythonImportsCheck = [
     "lark"
