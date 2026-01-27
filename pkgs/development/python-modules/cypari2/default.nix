@@ -4,7 +4,9 @@
   python,
   fetchPypi,
   pari,
+  pkg-config,
   gmp,
+  meson-python,
   cython,
   cysignals,
 
@@ -15,26 +17,35 @@
 buildPythonPackage rec {
   pname = "cypari2";
   # upgrade may break sage, please test the sage build or ping @timokau on upgrade
-  version = "2.2.2";
-  format = "setuptools";
+  version = "2.2.4";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-E6M4c16iIcEGj4/EFVYb93fYxoclcCvHSVRyZP0JFyA=";
+    hash = "sha256-+fDplKmgsGRhkyBBHh2cMDFYhH4FW1gILv2t5ayX9hM=";
   };
 
-  preBuild = ''
-    # generate cythonized extensions (auto_paridecl.pxd is crucial)
-    ${python.pythonOnBuildForHost.interpreter} setup.py build_ext --inplace
+  preConfigure = ''
+    substituteInPlace cypari2/meson.build \
+       --replace-fail "'cypari2.py'" "'cypari2.pc'"
+    # HACK: remove when Sage migrates to a meson build
+    sed  -i '1i # distutils: libraries = gmp pari' cypari2/paridecl.pxd
   '';
 
-  nativeBuildInputs = [ pari ];
-
-  buildInputs = [ gmp ];
-
-  propagatedBuildInputs = [
-    cysignals
+  build-system = [
+    meson-python
     cython
+    cysignals
+  ];
+
+  nativeBuildInputs = [
+    pari
+    pkg-config
+  ];
+
+  buildInputs = [
+    gmp
+    pari
   ];
 
   checkPhase = ''
