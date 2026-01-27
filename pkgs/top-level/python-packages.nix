@@ -17469,8 +17469,6 @@ self: super: with self; {
 
   slapd = callPackage ../development/python-modules/slapd { };
 
-  sleekxmpp = callPackage ../development/python-modules/sleekxmpp { };
-
   sleekxmppfs = callPackage ../development/python-modules/sleekxmppfs { };
 
   sleepyq = callPackage ../development/python-modules/sleepyq { };
