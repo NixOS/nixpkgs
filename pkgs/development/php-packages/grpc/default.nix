@@ -3,6 +3,7 @@
   pkg-config,
   lib,
   grpc,
+  php,
 }:
 
 buildPecl {
@@ -26,5 +27,6 @@ buildPecl {
     homepage = "https://github.com/grpc/grpc/tree/master/src/php/ext/grpc";
     license = lib.licenses.asl20;
     teams = [ lib.teams.php ];
+    broken = lib.versionAtLeast php.version "8.5";
   };
 }

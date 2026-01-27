@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zenpower";
-  version = "unstable-2025-06-17";
+  version = "unstable-2025-12-20";
 
   src = fetchFromGitHub {
     owner = "AliEmreSenel";
     repo = "zenpower3";
-    rev = "41e042935ee9840c0b9dd55d61b6ddd58bc4fde6";
-    hash = "sha256-0U/JmEd6OJJeUm1ZLFYxpKH15n7+QTWYOgtKIFAuf/4=";
+    rev = "dc4f1e2d2f5e26ad5b314497485419cb240e7134";
+    hash = "sha256-NvCBog1rAAjbhT9dMOjsmio6lVZ9h36XvOiE7znJdTo=";
   };
 
   hardeningDisable = [ "pic" ];
