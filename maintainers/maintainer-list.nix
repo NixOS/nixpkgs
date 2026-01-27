@@ -9681,6 +9681,12 @@
     github = "gmacon";
     githubId = 238853;
   };
+  gnuvalerie = {
+    email = "git@val.8shield.net";
+    name = "Valerie";
+    githubId = 240524768;
+    github = "gnuvalerie";
+  };
   gnxlxnxx = {
     email = "gnxlxnxx@web.de";
     github = "gnxlxnxx";
