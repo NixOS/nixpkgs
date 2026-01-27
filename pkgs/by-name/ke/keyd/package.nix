@@ -30,7 +30,11 @@ let
         --replace-fail /bin/sh ${runtimeShell}
     '';
 
-    propagatedBuildInputs = with pypkgs; [ xlib ];
+    propagatedBuildInputs = with pypkgs; [
+      xlib
+      pygobject3
+      dbus-python
+    ];
 
     dontBuild = true;
 
