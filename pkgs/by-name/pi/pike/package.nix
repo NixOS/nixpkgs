@@ -38,7 +38,7 @@
   ncurses,
   libnsl,
   libxcrypt-legacy,
-  nix-update-script,
+  gitUpdater,
   makeBinaryWrapper,
 }:
 
@@ -120,13 +120,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pike";
-  version = "9.0.11";
+  version = "8.0.2040";
 
   src = fetchFromGitHub {
     owner = "pikelang";
     repo = "Pike";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-J+IWYF2FvL395/+Aat4yGioxUi6vIhNjzLMPV7EvPtw=";
+    hash = "sha256-rRStfD6n1BBQA36O1HkkMlYtMnDTuHXYBL2ez9A2yI4=";
   };
 
   nativeBuildInputs = [
@@ -190,7 +190,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "INSTALLARGS=--traditional" ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = gitUpdater { allowedVersions = "^8\\..*"; };
 
   meta = {
     description = "Pike programming language";
