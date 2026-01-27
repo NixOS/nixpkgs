@@ -29,6 +29,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ gettext ];
 
+  # tools/attr.c: Add missing libgen.h include for basename(3)
+  # Fixes compilation issue with musl and modern C99 compilers.
+  # See: https://bugs.gentoo.org/926294
   patches = [ ./musl.patch ];
 
   postPatch = ''
