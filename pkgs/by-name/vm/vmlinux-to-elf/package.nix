@@ -5,7 +5,7 @@
 }:
 python3Packages.buildPythonApplication {
   pname = "vmlinux-to-elf";
-  version = "0-unstable-2024-07-20";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
