@@ -41,7 +41,7 @@ in
           Group = config.programs.ydotool.group;
           RuntimeDirectory = runtimeDirectory;
           RuntimeDirectoryMode = "0750";
-          ExecStart = "${lib.getExe' pkgs.ydotool "ydotoold"} --socket-path=${config.environment.variables.YDOTOOL_SOCKET} --socket-perm=0660";
+          ExecStart = "${lib.getExe' pkgs.ydotool "ydotoold"} --socket-path=${config.environment.sessionVariables.YDOTOOL_SOCKET} --socket-perm=0660";
 
           # hardening
 
@@ -85,7 +85,7 @@ in
         };
       };
 
-      environment.variables = {
+      environment.sessionVariables = {
         YDOTOOL_SOCKET = "/run/${runtimeDirectory}/socket";
       };
       environment.systemPackages = with pkgs; [ ydotool ];
