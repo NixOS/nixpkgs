@@ -42,6 +42,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "PAGMO_WITH_IPOPT" true)
   ];
 
+  postInstall = ''
+    substituteInPlace "$out"/lib/cmake/pagmo/pagmo_export.cmake \
+          --replace-fail 'INTERFACE_INCLUDE_DIRECTORIES "''${_IMPORT_PREFIX}/include"' 'INTERFACE_INCLUDE_DIRECTORIES ""'
+  '';
+
   env = {
     # Workaround clang17+ / lto bug
     # See https://github.com/esa/pagmo2/pull/585
