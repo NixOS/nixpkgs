@@ -14,7 +14,7 @@
     security.audit.enable = true;
   };
   nodes.journaldAudit = {
-    services.journald.audit = true;
+    services.journald.settings.Journal.Audit = true;
     security.audit.enable = true;
   };
   nodes.containerCheck = {
