@@ -14,11 +14,11 @@
 </p>
 
 [Nixpkgs](https://github.com/nixos/nixpkgs) is a collection of over 120,000 software packages that can be installed with the [Nix](https://nixos.org/nix/) package manager.
-It also implements [NixOS](https://nixos.org/nixos/), a purely-functional Linux distribution.
+It also implements [NixOS](https://nixos.org/nixos/), a purely functional Linux distribution.
 
 # Manuals
 
-* [NixOS Manual](https://nixos.org/nixos/manual) - how to install, configure, and maintain a purely-functional Linux distribution
+* [NixOS Manual](https://nixos.org/nixos/manual) - how to install, configure, and maintain a purely functional Linux distribution
 * [Nixpkgs Manual](https://nixos.org/nixpkgs/manual/) - contributing to Nixpkgs and using programming-language-specific Nix expressions
 * [Nix Package Manager Manual](https://nixos.org/nix/manual) - how to write Nix expressions (programs), and how to use Nix command line tools
 
@@ -57,7 +57,7 @@ When successful build and test criteria are met, the Nixpkgs expressions are dis
 # Contributing
 
 Nixpkgs is among the most active projects on GitHub.
-While thousands of open issues and pull requests might seem like a lot at first, it helps to consider it in the context of the scope of the project.
+While thousands of open issues and pull requests might seem like a lot at first, it helps to consider them in the context of the scope of the project.
 Nixpkgs describes how to build tens of thousands of pieces of software and implements a Linux distribution.
 The [GitHub Insights](https://github.com/NixOS/nixpkgs/pulse) page gives a sense of the project activity.
 

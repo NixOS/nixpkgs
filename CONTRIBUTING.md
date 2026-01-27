@@ -1,7 +1,7 @@
 # Contributing to Nixpkgs
 
-This document is for people wanting to contribute to Nixpkgs.
-This involves changes that are proposed using [GitHub](https://github.com) [pull requests](https://docs.github.com/pull-requests) to the [Nixpkgs repository](https://github.com/nixos/nixpkgs).
+This document is intended for individuals who wish to contribute to Nixpkgs.
+This involves proposing changes using [GitHub](https://github.com) [pull requests](https://docs.github.com/pull-requests) to the [Nixpkgs repository](https://github.com/nixos/nixpkgs).
 
 A GitHub account is recommended, which you can sign up for [here](https://github.com/signup).
 See [here](https://discourse.nixos.org/t/about-the-patches-category/477) for how to contribute without a GitHub account.
@@ -20,7 +20,7 @@ More specific information about individual parts of Nixpkgs can be found here:
 - [`nixos`](./nixos/README.md): Implementation of [NixOS](https://nixos.org/manual/nixos/stable/)
 - [`pkgs`](./pkgs/README.md): Package and [builder](https://nixos.org/manual/nixpkgs/stable/#part-builders) definitions
 
-# How to's
+# How-tos
 
 ## How to create pull requests
 [pr-create]: #how-to-create-pull-requests
@@ -40,7 +40,7 @@ This section describes how changes can be proposed with a pull request (PR).
    This can be changed later by [rebasing][rebase].
 
 2. Create a new Git branch, ideally such that:
-   - The name of the branch hints at your change, e.g. `update-hello`.
+   - The name of the branch hints at your change, e.g., `update-hello`.
    - The branch contains the most recent base branch.
 
    We'll assume the base branch `master` here.
@@ -53,7 +53,7 @@ This section describes how changes can be proposed with a pull request (PR).
    git switch --create update-hello upstream/master
    ```
 
-   To avoid potentially having to download and build many derivations, you can base on a specific [Git commit](https://www.git-scm.com/docs/gitglossary#def_commit) instead:
+   To avoid potentially having to download and build many derivations, you can base it on a specific [Git commit](https://www.git-scm.com/docs/gitglossary#def_commit) instead:
    - The commit of the latest `nixpkgs-unstable` channel, available [here](https://channels.nixos.org/nixpkgs-unstable/git-revision).
    - The commit of a local Nixpkgs downloaded using [nix-channel](https://nixos.org/manual/nix/stable/command-ref/nix-channel), available using `nix-instantiate --eval --expr '(import <nixpkgs/lib>).trivial.revisionWithDefault null'`
    - If you're using NixOS, the commit of your NixOS installation, available with `nixos-version --revision`.
@@ -65,7 +65,7 @@ This section describes how changes can be proposed with a pull request (PR).
    ```
 
 3. Make your changes in the local Nixpkgs repository and:
-   - Adhere to both the [general code conventions][code-conventions], and the relevant [specific code conventions][overview].
+   - Adhere to both the [general code conventions][code-conventions] and the relevant [specific code conventions][overview].
    - Test the changes.
    - If necessary, document the changes.
 
@@ -74,7 +74,7 @@ This section describes how changes can be proposed with a pull request (PR).
 4. Commit your changes using `git commit`.
    Make sure to adhere to the [commit conventions](#commit-conventions).
 
-   Repeat the steps 3-4 as many times as necessary.
+   Repeat steps 3-4 as many times as necessary.
    Advance to the next step once all the commits make sense together.
    You can view your commits with `git log`.
 
@@ -109,7 +109,7 @@ This section describes how changes can be proposed with a pull request (PR).
 
    - To change existing commits, [rewrite the Git history](https://git-scm.com/book/en/v2/Git-Tools-Rewriting-History).
      Useful Git commands for this are `git commit --patch --amend` and `git rebase --interactive`.
-     With a rewritten history you need to force-push the commits:
+     With a rewritten history, you need to force-push the commits:
      ```
      git push --force-with-lease
      ```
@@ -164,9 +164,9 @@ Only check the platforms you tested the build on in this section.
 
 #### Tested via one or more NixOS test(s) if existing and applicable for the change (look inside nixos/tests)
 
-Packages with automated tests are likely merged quicker, because they don’t require as much manual testing.
+Packages with automated tests are likely merged more quickly, because they don’t require as much manual testing.
 If there are existing tests for the package, they should be run.
-NixOS tests can only be run on linux.
+NixOS tests can only be run on Linux.
 For more details on writing and running tests, see the [section in the NixOS manual](https://nixos.org/nixos/manual/index.html#sec-nixos-tests).
 
 #### Tested compilation of all pkgs that depend on this change using `nixpkgs-review`
@@ -207,14 +207,14 @@ For example, if you make a change to `texlive`, you probably would only check th
 #### Meets Nixpkgs contribution standards
 
 The last checkbox is about whether it fits the guidelines in this `CONTRIBUTING.md` file.
-This document details our standards for commit messages, reviews, licensing of contributions, etc...
+This document details our standards for commit messages, reviews, licensing of contributions, etc.
 Everyone should read and understand these standards before submitting a pull request.
 
 ### Rebasing between branches (i.e. from `master` to `staging`)
 [rebase]: #rebasing-between-branches-ie-from-master-to-staging
 
 Sometimes, changes must be rebased between branches.
-One example is, if the number of rebuilds caused is too large for the original target branch.
+One example is if the number of rebuilds caused is too large for the original target branch.
 
 In the following example, the current `feature` branch is based on `master`, and we rebase it to have the PR target `staging`.
 We rebase on the _merge base_ between `master` and `staging` to avoid too many local rebuilds.
@@ -227,9 +227,9 @@ git rebase --onto upstream/staging... upstream/master
 git push origin feature --force-with-lease
 ```
 
-The syntax `upstream/staging...` is equivalent to `upstream/staging...HEAD` and stands for the merge base between `upstream/staging` and `HEAD` (hence between `upstream/staging` and `upstream/master`).
+The syntax `upstream/staging...` is equivalent to `upstream/staging...HEAD` stands for the merge base between `upstream/staging` and `HEAD` (hence between `upstream/staging` and `upstream/master`).
 
-Then use the *Edit* button in the upper right corner of the GitHub PR, and switch the base branch from `master` to `staging`.
+Then use the *Edit* button in the upper-right corner of the GitHub PR, and switch the base branch from `master` to `staging`.
 *After* the PR has been retargeted, a final rebase onto the target branch might be needed to resolve merge conflicts.
 
 ```console
@@ -253,7 +253,7 @@ Once a PR has been merged, a backport to the corresponding `release-YY.MM` branc
 
 Add the [`backport release-YY.MM` label](https://github.com/NixOS/nixpkgs/labels?q=backport) to the PR on the `master` branch.
 This will cause [a GitHub Action](.github/workflows/backport.yml) to open a new PR to the `release-YY.MM` branch a few minutes later.
-This can be done on both open or already merged pull requests.
+This can be done on both open and already merged pull requests.
 
 ### Manually backporting changes
 
@@ -266,13 +266,13 @@ To manually create a backport, follow [the standard pull request process][pr-cre
 > It points to the latest _tested_ release channel commit.
 
 - Instead of manually making and committing the changes, use [`git cherry-pick -x`](https://git-scm.com/docs/git-cherry-pick) for each commit.
-  Use `git cherry-pick -x <commit>` when the reason is obvious, for example for minor version bumps and fixes.
+  Use `git cherry-pick -x <commit>` when the reason is obvious, for example, for minor version bumps and fixes.
   Otherwise, use `git cherry-pick -xe <commit>` to add a reason for the backport.
   Here is [an example](https://github.com/nixos/nixpkgs/commit/5688c39af5a6c5f3d646343443683da880eaefb8).
 
 > [!Warning]
 > Ensure the commits exist on the `master` branch.
-> In the case of squashed or rebased merges, the commit hash will change and the new commits can be found in the merge message at the bottom of the `master` pull request.
+> In the case of squashed or rebased merges, the commit hash will change, and the new commits can be found in the merge message at the bottom of the `master` pull request.
 
 - In the pull request description, link to the original pull request to `master`.
   The pull request title should include `[YY.MM]` matching the release you're backporting to.
@@ -281,18 +281,18 @@ To manually create a backport, follow [the standard pull request process][pr-cre
 [pr-review]: #how-to-review-pull-requests
 
 The Nixpkgs project receives a high number of pull requests.
-Anyone may review and approve PRs and it is an important contribution to the project.
+Anyone may review and approve PRs, and it is an important contribution to the project.
 
 The high change rate makes any PR that remains open for too long subject to merge conflicts.
 To avoid extra work, reviewing PRs timely and being responsive is key.
 GitHub provides sort filters to see the [most recently updated](https://github.com/NixOS/nixpkgs/pulls?q=is%3Apr+is%3Aopen+sort%3Aupdated-desc) pull requests.
-We highly encourage looking at [this list of ready to merge, unreviewed pull requests](https://github.com/NixOS/nixpkgs/pulls?q=is%3Apr+is%3Aopen+review%3Anone+status%3Asuccess+no%3Aproject+no%3Aassignee+no%3Amilestone).
+We highly encourage looking at [this list of ready-to-merge, unreviewed pull requests](https://github.com/NixOS/nixpkgs/pulls?q=is%3Apr+is%3Aopen+review%3Anone+status%3Asuccess+no%3Aproject+no%3Aassignee+no%3Amilestone).
 
 Controversial changes can lead to controversial opinions, but it is important to respect every community member and their work.
 Always be nice and polite.
 
 GitHub provides reactions for quick feedback to pull requests or comments.
-The thumb-down reaction should be used with care and, if possible, accompanied with explanation for the submitter to improve their contribution.
+The thumb-down reaction should be used with care and, if possible, accompanied by an explanation for the submitter to improve their contribution.
 
 When doing a review:
 - Aim to drive the proposal to a timely conclusion.
@@ -307,20 +307,20 @@ If you find anything related that could be improved but is not immediately requi
 
 For example, follow-up changes could involve refactoring code in the affected files.
 
-But please remember not to make such additional considerations a blocker, and communicate that to the contributor, for example by following the [conventional comments](https://conventionalcomments.org) pattern.
+But please remember not to make such additional considerations a blocker, and communicate that to the contributor, for example, by following the [conventional comments](https://conventionalcomments.org) pattern.
 If the related change is essential for the contribution at hand, make clear why you think it is important to address that first.
 
 Pull request reviews should include a list of what has been reviewed in a comment, so other reviewers and mergers can know the state of the review.
 
 All the review templates provided are generic examples.
-Their usage is optional and the reviewer is free to adapt them.
+Their usage is optional, and the reviewer is free to adapt them.
 
 To get more information about how to review specific parts of Nixpkgs, refer to the documents linked to in the [overview section][overview].
 
 If a pull request contains documentation changes that might require feedback from the documentation team, ping [@NixOS/documentation-team](https://github.com/orgs/nixos/teams/documentation-team) on the pull request.
 
 If you have enough knowledge and experience in a topic and would like to be a long-term reviewer for related submissions, please contact the current reviewers for that topic.
-The main reviewers for a topic can be hard to find as there is no list, but checking past pull requests or git-blaming the code can give some hints.
+The main reviewers for a topic can be hard to find, as there is no list, but checking past pull requests or git-blaming the code can give some hints.
 
 ## How to merge pull requests yourself
 [pr-merge]: #how-to-merge-pull-requests
@@ -455,7 +455,7 @@ The staging workflow is used for all stable branches with corresponding names:
 Most changes should go to `master`, but sometimes other branches should be used instead.
 Use the following decision process to figure out the right branch:
 
-Is the change [acceptable for releases][release-acceptable] and do you wish to have the change in the release?
+Is the change [acceptable for releases][release-acceptable], and do you wish to have the change in the release?
 - No: Use the `master` branch, do not backport the pull request.
 - Yes: Can the change be implemented the same way on the `master` and release branches?
   For example, a package's major version might differ between the `master` and release branches, such that separate security patches are required.
@@ -487,18 +487,18 @@ Here are some examples of changes that are okay to backport:
 
 In addition, major package version updates with breaking changes are also acceptable for:
 - ✔️ Services that would fail without up-to-date client software, such as `spotify`, `steam`, and `discord`
-- ✔️ Security critical applications, such as `firefox` and `chromium`
+- ✔️ Security-critical applications, such as `firefox` and `chromium`
 
 ### Changes causing mass rebuilds
 [mass-rebuild]: #changes-causing-mass-rebuilds
 
 Which changes cause mass rebuilds is not formally defined.
-In order to help the decision, CI automatically assigns [`rebuild` labels](https://github.com/NixOS/nixpkgs/labels?q=rebuild) to pull requests based on the number of packages they cause rebuilds for.
+In order to help with the decision, CI automatically assigns [`rebuild` labels](https://github.com/NixOS/nixpkgs/labels?q=rebuild) to pull requests based on the number of packages they cause rebuilds for.
 As a rule of thumb, if the number of rebuilds is **500 or more**, consider targeting the `staging` branch instead of `master`; if the number is **1000 or more**, the pull request causes a mass rebuild, and should target the `staging` branch.
 See [previously merged pull requests to the staging branches](https://github.com/NixOS/nixpkgs/issues?q=base%3Astaging+-base%3Astaging-next+is%3Amerged) to get a sense for what changes are considered mass rebuilds.
 
 Please note that changes to the Linux kernel are an exception to this rule.
-These PRs go to `staging-nixos`, see [the next section for more context](#changes-rebuilding-all-tests).
+These PRs go to `staging-nixos`; see [the next section for more context](#changes-rebuilding-all-tests).
 
 ### Changes rebuilding all NixOS tests
 [test-driver-rebuild]: #changes-rebuilding-all-nixos-tests
@@ -506,12 +506,12 @@ These PRs go to `staging-nixos`, see [the next section for more context](#change
 Changes causing a rebuild of all NixOS tests get a special [`10.rebuild-nixos-tests`](https://github.com/NixOS/nixpkgs/issues?q=state%3Aopen%20label%3A10.rebuild-nixos-tests) label.
 These changes pose a significant impact on the build infrastructure.
 
-Hence, these PRs should either target a `staging`-branch or `staging-nixos`, provided one of following conditions applies:
+Hence, these PRs should either target a `staging`-branch or `staging-nixos`, provided one of the following conditions applies:
 
 * The label `10.rebuild-nixos-tests` is set, or
 * The PR is a change affecting the Linux kernel.
 
-The branch gets merged whenever mainline kernel updates or critical security fixes land on the branch.
+The branch gets merged whenever the mainline kernel updates or critical security fixes land on the branch.
 This usually happens on a weekly basis.
 
 Backports are not handled by such a branch.
@@ -553,9 +553,9 @@ Package upgrades with more extensive changes require more verbose commit message
 Comments on Pull Requests are considered non-blocking by default.
 Every blocking comment must be explicitly marked as such by using GitHub's "Request Changes" review type.
 A reviewer who submits a blocking review should be available for discussion and re-review.
-An abandoned review may be dismissed after reasonable time was given at the discretion of the merger.
+An abandoned review may be dismissed after a reasonable time has been given at the discretion of the merger.
 
-All suggestions for change, blocking or not, should be acknowledged before merge.
+All suggestions for change, blocking or not, should be acknowledged before merging.
 This can happen implicitly by applying the suggestion, or explicitly by rejecting it.
 
 To make changes on commit structure and commit messages or apply simple suggestions, committers are encouraged to [checkout the PR](https://cli.github.com/manual/gh_pr_checkout) and push directly to the contributor's branch before merging.
@@ -680,10 +680,10 @@ If you have any problems with formatting, please ping the [formatting team](http
   { buildInputs = if stdenv.hostPlatform.isDarwin then [ iconv ] else null; }
   ```
 
-  As an exception, an explicit conditional expression with null can be used when fixing a important bug without triggering a mass rebuild.
-  If this is done a follow up pull request _should_ be created to change the code to `lib.optional(s)`.
+  As an exception, an explicit conditional expression with null can be used when fixing an important bug without triggering a mass rebuild.
+  If this is done, a follow-up pull request _should_ be created to change the code to `lib.optional(s)`.
 
-- Any style choices not covered here but that can be expressed as general rules should be left at the discretion of the authors of changes and _not_ commented in reviews.
+- Any style choices not covered here but that can be expressed as general rules should be left at the discretion of the authors of changes and _not_ commented on in reviews.
   The purpose of this is:
    - to avoid churn as contributors with different style preferences undo each other's changes,
    - to ensure that style rules are written down and consistent (and can thus be followed when authoring changes, reducing review cycles),
@@ -709,7 +709,7 @@ You can often speed up the process by understanding the committer's perspective 
 
 ### The committer's perspective
 
-PRs have varying quality and even the best people make mistakes.
+PRs have varying quality, and even the best people make mistakes.
 Committers need to assess whether a PR's changes are good or not.
 To merge, at least one committer has to be confident about its quality.
 
@@ -736,19 +736,19 @@ If not, reviewers will notice this and will ask you to clarify the code by refac
 Doing this preemptively can save a lot of time.
 Doing multiple unrelated changes in a single commit can become hard to review quickly.
 Thus, consider multiple atomic commits to tell the story of your change.
-There is a balance to strike however: over-fragmentation causes friction.
+There is a balance to strike, however: over-fragmentation causes friction.
 
 The artifacts are the hardest to assess because PRs touch all sorts of components: applications, libraries, NixOS modules, editor plugins and many other things.
 Any individual committer can only really assess components that they themselves know how to use.
 Yet, they must still be convinced somehow.
-There isn't a good generic solution to this but there are some ways to ease it:
+There isn't a good generic solution to this, but there are some ways to ease it:
 
 - Provide smoke tests that can be run without much research or setup.
 
   Committers usually don't have the time or interest to learn how your component works and how they could test its functionality.
   Try to provide a quick guide on how to use it in a meaningful way or a ready-made command that demonstrates that it works as expected.
   The committer can use this to convince themselves that your change is good.
-  If it can be automated, you could even turn this into an automated NixOS test which reviewers could simply run.
+  If it can be automated, you could even turn this into an automated NixOS test that reviewers could simply run.
 
 - Invite other users of the component to try it out and report their findings.
 
@@ -756,16 +756,16 @@ There isn't a good generic solution to this but there are some ways to ease it:
 
 - Describe what you have done to test your PR.
 
-  It also helps, if you can additionally show that you have done sufficient quality assurance on your changes.
+  It also helps if you can additionally show that you have done sufficient quality assurance on your changes.
 
 - Become a maintainer of the component.
 
   Listed maintainers generally receive more trust when it comes to changes to their maintained components.
 
 Even if you adhere to all of these recommendations, it is still quite possible for your PR to be forgotten or abandoned by any given committer.
-Please remain mindful of them doing this work on their own volition and unpaid in their free time and therefore [owing you nothing](https://mikemcquaid.com/open-source-maintainers-owe-you-nothing/).
+Please remain mindful of them doing this work on their own volition and unpaid in their free time, and therefore [owing you nothing](https://mikemcquaid.com/open-source-maintainers-owe-you-nothing/).
 Causing a stink in such a situation is a surefire way to get any other potential committer to not want to look at your PR either.
-Ask them nicely whether they still intend to review your PR and find yourself another committer to look at your PR if not.
+Ask them nicely whether they still intend to review your PR, and find yourself another committer to look at your PR if not.
 
 ### How can I get a committer to look at my PR?
 
@@ -785,10 +785,10 @@ Ask them nicely whether they still intend to review your PR and find yourself an
 ### CI failed or got stuck on my PR, what do I do?
 
 First, ensure that the failure is actually related to your change.
-Sometimes, the CI system simply has a hiccup or the check was broken by someone else before.
+Sometimes, the CI system simply has a hiccup, or the check was broken by someone else before.
 Read through the error message; it's usually quite easy to tell whether it is caused by changes to the component you touched.
 If it is indeed caused by your change, try to fix it.
-Don't be afraid of asking for advice if you're uncertain how to do that, others might have fixed such issues already and can help you out.
+Don't be afraid of asking for advice if you're uncertain how to do that; others might have fixed such issues already and can help you out.
 Your PR will not be merged while CI is still failing.
 
 ofborg builds can often get stuck, particularly in PRs targeting `staging` and in builders for the Darwin platform.
@@ -799,19 +799,19 @@ If ofborg reveals the build to be broken on a platform that you don't have acces
 
 When in any doubt, please ask via comments or through one of the help channels.
 
-## I received a review, how do I get it over the finish line?
+## I received a review.  How do I get it over the finish line?
 
 Most likely, a reviewer wants you to change a few things or requires further input.
 
-A reviewer may have taken a look at the code and it looked good to them ("Diff LGTM"), but they still need to be convinced of the artifact's quality.
-They might also be waiting on input from other users or maintainers on whether the intention and direction of your PR makes sense.
+A reviewer may have taken a look at the code, and it looked good to them ("Diff LGTM"), but they still need to be convinced of the artifact's quality.
+They might also be waiting on input from other users or maintainers on whether the intention and direction of your PR make sense.
 If you know of people who could help clarify any of this, please bring the PR to their attention.
 The current state of the PR is frequently not clearly communicated, so please don't hesitate to ask about it if it's unclear to you.
 
 It's also possible for the reviewer to not be convinced that your PR is necessary or that the method you've chosen is the right one.
 
 Please explain your intentions and reasoning to the committer in such a case.
-There may be constraints you had to work with which they're not aware of or qualities of your approach that they didn't immediately notice.
+There may be constraints you had to work with that they're not aware of or qualities of your approach that they didn't immediately notice.
 If these weren't clear to the reviewer, that's a good sign you should explain them in your commit message or code comments!
 
 There are some further pitfalls and realities to be aware of:
@@ -821,7 +821,7 @@ There are some further pitfalls and realities to be aware of:
 Be prepared for it to take a while for the reviewer to get back to you after you respond.
 This is simply the reality of projects at the scale of Nixpkgs.
 As such, make sure to respond to _all_ feedback at once.
-It wastes everyone's time to wait for a couple of days just to have the reviewer need to remind you to address something they asked for.
+It wastes everyone's time to wait for a couple of days just to have the reviewer remind you to address something they asked for.
 
 ### A reviewer requested a bunch of insubstantial changes
 
@@ -829,59 +829,59 @@ The people involved in Nixpkgs care about code quality.
 Once in Nixpkgs, the code needs to be maintained for many years to come.
 Therefore, you will likely be asked to do something different or adhere to a standard.
 
-Sometimes however, they also care a bit too much and may ask you to adhere to a personal preference of theirs.
+Sometimes, however, they also care a bit too much and may ask you to adhere to a personal preference of theirs.
 It's not always easy to tell whether or not the requested changes must be addressed.
 Sometimes, another reviewer may even have a _conflicting_ opinion on some points.
 
-It is convention to mark review comments that are not required to merge as nitpicks, but this is not always followed.
+It is conventional to mark review comments that are not required to merge as nitpicks, but this is not always followed.
 As the author, you should still take a look at these, as they will often reveal best practices and unwritten rules.
-Those usually have good reasons behind them and you may want to pick them up as well.
+Those usually have good reasons behind them, and you may want to pick them up as well.
 
 Please keep in mind that reviewers always mean well.
-Their intent is not to denounce your code, they want your code to be as good as it can be.
+Their intent is not to denounce your code; they want your code to be as good as it can be.
 Through their experience, they may also take notice of a seemingly insignificant issue that has caused problems before.
 
-Sometimes however, they can also get a bit carried away and become too perfectionistic.
+Sometimes, however, they can also get a bit carried away and become too perfectionistic.
 If you feel some of the requests are unreasonable, out of scope, or merely a matter of personal preference, try to nicely ask the reviewers whether these requests are *critical* to the PR's success.
 
-While we do have a set of [official standards for the Nix community](https://github.com/NixOS/rfcs), we don't have standards for everything and there are often multiple valid ways to achieve the same goal.
+While we do have a set of [official standards for the Nix community](https://github.com/NixOS/rfcs), we don't have standards for everything, and there are often multiple valid ways to achieve the same goal.
 Unless there are standards forbidding the patterns used in your code or there are serious technical, maintainability or readability issues with your code, you can disregard these requests.
-Please communicate this clearly though; a simple "I prefer it this way and see no major issue maintaining it" can save a lot of arguing.
+Please communicate this clearly, though; a simple "I prefer it this way and see no major issue maintaining it" can save a lot of arguing.
 
 If you are unsure about some change requests, please ask reviewers *why* they requested them.
-This will usually reveal how important they deem it to be and will help educate you about standards, best practices, unwritten rules as well as preferences people have and why.
+This will usually reveal how important they deem it to be and will help educate you about standards, best practices, unwritten rules, as well as the preferences people have and why.
 
 Some committers have stronger opinions on some things and may not want to merge your PR if you don't follow their requests.
 It is totally fine to get yourself a second or third opinion in such a case.
 
-### Committers work on a push-basis
+### Committers work on a push basis
 
-It's possible for you to get a review but nothing happens afterwards, even if you respond to review comments.
-A committer not following up on your PR does not necessarily mean they're disinterested, they may have simply had other circumstances preventing them from doing so.
+It's possible for you to get a review, but nothing happens afterwards, even if you respond to review comments.
+A committer not following up on your PR does not necessarily mean they're uninterested; they may have simply had other circumstances preventing them from doing so.
 
-Committers typically handle many PRs at the same time and it is not realistic for them to keep up with all of them immediately.
+Committers typically handle many PRs at the same time, and it is not realistic for them to keep up with all of them immediately.
 If someone approved and didn't merge a few days later, they most likely just forgot.
 
 Please see it as your responsibility to actively remind reviewers of your open PRs.
 
 The easiest way to do so is to notify them via GitHub.
-Github notifies people involved, whenever you add a comment or push to your PR or re-request their review.
+GitHub notifies people involved whenever you add a comment or push to your PR or re-request their review.
 Doing any of that will get their attention again.
 Everyone deserves proper attention, and yes, that includes you!
 However, please be mindful that committers can sadly not always give everyone the attention they deserve.
 
-It may very well be the case that you have to do this every time you need the committer to follow up upon your PR.
-Again, this is a community project so please be mindful of people's circumstances here; be nice when requesting reviews again.
+It may very well be the case that you have to do this every time you need the committer to follow up on your PR.
+Again, this is a community project, so please be mindful of people's circumstances here; be nice when requesting reviews again.
 
-It may also be the case that the committer has lost interest or isn't familiar enough with the component you're touching to be comfortable to merge.
+It may also be the case that the committer has lost interest or isn't familiar enough with the component you're touching to be comfortable merging.
 They will likely not immediately state that fact, so please ask for clarification and don't hesitate to find yourself another committer to take a look.
 
 ### Nothing helped
 
-If you followed these guidelines but still got no results or if you feel that you have been wronged, please explicitly reach out to the greater community.
+If you followed these guidelines but still got no results, or if you feel that you have been wronged, please explicitly reach out to the greater community.
 
 The [NixOS Discourse](https://discourse.nixos.org) is a great place to do this, as it has historically been the asynchronous medium with the greatest concentration of committers and other people who are involved in Nixpkgs.
-There is a dedicated discourse thread [PRs in distress](https://discourse.nixos.org/t/prs-in-distress/3604) where you can link your PR, if everything else fails.
+There is a dedicated discourse thread, [PRs in distress](https://discourse.nixos.org/t/prs-in-distress/3604), where you can link your PR if everything else fails.
 The [Nixpkgs / NixOS contributions Matrix channel](https://matrix.to/#/#dev:nixos.org) is the best synchronous channel with the same qualities.
 
 Please reserve these for cases where you've made a serious effort in trying to get the attention of multiple active committers and provided realistic means for them to assess your PR's quality.
