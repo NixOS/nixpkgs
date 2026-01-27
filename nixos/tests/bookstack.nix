@@ -44,7 +44,6 @@ in
   };
 
   testScript = ''
-    bookstackMysql.wait_for_unit("phpfpm-bookstack.service")
     bookstackMysql.wait_for_unit("nginx.service")
     bookstackMysql.wait_for_unit("mysql.service")
     bookstackMysql.succeed("curl -fvvv -Ls http://localhost/ | grep 'Log In'")

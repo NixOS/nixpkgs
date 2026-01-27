@@ -106,8 +106,6 @@ rec {
 
     for machine in (${lib.concatStringsSep ", " (builtins.attrNames nodes)}):
         for site_name in site_names:
-            machine.wait_for_unit(f"phpfpm-wordpress-{site_name}")
-
             with subtest("website returns welcome screen"):
                 assert "Welcome to the famous" in machine.succeed(f"curl -k -L {site_name}")
 

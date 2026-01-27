@@ -126,8 +126,6 @@ in
 
     for machine in (dokuwiki_nginx, dokuwiki_caddy):
       for site_name in site_names:
-        machine.wait_for_unit(f"phpfpm-dokuwiki-{site_name}")
-
         machine.succeed("curl -sSfL http://site1.local/ | grep 'DokuWiki'")
         machine.fail("curl -sSfL 'http://site1.local/doku.php?do=login' | grep 'Login'")
 

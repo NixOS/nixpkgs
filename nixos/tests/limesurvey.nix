@@ -35,7 +35,6 @@
 
       start_all()
 
-      machine.wait_for_unit("phpfpm-limesurvey.service")
       machine.wait_for_unit("httpd.service")
       machine.wait_for_open_port(80)
       test()
