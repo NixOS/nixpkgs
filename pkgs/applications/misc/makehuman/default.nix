@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch2,
   python3,
   qtbase,
   git-lfs,
@@ -69,6 +70,14 @@ stdenv.mkDerivation rec {
     chmod u+w $finalSource --recursive
     sourceRoot=$finalSource
   '';
+
+  patches = [
+    # https://github.com/makehumancommunity/makehuman/pull/271
+    (fetchpatch2 {
+      url = "https://github.com/makehumancommunity/makehuman/commit/110b97e524a8b0ce31b1e19f7d4f2c2c37bc2ff2.patch";
+      hash = "sha256-wHYd/Ma+X4GFlw6Jl3+lbYqa98bd8YeCZad6OhFc2ik=";
+    })
+  ];
 
   configurePhase = ''
     runHook preConfigure
