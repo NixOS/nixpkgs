@@ -121,6 +121,8 @@ stdenv.mkDerivation (finalAttrs: {
       done
     '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "In-development indie sandbox game about innovation and exploration";
     homepage = "https://www.vintagestory.at/";
