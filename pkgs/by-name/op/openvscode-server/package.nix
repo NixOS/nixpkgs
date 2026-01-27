@@ -36,13 +36,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openvscode-server";
-  version = "1.103.1";
+  version = "1.106.3";
 
   src = fetchFromGitHub {
     owner = "gitpod-io";
     repo = "openvscode-server";
     rev = "openvscode-server-v${finalAttrs.version}";
-    hash = "sha256-Co0MF8Yr60Ppv6Zv85nJeua2S5Rnye6wGB1hTWNpMm4=";
+    hash = "sha256-wcmk35oqJ6d5MR9YnqC/pR0pC03/vCFCd9KLRByQWqk=";
   };
 
   ## fetchNpmDeps doesn't correctly process git dependencies
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
         inherit (finalAttrs) src nativeBuildInputs;
         outputHashMode = "recursive";
         outputHashAlgo = "sha256";
-        outputHash = "sha256-xK4qfzkWuOsEyP1+6cY5Dhrr5wNW3eOJBTyQaE6gTcc=";
+        outputHash = "sha256-FnlzXlhu72G9dUnezzc62qH2TG5mU9EJNe9akWtR6zg=";
         env = {
           FORCE_EMPTY_CACHE = true;
           FORCE_GIT_DEPS = true;
@@ -69,10 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
         mkdir $out
         for p in $(find -name package-lock.json)
         do (
-          ${prefetch-npm-deps}/bin/prefetch-npm-deps "$p" "$out"
-          local lockpath=$out/lockfiles/$p
-          mkdir -p "$(dirname $lockpath)"
-          mv $out/package-lock.json "$lockpath"
+          echo "Prefetching $p"
+          ${prefetch-npm-deps}/bin/prefetch-npm-deps "$p" "$out/$(dirname $p)"
         )
         done
       '';
@@ -89,9 +87,6 @@ stdenv.mkDerivation (finalAttrs: {
     NIX_NODEJS_BUILDNPMPACKAGE = "1";
     npm_config_nodedir = nodejs;
     npm_config_node_gyp = "${nodejs}/lib/node_modules/npm/node_modules/node-gyp/bin/node-gyp.js";
-
-    # use local npm cache (see <nixpkgs/pkgs/build-support/node/build-npm-package/hooks/npm-config-hook.sh>)
-    npm_config_cache = finalAttrs.nodeModules;
     npm_config_offline = true;
     npm_config_progress = false;
 
@@ -145,12 +140,9 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure = ''
     export HOME=$TMPDIR/home
     mkdir -p $HOME
-    mkdir -p $TMPDIR/cache/_cacache
-    # ln -s $nodeModules/_cacache/* $TMPDIR/cache/_cacache
-    # mkdir -p $TMPDIR/cache
-    cp -R $nodeModules/_cacache $TMPDIR/cache
+    mkdir -p $TMPDIR
+    cp -R $nodeModules $TMPDIR/cache
     chmod -R +w $TMPDIR/cache
-    export npm_config_cache=$TMPDIR/cache
   '';
 
   configurePhase = ''
@@ -167,7 +159,7 @@ stdenv.mkDerivation (finalAttrs: {
         echo >&2 "File exists $p/node_modules"
         exit 0
       fi
-      npm ci --ignore-scripts
+      npm_config_cache=$TMPDIR/cache/$p npm ci --ignore-scripts
       patchShebangs node_modules
     )
     done
@@ -186,13 +178,10 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   ## node-pty build fix
   + ''
-    substituteInPlace remote/node_modules/node-pty/scripts/post-install.js \
-      --replace-fail "npx node-gyp" "$npm_config_node_gyp"
-  ''
-  ## rebuild native binaries
-  + ''
-    echo >&2 "Rebuilding from source in ./remote"
-    npm --offline --prefix ./remote rebuild --build-from-source
+    find -path node_modules/node-pty/scripts/gen-compile-commands.js \
+         -exec substituteInPlace {} \
+                 --replace-fail "npx node-gyp" "$npm_config_node_gyp" \
+               \;
   ''
   ## run postinstall scripts
   + ''
@@ -200,10 +189,15 @@ stdenv.mkDerivation (finalAttrs: {
       if jq -e ".scripts.postinstall" {} >-
       then
         echo >&2 "Running postinstall script in $(dirname {})"
-        npm --offline --prefix=$(dirname {}) run postinstall
+        npm --prefix=$(dirname {}) run postinstall
       fi
       exit 0
     ' \;
+  ''
+  ## rebuild native binaries
+  + ''
+    echo >&2 "Rebuilding from source in ./remote"
+    npm --prefix ./remote rebuild --build-from-source
   ''
   + ''
     runHook postConfigure
