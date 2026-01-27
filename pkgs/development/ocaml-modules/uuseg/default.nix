@@ -19,9 +19,8 @@ let
 in
 
 stdenv.mkDerivation rec {
-
   name = "ocaml${ocaml.version}-${pname}-${version}";
-  inherit version;
+  inherit version pname;
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
