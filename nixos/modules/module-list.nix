@@ -887,6 +887,7 @@
   ./services/misc/logkeys.nix
   ./services/misc/mame.nix
   ./services/misc/mbpfan.nix
+  ./services/misc/mediathekarr.nix
   ./services/misc/mediatomb.nix
   ./services/misc/memos.nix
   ./services/misc/metabase.nix
