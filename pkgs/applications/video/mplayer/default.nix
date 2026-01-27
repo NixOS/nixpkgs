@@ -119,16 +119,30 @@ in
 
 stdenv.mkDerivation {
   pname = "mplayer";
-  version = "1.5-unstable-2024-12-21";
+  version = "1.5-unstable-2025-05-02";
 
   src = fetchsvn {
     url = "svn://svn.mplayerhq.hu/mplayer/trunk";
-    rev = "38668";
-    hash = "sha256-ezWYBkhiSBgf/SeTrO6sKGbL/IrX+82KXCIlqYMEtgY=";
+    rev = "38680";
+    hash = "sha256-CsCVZl65a9qsdeL3hKfgT/solxW4HoT64zwJwmtKz6I=";
   };
 
   prePatch = ''
     sed -i /^_install_strip/d configure
+
+    sed -e 's/avcodec_close([^)]*)/0/g' -i \
+      ./libaf/af_lavcac3enc.c \
+      ./libmpcodecs/ad_ffmpeg.c ./libmpcodecs/vd_ffmpeg.c \
+      ./libmpcodecs/ve_lavc.c ./libmpcodecs/vf_mcdeint.c \
+      ./libmpcodecs/vf_screenshot.c ./libvo/vo_png.c ./sub/av_sub.c
+
+    sed -e 's/FF_LEVEL_UNKNOWN/AV_LEVEL_UNKNOWN/' -i libmpcodecs/ve_lavc.c
+    sed -e 's/pic->interlaced_frame/(!! (pic->flags \& AV_FRAME_FLAG_INTERLACED))/' -i ./libmpcodecs/vd_ffmpeg.c
+    sed -e 's/pic->top_field_first *= *\([^;]*\);/if(\1) {pic->flags|=AV_FRAME_FLAG_TOP_FIELD_FIRST;} else {pic->flags\&=~AV_FRAME_FLAG_TOP_FIELD_FIRST;}/' -i libmpcodecs/ve_lavc.c
+    sed -e 's/pic->top_field_first/(!! (pic->flags \& AV_FRAME_FLAG_TOP_FIELD_FIRST))/' -i ./libmpcodecs/vd_ffmpeg.c libmpcodecs/ve_lavc.c
+    sed -e 's/av_stream_get_side_data(st, AV_PKT_DATA_DISPLAYMATRIX, NULL)/av_packet_side_data_get(st->codecpar->coded_side_data, st->codecpar->nb_coded_side_data, AV_PKT_DATA_DISPLAYMATRIX)->data/' -i libmpdemux/demux_lavf.c
+    sed -e '/av_stream_get_side_data(st, AV_PKT_DATA_REPLAYGAIN, &rg_size)/iAVPacketSideData * rg_sd;' -i libmpdemux/demux_lavf.c
+    sed -e 's/av_stream_get_side_data(st, AV_PKT_DATA_REPLAYGAIN, &rg_size)/(rg_sd = av_packet_side_data_get(st->codecpar->coded_side_data, st->codecpar->nb_coded_side_data,AV_PKT_DATA_REPLAYGAIN),rg_size=rg_sd->size,rg_sd->data)/' -i libmpdemux/demux_lavf.c
 
     rm -rf ffmpeg
   '';
