@@ -12,6 +12,7 @@
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
+  pyyaml,
   setuptools,
 }:
 
@@ -43,6 +44,7 @@ buildPythonPackage rec {
     mock
     pytest-asyncio
     pytestCheckHook
+    pyyaml
   ];
 
   preCheck = ''
@@ -55,12 +57,7 @@ buildPythonPackage rec {
     "tests/system/test_system.py"
     "tests/system/test_system_async.py"
     # Test requires credentials
-    "tests/unit/v1/test_bulk_writer.py"
-  ];
-
-  disabledTests = [
-    # Test requires credentials
-    "test_collections"
+    "tests/system/test_pipeline_acceptance.py"
   ];
 
   pythonImportsCheck = [
