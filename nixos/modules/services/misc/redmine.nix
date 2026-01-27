@@ -356,16 +356,6 @@ in
       "d '${cfg.stateDir}/public/plugin_assets' 0750 ${cfg.user} ${cfg.group} - -"
       "d '${cfg.stateDir}/themes' 0750 ${cfg.user} ${cfg.group} - -"
       "d '${cfg.stateDir}/tmp' 0750 ${cfg.user} ${cfg.group} - -"
-
-      "d /run/redmine/public - - - - -"
-      "L+ /run/redmine/config - - - - ${cfg.stateDir}/config"
-      "L+ /run/redmine/files - - - - ${cfg.stateDir}/files"
-      "L+ /run/redmine/log - - - - ${cfg.stateDir}/log"
-      "L+ /run/redmine/plugins - - - - ${cfg.stateDir}/plugins"
-      "L+ /run/redmine/public/assets - - - - ${cfg.stateDir}/public/assets"
-      "L+ /run/redmine/public/plugin_assets - - - - ${cfg.stateDir}/public/plugin_assets"
-      "L+ /run/redmine/themes - - - - ${cfg.stateDir}/themes"
-      "L+ /run/redmine/tmp - - - - ${cfg.stateDir}/tmp"
     ];
 
     systemd.services.redmine = {
@@ -392,6 +382,19 @@ in
         ++ lib.optional cfg.components.ghostscript ghostscript;
 
       preStart = ''
+        # Create symlinks for the basic directory layout the redmine package
+        # expects. This part must be done in preStart rather than tmpfiles,
+        # because /run/redmine is re-created when the service is restarted
+        mkdir /run/redmine/public
+        ln -s "${cfg.stateDir}/config" /run/redmine/config
+        ln -s "${cfg.stateDir}/files" /run/redmine/files
+        ln -s "${cfg.stateDir}/log" /run/redmine/log
+        ln -s "${cfg.stateDir}/plugins" /run/redmine/plugins
+        ln -s "${cfg.stateDir}/public/assets" /run/redmine/public/assets
+        ln -s "${cfg.stateDir}/public/plugin_assets" /run/redmine/public/plugin_assets
+        ln -s "${cfg.stateDir}/themes" /run/redmine/themes
+        ln -s "${cfg.stateDir}/tmp" /run/redmine/tmp
+
         rm -rf "${cfg.stateDir}/plugins/"*
         rm -rf "${cfg.stateDir}/themes/"*
 

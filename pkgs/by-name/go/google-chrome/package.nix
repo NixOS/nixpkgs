@@ -96,6 +96,9 @@
 
   # For QT support
   qt6,
+
+  # Create a symlink at $out/bin/google-chrome
+  withSymlink ? false,
 }:
 
 let
@@ -268,6 +271,10 @@ let
 
       runHook postInstall
     '';
+
+    postInstall = lib.optionalString withSymlink ''
+      ln -s $out/bin/google-chrome-stable $out/bin/google-chrome
+    '';
   });
 
   darwin = stdenvNoCC.mkDerivation (finalAttrs: {
@@ -304,6 +311,10 @@ let
         --add-flags "--simulate-outdated-no-au='Tue, 31 Dec 2099 23:59:59 GMT'" \
         --add-flags ${lib.escapeShellArg commandLineArgs}
       runHook postInstall
+    '';
+
+    postInstall = lib.optionalString withSymlink ''
+      ln -s $out/bin/google-chrome-stable $out/bin/google-chrome
     '';
   });
 

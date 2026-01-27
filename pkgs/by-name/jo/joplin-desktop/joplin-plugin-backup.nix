@@ -2,35 +2,29 @@
   lib,
   stdenv,
   fetchzip,
-  npm-lockfile-fix,
   buildNpmPackage,
   clang_20,
 
-  name,
-  url,
-  hash,
-  npmDepsHash,
   patches ? [ ],
 }:
 
+let
+  releaseData = (lib.importJSON ./release-data.json).plugins."io.github.jackgruber.backup";
+in
+
 buildNpmPackage {
-  inherit name npmDepsHash patches;
+  name = "joplin-plugin-backup";
+
+  inherit (releaseData) npmDepsHash;
+  inherit patches;
 
   src = fetchzip {
-    inherit url hash;
-    postFetch = ''
-      # Add missing integrity and resolved fields
-      ${lib.getExe npm-lockfile-fix} $out/package-lock.json
-    '';
+    inherit (releaseData) url hash;
   };
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     clang_20 # clang_21 breaks keytar
   ];
-
-  postPatch = ''
-    sed -i '/preinstall/d' package.json
-  '';
 
   npmBuildScript = "dist";
 
