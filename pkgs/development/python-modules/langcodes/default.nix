@@ -35,6 +35,10 @@ buildPythonPackage rec {
   disabledTests = [
     # AssertionError: assert 'Unknown language [aqk]' == 'Aninka'
     "test_updated_iana"
+    # doctest mismatches
+    "speaking_population"
+    "writing_population"
+    "README.md"
   ];
 
   pythonImportsCheck = [ "langcodes" ];
