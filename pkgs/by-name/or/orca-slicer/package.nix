@@ -135,6 +135,10 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/SoftFever/OrcaSlicer/commit/d10a06ae11089cd1f63705e87f558e9392f7a167.patch";
       hash = "sha256-t4own5AwPsLYBsGA15id5IH1ngM0NSuWdFsrxMRXmTk=";
     })
+  ]
+  ++ lib.optionals (finalAttrs.version == "2.3.1") [
+    # Fix upstream version number
+    ./patches/fix-upstream-version-number.patch
   ];
 
   doCheck = true;
