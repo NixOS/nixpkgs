@@ -5,6 +5,7 @@
   poetry-core,
   django,
   typing-extensions,
+  inline-snapshot,
   pytestCheckHook,
   pytest-cov-stub,
   pytest-django,
@@ -30,6 +31,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    inline-snapshot
     pytestCheckHook
     pytest-cov-stub
     pytest-django
