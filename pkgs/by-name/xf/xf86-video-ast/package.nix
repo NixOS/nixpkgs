@@ -12,7 +12,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xf86-video-ast";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "driver";
     repo = "xf86-video-ast";
     tag = "xf86-video-ast-${finalAttrs.version}";
-    hash = "sha256-5fZ0+6Jf/QBuR9l2lOsh4RQEGKrR9XttEvwOVO8w3t4=";
+    hash = "sha256-Xz9ZvngAsEb/9+YOGOkJQIbFzofKw+2V6sST8Ry2tvo=";
   };
 
   strictDeps = true;
