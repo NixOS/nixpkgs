@@ -182,9 +182,7 @@ let
         preferLocalBuild = true;
         allowSubstitutes = false;
         LANG = "en_US.UTF-8";
-        LOCALE_ARCHIVE = pkgs.lib.optionalString (
-          buildPlatform.libc == "glibc"
-        ) "${buildPackages.glibcLocales}/lib/locale/locale-archive";
+        LOCALE_ARCHIVE = pkgs.lib.optionalString (lib.meta.availableOn stdenv.buildPlatform buildPackages.glibcLocales) "${buildPackages.glibcLocales}/lib/locale/locale-archive";
       }
       ''
         export HOME="$TMP"

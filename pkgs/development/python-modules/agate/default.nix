@@ -43,10 +43,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     cssselect
-    glibcLocales
     lxml
     pyicu
     pytestCheckHook
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
+    glibcLocales
   ];
 
   disabledTests = lib.optionals stdenv.isDarwin [

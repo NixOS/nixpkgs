@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   python3Packages,
   wrapGAppsHook3,
@@ -31,10 +32,12 @@ python3Packages.buildPythonApplication rec {
     gobject-introspection
   ];
   buildInputs = [
-    glibcLocales
     gtk3
     libsoup_3
     libsecret
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform glibcLocales) [
+    glibcLocales
   ];
   propagatedBuildInputs = with python3Packages; [
     pygobject3

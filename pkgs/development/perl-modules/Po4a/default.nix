@@ -54,6 +54,8 @@ buildPerlPackage rec {
       docbook_sgml_dtd_41
       opensp
       kpsewhich-stub
+    ]
+    ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
       glibcLocales
     ];
   patches = [

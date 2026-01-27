@@ -34,7 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     desktop-file-utils
     gettext
-    glibcLocales
     itstool
     libxml2
     meson
@@ -42,6 +41,9 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3
     wrapGAppsHook4
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
+    glibcLocales
   ];
 
   buildInputs = [

@@ -86,6 +86,8 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     python3
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
     glibcLocales
   ];
 

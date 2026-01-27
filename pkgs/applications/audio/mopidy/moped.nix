@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   pythonPackages,
   fetchPypi,
   mopidy,
@@ -18,7 +19,9 @@ pythonPackages.buildPythonApplication rec {
   };
 
   LC_ALL = "en_US.UTF-8";
-  buildInputs = [ glibcLocales ];
+  buildInputs = lib.optionals (lib.meta.availableOn stdenv.hostPlatform glibcLocales) [
+    glibcLocales
+  ];
 
   build-system = [ pythonPackages.setuptools ];
 

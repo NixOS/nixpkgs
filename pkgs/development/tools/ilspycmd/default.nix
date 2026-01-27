@@ -28,7 +28,7 @@ buildDotnetModule (finalAttrs: {
 
   # https://github.com/NixOS/nixpkgs/issues/38991
   # bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
-  env.LOCALE_ARCHIVE = lib.optionalString stdenvNoCC.hostPlatform.isLinux "${glibcLocales}/lib/locale/locale-archive";
+  env.LOCALE_ARCHIVE = lib.optionalString (lib.meta.availableOn stdenvNoCC.hostPlatform glibcLocales) "${glibcLocales}/lib/locale/locale-archive";
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
 

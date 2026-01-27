@@ -68,6 +68,8 @@ stdenv.mkDerivation (finalAttrs: {
     beamPackages.elixir
     libxml2
     libxslt
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform glibcLocales) [
     glibcLocales
   ];
 

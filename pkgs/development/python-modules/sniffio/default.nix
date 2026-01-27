@@ -1,6 +1,7 @@
 {
   buildPythonPackage,
   lib,
+  stdenv,
   fetchPypi,
   setuptools,
   setuptools-scm,
@@ -27,7 +28,9 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  buildInputs = [ glibcLocales ];
+  buildInputs = lib.optionals (lib.meta.availableOn stdenv.hostPlatform glibcLocales) [
+    glibcLocales
+  ];
 
   nativeCheckInputs = [
     curio

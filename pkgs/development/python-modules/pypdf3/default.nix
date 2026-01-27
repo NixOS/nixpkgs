@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchPypi,
   glibcLocales,
@@ -19,7 +20,9 @@ buildPythonPackage (finalAttrs: {
   };
 
   LC_ALL = "en_US.UTF-8";
-  buildInputs = [ glibcLocales ];
+  buildInputs = lib.optionals (lib.meta.availableOn stdenv.hostPlatform glibcLocales) [
+    glibcLocales
+  ];
 
   checkPhase = ''
     ${python.interpreter} -m unittest tests/*.py

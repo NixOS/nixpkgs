@@ -36,10 +36,12 @@ buildPythonPackage rec {
   doCheck = true;
 
   nativeCheckInputs = [
-    glibcLocales
     pytestCheckHook
     pytest-cov-stub
     pytest-mock
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
+    glibcLocales
   ];
 
   disabledTests = [

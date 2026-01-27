@@ -31,13 +31,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gettext
-    glibcLocalesUtf8
     libpng
     SDL2
     SDL2_image
     SDL2_mixer
     SDL2_ttf
     zlib
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform glibcLocalesUtf8) [
+    glibcLocalesUtf8
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 

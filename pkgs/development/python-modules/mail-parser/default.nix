@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   python,
   glibcLocales,
@@ -24,7 +25,9 @@ buildPythonPackage rec {
 
   LC_ALL = "en_US.utf-8";
 
-  nativeBuildInputs = [ glibcLocales ];
+  nativeBuildInputs = lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
+    glibcLocales
+  ];
 
   build-system = [ setuptools ];
 

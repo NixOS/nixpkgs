@@ -50,7 +50,7 @@ buildPythonPackage rec {
     psutil
     pytestCheckHook
   ]
-  ++ lib.optionals isPyPy [
+  ++ lib.optionals (isPyPy && lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
     glibcLocales
   ];
 

@@ -61,11 +61,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   nativeCheckInputs = [
-    glibcLocales
     python3Packages.unittestCheckHook
     python3Packages.jsonschema
     python3Packages.mock
     python3Packages.lxml
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
+    glibcLocales
   ]
   # TODO: use JHBuild to build the Gramps' bundle
   ++ lib.optionals stdenv.hostPlatform.isDarwin [

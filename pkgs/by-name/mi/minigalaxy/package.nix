@@ -55,11 +55,15 @@ python3Packages.buildPythonApplication rec {
     requests
   ];
 
-  nativeCheckInputs = with python3Packages; [
-    glibcLocales
-    pytestCheckHook
-    simplejson
-  ];
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      pytestCheckHook
+      simplejson
+    ]
+    ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
+      glibcLocales
+    ];
 
   preCheck = ''
     export HOME=$(mktemp -d)

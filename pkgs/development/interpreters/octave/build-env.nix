@@ -19,8 +19,7 @@
 let
   packages = computeRequiredOctavePackages extraLibs;
 
-  # glibcLocalesUtf8 is null on darwin
-  localeArchiveArgs = lib.optionalString (glibcLocalesUtf8 != null) ''
+  localeArchiveArgs = lib.optionalString (lib.meta.availableOn stdenv.hostPlatform glibcLocalesUtf8) ''
     --set LOCALE_ARCHIVE "${glibcLocalesUtf8}/lib/locale/locale-archive"
   '';
 

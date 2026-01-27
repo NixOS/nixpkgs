@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchPypi,
   setuptools,
@@ -29,12 +30,14 @@ buildPythonPackage rec {
   ];
 
   build-system = [
-    glibcLocales
     setuptools
     setuptools-scm
     sphinxHook
     sphinx-autodoc-typehints
     sphinx-rtd-theme
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
+    glibcLocales
   ];
 
   dependencies = [

@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  checkInputs = [
+  checkInputs = lib.optionals (lib.meta.availableOn stdenv.hostPlatform glibcLocales) [
     glibcLocales
   ];
 

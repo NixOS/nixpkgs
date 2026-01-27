@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -53,13 +54,15 @@ buildPythonPackage rec {
     addBinToPathHook
     writableTmpDirAsHomeHook
     gitMinimal
-    glibcLocales
     pip
     pyte
     pytest-mock
     pytest-subprocess
     pytestCheckHook
     requests
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
+    glibcLocales
   ];
 
   disabledTests = [

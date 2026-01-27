@@ -34,8 +34,10 @@ buildDotnetModule rec {
 
   nativeBuildInputs = [
     git
-    glibcLocales
     bintools
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
+    glibcLocales
   ];
 
   runtimeDeps = [ mono ];

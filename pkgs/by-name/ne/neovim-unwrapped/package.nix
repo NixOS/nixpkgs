@@ -14,7 +14,7 @@
   buildPackages,
   treesitter-parsers ? import ./treesitter-parsers.nix { inherit fetchurl; },
   fixDarwinDylibNames,
-  glibcLocales ? null,
+  glibcLocales,
   procps ? null,
   versionCheckHook,
   nix-update-script,
@@ -143,8 +143,10 @@ stdenv.mkDerivation (
       utf8proc
     ]
     ++ lib.optionals finalAttrs.finalPackage.doCheck [
-      glibcLocales
       procps
+    ]
+    ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform glibcLocales) [
+      glibcLocales
     ]
     ++ lib.optionals (stdenv.hostPlatform.libc != "glibc") [
       # Provide libintl for non-glibc platforms

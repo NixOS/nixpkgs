@@ -63,8 +63,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   checkInputs = [
-    glibcLocales
     umockdev
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform glibcLocales) [
+    glibcLocales
   ];
 
   doCheck = withIntrospection;

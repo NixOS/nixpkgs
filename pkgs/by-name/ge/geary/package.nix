@@ -100,6 +100,8 @@ stdenv.mkDerivation rec {
     gnutls # for certtool
     cacert # trust store for glib-networking
     xvfb-run
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
     glibcLocales # required by Geary.ImapDb.DatabaseTest/utf8_case_insensitive_collation
   ];
 

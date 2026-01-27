@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   python3Packages,
   fetchFromGitHub,
   djvulibre,
@@ -51,10 +52,12 @@ python3Packages.buildPythonApplication rec {
     python3Packages.unittestCheckHook
     python3Packages.pillow
     djvulibre
-    glibcLocales
     libxml2
     libxml2Python
     tesseract5
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
+    glibcLocales
   ];
 
   unittestFlagsArray = [

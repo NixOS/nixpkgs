@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   glibcLocales,
@@ -45,7 +46,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    glibcLocales
     python-memcached
     mock
     pylibmc
@@ -53,6 +53,9 @@ buildPythonPackage rec {
     redis
     webtest
     pytestCheckHook
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
+    glibcLocales
   ];
 
   # Can not run memcached tests because it immediately tries to connect.

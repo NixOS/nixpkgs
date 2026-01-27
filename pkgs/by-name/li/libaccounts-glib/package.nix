@@ -43,13 +43,15 @@ stdenv.mkDerivation rec {
     check
     docbook_xml_dtd_43
     docbook_xsl
-    glibcLocales
     gobject-introspection
     gtk-doc
     meson
     ninja
     pkg-config
     vala
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
+    glibcLocales
   ]
   ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     mesonEmulatorHook

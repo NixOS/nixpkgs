@@ -313,7 +313,6 @@ let
     buildInputs = [
       jemalloc
       mpi
-      glibcLocales
       git
 
       # libs taken from system through the TF_SYS_LIBS mechanism
@@ -336,6 +335,9 @@ let
       }))
       snappy-cpp
       sqlite
+    ]
+    ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform glibcLocales) [
+      glibcLocales
     ]
     ++ lib.optionals cudaSupport [
       cudatoolkit

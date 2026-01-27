@@ -85,7 +85,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     botocore
-    glibcLocales
     jmespath
     pexpect
     pytest-asyncio
@@ -96,6 +95,9 @@ buildPythonPackage rec {
     sybil
     testfixtures
     uvloop
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
+    glibcLocales
   ];
 
   LC_ALL = "en_US.UTF-8";

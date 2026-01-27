@@ -46,6 +46,8 @@ buildPythonPackage rec {
   buildInputs = [
     numpy.blas
     pillow
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform glibcLocales) [
     glibcLocales
   ]
   ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];

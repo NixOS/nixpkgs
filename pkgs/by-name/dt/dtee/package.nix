@@ -53,6 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
     coreutils
     diffutils
     findutils
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
     glibcLocales # For tests that check translations work
   ];
 

@@ -78,12 +78,14 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pybids
-    glibcLocales
     mock
     pytest
     pytest-forked
     pytest-xdist
     which
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
+    glibcLocales
   ];
 
   # checks on darwin inspect memory which doesn't work in build environment

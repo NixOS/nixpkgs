@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   python3,
   fetchFromGitHub,
   glibcLocales,
@@ -71,14 +72,15 @@ buildPythonApplication rec {
     zulip
   ];
 
-  nativeCheckInputs = [
-    glibcLocales
-  ]
-  ++ (with python3.pkgs; [
-    pytestCheckHook
-    pytest-cov-stub
-    pytest-mock
-  ]);
+  nativeCheckInputs =
+    lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
+      glibcLocales
+    ]
+    ++ (with python3.pkgs; [
+      pytestCheckHook
+      pytest-cov-stub
+      pytest-mock
+    ]);
 
   disabledTests = [
     # these break the build but don't seem to affect

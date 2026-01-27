@@ -17,11 +17,9 @@
      || stdenv.hostPlatform.isFreeBSD
   */
   doCheck ? (interactive && stdenv.hostPlatform.isLinux),
-  glibcLocales ? null,
+  glibcLocales,
   locale ? null,
 }:
-
-assert (doCheck && stdenv.hostPlatform.isLinux) -> glibcLocales != null;
 
 stdenv.mkDerivation rec {
   pname = "gawk" + lib.optionalString interactive "-interactive";
@@ -49,7 +47,7 @@ stdenv.mkDerivation rec {
   ++ lib.optionals interactive [
     removeReferencesTo
   ]
-  ++ lib.optionals (doCheck && stdenv.hostPlatform.isLinux) [
+  ++ lib.optionals (doCheck && lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
     glibcLocales
   ];
 

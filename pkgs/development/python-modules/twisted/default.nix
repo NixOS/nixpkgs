@@ -215,6 +215,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     gitMinimal
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
     glibcLocales
   ]
   ++ optional-dependencies.test

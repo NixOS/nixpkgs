@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   cryptography,
   fetchFromGitHub,
@@ -39,9 +40,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "spnego" ];
 
   nativeCheckInputs = [
-    glibcLocales
     pytest-mock
     pytestCheckHook
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
+    glibcLocales
   ];
 
   env.LC_ALL = "en_US.UTF-8";

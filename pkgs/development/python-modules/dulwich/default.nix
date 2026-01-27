@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   cargo,
   fastimport,
@@ -69,8 +70,10 @@ buildPythonPackage rec {
     gevent
     geventhttpclient
     git
-    glibcLocales
     pytestCheckHook
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
+    glibcLocales
   ]
   ++ lib.concatAttrValues optional-dependencies;
 
