@@ -42,11 +42,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gparted";
-  version = "1.7.0";
+  version = "1.8.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/gparted/gparted-${finalAttrs.version}.tar.gz";
-    hash = "sha256-hK47mXPkQ6IXXweqDcKs7q2xUB4PiVPOyDsOwzR7fVI=";
+    hash = "sha256-9YTtS+f9CcLPanhHeKhUCXDZhfCsjlp70GKFKKOrVgk=";
   };
 
   # Tries to run `pkexec --version` to get version.
