@@ -8144,6 +8144,8 @@ self: super: with self; {
 
   kiss-headers = callPackage ../development/python-modules/kiss-headers { };
 
+  kitcat = callPackage ../development/python-modules/kitcat { };
+
   kitchen = callPackage ../development/python-modules/kitchen { };
 
   kivy = callPackage ../development/python-modules/kivy { };
