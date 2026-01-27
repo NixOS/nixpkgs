@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hisat2";
-  version = "2.2.1";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "DaehwanKimLab";
     repo = "hisat2";
     rev = "v${version}";
-    sha256 = "0lmzdhzjkvxw7n5w40pbv5fgzd4cz0f9pxczswn3d4cr0k10k754";
+    sha256 = "sha256-Ub7Oe363bU+R1xGiWVDkbXGV0PWJ5x2D9de+jTJSwOA=";
   };
 
   nativeBuildInputs = [
