@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
 
   pyproject = true;
 
-  pythonRelaxDeps = [ "psutil" ];
+  pythonRelaxDeps = true;
 
   build-system = with python3Packages; [
     pdm-backend
