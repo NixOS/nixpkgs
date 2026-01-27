@@ -20674,6 +20674,11 @@
     githubId = 1219785;
     name = "Félix Baylac-Jacqué";
   };
+  pid1 = {
+    github = "pid1";
+    githubId = 4173362;
+    name = "Jonathan Roemer";
+  };
   piegames = {
     name = "piegames";
     email = "nix@piegames.de";
