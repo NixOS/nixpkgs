@@ -21368,6 +21368,12 @@
     githubId = 737477;
     name = "Sibi Prabakaran";
   };
+  pslind17 = {
+    email = "peyton@slind.ca";
+    github = "pslind17";
+    githubId = 125328571;
+    name = "Peyton Slind";
+  };
   pstn = {
     email = "philipp@xndr.de";
     github = "pstn";
