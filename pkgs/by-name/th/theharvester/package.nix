@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "theharvester";
   version = "4.10.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "laramies";
     repo = "theharvester";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-PDFKDm1amqmdYo/avxudWZ9Xhp16Cw4ejmUAQ+BlvC0=";
   };
 
@@ -72,7 +72,7 @@ python3.pkgs.buildPythonApplication rec {
       gathers emails, names, subdomains, IPs, and URLs using multiple public data sources.
     '';
     homepage = "https://github.com/laramies/theHarvester";
-    changelog = "https://github.com/laramies/theHarvester/releases/tag/${src.tag}";
+    changelog = "https://github.com/laramies/theHarvester/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       c0bw3b
@@ -81,4 +81,4 @@ python3.pkgs.buildPythonApplication rec {
     ];
     mainProgram = "theHarvester";
   };
-}
+})
