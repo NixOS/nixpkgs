@@ -14,7 +14,7 @@
 
 resholve.mkDerivation rec {
   pname = "wgnord";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "phirecc";
@@ -26,7 +26,8 @@ resholve.mkDerivation rec {
   postPatch = ''
     substituteInPlace wgnord \
       --replace '$conf_dir/countries.txt' "$out/share/countries.txt" \
-      --replace '$conf_dir/countries_iso31662.txt' "$out/share/countries_iso31662.txt"
+      --replace '$conf_dir/countries_iso31662.txt' "$out/share/countries_iso31662.txt" \
+      --replace '$conf_dir/template.conf' "$out/share/template.conf"
   '';
 
   dontBuild = true;
@@ -35,6 +36,7 @@ resholve.mkDerivation rec {
     install -Dm 755 wgnord -t $out/bin/
     install -Dm 644 countries.txt -t $out/share/
     install -Dm 644 countries_iso31662.txt -t $out/share/
+    install -Dm 644 template.conf -t $out/share/
   '';
 
   solutions.default = {
