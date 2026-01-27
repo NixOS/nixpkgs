@@ -204,6 +204,16 @@ in
               example = "postgresql";
             };
 
+            preventManualStart = lib.mkOption {
+              type = lib.types.bool;
+              default = true;
+              description = ''
+                When a timer is configured, prevent manual start of the service.
+                This ensures backups only run on schedule and prevents automatic
+                restarts during nixos-rebuild switch.
+              '';
+            };
+
             extraBackupArgs = lib.mkOption {
               type = lib.types.listOf lib.types.str;
               default = [ ];
@@ -446,6 +456,9 @@ in
           };
           path = [ config.programs.ssh.package ];
           restartIfChanged = false;
+          unitConfig = lib.optionalAttrs (backup.timerConfig != null && backup.preventManualStart) {
+            RefuseManualStart = true;
+          };
           wants = [ "network-online.target" ];
           after = [ "network-online.target" ];
           serviceConfig = {
