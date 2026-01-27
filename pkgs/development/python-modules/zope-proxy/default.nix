@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "zope-proxy";
-  version = "7.0";
+  version = "7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zope.proxy";
     tag = version;
-    hash = "sha256-1u9Yn6j8tBMmAZmb/0L/lZUE/yC0OP8K825QBixxKQM=";
+    hash = "sha256-p5uDHNF7kZJkFibNbM0JLrw5BYqs+qnNH3t0UBt0Krg=";
   };
 
   build-system = [ setuptools ];
