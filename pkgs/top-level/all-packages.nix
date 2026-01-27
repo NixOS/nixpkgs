@@ -1646,20 +1646,6 @@ with pkgs;
     haskellPackages.generateOptparseApplicativeCompletions [ "cabal2nix" ] haskellPackages.cabal2nix
   );
 
-  cabal2nix = symlinkJoin {
-    inherit (cabal2nix-unwrapped) name meta;
-    nativeBuildInputs = [ buildPackages.makeWrapper ];
-    paths = [ cabal2nix-unwrapped ];
-    postBuild = ''
-      wrapProgram $out/bin/cabal2nix \
-        --prefix PATH ":" "${
-          lib.makeBinPath [
-            nix-prefetch-scripts
-          ]
-        }"
-    '';
-  };
-
   stack2nix =
     with haskell.lib;
     overrideCabal (justStaticExecutables haskellPackages.stack2nix) (_: {
