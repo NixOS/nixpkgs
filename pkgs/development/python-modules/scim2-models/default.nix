@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  hatchling,
+  uv-build,
   pydantic,
   pytestCheckHook,
 }:
@@ -20,16 +20,16 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-ahwHmWsM9IoK+yq0Qd0c2+kagMlXGi80/rAB4UQsf6U=";
   };
 
-  build-system = [ hatchling ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.8.9,<0.9.0" "uv_build"
+  '';
+
+  build-system = [ uv-build ];
 
   dependencies = [ pydantic ] ++ pydantic.optional-dependencies.email;
 
   nativeCheckInputs = [ pytestCheckHook ];
-
-  preCheck = ''
-    substituteInPlace doc/tutorial.rst \
-      --replace-fail "TzInfo(UTC)" "TzInfo(0)"
-  '';
 
   pythonImportsCheck = [ "scim2_models" ];
 
