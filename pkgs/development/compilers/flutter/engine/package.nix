@@ -194,6 +194,10 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gtk3
     libepoxy
+  ]
+  ++ lib.optionals (lib.versionAtLeast flutterVersion "3.41") [
+    at-spi2-atk
+    glib
   ];
 
   dontPatch = true;
@@ -269,6 +273,11 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString (lib.versionAtLeast flutterVersion "3.35") ''
       substituteInPlace src/flutter/third_party/dart/runtime/bin/process_linux.cc \
         --replace-fail "(unsigned int first, unsigned int last, int flags)" "(unsigned int first, unsigned int last, int flags) noexcept(true)"
+    ''
+    # src/flutter/third_party/libcxx/include/__type_traits/is_referenceable.h:33:1: error: templates must have C++ linkage
+    + lib.optionalString (lib.versionAtLeast flutterVersion "3.41") ''
+      substituteInPlace src/flutter/shell/platform/linux/fl_view_accessible.cc \
+        --replace-fail "// Workaround missing C code compatibility in ATK header." "#include <glib.h>"
     ''
     + ''
       popd
