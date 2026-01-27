@@ -22,16 +22,16 @@
   uvicorn,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sse-starlette";
-  version = "3.0.3";
+  version = "3.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sysid";
     repo = "sse-starlette";
-    tag = "v${version}";
-    hash = "sha256-2QCagK4OIVJJ54uedJFVjcGyRo2j1415iNjDIa67/mo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-SqYLwbl+AyeqgYIwAd/Z39BSPXaYSXMnM6DAGUv3vQ8=";
   };
 
   build-system = [ setuptools ];
@@ -82,8 +82,8 @@ buildPythonPackage rec {
   meta = {
     description = "Server Sent Events for Starlette and FastAPI";
     homepage = "https://github.com/sysid/sse-starlette";
-    changelog = "https://github.com/sysid/sse-starlette/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/sysid/sse-starlette/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
