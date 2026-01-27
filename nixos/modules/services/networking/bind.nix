@@ -107,8 +107,12 @@ let
       acl badnetworks { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.blockedNetworks} };
 
       options {
-        listen-on { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.listenOn} };
-        listen-on-v6 { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.listenOnIpv6} };
+        listen-on port ${toString cfg.listenOnPort} { ${
+          lib.concatMapStrings (entry: " ${entry}; ") cfg.listenOn
+        } };
+        listen-on-v6 port ${toString cfg.listenOnIpv6Port} { ${
+          lib.concatMapStrings (entry: " ${entry}; ") cfg.listenOnIpv6
+        } };
         allow-query-cache { cachenetworks; };
         blackhole { badnetworks; };
         forward ${cfg.forward};
