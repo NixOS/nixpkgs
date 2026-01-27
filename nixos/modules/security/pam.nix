@@ -816,7 +816,7 @@ let
               {
                 name = "unix";
                 control = "required";
-                modulePath = "${package}/lib/security/pam_unix.so";
+                modulePath = config.security.pam.pam_unixModulePath;
               }
             ];
 
@@ -1016,7 +1016,7 @@ let
                       name = "unix-early";
                       enable = cfg.unixAuth;
                       control = "optional";
-                      modulePath = "${package}/lib/security/pam_unix.so";
+                      modulePath = config.security.pam.pam_unixModulePath;
                       settings = {
                         nullok = cfg.allowNullPassword;
                         inherit (cfg) nodelay;
@@ -1114,7 +1114,7 @@ let
                   name = "unix";
                   enable = cfg.unixAuth;
                   control = "sufficient";
-                  modulePath = "${package}/lib/security/pam_unix.so";
+                  modulePath = config.security.pam.pam_unixModulePath;
                   settings = {
                     nullok = cfg.allowNullPassword;
                     inherit (cfg) nodelay;
@@ -1203,7 +1203,7 @@ let
               {
                 name = "unix";
                 control = "sufficient";
-                modulePath = "${package}/lib/security/pam_unix.so";
+                modulePath = config.security.pam.pam_unixModulePath;
                 settings = {
                   nullok = true;
                   yescrypt = true;
@@ -1292,7 +1292,7 @@ let
               {
                 name = "unix";
                 control = "required";
-                modulePath = "${package}/lib/security/pam_unix.so";
+                modulePath = config.security.pam.pam_unixModulePath;
               }
               {
                 name = "loginuid";
@@ -1657,6 +1657,14 @@ in
   options = {
 
     security.pam.package = lib.mkPackageOption pkgs "pam" { };
+
+    security.pam.pam_unixModulePath = lib.mkOption {
+      type = lib.types.pathInStore;
+      default = "${package}/lib/security/pam_unix.so";
+      defaultText = "\${config.security.pam.package}/lib/security/pam_unix.so";
+      description = "The pam_unix module to use in all the default pam services.";
+      internal = true;
+    };
 
     security.pam.loginLimits = lib.mkOption {
       default = [ ];
