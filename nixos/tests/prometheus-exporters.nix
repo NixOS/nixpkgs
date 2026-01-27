@@ -1171,38 +1171,64 @@ let
         exporterTest = ''
           wait_for_unit("prometheus-node-cert-exporter.service")
           wait_for_open_port(9141)
+          succeed("test -f /run/certs/node-cert.cert")
           wait_until_succeeds(
               "curl -sSf http://localhost:9141/metrics | grep 'ssl_certificate_expiry_seconds{.\\+path=\"/run/certs/node-cert\\.cert\".\\+}'"
           )
         '';
 
-        metricProvider = {
-          system.activationScripts.cert.text = ''
-            mkdir -p /run/certs
-            cd /run/certs
+        metricProvider =
+          { config, ... }:
+          {
+            systemd.services.prometheus-node-cert-exporter = {
+              serviceConfig.ExecStartPre =
+                let
+                  createDir = pkgs.writeShellApplication {
+                    name = "create-dir";
+                    text =
+                      let
+                        inherit (config.services.prometheus.exporters.node-cert) user;
+                      in
+                      ''
+                        mkdir -p /run/certs
+                        chown ${user}:${user} /run/certs
+                        chmod ug+rwx /run/certs
+                      '';
+                  };
+                  createCerts = pkgs.writeShellApplication {
+                    name = "create-certs";
+                    text = ''
+                      cd /run/certs
 
-            cat >ca.template <<EOF
-            organization = "prometheus-node-cert-exporter"
-            cn = "prometheus-node-cert-exporter"
-            expiration_days = 365
-            ca
-            cert_signing_key
-            crl_signing_key
-            EOF
+                      cat >ca.template <<EOF
+                      organization = "prometheus-node-cert-exporter"
+                      cn = "prometheus-node-cert-exporter"
+                      expiration_days = 365
+                      ca
+                      cert_signing_key
+                      crl_signing_key
+                      EOF
 
-            ${pkgs.gnutls}/bin/certtool  \
-              --generate-privkey         \
-              --key-type rsa             \
-              --sec-param High           \
-              --outfile node-cert.key
+                      ${pkgs.gnutls}/bin/certtool  \
+                        --generate-privkey         \
+                        --key-type rsa             \
+                        --sec-param High           \
+                        --outfile node-cert.key
 
-            ${pkgs.gnutls}/bin/certtool     \
-              --generate-self-signed        \
-              --load-privkey node-cert.key  \
-              --template ca.template        \
-              --outfile node-cert.cert
-          '';
-        };
+                      ${pkgs.gnutls}/bin/certtool     \
+                        --generate-self-signed        \
+                        --load-privkey node-cert.key  \
+                        --template ca.template        \
+                        --outfile node-cert.cert
+                    '';
+                  };
+                in
+                [
+                  "+${lib.getExe createDir}"
+                  "${lib.getExe createCerts}"
+                ];
+            };
+          };
       };
 
     pgbouncer =
