@@ -1,8 +1,8 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  fetchpatch2,
+  fetchFromGitHub,
+  autoreconfHook,
   makeWrapper,
   pkg-config,
   kronosnet,
@@ -24,24 +24,19 @@
 let
   inherit (lib) optional;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "corosync";
-  version = "3.1.9";
+  version = "3.1.10";
 
-  src = fetchurl {
-    url = "http://build.clusterlabs.org/corosync/releases/${pname}-${version}.tar.gz";
-    sha256 = "sha256-IDNUu93uGpezxQoHbq6JxjX0Bt1nTMrvyUu5CSrNlTU=";
+  src = fetchFromGitHub {
+    owner = "corosync";
+    repo = "corosync";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-9x19et+SEH+6Ufwx2MunQxX9wGfZgHCabd1IABTB8rk=";
   };
 
-  patches = [
-    (fetchpatch2 {
-      name = "CVE-2025-30472.patch";
-      url = "https://github.com/corosync/corosync/commit/7839990f9cdf34e55435ed90109e82709032466a.patch??full_index=1";
-      hash = "sha256-EgGTfOM9chjLnb1QWNGp6IQQKQGdetNkztdddXlN/uo=";
-    })
-  ];
-
   nativeBuildInputs = [
+    autoreconfHook
     makeWrapper
     pkg-config
   ];
@@ -112,4 +107,4 @@ stdenv.mkDerivation rec {
       ryantm
     ];
   };
-}
+})
