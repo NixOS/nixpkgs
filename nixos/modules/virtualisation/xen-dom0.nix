@@ -349,8 +349,8 @@ in
     store = {
       path = mkOption {
         type = path;
-        default = "${cfg.package}/bin/oxenstored";
-        defaultText = literalExpression "\${config.virtualisation.xen.package}/bin/oxenstored";
+        default = "${cfg.store.package}/bin/oxenstored";
+        defaultText = literalExpression "\${config.virtualisation.xen.store.package}/bin/oxenstored";
         example = literalExpression "\${config.virtualisation.xen.package}/bin/xenstored";
         description = ''
           Path to the Xen Store Daemon. This option is useful to
@@ -367,6 +367,12 @@ in
         internal = true;
         readOnly = true;
         description = "Helper internal option that determines the type of the Xen Store Daemon based on cfg.store.path.";
+      };
+      package = mkPackageOption pkgs [ "ocamlPackages" "oxenstored" ] {
+        extraDescription = ''
+          This is only used if the Xen Store Daemon being used is the newer OCaml-based store.
+          The legacy C-based store is always included.
+        '';
       };
       settings = mkOption {
         default = { };
@@ -782,7 +788,8 @@ in
       systemPackages = [
         cfg.package
         (hiPrio cfg.qemu.package)
-      ];
+      ]
+      ++ optional (cfg.store.type == "ocaml") (hiPrio cfg.store.package);
       etc =
         # Set up Xen Domain 0 configuration files.
         {
