@@ -404,6 +404,7 @@ in
   containers-restart_networking = runTest ./containers-restart_networking.nix;
   containers-tmpfs = runTest ./containers-tmpfs.nix;
   containers-unified-hierarchy = runTest ./containers-unified-hierarchy.nix;
+  contracts-secrets-hardcoded-secret = runTest ./contracts/secrets/hardcoded-secret.nix;
   convos = runTest ./convos.nix;
   corerad = runTest ./corerad.nix;
   corteza = runTest ./corteza.nix;
