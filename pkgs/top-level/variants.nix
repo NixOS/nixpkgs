@@ -183,4 +183,10 @@ self: super: {
     ]
     ++ overlays;
   };
+
+  pkgsStrict = nixpkgsFun {
+    config = super.config // {
+      strictDepsByDefault = true;
+    };
+  };
 }
