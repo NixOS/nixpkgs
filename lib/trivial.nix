@@ -566,17 +566,17 @@ in
   max = x: y: if x > y then x else y;
 
   /**
-    Integer modulus
+    Mathematical modulus
 
     # Inputs
 
-    `base`
+    `dividend`
 
-    : 1\. Function argument
+    : The number to be divided
 
-    `int`
+    `divisor`
 
-    : 2\. Function argument
+    : The number by which to divide
 
     # Examples
     :::{.example}
@@ -587,11 +587,96 @@ in
     => 1
     mod 1 10
     => 1
+    mod (-1) 10
+    => 9
+    mod 10 (-3)
+    => 1
+    mod 5.5 2
+    => 1.5
+    mod (-3.7) 2.5
+    => 1.3
     ```
 
     :::
   */
-  mod = base: int: base - (int * (builtins.div base int));
+  mod =
+    dividend: divisor:
+    let
+      quotient = builtins.floor (dividend / divisor);
+      remainder = dividend - quotient * divisor;
+    in
+    if remainder < 0 then remainder + lib.abs divisor else remainder;
+
+  /**
+    C-style remainder
+
+    # Inputs
+
+    `dividend`
+
+    : The number to be divided
+
+    `divisor`
+
+    : The number by which to divide
+
+    # Examples
+    :::{.example}
+    ## `lib.trivial.rem` usage example
+
+    ```nix
+    rem 11 10
+    # => 1
+    rem 1 10
+    # => 1
+    rem (-1) 10
+    # => -1
+    rem 10 (-3)
+    # => 1
+    rem 5.5 2
+    # => 1.5
+    rem (-3.7) 2.5
+    # => -1.2
+    ```
+
+    :::
+  */
+  rem =
+    dividend: divisor:
+    let
+      quotient =
+        if dividend >= 0 then
+          builtins.floor (dividend / divisor)
+        else
+          -builtins.floor (-dividend / divisor);
+    in
+    dividend - quotient * divisor;
+
+  /**
+    Absolute value
+
+    # Inputs
+
+    `n`
+
+    : A number
+
+    # Examples
+    :::{.example}
+    ## `lib.trivial.abs` usage example
+
+    ```nix
+    abs 1
+    # => 1
+    abs -1
+    # => 1
+    abs -12.34
+    # => 12.34
+    ```
+
+    :::
+  */
+  abs = n: if n < 0 then -n else n;
 
   ## Comparisons
 

@@ -162,6 +162,8 @@ let
         isInOldestRelease
         oldestSupportedReleaseIsAtLeast
         mod
+        rem
+        abs
         compare
         splitByAndCompare
         seq
