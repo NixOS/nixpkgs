@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
 
   dependencies = with python3Packages; [ pyxdg ];
 
-  env.HOME = "$TMPDIR";
+  env.HOME = "/tmp";
 
   pythonImportsCheck = [ "passgithelper" ];
 
