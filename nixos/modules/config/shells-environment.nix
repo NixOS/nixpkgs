@@ -222,7 +222,7 @@ in
   config = lib.mkIf cfg.shell.enable {
 
     # Set this here so its enabled only when shell support is enabled
-    environment.binsh = lib.mkDefault "${pkgs.bashInteractive}/bin/sh";
+    environment.binsh = lib.mkDefault "${pkgs.dash}/bin/dash";
 
     # Set session variables in the shell as well. This is usually
     # unnecessary, but it allows changes to session variables to take
