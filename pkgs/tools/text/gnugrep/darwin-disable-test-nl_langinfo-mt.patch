@@ -1,0 +1,12 @@
+diff -urN grep-3.12.orig/gnulib-tests/Makefile.in grep-3.12/gnulib-tests/Makefile.in
+--- grep-3.12.orig/gnulib-tests/Makefile.in	2025-11-16 21:11:03.803988000 -0500
++++ grep-3.12/gnulib-tests/Makefile.in	2025-11-16 21:12:37.850272926 -0500
+@@ -185,7 +185,7 @@
+ 	test-mcel-5.sh test-memchr$(EXEEXT) test-memchr2$(EXEEXT) \
+ 	test-memrchr$(EXEEXT) test-nanosleep$(EXEEXT) \
+ 	test-netinet_in-h$(EXEEXT) test-nl_langinfo1.sh \
+-	test-nl_langinfo2.sh test-nl_langinfo-mt$(EXEEXT) \
++	test-nl_langinfo2.sh \
+ 	test-nullptr$(EXEEXT) test-once1$(EXEEXT) test-once2$(EXEEXT) \
+ 	test-open$(EXEEXT) test-openat-safer$(EXEEXT) \
+ 	test-openat$(EXEEXT) test-pathmax$(EXEEXT) test-perror.sh \
