@@ -609,7 +609,7 @@
 
   markdown-inline = {
     language = "markdown_inline";
-    version = "0.3.2";
+    version = "0.5.2";
     url = "github:tree-sitter-grammars/tree-sitter-markdown";
     hash = "sha256-JJCFksPDwaiOmU+nZ3PHeLHlPKWTZBTnqcD/tQorWdU=";
     location = "tree-sitter-markdown-inline";
