@@ -9932,10 +9932,6 @@ with pkgs;
 
   awesomebump = libsForQt5.callPackage ../applications/graphics/awesomebump { };
 
-  backintime-common = callPackage ../applications/networking/sync/backintime/common.nix { };
-
-  backintime-qt = qt6.callPackage ../applications/networking/sync/backintime/qt.nix { };
-
   backintime = backintime-qt;
 
   bespokesynth-with-vst2 = bespokesynth.override {
@@ -11534,8 +11530,6 @@ with pkgs;
     timeshift
     timeshift-minimal
     ;
-
-  tipp10 = qt6.callPackage ../applications/misc/tipp10 { };
 
   tlp = callPackage ../tools/misc/tlp {
     inherit (linuxPackages) x86_energy_perf_policy;
