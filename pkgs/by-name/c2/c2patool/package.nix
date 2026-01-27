@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "c2patool";
-  version = "0.26.9";
+  version = "0.26.17";
 
   src = fetchFromGitHub {
     owner = "contentauth";
     repo = "c2pa-rs";
     tag = "c2patool-v${finalAttrs.version}";
-    hash = "sha256-hSt+BfcFtV0ooWk9z9mw2m9Lw9vvi9r6XNkbEskL8yU=";
+    hash = "sha256-iIBOXoNjZPC/phVTW4mHiN+9QwMtgg3OT3cWE0FCshQ=";
   };
 
-  cargoHash = "sha256-hlFthmanwTYOmw8Vu7eS7xQdvyKDEyT4joQYJNEnmK8=";
+  cargoHash = "sha256-tYejG8ohUNGNtdEB8aY/QGJKiLV9EqVBQkmHm5bsN4E=";
 
   # use the non-vendored openssl
   env.OPENSSL_NO_VENDOR = 1;
