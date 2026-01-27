@@ -5,7 +5,8 @@
   pythonAtLeast,
 
   # build-system
-  setuptools,
+  hatchling,
+  hatch-vcs,
 
   # dependencies
   param,
@@ -27,7 +28,8 @@ buildPythonPackage rec {
   };
 
   build-system = [
-    setuptools
+    hatchling
+    hatch-vcs
   ];
 
   dependencies = [
