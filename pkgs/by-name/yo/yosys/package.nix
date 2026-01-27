@@ -25,6 +25,7 @@
   makeWrapper,
   yosys-bluespec,
   yosys-ghdl,
+  yosys-slang,
   yosys-symbiflow,
   nix-update-script,
   enablePython ? true, # enable python binding
@@ -54,6 +55,7 @@ let
   allPlugins = {
     bluespec = yosys-bluespec;
     ghdl = yosys-ghdl;
+    slang = yosys-slang;
   }
   // yosys-symbiflow;
 
