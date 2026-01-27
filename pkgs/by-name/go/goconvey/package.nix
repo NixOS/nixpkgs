@@ -5,9 +5,10 @@
   # 'vendor/golang.org/x/tools/internal/tokeninternal/tokeninternal.go:64:9: invalid array length -delta * delta (constant -256 of type int64)'
   # Wait for upstream to update their vendored dependencies before unpinning.
   buildGo124Module,
+  nix-update-script,
 }:
 
-buildGo124Module {
+buildGo124Module (finalAttrs: {
   pname = "goconvey";
   version = "1.8.1-unstable-2024-03-06";
 
@@ -31,11 +32,17 @@ buildGo124Module {
     "-short"
   ];
 
+  # goconvey doesn't support --version flag
+  doInstallCheck = false;
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Go testing in the browser. Integrates with `go test`. Write behavioral tests in Go";
     mainProgram = "goconvey";
     homepage = "https://github.com/smartystreets/goconvey";
+    changelog = "https://github.com/smartystreets/goconvey/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ vdemeester ];
   };
-}
+})
