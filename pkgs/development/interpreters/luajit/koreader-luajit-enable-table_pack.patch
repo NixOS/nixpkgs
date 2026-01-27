@@ -1,0 +1,31 @@
+diff --git a/src/lib_table.c b/src/lib_table.c
+index d159360b..a3f146ce 100644
+--- a/src/lib_table.c
++++ b/src/lib_table.c
+@@ -267,7 +267,6 @@ LJLIB_CF(table_sort)
+   return 0;
+ }
+ 
+-#if LJ_52
+ LJLIB_PUSH("n")
+ LJLIB_CF(table_pack)
+ {
+@@ -283,7 +282,6 @@ LJLIB_CF(table_pack)
+   lj_gc_check(L);
+   return 1;
+ }
+-#endif
+ 
+ LJLIB_NOREG LJLIB_CF(table_new)		LJLIB_REC(.)
+ {
+@@ -316,10 +314,8 @@ static int luaopen_table_clear(lua_State *L)
+ LUALIB_API int luaopen_table(lua_State *L)
+ {
+   LJ_LIB_REG(L, LUA_TABLIBNAME, table);
+-#if LJ_52
+   lua_getglobal(L, "unpack");
+   lua_setfield(L, -2, "unpack");
+-#endif
+   lj_lib_prereg(L, LUA_TABLIBNAME ".new", luaopen_table_new, tabV(L->top-1));
+   lj_lib_prereg(L, LUA_TABLIBNAME ".clear", luaopen_table_clear, tabV(L->top-1));
+   return 1;

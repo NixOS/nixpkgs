@@ -8,15 +8,13 @@
   glib,
   gnutar,
   gtk3-x11,
-  luajit,
+  luajit_koreader,
   sdcv,
   SDL2,
   openssl,
   writeScript,
 }:
 let
-  luajit_lua52 = luajit.override { enable52Compat = true; };
-
   version = "2025.10";
 
   src_repo = fetchFromGitHub {
@@ -52,14 +50,15 @@ stdenv.mkDerivation {
     };
 
   nativeBuildInputs = [
-    makeWrapper
     dpkg
+    makeWrapper
   ];
+
   buildInputs = [
     glib
     gnutar
     gtk3-x11
-    luajit_lua52
+    luajit_koreader
     sdcv
     SDL2
     openssl
@@ -72,7 +71,7 @@ stdenv.mkDerivation {
   ''
   # Link required binaries
   + ''
-    ln -sf ${luajit_lua52}/bin/luajit $out/lib/koreader/luajit
+    ln -sf ${luajit_koreader}/bin/luajit $out/lib/koreader/luajit
     ln -sf ${sdcv}/bin/sdcv $out/lib/koreader/sdcv
     ln -sf ${gnutar}/bin/tar $out/lib/koreader/tar
   ''
@@ -83,7 +82,7 @@ stdenv.mkDerivation {
   ''
   # Copy fonts
   + ''
-    find ${src_repo}/resources/fonts -type d -execdir cp -r '{}' $out/lib/koreader/fonts \;
+    cp -r ${src_repo}/resources/fonts/* $out/lib/koreader/fonts/
   ''
   # Remove broken symlinks
   + ''
