@@ -1027,7 +1027,7 @@ let
                       name = "fscrypt";
                       enable = config.security.pam.enableFscrypt;
                       control = "optional";
-                      modulePath = "${pkgs.fscrypt-experimental}/lib/security/pam_fscrypt.so";
+                      modulePath = "${pkgs.fscrypt}/lib/security/pam_fscrypt.so";
                     }
                     {
                       name = "zfs_key";
@@ -1213,7 +1213,7 @@ let
                 name = "fscrypt";
                 enable = config.security.pam.enableFscrypt;
                 control = "optional";
-                modulePath = "${pkgs.fscrypt-experimental}/lib/security/pam_fscrypt.so";
+                modulePath = "${pkgs.fscrypt}/lib/security/pam_fscrypt.so";
               }
               {
                 name = "zfs_key";
@@ -1362,7 +1362,7 @@ let
                 name = "fscrypt";
                 enable = config.security.pam.enableFscrypt;
                 control = "optional";
-                modulePath = "${pkgs.fscrypt-experimental}/lib/security/pam_fscrypt.so";
+                modulePath = "${pkgs.fscrypt}/lib/security/pam_fscrypt.so";
               }
               {
                 name = "zfs_key-skip-systemd";
@@ -2348,7 +2348,7 @@ in
       ++ lib.optionals config.security.pam.enableOTPW [ pkgs.otpw ]
       ++ lib.optionals config.security.pam.oath.enable [ pkgs.oath-toolkit ]
       ++ lib.optionals config.security.pam.p11.enable [ pkgs.pam_p11 ]
-      ++ lib.optionals config.security.pam.enableFscrypt [ pkgs.fscrypt-experimental ]
+      ++ lib.optionals config.security.pam.enableFscrypt [ pkgs.fscrypt ]
       ++ lib.optionals config.security.pam.u2f.enable [ pkgs.pam_u2f ];
 
     security.wrappers = {

@@ -10,7 +10,7 @@
   kdePackages,
   cryfs,
   encfs,
-  fscrypt-experimental,
+  fscrypt,
   gocryptfs,
   securefs,
   sshfs,
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
       lib.makeBinPath [
         cryfs
         encfs
-        fscrypt-experimental
+        fscrypt
         gocryptfs
         securefs
         sshfs
