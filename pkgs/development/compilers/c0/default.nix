@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
       --replace '`../get_version.sh`' '${version}' \
       --replace '`date`' '1970-01-01T00:00:00Z' \
       --replace '`hostname`' 'nixpkgs'
+    patchShebangs --build cc0/compiler/bin
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     for f in cc0/compiler/bin/coin-o0-support cc0/compiler/bin/cc0-o0-support; do
@@ -81,8 +82,5 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.unix;
-    # line 1: ../../bin/wrappergen: cannot execute: required file not found
-    # make[2]: *** [../../lib.mk:83:
-    broken = stdenv.hostPlatform.isLinux;
   };
 }
