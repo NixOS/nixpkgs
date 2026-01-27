@@ -38,14 +38,14 @@
 
 buildPythonPackage rec {
   pname = "pyhanko";
-  version = "0.31.0";
+  version = "0.32.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MatthiasValvekens";
     repo = "pyHanko";
     tag = "v${version}";
-    hash = "sha256-ZDHAcI2yoiVifYt05V85lz8mJmoyi10g4XoLQ+LhLHE=";
+    hash = "sha256-UyJ9odchy63CcCkJVtBgraRQuD2fxqCciwLuhN4+8aw=";
   };
 
   sourceRoot = "${src.name}/pkgs/pyhanko";
@@ -104,10 +104,6 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # ModuleNotFoundError: No module named 'csc_dummy'
     "tests/test_csc.py"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # OSError: One or more parameters passed to a function were not valid.
-    "tests/cli_tests"
   ];
 
   disabledTests = [
@@ -134,10 +130,6 @@ buildPythonPackage rec {
     "test_ocsp_embed"
     "test_ts_fetch_aiohttp"
     "test_ts_fetch_requests"
-
-    # https://github.com/MatthiasValvekens/pyHanko/pull/595
-    "test_simple_text_stamp_on_page_with_leaky_graphics_state"
-    "test_simple_text_stamp_on_page_with_leaky_graphics_state_without_coord_correction"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # OSError: One or more parameters passed to a function were not valid.
@@ -147,6 +139,17 @@ buildPythonPackage rec {
     "test_diff_analysis_update_indirect_extensions_not_all_path"
     "test_no_certificates"
     "test_ocsp_without_nextupdate_embed"
+    "test_dangerous_xml_metadata_manipulation"
+    "test_pades_dss_content"
+
+    # PermissionError: [Errno 1] Operation not permitted
+    "test_bootstrap_signers"
+    "test_bootstrap_signers_with_populated_cache"
+    "test_bootstrap_signers_request_retry"
+    "test_bootstrap_signers_request_fail"
+    "test_bootstrap_signers_request_outage"
+    "test_parse_services_from_real_tl_via_lotl"
+    "test_parse_services_from_real_tl_via_selective_lotl"
   ];
 
   pythonImportsCheck = [ "pyhanko" ];
