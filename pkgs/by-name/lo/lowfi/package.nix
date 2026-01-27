@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-OAg3ZpBmuINkc6KZJGKvYFnpv9hVbwlnOEP5ICtYh28=";
 
-  buildFeatures = lib.optionals stdenv.hostPlatform.isLinux [ "mpris" ];
+  buildFeatures = [ "scrape" ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "mpris" ];
 
   nativeBuildInputs = [
     pkg-config
