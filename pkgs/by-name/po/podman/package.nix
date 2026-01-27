@@ -7,7 +7,6 @@
   buildGoModule,
   buildPackages,
   gpgme,
-  lvm2,
   btrfs-progs,
   libapparmor,
   libseccomp,
@@ -83,7 +82,6 @@ buildGoModule (finalAttrs: {
     libapparmor
     libseccomp
     libselinux
-    lvm2
     systemd
   ];
 
