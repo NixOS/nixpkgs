@@ -5,7 +5,7 @@
   chromium,
 }:
 buildNpmPackage rec {
-  name = "decktape";
+  pname = "decktape";
   version = "3.15.0";
 
   src = fetchFromGitHub {
