@@ -1,5 +1,6 @@
 {
   lib,
+  backports-zstd,
   buildPythonPackage,
   fetchFromGitHub,
   awscli2,
@@ -13,13 +14,14 @@
   numpy,
   paramiko,
   pytest-cov-stub,
+  pytest-timeout,
+  pytest-xdist,
   pytestCheckHook,
   pyopenssl,
   responses,
   setuptools,
   setuptools-scm,
   wrapt,
-  zstandard,
 }:
 
 buildPythonPackage rec {
@@ -52,7 +54,7 @@ buildPythonPackage rec {
     http = [ requests ];
     webhdfs = [ requests ];
     ssh = [ paramiko ];
-    zst = [ zstandard ];
+    zst = [ backports-zstd ];
   };
 
   pythonImportsCheck = [ "smart_open" ];
@@ -62,6 +64,8 @@ buildPythonPackage rec {
     moto
     numpy
     pytest-cov-stub
+    pytest-timeout
+    pytest-xdist
     pytestCheckHook
     pyopenssl
     responses
