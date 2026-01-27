@@ -1,14 +1,14 @@
 {
   lib,
-  python3Packages,
+  stdenv,
   fetchzip,
+  python3,
   writeScript,
 }:
 
-python3Packages.buildPythonApplication rec {
+stdenv.mkDerivation rec {
   pname = "pdf-parser";
   version = "0.7.10";
-  pyproject = false;
 
   src = fetchzip {
     url = "https://didierstevens.com/files/software/pdf-parser_V${
@@ -16,6 +16,8 @@ python3Packages.buildPythonApplication rec {
     }.zip";
     hash = "sha256-RhgEGue3RcALjLXKOnnXyx/0subXHNuXfDg8hbO3VDg=";
   };
+
+  buildInputs = [ python3 ];
 
   postPatch = ''
     # quote regular expressions correctly
@@ -34,7 +36,7 @@ python3Packages.buildPythonApplication rec {
 
   preFixup = ''
     substituteInPlace $out/bin/pdf-parser.py \
-      --replace-fail '/usr/bin/python' '${python3Packages.python}/bin/python'
+      --replace-fail '/usr/bin/python' '${python3}/bin/python'
   '';
 
   passthru.updateScript = writeScript "update-pdf-parser" ''
