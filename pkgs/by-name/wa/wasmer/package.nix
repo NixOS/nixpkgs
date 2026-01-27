@@ -1,28 +1,37 @@
 {
   lib,
-  rustPlatform,
+  stdenv,
   fetchFromGitHub,
+  rustPlatform,
+  cargo,
+  rustc,
   llvmPackages_18,
   libffi,
   libxml2,
-  withLLVM ? true,
-  withSinglepass ? true,
+  withLLVM ?
+    stdenv.hostPlatform.isLinux || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64),
 }:
 
-rustPlatform.buildRustPackage rec {
+stdenv.mkDerivation rec {
   pname = "wasmer";
-  version = "5.0.4";
+  version = "6.0.1";
 
   src = fetchFromGitHub {
     owner = "wasmerio";
     repo = "wasmer";
     tag = "v${version}";
-    hash = "sha256-rP0qvSb9PxsTMAq0hpB+zdSTHvridyCVdukLUYxdao8=";
+    hash = "sha256-nw/4hcEDkAabcpatVBRozxvVLzYOKbj3ylrGeQtNzMQ=";
   };
 
-  cargoHash = "sha256-Fympp2A04viibo4U79FiBSJIeGDUWS34OOwebCks6S0=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-Nui8KxDk4+sqcmzeoZ6hGRb9Ux71+Nckz8seqq07cdE=";
+  };
 
   nativeBuildInputs = [
+    cargo
+    rustc
+    rustPlatform.cargoSetupHook
     rustPlatform.bindgenHook
   ];
 
@@ -32,25 +41,18 @@ rustPlatform.buildRustPackage rec {
     libxml2
   ];
 
-  # check references to `compiler_features` in Makefile on update
-  buildFeatures = [
-    "cranelift"
-    "wasmer-artifact-create"
-    "static-artifact-create"
-    "wasmer-artifact-load"
-    "static-artifact-load"
-  ]
-  ++ lib.optional withLLVM "llvm"
-  ++ lib.optional withSinglepass "singlepass";
-
-  cargoBuildFlags = [
-    "--manifest-path"
-    "lib/cli/Cargo.toml"
-    "--bin"
-    "wasmer"
+  makeFlags = [
+    "WASMER_INSTALL_PREFIX=${placeholder "out"}"
+    "DESTDIR=${placeholder "out"}"
   ];
 
-  env.LLVM_SYS_180_PREFIX = lib.optionalString withLLVM llvmPackages_18.llvm.dev;
+  buildFlags = [
+    "ENABLE_LLVM=${if withLLVM then "1" else "0"}"
+  ];
+
+  env = lib.optionalAttrs withLLVM {
+    LLVM_SYS_180_PREFIX = llvmPackages_18.llvm.dev;
+  };
 
   # Tests are failing due to `Cannot allocate memory` and other reasons
   doCheck = false;
