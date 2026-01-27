@@ -4167,6 +4167,12 @@
     githubId = 1394;
     name = "Andy Gayton";
   };
+  cachebag = {
+    email = "alhakimiakrmj@gmail.com";
+    github = "cachebag";
+    githubId = 111914307;
+    name = "Akrm Al-Hakimi";
+  };
   CactiChameleon9 = {
     email = "h19xjkkp@duck.com";
     github = "CactiChameleon9";
@@ -12777,6 +12783,12 @@
     github = "jonboh";
     githubId = 31407988;
     name = "Jon Bosque";
+  };
+  joncorv = {
+    email = "joncorv@gmail.com";
+    github = "joncorv";
+    githubId = 151096562;
+    name = "Jonathan Corriveau";
   };
   jonhermansen = {
     name = "Jon Hermansen";
