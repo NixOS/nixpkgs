@@ -1,33 +1,37 @@
 {
-  stdenv,
+  gcc14Stdenv,
   fetchFromGitHub,
   lib,
-  autoreconfHook,
   pkg-config,
   readline,
   xercesc,
   unstableGitUpdater,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+gcc14Stdenv.mkDerivation (finalAttrs: {
   pname = "ringing-lib";
-  version = "0-unstable-2025-07-16";
+  version = "0-unstable-2025-11-10";
 
   src = fetchFromGitHub {
     owner = "ringing-lib";
     repo = "ringing-lib";
-    rev = "838d13edb3231d8c122d3222da1b465e2018757f";
-    hash = "sha256-MO5FerQMyWDV/cV2hrY/L+JyhMojtaqPQkw8efaVu1I=";
+    rev = "6a58b9434b073df4dba5e851d23d397c621e9686";
+    hash = "sha256-XQj94IGxo39foqstC/BdpRAAXRiMu74BZdpBvywA6S8=";
   };
 
   nativeBuildInputs = [
-    autoreconfHook
     pkg-config
   ];
   buildInputs = [
     readline
     xercesc
   ];
+
+  installPhase = ''
+    runHook preInstall
+    make install PREFIX=''$out
+    runHook postInstall
+  '';
 
   doCheck = true;
 
