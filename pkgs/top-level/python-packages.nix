@@ -6607,6 +6607,8 @@ self: super: with self; {
 
   griffe = callPackage ../development/python-modules/griffe { };
 
+  grimp = callPackage ../development/python-modules/grimp { };
+
   grip = callPackage ../development/python-modules/grip { };
 
   groestlcoin-hash = callPackage ../development/python-modules/groestlcoin-hash { };

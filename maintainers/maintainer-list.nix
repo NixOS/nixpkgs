@@ -24630,6 +24630,12 @@
     githubId = 1505617;
     name = "Sean Lee";
   };
+  sloschert = {
+    email = "sebastian.loschert@gmx.de";
+    github = "sloschert";
+    githubId = 61537351;
+    name = "Sebastian Loschert";
+  };
   SlothOfAnarchy = {
     email = "slothofanarchy1@gmail.com";
     matrix = "@michel.weitbrecht:helsinki-systems.de";
