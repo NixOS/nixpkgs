@@ -1,7 +1,8 @@
 {
   lib,
+  buildNpmPackage,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
 
   # build-system
   setuptools,
@@ -29,19 +30,41 @@
   # tests
   callPackage,
 }:
+let
+  pname = "wagtail";
+
+  version = "7.2.1";
+
+  src = fetchFromGitHub {
+    owner = "wagtail";
+    repo = pname;
+    tag = "v${version}";
+    hash = "sha256-TnUEydc1D14ICoCcpq9roE5ZREDm/z3nmaazaQcKlJU=";
+  };
+
+  assets = buildNpmPackage {
+    pname = "${pname}-assets";
+    inherit version src;
+    npmDepsHash = "sha256-Uc16K1RZUCnr4qRe2u4yB44F+zYFBxMpEQCz5992RMA=";
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir $out
+
+      for static_dir in wagtail/*/static; do
+        cp --parents -r $static_dir $out
+      done
+
+      runHook postInstall
+    '';
+  };
+in
 
 buildPythonPackage rec {
-  pname = "wagtail";
-  version = "7.2.1";
-  pyproject = true;
+  inherit pname version src;
 
-  # The GitHub source requires some assets to be compiled, which in turn
-  # requires fixing the upstream package lock. We need to use the PyPI release
-  # until https://github.com/wagtail/wagtail/pull/13136 gets merged.
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-OIu0LEgYwIGk3fNub0Upv7xU7SYqkbZbDl+VFHbyz3Q=";
-  };
+  pyproject = true;
 
   build-system = [
     setuptools
@@ -70,6 +93,10 @@ buildPythonPackage rec {
     willow
   ]
   ++ willow.optional-dependencies.heif;
+
+  preBuild = ''
+    cp -r ${assets}/wagtail .
+  '';
 
   # Tests are in separate derivation because they require a package that depends
   # on wagtail (wagtail-factories)
