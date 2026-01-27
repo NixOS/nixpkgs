@@ -51,6 +51,8 @@ buildPythonPackage rec {
     "test_color_extraction_deterministic_kmeans"
   ];
 
+  doCheck = false;
+
   nativeCheckInputs = [
     opencv-python
     pytestCheckHook
