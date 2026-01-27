@@ -7,17 +7,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "iocaine";
-  version = "2.5.1";
+  version = "3.0.1";
 
   src = fetchFromGitea {
     domain = "git.madhouse-project.org";
     owner = "iocaine";
     repo = "iocaine";
     tag = "iocaine-${version}";
-    hash = "sha256-213QLpGBKSsT9r8O27PyMom5+OGPz0VtRBevxswISZA=";
+    hash = "sha256-FLjoOAiKwxQ6fs/p943lb4+vM8cXHlThBCeyBdo1GRo=";
   };
 
-  cargoHash = "sha256-EgPGDlJX/m+v3f/tGIO+saGHoYrtiWLZuMlXEvsgnxE=";
+  cargoHash = "sha256-UDsF8OeylCz0YfmhZ+phfQfC9HpweI51G4OHnK1dDfk=";
 
   meta = {
     description = "Deadliest poison known to AI";
