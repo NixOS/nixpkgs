@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "liblognorm";
-  version = "2.0.7";
+  version = "2.0.9";
 
   src = fetchurl {
     url = "http://www.liblognorm.com/files/download/liblognorm-${finalAttrs.version}.tar.gz";
-    hash = "sha256-vp2OekIHAu2NPFvK1zBsLZxs9UtZx3FcYbCIoGDgiUM=";
+    hash = "sha256-dsfMLLdqPVjncy4M/yORgPg/O2NQAriqBIZciBKFd5M=";
   };
 
   nativeBuildInputs = [ pkg-config ];
