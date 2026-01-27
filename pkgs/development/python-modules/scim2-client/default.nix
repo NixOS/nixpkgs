@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   hatchling,
   scim2-models,
   pytestCheckHook,
@@ -20,10 +20,11 @@ buildPythonPackage rec {
 
   pyproject = true;
 
-  src = fetchPypi {
-    inherit version;
-    pname = "scim2_client";
-    hash = "sha256-5XOUOKf0vYHkewY22x5NQdhICXCd+EftKhsxtQurgHQ=";
+  src = fetchFromGitHub {
+    owner = "python-scim";
+    repo = "scim2-client";
+    tag = version;
+    hash = "sha256-XwoYyROGP5xrHL6jqYmACkYS7N8bo7ve55H9najpWvE=";
   };
 
   build-system = [ hatchling ];
@@ -40,12 +41,6 @@ buildPythonPackage rec {
     cacert
   ]
   ++ optional-dependencies.httpx;
-
-  # Werkzeug returns 500, didn't deem it worth it to investigate
-  disabledTests = [
-    "test_search_request"
-    "test_query_dont_check_request_payload"
-  ];
 
   pythonImportsCheck = [ "scim2_client" ];
 

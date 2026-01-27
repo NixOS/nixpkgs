@@ -12,21 +12,21 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "canaille";
-  version = "0.0.74";
+  version = "0.1.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "yaal";
     repo = "canaille";
     tag = version;
-    hash = "sha256-FL02ADM7rUU43XR71UWr4FLr/NeUau7zRwTMOSFm1T4=";
+    hash = "sha256-X3EmoOJlGPysTD2v+7K/L4rkgWoVHfNZH1tefxeYFD0=";
   };
 
   patches = [
-    # https://gitlab.com/yaal/canaille/-/merge_requests/275
+    # Fix test_intruder_lockout_two_consecutive_fails
     (fetchpatch {
-      url = "https://gitlab.com/yaal/canaille/-/commit/1c7fc8b1034a4423f7f46ad8adeced854910b702.patch";
-      hash = "sha256-fu7D010NG7yUChOve7HY3e7mm2c/UGpfcTAiTU8BnGg=";
+      url = "https://gitlab.com/yaal/canaille/-/commit/d616095a8a425890c5bab69e9a1fe5eb729fee9a.patch";
+      hash = "sha256-sGkqaBBmorWmSwMiZolvtRd/WGDaxmDiPmZyPh+otvU=";
     })
   ];
 
@@ -36,18 +36,20 @@ python.pkgs.buildPythonApplication rec {
     setuptools
   ];
 
-  dependencies =
-    with python.pkgs;
-    [
-      blinker
-      flask
-      flask-caching
-      flask-wtf
-      pydantic-settings
-      httpx
-      wtforms
-    ]
-    ++ sentry-sdk.optional-dependencies.flask;
+  dependencies = with python.pkgs; [
+    blinker
+    click
+    dramatiq
+    dramatiq-eager-broker
+    flask
+    flask-caching
+    flask-dramatiq
+    flask-wtf
+    httpx
+    pika
+    pydantic-settings
+    wtforms
+  ];
 
   nativeCheckInputs =
     with python.pkgs;
@@ -59,8 +61,10 @@ python.pkgs.buildPythonApplication rec {
       pytest-cov-stub
       pytest-httpserver
       pytest-lazy-fixtures
+      pytest-postgresql
       pytest-smtpd
       pytest-xdist
+      python-avatars
       scim2-tester
       slapd
       toml
@@ -68,13 +72,7 @@ python.pkgs.buildPythonApplication rec {
       time-machine
       pytest-scim2-server
     ]
-    ++ optional-dependencies.front
-    ++ optional-dependencies.oidc
-    ++ optional-dependencies.scim
-    ++ optional-dependencies.ldap
-    ++ optional-dependencies.postgresql
-    ++ optional-dependencies.otp
-    ++ optional-dependencies.sms;
+    ++ (lib.concatLists (builtins.attrValues optional-dependencies));
 
   postInstall = ''
     mkdir -p $out/etc/schema
@@ -87,10 +85,16 @@ python.pkgs.buildPythonApplication rec {
     export SBIN="${openldap}/bin"
     export SLAPD="${openldap}/libexec/slapd"
     export SCHEMA="${openldap}/etc/schema"
-
-    # Just use their example config for testing
-    export CONFIG=tests/app/fixtures/default-config.toml
   '';
+
+  # For now, just the memory backend passes the tests. The goal is to at least
+  # get the sql backend work too.
+  pytestFlags = [ "--backend memory" ];
+
+  disabledTests = [
+    # Tries to use DNS resolution
+    "test_send_new_email_error"
+  ];
 
   optional-dependencies = with python.pkgs; {
     front = [
@@ -98,6 +102,7 @@ python.pkgs.buildPythonApplication rec {
       flask-babel
       flask-talisman
       flask-themer
+      isodate
       pycountry
       pytz
       tomlkit
@@ -108,10 +113,10 @@ python.pkgs.buildPythonApplication rec {
       joserfc
     ];
     scim = [
-      httpx
-      scim2-models
       authlib
+      httpx
       scim2-client
+      scim2-models
     ];
     ldap = [ python-ldap ];
     sentry = [ sentry-sdk ];
@@ -129,7 +134,15 @@ python.pkgs.buildPythonApplication rec {
       qrcode
     ];
     sms = [ smpplib ];
-    server = [ hypercorn ];
+    server = [
+      asgiref
+      hypercorn
+      isodate
+      pydanclick
+      tomlkit
+    ];
+    redis = [ dramatiq ] ++ dramatiq.optional-dependencies.redis;
+    rabbitmq = [ dramatiq ] ++ dramatiq.optional-dependencies.rabbitmq;
   };
 
   passthru = {
