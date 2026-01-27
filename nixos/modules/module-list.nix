@@ -948,7 +948,7 @@
   ./services/misc/servarr/whisparr.nix
   ./services/misc/serviio.nix
   ./services/misc/shoko.nix
-  ./services/misc/sickbeard.nix
+  ./services/misc/sickgear.nix
   ./services/misc/snapper.nix
   ./services/misc/soft-serve.nix
   ./services/misc/spice-autorandr.nix
