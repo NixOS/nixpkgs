@@ -7688,6 +7688,12 @@
     githubId = 9874955;
     name = "Elnu";
   };
+  EloToJaa = {
+    email = "elotoja@protonmail.com";
+    github = "EloToJaa";
+    githubId = 22549550;
+    name = "Łukasz Budziak";
+  };
   elpdt852 = {
     email = "nix@pdtpartners.com";
     github = "elpdt852";
