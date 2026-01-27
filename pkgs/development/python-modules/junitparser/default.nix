@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   glibcLocales,
   lxml,
   pytestCheckHook,
@@ -10,7 +11,7 @@
 buildPythonPackage rec {
   pname = "junitparser";
   version = "4.0.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "weiwei";
@@ -18,6 +19,8 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-+81n5xW9SEE+NZbYKxXu6xupoq4/haUZokVardh43iM=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pytestCheckHook
