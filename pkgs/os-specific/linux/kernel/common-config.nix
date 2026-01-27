@@ -72,7 +72,9 @@ let
       # Reduced debug info conflict with BTF and have been enabled in
       # aarch64 defconfig since 5.13
       DEBUG_INFO_REDUCED = whenAtLeast "5.13" (option no);
-      DEBUG_INFO_BTF = option yes;
+      # Intermittently breaks on 5.10 for unknown reasons.
+      # https://lore.kernel.org/r/6dd6eef7-15cb-00a3-c216-d6eaaa5cbf54@est.tech
+      DEBUG_INFO_BTF = whenAtLeast "5.11" (option yes);
       # Allow loading modules with mismatched BTFs
       # FIXME: figure out how to actually make BTFs reproducible instead
       # See https://github.com/NixOS/nixpkgs/pull/181456 for details.
