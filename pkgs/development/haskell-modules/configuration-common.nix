@@ -2519,6 +2519,10 @@ with haskellLib;
     doJailbreak
   ];
 
+  # too strict bounds on extra < 1.8
+  # https://github.com/georgefst/svgone/pull/3
+  svgone = doJailbreak super.svgone;
+
   # 2026-01-06: unbreak and modernize to GHC 9.10.3
   reanimate-svg = overrideCabal (drv: {
     # patching doesn't actually move files, need to do manually
