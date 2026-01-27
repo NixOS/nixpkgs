@@ -1,0 +1,13 @@
+diff --git a/vendor/glycin/src/sandbox.rs b/vendor/glycin/src/sandbox.rs
+index d840674..475d4be 100644
+--- a/vendor/glycin/src/sandbox.rs
++++ b/vendor/glycin/src/sandbox.rs
+@@ -292,7 +292,7 @@ impl Sandbox {
+             "--chdir",
+             "/",
+             // Make /usr available as read only
+-            "--ro-bind",
++            "--ro-bind-try",
+             "/usr",
+             "/usr",
+             // Make tmpfs dev available
