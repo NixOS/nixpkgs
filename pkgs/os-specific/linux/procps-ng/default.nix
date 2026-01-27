@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  fetchpatch2,
   fetchurl,
   ncurses,
   pkg-config,
@@ -31,6 +32,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-wubRk8x4+EzW3bcqr21capFi8EcOWZIJIFf1/1GFYvo=";
   };
 
+  patches = [
+    # Fix build on Darwin. This patch can be dropped once 4.0.6 is released.
+    (fetchpatch2 {
+      url = "https://gitlab.com/procps-ng/procps/-/commit/2dc340e47669e0b0df7f71ff082e05ac5fa36615.diff";
+      hash = "sha256-4eu0MdHsCeUPiQBTdvYHlUAtSVbgputTqPRmSvh9iVs=";
+    })
+  ];
+
   buildInputs = [ ncurses ] ++ lib.optionals withSystemd [ systemdLibs ];
   nativeBuildInputs = [
     pkg-config
@@ -47,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-watch8bit"
   ]
   ++ lib.optionals withSystemd [ "--with-systemd" ]
+  ++ lib.optionals (!stdenv.hostPlatform.isLinux) [ "--disable-pidwait" ] # Requires (Linux-only) `pidfd_open`
   ++ lib.optionals stdenv.hostPlatform.isMusl [ "--disable-w" ]
   ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "ac_cv_func_malloc_0_nonnull=yes"
