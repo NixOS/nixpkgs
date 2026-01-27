@@ -1047,7 +1047,7 @@ in
 
                           # IEEE 802.11i (authentication) related configuration
                           # Encrypt management frames to protect against deauthentication and similar attacks
-                          ieee80211w = mkDefault 1;
+                          ieee80211w = mkDefault 2;
                           sae_require_mfp = mkDefault 1;
 
                           # Only allow WPA by default and disable insecure WEP
