@@ -172,4 +172,6 @@ in
         };
       };
     };
+
+  behaviorTest = import ./filebackup/test.nix { inherit lib; };
 }
