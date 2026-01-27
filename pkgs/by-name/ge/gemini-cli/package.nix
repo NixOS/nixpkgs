@@ -27,6 +27,8 @@ buildNpmPackage (finalAttrs: {
 
   npmDepsHash = "sha256-4peAAxCws5IjWaiNwkRBiaL+n1fE+zsK0qbk1owueeY=";
 
+  dontPatchElf = stdenv.isDarwin;
+
   nativeBuildInputs = [
     jq
     pkg-config
@@ -80,6 +82,9 @@ buildNpmPackage (finalAttrs: {
 
     # Remove python files to prevent python from getting into the closure
     find node_modules -name "*.py" -delete
+    # keytar/build has gyp-mac-tool with a Python shebang that gets patched,
+    # creating a python3 reference in the closure
+    rm -rf node_modules/keytar/build
 
     cp -r node_modules $out/share/gemini-cli/
 
