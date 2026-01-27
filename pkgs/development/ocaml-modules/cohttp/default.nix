@@ -19,7 +19,7 @@
 
 buildDunePackage (finalAttrs: {
   pname = "cohttp";
-  version = if lib.versionAtLeast ocaml.version "4.13" then "6.2.0" else "5.3.1";
+  version = if lib.versionAtLeast ocaml.version "4.13" then "6.2.1" else "5.3.1";
 
   minimalOCamlVersion = "4.08";
 
@@ -27,7 +27,7 @@ buildDunePackage (finalAttrs: {
     url = "https://github.com/mirage/ocaml-cohttp/releases/download/v${finalAttrs.version}/cohttp-${finalAttrs.version}.tbz";
     hash =
       {
-        "6.2.0" = "sha256-bwV1TK8z1rdeii4aISDKe1Ag4TiLwgJIRC0TOZNt3zs=";
+        "6.2.1" = "sha256-ZQgCR3Y0QtHcPNkGeLgjO3mHcvA2rIHNHqreH11mpl8=";
         "5.3.1" = "sha256-9eJz08Lyn/R71+Ftsj4fPWzQGkC+ACCJhbxDTIjUV2s=";
       }
       ."${finalAttrs.version}";
