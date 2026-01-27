@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mvfst";
-  version = "2025.10.13.00";
+  version = "2026.01.19.00";
 
   outputs = [
     "bin"
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebook";
     repo = "mvfst";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bsg+Zqv+aEDH6r6lZazCG25Wj2zG/VSgpmEOKrb44/k=";
+    hash = "sha256-K4rskeF66EHchsBj8wIP3BYBa7SvQ1ohnOV0HPu+y80=";
   };
 
   patches = [
@@ -95,7 +95,6 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     # Make sure the libraries the `tperf` binary uses are installed.
     printf 'install(TARGETS mvfst_test_utils)\n' >> quic/common/test/CMakeLists.txt
-    printf 'install(TARGETS mvfst_dsr_backend)\n' >> quic/dsr/CMakeLists.txt
   '';
 
   disabledTests = [
