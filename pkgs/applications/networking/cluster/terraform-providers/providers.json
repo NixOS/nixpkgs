@@ -1148,13 +1148,13 @@
     "vendorHash": null
   },
   "sacloud_sakuracloud": {
-    "hash": "sha256-34UK1KyGOB4ryl71iW6FIpbU9eNwj/7LQq8cQnL0qWs=",
+    "hash": "sha256-hEE1bnkXutlQL0b51uTGZs4tzys4RBloadK1yYRK46M=",
     "homepage": "https://registry.terraform.io/providers/sacloud/sakuracloud",
     "owner": "sacloud",
     "repo": "terraform-provider-sakuracloud",
-    "rev": "v2.34.0",
+    "rev": "v2.34.1",
     "spdx": "Apache-2.0",
-    "vendorHash": "sha256-VJ5P2dlEBvQhTYZZG4G3QgIoHuqxLwa6w4h8W5n2knU="
+    "vendorHash": "sha256-X2CQf1/KGZZv1R0WzA6+IEDggmuttm/MeFMqxBm8PVk="
   },
   "sap-cloud-infrastructure_sci": {
     "hash": "sha256-m3degJZruqRkA/lSnNQrLfJIlpl5k8qCpbyIcsyV5/U=",
