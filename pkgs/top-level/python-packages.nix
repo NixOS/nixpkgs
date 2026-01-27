@@ -12153,6 +12153,10 @@ self: super: with self; {
 
   phply = callPackage ../development/python-modules/phply { };
 
+  pycvc = callPackage ../development/python-modules/pycvc { };
+
+  pypicohsm = callPackage ../development/python-modules/pypicohsm { };
+
   phpserialize = callPackage ../development/python-modules/phpserialize { };
 
   phunspell = callPackage ../development/python-modules/phunspell { };
