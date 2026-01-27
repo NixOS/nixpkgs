@@ -1528,7 +1528,7 @@ let
   # mkDefault properties of the previous option.
   #
   mkAliasDefinitions = mkAliasAndWrapDefinitions id;
-  mkAliasAndWrapDefinitions = wrap: option: mkAliasIfDef option (wrap (mkMerge option.definitions));
+  mkAliasAndWrapDefinitions = wrap: option: mkIf option.isDefined (wrap (mkMerge option.definitions));
 
   # Similar to mkAliasAndWrapDefinitions but copies over the priority from the
   # option as well.
@@ -1540,9 +1540,11 @@ let
       prio = option.highestPrio or defaultOverridePriority;
       defsWithPrio = map (mkOverride prio) option.definitions;
     in
-    mkAliasIfDef option (wrap (mkMerge defsWithPrio));
+    mkIf option.isDefined (wrap (mkMerge defsWithPrio));
 
-  mkAliasIfDef = option: mkIf (isOption option && option.isDefined);
+  mkAliasIfDef =
+    lib.warn "Usage of 'mkAliasIfDef' has been deprecated. Use 'mkIf option.isDefined' instead."
+      (option: mkIf option.isDefined);
 
   /**
     Compatibility.
