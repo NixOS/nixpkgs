@@ -6,14 +6,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "abctl";
   version = "0.30.3";
 
   src = fetchFromGitHub {
     owner = "airbytehq";
     repo = "abctl";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-pQvLFfj7/uZQUqtWAsTcw2RQ3KHFuoQCBP3lBvb2LTs=";
   };
 
@@ -38,10 +38,10 @@ buildGoModule rec {
   meta = {
     description = "Airbyte's CLI for managing local Airbyte installations";
     homepage = "https://airbyte.com/";
-    changelog = "https://github.com/airbytehq/abctl/releases/tag/v${version}";
+    changelog = "https://github.com/airbytehq/abctl/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ xelden ];
     mainProgram = "abctl";
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})
