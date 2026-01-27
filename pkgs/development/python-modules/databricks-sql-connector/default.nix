@@ -10,6 +10,8 @@
   pandas,
   poetry-core,
   pyarrow,
+  pybreaker,
+  pyjwt,
   pytestCheckHook,
   sqlalchemy,
   thrift,
@@ -35,11 +37,11 @@ buildPythonPackage rec {
     "thrift"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     alembic
     lz4
     numpy
@@ -47,6 +49,8 @@ buildPythonPackage rec {
     openpyxl
     pandas
     pyarrow
+    pybreaker
+    pyjwt
     sqlalchemy
     thrift
     requests
