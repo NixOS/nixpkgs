@@ -179,9 +179,9 @@ let
   shlibExt = stdenv.hostPlatform.extensions.sharedLibrary;
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openblas";
-  version = "0.3.30";
+  version = "0.3.31";
 
   outputs = [
     "out"
@@ -191,27 +191,25 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "OpenMathLib";
     repo = "OpenBLAS";
-    rev = "v${version}";
-    hash = "sha256-foP2OXUL6ttgYvCxLsxUiVdkPoTvGiHomdNudbSUmSE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-YBR81GOLnTsc0g1SZL+j31/OFucJrBRFqtOTV8lcy8U=";
   };
 
   patches = [
-    # Remove this once https://github.com/OpenMathLib/OpenBLAS/issues/5414 is
-    # resolved.
-    ./disable-sme-sgemm-kernel.patch
-
-    # https://github.com/OpenMathLib/OpenBLAS/issues/5460
+    # Fix ARMV9SME/VORTEXM4 target compilation with SMP disabled:
+    # https://github.com/OpenMathLib/OpenBLAS/pull/5613
     (fetchpatch {
-      name = "0001-openblas-Use-generic-kernels-for-SCAL-on-POWER4-5.patch";
-      url = "https://github.com/OpenMathLib/OpenBLAS/commit/14c9dcaac70d9382de00ba4418643d9587f4950e.patch";
-      hash = "sha256-mIOqRc7tE1rV/krrAu630JwApZHdeHCdVmO5j6eDC8U=";
+      url = "https://github.com/OpenMathLib/OpenBLAS/commit/d2906e8787ccc50051505f97262027bae6b55258.patch";
+      hash = "sha256-jYYMDr2rDJjM8ESO7/yPDl7Z/Y1MsrFBB4HsNOuFL9M=";
+    })
+
+    # Fix shared library compilation with SMP disabled:
+    # https://github.com/OpenMathLib/OpenBLAS/pull/5615
+    (fetchpatch {
+      url = "https://github.com/OpenMathLib/OpenBLAS/commit/874243421298866d116e1e8bdbd7e0ed4e31e4f6.patch";
+      hash = "sha256-+L98AjuMaDdmEdF8yruvBpljQ+hGmsfNuJSLxB4quDU=";
     })
   ];
-
-  postPatch = ''
-    # cc1: error: invalid feature modifier 'sve2' in '-march=armv8.5-a+sve+sve2+bf16'
-    substituteInPlace Makefile.arm64 --replace "+sve2+bf16" ""
-  '';
 
   inherit blas64;
 
@@ -263,7 +261,7 @@ stdenv.mkDerivation rec {
       NO_STATIC = !enableStatic;
       NO_SHARED = !enableShared;
       CROSS = stdenv.hostPlatform != stdenv.buildPlatform;
-      HOSTCC = "cc";
+      HOSTCC = lib.getExe buildPackages.stdenv.cc;
       # Makefile.system only checks defined status
       # This seems to be a bug in the openblas Makefile:
       # on x86_64 it expects NO_BINARY_MODE=
@@ -290,7 +288,7 @@ stdenv.mkDerivation rec {
   );
 
   # The default "all" target unconditionally builds the "tests" target.
-  buildFlags = lib.optionals (!doCheck) [ "shared" ];
+  buildFlags = lib.optionals (!finalAttrs.doCheck) [ "shared" ];
 
   doCheck = true;
   checkTarget = "tests";
@@ -301,7 +299,7 @@ stdenv.mkDerivation rec {
         for alias in blas cblas lapack; do
           cat <<EOF > $out/lib/pkgconfig/$alias.pc
     Name: $alias
-    Version: ${version}
+    Version: ${finalAttrs.version}
     Description: $alias provided by the OpenBLAS package.
     Cflags: -I$dev/include
     Libs: -L$out/lib -lopenblas
@@ -346,7 +344,8 @@ stdenv.mkDerivation rec {
     description = "Basic Linear Algebra Subprograms";
     license = lib.licenses.bsd3;
     homepage = "https://github.com/OpenMathLib/OpenBLAS";
+    changelog = "https://github.com/OpenMathLib/OpenBLAS/releases/tag/v${finalAttrs.version}";
     platforms = lib.attrNames configs;
     maintainers = with lib.maintainers; [ ttuegel ];
   };
-}
+})
