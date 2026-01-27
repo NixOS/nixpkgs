@@ -5,14 +5,16 @@
   ocaml,
 }:
 
-stdenv.mkDerivation rec {
+let
   pname = "cmdliner";
-  version = "1.3.0";
-
+  version = "2.1.0";
   src = fetchurl {
     url = "https://erratique.ch/software/${pname}/releases/${pname}-${version}.tbz";
-    sha256 = "sha256-joGA9XO0QPanqMII2rLK5KgjhP7HMtInhNG7bmQWjLs=";
+    sha256 = "1s9lhkzrblaf1rk0b9lg95622p0jv4qmmby8xg8jzma3rlacc548";
   };
+in
+stdenv.mkDerivation {
+  inherit pname version src;
 
   nativeBuildInputs = [ ocaml ];
 
@@ -31,7 +33,10 @@ stdenv.mkDerivation rec {
     description = "OCaml module for the declarative definition of command line interfaces";
     license = lib.licenses.isc;
     inherit (ocaml.meta) platforms;
-    maintainers = [ lib.maintainers.vbgl ];
+    maintainers = with lib.maintainers; [
+      vbgl
+      eureka-cpu
+    ];
     broken = !(lib.versionAtLeast ocaml.version "4.08");
   };
 }
