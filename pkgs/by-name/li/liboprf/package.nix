@@ -32,6 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=maybe-uninitialized";
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
