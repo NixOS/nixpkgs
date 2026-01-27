@@ -3,8 +3,9 @@
 # succeeds, and all other jobs have finished (they may fail).
 
 {
+  lib ? (import ../lib),
   nixpkgs ? {
-    outPath = (import ../lib).cleanSource ./..;
+    outPath = lib.cleanSource ./..;
     revCount = 56789;
     shortRev = "gfedcba";
   },
@@ -28,7 +29,7 @@ let
       if (set.type or "") == "derivation" then
         set // { meta = removeAttrs (set.meta or { }) [ "maintainers" ]; }
       else
-        pkgs.lib.mapAttrs (n: v: removeMaintainers v) set
+        lib.mapAttrs (n: v: removeMaintainers v) set
     else
       set;
 
@@ -57,7 +58,7 @@ rec {
       onSystems =
         systems: x:
         map (system: "${x}.${system}") (
-          pkgs.lib.intersectLists systems (supportedSystems ++ limitedSupportedSystems)
+          lib.intersectLists systems (supportedSystems ++ limitedSupportedSystems)
         );
     in
     pkgs.releaseTools.aggregate {
@@ -66,7 +67,7 @@ rec {
         description = "Release-critical builds for the NixOS channel";
         maintainers = [ ];
       };
-      constituents = pkgs.lib.concatLists [
+      constituents = lib.concatLists [
         [ "nixos.channel" ]
         (onFullSupported "nixos.dummy")
         (onAllSupported "nixos.iso_minimal")
