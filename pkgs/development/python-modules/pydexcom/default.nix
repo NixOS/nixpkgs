@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pydexcom";
-  version = "0.5.0";
+  version = "0.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gagebenne";
     repo = "pydexcom";
     tag = version;
-    hash = "sha256-IqSZZHe5epcgO2uoIsGkNaac3+UplHzqEcFWTzwAqPg=";
+    hash = "sha256-u94OI45PmofPLpuJUpjbvGLla+mJEHy1t6/4fiI6+zc=";
   };
 
   build-system = [
