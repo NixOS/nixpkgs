@@ -4448,6 +4448,8 @@ self: super: with self; {
 
   dnachisel = callPackage ../development/python-modules/dnachisel { };
 
+  dnaio = callPackage ../development/python-modules/dnaio { };
+
   dncil = callPackage ../development/python-modules/dncil { };
 
   dnf-plugins-core = callPackage ../development/python-modules/dnf-plugins-core { };
@@ -20944,6 +20946,8 @@ self: super: with self; {
   xnd = callPackage ../development/python-modules/xnd { };
 
   xonsh = callPackage ../by-name/xo/xonsh/unwrapped.nix { };
+
+  xopen = callPackage ../development/python-modules/xopen { };
 
   xpath-expressions = callPackage ../development/python-modules/xpath-expressions { };
 
