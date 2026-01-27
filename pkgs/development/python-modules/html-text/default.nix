@@ -5,7 +5,7 @@
   lxml,
   lxml-html-clean,
   pytestCheckHook,
-  setuptools,
+  hatchling,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -20,7 +20,7 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-KLWgdVHGYRiQ61hMNx+Kcx9mE7d/TsBe110TfCe+ejU=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [
     lxml
