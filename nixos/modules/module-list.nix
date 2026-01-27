@@ -14,6 +14,7 @@
   ./config/iproute2.nix
   ./config/ldap.nix
   ./config/ldso.nix
+  ./config/lix.nix
   ./config/locale.nix
   ./config/malloc.nix
   ./config/mysql.nix

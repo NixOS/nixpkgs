@@ -562,5 +562,21 @@ rec {
         services.postgresql.package = pkgs.postgresql;
       }
     );
+
+    lix = makeClosure (
+      { pkgs, ... }:
+      {
+        lix.enable = true;
+        environment.systemPackages = [
+          pkgs.nixpkgs-review
+          pkgs.nix-direnv
+          pkgs.nix-eval-jobs
+          pkgs.nix-fast-build
+          pkgs.colmena
+          pkgs.nix-update
+          pkgs.nix-serve-ng
+        ];
+      }
+    );
   };
 }
