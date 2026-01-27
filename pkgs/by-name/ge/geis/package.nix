@@ -13,7 +13,10 @@
   gobject-introspection,
   grail,
   gtk3,
-  xorg,
+  libxtst,
+  libxi,
+  libxext,
+  libx11,
   pango,
   xorgserver,
   testers,
@@ -51,10 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
     gdk-pixbuf
     grail
     gtk3
-    xorg.libX11
-    xorg.libXext
-    xorg.libXi
-    xorg.libXtst
+    libx11
+    libxext
+    libxi
+    libxtst
     pango
     python3Packages.python
     xorgserver

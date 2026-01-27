@@ -14,7 +14,7 @@
   libGL,
   SDL2,
   SDL2_mixer,
-  xorg,
+  libx11,
   graphicsmagick,
   unstableGitUpdater,
 }:
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     libGL
-    xorg.libX11
+    libx11
   ];
 
   nativeBuildInputs = [

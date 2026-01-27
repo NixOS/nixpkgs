@@ -237,6 +237,7 @@
   ./programs/htop.nix
   ./programs/i3lock.nix
   ./programs/iay.nix
+  ./programs/idescriptor.nix
   ./programs/iftop.nix
   ./programs/iio-hyprland.nix
   ./programs/immersed.nix

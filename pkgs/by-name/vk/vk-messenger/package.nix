@@ -5,7 +5,10 @@
   rpmextract,
   undmg,
   autoPatchelfHook,
-  xorg,
+  libxtst,
+  libxscrnsaver,
+  libxdamage,
+  libxkbfile,
   gtk3,
   nss,
   alsa-lib,
@@ -61,18 +64,15 @@ let
       autoPatchelfHook
       wrapGAppsHook3
     ];
-    buildInputs =
-      (with xorg; [
-        libXdamage
-        libXtst
-        libXScrnSaver
-        libxkbfile
-      ])
-      ++ [
-        gtk3
-        nss
-        alsa-lib
-      ];
+    buildInputs = [
+      libxdamage
+      libxtst
+      libxscrnsaver
+      libxkbfile
+      gtk3
+      nss
+      alsa-lib
+    ];
 
     runtimeDependencies = [
       (lib.getLib udev)

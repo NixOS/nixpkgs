@@ -3,7 +3,11 @@
   stdenv,
   requireFile,
   unzip,
-  xorg,
+  libxt,
+  libxpm,
+  libx11,
+  libsm,
+  libice,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,11 +25,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ unzip ];
 
   libraries = [
-    xorg.libXpm
-    xorg.libXt
-    xorg.libX11
-    xorg.libICE
-    xorg.libSM
+    libxpm
+    libxt
+    libx11
+    libice
+    libsm
     stdenv.cc.cc
   ];
 

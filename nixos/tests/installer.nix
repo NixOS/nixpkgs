@@ -740,7 +740,7 @@ let
                   switch-to-configuration-ng
                   texinfo
                   unionfs-fuse
-                  xorg.lndir
+                  lndir
                   shellcheck-minimal
 
                   # Only the out output is included here, which is what is

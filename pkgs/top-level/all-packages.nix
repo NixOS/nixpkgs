@@ -2610,6 +2610,7 @@ with pkgs;
     godotPackages_4_3
     godotPackages_4_4
     godotPackages_4_5
+    godotPackages_4_6
     godotPackages_4
     godotPackages
     godot_4_3
@@ -2621,6 +2622,9 @@ with pkgs;
     godot_4_5
     godot_4_5-mono
     godot_4_5-export-templates-bin
+    godot_4_6
+    godot_4_6-mono
+    godot_4_6-export-templates-bin
     godot_4
     godot_4-mono
     godot_4-export-templates-bin
@@ -3739,9 +3743,7 @@ with pkgs;
 
   ttfautohint-nox = ttfautohint.override { enableGUI = false; };
 
-  twilight = callPackage ../tools/graphics/twilight {
-    libX11 = xorg.libX11;
-  };
+  twilight = callPackage ../tools/graphics/twilight { };
 
   twitch-chat-downloader =
     python3Packages.callPackage ../applications/misc/twitch-chat-downloader
@@ -3814,7 +3816,7 @@ with pkgs;
   truecrack-cuda = truecrack.override { cudaSupport = true; };
 
   turbovnc = callPackage ../tools/admin/turbovnc {
-    # fontDirectories = [ xorg.fontadobe75dpi xorg.fontmiscmisc xorg.fontcursormisc xorg.fontbhlucidatypewriter75dpi ];
+    # fontDirectories = [ font-adobe-75dpi font-misc-misc font-cursor-misc font-bh-lucidatypewriter-75dpi ];
     libjpeg_turbo = libjpeg_turbo.override { enableJava = true; };
   };
 
@@ -5015,6 +5017,7 @@ with pkgs;
 
   teyjus = callPackage ../development/compilers/teyjus {
     inherit (ocaml-ng.ocamlPackages_4_14) buildDunePackage;
+    stdenv = gcc14Stdenv;
   };
 
   urweb = callPackage ../development/compilers/urweb {
@@ -5199,14 +5202,9 @@ with pkgs;
     };
   };
 
-  dbqn = callPackage ../by-name/db/dbqn/package.nix {
-    jdk = jre;
-    stdenv = stdenvNoCC;
-  };
-
   dbqn-native = dbqn.override {
     buildNativeImage = true;
-    jdk = graalvmPackages.graalvm-ce;
+    jre = graalvmPackages.graalvm-ce;
   };
 
   clojupyter = callPackage ../applications/editors/jupyter-kernels/clojupyter {
@@ -6993,9 +6991,7 @@ with pkgs;
     x11Support = false;
   };
 
-  imlibsetroot = callPackage ../applications/graphics/imlibsetroot {
-    libXinerama = xorg.libXinerama;
-  };
+  imlibsetroot = callPackage ../applications/graphics/imlibsetroot { };
 
   indilib = callPackage ../development/libraries/science/astronomy/indilib { };
   indi-3rdparty = recurseIntoAttrs (
@@ -8085,7 +8081,7 @@ with pkgs;
     libmagic = file;
   };
 
-  xcb-util-cursor = xorg.xcbutilcursor;
+  xcb-util-cursor = libxcb-cursor;
 
   xgboostWithCuda = xgboost.override { cudaSupport = true; };
 
@@ -9982,8 +9978,6 @@ with pkgs;
   };
 
   bfcal = libsForQt5.callPackage ../applications/misc/bfcal { };
-
-  bino3d = qt6Packages.callPackage ../applications/video/bino3d { };
 
   bitlbee = callPackage ../applications/networking/instant-messengers/bitlbee { };
   bitlbee-plugins = callPackage ../applications/networking/instant-messengers/bitlbee/plugins.nix { };

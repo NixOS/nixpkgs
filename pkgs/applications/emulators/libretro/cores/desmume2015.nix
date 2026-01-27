@@ -6,7 +6,7 @@
   libpcap,
   libGLU,
   libGL,
-  xorg,
+  libx11,
 }:
 mkLibretroCore {
   core = "desmume2015";
@@ -23,7 +23,7 @@ mkLibretroCore {
     libpcap
     libGLU
     libGL
-    xorg.libX11
+    libx11
   ];
 
   makeFlags =

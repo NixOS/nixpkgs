@@ -36,7 +36,7 @@
   libjpeg8,
   libkate,
   librsvg,
-  xorg,
+  libxpm,
   libsForQt5,
   libupnp,
   aalib,
@@ -174,7 +174,7 @@ stdenv.mkDerivation (finalAttrs: {
     libjpeg8
     libkate
     librsvg
-    xorg.libXpm
+    libxpm
     libsForQt5.qt5.qtsvg
     libsForQt5.qt5.qtbase
     libsForQt5.qt5.qtx11extras

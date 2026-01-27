@@ -10,7 +10,14 @@
   pkg-config,
   libdrm,
   elfutils,
-  xorg,
+  libxxf86vm,
+  libxrandr,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcomposite,
+  libx11,
+  libxcb,
   glib,
   nss,
   nspr,
@@ -86,14 +93,14 @@ intel-oneapi.mkIntelOneApi (finalAttrs: {
       fontconfig
       glib
       freetype
-      xorg.libX11
-      xorg.libXxf86vm
-      xorg.libXext
-      xorg.libxcb
-      xorg.libXcomposite
-      xorg.libXdamage
-      xorg.libXfixes
-      xorg.libXrandr
+      libx11
+      libxxf86vm
+      libxext
+      libxcb
+      libxcomposite
+      libxdamage
+      libxfixes
+      libxrandr
       nss
       dbus
       cups
@@ -134,13 +141,13 @@ intel-oneapi.mkIntelOneApi (finalAttrs: {
       libdrm
       elfutils
       zlib
-      xorg.libX11
-      xorg.libXext
-      xorg.libxcb
-      xorg.libXcomposite
-      xorg.libXdamage
-      xorg.libXfixes
-      xorg.libXrandr
+      libx11
+      libxext
+      libxcb
+      libxcomposite
+      libxdamage
+      libxfixes
+      libxrandr
       glib
       nss
       dbus

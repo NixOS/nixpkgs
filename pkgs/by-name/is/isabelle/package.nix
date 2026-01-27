@@ -50,7 +50,8 @@ let
 
   # Isabelle uses a branch of vampire that is not in the normal release line
   # that adds support for higher order goals
-  vampire' = (vampire.override { stdenv = gcc14Stdenv; }).overrideAttrs (_: {
+  vampireStdenv = if stdenv.hostPlatform.isLinux then gcc14Stdenv else stdenv;
+  vampire' = (vampire.override { stdenv = vampireStdenv; }).overrideAttrs (_: {
     pname = "vampire-for-isabelle";
     version = "4.8";
 
@@ -61,7 +62,16 @@ let
       hash = "sha256-CmppaGa4M9tkE1b25cY1LSPFygJy5yV4kpHKbPqvcVE=";
     };
 
-    cmakeFlags = [ (lib.cmakeFeature "CMAKE_BUILD_HOL" "On") ];
+    patches = [ ./vampire-add-install-directive.patch ];
+
+    postInstall = ''
+      mv $out/bin/vampire_rel $out/bin/vampire
+    '';
+
+    cmakeFlags = [
+      (lib.cmakeFeature "CMAKE_BUILD_HOL" "On")
+      (lib.cmakeFeature "CMAKE_DISABLE_FIND_PACKAGE_Z3" "On")
+    ];
   });
 
   sha1 = stdenv.mkDerivation {

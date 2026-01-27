@@ -6,7 +6,7 @@
   perl,
   python3,
   openssl,
-  xorg,
+  libxcb-util,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
-    xorg.xcbutil
+    libxcb-util
   ];
 
   # Fix for build failure with gcc15

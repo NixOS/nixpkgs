@@ -5,7 +5,7 @@
   qtsensors,
   qttools,
   qtwayland,
-  xorg,
+  libxcvt,
   libcanberra,
   libdisplay-info,
   libgbm,
@@ -39,6 +39,6 @@ mkKdeDerivation {
     libcanberra
     libdisplay-info
 
-    xorg.libxcvt
+    libxcvt
   ];
 }

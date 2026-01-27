@@ -13,7 +13,9 @@
   cmake,
   ninja,
   libproxy,
-  xorg,
+  libxcb-cursor,
+  libxtst,
+  libxdmcp,
   zstd,
   double-conversion,
   util-linux,
@@ -156,9 +158,9 @@ stdenv.mkDerivation rec {
     xcbutilkeysyms
     xcbutilrenderutil
     xcbutilwm
-    xorg.libXdmcp
-    xorg.libXtst
-    xorg.xcbutilcursor
+    libxdmcp
+    libxtst
+    libxcb-cursor
     libepoxy
   ]
   ++ lib.optional (cups != null && lib.meta.availableOn stdenv.hostPlatform cups) cups

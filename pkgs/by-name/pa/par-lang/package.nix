@@ -8,7 +8,10 @@
   libGL,
   libxkbcommon,
   wayland,
-  xorg,
+  libxrandr,
+  libxi,
+  libxcursor,
+  libx11,
   makeDesktopItem,
   copyDesktopItems,
   nix-update-script,
@@ -40,10 +43,10 @@ rustPlatform.buildRustPackage {
         libGL
         libxkbcommon
         wayland
-        xorg.libX11
-        xorg.libXcursor
-        xorg.libXi
-        xorg.libXrandr
+        libx11
+        libxcursor
+        libxi
+        libxrandr
       ];
     in
     lib.optionalString stdenv.hostPlatform.isLinux ''

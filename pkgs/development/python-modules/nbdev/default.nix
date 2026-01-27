@@ -6,6 +6,7 @@
   setuptools,
   ipywidgets,
   fastcore,
+  fastgit,
   astunparse,
   watchdog,
   execnb,
@@ -15,12 +16,12 @@
 
 buildPythonPackage rec {
   pname = "nbdev";
-  version = "2.4.7";
+  version = "2.4.14";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-SonqSaW/xmM91Cy0aLAkVUrXuNnkjg+ZphZF3I5ZGvQ=";
+    hash = "sha256-zXUbUFf08IncbDO6sHiZP6KFvhF3d+GsFLPp2EuAW3g=";
   };
 
   pythonRelaxDeps = [ "ipywidgets" ];
@@ -34,6 +35,7 @@ buildPythonPackage rec {
     astunparse
     execnb
     fastcore
+    fastgit
     ghapi
     ipywidgets
     pyyaml

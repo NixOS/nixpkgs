@@ -7,17 +7,18 @@
   swtpm,
   openssl,
   age,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
   pname = "age-plugin-tpm";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "Foxboron";
     repo = "age-plugin-tpm";
     tag = "v${version}";
-    hash = "sha256-Vr6simVW5nAWTa8Dro2gar2+O90T8u6h09wTnEnygss=";
+    hash = "sha256-1BHVQY8ZexwdjchQiG8aQMEPukq/3ez+QYY1X67DgPc=";
   };
 
   proxyVendor = true;
@@ -28,6 +29,7 @@ buildGoModule rec {
     age
     swtpm
   ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   buildInputs = [
     openssl
@@ -36,6 +38,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
+    "-X main.version=${version}"
   ];
 
   passthru.tests = {

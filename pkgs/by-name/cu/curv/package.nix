@@ -14,7 +14,12 @@
   makeWrapper,
   openexr,
   onetbb,
-  xorg,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxext,
+  libxcursor,
+  libx11,
   ilmbase,
   llvmPackages,
   unstableGitUpdater,
@@ -49,12 +54,12 @@ stdenv.mkDerivation {
     libpng
     openexr
     onetbb
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXext
-    xorg.libXi
-    xorg.libXinerama
-    xorg.libXrandr
+    libx11
+    libxcursor
+    libxext
+    libxi
+    libxinerama
+    libxrandr
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     ilmbase

@@ -8,7 +8,9 @@
   makeDesktopItem,
   makeBinaryWrapper,
   libGL,
-  xorg,
+  libxxf86vm,
+  libxrender,
+  libx11,
 }:
 
 let
@@ -24,12 +26,10 @@ let
 
   runtimeDeps = [
     libGL
-  ]
-  ++ (with xorg; [
-    libX11
-    libXrender
-    libXxf86vm
-  ]);
+    libx11
+    libxrender
+    libxxf86vm
+  ];
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "weasis";

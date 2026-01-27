@@ -35,7 +35,9 @@
   vulkan-loader,
   wayland,
   xfconf,
-  xorg,
+  libxext,
+  libxdmcp,
+  libxau,
   yyjson,
   zlib,
   zfs,
@@ -169,9 +171,9 @@ stdenv.mkDerivation (finalAttrs: {
           libXrandr
           libxcb
           # Required by libxcb messages
-          xorg.libXau
-          xorg.libXdmcp
-          xorg.libXext
+          libxau
+          libxdmcp
+          libxext
         ]
         ++ lib.optionals xfceSupport [
           #  Needed for XFWM theme and XFCE Terminal font.

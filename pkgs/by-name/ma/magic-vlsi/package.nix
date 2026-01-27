@@ -2,7 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  git,
+  fetchpatch,
+  gitMinimal,
   python3,
   m4,
   cairo,
@@ -16,21 +17,35 @@
   fixDarwinDylibNames,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "magic-vlsi";
   version = "8.3.573";
 
   src = fetchFromGitHub {
     owner = "RTimothyEdwards";
     repo = "magic";
-    tag = version;
-    sha256 = "sha256-P5qfMsn3DGHjeF7zsZWeG9j38C6j5UEwUqGyjaEVO1E=";
+    tag = finalAttrs.version;
+    hash = "sha256-P5qfMsn3DGHjeF7zsZWeG9j38C6j5UEwUqGyjaEVO1E=";
     leaveDotGit = true;
   };
 
+  patches = [
+    (fetchpatch {
+      name = "fix-buffer-overflow-runstats.patch";
+      url = "https://github.com/RTimothyEdwards/magic/commit/6a07bc172b4bdae8bc22f51905194cdd427912cc.patch";
+      hash = "sha256-QPVl+SfUWj51u/G+EjTCVQZdG7tTdOlEFN/hS7E1Ojg=";
+    })
+
+    (fetchpatch {
+      name = "neuer-fix-name.patch";
+      url = "https://github.com/RTimothyEdwards/magic/commit/a70ca249c3a4e7a256a4482bd887452267c8cd52.patch";
+      hash = "sha256-sNQDz4/hBtwJeDrOCe+LfJkuaB0zRzX7w1aDv8ZD7Pw=";
+    })
+  ];
+
   nativeBuildInputs = [
     python3
-    git
+    gitMinimal
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     fixDarwinDylibNames
@@ -97,4 +112,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ thoughtpolice ];
   };
-}
+})

@@ -38,7 +38,8 @@
   nss,
   pango,
   udev,
-  xorg,
+  libxshmfence,
+  libxcb,
   bintools,
   makeDesktopItem,
   # It's unknown which version of openssl that postman expects but it seems that
@@ -140,8 +141,8 @@ stdenv.mkDerivation {
           nss
           pango
           udev
-          xorg.libxcb
-          xorg.libxshmfence
+          libxcb
+          libxshmfence
         ]
       }" $file
     done

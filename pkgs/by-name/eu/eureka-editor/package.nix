@@ -5,7 +5,7 @@
   fltk,
   zlib,
   xdg-utils,
-  xorg,
+  libxinerama,
   libjpeg,
   libGLU,
 }:
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     zlib
     xdg-utils
     libjpeg
-    xorg.libXinerama
+    libxinerama
     libGLU
   ];
 

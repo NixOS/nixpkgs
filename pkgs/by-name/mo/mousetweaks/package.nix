@@ -8,7 +8,10 @@
   gnome,
   gsettings-desktop-schemas,
   wrapGAppsHook3,
-  xorg,
+  libxtst,
+  libxfixes,
+  libxcursor,
+  libx11,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,10 +32,10 @@ stdenv.mkDerivation rec {
     glib
     gtk3
     gsettings-desktop-schemas
-    xorg.libX11
-    xorg.libXtst
-    xorg.libXfixes
-    xorg.libXcursor
+    libx11
+    libxtst
+    libxfixes
+    libxcursor
   ];
 
   passthru = {

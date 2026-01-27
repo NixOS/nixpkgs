@@ -19,6 +19,12 @@ stdenv.mkDerivation rec {
   # fails to find X on darwin
   configureFlags = lib.optional stdenv.hostPlatform.isDarwin "--without-x";
 
+  outputs = [
+    "out"
+    "info"
+    "man"
+  ];
+
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   enableParallelBuilding = true;

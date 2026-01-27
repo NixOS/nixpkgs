@@ -3,7 +3,7 @@
   lib,
   glib,
   wrapGAppsHook3,
-  xorg,
+  lndir,
   marco,
   mate-panel,
   panelApplets,
@@ -51,7 +51,7 @@ stdenv.mkDerivation {
 
     mkdir -p $out
     for i in $(cat $pathsPath); do
-      ${xorg.lndir}/bin/lndir -silent $i $out
+      ${lndir}/bin/lndir -silent $i $out
     done
 
     runHook postInstall

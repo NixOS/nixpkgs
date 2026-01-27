@@ -38,7 +38,9 @@
   udev,
   wayland,
   wayland-scanner,
-  xorg,
+  libxcursor,
+  libx11,
+  xorgproto,
   xwayland,
   dbus,
   gobject-introspection,
@@ -141,9 +143,9 @@ stdenv.mkDerivation (
       nettle
       udev
       wayland
-      xorg.libX11
-      xorg.libXcursor
-      xorg.xorgproto
+      libx11
+      libxcursor
+      xorgproto
       xwayland
     ]
     ++ lib.optionals (lib.strings.versionAtLeast version "2.18.0") [

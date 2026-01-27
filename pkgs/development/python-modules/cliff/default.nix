@@ -4,13 +4,10 @@
   fetchPypi,
   autopage,
   cmd2,
-  importlib-metadata,
   openstackdocstheme,
   pbr,
   prettytable,
-  pyparsing,
   pyyaml,
-  setuptools,
   stevedore,
   sphinxHook,
   callPackage,
@@ -18,17 +15,17 @@
 
 buildPythonPackage rec {
   pname = "cliff";
-  version = "4.10.0";
+  version = "4.13.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jB9baCdBoDsMRgfILor0HU6cKFkCRkZWL4bN6ylZqG0=";
+    hash = "sha256-t5zAssGfbG54yCvZI+BnhQNdd8sNKhpIMinwooNvDKc=";
   };
 
   build-system = [
     openstackdocstheme
-    setuptools
+    pbr
     sphinxHook
   ];
 
@@ -37,10 +34,7 @@ buildPythonPackage rec {
   dependencies = [
     autopage
     cmd2
-    importlib-metadata
-    pbr
     prettytable
-    pyparsing
     pyyaml
     stevedore
   ];

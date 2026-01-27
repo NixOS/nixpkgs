@@ -10,7 +10,7 @@
   sqlite,
   stdenv,
   alsa-lib,
-  xorg,
+  libxcb,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "screen-pipe";
@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
-    xorg.libxcb
+    libxcb
   ];
 
   buildFeatures = lib.optional stdenv.hostPlatform.isDarwin "metal";

@@ -6,7 +6,9 @@
   pandoc,
   installShellFiles,
   perl,
-  xorg,
+  libxext,
+  libx11,
+  x11perf,
   libGLX,
   coreutils,
   unixtools,
@@ -52,8 +54,8 @@ stdenv.mkDerivation rec {
     perl
   ]
   ++ lib.optionals withGL [
-    xorg.libX11
-    xorg.libXext
+    libx11
+    libxext
     libGLX
   ];
 
@@ -66,7 +68,7 @@ stdenv.mkDerivation rec {
     gawk
   ]
   ++ lib.optionals withX11perf [
-    xorg.x11perf
+    x11perf
   ];
 
   makeFlags = [

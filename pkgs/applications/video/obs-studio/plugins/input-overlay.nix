@@ -7,7 +7,14 @@
   ninja,
   obs-studio,
   qtbase,
-  xorg,
+  libxt,
+  libxtst,
+  libxi,
+  libxinerama,
+  libxext,
+  libxdmcp,
+  libxau,
+  libx11,
   libxkbcommon,
   libxkbfile,
   sdl3,
@@ -35,14 +42,14 @@ stdenv.mkDerivation (finalAttrs: {
     obs-studio
     qtbase
     sdl3
-    xorg.libX11
-    xorg.libXau
-    xorg.libXdmcp
-    xorg.libXtst
-    xorg.libXext
-    xorg.libXi
-    xorg.libXt
-    xorg.libXinerama
+    libx11
+    libxau
+    libxdmcp
+    libxtst
+    libxext
+    libxi
+    libxt
+    libxinerama
     libxkbcommon
     libxkbfile
   ];

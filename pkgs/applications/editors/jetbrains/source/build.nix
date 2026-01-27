@@ -22,7 +22,7 @@
   maven,
   p7zip,
   pkg-config,
-  xorg,
+  libx11,
 }:
 {
   version,
@@ -97,7 +97,7 @@ let
     ];
     buildInputs = [
       glib
-      xorg.libX11
+      libx11
       libdbusmenu
     ];
     inherit src;

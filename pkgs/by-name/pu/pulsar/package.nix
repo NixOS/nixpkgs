@@ -18,7 +18,15 @@
   libgbm,
   nss,
   nspr,
-  xorg,
+  libxrandr,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcomposite,
+  libx11,
+  libxshmfence,
+  libxkbfile,
+  libxcb,
   libdrm,
   libsecret,
   libxkbcommon,
@@ -62,16 +70,16 @@ let
     nss
     nspr
     libdrm
-    xorg.libX11
-    xorg.libxcb
-    xorg.libXcomposite
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXrandr
-    xorg.libxshmfence
+    libx11
+    libxcb
+    libxcomposite
+    libxdamage
+    libxext
+    libxfixes
+    libxrandr
+    libxshmfence
     libxkbcommon
-    xorg.libxkbfile
+    libxkbfile
     pango
     stdenv.cc.cc
     systemd
@@ -102,7 +110,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     gtk3
-    xorg.libxkbfile
+    libxkbfile
   ];
 
   dontBuild = true;

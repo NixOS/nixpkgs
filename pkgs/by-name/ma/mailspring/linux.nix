@@ -18,7 +18,11 @@
   nss,
   openssl,
   udev,
-  xorg,
+  libxtst,
+  libxscrnsaver,
+  libxdamage,
+  libxshmfence,
+  libxkbfile,
   libgbm,
   libdrm,
   libappindicator,
@@ -46,11 +50,11 @@ stdenv.mkDerivation (finalAttrs: {
     libkrb5
     libsecret
     nss
-    xorg.libxkbfile
-    xorg.libXdamage
-    xorg.libXScrnSaver
-    xorg.libXtst
-    xorg.libxshmfence
+    libxkbfile
+    libxdamage
+    libxscrnsaver
+    libxtst
+    libxshmfence
     libgbm
     libdrm
   ];

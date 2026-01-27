@@ -7,7 +7,10 @@
   libxkbcommon,
   openssl,
   pkg-config,
-  xorg,
+  libxscrnsaver,
+  libxi,
+  libxcursor,
+  libx11,
   vulkan-loader,
   wayland,
 }:
@@ -32,10 +35,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     fontconfig
     openssl
     libxkbcommon
-    xorg.libX11
-    xorg.libXScrnSaver
-    xorg.libXcursor
-    xorg.libXi
+    libx11
+    libxscrnsaver
+    libxcursor
+    libxi
     vulkan-loader
     wayland
   ];

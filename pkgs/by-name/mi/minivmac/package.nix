@@ -4,7 +4,7 @@
   fetchFromGitHub,
   buildPackages,
   alsa-lib,
-  xorg,
+  libx11,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-iiEE0ioXh3keKUPfAB+YcE1iggGLpxT9N8LSVFDhttE=";
   };
 
-  buildInputs = [ xorg.libX11 ];
+  buildInputs = [ libx11 ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 

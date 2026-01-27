@@ -9,7 +9,8 @@
   fetchurl,
   stdenv,
   lib,
-  xorg,
+  libxtst,
+  libx11,
   glib,
   libglvnd,
   glibcLocales,
@@ -49,8 +50,8 @@ let
   versionFile = toString ./packages.nix;
 
   neededLibraries = [
-    xorg.libX11
-    xorg.libXtst
+    libx11
+    libxtst
     glib
     libglvnd
     openssl_1_1

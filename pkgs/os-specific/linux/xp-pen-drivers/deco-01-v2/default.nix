@@ -5,7 +5,6 @@
   libusb1,
   glibc,
   libGL,
-  xorg,
   makeWrapper,
   qtx11extras,
   wrapQtAppsHook,

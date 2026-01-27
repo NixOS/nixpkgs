@@ -3,7 +3,7 @@
   fetchFromGitHub,
   stdenv,
   libopus,
-  xorg,
+  libxrandr,
   pname,
   releaseFile ? pname,
   buildFlags,
@@ -42,7 +42,7 @@ stdenv.mkDerivation {
     substituteInPlace ./engine/Makefile \
       --replace "I/usr/include/opus" "I${libopus.dev}/include/opus"
     substituteInPlace ./engine/gl/gl_vidlinuxglx.c \
-      --replace 'Sys_LoadLibrary("libXrandr"' 'Sys_LoadLibrary("${xorg.libXrandr}/lib/libXrandr.so"'
+      --replace 'Sys_LoadLibrary("libXrandr"' 'Sys_LoadLibrary("${libxrandr}/lib/libXrandr.so"'
   '';
 
   installPhase = ''

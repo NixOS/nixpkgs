@@ -8,7 +8,13 @@
   cmake,
   pkg-config,
   alsa-lib,
-  xorg,
+  libxrender,
+  libxrandr,
+  libxinerama,
+  libxext,
+  libxcursor,
+  libxcomposite,
+  libx11,
   fontconfig,
   freetype,
   libjack2,
@@ -84,13 +90,13 @@ stdenv.mkDerivation {
 
   buildInputs = [
     alsa-lib
-    xorg.libX11
-    xorg.libXcomposite
-    xorg.libXcursor
-    xorg.libXext
-    xorg.libXinerama
-    xorg.libXrandr
-    xorg.libXrender
+    libx11
+    libxcomposite
+    libxcursor
+    libxext
+    libxinerama
+    libxrandr
+    libxrender
     fontconfig
     libjack2
     freetype

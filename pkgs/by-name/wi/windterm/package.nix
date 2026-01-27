@@ -10,7 +10,12 @@
   glib,
   alsa-lib,
   pulseaudio,
-  xorg,
+  libxcb-util,
+  libxcb-render-util,
+  libxcb-keysyms,
+  libxcb-image,
+  libxtst,
+  libxcb,
   gtk3,
   atk,
   pango,
@@ -40,12 +45,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    xorg.libxcb
-    xorg.xcbutil
-    xorg.libXtst
-    xorg.xcbutilimage
-    xorg.xcbutilkeysyms
-    xorg.xcbutilrenderutil
+    libxcb
+    libxcb-util
+    libxtst
+    libxcb-image
+    libxcb-keysyms
+    libxcb-render-util
     libsForQt5.qtbase
     libsForQt5.qtmultimedia
     gst_all_1.gst-plugins-base

@@ -592,9 +592,9 @@ builtins.intersectAttrs super {
       testDepends =
         drv.testDepends or [ ]
         ++ map lib.getBin [
-          pkgs.xorg.xorgserver
-          pkgs.xorg.xprop
-          pkgs.xorg.xrandr
+          pkgs.xorg-server
+          pkgs.xprop
+          pkgs.xrandr
           pkgs.xdummy
           pkgs.xterm
           pkgs.dbus
@@ -725,7 +725,7 @@ builtins.intersectAttrs super {
   pcap = addExtraLibrary pkgs.libpcap super.pcap;
 
   # https://github.com/NixOS/nixpkgs/issues/53336
-  greenclip = addExtraLibrary pkgs.xorg.libXdmcp super.greenclip;
+  greenclip = addExtraLibrary pkgs.libxdmcp super.greenclip;
 
   # The cabal files for these libraries do not list the required system dependencies.
   libjwt-typed = addExtraLibrary pkgs.libjwt super.libjwt-typed;
@@ -2000,13 +2000,13 @@ builtins.intersectAttrs super {
     ;
 
   webkit2gtk3-javascriptcore = lib.pipe super.webkit2gtk3-javascriptcore [
-    (addBuildDepend pkgs.xorg.libXtst)
+    (addBuildDepend pkgs.libxtst)
     (addBuildDepend pkgs.lerc)
     (overrideCabal { __onlyPropagateKnownPkgConfigModules = true; })
   ];
 
   gi-webkit2 = lib.pipe super.gi-webkit2 [
-    (addBuildDepend pkgs.xorg.libXtst)
+    (addBuildDepend pkgs.libxtst)
     (addBuildDepend pkgs.lerc)
     (overrideCabal { __onlyPropagateKnownPkgConfigModules = true; })
   ];

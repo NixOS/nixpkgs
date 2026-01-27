@@ -626,25 +626,25 @@ let
 
         ffmpeg = callPackage ../development/ocaml-modules/ffmpeg { };
         ffmpeg-av = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-av.nix {
-          ffmpeg = pkgs.ffmpeg_6;
+          ffmpeg = pkgs.ffmpeg_8;
         };
         ffmpeg-avcodec = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-avcodec.nix {
-          ffmpeg = pkgs.ffmpeg_6;
+          ffmpeg = pkgs.ffmpeg_8;
         };
         ffmpeg-avdevice = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-avdevice.nix {
-          ffmpeg = pkgs.ffmpeg_6;
+          ffmpeg = pkgs.ffmpeg_8;
         };
         ffmpeg-avfilter = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-avfilter.nix {
-          ffmpeg = pkgs.ffmpeg_6;
+          ffmpeg = pkgs.ffmpeg_8;
         };
         ffmpeg-avutil = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-avutil.nix {
-          ffmpeg = pkgs.ffmpeg_6;
+          ffmpeg = pkgs.ffmpeg_8;
         };
         ffmpeg-swresample = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-swresample.nix {
-          ffmpeg = pkgs.ffmpeg_6;
+          ffmpeg = pkgs.ffmpeg_8;
         };
         ffmpeg-swscale = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-swscale.nix {
-          ffmpeg = pkgs.ffmpeg_6;
+          ffmpeg = pkgs.ffmpeg_8;
         };
 
         fiber = callPackage ../development/ocaml-modules/fiber { };

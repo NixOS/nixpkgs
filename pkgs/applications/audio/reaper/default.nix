@@ -148,7 +148,6 @@ stdenv.mkDerivation rec {
       "aarch64-darwin"
     ];
     maintainers = with lib.maintainers; [
-      atinba
       ilian
       viraptor
     ];

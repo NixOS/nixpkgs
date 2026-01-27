@@ -8,7 +8,7 @@
   glib,
   gtk3,
   pango,
-  xorg,
+  libxfixes,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -25,8 +25,8 @@ python3Packages.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace volctl/xwrappers.py \
-      --replace 'libXfixes.so' "${xorg.libXfixes}/lib/libXfixes.so" \
-      --replace 'libXfixes.so.3' "${xorg.libXfixes}/lib/libXfixes.so.3"
+      --replace 'libXfixes.so' "${libxfixes}/lib/libXfixes.so" \
+      --replace 'libXfixes.so.3' "${libxfixes}/lib/libXfixes.so.3"
   '';
 
   preBuild = ''

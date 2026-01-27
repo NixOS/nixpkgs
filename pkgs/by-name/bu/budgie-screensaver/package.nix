@@ -17,7 +17,7 @@
   systemd,
   testers,
   wrapGAppsHook3,
-  xorg,
+  libxxf86vm,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     libX11
     linux-pam
     systemd
-    xorg.libXxf86vm
+    libxxf86vm
   ];
 
   # Fix GCC 14 build.

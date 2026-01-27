@@ -39,7 +39,7 @@ appimageTools.wrapType2 {
 
   extraPkgs =
     pkgs: with pkgs; [
-      xorg.libxkbfile
+      libxkbfile
     ];
 
   meta = {

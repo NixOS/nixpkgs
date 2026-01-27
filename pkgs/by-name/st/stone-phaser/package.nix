@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  xorg,
+  libx11,
   cairo,
   libGL,
   lv2,
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    xorg.libX11
+    libx11
     cairo
     libGL
     lv2

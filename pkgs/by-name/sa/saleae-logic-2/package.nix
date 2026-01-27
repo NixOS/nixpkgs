@@ -41,16 +41,16 @@ appimageTools.wrapType2 {
       wget
       unzip
       glib
-      xorg.libX11
-      xorg.libxcb
-      xorg.libXcomposite
-      xorg.libXcursor
-      xorg.libXdamage
-      xorg.libXext
-      xorg.libXfixes
-      xorg.libXi
-      xorg.libXrender
-      xorg.libXtst
+      libx11
+      libxcb
+      libxcomposite
+      libxcursor
+      libxdamage
+      libxext
+      libxfixes
+      libxi
+      libxrender
+      libxtst
       nss
       nspr
       dbus
@@ -60,8 +60,8 @@ appimageTools.wrapType2 {
       atk
       cairo
       expat
-      xorg.libXrandr
-      xorg.libXScrnSaver
+      libxrandr
+      libxscrnsaver
       alsa-lib
       at-spi2-core
       cups

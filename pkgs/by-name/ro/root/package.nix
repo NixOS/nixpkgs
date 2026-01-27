@@ -25,7 +25,10 @@
   llvm_20,
   lsof,
   lz4,
-  xorg,
+  libxpm,
+  libxft,
+  libxext,
+  libx11,
   xz,
   man,
   openssl,
@@ -116,10 +119,10 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libGLU
     libGL
-    xorg.libX11
-    xorg.libXpm
-    xorg.libXft
-    xorg.libXext
+    libx11
+    libxpm
+    libxft
+    libxext
   ];
 
   preConfigure = ''

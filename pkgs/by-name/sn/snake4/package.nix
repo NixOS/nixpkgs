@@ -4,7 +4,11 @@
   fetchurl,
   shhmsg,
   shhopt,
-  xorg,
+  libxt,
+  libxpm,
+  libxext,
+  libxaw,
+  libx11,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,14 +20,14 @@ stdenv.mkDerivation rec {
     sha256 = "14cng9l857np42zixp440mbc8y5675frb6lhsds53j1cws9cncw9";
   };
 
-  buildInputs = with xorg; [
+  buildInputs = [
     shhmsg
     shhopt
-    libX11
-    libXt
-    libXpm
-    libXaw
-    libXext
+    libx11
+    libxt
+    libxpm
+    libxaw
+    libxext
   ];
 
   preInstall = ''

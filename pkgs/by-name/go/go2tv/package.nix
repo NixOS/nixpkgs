@@ -2,7 +2,13 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  xorg,
+  libxxf86vm,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxext,
+  libxcursor,
+  libx11,
   libglvnd,
   pkg-config,
   withGui ? true,
@@ -24,13 +30,13 @@ buildGoModule rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXrandr
-    xorg.libXinerama
-    xorg.libXi
-    xorg.libXext
-    xorg.libXxf86vm
+    libx11
+    libxcursor
+    libxrandr
+    libxinerama
+    libxi
+    libxext
+    libxxf86vm
     libglvnd
   ];
 

@@ -8,7 +8,7 @@
   zstd,
   pkg-config,
   python3,
-  xorg,
+  libx11,
   nghttp2,
   libgit2,
   withDefaultFeatures ? true,
@@ -48,7 +48,7 @@ rustPlatform.buildRustPackage {
     zstd
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ zlib ]
-  ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isLinux) [ xorg.libX11 ]
+  ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isLinux) [ libx11 ]
   ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isDarwin) [
     nghttp2
     libgit2

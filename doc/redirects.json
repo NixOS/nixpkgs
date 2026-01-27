@@ -311,7 +311,12 @@
     "release-notes.html#sec-nixpkgs-release-26.05-highlights"
   ],
   "sec-nixpkgs-release-26.05-incompatibilities": [
-    "release-notes.html#sec-nixpkgs-release-26.05-incompatibilities"
+    "release-notes.html#sec-nixpkgs-release-26.05-incompatibilities",
+    "index.html#sec-xorg",
+    "index.html#katamari-tarballs",
+    "index.html#individual-tarballs",
+    "index.html#generating-nix-expressions",
+    "index.html#overriding-the-generator"
   ],
   "sec-nixpkgs-release-26.05-lib": [
     "release-notes.html#sec-nixpkgs-release-26.05-lib"
@@ -2933,25 +2938,32 @@
   "sec-chicken-override-scope": [
     "index.html#sec-chicken-override-scope"
   ],
-  "sec-language-coq": [
+  "sec-language-rocq": [
+    "index.html#sec-language-rocq",
     "index.html#sec-language-coq"
   ],
-  "coq-derivation-coq": [
+  "rocq-derivation-rocq": [
+    "index.html#rocq-derivation-rocq",
     "index.html#coq-derivation-coq"
   ],
-  "coq-packages-attribute-sets-coqpackages": [
+  "rocq-packages-attribute-sets-rocqpackages": [
+    "index.html#rocq-packages-attribute-sets-rocqpackages",
     "index.html#coq-packages-attribute-sets-coqpackages"
   ],
-  "coq-overriding-packages": [
+  "rocq-overriding-packages": [
+    "index.html#rocq-overriding-packages",
     "index.html#coq-overriding-packages"
   ],
-  "coq-override": [
+  "rocq-override": [
+    "index.html#rocq-override",
     "index.html#coq-override"
   ],
-  "coq-overrideCoqDerivation": [
+  "rocq-overrideRocqDerivation": [
+    "index.html#rocq-overrideRocqDerivation",
     "index.html#coq-overrideCoqDerivation"
   ],
-  "coq-overrideAttrs": [
+  "rocq-overrideAttrs": [
+    "index.html#rocq-overrideAttrs",
     "index.html#coq-overrideAttrs"
   ],
   "crystal": [
@@ -4494,21 +4506,6 @@
   ],
   "sec-weechat": [
     "index.html#sec-weechat"
-  ],
-  "sec-xorg": [
-    "index.html#sec-xorg"
-  ],
-  "katamari-tarballs": [
-    "index.html#katamari-tarballs"
-  ],
-  "individual-tarballs": [
-    "index.html#individual-tarballs"
-  ],
-  "generating-nix-expressions": [
-    "index.html#generating-nix-expressions"
-  ],
-  "overriding-the-generator": [
-    "index.html#overriding-the-generator"
   ],
   "sec-build-support": [
     "index.html#sec-build-support"

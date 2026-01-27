@@ -6,7 +6,23 @@
   dpkg,
   nss,
   nspr,
-  xorg,
+  libxt,
+  libxtst,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxft,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  libsm,
+  libice,
+  libxshmfence,
+  libxcb,
   pango,
   zlib,
   atkmm,
@@ -63,7 +79,7 @@ let
     preferLocalBuild = true;
   };
 
-  wechat-uos-runtime = with xorg; [
+  wechat-uos-runtime = [
     stdenv.cc.cc
     stdenv.cc.libc
     pango
@@ -72,23 +88,23 @@ let
     xcbutilimage
     xcbutilkeysyms
     xcbutilrenderutil
-    libX11
-    libXt
-    libXext
-    libSM
-    libICE
+    libx11
+    libxt
+    libxext
+    libsm
+    libice
     libxcb
     libxkbcommon
     libxshmfence
-    libXi
-    libXft
-    libXcursor
-    libXfixes
-    libXScrnSaver
-    libXcomposite
-    libXdamage
-    libXtst
-    libXrandr
+    libxi
+    libxft
+    libxcursor
+    libxfixes
+    libxscrnsaver
+    libxcomposite
+    libxdamage
+    libxtst
+    libxrandr
     libnotify
     atk
     atkmm
@@ -105,7 +121,7 @@ let
     libva
     freetype
     fontconfig
-    libXrender
+    libxrender
     libuuid
     expat
     glib

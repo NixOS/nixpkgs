@@ -14,7 +14,7 @@
   libSM,
   libX11,
   dotnetCorePackages,
-  xorg,
+  libxcb-keysyms,
   expat,
   libxml2,
   xz,
@@ -64,7 +64,7 @@ in
     musl
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    xorg.xcbutilkeysyms
+    libxcb-keysyms
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch) [
     expat

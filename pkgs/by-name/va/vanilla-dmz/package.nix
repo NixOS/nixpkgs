@@ -2,7 +2,7 @@
   stdenvNoCC,
   lib,
   fetchzip,
-  xorg,
+  xcursorgen,
   hicolor-icon-theme,
 }:
 
@@ -16,7 +16,7 @@ stdenvNoCC.mkDerivation rec {
   };
 
   buildInputs = [
-    xorg.xcursorgen
+    xcursorgen
   ];
 
   propagatedBuildInputs = [

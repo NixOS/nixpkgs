@@ -17,7 +17,7 @@
   pcre,
   pkg-config,
   readline,
-  xorg,
+  libpthread-stubs,
   zlib,
 }:
 
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     minixml
     pcre
     readline
-    xorg.libpthreadstubs
+    libpthread-stubs
     zlib
   ];
 

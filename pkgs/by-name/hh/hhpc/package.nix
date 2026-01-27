@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  xorg,
+  libx11,
   pkg-config,
 }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ xorg.libX11 ];
+  buildInputs = [ libx11 ];
 
   installPhase = ''
     mkdir -p $out/bin

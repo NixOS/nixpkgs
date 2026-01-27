@@ -21,7 +21,7 @@
   pkg-config,
   stdenv,
   onetbb,
-  xorg,
+  libx11,
   cudaPackages,
   enableCuda ? config.cudaSupport,
 }:
@@ -63,7 +63,7 @@ stdenv.mkDerivation {
     magic-enum
     opencv'.cxxdev
     onetbb
-    xorg.libX11
+    libx11
   ]
   ++ lib.optionals enableCuda [
     cudaPackages.cuda_nvcc

@@ -3,7 +3,6 @@
   buildGoModule,
   fetchFromGitHub,
   stdenv,
-  xorg,
   testers,
   src-cli,
 }:

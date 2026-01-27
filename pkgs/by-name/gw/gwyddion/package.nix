@@ -17,7 +17,7 @@
   libwebp,
   # libXmu is not used if libunique is.
   libXmuSupport ? false,
-  xorg,
+  libxmu,
   libxsltSupport ? true,
   libxslt,
   fitsSupport ? true,
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     libGL
   ]
   ++ lib.optional openexrSupport openexr
-  ++ lib.optional libXmuSupport xorg.libXmu
+  ++ lib.optional libXmuSupport libxmu
   ++ lib.optional fitsSupport cfitsio
   ++ lib.optional libpngSupport libpng
   ++ lib.optional libxsltSupport libxslt

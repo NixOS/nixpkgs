@@ -96,10 +96,10 @@ let
   // optionalAttrs xcfg.enable {
     X11 = {
       ServerPath = toString xserverWrapper;
-      XephyrPath = "${pkgs.xorg.xorgserver.out}/bin/Xephyr";
+      XephyrPath = "${pkgs.xorg-server.out}/bin/Xephyr";
       SessionCommand = toString dmcfg.sessionData.wrapper;
       SessionDir = "${dmcfg.sessionData.desktops}/share/xsessions";
-      XauthPath = "${pkgs.xorg.xauth}/bin/xauth";
+      XauthPath = "${pkgs.xauth}/bin/xauth";
       DisplayCommand = toString Xsetup;
       DisplayStopCommand = toString Xstop;
       EnableHiDPI = cfg.enableHidpi;

@@ -13,7 +13,7 @@
   lttng-ust,
   numactl,
   libglvnd,
-  xorg,
+  libxi,
   udev,
   vulkan-loader,
   nix-update-script,
@@ -54,7 +54,7 @@ buildDotnetModule rec {
     libglvnd
 
     # needed for the window to actually appear
-    xorg.libXi
+    libxi
 
     # needed to avoid in runtime.log:
     # [verbose]: SDL error log [debug]: Failed loading udev_device_get_action: /nix/store/*-osu-lazer-*/lib/osu-lazer/runtimes/linux-x64/native/libSDL2.so: undefined symbol: _udev_device_get_action

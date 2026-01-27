@@ -9,7 +9,10 @@
   makeWrapper,
   libxkbcommon,
   vulkan-loader,
-  xorg,
+  libxrender,
+  libxi,
+  libxcursor,
+  libx11,
 }:
 let
   version = "0.3.1";
@@ -49,10 +52,10 @@ rustPlatform.buildRustPackage {
         wayland
         libxkbcommon
         vulkan-loader
-        xorg.libX11
-        xorg.libXcursor
-        xorg.libXi
-        xorg.libXrender
+        libx11
+        libxcursor
+        libxi
+        libxrender
       ]
     }"
 

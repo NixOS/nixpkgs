@@ -6,7 +6,10 @@
   libGL,
   glib,
   gdk-pixbuf,
-  xorg,
+  libxrandr,
+  libxfixes,
+  libxdamage,
+  libxcomposite,
   libintl,
   pangoSupport ? true,
   pango,
@@ -87,10 +90,10 @@ stdenv.mkDerivation rec {
     libgbm
     mesa-gl-headers
     libGL
-    xorg.libXrandr
-    xorg.libXfixes
-    xorg.libXcomposite
-    xorg.libXdamage
+    libxrandr
+    libxfixes
+    libxcomposite
+    libxdamage
   ]
   ++ lib.optionals gstreamerSupport [
     gst_all_1.gstreamer

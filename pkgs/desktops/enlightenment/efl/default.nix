@@ -53,7 +53,20 @@
   wayland-protocols,
   wayland-scanner,
   writeText,
-  xorg,
+  libxtst,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  xorgproto,
+  libxcb,
   zlib,
   directoryListingUpdater,
 }:
@@ -97,9 +110,9 @@ stdenv.mkDerivation rec {
     systemd
     udev
     wayland-protocols
-    xorg.libX11
-    xorg.libXcursor
-    xorg.xorgproto
+    libx11
+    libxcursor
+    xorgproto
     zlib
     # still missing parent icon themes: RAVE-X, Faenza
   ];
@@ -133,17 +146,17 @@ stdenv.mkDerivation rec {
     poppler
     util-linux
     wayland
-    xorg.libXScrnSaver
-    xorg.libXcomposite
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXi
-    xorg.libXinerama
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libXtst
-    xorg.libxcb
+    libxscrnsaver
+    libxcomposite
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxinerama
+    libxrandr
+    libxrender
+    libxtst
+    libxcb
   ];
 
   dontDropIconThemeCache = true;
