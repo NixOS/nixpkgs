@@ -43,4 +43,5 @@ let
     };
 in
 {
+  secrets = importContract ./secrets.nix;
 }
