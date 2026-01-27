@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/FlareSolverr/FlareSolverr/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     mainProgram = "flaresolverr";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ diogotcorreia ];
     inherit (undetected-chromedriver.meta) platforms;
   };
 })
