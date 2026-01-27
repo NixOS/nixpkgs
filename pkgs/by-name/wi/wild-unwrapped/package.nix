@@ -33,6 +33,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env.ZSTD_SYS_USE_PKG_CONFIG = true;
 
+  postInstall = ''
+    ln -s wild $out/bin/ld.wild
+  '';
+
   doCheck = false; # Tests are ran in passthru tests
 
   doInstallCheck = true;
