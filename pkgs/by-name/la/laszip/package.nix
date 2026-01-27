@@ -7,14 +7,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "3.4.4";
+  version = "3.5.0";
   pname = "laszip";
 
   src = fetchFromGitHub {
     owner = "LASzip";
     repo = "LASzip";
     rev = finalAttrs.version;
-    hash = "sha256-v/oLU69zqDW1o1HTlay7GDh1Kbmv1rarII2Fz5HWCqg=";
+    hash = "sha256-xZ8IFnqrGt47lN+C6/ibgbIWqpObDf4RHPaGMXw0WZ4=";
   };
 
   hardeningDisable = [ "format" ]; # -Werror=format-security
