@@ -18,6 +18,7 @@
   systemdMinimal,
   onetbb,
   writeTextDir,
+  wrapGAppsHook4,
 }:
 
 let
@@ -57,6 +58,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     dpkg
     makeWrapper
+    wrapGAppsHook4
   ];
 
   buildInputs = libraries;
