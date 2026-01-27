@@ -9,14 +9,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "icloudpd";
-  version = "1.31.0";
+  version = "1.32.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "icloud-photos-downloader";
     repo = "icloud_photos_downloader";
     tag = "v${version}";
-    hash = "sha256-GZhc5AeOxfSPxloN630lQguh63ha63Wnuh0H6pMkPyE=";
+    hash = "sha256-XwMY3OBGYDA/DKTXYgxuMV9pbamy8NbitMrEbsEmlMk=";
   };
 
   pythonRelaxDeps = true;
@@ -62,7 +62,21 @@ python3Packages.buildPythonApplication rec {
     "test_autodelete_photos_dry_run"
     "test_retry_fail_delete_after_download_internal_error"
     "test_autodelete_invalid_creation_date"
+    "test_all_http_methods_covered"
+    "test_builtin_timeout_error_handling"
+    "test_connection_error_handling"
+    "test_new_connection_error_handling"
+    "test_normal_request"
+    "test_other_exceptions_pass_through"
+    "test_timeout_error_handling"
+    "test_response_to_har_entry_with_large_streaming_response"
+    "test_response_to_har_entry_with_real_json_response"
+    "test_response_to_har_entry_with_real_streaming_response"
+    "test_response_to_har_entry_with_real_text_response"
+    "test_streaming_vs_non_streaming_behavior"
+    # touches non-existing folders
     "test_folder_structure_de_posix"
+    "test_missing_directory"
   ];
 
   passthru = {
