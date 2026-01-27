@@ -299,6 +299,7 @@ in
       default = [ ];
       description = ''
         Packages to include in /bin for the stage 1 emergency shell.
+        populates /bin with symlinks /bin/foo -> /nix/store/.../bin/foo
       '';
     };
 
