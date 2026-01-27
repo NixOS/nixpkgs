@@ -8,26 +8,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "code2prompt";
-  version = "1.1.0";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "mufeedvh";
     repo = "code2prompt";
     rev = "v${version}";
-    hash = "sha256-KZqh0Vq4Mn56PhUO1JUzVpNBAGOZqUAsj31Cj5K+Lyk=";
+    hash = "sha256-Gh8SsSTZW7QlyyC3SWJ5pOK2x85/GT7+LPJn2Jeczpc=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  cargoHash = "sha256-t4HpGqojIkw9OBUAYz4ZEaB7XyHQxkFB2HtlkGKbe2s=";
 
-  postPatch = ''
-    # src is missing Cargo.lock
-    ln -s ${./Cargo.lock} Cargo.lock
-  '';
+  cargoBuildFlags = [
+    "-p"
+    "code2prompt"
+  ];
 
+  OPENSSL_NO_VENDOR = 1;
   nativeBuildInputs = [ pkg-config ];
-
   buildInputs = [ openssl ];
 
   meta = {
