@@ -92,7 +92,7 @@ Exceptions to this rule are:
 Each tool has an abstraction to just build the node_modules (dependencies) directory.
 You can always use the `stdenv.mkDerivation` with the node_modules to build the package (symlink the node_modules directory and then use the package build command).
 The node_modules abstraction can be also used to build some web framework frontends.
-For an example of this see how [plausible](https://github.com/NixOS/nixpkgs/blob/master/pkgs/servers/web-apps/plausible/default.nix) is built. `mkYarnModules` to make the derivation containing node_modules.
+For an example of this see how [plausible](https://github.com/NixOS/nixpkgs/blob/master/pkgs/by-name/pl/plausible/package.nix) is built. `mkYarnModules` to make the derivation containing node_modules.
 Then when building the frontend you can just symlink the node_modules directory.
 
 ## Tool-specific instructions {#javascript-tool-specific}
