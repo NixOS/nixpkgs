@@ -355,6 +355,11 @@ let
 
         cudf = callPackage ../development/ocaml-modules/cudf { };
 
+        curl = callPackage ../development/ocaml-modules/curl {
+          inherit (pkgs) curl;
+        };
+        curl_lwt = callPackage ../development/ocaml-modules/curl/lwt.nix { };
+
         curly = callPackage ../development/ocaml-modules/curly {
           inherit (pkgs) curl;
         };
