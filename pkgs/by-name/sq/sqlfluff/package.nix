@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "sqlfluff";
-  version = "3.5.0";
+  version = "4.0.0a3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sqlfluff";
     repo = "sqlfluff";
     tag = version;
-    hash = "sha256-fO4a1DCDM5RCeaPUHtPPGgTtZPRHOl9nuxbipDJZy7A=";
+    hash = "sha256-Syc3gMe/AaoqXQG2YJEOBOoeWmFLogLHvgw+bmAVEtw=";
   };
 
   build-system = with python3Packages; [ setuptools ];
