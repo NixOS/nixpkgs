@@ -123,8 +123,9 @@ let
         AmbientCapabilities = [
           "CAP_NET_ADMIN"
           "CAP_NET_RAW"
-        ];
-        CapabilityBoundingSet = [
+        ]
+        ++ lib.optional (!cfg.enableHardening) "CAP_SYS_ADMIN";
+        CapabilityBoundingSet = lib.mkIf cfg.enableHardening [
           "CAP_NET_ADMIN"
           "CAP_NET_RAW"
         ];
@@ -144,25 +145,25 @@ let
           "/etc/"
         ]
         ++ lib.optional (cfg.secretsFile != null) cfg.secretsFile;
-        DeviceAllow = "/dev/rfkill rw";
+        DeviceAllow = lib.mkIf cfg.enableHardening "/dev/rfkill rw";
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
-        NoNewPrivileges = true;
-        PrivateDevices = true;
-        PrivateMounts = true;
+        NoNewPrivileges = cfg.enableHardening;
+        PrivateDevices = cfg.enableHardening;
+        PrivateMounts = cfg.enableHardening;
         PrivateTmp = true;
         PrivateUsers = false;
         ProtectClock = true;
         ProtectControlGroups = true;
-        ProtectHome = true;
-        ProtectHostname = true;
+        ProtectHome = cfg.enableHardening;
+        ProtectHostname = cfg.enableHardening;
         ProtectKernelLogs = true;
-        ProtectKernelModules = true;
-        ProtectKernelTunables = true;
-        ProtectProc = "invisible";
-        ProtectSystem = "strict";
+        ProtectKernelModules = cfg.enableHardening;
+        ProtectKernelTunables = cfg.enableHardening;
+        ProtectProc = lib.mkIf cfg.enableHardening "invisible";
+        ProtectSystem = lib.mkIf cfg.enableHardening "strict";
         IPAddressDeny = "any";
-        RemoveIPC = true;
+        RemoveIPC = cfg.enableHardening;
         RestrictAddressFamilies = [
           "AF_UNIX"
           "AF_INET"
@@ -170,10 +171,10 @@ let
           "AF_NETLINK"
           "AF_PACKET"
         ];
-        RestrictNamespaces = true;
+        RestrictNamespaces = cfg.enableHardening;
         RestrictRealtime = true;
-        RestrictSUIDSGID = true;
-        SystemCallFilter = [
+        RestrictSUIDSGID = cfg.enableHardening;
+        SystemCallFilter = lib.mkIf cfg.enableHardening [
           "@system-service"
           "~@keyring"
           "~@resources"
@@ -584,6 +585,22 @@ in
           When networks are configured declaratively, you cannot persist any settings
           via wpa_gui or wpa_cli, unless {option}`allowAuxiliaryImperativeNetworks`
           is used.
+          :::
+        '';
+      };
+
+      enableHardening = mkOption {
+        default = true;
+        description = ''
+          Whether to apply security hardening measures to wpa_supplicant.
+          These include limiting access to the filesystem, devices and network
+          capabilities.
+
+          ::: {.note}
+          Disabling this will increase the potential attack surface if the
+          wpa_supplicant daemon becomes compromised, but it may be necessary
+          for more complex enterprise networks (for example requiring
+          access to mutable files, smart cards or TPM devices).
           :::
         '';
       };
