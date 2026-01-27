@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pure-ftpd";
-  version = "1.0.52";
+  version = "1.0.53";
 
   src = fetchurl {
     url = "https://download.pureftpd.org/pub/pure-ftpd/releases/pure-ftpd-${version}.tar.gz";
-    sha256 = "sha256-ESbzqVhW0IiJ/4lwPLGqnsmSTZOdFU6WkEySDwXcPHQ=";
+    sha256 = "sha256-s/KwGUIjseiL+LDfnpH/tdG5gSNW6d1GXy+XtyshJl8=";
   };
 
   buildInputs = [
