@@ -730,7 +730,7 @@ in
 
         echo "exit( \$this->getPrimaryDB()->tableExists( 'user' ) ? 1 : 0 );" | \
         ${cfg.phpPackage}/bin/php ${pkg}/share/mediawiki/maintenance/run.php eval --conf ${mediawikiConfig} && \
-        ${cfg.phpPackage}/bin/php ${pkg}/share/mediawiki/maintenance/install.php \
+        ${cfg.phpPackage}/bin/php ${pkg}/share/mediawiki/maintenance/run.php ${pkg}/share/mediawiki/maintenance/install.php \
           --confpath /tmp \
           --scriptpath / \
           --dbserver ${lib.escapeShellArg dbAddr} \
@@ -743,9 +743,21 @@ in
           } \
           --dbuser ${lib.escapeShellArg cfg.database.user} \
           ${
-            optionalString (
-              cfg.database.passwordFile != null
-            ) "--dbpassfile ${lib.escapeShellArg cfg.database.passwordFile}"
+            if
+              (
+                cfg.database.passwordFile == null
+                && cfg.database.type == "postgres"
+                && cfg.database.dbserver == "/run/postgresql"
+              )
+            then
+              # Lets hack around PHP not being properly typed
+              # https://phabricator.wikimedia.org/T414884
+              # TypeError: MediaWiki\Installer\PostgresInstaller::openConnectionToAnyDB(): Argument #2 ($password) must be of type string, null given, called in /nix/store/...-mediawiki-full-1.45.0/share/mediawiki/includes/installer/PostgresInstaller.php on line 120
+              ''--dbpass "banana"''
+            else if (cfg.database.passwordFile != null) then
+              "--dbpassfile ${lib.escapeShellArg cfg.database.passwordFile}"
+            else
+              ""
           } \
           --passfile ${lib.escapeShellArg cfg.passwordFile} \
           --dbtype ${cfg.database.type} \
