@@ -19,10 +19,7 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail '"setuptools_git_ls_files",' ""
-    substituteInPlace setup.py \
-      --replace-fail ', "setuptools_git_ls_files"' ""
+    sed -i "/setuptools_git_ls_files/d" pyproject.toml
   '';
 
   build-system = [
