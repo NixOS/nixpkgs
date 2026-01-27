@@ -278,9 +278,14 @@ rec {
       f = if isFunction fn then fn else import fn;
       fargs = functionArgs f;
 
+      argSelectors = f.argSelectors or { };
+      selectedArgs = mapAttrs (_: select: select autoArgs) argSelectors;
+
+      customArgs = selectedArgs // args;
+
       # All arguments that will be passed to the function
       # This includes automatic ones and ones passed explicitly
-      allArgs = intersectAttrs fargs autoArgs // args;
+      allArgs = intersectAttrs fargs autoArgs // customArgs;
 
       # a list of argument names that the function requires, but
       # wouldn't be passed to it
@@ -295,7 +300,7 @@ rec {
       # Get a list of suggested argument names for a given missing one
       getSuggestions =
         arg:
-        pipe (autoArgs // args) [
+        pipe (autoArgs // customArgs) [
           attrNames
           # Only use ones that are at most 2 edits away. While mork would work,
           # levenshteinAtMost is only fast for 2 or less.
@@ -329,9 +334,20 @@ rec {
       # Only show the error for the first missing argument
       error = errorForArg (head (attrNames missingArgs));
 
+      result = makeOverridable f allArgs;
     in
     if missingArgs == { } then
-      makeOverridable f allArgs
+      if lib.isAttrs result then
+        result
+        // {
+          override =
+            result.override
+            // optionalAttrs (args == { }) {
+              inherit argSelectors;
+            };
+        }
+      else
+        result
     # This needs to be an abort so it can't be caught with `builtins.tryEval`,
     # which is used by nix-env and ofborg to filter out packages that don't evaluate.
     # This way we're forced to fix such errors in Nixpkgs,
@@ -370,9 +386,25 @@ rec {
       f = if isFunction fn then fn else import fn;
       auto = intersectAttrs (functionArgs f) autoArgs;
       mirrorArgs = mirrorFunctionArgs f;
-      origArgs = auto // args;
+
+      argSelectors = f.argSelectors or { };
+      selectedArgs = mapAttrs (_: select: select autoArgs) argSelectors;
+
+      customArgs = selectedArgs // args;
+      origArgs = auto // customArgs;
       pkgs = f origArgs;
-      mkAttrOverridable = name: _: makeOverridable (mirrorArgs (newArgs: (f newArgs).${name})) origArgs;
+      mkAttrOverridable =
+        name: _:
+        let
+          result = makeOverridable (mirrorArgs (newArgs: (f newArgs).${name})) origArgs;
+        in
+        if isAttrs result then
+          result
+          // {
+            override = result.override // optionalAttrs (args == { }) { inherit argSelectors; };
+          }
+        else
+          result;
     in
     if isDerivation pkgs then
       throw (
@@ -382,6 +414,19 @@ rec {
       )
     else
       mapAttrs mkAttrOverridable pkgs;
+
+  makeCallPackageWithArgSelectors =
+    callPackage: fn: extraArgSelectors:
+    let
+      f = if isFunction fn then fn else import fn;
+      f' = if isAttrs f then f else mirrorFunctionArgs f f;
+    in
+    callPackage (
+      f'
+      // {
+        argSelectors = f.argSelectors or { } // extraArgSelectors;
+      }
+    ) { };
 
   /**
     Add attributes to each output of a derivation without changing
