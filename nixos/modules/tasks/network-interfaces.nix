@@ -560,24 +560,27 @@ in
     networking.hostName = mkOption {
       default = config.system.nixos.distroId;
       defaultText = literalExpression "config.system.nixos.distroId";
-      # Only allow hostnames without the domain name part (i.e. no FQDNs, see
-      # e.g. "man 5 hostname") and require valid DNS labels (recommended
-      # syntax). Note: We also allow underscores for compatibility/legacy
-      # reasons (as undocumented feature):
-      type = types.strMatching "^$|^[[:alnum:]]([[:alnum:]_-]{0,61}[[:alnum:]])?$";
+      # Require a valid DNS label, or a sequence of such which forms an FQDN
+      # (see "man 1 hostnamectl"). Note: We also allow underscores for
+      # compatibility/legacy reasons (as an undocumented feature).
+      type =
+        types.strMatching "^$|^[[:alnum:]]([[:alnum:]_-]*?[[:alnum:]])?(\\.[[:alnum:]]([[:alnum:]_-]*?[[:alnum:]])?)*?$"
+        // {
+          # Nix doesn't support the (?N) syntax, so the regex is a verbose version of:
+          description = "string matching the pattern ^$|^([[:alnum:]]([[:alnum:]_-]*?[[:alnum:]])?)(\\.(?1))*?$";
+        };
       description = ''
         The name of the machine. Leave it empty if you want to obtain it from a
         DHCP server (if using DHCP). The hostname must be a valid DNS label (see
         RFC 1035 section 2.3.1: "Preferred name syntax", RFC 1123 section 2.1:
-        "Host Names and Numbers") and as such must not contain the domain part.
-        This means that the hostname must start with a letter or digit,
+        "Host Names and Numbers") or a sequence of such labels separated by single
+        dots. A multi-part hostname containing dots is only allowed if `domain`
+        isn't set, as it must form a valid FQDN (see `hostnamectl(1)`).
+
+        This means that each label in the hostname must start with a letter or digit,
         end with a letter or digit, and have as interior characters only
         letters, digits, and hyphen. The maximum length is 63 characters.
         Additionally it is recommended to only use lower-case characters.
-        If (e.g. for legacy reasons) a FQDN is required as the Linux kernel
-        network node hostname (uname --nodename) the option
-        boot.kernel.sysctl."kernel.hostname" can be used as a workaround (but
-        the 64 character limit still applies).
 
         WARNING: Do not use underscores (_) or you may run into unexpected issues.
       '';
@@ -588,7 +591,9 @@ in
     networking.fqdn = mkOption {
       type = types.str;
       default =
-        if (cfg.hostName != "" && cfg.domain != null) then
+        if lib.hasInfix "." cfg.hostName then
+          cfg.hostName
+        else if (cfg.hostName != "" && cfg.domain != null) then
           "${cfg.hostName}.${cfg.domain}"
         else
           throw ''
@@ -596,16 +601,19 @@ in
             and `networking.domain`. Please ensure these options are set properly or
             set `networking.fqdn` directly.
           '';
-      defaultText = literalExpression ''"''${networking.hostName}.''${networking.domain}"'';
+      defaultText = literalExpression ''
+        if lib.hasInfix "." cfg.hostName then networking.hostName else "''${networking.hostName}.''${networking.domain}"
+      '';
       description = ''
-        The fully qualified domain name (FQDN) of this host. By default, it is
-        the result of combining `networking.hostName` and `networking.domain.`
+        The fully qualified domain name (FQDN) of this host. By default, it is set to
+        `networking.hostName` alone if the hostname is defined as an FQDN (i.e. contains dots),
+        or to the result of combining `networking.hostName` and `networking.domain` if not.
 
         Using this option will result in an evaluation error if the hostname is empty or
-        no domain is specified.
+        if no domain is specified and the hostname doesn't contain dots.
 
-        Modules that accept a mere `networking.hostName` but prefer a fully qualified
-        domain name may use `networking.fqdnOrHostName` instead.
+        Modules that accept a mere single-part `networking.hostName` but prefer a fully
+        qualified domain name should use `networking.fqdnOrHostName` instead.
       '';
     };
 
@@ -625,8 +633,9 @@ in
         it does not exist.
 
         This is a convenience option for modules to read instead of `fqdn` when
-        a mere `hostName` is also an acceptable value; this option does not
-        throw an error when `domain` or `fqdn` is unset.
+        a mere single-part `hostName` is also an acceptable value; this option does
+        not throw an error when `domain` or `fqdn` is unset and `hostName` doesn't
+        contain dots.
       '';
     };
 
@@ -729,6 +738,7 @@ in
       type = types.nullOr types.str;
       description = ''
         The system domain name. Used to populate the {option}`fqdn` value.
+        Can only be set if `hostName` isn't an FQDN (doesn't contain dots).
 
         ::: {.warning}
         The domain name is not configured for DNS resolution purposes, see {option}`search` instead.
@@ -1715,6 +1725,14 @@ in
         '';
       }))
       ++ [
+        {
+          assertion = stringLength cfg.hostName < 64;
+          message = "networking.hostName is too long, it needs to be less than 64 characters.";
+        }
+        {
+          assertion = cfg.domain == null || !(lib.hasInfix "." cfg.hostName);
+          message = "networking.hostName cannot contain dots if networking.domain is set.";
+        }
         {
           assertion = cfg.hostId == null || (stringLength cfg.hostId == 8 && isHexString cfg.hostId);
           message = "Invalid value given to the networking.hostId option.";

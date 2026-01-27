@@ -11,7 +11,7 @@ in
       cellServDB = {
         ${cellName} = lib.mapAttrsToList (_: config: {
           ip = config.networking.primaryIPAddress;
-          dnsname = "${config.networking.hostName}.${config.networking.domain}";
+          dnsname = config.networking.fqdn;
         }) nodes;
       };
     in

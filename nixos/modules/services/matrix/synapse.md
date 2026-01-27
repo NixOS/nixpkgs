@@ -51,7 +51,7 @@ please refer to the
   ...
 }:
 let
-  fqdn = "${config.networking.hostName}.${config.networking.domain}";
+  fqdn = config.networking.fqdn;
   baseUrl = "https://${fqdn}";
   clientConfig."m.homeserver".base_url = baseUrl;
   serverConfig."m.server" = "${fqdn}:443";
