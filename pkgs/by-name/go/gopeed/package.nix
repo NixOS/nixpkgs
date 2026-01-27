@@ -1,20 +1,21 @@
 {
   lib,
   fetchFromGitHub,
-  flutter332,
+  flutter338,
   autoPatchelfHook,
   buildGoModule,
+  keybinder3,
   libayatana-appindicator,
 }:
 
 let
-  version = "1.8.3";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "GopeedLab";
     repo = "gopeed";
     tag = "v${version}";
-    hash = "sha256-ze0hoTR3e3Wrgtv2FlM81faXmij61NEcPLzO4WDXIak=";
+    hash = "sha256-kLWhAQfzqZ9/THYeU/W4YOJYfMnqoTbyobC2P9YYddI=";
   };
 
   metaCommon = {
@@ -29,14 +30,7 @@ let
     inherit version src;
     pname = "libgopeed";
 
-    vendorHash = "sha256-rIj4T+NEqWla6/+ofosTwagL4/VMovDp1NEYMuzbOrQ=";
-
-    # Fix C23 compat
-    preBuild = ''
-      chmod +w vendor/github.com/anacrolix/go-libutp/utp_types.h
-      substituteInPlace vendor/github.com/anacrolix/go-libutp/utp_types.h \
-        --replace-fail "typedef uint8 bool;" ""
-    '';
+    vendorHash = "sha256-XTVFqKn0JeOC/QFns0GhIYqu1FB+eFg6bgIi4G7Lw1o=";
 
     buildPhase = ''
       runHook preBuild
@@ -51,7 +45,7 @@ let
     meta = metaCommon;
   };
 in
-flutter332.buildFlutterApplication {
+flutter338.buildFlutterApplication {
   inherit version src;
   pname = "gopeed";
 
@@ -63,7 +57,10 @@ flutter332.buildFlutterApplication {
 
   nativeBuildInputs = [ autoPatchelfHook ];
 
-  buildInputs = [ libayatana-appindicator ];
+  buildInputs = [
+    keybinder3
+    libayatana-appindicator
+  ];
 
   preBuild = ''
     mkdir -p linux/bundle/lib
