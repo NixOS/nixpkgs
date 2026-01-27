@@ -85,6 +85,10 @@ buildPythonPackage rec {
     # AssertionError:
     # clip: Could not set clip rect SDL_Rect(x=2, y=2, w=0, h=0)
     "test_SDL_GetSetClipRect"
+
+    # AssertionError: That operation is not supported
+    "test_SDL_GetSetWindowMouseRect"
+    "test_sdl2ext_video"
   ];
 
   meta = {
