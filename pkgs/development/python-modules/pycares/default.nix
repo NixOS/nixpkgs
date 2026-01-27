@@ -4,6 +4,7 @@
   buildPythonPackage,
   c-ares,
   cffi,
+  cmake,
   fetchPypi,
   idna,
   setuptools,
@@ -12,24 +13,26 @@
 
 buildPythonPackage rec {
   pname = "pycares";
-  version = "4.9.0";
+  version = "5.0.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-juSE3bI9vsTYjRTtW21ZLBlg0uk8OF1eUrb61WTYI5U=";
+    hash = "sha256-WjwknIMEMmMUOYFfmoGEY0FvKoy9semI54dX3prnUIE=";
   };
+
+  nativeBuildInputs = [ cmake ];
+  dontUseCmakeConfigure = true;
+
+  propagatedNativeBuildInputs = [ cffi ];
 
   build-system = [ setuptools ];
 
   buildInputs = [ c-ares ];
 
-  dependencies = [
-    cffi
-    idna
-  ];
+  dependencies = [ cffi ];
 
-  propagatedNativeBuildInputs = [ cffi ];
+  optional-dependencies.idna = [ idna ];
 
   # Requires network access
   doCheck = false;
