@@ -336,8 +336,17 @@ stdenv.mkDerivation rec {
   stripExclude = [ "bin/.bazel-${version}-*-wrapped" ];
 
   passthru = {
-    tests = {
-      inherit (callPackage ./examples.nix { }) cpp java rust;
-    };
+    tests =
+      let
+        examples = callPackage ./examples.nix { };
+      in
+      {
+        inherit (examples)
+          cpp
+          java
+          rust
+          cpp_with_linux_sandbox
+          ;
+      };
   };
 }
