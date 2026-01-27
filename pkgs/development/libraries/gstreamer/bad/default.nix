@@ -66,6 +66,8 @@
   libsndfile,
   libusb1,
   neon,
+  onnxSupport ? false,
+  onnxruntime,
   openal,
   openexr,
   openh264Support ? lib.meta.availableOn stdenv.hostPlatform openh264,
@@ -219,6 +221,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals microdnsSupport [
     libmicrodns
   ]
+  ++ lib.optionals onnxSupport [
+    onnxruntime
+  ]
   ++ lib.optionals openh264Support [
     openh264
   ]
@@ -312,12 +317,12 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dwasapi2=disabled" # not packaged in nixpkgs as of writing / no Windows support
     "-Dwpe=disabled" # required `wpe-webkit` library not packaged in nixpkgs as of writing
     "-Dgs=disabled" # depends on `google-cloud-cpp`
-    "-Donnx=disabled" # depends on `libonnxruntime` not packaged in nixpkgs as of writing
     "-Dopenaptx=enabled" # since gstreamer-1.20.1 `libfreeaptx` is supported for circumventing the dubious license conflict with `libopenaptx`
     "-Dopencv=${if opencvSupport then "enabled" else "disabled"}" # Reduces rebuild size when `config.cudaSupport = true`
     "-Daja=${if ajaSupport then "enabled" else "disabled"}"
     "-Dmicrodns=${if microdnsSupport then "enabled" else "disabled"}"
     "-Dbluez=${if bluezSupport then "enabled" else "disabled"}"
+    (lib.mesonEnable "onnx" onnxSupport)
     (lib.mesonEnable "openh264" openh264Support)
     (lib.mesonEnable "doc" enableDocumentation)
     (lib.mesonEnable "directfb" false)
