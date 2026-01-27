@@ -27,13 +27,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libpostal";
-  version = "1.1";
+  version = "1.1.4";
 
   src = fetchFromGitHub {
     owner = "openvenues";
     repo = "libpostal";
     tag = "v${version}";
-    hash = "sha256-7G/CjYdVzsrvUFXGODoXgXoRp8txkl5SddcPtgltrjY=";
+    hash = "sha256-L7t/z5mBrV7RxRrkYDRyKhjQRS1p5EOE01f2eEOUxfI=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
