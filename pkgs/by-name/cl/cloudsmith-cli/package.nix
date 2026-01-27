@@ -6,24 +6,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "cloudsmith-cli";
-  version = "1.8.7";
+  version = "1.11.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cloudsmith-io";
     repo = "cloudsmith-cli";
     tag = "v${version}";
-    hash = "sha256-xUaa1B6f6W0Q/9q8sztFoCxEaxqXajImROC1sJb0Zdk=";
+    hash = "sha256-uYtDzC21hSXiEHhIPn5EW5bfYvRR2OWv/R0qg1WZPrA=";
   };
-
-  postPatch = ''
-    # Fix compatibility with urllib3 >= 2.0 - method_whitelist renamed to allowed_methods
-    # https://github.com/cloudsmith-io/cloudsmith-cli/pull/148
-    substituteInPlace cloudsmith_cli/core/rest.py \
-      --replace-fail 'method_whitelist=False' 'allowed_methods=False'
-    substituteInPlace setup.py \
-      --replace-fail 'urllib3<2.0' 'urllib3'
-  '';
 
   build-system = with python3Packages; [ setuptools ];
 
