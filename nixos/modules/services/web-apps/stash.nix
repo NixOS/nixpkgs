@@ -417,8 +417,16 @@ in
         '';
       };
 
-      passwordFile = mkOption {
-        type = types.nullOr types.path;
+      password = mkOption {
+        type = types.nullOr (
+          lib.types.submodule {
+            options = lib.contracts.secrets.mkConsumer {
+              owner = cfg.user;
+              group = cfg.group;
+              mode = "0400";
+            };
+          }
+        );
         default = null;
         example = "/path/to/password/file";
         description = ''
@@ -431,12 +439,28 @@ in
         '';
       };
 
-      jwtSecretKeyFile = mkOption {
-        type = types.path;
+      jwtSecretKey = mkOption {
+        type = types.nullOr (
+          lib.types.submodule {
+            options = lib.contracts.secrets.mkConsumer {
+              owner = cfg.user;
+              group = cfg.group;
+              mode = "0400";
+            };
+          }
+        );
         description = "Path to file containing a secret used to sign JWT tokens.";
       };
-      sessionStoreKeyFile = mkOption {
-        type = types.path;
+      sessionStoreKey = mkOption {
+        type = types.nullOr (
+          lib.types.submodule {
+            options = lib.contracts.secrets.mkConsumer {
+              owner = cfg.user;
+              group = cfg.group;
+              mode = "0400";
+            };
+          }
+        );
         description = "Path to file containing a secret for session store.";
       };
 
@@ -467,7 +491,7 @@ in
       {
         assertion =
           !lib.xor (cfg.username != null || cfg.settings.username or null != null) (
-            cfg.passwordFile != null || cfg.settings.password or null != null
+            cfg.password != null || cfg.settings.password or null != null
           );
         message = "You must set either both username and password, or neither.";
       }
@@ -514,9 +538,9 @@ in
               install -d ${cfg.settings.generated}
               if [[ -z "${toString cfg.mutableSettings}" || ! -f ${cfg.dataDir}/config.yml ]]; then
                 env \
-                  password=$(< ${cfg.passwordFile}) \
-                  jwtSecretKeyFile=$(< ${cfg.jwtSecretKeyFile}) \
-                  sessionStoreKeyFile=$(< ${cfg.sessionStoreKeyFile}) \
+                  password=$(< ${cfg.password.output.path}) \
+                  jwtSecretKeyFile=$(< ${cfg.jwtSecretKey.output.path}) \
+                  sessionStoreKeyFile=$(< ${cfg.sessionStoreKey.output.path}) \
                   ${lib.getExe pkgs.yq-go} '
                     .jwt_secret_key = strenv(jwtSecretKeyFile) |
                     .session_store_key = strenv(sessionStoreKeyFile) |
