@@ -1,0 +1,458 @@
+diff --git a/src/libslic3r/GCodeSender.cpp b/src/libslic3r/GCodeSender.cpp
+index 275dd61..81b3aa5 100644
+--- a/src/libslic3r/GCodeSender.cpp
++++ b/src/libslic3r/GCodeSender.cpp
+@@ -102,12 +102,12 @@ GCodeSender::connect(std::string devname, unsigned int baud_rate)
+     fs.open("serial.txt", std::fstream::out | std::fstream::trunc);
+ #endif
+     
+-    // this gives some work to the io_service before it is started
++    // this gives some work to the io_context before it is started
+     // (post() runs the supplied function in its thread)
+-    this->io.post(boost::bind(&GCodeSender::do_read, this));
++    boost::asio::post(this->io, boost::bind(&GCodeSender::do_read, this));
+     
+     // start reading in the background thread
+-    boost::thread t(boost::bind(&boost::asio::io_service::run, &this->io));
++    boost::thread t(boost::bind(&boost::asio::io_context::run, &this->io));
+     this->background_thread.swap(t);
+     
+     // always send a M105 to check for connection because firmware might be silent on connect
+@@ -164,7 +164,7 @@ GCodeSender::disconnect()
+     if (!this->open) return;
+     this->open = false;
+     this->connected = false;
+-    this->io.post(boost::bind(&GCodeSender::do_close, this));
++    boost::asio::post(this->io, boost::bind(&GCodeSender::do_close, this));
+     this->background_thread.join();
+     this->io.reset();
+     /*
+@@ -457,7 +457,7 @@ GCodeSender::send(const std::string &line, bool priority)
+ void
+ GCodeSender::send()
+ {
+-    this->io.post(boost::bind(&GCodeSender::do_send, this));
++    boost::asio::post(this->io, boost::bind(&GCodeSender::do_send, this));
+ }
+ 
+ void
+diff --git a/src/libslic3r/GCodeSender.hpp b/src/libslic3r/GCodeSender.hpp
+index 3a2055e..5c8eec4 100644
+--- a/src/libslic3r/GCodeSender.hpp
++++ b/src/libslic3r/GCodeSender.hpp
+@@ -35,7 +35,7 @@ class GCodeSender : private boost::noncopyable {
+     void reset();
+     
+     private:
+-    asio::io_service io;
++    asio::io_context io;
+     asio::serial_port serial;
+     boost::thread background_thread;
+     boost::asio::streambuf read_buffer, write_buffer;
+diff --git a/src/slic3r/GUI/HttpServer.cpp b/src/slic3r/GUI/HttpServer.cpp
+index 83757ed..3a2c81a 100644
+--- a/src/slic3r/GUI/HttpServer.cpp
++++ b/src/slic3r/GUI/HttpServer.cpp
+@@ -156,7 +156,7 @@ void HttpServer::start()
+ 
+         server_->do_accept();
+ 
+-        server_->io_service.run();
++        server_->io_context.run();
+     });
+ }
+ 
+@@ -166,7 +166,7 @@ void HttpServer::stop()
+     if (server_) {
+         server_->acceptor.close();
+         server_->stop_all();
+-        server_->io_service.stop();
++        server_->io_context.stop();
+     }
+     if (m_http_server_thread.joinable())
+         m_http_server_thread.join();
+diff --git a/src/slic3r/GUI/HttpServer.hpp b/src/slic3r/GUI/HttpServer.hpp
+index 5c1547f..d10d0d9 100644
+--- a/src/slic3r/GUI/HttpServer.hpp
++++ b/src/slic3r/GUI/HttpServer.hpp
+@@ -115,11 +115,11 @@ private:
+     {
+     public:
+         HttpServer&                        server;
+-        boost::asio::io_service            io_service;
++        boost::asio::io_context            io_context;
+         boost::asio::ip::tcp::acceptor     acceptor;
+         std::set<std::shared_ptr<session>> sessions;
+ 
+-        IOServer(HttpServer& server) : server(server), acceptor(io_service, {boost::asio::ip::tcp::v4(), server.port}) {}
++        IOServer(HttpServer& server) : server(server), acceptor(io_context, {boost::asio::ip::tcp::v4(), server.port}) {}
+ 
+         void do_accept();
+ 
+diff --git a/src/slic3r/Utils/Bonjour.cpp b/src/slic3r/Utils/Bonjour.cpp
+index 0701695..6e4dff7 100644
+--- a/src/slic3r/Utils/Bonjour.cpp
++++ b/src/slic3r/Utils/Bonjour.cpp
+@@ -620,11 +620,11 @@ UdpSession::UdpSession(Bonjour::ReplyFn rfn) : replyfn(rfn)
+ 	buffer.resize(DnsMessage::MAX_SIZE);
+ }
+ 
+-UdpSocket::UdpSocket( Bonjour::ReplyFn replyfn, const asio::ip::address& multicast_address, const asio::ip::address& interface_address, std::shared_ptr< boost::asio::io_service > io_service)
++UdpSocket::UdpSocket( Bonjour::ReplyFn replyfn, const asio::ip::address& multicast_address, const asio::ip::address& interface_address, std::shared_ptr< boost::asio::io_context > io_context)
+ 	: replyfn(replyfn)
+ 	, multicast_address(multicast_address)
+-	, socket(*io_service)
+-	, io_service(io_service)
++	, socket(*io_context)
++	, io_context(io_context)
+ {
+ 	try {
+ 		// open socket
+@@ -654,11 +654,11 @@ UdpSocket::UdpSocket( Bonjour::ReplyFn replyfn, const asio::ip::address& multica
+ }
+ 
+ 
+-UdpSocket::UdpSocket( Bonjour::ReplyFn replyfn, const asio::ip::address& multicast_address, std::shared_ptr< boost::asio::io_service > io_service)
++UdpSocket::UdpSocket( Bonjour::ReplyFn replyfn, const asio::ip::address& multicast_address, std::shared_ptr< boost::asio::io_context > io_context)
+ 	: replyfn(replyfn)
+ 	, multicast_address(multicast_address)
+-	, socket(*io_service)
+-	, io_service(io_service)
++	, socket(*io_context)
++	, io_context(io_context)
+ {
+ 	try {
+ 		// open socket
+@@ -707,10 +707,8 @@ void UdpSocket::async_receive()
+ 
+ void UdpSocket::receive_handler(SharedSession session, const boost::system::error_code& error, size_t bytes)
+ {
+-	// let io_service to handle the datagram on session
+-	// from boost documentation io_service::post:
+-	// The io_service guarantees that the handler will only be called in a thread in which the run(), run_one(), poll() or poll_one() member functions is currently being invoked.
+-	io_service->post(boost::bind(&UdpSession::handle_receive, session, error, bytes));
++	// let io_context to handle the datagram on session
++	boost::asio::post(*io_context, boost::bind(&UdpSession::handle_receive, session, error, bytes));
+ 	// immediately accept new datagrams
+ 	async_receive();
+ }
+@@ -867,13 +865,13 @@ void Bonjour::priv::lookup_perform()
+ {
+ 	service_dn = (boost::format("_%1%._%2%.local") % service % protocol).str();
+ 
+-	std::shared_ptr< boost::asio::io_service > io_service(new boost::asio::io_service);
++	std::shared_ptr< boost::asio::io_context > io_context(new boost::asio::io_context);
+ 
+ 	std::vector<LookupSocket*> sockets;
+ 
+ 	// resolve intefaces - from PR#6646
+ 	std::vector<boost::asio::ip::address> interfaces;
+-	asio::ip::udp::resolver resolver(*io_service);
++	asio::ip::udp::resolver resolver(*io_context);
+ 	boost::system::error_code ec;
+ 	// ipv4 interfaces
+ 	auto results = resolver.resolve(udp::v4(), asio::ip::host_name(), "", ec);
+@@ -886,12 +884,12 @@ void Bonjour::priv::lookup_perform()
+ 		// create ipv4 socket for each interface
+ 		// each will send to querry to for both ipv4 and ipv6
+ 		for (const auto& intrfc : interfaces) 		
+-			sockets.emplace_back(new LookupSocket(txt_keys, service, service_dn, protocol, replyfn, BonjourRequest::MCAST_IP4, intrfc, io_service));
++			sockets.emplace_back(new LookupSocket(txt_keys, service, service_dn, protocol, replyfn, BonjourRequest::MCAST_IP4, intrfc, io_context));
+ 	} else {
+ 		BOOST_LOG_TRIVIAL(info) << "Failed to resolve ipv4 interfaces: " << ec.message();
+ 	}
+ 	if (sockets.empty())
+-		sockets.emplace_back(new LookupSocket(txt_keys, service, service_dn, protocol, replyfn, BonjourRequest::MCAST_IP4, io_service));
++		sockets.emplace_back(new LookupSocket(txt_keys, service, service_dn, protocol, replyfn, BonjourRequest::MCAST_IP4, io_context));
+ 	// ipv6 interfaces
+ 	interfaces.clear();
+ 	//udp::resolver::query query(host, PORT, boost::asio::ip::resolver_query_base::numeric_service);
+@@ -906,9 +904,9 @@ void Bonjour::priv::lookup_perform()
+ 		// create ipv6 socket for each interface
+ 		// each will send to querry to for both ipv4 and ipv6
+ 		for (const auto& intrfc : interfaces)
+-			sockets.emplace_back(new LookupSocket(txt_keys, service, service_dn, protocol, replyfn, BonjourRequest::MCAST_IP6, intrfc, io_service));
++			sockets.emplace_back(new LookupSocket(txt_keys, service, service_dn, protocol, replyfn, BonjourRequest::MCAST_IP6, intrfc, io_context));
+ 		if (interfaces.empty())
+-			sockets.emplace_back(new LookupSocket(txt_keys, service, service_dn, protocol, replyfn, BonjourRequest::MCAST_IP6, io_service));
++			sockets.emplace_back(new LookupSocket(txt_keys, service, service_dn, protocol, replyfn, BonjourRequest::MCAST_IP6, io_context));
+ 	} else {
+ 		BOOST_LOG_TRIVIAL(info)<< "Failed to resolve ipv6 interfaces: " << ec.message();
+ 	}
+@@ -919,13 +917,13 @@ void Bonjour::priv::lookup_perform()
+ 			socket->send();
+ 
+ 		// timer settings
+-		asio::deadline_timer timer(*io_service);
++		asio::deadline_timer timer(*io_context);
+ 		retries--;
+ 		std::function<void(const error_code&)> timer_handler = [&](const error_code& error) {
+ 			// end 
+ 			if (retries == 0 || error) {
+ 				// is this correct ending?
+-				io_service->stop();
++				io_context->stop();
+ 				if (completefn) {
+ 					completefn();
+ 				}
+@@ -942,8 +940,8 @@ void Bonjour::priv::lookup_perform()
+ 		// start timer
+ 		timer.expires_from_now(boost::posix_time::seconds(timeout));
+ 		timer.async_wait(timer_handler);
+-		// start io_service, it will run until it has something to do - so in this case until stop is called in timer
+-		io_service->run();
++		// start io_context, it will run until it has something to do - so in this case until stop is called in timer
++		io_context->run();
+ 	}
+ 	catch (std::exception& e) {
+ 		BOOST_LOG_TRIVIAL(error) << e.what();
+@@ -952,7 +950,7 @@ void Bonjour::priv::lookup_perform()
+ 
+ void Bonjour::priv::resolve_perform()
+ {
+-	// reply callback is shared to every UDPSession which is called on same thread as io_service->run();
++	// reply callback is shared to every UDPSession which is called on same thread as io_context->run();
+ 	// thus no need to mutex replies in reply_callback, same should go with the timer
+ 	std::vector<BonjourReply> replies;
+ 	// examples would store [self] to the lambda (and the timer one), is it ok not to do it? (Should be c++03)
+@@ -962,12 +960,12 @@ void Bonjour::priv::resolve_perform()
+ 			rpls.push_back(reply);
+ 	};
+ 
+-	std::shared_ptr< boost::asio::io_service > io_service(new boost::asio::io_service);
++	std::shared_ptr< boost::asio::io_context > io_context(new boost::asio::io_context);
+ 	std::vector<ResolveSocket*> sockets;
+ 
+ 	// resolve interfaces - from PR#6646
+ 	std::vector<boost::asio::ip::address> interfaces;
+-	asio::ip::udp::resolver resolver(*io_service);
++	asio::ip::udp::resolver resolver(*io_context);
+ 	boost::system::error_code ec;
+ 	// ipv4 interfaces
+ 	auto results = resolver.resolve(udp::v4(), asio::ip::host_name(), "", ec);
+@@ -980,12 +978,12 @@ void Bonjour::priv::resolve_perform()
+ 		// create ipv4 socket for each interface
+ 		// each will send to querry to for both ipv4 and ipv6
+ 		for (const auto& intrfc : interfaces)
+-			sockets.emplace_back(new ResolveSocket(hostname, reply_callback, BonjourRequest::MCAST_IP4, intrfc, io_service));
++			sockets.emplace_back(new ResolveSocket(hostname, reply_callback, BonjourRequest::MCAST_IP4, intrfc, io_context));
+ 	} else {
+ 		BOOST_LOG_TRIVIAL(info) << "Failed to resolve ipv4 interfaces: " << ec.message();
+ 	}
+ 	if (sockets.empty())
+-		sockets.emplace_back(new ResolveSocket(hostname, reply_callback, BonjourRequest::MCAST_IP4, io_service));
++		sockets.emplace_back(new ResolveSocket(hostname, reply_callback, BonjourRequest::MCAST_IP4, io_context));
+ 
+ 	// ipv6 interfaces
+ 	interfaces.clear();
+@@ -999,9 +997,9 @@ void Bonjour::priv::resolve_perform()
+ 		// create ipv6 socket for each interface
+ 		// each will send to querry to for both ipv4 and ipv6
+ 		for (const auto& intrfc : interfaces) 
+-			sockets.emplace_back(new ResolveSocket(hostname, reply_callback, BonjourRequest::MCAST_IP6, intrfc, io_service));
++			sockets.emplace_back(new ResolveSocket(hostname, reply_callback, BonjourRequest::MCAST_IP6, intrfc, io_context));
+ 		if (interfaces.empty())
+-			sockets.emplace_back(new ResolveSocket(hostname, reply_callback, BonjourRequest::MCAST_IP6, io_service));
++			sockets.emplace_back(new ResolveSocket(hostname, reply_callback, BonjourRequest::MCAST_IP6, io_context));
+ 	} else {
+ 		BOOST_LOG_TRIVIAL(info) << "Failed to resolve ipv6 interfaces: " << ec.message();
+ 	}
+@@ -1012,14 +1010,14 @@ void Bonjour::priv::resolve_perform()
+ 			socket->send();
+ 
+ 		// timer settings
+-		asio::deadline_timer timer(*io_service);
++		asio::deadline_timer timer(*io_context);
+ 		retries--;
+ 		std::function<void(const error_code&)> timer_handler = [&](const error_code& error) {
+ 			int replies_count = replies.size();
+ 			// end 
+ 			if (retries == 0 || error || replies_count > 0) {
+ 				// is this correct ending?
+-				io_service->stop();
++				io_context->stop();
+ 				if (replies_count > 0 && resolvefn) {
+ 					resolvefn(replies);
+ 				}
+@@ -1036,8 +1034,8 @@ void Bonjour::priv::resolve_perform()
+ 		// start timer
+ 		timer.expires_from_now(boost::posix_time::seconds(timeout));
+ 		timer.async_wait(timer_handler);
+-		// start io_service, it will run until it has something to do - so in this case until stop is called in timer
+-		io_service->run();
++		// start io_context, it will run until it has something to do - so in this case until stop is called in timer
++		io_context->run();
+ 	}
+ 	catch (std::exception& e) {
+ 		BOOST_LOG_TRIVIAL(error) << e.what();
+diff --git a/src/slic3r/Utils/Bonjour.hpp b/src/slic3r/Utils/Bonjour.hpp
+index 50b7179..dd12a05 100644
+--- a/src/slic3r/Utils/Bonjour.hpp
++++ b/src/slic3r/Utils/Bonjour.hpp
+@@ -109,7 +109,7 @@ private:
+ class LookupSocket;
+ class ResolveSocket;
+ 
+-// Session is created for each async_receive of socket. On receive, its handle_receive method is called (Thru io_service->post).
++// Session is created for each async_receive of socket. On receive, its handle_receive method is called (Thru io_context->post).
+ // ReplyFn is called if correct datagram was received. 
+ class UdpSession 
+ {
+@@ -143,7 +143,7 @@ protected:
+ 	const ResolveSocket* socket;
+ };
+ 
+-// Udp socket, starts receiving answers after first send() call until io_service is stopped.
++// Udp socket, starts receiving answers after first send() call until io_context is stopped.
+ class UdpSocket
+ {
+ public:
+@@ -151,11 +151,11 @@ public:
+ 	UdpSocket(Bonjour::ReplyFn replyfn
+ 		, const boost::asio::ip::address& multicast_address
+ 		, const boost::asio::ip::address& interface_address
+-		, std::shared_ptr< boost::asio::io_service > io_service);
++		, std::shared_ptr< boost::asio::io_context > io_context);
+ 
+ 	UdpSocket(Bonjour::ReplyFn replyfn
+ 		, const boost::asio::ip::address& multicast_address
+-		, std::shared_ptr< boost::asio::io_service > io_service);
++		, std::shared_ptr< boost::asio::io_context > io_context);
+ 
+ 	void send();
+ 	void async_receive();
+@@ -168,7 +168,7 @@ protected:
+ 	boost::asio::ip::address					    multicast_address;
+ 	boost::asio::ip::udp::socket					socket;
+ 	boost::asio::ip::udp::endpoint					mcast_endpoint;
+-	std::shared_ptr< boost::asio::io_service >	io_service;
++	std::shared_ptr< boost::asio::io_context >	io_context;
+ 	std::vector<BonjourRequest>						requests;
+ };
+ 
+@@ -182,8 +182,8 @@ public:
+ 		, Bonjour::ReplyFn replyfn
+ 		, const boost::asio::ip::address& multicast_address
+ 		, const boost::asio::ip::address& interface_address
+-		, std::shared_ptr< boost::asio::io_service > io_service)
+-		: UdpSocket(replyfn, multicast_address, interface_address, io_service)
++		, std::shared_ptr< boost::asio::io_context > io_context)
++		: UdpSocket(replyfn, multicast_address, interface_address, io_context)
+ 		, txt_keys(txt_keys)
+ 		, service(service)
+ 		, service_dn(service_dn)
+@@ -199,8 +199,8 @@ public:
+ 		, std::string protocol
+ 		, Bonjour::ReplyFn replyfn
+ 		, const boost::asio::ip::address& multicast_address
+-		, std::shared_ptr< boost::asio::io_service > io_service)
+-		: UdpSocket(replyfn, multicast_address, io_service)
++		, std::shared_ptr< boost::asio::io_context > io_context)
++		: UdpSocket(replyfn, multicast_address, io_context)
+ 		, txt_keys(txt_keys)
+ 		, service(service)
+ 		, service_dn(service_dn)
+@@ -237,8 +237,8 @@ public:
+ 		, Bonjour::ReplyFn replyfn
+ 		, const boost::asio::ip::address& multicast_address
+ 		, const boost::asio::ip::address& interface_address
+-		, std::shared_ptr< boost::asio::io_service > io_service)
+-		: UdpSocket(replyfn, multicast_address, interface_address, io_service)
++		, std::shared_ptr< boost::asio::io_context > io_context)
++		: UdpSocket(replyfn, multicast_address, interface_address, io_context)
+ 		, hostname(hostname)
+ 
+ 	{
+@@ -249,8 +249,8 @@ public:
+ 	ResolveSocket(const std::string& hostname
+ 		, Bonjour::ReplyFn replyfn
+ 		, const boost::asio::ip::address& multicast_address
+-		, std::shared_ptr< boost::asio::io_service > io_service)
+-		: UdpSocket(replyfn, multicast_address, io_service)
++		, std::shared_ptr< boost::asio::io_context > io_context)
++		: UdpSocket(replyfn, multicast_address, io_context)
+ 		, hostname(hostname)
+ 
+ 	{
+diff --git a/src/slic3r/Utils/Serial.cpp b/src/slic3r/Utils/Serial.cpp
+index 4db1acc..555f907 100644
+--- a/src/slic3r/Utils/Serial.cpp
++++ b/src/slic3r/Utils/Serial.cpp
+@@ -278,12 +278,12 @@ std::vector<std::string> scan_serial_ports()
+ namespace asio = boost::asio;
+ using boost::system::error_code;
+ 
+-Serial::Serial(asio::io_service& io_service) :
+-	asio::serial_port(io_service)
++Serial::Serial(asio::io_context& io_context) :
++	asio::serial_port(io_context)
+ {}
+ 
+-Serial::Serial(asio::io_service& io_service, const std::string &name, unsigned baud_rate) :
+-	asio::serial_port(io_service, name)
++Serial::Serial(asio::io_context& io_context, const std::string &name, unsigned baud_rate) :
++	asio::serial_port(io_context, name)
+ {
+ 	set_baud_rate(baud_rate);
+ }
+@@ -386,19 +386,19 @@ void Serial::reset_line_num()
+ 
+ bool Serial::read_line(unsigned timeout, std::string &line, error_code &ec)
+ {
+-	auto& io_service =
++	auto& io_context =
+ #if BOOST_VERSION >= 107000
+ 		//FIXME this is most certainly wrong!
+ 		(boost::asio::io_context&)this->get_executor().context();
+  #else
+-		this->get_io_service();
++		this->get_io_context();
+ #endif
+-	asio::deadline_timer timer(io_service);
++	asio::deadline_timer timer(io_context);
+ 	char c = 0;
+ 	bool fail = false;
+ 
+ 	while (true) {
+-		io_service.reset();
++		io_context.reset();
+ 
+ 		asio::async_read(*this, boost::asio::buffer(&c, 1), [&](const error_code &read_ec, size_t size) {
+ 			if (ec || size == 0) {
+@@ -419,7 +419,7 @@ bool Serial::read_line(unsigned timeout, std::string &line, error_code &ec)
+ 			});
+ 		}
+ 
+-		io_service.run();
++		io_context.run();
+ 
+ 		if (fail) {
+ 			return false;
+diff --git a/src/slic3r/Utils/Serial.hpp b/src/slic3r/Utils/Serial.hpp
+index 8bad75b..138c238 100644
+--- a/src/slic3r/Utils/Serial.hpp
++++ b/src/slic3r/Utils/Serial.hpp
+@@ -39,8 +39,8 @@ extern std::vector<SerialPortInfo> 	scan_serial_ports_extended();
+ class Serial : public boost::asio::serial_port
+ {
+ public:
+-	Serial(boost::asio::io_service &io_service);
+-	Serial(boost::asio::io_service &io_service, const std::string &name, unsigned baud_rate);
++	Serial(boost::asio::io_context &io_context);
++	Serial(boost::asio::io_context &io_context, const std::string &name, unsigned baud_rate);
+ 	Serial(const Serial &) = delete;
+ 	Serial &operator=(const Serial &) = delete;
+ 	~Serial();
+diff --git a/src/slic3r/Utils/TCPConsole.cpp b/src/slic3r/Utils/TCPConsole.cpp
+index 25802e3..dddd350 100644
+--- a/src/slic3r/Utils/TCPConsole.cpp
++++ b/src/slic3r/Utils/TCPConsole.cpp
+@@ -170,7 +170,7 @@ bool TCPConsole::run_queue()
+ 
+         auto endpoints = m_resolver.resolve(m_host_name, m_port_name);
+ 
+-        m_socket.async_connect(endpoints->endpoint(),
++	boost::asio::async_connect(m_socket, endpoints,
+             boost::bind(&TCPConsole::handle_connect, this, boost::placeholders::_1)
+         );
+ 

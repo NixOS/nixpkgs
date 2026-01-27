@@ -7,7 +7,7 @@
   cmake,
   pkg-config,
   wrapGAppsHook3,
-  boost186,
+  boost187,
   cereal,
   cgal_5,
   curl,
@@ -58,13 +58,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "orca-slicer";
-  version = "2.3.1";
+  version = "7bab2c2785cced6d9f9f0548ace9a9ade30336ca";
 
   src = fetchFromGitHub {
-    owner = "SoftFever";
+    owner = "OrcaSlicer";
     repo = "OrcaSlicer";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-RdMBx/onLq58oI1sL0cHmF2SGDfeI9KkPPCbjyMqECI=";
+    rev = finalAttrs.version;
+    hash = "sha256-YtgQg87Ed9rk0WZqXPwitsxPWgutygi/0NfXvDMlvSg=";
   };
 
   nativeBuildInputs = [
@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     binutils
-    (boost186.override {
+    (boost187.override {
       enableShared = true;
       enableStatic = false;
       extraFeatures = [
@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
         "filesystem"
       ];
     })
-    boost186.dev
+    boost187.dev
     cereal
     cgal_5
     curl
@@ -128,6 +128,8 @@ stdenv.mkDerivation (finalAttrs: {
     ./patches/0001-not-for-upstream-CMakeLists-Link-against-webkit2gtk-.patch
     # Link opencv_core and opencv_imgproc instead of opencv_world
     ./patches/dont-link-opencv-world-orca.patch
+    # Migrate from long-time deprecated and now removed boost::asio::io_service to boost::asio::io_context
+    ./patches/migrate-to-boost-asio-io_context.patch
     # The changeset from https://github.com/SoftFever/OrcaSlicer/pull/7650, can be removed when that PR gets merged
     # Allows disabling the update nag screen
     (fetchpatch {
@@ -173,7 +175,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   NIX_LDFLAGS = toString [
     (lib.optionalString withSystemd "-ludev")
-    "-L${boost186}/lib"
+    "-L${boost187}/lib"
     "-lboost_log"
     "-lboost_log_setup"
   ];
@@ -195,7 +197,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_EXE_LINKER_FLAGS" "-Wl,--no-as-needed")
     (lib.cmakeBool "ORCA_VERSION_CHECK_DEFAULT" false)
     (lib.cmakeFeature "LIBNOISE_INCLUDE_DIR" "${libnoise}/include/noise")
-    (lib.cmakeFeature "LIBNOISE_LIBRARY" "${libnoise}/lib/libnoise-static.a")
+    (lib.cmakeFeature "LIBNOISE_LIBRARY_RELEASE" "${libnoise}/lib/libnoise-static.a")
     "-Wno-dev"
 
     # cmake 4 compatibility, remove in next update
