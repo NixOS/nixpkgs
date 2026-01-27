@@ -13,7 +13,7 @@ index 1aa8631a..2304ce1f 100644
 -        else:
 -            # obtain Clang and LLVM libraries from packman
 -            fetch_prebuilt_libraries(arch)
--            libpath = os.path.join(base_path, f"_build/host-deps/llvm-project/release-{arch}/lib")
+-            libpath = os.path.join(base_path, "_build", "host-deps", "llvm-project", f"release-{arch}", "lib")
 -
 -        libs = []
 -
