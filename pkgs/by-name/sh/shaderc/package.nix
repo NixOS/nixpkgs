@@ -14,7 +14,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "shaderc";
-  version = "2025.5";
+  version = "2026.1";
 
   outputs = [
     "out"
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "google";
     repo = "shaderc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-PmGRZDXblrBhZe16QfpHfRdsRhXnGsN7o+qh14nlOUQ=";
+    hash = "sha256-OiBv18zxeE/gqY4zOMXTsCdkAEWo9BIehdu/adw0+cE=";
   };
 
   patches = [
