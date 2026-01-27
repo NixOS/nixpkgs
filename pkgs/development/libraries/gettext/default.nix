@@ -15,18 +15,17 @@
 
 stdenv.mkDerivation rec {
   pname = "gettext";
-  version = "0.25.1";
+  version = "0.26";
 
   src = fetchurl {
     url = "mirror://gnu/gettext/${pname}-${version}.tar.gz";
-    hash = "sha256-dG+VXULXHrac52OGnLkmgvCaQGZSjQGLbKej9ICJoIU=";
+    hash = "sha256-Oaz0sDcemxELYABVYqrOWzYx/tmxu57Mz8f1bli7HX8=";
   };
   patches = [
     ./absolute-paths.diff
     # fix reproducibile output, in particular in the grub2 build
     # https://savannah.gnu.org/bugs/index.php?59658
     ./0001-msginit-Do-not-use-POT-Creation-Date.patch
-    ./memory-safety.patch
   ];
 
   outputs = [
