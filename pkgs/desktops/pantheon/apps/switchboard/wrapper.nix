@@ -36,6 +36,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     glib
+    lndir
     wrapGAppsHook4
   ];
 
@@ -47,11 +48,12 @@ stdenv.mkDerivation {
 
   preferLocalBuild = true;
   allowSubstitutes = false;
+  strictDeps = true;
 
   installPhase = ''
     mkdir -p $out
     for i in $(cat $pathsPath); do
-      ${lndir}/bin/lndir -silent $i $out
+      lndir -silent $i $out
     done
 
     dbus_file="share/dbus-1/services/io.elementary.settings.service"
