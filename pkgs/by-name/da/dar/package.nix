@@ -21,12 +21,12 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "2.8.2";
+  version = "2.8.3";
   pname = "dar";
 
   src = fetchzip {
     url = "mirror://sourceforge/dar/dar-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-x8WTJxpYzxvcN5Y6bAKE+JQ7n9dAbPkEosVnaFe2HoA=";
+    hash = "sha256-2zLGMJ+ggq5f/TNRljuiLl6+NWcs+/Hqo61EYrwHkKU=";
   };
 
   outputs = [
