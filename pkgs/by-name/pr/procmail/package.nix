@@ -1,12 +1,16 @@
 {
   lib,
   stdenv,
+  gcc14Stdenv,
   fetchurl,
   fetchpatch,
   buildPackages,
 }:
-
-stdenv.mkDerivation rec {
+let
+  env =
+    if stdenv.cc.isGNU && (lib.versionAtLeast stdenv.cc.version "15") then gcc14Stdenv else stdenv;
+in
+env.mkDerivation rec {
   pname = "procmail";
   version = "3.24";
 
@@ -40,18 +44,18 @@ stdenv.mkDerivation rec {
     .PHONY: install
     " -i Makefile
   ''
-  + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  + lib.optionalString (!env.buildPlatform.canExecute env.hostPlatform) ''
     substituteInPlace src/Makefile.0 \
-      --replace-fail '@./_autotst' '@${stdenv.hostPlatform.emulator buildPackages} ./_autotst'
+      --replace-fail '@./_autotst' '@${env.hostPlatform.emulator buildPackages} ./_autotst'
     sed -e '3i\
-    _autotst() { ${stdenv.hostPlatform.emulator buildPackages} ./_autotst "$@"; } \
-    _locktst() { ${stdenv.hostPlatform.emulator buildPackages} ./_locktst "$@"; } \
+    _autotst() { ${env.hostPlatform.emulator buildPackages} ./_autotst "$@"; } \
+    _locktst() { ${env.hostPlatform.emulator buildPackages} ./_locktst "$@"; } \
     ' -i src/autoconf
   '';
 
   # default target is binaries + manpages; manpages don't cross compile without more work.
-  makeFlags = lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ "bins" ];
-  installTargets = lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+  makeFlags = lib.optionals (!env.buildPlatform.canExecute env.hostPlatform) [ "bins" ];
+  installTargets = lib.optionals (!env.buildPlatform.canExecute env.hostPlatform) [
     "install.bin"
   ];
 
