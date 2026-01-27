@@ -4351,6 +4351,8 @@ self: super: with self; {
 
   django-two-factor-auth = callPackage ../development/python-modules/django-two-factor-auth { };
 
+  django-typer = callPackage ../development/python-modules/django-typer { };
+
   django-types = callPackage ../development/python-modules/django-types { };
 
   django-versatileimagefield =
