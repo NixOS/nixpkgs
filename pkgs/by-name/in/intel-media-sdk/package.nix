@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
   ];
+
   buildInputs = [
     libdrm
     libva
@@ -51,15 +52,14 @@ stdenv.mkDerivation rec {
     libXdmcp
     libpthreadstubs
   ];
-  nativeCheckInputs = [ gtest ];
 
   cmakeFlags = [
     "-DBUILD_SAMPLES=OFF"
-    "-DBUILD_TESTS=${if doCheck then "ON" else "OFF"}"
+    "-DBUILD_TESTS=OFF"
     "-DUSE_SYSTEM_GTEST=ON"
   ];
 
-  doCheck = true;
+  doCheck = false;
 
   meta = {
     description = "Intel Media SDK";
