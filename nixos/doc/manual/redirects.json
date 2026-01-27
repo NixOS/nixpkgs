@@ -49,6 +49,9 @@
   "module-services-tandoor-recipes-migrating-media-option-disallow-access": [
     "index.html#module-services-tandoor-recipes-migrating-media-option-disallow-access"
   ],
+  "module-services-keycloak-unix-socket": [
+    "index.html#module-services-keycloak-unix-socket"
+  ],
   "sec-override-nixos-test": [
     "index.html#sec-override-nixos-test"
   ],
