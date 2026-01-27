@@ -1,0 +1,15 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 2fb354a..3fb84e3 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -180,10 +180,6 @@ else()
+     endif()
+ endif()
+ 
+-clap_juce_extensions_plugin(TARGET OB-Xf
+-    CLAP_ID "org.surge-synth-team.OB-Xf"
+-    CLAP_FEATURES instrument synthesizer "virtual analog" analog)
+-
+ target_compile_definitions(OB-Xf PRIVATE)
+ 
+ add_subdirectory(assets)
