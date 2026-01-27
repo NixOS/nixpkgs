@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pytestCheckHook,
   setuptools-scm,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -20,6 +21,7 @@ buildPythonPackage rec {
 
   build-system = [ setuptools-scm ];
 
+  buildInputs = [ setuptools ];
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "cppy" ];

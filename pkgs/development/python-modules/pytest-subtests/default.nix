@@ -12,6 +12,7 @@
 
   # tests
   pytestCheckHook,
+  pytest,
 }:
 
 buildPythonPackage rec {
@@ -32,6 +33,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ attrs ];
 
+  buildInputs = [ pytest ];
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pytest_subtests" ];
