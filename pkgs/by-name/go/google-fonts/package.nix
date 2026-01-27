@@ -7,7 +7,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "google-fonts";
-  version = "unstable-2024-06-21";
+  version = "0.4.9-unstable-2025-11-14";
 
   # Adobe Blank is split out in a separate output,
   # because it causes crashes with `libfontconfig`.
@@ -20,8 +20,8 @@ stdenvNoCC.mkDerivation {
   src = fetchFromGitHub {
     owner = "google";
     repo = "fonts";
-    rev = "d5ea3092960d3d5db0b7a9890c828bafbf159c51";
-    hash = "sha256-jQVwAgrZzdCVD4aaX4vYJLqj67t9vn60bYPuBWWMbBg=";
+    rev = "5f31230ff3fa9668cb2e0f020334041c5d558d5a";
+    hash = "sha256-V70GTOf1gBOqTxwwi8FJlnE6SOuWw2vV2fqoM+sLnJQ=";
   };
 
   postPatch = ''
