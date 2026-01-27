@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
-  # doc: https://github.com/bdwgc/bdwgc/blob/v8.2.8/doc/README.macros (LARGE_CONFIG)
+  # doc: https://github.com/bdwgc/bdwgc/blob/v8.2.10/doc/README.macros (LARGE_CONFIG)
   enableLargeConfig ? false,
   enableMmap ? true,
   enableStatic ? false,
@@ -14,20 +14,20 @@
   # Look for messages such as `Mark stack overflow`, `No room to copy back mark stack`, and
   # `Grew mark stack to ... frames`.
   #
-  # If this parameter is set to `null`, the default from upstream is used, which is 4096 as of 8.2.8
+  # If this parameter is set to `null`, the default from upstream is used, which is 4096 as of 8.2.10
   initialMarkStackSize ? null,
   nixVersions,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "boehm-gc";
-  version = "8.2.8";
+  version = "8.2.10";
 
   src = fetchFromGitHub {
     owner = "bdwgc";
     repo = "bdwgc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-UQSLK/05uPal6/m+HMz0QwXVII1leonlmtSZsXjJ+/c=";
+    hash = "sha256-w9LhJvQHjsgvafYSQdyvE3ZNPlnrqEPP0MZ+gzbsTMM=";
   };
 
   outputs = [
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
       # not fix the problem the test failure will be a reminder to
       # extend the set of versions requiring the workaround).
       noSoftVDB =
-        lib.optional (stdenv.hostPlatform.isPower64 && finalAttrs.version == "8.2.8")
+        lib.optional (stdenv.hostPlatform.isPower64 && finalAttrs.version == "8.2.10")
           # do not use /proc primitives to track dirty bits; see:
           # https://github.com/bdwgc/bdwgc/issues/479#issuecomment-1279687537
           # https://github.com/bdwgc/bdwgc/blob/54522af853de28f45195044dadfd795c4e5942aa/include/private/gcconfig.h#L741
