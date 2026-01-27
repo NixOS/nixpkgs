@@ -984,7 +984,7 @@ in
 
   meta = {
     maintainers = with lib.maintainers; [
-      m0ustach3
+      M0ustach3
       tornax
       jk
     ];
