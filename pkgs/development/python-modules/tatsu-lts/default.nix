@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dnicolodi";
     repo = "TatSu-LTS";
-    tag = "v${version}";
-    hash = "sha256-YFNoA81J8x4OO7lLUjeN/NzQfCTEeosaWZg9UKy8C50=";
+    tag = "v${version}-LTS";
+    hash = "sha256-2mMIFJ9baN6hmx2HPR3kKZHuhAWC30sTIIaRRuTc1Gg=";
   };
 
   build-system = [ hatchling ];
