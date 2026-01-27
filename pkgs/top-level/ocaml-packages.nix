@@ -244,13 +244,13 @@ let
 
         cmarkit = callPackage ../development/ocaml-modules/cmarkit { };
 
-        # The 1.1.0 release broke a lot of packages and is not compatible with
-        # OCaml < 4.08.
-        cmdliner = if lib.versionAtLeast ocaml.version "4.08" then cmdliner_1_1 else cmdliner_1_0;
+        cmdliner = callPackage ../development/ocaml-modules/cmdliner { };
 
-        cmdliner_1_0 = callPackage ../development/ocaml-modules/cmdliner/1_0.nix { };
+        cmdliner_1_0 = cmdliner.override { version = "1.0.4"; };
 
-        cmdliner_1_1 = callPackage ../development/ocaml-modules/cmdliner/1_1.nix { };
+        cmdliner_1_3 = cmdliner.override { version = "1.3.0"; };
+
+        cmdliner_2_1 = cmdliner.override { version = "2.1.0"; };
 
         cohttp = callPackage ../development/ocaml-modules/cohttp { };
 
