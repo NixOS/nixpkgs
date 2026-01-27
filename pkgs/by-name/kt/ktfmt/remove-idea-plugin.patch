@@ -1,0 +1,15 @@
+# the :idea_plugin depends on the builtin hdiutil executable on darwin, which is not packaged yet
+# so just skip building it for now instead of an impure build
+diff --git a/settings.gradle.kts b/settings.gradle.kts
+index ea48f26..52fe28e 100644
+--- a/settings.gradle.kts
++++ b/settings.gradle.kts
+@@ -26,8 +26,6 @@ project(":ktfmt").projectDir = file("core")
+ 
+ project(":lambda").projectDir = file("online_formatter")
+ 
+-project(":idea_plugin").projectDir = file("ktfmt_idea_plugin")
+-
+ dependencyResolutionManagement {
+   versionCatalogs {
+     create("libs") {

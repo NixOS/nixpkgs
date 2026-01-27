@@ -1,34 +1,44 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   jre_headless,
   makeWrapper,
-  maven,
+  gradle,
 }:
 
-maven.buildMavenPackage rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ktfmt";
-  version = "0.51";
+  version = "0.61";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "ktfmt";
-    tag = "v${version}";
-    hash = "sha256-TIYV/V6vtGTTSLFf9dcKo8Ezx61e7Vvz3vQvbh0Kj/Y=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-WY3d25c8VLsgeNBV/lSlOL+C3XtM9lfRYqMz3Z0mT3s=";
   };
 
-  patches = [ ./pin-default-maven-plugin-versions.patch ];
+  patches = [ ./remove-idea-plugin.patch ];
 
-  mvnHash = "sha256-f/Uwc0ynROEKl2+zsgqj5ctRu1QcNblF5suU/0+fvKw=";
+  nativeBuildInputs = [
+    gradle
+    makeWrapper
+  ];
 
-  mvnParameters = "-Dproject.build.outputTimestamp=1980-01-01T00:00:02Z";
+  mitmCache = gradle.fetchDeps {
+    inherit (finalAttrs) pname;
+    data = ./deps.json;
+  };
+  __darwinAllowLocalNetworking = true; # this is required for using mitm-cache on Darwin
 
-  nativeBuildInputs = [ makeWrapper ];
+  gradleFlags = [ "-Dfile.encoding=utf-8" ];
+
+  doCheck = true;
 
   installPhase = ''
     runHook preInstall
 
-    install -Dm644 core/target/ktfmt-*-jar-with-dependencies.jar $out/share/ktfmt/ktfmt.jar
+    install -Dm644 core/build/libs/ktfmt-*-with-dependencies.jar $out/share/ktfmt/ktfmt.jar
 
     makeWrapper ${jre_headless}/bin/java $out/bin/ktfmt \
       --add-flags "-jar $out/share/ktfmt/ktfmt.jar"
@@ -42,6 +52,10 @@ maven.buildMavenPackage rec {
     license = lib.licenses.asl20;
     mainProgram = "ktfmt";
     maintainers = with lib.maintainers; [ ghostbuster91 ];
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryBytecode # mitm cache
+    ];
     inherit (jre_headless.meta) platforms;
   };
-}
+})
