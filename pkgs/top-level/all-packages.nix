@@ -3438,10 +3438,6 @@ with pkgs;
 
   tautulli = python3Packages.callPackage ../servers/tautulli { };
 
-  plfit = callPackage ../by-name/pl/plfit/package.nix {
-    python = null;
-  };
-
   inherit (callPackage ../development/tools/pnpm { })
     pnpm_8
     pnpm_9
