@@ -66,7 +66,13 @@ async function dismissReviews({ github, context, core, dry, reviewKey }) {
     changesRequestedReviews.every(
       (review) =>
         commentResolvedRegex.test(review.body) ||
-        (reviewKey && reviewKeyRegex.test(review.body)),
+        (reviewKey && reviewKeyRegex.test(review.body)) ||
+        // If we are called by check-commits and the review body is clearly
+        // from `commits.js`, then we can safely dismiss the review.
+        // This helps with pre-existing reviews (before the comments were added).
+        (reviewKey &&
+          reviewKey === 'check-commits' &&
+          review.body.includes('PR / Check / cherry-pick')),
     )
   ) {
     reviewsToDismiss = changesRequestedReviews
