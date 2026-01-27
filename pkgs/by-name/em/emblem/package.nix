@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation rec {
   pname = "emblem";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -26,12 +26,12 @@ stdenv.mkDerivation rec {
     owner = "design";
     repo = "emblem";
     rev = version;
-    sha256 = "sha256-knq8OKoc8Xv7lOr0ub9+2JfeQE84UlTHR1q4SFFF8Ug=";
+    hash = "sha256-OqP6KLaDix4hR/AA+lfaMu4nZPqpAKfYzZu7tr+RUJI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-CsISaVlRGtVVEna1jyGZo/IdWcJdwHJv6LXcXYha2UE=";
+    hash = "sha256-J00zw8jOeMLjGyn2Gj4TA5vHjIWOw+x/XEIXMyBFMdw=";
   };
 
   nativeBuildInputs = [
