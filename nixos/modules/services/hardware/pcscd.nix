@@ -134,5 +134,12 @@ in
         "${lib.getExe package} -f -x -c ${cfgFile} ${lib.escapeShellArgs cfg.extraArgs}"
       ];
     };
+
+    users.users.pcscd = {
+      isSystemUser = true;
+      group = "pcscd";
+    };
+
+    users.groups.pcscd = { };
   };
 }

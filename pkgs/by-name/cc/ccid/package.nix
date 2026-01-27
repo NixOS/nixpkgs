@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ccid";
-  version = "1.6.2";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "LudovicRousseau";
     repo = "CCID";
     tag = version;
-    hash = "sha256-n7rOjnLZH4RLmddtBycr3FK2Bi/OLR+9IjWBRbWjnUw=";
+    hash = "sha256-6eaznSIQZl1bpIe1F9EtwotF9BjOruJ9g/c2QrTgfUg=";
   };
 
   postPatch = ''
@@ -33,6 +33,9 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     (lib.mesonBool "serial" true)
+    # Upstream tries to install udev outside of PREFIX. It's easier to disable
+    # this and install it ourself than to patch meson.build.
+    (lib.mesonBool "udev-rules" false)
   ];
 
   # error: call to undeclared function 'InterruptRead';
