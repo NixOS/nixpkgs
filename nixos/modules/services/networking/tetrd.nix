@@ -6,23 +6,26 @@
 }:
 
 {
-  options.services.tetrd.enable = lib.mkEnableOption "tetrd";
+  options.services.tetrd = {
+    enable = lib.mkEnableOption "tetrd";
+    package = lib.mkPackageOption pkgs "tetrd" { };
+  };
 
   config = lib.mkIf config.services.tetrd.enable {
     environment = {
-      systemPackages = [ pkgs.tetrd ];
-      etc."resolv.conf".source = "/etc/tetrd/resolv.conf";
+      systemPackages = [ config.services.tetrd.package ];
+      # etc."resolv.conf".source = "/etc/tetrd/resolv.conf"; # Disabled overwriting of resolve.conf since otherwise tetrd disables your dns when its not connected to a device.
     };
 
     systemd = {
       tmpfiles.rules = [ "f /etc/tetrd/resolv.conf - - -" ];
 
       services.tetrd = {
-        description = pkgs.tetrd.meta.description;
+        description = config.services.tetrd.package.meta.description;
         wantedBy = [ "multi-user.target" ];
 
         serviceConfig = {
-          ExecStart = "${pkgs.tetrd}/opt/Tetrd/bin/tetrd";
+          ExecStart = "${config.services.tetrd.package}/opt/Tetrd/bin/tetrd";
           Restart = "always";
           RuntimeDirectory = "tetrd";
           RootDirectory = "/run/tetrd";
