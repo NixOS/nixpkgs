@@ -133,6 +133,7 @@ buildGoModule (
       maintainers = with lib.maintainers; [
         Golo300
         DrakeTDL
+        far-cake7739
       ];
       platforms = [
         "x86_64-linux"

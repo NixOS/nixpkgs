@@ -8392,6 +8392,12 @@
     name = "Fang-Pen Lin";
     keys = [ { fingerprint = "7130 3454 A7CD 0F0A 941A  F9A3 2A26 9964 AD29 2131"; } ];
   };
+  far-cake7739 = {
+    name = "far-cake7739";
+    email = "far.cake7739@fastmail.com";
+    github = "far-cake7739";
+    githubId = 257163206;
+  };
   farcaller = {
     name = "Vladimir Pouzanov";
     email = "farcaller@gmail.com";
