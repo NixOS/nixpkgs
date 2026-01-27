@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "siesta";
-  version = "5.2.2";
+  version = "5.4.1";
 
   src = fetchFromGitLab {
     owner = "siesta-project";
     repo = "siesta";
     tag = finalAttrs.version;
-    hash = "sha256-pud8RlJAT+0TwyPRsbf5D/8FfLjZvPYPf84Xb7UH6os=";
+    hash = "sha256-tmuJRRW+DmLjHPQaG5yW+xS1t+JcQjUHngyw62S8VAc=";
     fetchSubmodules = true;
   };
 
