@@ -83,7 +83,7 @@ let
     fi
   '';
 
-  # 'emergency.serivce' and 'rescue.service' have
+  # 'emergency.service' and 'rescue.service' have
   # 'ExecStartPre=-plymouth quit --wait', but 'plymouth' is not on
   # their 'ExecSearchPath'. We could set 'ExecSearchPath', but it
   # overrides 'DefaultEnvironment=PATH=...', which is trouble for the
@@ -371,7 +371,7 @@ in
 
         # Setup font
         mkdir -p $out/share/fonts
-        cp ${cfg.font} $out/share/fonts
+        cp ${escapeShellArg cfg.font} $out/share/fonts
         mkdir -p $out/etc/fonts
         cat > $out/etc/fonts/fonts.conf <<EOF
         <?xml version="1.0"?>
