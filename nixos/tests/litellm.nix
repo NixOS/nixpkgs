@@ -22,6 +22,8 @@ in
   '';
 
   meta = {
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      yzx9
+    ];
   };
 }
