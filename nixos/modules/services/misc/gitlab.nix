@@ -1903,7 +1903,9 @@ in
         User = cfg.user;
         Group = cfg.group;
         Slice = "system-gitlab.slice";
+        Type = "oneshot";
         ExecStart = "${gitlab-rake}/bin/gitlab-rake gitlab:backup:create";
+        RemainAfterExit = true;
       };
     };
 
