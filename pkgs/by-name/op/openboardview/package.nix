@@ -31,6 +31,13 @@ stdenv.mkDerivation rec {
       url = "https://github.com/OpenBoardView/OpenBoardView/commit/a1de2e5de908afd83eceed757260f6425314af2e.patch?full_index=1";
       hash = "sha256-DK+K4F0+QGqaoWCyc8AvuIsaiTCqhAG6AsTNg2hegh0=";
     })
+    (fetchpatch {
+      name = "fix-compatibility-with-cmake4.patch";
+      url = "https://github.com/OpenBoardView/OpenBoardView/commit/55ba0afca413189e8611b2861fe6653499028e47.patch?full_index=1";
+      hash = "sha256-InzfX2aU20oyyImDdmjCS+FGm0aQOMbN//Vwty1VCpI=";
+    })
+    # https://github.com/OpenBoardView/OpenBoardView/pull/339
+    ./fix-darwin-build.patch
   ];
 
   nativeBuildInputs = [
