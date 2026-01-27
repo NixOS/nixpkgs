@@ -10,7 +10,7 @@ let
   cfg = config.services.ollama;
   ollama = lib.getExe cfg.package;
 
-  staticUser = cfg.user != null && cfg.group != null;
+  staticUser = cfg.user != null;
 in
 {
   imports = [
