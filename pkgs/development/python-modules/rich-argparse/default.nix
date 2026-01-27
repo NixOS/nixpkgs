@@ -25,6 +25,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  disabledTests = [
+    # coloring mismatch in fixture
+    "test_subparsers_usage"
+  ];
+
   pythonImportsCheck = [ "rich_argparse" ];
 
   meta = {
