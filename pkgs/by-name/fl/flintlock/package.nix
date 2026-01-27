@@ -11,16 +11,16 @@
 
 buildGoModule rec {
   pname = "flintlock";
-  version = "0.8.1";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "weaveworks";
     repo = "flintlock";
     rev = "v${version}";
-    sha256 = "sha256-Kbk94sqj0aPsVonPsiu8kbjhIOURB1kX9Lt3NURL+jk=";
+    sha256 = "sha256-WQbZUbTrg50vYvFY5ng8LtT4d6aVsUzZUIy8tMUr50M=";
   };
 
-  vendorHash = "sha256-Iv1qHEQLgw6huCA/6PKNmm+dS2yHgOvY/oy2fKjwEpY=";
+  vendorHash = "sha256-SjKxnLsC6RAg7is+ABRG1NyKX01cRNwCcW5B3Fgo/FQ=";
 
   subPackages = [
     "cmd/flintlock-metrics"
