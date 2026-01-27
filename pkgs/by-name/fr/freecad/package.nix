@@ -8,6 +8,7 @@
   fetchFromGitHub,
   fetchpatch,
   fmt,
+  gtk3,
   gts,
   hdf5,
   libGLU,
@@ -142,6 +143,7 @@ freecad-utils.makeCustomizable (
         "--set COIN_GL_NO_CURRENT_CONTEXT_CHECK 1"
         "--prefix PATH : ${binPath}"
         "--prefix PYTHONPATH : ${python3Packages.makePythonPath pythonDeps}"
+        "--prefix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}"
       ];
 
     postFixup = ''
