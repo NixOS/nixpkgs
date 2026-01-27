@@ -196,7 +196,6 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     capnproto
     editline
-    libsodium
     openssl
     sqlite
     xz
@@ -295,9 +294,21 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++
     lib.optionals
-      (stdenv.hostPlatform.isLinux && finalAttrs.doInstallCheck && lib.versionAtLeast version "2.94")
+      (
+        stdenv.hostPlatform.isLinux
+        && finalAttrs.doInstallCheck
+        && lib.versionAtLeast version "2.94"
+        && lib.versionOlder version "2.95"
+      )
       [
         (lib.mesonOption "build-test-shell" "${pkgsStatic.busybox}/bin")
+      ]
+  ++
+    lib.optionals
+      (stdenv.hostPlatform.isLinux && finalAttrs.doInstallCheck && lib.versionAtLeast version "2.95")
+      [
+        (lib.mesonOption "build-test-env" "${pkgsStatic.busybox}/bin")
+        (lib.mesonOption "build-test-shell" "${pkgsStatic.bash}/bin")
       ];
 
   ninjaFlags = [ "-v" ];
@@ -347,7 +358,8 @@ stdenv.mkDerivation (finalAttrs: {
     rapidcheck
   ];
 
-  doInstallCheck = true;
+  # Python splices are broken (https://github.com/NixOS/nixpkgs/issues/476822), causing build failure in `buildPackages.python3Packages.bcrypt`.
+  doInstallCheck = stdenv.buildPlatform == stdenv.hostPlatform;
   mesonInstallCheckFlags = [
     "--suite=installcheck"
     "--print-errorlogs"
