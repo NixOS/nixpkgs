@@ -11,6 +11,7 @@
   keycloak-discord = callPackage ./keycloak-discord { };
   keycloak-magic-link = callPackage ./keycloak-magic-link { };
   keycloak-metrics-spi = callPackage ./keycloak-metrics-spi { };
+  keycloak-trusted-device-spi = callPackage ./keycloak-trusted-device-spi { };
   keycloak-restrict-client-auth = callPackage ./keycloak-restrict-client-auth { };
   keycloak-remember-me-authenticator = callPackage ./keycloak-remember-me-authenticator { };
 
