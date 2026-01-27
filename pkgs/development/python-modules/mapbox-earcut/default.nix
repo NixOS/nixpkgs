@@ -6,7 +6,7 @@
   # build-system
   cmake,
   ninja,
-  pybind11,
+  nanobind,
   scikit-build-core,
 
   # dependencies
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   };
 
   build-system = [
-    pybind11
+    nanobind
     scikit-build-core
   ];
 
@@ -43,6 +43,10 @@ buildPythonPackage rec {
   dependencies = [ numpy ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  preCheck = ''
+    rm -rf mapbox_earcut
+  '';
 
   pythonImportsCheck = [ "mapbox_earcut" ];
 
