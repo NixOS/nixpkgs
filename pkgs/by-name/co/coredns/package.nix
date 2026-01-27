@@ -121,10 +121,6 @@ buildGoModule (finalAttrs: {
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # loopback interface is lo0 on macos
     sed -E -i 's/\blo\b/lo0/' plugin/bind/setup_test.go
-
-    # test is apparently outdated but only exhibits this on darwin
-    substituteInPlace test/corefile_test.go \
-      --replace-fail "TestCorefile1" "SkipCorefile1"
   '';
 
   __darwinAllowLocalNetworking = true;
