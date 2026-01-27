@@ -1052,6 +1052,7 @@ in
   netbox_4_3 = handleTest ./web-apps/netbox/default.nix { netbox = pkgs.netbox_4_3; };
   netbox_4_4 = handleTest ./web-apps/netbox/default.nix { netbox = pkgs.netbox_4_4; };
   netdata = runTest ./netdata.nix;
+  netfoil = runTest ./netfoil.nix;
   networking.networkd = handleTest ./networking/networkd-and-scripted.nix { networkd = true; };
   networking.networkmanager = handleTest ./networking/networkmanager.nix { };
   networking.scripted = handleTest ./networking/networkd-and-scripted.nix { networkd = false; };
