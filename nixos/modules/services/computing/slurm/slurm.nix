@@ -336,31 +336,27 @@ in
 
   config =
     let
-      wrappedSlurm = pkgs.stdenv.mkDerivation {
-        name = "wrappedSlurm";
+      wrappedSlurm = pkgs.runCommand "wrappedSlurm" { } ''
+        mkdir -p $out/bin
+        find  ${lib.getBin cfg.package}/bin -type f -executable | while read EXE
+        do
+          exename="$(basename $EXE)"
+          wrappername="$out/bin/$exename"
+          cat > "$wrappername" <<EOT
+        #!/bin/sh
+        if [ -z "\$SLURM_CONF" ]
+        then
+          SLURM_CONF="${cfg.etcSlurm}/slurm.conf" "$EXE" "\$@"
+        else
+          "$EXE" "\$0"
+        fi
+        EOT
+          chmod +x "$wrappername"
+        done
 
-        builder = pkgs.writeText "builder.sh" ''
-          mkdir -p $out/bin
-          find  ${lib.getBin cfg.package}/bin -type f -executable | while read EXE
-          do
-            exename="$(basename $EXE)"
-            wrappername="$out/bin/$exename"
-            cat > "$wrappername" <<EOT
-          #!/bin/sh
-          if [ -z "$SLURM_CONF" ]
-          then
-            SLURM_CONF="${cfg.etcSlurm}/slurm.conf" "$EXE" "\$@"
-          else
-            "$EXE" "\$0"
-          fi
-          EOT
-            chmod +x "$wrappername"
-          done
-
-          mkdir -p $out/share
-          ln -s ${lib.getBin cfg.package}/share/man $out/share/man
-        '';
-      };
+        mkdir -p $out/share
+        ln -s ${lib.getBin cfg.package}/share/man $out/share/man
+      '';
 
     in
     lib.mkIf (cfg.enableStools || cfg.client.enable || cfg.server.enable || cfg.dbdserver.enable) {
