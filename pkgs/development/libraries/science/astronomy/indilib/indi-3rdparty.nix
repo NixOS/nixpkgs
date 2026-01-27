@@ -41,13 +41,13 @@
 }:
 
 let
-  thirdparty_version = "2.1.6.2";
+  thirdparty_version = "2.1.7.1";
   fxload = libusb1.override { withExamples = true; };
   src-3rdparty = fetchFromGitHub {
     owner = "indilib";
     repo = "indi-3rdparty";
     rev = "v${thirdparty_version}";
-    hash = "sha256-FMvdm7dkOkRlmbPNeQjh0jd+2bOinzW13QPP2NnOr/M=";
+    hash = "sha256-qndgO4g/SAXs7CrwILo6WajnoS6UQ5EhSpamBzdAqU8=";
   };
 
   buildIndi3rdParty =
@@ -127,9 +127,16 @@ let
 
   libaltaircam = buildIndi3rdParty {
     pname = "libaltaircam";
+
     meta = {
       license = lib.licenses.unfreeRedistributable;
-      platforms = with lib.platforms; x86_64 ++ aarch64 ++ arm;
+      platforms = [
+        "armv7l-linux"
+        "aarch64-linux"
+        "x86_64-linux"
+      ];
+      # autopatchelf does not work with Mach-O universal binaries
+      broken = stdenv.isDarwin;
     };
   };
 
@@ -165,22 +172,38 @@ let
     nativeBuildInputs = [ autoPatchelfHook ];
     meta = {
       license = lib.licenses.unfreeRedistributable;
-      platforms = with lib.platforms; x86_64 ++ aarch64 ++ i686 ++ arm;
+      platforms = [
+        "armv7l-linux"
+        "aarch64-linux"
+        "i686-linux"
+        "x86_64-linux"
+      ];
+      # autopatchelf does not work with Mach-O universal binaries
+      broken = stdenv.isDarwin;
     };
   };
 
   libastroasis = buildIndi3rdParty {
     pname = "libastroasis";
+
     buildInputs = [ (lib.getLib stdenv.cc.cc) ];
     nativeBuildInputs = [ autoPatchelfHook ];
     meta = {
       license = lib.licenses.unfreeRedistributable;
-      platforms = with lib.platforms; x86_64 ++ aarch64 ++ arm;
+      platforms = [
+        "armv7l-linux"
+        "aarch64-linux"
+        "i686-linux"
+        "x86_64-linux"
+      ];
+      # autopatchelf does not work with Mach-O universal binaries
+      broken = stdenv.isDarwin;
     };
   };
 
   libatik = buildIndi3rdParty {
     pname = "libatik";
+
     buildInputs = [
       (lib.getLib stdenv.cc.cc)
       libusb1
@@ -190,16 +213,31 @@ let
     nativeBuildInputs = [ autoPatchelfHook ];
     meta = {
       license = lib.licenses.unfreeRedistributable;
-      platforms = with lib.platforms; x86_64 ++ aarch64 ++ i686 ++ arm;
+      platforms = [
+        "armv7l-linux"
+        "aarch64-linux"
+        "i686-linux"
+        "x86_64-linux"
+      ];
+      # autopatchelf does not work with Mach-O universal binaries
+      broken = stdenv.isDarwin;
     };
   };
 
   libbressercam = buildIndi3rdParty {
     pname = "libbressercam";
+
     nativeBuildInputs = [ autoPatchelfHook ];
     meta = {
       license = lib.licenses.unfreeRedistributable;
-      platforms = with lib.platforms; x86_64 ++ aarch64 ++ arm;
+      platforms = [
+        "armv7l-linux"
+        "aarch64-linux"
+        "x86_64-linux"
+      ];
+      # autopatchelf does not work with Mach-O universal binaries
+      broken = stdenv.isDarwin;
+
     };
   };
 
@@ -242,62 +280,113 @@ let
     nativeBuildInputs = [ autoPatchelfHook ];
     meta = {
       license = lib.licenses.unfreeRedistributable;
-      platforms = with lib.platforms; x86_64 ++ aarch64 ++ arm ++ i686;
+      platforms = [
+        "armv7l-linux"
+        "aarch64-linux"
+        "i686-linux"
+        "x86_64-linux"
+      ];
+      # autopatchelf does not work with Mach-O universal binaries
+      broken = stdenv.isDarwin;
     };
   };
 
   libmallincam = buildIndi3rdParty {
     pname = "libmallincam";
+
     nativeBuildInputs = [ autoPatchelfHook ];
     meta = {
       license = lib.licenses.unfreeRedistributable;
-      platforms = with lib.platforms; x86_64 ++ aarch64 ++ arm;
+      platforms = [
+        "armv7l-linux"
+        "aarch64-linux"
+        "x86_64-linux"
+      ];
+      # autopatchelf does not work with Mach-O universal binaries
+      broken = stdenv.isDarwin;
+
     };
   };
 
   libmeadecam = buildIndi3rdParty {
     pname = "libmeadecam";
+
     buildInputs = [ libusb1 ];
     meta = {
       license = lib.licenses.lgpl21Only;
-      platforms = lib.platforms.linux;
+      platforms = [
+        "armv7l-linux"
+        "aarch64-linux"
+        "x86_64-linux"
+      ];
     };
   };
 
   libmicam = buildIndi3rdParty {
     pname = "libmicam";
+
     buildInputs = [ libusb1 ];
     nativeBuildInputs = [ autoPatchelfHook ];
     meta = {
       license = lib.licenses.unfreeRedistributable;
-      platforms = with lib.platforms; x86_64 ++ aarch64 ++ arm ++ i686;
+      platforms = [
+        "armv7l-linux"
+        "aarch64-linux"
+        "x86_64-linux"
+      ];
+      # autopatchelf does not work with Mach-O universal binaries
+      broken = stdenv.isDarwin;
+
     };
   };
 
   libnncam = buildIndi3rdParty {
     pname = "libnncam";
+
     nativeBuildInputs = [ autoPatchelfHook ];
     meta = {
       license = lib.licenses.unfreeRedistributable;
-      platforms = with lib.platforms; x86_64 ++ aarch64 ++ arm;
+      platforms = [
+        "armv7l-linux"
+        "aarch64-linux"
+        "x86_64-linux"
+      ];
+      # autopatchelf does not work with Mach-O universal binaries
+      broken = stdenv.isDarwin;
     };
   };
 
   libogmacam = buildIndi3rdParty {
     pname = "libogmacam";
+
     nativeBuildInputs = [ autoPatchelfHook ];
     meta = {
       license = lib.licenses.unfreeRedistributable;
-      platforms = with lib.platforms; x86_64 ++ aarch64 ++ arm;
+      platforms = [
+        "armv7l-linux"
+        "aarch64-linux"
+        "x86_64-linux"
+      ];
+      # autopatchelf does not work with Mach-O universal binaries
+      broken = stdenv.isDarwin;
+
     };
   };
 
   libomegonprocam = buildIndi3rdParty {
     pname = "libomegonprocam";
+
     nativeBuildInputs = [ autoPatchelfHook ];
     meta = {
       license = lib.licenses.unfreeRedistributable;
-      platforms = with lib.platforms; x86_64 ++ aarch64 ++ arm;
+      platforms = [
+        "armv7l-linux"
+        "aarch64-linux"
+        "x86_64-linux"
+      ];
+      # autopatchelf does not work with Mach-O universal binaries
+      broken = stdenv.isDarwin;
+
     };
   };
 
@@ -330,6 +419,7 @@ let
 
   libplayerone = buildIndi3rdParty {
     pname = "libplayerone";
+
     postPatch = ''
       substituteInPlace 99-player_one_astronomy.rules \
         --replace-fail "/bin/echo" "${lib.getBin coreutils}/bin/echo" \
@@ -344,7 +434,14 @@ let
     nativeBuildInputs = [ autoPatchelfHook ];
     meta = {
       license = lib.licenses.unfreeRedistributable;
-      platforms = with lib.platforms; x86_64 ++ aarch64 ++ arm;
+      platforms = [
+        "armv7l-linux"
+        "aarch64-linux"
+        "x86_64-linux"
+      ];
+      # autopatchelf does not work with Mach-O universal binaries
+      broken = stdenv.isDarwin;
+
     };
   };
 
@@ -373,7 +470,14 @@ let
 
     meta = {
       license = lib.licenses.unfreeRedistributable;
-      platforms = with lib.platforms; x86_64 ++ aarch64 ++ arm;
+      platforms = [
+        "armv7l-linux"
+        "aarch64-linux"
+        "x86_64-linux"
+      ];
+      # autopatchelf does not work with Mach-O universal binaries
+      broken = stdenv.isDarwin;
+
     };
   };
 
@@ -420,21 +524,37 @@ let
 
     meta = {
       license = lib.licenses.unfreeRedistributable;
-      platforms = with lib.platforms; x86_64 ++ aarch64 ++ arm;
+      platforms = [
+        "armv7l-linux"
+        "aarch64-linux"
+        "x86_64-linux"
+      ];
+      # autopatchelf does not work with Mach-O universal binaries
+      broken = stdenv.isDarwin;
+
     };
   };
 
   libstarshootg = buildIndi3rdParty {
     pname = "libstarshootg";
+
     nativeBuildInputs = [ autoPatchelfHook ];
     meta = {
       license = lib.licenses.unfreeRedistributable;
-      platforms = with lib.platforms; x86_64 ++ aarch64 ++ arm;
+      platforms = [
+        "armv7l-linux"
+        "aarch64-linux"
+        "x86_64-linux"
+      ];
+      # autopatchelf does not work with Mach-O universal binaries
+      broken = stdenv.isDarwin;
+
     };
   };
 
   libsvbony = buildIndi3rdParty {
     pname = "libsvbony";
+
     buildInputs = [
       (lib.getLib stdenv.cc.cc)
       libusb1
@@ -442,34 +562,65 @@ let
     nativeBuildInputs = [ autoPatchelfHook ];
     meta = {
       license = lib.licenses.unfreeRedistributable;
-      platforms = with lib.platforms; x86_64 ++ aarch64 ++ arm ++ i686;
+      platforms = [
+        "armv7l-linux"
+        "aarch64-linux"
+        "x86_64-linux"
+      ];
+      # autopatchelf does not work with Mach-O universal binaries
+      broken = stdenv.isDarwin;
+
     };
   };
 
   libsvbonycam = buildIndi3rdParty {
     pname = "libsvbonycam";
+
     nativeBuildInputs = [ autoPatchelfHook ];
     meta = {
       license = lib.licenses.unfreeRedistributable;
-      platforms = with lib.platforms; x86_64 ++ aarch64 ++ arm;
+      platforms = [
+        "armv7l-linux"
+        "aarch64-linux"
+        "x86_64-linux"
+      ];
+      # autopatchelf does not work with Mach-O universal binaries
+      broken = stdenv.isDarwin;
+
     };
   };
 
   libtoupcam = buildIndi3rdParty {
     pname = "libtoupcam";
+
     nativeBuildInputs = [ autoPatchelfHook ];
     meta = {
       license = lib.licenses.unfreeRedistributable;
-      platforms = with lib.platforms; x86_64 ++ aarch64 ++ arm;
+      platforms = [
+        "armv7l-linux"
+        "aarch64-linux"
+        "x86_64-linux"
+      ];
+      # autopatchelf does not work with Mach-O universal binaries
+      broken = stdenv.isDarwin;
+
     };
   };
 
   libtscam = buildIndi3rdParty {
     pname = "libtscam";
+
     nativeBuildInputs = [ autoPatchelfHook ];
     meta = {
       license = lib.licenses.unfreeRedistributable;
-      platforms = with lib.platforms; x86_64 ++ aarch64 ++ arm;
+      platforms = [
+        "armv7l-linux"
+        "aarch64-linux"
+        "x86_64-linux"
+      ];
+      # autopatchelf does not work with Mach-O universal binaries
+      broken = stdenv.isDarwin;
+
     };
   };
 
