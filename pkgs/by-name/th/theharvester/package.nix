@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "theharvester";
-  version = "4.9.2";
+  version = "4.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "laramies";
     repo = "theharvester";
     tag = version;
-    hash = "sha256-ZD5nFjhunD6miBBgCp7r82l/zIbLjHSj1jghXGav8hI=";
+    hash = "sha256-PDFKDm1amqmdYo/avxudWZ9Xhp16Cw4ejmUAQ+BlvC0=";
   };
 
   pythonRelaxDeps = true;
@@ -26,6 +26,7 @@ python3.pkgs.buildPythonApplication rec {
     aiodns
     aiofiles
     aiohttp
+    aiohttp-socks
     aiomultiprocess
     aiosqlite
     beautifulsoup4
