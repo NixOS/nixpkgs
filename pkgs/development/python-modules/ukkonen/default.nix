@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "ukkonen";
-  version = "1.0.1";
+  version = "1.1.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "asottile";
     repo = "ukkonen";
     rev = "v${version}";
-    sha256 = "jG6VP/P5sadrdrmneH36/ExSld9blyMAAG963QS9+p0=";
+    sha256 = "sha256-vXyOLAiY92Df7g57quiSnOz8yhaIsm8MTB6Fbiv6axQ=";
   };
 
   nativeBuildInputs = [ cffi ];
