@@ -4,6 +4,7 @@
   fetchFromGitHub,
   hatchling,
   django,
+  pytest-cov-stub,
   pytest-django,
   pytestCheckHook,
 }:
@@ -26,6 +27,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     django
+    pytest-cov-stub
     pytest-django
     pytestCheckHook
   ];
