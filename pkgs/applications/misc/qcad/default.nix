@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
     install -Dm555 -t $out/lib release/libqcadecmaapi${stdenv.hostPlatform.extensions.sharedLibrary}
 
     install -Dm444 -t $out/share/applications qcad.desktop
-    install -Dm644 -t $out/share/pixmaps      scripts/qcad_icon.png
+    substituteInPlace $out/share/applications/qcad.desktop --replace 'Icon=org.qcad.QCAD' 'Icon=qcad'
 
     cp -r scripts $out/lib
     cp -r plugins $out/lib/plugins
