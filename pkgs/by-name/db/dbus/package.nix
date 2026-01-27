@@ -7,6 +7,7 @@
   enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
   systemdMinimal,
   audit,
+  libcap_ng,
   libapparmor,
   dbus,
   docbook_xml_dtd_44,
@@ -81,6 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     audit
     libapparmor
+    libcap_ng
   ];
   # ToDo: optional selinux?
 
