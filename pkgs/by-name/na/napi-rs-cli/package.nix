@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Remove workspace symlinks that point to non-existent paths
     find "$out/lib/napi-rs-cli/node_modules" -type l ! -exec test -e {} \; -delete
 
-    makeWrapper ${nodejs}/bin/node "$out/bin/napi" \
+    makeWrapper ${lib.getExe nodejs} "$out/bin/napi" \
       --add-flags "$out/lib/napi-rs-cli/dist/cli.js" \
       --set NODE_PATH "$out/lib/napi-rs-cli/node_modules"
 
