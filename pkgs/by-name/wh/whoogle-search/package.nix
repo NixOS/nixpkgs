@@ -7,13 +7,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "whoogle-search";
-  version = "0.9.4";
+  version = "1.1.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "whoogle_search";
     inherit version;
-    hash = "sha256-EvmNDU1hRUIy+CTwECLzIdcEjzcJgiiFYd2iMy0wDG0=";
+    hash = "sha256-1oPpCn9qeg/N/BA8Hv3+x4d7A5qEgcSI8i8B5XALQdw=";
   };
 
   build-system = with python3Packages; [ setuptools ];
@@ -22,15 +22,19 @@ python3Packages.buildPythonApplication rec {
     attrs
     beautifulsoup4
     brotli
-    cachelib
+    cachetools
     certifi
     cffi
-    chardet
     click
     cryptography
     cssutils
     defusedxml
     flask
+    h11
+    httpcore
+    httpx
+    httpx.optional-dependencies.http2
+    httpx.optional-dependencies.socks
     idna
     itsdangerous
     jinja2
@@ -42,17 +46,15 @@ python3Packages.buildPythonApplication rec {
     pycparser
     pyopenssl
     pyparsing
-    pysocks
+    pytest
     python-dateutil
-    requests
+    python-dotenv
     soupsieve
     stem
-    urllib3
     validators
     waitress
     wcwidth
     werkzeug
-    python-dotenv
   ];
 
   postInstall = ''
