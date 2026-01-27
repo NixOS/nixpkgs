@@ -5,7 +5,7 @@
   cython,
   fetchFromGitHub,
   setuptools,
-  wheel,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -21,18 +21,15 @@ buildPythonPackage rec {
     hash = "sha256-Pwbb+/vzNnliBpcDmOpkkNMVI/cPbJY+yMIKKR6m01w=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "cython == 3.1" "cython"
-  '';
-
   build-system = [
     cython
     setuptools
-    wheel
   ];
 
-  dependencies = [ cryptography ];
+  dependencies = [
+    cryptography
+    typing-extensions
+  ];
 
   # Checks need an Oracle database
   doCheck = false;
