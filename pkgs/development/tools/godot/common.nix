@@ -12,6 +12,7 @@
   fetchpatch,
   fontconfig,
   freetype,
+  gettext,
   glib,
   glslang,
   graphite2,
@@ -526,6 +527,7 @@ let
         ++ lib.optional withUdev udev;
 
         nativeBuildInputs = [
+          gettext
           installShellFiles
           perl
           pkg-config
