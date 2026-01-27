@@ -65,6 +65,8 @@ buildPythonPackage rec {
     # Access to the host's filesystem
     "podman/tests/integration/test_container_create.py"
     "podman/tests/unit/test_utils.py"
+    # Calls to podman
+    "podman/tests/integration/test_volumes.py"
   ];
 
   meta = {
