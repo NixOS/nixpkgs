@@ -35,9 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    ant compile prepare-dist
-    cp -Rv dist/{lib,davmail{,.jar}} .
-    sed -i -e '/^JAVA_OPTS/d' davmail
+    ant prepare-dist
+    sed -i -e '/^JAVA_OPTS/d' ./dist/davmail
 
     runHook postBuild
   '';
@@ -55,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/share/davmail
-    cp -vR ./{lib,davmail{,.jar}} $out/share/davmail
+    cp -R ./dist/{lib,davmail{,.jar}} $out/share/davmail
     chmod +x $out/share/davmail/davmail
     makeWrapper $out/share/davmail/davmail $out/bin/davmail \
       --set-default JAVA_OPTS "-Xmx512M -Dsun.net.inetaddr.ttl=60 -Djdk.gtk.version=${lib.versions.major gtk'.version}" \
