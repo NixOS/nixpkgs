@@ -48,7 +48,13 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  outputHash = "sha256-YqUAP11oSxfKifa8QL4VXGCWV5xGG2+vk60f4NdIXIA=";
+  outputHash =
+    {
+      x86_64-linux = "sha256-YqUAP11oSxfKifa8QL4VXGCWV5xGG2+vk60f4NdIXIA=";
+      aarch64-linux = "sha256-q7adhMY95g5BCcoiCVIwCpnqJAidE4a2cxGOjuE2YDk=";
+    }
+    .${stdenvNoCC.hostPlatform.system}
+      or (throw "Unsupported system ${stdenvNoCC.hostPlatform.system}");
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
 }
