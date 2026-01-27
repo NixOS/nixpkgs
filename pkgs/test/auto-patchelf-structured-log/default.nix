@@ -31,7 +31,8 @@ stdenv.mkDerivation {
     auto-patchelf \
       --paths ./usr/bin/ToneLib-Jam \
       --libs ${lib.getLib freetype}/lib \
-      --structured-logs > log.jsonl || true
+      --ignore-missing "libasound.so.*" "libGL.so.*" \
+      --structured-logs | tee log.jsonl
 
     # Expect 1 SetInterpreter line
     jq -e -s '[.[] | select(has("SetInterpreter"))] | length == 1' log.jsonl
@@ -39,13 +40,16 @@ stdenv.mkDerivation {
     # We expect 3 Dependency lines
     jq -e -s '[.[] | select(has("Dependency"))] | length == 3' log.jsonl
 
-    # Expect the last line to set the rpath as expected
-    jq -e -s 'last == {
+    # We expect 2 IgnoredDependency lines
+    jq -e -s '[.[] | select(has("IgnoredDependency"))] | length == 2' log.jsonl
+
+    # Expect there to be a SetRpath event using the expected rpath
+    jq -e -s 'any(.[]; . == {
       "SetRpath": {
         "file": "usr/bin/ToneLib-Jam",
         "rpath": "${lib.getLib freetype}/lib"
       }
-    }' log.jsonl
+    })' log.jsonl
 
     cp log.jsonl $out
   '';

@@ -257,6 +257,15 @@ class SetInterpreter:
 
 
 @dataclass
+class IgnoredDependency:
+    file: Path                          # The file that contains the ignored dependency
+    name: Path                          # The name of the dependency
+    pattern: str                        # The pattern that caused this missing dep to be ignored
+
+    def to_human_readable_str(self) -> str:
+        return f"warn: auto-patchelf ignoring missing {self.name} wanted by {self.file}"
+
+@dataclass
 class Dependency:
     file: Path                          # The file that contains the dependency
     name: Path                          # The name of the dependency
@@ -464,7 +473,7 @@ def auto_patchelf(
     for dep in missing:
         for pattern in ignore_missing:
             if fnmatch(dep.name.name, pattern):
-                logger.debug(f"warn: auto-patchelf ignoring missing {dep.name} wanted by {dep.file}")
+                logger.log(IgnoredDependency(file=dep.file, name=dep.name, pattern=pattern))
                 break
         else:
             logger.debug(f"error: auto-patchelf could not satisfy dependency {dep.name} wanted by {dep.file}")
