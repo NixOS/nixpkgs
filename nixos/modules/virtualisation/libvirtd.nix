@@ -552,6 +552,7 @@ in
       path = [
         cfg.qemu.package
         pkgs.netcat
+        pkgs.passt
       ] # libvirtd requires qemu-img to manage disk images
       ++ optional vswitch.enable vswitch.package
       ++ optional cfg.qemu.swtpm.enable cfg.qemu.swtpm.package;
