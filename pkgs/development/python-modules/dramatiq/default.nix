@@ -8,6 +8,7 @@
   prometheus-client,
   pylibmc,
   pytestCheckHook,
+  pytest-benchmark,
   pytest-cov-stub,
   redis,
   setuptools,
@@ -53,16 +54,13 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-cov-stub
+    pytest-benchmark
     pika
     redis
     pylibmc
   ];
 
-  postPatch = ''
-    sed -i ./setup.cfg \
-      -e 's:--benchmark-autosave::' \
-      -e 's:--benchmark-compare::' \
-  '';
+  pytestFlags = [ "--benchmark-disable" ];
 
   disabledTests = [
     # Requires a running redis
