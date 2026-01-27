@@ -23,6 +23,7 @@
   pydub,
   pytest-asyncio,
   pytestCheckHook,
+  requests,
   rich,
   safehttpx,
   tomlkit,
@@ -85,6 +86,7 @@ buildPythonPackage rec {
     pydub
     pytest-asyncio
     pytestCheckHook
+    requests
     rich
     safehttpx
     tomlkit
