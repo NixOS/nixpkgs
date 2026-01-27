@@ -4,6 +4,7 @@
   makeSetupHook,
   srcOnly,
   nodejs,
+  jq,
 }:
 {
   npmConfigHook = makeSetupHook {
@@ -13,6 +14,7 @@
       nodeGyp = "${nodejs}/lib/node_modules/npm/node_modules/node-gyp/bin/node-gyp.js";
       canonicalizeSymlinksScript = ./canonicalize-symlinks.js;
       storePrefix = builtins.storeDir;
+      jq = lib.getExe jq;
     };
   } ./npm-config-hook.sh;
 
