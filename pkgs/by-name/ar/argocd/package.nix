@@ -11,24 +11,24 @@
   nodejs,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "argocd";
   version = "3.1.9";
 
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo-cd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-l8MlEVfw8BoHS/ZCtxzi7M0xMMOvotXYnconB+3x/1k=";
   };
 
   ui = stdenv.mkDerivation {
-    pname = "${pname}-ui";
-    inherit version;
-    src = src + "/ui";
+    pname = "argocd-ui";
+    inherit (finalAttrs) version;
+    src = finalAttrs.src + "/ui";
 
     offlineCache = fetchYarnDeps {
-      yarnLock = "${src}/ui/yarn.lock";
+      yarnLock = "${finalAttrs.src}/ui/yarn.lock";
       hash = "sha256-ekhSPWzIgFhwSw0bIlBqu8LTYk3vuJ9VM8eHc3mnHGM=";
     };
 
@@ -58,17 +58,17 @@ buildGoModule rec {
     [
       "-s"
       "-w"
-      "-X ${packageUrl}.version=${version}"
+      "-X ${packageUrl}.version=${finalAttrs.version}"
       "-X ${packageUrl}.buildDate=unknown"
-      "-X ${packageUrl}.gitCommit=${src.rev}"
-      "-X ${packageUrl}.gitTag=${src.rev}"
+      "-X ${packageUrl}.gitCommit=${finalAttrs.src.rev}"
+      "-X ${packageUrl}.gitTag=${finalAttrs.src.rev}"
       "-X ${packageUrl}.gitTreeState=clean"
     ];
 
   nativeBuildInputs = [ installShellFiles ];
 
   preBuild = ''
-    cp -r ${ui}/dist ./ui
+    cp -r ${finalAttrs.ui}/dist ./ui
     stat ./ui/dist/app/index.html # Sanity check
   '';
 
@@ -88,7 +88,7 @@ buildGoModule rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
-    $out/bin/argocd version --client | grep ${src.rev} > /dev/null
+    $out/bin/argocd version --client | grep ${finalAttrs.src.rev} > /dev/null
   '';
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -112,4 +112,4 @@ buildGoModule rec {
       FKouhai
     ];
   };
-}
+})
