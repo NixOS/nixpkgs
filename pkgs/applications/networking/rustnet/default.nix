@@ -27,6 +27,7 @@ pkgs.stdenv.mkDerivation rec {
 
   meta = with pkgs.lib; {
     description = "A cross-platform network monitoring terminal UI tool built with Rust.";
+    maintainers = [ "0x545a" ];
     license = lib.licenses.asl20;
     homepage = "https://github.com/domcyrus/rustnet";
     platforms = [ "x86_64-linux" ];
