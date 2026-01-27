@@ -12000,6 +12000,13 @@
     githubId = 2377;
     name = "Jonathan del Strother";
   };
+  jderrac = {
+    email = "jeremy@derrac.fr";
+    github = "jderrac";
+    githubId = 1788613;
+    name = "Jérémy Derrac";
+    keys = [ { fingerprint = "7B18 DA58 169F AEB8 6826  D1D6 BED4 91C6 40AB 31DD"; } ];
+  };
   jdev082 = {
     email = "jdev0894@gmail.com";
     github = "jdev082";
