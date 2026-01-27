@@ -63,7 +63,7 @@ in
     package = mkPackageOption pkgs "hercules-ci-agent" { };
     settings = mkOption {
       description = ''
-        These settings are written to the `agent.toml` file.
+        These settings are written to the {file}`agent.toml` file.
 
         Not all settings are listed as options, can be set nonetheless.
 

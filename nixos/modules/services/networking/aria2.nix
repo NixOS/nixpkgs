@@ -112,7 +112,7 @@ in
       };
       settings = lib.mkOption {
         description = ''
-          Generates the `aria2.conf` file. Refer to [the documentation][0] for
+          Generates the {file}`aria2.conf` file. Refer to [the documentation][0] for
           all possible settings.
 
           [0]: <https://aria2.github.io/manual/en/html/aria2c.html#synopsis>

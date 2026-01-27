@@ -63,7 +63,7 @@ in
         inherit (format) type;
         default = { };
         description = ''
-          Additional attributes to be merged with the configuration options and written to Pangolin's `config.yml` file.
+          Additional attributes to be merged with the configuration options and written to Pangolin's {file}`config.yml` file.
         '';
         example = {
           app = {

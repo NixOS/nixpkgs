@@ -346,7 +346,7 @@ in
         ];
         default = "default";
         description = ''
-          Set the DNS (`resolv.conf`) processing mode.
+          Set the DNS ({file}`resolv.conf`) processing mode.
 
           A description of these modes can be found in the main section of
           [
