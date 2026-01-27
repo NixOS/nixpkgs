@@ -13,17 +13,18 @@
   libXcursor,
   libX11,
   libXi,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "outfly";
-  version = "0.14.0";
+  version = "0.15.0";
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "outfly";
     repo = "outfly";
     tag = "v${version}";
-    hash = "sha256-FRvu3FgbT3i5888ll573nhb7naYx04Oi8nrcfgEHxUo=";
+    hash = "sha256-BOm5SxpWowq5LCTqRqDkbKGPnZo0pJYz8w3kB/WnH9M=";
   };
 
   runtimeInputs = [
@@ -49,7 +50,7 @@ rustPlatform.buildRustPackage rec {
     --add-rpath ${lib.makeLibraryPath runtimeInputs}
   '';
 
-  cargoHash = "sha256-5t6PPlfV/INqb4knz1Bv6dqw47RxUmVO0DSlQNUIQL4=";
+  cargoHash = "sha256-UXqS4JfKuLxeTW1MDMnKLzw8oHf1Gpgv8SktTtf12mc=";
 
   desktopItems = [
     (makeDesktopItem {
@@ -59,6 +60,8 @@ rustPlatform.buildRustPackage rec {
       categories = [ "Game" ];
     })
   ];
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Breathtaking 3D space game in the rings of Jupiter";
     homepage = "https://yunicode.itch.io/outfly";
