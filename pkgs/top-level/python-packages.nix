@@ -17258,6 +17258,12 @@ self: super: with self; {
 
   shellingham = callPackage ../development/python-modules/shellingham { };
 
+  sherpa-onnx = callPackage ../development/python-modules/sherpa-onnx {
+    sherpa-onnx = pkgs.sherpa-onnx.override {
+      python3Packages = self;
+    };
+  };
+
   shiboken2 = toPythonModule (
     callPackage ../development/python-modules/shiboken2 { inherit (pkgs) cmake llvmPackages qt5; }
   );

@@ -23,14 +23,13 @@ buildNpmPackage {
       src/components/card/AnimatedEventCard.tsx \
       src/components/player/PreviewThumbnailPlayer.tsx \
       src/views/system/StorageMetrics.tsx \
-      src/components/timeline/EventSegment.tsx \
       --replace-fail "/media/frigate" "/var/lib/frigate" \
 
     substituteInPlace src/views/system/StorageMetrics.tsx \
       --replace-fail "/tmp/cache" "/var/cache/frigate"
   '';
 
-  npmDepsHash = "sha256-CrK/6BaKmKIxlohEZdGEEKJkioszBUupyKQx4nBeLqI=";
+  npmDepsHash = "sha256-jwTge4i24tVEqxoO4sERfVaYgNRsYAU9fOPFz3k7xlg=";
 
   installPhase = ''
     cp -rv dist/ $out
