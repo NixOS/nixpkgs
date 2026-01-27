@@ -1,9 +1,9 @@
 {
-  buildGoModule,
   bun,
+  buildGoModule,
   cairo,
-  cargo-tauri,
   cargo,
+  cargo-tauri,
   esbuild,
   fetchFromGitHub,
   gdk-pixbuf,
@@ -13,8 +13,9 @@
   lib,
   libsoup_3,
   makeBinaryWrapper,
+  makeWrapper,
   moreutils,
-  nodejs,
+  nodejs_24,
   openssl,
   pango,
   pkg-config,
@@ -26,7 +27,29 @@
   writableTmpDirAsHomeHook,
 }:
 let
-  esbuild_21-5 =
+  pname = "surrealist";
+  version = "3.6.15";
+  appName = "Surrealist";
+
+  src = fetchFromGitHub {
+    owner = "surrealdb";
+    repo = "surrealist";
+    rev = "surrealist-v${version}";
+    hash = "sha256-AsA5p3ViwtBUBOw8Bj4okGsy3ImCcSz7Ctd0WJ2wBkE=";
+  };
+
+in
+stdenv.mkDerivation (finalAttrs: {
+  inherit pname version src;
+
+  cargoRoot = "src-tauri";
+  buildAndTestSubdir = finalAttrs.cargoRoot;
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    src = "${finalAttrs.src}/src-tauri";
+    hash = "sha256-NhgSfiBb4FGEnirpDFWI3MIMElen8frKDFKmCBJlSBY=";
+  };
+
+  esBuild =
     let
       version = "0.21.5";
     in
@@ -47,43 +70,29 @@ let
           }
         );
     };
-in
-stdenv.mkDerivation (finalAttrs: {
-  pname = "surrealist";
-  version = "3.6.1";
 
-  src = fetchFromGitHub {
-    owner = "surrealdb";
-    repo = "surrealist";
-    rev = "surrealist-v${finalAttrs.version}";
-    hash = "sha256-L2O3iMoNptNgzEy7gXptAaHXhv4J5ED/72GLrH43/kQ=";
-  };
-
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src cargoRoot;
-    hash = "sha256-NhgSfiBb4FGEnirpDFWI3MIMElen8frKDFKmCBJlSBY=";
-  };
-
-  node_modules = stdenv.mkDerivation {
+  # build node modules in derivation to handle @codemirror dependencies
+  bunDeps = stdenv.mkDerivation {
     inherit (finalAttrs) src version;
     pname = "surrealist-node_modules";
-    impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
-      "GIT_PROXY_COMMAND"
-      "SOCKS_SERVER"
-    ];
     nativeBuildInputs = [
+      jq
+      moreutils
       bun
       writableTmpDirAsHomeHook
     ];
     dontConfigure = true;
     buildPhase = ''
-      runHook preBuild
+       runHook preBuild
 
-      export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
+      ${lib.optionalString (stdenv.hostPlatform.system == "aarch64-linux") ''
+        jq '.overrides.rollup = "npm:@rollup/wasm-node@4.56.0"' package.json | sponge package.json
+      ''}
 
-      bun install --no-progress --frozen-lockfile --no-cache
+       export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
+       bun install --no-progress --no-cache
 
-      runHook postBuild
+       runHook postBuild
     '';
     installPhase = ''
       runHook preInstall
@@ -95,68 +104,66 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     outputHash =
       {
-        x86_64-linux = "sha256-tZYIiWHaeryV/f9AFNknRZp8om0y8QH8RCxoqgmbR5g=";
-        aarch64-linux = "sha256-6nB8wcXIYR1WcYqZrNFl0Jfdz/Z3PttULQHsQcfAsOk=";
+        aarch64-darwin = "sha256-4rzKzfcIhjqYovn0lXlBMems5NiQ1I6uhA32VXFvPqk=";
+        aarch64-linux = "sha256-5JySFDALOTk2Cfk1gQ+q6ItekRaDBzZYh5p9WXkoj4o=";
+        x86_64-linux = "sha256-xcHTMjIfDxVeVL22eR2C8NJZtues0M2Kbw+VYobK6U8=";
       }
       .${stdenv.hostPlatform.system}
-        or (throw "${finalAttrs.pname}: Platform ${stdenv.hostPlatform.system} is not packaged yet. Supported platforms: x86_64-linux, aarch64-linux.");
+        or (throw "${finalAttrs.pname}: Platform ${stdenv.hostPlatform.system} is not packaged yet. Please consider adding it.");
     outputHashMode = "recursive";
   };
 
   nativeBuildInputs = [
-    bun
-    cargo
-    cargo-tauri.hook
-    gobject-introspection
     jq
-    makeBinaryWrapper
     moreutils
-    nodejs
     pkg-config
-    rustc
-    rustPlatform.cargoSetupHook
+    bun
+    nodejs_24
     typescript
+    rustc
+    cargo
+    cargo-tauri
+    rustPlatform.cargoSetupHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    gobject-introspection
+    makeBinaryWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    makeWrapper
   ];
 
   buildInputs = [
     cairo
-    gdk-pixbuf
-    libsoup_3
     openssl
     pango
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    gdk-pixbuf
+    glib-networking
+    libsoup_3
     webkitgtk_4_1
   ];
 
   env = {
-    ESBUILD_BINARY_PATH = lib.getExe esbuild_21-5;
     OPENSSL_NO_VENDOR = 1;
+    ESBUILD_BINARY_PATH = lib.getExe finalAttrs.esBuild;
   };
 
-  cargoRoot = "src-tauri";
-  buildAndTestSubdir = finalAttrs.cargoRoot;
-
-  # Deactivate the upstream update mechanism
   postPatch = ''
+    # Only build the app, not other packages (prevent dmg build on darwin)
     jq '
+      .bundle.targets = ["app"] |
       .bundle.createUpdaterArtifacts = false |
       .plugins.updater = {"active": false, "pubkey": "", "endpoints": []}
-    ' \
-    src-tauri/tauri.conf.json | sponge src-tauri/tauri.conf.json
-  '';
-
-  postFixup = ''
-    wrapProgram "$out/bin/surrealist" \
-      --set GIO_EXTRA_MODULES ${glib-networking}/lib/gio/modules \
-      --set WEBKIT_DISABLE_COMPOSITING_MODE 1
+    ' src-tauri/tauri.conf.json | sponge src-tauri/tauri.conf.json
   '';
 
   configurePhase = ''
     runHook preConfigure
 
-    cp -R ${finalAttrs.node_modules}/node_modules .
-
-    # Bun takes executables from this folder
-    chmod -R u+rw node_modules
+    cp -R ${finalAttrs.bunDeps}/node_modules .
+    chmod -R u+w node_modules
     chmod -R u+x node_modules/.bin
     patchShebangs node_modules
 
@@ -166,15 +173,55 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postConfigure
   '';
 
+  buildPhase = ''
+    runHook preBuild
+
+    export CARGO_TARGET_DIR="$(pwd)/target"
+    pushd src-tauri
+    cargo tauri build --bundles ${if stdenv.hostPlatform.isDarwin then "app" else "deb"}
+    popd
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    ${
+      if stdenv.hostPlatform.isDarwin then
+        ''
+          mkdir -p $out/Applications
+          cp -r ./target/release/bundle/macos/${appName}.app $out/Applications/
+          mkdir -p $out/bin
+          makeWrapper "$out/Applications/${appName}.app/Contents/MacOS/${appName}" $out/bin/${pname}
+        ''
+      else
+        ''
+          mkdir -p $out
+          cp -r ./target/release/bundle/deb/*/data/usr/* $out/
+        ''
+    }
+
+    runHook postInstall
+  '';
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    wrapProgram "$out/bin/surrealist" \
+      --set GIO_EXTRA_MODULES ${glib-networking}/lib/gio/modules \
+      --set WEBKIT_DISABLE_COMPOSITING_MODE 1
+  '';
+
   meta = {
     description = "Visual management of your SurrealDB database";
     homepage = "https://surrealdb.com/surrealist";
+    downloadPage = "https://github.com/surrealdb/surrealist/releases";
     license = lib.licenses.mit;
     mainProgram = "surrealist";
     maintainers = with lib.maintainers; [
       frankp
       dmitriiStepanidenko
+      smissingham
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
