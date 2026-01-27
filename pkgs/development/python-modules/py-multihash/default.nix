@@ -1,10 +1,13 @@
 {
   lib,
   base58,
+  blake3,
   buildPythonPackage,
   fetchFromGitHub,
+  mmh3,
   morphys,
   pytestCheckHook,
+  setuptools,
   six,
   varint,
 }:
@@ -12,7 +15,7 @@
 buildPythonPackage rec {
   pname = "py-multihash";
   version = "3.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "multiformats";
@@ -21,14 +24,13 @@ buildPythonPackage rec {
     hash = "sha256-hdjJJh77P4dJQAIGTlPGolz1qDumvNOaIMyfxmWMzUk=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "'pytest-runner', " ""
-  '';
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     base58
+    blake3
     morphys
+    mmh3
     six
     varint
   ];
