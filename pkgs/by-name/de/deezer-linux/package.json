@@ -1,0 +1,72 @@
+{
+  "name": "deezer-desktop",
+  "version": "7.1.20",
+  "private": true,
+  "description": "The official Deezer Desktop application built with Electron",
+  "homepage": "https://www.deezer.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.deezerdev.com/Deezer/deezer-desktop"
+  },
+  "license": "Proprietary",
+  "author": "Deezer <support@deezer.com>",
+  "main": "build/main.js",
+  "dependencies": {
+		"@electron/asar": "3.4.1",
+    "@electron/remote": "2.1.2",
+    "electron-log": "^5.1.2",
+    "electron-settings": "4.0.4",
+    "electron-updater": "^6.3.9",
+    "eventemitter2": "^6.4.9",
+    "i18next": "^23.11.2",
+    "i18next-node-fs-backend": "^2.1.3",
+    "i18next-sprintf-postprocessor": "^0.2.2",
+    "inversify": "^6.0.2",
+    "isomorphic-fetch": "^3.0.0",
+    "js-yaml": "3.14.2",
+    "lodash.debounce": "^4.0.8",
+    "lodash.get": "^4.4.2",
+    "macos-version": "^5.2.1",
+		"prettier": "3.5.3",
+    "raven": "^2.6.4",
+    "reflect-metadata": "^0.2.2",
+    "semver": "^7.6.0",
+    "uuid": "^9.0.1",
+    "@jellybrick/mpris-service": "2.1.5"
+  },
+  "scripts": {
+		"asar": "asar",
+    "prettier": "prettier"
+  },
+  "devDependencies": {
+    "electron": "^38.4.0",
+    "electron-builder": "^26.0.0"
+  },
+  "build": {
+    "appId": "dev.aunetx.deezer",
+    "files": [
+      "**"
+    ],
+    "directories": {
+      "buildResources": "build",
+      "output": "../dist"
+    },
+    "extraResources": [
+      {
+        "from": "../extra/",
+        "to": ".",
+        "filter": [
+          "**"
+        ]
+      }
+    ],
+    "linux": {
+      "maintainer": "aunetx <me@aunetx.dev>",
+      "icon": "../icons",
+      "category": "AudioVideo;Audio;Player;Music;",
+      "artifactName": "${productName}-${version}-${arch}.${ext}"
+    }
+  }
+}
+
+
