@@ -13,11 +13,11 @@
 
 mkDerivation rec {
   pname = "datovka";
-  version = "4.26.0";
+  version = "4.28.0";
 
   src = fetchurl {
     url = "https://gitlab.nic.cz/datovka/datovka/-/archive/v${version}/datovka-v${version}.tar.gz";
-    sha256 = "sha256-pEdjh/c4vhirj2R9bYDdi2FL7N9x67kTOyfXiJDzMKE=";
+    sha256 = "sha256-vTfmJEwbfaPFnZE8o3YnZhjwfMZ0At7eZ0iMoh4/HQE=";
   };
 
   buildInputs = [
