@@ -22,6 +22,7 @@
   fmt,
   libpsl,
   miniupnpc,
+  crc32c,
   dht,
   libnatpmp,
   libiconv,
@@ -64,13 +65,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "transmission";
-  version = "4.1.0-beta.2";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "transmission";
     repo = "transmission";
     rev = finalAttrs.version;
-    hash = "sha256-eGBlXgNQ/6Xt//9KPCNCKAL1jnk/2uRb4nM01Ha68dE=";
+    hash = "sha256-glmwa06+jCyL9G2Rc58Yrvzo+/6Qu3bqwqy02RWgG64=";
     fetchSubmodules = true;
   };
 
@@ -111,10 +112,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Upstream uses different config file name.
     substituteInPlace CMakeLists.txt \
       --replace-fail 'find_package(UtfCpp)' 'find_package(utf8cpp)'
-
-    # Use gettext even on Darwin
-    substituteInPlace libtransmission/utils.h \
-      --replace-fail '#if defined(HAVE_GETTEXT) && !defined(__APPLE__)' '#if defined(HAVE_GETTEXT)'
   '';
 
   nativeBuildInputs = [
@@ -128,6 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     curl
+    crc32c
     dht
     fast-float
     fmt
