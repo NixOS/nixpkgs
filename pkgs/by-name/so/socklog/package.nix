@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "socklog";
-  version = "2.1.1";
+  version = "2.1.2";
 
   src = fetchurl {
     url = "https://smarden.org/socklog/socklog-${finalAttrs.version}.tar.gz";
-    hash = "sha256-6xk3JB1seyoEArSf/evwIrsvzaPgDBsaF66Lzx5KObo=";
+    hash = "sha256-e8ej+ejhWn55EoHAV0GkwM8N6G50hw/SxvTX55QrleY=";
   };
 
   sourceRoot = "admin/socklog-${finalAttrs.version}";
