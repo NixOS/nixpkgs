@@ -347,8 +347,8 @@ in
       "sha256-omWYUcr7Aj6r1F1kKAmM32fn9577UeUgqesnIiBIpPQ=";
 
   mypy-boto3-connectcases =
-    buildMypyBoto3Package "connectcases" "1.42.3"
-      "sha256-OpFwfLIgldcA31CkZfgcD8H9vOPNVNSxmr0J3taPKV8=";
+    buildMypyBoto3Package "connectcases" "1.42.35"
+      "sha256-y/EYsonfz1GwySCHmcVK5i3gVGarbM3bLvDIj/nFh9o=";
 
   mypy-boto3-connectparticipant =
     buildMypyBoto3Package "connectparticipant" "1.42.3"
@@ -443,8 +443,8 @@ in
       "sha256-92qhSUqTiLgbtvCdi/Mmgve18mcYR00ABL+bNy7/OnY=";
 
   mypy-boto3-ec2 =
-    buildMypyBoto3Package "ec2" "1.42.33"
-      "sha256-6FgPHidDOccO4DvmCnE+1tDvZU+V/2I1aJ563D8/rDs=";
+    buildMypyBoto3Package "ec2" "1.42.35"
+      "sha256-uiUIfubdYTR0JL4fLLArnL9fHMc35JtpBwud2pW3HEw=";
 
   mypy-boto3-ec2-instance-connect =
     buildMypyBoto3Package "ec2-instance-connect" "1.42.3"
@@ -519,8 +519,8 @@ in
       "sha256-zoJFU3RC1bgWvK/rTsAKRoWDbl1+VehjlGM9s18h7Fg=";
 
   mypy-boto3-evidently =
-    buildMypyBoto3Package "evidently" "1.42.3"
-      "sha256-t+mFGfaY21XDIDWgKthnXeg+couyjop0grL6QjHpi9g=";
+    buildMypyBoto3Package "evidently" "1.42.35"
+      "sha256-kdSGsikyLazIdSKidTt6bk5i+syJgx/GE0y+KRpC1rw=";
 
   mypy-boto3-finspace =
     buildMypyBoto3Package "finspace" "1.42.3"
@@ -586,8 +586,8 @@ in
       "sha256-w3vOm8K/2rToF1CFWtAobCzswkv2d/gm1bzy6XiOFVA=";
 
   mypy-boto3-groundstation =
-    buildMypyBoto3Package "groundstation" "1.42.3"
-      "sha256-BrtHCaCwsfpaB5GA9kEhCFapQceZsjpyv3HVgpXUOFA=";
+    buildMypyBoto3Package "groundstation" "1.42.35"
+      "sha256-UIxD9R+oQjVmR90OfD8Dp7GW3E73zny6LFTkxrSdmNU=";
 
   mypy-boto3-guardduty =
     buildMypyBoto3Package "guardduty" "1.42.33"

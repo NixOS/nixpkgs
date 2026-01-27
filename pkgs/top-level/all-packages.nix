@@ -956,13 +956,6 @@ with pkgs;
 
   opnplug = adlplug.override { type = "OPN"; };
 
-  aegisub = callPackage ../by-name/ae/aegisub/package.nix (
-    {
-      luajit = luajit.override { enable52Compat = true; };
-    }
-    // (config.aegisub or { })
-  );
-
   acme-client = callPackage ../tools/networking/acme-client {
     stdenv = gccStdenv;
   };
@@ -7784,10 +7777,6 @@ with pkgs;
   librdf_redland = callPackage ../development/libraries/librdf/redland.nix { };
   redland = librdf_redland; # added 2018-04-25
 
-  renovate = callPackage ../by-name/re/renovate/package.nix {
-    nodejs = nodejs_22;
-  };
-
   qadwaitadecorations-qt6 = callPackage ../by-name/qa/qadwaitadecorations/package.nix {
     useQt6 = true;
   };
@@ -9453,10 +9442,6 @@ with pkgs;
 
   open-vm-tools-headless = open-vm-tools.override { withX = false; };
 
-  odin = callPackage ../by-name/od/odin/package.nix {
-    llvmPackages = llvmPackages_18;
-  };
-
   pam =
     if stdenv.hostPlatform.isLinux then
       linux-pam
@@ -10054,11 +10039,6 @@ with pkgs;
   darcs = haskell.lib.compose.disableCabalFlag "library" (
     haskell.lib.compose.justStaticExecutables haskellPackages.darcs
   );
-
-  darktable = callPackage ../by-name/da/darktable/package.nix {
-    lua = lua5_4;
-    pugixml = pugixml.override { shared = true; };
-  };
 
   datadog-agent = callPackage ../tools/networking/dd-agent/datadog-agent.nix {
     pythonPackages = datadog-integrations-core { };

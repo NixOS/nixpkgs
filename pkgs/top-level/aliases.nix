@@ -1873,6 +1873,7 @@ mapAliases {
   xdragon = throw "'xdragon' has been renamed to/replaced by 'dragon-drop'"; # Converted to throw 2025-10-27
   xf86_input_cmt = xf86-input-cmt; # Added 2025-12-12
   xf86_input_wacom = xf86-input-wacom; # Added 2025-12-12
+  xf86_video_nested = xf86-video-nested; # added 2026-01-13
   xf86inputjoystick = xf86-input-joystick; # Added 2026-01-19
   xf86inputkeyboard = xf86-input-keyboard; # Added 2026-01-19
   xf86inputmouse = xf86-input-mouse; # Added 2026-01-19
