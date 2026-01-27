@@ -2,8 +2,8 @@
 
 grafanaPlugin {
   pname = "grafana-sentry-datasource";
-  version = "2.2.1";
-  zipHash = "sha256-VJ1RpVWT3d+BrZ9zUoAaNshrE3zBgEkimqUl+innBhg=";
+  version = "2.2.3";
+  zipHash = "sha256-y0gI1gSBgzXbbTDdaBIsvPeNvah8ThtU42GmL3LYsd4=";
   meta = {
     description = "Integrate Sentry data into Grafana";
     license = lib.licenses.asl20;
