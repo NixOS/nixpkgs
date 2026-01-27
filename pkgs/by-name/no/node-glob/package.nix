@@ -25,6 +25,6 @@ buildNpmPackage rec {
     homepage = "https://github.com/isaacs/node-glob";
     license = lib.licenses.blueOak100;
     mainProgram = "glob-bin";
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.kashw2 ];
   };
 }
