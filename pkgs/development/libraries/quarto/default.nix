@@ -39,11 +39,11 @@ let
 in
 stdenv.mkDerivation (final: {
   pname = "quarto";
-  version = "1.8.26";
+  version = "1.8.27";
 
   src = fetchurl {
     url = "https://github.com/quarto-dev/quarto-cli/releases/download/v${final.version}/quarto-${final.version}-linux-amd64.tar.gz";
-    hash = "sha256-rYyqbTrsw/K2pKj7gpZnfvLvlBCkij7rp7H5ockQAPA=";
+    hash = "sha256-vfaJtViXiaHyHYnDuD147QKpeRTdcC5hcpTyzB6nOH0=";
   };
 
   nativeBuildInputs = [
