@@ -1,31 +1,34 @@
 {
-  version,
-  src,
-}:
-
-{
-  lib,
-  stdenv,
-  pkg-config,
-  gnutls,
-  p11-kit,
-  openssl,
-  useOpenSSL ? false,
+  autoreconfHook,
+  fetchFromGitLab,
   gmp,
+  gnutls,
+  lib,
   libxml2,
-  stoken,
-  zlib,
+  openssl,
+  p11-kit,
   pcsclite,
-  vpnc-scripts,
+  pkg-config,
+  stdenv,
+  stoken,
+  unstableGitUpdater,
   useDefaultExternalBrowser ?
     stdenv.hostPlatform.isLinux && stdenv.buildPlatform == stdenv.hostPlatform, # xdg-utils doesn't cross-compile
+  useOpenSSL ? false,
+  vpnc-scripts,
   xdg-utils,
-  autoreconfHook,
+  zlib,
 }:
-
 stdenv.mkDerivation {
   pname = "openconnect";
-  inherit version src;
+  version = "9.12-unstable-2025-11-03";
+
+  src = fetchFromGitLab {
+    owner = "openconnect";
+    repo = "openconnect";
+    rev = "0dcdff87db65daf692dc323732831391d595d98d";
+    hash = "sha256-AvowUEDkXvR+QkhJbZU759fZjIqj/mO8HjP2Ka3lH1U=";
+  };
 
   outputs = [
     "out"
@@ -50,10 +53,15 @@ stdenv.mkDerivation {
     pcsclite
   ]
   ++ lib.optional useDefaultExternalBrowser xdg-utils;
+
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
   ];
+
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "v";
+  };
 
   meta = {
     description = "VPN Client for Cisco's AnyConnect SSL VPN";
@@ -62,6 +70,7 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [
       tricktron
       pentane
+      jeffdess
     ];
     platforms = lib.platforms.unix;
     mainProgram = "openconnect";
