@@ -4,10 +4,10 @@
   buildPythonPackage,
   crytic-compile,
   fetchFromGitHub,
+  hatchling,
   makeWrapper,
   packaging,
   prettytable,
-  setuptools-scm,
   solc,
   web3,
   withSolc ? false,
@@ -17,22 +17,21 @@
 
 buildPythonPackage rec {
   pname = "slither-analyzer";
-  version = "0.11.3";
+  version = "0.11.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "crytic";
     repo = "slither";
     tag = version;
-    hash = "sha256-HgPQPyxDvKrmqGiHjiVGxEguYUcaNYwK1gZoMMkQWhM=";
+    hash = "sha256-sy1vE9XniwyvvZRFnnKhPfmYh2auHHcMel9sZx2YK3c=";
   };
 
-  nativeBuildInputs = [
-    makeWrapper
-    setuptools-scm
-  ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [ makeWrapper ];
+
+  dependencies = [
     crytic-compile
     packaging
     prettytable
