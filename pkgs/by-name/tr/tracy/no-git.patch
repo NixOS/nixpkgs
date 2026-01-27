@@ -1,0 +1,13 @@
+diff --git a/cmake/CPM.cmake b/cmake/CPM.cmake
+index c1c05320..6a551481 100644
+--- a/cmake/CPM.cmake
++++ b/cmake/CPM.cmake
+@@ -405,8 +405,6 @@ endfunction()
+ # Check that the working directory for a git repo is clean
+ function(cpm_check_git_working_dir_is_clean repoPath gitTag isClean)
+ 
+-  find_package(Git REQUIRED)
+-
+   if(NOT GIT_EXECUTABLE)
+     # No git executable, assume directory is clean
+     set(${isClean}
