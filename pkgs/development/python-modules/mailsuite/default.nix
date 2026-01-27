@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "mailsuite";
-  version = "1.10.1";
+  version = "1.11.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+QPGSQQZaUjDmTGhZZoyTGegKV9DBqrgnxdQpEgszrI=";
+    hash = "sha256-ilcOH27lVKhh/xFO/dkWZkwtx6wPYrKTWR3n1xqoUdk=";
   };
 
   pythonRelaxDeps = [ "mail-parser" ];
