@@ -168,8 +168,6 @@ stdenv.mkDerivation (
       attrs.configurePhase or ''
         runHook preConfigure
 
-        ${./mix-configure-hook.sh}
-
         # This is needed for projects that have a specific compile step
         # the dependency needs to be compiled in order for the task
         # to be available.

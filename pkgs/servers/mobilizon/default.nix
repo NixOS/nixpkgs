@@ -146,6 +146,7 @@ mixRelease rec {
       ${lib.getExe nixfmt} pkgs/servers/mobilizon/mix.nix
     '';
     elixirPackage = beamPackages.elixir;
+    inherit mixNixDeps;
   };
 
   meta = {
