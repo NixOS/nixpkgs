@@ -5,6 +5,7 @@
   buildPythonPackage,
   chalice,
   channels,
+  cross-web,
   daphne,
   django,
   email-validator,
@@ -61,6 +62,7 @@ buildPythonPackage rec {
   build-system = [ poetry-core ];
 
   dependencies = [
+    cross-web
     graphql-core
     python-dateutil
     typing-extensions
@@ -152,7 +154,6 @@ buildPythonPackage rec {
     "tests/schema/test_lazy/"
     "tests/sanic/test_file_upload.py"
     "tests/test_dataloaders.py"
-    "tests/utils/test_pretty_print.py"
     "tests/websockets/test_graphql_transport_ws.py"
     "tests/litestar/"
   ];
