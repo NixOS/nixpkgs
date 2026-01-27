@@ -13486,4 +13486,8 @@ with pkgs;
   gpac-unstable = callPackage ../by-name/gp/gpac/package.nix {
     releaseChannel = "unstable";
   };
+
+  # Reserved namespace for overlaying onto.
+  # Never used within Nixpkgs.
+  alt = { };
 }
