@@ -41,37 +41,27 @@ python3Packages.buildPythonApplication rec {
     which
   ];
 
-  disabledTests =
-    [
-      # Require running docker daemon
-      "test_cpp_plugin"
-      "test_godot_plugin"
-      "test_html"
-      "test_python"
-      "test_qml_only"
-      "test_rust"
+  disabledTests = [
+    # Requires running docker daemon
+    "TestTemplates"
 
-      # Expects /tmp to exist and not be a symlink
-      # https://gitlab.com/clickable/clickable/-/issues/479
-      "TestReviewCommand and test_run and not test_run_with_path_arg"
-    ]
-    # Tests do not work on non-amd64 platforms
-    ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [
-      # hardcode amd64
-      "test_arch"
-      "test_restricted_arch"
+    # Expects /tmp to exist and not be a symlink
+    # https://gitlab.com/clickable/clickable/-/issues/479
+    "TestReviewCommand and test_run and not test_run_with_path_arg"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [
+    # hardcode amd64
+    "TestArchitectures and test_arch and not test_arch_agnostic"
+    "TestArchitectures and test_restricted_arch and not test_restricted_arch_env"
 
-      # no -ide images on arm64
-      # https://gitlab.com/clickable/clickable/-/issues/478
-      "test_command_overrided"
-      "test_init_cmake_project"
-      "test_init_cmake_project_exe_as_var"
-      "test_init_cmake_project_no_exe"
-      "test_init_cmake_project_no_to_prompt"
-      "test_initialize_qtcreator_conf"
-      "test_project_pre_configured"
-      "test_recurse_replace"
-    ];
+    # no -ide images on non-x86_64
+    # https://gitlab.com/clickable/clickable/-/issues/478
+    "TestIdeQtCreatorCommand and test_command_overrided"
+    "TestIdeQtCreatorCommand and test_init_cmake_project"
+    "TestIdeQtCreatorCommand and test_initialize_qtcreator_conf"
+    "TestIdeQtCreatorCommand and test_project_pre_configured"
+    "TestIdeQtCreatorCommand and test_recurse_replace"
+  ];
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
