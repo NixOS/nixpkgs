@@ -869,6 +869,7 @@ in
   libinput = runTest ./libinput.nix;
   librechat = runTest ./librechat.nix;
   librenms = runTest ./librenms.nix;
+  librenms-agent = runTest ./librenms-agent.nix;
   libresprite = runTest ./libresprite.nix;
   libreswan = runTest ./libreswan.nix;
   libreswan-nat = runTest ./libreswan-nat.nix;
