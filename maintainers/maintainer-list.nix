@@ -5603,6 +5603,12 @@
     github = "cybardev";
     githubId = 50134239;
   };
+  cybermanu84 = {
+    email = "cybermanu@gmail.com";
+    name = "Emmanuel Le Calonnec";
+    github = "cybermanu84";
+    githubId = 14197102;
+  };
   cybershadow = {
     name = "Vladimir Panteleev";
     email = "nixpkgs@cy.md";

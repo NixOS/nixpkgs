@@ -2517,6 +2517,8 @@ self: super: with self; {
 
   cccolutils = callPackage ../development/python-modules/cccolutils { krb5-c = pkgs.krb5; };
 
+  ccxt = callPackage ../development/python-modules/ccxt { };
+
   cdcs = callPackage ../development/python-modules/cdcs { };
 
   cddlparser = callPackage ../development/python-modules/cddlparser { };
