@@ -18,7 +18,7 @@ All this is checked during evaluation already, and the check includes any packag
 In particular, all build-time dependencies are checked.
 :::
 
-A user's Nixpkgs configuration is stored in a user-specific configuration file located at `~/.config/nixpkgs/config.nix`. For example:
+A user's Nixpkgs configuration is stored in a user-specific configuration file located at `$XDG_CONFIG_HOME/nixpkgs/config.nix` (if `$XDG_CONFIG_HOME` is unset or empty, the search will fall back to `~/.config/nixpkgs/config.nix`). For example:
 
 ```nix
 { allowUnfree = true; }
