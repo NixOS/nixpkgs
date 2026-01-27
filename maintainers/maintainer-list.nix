@@ -18342,6 +18342,12 @@
       { fingerprint = "5A1D C7CE 51DC 0A85 6DEA  41F7 31A8 CE0D 2E7D 30C3"; }
     ];
   };
+  naomieow = {
+    name = "Naomi Roberts";
+    email = "mia@naomieow.xyz";
+    github = "naomieow";
+    githubId = 79906167;
+  };
   naora = {
     name = "Joris Gundermann";
     email = "jorisgundermann@gmail.com";
