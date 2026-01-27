@@ -216,8 +216,8 @@
   },
   {
     "pname": "Robust.Natives",
-    "version": "0.2.4",
-    "hash": "sha256-th23WgdtSGtKmGGxLmc3pvgEPlbHxsIYlALPpbRLvPs="
+    "version": "0.2.3",
+    "hash": "sha256-EwaSVnPsDSjY61vBIHaRSs/xpigGPqRStjYLcz+xaB0="
   },
   {
     "pname": "Robust.Natives.Angle",
@@ -246,8 +246,8 @@
   },
   {
     "pname": "Robust.Natives.Sdl3",
-    "version": "0.1.2-sdl3.4.0",
-    "hash": "sha256-y2DJ/4riRBaqR20/nD6Z57p5xA+mWM9lssBa9fIfFnA="
+    "version": "0.1.1-sdl3.2.20",
+    "hash": "sha256-dQPO/zME+e/Hsmic32hn5YIy4+LKfjDk064o6N7PKvM="
   },
   {
     "pname": "Robust.Natives.Swnfd",
