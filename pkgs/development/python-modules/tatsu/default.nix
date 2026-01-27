@@ -5,7 +5,7 @@
   fetchFromGitHub,
   pytestCheckHook,
   regex,
-  setuptools,
+  hatchling,
 }:
 
 buildPythonPackage rec {
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-YFNoA81J8x4OO7lLUjeN/NzQfCTEeosaWZg9UKy8C50=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     colorama
