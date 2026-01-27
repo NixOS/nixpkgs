@@ -3,11 +3,11 @@
   stdenvNoCC,
   bun,
   fetchFromGitHub,
-  fzf,
   makeBinaryWrapper,
   models-dev,
   nix-update-script,
   ripgrep,
+  sysctl,
   installShellFiles,
   versionCheckHook,
   writableTmpDirAsHomeHook,
@@ -81,11 +81,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
-  patches = [
-    # NOTE: Remove special and windows build targes
-    ./remove-special-and-windows-build-targets.patch
-  ];
-
   postPatch = ''
     # NOTE: Relax Bun version check to be a warning instead of an error
     substituteInPlace packages/script/src/index.ts \
@@ -104,16 +99,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   env.MODELS_DEV_API_JSON = "${models-dev}/dist/_api.json";
   env.OPENCODE_VERSION = finalAttrs.version;
   env.OPENCODE_CHANNEL = "stable";
-
-  preBuild = ''
-    chmod -R u+w ./packages/opencode/node_modules
-    pushd ./packages/opencode/node_modules/@opentui/
-      for pkg in ../../../../node_modules/.bun/@opentui+core-*; do
-        linkName=$(basename "$pkg" | sed 's/@.*+\(.*\)@.*/\1/')
-        ln -sf "$pkg/node_modules/@opentui/$linkName" "$linkName"
-      done
-    popd
-  '';
 
   buildPhase = ''
     runHook preBuild
@@ -136,16 +121,21 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   postInstall = lib.optionalString (stdenvNoCC.buildPlatform.canExecute stdenvNoCC.hostPlatform) ''
     installShellCompletion --cmd opencode \
-      --bash <($out/bin/opencode completion)
+      --bash <($out/bin/opencode completion) \
+      --zsh <(SHELL=/bin/zsh $out/bin/opencode completion)
   '';
 
   postFixup = ''
     wrapProgram $out/bin/opencode \
      --prefix PATH : ${
-       lib.makeBinPath [
-         fzf
-         ripgrep
-       ]
+       lib.makeBinPath (
+         [
+           ripgrep
+         ]
+         ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
+           sysctl
+         ]
+       )
      }
   '';
 
