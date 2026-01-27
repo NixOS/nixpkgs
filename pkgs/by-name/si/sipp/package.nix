@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sipp";
-  version = "3.7.5";
+  version = "3.7.6";
 
   src = fetchFromGitHub {
     owner = "SIPp";
     repo = "sipp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-W5KOvBBaUmyYJshYEg39QpkS8rrpGSEj4g3NZD29YrY=";
+    hash = "sha256-z+pbnqVPGSJMbmONoLoa05HAU/SPq8001U5cuRdoOkk=";
   };
 
   postPatch = ''
