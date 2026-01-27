@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
+  pypdf,
   requests,
   selenium,
   versionCheckHook,
@@ -11,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "html2pdf4doc";
-  version = "0.0.21";
+  version = "0.0.25";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mettta";
     repo = "html2pdf4doc_python";
     tag = version;
-    hash = "sha256-cYKbnMVsENA17VsNXjV/funmBPbbrwA6enpIxOZ2sbQ=";
+    hash = "sha256-IE0dWnbCwmkRykAsveYSfcoNeGP+HvgTocQ1+cVE0JE=";
   };
 
   build-system = [
@@ -29,6 +30,7 @@ buildPythonPackage rec {
     requests
     selenium
     webdriver-manager
+    pypdf
   ];
 
   pythonImportsCheck = [ "html2pdf4doc" ];
