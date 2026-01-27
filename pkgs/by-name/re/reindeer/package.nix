@@ -31,6 +31,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "reindeer";
     homepage = "https://github.com/facebookincubator/reindeer";
     license = with lib.licenses; [ mit ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ amaanq ];
   };
 }

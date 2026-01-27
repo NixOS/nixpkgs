@@ -12,7 +12,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xf86-video-geode";
-  version = "2.18.1";
+  version = "2.18.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "driver";
     repo = "xf86-video-geode";
     tag = "xf86-video-geode-${finalAttrs.version}";
-    hash = "sha256-y9fQpMg6qKjaQvDfqYbWscFomtzmHQ1cvzMaa4anhOE=";
+    hash = "sha256-G0w6Ft172ar5dwR3NAu+8vuvJqWKaknmpbdThpPR+kY=";
   };
 
   strictDeps = true;
