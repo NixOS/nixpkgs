@@ -36,19 +36,22 @@
   # Path to set ROBUST_SOUNDFONT_OVERRIDE to, essentially the default soundfont used.
   soundfont-path ? "${soundfont-fluid}/share/soundfonts/FluidR3_GM2-2.sf2",
 }:
-buildDotnetModule rec {
+let
+  version = "0.37.1";
   pname = "space-station-14-launcher";
-  version = "0.36.1";
+in
+buildDotnetModule rec {
+  inherit pname;
 
   # Workaround to prevent buildDotnetModule from overriding assembly versions.
-  name = "space-station-14-launcher-${version}";
+  name = "${pname}-${version}";
 
   # A bit redundant but I don't trust this package to be maintained by anyone else.
   src = fetchFromGitHub {
     owner = "space-wizards";
     repo = "SS14.Launcher";
     tag = "v${version}";
-    hash = "sha256-6wH2CkTuwy+a3EGpKrdLDsIaQ7oZc2I1OLdmAREMazw=";
+    hash = "sha256-83eBAT+NuwwpC30Xc5bJEs++tTYlY3akMaizQgNHOsA=";
     fetchSubmodules = true;
   };
 
@@ -66,9 +69,7 @@ buildDotnetModule rec {
     inherit version;
   };
 
-  dotnet-sdk = dotnetCorePackages.sdk_10_0 // {
-    inherit (dotnetCorePackages.sdk_8_0) packages;
-  };
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
   dotnet-runtime = dotnetCorePackages.runtime_10_0;
 
   dotnetFlags = [
@@ -113,9 +114,9 @@ buildDotnetModule rec {
 
   desktopItems = [
     (makeDesktopItem {
-      name = "space-station-14-launcher";
+      name = pname;
       exec = meta.mainProgram;
-      icon = "space-station-14-launcher";
+      icon = pname;
       desktopName = "Space Station 14 Launcher";
       comment = meta.description;
       categories = [ "Game" ];
@@ -134,7 +135,7 @@ buildDotnetModule rec {
     description = "Launcher for Space Station 14, a multiplayer game about paranoia and disaster";
     homepage = "https://spacestation14.io";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.coca ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "SS14.Launcher";
   };
