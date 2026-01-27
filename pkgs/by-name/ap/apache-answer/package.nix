@@ -6,30 +6,29 @@
   pnpmConfigHook,
   pnpm,
   nodejs,
-  fetchpatch,
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "apache-answer";
   version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "answer";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-QTm/6srSn4oF78795ADpW10bZmyEmqTNezB6JSkS2I4=";
   };
 
   webui = stdenv.mkDerivation {
-    pname = pname + "-webui";
-    inherit version src;
+    pname = "apache-answer" + "-webui";
+    inherit (finalAttrs) version src;
 
-    sourceRoot = "${src.name}/ui";
+    sourceRoot = "${finalAttrs.src.name}/ui";
 
     pnpmDeps = fetchPnpmDeps {
-      inherit src version pname;
-      sourceRoot = "${src.name}/ui";
+      inherit (finalAttrs) src version pname;
+      sourceRoot = "${finalAttrs.src.name}/ui";
       fetcherVersion = 1;
       hash = "sha256-6IeLOwsEqchCwe0GGj/4v9Q4/Hm16K+ve2X+8QHztQM=";
     };
@@ -63,12 +62,12 @@ buildGoModule rec {
   doCheck = false; # TODO checks are currently broken upstream
 
   ldflags = [
-    "-X main.Version=${version}"
-    "-X main.Commit=${version}"
+    "-X main.Version=${finalAttrs.version}"
+    "-X main.Commit=${finalAttrs.version}"
   ];
 
   preBuild = ''
-    cp -r ${webui}/* ui/build/
+    cp -r ${finalAttrs.webui}/* ui/build/
   '';
 
   meta = {
@@ -79,7 +78,7 @@ buildGoModule rec {
     ];
     platforms = lib.platforms.unix;
     mainProgram = "answer";
-    changelog = "https://github.com/apache/answer/releases/tag/v${version}";
+    changelog = "https://github.com/apache/answer/releases/tag/v${finalAttrs.version}";
     description = "Q&A platform software for teams at any scales";
   };
-}
+})
