@@ -5,6 +5,7 @@
   makeBinaryWrapper,
   copyDesktopItems,
   electron_39,
+  extraPackages ? [ ],
   nodejs,
   pnpm_10,
   fetchPnpmDeps,
@@ -112,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase =
     let
-      commonWrapperArgs = "--prefix PATH : ${lib.makeBinPath [ podman ]}";
+      commonWrapperArgs = "--prefix PATH : ${lib.makeBinPath ([ podman ] ++ extraPackages)}";
     in
     (
       ''
