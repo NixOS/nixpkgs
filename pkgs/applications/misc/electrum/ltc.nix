@@ -8,6 +8,7 @@
   zbar,
   secp256k1,
   enableQt ? true,
+  enablePythonEcdsa ? false,
   qtwayland,
 }:
 
@@ -82,15 +83,17 @@ python3.pkgs.buildPythonApplication {
       requests
       scrypt
       # plugins
-      btchip-python
-      ckcc-protocol
-      keepkey
-      trezor
       distutils
     ]
     ++ lib.optionals enableQt [
       pyqt5
       qdarkstyle
+    ]
+    ++ lib.optionals enablePythonEcdsa [
+      btchip-python
+      ckcc-protocol
+      keepkey
+      trezor
     ];
 
   patches = [
