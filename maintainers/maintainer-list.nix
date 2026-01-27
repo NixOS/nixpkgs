@@ -28297,6 +28297,11 @@
     githubId = 5185341;
     name = "Will Cohen";
   };
+  willfish = {
+    github = "willfish";
+    githubId = 8156884;
+    name = "William Fish";
+  };
   willibutz = {
     email = "willibutz@posteo.de";
     github = "WilliButz";
