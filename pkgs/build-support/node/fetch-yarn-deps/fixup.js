@@ -2,39 +2,53 @@
 'use strict'
 
 const fs = require('fs')
+const path = require('path')
 const process = require('process')
 const lockfile = require('./yarnpkg-lockfile.js')
-const { urlToName } = require('./common.js')
+
+const urlToName = url => {
+  const isCodeloadGitTarballUrl = url.startsWith('https://codeload.github.com/') && url.includes('/tar.gz/')
+
+  if (url.startsWith('file:')) {
+    return url
+  } else if (url.startsWith('git+') || isCodeloadGitTarballUrl) {
+    return path.basename(url)
+  } else {
+    return url
+      .replace(/https:\/\/(.)*(.com)\//g, '') // prevents having long directory names
+      .replace(/[@/%:-]/g, '_') // replace @ and : and - and % characters with underscore
+  }
+}
 
 const fixupYarnLock = async (lockContents, verbose) => {
   const lockData = lockfile.parse(lockContents)
 
   const fixedData = Object.fromEntries(
     Object.entries(lockData.object)
-    .map(([dep, pkg]) => {
-      if (pkg.resolved === undefined) {
-        console.warn(`no resolved URL for package ${dep}`)
-        var maybeFile = dep.split("@", 2)[1]
-        if (maybeFile.startsWith("file:")) {
-          console.log(`Rewriting URL for local file dependency ${dep}`)
-          pkg.resolved = maybeFile
+      .map(([dep, pkg]) => {
+        if (pkg.resolved === undefined) {
+          console.warn(`no resolved URL for package ${dep}`)
+          var maybeFile = dep.split("@", 2)[1]
+          if (maybeFile.startsWith("file:")) {
+            console.log(`Rewriting URL for local file dependency ${dep}`)
+            pkg.resolved = maybeFile
+          }
+          return [dep, pkg]
         }
+        const [url, hash] = pkg.resolved.split("#", 2)
+
+        if (hash || url.startsWith("https://codeload.github.com/")) {
+          if (verbose) console.log(`Removing integrity for git dependency ${dep}`)
+          delete pkg.integrity
+        }
+
+        if (verbose) console.log(`Rewriting URL ${url} for dependency ${dep}`)
+        pkg.resolved = urlToName(url)
+        if (hash)
+          pkg.resolved += `#${hash}`
+
         return [dep, pkg]
-      }
-      const [ url, hash ] = pkg.resolved.split("#", 2)
-
-      if (hash || url.startsWith("https://codeload.github.com/")) {
-        if (verbose) console.log(`Removing integrity for git dependency ${dep}`)
-        delete pkg.integrity
-      }
-
-      if (verbose) console.log(`Rewriting URL ${url} for dependency ${dep}`)
-      pkg.resolved = urlToName(url)
-      if (hash)
-        pkg.resolved += `#${hash}`
-
-      return [dep, pkg]
-    })
+      })
   )
 
   if (verbose) console.log('Done')
