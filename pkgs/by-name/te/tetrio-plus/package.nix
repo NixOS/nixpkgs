@@ -106,5 +106,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [ huantian ];
     platforms = lib.platforms.linux;
+    broken = true; # not yet updated for tetrio-desktop v10
   };
 })
