@@ -30,7 +30,11 @@ buildPythonPackage rec {
     owner = "ansible";
     repo = "ansible-compat";
     tag = "v${version}";
-    hash = "sha256-nn0NKX6rqNKrSZd+p/oq/LmESAgvTkSOA08wq1xLY2I=";
+    # this resulted in a mismatched hash, so remove it
+    postFetch = ''
+      rm -f $out/.git_archival.txt
+    '';
+    hash = "sha256-qknFdICK+gtFmlRPL7AzIwGDOpMxmX6DzMsIsPC6JY8=";
   };
 
   build-system = [
