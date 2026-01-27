@@ -36,6 +36,8 @@ buildPythonPackage rec {
   disabledTests = [
     # AttributeError: 'Context' object has no attribute '_ctx_mgr'
     "test_context_pushing"
+    # https://github.com/python-trio/asyncclick/issues/47
+    "test_echo_via_pager"
   ];
 
   pythonImportsCheck = [ "asyncclick" ];
