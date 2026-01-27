@@ -303,6 +303,7 @@ buildNpmPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       atila
       justanotherariel
+      mynacol
     ];
   };
 })
