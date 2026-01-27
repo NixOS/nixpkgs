@@ -1,11 +1,12 @@
 diff --git a/oslo_utils/secretutils.py b/oslo_utils/secretutils.py
-index 3183865..83e00e8 100644
+index 55cfdcc..039d07e 100644
 --- a/oslo_utils/secretutils.py
 +++ b/oslo_utils/secretutils.py
-@@ -46,13 +46,10 @@ def md5(string=b'', usedforsecurity=True):
-     return hashlib.md5(string, usedforsecurity=usedforsecurity)  # nosec
+@@ -41,14 +41,10 @@ def md5(string: bytes | bytearray = b'', usedforsecurity: bool = True) -> Any:
+     return hashlib.md5(string, usedforsecurity=usedforsecurity)  # noqa: S324
  
  
+-_crypt: Any
 -if ctypes.util.find_library("crypt"):
 -    _libcrypt = ctypes.CDLL(ctypes.util.find_library("crypt"), use_errno=True)
 -    _crypt = _libcrypt.crypt
@@ -19,4 +20,4 @@ index 3183865..83e00e8 100644
 +_crypt.restype = ctypes.c_char_p
  
  
- def crypt_mksalt(method):
+ def crypt_mksalt(method: str) -> str:
