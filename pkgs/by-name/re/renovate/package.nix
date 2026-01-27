@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   makeWrapper,
-  nodejs_22,
+  nodejs_24,
   pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
@@ -15,7 +15,7 @@
   yq-go,
 }:
 let
-  nodejs = nodejs_22;
+  nodejs = nodejs_24;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "renovate";
