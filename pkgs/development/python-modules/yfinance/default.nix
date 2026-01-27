@@ -55,6 +55,8 @@ buildPythonPackage rec {
     websockets
   ];
 
+  pythonRelaxDeps = [ "curl_cffi" ];
+
   optional-dependencies = {
     nospam = [
       requests-cache
