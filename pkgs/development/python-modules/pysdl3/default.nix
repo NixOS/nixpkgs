@@ -30,7 +30,7 @@ let
 in
 buildPythonPackage rec {
   pname = "pysdl3";
-  version = "0.9.8b9";
+  version = "0.9.10b0";
   pyproject = true;
 
   pythonImportsCheck = [ "sdl3" ];
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     owner = "Aermoss";
     repo = "PySDL3";
     tag = "v${version}";
-    hash = "sha256-TpfMpp8CGb8lYALCWlMtyucxObDg1VYEvBW+mVHN9JM=";
+    hash = "sha256-M7XIiq/h0eIZlfVUuRUMcu9pM/Fmcig78YPGpKT8c5U=";
   };
 
   docfile = fetchurl {
