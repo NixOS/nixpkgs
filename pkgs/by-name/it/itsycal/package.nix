@@ -31,7 +31,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Tiny menu bar calendar";
     homepage = "https://www.mowglii.com/itsycal/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ FlameFlag ];
+    maintainers = with lib.maintainers; [
+      eclairevoyant
+      FlameFlag
+    ];
     platforms = lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };

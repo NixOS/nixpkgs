@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "slurp";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "emersion";
     repo = "slurp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-2M8f3kN6tihwKlUCp2Qowv5xD6Ufb71AURXqwQShlXI=";
+    hash = "sha256-kH7K/ttTNYQ5im7YsJ28bLi8yKfWZ3HGEDOfTs22UR0=";
   };
 
   depsBuildBuild = [ pkg-config ];

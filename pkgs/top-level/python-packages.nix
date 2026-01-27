@@ -3340,6 +3340,8 @@ self: super: with self; {
 
   cucumber-tag-expressions = callPackage ../development/python-modules/cucumber-tag-expressions { };
 
+  cuda-bindings = callPackage ../development/python-modules/cuda-bindings { };
+
   cupy = callPackage ../development/python-modules/cupy {
     cudaPackages =
       # CuDNN 9 is not supported:
@@ -9614,6 +9616,8 @@ self: super: with self; {
 
   mficlient = callPackage ../development/python-modules/mficlient { };
 
+  mflux = callPackage ../development/python-modules/mflux { };
+
   mfusepy = callPackage ../development/python-modules/mfusepy { };
 
   mhcflurry = callPackage ../development/python-modules/mhcflurry { };
@@ -13158,6 +13162,8 @@ self: super: with self; {
   pychromecast = callPackage ../development/python-modules/pychromecast { };
 
   pycketcasts = callPackage ../development/python-modules/pycketcasts { };
+
+  pyclibrary = callPackage ../development/python-modules/pyclibrary { };
 
   pyclimacell = callPackage ../development/python-modules/pyclimacell { };
 

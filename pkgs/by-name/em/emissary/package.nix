@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Rust implementation of the I2P protocol stack";
     homepage = "https://altonen.github.io/emissary/";
     license = lib.licenses.mit; # https://github.com/altonen/emissary/blob/master/LICENSE (found an apache2 as well but thats for https://github.com/altonen/emissary/commit/c4a1c849ebfceba892adce53f512f1f099721de2)
-    mainProgram = "emissary";
+    mainProgram = "emissary-cli";
     maintainers = [ lib.maintainers.N4CH723HR3R ];
   };
 })
