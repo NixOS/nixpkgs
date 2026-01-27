@@ -1,0 +1,11 @@
+--- a/omr/tools/compiler/scripts/generateVersion.pl
++++ b/omr/tools/compiler/scripts/generateVersion.pl
+@@ -39,7 +39,7 @@ if (defined $ENV{"TR_BUILD_NAME"}) {
+     # FIXME: try to include a workspace name too
+     # Optionally, check if the user has defined $USER_TR_VERSION, and incorporate
+     # too.
+-    my $time = POSIX::strftime("%Y%m%d_%H%M", localtime($^T));
++    my $time = POSIX::strftime("%Y%m%d_%H%M", localtime($ENV{SOURCE_DATE_EPOCH} || $^T));
+     $snapshot_name = $rel . "_" . $time . "_" . $ENV{LOGNAME};
+ }
+ 
