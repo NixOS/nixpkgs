@@ -26,13 +26,13 @@
 stdenv.mkDerivation rec {
   pname = "grpc";
   version = "1.76.0"; # N.B: if you change this, please update:
-  # pythonPackages.grpcio
-  # pythonPackages.grpcio-channelz
-  # pythonPackages.grpcio-health-checking
-  # pythonPackages.grpcio-reflection
-  # pythonPackages.grpcio-status
-  # pythonPackages.grpcio-testing
-  # pythonPackages.grpcio-tools
+  # python3Packages.grpcio
+  # python3Packages.grpcio-channelz
+  # python3Packages.grpcio-health-checking
+  # python3Packages.grpcio-reflection
+  # python3Packages.grpcio-status
+  # python3Packages.grpcio-testing
+  # python3Packages.grpcio-tools
 
   src = fetchFromGitHub {
     owner = "grpc";

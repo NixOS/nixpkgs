@@ -10974,6 +10974,8 @@ self: super: with self; {
 
   nominal-api-protos = callPackage ../development/python-modules/nominal-api-protos { };
 
+  nominal-streaming = callPackage ../development/python-modules/nominal-streaming { };
+
   nominatim-api = callPackage ../by-name/no/nominatim/nominatim-api.nix { };
 
   nonbloat-db = callPackage ../development/python-modules/nonbloat-db { };

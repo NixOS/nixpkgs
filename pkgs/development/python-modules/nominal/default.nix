@@ -5,6 +5,7 @@
   hatchling,
   requests,
   nominal-api,
+  nominal-streaming,
   nominal-api-protos,
   python-dateutil,
   conjure-python-client,
@@ -16,18 +17,25 @@
   ffmpeg-python,
   pytest-cov-stub,
   pytestCheckHook,
+  pythonRelaxDepsHook,
+  cachetools,
+  openpyxl,
+  polars,
+  rich,
+  truststore,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "nominal";
-  version = "1.71.0";
+  version = "1.104.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nominal-io";
     repo = "nominal-client";
     tag = "v${version}";
-    hash = "sha256-C0afrzWlq2Z3a21MIJ/3XgvjkEZONwBgCZ+06XIYFGE=";
+    hash = "sha256-+hJzDQND+eQ/za+V7HXHhwoGfIusXBUUWWSYwWu39ew=";
   };
 
   build-system = [ hatchling ];
@@ -36,6 +44,7 @@ buildPythonPackage rec {
     requests
     conjure-python-client
     nominal-api
+    nominal-streaming
     python-dateutil
     pandas
     typing-extensions
@@ -43,12 +52,26 @@ buildPythonPackage rec {
     pyyaml
     tabulate
     ffmpeg-python
+    cachetools
+    openpyxl
+    polars
+    rich
+    truststore
+    urllib3
   ];
 
   optional-dependencies = {
     protos = [ nominal-api-protos ];
     # tdms = [ nptdms ]; nptdms is not in nixpkgs
   };
+
+  pythonRemoveDeps = [
+    "types-cachetools" # typing stubs, not needed at runtime
+  ];
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
 
   nativeCheckInputs = [
     nominal-api-protos
@@ -61,6 +84,11 @@ buildPythonPackage rec {
     "nominal.core"
   ];
 
+  pythonRelaxDeps = [
+    "nominal-api"
+    "urllib3"
+  ];
+
   disabledTestPaths = [
     "tests/cli/test_auth.py::test_good_request"
   ];
@@ -70,6 +98,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/nominal-io/nominal-client";
     changelog = "https://github.com/nominal-io/nominal-client/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ alkasm ];
+    maintainers = with lib.maintainers; [
+      alkasm
+      watwea
+    ];
   };
 }

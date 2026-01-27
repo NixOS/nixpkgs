@@ -1,0 +1,71 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  openssl,
+  pkg-config,
+  python-dateutil,
+  rustPlatform,
+  typing-extensions,
+}:
+
+# Nominal packages should be updated together
+# to ensure compatibility.
+# nixpkgs-update: no auto update
+buildPythonPackage rec {
+  pname = "nominal-streaming";
+  version = "0.5.8";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "nominal-io";
+    repo = "nominal-streaming";
+    tag = "v${version}";
+    hash = "sha256-Lp4WziVtqYKpew8VhviKbImhMjXAeIZlxj/uEV9wqdE=";
+  };
+  sourceRoot = "source/py-nominal-streaming";
+
+  patchPhase = ''
+    runHook prePatch
+    cp ${src}/Cargo.lock ./
+    runHook postPatch
+  '';
+
+  env = {
+    CARGO_TARGET_DIR = "target";
+    OPENSSL_NO_VENDOR = "1";
+  };
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit src;
+    patches = [ ];
+    hash = "sha256-xjanEdZpX2kWJqi0dYXuvoJem9MBTWoU12uAzajsj84=";
+  };
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ (with rustPlatform; [
+    bindgenHook
+    cargoSetupHook
+    maturinBuildHook
+  ]);
+
+  buildInputs = [ openssl ];
+
+  dependencies = [
+    python-dateutil
+    typing-extensions
+  ];
+
+  pythonImportsCheck = [ "nominal_streaming" ];
+
+  meta = {
+    description = "Generated conjure client for the Nominal API";
+    homepage = "https://pypi.org/project/nominal-streaming/";
+    maintainers = with lib.maintainers; [
+      alkasm
+      watwea
+    ];
+    license = lib.licenses.unfree;
+  };
+}
