@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "tesla-fleet-api";
-  version = "1.4.0";
+  version = "1.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Teslemetry";
     repo = "python-tesla-fleet-api";
     tag = "v${version}";
-    hash = "sha256-ey0HJw1IE6vNmTeUN26Vusz6D+90hSzgvx1hJ7O5QOc=";
+    hash = "sha256-qDYa7GVJokr/0ZmSC5pusc/I5CX9Pras2+dZI2MRXzk=";
   };
 
   build-system = [ setuptools ];
