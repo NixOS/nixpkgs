@@ -6077,12 +6077,10 @@ with pkgs;
 
   gradle-packages = callPackage ../development/tools/build-managers/gradle { };
 
-  gradle_7-unwrapped = gradle-packages.gradle_7;
   gradle_8-unwrapped = gradle-packages.gradle_8;
   gradle_9-unwrapped = gradle-packages.gradle_9;
   gradle-unwrapped = gradle-packages.gradle;
 
-  gradle_7 = gradle-packages.gradle_7.wrapped;
   gradle_8 = gradle-packages.gradle_8.wrapped;
   gradle_9 = gradle-packages.gradle_9.wrapped;
   gradle = gradle-packages.gradle.wrapped;

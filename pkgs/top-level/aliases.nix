@@ -806,6 +806,8 @@ mapAliases {
   graalvm-oracle = throw "'graalvm-oracle' has been renamed to/replaced by 'graalvmPackages.graalvm-oracle'"; # Converted to throw 2025-10-27
   graalvmCEPackages = throw "'graalvmCEPackages' has been renamed to/replaced by 'graalvmPackages'"; # Converted to throw 2025-10-27
   gradience = throw "`gradience` has been removed because it was archived upstream."; # Added 2025-09-20
+  gradle_7 = throw "Gradle 7 has been removed because it is end-of-life. Please upgrade to a newer version of Gradle: https://docs.gradle.org/current/userguide/upgrading_version_7.html"; # Added 2026-01-22
+  gradle_7-unwrapped = throw "Gradle 7 has been removed because it is end-of-life. Please upgrade to a newer version of Gradle: https://docs.gradle.org/current/userguide/upgrading_version_7.html"; # Added 2026-01-22
   gradleGen = throw "'gradleGen' has been moved to `gradle-packages.mkGradle`."; # Added 2025-11-02
   grafana_reporter = throw "'grafana_reporter' has been renamed to/replaced by 'grafana-reporter'"; # Converted to throw 2025-10-27
   graphite-kde-theme = throw "'graphite-kde-theme' has been removed, as it is only compatible with Plasma 5, which is EOL"; # Added 2025-08-20
