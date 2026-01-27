@@ -1,0 +1,12 @@
+diff --git a/setup.py b/setup.py
+index 943e319..b90edec 100644
+--- a/setup.py
++++ b/setup.py
+@@ -24,7 +24,6 @@ setup(
+         "pykeepass>=4.0.3",
+         "pykeepass_cache",
+         "colorama",
+-        "future",
+         "pyotp",
+         "qrcode",
+     ],
