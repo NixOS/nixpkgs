@@ -16854,6 +16854,8 @@ self: super: with self; {
 
   safeio = callPackage ../development/python-modules/safeio { };
 
+  safelz4 = callPackage ../development/python-modules/safelz4 { };
+
   safetensors = callPackage ../development/python-modules/safetensors { };
 
   safety = callPackage ../development/python-modules/safety { };
