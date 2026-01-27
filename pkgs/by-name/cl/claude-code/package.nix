@@ -1,6 +1,6 @@
 # NOTE: Use the following command to update the package
 # ```sh
-# nix-shell maintainers/scripts/update.nix --argstr commit true --arg predicate '(path: pkg: builtins.elem path [["claude-code"] ["vscode-extensions" "anthropic" "claude-code"]])'
+# nix-shell maintainers/scripts/update.nix --argstr commit true --arg predicate '(path: pkg: builtins.elem path [["claude-code"] ["claude-code-bin"] ["vscode-extensions" "anthropic" "claude-code"]])'
 # ```
 {
   lib,
@@ -15,19 +15,23 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "claude-code";
-  version = "2.1.19";
+  version = "2.1.20";
 
   src = fetchzip {
     url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-${finalAttrs.version}.tgz";
-    hash = "sha256-K2fJf1eRAyqmtAvKBzpAtMohQ4B1icwC9yf5zEf52C8=";
+    hash = "sha256-V2BIqUUJnQpjIsCAAk932L8wp5T74s22q3KgFoxfdDg=";
   };
 
-  npmDepsHash = "sha256-C8HVKSz1ZQmYNMoLUKk2XUpf5y+Np4nTacCGMVEqO8c=";
+  npmDepsHash = "sha256-X8j7httM9qMpAPR11oDAWwDpkxZ2bc20y6ruMoStMsQ=";
 
   strictDeps = true;
 
   postPatch = ''
     cp ${./package-lock.json} package-lock.json
+
+    # https://github.com/anthropics/claude-code/issues/15195
+    substituteInPlace cli.js \
+          --replace-fail '#!/bin/sh' '#!/usr/bin/env sh'
   '';
 
   dontNpmBuild = true;

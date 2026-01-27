@@ -36,7 +36,7 @@
 /maintainers/computed-team-list.nix @infinisil
 ## Standard environment–related libraries
 /lib/customisation.nix      @alyssais @NixOS/stdenv
-/lib/derivations.nix        @alyssais @NixOS/stdenv
+/lib/derivations.nix        @NixOS/stdenv
 /lib/fetchers.nix           @alyssais @NixOS/stdenv
 /lib/meta.nix               @alyssais @NixOS/stdenv
 /lib/source-types.nix       @alyssais @NixOS/stdenv

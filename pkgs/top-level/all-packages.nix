@@ -1758,15 +1758,7 @@ with pkgs;
     asciidoc = asciidoc-full;
   };
 
-  dino = callPackage ../applications/networking/instant-messengers/dino {
-    inherit (gst_all_1)
-      gstreamer
-      gst-plugins-base
-      gst-plugins-bad
-      gst-vaapi
-      ;
-    gst-plugins-good = gst_all_1.gst-plugins-good.override { gtkSupport = true; };
-  };
+  dino = callPackage ../applications/networking/instant-messengers/dino { };
 
   dnschef = python3Packages.callPackage ../tools/networking/dnschef { };
 
@@ -2345,10 +2337,6 @@ with pkgs;
   };
 
   diffutils = callPackage ../tools/text/diffutils { };
-
-  dotnetfx35 = callPackage ../development/libraries/dotnetfx35 { };
-
-  dotnetfx40 = callPackage ../development/libraries/dotnetfx40 { };
 
   drone = callPackage ../development/tools/continuous-integration/drone { };
   drone-oss = callPackage ../development/tools/continuous-integration/drone {
@@ -5386,6 +5374,16 @@ with pkgs;
   php = php84;
   phpExtensions = recurseIntoAttrs php.extensions;
   phpPackages = recurseIntoAttrs php.packages;
+
+  # Import PHP85 interpreter, extensions and packages
+  php85 = callPackage ../development/interpreters/php/8.5.nix {
+    stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
+    pcre2 = pcre2.override {
+      withJitSealloc = false; # See https://bugs.php.net/bug.php?id=78927 and https://bugs.php.net/bug.php?id=78630
+    };
+  };
+  php85Extensions = recurseIntoAttrs php85.extensions;
+  php85Packages = recurseIntoAttrs php85.packages;
 
   # Import PHP84 interpreter, extensions and packages
   php84 = callPackage ../development/interpreters/php/8.4.nix {
