@@ -26,6 +26,7 @@
   libgbm,
   libdrm,
   libappindicator,
+  libnotify,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -65,6 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.getLib udev)
     libappindicator
     libsecret
+    libnotify
   ];
 
   unpackPhase = ''
