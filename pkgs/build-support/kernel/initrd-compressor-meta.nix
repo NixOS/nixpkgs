@@ -33,7 +33,8 @@ rec {
     extension = ".lzma";
   };
   lz4 = {
-    executable = pkgs: "${pkgs.lz4}/bin/lz4";
+    # Specify "out" output instead of default "dev" to ensure lz4 cli is available
+    executable = pkgs: "${pkgs.lz4.out}/bin/lz4";
     defaultArgs = [ "-l" ];
     ubootName = "lz4";
     extension = ".lz4";
