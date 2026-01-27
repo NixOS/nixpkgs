@@ -23,7 +23,7 @@ let
 
   pname = "intiface-central";
 
-  version = "2.6.8-unstable-2025-09-14";
+  version = "2.6.8";
 
   src = fetchFromGitHub {
     owner = "intiface";
