@@ -4,13 +4,14 @@
   cffi,
   fetchPypi,
   pytestCheckHook,
+  setuptools,
   xorg,
 }:
 
 buildPythonPackage rec {
   pname = "xcffib";
   version = "1.12.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -19,8 +20,11 @@ buildPythonPackage rec {
 
   postPatch = ''
     # Hardcode cairo library path
-    sed -e 's,ffi\.dlopen(,&"${xorg.libxcb.out}/lib/" + ,' -i xcffib/__init__.py
+    substituteInPlace xcffib/__init__.py \
+      --replace-fail "lib = ffi.dlopen(soname)" "lib = ffi.dlopen('${lib.getLib xorg.libxcb}/lib/' + soname)"
   '';
+
+  build-system = [ setuptools ];
 
   propagatedNativeBuildInputs = [ cffi ];
 
