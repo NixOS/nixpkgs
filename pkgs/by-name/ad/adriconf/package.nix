@@ -9,7 +9,6 @@
   libdrm,
   libGL,
   atkmm,
-  pcre,
   gtkmm4,
   pugixml,
   libgbm,
@@ -44,7 +43,6 @@ stdenv.mkDerivation rec {
     libdrm
     libGL
     atkmm
-    pcre
     gtkmm4
     pugixml
     libgbm
