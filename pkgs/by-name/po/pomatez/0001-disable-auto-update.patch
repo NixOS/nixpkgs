@@ -1,0 +1,75 @@
+diff --git c/app/electron/src/main.ts i/app/electron/src/main.ts
+index ed9ca0e..5c1fd4c 100644
+--- c/app/electron/src/main.ts
++++ i/app/electron/src/main.ts
+@@ -328,37 +328,39 @@ if (!onlySingleInstance) {
+       },
+     ]);
+ 
+-    const autoUpdater = activateAutoUpdate({
+-      onUpdateAvailable: (info) => {
+-        notify({
+-          title: "NEW UPDATE IS AVAILABLE",
+-          message: `App version ${info.version} ready to be downloaded.`,
+-          actions: ["View Release Notes"],
+-          callback: (err, response) => {
+-            if (!err) {
+-              if (response === "view release notes") {
+-                shell.openExternal(RELEASE_NOTES_LINK);
+-              }
+-            }
+-          },
+-        });
+-      },
+-      onUpdateDownloaded: (info) => {
+-        notify({
+-          title: "READY TO BE INSTALLED",
+-          message: "Update has been successfully downloaded.",
+-          // Temporarily commented out due to an issue with snoretoast https://github.com/mikaelbr/node-notifier/issues/332
+-          actions: ["Quit and Install" /*, "Install it Later"*/],
+-          callback: (err, response) => {
+-            if (!err) {
+-              //if (response === "quit and install") {
+-              autoUpdater.quitAndInstall();
+-              //}
+-            }
+-          },
+-        });
+-      },
+-    });
++    console.info("auto-update disabled by Nix");
++
++    // const autoUpdater = activateAutoUpdate({
++    //   onUpdateAvailable: (info) => {
++    //     notify({
++    //       title: "NEW UPDATE IS AVAILABLE",
++    //       message: `App version ${info.version} ready to be downloaded.`,
++    //       actions: ["View Release Notes"],
++    //       callback: (err, response) => {
++    //         if (!err) {
++    //           if (response === "view release notes") {
++    //             shell.openExternal(RELEASE_NOTES_LINK);
++    //           }
++    //         }
++    //       },
++    //     });
++    //   },
++    //   onUpdateDownloaded: (info) => {
++    //     notify({
++    //       title: "READY TO BE INSTALLED",
++    //       message: "Update has been successfully downloaded.",
++    //       // Temporarily commented out due to an issue with snoretoast https://github.com/mikaelbr/node-notifier/issues/332
++    //       actions: ["Quit and Install" /*, "Install it Later"*/],
++    //       callback: (err, response) => {
++    //         if (!err) {
++    //           //if (response === "quit and install") {
++    //           autoUpdater.quitAndInstall();
++    //           //}
++    //         }
++    //       },
++    //     });
++    //   },
++    // });
+   });
+ }
+ 

@@ -1,0 +1,12 @@
+diff --git c/app/electron/src/main.ts i/app/electron/src/main.ts
+index ed9ca0e..f3fe08b 100644
+--- c/app/electron/src/main.ts
++++ i/app/electron/src/main.ts
+@@ -97,6 +97,7 @@ function createMainWindow() {
+     backgroundColor: store.safeGet("isDarkMode") ? "#141e25" : "#fff",
+     webPreferences: {
+       contextIsolation: true,
++      nodeIntegration: true,
+       backgroundThrottling: false,
+       preload: path.join(__dirname, "preload.js"),
+     },
