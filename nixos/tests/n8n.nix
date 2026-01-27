@@ -15,6 +15,7 @@ in
     {
       services.n8n = {
         enable = true;
+        customNodes = [ pkgs.n8n-nodes-carbonejs ];
         environment = {
           WEBHOOK_URL = webhookUrl;
           N8N_TEMPLATES_ENABLED = false;
@@ -41,5 +42,11 @@ in
     # Test _FILE environment variables
     machine.succeed("grep -qF 'LoadCredential=n8n_encryption_key_file:${secretFile}' /etc/systemd/system/n8n.service")
     machine.succeed("grep -qF 'N8N_ENCRYPTION_KEY_FILE=%d/n8n_encryption_key_file' /etc/systemd/system/n8n.service")
+
+    # Test custom nodes
+    machine.succeed("grep -qF 'N8N_CUSTOM_EXTENSIONS=' /etc/systemd/system/n8n.service")
+    custom_extensions_dir = machine.succeed("grep -oP 'N8N_CUSTOM_EXTENSIONS=\\K[^\"]+' /etc/systemd/system/n8n.service").strip()
+    machine.succeed(f"test -L {custom_extensions_dir}/n8n-nodes-carbonejs")
+    machine.succeed(f"test -f {custom_extensions_dir}/n8n-nodes-carbonejs/package.json")
   '';
 }
