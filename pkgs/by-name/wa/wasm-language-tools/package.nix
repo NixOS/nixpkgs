@@ -3,7 +3,9 @@
   rustPlatform,
   fetchFromGitHub,
   versionCheckHook,
+  _experimental-update-script-combinators,
   nix-update-script,
+  vscode-extension-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,7 +25,16 @@ rustPlatform.buildRustPackage rec {
   versionCheckProgram = "${placeholder "out"}/bin/wat_server";
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = _experimental-update-script-combinators.sequence [
+    (nix-update-script { })
+    (vscode-extension-update-script {
+      attrPath = "vscode-extensions.gplane.wasm-language-tools";
+      extraArgs = [
+        "--override-filename"
+        "pkgs/applications/editors/vscode/extensions/gplane.wasm-language-tools/default.nix"
+      ];
+    })
+  ];
 
   meta = {
     description = "Language server and other tools for WebAssembly";
