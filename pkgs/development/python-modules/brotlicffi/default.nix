@@ -3,9 +3,11 @@
   fetchFromGitHub,
   buildPythonPackage,
   cffi,
+  isPyPy,
   # overridden as pkgs.brotli
   brotli,
   setuptools,
+  pycparser,
   pytestCheckHook,
   hypothesis,
 }:
@@ -28,7 +30,7 @@ buildPythonPackage rec {
 
   propagatedNativeBuildInputs = [ cffi ];
 
-  dependencies = [ cffi ];
+  dependencies = [ cffi ] ++ lib.optional isPyPy pycparser;
 
   preBuild = ''
     export USE_SHARED_BROTLI=1

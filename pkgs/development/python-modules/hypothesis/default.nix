@@ -129,6 +129,10 @@ buildPythonPackage rec {
     "test_resolving_standard_reversible_as_generic"
     "test_resolving_standard_sequence_as_generic"
     "test_specialised_collection_types"
+  ]
+  ++ lib.optionals isPyPy [
+    # hypothesis.errors.Unsatisfiable: Could not find any examples from datetimes(min_value=datetime.datetime(2003, 1, 1, 0, 0), max_value=datetime.datetime(2005, 12, 31, 23, 59, 59, 999999)) that satisfied lambda x: x.month == 2 and x.day == 29
+    "test_bordering_on_a_leap_year"
   ];
 
   pythonImportsCheck = [ "hypothesis" ];
