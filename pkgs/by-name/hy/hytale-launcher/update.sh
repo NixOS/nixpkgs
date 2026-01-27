@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -I nixpkgs=./. -i bash -p bash curl cacert jq nix nix-prefetch common-updater-scripts
+#!nix-shell --pure -I nixpkgs=./. -i bash -p bash curl cacert jq nix nix-prefetch common-updater-scripts
 
 launcherJson=$(curl -s https://launcher.hytale.com/version/release/launcher.json)
 
