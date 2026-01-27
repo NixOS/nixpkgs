@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
           [ libcap ] ++ lib.optional (!stdenv.hostPlatform.isMusl) libidn2
         )
       }"
-      include <local/bin.ping>
+      include if exists <local/bin.ping>
       capability net_raw,
       network inet raw,
       network inet6 raw,
