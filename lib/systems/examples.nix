@@ -341,31 +341,48 @@ rec {
   # Windows
   #
 
-  # 32 bit mingw-w64
-  mingw32 = {
+  # mingw-w64 with MSVCRT for i686
+  mingw-msvcrt-i686 = {
     config = "i686-w64-mingw32";
     libc = "msvcrt"; # This distinguishes the mingw (non posix) toolchain
   };
 
-  # 64 bit mingw-w64
-  mingwW64 = {
+  # mingw-w64 with MSVCRT for x86_64
+  mingw-msvcrt-x86_64 = {
     # That's the triplet they use in the mingw-w64 docs.
     config = "x86_64-w64-mingw32";
     libc = "msvcrt"; # This distinguishes the mingw (non posix) toolchain
   };
 
-  ucrt64 = {
+  # mingw-w64 with UCRT for x86_64, default compiler
+  mingw-ucrt-x86_64 = {
     config = "x86_64-w64-mingw32";
     libc = "ucrt"; # This distinguishes the mingw (non posix) toolchain
   };
 
-  # LLVM-based mingw-w64 for ARM
-  ucrtAarch64 = {
+  # mingw-w64 with UCRT for x86_64, LLVM
+  mingw-ucrt-x86_64-llvm = {
+    config = "x86_64-w64-mingw32";
+    libc = "ucrt";
+    rust.rustcTarget = "x86_64-pc-windows-gnullvm";
+    useLLVM = true;
+  };
+
+  # mingw-w64 with ucrt for Aarch64, default compiler (which is LLVM
+  # because GCC does not support this platform yet).
+  mingw-ucrt-aarch64 = {
     config = "aarch64-w64-mingw32";
     libc = "ucrt";
     rust.rustcTarget = "aarch64-pc-windows-gnullvm";
     useLLVM = true;
   };
+
+  # mingw-64 back compat
+  # TODO: Warn after 26.05, and remove after 26.11.
+  mingw32 = mingw-msvcrt-i686;
+  mingwW64 = mingw-msvcrt-x86_64;
+  ucrt64 = mingw-ucrt-x86_64;
+  ucrtAarch64 = mingw-ucrt-aarch64;
 
   # Target the MSVC ABI
   x86_64-windows = {
