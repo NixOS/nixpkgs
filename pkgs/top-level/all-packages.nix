@@ -2351,10 +2351,6 @@ with pkgs;
 
   diffutils = callPackage ../tools/text/diffutils { };
 
-  dotnetfx35 = callPackage ../development/libraries/dotnetfx35 { };
-
-  dotnetfx40 = callPackage ../development/libraries/dotnetfx40 { };
-
   drone = callPackage ../development/tools/continuous-integration/drone { };
   drone-oss = callPackage ../development/tools/continuous-integration/drone {
     enableUnfree = false;
