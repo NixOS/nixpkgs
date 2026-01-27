@@ -1,0 +1,19 @@
+Allow adding specific packages to the PATH that coc-go uses when invoking binaries.
+
+diff --git a/src/utils/tools.ts b/src/utils/tools.ts
+index 32c2857..1fdd406 100644
+--- a/src/utils/tools.ts
++++ b/src/utils/tools.ts
+@@ -79,7 +79,11 @@ export async function runGoTool(name: string, args: string[] = []): Promise<[num
+ 
+ export async function runBin(bin: string, args: string[] = []): Promise<[number, string]> {
+   return new Promise((resolve): void => {
+-    const p = spawn(bin, args)
++    const customEnv: NodeJS.ProcessEnv = {
++      ...process.env, // Copy all existing environment variables
++      PATH: "@customPath@" + path.delimiter + process.env.PATH,
++    };
++    const p = spawn(bin, args, { env: customEnv })
+ 
+     let out = ""
+     p.stdout.on('data', (data) => out += data)
