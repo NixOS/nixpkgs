@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "aiokafka";
-  version = "0.12.0";
+  version = "0.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiokafka";
     tag = "v${version}";
-    hash = "sha256-OU/Kept3TvMfGvVCjSthfZnfTX6/T0Fy3PS/ynrV3Cg=";
+    hash = "sha256-xmrNhtyFY+3CJhECIVZRMVx0sZbZ00RLiyZzOdPNNIs=";
   };
 
   build-system = [
