@@ -6,15 +6,15 @@
 
 buildGoModule rec {
   pname = "netassert";
-  version = "2.1.0";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "controlplaneio";
     repo = "netassert";
     rev = "v${version}";
-    hash = "sha256-9uzidE/b+7UWNMAknxTdeWYKLEjWbV0V9hab18w+E10=";
+    hash = "sha256-Osf6JIQ+h+hw6tN+CPz21nmAp5LJi5dayq38xb1J578=";
   };
-  vendorHash = "sha256-JuyE1pYlTIeG3IGOsvYgQN1lTAb7NWytkp/Ibh91QgA=";
+  vendorHash = "sha256-iipYu/thw0F0vrj6NWPJrd4CcDmgrPCs6TJZcBqbfSg=";
 
   ldflags = [
     "-s"
