@@ -8,7 +8,7 @@
   fixup-yarn-lock,
   go,
   makeWrapper,
-  nodejs,
+  nodejs_22,
   nix-update-script,
   patchelf,
   removeReferencesTo,
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     fixup-yarn-lock
     go
     makeWrapper
-    nodejs
+    nodejs_22
     patchelf
     removeReferencesTo
     yarn
@@ -129,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p "$out/lib/node_modules/cdktf-cli"
     cp -rL node_modules packages/cdktf-cli/bundle packages/cdktf-cli/package.json "$out/lib/node_modules/cdktf-cli/"
 
-    makeWrapper "${lib.getExe nodejs}" "$out/bin/cdktf" \
+    makeWrapper "${lib.getExe nodejs_22}" "$out/bin/cdktf" \
       --add-flags "$out/lib/node_modules/cdktf-cli/bundle/bin/cdktf.js"
 
     runHook postInstall
