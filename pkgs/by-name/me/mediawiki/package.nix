@@ -7,11 +7,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "mediawiki";
-  version = "1.45.0";
+  version = "1.45.1";
 
   src = fetchurl {
     url = "https://releases.wikimedia.org/mediawiki/${lib.versions.majorMinor version}/mediawiki-${version}.tar.gz";
-    hash = "sha256-1Jm8frPXGDXCvsHJyu2IoDCK7DfwcmTnURDSor7wJTQ=";
+    hash = "sha256-4vEmsZrsQiBRoKUODGq36QTzOzmIpHudqK+/0MCiUsw=";
   };
 
   postPatch = ''
