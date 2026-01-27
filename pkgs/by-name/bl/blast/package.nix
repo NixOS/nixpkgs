@@ -9,15 +9,22 @@
   cpio,
   gawk,
   coreutils,
+  curl,
+  # Required for 2.17.0 full build (partial build via all_projects=app/ has seqdb dependency issues)
+  boost,
+  libuv,
+  libssh,
+  fastcgipp,
+  sqlite, # required for seqdb
 }:
 
 stdenv.mkDerivation rec {
   pname = "blast";
-  version = "2.14.1";
+  version = "2.17.0";
 
   src = fetchurl {
     url = "https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/${version}/ncbi-blast-${version}+-src.tar.gz";
-    sha256 = "sha256-cSwtvfD7E8wcLU9O9d0c5LBsO1fpbf6o8j5umfWxZQ4=";
+    hash = "sha256-UCBXqI6ZkONOYnWL4h6kdMwK1o1qY6LjeyNyrx5eoUc=";
   };
 
   sourceRoot = "ncbi-blast-${version}+-src/c++";
@@ -28,9 +35,10 @@ stdenv.mkDerivation rec {
     "--with-flat-makefile"
     "--without-makefile-auto-update"
     "--with-dll" # build dynamic libraries (static are default)
+    "--with-sqlite3=${sqlite.dev}" # required for seqdb
+    # Use project list with unit tests excluded
+    "--with-projects=scripts/projects/blast/project.lst"
   ];
-
-  makeFlags = [ "all_projects=app/" ];
 
   preConfigure = ''
     export NCBICXX_RECONF_POLICY=warn
@@ -44,15 +52,13 @@ stdenv.mkDerivation rec {
 
     for awks in scripts/common/impl/is_log_interesting.awk \
         scripts/common/impl/report_duplicates.awk; do
-
-        substituteInPlace $awks \
-              --replace-fail "/usr/bin/awk" "${gawk}/bin/awk"
+      substituteInPlace $awks \
+        --replace-fail "/usr/bin/awk" "${gawk}/bin/awk"
     done
 
     for mk in src/build-system/Makefile.meta.in \
         src/build-system/helpers/run_with_lock.c ; do
-
-        substituteInPlace $mk \
+      substituteInPlace $mk \
         --replace-fail "/bin/rm" "${coreutils}/bin/rm"
     done
 
@@ -61,18 +67,16 @@ stdenv.mkDerivation rec {
         src/build-system/Makefile.meta_r \
         src/build-system/Makefile.requirements \
         src/build-system/Makefile.rules_with_autodep.in; do
-
-        substituteInPlace $mk \
-            --replace-fail "/bin/echo" "${coreutils}/bin/echo"
+      substituteInPlace $mk \
+        --replace-fail "/bin/echo" "${coreutils}/bin/echo"
     done
+
     for mk in src/build-system/Makefile.meta_p \
         src/build-system/Makefile.rules_with_autodep.in \
         src/build-system/Makefile.protobuf.in ; do
-
-        substituteInPlace $mk \
-            --replace-fail "/bin/mv" "${coreutils}/bin/mv"
+      substituteInPlace $mk \
+        --replace-fail "/bin/mv" "${coreutils}/bin/mv"
     done
-
 
     substituteInPlace src/build-system/configure \
         --replace-fail "/bin/pwd" "${coreutils}/bin/pwd" \
@@ -84,9 +88,20 @@ stdenv.mkDerivation rec {
 
     substituteInPlace src/build-system/Makefile.meta_l \
         --replace-fail "/bin/date" "${coreutils}/bin/date"
+
+    # Exclude unit tests from build (Boost.Test 1.87 / GCC 15 incompatibility)
+    sed -i 's|^algo/blast/unit_tests$|-algo/blast/unit_tests|' scripts/projects/blast/project.lst
+    sed -i 's|^algo/blast/blastinput/unit_test$|-algo/blast/blastinput/unit_test|' scripts/projects/blast/project.lst
+    # Also exclude other unit tests (included via parent dirs without $ suffix)
+    sed -i '/^objtools\/blast\/seqdb_writer$/a -objtools/blast/seqdb_writer/unit_test' scripts/projects/blast/project.lst
+    sed -i '/^objtools\/blast\/blastdb_format$/a -objtools/blast/blastdb_format/unit_test' scripts/projects/blast/project.lst
+    sed -i '/^objtools\/blast\/services$/a -objtools/blast/services/unit_test' scripts/projects/blast/project.lst
+    sed -i '/^objtools\/align_format$/a -objtools/align_format/unit_test' scripts/projects/blast/project.lst
+    sed -i '/^algo\/blast\/proteinkmer$/a -algo/blast/proteinkmer/unit_test' scripts/projects/blast/project.lst
   '';
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
+
   nativeBuildInputs = [
     cpio
     perl
@@ -100,6 +115,11 @@ stdenv.mkDerivation rec {
     gawk
     zlib
     bzip2
+    boost
+    libuv
+    libssh
+    fastcgipp
+    sqlite
   ];
 
   strictDeps = true;
@@ -109,7 +129,11 @@ stdenv.mkDerivation rec {
   postInstall = ''
     substituteInPlace $out/bin/get_species_taxids.sh \
         --replace-fail "/bin/rm" "${coreutils}/bin/rm"
+
+    substituteInPlace $out/bin/update_blastdb.pl \
+        --replace-fail 'qw(/usr/local/bin /usr/bin)' 'qw(${curl}/bin)'
   '';
+
   patches = [ ./no_slash_bin.patch ];
 
   enableParallelBuilding = true;
@@ -121,7 +145,6 @@ stdenv.mkDerivation rec {
     description = "Basic Local Alignment Search Tool (BLAST) finds regions of similarity between biological sequences";
     homepage = "https://blast.ncbi.nlm.nih.gov/Blast.cgi";
     license = lib.licenses.publicDomain;
-
     # Version 2.10.0 fails on Darwin
     # See https://github.com/NixOS/nixpkgs/pull/61430
     platforms = lib.platforms.linux;
