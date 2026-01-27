@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "JojiiOfficial";
     repo = "LiveBudsCli";
-    rev = "ba71146858bc9bcf2574d380327a8b3828916b04";
+    rev = "v0.2.0";
     hash = "sha256-x0PXOWj77VgJDPY4j+1PRg0M7+vIYSk+6yfj8s0UKx8=";
   };
 
