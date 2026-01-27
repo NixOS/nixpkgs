@@ -261,6 +261,11 @@ lib.extendMkDerivation {
     in
 
     derivationArgs
+    # Compatibility layer for empty-string pname/version exclusion for Nixpkgs 25.11.
+    // lib.optionalAttrs (!(lib.oldestSupportedReleaseIsAtLeast 2511)) (
+      lib.optionalAttrs (pname == "") { pname = null; }
+      // lib.optionalAttrs (version == "") { version = null; }
+    )
     // {
       __structuredAttrs = true;
 
