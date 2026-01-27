@@ -444,6 +444,12 @@ in
     '';
   };
 
+  lua-resty-hmac-ffi = prev.lua-resty-hmac-ffi.overrideAttrs {
+    postConfigure = ''
+      rockspecFilename=rockspec/''${rockspecFilename}
+    '';
+  };
+
   lua-resty-jwt = prev.lua-resty-jwt.overrideAttrs {
     src = fetchFromGitHub {
       owner = "cdbattags";

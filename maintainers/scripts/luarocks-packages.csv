@@ -57,6 +57,7 @@ lua-iconv,,,,7.0.0,,
 lua-lsp,,,,,,
 lua-messagepack,,,,,,
 lua-protobuf,,,,,,lockejan
+lua-resty-hmac-ffi,,,,,,
 lua-resty-http,,,,,,
 lua-resty-jwt,,,,,,
 lua-resty-openidc,,,,,,
