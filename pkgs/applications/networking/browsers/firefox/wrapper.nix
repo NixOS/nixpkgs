@@ -131,7 +131,7 @@ let
         ++ lib.optional jackSupport libjack2
         ++ lib.optional smartcardSupport opensc
         ++ pkcs11Modules
-        ++ lib.optionals (!isDarwin) gtk_modules;
+        ++ gtk_modules;
       gtk_modules = lib.optionals (!isDarwin) [ libcanberra-gtk3 ];
 
       # Darwin does not rename bundled binaries
@@ -328,11 +328,11 @@ let
         "MOZ_ALLOW_DOWNGRADE"
         "1"
       ]
-      ++ lib.optionals (!isDarwin) [
+      ++ lib.optionals (gtk_modules != [ ]) [
         "--suffix"
         "GTK_PATH"
         ":"
-        "${lib.concatStringsSep ":" finalAttrs.gtk_modules}"
+        "${lib.concatStringsSep ":" (map (x: x + x.gtkModule) gtk_modules)}"
 
         "--suffix"
         "XDG_DATA_DIRS"
@@ -570,7 +570,6 @@ let
       preferLocalBuild = true;
 
       libs = lib.makeLibraryPath libs + ":" + lib.makeSearchPathOutput "lib" "lib64" libs;
-      gtk_modules = map (x: x + x.gtkModule) gtk_modules;
 
       passthru = {
         unwrapped = browser;
