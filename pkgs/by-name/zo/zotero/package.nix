@@ -152,7 +152,7 @@ let
   };
 
 in
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   inherit
     pname
     version
@@ -249,7 +249,7 @@ buildNpmPackage rec {
     name = "zotero";
     exec = "zotero -url %U";
     icon = "zotero";
-    comment = meta.description;
+    comment = finalAttrs.meta.description;
     desktopName = "Zotero";
     genericName = "Reference Management";
     categories = [
@@ -305,4 +305,4 @@ buildNpmPackage rec {
       justanotherariel
     ];
   };
-}
+})
