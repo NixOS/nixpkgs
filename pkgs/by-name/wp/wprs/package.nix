@@ -10,13 +10,13 @@
 }:
 rustPlatform.buildRustPackage {
   pname = "wprs";
-  version = "0-unstable-2025-09-05";
+  version = "0-unstable-2025-10-04";
 
   src = fetchFromGitHub {
     owner = "wayland-transpositor";
     repo = "wprs";
-    rev = "1eb482e0f80cc84a3ee55f7cda99df9bea6573af";
-    hash = "sha256-+m0gXQQa2NkUFNXfGPCwHTlyTFOw1nfjrUBgSD5iGMo=";
+    rev = "e8bce459839ab0c3cab256d700ca62a19327839f";
+    hash = "sha256-6ykqj28UC29AwvWkK9/G+YNhtdL7kgjJq1F1uDIFAXs=";
   };
 
   nativeBuildInputs = [
