@@ -14,7 +14,6 @@
   packaging,
   pyyaml,
   regex,
-  requests,
   tokenizers,
   safetensors,
   tqdm,
@@ -78,7 +77,6 @@ buildPythonPackage (finalAttrs: {
     packaging
     pyyaml
     regex
-    requests
     tokenizers
     safetensors
     tqdm
