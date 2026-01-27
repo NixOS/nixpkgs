@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "monocle";
-  version = "0.9.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "bgpkit";
     repo = "monocle";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-64oa3rmPR1PFmtGti1LVubO+2lY4VIkdMBKP6/IeyFk=";
+    hash = "sha256-jXjIhAryTD+XpbekBmO2WnzNlCuHAD6VMVv6mB79WEg=";
   };
 
-  cargoHash = "sha256-rSvq+aHI5u0W1RG3JQooljeDmxTHE9ywdPguHdV3T+c=";
+  cargoHash = "sha256-m7Cb1KZUUcOqlVerKkjXx/RrlAfxTk6NmopJT1x+Htg=";
 
   # require internet access
   checkFlags = [
@@ -29,6 +29,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=datasets::rpki::validator::tests::test_validation"
     "--skip=filters::search::tests::test_build_broker_with_filters"
     "--skip=filters::search::tests::test_pagination_logic"
+    "--skip=lens::country::tests::test_all"
+    "--skip=lens::country::tests::test_lookup_by_code"
+    "--skip=lens::country::tests::test_lookup_by_name"
+    "--skip=lens::country::tests::test_lookup_code"
+    "--skip=lens::country::tests::test_search_with_args"
+    "--skip=lens::ip::tests::test_fetch_ip_info"
+    "--skip=lens::search::tests::test_build_broker_with_filters"
+    "--skip=lens::search::tests::test_pagination_logic"
+    "--skip=server::handlers::country::tests::test_country_lens_lookup"
   ];
 
   doInstallCheck = true;
