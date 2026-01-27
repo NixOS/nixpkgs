@@ -72,10 +72,13 @@
       stdenv.targetPlatform.isWindows
       || stdenv.targetPlatform.isGhcjs
       # Before <https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13932>,
-      # we couldn't force hadrian to build terminfo for cross.
+      # we couldn't force hadrian to build terminfo for different triples.
       || (
         lib.versionOlder version "9.15.20250808"
-        && (stdenv.buildPlatform != stdenv.hostPlatform || stdenv.hostPlatform != stdenv.targetPlatform)
+        && (
+          stdenv.buildPlatform.config != stdenv.hostPlatform.config
+          || stdenv.hostPlatform.config != stdenv.targetPlatform.config
+        )
       )
     ),
 
