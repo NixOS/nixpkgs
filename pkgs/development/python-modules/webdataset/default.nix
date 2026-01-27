@@ -22,7 +22,7 @@
 }:
 buildPythonPackage rec {
   pname = "webdataset";
-  version = "1.0.2";
+  version = "0.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
