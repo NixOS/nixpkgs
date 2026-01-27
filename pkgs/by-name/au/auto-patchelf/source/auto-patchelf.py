@@ -285,6 +285,11 @@ class Logger:
     def __init__(self, structured: bool = False):
         self.structured = structured
 
+    def debug(self, message: str):
+        """Output a debug log message (text), only if not in structured mode."""
+        if not self.structured:
+            print(message)
+
     def log(self, event: Event) -> None:
         """Output an event immediately. In structured mode, output JSON. In human-readable mode, output human-readable text."""
         if self.structured:
@@ -342,8 +347,7 @@ def auto_patchelf_file(logger: Logger, path: Path, runtime_deps: list[Path], app
                 check=True)
         rpath += runtime_deps
 
-    if not logger.structured:
-        print(f"searching for dependencies of {path}")
+    logger.debug(f"searching for dependencies of {path}")
     dependencies = []
     # Be sure to get the output of all missing dependencies instead of
     # failing at the first one, because it's more useful when working
@@ -455,18 +459,15 @@ def auto_patchelf(
     missing = [dep for dep in dependencies if not dep.found]
 
     # Print a summary of the missing dependencies at the end
-    if not logger.structured:
-        print(f"auto-patchelf: {len(missing)} dependencies could not be satisfied")
+    logger.debug(f"auto-patchelf: {len(missing)} dependencies could not be satisfied")
     failure = False
     for dep in missing:
         for pattern in ignore_missing:
             if fnmatch(dep.name.name, pattern):
-                if not logger.structured:
-                    print(f"warn: auto-patchelf ignoring missing {dep.name} wanted by {dep.file}")
+                logger.debug(f"warn: auto-patchelf ignoring missing {dep.name} wanted by {dep.file}")
                 break
         else:
-            if not logger.structured:
-                print(f"error: auto-patchelf could not satisfy dependency {dep.name} wanted by {dep.file}")
+            logger.debug(f"error: auto-patchelf could not satisfy dependency {dep.name} wanted by {dep.file}")
             failure = True
 
     if failure:
@@ -563,11 +564,8 @@ def main() -> None:
 
     args = parser.parse_args()
     logger = Logger(structured=args.structured_logs)
-    if not logger.structured:
-        print("automatically fixing dependencies for ELF files")
-
-    if not logger.structured:
-        pprint.pprint(vars(args))
+    logger.debug("automatically fixing dependencies for ELF files")
+    logger.debug(pprint.pformat(vars(args)))
 
     auto_patchelf(
         logger,
