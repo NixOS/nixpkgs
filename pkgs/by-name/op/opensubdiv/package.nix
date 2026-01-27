@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "opensubdiv";
-  version = "3.6.1";
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "PixarAnimationStudios";
     repo = "OpenSubdiv";
     tag = "v${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
-    hash = "sha256-/22SeMzNNnrUgmPGpgbQwoYthdAdhRa615VhVJOvP9o=";
+    hash = "sha256-yWi+SaJfyMHPnc8hhrMZ4W6cBRkFOhRehXg3BqSGPcM=";
   };
 
   outputs = [
