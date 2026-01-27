@@ -21,6 +21,8 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-W6NPZ5uP7wGjgyA+Nv2vpmshKWny2CCSrn/Gaoi7Pr4=";
   };
 
+  __structuredAttrs = true;
+
   build-system = [ python3Packages.setuptools ];
 
   dependencies = with python3Packages; [
@@ -40,14 +42,18 @@ python3Packages.buildPythonApplication rec {
   ];
 
   disabledTests =
-    # Tests require running docker daemon
     [
+      # Require running docker daemon
       "test_cpp_plugin"
       "test_godot_plugin"
       "test_html"
       "test_python"
       "test_qml_only"
       "test_rust"
+
+      # Expects /tmp to exist and not be a symlink
+      # https://gitlab.com/clickable/clickable/-/issues/479
+      "TestReviewCommand and test_run and not test_run_with_path_arg"
     ]
     # Tests do not work on non-amd64 platforms
     ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [
