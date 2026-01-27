@@ -7,7 +7,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   numpy,
-  pytest-astropy,
   pytestCheckHook,
   scipy,
   setuptools-scm,
@@ -41,7 +40,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   nativeCheckInputs = [
-    pytest-astropy
     pytestCheckHook
   ];
 

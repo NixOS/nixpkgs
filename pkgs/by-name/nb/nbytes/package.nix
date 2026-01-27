@@ -44,6 +44,10 @@ stdenv.mkDerivation (finalAttrs: {
     gtest
   ];
 
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+  ];
+
   passthru = {
     updateScript = nix-update-script { };
 
