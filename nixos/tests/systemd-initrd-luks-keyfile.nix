@@ -16,7 +16,16 @@ in
     {
       # Use systemd-boot
       virtualisation = {
-        emptyDiskImages = [ 512 ];
+        emptyDiskImages = [
+          {
+            size = 512;
+            driveConfig.deviceExtraOpts.serial = "new-root";
+          }
+          {
+            size = 512;
+            driveConfig.deviceExtraOpts.serial = "key";
+          }
+        ];
         useBootLoader = true;
         # Necessary to boot off the encrypted disk because it requires a init script coming from the Nix store
         mountHostNixStore = true;
@@ -31,22 +40,32 @@ in
       };
 
       specialisation.boot-luks.configuration = {
+        testing.initrdBackdoor = true;
         boot.initrd.luks.devices = lib.mkVMOverride {
           cryptroot = {
-            device = "/dev/vdb";
-            keyFile = "/etc/cryptroot.key";
+            device = "/dev/disk/by-id/virtio-new-root";
+            keyFile = "/keyfile:/dev/disk/by-id/virtio-key";
           };
         };
         virtualisation.rootDevice = "/dev/mapper/cryptroot";
         virtualisation.fileSystems."/".autoFormat = true;
-        boot.initrd.secrets."/etc/cryptroot.key" = keyfile;
       };
     };
 
   testScript = ''
+    import re
+
     # Create encrypted volume
     machine.wait_for_unit("multi-user.target")
-    machine.succeed("cryptsetup luksFormat -q --iter-time=1 -d ${keyfile} /dev/vdb")
+    machine.succeed(
+      "mkfs.ext4 /dev/disk/by-id/virtio-key",
+      "mkdir /mnt",
+      "mount /dev/disk/by-id/virtio-key /mnt",
+      "cp ${keyfile} /mnt/keyfile",
+      "chmod 0600 /mnt/keyfile",
+      "cryptsetup luksFormat -q --iter-time=1 -d /mnt/keyfile /dev/disk/by-id/virtio-new-root",
+      "umount /mnt",
+    )
 
     # Boot from the encrypted disk
     machine.succeed("bootctl set-default nixos-generation-1-specialisation-boot-luks.conf")
@@ -54,7 +73,10 @@ in
     machine.crash()
 
     # Boot and decrypt the disk
+    machine.wait_for_unit("initrd.target")
+    assert not re.search(r"/dev/vd.* on .* type ext4", machine.succeed("mount")), "Key file system should be unmounted automatically"
+    machine.switch_root()
     machine.wait_for_unit("multi-user.target")
-    assert "/dev/mapper/cryptroot on / type ext4" in machine.succeed("mount")
+    assert "/dev/mapper/cryptroot on / type ext4" in machine.succeed("mount"), "Booted wrong rootfs"
   '';
 }
