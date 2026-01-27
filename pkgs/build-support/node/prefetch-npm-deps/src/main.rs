@@ -67,7 +67,7 @@ fn fixup_lockfile(
                 if let Some(Value::String(resolved)) = package.get("resolved")
                     && let Some(Value::String(integrity)) = package.get("integrity")
                 {
-                    if resolved.starts_with("git+") {
+                    if resolved.starts_with("git+") || resolved.starts_with("file:") {
                         fixed = true;
 
                         package
@@ -242,6 +242,9 @@ fn main() -> anyhow::Result<()> {
     cache.init()?;
 
     packages.into_par_iter().try_for_each(|package| {
+        if package.url.scheme() == "file" {
+            return Ok::<_, anyhow::Error>(());
+        }
         let tarball = package
             .tarball()
             .map_err(|e| anyhow!("couldn't fetch {} at {}: {e:?}", package.name, package.url))?;
