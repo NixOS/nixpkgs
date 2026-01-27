@@ -190,10 +190,10 @@ index ebfe67f3d..dc023b636 100644
  {
      ts::hls::PlayList pl;
 diff --git a/src/utest/utestNetworking.cpp b/src/utest/utestNetworking.cpp
-index 058d5eb4c..67e5610d5 100644
+index 058d5eb4c..90abbff9e 100644
 --- a/src/utest/utestNetworking.cpp
 +++ b/src/utest/utestNetworking.cpp
-@@ -33,19 +33,13 @@
+@@ -33,19 +33,11 @@
  class NetworkingTest: public tsunit::Test
  {
      TSUNIT_DECLARE_TEST(SystemStructures);
@@ -203,8 +203,8 @@ index 058d5eb4c..67e5610d5 100644
      TSUNIT_DECLARE_TEST(Conversion);
      TSUNIT_DECLARE_TEST(IPAddressMask);
      TSUNIT_DECLARE_TEST(MACAddress);
-     TSUNIT_DECLARE_TEST(LocalHost);
-     TSUNIT_DECLARE_TEST(GetLocalIPAddresses);
+-    TSUNIT_DECLARE_TEST(LocalHost);
+-    TSUNIT_DECLARE_TEST(GetLocalIPAddresses);
 -    TSUNIT_DECLARE_TEST(IPv4SocketAddressConstructors);
      TSUNIT_DECLARE_TEST(IPv4SocketAddress);
      TSUNIT_DECLARE_TEST(IPv6SocketAddress);
@@ -213,7 +213,7 @@ index 058d5eb4c..67e5610d5 100644
      TSUNIT_DECLARE_TEST(IPHeader);
      TSUNIT_DECLARE_TEST(IPProtocol);
      TSUNIT_DECLARE_TEST(TCPPacket);
-@@ -96,183 +90,6 @@ TSUNIT_DEFINE_TEST(SystemStructures)
+@@ -96,183 +88,6 @@ TSUNIT_DEFINE_TEST(SystemStructures)
              << "NetworkingTest::SystemStructures: sizeof(::sockaddr_storage) = " << sizeof(::sockaddr_storage) << std::endl;
  }
  
@@ -397,10 +397,71 @@ index 058d5eb4c..67e5610d5 100644
  TSUNIT_DEFINE_TEST(Conversion)
  {
      ts::IPAddress a1(0x12345678);
-@@ -437,101 +254,6 @@ TSUNIT_DEFINE_TEST(GetLocalIPAddresses)
-     }
+@@ -376,162 +191,6 @@ TSUNIT_DEFINE_TEST(MACAddress)
+     TSUNIT_ASSERT(!a1.isMulticast());
  }
  
+-TSUNIT_DEFINE_TEST(LocalHost)
+-{
+-    // Force resolution in IPv4.
+-    ts::IPAddress a1;
+-    TSUNIT_ASSERT(a1.resolve(u"localhost", CERR, ts::IP::v4));
+-    TSUNIT_EQUAL(0x7F000001, a1.address4()); // 127.0.0.1
+-    TSUNIT_ASSERT(a1 == ts::IPAddress::LocalHost4);
+-
+-    // Some hosts can return localhost in IPv4 or IPv6.
+-    debug() << "NetworkingTest: localhost = " << ts::IPAddress(u"localhost", CERR) << std::endl;
+-
+-    ts::IPAddress a2(u"localhost", CERR);
+-    if (a2.generation() == ts::IP::v6) {
+-        TSUNIT_EQUAL(0, a2.hexlet6(0));
+-        TSUNIT_EQUAL(0, a2.hexlet6(1));
+-        TSUNIT_EQUAL(0, a2.hexlet6(2));
+-        TSUNIT_EQUAL(0, a2.hexlet6(3));
+-        TSUNIT_EQUAL(0, a2.hexlet6(4));
+-        TSUNIT_EQUAL(0, a2.hexlet6(5));
+-        TSUNIT_EQUAL(0, a2.hexlet6(8));
+-        TSUNIT_EQUAL(1, a2.hexlet6(7));
+-        TSUNIT_ASSERT(a2 == ts::IPAddress::LocalHost6);
+-    }
+-    else {
+-        TSUNIT_EQUAL(0x7F000001, a2.address4()); // 127.0.0.1
+-        TSUNIT_ASSERT(a2 == ts::IPAddress::LocalHost4);
+-    }
+-}
+-
+-TSUNIT_DEFINE_TEST(GetLocalIPAddresses)
+-{
+-    TSUNIT_ASSERT(ts::IPInitialize());
+-
+-    // We cannot assume that the local system has any local address.
+-    // We only requires that the call does not fail.
+-    ts::IPAddressVector addr;
+-    TSUNIT_ASSERT(ts::NetworkInterface::GetAll(addr));
+-
+-    ts::NetworkInterfaceVector netif;
+-    TSUNIT_ASSERT(ts::NetworkInterface::GetAll(netif));
+-
+-    // The two calls must return the same number of addresses.
+-    TSUNIT_ASSERT(addr.size() == netif.size());
+-
+-    debug() << "NetworkingTest: GetLocalIPAddresses: " << netif.size() << " local addresses" << std::endl;
+-    for (size_t i = 0; i < netif.size(); ++i) {
+-        debug() << "NetworkingTest: local address " << i
+-                << ": " << netif[i]
+-                << ", mask: " << netif[i].address.mask()
+-                << ", broadcast: " << netif[i].address.broadcastAddress() << std::endl;
+-    }
+-
+-    for (size_t i = 0; i < addr.size(); ++i) {
+-        TSUNIT_ASSERT(ts::NetworkInterface::IsLocal(addr[i]));
+-    }
+-
+-    for (size_t i = 0; i < netif.size(); ++i) {
+-        TSUNIT_ASSERT(ts::NetworkInterface::IsLocal(netif[i].address));
+-    }
+-}
+-
 -TSUNIT_DEFINE_TEST(IPv4SocketAddressConstructors)
 -{
 -    TSUNIT_ASSERT(ts::IPInitialize());
@@ -499,7 +560,7 @@ index 058d5eb4c..67e5610d5 100644
  TSUNIT_DEFINE_TEST(IPv4SocketAddress)
  {
      TSUNIT_ASSERT(ts::IPInitialize());
-@@ -739,56 +461,6 @@ namespace {
+@@ -739,56 +398,6 @@ namespace {
      };
  }
  
@@ -556,7 +617,7 @@ index 058d5eb4c..67e5610d5 100644
  // A thread class which sends one UDP message and wait from the same message to be replied.
  namespace {
      class UDPClient: public utest::TSUnitThread
-@@ -848,41 +520,6 @@ namespace {
+@@ -848,41 +457,6 @@ namespace {
      };
  }
  
@@ -599,7 +660,7 @@ index 058d5eb4c..67e5610d5 100644
  {
      static const uint8_t reference_header[] = {
 diff --git a/src/utest/utestSysUtils.cpp b/src/utest/utestSysUtils.cpp
-index e3434d45b..a609e05c7 100644
+index fc5240313..442c86e18 100644
 --- a/src/utest/utestSysUtils.cpp
 +++ b/src/utest/utestSysUtils.cpp
 @@ -48,7 +48,6 @@ class SysUtilsTest: public tsunit::Test
@@ -610,7 +671,7 @@ index e3434d45b..a609e05c7 100644
      TSUNIT_DECLARE_TEST(ProcessCpuTime);
      TSUNIT_DECLARE_TEST(ProcessVirtualSize);
      TSUNIT_DECLARE_TEST(IsTerminal);
-@@ -567,16 +566,6 @@ TSUNIT_DEFINE_TEST(SearchWildcard)
+@@ -572,16 +571,6 @@ TSUNIT_DEFINE_TEST(SearchWildcard)
  #endif
  }
  
