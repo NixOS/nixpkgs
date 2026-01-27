@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "wafw00f";
   version = "2.4.2";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "EnableSecurity";
     repo = "wafw00f";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-vGTqgvAVO6fbgRN5V5HhlKFrI9Z2XZaAjI1L19RIi9U=";
   };
 
@@ -31,9 +31,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Tool to identify and fingerprint Web Application Firewalls (WAF)";
     homepage = "https://github.com/EnableSecurity/wafw00f";
-    changelog = "https://github.com/EnableSecurity/wafw00f/releases/tag/v${version}";
+    changelog = "https://github.com/EnableSecurity/wafw00f/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "wafw00f";
   };
-}
+})
