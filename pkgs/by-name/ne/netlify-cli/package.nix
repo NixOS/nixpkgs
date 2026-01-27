@@ -11,13 +11,13 @@
 
 buildNpmPackage rec {
   pname = "netlify-cli";
-  version = "23.9.2";
+  version = "23.13.5";
 
   src = fetchFromGitHub {
     owner = "netlify";
     repo = "cli";
     tag = "v${version}";
-    hash = "sha256-rjxm/TrKsvYCKwoHkZRZXFpFTfLd0s0D/H6p5Bull0E=";
+    hash = "sha256-txP7zyZPdReZehfDmAmpQHPmnO6WWRaZ4XfmTLFhcUY=";
   };
 
   # Prevent postinstall script from running before package is built
@@ -27,7 +27,7 @@ buildNpmPackage rec {
     touch .git
   '';
 
-  npmDepsHash = "sha256-itzEmCOBXxspGiwxt8t6di7/EuCo2Qkl5JVSkMfUemI=";
+  npmDepsHash = "sha256-M9CrREPeAIPv3edOv4l0rsfF3VeYbfYppQlbb2Hnpo8=";
 
   inherit nodejs;
 
