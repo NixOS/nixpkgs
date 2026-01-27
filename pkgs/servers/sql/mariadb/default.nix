@@ -378,22 +378,22 @@ self: {
   # see https://mariadb.org/about/#maintenance-policy for EOLs
   mariadb_106 = self.callPackage generic {
     # Supported until 2026-07-06
-    version = "10.6.23";
-    hash = "sha256-uvS/N6BR6JLnFyTudSiRrbfPxpzSjQhzXDYH0wxpPCM=";
+    version = "10.6.24";
+    hash = "sha256-SeK63GdFcMhg48t6LAFhJKpmKMlfMBMwMEEeXImqFy8=";
   };
   mariadb_1011 = self.callPackage generic {
     # Supported until 2028-02-16
-    version = "10.11.14";
-    hash = "sha256-ilccsU+x1ONmPY6Y89QgDAQvyLKkqqq0lYYN6ot9BS8=";
+    version = "10.11.15";
+    hash = "sha256-UxHoV2VAK95agamnsmQ6c3jSAxaigiv61LbdzxBHWaU=";
   };
   mariadb_114 = self.callPackage generic {
     # Supported until 2029-05-29
-    version = "11.4.8";
-    hash = "sha256-UvpNyixfgK/BZn1SOifAYXbZhTIpimsMMe1zUF9J4Vw=";
+    version = "11.4.9";
+    hash = "sha256-jkgcoptadARE1FRRyOotk3Ec9SXW+l0nvJUSz4lzsHU=";
   };
   mariadb_118 = self.callPackage generic {
     # Supported until 2028-06-04
-    version = "11.8.3";
-    hash = "sha256-EBSoXHaN6PnpxtS/C0JhfzsViL4a03H3FnTqMrhxGcA=";
+    version = "11.8.5";
+    hash = "sha256-vLc5RWnAiHfCg+FkmGlQRTG+6MqvowKI8HjjDZn8ufY=";
   };
 }
