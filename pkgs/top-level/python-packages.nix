@@ -16670,6 +16670,8 @@ self: super: with self; {
 
   rocket-errbot = callPackage ../development/python-modules/rocket-errbot { };
 
+  rocketcea = callPackage ../development/python-modules/rocketcea { };
+
   rocketchat-api = callPackage ../development/python-modules/rocketchat-api { };
 
   rocksdict = callPackage ../development/python-modules/rocksdict { };
