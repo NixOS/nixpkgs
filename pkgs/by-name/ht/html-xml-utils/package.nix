@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   curl,
+  gperf,
   libiconv,
 }:
 
@@ -14,6 +15,10 @@ stdenv.mkDerivation rec {
     url = "https://www.w3.org/Tools/HTML-XML-utils/${pname}-${version}.tar.gz";
     sha256 = "sha256-iIoxYxp6cDCLsvMz4HfQQW9Lt4MX+Gl/+0qVGH9ncwE=";
   };
+
+  patches = [ ./gcc15.patch ];
+
+  nativeBuildInputs = [ gperf ];
 
   buildInputs = [
     curl
