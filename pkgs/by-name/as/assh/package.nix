@@ -8,14 +8,14 @@
   ps,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "assh";
   version = "2.16.0";
 
   src = fetchFromGitHub {
     repo = "advanced-ssh-config";
     owner = "moul";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-rvJJZqVSBdaJ154NV6RaxbymsSsHbKnlJDeR6KHQE7M=";
   };
 
@@ -24,7 +24,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X moul.io/assh/v2/pkg/version.Version=${version}"
+    "-X moul.io/assh/v2/pkg/version.Version=${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [ makeWrapper ];
@@ -44,9 +44,9 @@ buildGoModule rec {
   meta = {
     description = "Advanced SSH config - Regex, aliases, gateways, includes and dynamic hosts";
     homepage = "https://github.com/moul/assh";
-    changelog = "https://github.com/moul/assh/releases/tag/v${version}";
+    changelog = "https://github.com/moul/assh/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})
