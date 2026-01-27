@@ -15,6 +15,7 @@
   psutils,
   netpbm, # for html output
   enableIconv ? false,
+  enableUrwFonts ? false,
   iconv,
   enableLibuchardet ? false,
   libuchardet, # for detecting input file encoding in preconv(1)
@@ -100,23 +101,27 @@ stdenv.mkDerivation (finalAttrs: {
   # Builds running without a chroot environment may detect the presence
   # of /usr/X11 in the host system, leading to an impure build of the
   # package. To avoid this issue, X11 support is explicitly disabled.
-  configureFlags =
-    lib.optionals (!enableGhostscript) [
-      "--without-x"
-    ]
-    ++ [
-      "ac_cv_path_PERL=${buildPackages.perl}/bin/perl"
-      "--enable-year2038"
-      "--with-urw-fonts-dir=${urw-fonts}/fonts"
-    ]
-    ++ lib.optionals enableGhostscript [
-      "--with-gs=${lib.getExe ghostscript}"
-      "--with-awk=${lib.getExe gawk}"
-      "--with-appresdir=${placeholder "out"}/lib/X11/app-defaults"
-    ]
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-      "gl_cv_func_signbit=yes"
-    ];
+  configureFlags = [
+    "ac_cv_path_PERL=${buildPackages.perl}/bin/perl"
+    "--enable-year2038"
+  ]
+  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "gl_cv_func_signbit=yes"
+  ]
+  ++ lib.optionals enableGhostscript [
+    "--with-gs=${lib.getExe ghostscript}"
+    "--with-awk=${lib.getExe gawk}"
+    "--with-appresdir=${placeholder "out"}/lib/X11/app-defaults"
+  ]
+  ++ lib.optionals (!enableGhostscript) [
+    "--without-x"
+  ]
+  ++ lib.optionals enableUrwFonts [
+    "--with-urw-fonts-dir=${urw-fonts}/fonts"
+  ]
+  ++ lib.optionals (!enableUrwFonts) [
+    "--without-urw-fonts"
+  ];
 
   postConfigure = ''
     # Move mom docs instead of linking them to avoid dangling symlinks
