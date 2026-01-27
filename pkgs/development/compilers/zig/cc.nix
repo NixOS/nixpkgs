@@ -20,6 +20,10 @@ runCommand "zig-cc-${zig.version}"
     passthru = {
       isZig = true;
       inherit targetPrefix;
+      hardeningUnsupportedFlags = [
+        "libcxxhardeningfast"
+        "libcxxhardeningextensive"
+      ];
     };
 
     inherit zig;
