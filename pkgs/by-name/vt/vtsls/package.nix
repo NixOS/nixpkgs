@@ -9,6 +9,8 @@
   fetchPnpmDeps,
   pnpmConfigHook,
   nix-update-script,
+  vtsls,
+  runCommand,
 }:
 let
   pnpm' = pnpm_10.override { nodejs = nodejs_22; };
@@ -94,6 +96,25 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script { };
+
+    tests.smoke =
+      runCommand "vtsls-smoke-test"
+        {
+        }
+        ''
+          INIT_REQUEST='{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"processId":null,"rootUri":"file:///tmp","workspaceFolders":[{"uri":"file:///tmp","name":"test"}],"capabilities":{}}}'
+          CONTENT_LENGTH=''${#INIT_REQUEST}
+
+          RESPONSE=$(
+            {
+              printf "Content-Length: %d\r\n\r\n%s" "$CONTENT_LENGTH" "$INIT_REQUEST"
+              sleep 1
+            } | timeout 3  ${lib.getExe vtsls} --stdio 2>&1 | head -c 1000
+          ) || true
+
+          echo "$RESPONSE" | grep -q '"capabilities"'
+          touch $out
+        '';
   };
 
   meta = {
