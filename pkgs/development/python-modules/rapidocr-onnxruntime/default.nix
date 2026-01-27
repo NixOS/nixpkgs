@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   config,
   buildPythonPackage,
   fetchFromGitHub,
@@ -25,15 +26,6 @@
   rapidocr-onnxruntime,
 }:
 let
-  version = "1.4.4";
-
-  src = fetchFromGitHub {
-    owner = "RapidAI";
-    repo = "RapidOCR";
-    tag = "v${version}";
-    hash = "sha256-x0VELDKOffxbV3v0aDFJFuDC4YfsGM548XWgINmRc3M=";
-  };
-
   models =
     fetchzip {
       url = "https://github.com/RapidAI/RapidOCR/releases/download/v1.1.0/required_for_whl_v1.3.0.zip";
@@ -41,13 +33,22 @@ let
       stripRoot = false;
     }
     + "/required_for_whl_v1.3.0/resources/models";
+
+  isNotAarch64Linux = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
 in
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "rapidocr-onnxruntime";
-  inherit version src;
+  version = "1.4.4";
   pyproject = true;
 
-  sourceRoot = "${src.name}/python";
+  src = fetchFromGitHub {
+    owner = "RapidAI";
+    repo = "RapidOCR";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-x0VELDKOffxbV3v0aDFJFuDC4YfsGM548XWgINmRc3M=";
+  };
+
+  sourceRoot = "${finalAttrs.src.name}/python";
 
   # HACK:
   # Upstream uses a very unconventional structure to organize the packages, and we have to coax the
@@ -61,7 +62,7 @@ buildPythonPackage {
   # hence we patch that out and get the version from the build environment directly.
   patches = [
     (replaceVars ./setup-py-override-version-checking.patch {
-      inherit version;
+      inherit (finalAttrs) version;
     })
   ];
 
@@ -101,7 +102,13 @@ buildPythonPackage {
     tqdm
   ];
 
-  pythonImportsCheck = [ "rapidocr_onnxruntime" ];
+  # aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox:
+  # terminate called after throwing an instance of 'onnxruntime::OnnxRuntimeException'
+  #
+  # -> Skip all tests that require importing markitdown
+  pythonImportsCheck = lib.optionals isNotAarch64Linux [
+    "rapidocr_onnxruntime"
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -119,10 +126,14 @@ buildPythonPackage {
     "test_long_img"
   ];
 
-  # Tests require access to a physical GPU to work, otherwise the interpreter crashes:
-  # Fatal Python error: Aborted
-  # File "/nix/store/..onnxruntime/capi/onnxruntime_inference_collection.py", line 561 in _create_inference_session
-  doCheck = !cudaSupport;
+  doCheck =
+    # Tests require access to a physical GPU to work, otherwise the interpreter crashes:
+    # Fatal Python error: Aborted
+    # File "/nix/store/..onnxruntime/capi/onnxruntime_inference_collection.py", line 561 in _create_inference_session
+    (!cudaSupport)
+    # See comment above
+    # 'onnxruntime::OnnxRuntimeException'
+    && isNotAarch64Linux;
 
   # rapidocr-onnxruntime has been renamed to rapidocr by upstream since 2.0.0. However, some packages like open-webui still requires rapidocr-onnxruntime 1.4.4. Therefore we set no auto update here.
   # nixpkgs-update: no auto update
@@ -141,11 +152,11 @@ buildPythonPackage {
   });
 
   meta = {
-    changelog = "https://github.com/RapidAI/RapidOCR/releases/tag/${src.tag}";
+    changelog = "https://github.com/RapidAI/RapidOCR/releases/tag/${finalAttrs.src.tag}";
     description = "Cross platform OCR Library based on OnnxRuntime";
     homepage = "https://github.com/RapidAI/RapidOCR";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ wrvsrx ];
     mainProgram = "rapidocr_onnxruntime";
   };
-}
+})

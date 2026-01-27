@@ -17,16 +17,16 @@
   lua,
   withCaca ? false,
   libcaca,
-  libX11 ? null,
-  libXt ? null,
-  libXpm ? null,
-  libXaw ? null,
+  libX11,
+  libXt,
+  libXpm,
+  libXaw,
   aquaterm ? false,
   withWxGTK ? false,
   wxGTK32,
-  fontconfig ? null,
-  gnused ? null,
-  coreutils ? null,
+  fontconfig,
+  gnused,
+  coreutils,
   withQt ? false,
   mkDerivation,
   qttools,
@@ -34,16 +34,15 @@
   qtsvg,
 }:
 
-assert libX11 != null -> (fontconfig != null && gnused != null && coreutils != null);
 let
-  withX = libX11 != null && !aquaterm && !stdenv.hostPlatform.isDarwin;
+  withX = !aquaterm && !stdenv.hostPlatform.isDarwin;
 in
 (if withQt then mkDerivation else stdenv.mkDerivation) rec {
   pname = "gnuplot";
   version = "6.0.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gnuplot/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/gnuplot/gnuplot-${version}.tar.gz";
     sha256 = "sha256-RY2UdpYl5z1fYjJQD0nLrcsrGDOA1D0iZqD5cBrrnFs=";
   };
 

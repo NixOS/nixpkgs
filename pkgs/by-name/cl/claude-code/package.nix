@@ -15,24 +15,19 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "claude-code";
-  version = "2.1.17";
+  version = "2.1.19";
 
   src = fetchzip {
     url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-${finalAttrs.version}.tgz";
-    hash = "sha256-cLJ8qKa8OhGpjdB7l1KAcG73EvH5T+OUww3flAKWihI=";
+    hash = "sha256-K2fJf1eRAyqmtAvKBzpAtMohQ4B1icwC9yf5zEf52C8=";
   };
 
-  npmDepsHash = "sha256-aUqPXF5L78wZ34pNRvpEJi6l2wl15Og1yCEvVoeV0tE=";
+  npmDepsHash = "sha256-C8HVKSz1ZQmYNMoLUKk2XUpf5y+Np4nTacCGMVEqO8c=";
 
   strictDeps = true;
 
   postPatch = ''
     cp ${./package-lock.json} package-lock.json
-
-    # Replace hardcoded `/bin/bash` with `/usr/bin/env bash` for Nix compatibility
-    # https://github.com/anthropics/claude-code/issues/15195
-    substituteInPlace cli.js \
-      --replace-warn '#!/bin/bash' '#!/usr/bin/env bash'
   '';
 
   dontNpmBuild = true;
@@ -45,6 +40,7 @@ buildNpmPackage (finalAttrs: {
   postInstall = ''
     wrapProgram $out/bin/claude \
       --set DISABLE_AUTOUPDATER 1 \
+      --set DISABLE_INSTALLATION_CHECKS 1
       --unset DEV \
       --prefix PATH : ${
         lib.makeBinPath (
