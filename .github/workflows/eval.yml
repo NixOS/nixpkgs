@@ -459,3 +459,7 @@ jobs:
       - name: Query nixpkgs with aliases enabled to check for basic syntax errors
         run: |
           time nix-env -I ./nixpkgs/untrusted -f ./nixpkgs/untrusted -qa '*' --option restrict-eval true --option allow-import-from-derivation false >/dev/null
+
+      - name: Ensure NixOS modules meta is valid
+        run: |
+          time nix-instantiate -I ./nixpkgs/untrusted --strict --eval --json ./nixpkgs/untrusted/nixos --arg configuration '{}' --attr config.meta --option restrict-eval true --option allow-import-from-derivation false
