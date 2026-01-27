@@ -50,9 +50,20 @@ python3Packages.buildPythonApplication rec {
     "TestReviewCommand and test_run and not test_run_with_path_arg"
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [
-    # hardcode amd64
-    "TestArchitectures and test_arch and not test_arch_agnostic"
-    "TestArchitectures and test_restricted_arch and not test_restricted_arch_env"
+    # pytest's lack of exact nodeid matching or deselecting makes it impossible to nicely disable just
+    # test_architectures.py::TestArchitectures::test_arch (infix matching makes test_arch match test_architectures.py).
+    # Have to `or` for every other TestArchitectures test and then `not` that.
+    # What we want to disable: test_arch & test_restricted_arch
+    # Reason: they hardcode amd64
+    "TestArchitectures and not (${
+      lib.strings.concatStringsSep " or " [
+        "test_arch_agnostic"
+        "test_default_arch"
+        "test_fail_arch_agnostic"
+        "test_fail_in_restricted_arch"
+        "test_restricted_arch_env"
+      ]
+    })"
 
     # no -ide images on non-x86_64
     # https://gitlab.com/clickable/clickable/-/issues/478
