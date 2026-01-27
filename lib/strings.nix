@@ -1565,6 +1565,9 @@ rec {
     ```nix
     toSentenceCase "home"
     => "Home"
+
+    toSentenceCase "homeAwayFromHome"
+    => "HomeAwayFromHome"
     ```
 
     :::
@@ -1578,7 +1581,7 @@ rec {
           firstChar = substring 0 1 str;
           rest = substring 1 (stringLength str) str;
         in
-        addContextFrom str (toUpper firstChar + toLower rest)
+        addContextFrom str (toUpper firstChar + rest)
       );
 
   /**
