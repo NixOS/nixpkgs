@@ -31,6 +31,7 @@
   buildPackages,
   gobject-introspection,
   mesonEmulatorHook,
+  fixDarwinDylibNames,
   _experimental-update-script-combinators,
   common-updater-scripts,
   jq,
@@ -95,7 +96,8 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (withIntrospection && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     mesonEmulatorHook
-  ];
+  ]
+  ++ lib.optionals (withPixbufLoader && stdenv.hostPlatform.isDarwin) [ fixDarwinDylibNames ];
 
   buildInputs = [
     libxml2
@@ -141,7 +143,18 @@ stdenv.mkDerivation (finalAttrs: {
     # Fix thumbnailer path
     substituteInPlace gdk-pixbuf-loader/librsvg.thumbnailer.in \
       --replace-fail '@bindir@/gdk-pixbuf-thumbnailer' '${gdk-pixbuf}/bin/gdk-pixbuf-thumbnailer'
-  '';
+  ''
+  +
+    lib.optionalString (withPixbufLoader && stdenv.hostPlatform.isDarwin)
+      # use .so as the loader library extension
+      # see https://gitlab.gnome.org/GNOME/librsvg/-/merge_requests/1049
+      # see https://gitlab.gnome.org/GNOME/glib/-/issues/1413
+      ''
+        substituteInPlace gdk-pixbuf-loader/meson.build \
+          --replace-fail \
+            "(cargo_dylib_prefix, ext_dynamic)" \
+            "(cargo_dylib_prefix, 'so')"
+      '';
 
   preCheck = ''
     # Tests complain: Fontconfig error: No writable cache directories
@@ -150,6 +163,21 @@ stdenv.mkDerivation (finalAttrs: {
     # https://gitlab.gnome.org/GNOME/librsvg/-/issues/258#note_251789
     export XDG_DATA_DIRS=${shared-mime-info}/share:$XDG_DATA_DIRS
   '';
+
+  preInstall =
+    if (withPixbufLoader && stdenv.hostPlatform.isDarwin) then
+      # fix the @rpath-reference, and use .so as the loader library extension
+      # see https://gitlab.gnome.org/GNOME/librsvg/-/merge_requests/1049
+      # see https://gitlab.gnome.org/GNOME/glib/-/issues/1413
+      # adapted from eed7db423e722bdb3542af56f96fd08583e80b3d
+      ''
+        for f in gdk-pixbuf-loader/*.dylib; do
+            install_name_tool -change {@rpath,$out/lib}/librsvg-2.2.dylib $f
+            mv $f ''${f%.dylib}.so
+        done
+      ''
+    else
+      null;
 
   postInstall =
     let
