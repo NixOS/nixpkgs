@@ -19,9 +19,15 @@ let
       server: "server " + server + " " + cfg.serverOption + lib.optionalString (cfg.enableNTS) " nts"
     ) cfg.servers}
 
-    ${lib.optionalString (
-      cfg.initstepslew.enabled && (cfg.servers != [ ])
-    ) "initstepslew ${toString cfg.initstepslew.threshold} ${lib.concatStringsSep " " cfg.servers}"}
+    ${lib.concatMapStringsSep "\n" (
+      pool: "pool " + pool + " " + cfg.poolOption + lib.optionalString (cfg.enableNTS) " nts"
+    ) cfg.pools}
+
+    ${lib.optionalString (cfg.initstepslew.enabled && ((cfg.servers != [ ]) || (cfg.pools != [ ])))
+      "initstepslew ${toString cfg.initstepslew.threshold} ${
+        lib.concatStringsSep " " (cfg.servers ++ cfg.pools)
+      }"
+    }
 
     driftfile ${driftFile}
     keyfile ${keyFile}
@@ -67,6 +73,14 @@ in
         '';
       };
 
+      pools = lib.mkOption {
+        default = [ ];
+        type = lib.types.listOf lib.types.str;
+        description = ''
+          The set of NTP pools from which to synchronise.
+        '';
+      };
+
       serverOption = lib.mkOption {
         default = "iburst";
         type = lib.types.enum [
@@ -81,6 +95,20 @@ in
 
           Use "offline" to prevent polling on startup. Recommended if your
           machine boots offline or is otherwise frequently offline.
+        '';
+      };
+
+      poolOption = lib.mkOption {
+        default = "iburst";
+        type = lib.types.enum [
+          "iburst"
+          "offline"
+        ];
+        description = ''
+          Set option for pool directives.
+
+          Default is the same as server option. Use "iburst" to rapidly poll on
+          startup. Use "offline" to prevent polling on startup.
         '';
       };
 
