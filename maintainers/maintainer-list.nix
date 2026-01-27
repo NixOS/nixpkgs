@@ -20434,6 +20434,13 @@
     github = "peret";
     githubId = 617977;
   };
+  peritia = {
+    name = "Peritia";
+    github = "Peritia-System";
+    githubId = 199906147;
+    email = "peritia@peritia.space";
+    matrix = "@peritia:matrix.org";
+  };
   perstark = {
     email = "perstark.se@gmail.com";
     github = "perstarkse";
