@@ -17,13 +17,13 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-firestore";
-  version = "2.21.0";
+  version = "2.22.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_firestore";
     inherit version;
-    hash = "sha256-DDf6qFBil/gn7vw4/rFVJHpty5pUEoljEBXRJfGwA/g=";
+    hash = "sha256-nWpb3vsw7VypSnyzVghzNSo9v4aJV+94nm500IbVLYI=";
   };
 
   build-system = [ setuptools ];
