@@ -13,6 +13,7 @@
   librsvg,
   python3,
   buildPackages,
+  pkgsBuildBuild,
 }:
 
 stdenv.mkDerivation {
@@ -31,8 +32,6 @@ stdenv.mkDerivation {
     ninja
     sassc
     gtk3
-    inkscape
-    optipng
     python3
   ];
 
@@ -45,15 +44,20 @@ stdenv.mkDerivation {
     gtk-engine-murrine
   ];
 
+  depsBuildBuild = [
+    inkscape
+    optipng
+  ];
+
   postPatch = ''
     patchShebangs .
 
     for file in $(find -name render-\*.sh); do
       substituteInPlace "$file" \
         --replace 'INKSCAPE="/usr/bin/inkscape"' \
-                  'INKSCAPE="${buildPackages.inkscape}/bin/inkscape"' \
+                  'INKSCAPE="${pkgsBuildBuild.inkscape}/bin/inkscape"' \
         --replace 'OPTIPNG="/usr/bin/optipng"' \
-                  'OPTIPNG="${buildPackages.optipng}/bin/optipng"'
+                  'OPTIPNG="${pkgsBuildBuild.optipng}/bin/optipng"'
     done
   '';
 
