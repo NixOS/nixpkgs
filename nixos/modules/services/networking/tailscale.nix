@@ -141,6 +141,25 @@ in
   };
 
   config = mkIf cfg.enable {
+    warnings =
+      optional
+        (
+          config.networking.firewall.enable
+          && !(any (x: x == cfg.interfaceName) config.networking.firewall.trustedInterfaces)
+        )
+        ''
+          Since version 1.52.0 Tailscale creates a firewall rule that accepts
+          all incoming traffic on its interface. This effectively disables the
+          NixOS firewall on this interface.
+
+          To disable this warning explicitly add the Tailscale interface to the
+          firewall's trustedInterfaces:
+
+              networking.firewall.trustedInterfaces = [ config.services.tailscale.interfaceName ];
+
+          <https://github.com/tailscale/tailscale/commit/ba6ec42f6d5558d04b683755aca63f88b1f2d5fc>
+        '';
+
     environment.systemPackages = [ cfg.package ]; # for the CLI
     systemd.packages = [ cfg.package ];
     systemd.services.tailscaled = {
