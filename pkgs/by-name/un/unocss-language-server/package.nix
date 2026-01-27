@@ -34,9 +34,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildPhase = ''
     runHook preBuild
-
+  buildPhase = ''
+    runHook preBuild
+    
     pnpm run build
-
+    
     runHook postBuild
   '';
 
