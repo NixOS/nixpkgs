@@ -13544,6 +13544,12 @@
     github = "keenanweaver";
     githubId = 37268985;
   };
+  keepinfov = {
+    email = "elbow-crazy-onto@duck.com";
+    name = "KeepInFov";
+    github = "keepinfov";
+    githubId = 218463407;
+  };
   keksgesicht = {
     name = "Jan Braun";
     email = "git@keksgesicht.de";
