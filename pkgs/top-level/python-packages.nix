@@ -930,6 +930,8 @@ self: super: with self; {
 
   ariadne = callPackage ../development/python-modules/ariadne { };
 
+  aristotlelib = callPackage ../development/python-modules/aristotlelib { };
+
   arpeggio = callPackage ../development/python-modules/arpeggio { };
 
   arpy = callPackage ../development/python-modules/arpy { };

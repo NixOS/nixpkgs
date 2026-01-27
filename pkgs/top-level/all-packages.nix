@@ -1415,6 +1415,8 @@ with pkgs;
   arduino-core = callPackage ../development/embedded/arduino/arduino-core/chrootenv.nix { };
   arduino-core-unwrapped = callPackage ../development/embedded/arduino/arduino-core { };
 
+  aristotle = with python3Packages; toPythonApplication aristotlelib;
+
   arpack-mpi = arpack.override { useMpi = true; };
 
   authentik-outposts = recurseIntoAttrs (callPackages ../by-name/au/authentik/outposts.nix { });
