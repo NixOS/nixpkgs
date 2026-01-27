@@ -12,19 +12,21 @@ mesonConfigurePhase() {
     fi
 
     # See multiple-outputs.sh and meson’s coredata.py
-    flagsArray+=(
-        "--libdir=${!outputLib}/lib"
-        "--libexecdir=${!outputLib}/libexec"
-        "--bindir=${!outputBin}/bin"
-        "--sbindir=${!outputBin}/sbin"
-        "--includedir=${!outputInclude}/include"
-        "--mandir=${!outputMan}/share/man"
-        "--infodir=${!outputInfo}/share/info"
-        "--localedir=${!outputLib}/share/locale"
-        "-Dauto_features=${mesonAutoFeatures:-enabled}"
-        "-Dwrap_mode=${mesonWrapMode:-nodownload}"
-        "--buildtype=${mesonBuildType:-plain}"
-    )
+    if [ -n "${setOutputFlags-1}" ]; then
+        flagsArray+=(
+            "--libdir=${!outputLib}/lib"
+            "--libexecdir=${!outputLib}/libexec"
+            "--bindir=${!outputBin}/bin"
+            "--sbindir=${!outputBin}/sbin"
+            "--includedir=${!outputInclude}/include"
+            "--mandir=${!outputMan}/share/man"
+            "--infodir=${!outputInfo}/share/info"
+            "--localedir=${!outputLib}/share/locale"
+            "-Dauto_features=${mesonAutoFeatures:-enabled}"
+            "-Dwrap_mode=${mesonWrapMode:-nodownload}"
+            "--buildtype=${mesonBuildType:-plain}"
+        )
+    fi
 
     # --no-undefined is universally a bad idea on freebsd because environ is in the csu
     if [[ "@hostPlatform@" == *-freebsd ]]; then
