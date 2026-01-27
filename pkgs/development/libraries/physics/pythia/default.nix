@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pythia";
-  version = "8.315";
+  version = "8.316";
 
   src = fetchurl {
     url = "https://pythia.org/download/pythia83/pythia${
       builtins.replaceStrings [ "." ] [ "" ] version
     }.tgz";
-    sha256 = "sha256-Sy/nNB4z6QtyJv3Koqe/kyeYezNU6EwE8f2SVoY2kK4=";
+    sha256 = "sha256-HZkwGq/WiWtXQ17dc4UOU/No8AIaZHsSzyVYTXcxNIk=";
   };
 
   nativeBuildInputs = [ rsync ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
