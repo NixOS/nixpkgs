@@ -199,6 +199,7 @@
   ./programs/digitalbitbox/default.nix
   ./programs/direnv.nix
   ./programs/dmrconfig.nix
+  ./programs/dpcmd.nix
   ./programs/droidcam.nix
   ./programs/dsearch.nix
   ./programs/dublin-traceroute.nix
