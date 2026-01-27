@@ -6425,12 +6425,6 @@ with pkgs;
 
   watson-ruby = callPackage ../development/tools/misc/watson-ruby { };
 
-  xcbuild = callPackage ../by-name/xc/xcbuild/package.nix {
-    stdenv =
-      # xcbuild is included in the SDK. Avoid an infinite recursion by using a bootstrap stdenv.
-      if stdenv.hostPlatform.isDarwin then darwin.bootstrapStdenv else stdenv;
-  };
-
   xcbuildHook = makeSetupHook {
     name = "xcbuild-hook";
     propagatedBuildInputs = [ xcbuild ];
@@ -7193,12 +7187,7 @@ with pkgs;
   libpeas = callPackage ../development/libraries/libpeas { };
   libpeas2 = callPackage ../development/libraries/libpeas/2.x.nix { };
 
-  libpng = callPackage ../development/libraries/libpng {
-    stdenv =
-      # libpng is a dependency of xcbuild. Avoid an infinite recursion by using a bootstrap stdenv
-      # that does not propagate xcrun.
-      if stdenv.hostPlatform.isDarwin then darwin.bootstrapStdenv else stdenv;
-  };
+  libpng = callPackage ../development/libraries/libpng { };
 
   libpng12 = callPackage ../development/libraries/libpng/12.nix { };
 
@@ -7442,7 +7431,7 @@ with pkgs;
       null
     else
       callPackage ../development/libraries/ncurses {
-        # ncurses is included in the SDK. Avoid an infinite recursion by using a bootstrap stdenv.
+        # ncurses is included in the SDK. Avoid an infinite recursion with `pkgsStatic` by using a bootstrap stdenv.
         stdenv = if stdenv.hostPlatform.isDarwin then darwin.bootstrapStdenv else stdenv;
       };
 
@@ -8075,12 +8064,7 @@ with pkgs;
 
   xgboostWithCuda = xgboost.override { cudaSupport = true; };
 
-  zlib = callPackage ../development/libraries/zlib {
-    stdenv =
-      # zlib is a dependency of xcbuild. Avoid an infinite recursion by using a bootstrap stdenv
-      # that does not propagate xcrun.
-      if stdenv.hostPlatform.isDarwin then darwin.bootstrapStdenv else stdenv;
-  };
+  zlib = callPackage ../development/libraries/zlib { };
 
   inherit
     (rec {
