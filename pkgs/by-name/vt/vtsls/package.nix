@@ -5,23 +5,23 @@
   nodejs_22,
   gitMinimal,
   gitSetupHook,
-  pnpm_8,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   nix-update-script,
 }:
 let
-  pnpm' = pnpm_8.override { nodejs = nodejs_22; };
+  pnpm' = pnpm_10.override { nodejs = nodejs_22; };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vtsls";
-  version = "0.2.9";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "yioneko";
     repo = "vtsls";
     tag = "server-v${finalAttrs.version}";
-    hash = "sha256-vlw84nigvQqRB9OQBxOmrR9CClU9M4dNgF/nrvGN+sk=";
+    hash = "sha256-RuxaT3u9OOUMbDN6A2biIeUC+Z4leELF3OhKXxmCqbM=";
     fetchSubmodules = true;
   };
 
@@ -36,7 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ nodejs_22 ];
 
-  pnpmWorkspaces = [ "@vtsls/language-server" ];
+  pnpmWorkspaces = [
+    "@vtsls/language-server"
+    "@vtsls/language-service"
+    "@vtsls/vscode-fuzzy"
+  ];
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
@@ -46,8 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
       version
       ;
     pnpm = pnpm';
-    fetcherVersion = 1;
-    hash = "sha256-SdqeTYRH60CyU522+nBo0uCDnzxDP48eWBAtGTL/pqg=";
+    fetcherVersion = 3;
+    hash = "sha256-CWTI8uGfrUFgry3NZ9wPgmdg3yYz4SBu7wvVnR+kS6I=";
   };
 
   # Patches to get submodule sha from file instead of 'git submodule status'
