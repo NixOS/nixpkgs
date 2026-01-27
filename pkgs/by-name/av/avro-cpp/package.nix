@@ -1,30 +1,27 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   cmake,
   boost,
   python3,
   fmt,
   versionCheckHook,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
   pname = "avro-c++";
-  version = "1.12.0";
+  version = "1.12.1";
 
-  src = fetchurl {
-    url = "mirror://apache/avro/avro-${version}/cpp/avro-cpp-${version}.tar.gz";
-    hash = "sha256-8u33cSanWw7BrRZncr4Fg1HOo9dESL5+LO8gBQwPmKs=";
+  src = fetchFromGitHub {
+    owner = "apache";
+    repo = "avro";
+    tag = "release-${version}";
+    hash = "sha256-o1eZgvj3oYIofmmCdBJtCnErZx5srXGo0rVLAMhfwso=";
   };
 
-  # TODO: remove fmt formatter patches when updating to next version
-  # Patches exist upstream but don't apply cleanly.
-  patches = [
-    ./0001-get-rid-of-fmt-fetchcontent.patch
-    ./0002-fix-fmt-name-formatter.patch
-    ./0003-fix-fmt-type-formatter.patch
-  ];
+  sourceRoot = "${src.name}/lang/c++";
 
   nativeBuildInputs = [
     cmake
@@ -34,6 +31,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     boost
     fmt
+    zlib
   ];
 
   doCheck = true;
