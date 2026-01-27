@@ -7,12 +7,19 @@ let
     match
     split
     storeDir
+    escapeRegex
+    removePrefix
     ;
   inherit (lib)
     boolToString
     filter
     isString
     readFile
+    concatStrings
+    length
+    elemAt
+    isList
+    any
     ;
   inherit (lib.filesystem)
     pathIsRegularFile
@@ -507,6 +514,107 @@ let
     else
       throw "repoRevToName: invalid kind";
 
+  /**
+    Filter sources by a list of double star glob patterns.
+
+    # Inputs
+
+    `src`
+
+    : 1\. Function argument
+
+    `patterns`
+
+    : 2\. Function argument
+
+    # Examples
+    :::{.example}
+    ## `sourceByGlobs` usage example
+
+    - Include all .py files recursively
+    ```nix
+    src = sourceByGlobs ./my-subproject ["**\/*.py" ]
+    ```
+
+    - Include all .py files in root directory only
+    ```nix
+    src = sourceByGlobs ./my-subproject ["*.py" ]
+    ```
+
+    :::
+  */
+  sourceByGlobs =
+    let
+      splitPath = path: filter isString (split "\/" path);
+      # Make component regex
+      mkRe =
+        s:
+        if s == "**" then
+          ".*" # Has special handling below
+        else
+          concatStrings (map (tok: if isList tok then "[^\/]*" else escapeRegex tok) (split "\\*+" s));
+
+      # Make a source filter function from pattern
+      mkMatcher =
+        pat:
+        let
+          globs = map mkRe (splitPath pat);
+          glen = length globs;
+        in
+        path: type:
+        let
+          path' = splitPath path;
+          plen = length path';
+
+          recurse =
+            gi: pi:
+            let
+              g = elemAt globs gi;
+              p = elemAt path' pi;
+              m = match g p != null;
+            in
+            if pi >= plen then # Reached end of path
+              gi >= glen || (type == "directory" || type == "symlink") # Only allow partial matches for directories
+            else if gi >= glen then # Reached end of globs
+              false
+            else if g == ".*" then # Special handling for **
+              (
+                # Lookahead for next glob match
+                if (gi + 1) == glen then
+                  true
+                else if (match (elemAt globs (gi + 1)) p != null) then
+                  recurse (gi + 1) pi
+                else if m then
+                  recurse gi (pi + 1)
+                else
+                  false
+              )
+            else if m then
+              recurse (gi + 1) (pi + 1)
+            else
+              false;
+
+        in
+        recurse 0 0;
+
+      mkSourceFilter =
+        root: patterns:
+        let
+          root' = "${toString root}/";
+          matchers = map mkMatcher patterns;
+        in
+        name: type:
+        let
+          name' = removePrefix root' name;
+        in
+        any (m: m name' type) matchers;
+
+    in
+    src: patterns:
+    lib.cleanSourceWith {
+      filter = mkSourceFilter src patterns;
+      inherit src;
+    };
 in
 {
   inherit
@@ -526,6 +634,7 @@ in
 
     sourceByRegex
     sourceFilesBySuffices
+    sourceByGlobs
 
     trace
     ;
