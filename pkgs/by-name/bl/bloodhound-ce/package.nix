@@ -8,6 +8,7 @@
   p7zip,
   python3,
   stdenv,
+  versionCheckHook,
   yarn-berry_3,
 }:
 let
@@ -17,13 +18,13 @@ let
   # reference: https://github.com/SpecterOps/BloodHound/blob/main/dockerfiles/bloodhound.Dockerfile
 
   pname = "bloodhound-ce";
-  version = "8.3.1";
+  version = "8.4.1";
 
   src = fetchFromGitHub {
     owner = "SpecterOps";
     repo = "BloodHound";
     tag = "v${version}";
-    hash = "sha256-mIoQkxUxv2BktFGSLKo5RVEF/7JByiyCWC2o9GWS9w4=";
+    hash = "sha256-TEmt12ELVIj0RgKkw0VRYaLX5okOv3EvLLB1cWJmXFw=";
   };
 
   yarn-berry = yarn-berry_3;
@@ -55,7 +56,7 @@ let
 
     offlineCache = yarn-berry.fetchYarnBerryDeps {
       inherit (finalAttrs) src patches missingHashes;
-      hash = "sha256-0OXOZ9QVpOxqE4r1Gj0dOlEijY+JAqOvanntp5D5t1M=";
+      hash = "sha256-NNu0YwtjTmEpJu3ps/hVgQ2L9iHIxR9afkZ5s2Wv/bk=";
     };
 
     preConfigure = ''
@@ -77,12 +78,12 @@ let
 
   collectors =
     let
-      azver = "v2.8.1";
-      shver = "v2.8.0";
+      azver = "v2.8.2";
+      shver = "v2.8.1";
 
       sharphound = fetchurl {
         url = "https://github.com/SpecterOps/SharpHound/releases/download/${shver}/sharphound_${shver}_windows_x86.zip";
-        hash = "sha256-BjBOxjhQYpqD/qUy9EsuXplK8JAuPU/LE2O0Ooxr+r4=";
+        hash = "sha256-UepCKQ8TV2CCeNvoU5pu5twH22oRSpbo/Hn4aJtXjao=";
       };
     in
     pipe
@@ -90,32 +91,32 @@ let
         {
           os = "darwin";
           arch = "amd64";
-          hash = "sha256-HD5vMc6vt71wj5ST6On417iY3DJZQXdG8Il73H22m9Q=";
+          hash = "sha256-Y5s3OW/kHNHQ/44r9N5TZQOcNatBK6b9TDNoP3aiqMA=";
         }
         {
           os = "darwin";
           arch = "arm64";
-          hash = "sha256-57i+/9gV17pqQqqnEianJdJ6Jtg4DsExMkfAEqaeNns=";
+          hash = "sha256-hK8sTg3kBmayTqPbWk3m2Dj7ABDX6h21+LvKe0xzPCs=";
         }
         {
           os = "linux";
           arch = "amd64";
-          hash = "sha256-8wrEef0+ik5WAsIV7tInyUlNnsUBw6Ux9LE7gVS3Fhs=";
+          hash = "sha256-MFECKv/bMC5Wwo//crIlyl6YDBZ+V0HD9MuhuWBpmAQ=";
         }
         {
           os = "linux";
           arch = "arm64";
-          hash = "sha256-23lokcbd2Yp9pWibsb5SNW/YE/eHpHCFZv2PbBlw0Xo=";
+          hash = "sha256-GG5hl0YXMgaP0BCjsTFY70Jlmu2Cx8Y1wWXAAUabffQ=";
         }
         {
           os = "windows";
           arch = "amd64";
-          hash = "sha256-IkEfEh2VFNTnuUAez6/vMY7sMv4rtDR3Paerev/xoqs=";
+          hash = "sha256-9235b2K+b0vXusGS7LcUiEaMW5EyHFrtYvNNxsTCIVg=";
         }
         {
           os = "windows";
           arch = "arm64";
-          hash = "sha256-qEgmO7oNy/pUXH7lbOoJxNznl2mPofj2R5RGBZdOoUI=";
+          hash = "sha256-rXv50p8oYnYW9tCyzfCQ16UJrIFgd2ZMHJrpI2z+kus=";
         }
       ]
       [
@@ -183,6 +184,10 @@ buildGoModule {
     wrapProgram $out/bin/bloodhound-ce \
       --set BHE_COLLECTORS_BASE_PATH ${collectors}
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   passthru = {
     inherit frontend collectors;
