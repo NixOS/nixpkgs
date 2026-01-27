@@ -26,8 +26,6 @@ buildNpmPackage (finalAttrs: {
 
   strictDeps = true;
 
-  strictDeps = true;
-
   postPatch = ''
     cp ${./package-lock.json} package-lock.json
 
@@ -47,6 +45,7 @@ buildNpmPackage (finalAttrs: {
   postInstall = ''
     wrapProgram $out/bin/claude \
       --set DISABLE_AUTOUPDATER 1 \
+      --set DISABLE_INSTALLATION_CHECKS 1 \
       --unset DEV \
       --prefix PATH : ${
         lib.makeBinPath (
