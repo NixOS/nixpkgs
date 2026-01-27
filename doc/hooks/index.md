@@ -34,6 +34,7 @@ postgresql-test-hook.section.md
 premake.section.md
 python.section.md
 scons.section.md
+systemd-verify-units-hook.section.md
 tauri.section.md
 tetex-tex-live.section.md
 udevCheckHook.section.md
