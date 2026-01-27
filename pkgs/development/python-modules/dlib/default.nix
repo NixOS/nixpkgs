@@ -5,9 +5,8 @@
   more-itertools,
 }:
 
-buildPythonPackage {
+buildPythonPackage.override { inherit (dlib) stdenv; } {
   inherit (dlib)
-    stdenv
     pname
     version
     src

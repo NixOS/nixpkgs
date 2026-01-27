@@ -74,13 +74,12 @@ let
     else
       throw "No GPU targets specified"
   );
+  stdenv = torch.stdenv;
 in
-buildPythonPackage rec {
+buildPythonPackage.override { inherit stdenv; } rec {
   pname = "torchaudio";
   version = "2.9.1";
   pyproject = true;
-
-  stdenv = torch.stdenv;
 
   src = fetchFromGitHub {
     owner = "pytorch";
