@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  go,
   buildGoModule,
   installShellFiles,
   versionCheckHook,
@@ -23,6 +24,16 @@ buildGoModule (finalAttrs: {
   };
 
   vendorHash = "sha256-EqfhHy9OUiaoCI/VFjUJlm917un3Lf4/cUmeHG7w9Bg=";
+
+  # Upstream updates the Go version quickly. In nixpkgs, these updates remain in the staging branch for a while before reaching master.
+  # This adjusts go.mod to match the version available in nixpkgs, but only if they share the same major/minor version.
+  postPatch = ''
+    mod_major_minor="$(grep --only-matching --perl-regexp '^go \K([0-9]+\.[0-9]+)' go.mod)"
+
+    if [[ "$mod_major_minor" == '${lib.versions.majorMinor go.version}' ]]; then
+      '${lib.getExe go}' mod edit -go='${go.version}'
+    fi
+  '';
 
   env.CGO_ENABLED = 0;
 
