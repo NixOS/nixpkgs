@@ -33,12 +33,13 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DCMAKE_INSTALL_LIBDIR=lib"
 
+    "-DSLANG_INCLUDE_PYLIB=ON"
     "-DSLANG_INCLUDE_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
   ];
 
   nativeBuildInputs = [
     cmake
-    python3
+    (python3.withPackages (pyPkgs: with pyPkgs; [ pybind11 ]))
     ninja
   ];
 
@@ -55,6 +56,10 @@ stdenv.mkDerivation (finalAttrs: {
   # TODO: a mysterious linker error occurs when building the unittests on darwin.
   # The error occurs when using catch2_3 in nixpkgs, not when fetching catch2_3 using CMake
   doCheck = !stdenv.hostPlatform.isDarwin;
+
+  # Pass through the python version for which the pylib (python extension
+  # module) was built for.
+  passthru.pythonVersion = python3.pythonVersion;
 
   meta = {
     description = "SystemVerilog compiler and language services";

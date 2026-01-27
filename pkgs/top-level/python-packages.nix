@@ -14714,6 +14714,8 @@ self: super: with self; {
 
   pyskyqremote = callPackage ../development/python-modules/pyskyqremote { };
 
+  pyslang = callPackage ../development/python-modules/pyslang { };
+
   pyslim = callPackage ../development/python-modules/pyslim { };
 
   pyslurm = callPackage ../development/python-modules/pyslurm { inherit (pkgs) slurm; };
