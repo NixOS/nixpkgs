@@ -60,7 +60,7 @@ let
             ;
           tests = {
             inherit (nixosTests) agda;
-            allPackages = withPackages (filter self.lib.isUnbrokenAgdaPackage (attrValues self));
+            allPackages = withPackages (filter self.isUnbrokenAgdaPackage (attrValues self));
           };
         };
         # Agda is a split package with multiple outputs; do not inherit them here.
@@ -150,7 +150,7 @@ let
         tests =
           passthru.tests or { }
           // filterAttrs (
-            name: pkg: self.lib.isUnbrokenAgdaPackage pkg && elem pname (map (pkg: pkg.pname) pkg.buildInputs)
+            name: pkg: self.isUnbrokenAgdaPackage pkg && elem pname (map (pkg: pkg.pname) pkg.buildInputs)
           ) self;
       };
     };

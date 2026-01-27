@@ -25,7 +25,7 @@ let
     {
       inherit mkLibraryFile mkDerivation;
 
-      lib = lib.extend (final: prev: import ../build-support/agda/lib.nix { lib = prev; });
+      inherit (callPackage ../build-support/agda/lib.nix { }) interfaceFile isUnbrokenAgdaPackage;
 
       agda = withPackages [ ];
 
