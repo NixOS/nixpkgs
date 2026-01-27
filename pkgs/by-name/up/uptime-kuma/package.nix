@@ -10,16 +10,16 @@
 
 buildNpmPackage rec {
   pname = "uptime-kuma";
-  version = "1.23.16";
+  version = "1.23.17";
 
   src = fetchFromGitHub {
     owner = "louislam";
     repo = "uptime-kuma";
     rev = version;
-    hash = "sha256-+bhKnyZnGd+tNlsxvP96I9LXOca8FmOPhIFHp7ijmyA=";
+    hash = "sha256-isEo2Ns5bQni17UvJfzxg5c9LllaLoRIy/mI0+whGU0=";
   };
 
-  npmDepsHash = "sha256-5i1NxwHqOahkioyM4wSu2X5KeMu7CdC4BqoUooAshn4=";
+  npmDepsHash = "sha256-WcmVttiubza9uq5jjzt/xnztDnM42DZXnu5BgWbpDbM=";
 
   patches = [
     # Fixes the permissions of the database being not set correctly

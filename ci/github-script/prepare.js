@@ -1,5 +1,6 @@
 const { classify } = require('../supportedBranches.js')
-const { postReview } = require('./reviews.js')
+const { postReview, dismissReviews } = require('./reviews.js')
+const reviewKey = 'prepare'
 
 module.exports = async ({ github, context, core, dry }) => {
   const pull_number = context.payload.pull_request.number
@@ -46,7 +47,7 @@ module.exports = async ({ github, context, core, dry }) => {
         `Please target \`${correctBranch}\` instead.`,
       ].join('\n')
 
-      await postReview({ github, context, core, dry, body })
+      await postReview({ github, context, core, dry, body, reviewKey })
 
       throw new Error('The PR targets a channel branch.')
     }
@@ -170,11 +171,13 @@ module.exports = async ({ github, context, core, dry }) => {
           '  ```',
         ].join('\n')
 
-        await postReview({ github, context, core, dry, body })
+        await postReview({ github, context, core, dry, body, reviewKey })
 
         throw new Error(`The PR contains commits from a different base.`)
       }
     }
+
+    await dismissReviews({ github, context, core, dry, reviewKey })
 
     let mergedSha, targetSha
 

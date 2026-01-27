@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       nydragon
-      bridgesense
+      saadndm
     ];
     mainProgram = "impala";
   };

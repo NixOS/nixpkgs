@@ -6,8 +6,9 @@
 
 const { classify, split } = require('../supportedBranches.js')
 const { readFile } = require('node:fs/promises')
-const { postReview } = require('./reviews.js')
+const { postReview, dismissReviews } = require('./reviews.js')
 
+const reviewKey = 'check-target-branch'
 /**
  * @param {{
  *  github: InstanceType<import('@actions/github/lib/utils').GitHub>,
@@ -17,6 +18,19 @@ const { postReview } = require('./reviews.js')
  * }} CheckTargetBranchProps
  */
 async function checkTargetBranch({ github, context, core, dry }) {
+  /**
+   * @type {{
+   *  attrdiff: {
+   *   added: string[],
+   *   changed: string[],
+   *   removed: string[],
+   *  },
+   *  labels: Record<string, boolean>,
+   *  rebuildCountByKernel: Record<string, number>,
+   *  rebuildsByKernel: Record<string, string[]>,
+   *  rebuildsByPlatform: Record<string, string[]>,
+   * }}
+   */
   const changed = JSON.parse(
     await readFile('comparison/changed-paths.json', 'utf-8'),
   )
@@ -43,6 +57,15 @@ async function checkTargetBranch({ github, context, core, dry }) {
     core.info(
       `Skipping checkTargetBranch: PR is from a development branch (${head})`,
     )
+
+    await dismissReviews({
+      github,
+      context,
+      core,
+      dry,
+      reviewKey,
+    })
+
     return
   }
   // Don't run on PRs against staging branches, wip branches, haskell-updates, etc.
@@ -50,6 +73,15 @@ async function checkTargetBranch({ github, context, core, dry }) {
     core.info(
       `Skipping checkTargetBranch: PR is against a non-primary base branch (${base})`,
     )
+
+    await dismissReviews({
+      github,
+      context,
+      core,
+      dry,
+      reviewKey,
+    })
+
     return
   }
 
@@ -57,12 +89,40 @@ async function checkTargetBranch({ github, context, core, dry }) {
     ...Object.values(changed.rebuildCountByKernel),
   )
   const rebuildsAllTests =
-    changed.attrdiff.changed.includes('nixosTests.simple') ?? false
+    changed.attrdiff.changed.includes('nixosTests.simple')
+
+  // https://github.com/NixOS/nixpkgs/pull/481205#issuecomment-3790123921
+  // These should go to staging-nixos instead of master,
+  // but release-xx.xx (not staging-xx.xx) when backported
+  let isExemptKernelUpdate = false
+  if (prInfo.changed_files === 1 && base.startsWith('release-')) {
+    const changedFiles = (
+      await github.rest.pulls.listFiles({
+        ...context.repo,
+        pull_number,
+      })
+    ).data
+    isExemptKernelUpdate =
+      changedFiles.length === 1 &&
+      changedFiles[0].filename ===
+        'pkgs/os-specific/linux/kernel/kernels-org.json'
+  }
+
+  // https://github.com/NixOS/nixpkgs/pull/483194#issuecomment-3793393218
+  const isExemptHomeAssistantUpdate =
+    maxRebuildCount <= 1500 && head === 'wip-home-assistant'
+
   core.info(
-    `checkTargetBranch: PR causes ${maxRebuildCount} rebuilds and ${rebuildsAllTests ? 'does' : 'does not'} rebuild all NixOS tests.`,
+    [
+      `checkTargetBranch: this PR:`,
+      `  * causes ${maxRebuildCount} rebuilds`,
+      `  * ${rebuildsAllTests ? 'rebuilds' : 'does not rebuild'} all NixOS tests`,
+      `  * ${isExemptKernelUpdate ? 'is' : 'is not'} an exempt kernel update`,
+      `  * ${isExemptHomeAssistantUpdate ? 'is' : 'is not'} an exempt home-assistant update`,
+    ].join('\n'),
   )
 
-  if (maxRebuildCount >= 1000) {
+  if (maxRebuildCount >= 1000 && !isExemptHomeAssistantUpdate) {
     const desiredBranch =
       base === 'master' ? 'staging' : `staging-${split(base).version}`
     const body = [
@@ -77,11 +137,12 @@ async function checkTargetBranch({ github, context, core, dry }) {
       core,
       dry,
       body,
-      event: 'REQUEST_CHANGES',
+      event: 'COMMENT',
+      reviewKey,
     })
 
     throw new Error('This PR is against the wrong branch.')
-  } else if (rebuildsAllTests) {
+  } else if (rebuildsAllTests && !isExemptKernelUpdate) {
     let branchText
     if (base === 'master' && maxRebuildCount >= 500) {
       branchText = '(probably either `staging-nixos` or `staging`)'
@@ -104,11 +165,16 @@ async function checkTargetBranch({ github, context, core, dry }) {
       core,
       dry,
       body,
-      event: 'REQUEST_CHANGES',
+      event: 'COMMENT',
+      reviewKey,
     })
 
     throw new Error('This PR is against the wrong branch.')
-  } else if (maxRebuildCount >= 500) {
+  } else if (
+    maxRebuildCount >= 500 &&
+    !isExemptKernelUpdate &&
+    !isExemptHomeAssistantUpdate
+  ) {
     const stagingBranch =
       base === 'master' ? 'staging' : `staging-${split(base).version}`
     const body = [
@@ -125,10 +191,18 @@ async function checkTargetBranch({ github, context, core, dry }) {
       dry,
       body,
       event: 'COMMENT',
+      reviewKey,
     })
   } else {
-    // Any existing reviews were dismissed by commits.js
     core.info('checkTargetBranch: this PR is against an appropriate branch.')
+
+    await dismissReviews({
+      github,
+      context,
+      core,
+      dry,
+      reviewKey,
+    })
   }
 }
 
