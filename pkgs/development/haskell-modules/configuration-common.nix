@@ -2541,6 +2541,10 @@ with haskellLib;
   # https://github.com/zellige/hs-geojson/commit/2a5ce5a
   geojson = doJailbreak super.geojson;
 
+  # too strict bounds on extra < 1.8
+  # https://github.com/georgefst/svgone/pull/3
+  svgone = doJailbreak super.svgone;
+
   # 2026-01-06: unbreak and modernize to GHC 9.10.3
   reanimate-svg = overrideCabal (drv: {
     prePatch = ''
