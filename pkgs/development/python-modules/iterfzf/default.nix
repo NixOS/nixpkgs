@@ -54,7 +54,7 @@ buildPythonPackage rec {
     description = "Pythonic interface to fzf, a CLI fuzzy finder";
     homepage = "https://github.com/dahlia/iterfzf";
     changelog = "https://github.com/dahlia/iterfzf/releases/tag/${version}";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
     platforms = lib.platforms.unix;
   };
