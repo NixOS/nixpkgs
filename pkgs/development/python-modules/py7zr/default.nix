@@ -51,6 +51,12 @@ buildPythonPackage rec {
     texttable
   ];
 
+  pythonRelaxDeps = [
+    "pyppmd"
+    "pybcj"
+    "inflate64"
+  ];
+
   nativeCheckInputs = [
     py-cpuinfo
     pytest-benchmark
