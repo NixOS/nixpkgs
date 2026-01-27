@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "asmfmt";
   version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "klauspost";
     repo = "asmfmt";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-YxIVqPGsqxvOY0Qz4Jw5FuO9IbplCICjChosnHrSCgc=";
   };
 
@@ -37,8 +37,8 @@ buildGoModule rec {
       your Go code.
     '';
     homepage = "https://github.com/klauspost/asmfmt";
-    changelog = "https://github.com/klauspost/asmfmt/releases/tag/v${version}";
+    changelog = "https://github.com/klauspost/asmfmt/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kalbasit ];
   };
-}
+})
