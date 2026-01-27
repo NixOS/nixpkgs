@@ -20,14 +20,14 @@ let
     ];
   });
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "appvm";
   version = "0.6";
 
   src = fetchFromGitHub {
     owner = "jollheef";
     repo = "appvm";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-n+YputGiNWSOYbwes/rjz0h3RWZONDTc8+LDc0La/KU=";
   };
 
@@ -55,4 +55,4 @@ buildGoModule rec {
     ];
     license = lib.licenses.gpl3;
   };
-}
+})
