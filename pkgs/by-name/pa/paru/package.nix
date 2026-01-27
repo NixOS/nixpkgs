@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "paru";
-  version = "2.1.0";
+  version = "2.1.0-unstable-2026-01-09";
 
   src = fetchFromGitHub {
     owner = "Morganamilo";
     repo = "paru";
-    tag = "v${version}";
-    hash = "sha256-i99f2ngYhfVCKpImJ8L7u2T2FgOt7Chp8DHDbrNh1kw=";
+    rev = "9ac3578807a87858651e81a02586ceb947686e7c";
+    hash = "sha256-TJbhxVnP5UhlCmwxKjXq/XaqPGtzHoN5S+lizm3Bmvs=";
   };
 
-  cargoHash = "sha256-USIceRh24WGV0TIrpuyHs4thjaghpxqZmk2uVKBxlm4=";
+  cargoHash = "sha256-Shp/2jQtO3pulT2gmsAcsEVPpv76nbEiGol+kYD7kr8=";
 
   nativeBuildInputs = [
     gettext
