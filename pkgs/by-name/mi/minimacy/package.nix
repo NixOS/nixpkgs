@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "minimacy";
-  version = "1.2.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "ambermind";
     repo = "minimacy";
     rev = version;
-    hash = "sha256-uA+4dnhOnv7qRE7nqew8a14DGaQblsMY2uBZ+iyLtFU=";
+    hash = "sha256-VR7MCXRJHudFXBorjR6L/umn0p9NIu3zP2XMH3d9DHQ=";
   };
 
   nativeBuildInputs = [ makeBinaryWrapper ];
@@ -55,9 +55,10 @@ stdenv.mkDerivation rec {
   checkPhase = ''
     runHook preCheck
 
-    bin/${
-      if stdenv.hostPlatform.isDarwin then "minimacyMac" else "minimacy"
-    } system/demo/demo.fun.mandelbrot.mcy
+    prog=bin/${if stdenv.hostPlatform.isDarwin then "minimacyMac" else "minimacy"}
+
+    $prog programs/demo/demo.fun.mandelbrot.mcy
+    $prog programs/demo/demo.fun.maze.mcy
 
     runHook postCheck
   '';
@@ -66,7 +67,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out/lib/minimacy
-    cp -r {README.md,LICENSE,system,rom,topLevel.mcy} $out/lib/minimacy
+    cp -r {README.md,LICENSE,rom,topLevel.mcy} $out/lib/minimacy
     install bin/minimacy* -Dt $out/bin
 
     runHook postInstall
