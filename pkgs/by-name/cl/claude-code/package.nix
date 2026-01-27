@@ -31,7 +31,7 @@ buildNpmPackage (finalAttrs: {
 
     # https://github.com/anthropics/claude-code/issues/15195
     substituteInPlace cli.js \
-          --replace-warn '#!/bin/sh' '#!/usr/bin/env sh'
+          --replace-fail '#!/bin/sh' '#!/usr/bin/env sh'
   '';
 
   dontNpmBuild = true;
