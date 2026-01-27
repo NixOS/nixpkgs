@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xdotool";
-  version = "3.20211022.1";
+  version = "4.20251130.1";
 
   src = fetchFromGitHub {
     owner = "jordansissel";
     repo = "xdotool";
     rev = "v${version}";
-    sha256 = "sha256-XFiaiHHtUSNFw+xhUR29+2RUHOa+Eyj1HHfjCUjwd9k=";
+    sha256 = "sha256-Oh+R8TriOfzwhja5EJGF0YdguMIT/p2BckjkTBbv9EU=";
   };
 
   nativeBuildInputs = [
