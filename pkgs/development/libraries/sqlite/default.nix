@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
     "--bindir=${placeholder "bin"}/bin"
     "--includedir=${placeholder "dev"}/include"
     "--libdir=${placeholder "out"}/lib"
-    "--with-tcl=${lib.getLib tcl}/lib"
+    (if stdenv.hostPlatform.isStatic then "--disable-tcl" else "--with-tcl=${lib.getLib tcl}/lib")
   ]
   ++ lib.optional (!interactive) "--disable-readline"
   # autosetup only looks up readline.h in predefined set of directories.
@@ -129,6 +129,8 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+  # When tcl is not available, only run test targets that don't need it.
+  checkTarget = lib.optionalString stdenv.hostPlatform.isStatic "fuzztest sourcetest";
 
   passthru = {
     tests = {
