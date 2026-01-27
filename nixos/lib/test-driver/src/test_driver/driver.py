@@ -69,8 +69,8 @@ class Driver:
 
     tests: str
     vlans: list[VLan]
-    vm_machines: list[QemuMachine]
-    container_machines: list[NspawnMachine]
+    machines_qemu: list[QemuMachine]
+    machines_nspawn: list[NspawnMachine]
     polling_conditions: list[PollingCondition]
     global_timeout: int
     race_timer: threading.Timer
@@ -106,7 +106,7 @@ class Driver:
 
         self.polling_conditions = []
 
-        self.vm_machines = [
+        self.machines_qemu = [
             QemuMachine(
                 name=name,
                 start_command=vm_start_script,
@@ -124,7 +124,7 @@ class Driver:
         if len(container_start_scripts) > 0:
             self._init_nspawn_environment()
 
-        self.container_machines = [
+        self.machines_nspawn = [
             NspawnMachine(
                 name=name,
                 start_command=container_start_script,
@@ -188,7 +188,7 @@ class Driver:
 
     @property
     def machines(self) -> list[QemuMachine | NspawnMachine]:
-        machines = self.vm_machines + self.container_machines
+        machines = self.machines_qemu + self.machines_nspawn
         # Sort the machines by name for consistency with `nodesAndContainers` in <nixos/lib/testing/network.nix>.
         machines.sort(key=lambda machine: machine.name)
         return machines
@@ -228,8 +228,8 @@ class Driver:
         general_symbols = dict(
             start_all=self.start_all,
             test_script=self.test_script,
-            vm_machines=self.vm_machines,
-            container_machines=self.container_machines,
+            machines_qemu=self.machines_qemu,
+            machines_nspawn=self.machines_nspawn,
             vlans=self.vlans,
             driver=self,
             log=self.logger,
