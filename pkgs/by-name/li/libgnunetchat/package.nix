@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchgit,
+  fetchpatch,
   meson,
   ninja,
   pkg-config,
@@ -16,13 +17,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libgnunetchat";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchgit {
     url = "https://git.gnunet.org/libgnunetchat.git";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pRO8i7tHynCqm97RLMBOiWKCl2CAYBE6RXfyIljIiQ0=";
+    hash = "sha256-FKFoIuGGPcYVRBrsqn1rnodRVCLAjLKlgZOs9v4H+8w=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://build.opensuse.org/public/source/openSUSE:Factory/libgnunetchat/libgnunetchat-0.6.1-gnunet-0.26.2.patch?rev=6";
+      hash = "sha256-Q0FvZUXSnYwK+LsN9MoW7v+gPYmD7w4E+bXNDluhxfI=";
+    })
+  ];
 
   strictDeps = true;
 
