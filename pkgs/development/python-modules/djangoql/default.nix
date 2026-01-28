@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "djangoql";
-  version = "0.18.0";
+  version = "0.19.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-x8KJ08BLKLRD42uqIW/FSFf3V6TFNXLTyWaoCr5Zb78=";
+    hash = "sha256-vOCdUoV4V7InRPkyQfFtXGKhsRing04civoUvruWTu4=";
   };
 
   propagatedBuildInputs = [ ply ];
