@@ -11072,8 +11072,6 @@ with pkgs;
     };
   };
 
-  pantalaimon = callPackage ../applications/networking/instant-messengers/pantalaimon { };
-
   pantalaimon-headless = callPackage ../applications/networking/instant-messengers/pantalaimon {
     enableDbusUi = false;
   };
