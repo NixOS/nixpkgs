@@ -6149,7 +6149,7 @@ self: super: with self; {
 
   ghp-import = callPackage ../development/python-modules/ghp-import { };
 
-  ghrepo-stats = callPackage ../development/python-modules/ghrepo-stats { };
+  ghrepo-stats = callPackage ../by-name/gh/ghrepo-stats/unwrapped.nix { };
 
   gibberish-detector = callPackage ../development/python-modules/gibberish-detector { };
 
