@@ -180,6 +180,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
     # system_profiler is not available in the sandbox
     "test_tb_parsing"
+
+    # Flaky in the sandbox (even when __darwinAllowLocalNetworking is enabled)
+    # RuntimeError - Attempted to create a NULL object.
+    "test_sleep_on_multiple_items"
+
+    # Flaky in the sandbox (even when __darwinAllowLocalNetworking is enabled)
+    # AssertionError: Expected 2 results, got 0. Errors: {0: "[ring] Couldn't bind socket (error: 1)"}
+    "test_composed_call_works"
   ];
 
   disabledTestPaths = [

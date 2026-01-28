@@ -56,13 +56,10 @@ python3Packages.buildPythonApplication rec {
             llama-cpp-vulkan
             podman
           ]
-          ++ (
-            with python3Packages;
-            [
-              huggingface-hub
-            ]
-            ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform mlx-lm) mlx-lm
-          )
+          ++ (with python3Packages; [
+            huggingface-hub
+            mlx-lm
+          ])
         )
       }
   '';

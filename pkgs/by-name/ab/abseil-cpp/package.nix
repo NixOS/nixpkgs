@@ -1,50 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  gtest,
-  static ? stdenv.hostPlatform.isStatic,
-  cxxStandard ? null,
-}:
+# Some packages, such as or-tools, strictly require a specific LTS
+# branch of abseil-cpp, and will be broken by arbitrary upgrades.  See
+# also https://abseil.io/about/compatibility, which confirms “Each LTS
+# release should be considered to be a new major version of the
+# library.”  Therefore, we keep packages `abseil-cpp_YYYYMM` for each
+# required LTS branch, leaving `abseil-cpp` as an alias.
 
-stdenv.mkDerivation (finalAttrs: {
-  pname = "abseil-cpp";
-  version = "20250814.1";
-
-  src = fetchFromGitHub {
-    owner = "abseil";
-    repo = "abseil-cpp";
-    tag = finalAttrs.version;
-    hash = "sha256-SCQDORhmJmTb0CYm15zjEa7dkwc+lpW2s1d4DsMRovI=";
-  };
-
-  outputs = [
-    "out"
-    "dev"
-  ];
-
-  cmakeFlags = [
-    (lib.cmakeBool "ABSL_BUILD_TEST_HELPERS" true)
-    (lib.cmakeBool "ABSL_USE_EXTERNAL_GOOGLETEST" true)
-    (lib.cmakeBool "BUILD_SHARED_LIBS" (!static))
-  ]
-  ++ lib.optionals (cxxStandard != null) [
-    (lib.cmakeFeature "CMAKE_CXX_STANDARD" cxxStandard)
-  ];
-
-  strictDeps = true;
-
-  nativeBuildInputs = [ cmake ];
-
-  buildInputs = [ gtest ];
-
-  meta = {
-    description = "Open-source collection of C++ code designed to augment the C++ standard library";
-    homepage = "https://abseil.io/";
-    changelog = "https://github.com/abseil/abseil-cpp/releases/tag/${finalAttrs.version}";
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.all;
-    maintainers = [ lib.maintainers.GaetanLepage ];
-  };
-})
+{ abseil-cpp_202508 }: abseil-cpp_202508
