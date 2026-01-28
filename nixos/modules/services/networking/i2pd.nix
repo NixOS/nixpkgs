@@ -545,4 +545,11 @@ in
         };
       };
     };
+
+  meta = {
+    maintainers = with lib.maintainers; [
+      N4CH723HR3R
+      one-d-wide
+    ];
+  };
 }
