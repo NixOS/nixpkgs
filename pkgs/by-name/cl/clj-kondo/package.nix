@@ -6,11 +6,11 @@
 
 buildGraalvmNativeImage (finalAttrs: {
   pname = "clj-kondo";
-  version = "2025.10.23";
+  version = "2026.01.19";
 
   src = fetchurl {
     url = "https://github.com/clj-kondo/clj-kondo/releases/download/v${finalAttrs.version}/clj-kondo-${finalAttrs.version}-standalone.jar";
-    sha256 = "sha256-bqHCDPL0R/Or6xHb5QDaw32S+Q2hAly3H5BUbQMDU0M=";
+    sha256 = "sha256-S4Fg165BkD1ufuH+8JmDmY/o1GzScZUirEEifGrnmLo=";
   };
 
   extraNativeImageBuildArgs = [
