@@ -480,8 +480,6 @@ with pkgs;
 
   prefer-remote-fetch = import ../build-support/prefer-remote-fetch;
 
-  magika = with python3Packages; toPythonApplication magika;
-
   mysql-shell = mysql-shell_8;
 
   inherit

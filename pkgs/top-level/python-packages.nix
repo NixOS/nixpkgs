@@ -9268,7 +9268,7 @@ self: super: with self; {
 
   magicgui = callPackage ../development/python-modules/magicgui { };
 
-  magika = callPackage ../development/python-modules/magika { };
+  magika = callPackage ../by-name/ma/magika/unwrapped.nix { };
 
   mahotas = callPackage ../development/python-modules/mahotas { };
 
