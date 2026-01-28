@@ -1,0 +1,12 @@
+[Unit]
+Description=Detect Invalid Ventoy Hook
+DefaultDependencies=no
+ConditionPathExists=/etc/initrd-release
+ConditionPathIsDirectory=/ventoy
+Before=sysroot.mount
+OnFailure=emergency.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=@ventoy-compat-protocol@ detect-hook
