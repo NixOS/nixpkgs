@@ -24533,7 +24533,7 @@
     name = "Johannes Klein";
   };
   sith-lord-vader = {
-    email = "abhiayush23@gmail.com";
+    email = "nixpkgs@xpertsre.rocks";
     github = "sith-lord-vader";
     githubId = 24388085;
     name = "Abhishek Adhikari";
