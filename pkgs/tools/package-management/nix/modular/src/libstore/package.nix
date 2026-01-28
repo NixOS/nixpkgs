@@ -25,7 +25,8 @@
 
   withAWS ?
     # Default is this way because there have been issues building this dependency
-    lib.meta.availableOn stdenv.hostPlatform aws-c-common,
+    # TODO: aws-crt-cpp is broken on cygwin, find a good way to check that here
+    lib.meta.availableOn stdenv.hostPlatform aws-c-common && !stdenv.hostPlatform.isCygwin,
 }:
 
 mkMesonLibrary (finalAttrs: {
