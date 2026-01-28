@@ -6,26 +6,24 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "tldr";
-  version = "3.3.0";
+  version = "3.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tldr-pages";
     repo = "tldr-python-client";
-    tag = version;
-    hash = "sha256-lc0Jen8vW4BNg784td1AZa2GTYvXC1d83FnAe5RZqpY=";
+    tag = finalAttrs.version;
+    hash = "sha256-YdVmgV7N67XswcGlUN1hhXpRXGMHhY34VBxfr7i/MBs=";
   };
 
   build-system = with python3Packages; [
-    setuptools
-    wheel
+    hatchling
   ];
 
   dependencies = with python3Packages; [
     termcolor
-    colorama
     shtab
   ];
 
@@ -56,7 +54,7 @@ python3Packages.buildPythonApplication rec {
       through a man page for the correct flags.
     '';
     homepage = "https://tldr.sh";
-    changelog = "https://github.com/tldr-pages/tldr-python-client/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/tldr-pages/tldr-python-client/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       taeer
@@ -65,4 +63,4 @@ python3Packages.buildPythonApplication rec {
     ];
     mainProgram = "tldr";
   };
-}
+})
