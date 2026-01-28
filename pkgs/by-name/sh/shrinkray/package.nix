@@ -1,26 +1,37 @@
 {
+  bash,
+  black,
   coreutils,
   creduce,
   fetchFromGitHub,
   lib,
+  minisat,
   python3,
 }:
 
-python3.pkgs.buildPythonApplication {
+python3.pkgs.buildPythonApplication rec {
   pname = "shrinkray";
-  version = "25.9.1-unstable-2025-09-11";
+  version = "26.1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DRMacIver";
     repo = "shrinkray";
-    rev = "21dac48cdb7f3a375a4ac5e5c782b7d4d3711d36";
-    hash = "sha256-ef0vsWfLl0hJ7WfwInh++GAbw3qTZe8RAVNLxQCTNNs=";
+    tag = "v${version}";
+    hash = "sha256-nQ1k83z03iP+p4qTqk2X7VWaO3zSr3dl9k4mF3fnF8I=";
   };
-  patches = [ ./tests-remove-black.patch ];
   postPatch = ''
     substituteInPlace tests/test_main.py \
       --replace-fail '/usr/bin/env' '${coreutils}/bin/env'
+    substituteInPlace \
+      tests/test_cli.py \
+      tests/test_history.py \
+      tests/test_main.py \
+      tests/test_state.py \
+      tests/test_subprocess_worker.py \
+      tests/test_tui.py \
+      tests/test_validation.py \
+      --replace-fail '#!/bin/bash' '#!${bash}/bin/bash'
   '';
 
   build-system = [ python3.pkgs.setuptools ];
@@ -28,19 +39,28 @@ python3.pkgs.buildPythonApplication {
     click
     chardet
     trio
-    urwid
+    textual
+    textual-plotext
     humanize
     libcst
     exceptiongroup
     binaryornot
   ];
+  propagatedNativeBuildInputs = [
+    black
+    minisat
+  ];
   checkInputs = with python3.pkgs; [
     hypothesis
     hypothesmith
     pytest-trio
+    pytest-textual-snapshot
     pygments
+    pexpect
+    pyte
   ];
   nativeCheckInputs = with python3.pkgs; [
+    pip
     pytestCheckHook
   ];
 
