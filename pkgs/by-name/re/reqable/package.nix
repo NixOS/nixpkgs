@@ -4,6 +4,7 @@
   fetchurl,
   dpkg,
   autoPatchelfHook,
+  wrapGAppsHook3,
   makeBinaryWrapper,
   fontconfig,
   atk,
@@ -38,6 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     dpkg
     autoPatchelfHook
+    wrapGAppsHook3
     makeBinaryWrapper
   ];
 
@@ -76,7 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir $out/bin
     makeWrapper $out/share/reqable/reqable $out/bin/reqable \
       --prefix LD_LIBRARY_PATH : $out/share/reqable/lib \
-      --set GIO_MODULE_DIR "${glib.out}/lib/gio/modules"
   '';
 
   passthru.updateScript = nix-update-script { };
