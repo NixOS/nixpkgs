@@ -21,8 +21,6 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "pic" ];
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
-
   makeFlags = kernelModuleMakeFlags ++ [
     "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "INSTALL_MOD_PATH=${placeholder "out"}"
