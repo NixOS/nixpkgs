@@ -68,7 +68,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall = ''
     wrapProgram $out/bin/dx \
-      --prefix PATH : ${lib.makeBinPath [ wasm-bindgen-cli_0_2_108 ]}
+      --suffix PATH : ${lib.makeBinPath [ wasm-bindgen-cli_0_2_108 ]}
   '';
 
   meta = {

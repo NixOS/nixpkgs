@@ -1393,6 +1393,28 @@ with self;
     };
   };
 
+  AppXMLDocBookBuilder = buildPerlPackage {
+    pname = "docmake";
+    version = "0.1101";
+
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/App-XML-DocBook-Builder-0.1101.tar.gz";
+      hash = "sha256-oa8C24OsbeaNdLIssSz/KH3MNFr0WuQJ67govyhxmqQ=";
+    };
+
+    buildInputs = [
+      ClassXSAccessor
+      TestTrap
+      FileShouldUpdate
+    ];
+
+    meta = {
+      description = "automated builder from DocBook/XML to its output formats (e.g XHTML5 or PDF)";
+      homepage = "https://github.com/shlomif/docmake";
+      license = lib.licenses.mit;
+    };
+  };
+
   ArchiveAnyLite = buildPerlPackage {
     pname = "Archive-Any-Lite";
     version = "0.11";
@@ -13915,6 +13937,26 @@ with self;
         artistic1
         gpl1Plus
       ];
+    };
+  };
+
+  FileShouldUpdate = buildPerlModule {
+    pname = "File-ShouldUpdate";
+    version = "0.2.1";
+
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/File-ShouldUpdate-0.2.1.tar.gz";
+      hash = "sha256-r1k1mNBvHCG63TrnQb8LRQbOJl7ImVDGCj8+cQbes+I=";
+    };
+
+    buildInputs = [
+      PathTiny
+    ];
+
+    meta = {
+      description = "an be used to determine if files should be updated based on the mtime timestamps of their dependencies";
+      homepage = "https://github.com/shlomif/perl-File-ShouldUpdate";
+      license = lib.licenses.mit;
     };
   };
 
@@ -35262,6 +35304,23 @@ with self;
     ];
     meta = {
       description = "Write tests in a declarative specification style";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  TestStrict = buildPerlPackage {
+    pname = "Test-Strict";
+    version = "0.54";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MANWAR/Test-Strict-0.54.tar.gz";
+      hash = "sha256-9oB1F4I6kKlrQN7q7ZqggAgt7UtQpRIE9b4efOd0yFw=";
+    };
+    buildInputs = [ IOStringy ];
+    meta = {
+      description = "Check syntax, presence of use strict; and test coverage";
       license = with lib.licenses; [
         artistic1
         gpl1Plus

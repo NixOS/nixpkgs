@@ -20,14 +20,14 @@
 
 stdenv.mkDerivation {
   pname = "xrgears";
-  version = "1.0.1-unstable-2025-03-03";
+  version = "1.0.1-unstable-2026-01-20";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "monado";
     repo = "demos/xrgears";
-    rev = "caa21e13c2de83d33fb617c8f9b70a0d77c82453";
-    sha256 = "sha256-VAcH+3yokDnUbFYldQOrkUi+WgcTnk6gBeKScyAyv6c=";
+    rev = "034d3dbb17beb4e393f1524a8508fb353bafebea";
+    sha256 = "sha256-nbAwR4bFBSv2tYJgX3uH318uyRGfz9Qxsj+bAxagqIg=";
   };
 
   nativeBuildInputs = [

@@ -3,6 +3,7 @@
   pname,
   version,
   src,
+  passthru,
   meta,
   undmg,
 }:
@@ -12,6 +13,7 @@ stdenvNoCC.mkDerivation {
     pname
     version
     src
+    passthru
     meta
     ;
 
@@ -23,7 +25,7 @@ stdenvNoCC.mkDerivation {
     runHook preInstall
 
     mkdir -p "$out/Applications"
-    cp -R "Lens.app" "$out/Applications/Lens.app"
+    cp -R "Freelens.app" "$out/Applications/Freelens.app"
 
     runHook postInstall
   '';

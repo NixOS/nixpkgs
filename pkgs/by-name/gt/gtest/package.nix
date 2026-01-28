@@ -4,6 +4,9 @@
   fetchFromGitHub,
   cmake,
   ninja,
+  withAbseil ? false,
+  abseil-cpp,
+  re2,
   # Enable C++17 support
   #     https://github.com/google/googletest/issues/3081
   # Projects that require a higher standard can override this package.
@@ -47,6 +50,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     ninja
+  ]
+  ++ lib.optionals withAbseil [
+    abseil-cpp
+    re2
   ];
 
   cmakeFlags = [
@@ -54,7 +61,8 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals (cxx_standard != null) [
     "-DCMAKE_CXX_STANDARD=${cxx_standard}"
-  ];
+  ]
+  ++ lib.optional withAbseil "-DGTEST_HAS_ABSL=ON";
 
   meta = {
     description = "Google's framework for writing C++ tests";

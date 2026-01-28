@@ -308,9 +308,9 @@
   };
 
   glimmer = {
-    version = "1.4.0";
-    url = "github:ember-tooling/tree-sitter-glimmer?ref=v1.4.0-tree-sitter-glimmer";
-    hash = "sha256-4kEOvObNnZtt2aaf0Df+R/Wvyk/JlFnsvbasDIJxt4w=";
+    version = "1.6.0";
+    url = "github:ember-tooling/tree-sitter-glimmer?ref=v1.6.0-tree-sitter-glimmer";
+    hash = "sha256-AW+jd1Kl3krTgnPc8NoXfSM91fOan/wIB/mo/feWj74=";
     meta = {
       license = lib.licenses.mit;
     };
@@ -598,9 +598,9 @@
   };
 
   markdown = {
-    version = "0.3.2";
+    version = "0.5.2";
     url = "github:tree-sitter-grammars/tree-sitter-markdown";
-    hash = "sha256-OlVuHz9/5lxsGVT+1WhKx+7XtQiezMW1odiHGinzro8=";
+    hash = "sha256-JJCFksPDwaiOmU+nZ3PHeLHlPKWTZBTnqcD/tQorWdU=";
     location = "tree-sitter-markdown";
     meta = {
       license = lib.licenses.mit;
@@ -609,9 +609,9 @@
 
   markdown-inline = {
     language = "markdown_inline";
-    version = "0.3.2";
+    version = "0.5.2";
     url = "github:tree-sitter-grammars/tree-sitter-markdown";
-    hash = "sha256-OlVuHz9/5lxsGVT+1WhKx+7XtQiezMW1odiHGinzro8=";
+    hash = "sha256-JJCFksPDwaiOmU+nZ3PHeLHlPKWTZBTnqcD/tQorWdU=";
     location = "tree-sitter-markdown-inline";
     meta = {
       license = lib.licenses.mit;
