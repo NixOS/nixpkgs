@@ -15100,6 +15100,8 @@ self: super: with self; {
 
   pytest-postgresql = callPackage ../development/python-modules/pytest-postgresql { };
 
+  pytest-pretty = callPackage ../development/python-modules/pytest-pretty { };
+
   pytest-pudb = callPackage ../development/python-modules/pytest-pudb { };
 
   pytest-pycodestyle = callPackage ../development/python-modules/pytest-pycodestyle { };
