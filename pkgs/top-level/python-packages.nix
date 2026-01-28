@@ -17259,7 +17259,7 @@ self: super: with self; {
 
   shapely = callPackage ../development/python-modules/shapely { };
 
-  shaperglot = callPackage ../development/python-modules/shaperglot { };
+  shaperglot = callPackage ../by-name/sh/shaperglot/unwrapped.nix { };
 
   shared = callPackage ../development/python-modules/shared { };
 

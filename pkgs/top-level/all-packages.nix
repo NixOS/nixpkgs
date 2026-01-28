@@ -1011,8 +1011,6 @@ with pkgs;
 
   inherit (callPackage ../development/libraries/sdbus-cpp { }) sdbus-cpp sdbus-cpp_2;
 
-  shaperglot = with python3Packages; toPythonApplication shaperglot;
-
   supermin = callPackage ../tools/virtualization/supermin {
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
