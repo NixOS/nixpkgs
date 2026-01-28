@@ -17,7 +17,7 @@ services.xserver = {
   videoDrivers = [ "nvidia" ];
 };
 
-nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
+nixpkgs.config.allowUnfreePackages = [
   "nvidia-x11"
   "nvidia-settings"
 ];
