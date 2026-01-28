@@ -20058,6 +20058,8 @@ self: super: with self; {
 
   ufmt = callPackage ../development/python-modules/ufmt { };
 
+  ufo-extractor = callPackage ../development/python-modules/ufo-extractor { };
+
   ufo2ft = callPackage ../development/python-modules/ufo2ft { };
 
   ufolib2 = callPackage ../development/python-modules/ufolib2 { };
