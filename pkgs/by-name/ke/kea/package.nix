@@ -6,6 +6,7 @@
   # build time
   bison,
   flex,
+  makeBinaryWrapper,
   meson,
   ninja,
   pkg-config,
@@ -20,12 +21,18 @@
   krb5,
   withMysql ? stdenv.buildPlatform.system == stdenv.hostPlatform.system,
   libmysqlclient,
+  mariadb,
   withPostgresql ? stdenv.buildPlatform.system == stdenv.hostPlatform.system,
   libpq,
+  postgresql,
 
   # tests
   nixosTests,
 }:
+
+let
+  keaAdminUtils = (lib.optional withMysql mariadb) ++ (lib.optional withPostgresql postgresql);
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kea";
@@ -49,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "doc"
-    "python"
+    "db"
   ];
 
   mesonFlags = [
@@ -72,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     bison
     flex
+    makeBinaryWrapper
     meson
     ninja
     pkg-config
@@ -103,8 +111,16 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postFixup = ''
-    mkdir -p $python/lib
-    mv $out/lib/python* $python/lib/
+    mkdir -p $db/bin $db/share/kea
+    mv $out/bin/kea-admin $db/bin/
+    mv $out/share/kea/scripts $db/share/kea/
+
+    find $db -type f -exec sed -i 's,${placeholder "out"},${placeholder "db"},g' {} \+
+
+    ${lib.optionalString (keaAdminUtils != [ ]) ''
+      wrapProgramBinary $db/bin/kea-admin \
+          --suffix PATH : ${lib.makeBinPath keaAdminUtils}
+    ''}
   '';
 
   passthru.tests = {
