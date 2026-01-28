@@ -1,0 +1,19 @@
+diff --git a/scripts/vars.mjs b/scripts/vars.mjs
+index 1366049981..d750898821 100755
+--- a/scripts/vars.mjs
++++ b/scripts/vars.mjs
+@@ -10,13 +10,7 @@
+ 
+ const electronInfo = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../node_modules/electron/package.json')))
+ 
+-export let version = childProcess.execSync('git describe --tags', { encoding:'utf-8' })
+-version = version.substring(1).trim()
+-version = version.replace('-', '-c')
+-
+-if (version.includes('-c')) {
+-    version = semver.inc(version, 'prepatch').replace('-0', `-nightly.${process.env.REV ?? 0}`)
+-}
++export let version = "@version@"
+ 
+ export const builtinPlugins = [
+     'tabby-core',
