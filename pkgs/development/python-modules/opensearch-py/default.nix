@@ -41,12 +41,6 @@ buildPythonPackage rec {
     hash = "sha256-wAk+P64w4N0DdBFsDT3cPIyRa269dtjPr8l2W2454e4=";
   };
 
-  patches = [
-    # Remove delete event_loop fixture to fix test with pytest-asyncio 1.x
-    # reference: https://github.com/opensearch-project/opensearch-py/pull/936
-    ./remove-delete-event-loop-fixture.patch
-  ];
-
   nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
