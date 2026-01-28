@@ -13007,6 +13007,12 @@
     githubId = 3267697;
     name = "Joshua Potter";
   };
+  jrrom = {
+    email = "maintainer@jrrom.com";
+    github = "jrrom";
+    githubId = 77691121;
+    name = "Jerome Baeyens";
+  };
   js6pak = {
     name = "js6pak";
     email = "me@6pak.dev";
