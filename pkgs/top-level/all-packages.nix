@@ -987,8 +987,6 @@ with pkgs;
   alice-tools-qt5 = alice-tools.override { withQt5 = true; };
   alice-tools-qt6 = alice-tools.override { withQt6 = true; };
 
-  auditwheel = with python3Packages; toPythonApplication auditwheel;
-
   btrsync = with python3Packages; toPythonApplication btrsync;
 
   davinci-resolve-studio = callPackage ../by-name/da/davinci-resolve/package.nix {
