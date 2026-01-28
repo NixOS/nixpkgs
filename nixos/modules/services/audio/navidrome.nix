@@ -7,6 +7,8 @@
 
 let
   inherit (lib)
+    literalExpression
+    mkDefault
     mkEnableOption
     mkPackageOption
     mkOption
@@ -14,6 +16,7 @@ let
     ;
   inherit (lib.types)
     bool
+    package
     port
     str
     submodule
@@ -27,7 +30,16 @@ in
 
       enable = mkEnableOption "Navidrome music server";
 
-      package = mkPackageOption pkgs "navidrome" { };
+      package = mkPackageOption pkgs "navidrome" {
+        example = ''
+          pkgs.navidrome.override {
+            plugins = with pkgs.navidromePlugins; [
+              wikimedia
+              coverartarchive
+            ];
+          }
+        '';
+      };
 
       settings = mkOption {
         type = submodule {
@@ -50,6 +62,28 @@ in
               default = false;
               description = "Enable anonymous usage data collection, see <https://www.navidrome.org/docs/getting-started/insights/> for details.";
               type = bool;
+            };
+
+            Plugins = {
+              Enabled = mkEnableOption "Enable plugins in navidrome";
+              Folder = mkOption {
+                default = "${cfg.package}/share/plugins";
+                defaultText = literalExpression ''"''${package}/share/plugins"'';
+                description = "Location of the plugin folders (or symlinks to them)";
+                type = str;
+                example = literalExpression ''
+                  Folder = lib.linkFarm "plugins" [
+                    {
+                      path = "''\'''${cfg.package}/share/plugins/wikimedia";
+                      name = "wikimedia";
+                    }
+                    {
+                      path = "''\'''${cfg.package}/share/plugins/wikimedia";
+                      name = "coverartarchive";
+                    }
+                  ];
+                '';
+              };
             };
           };
         };
@@ -78,7 +112,7 @@ in
         description = "Whether to open the TCP port in the firewall";
       };
 
-      environmentFile = lib.mkOption {
+      environmentFile = mkOption {
         type = lib.types.nullOr lib.types.path;
         default = null;
         description = "Environment file, used to set any secret ND_* environment variables.";
@@ -161,7 +195,8 @@ in
             ];
             RestrictRealtime = true;
             LockPersonality = true;
-            MemoryDenyWriteExecute = true;
+            # Plugin Functionality uses mmap
+            MemoryDenyWriteExecute = mkDefault (!cfg.settings.Plugins.Enabled);
             UMask = "0066";
             ProtectHostname = true;
           };

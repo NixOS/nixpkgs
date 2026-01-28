@@ -2929,6 +2929,8 @@ with pkgs;
 
   nanoemoji = with python3Packages; toPythonApplication nanoemoji;
 
+  navidromePlugins = recurseIntoAttrs (callPackage ../by-name/na/navidrome/plugins { });
+
   netdata = callPackage ../tools/system/netdata {
     protobuf = protobuf_21;
   };
