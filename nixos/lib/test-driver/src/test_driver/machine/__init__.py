@@ -1510,6 +1510,52 @@ class NspawnMachine(BaseMachine):
         )
         return (cp.returncode, cp.stdout)
 
+    def _stream_journal(self) -> None:
+        assert self.process is not None, "Container not started"
+        journal_path = self.state_dir / "var/log/journal"
+
+        # 1. Wait for the directory to actually be created by the container
+        self.log(f"Waiting for journal at {journal_path}...")
+        max_attempts = 10
+        attempts = 0
+        while not journal_path.exists() and attempts < max_attempts:
+            time.sleep(1)
+            attempts += 1
+
+        if not journal_path.exists():
+            self.log(f"Error: Journal directory {journal_path} never appeared.")
+            return
+
+        # 2. Start the journalctl process
+        # Using a loop here handles cases where journalctl might exit unexpectedly
+        while self.process.poll() is None:  # While the container is still running
+            with subprocess.Popen(
+                ["journalctl", "-f", "-D", journal_path, "-o", "short-monotonic"],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True,
+                bufsize=1,  # Line buffered.
+            ) as log_proc:
+                assert log_proc.stdout is not None, (
+                    "Failed to capture journalctl output"
+                )
+                try:
+                    for line in iter(log_proc.stdout.readline, ""):
+                        if line:
+                            self.log_serial(line.rstrip())
+                        if self.process.poll() is not None:
+                            break
+                except Exception as e:
+                    self.log(f"Error while reading journalctl output: {e}")
+                finally:
+                    log_proc.terminate()
+                    log_proc.wait()
+
+            # If we reach here, journalctl stopped while the container is still running.
+            # Wait a moment before retrying to avoid CPU pegging if something is wrong.
+            if self.process.poll() is None:
+                time.sleep(1)
+
     def start(self) -> None:
         if self.process is not None:
             return
@@ -1527,6 +1573,9 @@ class NspawnMachine(BaseMachine):
         self.pid = self.process.pid
 
         self.log(f"systemd-nspawn running (pid {self.pid})")
+
+        journal_thread = threading.Thread(target=self._stream_journal, daemon=True)
+        journal_thread.start()
 
     def wait_for_shutdown(self) -> None:
         if self.process is None:
