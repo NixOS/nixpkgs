@@ -971,8 +971,6 @@ with pkgs;
 
   alice-tools-qt6 = qt6Packages.callPackage ../tools/games/alice-tools { };
 
-  auditwheel = with python3Packages; toPythonApplication auditwheel;
-
   davinci-resolve-studio = callPackage ../by-name/da/davinci-resolve/package.nix {
     studioVariant = true;
   };

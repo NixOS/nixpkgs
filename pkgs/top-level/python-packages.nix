@@ -1183,7 +1183,7 @@ self: super: with self; {
 
   auditok = callPackage ../development/python-modules/auditok { };
 
-  auditwheel = callPackage ../development/python-modules/auditwheel {
+  auditwheel = callPackage ../by-name/au/auditwheel/unwrapped.nix {
     inherit (pkgs)
       bzip2
       gnutar
