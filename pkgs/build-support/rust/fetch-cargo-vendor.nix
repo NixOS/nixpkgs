@@ -7,6 +7,7 @@
   cargo,
   nix-prefetch-git,
   cacert,
+  makeBinaryWrapper,
 }:
 
 let
@@ -91,17 +92,35 @@ let
     }
     // removeAttrs args removedArgs
   );
+
 in
 
-runCommand "${name}-vendor"
+(runCommand "${name}-vendor"
   {
     inherit vendorStaging;
-    nativeBuildInputs = [
-      fetchCargoVendorUtil
-      cargo
-      replaceWorkspaceValues
-    ];
+    nativeBuildInputs = [ makeBinaryWrapper ];
   }
   ''
-    fetch-cargo-vendor-util create-vendor "$vendorStaging" "$out"
+    makeBinaryWrapper ${fetchCargoVendorUtil}/bin/fetch-cargo-vendor-util $out/bin/unpack-vendor \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          cargo
+          replaceWorkspaceValues
+        ]
+      } \
+      --add-flags create-vendor \
+      --add-flags "$vendorStaging"
+
+    # just a decoration
+    ln -s "$vendorStaging" "$out/vendor-staging"
   ''
+).overrideAttrs # idk I just wanted to have access to finalAttrs
+  (
+    finalAttrs: _: {
+      passthru.vendorFetched =
+        runCommand "${name}-vendor-fetched" { nativeBuildInputs = [ finalAttrs.finalPackage ]; }
+          ''
+            unpack-vendor $out
+          '';
+    }
+  )
