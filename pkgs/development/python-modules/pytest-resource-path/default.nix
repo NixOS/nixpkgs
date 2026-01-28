@@ -21,11 +21,6 @@ buildPythonPackage rec {
     hash = "sha256-f0jN6V6tQRbr/DHOKKTrFCb1EBUUxZAQRckMy2iiVqI=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "pytest-runner" ""
-  '';
-
   build-system = [ setuptools ];
 
   buildInputs = [ pytest ];
