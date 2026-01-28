@@ -252,7 +252,7 @@ let
             else
               null;
           description = ''
-            Location of the dokuwiki acl rules. Mutually exclusive with services.dokuwiki.acl
+            Location of the dokuwiki acl rules.
             Mutually exclusive with services.dokuwiki.acl which is preferred.
             Consult documentation <https://www.dokuwiki.org/acl> for further instructions.
             Example: <https://github.com/splitbrain/dokuwiki/blob/master/conf/acl.auth.php.dist>
@@ -294,7 +294,7 @@ let
           type = types.listOf types.path;
           default = [ ];
           description = ''
-            List of path(s) to respective plugin(s) which are copied from the 'plugin' directory.
+            List of path(s) to respective plugin(s) which are copied into the 'plugin' directory.
 
             ::: {.note}
             These plugins need to be packaged before use, see example.
@@ -312,7 +312,7 @@ let
                 };
                 installPhase = "mkdir -p $out; cp -R * $out/";
               };
-            # And then pass this theme to the plugin list like this:
+            # And then pass this plugin to the plugin list like this:
             in [ plugin-icalevents ]
           '';
         };
@@ -321,7 +321,7 @@ let
           type = types.listOf types.path;
           default = [ ];
           description = ''
-            List of path(s) to respective template(s) which are copied from the 'tpl' directory.
+            List of path(s) to respective template(s) which are copied into the 'tpl' directory.
 
             ::: {.note}
             These templates need to be packaged before use, see example.
