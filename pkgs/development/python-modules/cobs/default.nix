@@ -36,5 +36,10 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/cmcqueen/cobs-python/";
     license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      kip93
+      sbc64
+      victormeriqui
+    ];
   };
 }

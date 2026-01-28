@@ -23550,6 +23550,12 @@
     githubId = 720864;
     name = "Sébastien Bourdeauducq";
   };
+  sbc64 = {
+    name = "Sebastian Bolaños Heston";
+    email = "sebastian.bolanos.heston@ororatech.com";
+    github = "sbc64";
+    githubId = 10123236;
+  };
   sbellem = {
     email = "sbellem@gmail.com";
     github = "sbellem";
@@ -27729,6 +27735,12 @@
     github = "vgskye";
     githubId = 116078858;
     keys = [ { fingerprint = "CDEA 7E04 69E3 0885 A754  4B05 0104 BC05 F41B 77B8"; } ];
+  };
+  victormeriqui = {
+    name = "Victor Meriqui";
+    email = "victor.meriqui@ororatech.com";
+    github = "victormeriqui";
+    githubId = 1396008;
   };
   videl = {
     email = "thibaut.smith@mailbox.org";
