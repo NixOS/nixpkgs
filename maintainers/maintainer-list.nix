@@ -9974,6 +9974,12 @@
     githubId = 1949438;
     name = "Guillaume Matheron";
   };
+  guilvareux = {
+    email = "paul@alcock.dev";
+    github = "guilvareux";
+    githubId = 25768075;
+    name = "Paul Alcock";
+  };
   guitargeek = {
     email = "jonas.rembser@cern.ch";
     github = "guitargeek";
