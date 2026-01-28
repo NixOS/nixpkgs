@@ -975,8 +975,6 @@ with pkgs;
     studioVariant = true;
   };
 
-  dehinter = with python3Packages; toPythonApplication dehinter;
-
   gamemode = callPackage ../tools/games/gamemode {
     libgamemode32 = pkgsi686Linux.gamemode.lib;
   };
