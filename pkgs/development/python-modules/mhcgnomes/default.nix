@@ -9,7 +9,7 @@
 
 buildPythonPackage {
   pname = "mhcgnomes";
-  version = "1.8.6";
+  version = "2.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
