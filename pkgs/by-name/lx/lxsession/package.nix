@@ -61,7 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://wiki.lxde.org/en/LXSession";
     description = "Classic LXDE session manager";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.shamilton ];
     platforms = lib.platforms.linux;
     mainProgram = "lxsession";
   };

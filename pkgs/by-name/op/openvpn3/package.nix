@@ -129,7 +129,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/OpenVPN/openvpn3-linux/";
     changelog = "https://github.com/OpenVPN/openvpn3-linux/releases/tag/v${version}";
     maintainers = with lib.maintainers; [
-      shamilton
       progrm_jarvis
     ];
     platforms = lib.platforms.linux;

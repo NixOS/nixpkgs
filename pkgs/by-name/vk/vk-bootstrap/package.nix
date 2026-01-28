@@ -45,7 +45,6 @@ stdenv.mkDerivation rec {
     description = "Vulkan Bootstrapping Library";
     license = lib.licenses.mit;
     homepage = "https://github.com/charles-lunarg/vk-bootstrap";
-    maintainers = with lib.maintainers; [ shamilton ];
     platforms = lib.platforms.all;
   };
 }

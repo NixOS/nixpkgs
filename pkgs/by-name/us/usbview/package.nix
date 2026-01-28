@@ -34,7 +34,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
     homepage = "http://www.kroah.com/linux-usb/";
     maintainers = with lib.maintainers; [
-      shamilton
       h7x4
     ];
     platforms = lib.platforms.linux;

@@ -36,7 +36,6 @@ rustPlatform.buildRustPackage rec {
     description = "Unicode tool with a terminal user interface";
     homepage = "https://github.com/eyeplum/cicero-tui";
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ shamilton ];
     platforms = lib.platforms.linux;
     mainProgram = "cicero";
   };

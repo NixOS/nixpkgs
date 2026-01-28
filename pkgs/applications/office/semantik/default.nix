@@ -94,7 +94,6 @@ mkDerivation rec {
     description = "Mind-mapping application for KDE";
     license = lib.licenses.mit;
     homepage = "https://waf.io/semantik.html";
-    maintainers = [ lib.maintainers.shamilton ];
     platforms = lib.platforms.linux;
     mainProgram = "semantik";
   };

@@ -52,7 +52,6 @@ stdenv.mkDerivation {
     homepage = "https://dominic.familie-radermacher.ch/projekte/ptouch-print/";
     license = lib.licenses.gpl3Plus;
     mainProgram = "ptouch-print";
-    maintainers = with lib.maintainers; [ shamilton ];
     platforms = lib.platforms.unix;
   };
 }

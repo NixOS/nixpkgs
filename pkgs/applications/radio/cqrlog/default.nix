@@ -104,7 +104,6 @@ stdenv.mkDerivation rec {
     mainProgram = "cqrlog";
     homepage = "https://www.cqrlog.com/";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ shamilton ];
     platforms = lib.platforms.linux;
   };
 }

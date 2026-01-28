@@ -68,7 +68,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     homepage = "https://github.com/vkohaupt/vokoscreenNG";
     maintainers = with lib.maintainers; [
-      shamilton
       dietmarw
     ];
     platforms = lib.platforms.linux;
