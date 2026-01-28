@@ -24,15 +24,14 @@
 }:
 
 let
-  pname = "caribou";
-  version = "0.4.21";
   pythonEnv = python3.withPackages (ps: with ps; [ pygobject3 ]);
 in
 stdenv.mkDerivation rec {
-  name = "caribou-${version}";
+  pname = "caribou";
+  version = "0.4.21";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/caribou/${lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/caribou/${lib.versions.majorMinor version}/caribou-${version}.tar.xz";
     hash = "sha256-nEPZ9L0w9P6n94DU6LFPdYkQfFLpy2vSAr0NHCBk3lU=";
   };
 
