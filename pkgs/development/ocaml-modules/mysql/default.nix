@@ -12,16 +12,13 @@
 # qualche cambiamento negli header .h
 # TODO: compilazione di moduli dipendenti da zip, ssl, tcl, gtk, gtk2
 
-let
-  pname = "ocaml-mysql";
-in
-
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  name = "ocaml${ocaml.version}-${pname}-${version}";
+  pname = "ocaml-mysql";
   version = "1.2.1";
 
   src = fetchurl {
-    url = "http://ygrek.org.ua/p/release/ocaml-mysql/${name}.tar.gz";
+    url = "http://ygrek.org.ua/p/release/ocaml-mysql/ocaml-mysql-${version}.tar.gz";
     sha256 = "06mb2bq7v37wn0lza61917zqgb4bsg1xxb73myjyn88p6khl6yl2";
   };
 
