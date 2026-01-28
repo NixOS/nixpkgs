@@ -1,9 +1,9 @@
 {
-  stdenv,
   lib,
+  stdenv,
+  python3Packages,
   fetchFromGitHub,
   installShellFiles,
-  python3Packages,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -30,16 +30,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
   nativeBuildInputs = [ installShellFiles ];
 
   nativeCheckInputs = with python3Packages; [
-    pytest
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    runHook preCheck
-    pytest -k 'not test_error_message'
-    runHook postCheck
-  '';
-
-  doCheck = true;
+  disabledTests = [
+    # Requires internet access
+    "test_error_message"
+  ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd tldr \
