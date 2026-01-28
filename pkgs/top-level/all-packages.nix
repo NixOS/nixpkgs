@@ -305,6 +305,8 @@ with pkgs;
   buildFHSEnvChroot = callPackage ../build-support/build-fhsenv-chroot { }; # Deprecated; use buildFHSEnv/buildFHSEnvBubblewrap
   buildFHSEnvBubblewrap = callPackage ../build-support/build-fhsenv-bubblewrap { };
 
+  calibrePlugins = lib.recurseIntoAttrs (callPackage ../applications/misc/calibre-plugins { });
+
   cameractrls-gtk4 = cameractrls.override { withGtk = 4; };
 
   cameractrls-gtk3 = cameractrls.override { withGtk = 3; };
