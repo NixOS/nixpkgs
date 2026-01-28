@@ -58,6 +58,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
+  passthru.tests = {
+    python3-bindings = python3.pkgs.silver-platter;
+  };
+
   meta = {
     description = "Automate the creation of merge proposals for scriptable changes";
     homepage = "https://jelmer.uk/code/silver-platter";
