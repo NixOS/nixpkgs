@@ -77,6 +77,10 @@
       description = "GVariant formatted string serialization functions";
     }
     {
+      name = "ron";
+      description = "RON (Rusty Object Notation) serialization and deserialization functions";
+    }
+    {
       name = "customisation";
       description = "Functions to customise (derivation-related) functions, derivations, or attribute sets";
     }
