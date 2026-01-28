@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "search-vulns";
-  version = "0.8.4";
+  version = "1.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ra1nb0rn";
     repo = "search_vulns";
     tag = "v${version}";
-    hash = "sha256-lvFx+ozbw7cYAJvaEFkeFxG+CfvbvDO0VRuNJ/Ub+bA=";
+    hash = "sha256-xdZq4Er+0CT59Iv0mEcmkZcUM+xbBi/x+TtBNCiyhbY=";
     fetchSubmodules = true;
   };
 
@@ -26,9 +26,11 @@ python3.pkgs.buildPythonApplication rec {
     aiolimiter
     cpe-search
     cvss
+    pydantic
     requests
     tqdm
     ujson
+    univers
   ];
 
   optional-dependencies = with python3.pkgs; {
@@ -42,9 +44,11 @@ python3.pkgs.buildPythonApplication rec {
       gunicorn
       mariadb
       markdown
+      pydantic
       requests
       tqdm
       ujson
+      univers
     ];
     mariadb = [ mariadb ];
     web = [
