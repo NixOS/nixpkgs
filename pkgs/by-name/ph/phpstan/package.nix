@@ -49,6 +49,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.mit;
     mainProgram = "phpstan";
-    maintainers = [ lib.maintainers.patka ];
+    maintainers = with lib.maintainers; [
+      patka
+      piotrkwiecinski
+    ];
   };
 })
