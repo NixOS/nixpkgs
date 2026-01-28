@@ -449,9 +449,35 @@ in
           EnvironmentFile = optional (cfg.environmentFile != null) cfg.environmentFile;
 
           # TODO: attempt to upstream these options
+          CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
+          MemoryDenyWriteExecute = true;
+          LockPersonality = true;
           NoNewPrivileges = true;
+          ProcSubset = "pid";
           PrivateDevices = true;
+          ProtectClock = true;
+          ProtectControlGroups = true;
           ProtectHome = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          ProtectProc = "invisible";
+          ProtectSystem = "strict";
+          RestrictAddressFamilies = [
+            "AF_UNIX"
+            "AF_INET"
+            "AF_INET6"
+          ];
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          RemoveIPC = true;
+          SystemCallArchitectures = "native";
+          SystemCallFilter = [
+            "@system-service"
+            "~@privileged"
+          ];
         };
     };
 
