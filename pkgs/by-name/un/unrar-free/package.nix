@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  argp-standalone,
   fetchFromGitLab,
   autoreconfHook,
   libarchive,
@@ -24,7 +25,14 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [ libarchive ];
+  buildInputs = [
+    libarchive
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    argp-standalone
+  ];
+
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-largp";
 
   setupHook = ./setup-hook.sh;
 
@@ -50,6 +58,5 @@ stdenv.mkDerivation (finalAttrs: {
       thiagokokada
     ];
     platforms = lib.platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })
