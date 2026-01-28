@@ -79,7 +79,7 @@ python3.pkgs.buildPythonApplication rec {
 
   postFixup = ''
     # Wrap a helper script in an unusual location.
-    wrapPythonProgramsIn "$out/${python3.sitePackages}/cambalache/priv/merengue" "$out $pythonPath"
+    wrapPythonProgramsIn "$out/${python3.sitePackages}/cambalache/priv/merengue" "$out ''${pythonPath[*]}"
   '';
 
   passthru = {

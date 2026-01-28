@@ -58,7 +58,9 @@ let
         mkdir -p $out/bin
         cp $unwrapped/bin/.mbc-wrapped $out/bin/mbc
         cp $unwrapped/bin/.maubot-wrapped $out/bin/maubot
-        wrapPythonProgramsIn "$out/bin" "${lib.optionalString (baseConfig != null) "$out "}$pythonPath"
+        wrapPythonProgramsIn "$out/bin" "${
+          lib.optionalString (baseConfig != null) "$out "
+        }''${pythonPath[*]}"
       '';
 
       passthru = {

@@ -164,7 +164,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   postFixup = ''
-    wrapPythonProgramsIn "$out/lib/pince" "$out $pythonPath"
+    wrapPythonProgramsIn "$out/lib/pince" "$out ''${pythonPath[*]}"
   '';
 
   passthru = {
