@@ -6,14 +6,14 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "types-openpyxl";
-  version = "3.1.5.20250809";
+  version = "3.1.5.20250919";
 
   pyproject = true;
 
   src = fetchPypi {
     pname = "types_openpyxl";
     inherit (finalAttrs) version;
-    hash = "sha256-SVNvoYo6i1Z7bSZx0zAdjCQOwvG895UQ9LrZ+skjLL0=";
+    hash = "sha256-IytZBnc+66zhUJuJlM2t2gQ/aSz9upv7uGypIdVNMtc=";
   };
 
   build-system = [ setuptools ];
