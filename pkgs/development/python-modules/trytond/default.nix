@@ -29,12 +29,12 @@
 
 buildPythonPackage rec {
   pname = "trytond";
-  version = "7.8.1";
+  version = "7.8.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-F2sb3JgbNjbmgS5o9vUCWOBgII4Vv2E8Ml6ijTQA8D8=";
+    hash = "sha256-12RJbRg0yVl1S46ePpbzfht9FzOj/WOzna6sKWJ/v/U=";
   };
 
   build-system = [ setuptools ];
