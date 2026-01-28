@@ -802,7 +802,7 @@ self: super: with self; {
 
   anywidget = callPackage ../development/python-modules/anywidget { };
 
-  aocd = callPackage ../development/python-modules/aocd { };
+  aocd = callPackage ../by-name/ao/aocd/unwrapped.nix { };
 
   aocd-example-parser = callPackage ../development/python-modules/aocd-example-parser { };
 
