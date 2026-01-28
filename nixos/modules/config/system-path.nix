@@ -50,23 +50,16 @@ let
     ++ [ pkgs.stdenv.cc.libc ];
   corePackagesText = "[ ${lib.concatMapStringsSep " " (n: "pkgs.${n}") corePackageNames} ]";
 
-  defaultPackageNames = [
-    "perl"
-    "rsync"
-    "strace"
-  ];
-  defaultPackages = map (
-    n:
-    let
-      pkg = pkgs.${n};
-    in
-    lib.setPrio ((pkg.meta.priority or lib.meta.defaultPriority) + 3) pkg
-  ) defaultPackageNames;
-  defaultPackagesText = "[ ${lib.concatMapStringsSep " " (n: "pkgs.${n}") defaultPackageNames} ]";
-
 in
 
 {
+  imports = [
+    (lib.mkRemovedOptionModule [
+      "environment"
+      "defaultPackages"
+    ] "Use environment.systemPackages instead")
+  ];
+
   options = {
 
     environment = {
@@ -99,29 +92,6 @@ in
           Set of core packages for a normal interactive system.
 
           Only change this if you know what you're doing!
-
-          Like with systemPackages, packages are installed to
-          {file}`/run/current-system/sw`. They are
-          automatically available to all users, and are
-          automatically updated every time you rebuild the system
-          configuration.
-        '';
-      };
-
-      defaultPackages = lib.mkOption {
-        type = lib.types.listOf lib.types.package;
-        default = defaultPackages;
-        defaultText = lib.literalMD ''
-          these packages, with their `meta.priority` numerically increased
-          (thus lowering their installation priority):
-
-              ${defaultPackagesText}
-        '';
-        example = [ ];
-        description = ''
-          Set of default packages that aren't strictly necessary
-          for a running system, entries can be removed for a more
-          minimal NixOS installation.
 
           Like with systemPackages, packages are installed to
           {file}`/run/current-system/sw`. They are
@@ -183,7 +153,7 @@ in
     # merging.
     environment.corePackages = corePackages;
 
-    environment.systemPackages = config.environment.corePackages ++ config.environment.defaultPackages;
+    environment.systemPackages = config.environment.corePackages;
 
     environment.pathsToLink = [
       "/bin"
