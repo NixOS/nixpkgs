@@ -47,11 +47,11 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    mkdir -p "$out/lib/pkgconfig"
-    cat >"$out/lib/pkgconfig/libajantv2.pc" <<EOF
+    mkdir -p "$dev/lib/pkgconfig"
+    cat >"$dev/lib/pkgconfig/libajantv2.pc" <<EOF
     prefix=$out
     libdir=\''${prefix}/lib
-    includedir=\''${prefix}/include/libajantv2
+    includedir=$dev/include/libajantv2
 
     Name: libajantv2
     Description: Library for controlling AJA NTV2 video devices
