@@ -1460,6 +1460,7 @@
   ./services/scheduling/cron.nix
   ./services/scheduling/fcron.nix
   ./services/scheduling/prefect.nix
+  ./services/scheduling/scx-loader.nix
   ./services/scheduling/scx.nix
   ./services/search/elasticsearch-curator.nix
   ./services/search/elasticsearch.nix
