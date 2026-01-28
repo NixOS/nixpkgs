@@ -102,6 +102,8 @@ stdenv.mkDerivation (finalAttrs: {
       nickcao
       leona
       anish
+      krit
+      jefferyoo
     ];
   };
 })

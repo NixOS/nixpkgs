@@ -1,6 +1,7 @@
 {
   fetchFromGitHub,
   gradle_8,
+  jdk17_headless,
   jre,
   lib,
   makeWrapper,
@@ -26,19 +27,14 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "atlauncher";
-  version = "3.4.38.2";
+  version = "3.4.40.2";
 
   src = fetchFromGitHub {
     owner = "ATLauncher";
     repo = "ATLauncher";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-x8ch8BdUckweuwEvsOxYG2M5UmbW4fRjF/jJ6feIjIA=";
+    hash = "sha256-sV6eWIgx/0e+uUCbbRwAPPqNcFWUQWyuHnzrwcYJkqA=";
   };
-
-  postPatch = ''
-    # exclude UI tests
-    sed -i "/test {/a\    exclude '**/BasicLauncherUiTest.class'" build.gradle
-  '';
 
   nativeBuildInputs = [
     gradle
@@ -55,6 +51,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   gradleBuildTask = "shadowJar";
 
   gradleFlags = [
+    "-Dorg.gradle.java.home=${jdk17_headless.home}"
     "--exclude-task"
     "createExe"
   ];

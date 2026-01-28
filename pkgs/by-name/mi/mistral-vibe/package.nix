@@ -12,14 +12,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mistral-vibe";
-  version = "1.3.5";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mistralai";
     repo = "mistral-vibe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-R+sh8xQpLDIKqQwE1JjguP4NwE2Jz7tuXNK1+EsHnrA=";
+    hash = "sha256-2waDKL1TWVw2BXl0oqV9+kH86w7dWpz1j61VQSxJW5Q=";
   };
 
   build-system = with python3Packages; [
@@ -37,7 +37,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
   dependencies = with python3Packages; [
     agent-client-protocol
-    aiofiles
+    anyio
     httpx
     mcp
     mistralai
@@ -70,20 +70,15 @@ python3Packages.buildPythonApplication (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
   versionCheckKeepEnvironment = [ "HOME" ];
-  pytestFlags = [ "tests/cli/test_clipboard.py" ];
 
-  disabledTests = [
-    # AssertionError: assert '/nix/store/00000000000000000000000000000000-bash-5.3p3/bin/sh:
-    # warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8): No such file or directory\n' == ''
-    "test_decodes_non_utf8_bytes"
-    "test_runs_echo_successfully"
-    "test_truncates_output_to_max_bytes"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # AssertionError: assert 3 == 4
-    "test_get_copy_fns_with_wl_copy"
-    "test_get_copy_fns_with_both_system_tools"
-    "test_get_copy_fns_with_xclip"
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # AssertionError
+    "test_rebuilds_index_when_mass_change_threshold_is_exceeded"
+    "test_updates_index_incrementally_by_default"
+    "test_updates_index_on_file_creation"
+    "test_updates_index_on_file_deletion"
+    "test_updates_index_on_file_rename"
+    "test_updates_index_on_folder_rename"
   ];
 
   disabledTestPaths = [

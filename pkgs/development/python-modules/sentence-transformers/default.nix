@@ -34,14 +34,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "sentence-transformers";
-  version = "5.2.1";
+  version = "5.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "sentence-transformers";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MMiZBnFwfgLxmiyIQoEA9Kw+J24uUeypbAcenvR7rjw=";
+    hash = "sha256-+ZJb56yo58nJtQz6LIyqsQA4yAFuDGeRRlkj0+iwUJ4=";
   };
 
   build-system = [ setuptools ];
