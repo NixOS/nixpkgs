@@ -236,6 +236,15 @@ in
           "${configFile}"
         ];
       };
+
+      tmpfiles.settings."stalwart-mail"."${dataDir}/${
+        if useLegacyStorage then "data/blobs" else "db"
+      }".d =
+        {
+          group = "stalwart-mail";
+          mode = "700";
+          user = "stalwart-mail";
+        };
     };
 
     # Make admin commands available in the shell
