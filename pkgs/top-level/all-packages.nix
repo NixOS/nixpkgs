@@ -8406,6 +8406,7 @@ with pkgs;
     {
       inherit apacheHttpd;
       mod_auth_mellon = callPackage ../servers/http/apache-modules/mod_auth_mellon { };
+      mod_authnz_external = callPackage ../servers/http/apache-modules/mod-authnz-external { };
       mod_ca = callPackage ../servers/http/apache-modules/mod_ca { };
       mod_crl = callPackage ../servers/http/apache-modules/mod_crl { };
       mod_cspnonce = callPackage ../servers/http/apache-modules/mod_cspnonce { };
