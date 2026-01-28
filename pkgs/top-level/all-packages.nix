@@ -11064,10 +11064,6 @@ with pkgs;
 
   openrazer-daemon = python3Packages.toPythonApplication python3Packages.openrazer-daemon;
 
-  orpie = callPackage ../applications/misc/orpie {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_14;
-  };
-
   osmscout-server = libsForQt5.callPackage ../applications/misc/osmscout-server {
     protobuf = protobuf_21.override {
       abseil-cpp = abseil-cpp_202103.override {
