@@ -25159,6 +25159,13 @@
     githubId = 94006354;
     name = "steamwalker";
   };
+  Stebalien = {
+    email = "steven@stebalien.com";
+    github = "Stebalien";
+    githubId = 310393;
+    name = "Steven Allen";
+    keys = [ { fingerprint = "327B 20CE 21EA 68CF A774  8675 7C92 3221 5899 410C"; } ];
+  };
   steeleduncan = {
     email = "steeleduncan@hotmail.com";
     github = "steeleduncan";

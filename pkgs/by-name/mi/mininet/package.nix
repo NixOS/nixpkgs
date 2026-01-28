@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    wrapPythonProgramsIn "$out/bin" "$py $pythonPath"
+    wrapPythonProgramsIn "$out/bin" "$py ''${pythonPath[*]}"
     wrapProgram "$out/bin/mnexec" \
       --prefix PATH : "${generatedPath}"
     wrapProgram "$out/bin/mn" \

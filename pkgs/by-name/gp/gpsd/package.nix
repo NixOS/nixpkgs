@@ -124,7 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # remove binaries for x-less install because xgps sconsflag is partially broken
   postFixup = ''
-    wrapPythonProgramsIn $out/bin "$out $pythonPath"
+    wrapPythonProgramsIn $out/bin "$out ''${pythonPath[*]}"
   '';
 
   meta = {

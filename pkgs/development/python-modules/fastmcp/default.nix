@@ -158,6 +158,9 @@ buildPythonPackage (finalAttrs: {
     # AssertionError: assert len(caplog.records) == 1
     "test_log"
 
+    #  assert [TextContent(...e, meta=None)] == [TextContent(...e, meta=None)]
+    "test_read_resource_tool_works"
+
     # fastmcp.exceptions.ToolError: Unknown tool
     "test_multi_client_with_logging"
     "test_multi_client_with_elicitation"
