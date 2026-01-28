@@ -490,11 +490,7 @@ with haskellLib;
   # Fix 32bit struct being used for 64bit syscall on 32bit platforms
   # https://github.com/haskellari/lukko/issues/15
   lukko = appendPatches [
-    (fetchpatch {
-      name = "lukko-ofd-locking-32bit.patch";
-      url = "https://github.com/haskellari/lukko/pull/32/commits/4e69ffad996c3771f50017b97375af249dd17c85.patch";
-      sha256 = "0n8vig48irjz0jckc20dzc23k16fl5hznrc0a81y02ms72msfwi1";
-    })
+    ./patches/lukko-ofd-locking-32bit.patch
   ] super.lukko;
 
   # Relax version constraints (network < 3.2, text < 2.1)
@@ -1005,11 +1001,9 @@ with haskellLib;
 
   # Group of libraries by same upstream maintainer for interacting with
   # Telegram messenger. Bit-rotted a bit since 2020.
-  tdlib = appendPatch (fetchpatch {
-    # https://github.com/poscat0x04/tdlib/pull/3
-    url = "https://github.com/poscat0x04/tdlib/commit/8eb9ecbc98c65a715469fdb8b67793ab375eda31.patch";
-    hash = "sha256-vEI7fTsiafNGBBl4VUXVCClW6xKLi+iK53fjcubgkpc=";
-  }) (doJailbreak super.tdlib);
+  tdlib = appendPatch ./patches/tdlib-relax-dependencies-and-fix-build-with-aeson.patch (
+    doJailbreak super.tdlib
+  );
   tdlib-types = doJailbreak super.tdlib-types;
   tdlib-gen = doJailbreak super.tdlib-gen;
   # https://github.com/poscat0x04/language-tl/pull/1
@@ -1589,10 +1583,7 @@ with haskellLib;
         hash = "sha256-FLr1KfBaSYzI6MiZIBY1CkgAb5sThvvgjrSAN8EV0h4=";
       })
       # Fix build with vector >= 0.13, mtl >= 2.3 (https://github.com/redelmann/scat/pull/8)
-      (fetchpatch {
-        url = "https://github.com/redelmann/scat/compare/e8e064f7e6a152fe25a6ccd743573a16974239d0..c6a3636548d628f32d8edc73a333188ce24141a7.patch";
-        hash = "sha256-BU4MUn/TnZHpZBlX1vDHE7QZva5yhlLTb8zwpx7UScI";
-      })
+      ./patches/scat-fix-build-in-stackage-lts-22.patch
     ];
   }) super.scat;
 
@@ -1764,15 +1755,9 @@ with haskellLib;
   svgcairo = overrideCabal (drv: {
     patches = drv.patches or [ ] ++ [
       # Remove when https://github.com/gtk2hs/svgcairo/pull/12 goes in.
-      (fetchpatch {
-        url = "https://github.com/gtk2hs/svgcairo/commit/348c60b99c284557a522baaf47db69322a0a8b67.patch";
-        sha256 = "0akhq6klmykvqd5wsbdfnnl309f80ds19zgq06sh1mmggi54dnf3";
-      })
+      ./patches/svgcairo-update-cpp-option-to-fix-the-build.patch
       # Remove when https://github.com/gtk2hs/svgcairo/pull/13 goes in.
-      (fetchpatch {
-        url = "https://github.com/dalpd/svgcairo/commit/d1e0d7ae04c1edca83d5b782e464524cdda6ae85.patch";
-        sha256 = "1pq9ld9z67zsxj8vqjf82qwckcp69lvvnrjb7wsyb5jc6jaj3q0a";
-      })
+      ./patches/svgcairo-fix-librsvg-2.51.0-greater.patch
     ];
     editedCabalFile = null;
     revision = null;
@@ -1784,10 +1769,7 @@ with haskellLib;
   ascii-numbers = doJailbreak super.ascii-numbers;
 
   # Upstream PR: https://github.com/jkff/splot/pull/9
-  splot = appendPatch (fetchpatch {
-    url = "https://github.com/jkff/splot/commit/a6710b05470d25cb5373481cf1cfc1febd686407.patch";
-    sha256 = "1c5ck2ibag2gcyag6rjivmlwdlp5k0dmr8nhk7wlkzq2vh7zgw63";
-  }) super.splot;
+  splot = appendPatch ./patches/splot-fix-build-remove-broken-module.patch super.splot;
 
   # Support ansi-terminal 1.1: https://github.com/facebookincubator/retrie/pull/73
   retrie = appendPatch (fetchpatch {
@@ -1814,10 +1796,7 @@ with haskellLib;
   hcoord = overrideCabal (drv: {
     # Remove when https://github.com/danfran/hcoord/pull/8 is merged.
     patches = [
-      (fetchpatch {
-        url = "https://github.com/danfran/hcoord/pull/8/commits/762738b9e4284139f5c21f553667a9975bad688e.patch";
-        sha256 = "03r4jg9a6xh7w3jz3g4bs7ff35wa4rrmjgcggq51y0jc1sjqvhyz";
-      })
+      ./patches/permit-hunit-dependency-in-vresion-1-6.patch
     ];
     # Remove when https://github.com/danfran/hcoord/issues/9 is closed.
     doCheck = false;
@@ -1949,11 +1928,7 @@ with haskellLib;
   ];
 
   # https://github.com/k0001/pipes-aeson/pull/21
-  pipes-aeson = appendPatch (fetchpatch {
-    url = "https://github.com/k0001/pipes-aeson/commit/08c25865ef557b41d7e4a783f52e655d2a193e18.patch";
-    relative = "pipes-aeson";
-    sha256 = "sha256-kFV6CcwKdMq+qSgyc+eIApnaycq5A++pEEVr2A9xvts=";
-  }) super.pipes-aeson;
+  pipes-aeson = appendPatch ./patches/pipes-aeson-relax-lower-bound-on-attoparsec-aeson.patch super.pipes-aeson;
 
   moto-postgresql = appendPatches [
     # https://gitlab.com/k0001/moto/-/merge_requests/3
