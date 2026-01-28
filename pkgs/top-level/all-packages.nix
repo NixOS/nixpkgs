@@ -273,7 +273,6 @@ with pkgs;
 
   # addDriverRunpath is the preferred package name, as this enables
   # many more scenarios than just opengl now.
-  cve = with python3Packages; toPythonApplication cvelib;
 
   # Zip file format only allows times after year 1980, which makes e.g. Python
   # wheel building fail with:
