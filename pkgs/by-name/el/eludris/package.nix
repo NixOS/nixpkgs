@@ -19,8 +19,14 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-JpXjnkZHz12YxgTSqTcWdQTkrMugP7ZGw48145BeBZk=";
 
-  cargoBuildFlags = [ "-p eludris" ];
-  cargoTestFlags = [ "-p eludris" ];
+  cargoBuildFlags = [
+    "--package"
+    "eludris"
+  ];
+  cargoTestFlags = [
+    "--package"
+    "eludris"
+  ];
   buildInputs = [ openssl ];
   nativeBuildInputs = [ pkg-config ];
 
