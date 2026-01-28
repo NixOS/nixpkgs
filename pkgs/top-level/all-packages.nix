@@ -1131,8 +1131,6 @@ with pkgs;
 
   git-autofixup = perlPackages.GitAutofixup;
 
-  git-revise = with python3Packages; toPythonApplication git-revise;
-
   ### APPLICATIONS/EMULATORS
 
   _86box-with-roms = _86box.override {
