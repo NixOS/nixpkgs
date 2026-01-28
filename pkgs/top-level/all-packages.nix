@@ -2956,20 +2956,48 @@ with pkgs;
   nodejs = nodejs_24;
   nodejs-slim = nodejs-slim_24;
 
-  nodejs_20 = callPackage ../development/web/nodejs/v20.nix { };
-  nodejs-slim_20 = callPackage ../development/web/nodejs/v20.nix { enableNpm = false; };
-  corepack_20 = callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs_20; };
+  nodejs-slim_20 = callPackage ../development/web/nodejs/v20.nix { };
+  nodejs_20 = symlinkJoin {
+    pname = "nodejs";
+    inherit (nodejs-slim_20) version passthru meta;
+    paths = [
+      nodejs-slim_20
+      nodejs-slim_20.npm
+    ];
+  };
+  corepack_20 = callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs-slim_20; };
 
-  nodejs_22 = callPackage ../development/web/nodejs/v22.nix { };
-  nodejs-slim_22 = callPackage ../development/web/nodejs/v22.nix { enableNpm = false; };
-  corepack_22 = callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs_22; };
+  nodejs-slim_22 = callPackage ../development/web/nodejs/v22.nix { };
+  nodejs_22 = symlinkJoin {
+    pname = "nodejs";
+    inherit (nodejs-slim_22) version passthru meta;
+    paths = [
+      nodejs-slim_22
+      nodejs-slim_22.npm
+    ];
+  };
+  corepack_22 = callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs-slim_22; };
 
-  nodejs_24 = callPackage ../development/web/nodejs/v24.nix { };
-  nodejs-slim_24 = callPackage ../development/web/nodejs/v24.nix { enableNpm = false; };
-  corepack_24 = callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs_24; };
+  nodejs-slim_24 = callPackage ../development/web/nodejs/v24.nix { };
+  nodejs_24 = symlinkJoin {
+    pname = "nodejs";
+    inherit (nodejs-slim_24) version passthru meta;
+    paths = [
+      nodejs-slim_24
+      nodejs-slim_24.npm
+    ];
+  };
+  corepack_24 = callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs-slim_24; };
 
-  nodejs_25 = callPackage ../development/web/nodejs/v25.nix { };
-  nodejs-slim_25 = callPackage ../development/web/nodejs/v25.nix { enableNpm = false; };
+  nodejs-slim_25 = callPackage ../development/web/nodejs/v25.nix { };
+  nodejs_25 = symlinkJoin {
+    pname = "nodejs";
+    inherit (nodejs-slim_25) version passthru meta;
+    paths = [
+      nodejs-slim_25
+      nodejs-slim_25.npm
+    ];
+  };
 
   # Update this when adding the newest nodejs major version!
   nodejs_latest = nodejs_25;
