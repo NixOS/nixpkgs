@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
+  rizin
 }:
 
 buildPythonPackage rec {
@@ -14,6 +15,11 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-KKqPFMGgsmiYZ0tXTIhhvhLDfm/iV8JcYeVc4akezYc=";
   };
+
+  postPatch = ''
+    substituteInPlace rzpipe/open_sync.py \
+      --replace-fail "cmd = [rze," "cmd = ['${lib.getExe rizin}',"
+  '';
 
   build-system = [ setuptools ];
 
