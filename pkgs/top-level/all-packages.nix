@@ -1131,8 +1131,6 @@ with pkgs;
 
   git-autofixup = perlPackages.GitAutofixup;
 
-  ghrepo-stats = with python3Packages; toPythonApplication ghrepo-stats;
-
   git-filter-repo = with python3Packages; toPythonApplication git-filter-repo;
 
   git-revise = with python3Packages; toPythonApplication git-revise;
