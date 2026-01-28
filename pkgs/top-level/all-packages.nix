@@ -993,8 +993,6 @@ with pkgs;
     enableWsi = true;
   };
 
-  font-v = with python3Packages; toPythonApplication font-v;
-
   fontbakery = with python3Packages; toPythonApplication fontbakery;
 
   genealogos-api = genealogos-cli.override {
