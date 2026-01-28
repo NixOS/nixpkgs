@@ -6264,10 +6264,6 @@ with pkgs;
     replay-node-cli
     ;
 
-  rescript-language-server = callPackage ../by-name/re/rescript-language-server/package.nix {
-    rescript-editor-analysis = vscode-extensions.chenglou92.rescript-vscode.rescript-editor-analysis;
-  };
-
   rnginline = with python3Packages; toPythonApplication rnginline;
 
   rr = callPackage ../development/tools/analysis/rr { };
