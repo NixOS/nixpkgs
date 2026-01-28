@@ -9,12 +9,14 @@
   pytestCheckHook,
   pytest-html,
   pytest-benchmark,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "logical-unification";
   version = "0.4.7";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pythological";
@@ -23,7 +25,12 @@ buildPythonPackage rec {
     hash = "sha256-m1wB7WOGb/io4Z7Zfl/rckh08j6IKSiiwFKMvl5UzHg=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = [
     toolz
     multipledispatch
   ];
