@@ -6169,7 +6169,7 @@ self: super: with self; {
 
   git-dummy = callPackage ../development/python-modules/git-dummy { };
 
-  git-filter-repo = callPackage ../development/python-modules/git-filter-repo { };
+  git-filter-repo = callPackage ../by-name/gi/git-filter-repo/unwrapped.nix { };
 
   git-find-repos = callPackage ../development/python-modules/git-find-repos { };
 

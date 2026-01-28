@@ -1167,8 +1167,6 @@ with pkgs;
 
   git-autofixup = perlPackages.GitAutofixup;
 
-  git-filter-repo = with python3Packages; toPythonApplication git-filter-repo;
-
   git-revise = with python3Packages; toPythonApplication git-revise;
 
   ### APPLICATIONS/EMULATORS
