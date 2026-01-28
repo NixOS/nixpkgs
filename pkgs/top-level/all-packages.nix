@@ -948,8 +948,6 @@ with pkgs;
 
   _7zz-rar = _7zz.override { enableUnfree = true; };
 
-  actdiag = with python3.pkgs; toPythonApplication actdiag;
-
   opnplug = adlplug.override { type = "OPN"; };
 
   acme-client = callPackage ../tools/networking/acme-client {

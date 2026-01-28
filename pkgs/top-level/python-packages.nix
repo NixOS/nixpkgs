@@ -57,7 +57,7 @@ self: super: with self; {
 
   acres = callPackage ../development/python-modules/acres { };
 
-  actdiag = callPackage ../development/python-modules/actdiag { };
+  actdiag = callPackage ../by-name/ac/actdiag/unwrapped.nix { };
 
   actron-neo-api = callPackage ../development/python-modules/actron-neo-api { };
 
