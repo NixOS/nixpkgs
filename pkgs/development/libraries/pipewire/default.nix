@@ -80,7 +80,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pipewire";
-  version = "1.4.9";
+  version = "1.5.84";
 
   outputs = [
     "out"
@@ -96,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "pipewire";
     repo = "pipewire";
     rev = finalAttrs.version;
-    sha256 = "sha256-380KY17l6scVchZAoSHswTvceYl427e79eU11JQallc=";
+    sha256 = "sha256-+ZIBXFwzETHNflboEBdPlHrg4lLDg0rnrcIpos4Z4a0=";
   };
 
   patches = [
@@ -208,7 +208,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "avb" stdenv.hostPlatform.isLinux)
     (lib.mesonEnable "v4l2" stdenv.hostPlatform.isLinux)
     (lib.mesonEnable "pipewire-v4l2" stdenv.hostPlatform.isLinux)
-    (lib.mesonEnable "systemd" enableSystemd)
+    (lib.mesonEnable "libsystemd" enableSystemd)
     (lib.mesonEnable "systemd-system-service" enableSystemd)
     (lib.mesonEnable "udev" (!enableSystemd && stdenv.hostPlatform.isLinux))
     (lib.mesonEnable "ffmpeg" true)
@@ -223,6 +223,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "bluez5-codec-lc3plus" false)
     (lib.mesonEnable "bluez5-codec-lc3" bluezSupport)
     (lib.mesonEnable "bluez5-codec-ldac" (bluezSupport && ldacbtSupport))
+    (lib.mesonEnable "bluez5-codec-ldac-dec" false) # Wasn't included previously and was causing mason errors
+    (lib.mesonEnable "bluez5-plc-spandsp" false) # Same as above
+    (lib.mesonEnable "onnxruntime" false) # Same as above
     (lib.mesonEnable "opus" true)
     (lib.mesonOption "sysconfdir" "/etc")
     (lib.mesonEnable "raop" raopSupport)
