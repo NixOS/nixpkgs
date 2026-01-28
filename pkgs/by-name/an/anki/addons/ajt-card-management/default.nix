@@ -2,7 +2,6 @@
   lib,
   anki-utils,
   fetchFromGitHub,
-  nix-update-script,
 }:
 
 anki-utils.buildAnkiAddon (finalAttrs: {
@@ -26,7 +25,6 @@ anki-utils.buildAnkiAddon (finalAttrs: {
         };
       });
   sourceRoot = "${finalAttrs.src.name}/card_management";
-  passthru.updateScript = nix-update-script { };
   meta = {
     description = "Reset, Learn, and Grade cards from the card browser";
     longDescription = ''
