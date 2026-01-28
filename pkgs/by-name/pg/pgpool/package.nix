@@ -18,6 +18,12 @@ stdenv.mkDerivation rec {
   pname = "pgpool-II";
   version = "4.7.0";
 
+  outputs = [
+    "out"
+    "dev"
+    "lib"
+  ];
+
   src = fetchFromGitHub {
     owner = "pgpool";
     repo = "pgpool2";
