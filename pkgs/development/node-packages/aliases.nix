@@ -178,6 +178,7 @@ mapAliases {
   flood = pkgs.flood; # Added 2023-07-25
   forever = throw "'forever' has been removed because it was unmaintained upstream"; # Added 2025-11-14
   inherit (pkgs) fx; # Added 2025-11-06
+  inherit (pkgs) gamedig; # added 2025-12-04
   ganache = throw "ganache was removed because it was deprecated upstream"; # added 2024-12-02
   inherit (pkgs) gatsby-cli; # Added 2025-11-05
   generator-code = throw "generator-code was removed because it provides no executable"; # added 2023-09-24
