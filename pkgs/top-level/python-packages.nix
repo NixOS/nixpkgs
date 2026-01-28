@@ -3422,7 +3422,7 @@ self: super: with self; {
 
   cv2-enumerate-cameras = callPackage ../development/python-modules/cv2-enumerate-cameras { };
 
-  cvelib = callPackage ../development/python-modules/cvelib { };
+  cvelib = callPackage ../by-name/cv/cve/unwrapped.nix { };
 
   cvss = callPackage ../development/python-modules/cvss { };
 
