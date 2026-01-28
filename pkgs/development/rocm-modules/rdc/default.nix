@@ -49,7 +49,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rdc";
-  version = "7.1.1";
+  version = "7.2.0";
 
   outputs = [
     "out"
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "rdc";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-oJS0fBeISpgjZkaMfFl/Yq7mPOsdaZDqiRjSPv7kT1Q=";
+    hash = "sha256-gF17mcbsqsL2K9pwTAVG9E6nVY4pi2lC88WyPa0xMes=";
   };
 
   patches = [

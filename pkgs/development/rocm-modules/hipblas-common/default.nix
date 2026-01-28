@@ -8,13 +8,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipblas-common";
-  version = "7.1.1";
+  version = "7.2.0";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "hipBLAS-common";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-sswqYIv3c5ArT6dQ3MRru7ZZVA0VxoKW/a0pYTBpjgE=";
+    hash = "sha256-oOelDrk7TLe9/17fzaw6CDPL4MGAoITJL90ahHzhaAE=";
   };
 
   nativeBuildInputs = [

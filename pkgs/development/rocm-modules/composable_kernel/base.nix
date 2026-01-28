@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   pname = "composable_kernel_base";
-  version = "7.1.1";
+  version = "7.2.0";
 
   outputs = [
     "out"
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "composable_kernel";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-exdkyTIK03dzlCXHm3j8ehEb9NxLOxPX9QyfMsiCgSs=";
+    hash = "sha256-ABL0MSmWtqAeY5uyw8Ib64npB2v82baUnzLpmrEgDn4=";
   };
 
   nativeBuildInputs = [

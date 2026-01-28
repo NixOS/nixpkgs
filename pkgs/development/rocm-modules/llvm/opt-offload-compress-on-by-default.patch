@@ -17,6 +17,6 @@ index 33f12fb2d075d..ba35f65210c7a 100644
    if (TCArgs.hasFlag(options::OPT_offload_compress,
 -                     options::OPT_no_offload_compress, false))
 +                     options::OPT_no_offload_compress, true))
-     CmdArgs.push_back("-compress");
+     CmdArgs.push_back("--compress");
    if (TCArgs.hasArg(options::OPT_v))
      CmdArgs.push_back("-verbose");

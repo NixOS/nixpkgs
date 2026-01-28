@@ -44,13 +44,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocprofiler";
-  version = "7.1.1";
+  version = "7.2.0";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocprofiler";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-V+E+6D/mBW/NVdHSBVUVMG5Z/QOF73vfZ5rryW2VBtI=";
+    hash = "sha256-W32VAdtZdFmkHeUwyHIIHk8yRnABq6gUaHLZ9Bj8kYI=";
     fetchSubmodules = true;
   };
 
