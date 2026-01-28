@@ -5,14 +5,14 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nuclei";
   version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "nuclei";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-MAOyMpcJsw4O+oC3IhEBF1XR6KSLBHhYZDnmNnwX4mo=";
   };
 
@@ -46,7 +46,7 @@ buildGoModule rec {
       CVEs across targets that are known and easily detectable.
     '';
     homepage = "https://github.com/projectdiscovery/nuclei";
-    changelog = "https://github.com/projectdiscovery/nuclei/releases/tag/v${version}";
+    changelog = "https://github.com/projectdiscovery/nuclei/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       fab
@@ -54,4 +54,4 @@ buildGoModule rec {
     ];
     mainProgram = "nuclei";
   };
-}
+})
