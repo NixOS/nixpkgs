@@ -1486,6 +1486,246 @@ rec {
       [ "\"" "'" "<" ">" "&" ]
       [ "&quot;" "&apos;" "&lt;" "&gt;" "&amp;" ];
 
+  /**
+    Quotes a string `s` so that it can be embedded in a Python script as a [bytes
+    literal](https://docs.python.org/3/reference/lexical_analysis.html#bytes-literals).
+
+    This function allows you to turn a Nix string value into a Python bytes value rather than a
+    Python string value. This is because the Nix expression language and the Python programming
+    language use the term “string” to refer to different things. In the Nix expression language,
+    [strings are sequences of
+    bytes](https://nix.dev/manual/nix/latest/language/types.html#type-string). In the Python
+    programming language, [strings are sequences of Unicode code
+    points](https://docs.python.org/3/reference/datamodel.html#immutable-sequences).
+
+    When using this function, you may want to convert the resulting Python bytes object into a
+    different type of Python object. For example, if you know that `s` contains a path, then it’s
+    probably a good idea to convert it into a
+    [`pathlib.Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path) object like this:
+
+    ```nix
+    pkgs.writers.writePython3 "escapePythonBytes-to-pathlib.Path-example" { } ''
+      import os
+      import pathlib
+
+      hello_out_path = pathlib.Path(os.fsdecode(${pkgs.lib.strings.escapePythonBytes "${pkgs.hello}"}))  # noqa: E501
+
+      print(f"Contents of {hello_out_path}:")
+      for subpath in hello_out_path.iterdir():
+          print(f"\t{subpath}")
+    ''
+    ```
+
+    # Type
+
+    ```
+    escapePythonBytes :: string -> string
+    ```
+
+    # Inputs
+
+    `s`
+    : The Nix string to convert.
+
+    # Returns
+
+    A Nix string value that contains an ASCII-encoded Python bytes literal.
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.escapePythonBytes` usage example
+
+    ```nix
+    escapePythonBytes ":) isn't the same as 😀"
+    => "b':) isn\\'t the same as \\xF0\\x9F\\x98\\x80'"
+    ```
+
+    :::
+  */
+  # escapePythonBytes used to be simpler. Specifically, it used to turn each
+  # byte in s into "\\x<hex digit><hex digit>". While that implementation was
+  # simpler, it had a significant problem. Consider this Nix expression:
+  #
+  # ''hello_out_path = pathlib.Path(os.fsdecode(${pkgs.lib.strings.escapePythonBytes "${pkgs.hello}"}))''
+  #
+  # With the older version of escapePythonBytes, that Nix expression would
+  # evaluate to something like this:
+  #
+  # "hello_out_path = pathlib.Path(os.fsdecode(b'\\x2F\\x6E\\x69\\x78\\x2F\\x73\\x74\\x6F\\x72\\x65\\x2F\\x73\\x71\\x77\\x39\\x6B\\x79\\x6C\\x38\\x7A\\x72\\x66\\x6E\\x6B\\x6B\\x6C\\x62\\x33\\x76\\x70\\x36\\x67\\x6A\\x69\\x39\\x6A\\x77\\x39\\x71\\x66\\x67\\x62\\x35\\x2D\\x68\\x65\\x6C\\x6C\\x6F\\x2D\\x32\\x2E\\x31\\x32\\x2E\\x32'))"
+  #
+  # If that Nix string was embedded into a derivation’s output’s store path,
+  # then we would hope that that store path would depend on
+  # /nix/store/sqw9kyl8zrfnkklb3vp6gji9jw9qfgb5-hello-2.12.2. Unfortunately,
+  # the store path will not depend on
+  # /nix/store/sqw9kyl8zrfnkklb3vp6gji9jw9qfgb5-hello-2.12.2. A derivation’s
+  # output’s store path must contain sqw9kyl8zrfnkklb3vp6gji9jw9qfgb5 or else
+  # it will not depend on
+  # /nix/store/sqw9kyl8zrfnkklb3vp6gji9jw9qfgb5-hello-2.12.2 [1].
+  #
+  # In order to avoid that problem, escapePythonBytes now avoids most
+  # unnecessary escape sequences.
+  #
+  # [1]: <https://nix.dev/manual/nix/2.32#complete-dependencies>
+  escapePythonBytes =
+    s:
+    let
+      # Generate a two-digit hex string from a number (0-255).
+      toTwoDigitHexString = n: fixedWidthNumber 2 (lib.trivial.toHexString n);
+
+      # Create a string containing all bytes from 0x01 to 0xFF.
+      # We do this by reading a pre-generated binary file that contains all these bytes.
+      # This is necessary because Nix doesn't provide a way to construct arbitrary
+      # byte values programmatically - we can only work with strings that come from
+      # external sources (files, environment variables, etc.).
+      allBytes = readFile ./all-bytes-except-null.bin;
+
+      # Split the string into individual bytes.
+      byteList = stringToCharacters allBytes;
+
+      # A lookup table mapping bytes (as one-byte-long Nix strings) to their
+      # Python stringitem representation (as one-, two- or four-byte-long Nix
+      # strings). See below for the definition of “stringitem”. The lookup
+      # table is generated from a file that we know contains bytes 0x01 through
+      # 0xFF in order.
+      byteToStringItemTable = builtins.listToAttrs (
+        genList (
+          i:
+          let
+            byte = elemAt byteList i;
+            byteValueAsInteger = i + 1;
+          in
+          {
+            name = byte;
+            # This next part sets value to an ASCII-encoded Python stringitem.
+            # A Python stringitem is either a single character or an escape
+            # sequence. This code tries to only use escape sequences when they
+            # are needed in single-quoted bytes literals. That begs the
+            # question though, when is it necessary to use escape sequences in
+            # single-quoted bytes literals?
+            #
+            # The rules for writing Python bytes literals is listed in The
+            # Python Language Reference section of the Python documentation
+            # [1]. The Python Language Reference describes bytes literals as a
+            # kind of string literal. Regular string literals create str
+            # objects and bytes literals create bytes objects. The str type
+            # does not inherit from the bytes type, and the bytes type does not
+            # inherit from the str type. This line of Python code can be run to
+            # verify that they don’t inherit from each other:
+            #
+            # assert not isinstance("Example string literal", bytes) and not isinstance(b'Example bytes literal', str)
+            #
+            # This means that bytes literals are a type of string literal, but
+            # bytes objects are not a type of string object. This is kind of
+            # confusing.
+            #
+            # With that in mind, section 2.5.3 of The Python Language Reference
+            # says [2]:
+            #
+            # > String literals, except “f-strings” and “t-strings”, are
+            # > described by the following lexical definitions.
+            # >
+            # > These definitions use negative lookaheads (!) to indicate that
+            # > an ending quote ends the literal.
+            # >
+            # > STRING:          [stringprefix] (stringcontent)
+            # > stringprefix:    <("r" | "u" | "b" | "br" | "rb"), case-insensitive>
+            # > stringcontent:
+            # >    | "'''" ( !"'''" longstringitem)* "'''"
+            # >    | '"""' ( !'"""' longstringitem)* '"""'
+            # >    | "'" ( !"'" stringitem)* "'"
+            # >    | '"' ( !'"' stringitem)* '"'
+            # > stringitem:      stringchar | stringescapeseq
+            # > stringchar:      <any source_character, except backslash and newline>
+            # > longstringitem:  stringitem | newline
+            # > stringescapeseq: "\" <any source_character>
+            #
+            # The return value of escapePythonBytes always uses single-quoted
+            # bytes literals, and it always uses a lowercase b for bytes
+            # literals. With that in mind, we can simplify that grammar so that
+            # it only deals with "b'" bytes literals:
+            #
+            # SIMPLEBYTES:     "b'" ( !"'" stringitem)* "'"
+            # stringitem:      stringchar | stringescapeseq
+            # stringchar:      <any source_character, except backslash and newline>
+            # stringescapeseq: "\" <any source_character>
+            #
+            # newline is defined in section 2.1.2 [3]:
+            #
+            # > newline: <ASCII LF> | <ASCII CR> <ASCII LF> | <ASCII CR>
+            #
+            # source_character is defined in section 2.1.4 [4]:
+            #
+            # > source_character:  <any Unicode code point, except NUL>
+            #
+            # Section 2.5.5 gives us an additional rule that bytes literals must
+            # follow [5]:
+            #
+            # > Bytes literals are always prefixed with ‘b’ or ‘B’; they
+            # > produce an instance of the bytes type instead of the str type.
+            # > They may only contain ASCII characters; bytes with a numeric
+            # > value of 128 or greater must be expressed with escape sequences
+            # > (typically Hexadecimal character or Octal character):[…]
+            #
+            # We can incorporate those three rules into our previous
+            # simplification:
+            #
+            # SIMPLEBYTES:      "b'" ( !"'" stringitem)* "'"
+            # stringitem:       stringchar | stringescapeseq
+            # stringchar:       <any ASCII source_character, except backslash and newline>
+            # newline:          <ASCII LF> | <ASCII CR> <ASCII LF> | <ASCII CR>
+            # stringescapeseq:  "\" <any source_character>
+            # source_character: <any Unicode code point, except NUL>
+            #
+            # With the above grammar in mind, we can finally answer the
+            # original question: when is it necessary to use escape sequences
+            # in single-quoted bytes literals? For an ASCII-encoded Python
+            # file, the following bytes must always be escaped when they are
+            # put in a single-quoted bytes literal:
+            #
+            # • 0x00* (ASCII NUL, disallowed by the source_character rule)
+            # • 0x0A (ASCII LF, disallowed by the stringchar rule)
+            # • 0x0D (ASCII CR, disallowed by the stringchar rule)
+            # • 0x27 (ASCII single quote, disallowed by the SIMPLEBYTES rule)
+            # • 0x5C (ASCII backslash, disallowed by the stringchar rule)
+            # • All bytes that are greater than or equal to 0x80 (non-ASCII
+            #   bytes, disallowed by the stringchar rule)
+            #
+            # *At the moment, Nix strings can’t contain null bytes so the below
+            # code doesn’t actually handle 0x00. If this feature request [7]
+            # gets implemented, then the below code will need to be updated in
+            # order to handle 0x00 bytes.
+            #
+            # [1]: <https://docs.python.org/3.14/reference/index.html>
+            # [2]: <https://docs.python.org/3.14/reference/lexical_analysis.html#formal-grammar>
+            # [3]: <https://docs.python.org/3.14/reference/lexical_analysis.html#physical-lines>
+            # [4]: <https://docs.python.org/3.14/reference/lexical_analysis.html#encoding-declarations>
+            # [5]: <https://docs.python.org/3.14/reference/lexical_analysis.html#bytes-literals>
+            # [6]: <https://docs.python.org/3.14/reference/lexical_analysis.html#escape-sequences>
+            # [7]: <https://github.com/NixOS/nix/issues/1307>
+            value =
+              if (byte == "\n") then
+                "\\n"
+              else if (byte == "\r") then
+                "\\r"
+              else if (byte == "'") then
+                "\\'"
+              else if (byte == "\\") then
+                "\\\\"
+              else if (byteValueAsInteger >= 128) then
+                "\\x${toTwoDigitHexString byteValueAsInteger}"
+              else
+                byte;
+          }
+        ) 255
+      );
+
+      byteToStringItem = byte: byteToStringItemTable.${byte};
+
+      argumentWithoutContext = unsafeDiscardStringContext s;
+      returnValueWithoutContext = "b'${stringAsChars byteToStringItem argumentWithoutContext}'";
+    in
+    addContextFrom s returnValueWithoutContext;
+
   # Case conversion utilities.
   lowerChars = stringToCharacters "abcdefghijklmnopqrstuvwxyz";
   upperChars = stringToCharacters "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
