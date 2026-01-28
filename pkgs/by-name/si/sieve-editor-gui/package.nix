@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  nodejs_22,
   buildNpmPackage,
   fetchFromGitHub,
   electron,
@@ -31,6 +32,8 @@ in
 buildNpmPackage {
   pname = "sieve-editor-gui";
   version = "0.6.1-unstable-2025-03-12";
+
+  nodejs = nodejs_22;
 
   src = fetchFromGitHub {
     owner = "thsmi";
