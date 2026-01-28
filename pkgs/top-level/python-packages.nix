@@ -228,7 +228,7 @@ self: super: with self; {
 
   aiobiketrax = callPackage ../development/python-modules/aiobiketrax { };
 
-  aioblescan = callPackage ../development/python-modules/aioblescan { };
+  aioblescan = callPackage ../by-name/ai/aioblescan/unwrapped.nix { };
 
   aioboto3 = callPackage ../development/python-modules/aioboto3 { };
 

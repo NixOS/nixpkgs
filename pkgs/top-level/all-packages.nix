@@ -958,8 +958,6 @@ with pkgs;
 
   libdislocator = callPackage ../tools/security/aflplusplus/libdislocator.nix { };
 
-  aioblescan = with python3Packages; toPythonApplication aioblescan;
-
   inherit (recurseIntoAttrs (callPackage ../tools/package-management/akku { }))
     akku
     akkuPackages
