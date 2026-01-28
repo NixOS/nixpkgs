@@ -1,5 +1,3 @@
-# TODO add plugins having various licenses, see http://www.vamp-plugins.org/download.html
-
 {
   lib,
   stdenv,
@@ -29,53 +27,55 @@
   opusfile,
   meson,
   ninja,
-  cmake,
-  libsForQt5,
+  qt6,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sonic-visualiser";
-  version = "4.5.1";
+  version = "5.2.1";
 
   src = fetchurl {
-    url = "https://code.soundsoftware.ac.uk/attachments/download/2841/sonic-visualiser-${finalAttrs.version}.tar.gz";
-    hash = "sha256-WauIaCWQs739IwJIorDCNymH//navxsbHUCVAUYl7+k=";
+    url = "https://github.com/sonic-visualiser/sonic-visualiser/releases/download/sv_v${finalAttrs.version}/sonic-visualiser-${finalAttrs.version}.tar.gz";
+    hash = "sha256-LzOK8CMekwU5xeXgTax8M4QleGbMKf2hEiFfjEEImMk=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
-    cmake
     pkg-config
-    libsForQt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
+
   buildInputs = [
-    libsndfile
-    libsForQt5.qtbase
-    libsForQt5.qtsvg
+    alsa-lib
+    bzip2
+    capnproto
     fftw
     fftwFloat
-    bzip2
-    lrdf
-    rubberband
+    libfishsound
+    libid3tag
+    libjack2
+    liblo
+    libmad
+    liboggz
+    libpulseaudio
     libsamplerate
-    vamp-plugin-sdk
-    alsa-lib
+    libsndfile
+    libX11
+    lrdf
+    opusfile
+    qt6.qtbase
+    qt6.qtsvg
     redland
+    rubberband
     serd
     sord
-    # optional
-    libjack2
-    # portaudio
-    libpulseaudio
-    libmad
-    libfishsound
-    liblo
-    libX11
-    capnproto
-    liboggz
-    libid3tag
-    opusfile
+    vamp-plugin-sdk
+  ];
+
+  patches = [
+    ./fix-atomic-qt.patch
+    ./fix-modifier-names.patch
   ];
 
   enableParallelBuilding = true;
@@ -86,5 +86,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ marcweber ];
     platforms = lib.platforms.linux;
+    mainProgram = "sonic-visualiser";
   };
 })
