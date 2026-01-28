@@ -82,7 +82,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Universal web framework adapter for Python";
     homepage = "https://github.com/usecross/cross-web";
-    changelog = "https://github.com/usecross/cross-web/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/usecross/cross-web/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
