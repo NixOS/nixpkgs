@@ -55,7 +55,10 @@ python3.pkgs.buildPythonApplication rec {
   dependencies = with python3.pkgs; [
     certifi
     distro
+    gssapi
     imaplib2
+    keyring
+    portalocker
     pysocks
     rfc6555
     urllib3
