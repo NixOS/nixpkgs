@@ -383,6 +383,7 @@ let
       # no package has `doCheck = true`.
       doCheck' = doCheck && canExecuteHostOnBuild;
       doInstallCheck' = doInstallCheck && canExecuteHostOnBuild;
+      enableDerivationMeta = __structuredAttrs && config.derivationMeta;
 
       separateDebugInfo' =
         let
@@ -639,8 +640,12 @@ let
             # TODO: remove platform condition
             # Enabling this check could be a breaking change as it requires to edit nix.conf
             # NixOS module already sets gccarch, unsure of nix installers and other distributions
-            ${if requiredSystemFeaturesShouldBeSet then "requiredSystemFeatures" else null} =
-              attrs.requiredSystemFeatures or [ ] ++ gccArchFeature;
+            ${
+              if requiredSystemFeaturesShouldBeSet || enableDerivationMeta then "requiredSystemFeatures" else null
+            } =
+              attrs.requiredSystemFeatures or [ ]
+              ++ optionals requiredSystemFeaturesShouldBeSet gccArchFeature
+              ++ optionals enableDerivationMeta [ "derivation-meta" ];
           }
           // optionalAttrs buildIsDarwin (
             let
@@ -805,6 +810,8 @@ let
       mainProgram = meta.mainProgram or null;
       env' = env // lib.optionalAttrs (mainProgram != null) { NIX_MAIN_PROGRAM = mainProgram; };
 
+      enableDerivationMeta = __structuredAttrs && config.derivationMeta;
+
       derivationArg = makeDerivationArgument (
         removeAttrs attrs [
           "meta"
@@ -813,6 +820,7 @@ let
           "env"
         ]
         // lib.optionalAttrs __structuredAttrs { env = checkedEnv; }
+        // lib.optionalAttrs enableDerivationMeta { __meta = meta; }
         // {
           cmakeFlags = makeCMakeFlags attrs;
           mesonFlags = makeMesonFlags attrs;
