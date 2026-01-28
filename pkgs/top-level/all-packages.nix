@@ -993,8 +993,6 @@ with pkgs;
     studioVariant = true;
   };
 
-  dehinter = with python3Packages; toPythonApplication dehinter;
-
   gamescope-wsi = callPackage ../by-name/ga/gamescope/package.nix {
     enableExecutable = false;
     enableWsi = true;
