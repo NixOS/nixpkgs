@@ -5,7 +5,7 @@
   fetchPypi,
 
   # build-system
-  setuptools,
+  hatchling,
 
   # native dependencies
   zlib,
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     hash = "sha256-zcUHVCeDURytSFb85YL9w36fKWZcpZaInGY8g+yMbsk=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   buildInputs = [ zlib.dev ];
 
