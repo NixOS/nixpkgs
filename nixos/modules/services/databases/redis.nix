@@ -477,7 +477,7 @@ in
       lib.nameValuePair (redisName name) {
         description = "System user for the redis-server instance ${name}";
         isSystemUser = true;
-        group = redisName name;
+        group = conf.group;
       }
     ) (lib.filterAttrs (name: conf: conf.user == redisName name) enabledServers);
     users.groups = lib.mapAttrs' (
