@@ -17,16 +17,19 @@
   libieee1284,
   bluez,
   sigrok-firmware-fx2lafw,
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation {
   pname = "libsigrok";
-  version = "0.5.2-unstable-2024-10-20";
+  version = "0.6.0-unstable-2025-11-20";
 
-  src = fetchgit {
-    url = "git://sigrok.org/libsigrok";
-    rev = "f06f788118191d19fdbbb37046d3bd5cec91adb1";
-    hash = "sha256-8aco5tymkCJ6ya1hyp2ODrz+dlXvZmcYoo4o9YC6D6o=";
+  #Use sipeed fork since it seems to be more up to date and supports my device
+  src = fetchFromGitHub {
+    owner = "sipeed";
+    repo = "libsigrok";
+    rev = "0ce0720421b6bcc8e65a0c94c5b2883cbfe22d7e";
+    hash = "sha256-4aqX+OX4bBsvvb7b1XHKqG6u1Ek3floXDfjr27usZwo=";
   };
 
   enableParallelBuilding = true;
