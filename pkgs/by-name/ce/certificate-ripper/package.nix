@@ -7,7 +7,7 @@
 
 buildGraalvmNativeImage (finalAttrs: {
   pname = "certificate-ripper";
-  version = "2.4.1";
+  version = "2.6.1";
 
   src = maven.buildMavenPackage {
     pname = "certificate-ripper-jar";
@@ -17,7 +17,7 @@ buildGraalvmNativeImage (finalAttrs: {
       owner = "Hakky54";
       repo = "certificate-ripper";
       tag = finalAttrs.version;
-      hash = "sha256-qQ5BHH+DT1sGNDGzSbclqc6+byBxyP16qvm3k9E/Yks=";
+      hash = "sha256-NtLCIKaSU1oQd/JTEUbmQlO0MoXky95DwxN8BBimBns=";
     };
 
     patches = [
@@ -25,19 +25,25 @@ buildGraalvmNativeImage (finalAttrs: {
       ./fix-test-temp-dir-path.patch
     ];
 
-    mvnHash = "sha256-G2+Z1JyxTzCZzWjB8MQH1T9kwHjtRPag+bmzGXpQXw4=";
+    mvnHash = "sha256-77APMDeOLVQaZoG5TY4F0vZbEINjQ9e0tUJVhUlg6s4=";
 
     mvnParameters =
       let
         disabledTests = [
           "PemExportCommandShould#resolveRootCaOnlyWhenEnabled" # uses network
+          "PemExportRequestShould#resolveRootCaOnlyWhenEnabled"
           "DerExportCommandShould#processSystemTrustedCertificates"
+          "DerExportRequestShould#processSystemTrustedCertificates"
           "JksExportCommandShould#processSystemTrustedCertificates"
+          "JksExportRequestShould#processSystemTrustedCertificates"
           "PemExportCommandShould#processSystemTrustedCertificates"
+          "PemExportRequestShould#processSystemTrustedCertificates"
           "Pkcs12ExportCommandShould#processSystemTrustedCertificates"
+          "Pkcs12ExportRequestShould#processSystemTrustedCertificates"
         ];
       in
       lib.escapeShellArgs [
+        "-Pfat-jar"
         "-Dproject.build.outputTimestamp=1980-01-01T00:00:02Z" # make timestamp deterministic
         "-Dtest=${lib.concatMapStringsSep "," (t: "!" + t) disabledTests}"
       ];
