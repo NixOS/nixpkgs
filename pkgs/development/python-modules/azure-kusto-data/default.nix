@@ -1,6 +1,7 @@
 {
   lib,
   aiohttp,
+  aioresponses,
   asgiref,
   azure-core,
   azure-identity,
@@ -10,10 +11,11 @@
   msal,
   pandas,
   pytest-asyncio,
+  pytest-xdist,
   pytestCheckHook,
   python-dateutil,
   requests,
-  setuptools,
+  uv-build,
 }:
 
 buildPythonPackage rec {
@@ -30,7 +32,12 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/${pname}";
 
-  build-system = [ setuptools ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.8.9,<0.9.0" uv_build
+  '';
+
+  build-system = [ uv-build ];
 
   dependencies = [
     azure-core
@@ -50,7 +57,9 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    aioresponses
     pytest-asyncio
+    pytest-xdist
     pytestCheckHook
   ]
   ++ lib.concatAttrValues optional-dependencies;
@@ -66,7 +75,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Kusto Data Client";
-    homepage = "https://pypi.org/project/azure-kusto-data/";
+    homepage = "https://github.com/Azure/azure-kusto-python/tree/master/azure-kusto-data";
     changelog = "https://github.com/Azure/azure-kusto-python/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pyrox0 ];
