@@ -6,6 +6,7 @@
   django,
   dj-database-url,
   django-test-migrations,
+  pytest-cov-stub,
   pytest-django,
   pytest-playwright,
   pytestCheckHook,
@@ -13,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "django-polymorphic";
-  version = "4.10.4";
+  version = "4.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-polymorphic";
     repo = "django-polymorphic";
     tag = "v${version}";
-    hash = "sha256-U4NOFnZOGgXStE9adixkFmf4jm6fZ2dgSmw0ainMVd0=";
+    hash = "sha256-8MZrQErWWd4GiNaIEnGvj4jONGFzsi3bu5NervF4AnE=";
   };
 
   build-system = [ hatchling ];
@@ -30,6 +31,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     dj-database-url
     django-test-migrations
+    pytest-cov-stub
     pytest-django
     pytest-playwright
     pytestCheckHook
