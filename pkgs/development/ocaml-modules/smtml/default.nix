@@ -85,6 +85,7 @@ buildDunePackage (finalAttrs: {
     downloadPage = "https://github.com/formalsec/smtml";
     changelog = "https://github.com/formalsec/smtml/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
+    teams = with lib.teams; [ ngi ];
     maintainers = with lib.maintainers; [
       ethancedwards8
       redianthus
