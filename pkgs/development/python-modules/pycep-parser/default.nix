@@ -4,27 +4,27 @@
   buildPythonPackage,
   fetchFromGitHub,
   lark,
-  poetry-core,
   pytestCheckHook,
   regex,
   typing-extensions,
+  uv-build,
 }:
 
 buildPythonPackage rec {
   pname = "pycep-parser";
-  version = "0.5.1";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gruebel";
     repo = "pycep";
     tag = version;
-    hash = "sha256-yCcJUN+gDeuifFoYyFsS5Ak/AYxLo0Q8edmhFYfi/eA=";
+    hash = "sha256-pEFgpLfGcJhUWfs/nG1r7GfIS045cfNh7MVQokluXmM=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ uv-build ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     lark
     regex
     typing-extensions
