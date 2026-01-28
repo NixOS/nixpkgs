@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "languagetool-rust";
-  version = "3.0.0";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "jeertmans";
     repo = "languagetool-rust";
     rev = "v${version}";
-    hash = "sha256-LHlM+PJbBqsgOwK9Mw8oVVP+dq4IBFhxjRaXLIGxZPg=";
+    hash = "sha256-zH93Pi/zVnCLo8O/1HnSTfUOu9vtzF3JSzn+1/1/Oz0=";
   };
 
-  cargoHash = "sha256-VfvdIjNIHpvN370/3y2XXxaIyEL9+tG0OcnONhs9Z2I=";
+  cargoHash = "sha256-e75srZlKx/WfxbguyIu7MWZm33WuOfDubGqfvviN1HA=";
 
   buildFeatures = [ "full" ];
 
