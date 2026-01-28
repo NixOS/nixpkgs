@@ -92,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     intel-compute-runtime
   ];
 
-  nativeCheckInputs = lib.optionals finalAttrs.doCheck [
+  nativeCheckInputs = [
     gtest
     lit
     filecheck
