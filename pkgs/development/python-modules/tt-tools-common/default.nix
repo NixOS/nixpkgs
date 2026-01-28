@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  fetchpatch,
   fetchFromGitHub,
   setuptools,
   distro,
@@ -11,6 +10,7 @@
   rich,
   textual,
   requests,
+  tomli,
   tqdm,
   pydantic,
   setuptools-scm,
@@ -40,6 +40,7 @@ buildPythonPackage rec {
     rich
     textual
     requests
+    tomli
     tqdm
     pydantic
   ];
