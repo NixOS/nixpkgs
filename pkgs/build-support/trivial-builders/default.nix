@@ -291,6 +291,12 @@ rec {
       */
       checkPhase ? null,
       /*
+        Whether to run `shellcheck` for potential lint errors.
+
+        Type: Bool
+      */
+      runShellCheck ? true,
+      /*
          Checks to exclude when running `shellcheck`, e.g. `[ "SC2016" ]`.
 
          See <https://www.shellcheck.net/wiki/> for a list of checks.
@@ -372,13 +378,15 @@ rec {
           ];
           # GHC (=> shellcheck) isn't supported on some platforms (such as risc-v)
           # but we still want to use writeShellApplication on those platforms
-          shellcheckCommand = lib.optionalString shellcheck-minimal.compiler.bootstrapAvailable ''
-            # use shellcheck which does not include docs
-            # pandoc takes long to build and documentation isn't needed for just running the cli
-            ${lib.getExe shellcheck-minimal} ${
-              lib.escapeShellArgs (excludeFlags ++ extraShellCheckFlags)
-            } "$target"
-          '';
+          shellcheckCommand =
+            lib.optionalString (runShellCheck && shellcheck-minimal.compiler.bootstrapAvailable)
+              # use shellcheck which does not include docs
+              # pandoc takes long to build and documentation isn't needed for just running the cli
+              ''
+                ${lib.getExe shellcheck-minimal} ${
+                  lib.escapeShellArgs (excludeFlags ++ extraShellCheckFlags)
+                } "$target"
+              '';
         in
         if checkPhase == null then
           ''
