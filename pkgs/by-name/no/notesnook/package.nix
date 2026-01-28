@@ -35,6 +35,10 @@ let
       .${system} or throwSystem;
   };
 
+  passthru = {
+    updateScript = ./update.sh;
+  };
+
   appimageContents = appimageTools.extractType2 {
     inherit pname version src;
   };
@@ -67,6 +71,7 @@ let
       version
       src
       meta
+      passthru
       ;
 
     nativeBuildInputs = [ makeWrapper ];
@@ -91,6 +96,7 @@ let
       version
       src
       meta
+      passthru
       ;
 
     nativeBuildInputs = [ _7zz ];
