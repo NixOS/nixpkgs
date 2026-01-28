@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r $src/share/doc $out/share
     cp -r $src/share/icons $out/share
 
-    buildPythonPath "$pythonPath"
+    buildPythonPath "''${pythonPath[*]}"
 
     makeWrapper ${blender}/bin/blender $out/bin/${finalAttrs.finalPackage.pname} \
       --prefix PATH : $program_PATH \

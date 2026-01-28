@@ -125,7 +125,7 @@ stdenv.mkDerivation rec {
   doInstallCheck = true;
 
   postInstall = ''
-    buildPythonPath "$out $pythonPath"
+    buildPythonPath "$out ''${pythonPath[*]}"
     gappsWrapperArgs+=(
       --prefix PATH : "$program_PATH"
       --set CUPS_DATADIR "${libcupsfilters}/share/cups"
