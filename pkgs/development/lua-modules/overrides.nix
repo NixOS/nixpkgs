@@ -251,12 +251,42 @@ in
     '';
   };
 
-  image-nvim = prev.image-nvim.overrideAttrs {
-    propagatedBuildInputs = [
-      lua
-      luajitPackages.magick
-    ];
-  };
+  image-nvim = final.callPackage (
+    {
+      buildLuarocksPackage,
+      fetchurl,
+      fetchzip,
+      luaOlder,
+      magick,
+    }:
+    buildLuarocksPackage rec {
+      pname = "image.nvim";
+      version = "1.4.0";
+
+      disabled = luaOlder "5.1";
+      knownRockspec = "image.nvim-scm-1.rockspec";
+      rockspecVersion = "scm-1";
+
+      src = fetchFromGitHub {
+        owner = "3rd";
+        repo = "image.nvim";
+        tag = "v${version}";
+        hash = "sha256-EaDeY8aP41xHTw5epqYjaBqPYs6Z2DABzSaVOnG6D6I=";
+      };
+
+      propagatedBuildInputs = [
+        lua
+        luajitPackages.magick
+      ];
+
+      meta = {
+        homepage = "https://github.com/3rd/image.nvim";
+        description = "🖼️ Bringing images to Neovim.";
+        maintainers = with lib.maintainers; [ teto ];
+        license.fullName = "MIT";
+      };
+    }
+  ) { };
 
   ldbus = prev.ldbus.overrideAttrs (old: {
     luarocksConfig = old.luarocksConfig // {

@@ -29,7 +29,6 @@ gitsigns.nvim,,,,,5.1,
 grug-far.nvim,,,,,5.1,teto
 haskell-tools.nvim,,,,,5.1,mrcjkb
 http,,,,0.4-0,,vcunat
-image.nvim,,,,,5.1,teto
 inspect,,,,,,
 jsregexp,,,,0.0.7-2,,
 ldbus,,,https://luarocks.org/dev,,,

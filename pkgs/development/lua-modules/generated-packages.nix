@@ -1010,39 +1010,6 @@ final: prev: {
     }
   ) { };
 
-  image-nvim = callPackage (
-    {
-      buildLuarocksPackage,
-      fetchurl,
-      fetchzip,
-      luaOlder,
-      magick,
-    }:
-    buildLuarocksPackage {
-      pname = "image.nvim";
-      version = "1.3.0-1";
-      knownRockspec =
-        (fetchurl {
-          url = "mirror://luarocks/image.nvim-1.3.0-1.rockspec";
-          sha256 = "1ls3v5xcgmqmscqk5prpj0q9sy0946rfb2dfva5f1axb5x4jbvj9";
-        }).outPath;
-      src = fetchzip {
-        url = "https://github.com/3rd/image.nvim/archive/v1.3.0.zip";
-        sha256 = "0fbc3wvzsck8bbz8jz5piy68w1xmq5cnhaj1lw91d8hkyjryrznr";
-      };
-
-      disabled = luaOlder "5.1";
-      propagatedBuildInputs = [ magick ];
-
-      meta = {
-        homepage = "https://github.com/3rd/image.nvim";
-        description = "🖼️ Bringing images to Neovim.";
-        maintainers = with lib.maintainers; [ teto ];
-        license.fullName = "MIT";
-      };
-    }
-  ) { };
-
   inspect = callPackage (
     {
       buildLuarocksPackage,
