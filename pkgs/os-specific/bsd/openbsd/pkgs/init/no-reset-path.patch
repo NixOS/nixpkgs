@@ -1,0 +1,12 @@
+diff --git a/sbin/init/init.c b/sbin/init/init.c
+index cf7ed60afe9..2decfc15d4f 100644
+--- a/sbin/init/init.c
++++ b/sbin/init/init.c
+@@ -595,7 +595,6 @@ f_single_user(void)
+ 		 */
+ 		argv[0] = name;
+ 		argv[1] = NULL;
+-		setenv("PATH", _PATH_STDPATH, 1);
+ 		execv(shell, argv);
+ 		emergency("can't exec %s for single user: %m", shell);
+ 
