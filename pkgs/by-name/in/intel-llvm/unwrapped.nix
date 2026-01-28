@@ -119,6 +119,9 @@ stdenv.mkDerivation (finalAttrs: {
     hwloc
     emhash
     parallel-hashmap
+    # Static ZSTD is required by sycl, see sycl/source/CMakeLists.txt:163
+    # This may be related to the fork not supporting building shared libraries;
+    #  https://github.com/intel/llvm/issues/19060
     pkgsStatic.zstd
   ]
   ++ unified-runtime.buildInputs;
@@ -213,8 +216,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "LLVM_ENABLE_ZLIB" "FORCE_ON")
     (lib.cmakeBool "LLVM_ENABLE_THREADS" true)
 
-    # Having these set to true breaks the build
-    # See https://github.com/intel/llvm/issues/19060
+    # Intels LLVM fork does not support building shared libraries,
+    # see https://github.com/intel/llvm/issues/19060
     (lib.cmakeBool "BUILD_SHARED_LIBS" false)
     (lib.cmakeBool "LLVM_LINK_LLVM_DYLIB" false)
     (lib.cmakeBool "LLVM_BUILD_LLVM_DYLIB" false)
