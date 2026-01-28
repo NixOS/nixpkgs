@@ -10,6 +10,7 @@
 
   # checks
   pytestCheckHook,
+  pytest-codspeed,
   pytest-cov-stub,
 }:
 
@@ -33,6 +34,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-codspeed
     pytest-cov-stub
   ];
 
