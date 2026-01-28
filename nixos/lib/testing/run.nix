@@ -105,6 +105,7 @@ in
         nativeBuildInputs = lib.optionals config.enableDebugHook [
           hostPkgs.openssh
           hostPkgs.inetutils
+          hostPkgs.socat # to allow SSH backdoor connections for systemd-nspawn containers
         ];
 
         buildCommand = ''
