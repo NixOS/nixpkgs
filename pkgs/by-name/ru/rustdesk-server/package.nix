@@ -12,17 +12,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rustdesk-server";
-  version = "1.1.14";
+  version = "1.1.15";
 
   src = fetchFromGitHub {
     owner = "rustdesk";
     repo = "rustdesk-server";
     tag = version;
-    hash = "sha256-5LRMey1cxmjLg1s9RtVwgPjHjwYLSQHa6Tyv7r/XEQs=";
+    hash = "sha256-1qSgTIccMkrg9Cr0FZ2eb32GjXpRB01b/b/YV4Er6MA=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-U1LTnqi2iEsm2U7t0Fr4VJWLo1MdQmeTKrPsNqRWap0=";
+  cargoHash = "sha256-NCIKf1SO1AcBciXweuCyeSBffQ3MeCHj4ALpjuarpWA=";
 
   nativeBuildInputs = [
     pkg-config
