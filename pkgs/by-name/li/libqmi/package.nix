@@ -6,6 +6,7 @@
   ninja,
   pkg-config,
   gobject-introspection,
+  gi-docgen,
   gtk-doc,
   docbook-xsl-nons,
   docbook_xml_dtd_43,
@@ -26,20 +27,20 @@
 
 stdenv.mkDerivation rec {
   pname = "libqmi";
-  version = "1.36.0";
+  version = "1.38.0";
 
   outputs = [
     "out"
     "dev"
   ]
-  ++ lib.optional withIntrospection "devdoc";
+  ++ lib.optional withIntrospection "doc";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mobile-broadband";
     repo = "libqmi";
     rev = version;
-    hash = "sha256-cGNnw0vO/Hr9o/eIf6lLTsoGiEkTvZiArgO7tAc208U=";
+    hash = "sha256-bJbNfnKVJuhy/6EJgu5b7t6vxNTex/5heTzMzTzVREw=";
   };
 
   nativeBuildInputs = [
@@ -53,6 +54,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals withIntrospection [
     gobject-introspection
+    gi-docgen
     gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_43
