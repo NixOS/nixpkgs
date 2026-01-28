@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libvisio2svg";
-  version = "0.5.6";
+  version = "0.5.8";
 
   src = fetchFromGitHub {
     owner = "kakwa";
     repo = "libvisio2svg";
     rev = version;
-    sha256 = "sha256-MklZ/pY04kw8BJxoGcBQAWdXytAPkrDz0N0W1t9I5Is=";
+    sha256 = "sha256-Qpkt7HyicK1lGVrXkcaHabXkIwUhEKUAc84rGmbHE/E=";
   };
 
   nativeBuildInputs = [ cmake ];
