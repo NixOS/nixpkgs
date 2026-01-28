@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation rec {
   pname = "mblaze";
-  version = "1.3";
+  version = "1.4";
 
   nativeBuildInputs = [
     installShellFiles
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     owner = "leahneukirchen";
     repo = "mblaze";
     rev = "v${version}";
-    sha256 = "sha256-398wiXJ/iG9ZfPGDZc57xH37lft3NpEZuLE0Qhb2GGc=";
+    sha256 = "sha256-v7g4kzCZFkkZ/VPogDObduFzgjBVQFziBzHocAdEw9A=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
