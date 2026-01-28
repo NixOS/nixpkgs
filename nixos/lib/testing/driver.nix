@@ -38,19 +38,11 @@ let
 
   vmMachineNames = map (c: c.system.name) (lib.attrValues config.nodes);
   containerMachineNames = map (c: c.system.name) (lib.attrValues config.containers);
-  allMachineNames =
-    let
-      overlappingNames = lib.intersectLists vmMachineNames containerMachineNames;
-    in
-    assert (
-      lib.asserts.assertMsg (overlappingNames == [ ])
-        "Names of QEMU VM nodes and systemd-nspawn containers must not overlap. Overlapping names: ${toString overlappingNames}"
-    );
-    vmMachineNames ++ containerMachineNames;
 
   theOnlyMachine =
     let
       exactlyOneMachine = lib.length (lib.attrValues config.nodes) == 1;
+      allMachineNames = map (c: c.system.name) (lib.attrValues config.allMachines);
     in
     lib.optional (exactlyOneMachine && !lib.elem "machine" allMachineNames) "machine";
 

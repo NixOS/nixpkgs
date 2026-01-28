@@ -176,6 +176,25 @@ in
       '';
     };
 
+    allMachines = mkOption {
+      readOnly = true;
+      internal = true;
+      description = ''
+        Basically a merge of [{option}`nodes`](#test-opt-nodes) and [{option}`containers`](#test-opt-containers).
+
+        This ensures that there are no name collisions between nodes and containers.
+      '';
+      default =
+        let
+          overlappingNames = lib.intersectLists (lib.attrNames config.nodes) (
+            lib.attrNames config.containers
+          );
+        in
+        lib.throwIfNot (overlappingNames == [ ])
+          "The following names are used in both `nodes` and `containers`: ${lib.concatStringsSep ", " overlappingNames}"
+          (config.nodes // config.containers);
+    };
+
     defaults = mkOption {
       description = ''
         NixOS configuration that is applied to all [{option}`nodes`](#test-opt-nodes) and [{option}`containers`](#test-opt-containers).
@@ -261,6 +280,7 @@ in
   };
 
   config = {
+    _module.args.allMachines = config.allMachines;
     _module.args.containers = config.containers;
     _module.args.nodes = config.nodesCompat;
     nodesCompat = mapAttrs (

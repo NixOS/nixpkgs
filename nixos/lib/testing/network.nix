@@ -1,6 +1,5 @@
 {
-  containers,
-  nodes,
+  allMachines,
   lib,
   ...
 }:
@@ -24,16 +23,7 @@ let
     zipLists
     ;
 
-  nodesAndContainers =
-    let
-      nodeNames = lib.attrNames nodes;
-      containerNames = lib.attrNames containers;
-      conflictingNames = lib.intersectLists nodeNames containerNames;
-      message = "`nodes` and `containers` must have unique names. Conflicting names: ${lib.concatStringsSep " " conflictingNames}";
-    in
-    lib.throwIfNot (builtins.length conflictingNames == 0) message (nodes // containers);
-
-  nodeNumbers = listToAttrs (zipListsWith nameValuePair (attrNames nodesAndContainers) (range 1 254));
+  nodeNumbers = listToAttrs (zipListsWith nameValuePair (attrNames allMachines) (range 1 254));
 
   networkModule =
     { config, ... }:
@@ -93,7 +83,7 @@ let
           + optionalString (
             config.networking.primaryIPv6Address != ""
           ) "${config.networking.primaryIPv6Address} ${hostnames}"
-        ) nodesAndContainers;
+        ) allMachines;
       };
 
     in
