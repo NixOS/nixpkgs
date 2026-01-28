@@ -1015,8 +1015,6 @@ with pkgs;
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
 
-  ufolint = with python3Packages; toPythonApplication ufolint;
-
   ventoy-full = ventoy.override {
     withCryptsetup = true;
     withXfs = true;

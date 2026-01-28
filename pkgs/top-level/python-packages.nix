@@ -20062,7 +20062,7 @@ self: super: with self; {
 
   ufolib2 = callPackage ../development/python-modules/ufolib2 { };
 
-  ufolint = callPackage ../development/python-modules/ufolint { };
+  ufolint = callPackage ../by-name/uf/ufolint/unwrapped.nix { };
 
   ufomerge = callPackage ../development/python-modules/ufomerge { };
 
