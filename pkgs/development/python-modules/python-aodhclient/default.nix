@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "python-aodhclient";
-  version = "3.9.1";
+  version = "3.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-aodhclient";
     tag = version;
-    hash = "sha256-ymOMCHhntoWr3mROI1M/PN7oWWaDTN58Z9xb97qnP+w=";
+    hash = "sha256-+VBtsx9bjO7YIS5mGd6AaxvQyxg4En5gP5mKmoIFAtU=";
   };
 
   env.PBR_VERSION = version;
