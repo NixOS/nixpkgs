@@ -15,6 +15,8 @@ let
 in
 runCommand "llvm-binutils-${version}"
   {
+    pname = "llvm-binutils";
+    inherit version;
     preferLocalBuild = true;
     passthru = {
       isLLVM = true;

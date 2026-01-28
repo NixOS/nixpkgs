@@ -510,7 +510,7 @@ in
             # We wouldn't need to *copy* all, but it's easier and the result is temporary anyway.
             installPhase = ''
               mkdir -p "$out"/bin
-              cp -a '${prevStage.bintools.bintools}'/bin/* "$out"/bin/
+              cp -a '${prevStage.binutils.bintools}'/bin/* "$out"/bin/
               chmod +w "$out"/bin/ld.bfd
               patchelf --set-interpreter '${self.libc}'/lib/ld*.so.? \
                 --set-rpath "${self.libc}/lib:$(patchelf --print-rpath "$out"/bin/ld.bfd)" \
