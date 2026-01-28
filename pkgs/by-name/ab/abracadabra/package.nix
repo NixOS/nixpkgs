@@ -13,14 +13,14 @@
   soapysdr-with-plugins,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "abracadabra";
   version = "3.3.2";
 
   src = fetchFromGitHub {
     owner = "KejPi";
     repo = "AbracaDABra";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-QR3wc+eltIpmdNpyzQqJd4Zo40JVlTzRBNSr11tE0X8=";
   };
 
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ markuskowa ];
     mainProgram = "AbracaDABra";
   };
-}
+})

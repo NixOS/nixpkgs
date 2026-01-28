@@ -4,12 +4,12 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "actkbd";
   version = "0.2.8";
 
   src = fetchurl {
-    url = "http://users.softlab.ece.ntua.gr/~thkala/projects/actkbd/files/actkbd-${version}.tar.bz2";
+    url = "http://users.softlab.ece.ntua.gr/~thkala/projects/actkbd/files/actkbd-${finalAttrs.version}.tar.bz2";
     sha256 = "1ipb7k5q7k7p54is96ij2n74jfa6xc0llb9lpjwxhsqviqxn9slm";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "actkbd";
   };
-}
+})
