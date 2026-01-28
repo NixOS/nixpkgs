@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "maildrop";
-  version = "3.2.1";
+  version = "3.3.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/courier/maildrop/${version}/maildrop-${version}.tar.bz2";
-    hash = "sha256-PFiQ9NQzItTmPz6Aw6YJzeYF9ylm1iNPyIZBjZSdJLk=";
+    hash = "sha256-YPdFraFAkwq8MgKL6ScF01xEOaMC4v4tdOmhhdtlxFs=";
   };
 
   nativeBuildInputs = [ pkg-config ];
