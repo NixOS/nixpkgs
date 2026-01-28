@@ -3796,7 +3796,7 @@ self: super: with self; {
 
   defusedxml = callPackage ../development/python-modules/defusedxml { };
 
-  dehinter = callPackage ../development/python-modules/dehinter { };
+  dehinter = callPackage ../by-name/de/dehinter/unwrapped.nix { };
 
   deid = callPackage ../development/python-modules/deid { };
 
