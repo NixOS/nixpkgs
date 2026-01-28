@@ -13,13 +13,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "omnom";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "asciimoo";
     repo = "omnom";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Txqla3fivQdM8oQYGlyaYhSQhBLJRykWkftdmkHxlu8=";
+    hash = "sha256-cG+cAsarbDqi3BLrIiSnH4VQS0fdfyMgkvbQvzKUXNw=";
     fetchSubmodules = true;
   };
 
