@@ -8,16 +8,16 @@
 
 buildNpmPackage rec {
   pname = "textlint-rule-terminology";
-  version = "5.0.0";
+  version = "5.2.16";
 
   src = fetchFromGitHub {
     owner = "sapegin";
     repo = "textlint-rule-terminology";
     tag = "v${version}";
-    hash = "sha256-/NuKZSugizP4b2LFNqPrTvoXNE4D1sytU2B7T40ZASQ=";
+    hash = "sha256-XtyPOK2nrtlUQO6cx+ozVj27jvezCAKQ/+E0UDriCQw=";
   };
 
-  npmDepsHash = "sha256-FQr7E6ZSJxj/ide+3JJwc27x15L1bAIAlPnMl8hdQ8w=";
+  npmDepsHash = "sha256-ZUM+zNl9kgEu0KHIVmnLDZ+1PJPE2e2wP6Hofe/9zPQ=";
 
   dontNpmBuild = true;
 
