@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/NullPointerDepressiveDisorder/MiddleDrag/releases/download/v${version}/MiddleDrag-${version}.pkg";
-    hash = "sha256-X5FsthqUFr9N04jyXsi5PlV302wXAeiP5XPYFyrT1Hs=";
+    hash = "sha256-TNYe731JA5qdD85iIzy8uWsP4X59NYaKggUK08N66QI=";
   };
 
   nativeBuildInputs = [
