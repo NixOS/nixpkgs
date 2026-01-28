@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule {
+buildGoModule rec {
   pname = "cerca";
-  version = "0-unstable-2025-05-21";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "cblgh";
     repo = "cerca";
-    rev = "722c38d96160ccf69dd7a8122b62660102b64a59";
-    hash = "sha256-M5INnik/TIzH0Afi8/6/PnhwsAhd+kFaDHejfsmuhn0=";
+    tag = "v${version}";
+    hash = "sha256-lLN2VCbbX4HnUY5c+YhwZHpVN2w6YoV/5CtbeT3wHjE=";
   };
 
-  vendorHash = "sha256-yfsI0nKfzyzmtbS9bSHRaD2pEgxN6gOKAA/FRDxJx40=";
+  vendorHash = "sha256-iIZMYIwIgnFvraowh2k8MUTl7L4zhgcm+UojlimpCTk=";
 
   ldflags = [
     "-s"
