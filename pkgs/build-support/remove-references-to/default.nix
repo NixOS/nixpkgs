@@ -5,34 +5,21 @@
 
 {
   lib,
-  stdenvNoCC,
+  replaceVarsWith,
   signingUtils,
-  replaceVars,
+  stdenvNoCC,
   shell ? stdenvNoCC.shell,
 }:
-
-let
-  remove-references-to = replaceVars ./remove-references-to.sh {
+replaceVarsWith {
+  src = ./remove-references-to;
+  replacements = {
     inherit (builtins) storeDir;
     shell = lib.getBin shell + (shell.shellPath or "");
     signingUtils = lib.optionalString (
       stdenvNoCC.targetPlatform.isDarwin && stdenvNoCC.targetPlatform.isAarch64
     ) signingUtils;
   };
-in
-stdenvNoCC.mkDerivation {
-  name = "remove-references-to";
-
-  strictDeps = true;
-  enableParallelBuilding = true;
-  dontUnpack = true;
-  dontConfigure = true;
-  dontBuild = true;
-
-  installPhase = ''
-    mkdir -p $out/bin
-    install -Dm755 ${remove-references-to} $out/bin/remove-references-to
-  '';
-
+  dir = "bin";
+  isExecutable = true;
   meta.mainProgram = "remove-references-to";
 }
