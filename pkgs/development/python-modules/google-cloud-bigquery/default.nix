@@ -32,7 +32,7 @@
   mock,
   psutil,
   pytest-xdist,
-  pytestCheckHook,
+  pytest8_3CheckHook,
 }:
 
 buildPythonPackage rec {
@@ -84,7 +84,7 @@ buildPythonPackage rec {
     mock
     psutil
     pytest-xdist
-    pytestCheckHook
+    pytest8_3CheckHook
   ]
   ++ optional-dependencies.pandas
   ++ optional-dependencies.ipython;
@@ -109,6 +109,8 @@ buildPythonPackage rec {
     "test_list_rows_scalars_extreme"
     "test_session"
     "test_to_arrow_query_with_empty_result"
+    "test_list_rows_pico"
+    "test_list_rows_pico_truncate"
 
     # Mocking of _ensure_bqstorage_client fails
     "test_to_arrow_ensure_bqstorage_client_wo_bqstorage"
