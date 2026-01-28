@@ -10,11 +10,9 @@
 let
   inherit (lib)
     concatStrings
-    foldl
     foldl'
     genAttrs
     literalExpression
-    maintainers
     mapAttrs
     mapAttrsToList
     mkDefault
@@ -22,9 +20,7 @@ let
     mkIf
     mkMerge
     mkOption
-    optional
     types
-    mkOptionDefault
     flip
     attrNames
     xor
@@ -327,6 +323,7 @@ let
           description = "Prometheus ${name} exporter service user";
           isSystemUser = true;
           inherit (conf) group;
+          extraGroups = mkIf (name == "libvirt") [ "libvirtd" ];
         }
       );
       users.groups = mkMerge [
