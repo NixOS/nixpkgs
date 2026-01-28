@@ -3,26 +3,33 @@ enable cross-compilation of glibc on Darwin (build=Darwin, host=Linux)
 * use host version of ar, which is given by environment variable
 * build system uses stamp.os and stamp.oS files, which only differ in case;
   this fails on macOS, so replace .oS with .o_S
---- glibc-2.32/Makefile.in	2018-02-01 17:17:18.000000000 +0100
-+++ glibc-2.32/Makefile.in	2020-12-27 18:21:30.000000000 +0100
-@@ -6,9 +6,11 @@
+diff --git a/Makefile.in b/Makefile.in
+index e40dcbbc78..0815b79164 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -17,7 +17,8 @@ test-supported-fortify = @libc_cv_test_supported_fortify_source@
  .PHONY: all install bench
- 
+
  all .DEFAULT:
 -	$(MAKE) -r PARALLELMFLAGS="$(PARALLELMFLAGS)" -C $(srcdir) objdir=`pwd` $@
 +	ulimit -n 1024; \
 +	$(MAKE) -r AR=$$AR PARALLELMFLAGS="$(PARALLELMFLAGS)" -C $(srcdir) objdir=`pwd` $@
- 
+
+ check xcheck test:
+ 	$(MAKE) -r PARALLELMFLAGS="$(PARALLELMFLAGS)" -C $(srcdir) \
+@@ -33,6 +34,7 @@ check xcheck test:
+ 		objdir=`pwd` $@
+
  install:
 +	ulimit -n 1024; \
  	LC_ALL=C; export LC_ALL; \
  	$(MAKE) -r PARALLELMFLAGS="$(PARALLELMFLAGS)" -C $(srcdir) objdir=`pwd` $@
- 
+
 --- glibc-2.32/Makerules	2018-02-01 17:17:18.000000000 +0100
 +++ glibc-2.32/Makerules	2020-12-27 18:21:30.000000000 +0100
 @@ -847,8 +847,8 @@
  ifndef objects
- 
+
  # Create the stamp$o files to keep the parent makefile happy.
 -subdir_lib: $(foreach o,$(object-suffixes-for-libc),$(objpfx)stamp$o)
 -$(foreach o,$(object-suffixes-for-libc),$(objpfx)stamp$o):
@@ -64,7 +71,7 @@ enable cross-compilation of glibc on Darwin (build=Darwin, host=Linux)
 -libobjs: $(foreach o,$(object-suffixes-for-libc),$(objpfx)stamp$o)
 +libobjs: $(foreach o,$(object-suffixes-for-libc),$(objpfx)stamp$(subst .oS,.o_S,$o))
  extra-objs: $(addprefix $(objpfx),$(extra-objs))
- 
+
  # Canned sequence for building an extra library archive.
 @@ -1499,7 +1499,7 @@
  	$(rmobjs)
@@ -73,5 +80,5 @@ enable cross-compilation of glibc on Darwin (build=Darwin, host=Linux)
 --rm -f $(objpfx)stamp$o $(o-objects))
 +-rm -f $(objpfx)stamp$(subst .oS,.o_S,$o) $(o-objects))
  endef
- 
+
  # Also remove the dependencies and generated source files.
