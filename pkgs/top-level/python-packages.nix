@@ -11375,7 +11375,7 @@ self: super: with self; {
 
   olefile = callPackage ../development/python-modules/olefile { };
 
-  oletools = callPackage ../development/python-modules/oletools { };
+  oletools = callPackage ../by-name/ol/oletools/unwrapped.nix { };
 
   ollama = callPackage ../development/python-modules/ollama { };
 
