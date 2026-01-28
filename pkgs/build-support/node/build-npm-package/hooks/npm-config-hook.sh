@@ -95,7 +95,8 @@ npmConfigHook() {
     fi
 
     export CACHE_MAP_PATH="$TMP/MEOW"
-    @prefetchNpmDeps@ --map-cache
+
+    @prefetchNpmDeps@ --map-cache "$npmDeps"
 
     @prefetchNpmDeps@ --fixup-lockfile "$srcLockfile"
 
@@ -122,7 +123,7 @@ npmConfigHook() {
 
     echo "Installing dependencies"
 
-    if ! npm ci --ignore-scripts $npmInstallFlags "${npmInstallFlagsArray[@]}" $npmFlags "${npmFlagsArray[@]}"; then
+    if ! npm ci --ignore-scripts "${npmInstallFlags[@]}" "${npmFlags[@]}"; then
         echo
         echo "ERROR: npm failed to install dependencies"
         echo
@@ -138,7 +139,7 @@ npmConfigHook() {
 
     patchShebangs node_modules
 
-    npm rebuild $npmRebuildFlags "${npmRebuildFlagsArray[@]}" $npmFlags "${npmFlagsArray[@]}"
+    npm rebuild "${npmRebuildFlags[@]}" "${npmFlags[@]}"
 
     patchShebangs node_modules
 
