@@ -1,0 +1,48 @@
+--- a/build.gradle
++++ b/build.gradle
+@@ -10,8 +10,8 @@ buildscript {
+ }
+ 
+ plugins {
+-  id 'org.ajoberstar.grgit' version '3.0.0'
+-  id 'nebula.ospackage' version '9.1.1'
++  id 'org.ajoberstar.grgit' version '5.3.3'
++  id 'com.netflix.nebula.ospackage' version '12.2.0'
+ }
+ 
+ ext {
+@@ -363,7 +363,6 @@ sourceSets {
+             ]
+             exclude '**/*.ump', '**/.git*'
+         }
+-        java.outputDir = file(rootProject.ext.classfileOutputDir)
+     }
+     test {
+         compileClasspath = files(
+@@ -381,10 +380,16 @@ sourceSets {
+             ]
+             exclude '**/*.ump', '**/.git*'
+         }
+-        java.outputDir = file(rootProject.ext.testClassfileOutputDir)
+     }
+ }
+ 
++tasks.named("compileJava") {
++    destinationDirectory.set(file(rootProject.ext.classfileOutputDir))
++}
++
++tasks.named("compileTestJava") {
++    destinationDirectory.set(file(rootProject.ext.testClassfileOutputDir))
++}
+ 
+ // ===============
+ //  Jar packaging
+@@ -1998,7 +2003,7 @@ task executeDocJar (type: JavaExec){
+     def drop = fileTree ("${rootProject.ext.umpleoscripts}/dropbox") {
+       include '*.js'
+     }
+-   files = files (
++   files = project.files (
+      'umpleonline/scripts/prototype.js',
+      'umpleonline/scripts/dom.js',
+      'umpleonline/scripts/ajax.js', 
