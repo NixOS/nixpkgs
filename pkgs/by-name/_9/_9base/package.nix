@@ -39,11 +39,9 @@ stdenv.mkDerivation {
   # the 9yacc script needs to be executed to build other items
   preBuild = lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     substituteInPlace ./yacc/9yacc \
-      --replace "../yacc/yacc" "${lib.getExe' pkgsBuildHost._9base "yacc"}"
+      --replace-fail "../yacc/yacc" "${lib.getExe' pkgsBuildHost._9base "yacc"}"
   '';
 
-  enableParallelBuilding = true;
-  strictDeps = true;
   nativeBuildInputs = [ pkg-config ];
   env.NIX_CFLAGS_COMPILE = toString [
     # workaround build failure on -fno-common toolchains like upstream

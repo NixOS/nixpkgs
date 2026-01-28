@@ -20,7 +20,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = ".";
 
-  strictDeps = true;
   dontBuild = true;
   dontConfigure = true;
 

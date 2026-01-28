@@ -171,8 +171,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "OPUSFILE_INCLUDE_DIR" "${lib.getDev opusfile}/include/opus")
   ];
 
-  strictDeps = true;
-
   dontAddPrefix = true;
 
   # Linking fails without this

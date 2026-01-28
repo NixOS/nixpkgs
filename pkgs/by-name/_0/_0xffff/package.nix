@@ -17,8 +17,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-RTpiH6OpC1hRbhLW5Em01oDQdpAZ/mfggCDLSUzOC9s=";
   };
 
-  strictDeps = true;
-
   buildInputs = [ libusb-compat-0_1 ];
 
   installFlags = [

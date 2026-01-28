@@ -75,7 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
     cargo
     rustc
   ]
-  ++ lib.optional withCockpit rsync;
+  ++ lib.optional withCockpit rsync
+  ++ lib.optional withNetSnmp net-snmp;
 
   buildInputs = [
     cracklib
@@ -95,8 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional withSystemd systemd
   ++ lib.optional withOpenldap openldap
-  ++ lib.optional withBdb db
-  ++ lib.optional withNetSnmp net-snmp;
+  ++ lib.optional withBdb db;
 
   postPatch = ''
     patchShebangs ./buildnum.py ./ldap/servers/slapd/mkDBErrStrs.py
@@ -119,7 +119,9 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
   ]
   ++ lib.optionals withOpenldap [
-    "--with-openldap"
+    "--with-openldap-inc=${lib.getDev openldap}/include"
+    "--with-openldap-lib=${lib.getLib openldap}/lib"
+    "--with-openldap-bin=${openldap}/bin"
   ]
   ++ lib.optionals withBdb [
     "--with-db-inc=${lib.getDev db}/include"
@@ -137,8 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-debug"
   ];
 
-  enableParallelBuilding = true;
-  # Disable parallel builds as those lack some dependencies:
+  # Disable parallel installation as those lack some dependencies:
   #   ld: cannot find -lslapd: No such file or directory
   # https://hydra.nixos.org/log/h38bj77gav0r6jbi4bgzy1lfjq22k2wy-389-ds-base-2.3.1.drv
   enableParallelInstalling = false;

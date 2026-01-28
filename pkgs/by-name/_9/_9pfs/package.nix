@@ -7,19 +7,19 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "9pfs";
   version = "0.5";
 
   src = fetchFromGitHub {
     owner = "ftrvxmtrx";
     repo = "9pfs";
-    tag = version;
-    sha256 = "sha256-NT8oIQK8Os3HRZLOH2OvauiCvh5bXZFbeEtTFbzNvrs=";
+    tag = finalAttrs.version;
+    hash = "sha256-NT8oIQK8Os3HRZLOH2OvauiCvh5bXZFbeEtTFbzNvrs=";
   };
 
   postPatch = ''
-    substituteInPlace Makefile --replace "pkg-config" "$PKG_CONFIG"
+    substituteInPlace Makefile --replace-fail "pkg-config" "$PKG_CONFIG"
   '';
 
   makeFlags = [
@@ -28,7 +28,6 @@ stdenv.mkDerivation rec {
   ];
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ fuse ];
-  enableParallelBuilding = true;
 
   passthru.updateScript = gitUpdater { };
 
@@ -43,4 +42,4 @@ stdenv.mkDerivation rec {
       bsd2
     ];
   };
-}
+})

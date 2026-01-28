@@ -41,9 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
     readline
   ];
 
-  strictDeps = true;
-  enableParallelBuilding = true;
-
   postInstall = ''
     install -d $doc/share/doc/1oom
     install -t $doc/share/doc/1oom \

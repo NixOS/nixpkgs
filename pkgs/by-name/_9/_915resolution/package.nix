@@ -4,13 +4,13 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "915resolution";
   version = "0.5.3";
 
   src = fetchurl {
-    url = "http://915resolution.mango-lang.org/915resolution-${version}.tar.gz";
-    sha256 = "0hmmy4kkz3x6yigz6hk99416ybznd67dpjaxap50nhay9f1snk5n";
+    url = "http://915resolution.mango-lang.org/915resolution-${finalAttrs.version}.tar.gz";
+    hash = "sha256-tkyrg0teQQvKVV3J245p9i9vAklpQvNf9KaPPyfxtUI=";
   };
 
   patchPhase = "rm *.o";
@@ -26,4 +26,4 @@ stdenv.mkDerivation rec {
     ];
     license = lib.licenses.publicDomain;
   };
-}
+})

@@ -8,14 +8,14 @@
 telegram-desktop.override {
   pname = "64gram";
   inherit withWebkit;
-  unwrapped = telegram-desktop.unwrapped.overrideAttrs (old: rec {
+  unwrapped = telegram-desktop.unwrapped.overrideAttrs (finalAttrs: {
     pname = "64gram-unwrapped";
     version = "1.1.93";
 
     src = fetchFromGitHub {
       owner = "TDesktop-x64";
       repo = "tdesktop";
-      tag = "v${version}";
+      tag = "v${finalAttrs.version}";
       hash = "sha256-AwzTmEaN6MsJNq1W+cyAbg+QkYrPaV2LXmt3NzKc/vQ=";
       fetchSubmodules = true;
     };
@@ -25,7 +25,7 @@ telegram-desktop.override {
       license = lib.licenses.gpl3Only;
       platforms = lib.platforms.all;
       homepage = "https://github.com/TDesktop-x64/tdesktop";
-      changelog = "https://github.com/TDesktop-x64/tdesktop/releases/tag/v${version}";
+      changelog = "https://github.com/TDesktop-x64/tdesktop/releases/tag/v${finalAttrs.version}";
       maintainers = with lib.maintainers; [ clot27 ];
       mainProgram = "Telegram";
     };
