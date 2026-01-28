@@ -71,7 +71,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.unfree;
     homepage = "https://store.steampowered.com/app/2379780/Balatro/";
-    maintainers = [ lib.maintainers.antipatico ];
+    maintainers = with lib.maintainers; [
+      antipatico
+      appsforartists
+    ];
     platforms = love.meta.platforms;
     mainProgram = "balatro";
   };
