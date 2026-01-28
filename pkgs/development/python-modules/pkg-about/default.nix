@@ -8,6 +8,8 @@
   importlib-resources,
   setuptools,
   packaging,
+  typing-extensions,
+  appdirs,
   pytestCheckHook,
 }:
 
@@ -41,9 +43,13 @@ buildPythonPackage rec {
     importlib-resources
     packaging
     setuptools
+    typing-extensions
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    appdirs
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "pkg_about" ];
 
