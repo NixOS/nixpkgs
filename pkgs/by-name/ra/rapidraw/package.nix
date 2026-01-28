@@ -132,8 +132,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   dontWrapGApps = true;
 
-  # needs to be declared twice annoyingly
-  ORT_STRATEGY = "system";
+  env = {
+    ORT_STRATEGY = "system";
+  };
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     # Patch the .desktop file to set the Categories field
@@ -144,16 +145,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     # link the .so file
     ln -sf ${onnxruntime}/lib/libonnxruntime.so $out/lib/RapidRAW/resources/libonnxruntime.so
-
-    # remove the .dylib file
-    rm -rf $out/lib/RapidRAW/resources/libonnxruntime.dylib
   '';
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapGApp $out/bin/rapidraw \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath finalAttrs.buildInputs} \
-      --set ORT_STRATEGY "system" \
-      --set ORT_DYLIB_PATH "${onnxruntime}/lib/libonnxruntime.so"
+      --set ORT_STRATEGY "system"
   '';
 
   meta = {
