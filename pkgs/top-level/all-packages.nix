@@ -364,8 +364,6 @@ with pkgs;
 
   octodns-providers = octodns.providers;
 
-  oletools = with python3.pkgs; toPythonApplication oletools;
-
   ollama-cpu = callPackage ../by-name/ol/ollama/package.nix { acceleration = false; };
   ollama-rocm = callPackage ../by-name/ol/ollama/package.nix { acceleration = "rocm"; };
   ollama-cuda = callPackage ../by-name/ol/ollama/package.nix { acceleration = "cuda"; };
