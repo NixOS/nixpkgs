@@ -1,4 +1,4 @@
-^/*
+/*
   List of active NixOS maintainers.
    ```nix
    handle = {
