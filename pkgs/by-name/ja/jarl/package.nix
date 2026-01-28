@@ -31,7 +31,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoTestFlags = [
     "--lib"
     "--bins"
-    "--test integration"
+    "--test"
+    "integration"
     # "--test integration_tests"
   ];
 
