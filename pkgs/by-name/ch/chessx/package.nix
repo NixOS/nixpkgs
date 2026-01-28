@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "chessx";
-  version = "1.6.2";
+  version = "1.6.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/chessx/chessx-${finalAttrs.version}.tgz";
-    hash = "sha256-uwkdhJywLWMJl4/ihMnxqFwnTzUSL+kca5wwiabiD4A=";
+    hash = "sha256-NWK2LnUDi9e2358hltpD7H/w8PMgRqQvk9RGzOgEouo=";
   };
 
   nativeBuildInputs = [
