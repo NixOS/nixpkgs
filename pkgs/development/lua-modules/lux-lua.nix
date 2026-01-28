@@ -80,7 +80,9 @@ toLuaModule (
       runHook postInstall
     '';
 
-    cargoTestFlags = "--lib"; # Disable impure integration tests
+    cargoTestFlags = [
+      "--lib" # Disable impure integration tests
+    ];
 
     meta = {
       description = "Lua API for the Lux package manager";
