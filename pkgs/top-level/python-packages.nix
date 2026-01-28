@@ -17521,6 +17521,8 @@ self: super: with self; {
 
   slixmpp = callPackage ../development/python-modules/slixmpp { inherit (pkgs) gnupg; };
 
+  slmd = callPackage ../development/python-modules/slmd { };
+
   slob = callPackage ../development/python-modules/slob { };
 
   slovnet = callPackage ../development/python-modules/slovnet { };
