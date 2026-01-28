@@ -1,8 +1,10 @@
 {
   lib,
+  stdenv,
   fetchdarcs,
   python3Packages,
   ocamlPackages,
+  darwin,
   makeBinaryWrapper,
   coreutils,
   nix-prefetch-darcs,
@@ -31,6 +33,9 @@ ocamlPackages.buildDunePackage (finalAttrs: {
     # For manpages
     python3Packages.docutils
     python3Packages.pygments
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.sigtool
   ];
 
   buildInputs = with ocamlPackages; [
