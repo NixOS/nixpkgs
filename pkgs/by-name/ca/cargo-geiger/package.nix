@@ -53,21 +53,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # skip tests with networking or other failures
   checkFlags = [
     # panics
-    "--skip serialize_test2_quick_report"
-    "--skip serialize_test3_quick_report"
-    "--skip serialize_test6_quick_report"
-    "--skip serialize_test2_report"
-    "--skip serialize_test3_report"
-    "--skip serialize_test6_report"
+    "--skip=serialize_test2_quick_report"
+    "--skip=serialize_test3_quick_report"
+    "--skip=serialize_test6_quick_report"
+    "--skip=serialize_test2_report"
+    "--skip=serialize_test3_report"
+    "--skip=serialize_test6_report"
     # requires networking
-    "--skip test_package::case_2"
-    "--skip test_package::case_3"
-    "--skip test_package::case_6"
-    "--skip test_package::case_9"
+    "--skip=test_package::case_2"
+    "--skip=test_package::case_3"
+    "--skip=test_package::case_6"
+    "--skip=test_package::case_9"
     # panics, snapshot assertions fails
-    "--skip test_package_update_readme::case_2"
-    "--skip test_package_update_readme::case_3"
-    "--skip test_package_update_readme::case_5"
+    "--skip=test_package_update_readme::case_2"
+    "--skip=test_package_update_readme::case_3"
+    "--skip=test_package_update_readme::case_5"
   ];
 
   passthru.tests.version = testers.testVersion {

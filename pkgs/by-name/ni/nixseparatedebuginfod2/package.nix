@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage rec {
   passthru.tests = { inherit (nixosTests) nixseparatedebuginfod2; };
 
   # flaky tests
-  checkFlags = [ "--skip substituter::http" ];
+  checkFlags = [ "--skip=substituter::http" ];
 
   meta = {
     description = "Downloads and provides debug symbols and source code for nix derivations to gdb and other debuginfod-capable debuggers as needed";

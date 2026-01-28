@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage rec {
       ]
       ++ lib.optional stdenv.buildPlatform.isDarwin "pandoc::tests::five_item_deep_list";
     in
-    builtins.map (x: "--skip " + x) skippedTests;
+    builtins.map (x: "--skip=" + x) skippedTests;
 
   passthru = {
     wrapper = callPackage ./wrapper.nix { };

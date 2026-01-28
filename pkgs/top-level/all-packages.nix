@@ -1945,10 +1945,6 @@ with pkgs;
     mobilizon-frontend = callPackage ../servers/mobilizon/frontend.nix { };
   };
 
-  monado = callPackage ../by-name/mo/monado/package.nix {
-    inherit (gst_all_1) gstreamer gst-plugins-base;
-  };
-
   nltk-data = recurseIntoAttrs (callPackage ../tools/text/nltk-data { });
 
   seabios-coreboot = seabios.override { ___build-type = "coreboot"; };
