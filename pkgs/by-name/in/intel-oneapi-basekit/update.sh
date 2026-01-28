@@ -66,6 +66,19 @@ FINAL_URL="https://registrationcenter-download.intel.com/akdlm/IRC_NAS/$UUID/int
 echo "  -> Version: $VERSION"
 echo "  -> UUID:    $UUID"
 echo "  -> Final URL: $FINAL_URL"
+#
+# --- Check if version already matches ---
+if [[ -f "$TARGET_FILE" ]]; then
+  CURRENT_VERSION=$(rg '^\s*version\s*=\s*"([^"]+)"' -o -r '$1' "$TARGET_FILE" || true)
+  if [[ "$CURRENT_VERSION" == "$VERSION" ]]; then
+    echo "Version $VERSION is already up-to-date in $TARGET_FILE. Skipping update."
+    exit 0
+  fi
+  echo "  -> Current version: $CURRENT_VERSION (will update to $VERSION)"
+else
+  echo "Error: Target file '$TARGET_FILE' not found." >&2
+  exit 1
+fi
 
 echo "Prefetching URL to calculate SRI hash..."
 SHA=$(nix-prefetch-url --type sha256 "$FINAL_URL")
