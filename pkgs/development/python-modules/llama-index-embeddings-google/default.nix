@@ -7,14 +7,14 @@
   hatchling,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llama-index-embeddings-google";
   version = "0.4.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_embeddings_google";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-dWV2fKudLsxfpHTGrGljMBU62vYUqzf8NarQ3Nl9poI=";
   };
 
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
