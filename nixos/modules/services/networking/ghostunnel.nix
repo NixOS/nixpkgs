@@ -193,14 +193,18 @@ let
               optional (config.keystore != null) "keystore:${config.keystore}"
               ++ optional (config.cert != null) "cert:${config.cert}"
               ++ optional (config.key != null) "key:${config.key}"
-              ++ optional (config.cacert != null) "cacert:${config.cacert}";
+              # Always load cacert so Landlock sandboxing (enabled by default
+              # since v1.9.0) includes it in allowed paths
+              ++ [
+                "cacert:${if config.cacert != null then config.cacert else "/etc/ssl/certs/ca-certificates.crt"}"
+              ];
           };
           script = concatStringsSep " " (
             [ "${mainCfg.package}/bin/ghostunnel" ]
             ++ optional (config.keystore != null) "--keystore=$CREDENTIALS_DIRECTORY/keystore"
             ++ optional (config.cert != null) "--cert=$CREDENTIALS_DIRECTORY/cert"
             ++ optional (config.key != null) "--key=$CREDENTIALS_DIRECTORY/key"
-            ++ optional (config.cacert != null) "--cacert=$CREDENTIALS_DIRECTORY/cacert"
+            ++ [ "--cacert=$CREDENTIALS_DIRECTORY/cacert" ]
             ++ [
               "server"
               "--listen ${config.listen}"
