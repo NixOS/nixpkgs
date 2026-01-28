@@ -8,6 +8,7 @@
   runCommand,
   which,
   rustPlatform,
+  libclang,
   emscripten,
   openssl,
   pkg-config,
@@ -103,25 +104,27 @@ let
 in
 rustPlatform.buildRustPackage (final: {
   pname = "tree-sitter";
-  version = "0.25.10";
+  version = "0.26.3";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
     repo = "tree-sitter";
     tag = "v${final.version}";
-    hash = "sha256-aHszbvLCLqCwAS4F4UmM3wbSb81QuG9FM7BDHTu1ZvM=";
+    hash = "sha256-G1C5IhRIVcWUwEI45ELxCKfbZnsJoqan7foSzPP3mMg=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-4R5Y9yancbg/w3PhACtsWq0+gieUd2j8YnmEj/5eqkg=";
+  cargoHash = "sha256-kHYLaiCHyKG+DL+T2s8yumNHFfndrB5aWs7ept0X4CM=";
 
   buildInputs = [
     installShellFiles
+    libclang
   ]
   ++ lib.optionals webUISupport [
     openssl
   ];
   nativeBuildInputs = [
+    rustPlatform.bindgenHook
     which
   ]
   ++ lib.optionals webUISupport [
