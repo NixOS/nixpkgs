@@ -10,11 +10,15 @@
 
   nodes = {
     docker =
-      { pkgs, ... }:
+      { pkgs, config, ... }:
       {
         virtualisation.docker.enable = true;
         virtualisation.docker.autoPrune.enable = true;
         virtualisation.docker.package = pkgs.docker;
+
+        environment.systemPackages = [
+          config.boot.kernelPackages.psc
+        ];
 
         users.users = {
           noprivs = {
@@ -51,5 +55,26 @@
     docker.succeed("systemctl restart systemd-sysctl")
     docker.succeed("grep 1 /proc/sys/net/ipv4/conf/all/forwarding")
     docker.succeed("grep 1 /proc/sys/net/ipv4/conf/default/forwarding")
+
+    # Test psc container integration with Docker
+    with subtest("psc can see Docker containers"):
+        docker.succeed(
+            "docker run -d --name=psc-test -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/sleep 60"
+        )
+        docker.succeed("docker ps | grep psc-test")
+
+        # psc -o containers should show Docker container info
+        output = docker.succeed("psc -o containers --no-color")
+        print("=== psc -o containers with Docker ===")
+        print(output)
+        assert "sleep" in output, "psc should show the sleep process"
+
+        # Filter for processes in containers
+        output = docker.succeed("psc 'container.id != \"\"' -o containers --no-color")
+        print("=== psc container filter ===")
+        print(output)
+
+        docker.succeed("docker stop psc-test")
+        docker.succeed("docker rm psc-test")
   '';
 }

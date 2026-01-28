@@ -500,6 +500,8 @@ in
 
         ply = callPackage ../os-specific/linux/ply { };
 
+        psc = callPackage ../os-specific/linux/psc { };
+
         r8125 = callPackage ../os-specific/linux/r8125 { };
 
         r8168 = callPackage ../os-specific/linux/r8168 { };
