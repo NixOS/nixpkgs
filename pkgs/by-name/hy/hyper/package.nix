@@ -1,123 +1,42 @@
 {
-  stdenv,
   lib,
+  stdenv,
+  appimageTools,
   fetchurl,
-  dpkg,
-  atk,
-  glib,
-  pango,
-  gdk-pixbuf,
-  gtk3,
-  cairo,
-  freetype,
-  fontconfig,
-  dbus,
-  libXi,
-  libXcursor,
-  libXdamage,
-  libXrandr,
-  libXcomposite,
-  libXext,
-  libXfixes,
-  libXrender,
-  libX11,
-  libXtst,
-  libXScrnSaver,
-  libxcb,
-  nss,
-  nspr,
-  alsa-lib,
-  cups,
-  expat,
-  udev,
-  libpulseaudio,
-  at-spi2-atk,
-  at-spi2-core,
-  libxshmfence,
-  libdrm,
-  libxkbcommon,
-  libgbm,
-  nixosTests,
 }:
 
 let
-  libPath = lib.makeLibraryPath [
-    stdenv.cc.cc
-    gtk3
-    atk
-    glib
-    pango
-    gdk-pixbuf
-    cairo
-    freetype
-    fontconfig
-    dbus
-    libXi
-    libXcursor
-    libXdamage
-    libXrandr
-    libXcomposite
-    libXext
-    libXfixes
-    libxcb
-    libXrender
-    libX11
-    libXtst
-    libXScrnSaver
-    nss
-    nspr
-    alsa-lib
-    cups
-    expat
-    udev
-    libpulseaudio
-    at-spi2-atk
-    at-spi2-core
-    libxshmfence
-    libdrm
-    libxkbcommon
-    libgbm
-  ];
-
-in
-stdenv.mkDerivation rec {
-  pname = "hyper";
   version = "3.4.1";
+  pname = "hyper";
 
   src = fetchurl {
-    url = "https://github.com/vercel/hyper/releases/download/v${version}/hyper_${version}_amd64.deb";
-    sha256 = "sha256-jEzZ6MWFaNXBS8CAzfn/ufMPpWcua9HhBFzetWMlH1Y=";
+    url = "https://github.com/vercel/hyper/releases/download/v${version}/Hyper-${version}.AppImage";
+    hash = "sha256-UFC+Zn/lbWhx7W+Gs7A6AjsrdaqRMpqCwvFf9+1mtjw=";
   };
 
-  nativeBuildInputs = [ dpkg ];
+  appimageContents = appimageTools.extractType2 {
+    inherit pname version src;
+  };
+in
+appimageTools.wrapType2 rec {
+  inherit pname version src;
 
-  installPhase = ''
-    mkdir -p "$out/bin"
-    mv opt "$out/"
+  extraInstallCommands = ''
+    install -m 444 -D ${appimageContents}/hyper.desktop $out/share/applications/${pname}.desktop
+    substituteInPlace $out/share/applications/${pname}.desktop \
+      --replace-fail 'Exec=AppRun' 'Exec=${meta.mainProgram}'
 
-    ln -s "$out/opt/Hyper/hyper" "$out/bin/hyper"
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" --set-rpath "${libPath}:$out/opt/Hyper:\$ORIGIN" "$out/opt/Hyper/hyper"
-
-    mv usr/* "$out/"
-
-    substituteInPlace $out/share/applications/hyper.desktop \
-      --replace "/opt/Hyper/hyper" "hyper"
+    install -m 444 -D ${appimageContents}/usr/share/icons/hicolor/1024x1024/apps/hyper.png \
+      $out/share/icons/hicolor/1024x1024/apps/${pname}.png
   '';
 
-  passthru.tests.test = nixosTests.terminal-emulators.hyper;
-
-  dontPatchELF = true;
-  meta = {
-    description = "Terminal built on web technologies";
-    homepage = "https://hyper.is/";
-    maintainers = with lib.maintainers; [
-      puffnfresh
-      fabiangd
-    ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.mit;
+  meta = with lib; {
+    description = "A terminal built on web technologies";
+    homepage = "https://hyper.is";
+    license = licenses.mit;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    maintainers = with maintainers; [ ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "hyper";
-    broken = true; # Error: 'node-pty' failed to load
   };
 }
