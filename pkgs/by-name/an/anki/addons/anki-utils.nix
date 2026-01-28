@@ -5,6 +5,7 @@
   lndir,
   formats,
   runCommand,
+  nix-update-script,
 }:
 {
   buildAnkiAddon = lib.extendMkDerivation {
@@ -53,6 +54,7 @@
         '';
 
         passthru = {
+          updateScript = nix-update-script { };
           withConfig =
             {
               # JSON add-on config. The available options for an add-on are in its
