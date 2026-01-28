@@ -917,6 +917,7 @@ in
           StateDirectory = "kanidm";
           StateDirectoryMode = "0700";
           RuntimeDirectory = "kanidmd";
+          ExecStartPre = "${cfg.package}/bin/kanidmd domain rename -c ${serverConfigFile}";
           ExecStart = "${cfg.package}/bin/kanidmd server -c ${serverConfigFile}";
           ExecStartPost = mkIf cfg.provision.enable postStartScript;
           User = "kanidm";
