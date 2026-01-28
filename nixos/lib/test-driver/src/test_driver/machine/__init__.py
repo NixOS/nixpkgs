@@ -1,6 +1,5 @@
 import base64
 import io
-import json
 import os
 import platform
 import queue
@@ -1422,19 +1421,10 @@ class NspawnMachine(BaseMachine):
         self.pid = None
 
     def ssh_backdoor_command(self, index: int) -> str:
-        # get IP from `ip addr` inside the container:
-        ip_status, ip_output = self._execute("ip -j addr show")
-        assert ip_status == 0, "Failed to get IP addresses from container"
-        ip_output_data = json.loads(ip_output)
-        ip_addresses = [
-            addr_info.get("local")
-            for iface in ip_output_data
-            if iface.get("ifname") != "lo"
-            for addr_info in iface.get("addr_info", [])
-            if addr_info.get("family") == "inet"
-        ]
-
-        return "\n".join(f"ssh -o User=root {addr}" for addr in ip_addresses)
+        # documented in systemd-ssh-generator(8) and https://systemd.io/CONTAINER_INTERFACE/
+        socket_path = f"/run/systemd/nspawn/unix-export/{self.name}/ssh"
+        proxy_cmd = f"socat - UNIX-CLIENT:{socket_path}"
+        return f'ssh -o User=root -o ProxyCommand="{proxy_cmd}" bash'
 
     def release(self) -> None:
         if self.pid is None:

@@ -70,7 +70,10 @@ let
           hostPkgs.makeWrapper
         ]
         ++ lib.optionals (!config.skipTypeCheck) [ hostPkgs.mypy ];
-        buildInputs = [ testDriver ];
+        buildInputs = [
+          testDriver
+          hostPkgs.socat
+        ];
         testScript = config.testScriptString;
         preferLocalBuild = true;
         passthru = config.passthru;
