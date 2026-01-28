@@ -5742,7 +5742,7 @@ self: super: with self; {
 
   fontawesomefree = callPackage ../development/python-modules/fontawesomefree { };
 
-  fontbakery = callPackage ../development/python-modules/fontbakery { };
+  fontbakery = callPackage ../by-name/fo/fontbakery/unwrapped.nix { };
 
   fontfeatures = callPackage ../development/python-modules/fontfeatures { };
 

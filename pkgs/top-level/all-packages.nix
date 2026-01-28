@@ -977,8 +977,6 @@ with pkgs;
     enableWsi = true;
   };
 
-  fontbakery = with python3Packages; toPythonApplication fontbakery;
-
   genealogos-api = genealogos-cli.override {
     crate = "api";
   };
