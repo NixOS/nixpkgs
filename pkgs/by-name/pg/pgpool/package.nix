@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     }.html";
     license = lib.licenses.free;
     platforms = lib.platforms.unix;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ anthonyroussel ];
     mainProgram = "pgpool";
   };
 })
