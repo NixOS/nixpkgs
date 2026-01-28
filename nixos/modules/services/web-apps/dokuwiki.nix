@@ -115,7 +115,7 @@ let
   pkg =
     hostName: cfg:
     cfg.package.combine {
-      inherit (cfg) plugins templates;
+      inherit (cfg) plugins templates extraConfigs;
 
       pname = p: "${p.pname}-${hostName}";
 
@@ -342,6 +342,22 @@ let
             };
             # And then pass this theme to the template list like this:
             in [ template-bootstrap3 ]
+          '';
+        };
+
+        extraConfigs = mkOption {
+          type = types.attrsOf types.path;
+          default = { };
+          description = ''
+            Path(s) to additional configuration files that are then linked to the 'conf' directory.
+          '';
+          example = literalExpression ''
+            {
+              "acronyms.local.conf" = pkgs.writeText "acronyms.local.conf" '''
+                r13y  reproducibility
+              ''';
+              "entities.local.conf" = ./dokuwiki-entities;
+            }
           '';
         };
 
