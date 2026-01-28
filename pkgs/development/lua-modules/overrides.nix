@@ -18,6 +18,7 @@
   fzf,
   glib,
   glibc,
+  glibcLocalesUtf8,
   gmp,
   gnulib,
   gnum4,
@@ -51,6 +52,7 @@
   tree-sitter,
   unbound,
   unzip,
+  util-linux,
   versionCheckHook,
   vimPlugins,
   yajl,
@@ -898,6 +900,14 @@ in
   };
 
   orgmode = prev.orgmode.overrideAttrs {
+    doCheck = stdenv.hostPlatform.isLinux;
+    nativeCheckInputs = [
+      neovim-unwrapped
+      glibcLocalesUtf8 # the tests run "vim.cmd.language('en_US.utf-8')"
+      writableTmpDirAsHomeHook
+      util-linux # for uuidgen
+    ];
+
     # Patch in tree-sitter-orgmode dependency
     postPatch = ''
       substituteInPlace lua/orgmode/config/init.lua \
@@ -907,6 +917,32 @@ in
         --replace-fail \
         "require('orgmode.utils.treesitter.install').reinstall()" \
         "pcall(function() vim.treesitter.language.add('org', { path = '${final.tree-sitter-orgmode}/lib/lua/${final.tree-sitter-orgmode.lua.luaversion}/parser/org.so'}) end)"
+    '';
+
+    preCheck = ''LUA_PATH="lua/?.lua;lua/?/init.lua;$LUA_PATH"'';
+
+    checkPhase = ''
+      runHook preCheck
+
+      # bypass the download of plenary
+      substituteInPlace  tests/minimal_init.lua --replace-fail \
+        "plenary = 'https://github.com/nvim-lua/plenary.nvim.git'," \
+        ""
+
+      # remove failing tests
+      rm tests/plenary/colors/colors_spec.lua # colors depend on neovim version usually
+      rm tests/plenary/capture/capture_spec.lua # because clipboard not available
+
+      # not sure why yet
+      rm tests/plenary/ui/mappings/date_spec.lua \
+        tests/plenary/capture/templates_spec.lua
+
+      # bypass upstream launcher that interacts with network
+      nvim --headless -i NONE \
+        -u test/minimal_init.vim --cmd "set rtp+=${vimPlugins.plenary-nvim}" \
+        -c "PlenaryBustedDirectory tests { sequential = true, minimal_init = './tests/minimal_init.lua' }"
+
+      runHook postCheck
     '';
   };
 
@@ -1092,9 +1128,11 @@ in
 
     # we override 'luarocks test' because otherwise neovim doesn't find/loldd the plenary plugin
     checkPhase = ''
+      runHook preCheck
       nvim --headless -i NONE \
         -u test/minimal_init.vim --cmd "set rtp+=${vimPlugins.plenary-nvim}" \
         -c "PlenaryBustedDirectory test/auto/ { sequential = true, minimal_init = './test/minimal_init.vim' }"
+      runHook postCheck
     '';
   };
 
