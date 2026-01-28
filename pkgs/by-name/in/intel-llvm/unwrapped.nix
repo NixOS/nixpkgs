@@ -22,12 +22,7 @@
   opencl-headers,
   libxml2,
   libedit,
-  llvmPackages,
-  # Ideally this would be the LLVM with the same major version
-  # as the LLVM built here (22). However LLVM 22 is packaged
-  # as the alias llvmPackages_git and not available
-  # for use as a dependency.
-  llvmPackages_21,
+  llvmPackages_22,
   callPackage,
   parallel-hashmap,
   spirv-headers,
@@ -107,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     python3
-    llvmPackages.bintools # For lld
+    llvmPackages_22.bintools # For lld
     pkg-config
     zlib
     zstd
@@ -318,8 +313,7 @@ stdenv.mkDerivation (finalAttrs: {
     # This is for easily referencing version-compatible LLVM libraries
     # and tools that aren't built in this derivation,
     # as well as nix tooling, such as the stdenv.
-    # As above, ideally this would be LLVM 22, but for now, we use LLVM 21.
-    baseLlvm = llvmPackages_21;
+    baseLlvm = llvmPackages_22;
 
     inherit llvmMajorVersion;
 
