@@ -1485,7 +1485,7 @@ class NspawnMachine(BaseMachine):
         assert nsenter is not None
 
         # Pull in /etc/profile, and some shell sanity.
-        command = f"set -eo pipefail; source /etc/profile; set -xu; {command}"
+        command = f"set -eo pipefail; source /etc/profile; set -u; {command}"
         cp = subprocess.run(
             [
                 nsenter,
