@@ -8,26 +8,44 @@
   runCommand,
   cctools,
   darwin,
-  sources ? import ./sources.nix { inherit fetchurl; },
-  version ? sources.versionUsed,
 }:
 
-assert sources != null && (builtins.isAttrs sources);
 stdenv.mkDerivation (finalAttrs: {
   pname = "dart";
-  inherit version;
-
-  nativeBuildInputs = [ unzip ];
+  version = "3.10.8";
 
   src =
-    sources."${version}-${stdenv.hostPlatform.system}"
-      or (throw "unsupported version/system: ${version}/${stdenv.hostPlatform.system}");
+    let
+      selectSystem =
+        attrs:
+        attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+      system = selectSystem {
+        x86_64-linux = "linux-x64";
+        aarch64-linux = "linux-arm64";
+        x86_64-darwin = "macos-x64";
+        aarch64-darwin = "macos-arm64";
+      };
+      hash = selectSystem {
+        x86_64-linux = "sha256-ZxIAfRYgP4kotAKADe0OkjV0Jrg7AkF9FXPbnMiLdcQ=";
+        aarch64-linux = "sha256-WE7qTFP2T+2mjrpdxLKwJCdcIQA9/M2Fp56TT6qsCSE=";
+        x86_64-darwin = "sha256-EwLryZDVKeq+IjPzedwRcXR3Qtu3HcgYBIocLAWbZSc=";
+        aarch64-darwin = "sha256-vQ4yOB1I97w0AyCaQR2CxffI8b2I6S8MTzkr9G68Dg8=";
+      };
+    in
+    fetchurl {
+      url = "https://storage.googleapis.com/dart-archive/channels/${
+        if lib.strings.hasSuffix ".beta" finalAttrs.version then "beta" else "stable"
+      }/release/${finalAttrs.version}/sdk/dartsdk-${system}-release.zip";
+      inherit hash;
+    };
+
+  nativeBuildInputs = [ unzip ];
 
   installPhase = ''
     runHook preInstall
 
-    rm LICENSE
-    cp -R . $out
+    rm LICENSE README revision
+    cp --recursive . $out
   ''
   + lib.optionalString (stdenv.hostPlatform.isLinux) ''
     find $out/bin -executable -type f -exec patchelf --set-interpreter ${bintools.dynamicLinker} {} \;
