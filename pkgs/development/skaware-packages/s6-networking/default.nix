@@ -25,8 +25,8 @@ assert sslSupportEnabled -> sslLibs ? ${sslSupport};
 
 skawarePackages.buildPackage {
   pname = "s6-networking";
-  version = "2.7.1.0";
-  sha256 = "sha256-p7M0l+cpIaWdTB/GfOXMdL0GXgkQW/Gnnx/HPPmgZZI=";
+  version = "2.7.2.1";
+  sha256 = "sha256-Z5+GUthb40PawfB2SXzTbKjFZACUh4D4XcZONAVeLBs=";
 
   manpages = skawarePackages.buildManPages {
     pname = "s6-networking-man-pages";
@@ -76,7 +76,7 @@ skawarePackages.buildPackage {
 
   postInstall = ''
     # remove all s6 executables from build directory
-    rm $(find -name "s6-*" -type f -mindepth 1 -maxdepth 1 -executable)
+    rm $(find -name "s6-*" -type f -mindepth 1 -maxdepth 1 -executable) proxy-server
     rm libs6net.* libstls.* libs6tls.* libsbearssl.*
 
     mv doc $doc/share/doc/s6-networking/html
