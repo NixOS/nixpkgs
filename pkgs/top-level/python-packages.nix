@@ -3563,7 +3563,7 @@ self: super: with self; {
     protoc = pkgs.protobuf;
   };
 
-  datalad = callPackage ../development/python-modules/datalad { };
+  datalad = callPackage ../by-name/da/datalad/unwrapped.nix { };
 
   datalad-gooey = callPackage ../by-name/da/datalad-gooey/unwrapped.nix { };
 

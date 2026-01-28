@@ -1115,8 +1115,6 @@ with pkgs;
 
   cgit = callPackage ../applications/version-management/cgit { };
 
-  datalad = with python3Packages; toPythonApplication datalad;
-
   forgejo-lts = callPackage ../by-name/fo/forgejo/lts.nix { };
 
   github-cli = gh;
