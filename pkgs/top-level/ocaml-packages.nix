@@ -1790,6 +1790,8 @@ let
 
         ppx_lun = callPackage ../development/ocaml-modules/lun/ppx.nix { };
 
+        ppx_mikmatch = callPackage ../development/ocaml-modules/ppx_mikmatch { };
+
         ppx_monad = callPackage ../development/ocaml-modules/ppx_monad { };
 
         ppx_repr = callPackage ../development/ocaml-modules/repr/ppx.nix { };
