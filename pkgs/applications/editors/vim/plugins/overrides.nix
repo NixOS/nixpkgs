@@ -2750,15 +2750,15 @@ assertNoAdditions {
     checkInputs = [ self.toggleterm-nvim ];
     dependencies = with self; [
       nvim-treesitter-legacy
-      nvim-treesitter-legacy-parsers.c_sharp
-      nvim-treesitter-legacy-parsers.go
-      nvim-treesitter-legacy-parsers.haskell
-      nvim-treesitter-legacy-parsers.javascript
-      nvim-treesitter-legacy-parsers.python
-      nvim-treesitter-legacy-parsers.ruby
-      nvim-treesitter-legacy-parsers.rust
-      nvim-treesitter-legacy-parsers.typescript
-      nvim-treesitter-legacy-parsers.zig
+      nvim-treesitter-parsers.c_sharp
+      nvim-treesitter-parsers.go
+      nvim-treesitter-parsers.haskell
+      nvim-treesitter-parsers.javascript
+      nvim-treesitter-parsers.python
+      nvim-treesitter-parsers.ruby
+      nvim-treesitter-parsers.rust
+      nvim-treesitter-parsers.typescript
+      nvim-treesitter-parsers.zig
     ];
     nvimSkipModules = [
       # Broken runners
