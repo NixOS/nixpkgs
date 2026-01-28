@@ -173,7 +173,7 @@ stdenv.mkDerivation (finalAttrs: {
     configDestination=($out/share/ImageMagick-*)
     grep -v '/nix/store' $dev/lib/ImageMagick-*/config-Q16HDRI/configure.xml > $configDestination/configure.xml
     for file in "$dev"/bin/*-config; do
-      substituteInPlace "$file" --replace pkg-config \
+      substituteInPlace "$file" --replace "$PKG_CONFIG" \
         "PKG_CONFIG_PATH='$dev/lib/pkgconfig' '$(command -v $PKG_CONFIG)'"
     done
   ''
