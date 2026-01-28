@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "checkmake";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "checkmake";
     repo = "checkmake";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-W+4bKERQL4nsPxrcCP19uYAwSw+tK9mAQp/fufzYcYg=";
+    hash = "sha256-5GIqmcIj1jU4lOqrFxuI8lDNYYpsRnUSft6RYGRbiAE=";
   };
 
   vendorHash = "sha256-Iv3MFhHnwDLIuUH7G6NYyQUSAaivBYqYDWephHnBIho=";
