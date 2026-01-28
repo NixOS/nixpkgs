@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "sorl-thumbnail";
-  version = "12.11.0";
+  version = "13.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "sorl_thumbnail";
     inherit version;
-    hash = "sha256-GRuJwn7LQLXCo1VJ1VfRfEhBxq/0ObLhe5OLke6kY7M=";
+    hash = "sha256-dfHyL6dChGkXykd0zUxXjNgC/15Pb1MyhzXDo4Jk7kk=";
   };
 
   build-system = [
