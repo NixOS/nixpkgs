@@ -8,13 +8,13 @@
 
 buildDubPackage rec {
   pname = "btdu";
-  version = "0.6.0";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "CyberShadow";
     repo = "btdu";
     rev = "v${version}";
-    hash = "sha256-B8ojxdXibeNEZay9S5lzpB6bTKNB2ZI6AQ3XKUHioE0=";
+    hash = "sha256-ZZaBaDKfW52w2YWj34gXFruWNBNqjLUFsPCHmrCKT7I=";
   };
 
   dubLock = ./dub-lock.json;
@@ -27,6 +27,8 @@ buildDubPackage rec {
   installPhase = ''
     runHook preInstall
     install -Dm755 btdu -t $out/bin
+    ./btdu --man "" > btdu.1
+    install -Dm644 btdu.1 -t $out/share/man/man1
     runHook postInstall
   '';
 
