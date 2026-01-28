@@ -4450,7 +4450,7 @@ self: super: with self; {
 
   dncil = callPackage ../development/python-modules/dncil { };
 
-  dnf-plugins-core = callPackage ../development/python-modules/dnf-plugins-core { };
+  dnf-plugins-core = callPackage ../by-name/dn/dnf-plugins-core/unwrapped.nix { };
 
   dnf4 = callPackage ../development/python-modules/dnf4 { };
 
