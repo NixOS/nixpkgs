@@ -15,14 +15,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.5.5.6";
+  version = "1.5.5.7";
   pname = "chuck";
 
   src = fetchFromGitHub {
     owner = "ccrma";
     repo = "chuck";
     tag = "chuck-${finalAttrs.version}";
-    hash = "sha256-KBmMpycNCjRZJPdRR3HG5nqHQhhVOENciRpiQ7buyok=";
+    hash = "sha256-pcALvo+YFL/tnyl5SKGfxWdMAvnrD/cqOWxvVLcm1ZI=";
   };
 
   nativeBuildInputs = [
