@@ -18,7 +18,7 @@
   };
 
   config = lib.mkIf config.virtualisation.spiceUSBRedirection.enable {
-    environment.systemPackages = [ pkgs.spice-gtk ]; # For polkit actions
+    security.polkit.packages = [ pkgs.spice-gtk ];
     security.wrappers.spice-client-glib-usb-acl-helper = {
       owner = "root";
       group = "root";
