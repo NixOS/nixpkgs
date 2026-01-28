@@ -1,12 +1,18 @@
 { lib, pkgs }:
 let
   inherit (lib)
+    all
+    assertOneOf
     boolToString
+    concatLists
+    concatMapStringsSep
+    concatStrings
     concatStringsSep
     escape
     filterAttrs
     flatten
     hasPrefix
+    hasSuffix
     id
     isAttrs
     isBool
@@ -21,6 +27,8 @@ let
     optionalAttrs
     optionalString
     pipe
+    removePrefix
+    removeSuffix
     singleton
     strings
     toPretty
@@ -30,19 +38,19 @@ let
     ;
 
   inherit (lib.generators)
+    mkKeyValueDefault
+    mkLuaInline
     mkValueStringDefault
     toGitINI
     toINI
     toINIWithGlobalSection
     toKeyValue
     toLua
-    mkLuaInline
+    toPlist
     ;
 
   inherit (lib.types)
-    serializableValueWith
     attrsOf
-    atom
     bool
     coercedTo
     either
@@ -55,6 +63,7 @@ let
     nullOr
     oneOf
     path
+    serializableValueWith
     str
     submodule
     ;
@@ -388,7 +397,7 @@ optionalAttrs allowAliases aliases
     // {
       generate =
         name: value:
-        lib.warn
+        warn
           "Direct use of `pkgs.formats.systemd` has been deprecated, please use `pkgs.formats.systemd { }` instead."
           rawFormat.generate
           name
@@ -801,7 +810,7 @@ optionalAttrs allowAliases aliases
             ''
         ) { };
       # Alias for mkLuaInline
-      lib.mkRaw = lib.mkLuaInline;
+      lib.mkRaw = mkLuaInline;
     };
 
   nixConf =
@@ -874,7 +883,7 @@ optionalAttrs allowAliases aliases
             ${mkKeyValuePairs (filterAttrs (key: _: isExtra key) value)}
             ${extraOptions}
           '';
-          checkPhase = lib.optionalString checkConfig (
+          checkPhase = optionalString checkConfig (
             if pkgs.stdenv.hostPlatform != pkgs.stdenv.buildPlatform then
               ''
                 echo "Ignoring validation for cross-compilation"
@@ -1051,6 +1060,156 @@ optionalAttrs allowAliases aliases
         in
         valueType;
 
-      generate = name: value: pkgs.writeText name (lib.generators.toPlist { inherit escape; } value);
+      generate = name: value: pkgs.writeText name (toPlist { inherit escape; } value);
+    };
+
+  # The Xen Project Hypervisor's `xl` configuration syntax.
+  # Useful for the entire Xen module and declarative VM configurations.
+  # https://xenbits.xen.org/docs/unstable/man/xl.cfg.5.html
+  # https://xenbits.xen.org/docs/unstable/man/xl.conf.5.html
+  xenLight =
+    {
+      type ? "cfg",
+    }:
+    assert assertOneOf "pkgs.formats.xenLight's 'type' attribute" type [
+      "cfg"
+      "conf"
+    ];
+    {
+      type =
+        let
+          valueType =
+            oneOf [
+              bool
+              float
+              int
+              path
+              str
+              (listOf valueType)
+              (listOf (attrsOf valueType))
+            ]
+            // {
+              description = "xl.${type} value";
+            };
+        in
+        attrsOf valueType;
+      generate =
+        let
+          # Modified version of lib.generators.toKeyValue that does not use
+          # newlines and parses Xen's `SPEC` and `SPEC_STRING` value types.
+          generator =
+            let
+              # This function prevents standardisedString from adding extra quotes to SPECs and SPEC_STRINGs.
+              escapedString = mapAttrs (name: value: if (isString value) then "{${value}}" else value);
+
+              # This function:
+              # - Converts our native `true` and `false` types to numeric booleans,
+              # - Adds quotes to strings that aren't lists or escaped with '{}'.
+              standardisedString =
+                v:
+                if isString v then
+                  if ((hasPrefix "[" v) && (hasSuffix "]" v)) then
+                    v
+                  else if ((hasPrefix "{" v) && (hasSuffix "}" v)) then
+                    removePrefix "{" (removeSuffix "}" v)
+                  else
+                    ''"${v}"''
+                else if v then
+                  1
+                else if !v then
+                  0
+                else
+                  v;
+
+              mkKeyValue = mkKeyValueDefault { } "=";
+
+              mkConfig =
+                {
+                  semicolon,
+                  quotes,
+                }:
+                k: v:
+                optionalString quotes ''"''
+                + (mkKeyValue k (standardisedString v))
+                + optionalString quotes ''"''
+                + optionalString semicolon ";";
+
+              mkConfigFile =
+                {
+                  semicolon ? true,
+                  quotes ? false,
+                }:
+                k: v: [
+                  (mkConfig { inherit semicolon quotes; } k (
+                    let
+                      specString = concatStringsSep "," (
+                        flatten (
+                          map (
+                            val:
+                            (concatStringsSep "" (
+                              [ ''"'' ]
+                              ++ [
+                                (concatStringsSep "," (
+                                  flatten (
+                                    mapAttrsToList (mkConfigFile {
+                                      semicolon = false;
+                                    }) (escapedString val)
+                                  )
+                                ))
+                              ]
+                              ++ [ ''"'' ]
+                            ))
+                          ) v
+                        )
+                      );
+
+                      spec = concatStringsSep "," (
+                        map (
+                          val:
+                          (concatStringsSep "" (
+                            flatten (
+                              map (
+                                val2:
+                                [ "[" ]
+                                ++ [
+                                  (concatStringsSep "," (
+                                    flatten (
+                                      mapAttrsToList (mkConfigFile {
+                                        semicolon = false;
+                                        quotes = true;
+                                      }) (escapedString val2)
+                                    )
+                                  ))
+                                ]
+                                ++ [ "]" ]
+                              ) val
+                            )
+                          ))
+                        ) v
+                      );
+
+                      standard = concatMapStringsSep "," standardisedString v;
+
+                      keyValuePairs =
+                        if (all isAttrs v) then
+                          specString
+                        else if (all isList v) then
+                          spec
+                        else if (all (!isAttrs) v) then
+                          standard
+                        else
+                          throw "pkgs.formats.xenLight: lists must include only attribute sets (SPEC_STRING), only lists (SPEC), or only simple types.";
+                    in
+                    if isList v then "[${keyValuePairs}]" else v
+                  ))
+                ];
+            in
+            attrs:
+            (removeSuffix ";" (
+              concatStrings (concatLists (mapAttrsToList (name: value: mkConfigFile { } name value) attrs))
+            ))
+            + "\n";
+        in
+        name: value: pkgs.writeText name (generator value);
     };
 }
