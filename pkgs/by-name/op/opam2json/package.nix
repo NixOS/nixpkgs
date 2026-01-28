@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = with ocamlPackages; [
     yojson
     opam-file-format
-    cmdliner
+    cmdliner_1
   ];
   nativeBuildInputs = with ocamlPackages; [
     ocaml

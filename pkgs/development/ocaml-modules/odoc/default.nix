@@ -3,7 +3,7 @@
   buildDunePackage,
   ocaml-crunch,
   astring,
-  cmdliner,
+  cmdliner_1,
   cppo,
   fpath,
   result,
@@ -28,7 +28,7 @@ buildDunePackage {
   ];
   buildInputs = [
     astring
-    cmdliner
+    cmdliner_1
     fpath
     tyxml
     odoc-parser

@@ -24,7 +24,7 @@
   lwt,
   findlib,
   mirage-flow,
-  cmdliner,
+  cmdliner_1,
   hxd,
   getconf,
   replaceVars,
@@ -33,8 +33,6 @@
 buildDunePackage rec {
   pname = "carton";
   version = "0.7.0";
-
-  minimalOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-git/releases/download/${pname}-v${version}/git-${pname}-v${version}.tbz";
@@ -53,7 +51,7 @@ buildDunePackage rec {
   '';
 
   buildInputs = [
-    cmdliner
+    cmdliner_1
     digestif
     result
     rresult
@@ -74,7 +72,8 @@ buildDunePackage rec {
     fmt
   ];
 
-  doCheck = true;
+  # Alcotest depends on cmdliner ≥ 2.0
+  doCheck = false;
   nativeBuildInputs = [
     findlib
   ];

@@ -3,7 +3,7 @@
   fetchFromGitHub,
   fetchpatch,
   buildDunePackage,
-  cmdliner,
+  cmdliner_1,
   ppxlib,
 }:
 
@@ -37,7 +37,7 @@ buildDunePackage (finalAttrs: {
   minimalOCamlVersion = "4.11";
 
   buildInputs = [
-    cmdliner
+    cmdliner_1
     ppxlib
   ];
 

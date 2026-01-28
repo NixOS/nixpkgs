@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   alcotest,
-  cmdliner,
+  cmdliner_1,
   ppx_deriving,
   ppxlib,
   result,
@@ -34,7 +34,7 @@ buildDunePackage rec {
   ];
 
   propagatedBuildInputs = [
-    cmdliner
+    cmdliner_1
     ppx_deriving
     ppxlib
     result
@@ -42,7 +42,7 @@ buildDunePackage rec {
 
   doCheck = true;
   checkInputs = [
-    alcotest
+    (alcotest.override { cmdliner = cmdliner_1; })
   ];
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };

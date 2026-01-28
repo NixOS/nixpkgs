@@ -5,7 +5,7 @@
   alcotest,
   dedukti,
   camlp-streams,
-  cmdliner,
+  cmdliner_1,
   dream,
   lwt_ppx,
   menhir,
@@ -35,7 +35,7 @@ buildDunePackage rec {
   buildInputs = [ lwt_ppx ];
   propagatedBuildInputs = [
     camlp-streams
-    cmdliner
+    cmdliner_1
     dream
     pratter
     sedlex

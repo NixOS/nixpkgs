@@ -2,6 +2,7 @@
   lib,
   buildDunePackage,
   fetchurl,
+  fetchpatch,
   makeWrapper,
   curly,
   fmt,
@@ -48,6 +49,18 @@ buildDunePackage rec {
     url = "https://github.com/ocamllabs/${pname}/releases/download/${version}/${pname}-${version}.tbz";
     hash = "sha256-bhDf/zb6mnSB53ibb1yb8Yf1TTmVEu8rb8KUnJieCnY=";
   };
+
+  patches = [
+    # Compatibility with cmdliner ≥ 2.0
+    (fetchpatch {
+      url = "https://github.com/tarides/dune-release/commit/195d83c091ec8d79c14b5ff3d47f4dc9b630061e.patch";
+      hash = "sha256-02ghFM02t6KVsxWW6NbLrzrQLs3afWaN4z4XoQonxqA=";
+    })
+    (fetchpatch {
+      url = "https://github.com/tarides/dune-release/commit/9ef5f0b083cbdb06c2dff387da2f1adadf08c583.patch";
+      hash = "sha256-jaYTMhEGe9du/BY9e6Ugbbrvn/H0XeiCCoCg1aZoLzI=";
+    })
+  ];
 
   nativeBuildInputs = [ makeWrapper ] ++ runtimeInputs;
   buildInputs = [

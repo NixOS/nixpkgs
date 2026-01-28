@@ -9,7 +9,7 @@
   ocaml_oasis,
   bitstring,
   camlzip,
-  cmdliner,
+  cmdliner_1,
   core_kernel,
   ezjsonm,
   fileutils,
@@ -87,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [
     bitstring
     camlzip
-    cmdliner
+    cmdliner_1
     ppx_bap
     core_kernel
     ezjsonm

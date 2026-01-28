@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   ocaml,
-  version ? "1.3.0",
+  version ? "2.1.0",
 }:
 
 stdenv.mkDerivation {
@@ -16,6 +16,7 @@ stdenv.mkDerivation {
       {
         "1.0.4" = "sha256-XCqT1Er4o4mWosD4D715cP5HUfEEvkcMr6BpNT/ABMA=";
         "1.3.0" = "sha256-joGA9XO0QPanqMII2rLK5KgjhP7HMtInhNG7bmQWjLs=";
+        "2.1.0" = "sha256-iBTGFM1D1S/R68ivWjHZElwhTEmPpgVmDk7Rlf+ENOk=";
       }
       ."${version}";
   };
