@@ -2118,7 +2118,7 @@ self: super: with self; {
 
   blocksat-cli = callPackage ../development/python-modules/blocksat-cli { };
 
-  bloodhound-py = callPackage ../development/python-modules/bloodhound-py { };
+  bloodhound-py = callPackage ../by-name/bl/bloodhound-py/unwrapped.nix { };
 
   bloodyad = callPackage ../development/python-modules/bloodyad { };
 

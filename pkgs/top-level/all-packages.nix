@@ -275,8 +275,6 @@ with pkgs;
   # many more scenarios than just opengl now.
   cve = with python3Packages; toPythonApplication cvelib;
 
-  bloodhound-py = with python3Packages; toPythonApplication bloodhound-py;
-
   # Zip file format only allows times after year 1980, which makes e.g. Python
   # wheel building fail with:
   # ValueError: ZIP does not support timestamps before 1980
