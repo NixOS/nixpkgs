@@ -1325,8 +1325,6 @@ with pkgs;
   };
   termite-unwrapped = callPackage ../applications/terminal-emulators/termite { };
 
-  twine = with python3Packages; toPythonApplication twine;
-
   inherit (callPackages ../development/tools/ammonite { })
     ammonite_2_12
     ammonite_2_13

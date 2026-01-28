@@ -19467,7 +19467,7 @@ self: super: with self; {
 
   twill = callPackage ../development/python-modules/twill { };
 
-  twine = callPackage ../development/python-modules/twine { };
+  twine = callPackage ../by-name/tw/twine/unwrapped.nix { };
 
   twinkly-client = callPackage ../development/python-modules/twinkly-client { };
 
