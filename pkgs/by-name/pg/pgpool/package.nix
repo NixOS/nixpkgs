@@ -14,7 +14,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "pgpool-II";
+  pname = "pgpool";
   version = "4.7.1";
 
   outputs = [
