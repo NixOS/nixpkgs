@@ -5,8 +5,10 @@
   pytestCheckHook,
   ctranslate2,
   ctranslate2-cpp,
+  sacremoses,
   sentencepiece,
   setuptools,
+  spacy,
   stanza,
 }:
 let
@@ -32,7 +34,9 @@ buildPythonPackage rec {
 
   dependencies = [
     ctranslate2OneDNN
+    sacremoses
     sentencepiece
+    spacy
     stanza
   ];
 
