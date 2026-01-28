@@ -445,8 +445,9 @@ in
       allowAny.fail("ping -c3 -W1 10.0.100.1")
       allowAny.fail("ping -c3 -W1 2001:db8::4")
       ${allowTrafficBetweenV4 "lighthouse" "allowAny"}
-      allowAny.wait_until_succeeds("ping -c1 -W1 10.0.100.1", timeout=10)
-      allowAny.wait_until_succeeds("ping -c1 -W1 10.0.100.4", timeout=10)
+      allowAny.wait_until_succeeds("ping -c1 -W1 192.168.1.1", timeout=10)
+      allowAny.wait_until_succeeds("ping -c1 -W1 10.0.100.1", timeout=15)
+      allowAny.wait_until_succeeds("ping -c1 -W1 10.0.100.4", timeout=15)
       ${allowTrafficBetweenV6 "lighthouse" "allowAny"}
       ${allowTrafficBetweenV6 "lighthouse" "allowToLighthouse"}
       ${allowTrafficBetweenV6 "allowAny" "allowToLighthouse"}
