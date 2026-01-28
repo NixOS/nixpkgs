@@ -25,6 +25,7 @@
   watchdog,
   xattr,
   pytestCheckHook,
+  gitUpdater,
   nixosTests,
 }:
 
@@ -111,7 +112,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "maestral" ];
 
-  passthru.tests.maestral = nixosTests.maestral;
+  passthru = {
+    updateScript = gitUpdater {
+      ignoredVersions = "dev";
+      rev-prefix = "v";
+    };
+    tests.maestral = nixosTests.maestral;
+  };
 
   meta = {
     description = "Open-source Dropbox client for macOS and Linux";
