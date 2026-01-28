@@ -343,6 +343,16 @@ have a predefined type and string generator already declared under
     and returning a set with TOML-specific attributes `type` and
     `generate` as specified [below](#pkgs-formats-result).
 
+`pkgs.formats.vim` { }
+
+:   A function taking an empty attribute set (for future extensibility)
+    and returning a set with Vim-specific attributes `type` and
+    `generate` as specified [below](#pkgs-formats-result).
+
+    `mkRaw vimCode`
+
+    :   Outputs the given string as raw Vim code
+
 `pkgs.formats.xml` { format ? "badgerfish", withHeader ? true}
 
 :   A function taking an attribute set with values
