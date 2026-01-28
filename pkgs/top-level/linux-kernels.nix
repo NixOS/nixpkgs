@@ -371,6 +371,8 @@ in
         # unreleased changes to the module build process.
         bcachefs = callPackage pkgs.bcachefs-tools.kernelModule { };
 
+        btf = callPackage ../os-specific/linux/btf { };
+
         ch9344 = callPackage ../os-specific/linux/ch9344 { };
 
         chipsec = callPackage ../by-name/ch/chipsec/package.nix {
