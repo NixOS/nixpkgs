@@ -70,6 +70,8 @@ python3.pkgs.buildPythonApplication rec {
     make -C docs man
     installManPage docs/offlineimap.1
     installManPage docs/offlineimapui.7
+    install -Dm644 offlineimap.conf -T $out/share/offlineimap/offlineimap.conf
+    install -Dm644 offlineimap.conf.minimal -T $out/share/offlineimap/offlineimap.conf.minimal
   '';
 
   # Test requires credentials
