@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    unified-memory-framework
+    (unified-memory-framework.override { useJemalloc = false; })
     zlib
     libbacktrace
     hwloc
@@ -97,9 +97,6 @@ stdenv.mkDerivation (finalAttrs: {
     lit
     filecheck
   ];
-
-  # Without this it fails to link to hwloc, despite it being in the buildInputs
-  NIX_LDFLAGS = "-lhwloc";
 
   postPatch = ''
     # `NO_CMAKE_PACKAGE_REGISTRY` prevents it from finding OpenCL, so we unset it

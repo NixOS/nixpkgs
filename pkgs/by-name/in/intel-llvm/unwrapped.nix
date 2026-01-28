@@ -256,9 +256,6 @@ stdenv.mkDerivation (finalAttrs: {
   # Must be disabled during intel-llvm's own build (especially for libdevice)
   hardeningDisable = [ "zerocallusedregs" ];
 
-  # Without this it fails to link to hwloc, despite it being in the buildInputs
-  NIX_LDFLAGS = "-lhwloc";
-
   requiredSystemFeatures = [ "big-parallel" ];
   enableParallelBuilding = true;
 
