@@ -40,7 +40,7 @@ jobs:
               context,
               core,
               // Review comments will be posted by the main PR workflow on the pull_request_target event.
-              dry: false,
+              dry: true,
             })
 
       - name: Determine changed files

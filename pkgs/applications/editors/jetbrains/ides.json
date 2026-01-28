@@ -1,6 +1,7 @@
 {
   "aqua": {
     "product": "Aqua",
+    "updateChannel": "Aqua RELEASE",
     "wmClass": "jetbrains-aqua",
     "meta": {
       "isOpenSource": false,
@@ -12,6 +13,7 @@
   },
   "clion": {
     "product": "CLion",
+    "updateChannel": "CLion RELEASE",
     "wmClass": "jetbrains-clion",
     "meta": {
       "isOpenSource": false,
@@ -23,6 +25,7 @@
   },
   "datagrip": {
     "product": "DataGrip",
+    "updateChannel": "DataGrip RELEASE",
     "wmClass": "jetbrains-datagrip",
     "meta": {
       "isOpenSource": false,
@@ -34,6 +37,7 @@
   },
   "dataspell": {
     "product": "DataSpell",
+    "updateChannel": "DataSpell RELEASE",
     "wmClass": "jetbrains-dataspell",
     "meta": {
       "isOpenSource": false,
@@ -45,6 +49,7 @@
   },
   "gateway": {
     "product": "JetBrains Gateway",
+    "updateChannel": "Gateway RELEASE",
     "productShort": "Gateway",
     "wmClass": "jetbrains-gateway",
     "meta": {
@@ -57,6 +62,7 @@
   },
   "goland": {
     "product": "Goland",
+    "updateChannel": "GoLand RELEASE",
     "wmClass": "jetbrains-goland",
     "meta": {
       "isOpenSource": false,
@@ -68,6 +74,7 @@
   },
   "idea": {
     "product": "IntelliJ IDEA",
+    "updateChannel": "IntelliJ IDEA RELEASE",
     "productShort": "IDEA",
     "wmClass": "jetbrains-idea",
     "meta": {
@@ -80,6 +87,7 @@
   },
   "idea-community": {
     "product": "IntelliJ IDEA CE",
+    "updateChannel": "IntelliJ IDEA RELEASE",
     "productShort": "IDEA",
     "wmClass": "jetbrains-idea-ce",
     "meta": {
@@ -92,6 +100,7 @@
   },
   "idea-oss": {
     "product": "IntelliJ IDEA Open Source",
+    "updateChannel": "IntelliJ IDEA RELEASE",
     "productShort": "IDEA",
     "wmClass": "jetbrains-idea-ce",
     "meta": {
@@ -104,6 +113,7 @@
   },
   "mps": {
     "product": "MPS",
+    "updateChannel": "MPS RELEASE",
     "wmClass": "jetbrains-MPS",
     "meta": {
       "isOpenSource": false,
@@ -115,6 +125,7 @@
   },
   "phpstorm": {
     "product": "PhpStorm",
+    "updateChannel": "PhpStorm RELEASE",
     "wmClass": "jetbrains-phpstorm",
     "meta": {
       "isOpenSource": false,
@@ -127,6 +138,7 @@
   "pycharm": {
     "product": "PyCharm",
     "productShort": "PyCharm",
+    "updateChannel": "PyCharm RELEASE",
     "wmClass": "jetbrains-pycharm",
     "meta": {
       "isOpenSource": false,
@@ -139,6 +151,7 @@
   "pycharm-community": {
     "product": "PyCharm CE",
     "productShort": "PyCharm",
+    "updateChannel": "PyCharm RELEASE",
     "wmClass": "jetbrains-pycharm-ce",
     "meta": {
       "isOpenSource": true,
@@ -151,6 +164,7 @@
   "pycharm-oss": {
     "product": "PyCharm Open Source",
     "productShort": "PyCharm",
+    "updateChannel": "PyCharm RELEASE",
     "wmClass": "jetbrains-pycharm-ce",
     "meta": {
       "isOpenSource": true,
@@ -162,6 +176,7 @@
   },
   "rider": {
     "product": "Rider",
+    "updateChannel": "Rider RELEASE",
     "wmClass": "jetbrains-rider",
     "meta": {
       "isOpenSource": false,
@@ -173,6 +188,7 @@
   },
   "ruby-mine": {
     "product": "RubyMine",
+    "updateChannel": "RubyMine RELEASE",
     "wmClass": "jetbrains-rubymine",
     "meta": {
       "isOpenSource": false,
@@ -184,6 +200,7 @@
   },
   "rust-rover": {
     "product": "RustRover",
+    "updateChannel": "RustRover RELEASE",
     "wmClass": "jetbrains-rustrover",
     "meta": {
       "isOpenSource": false,
@@ -195,6 +212,7 @@
   },
   "webstorm": {
     "product": "WebStorm",
+    "updateChannel": "WebStorm RELEASE",
     "wmClass": "jetbrains-webstorm",
     "meta": {
       "isOpenSource": false,
@@ -206,6 +224,7 @@
   },
   "writerside": {
     "product": "Writerside",
+    "updateChannel": "Writerside EAP",
     "wmClass": "jetbrains-writerside",
     "meta": {
       "isOpenSource": false,
