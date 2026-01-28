@@ -1944,6 +1944,8 @@ self: super: with self; {
     bencodetools = pkgs.bencodetools;
   };
 
+  bencoding = callPackage ../development/python-modules/bencoding { };
+
   beniget = callPackage ../development/python-modules/beniget { };
 
   benqprojector = callPackage ../development/python-modules/benqprojector { };
