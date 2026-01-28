@@ -3869,7 +3869,7 @@ self: super: with self; {
 
   dill = callPackage ../development/python-modules/dill { };
 
-  dinghy = callPackage ../development/python-modules/dinghy { };
+  dinghy = callPackage ../by-name/di/dinghy/unwrapped.nix { };
 
   dingz = callPackage ../development/python-modules/dingz { };
 
