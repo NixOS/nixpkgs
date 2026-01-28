@@ -96,6 +96,7 @@
   ./hardware/new-lg4ff.nix
   ./hardware/nfc-nci.nix
   ./hardware/nitrokey.nix
+  ./hardware/omenrgb.nix
   ./hardware/onlykey/default.nix
   ./hardware/openrazer.nix
   ./hardware/opentabletdriver.nix

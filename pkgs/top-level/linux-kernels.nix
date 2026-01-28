@@ -498,6 +498,12 @@ in
 
         openrazer = callPackage ../os-specific/linux/openrazer/driver.nix { };
 
+        hp-omen-wmi =
+          if lib.versionAtLeast kernel.version "6.15" then
+            callPackage ../os-specific/linux/hp-omen-wmi { }
+          else
+            null;
+
         ply = callPackage ../os-specific/linux/ply { };
 
         r8125 = callPackage ../os-specific/linux/r8125 { };
