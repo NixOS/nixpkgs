@@ -17242,7 +17242,7 @@ self: super: with self; {
 
   sdjson = callPackage ../development/python-modules/sdjson { };
 
-  sdkmanager = callPackage ../development/python-modules/sdkmanager { };
+  sdkmanager = callPackage ../by-name/sd/sdkmanager/unwrapped.nix { };
 
   sdnotify = callPackage ../development/python-modules/sdnotify { };
 
