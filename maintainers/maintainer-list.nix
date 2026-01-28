@@ -13280,6 +13280,12 @@
     githubId = 2396926;
     name = "Justin Woo";
   };
+  justsoup312 = {
+    email = "brandonboese@protonmail.com";
+    github = "JustSoup312";
+    githubId = 169118047;
+    name = "Aster Boese";
+  };
   jvanbruegge = {
     email = "supermanitu@gmail.com";
     github = "jvanbruegge";
