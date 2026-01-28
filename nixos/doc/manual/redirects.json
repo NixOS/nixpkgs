@@ -196,6 +196,12 @@
   "module-services-dump1090-fa-configuration": [
     "index.html#module-services-dump1090-fa-configuration"
   ],
+  "module-services-vencloud": [
+    "index.html#module-services-vencloud"
+  ],
+  "module-services-vencloud-basic-usage": [
+    "index.html#module-services-vencloud-basic-usage"
+  ],
   "preface": [
     "index.html#preface"
   ],
