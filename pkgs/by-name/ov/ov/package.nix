@@ -12,16 +12,16 @@
 
 buildGoModule rec {
   pname = "ov";
-  version = "0.45.1";
+  version = "0.50.2";
 
   src = fetchFromGitHub {
     owner = "noborus";
     repo = "ov";
     tag = "v${version}";
-    hash = "sha256-Ptzlz+9mBKSPmogT4PVnimHw/wsQMQpfPo8MX1AocdM=";
+    hash = "sha256-tmGOyafVocbeEfHQcvysBuX/LJO62xRuclQ6Xy+Q1Gs=";
   };
 
-  vendorHash = "sha256-iAwlD6G+80Ci9pGANqbcmVjoRto7FMBSSDKsI6lpv/k=";
+  vendorHash = "sha256-Y+rNTJoSbTccHVPA/TTQGkkYpYr72WB8gqwzWfqPRH0=";
 
   ldflags = [
     "-s"
