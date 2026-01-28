@@ -1032,8 +1032,6 @@ with pkgs;
     defaultGuiType = "qt5";
   };
 
-  vprof = with python3Packages; toPythonApplication vprof;
-
   waydroid-nftables = waydroid.override { withNftables = true; };
 
   winbox = winbox3;
