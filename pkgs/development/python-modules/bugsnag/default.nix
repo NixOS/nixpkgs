@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "bugsnag";
-  version = "4.8.0";
+  version = "4.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bugsnag";
     repo = "bugsnag-python";
     tag = "v${version}";
-    hash = "sha256-aN7/MpTdsRsAINPXOmSau4pG1+F8gmvjlx5czKpx7H8=";
+    hash = "sha256-WXBdlgUoWdptv1weJf82qyH8TTqNCC1rYFEa972TqDY=";
   };
 
   postPatch = ''
