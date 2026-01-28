@@ -20,16 +20,17 @@
   torch-bin,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "torchaudio";
-  version = "2.9.1";
+  version = "2.10.0";
   format = "wheel";
 
   src =
     let
       pyVerNoDot = lib.replaceStrings [ "." ] [ "" ] python.pythonVersion;
       unsupported = throw "Unsupported system";
-      srcs = (import ./binary-hashes.nix version)."${stdenv.system}-${pyVerNoDot}" or unsupported;
+      srcs =
+        (import ./binary-hashes.nix finalAttrs.version)."${stdenv.system}-${pyVerNoDot}" or unsupported;
     in
     fetchurl srcs;
 
@@ -72,7 +73,7 @@ buildPythonPackage rec {
   meta = {
     description = "PyTorch audio library";
     homepage = "https://pytorch.org/";
-    changelog = "https://github.com/pytorch/audio/releases/tag/v${version}";
+    changelog = "https://github.com/pytorch/audio/releases/tag/v${finalAttrs.version}";
     # Includes CUDA and Intel MKL, but redistributions of the binary are not limited.
     # https://docs.nvidia.com/cuda/eula/index.html
     # https://www.intel.com/content/www/us/en/developer/articles/license/onemkl-license-faq.html
@@ -88,4 +89,4 @@ buildPythonPackage rec {
       junjihashimoto
     ];
   };
-}
+})
