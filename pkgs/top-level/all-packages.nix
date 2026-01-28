@@ -1127,6 +1127,7 @@ with pkgs;
     osxkeychainSupport = false;
     pythonSupport = false;
     perlSupport = false;
+    rustSupport = false; # Needed for bootstrap
     withpcre2 = false;
   };
 
