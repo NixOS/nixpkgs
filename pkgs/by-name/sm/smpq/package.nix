@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "smpq";
-  version = "1.6";
+  version = "1.7";
 
   src = fetchurl {
     url = "https://launchpad.net/smpq/trunk/${finalAttrs.version}/+download/smpq_${finalAttrs.version}.orig.tar.gz";
-    hash = "sha256-tdLcil3oYptx7l02ErboTYhBi4bFzTm6MV6esEYvGMs=";
+    hash = "sha256-ufmfE7Ma2qeS4yCgKkBaMiy3ZprUhHgb8v/+/790neI=";
   };
 
   cmakeFlags = [
