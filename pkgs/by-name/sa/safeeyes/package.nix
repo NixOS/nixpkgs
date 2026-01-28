@@ -19,12 +19,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "safeeyes";
-  version = "3.3.0";
+  version = "3.3.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-11nw13AAqupSIZRrhmDaViO3V/yYK8/xsVF8ylS49Rw=";
+    hash = "sha256-FKQXIr4HddMRHEfSQKUJgJx9Ok8hyqXhgQ0Xtx1aZos=";
   };
 
   nativeBuildInputs = [
