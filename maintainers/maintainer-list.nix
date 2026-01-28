@@ -24476,6 +24476,12 @@
     github = "Sinjin2300";
     githubId = 35543336;
   };
+  sinrohit-desco = {
+    email = "rohit1.singh@deshaw.com";
+    github = "sinrohit-desco";
+    githubId = 207977821;
+    name = "Rohit Singh";
+  };
   sioodmy = {
     name = "Antoni Sokołowski";
     github = "sioodmy";
