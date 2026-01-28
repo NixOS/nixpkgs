@@ -4,7 +4,6 @@
   fetchPypi,
   docutils,
   sphinx,
-  readthedocs-sphinx-ext,
   sphinxcontrib-jquery,
   pytestCheckHook,
 }:
@@ -33,7 +32,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    readthedocs-sphinx-ext
   ];
 
   disabledTests = [

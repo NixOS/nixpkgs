@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "sphinx-pytest";
-  version = "0.2.0";
+  version = "0.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "chrisjsewell";
+    owner = "sphinx-extensions2";
     repo = "sphinx-pytest";
     tag = "v${version}";
-    hash = "sha256-oSBBt+hSMs4mvGqibQHoYHXr2j/bpsGOnIMfwfTfWKQ=";
+    hash = "sha256-z71IrUr3e2oAPeZMjUBwMwy2SkoAA3oxtK4+iR9vLEc=";
   };
 
   nativeBuildInputs = [ flit-core ];
