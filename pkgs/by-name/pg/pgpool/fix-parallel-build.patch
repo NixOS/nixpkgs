@@ -1,0 +1,32 @@
+commit 34e6484addad47df86a332ca0b9028b750bc1649
+Author: Anthony Roussel <anthony@roussel.dev>
+Date:   Wed Jan 28 23:34:54 2026 +0100
+
+    Fix parallel build
+    
+    Added `BUILT_SOURCES` for gram.c, gram.h, gram_minimal.c, gram_minimal.h
+    and scan.c to ensure that bison generated files are built before
+    compilation of dependent C files (when parallelisation is enabled using `make -j`).
+
+diff --git a/src/parser/Makefile.am b/src/parser/Makefile.am
+index ce1dffaf5..6d79dadb6 100644
+--- a/src/parser/Makefile.am
++++ b/src/parser/Makefile.am
+@@ -30,8 +30,15 @@ ARFLAGS = cr
+ 
+ AM_YFLAGS = -d -Wno-yacc
+ 
+-gram.c: gram.y scan.c
+-gram_minimal.c: gram_minimal.y scan.c
++BUILT_SOURCES = \
++	gram.c \
++	gram.h \
++	gram_minimal.c \
++	gram_minimal.h \
++	scan.c
++
++gram.c gram.h: gram.y scan.c
++gram_minimal.c gram_minimal.h: gram_minimal.y scan.c
+ 
+ scan.c: scan.l
+ 	$(LEX) -o'scan.c' $<
