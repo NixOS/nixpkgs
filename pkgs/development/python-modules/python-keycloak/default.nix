@@ -1,8 +1,10 @@
 {
   lib,
+  aiofiles,
   buildPythonPackage,
   deprecation,
   fetchFromGitHub,
+  httpx,
   jwcrypto,
   poetry-core,
   requests,
@@ -30,7 +32,9 @@ buildPythonPackage rec {
   build-system = [ poetry-core ];
 
   dependencies = [
+    aiofiles
     deprecation
+    httpx
     jwcrypto
     requests
     requests-toolbelt
