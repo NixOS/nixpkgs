@@ -1416,6 +1416,12 @@
       { fingerprint = "DF68 C500 4024 23CC F9C5  E6CA 3D17 C832 4696 FE70"; }
     ];
   };
+  alper-han = {
+    email = "contact@zynix.net";
+    github = "alper-han";
+    githubId = 89567766;
+    name = "Zynix";
+  };
   alternateved = {
     email = "alternateved@pm.me";
     github = "alternateved";
