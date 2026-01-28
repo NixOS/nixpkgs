@@ -3,10 +3,13 @@
   fetchFromGitHub,
   lib,
   llvmPackages,
+  withPython ? false,
   python ? null,
   stdenv,
   swig,
 }:
+
+assert withPython -> python != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "plfit";
@@ -19,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-0JrPAq/4yzr7XbxvcnFj8CKmMyZT05PkSdGprNdAsJA=";
   };
 
-  postPatch = lib.optionalString (python != null) ''
+  postPatch = lib.optionalString withPython ''
     substituteInPlace src/CMakeLists.txt \
       --replace-fail ' ''${Python3_SITEARCH}' ' ${placeholder "out"}/${python.sitePackages}' \
       --replace-fail ' ''${Python3_SITELIB}' ' ${placeholder "out"}/${python.sitePackages}'
@@ -28,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
   ]
-  ++ lib.optionals (python != null) [
+  ++ lib.optionals withPython [
     python
     swig
   ];
@@ -36,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DPLFIT_USE_OPENMP=ON"
   ]
-  ++ lib.optionals (python != null) [
+  ++ lib.optionals withPython [
     "-DPLFIT_COMPILE_PYTHON_MODULE=ON"
   ];
 

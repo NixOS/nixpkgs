@@ -6859,6 +6859,8 @@ self: super: with self; {
 
   helion = callPackage ../development/python-modules/helion { };
 
+  helium = callPackage ../development/python-modules/helium { };
+
   help2man = callPackage ../development/python-modules/help2man { };
 
   helpdev = callPackage ../development/python-modules/helpdev { };
@@ -11249,6 +11251,10 @@ self: super: with self; {
     callPackage ../development/python-modules/online-judge-verify-helper
       { };
 
+  onlinepayments-sdk-python3 =
+    callPackage ../development/python-modules/onlinepayments-sdk-python3
+      { };
+
   onlykey-solo-python = callPackage ../development/python-modules/onlykey-solo-python { };
 
   onnx = callPackage ../development/python-modules/onnx {
@@ -12354,7 +12360,12 @@ self: super: with self; {
 
   plexwebsocket = callPackage ../development/python-modules/plexwebsocket { };
 
-  plfit = toPythonModule (pkgs.plfit.override { inherit (self) python; });
+  plfit = toPythonModule (
+    pkgs.plfit.override {
+      withPython = true;
+      inherit (self) python;
+    }
+  );
 
   plink = callPackage ../development/python-modules/plink { };
 
@@ -19502,6 +19513,8 @@ self: super: with self; {
     inherit (pkgs) file zlib;
   };
 
+  typed-argparse = callPackage ../development/python-modules/typed-argparse { };
+
   typed-settings = callPackage ../development/python-modules/typed-settings { };
 
   typedmonarchmoney = callPackage ../development/python-modules/typedmonarchmoney { };
@@ -19930,6 +19943,8 @@ self: super: with self; {
   types-mock = callPackage ../development/python-modules/types-mock { };
 
   types-mysqlclient = callPackage ../development/python-modules/types-mysqlclient { };
+
+  types-openpyxl = callPackage ../development/python-modules/types-openpyxl { };
 
   types-pillow = callPackage ../development/python-modules/types-pillow { };
 

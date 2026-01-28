@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/tests-always-included/mo";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sheepforce ];
+    mainProgram = "mo";
   };
 }

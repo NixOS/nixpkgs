@@ -24,13 +24,13 @@ let
     ln -s ${zlib}/lib $out/lib
   '';
 
-  version = "1.29.1";
+  version = "1.29.5";
 
   src = fetchFromGitHub {
     owner = "saber-notes";
     repo = "saber";
     tag = "v${version}";
-    hash = "sha256-+hqZQQtuNsyAIUKb0fydSnRTqc8EGVxWRtGubccsK2w=";
+    hash = "sha256-IHsVeOEgVV6GlqiH9RextBKLfIZ/jQ8+OWTcjAGNu5c=";
   };
 in
 flutter338.buildFlutterApplication {
@@ -54,8 +54,9 @@ flutter338.buildFlutterApplication {
   ];
 
   postPatch = ''
-    patchShebangs patches/remove_proprietary_dependencies.sh
-    patches/remove_proprietary_dependencies.sh
+    patchShebangs patches/pre/remove_proprietary_dependencies.sh patches/pre/remove_dev_dependencies.sh
+    patches/pre/remove_proprietary_dependencies.sh
+    patches/pre/remove_dev_dependencies.sh
   '';
 
   flutterBuildFlags = [ "--dart-define=DIRTY=false" ];
