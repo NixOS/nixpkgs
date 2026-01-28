@@ -462,10 +462,17 @@ in
       "${config.boot.initrd.systemd.package}/lib/systemd/systemd-udevd"
       "${config.boot.initrd.systemd.package}/lib/udev/ata_id"
       "${config.boot.initrd.systemd.package}/lib/udev/cdrom_id"
-      "${config.boot.initrd.systemd.package}/lib/udev/dmi_memory_id"
       "${config.boot.initrd.systemd.package}/lib/udev/scsi_id"
       "${config.boot.initrd.systemd.package}/lib/udev/rules.d"
     ]
+    ++ lib.optional (
+      # https://github.com/systemd/systemd/blob/v259/meson.build#L1529-L1530
+      pkgs.stdenv.hostPlatform.isx86
+      || pkgs.stdenv.hostPlatform.isAarch
+      || pkgs.stdenv.hostPlatform.isLoongArch64
+      || pkgs.stdenv.hostPlatform.isMips
+      || pkgs.stdenv.hostPlatform.isRiscV64
+    ) "${config.boot.initrd.systemd.package}/lib/udev/dmi_memory_id"
     ++ map (x: "${x}/bin") config.boot.initrd.services.udev.binPackages;
 
     # Generate the udev rules for the initrd
