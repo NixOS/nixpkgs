@@ -3066,6 +3066,10 @@ self: super: with self; {
 
   conda = callPackage ../development/python-modules/conda { };
 
+  conda-build = callPackage ../development/python-modules/conda-build { };
+
+  conda-index = callPackage ../development/python-modules/conda-index { };
+
   conda-inject = callPackage ../development/python-modules/conda-inject { };
 
   conda-libmamba-solver = callPackage ../development/python-modules/conda-libmamba-solver { };
@@ -5072,6 +5076,8 @@ self: super: with self; {
   euporie = callPackage ../development/python-modules/euporie { };
 
   eval-type-backport = callPackage ../development/python-modules/eval-type-backport { };
+
+  evalidate = callPackage ../development/python-modules/evalidate { };
 
   evaluate = callPackage ../development/python-modules/evaluate { };
 
