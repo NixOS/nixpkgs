@@ -1011,8 +1011,6 @@ with pkgs;
 
   inherit (callPackage ../development/libraries/sdbus-cpp { }) sdbus-cpp sdbus-cpp_2;
 
-  sdkmanager = with python3Packages; toPythonApplication sdkmanager;
-
   shaperglot = with python3Packages; toPythonApplication shaperglot;
 
   supermin = callPackage ../tools/virtualization/supermin {
