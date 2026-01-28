@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
@@ -7,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "isbnlib";
   version = "3.10.14";
   pyproject = true;
@@ -15,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "xlcnd";
     repo = "isbnlib";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-d6p0wv7kj+NOZJRE2rzQgb7PXv+E3tASIibYCjzCdx8=";
   };
 
@@ -42,6 +43,10 @@ buildPythonPackage rec {
     "test_isbn_from_words"
     "test_desc"
     "test_cover"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # pickle.PicklingError: Can't pickle local object
+    "test_vias_multi"
   ];
 
   disabledTestPaths = [
@@ -66,8 +71,8 @@ buildPythonPackage rec {
   meta = {
     description = "Extract, clean, transform, hyphenate and metadata for ISBNs";
     homepage = "https://github.com/xlcnd/isbnlib";
-    changelog = "https://github.com/xlcnd/isbnlib/blob/v${version}/CHANGES.txt";
+    changelog = "https://github.com/xlcnd/isbnlib/blob/${finalAttrs.src.rev}/CHANGES.txt";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})
