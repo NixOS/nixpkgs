@@ -3214,7 +3214,15 @@ self: super: with self; {
 
   cppy = callPackage ../development/python-modules/cppy { };
 
+  cppyy = callPackage ../development/python-modules/cppyy { };
+
+  cppyy-cling = callPackage ../development/python-modules/cppyy-cling { };
+
+  cppyy-backend = callPackage ../development/python-modules/cppyy-backend { };
+
   cpufeature = callPackage ../development/python-modules/cpufeature { };
+
+  CPyCppyy = callPackage ../development/python-modules/cpycppyy { };
 
   cpyparsing = callPackage ../development/python-modules/cpyparsing { };
 
