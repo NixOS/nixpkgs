@@ -1499,12 +1499,12 @@
     "vendorHash": "sha256-Z4DfoG4ApXbPNXZs9YvBWQj1bH7moLNI6P+nKDHt/Jc="
   },
   "yandex-cloud_yandex": {
-    "hash": "sha256-lNVCxNXYai+da2Hcg1+tcoYzoYRLRoCjzAQ/UB1WW4g=",
+    "hash": "sha256-UyrHFZDY2mQqF0yosPc1xS/Zm9nrGGhMH6awf3pdFdI=",
     "homepage": "https://registry.terraform.io/providers/yandex-cloud/yandex",
     "owner": "yandex-cloud",
     "repo": "terraform-provider-yandex",
-    "rev": "v0.179.0",
+    "rev": "v0.181.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-JW8aCDhY0XLoeFN864bM9ZWPxDrGk7VGTAUhx3PiQ+E="
+    "vendorHash": "sha256-Gj6ApI9xUL42KF4xYdvC8uwsAPNHJmouRkoz69yVVXQ="
   }
 }
