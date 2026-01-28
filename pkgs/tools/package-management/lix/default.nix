@@ -20,11 +20,14 @@
   nixpkgs-reviewFull,
   nix-direnv,
   nix-fast-build,
+  nix-prefetch-github,
   haskell,
   nix-serve-ng,
   colmena,
+  comma,
   nix-update,
   nix-init,
+  nixos-option,
 
   storeDir ? "/nix/store",
   stateDir ? "/nix/var",
@@ -122,6 +125,10 @@ let
             inherit (self) nix-eval-jobs;
           };
 
+          nix-prefetch-github = nix-prefetch-github.override {
+            nix = self.lix;
+          };
+
           nix-serve-ng = lib.pipe (nix-serve-ng.override { nix = self.lix; }) [
             (haskell.lib.compose.enableCabalFlag "lix")
             (haskell.lib.compose.overrideCabal (drv: {
@@ -136,12 +143,20 @@ let
             inherit (self) nix-eval-jobs;
           };
 
+          comma = comma.override {
+            nix = self.lix;
+          };
+
           nix-update = nix-update.override {
             nix = self.lix;
             inherit (self) nixpkgs-review;
           };
 
           nix-init = nix-init.override {
+            nix = self.lix;
+          };
+
+          nixos-option = nixos-option.override {
             nix = self.lix;
           };
         };
