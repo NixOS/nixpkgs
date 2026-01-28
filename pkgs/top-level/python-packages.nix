@@ -20172,6 +20172,8 @@ self: super: with self; {
 
   unpaddedbase64 = callPackage ../development/python-modules/unpaddedbase64 { };
 
+  unrar2-cffi = callPackage ../development/python-modules/unrar2-cffi { };
+
   unrardll = callPackage ../development/python-modules/unrardll { };
 
   unrpa = callPackage ../development/python-modules/unrpa { };
