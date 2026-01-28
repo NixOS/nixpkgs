@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "llama-index-embeddings-google";
-  version = "0.4.1";
+  version = "0.4.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_embeddings_google";
     inherit version;
-    hash = "sha256-bVVg+oHf8KPb04F/HE/2XVkn4NY/Bb+PPj3fypkJ/zE=";
+    hash = "sha256-dWV2fKudLsxfpHTGrGljMBU62vYUqzf8NarQ3Nl9poI=";
   };
 
   pythonRelaxDeps = [ "google-generativeai" ];
