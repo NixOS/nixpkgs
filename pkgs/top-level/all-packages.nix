@@ -11072,7 +11072,6 @@ with pkgs;
     };
   };
 
-  palemoon-bin = callPackage ../applications/networking/browsers/palemoon/bin.nix { };
   palemoon-gtk2-bin = palemoon-bin.override { withGTK3 = false; };
 
   pantalaimon = callPackage ../applications/networking/instant-messengers/pantalaimon { };
