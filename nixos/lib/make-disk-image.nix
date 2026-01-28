@@ -19,7 +19,8 @@
   - compute the size of the disk image based on the apparent size of the root folder
   - partition the disk image using the corresponding script according to the partition table type
   - format the partitions if needed
-  - use `cptofs` (LKL tool) to copy the root folder inside the disk image
+  - while formatting, if the `fsType` is 'ext4', the root directory is copied to the newly created filesystem with the mkfs operation
+  - if the root directory was not copied during the mkfs operation, `cptofs` (LKL tool) is used to do that, post formatting
 
   At this step, the disk image already contains the Nix store, it now only needs to be converted to the desired format to be used.
 
@@ -610,26 +611,52 @@ let
 
     ${partitionDiskScript}
 
+    # We are at the stage where we determine _how_ a new filesystem is
+    # populated. There are two options, determined by the value of the
+    # `fsType` variable:
+    #
+    # 1. If `fsType` is 'ext2'/'ext3'/'ext4', the `mke2fs` command has
+    #    the option to copy the contents of a directory/tarball in the
+    #    root directory of the new filesystem.
+    # 2. Otherwise, use the `cptofs` command from the `lkl` (Linux
+    #    Kernel Library) package.
+    #
+    # The problem usually encountered here is that there is a very high
+    # probability that the `cptofs` command will either fail (when
+    # `memSize` is "low") or will hang indifinitely. Both outcomes
+    # result in failure. Hence, the approach of populating the new
+    # filesystem using something other than `cptofs`.
+
+    useCptofs=1
+    ext4PopulateFilesystemArgs=""
+    if [ ${fsType} == 'ext2' ] || [ ${fsType} == 'ext3' ] || [ ${fsType} == 'ext4' ]; then
+        ext4PopulateFilesystemArgs="-d $root${lib.optionalString onlyNixStore "/${builtins.storeDir}"}"
+        useCptofs=0
+        echo 'populating the filesystem using mke2fs'
+    fi
+
     ${
       if partitionTableType != "none" then
         ''
           # Get start & length of the root partition in sectors to $START and $SECTORS.
           eval $(partx $diskImage -o START,SECTORS --nr ${rootPartition} --pairs)
 
-          mkfs.${fsType} -b ${blockSize} -F -L ${label} $diskImage -E offset=$(sectorsToBytes $START) $(sectorsToKilobytes $SECTORS)K
+          mkfs.${fsType} -b ${blockSize} ''${ext4PopulateFilesystemArgs} -F -L ${label} $diskImage -E offset=$(sectorsToBytes $START) $(sectorsToKilobytes $SECTORS)K
         ''
       else
         ''
-          mkfs.${fsType} -b ${blockSize} -F -L ${label} $diskImage
+          mkfs.${fsType} -b ${blockSize} ''${ext4PopulateFilesystemArgs} -F -L ${label} $diskImage
         ''
     }
 
-    echo "copying staging root to image..."
-    cptofs -p ${lib.optionalString (partitionTableType != "none") "-P ${rootPartition}"} \
-           -t ${fsType} \
-           -i $diskImage \
-           $root${lib.optionalString onlyNixStore builtins.storeDir}/* / ||
-      (echo >&2 "ERROR: cptofs failed. diskSize might be too small for closure."; exit 1)
+    if [ $useCptofs -eq 1 ]; then
+        echo 'populating the filesystem using cptofs'
+        cptofs -p ${lib.optionalString (partitionTableType != "none") "-P ${rootPartition}"} \
+            -t ${fsType} \
+            -i $diskImage \
+            $root${lib.optionalString onlyNixStore builtins.storeDir}/* / ||
+                (echo >&2 "ERROR: cptofs failed. diskSize might be too small for closure."; exit 1)
+    fi
   '';
 
   moveOrConvertImage = ''
