@@ -37,7 +37,7 @@ in
 let
   bolt = stdenv.mkDerivation (finalAttrs: {
     pname = "bolt-launcher";
-    version = "0.20.6";
+    version = "0.21.0";
 
     src = fetchFromGitea {
       domain = "codeberg.org";
@@ -45,7 +45,7 @@ let
       repo = "Bolt";
       tag = finalAttrs.version;
       fetchSubmodules = true;
-      hash = "sha256-m0s+RNoHJ//HGTZ3zU+sW+MXM1/GcQbMbBmAJfy47W0=";
+      hash = "sha256-QQJKUCxeff56ghwP00uF4GI35vSAPWM+JphTEUfWOUo=";
     };
 
     nativeBuildInputs = [
