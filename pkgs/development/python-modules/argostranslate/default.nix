@@ -6,6 +6,7 @@
   ctranslate2,
   ctranslate2-cpp,
   sentencepiece,
+  setuptools,
   stanza,
 }:
 let
@@ -20,15 +21,16 @@ in
 buildPythonPackage rec {
   pname = "argostranslate";
   version = "1.10.0";
-
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-I38L2u9aRareA0rHEsHQwY/UKIf8CBQYCNyt3nv9H2c=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     ctranslate2OneDNN
     sentencepiece
     stanza
