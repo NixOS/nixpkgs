@@ -1,0 +1,12 @@
+diff --git a/kotlin-lsp.sh b/kotlin-lsp.sh
+index c08d876..9f79758 100644
+--- a/kotlin-lsp.sh
++++ b/kotlin-lsp.sh
+@@ -21,7 +21,6 @@ else
+ fi
+ 
+ if [ -d "$LOCAL_JRE_PATH" ] && [ -f "$LOCAL_JRE_PATH/bin/java" ]; then
+-    chmod +x "$LOCAL_JRE_PATH/bin/java"
+     JAVA_BIN="$LOCAL_JRE_PATH/bin/java"
+ else
+     echo >&2 -e "'java' was not found at $LOCAL_JRE_PATH, installation corrupted"
