@@ -50,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ADA_TOOLS" false)
     (lib.cmakeBool "ADA_TESTING" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "ADA_USE_SIMDUTF" true)
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
     (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
     (lib.cmakeBool "CPM_USE_LOCAL_PACKAGES" true)
   ];
