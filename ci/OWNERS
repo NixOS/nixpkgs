@@ -258,6 +258,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 
 # Java
 /doc/languages-frameworks/java.section.md @NixOS/java
+/doc/languages-frameworks/ant.section.md @NixOS/java
 /doc/languages-frameworks/gradle.section.md @NixOS/java
 /doc/languages-frameworks/maven.section.md @NixOS/java
 /nixos/modules/programs/java.nix @NixOS/java

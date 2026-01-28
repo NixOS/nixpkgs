@@ -2803,6 +2803,30 @@
   "agda-maintaining-packages": [
     "index.html#agda-maintaining-packages"
   ],
+  "ant": [
+    "index.html#ant"
+  ],
+  "ant-hook": [
+    "index.html#ant-hook"
+  ],
+  "ant-hook-findExternalAntTasks": [
+    "index.html#ant-hook-findExternalAntTasks"
+  ],
+  "ant-hook-thin-wrapper": [
+    "index.html#ant-hook-thin-wrapper"
+  ],
+  "ant-hook-buildPhase": [
+    "index.html#ant-hook-buildPhase"
+  ],
+  "ant-hook-buildPhase-parameters": [
+    "index.html#ant-hook-buildPhase-parameters"
+  ],
+  "ant-hook-checkPhase": [
+    "index.html#ant-hook-checkPhase"
+  ],
+  "ant-hook-checkPhase-parameters": [
+    "index.html#ant-hook-checkPhase-parameters"
+  ],
   "android": [
     "index.html#android"
   ],
