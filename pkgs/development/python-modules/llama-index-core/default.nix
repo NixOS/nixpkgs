@@ -38,14 +38,14 @@
 
 buildPythonPackage rec {
   pname = "llama-index-core";
-  version = "0.14.12";
+  version = "0.14.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "run-llama";
     repo = "llama_index";
     tag = "v${version}";
-    hash = "sha256-grF9IToAMc3x5/40+u3lHU9RyjROWu1e3M6N1owq0f4=";
+    hash = "sha256-SLZypfhMd5Hi93fXhzr6vMAGzJ3q6tLsgXJe6Eo9IXA=";
   };
 
   sourceRoot = "${src.name}/${pname}";
