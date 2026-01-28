@@ -8,6 +8,7 @@
 #
 
 {
+  cacert,
   stdenv,
   lib,
   fetchurl,
@@ -166,6 +167,16 @@ stdenv.mkDerivation rec {
     export HOME=$(mktemp -d)
     $out/bin/gcloud version --format json | jq '."Google Cloud SDK"' | grep "${version}"
     $out/bin/gsutil version | grep -w "$(cat platform/gsutil/VERSION)"
+  '';
+
+  # Replace all vendored copies of CA bundle with the one used by Nixpkgs.
+  # This search/replace is a bit overzealous and replaces some files used by tests
+  # but it should cause no harm since we're not running those tests.
+  postFixup = ''
+    while IFS= read -rd "" f; do
+      echo "rewriting certificate bundle: $f"
+      ln -sf ${cacert}/etc/ssl/certs/ca-bundle.crt "$f"
+    done < <(find "$out" '(' -name cacert.pem -o -name cacerts.txt ')' -print0)
   '';
 
   passthru = {
