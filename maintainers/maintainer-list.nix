@@ -28793,6 +28793,11 @@
     githubId = 3028542;
     name = "Guillermo NWDD";
   };
+  xoconoch = {
+    name = "Xoconoch";
+    github = "Xoconoch";
+    githubId = 93692082;
+  };
   xokdvium = {
     email = "sergei@zimmerman.foo";
     github = "xokdvium";
