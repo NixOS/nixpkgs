@@ -235,6 +235,9 @@
   "chap-packageconfig": [
     "index.html#chap-packageconfig"
   ],
+  "python-dependencies-avoid-replace": [
+    "index.html#python-dependencies-avoid-replace"
+  ],
   "python-tree-sitter": [
     "index.html#python-tree-sitter"
   ],
