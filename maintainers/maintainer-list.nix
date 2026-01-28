@@ -14893,6 +14893,12 @@
     githubId = 22010764;
     name = "Liam Weitzel";
   };
+  liamdevoe = {
+    email = "orionldevoe@gmail.com";
+    github = "Liam-Devoe";
+    githubId = 31628143;
+    name = "Liam DeVoe";
+  };
   liamdiprose = {
     email = "liam@liamdiprose.com";
     github = "liamdiprose";
