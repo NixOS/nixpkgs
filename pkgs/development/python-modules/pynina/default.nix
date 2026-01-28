@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "pynina";
-  version = "0.3.6";
+  version = "1.0.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-w5iJXmOd0fqWIZnVG6zDop1t2h4B+4v0/EuwgS00LkA=";
+    hash = "sha256-ypbfvhXKu4pKr/DrWFnAhwMoqShJzWLqlA7/YQzJ9r4=";
   };
 
   pythonRelaxDeps = [ "aiohttp" ];
