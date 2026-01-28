@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  gcc14Stdenv,
   fetchhg,
   pkg-config,
   meson,
@@ -12,14 +12,14 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation {
+gcc14Stdenv.mkDerivation {
   pname = "rootbar";
-  version = "unstable-2020-11-13";
+  version = "unstable-2024-08-07";
 
   src = fetchhg {
     url = "https://hg.sr.ht/~scoopta/rootbar";
-    rev = "a018e10cfc5e";
-    sha256 = "sha256-t6oDIYCVaCxaYy4bS1vxESaFDNxsx5JQLQK77eVuafE=";
+    rev = "36333af9fd8d";
+    sha256 = "sha256-CpORCSJyHZhcK14EhjxoPt/h0026NU5J/kicL1dX96o=";
   };
 
   nativeBuildInputs = [
@@ -38,15 +38,15 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "https://hg.sr.ht/~scoopta/rootbar";
-    description = "Bar for Wayland WMs";
+    description = "Bar for wlroots-based Wayland compositors";
     mainProgram = "rootbar";
     longDescription = ''
-      Root Bar is a bar for wlroots based wayland compositors such as sway and
-      was designed to address the lack of good bars for wayland.
+      Root Bar is a bar for wlroots-based Wayland compositors such as Sway and
+      was designed to address the lack of good bars for Wayland.
     '';
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin;
+    broken = gcc14Stdenv.hostPlatform.isDarwin;
   };
 }
