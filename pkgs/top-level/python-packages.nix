@@ -2144,7 +2144,7 @@ self: super: with self; {
 
   blockfrost-python = callPackage ../development/python-modules/blockfrost-python { };
 
-  blocksat-cli = callPackage ../development/python-modules/blocksat-cli { };
+  blocksat-cli = callPackage ../by-name/bl/blocksat-cli/unwrapped.nix { };
 
   bloodhound-py = callPackage ../by-name/bl/bloodhound-py/unwrapped.nix { };
 
