@@ -36,12 +36,13 @@
   libjack2,
   makeWrapper,
   buildPackages,
+  versionCheckHook,
 }:
 
 let
   opengfx = fetchzip {
-    url = "https://cdn.openttd.org/opengfx-releases/7.1/opengfx-7.1-all.zip";
-    hash = "sha256-daJ/Qwg/okpmLQkXcCjruIiP8GEwyyp02YWcGQepxzs=";
+    url = "https://cdn.openttd.org/opengfx-releases/8.0/opengfx-8.0-all.zip";
+    hash = "sha256-aqLEZ3EptxBZrYQd1IG6B1rSRJJTGIijKu2NIqpAYRA=";
   };
 
   opensfx = fetchzip {
@@ -68,11 +69,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openttd";
-  version = "15.0";
+  version = "15.1";
 
   src = fetchzip {
     url = "https://cdn.openttd.org/openttd-releases/${finalAttrs.version}/openttd-${finalAttrs.version}-source.tar.xz";
-    hash = "sha256-J4M0n5dLM04Xtx3WMxWKVgDbo92QjuuJgPbESpwf1e8=";
+    hash = "sha256-eBtCsbDolcTLpumWi235y4dFnZFkgLfPuTuyMaA+xac=";
   };
 
   nativeBuildInputs = [
@@ -111,6 +112,9 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     libjack2
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   strictDeps = true;
 
