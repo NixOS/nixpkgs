@@ -132,11 +132,6 @@ in
         type = types.submodule {
           inherit freeformType;
           options = {
-            datadir = lib.mkOption {
-              type = types.path;
-              default = "/var/lib/i2pd";
-              description = "Path to storage of i2pd data (RouterInfos, destinations keys, peer profiles, etc ...)";
-            };
             loglevel = lib.mkOption {
               type = types.enum [
                 "debug"
@@ -389,23 +384,15 @@ in
       };
     in
     lib.mkIf cfg.enable {
-      users.users.i2pd = {
-        group = "i2pd";
-        description = "I2Pd User";
-        home = cfg.config.datadir;
-        createHome = true; # TODO: Create dir with systemd
-        uid = config.ids.uids.i2pd;
-      };
-
-      users.groups.i2pd.gid = config.ids.gids.i2pd;
-
       systemd.services.i2pd = {
         description = "Minimal I2P router";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           User = "i2pd";
-          WorkingDirectory = cfg.config.datadir;
+          Group = "i2pd";
+          DynamicUser = true;
+          StateDirectory = [ "i2pd" ];
           ExecStart = "${lib.getExe cfg.package} ${i2pdCliArgs}";
           Restart = if cfg.autoRestart then "on-failure" else "no";
           KillSignal = if cfg.gracefulShutdown then "SIGINT" else "SIGTERM";
@@ -432,7 +419,6 @@ in
           ProcSubset = "pid";
           PrivateMounts = true;
           PrivateUsers = true;
-          ReadWritePaths = cfg.config.datadir;
           RemoveIPC = true;
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
