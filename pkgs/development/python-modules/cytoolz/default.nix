@@ -2,45 +2,35 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  isPyPy,
   pytestCheckHook,
   cython,
   setuptools,
+  setuptools-git-versioning,
   toolz,
   python,
-  isPy27,
 }:
 
 buildPythonPackage rec {
   pname = "cytoolz";
-  version = "1.0.1";
+  version = "1.1.0";
   pyproject = true;
-
-  disabled = isPy27 || isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-icwxYbieG7Ptdjb3TtLlWYT9NVFpBPyHjK4hbkKyx9Y=";
+    hash = "sha256-E6e/JUw8DSixLiKQuCrtDwl3pMKiv4SFT83HeWop87A=";
   };
 
   nativeBuildInputs = [
     cython
     setuptools
+    setuptools-git-versioning
   ];
 
   propagatedBuildInputs = [ toolz ];
 
-  # tests are located in cytoolz/tests, however we can't import cytoolz
-  # from $PWD, as it will break relative imports
   preCheck = ''
-    cd cytoolz
-    export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
+    cd $out/${python.sitePackages}
   '';
-
-  disabledTests = [
-    # https://github.com/pytoolz/cytoolz/issues/200
-    "test_inspect_wrapped_property"
-  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
