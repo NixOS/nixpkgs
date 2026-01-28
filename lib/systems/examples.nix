@@ -97,6 +97,12 @@ rec {
     libc = "bionic";
     useAndroidPrebuilt = false;
     useLLVM = true;
+    cc = "clang";
+    bintools = "llvm";
+    cxxlib = "libcxx";
+    cxxrtlib = "libcxxabi";
+    unwindlib = "libunwind";
+    rtlib = "compiler-rt";
   };
 
   pogoplug4 = {
@@ -375,6 +381,12 @@ rec {
     libc = "ucrt";
     rust.rustcTarget = "aarch64-pc-windows-gnullvm";
     useLLVM = true;
+    cc = "clang";
+    bintools = "llvm";
+    cxxlib = "libcxx";
+    cxxrtlib = "libcxxabi";
+    unwindlib = "libunwind";
+    rtlib = "compiler-rt";
   };
 
   # mingw-64 back compat
@@ -404,11 +416,23 @@ rec {
   aarch64-freebsd = {
     config = "aarch64-unknown-freebsd";
     useLLVM = true;
+    cc = "clang";
+    bintools = "llvm";
+    cxxlib = "libcxx";
+    cxxrtlib = "libcxxabi";
+    unwindlib = "libunwind";
+    rtlib = "compiler-rt";
   };
 
   x86_64-freebsd = {
     config = "x86_64-unknown-freebsd";
     useLLVM = true;
+    cc = "clang";
+    bintools = "llvm";
+    cxxlib = "libcxx";
+    cxxrtlib = "libcxxabi";
+    unwindlib = "libunwind";
+    rtlib = "compiler-rt";
   };
 
   x86_64-netbsd = {
@@ -419,11 +443,23 @@ rec {
   x86_64-netbsd-llvm = {
     config = "x86_64-unknown-netbsd";
     useLLVM = true;
+    cc = "clang";
+    bintools = "llvm";
+    cxxlib = "libcxx";
+    cxxrtlib = "libcxxabi";
+    unwindlib = "libunwind";
+    rtlib = "compiler-rt";
   };
 
   x86_64-openbsd = {
     config = "x86_64-unknown-openbsd";
     useLLVM = true;
+    cc = "clang";
+    bintools = "llvm";
+    cxxlib = "libcxx";
+    cxxrtlib = "libcxxabi";
+    unwindlib = "libunwind";
+    rtlib = "compiler-rt";
   };
 
   #
@@ -433,12 +469,24 @@ rec {
   wasi32 = {
     config = "wasm32-unknown-wasi";
     useLLVM = true;
+    cc = "clang";
+    bintools = "llvm";
+    cxxlib = "libcxx";
+    cxxrtlib = "libcxxabi";
+    unwindlib = "libunwind";
+    rtlib = "compiler-rt";
   };
 
   wasm32-unknown-none = {
     config = "wasm32-unknown-none";
     rust.rustcTarget = "wasm32-unknown-unknown";
     useLLVM = true;
+    cc = "clang";
+    bintools = "llvm";
+    cxxlib = "libcxx";
+    cxxrtlib = "libcxxabi";
+    unwindlib = "libunwind";
+    rtlib = "compiler-rt";
   };
 
   # Ghcjs
