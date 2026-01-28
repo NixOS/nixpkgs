@@ -18,8 +18,14 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-pxEwcLiRB95UBfXb+JgS8duEXiZUApH/C8Exus5TkfU=";
-  cargoBuildFlags = "--package flutter_rust_bridge_codegen";
-  cargoTestFlags = "--package flutter_rust_bridge_codegen";
+  cargoBuildFlags = [
+    "--package"
+    "flutter_rust_bridge_codegen"
+  ];
+  cargoTestFlags = [
+    "--package"
+    "flutter_rust_bridge_codegen"
+  ];
 
   # needed to get tests running
   nativeBuildInputs = [ cargo-expand ];
