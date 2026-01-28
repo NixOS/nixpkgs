@@ -1,34 +1,34 @@
 {
-  "version": "2.1.21",
-  "buildDate": "2026-01-28T01:39:36Z",
+  "version": "2.1.22",
+  "buildDate": "2026-01-28T06:36:13Z",
   "platforms": {
     "darwin-arm64": {
-      "checksum": "e8265d8719f131ab8f2863e66ce69cc829c4f55387ae2286e45d4a06b802c6fd",
+      "checksum": "dd07b877ea3213ae7fd1df5536de3b441fbf7b11f93a0c20078540a6bd69033e",
       "size": 181892336
     },
     "darwin-x64": {
-      "checksum": "1824c9a01e0266bef1c0da880503e49db08823cf7eb6a54fef2a385028c2bb05",
+      "checksum": "3b16c67ef7d9edc6139cff1c73fc55b630dbeaa72fb7853fc0748309fc6529a0",
       "size": 188189376
     },
     "linux-arm64": {
-      "checksum": "e043ed95e4df4282a9adb34eb51ee14d59a53f2feeeb19884a6b4edeccbe7f3a",
-      "size": 216288068
+      "checksum": "3750cebff6c8d7664fdffef578b14b962af8e29daa7ce53c0a6bd0a317ce973e",
+      "size": 216288129
     },
     "linux-x64": {
-      "checksum": "35fcccfced2e8669dc4aacf2bb76fab9816bcc5fc566e66b5ae42f4e7b4474b1",
-      "size": 224093184
+      "checksum": "f7ba63e4d72ea8394998dec8b25cf94ba17faec434db17885218c0884103b5e9",
+      "size": 224093245
     },
     "linux-arm64-musl": {
-      "checksum": "5e453c59b3c8fea4e6848e0972ab093e8eda4711e2be20b68dd4ebaea12db4e1",
-      "size": 211552100
+      "checksum": "237b62972ebcee890d816224ef9db079da06a824ae39a2755e398cf8f4f1cc73",
+      "size": 211552161
     },
     "linux-x64-musl": {
-      "checksum": "afa929dbccd23f746b01821699b1985eb7cc35018d0a8e9bbab678764ea58fb7",
-      "size": 216781760
+      "checksum": "affcacf6d15f9d0f1831aad6373103c8d89497563704dc0fa07186402e8ea8d1",
+      "size": 216781821
     },
     "win32-x64": {
-      "checksum": "325abe8bb0b907c008e229085815c938037864411ced6c553dbb52e0be587efe",
-      "size": 233936544
+      "checksum": "fb522d2000e434328189a5ce5ade17faf132ea05ddc29d60e4ac0afefddb69fd",
+      "size": 233937056
     }
   }
 }
