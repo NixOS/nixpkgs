@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     # times out on darwin during nixpkgs-review
-    "--skip test_file_modification_updates_via_websocket"
+    "--skip=test_file_modification_updates_via_websocket"
   ];
 
   passthru.updateScript = nix-update-script { };
