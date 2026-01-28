@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "go-mockery";
-  version = "3.5.5";
+  version = "3.6.1";
 
   src = fetchFromGitHub {
     owner = "vektra";
     repo = "mockery";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-paoI7KkpLbpQyEwS/oW8Ck9KiJRTUxzFzihsnFyhrCw=";
+    hash = "sha256-IYBqzQc6ZyueV3DqKxxwyEZHQ3ppGv9RQzQZHXZRWOk=";
   };
 
   proxyVendor = true;
