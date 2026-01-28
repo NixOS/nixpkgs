@@ -418,7 +418,12 @@ lib.extendMkDerivation {
           optional-dependencies
           ;
         updateScript = nix-update-script { };
+        # __stdenvPythonCompat[Pos] attributes are here for overrideStdenvCompat in `python-packages-base.nix` to work.
+        # They are internal and subject to changes.
+        # TODO(@ShamrockLee): Remove when overrideStdenvCompat gets removed.
         ${if attrs ? stdenv then "__stdenvPythonCompat" else null} = attrs.stdenv;
+        ${if attrs ? stdenv then "__stdenvPythonCompatPos" else null} =
+          builtins.unsafeGetAttrPos "stdenv" attrs;
       }
       // attrs.passthru or { };
 
