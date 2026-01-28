@@ -11,6 +11,7 @@
   llvmSharedForHost,
   llvmSharedForTarget,
   llvmPackages,
+  runCommand,
   runCommandLocal,
   fetchurl,
   file,
@@ -260,6 +261,17 @@ stdenv.mkDerivation (finalAttrs: {
     ++ optionals stdenv.targetPlatform.isMusl [
       "${setTarget}.musl-root=${pkgsBuildTarget.targetPackages.stdenv.cc.libc}"
     ]
+    ++ optionals stdenv.targetPlatform.isWasi (
+      let
+        wasiSysRoot = runCommand "wasi-sysroot" { } ''
+          mkdir -p $out/lib
+          ln -s ${pkgsBuildTarget.targetPackages.stdenv.cc.libc}/lib $out/lib/wasm32-wasip1
+        '';
+      in
+      [
+        "${setTarget}.wasi-root=${wasiSysRoot}"
+      ]
+    )
     ++ optionals stdenv.targetPlatform.rust.isNoStdTarget [
       "--disable-docs"
     ]
