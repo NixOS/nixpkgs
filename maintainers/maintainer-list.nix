@@ -27744,7 +27744,7 @@
     name = "Thibaut Smith";
   };
   vieta = {
-    email = "xyzVieta@gmail.com";
+    email = "vieta@4d2.org";
     github = "yVieta";
     githubId = 94648307;
     name = "Thanh Viet Nguyen";
