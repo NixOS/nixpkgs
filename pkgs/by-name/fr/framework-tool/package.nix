@@ -1,9 +1,12 @@
 {
+  config,
   lib,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
   udev,
+  autoAddDriverRunpath,
+  enableNVML ? config.cudaSupport,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,8 +22,22 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-W+k/PAcdwl9mvajB9D4SUH4o5VqpeD/BnK6ZEJzPpmI=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ (lib.optionals enableNVML [
+    autoAddDriverRunpath
+  ]);
+
+  buildFeatures = lib.optionals enableNVML [
+    "nvidia"
+  ];
+
   buildInputs = [ udev ];
+
+  postFixup = lib.optionalString enableNVML ''
+    patchelf --add-needed libnvidia-ml.so "$out/bin/framework_tool"
+  '';
 
   meta = {
     description = "Swiss army knife for Framework laptops";
