@@ -2333,7 +2333,7 @@ self: super: with self; {
 
   bump-my-version = callPackage ../development/python-modules/bump-my-version { };
 
-  bump2version = callPackage ../development/python-modules/bump2version { };
+  bump2version = callPackage ../by-name/bu/bump2version/unwrapped.nix { };
 
   bumpfontversion = callPackage ../development/python-modules/bumpfontversion { };
 

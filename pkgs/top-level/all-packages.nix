@@ -1114,8 +1114,6 @@ with pkgs;
     withpcre2 = false;
   };
 
-  bump2version = with python3Packages; toPythonApplication bump2version;
-
   cgit = callPackage ../applications/version-management/cgit { };
 
   datalad = with python3Packages; toPythonApplication datalad;
