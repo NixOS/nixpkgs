@@ -109,6 +109,10 @@ in
         ''
       ];
 
+      serviceConfig.Environment = optionals cfg.useXkbConfig [
+        "XKB_CONFIG_ROOT=${config.services.xserver.xkb.dir}"
+      ];
+
       restartIfChanged = false;
       aliases = [ "autovt@.service" ];
     };
