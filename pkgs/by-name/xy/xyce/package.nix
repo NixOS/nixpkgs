@@ -50,16 +50,19 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xyce";
   inherit version;
 
+  inherit xyce_src;
+  inherit regression_src;
+
   srcs = [
-    xyce_src
-    regression_src
+    finalAttrs.xyce_src
+    finalAttrs.regression_src
   ];
 
-  sourceRoot = xyce_src.name;
+  sourceRoot = finalAttrs.xyce_src.name;
 
   cmakeFlags = lib.optionals withMPI [
     "-DCMAKE_C_COMPILER=mpicc"
@@ -102,7 +105,7 @@ stdenv.mkDerivation rec {
   doCheck = enableTests;
 
   postPatch = ''
-    pushd ../${regression_src.name}
+    pushd ../${finalAttrs.regression_src.name}
     find Netlists -type f -regex ".*\.sh\|.*\.pl" -exec chmod ugo+x {} \;
     # some tests generate new files, some overwrite netlists
     find . -type d -exec chmod u+w {} \;
@@ -134,7 +137,7 @@ stdenv.mkDerivation rec {
   checkPhase = ''
     XYCE_BINARY="$(pwd)/src/Xyce"
     EXECSTRING="${lib.optionalString withMPI "mpirun -np 2 "}$XYCE_BINARY"
-    TEST_ROOT="$(pwd)/../../${regression_src.name}"
+    TEST_ROOT="$(pwd)/../../${finalAttrs.regression_src.name}"
 
     # Honor the TMP variable
     sed -i -E 's|/tmp|\$TMP|' $TEST_ROOT/TestScripts/suggestXyceTagList.sh
@@ -160,10 +163,10 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = lib.optionalString enableDocs ''
-    pushd ../../${xyce_src.name}
+    pushd ../../${finalAttrs.xyce_src.name}
     local docFiles=("doc/Users_Guide/Xyce_UG"
       "doc/Reference_Guide/Xyce_RG"
-      "doc/Release_Notes/Release_Notes_${lib.versions.majorMinor version}/Release_Notes_${lib.versions.majorMinor version}")
+      "doc/Release_Notes/Release_Notes_${lib.versions.majorMinor finalAttrs.version}/Release_Notes_${lib.versions.majorMinor finalAttrs.version}")
 
     # SANDIA LaTeX class and some organization logos are not publicly available see
     # https://groups.google.com/g/xyce-users/c/MxeViRo8CT4/m/ppCY7ePLEAAJ
@@ -171,7 +174,7 @@ stdenv.mkDerivation rec {
       sed -i -E "s/\\includegraphics\[height=(0.[1-9]in)\]\{$img\}/\\mbox\{\\rule\{0mm\}\{\1\}\}/" ''${docFiles[2]}.tex
     done
 
-    install -d $doc/share/doc/${pname}-${version}/
+    install -d $doc/share/doc/${finalAttrs.pname}-${finalAttrs.version}/
     for d in ''${docFiles[@]}; do
       # Use a public document class
       sed -i -E 's/\\documentclass\[11pt,report\]\{SANDreport\}/\\documentclass\[11pt,letterpaper\]\{scrreprt\}/' $d.tex
@@ -179,15 +182,14 @@ stdenv.mkDerivation rec {
       sed -i -E 's/\\SANDauthor/\\author/' $d.tex
       pushd $(dirname $d)
       make
-      install -t $doc/share/doc/${pname}-${version}/ $(basename $d.pdf)
+      install -t $doc/share/doc/${finalAttrs.pname}-${finalAttrs.version}/ $(basename $d.pdf)
       popd
     done
     popd
   '';
 
   meta = {
-    broken =
-      (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) || stdenv.hostPlatform.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "High-performance analog circuit simulator";
     longDescription = ''
       Xyce is a SPICE-compatible, high-performance analog circuit simulator,
@@ -197,6 +199,9 @@ stdenv.mkDerivation rec {
     homepage = "https://xyce.sandia.gov";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ fbeffa ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
-}
+})
