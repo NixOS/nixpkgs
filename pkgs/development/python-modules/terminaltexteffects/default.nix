@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  poetry-core,
+  hatchling,
 }:
 
 buildPythonPackage rec {
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     hash = "sha256-ITyJnOS492Q9LQVorxROEnThHkST259bBDh70XwhdxQ=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   pythonImportsCheck = [ "terminaltexteffects" ];
 
