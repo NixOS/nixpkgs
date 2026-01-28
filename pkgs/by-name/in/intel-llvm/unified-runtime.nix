@@ -90,8 +90,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals levelZeroSupport [
     level-zero
     intel-compute-runtime
-  ]
-  ++ lib.optionals finalAttrs.doCheck [
+  ];
+
+  nativeCheckInputs = lib.optionals finalAttrs.doCheck [
     gtest
     lit
     filecheck
