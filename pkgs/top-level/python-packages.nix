@@ -12973,7 +12973,7 @@ self: super: with self; {
 
   py4j = callPackage ../development/python-modules/py4j { };
 
-  py65 = callPackage ../development/python-modules/py65 { };
+  py65 = callPackage ../by-name/py/py65/unwrapped.nix { };
 
   py7zr = callPackage ../development/python-modules/py7zr { };
 
