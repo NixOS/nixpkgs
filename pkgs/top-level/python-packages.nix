@@ -5738,7 +5738,7 @@ self: super: with self; {
 
   folium = callPackage ../development/python-modules/folium { };
 
-  font-v = callPackage ../development/python-modules/font-v { };
+  font-v = callPackage ../by-name/fo/font-v/unwrapped.nix { };
 
   fontawesomefree = callPackage ../development/python-modules/fontawesomefree { };
 
