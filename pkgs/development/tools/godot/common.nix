@@ -462,6 +462,14 @@ let
         patches = [
           ./Linux-fix-missing-library-with-builtin_glslang-false.patch
         ]
+        ++ lib.optionals (lib.versionAtLeast version "4.6") [
+          # https://github.com/godotengine/godot/pull/115450
+          (fetchpatch {
+            name = "fix-tls-handshake-fail-preventing-assetlib-use.patch";
+            url = "https://github.com/godotengine/godot/commit/29acd734c71f06268d6ef4715d7df70b14731f48.patch";
+            hash = "sha256-wxkr6jPtutUTG+mYrXoxcDcWIIZghlSJ79XqhFh/0P4=";
+          })
+        ]
         ++ lib.optionals (lib.versionOlder version "4.4") [
           (fetchpatch {
             name = "wayland-header-fix.patch";
