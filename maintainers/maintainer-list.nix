@@ -19226,6 +19226,12 @@
     githubId = 2946283;
     name = "Brian Cohen";
   };
+  nouritsu = {
+    name = "Aneesh Bhave";
+    email = "aneesh1701@gmail.com";
+    github = "nouritsu";
+    githubId = 113834791;
+  };
   nova-madeline = {
     matrix = "@nova:tchncs.de";
     github = "nova-r";
