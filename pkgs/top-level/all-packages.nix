@@ -6478,6 +6478,7 @@ with pkgs;
     boost187
     boost188
     boost189
+    boost190
     ;
 
   boost = boost187;
