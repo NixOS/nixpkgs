@@ -12975,7 +12975,7 @@ self: super: with self; {
 
   py65 = callPackage ../by-name/py/py65/unwrapped.nix { };
 
-  py7zr = callPackage ../development/python-modules/py7zr { };
+  py7zr = callPackage ../by-name/py/py7zr/unwrapped.nix { };
 
   pyabpoa = toPythonModule (
     pkgs.abpoa.override {
