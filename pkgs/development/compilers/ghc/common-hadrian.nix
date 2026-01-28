@@ -308,6 +308,9 @@
         ./ghc-define-undefined-elf-st-visibility.patch
       ]
 
+      # Fix docs build with Sphinx >= 9 https://gitlab.haskell.org/ghc/ghc/-/issues/26810
+      ++ [ ./ghc-9.6-or-later-docs-sphinx-9.patch ]
+
       ++ (import ./common-llvm-patches.nix { inherit lib version fetchpatch; });
 
     stdenv = stdenvNoCC;
