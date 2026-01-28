@@ -5,7 +5,6 @@
   buildPythonPackage,
   fetchPypi,
   isodate,
-  setuptools,
   typing-extensions,
 }:
 
@@ -20,7 +19,7 @@ buildPythonPackage rec {
     format = "wheel";
     python = "py3";
     dist = "py3";
-    hash = "sha256-1H/4DK6haFLDv1ElPR3MjKvy98CsMSipEmt4ZaNwBoQ=";
+    hash = "sha256-1LASBzs+biyDDQPoCujcvLhK3iyNaHLU8VCtBSdTJxg=";
   };
 
   propagatedBuildInputs = [
