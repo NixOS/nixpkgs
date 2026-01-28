@@ -886,25 +886,57 @@ in
         clock.gid = ids.gids.clock;
       };
 
-      system.activationScripts.users =
-        if !config.systemd.sysusers.enable && !config.services.userborn.enable then
+      systemd.services.users-groups =
+        lib.mkIf (!config.systemd.sysusers.enable && !config.services.userborn.enable)
           {
-            supportsDryActivation = true;
-            text = ''
-              install -m 0700 -d /root
-              install -m 0755 -d /home
+            wantedBy = [ "sysinit.target" ];
+            requiredBy = [ "sysinit-reactivation.target" ];
+            after = [
+              "systemd-remount-fs.service"
+              "systemd-tmpfiles-setup-dev-early.service"
+            ];
+            before = [
+              "systemd-tmpfiles-setup-dev.service"
+              "sysinit.target"
+              "shutdown.target"
+              "sysinit-reactivation.target"
+            ];
+            conflicts = [ "shutdown.target" ];
+            # This way we don't have to re-declare all the dependencies to other
+            # services again.
+            aliases = [ "systemd-sysusers.service" ];
 
-              ${
-                pkgs.perl.withPackages (p: [
-                  p.FileSlurp
-                  p.JSON
-                ])
-              }/bin/perl \
-              -w ${./update-users-groups.pl} ${spec}
-            '';
-          }
-        else
-          ""; # keep around for backwards compatibility
+            restartTriggers = [
+              spec
+            ];
+
+            unitConfig = {
+              Description = "Manage Users and Groups";
+              DefaultDependencies = false;
+            };
+
+            serviceConfig = {
+              Type = "oneshot";
+              RemainAfterExit = true;
+              TimeoutSec = "90s";
+
+              ExecStartPre = [
+                "${lib.getExe' pkgs.coreutils "install"} -m 0700 -d /root"
+                "${lib.getExe' pkgs.coreutils "install"} -m 0755 -d /home"
+              ];
+
+              ExecStart =
+                let
+                  perl = pkgs.perl.withPackages (p: [
+                    p.FileSlurp
+                    p.JSON
+                  ]);
+                in
+                ''${lib.getExe perl} -w ${./update-users-groups.pl} ${spec}'';
+            };
+          };
+
+      system.activationScripts.users = ""; # keep around for backwards compatibility
 
       systemd.services.linger-users = lib.mkIf cfg.manageLingering {
         wantedBy = [ "multi-user.target" ];
