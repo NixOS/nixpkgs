@@ -62,8 +62,9 @@ stdenv.mkDerivation (finalAttrs: {
     find -name 'node_modules' -type d -exec rm -rf {} \; || true
     pnpm install --offline --prod --ignore-scripts
   ''
-  # The optional dependency re2 is not built by pnpm and needs to be built manually.
+  # The optional dependencies re2 and better-sqlite3 are not built by pnpm and need to be built manually.
   # If re2 is not built, you will get an annoying warning when you run renovate.
+  # better-sqlite3 is required.
   + ''
     pushd node_modules/.pnpm/re2*/node_modules/re2
 
@@ -72,6 +73,13 @@ stdenv.mkDerivation (finalAttrs: {
     ln -sfv ${nodejs}/include $HOME/.node-gyp/${nodejs.version}
     export npm_config_nodedir=${nodejs}
     npm run rebuild
+    rm -rf build/Release/{obj.target,.deps} vendor
+
+    popd
+
+    pushd node_modules/.pnpm/better-sqlite3*/node_modules/better-sqlite3
+    npm run build-release
+    rm -rf build/Release/{obj.target,sqlite3.a,.deps} deps
 
     popd
 
