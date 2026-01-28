@@ -172,6 +172,12 @@ let
       name,
       overrides ? (self: super: { }),
       extraNativeBuildInputs ? [ ],
+      fetchurlBootFunc ?
+        thisStdenv:
+        import ../../build-support/fetchurl/boot.nix {
+          inherit system;
+          inherit (config) rewriteURL;
+        },
     }:
 
     let
@@ -191,10 +197,7 @@ let
         shell = "${bootstrapTools}/bin/bash";
         initialPath = [ bootstrapTools ];
 
-        fetchurlBoot = import ../../build-support/fetchurl/boot.nix {
-          inherit system;
-          inherit (config) rewriteURL;
-        };
+        fetchurlBoot = fetchurlBootFunc thisStdenv;
 
         cc =
           if prevStage.gcc-unwrapped == null then
@@ -235,6 +238,8 @@ let
       inherit config overlays;
       stdenv = thisStdenv;
     };
+
+  llvmVersion = "21"; # This needs to be updated when the default LLVM version is changed.
 
 in
 assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
@@ -556,8 +561,8 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
           # and that can fail to load.  Therefore we upgrade `ld` to use newer libc;
           # apparently the interpreter needs to match libc, too.
           bintools = self.stdenvNoCC.mkDerivation {
-            pname = prevStage.bintools.bintools.pname + "-patchelfed-ld";
-            inherit (prevStage.bintools.bintools) version;
+            pname = prevStage.binutils.bintools.pname + "-patchelfed-ld";
+            inherit (prevStage.binutils.bintools) version;
             passthru = { inherit (prevStage.bintools.passthru) isFromBootstrapFiles; };
             enableParallelBuilding = true;
             dontUnpack = true;
@@ -566,7 +571,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
             # We wouldn't need to *copy* all, but it's easier and the result is temporary anyway.
             installPhase = ''
               mkdir -p "$out"/bin
-              cp -a '${prevStage.bintools.bintools}'/bin/* "$out"/bin/
+              cp -a '${prevStage.binutils.bintools}'/bin/* "$out"/bin/
               chmod +w "$out"/bin/ld.bfd
               patchelf --set-interpreter '${self.libc}'/lib/ld*.so.? \
                 --set-rpath "${self.libc}/lib:$(patchelf --print-rpath "$out"/bin/ld.bfd)" \
@@ -656,6 +661,15 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
                     ;
                 };
               });
+        }
+        // lib.optionalAttrs (localSystem.useLLVM) {
+          # Prevent eval issue
+          cmake = self.cmakeMinimal;
+
+          curl = self.curlMinimal.override {
+            # Prevent eval issue
+            brotliSupport = false;
+          };
         };
       extraNativeBuildInputs = [
         prevStage.patchelf
@@ -681,51 +695,83 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
     stageFun prevStage {
       name = "bootstrap-stage4";
 
-      overrides = self: super: {
-        # Zlib has to be inherited and not rebuilt in this stage,
-        # because gcc (since JAR support) already depends on zlib, and
-        # then if we already have a zlib we want to use that for the
-        # other purposes (binutils and top-level pkgs) too.
-        inherit (prevStage)
-          gettext
-          gnum4
-          bison
-          perl
-          texinfo
-          zlib
-          linuxHeaders
-          libidn2
-          libunistring
-          ;
-        ${localSystem.libc} = prevStage.${localSystem.libc};
-        # Since this is the first fresh build of binutils since stage2, our own runtimeShell will be used.
-        binutils = super.binutils.override {
-          # Build expand-response-params with last stage like below
-          inherit (prevStage) expand-response-params;
-        };
+      fetchurlBootFunc =
+        thisStdenv:
+        if localSystem.useLLVM then
+          import ../../build-support/fetchurl {
+            inherit lib;
+            stdenvNoCC = prevStage.ccWrapperStdenv or thisStdenv;
+            inherit (prevStage) curl;
+            inherit (config) hashedMirrors rewriteURL;
+          }
+        else
+          import ../../build-support/fetchurl/boot.nix {
+            inherit system;
+            inherit (config) rewriteURL;
+          };
 
-        # To allow users' overrides inhibit dependencies too heavy for
-        # bootstrap, like guile: https://github.com/NixOS/nixpkgs/issues/181188
-        gnumake = super.gnumake.override { inBootstrap = true; };
-
-        gcc = lib.makeOverridable (import ../../build-support/cc-wrapper) {
-          nativeTools = false;
-          nativeLibc = false;
-          isGNU = true;
-          inherit (prevStage) expand-response-params;
-          cc = prevStage.gcc-unwrapped;
-          bintools = self.binutils;
-          inherit lib;
-          inherit (self)
-            stdenvNoCC
-            coreutils
-            gnugrep
-            runtimeShell
-            libc
+      overrides =
+        self: super:
+        {
+          # Zlib has to be inherited and not rebuilt in this stage,
+          # because gcc (since JAR support) already depends on zlib, and
+          # then if we already have a zlib we want to use that for the
+          # other purposes (binutils and top-level pkgs) too.
+          inherit (prevStage)
+            gettext
+            gnum4
+            bison
+            perl
+            texinfo
+            zlib
+            linuxHeaders
+            libidn2
+            libunistring
             ;
-          fortify-headers = self.fortify-headers;
+          ${localSystem.libc} = prevStage.${localSystem.libc};
+          # Since this is the first fresh build of binutils since stage2, our own runtimeShell will be used.
+          binutils = super.binutils.override {
+            # Build expand-response-params with last stage like below
+            inherit (prevStage) expand-response-params;
+          };
+
+          llvmPackages = super.llvmPackages.overrideScope (
+            selfLlvmPackages: prevLlvmPackages: {
+              libllvm = prevLlvmPackages.libllvm.override {
+                enablePFM = false;
+              };
+            }
+          );
+
+          # To allow users' overrides inhibit dependencies too heavy for
+          # bootstrap, like guile: https://github.com/NixOS/nixpkgs/issues/181188
+          gnumake = super.gnumake.override { inBootstrap = true; };
+
+          gcc = lib.makeOverridable (import ../../build-support/cc-wrapper) {
+            nativeTools = false;
+            nativeLibc = false;
+            isGNU = true;
+            inherit (prevStage) expand-response-params;
+            cc = prevStage.gcc-unwrapped;
+            bintools = self.binutils;
+            inherit lib;
+            inherit (self)
+              stdenvNoCC
+              coreutils
+              gnugrep
+              runtimeShell
+              libc
+              ;
+            fortify-headers = self.fortify-headers;
+          };
+        }
+        // lib.optionalAttrs (localSystem.useLLVM) {
+          # Remove docs prevents unnecessary dependencies from being built.
+          ninja = super.ninja.override { buildDocs = false; };
+
+          # Disable tests because they use dejagnu, which fails to run.
+          libffi = super.libffi.override { doCheck = false; };
         };
-      };
       extraNativeBuildInputs = [
         prevStage.patchelf
         prevStage.xz
@@ -774,7 +820,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
           prevStage.updateAutotoolsGnuConfigScriptsHook
         ];
 
-        cc = prevStage.gcc;
+        cc = if localSystem.useLLVM then prevStage.llvmPackages.clang else prevStage.gcc;
 
         shell = cc.shell;
 
@@ -819,6 +865,9 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
               gcc
               fortify-headers
               gcc-unwrapped
+              llvmPackages
+              libffi
+              libxml2
               ;
           in
           # Simple executable tools
@@ -864,13 +913,36 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
           ])
           ++ [
             linuxHeaders # propagated from .dev
+          ]
+          ++ lib.optionals (!localSystem.useLLVM) [
             binutils
+          ]
+          ++ [
             gcc
             gcc.cc
             gcc.cc.lib
             gcc.expand-response-params # != (prevStage.)expand-response-params
             gcc.cc.libgcc
             glibc.passthru.libgcc
+          ]
+          ++ lib.optionals (localSystem.useLLVM) [
+            libffi.out
+            libxml2.out
+            llvmPackages.compiler-rt
+            llvmPackages.compiler-rt.dev
+            llvmPackages.libcxx
+            llvmPackages.libcxx.dev
+            llvmPackages.libunwind
+            llvmPackages.libunwind.dev
+            llvmPackages.bintools
+            llvmPackages.bintools.bintools
+            llvmPackages.clang
+            llvmPackages.clang.cc
+            llvmPackages.clang.cc.lib
+            llvmPackages.clang.expand-response-params
+            llvmPackages.libllvm
+            llvmPackages.libllvm.lib
+            llvmPackages.lld
           ]
           ++ lib.optionals (localSystem.libc == "musl") [ fortify-headers ]
           ++ [
@@ -925,8 +997,46 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
           }
           // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) {
             # Need to get rid of these when cross-compiling.
-            inherit (prevStage) binutils binutils-unwrapped;
-            gcc = cc;
+            inherit (prevStage) binutils binutils-unwrapped gcc;
+          }
+          // lib.optionalAttrs (localSystem.useLLVM) {
+            "llvmPackages_${llvmVersion}" =
+              (super."llvmPackages_${llvmVersion}".overrideScope (
+                finalLLVM: _:
+                # These are defined explicitly to make sure that overriding their dependencies using `overrideScope`
+                # still works. `llvmPackages.libcxx` is not included because it’s not part of the Darwin stdenv.
+                {
+                  inherit (prevStage."llvmPackages_${llvmVersion}") libllvm libunwind libcxx;
+                  compiler-rt = prevStage."llvmPackages_${llvmVersion}".compiler-rt.override {
+                    inherit (finalLLVM) libllvm;
+                  };
+                  libclang = prevStage."llvmPackages_${llvmVersion}".libclang.override {
+                    inherit (finalLLVM) libllvm;
+                  };
+                  lld = prevStage."llvmPackages_${llvmVersion}".lld.override {
+                    inherit (finalLLVM) libllvm;
+                  };
+                }
+                # Avoid using the llvm-manpages package from the bootstrap, which won’t build due to needing curl.
+                // {
+                  inherit (super."llvmPackages_${llvmVersion}") llvm-manpages;
+                }
+                // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) {
+                  # Make sure the following are all the same in the local == target case:
+                  # - clang
+                  # - llvmPackages.stdenv.cc
+                  # - llvmPackages.systemLibcxxClang.
+                  # - llvmPackages.clang
+                  # - stdenv.cc
+                  clangUseLLVM = prevStage."llvmPackages_${llvmVersion}".clangUseLLVM.override {
+                    cc = finalLLVM.clang-unwrapped;
+                  };
+                }
+              ))
+              // {
+                inherit (super."llvmPackages_${llvmVersion}") override;
+                recurseForDerivations = true;
+              };
           };
       };
     }
