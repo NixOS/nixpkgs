@@ -53,7 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://hohnstaedt.de/xca/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
-      offline
       peterhoeg
     ];
     inherit (qtbase.meta) platforms;

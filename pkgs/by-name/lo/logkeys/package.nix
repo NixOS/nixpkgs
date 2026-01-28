@@ -47,7 +47,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/kernc/logkeys";
     maintainers = with lib.maintainers; [
       mikoim
-      offline
     ];
     platforms = lib.platforms.linux;
   };

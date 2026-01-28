@@ -159,7 +159,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.agpl3Only;
     homepage = "https://grafana.com";
     maintainers = with lib.maintainers; [
-      offline
       fpletz
       globin
       ma27

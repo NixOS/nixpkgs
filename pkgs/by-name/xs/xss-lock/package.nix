@@ -51,7 +51,6 @@ stdenv.mkDerivation {
     mainProgram = "xss-lock";
     maintainers = with lib.maintainers; [
       malyn
-      offline
     ];
     platforms = lib.platforms.linux;
   };

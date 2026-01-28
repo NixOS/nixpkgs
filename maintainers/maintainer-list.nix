@@ -19589,12 +19589,6 @@
     githubId = 9677399;
     name = "Ofek Lev";
   };
-  offline = {
-    email = "jaka@x-truder.net";
-    github = "offlinehacker";
-    githubId = 585547;
-    name = "Jaka Hudoklin";
-  };
   offsetcyan = {
     github = "offsetcyan";
     githubId = 49906709;

@@ -32,7 +32,6 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     homepage = "https://github.com/containernetworking/cni";
     maintainers = with lib.maintainers; [
-      offline
       vdemeester
     ];
     platforms = [
