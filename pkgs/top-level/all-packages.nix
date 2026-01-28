@@ -1013,8 +1013,6 @@ with pkgs;
     withUsdView = true;
   };
 
-  py7zr = with python3Packages; toPythonApplication py7zr;
-
   qFlipper = libsForQt5.callPackage ../tools/misc/qflipper { };
 
   inherit (callPackage ../development/libraries/sdbus-cpp { }) sdbus-cpp sdbus-cpp_2;
