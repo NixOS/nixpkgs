@@ -4,12 +4,18 @@
 }:
 
 /**
-  `buildTypstPackage` is a helper builder for typst packages.
+  `buildTypstPackage` is a helper builder for Typst packages that can be dependencies for Typst documents.
 
   # Inputs
 
-    `attrs`
-    : attrs for stdenvNoCC.mkDerivation + typstDeps (a list of `buildTypstPackage` derivations)
+    *`typstDeps`* (List of packages)
+    : A list of Typst packages that this package depends on
+
+    *`namespace`* (string; _optional_)
+    : The Typst namespace the package resides in. Defaults to "preview" as all Typst Universe packages are.
+
+    *`attrs`* (AttrSet; _optional_)
+    : All attributes passed to the mkDerivation builder
 
   # Example
   ```nix
@@ -29,22 +35,31 @@ lib.extendMkDerivation {
 
   excludeDrvArgNames = [
     "typstDeps"
+    "namespace"
   ];
 
   extendDrvArgs =
     finalAttrs:
     {
+      # Require that pname, version, and src are passed.
+      pname,
+      version,
+      src,
       typstDeps ? [ ],
+      namespace ? "preview",
       ...
     }@attrs:
     {
+      __structuredAttrs = true;
+      strictDeps = true;
+
       name = "typst-package-${finalAttrs.pname}-${finalAttrs.version}";
 
       dontBuild = true;
 
       installPhase =
         let
-          outDir = "$out/lib/typst-packages/${finalAttrs.pname}/${finalAttrs.version}";
+          outDir = "$out/lib/typst/packages/${namespace}/${finalAttrs.pname}/${finalAttrs.version}";
         in
         ''
           runHook preInstall
@@ -56,7 +71,9 @@ lib.extendMkDerivation {
       propagatedBuildInputs = typstDeps;
 
       passthru = {
-        inherit typstDeps;
+        # If propagatedBuildInputs is overriden, make sure
+        # we pass the final ones thru
+        inherit (finalAttrs) propagatedBuildInputs;
       };
     };
 }
