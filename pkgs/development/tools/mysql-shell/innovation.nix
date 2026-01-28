@@ -38,8 +38,8 @@ let
     pyyaml
   ];
 
-  mysqlShellVersion = "9.4.0";
-  mysqlServerVersion = "9.4.0";
+  mysqlShellVersion = "9.6.0";
+  mysqlServerVersion = "9.6.0";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mysql-shell-innovation";
@@ -48,11 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
   srcs = [
     (fetchurl {
       url = "https://dev.mysql.com/get/Downloads/MySQL-${lib.versions.majorMinor mysqlServerVersion}/mysql-${mysqlServerVersion}.tar.gz";
-      hash = "sha256-a7UJxU5YtUq776SeKW5yIPXnz+RGkUujYV9ZSWfPqSE=";
+      hash = "sha256-JABh2GnVrhiMmjM4RZKImenZY8y9Z4Zaii5Lb8tnF4w=";
     })
     (fetchurl {
       url = "https://dev.mysql.com/get/Downloads/MySQL-Shell/mysql-shell-${finalAttrs.version}-src.tar.gz";
-      hash = "sha256-BpiDGA3Lxf/MrKqtPSA+apFNZx9N805PYYVa+2vQxPE=";
+      hash = "sha256-WnCr/poMsxtaS9k7/6QZDkFPOZlf7WAELsqFGpnUwf4=";
     })
   ];
 
