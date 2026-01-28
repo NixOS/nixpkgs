@@ -1700,6 +1700,7 @@ mapAliases {
   synth = throw "'synth' has been removed because it is unmaintained"; # Added 2025-11-15
   system = warnAlias "'system' has been renamed to/replaced by 'stdenv.hostPlatform.system'" stdenv.hostPlatform.system; # Converted to warning 2025-10-28
   t1lib = throw "'t1lib' has been removed as it was broken and unmaintained upstream."; # Added 2025-06-11
+  tailscale-gui = warnAlias "'tailscale-gui' has been renamed to/replaced by 'tailscale.gui'" tailscale.gui; # Added 2026-01-28
   tamgamp.lv2 = tamgamp-lv2; # Added 2025-09-27
   taplo-cli = throw "'taplo-cli' has been renamed to/replaced by 'taplo'"; # Converted to throw 2025-10-27
   taplo-lsp = throw "'taplo-lsp' has been renamed to/replaced by 'taplo'"; # Converted to throw 2025-10-27

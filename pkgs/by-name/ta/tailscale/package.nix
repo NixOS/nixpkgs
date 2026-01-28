@@ -20,6 +20,9 @@
 
   nixosTests,
   tailscale-nginx-auth,
+
+  # for passthru.gui
+  callPackage,
 }:
 
 buildGoModule (finalAttrs: {
@@ -218,10 +221,13 @@ buildGoModule (finalAttrs: {
       --zsh <($out/bin/tailscale completion zsh)
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) headscale;
-    inherit tailscale-nginx-auth;
-    tests = finalAttrs.finalPackage.overrideAttrs { doCheck = true; };
+  passthru = {
+    tests = {
+      inherit (nixosTests) headscale;
+      inherit tailscale-nginx-auth;
+      tests = finalAttrs.finalPackage.overrideAttrs { doCheck = true; };
+    };
+    gui = callPackage ./gui.nix { inherit (finalAttrs) version; };
   };
 
   meta = {
@@ -237,6 +243,7 @@ buildGoModule (finalAttrs: {
       philiptaron
       pyrox0
       ryan4yin
+      anish
     ];
   };
 })

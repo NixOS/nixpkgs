@@ -5,15 +5,16 @@
   xar,
   cpio,
   pbzx,
+  version,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tailscale-gui";
-  version = "1.92.3";
+  inherit version;
 
   src = fetchurl {
     url = "https://pkgs.tailscale.com/stable/Tailscale-${finalAttrs.version}-macos.pkg";
-    hash = "sha256-K5tJHyFhqnxV4KHzr7YOHRoH33vk+dq+EVWyUo88nuI=";
+    hash = "sha256-MPS6OA6+0SN0IZjPPcV1fE6VS7BdzXZE+z5HkfoA31M=";
   };
 
   dontUnpack = true;
@@ -40,7 +41,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Tailscale GUI client for macOS";
+    description = "Standalone Tailscale GUI client for macOS";
     homepage = "https://tailscale.com";
     changelog = "https://tailscale.com/changelog#client";
     license = lib.licenses.unfree;
