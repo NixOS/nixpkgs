@@ -13,9 +13,9 @@
 let
   latestVersionForNc = {
     "31" = {
-      version = "7.8.1";
-      appHash = "sha256-lD50xKxHYc04G6r4caAKzRcTl0Q2VSWUXHRETUCF1dg=";
-      srcHash = "sha256-E/hdjfBh6MorJ5A2W15F6iqax+wV8XHxiQQiahCM4Os=";
+      version = "7.8.2";
+      appHash = "sha256-O59G5kUkYlYxr8p/vEqs3LqLRKJZbeEgDhdY5eHfnZg=";
+      srcHash = "sha256-KyUfrKHnRO3lMin0seSNFRnRRTPo12NbbvbkSpxSMQE=";
     };
     "32" = latestVersionForNc."31";
   };
