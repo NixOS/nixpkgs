@@ -4,7 +4,6 @@
   buildGoModule,
   fetchFromGitHub,
   nixosTests,
-  swtpm,
   openssl,
   age,
   versionCheckHook,
@@ -27,7 +26,6 @@ buildGoModule rec {
 
   nativeCheckInputs = [
     age
-    swtpm
   ];
   nativeInstallCheckInputs = [ versionCheckHook ];
 
