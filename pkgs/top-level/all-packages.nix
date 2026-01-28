@@ -1019,8 +1019,6 @@ with pkgs;
 
   inherit (callPackage ../development/libraries/sdbus-cpp { }) sdbus-cpp sdbus-cpp_2;
 
-  ufolint = with python3Packages; toPythonApplication ufolint;
-
   ventoy-full = ventoy.override {
     withCryptsetup = true;
     withXfs = true;
