@@ -1100,8 +1100,6 @@ with pkgs;
 
   datalad = with python3Packages; toPythonApplication datalad;
 
-  datalad-gooey = with python3Packages; toPythonApplication datalad-gooey;
-
   forgejo-lts = callPackage ../by-name/fo/forgejo/lts.nix { };
 
   github-cli = gh;
