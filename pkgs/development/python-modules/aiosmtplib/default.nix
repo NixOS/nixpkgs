@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "aiosmtplib";
-  version = "5.0.0";
+  version = "5.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cole";
     repo = "aiosmtplib";
     tag = "v${version}";
-    hash = "sha256-ICG7yVH2UcvQAsVGbxu7LibWUj/NEPV/f5iDc25XuzU=";
+    hash = "sha256-+aMtU8ea8yy1jxPPQGSu4kW3PX9N9qYQ90CSduPPgYc=";
   };
 
   build-system = [ hatchling ];
