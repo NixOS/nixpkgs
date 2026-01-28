@@ -5,7 +5,7 @@
   setuptools,
   djangorestframework,
   django,
-  josepy,
+  pyjwt,
   requests,
   cryptography,
 }:
@@ -22,14 +22,15 @@ buildPythonPackage rec {
     hash = "sha256-5J2lzGGdjoXzdzfKdmfUaSM7KQ6Hn7KerBtoKzFsZfY=";
   };
 
-  # Fix test with latest cryptography
-  # Upstream PR: https://github.com/mozilla/mozilla-django-oidc/pull/556
-  patches = [
-    ./cryptography.patch
+  build-system = [
+    setuptools
   ];
 
-  nativeBuildInputs = [
-    setuptools
+  dependencies = [
+    django
+    pyjwt
+    requests
+    cryptography
   ];
 
   nativeCheckInputs = [
@@ -43,13 +44,6 @@ buildPythonPackage rec {
 
     runHook postCheck
   '';
-
-  dependencies = [
-    django
-    josepy
-    requests
-    cryptography
-  ];
 
   meta = {
     description = "Django OpenID Connect library";
