@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "skrooge";
-  version = "25.10.0";
+  version = "26.1.20";
 
   src = fetchurl {
     url = "mirror://kde/stable/skrooge/skrooge-${version}.tar.xz";
-    hash = "sha256-kECWi5/q2reBOs9DrubOz5Vol3AkA7lXzOLtbgx2HlE=";
+    hash = "sha256-2Yb/VGQGYQlcQPLrpD2ZGICVFMidqeZpXTX/0TesoJY=";
   };
 
   nativeBuildInputs = with kdePackages; [
