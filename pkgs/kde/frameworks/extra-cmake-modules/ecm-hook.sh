@@ -65,7 +65,7 @@ ecmPostHook() {
     appendToVar cmakeFlags "-DKDE_INSTALL_AUTOSTARTDIR=${!outputBin}/etc/xdg/autostart"
     appendToVar cmakeFlags "-DKDE_INSTALL_LOGGINGCATEGORIESDIR=${!outputLib}/share/qlogging-categories6"
     appendToVar cmakeFlags "-DKDE_INSTALL_SYSTEMDUNITDIR=${!outputBin}/lib/systemd"
-    appendToVar cmakeFlags "-DKDE_INSTALL_SYSTEMDUSERUNITDIR=${!outputBin}/share/systemd/user"
+    appendToVar cmakeFlags "-DKDE_INSTALL_SYSTEMDUSERUNITDIR=${!outputBin}/lib/systemd/user"
 }
 postHooks+=(ecmPostHook)
 
