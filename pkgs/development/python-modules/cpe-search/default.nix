@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cpe-search";
-  version = "0.2.4";
+  version = "0.2.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ra1nb0rn";
     repo = "cpe_search";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wnUKLJUUj3idQLv3FSpcUZksa0FvwMxKDId6/hjpEZw=";
+    hash = "sha256-GZzMS1zmI7w8L2qVa57KtY3sb/quULyXrPQYTcPFxTI=";
   };
 
   build-system = [ hatchling ];

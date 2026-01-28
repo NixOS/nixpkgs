@@ -5278,6 +5278,8 @@ self: super: with self; {
 
   fastapi-sso = callPackage ../development/python-modules/fastapi-sso { };
 
+  fastapi-versionizer = callPackage ../development/python-modules/fastapi-versionizer { };
+
   fastavro = callPackage ../development/python-modules/fastavro { };
 
   fastbencode = callPackage ../development/python-modules/fastbencode { };
@@ -9113,6 +9115,10 @@ self: super: with self; {
   logbook = callPackage ../development/python-modules/logbook { };
 
   logboth = callPackage ../development/python-modules/logboth { };
+
+  logfire = callPackage ../development/python-modules/logfire { };
+
+  logfire-api = callPackage ../development/python-modules/logfire-api { };
 
   logfury = callPackage ../development/python-modules/logfury { };
 
