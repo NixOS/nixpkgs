@@ -27,13 +27,13 @@
   srtp,
   libnice,
   gnutls,
-  gstreamer,
-  gst-plugins-base,
-  gst-plugins-good,
-  gst-plugins-bad,
-  gst-vaapi,
+  gst_all_1,
   webrtc-audio-processing,
 }:
+
+# Upstream is very deliberate about which features are enabled per default or are automatically enabled.
+# Everything that is disabled per default has to been seen experimental and should not be enabled without strong reasoning.
+# see https://github.com/NixOS/nixpkgs/issues/469614#issuecomment-3649662176
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dino";
@@ -79,23 +79,12 @@ stdenv.mkDerivation (finalAttrs: {
     srtp
     libnice
     gnutls
-    gstreamer
-    gst-plugins-base
-    gst-plugins-good # contains rtpbin, required for VP9
-    gst-plugins-bad # required for H264, MSDK
-    gst-vaapi # required for VAAPI
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
     webrtc-audio-processing
   ];
 
   doCheck = true;
-
-  mesonFlags = [
-    "-Dplugin-notification-sound=enabled"
-    "-Dplugin-rtp-h264=enabled"
-    "-Dplugin-rtp-msdk=enabled"
-    "-Dplugin-rtp-vaapi=enabled"
-    "-Dplugin-rtp-vp9=enabled"
-  ];
 
   # Undefined symbols for architecture arm64: "_gpg_strerror"
   NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-lgpg-error";
@@ -108,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
   # will load
   #
   # See https://github.com/dino/dino/wiki/macOS
-  postFixup = lib.optionalString (stdenv.hostPlatform.isDarwin) ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     cd "$out/lib/dino/plugins/"
     for f in *.dylib; do
       mv "$f" "$(basename "$f" .dylib).so"
