@@ -55,6 +55,7 @@
     "relro"
     "stackclashprotection"
     "stackprotector"
+    "strictflexarrays1"
     "strictoverflow"
     "zerocallusedregs"
   ],
