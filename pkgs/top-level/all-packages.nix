@@ -12222,10 +12222,6 @@ with pkgs;
     quake3hires
     ;
 
-  rott-shareware = callPackage ../by-name/ro/rott/package.nix {
-    buildShareware = true;
-  };
-
   inherit (callPackage ../by-name/sc/scummvm/games.nix { })
     beneath-a-steel-sky
     broken-sword-25
