@@ -46,14 +46,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.15.0";
+  version = "1.16.0";
   pname = "tigervnc";
 
   src = fetchFromGitHub {
     owner = "TigerVNC";
     repo = "tigervnc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZuuvRJe/lAqULWObPxGHVJrDPCTK4IVSqX0K1rWOctw=";
+    hash = "sha256-aIQcFX4GQ0VniacjYherpUSgzM55Han9oMvbjMUYgfE=";
   };
 
   postPatch =
