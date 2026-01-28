@@ -30,6 +30,8 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-iKG6Cs28D0scPEIRKoGk/CgquKzGZvIjf4UIj4MQXHA=";
   };
 
+  hardeningEnable = [ "glibcxxassertions" ];
+
   dontUseCmakeConfigure = true;
 
   build-system = [
