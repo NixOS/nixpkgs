@@ -8,8 +8,6 @@
 let
   inherit (lib) types;
 
-  # TODO: Secrets handling
-
   # Similar to types.enum of `attrNames attrset`, but maps merged result to `attrset.${value}`
   attrEnum =
     attrset:
@@ -22,6 +20,50 @@ let
         binOp = a: b: a // b;
       };
     };
+
+  /*
+    Credential handling pipeline:
+    - Buildtime
+      - User calls `mkSecret` for every value expected to be substituted at runtime
+      - credential.finalize recursively traverses configuration inserting placeholder values like "@<id>@"
+    - Runtime
+      - Systemd ensures that given path exists (`RequiresMountsFor` and `AssertPathExists`)
+      - Systemd reads value of each credential to `$CREDENTIALS_DIRECTORY/<id>`
+      - loadCredentialsScript copies config files from /nix/store to /tmp and finally substitutes credentials
+  */
+  credAttrType = "_credentialFilePath";
+  credType = types.addCheck types.attrs (attrs: attrs ? ${credAttrType}) // {
+    merge = loc: defs: {
+      ${credAttrType} =
+        let
+          path = (lib.mergeEqualOption loc defs).${credAttrType};
+          id = builtins.hashString "sha256" path;
+        in
+        {
+          inherit path id;
+        };
+    };
+  };
+  credSubstituteRec =
+    x:
+    if credType.check x then
+      "@${x.${credAttrType}.id}@"
+    else if lib.isList x then
+      map credSubstituteRec x
+    else if lib.isAttrs x then
+      lib.mapAttrs (_: v: credSubstituteRec v) x
+    else
+      x;
+  credCollectRec =
+    x:
+    if credType.check x then
+      [ x.${credAttrType} ]
+    else if lib.isList x then
+      lib.flatten (lib.map credCollectRec x)
+    else if lib.isAttrs x then
+      lib.flatten (lib.mapAttrsToList (_: v: credCollectRec v) x)
+    else
+      [ ];
 in
 {
   ###### Interface #####
@@ -35,6 +77,7 @@ in
             bool
             int
             str
+            credType
           ];
         in
         attrsOf (
@@ -200,7 +243,7 @@ in
             inherit freeformType;
             options = {
               host = lib.mkOption {
-                type = types.str;
+                type = types.either types.str credType;
                 description = "IP address of server (on this address i2pd will send data from I2P)";
               };
               port = lib.mkOption {
@@ -230,7 +273,7 @@ in
                 description = "Port of client tunnel (on this port i2pd will receive data)";
               };
               destination = lib.mkOption {
-                type = types.str;
+                type = types.either types.str credType;
                 description = "Remote endpoint, I2P hostname or b32.i2p address";
               };
               inherit (templates) signaturetype i2cp i2p;
@@ -249,6 +292,32 @@ in
             i2p.streaming.profile = "interactive";
           };
         };
+      };
+
+      mkSecret = lib.mkOption {
+        type = types.anything // {
+          description = "Function that takes absolute path to runtime credential file";
+        };
+        readOnly = true;
+        default =
+          path:
+          if types.path.check path then
+            { ${credAttrType} = path; }
+          else
+            throw "Argument to `mkSecret` is not of type `lib.types.path`";
+        description = ''
+          Substitute value of any free-formed option with contents of the provided file.
+          The file is read at runtime before i2pd service starts, file permissions are ignored.
+        '';
+        example = lib.literalExpression ''
+          { pkgs, lib, config, ... }:
+          let
+            mkSecret = config.services.i2pd.mkSecret;
+          in
+          {
+            clientTunnels."example".destination = mkSecret "/run/secrets/example-tunnel-destination";
+          }
+        '';
       };
     };
 
@@ -362,21 +431,61 @@ in
             cp ${configPath} $out
           '';
 
-      i2pdConfig = validateConfig (genConfig "i2pd.conf" cfg.config);
+      i2pdConfig = validateConfig (genConfig "i2pd.conf" (credSubstituteRec cfg.config));
 
       tunConfig = genTunnels "i2pd-tunnels.conf" (
         lib.mapAttrs' (k: v: lib.nameValuePair "client-${k}" (v // { "type" = "client"; })) (
-          cfg.clientTunnels
+          credSubstituteRec cfg.clientTunnels
         )
         // lib.mapAttrs' (k: v: lib.nameValuePair "server-${k}" (v // { "type" = "server"; })) (
-          cfg.serverTunnels
+          credSubstituteRec cfg.serverTunnels
         )
       );
 
+      # List of all passed credentials: `[ { id = ...; path = ...; } ... ]`
+      credentials = credCollectRec [
+        cfg.config
+        cfg.clientTunnels
+        cfg.serverTunnels
+      ];
+
+      loadCredentialsScriptArgs = [
+        # "%T" is temporary directory, usually `/tmp`
+        "%T/conf=${i2pdConfig}"
+        "%T/tunconf=${tunConfig}"
+      ];
+
+      loadCredentialsScript =
+        pkgs.writeShellScript "i2pd-load-credentials"
+          # sh
+          ''
+            set -euo pipefail
+
+            # If no credential declared, `CREDENTIALS_DIRECTORY` is unset
+            ids=(${"$"}{CREDENTIALS_DIRECTORY:+$(ls "$CREDENTIALS_DIRECTORY")})
+
+            # For every cli argument
+            for arg in "$@"; do
+              # Split argument at "=", assign first part to `out` and second part to `in`
+              arg=(${"$"}{arg//=/ })
+              out="${"$"}{arg[0]}"
+              in="${"$"}{arg[1]}"
+
+              # Copy file, set permissions
+              cp "$in" "$out"
+              chmod u=rw,g=,o= "$out"
+
+              # Try substitute all known credentials
+              for id in "${"$"}{ids[@]}"; do
+                ${lib.getExe pkgs.replace-secret} @"$id"@ "$CREDENTIALS_DIRECTORY/$id" "$out"
+              done
+            done
+          '';
+
       i2pdCliArgs = lib.cli.toGNUCommandLineShell { } {
-        "datadir" = cfg.config.datadir;
-        "conf" = i2pdConfig;
-        "tunconf" = tunConfig;
+        "datadir" = "%S/i2pd"; # "%S" is systemd state directory, usually `/var/lib`
+        "conf" = "%T/conf";
+        "tunconf" = "%T/tunconf";
       };
     in
     lib.mkIf cfg.enable {
@@ -384,9 +493,19 @@ in
         description = "Minimal I2P router";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
+        unitConfig = rec {
+          AssertPathExists = map (cred: cred.path) credentials;
+          RequiresMountsFor = AssertPathExists;
+        };
+
         serviceConfig = {
           DynamicUser = true;
           StateDirectory = [ "i2pd" ];
+
+          # Load credentials
+          LoadCredential = lib.forEach credentials (cred: "${cred.id}:${cred.path}");
+          ExecStartPre = "${loadCredentialsScript} ${lib.escapeShellArgs loadCredentialsScriptArgs}";
+
           ExecStart = "${lib.getExe cfg.package} ${i2pdCliArgs}";
           Restart = if cfg.autoRestart then "on-failure" else "no";
           KillSignal = if cfg.gracefulShutdown then "SIGINT" else "SIGTERM";
