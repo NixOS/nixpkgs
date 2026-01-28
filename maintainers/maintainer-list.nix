@@ -22700,6 +22700,13 @@
     githubId = 26892280;
     name = "Robert Walter";
   };
+  RocketDev = {
+    email = "ma2014119@outlook.com";
+    github = "RocketMaDev";
+    githubId = 48864431;
+    keys = [ { fingerprint = "A7AC CC38 6C15 E3C5 54D3  4B3E AB08 F980 92A4 56BB"; } ];
+    name = "Rocket Ma";
+  };
   roconnor = {
     email = "roconnor@r6.ca";
     github = "roconnor";
@@ -26083,6 +26090,12 @@
     github = "tesq0";
     githubId = 26417242;
     name = "Mikolaj Galkowski";
+  };
+  tesuji = {
+    email = "taolzu@gmail.com";
+    github = "tesuji";
+    githubId = 15225902;
+    name = "Lzu Tao";
   };
   TethysSvensson = {
     email = "freaken@freaken.dk";
