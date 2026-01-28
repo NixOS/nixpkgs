@@ -4541,6 +4541,10 @@ with pkgs;
   haxePackages = recurseIntoAttrs (callPackage ./haxe-packages.nix { });
   inherit (haxePackages) hxcpp;
 
+  heptagon = callPackage ../by-name/he/heptagon/package.nix {
+    ocamlPackages = ocaml-ng.ocamlPackages_5_3;
+  };
+
   dotnetPackages = recurseIntoAttrs (callPackage ./dotnet-packages.nix { });
 
   gopro-tool = callPackage ../by-name/go/gopro-tool/package.nix {
@@ -9460,7 +9464,9 @@ with pkgs;
 
   rfkill_udev = callPackage ../os-specific/linux/rfkill/udev.nix { };
 
-  sgx-sdk = callPackage ../os-specific/linux/sgx/sdk { };
+  sgx-sdk = callPackage ../os-specific/linux/sgx/sdk {
+    ocamlPackages = ocaml-ng.ocamlPackages_5_3;
+  };
 
   sgx-psw = callPackage ../os-specific/linux/sgx/psw {
     protobuf = protobuf_21;
