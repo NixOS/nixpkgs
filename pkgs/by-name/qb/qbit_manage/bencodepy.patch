@@ -1,0 +1,14 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index 68b0e3b..d4735f3 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -18,7 +18,7 @@ authors = [
+ ]
+ dependencies = [
+     "argon2-cffi==25.1.0",
+-    "bencodepy==0.9.5",
++    "bencode.py==4.0.0",
+     "croniter==6.0.0",
+     "fastapi==0.122.0",
+     "GitPython==3.1.45",
+
