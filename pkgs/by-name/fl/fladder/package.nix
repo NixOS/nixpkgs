@@ -2,6 +2,8 @@
   lib,
   fetchFromGitHub,
   flutter335,
+  copyDesktopItems,
+  makeDesktopItem,
 
   alsa-lib,
   libdisplay-info,
@@ -10,7 +12,7 @@
   libepoxy,
   mpv-unwrapped,
 
-  targetFlutterPlatform ? "web",
+  targetFlutterPlatform ? "linux",
   baseUrl ? null,
 }:
 
@@ -46,6 +48,10 @@ flutter.buildFlutterApplication rec {
     media_kit_libs_windows_video = media_kit_hash;
   };
 
+  nativeBuildInputs = lib.optionals (targetFlutterPlatform == "linux") [
+    copyDesktopItems
+  ];
+
   buildInputs = [
     alsa-lib
     libdisplay-info
@@ -57,21 +63,46 @@ flutter.buildFlutterApplication rec {
     libepoxy
   ];
 
-  postInstall = lib.optionalString (targetFlutterPlatform == "web") (
-    ''
-      sed -i 's;base href="/";base href="$out";' $out/index.html
-    ''
-    + lib.optionalString (baseUrl != null) ''
-      echo '{"baseUrl": "${baseUrl}"}' > $out/assets/config/config.json
-    ''
-  );
+  postInstall =
+    lib.optionalString (targetFlutterPlatform == "web") (
+      ''
+        sed -i 's;base href="/";base href="$out";' $out/index.html
+      ''
+      + lib.optionalString (baseUrl != null) ''
+        echo '{"baseUrl": "${baseUrl}"}' > $out/assets/config/config.json
+      ''
+    )
+    + lib.optionalString (targetFlutterPlatform == "linux") ''
+      # Install SVG icon
+      install -Dm644 icons/fladder_icon.svg \
+        $out/share/icons/hicolor/scalable/apps/fladder.svg
+    '';
+
+  desktopItems = lib.optionals (targetFlutterPlatform == "linux") [
+    (makeDesktopItem {
+      name = "fladder";
+      desktopName = "Fladder";
+      genericName = "Jellyfin Client";
+      exec = "Fladder";
+      icon = "fladder";
+      comment = "Simple Jellyfin Frontend built on top of Flutter";
+      categories = [
+        "AudioVideo"
+        "Video"
+        "Player"
+      ];
+    })
+  ];
 
   meta = {
     description = "Simple Jellyfin Frontend built on top of Flutter";
     homepage = "https://github.com/DonutWare/Fladder";
     downloadPage = "https://github.com/DonutWare/Fladder/releases";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ ratcornu ];
+    maintainers = with lib.maintainers; [
+      ratcornu
+      vikingnope
+    ];
     mainProgram = "Fladder";
   };
 }
