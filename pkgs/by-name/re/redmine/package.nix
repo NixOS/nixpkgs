@@ -13,7 +13,7 @@ let
   rubyEnv = bundlerEnv {
     name = "redmine-env-${version}";
 
-    inherit ruby_3_3;
+    ruby = ruby_3_3;
     gemdir = ./.;
     groups = [
       "development"
