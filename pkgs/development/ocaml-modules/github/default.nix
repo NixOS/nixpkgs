@@ -11,14 +11,14 @@
   stringext,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "github";
   version = "4.5.0";
 
   src = fetchFromGitHub {
     owner = "mirage";
     repo = "ocaml-github";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-/IRoaGh4nYcdv4ir3LOS1d9UHLfWJ6DdPyFoFVCS+p4=";
   };
 
@@ -40,4 +40,4 @@ buildDunePackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ niols ];
   };
-}
+})

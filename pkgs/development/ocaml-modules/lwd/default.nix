@@ -5,14 +5,14 @@
   seq,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "lwd";
   version = "0.4";
 
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
-    url = "https://github.com/let-def/lwd/releases/download/v${version}/lwd-${version}.tbz";
+    url = "https://github.com/let-def/lwd/releases/download/v${finalAttrs.version}/lwd-${finalAttrs.version}.tbz";
     hash = "sha256-nnFltlBWfPOerF4HuVNGzXcZxRSdsM+abeD5ZdQ+x8U=";
   };
 
@@ -24,4 +24,4 @@ buildDunePackage rec {
     maintainers = [ lib.maintainers.alizter ];
     homepage = "https://github.com/let-def/lwd";
   };
-}
+})

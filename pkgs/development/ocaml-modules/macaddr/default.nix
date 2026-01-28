@@ -7,14 +7,14 @@
   ounit2,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "macaddr";
   version = "5.6.1";
 
   minimalOCamlVersion = "4.04";
 
   src = fetchurl {
-    url = "https://github.com/mirage/ocaml-ipaddr/releases/download/v${version}/ipaddr-${version}.tbz";
+    url = "https://github.com/mirage/ocaml-ipaddr/releases/download/v${finalAttrs.version}/ipaddr-${finalAttrs.version}.tbz";
     hash = "sha256-HmF9+KvUWEPII+m+dSZ9J0JstXhmHPJWItULJa4Uoxk=";
   };
 
@@ -30,4 +30,4 @@ buildDunePackage rec {
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.alexfmpe ];
   };
-}
+})

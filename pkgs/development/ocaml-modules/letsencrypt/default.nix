@@ -18,12 +18,12 @@
   domain-name,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "letsencrypt";
   version = "1.1.0";
 
   src = fetchurl {
-    url = "https://github.com/mmaker/ocaml-letsencrypt/releases/download/v${version}/letsencrypt-${version}.tbz";
+    url = "https://github.com/mmaker/ocaml-letsencrypt/releases/download/v${finalAttrs.version}/letsencrypt-${finalAttrs.version}.tbz";
     hash = "sha256-Iw55GffyG5tWA49hao1z9BX6p4N2+EKuhLIoOwG8EKM=";
   };
 
@@ -57,4 +57,4 @@ buildDunePackage rec {
     maintainers = [ lib.maintainers.sternenseemann ];
     homepage = "https://github.com/mmaker/ocaml-letsencrypt";
   };
-}
+})

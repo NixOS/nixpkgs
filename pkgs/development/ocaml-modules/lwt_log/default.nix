@@ -5,7 +5,7 @@
   lwt,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "lwt_log";
   version = "1.1.2";
 
@@ -13,8 +13,8 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "aantron";
-    repo = pname;
-    rev = version;
+    repo = "lwt_log";
+    rev = finalAttrs.version;
     sha256 = "sha256-ODTD3KceEnrEzD01CeuNg4BNKOtKZEpYaDIB+RIte1U=";
   };
 
@@ -26,4 +26,4 @@ buildDunePackage rec {
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.vbgl ];
   };
-}
+})

@@ -8,14 +8,14 @@
   yaml,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "lustre-v6";
   version = "6.107.4";
 
   minimalOCamlVersion = "4.12";
 
   src = fetchurl {
-    url = "https://www-verimag.imag.fr/DIST-TOOLS/SYNCHRONE/pool/lustre-v6.v${version}.tgz";
+    url = "https://www-verimag.imag.fr/DIST-TOOLS/SYNCHRONE/pool/lustre-v6.v${finalAttrs.version}.tgz";
     hash = "sha256-baT5ZJtg5oFoJ5eHb3ISsmY6G31UG10KlNXC+ta+M1c=";
   };
 
@@ -36,4 +36,4 @@ buildDunePackage rec {
     ];
     mainProgram = "lv6";
   };
-}
+})

@@ -4,14 +4,14 @@
   buildDunePackage,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "mem_usage";
   version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-mem_usage";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-5tQNsqbiU9oJvKHUjeTo/ST4A0Axc95gdJISLaa9VRM=";
   };
 
@@ -25,4 +25,4 @@ buildDunePackage rec {
     description = "Cross-platform memory usage information";
     maintainers = [ lib.maintainers.vbgl ];
   };
-}
+})

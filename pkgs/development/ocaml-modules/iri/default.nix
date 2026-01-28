@@ -7,7 +7,7 @@
   uutf,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "iri";
   version = "1.1.0";
 
@@ -17,7 +17,7 @@ buildDunePackage rec {
     domain = "framagit.org";
     owner = "zoggy";
     repo = "ocaml-iri";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-fh5+0CWplDdGXCotZL2UzjOGil2LR4NppttaquO/ndE=";
   };
 
@@ -31,6 +31,6 @@ buildDunePackage rec {
     description = "IRI (RFC3987) native OCaml implementation";
     license = lib.licenses.lgpl3;
     maintainers = [ lib.maintainers.vbgl ];
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
   };
-}
+})

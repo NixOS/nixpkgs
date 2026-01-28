@@ -18,12 +18,12 @@
   lru,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "index";
   version = "1.6.2";
 
   src = fetchurl {
-    url = "https://github.com/mirage/index/releases/download/${version}/index-${version}.tbz";
+    url = "https://github.com/mirage/index/releases/download/${finalAttrs.version}/index-${finalAttrs.version}.tbz";
     hash = "sha256-k4iDUJik7UTuztBw7YaFXASd8SqYMR1JgLm3JOyriGA=";
   };
 
@@ -63,4 +63,4 @@ buildDunePackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ vbgl ];
   };
-}
+})

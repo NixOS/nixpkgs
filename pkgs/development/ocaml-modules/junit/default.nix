@@ -6,12 +6,12 @@
   tyxml,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "junit";
   version = "2.3.0";
 
   src = fetchurl {
-    url = "https://github.com/Khady/ocaml-junit/releases/download/${version}/junit-${version}.tbz";
+    url = "https://github.com/Khady/ocaml-junit/releases/download/${finalAttrs.version}/junit-${finalAttrs.version}.tbz";
     hash = "sha256-j+4lfuQEWq8z8ik/zfA5phWqv8km+tGEzqG/63cbhTM=";
   };
 
@@ -28,4 +28,4 @@ buildDunePackage rec {
     maintainers = [ ];
     homepage = "https://github.com/Khady/ocaml-junit";
   };
-}
+})
