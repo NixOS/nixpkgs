@@ -173,6 +173,7 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [
       de11n
       despsyched
+      sinrohit-desco
     ];
     mainProgram = "dcgmi";
     platforms = lib.platforms.linux;
