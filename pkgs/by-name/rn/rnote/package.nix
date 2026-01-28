@@ -17,7 +17,6 @@
   meson,
   ninja,
   pkg-config,
-  poppler,
   python3,
   rustPlatform,
   rustc,
@@ -27,18 +26,18 @@
 
 stdenv.mkDerivation rec {
   pname = "rnote";
-  version = "0.13.1";
+  version = "0.13.1-unstable-2026-01-15";
 
   src = fetchFromGitHub {
     owner = "flxzt";
     repo = "rnote";
-    tag = "v${version}";
-    hash = "sha256-EMxA5QqmIae/d3nUpwKjgURo0nOyaNbma8poB5mcQW0=";
+    rev = "ddc89dac5264919d71772c1c8d935468c9e14132";
+    hash = "sha256-+x+5M7qqhqjP3a1GHbanFallIACz2IzVAvX8WDxS3wo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-fr1bDTzTKx7TLBqw94CyaB0/Jo2x1BzZcM6dcen1PHc=";
+    hash = "sha256-yNK2WNcv70h6qWfUgAEp8fGEBqM2PQWNknWoyRcsrXE=";
   };
 
   nativeBuildInputs = [
@@ -71,7 +70,6 @@ stdenv.mkDerivation rec {
     gtk4
     libadwaita
     libxml2
-    poppler
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
@@ -88,7 +86,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/flxzt/rnote";
-    changelog = "https://github.com/flxzt/rnote/releases/tag/${src.tag}";
     description = "Simple drawing application to create handwritten notes";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
