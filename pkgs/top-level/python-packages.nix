@@ -3565,7 +3565,7 @@ self: super: with self; {
 
   datalad = callPackage ../development/python-modules/datalad { };
 
-  datalad-gooey = callPackage ../development/python-modules/datalad-gooey { };
+  datalad-gooey = callPackage ../by-name/da/datalad-gooey/unwrapped.nix { };
 
   datalad-next = callPackage ../development/python-modules/datalad-next { };
 
