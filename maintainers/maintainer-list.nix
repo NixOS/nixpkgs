@@ -8802,6 +8802,12 @@
     githubId = 100240294;
     name = "Florian Sanders";
   };
+  FlorisMenninga = {
+    email = "fl-ris@protonmail.com";
+    github = "Fl-ris";
+    githubId = 117688953;
+    name = "Floris Menninga";
+  };
   flosse = {
     email = "mail@markus-kohlhase.de";
     github = "flosse";
