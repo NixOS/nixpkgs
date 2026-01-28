@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "qpageview";
-  version = "1.0.2";
+  version = "1.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frescobaldi";
     repo = "qpageview";
     tag = "v${version}";
-    hash = "sha256-bUZI3ML3MN+0KLQxrPfQOC7lxdpvl3sxJ4zi0phsiCw=";
+    hash = "sha256-cKidVtsqNXGuWNTTgvVOP3Wyf6M+Xctwaq7pOZb8eeo=";
   };
 
   build-system = [ hatchling ];
