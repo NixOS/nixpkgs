@@ -32,6 +32,8 @@
   qttools,
   qtbase,
   qtsvg,
+  enableInfo ? true,
+  emacs,
 }:
 
 let
@@ -46,12 +48,15 @@ in
     sha256 = "sha256-RY2UdpYl5z1fYjJQD0nLrcsrGDOA1D0iZqD5cBrrnFs=";
   };
 
+  outputs = [ "out" ] ++ lib.optional enableInfo "info";
+
   nativeBuildInputs = [
     makeWrapper
     pkg-config
     texinfo
   ]
-  ++ lib.optional withQt qttools;
+  ++ lib.optional withQt qttools
+  ++ lib.optional enableInfo emacs;
 
   buildInputs = [
     cairo
@@ -117,6 +122,8 @@ in
   ];
 
   enableParallelBuilding = true;
+
+  installTargets = [ "install" ] ++ lib.optional enableInfo "install-info";
 
   meta = {
     homepage = "http://www.gnuplot.info/";
