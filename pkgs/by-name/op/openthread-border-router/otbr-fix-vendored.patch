@@ -1,0 +1,121 @@
+diff --git a/third_party/CMakeLists.txt b/third_party/CMakeLists.txt
+index 8e8aaf77a23..da54fe56adf 100644
+--- a/third_party/CMakeLists.txt
++++ b/third_party/CMakeLists.txt
+@@ -20,15 +20,11 @@
+ #  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ #  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ #  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ #  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ #  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ #  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ #  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ #  POSSIBILITY OF SUCH DAMAGE.
+ #
+ 
+ add_subdirectory(openthread)
+-if(OTBR_REST)
+-    add_subdirectory(cJSON)
+-    add_subdirectory(http-parser)
+-endif()
+
+diff --git a/src/rest/json.cpp b/src/rest/json.cpp
+index 943e0ee45d1..3367c4bce0b 100644
+--- a/src/rest/json.cpp
++++ b/src/rest/json.cpp
+@@ -25,21 +25,21 @@
+  *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  *  POSSIBILITY OF SUCH DAMAGE.
+  */
+ 
+ #include "rest/json.hpp"
+ #include <sstream>
+ 
+ #include "common/code_utils.hpp"
+ 
+ extern "C" {
+-#include <cJSON.h>
++#include <cjson/cJSON.h>
+ }
+ 
+ #ifndef BITS_PER_BYTE
+ #define BITS_PER_BYTE 8
+ #endif
+ 
+ namespace otbr {
+ namespace rest {
+
+
+diff --git a/src/web/web-service/frontend/CMakeLists.txt b/src/web/web-service/frontend/CMakeLists.txt
+index a6cced2f54f..8887985f358 100644
+--- a/src/web/web-service/frontend/CMakeLists.txt
++++ b/src/web/web-service/frontend/CMakeLists.txt
+@@ -20,39 +20,37 @@
+ #  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ #  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ #  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ #  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ #  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ #  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ #  POSSIBILITY OF SUCH DAMAGE.
+ #
+ 
+ set(NPM_CSS_DEPENDENCIES
+-    ${CMAKE_CURRENT_BINARY_DIR}/node_modules/angular-material/angular-material.min.css
+-    ${CMAKE_CURRENT_BINARY_DIR}/node_modules/material-design-lite/material.min.css
++    ${CMAKE_SOURCE_DIR}/node_modules/angular-material/angular-material.min.css
++    ${CMAKE_SOURCE_DIR}/node_modules/material-design-lite/material.min.css
+ )
+ set(NPM_JS_DEPENDENCIES
+-    ${CMAKE_CURRENT_BINARY_DIR}/node_modules/angular-animate/angular-animate.min.js
+-    ${CMAKE_CURRENT_BINARY_DIR}/node_modules/angular-aria/angular-aria.min.js
+-    ${CMAKE_CURRENT_BINARY_DIR}/node_modules/angular-material/angular-material.min.js
+-    ${CMAKE_CURRENT_BINARY_DIR}/node_modules/angular-messages/angular-messages.min.js
+-    ${CMAKE_CURRENT_BINARY_DIR}/node_modules/angular/angular.min.js
+-    ${CMAKE_CURRENT_BINARY_DIR}/node_modules/d3/d3.min.js
+-    ${CMAKE_CURRENT_BINARY_DIR}/node_modules/material-design-lite/material.min.js
++    ${CMAKE_SOURCE_DIR}/node_modules/angular-animate/angular-animate.min.js
++    ${CMAKE_SOURCE_DIR}/node_modules/angular-aria/angular-aria.min.js
++    ${CMAKE_SOURCE_DIR}/node_modules/angular-material/angular-material.min.js
++    ${CMAKE_SOURCE_DIR}/node_modules/angular-messages/angular-messages.min.js
++    ${CMAKE_SOURCE_DIR}/node_modules/angular/angular.min.js
++    ${CMAKE_SOURCE_DIR}/node_modules/d3/d3.min.js
++    ${CMAKE_SOURCE_DIR}/node_modules/material-design-lite/material.min.js
+ )
+ 
+ add_custom_target(otbr-web-frontend
+     DEPENDS ${NPM_CSS_DEPENDENCIES} ${NPM_JS_DEPENDENCIES})
+ 
+ add_custom_command(OUTPUT ${NPM_CSS_DEPENDENCIES} ${NPM_JS_DEPENDENCIES}
+-    COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/package.json .
+-    COMMAND npm install
+     DEPENDS package.json)
+ 
+ install(FILES index.html join.dialog.html
+     DESTINATION ${OTBR_WEB_DATADIR}/frontend)
+ 
+ install(DIRECTORY res
+     DESTINATION ${OTBR_WEB_DATADIR}/frontend)
+ 
+ install(FILES ${NPM_JS_DEPENDENCIES}
+     DESTINATION ${OTBR_WEB_DATADIR}/frontend/res/js)
+
+diff --git a/tools/CMakeLists.txt b/tools/CMakeLists.txt
+index 5e8451afdb0..e9901dbd76e 100644
+--- a/tools/CMakeLists.txt
++++ b/tools/CMakeLists.txt
+@@ -42,10 +42,13 @@ add_executable(steering-data
+ target_link_libraries(steering-data PRIVATE
+     otbr-config
+     otbr-common
+     otbr-utils
+     mbedtls
+ )
+ 
+ if ($ENV{REFERENCE_DEVICE})
+     add_subdirectory(reference_device)
+ endif()
++
++install(TARGETS pskc
++    DESTINATION bin)
+
