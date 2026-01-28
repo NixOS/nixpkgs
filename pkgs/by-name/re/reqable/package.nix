@@ -4,7 +4,7 @@
   fetchurl,
   dpkg,
   autoPatchelfHook,
-  makeBinaryWrapper,
+  wrapGAppsHook3,
   fontconfig,
   atk,
   cairo,
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     dpkg
     autoPatchelfHook
-    makeBinaryWrapper
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -72,11 +72,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  dontWrapGApps = true;
+
   preFixup = ''
-    mkdir $out/bin
     makeWrapper $out/share/reqable/reqable $out/bin/reqable \
-      --prefix LD_LIBRARY_PATH : $out/share/reqable/lib \
-      --set GIO_MODULE_DIR "${glib.out}/lib/gio/modules"
+     --prefix LD_LIBRARY_PATH : $out/share/reqable/lib \
+     ''${gappsWrapperArgs[@]}
   '';
 
   passthru.updateScript = nix-update-script { };
