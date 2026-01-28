@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-Ga+1zFwS/v+3iKVEz7TFmJjyBW/gq6leHeyH2vjawto=";
   };
 
-  cargoHash = "sha256-7pD5LA1ytO7VqFnHwgf7vW9eS3olnZBgdsj+rmcHkbU=";
+  cargoHash = "sha256-/ViKfnC8PVffT0CP0rlN9SlOnFuZOb2U5qwtPZIdhDU=";
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.cc.isClang [ rustPlatform.bindgenHook ];
   buildInputs = [ dbus ];
@@ -33,8 +33,5 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ aftix ];
     platforms = lib.platforms.linux;
-    # "Plugin `dbus` is compiled for nushell version 0.101.0, which is not
-    # compatible with version 0.105.1"
-    broken = true;
   };
 })
