@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-run";
-  version = "0.13.0";
+  version = "0.15.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_run";
     inherit version;
-    hash = "sha256-l1NK1206LCBH0STAoKKUpIIvzCQzHroPKUyt+xk8Sa0=";
+    hash = "sha256-FY8mRkP5gr+k9PGPnijFbqAOqVwki8inRuFZtTivq1c=";
   };
 
   build-system = [ setuptools ];
