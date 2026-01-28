@@ -9800,6 +9800,10 @@ self: super: with self; {
     callPackage ../development/python-modules/mkdocs-git-revision-date-localized-plugin
       { };
 
+  mkdocs-github-admonitions-plugin =
+    callPackage ../development/python-modules/mkdocs-github-admonitions-plugin
+      { };
+
   mkdocs-gitlab = callPackage ../development/python-modules/mkdocs-gitlab-plugin { };
 
   mkdocs-glightbox = callPackage ../development/python-modules/mkdocs-glightbox { };
