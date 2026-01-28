@@ -64,6 +64,11 @@ buildPythonPackage rec {
     pycryptodome
   ];
 
+  pytestFlags = [
+    # 'asyncio.iscoroutinefunction' is deprecated and slated for removal in Python 3.16; use inspect.iscoroutinefunction() instead
+    "-Wignore::DeprecationWarning"
+  ];
+
   disabledTests = [
     # side-effect: runs pip online check and is blocked by sandbox
     "test_install_local_wheel"
