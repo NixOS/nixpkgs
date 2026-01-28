@@ -45,5 +45,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/pytoolz/cytoolz/releases/tag/${finalAttrs.src.tag}";
     description = "Cython implementation of Toolz: High performance functional utilities";
     license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ sarahec ];
   };
 })
