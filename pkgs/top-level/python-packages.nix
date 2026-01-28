@@ -13342,6 +13342,8 @@ self: super: with self; {
 
   pydispatcher = callPackage ../development/python-modules/pydispatcher { };
 
+  pydivsufsort = callPackage ../development/python-modules/pydivsufsort { };
+
   pydle = callPackage ../development/python-modules/pydle { };
 
   pydmd = callPackage ../development/python-modules/pydmd { };
