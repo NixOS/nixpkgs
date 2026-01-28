@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mlkit";
-  version = "4.7.18";
+  version = "4.7.21";
 
   src = fetchFromGitHub {
     owner = "melsman";
     repo = "mlkit";
     rev = "v${version}";
-    sha256 = "sha256-OACdbHwg3sEAVw+Fje0tWVHh7Xy6C/WdOQHfexOezlo=";
+    sha256 = "sha256-c1GdM3K6dgY0EgHu01adBXwAxuMehRfo73Lo71couJ4=";
   };
 
   nativeBuildInputs = [
