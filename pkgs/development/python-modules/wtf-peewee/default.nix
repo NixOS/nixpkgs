@@ -1,26 +1,28 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
   peewee,
   wtforms,
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wtf-peewee";
   version = "3.1.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Y2eVVl0Tg5K1Iw3lE6icxq0AJKdqfIBt20wQdSO19Bo=";
+  src = fetchFromGitHub {
+    owner = "coleifer";
+    repo = "wtf-peewee";
+    tag = finalAttrs.version;
+    hash = "sha256-9gVvcPFVA3051Y0sn0mLq1ejKqcGlKZVbIaQ/uH5f4Y=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     peewee
     wtforms
   ];
@@ -37,4 +39,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})
