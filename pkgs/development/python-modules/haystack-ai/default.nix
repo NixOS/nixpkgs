@@ -136,7 +136,7 @@ buildPythonPackage rec {
     transformers
   ];
 
-  env.HOME = "$(mktemp -d)";
+  env.HOME = "/tmp";
 
   optional-dependencies = {
     # all = [
