@@ -62,7 +62,7 @@ tryDownload() {
     # if we get error code 18, resume partial download
     while [ $curlexit -eq 18 ]; do
        # keep this inside an if statement, since on failure it doesn't abort the script
-       if "${curl[@]}" -C - --fail "$url" --output "$target"; then
+       if "${curl[@]}" -C - --fail-with-body "$url" --output "$target"; then
           success=1
           break
        else
