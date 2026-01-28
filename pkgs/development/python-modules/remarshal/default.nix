@@ -13,6 +13,7 @@
   pyyaml,
   rich-argparse,
   ruamel-yaml,
+  tomli,
   tomlkit,
   u-msgpack-python,
 
@@ -41,6 +42,7 @@ buildPythonPackage rec {
     pyyaml
     rich-argparse
     ruamel-yaml
+    tomli
     tomlkit
     u-msgpack-python
   ];
