@@ -15,7 +15,7 @@
   pkg-config,
   diffutils,
   versionCheckHook,
-  glibc ? !stdenv.hostPlatform.isDarwin,
+  glibc,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -91,10 +91,20 @@ stdenv.mkDerivation (finalAttrs: {
     # which makes some tests fail.
     sed -i '/opts normalize/a AT_SKIP_IF([true])' src/at/chdir.at
   ''
-  + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-    substituteInPlace src/main/help.c \
-       --replace-fail '"ldconfig"' \"${glibc.bin}/bin/ldconfig\"
-  '';
+  +
+    lib.optionalString
+      (
+        stdenv.hostPlatform.libc == "glibc"
+        || stdenv.hostPlatform.libc == "uclibc"
+        || stdenv.hostPlatform.isFreeBSD
+        || stdenv.hostPlatform.isOpenBSD
+        || stdenv.hostPlatform.isNetBSD
+      )
+      ''
+        # See <https://github.com/guillemj/dpkg/blob/$version/src/main/help.c#L93>
+        substituteInPlace src/main/help.c \
+           --replace-fail '"ldconfig"' \"${glibc.bin}/bin/ldconfig\"
+      '';
 
   buildInputs = [
     perl
