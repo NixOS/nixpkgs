@@ -8,13 +8,13 @@
 
 buildDunePackage rec {
   pname = "posix-base";
-  version = "2.2.0";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-posix";
     tag = "v${version}";
-    hash = "sha256-JKJIiuo4lW8DmcK1mJlT22784J1NS2ig860jDbRIjIo=";
+    hash = "sha256-JC4xLxSLXahR6TDFZzgYMJfussETZ4SRCmbsytPgJxg=";
   };
 
   minimalOCamlVersion = "4.08";
