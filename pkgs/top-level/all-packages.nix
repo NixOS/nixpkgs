@@ -273,8 +273,6 @@ with pkgs;
 
   # addDriverRunpath is the preferred package name, as this enables
   # many more scenarios than just opengl now.
-  aocd = with python3Packages; toPythonApplication aocd;
-
   cve = with python3Packages; toPythonApplication cvelib;
 
   bloodhound-py = with python3Packages; toPythonApplication bloodhound-py;
