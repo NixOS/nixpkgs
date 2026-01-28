@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "biglybt";
-  version = "3.9.0.0";
+  version = "4.0.0.0";
 
   src = fetchurl {
     url = "https://github.com/BiglySoftware/BiglyBT/releases/download/v${version}/GitHub_BiglyBT_unix.tar.gz";
-    hash = "sha256-NBXEY5f2kVPoZit7Gy4rM61bwQSdXovg0gURukhxJJ4=";
+    hash = "sha256-J61AgH9WnkUunqWsYKU/hyH569QobJqh9M3lBpxCcAk=";
   };
 
   nativeBuildInputs = [
