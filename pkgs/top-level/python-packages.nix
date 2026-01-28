@@ -53,7 +53,7 @@ self: super: with self; {
 
   acme-tiny = callPackage ../development/python-modules/acme-tiny { };
 
-  acquire = callPackage ../development/python-modules/acquire { };
+  acquire = callPackage ../by-name/ac/acquire/unwrapped.nix { };
 
   acres = callPackage ../development/python-modules/acres { };
 
