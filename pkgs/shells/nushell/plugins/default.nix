@@ -56,6 +56,7 @@ lib.makeScope newScope (
           inherit dbus;
         };
         skim = callPackage ./skim.nix { };
+        bson = callPackage ./bson.nix { };
         semver = callPackage ./semver.nix { };
         hcl = callPackage ./hcl.nix { };
         desktop_notifications = callPackage ./desktop_notifications.nix { };
