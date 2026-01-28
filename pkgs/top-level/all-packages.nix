@@ -7979,10 +7979,6 @@ with pkgs;
     gtkVersion = "4";
   };
 
-  vtfedit = callPackage ../by-name/vt/vtfedit/package.nix {
-    wine = wineWowPackages.staging;
-  };
-
   inherit (callPackage ../development/libraries/vtk { }) vtk_9_5;
 
   vtk = vtk_9_5;
