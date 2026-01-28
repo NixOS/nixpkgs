@@ -1629,7 +1629,7 @@ in
   traefik = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./traefik.nix;
   trafficserver = runTest ./trafficserver.nix;
   transfer-sh = runTest ./transfer-sh.nix;
-  transmission_4 = handleTest ./transmission.nix { };
+  transmission_4 = runTest ./transmission.nix;
   trezord = runTest ./trezord.nix;
   trickster = runTest ./trickster.nix;
   trilium-server = runTestOn [ "x86_64-linux" ] ./trilium-server.nix;
