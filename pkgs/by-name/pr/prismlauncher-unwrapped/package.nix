@@ -92,7 +92,33 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://prismlauncher.org/";
     changelog = "https://github.com/PrismLauncher/PrismLauncher/releases/tag/${finalAttrs.version}";
-    license = lib.licenses.gpl3Only;
+    # License list sources:
+    # https://github.com/PrismLauncher/PrismLauncher/tree/develop/libraries
+    # https://github.com/PrismLauncher/PrismLauncher/blob/develop/COPYING.md
+    license = with lib.licenses; [
+      # Prism Launcher's license
+      gpl3Only
+      # Original MultiMC license
+      asl20
+      # Prism Launcher assets
+      cc-by-sa-40
+      # LibNBT++, Oxygen Icons
+      lgpl3Plus
+      # rainbow
+      lgpl2Plus
+      # qdcss
+      lgpl3Only
+      # Material Design Icons
+      ofl
+      # lionshead
+      mit
+      # LocalPeer
+      bsd3
+      # Batch Icons
+      batchLicense
+      # murmur2
+      publicDomain
+    ];
     maintainers = with lib.maintainers; [
       minion3665
       Scrumplex

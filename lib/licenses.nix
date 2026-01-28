@@ -177,6 +177,11 @@ lib.mapAttrs mkLicense (
       fullName = "Baekmuk License";
     };
 
+    batchLicense = {
+      fullName = "Batch Icons License";
+      url = "https://github.com/rivermont/batch/blob/master/License.txt";
+    };
+
     bitstreamCharter = {
       spdxId = "Bitstream-Charter";
       fullName = "Bitstream Charter Font License";
