@@ -2144,8 +2144,6 @@ with pkgs;
 
   unify = with python3Packages; toPythonApplication unify;
 
-  usb-modeswitch-data = callPackage ../by-name/us/usb-modeswitch/data.nix { };
-
   persistent-evdev = python3Packages.callPackage ../servers/persistent-evdev { };
 
   inherit (import ../development/libraries/libsbsms pkgs)
