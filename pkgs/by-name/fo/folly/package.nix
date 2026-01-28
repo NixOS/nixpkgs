@@ -40,7 +40,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "folly";
-  version = "2025.10.13.00";
+  version = "2026.01.05.00";
 
   # split outputs to reduce downstream closure sizes
   outputs = [
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebook";
     repo = "folly";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-k7PGxYF3HlNc5nPBV+MkELya/4yllkaMA37vcfES4NE=";
+    hash = "sha256-dE6i+giIjf6ZQNWI9JVasBkNXUrkxnglbqLQIdPsMq8=";
   };
 
   nativeBuildInputs = [
@@ -139,20 +139,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     # <https://github.com/facebook/folly/issues/2171>
     ./folly-fix-glog-0.7.patch
-
-    # Fix a GCC‐incompatible use of a private trait.
-    #
-    # Per Folly’s own documentation:
-    #
-    #     /// Under gcc, the builtin is available but does not mangle. Therefore, this
-    #     /// trait must not be used anywhere it might be subject to mangling, such as in
-    #     /// a return-type expression.
-    #
-    # See:
-    #
-    # * <https://github.com/facebook/folly/issues/2493>
-    # * <https://github.com/facebook/folly/pull/2499>
-    ./fix-__type_pack_element.patch
   ];
 
   # https://github.com/NixOS/nixpkgs/issues/144170
