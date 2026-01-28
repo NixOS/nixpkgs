@@ -13384,6 +13384,8 @@ self: super: with self; {
 
   pyeapi = callPackage ../development/python-modules/pyeapi { };
 
+  pyeasee = callPackage ../development/python-modules/pyeasee { };
+
   pyebox = callPackage ../development/python-modules/pyebox { };
 
   pyebus = callPackage ../development/python-modules/pyebus { };
