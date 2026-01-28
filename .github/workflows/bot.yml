@@ -46,7 +46,7 @@ jobs:
       # https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
           sparse-checkout: |
@@ -97,7 +97,7 @@ jobs:
           github.event_name == 'pull_request_target' &&
           !contains(fromJSON(inputs.headBranch).type, 'development')
         with:
-          repo-token: ${{ steps.app-token.outputs.token }}
+          repo-token: ${{ steps.app-token.outputs.token || github.token }}
           configuration-path: .github/labeler.yml # default
           sync-labels: true
 
@@ -107,7 +107,7 @@ jobs:
           github.event_name == 'pull_request_target' &&
           !contains(fromJSON(inputs.headBranch).type, 'development')
         with:
-          repo-token: ${{ steps.app-token.outputs.token }}
+          repo-token: ${{ steps.app-token.outputs.token || github.token }}
           configuration-path: .github/labeler-no-sync.yml
           sync-labels: false
 
@@ -120,7 +120,7 @@ jobs:
           github.event_name == 'pull_request_target' &&
           contains(fromJSON(inputs.headBranch).type, 'development')
         with:
-          repo-token: ${{ steps.app-token.outputs.token }}
+          repo-token: ${{ steps.app-token.outputs.token || github.token }}
           configuration-path: .github/labeler-development-branches.yml
           sync-labels: true
 

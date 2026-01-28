@@ -12,7 +12,19 @@
   atk,
   cairo,
   gdk-pixbuf,
-  xorg,
+  libxtst,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  libxshmfence,
+  libxcb,
   xorg_sys_opengl,
   util-linux,
   alsa-lib,
@@ -62,21 +74,21 @@ stdenv.mkDerivation (finalAttrs: {
         atk
         cairo
         gdk-pixbuf
-        xorg.libX11
-        xorg.libxcb
-        xorg.libXcomposite
-        xorg.libXcursor
-        xorg.libXdamage
-        xorg.libXext
-        xorg.libXfixes
-        xorg.libXi
-        xorg.libXrender
-        xorg.libxshmfence
-        xorg.libXtst
+        libx11
+        libxcb
+        libxcomposite
+        libxcursor
+        libxdamage
+        libxext
+        libxfixes
+        libxi
+        libxrender
+        libxshmfence
+        libxtst
         xorg_sys_opengl
         util-linux
-        xorg.libXrandr
-        xorg.libXScrnSaver
+        libxrandr
+        libxscrnsaver
         alsa-lib
         dbus.lib
         at-spi2-atk

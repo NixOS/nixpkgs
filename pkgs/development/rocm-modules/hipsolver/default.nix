@@ -21,7 +21,7 @@
 # Can also use cuSOLVER
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipsolver";
-  version = "7.0.2";
+  version = "7.1.0";
 
   outputs = [
     "out"
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "hipSOLVER";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-IZAVdu+VpSrJ/EZXymOzvrGnRLBpxUgVeaj1U+ux02M=";
+    hash = "sha256-n0+Xy92mBhI2vjB7pFHGt2UgPIHo9rO2ZxGxkz30Otw=";
   };
 
   nativeBuildInputs = [

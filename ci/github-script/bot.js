@@ -9,6 +9,9 @@ module.exports = async ({ github, context, core, dry }) => {
 
   const artifactClient = new DefaultArtifactClient()
 
+  // Detect if running in a fork (not NixOS/nixpkgs)
+  const isFork = context.repo.owner !== 'NixOS'
+
   async function downloadMaintainerMap(branch) {
     let run
 
@@ -68,9 +71,18 @@ module.exports = async ({ github, context, core, dry }) => {
 
     // We get here when none of the 10 commits we looked at contained a maintainer map.
     // For the master branch, we don't have any fallback options, so we error out.
-    // For other branches, we select a suitable fallback below.
-    if (branch === 'master') throw new Error('No maintainer map found.')
+    // In forks without merge-group history, return empty map to allow testing.
+    if (branch === 'master') {
+      if (isFork) {
+        core.warning(
+          'No maintainer map found. Using empty map (expected in forks without merge-group history).',
+        )
+        return {}
+      }
+      throw new Error('No maintainer map found.')
+    }
 
+    // For other branches, we select a suitable fallback below.
     const { stable, version } = classify(branch)
 
     const release = `release-${version}`
@@ -106,6 +118,11 @@ module.exports = async ({ github, context, core, dry }) => {
       // permissions to access the members endpoint below. Thus, we're pretending to have
       // no members. This is OK; because this is only for the Test workflow, not for
       // real use.
+      return []
+    }
+
+    // Forks don't have NixOS teams, return empty list
+    if (isFork) {
       return []
     }
 
@@ -304,9 +321,40 @@ module.exports = async ({ github, context, core, dry }) => {
         expectedHash: artifact.digest,
       })
 
-      const evalLabels = JSON.parse(
+      const changedPaths = JSON.parse(
         await readFile(`${pull_number}/changed-paths.json`, 'utf-8'),
-      ).labels
+      )
+      const evalLabels = changedPaths.labels
+
+      // Fetch all PR commits to check their messages for package patterns
+      const prCommits = await github.paginate(github.rest.pulls.listCommits, {
+        ...context.repo,
+        pull_number,
+        per_page: 100,
+      })
+      const commitSubjects = prCommits.map(
+        (c) => c.commit.message.split('\n')[0],
+      )
+
+      // Label new package PRs: "packagename: init at X.Y.Z"
+      // Exclude NixOS module commits like "nixos/timekpr: init at 0.5.8"
+      const newPackagePattern = /^(?<!nixos\/)\S+: init at\b/
+      const hasNewPackages = changedPaths.attrdiff?.added?.length > 0
+      const commitsIndicateNewPackage = commitSubjects.some((msg) =>
+        newPackagePattern.test(msg),
+      )
+      evalLabels['8.has: package (new)'] =
+        hasNewPackages && commitsIndicateNewPackage
+
+      // Label package update PRs: "packagename: X.Y.Z -> A.B.C"
+      // Matches versions like: 1.2.3, 0-unstable-2024-01-15, 1.3rc1, alpha, unstable
+      // Exclude NixOS module commits like "nixos/ncps: types.str -> types.path"
+      const updatePackagePattern =
+        /^(?<!nixos\/)\S+: [\w.-]*\d[\w.-]* (->|→) [\w.-]*\d[\w.-]*$/
+      const commitsIndicateUpdate = commitSubjects.some((msg) =>
+        updatePackagePattern.test(msg),
+      )
+      evalLabels['8.has: package (update)'] = commitsIndicateUpdate
 
       // TODO: Get "changed packages" information from list of changed by-name files
       // in addition to just the Eval results, to make this work for these packages

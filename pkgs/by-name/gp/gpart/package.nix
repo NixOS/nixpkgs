@@ -23,6 +23,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
+
   meta = {
     inherit (src.meta) homepage;
     description = "Guess PC-type hard disk partitions";

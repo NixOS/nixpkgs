@@ -17,6 +17,11 @@ stdenv.mkDerivation rec {
     "prefix=$(out)"
     "CC=${stdenv.cc.targetPrefix}cc"
   ];
+  outputs = [
+    "out"
+    "man"
+    "doc"
+  ];
 
   meta = {
     homepage = "https://www.nongnu.org/dmidecode/";

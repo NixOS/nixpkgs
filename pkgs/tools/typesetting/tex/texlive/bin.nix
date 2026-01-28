@@ -10,16 +10,16 @@
   zlib,
   libiconv,
   libpng,
-  libX11,
+  libx11,
   freetype,
   ttfautohint,
   gd,
-  libXaw,
+  libxaw,
   icu,
   ghostscript,
-  libXpm,
-  libXmu,
-  libXext,
+  libxpm,
+  libxmu,
+  libxext,
   perl,
   perlPackages,
   python3Packages,
@@ -37,7 +37,8 @@
   brotli,
   cairo,
   pixman,
-  xorg,
+  libxi,
+  libxfixes,
   clisp,
   biber,
   woff2,
@@ -414,7 +415,7 @@ rec {
       harfbuzz
       icu
       graphite2
-      libX11
+      libx11
       potrace
     ];
 
@@ -751,17 +752,15 @@ rec {
       core # kpathsea
       freetype
       ghostscript
-    ]
-    ++ (with xorg; [
-      libX11
-      libXaw
-      libXi
-      libXpm
-      libXmu
-      libXaw
-      libXext
-      libXfixes
-    ]);
+      libx11
+      libxaw
+      libxi
+      libxpm
+      libxmu
+      libxaw
+      libxext
+      libxfixes
+    ];
 
     preConfigure = "cd texk/xdvik";
 
@@ -785,7 +784,7 @@ rec {
 
     inherit (common) src;
 
-    buildInputs = [ libX11 ];
+    buildInputs = [ libx11 ];
 
     preConfigure = "cd utils/xpdfopen";
 

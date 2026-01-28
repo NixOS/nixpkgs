@@ -3,7 +3,7 @@
   lib,
   fetchhg,
   libepoxy,
-  xorg,
+  libx11,
   libGLU,
   glm,
   pkg-config,
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libepoxy
-    xorg.libX11
+    libx11
     libGLU
     glm
     imagemagick

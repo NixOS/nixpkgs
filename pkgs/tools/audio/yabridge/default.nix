@@ -103,7 +103,7 @@ multiStdenv.mkDerivation (finalAttrs: {
     # Hard code bitbridge & runtime dependencies
     (replaceVars ./hardcode-dependencies.patch {
       libdbus = dbus.lib;
-      libxcb32 = pkgsi686Linux.xorg.libxcb;
+      libxcb32 = pkgsi686Linux.libxcb;
       inherit wine;
     })
 

@@ -29,7 +29,11 @@
   ncurses ? null,
   x11Support ? true,
   freetype,
-  xorg,
+  libxft,
+  libxext,
+  libx11,
+  libsm,
+  libice,
   waylandSupport ? true,
   pango,
   wayland,
@@ -132,12 +136,12 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals x11Support [
     freetype
     libxfixes
-    xorg.libICE
-    xorg.libX11
-    xorg.libXext
-    xorg.libXft
-    xorg.libXfixes
-    xorg.libSM
+    libice
+    libx11
+    libxext
+    libxft
+    libxfixes
+    libsm
     expat
   ]
   ++ lib.optionals waylandSupport [

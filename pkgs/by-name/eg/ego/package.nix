@@ -4,7 +4,7 @@
   fetchFromGitHub,
   makeBinaryWrapper,
   acl,
-  xorg,
+  xhost,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,11 +26,11 @@ rustPlatform.buildRustPackage rec {
 
   # requires access to /root
   checkFlags = [
-    "--skip tests::test_check_user_homedir"
+    "--skip=tests::test_check_user_homedir"
   ];
 
   postInstall = ''
-    wrapProgram $out/bin/ego --prefix PATH : ${lib.makeBinPath [ xorg.xhost ]}
+    wrapProgram $out/bin/ego --prefix PATH : ${lib.makeBinPath [ xhost ]}
   '';
 
   meta = {

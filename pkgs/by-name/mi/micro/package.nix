@@ -15,16 +15,17 @@
 let
   self = buildGoModule {
     pname = "micro";
-    version = "2.0.14";
+    version = "2.0.15";
 
     src = fetchFromGitHub {
-      owner = "zyedidia";
+      owner = "micro-editor";
       repo = "micro";
       rev = "v${self.version}";
-      hash = "sha256-avLVl6mn0xKgIy0BNnPZ8ypQhn8Ivj7gTgWbebDSjt0=";
+      hash = "sha256-4C6TtMU6PIYX7lO+o4GRVnIsKnYJxjAqPdoOyAwi7Gc=";
     };
 
-    vendorHash = "sha256-ePhObvm3m/nT+7IyT0W6K+y+9UNkfd2kYjle2ffAd9Y=";
+    vendorHash = "sha256-bkPd6zB9e4q6N20wbKS8n8zGGITOoScajdPYv7Race0=";
+    proxyVendor = true;
 
     nativeBuildInputs = [ installShellFiles ];
 
@@ -38,6 +39,8 @@ let
     ldflags =
       let
         t = "github.com/zyedidia/micro/v2/internal";
+        # TODO: switch to this once the source code uses it, passthru.tests.version checks for this
+        # t = "github.com/micro-editor/micro/v2/internal";
       in
       [
         "-s"
@@ -68,7 +71,7 @@ let
 
     meta = {
       homepage = "https://micro-editor.github.io";
-      changelog = "https://github.com/zyedidia/micro/releases/";
+      changelog = "https://github.com/micro-editor/micro/releases/";
       description = "Modern and intuitive terminal-based text editor";
       longDescription = ''
         micro is a terminal-based text editor that aims to be easy to use and

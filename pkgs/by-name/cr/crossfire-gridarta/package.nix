@@ -8,7 +8,7 @@
 }:
 
 stdenv.mkDerivation {
-  name = "crossfire-gridarta";
+  pname = "crossfire-gridarta";
   version = "2025-04";
 
   src = fetchgit {

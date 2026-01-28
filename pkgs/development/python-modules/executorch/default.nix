@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   pkgs,
   buildPythonPackage,
   fetchFromGitHub,
@@ -198,6 +199,15 @@ buildPythonPackage (finalAttrs: {
     "test_resnet18_export_to_executorch"
     "test_resnet50_export_to_executorch"
     "test_vit_export_to_executorch"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
+    # RuntimeError: Error in dlopen:
+    # /tmp/AP8CBk/vision_encoder/data/aotinductor/model/chm6ca425mbz7jdmmwcbnyrm6x6tedrfmaoyr4vee625vxhjibbt.wrapper.so:
+    # cannot enable executable stack as shared object requires: Invalid argument
+    "TestImageTransform"
+    "test_flamingo_vision_encoder"
+    "test_llama3_2_text_decoder_aoti"
+    "test_tile_positional_embedding_aoti"
   ];
 
   meta = {

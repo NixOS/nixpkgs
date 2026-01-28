@@ -4,7 +4,7 @@
   fetchFromGitHub,
   makeWrapper,
   imagemagick,
-  xorg,
+  xwd,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${
         lib.makeBinPath [
           imagemagick
-          xorg.xwd
+          xwd
         ]
       }
   '';

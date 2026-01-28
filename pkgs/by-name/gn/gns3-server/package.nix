@@ -13,14 +13,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gns3-server";
-  version = "2.2.55";
+  version = "2.2.56";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GNS3";
     repo = "gns3-server";
     tag = "v${version}";
-    hash = "sha256-o04RrHYsa5sWYUBDLJ5xgcK4iJK8CfZ4YdAiZ4eV/o4=";
+    hash = "sha256-akA6P/ONPioce4pJbg4wAzSvb7aSYGM8NfCs7q9svic=";
   };
 
   # GNS3 2.3.26 requires a static BusyBox for the Docker integration

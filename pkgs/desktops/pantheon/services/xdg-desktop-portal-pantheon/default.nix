@@ -14,7 +14,7 @@
   gtk4,
   pantheon-wayland,
   systemd,
-  xorg,
+  libx11,
 }:
 
 stdenv.mkDerivation rec {
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     gtk4
     pantheon-wayland
     systemd
-    xorg.libX11
+    libx11
   ];
 
   mesonFlags = [

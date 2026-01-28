@@ -5,7 +5,9 @@
   autoreconfHook,
   aalib,
   ncurses,
-  xorg,
+  libxdmcp,
+  libxau,
+  libx11,
   libmikmod,
 }:
 
@@ -29,9 +31,9 @@ stdenv.mkDerivation rec {
     aalib
     ncurses
     libmikmod
-    xorg.libXau
-    xorg.libXdmcp
-    xorg.libX11
+    libxau
+    libxdmcp
+    libx11
   ];
 
   # regparm attribute is not supported by clang

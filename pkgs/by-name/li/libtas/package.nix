@@ -10,7 +10,7 @@
   ffmpeg,
   lua5_4,
   qt5,
-  xorg,
+  libxi,
   file,
   binutils,
   makeDesktopItem,
@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
       } \
       --suffix LD_LIBRARY_PATH : ${
         lib.makeLibraryPath [
-          xorg.libXi
+          libxi
           ffmpeg.lib
         ]
       } \

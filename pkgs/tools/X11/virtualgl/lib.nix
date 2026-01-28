@@ -10,7 +10,7 @@
   libXi,
   libjpeg_turbo,
   fltk,
-  xorg,
+  libxcb-keysyms,
   opencl-headers,
   opencl-clhpp,
   ocl-icd,
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     libXv
     libXtst
     libXi
-    xorg.xcbutilkeysyms
+    libxcb-keysyms
     opencl-headers
     opencl-clhpp
     ocl-icd

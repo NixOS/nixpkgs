@@ -25,7 +25,9 @@
   vulkan-loader,
   libGL,
   libxkbcommon,
-  xorg,
+  libxcursor,
+  libx11,
+  libxcb,
 }:
 
 let
@@ -123,9 +125,9 @@ let
     wayland
     openssl
     libxkbcommon
-    xorg.libXcursor
-    xorg.libxcb
-    xorg.libX11
+    libxcursor
+    libxcb
+    libx11
   ];
   cef = cef-binary.overrideAttrs {
     postFixup = ''

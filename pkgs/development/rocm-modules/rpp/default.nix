@@ -14,7 +14,7 @@
   buildDocs ? false, # Needs internet
   useOpenCL ? false,
   useCPU ? false,
-  gpuTargets ? [ ],
+  gpuTargets ? clr.localGpuTargets or [ ],
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,13 +29,13 @@ stdenv.mkDerivation (finalAttrs: {
         "cpu"
     );
 
-  version = "7.0.2";
+  version = "7.1.1";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rpp";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-oysmF9TS1tm37x9DNoZ2KqHKP1wJDoFY+IuL1WkIz0o=";
+    hash = "sha256-ZlJRV57ybPsczvoWwd5vr2n7EKje0vj2GJYsvVY+qas=";
   };
 
   nativeBuildInputs = [
@@ -56,6 +56,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DROCM_PATH=${clr}"
+    "-DCMAKE_INSTALL_BINDIR=bin"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
   ]
   ++ lib.optionals (gpuTargets != [ ]) [
     "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"

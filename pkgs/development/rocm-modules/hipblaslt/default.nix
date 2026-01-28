@@ -43,7 +43,7 @@ let
       "gfx950"
       "gfx1100"
       "gfx1101"
-      # 7.x "gfx1150"
+      "gfx1150"
       "gfx1151"
       "gfx1200"
       "gfx1201"
@@ -70,7 +70,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipblaslt${clr.gpuArchSuffix}";
-  version = "7.0.2";
+  version = "7.1.1";
 
   src = fetchFromGitHub {
     owner = "ROCm";

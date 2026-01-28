@@ -2,7 +2,26 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  xorg,
+  xorg-server,
+  util-macros,
+  tab-window-manager,
+  libxtst,
+  libxrandr,
+  libxi,
+  libxft,
+  libxfont_2,
+  libxext,
+  libxdamage,
+  libx11,
+  libsm,
+  libice,
+  font-util,
+  xsetroot,
+  xorgproto,
+  xkbcomp,
+  xauth,
+  libxkbfile,
+  libpciaccess,
   xkeyboard_config,
   zlib,
   libjpeg_turbo,
@@ -68,10 +87,10 @@ stdenv.mkDerivation (finalAttrs: {
       export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-error=int-to-pointer-cast -Wno-error=pointer-to-int-cast"
       export CXXFLAGS="$CXXFLAGS -fpermissive"
       # Build Xvnc
-      tar xf ${xorg.xorgserver.src}
+      tar xf ${xorg-server.src}
       cp -R xorg*/* unix/xserver
       pushd unix/xserver
-      version=$(echo ${xorg.xorgserver.name} | sed 's/.*-\([0-9]\+\).[0-9]\+.*/\1/g')
+      version=$(echo ${xorg-server.name} | sed 's/.*-\([0-9]\+\).[0-9]\+.*/\1/g')
       patch -p1 < "$source_top/unix/xserver$version.patch"
       autoreconf -vfi
       ./configure $configureFlags  --disable-devel-docs --disable-docs \
@@ -87,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
           --enable-install-libxf86config \
           --prefix="$out" --disable-unit-tests \
           --with-xkb-path=${xkeyboard_config}/share/X11/xkb \
-          --with-xkb-bin-directory=${xorg.xkbcomp}/bin \
+          --with-xkb-bin-directory=${xkbcomp}/bin \
           --with-xkb-output=$out/share/X11/xkb/compiled
       make TIGERVNC_SRC=$src TIGERVNC_BUILDDIR=`pwd`/../.. -j$NIX_BUILD_CORES
       popd
@@ -105,15 +124,12 @@ stdenv.mkDerivation (finalAttrs: {
 
       wrapProgram $out/bin/vncserver \
         --prefix PATH : ${
-          lib.makeBinPath (
-            with xorg;
-            [
-              xterm
-              twm
-              xsetroot
-              xauth
-            ]
-          )
+          lib.makeBinPath [
+            xterm
+            tab-window-manager
+            xsetroot
+            xauth
+          ]
         }
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -134,29 +150,28 @@ stdenv.mkDerivation (finalAttrs: {
     ffmpeg
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux (
-    with xorg;
     [
       nettle
       pam
       perl
       xorgproto
-      utilmacros
-      libXtst
-      libXext
-      libX11
-      libXext
-      libICE
-      libXi
-      libSM
-      libXft
+      util-macros
+      libxtst
+      libxext
+      libx11
+      libxext
+      libice
+      libxi
+      libsm
+      libxft
       libxkbfile
-      libXfont2
+      libxfont_2
       libpciaccess
       libGLU
-      libXrandr
-      libXdamage
+      libxrandr
+      libxdamage
     ]
-    ++ xorg.xorgserver.buildInputs
+    ++ xorg-server.buildInputs
   );
 
   nativeBuildInputs = [
@@ -166,18 +181,17 @@ stdenv.mkDerivation (finalAttrs: {
     automake
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux (
-    with xorg;
     [
-      fontutil
+      font-util
       libtool
       makeWrapper
-      utilmacros
+      util-macros
       zlib
     ]
-    ++ xorg.xorgserver.nativeBuildInputs
+    ++ xorg-server.nativeBuildInputs
   );
 
-  propagatedBuildInputs = lib.optional stdenv.hostPlatform.isLinux xorg.xorgserver.propagatedBuildInputs;
+  propagatedBuildInputs = lib.optional stdenv.hostPlatform.isLinux xorg-server.propagatedBuildInputs;
 
   passthru.tests.tigervnc = nixosTests.tigervnc;
 

@@ -440,9 +440,13 @@ let
           # disable all builtin libraries by default
           perl -pi -e '{ $r |= s:(opts.Add\(BoolVariable\("builtin_.*, )True(\)\)):\1False\2: } END { exit ($r != 1) }' SConstruct
 
+        ''
+        + lib.optionalString (lib.versionOlder version "4.6") ''
           substituteInPlace platform/linuxbsd/detect.py \
             --replace-fail /usr/include/recastnavigation ${lib.escapeShellArg (lib.getDev recastnavigation)}/include/recastnavigation
 
+        ''
+        + ''
           substituteInPlace thirdparty/glad/egl.c \
             --replace-fail \
               'static const char *NAMES[] = {"libEGL.so.1", "libEGL.so"}' \

@@ -9,20 +9,20 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "audible-cli";
-  version = "0.3.2";
+  version = "0.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mkb79";
     repo = "audible-cli";
     tag = "v${version}";
-    hash = "sha256-DGOOMjP6dxIwbIhzRKf0+oy/2Cs+00tpwHkcmrukatw=";
+    hash = "sha256-ckI6nZUggIMvjJtN1zWXvTlVdiog0uJy6YR110A+JxM=";
   };
 
   nativeBuildInputs =
     with python3Packages;
     [
-      setuptools
+      hatchling
     ]
     ++ [
       addBinToPathHook
@@ -37,7 +37,6 @@ python3Packages.buildPythonApplication rec {
     packaging
     pillow
     questionary
-    setuptools
     tabulate
     toml
     tqdm
@@ -50,7 +49,6 @@ python3Packages.buildPythonApplication rec {
   postInstall = ''
     installShellCompletion --cmd audible \
       --bash <(source utils/code_completion/audible-complete-bash.sh) \
-      --fish <(source utils/code_completion/audible-complete-zsh-fish.sh) \
       --zsh <(source utils/code_completion/audible-complete-zsh-fish.sh)
   '';
 

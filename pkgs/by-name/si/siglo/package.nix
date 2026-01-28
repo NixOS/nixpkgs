@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   ];
 
   preFixup = ''
-    buildPythonPath "$out $pythonPath"
+    buildPythonPath "$out ''${pythonPath[*]}"
     gappsWrapperArgs+=(--prefix PYTHONPATH : "$program_PYTHONPATH")
   '';
 

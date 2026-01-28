@@ -11,7 +11,21 @@
   libxml2,
   pkg-config,
   which,
-  xorg,
+  xkeyboard-config,
+  libxtst,
+  libxrandr,
+  libxpm,
+  libxinerama,
+  libxfont_2,
+  libxext,
+  libxdmcp,
+  libxdamage,
+  libxcomposite,
+  font-util,
+  xkbcomp,
+  pixman,
+  imake,
+  gccmakedep,
   libtirpc,
 }:
 stdenv.mkDerivation rec {
@@ -38,26 +52,26 @@ stdenv.mkDerivation rec {
     libtool
     pkg-config
     which
-    xorg.gccmakedep
-    xorg.imake
+    gccmakedep
+    imake
   ];
   buildInputs = [
     libjpeg_turbo
     libpng
     libxml2
-    xorg.fontutil
-    xorg.libXcomposite
-    xorg.libXdamage
-    xorg.libXdmcp
-    xorg.libXext
-    xorg.libXfont2
-    xorg.libXinerama
-    xorg.libXpm
-    xorg.libXrandr
-    xorg.libXtst
-    xorg.pixman
-    xorg.xkbcomp
-    xorg.xkeyboardconfig
+    font-util
+    libxcomposite
+    libxdamage
+    libxdmcp
+    libxext
+    libxfont_2
+    libxinerama
+    libxpm
+    libxrandr
+    libxtst
+    pixman
+    xkbcomp
+    xkeyboard-config
     libtirpc
   ];
 

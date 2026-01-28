@@ -10,21 +10,17 @@
 
 buildPythonPackage rec {
   pname = "py-libzfs";
-  version = "24.04.0";
+  version = "25.10.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "truenas";
     repo = "py-libzfs";
     rev = "TS-${version}";
-    hash = "sha256-Uiu0RNE06++iNWUNcKpbZvreT2D7/EqHlFZJXKe3F4A=";
+    hash = "sha256-kme5qUG0Nsya8HxU/oMHP1AidoMMOob/EON8sZMzKKI=";
   };
 
   patches = [
-    (fetchpatch2 {
-      url = "https://github.com/truenas/py-libzfs/commit/b5ffe1f1d6097df6e2f5cc6dd3c968872ec60804.patch";
-      hash = "sha256-6r5hQ/o7c4vq4Tfh0l1WbeK3AuPvi+1wzkwkIn1qEes=";
-    })
     # Upstream has open PR. Debian uses the patch.
     # https://github.com/truenas/py-libzfs/pull/277
     (fetchpatch2 {

@@ -56,7 +56,7 @@ android.section.md
 astal.section.md
 beam.section.md
 chicken.section.md
-coq.section.md
+rocq.section.md
 cosmic.section.md
 crystal.section.md
 cuda.section.md

@@ -41,7 +41,19 @@
   libyuv,
   xauth,
   xdg-utils,
-  xorg,
+  xkeyboard-config,
+  xf86-video-dummy,
+  libxtst,
+  libxres,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxdamage,
+  libxcomposite,
+  libx11,
+  xorgproto,
+  libxkbfile,
   xorgserver,
   xxHash,
   clang,
@@ -53,7 +65,7 @@
 let
   inherit (python3.pkgs) cython buildPythonApplication;
 
-  xf86videodummy = xorg.xf86videodummy.overrideDerivation (p: {
+  xf86videodummy = xf86-video-dummy.overrideDerivation (p: {
     patches = [
       # patch provided by Xpra upstream
       ./0002-Constant-DPI.patch
@@ -126,57 +138,55 @@ effectiveBuildPythonApplication rec {
   ]
   ++ lib.optional withNvenc cudatoolkit;
 
-  buildInputs =
-    with xorg;
-    [
-      libX11
-      libXcomposite
-      libXdamage
-      libXfixes
-      libXi
-      libxkbfile
-      libXrandr
-      libXrender
-      libXres
-      libXtst
-      xorgproto
-    ]
-    ++ (with gst_all_1; [
-      gst-libav
-      gst-vaapi
-      gst-plugins-ugly
-      gst-plugins-bad
-      gst-plugins-base
-      gst-plugins-good
-      gstreamer
-    ])
-    ++ [
-      atk.out
-      cairo
-      cython
-      ffmpeg
-      gdk-pixbuf
-      glib
-      gtk3
-      libappindicator
-      librsvg
-      libvpx
-      libwebp
-      lz4
-      pam
-      pango
-      x264
-      x265
-      libavif
-      openh264
-      libyuv
-      xxHash
-      systemd
-    ]
-    ++ lib.optional withNvenc [
-      nvencHeaders
-      nvjpegHeaders
-    ];
+  buildInputs = [
+    libx11
+    libxcomposite
+    libxdamage
+    libxfixes
+    libxi
+    libxkbfile
+    libxrandr
+    libxrender
+    libxres
+    libxtst
+    xorgproto
+  ]
+  ++ (with gst_all_1; [
+    gst-libav
+    gst-vaapi
+    gst-plugins-ugly
+    gst-plugins-bad
+    gst-plugins-base
+    gst-plugins-good
+    gstreamer
+  ])
+  ++ [
+    atk.out
+    cairo
+    cython
+    ffmpeg
+    gdk-pixbuf
+    glib
+    gtk3
+    libappindicator
+    librsvg
+    libvpx
+    libwebp
+    lz4
+    pam
+    pango
+    x264
+    x265
+    libavif
+    openh264
+    libyuv
+    xxHash
+    systemd
+  ]
+  ++ lib.optional withNvenc [
+    nvencHeaders
+    nvjpegHeaders
+  ];
 
   propagatedBuildInputs =
     with python3.pkgs;
@@ -238,7 +248,7 @@ effectiveBuildPythonApplication rec {
       "''${gappsWrapperArgs[@]}"
       --set XPRA_INSTALL_PREFIX "$out"
       --set XPRA_COMMAND "$out/bin/xpra"
-      --set XPRA_XKB_CONFIG_ROOT "${xorg.xkeyboardconfig}/share/X11/xkb"
+      --set XPRA_XKB_CONFIG_ROOT "${xkeyboard-config}/share/X11/xkb"
       --set XORG_CONFIG_PREFIX ""
       --prefix LD_LIBRARY_PATH : ${libfakeXinerama}/lib
       --prefix PATH : ${

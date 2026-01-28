@@ -2,13 +2,15 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
+
+  # build-system
+  uv-build,
+
   mdformat-beautysh,
   mdformat-footnote,
-  mdformat-frontmatter,
+  mdformat-front-matters,
   mdformat-gfm,
   mdformat-simple-breaks,
-  mdformat-tables,
   mdformat,
   mdit-py-plugins,
   more-itertools,
@@ -16,19 +18,26 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mdformat-mkdocs";
-  version = "4.4.2";
+  version = "5.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "KyleKing";
     repo = "mdformat-mkdocs";
-    tag = "v${version}";
-    hash = "sha256-u3IHqllknX6ilReXRVyZoDfqid8Ioe+zvC3wPh04HXo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-PklT9LlaIQFG194zhHQhzR8kVe084Q+1Bo9180eOMd0=";
   };
 
-  build-system = [ flit-core ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.9.10" "uv_build"
+  '';
+
+  build-system = [
+    uv-build
+  ];
 
   dependencies = [
     mdformat
@@ -42,10 +51,9 @@ buildPythonPackage rec {
       mdformat-beautysh
       # mdformat-config
       mdformat-footnote
-      mdformat-frontmatter
+      mdformat-front-matters
       # mdformat-ruff
       mdformat-simple-breaks
-      mdformat-tables
       # mdformat-web
       # mdformat-wikilink
     ];
@@ -66,8 +74,8 @@ buildPythonPackage rec {
   meta = {
     description = "Mdformat plugin for MkDocs";
     homepage = "https://github.com/KyleKing/mdformat-mkdocs";
-    changelog = "https://github.com/KyleKing/mdformat-mkdocs/releases/tag/${src.tag}";
+    changelog = "https://github.com/KyleKing/mdformat-mkdocs/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ aldoborrero ];
   };
-}
+})

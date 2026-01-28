@@ -12,6 +12,8 @@
   verit,
   vampire,
   eprover-ho,
+  cvc5,
+  csdp,
   rlwrap,
   perl,
   procps,
@@ -19,6 +21,7 @@
   isabelle-components,
   symlinkJoin,
   fetchhg,
+  electron,
 }:
 
 let
@@ -47,7 +50,8 @@ let
 
   # Isabelle uses a branch of vampire that is not in the normal release line
   # that adds support for higher order goals
-  vampire' = (vampire.override { stdenv = gcc14Stdenv; }).overrideAttrs (_: {
+  vampireStdenv = if stdenv.hostPlatform.isLinux then gcc14Stdenv else stdenv;
+  vampire' = (vampire.override { stdenv = vampireStdenv; }).overrideAttrs (_: {
     pname = "vampire-for-isabelle";
     version = "4.8";
 
@@ -58,7 +62,16 @@ let
       hash = "sha256-CmppaGa4M9tkE1b25cY1LSPFygJy5yV4kpHKbPqvcVE=";
     };
 
-    cmakeFlags = [ (lib.cmakeFeature "CMAKE_BUILD_HOL" "On") ];
+    patches = [ ./vampire-add-install-directive.patch ];
+
+    postInstall = ''
+      mv $out/bin/vampire_rel $out/bin/vampire
+    '';
+
+    cmakeFlags = [
+      (lib.cmakeFeature "CMAKE_BUILD_HOL" "On")
+      (lib.cmakeFeature "CMAKE_DISABLE_FIND_PACKAGE_Z3" "On")
+    ];
   });
 
   sha1 = stdenv.mkDerivation {
@@ -84,10 +97,20 @@ let
     '';
   };
 
+  cvc5' = cvc5.overrideAttrs {
+    version = "1.2.0";
+    src = fetchFromGitHub {
+      owner = "cvc5";
+      repo = "cvc5";
+      tag = "cvc5-1.2.0";
+      hash = "sha256-Um1x+XgQ5yWSoqtx1ZWbVAnNET2C4GVasIbn0eNfico=";
+    };
+  };
+
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "isabelle";
-  version = "2025-1";
+  version = "2025-2";
 
   dirname = "Isabelle${finalAttrs.version}";
 
@@ -95,17 +118,17 @@ stdenv.mkDerivation (finalAttrs: {
     if stdenv.hostPlatform.isDarwin then
       fetchurl {
         url = "https://isabelle.in.tum.de/website-${finalAttrs.dirname}/dist/${finalAttrs.dirname}_macos.tar.gz";
-        hash = "sha256-WKlrsXP6oZHy6NTaaQYpddtgE2QGhBZ4uKai61dtQ14=";
+        hash = "sha256-jxh0luKV8WmVLpRHRa+eSuAMnBzS7UytvPfYmOREkT4=";
       }
     else if stdenv.hostPlatform.isx86 then
       fetchurl {
         url = "https://isabelle.in.tum.de/website-${finalAttrs.dirname}/dist/${finalAttrs.dirname}_linux.tar.gz";
-        hash = "sha256-0SA28X3fIKMV3wZtlJvBxq9MZkI6GevVuSNzgqJ4xQU=";
+        hash = "sha256-ogpQe8fBJw2L6WqfP77AY0U4d4nS3CxNPfYmDUe/szw=";
       }
     else
       fetchurl {
         url = "https://isabelle.in.tum.de/website-${finalAttrs.dirname}/dist/${finalAttrs.dirname}_linux_arm.tar.gz";
-        hash = "sha256-BUhdK8qhdV2Den+4bbdd9T6MD/BtGpxp+1Axj21NxrI=";
+        hash = "sha256-ZQqWabSgh2da+zQpTYLe0vBwTUfVgN2e1FzdyfF2S90=";
       };
 
   nativeBuildInputs = [ java ];
@@ -116,6 +139,14 @@ stdenv.mkDerivation (finalAttrs: {
     vampire'
     eprover-ho
     net-tools
+    cvc5'
+    csdp
+  ];
+
+  patches = [
+    # Make "isabelle build" work when generating documents
+    # See: https://github.com/NixOS/nixpkgs/issues/289529
+    ./fix-copied-permissions.patch
   ];
 
   propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ procps ];
@@ -151,6 +182,17 @@ stdenv.mkDerivation (finalAttrs: {
       VAMPIRE_EXTRA_OPTIONS="--mode casc"
     EOF
 
+    cat >contrib/cvc5-*/etc/settings <<EOF
+      CVC5_HOME=${cvc5'}
+      CVC5_VERSION=${cvc5'.version}
+      CVC5_SOLVER=${cvc5'}/bin/cvc5
+      CVC5_INSTALLED=yes
+    EOF
+
+    cat >contrib/csdp-*/etc/settings <<EOF
+      ISABELLE_CSDP=${csdp}/bin/csdp
+    EOF
+
     cat >contrib/polyml-*/etc/settings <<EOF
       ML_SYSTEM_64=true
       ML_SYSTEM=${polyml'.name}
@@ -167,7 +209,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     echo ISABELLE_LINE_EDITOR=${rlwrap}/bin/rlwrap >>etc/settings
 
-    for comp in contrib/jdk* contrib/polyml-* contrib/verit-* contrib/vampire-* contrib/e-*; do
+    for comp in contrib/jdk* contrib/polyml-* contrib/verit-* contrib/vampire-* \
+                contrib/e-* contrib/cvc5-* contrib/csdp-*; do
       rm -rf $comp/${if stdenv.hostPlatform.isx86 then "x86" else "arm"}*
     done
     rm -rf contrib/*/src
@@ -192,10 +235,15 @@ stdenv.mkDerivation (finalAttrs: {
     arch=${
       if stdenv.hostPlatform.system == "aarch64-linux" then "arm64-linux" else stdenv.hostPlatform.system
     }
-    for f in contrib/*/$arch/{z3,nunchaku,spass,zipperposition}; do
+    for f in contrib/*/$arch/{z3,nunchaku,SPASS,zipperposition}; do
       patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f"${lib.optionalString stdenv.hostPlatform.isAarch64 " || true"}
     done
     patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) contrib/bash_process-*/$arch/bash_process
+
+    ln -sf ${electron}/bin/electron contrib/vscodium-*/*/electron
+    rm contrib/vscodium-*/*/*.so{,.*}
+    rm contrib/vscodium-*/*/chrome*
+
     for d in contrib/kodkodi-*/jni/$arch; do
       patchelf --set-rpath "${
         lib.concatStringsSep ":" [
@@ -278,36 +326,48 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = [
       lib.maintainers.jvanbruegge
+      lib.maintainers.sempiternal-aurora
     ];
-    platforms = lib.platforms.unix;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
 
-  passthru.withComponents =
-    f:
-    let
-      isabelle = finalAttrs.finalPackage;
-      base = "$out/${isabelle.dirname}";
-      components = f isabelle-components;
-    in
-    symlinkJoin {
-      name = "isabelle-with-components-${isabelle.version}";
-      paths = [ isabelle ] ++ (map (c: c.override { inherit isabelle; }) components);
+  passthru = {
+    vampire = vampire';
+    polyml = polyml';
+    cvc5 = cvc5';
+    sha1 = sha1;
+    withComponents =
+      f:
+      let
+        isabelle = finalAttrs.finalPackage;
+        base = "$out/${isabelle.dirname}";
+        components = f isabelle-components;
+      in
+      symlinkJoin {
+        name = "isabelle-with-components-${isabelle.version}";
+        paths = [ isabelle ] ++ (map (c: c.override { inherit isabelle; }) components);
 
-      postBuild = ''
-        rm $out/bin/*
+        postBuild = ''
+          rm $out/bin/*
 
-        cd ${base}
-        rm bin/*
-        cp ${isabelle}/${isabelle.dirname}/bin/* bin/
-        rm etc/components
-        cat ${isabelle}/${isabelle.dirname}/etc/components > etc/components
+          cd ${base}
+          rm bin/*
+          cp ${isabelle}/${isabelle.dirname}/bin/* bin/
+          rm etc/components
+          cat ${isabelle}/${isabelle.dirname}/etc/components > etc/components
 
-        export HOME=$TMP
-        bin/isabelle install $out/bin
-        patchShebangs $out/bin
-      ''
-      + lib.concatMapStringsSep "\n" (c: ''
-        echo contrib/${c.pname}-${c.version} >> ${base}/etc/components
-      '') components;
-    };
+          export HOME=$TMP
+          bin/isabelle install $out/bin
+          patchShebangs $out/bin
+        ''
+        + lib.concatMapStringsSep "\n" (c: ''
+          echo contrib/${c.pname}-${c.version} >> ${base}/etc/components
+        '') components;
+      };
+  };
 })

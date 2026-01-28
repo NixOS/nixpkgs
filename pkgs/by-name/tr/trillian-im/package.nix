@@ -12,7 +12,7 @@
   libnotify,
   libsecret,
   pangomm,
-  xorg,
+  libxscrnsaver,
   libpulseaudio,
   librsvg,
   libzip,
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     libnotify
     libsecret
     pangomm
-    xorg.libXScrnSaver
+    libxscrnsaver
     libpulseaudio
     librsvg
     libzip

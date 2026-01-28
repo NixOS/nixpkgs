@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocfft${clr.gpuArchSuffix}";
-  version = "7.0.2";
+  version = "7.1.1";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocFFT";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-VVRZSmMma/sjSj2obRrwP118v/FasS30ZU0nFsEp9rw=";
+    hash = "sha256-1Ho3b5NmnzfLhDnvH6FECigs6OgpbJrxw4EnqKyaHA0=";
   };
 
   nativeBuildInputs = [

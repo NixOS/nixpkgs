@@ -10,12 +10,12 @@
   gbenchmark,
   buildTests ? false,
   buildBenchmarks ? false,
-  gpuTargets ? [ ],
+  gpuTargets ? clr.localGpuTargets or [ ],
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocprim";
-  version = "7.0.2";
+  version = "7.1.1";
 
   outputs = [
     "out"
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "rocPRIM";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-uOlrN/FvEBBCHsPeJOWs9NNqVwrcxVExfs5wp03PH0U=";
+    hash = "sha256-/O6aEF23IaUSVzEDRqIlpYpxNCSTa/CwVDgXOhvTrQc=";
   };
 
   nativeBuildInputs = [

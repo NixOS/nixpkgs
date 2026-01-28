@@ -7,15 +7,15 @@
   hatchling,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llama-index-embeddings-gemini";
-  version = "0.4.1";
+  version = "0.4.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_embeddings_gemini";
-    inherit version;
-    hash = "sha256-XkFXYdaRr1i0Ez5GLkxIGIJZcR/hCS2mB2t5jWRUUs0=";
+    inherit (finalAttrs) version;
+    hash = "sha256-GY983cmRtwir+2q0qyJW5iFmK+96ed5lu6pKHcUm/4g=";
   };
 
   pythonRelaxDeps = [ "google-generativeai" ];
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -8,13 +8,13 @@
 
 buildDunePackage rec {
   pname = "sel";
-  version = "0.7.0";
+  version = "0.8.0";
 
   minimalOCamlVersion = "4.07";
 
   src = fetchurl {
     url = "https://github.com/gares/sel/releases/download/v${version}/sel-${version}.tbz";
-    hash = "sha256-1EJW9QogROoi0704v8/Wf8gIws/uEm05E0adv3eRDzI=";
+    hash = "sha256-jTAjWdaoioR5+G96qoOY+JXrJY00eF7y7WhGSiFwfqg=";
   };
 
   buildInputs = [

@@ -858,18 +858,6 @@ let
 
           auto-indent-mode = ignoreCompilationError super.auto-indent-mode; # elisp error
 
-          auto-virtualenv = super.auto-virtualenv.overrideAttrs (
-            finalAttrs: previousAttrs: {
-              patches = previousAttrs.patches or [ ] ++ [
-                (pkgs.fetchpatch {
-                  name = "do-not-error-if-the-optional-projectile-is-not-available.patch";
-                  url = "https://github.com/marcwebbie/auto-virtualenv/pull/14/commits/9a068974a4e12958200c12c6a23372fa736523c1.patch";
-                  hash = "sha256-bqrroFf5AD5SHx6uzBFdVwTv3SbFiO39T+0x03Ves/k=";
-                })
-              ];
-            }
-          );
-
           aws-ec2 = ignoreCompilationError super.aws-ec2; # elisp error
 
           badger-theme = ignoreCompilationError super.badger-theme; # elisp error
@@ -1019,6 +1007,9 @@ let
 
           # missing optional dependencies
           conda = addPackageRequires super.conda [ self.projectile ];
+
+          # https://github.com/NixOS/nixpkgs/issues/483425
+          consult = addPackageRequires super.consult [ self.flymake ];
 
           # needs network during compilation, also native-ice
           consult-gh = ignoreCompilationError (
@@ -1763,13 +1754,6 @@ let
           weibo = ignoreCompilationError super.weibo; # elisp error
 
           workgroups2 = ignoreCompilationError super.workgroups2; # elisp error
-
-          ws-butler = super.ws-butler.overrideAttrs (old: {
-            # TODO: Remove override when URL was updated in MELPA.
-            src = old.src.override {
-              url = "https://https.git.savannah.gnu.org/git/elpa/nongnu.git";
-            };
-          });
 
           # https://github.com/nicklanasa/xcode-mode/issues/28
           xcode-mode = addPackageRequires super.xcode-mode [ self.hydra ];

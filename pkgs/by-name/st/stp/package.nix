@@ -15,7 +15,7 @@
   minisat,
   cryptominisat,
   gmp,
-  cadical,
+  cadical_2,
   gtest,
   lit,
   outputcheck,
@@ -85,8 +85,8 @@ stdenv.mkDerivation (finalAttrs: {
       cadicalDependency = symlinkJoin {
         name = "stp-${finalAttrs.version}-cadical";
         paths = [
-          cadical.lib
-          cadical.dev
+          cadical_2.lib
+          cadical_2.dev
         ];
       };
     in

@@ -13,7 +13,16 @@
   pkg-config,
   sfml,
   udev,
-  xorg,
+  libxcb-util,
+  libxxf86vm,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxext,
+  libx11,
+  libsm,
+  libpthread-stubs,
+  libxcb,
 }:
 mkLibretroCore {
   core = "dolphin";
@@ -40,16 +49,16 @@ mkLibretroCore {
     pcre
     sfml
     udev
-    xorg.libSM
-    xorg.libX11
-    xorg.libXext
-    xorg.libXi
-    xorg.libXinerama
-    xorg.libXrandr
-    xorg.libXxf86vm
-    xorg.libpthreadstubs
-    xorg.libxcb
-    xorg.xcbutil
+    libsm
+    libx11
+    libxext
+    libxi
+    libxinerama
+    libxrandr
+    libxxf86vm
+    libpthread-stubs
+    libxcb
+    libxcb-util
   ];
 
   makefile = "Makefile";

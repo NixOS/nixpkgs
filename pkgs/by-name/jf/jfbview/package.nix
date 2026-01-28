@@ -11,7 +11,7 @@
   ncurses,
   openjpeg,
   zlib,
-  xorg,
+  libx11,
   cmake,
 }:
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     libjpeg
     ncurses
     openjpeg
-    xorg.libX11
+    libx11
     zlib
   ];
 

@@ -20,7 +20,7 @@ let
   # Extract attributes that changed from by-name paths.
   # This allows pinging reviewers for pure refactors.
   touchedattrs = lib.pipe changedpaths [
-    (lib.filter (changed: lib.hasPrefix "pkgs/by-name/" changed))
+    (lib.filter (changed: lib.hasPrefix "pkgs/by-name/" changed && changed != "pkgs/by-name/README.md"))
     (map (lib.splitString "/"))
     (map (path: lib.elemAt path 3))
     lib.unique

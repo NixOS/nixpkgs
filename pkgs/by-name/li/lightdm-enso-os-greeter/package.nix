@@ -8,7 +8,9 @@
   dbus,
   pcre,
   libepoxy,
-  xorg,
+  libxdmcp,
+  libx11,
+  libpthread-stubs,
   at-spi2-core,
   libxklavier,
   libxkbcommon,
@@ -51,15 +53,15 @@ stdenv.mkDerivation {
     pcre
     libepoxy
     libgee
-    xorg.libX11
+    libx11
     lightdm
-    xorg.libXdmcp
+    libxdmcp
     gdk-pixbuf
     clutter-gtk
     libxklavier
     at-spi2-core
     libxkbcommon
-    xorg.libpthreadstubs
+    libpthread-stubs
     librsvg
   ];
 

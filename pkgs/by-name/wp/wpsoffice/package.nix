@@ -12,7 +12,9 @@
   libtiff,
   udev,
   gtk3,
-  xorg,
+  libxv,
+  libxtst,
+  libxdamage,
   cups,
   pango,
   runCommandLocal,
@@ -74,9 +76,9 @@ stdenv.mkDerivation rec {
     udev
     gtk3
     libsForQt5.qt5.qtbase
-    xorg.libXdamage
-    xorg.libXtst
-    xorg.libXv
+    libxdamage
+    libxtst
+    libxv
   ];
 
   dontWrapQtApps = true;

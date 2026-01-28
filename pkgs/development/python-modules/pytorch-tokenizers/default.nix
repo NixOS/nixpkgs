@@ -20,7 +20,7 @@
 }:
 
 let
-  # https://github.com/meta-pytorch/tokenizers/blob/v1.0.1/CMakeLists.txt#L174-L175
+  # https://github.com/meta-pytorch/tokenizers/blob/v<VERSION>/CMakeLists.txt#L174-L175
   pybind11-src = fetchFromGitHub {
     owner = "pybind";
     repo = "pybind11";
@@ -28,17 +28,17 @@ let
     hash = "sha256-SNLdtrOjaC3lGHN9MAqTf51U9EzNKQLyTMNPe0GcdrU=";
   };
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytorch-tokenizers";
-  version = "1.0.1";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "meta-pytorch";
     repo = "tokenizers";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-1BGazimbauNBN/VfLiuhk21VEhbP07GEpPc+GAfKTQY=";
+    hash = "sha256-la1PH8KT6iWYjvwBNYcQu5KwRS1/6H7SX5Vu6bpD+vg=";
   };
 
   patches = [
@@ -93,4 +93,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

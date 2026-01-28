@@ -8,7 +8,11 @@
     "."
     "netclient"
   ],
-  xorg,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxcursor,
+  libx11,
 }:
 
 buildGoModule rec {
@@ -30,11 +34,11 @@ buildGoModule rec {
 
   buildInputs = [
     libglvnd
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXinerama
-    xorg.libXrandr
+    libx11
+    libxcursor
+    libxi
+    libxinerama
+    libxrandr
   ];
 
   meta = {

@@ -470,7 +470,7 @@ let
       libtiff
       libjpeg
       cairo.dev
-      xorg.libXt.dev
+      libxt.dev
       fontconfig.lib
     ];
     Cardinal = [ pkgs.which ];
@@ -495,7 +495,7 @@ let
       cargo
       rustc
     ];
-    devEMF = with pkgs; [ xorg.libXft.dev ];
+    devEMF = with pkgs; [ libxft.dev ];
     DEploid = [ pkgs.zlib.dev ];
     DEploid_utils = [ pkgs.zlib.dev ];
     diversitree = with pkgs; [
@@ -542,7 +542,7 @@ let
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         expat
-        xorg.libXdmcp
+        libxdmcp
       ];
     GeneralizedWendland = [ pkgs.gsl ];
     ggiraph = [ pkgs.libpng.dev ];
@@ -604,7 +604,7 @@ let
       mpfr.dev
       pkg-config
     ];
-    imager = [ pkgs.xorg.libX11.dev ];
+    imager = [ pkgs.libx11.dev ];
     imbibe = [ pkgs.zlib.dev ];
     image_CannyEdges = with pkgs; [
       fftw.dev
@@ -943,7 +943,7 @@ let
     ];
     tiff = [ pkgs.libtiff.dev ];
     tkrplot = with pkgs; [
-      xorg.libX11
+      libx11
       tk.dev
     ];
     topicmodels = [ pkgs.gsl ];
@@ -1175,7 +1175,7 @@ let
     rgl = with pkgs; [
       libGLU
       libGL
-      xorg.libX11.dev
+      libx11.dev
       freetype.dev
       libpng.dev
     ];
@@ -1317,7 +1317,7 @@ let
     gridGraphics = [ pkgs.which ];
     adimpro = with pkgs; [
       which
-      xorg.xdpyinfo
+      xdpyinfo
     ];
     tfevents = [ pkgs.protobuf ];
     rsvg = [ pkgs.librsvg.dev ];
@@ -1541,7 +1541,7 @@ let
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         expat
-        xorg.libXdmcp
+        libxdmcp
       ];
     HilbertVisGUI = [ pkgs.gtkmm2.dev ];
     textshaping = with pkgs; [
@@ -2459,7 +2459,7 @@ let
     });
 
     devEMF = old.devEMF.overrideAttrs (attrs: {
-      NIX_CFLAGS_LINK = "-L${pkgs.xorg.libXft.out}/lib -lXft";
+      NIX_CFLAGS_LINK = "-L${pkgs.libxft.out}/lib -lXft";
       NIX_LDFLAGS = "-lX11";
     });
 

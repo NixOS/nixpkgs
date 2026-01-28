@@ -2,7 +2,7 @@
   fetchurl,
   lib,
   stdenv,
-  guile,
+  guile_2_2,
   guile-lib,
   libffi,
   pkg-config,
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   # Note: Glib support is optional, but it's quite useful (e.g., it's used by
   # Guile-GNOME).
   buildInputs = [
-    guile
+    guile_2_2
     glib
     guile-lib
   ];

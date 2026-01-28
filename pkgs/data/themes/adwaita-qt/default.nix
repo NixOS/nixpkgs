@@ -8,7 +8,7 @@
   qtbase,
   qtwayland,
   qt5,
-  xorg,
+  libxcb,
   useQt6 ? false,
 }:
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     qtbase
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    xorg.libxcb
+    libxcb
   ]
   ++ lib.optionals (!useQt6) [
     qt5.qtx11extras

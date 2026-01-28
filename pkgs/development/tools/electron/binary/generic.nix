@@ -24,7 +24,14 @@
   gdk-pixbuf,
   nss,
   nspr,
-  xorg,
+  libxrandr,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcomposite,
+  libx11,
+  libxkbfile,
+  libxcb,
   pango,
   systemd,
   pciutils,
@@ -101,14 +108,14 @@ let
     gtk4
     nss
     nspr
-    xorg.libX11
-    xorg.libxcb
-    xorg.libXcomposite
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXrandr
-    xorg.libxkbfile
+    libx11
+    libxcb
+    libxcomposite
+    libxdamage
+    libxext
+    libxfixes
+    libxrandr
+    libxkbfile
     pango
     pciutils
     stdenv.cc.cc

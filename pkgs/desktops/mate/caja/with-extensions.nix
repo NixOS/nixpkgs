@@ -3,7 +3,7 @@
   lib,
   glib,
   wrapGAppsHook3,
-  xorg,
+  lndir,
   caja,
   cajaExtensions,
   extensions ? [ ],
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     glib
     wrapGAppsHook3
-    xorg.lndir
+    lndir
   ];
 
   buildInputs =

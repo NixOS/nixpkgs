@@ -14,7 +14,13 @@
   lttng-ust_2_12,
   krb5,
   bash,
-  xorg,
+  libxrandr,
+  libxi,
+  libxext,
+  libxcursor,
+  libx11,
+  libsm,
+  libice,
   nix-update-script,
 }:
 
@@ -72,14 +78,14 @@ buildDotnetModule (finalAttrs: {
     (lib.getLib stdenv.cc.cc)
   ];
 
-  runtimeDeps = with xorg; [
-    libX11
-    libXrandr
-    libXi
-    libICE
-    libSM
-    libXcursor
-    libXext
+  runtimeDeps = [
+    libx11
+    libxrandr
+    libxi
+    libice
+    libsm
+    libxcursor
+    libxext
   ];
 
   desktopItems = [

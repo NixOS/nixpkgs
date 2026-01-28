@@ -7,7 +7,10 @@
   fftw,
   gsl,
   motif,
-  xorg,
+  libxt,
+  libxpm,
+  libxft,
+  libxext,
 }:
 
 stdenv.mkDerivation rec {
@@ -31,12 +34,12 @@ stdenv.mkDerivation rec {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
   ]
-  ++ (with xorg; [
-    libXext
-    libXft
-    libXpm
-    libXt
-  ]);
+  ++ [
+    libxext
+    libxft
+    libxpm
+    libxt
+  ];
 
   configureFlags = [
     "--with-motif"

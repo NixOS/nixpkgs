@@ -10,7 +10,14 @@
   pkg-config,
 
   # Build Inputs
-  xorg,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxfixes,
+  libxext,
+  libxcursor,
+  libx11,
   wayland,
   libxkbcommon,
   wayland-protocols,
@@ -62,14 +69,14 @@ stdenv.mkDerivation (finalAttrs: {
     iniparser
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    xorg.libX11
-    xorg.libXext
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libXfixes
-    xorg.libXi
-    xorg.libXinerama
-    xorg.libXcursor
+    libx11
+    libxext
+    libxrandr
+    libxrender
+    libxfixes
+    libxi
+    libxinerama
+    libxcursor
     wayland
     libxkbcommon
     wayland-protocols

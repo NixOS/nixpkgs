@@ -98,7 +98,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://openboard.ch/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
-      atinba
       fufexan
     ];
     platforms = lib.platforms.linux;

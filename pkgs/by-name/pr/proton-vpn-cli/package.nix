@@ -9,14 +9,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "proton-vpn-cli";
-  version = "0.1.3";
+  version = "0.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "proton-vpn-cli";
     tag = "v${version}";
-    hash = "sha256-Hn7xLb7VWa2dlsrQnjnRgv+8UntOwDak9+rV1HF7k80=";
+    hash = "sha256-nopkUda1XaFMroIvsf+vCXWa5aXUTEC/EhAN9Lto3Lo=";
   };
 
   nativeBuildInputs = [
@@ -41,6 +41,7 @@ python3Packages.buildPythonApplication rec {
     proton-keyring-linux
     proton-vpn-api-core
     proton-vpn-local-agent
+    tabulate
   ];
 
   dontWrapGApps = true;

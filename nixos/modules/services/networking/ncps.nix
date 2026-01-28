@@ -18,89 +18,110 @@ let
   ];
 
   ncpsWrapper = pkgs.writeShellScript "ncps-wrapper" ''
+    ${lib.optionalString (cfg.cache.secretKeyPath != null) ''
+      export CACHE_SECRET_KEY_PATH="$CREDENTIALS_DIRECTORY/secretKey"
+    ''}
+
     ${lib.optionalString (cfg.cache.storage.s3 != null) ''
       export CACHE_STORAGE_S3_ACCESS_KEY_ID="$(cat "$CREDENTIALS_DIRECTORY/s3AccessKeyId")"
       export CACHE_STORAGE_S3_SECRET_ACCESS_KEY="$(cat "$CREDENTIALS_DIRECTORY/s3SecretAccessKey")"
     ''}
 
-    ${lib.optionalString (cfg.cache.redis != null && cfg.cache.redis.passwordFile != null) ''
-      export CACHE_REDIS_PASSWORD="$(cat "$CREDENTIALS_DIRECTORY/redisPassword")"
-    ''}
+    ${lib.optionalString (cfg.cache.redis != null) (
+      if cfg.cache.redis.passwordFile != null then
+        ''export CACHE_REDIS_PASSWORD="$(cat "$CREDENTIALS_DIRECTORY/redisPassword")"''
+      else if cfg.cache.redis.password != null then
+        ''export CACHE_REDIS_PASSWORD="${cfg.cache.redis.password}"''
+      else
+        ""
+    )}
 
     ${lib.optionalString (cfg.cache.databaseURLFile != null) ''
       export CACHE_DATABASE_URL="$(cat "$CREDENTIALS_DIRECTORY/databaseURL")"
     ''}
 
-    exec ${lib.getExe cfg.package} "$@"
+    exec ${lib.getExe cfg.package} --config "${configFile}" "$@"
   '';
 
-  globalFlags = lib.concatStringsSep " " (
-    [ "--log-level='${cfg.logLevel}'" ]
-    ++ (lib.optionals cfg.openTelemetry.enable (
-      [
-        "--otel-enabled"
-      ]
-      ++ (lib.optional (
-        cfg.openTelemetry.grpcURL != null
-      ) "--otel-grpc-url='${cfg.openTelemetry.grpcURL}'")
-    ))
-    ++ (lib.optional cfg.prometheus.enable "--prometheus-enabled")
-    ++ (lib.optional (!cfg.analytics.reporting.enable) "--analytics-reporting-enabled=false")
-  );
+  settings = {
+    log.level = cfg.logLevel;
+    opentelemetry = lib.optionalAttrs cfg.openTelemetry.enable {
+      enabled = true;
+      grpc-url = cfg.openTelemetry.grpcURL;
+    };
+    prometheus = lib.optionalAttrs cfg.prometheus.enable {
+      enabled = true;
+    };
+    analytics.reporting = {
+      enabled = cfg.analytics.reporting.enable;
+      samples = cfg.analytics.reporting.samples;
+    };
+    server.addr = cfg.server.addr;
+    cache = {
+      allow-delete-verb = cfg.cache.allowDeleteVerb;
+      allow-put-verb = cfg.cache.allowPutVerb;
+      hostname = cfg.cache.hostName;
+      database-url = cfg.cache.databaseURL;
+      database.pool = {
+        max-open-conns = cfg.cache.database.pool.maxOpenConns;
+        max-idle-conns = cfg.cache.database.pool.maxIdleConns;
+      };
+      max-size = cfg.cache.maxSize;
+      lru = {
+        schedule = cfg.cache.lru.schedule;
+        timezone = cfg.cache.lru.scheduleTimeZone;
+      };
+      sign-narinfo = cfg.cache.signNarinfo;
+      storage =
+        if cfg.cache.storage.s3 != null then
+          {
+            s3 = {
+              bucket = cfg.cache.storage.s3.bucket;
+              endpoint = cfg.cache.storage.s3.endpoint;
+              region = cfg.cache.storage.s3.region;
+              force-path-style = cfg.cache.storage.s3.forcePathStyle;
+            };
+          }
+        else
+          {
+            local = cfg.cache.storage.local;
+          };
+      temp-path = cfg.cache.tempPath;
+      netrc-file = cfg.netrcFile;
+      upstream = {
+        urls = cfg.cache.upstream.urls;
+        public-keys = cfg.cache.upstream.publicKeys;
+        dialer-timeout = cfg.cache.upstream.dialerTimeout;
+        response-header-timeout = cfg.cache.upstream.responseHeaderTimeout;
+      };
+      lock = {
+        backend = cfg.cache.lock.backend;
+        redis.key-prefix = cfg.cache.lock.redisKeyPrefix;
+        postgres.key-prefix = cfg.cache.lock.postgresKeyPrefix;
+        download-lock-ttl = cfg.cache.lock.downloadTTL;
+        lru-lock-ttl = cfg.cache.lock.lruTTL;
+        retry = {
+          max-attempts = cfg.cache.lock.retry.maxAttempts;
+          initial-delay = cfg.cache.lock.retry.initialDelay;
+          max-delay = cfg.cache.lock.retry.maxDelay;
+          jitter = cfg.cache.lock.retry.jitter;
+        };
+        allow-degraded-mode = cfg.cache.lock.allowDegradedMode;
+      };
+      redis = lib.optionalAttrs (cfg.cache.redis != null) {
+        addrs = cfg.cache.redis.addresses;
+        db = cfg.cache.redis.database;
+        username = cfg.cache.redis.username;
+        use-tls = cfg.cache.redis.useTLS;
+        pool-size = cfg.cache.redis.poolSize;
+      };
+    };
+  };
 
-  serveFlags = lib.concatStringsSep " " (
-    [
-      "--cache-hostname='${cfg.cache.hostName}'"
-      "--cache-lock-backend='${cfg.cache.lock.backend}'"
-      "--cache-temp-path='${cfg.cache.tempPath}'"
-      "--server-addr='${cfg.server.addr}'"
-    ]
-    ++ (lib.optional (cfg.cache.databaseURL != null) "--cache-database-url='${cfg.cache.databaseURL}'")
-    ++ (lib.optionals (cfg.cache.redis != null) (
-      [
-        "--cache-redis-addrs='${builtins.concatStringsSep "," cfg.cache.redis.addresses}'"
-        "--cache-redis-db='${builtins.toString cfg.cache.redis.database}'"
-        "--cache-redis-pool-size='${builtins.toString cfg.cache.redis.poolSize}'"
-      ]
-      ++ (lib.optional (
-        cfg.cache.redis.username != null
-      ) "--cache-redis-username='${cfg.cache.redis.username}'")
-      ++ (lib.optional (
-        cfg.cache.redis.password != null
-      ) "--cache-redis-password='${cfg.cache.redis.password}'")
-      ++ (lib.optional cfg.cache.redis.useTLS "--cache-redis-use-tls")
-    ))
-    ++ (lib.optional (
-      cfg.cache.storage.s3 == null
-    ) "--cache-storage-local='${cfg.cache.storage.local}'")
-    ++ (lib.optionals (cfg.cache.storage.s3 != null) (
-      [
-        "--cache-storage-s3-bucket='${cfg.cache.storage.s3.bucket}'"
-        "--cache-storage-s3-endpoint='${cfg.cache.storage.s3.endpoint}'"
-      ]
-      ++ (lib.optional cfg.cache.storage.s3.forcePathStyle "--cache-storage-s3-force-path-style")
-      ++ (lib.optional (
-        cfg.cache.storage.s3.region != null
-      ) "--cache-storage-s3-region='${cfg.cache.storage.s3.region}'")
-    ))
-    ++ (lib.optional cfg.cache.allowDeleteVerb "--cache-allow-delete-verb")
-    ++ (lib.optional cfg.cache.allowPutVerb "--cache-allow-put-verb")
-    ++ (lib.optional (cfg.cache.maxSize != null) "--cache-max-size='${cfg.cache.maxSize}'")
-    ++ (lib.optionals (cfg.cache.lru.schedule != null) [
-      "--cache-lru-schedule='${cfg.cache.lru.schedule}'"
-      "--cache-lru-schedule-timezone='${cfg.cache.lru.scheduleTimeZone}'"
-    ])
-    ++ (lib.optional (cfg.cache.secretKeyPath != null) "--cache-secret-key-path='%d/secretKey'")
-    ++ (lib.optional (!cfg.cache.signNarinfo) "--cache-sign-narinfo='false'")
-    ++ (lib.optional (
-      cfg.cache.upstream.dialerTimeout != null
-    ) "--cache-upstream-dialer-timeout='${cfg.cache.upstream.dialerTimeout}'")
-    ++ (lib.optional (
-      cfg.cache.upstream.responseHeaderTimeout != null
-    ) "--cache-upstream-response-header-timeout='${cfg.cache.upstream.responseHeaderTimeout}'")
-    ++ (lib.forEach cfg.cache.upstream.publicKeys (pk: "--cache-upstream-public-key='${pk}'"))
-    ++ (lib.forEach cfg.cache.upstream.urls (url: "--cache-upstream-url='${url}'"))
-    ++ (lib.optional (cfg.netrcFile != null) "--netrc-file='${cfg.netrcFile}'")
+  configFile = pkgs.writeText "ncps-config.json" (
+    builtins.toJSON (
+      lib.filterAttrsRecursive (_: v: v != null && v != { } && v != "" && v != [ ]) settings
+    )
   );
 
   isSqlite = cfg.cache.databaseURL != null && lib.strings.hasPrefix "sqlite:" cfg.cache.databaseURL;
@@ -136,12 +157,16 @@ in
     services.ncps = {
       enable = lib.mkEnableOption "ncps: Nix binary cache proxy service implemented in Go";
 
-      analytics.reporting.enable = lib.mkOption {
-        type = lib.types.bool;
-        default = true;
-        description = ''
-          Enable reporting anonymous usage statistics (DB type, Lock type, Total Size) to the project maintainers.
-        '';
+      analytics.reporting = {
+        enable = lib.mkOption {
+          type = lib.types.bool;
+          default = true;
+          description = ''
+            Enable reporting anonymous usage statistics (DB type, Lock type, Total Size) to the project maintainers.
+          '';
+        };
+
+        samples = lib.mkEnableOption "Enable printing the analytics samples to stdout. This is useful for debugging and verification purposes only.";
       };
 
       package = lib.mkPackageOption pkgs "ncps" { };
@@ -208,6 +233,28 @@ in
           '';
         };
 
+        database = {
+          pool = {
+            maxOpenConns = lib.mkOption {
+              type = lib.types.int;
+              default = 0;
+              description = ''
+                Maximum number of open connections to the database (0 = use
+                database-specific defaults).
+              '';
+            };
+
+            maxIdleConns = lib.mkOption {
+              type = lib.types.int;
+              default = 0;
+              description = ''
+                Maximum number of idle connections in the pool (0 = use
+                database-specific defaults).
+              '';
+            };
+          };
+        };
+
         lru = {
           schedule = lib.mkOption {
             type = lib.types.nullOr lib.types.str;
@@ -233,17 +280,107 @@ in
           };
         };
 
-        lock.backend = lib.mkOption {
-          type = lib.types.enum [
-            "local"
-            "redis"
-            "postgres"
-          ];
-          default = "local";
-          description = ''
-            Lock backend to use: 'local' (single instance), 'redis'
-            (distributed), or 'postgres' (distributed, requires PostgreSQL).
-          '';
+        lock = {
+          backend = lib.mkOption {
+            type = lib.types.enum [
+              "local"
+              "redis"
+              "postgres"
+            ];
+            default = "local";
+            description = ''
+              Lock backend to use: 'local' (single instance), 'redis'
+              (distributed), 'postgres' (distributed, requires PostgreSQL).
+
+              Advisory Locks and Connection Pools: If you use PostgreSQL as
+              your distributed lock backend, each active lock consumes a
+              dedicated connection from the pool. A single request can consume
+              up to 3 connections simultaneously.
+
+              To avoid deadlocks under concurrent load, ensure
+              {option}`services.ncps.cache.database.pool.maxOpenConns` is
+              significantly higher than your expected concurrency (at least
+              50-100 is recommended).
+            '';
+          };
+
+          redisKeyPrefix = lib.mkOption {
+            type = lib.types.str;
+            default = "ncps:lock:";
+            description = ''
+              Prefix for all Redis lock keys (only used when Redis is
+              configured).
+            '';
+          };
+
+          postgresKeyPrefix = lib.mkOption {
+            type = lib.types.str;
+            default = "ncps:lock:";
+            description = ''
+              Prefix for all PostgreSQL advisory lock keys (only used when
+              PostgreSQL is configured as lock backend).
+            '';
+          };
+
+          downloadTTL = lib.mkOption {
+            type = lib.types.str;
+            default = "5m0s";
+            description = ''
+              TTL for download locks (per-hash locks).
+            '';
+          };
+
+          lruTTL = lib.mkOption {
+            type = lib.types.str;
+            default = "30m0s";
+            description = ''
+              TTL for LRU lock (global exclusive lock).
+            '';
+          };
+
+          retry = {
+            maxAttempts = lib.mkOption {
+              type = lib.types.int;
+              default = 3;
+              description = ''
+                Maximum number of retry attempts for distributed locks.
+              '';
+            };
+
+            initialDelay = lib.mkOption {
+              type = lib.types.str;
+              default = "100ms";
+              description = ''
+                Initial retry delay for distributed locks.
+              '';
+            };
+
+            maxDelay = lib.mkOption {
+              type = lib.types.str;
+              default = "2s";
+              description = ''
+                Maximum retry delay for distributed locks (exponential backoff
+                caps at this).
+              '';
+            };
+
+            jitter = lib.mkOption {
+              type = lib.types.bool;
+              default = true;
+              description = ''
+                Enable jitter in retry delays to prevent thundering herd.
+              '';
+            };
+          };
+
+          allowDegradedMode = lib.mkOption {
+            type = lib.types.bool;
+            default = false;
+            description = ''
+              Allow falling back to local locks if Redis is unavailable (WARNING:
+              breaks HA guarantees).
+            '';
+          };
         };
 
         maxSize = lib.mkOption {
@@ -555,7 +692,7 @@ in
 
       serviceConfig = lib.mkMerge [
         {
-          ExecStart = "${ncpsWrapper} ${globalFlags} serve ${serveFlags}";
+          ExecStart = "${ncpsWrapper} serve";
           User = "ncps";
           Group = "ncps";
           Restart = "on-failure";

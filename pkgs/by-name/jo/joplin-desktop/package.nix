@@ -13,37 +13,19 @@
   cairo,
   pixman,
   libsecret,
-  electron_37,
+  electron,
   xcbuild,
   buildPackages,
   callPackage,
-  runCommand,
   libGL,
   clang_20,
+  jq,
 }:
 
 let
-  electron = electron_37;
   yarn-berry = yarn-berry_4;
 
   releaseData = lib.importJSON ./release-data.json;
-
-  buildPlugin = import ./buildPlugin.nix;
-
-  getPluginPatch =
-    src: id:
-    runCommand "${id}.diff" { } ''
-      patch="${src}/packages/default-plugins/plugin-patches/${id}.diff"
-
-      if [ -f "$patch" ]; then
-        cp "$patch" "$out"
-      else
-        # create an empty patch file if it doesn't exist – can't check this from Nix code without IFD
-        touch "$out"
-      fi
-    '';
-
-  getDefaultPlugins = map (callPackage buildPlugin);
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -70,16 +52,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = releaseData.deps_hash;
   };
 
-  # allows overriding to disable building the plugins
-  defaultPlugins = getDefaultPlugins (
-    lib.mapAttrsToList (
-      id: plugin:
-      plugin
-      // {
-        patches = [ (getPluginPatch finalAttrs.src id) ];
-      }
-    ) releaseData.plugins
-  );
+  # allows overriding to disable building these plugins or add other ones
+  defaultPlugins = [
+    (callPackage ./joplin-plugin-backup.nix {
+      patches = [
+        (finalAttrs.src + "/packages/default-plugins/plugin-patches/io.github.jackgruber.backup.diff")
+      ];
+    })
+  ];
 
   buildInputs = [
     libGL
@@ -96,6 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     pixman
     libsecret
     makeWrapper
+    jq
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     xcbuild
@@ -120,20 +101,25 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i '/postinstall/d' package.json
     # Don't install onenote-converter subpackage deps
     sed -i '/onenote-converter/d' packages/{lib,app-desktop}/package.json
-    # Don't build the default plugins, would require networking. We build them separately.
-    sed -i "/'buildDefaultPlugins',/d" packages/app-desktop/gulpfile.ts
   '';
 
   buildPhase = ''
     runHook preBuild
 
-    unset YARN_ENABLE_SCRIPTS
-
     for node_modules in packages/*/node_modules; do
       patchShebangs $node_modules
     done
 
+    unset YARN_ENABLE_SCRIPTS
+
     yarn config set enableInlineBuilds true
+
+    # fails otherwise because it tries to set up git hooks, not needed here
+    sed -i 's/"preinstall": ".*"/"preinstall": "echo skipped preinstall"/' packages/default-plugins/node_modules/joplin-plugin-freehand-drawing/package.json
+
+    # Don't let joplin build plugins from source, would require networking. We build them separately.
+    pluginRepositories=packages/default-plugins/pluginRepositories.json
+    jq 'with_entries(select(.value | has("package")))' <<< "$(cat $pluginRepositories)" > $pluginRepositories
 
     echo "installing yarn dependencies..."
     yarn workspaces focus \
@@ -248,6 +234,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       fugi
     ];
-    platforms = electron.meta.platforms ++ lib.platforms.darwin;
+    inherit (electron.meta) platforms;
   };
 })

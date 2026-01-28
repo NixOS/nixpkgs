@@ -14,7 +14,9 @@
   stdenv,
   systemd,
   xkeyboard_config,
-  xorg,
+  libxrandr,
+  libxext,
+  libxkbfile,
   wrapGAppsHook3,
   glib,
 }:
@@ -46,9 +48,9 @@ stdenv.mkDerivation rec {
     isocodes
     systemd
     xkeyboard_config
-    xorg.libxkbfile
-    xorg.libXext
-    xorg.libXrandr
+    libxkbfile
+    libxext
+    libxrandr
   ];
 
   nativeBuildInputs = [

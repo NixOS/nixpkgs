@@ -12,7 +12,10 @@
   rustPlatform,
   vulkan-loader,
   wayland,
-  xorg,
+  libxi,
+  libxcursor,
+  libx11,
+  libxcb,
   alsa-lib,
 }:
 
@@ -43,10 +46,10 @@ rustPlatform.buildRustPackage rec {
     libxkbcommon
     vulkan-loader
     wayland
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libxcb
+    libx11
+    libxcursor
+    libxi
+    libxcb
   ];
 
   desktopItems = [

@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-runtime";
-  version = "7.0.2";
+  version = "7.1.1";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "ROCR-Runtime";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-oz2UCR4XEhNm1uDlCeDnDJrmysWKA6GKxlEuFu21es0=";
+    hash = "sha256-gqe1trGc/Cu1XFA4aYjOzFurUgebLbdTHEJi4iw2+kk=";
   };
 
   cmakeBuildType = "RelWithDebInfo";
@@ -53,21 +53,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
+    # Vendored upstream PR for fix for segfault when queue allocation fails
+    # https://github.com/ROCm/rocm-systems/pull/2850
+    ./queue-failure.patch
     (fetchpatch {
-      # rocr: Extend HIP ISA compatibility check
+      # [PATCH] rocr: Extend HIP ISA compatibility check
       sha256 = "sha256-8r2Lb5lBfFaZC3knCxfXGcnkzNv6JxOKyJn2rD5gus4=";
-      url = "https://github.com/GZGavinZhao/ROCR-Runtime/commit/7c63e7185d8fcf08537a278908946145f6231121.patch";
-    })
-    # Patches for UB at runtime https://github.com/ROCm/ROCR-Runtime/issues/272
-    (fetchpatch {
-      # [PATCH] queues: fix UB due to 1 << 31
-      url = "https://github.com/ROCm/ROCR-Runtime/commit/9b8a0f5dbee1903fa990a7d8accc1c5fbc549636.patch";
-      hash = "sha256-KlZWjfngH8yKly08iwC+Bzpvp/4dkaTpRIKdFYwRI+U=";
-    })
-    (fetchpatch {
-      # [PATCH] topology: fix UB due to 1 << 31
-      url = "https://github.com/ROCm/ROCR-Runtime/commit/d1d00bfee386d263e13c2b64fb6ffd1156deda7c.patch";
-      hash = "sha256-u70WEZaphQ7qTfgQPFATwdKWtHytu7CFH7Pzv1rOM8w=";
+      url = "https://github.com/GZGavinZhao/rocm-systems/commit/c13cd118fcc8e0bc9ae8de62897542dca7352b71.patch";
+      relative = "projects/rocr-runtime";
     })
     (fetchpatch {
       # [PATCH] kfd_ioctl: fix UB due to 1 << 31

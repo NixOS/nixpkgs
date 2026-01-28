@@ -9,7 +9,9 @@
   zlib,
   libpng,
   libglvnd,
-  xorg,
+  libxtst,
+  libxi,
+  libx11,
   libevdev,
   curl,
   pulseaudio,
@@ -68,9 +70,9 @@ clangStdenv.mkDerivation (finalAttrs: {
     zlib
     libpng
     libglvnd
-    xorg.libX11
-    xorg.libXi
-    xorg.libXtst
+    libx11
+    libxi
+    libxtst
     libevdev
     curl
     pulseaudio

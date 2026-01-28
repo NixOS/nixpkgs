@@ -5,7 +5,7 @@
   pkg-config,
   dbus-glib,
   autoreconfHook,
-  xorg,
+  libx11,
 }:
 
 stdenv.mkDerivation {
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     pkg-config
   ];
   buildInputs = [
-    xorg.libX11
+    libx11
     dbus-glib
   ];
 

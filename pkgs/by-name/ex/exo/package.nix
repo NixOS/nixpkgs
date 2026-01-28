@@ -18,13 +18,13 @@
   nix-update-script,
 }:
 let
-  version = "1.0.63";
+  version = "1.0.65";
   src = fetchFromGitHub {
     name = "exo";
     owner = "exo-explore";
     repo = "exo";
     tag = "v${version}";
-    hash = "sha256-aQ3rGLtT/zvIVdKQcwqODulzEHBKg7KMkBg3KJEscho=";
+    hash = "sha256-Zj174EySIILdj7+QJVT6ZGYvjO+jXHj+GizVsve2lFk=";
   };
 
   pyo3-bindings = python3Packages.buildPythonPackage (finalAttrs: {
@@ -71,7 +71,7 @@ let
         sourceRoot
         ;
       fetcherVersion = 2;
-      hash = "sha256-w3FZL/yy8R+SWCQF7+v21sKyizvZMmipG6IfhJeSjyQ=";
+      hash = "sha256-3ZgE1ysb1OeB4BNszvlrnYcc7gOo7coPfOEQmMHC6E0=";
     };
   });
 in
@@ -100,15 +100,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
         "_MemoryObjectStreamState as AnyioState,"
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace src/exo/worker/utils/macmon.py \
+    substituteInPlace src/exo/utils/info_gatherer/info_gatherer.py \
       --replace-fail \
-        'path = shutil.which("macmon")' \
-        'path = "${lib.getExe macmon}"'
-
-    substituteInPlace src/exo/worker/utils/tests/test_macmon.py \
-      --replace-fail \
-        'cmd=["macmon"' \
-        'cmd=["${lib.getExe macmon}"'
+        'shutil.which("macmon")' \
+        '"${lib.getExe macmon}"'
   '';
 
   build-system = with python3Packages; [
@@ -137,6 +132,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       hypercorn
       jinja2
       loguru
+      mflux
       mlx
       mlx-lm
       nvidia-ml-py
@@ -148,10 +144,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
       psutil
       pydantic
       pyo3-bindings
+      python-multipart
       rustworkx
       scapy
       tiktoken
       tinygrad
+      tomlkit
       transformers
       uvloop
     ]
@@ -179,6 +177,17 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
     # ValueError: zip() argument 2 is longer than argument 1
     "test_events_processed_in_correct_order"
+
+    # system_profiler is not available in the sandbox
+    "test_tb_parsing"
+
+    # Flaky in the sandbox (even when __darwinAllowLocalNetworking is enabled)
+    # RuntimeError - Attempted to create a NULL object.
+    "test_sleep_on_multiple_items"
+
+    # Flaky in the sandbox (even when __darwinAllowLocalNetworking is enabled)
+    # AssertionError: Expected 2 results, got 0. Errors: {0: "[ring] Couldn't bind socket (error: 1)"}
+    "test_composed_call_works"
   ];
 
   disabledTestPaths = [

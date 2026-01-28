@@ -3,7 +3,11 @@
   stdenv,
   fetchzip,
   zlib,
-  xorg,
+  libxtst,
+  libxrender,
+  libxi,
+  libxext,
+  libx11,
   freetype,
   jdk17,
   curl,
@@ -24,11 +28,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     zlib
-    xorg.libX11
-    xorg.libXext
-    xorg.libXi
-    xorg.libXtst
-    xorg.libXrender
+    libx11
+    libxext
+    libxi
+    libxtst
+    libxrender
     freetype
     jdk17
     (lib.getLib stdenv.cc.cc)

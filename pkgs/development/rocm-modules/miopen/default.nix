@@ -43,7 +43,7 @@
 let
   # FIXME: cmake files need patched to include this properly
   cFlags = "-Wno-documentation-pedantic --offload-compress -I${hipblas-common}/include -I${hipblas}/include -I${roctracer}/include -I${nlohmann_json}/include -I${sqlite.dev}/include -I${rocrand}/include";
-  version = "7.0.2";
+  version = "7.1.1";
 
   # Targets outside this list will get
   # error: use of undeclared identifier 'CK_BUFFER_RESOURCE_3RD_DWORD'
@@ -69,7 +69,7 @@ let
     owner = "ROCm";
     repo = "MIOpen";
     rev = "rocm-${version}";
-    hash = "sha256-PJj2LzU5naAku+FOnMl+Ymad2beYYSS81/K/CR+l2UA=";
+    hash = "sha256-g0AEpuUiwKCu/doiRh9mW34W04m4ynHoarSyl6tR/aE=";
     fetchLFS = true;
     fetchSubmodules = true;
     # WORKAROUND: .lfsconfig is incorrectly set to exclude everything upstream

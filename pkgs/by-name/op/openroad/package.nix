@@ -37,7 +37,7 @@
   tclPackages,
   yosys,
   zlib,
-  xorg,
+  libx11,
   llvmPackages,
 }:
 
@@ -92,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     yaml-cpp
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ xorg.libX11 ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libx11 ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.openmp ];
 
   postPatch = ''

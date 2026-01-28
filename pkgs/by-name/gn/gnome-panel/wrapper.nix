@@ -4,7 +4,7 @@
   buildEnv,
   gnome-panel,
   gnome-flashback,
-  xorg,
+  lndir,
   glib,
   wrapGAppsHook3,
   panelModulePackages ? [ ],
@@ -49,10 +49,10 @@ stdenv.mkDerivation {
     runHook preInstall
 
     mkdir -p $out
-    ${xorg.lndir}/bin/lndir -silent ${gnome-panel} $out
+    ${lndir}/bin/lndir -silent ${gnome-panel} $out
 
     rm -r $out/lib/gnome-panel/modules
-    ${xorg.lndir}/bin/lndir -silent ${panelModulesEnv} $out
+    ${lndir}/bin/lndir -silent ${panelModulesEnv} $out
 
     rm $out/share/systemd/user/gnome-panel.service
     substitute ${gnome-panel}/share/systemd/user/gnome-panel.service \

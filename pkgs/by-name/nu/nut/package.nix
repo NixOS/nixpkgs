@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     (replaceVars ./hardcode-paths.patch {
       avahi = "${avahi}/lib";
       freeipmi = "${freeipmi}/lib";
-      libgpiod = "${libgpiod_1}/lib";
+      libgpiod = if stdenv.hostPlatform.isLinux then "${libgpiod_1}/lib" else "/homeless-shelter";
       libusb = "${libusb1}/lib";
       neon = "${neon}/lib";
       libmodbus = "${modbus}/lib";
@@ -76,18 +76,20 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    neon
-    libusb1
-    openssl
-    udev
     avahi
     freeipmi
-    libgpiod_1
-    libtool
-    i2c-tools
-    net-snmp
     gd
+    libtool
+    libusb1
     modbus
+    neon
+    net-snmp
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    i2c-tools
+    libgpiod_1
+    udev
   ];
 
   nativeBuildInputs = [
@@ -129,7 +131,7 @@ stdenv.mkDerivation rec {
     "sbin"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace $out/lib/systemd/system-shutdown/nutshutdown \
       --replace /bin/sed "${gnused}/bin/sed" \
       --replace /bin/sleep "${coreutils}/bin/sleep" \
@@ -155,7 +157,7 @@ stdenv.mkDerivation rec {
       It uses a layered approach to connect all of the parts.
     '';
     homepage = "https://networkupstools.org/";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.pierron ];
     license = with lib.licenses; [
       gpl1Plus

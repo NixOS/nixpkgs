@@ -14,7 +14,10 @@
   expat,
   fontconfig,
   vulkan-loader,
-  xorg,
+  libxrandr,
+  libxi,
+  libxcursor,
+  libx11,
 
   # wrapper
   libxkbcommon,
@@ -48,10 +51,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     expat
     fontconfig
     vulkan-loader
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXrandr
+    libx11
+    libxcursor
+    libxi
+    libxrandr
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     rustPlatform.bindgenHook
@@ -78,7 +81,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --add-rpath ${
         lib.makeLibraryPath [
           vulkan-loader
-          xorg.libX11
+          libx11
           libxkbcommon
           wayland
         ]

@@ -12,7 +12,14 @@
   uthash,
   which,
   xnee,
-  xorg,
+  libxrender,
+  libxrandr,
+  libxpm,
+  libxmu,
+  libxft,
+  libx11,
+  xprop,
+  xeyes,
   python3Packages,
 }:
 
@@ -40,12 +47,12 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libpng
     uthash
-    xorg.libX11
-    xorg.libXft
-    xorg.libXmu
-    xorg.libXpm
-    xorg.libXrandr
-    xorg.libXrender
+    libx11
+    libxft
+    libxmu
+    libxpm
+    libxrandr
+    libxrender
   ];
 
   enableParallelBuilding = true;
@@ -58,8 +65,8 @@ stdenv.mkDerivation rec {
     python3Packages.xvfbwrapper
     which
     xnee
-    xorg.xeyes
-    xorg.xprop
+    xeyes
+    xprop
   ];
 
   meta = {

@@ -15,7 +15,7 @@
   cairo,
   libxkbcommon,
   libxkbfile,
-  xorg,
+  libxcb-util,
 }:
 
 stdenv.mkDerivation rec {
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     cairo
     libxkbcommon
     libxkbfile
-    xorg.xcbutil
+    libxcb-util
   ];
 
   meta = {

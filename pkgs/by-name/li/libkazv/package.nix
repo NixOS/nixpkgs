@@ -8,7 +8,7 @@
   cryptopp,
   immer,
   lager,
-  libcpr,
+  libcpr_1_10_5,
   libhttpserver,
   libmicrohttpd,
   nlohmann_json,
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     cryptopp
     immer
     lager
-    libcpr
+    libcpr_1_10_5
     libhttpserver
     libmicrohttpd
     olm

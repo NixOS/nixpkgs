@@ -8,7 +8,12 @@
   makeDesktopItem,
   nss,
   cairo,
-  xorg,
+  libxrandr,
+  libxfixes,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
   libxkbcommon,
   alsa-lib,
   at-spi2-core,
@@ -91,15 +96,13 @@ let
       libgbm
       libGL
       libglvnd
-    ]
-    ++ (with xorg; [
-      libX11
-      libXcomposite
-      libXdamage
-      libXrandr
-      libXfixes
-      libXcursor
-    ]);
+      libx11
+      libxcomposite
+      libxdamage
+      libxrandr
+      libxfixes
+      libxcursor
+    ];
 
     # Required to launch the application and proceed past the zygote_linux fork() process
     # Fixes `Zygote could not fork`

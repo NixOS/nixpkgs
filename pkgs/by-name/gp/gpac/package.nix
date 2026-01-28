@@ -29,7 +29,9 @@
   pulseaudio,
   SDL2,
   curl,
-  xorg,
+  libxv,
+  libx11,
+  xorgproto,
 
   withFullDeps ? false,
   withFfmpeg ? withFullDeps,
@@ -108,9 +110,9 @@ stdenv.mkDerivation (finalAttrs: {
     nghttp2
     openjpeg
     libcaca
-    xorg.libX11
-    xorg.libXv
-    xorg.xorgproto
+    libx11
+    libxv
+    xorgproto
     mesa
     mesa_glu
     xvidcore

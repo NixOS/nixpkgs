@@ -23,7 +23,11 @@
   libdrm,
   libGL,
   wayland,
-  xorg,
+  libxrender,
+  libxrandr,
+  libx11,
+  xorgproto,
+  libxcb,
   withQt ? true,
   qt6,
 }:
@@ -35,11 +39,11 @@ let
     libdrm
     libGL
     wayland
-    xorg.libX11
-    xorg.libxcb
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.xorgproto
+    libx11
+    libxcb
+    libxrandr
+    libxrender
+    xorgproto
   ];
 
   pkgsCross32 = pkgsCross.gnu32;

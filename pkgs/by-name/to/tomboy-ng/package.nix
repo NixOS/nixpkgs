@@ -12,7 +12,7 @@
   gtk2,
   gdk-pixbuf,
   at-spi2-atk,
-  xorg,
+  libx11,
   libnotify,
 
   nix-update-script,
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk2
     gdk-pixbuf
     at-spi2-atk
-    xorg.libX11
+    libx11
     libnotify
   ];
 

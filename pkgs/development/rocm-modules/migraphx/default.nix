@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   rocmUpdateScript,
   pkg-config,
   cmake,
@@ -59,7 +58,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "migraphx";
-  version = "7.0.2";
+  version = "7.1.1";
 
   outputs = [
     "out"
@@ -75,12 +74,8 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "AMDMIGraphX";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-P3jiq6i7jpfpL9/S7mc1CiNRwAt8fzy3waHKhyuYIXI=";
+    hash = "sha256-s6w4bF7koK4wnf6leVKBzwIB4X2ROHa3EgX6XuJIAew=";
   };
-
-  patches = [
-    ./msgpack-6-compat.patch
-  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -147,7 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    export CXXFLAGS+=" -w -isystem${rocmlir}/include/rocmlir -I${half}/include -I${lib.getInclude abseil-cpp}/include -I${hipblas-common}/include"
+    export CXXFLAGS+=" -w -isystem${rocmlir}/include/rocmlir -I${half}/include -I${lib.getInclude abseil-cpp}/include -I${hipblas-common}/include -I${lib.getInclude protobuf}/include"
     patchShebangs tools
 
     # `error: '__clang_hip_runtime_wrapper.h' file not found [clang-diagnostic-error]`

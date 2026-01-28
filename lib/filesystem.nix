@@ -31,6 +31,12 @@ in
     isPath
     ;
 
+  inherit (builtins)
+    readDir
+    readFileType
+    hashFile
+    ;
+
   /**
     The type of a path. The path needs to exist and be accessible.
     The result is either `"directory"` for a directory, `"regular"` for a

@@ -14,7 +14,12 @@
   makeWrapper,
   openexr,
   onetbb,
-  xorg,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxext,
+  libxcursor,
+  libx11,
   ilmbase,
   llvmPackages,
   unstableGitUpdater,
@@ -22,14 +27,14 @@
 
 stdenv.mkDerivation {
   pname = "curv";
-  version = "0.5-unstable-2026-01-17";
+  version = "0.5-unstable-2026-01-23";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "doug-moen";
     repo = "curv";
-    rev = "1c2eb68e47e3c61a98e39cd3c50f90691c5a268d";
-    hash = "sha256-PuRBnJswrg+PjtU6ize+PjoBpQSSEzO2CeCx9mQF+3w=";
+    rev = "17d03b534c69976ed60936beb8b7cc38e8c12c13";
+    hash = "sha256-qQLcRCha01b6ClUSPO2jMBDJsN28EhqzakTLu1medAQ=";
     fetchSubmodules = true;
   };
 
@@ -49,12 +54,12 @@ stdenv.mkDerivation {
     libpng
     openexr
     onetbb
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXext
-    xorg.libXi
-    xorg.libXinerama
-    xorg.libXrandr
+    libx11
+    libxcursor
+    libxext
+    libxi
+    libxinerama
+    libxrandr
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     ilmbase
@@ -97,7 +102,8 @@ stdenv.mkDerivation {
     homepage = "https://codeberg.org/doug-moen/curv";
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
-    broken = stdenv.hostPlatform.isDarwin;
+    # aarch64 fails installCheckPhase: https://hydra.nixos.org/build/319705783
+    broken = stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isAarch64;
     maintainers = with lib.maintainers; [ pbsds ];
     mainProgram = "curv";
   };

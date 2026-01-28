@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "codegrab";
-  version = "1.0.7";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "epilande";
     repo = "codegrab";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gKxvPcAZ8TnECAs3iMkFfZKdaq8vkLz/T9MUBWk4MfQ=";
+    hash = "sha256-Krcjb8HEzaxHhJ+6blP1tuAvAHPKnHSNRrbJ8CHNPG4=";
     leaveDotGit = true;
     postFetch = ''
       cd "$out"
@@ -21,7 +21,7 @@ buildGoModule (finalAttrs: {
     '';
   };
 
-  vendorHash = "sha256-u9pVOZOwK6xLdR4tlWN2eBoJZ2ziPEdJv78uCV0Suus=";
+  vendorHash = "sha256-/M51gagiJTLSUdUM+Rn96az2iDVj6nsevKcrq2sPzJA=";
 
   checkFlags = [
     "-skip=TestParseSizeString"

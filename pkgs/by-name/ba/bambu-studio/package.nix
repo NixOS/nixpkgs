@@ -38,7 +38,7 @@
   onetbb,
   webkitgtk_4_1,
   wxGTK31,
-  xorg,
+  libx11,
   withSystemd ? stdenv.hostPlatform.isLinux,
 }:
 let
@@ -105,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
     onetbb
     webkitgtk_4_1
     wxGTK'
-    xorg.libX11
+    libx11
     opencv
   ]
   ++ lib.optionals withSystemd [ systemd ]

@@ -33,7 +33,7 @@
 }:
 
 let
-  version = "7.0.2";
+  version = "7.1.1";
   # major version of this should be the clang version ROCm forked from
   rocmLlvmVersion = "20.0.0-rocm";
   # llvmPackages_base version should match rocmLlvmVersion
@@ -115,7 +115,7 @@ let
     owner = "ROCm";
     repo = "llvm-project";
     rev = "rocm-${version}";
-    hash = "sha256-gJlDFbCRsiwHgRzmwm36C3WvGfWwgPrtBNUHYmZHTB8=";
+    hash = "sha256-CfknIRVeR1bCKh1xzXKl3ehVp0kWT0uGrI9C1HTSKVo=";
   };
   llvmMajorVersion = lib.versions.major rocmLlvmVersion;
   # An llvmPackages (pkgs/development/compilers/llvm/) built from ROCm LLVM's source tree

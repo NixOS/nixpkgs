@@ -4,18 +4,21 @@
   gitUpdater,
   python3Packages,
   stdenv,
+  docker,
+  git,
+  which,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "clickable";
-  version = "8.6.0";
+  version = "8.7.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "clickable";
     repo = "clickable";
     rev = "v${version}";
-    hash = "sha256-rgIp4LCSUamImYhgFeG+XEpgnxHcKylWRB2CCx9u5S0=";
+    hash = "sha256-W6NPZ5uP7wGjgyA+Nv2vpmshKWny2CCSrn/Gaoi7Pr4=";
   };
 
   build-system = [ python3Packages.setuptools ];
@@ -29,49 +32,39 @@ python3Packages.buildPythonApplication rec {
     watchdog
   ];
 
-  nativeCheckInputs = [ python3Packages.pytestCheckHook ];
+  nativeCheckInputs = [
+    docker
+    git
+    python3Packages.pytestCheckHook
+    which
+  ];
 
-  disabledTests = [
-    # Tests require docker
-    "test_cpp_plugin"
-    "test_html"
-    "test_python"
-    "test_qml_only"
-    "test_rust"
-    "test_review"
-    "test_click_build"
-    "test_no_device"
-    "test_no_file_temp"
-    "test_update"
-    "test_lib_build"
-    "test_clean"
-    "test_temp_exception"
-    "test_create_interactive"
-    "test_create_non_interactive"
-    "test_kill"
-    "test_writable_image"
-    "test_no_desktop_mode"
-    "test_no_lock"
-    "test_run_default_command"
-    "test_run"
-    "test_no_container_mode_log"
-    "test_custom_mode_log"
-    "test_skip_desktop_mode"
-    "test_log"
-    "test_custom_lock_file"
-    "test_launch_custom"
-    "test_launch"
-    "test_devices"
-    "test_install"
-    "test_skip_container_mode"
-    "test_godot_plugin"
-  ]
-  ++
-    # There are no docker images available for the aarch64 architecture
-    # which are required for tests.
-    lib.optionals stdenv.hostPlatform.isAarch64 [
+  disabledTests =
+    # Tests require running docker daemon
+    [
+      "test_cpp_plugin"
+      "test_godot_plugin"
+      "test_html"
+      "test_python"
+      "test_qml_only"
+      "test_rust"
+    ]
+    # Tests do not work on non-amd64 platforms
+    ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [
+      # hardcode amd64
       "test_arch"
       "test_restricted_arch"
+
+      # no -ide images on arm64
+      # https://gitlab.com/clickable/clickable/-/issues/478
+      "test_command_overrided"
+      "test_init_cmake_project"
+      "test_init_cmake_project_exe_as_var"
+      "test_init_cmake_project_no_exe"
+      "test_init_cmake_project_no_to_prompt"
+      "test_initialize_qtcreator_conf"
+      "test_project_pre_configured"
+      "test_recurse_replace"
     ];
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };

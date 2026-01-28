@@ -19,7 +19,7 @@ if (! -e $dbPath) {
     print STDERR "This tool requires nix-channels to generate the database for the `nixos` channel.\n";
     print STDERR "\n";
     print STDERR "If you are using nix-channels you can run:\n";
-    print STDERR "    sudo nix-channels --update\n";
+    print STDERR "    sudo nix-channel --update\n";
     print STDERR "\n";
     print STDERR "If you are using flakes, see nix-index and nix-index-database.\n";
     print STDERR "\n";

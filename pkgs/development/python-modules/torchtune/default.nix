@@ -111,6 +111,14 @@ buildPythonPackage (finalAttrs: {
     "test_forward_with_curr_pos"
     "test_forward_with_packed_pos"
   ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
+    # RuntimeError: Error in dlopen:
+    # /tmp/yae2xK/mha/data/aotinductor/model/ckk2zlroqn6hgq5vvpy7bcjikztqmwqkek3njxe2gvvwp244hjny.wrapper.so:
+    # cannot enable executable stack as shared object requires: Invalid argument
+    "test_attention_aoti"
+    "test_tile_positional_embedding_aoti"
+    "test_tiled_token_positional_embedding_aoti"
+  ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # Fatal Python error: Segmentation fault
     "test_forward_gqa"

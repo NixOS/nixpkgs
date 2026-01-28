@@ -37,7 +37,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   postFixup = ''
-    wrapPythonProgramsIn $out/share/pokete "$pythonPath"
+    wrapPythonProgramsIn $out/share/pokete "''${pythonPath[*]}"
   '';
 
   passthru.tests = {

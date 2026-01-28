@@ -1,7 +1,15 @@
 {
   writeText,
   writeScriptBin,
-  xorg,
+  xorg-server,
+  xf86-video-dummy,
+  font-misc-misc,
+  font-cursor-misc,
+  font-bh-lucidatypewriter-75dpi,
+  font-bh-lucidatypewriter-100dpi,
+  font-bh-100dpi,
+  font-adobe-75dpi,
+  font-adobe-100dpi,
   xkeyboard_config,
   runtimeShell,
   unfreeFonts ? false,
@@ -26,17 +34,17 @@ let
     EndSection
 
     Section "Files"
-      ModulePath "${xorg.xorgserver.out}/lib/xorg/modules"
-      ModulePath "${xorg.xf86videodummy}/lib/xorg/modules"
+      ModulePath "${xorg-server.out}/lib/xorg/modules"
+      ModulePath "${xf86-video-dummy}/lib/xorg/modules"
       XkbDir "${xkeyboard_config}/share/X11/xkb"
-      FontPath "${xorg.fontadobe75dpi}/share/fonts/X11/75dpi"
-      FontPath "${xorg.fontadobe100dpi}/share/fonts/X11/100dpi"
-      FontPath "${xorg.fontmiscmisc}/share/fonts/X11/misc"
-      FontPath "${xorg.fontcursormisc}/share/fonts/X11/misc"
+      FontPath "${font-adobe-75dpi}/share/fonts/X11/75dpi"
+      FontPath "${font-adobe-100dpi}/share/fonts/X11/100dpi"
+      FontPath "${font-misc-misc}/share/fonts/X11/misc"
+      FontPath "${font-cursor-misc}/share/fonts/X11/misc"
     ${lib.optionalString unfreeFonts ''
-      FontPath "${xorg.fontbhlucidatypewriter75dpi}/share/fonts/X11/75dpi"
-      FontPath "${xorg.fontbhlucidatypewriter100dpi}/share/fonts/X11/100dpi"
-      FontPath "${xorg.fontbh100dpi}/share/fonts/X11/100dpi"
+      FontPath "${font-bh-lucidatypewriter-75dpi}/share/fonts/X11/75dpi"
+      FontPath "${font-bh-lucidatypewriter-100dpi}/share/fonts/X11/100dpi"
+      FontPath "${font-bh-100dpi}/share/fonts/X11/100dpi"
     ''}
     EndSection
 
@@ -85,7 +93,7 @@ let
 in
 writeScriptBin "xdummy" ''
   #!${runtimeShell}
-  exec ${xorg.xorgserver.out}/bin/Xorg \
+  exec ${xorg-server.out}/bin/Xorg \
     -noreset \
     -logfile /dev/null \
     "$@" \

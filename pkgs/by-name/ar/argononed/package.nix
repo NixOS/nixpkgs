@@ -5,16 +5,15 @@
   dtc,
   installShellFiles,
 }:
-
 stdenv.mkDerivation {
   pname = "argononed";
-  version = "unstable-2022-03-26";
+  version = "0.4.1-unstable-2025-12-26";
 
   src = fetchFromGitLab {
     owner = "DarkElvenAngel";
     repo = "argononed";
-    rev = "97c4fa07fc2c09ffc3bd86e0f6319d50fa639578";
-    hash = "sha256-5/xUYbprRiwD+FN8V2cUpHxnTbBkEsFG2wfsEXrCrgQ=";
+    rev = "34d70b3bb1b2a8ba4b146ba7d9962dd0d925e67e";
+    hash = "sha256-f7YGoky4C5P/Iyez3kuLEKU/yWKZ4Dh6Cy//PAKMYuU=";
   };
 
   patches = [ ./fix-hardcoded-reboot-poweroff-paths.patch ];

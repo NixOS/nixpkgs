@@ -2,7 +2,7 @@
   lib,
   stdenv,
   stdenvNoCC,
-  callPackage,
+  buildVscode,
   fetchurl,
   nixosTests,
   srcOnly,
@@ -51,7 +51,7 @@ let
   # This is used for VS Code - Remote SSH test
   rev = "585eba7c0c34fd6b30faac7c62a42050bfbc0086";
 in
-callPackage ./generic.nix {
+buildVscode {
   pname = "vscode" + lib.optionalString isInsiders "-insiders";
 
   executableName = "code" + lib.optionalString isInsiders "-insiders";

@@ -168,7 +168,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       wyvie
       pstn
-      cpu
       felixalbrigtsen
     ];
     platforms = with lib.platforms; linux ++ darwin;

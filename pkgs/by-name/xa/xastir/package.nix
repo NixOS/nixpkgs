@@ -10,7 +10,8 @@
   gnused,
   libgeotiff,
   libtiff,
-  xorg,
+  libxt,
+  libxpm,
   motif,
   pcre2,
   perl,
@@ -43,8 +44,8 @@ stdenv.mkDerivation rec {
     db
     libgeotiff
     libtiff
-    xorg.libXpm
-    xorg.libXt
+    libxpm
+    libxt
     motif
     pcre2
     perl

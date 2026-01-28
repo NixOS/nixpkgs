@@ -17,7 +17,8 @@
   libsepol,
   libthai,
   libdatrie,
-  xorg,
+  libxtst,
+  libxdmcp,
   lerc,
   libxkbcommon,
   libepoxy,
@@ -84,8 +85,8 @@ stdenv.mkDerivation {
     lerc
     libxkbcommon
     libepoxy
-    xorg.libXdmcp
-    xorg.libXtst
+    libxdmcp
+    libxtst
   ];
 
   nativeBuildInputs = [

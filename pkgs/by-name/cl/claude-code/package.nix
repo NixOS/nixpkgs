@@ -1,6 +1,6 @@
 # NOTE: Use the following command to update the package
 # ```sh
-# nix-shell maintainers/scripts/update.nix --argstr commit true --arg predicate '(path: pkg: builtins.elem path [["claude-code"] ["vscode-extensions" "anthropic" "claude-code"]])'
+# nix-shell maintainers/scripts/update.nix --argstr commit true --arg predicate '(path: pkg: builtins.elem path [["claude-code"] ["claude-code-bin"] ["vscode-extensions" "anthropic" "claude-code"]])'
 # ```
 {
   lib,
@@ -15,24 +15,23 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "claude-code";
-  version = "2.1.17";
+  version = "2.1.20";
 
   src = fetchzip {
     url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-${finalAttrs.version}.tgz";
-    hash = "sha256-cLJ8qKa8OhGpjdB7l1KAcG73EvH5T+OUww3flAKWihI=";
+    hash = "sha256-V2BIqUUJnQpjIsCAAk932L8wp5T74s22q3KgFoxfdDg=";
   };
 
-  npmDepsHash = "sha256-aUqPXF5L78wZ34pNRvpEJi6l2wl15Og1yCEvVoeV0tE=";
+  npmDepsHash = "sha256-X8j7httM9qMpAPR11oDAWwDpkxZ2bc20y6ruMoStMsQ=";
 
   strictDeps = true;
 
   postPatch = ''
     cp ${./package-lock.json} package-lock.json
 
-    # Replace hardcoded `/bin/bash` with `/usr/bin/env bash` for Nix compatibility
     # https://github.com/anthropics/claude-code/issues/15195
     substituteInPlace cli.js \
-      --replace-warn '#!/bin/bash' '#!/usr/bin/env bash'
+          --replace-fail '#!/bin/sh' '#!/usr/bin/env sh'
   '';
 
   dontNpmBuild = true;
@@ -45,6 +44,7 @@ buildNpmPackage (finalAttrs: {
   postInstall = ''
     wrapProgram $out/bin/claude \
       --set DISABLE_AUTOUPDATER 1 \
+      --set DISABLE_INSTALLATION_CHECKS 1 \
       --unset DEV \
       --prefix PATH : ${
         lib.makeBinPath (

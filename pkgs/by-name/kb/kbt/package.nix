@@ -4,7 +4,7 @@
   fetchFromGitHub,
   stdenv,
   pkg-config,
-  xorg,
+  libx11,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    xorg.libX11
+    libx11
   ];
 
   meta = {

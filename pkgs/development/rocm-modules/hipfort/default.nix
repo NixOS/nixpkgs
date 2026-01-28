@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipfort";
-  version = "7.0.2";
+  version = "7.1.1";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "hipfort";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-s/VOaU5IKZYH0Vhtjl/UZTrnpLsJ7zWFTvAJY2x3AcA=";
+    hash = "sha256-IVLhp8rYtKhkt8K8Mc0qyrp670oKoK0QeclnJjO36pY=";
   };
 
   patches = [

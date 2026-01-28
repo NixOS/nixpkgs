@@ -300,6 +300,7 @@ with lib.maintainers;
 
   gitlab = {
     members = [
+      gabyx
       krav
       leona
       talyz

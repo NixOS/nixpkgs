@@ -6,7 +6,10 @@
   makeDesktopItem,
   SDL2,
   pkg-config,
-  xorg,
+  libxrandr,
+  libxi,
+  libxcursor,
+  libx11,
   wayland,
   libxkbcommon,
   libGL,
@@ -32,10 +35,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     SDL2.dev
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXrandr
-    xorg.libXi
+    libx11
+    libxcursor
+    libxrandr
+    libxi
   ];
 
   postInstall = ''

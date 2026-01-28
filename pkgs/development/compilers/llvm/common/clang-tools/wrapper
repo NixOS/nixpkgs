@@ -4,6 +4,24 @@ buildcpath() {
   local path after
   while (( $# )); do
     case $1 in
+        -isystem)
+            shift
+            path=$path${path:+':'}$1
+            ;;
+        -idirafter)
+            shift
+            after=$after${after:+':'}$1
+            ;;
+    esac
+    shift
+  done
+  echo $path${after:+':'}$after
+}
+
+buildcpluspath() {
+  local path after
+  while (( $# )); do
+    case $1 in
         -isystem|-cxx-isystem)
             shift
             path=$path${path:+':'}$1
@@ -29,12 +47,12 @@ for arg in "$@"; do
 done
 
 if [ "$extendcpath" = true ]; then
-  export CPATH=${CPATH}${CPATH:+':'}$(buildcpath ${NIX_CFLAGS_COMPILE} \
-                                                 $(<@clang@/nix-support/libc-cflags))
+  export C_INCLUDE_PATH=${CPATH}${CPATH:+':'}$(buildcpath ${NIX_CFLAGS_COMPILE} \
+                                                          $(<@clang@/nix-support/libc-cflags))
 
-  export CPLUS_INCLUDE_PATH=${CPLUS_INCLUDE_PATH}${CPLUS_INCLUDE_PATH:+':'}$(buildcpath ${NIX_CFLAGS_COMPILE} \
-                                                                                        $(<@clang@/nix-support/libcxx-cxxflags) \
-                                                                                        $(<@clang@/nix-support/libc-cflags))
+  export CPLUS_INCLUDE_PATH=${CPLUS_INCLUDE_PATH}${CPLUS_INCLUDE_PATH:+':'}$(buildcpluspath ${NIX_CFLAGS_COMPILE} \
+                                                                                            $(<@clang@/nix-support/libcxx-cxxflags) \
+                                                                                            $(<@clang@/nix-support/libc-cflags))
 fi
 
 @out@/bin/$(basename $0)-unwrapped "$@"

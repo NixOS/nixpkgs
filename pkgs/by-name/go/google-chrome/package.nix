@@ -94,8 +94,13 @@
   addDriverRunpath,
   undmg,
 
-  # For QT support
+  # Enables Chrome's "Use QT" appearance to introspect the user's Plasma theme
+  plasmaSupport ? false,
   qt6,
+  kdePackages,
+
+  # Create a symlink at $out/bin/google-chrome
+  withSymlink ? true,
 }:
 
 let
@@ -164,17 +169,21 @@ let
   ++ [
     gtk3
     gtk4
+  ]
+  ++ lib.optionals plasmaSupport [
     qt6.qtbase
     qt6.qtwayland
+    kdePackages.plasma-integration
+    kdePackages.breeze
   ];
 
   linux = stdenvNoCC.mkDerivation (finalAttrs: {
     inherit pname meta passthru;
-    version = "144.0.7559.96";
+    version = "144.0.7559.109";
 
     src = fetchurl {
       url = "https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${finalAttrs.version}-1_amd64.deb";
-      hash = "sha256-tPM+bbT3AreOPZdeHfO2ktBXvFGicH1+oz/a2R+MbEE=";
+      hash = "sha256-O3fFCcSghHor8UaqvUCn/GDqKD+8SCrXT6FEnWh9QUc=";
     };
 
     # With strictDeps on, some shebangs were not being patched correctly
@@ -246,9 +255,13 @@ let
 
       # "--simulate-outdated-no-au" disables auto updates and browser outdated popup
       makeWrapper "$out/share/google/$appname/google-$appname" "$exe" \
-        --prefix QT_PLUGIN_PATH  : "${qt6.qtbase}/lib/qt-6/plugins" \
-        --prefix QT_PLUGIN_PATH  : "${qt6.qtwayland}/lib/qt-6/plugins" \
-        --prefix NIXPKGS_QT6_QML_IMPORT_PATH : "${qt6.qtwayland}/lib/qt-6/qml" \
+        ${lib.optionalString plasmaSupport ''
+          --prefix QT_PLUGIN_PATH  : "${qt6.qtbase}/lib/qt-6/plugins" \
+          --prefix QT_PLUGIN_PATH  : "${qt6.qtwayland}/lib/qt-6/plugins" \
+          --prefix QT_PLUGIN_PATH  : "${kdePackages.plasma-integration}/lib/qt-6/plugins" \
+          --prefix QT_PLUGIN_PATH  : "${kdePackages.breeze}/lib/qt-6/plugins" \
+          --prefix NIXPKGS_QT6_QML_IMPORT_PATH : "${qt6.qtwayland}/lib/qt-6/qml" \
+        ''} \
         --prefix LD_LIBRARY_PATH : "$rpath" \
         --prefix PATH            : "$binpath" \
         --suffix PATH            : "${lib.makeBinPath [ xdg-utils ]}" \
@@ -267,6 +280,10 @@ let
       done
 
       runHook postInstall
+    '';
+
+    postInstall = lib.optionalString withSymlink ''
+      ln -s $out/bin/google-chrome-stable $out/bin/google-chrome
     '';
   });
 
@@ -305,6 +322,10 @@ let
         --add-flags ${lib.escapeShellArg commandLineArgs}
       runHook postInstall
     '';
+
+    postInstall = lib.optionalString withSymlink ''
+      ln -s $out/bin/google-chrome-stable $out/bin/google-chrome
+    '';
   });
 
   passthru.updateScript = ./update.sh;
@@ -315,7 +336,7 @@ let
     homepage = "https://www.google.com/chrome/browser/";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
-      johnrtitor
+      iedame
       mdaniels5757
     ];
     platforms = lib.platforms.darwin ++ [ "x86_64-linux" ];

@@ -3,7 +3,14 @@
   fetchFromGitHub,
   lib,
   pkg-config,
-  xorg,
+  libxt,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxfixes,
+  libxext,
+  libx11,
+  xorgproto,
   cairo,
   wayland,
   wayland-protocols,
@@ -31,14 +38,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     cairo
-    xorg.libX11
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXi
-    xorg.libXinerama
-    xorg.libXrandr
-    xorg.libXt
-    xorg.xorgproto
+    libx11
+    libxext
+    libxfixes
+    libxi
+    libxinerama
+    libxrandr
+    libxt
+    xorgproto
     wayland
     wayland-protocols
     libconfig

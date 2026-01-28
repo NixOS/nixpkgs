@@ -3,7 +3,11 @@
   stdenv,
   requireFile,
   dpkg,
-  xorg,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxcursor,
+  libx11,
   libGL,
   alsa-lib,
   pulseaudio,
@@ -39,11 +43,11 @@ stdenv.mkDerivation rec {
   preFixup =
     let
       libPath = lib.makeLibraryPath [
-        xorg.libXcursor
-        xorg.libXinerama
-        xorg.libXrandr
-        xorg.libX11
-        xorg.libXi
+        libxcursor
+        libxinerama
+        libxrandr
+        libx11
+        libxi
         libGL
         alsa-lib
         pulseaudio

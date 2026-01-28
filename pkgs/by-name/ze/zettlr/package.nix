@@ -3,16 +3,17 @@
   lib,
   fetchurl,
   makeWrapper,
+  nix-update-script,
 }:
 
 # Based on https://gist.github.com/msteen/96cb7df66a359b827497c5269ccbbf94 and joplin-desktop nixpkgs.
 let
   pname = "zettlr";
-  version = "3.4.4";
+  version = "4.1.0";
 
   src = fetchurl {
     url = "https://github.com/Zettlr/Zettlr/releases/download/v${version}/Zettlr-${version}-x86_64.appimage";
-    hash = "sha256-ApgmHl9WoAmWl03tqv01D0W8orja25f7KZUFLhlZloQ=";
+    hash = "sha256-/6x2HhwW0+A7/CYC+HUCsJ2u1tp4zno6XjpvBLogUKU=";
   };
   appimageContents = appimageTools.extractType2 {
     inherit pname version src;
@@ -37,10 +38,13 @@ appimageTools.wrapType2 rec {
       --replace-fail 'Exec=AppRun' 'Exec=${pname}'
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Markdown editor for writing academic texts and taking notes";
     homepage = "https://www.zettlr.com";
     platforms = [ "x86_64-linux" ];
+    maintainers = with lib.maintainers; [ maj0e ];
     license = lib.licenses.gpl3;
     mainProgram = "zettlr";
   };

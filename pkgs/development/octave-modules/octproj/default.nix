@@ -11,7 +11,7 @@ buildOctavePackage rec {
 
   src = fetchFromBitbucket {
     owner = "jgpallero";
-    repo = pname;
+    repo = "octproj";
     rev = "OctPROJ-${version}";
     sha256 = "sha256-d/Zf172Etj+GA0cnGsQaKMjOmirE7Hwyj4UECpg7QFM=";
   };

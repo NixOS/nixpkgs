@@ -38,7 +38,7 @@ in
         Whether interactive shells should show which Nix package (if
         any) provides a missing command.
 
-        Requires nix-channels to be set and downloaded (sudo nix-channels --update.)
+        Requires nix-channels to be set and downloaded (sudo nix-channel --update.)
 
         See also nix-index and nix-index-database as an alternative for flakes-based systems.
 

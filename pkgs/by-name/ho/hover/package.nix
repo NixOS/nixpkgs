@@ -7,7 +7,16 @@
   pkg-config,
   fetchFromGitHub,
   roboto,
-  xorg,
+  libxxf86vm,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxfixes,
+  libxext,
+  libxcursor,
+  libx11,
+  xorgproto,
   libglvnd,
   addDriverRunpath,
   makeWrapper,
@@ -20,16 +29,16 @@ let
   pname = "hover";
   version = "0.47.2";
 
-  libs = with xorg; [
-    libX11.dev
-    libXcursor.dev
-    libXext.dev
-    libXi.dev
-    libXinerama.dev
-    libXrandr.dev
-    libXrender.dev
-    libXfixes.dev
-    libXxf86vm
+  libs = [
+    libx11.dev
+    libxcursor.dev
+    libxext.dev
+    libxi.dev
+    libxinerama.dev
+    libxrandr.dev
+    libxrender.dev
+    libxfixes.dev
+    libxxf86vm
     libglvnd.dev
     xorgproto
   ];

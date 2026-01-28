@@ -206,14 +206,13 @@ let
 in
 utils
 // {
-  coreboot-utils =
-    (buildEnv {
-      name = "coreboot-utils-${version}";
-      paths = lib.filter (lib.meta.availableOn stdenv.hostPlatform) (lib.attrValues utils);
-      postBuild = "rm -rf $out/sbin";
-    })
-    // {
+  coreboot-utils = (
+    buildEnv {
+      pname = "coreboot-utils";
       inherit version;
       meta = commonMeta;
-    };
+      paths = lib.filter (lib.meta.availableOn stdenv.hostPlatform) (lib.attrValues utils);
+      postBuild = "rm -rf $out/sbin";
+    }
+  );
 }
