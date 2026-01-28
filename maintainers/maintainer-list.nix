@@ -15373,6 +15373,12 @@
     githubId = 8555953;
     name = "Laure Tavard";
   };
+  ltpie123 = {
+    email = "ltpie12345+github@gmail.com";
+    github = "ltpie123";
+    githubId = 112160364;
+    name = "eli n chokier";
+  };
   ltrump = {
     email = "ltrump@163.com";
     github = "L-Trump";
