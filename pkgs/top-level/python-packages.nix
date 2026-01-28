@@ -6173,7 +6173,7 @@ self: super: with self; {
 
   git-find-repos = callPackage ../development/python-modules/git-find-repos { };
 
-  git-revise = callPackage ../development/python-modules/git-revise { };
+  git-revise = callPackage ../by-name/gi/git-revise/unwrapped.nix { };
 
   git-sweep = callPackage ../development/python-modules/git-sweep { };
 
