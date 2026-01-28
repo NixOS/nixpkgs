@@ -11,14 +11,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "maestral-qt";
-  version = "1.9.5";
+  version = "1.9.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = "maestral-qt";
     tag = "v${version}";
-    hash = "sha256-FCn9ELbodk+zCJNmlOVoxE/KSSqbxy5HTB1vpiu7AJA=";
+    hash = "sha256-YGEZdvQaS/jquZPcGdREwOuSYVRorAijHGKDOJEgECo=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
