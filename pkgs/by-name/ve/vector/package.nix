@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  installShellFiles,
   rustPlatform,
   pkg-config,
   openssl,
@@ -43,6 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     perl
     git
     rustPlatform.bindgenHook
+    installShellFiles
   ]
   # Provides the mig command used by the build scripts
   ++ lib.optional stdenv.hostPlatform.isDarwin darwin.bootstrap_cmds;
@@ -114,6 +116,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postPatch = ''
     substituteInPlace ./src/dns.rs \
       --replace-fail "#[tokio::test]" ""
+  '';
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    for shell in bash fish zsh; do
+      installShellCompletion --cmd vector --$shell <($out/bin/vector completion $shell)
+    done
   '';
 
   nativeInstallCheckInputs = [
