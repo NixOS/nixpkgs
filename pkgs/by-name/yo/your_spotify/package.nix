@@ -82,7 +82,10 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/Yooooomi/your_spotify/releases/tag/${finalAttrs.version}";
     description = "Self-hosted application that tracks what you listen and offers you a dashboard to explore statistics about it";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ patrickdag ];
+    maintainers = with lib.maintainers; [
+      patrickdag
+      miniharinn
+    ];
     mainProgram = "your_spotify_server";
   };
 })
