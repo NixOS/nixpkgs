@@ -26,6 +26,8 @@
   yarn-berry_4,
   runCommand,
 
+  wrapGAppsHook3,
+
   swift,
 
   mesa,
@@ -141,6 +143,8 @@ python3Packages.buildPythonApplication rec {
     rustPlatform.cargoSetupHook
     writableTmpDirAsHomeHook
     yarn-berry_4.yarnBerryConfigHook
+
+    wrapGAppsHook3
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin swift;
 
@@ -149,6 +153,8 @@ python3Packages.buildPythonApplication rec {
     qt6.qtsvg
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux qt6.qtwayland;
+
+  dontWrapGApps = true;
 
   nativeCheckInputs = with python3Packages; [
     pytest
@@ -277,6 +283,7 @@ python3Packages.buildPythonApplication rec {
 
   preFixup = ''
     makeWrapperArgs+=(
+      "''${gappsWrapperArgs[@]}"
       "''${qtWrapperArgs[@]}"
       --prefix PATH ':' "${lame}/bin:${mpv-unwrapped}/bin"
       --prefix PYTHONPATH ':' "$lib/${python3.sitePackages}"
