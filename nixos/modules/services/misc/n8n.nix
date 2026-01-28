@@ -80,6 +80,13 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    # workaround for CVE-2026-0863
+    # https://github.com/NixOS/nixpkgs/pull/477422
+    services.n8n.environment = {
+      N8N_RUNNERS_ENABLED = "true";
+      N8N_NATIVE_PYTHON_RUNNER = "true";
+    };
+
     systemd.services.n8n = {
       description = "n8n service";
       after = [ "network.target" ];
