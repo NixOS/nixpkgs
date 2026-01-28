@@ -12,14 +12,14 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "commitizen";
-  version = "4.11.6";
+  version = "4.12.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "commitizen-tools";
     repo = "commitizen";
     tag = "v${version}";
-    hash = "sha256-7KF7qzBWF8OQLHxXYWHI+zcjBWV7KogMr0FYhitPSTw=";
+    hash = "sha256-s9sbI6M/8sCUz7a/POQRFmPeqK+7rTZnXGN7ucT+iOY=";
   };
 
   postPatch = ''
