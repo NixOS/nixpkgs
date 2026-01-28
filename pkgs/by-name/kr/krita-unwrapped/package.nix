@@ -15,6 +15,7 @@
   gsl,
   ilmbase,
   immer,
+  kdePackages,
   kseexpr,
   lager,
   lcms2,
@@ -34,6 +35,7 @@
   python3Packages,
   xsimd,
   zug,
+  isQt6 ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -59,7 +61,7 @@ stdenv.mkDerivation rec {
     extra-cmake-modules
     pkg-config
     python3Packages.sip
-    libsForQt5.wrapQtAppsHook
+    (if isQt6 then kdePackages else libsForQt5).wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -75,7 +77,6 @@ stdenv.mkDerivation rec {
     lager
     libaom
     libheif
-
     giflib
     libjxl
     openjpeg
@@ -84,15 +85,13 @@ stdenv.mkDerivation rec {
     curl
     ilmbase
     immer
-    kseexpr
     libmypaint
     libunibreak
     libwebp
     SDL2
     zug
-    python3Packages.pyqt5
   ]
-  ++ (with libsForQt5; [
+  ++ (with (if isQt6 then kdePackages else libsForQt5); [
     breeze-icons
     karchive
     kcompletion
@@ -109,11 +108,16 @@ stdenv.mkDerivation rec {
     mlt
     poppler
     qtmultimedia
-    qtx11extras
     quazip
-
-    # TODO: reenable libkdcraw when migrating to Qt6, see #430298
-    # libkdcraw
+  ])
+  ++ (lib.optionals isQt6 [
+    kdePackages.libkdcraw # qt5 version has been removed from nixpkgs
+    python3Packages.pyqt6
+  ])
+  ++ (lib.optionals (!isQt6) [
+    libsForQt5.qtx11extras # qt5 only
+    kseexpr # qt6 version not available in nixpkgs yet
+    python3Packages.pyqt5
   ]);
 
   env.NIX_CFLAGS_COMPILE = toString (lib.optional stdenv.cc.isGNU "-Wno-deprecated-copy");
@@ -142,11 +146,18 @@ stdenv.mkDerivation rec {
 
   cmakeBuildType = "RelWithDebInfo";
 
-  cmakeFlags = [
-    "-DPYQT5_SIP_DIR=${python3Packages.pyqt5}/${python3Packages.python.sitePackages}/PyQt5/bindings"
-    "-DPYQT_SIP_DIR_OVERRIDE=${python3Packages.pyqt5}/${python3Packages.python.sitePackages}/PyQt5/bindings"
-    "-DBUILD_KRITA_QT_DESIGNER_PLUGINS=ON"
-  ];
+  cmakeFlags =
+    if isQt6 then
+      [
+        "-DBUILD_WITH_QT6=ON"
+        "-DBUILD_KRITA_QT_DESIGNER_PLUGINS=OFF" # Does not support qt6 build yet
+      ]
+    else
+      [
+        "-DPYQT5_SIP_DIR=${python3Packages.pyqt5}/${python3Packages.python.sitePackages}/PyQt5/bindings"
+        "-DPYQT_SIP_DIR_OVERRIDE=${python3Packages.pyqt5}/${python3Packages.python.sitePackages}/PyQt5/bindings"
+        "-DBUILD_KRITA_QT_DESIGNER_PLUGINS=ON"
+      ];
 
   meta = {
     description = "Free and open source painting application";
