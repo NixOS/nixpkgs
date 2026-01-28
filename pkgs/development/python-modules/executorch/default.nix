@@ -49,7 +49,7 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "executorch";
-  version = "1.0.1";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -62,7 +62,7 @@ buildPythonPackage (finalAttrs: {
     name = "executorch";
 
     fetchSubmodules = true;
-    hash = "sha256-h+nmipFDO/cdPTQXrjM5EkH//wHKBAvlDIp6SBbGN/8=";
+    hash = "sha256-bXficeXcpKcWbaSHpxSrpWbgP8Xs/mPZjn1pIw/dL4U=";
   };
 
   postPatch =
@@ -95,6 +95,7 @@ buildPythonPackage (finalAttrs: {
           'static char hexdigits[17] = "0123456789ABCDEF";'
 
       sed -i "1i #include <cstdint>" backends/apple/coreml/runtime/inmemoryfs/memory_buffer.hpp
+      sed -i "1i #include <cstdint>" extension/llm/tokenizers/third-party/sentencepiece/src/sentencepiece_processor.h
     '';
 
   env = {
