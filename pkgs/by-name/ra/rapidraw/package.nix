@@ -125,6 +125,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail 'if !is_valid' 'if false'
   '';
 
+  # Fix dyld error about onnxruntime not being loaded on darwin during cargo test
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export DYLD_LIBRARY_PATH="${onnxruntime}/lib:$DYLD_LIBRARY_PATH"
+  '';
+
   dontWrapGApps = true;
 
   # needs to be declared twice annoyingly
