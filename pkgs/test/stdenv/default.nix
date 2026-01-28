@@ -9,9 +9,10 @@
 }:
 
 let
-  # tests can be based on builtins.derivation and bootstrapTools directly to minimize rebuilds
+  # tests can be based on builtins.derivation and stage0 or bootstrapTools directly to minimize rebuilds
   # see test 'make-symlinks-relative' in ./hooks.nix as an example.
-  bootstrapTools = stdenv.bootstrapTools;
+  initialBash = if stdenv ? stage0 then stdenv.stage0.bash else stdenv.bootstrapTools;
+  initialPath = if stdenv ? stage0 then stdenv.stage0.initialPath else [ stdenv.bootstrapTools ];
   # early enough not to rebuild gcc but late enough to have patchelf
   earlyPkgs = stdenv.__bootPackages.stdenv.__bootPackages or pkgs;
   earlierPkgs =
@@ -243,7 +244,7 @@ in
     import ./hooks.nix {
       stdenv = bootStdenv;
       pkgs = earlyPkgs;
-      inherit bootstrapTools lib;
+      inherit initialPath initialBash lib;
     }
   );
 
@@ -458,10 +459,9 @@ in
     derivation {
       name = "ensure-no-execve-in-setup-sh";
       inherit (stdenv.hostPlatform) system;
-      builder = "${stdenv.bootstrapTools}/bin/bash";
-      PATH = "${pkgs.strace}/bin:${stdenv.bootstrapTools}/bin";
-      initialPath = [
-        stdenv.bootstrapTools
+      builder = "${initialBash}/bin/bash";
+      PATH = "${pkgs.strace}/bin:${lib.strings.makeSearchPath "bin" initialPath}";
+      initialPath = initialPath ++ [
         pkgs.strace
       ];
       args = [
@@ -504,7 +504,7 @@ in
       import ./hooks.nix {
         stdenv = bootStdenvStructuredAttrsByDefault;
         pkgs = earlyPkgs;
-        inherit bootstrapTools lib;
+        inherit initialBash initialPath lib;
       }
     );
 
