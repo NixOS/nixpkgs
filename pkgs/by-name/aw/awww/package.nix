@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromGitHub,
+  fetchFromGitea,
   rustPlatform,
   pkg-config,
   lz4,
@@ -14,12 +14,13 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
-  pname = "swww";
+  pname = "awww";
   version = "0.11.2";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitea {
+    domain = "codeberg.org";
     owner = "LGFae";
-    repo = "swww";
+    repo = "awww";
     tag = "v${finalAttrs.version}";
     hash = "sha256-X2ptpXRo6ps5RxDe5RS7qfTaHWqBbBNw/aSdC2tzUG8=";
   };
@@ -64,7 +65,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Efficient animated wallpaper daemon for wayland, controlled at runtime";
-    homepage = "https://github.com/LGFae/swww";
+    homepage = "https://codeberg.org/LGFae/awww";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [
       mateodd25
