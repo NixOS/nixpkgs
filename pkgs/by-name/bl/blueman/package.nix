@@ -89,8 +89,8 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     # This mimics ../../../development/interpreters/python/wrap.sh
-    wrapPythonProgramsIn "$out/bin" "$out $pythonPath"
-    wrapPythonProgramsIn "$out/libexec" "$out $pythonPath"
+    wrapPythonProgramsIn "$out/bin" "$out ''${pythonPath[*]}"
+    wrapPythonProgramsIn "$out/libexec" "$out ''${pythonPath[*]}"
   '';
 
   meta = {
