@@ -1001,3 +1001,24 @@ fetchtorrent {
 
 - `config`: When using `transmission` as the `backend`, a json configuration can
   be supplied to transmission. Refer to the [upstream documentation](https://github.com/transmission/transmission/blob/main/docs/Editing-Configuration-Files.md) for information on how to configure.
+
+## `fetchItchIo` {#fetchitchio}
+
+`fetchItchIo` is a fetcher for downloading game assets from [itch.io](https://itch.io/). It requires an `upload` argument, which is the numerical ID of the asset to download, and a `hash` argument for the expected hash of the downloaded file. For this fetcher to work, the environment variable `NIXPKGS_ITCHIO_API_KEY` must be set, and it must belong to an account that has bought the asset to be downloaded if the asset is behind a paywall. Optionally, a `gameUrl` argument can be provided for a better error message when the API key is not provided, and an `extraMessage` argument can be provided to further show more texts in the error message.
+
+To get your API key, go to the ["API key" section](https://itch.io/user/settings/api-keys) of your account settings on itch.io. To find the upload ID of an asset, check the basename of the request URL when you download the asset using a browser.
+
+:::{.note}
+The API key will be printed in the build log. Take care to avoid leaking your API key.
+:::
+
+```nix
+{ fetchItchIo }:
+
+fetchItchIo {
+  name = "DungeonDuelMonsters-linux-x64.zip";
+  hash = "sha256-gq2nGwpaStqaVI1pL63xygxOI/z53o+zLwiKizG98Ks=";
+  gameUrl = "https://mikaygo.itch.io/ddm";
+  upload = "13371354";
+}
+```
