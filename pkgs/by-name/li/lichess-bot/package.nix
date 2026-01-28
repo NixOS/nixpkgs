@@ -32,11 +32,6 @@ python3Packages.buildPythonApplication {
   installPhase = ''
     runHook preInstall
 
-    substituteInPlace "lib/lichess_bot.py" \
-      --replace 'open("lib/versioning.yml")' \
-                'open("'$out'/share/lichess-bot/lib/versioning.yml")'
-
-
     mkdir -p "$out"/{bin,share/lichess-bot}
     cp -R . $out/share/lichess-bot
 
