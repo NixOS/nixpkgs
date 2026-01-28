@@ -90,12 +90,9 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r ${finalAttrs.finalPackage.mavenDeps}/* .m2/repository/
     chmod -R +w .m2/repository
 
-    # Copy SWT jar to a fixed location to avoid path dependencies
-    cp ${swt}/jars/swt.jar swt-4.36.jar
-
     # Install SWT jar into our mutable repository
     mvn install:install-file \
-      -Dfile=$(pwd)/swt-4.36.jar \
+      -Dfile=${swt}/jars/swt.jar \
       -DgroupId=org.eclipse.swt \
       -DartifactId=${finalAttrs.finalPackage.passthru.swtArtifactId} \
       -Dpackaging=jar \
@@ -230,12 +227,8 @@ stdenv.mkDerivation (finalAttrs: {
         # Use a temporary local repository
         mkdir -p .m2/repository
 
-        # Copy SWT jar to a fixed location to avoid path dependencies
-        cp ${swt}/jars/swt.jar swt-4.36.jar
-
-        # Install SWT jar from fixed location
         mvn install:install-file \
-          -Dfile=$(pwd)/swt-4.36.jar \
+          -Dfile=${swt}/jars/swt.jar \
           -DgroupId=org.eclipse.swt \
           -DartifactId=${finalAttrs.finalPackage.passthru.swtArtifactId} \
           -Dpackaging=jar \
