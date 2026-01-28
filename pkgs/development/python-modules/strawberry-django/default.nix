@@ -4,8 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
-  setuptools,
+  hatchling,
 
   # dependencies
   asgiref,
@@ -51,8 +50,7 @@ buildPythonPackage rec {
   '';
 
   build-system = [
-    poetry-core
-    setuptools
+    hatchling
   ];
 
   dependencies = [
