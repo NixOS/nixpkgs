@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch2,
+  pythonAtLeast,
 
   # build-system
   hatchling,
