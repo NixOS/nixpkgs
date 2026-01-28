@@ -13,7 +13,9 @@ let
   tag = "stable_20250916";
   hash = "sha256-HG8Oc04V2t54l0SOn4gKmNJWQUrZfjWusgKcWvx74H0==";
 in
-lib.overrideDerivation
+lib.warn
+  "linux-rpi series will be removed in a future release. Please change to use nixos-hardware."
+  lib.overrideDerivation
   (buildLinux (
     args
     // {
