@@ -9,6 +9,7 @@
   libxcrypt,
   openssl,
   pam,
+  versionCheckHook,
   withPam ? true,
 }:
 
@@ -62,6 +63,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   enableParallelBuilding = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Middleware that works between PostgreSQL servers and PostgreSQL clients";
