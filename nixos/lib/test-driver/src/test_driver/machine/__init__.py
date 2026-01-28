@@ -581,10 +581,8 @@ class BaseMachine(ABC):
 
     def cleanup_statedir(self) -> None:
         shutil.rmtree(self.state_dir)
-        self.logger.log(f"deleting machine state directory {self.state_dir}")
-        self.logger.log(
-            "if you want to keep the machine state, pass --keep-machine-state"
-        )
+        self.log(f"deleting machine state directory {self.state_dir}")
+        self.log("if you want to keep the machine state, pass --keep-machine-state")
 
     def copy_from_machine(self, source: str, target_dir: str = "") -> None:
         """Copy a file from the machine (specified by an in-machine source path) to a path
@@ -1443,7 +1441,7 @@ class NspawnMachine(BaseMachine):
         systemd_nspawn_pid = None
         for line_bytes in self.process.stdout:
             line = line_bytes.decode()
-            print(line, end="")
+            self.log(line.rstrip())
 
             systemd_nspawn_pid_prefix = "systemd-nspawn's PID is "
             if line.startswith(systemd_nspawn_pid_prefix):
