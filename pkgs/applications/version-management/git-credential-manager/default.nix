@@ -15,13 +15,13 @@
 
 buildDotnetModule rec {
   pname = "git-credential-manager";
-  version = "2.6.1";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "git-ecosystem";
     repo = "git-credential-manager";
     rev = "v${version}";
-    hash = "sha256-fzcGAcKOAEnBiAEYYyxKJ71xnixb5cz7FzR28/cKIFg=";
+    hash = "sha256-8QlPAoCdA3+8CWER+sqT/ZGaS4UNFSW/R3E05BBD0WE=";
   };
 
   projectFile = "src/shared/Git-Credential-Manager/Git-Credential-Manager.csproj";
