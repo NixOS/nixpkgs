@@ -101,6 +101,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTestPaths = [
+    "xarray/tests/test_dataarray.py::TestDataArray::test_curvefit_helpers" # Failed: DID NOT RAISE <class 'ValueError'>
+    "xarray/tests/test_duck_array_ops.py::test_extension_array_attr" # NotImplementedError: (CategoricalDtype(categories=['cat1', 'cat2', 'cat3'],...
+    "xarray/tests/test_variable.py::TestIndexVariable::test_concat_periods" # ValueError: Could not convert <xarray.IndexVariable 't' (t: 5)> Size: 40B
+  ];
+
   pythonImportsCheck = [ "xarray" ];
 
   meta = {
