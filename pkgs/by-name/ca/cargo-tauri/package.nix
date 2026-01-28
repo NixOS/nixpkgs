@@ -39,7 +39,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       zstd
     ];
 
-  cargoBuildFlags = [ "--package tauri-cli" ];
+  cargoBuildFlags = [
+    "--package"
+    "tauri-cli"
+  ];
   cargoTestFlags = finalAttrs.cargoBuildFlags;
 
   env = lib.optionalAttrs stdenv.hostPlatform.isLinux {
