@@ -2,26 +2,59 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  stdenv,
+  enableWayland ? true,
+  enableX11 ? false,
 }:
 
-buildGoModule rec {
+let
   pname = "clipse";
-  version = "1.1.0";
+  version = "1.2.1";
 
-  src = fetchFromGitHub {
-    owner = "savedra1";
-    repo = "clipse";
-    rev = "v${version}";
-    hash = "sha256-yUkHT7SZT7Eudvk1n43V+WGWqUKtXaV+p4ySMK/XzQw=";
-  };
+  tags =
+    if stdenv.hostPlatform.isDarwin then
+      [ "darwin" ]
+    else if enableWayland then
+      [ "wayland" ]
+    else if enableX11 then
+      [ "linux" ]
+    else
+      [ ];
 
-  vendorHash = "sha256-+9uoB/1g4qucdM8RJRs+fSc5hpcgaCK0GrUOFgHWeKo=";
+  cgoEnabled = enableX11 || stdenv.hostPlatform.isDarwin;
 
-  meta = {
-    description = "Useful clipboard manager TUI for Unix";
-    homepage = "https://github.com/savedra1/clipse";
-    license = lib.licenses.mit;
-    mainProgram = "clipse";
-    maintainers = [ lib.maintainers.savedra1 ];
-  };
-}
+  packageName = if enableX11 then "${pname}-x11" else pname;
+in
+(
+  assert lib.assertMsg (
+    stdenv.hostPlatform.isLinux -> (lib.xor enableX11 enableWayland)
+  ) "Exactly one of enableWayland, enableX11 must be true";
+
+  buildGoModule {
+    pname = packageName;
+    inherit version;
+
+    src = fetchFromGitHub {
+      owner = "savedra1";
+      repo = "clipse";
+      rev = "v${version}";
+      hash = "sha256-iDMHEhYuxspBYG54WivnVj2GfMxAc5dcrjNxtAMhsck=";
+    };
+
+    vendorHash = "sha256-rq+2UhT/kAcYMdla+Z/11ofNv2n4FLvpVgHZDe0HqX4=";
+
+    inherit tags;
+
+    env = {
+      CGO_ENABLED = if cgoEnabled then "1" else "0";
+    };
+
+    meta = {
+      description = "Useful clipboard manager TUI for Unix";
+      homepage = "https://github.com/savedra1/clipse";
+      license = lib.licenses.mit;
+      mainProgram = "clipse";
+      maintainers = [ lib.maintainers.savedra1 ];
+    };
+  }
+)
