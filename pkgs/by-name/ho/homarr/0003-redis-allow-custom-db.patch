@@ -1,0 +1,36 @@
+From f9969f5dba240ac2abefcd62a2285c6286a6b0d1 Mon Sep 17 00:00:00 2001
+From: Chris Moultrie <821688+tebriel@users.noreply.github.com>
+Date: Fri, 1 Aug 2025 23:54:08 -0400
+Subject: [PATCH] redis: allow custom db
+
+---
+ packages/core/src/infrastructure/redis/client.ts | 1 +
+ packages/core/src/infrastructure/redis/env.ts    | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/packages/core/src/infrastructure/redis/client.ts b/packages/core/src/infrastructure/redis/client.ts
+index e35ee922..5678b1c1 100644
+--- a/packages/core/src/infrastructure/redis/client.ts
++++ b/packages/core/src/infrastructure/redis/client.ts
+@@ -22,5 +22,6 @@ export const createRedisClient = () =>
+           : undefined,
+         username: redisEnv.USERNAME,
+         password: redisEnv.PASSWORD,
++        db: redisEnv.DB,
+       })
+     : new Redis(defaultRedisOptions);
+diff --git a/packages/core/src/infrastructure/redis/env.ts b/packages/core/src/infrastructure/redis/env.ts
+index f54ec128..899ce301 100644
+--- a/packages/core/src/infrastructure/redis/env.ts
++++ b/packages/core/src/infrastructure/redis/env.ts
+@@ -12,6 +12,7 @@ export const redisEnv = createEnv({
+     TLS_CA: z.string().optional(),
+     USERNAME: z.string().optional(),
+     PASSWORD: z.string().optional(),
++    DB: z.coerce.number().default(0).optional(),
+   },
+   runtimeEnv: runtimeEnvWithPrefix("REDIS_"),
+ });
+-- 
+2.49.0
+
