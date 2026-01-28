@@ -99,6 +99,11 @@ cat >"$(dirname "$pkgpath")"/deps.nix <<EOF
     url = "$(evalvar NGHTTP3_URL "$vars")";
     hash = "$(narhash "$(evalvar NGHTTP3_URL "$vars")")";
   };
+
+  "c-ares-$(getvar CARES_VERSION "$vars").tar.gz" = fetchurl {
+    url = "$(evalvar CARES_URL "$vars")";
+    hash = "$(narhash "$(evalvar CARES_URL "$vars")")";
+  };
 }
 EOF
 
