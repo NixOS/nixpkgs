@@ -10,10 +10,10 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uefitool";
-  version = "A72";
+  version = "A73";
 
   src = fetchFromGitHub {
-    hash = "sha256-sVosxqUUvkZwJIY9FZ9N6xoDyBpSgTLFUmD4B9ymTHs=";
+    hash = "sha256-XZGddj0i/r1rqntEcqU2AK6ihvqwN031TR12qmEmKLk=";
     owner = "LongSoft";
     repo = "uefitool";
     tag = finalAttrs.version;
