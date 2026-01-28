@@ -836,6 +836,7 @@ in
   kimai = runTest ./kimai.nix;
   kismet = runTest ./kismet.nix;
   kmonad = runTest ./kmonad.nix;
+  kmscon = runTest ./kmscon.nix;
   knot = runTest ./knot.nix;
   komga = runTest ./komga.nix;
   komodo-periphery = runTest ./komodo-periphery.nix;
