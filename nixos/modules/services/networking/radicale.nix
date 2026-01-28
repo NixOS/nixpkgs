@@ -26,6 +26,9 @@ let
 
   bindLocalhost = cfg.settings != { } && !hasAttrByPath [ "server" "hosts" ] cfg.settings;
 
+  storageSet =
+    (hasAttrByPath [ "storage" "filesystem_folder" ] cfg.settings)
+    && cfg.settings.storage.filesystem_folder != "/var/lib/radicale/collections";
 in
 {
   options.services.radicale = {
@@ -108,6 +111,18 @@ in
       default = [ ];
       description = "Extra arguments passed to the Radicale daemon.";
     };
+
+    user = mkOption {
+      type = types.str;
+      default = "radicale";
+      description = "User account under which Radicale runs.";
+    };
+
+    group = mkOption {
+      type = types.str;
+      default = "radicale";
+      description = "Group under which Radicale runs.";
+    };
   };
 
   config = mkIf cfg.enable {
@@ -155,12 +170,16 @@ in
 
     environment.systemPackages = [ pkg ];
 
-    users.users.radicale = {
-      isSystemUser = true;
-      group = "radicale";
+    users.users = mkIf (cfg.user == "radicale") {
+      radicale = {
+        group = cfg.group;
+        isSystemUser = true;
+      };
     };
 
-    users.groups.radicale = { };
+    users.groups = mkIf (cfg.group == "radicale") {
+      radicale = { };
+    };
 
     systemd.services.radicale = {
       description = "A Simple Calendar and Contact Server";
@@ -176,10 +195,10 @@ in
           ]
           ++ (map escapeShellArg cfg.extraArgs)
         );
-        User = "radicale";
-        Group = "radicale";
-        StateDirectory = "radicale/collections";
-        StateDirectoryMode = "0750";
+        User = cfg.user;
+        Group = cfg.group;
+        StateDirectory = lib.mkIf (!storageSet) "radicale/collections";
+        StateDirectoryMode = lib.mkIf (!storageSet) "0750";
         # Hardening
         CapabilityBoundingSet = [ "" ];
         DeviceAllow = [
@@ -205,10 +224,7 @@ in
         ProtectKernelTunables = true;
         ProtectProc = "invisible";
         ProtectSystem = "strict";
-        ReadWritePaths = lib.optional (hasAttrByPath [
-          "storage"
-          "filesystem_folder"
-        ] cfg.settings) cfg.settings.storage.filesystem_folder;
+        ReadWritePaths = lib.optional storageSet cfg.settings.storage.filesystem_folder;
         RemoveIPC = true;
         RestrictAddressFamilies = [
           "AF_INET"
@@ -225,7 +241,8 @@ in
           "~@resources"
         ];
         UMask = "0027";
-        WorkingDirectory = "/var/lib/radicale";
+        WorkingDirectory =
+          if storageSet then cfg.settings.storage.filesystem_folder else "/var/lib/radicale";
       };
     };
   };
