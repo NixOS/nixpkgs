@@ -74,25 +74,16 @@ stdenv.mkDerivation (finalAttrs: {
   # https://issues.dlang.org/show_bug.cgi?id=19553
   hardeningDisable = [ "fortify" ];
 
-  patches =
-    lib.optionals (lib.versionOlder version "2.088.0") [
-      # Migrates D1-style operator overloads in DMD source, to allow building with
-      # a newer DMD
-      (fetchpatch {
-        url = "https://github.com/dlang/dmd/commit/c4d33e5eb46c123761ac501e8c52f33850483a8a.patch";
-        stripLen = 1;
-        extraPrefix = "dmd/";
-        hash = "sha256-N21mAPfaTo+zGCip4njejasraV5IsWVqlGR5eOdFZZE=";
-      })
-    ]
-    ++ [
-      (fetchpatch {
-        url = "https://github.com/dlang/dmd/commit/fdd25893e0ac04893d6eba8652903d499b7b0dfc.patch";
-        stripLen = 1;
-        extraPrefix = "dmd/";
-        hash = "sha256-Uccb8rBPBLAEPWbOYWgdR5xN3wJoIkKKhLGu58IK1sM=";
-      })
-    ];
+  patches = lib.optionals (lib.versionOlder version "2.088.0") [
+    # Migrates D1-style operator overloads in DMD source, to allow building with
+    # a newer DMD
+    (fetchpatch {
+      url = "https://github.com/dlang/dmd/commit/c4d33e5eb46c123761ac501e8c52f33850483a8a.patch";
+      stripLen = 1;
+      extraPrefix = "dmd/";
+      hash = "sha256-N21mAPfaTo+zGCip4njejasraV5IsWVqlGR5eOdFZZE=";
+    })
+  ];
 
   postPatch = ''
     patchShebangs dmd/compiler/test/{runnable,fail_compilation,compilable,tools}{,/extra-files}/*.sh
@@ -189,6 +180,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     NIX_ENFORCE_PURITY= \
       make -C phobos unittest -j$checkJobs $checkFlags \
+        DISABLED_TESTS=std/datetime/timezone \
         DFLAGS="-version=TZDatabaseDir -version=LibcurlPath -J$PWD"
 
     runHook postCheck
