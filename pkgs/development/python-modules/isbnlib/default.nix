@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   setuptools,
@@ -15,6 +16,9 @@ buildPythonPackage (finalAttrs: {
   pname = "isbnlib";
   version = "3.10.14";
   pyproject = true;
+
+  # Several tests fail and suggest that the package is incompatible with python >= 3.14
+  disabled = pythonAtLeast "3.14";
 
   src = fetchFromGitHub {
     owner = "xlcnd";
