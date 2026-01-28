@@ -57,13 +57,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "quickemu";
-  version = "4.9.7-unstable-2025-12-28";
+  version = "4.9.8";
 
   src = fetchFromGitHub {
     owner = "quickemu-project";
     repo = "quickemu";
-    rev = "7ea4e95508a7898bc63c3b5e1588066184d4c79b";
-    hash = "sha256-pj6YQc7e4I6XvGq/uGGq2z/UhAs3ZeKrsJd8oLWjauA=";
+    tag = finalAttrs.version;
+    hash = "sha256-VgMe5Xl1AxMP4dxOz2Pcirm6x1Ji1yZyo/T2kizyyMw=";
   };
 
   postPatch = ''
@@ -74,9 +74,6 @@ stdenv.mkDerivation (finalAttrs: {
       -e 's/Icon=.*qemu.svg/Icon=qemu/' \
       -e 's,\[ -x "\$(command -v smbd)" \],true,' \
       quickemu
-
-    substituteInPlace quickemu \
-      --replace-fail 'readonly VERSION="4.9.8"' 'readonly VERSION="${finalAttrs.version}"'
   '';
 
   nativeBuildInputs = [
