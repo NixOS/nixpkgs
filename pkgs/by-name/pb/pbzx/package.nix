@@ -1,37 +1,53 @@
 {
-  stdenv,
   lib,
   fetchFromGitHub,
-  xz,
+  stdenv,
   xar,
+  xz,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pbzx";
   version = "1.0.2";
+
   src = fetchFromGitHub {
     owner = "NiklasRosenstein";
     repo = "pbzx";
-    rev = "v${version}";
-    sha256 = "0bwd7wmnhpz1n5p39mh6asfyccj4cm06hwigslcwbb3pdwmvxc90";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ILG+K293rMUZ1S9yaEBlRDLmnVYG1jRuseFfaCs/jS8=";
   };
+
   patches = [ ./stdin.patch ];
+
   buildInputs = [
-    xz
     xar
+    xz
   ];
+
   buildPhase = ''
-    ${stdenv.cc.targetPrefix}cc pbzx.c -llzma -lxar -o pbzx
+    runHook preBuild
+
+    $CC pbzx.c -llzma -lxar -o pbzx
+
+    runHook postBuild
   '';
+
   installPhase = ''
-    mkdir -p $out/bin
-    cp pbzx $out/bin
+    runHook preInstall
+
+    install -Dm755 -t $out/bin pbzx
+
+    runHook postInstall
   '';
+
   meta = {
     description = "Stream parser of Apple's pbzx compression format";
-    platforms = lib.platforms.unix;
-    license = lib.licenses.gpl3;
-    maintainers = [ ];
+    homepage = "https://github.com/NiklasRosenstein/pbzx";
+    downloadPage = "https://github.com/NiklasRosenstein/pbzx/releases";
+    changelog = "https://github.com/NiklasRosenstein/pbzx/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ prince213 ];
     mainProgram = "pbzx";
+    platforms = lib.platforms.unix;
   };
-}
+})
