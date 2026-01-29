@@ -274,7 +274,7 @@ with haskellLib;
       "vector-tests-O2"
     ];
     # inspection-testing doesn't work on all archs & ABIs
-    doCheck = !self.inspection-testing.meta.broken;
+    doCheck = super.vector.doCheck && !self.inspection-testing.meta.broken;
   }) super.vector;
 
   # https://github.com/lspitzner/data-tree-print/issues/4
@@ -505,15 +505,19 @@ with haskellLib;
   jpeg-turbo = dontCheck super.jpeg-turbo;
   JuicyPixels-jpeg-turbo = dontCheck super.JuicyPixels-jpeg-turbo;
 
-  # Fixes compilation for basement on i686
-  # https://github.com/haskell-foundation/foundation/pull/573
   basement = appendPatches [
+    # Fixes compilation for basement on i686
+    # https://github.com/haskell-foundation/foundation/pull/573
     (fetchpatch {
       name = "basement-i686-ghc-9.4.patch";
       url = "https://github.com/haskell-foundation/foundation/pull/573/commits/38be2c93acb6f459d24ed6c626981c35ccf44095.patch";
       sha256 = "17kz8glfim29vyhj8idw8bdh3id5sl9zaq18zzih3schfvyjppj7";
       stripLen = 1;
     })
+
+    # Fixes compilation on windows
+    ./patches/basement-add-cast.patch
+
   ] super.basement;
 
   # Fixes compilation of memory with GHC >= 9.4 on 32bit platforms
@@ -2372,6 +2376,13 @@ with haskellLib;
   crypton-x509-validation = dontCheckIf (
     pkgs.stdenv.hostPlatform.isPower64 && pkgs.stdenv.hostPlatform.isBigEndian
   ) super.crypton-x509-validation;
+
+  crypton-x509-system = overrideCabal (drv: {
+    # Case sensitive when doing cross-compilation to windows
+    postPatch = drv.postPatch or "" + ''
+      substituteInPlace crypton-x509-system.cabal --replace-fail "Crypt32" "crypt32"
+    '';
+  }) super.crypton-x509-system;
 
   # Likely fallout from the crypton issues
   # exception: HandshakeFailed (Error_Protocol "bad PubKeyALG_Ed448 signature for ecdhparams" DecryptError)
