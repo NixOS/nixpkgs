@@ -18,10 +18,6 @@
   which,
   wrapGAppsHook3,
   nixosTests,
-  # Darwin frameworks - imported directly, only on Darwin
-  AudioUnit ? null,
-  CoreAudio ? null,
-  CoreFoundation ? null,
 }:
 
 let
@@ -126,11 +122,6 @@ maven.buildMavenPackage rec {
     libpulseaudio
     suil
     qt5.qtbase
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    AudioUnit
-    CoreAudio
-    CoreFoundation
   ];
 
   dontWrapQtApps = true;
