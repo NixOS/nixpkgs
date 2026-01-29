@@ -38,7 +38,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # valid by making a network call to the repo that houses their binaries; but, the
   # build env can't make network calls (impurity)
   cargoTestFlags = [
-    "-- --skip=latest_plugins_are_valid_versions"
+    "--"
+    "--skip=latest_plugins_are_valid_versions"
   ];
 
   # Some tests try to write configuration data to a location in the user's home

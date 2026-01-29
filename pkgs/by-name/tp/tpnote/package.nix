@@ -48,11 +48,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installManPage docs/build/man/man1/tpnote.1
   '';
 
-  RUSTONIG_SYSTEM_LIBONIG = true;
+  env.RUSTONIG_SYSTEM_LIBONIG = true;
 
   # The `tpnote` crate has no unit tests. All tests are in `tpnote-lib`.
   checkType = "debug";
-  cargoTestFlags = "--package tpnote-lib";
+  cargoTestFlags = [
+    "--package"
+    "tpnote-lib"
+  ];
   doCheck = true;
 
   nativeInstallCheckInputs = [
