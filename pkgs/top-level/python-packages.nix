@@ -814,6 +814,8 @@ self: super: with self; {
 
   apeye-core = callPackage ../development/python-modules/apeye-core { };
 
+  apiflask = callPackage ../development/python-modules/apiflask { };
+
   apipkg = callPackage ../development/python-modules/apipkg { };
 
   apischema = callPackage ../development/python-modules/apischema { };
