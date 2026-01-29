@@ -8273,6 +8273,17 @@
     githubId = 873530;
     name = "Alexey Levan";
   };
+  expede = {
+    name = "Brooklyn Zelenka";
+    github = "expede";
+    githubId = 1052016;
+    email = "hello@brooklynzelenka.com";
+    keys = [
+      {
+        fingerprint = "/4gXhDZ5t/1xfr07WJ4jJ+5k1zlESOlDO/+oCoJ1LgA";
+      }
+    ];
+  };
   exploitoverload = {
     email = "nix@exploitoverload.com";
     github = "exploitoverload";
