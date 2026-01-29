@@ -5286,6 +5286,11 @@
     githubId = 6487079;
     name = "Dane Rieber";
   };
+  conao3 = {
+    github = "conao3";
+    githubId = 4703128;
+    name = "Naoya Yamashita";
+  };
   conduktorbot = {
     email = "automation@conduktor.io";
     github = "conduktorbot";
