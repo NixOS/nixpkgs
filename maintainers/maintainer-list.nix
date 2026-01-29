@@ -3268,6 +3268,11 @@
     githubId = 7118777;
     keys = [ { fingerprint = "E9A3 7864 2165 28CE 507C  CA82 72EA BF75 C331 CD25"; } ];
   };
+  benjaminkitt = {
+    name = "Benjamin Kitt";
+    github = "benjaminkitt";
+    githubId = 113823136;
+  };
   benkuhn = {
     email = "ben@ben-kuhn.com";
     github = "ben-kuhn";
