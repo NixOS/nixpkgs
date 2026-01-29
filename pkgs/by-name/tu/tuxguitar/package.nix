@@ -131,7 +131,6 @@ maven.buildMavenPackage rec {
   installPhase = ''
     runHook preInstall
 
-    # Find the built tuxguitar directory (it's in the subdirectory where we ran maven)
     cd ${buildDir}
   ''
   # macOS: The build creates tuxguitar-VERSION-macosx-swt-cocoa.app directly
