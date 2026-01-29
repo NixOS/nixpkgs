@@ -1,50 +1,56 @@
 {
-  lib,
   buildPythonPackage,
-  fetchPypi,
   curl,
   cython,
   expat,
+  fetchFromGitHub,
+  lib,
   libpng,
+  qt6,
   setuptools,
-  stdenv,
-  fixDarwinDylibNames,
+  which,
+  zlib,
 }:
 
 buildPythonPackage rec {
   pname = "klayout";
-  version = "0.30.4.post1";
-  pyproject = true;
+  version = "0.30.5";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-jQLVD3IsekQfO0P80miKOtyTyGldc2Vn/mJFfvvgMFo=";
+  src = fetchFromGitHub {
+    owner = "KLayout";
+    repo = "klayout";
+    rev = "v${version}";
+    hash = "sha256-R41xsowPaSG2r2jiMcj0RGdxfFD8jT+atie24xxicb4=";
   };
 
-  build-system = [
-    cython
+  nativeBuildInputs = [
     setuptools
+    qt6.wrapQtAppsHook
+    which
   ];
 
   buildInputs = [
+    qt6.qtbase
+    qt6.qtsvg
+    qt6.qtmultimedia
+    libpng
     curl
     expat
-    libpng
+    zlib
   ];
 
-  # libpng-config is needed for the build on Darwin
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    libpng.dev
-    fixDarwinDylibNames
-  ];
+  preBuild = ''
+    export KLAYOUT_QT_VERSION=6
+    export HAVE_QT6=1
+    export HAVE_PNG=1
+    export HAVE_CURL=1
+    export HAVE_EXPAT=1
+    export HAVE_ZLIB=1
+  '';
 
-  # Ensure that there is enough space for the `fixDarwinDylibNames` hook to
-  # update the install names of the output dylibs.
-  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-headerpad_max_install_names";
+  format = "setuptools";
 
-  pythonImportsCheck = [ "klayout" ];
-
-  meta = {
+  meta = with lib; {
     description = "KLayout’s Python API";
     homepage = "https://github.com/KLayout/klayout";
     license = lib.licenses.gpl3Plus;
