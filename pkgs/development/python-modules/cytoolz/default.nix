@@ -1,27 +1,31 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  isPyPy,
+  fetchFromGitHub,
   pytestCheckHook,
   cython,
   setuptools,
   toolz,
   python,
-  isPy27,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cytoolz";
-  version = "1.0.1";
+  version = "1.1.0";
   pyproject = true;
 
-  disabled = isPy27 || isPyPy;
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-icwxYbieG7Ptdjb3TtLlWYT9NVFpBPyHjK4hbkKyx9Y=";
+  src = fetchFromGitHub {
+    owner = "pytoolz";
+    repo = "cytoolz";
+    tag = finalAttrs.version;
+    hash = "sha256-beOEhm7+Nq7oA7iDcdORz03D1InHmypqsYUDUXEUPC0=";
   };
+
+  postPatch = ''
+    sed -i "/setuptools-git-versioning >=/d" pyproject.toml
+    substituteInPlace pyproject.toml \
+      --replace-fail "dynamic = [\"version\"]" "version = \"${finalAttrs.version}\""
+  '';
 
   nativeBuildInputs = [
     cython
@@ -30,23 +34,17 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ toolz ];
 
-  # tests are located in cytoolz/tests, however we can't import cytoolz
-  # from $PWD, as it will break relative imports
   preCheck = ''
-    cd cytoolz
-    export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
+    cd $out/${python.sitePackages}
   '';
-
-  disabledTests = [
-    # https://github.com/pytoolz/cytoolz/issues/200
-    "test_inspect_wrapped_property"
-  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     homepage = "https://github.com/pytoolz/cytoolz/";
+    changelog = "https://github.com/pytoolz/cytoolz/releases/tag/${finalAttrs.src.tag}";
     description = "Cython implementation of Toolz: High performance functional utilities";
     license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ sarahec ];
   };
-}
+})
