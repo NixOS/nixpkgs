@@ -56,6 +56,7 @@ pkgs.lib.throwIf (args ? specialArgs)
       {
         machine ? null,
         nodes ? { },
+        containers ? { },
         testScript,
         enableOCR ? false,
         globalTimeout ? (60 * 60),

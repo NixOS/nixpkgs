@@ -14,18 +14,15 @@ let
     qemu_pkg = config.qemu.package;
     imagemagick_light = hostPkgs.imagemagick_light.override { inherit (hostPkgs) libtiff; };
     tesseract4 = hostPkgs.tesseract4.override { enableLanguages = [ "eng" ]; };
+    # We want `pkgs.systemd`, *not* `python3Packages.system`.
+    systemd = hostPkgs.systemd;
   };
 
   vlans = map (
     m: (m.virtualisation.vlans ++ (lib.mapAttrsToList (_: v: v.vlan) m.virtualisation.interfaces))
-  ) (lib.attrValues config.nodes);
+  ) ((lib.attrValues config.nodes) ++ (lib.attrValues config.containers));
   vms = map (m: m.system.build.vm) (lib.attrValues config.nodes);
-
-  nodeHostNames =
-    let
-      nodesList = map (c: c.system.name) (lib.attrValues config.nodes);
-    in
-    nodesList ++ lib.optional (lib.length nodesList == 1 && !lib.elem "machine" nodesList) "machine";
+  containers = map (m: m.system.build.nspawn) (lib.attrValues config.containers);
 
   pythonizeName =
     name:
@@ -38,8 +35,22 @@ let
 
   uniqueVlans = lib.unique (builtins.concatLists vlans);
   vlanNames = map (i: "vlan${toString i}: VLan;") uniqueVlans;
-  pythonizedNames = map pythonizeName nodeHostNames;
-  machineNames = map (name: "${name}: Machine;") pythonizedNames;
+
+  vmMachineNames = map (c: c.system.name) (lib.attrValues config.nodes);
+  containerMachineNames = map (c: c.system.name) (lib.attrValues config.containers);
+
+  theOnlyMachine =
+    let
+      exactlyOneMachine = lib.length (lib.attrValues config.nodes) == 1;
+      allMachineNames = map (c: c.system.name) (lib.attrValues config.allMachines);
+    in
+    lib.optional (exactlyOneMachine && !lib.elem "machine" allMachineNames) "machine";
+
+  pythonizedVmNames = map pythonizeName (vmMachineNames ++ theOnlyMachine);
+  vmMachineTypeHints = map (name: "${name}: QemuMachine;") pythonizedVmNames;
+
+  pythonizedContainerNames = map pythonizeName containerMachineNames;
+  containerMachineTypeHints = map (name: "${name}: NspawnMachine;") pythonizedContainerNames;
 
   withChecks = lib.warnIf config.skipLint "Linting is disabled";
 
@@ -51,7 +62,10 @@ let
           hostPkgs.makeWrapper
         ]
         ++ lib.optionals (!config.skipTypeCheck) [ hostPkgs.mypy ];
-        buildInputs = [ testDriver ];
+        buildInputs = [
+          testDriver
+          hostPkgs.socat
+        ];
         testScript = config.testScriptString;
         preferLocalBuild = true;
         passthru = config.passthru;
@@ -62,12 +76,16 @@ let
       ''
         mkdir -p $out/bin
 
-        vmStartScripts=($(for i in ${toString vms}; do echo $i/bin/run-*-vm; done))
+        vmNames=(${lib.escapeShellArgs vmMachineNames})
+        vmStartScripts=(${lib.escapeShellArgs (map lib.getExe vms)})
+        containerNames=(${lib.escapeShellArgs containerMachineNames})
+        containerStartScripts=(${lib.escapeShellArgs (map lib.getExe containers)})
 
         ${lib.optionalString (!config.skipTypeCheck) ''
           # prepend type hints so the test script can be type checked with mypy
           cat "${../test-script-prepend.py}" >> testScriptWithTypes
-          echo "${toString machineNames}" >> testScriptWithTypes
+          echo "${toString vmMachineTypeHints}" >> testScriptWithTypes
+          echo "${toString containerMachineTypeHints}" >> testScriptWithTypes
           echo "${toString vlanNames}" >> testScriptWithTypes
           echo -n "$testScript" >> testScriptWithTypes
 
@@ -90,7 +108,9 @@ let
           echo "See https://nixos.org/manual/nixos/stable/#test-opt-skipLint"
 
           PYFLAKES_BUILTINS="$(
-            echo -n ${lib.escapeShellArg (lib.concatStringsSep "," pythonizedNames)},
+            echo -n ${
+              lib.escapeShellArg (lib.concatStringsSep "," (pythonizedVmNames ++ pythonizedContainerNames))
+            },
             cat ${lib.escapeShellArg "driver-symbols"}
           )" ${hostPkgs.python3Packages.pyflakes}/bin/pyflakes $out/test-script
         ''}
@@ -98,7 +118,10 @@ let
         # set defaults through environment
         # see: ./test-driver/test-driver.py argparse implementation
         wrapProgram $out/bin/nixos-test-driver \
-          --set startScripts "''${vmStartScripts[*]}" \
+          --set vmStartScripts "''${vmStartScripts[*]}" \
+          --set vmNames "''${vmNames[*]}" \
+          --set containerStartScripts "''${containerStartScripts[*]}" \
+          --set containerNames "''${containerNames[*]}" \
           --set testScript "$out/test-script" \
           --set globalTimeout "${toString config.globalTimeout}" \
           --set vlans '${toString vlans}' \

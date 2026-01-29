@@ -1,11 +1,14 @@
-{ lib, nodes, ... }:
+{
+  allMachines,
+  lib,
+  ...
+}:
 
 let
   inherit (lib)
     attrNames
-    concatMap
+    concatMapAttrsStringSep
     concatMapStrings
-    flip
     forEach
     head
     listToAttrs
@@ -20,21 +23,12 @@ let
     zipLists
     ;
 
-  nodeNumbers = listToAttrs (zipListsWith nameValuePair (attrNames nodes) (range 1 254));
+  nodeNumbers = listToAttrs (zipListsWith nameValuePair (attrNames allMachines) (range 1 254));
 
   networkModule =
-    {
-      config,
-      nodes,
-      pkgs,
-      ...
-    }:
+    { config, ... }:
     let
-      qemu-common = import ../qemu-common.nix { inherit (pkgs) lib stdenv; };
-
       interfaces = lib.attrValues config.virtualisation.allInterfaces;
-
-      interfacesNumbered = zipLists interfaces (range 1 255);
 
       # Automatically assign IP addresses to requested interfaces.
       assignIPs = lib.filter (i: i.assignIP) interfaces;
@@ -56,17 +50,6 @@ let
         }
       );
 
-      qemuOptions = lib.flatten (
-        forEach interfacesNumbered (
-          { fst, snd }: qemu-common.qemuNICFlags snd fst.vlan config.virtualisation.test.nodeNumber
-        )
-      );
-      udevRules = forEach interfaces (
-        interface:
-        # MAC Addresses for QEMU network devices are lowercase, and udev string comparison is case-sensitive.
-        ''SUBSYSTEM=="net",ACTION=="add",ATTR{address}=="${toLower (qemu-common.qemuNicMac interface.vlan config.virtualisation.test.nodeNumber)}",NAME="${interface.name}"''
-      );
-
       networkConfig = {
         networking.hostName = mkDefault config.virtualisation.test.nodeName;
 
@@ -85,10 +68,9 @@ let
         # interfaces, use the IP address corresponding to
         # the first interface (i.e. the first network in its
         # virtualisation.vlans option).
-        networking.extraHosts = flip concatMapStrings (attrNames nodes) (
-          m':
+        networking.extraHosts = concatMapAttrsStringSep "" (
+          m': config:
           let
-            config = nodes.${m'};
             hostnames =
               optionalString (
                 config.networking.domain != null
@@ -101,10 +83,7 @@ let
           + optionalString (
             config.networking.primaryIPv6Address != ""
           ) "${config.networking.primaryIPv6Address} ${hostnames}"
-        );
-
-        virtualisation.qemu.options = qemuOptions;
-        boot.initrd.services.udev.rules = concatMapStrings (x: x + "\n") udevRules;
+        ) allMachines;
       };
 
     in
@@ -117,6 +96,31 @@ let
       };
     };
 
+  qemuNetworkModule =
+    { config, pkgs, ... }:
+    let
+      qemu-common = import ../qemu-common.nix { inherit (pkgs) lib stdenv; };
+
+      interfaces = lib.attrValues config.virtualisation.allInterfaces;
+
+      interfacesNumbered = zipLists interfaces (range 1 255);
+
+      qemuOptions = lib.flatten (
+        forEach interfacesNumbered (
+          { fst, snd }: qemu-common.qemuNICFlags snd fst.vlan config.virtualisation.test.nodeNumber
+        )
+      );
+      udevRules = map (
+        interface:
+        # MAC Addresses for QEMU network devices are lowercase, and udev string comparison is case-sensitive.
+        ''SUBSYSTEM=="net",ACTION=="add",ATTR{address}=="${toLower (qemu-common.qemuNicMac interface.vlan config.virtualisation.test.nodeNumber)}",NAME="${interface.name}"''
+      ) interfaces;
+    in
+    {
+      virtualisation.qemu.options = qemuOptions;
+      boot.initrd.services.udev.rules = concatMapStrings (x: x + "\n") udevRules;
+    };
+
   nodeNumberModule = (
     regular@{ config, name, ... }:
     {
@@ -127,7 +131,7 @@ let
           # We need to force this in specialisations, otherwise it'd be
           # readOnly = true;
           description = ''
-            The `name` in `nodes.<name>`; stable across `specialisations`.
+            The `name` in `nodes.<name>` and `containers.<name>`; stable across `specialisations`.
           '';
         };
         virtualisation.test.nodeNumber = mkOption {
@@ -136,7 +140,7 @@ let
           readOnly = true;
           default = nodeNumbers.${config.virtualisation.test.nodeName};
           description = ''
-            A unique number assigned for each node in `nodes`.
+            A unique number assigned for each machine in `nodes` and `containers`.
           '';
         };
 
@@ -170,6 +174,11 @@ in
       imports = [
         networkModule
         nodeNumberModule
+      ];
+    };
+    extraBaseNodeModules = {
+      imports = [
+        qemuNetworkModule
       ];
     };
   };

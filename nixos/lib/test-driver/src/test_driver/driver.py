@@ -1,6 +1,7 @@
 import os
 import re
 import signal
+import subprocess
 import sys
 import tempfile
 import threading
@@ -16,7 +17,12 @@ from colorama import Style
 from test_driver.debug import DebugAbstract, DebugNop
 from test_driver.errors import MachineError, RequestedAssertionFailed
 from test_driver.logger import AbstractLogger
-from test_driver.machine import Machine, NixStartScript, retry
+from test_driver.machine import (
+    BaseMachine,
+    NspawnMachine,
+    QemuMachine,
+    retry,
+)
 from test_driver.polling_condition import PollingCondition
 from test_driver.vlan import VLan
 
@@ -63,7 +69,8 @@ class Driver:
 
     tests: str
     vlans: list[VLan]
-    machines: list[Machine]
+    machines_qemu: list[QemuMachine]
+    machines_nspawn: list[NspawnMachine]
     polling_conditions: list[PollingCondition]
     global_timeout: int
     race_timer: threading.Timer
@@ -72,12 +79,15 @@ class Driver:
 
     def __init__(
         self,
-        start_scripts: list[str],
+        vm_names: list[str] | None,
+        vm_start_scripts: list[str],
+        container_names: list[str] | None,
+        container_start_scripts: list[str],
         vlans: list[int],
         tests: str,
         out_dir: Path,
         logger: AbstractLogger,
-        keep_vm_state: bool = False,
+        keep_machine_state: bool = False,
         global_timeout: int = 24 * 60 * 60 * 7,
         debug: DebugAbstract = DebugNop(),
     ):
@@ -94,24 +104,94 @@ class Driver:
             vlans = list(set(vlans))
             self.vlans = [VLan(nr, tmp_dir, self.logger) for nr in vlans]
 
-        def cmd(scripts: list[str]) -> Iterator[NixStartScript]:
-            for s in scripts:
-                yield NixStartScript(s)
-
         self.polling_conditions = []
 
-        self.machines = [
-            Machine(
-                start_command=cmd,
-                keep_vm_state=keep_vm_state,
-                name=cmd.machine_name,
+        self.machines_qemu = [
+            QemuMachine(
+                name=name,
+                start_command=vm_start_script,
+                keep_machine_state=keep_machine_state,
                 tmp_dir=tmp_dir,
                 callbacks=[self.check_polling_conditions],
                 out_dir=self.out_dir,
                 logger=self.logger,
             )
-            for cmd in cmd(start_scripts)
+            for name, vm_start_script in zip(
+                vm_names or (len(vm_start_scripts) * [None]), vm_start_scripts
+            )
         ]
+
+        if len(container_start_scripts) > 0:
+            self._init_nspawn_environment()
+
+        self.machines_nspawn = [
+            NspawnMachine(
+                name=name,
+                start_command=container_start_script,
+                tmp_dir=tmp_dir,
+                logger=self.logger,
+                keep_machine_state=keep_machine_state,
+                callbacks=[self.check_polling_conditions],
+                out_dir=self.out_dir,
+            )
+            for name, container_start_script in zip(
+                container_names or (len(container_start_scripts) * [None]),
+                container_start_scripts,
+            )
+        ]
+
+    def _init_nspawn_environment(self) -> None:
+        assert os.geteuid() == 0, (
+            f"systemd-nspawn requires root to work. You are {os.geteuid()}"
+        )
+
+        # set up prerequisites for systemd-nspawn containers.
+        # these are not guaranteed to be set up in the Nix sandbox.
+        # if running interactively as root, these will already be set up.
+
+        # check if /run is writable by root
+        if not os.access("/run", os.W_OK):
+            Path("/run").mkdir(parents=True, exist_ok=True)
+            subprocess.run(["mount", "-t", "tmpfs", "none", "/run"], check=True)
+            Path("/run/netns").mkdir(parents=True, exist_ok=True)
+
+        # check if /var/run is a symlink to /run
+        if not (os.path.exists("/var/run") and os.path.samefile("/var/run", "/run")):
+            Path("/var").mkdir(parents=True, exist_ok=True)
+            subprocess.run(["ln", "-s", "/run", "/var/run"], check=True)
+
+        # check if /sys/fs/cgroup is mounted as cgroup2
+        with open("/proc/mounts", encoding="utf-8") as mounts:
+            for line in mounts:
+                parts = line.split()
+                if len(parts) >= 3 and parts[1] == "/sys/fs/cgroup":
+                    if parts[2] == "cgroup2":
+                        break
+            else:
+                Path("/sys/fs/cgroup").mkdir(parents=True, exist_ok=True)
+                subprocess.run(
+                    ["mount", "-t", "cgroup2", "none", "/sys/fs/cgroup"], check=True
+                )
+
+        # ensure /etc/os-release exists
+        if not os.path.isfile("/etc/os-release"):
+            subprocess.run(["touch", "/etc/os-release"], check=True)
+
+        # ensure /etc/machine-id exists and is non-empty
+        if (
+            not os.path.isfile("/etc/machine-id")
+            or os.path.getsize("/etc/machine-id") == 0
+        ):
+            subprocess.run(
+                ["systemd-machine-id-setup"], check=True
+            )  # set up /etc/machine-id
+
+    @property
+    def machines(self) -> list[QemuMachine | NspawnMachine]:
+        machines = self.machines_qemu + self.machines_nspawn
+        # Sort the machines by name for consistency with `nodesAndContainers` in <nixos/lib/testing/network.nix>.
+        machines.sort(key=lambda machine: machine.name)
+        return machines
 
     def __enter__(self) -> "Driver":
         return self
@@ -148,7 +228,8 @@ class Driver:
         general_symbols = dict(
             start_all=self.start_all,
             test_script=self.test_script,
-            machines=self.machines,
+            machines_qemu=self.machines_qemu,
+            machines_nspawn=self.machines_nspawn,
             vlans=self.vlans,
             driver=self,
             log=self.logger,
@@ -161,7 +242,7 @@ class Driver:
             serial_stdout_off=self.serial_stdout_off,
             serial_stdout_on=self.serial_stdout_on,
             polling_condition=self.polling_condition,
-            Machine=Machine,  # for typing
+            BaseMachine=BaseMachine,  # for typing
             t=AssertionTester(),
             debug=self.debug,
         )
@@ -186,14 +267,14 @@ class Driver:
     def dump_machine_ssh(self, offset: int) -> None:
         print("SSH backdoor enabled, the machines can be accessed like this:")
         print(
-            f"{Style.BRIGHT}Note:{Style.RESET_ALL} this requires {Style.BRIGHT}systemd-ssh-proxy(1){Style.RESET_ALL} to be enabled (default on NixOS 25.05 and newer)."
+            f"{Style.BRIGHT}Note:{Style.RESET_ALL} vsocks require {Style.BRIGHT}systemd-ssh-proxy(1){Style.RESET_ALL} to be enabled (default on NixOS 25.05 and newer)."
         )
-        names = [machine.name for machine in self.machines]
-        longest_name = len(max(names, key=len))
-        for num, name in enumerate(names, start=offset + 1):
+        longest_name = len(max((machine.name for machine in self.machines), key=len))
+        for index, machine in enumerate(self.machines, start=offset + 1):
+            name = machine.name
             spaces = " " * (longest_name - len(name) + 2)
             print(
-                f"    {name}:{spaces}{Style.BRIGHT}ssh -o User=root vsock/{num}{Style.RESET_ALL}"
+                f"    {name}:{spaces}{Style.BRIGHT}{machine.ssh_backdoor_command(index)}{Style.RESET_ALL}"
             )
 
     def test_script(self) -> None:
@@ -279,19 +360,19 @@ class Driver:
         start_command: str,
         *,
         name: str | None = None,
-        keep_vm_state: bool = False,
-    ) -> Machine:
+        keep_machine_state: bool = False,
+    ) -> BaseMachine:
+        """
+        Create a `QemuMachine`. This currently only supports qemu "nodes", not containers.
+        """
         tmp_dir = get_tmp_dir()
 
-        cmd = NixStartScript(start_command)
-        name = name or cmd.machine_name
-
-        return Machine(
+        return QemuMachine(
             tmp_dir=tmp_dir,
             out_dir=self.out_dir,
-            start_command=cmd,
+            start_command=start_command,
             name=name,
-            keep_vm_state=keep_vm_state,
+            keep_machine_state=keep_machine_state,
             logger=self.logger,
         )
 

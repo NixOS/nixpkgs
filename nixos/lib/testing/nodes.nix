@@ -2,7 +2,6 @@ testModuleArgs@{
   config,
   lib,
   hostPkgs,
-  nodes,
   options,
   ...
 }:
@@ -12,12 +11,9 @@ let
     literalExpression
     literalMD
     mapAttrs
-    mkDefault
     mkIf
     mkMerge
     mkOption
-    mkForce
-    optional
     optionalAttrs
     types
     ;
@@ -52,13 +48,6 @@ let
         _module.args.nodes = config.nodesCompat;
       }
       (
-        { config, ... }:
-        {
-          virtualisation.qemu.package = testModuleArgs.config.qemu.package;
-          virtualisation.host.pkgs = hostPkgs;
-        }
-      )
-      (
         { options, ... }:
         {
           key = "nodes.nix-pkgs";
@@ -71,6 +60,44 @@ let
         }
       )
       testModuleArgs.config.extraBaseModules
+    ];
+  };
+  baseQemuOS = baseOS.extendModules {
+    modules = [
+      ../../modules/virtualisation/qemu-vm.nix
+      config.nodeDefaults
+      {
+        key = "base-qemu";
+        virtualisation.qemu.package = testModuleArgs.config.qemu.package;
+        virtualisation.host.pkgs = hostPkgs;
+      }
+      testModuleArgs.config.extraBaseNodeModules
+    ];
+  };
+  baseNspawnOS = baseOS.extendModules {
+    modules = [
+      ../../modules/virtualisation/nspawn-container
+      config.containerDefaults
+      (
+        { pkgs, ... }:
+        {
+          key = "base-nspawn";
+
+          # PAM requires setuid and doesn't work in the build sandbox.
+          # https://github.com/NixOS/nix/blob/959c244a1265f4048390f3ad21679219d7b27a99/src/libstore/unix/build/linux-derivation-builder.cc#L63
+          services.openssh.settings.UsePAM = false;
+
+          # Gross, insecure hack to make login work. See above.
+          security.pam.services.login = {
+            text = ''
+              auth sufficient ${pkgs.linux-pam}/lib/security/pam_permit.so
+              account sufficient ${pkgs.linux-pam}/lib/security/pam_permit.so
+              password sufficient ${pkgs.linux-pam}/lib/security/pam_permit.so
+              session sufficient ${pkgs.linux-pam}/lib/security/pam_permit.so
+            '';
+          };
+        }
+      )
     ];
   };
 
@@ -109,15 +136,16 @@ in
 
     node.type = mkOption {
       type = types.raw;
-      default = baseOS.type;
+      default = baseQemuOS.type;
       internal = true;
     };
 
     nodes = mkOption {
       type = types.lazyAttrsOf config.node.type;
+      default = { };
       visible = "shallow";
       description = ''
-        An attribute set of NixOS configuration modules.
+        An attribute set of NixOS configuration modules representing QEMU vms that can be started during a test.
 
         The configurations are augmented by the [`defaults`](#test-opt-defaults) option.
 
@@ -127,7 +155,55 @@ in
       '';
     };
 
+    container.type = mkOption {
+      type = types.raw;
+      default = baseNspawnOS.type;
+      internal = true;
+    };
+
+    containers = mkOption {
+      type = types.lazyAttrsOf config.container.type;
+      default = { };
+      visible = "shallow";
+      description = ''
+        An attribute set of NixOS configuration modules representing systemd-nspawn containers that can be started during a test.
+
+        The configurations are augmented by the [`defaults`](#test-opt-defaults) option.
+
+        They are assigned network addresses according to the `nixos/lib/testing/network.nix` module.
+
+        A few special options are available, that aren't in a plain NixOS configuration. See [Configuring the nodes](#sec-nixos-test-nodes)
+      '';
+    };
+
+    allMachines = mkOption {
+      readOnly = true;
+      internal = true;
+      description = ''
+        Basically a merge of [{option}`nodes`](#test-opt-nodes) and [{option}`containers`](#test-opt-containers).
+
+        This ensures that there are no name collisions between nodes and containers.
+      '';
+      default =
+        let
+          overlappingNames = lib.intersectLists (lib.attrNames config.nodes) (
+            lib.attrNames config.containers
+          );
+        in
+        lib.throwIfNot (overlappingNames == [ ])
+          "The following names are used in both `nodes` and `containers`: ${lib.concatStringsSep ", " overlappingNames}"
+          (config.nodes // config.containers);
+    };
+
     defaults = mkOption {
+      description = ''
+        NixOS configuration that is applied to all [{option}`nodes`](#test-opt-nodes) and [{option}`containers`](#test-opt-containers).
+      '';
+      type = types.deferredModule;
+      default = { };
+    };
+
+    nodeDefaults = mkOption {
       description = ''
         NixOS configuration that is applied to all [{option}`nodes`](#test-opt-nodes).
       '';
@@ -135,7 +211,23 @@ in
       default = { };
     };
 
+    containerDefaults = mkOption {
+      description = ''
+        NixOS configuration that is applied to all [{option}`containers`](#test-opt-containers).
+      '';
+      type = types.deferredModule;
+      default = { };
+    };
+
     extraBaseModules = mkOption {
+      description = ''
+        NixOS configuration that, like [{option}`defaults`](#test-opt-defaults), is applied to all [{option}`nodes`](#test-opt-nodes) and [{option}`containers`](#test-opt-containers) and can not be undone with [`specialisation.<name>.inheritParentConfig`](https://search.nixos.org/options?show=specialisation.%3Cname%3E.inheritParentConfig&from=0&size=50&sort=relevance&type=packages&query=specialisation).
+      '';
+      type = types.deferredModule;
+      default = { };
+    };
+
+    extraBaseNodeModules = mkOption {
       description = ''
         NixOS configuration that, like [{option}`defaults`](#test-opt-defaults), is applied to all [{option}`nodes`](#test-opt-nodes) and can not be undone with [`specialisation.<name>.inheritParentConfig`](https://search.nixos.org/options?show=specialisation.%3Cname%3E.inheritParentConfig&from=0&size=50&sort=relevance&type=packages&query=specialisation).
       '';
@@ -145,7 +237,7 @@ in
 
     node.pkgs = mkOption {
       description = ''
-        The Nixpkgs to use for the nodes.
+        The Nixpkgs to use for the nodes and containers.
 
         Setting this will make the `nixpkgs.*` options read-only, to avoid mistakenly testing with a Nixpkgs configuration that diverges from regular use.
       '';
@@ -160,7 +252,7 @@ in
       description = ''
         Whether to make the `nixpkgs.*` options read-only. This is only relevant when [`node.pkgs`](#test-opt-node.pkgs) is set.
 
-        Set this to `false` when any of the [`nodes`](#test-opt-nodes) needs to configure any of the `nixpkgs.*` options. This will slow down evaluation of your test a bit.
+        Set this to `false` when any of the [`nodes`](#test-opt-nodes) or [{option}`containers`](#test-opt-containers) need to configure any of the `nixpkgs.*` options. This will slow down evaluation of your test a bit.
       '';
       type = types.bool;
       default = config.node.pkgs != null;
@@ -188,6 +280,8 @@ in
   };
 
   config = {
+    _module.args.allMachines = config.allMachines;
+    _module.args.containers = config.containers;
     _module.args.nodes = config.nodesCompat;
     nodesCompat = mapAttrs (
       name: config:
@@ -201,6 +295,7 @@ in
     ) config.nodes;
 
     passthru.nodes = config.nodesCompat;
+    passthru.containers = config.containers;
 
     extraDriverArgs = mkIf config.sshBackdoor.enable [
       "--dump-vsocks=${toString config.sshBackdoor.vsockOffset}"
@@ -211,32 +306,34 @@ in
         nixpkgs.pkgs = config.node.pkgs;
         imports = [ ../../modules/misc/nixpkgs/read-only.nix ];
       })
-      (mkIf config.sshBackdoor.enable (
-        let
-          inherit (config.sshBackdoor) vsockOffset;
-        in
-        { config, ... }:
-        {
-          services.openssh = {
-            enable = true;
-            settings = {
-              PermitRootLogin = "yes";
-              PermitEmptyPasswords = "yes";
-            };
+      (mkIf config.sshBackdoor.enable {
+        services.openssh = {
+          enable = true;
+          settings = {
+            PermitRootLogin = "yes";
+            PermitEmptyPasswords = "yes";
           };
+        };
 
-          security.pam.services.sshd = {
-            allowNullPassword = true;
-          };
-
-          virtualisation.qemu.options = [
-            "-device vhost-vsock-pci,guest-cid=${
-              toString (config.virtualisation.test.nodeNumber + vsockOffset)
-            }"
-          ];
-        }
-      ))
+        security.pam.services.sshd = {
+          allowNullPassword = true;
+        };
+      })
     ];
+
+    nodeDefaults = mkIf config.sshBackdoor.enable (
+      let
+        inherit (config.sshBackdoor) vsockOffset;
+      in
+      { config, ... }:
+      {
+        virtualisation.qemu.options = [
+          "-device vhost-vsock-pci,guest-cid=${
+            toString (config.virtualisation.test.nodeNumber + vsockOffset)
+          }"
+        ];
+      }
+    );
 
     # Docs: nixos/doc/manual/development/writing-nixos-tests.section.md
     /**
