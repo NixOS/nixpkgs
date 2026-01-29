@@ -12628,6 +12628,23 @@ with self;
     };
   };
 
+  ExtUtilsH2PM = buildPerlPackage {
+    pname = "ExtUtils-H2PM";
+    version = "0.11";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/ExtUtils-H2PM-0.11.tar.gz";
+      hash = "sha256-RrSuyafSxXSSVtCdz3ukwtAM3dQRAUgkme2Ix2bp6No=";
+    };
+    buildInputs = [ ModuleBuild ];
+    meta = {
+      description = "Automatically generate perl modules to wrap C header files";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   ExtUtilsInstall = buildPerlPackage {
     pname = "ExtUtils-Install";
     version = "2.22";
@@ -30767,6 +30784,28 @@ with self;
     meta = {
       description = "IPv6 related part of the C socket.h defines and structure manipulators";
       license = with lib.licenses; [ bsd3 ];
+    };
+  };
+
+  SocketNetlink = buildPerlPackage {
+    pname = "Socket-Netlink";
+    version = "0.05";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Socket-Netlink-0.05.tar.gz";
+      hash = "sha256-2EfbWbFI0I1A/gndoswlfvcvsetaDWgVX77csfWF2L0=";
+    };
+    buildInputs = [
+      ExtUtilsCChecker
+      ExtUtilsH2PM
+      TestHexString
+      ModuleBuild
+    ];
+    meta = {
+      description = "Interface to Linux's C<PF_NETLINK> socket family";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
