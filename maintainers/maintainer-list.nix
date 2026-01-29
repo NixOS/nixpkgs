@@ -11383,6 +11383,12 @@
     email = "itepastra@gmail.com";
     keys = [ { fingerprint = "E681 4CAF 06AE B076 D55D  3E32 A16C DCBF 1472 541F"; } ];
   };
+  itsmyowninvention = {
+    email = "changlong.zhao@outlook.com";
+    github = "itsmyowninvention";
+    githubId = 89126591;
+    name = "itsmyowninvention";
+  };
   itsvic-dev = {
     email = "contact@itsvic.dev";
     name = "Victor B.";
