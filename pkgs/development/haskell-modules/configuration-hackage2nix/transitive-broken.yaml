@@ -278,7 +278,6 @@ dont-distribute-packages:
  - birch-beer
  - bird
  - BirdPP
- - bisc
  - biscuit-servant
  - bishbosh
  - bit-array
@@ -950,6 +949,7 @@ dont-distribute-packages:
  - fay-uri
  - fay-websockets
  - fbrnch
+ - fbrnch_1_8
  - fcd
  - FComp
  - feature-flipper-postgres
@@ -2085,7 +2085,6 @@ dont-distribute-packages:
  - linkcore
  - linnet-aeson
  - linnet-conduit
- - linux-ptrace
  - lio-eci11
  - lion
  - liquid-base
@@ -2426,6 +2425,7 @@ dont-distribute-packages:
  - network-rpca
  - network-stream
  - network-topic-models
+ - network-transport-quic
  - network-websocket
  - neuron
  - newsletter-mailgun
@@ -2653,6 +2653,7 @@ dont-distribute-packages:
  - pms-application-service
  - pms-domain-service
  - pms-infra-cmdrun
+ - pms-infra-filesystem
  - pms-infra-procspawn
  - pms-infra-serial
  - pms-infra-socket
@@ -2701,6 +2702,7 @@ dont-distribute-packages:
  - ports
  - poseidon
  - poseidon-postgis
+ - postgres-websockets
  - postgresql-common-persistent
  - postgresql-pure
  - postgresql-simple-ltree
@@ -2709,6 +2711,7 @@ dont-distribute-packages:
  - postgresql-tx-query
  - postgresql-tx-squeal
  - postgresql-tx-squeal-compat-simple
+ - postgrest
  - postmark
  - potoki
  - potoki-cereal
@@ -3088,8 +3091,6 @@ dont-distribute-packages:
  - secrm
  - sednaDBXML
  - seitz-symbol
- - selda-json
- - selda-sqlite
  - SelectSequencesFromMSA
  - selenium-server
  - semantic-source
@@ -3394,7 +3395,6 @@ dont-distribute-packages:
  - sydtest-amqp
  - sydtest-webdriver-screenshot
  - sydtest-webdriver-yesod
- - sydtest-webdriver-yesod_0_0_1_0
  - sylvia
  - symantic-atom
  - symantic-http-demo

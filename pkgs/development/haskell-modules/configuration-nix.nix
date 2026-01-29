@@ -495,11 +495,26 @@ builtins.intersectAttrs super {
   mustache = dontCheck super.mustache;
   arch-web = dontCheck super.arch-web;
 
+  # Some test cases require network access
+  hpack_0_39_1 = doDistribute (
+    overrideCabal (drv: {
+      testFlags = drv.testFlags or [ ] ++ [
+        "--skip=/EndToEnd/hpack/defaults/fails if defaults don't exist/"
+        "--skip=/Hpack.Defaults/ensureFile/downloads file if missing/"
+        "--skip=/Hpack.Defaults/ensureFile/with 404/does not create any files/"
+      ];
+    }) super.hpack_0_39_1
+  );
+
   # Tries accessing the GitHub API
   github-app-token = dontCheck super.github-app-token;
 
-  # The curl executable is required for withApplication tests.
-  warp = addTestToolDepend pkgs.curl super.warp;
+  warp = lib.pipe super.warp [
+    # The curl executable is required for withApplication tests.
+    (addTestToolDepend pkgs.curl)
+    # Avoids much closure size of downstream deps on macOS: https://github.com/yesodweb/wai/pull/1044
+    (disableCabalFlag "include-warp-version")
+  ];
 
   lz4-frame-conduit = addTestToolDepends [ pkgs.lz4 ] super.lz4-frame-conduit;
 
@@ -944,13 +959,17 @@ builtins.intersectAttrs super {
     ];
   }) super.liquid-fixpoint;
 
-  # overrideCabal because the tests need to execute the built executable "liquid"
+  # overrideCabal because
+  # - tests need to execute the built executable "liquid"
+  # - LiquidHaskell needs an SMT solver. We use Z3.
+  # - LiquidHaskell clash with Haddock as of now, see https://github.com/ucsd-progsys/liquidhaskell/issues/2188
   liquidhaskell = overrideCabal (drv: {
     preCheck = ''
       export PATH=$PWD/dist/build/liquid:$PATH
     ''
     + (drv.preCheck or "");
     libraryToolDepends = (drv.libraryToolDepends or [ ]) ++ [ pkgs.z3 ];
+    doHaddock = false;
   }) super.liquidhaskell;
 
   # Break cyclic reference that results in an infinite recursion.
@@ -1196,8 +1215,7 @@ builtins.intersectAttrs super {
   http-download = dontCheck super.http-download;
   http-download_0_2_1_0 = doDistribute (dontCheck super.http-download_0_2_1_0);
   pantry = dontCheck super.pantry;
-  pantry_0_9_3_1 = dontCheck super.pantry_0_9_3_1;
-  pantry_0_10_0 = dontCheck super.pantry_0_10_0;
+  pantry_0_11_2 = doDistribute (dontCheck super.pantry_0_11_2);
 
   # gtk2hs-buildtools is listed in setupHaskellDepends, but we
   # need it during the build itself, too.

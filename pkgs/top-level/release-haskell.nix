@@ -533,7 +533,7 @@ let
       ] released;
       Cabal_3_12_1_0 = released;
       Cabal_3_14_2_0 = released;
-      Cabal_3_16_0_0 = released;
+      Cabal_3_16_1_0 = released;
       cabal2nix = released;
       cabal2nix-unstable = released;
       funcmp = released;

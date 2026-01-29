@@ -72,10 +72,13 @@
       stdenv.targetPlatform.isWindows
       || stdenv.targetPlatform.isGhcjs
       # Before <https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13932>,
-      # we couldn't force hadrian to build terminfo for cross.
+      # we couldn't force hadrian to build terminfo for different triples.
       || (
         lib.versionOlder version "9.15.20250808"
-        && (stdenv.buildPlatform != stdenv.hostPlatform || stdenv.hostPlatform != stdenv.targetPlatform)
+        && (
+          stdenv.buildPlatform.config != stdenv.hostPlatform.config
+          || stdenv.hostPlatform.config != stdenv.targetPlatform.config
+        )
       )
     ),
 
@@ -211,18 +214,6 @@
             ./Cabal-3.16-paths-fix-cycle-aarch64-darwin.patch
         )
       ]
-      ++ lib.optionals stdenv.targetPlatform.isWindows [
-        # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13919
-        (fetchpatch {
-          name = "include-modern-utimbuf.patch";
-          url = "https://gitlab.haskell.org/ghc/ghc/-/commit/7e75928ed0f1c4654de6ddd13d0b00bf4b5c6411.patch";
-          hash = "sha256-sb+AHdkGkCu8MW0xoQIpD5kEc0zYX8udAMDoC+TWc0Q=";
-        })
-      ]
-      ++ lib.optionals stdenv.targetPlatform.isGhcjs [
-        # https://gitlab.haskell.org/ghc/ghc/-/issues/26290
-        ./export-heap-methods.patch
-      ]
       # Prevents passing --hyperlinked-source to haddock. Note that this can
       # be configured via a user defined flavour now. Unfortunately, it is
       # impossible to import an existing flavour in UserSettings, so patching
@@ -303,8 +294,20 @@
         })
       ]
 
-      # Missing ELF symbols
-      ++ lib.optionals stdenv.targetPlatform.isAndroid [
+      # Unreleased or still in-progress upstream cross fixes
+      ++ lib.optionals (lib.versionAtLeast version "9.10.2" && lib.versionOlder version "9.15") [
+        # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13919
+        (fetchpatch {
+          name = "include-modern-utimbuf.patch";
+          url = "https://gitlab.haskell.org/ghc/ghc/-/commit/7e75928ed0f1c4654de6ddd13d0b00bf4b5c6411.patch";
+          hash = "sha256-sb+AHdkGkCu8MW0xoQIpD5kEc0zYX8udAMDoC+TWc0Q=";
+        })
+
+        # https://gitlab.haskell.org/ghc/ghc/-/issues/26290 krank:ignore-line
+        ./export-heap-methods.patch
+      ]
+      ++ lib.optionals (lib.versionAtLeast version "9.10.3") [
+        # https://gitlab.haskell.org/ghc/ghc/-/issues/26518 krank:ignore-line
         ./ghc-define-undefined-elf-st-visibility.patch
       ]
 
@@ -353,7 +356,9 @@ let
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
   # TODO(@Ericson2314) Make unconditional
-  targetPrefix = lib.optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-";
+  targetPrefix = lib.optionalString (
+    targetPlatform.config != hostPlatform.config
+  ) "${targetPlatform.config}-";
 
   # TODO(@sternenseemann): there's no stage0:exe:haddock target by default,
   # so haddock isn't available for GHC cross-compilers. Can we fix that?
@@ -512,6 +517,9 @@ stdenv.mkDerivation (
     pname = "${targetPrefix}ghc${variantSuffix}";
     inherit version;
 
+    # Useful as hadrianSettings often have spaces in them
+    __structuredAttrs = true;
+
     src = ghcSrc;
 
     enableParallelBuilding = true;
@@ -632,15 +640,8 @@ stdenv.mkDerivation (
       }/share/emscripten/cache/* "$EM_CACHE/"
       chmod u+rwX -R "$EM_CACHE"
     ''
-    # Create bash array hadrianFlagsArray for use in buildPhase. Do it in
-    # preConfigure, so overrideAttrs can be used to modify it effectively.
-    # hadrianSettings are passed via the command line so they are more visible
-    # in the build log.
     + ''
-      hadrianFlagsArray=(
-        "-j$NIX_BUILD_CORES"
-        ${lib.escapeShellArgs hadrianSettings}
-      )
+      hadrianFlags+=("-j$NIX_BUILD_CORES")
     '';
 
     ${if targetPlatform.isGhcjs then "configureScript" else null} = "emconfigure ./configure";
@@ -782,16 +783,16 @@ stdenv.mkDerivation (
       # In 9.14 this will be default with release flavour.
       # See https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13444
       "--hash-unit-ids"
-    ];
+    ]
+    ++ hadrianSettings;
 
     buildPhase = ''
       runHook preBuild
 
-      # hadrianFlagsArray is created in preConfigure
-      echo "hadrianFlags: $hadrianFlags ''${hadrianFlagsArray[@]}"
+      echo "hadrianFlags: ''${hadrianFlags[@]}"
 
       # We need to go via the bindist for installing
-      hadrian $hadrianFlags "''${hadrianFlagsArray[@]}" binary-dist-dir
+      hadrian "''${hadrianFlags[@]}" binary-dist-dir
 
       runHook postBuild
     '';
@@ -830,8 +831,9 @@ stdenv.mkDerivation (
       export InstallNameToolCmd=$INSTALL_NAME_TOOL
       export OtoolCmd=$OTOOL
     ''
+    # Replicate configurePhase
     + ''
-      $configureScript $configureFlags "''${configureFlagsArray[@]}"
+      $configureScript "''${configureFlags[@]}"
     '';
 
     postInstall = ''
