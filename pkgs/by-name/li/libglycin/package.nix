@@ -1,7 +1,8 @@
 {
   lib,
   stdenv,
-  fetchFromGitLab,
+  fetchurl,
+  makeSetupHook,
   meson,
   ninja,
   pkg-config,
@@ -11,13 +12,18 @@
   rustPlatform,
   vala,
   gi-docgen,
+  glib,
   gobject-introspection,
+  glycin-loaders,
+  libglycin-gtk4,
+  fontconfig,
   libseccomp,
   lcms2,
-  gtk4,
   gnome,
   replaceVars,
   bubblewrap,
+  jq,
+  moreutils,
   common-updater-scripts,
   _experimental-update-script-combinators,
   buildPackages,
@@ -29,12 +35,22 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "libglycin";
   version = "2.0.7";
 
-  src = fetchFromGitLab {
-    domain = "gitlab.gnome.org";
-    owner = "GNOME";
-    repo = "glycin";
-    tag = finalAttrs.version;
-    hash = "sha256-17ebdiLMuDJuuw8TBYWamyyDM4aZgtWRWEQhWGb/2mw=";
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
+
+  setupHook = ./path-hook.sh;
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/glycin/${lib.versions.majorMinor finalAttrs.version}/glycin-${finalAttrs.version}.tar.xz";
+    hash = "sha256-xBasKbbT7NxnuQwVU3uhKTzrevlvoQHK5nt9HTflCrA=";
+  };
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-UVVVjMt4vWkLob0H/MxIaW6rkBSFImu+5dezaCnc3Q8=";
   };
 
   nativeBuildInputs = [
@@ -45,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     cargo
     python3
     rustPlatform.cargoSetupHook
+    finalAttrs.passthru.patchVendorHook
   ]
   ++ lib.optionals withIntrospection [
     vala
@@ -52,18 +69,16 @@ stdenv.mkDerivation (finalAttrs: {
     gobject-introspection
   ];
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) pname version src;
-    hash = "sha256-7x4Ts0wRFoxZ2u3AHVEey8g6+XWDpxM/hFZeomkojKU=";
-  };
-
   buildInputs = [
+    fontconfig
     libseccomp
     lcms2
-    gtk4
   ];
 
   propagatedBuildInputs = [
+    glib
+    # TODO: these should not be required by .pc file
+    fontconfig
     libseccomp
     lcms2
   ];
@@ -72,16 +87,20 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "glycin-loaders" false)
     (lib.mesonBool "glycin-thumbnailer" false)
     (lib.mesonBool "libglycin" true)
+    (lib.mesonBool "libglycin-gtk4" false)
     (lib.mesonBool "introspection" withIntrospection)
     (lib.mesonBool "vapi" withIntrospection)
     (lib.mesonBool "capi_docs" withIntrospection)
   ];
 
   postPatch = ''
-    patch -p2 < ${finalAttrs.passthru.glycin3PathsPatch}
-
     patchShebangs \
       build-aux/crates-version.py
+  '';
+
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   passthru = {
@@ -113,12 +132,24 @@ stdenv.mkDerivation (finalAttrs: {
         updateLockfile
       ];
 
-    glycinPathsPatch = replaceVars ./fix-glycin-paths.patch {
-      bwrap = "${bubblewrap}/bin/bwrap";
-    };
+    patchVendorHook =
+      makeSetupHook
+        {
+          name = "glycinPatchVendorHook";
+        }
+        (
+          replaceVars ./patch-vendor-hook.sh {
+            bwrap = "${bubblewrap}/bin/bwrap";
+            jq = "${jq}/bin/jq";
+            sponge = "${moreutils}/bin/sponge";
+          }
+        );
 
-    glycin3PathsPatch = replaceVars ./fix-glycin-3-paths.patch {
-      bwrap = "${bubblewrap}/bin/bwrap";
+    tests = {
+      inherit
+        glycin-loaders
+        libglycin-gtk4
+        ;
     };
   };
 
@@ -135,7 +166,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     pkgConfigModules = [
       "glycin-1"
-      "glycin-gtk4-1"
     ];
   };
 })
