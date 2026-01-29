@@ -36,12 +36,15 @@ let
     buildPhase = ''
       runHook preBuild
 
-      bun install \
-        --cpu="*" \
-        --frozen-lockfile \
-        --ignore-scripts \
-        --no-progress \
-        --os="*"
+       export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
+
+       bun install \
+         --filter=./packages/web \
+         --force \
+         --frozen-lockfile \
+         --ignore-scripts \
+         --no-progress \
+         --production
 
       runHook postBuild
     '';
@@ -109,13 +112,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Comprehensive open-source database of AI model specifications, pricing, and capabilities";
-    homepage = "https://github.com/anomalyco/models-dev";
+    homepage = "https://github.com/anomalyco/models.dev";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ delafthi ];
-    badPlatforms = [
-      # error: Invalid DNS result order
-      "x86_64-darwin"
-    ];
   };
 })
