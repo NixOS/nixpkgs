@@ -6,11 +6,10 @@
 }:
 let
   cfg = config.hardware.openrazer;
-  kernelPackages = config.boot.kernelPackages;
 
   toPyBoolStr = b: if b then "True" else "False";
 
-  daemonExe = "${pkgs.openrazer-daemon}/bin/openrazer-daemon --config ${daemonConfFile}";
+  daemonExe = "${cfg.packages.daemon}/bin/openrazer-daemon --config ${daemonConfFile}";
 
   daemonConfFile = pkgs.writeTextFile {
     name = "razer.conf";
@@ -134,6 +133,21 @@ in
           can start and interact with the OpenRazer userspace daemon.
         '';
       };
+
+      packages = {
+        kernel = lib.mkPackageOption pkgs "openrazer kernel" { } // {
+          default = config.boot.kernelPackages.openrazer;
+          defaultText = lib.literalExpression ''
+            config.boot.kernelPackages.openrazer
+          '';
+        };
+        daemon = lib.mkPackageOption pkgs "openrazer-daemon" { } // {
+          default = pkgs.python3Packages.openrazer-daemon;
+          defaultText = lib.literalExpression ''
+            pkgs.python3Packages.openrazer-daemon
+          '';
+        };
+      };
     };
   };
 
@@ -145,14 +159,14 @@ in
   ];
 
   config = lib.mkIf cfg.enable {
-    boot.extraModulePackages = [ kernelPackages.openrazer ];
+    boot.extraModulePackages = [ cfg.packages.kernel ];
     boot.kernelModules = drivers;
 
     # Makes the man pages available so you can successfully run
     # > systemctl --user help openrazer-daemon
-    environment.systemPackages = [ pkgs.python3Packages.openrazer-daemon.man ];
+    environment.systemPackages = lib.optional (cfg.packages.daemon ? man) cfg.packages.daemon.man;
 
-    services.udev.packages = [ kernelPackages.openrazer ];
+    services.udev.packages = [ cfg.packages.kernel ];
     services.dbus.packages = [ dbusServiceFile ];
 
     # A user must be a member of the openrazer group in order to start
