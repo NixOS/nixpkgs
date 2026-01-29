@@ -7,6 +7,7 @@
   ninja,
   pkg-config,
   babl,
+  bash-completion,
   cfitsio,
   gegl,
   gtk3,
@@ -41,6 +42,7 @@
   python3,
   libexif,
   gettext,
+  glibcLocales,
   wrapGAppsHook3,
   libxslt,
   gobject-introspection,
@@ -82,7 +84,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gimp";
-  version = "3.0.6";
+  version = "3.0.8";
 
   outputs = [
     "out"
@@ -93,17 +95,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://download.gimp.org/gimp/v${lib.versions.majorMinor finalAttrs.version}/gimp-${finalAttrs.version}.tar.xz";
-    hash = "sha256-JGwiU4PHLvnw3HcDt9cHCEu/F3vSkA6UzkZqYoYuKWs=";
+    hash = "sha256-/rSYrMAbJoJ8/x/5Wqj7gs3Wpg16v3c8/NGavq/KM4Y=";
   };
 
   patches = [
-    # https://gitlab.gnome.org/GNOME/gimp/-/issues/15257
-    (fetchpatch {
-      name = "fix-gegl-bevel-test.patch";
-      url = "https://gitlab.gnome.org/GNOME/gimp/-/commit/2fd12847496a9a242ca8edc448d400d3660b8009.patch";
-      hash = "sha256-pjOjyzZxxl+zRqThXBwCBfYHdGhgaMI/IMKaL3XGAMs=";
-    })
-
     # to remove compiler from the runtime closure, reference was retained via
     # gimp --version --verbose output
     (replaceVars ./remove-cc-reference.patch {
@@ -123,6 +118,31 @@ stdenv.mkDerivation (finalAttrs: {
     (replaceVars ./tests-dbus-conf.patch {
       session_conf = "${dbus.out}/share/dbus-1/session.conf";
     })
+
+    # Allow calling tests from other directories.
+    # Required for the next patch.
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gimp/-/commit/fd58ab3bee7a79cb0a7870c6858f3b64c84a7917.patch";
+      hash = "sha256-fpysKWwt5rilqp7ukdWx7kutkDquL/6YhYjR1zQfu/Q=";
+    })
+
+    # Do not go through ui for save-and-export test.
+    # https://gitlab.gnome.org/GNOME/gimp/-/issues/15763
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gimp/-/commit/608ad0a528b5b31101c021d96aeb95558d207497.patch";
+      hash = "sha256-0oA5u+uAT0l3WT90fy0RGOR8xy/fGIHevBb69oUzfGs=";
+      excludes = [
+        # Other changes would prevent deletion, removing it from build is sufficient.
+        "app/tests/test-save-and-export.c"
+      ];
+    })
+
+    # Disable broken UI tests.
+    # https://gitlab.gnome.org/GNOME/gimp/-/issues/15763
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gimp/-/commit/c34fe3e94f1019eafcb38edf1c07bff12a57431e.patch";
+      hash = "sha256-yVauEpoGEOIfCXnGnWMGWjXbIDizDhJ3hipeCy3XSBM=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -130,6 +150,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     gettext
+    glibcLocales
     wrapGAppsHook3
     libxslt # for xsltproc
     gobject-introspection
@@ -153,6 +174,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     appstream # for library
     babl
+    bash-completion
     cfitsio
     gegl
     gtk3
@@ -266,6 +288,16 @@ stdenv.mkDerivation (finalAttrs: {
     chmod +x plug-ins/python/{colorxhtml,file-openraster,foggify,gradients-save-as-css,histogram-export,palette-offset,palette-sort,palette-to-gradient,python-eval,spyro-plus}.py
     patchShebangs \
       plug-ins/python/{colorxhtml,file-openraster,foggify,gradients-save-as-css,histogram-export,palette-offset,palette-sort,palette-to-gradient,python-eval,spyro-plus}.py
+
+    # Use Python from environment not from Meson.
+    # https://gitlab.gnome.org/GNOME/gimp/-/merge_requests/2607
+    substituteInPlace meson.build \
+      --replace-fail "import('python').find_installation()" "import('python').find_installation('python3')"
+
+    # Broken test
+    # https://github.com/NixOS/nixpkgs/pull/484971#issuecomment-3846759517
+    substituteInPlace app/tests/meson.build \
+      --replace-fail "{${"\n"}    'name': 'save-and-export',${"\n"}  }${"\n"}" ""
   '';
 
   preBuild =
