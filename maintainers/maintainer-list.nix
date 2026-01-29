@@ -3183,6 +3183,12 @@
     email = "close.line3633@fastmail.com";
     keys = [ { fingerprint = "FAD9F10819FA179515CD1B9FAFD359B057CEEE04"; } ];
   };
+  bearoffwork = {
+    name = "Bear.Y";
+    github = "bearoffwork";
+    githubId = 20751011;
+    email = "code@bearoff.work";
+  };
   beeb = {
     name = "Valentin Bersier";
     email = "hi@beeb.li";
