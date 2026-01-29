@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  fetchpatch2,
   fetchPypi,
   pythonOlder,
 
@@ -15,6 +14,7 @@
   jedi,
   loro,
   markdown,
+  msgspec,
   narwhals,
   packaging,
   psutil,
@@ -31,26 +31,16 @@
   # tests
   versionCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "marimo";
-  version = "0.15.2";
+  version = "0.19.5";
   pyproject = true;
 
   # The github archive does not include the static assets
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cmkz/ZyVYfpz4yOxghsXPF4PhRluwqSXo1CcwvwkXFg=";
+    hash = "sha256-+pdtrHPGQf2BUUbe0+CvCLdhgMf7RXfVjEGl5mI/Tms=";
   };
-
-  patches = [
-    # https://github.com/marimo-team/marimo/pull/6714
-    (fetchpatch2 {
-      name = "uv-build.patch";
-      url = "https://github.com/Prince213/marimo/commit/b1c690e82e8117c451a74fdf172eb51a4861853d.patch?full_index=1";
-      hash = "sha256-iFS5NSGjaGdECRk0LCRSA8XzRb1/sVSZCTRLy6taHNU=";
-    })
-  ];
 
   build-system = [ uv-build ];
 
@@ -61,6 +51,7 @@ buildPythonPackage rec {
     jedi
     loro
     markdown
+    msgspec
     narwhals
     packaging
     psutil
