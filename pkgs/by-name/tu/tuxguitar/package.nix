@@ -201,6 +201,7 @@ maven.buildMavenPackage rec {
     mvnHashByPlatform = {
       "x86_64-linux" = "sha256-7UDFGuOMERvY74mkneusJyuAHfF3U6b4qV4MPHGQYdM=";
       "aarch64-linux" = "sha256-7UDFGuOMERvY74mkneusJyuAHfF3U6b4qV4MPHGQYdM=";
+      "aarch64-darwin" = "sha256-lfO2YH+yKZWzh3MeQ7baESGmmW7zPdTLs8CjZ/FtLu0";
     };
     ldLibVar = if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
     classpath = [
