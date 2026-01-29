@@ -25,6 +25,12 @@ python3Packages.buildPythonApplication rec {
     mt-940
   ];
 
+  pythonRelaxDeps = [
+    # Upstream requires v4, but nixpkgs has v5,
+    # see also: https://github.com/pretix/pretix-banktool/issues/13
+    "fints"
+  ];
+
   doCheck = false; # no tests
 
   pythonImportsCheck = [ "pretix_banktool" ];
