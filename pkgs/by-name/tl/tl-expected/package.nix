@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tl-expected";
-  version = "1.1.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "TartanLlama";
     repo = "expected";
     rev = "v${version}";
-    hash = "sha256-AuRU8VI5l7Th9fJ5jIc/6mPm0Vqbbt6rY8QCCNDOU50=";
+    hash = "sha256-+9M1++ZYaZNJGjEoI6+J8565R2wlznoDWW8MPrmCMoU=";
   };
 
   nativeBuildInputs = [ cmake ];
