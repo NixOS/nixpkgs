@@ -31,5 +31,6 @@ buildPecl rec {
     homepage = "https://github.com/websupport-sk/pecl-memcache";
     maintainers = [ lib.maintainers.krzaczek ];
     teams = [ lib.teams.php ];
+    broken = lib.versionAtLeast php.version "8.5";
   };
 }

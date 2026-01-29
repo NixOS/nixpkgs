@@ -38,5 +38,6 @@ buildPecl rec {
     homepage = "https://phalcon.io";
     maintainers = [ lib.maintainers.krzaczek ];
     teams = [ lib.teams.php ];
+    broken = lib.versionAtLeast php.version "8.5";
   };
 }

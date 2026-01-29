@@ -3,6 +3,7 @@
   lib,
   pkg-config,
   rrdtool,
+  fetchpatch,
 }:
 
 buildPecl {
@@ -17,6 +18,14 @@ buildPecl {
 
   nativeBuildInputs = [
     pkg-config
+  ];
+
+  patches = [
+    # PHP 8.5 compatibility patch
+    (fetchpatch {
+      url = "https://github.com/php/pecl-processing-rrd/pull/4/commits/dd4856dc89499a0141b1710e791f0e1096c7b244.patch";
+      hash = "sha256-ES+cMhMBUubFB5TpTZzzKKfEK2cY737z7zCuNy4XF8Y=";
+    })
   ];
 
   # Fix GCC 14 build.

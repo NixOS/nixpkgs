@@ -35,6 +35,6 @@ buildPecl {
       You can use the sync or async, Coroutine API to write whole applications or create thousands of light weight Coroutines within one Linux process.
     '';
     teams = [ lib.teams.php ];
-    broken = lib.versionOlder php.version "8.2";
+    broken = lib.versionOlder php.version "8.2" || lib.versionAtLeast php.version "8.5";
   };
 }
