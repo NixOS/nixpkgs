@@ -1,0 +1,23 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index e34e865..f291f87 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -73,9 +73,6 @@ endif ()
+
+ string(TOLOWER ${CMAKE_BUILD_TYPE} LIBCAESIUM_BUILD_TYPE)
+
+-if (NOT WIN32)
+-    link_directories(${LIBCAESIUM_SOURCE_DIR}/target/${LIBCAESIUM_BUILD_TYPE})
+-endif ()
+ find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets Core Gui Concurrent Svg Network LinguistTools REQUIRED)
+ find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets Core Gui Concurrent Svg Network LinguistTools REQUIRED)
+
+@@ -169,8 +166,6 @@ set(RESOURCES
+
+ if (WIN32)
+     add_executable(${TARGET} WIN32 ${SOURCES} ${UI} ${RESOURCES} ${CAESIUM_ICON} ${QM_FILES})
+-elseif (APPLE)
+-    add_executable(${TARGET} MACOSX_BUNDLE ${SOURCES} ${OSX_SOURCES} ${UI} ${RESOURCES} ${CAESIUM_ICON} ${QM_FILES})
+ else ()
+     add_executable(${TARGET} ${SOURCES} ${OSX_SOURCES} ${UI} ${RESOURCES} ${CAESIUM_ICON} ${QM_FILES})
+     install(TARGETS ${TARGET} RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
