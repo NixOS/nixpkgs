@@ -1594,6 +1594,7 @@
   ./services/web-apps/changedetection-io.nix
   ./services/web-apps/chhoto-url.nix
   ./services/web-apps/cloudlog.nix
+  ./services/web-apps/cocoon.nix
   ./services/web-apps/code-server.nix
   ./services/web-apps/coder.nix
   ./services/web-apps/collabora-online.nix
