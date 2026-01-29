@@ -1899,6 +1899,33 @@ final: prev: {
     }
   ) { };
 
+  lua-resty-hmac-ffi = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchFromGitHub,
+      lua,
+    }:
+    buildLuarocksPackage {
+      pname = "lua-resty-hmac-ffi";
+      version = "0.06-1";
+
+      src = fetchFromGitHub {
+        owner = "jkeys089";
+        repo = "lua-resty-hmac";
+        rev = "0.06-1";
+        hash = "sha256-CdYps8gqJqa0UzvZ8CsesEyBIb3rr0ZD+ugCr5P96NM=";
+      };
+
+      disabled = lua.luaversion != "5.1";
+
+      meta = {
+        homepage = "https://github.com/jkeys089/lua-resty-hmac";
+        description = "HMAC functions for ngx_lua and LuaJIT";
+        license.fullName = "BSD-2-Clause License";
+      };
+    }
+  ) { };
+
   lua-resty-http = callPackage (
     {
       buildLuarocksPackage,
