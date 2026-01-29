@@ -18045,6 +18045,12 @@
     githubId = 220262;
     name = "Ion Mudreac";
   };
+  mulatta = {
+    email = "seungwon@mulatta.io";
+    github = "mulatta";
+    githubId = 67085791;
+    name = "Seungwon Lee";
+  };
   MulliganSecurity = {
     email = "mulligansecurity@riseup.net";
     github = "MulliganSecurity";

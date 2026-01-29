@@ -20,16 +20,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nextflow";
-  # 24.08.0-edge is compatible with Java 21. The current (as of 2024-09-19)
-  # nextflow release (24.04.4) does not yet support java21, but java19. The
-  # latter is not in nixpkgs(-unstable) anymore.
-  version = "24.08.0-edge";
+  version = "25.10.2";
 
   src = fetchFromGitHub {
     owner = "nextflow-io";
     repo = "nextflow";
-    rev = "6e866ae81ff3bf8a9729e9dbaa9dd89afcb81a4b";
-    hash = "sha256-SA27cuP3iO5kD6u0uTeEaydyqbyJzOkVtPrb++m3Tv0=";
+    rev = "c03082c9b816774c799660d22c2b56d72218fddc";
+    hash = "sha256-k8B393GOsU1gs+ZS5x3VZUmz+n8lH8/cmXkpzU301lY=";
   };
 
   nativeBuildInputs = [
@@ -44,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     # to be reverted for this specific use case.
     substituteInPlace modules/nextflow/src/main/groovy/nextflow/executor/BashWrapperBuilder.groovy \
       --replace-fail "['/bin/bash'," "['${bash}/bin/bash'," \
+      --replace-fail '? "/bin/bash"' '? "'${bash}'/bin/bash"' \
       --replace-fail "if( containerBuilder ) {" "if( containerBuilder ) {
                 launcher = launcher.replaceFirst(\"/nix/store/.*/bin/bash\", \"/bin/bash\")"
   '';
@@ -113,6 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       Etjean
+      mulatta
     ];
     mainProgram = "nextflow";
     platforms = lib.platforms.unix;
