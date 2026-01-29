@@ -143,8 +143,8 @@ in
       };
 
       openFirewall = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
+        type = lib.types.nullOr lib.types.bool;
+        default = null;
         description = "Open ports in the firewall for mpd.";
       };
 
@@ -378,9 +378,9 @@ in
             ])
             || (lib.hasPrefix "/" cfg.settings.bind_to_address)
           )
-          && !cfg.openFirewall
+          && (isNull cfg.openFirewall)
         )
-        "Using '${cfg.settings.bind_to_address}' as services.mpd.settings.bind_to_address without enabling services.mpd.openFirewall, might prevent you from accessing MPD from other clients.";
+        "Using '${cfg.settings.bind_to_address}' as services.mpd.settings.bind_to_address without enabling services.mpd.openFirewall, might prevent you from accessing MPD from other clients. To surpress this warning, set services.mpd.openFirewall explicitly to `false`";
 
     # install mpd units
     systemd.packages = [ pkgs.mpd ];
@@ -438,7 +438,9 @@ in
       };
     };
 
-    networking.firewall.allowedTCPPorts = lib.optionals cfg.openFirewall [ cfg.settings.port ];
+    networking.firewall.allowedTCPPorts = lib.optionals (
+      builtins.isBool cfg.openFirewall && cfg.openFirewall
+    ) [ cfg.settings.port ];
 
     users.users = lib.optionalAttrs (cfg.user == name) {
       ${name} = {
