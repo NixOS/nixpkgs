@@ -823,6 +823,7 @@ in
             || config.services.greetd.enable
             || config.services.displayManager.ly.enable
             || config.services.displayManager.lemurs.enable
+            || config.services.displayManager.plasma-login-manager.enable
           );
       in
       mkIf default (mkDefault true);

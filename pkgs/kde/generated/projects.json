@@ -792,7 +792,7 @@
     "repo_path": "unmaintained/cutepaste"
   },
   "cxx-kde-frameworks": {
-    "description": "Extension Crate for cxx-qt which allows the use of KDE Frameworks in Rust software",
+    "description": "Bridge KDE Frameworks and Rust using cxx-qt",
     "name": "cxx-kde-frameworks",
     "project_path": "libs/cxx-kde-frameworks",
     "repo_path": "libraries/cxx-kde-frameworks"
@@ -946,6 +946,12 @@
     "name": "dragon",
     "project_path": "kdemultimedia/dragon",
     "repo_path": "multimedia/dragon"
+  },
+  "drawy": {
+    "description": "Your handy, infinite, brainstorming tool!",
+    "name": "drawy",
+    "project_path": "graphics/drawy",
+    "repo_path": "graphics/drawy"
   },
   "drkonqi": {
     "description": "Crash handler for KDE software",
@@ -1348,6 +1354,12 @@
     "name": "kaichat",
     "project_path": "utilities/kaichat",
     "repo_path": "utilities/kaichat"
+  },
+  "kaichat-addons": {
+    "description": "Addons for KAIChat",
+    "name": "kaichat-addons",
+    "project_path": "utilities/kaichat-addons",
+    "repo_path": "utilities/kaichat-addons"
   },
   "kaidan": {
     "description": "Modern chat app for every device",
@@ -3305,6 +3317,12 @@
     "project_path": "utils/kongress",
     "repo_path": "utilities/kongress"
   },
+  "konlineaccounts": {
+    "description": "KOnlineAccounts is a system service to allow applications to obtain information about system-wide logged in accounts",
+    "name": "konlineaccounts",
+    "project_path": "system/konlineaccounts",
+    "repo_path": "system/konlineaccounts"
+  },
   "konqueror": {
     "description": "Web browser and Swiss Army knife for any kind of file management and previewing",
     "name": "konqueror",
@@ -4811,6 +4829,12 @@
     "project_path": "base/mangonel",
     "repo_path": "utilities/mangonel"
   },
+  "mankalaengine": {
+    "description": "Engine used for creating computerized opponents for Mancala variants",
+    "name": "mankalaengine",
+    "project_path": "games/mankalaengine",
+    "repo_path": "games/mankalaengine"
+  },
   "marble": {
     "description": "Virtual Globe and World Atlas that you can use to learn more about the Earth",
     "name": "marble",
@@ -5010,7 +5034,7 @@
     "repo_path": "pim/mbox-importer"
   },
   "md4qt": {
-    "description": "Header-only C++ library for parsing Markdown.",
+    "description": "C++ library for parsing Markdown.",
     "name": "md4qt",
     "project_path": "libs/md4qt",
     "repo_path": "libraries/md4qt"
@@ -6005,6 +6029,12 @@
     "project_path": "libs/pulseaudio-qt",
     "repo_path": "libraries/pulseaudio-qt"
   },
+  "pumoku": {
+    "description": "PuMoKu is a classic, 9x9 pumoku solving game aimed at Plasma Mobile",
+    "name": "pumoku",
+    "project_path": "games/pumoku",
+    "repo_path": "games/pumoku"
+  },
   "purpose": {
     "description": "Framework for providing abstractions to get the developer's purposes fulfilled.",
     "name": "purpose",
@@ -6688,6 +6718,12 @@
     "name": "sysadmin-ci-utilities",
     "project_path": "sysadmin/ci-utilities",
     "repo_path": "sysadmin/ci-utilities"
+  },
+  "sysadmin-craft-ci": {
+    "description": "Contains all tooling necessary to run Craft CI jobs on all platforms",
+    "name": "sysadmin-craft-ci",
+    "project_path": "sysadmin/craft-ci",
+    "repo_path": "sysadmin/craft-ci"
   },
   "sysadmin-dns": {
     "description": "DNS Zone files for Sysadmin managed domains",

@@ -1,13 +1,17 @@
 {
   mkKdeDerivation,
   pkg-config,
-  qtmultimedia,
+  qtlocation,
+  plasma-nm,
 }:
 mkKdeDerivation {
-  pname = "qrca";
+  pname = "plasma-setup";
+
+  patches = [ ./optional-dependencies.patch ];
 
   extraNativeBuildInputs = [ pkg-config ];
   extraBuildInputs = [
-    qtmultimedia
+    qtlocation
+    plasma-nm
   ];
 }
