@@ -532,7 +532,9 @@ let
           rm -f "$POL_PATH"
           cat ${policiesJson} >> "$POL_PATH"
 
-          extraPoliciesFiles=(${toString extraPoliciesFiles})
+          # Force relative paths to be added to the store,
+          # similar to nixos/modules/system/etc/etc.nix#L62-L63.
+          extraPoliciesFiles=(${toString (map (file: "${file}") extraPoliciesFiles)})
           for extraPoliciesFile in "''${extraPoliciesFiles[@]}"; do
             jq -s '.[0] * .[1]' $extraPoliciesFile "$POL_PATH" > .tmp.json
             mv .tmp.json "$POL_PATH"
@@ -549,7 +551,8 @@ let
           ${mozillaCfg}
           EOF
 
-          extraPrefsFiles=(${toString extraPrefsFiles})
+          # Same as with policies.
+          extraPrefsFiles=(${toString (map (file: "${file}") extraPrefsFiles)})
           for extraPrefsFile in "''${extraPrefsFiles[@]}"; do
             cat "$extraPrefsFile" >> "$libDir/mozilla.cfg"
           done
