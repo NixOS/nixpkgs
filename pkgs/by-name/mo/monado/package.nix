@@ -59,6 +59,8 @@
   # https://gitlab.freedesktop.org/monado/monado/-/blob/master/doc/targets.md#xrt_feature_service-disabled
   serviceSupport ? true,
   tracingSupport ? false,
+  # Only build client libraries to allow applications/games to connect to the monado IPC socket for VR eg, for 32 bit applications/games on a 64 bit host
+  clientLibOnly ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -113,8 +115,6 @@ stdenv.mkDerivation (finalAttrs: {
     libXdmcp
     libXext
     libXrandr
-    onnxruntime
-    opencv4
     openvr
     orc
     pcre2
@@ -129,6 +129,10 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     zstd
   ]
+  ++ lib.optionals (!clientLibOnly) [
+    onnxruntime
+    opencv4
+  ]
   ++ lib.optionals tracingSupport [
     tracy
   ]
@@ -138,16 +142,39 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeBool "XRT_FEATURE_SERVICE" serviceSupport)
+    (lib.cmakeBool "XRT_FEATURE_SERVICE" (serviceSupport && !clientLibOnly))
     (lib.cmakeBool "XRT_HAVE_TRACY" tracingSupport)
     (lib.cmakeBool "XRT_FEATURE_TRACING" tracingSupport)
     (lib.cmakeBool "XRT_OPENXR_INSTALL_ABSOLUTE_RUNTIME_PATH" true)
+  ]
+  ++ lib.optionals clientLibOnly [
+    (lib.cmakeBool "XRT_FEATURE_CLIENT_WITHOUT_SERVICE" true)
+    (lib.cmakeBool "XRT_FEATURE_STEAMVR_PLUGIN" false)
+    (lib.cmakeBool "XRT_HAVE_LIBUVC" false)
+    (lib.cmakeBool "XRT_HAVE_LIBUSB" false)
+    (lib.cmakeBool "XRT_HAVE_JPEG" false)
+    (lib.cmakeBool "XRT_HAVE_HIDAPI" false)
+    (lib.cmakeBool "XRT_HAVE_GST" false)
+    (lib.cmakeBool "XRT_HAVE_BLUETOOTH" false)
+    (lib.cmakeBool "XRT_FEATURE_DEBUG_GUI" false)
+    (lib.cmakeBool "XRT_FEATURE_WINDOW_PEEK" false)
+    (lib.cmakeBool "XRT_FEATURE_SLAM" false)
+    (lib.cmakeBool "XRT_MODULE_MONADO_CLI" false)
+    (lib.cmakeBool "XRT_MODULE_MONADO_GUI" false)
+    (lib.cmakeBool "XRT_MODULE_MERCURY_HANDTRACKING" false)
+    (lib.cmakeBool "XRT_BUILD_SAMPLES" false)
   ];
 
   # Help openxr-loader find this runtime
   setupHook = writeText "setup-hook" ''
     export XDG_CONFIG_DIRS=@out@/etc/xdg''${XDG_CONFIG_DIRS:+:''${XDG_CONFIG_DIRS}}
   '';
+
+  # While it seems like you could use stdenv.hostPlatform.parsed.cpu.arch for the next variable, you can't, as this always sets the correct host CPU, even if you're using i686 packages on x86_64
+  # This may not be correct on every CPU architecture as per, https://registry.khronos.org/OpenXR/specs/1.1/loader.html#architecture-identifiers
+  postInstall = ''
+    cp "$out/share/openxr/1/openxr_monado.json" "$out/share/openxr/1/openxr_monado.${stdenv.hostPlatform.parsed.cpu.name}.json"
+  ''; # Do not change this from using `cp` as this will break the multiarch build because it will be pointing to openxr_monado.json for both the 32 bit json and the 64 bit json.
 
   passthru = {
     updateScript = nix-update-script { };
@@ -159,7 +186,11 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://monado.freedesktop.org/";
     license = lib.licenses.boost;
     maintainers = with lib.maintainers; [ Scrumplex ];
-    platforms = lib.platforms.linux;
     mainProgram = "monado-cli";
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+      "aarch64-linux"
+    ];
   };
 })
