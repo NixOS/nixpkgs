@@ -27,6 +27,7 @@
 }:
 
 let
+  codec2' = codec2.override { freedvSupport = true; };
   ebur128Src = fetchFromGitHub {
     owner = "jiixyj";
     repo = "libebur128";
@@ -125,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    codec2
+    codec2'
     libsamplerate
     libsndfile
     lpcnet
@@ -157,7 +158,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "USE_NATIVE_AUDIO" (with stdenv.hostPlatform; isLinux || isDarwin))
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-I${codec2.src}/src";
+  env.NIX_CFLAGS_COMPILE = "-I${codec2'.src}/src";
 
   doCheck = false;
 
