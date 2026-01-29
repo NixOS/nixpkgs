@@ -62,6 +62,8 @@ buildDotnetModule {
   pname = "sonarr";
   inherit version src;
 
+  # Upstream expects to be ran from a "bin" directory
+  installPath = "${placeholder "out"}/lib/sonarr/bin";
   strictDeps = true;
   nativeBuildInputs = [
     nodejs
@@ -87,12 +89,18 @@ buildDotnetModule {
     yarn --offline run build --env production
   '';
   postInstall =
+    let
+      packageInfo = writers.writeText "package_info" ''
+        PackageVersion=${version}
+        PackageAuthor=[NixOS](https://nixos.org)
+      '';
+    in
     lib.optionalString withFFmpeg ''
-      rm -- "$out/lib/sonarr/ffprobe"
-      ln -s -- "$ffprobe" "$out/lib/sonarr/ffprobe"
+      ln -sf -- "$ffprobe" "$out/lib/sonarr/bin/ffprobe"
     ''
     + ''
-      cp -a -- _output/UI "$out/lib/sonarr/UI"
+      cp -a -- _output/UI "$out/lib/sonarr/bin/UI"
+      ln -s ${packageInfo} $out/lib/sonarr/package_info
     '';
   # Add an alias for compatibility with Sonarr v3 package.
   postFixup = ''
