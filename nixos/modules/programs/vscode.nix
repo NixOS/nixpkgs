@@ -7,6 +7,7 @@
 
 let
   cfg = config.programs.vscode;
+  format = pkgs.formats.json { };
 in
 {
   options.programs.vscode = {
@@ -34,6 +35,21 @@ in
         ]
       '';
       description = "List of extensions to install.";
+    };
+
+    policies = lib.mkOption {
+      type = format.type;
+      default = { };
+      example = lib.literalExpression ''
+        {
+          "UpdateMode" = "none";
+          "TelemetryLevel" = "off";
+        }
+      '';
+      description = ''
+        System-wide policies for VSCode in `/etc/vscode/policy.json`.
+        See <https://code.visualstudio.com/docs/setup/enterprise#_centrally-manage-vs-code-settings> for more information.
+      '';
     };
 
     finalPackage = lib.mkOption {
