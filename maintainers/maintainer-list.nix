@@ -20591,6 +20591,12 @@
     githubId = 7051056;
     keys = [ { fingerprint = "01AE 5EC2 39D9 CE4B DDB0  166A 4EC5 5FB7 07DC 24C4"; } ];
   };
+  philipjohnbasile = {
+    email = "PhilipJohnBasile@gmail.com";
+    github = "PhilipJohnBasile";
+    githubId = 1419847;
+    name = "Philip John Basile";
+  };
   Philipp-M = {
     email = "philipp@mildenberger.me";
     github = "Philipp-M";
