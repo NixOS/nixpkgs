@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "langgraph-sdk";
-  version = "0.3.2";
+  version = "0.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = "sdk==${version}";
-    hash = "sha256-PGQjIxdd4aDh2t9p1gttMlREBxqMOR9Ghtb10wL0gBI=";
+    hash = "sha256-nhx/0qSdS8itk6jY/NR8iQCUNkk/LBDlGzEGddIXxLs=";
   };
 
   sourceRoot = "${src.name}/libs/sdk-py";
