@@ -27,13 +27,13 @@
 
 buildDunePackage (finalAttrs: {
   pname = "smtml";
-  version = "0.19.0";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "formalsec";
     repo = "smtml";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZS+SVmpmvUP2V3DTQ5+QNjFWgj3O3vFIST5c7CifIos=";
+    hash = "sha256-VnkF+bZXeqaj9LSpyzqH5AM9EQsrW4Rlj5kvyTfYTKE=";
   };
 
   minimalOCamlVersion = "4.14";
@@ -85,6 +85,7 @@ buildDunePackage (finalAttrs: {
     downloadPage = "https://github.com/formalsec/smtml";
     changelog = "https://github.com/formalsec/smtml/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
+    teams = with lib.teams; [ ngi ];
     maintainers = with lib.maintainers; [
       ethancedwards8
       redianthus
