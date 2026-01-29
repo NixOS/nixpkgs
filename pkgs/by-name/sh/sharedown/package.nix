@@ -21,18 +21,18 @@ let
   yarnLock = ./yarn.lock;
   offlineCache = fetchYarnDeps {
     inherit yarnLock;
-    hash = "sha256-MRCrBvqDpPpwMg4A50RVKGp4GqRHNjNJzSpJz+14OG4=";
+    hash = "sha256-1OWsO3qUA+r2q0DGJ59wglEDmSje58IGPa5k45Dnamg=";
   };
 in
 stdenvNoCC.mkDerivation rec {
   pname = "Sharedown";
-  version = "5.3.6-unstable-2025-12-06";
+  version = "rolling-unstable-2025-12-30";
 
   src = fetchFromGitHub {
     owner = "kylon";
     repo = "Sharedown";
-    rev = "c39f0c5bbf694c2cdfce4ef0b4381342fb535ecc";
-    hash = "sha256-PsfE7v9yEeGC8rUzhj/klhqtKKzxCV+thwLnQlgfDxI=";
+    rev = "4a35cf6785b1ef1887f838167e072b458a8c42a0";
+    hash = "sha256-oOgNaAEVMKT7CXvezj9DgTNUcA1sTvtMAIQOvaRRf2Q=";
   };
 
   nativeBuildInputs = [
