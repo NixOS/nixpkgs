@@ -9963,6 +9963,8 @@ self: super: with self; {
 
   moehlenhoff-alpha2 = callPackage ../development/python-modules/moehlenhoff-alpha2 { };
 
+  modularcalculator = callPackage ../development/python-modules/modularcalculator { };
+
   mohawk = callPackage ../development/python-modules/mohawk { };
 
   molbar = callPackage ../development/python-modules/molbar { };
