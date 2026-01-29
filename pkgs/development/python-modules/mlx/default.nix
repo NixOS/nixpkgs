@@ -40,14 +40,14 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "mlx";
-  version = "0.30.3";
+  version = "0.30.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ml-explore";
     repo = "mlx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Y4RTkGcDCZ9HLyflN0qYhPt/oVOsBhF1mHnKM4n1/ys=";
+    hash = "sha256-OJk6jPlbaSlsUdk3ADz3tWcRzTWXRof3/q8Soe1AO6w=";
   };
 
   patches = [
