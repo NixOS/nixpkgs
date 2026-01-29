@@ -21261,6 +21261,12 @@
     matrix = "@pschmitt:one.ems.host";
     keys = [ { fingerprint = "9FBF 2ABF FB37 F7F3 F502  44E5 DC43 9C47 EACB 17F9"; } ];
   };
+  pseudocc = {
+    email = "pseudoc@163.com";
+    github = "pseudocc";
+    githubId = 85104110;
+    name = "Atlas Yu";
+  };
   pshirshov = {
     email = "pshirshov@eml.cc";
     github = "pshirshov";
