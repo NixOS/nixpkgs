@@ -1,43 +1,43 @@
 {
   lib,
-  nix-update-script,
   buildPythonPackage,
   crytic-compile,
   fetchFromGitHub,
+  hatchling,
   makeWrapper,
   packaging,
   prettytable,
-  setuptools-scm,
   solc,
+  testers,
+  versionCheckHook,
   web3,
   withSolc ? false,
-  testers,
-  slither-analyzer,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "slither-analyzer";
-  version = "0.11.3";
+  version = "0.11.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "crytic";
     repo = "slither";
-    tag = version;
-    hash = "sha256-HgPQPyxDvKrmqGiHjiVGxEguYUcaNYwK1gZoMMkQWhM=";
+    tag = finalAttrs.version;
+    hash = "sha256-sy1vE9XniwyvvZRFnnKhPfmYh2auHHcMel9sZx2YK3c=";
   };
 
-  nativeBuildInputs = [
-    makeWrapper
-    setuptools-scm
-  ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [ makeWrapper ];
+
+  dependencies = [
     crytic-compile
     packaging
     prettytable
     web3
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   postFixup = lib.optionalString withSolc ''
     wrapProgram $out/bin/slither \
@@ -66,22 +66,7 @@ buildPythonPackage rec {
     "slither.vyper_parsing"
   ];
 
-  # Test if the binary works during the build phase.
-  checkPhase = ''
-    runHook preCheck
-
-    HOME="$TEMP" $out/bin/slither --version
-
-    runHook postCheck
-  '';
-
-  passthru.tests.version = testers.testVersion {
-    package = slither-analyzer;
-    command = "HOME=$TMPDIR slither --version";
-    version = "${version}";
-  };
-
-  passthru.updateScript = nix-update-script { };
+  doInstallCheck = true;
 
   meta = {
     description = "Static Analyzer for Solidity";
@@ -91,7 +76,7 @@ buildPythonPackage rec {
       contract details, and provides an API to easily write custom analyses.
     '';
     homepage = "https://github.com/trailofbits/slither";
-    changelog = "https://github.com/crytic/slither/releases/tag/${version}";
+    changelog = "https://github.com/crytic/slither/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.agpl3Plus;
     mainProgram = "slither";
     maintainers = with lib.maintainers; [
@@ -100,4 +85,4 @@ buildPythonPackage rec {
       hellwolf
     ];
   };
-}
+})
