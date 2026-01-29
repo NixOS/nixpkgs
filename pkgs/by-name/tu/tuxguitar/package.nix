@@ -58,7 +58,10 @@ maven.buildMavenPackage rec {
 
   mvnJdk = jdk;
 
-  mvnHash = "sha256-7UDFGuOMERvY74mkneusJyuAHfF3U6b4qV4MPHGQYdM=";
+  mvnHash = (
+    passthru.mvnHashByPlatform.${stdenv.system}
+      or (lib.warn "Missing mvnHash for ${stdenv.system}, using lib.fakeHash" lib.fakeHash)
+  );
 
   mvnParameters = mvnParams;
   mvnDepsParameters = mvnParams;
@@ -194,6 +197,11 @@ maven.buildMavenPackage rec {
   passthru = rec {
     tests.nixos = nixosTests.tuxguitar;
     inherit swtArtifactId buildDir buildScript;
+    # FIXME: Makes hash stable across platforms and convert to a single hash.
+    mvnHashByPlatform = {
+      "x86_64-linux" = "sha256-7UDFGuOMERvY74mkneusJyuAHfF3U6b4qV4MPHGQYdM=";
+      "aarch64-linux" = "sha256-7UDFGuOMERvY74mkneusJyuAHfF3U6b4qV4MPHGQYdM=";
+    };
     ldLibVar = if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
     classpath = [
       "${swt}/jars/swt.jar"
@@ -246,7 +254,7 @@ maven.buildMavenPackage rec {
       ardumont
       mio
     ];
-    platforms = builtins.attrNames swt.passthru.srcMetadataByPlatform;
+    platforms = builtins.attrNames passthru.mvnHashByPlatform;
     mainProgram = "tuxguitar";
   };
 }
