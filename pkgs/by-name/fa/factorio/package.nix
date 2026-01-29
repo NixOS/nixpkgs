@@ -16,7 +16,7 @@
   libxkbcommon,
   makeDesktopItem,
   makeWrapper,
-  releaseType,
+  releaseType ? "alpha",
   stdenv,
   wayland,
 

@@ -79,7 +79,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   postFixup = ''
-    wrapPythonProgramsIn "$out/libexec" "$out $pythonPath"
+    wrapPythonProgramsIn "$out/libexec" "$out ''${pythonPath[*]}"
   '';
 
   passthru = {

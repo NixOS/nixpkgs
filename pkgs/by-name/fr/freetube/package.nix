@@ -33,8 +33,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   postUnpack =
     if stdenvNoCC.hostPlatform.isDarwin then
       ''
-        cp -r ${electron.dist} electron-dist
-        chmod -R u+w electron-dist
+        cp -r ${electron.dist} source/electron-dist
+        chmod -R u+w source/electron-dist
       ''
     else
       ''
@@ -45,6 +45,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     (replaceVars ./patch-build-script.patch {
       electron-version = electron.version;
     })
+    ./darwin-targets.patch
   ];
 
   yarnOfflineCache = fetchYarnDeps {
@@ -74,7 +75,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     install -D _icons/icon.svg $out/share/icons/hicolor/scalable/apps/freetube.svg
   ''
   + lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
-    mkdir -p $out/Applications
+    mkdir -p $out/Applications $out/bin
     cp -r build/mac*/FreeTube.app $out/Applications
     ln -s "$out/Applications/FreeTube.app/Contents/MacOS/FreeTube" $out/bin/freetube
   ''
@@ -109,11 +110,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       ryand56
       sigmasquadron
       ddogfoodd
-    ];
-    badPlatforms = [
-      # output app is called "Electron.app" while derivation expects "FreeTube.app"
-      #see: https://github.com/NixOS/nixpkgs/pull/384596#issuecomment-2677141349
-      lib.systems.inspect.patterns.isDarwin
     ];
     inherit (electron.meta) platforms;
     mainProgram = "freetube";

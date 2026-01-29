@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postFixup = ''
-    buildPythonPath "$pythonPath"
+    buildPythonPath "''${pythonPath[*]}"
     patchPythonScript $out/lib/pluma/plugins/snippets/Snippet.py
   '';
 

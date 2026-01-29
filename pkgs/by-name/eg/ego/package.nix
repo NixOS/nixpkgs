@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
 
   # requires access to /root
   checkFlags = [
-    "--skip tests::test_check_user_homedir"
+    "--skip=tests::test_check_user_homedir"
   ];
 
   postInstall = ''

@@ -3,9 +3,10 @@
   python3Packages,
   fetchFromGitHub,
   installShellFiles,
+  stdenv,
 
-  waylandSupport ? true,
-  x11Support ? true,
+  waylandSupport ? (!stdenv.hostPlatform.isDarwin),
+  x11Support ? (!stdenv.hostPlatform.isDarwin),
 
   wl-clipboard,
   wtype,
@@ -60,7 +61,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/fdw/rofimoji";
     changelog = "https://github.com/fdw/rofimoji/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ justinlovinger ];
   };
 }

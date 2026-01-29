@@ -810,8 +810,6 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-    services.displayManager.enable = true;
-
     services.xserver.displayManager.lightdm.enable =
       let
         dmConf = cfg.displayManager;

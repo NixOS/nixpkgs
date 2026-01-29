@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libks";
-  version = "2.0.8";
+  version = "2.0.9";
 
   src = fetchFromGitHub {
     owner = "signalwire";
     repo = "libks";
     tag = "v${version}";
-    hash = "sha256-cBNNCOm+NcIvozN4Z4XnZWBBqq0LVELVqXubQB4JMTU=";
+    hash = "sha256-XnNyzH+VdBHligJ5+ct835Mekw2DbxMboC06Umm2Zak=";
   };
 
   patches = [
@@ -62,6 +62,9 @@ stdenv.mkDerivation rec {
 
   # Something seems to go wrong with testwebsock2 when using parallelism
   enableParallelChecking = false;
+
+  # Some tests require this on Darwin
+  __darwinAllowLocalNetworking = true;
 
   passthru = {
     tests.freeswitch = freeswitch;

@@ -389,6 +389,8 @@ let
               "${pkgs.qemu-user}/bin/qemu-${final.qemuArch}"
             else if final.isWasi then
               "${pkgs.wasmtime}/bin/wasmtime"
+            else if final.isGhcjs then
+              "${pkgs.nodejs-slim}/bin/node"
             else if final.isMmix then
               "${pkgs.mmixware}/bin/mmix"
             else

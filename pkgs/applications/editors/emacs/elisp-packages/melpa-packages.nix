@@ -1008,6 +1008,9 @@ let
           # missing optional dependencies
           conda = addPackageRequires super.conda [ self.projectile ];
 
+          # https://github.com/NixOS/nixpkgs/issues/483425
+          consult = addPackageRequires super.consult [ self.flymake ];
+
           # needs network during compilation, also native-ice
           consult-gh = ignoreCompilationError (
             super.consult-gh.overrideAttrs (old: {

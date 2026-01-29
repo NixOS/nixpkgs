@@ -88,7 +88,7 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   postFixup = ''
-    wrapPythonProgramsIn "$out/share/better-control" "$out $pythonPath"
+    wrapPythonProgramsIn "$out/share/better-control" "$out ''${pythonPath[*]}"
   '';
 
   passthru.updateScript = nix-update-script { };

@@ -20,8 +20,43 @@ let
 
   mkDefaultAttrs = mapAttrs (n: v: mkDefault v);
 
-  libconfig = pkgs.formats.libconfig { };
-  configFile = libconfig.generate "picom.conf" cfg.settings;
+  # Basically a tinkered lib.generators.mkKeyValueDefault
+  # It either serializes a top-level definition "key: { values };"
+  # or an expression "key = { values };"
+  mkAttrsString =
+    top:
+    mapAttrsToList (
+      k: v:
+      let
+        sep = if (top && isAttrs v) then ":" else "=";
+      in
+      "${escape [ sep ] k}${sep}${mkValueString v};"
+    );
+
+  # This serializes a Nix expression to the libconfig format.
+  mkValueString =
+    v:
+    if types.bool.check v then
+      boolToString v
+    else if types.int.check v then
+      toString v
+    else if types.float.check v then
+      toString v
+    else if types.str.check v then
+      "\"${escape [ "\"" ] v}\""
+    else if builtins.isList v then
+      "[ ${concatMapStringsSep " , " mkValueString v} ]"
+    else if types.attrs.check v then
+      "{ ${concatStringsSep " " (mkAttrsString false v)} }"
+    else
+      throw ''
+        invalid expression used in option services.picom.settings:
+        ${v}
+      '';
+
+  toConf = attrs: concatStringsSep "\n" (mkAttrsString true cfg.settings);
+
+  configFile = pkgs.writeText "picom.conf" (toConf cfg.settings);
 
 in
 {
@@ -244,22 +279,56 @@ in
       '';
     };
 
-    settings = mkOption {
-      type = libconfig.type;
-      default = { };
-      example = literalExpression ''
-        blur =
-          { method = "gaussian";
-            size = 10;
-            deviation = 5.0;
+    settings =
+      with types;
+      let
+        scalar =
+          oneOf [
+            bool
+            int
+            float
+            str
+          ]
+          // {
+            description = "scalar types";
           };
-      '';
-      description = ''
-        Picom settings. Use this option to configure Picom settings not exposed
-        in a NixOS option or to bypass one.  For the available options see the
-        CONFIGURATION FILES section at {manpage}`picom(1)`.
-      '';
-    };
+
+        libConfig =
+          oneOf [
+            scalar
+            (listOf libConfig)
+            (attrsOf libConfig)
+          ]
+          // {
+            description = "libconfig type";
+          };
+
+        topLevel = attrsOf libConfig // {
+          description = ''
+            libconfig configuration. The format consists of an attributes
+            set (called a group) of settings. Each setting can be a scalar type
+            (boolean, integer, floating point number or string), a list of
+            scalars or a group itself
+          '';
+        };
+
+      in
+      mkOption {
+        type = topLevel;
+        default = { };
+        example = literalExpression ''
+          blur =
+            { method = "gaussian";
+              size = 10;
+              deviation = 5.0;
+            };
+        '';
+        description = ''
+          Picom settings. Use this option to configure Picom settings not exposed
+          in a NixOS option or to bypass one.  For the available options see the
+          CONFIGURATION FILES section at {manpage}`picom(1)`.
+        '';
+      };
   };
 
   config = mkIf cfg.enable {

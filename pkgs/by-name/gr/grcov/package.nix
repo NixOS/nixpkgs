@@ -30,9 +30,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
         "test_integration_zip_dir"
         "test_integration_zip_zip"
       ];
-      skipFlag = test: "--skip " + test;
     in
-    builtins.concatStringsSep " " (map skipFlag skipList);
+    builtins.map (x: "--skip=" + x) skipList;
 
   meta = {
     description = "Rust tool to collect and aggregate code coverage data for multiple source files";

@@ -16,13 +16,6 @@
   libuv,
   libxkbcommon,
   ulfius,
-  openssl,
-  gnutls,
-  jansson,
-  zlib,
-  libmicrohttpd,
-  orcania,
-  yder,
   yaml-cpp,
   udevCheckHook,
   versionCheckHook,
@@ -73,22 +66,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     bluez
-    gnutls
     i2c-tools
-    jansson
     libX11
     libgpiod_1
     libinput
-    libmicrohttpd
     libusb1
     libuv
     libxkbcommon
-    openssl
-    orcania
     ulfius
     yaml-cpp
-    yder
-    zlib
   ];
 
   preConfigure = ''

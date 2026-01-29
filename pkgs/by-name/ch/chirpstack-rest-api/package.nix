@@ -6,16 +6,16 @@
 }:
 buildGoModule rec {
   pname = "chirpstack-rest-api";
-  version = "4.15.0";
+  version = "4.16.1";
 
   src = fetchFromGitHub {
     owner = "chirpstack";
     repo = "chirpstack-rest-api";
     rev = "v${version}";
-    hash = "sha256-YSMdE0f3usedyUItSvdtJ77L/x4rwrgIJa1TTg9ODek=";
+    hash = "sha256-utXayqQGlBYzmf7xW+s1Fh4oRhpBdfnV5g73X2ILKko=";
   };
 
-  vendorHash = "sha256-+lAfgFb45WxZYh5fzONECRwTlXA64nl58rfstOPsDEg=";
+  vendorHash = "sha256-JnQaClgU+Yyz07lELoEyLYHLJwcmET5SLci2XQoFGKc=";
 
   ldflags = [
     "-s"

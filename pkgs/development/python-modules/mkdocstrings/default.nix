@@ -13,21 +13,21 @@
   dirty-equals,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mkdocstrings";
-  version = "1.0.1";
+  version = "1.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mkdocstrings";
     repo = "mkdocstrings";
-    tag = version;
-    hash = "sha256-dRDelPj2zO31gZzPDh7BxdBemGNaTPbzhlmWH1JYmaM=";
+    tag = finalAttrs.version;
+    hash = "sha256-fdWHcg6WijOXsE6+03iPRineUHtMDU/Yfra3S9lkMWs=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
+      --replace-fail 'dynamic = ["version"]' 'version = "${finalAttrs.version}"'
   '';
 
   build-system = [ pdm-backend ];
@@ -65,8 +65,8 @@ buildPythonPackage rec {
   meta = {
     description = "Automatic documentation from sources for MkDocs";
     homepage = "https://github.com/mkdocstrings/mkdocstrings";
-    changelog = "https://github.com/mkdocstrings/mkdocstrings/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/mkdocstrings/mkdocstrings/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

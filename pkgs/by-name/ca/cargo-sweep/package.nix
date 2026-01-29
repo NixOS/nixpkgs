@@ -19,9 +19,9 @@ rustPlatform.buildRustPackage rec {
 
   checkFlags = [
     # Requires a rustup toolchain to be installed.
-    "--skip check_toolchain_listing_on_multiple_projects"
+    "--skip=check_toolchain_listing_on_multiple_projects"
     # Does not work with a `--target` build in the environment
-    "--skip empty_project_output"
+    "--skip=empty_project_output"
   ];
 
   meta = {

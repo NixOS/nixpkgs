@@ -51,6 +51,8 @@ in
       '')
     ];
 
+    services.displayManager.enable = true;
+
     systemd.services.display-manager = {
       description = "Display Manager";
       after = [

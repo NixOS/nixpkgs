@@ -29,17 +29,17 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deno";
-  version = "2.6.5";
+  version = "2.6.6";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "deno";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true; # required for tests
-    hash = "sha256-oNZXPBW61IQdA3MFS1gxNoInSCt6mUitedAXx+tuFaw=";
+    hash = "sha256-QqzV4Ikr5iWrOX+KJH/65S1HHhxOB0SmHj7yejVJp3M=";
   };
 
-  cargoHash = "sha256-H1vX/aiB5inK6Fo0l3sEZnvqgRImTpjkxRZHLBPgz0U=";
+  cargoHash = "sha256-soJ2ZKpxlBskl2b3pz4pn6zMaWUXjYOBRKBuoxHokes=";
 
   patches = [
     ./patches/0002-tests-replace-hardcoded-paths.patch

@@ -345,7 +345,7 @@ stdenv'.mkDerivation (finalAttrs: {
       mv $out/Blender.app $out/Applications
     ''
     + ''
-      buildPythonPath "$pythonPath"
+      buildPythonPath "''${pythonPath[*]}"
       wrapProgram $blenderExecutable \
         --prefix PATH : $program_PATH \
         --prefix PYTHONPATH : "$program_PYTHONPATH" \

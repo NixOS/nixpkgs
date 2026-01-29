@@ -221,7 +221,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pythonPath = [ python3Packages.numpy ];
   postInstall = ''
-    wrapPythonProgramsIn "$out/bin" "$out $pythonPath"
+    wrapPythonProgramsIn "$out/bin" "$out ''${pythonPath[*]}"
   ''
   + lib.optionalString useJava ''
     cd $out/lib

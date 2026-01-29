@@ -62,7 +62,7 @@ python3Packages.buildPythonApplication rec {
       --replace "/usr/bin/env sh" "sh"
   '';
   postFixup = ''
-    wrapPythonProgramsIn $out/libexec "$out $pythonPath"
+    wrapPythonProgramsIn $out/libexec "$out ''${pythonPath[*]}"
   '';
 
   meta = {

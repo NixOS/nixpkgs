@@ -1,13 +1,13 @@
 [
   {
     "pname": "AAXClean",
-    "version": "2.1.0.1",
-    "hash": "sha256-dQJKHzET1QXKwxXqEb6X/B+vN6f8tF5jchxSGxUVeTs="
+    "version": "2.1.1.1",
+    "hash": "sha256-SjM74bfcqb3L6Ux+crofEsOWoHB0O78afNrld9WEFY0="
   },
   {
     "pname": "AAXClean.Codecs",
-    "version": "2.1.3.1",
-    "hash": "sha256-GeIQgSPzAhpNfulGWA9tJmnFDN1CsSnerq9rKaK8poE="
+    "version": "2.1.3.2",
+    "hash": "sha256-la4yuCQi75bCRr700CDD2huNEjk5ZKrTzwrtuUjyWAk="
   },
   {
     "pname": "AudibleApi",

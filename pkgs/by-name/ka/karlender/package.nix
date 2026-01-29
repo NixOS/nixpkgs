@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   checkFlags = [
-    "--skip domain::time::tests::test_get_correct_offset_for_dst" # Need time
+    "--skip=domain::time::tests::test_get_correct_offset_for_dst" # Need time
   ];
 
   preBuild = ''
