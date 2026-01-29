@@ -13464,6 +13464,13 @@
     email = "nixos@karpfen.dev";
     matrix = "@karpfen:matrix.org";
   };
+  kashu-02 = {
+    email = "kashu@kashu.dev";
+    github = "kashu-02";
+    githubId = 64694079;
+    name = "Shunsuke Kasuya";
+    keys = [ { fingerprint = "7C7C 0516 D651 D2C4 86F9  2A9F 0F44 84A6 5691 E216"; } ];
+  };
   kashw2 = {
     email = "supra4keanu@hotmail.com";
     github = "kashw2";
