@@ -407,6 +407,9 @@ in
   containers-restart_networking = runTest ./containers-restart_networking.nix;
   containers-tmpfs = runTest ./containers-tmpfs.nix;
   containers-unified-hierarchy = runTest ./containers-unified-hierarchy.nix;
+  contracts-fileBackup-restic = runTest ./contracts/fileBackup/restic.nix;
+  contracts-secret-hardcodedSecret = runTest ./contracts/secret/hardcodedSecret.nix;
+  contracts-streamingBackup-restic = runTest ./contracts/streamingBackup/restic.nix;
   convos = runTest ./convos.nix;
   corerad = runTest ./corerad.nix;
   corteza = runTest ./corteza.nix;

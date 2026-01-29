@@ -16,7 +16,7 @@ in
     '';
     type = lib.types.attrsOf (
       lib.types.submodule (
-        { name, ... }:
+        mod@{ name, ... }:
         {
           options = {
             passwordFile = lib.mkOption {
@@ -318,7 +318,91 @@ in
               '';
               example = 0.1;
             };
+
+            fileBackup = lib.mkOption {
+              type = lib.types.nullOr config.contracts.fileBackup.provider;
+              default = null;
+            };
+            streamingBackup = lib.mkOption {
+              type = lib.types.nullOr config.contracts.streamingBackup.provider;
+              default = null;
+            };
           };
+
+          config = lib.mkMerge [
+            (lib.mkIf (mod.config.fileBackup.input != null) (
+              let
+                inherit (mod.config) fileBackup;
+              in
+              {
+                user = fileBackup.input.user;
+                paths = fileBackup.input.sourceDirectories;
+                backupPrepareCommand = lib.concatStringsSep "\n" fileBackup.input.hooks.beforeBackup;
+                backupCleanupCommand = lib.concatStringsSep "\n" fileBackup.input.hooks.afterBackup;
+                exclude = fileBackup.input.excludePatterns;
+              }
+            ))
+            {
+              fileBackup.output = {
+                backupService = "restic-backups-${name}.service";
+                restoreScript = lib.getExe (
+                  pkgs.writeShellApplication {
+                    name = "restic-${name}";
+                    text = ''
+                      if [ "$1" = "snapshots" ]; then
+                        restic-${name} snapshots
+                      elif [ "$1" = "restore" ]; then
+                        shift
+                        restic-${name} restore "$1" --target /
+                      fi
+                    '';
+                  }
+                );
+              };
+            }
+
+            (lib.mkIf (mod.config.streamingBackup.input != null) (
+              let
+                inherit (mod.config.streamingBackup) input;
+              in
+              {
+                command = [
+                  (lib.getExe (
+                    pkgs.writeShellApplication {
+                      name = "dump.sh";
+                      text = input.backupCmd;
+                    }
+                  ))
+                ];
+                extraBackupArgs = [
+                  "--stdin-filename ${input.backupName}"
+                ];
+              }
+            ))
+            (
+              let
+                inherit (mod.config.streamingBackup) input;
+              in
+              {
+                streamingBackup.output = {
+                  backupService = "restic-backups-${name}.service";
+                  restoreScript = lib.getExe (
+                    pkgs.writeShellApplication {
+                      name = "restic-${name}";
+                      text = ''
+                        if [ "$1" = "snapshots" ]; then
+                          restic-${name} snapshots
+                        elif [ "$1" = "restore" ]; then
+                          shift
+                          restic-${name} dump "$1" ${input.backupName} | ${input.restoreCmd}
+                        fi
+                      '';
+                    }
+                  );
+                };
+              }
+            )
+          ];
         }
       )
     );
