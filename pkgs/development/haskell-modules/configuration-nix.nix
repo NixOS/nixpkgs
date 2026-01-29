@@ -1302,9 +1302,6 @@ builtins.intersectAttrs super {
       '';
     }) (addBuildTool pkgs.buildPackages.makeWrapper super.cut-the-crap);
 
-  # Compiling the readme throws errors and has no purpose in nixpkgs
-  aeson-gadt-th = disableCabalFlag "build-readme" super.aeson-gadt-th;
-
   # Fix compilation of Setup.hs by removing the module declaration.
   # See: https://github.com/tippenein/guid/issues/1
   guid = overrideCabal (drv: {
@@ -2177,9 +2174,10 @@ builtins.intersectAttrs super {
           enableExternalInterpreter = false;
         };
       in
-      lib.mapAttrs (_: noExternalInterpreter) { inherit (super) iserv-proxy network; }
+      lib.mapAttrs (_: noExternalInterpreter) { inherit (super) iserv-proxy libiserv network; }
     )
     iserv-proxy
+    libiserv
     network
     ;
 
