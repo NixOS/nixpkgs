@@ -23312,6 +23312,12 @@
     githubId = 78461130;
     keys = [ { fingerprint = "CA52 EE7B E681 720E 32B6  6792 FE52 FD65 B76E 4751"; } ];
   };
+  saltrocks = {
+    name = "saltrocks";
+    email = "lostmason@tutamail.com";
+    github = "saltrocks";
+    githubId = 123449653;
+  };
   samalws = {
     email = "sam@samalws.com";
     name = "Sam Alws";
