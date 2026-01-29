@@ -242,6 +242,62 @@ in
 
     package = mkPackageOption pkgs "systemd" { };
 
+    unitGenerator = {
+      useGoImpl = mkEnableOption "" // {
+        default = false;
+        description = ''
+          Whether to use the experimental Go-based systemd unit generator
+          for the final output instead of the bash implementation.
+
+          By default (when false), NixOS will:
+          - Build systemd units using the bash implementation (output)
+          - Also build with the Go implementation (for testing)
+          - Compare both outputs and warn if they differ
+          - Suggest reporting differences to nixpkgs
+
+          When enabled (true):
+          - Use the Go implementation for the final output (30-60x faster)
+          - Does not build the bash implementation anymore
+
+          The Go implementation is experimental. By keeping this disabled,
+          you help test it automatically while using the stable bash version.
+          
+          Note: This option is mutually exclusive with useRustImpl.
+        '';
+      };
+
+      useRustImpl = mkEnableOption "" // {
+        default = false;
+        description = ''
+          Whether to use the Rust-based systemd unit generator
+          for the final output instead of the bash implementation.
+
+          When enabled (true):
+          - Use the Rust implementation for the final output (comparable speed to Go)
+          - Does not build the bash implementation anymore
+
+          The Rust implementation maintains feature parity with the Go version
+          and is aligned with the systemd team's language preferences.
+          
+          Note: This option is mutually exclusive with useGoImpl.
+        '';
+      };
+
+      debug = mkEnableOption "" // {
+        default = false;
+        description = ''
+          Whether to enable debug output for the Go-based systemd unit generator.
+          
+          When enabled, the Go unit generator will output detailed information about
+          what it's doing, which can help diagnose issues or differences between the
+          bash and Go implementations.
+          
+          This is useful when reporting issues about differences between the
+          bash and Go implementations.
+        '';
+      };
+    };
+
     enableStrictShellChecks = mkEnableOption "" // {
       description = ''
         Whether to run `shellcheck` on the generated scripts for systemd
@@ -527,7 +583,12 @@ in
       ++ (mkMountNetOnlineWarns "automount" cfg.automounts)
       ++ (mkNetOnlineWarns "slice" cfg.slices);
 
-    assertions = concatLists (
+    assertions = [
+      {
+        assertion = !(cfg.unitGenerator.useGoImpl && cfg.unitGenerator.useRustImpl);
+        message = "systemd.unitGenerator.useGoImpl and systemd.unitGenerator.useRustImpl are mutually exclusive. Please enable only one.";
+      }
+    ] ++ concatLists (
       mapAttrsToList (
         name: service:
         map

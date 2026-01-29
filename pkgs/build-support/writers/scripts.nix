@@ -254,7 +254,7 @@ rec {
       # The inner derivation which creates the executable under $out/bin (never at $out directly)
       # This is required in order to support wrapping, as wrapped programs consist of at least two files: the executable and the wrapper.
       inner =
-        pkgs.runCommandLocal name
+        pkgs.runCommandLocal "${name}-makeBinWriter-wrapper"
           (
             {
               inherit makeWrapperArgs;
@@ -787,6 +787,70 @@ rec {
     writeHaskellBin takes the same arguments as writeHaskell but outputs a directory (like writeScriptBin)
   */
   writeHaskellBin = name: writeHaskell "/bin/${name}";
+
+  /**
+    writeGo takes a name, an attrset with optional configuration,
+    and some Go source code, returning an executable.
+
+    Currently only supports stdlib-only Go programs.
+
+    # Inputs
+
+    `name`
+
+    : 1\. Function argument
+
+    `attrs`
+
+    : 2\. Function argument
+
+    `go` (Optional, Default: pkgs.go)
+
+    : The Go compiler to use (must be executable on build system)
+
+    # Examples
+    :::{.example}
+    ## `pkgs.writers.writeGo` usage example
+
+    ```nix
+    writeGo "hello-go" {} ''
+      package main
+
+      import "fmt"
+
+      func main() {
+          fmt.Println("Hello, World!")
+      }
+    ''
+    ```
+    :::
+
+    # Future Extensions
+
+    The attrs parameter may support in the future:
+    - `goArgs`: Additional compiler arguments
+    - `packages`: External Go packages
+    - `makeWrapperArgs`: Wrapper arguments
+    - `strip`: Whether to strip the binary
+  */
+  writeGo =
+    name:
+    {
+      go ? pkgs.go,
+    }:
+    makeBinWriter {
+      compileScript = ''
+        cp $contentPath tmp.go
+        export HOME=$TMPDIR
+        ${go}/bin/go build -o $out tmp.go
+      '';
+      makeWrapperArgs = [ ];
+    } name;
+
+  /**
+    writeGoBin takes the same arguments as writeGo but outputs a directory (like writeScriptBin)
+  */
+  writeGoBin = name: writeGo "/bin/${name}";
 
   /**
     writeNim takes a name, an attrset with an optional Nim compiler, and some
