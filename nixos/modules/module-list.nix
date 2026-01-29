@@ -231,6 +231,7 @@
   ./programs/gnupg.nix
   ./programs/gpaste.nix
   ./programs/gphoto2.nix
+  ./programs/gpu-screen-recorder-ui.nix
   ./programs/gpu-screen-recorder.nix
   ./programs/haguichi.nix
   ./programs/hamster.nix
