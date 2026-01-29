@@ -379,6 +379,14 @@ rec {
           '';
         };
 
+        enableDefaultPath = mkOption {
+          default = true;
+          type = types.bool;
+          description = ''
+            Whether to append a minimal default {env}`PATH` environment variable to the service, containing common system utilities.
+          '';
+        };
+
         serviceConfig = mkOption {
           default = { };
           example = {
