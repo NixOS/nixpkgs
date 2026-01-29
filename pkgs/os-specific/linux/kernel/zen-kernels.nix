@@ -23,9 +23,9 @@ let
     };
     # ./update-zen.py lqx
     lqx = {
-      version = "6.18.6"; # lqx
+      version = "6.18.7"; # lqx
       suffix = "lqx1"; # lqx
-      sha256 = "18b5yw91k4m9cfa2gw6n07sw3xfnzs9xx7hb0ls26r4d8jn01lsq"; # lqx
+      sha256 = "1wm1qzim11gka3fmfz3qxxhl1rjyy9jb6pjqh2q8fpg33g005wsh"; # lqx
       isLqx = true;
     };
   };
