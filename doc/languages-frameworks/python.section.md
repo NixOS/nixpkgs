@@ -208,6 +208,61 @@ following are specific to `buildPythonPackage`:
 * `setupPyGlobalFlags ? []`: List of flags passed to `setup.py` command.
 * `setupPyBuildFlags ? []`: List of flags passed to `setup.py build_ext` command.
 
+##### Using fixed-point arguments {#buildpythonpackage-fixed-point-arguments}
+
+Both `buildPythonPackage` and `buildPythonApplication` support [fixed-point arguments](#chap-build-helpers-finalAttrs), similar to `stdenv.mkDerivation`.
+This allows you to reference the final attributes of the derivation.
+
+Instead of using `rec`:
+
+```nix
+buildPythonPackage rec {
+  pname = "pyspread";
+  version = "2.4";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-...";
+  };
+}
+```
+
+You can use the `finalAttrs` pattern:
+
+```nix
+buildPythonPackage (finalAttrs: {
+  pname = "pyspread";
+  version = "2.4";
+  src = fetchPypi {
+    pname = "pyspread";
+    inherit (finalAttrs) version;
+    hash = "sha256-...";
+  };
+})
+```
+
+See the [general documentation on fixed-point arguments](#chap-build-helpers-finalAttrs) for more details on the benefits of this pattern.
+
+::: {.note}
+
+Some `buildPythonPackage`/`buildPythonApplication` arguments are passed down indirectly to `stdenv.mkDerivation` via `passthru`.
+Therefore the final state of these attributes can be accessed via `finalAttrs.passthru.${name}`.
+[`<pkg>.overrideAttrs`](#sec-pkg-overrideAttrs) can override them using the `passthru = prevAttrs.passthru // { foo = "bar"; }` pattern.
+Such arguments include:
+
+- `disabled`
+- `pyproject`
+- `format`
+- `build-system`, `dependencies` and `optional-dependencies`
+
+<!--
+TODO(@doronbehar): When [#258246][1] will be resolved, or when
+`.overridePythonAttrs` will be removed, the above text might need to be revised.
+
+- [1]: https://github.com/NixOS/nixpkgs/issues/258246
+
+-->
+:::
+
 The [`stdenv.mkDerivation`](#sec-using-stdenv) function accepts various parameters for describing
 build inputs (see "Specifying dependencies"). The following are of special
 interest for Python packages, either because these are primarily used, or
@@ -238,29 +293,21 @@ the overrides for packages in the package set.
 ```nix
 with import <nixpkgs> { };
 
-(
-  let
-    python =
-      let
-        packageOverrides = self: super: {
-          pandas = super.pandas.overridePythonAttrs (old: rec {
-            version = "0.19.1";
-            src = fetchPypi {
-              pname = "pandas";
-              inherit version;
-              hash = "sha256-JQn+rtpy/OA2deLszSKEuxyttqBzcAil50H+JDHUdCE=";
-            };
-          });
+let
+  python = pkgs.python3.override {
+    packageOverrides = self: super: {
+      pandas = super.pandas.overridePythonAttrs (old: {
+        version = "0.19.1";
+        src = fetchPypi {
+          pname = "pandas";
+          inherit version;
+          hash = "sha256-JQn+rtpy/OA2deLszSKEuxyttqBzcAil50H+JDHUdCE=";
         };
-      in
-      pkgs.python3.override {
-        inherit packageOverrides;
-        self = python;
-      };
-
-  in
-  python.withPackages (ps: [ ps.blaze ])
-).env
+      });
+    };
+  };
+in
+(python.withPackages (ps: [ ps.blaze ])).env
 ```
 
 The next example shows a non trivial overriding of the `blas` implementation to

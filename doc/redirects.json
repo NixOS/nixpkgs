@@ -3870,6 +3870,9 @@
   "buildpythonpackage-parameters": [
     "index.html#buildpythonpackage-parameters"
   ],
+  "buildpythonpackage-fixed-point-arguments": [
+    "index.html#buildpythonpackage-fixed-point-arguments"
+  ],
   "overriding-python-build-helpers": [
     "index.html#overriding-python-build-helpers"
   ],
