@@ -14,6 +14,7 @@
   cctools,
   nix-update-script,
   versionCheckHook,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -88,12 +89,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      # avoid unstable pre‐releases
-      "--version-regex"
-      "^v([0-9.]+)$"
-    ];
+
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [
+        # avoid unstable pre‐releases
+        "--version-regex"
+        "^v([0-9.]+)$"
+      ];
+    };
+    tests = { inherit (nixosTests) matrix-authentication-service; };
   };
 
   meta = {
@@ -102,6 +107,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/element-hq/matrix-authentication-service/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ teutat3s ];
+    platforms = lib.platforms.linux;
     mainProgram = "mas-cli";
   };
 })
