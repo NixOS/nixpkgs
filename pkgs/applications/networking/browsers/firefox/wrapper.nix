@@ -11,6 +11,8 @@
   writeText,
 
   ## various stuff that can be plugged in
+  # can't switch to ffmpeg_8 breaks firefox-esr-140
+  # see https://bugzilla.mozilla.org/show_bug.cgi?id=1962139
   ffmpeg_7,
   libxxf86vm,
   libxxf86dga,
