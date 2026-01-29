@@ -70,7 +70,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "Fully functional local Cloud stack";
     homepage = "https://github.com/localstack/localstack";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ damien ];
     mainProgram = "localstack";
   };
 }
