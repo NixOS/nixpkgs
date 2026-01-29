@@ -23,7 +23,11 @@ let
       origArgs:
       let
         result = f origArgs;
-        overrideWith = newArgs: origArgs // lib.toFunction newArgs origArgs;
+        overrideWith =
+          if lib.isFunction origArgs then
+            newArgs: lib.extends (_: lib.toFunction newArgs) origArgs
+          else
+            newArgs: origArgs // lib.toFunction newArgs origArgs;
       in
       if lib.isAttrs result then
         result
