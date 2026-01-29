@@ -13900,6 +13900,13 @@
     github = "kkoniuszy";
     githubId = 120419423;
   };
+  Kladki = {
+    name = "Matthias Ahouansou";
+    email = "matthias@ahouansou.cz";
+    github = "Kladki";
+    githubId = 158313939;
+    matrix = "@matthias:ahouansou.cz";
+  };
   klchen0112 = {
     name = "klchen0112";
     email = "klchen0112@gmail.com";
