@@ -2427,9 +2427,85 @@ with haskellLib;
     doJailbreak
   ];
 
-  # Test suite doesn't support hspec 2.8
-  # https://github.com/zellige/hs-geojson/issues/29
-  geojson = dontCheck super.geojson;
+  # 2026-01-16: upper bounds on:
+  # - containers (0.7)
+  # - deepseq    (1.5)
+  # - text       (2.1)
+  # are too strict, these bounds have already been bumped to:
+  # - containers (0.8)
+  # - deepseq    (1.6)
+  # - text       (2.2)
+  # but not in Nix
+  # https://github.com/zellige/hs-geojson/commit/2a5ce5a
+  geojson = doJailbreak super.geojson;
+
+  # too strict bounds on extra < 1.8
+  # https://github.com/georgefst/svgone/pull/3
+  svgone = doJailbreak super.svgone;
+
+  # 2026-01-06: unbreak and modernize to GHC 9.10.3
+  reanimate-svg = overrideCabal (drv: {
+    prePatch = ''
+      # Move tests marked good due to previous librsvg failures
+      for f in \
+        animate-elem-32-t.svg \
+        fonts-desc-02-t.svg \
+        shapes-ellipse-02-t.svg \
+        shapes-intro-01-t.svg \
+        styling-css-06-b.svg \
+        text-intro-05-t.svg \
+      ; do
+        mv test/good/$f test/bad/$f
+      done
+
+      # Move tests previously marked bad but now fixed from new changes
+      for f in \
+        filters-displace-02-f.svg \
+        filters-gauss-01-b.svg \
+        masking-mask-01-b.svg \
+        painting-render-01-b.svg \
+        pservers-grad-04-b.svg \
+        pservers-grad-05-b.svg \
+        pservers-grad-07-b.svg \
+        pservers-grad-08-b.svg \
+        pservers-grad-09-b.svg \
+        pservers-grad-10-b.svg \
+        pservers-grad-11-b.svg \
+        pservers-grad-12-b.svg \
+        pservers-grad-14-b.svg \
+        pservers-grad-15-b.svg \
+        pservers-grad-16-b.svg \
+        pservers-grad-22-b.svg \
+      ; do
+        mv test/bad/$f test/good/$f
+      done
+    '';
+    patches = (drv.patches or [ ]) ++ [
+      (pkgs.fetchpatch2 {
+        name = "modernize-to-ghc-9.10.3-and-regress-tests-wrt-librsvg";
+        url = "https://github.com/reanimate/reanimate-svg/commit/3f2fab8eb08b7f35b03f5fa17819e43e3879ea80.patch";
+        sha256 = "sha256-Em10QyAAiIwHId3CZuByKJ4Fv9W6MII4go5rychg07Y=";
+      })
+    ];
+  }) super.reanimate-svg;
+
+  # 2026-01-06: modernize to GHC 9.10.3
+  reanimate = overrideCabal (drv: {
+    # file in Hackage but not on github, need to remove here
+    # test relies on hegometry but that was removed as a dependency
+    # https://github.com/reanimate/reanimate/commit/f58a00e
+    prePatch = drv.prePatch or "" + ''
+      rm -f examples/decompose.hs
+    '';
+    patches = (drv.patches or [ ]) ++ [
+      # variant of PR https://github.com/reanimate/reanimate/pull/317
+      (pkgs.fetchpatch2 {
+        name = "modernize-to-ghc-9.10.3";
+        url = "https://github.com/reanimate/reanimate/commit/273f48c2b82dcfa027481133a6a606e73a22461b.patch";
+        sha256 = "sha256-aibbIoc54I4Ibg6t2o8vykL8MqzmxLvayUNa8MiibEw=";
+      })
+    ];
+  }) super.reanimate;
 
   # Test data missing from sdist
   # https://github.com/ngless-toolkit/ngless/issues/152

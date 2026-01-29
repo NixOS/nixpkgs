@@ -881,6 +881,24 @@ builtins.intersectAttrs super {
   # https://github.com/plow-technologies/servant-streaming/issues/12
   servant-streaming-server = dontCheck super.servant-streaming-server;
 
+  reanimate = overrideCabal (drv: {
+    buildTools = (drv.buildTools or [ ]) ++ [
+      # needed for testsuite
+      pkgs.ffmpeg
+      pkgs.librsvg
+      pkgs.texliveFull
+    ];
+  }) super.reanimate;
+
+  reanimate-svg = overrideCabal (drv: {
+    buildTools = (drv.buildTools or [ ]) ++ [
+      # needed for testsuite
+      pkgs.freefont_ttf
+      pkgs.librsvg
+      pkgs.pango
+    ];
+  }) super.reanimate-svg;
+
   # https://github.com/haskell-servant/servant/pull/1238
   servant-client-core =
     if (pkgs.lib.getVersion super.servant-client-core) == "0.16" then

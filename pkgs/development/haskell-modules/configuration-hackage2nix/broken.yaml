@@ -2117,7 +2117,6 @@ broken-packages:
   - GeocoderOpenCage # failure in job https://hydra.nixos.org/build/233214852 at 2023-09-02
   - geodetic-types # failure in job https://hydra.nixos.org/build/233209496 at 2023-09-02
   - GeoIp # failure in job https://hydra.nixos.org/build/233257383 at 2023-09-02
-  - geojson # failure in job https://hydra.nixos.org/build/295093530 at 2025-04-22
   - geojson-types # failure in job https://hydra.nixos.org/build/233224929 at 2023-09-02
   - geom2d # failure in job https://hydra.nixos.org/build/233254609 at 2023-09-02
   - geomancy # failure in job https://hydra.nixos.org/build/315096508 at 2025-11-29
@@ -5254,7 +5253,6 @@ broken-packages:
   - readme-lhs # failure in job https://hydra.nixos.org/build/233248229 at 2023-09-02
   - readshp # failure in job https://hydra.nixos.org/build/233197835 at 2023-09-02
   - really-simple-xml-parser # failure in job https://hydra.nixos.org/build/233195945 at 2023-09-02
-  - reanimate-svg # failure in job https://hydra.nixos.org/build/233242271 at 2023-09-02
   - reason-export # failure in job https://hydra.nixos.org/build/233212942 at 2023-09-02
   - reasonable-lens # failure in job https://hydra.nixos.org/build/233233111 at 2023-09-02
   - rebound # failure in job https://hydra.nixos.org/build/311055152 at 2025-11-02

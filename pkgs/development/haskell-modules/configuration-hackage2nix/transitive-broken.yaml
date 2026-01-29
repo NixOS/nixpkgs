@@ -2873,7 +2873,6 @@ dont-distribute-packages:
  - reactor
  - readline-in-other-words
  - readpyc
- - reanimate
  - record-aeson
  - record-gl
  - record-preprocessor
@@ -3387,7 +3386,6 @@ dont-distribute-packages:
  - sv-svfactor
  - SVG2Q
  - svg2q
- - svgone
  - swapper
  - switch
  - syb-with-class-instances-text
@@ -3395,6 +3393,7 @@ dont-distribute-packages:
  - sydtest-amqp
  - sydtest-webdriver-screenshot
  - sydtest-webdriver-yesod
+ - sydtest-webdriver-yesod_0_0_1_0
  - sylvia
  - symantic-atom
  - symantic-http-demo
