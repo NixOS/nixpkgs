@@ -9463,6 +9463,8 @@ self: super: with self; {
 
   mcpadapt = callPackage ../development/python-modules/mcpadapt { };
 
+  mcpo = callPackage ../development/python-modules/mcpo { };
+
   mcstatus = callPackage ../development/python-modules/mcstatus { };
 
   mcuuid = callPackage ../development/python-modules/mcuuid { };
