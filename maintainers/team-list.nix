@@ -141,6 +141,16 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  cockpit = {
+    members = [
+      alexandru0-dev
+      andre4ik3
+      lucasew
+    ];
+    scope = "Maintain Cockpit and official plugins by the Cockpit project.";
+    shortName = "Cockpit";
+  };
+
   coq = {
     members = [
       cohencyril
