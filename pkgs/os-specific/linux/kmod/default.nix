@@ -86,13 +86,26 @@ stdenv.mkDerivation rec {
   ++ lib.optional withStatic "--enable-static";
 
   patches = [
+    # Accept multiple default kernel module dirs at build-time, instead
+    # of hardcoding a single /lib/modules, and adjust module search logic
+    # accordingly (to account for multiple default directories)
     ./module-dir.patch
+
+    # Use portable implementation for basename API
+    #
+    # musl has removed the non-prototype declaration of basename from string.h
+    # which now results in build errors with clang-17+ compiler
+    #
+    # Implement GNU basename behavior using strchr which is portable across libcs
+    #
+    # Fixes "call to undeclared function 'basename'" error on clang+musl
     (fetchpatch {
       name = "musl.patch";
       url = "https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/patch/?id=11eb9bc67c319900ab00523997323a97d2d08ad2";
       hash = "sha256-CYG615elMWces6QGQRg2H/NL7W4XsG9Zvz5H+xsdFFo=";
     })
   ]
+  # Force configure.ac to accept --enable-static (no other changes necessary)
   ++ lib.optional withStatic ./enable-static.patch;
 
   postInstall = ''
