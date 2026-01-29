@@ -348,21 +348,22 @@ let
     "--with-hsc2hs=${ghc.targetPrefix}hsc2hs"
     "--with-strip=${stdenv.cc.bintools.targetPrefix}strip"
   ]
-  ++ optionals (!isHaLVM) [
-    "--hsc2hs-option=--cross-compile"
-    (optionalString enableHsc2hsViaAsm "--hsc2hs-option=--via-asm")
-  ]
-  ++ optional (allPkgconfigDepends != [ ]) "--with-pkg-config=${pkg-config.targetPrefix}pkg-config"
-
-  ++ optionals enableExternalInterpreter (
-    map (opt: "--ghc-option=${opt}") [
-      "-fexternal-interpreter"
-      "-pgmi"
-      crossSupport.iservWrapper
+  ++ optionals (!isHaLVM) (
+    [
+      "--hsc2hs-option=--cross-compile"
     ]
-  );
+    ++ optionals enableHsc2hsViaAsm [ "--hsc2hs-option=--via-asm" ]
+  )
+  ++ optionals (allPkgconfigDepends != [ ]) [
+    "--with-pkg-config=${pkg-config.targetPrefix}pkg-config"
+  ]
+  ++ optionals enableExternalInterpreter (makeGhcOptions [
+    "-fexternal-interpreter"
+    "-pgmi"
+    crossSupport.iservWrapper
+  ]);
 
-  makeGhcOptions = opts: lib.concatStringsSep " " (map (opt: "--ghc-option=${opt}") opts);
+  makeGhcOptions = opts: map (opt: "--ghc-option=${opt}") opts;
 
   defaultConfigureFlags = [
     "--verbose"
@@ -370,38 +371,48 @@ let
     # Note: This must be kept in sync manually with mkGhcLibdir
     ("--libdir=\\$prefix/lib/\\$compiler" + lib.optionalString (ghc ? hadrian) "/lib")
     "--libsubdir=\\$abi/\\$libname"
-    (optionalString enableSeparateDataOutput "--datadir=$data/share/${ghcNameWithPrefix}")
-    (optionalString enableSeparateDocOutput "--docdir=${docdir "$doc"}")
+  ]
+  ++ optionals enableSeparateDataOutput [
+    "--datadir=$data/share/${ghcNameWithPrefix}"
+  ]
+  ++ optionals enableSeparateDocOutput [
+    "--docdir=${docdir "$doc"}"
   ]
   ++ optionals stdenv.hasCC [
     "--with-gcc=$CC" # Clang won't work without that extra information.
   ]
   ++ [
     "--package-db=$packageConfDir"
-    (optionalString (
-      enableSharedExecutables && stdenv.hostPlatform.isLinux
-    ) "--ghc-option=-optl=-Wl,-rpath=$out/${ghcLibdir}/${pname}-${version}")
-    (optionalString (
-      enableSharedExecutables && stdenv.hostPlatform.isDarwin
-    ) "--ghc-option=-optl=-Wl,-headerpad_max_install_names")
-    (optionalString enableParallelBuilding (makeGhcOptions [
-      "-j$NIX_BUILD_CORES"
-      "+RTS"
-      "-A64M"
-      "-RTS"
-    ]))
-    (optionalString useCpphs (
-      "--with-cpphs=${cpphs}/bin/cpphs "
-      + (makeGhcOptions [
-        "-cpp"
-        "-pgmP${cpphs}/bin/cpphs"
-        "-optP--cpp"
-      ])
-    ))
+  ]
+  ++ optionals (enableSharedExecutables && stdenv.hostPlatform.isLinux) [
+    "--ghc-option=-optl=-Wl,-rpath=$out/${ghcLibdir}/${pname}-${version}"
+  ]
+  ++ optionals (enableSharedExecutables && stdenv.hostPlatform.isDarwin) [
+    "--ghc-option=-optl=-Wl,-headerpad_max_install_names"
+  ]
+  ++ optionals enableParallelBuilding (makeGhcOptions [
+    "-j$NIX_BUILD_CORES"
+    "+RTS"
+    "-A64M"
+    "-RTS"
+  ])
+  ++ optionals useCpphs (
+    [
+      "--with-cpphs=${cpphs}/bin/cpphs"
+    ]
+    ++ (makeGhcOptions [
+      "-cpp"
+      "-pgmP${cpphs}/bin/cpphs"
+      "-optP--cpp"
+    ])
+  )
+  ++ [
     (enableFeature enableLibraryProfiling "library-profiling")
-    (optionalString (
-      enableExecutableProfiling || enableLibraryProfiling
-    ) "--profiling-detail=${profilingDetail}")
+  ]
+  ++ optionals (enableExecutableProfiling || enableLibraryProfiling) [
+    "--profiling-detail=${profilingDetail}"
+  ]
+  ++ [
     (enableFeature enableExecutableProfiling "profiling")
     (enableFeature enableSharedLibraries "shared")
     (enableFeature doCoverage "coverage")
@@ -433,10 +444,13 @@ let
 
   postPhases = optional doInstallIntermediates "installIntermediatesPhase";
 
-  setupCompileFlags = [
-    (optionalString (!coreSetup) "-package-db=$setupPackageConfDir")
-    "-threaded" # https://github.com/haskell/cabal/issues/2398
-  ];
+  setupCompileFlags =
+    optionals (!coreSetup) [
+      "-package-db=$setupPackageConfDir"
+    ]
+    ++ [
+      "-threaded" # https://github.com/haskell/cabal/issues/2398
+    ];
 
   isHaskellPkg = x: x ? isHaskellLibrary;
 
@@ -699,8 +713,10 @@ lib.fix (
         packageConfDir="$builddir/package.conf.d"
         mkdir -p $packageConfDir
 
-        setupCompileFlags="${concatStringsSep " " setupCompileFlags}"
-        configureFlags="${concatStringsSep " " defaultConfigureFlags} $configureFlags"
+        setupCompileFlags=(${concatStringsSep " " (map (f: ''"${f}"'') setupCompileFlags)})
+        configureFlags=(${
+          concatStringsSep " " (map (f: ''"${f}"'') defaultConfigureFlags)
+        } "''${configureFlags[@]}")
       ''
       # We build the Setup.hs on the *build* machine, and as such should only add
       # dependencies for the build machine.
@@ -717,13 +733,13 @@ lib.fix (
         for p in "''${pkgsHostHost[@]}" "''${pkgsHostTarget[@]}"; do
           ${buildPkgDb ghc "$packageConfDir"}
           if [ -d "$p/include" ]; then
-            appendToVar configureFlags "--extra-include-dirs=$p/include"
+            configureFlags+=("--extra-include-dirs=$p/include")
           fi
           if [ -d "$p/lib" ]; then
-            appendToVar configureFlags "--extra-lib-dirs=$p/lib"
+            configureFlags+=("--extra-lib-dirs=$p/lib")
           fi
           if [[ -d "$p/Library/Frameworks" ]]; then
-            appendToVar configureFlags "--extra-framework-dirs=$p/Library/Frameworks"
+            configureFlags+=("--extra-framework-dirs=$p/Library/Frameworks")
           fi
       ''
       + ''
@@ -790,8 +806,8 @@ lib.fix (
           test -f $i && break
         done
 
-        echo setupCompileFlags: $setupCompileFlags
-        ${nativeGhcCommand} $setupCompileFlags --make -o Setup -odir $builddir -hidir $builddir $i
+        echo setupCompileFlags: "''${setupCompileFlags[@]}"
+        ${nativeGhcCommand} "''${setupCompileFlags[@]}" --make -o Setup -odir $builddir -hidir $builddir $i
 
         runHook postCompileBuildDriver
       '';
@@ -809,8 +825,8 @@ lib.fix (
       configurePhase = ''
         runHook preConfigure
 
-        echo configureFlags: $configureFlags
-        ${setupCommand} configure $configureFlags 2>&1 | ${coreutils}/bin/tee "$NIX_BUILD_TOP/cabal-configure.log"
+        echo configureFlags: "''${configureFlags[@]}"
+        ${setupCommand} configure "''${configureFlags[@]}" 2>&1 | ${coreutils}/bin/tee "$NIX_BUILD_TOP/cabal-configure.log"
         ${lib.optionalString (!allowInconsistentDependencies) ''
           if grep -E -q -z 'Warning:.*depends on multiple versions' "$NIX_BUILD_TOP/cabal-configure.log"; then
             echo >&2 "*** abort because of serious configure-time warning from Cabal"
@@ -832,7 +848,7 @@ lib.fix (
         find dist/build -exec touch -d '1970-01-01T00:00:00Z' {} +
       ''
       + ''
-        ${setupCommand} build ${buildTarget} $buildFlags
+        ${setupCommand} build ${buildTarget} "''${buildFlags[@]}"
         runHook postBuild
       '';
 
@@ -851,13 +867,13 @@ lib.fix (
       #   plus GHC's core packages.
       checkPhase = ''
         runHook preCheck
-        checkFlagsArray+=(
+        checkFlags+=(
           "--show-details=streaming"
           "--test-wrapper=${testWrapperScript}"
           ${lib.escapeShellArgs (map (opt: "--test-option=${opt}") testFlags)}
         )
         export NIX_GHC_PACKAGE_PATH_FOR_TEST="''${NIX_GHC_PACKAGE_PATH_FOR_TEST:-$packageConfDir:}"
-        ${setupCommand} test ${testTargetsString} $checkFlags ''${checkFlagsArray:+"''${checkFlagsArray[@]}"}
+        ${setupCommand} test ${testTargetsString} "''${checkFlags[@]}"
         runHook postCheck
       '';
 
@@ -1099,6 +1115,8 @@ lib.fix (
         env = envFunc { };
 
       };
+
+      __structuredAttrs = true;
 
       meta = {
         inherit homepage platforms;
