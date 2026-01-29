@@ -31,7 +31,6 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       caarlos0
-      maaslalani
     ];
   };
 }
