@@ -2,23 +2,23 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  stdenv,
+
   beanquery,
   fava,
   hatch-vcs,
   hatchling,
   pyyaml,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fava-dashboards";
-  version = "1.2.0";
+  version = "2.0.0b2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "andreasgerstmayr";
     repo = "fava-dashboards";
-    rev = "v${version}";
-    hash = "sha256-0524Mx93bJ4DKTb3gYps+C7dzhzuNd7YIvqeCtZz2f0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JvvGIHALMHewx4vYdjzZPAYz+FhXzX/vgbaQIcRvbus=";
   };
 
   build-system = [
@@ -37,8 +37,8 @@ buildPythonPackage rec {
   meta = {
     description = "Custom Dashboards for Beancount in Fava";
     homepage = "https://github.com/andreasgerstmayr/fava-dashboards";
-    changelog = "https://github.com/andreasgerstmayr/fava-dashboards/blob/main/CHANGELOG.md";
+    changelog = "https://github.com/andreasgerstmayr/fava-dashboards/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ambroisie ];
   };
-}
+})
