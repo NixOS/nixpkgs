@@ -986,6 +986,9 @@ let
       XEN_PVHVM = option yes;
       XEN_SAVE_RESTORE = option yes;
 
+      # Disabled by default on POWER
+      VIRTIO_MENU = yes;
+
       # Enable device detection on virtio-mmio hypervisors
       VIRTIO_MMIO_CMDLINE_DEVICES = yes;
 
@@ -1433,6 +1436,10 @@ let
         # Enable coreboot firmware drivers.
         # While these are called CONFIG_GOOGLE_*, they apply to coreboot systems in general.
         GOOGLE_FIRMWARE = yes;
+
+        # Disabled by default on POWER
+        ATA_BMDMA = yes;
+        ATA_SFF = yes;
       }
       //
         lib.optionalAttrs
@@ -1548,6 +1555,11 @@ let
 
         # Enable Intel Turbo Boost Max 3.0
         INTEL_TURBO_MAX_3 = yes;
+      }
+      // lib.optionalAttrs (stdenv.hostPlatform.isPower64) {
+        # avoid driver/FS trouble arising from unusual page size
+        PPC_64K_PAGES = no;
+        PPC_4K_PAGES = yes;
       };
 
     accel = {
