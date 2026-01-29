@@ -40,7 +40,9 @@ in
       type = lib.types.submodule {
         freeformType = format.type;
       };
-      default = { };
+      default = {
+        observability.log-level = "warn";
+      };
       description = ''
         Settings to write to {file}`ntp.toml`
 
