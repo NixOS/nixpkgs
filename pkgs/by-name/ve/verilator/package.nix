@@ -1,26 +1,25 @@
 {
   lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  perl,
-  flex,
-  bison,
-  python3,
   autoconf,
-  which,
+  bison,
+  coreutils,
+  fetchFromGitHub,
+  flex,
+  gdb,
+  git,
   help2man,
   makeWrapper,
-  systemc,
-  git,
   numactl,
-  coreutils,
-  gdb,
+  perl,
+  python3,
+  stdenv,
+  systemc,
+  which,
 }:
 
 stdenv.mkDerivation rec {
   pname = "verilator";
-  version = "5.040";
+  version = "5.044";
 
   # Verilator gets the version from this environment variable
   # if it can't do git describe while building.
@@ -30,16 +29,8 @@ stdenv.mkDerivation rec {
     owner = "verilator";
     repo = "verilator";
     tag = "v${version}";
-    hash = "sha256-S+cDnKOTPjLw+sNmWL3+Ay6+UM8poMadkyPSGd3hgnc=";
+    hash = "sha256-z3jYNzhnZ+OocDAbmsRBWHNNPXLLvExKK1TLDi9JzPQ=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "clang-V3hash-overload-fix.patch";
-      url = "https://github.com/verilator/verilator/commit/2aa260a03b67d3fe86bc64b8a59183f8dc21e117.patch";
-      hash = "sha256-waUsctWiAMG3lCpQi+VUUZ7qMw/kJGu/wNXPHZGuAoU=";
-    })
-  ];
 
   enableParallelBuilding = true;
   buildInputs = [
