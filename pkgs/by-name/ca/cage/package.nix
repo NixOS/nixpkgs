@@ -34,11 +34,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     # backport of https://github.com/cage-kiosk/cage/pull/461
+    # and https://github.com/cage-kiosk/cage/pull/464
     # to fix https://github.com/cage-kiosk/cage/issues/456
+    # and https://github.com/cage-kiosk/cage/pull/463
     # remove on next release
     (fetchpatch {
-      url = "https://github.com/cage-kiosk/cage/commit/832e88b0c964a324bb09c7af02ed0650b73dfb9b.patch";
-      hash = "sha256-8dyJL46xXGkw3pF9uskX8H72s0hUO1BhU2UMaoEwz4U=";
+      url = "https://github.com/cage-kiosk/cage/compare/f9626f79519f8ee22d7bb0c3880a66791d82f923..73bf1c8bd6bbeabe2c05cee8a8a55edbd45e7982.patch";
+      hash = "sha256-zCrmv90CWbsPuBTxjLT+m0WmmkWiJj7b786Krbm4mEs=";
     })
   ];
 
