@@ -90,6 +90,13 @@ let
         inherit packageOverrides;
         self = luaOnBuild;
       };
+      inherit
+        luaOnBuildForBuild
+        luaOnBuildForHost
+        luaOnBuildForTarget
+        luaOnHostForHost
+        luaOnTargetForTarget
+        ;
 
       tests = callPackage ./tests {
         lua = self;

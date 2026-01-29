@@ -1,6 +1,7 @@
 # Generic builder for lua packages
 {
   lib,
+  stdenv,
   lua,
   wrapLua,
   luarocks_bootstrap,
@@ -203,6 +204,20 @@ let
         postFixup =
           lib.optionalString (!dontWrapLuaPrograms) ''
             wrapLuaPrograms
+            # Build platform's Luarocks writes scripts that reference luarocks
+            # itself in them. On cross compilation these host scripts will
+            # retain reference to build platform luarocks and lua - something
+            # we disallow intentionally. Ideally this should have been done
+            # before wrapping, and our wrapping would have used only the host's
+            # luarocks_bootstrap for LUA_PATH. However from some reason the
+            # build platform's luarocks_bootstrap is added to `LUA_PATH` as
+            # well, so we just perform all substitutions after wrapping.
+            find "$out/bin" -executable -type f | while read f; do
+              echo fixing lua interpreter path in "$f"
+              substituteInPlace "$f" \
+                --replace-quiet ${lua.luaOnBuild} ${lua} \
+                --replace-quiet ${lua.luaOnBuild.pkgs.luarocks_bootstrap} ${luarocks_bootstrap}
+            done
           ''
           + attrs.postFixup or "";
 
@@ -231,6 +246,11 @@ let
           export LUAROCKS_CONFIG="$PWD/${luarocks_config}";
           runHook postShell
         '';
+
+        disallowedReferences = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+          lua.luaOnBuild
+          lua.luaOnBuild.pkgs.luarocks_bootstrap
+        ];
 
         passthru = {
           inherit lua;

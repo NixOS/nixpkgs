@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     sed -e "1s@.*@#! ${lua}/bin/lua$LUA_SUFFIX@" -i "$out"/bin/*
     substituteInPlace $out/etc/luarocks/* \
-     --replace-quiet '${lua.luaOnBuild}' '${lua}'
+     --replace-quiet '${lua.luaOnBuild}' '${lua.luaOnHostForHost}'
   ''
   + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd luarocks \
