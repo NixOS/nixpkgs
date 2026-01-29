@@ -164,6 +164,6 @@ buildFHSEnv {
       iedame
     ];
     platforms = lib.platforms.linux;
-    mainProgram = "${bolt.name}";
+    mainProgram = "${bolt.pname}";
   };
 }
