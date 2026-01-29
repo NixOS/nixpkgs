@@ -20,7 +20,7 @@
   xz,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "deebot-client";
   version = "17.1.0";
   pyproject = true;
@@ -30,18 +30,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "DeebotUniverse";
     repo = "client.py";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-0gKjps5KqbicYYyN3VTO9diF11zR1UYsTyIwZG34doI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-h1iSXoVv9J6u30VCudIhGBuJsWCKUJyXhVaM/5f5NqI=";
   };
-
-  pythonRelaxDeps = [
-    "aiohttp"
-  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -93,8 +89,8 @@ buildPythonPackage rec {
   meta = {
     description = "Deebot client library";
     homepage = "https://github.com/DeebotUniverse/client.py";
-    changelog = "https://github.com/DeebotUniverse/client.py/releases/tag/${version}";
+    changelog = "https://github.com/DeebotUniverse/client.py/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
