@@ -11741,6 +11741,8 @@ with pkgs;
     imlib2 = imlib2-nox;
   };
 
+  waterfox = wrapFirefox waterfox-unwrapped { };
+
   wayfire = callPackage ../applications/window-managers/wayfire/default.nix { };
   wf-config = callPackage ../applications/window-managers/wayfire/wf-config.nix { };
 

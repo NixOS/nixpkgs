@@ -1709,6 +1709,10 @@ in
   wasabibackend = runTest ./wasabibackend.nix;
   wastebin = runTest ./wastebin.nix;
   watchdogd = runTest ./watchdogd.nix;
+  waterfox = runTest {
+    imports = [ ./firefox.nix ];
+    _module.args.firefoxPackage = pkgs.waterfox;
+  };
   webhook = runTest ./webhook.nix;
   weblate = runTest ./web-apps/weblate.nix;
   wg-access-server = runTest ./wg-access-server.nix;
