@@ -31,13 +31,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dunst";
-  version = "1.13.0";
+  version = "1.13.1";
 
   src = fetchFromGitHub {
     owner = "dunst-project";
     repo = "dunst";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HPmIcOLoYDD1GEgTh1elA9xiZGFKt1In4vsAtRsOukE=";
+    hash = "sha256-F7CONYJ95aKNZ+BpWNUerCBMflgJYgSaLAqp6XJ1G5k=";
   };
 
   nativeBuildInputs = [

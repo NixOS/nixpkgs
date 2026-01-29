@@ -18,13 +18,13 @@
   nix-update-script,
 }:
 let
-  version = "1.0.65";
+  version = "1.0.67";
   src = fetchFromGitHub {
     name = "exo";
     owner = "exo-explore";
     repo = "exo";
     tag = "v${version}";
-    hash = "sha256-Zj174EySIILdj7+QJVT6ZGYvjO+jXHj+GizVsve2lFk=";
+    hash = "sha256-hipCiAqCkkyrVcQXEZKbGoVbgjM3hykUcazNPEbT+q8=";
   };
 
   pyo3-bindings = python3Packages.buildPythonPackage (finalAttrs: {
@@ -55,6 +55,10 @@ let
     enabledTestPaths = [
       "rust/exo_pyo3_bindings/tests/"
     ];
+
+    # RuntimeError
+    # Attempted to create a NULL object
+    doCheck = !stdenv.hostPlatform.isDarwin;
   });
 
   dashboard = buildNpmPackage (finalAttrs: {
@@ -72,6 +76,19 @@ let
         ;
       fetcherVersion = 2;
       hash = "sha256-3ZgE1ysb1OeB4BNszvlrnYcc7gOo7coPfOEQmMHC6E0=";
+    };
+  });
+
+  # exo requires building mlx-lm from its main branch to use the kimi-k2.5 model
+  mlx-lm-unstable = python3Packages.mlx-lm.overridePythonAttrs (old: {
+    version = "0.30.4-unstable-2026-01-27";
+    src = old.src.override {
+      rev = "96699e6dadb13b82b28285bb131a0741997d19ae";
+      tag = null;
+      hash = "sha256-L1ws8XA8VhR18pRuRGbVal/yEfJaFNW8QzS16C1dFpE=";
+    };
+    meta = old.meta // {
+      changelog = "https://github.com/ml-explore/mlx-lm/releases/tag/v0.30.5";
     };
   });
 in
@@ -134,7 +151,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       loguru
       mflux
       mlx
-      mlx-lm
+      mlx-lm-unstable
       nvidia-ml-py
       openai
       openai-harmony

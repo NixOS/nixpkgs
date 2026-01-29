@@ -1795,10 +1795,6 @@ with pkgs;
 
   easyocr = with python3.pkgs; toPythonApplication easyocr;
 
-  element-web = callPackage ../by-name/el/element-web/package.nix {
-    conf = config.element-web.conf or { };
-  };
-
   espanso-wayland = espanso.override {
     x11Support = false;
     waylandSupport = !stdenv.hostPlatform.isDarwin;
@@ -2150,8 +2146,6 @@ with pkgs;
   collectd-data = callPackage ../tools/system/collectd/data.nix { };
 
   unify = with python3Packages; toPythonApplication unify;
-
-  usb-modeswitch-data = callPackage ../by-name/us/usb-modeswitch/data.nix { };
 
   persistent-evdev = python3Packages.callPackage ../servers/persistent-evdev { };
 
@@ -6275,10 +6269,6 @@ with pkgs;
     replay-node-cli
     ;
 
-  rescript-language-server = callPackage ../by-name/re/rescript-language-server/package.nix {
-    rescript-editor-analysis = vscode-extensions.chenglou92.rescript-vscode.rescript-editor-analysis;
-  };
-
   rnginline = with python3Packages; toPythonApplication rnginline;
 
   rr = callPackage ../development/tools/analysis/rr { };
@@ -7992,10 +7982,6 @@ with pkgs;
 
   vte-gtk4 = vte.override {
     gtkVersion = "4";
-  };
-
-  vtfedit = callPackage ../by-name/vt/vtfedit/package.nix {
-    wine = wineWowPackages.staging;
   };
 
   inherit (callPackage ../development/libraries/vtk { }) vtk_9_5;
@@ -12047,9 +12033,7 @@ with pkgs;
 
   pmars-x11 = pmars.override { enableXwinGraphics = true; };
 
-  vanillatd = callPackage ../by-name/va/vanillatd/package.nix { appName = "vanillatd"; };
-
-  vanillara = callPackage ../by-name/va/vanillatd/package.nix { appName = "vanillara"; };
+  vanillara = vanillatd.override { appName = "vanillara"; };
 
   anki-utils = callPackage ../by-name/an/anki/addons/anki-utils.nix { };
   ankiAddons = recurseIntoAttrs (callPackage ../by-name/an/anki/addons { });
