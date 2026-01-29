@@ -106,6 +106,8 @@ lib.makeScope newScope (self: {
 
   melonds = self.callPackage ./cores/melonds.nix { };
 
+  melondsds = self.callPackage ./cores/melondsds.nix { };
+
   mesen = self.callPackage ./cores/mesen.nix { };
 
   mesen-s = self.callPackage ./cores/mesen-s.nix { };
