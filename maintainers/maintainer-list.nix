@@ -21153,6 +21153,11 @@
     github = "powwu";
     githubId = 20643401;
   };
+  poyo86 = {
+    name = "poyo86";
+    github = "poyo86";
+    githubId = 232233992;
+  };
   poz = {
     name = "Jacek Poziemski";
     email = "poz@poz.pet";
