@@ -11233,6 +11233,12 @@
     matrix = "@incrediblelaser:tchncs.de";
     name = "Gereon Schomber";
   };
+  ind-e = {
+    email = "indiesneault@gmail.com";
+    github = "Ind-E";
+    githubId = 30554197;
+    name = "Indi";
+  };
   indexyz = {
     email = "indexyz@pm.me";
     github = "5aaee9";
