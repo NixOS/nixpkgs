@@ -18339,6 +18339,12 @@
     githubId = 1222539;
     name = "Roman Naumann";
   };
+  nanamiiiii = {
+    email = "sk@myuu.dev";
+    github = "Nanamiiiii";
+    githubId = 52265804;
+    name = "Akihiro Saiki";
+  };
   nanotwerp = {
     email = "nanotwerp@gmail.com";
     github = "nanotwerp";
