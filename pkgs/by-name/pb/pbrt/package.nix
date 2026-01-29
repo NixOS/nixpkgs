@@ -1,42 +1,86 @@
 {
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  flex,
-  bison,
+  addDriverRunpath,
   cmake,
+  cudaPackages,
+  cudaSupport ? false,
+  fetchFromGitHub,
+  git,
+  glfw,
+  lib,
+  openexr,
+  pkg-config,
+  stdenv,
   zlib,
 }:
-
-stdenv.mkDerivation {
-  version = "2023-09-03";
-  pname = "pbrt-v3";
+let
+  stdenv' = if cudaSupport then cudaPackages.backendStdenv else stdenv;
+  optix = fetchFromGitHub {
+    owner = "NVIDIA";
+    repo = "optix-dev";
+    tag = "v9.0.0";
+    hash = "sha256-WbMKgiM1b3IZ9eguRzsJSkdZJR/SMQTda2jEqkeOwok=";
+  };
+in
+stdenv'.mkDerivation {
+  pname = "pbrt-v4";
+  version = "2025-12-09";
 
   src = fetchFromGitHub {
-    rev = "13d871faae88233b327d04cda24022b8bb0093ee";
     owner = "mmp";
-    repo = "pbrt-v3";
-    hash = "sha256-xg99l1o4MychQiOYkfsvD9vO0ysfmgQyaNaf8oqoWzk=";
+    repo = "pbrt-v4";
+    rev = "8c19f30";
     fetchSubmodules = true;
+    sha256 = "sha256-WbMKgiM1b3IZ9eguRzsJSkdZJR/SMQTda2jEqkeOwok=";
   };
 
-  cmakeFlags = [
-    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+  patches = [
+    # use glfw in nixpkgs
+    ./glfw.patch
+    # fix unmatched __CUDA_ARCH__ https://github.com/mmp/pbrt-v4/issues/429
+    ./cuda-arch.patch
+    # set libcuda.so path
+    ./libcuda.patch
   ];
 
   nativeBuildInputs = [
-    flex
-    bison
     cmake
+    git
+    pkg-config
+  ]
+  ++ lib.optionals cudaSupport [
+    addDriverRunpath
+    cudaPackages.cuda_nvcc
   ];
-  buildInputs = [ zlib ];
+
+  buildInputs = [
+    glfw
+    openexr
+    zlib
+  ]
+  ++ lib.optionals cudaSupport (
+    with cudaPackages;
+    [
+      cuda_cccl
+      cuda_cudart
+    ]
+  );
+
+  cmakeFlags = lib.optionals cudaSupport [
+    (lib.cmakeFeature "PBRT_OPTIX_PATH" "${optix}")
+    (lib.cmakeFeature "PBRT_GPU_SHADER_MODEL" "${builtins.head cudaPackages.flags.realArches}")
+    (lib.cmakeFeature "PBRT_CUDA_LIB" "${lib.getOutput "stubs" cudaPackages.cuda_cudart}/lib/stubs/libcuda.so")
+  ];
+
+  postFixup = lib.optionalString cudaSupport ''
+    addDriverRunpath $out/bin/pbrt
+  '';
 
   meta = {
-    homepage = "https://pbrt.org/";
-    description = "Renderer described in the third edition of the book 'Physically Based Rendering: From Theory To Implementation'";
-    platforms = lib.platforms.linux;
-    license = lib.licenses.bsd2;
-    maintainers = [ lib.maintainers.juliendehos ];
-    priority = 10;
+    description = "Source code to pbrt, the ray tracer described in the forthcoming 4th edition of the \"Physically Based Rendering: From Theory to Implementation\" book.";
+    homepage = "github.com/mmp/pbrt-v4";
+    mainProgram = "pbrt";
+    license = with lib.licenses; [ asl20 ] ++ lib.optional cudaSupport nvidiaCudaRedist;
+    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = [ lib.maintainers.tsssni ];
   };
 }
