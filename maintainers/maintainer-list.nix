@@ -27437,6 +27437,15 @@
     github = "UnsolvedCypher";
     githubId = 3170853;
   };
+  UnstoppableMango = {
+    name = "Erik Rasmussen";
+    email = "erik.rasmussen@unmango.dev";
+    github = "UnstoppableMango";
+    githubId = 20211602;
+    keys = [
+      { fingerprint = "B498 6C13 7EB1 5A0C 91FB  69FE 2642 83BB FDC4 91BC"; }
+    ];
+  };
   uralbash = {
     email = "root@uralbash.ru";
     github = "uralbash";
