@@ -1,12 +1,12 @@
 {
   lib,
-  aetcd,
   buildPythonPackage,
   coredis,
   deprecated,
-  etcd3,
   fetchFromGitHub,
   flaky,
+  hatchling,
+  hatch-vcs,
   hiro,
   importlib-resources,
   motor,
@@ -18,47 +18,35 @@
   pytest-cov-stub,
   pytest-lazy-fixtures,
   pytestCheckHook,
-  pythonOlder,
   redis,
-  setuptools,
   typing-extensions,
   valkey,
 }:
 
 buildPythonPackage rec {
   pname = "limits";
-  version = "5.4.0";
+  version = "5.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alisaifee";
     repo = "limits";
     tag = version;
-    # Upstream uses versioneer, which relies on git attributes substitution.
-    # This leads to non-reproducible archives on github. Remove the substituted
-    # file here, and recreate it later based on our version info.
-    hash = "sha256-EHLqkd5Muazr52/oYaLklFVvF+AzJWGbFaaIG+T0ulE=";
+    hash = "sha256-JmxoFc+AWV4qLgexpAysMGRKx2Q6K6AqNoaGkWU28Ro=";
     postFetch = ''
-      rm "$out/limits/_version.py"
+      rm "$out/limits/_version.pyi"
     '';
   };
-
-  patches = [
-    ./only-test-in-memory.patch
-  ];
 
   postPatch = ''
     substituteInPlace pytest.ini \
       --replace-fail "-K" ""
-
-    substituteInPlace setup.py \
-      --replace-fail "versioneer.get_version()" "'${version}'"
-
-    # Recreate _version.py, deleted at fetch time due to non-reproducibility.
-    echo 'def get_versions(): return {"version": "${version}"}' > limits/_version.py
   '';
 
-  build-system = [ setuptools ];
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
   dependencies = [
     deprecated
@@ -68,17 +56,14 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    redis = [ redis ];
-    rediscluster = [ redis ];
+    async-memcached = [ pymemcache ];
+    async-mongodb = [ motor ];
+    async-redis = [ coredis ];
+    async-valkey = [ valkey ];
     memcached = [ pymemcache ];
     mongodb = [ pymongo ];
-    etcd = [ etcd3 ];
-    async-redis = [ coredis ];
-    # async-memcached = [
-    #   emcache  # Missing module
-    # ];
-    async-mongodb = [ motor ];
-    async-etcd = [ aetcd ];
+    redis = [ redis ];
+    rediscluster = [ redis ];
     valkey = [ valkey ];
   };
 
@@ -102,9 +87,17 @@ buildPythonPackage rec {
   pytestFlags = [ "--benchmark-disable" ];
 
   disabledTests = [
-    "test_moving_window_memcached"
-    # Flaky: compares time to magic value
-    "test_sliding_window_counter_previous_window"
+    # requires docker
+    "TestAsyncConcurrency"
+    "TestAsyncFixedWindow"
+    "TestAsyncMovingWindow"
+    "TestAsyncSlidingWindow"
+    "TestConcreteStorages"
+    "TestConcurrency"
+    "TestFixedWindow"
+    "TestMovingWindow"
+    "TestRedisStorage"
+    "TestSlidingWindow"
   ];
 
   pythonImportsCheck = [ "limits" ];
