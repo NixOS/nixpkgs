@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "plaid-python";
-  version = "38.0.0";
+  version = "38.1.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "plaid_python";
     inherit version;
-    hash = "sha256-4BbYY8IQvQFs0MVjXflL2sa+pJjebcId14VVRd6nizI=";
+    hash = "sha256-j/AypUXwsaeL6iYjW7xo53wwE+YGMLv8TRwSZ8CeGFk=";
   };
 
   build-system = [ setuptools ];
