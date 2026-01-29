@@ -95,6 +95,10 @@ let
         karousel = self.callPackage ./third-party/karousel { };
         koi = self.callPackage ./third-party/koi { };
         krohnkite = self.callPackage ./third-party/krohnkite { };
+        kwin-better-blur-dx = self.callPackage ./third-party/kwin-better-blur-dx { };
+        kwin-better-blur-dx-x11 = self.callPackage ./third-party/kwin-better-blur-dx {
+          withKwinX11 = true;
+        };
         kzones = self.callPackage ./third-party/kzones { };
         wallpaper-engine-plugin = self.callPackage ./third-party/wallpaper-engine-plugin { };
       }
