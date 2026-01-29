@@ -20650,6 +20650,12 @@
     githubId = 2997905;
     name = "Petr Hodina";
   };
+  PhoqueEberlue = {
+    email = "andrewmhdb@gmail.com";
+    github = "PhoqueEberlue";
+    githubId = 58080347;
+    name = "Andrew Mary Huet de Barochez";
+  };
   photex = {
     email = "photex@gmail.com";
     github = "photex";
