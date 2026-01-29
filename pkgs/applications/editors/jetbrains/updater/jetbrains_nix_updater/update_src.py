@@ -2,6 +2,7 @@ import json
 import re
 from pathlib import Path
 from xmltodict import parse
+from subprocess import CalledProcessError
 
 from jetbrains_nix_updater.config import UpdaterConfig
 from jetbrains_nix_updater.fetcher import VersionInfo
@@ -151,8 +152,17 @@ def maven_out_path(jb_root: Path, name: str) -> Path:
 
 def run_src_update(ide: Ide, info: VersionInfo, config: UpdaterConfig):
     variant = ide.name.removesuffix("-oss")
-    intellij_hash, intellij_outpath = prefetch_intellij_community(variant, info.version)
-    android_hash = prefetch_android(variant, info.version)
+    try:
+        intellij_hash, intellij_outpath = prefetch_intellij_community(variant, info.version)
+        android_hash = prefetch_android(variant, info.version)
+    except CalledProcessError:
+        print(
+            f"[!] Unable to fetch sources for version {info.version}. "
+            f"This probably means, that JetBrains has not published a source release yet for this version. "
+            f"Check: https://github.com/JetBrains/intellij-community/releases and https://github.com/JetBrains/android/tags"
+        )
+        print(f"[!] Skipping update of {ide.name}.")
+        return
     jps_hash = generate_jps_hash(config, intellij_outpath)
     restarter_hash = generate_restarter_hash(config, intellij_outpath)
     repositories = jar_repositories(intellij_outpath)
