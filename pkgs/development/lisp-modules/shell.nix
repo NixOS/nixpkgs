@@ -1,10 +1,10 @@
 let
   pkgs = import ../../../. { };
-  inherit (pkgs) mkShellNoCC sbcl nixfmt-rfc-style;
+  inherit (pkgs) mkShellNoCC sbcl nixfmt;
 in
 mkShellNoCC {
   packages = [
-    nixfmt-rfc-style
+    nixfmt
     (sbcl.withPackages (
       ps:
       builtins.attrValues {
