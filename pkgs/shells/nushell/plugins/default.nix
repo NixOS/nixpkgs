@@ -46,6 +46,7 @@ lib.makeScope newScope (
       with self;
       {
         gstat = callPackage ./gstat.nix { };
+        bson = callPackage ./bson.nix { };
         formats = callPackage ./formats.nix { };
         polars = callPackage ./polars.nix { };
         query = callPackage ./query.nix { };
