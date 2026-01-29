@@ -15,6 +15,7 @@
   testers,
   runCommand,
   fetchurl,
+  fetchpatch2,
   # Main build tools
   pkg-config,
   autoconf,
@@ -140,6 +141,12 @@ let
           "${src}/contrib/ffmpeg/A28-enable-av1_mf-encoder.patch"
           "${src}/contrib/ffmpeg/A30-qsv-fixed-BT2020-BT709-conversion.patch"
           "${src}/contrib/ffmpeg/A31-Parse-EAC3-Atmos-ComplexityIndex-for-MP4-remuxing.patch"
+
+          # Fixes https://github.com/NixOS/nixpkgs/issues/484121
+          (fetchpatch2 {
+            url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/d8ffec5bf9a2803f55cc0822a97b7815f24bee83";
+            hash = "sha256-lmSI5arShb2/W84FMnSNs3lb6rd5vWdUSzfU8oza0Ic=";
+          })
         ];
       });
 
