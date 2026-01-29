@@ -20,7 +20,6 @@
 
   versionCheckHook,
 
-  testers,
   mistral-rs,
   nix-update-script,
 
@@ -204,6 +203,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
         mistral-rs.override { acceleration = "metal"; }
       );
     };
+
+    gpuCheck = finalAttrs.passthru.tests.withCuda.overrideAttrs {
+      requiredSystemFeatures = [ "cuda" ];
+
+      # Run GPU tests
+      cargoCheckFeatures = [ "cuda" ];
+
+      # Ensure that `mistralrs --version` succeeds
+      doInstallCheck = true;
+    };
+
     updateScript = nix-update-script { };
   };
 
