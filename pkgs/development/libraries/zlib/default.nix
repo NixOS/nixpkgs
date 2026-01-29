@@ -24,7 +24,7 @@ assert splitStaticOutput -> static;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zlib";
-  version = "1.3.1";
+  version = "1.3.1.2";
 
   src =
     let
@@ -33,11 +33,11 @@ stdenv.mkDerivation (finalAttrs: {
     fetchurl {
       urls = [
         # This URL works for 1.2.13 only; hopefully also for future releases.
-        "https://github.com/madler/zlib/releases/download/v${version}/zlib-${version}.tar.gz"
+        "https://github.com/madler/zlib/archive/refs/tags/v${version}.tar.gz"
         # Stable archive path, but captcha can be encountered, causing hash mismatch.
         "https://www.zlib.net/fossils/zlib-${version}.tar.gz"
       ];
-      hash = "sha256-mpOyt9/ax3zrpaVYpYDnRmfdb+3kWFuR7vtg8Dty3yM=";
+      hash = "sha256-+/HIR2E2aT5sPx+ibm2MTyyLWlxENAwE3zSdrQLu0J4=";
     };
 
   postPatch =
