@@ -8,9 +8,9 @@
   meson,
   ninja,
   pkg-config,
-  wine,
   libxcb,
   nix-update-script,
+  wineWowPackages,
 }:
 
 let
@@ -70,6 +70,8 @@ let
     fetchSubmodules = true;
     hash = "sha256-LsPHPoAL21XOKmF1Wl/tvLJGzjaCLjaDAcUtDvXdXSU=";
   };
+
+  wine = wineWowPackages.yabridge;
 in
 multiStdenv.mkDerivation (finalAttrs: {
   pname = "yabridge";
