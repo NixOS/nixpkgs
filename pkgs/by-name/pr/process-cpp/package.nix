@@ -21,7 +21,6 @@ stdenv.mkDerivation (finalAttrs: {
   version = "3.0.3";
 
   src = fetchFromGitLab {
-    domain = "gitlab.com";
     owner = "ubports";
     repo = "development/core/lib-cpp/process-cpp";
     rev = finalAttrs.version;

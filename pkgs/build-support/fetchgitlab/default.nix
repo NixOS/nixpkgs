@@ -14,7 +14,7 @@ lib.makeOverridable (
     tag ? null,
     name ? repoRevToNameMaybe repo (lib.revOrTag rev tag) "gitlab",
     protocol ? "https",
-    domain ? "gitlab.com",
+    domain ? null,
     group ? null,
     fetchSubmodules ? false,
     leaveDotGit ? false,
@@ -26,6 +26,10 @@ lib.makeOverridable (
     ... # For hash agility
   }@args:
 
+  assert lib.assertMsg (
+    domain != "gitlab.com"
+  ) "gitlab.com is default value so it should not be provided";
+
   assert (
     lib.assertMsg (lib.xor (tag == null) (
       rev == null
@@ -33,6 +37,7 @@ lib.makeOverridable (
   );
 
   let
+    finalDomain = if domain == null then "gitlab.com" else domain;
     slug = lib.concatStringsSep "/" (
       (lib.optional (group != null) group)
       ++ [
@@ -78,7 +83,7 @@ lib.makeOverridable (
             # https://docs.gitlab.com/ee/user/project/settings/project_access_tokens.html#project-access-tokens
             ''
               cat > netrc <<EOF
-              machine ${domain}
+              machine ${finalDomain}
                       login ''$${varBase}USERNAME
                       password ''$${varBase}PASSWORD
               EOF
@@ -104,7 +109,7 @@ lib.makeOverridable (
       }
     );
 
-    gitRepoUrl = "${protocol}://${domain}/${slug}.git";
+    gitRepoUrl = "${protocol}://${finalDomain}/${slug}.git";
 
     fetcherArgs =
       (
@@ -122,7 +127,7 @@ lib.makeOverridable (
           }
         else
           {
-            url = "${protocol}://${domain}/api/v4/projects/${escapedSlug}/repository/archive.tar.gz?sha=${escapedRevWithTag}";
+            url = "${protocol}://${finalDomain}/api/v4/projects/${escapedSlug}/repository/archive.tar.gz?sha=${escapedRevWithTag}";
 
             passthru = {
               inherit gitRepoUrl;
@@ -138,7 +143,7 @@ lib.makeOverridable (
 
   fetcher fetcherArgs
   // {
-    meta.homepage = "${protocol}://${domain}/${slug}/";
+    meta.homepage = "${protocol}://${finalDomain}/${slug}/";
     inherit
       tag
       owner

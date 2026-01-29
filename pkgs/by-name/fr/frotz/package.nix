@@ -18,7 +18,6 @@ stdenv.mkDerivation rec {
   version = "2.54";
 
   src = fetchFromGitLab {
-    domain = "gitlab.com";
     owner = "DavidGriffith";
     repo = "frotz";
     rev = version;
