@@ -8205,6 +8205,8 @@ self: super: with self; {
 
   kornia-rs = callPackage ../development/python-modules/kornia-rs { };
 
+  kosong = callPackage ../development/python-modules/kosong { };
+
   kotsu = callPackage ../development/python-modules/kotsu { };
 
   krakenex = callPackage ../development/python-modules/krakenex { };
@@ -13766,6 +13768,8 @@ self: super: with self; {
 
   pykalman = callPackage ../development/python-modules/pykalman { };
 
+  pykaos = callPackage ../development/python-modules/pykaos { };
+
   pykcs11 = callPackage ../development/python-modules/pykcs11 { };
 
   pykdebugparser = callPackage ../development/python-modules/pykdebugparser { };
@@ -16599,6 +16603,8 @@ self: super: with self; {
 
   ripe-atlas-sagan = callPackage ../development/python-modules/ripe-atlas-sagan { };
 
+  ripgrepy = callPackage ../development/python-modules/ripgrepy { };
+
   riprova = callPackage ../development/python-modules/riprova { };
 
   ripser = callPackage ../development/python-modules/ripser { };
@@ -18323,6 +18329,8 @@ self: super: with self; {
   streamdeck = callPackage ../development/python-modules/streamdeck { };
 
   streaming-form-data = callPackage ../development/python-modules/streaming-form-data { };
+
+  streamingjson = callPackage ../development/python-modules/streamingjson { };
 
   streamlabswater = callPackage ../development/python-modules/streamlabswater { };
 
