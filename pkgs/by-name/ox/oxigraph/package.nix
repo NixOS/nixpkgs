@@ -9,6 +9,7 @@ let
   features = [
     "rustls-webpki"
     "geosparql"
+    "rdf-12"
   ];
 in
 rustPlatform.buildRustPackage (finalAttrs: {
