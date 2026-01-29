@@ -335,6 +335,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    inherit selectedPlugins;
     tests.pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
       versionCheck = true;
