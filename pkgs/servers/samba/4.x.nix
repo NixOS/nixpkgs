@@ -302,7 +302,7 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -id \$BIN \$BIN
-    for old_rpath in \$(otool -L \$BIN | grep /private/tmp/ | awk '{print \$1}'); do
+    for old_rpath in \$(otool -L \$BIN | grep "$NIX_BUILD_TOP" | awk '{print \$1}'); do
       new_rpath=\$(find \$SAMBA_LIBS -name \$(basename \$old_rpath) | head -n 1)
       install_name_tool -change \$old_rpath \$new_rpath \$BIN
     done
