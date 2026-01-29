@@ -13,13 +13,13 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "nvidia-container-toolkit";
-  version = "1.18.1";
+  version = "1.18.0";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "nvidia-container-toolkit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qrEMfynNXiUrG/QXpgrzu2BAMd5XVh5s3LpirjzX4Z8=";
+    hash = "sha256-VQcuN+LU7iljpSWrmLBHX67esEQN1HYNPj5cLxUB7dI=";
 
   };
 
