@@ -2,7 +2,6 @@
   _7zz,
   appimageTools,
   fetchurl,
-  fetchzip,
   lib,
   stdenvNoCC,
   libxshmfence,
@@ -10,14 +9,16 @@
 
 let
   pname = "mochi";
-  version = "1.18.11";
+  version = "1.20.5";
+
+  appName = "Mochi";
 
   linux = appimageTools.wrapType2 rec {
     inherit pname version meta;
 
     src = fetchurl {
-      url = "https://mochi.cards/releases/Mochi-${version}.AppImage";
-      hash = "sha256-NQ591KtWQz8hlXPhV83JEwGm+Au26PIop5KVzsyZKp4=";
+      url = "https://download.mochi.cards/releases/Mochi-${version}.AppImage";
+      hash = "sha256-QOJ1bigmoUm+CEW5gKB73arCTF4yG8RWsJ22NHv8YCo=";
     };
 
     appimageContents = appimageTools.extractType2 { inherit pname version src; };
@@ -33,29 +34,40 @@ let
   };
 
   darwin = stdenvNoCC.mkDerivation {
-    inherit pname version meta;
+    inherit
+      pname
+      version
+      meta
+      appName
+      ;
 
-    src = fetchzip {
-      url = "https://mochi.cards/releases/Mochi-${version}.dmg";
-      hash = "sha256-5RM4eqHQoYfO5JiUH9ol+3XxOk4VX4ocE3Yia82sovI=";
-      stripRoot = false;
-      nativeBuildInputs = [ _7zz ];
+    src = fetchurl {
+      url = "https://download.mochi.cards/releases/Mochi-${version}.dmg";
+      hash = "sha256-+fhsjr6Ek0wzZLHFi3oJEZxXhCliEjO+5/5HN4ehw1w=";
     };
+
+    sourceRoot = "${appName}.app";
+    nativeBuildInputs = [ _7zz ];
 
     installPhase = ''
       runHook preInstall
 
-      mkdir -p $out/Applications
-      cp -r *.app $out/Applications
+      mkdir -p $out/Applications/Mochi.app
+      cp -r . $out/Applications/Mochi.app
 
       runHook postInstall
     '';
+
+    dontUpdateAutotoolsGnuConfigScripts = true;
+    dontConfigure = true;
+    dontFixup = true;
   };
 
   meta = {
     description = "Simple markdown-powered SRS app";
     homepage = "https://mochi.cards/";
-    changelog = "https://mochi.cards/changelog.html";
+    changelog = "https://mochi.cards/changelog";
+    mainProgram = "mochi";
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [ poopsicles ];
