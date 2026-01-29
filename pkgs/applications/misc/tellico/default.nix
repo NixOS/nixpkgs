@@ -25,14 +25,14 @@
 
 stdenv.mkDerivation rec {
   pname = "tellico";
-  version = "4.1.4";
+  version = "4.1.5";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "office";
     repo = "tellico";
     rev = "v${version}";
-    hash = "sha256-eScAOd1da05fqXtbcz8oEJiObB7CUxiYReSrr3R7ybM=";
+    hash = "sha256-tai21tbEKrqAutS/HTRQEjXBiUFXy6cDSrYxbylyflU=";
   };
 
   nativeBuildInputs = [
