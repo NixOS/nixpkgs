@@ -20019,6 +20019,12 @@
     githubId = 8976745;
     name = "Ossian Mapes";
   };
+  p-alik = {
+    email = "info@maximka.de";
+    github = "p-alik";
+    githubId = 2326795;
+    name = "Alexei Pastuchov";
+  };
   p-h = {
     email = "p@hurlimann.org";
     github = "p-h";
