@@ -19916,6 +19916,12 @@
     github = "OlivierNicole";
     githubId = 14031333;
   };
+  otisdog8 = {
+    name = "Jacob Root";
+    email = "me@rooty.dev";
+    github = "otisdog8";
+    githubId = 37094599;
+  };
   ottoblep = {
     name = "Severin Lochschmidt";
     email = "seviron53@gmail.com";
