@@ -1851,8 +1851,8 @@ let
         mktplcRef = {
           name = "godot-tools";
           publisher = "geequlim";
-          version = "2.5.1";
-          hash = "sha256-kAzRSNZw1zaECblJv7NzXnE2JXSy9hzdT2cGX+uwleY=";
+          version = "2.6.0";
+          hash = "sha256-b6aH4LAqXjwRp2dFa7+hhQL3ac9K7Zmat5ncaRLooD0=";
         };
         meta = {
           description = "VS Code extension for game development with Godot Engine and GDScript";
