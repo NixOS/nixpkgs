@@ -1,0 +1,39 @@
+diff --git a/src/common/versions.cpp b/src/common/versions.cpp
+index b935bb6..366d8ea 100644
+--- a/src/common/versions.cpp
++++ b/src/common/versions.cpp
+@@ -5,6 +5,7 @@
+ #include "path_util.h"
+ #include "versions.h"
+ 
++#include <QCoreApplication>
+ #include <algorithm>
+ #include <filesystem>
+ #include <fstream>
+@@ -18,7 +19,7 @@ namespace VersionManager {
+ 
+ std::vector<Version> GetVersionList(std::filesystem::path const& path) {
+     std::filesystem::path cfg_path =
+-        path.empty() ? Common::FS::GetUserPath(Common::FS::PathType::LauncherDir) / "versions.json"
++        path.empty() ? "@shadps4@/share/versions.json"
+                      : path;
+ 
+     std::ifstream ifs{cfg_path};
+diff --git a/src/qt_gui/gui_settings.cpp b/src/qt_gui/gui_settings.cpp
+index 707131c..3077d39 100644
+--- a/src/qt_gui/gui_settings.cpp
++++ b/src/qt_gui/gui_settings.cpp
+@@ -1,11 +1,12 @@
+ // SPDX-FileCopyrightText: Copyright 2025 shadPS4 Emulator Project
+ // SPDX-License-Identifier: GPL-2.0-or-later
+ 
++#include <QCoreApplication>
+ #include "common/path_util.h"
+ #include "gui_settings.h"
+ 
+ gui_settings::gui_settings(QObject* parent) : settings(parent) {
+-    m_settings = std::make_unique<QSettings>(ComputeSettingsDir() + "qt_ui.ini",
++    m_settings = std::make_unique<QSettings>(QString::fromStdString("@shadps4@/share/qt_ui.ini"),
+                                              QSettings::Format::IniFormat, parent);
+ }
+ 

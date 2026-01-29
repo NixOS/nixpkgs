@@ -3566,6 +3566,10 @@ with pkgs;
 
   seqdiag = with python3Packages; toPythonApplication seqdiag;
 
+  shadps4-qt = kdePackages.callPackage ../by-name/sh/shadps4/package.nix {
+    withGUI = true;
+  };
+
   shellify = haskellPackages.shellify.bin;
 
   shiv = with python3Packages; toPythonApplication shiv;

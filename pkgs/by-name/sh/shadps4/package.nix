@@ -1,185 +1,130 @@
 {
   lib,
-  gcc14Stdenv,
+  stdenv,
   fetchFromGitHub,
+  replaceVars,
 
-  nixosTests,
-  alsa-lib,
-  boost,
-  cmake,
-  cryptopp,
-  game-music-emu,
-  glslang,
-  ffmpeg,
-  flac,
-  fluidsynth,
-  fmt,
-  half,
-  jack2,
-  libdecor,
-  libGL,
+  wrapQtAppsHook ? null,
+
+  qtbase ? null,
+  qttools ? null,
+  qtmultimedia ? null,
   libpulseaudio,
-  libunwind,
-  libusb1,
-  libvorbis,
-  libxmp,
-  libgbm,
-  libx11,
-  libxcb,
-  libxcursor,
-  libxext,
-  libxi,
-  libxrandr,
-  libxscrnsaver,
-  libxtst,
-  magic-enum,
-  mpg123,
   pipewire,
-  pkg-config,
-  pugixml,
-  rapidjson,
-  renderdoc,
-  robin-map,
-  sndio,
-  stb,
-  toml11,
-  util-linux,
-  vulkan-headers,
-  vulkan-loader,
-  vulkan-memory-allocator,
-  xbyak,
-  xxHash,
-  zlib-ng,
-  zydis,
-  nix-update-script,
+
+  withGUI ? false,
+  callPackage,
+  symlinkJoin,
 }:
 
-# relies on std::sinf & co, which was broken in GCC until GCC 14: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79700
-gcc14Stdenv.mkDerivation (finalAttrs: {
-  pname = "shadps4";
-  version = "0.13.0";
+let
+  emulator = callPackage ./emulator.nix { };
 
-  src = fetchFromGitHub {
-    owner = "shadps4-emu";
-    repo = "shadPS4";
-    tag = "v.${finalAttrs.version}";
-    hash = "sha256-zc3zhFTphty/vwioFEOfhgXttpD9MG2F7+YJYcW0H2w=";
-    fetchSubmodules = true;
+  shadps4 = symlinkJoin {
+    name = "shadps4-wrapped";
+    paths = [ emulator ];
 
-    leaveDotGit = true;
-    postFetch = ''
-      cd "$out"
-      git rev-parse --short=8 HEAD > $out/COMMIT
-      date -u -d "@$(git log -1 --pretty=%ct)" "+%Y-%m-%dT%H:%M:%SZ" > $out/SOURCE_DATE_EPOCH
-      find "$out" -name .git -print0 | xargs -0 rm -rf
+    postBuild = ''
+      substitute ${./versions.json} $out/share/versions.json \
+        --replace-fail @shadps4@ $out/bin/shadps4
+
+      substitute ${./qt_ui.ini} $out/share/qt_ui.ini \
+        --replace-fail @shadps4@ $out/bin/shadps4
     '';
   };
+in
+(
+  if withGUI then
+    stdenv.mkDerivation (finalAttrs: {
+      pname = "shadps4-qt";
+      version = "0-unstable-2026-01-26";
 
-  postPatch = ''
-    substituteInPlace src/common/scm_rev.cpp.in \
-      --replace-fail @APP_VERSION@ ${finalAttrs.version} \
-      --replace-fail @GIT_REV@ $(cat COMMIT) \
-      --replace-fail @GIT_BRANCH@ ${finalAttrs.version} \
-      --replace-fail @GIT_DESC@ nixpkgs \
-      --replace-fail @BUILD_DATE@ $(cat SOURCE_DATE_EPOCH)
-  '';
+      inherit (emulator)
+        postPatch
+        cmakeFlags
+        cmakeBuildType
+        dontStrip
+        runtimeDependencies
+        ;
 
-  buildInputs = [
-    alsa-lib
-    boost
-    cryptopp
-    game-music-emu
-    glslang
-    ffmpeg
-    flac
-    fluidsynth
-    fmt
-    half
-    jack2
-    libdecor
-    libGL
-    libpulseaudio
-    libunwind
-    libusb1
-    libvorbis
-    libxmp
-    libx11
-    libxcb
-    libxcursor
-    libxext
-    libxi
-    libxrandr
-    libxscrnsaver
-    libxtst
-    libgbm
-    magic-enum
-    mpg123
-    pipewire
-    pugixml
-    rapidjson
-    renderdoc
-    robin-map
-    sndio
-    stb
-    toml11
-    util-linux
-    vulkan-headers
-    vulkan-loader
-    vulkan-memory-allocator
-    xbyak
-    xxHash
-    zlib-ng
-    zydis
-  ];
+      src = fetchFromGitHub {
+        inherit (emulator.src) owner leaveDotGit postFetch;
+        repo = "shadps4-qtlauncher";
+        rev = "f8ebecb33a773821e5bf9d3d3e273d2a7f8f4744";
+        hash = "sha256-Al32n5OTafmNKxkFp/eGE26qQ7gz8bWr6qHpWYBr30g=";
+        fetchSubmodules = true;
+      };
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ];
-
-  cmakeFlags = [
-    (lib.cmakeBool "ENABLE_UPDATER" false)
-  ];
-
-  # Still in development, help with debugging
-  cmakeBuildType = "RelWithDebugInfo";
-  dontStrip = true;
-
-  installPhase = ''
-    runHook preInstall
-
-    install -D -t $out/bin shadps4
-    install -Dm644 $src/.github/shadps4.png $out/share/icons/hicolor/512x512/apps/net.shadps4.shadPS4.png
-    install -Dm644 -t $out/share/applications $src/dist/net.shadps4.shadPS4.desktop
-    install -Dm644 -t $out/share/metainfo $src/dist/net.shadps4.shadPS4.metainfo.xml
-
-    runHook postInstall
-  '';
-
-  runtimeDependencies = [
-    vulkan-loader
-    libxi
-  ];
-
-  passthru = {
-    tests.openorbis-example = nixosTests.shadps4;
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--version-regex"
-        "v\\.(.*)"
+      patches = [
+        (replaceVars ./qt-paths.patch {
+          inherit shadps4;
+        })
+        ./hide-version-manager.patch
       ];
-    };
-  };
 
-  meta = {
-    description = "Early in development PS4 emulator";
-    homepage = "https://github.com/shadps4-emu/shadPS4";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [
-      ryand56
-      liberodark
-    ];
-    mainProgram = "shadps4";
-    platforms = lib.intersectLists lib.platforms.linux lib.platforms.x86_64;
-  };
-})
+      nativeBuildInputs = (emulator.nativeBuildInputs or [ ]) ++ [
+        wrapQtAppsHook
+      ];
+
+      buildInputs = (emulator.buildInputs or [ ]) ++ [
+        qtbase
+        qttools
+        qtmultimedia
+      ];
+
+      installPhase = ''
+        runHook preInstall
+
+        mkdir -p $out/bin
+        ln -s ${shadps4}/bin/shadps4 $out/bin
+
+        install -Dm644 $src/.github/shadps4.png $out/share/icons/hicolor/512x512/apps/net.shadps4.shadPS4.png
+        install -Dm644 -t $out/share/applications $src/dist/net.shadps4.shadps4-qtlauncher.desktop
+        install -Dm644 -t $out/share/metainfo $src/dist/net.shadps4.shadps4-qtlauncher.metainfo.xml
+
+        install -Dm755 shadPS4QtLauncher $out/bin/shadps4-qt
+
+        runHook postInstall
+      '';
+
+      fixupPhase = ''
+        runHook preFixup
+
+        substituteInPlace $out/share/applications/net.shadps4.shadps4-qtlauncher.desktop \
+          --replace-fail 'Exec=shadPS4QtLauncher' 'Exec=''${!outputBin}/bin/shadps4-qt'
+
+        runHook postFixup
+      '';
+
+      qtWrapperArgs = [
+        "--prefix LD_LIBRARY_PATH : ${
+          lib.makeLibraryPath [
+            libpulseaudio
+            pipewire
+          ]
+        }"
+      ];
+
+      meta = {
+        inherit (emulator.meta) platforms;
+      };
+    })
+  else
+    emulator
+).overrideAttrs
+  (oa: {
+    meta = oa.meta // {
+      description = "Early in development PS4 emulator";
+      homepage =
+        if withGUI then
+          "https://github.com/shadps4-emu/shadps4-qtlauncher"
+        else
+          "https://github.com/shadps4-emu/shadPS4";
+      license = lib.licenses.gpl2Plus;
+      maintainers = with lib.maintainers; [
+        ryand56
+        liberodark
+      ];
+      mainProgram = if withGUI then "shadps4-qt" else "shadps4";
+    };
+  })
