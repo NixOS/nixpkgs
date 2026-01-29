@@ -49,6 +49,8 @@ while (( "$n" < "$nParams" )); do
         -nostdinc++) cxxInclude=0 ;;
         -nostdlib) cxxLibrary=0 ;;
         -x*-header) dontLink=1 ;; # both `-x c-header` and `-xc-header` are accepted by clang
+        -std=c++*) isCxx=1 ;;     # these are also ways to enable c++!
+        -std=gnu++*) isCxx=1 ;;   # ...the gnu versions of c++ as well
         -xc++*) isCxx=1 ;;        # both `-xc++` and `-x c++` are accepted by clang
         -x)
             case "$p2" in
