@@ -1,6 +1,7 @@
 {
   electron,
   fetchFromGitHub,
+  nix-update-script,
   imagemagick,
   lib,
   makeDesktopItem,
@@ -14,13 +15,13 @@
 stdenv.mkDerivation rec {
   pname = "folo";
 
-  version = "0.6.3";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "RSSNext";
     repo = "Folo";
     tag = "v${version}";
-    hash = "sha256-huVk5KcsepDwtdWMm9pvn31GE1felbH1pR3mGqlSWRs=";
+    hash = "sha256-ZJ7awA1pN1q51Jp+z2sn9HTepjjLH+UE8gzETwzVl1E=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +40,7 @@ stdenv.mkDerivation rec {
       ;
     pnpm = pnpm_10;
     fetcherVersion = 1;
-    hash = "sha256-6I10NSmTDd/wmL/HfAgLH+G2MDfuPmrTePNDDy08nRA=";
+    hash = "sha256-a/M0V6M9cr+rqLbceJx+Nw8ZQDXMnJrOSbqruFpNeyM=";
   };
 
   env = {
@@ -119,6 +120,13 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "v([0-9]+\.[0-9]+\.[0-9]+)"
+    ];
+  };
 
   meta = {
     description = "Next generation information browser";
