@@ -159,162 +159,167 @@ let
   '';
 
   configFile =
-    (if cfg.validateConfigFile then pkgs.writers.writeNginxConfig else pkgs.writeText) "nginx.conf"
-      ''
-        ${cfg.prependConfig}
+    let
+      writeNginxConfig = pkgs.writers.writeNginxConfig {
+        nginxPackage = cfg.package;
+        inherit (cfg) validateSyntax;
+      };
+    in
+    (if cfg.validateConfigFile then writeNginxConfig else pkgs.writeText) "nginx.conf" ''
+      ${cfg.prependConfig}
 
-        pid /run/nginx/nginx.pid;
-        error_log ${cfg.logError};
-        daemon off;
+      pid /run/nginx/nginx.pid;
+      error_log ${cfg.logError};
+      daemon off;
 
-        ${optionalString cfg.enableQuicBPF ''
-          quic_bpf on;
-        ''}
+      ${optionalString cfg.enableQuicBPF ''
+        quic_bpf on;
+      ''}
 
-        ${cfg.config}
+      ${cfg.config}
 
-        ${optionalString (cfg.eventsConfig != "" || cfg.config == "") ''
-          events {
-            ${cfg.eventsConfig}
+      ${optionalString (cfg.eventsConfig != "" || cfg.config == "") ''
+        events {
+          ${cfg.eventsConfig}
+        }
+      ''}
+
+      ${optionalString (cfg.httpConfig == "" && cfg.config == "") ''
+        http {
+          ${commonHttpConfig}
+
+          ${optionalString (cfg.resolver.addresses != [ ]) ''
+            resolver ${toString cfg.resolver.addresses} ${
+              optionalString (cfg.resolver.valid != "") "valid=${cfg.resolver.valid}"
+            } ${optionalString (!cfg.resolver.ipv4) "ipv4=off"} ${
+              optionalString (!cfg.resolver.ipv6) "ipv6=off"
+            };
+          ''}
+          ${upstreamConfig}
+
+          ${optionalString cfg.recommendedOptimisation ''
+            # optimisation
+            sendfile on;
+            tcp_nopush on;
+            tcp_nodelay on;
+            keepalive_timeout 65;
+          ''}
+
+          ssl_protocols ${cfg.sslProtocols};
+          ${optionalString (cfg.sslCiphers != null) "ssl_ciphers ${cfg.sslCiphers};"}
+          ${optionalString (cfg.sslDhparam != null) "ssl_dhparam ${cfg.sslDhparam};"}
+
+          ${optionalString cfg.recommendedTlsSettings ''
+            # Consider https://ssl-config.mozilla.org/#server=nginx&config=intermediate as the lower bound
+
+            ssl_conf_command Groups "X25519MLKEM768:X25519:P-256:P-384";
+            ssl_session_timeout 1d;
+            ssl_session_cache shared:SSL:10m;
+            # Breaks forward secrecy: https://github.com/mozilla/server-side-tls/issues/135
+            ssl_session_tickets off;
+            # We don't enable insecure ciphers by default, so this allows
+            # clients to pick the most performant, per https://github.com/mozilla/server-side-tls/issues/260
+            ssl_prefer_server_ciphers off;
+          ''}
+
+          ${optionalString cfg.recommendedBrotliSettings ''
+            brotli on;
+            brotli_static on;
+            brotli_comp_level 5;
+            brotli_window 512k;
+            brotli_min_length 256;
+            brotli_types ${lib.concatStringsSep " " compressMimeTypes};
+          ''}
+
+          ${optionalString cfg.recommendedGzipSettings
+            # https://docs.nginx.com/nginx/admin-guide/web-server/compression/
+            ''
+              gzip on;
+              gzip_static on;
+              gzip_vary on;
+              gzip_comp_level 5;
+              gzip_min_length 256;
+              gzip_proxied expired no-cache no-store private auth;
+              gzip_types ${lib.concatStringsSep " " compressMimeTypes};
+            ''
           }
-        ''}
 
-        ${optionalString (cfg.httpConfig == "" && cfg.config == "") ''
-          http {
-            ${commonHttpConfig}
+          ${optionalString cfg.experimentalZstdSettings ''
+            zstd on;
+            zstd_comp_level 9;
+            zstd_min_length 256;
+            zstd_static on;
+            zstd_types ${lib.concatStringsSep " " compressMimeTypes};
+          ''}
 
-            ${optionalString (cfg.resolver.addresses != [ ]) ''
-              resolver ${toString cfg.resolver.addresses} ${
-                optionalString (cfg.resolver.valid != "") "valid=${cfg.resolver.valid}"
-              } ${optionalString (!cfg.resolver.ipv4) "ipv4=off"} ${
-                optionalString (!cfg.resolver.ipv6) "ipv6=off"
-              };
-            ''}
-            ${upstreamConfig}
+          ${optionalString cfg.recommendedProxySettings ''
+            proxy_redirect          off;
+            proxy_connect_timeout   ${cfg.proxyTimeout};
+            proxy_send_timeout      ${cfg.proxyTimeout};
+            proxy_read_timeout      ${cfg.proxyTimeout};
+            proxy_http_version      1.1;
+            # don't let clients close the keep-alive connection to upstream. See the nginx blog for details:
+            # https://www.nginx.com/blog/avoiding-top-10-nginx-configuration-mistakes/#no-keepalives
+            proxy_set_header        "Connection" "";
+            include ${recommendedProxyConfig};
+          ''}
 
-            ${optionalString cfg.recommendedOptimisation ''
-              # optimisation
-              sendfile on;
-              tcp_nopush on;
-              tcp_nodelay on;
-              keepalive_timeout 65;
-            ''}
+          ${optionalString cfg.recommendedUwsgiSettings ''
+            uwsgi_connect_timeout   ${cfg.uwsgiTimeout};
+            uwsgi_send_timeout      ${cfg.uwsgiTimeout};
+            uwsgi_read_timeout      ${cfg.uwsgiTimeout};
+            uwsgi_param             HTTP_CONNECTION "";
+            include ${cfg.package}/conf/uwsgi_params;
+          ''}
 
-            ssl_protocols ${cfg.sslProtocols};
-            ${optionalString (cfg.sslCiphers != null) "ssl_ciphers ${cfg.sslCiphers};"}
-            ${optionalString (cfg.sslDhparam != null) "ssl_dhparam ${cfg.sslDhparam};"}
+          ${optionalString (cfg.mapHashBucketSize != null) ''
+            map_hash_bucket_size ${toString cfg.mapHashBucketSize};
+          ''}
 
-            ${optionalString cfg.recommendedTlsSettings ''
-              # Consider https://ssl-config.mozilla.org/#server=nginx&config=intermediate as the lower bound
+          ${optionalString (cfg.mapHashMaxSize != null) ''
+            map_hash_max_size ${toString cfg.mapHashMaxSize};
+          ''}
 
-              ssl_conf_command Groups "X25519MLKEM768:X25519:P-256:P-384";
-              ssl_session_timeout 1d;
-              ssl_session_cache shared:SSL:10m;
-              # Breaks forward secrecy: https://github.com/mozilla/server-side-tls/issues/135
-              ssl_session_tickets off;
-              # We don't enable insecure ciphers by default, so this allows
-              # clients to pick the most performant, per https://github.com/mozilla/server-side-tls/issues/260
-              ssl_prefer_server_ciphers off;
-            ''}
+          ${optionalString (cfg.serverNamesHashBucketSize != null) ''
+            server_names_hash_bucket_size ${toString cfg.serverNamesHashBucketSize};
+          ''}
 
-            ${optionalString cfg.recommendedBrotliSettings ''
-              brotli on;
-              brotli_static on;
-              brotli_comp_level 5;
-              brotli_window 512k;
-              brotli_min_length 256;
-              brotli_types ${lib.concatStringsSep " " compressMimeTypes};
-            ''}
+          ${optionalString (cfg.serverNamesHashMaxSize != null) ''
+            server_names_hash_max_size ${toString cfg.serverNamesHashMaxSize};
+          ''}
 
-            ${optionalString cfg.recommendedGzipSettings
-              # https://docs.nginx.com/nginx/admin-guide/web-server/compression/
-              ''
-                gzip on;
-                gzip_static on;
-                gzip_vary on;
-                gzip_comp_level 5;
-                gzip_min_length 256;
-                gzip_proxied expired no-cache no-store private auth;
-                gzip_types ${lib.concatStringsSep " " compressMimeTypes};
-              ''
-            }
-
-            ${optionalString cfg.experimentalZstdSettings ''
-              zstd on;
-              zstd_comp_level 9;
-              zstd_min_length 256;
-              zstd_static on;
-              zstd_types ${lib.concatStringsSep " " compressMimeTypes};
-            ''}
-
-            ${optionalString cfg.recommendedProxySettings ''
-              proxy_redirect          off;
-              proxy_connect_timeout   ${cfg.proxyTimeout};
-              proxy_send_timeout      ${cfg.proxyTimeout};
-              proxy_read_timeout      ${cfg.proxyTimeout};
-              proxy_http_version      1.1;
-              # don't let clients close the keep-alive connection to upstream. See the nginx blog for details:
-              # https://www.nginx.com/blog/avoiding-top-10-nginx-configuration-mistakes/#no-keepalives
-              proxy_set_header        "Connection" "";
-              include ${recommendedProxyConfig};
-            ''}
-
-            ${optionalString cfg.recommendedUwsgiSettings ''
-              uwsgi_connect_timeout   ${cfg.uwsgiTimeout};
-              uwsgi_send_timeout      ${cfg.uwsgiTimeout};
-              uwsgi_read_timeout      ${cfg.uwsgiTimeout};
-              uwsgi_param             HTTP_CONNECTION "";
-              include ${cfg.package}/conf/uwsgi_params;
-            ''}
-
-            ${optionalString (cfg.mapHashBucketSize != null) ''
-              map_hash_bucket_size ${toString cfg.mapHashBucketSize};
-            ''}
-
-            ${optionalString (cfg.mapHashMaxSize != null) ''
-              map_hash_max_size ${toString cfg.mapHashMaxSize};
-            ''}
-
-            ${optionalString (cfg.serverNamesHashBucketSize != null) ''
-              server_names_hash_bucket_size ${toString cfg.serverNamesHashBucketSize};
-            ''}
-
-            ${optionalString (cfg.serverNamesHashMaxSize != null) ''
-              server_names_hash_max_size ${toString cfg.serverNamesHashMaxSize};
-            ''}
-
-            # $connection_upgrade is used for websocket proxying
-            map $http_upgrade $connection_upgrade {
-                default upgrade;
-                '''      close;
-            }
-            client_max_body_size ${cfg.clientMaxBodySize};
-
-            server_tokens ${if cfg.serverTokens then "on" else "off"};
-
-            ${cfg.commonHttpConfig}
-
-            ${proxyCachePathConfig}
-
-            ${vhosts}
-
-            ${cfg.appendHttpConfig}
-          }''}
-
-        ${optionalString (cfg.httpConfig != "") ''
-          http {
-            ${commonHttpConfig}
-            ${cfg.httpConfig}
-          }''}
-
-        ${optionalString (cfg.streamConfig != "") ''
-          stream {
-            ${cfg.streamConfig}
+          # $connection_upgrade is used for websocket proxying
+          map $http_upgrade $connection_upgrade {
+              default upgrade;
+              '''      close;
           }
-        ''}
+          client_max_body_size ${cfg.clientMaxBodySize};
 
-        ${cfg.appendConfig}
-      '';
+          server_tokens ${if cfg.serverTokens then "on" else "off"};
+
+          ${cfg.commonHttpConfig}
+
+          ${proxyCachePathConfig}
+
+          ${vhosts}
+
+          ${cfg.appendHttpConfig}
+        }''}
+
+      ${optionalString (cfg.httpConfig != "") ''
+        http {
+          ${commonHttpConfig}
+          ${cfg.httpConfig}
+        }''}
+
+      ${optionalString (cfg.streamConfig != "") ''
+        stream {
+          ${cfg.streamConfig}
+        }
+      ''}
+
+      ${cfg.appendConfig}
+    '';
 
   configPath = if cfg.enableReload then "/etc/nginx/nginx.conf" else configFile;
 
@@ -1279,6 +1284,11 @@ in
       validateConfigFile = lib.mkEnableOption "validating configuration with pkgs.writeNginxConfig" // {
         default = true;
       };
+
+      validateSyntax = mkEnableOption "validating the syntax of the configuration" // {
+        default = cfg.validateConfigFile;
+        defaultText = lib.literalExpression "config.services.nginx.validateConfigFile";
+      };
     };
   };
 
@@ -1414,6 +1424,13 @@ in
           assertion = cfg.resolver.ipv4 || cfg.resolver.ipv6;
           message = ''
             At least one of services.nginx.resolver.ipv4 and services.nginx.resolver.ipv6 must be true.
+          '';
+        }
+
+        {
+          assertion = cfg.validateSyntax -> cfg.validateConfigFile;
+          message = ''
+            Validating syntax depends on validating the config file.
           '';
         }
       ]
