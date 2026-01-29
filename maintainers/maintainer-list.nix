@@ -25473,6 +25473,12 @@
     githubId = 144952;
     name = "Suvash Thapaliya";
   };
+  svecco = {
+    email = "chenrui@svecco.org";
+    github = "svecco";
+    githubId = 246923954;
+    name = "Chenrui Wu";
+  };
   sveitser = {
     email = "sveitser@gmail.com";
     github = "sveitser";
