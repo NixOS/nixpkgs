@@ -5,10 +5,11 @@
   ...
 }:
 let
-  cfg = config.services.stalwart-mail;
+  cfg = config.services.stalwart;
   configFormat = pkgs.formats.toml { };
-  configFile = configFormat.generate "stalwart-mail.toml" cfg.settings;
+  configFile = configFormat.generate "stalwart.toml" cfg.settings;
   useLegacyStorage = lib.versionOlder config.system.stateVersion "24.11";
+  useLegacyDefault = lib.versionOlder config.system.stateVersion "26.05";
 
   parsePorts =
     listeners:
@@ -21,17 +22,22 @@ let
 
 in
 {
-  options.services.stalwart-mail = {
-    enable = lib.mkEnableOption "the Stalwart all-in-one email server";
+  imports = [
+    # since 0.12.0 (2025-05-26) release, upstream re-branded project to 'stalwart' due to inclusion of collaboration features (CalDAV, CardDAV, and WebDAV)
+    #  https://github.com/stalwartlabs/stalwart/releases/tag/v0.12.0
+    (lib.mkRenamedOptionModule [ "services" "stalwart-mail" ] [ "services" "stalwart" ])
+  ];
+  options.services.stalwart = {
+    enable = lib.mkEnableOption "the all-in-one collaboration and mail server, Stalwart";
 
-    package = lib.mkPackageOption pkgs "stalwart-mail" { };
+    package = lib.mkPackageOption pkgs "stalwart" { };
 
     openFirewall = lib.mkOption {
       type = lib.types.bool;
       default = false;
       description = ''
         Whether to open TCP firewall ports, which are specified in
-        {option}`services.stalwart-mail.settings.server.listener` on all interfaces.
+        {option}`services.stalwart.settings.server.listener` on all interfaces.
       '';
     };
 
@@ -39,7 +45,7 @@ in
       inherit (configFormat) type;
       default = { };
       description = ''
-        Configuration options for the Stalwart email server.
+        Configuration options for the Stalwart server.
         See <https://stalw.art/docs/category/configuration> for available options.
 
         By default, the module is configured to store everything locally.
@@ -48,18 +54,34 @@ in
 
     dataDir = lib.mkOption {
       type = lib.types.path;
-      default = "/var/lib/stalwart-mail";
+      default = if useLegacyDefault then "/var/lib/stalwart-mail" else "/var/lib/stalwart";
       description = ''
         Data directory for stalwart
       '';
     };
 
+    user = lib.mkOption {
+      type = lib.types.str;
+      default = if useLegacyDefault then "stalwart-mail" else "stalwart";
+      description = ''
+        User ownership of service
+      '';
+    };
+
+    group = lib.mkOption {
+      type = lib.types.str;
+      default = if useLegacyDefault then "stalwart-mail" else "stalwart";
+      description = ''
+        Group ownership of service
+      '';
+    };
+
     credentials = lib.mkOption {
       description = ''
-        Credentials envs used to configure Stalwart-Mail secrets.
+        Credentials envs used to configure Stalwart secrets.
         These secrets can be accessed in configuration values with
         the macros such as
-        `%{file:/run/credentials/stalwart-mail.service/VAR_NAME}%`.
+        `%{file:/run/credentials/stalwart.service/VAR_NAME}%`.
       '';
       type = lib.types.attrsOf lib.types.str;
       default = { };
@@ -90,7 +112,7 @@ in
     ];
 
     # Default config: all local
-    services.stalwart-mail.settings = {
+    services.stalwart.settings = {
       tracer.stdout = {
         type = lib.mkDefault "stdout";
         level = lib.mkDefault "info";
@@ -132,7 +154,7 @@ in
           );
         in
         {
-          path = "/var/cache/stalwart-mail";
+          path = if useLegacyDefault then "/var/cache/stalwart-mail" else "/var/cache/stalwart";
           resource = lib.mkIf hasHttpListener (lib.mkDefault "file://${cfg.package.webadmin}/webadmin.zip");
         };
     };
@@ -142,20 +164,24 @@ in
     # service is restarted on a potentially large number of files.
     # That would cause unnecessary and unwanted delays.
     users = {
-      groups.stalwart-mail = { };
-      users.stalwart-mail = {
-        isSystemUser = true;
-        group = "stalwart-mail";
+      groups = {
+        ${cfg.group} = { };
+      };
+      users = {
+        ${cfg.user} = {
+          isSystemUser = true;
+          inherit (cfg) group;
+        };
       };
     };
 
     systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' - stalwart-mail stalwart-mail - -"
+      "d '${cfg.dataDir}' - '${cfg.user}' '${cfg.group}' - -"
     ];
 
     systemd = {
-      services.stalwart-mail = {
-        description = "Stalwart Mail Server";
+      services.stalwart = {
+        description = "Stalwart Server";
         wantedBy = [ "multi-user.target" ];
         after = [
           "local-fs.target"
@@ -170,7 +196,7 @@ in
           KillSignal = "SIGINT";
           Restart = "on-failure";
           RestartSec = 5;
-          SyslogIdentifier = "stalwart-mail";
+          SyslogIdentifier = "stalwart";
 
           ExecStartPre =
             if useLegacyStorage then
@@ -190,12 +216,12 @@ in
           ReadWritePaths = [
             cfg.dataDir
           ];
-          CacheDirectory = "stalwart-mail";
-          StateDirectory = "stalwart-mail";
+          CacheDirectory = if useLegacyDefault then "stalwart-mail" else "stalwart";
+          StateDirectory = if useLegacyDefault then "stalwart-mail" else "stalwart";
 
           # Upstream uses "stalwart" as the username since 0.12.0
-          User = "stalwart-mail";
-          Group = "stalwart-mail";
+          User = cfg.user;
+          Group = cfg.group;
 
           # Bind standard privileged ports
           AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];

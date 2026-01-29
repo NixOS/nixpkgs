@@ -7,7 +7,7 @@ in
 {
   security.pki.certificateFiles = [ certs.ca.cert ];
 
-  services.stalwart-mail = {
+  services.stalwart = {
     enable = true;
     settings = {
       server.hostname = domain;
@@ -54,7 +54,7 @@ in
 
       store."rocksdb" = {
         type = "rocksdb";
-        path = "/var/lib/stalwart-mail/data";
+        path = "/var/lib/stalwart/data";
         compression = "lz4";
       };
 
