@@ -35,6 +35,7 @@ let
 
 in
 {
+  meta.buildDocsInSandbox = false;
   meta.maintainers = with lib.maintainers; [
     kurogeek
   ];
@@ -65,6 +66,7 @@ in
     secretKeyFile = mkOption {
       type = types.path;
       default = "${cfg.dataDir}/secret_key.txt";
+      defaultText = lib.literalExpression ''"''${cfg.dataDir}/secret_key.txt"'';
       example = "/run/keys/inventree-secret-key";
       description = ''
         Path to a file containing the secret key
@@ -113,7 +115,6 @@ in
       dbuser = mkOption {
         type = types.str;
         default = "inventree";
-        defaultText = lib.literalExpression "inventree";
         description = "Database username.";
       };
       passwordFile = mkOption {
@@ -122,7 +123,7 @@ in
         example = "/run/keys/inventree-dbpassword";
         description = ''
           A file containing the password corresponding to
-          <option>database.user</option>.
+          <option>database.dbuser</option>.
         '';
       };
       createLocally = mkOption {
@@ -136,7 +137,7 @@ in
       type = types.str;
       default = "localhost";
       example = "inventree.example.com";
-      description = mdDoc ''
+      description = ''
         The INVENTREE_SITE_URL option defines the base URL for the
         InvenTree server. This is a critical setting, and it is required
         for correct operation of the server. If not specified, the
@@ -175,19 +176,7 @@ in
             str
           ])
         );
-      default = {
-        INVENTREE_CONFIG_FILE = lib.mkDefault "${cfg.dataDir}/config/config.yaml";
-        INVENTREE_OIDC_PRIVATE_KEY_FILE = lib.mkDefault "${cfg.dataDir}/config/oidc_private_key.txt";
-        INVENTREE_STATIC_ROOT = lib.mkDefault "${cfg.dataDir}/data/static_root";
-        INVENTREE_MEDIA_ROOT = lib.mkDefault "${cfg.dataDir}/data/media";
-        INVENTREE_BACKUP_DIR = lib.mkDefault "${cfg.dataDir}/data/backups";
-        INVENTREE_SITE_URL = lib.mkDefault "http://${cfg.domain}";
-        INVENTREE_PLUGIN_FILE = lib.mkDefault "${cfg.dataDir}/data/plugins/plugins.txt";
-        INVENTREE_PLUGIN_DIR = lib.mkDefault "${cfg.dataDir}/data/plugins";
-        INVENTREE_ADMIN_PASSWORD_FILE = lib.mkDefault cfg.adminPasswordFile;
-        INVENTREE_SECRET_KEY_FILE = lib.mkDefault cfg.secretKeyFile;
-        INVENTREE_AUTO_UPDATE = lib.mkDefault "false";
-      };
+      default = { };
       description = ''
         InvenTree config options.
 

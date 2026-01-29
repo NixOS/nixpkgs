@@ -17,12 +17,12 @@ let
     };
   };
 
-  version = "0.18.0";
+  version = "1.1.10";
   src = fetchFromGitHub {
     owner = "inventree";
     repo = "inventree";
-    rev = "d6c722041987d13a4e596711aafa0f30cde3f9a0";
-    hash = "sha256-BnRE6BM6/LHUtP3H0L8qh3LAxFphNlpll+r1oH4sGuQ=";
+    tag = "${version}";
+    hash = "sha256-TPB/3pFIU+ui4c+CbqIKTyAfJ/Xepm/RIhZeYhTrgI4=";
   };
 
   frontend =
@@ -38,7 +38,7 @@ let
 
       yarnOfflineCache = fetchYarnDeps {
         yarnLock = finalAttrs.src + "/yarn.lock";
-        hash = "sha256-wXIVtW1dMxhyuZ1LmuYZ2IwUbRZwbYmdRkiribMbK20=";
+        hash = "sha256-Ijbkx+INZgsvMhkzo8h/FUY75W3UHnKAdUjQRD8kJZw=";
       };
 
       nativeBuildInputs = [
@@ -93,6 +93,7 @@ python3.pkgs.buildPythonApplication rec {
       django-sql-utils
       django-sslserver
       django-stdimage
+      django-storages
       django-structlog
       django-taggit
       django-oauth-toolkit
@@ -131,6 +132,7 @@ python3.pkgs.buildPythonApplication rec {
       ppf-datamatrix
       psycopg2
       mysqlclient
+      requests-mock
 
       opentelemetry-api
       opentelemetry-sdk
@@ -185,6 +187,8 @@ python3.pkgs.buildPythonApplication rec {
         "test_package_loading"
         "test_export"
         "test_users_exist"
+        "test_import_part"
+        "test_model_names"
       ];
       skippedFuncScripts = builtins.map (funcName: ''
         grep -rlZ ${funcName} . | while IFS= read -r -d "" file; do
