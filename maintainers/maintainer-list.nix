@@ -25753,6 +25753,12 @@
     github = "takeda";
     githubId = 411978;
   };
+  takeokunn = {
+    email = "bararararatty@gmail.com";
+    github = "takeokunn";
+    githubId = 11222510;
+    name = "Takeo Obara";
+  };
   taketwo = {
     email = "alexandrov88@gmail.com";
     github = "taketwo";
