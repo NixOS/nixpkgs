@@ -111,6 +111,8 @@ buildPythonPackage rec {
     "pyarrow/tests/test_cpp_internals.py::test_pyarrow_include"
     # Searches for TZDATA in /usr.
     "pyarrow/tests/test_orc.py::test_example_using_json"
+    # TZDIR handling differs on Darwin; test assumes /usr/share/zoneinfo
+    "pyarrow/tests/test_orc.py::test_timezone_absent"
     # AssertionError: assert 'Europe/Monaco' == 'Europe/Paris'
     "pyarrow/tests/test_types.py::test_dateutil_tzinfo_to_string"
     # These fail with xxx_fixture not found.
