@@ -5708,6 +5708,10 @@ self: super: with self; {
 
   flowmc = callPackage ../development/python-modules/flowmc { };
 
+  flowsint-core = callPackage ../development/python-modules/flowsint-core { };
+
+  flowsint-types = callPackage ../development/python-modules/flowsint-types { };
+
   fluent-logger = callPackage ../development/python-modules/fluent-logger { };
 
   fluent-pygments = callPackage ../development/python-modules/python-fluent/fluent-pygments.nix { };
@@ -6899,6 +6903,8 @@ self: super: with self; {
 
   hg-git = callPackage ../development/python-modules/hg-git { };
 
+  hibpwned = callPackage ../development/python-modules/hibpwned { };
+
   hickle = callPackage ../development/python-modules/hickle { };
 
   hid = callPackage ../development/python-modules/hid { inherit (pkgs) hidapi; };
@@ -7264,6 +7270,8 @@ self: super: with self; {
   igloohome-api = callPackage ../development/python-modules/igloohome-api { };
 
   ignite = callPackage ../development/python-modules/ignite { };
+
+  ignorant = callPackage ../development/python-modules/ignorant { };
 
   igraph = callPackage ../development/python-modules/igraph { inherit (pkgs) igraph; };
 
@@ -13334,6 +13342,8 @@ self: super: with self; {
 
   pydiffx = callPackage ../development/python-modules/pydiffx { };
 
+  pydig = callPackage ../development/python-modules/pydig { };
+
   pydigiham = callPackage ../development/python-modules/pydigiham { };
 
   pydiscourse = callPackage ../development/python-modules/pydiscourse { };
@@ -16308,7 +16318,13 @@ self: super: with self; {
 
   recommonmark = callPackage ../development/python-modules/recommonmark { };
 
+  reconcrawl = callPackage ../development/python-modules/reconcrawl { };
+
   reconplogger = callPackage ../development/python-modules/reconplogger { };
+
+  reconspread = callPackage ../development/python-modules/reconspread { };
+
+  recontrack = callPackage ../development/python-modules/recontrack { };
 
   recordlinkage = callPackage ../development/python-modules/recordlinkage { };
 
@@ -16465,6 +16481,10 @@ self: super: with self; {
   requests-oauthlib = callPackage ../development/python-modules/requests-oauthlib { };
 
   requests-pkcs12 = callPackage ../development/python-modules/requests-pkcs12 { };
+
+  requests-random-user-agent =
+    callPackage ../development/python-modules/requests-random-user-agent
+      { };
 
   requests-ratelimiter = callPackage ../development/python-modules/requests-ratelimiter { };
 
