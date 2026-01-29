@@ -13,6 +13,8 @@ lib.makeScope newScope (self: {
 
   findcrypt = self.callPackage ./extensions/findcrypt { };
 
+  ghidralib = self.callPackage ./extensions/ghidralib { };
+
   ghidra-delinker-extension = self.callPackage ./extensions/ghidra-delinker-extension {
     inherit ghidra;
   };
