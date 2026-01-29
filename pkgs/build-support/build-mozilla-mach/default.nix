@@ -146,7 +146,10 @@ in
   ),
   overrideCC,
   buildPackages,
-  pgoSupport ? (stdenv.hostPlatform.isLinux && stdenv.hostPlatform == stdenv.buildPlatform),
+  pgoSupport ? (
+    (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin)
+    && stdenv.hostPlatform == stdenv.buildPlatform
+  ),
   xvfb-run,
   elfhackSupport ?
     isElfhackPlatform stdenv && !(stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isAarch64),
@@ -402,7 +405,7 @@ buildStdenv.mkDerivation {
     dump_syms
     patchelf
   ]
-  ++ lib.optionals pgoSupport [ xvfb-run ]
+  ++ lib.optionals (pgoSupport && stdenv.hostPlatform.isLinux) [ xvfb-run ]
   ++ extraNativeBuildInputs;
 
   setOutputFlags = false; # `./mach configure` doesn't understand `--*dir=` flags.
@@ -614,29 +617,37 @@ buildStdenv.mkDerivation {
   ++ lib.optional jemallocSupport jemalloc
   ++ extraBuildInputs;
 
-  profilingPhase = lib.optionalString pgoSupport ''
-    # Avoid compressing the instrumented build with high levels of compression
-    export MOZ_PKG_FORMAT=tar
+  profilingPhase =
+    lib.optionalString pgoSupport ''
+      # Avoid compressing the instrumented build with high levels of compression
+      export MOZ_PKG_FORMAT=tar
 
-    # Package up Firefox for profiling
-    ./mach package
+      # Package up Firefox for profiling
+      ./mach package
 
-    # Run profiling
-    (
-      export HOME=$TMPDIR
-      export LLVM_PROFDATA=llvm-profdata
-      export JARLOG_FILE="$TMPDIR/jarlog"
-
+      # Run profiling
+      (
+        export HOME=$TMPDIR
+        export LLVM_PROFDATA=llvm-profdata
+        export JARLOG_FILE="$TMPDIR/jarlog"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      export MOZ_HEADLESS=1
+      ./mach python ./build/pgo/profileserver.py
+    ''
+    + lib.optionalString (stdenv.hostPlatform.isLinux) ''
       xvfb-run -w 10 -s "-screen 0 1920x1080x24" \
         ./mach python ./build/pgo/profileserver.py
-    )
+    ''
+    + ''
+      )
 
-    # Copy profiling data to a place we can easily reference
-    cp ./merged.profdata $TMPDIR/merged.profdata
+      # Copy profiling data to a place we can easily reference
+      cp ./merged.profdata $TMPDIR/merged.profdata
 
-    # Clean build dir
-    ./mach clobber
-  '';
+      # Clean build dir
+      ./mach clobber
+    '';
 
   preBuild = ''
     cd objdir
