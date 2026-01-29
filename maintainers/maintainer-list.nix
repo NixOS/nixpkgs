@@ -21898,6 +21898,11 @@
     github = "randomdude16671";
     githubId = 210965013;
   };
+  randomizedcoder = {
+    name = "randomizedcoder";
+    github = "randomizedcoder";
+    githubId = 64496590;
+  };
   randoneering = {
     name = "randoneering";
     email = "justin@randoneering.tech";
