@@ -299,17 +299,10 @@ stdenv.mkDerivation (
           # This was fixed upstream in LLVM 21 with
           # 88f041f3e05e26617856cc096d2e2864dfaa1c7b, but it’s too
           # painful to backport all the way.
-          lib.optionalString
-            (
-              lib.versionOlder release_version "21"
-              ||
-                # Rebuild avoidance; TODO: clean up on `staging`.
-                stdenv.hostPlatform.isx86
-            )
-            ''
-              substituteInPlace unittests/TargetParser/Host.cpp \
-                --replace-fail "getMacOSHostVersion" "DISABLED_getMacOSHostVersion"
-            ''
+          lib.optionalString (lib.versionOlder release_version "21") ''
+            substituteInPlace unittests/TargetParser/Host.cpp \
+              --replace-fail "getMacOSHostVersion" "DISABLED_getMacOSHostVersion"
+          ''
         +
           # This test fails with a `dysmutil` crash; have not yet dug into what's
           # going on here (TODO(@rrbutani)).

@@ -1,6 +1,7 @@
 {
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   lib,
   replaceVars,
   cmake,
@@ -48,6 +49,26 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Provide a Nix-controlled location for the initial `sys.path` entry.
     (replaceVars ./set-python-sys-path.patch { python = "${py}/${py.sitePackages}"; })
+    (fetchpatch {
+      name = "CVE-2025-15279_1.patch";
+      url = "https://github.com/fontforge/fontforge/commit/7d67700cf8888e0bb37b453ad54ed932c8587073.patch";
+      hash = "sha256-AqixWSgMc75qkgO30nWnI9NKLRtVwCDR+uSEiwMtFKg=";
+    })
+    (fetchpatch {
+      name = "CVE-2025-15279_2.patch";
+      url = "https://github.com/fontforge/fontforge/commit/720ea95020c964202928afd2e93b0f5fac11027e.patch";
+      hash = "sha256-DsP2fDTZlTtg8MXcnsuGQ4PFPOVp56Jm95gq877PLlE=";
+    })
+    (fetchpatch {
+      name = "CVE-2025-15275.patch";
+      url = "https://github.com/fontforge/fontforge/commit/7195402701ace7783753ef9424153eff48c9af44.patch";
+      hash = "sha256-NHgKUvHF389z7PRqaDj3IWLSLijlSw0F3UYcMjLxKvE=";
+    })
+    (fetchpatch {
+      name = "CVE-2025-15269.patch";
+      url = "https://github.com/fontforge/fontforge/commit/6aea6db5da332d8ac94e3501bb83c1b21f52074d.patch";
+      hash = "sha256-3KsWSXVRpPJbytVmzjExCGw6IaCgcrKwqQGRKpQAOiY=";
+    })
   ];
 
   # use $SOURCE_DATE_EPOCH instead of non-deterministic timestamps

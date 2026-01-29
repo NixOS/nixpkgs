@@ -50,7 +50,7 @@
 
 let
   version = "2.40";
-  patchSuffix = "-66";
+  patchSuffix = "-218";
   sha256 = "sha256-GaiQF16SY9dI9ieZPeb0sa+c0h4D8IDkv7Oh+sECBaI=";
 in
 
@@ -68,7 +68,7 @@ stdenv.mkDerivation (
       /*
         No tarballs for stable upstream branch, only https://sourceware.org/git/glibc.git and using git would complicate bootstrapping.
          $ git fetch --all -p && git checkout origin/release/2.40/master && git describe
-         glibc-2.40-142-g2eb180377b
+         glibc-2.40-218-g9fe8576664
          $ git show --minimal --reverse glibc-2.40.. ':!ADVISORIES' > 2.40-master.patch
 
         To compare the archive contents zdiff can be used.
