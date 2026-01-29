@@ -1,70 +1,236 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
+  maven,
   swt,
+  jdk,
   jre,
-  makeWrapper,
+  makeBinaryWrapper,
+  pkg-config,
   alsa-lib,
   jack2,
   fluidsynth,
   libpulseaudio,
   lilv,
+  suil,
+  qt5,
   which,
   wrapGAppsHook3,
   nixosTests,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
-  version = "1.6.6";
+let
+  swtArtifactId =
+    "org.eclipse.swt." + (if stdenv.hostPlatform.isDarwin then "cocoa.macosx" else "gtk.linux");
+  buildDir =
+    "desktop/build-scripts/tuxguitar-"
+    + (if stdenv.hostPlatform.isDarwin then "macosx-swt-cocoa" else "linux-swt");
+  buildScript = "${buildDir}/pom.xml";
+  mvnParams = lib.escapeShellArgs [
+    "-f"
+    buildScript
+    "-P"
+    "native-modules"
+    "-Dmaven.test.skip=true"
+  ];
+in
+maven.buildMavenPackage rec {
   pname = "tuxguitar";
+  version = "2.0.1";
 
-  src = fetchurl {
-    url = "https://github.com/helge17/tuxguitar/releases/download/${finalAttrs.version}/tuxguitar-${finalAttrs.version}-linux-swt-amd64.tar.gz";
-    hash = "sha256-kfPk+IIg5Q4Fc9HMS0kxxCarlbJjVKluIvz8KpDjJLM=";
+  src = fetchFromGitHub {
+    owner = "helge17";
+    repo = "tuxguitar";
+    tag = version;
+    hash = "sha256-USdYj8ebosXkiZpDqyN5J+g1kjyWm225iQlx/szXmLA=";
   };
 
-  nativeBuildInputs = [
-    makeWrapper
-    wrapGAppsHook3
+  patches = [
+    ./fix-include.patch
   ];
+
+  buildOffline = true;
+
+  mvnJdk = jdk;
+
+  mvnHash = (
+    passthru.mvnHashByPlatform.${stdenv.system}
+      or (lib.warn "Missing mvnHash for ${stdenv.system}, using lib.fakeHash" lib.fakeHash)
+  );
+
+  mvnParameters = mvnParams;
+  mvnDepsParameters = mvnParams;
+
+  mvnFetchExtraArgs = {
+    dontWrapQtApps = true;
+    dontWrapGApps = true;
+    preBuild = ''
+      mkdir -p $out/.m2
+      mvn install:install-file \
+        -Dfile=${swt}/jars/swt.jar \
+        -DgroupId=org.eclipse.swt \
+        -DartifactId=${swtArtifactId} \
+        -Dpackaging=jar \
+        -Dversion=4.36 \
+        -Dmaven.repo.local=$out/.m2
+    '';
+    postInstall = ''
+      rm -rf $out/.m2/repository/org/eclipse/swt
+      find $out -type f -name "maven-metadata-*.xml" -delete
+      find $out -exec touch -t 197001010000 {} +
+    '';
+  };
+
+  afterDepsSetup = ''
+    mvn install:install-file \
+      -Dfile=${swt}/jars/swt.jar \
+      -DgroupId=org.eclipse.swt \
+      -DartifactId=${swtArtifactId} \
+      -Dpackaging=jar \
+      -Dversion=4.36 \
+      -Dmaven.repo.local=$mvnDeps/.m2
+  '';
+
+  nativeBuildInputs = [
+    makeBinaryWrapper
+    jdk
+    pkg-config
+    fluidsynth.dev
+    lilv.dev
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wrapGAppsHook3
+    alsa-lib.dev
+    jack2.dev
+    libpulseaudio.dev
+    suil
+    qt5.qtbase.dev
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    stdenv.cc
+  ];
+
+  buildInputs = [
+    swt
+    fluidsynth
+    lilv
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    jack2
+    libpulseaudio
+    suil
+    qt5.qtbase
+  ];
+
+  dontWrapQtApps = true;
 
   dontWrapGApps = true;
 
   installPhase = ''
+    runHook preInstall
+
+    cd ${buildDir}
+  ''
+  # macOS: The build creates tuxguitar-VERSION-macosx-swt-cocoa.app directly
+  # This directory name already ends with .app and IS the app bundle
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications
+    cp -r target/tuxguitar-*-macosx-swt-cocoa.app $out/Applications/TuxGuitar.app
+
+    # Fix the launch script to use the Nix JRE instead of bundled JRE
+    substituteInPlace $out/Applications/TuxGuitar.app/Contents/MacOS/tuxguitar.sh \
+      --replace-fail 'JAVA="./jre/bin/java"' 'JAVA="${jre}/bin/java"'
+
+    # Ensure the main executable has execute permissions
+    chmod +x $out/Applications/TuxGuitar.app/Contents/MacOS/tuxguitar.sh
+
+    # Symlink doesn't work. We have to create a wrapper script instead
     mkdir -p $out/bin
-    cp -r dist lib share $out/
-    cp tuxguitar.sh $out/bin/tuxguitar
+    cat > $out/bin/tuxguitar <<EOF
+    #!/bin/sh
+    exec "$out/Applications/TuxGuitar.app/Contents/MacOS/tuxguitar.sh" "\$@"
+    EOF
+    chmod +x $out/bin/tuxguitar
+  ''
+  # Linux: Install traditional layout
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    TUXGUITAR_DIR=$(ls -d target/tuxguitar-* | head -n 1)
+    mkdir -p $out/{bin,lib}
+    cp -r $TUXGUITAR_DIR $out/lib/tuxguitar
+    ln -s $out/lib/tuxguitar/tuxguitar.sh $out/bin/tuxguitar
 
-    ln -s $out/dist $out/bin/dist
-    ln -s $out/lib $out/bin/lib
-    ln -s $out/share $out/bin/share
+    # Selectively symlink share directories, but filter templates
+    mkdir -p $out/share
+    for dir in $out/lib/tuxguitar/share/*; do
+      if [ "$(basename "$dir")" != "templates" ]; then
+        ln -s "$dir" $out/share/
+      fi
+    done
+
+    # Only install templates that should appear in "Create New" menu (not localized defaults)
+    mkdir -p $out/share/templates
+    cp $out/lib/tuxguitar/share/templates/template-1.tg $out/share/templates/
+    cp $out/lib/tuxguitar/share/templates/template-2.tg $out/share/templates/
+    cp $out/lib/tuxguitar/share/templates/templates.xml $out/share/templates/
+  ''
+  + ''
+
+    runHook postInstall
   '';
 
-  postFixup = ''
-    wrapProgram $out/bin/tuxguitar \
-      "''${gappsWrapperArgs[@]}" \
-      --prefix PATH : ${
-        lib.makeBinPath [
-          jre
-          which
-        ]
-      } \
-      --prefix LD_LIBRARY_PATH : "$out/lib/:${
-        lib.makeLibraryPath [
-          swt
-          alsa-lib
-          jack2
-          fluidsynth
-          libpulseaudio
-          lilv
-        ]
-      }" \
-      --prefix CLASSPATH : "${swt}/jars/swt.jar:$out/lib/tuxguitar.jar:$out/lib/itext.jar"
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    wrapProgram $out/bin/tuxguitar ${lib.concatStringsSep " " passthru.wrapperArgs}
   '';
 
-  passthru.tests = {
-    nixos = nixosTests.tuxguitar;
+  passthru = rec {
+    tests.nixos = nixosTests.tuxguitar;
+    inherit swtArtifactId buildDir buildScript;
+    # FIXME: Makes hash stable across platforms and convert to a single hash.
+    mvnHashByPlatform = {
+      "x86_64-linux" = "sha256-7UDFGuOMERvY74mkneusJyuAHfF3U6b4qV4MPHGQYdM=";
+      "aarch64-linux" = "sha256-7UDFGuOMERvY74mkneusJyuAHfF3U6b4qV4MPHGQYdM=";
+      "aarch64-darwin" = "sha256-lfO2YH+yKZWzh3MeQ7baESGmmW7zPdTLs8CjZ/FtLu0";
+    };
+    ldLibVar = if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
+    classpath = [
+      "${swt}/jars/swt.jar"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      "$out/lib/tuxguitar.jar"
+      "$out/lib/itext.jar"
+    ];
+    libraryPath = [
+      "$out/lib"
+      fluidsynth
+      lilv
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      swt
+      alsa-lib
+      jack2
+      libpulseaudio
+    ];
+    wrapperPaths = [
+      jre
+      which
+    ];
+    wrapperArgs = [
+      "\${gappsWrapperArgs[@]}"
+      "--prefix"
+      "PATH"
+      ":"
+      (lib.makeBinPath wrapperPaths)
+      "--prefix"
+      ldLibVar
+      ":"
+      (lib.makeLibraryPath libraryPath)
+      "--prefix"
+      "CLASSPATH"
+      ":"
+      (lib.concatStringsSep ":" classpath)
+    ];
   };
 
   meta = {
@@ -74,10 +240,12 @@ stdenv.mkDerivation (finalAttrs: {
       in Java-SWT. It can open GuitarPro, PowerTab and TablEdit files.
     '';
     homepage = "https://github.com/helge17/tuxguitar";
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [ ardumont ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with lib.maintainers; [
+      ardumont
+      mio
+    ];
+    platforms = builtins.attrNames passthru.mvnHashByPlatform;
     mainProgram = "tuxguitar";
   };
-})
+}

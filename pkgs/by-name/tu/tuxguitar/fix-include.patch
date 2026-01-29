@@ -1,0 +1,24 @@
+diff -Naur tuxguitar/desktop/TuxGuitar-synth-lv2/src/main/cxx/LV2.h tuxguitar-patched/desktop/TuxGuitar-synth-lv2/src/main/cxx/LV2.h
+--- tuxguitar/desktop/TuxGuitar-synth-lv2/src/main/cxx/LV2.h	2025-11-03 22:30:10.315511003 +1100
++++ tuxguitar-patched/desktop/TuxGuitar-synth-lv2/src/main/cxx/LV2.h	2025-11-03 22:36:06.444389423 +1100
+@@ -1,7 +1,7 @@
+ #ifndef _Included_LV2
+ #define _Included_LV2
+ 
+-#include <lilv.h>
++#include <lilv-0/lilv/lilv.h>
+ #include <lv2/lv2plug.in/ns/extensions/ui/ui.h>
+ #include <lv2/lv2plug.in/ns/ext/state/state.h>
+ #include <lv2/lv2plug.in/ns/ext/options/options.h>
+diff -Naur tuxguitar/desktop/TuxGuitar-synth-lv2/src/main/cxx/LV2UI.h tuxguitar-patched/desktop/TuxGuitar-synth-lv2/src/main/cxx/LV2UI.h
+--- tuxguitar/desktop/TuxGuitar-synth-lv2/src/main/cxx/LV2UI.h	2025-11-03 22:30:10.315511003 +1100
++++ tuxguitar-patched/desktop/TuxGuitar-synth-lv2/src/main/cxx/LV2UI.h	2025-11-03 22:39:40.376479709 +1100
+@@ -1,7 +1,7 @@
+ #ifndef _Included_LV2UI
+ #define _Included_LV2UI
+ 
+-#include <suil.h>
++#include <suil-0/suil/suil.h>
+ 
+ void LV2UI_malloc(LV2UI **handle, LV2Feature *feature, LV2Instance *instance, LV2Lock* lock);
+ 
