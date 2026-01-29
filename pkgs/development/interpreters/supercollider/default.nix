@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  mkDerivation,
   fetchpatch,
   fetchurl,
   cmake,
@@ -31,7 +30,7 @@
   withWebengine ? false, # vulnerable, so disabled by default
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "supercollider";
   version = "3.13.1";
 
@@ -69,7 +68,8 @@ mkDerivation rec {
     qttools
     libsForQt5.wrapQtAppsHook
   ]
-  ++ lib.optionals useSCEL [ emacs ];
+  ++ lib.optionals useSCEL [ emacs ]
+  ++ [ libsForQt5.wrapQtAppsHook ];
 
   buildInputs = [
     gcc

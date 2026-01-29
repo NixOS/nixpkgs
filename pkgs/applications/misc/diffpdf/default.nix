@@ -1,16 +1,16 @@
 {
   lib,
   stdenv,
-  mkDerivation,
   fetchurl,
   fetchpatch,
   qmake,
   qttools,
+  wrapQtAppsHook,
   qtbase,
   poppler,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   version = "2.1.3";
   pname = "diffpdf";
 
@@ -30,6 +30,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     qmake
     qttools
+    wrapQtAppsHook
   ];
   buildInputs = [
     qtbase

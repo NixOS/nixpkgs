@@ -1,11 +1,11 @@
 {
-  mkDerivation,
   lib,
   stdenv,
   fetchurl,
   ncurses,
   libuuid,
   pkg-config,
+  wrapQtAppsHook,
   libjpeg,
   zlib,
   libewf-legacy,
@@ -25,7 +25,7 @@ assert enableQt -> qtbase != null;
 assert enableQt -> qttools != null;
 assert enableQt -> qwt != null;
 
-(if enableQt then mkDerivation else stdenv.mkDerivation) rec {
+stdenv.mkDerivation rec {
   pname = "testdisk";
   version = "7.2";
   src = fetchurl {
@@ -55,7 +55,10 @@ assert enableQt -> qwt != null;
     qwt
   ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ lib.optional enableQt wrapQtAppsHook;
 
   env.NIX_CFLAGS_COMPILE = "-Wno-unused";
 

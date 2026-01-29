@@ -1,8 +1,8 @@
 {
   lib,
   stdenv,
-  mkDerivation,
   fetchurl,
+  wrapQtAppsHook,
   makeDesktopItem,
   libXrender,
   libXrandr,
@@ -48,7 +48,7 @@ let
     qtwebengine
   ];
 in
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "eagle";
   version = "9.6.2";
 
@@ -68,6 +68,8 @@ mkDerivation rec {
     genericName = "Schematic editor";
     categories = [ "Development" ];
   };
+
+  nativeBuildInputs = [ wrapQtAppsHook ];
 
   buildInputs = [
     libXrender

@@ -1,20 +1,20 @@
 {
-  mkDerivation,
   stdenv,
   lib,
   fetchFromGitHub,
   fetchpatch,
+  cmake,
+  wrapQtAppsHook,
   procps,
   qtbase,
   qtwebengine,
   qtwebkit,
-  cmake,
   syncthing,
   preferQWebView ? false,
   preferNative ? true,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   version = "0.5.8";
   pname = "qsyncthingtray";
 
@@ -25,13 +25,16 @@ mkDerivation rec {
     sha256 = "1n9g4j7qznvg9zl6x163pi9f7wsc3x6q76i33psnm7x2v1i22x5w";
   };
 
+  nativeBuildInputs = [
+    cmake
+    wrapQtAppsHook
+  ];
+
   buildInputs = [
     qtbase
     qtwebengine
   ]
   ++ lib.optional preferQWebView qtwebkit;
-
-  nativeBuildInputs = [ cmake ];
 
   cmakeFlags =
     [ ]

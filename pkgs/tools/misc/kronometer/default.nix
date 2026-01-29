@@ -1,16 +1,17 @@
 {
-  mkDerivation,
   fetchurl,
+  stdenv,
   fetchpatch,
   lib,
   extra-cmake-modules,
   kdoctools,
+  wrapQtAppsHook,
   kconfig,
   kcrash,
   kinit,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "kronometer";
   version = "2.3.0";
 
@@ -36,6 +37,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     extra-cmake-modules
     kdoctools
+    wrapQtAppsHook
   ];
   propagatedBuildInputs = [
     kconfig

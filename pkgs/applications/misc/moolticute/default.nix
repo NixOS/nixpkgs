@@ -1,16 +1,17 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   libusb1,
   pkg-config,
   qmake,
-  qtbase,
   qttools,
+  wrapQtAppsHook,
+  qtbase,
   qtwebsockets,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "moolticute";
   version = "1.03.0";
 
@@ -30,6 +31,7 @@ mkDerivation rec {
     pkg-config
     qmake
     qttools
+    wrapQtAppsHook
   ];
   buildInputs = [
     libusb1

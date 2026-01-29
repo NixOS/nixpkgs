@@ -2,7 +2,6 @@
   stdenv,
   fetchurl,
   lib,
-  mkDerivation,
   antiword,
   aspell,
   bison,
@@ -32,6 +31,7 @@
   python3Packages,
   qtbase,
   qttools,
+  wrapQtAppsHook,
   unrtf,
   untex,
   unzip,
@@ -73,7 +73,7 @@ let
   useInotify = if stdenv.hostPlatform.isLinux then "true" else "false";
 in
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "recoll";
   version = "1.43.9";
 
@@ -127,7 +127,8 @@ mkDerivation rec {
   ]
   ++ lib.optionals withPython [
     python3Packages.setuptools
-  ];
+  ]
+  ++ [ wrapQtAppsHook ];
 
   buildInputs = [
     aspell

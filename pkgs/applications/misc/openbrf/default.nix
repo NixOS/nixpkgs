@@ -1,19 +1,19 @@
 {
-  mkDerivation,
   lib,
   stdenv,
   fetchFromGitHub,
   fetchpatch,
+  qmake,
+  wrapQtAppsHook,
   qtbase,
   vcg,
   glew,
-  qmake,
   libGLU,
   eigen,
   libGL,
 }:
 
-mkDerivation {
+stdenv.mkDerivation {
   pname = "openbrf";
   version = "unstable-2016-01-09";
 
@@ -33,14 +33,17 @@ mkDerivation {
     })
   ];
 
+  nativeBuildInputs = [
+    qmake
+    wrapQtAppsHook
+  ];
+
   buildInputs = [
     qtbase
     vcg
     glew
     eigen
   ];
-
-  nativeBuildInputs = [ qmake ];
 
   qmakeFlags = [ "openBrf.pro" ];
 

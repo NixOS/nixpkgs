@@ -1,17 +1,18 @@
 {
-  mkDerivation,
-  extra-cmake-modules,
+  lib,
+  stdenv,
   fetchFromGitHub,
+  extra-cmake-modules,
+  wrapQtAppsHook,
   kiconthemes,
   kio,
   kjobwidgets,
   kxmlgui,
-  lib,
   testers,
   k4dirstat,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "k4dirstat";
   version = "3.4.3";
 
@@ -22,7 +23,11 @@ mkDerivation rec {
     hash = "sha256-TXMUtiPS7qRLm6cCy2ZntYrcNJ0fn6X+3o3P5u7oo08=";
   };
 
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [
+    extra-cmake-modules
+    wrapQtAppsHook
+  ];
+
   buildInputs = [
     kiconthemes
     kio

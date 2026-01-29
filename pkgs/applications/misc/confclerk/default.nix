@@ -1,12 +1,13 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchurl,
   qtbase,
   qmake,
+  wrapQtAppsHook,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "confclerk";
   version = "0.7.2";
 
@@ -16,7 +17,11 @@ mkDerivation rec {
   };
 
   buildInputs = [ qtbase ];
-  nativeBuildInputs = [ qmake ];
+
+  nativeBuildInputs = [
+    qmake
+    wrapQtAppsHook
+  ];
 
   postInstall = ''
     mkdir -p $out/bin

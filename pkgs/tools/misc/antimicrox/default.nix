@@ -1,18 +1,19 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   cmake,
   extra-cmake-modules,
   pkg-config,
+  itstool,
+  udevCheckHook,
+  wrapQtAppsHook,
   SDL2,
   qttools,
   libxtst,
   fetchFromGitHub,
-  itstool,
-  udevCheckHook,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "antimicrox";
   version = "3.5.1";
 
@@ -29,6 +30,7 @@ mkDerivation rec {
     pkg-config
     itstool
     udevCheckHook
+    wrapQtAppsHook
   ];
   buildInputs = [
     SDL2

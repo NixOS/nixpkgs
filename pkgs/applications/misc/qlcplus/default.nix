@@ -1,9 +1,11 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   qmake,
   pkg-config,
+  udevCheckHook,
+  wrapQtAppsHook,
   udev,
   qtmultimedia,
   qtscript,
@@ -15,10 +17,9 @@
   libusb-compat-0_1,
   libsndfile,
   libmad,
-  udevCheckHook,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "qlcplus";
   version = "5.0.0";
 
@@ -33,6 +34,7 @@ mkDerivation rec {
     qmake
     pkg-config
     udevCheckHook
+    wrapQtAppsHook
   ];
   buildInputs = [
     udev

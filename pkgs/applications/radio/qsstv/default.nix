@@ -1,11 +1,12 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchurl,
   qtbase,
   qmake,
   openjpeg,
   pkg-config,
+  wrapQtAppsHook,
   fftw,
   libpulseaudio,
   alsa-lib,
@@ -14,7 +15,7 @@
   fftwFloat,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   version = "9.5.8";
   pname = "qsstv";
 
@@ -26,6 +27,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     qmake
     pkg-config
+    wrapQtAppsHook
   ];
 
   buildInputs = [

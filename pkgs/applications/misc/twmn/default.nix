@@ -1,14 +1,15 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
-  qtbase,
   qmake,
   pkg-config,
+  wrapQtAppsHook,
+  qtbase,
   boost,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "twmn";
   version = "2025_10_23";
 
@@ -22,6 +23,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     qmake
+    wrapQtAppsHook
   ];
   buildInputs = [
     qtbase

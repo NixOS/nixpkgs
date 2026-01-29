@@ -1,9 +1,10 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   python3,
   ruby,
+  wrapQtAppsHook,
   qtbase,
   qtmultimedia,
   qttools,
@@ -11,10 +12,9 @@
   which,
   perl,
   libgit2,
-  stdenv,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "klayout";
   version = "0.30.4-1";
 
@@ -35,6 +35,7 @@ mkDerivation rec {
     perl
     python3
     ruby
+    wrapQtAppsHook
   ];
 
   buildInputs = [

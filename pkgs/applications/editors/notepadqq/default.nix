@@ -1,18 +1,19 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchFromGitHub,
   pkg-config,
   which,
+  qttools,
+  wrapQtAppsHook,
   libuchardet,
   qtbase,
   qtsvg,
-  qttools,
   qtwebengine,
   qtwebsockets,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "notepadqq";
   # shipping a beta build as there's no proper release which supports qtwebengine
   version = "2.0.0-beta";
@@ -34,6 +35,7 @@ mkDerivation rec {
     pkg-config
     which
     qttools
+    wrapQtAppsHook
   ];
 
   buildInputs = [

@@ -1,10 +1,12 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchFromGitHub,
   cmake,
   extra-cmake-modules,
   makeWrapper,
+  qttools,
+  wrapQtAppsHook,
   boost,
   doxygen,
   openssl,
@@ -14,10 +16,9 @@
   loki,
   qscintilla,
   qtbase,
-  qttools,
 }:
 
-mkDerivation {
+stdenv.mkDerivation {
   pname = "tora";
   version = "3.2.176";
 
@@ -33,6 +34,7 @@ mkDerivation {
     extra-cmake-modules
     makeWrapper
     qttools
+    wrapQtAppsHook
   ];
 
   buildInputs = [

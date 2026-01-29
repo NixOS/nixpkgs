@@ -1,6 +1,6 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   qmake,
   qttools,
@@ -8,9 +8,10 @@
   poppler,
   flex,
   bison,
+  wrapQtAppsHook,
 }:
 
-mkDerivation {
+stdenv.mkDerivation {
   pname = "tikzit";
   version = "2.1.6";
 
@@ -26,6 +27,7 @@ mkDerivation {
     qttools
     flex
     bison
+    wrapQtAppsHook
   ];
   buildInputs = [
     qtbase

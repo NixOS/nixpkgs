@@ -1,14 +1,15 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitLab,
   pkg-config,
   qmake,
+  wrapQtAppsHook,
   qtbase,
   qemu,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "qtemu";
   version = "2.1";
 
@@ -22,6 +23,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     qmake
     pkg-config
+    wrapQtAppsHook
   ];
 
   buildInputs = [

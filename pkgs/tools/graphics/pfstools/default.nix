@@ -1,10 +1,10 @@
 {
   lib,
   stdenv,
-  mkDerivation,
   fetchurl,
   cmake,
   pkg-config,
+  wrapQtAppsHook,
   openexr,
   zlib,
   imagemagick6,
@@ -22,7 +22,7 @@
   opencv,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "pfstools";
   version = "2.2.0";
 
@@ -53,6 +53,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    wrapQtAppsHook
   ];
   buildInputs = [
     openexr

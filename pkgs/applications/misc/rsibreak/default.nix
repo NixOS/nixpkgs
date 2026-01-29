@@ -1,9 +1,10 @@
 {
-  mkDerivation,
   fetchurl,
   lib,
+  stdenv,
   extra-cmake-modules,
   kdoctools,
+  wrapQtAppsHook,
   knotifyconfig,
   kidletime,
   kwindowsystem,
@@ -11,7 +12,7 @@
   kcrash,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "rsibreak";
   version = "0.12.13";
 
@@ -23,6 +24,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     extra-cmake-modules
     kdoctools
+    wrapQtAppsHook
   ];
   propagatedBuildInputs = [
     knotifyconfig
