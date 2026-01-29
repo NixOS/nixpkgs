@@ -16047,6 +16047,12 @@
     githubId = 40720523;
     name = "MangoIV";
   };
+  maningreen = {
+    email = "flibbers@protonmail.com";
+    github = "maningreen";
+    githubId = 184766246;
+    name = "Maningreen";
+  };
   manipuladordedados = {
     email = "manipuladordedados@gmail.com";
     github = "manipuladordedados";
