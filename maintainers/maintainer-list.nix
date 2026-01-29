@@ -26693,6 +26693,12 @@
     name = "Thomas Kerber";
     keys = [ { fingerprint = "556A 403F B0A2 D423 F656  3424 8489 B911 F9ED 617B"; } ];
   };
+  tlehman = {
+    email = "tobi.lehman@gmail.com";
+    github = "tlehman";
+    githubId = 261552;
+    name = "Tobi Lehman";
+  };
   tljuniper = {
     email = "tljuniper1@gmail.com";
     github = "tljuniper";
