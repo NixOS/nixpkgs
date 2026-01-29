@@ -9316,6 +9316,13 @@
     githubId = 65962770;
     name = "Gaurav Ghodinde";
   };
+  gauravjuvekar = {
+    name = "Gaurav Juvekar";
+    email = "gauravjuvekar@gmail.com";
+    github = "gauravjuvekar";
+    githubId = 2271906;
+    keys = [ { fingerprint = "B923 B670 9363 8464 3390  14EE 0C91 672D EDFF 4DE1"; } ];
+  };
   gavin = {
     email = "gavin.rogers@holo.host";
     github = "gavinrogers";
