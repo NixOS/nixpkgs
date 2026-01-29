@@ -5,7 +5,7 @@
   copyDesktopItems,
   makeDesktopItem,
   makeBinaryWrapper,
-  wine,
+  wineWowPackages,
 }:
 
 let
@@ -15,6 +15,7 @@ let
     url = "https://aur.archlinux.org/cgit/aur.git/plain/winbox.png?h=winbox";
     hash = "sha256-YD6u2N+1thRnEsXO6AHm138fRda9XEtUX5+EGTg004A=";
   };
+  wine = wineWowPackages.stable;
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "winbox";
