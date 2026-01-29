@@ -2,7 +2,6 @@
   lib,
   anki-utils,
   fetchFromGitHub,
-  nix-update-script,
 }:
 anki-utils.buildAnkiAddon (finalAttrs: {
   pname = "passfail2";
@@ -21,7 +20,6 @@ anki-utils.buildAnkiAddon (finalAttrs: {
 
     runHook postBuild
   '';
-  passthru.updateScript = nix-update-script { };
   meta = {
     description = ''
       Replaces the default Anki review buttons with only two options:

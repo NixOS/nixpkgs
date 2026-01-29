@@ -2,7 +2,6 @@
   lib,
   anki-utils,
   fetchFromGitHub,
-  nix-update-script,
 }:
 anki-utils.buildAnkiAddon (finalAttrs: {
   pname = "image-occlusion-enhanced";
@@ -15,7 +14,6 @@ anki-utils.buildAnkiAddon (finalAttrs: {
     hash = "sha256-YR1hicBDb08J+1Qc+SDiJDXLo5FzLqCQGeVe7brbPME=";
   };
   sourceRoot = "${finalAttrs.src.name}/src/image_occlusion_enhanced";
-  passthru.updateScript = nix-update-script { };
   meta = {
     description = ''
       Adds extra features for creating image-based cloze-deletions
