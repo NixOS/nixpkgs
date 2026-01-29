@@ -588,6 +588,11 @@
       { fingerprint = "CE85 54F7 B9BC AC0D D648  5661 AB5F C04C 3C94 443F"; }
     ];
   };
+  adam-tj = {
+    github = "adam-tj";
+    githubId = 9314405;
+    name = "Adam Tjörnhammar";
+  };
   adam248 = {
     email = "adamjbutler091@gmail.com";
     github = "adam248";
