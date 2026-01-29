@@ -9,17 +9,17 @@
 
 buildGoModule {
   pname = "packwiz";
-  version = "0-unstable-2025-01-19";
+  version = "0-unstable-2025-11-24";
 
   src = fetchFromGitHub {
     owner = "packwiz";
     repo = "packwiz";
-    rev = "241f24b550f6fe838913a56bdd58bac2fc53254a";
-    sha256 = "sha256-VmNsWzsFVNRciNIPUXUVos4cBdpawgN1/nPwMjNpx+0=";
+    rev = "52b123018f9e19b49703f76e78ad415642acf5c5";
+    sha256 = "sha256-EVs2PngdapCUSf6J946rpJWnEbM8TtlDQQS/Zg16Qfs=";
   };
   passthru.updateScript = unstableGitUpdater { };
 
-  vendorHash = "sha256-krdrLQHM///dtdlfEhvSUDV2QljvxFc2ouMVQVhN7A0=";
+  vendorHash = "sha256-P1SsvHTYKUoPve9m1rloBfMxUNcDKr/YYU4dr4vZbTE=";
 
   nativeBuildInputs = [
     installShellFiles
