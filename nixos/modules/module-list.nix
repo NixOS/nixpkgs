@@ -657,6 +657,7 @@
   ./services/hardware/deepcool-digital-linux.nix
   ./services/hardware/dell-bios-fan-control.nix
   ./services/hardware/display.nix
+  ./services/hardware/eruption.nix
   ./services/hardware/fancontrol.nix
   ./services/hardware/freefall.nix
   ./services/hardware/fwupd.nix
