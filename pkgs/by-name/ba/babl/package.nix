@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "babl";
-  version = "0.1.120";
+  version = "0.1.122";
 
   outputs = [
     "out"
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://download.gimp.org/pub/babl/${lib.versions.majorMinor finalAttrs.version}/babl-${finalAttrs.version}.tar.xz";
-    hash = "sha256-9HatFSAftO0MkMF0xSSx5CcczWmjdyQtamn834fOrMI=";
+    hash = "sha256-aFH3Bc2jjy3wikuoYYJ5zjDQpG+Vf+aqMlt7feKXvtI=";
   };
 
   patches = [
