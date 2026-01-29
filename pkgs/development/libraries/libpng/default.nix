@@ -44,6 +44,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  # package consumers may want to run @dev@/bin/libpng-config,
+  # so add that directory to $PATH using a hook
+  setupHook = ./setup-hook.sh;
+
   passthru = {
     inherit zlib;
 
