@@ -48,7 +48,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "TUI display manager";
     license = lib.licenses.wtfpl;
     homepage = "https://codeberg.org/fairyglade/ly";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      zacharyarnaise
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "ly";
   };
