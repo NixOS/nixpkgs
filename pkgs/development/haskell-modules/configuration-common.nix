@@ -2036,6 +2036,16 @@ with haskellLib;
   # https://github.com/obsidiansystems/database-id/issues/1
   database-id-class = doJailbreak super.database-id-class;
 
+  # TODO: when (likely in 25.x) Stackage bumps random to 1.3, review
+  dataframe-persistent = lib.pipe super.dataframe-persistent [
+    doJailbreak # 2026-01-23: too strict bounds on dataframe >= 0.4
+    dontCheck # 2026-01-23: test uses dataframe function not exported in 0.3.3.6
+  ];
+
+  # 2026-01-23: too strict bounds on random >= 1.3
+  # TODO: when (likely in 25.x) Stackage bumps random to 1.3, unpin
+  ihaskell-dataframe = doJailbreak super.ihaskell-dataframe;
+
   # Too strict version bounds on base
   # https://github.com/gibiansky/IHaskell/issues/1217
   ihaskell-display = doJailbreak super.ihaskell-display;
