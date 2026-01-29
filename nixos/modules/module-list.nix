@@ -209,7 +209,7 @@
   ./programs/extra-container.nix
   ./programs/fcast-receiver.nix
   ./programs/feedbackd.nix
-  ./programs/firefox.nix
+  ./programs/firefox/default.nix
   ./programs/firejail.nix
   ./programs/fish.nix
   ./programs/flashprog.nix
