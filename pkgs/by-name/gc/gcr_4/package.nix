@@ -105,11 +105,6 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs gcr/fixtures/
   '';
 
-  postFixup = ''
-    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
-    moveToOutput "share/doc" "$devdoc"
-  '';
-
   passthru = {
     updateScript = gnome.updateScript {
       attrPath = "gcr_4";

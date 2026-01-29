@@ -168,11 +168,6 @@ stdenv.mkDerivation (finalAttrs: {
         --zsh <(${emulator} $out/bin/rsvg-convert --completion zsh)
     '';
 
-  postFixup = lib.optionalString withIntrospection ''
-    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
-    moveToOutput "share/doc" "$devdoc"
-  '';
-
   passthru = {
     updateScript =
       let

@@ -43,11 +43,6 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  postFixup = ''
-    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
-    moveToOutput "share/doc" "$devdoc"
-  '';
-
   mesonFlags = [
     "-Denable_valadoc=true"
     "-Denable_gtk3=false"

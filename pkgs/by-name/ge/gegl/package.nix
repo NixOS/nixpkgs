@@ -114,11 +114,6 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs tests/ff-load-save/tests_ff_load_save.sh tests/opencl/opencl_test.sh tools/xml_insert.sh
   '';
 
-  postFixup = ''
-    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
-    moveToOutput "share/doc" "$devdoc"
-  '';
-
   # tests fail to connect to the com.apple.fonts daemon in sandboxed mode
   doCheck = !stdenv.hostPlatform.isDarwin;
 

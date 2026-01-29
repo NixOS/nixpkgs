@@ -53,11 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  postFixup = ''
-    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
-    moveToOutput share/doc/template-glib-1.0 "$devdoc"
-  '';
-
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "template-glib";

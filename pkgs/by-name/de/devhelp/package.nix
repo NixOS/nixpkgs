@@ -69,11 +69,6 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  postFixup = ''
-    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
-    moveToOutput share/doc/devhelp-3 "$devdoc"
-  '';
-
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "devhelp";
