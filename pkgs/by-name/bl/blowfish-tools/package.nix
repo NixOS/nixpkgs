@@ -7,13 +7,13 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "blowfish-tools";
-  version = "1.10.0";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "nunocoracao";
     repo = "blowfish-tools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-90EKsRKOO2Hb64Wy3TlwzlPU2K8AAlSxc17ek5ZLoG0=";
+    hash = "sha256-hlnQQBfSmQF8vC3kIZbGQSDXQmfJN4pMbqYs6Oz2p9A=";
   };
 
   dontNpmBuild = true;
@@ -30,7 +30,10 @@ buildNpmPackage (finalAttrs: {
     homepage = "https://blowfish.page";
     changelog = "https://github.com/nunocoracao/blowfish-tools/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ eripa ];
+    maintainers = with lib.maintainers; [
+      eripa
+      thattemperature
+    ];
     mainProgram = "blowfish-tools";
   };
 })
