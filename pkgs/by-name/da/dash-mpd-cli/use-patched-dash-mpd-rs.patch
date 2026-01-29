@@ -1,0 +1,11 @@
+diff --git a/Cargo.toml b/Cargo.toml
+index f26c277..a38baa9 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -69,3 +69,6 @@ opt-level = "z"  # optimize for size
+ lto = "fat"
+ codegen-units = 1
+ 
++[patch.crates-io]
++dash-mpd = { path = "dash-mpd-rs" }
++
