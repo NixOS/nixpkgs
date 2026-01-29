@@ -5,6 +5,7 @@
   fetchFromGitHub,
   pytestCheckHook,
   setuptools,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
@@ -18,6 +19,9 @@ buildPythonPackage rec {
     rev = "v${version}";
     hash = "sha256-xKhVTmh/vrtBkatxtk8R4yqbGroH0I+xTKNYUpuikt4=";
   };
+
+  # broken and not updated in six years
+  disabled = pythonAtLeast "3.14";
 
   nativeBuildInputs = [ setuptools ];
 
