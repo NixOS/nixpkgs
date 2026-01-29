@@ -746,6 +746,8 @@ with pkgs;
 
   mkBinaryCache = callPackage ../build-support/binary-cache { };
 
+  mkFont = callPackage ../build-support/mkfont { };
+
   mkShell = callPackage ../build-support/mkshell { };
   mkShellNoCC = mkShell.override { stdenv = stdenvNoCC; };
 

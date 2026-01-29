@@ -1,12 +1,12 @@
 {
   lib,
-  stdenvNoCC,
+  mkFont,
   fetchgit,
   fontforge,
   gitUpdater,
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+mkFont (finalAttrs: {
   pname = "newcomputermodern";
   version = "7.1.1";
 
@@ -29,12 +29,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         ' $i;
     done
     runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-    install -m444 -Dt $out/share/fonts/opentype/public sfd/*.otf
-    runHook postInstall
   '';
 
   passthru.updateScript = gitUpdater { };
