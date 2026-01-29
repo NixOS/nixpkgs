@@ -19359,6 +19359,12 @@
     github = "nullishamy";
     githubId = 99221043;
   };
+  nullpointerdepressivedisorder = {
+    name = "Karan Kunal Mohindroo";
+    github = "nullpointerdepressivedisorder";
+    githubId = 96403086;
+    keys = [ { fingerprint = "0FA3 C482 6F81 76AB A9F7  8397 2539 0041 035D A9F8"; } ];
+  };
   numinit = {
     email = "me+nixpkgs@numin.it";
     name = "Morgan Jones";
