@@ -15,20 +15,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "r2modman";
-  version = "3.2.11";
+  version = "3.2.13";
 
   src = fetchFromGitHub {
     owner = "ebkr";
     repo = "r2modmanPlus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/cnaP5DbEqYEkTPd1QWNArvMMr7UbX/danXa7ISfPpc=";
+    hash = "sha256-dy+xVGh5VNGXI34ecglLFl/h6SXyUdfzyvLCjXYmC/w=";
   };
 
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src patches missingHashes;
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-XusNho027MjQLaBxaXMOb/2rTiSLmi4mfwY2hjHQZgk=";
+    hash = "sha256-5XTkUa31D83oZRZBQ9yUDjgf/4gWCDd+pr4FTNDW9F0=";
   };
 
   patches = [
