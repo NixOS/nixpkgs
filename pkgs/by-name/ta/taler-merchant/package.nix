@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "taler-merchant";
-  version = "1.0.1";
+  version = "1.3.0";
 
   src = fetchgit {
     url = "https://git.taler.net/merchant.git";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-H/JqMGLP0u68g/bMqsollAk6sKL73TCZ9no49psYST0=";
+    hash = "sha256-nrXokwZ0IFXAH3B12/FDAhhyE6JAiiJ59cuWLwLM684=";
   };
 
   postUnpack = ''
@@ -39,7 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'TALER_TEMPLATING_init (TALER_MERCHANT_project_data ())' "TALER_TEMPLATING_init_path (\"merchant\", \"$out/share/taler\")"
 
     substituteInPlace src/backend/taler-merchant-httpd_spa.c \
-      --replace-fail 'GNUNET_DISK_directory_scan (dn,' "GNUNET_DISK_directory_scan (\"$out/share/taler/merchant/spa/\","
+      --replace-fail 'TALER_MHD_spa_load (TALER_MERCHANT_project_data (),' "TALER_MHD_spa_load_dir (\"$out/share/taler/merchant/spa/\");" \
+      --replace-fail '"spa/");' ""
   '';
 
   nativeBuildInputs = [
