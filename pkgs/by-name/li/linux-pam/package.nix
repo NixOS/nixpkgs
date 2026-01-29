@@ -140,5 +140,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     license = lib.licenses.bsd3;
     badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "linux-pam" finalAttrs.version;
   };
 })

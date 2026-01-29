@@ -53,5 +53,6 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ fpletz ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "netfilter" version;
   };
 }

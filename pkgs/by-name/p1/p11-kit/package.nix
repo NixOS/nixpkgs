@@ -101,5 +101,6 @@ stdenv.mkDerivation rec {
     ];
     license = lib.licenses.bsd3;
     mainProgram = "p11-kit";
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "p11-kit_project" version;
   };
 }

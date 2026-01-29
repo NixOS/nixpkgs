@@ -312,6 +312,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix ++ lib.platforms.windows;
     maintainers = extraMeta.maintainers or [ ];
     mainProgram = "ssh";
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "openbsd" finalAttrs.version;
   }
   // extraMeta;
 })
