@@ -6,9 +6,6 @@
   # build-system
   poetry-core,
 
-  # dependencies
-  packaging,
-
   # tests
   jax,
   numpy,
@@ -16,24 +13,20 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyvers";
-  version = "0.1.0";
+  version = "0.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vmoens";
     repo = "pyvers";
-    tag = "v${version}";
-    hash = "sha256-BUUfb0vI1r/VV5aF9gmqnXGOIWQfBJ98MrcF/IH5CEs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-VKNwhxyc1f7tyJO7JyBNELlZwVv6U2N8ye0OYFN/nmc=";
   };
 
   build-system = [
     poetry-core
-  ];
-
-  dependencies = [
-    packaging
   ];
 
   pythonImportsCheck = [ "pyvers" ];
@@ -48,8 +41,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for dynamic dispatch based on module versions and backends";
     homepage = "https://github.com/vmoens/pyvers";
-    changelog = "https://github.com/vmoens/pyvers/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/vmoens/pyvers/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})
