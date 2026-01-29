@@ -1090,6 +1090,8 @@ self: super: with self; {
 
   asyncer = callPackage ../development/python-modules/asyncer { };
 
+  asyncgui = callPackage ../development/python-modules/asyncgui { };
+
   asyncinotify = callPackage ../development/python-modules/asyncinotify { };
 
   asyncio-dgram = callPackage ../development/python-modules/asyncio-dgram { };
@@ -1097,6 +1099,8 @@ self: super: with self; {
   asyncio-rlock = callPackage ../development/python-modules/asyncio-rlock { };
 
   asyncio-throttle = callPackage ../development/python-modules/asyncio-throttle { };
+
+  asynckivy = callPackage ../development/python-modules/asynckivy { };
 
   asyncmy = callPackage ../development/python-modules/asyncmy { };
 
@@ -5400,6 +5404,8 @@ self: super: with self; {
 
   ffmpy = callPackage ../development/python-modules/ffmpy { };
 
+  ffpyplayer = callPackage ../development/python-modules/ffpyplayer { };
+
   fhir-py = callPackage ../development/python-modules/fhir-py { };
 
   fiblary3-fork = callPackage ../development/python-modules/fiblary3-fork { };
@@ -8155,6 +8161,8 @@ self: super: with self; {
   kivy = callPackage ../development/python-modules/kivy { };
 
   kivy-garden = callPackage ../development/python-modules/kivy-garden { };
+
+  kivymd = callPackage ../development/python-modules/kivymd { };
 
   kiwiki-client = callPackage ../development/python-modules/kiwiki-client { };
 
