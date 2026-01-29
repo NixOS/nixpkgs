@@ -57,7 +57,10 @@ stdenv.mkDerivation (
       } ${command} ${
         lib.escapeShellArgs (
           lib.optional (registry != null) "--registry=file://${registry}"
-          ++ lib.optional (bazelRepoCache != null) "--repository_cache=repo_cache"
+          ++ lib.optionals (bazelRepoCache != null) [
+            "--repository_cache=repo_cache"
+            "--repo_contents_cache="
+          ]
           ++ lib.optional (bazelVendorDeps != null) "--vendor_dir=vendor_dir"
           ++ commandArgs
           ++ targets
