@@ -24,14 +24,29 @@
   CoreFoundation ? null,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+let
+  swtArtifactId =
+    "org.eclipse.swt." + (if stdenv.hostPlatform.isDarwin then "cocoa.macosx" else "gtk.linux");
+  buildDir =
+    "desktop/build-scripts/tuxguitar-"
+    + (if stdenv.hostPlatform.isDarwin then "macosx-swt-cocoa" else "linux-swt");
+  buildScript = "${buildDir}/pom.xml";
+  mvnParams = lib.escapeShellArgs [
+    "-f"
+    buildScript
+    "-P"
+    "native-modules"
+    "-Dmaven.test.skip=true"
+  ];
+in
+maven.buildMavenPackage rec {
   pname = "tuxguitar";
   version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "helge17";
     repo = "tuxguitar";
-    tag = finalAttrs.version;
+    tag = version;
     hash = "sha256-USdYj8ebosXkiZpDqyN5J+g1kjyWm225iQlx/szXmLA=";
   };
 
@@ -39,9 +54,47 @@ stdenv.mkDerivation (finalAttrs: {
     ./fix-include.patch
   ];
 
+  buildOffline = true;
+
+  mvnJdk = jdk;
+
+  mvnHash = "sha256-7UDFGuOMERvY74mkneusJyuAHfF3U6b4qV4MPHGQYdM=";
+
+  mvnParameters = mvnParams;
+  mvnDepsParameters = mvnParams;
+
+  mvnFetchExtraArgs = {
+    dontWrapQtApps = true;
+    dontWrapGApps = true;
+    preBuild = ''
+      mkdir -p $out/.m2
+      mvn install:install-file \
+        -Dfile=${swt}/jars/swt.jar \
+        -DgroupId=org.eclipse.swt \
+        -DartifactId=${swtArtifactId} \
+        -Dpackaging=jar \
+        -Dversion=4.36 \
+        -Dmaven.repo.local=$out/.m2
+    '';
+    postInstall = ''
+      rm -rf $out/.m2/repository/org/eclipse/swt
+      find $out -type f -name "maven-metadata-*.xml" -delete
+      find $out -exec touch -t 197001010000 {} +
+    '';
+  };
+
+  afterDepsSetup = ''
+    mvn install:install-file \
+      -Dfile=${swt}/jars/swt.jar \
+      -DgroupId=org.eclipse.swt \
+      -DartifactId=${swtArtifactId} \
+      -Dpackaging=jar \
+      -Dversion=4.36 \
+      -Dmaven.repo.local=$mvnDeps/.m2
+  '';
+
   nativeBuildInputs = [
     makeBinaryWrapper
-    maven
     jdk
     pkg-config
     fluidsynth.dev
@@ -81,36 +134,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontWrapGApps = true;
 
-  # Build with offline mode using pre-fetched dependencies
-  buildPhase = ''
-    runHook preBuild
-
-    # Create a writable repository
-    mkdir -p .m2/repository
-    cp -r ${finalAttrs.finalPackage.mavenDeps}/* .m2/repository/
-    chmod -R +w .m2/repository
-
-    # Install SWT jar into our mutable repository
-    mvn install:install-file \
-      -Dfile=${swt}/jars/swt.jar \
-      -DgroupId=org.eclipse.swt \
-      -DartifactId=${finalAttrs.finalPackage.passthru.swtArtifactId} \
-      -Dpackaging=jar \
-      -Dversion=4.36 \
-      -Dmaven.repo.local=$(pwd)/.m2/repository
-
-    mvn package -e -f ${finalAttrs.finalPackage.buildScript} -P native-modules \
-      -o -Dmaven.test.skip=true \
-      -Dmaven.repo.local=$(pwd)/.m2/repository
-
-    runHook postBuild
-  '';
-
   installPhase = ''
     runHook preInstall
 
     # Find the built tuxguitar directory (it's in the subdirectory where we ran maven)
-    cd ${finalAttrs.finalPackage.passthru.buildDir}
+    cd ${buildDir}
   ''
   # macOS: The build creates tuxguitar-VERSION-macosx-swt-cocoa.app directly
   # This directory name already ends with .app and IS the app bundle
@@ -160,18 +188,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
-    wrapProgram $out/bin/tuxguitar ${lib.concatStringsSep " " finalAttrs.finalPackage.passthru.wrapperArgs}
+    wrapProgram $out/bin/tuxguitar ${lib.concatStringsSep " " passthru.wrapperArgs}
   '';
 
-  passthru = {
+  passthru = rec {
     tests.nixos = nixosTests.tuxguitar;
-    swtArtifactId =
-      "org.eclipse.swt." + (if stdenv.hostPlatform.isDarwin then "cocoa.macosx" else "gtk.linux");
-
-    buildDir =
-      "desktop/build-scripts/tuxguitar-"
-      + (if stdenv.hostPlatform.isDarwin then "macosx-swt-cocoa" else "linux-swt");
-    buildScript = finalAttrs.finalPackage.passthru.buildDir + "/pom.xml";
+    inherit swtArtifactId buildDir buildScript;
     ldLibVar = if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
     classpath = [
       "${swt}/jars/swt.jar"
@@ -200,74 +222,16 @@ stdenv.mkDerivation (finalAttrs: {
       "--prefix"
       "PATH"
       ":"
-      (lib.makeBinPath finalAttrs.finalPackage.passthru.wrapperPaths)
+      (lib.makeBinPath wrapperPaths)
       "--prefix"
-      finalAttrs.finalPackage.passthru.ldLibVar
+      ldLibVar
       ":"
-      (lib.makeLibraryPath finalAttrs.finalPackage.passthru.libraryPath)
+      (lib.makeLibraryPath libraryPath)
       "--prefix"
       "CLASSPATH"
       ":"
-      (lib.concatStringsSep ":" finalAttrs.finalPackage.passthru.classpath)
+      (lib.concatStringsSep ":" classpath)
     ];
-
-    # Fetch Maven dependencies in a fixed-output derivation
-    # We fetch dependencies WITHOUT the native-modules profile to keep it deterministic
-    mavenDeps = stdenv.mkDerivation {
-      name = "${finalAttrs.finalPackage.pname}-${finalAttrs.finalPackage.version}-maven-deps";
-      inherit (finalAttrs.finalPackage) src patches;
-      nativeBuildInputs = [
-        maven
-        jdk
-      ];
-
-      buildPhase = ''
-        runHook preBuild
-
-        # Use a temporary local repository
-        mkdir -p .m2/repository
-
-        mvn install:install-file \
-          -Dfile=${swt}/jars/swt.jar \
-          -DgroupId=org.eclipse.swt \
-          -DartifactId=${finalAttrs.finalPackage.passthru.swtArtifactId} \
-          -Dpackaging=jar \
-          -Dversion=4.36 \
-          -Dmaven.repo.local=$(pwd)/.m2/repository
-
-        # Download dependencies WITH native-modules profile to get all deps
-        mvn dependency:go-offline -f ${finalAttrs.finalPackage.passthru.buildScript} -P native-modules \
-          -Dmaven.repo.local=$(pwd)/.m2/repository
-
-        runHook postBuild
-      '';
-
-      installPhase = ''
-        runHook preInstall
-
-        # Copy to output, removing timestamps and non-deterministic files
-        mkdir -p $out
-        cp -r .m2/repository/* $out/
-
-        # Remove swt from the output to avoid hash invalidation
-        rm -rf $out/org/eclipse/swt
-
-        # Remove resolver status files that contain timestamps
-        find $out -name "_remote.repositories" -delete
-        find $out -name "*.lastUpdated" -delete
-        find $out -name "resolver-status.properties" -delete
-        find $out -type f -name "maven-metadata-*.xml" -delete
-
-        # Reset timestamps for determinism
-        find $out -exec touch -t 197001010000 {} +
-
-        runHook postInstall
-      '';
-
-      outputHashMode = "recursive";
-      outputHashAlgo = "sha256";
-      outputHash = "sha256-3KKwaHYDxEN3m2obuijzYrWEPGcbjI6z+eTmtiIl0Ic=";
-    };
   };
 
   meta = {
@@ -285,4 +249,4 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = builtins.attrNames swt.passthru.srcMetadataByPlatform;
     mainProgram = "tuxguitar";
   };
-})
+}
