@@ -1,0 +1,15 @@
+diff --git a/comm/mail/extensions/openpgp/content/modules/RNPLib.sys.mjs b/comm/mail/extensions/openpgp/content/modules/RNPLib.sys.mjs
+index 102e608..0a972ae 100644
+--- a/comm/mail/extensions/openpgp/content/modules/RNPLib.sys.mjs
++++ b/comm/mail/extensions/openpgp/content/modules/RNPLib.sys.mjs
+@@ -41,8 +41,9 @@ function tryLoadRNP(name, suffix) {
+ 
+ function loadExternalRNPLib() {
+   if (!librnp) {
++    const rnpFlavor = Services.env.get("MOZ_RNP_FLAVOR") || "rnp";
+     // Try loading librnp.so, librnp.dylib, or rnp.dll first
+-    tryLoadRNP("rnp", "");
++    tryLoadRNP(rnpFlavor, "");
+   }
+ 
+   if (!librnp && (systemOS === "winnt" || systemOS === "darwin")) {

@@ -8,6 +8,7 @@
   icu78,
   fetchpatch2,
   config,
+  sequoia-octopus-librnp,
 }:
 
 let
@@ -47,7 +48,14 @@ let
       extraPatches = [
         # The file to be patched is different from firefox's `no-buildconfig-ffx90.patch`.
         (if lib.versionOlder version "140" then ./no-buildconfig.patch else ./no-buildconfig-tb140.patch)
+        # Allow changing between librnp.so and sequoia-octopus-librnp.so at runtime
+        ./librnp-flavor.patch
       ];
+      extraPostInstall = if stdenv.hostPlatform.isLinux then ''
+        ln -s ${lib.getLib sequoia-octopus-librnp}/lib/libsequoia_octopus_librnp.so $out/lib/
+      '' else ''
+        ln -s ${lib.getLib sequoia-octopus-librnp}/lib/libsequoia_octopus_librnp.dylib $out/Applications/Thunderbird.app/Contents/MacOS/
+      '';
       extraPassthru = {
         icu77 = icu77';
         icu78 = icu78';

@@ -14,6 +14,7 @@
   unpackPhase ? null,
   extraPatches ? [ ],
   extraPostPatch ? "",
+  extraPostInstall ? "",
   extraNativeBuildInputs ? [ ],
   extraConfigureFlags ? [ ],
   extraBuildInputs ? [ ],
@@ -694,7 +695,8 @@ buildStdenv.mkDerivation {
       install -Dvm644 ${defaultPrefsFile} "$resourceDir/browser/defaults/preferences/nixos-default-prefs.js"
 
       cd ..
-    '';
+    ''
+    + extraPostInstall;
 
   postFixup = lib.optionalString (crashreporterSupport && buildStdenv.hostPlatform.isLinux) ''
     patchelf --add-rpath "${lib.makeLibraryPath [ curl ]}" $out/lib/${binaryName}/crashreporter
