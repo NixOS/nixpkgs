@@ -8294,7 +8294,8 @@ with pkgs;
 
   ### DEVELOPMENT / R MODULES
 
-  R = callPackage ../applications/science/math/R {
+  R = R_42;
+  R_42 = callPackage ../applications/science/math/R/4.2.nix {
     # TODO: split docs into a separate output
     withRecommendedPackages = false;
   };
