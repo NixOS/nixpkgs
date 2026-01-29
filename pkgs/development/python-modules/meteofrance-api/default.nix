@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "meteofrance-api";
-  version = "1.4.0";
+  version = "1.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "hacf-fr";
     repo = "meteofrance-api";
     tag = "v${version}";
-    hash = "sha256-5zqmzPbzC9IUZ+y1FRh+u1gds/ZdGeRm5/ajQf8UKTQ=";
+    hash = "sha256-zvfFMxXbCul14OXaoRdjMWKW3FYyTUcYGklHgb04nvA=";
   };
 
   build-system = [ poetry-core ];
