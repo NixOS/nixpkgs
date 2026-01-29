@@ -3595,6 +3595,14 @@ with pkgs;
 
   spoof-mac = python3Packages.callPackage ../tools/networking/spoof-mac { };
 
+  stirling-pdf = callPackage ../by-name/st/stirling-pdf/package.nix {
+    isDesktopVariant = false;
+  };
+
+  stirling-pdf-desktop = callPackage ../by-name/st/stirling-pdf/package.nix {
+    isDesktopVariant = true;
+  };
+
   stm32loader = with python3Packages; toPythonApplication stm32loader;
 
   solc-select = with python3Packages; toPythonApplication solc-select;
