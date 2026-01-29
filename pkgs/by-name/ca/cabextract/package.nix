@@ -13,6 +13,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-tVRtsRVeTHGP89SyeFc2BPMN1kw8W/1GV80Im4I6OsY=";
   };
 
+  # Remove vendored getopt.h in favor of stdenv's to fix non-gnu builds.
+  postPatch = ''
+    rm getopt.h
+  '';
+
   # Let's assume that fnmatch works for cross-compilation, otherwise it gives an error:
   # undefined reference to `rpl_fnmatch'.
   configureFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
