@@ -20,6 +20,8 @@
   # command line arguments which are always set e.g "--password-store=kwallet6"
   commandLineArgs ? "",
 
+  applicationLanguage ? "",
+
   withAppleEmojis ? false,
 }:
 let
@@ -234,6 +236,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper '${lib.getExe electron}' "$out/bin/signal-desktop" \
       --add-flags "$out/share/signal-desktop/app.asar" \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
+      ${if applicationLanguage != "" then "--set-default LANGUAGE ${applicationLanguage}" else ""} \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --add-flags ${lib.escapeShellArg commandLineArgs}
 
