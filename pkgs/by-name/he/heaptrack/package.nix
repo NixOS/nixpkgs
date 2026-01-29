@@ -11,6 +11,7 @@
   sparsehash,
   zstd,
   kdePackages,
+  rustc-demangle,
 }:
 
 stdenv.mkDerivation {
@@ -38,6 +39,7 @@ stdenv.mkDerivation {
     libunwind
     sparsehash
     zstd
+    rustc-demangle
   ]
   ++ (with kdePackages; [
     qtbase
@@ -52,6 +54,11 @@ stdenv.mkDerivation {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     elfutils
   ];
+
+  postPatch = ''
+    substituteInPlace src/interpret/demangler.cpp \
+      --replace-fail "librustc_demangle.so" "${rustc-demangle}/lib/librustc_demangle.so"
+  '';
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     makeWrapper \
