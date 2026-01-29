@@ -1,11 +1,7 @@
 {
-  lib,
   stdenvNoCC,
-  dart,
-  dartHooks,
   jq,
   yq,
-  cacert,
 }:
 
 {
