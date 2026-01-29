@@ -7,18 +7,7 @@ runCommand "documentation-highlighter"
       license = lib.licenses.bsd3;
       platforms = lib.platforms.all;
     };
-    src = lib.sources.cleanSourceWith {
-      src = ./.;
-      filter =
-        path: type:
-        lib.elem (baseNameOf path) [
-          "highlight.pack.js"
-          "LICENSE"
-          "loader.js"
-          "mono-blue.css"
-          "README.md"
-        ];
-    };
+    src = ./src;
   }
   ''
     cp -r "$src" "$out"
