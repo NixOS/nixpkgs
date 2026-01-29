@@ -10,14 +10,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "snakemake";
-  version = "9.15.0";
+  version = "9.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snakemake";
     repo = "snakemake";
     tag = "v${version}";
-    hash = "sha256-wkx19shtDWs/9E3Dg22YG1G3RCzMx4STLQm1gYUK1wk=";
+    hash = "sha256-Sj9YnPmj7Fn1+8sIO7IYnuj6vDwxUnn+JDg+DbbgbSI=";
   };
 
   postPatch = ''
