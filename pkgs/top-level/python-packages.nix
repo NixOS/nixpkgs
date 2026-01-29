@@ -20906,6 +20906,8 @@ self: super: with self; {
 
   xgboost = callPackage ../development/python-modules/xgboost { inherit (pkgs) xgboost; };
 
+  xgi = callPackage ../development/python-modules/xgi { };
+
   xgrammar = callPackage ../development/python-modules/xgrammar { };
 
   xhtml2pdf = callPackage ../development/python-modules/xhtml2pdf { };
