@@ -1,0 +1,337 @@
+name: Daily Rebase
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *'  # daily at midnight UTC
+
+jobs:
+  check-updates:
+    name: Check for upstream updates
+    runs-on: ubuntu-latest
+    outputs:
+      has_changes: ${{ steps.check-changes.outputs.has_changes }}
+      upstream_rev: ${{ steps.check-changes.outputs.upstream_rev }}
+      current_rev: ${{ steps.current-state.outputs.current_rev }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ env.GITHUB_TOKEN }}
+
+      - name: Setup git config
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Setup upstream remote
+        run: |
+          if ! git remote get-url upstream >/dev/null 2>&1; then
+            git remote add upstream https://github.com/NixOS/nixpkgs.git
+          fi
+
+      - name: Fetch upstream
+        run: git fetch upstream nixos-unstable --no-tags
+
+      - name: Get current state
+        id: current-state
+        run: |
+          CURRENT=$(git rev-parse origin/feel-unstable)
+          echo "current_rev=$CURRENT" >> $GITHUB_OUTPUT
+          echo "Current feel-unstable: $CURRENT"
+
+      - name: Check for upstream changes
+        id: check-changes
+        run: |
+          UPSTREAM=$(git rev-parse upstream/nixos-unstable)
+          echo "upstream_rev=$UPSTREAM" >> $GITHUB_OUTPUT
+          echo "Latest upstream: $UPSTREAM"
+
+          CURRENT="${{ steps.current-state.outputs.current_rev }}"
+          if [ "$CURRENT" = "$UPSTREAM" ]; then
+            echo "No upstream changes detected"
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          else
+            echo "Upstream has new commits"
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          fi
+
+  rebase:
+    needs: check-updates
+    name: Perform rebase
+    runs-on: ubuntu-latest
+    outputs:
+      branch_name: ${{ steps.create-branch.outputs.branch }}
+      rebase_success: ${{ steps.rebase.outputs.success }}
+      has_conflicts: ${{ steps.rebase.outputs.has_conflicts }}
+      current_rev: ${{ needs.check-updates.outputs.current_rev }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ env.GITHUB_TOKEN }}
+
+      - name: Setup git config
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Setup upstream remote
+        run: |
+          if ! git remote get-url upstream >/dev/null 2>&1; then
+            git remote add upstream https://github.com/NixOS/nixpkgs.git
+          fi
+          git fetch upstream nixos-unstable
+
+      - name: Reset to current feel-unstable
+        run: git checkout origin/feel-unstable
+
+      - name: Create rebase branch
+        id: create-branch
+        run: |
+          TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+          BRANCH_NAME="rebase-${TIMESTAMP}"
+          git checkout -b "$BRANCH_NAME"
+          echo "branch=$BRANCH_NAME" >> $GITHUB_OUTPUT
+
+      - name: Perform rebase
+        id: rebase
+        run: |
+          if git rebase upstream/nixos-unstable 2>&1; then
+            echo "Rebase completed successfully"
+            echo "success=true" >> $GITHUB_OUTPUT
+            echo "has_conflicts=false" >> $GITHUB_OUTPUT
+          else
+            echo "::warning title=Rebase Conflict::Rebase encountered conflicts"
+            echo "has_conflicts=true" >> $GITHUB_OUTPUT
+            echo "success=false" >> $GITHUB_OUTPUT
+            git rebase --abort || true
+          fi
+
+      - name: Push rebased branch
+        if: steps.rebase.outputs.success == 'true'
+        run: |
+          BRANCH="${{ steps.create-branch.outputs.branch }}"
+          git push origin "$BRANCH" -f
+          echo "Pushed branch: $BRANCH"
+
+  identify-packages:
+    needs: [check-updates, rebase]
+    name: Identify changed packages
+    runs-on: ubuntu-latest
+    outputs:
+      packages_json: ${{ steps.identify.outputs.packages_json }}
+      package_count: ${{ steps.identify.outputs.package_count }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ env.GITHUB_TOKEN }}
+          ref: ${{ needs.rebase.outputs.branch_name }}
+
+      - name: Identify changed packages
+        id: identify
+        run: |
+          OLD_REV="${{ needs.check-updates.outputs.current_rev }}"
+          NEW_REV=$(git rev-parse HEAD)
+
+          CHANGED_FILES=$(git diff --name-only "$OLD_REV".."$NEW_REV")
+          PACKAGE_FILES=$(echo "$CHANGED_FILES" | grep '^pkgs/by-name/' || true)
+
+          if [ -z "$PACKAGE_FILES" ]; then
+            echo "No packages in pkgs/by-name changed"
+            echo "packages_json=[]" >> $GITHUB_OUTPUT
+            echo "package_count=0" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          PACKAGES=$(echo "$PACKAGE_FILES" | cut -d'/' -f4 | sort -u)
+          PACKAGE_COUNT=$(echo "$PACKAGES" | grep -c '^' || echo 0)
+          PACKAGES_JSON=$(echo "$PACKAGES" | jq -R -s 'split("\n") | map(select(length > 0))')
+
+          echo "packages_json=$PACKAGES_JSON" >> $GITHUB_OUTPUT
+          echo "package_count=$PACKAGE_COUNT" >> $GITHUB_OUTPUT
+          echo "Changed packages: $PACKAGE_COUNT"
+
+      - name: Save package list
+        run: echo "${{ steps.identify.outputs.packages_json }}" > /tmp/changed_packages.json
+
+      - name: Upload package list
+        uses: actions/upload-artifact@v4
+        with:
+          name: changed-packages
+          path: /tmp/changed_packages.json
+          retention-days: 7
+
+  build-packages:
+    needs: [rebase, identify-packages]
+    if: |
+      needs.rebase.outputs.rebase_success != 'false' &&
+      needs.rebase.outputs.has_conflicts != 'true' &&
+      needs.identify-packages.outputs.package_count > '0'
+    name: Build changed packages
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJson(needs.identify-packages.outputs.packages_json) }}
+    max-parallel: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.rebase.outputs.branch_name }}
+
+      - name: Setup Nix
+        uses: cachix/install-nix-action@v25
+
+      - name: Build package
+        id: build
+        run: |
+          PACKAGE="${{ matrix.package }}"
+          echo "Building: $PACKAGE"
+
+          if timeout 600 nix-build -A "$PACKAGE" --no-out-link > /tmp/build.log 2>&1; then
+            echo "Build succeeded: $PACKAGE"
+            echo "success=true" >> $GITHUB_OUTPUT
+          else
+            echo "Build failed: $PACKAGE"
+            echo "success=false" >> $GITHUB_OUTPUT
+            echo "::warning title=Build failed::$PACKAGE failed to build"
+          fi
+
+      - name: Upload build log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-log-${{ matrix.package }}
+          path: /tmp/build.log
+          retention-days: 7
+
+  build-summary:
+    needs: build-packages
+    name: Build summary
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Download all build logs
+        uses: actions/download-artifact@v4
+        with:
+          pattern: build-log-*
+          path: build-logs
+          merge-multiple: true
+
+      - name: Generate summary
+        id: summary
+        run: |
+          TOTAL=$(find build-logs -name "build-log-*" 2>/dev/null | wc -l || echo 0)
+          FAILED=$(find build-logs -name "build-log-*" -exec grep -l "error:" {} \; 2>/dev/null | wc -l || echo 0)
+          SUCCESSFUL=$((TOTAL - FAILED))
+
+          echo "=== Build Summary ==="
+          echo "Total: $TOTAL"
+          echo "Successful: $SUCCESSFUL"
+          echo "Failed: $FAILED"
+
+          echo "total_builds=$TOTAL" >> $GITHUB_OUTPUT
+          echo "successful_builds=$SUCCESSFUL" >> $GITHUB_OUTPUT
+          echo "failed_builds=$FAILED" >> $GITHUB_OUTPUT
+
+  create-pr:
+    needs: [rebase, identify-packages, build-summary]
+    if: needs.rebase.outputs.rebase_success != 'false'
+    name: Create pull request
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download package list
+        uses: actions/download-artifact@v4
+        with:
+          name: changed-packages
+
+      - name: Get build results
+        uses: actions/download-artifact@v4
+        with:
+          pattern: build-log-*
+          path: build-logs
+          merge-multiple: true
+
+      - name: Generate PR body
+        run: |
+          PACKAGES=$(cat /tmp/changed_packages.json)
+          PACKAGE_COUNT=$(echo "$PACKAGES" | jq 'length')
+
+          OLD_REV="${{ needs.rebase.outputs.current_rev }}"
+          NEW_REV=$(git rev-parse HEAD)
+
+          TOTAL="${{ needs.build-summary.outputs.total_builds }}"
+          SUCCESSFUL="${{ needs.build-summary.outputs.successful_builds }}"
+          FAILED="${{ needs.build-summary.outputs.failed_builds }}"
+
+          cat > PR_BODY.md << EOF
+          ## Automated Rebase
+
+          Rebased \`feel-unstable\` onto latest \`upstream/nixos-unstable\`.
+
+          ### Rebase Information
+
+          | Detail | Value |
+          |--------|-------|
+          | Previous | \`${OLD_REV:0:8}\` |
+          | New | \`${NEW_REV:0:8}\` |
+          | Packages changed | $PACKAGE_COUNT |
+
+          ### Changed Packages in \`pkgs/by-name\`
+
+          | Package | Status |
+          |---------|--------|
+          EOF
+
+          for pkg in $(echo "$PACKAGES" | jq -r '.[]'); do
+            if [ -f "build-logs/build-log-$pkg" ] && grep -q "error:" "build-logs/build-log-$pkg" 2>/dev/null; then
+              STATUS="❌ Failed"
+            else
+              STATUS="✅ Built"
+            fi
+            echo "| \`$pkg\` | $STATUS |" >> PR_BODY.md
+          done
+
+          cat >> PR_BODY.md << EOF
+
+          ### Build Summary
+
+          - Total: $TOTAL
+          - Successful: $SUCCESSFUL
+          - Failed: $FAILED
+
+          ---
+          *Created by \`daily-rebase\` workflow*
+          EOF
+
+      - name: Create PR
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ env.GITHUB_TOKEN }}
+          branch: ${{ needs.rebase.outputs.branch_name }}
+          base: feel-unstable
+          title: "chore: rebase on nixos-unstable ($(date +%Y-%m-%d))"
+          body-path: PR_BODY.md
+          labels: automated,rebase
+
+  fail-on-conflict:
+    needs: [check-updates, rebase]
+    if: needs.rebase.outputs.has_conflicts == 'true'
+    name: Conflict detected
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fail with conflict message
+        run: |
+          echo "::error title=Rebase Conflict::Rebase failed with conflicts. Please resolve manually."
+          exit 1
