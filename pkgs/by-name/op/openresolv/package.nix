@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "openresolv";
-  version = "3.17.0";
+  version = "3.17.4";
 
   src = fetchFromGitHub {
     owner = "NetworkConfiguration";
     repo = "openresolv";
     rev = "v${version}";
-    sha256 = "sha256-blWfUXTBPkAYj5o2/lqAfMV4mOHUW1wpPGiUx93Bfyo=";
+    sha256 = "sha256-I86BHiSI3G4xlYRJC99elHw8RyUd3eHdkV5kiEGRXNE=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
