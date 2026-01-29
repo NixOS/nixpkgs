@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  stdenv,
+  replaceVars,
   cmake,
   pkg-config,
   protobuf,
@@ -11,17 +13,28 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "holo-cli";
-  version = "0.5.0-unstable-2025-09-22";
+  version = "0.5.0-unstable-2026-01-03";
 
   src = fetchFromGitHub {
     owner = "holo-routing";
     repo = "holo-cli";
-    rev = "7d99e7de5eb5226728ee57153c03362c90eb65b2";
-    hash = "sha256-O509LNSpak+MJPQheYLPtJQcNGPyZLMHMasKScoVnls=";
+    rev = "8a8f02fc56f30cca216e9a99029b736fe57b3d59";
+    hash = "sha256-pCupXT4fymydzOpdsMbimAcQZzVUNzfG3VRnrD3q7Xw=";
   };
 
-  cargoHash = "sha256-bsoxWjOMzRRtFGEaaqK0/adhGpDcejCIY0Pzw1HjQ5U=";
+  cargoHash = "sha256-7/OtT2TdLhFVZeuQOg6xQJFnGJNz/G9mna8vIeh86/k=";
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    pushd $cargoDepsCopy/libyang4-sys-*
+    patch -p1 < ${
+      replaceVars ./libyang4-sys.patch {
+        PCRE2_INCLUDE_DIRS = "${lib.getInclude pcre2}/include";
+        PCRE2_LIBRARIES = "${lib.getLib pcre2}/lib/libpcre2-8${stdenv.hostPlatform.extensions.sharedLibrary}";
+      }
+    }
+    popd
+  '';
 
   # Use rust nightly features
   env.RUSTC_BOOTSTRAP = 1;
