@@ -15310,6 +15310,12 @@
     githubId = 4969294;
     name = "Louis Tim Larsen";
   };
+  LouisJalouzot = {
+    email = "louis.jalouzot.public@gmail.com";
+    github = "LouisJalouzot";
+    githubId = 86967472;
+    name = "Louis Jalouzot";
+  };
   lovek323 = {
     email = "jason@oconal.id.au";
     github = "lovek323";
