@@ -480,6 +480,7 @@ in
         nvidia_x11_legacy390 = nvidiaPackages.legacy_390;
         nvidia_x11_legacy470 = nvidiaPackages.legacy_470;
         nvidia_x11_legacy535 = nvidiaPackages.legacy_535;
+        nvidia_x11_new_feature_branch = nvidiaPackages.new_feature_branch;
         nvidia_x11_production = nvidiaPackages.production;
         nvidia_x11_vulkan_beta = nvidiaPackages.vulkan_beta;
         nvidia_dc = nvidiaPackages.dc;
@@ -490,6 +491,7 @@ in
         # only the opensource kernel driver exposed for hydra to build
         nvidia_x11_beta_open = nvidiaPackages.beta.open;
         nvidia_x11_latest_open = nvidiaPackages.latest.open;
+        nvidia_x11_new_feature_branch_open = nvidiaPackages.new_feature_branch.open;
         nvidia_x11_production_open = nvidiaPackages.production.open;
         nvidia_x11_stable_open = nvidiaPackages.stable.open;
         nvidia_x11_vulkan_beta_open = nvidiaPackages.vulkan_beta.open;
