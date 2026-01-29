@@ -185,7 +185,11 @@ let
           overlays
           ;
       } res self super;
+
+      conflictingAttrs = lib.intersectAttrs res super;
     in
+    assert lib.assertMsg (conflictingAttrs == { })
+      "The following attributes were defined both in `pkgs/top-level/all-packages.nix` and elsewhere, most likely in `pkgs/by-name/`: ${lib.concatStringsSep ", " (lib.attrNames conflictingAttrs)}";
     res;
 
   aliases = self: super: lib.optionalAttrs config.allowAliases (import ./aliases.nix lib self super);
