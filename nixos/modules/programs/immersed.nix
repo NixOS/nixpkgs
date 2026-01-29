@@ -26,6 +26,12 @@ in
     programs.immersed = {
       enable = lib.mkEnableOption "immersed";
 
+      openPorts = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Whether to open firewall ports for Immersed";
+      };
+
       package = lib.mkPackageOption pkgs "immersed" { };
     };
   };
@@ -43,6 +49,15 @@ in
     };
 
     environment.systemPackages = [ cfg.package ];
+
+    # https://immersed.helpscoutdocs.com/article/23-connection-troubleshooting-linux
+    networking.firewall = lib.mkIf cfg.openPorts {
+      allowedTCPPorts = [ 21000 ];
+      allowedUDPPorts = [
+        21000
+        21010
+      ];
+    };
   };
 
   meta.maintainers = pkgs.immersed.meta.maintainers;
