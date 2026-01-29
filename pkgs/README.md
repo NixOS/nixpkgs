@@ -305,10 +305,6 @@ For example, the `libxml2` package builds both a library and some tools; but it�
 
   - `servers/http` (e.g. `apache-httpd`)
 
-- **If it’s an implementation of the X Windowing System:**
-
-  - `servers/x11` (e.g. `xorg` — this includes the client libraries and programs)
-
 - **Else:**
 
   - `servers/misc`

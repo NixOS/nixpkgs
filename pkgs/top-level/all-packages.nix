@@ -9014,71 +9014,61 @@ with pkgs;
 
   virtualenv-clone = with python3Packages; toPythonApplication virtualenv-clone;
 
-  xorg = recurseIntoAttrs (makeScopeWithSplicing' {
-    otherSplices = generateSplicesForMkScope "xorg";
-    # Use `lib.callPackageWith __splicedPackages` rather than plain `callPackage`
-    # so as not to have the newly bound xorg items already in scope,  which would
-    # have created a cycle.
-    f = lib.callPackageWith __splicedPackages ../servers/x11/xorg { };
-  });
-
-  inherit (xorg)
-    fontadobe100dpi
-    fontadobeutopia100dpi
-    fontbh100dpi
-    fontbhlucidatypewriter100dpi
-    fontbitstream100dpi
-    fontutil
-    libAppleWM
-    libFS
-    libICE
-    libSM
-    libX11
-    libXScrnSaver
-    libXau
-    libXaw
-    libXcomposite
-    libXcursor
-    libXdamage
-    libXdmcp
-    libXext
-    libXfixes
-    libXfont2
-    libXft
-    libXi
-    libXinerama
-    libXmu
-    libXp
-    libXpm
-    libXpresent
-    libXrandr
-    libXrender
-    libXres
-    libXt
-    libXtst
-    libXv
-    libXvMC
-    libXxf86dga
-    libXxf86misc
-    libXxf86vm
-    libpthreadstubs
-    mkfontdir
-    utilmacros
-    xcbproto
-    xcbutil
-    xcbutilcursor
-    xcbutilerrors
-    xcbutilimage
-    xcbutilkeysyms
-    xcbutilrenderutil
-    xcbutilwm
-    xf86inputevdev
-    xf86inputlibinput
-    xf86videonouveau
-    xkeyboardconfig
-    xorgcffiles
-    xorgserver
-    ;
+  fontadobe100dpi = font-adobe-100dpi;
+  fontadobeutopia100dpi = font-adobe-utopia-100dpi;
+  fontbh100dpi = font-bh-100dpi;
+  fontbhlucidatypewriter100dpi = font-bh-lucidatypewriter-100dpi;
+  fontbitstream100dpi = font-bitstream-100dpi;
+  fontutil = font-util;
+  libAppleWM = libapplewm;
+  libFS = libfs;
+  libICE = libice;
+  libpthreadstubs = libpthread-stubs;
+  libSM = libsm;
+  libX11 = libx11;
+  libXau = libxau;
+  libXaw = libxaw;
+  libXcomposite = libxcomposite;
+  libXcursor = libxcursor;
+  libXdamage = libxdamage;
+  libXdmcp = libxdmcp;
+  libXext = libxext;
+  libXfixes = libxfixes;
+  libXfont2 = libxfont_2;
+  libXft = libxft;
+  libXi = libxi;
+  libXinerama = libxinerama;
+  libXmu = libxmu;
+  libXp = libxp;
+  libXpm = libxpm;
+  libXpresent = libxpresent;
+  libXrandr = libxrandr;
+  libXrender = libxrender;
+  libXres = libxres;
+  libXScrnSaver = libxscrnsaver;
+  libXt = libxt;
+  libXtst = libxtst;
+  libXv = libxv;
+  libXvMC = libxvmc;
+  libXxf86dga = libxxf86dga;
+  libXxf86misc = libxxf86misc;
+  libXxf86vm = libxxf86vm;
+  mkfontdir = mkfontscale;
+  utilmacros = util-macros;
+  xcbproto = xcb-proto;
+  xcbutil = libxcb-util;
+  xcbutilcursor = libxcb-cursor;
+  xcbutilerrors = libxcb-errors;
+  xcbutilimage = libxcb-image;
+  xcbutilkeysyms = libxcb-keysyms;
+  xcbutilrenderutil = libxcb-render-util;
+  xcbutilwm = libxcb-wm;
+  xf86inputevdev = xf86-input-evdev;
+  xf86inputlibinput = xf86-input-libinput;
+  xf86videonouveau = xf86-video-nouveau;
+  xkeyboardconfig = xkeyboard-config;
+  xorgcffiles = xorg-cf-files;
+  xorgserver = xorg-server;
 
   zabbixFor = version: rec {
     agent = (callPackages ../servers/monitoring/zabbix/agent.nix { }).${version};
