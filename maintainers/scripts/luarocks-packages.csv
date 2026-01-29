@@ -81,7 +81,7 @@ luaepnf,,,,,,
 luaevent,,,,,,
 luaexpat,,,,1.4.1-1,,arobyn flosse
 luaffi,,,https://luarocks.org/dev,,,
-luafilesystem,,,,1.8.0-1,,flosse
+luafilesystem,,,,,,flosse
 lualdap,,,,,,aanderse
 lualine.nvim,,,https://luarocks.org/dev,,,
 lualogging,,,,,,

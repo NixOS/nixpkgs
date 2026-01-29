@@ -2694,23 +2694,23 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "luafilesystem";
-      version = "1.8.0-1";
+      version = "1.9.0-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/luafilesystem-1.8.0-1.rockspec";
-          sha256 = "18nkaks0b75dmycljg5vljap5w8d0ysdkg96yl5szgzr7nzrymfa";
+          url = "mirror://luarocks/luafilesystem-1.9.0-1.rockspec";
+          sha256 = "1jg1w8c22hpv1jfcv6qyl3j354h1ar2qfarkiwx0c41sl90gpfrj";
         }).outPath;
       src = fetchFromGitHub {
-        owner = "keplerproject";
+        owner = "lunarmodules";
         repo = "luafilesystem";
-        rev = "v1_8_0";
-        hash = "sha256-pEA+Z1pkykWLTT6NHQ5lo8roOh2P0fiHtnK+byTkF5o=";
+        rev = "v1_9_0";
+        hash = "sha256-xoNJra/yqxRG11TePcUKrAUU6cwypGnXIoLKZXNaoW0=";
       };
 
       disabled = luaOlder "5.1";
 
       meta = {
-        homepage = "https://github.com/keplerproject/luafilesystem";
+        homepage = "https://github.com/lunarmodules/luafilesystem";
         description = "File System Library for the Lua Programming Language";
         maintainers = with lib.maintainers; [ flosse ];
         license.fullName = "MIT/X11";
