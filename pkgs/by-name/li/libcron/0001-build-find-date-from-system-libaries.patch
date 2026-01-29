@@ -1,0 +1,112 @@
+From 66199d9383e32e3cfcb04ab23d830a222478adb1 Mon Sep 17 00:00:00 2001
+From: Moraxyc <i@qaq.li>
+Date: Sun, 21 Dec 2025 12:45:57 +0800
+Subject: [PATCH] build: find date from system libaries
+
+---
+ CMakeLists.txt         |  2 --
+ libcron/CMakeLists.txt |  5 ++++-
+ test/CMakeLists.txt    | 15 ++++++++++-----
+ test/CronTest.cpp      |  2 +-
+ 4 files changed, 15 insertions(+), 9 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 9a994d5..4a232b0 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -8,5 +8,3 @@ add_dependencies(cron_test libcron)
+ 
+ install(TARGETS libcron DESTINATION lib)
+ install(DIRECTORY libcron/include/libcron DESTINATION include)
+-install(DIRECTORY libcron/externals/date/include/date DESTINATION include)
+-
+diff --git a/libcron/CMakeLists.txt b/libcron/CMakeLists.txt
+index 6511821..d47becb 100644
+--- a/libcron/CMakeLists.txt
++++ b/libcron/CMakeLists.txt
+@@ -1,6 +1,8 @@
+ cmake_minimum_required(VERSION 3.6)
+ project(libcron)
+ 
++find_package(date REQUIRED)
++
+ set(CMAKE_CXX_STANDARD 17)
+ 
+ # Deactivate Iterator-Debugging on Windows
+@@ -31,8 +33,9 @@ add_library(${PROJECT_NAME}
+ 		src/CronSchedule.cpp
+ 		src/Task.cpp)
+ 
++target_link_libraries(${PROJECT_NAME} PUBLIC date::date)
++
+ target_include_directories(${PROJECT_NAME}
+-		PUBLIC ${CMAKE_CURRENT_LIST_DIR}/externals/date/include
+ 		PUBLIC include)
+ 
+ if(NOT MSVC)
+diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
+index 5755431..499ba86 100644
+--- a/test/CMakeLists.txt
++++ b/test/CMakeLists.txt
+@@ -1,6 +1,8 @@
+ cmake_minimum_required(VERSION 3.6)
+ project(cron_test)
+ 
++find_package(Catch2 REQUIRED)
++
+ set(CMAKE_CXX_STANDARD 17)
+ 
+ # Deactivate Iterator-Debugging on Windows
+@@ -8,7 +10,7 @@ option(LIBCRON_DEACTIVATE_ITERATOR_DEBUGGING "Build with iterator-debugging (MSV
+ 
+ if( MSVC )
+         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
+-        
++
+ 	if (LIBCRON_DEACTIVATE_ITERATOR_DEBUGGING)
+ 		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_HAS_ITERATOR_DEBUGGING=0")
+ 	endif()
+@@ -17,8 +19,6 @@ else()
+ endif()
+ 
+ include_directories(
+-        ${CMAKE_CURRENT_LIST_DIR}/externals/Catch2/single_include/catch2
+-        ${CMAKE_CURRENT_LIST_DIR}/../libcron/externals/date/include
+         ${CMAKE_CURRENT_LIST_DIR}/..
+ )
+ 
+@@ -30,12 +30,17 @@ add_executable(
+ 	CronTest.cpp)
+ 
+ if(NOT MSVC)
+-	target_link_libraries(${PROJECT_NAME} libcron pthread)
++	target_link_libraries(${PROJECT_NAME} libcron Catch2::Catch2 pthread)
+ 
+ 	# Assume a modern compiler supporting uncaught_exceptions()
+ 	target_compile_definitions (${PROJECT_NAME} PRIVATE -DHAS_UNCAUGHT_EXCEPTIONS)
+ else()
+-	target_link_libraries(${PROJECT_NAME} libcron)
++	target_link_libraries(${PROJECT_NAME} libcron Catch2::Catch2)
++endif()
++
++if(TARGET Catch2::Catch2)
++    get_target_property(CATCH2_INC_DIR Catch2::Catch2 INTERFACE_INCLUDE_DIRECTORIES)
++    target_include_directories(${PROJECT_NAME} PRIVATE "${CATCH2_INC_DIR}/catch2")
+ endif()
+ 
+ set_target_properties(${PROJECT_NAME} PROPERTIES
+diff --git a/test/CronTest.cpp b/test/CronTest.cpp
+index 253206f..a309409 100644
+--- a/test/CronTest.cpp
++++ b/test/CronTest.cpp
+@@ -1,6 +1,6 @@
+ #include <catch.hpp>
+ #include <libcron/include/libcron/Cron.h>
+-#include <libcron/externals/date/include/date/date.h>
++#include <date/date.h>
+ #include <thread>
+ #include <iostream>
+ 
+-- 
+2.51.2
+
