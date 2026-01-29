@@ -13,8 +13,11 @@
 
 let
   cfg = config.services.desktopManager.cosmic;
+
+  extraSessionPkgs = map (name: pkgs.cosmic-ext-extra-sessions.${name}) cfg.extraSessions;
   notExcluded = pkg: utils.disablePackageByName pkg config.environment.cosmic.excludePackages;
   excludedCorePkgs = lib.lists.intersectLists corePkgs config.environment.cosmic.excludePackages;
+
   # **ONLY ADD PACKAGES WITHOUT WHICH COSMIC CRASHES, NOTHING ELSE**
   corePkgs =
     with pkgs;
@@ -22,7 +25,6 @@ let
       cosmic-applets
       cosmic-applibrary
       cosmic-bg
-      cosmic-comp
       cosmic-files
       config.services.displayManager.cosmic-greeter.package
       cosmic-idle
@@ -36,6 +38,7 @@ let
       cosmic-settings-daemon
       cosmic-workspaces-epoch
     ]
+    ++ lib.optionals cfg.defaultSession [ cosmic-comp ]
     ++ lib.optionals cfg.xwayland.enable [
       # Why would you want to enable XWayland but exclude the package
       # providing XWayland support? Doesn't make sense. Add `xwayland` to the
@@ -49,6 +52,26 @@ in
   options = {
     services.desktopManager.cosmic = {
       enable = lib.mkEnableOption "COSMIC desktop environment";
+
+      defaultSession = lib.mkEnableOption "the default COSMIC session" // {
+        default = true;
+      };
+
+      extraSessions = lib.mkOption {
+        type = lib.types.listOf (
+          lib.types.enum [
+            "niri"
+            "sway"
+            "miracle"
+          ]
+        );
+        default = [ ];
+        example = [
+          "niri"
+          "sway"
+        ];
+        description = "Alternative sessions to install for the COSMIC environment.";
+      };
 
       showExcludedPkgsWarning = lib.mkEnableOption "the warning for excluding core packages" // {
         default = true;
@@ -68,6 +91,17 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = cfg.defaultSession || cfg.extraSessions != [ ];
+        message = "COSMIC is enabled, but no session is configured. Enable `services.desktopManager.cosmic.defaultSession` or specify `services.desktopManager.cosmic.extraSessions`.";
+      }
+    ];
+
+    programs.niri.enable = lib.mkIf (builtins.elem "niri" cfg.extraSessions) true;
+    programs.sway.enable = lib.mkIf (builtins.elem "sway" cfg.extraSessions) true;
+    programs.wayland.miracle-wm.enable = lib.mkIf (builtins.elem "miracle" cfg.extraSessions) true;
+
     # Environment packages
     environment.pathsToLink = [
       "/share/backgrounds"
@@ -77,6 +111,7 @@ in
     ];
     environment.systemPackages = utils.removePackagesByName (
       corePkgs
+      ++ extraSessionPkgs
       ++ (
         with pkgs;
         [
@@ -149,7 +184,8 @@ in
     security.polkit.enable = true;
     security.rtkit.enable = true;
     services.accounts-daemon.enable = true;
-    services.displayManager.sessionPackages = [ pkgs.cosmic-session ];
+    services.displayManager.sessionPackages =
+      (lib.optionals cfg.defaultSession [ pkgs.cosmic-session ]) ++ extraSessionPkgs;
     services.libinput.enable = true;
     services.upower.enable = true;
     # Required for screen locker
