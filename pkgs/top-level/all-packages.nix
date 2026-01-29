@@ -1081,10 +1081,6 @@ with pkgs;
     };
   };
 
-  yabridgectl = callPackage ../tools/audio/yabridgectl {
-    wine = wineWowPackages.yabridge;
-  };
-
   ### APPLICATIONS/VERSION-MANAGEMENT
 
   # The full-featured Git.

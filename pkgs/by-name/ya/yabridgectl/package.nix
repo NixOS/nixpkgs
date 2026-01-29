@@ -3,9 +3,12 @@
   rustPlatform,
   yabridge,
   makeWrapper,
-  wine,
+  wineWowPackages,
 }:
 
+let
+  wine = wineWowPackages.yabridge;
+in
 rustPlatform.buildRustPackage {
   pname = "yabridgectl";
   version = yabridge.version;
