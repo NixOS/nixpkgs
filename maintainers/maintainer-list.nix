@@ -10537,6 +10537,12 @@
     github = "hitsmaxft";
     githubId = 352727;
   };
+  hjsmarais = {
+    name = "Hennie Marais";
+    email = "hennie@sulimo.co.za";
+    github = "hjsmarais";
+    githubId = 77006791;
+  };
   hkjn = {
     email = "me@hkjn.me";
     name = "Henrik Jonsson";
