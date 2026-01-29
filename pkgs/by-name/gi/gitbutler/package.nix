@@ -58,7 +58,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tauriConfRelease="crates/gitbutler-tauri/tauri.conf.release.json"
     jq '.version = "${finalAttrs.version}" | .bundle.createUpdaterArtifacts = false' "$tauriConfRelease" | sponge "$tauriConfRelease"
 
-    tomlq -ti 'del(.lints) | del(.workspace.lints)' "$cargoDepsCopy"/gix*/Cargo.toml
+    tomlq -ti 'del(.lints) | del(.workspace.lints)' "$cargoDepsCopy"/*/gix*/Cargo.toml
 
     substituteInPlace apps/desktop/src/lib/backend/tauri.ts \
       --replace-fail 'checkUpdate = check;' 'checkUpdate = () => null;'

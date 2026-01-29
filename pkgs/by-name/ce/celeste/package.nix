@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
   patches = [ ./missing-unsafe-block.patch ];
 
   postPatch = ''
-    pushd $cargoDepsCopy/librclone-sys-*
+    pushd $cargoDepsCopy/*/librclone-sys-*
     oldHash=$(sha256sum build.rs | cut -d " " -f 1)
     patch -p2 < ${./librclone-path.patch}
     substituteInPlace build.rs \

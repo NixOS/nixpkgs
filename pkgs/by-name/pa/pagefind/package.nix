@@ -127,24 +127,24 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # patch build-time dependency downloads
     (
       # add support for file:// urls
-      patch -d $cargoDepsCopy/lindera-dictionary-*/ -p1 < ${./lindera-dictionary-support-file-paths.patch}
+      patch -d $cargoDepsCopy/*/lindera-dictionary-*/ -p1 < ${./lindera-dictionary-support-file-paths.patch}
 
       # patch urls
       ${lib.pipe finalAttrs.passthru.lindera-srcs [
         (lib.mapAttrsToList (
           key: src: ''
             # compgen is only in bashInteractive
-            declare -a expanded_glob=($cargoDepsCopy/${src.vendorDir}/build.rs)
+            declare -a expanded_glob=($cargoDepsCopy/*/${src.vendorDir}/build.rs)
             if [[ "''${#expanded_glob[@]}" -eq 0 ]]; then
-              echo >&2 "ERROR: '$cargoDepsCopy/${src.vendorDir}/build.rs' not found! (pagefind.passthru.lindera-srcs.${key})"
+              echo >&2 "ERROR: '$cargoDepsCopy/*/${src.vendorDir}/build.rs' not found! (pagefind.passthru.lindera-srcs.${key})"
               false
             elif [[ "''${#expanded_glob[@]}" -gt 1 ]]; then
-              echo >&2 "ERROR: '$cargoDepsCopy/${src.vendorDir}/build.rs' matches more than one file! (pagefind.passthru.lindera-srcs.${key})"
+              echo >&2 "ERROR: '$cargoDepsCopy/*/${src.vendorDir}/build.rs' matches more than one file! (pagefind.passthru.lindera-srcs.${key})"
               printf >&2 "match: %s\n" "''${expanded_glob[@]}"
               false
             fi
-            echo "patching $cargoDepsCopy/${src.vendorDir}/build.rs..."
-            substituteInPlace $cargoDepsCopy/${src.vendorDir}/build.rs --replace-fail "${src.url}" "file://${src}"
+            echo "patching $cargoDepsCopy/*/${src.vendorDir}/build.rs..."
+            substituteInPlace $cargoDepsCopy/*/${src.vendorDir}/build.rs --replace-fail "${src.url}" "file://${src}"
             unset expanded_glob
           ''
         ))
