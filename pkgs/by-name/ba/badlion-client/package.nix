@@ -21,6 +21,8 @@ appimageTools.wrapAppImage rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
+  extraPkgs = pkgs: [ pkgs.xorg.libxshmfence ];
+
   extraInstallCommands = ''
     install -Dm444 ${src}/BadlionClient.desktop $out/share/applications/BadlionClient.desktop
     install -Dm444 ${src}/BadlionClient.png $out/share/pixmaps/BadlionClient.png
