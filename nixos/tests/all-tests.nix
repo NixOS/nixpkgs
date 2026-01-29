@@ -274,6 +274,7 @@ in
   beanstalkd = runTest ./beanstalkd.nix;
   bees = runTest ./bees.nix;
   benchexec = runTest ./benchexec.nix;
+  bentopdf = handleTest ./bentopdf { };
   beszel = runTest ./beszel.nix;
   binary-cache = runTest {
     imports = [ ./binary-cache.nix ];
