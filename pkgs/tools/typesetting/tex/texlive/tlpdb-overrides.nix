@@ -12,6 +12,7 @@
   gawk,
   getopt,
   ghostscript_headless,
+  git-latexdiff,
   gnugrep,
   gnumake,
   gnupg,
@@ -544,6 +545,12 @@ lib.recursiveUpdate orig rec {
       sed -i 's/use IO::file;/use IO::File;/' "$out"/scripts/crossrefware/ltx2crossrefxml.pl
     fi
   '';
+
+  # Use top-level git-latexdiff's version and src. NOTE that this derivation is
+  # still different from top-level's `git-latexdiff`, due to __structuredAttrs
+  # enabled unconditionally. Still though this derivation produces a funcitonal
+  # binary.
+  inherit git-latexdiff;
 
   # RISC-V: https://github.com/LuaJIT/LuaJIT/issues/628
   luajittex.binfiles = lib.optionals (lib.meta.availableOn stdenv.hostPlatform luajit) orig.luajittex.binfiles;
