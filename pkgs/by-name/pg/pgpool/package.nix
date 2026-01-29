@@ -1,58 +1,100 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  autoreconfHook,
+  bison,
+  fetchFromGitHub,
+  flex,
+  libmemcached,
   libpq,
-  openssl,
+  libtool,
   libxcrypt,
-  withPam ? stdenv.hostPlatform.isLinux,
+  openldap,
+  openssl,
   pam,
+  versionCheckHook,
+  enableLdap ? true,
+  enableMemcached ? true,
+  enablePam ? true,
 }:
 
 stdenv.mkDerivation rec {
-  pname = "pgpool-II";
-  version = "4.6.4";
+  pname = "pgpool";
+  version = "4.7.0";
 
-  src = fetchurl {
-    url = "https://www.pgpool.net/mediawiki/download.php?f=pgpool-II-${version}.tar.gz";
-    name = "pgpool-II-${version}.tar.gz";
-    hash = "sha256-7w0ukamhHXN8ZHYkchnmefcYvsU1UGRhiVlO+a79KY0=";
+  outputs = [
+    "out"
+    "dev"
+    "lib"
+  ];
+
+  src = fetchFromGitHub {
+    owner = "pgpool";
+    repo = "pgpool2";
+    tag = "V${builtins.replaceStrings [ "." ] [ "_" ] version}";
+    hash = "sha256-2uPXKrEyvuBY+FkQAr4Pk0zsJSQPJn0SKrMUu8ZvCGk=";
   };
+
+  patches = [
+    ./fix-parallel-build.patch
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+    # Build checks for strlcpy being available in the system, but doesn't
+    # actually exclude its own copy from being built
+    ./darwin-strlcpy.patch
+    # Fix strchrnul not available on Darwin
+    ./darwin-strchrnul.patch
+  ];
+
+  nativeBuildInputs = [
+    autoreconfHook
+    bison
+    flex
+    libtool
+  ];
 
   buildInputs = [
     libpq
-    openssl
     libxcrypt
+    openssl
   ]
-  ++ lib.optional withPam pam;
+  ++ lib.optional enableLdap openldap
+  ++ lib.optional enableMemcached libmemcached
+  ++ lib.optional enablePam pam;
+
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals (stdenv.cc.isClang) [
+      "-Wno-error=implicit-function-declaration"
+    ]
+  );
 
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-    "--with-openssl"
-  ]
-  ++ lib.optional withPam "--with-pam";
+    (lib.withFeature true "openssl")
+    (lib.withFeature enableLdap "ldap")
+    (lib.withFeature enablePam "pam")
+    (lib.withFeatureAs enableMemcached "memcached" (lib.getDev libmemcached))
+  ];
 
   installFlags = [
     "sysconfdir=\${out}/etc"
   ];
 
-  patches = lib.optionals (stdenv.hostPlatform.isDarwin) [
-    # Build checks for strlcpy being available in the system, but doesn't
-    # actually exclude its own copy from being built
-    ./darwin-strlcpy.patch
-  ];
-
   enableParallelBuilding = true;
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   meta = {
-    homepage = "https://www.pgpool.net/mediawiki/index.php/Main_Page";
     description = "Middleware that works between PostgreSQL servers and PostgreSQL clients";
+    homepage = "https://pgpool.net/";
     changelog = "https://www.pgpool.net/docs/latest/en/html/release-${
       builtins.replaceStrings [ "." ] [ "-" ] version
     }.html";
     license = lib.licenses.free;
     platforms = lib.platforms.unix;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ anthonyroussel ];
+    mainProgram = "pgpool";
   };
 }
