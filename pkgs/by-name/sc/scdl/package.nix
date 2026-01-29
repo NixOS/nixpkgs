@@ -7,12 +7,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "scdl";
-  version = "2.12.4";
+  version = "3.0.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5+3ok7UcJEdUW45bdPGkkvk+k/NYIpEi0URNuQ6e0vk=";
+    hash = "sha256-cbNXSMH4UpRyG7U5Csu3ITtS7vp3xM/yVdyYReLcHIU=";
   };
 
   build-system = [ python3Packages.setuptools ];
@@ -20,12 +20,8 @@ python3Packages.buildPythonApplication rec {
   dependencies = with python3Packages; [
     docopt-ng
     mutagen
-    termcolor
-    requests
-    tqdm
-    pathvalidate
     soundcloud-v2
-    filelock
+    yt-dlp
   ];
 
   # Ensure ffmpeg is available in $PATH:
