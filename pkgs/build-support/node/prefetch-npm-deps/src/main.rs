@@ -300,12 +300,18 @@ fn fixup_v1_deps(
     }
 }
 
-fn map_cache() -> anyhow::Result<HashMap<Url, String>> {
+fn map_cache(content_path_from_arg: &Option<&String>) -> anyhow::Result<HashMap<Url, String>> {
     let mut hashes = HashMap::new();
 
-    let content_path = Path::new(&env::var_os("npmDeps").unwrap()).join("_cacache/index-v5");
+    // Lazily evaluate npmDeps, which may not be present
+    let content_path_string = content_path_from_arg.map_or_else(
+        || env::var_os("npmDeps")
+            .unwrap()
+            .into_string()
+            .expect("env variable npmDeps should be set if it is not provided as an argument (but this is not recommended)"),
+        |a| a.clone());
 
-    for entry in WalkDir::new(content_path) {
+    for entry in WalkDir::new(Path::new(&content_path_string).join("_cacache/index-v5")) {
         let entry = entry?;
 
         if entry.file_type().is_file() {
@@ -375,7 +381,7 @@ fn main() -> anyhow::Result<()> {
 
         return Ok(());
     } else if args[1] == "--map-cache" {
-        let map = map_cache()?;
+        let map = map_cache(&args.get(2))?;
 
         fs::write(
             cache_map_path().expect("CACHE_MAP_PATH environment variable must be set"),

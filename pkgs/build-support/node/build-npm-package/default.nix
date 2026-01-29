@@ -111,6 +111,8 @@ lib.extendMkDerivation {
       # Stripping takes way too long with the amount of files required by a typical Node.js project.
       dontStrip = args.dontStrip or true;
 
+      __structuredAttrs = true;
+
       meta = (args.meta or { }) // {
         platforms = args.meta.platforms or nodejs.meta.platforms;
       };
