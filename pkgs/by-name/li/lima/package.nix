@@ -21,7 +21,7 @@
 }:
 
 buildGoModule (finalAttrs: {
-  pname = "lima";
+  pname = "lima" + lib.optionalString withAdditionalGuestAgents "-full";
 
   inherit (callPackage ./source.nix { }) version src vendorHash;
 
