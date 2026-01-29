@@ -16364,6 +16364,8 @@ self: super: with self; {
 
   reikna = callPackage ../development/python-modules/reikna { };
 
+  reinkpy = callPackage ../development/python-modules/reinkpy { };
+
   related = callPackage ../development/python-modules/related { };
 
   relatorio = callPackage ../development/python-modules/relatorio { };
