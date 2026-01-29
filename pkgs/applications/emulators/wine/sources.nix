@@ -123,6 +123,9 @@ rec {
     patches = [
       # Also look for root certificates at $NIX_SSL_CERT_FILE
       ./cert-path.patch
+
+      # Backported https://gitlab.winehq.org/wine/wine/-/merge_requests/9917
+      ./accept-dlls-from-device-paths.patch
     ]
     ++ patches-binutils-2_44-fix-wine-older-than-10_2
     ++ patches-add-truncf-to-the-import-library;

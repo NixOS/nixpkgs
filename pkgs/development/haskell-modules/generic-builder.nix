@@ -13,6 +13,7 @@
   haskellLib,
   iserv-proxy,
   nodejs,
+  windows,
   writeShellScriptBin,
 }:
 
@@ -36,11 +37,14 @@ let
               enableExecutableProfiling = enableProfiling;
             };
             buildProxy = lib.getExe' iserv-proxy.build "iserv-proxy";
-            hostProxy = lib.getExe' (overrides iserv-proxy.host) "iserv-proxy-interpreter";
+            hostProxy = lib.getExe' (overrides iserv-proxy.host) (
+              "iserv-proxy-interpreter" + stdenv.hostPlatform.extensions.executable
+            );
           in
           buildPackages.writeShellScriptBin ("iserv-wrapper" + lib.optionalString enableProfiling "-prof") ''
             set -euo pipefail
             PORT=$((5000 + $RANDOM % 5000))
+            ${lib.optionalString stdenv.hostPlatform.isWindows "export WINEPREFIX=$TMP"}
             (>&2 echo "---> Starting interpreter on port $PORT")
             ${emulator} ${hostProxy} tmp $PORT &
             RISERV_PID="$!"
@@ -355,11 +359,17 @@ let
   ++ optional (allPkgconfigDepends != [ ]) "--with-pkg-config=${pkg-config.targetPrefix}pkg-config"
 
   ++ optionals enableExternalInterpreter (
-    map (opt: "--ghc-option=${opt}") [
-      "-fexternal-interpreter"
-      "-pgmi"
-      crossSupport.iservWrapper
-    ]
+    map (opt: "--ghc-option=${opt}") (
+      [
+        "-fexternal-interpreter"
+        "-pgmi"
+        crossSupport.iservWrapper
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isWindows [
+        "-L${windows.pthreads}/bin"
+        "-L${windows.pthreads}/lib"
+      ]
+    )
   );
 
   makeGhcOptions = opts: lib.concatStringsSep " " (map (opt: "--ghc-option=${opt}") opts);
