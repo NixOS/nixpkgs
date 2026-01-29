@@ -25,19 +25,28 @@
   libgbm,
   pango,
   pciutils,
+  firefox-esr,
+  nspr,
+  nss,
 }:
 
 stdenv.mkDerivation rec {
   pname = "zotero";
-  version = "7.0.0-beta.111+b4f6c050e";
+  version = "8.0-beta.20+1233fd5a7";
 
   src =
     let
-      escapedVersion = lib.replaceStrings [ "+" ] [ "%2B" ] version;
+      inherit (stdenv.hostPlatform) system linuxArch;
+      escapedVersion = lib.escapeURL version;
+      platformHash = {
+        x86_64-linux = "sha256-IV8pukYHlGOL4bInbdh1SqKjlItum4LY7SRE+v73Spk=";
+        aarch64-linux = "sha256-+V1XtmpI7ye37oba9nNTBOC+D9+V3ag1y+SYabXfxpQ=";
+      };
+      throwSystem = throw "Unsupported system: ${system}";
     in
     fetchurl {
-      url = "https://download.zotero.org/client/beta/${escapedVersion}/Zotero-${escapedVersion}_linux-x86_64.tar.bz2";
-      hash = "sha256-pZsmS4gKCT8UAjz9IJg5C7n4kk7bWT/7H5ONF20CzPM=";
+      url = "https://download.zotero.org/client/beta/${escapedVersion}/Zotero-${escapedVersion}_linux-${linuxArch}.tar.xz";
+      hash = platformHash.${system} or throwSystem;
     };
 
   dontPatchELF = true;
@@ -94,8 +103,16 @@ stdenv.mkDerivation rec {
     # Copy package contents to the output directory
     mkdir -p "$prefix/usr/lib/zotero-bin-${version}"
     cp -r * "$prefix/usr/lib/zotero-bin-${version}"
-    mkdir -p "$out/bin"
-    ln -s "$prefix/usr/lib/zotero-bin-${version}/zotero" "$out/bin/"
+
+    # Replace bundled shared libraries with system-provided ones
+    for path in ${firefox-esr}/lib/firefox ${nspr}/lib ${nss}/lib; do
+      for lib in "$path"/*.so; do
+        name="$(basename "$lib")"
+        if [ -f $lib ] && [ -f "$prefix/usr/lib/zotero-bin-${version}/$name" ]; then
+          ln -sf "$lib" "$prefix/usr/lib/zotero-bin-${version}/$name"
+        fi
+      done
+    done
 
     # Install desktop file and icons
     mkdir -p $out/share/applications
@@ -111,18 +128,16 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    for executable in \
-      zotero-bin plugin-container updater vaapitest \
-      minidump-analyzer glxtest
-    do
-      if [ -e "$out/usr/lib/zotero-bin-${version}/$executable" ]; then
-        patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          "$out/usr/lib/zotero-bin-${version}/$executable"
-      fi
-    done
     find . -executable -type f -exec \
-      patchelf --set-rpath "$libPath" \
-        "$out/usr/lib/zotero-bin-${version}/{}" \;
+      patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+        "$out/usr/lib/zotero-bin-${version}/{}" \
+        --set-rpath "$libPath" \;
+
+    patchelf --add-needed libGL.so.1 --add-needed libEGL.so.1 \
+      "$out/usr/lib/zotero-bin-${version}/zotero-bin"
+
+    makeWrapper $out/usr/lib/zotero-bin-${version}/zotero $out/bin/zotero \
+      ''${gappsWrapperArgs[@]}
   '';
 
   meta = {
@@ -131,7 +146,10 @@ stdenv.mkDerivation rec {
     mainProgram = "zotero";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.agpl3Only;
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     maintainers = with lib.maintainers; [
       atila
       justanotherariel
