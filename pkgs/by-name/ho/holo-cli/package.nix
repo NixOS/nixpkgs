@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "holo-cli";
-  version = "0.5.0-unstable-2025-09-22";
+  version = "0.5.0-unstable-2025-12-19";
 
   src = fetchFromGitHub {
     owner = "holo-routing";
     repo = "holo-cli";
-    rev = "7d99e7de5eb5226728ee57153c03362c90eb65b2";
-    hash = "sha256-O509LNSpak+MJPQheYLPtJQcNGPyZLMHMasKScoVnls=";
+    rev = "bf712cf345be9f861e371b86732a93cea45de52e";
+    hash = "sha256-HHwxjsuhY0g2WWQBpaWPVNBhMlFu8H3ypDDcfWKdbGE=";
   };
 
-  cargoHash = "sha256-bsoxWjOMzRRtFGEaaqK0/adhGpDcejCIY0Pzw1HjQ5U=";
+  cargoHash = "sha256-7/OtT2TdLhFVZeuQOg6xQJFnGJNz/G9mna8vIeh86/k=";
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   # Use rust nightly features
@@ -30,6 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cmake
     pkg-config
     protobuf
+    pcre2.dev
   ];
   buildInputs = [
     pcre2
