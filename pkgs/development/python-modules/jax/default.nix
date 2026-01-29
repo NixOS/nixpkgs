@@ -39,17 +39,17 @@
 let
   usingMKL = blas.implementation == "mkl" || lapack.implementation == "mkl";
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jax";
-  version = "0.8.2";
+  version = "0.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "jax";
     # google/jax contains tags for jax and jaxlib. Only use jax tags!
-    tag = "jax-v${version}";
-    hash = "sha256-WKdFEhOxJPLjOXOChZbLRGcw0GFeg/TT/FT6M72C6bo=";
+    tag = "jax-v${finalAttrs.version}";
+    hash = "sha256-XbwtXtozkCoQDiioqBmAWfmYuZOtBQGUr4JDNLu6RH0=";
   };
 
   patches = [
@@ -73,7 +73,7 @@ buildPythonPackage rec {
     opt-einsum
     scipy
   ]
-  ++ lib.optionals cudaSupport optional-dependencies.cuda;
+  ++ lib.optionals cudaSupport finalAttrs.passthru.optional-dependencies.cuda;
 
   optional-dependencies = rec {
     cuda = [ jax-cuda12-plugin ];
@@ -194,4 +194,4 @@ buildPythonPackage rec {
       samuela
     ];
   };
-}
+})

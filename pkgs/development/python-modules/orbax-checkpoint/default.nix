@@ -35,19 +35,19 @@
   torch,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "orbax-checkpoint";
-  version = "0.11.30";
+  version = "0.11.32";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "orbax";
-    tag = "v${version}";
-    hash = "sha256-y8l0AVGt2t5zLX+x+yuWHsEDy68agpXIkrew+zfYGXU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-LwUtS0JgjHk4Qvl8HKiBHgQgeiFAO5JeXblHwI+f2q8=";
   };
 
-  sourceRoot = "${src.name}/checkpoint";
+  sourceRoot = "${finalAttrs.src.name}/checkpoint";
 
   build-system = [ flit-core ];
 
@@ -161,8 +161,8 @@ buildPythonPackage rec {
   meta = {
     description = "Orbax provides common utility libraries for JAX users";
     homepage = "https://github.com/google/orbax/tree/main/checkpoint";
-    changelog = "https://github.com/google/orbax/blob/v${version}/checkpoint/CHANGELOG.md";
+    changelog = "https://github.com/google/orbax/blob/${finalAttrs.src.tag}/checkpoint/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
