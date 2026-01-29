@@ -1,0 +1,29 @@
+diff --git i/errors/src/errors/cli/cli_errors.rs w/errors/src/errors/cli/cli_errors.rs
+index 9e3995743b..ed6363adeb 100644
+--- i/errors/src/errors/cli/cli_errors.rs
++++ w/errors/src/errors/cli/cli_errors.rs
+@@ -334,4 +334,11 @@ create_messages!(
+         msg: format!("{msg}"),
+         help: None,
+     }
++
++    @backtraced
++    nix_update_build_error {
++        args: (),
++        msg: format!("Self update is not supported on Nix."),
++        help: Some("Package must be updated via Nix".to_string()),
++    }
+ );
+diff --git i/leo/cli/cli.rs w/leo/cli/cli.rs
+index 0ebd1651c7..58fa196a0e 100644
+--- i/leo/cli/cli.rs
++++ w/leo/cli/cli.rs
+@@ -165,7 +165,7 @@ pub fn run_with_args(cli: CLI) -> Result<()> {
+         Commands::Test { command } => command.try_execute(context),
+         Commands::Execute { command } => command.try_execute(context),
+         Commands::Remove { command } => command.try_execute(context),
+-        Commands::Update { command } => command.try_execute(context),
++        Commands::Update { .. } => Err(leo_errors::LeoError::CliError(leo_errors::CliError::nix_update_build_error())),
+         Commands::Upgrade { command } => command.try_execute(context),
+     }
+ }
