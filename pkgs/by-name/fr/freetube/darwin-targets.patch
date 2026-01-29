@@ -1,0 +1,13 @@
+diff --git a/_scripts/build.js b/_scripts/build.js
+index ee1b7fa1c..1a4c9c6b2 100644
+--- a/_scripts/build.js
++++ b/_scripts/build.js
+@@ -16,7 +16,7 @@ if (platform === 'darwin') {
+     arch = Arch.arm64
+   }
+ 
+-  targets = Platform.MAC.createTarget(['DMG', 'zip', '7z'], arch)
++  targets = Platform.MAC.createTarget(['dir'], arch)
+ } else if (platform === 'win32') {
+   let arch = Arch.x64
+ 

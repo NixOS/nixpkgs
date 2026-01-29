@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "dbt-semantic-interfaces";
-  version = "0.10.3";
+  version = "0.10.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
     repo = "dbt-semantic-interfaces";
     tag = "v${version}";
-    hash = "sha256-uTlz41eIcEqMvD9d9jvn7g9sZs4uEKUdsmZ0fwWkIuY=";
+    hash = "sha256-1FTK+vi2iFvb1knFe3WKfCtEdYioT7eeONb410RnmNU=";
   };
 
   pythonRelaxDeps = [ "importlib-metadata" ];
