@@ -1,0 +1,6 @@
+(stack trace truncated; use '--show-trace' to show the full, detailed trace)
+
+error: Package ‘a-0’ in /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-default.nix:19 has an invalid meta attrset:
+  - a.meta.problems.florp: Invalid value; expected attrs, got
+    true
+, refusing to evaluate.

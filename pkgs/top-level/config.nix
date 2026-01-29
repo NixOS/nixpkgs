@@ -45,8 +45,15 @@ let
       internal = true;
     };
 
+    # Should be replaced by importing <nixos/modules/misc/assertions.nix> in the future
+    # see also https://github.com/NixOS/nixpkgs/pull/207187
     warnings = mkOption {
       type = types.listOf types.str;
+      default = [ ];
+      internal = true;
+    };
+    assertions = mkOption {
+      type = types.listOf types.anything;
       default = [ ];
       internal = true;
     };
@@ -431,6 +438,8 @@ let
         Please read https://www.visualstudio.com/license-terms/mt644918/ and enable this config if you accept.
       '';
     };
+
+    problems = (import ../stdenv/generic/problems.nix { inherit lib; }).configOptions;
   };
 
 in
@@ -453,9 +462,35 @@ in
   inherit options;
 
   config = {
-    warnings = optionals config.warnUndeclaredOptions (
-      mapAttrsToList (k: v: "undeclared Nixpkgs option set: config.${k}") config._undeclared or { }
-    );
+    warnings =
+      optionals config.warnUndeclaredOptions (
+        mapAttrsToList (k: v: "undeclared Nixpkgs option set: config.${k}") config._undeclared or { }
+      )
+      ++ lib.optional (config.showDerivationWarnings != [ ]) ''
+        `config.showDerivationWarnings = [ "maintainerless" ]` is deprecated, use `config.problems` instead:
+
+          config.problems.matchers = [ { kind = "maintainerless"; handler = "warn"; } ];
+
+        See this page for more details: https://nixos.org/manual/nixpkgs/unstable#sec-problems
+      '';
+
+    assertions =
+      # Collect the assertions from the problems.matchers.* submodules, propagate them into here
+      lib.concatMap (matcher: matcher.assertions) config.problems.matchers;
+
+    # Put the default value for matchers in here (as in, not as an *actual* mkDefault default value),
+    # to force it being merged with any custom values instead of being overridden.
+    problems.matchers = [
+      # Be loud and clear about package removals
+      {
+        kind = "removal";
+        handler = "warn";
+      }
+      (lib.mkIf (lib.elem "maintainerless" config.showDerivationWarnings) {
+        kind = "maintainerless";
+        handler = "warn";
+      })
+    ];
   };
 
 }
