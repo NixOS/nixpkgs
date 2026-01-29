@@ -50,6 +50,55 @@ let
       (lib.concatStringsSep " ")
     ];
 
+  # Converts an IPv4 address literal to a list of bits
+  parseAddr.ipv4 =
+    addr:
+    let
+      pad = b: lib.replicate (8 - builtins.length b) 0 ++ b;
+      toBin = n: pad (lib.toBaseDigits 2 (lib.toInt n));
+    in
+    lib.concatMap toBin (builtins.splitVersion addr);
+
+  # Converts an IPv6 address literal to a list of bits
+  parseAddr.ipv6 =
+    addr:
+    let
+      pad = b: lib.replicate (16 - builtins.length b) 0 ++ b;
+      fromHex = n: (builtins.fromTOML "n = 0x${n}").n;
+      toBin = n: pad (lib.toBaseDigits 2 (fromHex n));
+      normal = (lib.network.ipv6.fromString addr).address;
+    in
+    lib.concatMap toBin (lib.splitString ":" normal);
+
+  # Checks if `addr` is part of the `net` subnet
+  inSubnet =
+    v: net: addr:
+    let
+      prefix = lib.take net.prefixLength (parseAddr.${v} net.address);
+      match = lib.zipListsWith (a: b: a == b) prefix (parseAddr.${v} addr);
+    in
+    lib.all lib.id match;
+
+  # Checks if the interface `iface` is that of the `gateway`
+  isGateway =
+    v: gateway: iface:
+    lib.any lib.id (
+      [ (iface.name == gateway.interface) ]
+      ++ map (net: inSubnet v net gateway.address) iface.${v}.addresses
+    );
+
+  hasSource =
+    v: gateway: iface:
+    builtins.elem gateway.source (map (i: i.address) iface.${v}.addresses);
+
+  # Interfaces corresponding to the default gateways
+  gateway4Iface = builtins.filter (isGateway "ipv4" cfg.defaultGateway) interfaces;
+  gateway6Iface = builtins.filter (isGateway "ipv6" cfg.defaultGateway6) interfaces;
+
+  # Interfaces corresponding to the default source addresses
+  source4Iface = builtins.head (builtins.filter (hasSource "ipv4" cfg.defaultGateway) interfaces);
+  source6Iface = builtins.head (builtins.filter (hasSource "ipv6" cfg.defaultGateway6) interfaces);
+
   # warn that these attributes are deprecated (2017-2-2)
   # Should be removed in the release after next
   bondDeprecation = rec {
@@ -116,121 +165,71 @@ let
           else
             optional (!config.boot.isContainer) (subsystemDevice dev);
 
-        hasDefaultGatewaySet =
-          (cfg.defaultGateway != null && cfg.defaultGateway.address != "")
-          || (cfg.enableIPv6 && cfg.defaultGateway6 != null && cfg.defaultGateway6.address != "");
-
-        needNetworkSetup =
-          cfg.resolvconf.enable || cfg.defaultGateway != null || cfg.defaultGateway6 != null;
-
-        networkLocalCommands = lib.mkIf needNetworkSetup {
-          after = [ "network-setup.service" ];
-          bindsTo = [ "network-setup.service" ];
-        };
-
-        networkSetup = lib.mkIf needNetworkSetup {
-          description = "Networking Setup";
-
-          after = [ "network-pre.target" ];
-          before = [
-            "network.target"
-            "shutdown.target"
-          ];
-          wants = [ "network.target" ];
-          # exclude bridges from the partOf relationship to fix container networking bug #47210
-          partOf = map (i: "network-addresses-${i.name}.service") (
-            filter (i: !(hasAttr i.name cfg.bridges)) interfaces
-          );
-          conflicts = [ "shutdown.target" ];
-          wantedBy = [ "multi-user.target" ] ++ optional hasDefaultGatewaySet "network-online.target";
-
-          unitConfig.ConditionCapability = "CAP_NET_ADMIN";
-
-          path = [ pkgs.iproute2 ];
-
-          serviceConfig = {
-            Type = "oneshot";
-            RemainAfterExit = true;
-          };
-
-          unitConfig.DefaultDependencies = false;
-
-          script = ''
-            ${optionalString config.networking.resolvconf.enable ''
-              # Set the static DNS configuration, if given.
-              ${pkgs.openresolv}/sbin/resolvconf -m 1 -a static <<EOF
-              ${optionalString (cfg.nameservers != [ ] && cfg.domain != null) ''
-                domain ${cfg.domain}
-              ''}
-              ${optionalString (cfg.search != [ ]) ("search " + concatStringsSep " " cfg.search)}
-              ${flip concatMapStrings cfg.nameservers (ns: ''
-                nameserver ${ns}
-              '')}
-              EOF
-            ''}
-
-            # Set the default gateway
-            ${flip concatMapStrings
-              [
-                {
-                  version = "-4";
-                  gateway = cfg.defaultGateway;
-                }
-                {
-                  version = "-6";
-                  gateway = cfg.defaultGateway6;
-                }
-              ]
-              (
-                { version, gateway }:
-                optionalString (gateway != null && gateway.address != "") ''
-                  ${optionalString (gateway.interface != null) ''
-                    ip ${version} route replace ${gateway.address} proto static ${
-                      formatIpArgs {
-                        metric = gateway.metric;
-                        dev = gateway.interface;
-                      }
-                    }
-                  ''}
-                  ip ${version} route replace default proto static ${
-                    formatIpArgs {
-                      metric = gateway.metric;
-                      via = gateway.address;
-                      window = cfg.defaultGatewayWindowSize;
-                      dev = gateway.interface;
-                      src = gateway.source;
-                    }
-                  }
-                ''
-              )
-            }
-          '';
-        };
-
-        # For each interface <foo>, create a job ‘network-addresses-<foo>.service"
-        # that performs static address configuration.  It has a "wants"
-        # dependency on ‘<foo>.service’, which is supposed to create
-        # the interface and need not exist (i.e. for hardware
-        # interfaces).  It has a binds-to dependency on the actual
-        # network device, so it only gets started after the interface
-        # has appeared, and it's stopped when the interface
-        # disappears.
+        # For each interface <foo>, creates a network-addresses-<foo>.service
+        # job that performs static address configuration.
+        #
+        # It has a Wants dependency on <foo>-netdev.service, which creates
+        # create the interface, or on a device unit (for hardware interfaces).
+        # It also has a BindsTo dependency on the device unit: so, it only gets
+        # started after the interface has appeared and it's stopped when the
+        # interface disappears.
+        #
+        # Unless in a container, the job is not made part of network.target, so
+        # if an interface is not found (e.g. a USB interface not plugged in) it
+        # will not hang the boot sequence.
+        #
+        # If the interface is the default gateway, the job will also set the
+        # default gateway and delay network-online.target.
         configureAddrs =
           i:
           let
             ips = interfaceIps i;
+            isDefaultGateway4 = cfg.defaultGateway != null && builtins.elem i gateway4Iface;
+            isDefaultGateway6 = cfg.defaultGateway6 != null && builtins.elem i gateway6Iface;
+            needsSourceIface4 =
+              isDefaultGateway4 && cfg.defaultGateway.source != null && i.name != source4Iface.name;
+            needsSourceIface6 =
+              isDefaultGateway6 && cfg.defaultGateway6.source != null && i.name != source6Iface.name;
+
+            configureGateway =
+              version: gateway:
+              optionalString (gateway.address != "") ''
+                echo -n "setting ${i.name} as default IPv${version} gateway... "
+                ${optionalString (gateway.interface != null) ''
+                  ip -${version} route replace ${gateway.address} proto static ${
+                    formatIpArgs {
+                      metric = gateway.metric;
+                      dev = gateway.interface;
+                    }
+                  }
+                ''}
+                ip -${version} route replace default proto static ${
+                  formatIpArgs {
+                    metric = gateway.metric;
+                    via = gateway.address;
+                    window = cfg.defaultGatewayWindowSize;
+                    dev = gateway.interface;
+                    src = gateway.source;
+                  }
+                }
+                echo "done"
+              '';
           in
           nameValuePair "network-addresses-${i.name}" {
             description = "Address configuration of ${i.name}";
-            wantedBy = [
-              "network-setup.service"
-              "network.target"
-            ];
-            # order before network-setup because the routes that are configured
-            # there may need ip addresses configured
-            before = [ "network-setup.service" ];
+
+            wantedBy =
+              deviceDependency i.name
+              ++ optional config.boot.isContainer "network.target"
+              ++ optional (isDefaultGateway4 || isDefaultGateway6) "network-online.target";
             bindsTo = deviceDependency i.name;
-            after = [ "network-pre.target" ] ++ (deviceDependency i.name);
+            partOf = [ "networking-scripted.target" ];
+            after = [
+              "network-pre.target"
+            ]
+            ++ optional needsSourceIface4 "network-addresses-${source4Iface.name}.service"
+            ++ optional needsSourceIface6 "network-addresses-${source6Iface.name}.service"
+            ++ deviceDependency i.name;
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
             # Restart rather than stop+start this unit to prevent the
@@ -282,6 +281,10 @@ let
                   fi
                 ''
               )}
+
+              # Set the default gateway
+              ${optionalString isDefaultGateway4 (configureGateway "4" cfg.defaultGateway)}
+              ${optionalString isDefaultGateway6 (configureGateway "6" cfg.defaultGateway6)}
             '';
             preStop = ''
               state="/run/nixos/network/routes/${i.name}"
@@ -309,13 +312,13 @@ let
           nameValuePair "${i.name}-netdev" {
             description = "Virtual Network Interface ${i.name}";
             bindsTo = optional (!config.boot.isContainer) "dev-net-tun.device";
+            partOf = [ "networking-scripted.target" ];
             after = optional (!config.boot.isContainer) "dev-net-tun.device" ++ [ "network-pre.target" ];
             wantedBy = [
               "network.target"
-              "network-setup.service"
               (subsystemDevice i.name)
             ];
-            before = [ "network-setup.service" ];
+            before = [ "network.target" ];
             path = [ pkgs.iproute2 ];
             serviceConfig = {
               Type = "oneshot";
@@ -341,18 +344,21 @@ let
               description = "Bridge Interface ${n}";
               wantedBy = [
                 "network.target"
-                "network-setup.service"
                 (subsystemDevice n)
               ];
               bindsTo = deps ++ optional v.rstp "mstpd.service";
-              partOf = [ "network-setup.service" ] ++ optional v.rstp "mstpd.service";
+              partOf = [
+                "network.target"
+                "networking-scripted.target"
+              ]
+              ++ optional v.rstp "mstpd.service";
               after = [
                 "network-pre.target"
               ]
               ++ deps
               ++ optional v.rstp "mstpd.service"
               ++ map (i: "network-addresses-${i}.service") v.interfaces;
-              before = [ "network-setup.service" ];
+              before = [ "network.target" ];
               serviceConfig.Type = "oneshot";
               serviceConfig.RemainAfterExit = true;
               path = [ pkgs.iproute2 ];
@@ -446,15 +452,14 @@ let
               description = "Open vSwitch Interface ${n}";
               wantedBy = [
                 "network.target"
-                "network-setup.service"
                 (subsystemDevice n)
               ]
               ++ internalConfigs;
-              # before = [ "network-setup.service" ];
-              # should work without internalConfigs dependencies because address/link configuration depends
-              # on the device, which is created by ovs-vswitchd with type=internal, but it does not...
-              before = [ "network-setup.service" ] ++ internalConfigs;
-              partOf = [ "network-setup.service" ]; # shutdown the bridge when network is shutdown
+              before = [ "network.target" ] ++ internalConfigs;
+              partOf = [
+                "network.target"
+                "networking-scripted.target"
+              ]; # shutdown the bridge when network is shutdown
               bindsTo = [ "ovs-vswitchd.service" ]; # requires ovs-vswitchd to be alive at all times
               after = [
                 "network-pre.target"
@@ -519,12 +524,12 @@ let
               description = "Bond Interface ${n}";
               wantedBy = [
                 "network.target"
-                "network-setup.service"
                 (subsystemDevice n)
               ];
               bindsTo = deps;
+              partOf = [ "networking-scripted.target" ];
               after = [ "network-pre.target" ] ++ deps ++ map (i: "network-addresses-${i}.service") v.interfaces;
-              before = [ "network-setup.service" ];
+              before = [ "network.target" ];
               serviceConfig.Type = "oneshot";
               serviceConfig.RemainAfterExit = true;
               path = [
@@ -568,12 +573,12 @@ let
               description = "MACVLAN Interface ${n}";
               wantedBy = [
                 "network.target"
-                "network-setup.service"
                 (subsystemDevice n)
               ];
               bindsTo = deps;
+              partOf = [ "networking-scripted.target" ];
               after = [ "network-pre.target" ] ++ deps;
-              before = [ "network-setup.service" ];
+              before = [ "network.target" ];
               serviceConfig.Type = "oneshot";
               serviceConfig.RemainAfterExit = true;
               path = [ pkgs.iproute2 ];
@@ -612,12 +617,12 @@ let
               description = "FOU endpoint ${n}";
               wantedBy = [
                 "network.target"
-                "network-setup.service"
                 (subsystemDevice n)
               ];
               bindsTo = deps;
+              partOf = [ "networking-scripted.target" ];
               after = [ "network-pre.target" ] ++ deps;
-              before = [ "network-setup.service" ];
+              before = [ "network.target" ];
               serviceConfig.Type = "oneshot";
               serviceConfig.RemainAfterExit = true;
               path = [ pkgs.iproute2 ];
@@ -642,12 +647,11 @@ let
               description = "IPv6 in IPv4 Tunnel Interface ${n}";
               wantedBy = [
                 "network.target"
-                "network-setup.service"
                 (subsystemDevice n)
               ];
               bindsTo = deps;
               after = [ "network-pre.target" ] ++ deps;
-              before = [ "network-setup.service" ];
+              before = [ "network.target" ];
               serviceConfig.Type = "oneshot";
               serviceConfig.RemainAfterExit = true;
               path = [ pkgs.iproute2 ];
@@ -685,12 +689,12 @@ let
               description = "IP in IP Tunnel Interface ${n}";
               wantedBy = [
                 "network.target"
-                "network-setup.service"
                 (subsystemDevice n)
               ];
               bindsTo = deps;
+              partOf = [ "networking-scripted.target" ];
               after = [ "network-pre.target" ] ++ deps;
-              before = [ "network-setup.service" ];
+              before = [ "network.target" ];
               serviceConfig.Type = "oneshot";
               serviceConfig.RemainAfterExit = true;
               path = [ pkgs.iproute2 ];
@@ -733,12 +737,12 @@ let
               description = "GRE Tunnel Interface ${n}";
               wantedBy = [
                 "network.target"
-                "network-setup.service"
                 (subsystemDevice n)
               ];
               bindsTo = deps;
+              partOf = [ "networking-scripted.target" ];
               after = [ "network-pre.target" ] ++ deps;
-              before = [ "network-setup.service" ];
+              before = [ "network.target" ];
               serviceConfig.Type = "oneshot";
               serviceConfig.RemainAfterExit = true;
               path = [ pkgs.iproute2 ];
@@ -768,13 +772,15 @@ let
               description = "VLAN Interface ${n}";
               wantedBy = [
                 "network.target"
-                "network-setup.service"
                 (subsystemDevice n)
               ];
               bindsTo = deps;
-              partOf = [ "network-setup.service" ];
+              partOf = [
+                "network.target"
+                "networking-scripted.target"
+              ];
               after = [ "network-pre.target" ] ++ deps;
-              before = [ "network-setup.service" ];
+              before = [ "network.target" ];
               serviceConfig.Type = "oneshot";
               serviceConfig.RemainAfterExit = true;
               path = [ pkgs.iproute2 ];
@@ -809,9 +815,26 @@ let
       // mapAttrs' createGreDevice cfg.greTunnels
       // mapAttrs' createVlanDevice cfg.vlans
       // {
-        network-setup = networkSetup;
-        network-local-commands = networkLocalCommands;
+        network-local-commands = {
+          after = [ "network-pre.target" ];
+          wantedBy = [ "network.target" ];
+        };
       };
+
+    # Note: the scripted networking backend consistent of many
+    # independent services that are linked to the network.target.
+    # Since there is no daemon (e.g systemd-networkd) that is
+    # started as part of the system and pulls in network.target.
+    # Thus, to start these services we link network.target directly
+    # to multi-user.target, this has the same result.
+    systemd.targets.network.wantedBy = [ "multi-user.target" ];
+
+    # This target serves no purpose during the boot, but can be
+    # used to quickly reset the network configuration by running
+    # systemctl restart networking-scripted.target
+    systemd.targets.networking-scripted = {
+      description = "NixOS scripted networking setup";
+    };
 
     services.udev.extraRules = ''
       KERNEL=="tun", TAG+="systemd"
