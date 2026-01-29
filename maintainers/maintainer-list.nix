@@ -23256,6 +23256,11 @@
     githubId = 766350;
     name = "Richard Zetterberg";
   };
+  S-K-Tiger = {
+    name = "Vicar Tineamica";
+    github = "S-K-Tiger";
+    githubId = 55139409;
+  };
   S0AndS0 = {
     name = "S0AndS0";
     email = "S0AndS0@digital-mercenaries.com";
