@@ -6,11 +6,11 @@
   gmp,
   blas,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "iml";
   version = "1.0.5";
   src = fetchurl {
-    url = "http://www.cs.uwaterloo.ca/~astorjoh/iml-${version}.tar.bz2";
+    url = "http://www.cs.uwaterloo.ca/~astorjoh/iml-${finalAttrs.version}.tar.bz2";
     sha256 = "0akwhhz9b40bz6lrfxpamp7r7wkk48p455qbn04mfnl9a1l6db8x";
   };
   buildInputs = [
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     homepage = "https://cs.uwaterloo.ca/~astorjoh/iml.html";
   };
-}
+})

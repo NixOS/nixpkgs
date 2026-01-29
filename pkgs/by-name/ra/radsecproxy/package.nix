@@ -7,14 +7,14 @@
   nettle,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "radsecproxy";
   version = "1.11.2";
 
   src = fetchFromGitHub {
     owner = "radsecproxy";
     repo = "radsecproxy";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-E7nU6NgCmwRzX5j1Zyx/LTztjLqYJKv+3VU6UE0HhZA=";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = with lib.platforms; linux;
   };
-}
+})

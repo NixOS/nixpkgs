@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nix-zsh-completions";
   version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-zsh-completions";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-bgbMc4HqigqgdkvUe/CWbUclwxpl17ESLzCIP8Sz+F8=";
   };
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
       sebtm
     ];
   };
-}
+})

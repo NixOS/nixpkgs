@@ -5,12 +5,12 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "courier-unicode";
   version = "2.5.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/courier/courier-unicode/${version}/courier-unicode-${version}.tar.bz2";
+    url = "mirror://sourceforge/courier/courier-unicode/${finalAttrs.version}/courier-unicode-${finalAttrs.version}.tar.bz2";
     hash = "sha256-Xsp6U2UWEg745d5gFOaQcRvGs/saG9V9LxkDxU3ts+A=";
   };
 
@@ -29,4 +29,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
   };
-}
+})

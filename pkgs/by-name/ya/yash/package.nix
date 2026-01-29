@@ -7,14 +7,14 @@
   asciidoc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yash";
   version = "2.60";
 
   src = fetchFromGitHub {
     owner = "magicant";
     repo = "yash";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-iHM1f+zdYsfuqmyel+vlFi+TQukmN91SyZCHJLXPnTs=";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
   };
 
   passthru.shellPath = "/bin/yash";
-}
+})

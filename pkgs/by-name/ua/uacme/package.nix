@@ -9,14 +9,14 @@
   curl,
   openssl,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "uacme";
   version = "1.7.6";
 
   src = fetchFromGitHub {
     owner = "ndilieto";
     repo = "uacme";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-he0k4o/5JGFDxLrHBO6PNtRgKUzIkGby96cSz0ymuRs=";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

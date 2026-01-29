@@ -19,7 +19,7 @@
 #     };
 #   in
 #     "${edids}/lib/firmware/edid/PG278Q_2014.bin";
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "linuxhw-edid-fetcher";
   version = "0-unstable-2026-01-08";
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       gnutar
     ];
     text = ''
-      repo="''${repo:-"${src}"}"
+      repo="''${repo:-"${finalAttrs.src}"}"
       ${builtins.readFile ./linuxhw-edid-fetch.sh}
     '';
   });
@@ -72,4 +72,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "linuxhw-edid-fetch";
   };
-}
+})

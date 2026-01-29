@@ -10,11 +10,11 @@
   libXtst,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xautomation";
   version = "1.09";
   src = fetchurl {
-    url = "https://www.hoopajoo.net/static/projects/xautomation-${version}.tar.gz";
+    url = "https://www.hoopajoo.net/static/projects/xautomation-${finalAttrs.version}.tar.gz";
     sha256 = "03azv5wpg65h40ip2kk1kdh58vix4vy1r9bihgsq59jx2rhjr3zf";
   };
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ vaibhavsagar ];
     platforms = with lib.platforms; linux;
   };
-}
+})

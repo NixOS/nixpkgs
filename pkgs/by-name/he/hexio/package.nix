@@ -6,14 +6,14 @@
   pth,
   python3Packages,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hexio";
   version = "1.1";
 
   src = fetchFromGitLab {
     owner = "vanrein";
     repo = "hexio";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-jp7VHT08Rhw5nUtNpqkRHDHT0R51PCBy0cKb1sI6zkg=";
   };
 
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux;
   };
-}
+})

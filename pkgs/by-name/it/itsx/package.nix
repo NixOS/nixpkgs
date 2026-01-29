@@ -6,12 +6,12 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.1.1";
   pname = "itsx";
 
   src = fetchurl {
-    url = "http://microbiology.se/sw/ITSx_${version}.tar.gz";
+    url = "http://microbiology.se/sw/ITSx_${finalAttrs.version}.tar.gz";
     sha256 = "0lrmy2n3ax7f208k0k8l3yz0j5cpz05hv4hx1nnxzn0c51z1pc31";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.bzizou ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bomutils";
   version = "0.2";
 
   src = fetchFromGitHub {
     owner = "hogliux";
     repo = "bomutils";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "1i7nhbq1fcbrjwfg64znz8p4l7662f7qz2l6xcvwd5z93dnmgmdr";
   };
 
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ prusnak ];
   };
-}
+})

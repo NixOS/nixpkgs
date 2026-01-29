@@ -9,14 +9,14 @@
   copyDesktopItems,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "johnny";
   version = "2.2";
 
   src = fetchFromGitHub {
     owner = "openwall";
     repo = "johnny";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-fwRvyQbRO63iVt9AHlfl+Cv4NRFQmyVsZUQLxmzGjAY=";
   };
 
@@ -65,4 +65,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ Misaka13514 ];
     platforms = lib.platforms.linux;
   };
-}
+})

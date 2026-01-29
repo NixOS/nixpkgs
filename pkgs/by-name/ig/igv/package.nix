@@ -8,11 +8,11 @@
   igv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "igv";
   version = "2.19.7";
   src = fetchzip {
-    url = "https://data.broadinstitute.org/igv/projects/downloads/${lib.versions.majorMinor version}/IGV_${version}.zip";
+    url = "https://data.broadinstitute.org/igv/projects/downloads/${lib.versions.majorMinor finalAttrs.version}/IGV_${finalAttrs.version}.zip";
     sha256 = "sha256-IkzaQAM+s1boEKo/3ShtbUhihrhxLQCTz8/0lzAyYJA=";
   };
 
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
       lib.maintainers.rollf
     ];
   };
-}
+})

@@ -10,14 +10,14 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sshlatex";
   version = "0.8";
 
   src = fetchFromGitHub {
     owner = "iblech";
     repo = "sshlatex";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0kaah8is74zba9373xccmsxmnnn6kh0isr4qpg21x3qhdzhlxl7q";
   };
 
@@ -54,4 +54,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.iblech ];
     mainProgram = "sshlatex";
   };
-}
+})

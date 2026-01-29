@@ -8,14 +8,14 @@
   opencv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "focus-stack";
   version = "1.5";
 
   src = fetchFromGitHub {
     owner = "PetteriAimonen";
     repo = "focus-stack";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-hIaK8hjeuu6w/8nh9DHOffqZufQdqB1/VQRezCPQIPk=";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ paperdigits ];
     mainProgram = "focus-stack";
   };
-}
+})

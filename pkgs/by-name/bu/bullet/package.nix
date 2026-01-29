@@ -9,14 +9,14 @@
   libglut,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bullet";
   version = "3.25";
 
   src = fetchFromGitHub {
     owner = "bulletphysics";
     repo = "bullet3";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-AGP05GoxLjHqlnW63/KkZe+TjO3IKcgBi+Qb/osQuCM=";
   };
 
@@ -64,4 +64,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ aforemny ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -9,14 +9,14 @@
   popt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "librsync";
   version = "2.3.4";
 
   src = fetchFromGitHub {
     owner = "librsync";
     repo = "librsync";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-fiOby8tOhv0KJ+ZwAWfh/ynqHlYC9kNqKfxNl3IhzR8=";
   };
 
@@ -40,9 +40,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Implementation of the rsync remote-delta algorithm";
     homepage = "https://librsync.sourceforge.net/";
-    changelog = "https://github.com/librsync/librsync/releases/tag/v${version}";
+    changelog = "https://github.com/librsync/librsync/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.lgpl2Plus;
     mainProgram = "rdiff";
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -28,14 +28,14 @@ let
     hash = "sha256-fKa+R1TA1MJ7p3AsDc5lFlm9LKH6pcvyhI2BoAU8jBM=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libime";
   version = "1.1.12";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = "libime";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-LqbwXpmqUCbaKHaaE9pOrHb1Qdp20/S3QEf9F4/3oiE=";
     fetchSubmodules = true;
   };
@@ -65,4 +65,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ poscat ];
     platforms = lib.platforms.linux;
   };
-}
+})

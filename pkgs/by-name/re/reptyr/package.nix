@@ -8,14 +8,14 @@
 let
   python = python3.withPackages (p: [ p.pexpect ]);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.10.0";
   pname = "reptyr";
 
   src = fetchFromGitHub {
     owner = "nelhage";
     repo = "reptyr";
-    rev = "reptyr-${version}";
+    rev = "reptyr-${finalAttrs.version}";
     sha256 = "sha256-jlO/ykrwGJkgKiPxfRQEX4TSksrbPQhkQs+QddwqaQ4=";
   };
 
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     mainProgram = "reptyr";
     homepage = "https://github.com/nelhage/reptyr";
   };
-}
+})

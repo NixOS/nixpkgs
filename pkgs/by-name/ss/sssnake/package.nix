@@ -4,13 +4,13 @@
   fetchFromGitHub,
   ncurses,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sssnake";
   version = "0.3.2";
   src = fetchFromGitHub {
     owner = "angeljumbo";
     repo = "sssnake";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-zkErOV6Az0kJdwyXzMCnVW1997zpAB79TBvf/41Igic=";
   };
   postPatch = ''
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ quantenzitrone ];
   };
-}
+})

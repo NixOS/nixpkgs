@@ -5,7 +5,7 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libupnp";
   version = "1.14.25";
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "pupnp";
     repo = "pupnp";
-    tag = "release-${version}";
+    tag = "release-${finalAttrs.version}";
     hash = "sha256-emMZKskaFYmLnIZLduHlZ5I3praaBgXY2JHLDAGPO28=";
   };
 
@@ -54,4 +54,4 @@ stdenv.mkDerivation rec {
     homepage = "https://pupnp.github.io/pupnp/";
     platforms = lib.platforms.unix;
   };
-}
+})

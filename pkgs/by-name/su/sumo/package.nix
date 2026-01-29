@@ -35,14 +35,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sumo";
   version = "1.25.0";
 
   src = fetchFromGitHub {
     owner = "eclipse-sumo";
     repo = "sumo";
-    tag = "v${lib.replaceStrings [ "." ] [ "_" ] version}";
+    tag = "v${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     hash = "sha256-rUa5DpoBfnviSEmzPEiVnZU0KGavAIOFoysQ74uTll0=";
     fetchSubmodules = true;
   };
@@ -98,4 +98,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     teams = [ lib.teams.geospatial ];
   };
-}
+})

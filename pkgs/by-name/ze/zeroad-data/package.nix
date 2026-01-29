@@ -5,12 +5,12 @@
   zeroad-unwrapped,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "0ad-data";
   inherit (zeroad-unwrapped) version;
 
   src = fetchurl {
-    url = "https://releases.wildfiregames.com/0ad-${version}-unix-data.tar.xz";
+    url = "https://releases.wildfiregames.com/0ad-${finalAttrs.version}-unix-data.tar.xz";
     hash = "sha256-g34tbd8TiwJfwCAXJF11gaS7hP2UtCwOYF0yG3AXqZg=";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     hydraPlatforms = [ ];
   };
-}
+})

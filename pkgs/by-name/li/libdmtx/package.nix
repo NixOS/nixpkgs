@@ -6,14 +6,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libdmtx";
   version = "0.7.8";
 
   src = fetchFromGitHub {
     owner = "dmtx";
     repo = "libdmtx";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-/sV+t7RAr5dTwfUsGz0KEZYgm0DzQWRdiwrbbEbC1OY=";
   };
 
@@ -31,9 +31,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Open source software for reading and writing Data Matrix barcodes";
     homepage = "https://github.com/dmtx/libdmtx";
-    changelog = "https://github.com/dmtx/libdmtx/blob/v${version}/ChangeLog";
+    changelog = "https://github.com/dmtx/libdmtx/blob/v${finalAttrs.version}/ChangeLog";
     platforms = lib.platforms.all;
     maintainers = [ ];
     license = lib.licenses.bsd2;
   };
-}
+})

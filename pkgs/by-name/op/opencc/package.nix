@@ -10,14 +10,14 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opencc";
   version = "1.1.9";
 
   src = fetchFromGitHub {
     owner = "BYVoid";
     repo = "OpenCC";
-    rev = "ver.${version}";
+    rev = "ver.${finalAttrs.version}";
     sha256 = "sha256-JBTegQs9ALp4LdKKYMNp9GYEgqR9O8IkX6LqatvaTic=";
   };
 
@@ -72,4 +72,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ sifmelcara ];
     platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

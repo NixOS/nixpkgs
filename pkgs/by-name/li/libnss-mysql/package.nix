@@ -8,14 +8,14 @@
   libmysqlclient,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libnss-mysql";
   version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "saknopper";
     repo = "libnss-mysql";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1fhsswa3h2nkhjkyjxxqnj07rlx6bmfvd8j521snimx2jba8h0d6";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ netali ];
   };
-}
+})

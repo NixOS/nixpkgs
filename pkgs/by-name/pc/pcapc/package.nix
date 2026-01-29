@@ -5,7 +5,7 @@
   libpcap,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pcapc";
   version = "1.0.1";
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     domain = "codeberg.org";
     owner = "post-factum";
     repo = "pcapc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-oDg9OSvi9aQsZ2SQm02NKAcppE0w5SGZaI13gdp7gv4=";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "pcapc";
   };
-}
+})

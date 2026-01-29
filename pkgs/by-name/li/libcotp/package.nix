@@ -7,14 +7,14 @@
   libgcrypt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libcotp";
   version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "paolostivanin";
     repo = "libcotp";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-5Jjk8uby1QjvU7TraTTTp+29Yh5lzbCvlorfPbGvciM=";
   };
 
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ alexbakker ];
     platforms = lib.platforms.all;
   };
-}
+})

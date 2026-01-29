@@ -14,12 +14,12 @@
   SDL2_mixer,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "redeclipse";
   version = "2.0.0";
 
   src = fetchurl {
-    url = "https://github.com/redeclipse/base/releases/download/v${version}/redeclipse_${version}_nix.tar.bz2";
+    url = "https://github.com/redeclipse/base/releases/download/v${finalAttrs.version}/redeclipse_${finalAttrs.version}_nix.tar.bz2";
     sha256 = "143i713ggbk607qr4n39pi0pn8d93x9x6fcbh8rc51jb9qhi8p5i";
   };
 
@@ -70,4 +70,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     hydraPlatforms = [ ];
   };
-}
+})

@@ -36,12 +36,12 @@
 
 assert (!blas.isILP64) && (!lapack.isILP64);
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "giac${lib.optionalString enableGUI "-with-xcas"}";
   version = "1.9.0-993"; # TODO try to remove preCheck phase on upgrade
 
   src = fetchurl {
-    url = "https://www-fourier.ujf-grenoble.fr/~parisse/debian/dists/stable/main/source/giac_${version}.tar.gz";
+    url = "https://www-fourier.ujf-grenoble.fr/~parisse/debian/dists/stable/main/source/giac_${finalAttrs.version}.tar.gz";
     sha256 = "sha256-pqytFWrSWfEwQqRdRbaigGCq68s8mdgj2j8M+kclslE=";
   };
 
@@ -227,4 +227,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux ++ (lib.optionals (!enableGUI) lib.platforms.darwin);
     maintainers = [ lib.maintainers.symphorien ];
   };
-}
+})

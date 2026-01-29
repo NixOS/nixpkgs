@@ -11,14 +11,14 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libcgroup";
   version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "libcgroup";
     repo = "libcgroup";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-kWW9ID/eYZH0O/Ge8pf3Cso4yu644R5EiQFYfZMcizs=";
   };
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.thoughtpolice ];
   };
-}
+})

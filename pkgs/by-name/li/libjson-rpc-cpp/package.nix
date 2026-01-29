@@ -13,7 +13,7 @@
   libmicrohttpd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libjson-rpc-cpp";
   version = "1.4.1";
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "cinemast";
     repo = "libjson-rpc-cpp";
     sha256 = "sha256-YCCZN4y88AixQeo24pk6YHfSCsJz8jJ97Dg40KM08cQ=";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
   };
 
   env.NIX_CFLAGS_COMPILE = "-I${catch2}/include/catch2";
@@ -110,4 +110,4 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     maintainers = with lib.maintainers; [ robertrichter ];
   };
-}
+})

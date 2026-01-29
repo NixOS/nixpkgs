@@ -18,7 +18,7 @@
   which,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "exiv2";
   version = "0.28.7";
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "exiv2";
     repo = "exiv2";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-a7nPjDjTcwsQeypARvy2rRsv9jpasSSxSyCTLWNDDtA=";
   };
 
@@ -115,4 +115,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ wegank ];
   };
-}
+})

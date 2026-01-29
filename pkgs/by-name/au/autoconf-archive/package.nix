@@ -5,12 +5,12 @@
   xz,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "autoconf-archive";
   version = "2024.10.16";
 
   src = fetchurl {
-    url = "mirror://gnu/autoconf-archive/autoconf-archive-${version}.tar.xz";
+    url = "mirror://gnu/autoconf-archive/autoconf-archive-${finalAttrs.version}.tar.xz";
     hash = "sha256-e81dABkW86UO10NvT3AOPSsbrePtgDIZxZLWJQKlc2M=";
   };
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;
   };
-}
+})

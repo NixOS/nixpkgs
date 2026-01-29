@@ -75,12 +75,12 @@ let
   ];
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "3.1.0";
   pname = "pencil";
 
   src = fetchurl {
-    url = "http://pencil.evolus.vn/dl/V${version}.ga/pencil_${version}.ga_amd64.deb";
+    url = "http://pencil.evolus.vn/dl/V${finalAttrs.version}.ga/pencil_${finalAttrs.version}.ga_amd64.deb";
     sha256 = "01ae54b1a1351b909eb2366c6ec00816e1deba370e58f35601cf7368f10aaba3";
   };
 
@@ -147,4 +147,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

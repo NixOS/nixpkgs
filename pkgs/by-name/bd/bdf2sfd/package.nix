@@ -5,14 +5,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bdf2sfd";
   version = "1.1.9";
 
   src = fetchFromGitHub {
     owner = "fcambus";
     repo = "bdf2sfd";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-L1fIPZdVP4px73VbnEA6sb28WrmsNUJ2tqLeGPpwDbA=";
   };
 
@@ -26,4 +26,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "bdf2sfd";
   };
-}
+})

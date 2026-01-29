@@ -15,12 +15,12 @@ let
     builtins.attrNames (removeAttrs variantHashes [ "Iosevka" ])
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "${name}-bin";
   version = "34.1.0";
 
   src = fetchurl {
-    url = "https://github.com/be5invis/Iosevka/releases/download/v${version}/PkgTTC-${name}-${version}.zip";
+    url = "https://github.com/be5invis/Iosevka/releases/download/v${finalAttrs.version}/PkgTTC-${name}-${finalAttrs.version}.zip";
     sha256 =
       variantHashes.${name} or (throw ''
         No such variant "${variant}" for package iosevka-bin.
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
   };
 
   passthru.updateScript = ./update-bin.sh;
-}
+})

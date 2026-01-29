@@ -30,14 +30,14 @@
 let
   version = "2024.1.4";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "simgear";
   inherit version;
 
   src = fetchFromGitLab {
     owner = "flightgear";
     repo = "simgear";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-WJI15egN1H+EAIaFuI3svYCvM0xzsIGcIPsZgLsvBc0=";
   };
 
@@ -76,4 +76,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl2;
   };
-}
+})

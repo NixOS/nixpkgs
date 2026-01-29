@@ -40,12 +40,12 @@
 # You can find more instructions on how to build 0ad here:
 #    https://trac.wildfiregames.com/wiki/BuildInstructions
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "0ad";
   version = "0.27.1";
 
   src = fetchurl {
-    url = "https://releases.wildfiregames.com/0ad-${version}-unix-build.tar.xz";
+    url = "https://releases.wildfiregames.com/0ad-${finalAttrs.version}-unix-build.tar.xz";
     hash = "sha256-oKU1XutZaNJPKDdwc2FQ2XTa/sugd1TUZicH3BcBa/s=";
   };
 
@@ -176,4 +176,4 @@ stdenv.mkDerivation rec {
     platforms = lib.subtractLists lib.platforms.i686 lib.platforms.linux;
     mainProgram = "0ad";
   };
-}
+})

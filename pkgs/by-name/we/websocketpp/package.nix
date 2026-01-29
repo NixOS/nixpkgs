@@ -6,14 +6,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "websocket++";
   version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "zaphoyd";
     repo = "websocketpp";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-9fIwouthv2GcmBe/UPvV7Xn9P2o0Kmn2hCI4jCh0hPM=";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ revol-xut ];
   };
-}
+})

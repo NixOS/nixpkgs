@@ -34,14 +34,14 @@ let
     })
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "azure-dcap-client";
   version = "1.12.3";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "azure-dcap-client";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-zTDaICsSPXctgFRCZBiZwXV9dLk2pFL9kp5a8FkiTZA=";
   };
 
@@ -95,4 +95,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     license = [ lib.licenses.mit ];
   };
-}
+})

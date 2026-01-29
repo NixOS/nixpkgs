@@ -29,14 +29,14 @@ let
   ];
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wl-mirror";
   version = "0.18.3";
 
   src = fetchFromGitHub {
     owner = "Ferdi265";
     repo = "wl-mirror";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-xj+CZPHeMAisOMB8mYSIc2jAa5iQD5pM+Stccq4gnak=";
   };
 
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    echo 'v${version}' > version.txt
+    echo 'v${finalAttrs.version}' > version.txt
     substituteInPlace CMakeLists.txt \
       --replace 'WL_PROTOCOL_DIR "/usr' 'WL_PROTOCOL_DIR "${wayland-protocols}' \
       --replace 'WLR_PROTOCOL_DIR "/usr' 'WLR_PROTOCOL_DIR "${wlr-protocols}'
@@ -92,4 +92,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ synthetica ];
     platforms = lib.platforms.linux;
   };
-}
+})

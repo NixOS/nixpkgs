@@ -8,14 +8,14 @@
   lib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kde-rounded-corners";
   version = "0.8.6";
 
   src = fetchFromGitHub {
     owner = "matinlotfali";
     repo = "KDE-Rounded-Corners";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-v/kobtUoWBbYP4iMiUqWNnpIYyu5CBmYHnwxfN4eoQ0=";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ devusb ];
   };
-}
+})

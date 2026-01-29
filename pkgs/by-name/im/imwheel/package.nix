@@ -10,12 +10,12 @@
   libXtst,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "imwheel";
   version = "1.0.0pre12";
 
   src = fetchurl {
-    url = "mirror://sourceforge/imwheel/imwheel-${version}.tar.gz";
+    url = "mirror://sourceforge/imwheel/imwheel-${finalAttrs.version}.tar.gz";
     sha256 = "2320ed019c95ca4d922968e1e1cbf0c075a914e865e3965d2bd694ca3d57cfe3";
   };
 
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
     mainProgram = "imwheel";
   };
-}
+})

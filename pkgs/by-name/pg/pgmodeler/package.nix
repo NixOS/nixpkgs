@@ -11,14 +11,14 @@
   qt6,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pgmodeler";
   version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "pgmodeler";
     repo = "pgmodeler";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-gDhH6b+8zFIsosdecUUkwAQMP1HME4EbJZsFyTzvGcE=";
   };
 
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
       icon = "pgmodeler";
       desktopName = "PgModeler";
       genericName = "PgModeler";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       categories = [ "Development" ];
       startupWMClass = "pgmodeler";
     })
@@ -85,4 +85,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.esclear ];
     platforms = lib.platforms.unix;
   };
-}
+})

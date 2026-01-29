@@ -22,14 +22,14 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cassette";
   version = "0.2.1.g49";
 
   src = fetchFromGitHub {
     owner = "Rirusha";
     repo = "Cassette";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-1wIYEDaVlqNDS50MiYGqCtf5xGWou/g/YfZChTdQIns=";
   };
 
@@ -71,4 +71,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "cassette";
   };
-}
+})

@@ -5,12 +5,12 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bonnie++";
   version = "2.00a";
 
   src = fetchurl {
-    url = "https://www.coker.com.au/bonnie++/bonnie++-${version}.tgz";
+    url = "https://www.coker.com.au/bonnie++/bonnie++-${finalAttrs.version}.tgz";
     hash = "sha256-qNM7vYG8frVZzlv25YS5tT+uo5zPtK6S5Y8nJX5Gjw4=";
   };
 
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ wegank ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

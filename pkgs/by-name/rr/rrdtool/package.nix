@@ -15,14 +15,14 @@
 }:
 
 perl.pkgs.toPerlModule (
-  stdenv.mkDerivation rec {
+  stdenv.mkDerivation (finalAttrs: {
     pname = "rrdtool";
     version = "1.9.0";
 
     src = fetchFromGitHub {
       owner = "oetiker";
       repo = "rrdtool-1.x";
-      rev = "v${version}";
+      rev = "v${finalAttrs.version}";
       hash = "sha256-CPbSu1mosNlfj2nqiNVH14a5C5njkfvJM8ix3X3aP8E=";
     };
 
@@ -62,5 +62,5 @@ perl.pkgs.toPerlModule (
       platforms = lib.platforms.linux ++ lib.platforms.darwin;
       maintainers = with lib.maintainers; [ pSub ];
     };
-  }
+  })
 )

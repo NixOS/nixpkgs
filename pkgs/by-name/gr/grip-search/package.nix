@@ -9,14 +9,14 @@
   catch2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "grip-search";
   version = "0.8";
 
   src = fetchFromGitHub {
     owner = "sc0ty";
     repo = "grip";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0bkqarylgzhis6fpj48qbifcd6a26cgnq8784hgnm707rq9kb0rx";
   };
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace src/general/config.h --replace-fail "CUSTOM-BUILD" "${version}"
+    substituteInPlace src/general/config.h --replace-fail "CUSTOM-BUILD" "${finalAttrs.version}"
 
     substituteInPlace CMakeLists.txt \
       --replace-fail "cmake_minimum_required (VERSION 3.1)" "cmake_minimum_required(VERSION 3.10)"
@@ -53,4 +53,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})

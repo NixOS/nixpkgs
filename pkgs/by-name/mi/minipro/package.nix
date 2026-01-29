@@ -6,21 +6,21 @@
   libusb1,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "minipro";
   version = "0.7.2";
 
   src = fetchFromGitLab {
     owner = "DavidGriffith";
     repo = "minipro";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-NIaBN+T/EzYBhBtBEIvIAmqmksYDDiMJsWm9zCzZOxE=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libusb1 ];
   makeFlags = [
-    "VERSION=${version}"
+    "VERSION=${finalAttrs.version}"
     "PREFIX=$(out)"
     "UDEV_DIR=$(out)/lib/udev"
     "COMPLETIONS_DIR=$(out)/share/bash-completion/completions"
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     mainProgram = "minipro";
     platforms = lib.platforms.unix;
   };
-}
+})

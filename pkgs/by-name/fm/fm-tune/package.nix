@@ -7,14 +7,14 @@
   soapysdr,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fm-tune";
   version = "1.1";
 
   src = fetchFromGitHub {
     owner = "viraptor";
     repo = "fm_tune";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-pwL2G1Ni1Ixw/N0diSoGGIoVrtmF92mWZ5i57OOvkX4=";
   };
 
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ viraptor ];
     mainProgram = "fm_tune";
   };
-}
+})

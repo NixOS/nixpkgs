@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "commons-logging";
   version = "1.3.5";
 
   src = fetchurl {
-    url = "mirror://apache/commons/logging/binaries/commons-logging-${version}-bin.tar.gz";
+    url = "mirror://apache/commons/logging/binaries/commons-logging-${finalAttrs.version}-bin.tar.gz";
     sha256 = "sha256-4s/DfNYp/CXSIAtUAUHC2GReQrmlhpN8tRwvpHmB2G0=";
   };
 
@@ -25,4 +25,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -12,14 +12,14 @@
   cppunit,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libcmis";
   version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "tdf";
     repo = "libcmis";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-HXiyQKjOlQXWABY10XrOiYxPqfpmUJC3a6xD98LIHDw=";
   };
 
@@ -60,4 +60,4 @@ stdenv.mkDerivation rec {
     mainProgram = "cmis-client";
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -6,14 +6,14 @@
   libxcb,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xkbmon";
   version = "0.4";
 
   src = fetchFromGitHub {
     owner = "xkbmon";
     repo = "xkbmon";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-EWW6L6NojzXodDOET01LMcQT8/1JIMpOD++MCiM3j1Y=";
   };
 
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.romildo ];
     mainProgram = "xkbmon";
   };
-}
+})

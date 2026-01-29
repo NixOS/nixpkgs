@@ -9,12 +9,12 @@
   pkg-config,
   nix-update-script,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "free42";
   version = "3.3.11";
 
   src = fetchurl {
-    url = "https://thomasokken.com/free42/upstream/free42-nologo-${version}.tgz";
+    url = "https://thomasokken.com/free42/upstream/free42-nologo-${finalAttrs.version}.tgz";
     hash = "sha256-Y9tV06K+1tZmoNBLS5tsOoLPjS2unTe8c0AYkHgDVVo=";
   };
 
@@ -117,4 +117,4 @@ stdenv.mkDerivation rec {
     mainProgram = "free42dec";
     platforms = with lib.platforms; unix;
   };
-}
+})

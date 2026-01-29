@@ -8,14 +8,14 @@
   libXinerama,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hsetroot";
   version = "1.0.5";
 
   src = fetchFromGitHub {
     owner = "himdel";
     repo = "hsetroot";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1jbk5hlxm48zmjzkaq5946s58rqwg1v1ds2sdyd2ba029hmvr722";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ shamilton ];
     platforms = lib.platforms.unix;
   };
-}
+})

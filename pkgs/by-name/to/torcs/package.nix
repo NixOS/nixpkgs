@@ -24,12 +24,12 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "torcs";
   version = "1.3.8";
 
   src = fetchurl {
-    url = "mirror://sourceforge/torcs/torcs-${version}.tar.bz2";
+    url = "mirror://sourceforge/torcs/torcs-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-S5Z3NUX7NkEZgqbziXIF64/VciedTOVp8s4HsI6Jp68=";
   };
 
@@ -81,4 +81,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     hydraPlatforms = [ ];
   };
-}
+})

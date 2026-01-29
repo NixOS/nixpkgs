@@ -23,7 +23,7 @@
   python3Packages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.7.1";
 
   pname = "alttab";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "sagb";
     repo = "alttab";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-1+hk0OeSriXPyefv3wOgeiW781PL4VP5Luvt+RS5jmg=";
   };
 
@@ -77,4 +77,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "alttab";
   };
-}
+})

@@ -9,14 +9,14 @@
 }:
 # TODO: withTex
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "latex2html";
   version = "2025";
 
   src = fetchFromGitHub {
     owner = "latex2html";
     repo = "latex2html";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-xylIU2GY/1t9mA8zJzEjHwAIlvVxZmUAUdQ/IXEy+Wg=";
   };
 
@@ -63,4 +63,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux ++ darwin;
     maintainers = with lib.maintainers; [ yurrriq ];
   };
-}
+})

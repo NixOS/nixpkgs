@@ -18,14 +18,14 @@
   enableZimpl ? (!stdenv.hostPlatform.isDarwin),
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "scipopt-scip";
   version = "10.0.0";
 
   src = fetchFromGitHub {
     owner = "scipopt";
     repo = "scip";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-KW7N2ORspzkaR/gdU//p38BV4GyuhoSIVb6q9RTrCYQ=";
   };
 
@@ -53,10 +53,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     maintainers = with lib.maintainers; [ fettgoenner ];
-    changelog = "https://scipopt.org/doc-${version}/html/RN${lib.versions.major version}.php";
+    changelog = "https://scipopt.org/doc-${finalAttrs.version}/html/RN${lib.versions.major finalAttrs.version}.php";
     description = "Solving Constraint Integer Programs";
     license = lib.licenses.asl20;
     homepage = "https://github.com/scipopt/scip";
     mainProgram = "scip";
   };
-}
+})

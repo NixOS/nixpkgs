@@ -5,12 +5,12 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tetgen";
   version = "1.6.0";
 
   src = fetchurl {
-    url = "http://wias-berlin.de/software/tetgen/1.5/src/tetgen${version}.tar.gz";
+    url = "http://wias-berlin.de/software/tetgen/1.5/src/tetgen${finalAttrs.version}.tar.gz";
     sha256 = "sha256-h7XmHr06Rx/E8s3XEkwrEd1mOfT+sflBpdL1EQ0Fzjk=";
   };
 
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.agpl3Plus;
     platforms = lib.platforms.unix;
   };
-}
+})

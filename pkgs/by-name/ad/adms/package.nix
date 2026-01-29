@@ -13,14 +13,14 @@
   gd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "2.3.7";
   pname = "adms";
 
   src = fetchFromGitHub {
     owner = "Qucs";
     repo = "adms";
-    rev = "release-${version}";
+    rev = "release-${finalAttrs.version}";
     sha256 = "0i37c9k6q1iglmzp9736rrgsnx7sw8xn3djqbbjw29zsyl3pf62c";
   };
 
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     platforms = with lib.platforms; unix;
   };
-}
+})

@@ -7,14 +7,14 @@
   fonttosfnt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "creep";
   version = "0.31";
 
   src = fetchFromGitHub {
     owner = "romeovs";
     repo = "creep";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0zs21kznh1q883jfdgz74bb63i4lxlv98hj3ipp0wvsi6zw0vs8n";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})

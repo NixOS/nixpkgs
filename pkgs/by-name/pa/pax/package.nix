@@ -5,12 +5,12 @@
   musl-fts,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pax";
   version = "20240817";
 
   src = fetchurl {
-    url = "http://www.mirbsd.org/MirOS/dist/mir/cpio/paxmirabilis-${version}.tgz";
+    url = "http://www.mirbsd.org/MirOS/dist/mir/cpio/paxmirabilis-${finalAttrs.version}.tgz";
     sha256 = "sha256-6VXV06+Xrt4KP0Y6mlm4Po0Qg6rxQutvOIxUmn0YLms=";
   };
 
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

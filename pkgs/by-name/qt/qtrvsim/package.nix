@@ -6,14 +6,14 @@
   libsForQt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "QtRVSim";
   version = "0.9.8";
 
   src = fetchFromGitHub {
     owner = "cvut";
     repo = "qtrvsim";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-+EpPDA2+mBTdQjq6i9TN11yeXqvJA28JtmdNihM1a/U=";
   };
 
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ jdupak ];
     mainProgram = "qtrvsim_gui";
   };
-}
+})

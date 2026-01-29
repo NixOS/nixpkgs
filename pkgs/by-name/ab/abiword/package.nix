@@ -23,7 +23,7 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "abiword";
   version = "3.0.7";
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "AbiWord";
-    tag = "release-${version}";
+    tag = "release-${finalAttrs.version}";
     hash = "sha256-dYbJ726Zuxs7+VTTCWHYQLsVZ/86hRUBQRac6toO4UI=";
   };
 
@@ -86,4 +86,4 @@ stdenv.mkDerivation rec {
       sna
     ];
   };
-}
+})

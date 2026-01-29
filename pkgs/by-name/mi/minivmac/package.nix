@@ -7,14 +7,14 @@
   libx11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "minivmac-erichelgeson";
   version = "2024.06.08";
 
   src = fetchFromGitHub {
     owner = "erichelgeson";
     repo = "minivmac";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-iiEE0ioXh3keKUPfAB+YcE1iggGLpxT9N8LSVFDhttE=";
   };
 
@@ -54,4 +54,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     sourceProvenance = [ lib.sourceTypes.fromSource ];
   };
-}
+})

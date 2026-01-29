@@ -6,14 +6,14 @@
   kdePackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "supergfxctl-plasmoid";
   version = "2.1.1";
 
   src = fetchFromGitLab {
     owner = "jhyub";
     repo = "supergfxctl-plasmoid";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Un2uVTde18qloZoWk6bbscyvsBTIAdK1CfxYAZg1+F4=";
   };
 
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/Jhyub/supergfxctl-plasmoid";
     maintainers = with lib.maintainers; [ johnylpm ];
   };
-}
+})

@@ -7,12 +7,12 @@
   gtk2-x11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.6";
   pname = "gbdfed";
 
   src = fetchurl {
-    url = "http://sofia.nmsu.edu/~mleisher/Software/gbdfed/gbdfed-${version}.tar.bz2";
+    url = "http://sofia.nmsu.edu/~mleisher/Software/gbdfed/gbdfed-${finalAttrs.version}.tar.bz2";
     sha256 = "0g09k6wim58hngxncq2brr7mwjm92j3famp0vs4b3p48wr65vcjx";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "gbdfed";
   };
-}
+})

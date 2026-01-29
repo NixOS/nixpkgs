@@ -13,14 +13,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zmusic";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "ZDoom";
     repo = "ZMusic";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Lg0DN5p2xDB4j+kxa/TxM27rC+GPMK8kaPLajNDMvBg=";
   };
 
@@ -68,4 +68,4 @@ stdenv.mkDerivation rec {
       r4v3n6101
     ];
   };
-}
+})

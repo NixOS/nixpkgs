@@ -9,14 +9,14 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xteddy";
   version = "2.2-5";
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "games-team";
     repo = "xteddy";
-    rev = "debian/${version}";
+    rev = "debian/${finalAttrs.version}";
     sha256 = "0rm7w78d6qajq4fvi4agyqm0c70f3c1i0cy2jdb6kqql2k8w78qy";
   };
 
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
-    "${src}/debian/patches/10_libXext.patch"
-    "${src}/debian/patches/wrong-man-page-section.patch"
+    "${finalAttrs.src}/debian/patches/10_libXext.patch"
+    "${finalAttrs.src}/debian/patches/wrong-man-page-section.patch"
   ];
 
   postPatch = ''
@@ -59,4 +59,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.xaverdh ];
     platforms = lib.platforms.linux;
   };
-}
+})

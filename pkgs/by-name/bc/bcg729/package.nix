@@ -5,7 +5,7 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bcg729";
   version = "1.1.1";
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "public";
     group = "BC";
     repo = "bcg729";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "1hal6b3w6f8y5r1wa0xzj8sj2jjndypaxyw62q50p63garp2h739";
   };
 
@@ -32,9 +32,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Opensource implementation of both encoder and decoder of the ITU G729 Annex A/B speech codec";
     homepage = "https://linphone.org/technical-corner/bcg729";
-    changelog = "https://gitlab.linphone.org/BC/public/bcg729/raw/${version}/NEWS";
+    changelog = "https://gitlab.linphone.org/BC/public/bcg729/raw/${finalAttrs.version}/NEWS";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ c0bw3b ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -6,14 +6,14 @@
   unzip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "smlpkg";
   version = "0.1.7";
 
   src = fetchFromGitHub {
     owner = "diku-dk";
     repo = "smlpkg";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-zdWObV/W6fmQ6bFznEVEtp95D8t2YZd45sIC15XQwYM=";
   };
 
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ athas ];
     mainProgram = "smlpkg";
   };
-}
+})

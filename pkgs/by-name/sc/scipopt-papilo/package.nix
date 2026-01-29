@@ -10,14 +10,14 @@
   gfortran,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "scipopt-papilo";
   version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "scipopt";
     repo = "papilo";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-oxuXv/xWQiApxrrVdH3aEUOp40Em6kCz/DJXXpCxdzs=";
   };
 
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/scipopt/papilo";
     mainProgram = "papilo";
   };
-}
+})

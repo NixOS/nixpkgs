@@ -32,11 +32,11 @@
   libGL,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gwyddion";
   version = "2.69";
   src = fetchurl {
-    url = "mirror://sourceforge/gwyddion/gwyddion-${version}.tar.xz";
+    url = "mirror://sourceforge/gwyddion/gwyddion-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-WX62tR7ldaB/NQzAVzvHTQBaNJDZgyrRNqNp5w0w76Y=";
   };
 
@@ -89,4 +89,4 @@ stdenv.mkDerivation rec {
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
-}
+})

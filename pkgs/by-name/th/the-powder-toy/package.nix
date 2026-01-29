@@ -18,14 +18,14 @@
   stdenv,
   zlib,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "the-powder-toy";
   version = "99.3.384";
 
   src = fetchFromGitHub {
     owner = "The-Powder-Toy";
     repo = "The-Powder-Toy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-vlswHNkjyxM9sZT+mwiCMfNbdAbhYyx06w+ZLfaPaEQ=";
   };
 
@@ -75,4 +75,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "powder";
   };
-}
+})

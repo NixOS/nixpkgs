@@ -17,14 +17,14 @@
   python ? null,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libnl";
   version = "3.12.0";
 
   src = fetchFromGitHub {
     repo = "libnl";
     owner = "thom311";
-    rev = "libnl${lib.replaceStrings [ "." ] [ "_" ] version}";
+    rev = "libnl${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     hash = "sha256-K77WamOf+/3PNXe/hI+OYg0EBgBqvDfNDamXYXcK7P8=";
   };
 
@@ -73,4 +73,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ fpletz ];
     platforms = lib.platforms.linux;
   };
-}
+})

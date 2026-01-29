@@ -24,14 +24,14 @@
   libxtst,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "snippetpixie";
   version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "bytepixie";
     repo = "snippetpixie";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0gs3d9hdywg4vcfbp4qfcagfjqalfgw9xpvywg4pw1cm3rzbdqmz";
   };
 
@@ -88,4 +88,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "com.github.bytepixie.snippetpixie";
   };
-}
+})

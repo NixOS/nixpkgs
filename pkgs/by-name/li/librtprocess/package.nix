@@ -6,14 +6,14 @@
   llvmPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "librtprocess";
   version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "CarVac";
     repo = "librtprocess";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-/1o6SWUor+ZBQ6RsK2PoDRu03jcVRG58PNYFttriH2w=";
   };
 
@@ -30,4 +30,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

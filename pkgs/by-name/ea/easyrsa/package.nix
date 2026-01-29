@@ -7,14 +7,14 @@
   runtimeShell,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "easyrsa";
   version = "3.2.5";
 
   src = fetchFromGitHub {
     owner = "OpenVPN";
     repo = "easy-rsa";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-GD4KL8CqQ8U0ISrLm8zlnfi1AuYK0AZLiLuufEhZ7B0=";
   };
 
@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
 
     substituteInPlace $out/bin/easyrsa \
       --replace /usr/ $out/ \
-      --replace '~VER~' '${version}' \
-      --replace '~GITHEAD~' 'v${version}' \
+      --replace '~VER~' '${finalAttrs.version}' \
+      --replace '~GITHEAD~' 'v${finalAttrs.version}' \
       --replace '~DATE~' '1970-01-01'
 
     # Wrap it with the correct OpenSSL binary.
@@ -69,4 +69,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

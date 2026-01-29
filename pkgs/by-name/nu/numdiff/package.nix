@@ -5,12 +5,12 @@
   libintl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "numdiff";
   version = "5.9.0";
 
   src = fetchurl {
-    url = "mirror://savannah/numdiff/numdiff-${version}.tar.gz";
+    url = "mirror://savannah/numdiff/numdiff-${finalAttrs.version}.tar.gz";
     sha256 = "1vzmjh8mhwwysn4x4m2vif7q2k8i19x8azq7pzmkwwj4g48lla47";
   };
 
@@ -27,4 +27,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

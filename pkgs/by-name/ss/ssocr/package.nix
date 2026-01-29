@@ -7,14 +7,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ssocr";
   version = "2.25.0";
 
   src = fetchFromGitHub {
     owner = "auerswal";
     repo = "ssocr";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-yQPjs4kGvp6C7kFcWQ3EzoFhwEAhm2nC7yXu9RbU4os=";
   };
 
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     mainProgram = "ssocr";
     platforms = lib.platforms.unix;
   };
-}
+})

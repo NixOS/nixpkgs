@@ -17,7 +17,7 @@
   json-glib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gthree";
   version = "0.9.0";
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "alexlarsson";
     repo = "gthree";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "09fcnjc3j21lh5fjf067wm35sb4qni4vgzing61kixnn2shy79iy";
   };
 
@@ -77,4 +77,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/gthree.x86_64-darwin
   };
-}
+})

@@ -10,7 +10,7 @@
   libid3tag,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mtpfs";
   version = "1.1";
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://www.adebenham.com/files/mtp/mtpfs-${version}.tar.gz";
+    url = "https://www.adebenham.com/files/mtp/mtpfs-${finalAttrs.version}.tar.gz";
     sha256 = "07acrqb17kpif2xcsqfqh5j4axvsa4rnh6xwnpqab5b9w5ykbbqv";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/mtpfs.x86_64-darwin
     mainProgram = "mtpfs";
   };
-}
+})

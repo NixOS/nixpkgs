@@ -6,14 +6,14 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "torrent7z";
   version = "1.3";
 
   src = fetchFromGitHub {
     owner = "BubblesInTheTub";
     repo = "torrent7z";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "Y2tr0+z9uij4Ifi6FfWRN24BwcDXUZKVLkLtKUiVjU4=";
   };
 
@@ -55,4 +55,4 @@ stdenv.mkDerivation rec {
     # RAR code is under non-free UnRAR license, but we remove it
     license = lib.licenses.gpl3Only;
   };
-}
+})

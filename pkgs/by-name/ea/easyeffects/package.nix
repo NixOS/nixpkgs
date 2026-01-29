@@ -57,14 +57,14 @@ let
     ;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "easyeffects";
   version = "8.0.9";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "easyeffects";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-cFMbeJeEIDP7uiNi+rRKErgHtjP/PbPKASo+M2qogZQ=";
   };
 
@@ -148,7 +148,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Audio effects for PipeWire applications";
     homepage = "https://github.com/wwmm/easyeffects";
-    changelog = "https://github.com/wwmm/easyeffects/blob/v${version}/src/contents/docs/community/CHANGELOG.md";
+    changelog = "https://github.com/wwmm/easyeffects/blob/v${finalAttrs.version}/src/contents/docs/community/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       getchoo
@@ -158,4 +158,4 @@ stdenv.mkDerivation rec {
     mainProgram = "easyeffects";
     platforms = lib.platforms.linux;
   };
-}
+})

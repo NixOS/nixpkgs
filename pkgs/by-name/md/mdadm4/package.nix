@@ -13,13 +13,13 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mdadm";
   version = "4.4";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/utils/mdadm/mdadm.git";
-    tag = "mdadm-${version}";
+    tag = "mdadm-${finalAttrs.version}";
     hash = "sha256-jGmc8fkJM0V9J7V7tQPXSF/WD0kzyEAloBAwaAFenS0=";
   };
 
@@ -98,4 +98,4 @@ stdenv.mkDerivation rec {
     mainProgram = "mdadm";
     platforms = lib.platforms.linux;
   };
-}
+})

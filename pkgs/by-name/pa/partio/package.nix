@@ -15,14 +15,14 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "partio";
   version = "1.19.0";
 
   src = fetchFromGitHub {
     owner = "wdas";
     repo = "partio";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-p3mpxP0slHIQ75UtNAr5PcSOaSt9UyGR/MyOZ2GoXdU=";
   };
 
@@ -63,4 +63,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.guibou ];
   };
-}
+})

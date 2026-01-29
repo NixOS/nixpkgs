@@ -17,12 +17,12 @@
   texinfo,
   argp-standalone,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "freetalk";
   version = "4.2";
 
   src = fetchurl {
-    url = "mirror://gnu/freetalk/freetalk-${version}.tar.gz";
+    url = "mirror://gnu/freetalk/freetalk-${finalAttrs.version}.tar.gz";
     hash = "sha256-u1tPKacGry+JGYeAIgDia3N7zs5EM4FyQZdV8e7htYA=";
   };
 
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     downloadPage = "https://www.gnu.org/software/freetalk/";
   };
-}
+})

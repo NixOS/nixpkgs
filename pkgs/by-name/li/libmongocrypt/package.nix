@@ -9,14 +9,14 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libmongocrypt";
   version = "1.7.4";
 
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "libmongocrypt";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-I4KG2BHAovin9EaF8lNzJzucARvi0Qptz5Y9gTt3WkE=";
   };
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     "-DMONGOCRYPT_ENABLE_DECIMAL128=OFF"
 
     # this avoids a dependency on Python
-    "-DBUILD_VERSION=${version}"
+    "-DBUILD_VERSION=${finalAttrs.version}"
   ];
 
   meta = {
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
   };
-}
+})

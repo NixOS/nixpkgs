@@ -5,14 +5,14 @@
   stdenv,
   lib,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nautilus-open-in-blackbox";
   version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "ppvan";
     repo = "nautilus-open-in-blackbox";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-5rvh3qNalpjamcBVQrnAW6GxhwPPlRxP5h045YDqvrM=";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ppvan/nautilus-open-in-blackbox";
     platforms = lib.platforms.linux;
   };
-}
+})

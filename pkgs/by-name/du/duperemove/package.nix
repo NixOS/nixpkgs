@@ -14,14 +14,14 @@
   duperemove,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "duperemove";
   version = "0.15.2";
 
   src = fetchFromGitHub {
     owner = "markfasheh";
     repo = "duperemove";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Y3HIqq61bLfZi4XR2RtSyuCPmcWrTxeWvqpTh+3hUjc=";
   };
 
@@ -43,13 +43,13 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
-    "VERSION=v${version}"
+    "VERSION=v${finalAttrs.version}"
   ];
 
   passthru.tests.version = testers.testVersion {
     package = duperemove;
     command = "duperemove --version";
-    version = "v${version}";
+    version = "v${finalAttrs.version}";
   };
 
   meta = {
@@ -62,4 +62,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "duperemove";
   };
-}
+})

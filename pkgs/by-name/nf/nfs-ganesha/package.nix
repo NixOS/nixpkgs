@@ -23,7 +23,7 @@
   dbus,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nfs-ganesha";
   version = "9.4";
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nfs-ganesha";
     repo = "nfs-ganesha";
-    tag = "V${version}";
+    tag = "V${finalAttrs.version}";
     hash = "sha256-Adax64aaioYfPg7SMtylS2wpYV52l8KgXBA8eJefGkY=";
   };
 
@@ -128,4 +128,4 @@ stdenv.mkDerivation rec {
       "tools"
     ];
   };
-}
+})

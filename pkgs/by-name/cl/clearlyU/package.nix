@@ -7,12 +7,12 @@
   libfaketime,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "clearlyU";
   version = "12-1.9";
 
   src = fetchurl {
-    url = "https://www.math.nmsu.edu/~mleisher/Software/cu/cu${version}.tgz";
+    url = "https://www.math.nmsu.edu/~mleisher/Software/cu/cu${finalAttrs.version}.tgz";
     sha256 = "1xn14jbv3m1khy7ydvad9ydkn7yygdbhjy9wm1v000jzjwr3lv21";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.raskin ];
   };
-}
+})

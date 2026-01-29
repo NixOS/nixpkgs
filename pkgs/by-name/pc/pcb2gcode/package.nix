@@ -11,14 +11,14 @@
   librsvg,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pcb2gcode";
   version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "pcb2gcode";
     repo = "pcb2gcode";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-c5YabBqZn6ilIkF3lifTsYyLZMsZN21jDj1hNu0PRAc=";
   };
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace ./Makefile.am \
-    --replace '`git describe --dirty --always --tags`' '${version}'
+    --replace '`git describe --dirty --always --tags`' '${finalAttrs.version}'
   '';
 
   meta = {
@@ -56,4 +56,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ kritnich ];
     platforms = lib.platforms.unix;
   };
-}
+})

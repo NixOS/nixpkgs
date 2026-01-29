@@ -13,13 +13,13 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libtraceevent";
   version = "1.8.7";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git";
-    rev = "libtraceevent-${version}";
+    rev = "libtraceevent-${finalAttrs.version}";
     hash = "sha256-9rDgAHK1m369CGKxC+NEkW7fzOJsgKTQtk9GLfVEoLg=";
   };
 
@@ -65,4 +65,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ wentasah ];
   };
-}
+})

@@ -6,14 +6,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ddate";
   version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "bo0ts";
     repo = "ddate";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "1qchxnxvghbma6gp1g78wnjxsri0b72ha9axyk31cplssl7yn73f";
   };
 
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "ddate";
   };
-}
+})

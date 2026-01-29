@@ -8,14 +8,14 @@
   pe-parse,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "uthenticode";
   version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "trailofbits";
     repo = "uthenticode";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-NGVOGXMRlgpSRw56jr63rJc/5/qCmPjtAFa0D21ogd4=";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ arturcygan ];
   };
-}
+})

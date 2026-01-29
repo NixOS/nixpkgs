@@ -9,14 +9,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xmousepasteblock";
   version = "1.4";
   src = fetchFromGitHub {
     owner = "milaq";
     repo = "XMousePasteBlock";
     hash = "sha256-uHlHGVnIro6X4kRp79ibtqMmiv2XQT+zgbQagUxdB0c=";
-    rev = version;
+    rev = finalAttrs.version;
   };
   makeFlags = [
     "PREFIX=$(out)"
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "xmousepasteblock";
   };
-}
+})

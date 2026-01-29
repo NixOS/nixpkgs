@@ -24,14 +24,14 @@ assert lib.assertMsg (
   stdenv.hostPlatform.isDarwin -> !enableX11
 ) "macOS supports only SDL GUI backend";
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rvvm";
   version = "0.6";
 
   src = fetchFromGitHub {
     owner = "LekKit";
     repo = "RVVM";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-5nSlKyWDAx0EeKFzzwP5+99XuJz9BHXEF1WNkRMLa9U=";
   };
 
@@ -67,4 +67,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ kamillaova ];
     mainProgram = "rvvm";
   };
-}
+})

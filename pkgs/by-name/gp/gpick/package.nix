@@ -11,14 +11,14 @@
   lib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gpick";
   version = "0.3";
 
   src = fetchFromGitHub {
     owner = "thezbyg";
     repo = "gpick";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Z17YpdAAr2wvDFkrAosyCN6Y/wsFVkiB9IDvXuP9lYo=";
   };
 
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "gpick";
   };
-}
+})

@@ -10,14 +10,14 @@
   imagemagick,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pdfmixtool";
   version = "1.2.1";
 
   src = fetchFromGitLab {
     owner = "scarpetta";
     repo = "pdfmixtool";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-UuRTMLlUIyo2RF+XjI229kkE67ybmllIy98p97PjWCE=";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ onny ];
   };
-}
+})

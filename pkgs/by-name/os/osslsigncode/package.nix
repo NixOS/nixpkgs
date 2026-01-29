@@ -9,14 +9,14 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "osslsigncode";
   version = "2.11";
 
   src = fetchFromGitHub {
     owner = "mtrojnar";
     repo = "osslsigncode";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-ua/4OouuMWTvfFbdOVVZpf1Z43JoPiptlFl+THaef58=";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})

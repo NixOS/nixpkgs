@@ -11,7 +11,7 @@
   libxrandr,
   libx11,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rnnoise-plugin";
   version = "1.10";
   outputs = [
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "werman";
     repo = "noise-suppression-for-voice";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-sfwHd5Fl2DIoGuPDjELrPp5KpApZJKzQikCJmCzhtY8=";
   };
 
@@ -70,4 +70,4 @@ stdenv.mkDerivation rec {
       sciencentistguy
     ];
   };
-}
+})

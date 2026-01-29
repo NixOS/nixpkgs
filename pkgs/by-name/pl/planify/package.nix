@@ -27,14 +27,14 @@
   webkitgtk_6_0,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "planify";
   version = "4.17.0";
 
   src = fetchFromGitHub {
     owner = "alainm23";
     repo = "planify";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-wsjLx5MYLAnYZEAeavvuh0nogpINeklo2VD3EftW+UA=";
   };
 
@@ -77,4 +77,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "io.github.alainm23.planify";
   };
-}
+})

@@ -5,14 +5,14 @@
   puredata,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "maxlib";
   version = "1.5.7";
 
   src = fetchFromGitHub {
     owner = "electrickery";
     repo = "pd-maxlib";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "10w9qfgn26lj3zqjksf2r1wsjpf5xy4dx22jay9l6idy9q62mxsn";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.magnetophon ];
     platforms = lib.platforms.linux;
   };
-}
+})

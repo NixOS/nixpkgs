@@ -10,14 +10,14 @@
   gtk-engine-murrine,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "numix-solarized-gtk-theme";
   version = "20230408";
 
   src = fetchFromGitHub {
     owner = "Ferdi265";
     repo = "numix-solarized-gtk-theme";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-r5xCe8Ew+/SuCUaZ0yjlumORTy/y1VwbQQjQ6uEyGsY=";
   };
 
@@ -60,4 +60,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.offline ];
   };
-}
+})

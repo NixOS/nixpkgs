@@ -33,12 +33,12 @@
   vte,
   wrapGAppsHook3,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "virt-viewer";
   version = "11.0";
 
   src = fetchurl {
-    url = "https://releases.pagure.org/virt-viewer/virt-viewer-${version}.tar.xz";
+    url = "https://releases.pagure.org/virt-viewer/virt-viewer-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-pD+iMlxMHHelyMmAZaww7wURohrJjlkPIjQIabrZq9A=";
   };
 
@@ -118,4 +118,4 @@ stdenv.mkDerivation rec {
       downloadPage = "https://virt-manager.org/download.html";
     };
   };
-}
+})

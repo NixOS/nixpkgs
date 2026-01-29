@@ -10,14 +10,14 @@
   SDL2_ttf,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flare-engine";
   version = "1.14";
 
   src = fetchFromGitHub {
     owner = "flareteam";
     repo = "flare-engine";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-DIzfTqwZJ8NAPB/TWzvPjepHb7hIbIr+Kk+doXJmpLc=";
   };
 
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     license = [ lib.licenses.gpl3Plus ];
     platforms = lib.platforms.unix;
   };
-}
+})

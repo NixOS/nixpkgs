@@ -32,14 +32,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "solvespace";
   version = "3.2";
 
   src = fetchFromGitHub {
     owner = "solvespace";
     repo = "solvespace";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-+ZSAC7wDOaN51RjbSAqaQOp10JzxSME3g0ln4VdkwcA=";
     fetchSubmodules = true;
   };
@@ -104,6 +104,6 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.edef ];
     platforms = lib.platforms.linux;
     homepage = "https://solvespace.com";
-    changelog = "https://github.com/solvespace/solvespace/raw/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/solvespace/solvespace/raw/v${finalAttrs.version}/CHANGELOG.md";
   };
-}
+})

@@ -5,12 +5,12 @@
   unzip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "docbook5";
   version = "5.0.1";
 
   src = fetchurl {
-    url = "http://www.docbook.org/xml/${version}/docbook-${version}.zip";
+    url = "http://www.docbook.org/xml/${finalAttrs.version}/docbook-${finalAttrs.version}.zip";
     sha256 = "1iz3hq1lqgnshvlz4j9gvh4jy1ml74qf90vqf2ikbq0h4i2xzybs";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

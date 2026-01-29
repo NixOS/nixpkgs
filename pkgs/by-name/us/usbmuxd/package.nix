@@ -8,7 +8,7 @@
   libusb1,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "usbmuxd";
   version = "1.1.1+date=2023-05-05";
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   ];
 
   preAutoreconf = ''
-    export RELEASE_VERSION=${version}
+    export RELEASE_VERSION=${finalAttrs.version}
   '';
 
   configureFlags = [
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "usbmuxd";
   };
-}
+})

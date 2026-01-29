@@ -13,12 +13,12 @@
   libxext,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "snd";
   version = "25.8";
 
   src = fetchurl {
-    url = "mirror://sourceforge/snd/snd-${version}.tar.gz";
+    url = "mirror://sourceforge/snd/snd-${finalAttrs.version}.tar.gz";
     hash = "sha256-ha8f7vBRUNEHXc0/E0L714jPFDVhMSCluKPrrdQYOTM=";
   };
 
@@ -55,4 +55,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "snd";
   };
-}
+})

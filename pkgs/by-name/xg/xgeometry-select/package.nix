@@ -5,7 +5,7 @@
   libX11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xgeometry-select";
   version = "0.1";
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libX11 ];
 
   buildPhase = ''
-    gcc -Wall -lX11 ${src} -o xgeometry-select
+    gcc -Wall -lX11 ${finalAttrs.src} -o xgeometry-select
   '';
 
   installPhase = ''
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "xgeometry-select";
   };
-}
+})

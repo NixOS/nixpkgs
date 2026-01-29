@@ -15,12 +15,12 @@
   scons,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "swiften";
   version = "4.0.3";
 
   src = fetchurl {
-    url = "http://swift.im/git/swift/snapshot/swift-${version}.tar.bz2";
+    url = "http://swift.im/git/swift/snapshot/swift-${finalAttrs.version}.tar.bz2";
     hash = "sha256-aj+T6AevtR8birbsj+83nfzFC6cf72q+7nwSM0jaZrA=";
   };
 
@@ -93,4 +93,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.twey ];
   };
-}
+})

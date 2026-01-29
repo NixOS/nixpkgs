@@ -9,14 +9,14 @@
   libtool,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "simple-tpm-pk11";
   version = "0.07";
 
   src = fetchFromGitHub {
     owner = "ThomasHabets";
     repo = "simple-tpm-pk11";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-wJ0U4ZNg60+XJTSAMs9gaMTWVePE5dfv5cZWDqwnSlY=";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

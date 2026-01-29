@@ -135,14 +135,14 @@ let
   ];
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cmus";
   version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "cmus";
     repo = "cmus";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-8hgibGtkiwzenMI9YImIApRmw2EzTwE6RhglALpUkp4=";
   };
 
@@ -172,4 +172,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ oxij ];
     platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

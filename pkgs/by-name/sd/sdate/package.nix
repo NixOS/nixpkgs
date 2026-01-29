@@ -5,14 +5,14 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sdate";
   version = "0.7";
 
   src = fetchFromGitHub {
     owner = "ChristophBerg";
     repo = "sdate";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-jkwe+bSBa0p1Xzfetsdpw0RYw/gSRxnY2jBOzC5HtJ8=";
   };
 
@@ -26,4 +26,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "sdate";
   };
-}
+})

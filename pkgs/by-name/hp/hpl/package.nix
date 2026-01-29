@@ -9,12 +9,12 @@
 
 assert (!blas.isILP64) && (!lapack.isILP64);
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hpl";
   version = "2.3";
 
   src = fetchurl {
-    url = "http://www.netlib.org/benchmark/hpl/hpl-${version}.tar.gz";
+    url = "http://www.netlib.org/benchmark/hpl/hpl-${finalAttrs.version}.tar.gz";
     sha256 = "0c18c7fzlqxifz1bf3izil0bczv3a7nsv0dn6winy3ik49yw3i9j";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.markuskowa ];
     mainProgram = "xhpl";
   };
-}
+})

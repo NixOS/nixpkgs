@@ -21,12 +21,12 @@
   gtk2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xboard";
   version = "4.9.1";
 
   src = fetchurl {
-    url = "mirror://gnu/xboard/xboard-${version}.tar.gz";
+    url = "mirror://gnu/xboard/xboard-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-Ky5T6EKK2bbo3IpVs6UYM4GRGk2uLABy+pYpa7sZcNY=";
   };
 
@@ -67,4 +67,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl3Plus;
   };
-}
+})

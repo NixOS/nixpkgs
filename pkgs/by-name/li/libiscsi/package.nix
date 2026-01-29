@@ -5,14 +5,14 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libiscsi";
   version = "1.20.0";
 
   src = fetchFromGitHub {
     owner = "sahlberg";
     repo = "libiscsi";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-idiK9JowKhGAk5F5qJ57X14Q2Y0TbIKRI02onzLPkas=";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ misuzu ];
   };
-}
+})

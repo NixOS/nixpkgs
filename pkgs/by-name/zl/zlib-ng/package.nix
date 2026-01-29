@@ -8,14 +8,14 @@
   withZlibCompat ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zlib-ng";
   version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "zlib-ng";
     repo = "zlib-ng";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-lO6fO18Z74+wKF0O/JjfrhS8lyaNQ37eamWGThb39F8=";
   };
 
@@ -56,4 +56,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ izorkin ];
   };
-}
+})

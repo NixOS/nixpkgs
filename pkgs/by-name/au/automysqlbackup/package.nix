@@ -11,14 +11,14 @@
   gzip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "automysqlbackup";
   version = "3.0.7";
 
   src = fetchFromGitHub {
     owner = "sixhop";
     repo = "automysqlbackup";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-C0p1AY4yIxybQ6a/HsE3ZTHumtvQw5kKM51Ap+Se0ZI=";
   };
 
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.aanderse ];
     license = lib.licenses.gpl2Plus;
   };
-}
+})

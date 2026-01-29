@@ -5,12 +5,12 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.1.29";
   pname = "libpaper";
 
   src = fetchurl {
-    url = "mirror://debian/pool/main/libp/libpaper/libpaper_${version}.tar.gz";
+    url = "mirror://debian/pool/main/libp/libpaper/libpaper_${finalAttrs.version}.tar.gz";
     hash = "sha256-JjMOIemjEkZY1RX9hQsM3lRv9C2JsllqUmTF8Wd/BUc=";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -7,12 +7,12 @@
   libxcrypt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ircd-hybrid";
   version = "8.2.46";
 
   src = fetchurl {
-    url = "mirror://sourceforge/ircd-hybrid/ircd-hybrid-${version}.tgz";
+    url = "mirror://sourceforge/ircd-hybrid/ircd-hybrid-${finalAttrs.version}.tgz";
     sha256 = "sha256-pdXI8YiPqC+97XoxNFb1plm4cfLOB+b/getajXPzx0s=";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     homepage = "https://www.ircd-hybrid.org/";
   };
-}
+})

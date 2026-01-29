@@ -6,13 +6,13 @@
   jre,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jython";
 
   version = "2.7.4";
 
   src = fetchurl {
-    url = "http://search.maven.org/remotecontent?filepath=org/python/jython-standalone/${version}/jython-standalone-${version}.jar";
+    url = "http://search.maven.org/remotecontent?filepath=org/python/jython-standalone/${finalAttrs.version}/jython-standalone-${finalAttrs.version}.jar";
     sha256 = "sha256-H7oXae/8yLGfXhBDa8gnShWM6YhVnyV5J8JMc7sTfzw=";
   };
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.psfl;
     platforms = jre.meta.platforms;
   };
-}
+})

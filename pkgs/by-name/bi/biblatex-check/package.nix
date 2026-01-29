@@ -5,14 +5,14 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "biblatex-check";
   version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "Pezmc";
     repo = "BibLatex-Check";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-8oHX56+kRWWl8t22DqLAFinjPngRMo3vXxXuVXBwutM=";
   };
 
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "biblatex-check";
   };
-}
+})

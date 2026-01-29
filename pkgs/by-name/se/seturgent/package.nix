@@ -6,13 +6,13 @@
   xorgproto,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "seturgent";
   version = "1.5";
 
   src = fetchgit {
     url = "git://git.codemadness.org/seturgent";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-XW7ms0BVCf1/fuL3PJ970t6sHkmMY1iLYXfS9R60JX0=";
   };
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     homepage = "https://codemadness.org/seturgent-set-urgency-hints-for-x-applications.html";
     license = lib.licenses.mit;
   };
-}
+})

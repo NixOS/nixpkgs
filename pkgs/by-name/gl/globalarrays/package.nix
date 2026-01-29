@@ -9,14 +9,14 @@
   mpi,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "globalarrays";
   version = "5.9.2";
 
   src = fetchFromGitHub {
     owner = "GlobalArrays";
     repo = "ga";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-leCvbWteOp7z7ORwtljA+KslHUptY2vdupZTmAjsArg=";
   };
 
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
   };
-}
+})

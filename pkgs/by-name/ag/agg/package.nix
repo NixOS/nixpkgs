@@ -13,11 +13,11 @@
 let
   stdenv = gccStdenv;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "agg";
   version = "2.5";
   src = fetchurl {
-    url = "https://www.antigrain.com/agg-${version}.tar.gz";
+    url = "https://www.antigrain.com/agg-${finalAttrs.version}.tar.gz";
     sha256 = "07wii4i824vy9qsvjsgqxppgqmfdxq0xa87i5yk53fijriadq7mb";
   };
   nativeBuildInputs = [
@@ -79,4 +79,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     hydraPlatforms = lib.platforms.linux; # build hangs on both Darwin platforms, needs investigation
   };
-}
+})

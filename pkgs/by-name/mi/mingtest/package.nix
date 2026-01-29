@@ -5,13 +5,13 @@
   lib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   name = "mingtest";
   version = "0.2.1";
   src = fetchFromGitHub {
     owner = "craflin";
     repo = "mingtest";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-buFr5w+3YJ2gJeQ8YTsFrUMU9hWq/iAJ6cW6ykvETfM=";
   };
 
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
   };
 
-}
+})

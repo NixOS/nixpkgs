@@ -9,14 +9,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "scipopt-zimpl";
   version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "scipopt";
     repo = "zimpl";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ataepqBfdA7CgqPhbw+Xy7PC3VZTLcSrF2/xnFyx+YI=";
   };
 
@@ -71,4 +71,4 @@ stdenv.mkDerivation rec {
     homepage = "https://zimpl.zib.de";
     mainProgram = "zimpl";
   };
-}
+})

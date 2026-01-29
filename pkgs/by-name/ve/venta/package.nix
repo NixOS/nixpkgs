@@ -9,14 +9,14 @@
   marwaita,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "venta";
   version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "darkomarko42";
     repo = "venta";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "14ckkvyarq1xmf48fh47by5h3jnkmksj2n4y6zvx3aw7pfg2jc51";
   };
 
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.romildo ];
   };
-}
+})

@@ -8,14 +8,14 @@
   e2fsprogs,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nilfs-utils";
   version = "2.2.12";
 
   src = fetchFromGitHub {
     owner = "nilfs-dev";
     repo = "nilfs-utils";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-9IUuam5g24+eywEeNZET8TAvKJVevJBwHTHSwN9Tz58=";
   };
 
@@ -67,4 +67,4 @@ stdenv.mkDerivation rec {
     ];
     downloadPage = "http://nilfs.sourceforge.net/en/download.html";
   };
-}
+})

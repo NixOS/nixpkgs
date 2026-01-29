@@ -20,7 +20,7 @@
   vulkanSupport ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libplacebo";
   version = "7.351.0";
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     domain = "code.videolan.org";
     owner = "videolan";
     repo = "libplacebo";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ccoEFpp6tOFdrfMyE0JNKKMAdN4Q95tP7j7vzUj+lSQ=";
   };
 
@@ -90,9 +90,9 @@ stdenv.mkDerivation rec {
       MoltenVK).
     '';
     homepage = "https://code.videolan.org/videolan/libplacebo";
-    changelog = "https://code.videolan.org/videolan/libplacebo/-/tags/v${version}";
+    changelog = "https://code.videolan.org/videolan/libplacebo/-/tags/v${finalAttrs.version}";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

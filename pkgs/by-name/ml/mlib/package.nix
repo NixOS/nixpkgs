@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mlib";
   version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "P-p-H-d";
     repo = "mlib";
-    rev = "V${version}";
+    rev = "V${finalAttrs.version}";
     hash = "sha256-l91UGIxCd6868F21jHTEQd6CgKtuUigxgZJTTnuVPwo=";
   };
 
@@ -35,9 +35,9 @@ stdenv.mkDerivation rec {
       macro to access the container).
     '';
     homepage = "https://github.com/P-p-H-d/mlib";
-    changelog = "https://github.com/P-p-H-d/mlib/releases/tag/${src.rev}";
+    changelog = "https://github.com/P-p-H-d/mlib/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ azahi ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -9,19 +9,19 @@
   libosmo-netif,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "osmo-bts";
   version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "osmo-bts";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-SvlkIvdyrXlaSJl+LbHovhIlnxsxpufJCy1wVCZbjWM=";
   };
 
   postPatch = ''
-    echo "${version}" > .tarball-version
+    echo "${finalAttrs.version}" > .tarball-version
   '';
 
   nativeBuildInputs = [
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.markuskowa ];
     platforms = lib.platforms.linux;
   };
-}
+})

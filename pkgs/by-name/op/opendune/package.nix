@@ -15,14 +15,14 @@
 #     datadir=/path/to/opendune-data
 # - download dune2 into [datadir] http://www.bestoldgames.net/eng/old-games/dune-2.php
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opendune";
   version = "0.9";
 
   src = fetchFromGitHub {
     owner = "OpenDUNE";
     repo = "OpenDUNE";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "15rvrnszdy3db8s0dmb696l4isb3x2cpj7wcl4j09pdi59pc8p37";
   };
 
@@ -59,4 +59,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
     maintainers = [ ];
   };
-}
+})

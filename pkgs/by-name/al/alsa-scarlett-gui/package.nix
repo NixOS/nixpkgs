@@ -11,14 +11,14 @@
   wrapGAppsHook4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "alsa-scarlett-gui";
   version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "geoffreybennett";
     repo = "alsa-scarlett-gui";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-DkfpMK0T67B4mnriignf4hx6Ifddls0rN0SxyfEsPZg=";
   };
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     "DESTDIR=\${out}"
     "PREFIX=''"
   ];
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   postPatch = ''
     substituteInPlace file.c \
@@ -63,4 +63,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ mdorman ];
     platforms = lib.platforms.linux;
   };
-}
+})

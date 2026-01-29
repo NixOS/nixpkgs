@@ -5,14 +5,14 @@
   fetchpatch,
   cmake,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tango-idl";
   version = "6.0.4";
 
   src = fetchFromGitLab {
     owner = "tango-controls";
     repo = "tango-idl";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-etXjey4X5mNCHLtu3TyQv0S9uP4BSfZVNN8YDc/fp68=";
   };
 
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.gilice ];
   };
-}
+})

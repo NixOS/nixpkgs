@@ -24,7 +24,7 @@
   withMan ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libqmi";
   version = "1.36.0";
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "mobile-broadband";
     repo = "libqmi";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-cGNnw0vO/Hr9o/eIf6lLTsoGiEkTvZiArgO7tAc208U=";
   };
 
@@ -103,6 +103,6 @@ stdenv.mkDerivation rec {
       # Tools
       gpl2Plus
     ];
-    changelog = "https://gitlab.freedesktop.org/mobile-broadband/libqmi/-/blob/${version}/NEWS";
+    changelog = "https://gitlab.freedesktop.org/mobile-broadband/libqmi/-/blob/${finalAttrs.version}/NEWS";
   };
-}
+})

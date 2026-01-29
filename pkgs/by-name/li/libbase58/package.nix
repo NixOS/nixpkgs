@@ -7,14 +7,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libbase58";
   version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "bitcoin";
     repo = "libbase58";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-CU55V89GbcYnrhwTPFMd13EGeCk/x9nQswUZ2JsYsUU=";
   };
 
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     mainProgram = "base58";
     platforms = lib.platforms.all;
   };
-}
+})

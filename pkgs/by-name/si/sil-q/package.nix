@@ -18,14 +18,14 @@ let
     chmod +w -R "$ANGBAND_PATH"
   '';
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sil-q";
   version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "sil-quirk";
     repo = "sil-q";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-v/sWhPWF9cCKD8N0RHpwzChMM1t9G2yrMDmi1cZxdOs=";
   };
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   ];
 
   # Makefile(s) and config are not top-level
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   postPatch = ''
     # allow usage of ANGBAND_PATH
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     cp sil $out/bin/sil-q
     wrapProgram $out/bin/sil-q \
       --run "export ANGBAND_PATH=\$HOME/.sil-q" \
-      --run "${setup} ${src}/lib"
+      --run "${setup} ${finalAttrs.src}/lib"
 
     runHook postInstall
   '';
@@ -84,4 +84,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.kenran ];
     platforms = lib.platforms.linux;
   };
-}
+})

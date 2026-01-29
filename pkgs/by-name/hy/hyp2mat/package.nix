@@ -15,14 +15,14 @@
   buildPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hyp2mat";
   version = "0.0.18";
 
   src = fetchFromGitHub {
     owner = "koendv";
     repo = "hyp2mat";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "03ibk51swxfl7pfrhcrfiffdi4mnf8kla0g1xj1lsrvrjwapfx03";
   };
 
@@ -65,4 +65,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ matthuszagh ];
     platforms = lib.platforms.linux;
   };
-}
+})

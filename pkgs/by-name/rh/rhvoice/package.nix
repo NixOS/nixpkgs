@@ -11,14 +11,14 @@
   speechd-minimal,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rhvoice";
   version = "1.16.5";
 
   src = fetchFromGitHub {
     owner = "RHVoice";
     repo = "RHVoice";
-    tag = version;
+    tag = finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-4l4S4MUnVGN/El1BBuZvzPPcavUefjMyBk1hk0ux7zo=";
   };
@@ -54,4 +54,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; all;
     mainProgram = "RHVoice-test";
   };
-}
+})

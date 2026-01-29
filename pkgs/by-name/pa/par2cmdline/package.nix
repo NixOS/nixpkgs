@@ -5,14 +5,14 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "par2cmdline";
   version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "Parchive";
     repo = "par2cmdline";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "11mx8q29cr0sryd11awab7y4mhqgbamb1ss77rffjj6in8pb4hdk";
   };
 
@@ -30,4 +30,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

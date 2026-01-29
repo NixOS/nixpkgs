@@ -15,12 +15,12 @@
 
 # !!! assert freetype == xorg.freetype
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zoom";
   version = "1.1.5";
 
   src = fetchurl {
-    url = "https://www.logicalshift.co.uk/unix/zoom/zoom-${version}.tar.gz";
+    url = "https://www.logicalshift.co.uk/unix/zoom/zoom-${finalAttrs.version}.tar.gz";
     hash = "sha256-8pZ/HAVV341K6QRDUC0UzzO2rGW2AvSZ++Pp445V27w=";
   };
 
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "zoom";
   };
-}
+})

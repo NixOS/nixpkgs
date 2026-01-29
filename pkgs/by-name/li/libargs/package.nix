@@ -5,14 +5,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "args";
   version = "6.4.7";
 
   src = fetchFromGitHub {
     owner = "Taywee";
     repo = "args";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-IQzhbXl1CfEV164EjulKrOUdCTZNZAFgVyzxk4rTNlU=";
   };
 
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

@@ -18,14 +18,14 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "regextester";
   version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "artemanufrij";
     repo = "regextester";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-5+gU8DeB99w2h/4vMal2eHkR0305dmRYiY6fsLZzlnc=";
   };
 
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
   };
-}
+})

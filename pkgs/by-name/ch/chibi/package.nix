@@ -5,14 +5,14 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.11";
   pname = "chibi-scheme";
 
   src = fetchFromGitHub {
     owner = "ashinn";
     repo = "chibi-scheme";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-i+xiaYwM7a+0T824VSuh7UUNI6HV9KpqzQPE1WAZ+As=";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
       DerGuteMoritz
     ];
   };
-}
+})
