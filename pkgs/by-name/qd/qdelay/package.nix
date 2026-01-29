@@ -16,6 +16,10 @@
   libXrandr,
   libXtst,
   writableTmpDirAsHomeHook,
+
+  buildStandalone ? true,
+  buildVST3 ? true,
+  buildLV2 ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -56,7 +60,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "COPY_PLUGIN_AFTER_BUILD" false)
-    (lib.cmakeFeature "BUILD_STANDALONE" "OFF")
+
+    (lib.cmakeBool "BUILD_STANDALONE" buildStandalone)
+    (lib.cmakeBool "BUILD_VST3" buildVST3)
+    (lib.cmakeBool "BUILD_LV2" buildLV2)
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DCMAKE_OSX_ARCHITECTURES=${stdenv.hostPlatform.darwinArch}"
@@ -73,13 +80,27 @@ stdenv.mkDerivation (finalAttrs: {
     "-ffat-lto-objects"
   ]);
 
+  # Needed for standalone
+  NIX_LDFLAGS = lib.optional stdenv.hostPlatform.isLinux "-lX11";
+
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/lib/vst3 $out/lib/lv2
+    pushd QDelay_artefacts/Release
+      ${lib.optionalString buildStandalone ''
+        install -Dm755 Standalone/QDelay -t $out/bin
+      ''}
 
-    cp -r "QDelay_artefacts/Release/LV2/QDelay.lv2" $out/lib/lv2
-    cp -r "QDelay_artefacts/Release/VST3/QDelay.vst3" $out/lib/vst3
+      ${lib.optionalString buildVST3 ''
+        mkdir -p $out/lib/vst3
+        cp -r VST3/QDelay.vst3 $out/lib/vst3
+      ''}
+
+      ${lib.optionalString buildLV2 ''
+        mkdir -p $out/lib/lv2
+        cp -r LV2/QDelay.lv2 $out/lib/lv2
+      ''}
+    popd
 
     runHook postInstall
   '';
@@ -89,7 +110,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/tiagolr/qdelay";
     changelog = "https://github.com/tiagolr/qdelay/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ magnetophon ];
+    maintainers = with lib.maintainers; [
+      magnetophon
+      mrtnvgr
+    ];
     platforms = lib.platforms.all;
   };
 })
