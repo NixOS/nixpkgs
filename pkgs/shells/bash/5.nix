@@ -75,7 +75,7 @@ lib.warnIf (withDocs != null)
       -DSSH_SOURCE_BASHRC
     ''
     # Bash's configure script assumes that CC and CC_FOR_BUILD have the
-    # same default -std=... flags. But at this moment, for FreeBSD, we
+    # same default -std=... flags. But at this moment, for Cross and FreeBSD, we
     # have CC_FOR_BUILD that defaults to c23, and a CC that default to
     # something older, perhaps c17. This breaks the build because of
     # bash's faulty assumptions.
@@ -83,13 +83,11 @@ lib.warnIf (withDocs != null)
     # To fix, we simply force the standard to be the higher for CC to
     # match CC_FOR_BUILD.
     #
-    # Once FreeBSD is built with a newer version of Clang, this hack
-    # should be removed.
-    +
-      lib.optionalString (stdenv.hostPlatform.isFreeBSD && stdenv.hostPlatform != stdenv.buildPlatform)
-        ''
-          -std=c23
-        '';
+    # Once FreeBSD and other contexts are built with a newer version of clang,
+    # this hack should be removed.
+    + lib.optionalString stdenv.cc.isClang ''
+      -std=c23
+    '';
 
     patchFlags = [ "-p0" ];
 
