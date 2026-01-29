@@ -23,7 +23,7 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "syncstorage-rs";
-  version = "0.21.1-unstable-2026-01-26";
+  version = "0.21.1";
 
   src = fetchFromGitHub {
     owner = "mozilla-services";
