@@ -11,21 +11,21 @@
 }:
 buildPythonPackage rec {
   pname = "vl-convert-python";
-  version = "1.8.0";
+  version = "1.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vega";
     repo = "vl-convert";
     tag = "v${version}";
-    hash = "sha256-jOqqqr6O/wHFwUHJ/7iE4N/JXXH1MvqQkAQJ47Ww7YI=";
+    hash = "sha256-W23cau2VzpvfO6DRa/40UVv4j8AbsNLfAfDaMkTyj6w=";
   };
 
   patches = [ ./libffi-sys-system-feature.patch ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-oPUpX7aMZBSsVujcXkIBNL8pk2JJ0RyBCwoVsuARkkQ=";
+    hash = "sha256-P228JMS5K0TbZYyPgKhIbZ1NviwO1jHO5dClFYerNbI=";
   };
 
   buildAndTestSubdir = "vl-convert-python";
