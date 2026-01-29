@@ -463,6 +463,8 @@ in
 
         nct6687d = callPackage ../os-specific/linux/nct6687d { };
 
+        hid-fanatecff = callPackage ../os-specific/linux/hid-fanatecff { };
+
         new-lg4ff = callPackage ../os-specific/linux/new-lg4ff { };
 
         zenergy = callPackage ../os-specific/linux/zenergy { };
