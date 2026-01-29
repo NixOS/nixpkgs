@@ -7957,6 +7957,13 @@
     githubId = 323436;
     name = "Eric Yen";
   };
+  ericwheeler = {
+    email = "eric@onehumankindness.com";
+    github = "onehumankindness";
+    githubId = 148178062;
+    name = "Eric Wheeler";
+    matrix = "@eric:aurora.unstoppable";
+  };
   eriedaberrie = {
     email = "eriedaberrie@gmail.com";
     matrix = "@eriedaberrie:matrix.org";
