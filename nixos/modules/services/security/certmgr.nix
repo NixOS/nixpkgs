@@ -48,7 +48,7 @@ in
 
     defaultRemote = lib.mkOption {
       type = lib.types.str;
-      default = "127.0.0.1:8888";
+      default = "http://127.0.0.1:8888";
       description = "The default CA host:port to use.";
     };
 
