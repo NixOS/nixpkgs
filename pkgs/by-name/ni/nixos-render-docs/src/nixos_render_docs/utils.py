@@ -1,4 +1,6 @@
+from functools import cache
 from typing import Any
+from pathlib import Path
 
 _frozen_classes: dict[type, type] = {}
 
@@ -19,3 +21,29 @@ class Freezeable:
             })
             _frozen_classes[cls] = frozen
         self.__class__ = frozen
+
+@cache
+def relative_path_from(origin: str, to: str) -> str:
+    """
+    Calculate the relative path from origin file to destination file.
+
+    Args:
+        origin: The starting file path
+        to: The target file path to reach
+
+    Returns:
+        A relative path string that leads from origin to destination
+
+    Example:
+        relative_path_from("index.html", "part1/chapters.html")
+        # Returns: "part1/chapters.html"
+    """
+    origin_path = Path(origin).resolve()
+    to_path = Path(to).resolve()
+
+    # For file-to-file navigation, we calculate from the origin file's parent directory
+    origin_dir = origin_path.parent
+
+    # Calculate relative path from origin's directory to destination
+    relative = to_path.relative_to(origin_dir, walk_up=True)
+    return str(relative)

@@ -16,6 +16,7 @@
   roboto,
   treefmt,
   nixosOptionsDoc,
+  singlePageManual ? true,
 }:
 stdenvNoCC.mkDerivation (
   finalAttrs:
@@ -117,6 +118,7 @@ stdenvNoCC.mkDerivation (
         --script ./anchor-use.js \
         --toc-depth 1 \
         --section-toc-depth 1 \
+        ${if !singlePageManual then "--into-pages" else ""} \
         manual.md \
         out/index.html
 
