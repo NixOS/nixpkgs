@@ -145,6 +145,7 @@ stdenv.mkDerivation {
     # Use SDL_GetPrefPath since this takes XDG_DATA_HOME into account (which is correct).
     ++ optional (versionAtLeast version "52.02-r2") ./use-df-linux-dir.patch;
 
+
   # gcc 11 fix
   CXXFLAGS = optionalString (versionOlder version "0.47.05-r3") "-fpermissive";
 
@@ -178,6 +179,26 @@ stdenv.mkDerivation {
     mkdir -p .git/modules/library/xml
     touch .git/index .git/modules/library/xml/index
   '';
+  postPatch = ''
+    substituteInPlace library/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.12)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace depends/lua/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace depends/googletest/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.8)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace depends/googletest/googletest/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.6.4)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace depends//clsocket/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10 FATAL_ERROR)"
+    substituteInPlace depends/libexpat/expat/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.1.3)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace depends/libzip/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.0.2)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace depends/xlsxio/CMakeLists.txt \
+      --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace depends/googletest/googlemock/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.6.4)" "cmake_minimum_required(VERSION 3.10)"
+  '';
 
   cmakeFlags = [
     # Race condition in `Generating codegen.out.xml and df/headers` that is fixed when using Ninja.
@@ -200,10 +221,15 @@ stdenv.mkDerivation {
     "-DCMAKE_PROJECT_TOP_LEVEL_INCLUDES=${fetchOverrides}"
   ];
 
-  NIX_CFLAGS_COMPILE = [
+NIX_CFLAGS_COMPILE = [
+    "-Wno-error"
+    "-Wno-error=unused-result"
+    "-Wno-unused-result"
+    "-Wno-error=unused-variable"
+    "-Wno-unused-variable"
     "-Wno-error=deprecated-enum-enum-conversion"
-  ]
-  ++ optionals (versionOlder version "0.47") [ "-fpermissive" ];
+    "-Wno-deprecated-enum-enum-conversion"
+] ++ optionals (versionOlder version "0.47") [ "-fpermissive" ];
 
   preFixup = ''
     # Wrap dfhack scripts.
