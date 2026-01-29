@@ -277,10 +277,10 @@ let
   # From here on, `stdenv` shall be `stdenv'`.
   stdenv = stdenv';
 in
-buildPythonPackage.override { inherit stdenv; } rec {
+buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   pname = "torch";
   # Don't forget to update torch-bin to the same version.
-  version = "2.9.1";
+  version = "2.10.0";
   pyproject = true;
 
   outputs = [
@@ -292,8 +292,8 @@ buildPythonPackage.override { inherit stdenv; } rec {
   cudaPropagateToOutput = "cxxdev";
 
   src = callPackage ./src.nix {
+    inherit (finalAttrs) version;
     inherit
-      version
       fetchFromGitHub
       fetchFromGitLab
       runCommand
@@ -482,23 +482,23 @@ buildPythonPackage.override { inherit stdenv; } rec {
     done
   '';
 
-  # Override the (weirdly) wrong version set by default. See
-  # https://github.com/NixOS/nixpkgs/pull/52437#issuecomment-449718038
-  # https://github.com/pytorch/pytorch/blob/v1.0.0/setup.py#L267
-  PYTORCH_BUILD_VERSION = version;
-  PYTORCH_BUILD_NUMBER = 0;
-
-  # In-tree builds of NCCL are not supported.
-  # Use NCCL when cudaSupport is enabled and nccl is available.
-  USE_NCCL = setBool useSystemNccl;
-  USE_SYSTEM_NCCL = USE_NCCL;
-  USE_STATIC_NCCL = USE_NCCL;
-
-  # Set the correct Python library path, broken since
-  # https://github.com/pytorch/pytorch/commit/3d617333e
-  PYTHON_LIB_REL_PATH = "${placeholder "out"}/${python.sitePackages}";
-
   env = {
+    # Override the (weirdly) wrong version set by default. See
+    # https://github.com/NixOS/nixpkgs/pull/52437#issuecomment-449718038
+    # https://github.com/pytorch/pytorch/blob/v1.0.0/setup.py#L267
+    PYTORCH_BUILD_VERSION = finalAttrs.version;
+    PYTORCH_BUILD_NUMBER = 0;
+
+    # In-tree builds of NCCL are not supported.
+    # Use NCCL when cudaSupport is enabled and nccl is available.
+    USE_NCCL = setBool useSystemNccl;
+    USE_SYSTEM_NCCL = finalAttrs.env.USE_NCCL;
+    USE_STATIC_NCCL = finalAttrs.env.USE_NCCL;
+
+    # Set the correct Python library path, broken since
+    # https://github.com/pytorch/pytorch/commit/3d617333e
+    PYTHON_LIB_REL_PATH = "${placeholder "out"}/${python.sitePackages}";
+
     # disable warnings as errors as they break the build on every compiler
     # bump, among other things.
     # Also of interest: pytorch ignores CXXFLAGS uses CFLAGS for both C and C++:
@@ -692,7 +692,7 @@ buildPythonPackage.override { inherit stdenv; } rec {
       --replace-fail "\''${_IMPORT_PREFIX}/lib64" "$lib/lib"
 
     substituteInPlace $dev/share/cmake/ATen/ATenConfig.cmake \
-      --replace-fail "/build/${src.name}/torch/include" "$dev/include"
+      --replace-fail "/build/${finalAttrs.src.name}/torch/include" "$dev/include"
   '';
 
   postFixup = ''
@@ -751,7 +751,7 @@ buildPythonPackage.override { inherit stdenv; } rec {
   };
 
   meta = {
-    changelog = "https://github.com/pytorch/pytorch/releases/tag/v${version}";
+    changelog = "https://github.com/pytorch/pytorch/releases/tag/v${finalAttrs.version}";
     # keep PyTorch in the description so the package can be found under that name on search.nixos.org
     description = "PyTorch: Tensors and Dynamic neural networks in Python with strong GPU acceleration";
     homepage = "https://pytorch.org/";
@@ -767,4 +767,4 @@ buildPythonPackage.override { inherit stdenv; } rec {
       lib.platforms.linux ++ lib.optionals (!cudaSupport && !rocmSupport) lib.platforms.darwin;
     broken = builtins.any trivial.id (builtins.attrValues brokenConditions);
   };
-}
+})
