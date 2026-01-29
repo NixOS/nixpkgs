@@ -76,6 +76,60 @@
   "module-services-tandoor-recipes-migrating-media-option-disallow-access": [
     "index.html#module-services-tandoor-recipes-migrating-media-option-disallow-access"
   ],
+  "module-services-tdarr": [
+    "index.html#module-services-tdarr"
+  ],
+  "module-services-tdarr-advanced": [
+    "index.html#module-services-tdarr-advanced"
+  ],
+  "module-services-tdarr-advanced-datadir": [
+    "index.html#module-services-tdarr-advanced-datadir"
+  ],
+  "module-services-tdarr-advanced-extra": [
+    "index.html#module-services-tdarr-advanced-extra"
+  ],
+  "module-services-tdarr-advanced-node-datadir": [
+    "index.html#module-services-tdarr-advanced-node-datadir"
+  ],
+  "module-services-tdarr-advanced-plugins": [
+    "index.html#module-services-tdarr-advanced-plugins"
+  ],
+  "module-services-tdarr-authentication": [
+    "index.html#module-services-tdarr-authentication"
+  ],
+  "module-services-tdarr-basic-usage": [
+    "index.html#module-services-tdarr-basic-usage"
+  ],
+  "module-services-tdarr-distributed": [
+    "index.html#module-services-tdarr-distributed"
+  ],
+  "module-services-tdarr-networking": [
+    "index.html#module-services-tdarr-networking"
+  ],
+  "module-services-tdarr-networking-firewall": [
+    "index.html#module-services-tdarr-networking-firewall"
+  ],
+  "module-services-tdarr-networking-ipv6": [
+    "index.html#module-services-tdarr-networking-ipv6"
+  ],
+  "module-services-tdarr-networking-ports": [
+    "index.html#module-services-tdarr-networking-ports"
+  ],
+  "module-services-tdarr-nodes": [
+    "index.html#module-services-tdarr-nodes"
+  ],
+  "module-services-tdarr-nodes-multiple": [
+    "index.html#module-services-tdarr-nodes-multiple"
+  ],
+  "module-services-tdarr-nodes-path-translators": [
+    "index.html#module-services-tdarr-nodes-path-translators"
+  ],
+  "module-services-tdarr-nodes-types": [
+    "index.html#module-services-tdarr-nodes-types"
+  ],
+  "module-services-tdarr-nodes-workers": [
+    "index.html#module-services-tdarr-nodes-workers"
+  ],
   "sec-override-nixos-test": [
     "index.html#sec-override-nixos-test"
   ],
