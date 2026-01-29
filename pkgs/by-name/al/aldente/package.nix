@@ -2,7 +2,7 @@
   lib,
   stdenvNoCC,
   fetchurl,
-  _7zz,
+  undmg-hdiutil,
   nix-update-script,
 }:
 
@@ -18,16 +18,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   dontBuild = true;
   dontFixup = true;
 
-  # AlDente.dmg is APFS formatted, unpack with 7zz
-  nativeBuildInputs = [ _7zz ];
-
-  sourceRoot = "AlDente.app";
+  # dmg is APFS formatted
+  nativeBuildInputs = [ undmg-hdiutil ];
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/Applications/AlDente.app
-    cp -R . $out/Applications/AlDente.app
+    mkdir -p $out/Applications
+    cp -a AlDente.app $out/Applications
 
     runHook postInstall
   '';
