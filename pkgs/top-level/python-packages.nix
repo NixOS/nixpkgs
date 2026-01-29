@@ -9176,6 +9176,8 @@ self: super: with self; {
 
   lpc-checksum = callPackage ../development/python-modules/lpc-checksum { };
 
+  lpips = callPackage ../development/python-modules/lpips { };
+
   lrcalc-python = callPackage ../development/python-modules/lrcalc-python { };
 
   lrclibapi = callPackage ../development/python-modules/lrclibapi { };
