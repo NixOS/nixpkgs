@@ -1,0 +1,26 @@
+diff --git a/src/H5build_settings.cmake.c.in b/src/H5build_settings.cmake.c.in
+index 8889ebf..0059af9 100644
+--- a/src/H5build_settings.cmake.c.in
++++ b/src/H5build_settings.cmake.c.in
+@@ -24,8 +24,6 @@ const char H5build_settings[]=
+     "                   HDF5 Version: @HDF5_PACKAGE_VERSION_STRING@\n"
+     "                  Configured on: @CONFIG_DATE@\n"
+     "                  Configured by: @CMAKE_GENERATOR@\n"
+-    "                    Host system: @CMAKE_HOST_SYSTEM@\n"
+-    "              Uname information: @CMAKE_SYSTEM_NAME@\n"
+     "                       Byte sex: @BYTESEX@\n"
+     "             Installation point: @CMAKE_INSTALL_PREFIX@\n"
+     "\n"
+diff --git a/src/libhdf5.settings.cmake.in b/src/libhdf5.settings.cmake.in
+index c9f3e4d..f098bf1 100644
+--- a/src/libhdf5.settings.cmake.in
++++ b/src/libhdf5.settings.cmake.in
+@@ -6,8 +6,6 @@ General Information:
+                    HDF5 Version: @HDF5_PACKAGE_VERSION_STRING@
+                   Configured on: @CONFIG_DATE@
+                   Configured by: @CMAKE_GENERATOR@
+-                    Host system: @CMAKE_HOST_SYSTEM@
+-              Uname information: @CMAKE_SYSTEM_NAME@
+                        Byte sex: @BYTESEX@
+              Installation point: @CMAKE_INSTALL_PREFIX@
+ 

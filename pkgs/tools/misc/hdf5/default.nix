@@ -46,6 +46,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-mJTax+VWAL3Amkq3Ij8fxazY2nfpMOTxYMUQlTvY/rg=";
   };
 
+  patches = [ ./reproducible-build.patch ];
+
   passthru = {
     inherit
       cppSupport
