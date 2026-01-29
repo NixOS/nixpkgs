@@ -196,11 +196,6 @@ in
   fzy = prev.fzy.overrideAttrs {
     doCheck = true;
     nativeCheckInputs = [ final.busted ];
-    # Until https://github.com/swarn/fzy-lua/pull/8 is merged,
-    # we have to invoke busted manually
-    checkPhase = ''
-      busted
-    '';
   };
 
   grug-far-nvim = prev.grug-far-nvim.overrideAttrs {
