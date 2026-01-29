@@ -802,6 +802,7 @@ stdenv.mkDerivation {
     teams = [ lib.teams.swift ];
     license = lib.licenses.asl20;
     platforms = with lib.platforms; linux ++ darwin;
+    broken = true; # See https://github.com/NixOS/nixpkgs/issues/483584#issuecomment-3803535265 more infromation
     # Swift doesn't support 32-bit Linux, unknown on other platforms.
     badPlatforms = lib.platforms.i686;
     timeout = 86400; # 24 hours.
