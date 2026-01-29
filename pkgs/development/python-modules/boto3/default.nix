@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "boto";
     repo = "boto3";
     tag = version;
-    hash = "sha256-H6iCdOw0eFfd4rKhf5VRhWZhPG1ne+TrZYqxpY5R+T4=";
+    hash = "sha256-g/Iu+dXsoZduPoVK5YfRpJaYmg8wj8rflBLOJwfsO54=";
   };
 
   build-system = [
@@ -44,6 +44,11 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "boto3" ];
+
+  disabledTests = [
+    # Disable slow tests
+    "test_documentation"
+  ];
 
   disabledTestPaths = [
     # Integration tests require networking

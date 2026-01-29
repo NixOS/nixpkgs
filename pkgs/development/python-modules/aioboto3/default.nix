@@ -2,6 +2,7 @@
   lib,
   aiobotocore,
   aiofiles,
+  boto3,
   buildPythonPackage,
   chalice,
   cryptography,
@@ -38,8 +39,8 @@ buildPythonPackage rec {
   dependencies = [
     aiobotocore
     aiofiles
-  ]
-  ++ aiobotocore.optional-dependencies.boto3;
+    boto3
+  ];
 
   optional-dependencies = {
     chalice = [ chalice ];

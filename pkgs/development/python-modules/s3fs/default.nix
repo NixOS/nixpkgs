@@ -43,11 +43,6 @@ buildPythonPackage rec {
     aiohttp
   ];
 
-  optional-dependencies = {
-    awscli = aiobotocore.optional-dependencies.awscli;
-    boto3 = aiobotocore.optional-dependencies.boto3;
-  };
-
   pythonImportsCheck = [ "s3fs" ];
 
   nativeCheckInputs = [
