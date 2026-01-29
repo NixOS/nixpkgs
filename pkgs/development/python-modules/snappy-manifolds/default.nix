@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "snappy-manifolds";
-  version = "1.2.1";
+  version = "1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "3-manifolds";
     repo = "snappy_manifolds";
     tag = "${version}_as_released";
-    hash = "sha256-vxG3z6zWzG4S11fBxYGn4/c2f2sWOCIrzT+R27TR144=";
+    hash = "sha256-e+BoPvg0cuEqLq2f9ZPgqFMEYw7eeSEDkY42+l+kDCk=";
   };
 
   build-system = [ setuptools ];

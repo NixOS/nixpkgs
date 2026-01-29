@@ -1,11 +1,12 @@
 {
   lib,
+  fetchFromGitHub,
   python,
   buildPythonPackage,
-  fetchFromGitHub,
+  setuptools,
   setuptools-scm,
-  tkinter,
   tkgl,
+  tkinter,
 }:
 
 buildPythonPackage rec {
@@ -29,7 +30,10 @@ buildPythonPackage rec {
                      "pkg_dir = os.path.join(__path__[0], 'tk')"
   '';
 
-  build-system = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [ tkinter ];
 

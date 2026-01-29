@@ -1,16 +1,22 @@
 {
   lib,
   stdenv,
-  fetchpatch,
+  fetchFromGitHub,
   python,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchpatch,
+
+  # build-time dependencies
   setuptools,
-  cypari,
   cython,
+
+  # non-Python runtime dependencies
+  libGL,
+
+  # Python runtime dependencies
+  cypari,
   fxrays,
   ipython,
-  libGL,
   low-index,
   packaging,
   pickleshare,
@@ -20,14 +26,21 @@
   snappy-15-knots,
   snappy-manifolds,
   spherogram,
+  tkinter-gl,
+
+  # documentation
   sphinxHook,
   sphinx-rtd-theme,
-  tkinter-gl,
+
+  # tests
+  runCommand,
+  sage,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "snappy";
-  version = "3.2";
+  version = "3.3";
   pyproject = true;
 
   outputs = [
@@ -39,7 +52,7 @@ buildPythonPackage rec {
     owner = "3-manifolds";
     repo = "SnapPy";
     tag = "${version}_as_released";
-    hash = "sha256-IwPxuyVDsL5yML+J06HTKlz52sYrPkohLJ0XDXDwTlo=";
+    hash = "sha256-gok/94ziyOeXBgcfJNZVnS7vb7PCYL2r2BtNwnt/Peo=";
   };
 
   patches = [
@@ -48,17 +61,12 @@ buildPythonPackage rec {
       url = "https://github.com/3-manifolds/SnapPy/commit/c6aeeaaec7010a54e4ebdf2e8dad7b384c2ce8e5.patch";
       hash = "sha256-OV3Qr5wO5UHNzVFTPTujIpp5ptel6gvAlcMgrJ8C0KY=";
     })
-    (fetchpatch {
-      name = "fix-test-aarch64.patch";
-      url = "https://github.com/3-manifolds/SnapPy/commit/a8d57db39bc8f486746dc61027779168d0bc316a.patch";
-      hash = "sha256-RsuwaR+7UrVTKlPwQeHblTAN++La7b9BSMdFcJSiX5Q=";
-    })
   ];
 
   postPatch =
     lib.optionalString stdenv.hostPlatform.isLinux ''
       substituteInPlace setup.py \
-        --replace-fail "/usr/include/GL" "${libGL.dev}/include/GL"
+        --replace-fail "/usr/include/GL" "${lib.getDev libGL}/include/GL"
       substituteInPlace freedesktop/share/applications/snappy.desktop \
         --replace-fail "Exec=/usr/bin/env python3 -m snappy.app" "Exec=SnapPy"
     ''
@@ -116,6 +124,25 @@ buildPythonPackage rec {
     ${python.interpreter} -m snappy.test --skip-gui
     runHook postCheck
   '';
+
+  passthru.tests.sage =
+    let
+      sage' = sage.override {
+        extraPythonPackages = ps: [ ps.snappy ];
+        requireSageTests = false;
+      };
+    in
+    runCommand "snappy-sage-tests"
+      {
+        nativeBuildInputs = [
+          sage'
+          writableTmpDirAsHomeHook
+        ];
+      }
+      ''
+        sage -python -m snappy.test --skip-gui
+        touch $out
+      '';
 
   meta = {
     description = "Studying the topology and geometry of 3-manifolds, with a focus on hyperbolic structures";
