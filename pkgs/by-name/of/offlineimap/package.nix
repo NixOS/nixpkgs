@@ -15,33 +15,22 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "offlineimap";
-  version = "8.0.0";
+  version = "8.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OfflineIMAP";
     repo = "offlineimap3";
     rev = "v${version}";
-    hash = "sha256-XLxKqO5OCXsFu8S3lMp2Ke5hp6uer9npZ3ujmL6Kb3g=";
+    hash = "sha256-Aigh2B4MTAOeUprtcK9kOx+aG4yCmGZoWTLmYYhrfXA=";
   };
 
   patches = [
     (fetchpatch {
-      name = "sqlite-version-aware-threadsafety-check.patch";
-      url = "https://github.com/OfflineIMAP/offlineimap3/pull/139/commits/7cd32cf834b34a3d4675b29bebcd32dc1e5ef128.patch";
-      hash = "sha256-xNq4jFHMf9XZaa9BFF1lOzZrEGa5BEU8Dr+gMOBkJE4=";
-    })
-    (fetchpatch {
-      # https://github.com/OfflineIMAP/offlineimap3/pull/120
-      name = "python312-comaptibility.patch";
-      url = "https://github.com/OfflineIMAP/offlineimap3/commit/a1951559299b297492b8454850fcfe6eb9822a38.patch";
-      hash = "sha256-CBGMHi+ZzOBJt3TxBf6elrTRMIQ+8wr3JgptL2etkoA=";
-    })
-    (fetchpatch {
-      # https://github.com/OfflineIMAP/offlineimap3/pull/161
-      name = "python312-compatibility.patch";
-      url = "https://github.com/OfflineIMAP/offlineimap3/commit/3dd8ebc931e3f3716a90072bd34e50ac1df629fa.patch";
-      hash = "sha256-2IJ0yzESt+zk+r+Z+9js3oKhFF0+xok0xK8Jd3G/gYY=";
+      # https://github.com/OfflineIMAP/offlineimap3/pull/225
+      name = "duplicate-bin.patch";
+      url = "https://github.com/OfflineIMAP/offlineimap3/commit/64557d2251f0d911c215eb743f6bfe8de8dfc042.patch";
+      hash = "sha256-Agy38fLt2k9AwPmGBoQxUD7+FD3qJzj89A13SQr0/nU=";
     })
   ];
 
@@ -66,16 +55,26 @@ python3.pkgs.buildPythonApplication rec {
   dependencies = with python3.pkgs; [
     certifi
     distro
+    gssapi
     imaplib2
+    keyring
+    portalocker
     pysocks
     rfc6555
     urllib3
+  ];
+
+  # https://github.com/OfflineIMAP/offlineimap3/pull/232
+  pythonRelaxDeps = [
+    "urllib3"
   ];
 
   postInstall = ''
     make -C docs man
     installManPage docs/offlineimap.1
     installManPage docs/offlineimapui.7
+    install -Dm644 offlineimap.conf -T $out/share/offlineimap/offlineimap.conf
+    install -Dm644 offlineimap.conf.minimal -T $out/share/offlineimap/offlineimap.conf.minimal
   '';
 
   # Test requires credentials
