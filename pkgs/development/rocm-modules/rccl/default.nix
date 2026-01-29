@@ -40,7 +40,7 @@ in
 # infiniband ib_peer_mem support isn't in the mainline kernel but is carried by some distros
 stdenv.mkDerivation (finalAttrs: {
   pname = "rccl${clr.gpuArchSuffix}";
-  version = "7.1.1";
+  version = "7.2.0";
 
   outputs = [
     "out"
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "rccl";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-3u7D3Gre1n+4Lf+cK+RMfCUM9c46pXZjdhGOrwIKM0w=";
+    hash = "sha256-Kpobn0fR7/mXGVWYjNQ35sToRWLfOQTHRbjuSYj1of4=";
   };
 
   requiredSystemFeatures = [ "big-parallel" ]; # Very resource intensive LTO

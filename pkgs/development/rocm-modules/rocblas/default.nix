@@ -40,13 +40,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocblas${clr.gpuArchSuffix}";
-  version = "7.1.1";
+  version = "7.2.0";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocBLAS";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-obKypbYmnSeOtOr7g0pxOz02YfzZ0bGugTtznkeHz14=";
+    hash = "sha256-oY6yELFnpnDDksu63Go88TGLAgC64tUaPIbaRgD2qus=";
   };
 
   outputs = [ "out" ] ++ lib.optional buildBenchmarks "benchmark" ++ lib.optional buildTests "test";
