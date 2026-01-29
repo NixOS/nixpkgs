@@ -21,6 +21,8 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-W6NPZ5uP7wGjgyA+Nv2vpmshKWny2CCSrn/Gaoi7Pr4=";
   };
 
+  __structuredAttrs = true;
+
   build-system = [ python3Packages.setuptools ];
 
   dependencies = with python3Packages; [
@@ -39,33 +41,38 @@ python3Packages.buildPythonApplication rec {
     which
   ];
 
-  disabledTests =
-    # Tests require running docker daemon
-    [
-      "test_cpp_plugin"
-      "test_godot_plugin"
-      "test_html"
-      "test_python"
-      "test_qml_only"
-      "test_rust"
-    ]
-    # Tests do not work on non-amd64 platforms
-    ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [
-      # hardcode amd64
-      "test_arch"
-      "test_restricted_arch"
+  disabledTests = [
+    # Requires running docker daemon
+    "TestTemplates"
 
-      # no -ide images on arm64
-      # https://gitlab.com/clickable/clickable/-/issues/478
-      "test_command_overrided"
-      "test_init_cmake_project"
-      "test_init_cmake_project_exe_as_var"
-      "test_init_cmake_project_no_exe"
-      "test_init_cmake_project_no_to_prompt"
-      "test_initialize_qtcreator_conf"
-      "test_project_pre_configured"
-      "test_recurse_replace"
-    ];
+    # Expects /tmp to exist and not be a symlink
+    # https://gitlab.com/clickable/clickable/-/issues/479
+    "TestReviewCommand and test_run and not test_run_with_path_arg"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [
+    # pytest's lack of exact nodeid matching or deselecting makes it impossible to nicely disable just
+    # test_architectures.py::TestArchitectures::test_arch (infix matching makes test_arch match test_architectures.py).
+    # Have to `or` for every other TestArchitectures test and then `not` that.
+    # What we want to disable: test_arch & test_restricted_arch
+    # Reason: they hardcode amd64
+    "TestArchitectures and not (${
+      lib.strings.concatStringsSep " or " [
+        "test_arch_agnostic"
+        "test_default_arch"
+        "test_fail_arch_agnostic"
+        "test_fail_in_restricted_arch"
+        "test_restricted_arch_env"
+      ]
+    })"
+
+    # no -ide images on non-x86_64
+    # https://gitlab.com/clickable/clickable/-/issues/478
+    "TestIdeQtCreatorCommand and test_command_overrided"
+    "TestIdeQtCreatorCommand and test_init_cmake_project"
+    "TestIdeQtCreatorCommand and test_initialize_qtcreator_conf"
+    "TestIdeQtCreatorCommand and test_project_pre_configured"
+    "TestIdeQtCreatorCommand and test_recurse_replace"
+  ];
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
