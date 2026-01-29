@@ -5498,6 +5498,12 @@
     githubId = 4162215;
     keys = [ { fingerprint = "CE97 9DEE 904C 26AA 3716  78C2 96A4 38F9 EE72 572F"; } ];
   };
+  croots = {
+    name = "Cameron Roots";
+    github = "croots";
+    githubId = 38054423;
+    keys = [ { fingerprint = "8496 ECF3 0961 115C A6DE 919F A01D C430 0605 1618"; } ];
+  };
   crschnick = {
     email = "crschnick@xpipe.io";
     name = "Christopher Schnick";
