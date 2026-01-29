@@ -5953,8 +5953,6 @@ with pkgs;
 
   dbt = with python3Packages; toPythonApplication dbt-core;
 
-  devbox = callPackage ../development/tools/devbox { buildGoModule = buildGo124Module; };
-
   libcxx = llvmPackages.libcxx;
 
   libgcc = stdenv.cc.cc.libgcc or null;
@@ -11049,25 +11047,12 @@ with pkgs;
 
   openrazer-daemon = python3Packages.toPythonApplication python3Packages.openrazer-daemon;
 
-  orpie = callPackage ../applications/misc/orpie {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_14;
-  };
-
   osmscout-server = libsForQt5.callPackage ../applications/misc/osmscout-server {
     protobuf = protobuf_21.override {
       abseil-cpp = abseil-cpp_202103.override {
         cxxStandard = "17";
       };
     };
-  };
-
-  palemoon-bin = callPackage ../applications/networking/browsers/palemoon/bin.nix { };
-  palemoon-gtk2-bin = palemoon-bin.override { withGTK3 = false; };
-
-  pantalaimon = callPackage ../applications/networking/instant-messengers/pantalaimon { };
-
-  pantalaimon-headless = callPackage ../applications/networking/instant-messengers/pantalaimon {
-    enableDbusUi = false;
   };
 
   parsec-bin = callPackage ../applications/misc/parsec/bin.nix { };
