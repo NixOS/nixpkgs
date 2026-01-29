@@ -26628,7 +26628,12 @@
     email = "timor.dd@googlemail.com";
     github = "timor";
     githubId = 174156;
-    name = "timor";
+    name = "Timor Kellers";
+  };
+  timoteuszelle = {
+    github = "timoteuszelle";
+    githubId = 46320568;
+    name = "Tim Zelle";
   };
   timput = {
     email = "tim@timput.com";
