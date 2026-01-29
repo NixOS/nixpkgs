@@ -53,11 +53,11 @@ self: super: with self; {
 
   acme-tiny = callPackage ../development/python-modules/acme-tiny { };
 
-  acquire = callPackage ../development/python-modules/acquire { };
+  acquire = callPackage ../by-name/ac/acquire/unwrapped.nix { };
 
   acres = callPackage ../development/python-modules/acres { };
 
-  actdiag = callPackage ../development/python-modules/actdiag { };
+  actdiag = callPackage ../by-name/ac/actdiag/unwrapped.nix { };
 
   actron-neo-api = callPackage ../development/python-modules/actron-neo-api { };
 
@@ -228,7 +228,7 @@ self: super: with self; {
 
   aiobiketrax = callPackage ../development/python-modules/aiobiketrax { };
 
-  aioblescan = callPackage ../development/python-modules/aioblescan { };
+  aioblescan = callPackage ../by-name/ai/aioblescan/unwrapped.nix { };
 
   aioboto3 = callPackage ../development/python-modules/aioboto3 { };
 
@@ -802,7 +802,7 @@ self: super: with self; {
 
   anywidget = callPackage ../development/python-modules/anywidget { };
 
-  aocd = callPackage ../development/python-modules/aocd { };
+  aocd = callPackage ../by-name/ao/aocd/unwrapped.nix { };
 
   aocd-example-parser = callPackage ../development/python-modules/aocd-example-parser { };
 
@@ -1185,7 +1185,7 @@ self: super: with self; {
 
   auditok = callPackage ../development/python-modules/auditok { };
 
-  auditwheel = callPackage ../development/python-modules/auditwheel {
+  auditwheel = callPackage ../by-name/au/auditwheel/unwrapped.nix {
     inherit (pkgs)
       bzip2
       gnutar
@@ -2118,9 +2118,9 @@ self: super: with self; {
 
   blockfrost-python = callPackage ../development/python-modules/blockfrost-python { };
 
-  blocksat-cli = callPackage ../development/python-modules/blocksat-cli { };
+  blocksat-cli = callPackage ../by-name/bl/blocksat-cli/unwrapped.nix { };
 
-  bloodhound-py = callPackage ../development/python-modules/bloodhound-py { };
+  bloodhound-py = callPackage ../by-name/bl/bloodhound-py/unwrapped.nix { };
 
   bloodyad = callPackage ../development/python-modules/bloodyad { };
 
@@ -2335,7 +2335,7 @@ self: super: with self; {
 
   bump-my-version = callPackage ../development/python-modules/bump-my-version { };
 
-  bump2version = callPackage ../development/python-modules/bump2version { };
+  bump2version = callPackage ../by-name/bu/bump2version/unwrapped.nix { };
 
   bumpfontversion = callPackage ../development/python-modules/bumpfontversion { };
 
@@ -3384,7 +3384,7 @@ self: super: with self; {
 
   cv2-enumerate-cameras = callPackage ../development/python-modules/cv2-enumerate-cameras { };
 
-  cvelib = callPackage ../development/python-modules/cvelib { };
+  cvelib = callPackage ../by-name/cv/cve/unwrapped.nix { };
 
   cvss = callPackage ../development/python-modules/cvss { };
 
@@ -3565,9 +3565,9 @@ self: super: with self; {
     protoc = pkgs.protobuf;
   };
 
-  datalad = callPackage ../development/python-modules/datalad { };
+  datalad = callPackage ../by-name/da/datalad/unwrapped.nix { };
 
-  datalad-gooey = callPackage ../development/python-modules/datalad-gooey { };
+  datalad-gooey = callPackage ../by-name/da/datalad-gooey/unwrapped.nix { };
 
   datalad-next = callPackage ../development/python-modules/datalad-next { };
 
@@ -3749,7 +3749,7 @@ self: super: with self; {
 
   defusedxml = callPackage ../development/python-modules/defusedxml { };
 
-  dehinter = callPackage ../development/python-modules/dehinter { };
+  dehinter = callPackage ../by-name/de/dehinter/unwrapped.nix { };
 
   deid = callPackage ../development/python-modules/deid { };
 
@@ -3871,7 +3871,7 @@ self: super: with self; {
 
   dill = callPackage ../development/python-modules/dill { };
 
-  dinghy = callPackage ../development/python-modules/dinghy { };
+  dinghy = callPackage ../by-name/di/dinghy/unwrapped.nix { };
 
   dingz = callPackage ../development/python-modules/dingz { };
 
@@ -4452,7 +4452,7 @@ self: super: with self; {
 
   dncil = callPackage ../development/python-modules/dncil { };
 
-  dnf-plugins-core = callPackage ../development/python-modules/dnf-plugins-core { };
+  dnf-plugins-core = callPackage ../by-name/dn/dnf-plugins-core/unwrapped.nix { };
 
   dnf4 = callPackage ../development/python-modules/dnf4 { };
 
@@ -5740,11 +5740,11 @@ self: super: with self; {
 
   folium = callPackage ../development/python-modules/folium { };
 
-  font-v = callPackage ../development/python-modules/font-v { };
+  font-v = callPackage ../by-name/fo/font-v/unwrapped.nix { };
 
   fontawesomefree = callPackage ../development/python-modules/fontawesomefree { };
 
-  fontbakery = callPackage ../development/python-modules/fontbakery { };
+  fontbakery = callPackage ../by-name/fo/fontbakery/unwrapped.nix { };
 
   fontfeatures = callPackage ../development/python-modules/fontfeatures { };
 
@@ -6151,7 +6151,7 @@ self: super: with self; {
 
   ghp-import = callPackage ../development/python-modules/ghp-import { };
 
-  ghrepo-stats = callPackage ../development/python-modules/ghrepo-stats { };
+  ghrepo-stats = callPackage ../by-name/gh/ghrepo-stats/unwrapped.nix { };
 
   gibberish-detector = callPackage ../development/python-modules/gibberish-detector { };
 
@@ -6171,11 +6171,11 @@ self: super: with self; {
 
   git-dummy = callPackage ../development/python-modules/git-dummy { };
 
-  git-filter-repo = callPackage ../development/python-modules/git-filter-repo { };
+  git-filter-repo = callPackage ../by-name/gi/git-filter-repo/unwrapped.nix { };
 
   git-find-repos = callPackage ../development/python-modules/git-find-repos { };
 
-  git-revise = callPackage ../development/python-modules/git-revise { };
+  git-revise = callPackage ../by-name/gi/git-revise/unwrapped.nix { };
 
   git-sweep = callPackage ../development/python-modules/git-sweep { };
 
@@ -9270,7 +9270,7 @@ self: super: with self; {
 
   magicgui = callPackage ../development/python-modules/magicgui { };
 
-  magika = callPackage ../development/python-modules/magika { };
+  magika = callPackage ../by-name/ma/magika/unwrapped.nix { };
 
   mahotas = callPackage ../development/python-modules/mahotas { };
 
@@ -11211,7 +11211,7 @@ self: super: with self; {
 
   olefile = callPackage ../development/python-modules/olefile { };
 
-  oletools = callPackage ../development/python-modules/oletools { };
+  oletools = callPackage ../by-name/ol/oletools/unwrapped.nix { };
 
   ollama = callPackage ../development/python-modules/ollama { };
 
@@ -12975,9 +12975,9 @@ self: super: with self; {
 
   py4j = callPackage ../development/python-modules/py4j { };
 
-  py65 = callPackage ../development/python-modules/py65 { };
+  py65 = callPackage ../by-name/py/py65/unwrapped.nix { };
 
-  py7zr = callPackage ../development/python-modules/py7zr { };
+  py7zr = callPackage ../by-name/py/py7zr/unwrapped.nix { };
 
   pyabpoa = toPythonModule (
     pkgs.abpoa.override {
@@ -17077,7 +17077,7 @@ self: super: with self; {
 
   sdjson = callPackage ../development/python-modules/sdjson { };
 
-  sdkmanager = callPackage ../development/python-modules/sdkmanager { };
+  sdkmanager = callPackage ../by-name/sd/sdkmanager/unwrapped.nix { };
 
   sdnotify = callPackage ../development/python-modules/sdnotify { };
 
@@ -17261,7 +17261,7 @@ self: super: with self; {
 
   shapely = callPackage ../development/python-modules/shapely { };
 
-  shaperglot = callPackage ../development/python-modules/shaperglot { };
+  shaperglot = callPackage ../by-name/sh/shaperglot/unwrapped.nix { };
 
   shared = callPackage ../development/python-modules/shared { };
 
@@ -19469,7 +19469,7 @@ self: super: with self; {
 
   twill = callPackage ../development/python-modules/twill { };
 
-  twine = callPackage ../development/python-modules/twine { };
+  twine = callPackage ../by-name/tw/twine/unwrapped.nix { };
 
   twinkly-client = callPackage ../development/python-modules/twinkly-client { };
 
@@ -20064,7 +20064,7 @@ self: super: with self; {
 
   ufolib2 = callPackage ../development/python-modules/ufolib2 { };
 
-  ufolint = callPackage ../development/python-modules/ufolint { };
+  ufolint = callPackage ../by-name/uf/ufolint/unwrapped.nix { };
 
   ufomerge = callPackage ../development/python-modules/ufomerge { };
 
@@ -20478,7 +20478,7 @@ self: super: with self; {
 
   vpk = callPackage ../development/python-modules/vpk { };
 
-  vprof = callPackage ../development/python-modules/vprof { };
+  vprof = callPackage ../by-name/vp/vprof/unwrapped.nix { };
 
   vqgan-jax = callPackage ../development/python-modules/vqgan-jax { };
 
