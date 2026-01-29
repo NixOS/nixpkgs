@@ -12,16 +12,16 @@ buildPgrxExtension (finalAttrs: {
   cargo-pgrx = cargo-pgrx_0_16_0;
 
   pname = "vectorchord";
-  version = "0.5.3";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "tensorchord";
     repo = "vectorchord";
     tag = finalAttrs.version;
-    hash = "sha256-+c1Uf/3rp+HuthDVPLloJF2MQPW3Xho897Z2eAnG6aM=";
+    hash = "sha256-+BOuiinbKPZZaDl9aYsIoZPgvLZ4FA6Rb4/W+lAz4so=";
   };
 
-  cargoHash = "sha256-/EcQgQ6J9hg4BsniRX7OMwEYy5EtVeT6Q/+3mAkyCH8=";
+  cargoHash = "sha256-kwe2x7OTjpdPonZsvnR1C/89D5W/R5JswYF79YcSFEA=";
 
   # Include upgrade scripts in the final package
   # https://github.com/tensorchord/VectorChord/blob/0.5.0/crates/make/src/main.rs#L366
