@@ -27,8 +27,18 @@ stdenv.mkDerivation rec {
     owner = "kronosnet";
     repo = "kronosnet";
     rev = "v${version}";
-    sha256 = "sha256-g2AgVAFEmRlMaqH7uRabSNJP0ehUQ6Iws4LT2iB8kTA=";
+    sha256 = "sha256-6W8b5M97L1KxissLJej67v1+OhB7Pm+qLDSpjp8PF4c=";
   };
+
+  # Fix autoreconf issue: libtool puts ltmain.sh in ../../ but automake expects ./
+  preAutorreconf = ''
+    # Run libtollize first to generate ltmain.sh in the correct location
+    libtoolize --copy --force --install
+    # Now copy ltmain.sh to where automake expects it
+    if [ -f ../../ltmain.sh ]; then
+      cp ../../ltmain.sh ./ltmain.sh
+    fi
+  '';
 
   nativeBuildInputs = [
     autoreconfHook
