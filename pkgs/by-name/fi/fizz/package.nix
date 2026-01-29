@@ -26,7 +26,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fizz";
-  version = "2025.10.13.00";
+  version = "2025.12.22.00";
 
   outputs = [
     "bin"
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebookincubator";
     repo = "fizz";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MNkPf289QGZ1x6Yr2E8vnlCFan94Opjiw6RItodWGaw=";
+    hash = "sha256-NzqztQzgVsPoLZr+m3XlidnACuYD9vX4eB1IUbAccmw=";
   };
 
   patches = [
