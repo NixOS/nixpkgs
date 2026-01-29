@@ -75,6 +75,10 @@ buildPythonPackage rec {
     "test_queue"
     "test_redirection"
     "test_whole"
+
+    # AssertionError: assert ['deflate', 'gzip', 'zstd'] == ['deflate', 'gzip']
+    # https://github.com/adbar/trafilatura/issues/823
+    "test_config"
   ];
 
   pythonImportsCheck = [ "trafilatura" ];
@@ -83,6 +87,7 @@ buildPythonPackage rec {
     description = "Python package and command-line tool designed to gather text on the Web";
     homepage = "https://trafilatura.readthedocs.io";
     changelog = "https://github.com/adbar/trafilatura/blob/v${version}/HISTORY.md";
+    downloadPage = "https://github.com/adbar/trafilatura";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jokatzke ];
     mainProgram = "trafilatura";
