@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
     "dev"
     "out"
     "doc"
+    "man"
   ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
