@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "openant-unstable";
-  version = "1.3.1";
+  version = "1.3.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Tigge";
     repo = "openant";
     tag = "v${version}";
-    hash = "sha256-wDtHlkVyD7mMDXZ4LGMgatr9sSlQKVbgkYsKvHGr9Pc=";
+    hash = "sha256-YIROOAd68sNXRNJp+0qzUKJ9H2XTdhA/XUXP83AQr5U=";
   };
 
   nativeBuildInputs = [
