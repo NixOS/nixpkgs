@@ -8844,13 +8844,27 @@ self: super: with self; {
 
   lit = callPackage ../development/python-modules/lit { };
 
+  litedram = callPackage ../development/python-modules/litedram { };
+
+  liteeth = callPackage ../development/python-modules/liteeth { };
+
+  liteiclink = callPackage ../development/python-modules/liteiclink { };
+
   litellm = callPackage ../development/python-modules/litellm { };
 
   litemapy = callPackage ../development/python-modules/litemapy { };
 
+  litepcie = callPackage ../development/python-modules/litepcie { };
+
+  litesdcard = callPackage ../development/python-modules/litesdcard { };
+
   litestar = callPackage ../development/python-modules/litestar { };
 
   litestar-htmx = callPackage ../development/python-modules/litestar-htmx { };
+
+  litex = callPackage ../development/python-modules/litex { };
+
+  litex-boards = callPackage ../development/python-modules/litex-boards { };
 
   littleutils = callPackage ../development/python-modules/littleutils { };
 
@@ -15737,6 +15751,18 @@ self: super: with self; {
   python3-saml = callPackage ../development/python-modules/python3-saml { };
 
   python3-sipsimple = callPackage ../development/python-modules/python3-sipsimple { };
+
+  pythondata-cpu-vexriscv_smp =
+    callPackage ../development/python-modules/pythondata-cpu-vexriscv_smp
+      { };
+
+  pythondata-software-compiler_rt =
+    callPackage ../development/python-modules/pythondata-software-compiler_rt
+      { };
+
+  pythondata-software-picolibc =
+    callPackage ../development/python-modules/pythondata-software-picolibc
+      { };
 
   pythondialog = callPackage ../development/python-modules/pythondialog { };
 
