@@ -44,7 +44,7 @@ mkKdeDerivation {
     ./tzdir.patch
     ./no-discover-shortcut.patch
     (replaceVars ./wallpaper-paths.patch {
-      wallpapers = "${lib.getBin breeze}/share/wallpapers";
+      wallpapers = "${breeze}/share/wallpapers";
     })
   ];
 
