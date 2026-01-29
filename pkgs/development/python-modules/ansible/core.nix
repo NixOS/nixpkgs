@@ -32,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "ansible-core";
-  version = "2.20.0";
+  version = "2.20.1";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     owner = "ansible";
     repo = "ansible";
     tag = "v${version}";
-    hash = "sha256-4kTBzDHDfdHR/W4edxrGtWhg6TRLMtdEgUZYcn8cFQg=";
+    hash = "sha256-Y/BC5PLMto3H2KucIqMlmy25x0b7yGNmEOv8KDAs7SI=";
   };
 
   # ansible_connection is already wrapped, so don't pass it through
