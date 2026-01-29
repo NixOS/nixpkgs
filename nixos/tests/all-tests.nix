@@ -815,6 +815,7 @@ in
   kaidan = runTest ./kaidan;
   kanboard = runTest ./web-apps/kanboard.nix;
   kanidm = runTest ./kanidm.nix;
+  kanidm-generate-selfsigned = runTest ./kanidm-generate-selfsigned.nix;
   kanidm-provisioning = runTest ./kanidm-provisioning.nix;
   karakeep = runTest ./web-apps/karakeep.nix;
   karma = runTest ./karma.nix;
