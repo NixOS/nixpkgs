@@ -14,8 +14,27 @@
   setuptools,
   pytestCheckHook,
   six,
+  writeText,
 }:
 
+let
+  opensslConf = writeText "openssl.conf" ''
+    openssl_conf = openssl_init
+
+    [openssl_init]
+    providers = provider_sect
+
+    [provider_sect]
+    default = default_sect
+    legacy = legacy_sect
+
+    [default_sect]
+    activate = 1
+
+    [legacy_sect]
+    activate = 1
+  '';
+in
 buildPythonPackage rec {
   pname = "impacket";
   version = "0.13.0";
@@ -46,7 +65,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [ "impacket" ];
+  makeWrapperArgs = [ "--set-default OPENSSL_CONF ${opensslConf}" ];
+
+  pythonImportsCheck = [
+    "impacket"
+    "impacket.msada_guids"
+  ];
 
   disabledTestPaths = [
     # Skip all RPC related tests
