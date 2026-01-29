@@ -15560,6 +15560,8 @@ self: super: with self; {
 
   python-otbr-api = callPackage ../development/python-modules/python-otbr-api { };
 
+  python-otcextensions = callPackage ../development/python-modules/python-otcextensions { };
+
   python-overseerr = callPackage ../development/python-modules/python-overseerr { };
 
   python-owasp-zap-v2-4 = callPackage ../development/python-modules/python-owasp-zap-v2-4 { };
