@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "kn";
-  version = "1.20.0";
+  version = "1.21.0";
 
   src = fetchFromGitHub {
     owner = "knative";
     repo = "client";
     tag = "knative-v${finalAttrs.version}";
-    hash = "sha256-rElNlb3NfbOZjCMWT2efknWM9B0+BFa5CCNmcA6afPY=";
+    hash = "sha256-0P7KCBiUbmb8mJ06Hov/uqbiepcJ77kNduWdzEE88ms=";
   };
 
-  vendorHash = "sha256-rZEkwiCy2kpeKOi4lhLoW1o+cws/p++c9Dz8fKhgNKQ=";
+  vendorHash = "sha256-hdolhbfplGkZf79uOhTtVsmCrDGlTJdic5BmDGznP4A=";
 
   env.GOWORK = "off";
 
