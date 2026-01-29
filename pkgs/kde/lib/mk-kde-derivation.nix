@@ -92,7 +92,62 @@ in
 }@args:
 let
   depNames = dependencies.${pname} or [ ];
-  filteredDepNames = builtins.filter (dep: !(builtins.elem dep excludeDependencies)) depNames;
+  darwinExcludedDeps = lib.optionals stdenv.hostPlatform.isDarwin [
+    "acl"
+    "attr"
+    "kdoctools"
+    "libfakekey"
+    "modemmanager-qt"
+    "polkit"
+    "polkit-qt-1"
+    "plasma-wayland-protocols"
+    "pulseaudio-qt"
+    "qtwayland"
+    "wayland"
+    "wayland-protocols"
+  ];
+
+  filteredDepNames = builtins.filter (
+    dep:
+    dep != null && !(builtins.elem dep excludeDependencies) && !(builtins.elem dep darwinExcludedDeps)
+  ) depNames;
+
+  filteredExtraBuildInputs =
+    if stdenv.hostPlatform.isDarwin then
+      lib.filter (
+        drv:
+        drv != null
+        && (
+          let
+            name = lib.getName drv;
+          in
+          name != "qtwayland" && name != "kdoctools"
+        )
+      ) extraBuildInputs
+    else
+      extraBuildInputs;
+
+  filteredExtraPropagatedBuildInputs =
+    if stdenv.hostPlatform.isDarwin then
+      lib.filter (
+        drv:
+        drv != null
+        && (
+          let
+            name = lib.getName drv;
+          in
+          name != "qtwayland" && name != "kdoctools"
+        )
+      ) extraPropagatedBuildInputs
+    else
+      extraPropagatedBuildInputs;
+
+  filteredExtraCmakeFlags =
+    if stdenv.hostPlatform.isDarwin then
+      lib.filter (flag: !(lib.hasInfix "QtWaylandScanner_EXECUTABLE" flag)) extraCmakeFlags
+      ++ [ "-DBUILD_DOCS=OFF" ]
+    else
+      extraCmakeFlags;
 
   # FIXME(later): this is wrong for cross, some of these things really need to go into nativeBuildInputs,
   # but cross is currently very broken anyway, so we can figure this out later.
@@ -147,13 +202,13 @@ let
     ++ lib.optionals hasPythonBindings [
       python3Packages.pyside6
     ]
-    ++ extraBuildInputs;
+    ++ filteredExtraBuildInputs;
 
     # FIXME: figure out what to propagate here
-    propagatedBuildInputs = deps ++ extraPropagatedBuildInputs;
+    propagatedBuildInputs = deps ++ filteredExtraPropagatedBuildInputs;
     strictDeps = true;
 
-    cmakeFlags = [ "-DQT_MAJOR_VERSION=6" ] ++ extraCmakeFlags;
+    cmakeFlags = [ "-DQT_MAJOR_VERSION=6" ] ++ filteredExtraCmakeFlags;
 
     separateDebugInfo = true;
 
@@ -176,7 +231,7 @@ let
     license = lib.filter (l: l != null) (map (l: licensesBySpdxId.${l}) licenseInfo.${pname});
     teams = [ lib.teams.qt-kde ];
     # Platforms are currently limited to what upstream tests in CI, but can be extended if there's interest.
-    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd ++ lib.platforms.darwin;
   }
   // (args.meta or { });
 
