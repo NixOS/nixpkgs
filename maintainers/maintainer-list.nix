@@ -15988,6 +15988,12 @@
     githubId = 117918464;
     keys = [ { fingerprint = "B5ED 595C 8C7E 133C 6B68  63C8 CFEF 1E35 0351 F72D"; } ];
   };
+  malmeloo = {
+    email = "git@mikealmel.ooo";
+    github = "malmeloo";
+    githubId = 32306794;
+    name = "Mike Almeloo";
+  };
   malo = {
     email = "mbourgon@gmail.com";
     github = "malob";
