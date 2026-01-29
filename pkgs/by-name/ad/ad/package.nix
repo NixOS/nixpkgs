@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ad";
-  version = "0.3.1";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "sminez";
     repo = "ad";
     tag = version;
-    sha256 = "0rd4krklpnvaimzblqx2ckab6lk4apkmvnqr618gnx8i5f4nyl6m";
+    hash = "sha256-t9zhNAmUkjjVabaBlP/dGMHY11lxC3qqg0N0HK4nz2I=";
   };
 
-  cargoHash = "sha256:12g3fcym8184py66fgwahpb9q05dm9r9rbhh4l50yd62gkmifc93";
+  cargoHash = "sha256-T1y7Xnyhet3a/Obb4RJ+iJE4wWpmQf0fnhxfTzM6dm0=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -25,6 +25,8 @@ rustPlatform.buildRustPackage rec {
     # both assume `/usr/bin/sh` exists
     "--skip=buffer::tests::try_expand_known_works::file_that_exists_abs_path"
     "--skip=buffer::tests::try_expand_known_works::file_that_exists_abs_path_with_addr"
+    # integration tests require filesystem and Unix socket access
+    "--skip=editor_scenarios::"
   ];
 
   postInstall = ''
