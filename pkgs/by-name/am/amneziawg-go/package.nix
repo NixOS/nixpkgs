@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "amneziawg-go";
   version = "0.2.16";
 
   src = fetchFromGitHub {
     owner = "amnezia-vpn";
     repo = "amneziawg-go";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-JGmWMPVgereSZmdHUHC7ZqWCwUNfxfj3xBf/XDDHhpo=";
   };
 
@@ -41,4 +41,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ averyanalex ];
     mainProgram = "amneziawg-go";
   };
-}
+})

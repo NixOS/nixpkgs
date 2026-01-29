@@ -10,14 +10,14 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "age-plugin-tpm";
   version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "Foxboron";
     repo = "age-plugin-tpm";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-1BHVQY8ZexwdjchQiG8aQMEPukq/3ez+QYY1X67DgPc=";
   };
 
@@ -38,7 +38,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   passthru.tests = {
@@ -56,4 +56,4 @@ buildGoModule rec {
       sgo
     ];
   };
-}
+})

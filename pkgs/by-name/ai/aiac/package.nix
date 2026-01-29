@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "aiac";
   version = "5.3.0";
   excludedPackages = [ ".ci" ];
@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "gofireflyio";
     repo = "aiac";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Lk3Bmzg1owkIWzz7jgq1YpdPyRzyZ7aNoWPIU5aWzu0=";
   };
 
@@ -20,7 +20,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/gofireflyio/aiac/v4/libaiac.Version=v${version}"
+    "-X github.com/gofireflyio/aiac/v4/libaiac.Version=v${finalAttrs.version}"
   ];
 
   meta = {
@@ -30,4 +30,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ qjoly ];
   };
-}
+})

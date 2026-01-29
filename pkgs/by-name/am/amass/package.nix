@@ -5,7 +5,7 @@
   pkg-config,
   libpostalWithData,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "amass";
   version = "5.0.1";
 
@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "OWASP";
     repo = "Amass";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-uAuBWzEwppnmYacfPI7MZUW+7PdSs3EqYm1WQI4fthQ=";
   };
 
@@ -35,7 +35,7 @@ buildGoModule rec {
       target networks.
     '';
     homepage = "https://owasp.org/www-project-amass/";
-    changelog = "https://github.com/OWASP/Amass/releases/tag/v${version}";
+    changelog = "https://github.com/OWASP/Amass/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       kalbasit
@@ -43,4 +43,4 @@ buildGoModule rec {
     ];
     mainProgram = "amass";
   };
-}
+})

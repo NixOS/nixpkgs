@@ -6,7 +6,7 @@
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "acme-dns";
   # Unstable version to allow building with toolchains later than EOL Go 1.22,
   # see https://github.com/joohoi/acme-dns/issues/365
@@ -38,11 +38,11 @@ buildGoModule rec {
   meta = {
     description = "Limited DNS server to handle ACME DNS challenges easily and securely";
     homepage = "https://github.com/joohoi/acme-dns";
-    changelog = "https://github.com/joohoi/acme-dns/releases/tag/${src.rev}";
+    changelog = "https://github.com/joohoi/acme-dns/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ emilylange ];
     mainProgram = "acme-dns";
     # Tests time out on darwin.
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

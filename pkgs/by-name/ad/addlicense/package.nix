@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "addlicense";
   version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "addlicense";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-SM2fPfSqtc6LO+6Uk/sb/IMThXdE8yvk52jK3vF9EfE=";
   };
 
@@ -26,4 +26,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
     mainProgram = "addlicense";
   };
-}
+})
