@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   hatchling,
@@ -40,6 +41,9 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  # RuntimeError: torch.compile is not supported on Python 3.14+
+  disabledTests = lib.optionals (pythonAtLeast "3.14") [ "test_up" ];
 
   pythonImportsCheck = [ "x_transformers" ];
 
