@@ -295,23 +295,21 @@ in
       documentation = [ "https://docs.hedgedoc.org/" ];
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      preStart =
-        let
-          configFile = settingsFormat.generate "hedgedoc-config.json" {
-            production = cfg.settings;
-          };
-        in
-        ''
-          ${pkgs.envsubst}/bin/envsubst \
-            -o /run/${name}/config.json \
-            -i ${configFile}
-          ${pkgs.coreutils}/bin/mkdir -p ${cfg.settings.uploadsPath}
-        '';
       serviceConfig = {
         User = name;
         Group = name;
 
         Restart = "always";
+        ExecStartPre =
+          let
+            configFile = settingsFormat.generate "hedgedoc-config.json" {
+              production = cfg.settings;
+            };
+          in
+          [
+            "${pkgs.envsubst}/bin/envsubst -o /run/${name}/config.json -i ${configFile}"
+            "${pkgs.coreutils}/bin/mkdir -p ${cfg.settings.uploadsPath}"
+          ];
         ExecStart = lib.getExe cfg.package;
         RuntimeDirectory = [ name ];
         StateDirectory = [ name ];

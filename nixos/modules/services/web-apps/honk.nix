@@ -129,21 +129,26 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       bindsTo = [ "honk-initdb.service" ];
-      preStart = ''
-        mkdir -p $STATE_DIRECTORY/views
-        ${lib.optionalString (cfg.extraJS != null) "ln -fs ${cfg.extraJS} $STATE_DIRECTORY/views/local.js"}
-        ${lib.optionalString (
-          cfg.extraCSS != null
-        ) "ln -fs ${cfg.extraCSS} $STATE_DIRECTORY/views/local.css"}
-        ${lib.getExe cfg.package} -datadir $STATE_DIRECTORY -viewdir ${cfg.package}/share/honk backup $STATE_DIRECTORY/backup
-        ${lib.getExe cfg.package} -datadir $STATE_DIRECTORY -viewdir ${cfg.package}/share/honk upgrade
-        ${lib.getExe cfg.package} -datadir $STATE_DIRECTORY -viewdir ${cfg.package}/share/honk cleanup
-      '';
       serviceConfig = {
+        ExecStartPre = [
+          "'${lib.getExe cfg.package}' -datadir \"$STATE_DIRECTORY\" -viewdir '${cfg.package}/share/honk' backup \"\${STATE_DIRECTORY}\"/backup"
+          "'${lib.getExe cfg.package}' -datadir \"$STATE_DIRECTORY\" -viewdir '${cfg.package}/share/honk' upgrade"
+          "'${lib.getExe cfg.package}' -datadir \"$STATE_DIRECTORY\" -viewdir '${cfg.package}/share/honk' cleanup"
+        ];
         ExecStart = ''
-          ${lib.getExe cfg.package} -datadir $STATE_DIRECTORY -viewdir ${cfg.package}/share/honk
+          '${lib.getExe cfg.package}' -datadir "$STATE_DIRECTORY" -viewdir '${cfg.package}/share/honk'
         '';
-        StateDirectory = "honk";
+        StateDirectory = [
+          "honk"
+          # "honk/views"
+        ];
+        BindReadOnlyPaths =
+          lib.optionals (cfg.extraJS != null) [
+            "${cfg.extraJS}:/var/lib/honk/views/local.js"
+          ]
+          ++ lib.optionals (cfg.extraCSS != null) [
+            "${cfg.extraCSS}:/var/lib/honk/views/local.css"
+          ];
         DynamicUser = true;
         PrivateTmp = "yes";
         Restart = "on-failure";

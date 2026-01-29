@@ -68,12 +68,8 @@ in
       DynamicUser = false;
       EnvironmentFile = mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
       RuntimeDirectory = "prometheus-junos-czerwonk-exporter";
-      ExecStartPre = [
-        "${pkgs.writeShellScript "subst-secrets-junos-czerwonk-exporter" ''
-          umask 0077
-          ${pkgs.envsubst}/bin/envsubst -i ${configFile} -o ''${RUNTIME_DIRECTORY}/junos-exporter.json
-        ''}"
-      ];
+      RuntimeDirectoryMode = "0700";
+      ExecStartPre = "${pkgs.envsubst}/bin/envsubst -i ${configFile} -o \"\${RUNTIME_DIRECTORY}\"/junos-exporter.json";
       ExecStart = ''
         ${pkgs.prometheus-junos-czerwonk-exporter}/bin/junos_exporter \
           -web.listen-address ${cfg.listenAddress}:${toString cfg.port} \

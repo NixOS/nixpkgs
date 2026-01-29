@@ -993,11 +993,6 @@ in
       wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ config.environment.etc."prosody/prosody.cfg.lua".source ];
-      preStart = ''
-        ${pkgs.envsubst}/bin/envsubst -i ${
-          config.environment.etc."prosody/prosody.cfg.lua".source
-        } -o /run/prosody/prosody.cfg.lua
-      '';
       serviceConfig = mkMerge [
         {
           User = cfg.user;
@@ -1006,6 +1001,7 @@ in
           RuntimeDirectory = "prosody";
           PIDFile = "/run/prosody/prosody.pid";
           Environment = "PROSODY_CONFIG=/run/prosody/prosody.cfg.lua";
+          ExecStartPre = "${pkgs.envsubst}/bin/envsubst -i /etc/prosody/prosody.cfg.lua -o /run/prosody/prosody.cfg.lua";
           ExecStart = "${lib.getExe cfg.package} -F";
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
           Restart = "on-abnormal";

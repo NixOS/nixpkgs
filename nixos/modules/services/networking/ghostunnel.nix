@@ -194,27 +194,28 @@ let
               ++ optional (config.cert != null) "cert:${config.cert}"
               ++ optional (config.key != null) "key:${config.key}"
               ++ optional (config.cacert != null) "cacert:${config.cacert}";
+
+            ExecStart = concatStringsSep " " (
+              [ "${mainCfg.package}/bin/ghostunnel" ]
+              ++ optional (config.keystore != null) "--keystore=\"\${CREDENTIALS_DIRECTORY}\"/keystore"
+              ++ optional (config.cert != null) "--cert=\"\${CREDENTIALS_DIRECTORY}\"/cert"
+              ++ optional (config.key != null) "--key=\"\${CREDENTIALS_DIRECTORY}\"/key"
+              ++ optional (config.cacert != null) "--cacert=\"\${CREDENTIALS_DIRECTORY}\"/cacert"
+              ++ [
+                "server"
+                "--listen ${config.listen}"
+                "--target ${config.target}"
+              ]
+              ++ optional config.allowAll "--allow-all"
+              ++ map (v: "--allow-cn=${escapeShellArg v}") config.allowCN
+              ++ map (v: "--allow-ou=${escapeShellArg v}") config.allowOU
+              ++ map (v: "--allow-dns=${escapeShellArg v}") config.allowDNS
+              ++ map (v: "--allow-uri=${escapeShellArg v}") config.allowURI
+              ++ optional config.disableAuthentication "--disable-authentication"
+              ++ optional config.unsafeTarget "--unsafe-target"
+              ++ [ config.extraArguments ]
+            );
           };
-          script = concatStringsSep " " (
-            [ "${mainCfg.package}/bin/ghostunnel" ]
-            ++ optional (config.keystore != null) "--keystore=$CREDENTIALS_DIRECTORY/keystore"
-            ++ optional (config.cert != null) "--cert=$CREDENTIALS_DIRECTORY/cert"
-            ++ optional (config.key != null) "--key=$CREDENTIALS_DIRECTORY/key"
-            ++ optional (config.cacert != null) "--cacert=$CREDENTIALS_DIRECTORY/cacert"
-            ++ [
-              "server"
-              "--listen ${config.listen}"
-              "--target ${config.target}"
-            ]
-            ++ optional config.allowAll "--allow-all"
-            ++ map (v: "--allow-cn=${escapeShellArg v}") config.allowCN
-            ++ map (v: "--allow-ou=${escapeShellArg v}") config.allowOU
-            ++ map (v: "--allow-dns=${escapeShellArg v}") config.allowDNS
-            ++ map (v: "--allow-uri=${escapeShellArg v}") config.allowURI
-            ++ optional config.disableAuthentication "--disable-authentication"
-            ++ optional config.unsafeTarget "--unsafe-target"
-            ++ [ config.extraArguments ]
-          );
         };
       };
     };
