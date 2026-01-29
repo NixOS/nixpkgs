@@ -17589,6 +17589,12 @@
     githubId = 117842;
     name = "Henri Bourcereau";
   };
+  mmarsalko = {
+    email = "mmarsalko+github@protonmail.com";
+    github = "mmarsalko";
+    githubId = 1740924;
+    name = "Matthew Marsalko";
+  };
   mmesch = {
     github = "MMesch";
     githubId = 2597803;
