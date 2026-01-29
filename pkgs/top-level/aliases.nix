@@ -406,6 +406,9 @@ mapAliases {
   cargo-sync-readme = throw "'cargo-sync-readme' has been removed because upstream 404s"; # Converted to throw 2025-12-18
   cargonode = throw "'cargonode' has been removed due to lack of upstream maintenance"; # Added 2025-06-18
   cask = throw "'cask' has been renamed to/replaced by 'emacs.pkgs.cask'"; # Converted to throw 2025-10-27
+  cataclysm-dda = cataclysmPackages.dark-days-ahead.withTiles; # Added 2025-11-13
+  cataclysm-dda-git = cataclysmPackages.dark-days-ahead-unstable.withTiles; # Added 2025-11-13
+  cataclysmDDA = warnAlias "'cataclysmDDA' has been renamed cataclysmPackages" cataclysmPackages; # Added 2025-11-13
   catalyst-browser = throw "'catalyst-browser' has been removed due to a lack of maintenance and not satisfying our security criteria for browsers."; # Added 2025-06-25
   cataract = throw "'cataract' has been removed due to a lack of maintenace"; # Added 2025-08-25
   cataract-unstable = throw "'cataract-unstable' has been removed due to a lack of maintenace"; # Added 2025-08-25
