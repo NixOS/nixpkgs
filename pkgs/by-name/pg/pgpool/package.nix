@@ -5,12 +5,16 @@
   bison,
   fetchFromGitHub,
   flex,
+  libmemcached,
   libpq,
   libxcrypt,
+  openldap,
   openssl,
   pam,
   versionCheckHook,
-  withPam ? true,
+  enableLdap ? true,
+  enableMemcached ? true,
+  enablePam ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -49,7 +53,9 @@ stdenv.mkDerivation (finalAttrs: {
     libxcrypt
     openssl
   ]
-  ++ lib.optional withPam pam;
+  ++ lib.optional enableLdap openldap
+  ++ lib.optional enableMemcached libmemcached
+  ++ lib.optional enablePam pam;
 
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optionals (stdenv.cc.isClang) [
@@ -61,7 +67,9 @@ stdenv.mkDerivation (finalAttrs: {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     (lib.withFeature true "openssl")
-    (lib.withFeature withPam "pam")
+    (lib.withFeature enableLdap "ldap")
+    (lib.withFeature enablePam "pam")
+    (lib.withFeatureAs enableMemcached "memcached" (lib.getDev libmemcached))
   ];
 
   installFlags = [
