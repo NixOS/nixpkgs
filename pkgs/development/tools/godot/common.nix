@@ -14,6 +14,7 @@
   fetchpatch,
   fontconfig,
   freetype,
+  gettext,
   glib,
   glslang,
   graphite2,
@@ -609,6 +610,7 @@ let
           ];
 
         nativeBuildInputs = [
+          gettext
           installShellFiles
           perl
           pkg-config
