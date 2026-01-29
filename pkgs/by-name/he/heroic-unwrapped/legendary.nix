@@ -4,19 +4,17 @@
   fetchFromGitHub,
   python3Packages,
 }:
-let
-  version = "0.20.37";
-in
-python3Packages.buildPythonApplication {
+
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "legendary-heroic";
-  inherit version;
+  version = "0.20.39";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Heroic-Games-Launcher";
     repo = "legendary";
-    rev = version;
-    sha256 = "sha256-mOys7lOPrrzBUBMIM/JvKygFQ/qIGD68BDNigk5BCIo=";
+    tag = finalAttrs.version;
+    hash = "sha256-2+9MRbwugBlBdZQQo6BUcLmwCqVdTAv9CZ+sPu5VAxY=";
   };
 
   build-system = with python3Packages; [
@@ -25,10 +23,13 @@ python3Packages.buildPythonApplication {
 
   dependencies = with python3Packages; [
     requests
+    requests-futures
     filelock
   ];
 
   pythonImportsCheck = [ "legendary" ];
+
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "Free and open-source Epic Games Launcher alternative";
@@ -40,6 +41,4 @@ python3Packages.buildPythonApplication {
     maintainers = [ ];
     mainProgram = "legendary";
   };
-
-  passthru.updateScript = gitUpdater { };
-}
+})
