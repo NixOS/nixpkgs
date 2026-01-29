@@ -28227,6 +28227,12 @@
     github = "wentasah";
     githubId = 140542;
   };
+  weriomat = {
+    name = "weriomat";
+    email = "nixpkgs@weriomat.com";
+    github = "weriomat";
+    githubId = 59094810;
+  };
   wesleyjrz = {
     email = "dev@wesleyjrz.com";
     name = "Wesley V. Santos Jr.";
