@@ -13,6 +13,13 @@ let
   regularEnv = lib.filterAttrs (name: _value: !(lib.hasSuffix "_FILE" name)) cfg.environment;
   fileBasedEnv = lib.filterAttrs (name: _value: lib.hasSuffix "_FILE" name) cfg.environment;
 
+  customNodesDir = pkgs.linkFarm "n8n-custom-nodes" (
+    map (pkg: {
+      name = pkg.pname;
+      path = "${pkg}/lib/node_modules/${pkg.pname}";
+    }) cfg.customNodes
+  );
+
   # Transform file-based env vars to point to credentials directory
   fileBasedEnvTransformed = lib.mapAttrs' (
     varName: _secretPath: lib.nameValuePair varName "%d/${envVarToCredName varName}"
@@ -33,6 +40,17 @@ in
     enable = lib.mkEnableOption "n8n server";
 
     package = lib.mkPackageOption pkgs "n8n" { };
+
+    customNodes = lib.mkOption {
+      type = lib.types.listOf lib.types.package;
+      default = [ ];
+      example = lib.literalExpression "[ pkgs.n8n-nodes-carbonejs ]";
+      description = ''
+        List of custom n8n community node packages to load.
+        Each package is expected to be an npm package with an `n8n.nodes` entry in its `package.json`.
+        The packages are made available to n8n via the `N8N_CUSTOM_EXTENSIONS` environment variable.
+      '';
+    };
 
     openFirewall = lib.mkOption {
       type = lib.types.bool;
@@ -120,6 +138,9 @@ in
         regularEnv
         // {
           HOME = config.services.n8n.environment.N8N_USER_FOLDER;
+        }
+        // lib.optionalAttrs (cfg.customNodes != [ ]) {
+          N8N_CUSTOM_EXTENSIONS = toString customNodesDir;
         }
         // fileBasedEnvTransformed;
       serviceConfig = {
