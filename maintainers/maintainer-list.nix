@@ -22293,7 +22293,7 @@
     name = "Rexx Larsson";
   };
   reylak = {
-    name = "Joaquin Lopez";
+    name = "Reylak";
     email = "elreylak@proton.me";
     github = "Reylak-dev";
     githubId = 178049808;

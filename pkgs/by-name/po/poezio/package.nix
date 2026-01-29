@@ -7,7 +7,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "poezio";
-  version = "0.14";
+  version = "0.15.1";
   pyproject = true;
 
   src = fetchFromGitea {
@@ -15,7 +15,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "poezio";
     repo = "poezio";
     rev = "v${version}";
-    hash = "sha256-sk+8r+a0CcoB0RidqnE7hJUgt/xvN/MCJMkxiquvdJc=";
+    hash = "sha256-v9PpPghHf0Yi5JpK98+i2EAmohSXOhUyhY+duhICtnY=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -32,6 +32,7 @@ python3.pkgs.buildPythonApplication rec {
     pyinotify
     setuptools
     slixmpp
+    sphinx
     typing-extensions
   ];
 
@@ -53,5 +54,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://poez.io";
     changelog = "https://codeberg.org/poezio/poezio/src/tag/v${version}/CHANGELOG";
     license = lib.licenses.zlib;
+    maintainers = with lib.maintainers; [ reylak ];
   };
 }
