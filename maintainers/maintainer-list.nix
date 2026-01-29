@@ -17742,6 +17742,12 @@
     githubId = 42215704;
     name = "Moritz Böhme";
   };
+  moritzrfs = {
+    email = "m.reufsteck@me.com";
+    github = "moritzrfs";
+    githubId = 73069661;
+    name = "Moritz Reufsteck";
+  };
   mortenmunk = {
     email = "mortenmunk97@gmail.com";
     github = "MortenMunk";
