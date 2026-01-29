@@ -1,0 +1,32 @@
+diff --git a/apachetomcatscanner/utils/network.py b/apachetomcatscanner/utils/network.py
+index 0d8bd45..14fe83b 100644
+--- a/apachetomcatscanner/utils/network.py
++++ b/apachetomcatscanner/utils/network.py
+@@ -12,7 +12,10 @@ import requests
+ # Disable warnings of insecure connection for invalid certificates
+ requests.packages.urllib3.disable_warnings()
+ # Allow use of deprecated and weak cipher methods
+-requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS += ":HIGH:!DH:!aNULL"
++try:
++    requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS += ":HIGH:!DH:!aNULL"
++except AttributeError:
++    pass
+ try:
+     requests.packages.urllib3.contrib.pyopenssl.util.ssl_.DEFAULT_CIPHERS += (
+         ":HIGH:!DH:!aNULL"
+diff --git a/apachetomcatscanner/utils/scan.py b/apachetomcatscanner/utils/scan.py
+index bbd1c17..5a0f541 100644
+--- a/apachetomcatscanner/utils/scan.py
++++ b/apachetomcatscanner/utils/scan.py
+@@ -20,7 +20,10 @@ from apachetomcatscanner.utils.network import is_http_accessible, is_port_open
+ # Disable warnings of insecure connection for invalid certificates
+ requests.packages.urllib3.disable_warnings()
+ # Allow use of deprecated and weak cipher methods
+-requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS += ":HIGH:!DH:!aNULL"
++try:
++    requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS += ":HIGH:!DH:!aNULL"
++except AttributeError:
++    pass
+ try:
+     requests.packages.urllib3.contrib.pyopenssl.util.ssl_.DEFAULT_CIPHERS += (
+         ":HIGH:!DH:!aNULL"
