@@ -12,10 +12,10 @@ fi
 
 MY_PATH=$(dirname $(realpath "$0"))
 
-update-source-version dart $latestVersion --file=$MY_PATH/sources.nix
+update-source-version dart $latestVersion --file=$MY_PATH/default.nix
 
 systems=$(nix eval --json -f . dart.meta.platforms | jq --raw-output '.[]')
 for system in $systems; do
   hash=$(nix hash convert --to sri --hash-algo sha256 $(nix-prefetch-url $(nix eval --raw -f . dart.src.url --system "$system")))
-  update-source-version dart $latestVersion $hash --file=$MY_PATH/sources.nix --system=$system --ignore-same-version --ignore-same-hash
+  update-source-version dart $latestVersion $hash --file=$MY_PATH/default.nix --system=$system --ignore-same-version --ignore-same-hash
 done

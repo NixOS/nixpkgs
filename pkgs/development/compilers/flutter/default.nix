@@ -50,30 +50,18 @@ let
           ;
 
         dart =
-          let
-            dartChannel = if lib.strings.hasSuffix ".beta" dartVersion then "beta" else "stable";
-          in
-          dart.override {
+          (dart.overrideAttrs (_: {
             version = dartVersion;
-            sources = {
-              "${dartVersion}-x86_64-linux" = fetchzip {
-                url = "https://storage.googleapis.com/dart-archive/channels/${dartChannel}/release/${dartVersion}/sdk/dartsdk-linux-x64-release.zip";
-                hash = dartHash.x86_64-linux;
+            __intentionallyOverridingVersion = true;
+          })).overrideAttrs
+            (oldAttrs: {
+              src = fetchzip {
+                inherit (oldAttrs.src) url;
+                hash =
+                  dartHash.${stdenv.hostPlatform.system}
+                    or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
               };
-              "${dartVersion}-aarch64-linux" = fetchzip {
-                url = "https://storage.googleapis.com/dart-archive/channels/${dartChannel}/release/${dartVersion}/sdk/dartsdk-linux-arm64-release.zip";
-                hash = dartHash.aarch64-linux;
-              };
-              "${dartVersion}-x86_64-darwin" = fetchzip {
-                url = "https://storage.googleapis.com/dart-archive/channels/${dartChannel}/release/${dartVersion}/sdk/dartsdk-macos-x64-release.zip";
-                hash = dartHash.x86_64-darwin;
-              };
-              "${dartVersion}-aarch64-darwin" = fetchzip {
-                url = "https://storage.googleapis.com/dart-archive/channels/${dartChannel}/release/${dartVersion}/sdk/dartsdk-macos-arm64-release.zip";
-                hash = dartHash.aarch64-darwin;
-              };
-            };
-          };
+            });
         src =
           let
             source = fetchFromGitHub {
