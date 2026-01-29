@@ -2484,6 +2484,10 @@ with pkgs;
 
   uniscribe = callPackage ../tools/text/uniscribe { };
 
+  g-golf-adw-1-examples = callPackage ../by-name/g-/g-golf-gtk-4-examples/package.nix {
+    useLibadwaita = true;
+  };
+
   inherit (callPackages ../tools/filesystems/garage { })
     garage
     garage_1
