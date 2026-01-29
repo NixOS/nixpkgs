@@ -18731,6 +18731,12 @@
     githubId = 10180857;
     name = "Anmol Sethi";
   };
+  ni5arga = {
+    email = "hello@ni5arga.com";
+    github = "ni5arga";
+    githubId = 45588772;
+    name = "Nisarga Adhikary";
+  };
   nialov = {
     email = "nikolasovaskainen@gmail.com";
     github = "nialov";
