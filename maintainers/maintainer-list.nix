@@ -9616,6 +9616,12 @@
     githubId = 19275558;
     name = "Julien Girard-Satabin";
   };
+  GiulioCocconi = {
+    name = "Giulio Cocconi";
+    email = "coccogiulio8@gmail.com";
+    github = "GiulioCocconi";
+    githubId = 31406038;
+  };
   GKasparov = {
     email = "mizozahr@gmail.com";
     github = "GKasparov";
