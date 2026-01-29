@@ -29425,6 +29425,12 @@
     github = "zelkourban";
     githubId = 33812622;
   };
+  zencrab = {
+    name = "Adam Bisinella";
+    email = "adam.bisinella@gmail.com";
+    github = "zencrab";
+    githubId = 110183985;
+  };
   zendo = {
     name = "zendo";
     email = "linzway@qq.com";
