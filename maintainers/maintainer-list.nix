@@ -10109,6 +10109,12 @@
     githubId = 1742172;
     name = "Hamish Hutchings";
   };
+  hamidr = {
+    email = "hamidr.dev@gmail.com";
+    github = "hamidr";
+    githubId = 298427;
+    name = "Hamid Davoodi";
+  };
   hamzaremmal = {
     email = "hamza.remmal@epfl.ch";
     github = "hamzaremmal";
