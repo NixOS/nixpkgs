@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sv-lang";
-  version = "9.1";
+  version = "10.0";
 
   src = fetchFromGitHub {
     owner = "MikePopoloski";
     repo = "slang";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IfRh6F6vA+nFa+diPKD2aMv9kRbvVIY80IqX0d+d5JA=";
+    hash = "sha256-rw+DztENuY+DiAhQR2oNN/dQJzrcP5neF3LoWnqri+c=";
   };
 
   postPatch = ''
