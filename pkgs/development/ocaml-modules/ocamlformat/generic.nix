@@ -6,7 +6,7 @@
   base,
   camlp-streams,
   cmdliner_1_0,
-  cmdliner_1_1,
+  cmdliner_1,
   csexp,
   dune-build-info,
   either,
@@ -65,7 +65,7 @@ rec {
         "0.9.0";
   };
 
-  cmdliner_v = if lib.versionAtLeast version "0.21.0" then cmdliner_1_1 else cmdliner_1_0;
+  cmdliner_v = if lib.versionAtLeast version "0.21.0" then cmdliner_1 else cmdliner_1_0;
 
   library_deps = [
     base

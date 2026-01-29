@@ -4,7 +4,7 @@
   lib,
   kafka,
   lwt,
-  cmdliner,
+  cmdliner_1,
 }:
 
 buildDunePackage {
@@ -12,7 +12,7 @@ buildDunePackage {
 
   inherit (kafka) version src;
 
-  buildInputs = [ cmdliner ];
+  buildInputs = [ cmdliner_1 ];
 
   propagatedBuildInputs = [
     kafka

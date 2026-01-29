@@ -3,7 +3,7 @@
   buildDunePackage,
   replaceVars,
   base64,
-  cmdliner,
+  cmdliner_1,
   digestif,
   git-unix,
   kicadsch,
@@ -31,7 +31,7 @@ buildDunePackage {
 
   buildInputs = [
     base64
-    cmdliner
+    cmdliner_1
     digestif
     git-unix
     kicadsch

@@ -244,13 +244,11 @@ let
 
         cmarkit = callPackage ../development/ocaml-modules/cmarkit { };
 
-        # The 1.1.0 release broke a lot of packages and is not compatible with
-        # OCaml < 4.08.
-        cmdliner = if lib.versionAtLeast ocaml.version "4.08" then cmdliner_1_1 else cmdliner_1_0;
+        cmdliner = callPackage ../development/ocaml-modules/cmdliner { };
 
-        cmdliner_1_0 = callPackage ../development/ocaml-modules/cmdliner/1_0.nix { };
+        cmdliner_1_0 = cmdliner.override { version = "1.0.4"; };
 
-        cmdliner_1_1 = callPackage ../development/ocaml-modules/cmdliner/1_1.nix { };
+        cmdliner_1 = cmdliner.override { version = "1.3.0"; };
 
         cohttp = callPackage ../development/ocaml-modules/cohttp { };
 
@@ -2317,6 +2315,7 @@ let
       // lib.optionalAttrs config.allowAliases {
         biocaml = throw "biocaml has been removed"; # 2025-06-04
         chacha = throw "chacha has been removed because it has been marked as broken since at least November 2024. It is now vendored inside mirage-crypto, consider using that instead."; # Added 2025-10-11
+        cmdliner_1_1 = cmdliner_1; # Added 2026-01-28
         dune_2 = pkgs.dune_2; # Added 2025-12-08
         dune_3 = pkgs.dune_3; # Added 2025-12-08
         gd4o = throw "ocamlPackages.gd4o is not maintained, use ocamlPackages.gd instead";

@@ -37,5 +37,6 @@ buildDunePackage rec {
     license = lib.licenses.mit;
     changelog = "https://github.com/tarides/get-activity/releases/tag/${version}";
     maintainers = with lib.maintainers; [ zazedd ];
+    broken = true; # Not compatible with cmdliner ≥ 2.0
   };
 }
