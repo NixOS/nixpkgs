@@ -283,6 +283,14 @@ in
               };
             };
             log = {
+              format = mkOption {
+                description = "The format Warpgate emits logs in.";
+                default = "text";
+                type = enum [
+                  "text"
+                  "json"
+                ];
+              };
               retention = mkOption {
                 description = "How long Warpgate keep its logs.";
                 default = "7days";
@@ -296,17 +304,6 @@ in
                 default = null;
                 type = nullOr str;
               };
-            };
-            config_provider = mkOption {
-              description = ''
-                Source of truth of users.
-                DO NOT change this, Warpgate only implemented database provider.
-              '';
-              default = "database";
-              type = enum [
-                "file"
-                "database"
-              ];
             };
           };
         };
