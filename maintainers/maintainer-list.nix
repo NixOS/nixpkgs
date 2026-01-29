@@ -21677,6 +21677,14 @@
     github = "QuiNzX";
     githubId = 76129478;
   };
+  quio = {
+    name = "Dominik Schwaiger";
+    email = "mail@dominik-schwaiger.ch";
+    matrix = "@quio:matrix.dominik-schwaiger.ch";
+    github = "quiode";
+    githubId = 51075975;
+    keys = [ { fingerprint = "D9FE 655C CD52 8F80 3D27  8F75 F7E7 E19B C69F 7DF5"; } ];
+  };
   quodlibetor = {
     email = "quodlibetor@gmail.com";
     github = "quodlibetor";
