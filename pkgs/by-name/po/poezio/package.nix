@@ -1,21 +1,20 @@
 {
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   pkg-config,
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finallAttrs {
   pname = "poezio";
-  version = "0.14";
+  version = "0.15.1";
   pyproject = true;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "poezio";
     repo = "poezio";
-    rev = "v${version}";
-    hash = "sha256-sk+8r+a0CcoB0RidqnE7hJUgt/xvN/MCJMkxiquvdJc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-v9PpPghHf0Yi5JpK98+i2EAmohSXOhUyhY+duhICtnY=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -23,16 +22,13 @@ python3.pkgs.buildPythonApplication rec {
 
   dependencies = with python3.pkgs; [
     aiodns
-    cffi
-    mpd2
-    potr
     pyasn1
     pyasn1-modules
     pycares
     pyinotify
     setuptools
     slixmpp
-    typing-extensions
+    sphinx
   ];
 
   nativeCheckInputs = with python3.pkgs; [
@@ -51,7 +47,8 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Free console XMPP client";
     homepage = "https://poez.io";
-    changelog = "https://codeberg.org/poezio/poezio/src/tag/v${version}/CHANGELOG";
+    changelog = "https://codeberg.org/poezio/poezio/src/tag/${src.tag}/CHANGELOG";
     license = lib.licenses.zlib;
+    maintainers = with lib.maintainers; [ reylak ];
   };
-}
+})
