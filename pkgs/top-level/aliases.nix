@@ -1872,6 +1872,10 @@ mapAliases {
   xbursttools = throw "'xbursttools' has been removed as it is broken and unmaintained upstream."; # Added 2025-06-12
   xcb-util-cursor-HEAD = warnAlias "'xcb-util-cursor-HEAD' has been removed; use 'libxcb-cursor' instead" libxcb-cursor; # added 2026-01-12
   xcursorthemes = xcursor-themes; # Added 2026-01-19
+  xdg-terminal-exec-mkhl = warnAlias "
+    'xdg-terminal-exec-mkhl' has been removed due to being behind the xdg-terminal-exec spec for too long,
+    use the reference implementation 'xdg-terminal-exec' instead.
+  " xdg-terminal-exec; # Added 2026-01-14
   xdragon = throw "'xdragon' has been renamed to/replaced by 'dragon-drop'"; # Converted to throw 2025-10-27
   xf86_input_cmt = xf86-input-cmt; # Added 2025-12-12
   xf86_input_wacom = xf86-input-wacom; # Added 2025-12-12
