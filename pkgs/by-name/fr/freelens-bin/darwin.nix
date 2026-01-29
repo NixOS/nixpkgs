@@ -5,7 +5,8 @@
   src,
   passthru,
   meta,
-  undmg,
+  _7zz,
+  autoSignDarwinBinariesHook,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -19,16 +20,18 @@ stdenvNoCC.mkDerivation {
 
   sourceRoot = ".";
 
-  nativeBuildInputs = [ undmg ];
+  # APFS format is unsupported by undmg
+  nativeBuildInputs = [
+    _7zz
+    autoSignDarwinBinariesHook
+  ];
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p "$out/Applications"
-    cp -R "Freelens.app" "$out/Applications/Freelens.app"
+    cp -R Freelens*/Freelens.app "$out/Applications/Freelens.app"
 
     runHook postInstall
   '';
-
-  dontFixup = true;
 }

@@ -5,7 +5,8 @@
   lib,
   appimageTools,
   makeWrapper,
-  undmg,
+  _7zz,
+  darwin,
   writeShellScript,
   nix-update,
   jq,
@@ -81,8 +82,9 @@ if stdenv.hostPlatform.isDarwin then
       src
       passthru
       meta
-      undmg
+      _7zz
       ;
+    autoSignDarwinBinariesHook = darwin.autoSignDarwinBinariesHook;
   }
 else
   import ./linux.nix {

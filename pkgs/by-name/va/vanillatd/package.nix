@@ -24,7 +24,7 @@
   symlinkJoin,
   rsync,
 
-  appName,
+  appName ? "vanillatd",
   CMAKE_BUILD_TYPE ? "RelWithDebInfo", # "Choose the type of build, recommended options are: Debug Release RelWithDebInfo"
 }:
 assert lib.assertOneOf "appName" appName [
