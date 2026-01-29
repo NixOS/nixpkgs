@@ -3122,6 +3122,13 @@
     githubId = 34620799;
     name = "Jacob Bachmann";
   };
+  bcnelson = {
+    email = "bradely@nel.family";
+    github = "bcnelson";
+    githubId = 5659892;
+    matrix = "@bcnelson:matrix.org";
+    name = "Bradley Nelson";
+  };
   bcooley = {
     email = "bradley.m.cooley@gmail.com";
     github = "Bradley-Cooley";
