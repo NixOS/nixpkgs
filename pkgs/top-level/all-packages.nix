@@ -2612,6 +2612,8 @@ with pkgs;
 
   gparted-full = gparted.override { withAllTools = true; };
 
+  gdbm_1_13 = callPackage ../by-name/gd/gdbm/1.13.nix { };
+
   gdown = with python3Packages; toPythonApplication gdown;
 
   gpt4all-cuda = gpt4all.override {
@@ -3244,6 +3246,8 @@ with pkgs;
   ophcrack-cli = ophcrack.override { enableGui = false; };
 
   open-interpreter = with python3Packages; toPythonApplication open-interpreter;
+
+  opencl-clang_14 = callPackage ../by-name/op/opencl-clang/14.nix { };
 
   openhantek6022 = libsForQt5.callPackage ../applications/science/electronics/openhantek6022 { };
 
@@ -7041,6 +7045,8 @@ with pkgs;
   #
   # `libffiReal` is provided in case the upstream libffi package is needed on Darwin instead of the fork.
   libffi = if stdenv.hostPlatform.isDarwin then darwin.libffi else libffiReal;
+  libffi_3_3 = callPackage ../development/libraries/libffi/3.3.nix { };
+  libffi_3_2_1 = callPackage ../development/libraries/libffi/3.2.1.nix { };
 
   # https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git;a=blob;f=README;h=fd6e1a83f55696c1f7a08f6dfca08b2d6b7617ec;hb=70058cd9f944d620764e57c838209afae8a58c78#l118
   libgpg-error-gen-posix-lock-obj = libgpg-error.override {
