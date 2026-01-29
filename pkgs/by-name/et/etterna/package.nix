@@ -36,6 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # https://github.com/etternagame/etterna/pull/1396
     ./0001-Add-aarch64-linux-support.patch
+    ./0002-replays-dir-fix.patch
   ];
 
   nativeBuildInputs = [
