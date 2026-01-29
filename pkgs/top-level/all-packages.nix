@@ -687,6 +687,10 @@ with pkgs;
 
   makeDesktopItem = callPackage ../build-support/make-desktopitem { };
 
+  installFonts = makeSetupHook {
+    name = "install-fonts-hook";
+  } ../build-support/setup-hooks/install-fonts.sh;
+
   copyPkgconfigItems = makeSetupHook {
     name = "copy-pkg-config-items-hook";
   } ../build-support/setup-hooks/copy-pkgconfig-items.sh;
