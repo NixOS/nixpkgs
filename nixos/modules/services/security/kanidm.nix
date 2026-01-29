@@ -877,8 +877,8 @@ in
     services.kanidm.package =
       let
         pkg =
-          if lib.versionAtLeast config.system.stateVersion "24.11" then
-            pkgs.kanidm_1_4
+          if lib.versionAtLeast config.system.stateVersion "26.05" then
+            pkgs.kanidm_1_8
           else
             lib.warn "No default kanidm package found for stateVersion = '${config.system.stateVersion}'. Using unpinned version. Consider setting `services.kanidm.package = pkgs.kanidm_1_x` to avoid upgrades introducing breaking changes." pkgs.kanidm;
       in
