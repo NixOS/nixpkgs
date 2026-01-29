@@ -1,8 +1,8 @@
 {
   buildFHSEnv,
-  electron_36,
   fetchFromGitHub,
   fetchYarnDeps,
+  electron,
   git,
   lib,
   makeDesktopItem,
@@ -24,8 +24,6 @@ let
     tag = "v${version}";
     hash = "sha256-e9PLgkqWBNLBw7uuNpPluOQ6+aGLYQLyTzcLa+LMOzs=";
   };
-
-  electron = electron_36;
 
   unwrapped = stdenvNoCC.mkDerivation {
     pname = "${pname}-unwrapped";
