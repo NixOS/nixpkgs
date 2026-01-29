@@ -17089,6 +17089,8 @@ self: super: with self; {
 
   seatconnect = callPackage ../development/python-modules/seatconnect { };
 
+  sebaubuntu-libs = callPackage ../development/python-modules/sebaubuntu-libs { };
+
   seccomp = callPackage ../development/python-modules/seccomp { };
 
   secp256k1 = callPackage ../development/python-modules/secp256k1 { inherit (pkgs) secp256k1; };
