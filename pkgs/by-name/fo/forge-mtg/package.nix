@@ -25,8 +25,10 @@ let
     hash = "sha256-TRK6fUOLbI3lLdkSXvvuix0sGbpKLvMmYMx5ozViDRE=";
   };
 
-  # launch4j downloads and runs a native binary during the package phase.
-  patches = [ ./no-launch4j.patch ];
+  patches = [
+    ./no-launch4j.patch # launch4j downloads and runs a native binary during the package phase.
+    ./window-icon.patch # set runtime icon for the main window on wayland
+  ];
 
 in
 maven.buildMavenPackage {

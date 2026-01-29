@@ -1,0 +1,43 @@
+diff --git a/forge-gui-desktop/src/main/config/forge.sh b/forge-gui-desktop/src/main/config/forge.sh
+index a1203a68f6..c64404f527 100644
+--- a/forge-gui-desktop/src/main/config/forge.sh
++++ b/forge-gui-desktop/src/main/config/forge.sh
+@@ -1,3 +1,3 @@
+ #!/bin/sh
+ cd $(dirname "${0}")
+-java $mandatory.java.args$ -jar $project.build.finalName$ "$@"
++java --add-opens java.desktop/sun.awt.X11=ALL-UNNAMED $mandatory.java.args$ -jar $project.build.finalName$ "$@"
+diff --git a/forge-gui-desktop/src/main/java/forge/view/Main.java b/forge-gui-desktop/src/main/java/forge/view/Main.java
+index 9779c21d70..fdfa4e6c7c 100644
+--- a/forge-gui-desktop/src/main/java/forge/view/Main.java
++++ b/forge-gui-desktop/src/main/java/forge/view/Main.java
+@@ -17,6 +17,9 @@
+  */
+ package forge.view;
+ 
++import java.awt.Toolkit;
++import java.lang.reflect.Field;
++
+ import forge.GuiDesktop;
+ import forge.Singletons;
+ import forge.error.ExceptionHandler;
+@@ -53,6 +56,19 @@ public final class Main {
+         //Turn on OpenGl acceleration to improve performance
+         //System.setProperty("sun.java2d.opengl", "True");
+ 
++        //Set the application class name for proper icon lookup on Linux
++        try {
++            Toolkit toolkit = Toolkit.getDefaultToolkit();
++            Class<?> toolkitClass = toolkit.getClass();
++            if ("sun.awt.X11.XToolkit".equals(toolkitClass.getName())) {
++                Field awtAppClassName = toolkitClass.getDeclaredField("awtAppClassName");
++                awtAppClassName.setAccessible(true);
++                awtAppClassName.set(toolkit, "forge");
++            }
++        } catch (Exception e) {
++            // Silently ignore - will fall back to default behavior
++        }
++
+         //setup GUI interface
+         GuiBase.setInterface(new GuiDesktop());
+ 
