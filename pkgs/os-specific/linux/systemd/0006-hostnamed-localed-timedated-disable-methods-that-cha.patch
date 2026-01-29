@@ -11,7 +11,7 @@ Subject: [PATCH] hostnamed, localed, timedated: disable methods that change
  3 files changed, 25 insertions(+)
 
 diff --git a/src/hostname/hostnamed.c b/src/hostname/hostnamed.c
-index 06fb3f2878..b656e511b7 100644
+index fbe1b2fa7a..30e7c75279 100644
 --- a/src/hostname/hostnamed.c
 +++ b/src/hostname/hostnamed.c
 @@ -1388,6 +1388,9 @@ static int method_set_static_hostname(sd_bus_message *m, void *userdata, sd_bus_
@@ -35,7 +35,7 @@ index 06fb3f2878..b656e511b7 100644
  
          context_read_machine_info(c);
 diff --git a/src/locale/localed.c b/src/locale/localed.c
-index 11d9130bbc..dd4d9e59ea 100644
+index 041ba29cd8..02fbe3e278 100644
 --- a/src/locale/localed.c
 +++ b/src/locale/localed.c
 @@ -221,6 +221,9 @@ static int method_set_locale(sd_bus_message *m, void *userdata, sd_bus_error *er
@@ -69,7 +69,7 @@ index 11d9130bbc..dd4d9e59ea 100644
  
          r = x11_context_verify_and_warn(&in, LOG_ERR, error);
 diff --git a/src/timedate/timedated.c b/src/timedate/timedated.c
-index 662cc29ac5..57f3413dc6 100644
+index d1ef772b56..9b1fe439f1 100644
 --- a/src/timedate/timedated.c
 +++ b/src/timedate/timedated.c
 @@ -678,6 +678,10 @@ static int method_set_timezone(sd_bus_message *m, void *userdata, sd_bus_error *

@@ -35,10 +35,10 @@ index 3a13e04a27..4fd58068a1 100644
      <literal>Etc/UTC</literal>. The resulting link should lead to the
      corresponding binary
 diff --git a/src/basic/time-util.c b/src/basic/time-util.c
-index 55931a2546..2e00bd7539 100644
+index 8c776960e1..2e0563bd00 100644
 --- a/src/basic/time-util.c
 +++ b/src/basic/time-util.c
-@@ -1410,7 +1410,7 @@ static int get_timezones_from_zone1970_tab(char ***ret) {
+@@ -1443,7 +1443,7 @@ static int get_timezones_from_zone1970_tab(char ***ret) {
  
          assert(ret);
  
@@ -47,7 +47,7 @@ index 55931a2546..2e00bd7539 100644
          if (!f)
                  return -errno;
  
-@@ -1451,7 +1451,7 @@ static int get_timezones_from_tzdata_zi(char ***ret) {
+@@ -1488,7 +1488,7 @@ static int get_timezones_from_tzdata_zi(char ***ret) {
  
          assert(ret);
  
@@ -56,7 +56,7 @@ index 55931a2546..2e00bd7539 100644
          if (!f)
                  return -errno;
  
-@@ -1562,7 +1562,7 @@ int verify_timezone(const char *name, int log_level) {
+@@ -1603,7 +1603,7 @@ int verify_timezone(const char *name, int log_level) {
          if (p - name >= PATH_MAX)
                  return -ENAMETOOLONG;
  
@@ -65,7 +65,7 @@ index 55931a2546..2e00bd7539 100644
  
          fd = open(t, O_RDONLY|O_CLOEXEC);
          if (fd < 0)
-@@ -1614,7 +1614,7 @@ int get_timezone(char **ret) {
+@@ -1675,7 +1675,7 @@ int get_timezone(char **ret) {
          if (r < 0)
                  return r; /* Return EINVAL if not a symlink */
  
@@ -75,19 +75,19 @@ index 55931a2546..2e00bd7539 100644
                  return -EINVAL;
          if (!timezone_is_valid(e, LOG_DEBUG))
 diff --git a/src/firstboot/firstboot.c b/src/firstboot/firstboot.c
-index 5ed6d3a9d2..f922d91a9d 100644
+index 55bd273f21..d00aa16592 100644
 --- a/src/firstboot/firstboot.c
 +++ b/src/firstboot/firstboot.c
-@@ -618,7 +618,7 @@ static int prompt_timezone(int rfd) {
+@@ -571,7 +571,7 @@ static int prompt_timezone(int rfd, sd_varlink **mute_console_link) {
  
- static int process_timezone(int rfd) {
+ static int process_timezone(int rfd, sd_varlink **mute_console_link) {
          _cleanup_close_ int pfd = -EBADF;
 -        _cleanup_free_ char *f = NULL, *relpath = NULL;
 +        _cleanup_free_ char *f = NULL;
          const char *e;
          int r;
  
-@@ -664,12 +664,9 @@ static int process_timezone(int rfd) {
+@@ -617,12 +617,9 @@ static int process_timezone(int rfd, sd_varlink **mute_console_link) {
          if (isempty(arg_timezone))
                  return 0;
  
@@ -103,10 +103,10 @@ index 5ed6d3a9d2..f922d91a9d 100644
                  return log_error_errno(r, "Failed to create /etc/localtime symlink: %m");
  
 diff --git a/src/nspawn/nspawn.c b/src/nspawn/nspawn.c
-index 480a9c55c6..02c9ae6608 100644
+index 05e6be8874..6dc00ff416 100644
 --- a/src/nspawn/nspawn.c
 +++ b/src/nspawn/nspawn.c
-@@ -1821,8 +1821,8 @@ int userns_mkdir(const char *root, const char *path, mode_t mode, uid_t uid, gid
+@@ -1808,8 +1808,8 @@ int userns_mkdir(const char *root, const char *path, mode_t mode, uid_t uid, gid
  static const char *timezone_from_path(const char *path) {
          return PATH_STARTSWITH_SET(
                          path,
@@ -118,7 +118,7 @@ index 480a9c55c6..02c9ae6608 100644
  
  static bool etc_writable(void) {
 diff --git a/src/timedate/timedated.c b/src/timedate/timedated.c
-index 57f3413dc6..6a456fe601 100644
+index 9b1fe439f1..916886aeff 100644
 --- a/src/timedate/timedated.c
 +++ b/src/timedate/timedated.c
 @@ -266,7 +266,7 @@ static int context_read_data(Context *c) {

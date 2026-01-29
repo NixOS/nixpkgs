@@ -13,7 +13,7 @@ directly.
  1 file changed, 11 insertions(+)
 
 diff --git a/src/timesync/timesyncd.c b/src/timesync/timesyncd.c
-index 40305c046b..c3ed57c54e 100644
+index 96d0dd5c2b..ee7cc4bd17 100644
 --- a/src/timesync/timesyncd.c
 +++ b/src/timesync/timesyncd.c
 @@ -25,6 +25,11 @@
@@ -28,7 +28,7 @@ index 40305c046b..c3ed57c54e 100644
  
  static int advance_tstamp(int fd, usec_t epoch) {
          assert(fd >= 0);
-@@ -203,6 +208,12 @@ static int run(int argc, char *argv[]) {
+@@ -204,6 +209,12 @@ static int run(int argc, char *argv[]) {
          if (r < 0)
                  return log_error_errno(r, "Failed to parse fallback server strings: %m");
  
