@@ -510,6 +510,26 @@ stdenv.mkDerivation rec {
       url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=c448f511e74cb7c776b314fcb7943f98d3f22b6d";
       hash = "sha256-64gMhCEW0aYHt46crX/qN/3Hj8MgvWLazgQlVXqe8LE=";
     })
+    (fetchpatch {
+      name = "xfs-non-continuous-data-blocks.patch";
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=68dd65cfdaad08b1f8ec01b84949b0bf88bc0d8c";
+      hash = "sha256-KWdOJhsWmUIOj66SrIYhZvpnshDSpfzaEKZOSXjIs1E=";
+    })
+    (fetchpatch {
+      name = "xfs-superblock.patch";
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=1ed2628b560cedac7fd1a696985ab85b24541a8e";
+      hash = "sha256-ijeEzqHhrPU12iWF4Os8S3paCAR0gQ+W4JAIV5dH0jw=";
+    })
+    (fetchpatch {
+      name = "xfs-iterate-dir.patch";
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=f209887381a56dea79152ab26ffb485718e3218e";
+      hash = "sha256-3qWfGxQg7pndeseIcQn3uPj23cGJWyuP5dG4eDQearU=";
+    })
+    (fetchpatch {
+      name = "xfs-large-extent.patch";
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=4abac0ad5a7914dd3cdfff08aaac06588bf98d80";
+      hash = "sha256-SActYcUgGRNoAtmpUOSas2JRdWtg7sLovh4BtZRmFUc=";
+    })
   ];
 
   postPatch =
