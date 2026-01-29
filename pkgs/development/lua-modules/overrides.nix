@@ -17,7 +17,6 @@
   fetchurl,
   fzf,
   glib,
-  glibc,
   gmp,
   gnulib,
   gnum4,
@@ -25,6 +24,7 @@
   imagemagick,
   installShellFiles,
   lib,
+  libc,
   libevent,
   libiconv,
   libmpack,
@@ -416,7 +416,7 @@ in
 
   lrexlib-posix = prev.lrexlib-posix.overrideAttrs (old: {
     buildInputs = old.buildInputs ++ [
-      glibc.dev
+      (lib.getDev libc)
     ];
   });
 
@@ -704,7 +704,7 @@ in
 
   luasystem = prev.luasystem.overrideAttrs (
     lib.optionalAttrs stdenv.hostPlatform.isLinux {
-      buildInputs = [ glibc.out ];
+      buildInputs = [ libc.out ];
     }
   );
 
