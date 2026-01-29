@@ -545,6 +545,7 @@ mapAliases {
   zc-buildout221 = throw "'zc-buildout221' has been renamed to/replaced by 'zc-buildout'"; # Converted to throw 2025-10-29
   zc_lockfile = throw "'zc_lockfile' has been renamed to/replaced by 'zc-lockfile'"; # Converted to throw 2025-10-29
   zetup = "'zetup' has been removed because it is unmaintained"; # Added 2026-01-19
+  zeversolarlocal = throw "'zeversolarlocal' has been removed because it is unmaintained"; # Added 2026-01-28
   zope_component = throw "'zope_component' has been renamed to/replaced by 'zope-component'"; # Converted to throw 2025-10-29
   zope_configuration = throw "'zope_configuration' has been renamed to/replaced by 'zope-configuration'"; # Converted to throw 2025-10-29
   zope_contenttype = throw "'zope_contenttype' has been renamed to/replaced by 'zope-contenttype'"; # Converted to throw 2025-10-29
