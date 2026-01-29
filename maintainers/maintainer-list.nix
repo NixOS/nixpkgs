@@ -8736,6 +8736,12 @@
     matrix = "@flandweber:envs.net";
     name = "Finn Landweber";
   };
+  flaxeneel2 = {
+    email = "me@flaxeneel2.net";
+    github = "flaxeneel2";
+    githubId = 60919292;
+    name = "Siddhant Misra";
+  };
   fleaz = {
     email = "mail@felixbreidenstein.de";
     matrix = "@fleaz:rainbownerds.de";
