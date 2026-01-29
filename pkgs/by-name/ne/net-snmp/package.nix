@@ -48,6 +48,13 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux "--with-mnttab=/proc/mounts";
 
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.hostPlatform.isDarwin [
+      # https://github.com/net-snmp/net-snmp/pull/1053
+      "-Wno-declaration-after-statement"
+    ]
+  );
+
   postPatch = ''
     substituteInPlace testing/fulltests/support/simple_TESTCONF.sh --replace-fail "/bin/netstat" "${net-tools}/bin/netstat"
   '';
