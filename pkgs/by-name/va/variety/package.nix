@@ -22,14 +22,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "variety";
-  version = "0.8.13";
+  version = "0.9.0-b1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "varietywalls";
     repo = "variety";
     tag = version;
-    hash = "sha256-7CTJ3hWddbOX/UfZ1qX9rPNGTfkxQ4pxu23sq9ulgv4=";
+    hash = "sha256-uDQZfWY0RuTsdD/IxpjzSTMMtNq632VAwAjB+CeUIbw=";
   };
 
   nativeBuildInputs = [
