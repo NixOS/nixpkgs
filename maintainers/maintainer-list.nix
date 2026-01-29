@@ -27406,6 +27406,11 @@
     githubId = 29992205;
     keys = [ { fingerprint = "6684 4E7D D213 C75D 8828  6215 C714 A58B 6C1E 0F52"; } ];
   };
+  undefinedprophet = {
+    name = "Prophet";
+    github = "undefinedprophet";
+    githubId = 206461177;
+  };
   ungeskriptet = {
     name = "David Wronek";
     email = "nix@david-w.eu";
