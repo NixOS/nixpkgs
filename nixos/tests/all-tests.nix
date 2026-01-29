@@ -255,6 +255,7 @@ in
   audit = runTest ./audit.nix;
   auth-mysql = runTest ./auth-mysql.nix;
   authelia = runTest ./authelia.nix;
+  authentik = runTest ./authentik.nix;
   auto-cpufreq = runTest ./auto-cpufreq.nix;
   autobrr = runTest ./autobrr.nix;
   avahi = runTest {
