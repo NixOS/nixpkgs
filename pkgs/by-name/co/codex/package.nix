@@ -4,6 +4,8 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
+  cmake,
+  git,
   makeBinaryWrapper,
   nix-update-script,
   pkg-config,
@@ -14,20 +16,22 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codex";
-  version = "0.89.0";
+  version = "0.91.0";
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "codex";
     tag = "rust-v${finalAttrs.version}";
-    hash = "sha256-VFbtxGOqX80qWqVo+BG+BnUr8DiLCfcJCrN9fwy7utY=";
+    hash = "sha256-2wyXfwZpl5o+Quvuz1ME2Ju61B2xBw/9lbW9XeW6fh0=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/codex-rs";
 
-  cargoHash = "sha256-gg7KPEMO2aiBcIN8TllaDQeTLyw+WLfmMrXBKV/L53M=";
+  cargoHash = "sha256-FIjNADpaJdhr56mBa5sBac6uHnIsoJv8wQu3FdkP7yo=";
 
   nativeBuildInputs = [
+    cmake
+    git
     installShellFiles
     makeBinaryWrapper
     pkg-config
