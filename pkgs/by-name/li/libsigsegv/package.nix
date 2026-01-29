@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  sysctl,
   enableSigbusFix ? false, # required by kernels < 3.18.6
 }:
 
@@ -15,6 +16,19 @@ stdenv.mkDerivation rec {
   };
 
   patches = if enableSigbusFix then [ ./sigbus_fix.patch ] else null;
+
+  nativeBuildInputs = lib.optional (
+    stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
+  ) sysctl;
+
+  # stackoverflow tests fail on Rosetta, preventing Hydra from building x86_64-darwin binaries
+  preConfigure = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
+    onRosetta="$(sysctl -iqn sysctl.proc_translated)"
+    if [[ $onRosetta == 1 ]] ; then
+      echo "building on Rosetta, disable stackoverflow tests"
+      patch -p1 <${./disable-stackoverflow-tests.patch}
+    fi
+  '';
 
   doCheck = true; # not cross;
 
