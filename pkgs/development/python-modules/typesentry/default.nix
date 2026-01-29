@@ -4,12 +4,16 @@
   fetchFromGitHub,
   colorama,
   pytestCheckHook,
+  pythonAtLeast,
 }:
 
 buildPythonPackage {
   pname = "typesentry";
   version = "0.2.7";
   format = "setuptools";
+
+  # Fails accessing __args__. Unmaintained.
+  disabled = pythonAtLeast "3.14";
 
   # Only wheel distribution is available on PyPi.
   src = fetchFromGitHub {
