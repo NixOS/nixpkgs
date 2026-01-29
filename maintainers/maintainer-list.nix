@@ -9945,6 +9945,12 @@
     githubId = 76840985;
     name = "GueLaKais";
   };
+  gui-wf = {
+    email = "dev@gui.wf";
+    github = "gui-wf";
+    githubId = 48162143;
+    name = "Guilherme Fontes";
+  };
   guibert = {
     email = "david.guibert@gmail.com";
     github = "dguibert";
