@@ -1,6 +1,5 @@
 {
   lib,
-  callPackage,
   stdenv,
   fetchurl,
   pkg-config,
@@ -71,18 +70,18 @@ stdenv.mkDerivation rec {
     ++ lib.optional (!withMetadata) "-dlibxml2=disabled"
     ++ lib.optional (!withFonts) "-Dfreetype=disabled";
 
+  passthru = {
+    tests = {
+      # Verify the "full" package when verifying changes to this package
+      inherit libbluray-full;
+    };
+  };
+
   meta = {
     homepage = "http://www.videolan.org/developers/libbluray.html";
     description = "Library to access Blu-Ray disks for video playback";
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.amarshall ];
     platforms = lib.platforms.unix;
-  };
-
-  passthru = {
-    tests = {
-      # Verify the "full" package when verifying changes to this package
-      inherit libbluray-full;
-    };
   };
 }
