@@ -1,31 +1,33 @@
-{
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../.. { inherit system config; },
-}:
+{ lib, runTest }:
 
 let
-  shared = {
-    services.mediawiki.enable = true;
-    services.mediawiki.httpd.virtualHost.hostName = "localhost";
-    services.mediawiki.httpd.virtualHost.adminAddr = "root@example.com";
-    services.mediawiki.passwordFile = pkgs.writeText "password" "correcthorsebatterystaple";
-    services.mediawiki.extensions = {
-      Matomo = pkgs.fetchzip {
-        url = "https://github.com/DaSchTour/matomo-mediawiki-extension/archive/v4.0.1.tar.gz";
-        sha256 = "0g5rd3zp0avwlmqagc59cg9bbkn3r7wx7p6yr80s644mj6dlvs1b";
+  shared =
+    { pkgs, ... }:
+    {
+      services.mediawiki.enable = true;
+      services.mediawiki.httpd.virtualHost.hostName = "localhost";
+      services.mediawiki.httpd.virtualHost.adminAddr = "root@example.com";
+      services.mediawiki.passwordFile = pkgs.writeText "password" "correcthorsebatterystaple";
+      services.mediawiki.extensions = {
+        Matomo = pkgs.fetchzip {
+          url = "https://github.com/DaSchTour/matomo-mediawiki-extension/archive/v4.0.1.tar.gz";
+          sha256 = "0g5rd3zp0avwlmqagc59cg9bbkn3r7wx7p6yr80s644mj6dlvs1b";
+        };
+        ParserFunctions = null;
       };
-      ParserFunctions = null;
     };
-  };
 
-  testLib = import ../lib/testing-python.nix {
-    inherit system pkgs;
-    extraConfigurations = [ shared ];
-  };
+  makeTest =
+    t:
+    runTest {
+      imports = [
+        { nodes.machine.imports = [ shared ]; }
+        t
+      ];
+    };
 in
 {
-  mysql = testLib.makeTest {
+  mysql = makeTest {
     name = "mediawiki-mysql";
     nodes.machine = {
       services.mediawiki.database.type = "mysql";
@@ -40,7 +42,7 @@ in
     '';
   };
 
-  postgresql = testLib.makeTest {
+  postgresql = makeTest {
     name = "mediawiki-postgres";
     nodes.machine = {
       services.mediawiki.database.type = "postgres";
@@ -55,7 +57,7 @@ in
     '';
   };
 
-  nohttpd = testLib.makeTest {
+  nohttpd = makeTest {
     name = "mediawiki-nohttpd";
     nodes.machine = {
       services.mediawiki.webserver = "none";
@@ -72,12 +74,12 @@ in
           'QUERY_STRING=title=Main_Page',
           "REQUEST_METHOD=GET",
         );
-        page = machine.succeed(f"{' '.join(env)} ${pkgs.fcgi}/bin/cgi-fcgi -bind -connect ${nodes.machine.services.phpfpm.pools.mediawiki.socket}")
+        page = machine.succeed(f"{' '.join(env)} ${lib.getExe nodes.machine.nixpkgs.pkgs.fcgi} -bind -connect ${nodes.machine.services.phpfpm.pools.mediawiki.socket}")
         assert "MediaWiki has been installed" in page, f"no 'MediaWiki has been installed' in:\n{page}"
       '';
   };
 
-  nginx = testLib.makeTest {
+  nginx = makeTest {
     name = "mediawiki-nginx";
     nodes.machine = {
       services.mediawiki.webserver = "nginx";

@@ -949,7 +949,10 @@ in
   mealie = runTest ./mealie.nix;
   mediamtx = runTest ./mediamtx.nix;
   mediatomb = runTest ./mediatomb.nix;
-  mediawiki = handleTest ./mediawiki.nix { };
+  mediawiki = import ./mediawiki.nix {
+    inherit (pkgs) lib;
+    inherit runTest;
+  };
   meilisearch = runTest ./meilisearch.nix;
   memcached = runTest ./memcached.nix;
   merecat = runTest ./merecat.nix;
