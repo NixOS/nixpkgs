@@ -56,8 +56,8 @@
   },
   {
     "pname": "AssetRipper.GUI.Web.Dependencies",
-    "version": "1.0.0",
-    "hash": "sha256-vRaU7qR5u2TKk1RdP4ZyTbe+/rJ02ffeC8YkqMp+W4E="
+    "version": "1.1.0",
+    "hash": "sha256-ZsUjsQO2X6YuQfwkhmDQUlJLOGzkvdB73aE9oWpw/xY="
   },
   {
     "pname": "AssetRipper.HashAlgorithms",
@@ -66,8 +66,8 @@
   },
   {
     "pname": "AssetRipper.ICSharpCode.Decompiler",
-    "version": "10.0.0.8273-preview2",
-    "hash": "sha256-FI+I2MZfFG6iHVW7ykNIO6WOSxTqmRSEtWx3CQNlRBY="
+    "version": "10.0.0.8284-preview3",
+    "hash": "sha256-ae4zvCXkE9EgOdKy4LWI89laUtkAaPkdtf4YyQOZ4vA="
   },
   {
     "pname": "AssetRipper.IO.Endian",
@@ -86,8 +86,8 @@
   },
   {
     "pname": "AssetRipper.NativeDialogs",
-    "version": "1.0.1",
-    "hash": "sha256-fLUIHFnyurjuM5YhV9G4KbwIY0oooSNY/OLglG038Cs="
+    "version": "1.1.1",
+    "hash": "sha256-6ShudCx1WwuzmbElus3NxyxuNY5e8NthujoKkkgLFyE="
   },
   {
     "pname": "AssetRipper.Primitives",
@@ -121,8 +121,8 @@
   },
   {
     "pname": "AssetRipper.SourceGenerated",
-    "version": "1.3.9",
-    "hash": "sha256-YjaQJNyRY+HM4qzlGYPFxjQstibVY5IB94DJoks1upo="
+    "version": "1.3.10",
+    "hash": "sha256-CU8mSe7+vEmQ7QjRv0UDE9REOWniFz38BAtiKAtGsvo="
   },
   {
     "pname": "AssetRipper.Text.Html",
@@ -136,8 +136,8 @@
   },
   {
     "pname": "AssetRipper.TextureDecoder",
-    "version": "2.5.0",
-    "hash": "sha256-Jxy6sjAnB0fVzlZ7TeKb8H45aNftiZe8gMTNQyefouU="
+    "version": "2.6.0",
+    "hash": "sha256-qoecWzCXQq82wUTaw6A65pJYId/GxxkiKGZZ9AlbgWo="
   },
   {
     "pname": "AssetRipper.Tpk",
@@ -172,13 +172,13 @@
   },
   {
     "pname": "Microsoft.AspNetCore.OpenApi",
-    "version": "10.0.1",
-    "hash": "sha256-O31K6+++fM7XWd0JGrzmzLrtydYGiI4efzv+WqAdnQA="
+    "version": "10.0.2",
+    "hash": "sha256-FU57fPXL4NUDRqi+rLresi4yKttv1KcAnLuEdPCyTos="
   },
   {
     "pname": "Microsoft.Bcl.AsyncInterfaces",
-    "version": "10.0.1",
-    "hash": "sha256-aHoslRGmAot/z1GCCqSzjAxT/hltxOOIZ1/oti4WbGY="
+    "version": "10.0.2",
+    "hash": "sha256-3lrCf7HOpbkZkQx4/JSpKi8Rl+hp9NAaRi9dp6xqMaQ="
   },
   {
     "pname": "Microsoft.CodeAnalysis.Analyzers",
@@ -217,8 +217,8 @@
   },
   {
     "pname": "Microsoft.OpenApi",
-    "version": "2.4.1",
-    "hash": "sha256-DXdbXq5Gpg3MJVBM0C8uF6mcLczVJAUFp6LAdFojgPs="
+    "version": "2.6.1",
+    "hash": "sha256-cRA2net+NnfJUde1i3NRGvOxT8ycXq9+W+eerXKCapc="
   },
   {
     "pname": "NAudio.Core",
@@ -282,8 +282,8 @@
   },
   {
     "pname": "SharpCompress",
-    "version": "0.42.1",
-    "hash": "sha256-cHQM/AKOZtH0dgWQaoNlLQobq4/1f/+MpXAAKHHuOxU="
+    "version": "0.44.4",
+    "hash": "sha256-woh8cQz+Qc6MiYhCSXmMERxzhqYDWoqo7qDfRh3Od/o="
   },
   {
     "pname": "SourceGenerator.Foundations",
@@ -337,8 +337,8 @@
   },
   {
     "pname": "System.IO.Pipelines",
-    "version": "10.0.1",
-    "hash": "sha256-3NHQjvO1mSPo8Hq9vMM5QeKJeS9/y3UpznideAf5pJA="
+    "version": "10.0.2",
+    "hash": "sha256-Guh0w9aMQ5wNSI9ecuoH4tGOX4VFnlNgepvBTPGFgzc="
   },
   {
     "pname": "System.Memory",
@@ -402,13 +402,13 @@
   },
   {
     "pname": "System.Text.Encodings.Web",
-    "version": "10.0.1",
-    "hash": "sha256-dBN9Rpe+J1F8/cdzwNxLHYiqvzgSX1r9128YXyb2DKM="
+    "version": "10.0.2",
+    "hash": "sha256-DWbSR+d8DJtkMclrKKbS5Ghlvi6YYrrxgHGfyDJx50o="
   },
   {
     "pname": "System.Text.Json",
-    "version": "10.0.1",
-    "hash": "sha256-WfSgOpRL4DKfIry/H+eHxJHHrj6ENZ3+P6Q2ol3R2XM="
+    "version": "10.0.2",
+    "hash": "sha256-Gf6L3mxsdvmN8gDyoUhfZDSFWKpmn9UjJ2v/p1CDFmk="
   },
   {
     "pname": "System.Threading.Tasks.Extensions",
@@ -422,8 +422,8 @@
   },
   {
     "pname": "TerraFX.Interop.Windows",
-    "version": "10.0.26100.2",
-    "hash": "sha256-dIyetiPHgFg3cXN620ur3O/O3c+7Piw+KKzr88SlpHw="
+    "version": "10.0.26100.6",
+    "hash": "sha256-oC1WDA7w1kVB9adGZh2KDCvJisRcOkw4Cy87wDjh2qc="
   },
   {
     "pname": "ZstdSharp.Port",
@@ -432,7 +432,7 @@
   },
   {
     "pname": "ZstdSharp.Port",
-    "version": "0.8.6",
-    "hash": "sha256-rc3YWP80fykqujDsD72SXOA1tBDoy2KrvVETOC8eTx8="
+    "version": "0.8.7",
+    "hash": "sha256-WsuDTZOv3TgiE8NV/TXbKRMHBsZKgWB8iDdKKr9OvAo="
   }
 ]

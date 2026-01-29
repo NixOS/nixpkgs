@@ -10,13 +10,13 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "assetripper";
-  version = "1.3.9";
+  version = "1.3.10";
 
   src = fetchFromGitHub {
     owner = "AssetRipper";
     repo = "AssetRipper";
     tag = finalAttrs.version;
-    hash = "sha256-cQt0udU2IjsKPwTpBZLFmw1kGv2DfRt7ecdh2ilQtN8=";
+    hash = "sha256-sqlZsUTeLyHHESNtC07F2FjgLXnuqgoPYRcgE57sq5k=";
   };
 
   buildInputs = [
