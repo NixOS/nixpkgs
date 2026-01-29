@@ -11,7 +11,7 @@ maven.buildMavenPackage rec {
   src = fetchFromGitHub {
     owner = "sventorben";
     repo = "keycloak-restrict-client-auth";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-nQ2AwXhSUu5RY/BbxXE2OXgEb7Zf6FfrGP5tfbgAXk8=";
   };
 

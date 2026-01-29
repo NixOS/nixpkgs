@@ -12056,6 +12056,13 @@
     githubId = 1198065;
     name = "Jeffrey David Johnson";
   };
+  jefferyoo = {
+    email = "oojefferywm@proton.me";
+    github = "jefferyoo";
+    githubId = 237098253;
+    name = "Jeffery Oo";
+    keys = [ { fingerprint = "7129 408E 3D97 47EB FCE1  A6D5 1999 2BEC E706 CC59"; } ];
+  };
   jefflabonte = {
     email = "jean-francois.labonte@brightonlabs.ai";
     github = "JeffLabonte";
@@ -14151,6 +14158,12 @@
     github = "kristoff3r";
     githubId = 160317;
     name = "Kristoffer Søholm";
+  };
+  krit = {
+    email = "dasskrit@gmail.com";
+    github = "kritdass";
+    githubId = 68750861;
+    name = "Krit Dass";
   };
   kritnich = {
     email = "kritnich@kritni.ch";
