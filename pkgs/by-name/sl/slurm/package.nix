@@ -42,7 +42,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "slurm";
-  version = "25.11.1.1";
+  version = "25.11.2.1";
 
   # N.B. We use github release tags instead of https://www.schedmd.com/downloads.php
   # because the latter does not keep older releases.
@@ -51,21 +51,12 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "slurm";
     # The release tags use - instead of .
     rev = "slurm-${builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version}";
-    hash = "sha256-Hv0rqogwZH5GafwlELghAbKLwurd8x30u9DJZylBQP0=";
+    hash = "sha256-ukQlxKD+XhvL/sh15g3Tk5drsgXkK3hV+PFa1d2y9mk=";
   };
 
   outputs = [
     "out"
     "dev"
-  ];
-
-  patches = [
-    # upstream patch; remove with next upgrade.
-    (fetchpatch {
-      name = "pmix-509-compatability.patch";
-      url = "https://github.com/SchedMD/slurm/commit/be063f0c646d2bfe10d358fa7063f2b64e19e063.patch";
-      hash = "sha256-QbKMBMl+VTLrzdXhPtcqwC7OcAXcJBxDS8jRZ2EoJL4=";
-    })
   ];
 
   prePatch = ''
