@@ -12,8 +12,12 @@ in
   darwinSdkMajorVersion ? lib.versions.major stdenv.hostPlatform.darwinSdkVersion,
 
   # Enabling bootstrap disables propagation. Defaults to `false` (meaning to propagate certain packages and `xcrun`)
-  # except in stage0 of the Darwin stdenv bootstrap.
-  enableBootstrap ? stdenv.name == "bootstrap-stage0-stdenv-darwin",
+  # except in stage0 of the Darwin stdenv bootstrap or when building static to avoid circular dependencies.
+  # For static builds, propagating libiconv creates this cycle:
+  #   apple-sdk-static → libiconv-static → mkAppleDerivation (adds meson to nativeBuildInputs)
+  #   → meson → python3.pkgs.buildPythonApplication → wrapPython → pkgsBuildTarget.makeWrapper
+  #   → targetPackages.runtimeShell → bash-static → stdenv-darwin-static → apple-sdk-static
+  enableBootstrap ? stdenv.name == "bootstrap-stage0-stdenv-darwin" || stdenv.hostPlatform.isStatic,
 
   # Required by various phases
   callPackage,
