@@ -13386,6 +13386,8 @@ with pkgs;
 
   openbsd = callPackage ../os-specific/bsd/openbsd { };
 
+  bcompare4 = libsForQt5.callPackage ../applications/version-management/bcompare4 { };
+
   bcompare = libsForQt5.callPackage ../applications/version-management/bcompare { };
 
   xp-pen-deco-01-v2-driver = libsForQt5.xp-pen-deco-01-v2-driver;
