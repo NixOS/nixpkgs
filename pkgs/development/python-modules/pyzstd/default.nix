@@ -1,59 +1,39 @@
 {
+  backports-zstd,
   buildPythonPackage,
   fetchFromGitHub,
+  hatch-vcs,
+  hatchling,
   lib,
   pytestCheckHook,
   pythonOlder,
-  setuptools,
   typing-extensions,
-  zstd-c,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyzstd";
-  version = "0.18.0";
+  version = "0.19.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Rogdham";
     repo = "pyzstd";
-    tag = version;
-    hash = "sha256-15+GqJ/AMYs1R9ywo+muNVVbPkkzTMj//Zn/PPI+MCI=";
+    tag = finalAttrs.version;
+    hash = "sha256-1oUqnZCBJYu8haFIQ+T2KaSQaa1xnZyJHLzOQg4Fdw8=";
   };
 
-  postPatch = ''
-    # pyzst specifies setuptools<74 because 74+ drops `distutils.msvc9compiler`,
-    # required for Python 3.9 under Windows
-    substituteInPlace pyproject.toml \
-        --replace-fail '"setuptools>=64,<74"' '"setuptools"'
-
-    # pyzst needs a copy of upstream zstd's license
-    ln -s ${zstd-c.src}/LICENSE zstd
-  '';
-
-  nativeBuildInputs = [
-    setuptools
-  ];
-
   build-system = [
-    setuptools
+    hatchling
+    hatch-vcs
   ];
 
-  dependencies = lib.optionals (pythonOlder "3.13") [
-    typing-extensions
-  ];
-
-  pythonRelaxDeps = [
-    "typing-extensions"
-  ];
-
-  buildInputs = [
-    zstd-c
-  ];
-
-  pypaBuildFlags = [
-    "--config-setting=--global-option=--dynamic-link-zstd"
-  ];
+  dependencies =
+    lib.optionals (pythonOlder "3.13") [
+      typing-extensions
+    ]
+    ++ lib.optionals (pythonOlder "3.14") [
+      backports-zstd
+    ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -66,7 +46,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python bindings to Zstandard (zstd) compression library";
     homepage = "https://pyzstd.readthedocs.io";
-    changelog = "https://github.com/Rogdham/pyzstd/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/Rogdham/pyzstd/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       MattSturgeon
@@ -74,4 +54,4 @@ buildPythonPackage rec {
       PopeRigby
     ];
   };
-}
+})
