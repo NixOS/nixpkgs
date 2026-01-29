@@ -110,4 +110,4 @@ chroot_add_resolv_conf "$mountPoint" || echo "$0: failed to set up resolv.conf" 
 
 unset TMPDIR
 
-exec chroot "$mountPoint" "${command[@]}"
+exec chroot "$mountPoint" /usr/bin/env PATH="$system/sw/bin:/run/wrappers/bin:$PATH" "${command[@]}"
