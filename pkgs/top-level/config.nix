@@ -386,6 +386,21 @@ let
       '';
     };
 
+    recursionMode = mkOption {
+      type = types.uniq (
+        types.enum [
+          "hydra"
+          "eval"
+          "search"
+        ]
+      );
+      default = "eval";
+      description = ''
+        In which way to recurse through Nixpkgs. In most cases you want keep this as the default.
+        You can use this to emulate how `hydra` and `search` are going through Nixpkgs.
+      '';
+    };
+
     hashedMirrors = mkOption {
       type = types.listOf types.str;
       default = [ "https://tarballs.nixos.org" ];

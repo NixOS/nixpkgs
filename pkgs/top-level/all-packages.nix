@@ -108,13 +108,62 @@ with pkgs;
   gccStdenvNoLibs = mkStdenvNoLibs gccStdenv;
   clangStdenvNoLibs = mkStdenvNoLibs clangStdenv;
 
+  /**
+    Recurse into an attribute set depending on which `config.recursionMode` is set.
+
+    This function only affects a single attribute set;
+    it does not apply itself recursively for nested attribute sets.
+
+    # Inputs
+    `modes`
+    : An attribute set containg keys from `config.recursionMode` defaulting to true.
+    `attrs`
+    : An attribute set to scan for derivations.
+
+    # Type
+    ```
+    recurseIntoAttrsWith :: AttrSet -> AttrSet -> AttrSet
+    ```
+
+    # Examples
+    :::{.example}
+    ## `pkgs.recurseIntoAttrsWith` usage example
+    ```nix
+    { pkgs ? import <nixpkgs> {} }:
+    {
+      myTools = pkgs.recurseIntoAttrsWith { } {
+        inherit (pkgs) hello figlet;
+      };
+    }
+    ```
+    :::
+  */
+  recurseIntoAttrsWith =
+    {
+      hydra ? true,
+      eval ? true,
+      search ? true,
+    }:
+    attrs:
+    attrs
+    // {
+      recurseForDerivations =
+        let
+          modes = {
+            inherit hydra eval search;
+          };
+        in
+        modes.${config.recursionMode};
+    };
+
   ### Evaluating the entire Nixpkgs naively will likely fail, make failure fast
   AAAAAASomeThingsFailToEvaluate = throw ''
     This pseudo-package is likely not the only part of Nixpkgs that fails to evaluate.
     You should not evaluate entire Nixpkgs without measures to handle failing packages.
   '';
 
-  tests = recurseIntoAttrs (callPackages ../test { });
+  # Tests should not appear in search results
+  tests = recurseIntoAttrsWith { search = false; } (callPackages ../test { });
 
   defaultPkgConfigPackages =
     # We don't want nix-env -q to enter this, because all of these are aliases.
@@ -8370,11 +8419,17 @@ with pkgs;
 
   rstudioServerWrapper = rstudioWrapper.override { rstudio = rstudio-server; };
 
-  rPackages = dontRecurseIntoAttrs (
-    callPackage ../development/r-modules {
-      overrides = (config.rPackageOverrides or (_: { })) pkgs;
-    }
-  );
+  rPackages =
+    recurseIntoAttrsWith
+      {
+        hydra = false;
+        eval = false;
+      }
+      (
+        callPackage ../development/r-modules {
+          overrides = (config.rPackageOverrides or (_: { })) pkgs;
+        }
+      );
 
   ### SERVERS
 
@@ -9348,7 +9403,12 @@ with pkgs;
   };
 
   mdadm = mdadm4;
-  minimal-bootstrap = recurseIntoAttrs (
+
+  # minimal-bootstrap packages aren't used for anything but bootstrapping our
+  # stdenv. They should not be used for any other purpose and therefore not
+  # show up in search results or repository tracking services that consume our
+  # packages.json https://github.com/NixOS/nixpkgs/issues/244966
+  minimal-bootstrap = recurseIntoAttrsWith { search = false; } (
     import ../os-specific/linux/minimal-bootstrap {
       inherit (stdenv) buildPlatform hostPlatform;
       inherit lib config;
@@ -10087,9 +10147,11 @@ with pkgs;
       pkgs' = pkgs; # default pkgs used for bootstrapping the emacs package set
     };
 
-  # emacsPackages is exposed on search.nixos.org.
-  # Also see pkgs/top-level/packages-config.nix
-  emacsPackages = dontRecurseIntoAttrs emacs.pkgs;
+  # We want emacsPackages to be visible in search but not be build on hydra
+  emacsPackages = recurseIntoAttrsWith {
+    hydra = false;
+    eval = false;
+  } emacs.pkgs;
 
   espeak-classic = callPackage ../applications/audio/espeak { };
 
