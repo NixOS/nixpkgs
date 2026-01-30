@@ -7610,6 +7610,8 @@ self: super: with self; {
 
   iso8601 = callPackage ../development/python-modules/iso8601 { };
 
+  isocodes = callPackage ../development/python-modules/isocodes { };
+
   isodate = callPackage ../development/python-modules/isodate { };
 
   isoduration = callPackage ../development/python-modules/isoduration { };
