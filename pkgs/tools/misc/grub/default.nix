@@ -95,7 +95,7 @@ assert !(xenSupport && xenPvhSupport);
 
 stdenv.mkDerivation rec {
   pname = "grub";
-  version = "2.12";
+  version = "2.12.1";
 
   src = fetchgit {
     url = "https://git.savannah.gnu.org/git/grub.git";
