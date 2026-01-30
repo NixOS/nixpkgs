@@ -398,6 +398,10 @@ lib.extendMkDerivation {
 
       inherit dontWrapPythonPrograms;
 
+      preInstall = lib.optionalString (stdenv.buildPlatform == stdenv.hostPlatform) ''
+        export cleanPythonPath=${lib.escapeShellArg (lib.concatMapStringsSep ":" (p: "${p}/${python.sitePackages}") (python.pkgs.requiredPythonModules (finalAttrs.propagatedBuildInputs ++ finalAttrs.buildInputs)))}
+      '';
+
       postFixup =
         optionalString (!finalAttrs.dontWrapPythonPrograms) ''
           wrapPythonPrograms

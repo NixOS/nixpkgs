@@ -14,11 +14,10 @@ pythonImportsCheckPhase() {
             echo "Using python specific output \$python for imports check"
             pythonImportsCheckOutput=$python
         fi
-        export PYTHONPATH="$pythonImportsCheckOutput/@pythonSitePackages@:$PYTHONPATH"
         # Python modules and namespaces names are Python identifiers, which must not contain spaces.
         # See https://docs.python.org/3/reference/lexical_analysis.html
         # shellcheck disable=SC2048,SC2086
-        (cd "$pythonImportsCheckOutput" && @pythonCheckInterpreter@ -c 'import sys; import importlib; list(map(lambda mod: importlib.import_module(mod), sys.argv[1:]))' ${pythonImportsCheck[*]})
+        (export PYTHONPATH="$pythonImportsCheckOutput/@pythonSitePackages@:$cleanPythonPath" && cd "$pythonImportsCheckOutput" && @pythonCheckInterpreter@ -c 'import sys; import importlib; list(map(lambda mod: importlib.import_module(mod), sys.argv[1:]))' ${pythonImportsCheck[*]})
     fi
 }
 
