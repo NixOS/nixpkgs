@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "lineax";
-  version = "0.0.8";
+  version = "0.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "patrick-kidger";
     repo = "lineax";
     tag = "v${version}";
-    hash = "sha256-VMTDCExgxfCcd/3UZAglfAxAFaSjzFJJuvSWJAx2tJs=";
+    hash = "sha256-oUqJRp4pge3t9g7o/9PCZTb7e4EPkBEGLclHMIdUqiw=";
   };
 
   build-system = [ hatchling ];
