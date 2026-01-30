@@ -6,14 +6,14 @@
   kissfft,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qm-dsp";
   version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "c4dm";
     repo = "qm-dsp";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1vkb1xr2hjcaw88gig7rknlwsx01lm0w94d2z0rk5vz9ih4fslvv";
   };
 
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

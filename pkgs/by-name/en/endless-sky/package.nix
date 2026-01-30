@@ -18,14 +18,14 @@
   minizip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "endless-sky";
   version = "0.10.16";
 
   src = fetchFromGitHub {
     owner = "endless-sky";
     repo = "endless-sky";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-QO7Yv8H7hvavyOG/G9+HZh+a7XlCAf7fyPlszvOF91M=";
   };
 
@@ -79,4 +79,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux; # Maybe other non-darwin Unix
   };
-}
+})

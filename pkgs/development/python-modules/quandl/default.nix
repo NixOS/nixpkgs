@@ -5,7 +5,6 @@
   faker,
   fetchPypi,
   httpretty,
-  importlib-metadata,
   inflection,
   jsondate,
   mock,
@@ -15,7 +14,6 @@
   parameterized,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   requests,
   six,
 }:
@@ -41,8 +39,7 @@ buildPythonPackage rec {
     python-dateutil
     six
     more-itertools
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ];
 
   nativeCheckInputs = [
     factory-boy

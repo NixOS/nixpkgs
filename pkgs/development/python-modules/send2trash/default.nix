@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "send2trash";
   version = "1.8.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hsoft";

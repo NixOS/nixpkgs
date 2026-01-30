@@ -56,6 +56,7 @@ bash.runCommand "${pname}-${version}"
       --prefix=$out \
       --build=${buildPlatform.config} \
       --host=${hostPlatform.config} \
+      --disable-dependency-tracking \
       --disable-nls
 
     # Build

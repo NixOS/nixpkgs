@@ -46,14 +46,14 @@ let
 
   # "use of glibc_multi is only supported on x86_64-linux"
   isMultiBuild = multiArch && stdenv.system == "x86_64-linux";
-  # What should lib be linked to: lib32 or lib64?
+  # What should $out/usr/lib be linked to: lib32 or lib64?
   defaultLib =
-    {
-      "i686-linux" = "lib32";
-      "x86_64-linux" = "lib64";
-      "aarch64-linux" = "lib64";
-    }
-    .${stdenv.system} or (throw "Please expand list of system with defaultLib for '${stdenv.system}'");
+    if stdenv.hostPlatform.is64bit then
+      "lib64"
+    else if stdenv.hostPlatform.is32bit then
+      "lib32"
+    else
+      throw "buildFHSEnvBubblewrap: defaultLib cannot handle system ${stdenv.hostPlatform.system} (expected 64bit or 32bit)";
 
   # list of packages (usually programs) which match the host's architecture
   # (which includes stuff from multiPkgs)

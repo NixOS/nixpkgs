@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitLab {
     owner = "davide125";
     repo = "startup-disk";
-    tag = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-258whEX6hKqfrk2aII15tuFEuB7NQUCNLEmi3OCOWV4=";
     domain = "gitlab.gnome.org";
   };

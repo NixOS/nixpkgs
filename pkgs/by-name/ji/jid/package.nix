@@ -39,6 +39,6 @@ buildGoModule rec {
     mainProgram = "jid";
     homepage = "https://github.com/simeji/jid";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ stesie ];
+    maintainers = [ ];
   };
 }

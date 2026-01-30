@@ -7,7 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "cum";
   version = "0.9.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

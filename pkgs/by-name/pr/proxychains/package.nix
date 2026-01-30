@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "proxychains";
   version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "haad";
     repo = "proxychains";
-    rev = "proxychains-${version}";
+    rev = "proxychains-${finalAttrs.version}";
     sha256 = "083xdg6fsn8c2ns93lvy794rixxq8va6jdf99w1z0xi4j7f1nyjw";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "proxychains4";
   };
-}
+})

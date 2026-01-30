@@ -4,7 +4,7 @@
   fetchFromGitHub,
   makeDesktopItem,
   imagemagick,
-  glew110,
+  glew_1_10,
   SDL_compat,
   nix-update-script,
 }:
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ imagemagick ];
 
   buildInputs = [
-    glew110
+    glew_1_10
     SDL_compat
   ];
 

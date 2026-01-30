@@ -7,14 +7,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "unicorn";
   version = "2.1.4";
 
   src = fetchFromGitHub {
     owner = "unicorn-engine";
     repo = "unicorn";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-jEQXjYlLUdKrKPL4XfSbixn2KWJlNG7IYQveF4jDgl4=";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
       thoughtpolice
     ];
   };
-}
+})

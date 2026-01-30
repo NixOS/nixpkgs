@@ -11,13 +11,13 @@
   atWrapperPath ? "/run/wrappers/bin/at",
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "at";
   version = "3.2.5";
 
   src = fetchurl {
     # Debian is apparently the last location where it can be found.
-    url = "mirror://debian/pool/main/a/at/at_${version}.orig.tar.gz";
+    url = "mirror://debian/pool/main/a/at/at_${finalAttrs.version}.orig.tar.gz";
     hash = "sha256-uwZrOJ18m7nYSjVzgDK4XDDLp9lJ91gZKtxyyUd/07g=";
   };
 
@@ -85,4 +85,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "at";
   };
-}
+})

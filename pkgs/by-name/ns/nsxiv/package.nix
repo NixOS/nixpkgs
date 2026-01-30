@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitea,
   giflib,
-  imlib2,
+  imlib2Full,
   libXft,
   libexif,
   libwebp,
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     giflib
-    imlib2
+    imlib2Full
     libXft
     libexif
     libwebp

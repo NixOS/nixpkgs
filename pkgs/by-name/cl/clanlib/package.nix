@@ -6,7 +6,7 @@
   libGL,
   libpng,
   pkg-config,
-  xorg,
+  xorgproto,
   freetype,
   fontconfig,
   alsa-lib,
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libGL
     libpng
-    xorg.xorgproto
+    xorgproto
     freetype
     fontconfig
     alsa-lib

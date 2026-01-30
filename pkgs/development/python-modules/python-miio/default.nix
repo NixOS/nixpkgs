@@ -11,14 +11,12 @@
   defusedxml,
   fetchPypi,
   fetchpatch,
-  importlib-metadata,
   micloud,
   netifaces,
   poetry-core,
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   pyyaml,
   tqdm,
@@ -28,7 +26,7 @@
 buildPythonPackage rec {
   pname = "python-miio";
   version = "0.5.12";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -67,8 +65,7 @@ buildPythonPackage rec {
     pyyaml
     tqdm
     zeroconf
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ];
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -82,6 +79,5 @@ buildPythonPackage rec {
     description = "Python library for interfacing with Xiaomi smart appliances";
     homepage = "https://github.com/rytilahti/python-miio";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ flyfloh ];
   };
 }

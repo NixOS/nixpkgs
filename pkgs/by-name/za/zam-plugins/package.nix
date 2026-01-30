@@ -16,14 +16,14 @@
   libsamplerate,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zam-plugins";
   version = "4.4";
 
   src = fetchFromGitHub {
     owner = "zamaudio";
     repo = "zam-plugins";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-pjnhDavKnyQjPF4nUO+j1J+Qtw8yIYMY9A5zBMb4zFU=";
     fetchSubmodules = true;
   };
@@ -66,4 +66,4 @@ stdenv.mkDerivation rec {
     # tries to run dpf/utils/lv2_ttl_generator (built for host)
     broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   };
-}
+})

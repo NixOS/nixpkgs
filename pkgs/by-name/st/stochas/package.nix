@@ -14,14 +14,14 @@
   libjack2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "stochas";
   version = "1.3.13";
 
   src = fetchFromGitHub {
     owner = "surge-synthesizer";
     repo = "stochas";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Gp49cWvUkwz4xAq5sA1nUO+amRC39iWeUemQJyv6hTs=";
     fetchSubmodules = true;
   };
@@ -59,4 +59,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ magnetophon ];
     platforms = lib.platforms.unix;
   };
-}
+})

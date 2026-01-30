@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "userhosts";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "figiel";
     repo = "hosts";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-9uF0fYl4Zz/Ia2UKx7CBi8ZU8jfWoBfy2QSgTSwXo5A";
   };
 
@@ -24,4 +24,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.cc0;
     platforms = lib.platforms.linux;
   };
-}
+})

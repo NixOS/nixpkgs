@@ -5,16 +5,14 @@
   fetchFromGitHub,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
-  typing-extensions,
   zeroconf,
 }:
 
 buildPythonPackage rec {
   pname = "python-rabbitair";
   version = "0.0.8";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rabbit-air";
@@ -28,8 +26,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     cryptography
     zeroconf
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
+  ];
 
   nativeCheckInputs = [
     pytest-asyncio

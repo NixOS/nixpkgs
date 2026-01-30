@@ -556,7 +556,7 @@ in
             "/" = {
               priority = 1;
               index = "doku.php";
-              extraConfig = ''try_files $uri $uri/ @dokuwiki;'';
+              extraConfig = "try_files $uri $uri/ @dokuwiki;";
             };
 
             "@dokuwiki" = {

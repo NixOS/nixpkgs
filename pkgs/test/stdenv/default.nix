@@ -452,6 +452,8 @@ in
     stdenv' = bootStdenv;
   };
 
+  tests-stdenv-gcc-stageCompare = pkgs.callPackage ./gcc-stageCompare.nix { };
+
   ensure-no-execve-in-setup-sh =
     derivation {
       name = "ensure-no-execve-in-setup-sh";

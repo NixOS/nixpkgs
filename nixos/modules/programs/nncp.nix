@@ -81,7 +81,7 @@ in
       script = ''
         umask 127
         rm -f ${nncpCfgFile}
-        for f in ${jsonCfgFile} ${builtins.toString config.programs.nncp.secrets}
+        for f in ${jsonCfgFile} ${toString config.programs.nncp.secrets}
         do
           ${lib.getExe pkgs.hjson-go} -c <"$f"
         done |${lib.getExe pkgs.jq} --slurp 'reduce .[] as $x ({}; . * $x)' >${nncpCfgFile}

@@ -36,7 +36,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "intel";
     repo = "ipu6-camera-hal";
-    rev = "c933525a6efe8229a7129b7b0b66798f19d2bef7";
+    tag = "20250923_ov02e"; # Released on 2025-06-27
     hash = "sha256-ZWwszteRmUBn0wGgN5rmzw/onfzBoPGadcmpk+93kAM=";
   };
 

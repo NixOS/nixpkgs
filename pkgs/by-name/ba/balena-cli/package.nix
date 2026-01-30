@@ -21,16 +21,16 @@ let
 in
 buildNpmPackage' rec {
   pname = "balena-cli";
-  version = "23.2.16";
+  version = "23.2.30";
 
   src = fetchFromGitHub {
     owner = "balena-io";
     repo = "balena-cli";
     rev = "v${version}";
-    hash = "sha256-TqDcL3USt6HuYrQ0EqpYL3zB5hq19bgX0mT7+euYxaA=";
+    hash = "sha256-hRXOErA3WqXzd/W3nLgFgkyikenn8XsOELaQZScQRow=";
   };
 
-  npmDepsHash = "sha256-ec5E2ttOTlQ/YYiawtmCsplArkmFS1aQOTdOGVGGxWI=";
+  npmDepsHash = "sha256-kDcxcK0DyV1xWLDi8rjyqjOwaDcdJvHQCV7XKj0WmnM=";
 
   makeCacheWritable = true;
 

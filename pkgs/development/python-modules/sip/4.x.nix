@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = sip-module;
   version = "4.19.25";
-  format = "other";
+  pyproject = false;
 
   disabled = isPyPy;
 

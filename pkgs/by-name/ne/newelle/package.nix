@@ -20,7 +20,7 @@
 }:
 
 let
-  version = "1.0.1";
+  version = "1.1.0";
 in
 python3Packages.buildPythonApplication {
   pname = "newelle";
@@ -31,7 +31,7 @@ python3Packages.buildPythonApplication {
     owner = "qwersyk";
     repo = "Newelle";
     tag = version;
-    hash = "sha256-l/eNf1KLZeuDWf1A/5Y8fggOovKmjW6UFNMvNxuJXkc=";
+    hash = "sha256-gI4HNzbIM/1ZTPWondi8tCMZOlNt/SzrTIeppY7uLDM=";
   };
 
   postPatch = ''

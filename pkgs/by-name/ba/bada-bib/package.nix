@@ -21,7 +21,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "bada-bib";
   version = "0.8.1";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "RogerCrocker";
@@ -69,7 +69,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   postFixup = ''
-    wrapPythonProgramsIn "$out/libexec" "$out $pythonPath"
+    wrapPythonProgramsIn "$out/libexec" "$out ''${pythonPath[*]}"
   '';
 
   meta = {

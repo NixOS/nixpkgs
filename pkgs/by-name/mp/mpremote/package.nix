@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-Hk/DHMb9U/mLLVRKe+K3u5snxzW5BW3+bYRPFEAmUBQ=";
   };
   sourceRoot = "${src.name}/tools/mpremote";
-  format = "pyproject";
+  pyproject = true;
 
   nativeBuildInputs = with python3Packages; [
     hatchling

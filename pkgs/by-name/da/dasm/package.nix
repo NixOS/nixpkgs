@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dasm";
   version = "2.20.14.1";
 
   src = fetchFromGitHub {
     owner = "dasm-assembler";
     repo = "dasm";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1bna0bj503xyn5inwzzsrsgi9qg8p20by4dfk7azj91ynw56pl41";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.jwatt ];
     platforms = lib.platforms.all;
   };
-}
+})

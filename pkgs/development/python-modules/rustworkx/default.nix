@@ -2,33 +2,47 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  cargo,
   rustPlatform,
+
+  # nativeBuildInputs
+  cargo,
   rustc,
+
+  # build-system
   setuptools,
   setuptools-rust,
+
+  # dependencies
   numpy,
+
+  # tests
   fixtures,
   networkx,
-  testtools,
   pytestCheckHook,
+  testtools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rustworkx";
-  version = "0.16.0";
+  version = "0.17.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Qiskit";
     repo = "rustworkx";
-    rev = version;
-    hash = "sha256-hzB99ReL1bTmj1mYne9rJp2rBeMnmIR17VQFVl7rzr0=";
+    tag = finalAttrs.version;
+    hash = "sha256-aBKGJwm9EmGwLOhIx6qTuDco5uNcnwUlZf3ztFzmIGs=";
   };
 
+  # Otherwise, `rust-src` is required
+  # https://github.com/Qiskit/rustworkx/pull/1447
+  postPatch = ''
+    rm -rf .cargo/config.toml
+  '';
+
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    hash = "sha256-9NMTGq8KzIvnOXrsUpFHrtM9K/E7RMrE/Aa9mtO7pTI=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-2jqyXk6xWpSGdpaVGu7YW9643MBYDfl3A6InFw/cCUM=";
   };
 
   nativeBuildInputs = [
@@ -60,7 +74,8 @@ buildPythonPackage rec {
   meta = {
     description = "High performance Python graph library implemented in Rust";
     homepage = "https://github.com/Qiskit/rustworkx";
+    changelog = "https://github.com/Qiskit/rustworkx/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ raitobezarius ];
   };
-}
+})

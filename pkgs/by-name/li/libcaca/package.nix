@@ -4,21 +4,22 @@
   fetchFromGitHub,
   autoreconfHook,
   imlib2,
-  xorg,
+  libxext,
+  libx11,
   ncurses,
   pkg-config,
   zlib,
   x11Support ? !stdenv.hostPlatform.isDarwin,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libcaca";
   version = "0.99.beta20";
 
   src = fetchFromGitHub {
     owner = "cacalabs";
     repo = "libcaca";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-N0Lfi0d4kjxirEbIjdeearYWvStkKMyV6lgeyNKXcVw=";
   };
 
@@ -33,8 +34,8 @@ stdenv.mkDerivation rec {
     (imlib2.override { inherit x11Support; })
   ]
   ++ lib.optionals x11Support [
-    xorg.libX11
-    xorg.libXext
+    libx11
+    libxext
   ];
 
   outputs = [
@@ -83,4 +84,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

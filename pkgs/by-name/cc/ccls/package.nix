@@ -8,14 +8,14 @@
   runtimeShell,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ccls";
   version = "0.20241108";
 
   src = fetchFromGitHub {
     owner = "MaskRay";
     repo = "ccls";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-0hZ4VnscnKYBrXy58IjeoeDxja1oNq0mNaQGPmej5BA=";
   };
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     rapidjson
   ];
 
-  cmakeFlags = [ "-DCCLS_VERSION=${version}" ];
+  cmakeFlags = [ "-DCCLS_VERSION=${finalAttrs.version}" ];
 
   preConfigure = ''
     cmakeFlagsArray+=(-DCMAKE_CXX_FLAGS="-fvisibility=hidden -fno-rtti")
@@ -56,4 +56,4 @@ stdenv.mkDerivation rec {
       tobim
     ];
   };
-}
+})

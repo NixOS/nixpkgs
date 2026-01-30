@@ -22,25 +22,30 @@ let
 
   devenv_nix =
     let
-      components =
-        (nixVersions.nixComponents_git.override { version = devenvNixVersion; }).overrideSource
-          (fetchFromGitHub {
-            owner = "cachix";
-            repo = "nix";
-            rev = "devenv-${devenvNixVersion}";
-            hash = "sha256-3+GHIYGg4U9XKUN4rg473frIVNn8YD06bjwxKS1IPrU=";
-          });
+      components = (
+        nixVersions.nixComponents_git.overrideSource (fetchFromGitHub {
+          owner = "cachix";
+          repo = "nix";
+          rev = "devenv-${devenvNixVersion}";
+          hash = "sha256-3+GHIYGg4U9XKUN4rg473frIVNn8YD06bjwxKS1IPrU=";
+        })
+      );
     in
+    # Support for mdbook >= 0.5, https://github.com/NixOS/nix/issues/14628
     (
-      # Support for mdbook >= 0.5, https://github.com/NixOS/nix/issues/14628
-      components.appendPatches [
+      (components.appendPatches [
         (fetchpatch2 {
           name = "nix-2.30-14695-mdbook-0.5-support.patch";
           url = "https://github.com/NixOS/nix/commit/5cbd7856de0a9c13351f98e32a1e26d0854d87fd.patch";
           excludes = [ "doc/manual/package.nix" ];
           hash = "sha256-GYaTOG9wZT9UI4G6za535PkLyjHKSxwBjJsXbjmI26g=";
         })
-      ]
+      ]).overrideScope
+      (
+        finalScope: prevScope: {
+          version = devenvNixVersion;
+        }
+      )
     ).nix-everything.overrideAttrs
       (old: {
         pname = "devenv-nix";

@@ -4,26 +4,30 @@
   fetchurl,
   shhmsg,
   shhopt,
-  xorg,
+  libxt,
+  libxpm,
+  libxext,
+  libxaw,
+  libx11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "snake4";
   version = "1.0.14";
 
   src = fetchurl {
-    url = "https://shh.thathost.com/pub-unix/files/snake4-${version}.tar.gz";
+    url = "https://shh.thathost.com/pub-unix/files/snake4-${finalAttrs.version}.tar.gz";
     sha256 = "14cng9l857np42zixp440mbc8y5675frb6lhsds53j1cws9cncw9";
   };
 
-  buildInputs = with xorg; [
+  buildInputs = [
     shhmsg
     shhopt
-    libX11
-    libXt
-    libXpm
-    libXaw
-    libXext
+    libx11
+    libxt
+    libxpm
+    libxaw
+    libxext
   ];
 
   preInstall = ''
@@ -44,4 +48,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.artistic1;
     platforms = lib.platforms.linux;
   };
-}
+})

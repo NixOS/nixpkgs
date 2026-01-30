@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "rich-argparse-plus";
   version = "0.3.1.4";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "michelcrypt4d4mus";

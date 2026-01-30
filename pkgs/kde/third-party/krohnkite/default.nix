@@ -20,7 +20,7 @@ buildNpmPackage (finalAttrs: {
     hash = "sha256-gulKg23BeWL270B2omRYJIuAHIsKu1cBVpimgButM9I=";
   };
 
-  npmDepsHash = "sha256-Q/D6s0wOPSEziE1dBXgTakjhXCGvzhvLVS7zXcZlPCI=";
+  npmDepsHash = "sha256-6+meI602VKIzqunTOwNRLZOO7/LscjNm545icc2WN0c=";
 
   dontWrapQtApps = true;
 
@@ -31,10 +31,6 @@ buildNpmPackage (finalAttrs: {
     zip
     kwin
   ];
-
-  postPatch = ''
-    cp ${./package-lock.json} package-lock.json
-  '';
 
   npmBuildScript = "tsc";
 

@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "flask-httpauth";
   version = "4.8.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "Flask-HTTPAuth";

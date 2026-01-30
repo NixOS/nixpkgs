@@ -9,7 +9,6 @@ python3.pkgs.buildPythonApplication rec {
   pname = "ubi_reader";
   version = "0.8.10";
   pyproject = true;
-  disabled = python3.pkgs.pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "onekey-sec";

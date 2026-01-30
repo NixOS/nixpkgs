@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  xorg,
+  libxcb,
   wrapQtAppsHook,
   python3,
   nix-update-script,
@@ -34,7 +34,7 @@ python3.pkgs.buildPythonApplication rec {
     pillow
     pyyaml
     darkdetect
-    xorg.libxcb
+    libxcb
   ];
 
   postPatch = ''

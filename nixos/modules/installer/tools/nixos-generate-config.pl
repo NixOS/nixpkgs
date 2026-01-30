@@ -300,7 +300,7 @@ if ($virt eq "oracle") {
 # It is blocked by https://github.com/systemd/systemd/pull/23859
 if ($virt eq "parallels") {
     push @attrs, "hardware.parallels.enable = true;";
-    push @attrs, "nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [ \"prl-tools\" ];";
+    push @attrs, "nixpkgs.config.allowUnfreePackages = [ \"prl-tools\" ];";
 }
 
 # Likewise for QEMU.

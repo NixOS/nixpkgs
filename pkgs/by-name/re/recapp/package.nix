@@ -22,7 +22,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "recapp";
   version = "1.1.1";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "amikha1lov";

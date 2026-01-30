@@ -4,19 +4,19 @@
   buildPythonPackage,
   fetchFromGitHub,
   replaceVars,
+  nanobind,
 
   # build-system
-  setuptools,
-
-  # nativeBuildInputs
   cmake,
+  setuptools,
+  typing-extensions,
 
   # buildInputs
   apple-sdk,
   fmt,
-  nanobind,
   nlohmann_json,
-  pybind11,
+  # linux-only
+  openblas,
 
   # tests
   numpy,
@@ -40,26 +40,28 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "mlx";
-  version = "0.30.1";
+  version = "0.30.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ml-explore";
     repo = "mlx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Vt0RH+70VBwUjXSfPTsNdRS3g0ookJHhzf2kvgEtgH8=";
+    hash = "sha256-Y4RTkGcDCZ9HLyflN0qYhPt/oVOsBhF1mHnKM4n1/ys=";
   };
 
   patches = [
+    # Use nix packages instead of fetching their sources
+    ./dont-fetch-nanobind.patch
+    ./dont-fetch-json.patch
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (replaceVars ./darwin-build-fixes.patch {
       sdkVersion = apple-sdk.version;
     })
   ];
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "nanobind==2.10.2" "nanobind"
-
     substituteInPlace mlx/backend/cpu/jit_compiler.cpp \
       --replace-fail "g++" "${lib.getExe' stdenv.cc "c++"}"
   '';
@@ -77,33 +79,39 @@ buildPythonPackage (finalAttrs: {
   passthru.skipBulkUpdate = true;
 
   env = {
-    DEV_RELEASE = 1;
-    CMAKE_ARGS = toString [
-      # NOTE The `metal` command-line utility used to build the Metal kernels is not open-source.
-      # To build mlx with Metal support in Nix, you'd need to use one of the sandbox escape
-      # hatches which let you interact with a native install of Xcode, such as `composeXcodeWrapper`
-      # or by changing the upstream (e.g., https://github.com/zed-industries/zed/discussions/7016).
-      (lib.cmakeBool "MLX_BUILD_METAL" false)
-      (lib.cmakeBool "USE_SYSTEM_FMT" true)
-      (lib.cmakeOptionType "filepath" "FETCHCONTENT_SOURCE_DIR_GGUFLIB" "${gguf-tools}")
-      (lib.cmakeOptionType "filepath" "FETCHCONTENT_SOURCE_DIR_JSON" "${nlohmann_json.src}")
-    ];
+    PYPI_RELEASE = 1;
+    CMAKE_ARGS = toString (
+      [
+        # NOTE The `metal` command-line utility used to build the Metal kernels is not open-source.
+        # To build mlx with Metal support in Nix, you'd need to use one of the sandbox escape
+        # hatches which let you interact with a native install of Xcode, such as `composeXcodeWrapper`
+        # or by changing the upstream (e.g., https://github.com/zed-industries/zed/discussions/7016).
+        (lib.cmakeBool "MLX_BUILD_METAL" false)
+        (lib.cmakeBool "USE_SYSTEM_FMT" true)
+        (lib.cmakeOptionType "filepath" "FETCHCONTENT_SOURCE_DIR_GGUFLIB" "${gguf-tools}")
+        (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-I${lib.getDev nlohmann_json}/include/nlohmann")
+
+        # Cmake cannot find nanobind-config.cmake by itself
+        (lib.cmakeFeature "nanobind_DIR" "${nanobind}/${python.sitePackages}/nanobind/cmake")
+      ]
+      ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+        (lib.cmakeBool "MLX_ENABLE_X64_MAC" true)
+      ]
+    );
   };
 
   build-system = [
-    setuptools
-  ];
-
-  nativeBuildInputs = [
     cmake
+    setuptools
+    typing-extensions
   ];
 
   buildInputs = [
     fmt
-    gguf-tools
-    nanobind
     nlohmann_json
-    pybind11
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    openblas
   ];
 
   pythonImportsCheck = [ "mlx" ];
@@ -117,6 +125,30 @@ buildPythonPackage (finalAttrs: {
   enabledTestPaths = [
     "python/tests/"
   ];
+
+  disabledTests = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
+    # Segmentation fault
+    "test_lapack"
+    "test_multivariate_normal"
+    "test_orthogonal"
+    "test_vmap_inverse"
+    "test_vmap_svd"
+  ];
+
+  disabledTestPaths = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
+    # Segmentation fault
+    "python/tests/test_linalg.py"
+  ];
+
+  # patchelf is only available on Linux and no patching is needed on darwin.
+  # Otherwise mlx/core.cpython-313-x86_64-linux-gnu.so contains a reference to
+  # /build/source/build/temp.linux-x86_64-cpython-313/mlx.core/libmlx.so in its rpath.
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
+    patchelf --replace-needed \
+      libmlx.so \
+      $out/${python.sitePackages}/mlx/lib64/libmlx.so \
+      $out/${python.sitePackages}/mlx/core.cpython-*.so
+  '';
 
   # Additional testing by executing the example Python scripts supplied with mlx
   # using the version of the library we've built.
@@ -145,7 +177,6 @@ buildPythonPackage (finalAttrs: {
     description = "Array framework for Apple silicon";
     changelog = "https://github.com/ml-explore/mlx/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    platforms = [ "aarch64-darwin" ];
     maintainers = with lib.maintainers; [
       Gabriella439
       booxter

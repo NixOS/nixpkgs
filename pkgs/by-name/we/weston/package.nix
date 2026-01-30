@@ -47,12 +47,12 @@
   xwayland,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "weston";
   version = "14.0.1";
 
   src = fetchurl {
-    url = "https://gitlab.freedesktop.org/wayland/weston/-/releases/${version}/downloads/weston-${version}.tar.xz";
+    url = "https://gitlab.freedesktop.org/wayland/weston/-/releases/${finalAttrs.version}/downloads/weston-${finalAttrs.version}.tar.xz";
     hash = "sha256-qBUFBbEmpZ33gf6MMMjm+H2nAT4XkDnrhEpbu8x8ebM=";
   };
 
@@ -149,4 +149,4 @@ stdenv.mkDerivation rec {
       qyliss
     ];
   };
-}
+})

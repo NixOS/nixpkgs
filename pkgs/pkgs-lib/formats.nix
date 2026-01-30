@@ -40,6 +40,7 @@ let
     ;
 
   inherit (lib.types)
+    serializableValueWith
     attrsOf
     atom
     bool
@@ -57,38 +58,6 @@ let
     str
     submodule
     ;
-
-  /*
-    Creates a structured value type suitable for serialization formats.
-
-    Parameters:
-    - typeName: String describing the format (e.g. "JSON", "YAML", "XML")
-    - nullable: Whether the structured value type allows `null` values.
-
-    Returns a type suitable for structured data formats that supports:
-    - Basic types: boolean, integer, float, string, path
-    - Complex types: attribute sets and lists
-  */
-  mkStructuredType =
-    {
-      typeName,
-      nullable ? true,
-    }:
-    let
-      baseType = oneOf [
-        bool
-        int
-        float
-        str
-        path
-        (attrsOf valueType)
-        (listOf valueType)
-      ];
-      valueType = (if nullable then nullOr baseType else baseType) // {
-        description = "${typeName} value";
-      };
-    in
-    valueType;
 
   # Attributes added accidentally in https://github.com/NixOS/nixpkgs/pull/335232 (2024-08-18)
   # Deprecated in https://github.com/NixOS/nixpkgs/pull/415666 (2025-06)
@@ -162,7 +131,7 @@ optionalAttrs allowAliases aliases
     { }:
     {
 
-      type = mkStructuredType { typeName = "JSON"; };
+      type = types.json;
 
       generate =
         name: value:
@@ -203,7 +172,7 @@ optionalAttrs allowAliases aliases
             ''
         ) { };
 
-      type = mkStructuredType { typeName = "YAML 1.1"; };
+      type = serializableValueWith { typeName = "YAML 1.1"; };
 
     };
 
@@ -226,7 +195,7 @@ optionalAttrs allowAliases aliases
             ''
         ) { };
 
-      type = mkStructuredType { typeName = "YAML 1.2"; };
+      type = serializableValueWith { typeName = "YAML 1.2"; };
 
     };
 
@@ -487,10 +456,7 @@ optionalAttrs allowAliases aliases
     { }:
     json { }
     // {
-      type = mkStructuredType {
-        typeName = "TOML";
-        nullable = false;
-      };
+      type = types.toml;
 
       generate =
         name: value:
@@ -523,7 +489,7 @@ optionalAttrs allowAliases aliases
     { }:
     json { }
     // {
-      type = mkStructuredType { typeName = "CDN"; };
+      type = serializableValueWith { typeName = "CDN"; };
 
       generate =
         name: value:
@@ -938,7 +904,7 @@ optionalAttrs allowAliases aliases
   pythonVars =
     { }:
     {
-      type = attrsOf (mkStructuredType {
+      type = attrsOf (serializableValueWith {
         typeName = "Python";
       });
 
@@ -1020,7 +986,7 @@ optionalAttrs allowAliases aliases
     }:
     if format == "badgerfish" then
       {
-        type = mkStructuredType { typeName = "XML"; };
+        type = serializableValueWith { typeName = "XML"; };
 
         generate =
           name: value:

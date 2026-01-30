@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "pyhumps";
   version = "3.8.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nficano";

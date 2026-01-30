@@ -7,7 +7,7 @@
   alsa-lib ? null,
   carla ? null,
   fftwFloat,
-  fltk13,
+  fltk_1_3,
   fluidsynth ? null,
   lame ? null,
   libgig ? null,
@@ -47,7 +47,7 @@ mkDerivation rec {
     carla
     alsa-lib
     fftwFloat
-    fltk13
+    fltk_1_3
     fluidsynth
     lame
     libgig

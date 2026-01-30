@@ -1,11 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
-
-  # propagates
-  importlib-metadata,
 
   # tests
   editables,
@@ -28,8 +24,6 @@ buildPythonPackage rec {
   };
 
   env.PDM_BUILD_SCM_VERSION = version;
-
-  dependencies = lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   pythonImportsCheck = [ "pdm.backend" ];
 

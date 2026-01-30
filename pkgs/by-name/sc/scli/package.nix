@@ -25,7 +25,7 @@ python3.pkgs.buildPythonApplication rec {
     urwid
     urwid-readline
   ];
-  format = "other";
+  pyproject = false;
 
   dontBuild = true;
 

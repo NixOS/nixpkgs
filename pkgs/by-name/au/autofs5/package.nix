@@ -23,12 +23,12 @@
   libnsl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "5.1.9";
   pname = "autofs";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/daemons/autofs/v5/autofs-${version}.tar.xz";
+    url = "mirror://kernel/linux/daemons/autofs/v5/autofs-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-h+avagN5S5Ri6lGXgeUOfSO198ks1Z4RQshdJJOzwks=";
   };
   patches = [
@@ -100,4 +100,4 @@ stdenv.mkDerivation rec {
     executables = [ "automount" ];
     platforms = lib.platforms.linux;
   };
-}
+})

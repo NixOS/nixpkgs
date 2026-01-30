@@ -50,7 +50,7 @@ mkDerivation rec {
   pythonPath = with python3.pkgs; [ gpxpy ];
 
   preInstall = ''
-    buildPythonPath "$pythonPath"
+    buildPythonPath "''${pythonPath[*]}"
     qtWrapperArgs+=(--prefix PYTHONPATH : "$program_PYTHONPATH")
   '';
 

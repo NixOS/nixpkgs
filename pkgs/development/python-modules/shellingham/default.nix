@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "shellingham";
   version = "1.5.4";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sarugaku";

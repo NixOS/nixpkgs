@@ -23,6 +23,7 @@
   cmake,
   nix,
   samba,
+  testers,
 
   # for passthru.lore
   binlore,
@@ -102,13 +103,14 @@ stdenv.mkDerivation (finalAttrs: {
     acl
   ];
 
-  hardeningDisable = [ "strictflexarrays3" ];
+  hardeningDisable = [
+    "strictflexarrays3"
+  ]
+  # some tests won't compile because this makes memcpy a macro:
+  # libarchive/test/test_write_format_mtree_preset_digests.c:2020:29: error: macro "memcpy" passed 66 arguments, but takes just 3
+  ++ lib.optional stdenv.hostPlatform.isCygwin "fortify";
 
   configureFlags = lib.optional (!xarSupport) "--without-xml2";
-
-  preBuild = lib.optionalString stdenv.hostPlatform.isCygwin ''
-    echo "#include <windows.h>" >> config.h
-  '';
 
   # https://github.com/libarchive/libarchive/issues/1475
   doCheck = !stdenv.hostPlatform.isMusl;
@@ -140,10 +142,14 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ jcumming ];
     platforms = lib.platforms.all;
     inherit (acl.meta) badPlatforms;
+    pkgConfigModules = [ "libarchive" ];
   };
 
   passthru.tests = {
     inherit cmake nix samba;
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
   };
 
   # bsdtar is detected as "cannot" because its exec is internal to

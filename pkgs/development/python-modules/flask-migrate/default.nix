@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "flask-migrate";
   version = "4.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "miguelgrinberg";

@@ -6,7 +6,7 @@
 python3Packages.buildPythonApplication {
   pname = "fileinfo";
   version = "0-unstable-2022-09-16";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sdushantha";

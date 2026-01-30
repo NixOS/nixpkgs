@@ -25,7 +25,7 @@
 buildPythonPackage rec {
   pname = "tiledb";
   version = "0.36.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "TileDB-Inc";

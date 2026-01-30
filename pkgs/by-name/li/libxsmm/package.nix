@@ -51,6 +51,8 @@ stdenv.mkDerivation rec {
       "STATIC=${static}"
     ];
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-int -std=gnu17";
+
   postInstall = ''
     mkdir -p $dev/lib/pkgconfig
     mv $out/lib/*.pc $dev/lib/pkgconfig

@@ -9,14 +9,14 @@
   gnugrep,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hblock";
   version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "hectorm";
     repo = "hblock";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-cke3MppQm8p8B9+5IcvCplw6CtyRbgq46wHqli7U77I=";
   };
 
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ alanpearce ];
     platforms = lib.platforms.unix;
   };
-}
+})

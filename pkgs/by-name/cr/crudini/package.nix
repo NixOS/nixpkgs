@@ -9,7 +9,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "crudini";
   version = "0.9.6";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pixelb";

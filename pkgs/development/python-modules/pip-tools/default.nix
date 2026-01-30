@@ -74,6 +74,9 @@ buildPythonPackage rec {
     "test_get_hashes_from_mixed"
     "test_toggle_reuse_hashes_local_repository"
     "test_generate_hashes_all_platforms"
+    "test_iter_dependencies_after_combine_install_requirements"
+    "test_iter_dependencies_after_combine_install_requirements_extras"
+    "test_name_collision"
     # Assertion error
     "test_compile_recursive_extras"
     "test_compile_build_targets_setuptools_no_wheel_dep"

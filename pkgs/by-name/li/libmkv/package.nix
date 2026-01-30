@@ -7,14 +7,14 @@
   automake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libmkv";
   version = "0.6.5.1";
 
   src = fetchFromGitHub {
     owner = "saintdev";
     repo = "libmkv";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "0pr9q7yprndl8d15ir7i7cznvmf1yqpvnsyivv763n6wryssq6dl";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.wmertens ];
     platforms = lib.platforms.unix;
   };
-}
+})

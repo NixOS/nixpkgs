@@ -15,14 +15,14 @@
   wireshark-cli,
   nukeReferences,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xdp-tools";
   version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "xdp-project";
     repo = "xdp-tools";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Smu93zwZN2jn9bLkVRpyubqTUh8VnVFMGqzc9myryLU=";
   };
 
@@ -90,4 +90,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

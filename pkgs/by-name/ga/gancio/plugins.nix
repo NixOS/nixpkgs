@@ -1,4 +1,4 @@
-{ callPackage, nodejs }:
+{ callPackage }:
 {
-  telegram-bridge = callPackage ./plugin-telegram-bridge { inherit nodejs; };
+  telegram-bridge = callPackage ./plugin-telegram-bridge { };
 }

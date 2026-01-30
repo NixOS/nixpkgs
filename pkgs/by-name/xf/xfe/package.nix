@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  fox,
+  fox_1_6,
   fontconfig,
   freetype,
   pkg-config,
@@ -12,15 +12,16 @@
   intltool,
   file,
   libpng,
-  xorg,
+  libxft,
+  libx11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xfe";
   version = "2.1.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/xfe/xfe-${version}.tar.xz";
+    url = "mirror://sourceforge/xfe/xfe-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-jgDgd/DOB92v19SAGqBnTHIYQE+EohgDvvFCwTNDJlE=";
   };
 
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
     intltool
   ];
   buildInputs = [
-    fox
+    fox_1_6
     gettext
     xcbutil
     gcc
@@ -37,8 +38,8 @@ stdenv.mkDerivation rec {
     libpng
     fontconfig
     freetype
-    xorg.libX11
-    xorg.libXft
+    libx11
+    libxft
   ];
 
   preConfigure = ''
@@ -59,4 +60,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

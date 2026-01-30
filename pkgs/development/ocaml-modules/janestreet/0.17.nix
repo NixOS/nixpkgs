@@ -433,7 +433,7 @@ with self;
     propagatedBuildInputs = [
       async_ssl
       async_websocket
-      cohttp-async
+      cohttp-async_5_3
       ppx_jane
       uri-sexp
     ];
@@ -443,7 +443,7 @@ with self;
     pname = "cohttp_static_handler";
     hash = "sha256-RB/sUq1tL8A3m9YhHHx2LFqoExTX187VeZI9MRb1NeA=";
     meta.description = "Library for easily creating a cohttp handler for static files";
-    propagatedBuildInputs = [ cohttp-async ];
+    propagatedBuildInputs = [ cohttp-async_5_3 ];
   };
 
   content_security_policy = janePackage {

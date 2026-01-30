@@ -122,6 +122,13 @@ let
 
       cl-liballegro-nuklear = build-with-compile-into-pwd super.cl-liballegro-nuklear;
 
+      cl-project = super.cl-project.overrideLispAttrs {
+        # install skeleton.asd
+        postInstall = ''
+          cp -v skeleton/skeleton.asd $out/skeleton
+        '';
+      };
+
       lessp = build-asdf-system {
         pname = "lessp";
         version = "0.2-f8a9e4664";
@@ -472,7 +479,7 @@ let
         src = pkgs.fetchFromGitHub {
           owner = "fukamachi";
           repo = "qlot";
-          rev = "refs/tags/${version}";
+          tag = version;
           hash = "sha256-j9iT25Yz9Z6llCKwwiHlVNKLqwuKvY194LrAzXuljsE=";
         };
 

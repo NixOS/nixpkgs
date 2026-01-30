@@ -46,14 +46,14 @@ let
   );
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "screenfetch";
   version = "3.9.9";
 
   src = fetchFromGitHub {
     owner = "KittyKatt";
     repo = "screenFetch";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-UNZMCLXhH4wDV0/fGWsB+KAi6aJVuPs6zpWXIQAqnjo=";
   };
 
@@ -88,4 +88,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "screenfetch";
   };
-}
+})

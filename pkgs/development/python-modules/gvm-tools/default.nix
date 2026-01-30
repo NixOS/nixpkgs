@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "gvm-tools";
-  version = "25.4.4";
+  version = "25.4.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "gvm-tools";
     tag = "v${version}";
-    hash = "sha256-htBkQf9rxPXDtcr5w1ECshEKyPxPr6YaS4PtMvK2VQg=";
+    hash = "sha256-9A9ik6nXAHdFSxOmpsQVpyR/19DeGIG2XcqhMZPMHKo=";
   };
 
   __darwinAllowLocalNetworking = true;

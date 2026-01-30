@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     scdoc
     wayland-scanner
-    zig_0_15.hook
+    zig_0_15
   ];
 
   buildInputs = [

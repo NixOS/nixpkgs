@@ -25,7 +25,10 @@
   llvm_20,
   lsof,
   lz4,
-  xorg,
+  libxpm,
+  libxft,
+  libxext,
+  libx11,
   xz,
   man,
   openssl,
@@ -67,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "clad";
     # Make sure that this is the same tag as in the ROOT build files!
     # https://github.com/root-project/root/blob/master/interpreter/cling/tools/plugins/clad/CMakeLists.txt#L76
-    rev = "refs/tags/v2.0";
+    tag = "v2.0";
     hash = "sha256-Oj7gGSvnGuYdggonPWjrwPn/06cD+ig3eefRh7xaiPs=";
   };
 
@@ -116,10 +119,10 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libGLU
     libGL
-    xorg.libX11
-    xorg.libXpm
-    xorg.libXft
-    xorg.libXext
+    libx11
+    libxpm
+    libxft
+    libxext
   ];
 
   preConfigure = ''

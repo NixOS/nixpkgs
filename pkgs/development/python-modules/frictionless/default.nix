@@ -204,9 +204,15 @@ buildPythonPackage rec {
     "frictionless/formats/spss"
     # Console CLI tests fail due to typer/Click CliRunner output capture issues
     # result.stdout is empty when error messages are expected
-    # All 1690 functional tests pass (including duckdb adapter tests)
     "frictionless/console/__spec__/test_console.py"
     "frictionless/console/commands/__spec__/test_summary.py"
+    # We're well-ahead of requirements for duckdb and sqlalchemy
+    # https://github.com/frictionlessdata/frictionless-py/blob/be08dcf491781a565d230f47e08707e703292d85/pyproject.toml#L84
+    "frictionless/formats/sql/__spec__/duckdb/test_adapter.py"
+    "frictionless/formats/sql/__spec__/duckdb/test_parser.py"
+    "frictionless/indexer/__spec__/test_resource.py::test_resource_index_sqlite[duckdb_url]"
+    "frictionless/indexer/__spec__/test_resource.py::test_resource_index_sqlite_with_metadata[duckdb_url]"
+    "frictionless/indexer/__spec__/test_resource.py::test_resource_index_sqlite_on_progress[duckdb_url]"
   ];
 
   pythonImportsCheck = [

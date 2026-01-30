@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   stdenvNoCC,
+  nixosTests,
   nix-update-script,
   nodejs,
   pnpm_9,
@@ -72,11 +73,14 @@ buildGoModule (finalAttrs: {
   versionCheckProgramArg = "version";
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--subpackage"
-      "qui-web"
-    ];
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "qui-web"
+      ];
+    };
+    tests.testService = nixosTests.qui;
   };
 
   meta = {

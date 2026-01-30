@@ -23,9 +23,9 @@ rustPlatform.buildRustPackage rec {
 
   checkFlags = [
     # requires embedded toolchains
-    "--skip should_link_example_firmware::case_1_normal"
-    "--skip should_link_example_firmware::case_2_custom_linkerscript"
-    "--skip should_verify_memory_layout"
+    "--skip=should_link_example_firmware::case_1_normal"
+    "--skip=should_link_example_firmware::case_2_custom_linkerscript"
+    "--skip=should_verify_memory_layout"
   ];
 
   meta = {

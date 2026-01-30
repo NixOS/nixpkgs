@@ -4,17 +4,17 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "3.6.1";
   pname = "commons-math";
 
   src = fetchurl {
-    url = "mirror://apache/commons/math/binaries/commons-math3-${version}-bin.tar.gz";
+    url = "mirror://apache/commons/math/binaries/commons-math3-${finalAttrs.version}-bin.tar.gz";
     sha256 = "0x4nx5pngv2n4ga11c1s4w2mf6cwydwkgs7da6wwvcjraw57bhkz";
   };
 
   installPhase = ''
-    tar xf ${src}
+    tar xf ${finalAttrs.src}
     mkdir -p $out/share/java
     cp *.jar $out/share/java/
   '';
@@ -27,4 +27,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     platforms = with lib.platforms; unix;
   };
-}
+})

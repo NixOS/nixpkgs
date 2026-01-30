@@ -7,14 +7,14 @@
   libX11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xsettingsd";
   version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "derat";
     repo = "xsettingsd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-CIYshZqJICuL8adKHIN4R6nudaqWOCK2UPrGhsKf9pE=";
   };
 
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "xsettingsd";
   };
-}
+})

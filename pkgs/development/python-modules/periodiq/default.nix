@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "periodiq";
   version = "0.13.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitLab {
     owner = "bersace";

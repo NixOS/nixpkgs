@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  fetchpatch,
   stdenv,
   makeWrapper,
   gitUpdater,
@@ -58,22 +57,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "quickemu";
-  version = "4.9.7";
+  version = "4.9.7-unstable-2025-12-28";
 
   src = fetchFromGitHub {
     owner = "quickemu-project";
     repo = "quickemu";
-    rev = finalAttrs.version;
-    hash = "sha256-sCoCcN6950pH33bRZsLoLc1oSs5Qfpj9Bbywn/uA6Bc=";
+    rev = "7ea4e95508a7898bc63c3b5e1588066184d4c79b";
+    hash = "sha256-pj6YQc7e4I6XvGq/uGGq2z/UhAs3ZeKrsJd8oLWjauA=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "correctly-handle-version-10.0.0-of-qemu.patch";
-      url = "https://github.com/quickemu-project/quickemu/commit/f25205f4513c4fa72be6940081c62e613d1fddc6.patch";
-      hash = "sha256-OAXGyhMVDwbUypEPj/eRnH0wZYaL9WLGjbyoobe20UY=";
-    })
-  ];
 
   postPatch = ''
     sed -i \
@@ -83,6 +74,9 @@ stdenv.mkDerivation (finalAttrs: {
       -e 's/Icon=.*qemu.svg/Icon=qemu/' \
       -e 's,\[ -x "\$(command -v smbd)" \],true,' \
       quickemu
+
+    substituteInPlace quickemu \
+      --replace-fail 'readonly VERSION="4.9.8"' 'readonly VERSION="${finalAttrs.version}"'
   '';
 
   nativeBuildInputs = [

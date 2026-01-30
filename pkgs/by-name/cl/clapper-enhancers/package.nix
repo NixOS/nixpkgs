@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postFixup = ''
-    buildPythonPath "$out $pythonPath"
+    buildPythonPath "$out ''${pythonPath[*]}"
     for yt_plugin in $out/lib/clapper-enhancers/plugins/yt-dlp/*.py; do
       patchPythonScript $yt_plugin
     done

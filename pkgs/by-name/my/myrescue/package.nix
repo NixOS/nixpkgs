@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Hard disk recovery tool that reads undamaged regions first";
     mainProgram = "myrescue";
     homepage = "https://myrescue.sourceforge.net";
-    maintainers = with lib.maintainers; [ d3vil0p3r ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2Plus;
   };

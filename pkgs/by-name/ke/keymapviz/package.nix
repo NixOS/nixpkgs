@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "keymapviz";
   version = "1.14.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yskoht";

@@ -5,7 +5,7 @@
   buildPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "anthy";
   version = "9100h";
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   '';
 
   src = fetchurl {
-    url = "mirror://osdn/anthy/37536/anthy-${version}.tar.gz";
+    url = "mirror://osdn/anthy/37536/anthy-${finalAttrs.version}.tar.gz";
     sha256 = "0ism4zibcsa5nl77wwi12vdsfjys3waxcphn1p5s7d0qy1sz0mnj";
   };
-}
+})

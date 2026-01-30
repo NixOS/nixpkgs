@@ -8,12 +8,12 @@
   mysql80,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libmysqlconnectorcpp";
   version = "9.4.0";
 
   src = fetchurl {
-    url = "mirror://mysql/Connector-C++/mysql-connector-c++-${version}-src.tar.gz";
+    url = "mirror://mysql/Connector-C++/mysql-connector-c++-${finalAttrs.version}-src.tar.gz";
     hash = "sha256-NqfJPUoQ0doqLmY2dVnZF0GqDwNivArpQxcc8XcfZhU=";
   };
 
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -22,7 +22,7 @@
 buildPythonPackage rec {
   pname = "ipfshttpclient";
   version = "0.8.0a2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ipfs-shipyard";

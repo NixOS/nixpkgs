@@ -5,14 +5,14 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "timelimit";
   version = "1.9.2";
 
   src = fetchFromGitLab {
     owner = "timelimit";
     repo = "timelimit";
-    rev = "release/${version}";
+    rev = "release/${finalAttrs.version}";
     hash = "sha256-5IEAF8zCKaCVH6BAxjoa/2rrue9pRGBBkFzN57d+g+g=";
   };
 
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "timelimit";
   };
-}
+})

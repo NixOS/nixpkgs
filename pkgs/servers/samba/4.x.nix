@@ -35,6 +35,7 @@
   rpcsvc-proto,
   bash,
   python3Packages,
+  pkgsHostTarget,
   nixosTests,
   libiconv,
   testers,
@@ -76,6 +77,7 @@ let
     }
     .${stdenv.hostPlatform.system}
       or (throw "Need pre-generated answers file to compile for ${stdenv.hostPlatform.system}");
+  isCross = !lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "samba";
@@ -112,7 +114,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     python3Packages.python
-    python3Packages.wrapPython
+    # Not `python3Packages.wrapPython` to workaround
+    # `python3Packages.wrapPython.__spliced.buildHost` having the wrong
+    # `pythonHost`. See https://github.com/NixOS/nixpkgs/issues/434307
+    pkgsHostTarget.python3Packages.wrapPython
     wafHook
     pkg-config
     bison
@@ -121,6 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
     perl.pkgs.ParseYapp
     perl.pkgs.JSON
     libxslt
+    libtasn1 # Needed also natively for `asn1Parser` program
     docbook_xsl
     docbook_xml_dtd_45
     cmocka
@@ -129,7 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals stdenv.hostPlatform.isLinux [
     buildPackages.stdenv.cc
   ]
-  ++ optional (stdenv.buildPlatform != stdenv.hostPlatform) samba # asn1_compile/compile_et
+  ++ optional isCross samba # asn1_compile/compile_et
   ++ optionals stdenv.hostPlatform.isDarwin [
     fixDarwinDylibNames
   ];
@@ -193,7 +199,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     patchShebangs ./buildtools/bin
   ''
-  + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  + lib.optionalString isCross ''
     substituteInPlace wscript source3/wscript nsswitch/wscript_build lib/replace/wscript source4/ntvfs/sysdep/wscript_configure --replace-fail 'sys.platform' '"${stdenv.hostPlatform.parsed.kernel.name}"'
   '';
 
@@ -266,6 +272,8 @@ stdenv.mkDerivation (finalAttrs: {
     tdb
   ];
 
+  strictDeps = true;
+
   preBuild = ''
     export MAKEFLAGS="-j $NIX_BUILD_CORES"
   '';
@@ -306,17 +314,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Fix PYTHONPATH for some tools
     wrapPythonPrograms
-
-    # Samba does its own shebang patching, but uses build Python
-    find $out/bin -type f -executable | while read file; do
-      isScript "$file" || continue
-      sed -i 's^${lib.getBin buildPackages.python3Packages.python}^${lib.getBin python3Packages.python}^' "$file"
-    done
   '';
 
-  disallowedReferences = lib.optionals (
-    buildPackages.python3Packages.python != python3Packages.python
-  ) [ buildPackages.python3Packages.python ];
+  disallowedReferences = lib.optionals isCross [
+    buildPackages.python3Packages.python
+    buildPackages.runtimeShellPackage
+  ];
 
   passthru.tests = {
     samba = nixosTests.samba;

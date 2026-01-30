@@ -12,12 +12,12 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "disarchive";
   version = "0.5.0";
 
   src = fetchurl {
-    url = "https://files.ngyro.com/disarchive/disarchive-${version}.tar.gz";
+    url = "https://files.ngyro.com/disarchive/disarchive-${finalAttrs.version}.tar.gz";
     hash = "sha256-Agt7v5HTpaskXuYmMdGDRIolaqCHUpwd/CfbZCe9Ups=";
   };
 
@@ -62,4 +62,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = guile.meta.platforms;
   };
-}
+})

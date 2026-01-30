@@ -25,7 +25,7 @@ in
 py.pkgs.buildPythonApplication rec {
   pname = "archivy";
   version = "1.7.7";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

@@ -7,7 +7,6 @@
   fetchFromGitHub,
   fonttools,
   fs,
-  importlib-metadata,
   poetry-core,
   pytestCheckHook,
   pythonOlder,
@@ -20,7 +19,7 @@
 buildPythonPackage rec {
   pname = "statmake";
   version = "1.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "daltonmaag";
@@ -43,8 +42,7 @@ buildPythonPackage rec {
     # required by fonttools[ufo]
     fs
   ]
-  ++ lib.optionals (pythonOlder "3.11") [ exceptiongroup ]
-  ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ++ lib.optionals (pythonOlder "3.11") [ exceptiongroup ];
 
   nativeCheckInputs = [
     pytestCheckHook

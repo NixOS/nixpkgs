@@ -2,23 +2,26 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   pillow,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aafigure";
   version = "0.6";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "49f2c1fd2b579c1fffbac1386a2670b3f6f475cc7ff6cc04d8b984888c2d9e1e";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-SfLB/StXnB//usE4aiZws/b0dcx/9swE2LmEiIwtnh4=";
   };
+
+  build-system = [ setuptools ];
 
   propagatedBuildInputs = [ pillow ];
 
-  # error: invalid command 'test'
-  doCheck = false;
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Fix impurity. TODO: Do the font lookup using fontconfig instead of this
   # manual method. Until that is fixed, we get this whenever we run aafigure:
@@ -35,4 +38,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ bjornfor ];
     platforms = lib.platforms.unix;
   };
-}
+})

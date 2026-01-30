@@ -33,7 +33,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "gnome-music";
   version = "49.1";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-music/${lib.versions.major version}/gnome-music-${version}.tar.xz";

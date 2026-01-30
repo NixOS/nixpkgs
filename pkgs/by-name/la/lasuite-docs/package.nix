@@ -13,16 +13,16 @@ let
   python = python3.override {
     self = python3;
     packageOverrides = self: super: {
-      django = super.django_5_2;
+      django = super.django_5;
     };
   };
 
-  version = "4.1.0";
+  version = "4.4.0";
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "docs";
     tag = "v${version}";
-    hash = "sha256-vZkqHlZ1aDOXcrdyV8BXmI95AmMalXOuVLS9XWB/YxU=";
+    hash = "sha256-Cm/Ch7dBKInQYPFGfSlSMLgj8uQR6E3S+6gCFUyvFSU=";
   };
 
   mail-templates = stdenv.mkDerivation {
@@ -35,7 +35,7 @@ let
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${src}/src/mail/yarn.lock";
-      hash = "sha256-kwt4vSIiC8NNaKmygl2moV8ft02eB4ylPND4oe9tBUA=";
+      hash = "sha256-g71OGg0PAo60h0bC+oOyvLvPOCg0pYXuYD8vsR5X9/k=";
     };
 
     nativeBuildInputs = [
@@ -58,6 +58,8 @@ python.pkgs.buildPythonApplication rec {
   patches = [
     # Support configuration throught environment variables for SECURE_*
     ./secure_settings.patch
+    # Fix creation of unsafe C function in postgresql migrations
+    ./postgresql_fix.patch
   ];
 
   build-system = with python.pkgs; [ setuptools ];
@@ -89,6 +91,7 @@ python.pkgs.buildPythonApplication rec {
       factory-boy
       gunicorn
       jsonschema
+      langfuse
       lxml
       markdown
       mozilla-django-oidc

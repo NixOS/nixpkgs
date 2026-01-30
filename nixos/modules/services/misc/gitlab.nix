@@ -961,7 +961,7 @@ in
       puma.workers = mkOption {
         type = types.int;
         default = 2;
-        apply = x: builtins.toString x;
+        apply = x: toString x;
         description = ''
           The number of worker processes Puma should spawn. This
           controls the amount of parallel Ruby code can be
@@ -977,7 +977,7 @@ in
       puma.threadsMin = mkOption {
         type = types.int;
         default = 0;
-        apply = x: builtins.toString x;
+        apply = x: toString x;
         description = ''
           The minimum number of threads Puma should use per
           worker.
@@ -992,7 +992,7 @@ in
       puma.threadsMax = mkOption {
         type = types.int;
         default = 4;
-        apply = x: builtins.toString x;
+        apply = x: toString x;
         description = ''
           The maximum number of threads Puma should use per
           worker. This limits how many threads Puma will automatically
@@ -1033,7 +1033,7 @@ in
       sidekiq.memoryKiller.maxMemory = mkOption {
         type = types.int;
         default = 2000;
-        apply = x: builtins.toString (x * 1024);
+        apply = x: toString (x * 1024);
         description = ''
           The maximum amount of memory, in MiB, a Sidekiq worker is
           allowed to consume before being killed.
@@ -1043,7 +1043,7 @@ in
       sidekiq.memoryKiller.graceTime = mkOption {
         type = types.int;
         default = 900;
-        apply = x: builtins.toString x;
+        apply = x: toString x;
         description = ''
           The time MemoryKiller waits after noticing excessive memory
           consumption before killing Sidekiq.
@@ -1053,7 +1053,7 @@ in
       sidekiq.memoryKiller.shutdownWait = mkOption {
         type = types.int;
         default = 30;
-        apply = x: builtins.toString x;
+        apply = x: toString x;
         description = ''
           The time allowed for all jobs to finish before Sidekiq is
           killed forcefully.

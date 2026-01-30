@@ -8,7 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "grc";
   version = "1.13";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "garabik";

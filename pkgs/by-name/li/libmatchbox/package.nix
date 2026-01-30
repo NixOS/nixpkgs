@@ -13,7 +13,7 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libmatchbox";
   version = "1.14";
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://git.yoctoproject.org/libmatchbox/snapshot/libmatchbox-${version}.tar.gz";
+    url = "https://git.yoctoproject.org/libmatchbox/snapshot/libmatchbox-${finalAttrs.version}.tar.gz";
     sha256 = "1b66jl178pkwmswf1gqcyrpy15rll1znz38n07l9b3ybga13w31d";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

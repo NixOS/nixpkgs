@@ -20,14 +20,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "netsniff-ng";
   version = "0.6.9";
 
   src = fetchFromGitHub {
     repo = "netsniff-ng";
     owner = "netsniff-ng";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-P1xZqhZ/HJV3fAvh4xhhApZ0+FLDFqvYrZlbvb+FV7I=";
   };
 
@@ -106,4 +106,4 @@ stdenv.mkDerivation rec {
     license = with lib.licenses; [ gpl2Only ];
     platforms = lib.platforms.linux;
   };
-}
+})

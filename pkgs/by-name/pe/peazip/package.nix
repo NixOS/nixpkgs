@@ -5,7 +5,7 @@
   qt6Packages,
   fpc,
   lazarus,
-  xorg,
+  libx11,
   runCommand,
   _7zz,
   brotli,
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    xorg.libX11
+    libx11
   ]
   ++ (with qt6Packages; [
     qtbase

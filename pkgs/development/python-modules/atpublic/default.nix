@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitLab {
     owner = "warsaw";
     repo = "public";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-cqum+4hREu0jO9iFoUUzfzn597BoMAhG+aanwnh8hb8=";
   };
 

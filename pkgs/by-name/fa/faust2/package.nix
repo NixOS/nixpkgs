@@ -175,9 +175,9 @@ let
 
     args
     // {
-      name = "${baseName}-${version}";
+      pname = baseName;
 
-      inherit src;
+      inherit src version;
 
       dontBuild = true;
 

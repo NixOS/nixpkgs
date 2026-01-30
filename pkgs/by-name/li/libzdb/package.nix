@@ -5,12 +5,12 @@
   sqlite,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "3.4.1";
   pname = "libzdb";
 
   src = fetchurl {
-    url = "https://www.tildeslash.com/libzdb/dist/libzdb-${version}.tar.gz";
+    url = "https://www.tildeslash.com/libzdb/dist/libzdb-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-W0Yz/CoWiA93YZf0BF9i7421Bi9jAw+iIQEdS4XXNss=";
   };
 
@@ -23,4 +23,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

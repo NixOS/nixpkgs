@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "statik";
-  version = "0.1.7";
+  version = "0.1.8";
 
   src = fetchFromGitHub {
     owner = "rakyll";
     repo = "statik";
     rev = "v${version}";
-    sha256 = "ahsNiac/3I2+PUqc90E73Brb99M68ewh9nWXoupfE3g=";
+    sha256 = "sha256-GfXYlkzPESu9Szl+g90oB2ldrCS5aAOt9m+WPOOXhIE=";
   };
 
   vendorHash = null;

@@ -17,7 +17,10 @@ let
       It is a port of CaDiCaL back to C with improved data structures,
       better scheduling of inprocessing and optimized algorithms and implementation.
     '';
-    maintainers = with lib.maintainers; [ shnarazk ];
+    maintainers = with lib.maintainers; [
+      shnarazk
+      chrjabs
+    ];
     platforms = lib.platforms.unix;
     license = lib.licenses.mit;
     homepage = "https://fmv.jku.at/kissat";

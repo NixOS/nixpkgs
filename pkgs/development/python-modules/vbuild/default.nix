@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "manatlan";
     repo = "vbuild";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-p9v1FiYn0cI+f/25hvjwm7eb1GqxXvNnmXBGwZe9fk0=";
   };
 

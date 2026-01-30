@@ -6,12 +6,12 @@
   installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pngcheck";
   version = "3.0.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/png-mng/pngcheck-${version}.tar.gz";
+    url = "mirror://sourceforge/png-mng/pngcheck-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-DX4mLyQRb93yhHqM61yS2fXybvtC6f/2PsK7dnYTHKc=";
   };
 
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ starcraft66 ];
     mainProgram = "pngcheck";
   };
-}
+})

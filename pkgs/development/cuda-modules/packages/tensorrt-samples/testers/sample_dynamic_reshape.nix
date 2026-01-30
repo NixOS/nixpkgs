@@ -1,4 +1,6 @@
 {
+  atLeast,
+  lib,
   mkTester,
   sample-data,
   ...
@@ -21,7 +23,8 @@
     "--datadir=${sample-data.outPath + "/mnist"}"
     "--fp16"
   ];
-
+}
+// lib.optionalAttrs (atLeast "10") {
   bf16 = mkTester "sample_dynamic_reshape-bf16" [
     "sample_dynamic_reshape"
     "--datadir=${sample-data.outPath + "/mnist"}"

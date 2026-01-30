@@ -15,26 +15,28 @@
   findutils,
   gnutar,
   gzip,
+  linux-headers,
 }:
 let
   inherit (import ./common.nix { inherit lib; }) meta;
   pname = "coreutils-static";
-  version = "9.4";
+  version = "9.9";
 
   src = fetchurl {
     url = "mirror://gnu/coreutils/coreutils-${version}.tar.gz";
-    hash = "sha256-X2ANkJOXOwr+JTk9m8GMRPIjJlf0yg2V6jHHAutmtzk=";
+    hash = "sha256-kacZ/Pkj3mhgFvLI0ISovh95PzQXOGEnPEZo98Za+Uo=";
   };
 
   configureFlags = [
     "--prefix=${placeholder "out"}"
     "--build=${buildPlatform.config}"
     "--host=${hostPlatform.config}"
+    "--disable-dependency-tracking"
     # libstdbuf.so fails in static builds
     "--enable-no-install-program=stdbuf"
     "--enable-single-binary=symlinks"
     "CC=musl-gcc"
-    "CFLAGS=-static"
+    "CFLAGS=\"-static -I${linux-headers}/include\""
   ];
 in
 bash.runCommand "${pname}-${version}"

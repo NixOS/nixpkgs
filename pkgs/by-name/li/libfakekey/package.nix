@@ -12,13 +12,13 @@
   xorgproto,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libfakekey";
   version = "0.3";
 
   src = fetchgit {
     url = "https://git.yoctoproject.org/libfakekey";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-QNJlxZ9uNwNgFWm9qRJdPfusx7dXHZajjFH7wDhpgcs=";
   };
 
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "adafruit-ampy";
   version = "1.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

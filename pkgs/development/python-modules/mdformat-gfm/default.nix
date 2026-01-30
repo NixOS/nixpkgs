@@ -2,53 +2,55 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  linkify-it-py,
+
+  # build-system
+  flit-core,
+
+  # dependencies
   markdown-it-py,
   mdformat,
-  mdformat-tables,
   mdit-py-plugins,
-  poetry-core,
+  wcwidth,
+
+  # tests
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mdformat-gfm";
-  version = "0.3.6";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hukkin";
     repo = "mdformat-gfm";
-    tag = version;
-    hash = "sha256-c1jJwyTL8IgQnIAJFoPSuJ8VEYgnQ4slZyV0bHlUHLQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-Vijt5P3KRL4jkU8AI2lAsJkvFne/l3utUkjHUs8PQHI=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [
+    flit-core
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     markdown-it-py
     mdformat
-    mdformat-tables
     mdit-py-plugins
-    linkify-it-py
+    wcwidth
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-
-  disabledTests = [
-    "test_default_style__api"
-    "test_default_style__cli"
-  ];
 
   pythonImportsCheck = [ "mdformat_gfm" ];
 
   meta = {
     description = "Mdformat plugin for GitHub Flavored Markdown compatibility";
     homepage = "https://github.com/hukkin/mdformat-gfm";
+    changelog = "https://github.com/hukkin/mdformat-gfm/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       aldoborrero
       polarmutex
     ];
   };
-}
+})

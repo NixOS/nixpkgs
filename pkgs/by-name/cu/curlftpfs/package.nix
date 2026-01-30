@@ -10,12 +10,12 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "curlftpfs";
   version = "0.9.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/curlftpfs/curlftpfs-${version}.tar.gz";
+    url = "mirror://sourceforge/curlftpfs/curlftpfs-${finalAttrs.version}.tar.gz";
     sha256 = "0n397hmv21jsr1j7zx3m21i7ryscdhkdsyqpvvns12q7qwwlgd2f";
   };
 
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
   };
-}
+})

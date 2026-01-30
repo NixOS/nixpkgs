@@ -8,17 +8,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "git-pages-cli";
-  version = "1.5.1";
+  version = "1.5.2";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "git-pages";
     repo = "git-pages-cli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-T6spNuuG0l1bFv7SnsDTGBtD3Sa+8zKN0/VbsKVkGrM=";
+    hash = "sha256-58fEurUoRw1hJ2eYHrXrsVDElVVo5BH0bZFw7h1yM0w=";
   };
 
-  vendorHash = "sha256-5vjUhN3lCr41q91lOD7v0F9c6a8GJj7wBGnnzgFBhJU=";
+  vendorHash = "sha256-Mico/PFTb8YoRZCP42QETS0DkzMABUGTzBvy692XDJc=";
 
   ldflags = [
     "-X"

@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "django-encrypted-model-fields";
   version = "0.6.5";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

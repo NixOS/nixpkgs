@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "newick";
   version = "1.9.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dlce-eva";

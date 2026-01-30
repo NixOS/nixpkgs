@@ -200,7 +200,7 @@ let
                   jsonPreSecretsFile = pkgs.writeTextFile {
                     name = "${conf_type}-${new_cfg.id}-conf-pre-secrets.json";
                     # Remove the ignorePatterns attribute, it is handled separately
-                    text = builtins.toJSON (builtins.removeAttrs new_cfg [ "ignorePatterns" ]);
+                    text = builtins.toJSON (removeAttrs new_cfg [ "ignorePatterns" ]);
                   };
                   injectSecretsJqCmd =
                     {

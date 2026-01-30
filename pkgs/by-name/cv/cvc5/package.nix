@@ -15,14 +15,14 @@
   libpoly,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cvc5";
   version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "cvc5";
     repo = "cvc5";
-    tag = "cvc5-${version}";
+    tag = "cvc5-${finalAttrs.version}";
     hash = "sha256-Um1x+XgQ5yWSoqtx1ZWbVAnNET2C4GVasIbn0eNfico=";
   };
 
@@ -68,4 +68,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ shadaj ];
   };
-}
+})

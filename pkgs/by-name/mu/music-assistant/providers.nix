@@ -1,7 +1,7 @@
 # Do not edit manually, run ./update-providers.py
 
 {
-  version = "2.7.3";
+  version = "2.7.5";
   providers = {
     airplay = ps: [
     ];
@@ -134,6 +134,7 @@
     sendspin =
       ps: with ps; [
         aiosendspin
+        av
       ];
     siriusxm = ps: [
     ]; # missing sxm

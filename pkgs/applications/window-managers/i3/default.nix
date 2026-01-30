@@ -25,7 +25,8 @@
   xorgserver,
   xvfb-run,
   xdotool,
-  xorg,
+  xrandr,
+  setxkbmap,
   which,
   asciidoc,
   xmlto,
@@ -106,8 +107,8 @@ stdenv.mkDerivation (finalAttrs: {
     xorgserver
     xvfb-run
     xdotool
-    xorg.setxkbmap
-    xorg.xrandr
+    setxkbmap
+    xrandr
     which
   ];
 

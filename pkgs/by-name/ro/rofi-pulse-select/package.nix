@@ -7,14 +7,14 @@
   rofi-unwrapped,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rofi-pulse-select";
   version = "0.2.0";
 
   src = fetchFromGitLab {
     owner = "DamienCassou";
     repo = "rofi-pulse-select";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1405v0bh2m8ip9c23l95i8iq2gfrpanc6f4dz17nysdcff2ay2p3";
   };
 
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ DamienCassou ];
     platforms = lib.platforms.linux;
   };
-}
+})

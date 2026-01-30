@@ -9,15 +9,15 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "osslsigncode";
-  version = "2.10";
+  version = "2.11";
 
   src = fetchFromGitHub {
     owner = "mtrojnar";
     repo = "osslsigncode";
-    rev = version;
-    sha256 = "sha256-UjjNXcHpPbyUz5CPsW+uVhZP0X9XGM3//IVv9VhmP7o=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-ua/4OouuMWTvfFbdOVVZpf1Z43JoPiptlFl+THaef58=";
   };
 
   nativeBuildInputs = [
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})

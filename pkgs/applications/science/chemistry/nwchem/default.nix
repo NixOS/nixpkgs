@@ -158,7 +158,7 @@ stdenv.mkDerivation rec {
   '';
 
   # Required for build with gcc-14
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-int";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-int -std=gnu17";
 
   enableParallelBuilding = true;
 

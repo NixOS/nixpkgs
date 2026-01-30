@@ -2,17 +2,15 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  importlib-resources,
   pytest-subtests,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "tzdata";
   version = "2025.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -24,8 +22,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-subtests
-  ]
-  ++ lib.optionals (pythonOlder "3.7") [ importlib-resources ];
+  ];
 
   pythonImportsCheck = [ "tzdata" ];
 

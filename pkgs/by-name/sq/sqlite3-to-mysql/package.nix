@@ -11,7 +11,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "sqlite3-to-mysql";
   version = "2.5.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "techouse";

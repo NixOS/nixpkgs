@@ -16,7 +16,7 @@
 buildPythonPackage rec {
   pname = "pyee";
   version = "13.0.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

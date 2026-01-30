@@ -20,10 +20,9 @@
 let
   inherit (lib) optional;
 
-  pname = "raylib";
 in
 
-lib.checkListOfEnum "${pname}: platform"
+lib.checkListOfEnum "raylib: platform"
   [
     "Desktop"
     "Web"
@@ -36,14 +35,14 @@ lib.checkListOfEnum "${pname}: platform"
     stdenv.mkDerivation (finalAttrs: {
       __structuredAttrs = true;
 
-      inherit pname;
-      version = "5.5";
+      pname = "raylib";
+      version = "5.5-unstable-2026-01-20";
 
       src = fetchFromGitHub {
         owner = "raysan5";
         repo = "raylib";
-        rev = finalAttrs.version;
-        hash = "sha256-J99i4z4JF7d6mJNuJIB0rHNDhXJ5AEkG0eBvvuBLHrY=";
+        rev = "c610d228a244f930ad53492604640f39584c66da";
+        hash = "sha256-7Lhgqb7QJwz94M1ZxWgueTwIgSVclGCvHklZXGzoJgQ=";
       };
 
       # autoPatchelfHook is needed for appendRunpaths
@@ -84,7 +83,7 @@ lib.checkListOfEnum "${pname}: platform"
         maintainers = [ lib.maintainers.diniamo ];
         teams = [ lib.teams.ngi ];
         platforms = lib.platforms.all;
-        changelog = "https://github.com/raysan5/raylib/blob/${finalAttrs.version}/CHANGELOG";
+        changelog = "https://github.com/raysan5/raylib/blob/${finalAttrs.src.rev}/CHANGELOG";
       };
     })
   )

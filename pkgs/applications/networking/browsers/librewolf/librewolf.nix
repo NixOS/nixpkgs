@@ -11,6 +11,10 @@ rec {
   extraConfigureFlags = [
     "--with-unsigned-addon-scopes=app,system"
     "--disable-default-browser-agent"
+    # Flags based on discussion in https://github.com/NixOS/nixpkgs/issues/482250
+    "--disable-debug"
+    "--disable-debug-symbols"
+    "--enable-lto=thin,cross"
   ];
 
   extraPostPatch = ''

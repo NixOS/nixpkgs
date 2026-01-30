@@ -16,7 +16,8 @@
   libgudev,
   libwacom,
   switchboard,
-  xorg,
+  libxi,
+  libx11,
 }:
 
 stdenv.mkDerivation rec {
@@ -47,8 +48,8 @@ stdenv.mkDerivation rec {
     libgudev
     libwacom
     switchboard
-    xorg.libX11
-    xorg.libXi
+    libx11
+    libxi
   ];
 
   passthru = {

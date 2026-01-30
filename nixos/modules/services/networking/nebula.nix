@@ -51,7 +51,7 @@ let
       lib.warnIf
         ((settings.lighthouse.am_lighthouse || settings.relay.am_relay) && settings.listen.port == 0)
         ''
-          Nebula network '${netName}' is configured as a lighthouse or relay, and its port is ${builtins.toString settings.listen.port}.
+          Nebula network '${netName}' is configured as a lighthouse or relay, and its port is ${toString settings.listen.port}.
           You will likely experience connectivity issues: https://nebula.defined.net/docs/config/listen/#listenport
         ''
         settings

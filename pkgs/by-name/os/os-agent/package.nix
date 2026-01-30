@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "home-assistant";
     repo = "os-agent";
-    tag = "${version}";
+    tag = version;
     hash = "sha256-x0bVY476Gm5D1drRmyszdshrO0Vi/baDsG3ulysu0Kg=";
   };
 

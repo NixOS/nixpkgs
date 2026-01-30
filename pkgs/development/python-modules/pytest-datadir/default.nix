@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "pytest-datadir";
   version = "1.8.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gabrielcnr";

@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "isolyzer";
   version = "1.4.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "KBNLresearch";

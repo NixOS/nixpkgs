@@ -72,7 +72,9 @@ let
       # Reduced debug info conflict with BTF and have been enabled in
       # aarch64 defconfig since 5.13
       DEBUG_INFO_REDUCED = whenAtLeast "5.13" (option no);
-      DEBUG_INFO_BTF = option yes;
+      # Intermittently breaks on 5.10 for unknown reasons.
+      # https://lore.kernel.org/r/6dd6eef7-15cb-00a3-c216-d6eaaa5cbf54@est.tech
+      DEBUG_INFO_BTF = whenAtLeast "5.11" (option yes);
       # Allow loading modules with mismatched BTFs
       # FIXME: figure out how to actually make BTFs reproducible instead
       # See https://github.com/NixOS/nixpkgs/pull/181456 for details.
@@ -563,10 +565,6 @@ let
         # Enable CEC over DisplayPort
         DRM_DP_CEC = whenOlder "6.10" yes;
         DRM_DISPLAY_DP_AUX_CEC = whenAtLeast "6.10" yes;
-
-        # Required for Nova
-        # FIXME: remove after https://gitlab.freedesktop.org/drm/rust/kernel/-/commit/3d3352e73a55a4ccf110f8b3419bbe2fbfd8a030 lands
-        RUST_FW_LOADER_ABSTRACTIONS = lib.mkIf withRust (whenAtLeast "6.12" yes);
       }
       //
         lib.optionalAttrs
@@ -701,9 +699,9 @@ let
       NTFS3_LZX_XPRESS = whenAtLeast "5.15" yes;
       NTFS3_FS_POSIX_ACL = whenAtLeast "5.15" yes;
 
-      REISERFS_FS_XATTR = option yes;
-      REISERFS_FS_POSIX_ACL = option yes;
-      REISERFS_FS_SECURITY = option yes;
+      REISERFS_FS_XATTR = whenOlder "6.13" (option yes);
+      REISERFS_FS_POSIX_ACL = whenOlder "6.13" (option yes);
+      REISERFS_FS_SECURITY = whenOlder "6.13" (option yes);
 
       JFS_POSIX_ACL = option yes;
       JFS_SECURITY = option yes;

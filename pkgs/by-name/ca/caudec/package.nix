@@ -12,12 +12,12 @@
   sox,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "caudec";
   version = "1.7.5";
 
   src = fetchurl {
-    url = "http://caudec.cocatre.net/downloads/caudec-${version}.tar.gz";
+    url = "http://caudec.cocatre.net/downloads/caudec-${finalAttrs.version}.tar.gz";
     sha256 = "5d1f5ab3286bb748bd29cbf45df2ad2faf5ed86070f90deccf71c60be832f3d5";
   };
 
@@ -54,4 +54,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

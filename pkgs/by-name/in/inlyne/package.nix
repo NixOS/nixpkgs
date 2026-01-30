@@ -6,11 +6,16 @@
   stdenv,
   pkg-config,
   fontconfig,
-  xorg,
+  libxrandr,
+  libxi,
+  libxcursor,
+  libx11,
+  libxcb,
   libxkbcommon,
   wayland,
   libGL,
   openssl,
+  oniguruma,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -35,14 +40,18 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     fontconfig
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libxcb
+    libxcursor
+    libxi
+    libxrandr
+    libxcb
     wayland
     libxkbcommon
     openssl
+    oniguruma
   ];
+
+  # use system oniguruma since the bundled one fails to build with gcc15
+  env.RUSTONIG_SYSTEM_LIBONIG = 1;
 
   checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     # time out on darwin
@@ -66,7 +75,7 @@ rustPlatform.buildRustPackage rec {
       --add-rpath ${
         lib.makeLibraryPath [
           libGL
-          xorg.libX11
+          libx11
         ]
       }
   '';

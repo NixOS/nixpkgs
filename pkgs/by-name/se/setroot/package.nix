@@ -10,14 +10,14 @@
   libXinerama,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "2.0.2";
   pname = "setroot";
 
   src = fetchFromGitHub {
     owner = "ttzhou";
     repo = "setroot";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0w95828v0splk7bj5kfacp4pq6wxpyamvyjmahyvn5hc3ycq21mq";
   };
 
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "setroot";
   };
-}
+})

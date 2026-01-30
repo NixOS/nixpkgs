@@ -10,13 +10,13 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libxcomp";
   version = "3.5.99.16";
 
   src = fetchurl {
     sha256 = "1m3z9w3h6qpgk265xf030w7lcs181jgw2cdyzshb7l97mn1f7hh2";
-    url = "https://code.x2go.org/releases/source/nx-libs/nx-libs-${version}-lite.tar.gz";
+    url = "https://code.x2go.org/releases/source/nx-libs/nx-libs-${finalAttrs.version}-lite.tar.gz";
   };
 
   buildInputs = [
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -2,7 +2,15 @@
   lib,
   stdenv,
   fetchurl,
-  xorg,
+  libxt,
+  libxft,
+  libxext,
+  libxaw,
+  libx11,
+  libsm,
+  libice,
+  xorgproto,
+  luit,
   ncurses,
   freetype,
   fontconfig,
@@ -16,14 +24,14 @@
 
 stdenv.mkDerivation rec {
   pname = "xterm";
-  version = "404";
+  version = "406";
 
   src = fetchurl {
     urls = [
       "https://invisible-island.net/archives/xterm/${pname}-${version}.tgz"
       "https://invisible-mirror.net/archives/xterm/${pname}-${version}.tgz"
     ];
-    hash = "sha256-YzMvkhwie6WeWJ+gff2tFZnBCshZ6ibHKsHdSkG1ZaQ=";
+    hash = "sha256-Bm6y1mQwiX/h2t0nFVTM2uM9d8USEmp1j8TeN7EUh5k=";
   };
 
   patches = [ ./sixel-256.support.patch ];
@@ -37,17 +45,17 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    xorg.libXaw
-    xorg.xorgproto
-    xorg.libXt
-    xorg.libXext
-    xorg.libX11
-    xorg.libSM
-    xorg.libICE
+    libxaw
+    xorgproto
+    libxt
+    libxext
+    libx11
+    libsm
+    libice
     ncurses
     freetype
-    xorg.libXft
-    xorg.luit
+    libxft
+    luit
   ];
 
   configureFlags = [

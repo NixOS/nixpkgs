@@ -20,11 +20,11 @@
 }:
 let
   pname = "python";
-  version = "3.13.7";
+  version = "3.14.2";
 
   src = fetchurl {
     url = "https://www.python.org/ftp/python/${version}/Python-${version}.tar.xz";
-    hash = "sha256-VGL5CZ39MOI43vg8cdkYl9jKpf9uvHpQ8U1IAs2qp5o=";
+    hash = "sha256-zlQ6uFS8JWthtx6bJ/gx/9G/1gpHnWOfi+f5dXz1c+k=";
   };
 
   patches = [

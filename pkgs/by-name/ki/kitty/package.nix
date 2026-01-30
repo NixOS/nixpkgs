@@ -43,7 +43,7 @@
   buildGo124Module,
   nix-update-script,
   makeBinaryWrapper,
-  autoSignDarwinBinariesHook,
+  darwin,
   cairo,
   fetchpatch,
 }:
@@ -52,7 +52,7 @@ with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
   version = "0.45.0";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
@@ -117,7 +117,7 @@ buildPythonApplication rec {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     imagemagick
     libicns # For the png2icns tool.
-    autoSignDarwinBinariesHook
+    darwin.autoSignDarwinBinariesHook
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     wayland-scanner

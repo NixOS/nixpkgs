@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "threadpoolctl";
   version = "3.6.0";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "joblib";

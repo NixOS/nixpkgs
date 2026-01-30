@@ -11,14 +11,14 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sslh";
   version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "yrutschle";
     repo = "sslh";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-qGOOqEe9wlR3pXmYEwMQTxuMcNLLX2i/39AIAb6I4jU=";
   };
 
@@ -66,4 +66,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})

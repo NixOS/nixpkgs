@@ -30,40 +30,40 @@ in
         }
     );
 
-  # TODO(@connorbaker): A number of the tests fail with 10.2:
-  # API Usage Error (Unable to load library: libnvinfer_builder_resource_win.so.10.2.0:
-  # libnvinfer_builder_resource_win.so.10.2.0: cannot open shared object file: No such file or directory)
+  mkTester =
+    name: cmdArgs:
+    writeShellApplication {
+      name = finalAttrs.name + "-tester-" + name;
+      runtimeInputs = [ finalAttrs.finalPackage ];
+      text = ''
+        ${lib.toShellVar "cmdArgs" cmdArgs}
+        echo "running ''${cmdArgs[*]@Q}"
+        "''${cmdArgs[@]}"
+      '';
+    };
+
   # TODO(@connorbaker): Add tests for trtexec.
   testers =
     let
-      mkTester =
-        name: cmdArgs:
-        writeShellApplication {
-          name = finalAttrs.name + "-tester-" + name;
-          runtimeInputs = [ finalAttrs.finalPackage ];
-          text = ''
-            ${lib.toShellVar "cmdArgs" cmdArgs}
-            echo "running ''${cmdArgs[*]@Q}"
-            "''${cmdArgs[@]}"
-          '';
-        };
+      mkTesters = lib.flip import {
+        inherit (finalAttrs.passthru) mkTester sample-data;
+        inherit
+          atLeast
+          backendStdenv
+          finalAttrs
+          lib
+          older
+          ;
+      };
     in
-    lib.packagesFromDirectoryRecursive {
-      callPackage =
-        path: _:
-        import path {
-          inherit (finalAttrs.passthru) sample-data;
-          inherit
-            atLeast
-            backendStdenv
-            finalAttrs
-            lib
-            mkTester
-            older
-            ;
-        };
-      directory = ./testers;
-    };
+    # Filter out sets of testers which are completely empty (not available on this architecture, this version, etc.).
+    lib.filterAttrs (_: attrs: attrs != { }) (
+      # Construct all the testers from the filesystem.
+      lib.packagesFromDirectoryRecursive {
+        callPackage = path: _: mkTesters path;
+        directory = ./testers;
+      }
+    );
 
   # Wrap each of the derivations in testers in a runCommand.
   tests = lib.mapAttrsRecursiveCond (as: !(lib.isDerivation as)) (

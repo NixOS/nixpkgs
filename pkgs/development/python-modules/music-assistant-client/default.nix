@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "music-assistant-client";
-  version = "1.3.2";
+  version = "1.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "client";
     tag = version;
-    hash = "sha256-7u7P3uYFxx1UFzPIOgo0fCEEJrEEdBbBE7INhinkgLQ=";
+    hash = "sha256-f5+25MWuovG/g3PscWt0jls/5Y/Qdt2kq9Ai7/9P4aI=";
   };
 
   postPatch = ''

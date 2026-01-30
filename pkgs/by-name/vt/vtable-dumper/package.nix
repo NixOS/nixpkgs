@@ -5,14 +5,14 @@
   libelf,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vtable-dumper";
   version = "1.2";
 
   src = fetchFromGitHub {
     owner = "lvc";
     repo = "vtable-dumper";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0sl7lnjr2l4c2f7qaazvpwpzsp4gckkvccfam88wcq9f7j9xxbyp";
   };
 
@@ -26,4 +26,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.all;
   };
-}
+})

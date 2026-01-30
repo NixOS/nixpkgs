@@ -141,19 +141,6 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
-  clevercloud = {
-    members = [ floriansanderscc ];
-    scope = "Maintain Clever Cloud related packages.";
-    shortName = "CleverCloud";
-  };
-
-  cloudposse = {
-    members = [ dudymas ];
-    scope = "Maintain atmos and applications made by the Cloud Posse team.";
-    shortName = "CloudPosse";
-    enableFeatureFreezePing = true;
-  };
-
   coq = {
     members = [
       cohencyril
@@ -183,31 +170,8 @@ with lib.maintainers;
     shortName = "Cosmopolitan";
   };
 
-  ctrl-os = {
-    # Existing members may approve additions.
-    members = [
-      blitz
-      messemar
-      flyfloh
-    ];
-
-    scope = "Team of Cyberus Technology employees that maintain packages relevant to CTRL-OS";
-    shortName = "CTRL-OS";
-  };
-
   cuda = {
     github = "cuda-maintainers";
-  };
-
-  cyberus = {
-    # Verify additions by approval of an already existing member of the team.
-    members = [
-      xanderio
-      snu
-      e1mo
-    ];
-    scope = "Team for Cyberus Technology employees who collectively maintain packages.";
-    shortName = "Cyberus Technology employees";
   };
 
   danklinux = {
@@ -222,27 +186,6 @@ with lib.maintainers;
   darwin = {
     github = "darwin-core";
     enableFeatureFreezePing = true;
-  };
-
-  deshaw = {
-    # Verify additions to this team with at least one already existing member of the team.
-    members = [
-      de11n
-      despsyched
-      invokes-su
-    ];
-    scope = "Group registration for D. E. Shaw employees who collectively maintain packages.";
-    shortName = "D. E. Shaw employees";
-  };
-
-  determinatesystems = {
-    # Verify additions to this team with at least one already existing member of the team.
-    members = [
-      cole-h
-      grahamc
-    ];
-    scope = "Group registration for packages maintained by Determinate Systems.";
-    shortName = "Determinate Systems employees";
   };
 
   dhall = {
@@ -318,19 +261,6 @@ with lib.maintainers;
     github = "flutter";
   };
 
-  flyingcircus = {
-    # Verify additions by approval of an already existing member of the team.
-    members = [
-      theuni
-      dpausp
-      frlan
-      leona
-      osnyx
-    ];
-    scope = "Team for Flying Circus employees who collectively maintain packages.";
-    shortName = "Flying Circus employees";
-  };
-
   forgejo = {
     members = [
       adamcstephens
@@ -370,6 +300,7 @@ with lib.maintainers;
 
   gitlab = {
     members = [
+      gabyx
       krav
       leona
       talyz
@@ -415,17 +346,6 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
-  helsinki-systems = {
-    # Verify additions to this team with at least one already existing member of the team.
-    members = [
-      das_j
-      conni2461
-      helsinki-Jo
-    ];
-    scope = "Group registration for packages maintained by Helsinki Systems";
-    shortName = "Helsinki Systems employees";
-  };
-
   home-assistant = {
     members = [
       dotlambda
@@ -445,16 +365,6 @@ with lib.maintainers;
     members = [ akhilmhdh ];
     scope = "Maintain Infisical";
     shortName = "Infisical";
-  };
-
-  iog = {
-    members = [
-      cleverca22
-      disassembler
-      manveru
-    ];
-    scope = "Input-Output Global employees, which maintain critical software";
-    shortName = "Input-Output Global employees";
   };
 
   java = {
@@ -560,16 +470,6 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
-  lumiguide = {
-    # Verify additions by approval of an already existing member of the team.
-    members = [
-      roelvandijk
-      lucus16
-    ];
-    scope = "Group registration for LumiGuide employees who collectively maintain packages.";
-    shortName = "Lumiguide employees";
-  };
-
   lumina = {
     github = "lumina";
     enableFeatureFreezePing = true;
@@ -616,18 +516,6 @@ with lib.maintainers;
     ];
     scope = "Maintain the ecosystem around Matrix, a decentralized messenger.";
     shortName = "Matrix";
-  };
-
-  mercury = {
-    members = [
-      _9999years
-      Gabriella439
-      curran
-      lf-
-      jkachmar
-    ];
-    scope = "Group registry for packages maintained by Mercury";
-    shortName = "Mercury Employees";
   };
 
   minimal-bootstrap = {
@@ -742,17 +630,6 @@ with lib.maintainers;
     shortName = "OpenStack";
   };
 
-  ororatech = {
-    # email: nixdevs@ororatech.com
-    shortName = "OroraTech GmbH. employees";
-    scope = "Team for packages maintained by employees of OroraTech GmbH.";
-    # Edits to this list should only be done by an already existing member.
-    members = [
-      kip93
-      victormeriqui
-    ];
-  };
-
   pantheon = {
     github = "pantheon";
     enableFeatureFreezePing = true;
@@ -807,16 +684,6 @@ with lib.maintainers;
     scope = "Maintain the R programming language and related packages.";
     shortName = "R";
     enableFeatureFreezePing = true;
-  };
-
-  redcodelabs = {
-    members = [
-      unrooted
-      wr0belj
-      wintrmvte
-    ];
-    scope = "Maintain Red Code Labs related packages and modules.";
-    shortName = "Red Code Labs";
   };
 
   rocm = {
@@ -885,16 +752,6 @@ with lib.maintainers;
     members = [ mic92 ];
     scope = "coqui-ai TTS (formerly Mozilla TTS) and leaf packages";
     shortName = "coqui-ai TTS";
-  };
-
-  wdz = {
-    members = [
-      n0emis
-      johannwagner
-      yuka
-    ];
-    scope = "Group registration for WDZ GmbH team members who collectively maintain packages.";
-    shortName = "WDZ GmbH";
   };
 
   windows = {

@@ -10,14 +10,14 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pam_p11";
   version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "OpenSC";
     repo = "pam_p11";
-    rev = "pam_p11-${version}";
+    rev = "pam_p11-${finalAttrs.version}";
     sha256 = "1caidy18rq5zk82d51x8vwidmkhwmanf3qm25x1yrdlbhxv6m7lk";
   };
 
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ sb0 ];
   };
-}
+})

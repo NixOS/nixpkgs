@@ -10,12 +10,12 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "guile-lzlib";
   version = "0.3.0";
 
   src = fetchurl {
-    url = "https://notabug.org/guile-lzlib/guile-lzlib/archive/${version}.tar.gz";
+    url = "https://notabug.org/guile-lzlib/guile-lzlib/archive/${finalAttrs.version}.tar.gz";
     hash = "sha256-p/mcjSoUPgXqItstyLnObCfK6UIWK0XuMBXtkCevD/I=";
   };
 
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = guile.meta.platforms;
   };
-}
+})

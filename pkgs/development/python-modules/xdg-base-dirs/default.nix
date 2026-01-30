@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "xdg-base-dirs";
   version = "6.0.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "srstevenson";

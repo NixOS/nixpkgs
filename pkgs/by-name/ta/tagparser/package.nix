@@ -8,14 +8,14 @@
   isocodes,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tagparser";
   version = "12.5.2";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = "tagparser";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-QVeEwQFXr2xYKFtrrWumMoo3sVRtCWCVZvwK71BgoSg=";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.matthiasbeyer ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -18,7 +18,7 @@
 buildPythonPackage rec {
   pname = "peewee-migrate";
   version = "1.13.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "klen";

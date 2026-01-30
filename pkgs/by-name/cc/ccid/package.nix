@@ -13,14 +13,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ccid";
   version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "LudovicRousseau";
     repo = "CCID";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-n7rOjnLZH4RLmddtBycr3FK2Bi/OLR+9IjWBRbWjnUw=";
   };
 
@@ -92,4 +92,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.anthonyroussel ];
     platforms = lib.platforms.unix;
   };
-}
+})

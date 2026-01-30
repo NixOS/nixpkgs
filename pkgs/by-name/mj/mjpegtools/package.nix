@@ -18,12 +18,12 @@
 # - libpng-apng as alternative to libpng?
 # - libXxf86dga support? checking for XF86DGAQueryExtension in -lXxf86dga... no
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mjpegtools";
   version = "2.2.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/mjpeg/mjpegtools-${version}.tar.gz";
+    url = "mirror://sourceforge/mjpeg/mjpegtools-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-sYBTbX2ZYLBeACOhl7ANyxAJKaSaq3HRnVX0obIQ9Jo=";
   };
 
@@ -79,4 +79,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

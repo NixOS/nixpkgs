@@ -4,7 +4,11 @@
   stdenv,
   fetchurl,
   pkg-config,
-  xorg,
+  libxtst,
+  libxi,
+  libxfixes,
+  libxext,
+  libx11,
   python3,
   frame,
 }:
@@ -24,11 +28,11 @@ stdenv.mkDerivation rec {
     frame
   ]
   ++ lib.optionals enableX11 [
-    xorg.libX11
-    xorg.libXtst
-    xorg.libXext
-    xorg.libXi
-    xorg.libXfixes
+    libx11
+    libxtst
+    libxext
+    libxi
+    libxfixes
   ];
 
   configureFlags = lib.optional enableX11 "--with-x11";

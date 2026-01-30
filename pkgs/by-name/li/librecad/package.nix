@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "LibreCAD";
     repo = "LibreCAD";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-s9QA0YC91aziFxgnSeH4+XtQu18cSiRc0B15tyyF8b0=";
+    hash = "sha256-pun0mMCIsL8XfFlP14EkpBitNHL4OKezPfAF17D9pLg=";
   };
 
   buildInputs = [

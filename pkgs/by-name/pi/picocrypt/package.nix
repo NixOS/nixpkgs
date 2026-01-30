@@ -6,7 +6,7 @@
   copyDesktopItems,
   makeDesktopItem,
 
-  xorg,
+  libxxf86vm,
   glfw,
   gtk3,
   pkg-config,
@@ -39,7 +39,7 @@ buildGoModule (finalAttrs: {
     ++ glfw.propagatedBuildInputs or [ ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       gtk3
-      xorg.libXxf86vm
+      libxxf86vm
     ];
 
   nativeBuildInputs = [

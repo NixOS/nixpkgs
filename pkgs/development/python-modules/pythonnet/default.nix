@@ -34,7 +34,7 @@ in
 buildPythonPackage {
   inherit pname version src;
 
-  format = "pyproject";
+  pyproject = true;
 
   postPatch = ''
     substituteInPlace pyproject.toml \

@@ -5,14 +5,14 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "par2cmdline-turbo";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "animetosho";
     repo = "par2cmdline-turbo";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ld0oTaf1IZ0U0KMF4sW7RdTmF0CNobxjwomTLQEhpIc=";
   };
 
@@ -27,4 +27,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "par2";
   };
-}
+})

@@ -10,7 +10,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "analyze-build";
   inherit (clang-unwrapped) version;
 
-  format = "other";
+  pyproject = false;
 
   src = clang-unwrapped + "/bin";
 

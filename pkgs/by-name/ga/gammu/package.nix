@@ -20,14 +20,14 @@
   libpq ? null,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gammu";
   version = "1.42.0";
 
   src = fetchFromGitHub {
     owner = "gammu";
     repo = "gammu";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-aeaGHVxOMiXRU6RHws+oAnzdO9RY1jw/X/xuGfSt76I=";
   };
 
@@ -74,4 +74,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

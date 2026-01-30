@@ -32,6 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "spooftooph";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ d3vil0p3r ];
+    maintainers = [ ];
   };
 })

@@ -8,7 +8,7 @@
 buildPythonPackage rec {
   pname = "ttp-templates";
   version = "0.3.7";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dmulyalin";

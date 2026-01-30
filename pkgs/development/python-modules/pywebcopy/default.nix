@@ -42,6 +42,6 @@ buildPythonPackage rec {
     description = "Python package for cloning complete webpages and websites to local storage";
     homepage = "https://github.com/rajatomar788/pywebcopy/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ d3vil0p3r ];
+    maintainers = [ ];
   };
 }

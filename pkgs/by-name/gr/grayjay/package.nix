@@ -7,7 +7,13 @@
   libz,
   icu,
   openssl,
-  xorg,
+  libxrandr,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcomposite,
+  libx11,
+  libxcb,
   gtk3,
   glib,
   nss,
@@ -69,7 +75,7 @@ buildDotnetModule (finalAttrs: {
   buildInputs = [
     openssl
     libgcc
-    xorg.libX11
+    libx11
     gtk3
     glib
     alsa-lib
@@ -155,12 +161,12 @@ buildDotnetModule (finalAttrs: {
   runtimeDeps = [
     libz
 
-    xorg.libXcomposite
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXrandr
-    xorg.libxcb
+    libxcomposite
+    libxdamage
+    libxext
+    libxfixes
+    libxrandr
+    libxcb
 
     dbus
     atk

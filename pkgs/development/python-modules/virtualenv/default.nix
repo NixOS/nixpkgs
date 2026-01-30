@@ -10,6 +10,7 @@
   hatch-vcs,
   hatchling,
   platformdirs,
+  pytest-freezer,
   pytest-mock,
   pytestCheckHook,
   time-machine,
@@ -17,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "virtualenv";
-  version = "20.35.4";
+  version = "20.36.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "virtualenv";
     tag = version;
-    hash = "sha256-0PWIYU1/zXiOBUV/45rJsJwVlcqHeac68nRM2tvEPHo=";
+    hash = "sha256-8fiC7+9FzQnmoI+N4cA5kKBLH9tpU7LXZ7pVj8Bz8Wc=";
   };
 
   build-system = [
@@ -43,6 +44,7 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
   ]
+  ++ lib.optionals isPyPy [ pytest-freezer ]
   ++ lib.optionals (!isPyPy) [ time-machine ];
 
   disabledTestPaths = [

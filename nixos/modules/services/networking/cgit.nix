@@ -217,8 +217,7 @@ in
                   When enabled you must also configure `strict-export = "git-daemon-export-ok"`
                   in `settings` to make cgit check for the same files.
                 '';
-                type = lib.types.nullOr lib.types.bool;
-                default = null;
+                type = lib.types.bool;
               };
             };
           }
@@ -233,11 +232,6 @@ in
         {
           assertion = !cfg.enable || (cfg.scanPath == null) != (cfg.repos == { });
           message = "Misconfigured services.cgit.${vhost}: Exactly one of scanPath or repos must be set.";
-        }
-        {
-          assertion =
-            cfg.enable -> cfg.gitHttpBackend.enable -> cfg.gitHttpBackend.checkExportOkFiles != null;
-          message = "Misconfigured services.cgit.${vhost}: When gitHttpBackend.enable is true then gitHttpBackend.checkExportOkFiles must be set, see the documentation for the option for further information.";
         }
         {
           assertion =

@@ -47,7 +47,11 @@
   enableJack ? true,
   libjack2,
   enableX11 ? stdenv.hostPlatform.isLinux,
-  xorg,
+  libxtst,
+  libxi,
+  libxfixes,
+  libxext,
+  libxdamage,
   ncurses,
   enableWayland ? stdenv.hostPlatform.isLinux,
   wayland,
@@ -158,11 +162,11 @@ stdenv.mkDerivation (finalAttrs: {
     libraspberrypi
   ]
   ++ lib.optionals enableX11 [
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXdamage
-    xorg.libXtst
-    xorg.libXi
+    libxext
+    libxfixes
+    libxdamage
+    libxtst
+    libxi
   ]
   ++ lib.optionals gtkSupport [
     # for gtksink

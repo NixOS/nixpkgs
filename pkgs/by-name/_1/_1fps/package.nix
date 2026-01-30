@@ -2,7 +2,9 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
-  xorg,
+  libxtst,
+  libxi,
+  libx11,
   stdenv,
 }:
 buildGoModule rec {
@@ -21,9 +23,9 @@ buildGoModule rec {
   vendorHash = "sha256-29x5Lh++NBAsg2O2Vr6pf9iRuVOvow2R5Iqz6twZGXA=";
 
   buildInputs = [
-    xorg.libX11
-    xorg.libXtst
-    xorg.libXi
+    libx11
+    libxtst
+    libxi
   ];
 
   meta = {

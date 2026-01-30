@@ -19,7 +19,9 @@
   polkit,
   librsvg,
   libwacom,
-  xorg,
+  libxi,
+  libxext,
+  libx11,
   fontconfig,
   tzdata,
   nss,
@@ -30,13 +32,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-settings-daemon";
-  version = "6.6.2";
+  version = "6.6.3";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon-settings-daemon";
     tag = version;
-    hash = "sha256-s8LKta03ei4MIQICY5t4Kh2oDEN9egstX8IQ56FXq7s=";
+    hash = "sha256-sa3DYH4/yRycHyrAG8IfCCpHhFNKwq8yOgLoKHprGfk=";
   };
 
   patches = [
@@ -58,9 +60,9 @@ stdenv.mkDerivation rec {
     polkit
     librsvg
     libwacom
-    xorg.libXext
-    xorg.libX11
-    xorg.libXi
+    libxext
+    libx11
+    libxi
     fontconfig
     nss
     libgudev

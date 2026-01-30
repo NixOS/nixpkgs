@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "formbox";
   version = "1.0.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchzip {
     url = "https://trong.loang.net/~cnx/formbox/snapshot/formbox-${version}.tar.gz";

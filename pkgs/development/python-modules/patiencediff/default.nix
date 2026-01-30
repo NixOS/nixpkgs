@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "patiencediff";
   version = "0.2.15";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "breezy-team";

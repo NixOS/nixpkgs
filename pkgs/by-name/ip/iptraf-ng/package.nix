@@ -5,14 +5,14 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.2.2";
   pname = "iptraf-ng";
 
   src = fetchFromGitHub {
     owner = "iptraf-ng";
     repo = "iptraf-ng";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-SM1cJYNnZlGl3eWaYd8DlPrV4AL9nck1tjdOn0CHVUw=";
   };
 
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ devhell ];
     mainProgram = "iptraf-ng";
   };
-}
+})

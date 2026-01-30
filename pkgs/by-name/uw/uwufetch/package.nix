@@ -6,14 +6,14 @@
   viu,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "uwufetch";
   version = "2.1";
 
   src = fetchFromGitHub {
     owner = "TheDarkBug";
     repo = "uwufetch";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-cA8sajh+puswyKikr0Jp9ei+EpVkH+vhEp+pTerkUqA=";
   };
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   makeFlags = [
-    "UWUFETCH_VERSION=${version}"
+    "UWUFETCH_VERSION=${finalAttrs.version}"
   ];
 
   installFlags = [
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ bbjubjub ];
     mainProgram = "uwufetch";
   };
-}
+})

@@ -12,14 +12,14 @@
   ninja,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kompute";
   version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "KomputeProject";
     repo = "kompute";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-cf9Ef85R+VKao286+WHLgBWUqgwvuRocgeCzVJOGbdc=";
   };
 
@@ -79,4 +79,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ atila ];
     platforms = lib.platforms.linux;
   };
-}
+})

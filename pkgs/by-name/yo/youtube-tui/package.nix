@@ -4,7 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
-  xorg,
+  libxcb,
   stdenv,
   python3,
   makeBinaryWrapper,
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
-    xorg.libxcb
+    libxcb
     libsixel
     mpv
   ];

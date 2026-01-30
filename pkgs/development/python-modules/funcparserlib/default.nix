@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "funcparserlib";
   version = "1.0.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vlasovskikh";

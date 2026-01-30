@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "py-dmidecode";
   version = "0.1.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "py_dmidecode";

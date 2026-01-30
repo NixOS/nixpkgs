@@ -6,7 +6,7 @@
   jre,
   swt,
   makeWrapper,
-  xorg,
+  libxtst,
   dpkg,
   gtk3,
   glib,
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix LD_LIBRARY_PATH : "$out/lib/:${
         lib.makeLibraryPath [
           swt
-          xorg.libXtst
+          libxtst
           gtk3
           glib
         ]

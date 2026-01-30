@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libfreeaptx";
   version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "iamthehorker";
     repo = "libfreeaptx";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-ntbF0jz/ilOk45xMQxx00WJtJq4Wb7VyKE0eKvghYnY=";
   };
 
@@ -48,6 +48,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21Plus;
     homepage = "https://github.com/iamthehorker/libfreeaptx";
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ kranzes ];
+    maintainers = [ ];
   };
-}
+})

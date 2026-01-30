@@ -2,9 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   id,
-  importlib-metadata,
   keyring,
   packaging,
   pkginfo,
@@ -48,9 +46,6 @@ buildPythonPackage rec {
     rfc3986
     rich
     urllib3
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
   ];
 
   nativeCheckInputs = [

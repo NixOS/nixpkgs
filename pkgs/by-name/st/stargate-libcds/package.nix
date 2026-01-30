@@ -5,14 +5,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "stargate-libcds";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "stargateaudio";
     repo = "libcds";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-THThEzS8gGdwn3h0EBttaX5ljZH9Ma2Rcg143+GIdU8=";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     license = lib.licenses.lgpl3Only;
   };
-}
+})

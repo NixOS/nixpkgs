@@ -21,12 +21,12 @@
 let
   isFullPackage = mediaSupport;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = if isFullPackage then "vifm-full" else "vifm";
   version = "0.14.3";
 
   src = fetchurl {
-    url = "https://github.com/vifm/vifm/releases/download/v${version}/vifm-${version}.tar.bz2";
+    url = "https://github.com/vifm/vifm/releases/download/v${finalAttrs.version}/vifm-${finalAttrs.version}.tar.bz2";
     hash = "sha256-Fqm+EQjWpaCen5R/clY3XlGbpB6+lHNlmyBzn9vzRA4=";
   };
 
@@ -77,6 +77,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     downloadPage = "https://vifm.info/downloads.shtml";
     homepage = "https://vifm.info/";
-    changelog = "https://github.com/vifm/vifm/blob/v${version}/ChangeLog";
+    changelog = "https://github.com/vifm/vifm/blob/v${finalAttrs.version}/ChangeLog";
   };
-}
+})

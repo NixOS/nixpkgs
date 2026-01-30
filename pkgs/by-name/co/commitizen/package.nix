@@ -1,7 +1,6 @@
 {
   lib,
-  python3,
-  fetchPypi,
+  python3Packages,
   fetchFromGitHub,
   gitMinimal,
   stdenv,
@@ -10,41 +9,32 @@
   versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
-let
-  # commitizen 4.9.1 is not compatible with version 3.0.52 of prompt-toolkit
-  python = python3.override {
-    packageOverrides = self: super: {
-      prompt-toolkit = super.prompt-toolkit.overridePythonAttrs (oldAttrs: rec {
-        version = "3.0.51";
-        pname = "prompt_toolkit";
-        src = fetchPypi {
-          inherit pname version;
-          hash = "sha256-kxoWLjsn/JDIbxtIux+yxSjCdhR15XycBt4TMRx7VO0=";
-        };
-      });
-    };
-  };
-  python3Packages = python.pkgs;
-in
+
 python3Packages.buildPythonPackage rec {
   pname = "commitizen";
-  version = "4.10.1";
+  version = "4.11.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "commitizen-tools";
     repo = "commitizen";
     tag = "v${version}";
-    hash = "sha256-B4V2UPTEXQNASrwGRZbfFOqPuBIFzBM39a5rAC+Hk5Q=";
+    hash = "sha256-7KF7qzBWF8OQLHxXYWHI+zcjBWV7KogMr0FYhitPSTw=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build >= 0.9.17, <0.10.0" "uv-build"
+  '';
 
   pythonRelaxDeps = [
     "argcomplete"
     "decli"
+    "prompt-toolkit"
     "termcolor"
   ];
 
-  build-system = with python3Packages; [ poetry-core ];
+  build-system = with python3Packages; [ uv-build ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -75,7 +65,7 @@ python3Packages.buildPythonPackage rec {
     pytest-freezer
     pytest-mock
     pytest-regressions
-    pytest7CheckHook
+    pytestCheckHook
   ]);
 
   versionCheckProgramArg = "version";

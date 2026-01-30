@@ -5,14 +5,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tinyfecvpn";
   version = "20230206.0";
 
   src = fetchFromGitHub {
     owner = "wangyu-";
     repo = "tinyfecvpn";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-g4dduREH64TDK3Y2PKc5RZiISW4h2ALRh8vQK7jvCZU=";
     fetchSubmodules = true;
   };
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "tinyvpn";
   };
-}
+})

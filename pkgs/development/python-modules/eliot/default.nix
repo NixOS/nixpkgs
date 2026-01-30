@@ -68,6 +68,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/itamarst/eliot/blob/${version}/docs/source/news.rst";
     mainProgram = "eliot-prettyprint";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ dpausp ];
   };
 }

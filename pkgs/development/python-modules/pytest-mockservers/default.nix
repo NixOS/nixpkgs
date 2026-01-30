@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "pytest-mockservers";
   version = "0.6.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Gr1N";

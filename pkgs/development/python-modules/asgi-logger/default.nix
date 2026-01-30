@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "asgi-logger";
   version = "0.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -27,6 +27,5 @@ buildPythonPackage rec {
     description = "Access logger for ASGI servers";
     homepage = "https://github.com/Kludex/asgi-logger";
     license = lib.licenses.mit;
-    teams = [ lib.teams.wdz ];
   };
 }

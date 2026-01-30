@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
   pname = "hamster";
   version = "3.0.3";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "projecthamster";
@@ -62,7 +62,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   postFixup = ''
-    wrapPythonProgramsIn $out/libexec "$out $pythonPath"
+    wrapPythonProgramsIn $out/libexec "$out ''${pythonPath[*]}"
   '';
 
   meta = {

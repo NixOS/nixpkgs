@@ -11,9 +11,9 @@
   };
 
   beancount = {
-    version = "2.4.2";
+    version = "2.5.0";
     url = "github:polarmutex/tree-sitter-beancount";
-    hash = "sha256-YMIFnx4N9EtdzCxrzQv3xQbLHfDMnbXN+OP5KkMT7+s=";
+    hash = "sha256-eJ1XAPrVCoGQtrRJdcB/V4ULUmYXemUAE3FQijpH8q8=";
     meta = {
       license = lib.licenses.mit;
     };
@@ -308,9 +308,9 @@
   };
 
   glimmer = {
-    version = "1.4.0";
-    url = "github:ember-tooling/tree-sitter-glimmer?ref=v1.4.0-tree-sitter-glimmer";
-    hash = "sha256-4kEOvObNnZtt2aaf0Df+R/Wvyk/JlFnsvbasDIJxt4w=";
+    version = "1.6.0";
+    url = "github:ember-tooling/tree-sitter-glimmer?ref=v1.6.0-tree-sitter-glimmer";
+    hash = "sha256-AW+jd1Kl3krTgnPc8NoXfSM91fOan/wIB/mo/feWj74=";
     meta = {
       license = lib.licenses.mit;
     };
@@ -598,9 +598,9 @@
   };
 
   markdown = {
-    version = "0.3.2";
+    version = "0.5.2";
     url = "github:tree-sitter-grammars/tree-sitter-markdown";
-    hash = "sha256-OlVuHz9/5lxsGVT+1WhKx+7XtQiezMW1odiHGinzro8=";
+    hash = "sha256-JJCFksPDwaiOmU+nZ3PHeLHlPKWTZBTnqcD/tQorWdU=";
     location = "tree-sitter-markdown";
     meta = {
       license = lib.licenses.mit;
@@ -609,9 +609,9 @@
 
   markdown-inline = {
     language = "markdown_inline";
-    version = "0.3.2";
+    version = "0.5.2";
     url = "github:tree-sitter-grammars/tree-sitter-markdown";
-    hash = "sha256-OlVuHz9/5lxsGVT+1WhKx+7XtQiezMW1odiHGinzro8=";
+    hash = "sha256-JJCFksPDwaiOmU+nZ3PHeLHlPKWTZBTnqcD/tQorWdU=";
     location = "tree-sitter-markdown-inline";
     meta = {
       license = lib.licenses.mit;
@@ -710,9 +710,9 @@
   };
 
   pgn = {
-    version = "1.4.2";
+    version = "1.4.3";
     url = "github:rolandwalker/tree-sitter-pgn";
-    hash = "sha256-pGUSsmm+YUvfvt5c4tPs6tmEcFh3DZoDtVf+EpFhOo0=";
+    hash = "sha256-7N0irNJt/tiKywUSZAIVt/E1urNXDMG+hYvu+EPpfXA=";
     meta = {
       license = lib.licenses.bsd2;
     };
@@ -724,6 +724,18 @@
     hash = "sha256-jI7yzcoHS/tNxUqJI4aD1rdEZV3jMn1GZD0J+81Dyf0=";
     meta = {
       license = lib.licenses.mit;
+    };
+  };
+
+  phpdoc = {
+    version = "0.1.8";
+    url = "github:claytonrcarter/tree-sitter-phpdoc";
+    hash = "sha256-X+ElKI0ZMLCmxEanKsDRL/1KzGZfBrG7zITsT+jSrtQ=";
+    meta = {
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [
+        Stebalien
+      ];
     };
   };
 

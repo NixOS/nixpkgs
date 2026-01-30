@@ -55,9 +55,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
         "test_tls_init_no_verify"
         "test_tls_init_verify"
       ];
-      skipFlag = test: "--skip " + test;
     in
-    builtins.concatStringsSep " " (map skipFlag skipList);
+    builtins.map (x: "--skip=" + x) skipList;
 
   meta = {
     description = "Terminal MUD client written in Rust";

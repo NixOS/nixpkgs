@@ -11,7 +11,7 @@
   protobuf,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libssc";
   version = "0.2.2";
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     domain = "codeberg.org";
     owner = "DylanVanAssche";
     repo = "libssc";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-vc3phLAURKXAVD/o4uiGkBtJ3wsbLEfkwygMltEhqug=";
   };
 
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     mainProgram = "libssc";
     platforms = lib.platforms.all;
   };
-}
+})

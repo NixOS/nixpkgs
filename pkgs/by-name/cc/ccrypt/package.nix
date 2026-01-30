@@ -5,12 +5,12 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ccrypt";
   version = "1.11";
 
   src = fetchurl {
-    url = "mirror://sourceforge/ccrypt/ccrypt-${version}.tar.gz";
+    url = "mirror://sourceforge/ccrypt/ccrypt-${finalAttrs.version}.tar.gz";
     sha256 = "0kx4a5mhmp73ljknl2lcccmw9z3f5y8lqw0ghaymzvln1984g75i";
   };
 
@@ -25,4 +25,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = with lib.platforms; all;
   };
-}
+})

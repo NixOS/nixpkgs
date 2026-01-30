@@ -322,7 +322,9 @@ let
               RemainAfterExit = true;
             };
             script = ''
-              ip tuntap add dev "${i.name}" mode "${i.virtualType}" user "${i.virtualOwner}"
+              ip tuntap add dev "${i.name}" mode "${i.virtualType}" ${
+                lib.optionalString (i.virtualOwner != null) ''user "${i.virtualOwner}"''
+              }
             '';
             postStop = ''
               ip link del dev ${i.name} || true

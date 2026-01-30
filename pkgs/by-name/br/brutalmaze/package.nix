@@ -7,8 +7,7 @@
 python312Packages.buildPythonApplication rec {
   pname = "brutalmaze";
   version = "1.1.1";
-  format = "pyproject";
-  disabled = python312Packages.pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromSourcehut {
     owner = "~cnx";

@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "pywaterkotte";
   version = "0.1.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chboland";

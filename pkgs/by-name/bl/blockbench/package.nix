@@ -3,6 +3,7 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
+  fetchpatch,
   makeWrapper,
   imagemagick,
   copyDesktopItems,
@@ -12,13 +13,13 @@
 
 buildNpmPackage rec {
   pname = "blockbench";
-  version = "5.0.6";
+  version = "5.0.7";
 
   src = fetchFromGitHub {
     owner = "JannisX11";
     repo = "blockbench";
     tag = "v${version}";
-    hash = "sha256-AQAyxNVt8PCDCU/jViYY3IlPdNiesgx5kT9W7yrNJ4I=";
+    hash = "sha256-JXOO2+UPMOGSuvez8ektbD5waPKatMggKn+MuH9Qkrs=";
   };
 
   nativeBuildInputs = [
@@ -29,14 +30,22 @@ buildNpmPackage rec {
     copyDesktopItems
   ];
 
-  npmDepsHash = "sha256-OSrX/H1m89GLIznP8/Q1pVDgrlfp55ZUnYjyQIwlJi4=";
+  patches = [
+    (fetchpatch {
+      # fixes https://github.com/JannisX11/blockbench/issues/3237
+      name = "bump-electron-builder.patch";
+      url = "https://github.com/JannisX11/blockbench/commit/dee9ae271f252d4bb3f98c13c4a1abaaeedd1feb.patch";
+      hash = "sha256-XpdqeCKoWsUieOMWhxVsEQ2r0qR+iiXKnVRfNYERDQs=";
+    })
+  ];
+
+  npmDepsHash = "sha256-T3yenZCkOrGOWJBxqe0RG39jWYfpsXStblf5Jx4dtF0=";
   makeCacheWritable = true;
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
-  # disable code signing on Darwin
+  # disable notarization logic
   postConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    export CSC_IDENTITY_AUTO_DISCOVERY=false
     sed -i "/afterSign/d" package.json
   '';
 
@@ -48,9 +57,10 @@ buildNpmPackage rec {
     chmod -R u+w electron-dist
 
     npm exec electron-builder -- \
-        --dir \
-        -c.electronDist=electron-dist \
-        -c.electronVersion=${electron.version}
+      --dir \
+      -c.electronDist=electron-dist \
+      -c.electronVersion=${electron.version} \
+      -c.mac.identity=null
   '';
 
   installPhase = ''

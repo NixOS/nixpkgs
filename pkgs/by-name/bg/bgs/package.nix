@@ -8,7 +8,7 @@
   imlib2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
 
   pname = "bgs";
   version = "0.8";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Gottox";
     repo = "bgs";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "V8GP+xLSiCvaYZt8Bi3/3KlTBaGnMYQUeNCHwH6Ejzo=";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ pSub ];
     mainProgram = "bgs";
   };
-}
+})

@@ -13,12 +13,12 @@
   xorgproto,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "Xaw3d";
   version = "1.6.6";
 
   src = fetchurl {
-    url = "https://www.x.org/releases/individual/lib/libXaw3d-${version}.tar.xz";
+    url = "https://www.x.org/releases/individual/lib/libXaw3d-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-pBw+NxNa1hax8ou95wACr788tZow3zQUH4KdMurchkY=";
   };
   nativeBuildInputs = [
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.mit;
   };
-}
+})

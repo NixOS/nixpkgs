@@ -5,12 +5,12 @@
   liblockfile,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lockfile-progs";
   version = "0.1.19";
 
   src = fetchurl {
-    url = "mirror://debian/pool/main/l/lockfile-progs/lockfile-progs_${version}.tar.gz";
+    url = "mirror://debian/pool/main/l/lockfile-progs/lockfile-progs_${finalAttrs.version}.tar.gz";
     sha256 = "sha256-LFcEsByPR0+CkheA5Fkqknsr9qbXYWNUpsXXzVZkhX4=";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.all;
   };
-}
+})

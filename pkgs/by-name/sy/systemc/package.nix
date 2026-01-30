@@ -5,14 +5,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "systemc";
   version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "accellera-official";
     repo = "systemc";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-ReYRKx7H9rxVhvY9gAdxrMu5nlsK2FcVIzfgvZroD/E=";
   };
 
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ amiloradovsky ];
   };
-}
+})

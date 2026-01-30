@@ -36,8 +36,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doCheck = true;
   # Requires network access
   checkFlags = [
-    "--skip verify_compiles"
-    "--skip verify_deterministic"
+    "--skip=verify_compiles"
+    "--skip=verify_deterministic"
   ];
 
   doInstallCheck = true;

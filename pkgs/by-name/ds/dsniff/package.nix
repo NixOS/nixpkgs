@@ -76,7 +76,7 @@ let
     ];
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dsniff";
   version = "2.4b1";
   # upstream is so old that nearly every distribution packages the beta version.
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
     domain = "salsa.debian.org";
     owner = "pkg-security-team";
     repo = "dsniff";
-    tag = "debian/${version}+debian-35";
+    tag = "debian/${finalAttrs.version}+debian-35";
     hash = "sha256-RVv9USAHTVYnGgKygIPgfXpfjCYigJvScuzc2+1Uzfw=";
     name = "dsniff.tar.gz";
   };
@@ -129,4 +129,4 @@ stdenv.mkDerivation rec {
     # bsd and solaris should work as well
     platforms = lib.platforms.linux;
   };
-}
+})

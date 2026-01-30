@@ -23,14 +23,14 @@
   sqlcipher,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qtox";
   version = "1.18.3";
 
   src = fetchFromGitHub {
     owner = "TokTok";
     repo = "qTox";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-5pH39NsJdt4+ldlbpkvA0n/X/LkEUEv4UL1K/W3BqmM=";
   };
 
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ perl ];
 
   cmakeFlags = [
-    "-DGIT_DESCRIBE=v${version}"
+    "-DGIT_DESCRIBE=v${finalAttrs.version}"
     "-DTIMESTAMP=1"
   ];
 
@@ -79,4 +79,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})

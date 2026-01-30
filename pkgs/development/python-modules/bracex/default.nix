@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "bracex";
   version = "2.6";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

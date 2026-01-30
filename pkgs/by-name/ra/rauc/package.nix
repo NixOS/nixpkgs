@@ -18,14 +18,14 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rauc";
   version = "1.15.1";
 
   src = fetchFromGitHub {
     owner = "rauc";
     repo = "rauc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-aGJj1Vm1gznZBnoGkfbJlhGAUrP5JAMgEL8L+8UL9LY=";
   };
 
@@ -76,4 +76,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux;
     mainProgram = "rauc";
   };
-}
+})

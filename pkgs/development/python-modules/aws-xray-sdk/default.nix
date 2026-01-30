@@ -7,13 +7,11 @@
   django,
   fetchFromGitHub,
   httpx,
-  importlib-metadata,
   jsonpickle,
   pymysql,
   pytest-asyncio_0,
   pynamodb,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
   sqlalchemy,
@@ -40,8 +38,7 @@ buildPythonPackage rec {
     jsonpickle
     requests
     wrapt
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ];
 
   nativeCheckInputs = [
     aiohttp

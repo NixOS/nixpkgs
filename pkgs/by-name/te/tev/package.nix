@@ -15,7 +15,11 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
-  xorg,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxcursor,
+  libx11,
 }:
 
 stdenv.mkDerivation rec {
@@ -61,11 +65,11 @@ stdenv.mkDerivation rec {
     wayland
     wayland-protocols
     wayland-scanner
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXinerama
-    xorg.libXrandr
+    libx11
+    libxcursor
+    libxi
+    libxinerama
+    libxrandr
   ];
 
   cmakeFlags = [

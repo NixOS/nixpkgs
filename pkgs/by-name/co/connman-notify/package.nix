@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication {
     hash = "sha256-EsF+Ckjojnn2o5PCDIexKrNIYxcIM1CZUNaTEIwvq8w=";
   };
 
-  format = "other";
+  pyproject = false;
 
   nativeBuildInputs = [
     gobject-introspection

@@ -3,7 +3,7 @@
 buildPythonPackage {
   pname = "stestr-tests";
   inherit (stestr) version src;
-  format = "other";
+  pyproject = false;
 
   dontBuild = true;
   dontInstall = true;

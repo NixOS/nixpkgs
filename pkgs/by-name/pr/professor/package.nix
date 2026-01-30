@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   src = fetchFromGitLab {
     owner = "hepcedar";
     repo = "professor";
-    rev = "refs/tags/professor-2.4.2";
+    tag = "professor-2.4.2";
     hash = "sha256-z2Ub7SUTz4Hj3ajnzOV/QXZ+cH2v6zJv9UZM2M2y1Hg=";
     # workaround unpacking to case-sensitive filesystems
     postFetch = ''

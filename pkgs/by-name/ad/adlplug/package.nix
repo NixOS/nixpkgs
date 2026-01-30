@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  unstableGitUpdater,
   cmake,
   pkg-config,
   fmt,
@@ -36,7 +37,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "${lib.strings.toLower type}plug";
-  version = "unstable-2021-12-17";
+  version = "1.0.2-unstable-2021-12-17";
 
   src = fetchFromGitHub {
     owner = "jpcima";
@@ -111,6 +112,11 @@ stdenv.mkDerivation {
     mv vst2/${mainProgram}.vst $out/Library/Audio/Plug-Ins/VST/
     mv au/${mainProgram}.component $out/Library/Audio/Plug-Ins/Components/
   '';
+
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "v";
+    tagFormat = "v*";
+  };
 
   meta = {
     inherit mainProgram;

@@ -34,7 +34,7 @@
   udevCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "colord";
   version = "1.4.6";
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://www.freedesktop.org/software/colord/releases/colord-${version}.tar.xz";
+    url = "https://www.freedesktop.org/software/colord/releases/colord-${finalAttrs.version}.tar.xz";
     sha256 = "dAdjGie/5dG2cueuQndwAcEF2GC3tzkig8jGMA3ojm8=";
   };
 
@@ -144,4 +144,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.freedesktop ];
     platforms = lib.platforms.linux;
   };
-}
+})

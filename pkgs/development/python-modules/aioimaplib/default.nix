@@ -24,6 +24,11 @@ buildPythonPackage rec {
     hash = "sha256-njzSpKPis033eLoRKXL538ljyMOB43chslio1wodrKU=";
   };
 
+  patches = [
+    # https://github.com/iroco-co/aioimaplib/issues/125
+    ./event-loop.patch
+  ];
+
   build-system = [ poetry-core ];
 
   nativeCheckInputs = [

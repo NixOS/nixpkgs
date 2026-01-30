@@ -11,14 +11,14 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "logrotate";
   version = "3.22.0";
 
   src = fetchFromGitHub {
     owner = "logrotate";
     repo = "logrotate";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-D7E2mpC7v2kbsb1EyhR6hLvGbnIvGB2MK1n1gptYyKI=";
   };
 
@@ -55,4 +55,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "logrotate";
   };
-}
+})

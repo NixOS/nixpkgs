@@ -8,7 +8,7 @@
   catch2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vk-bootstrap";
   version = "0.7";
   outputs = [
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "charles-lunarg";
     repo = "vk-bootstrap";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-X3ANqfplrCF1R494+H5/plcwMH7rbW6zpLA4MZrYaoE=";
   };
 
@@ -45,7 +45,6 @@ stdenv.mkDerivation rec {
     description = "Vulkan Bootstrapping Library";
     license = lib.licenses.mit;
     homepage = "https://github.com/charles-lunarg/vk-bootstrap";
-    maintainers = with lib.maintainers; [ shamilton ];
     platforms = lib.platforms.all;
   };
-}
+})

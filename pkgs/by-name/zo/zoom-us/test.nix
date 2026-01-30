@@ -4,14 +4,14 @@
   zoom-us,
   runCommand,
   writeShellApplication,
-  xorg,
+  xwininfo,
 }:
 
 let
   testScript = writeShellApplication {
     name = "zoom-us-test-script";
     runtimeInputs = [
-      xorg.xwininfo
+      xwininfo
       zoom-us
     ];
     text = ''

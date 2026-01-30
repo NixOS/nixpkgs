@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "cssselect";
   version = "1.3.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

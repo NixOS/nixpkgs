@@ -12,7 +12,7 @@
   SDL2,
   SDL2_image,
   SDL2_mixer,
-  xorg,
+  libx11,
   zlib,
 
   makeDesktopItem,
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     SDL2
     SDL2_image
     SDL2_mixer
-    xorg.libX11
+    libx11
     zlib
   ];
 

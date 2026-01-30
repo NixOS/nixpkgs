@@ -22,7 +22,7 @@ let
     chmod +w -R "$ANGBAND_PATH"
   '';
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "Sil";
   version = "1.3.0";
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     libXmu
   ];
 
-  sourceRoot = "${src.name}/Sil/src";
+  sourceRoot = "${finalAttrs.src.name}/Sil/src";
 
   makefile = "Makefile.std";
 
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     # lib directory anyway, so we might as well give everyone a copy
     wrapProgram $out/bin/sil \
       --run "export ANGBAND_PATH=\$HOME/.sil" \
-      --run "${setup} ${src}/Sil/lib"
+      --run "${setup} ${finalAttrs.src}/Sil/lib"
 
     runHook postInstall
   '';
@@ -103,4 +103,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "sil";
   };
-}
+})

@@ -7,7 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "btlejack";
   version = "2.1.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "virtualabs";

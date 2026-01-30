@@ -27,7 +27,6 @@
   libkrb5,
   libxml2,
   libxslt,
-  python2,
   stdenv,
   which,
   libiconv,
@@ -65,7 +64,9 @@
   libossp_uuid,
   lxc,
   libpcap,
-  xorg,
+  libxtst,
+  libxdmcp,
+  libpthread-stubs,
   gtk3,
   lerc,
   buildRubyGem,
@@ -91,6 +92,7 @@
   fribidi,
   harfbuzz,
   bison,
+  h3_3,
   flex,
   pango,
   python3,
@@ -180,8 +182,8 @@ in
       glib
       libsysprof-capture
       pcre2
-      xorg.libpthreadstubs
-      xorg.libXdmcp
+      libpthread-stubs
+      libxdmcp
     ];
   };
 
@@ -192,8 +194,8 @@ in
       expat
       libsysprof-capture
       pcre2
-      xorg.libpthreadstubs
-      xorg.libXdmcp
+      libpthread-stubs
+      libxdmcp
     ];
   };
 
@@ -563,9 +565,9 @@ in
       libsysprof-capture
       libthai
       pcre2
-      xorg.libpthreadstubs
-      xorg.libXdmcp
-      xorg.libXtst
+      libpthread-stubs
+      libxdmcp
+      libxtst
       libxkbcommon
       libepoxy
     ];
@@ -639,6 +641,21 @@ in
     '';
   };
 
+  h3 = attrs: {
+    # This gem attempts to build h3 using cmake, but fails because that is not in the path
+    # Use h3 from nixpkgs instead, and reduce closure size by deleting the h3 source code
+    dontBuild = false; # allow applying patches
+    postPatch = ''
+      substituteInPlace ext/h3/Makefile \
+        --replace-fail 'cd src; cmake . -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DBUILD_SHARED_LIBS=true -DBUILD_FILTERS=OFF -DBUILD_BENCHMARKS=OFF -DENABLE_LINTING=OFF; make' ':'
+      substituteInPlace lib/h3/bindings/base.rb \
+        --replace-fail '__dir__ + "/../../../ext/h3/src/lib"' '"${h3_3}/lib"'
+    '';
+    postInstall = ''
+      rm -rf $out/${ruby.gemPath}/gems/h3-${attrs.version}/ext/h3/src
+    '';
+  };
+
   hiredis-client = attrs: {
     buildInputs = [
       openssl
@@ -651,6 +668,10 @@ in
       # Fix incompatible function pointer conversion errors with clang 16
       ./hpricot-fix-incompatible-function-pointer-conversion.patch
     ];
+    env.NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=incompatible-pointer-types"
+      "-Wno-error=int-conversion"
+    ];
   };
 
   iconv = attrs: {
@@ -658,6 +679,7 @@ in
       "--with-iconv-dir=${lib.getLib libiconv}"
       "--with-iconv-include=${lib.getDev libiconv}/include"
     ];
+    env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
   };
 
   idn-ruby = attrs: {
@@ -869,8 +891,8 @@ in
       harfbuzz
       libsysprof-capture
       pcre2
-      xorg.libpthreadstubs
-      xorg.libXdmcp
+      libpthread-stubs
+      libxdmcp
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       libselinux
@@ -1006,6 +1028,7 @@ in
 
   ruby-lxc = attrs: {
     buildInputs = [ lxc ];
+    env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
   };
 
   ruby-terminfo = attrs: {

@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   version = "0.9.0";
   pname = "tabulate";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

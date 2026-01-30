@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   pkg-config,
-  goocanvas2,
+  goocanvas_2,
   gtkmm3,
   gnome,
 }:
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [
     gtkmm3
-    goocanvas2
+    goocanvas_2
   ];
 
   enableParallelBuilding = true;

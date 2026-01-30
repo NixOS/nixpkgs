@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "pytest-env";
   version = "1.1.5";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "pytest_env";

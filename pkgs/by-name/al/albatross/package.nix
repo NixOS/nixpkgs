@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "Albatross";
   version = "1.7.4";
 
   src = fetchFromGitHub {
     repo = "Albatross";
     owner = "shimmerproject";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "0mq87n2hxy44nzr567av24n5nqjaljhi1afxrn3mpjqdbkq7lx88";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
   };
-}
+})

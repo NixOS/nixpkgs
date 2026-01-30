@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "sphinx-design";
   version = "0.6.1";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit version;

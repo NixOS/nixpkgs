@@ -117,14 +117,14 @@ in
 
           # TCP
           ${lib.optionalString (cfg.allowedTCPPorts != [ ]) ''
-            tcp dport { ${lib.concatStringsSep ", " (map builtins.toString cfg.allowedTCPPorts)} } accept
+            tcp dport { ${lib.concatStringsSep ", " (map toString cfg.allowedTCPPorts)} } accept
             ip protocol tcp counter drop
             ip6 nexthdr tcp counter drop
           ''}
 
           # UDP
           ${lib.optionalString (cfg.allowedUDPPorts != [ ]) ''
-            udp dport { ${lib.concatStringsSep ", " (map builtins.toString cfg.allowedUDPPorts)} } accept
+            udp dport { ${lib.concatStringsSep ", " (map toString cfg.allowedUDPPorts)} } accept
             ip protocol udp counter drop
             ip6 nexthdr udp counter drop
           ''}

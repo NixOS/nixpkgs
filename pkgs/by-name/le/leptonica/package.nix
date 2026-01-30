@@ -16,14 +16,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "leptonica";
   version = "1.85.0";
 
   src = fetchFromGitHub {
     owner = "DanBloomBerg";
     repo = "leptonica";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-meiSi0qL4i/KCMe5wsRK1/mbuRLHUb55DDOnxkrXZSs=";
   };
 
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd2; # http://www.leptonica.org/about-the-license.html
     platforms = lib.platforms.unix;
   };
-}
+})

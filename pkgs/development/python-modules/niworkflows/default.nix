@@ -40,14 +40,14 @@
 
 buildPythonPackage rec {
   pname = "niworkflows";
-  version = "1.14.3";
+  version = "1.14.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nipreps";
     repo = "niworkflows";
     tag = version;
-    hash = "sha256-wdPHXVgMvd+Od3M2j7S43gBRSh4yiPeu+HM6EyiakwU=";
+    hash = "sha256-AMUOiIL33kcJtlKT+L5QwcUh8mBBkf80uzOQZFKDauo=";
   };
 
   pythonRelaxDeps = [ "traits" ];

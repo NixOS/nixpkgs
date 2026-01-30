@@ -45,7 +45,22 @@
   xcbutilimage,
   xcbutilkeysyms,
   xkeyboard_config,
-  xorg,
+  libxtst,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxmu,
+  libxi,
+  libxinerama,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  libsm,
+  libice,
+  libxcb,
   zlib,
   # options
   cudaSupport,
@@ -115,25 +130,23 @@ stdenv.mkDerivation {
     xcbutilimage
     xcbutilkeysyms
     xkeyboard_config
-  ]
-  ++ (with xorg; [
-    libICE
-    libSM
-    libX11
-    libXScrnSaver
-    libXcomposite
-    libXcursor
-    libXdamage
-    libXext
-    libXfixes
-    libXi
-    libXinerama
-    libXmu
-    libXrandr
-    libXrender
-    libXtst
+    libice
+    libsm
+    libx11
+    libxscrnsaver
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxinerama
+    libxmu
+    libxrandr
+    libxrender
+    libxtst
     libxcb
-  ])
+  ]
   ++ lib.optional cudaSupport cudaEnv;
 
   wrapProgramFlags = [

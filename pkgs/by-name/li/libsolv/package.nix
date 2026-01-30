@@ -17,14 +17,14 @@
   withConda ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.7.35";
   pname = "libsolv";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "libsolv";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-DHECjda7s12hSysbaXK2+wM/nXpAOpTn+eSf9XGC3z0=";
   };
 
@@ -68,4 +68,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = [ ];
   };
-}
+})

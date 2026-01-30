@@ -3,9 +3,7 @@
   appdirs,
   buildPythonPackage,
   fetchPypi,
-  importlib-metadata,
   packaging,
-  pythonOlder,
   requests,
   rich,
   setuptools,
@@ -15,7 +13,7 @@
 buildPythonPackage rec {
   pname = "pipdate";
   version = "0.5.6";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -30,8 +28,7 @@ buildPythonPackage rec {
     requests
     rich
     setuptools
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ];
 
   # Tests require network access and pythonImportsCheck requires configuration file
   doCheck = false;

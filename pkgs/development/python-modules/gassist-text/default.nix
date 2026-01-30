@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "gassist-text";
   version = "0.0.14";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tronikos";

@@ -14,16 +14,16 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "powersupply";
-  version = "0.10.1";
+  version = "0.10.2";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitLab {
     domain = "gitlab.postmarketos.org";
     owner = "postmarketOS";
     repo = "powersupply";
     rev = version;
-    hash = "sha256-sPdtrm2WQYjPu+1bb0ltBiqS9t8FFvbgRdGe1PEthy0=";
+    hash = "sha256-i0AZfxYWj8ct2jiXl2GnCGMU3xBSRRny4H0G/5Qs14Y=";
   };
 
   postPatch = ''

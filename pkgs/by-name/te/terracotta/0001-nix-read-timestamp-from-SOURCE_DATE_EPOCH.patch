@@ -1,4 +1,4 @@
-From f89d1d20a773cff73dd5856af4c84bccaea549ac Mon Sep 17 00:00:00 2001
+From 6cb38146684743fda3e86f7c64c38f3455dacf0b Mon Sep 17 00:00:00 2001
 From: Moraxyc <i@qaq.li>
 Date: Sat, 8 Nov 2025 15:18:44 +0800
 Subject: [PATCH 1/2] nix: read timestamp from SOURCE_DATE_EPOCH
@@ -31,5 +31,5 @@ index 142abf3..3935272 100644
 \ No newline at end of file
 +}
 -- 
-2.51.0
+2.51.2
 

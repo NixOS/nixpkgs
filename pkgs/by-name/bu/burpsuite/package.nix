@@ -9,20 +9,20 @@
 }:
 
 let
-  version = "2025.12";
+  version = "2026.1";
 
   product =
     if proEdition then
       {
         productName = "pro";
         productDesktop = "Burp Suite Professional Edition";
-        hash = "sha256-6firazY0uyDBjdw8Qvs48xVXwy3MfCULtitb1gvGHQM=";
+        hash = "sha256-4GvB1K4UZnZMor0jBWXvzgy0qfh234TZmtu6eSR4/jk=";
       }
     else
       {
         productName = "community";
         productDesktop = "Burp Suite Community Edition";
-        hash = "sha256-hvhS6JKISPeDp0L7ElI/BojitUp93TvuPgO4zKBJjnI=";
+        hash = "sha256-q0vKBEIzO18mNX7bn1vhnstnGr1pwjMnHXq6HdtpJy0=";
       };
 
   src = fetchurl {
@@ -76,13 +76,13 @@ buildFHSEnv {
       nspr
       nss
       pango
-      xorg.libX11
-      xorg.libxcb
-      xorg.libXcomposite
-      xorg.libXdamage
-      xorg.libXext
-      xorg.libXfixes
-      xorg.libXrandr
+      libx11
+      libxcb
+      libxcomposite
+      libxdamage
+      libxext
+      libxfixes
+      libxrandr
     ];
 
   extraInstallCommands = ''

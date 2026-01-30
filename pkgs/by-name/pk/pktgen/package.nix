@@ -16,14 +16,14 @@
   withGtk ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pktgen";
   version = "24.10.3";
 
   src = fetchFromGitHub {
     owner = "pktgen";
     repo = "Pktgen-DPDK";
-    rev = "pktgen-${version}";
+    rev = "pktgen-${finalAttrs.version}";
     sha256 = "sha256-6KC1k+LWNSU/mdwcUKjCaq8pGOcO+dFzeXX4PJm0QgE=";
   };
 
@@ -72,4 +72,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.abuibrahim ];
   };
-}
+})

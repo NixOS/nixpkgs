@@ -12,7 +12,7 @@
   pkg-config,
   powertop,
   testers,
-  xorg,
+  xset,
   zlib,
 }:
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/main.cpp --replace-fail "/sbin/modprobe" "modprobe"
-    substituteInPlace src/calibrate/calibrate.cpp --replace-fail "/usr/bin/xset" "${lib.getExe xorg.xset}"
+    substituteInPlace src/calibrate/calibrate.cpp --replace-fail "/usr/bin/xset" "${lib.getExe xset}"
     substituteInPlace src/tuning/bluetooth.cpp --replace-fail "/usr/bin/hcitool" "hcitool"
   '';
 

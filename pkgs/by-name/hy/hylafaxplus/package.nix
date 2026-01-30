@@ -33,7 +33,7 @@
 let
 
   configSite = replaceVars ./config.site {
-    config_maxgid = lib.optionalString (maxgid != null) ''CONFIG_MAXGID=${toString maxgid}'';
+    config_maxgid = lib.optionalString (maxgid != null) "CONFIG_MAXGID=${toString maxgid}";
     ghostscript_version = ghostscript.version;
     out = null; # "out" will be resolved in post-install.sh
     inherit coreutils ghostscript libtiff;

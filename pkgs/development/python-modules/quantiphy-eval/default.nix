@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "quantiphy-eval";
   version = "0.5";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "KenKundert";

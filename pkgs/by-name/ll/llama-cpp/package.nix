@@ -27,11 +27,15 @@
   ],
   blas,
 
+  fetchNpmDeps,
+  nodejs,
+  npmHooks,
+
   pkg-config,
   metalSupport ? stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 && !openclSupport,
   vulkanSupport ? false,
   rpcSupport ? false,
-  curl,
+  openssl,
   llama-cpp,
   shaderc,
   vulkan-headers,
@@ -74,13 +78,18 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "7704";
+  version = "7823";
+
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "ggml-org";
     repo = "llama.cpp";
     tag = "b${finalAttrs.version}";
-    hash = "sha256-yFHrboXmJ2WK6QPvUqTz6qM2o2PVQF0co5opxFdARUs=";
+    hash = "sha256-3NLIX2bAxaxkpPRMzxWfcEhJDke2q4TWAyWjXIa/Wpk=";
     leaveDotGit = true;
     postFetch = ''
       git -C "$out" rev-parse --short HEAD > $out/COMMIT
@@ -88,10 +97,18 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     '';
   };
 
+  patches = [ ];
+
+  postPatch = ''
+    rm tools/server/public/index.html.gz
+  '';
+
   nativeBuildInputs = [
     cmake
     installShellFiles
     ninja
+    nodejs
+    npmHooks.npmConfigHook
     pkg-config
   ]
   ++ optionals cudaSupport [
@@ -105,10 +122,24 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ++ optionals rocmSupport rocmBuildInputs
     ++ optionals blasSupport [ blas ]
     ++ optionals vulkanSupport vulkanBuildInputs
-    ++ [ curl ];
+    ++ [ openssl ];
+
+  npmRoot = "tools/server/webui";
+  npmDepsHash = "sha256-m1boNqwMELdpHbV/jYK3hpf2vP1S/KSAf32wVKQGyFo=";
+  npmDeps = fetchNpmDeps {
+    name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
+    inherit (finalAttrs) src patches;
+    preBuild = ''
+      pushd ${finalAttrs.npmRoot}
+    '';
+    hash = finalAttrs.npmDepsHash;
+  };
 
   preConfigure = ''
     prependToVar cmakeFlags "-DLLAMA_BUILD_COMMIT:STRING=$(cat COMMIT)"
+    pushd ${finalAttrs.npmRoot}
+    npm run build
+    popd
   '';
 
   cmakeFlags = [
@@ -117,7 +148,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (cmakeBool "LLAMA_BUILD_EXAMPLES" false)
     (cmakeBool "LLAMA_BUILD_SERVER" true)
     (cmakeBool "LLAMA_BUILD_TESTS" (finalAttrs.finalPackage.doCheck or false))
-    (cmakeBool "LLAMA_CURL" true)
+    (cmakeBool "LLAMA_OPENSSL" true)
     (cmakeBool "BUILD_SHARED_LIBS" true)
     (cmakeBool "GGML_BLAS" blasSupport)
     (cmakeBool "GGML_CLBLAST" openclSupport)

@@ -57,7 +57,9 @@
   roc-toolkit,
   x11Support ? true,
   libcanberra,
-  xorg,
+  libxfixes,
+  libx11,
+  libxcb,
   libmysofa,
   ffadoSupport ?
     x11Support
@@ -166,9 +168,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals x11Support [
     libcanberra
-    xorg.libX11
-    xorg.libxcb
-    xorg.libXfixes
+    libx11
+    libxcb
+    libxfixes
   ]
   ++ lib.optionals bluezSupport [
     bluez
@@ -269,7 +271,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
     maintainers = with lib.maintainers; [
-      kranzes
       k900
     ];
     pkgConfigModules = [

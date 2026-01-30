@@ -115,7 +115,7 @@ python3Packages.buildPythonApplication rec {
       procps
     ];
 
-  format = "other";
+  pyproject = false;
   dontWrapGApps = true; # prevent double wrapping
 
   preFixup = ''
@@ -131,7 +131,6 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       psydvl
-      shamilton
       Gliczy
       XBagon
     ];

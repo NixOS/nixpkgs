@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "curtsies";
   version = "0.4.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

@@ -6,26 +6,26 @@
   libappindicator-gtk3,
   libayatana-appindicator,
   libnotify,
-  wrapGAppsHook3,
+  wrapGAppsHook4,
   withIndicator ? true,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "protonvpn-gui";
-  version = "4.13.1";
+  version = "4.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "proton-vpn-gtk-app";
     tag = "v${version}";
-    hash = "sha256-pfk7ttQp7nWpGWqBWny9VdSktpB7RoBJIcF/pF6gAfA=";
+    hash = "sha256-zmtx7lua1VsjRjtGYlkuT+u2rCJt7RQk8JRgVrLWVaM=";
   };
 
   nativeBuildInputs = [
     # Needed for the NM namespace
     gobject-introspection
-    wrapGAppsHook3
+    wrapGAppsHook4
   ];
 
   buildInputs = [

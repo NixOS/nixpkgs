@@ -169,7 +169,7 @@ let
         # source is a store path containing the complete manifest file
         source = mkManifestSource "auto-deploy-chart-${name}" (
           lib.singleton (mkHelmChartCR name value)
-          ++ builtins.map (x: fromYaml (mkExtraDeployManifest x)) value.extraDeploy
+          ++ map (x: fromYaml (mkExtraDeployManifest x)) value.extraDeploy
         );
       };
 
@@ -384,7 +384,7 @@ let
             target = lib.mkDefault (mkManifestTarget name);
             source = lib.mkIf (config.content != null) (
               let
-                name' = "${name}-manifest-" + builtins.baseNameOf name;
+                name' = "${name}-manifest-" + baseNameOf name;
                 mkSource = mkManifestSource name';
               in
               lib.mkDerivedConfig options.content mkSource

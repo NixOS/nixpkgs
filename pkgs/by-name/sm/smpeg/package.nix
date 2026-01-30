@@ -15,14 +15,14 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "smpeg";
   version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = "icculus";
     repo = "smpeg";
-    rev = "release_${builtins.replaceStrings [ "." ] [ "_" ] version}";
+    rev = "release_${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     sha256 = "sha256-nq/i7cFGpJXIuTwN/ScLMX7FN8NMdgdsRM9xOD3uycs=";
   };
 
@@ -101,4 +101,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
   };
-}
+})

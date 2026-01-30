@@ -12,7 +12,7 @@
   libpng,
   makeWrapper,
   pkg-config,
-  python3,
+  python312,
   SDL2,
   stdenv,
   versionCheckHook,
@@ -21,7 +21,7 @@
 }:
 
 let
-  python = python3;
+  python = python312;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "renpy";

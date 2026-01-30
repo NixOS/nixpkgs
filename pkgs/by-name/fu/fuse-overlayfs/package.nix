@@ -29,6 +29,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   strictDeps = true;
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   passthru.tests = { inherit (nixosTests) podman; };
 
   meta = {

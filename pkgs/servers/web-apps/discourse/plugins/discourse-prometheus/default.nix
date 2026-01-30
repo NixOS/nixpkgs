@@ -23,7 +23,6 @@ mkDiscoursePlugin {
 
   meta = {
     homepage = "https://github.com/discourse/discourse-prometheus";
-    maintainers = with lib.maintainers; [ dpausp ];
     license = lib.licenses.mit;
     description = "Official Discourse Plugin for Prometheus Monitoring";
   };

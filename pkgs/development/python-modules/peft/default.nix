@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "peft";
-  version = "0.18.0";
+  version = "0.18.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "peft";
     tag = "v${version}";
-    hash = "sha256-LLV6fMFPh45IvNJv9totMYDoKAkZW/1Bx3qOlDTWMLA=";
+    hash = "sha256-qlM8yEN/CJZbSAGNCltS4JQSzstVXRVqu47qZbLPVNc=";
   };
 
   build-system = [ setuptools ];

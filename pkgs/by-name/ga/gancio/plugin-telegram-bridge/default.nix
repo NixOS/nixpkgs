@@ -3,13 +3,23 @@
   stdenv,
   fetchFromGitLab,
   fetchYarnDeps,
+  yarn,
   yarnConfigHook,
   yarnInstallHook,
-  nodejs,
+  nodejs_22,
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+let
+  # The latest nodejs is always used in yarn, leading to build issues when it's
+  # different from the pinned one.
+  nodejs = nodejs_22;
+  yarnConfigHook' = yarnConfigHook.override {
+    yarn = yarn.override { inherit nodejs; };
+  };
+in
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "gancio-plugin-telegram-bridge";
   version = "1.0.6";
 
@@ -17,7 +27,7 @@ stdenv.mkDerivation rec {
     domain = "framagit.org";
     owner = "bcn.convocala";
     repo = "gancio-plugin-telegram-bridge";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-J7FIfJjounrq/hPQk58mYXigjD7BZQWoE4aGi0eJ4sY=";
   };
 
@@ -32,7 +42,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    yarnConfigHook
+    yarnConfigHook'
     yarnInstallHook
     nodejs
   ];
@@ -54,4 +64,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ jbgi ];
   };
-}
+})

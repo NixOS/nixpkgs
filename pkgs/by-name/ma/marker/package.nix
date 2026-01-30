@@ -14,14 +14,14 @@
   pandoc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "marker";
   version = "2023.05.02";
 
   src = fetchFromGitHub {
     owner = "fabiocolacio";
     repo = "Marker";
-    tag = version;
+    tag = finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-HhDhigQ6Aqo8R57Yrf1i69sM0feABB9El5R5OpzOyB0=";
   };
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    meson rewrite kwargs set project / version '${version}'
+    meson rewrite kwargs set project / version '${finalAttrs.version}'
   '';
 
   meta = {
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    changelog = "https://github.com/fabiocolacio/Marker/releases/tag/${version}";
+    changelog = "https://github.com/fabiocolacio/Marker/releases/tag/${finalAttrs.version}";
     mainProgram = "marker";
   };
-}
+})

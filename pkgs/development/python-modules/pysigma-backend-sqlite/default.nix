@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pysigma-backend-sqlite";
-  version = "1.1.0";
+  version = "1.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = "pySigma-backend-sqlite";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-R0VM4Keui8jvUJY+YqV6wU7buJHuLkONP7unj7AB3DA=";
+    hash = "sha256-FmqsWwMn/xtKfPPUA025UcEmgsqiQ+8vQm13B/5oahQ=";
   };
 
   pythonRelaxDeps = [ "pysigma" ];

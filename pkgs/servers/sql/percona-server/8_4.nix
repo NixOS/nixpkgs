@@ -219,7 +219,10 @@ stdenv.mkDerivation (finalAttrs: {
       Long-term support release.
     '';
     license = lib.licenses.gpl2Only;
-    teams = [ lib.teams.flyingcircus ];
+    maintainers = [
+      lib.maintainers.leona
+      lib.maintainers.osnyx
+    ];
     platforms = lib.platforms.unix;
   };
 })

@@ -15,14 +15,14 @@
   fetchFromGitHub,
   cmake,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "calf";
   version = "0.90.6";
 
   src = fetchFromGitHub {
     owner = "calf-studio-gear";
     repo = "calf";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-rcMuQFig6BrnyGFyvYaAHmOvabEHGl+1lMNfffLHn1w=";
   };
 
@@ -59,4 +59,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "calfjackhost";
   };
-}
+})

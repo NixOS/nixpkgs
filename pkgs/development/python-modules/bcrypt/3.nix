@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "bcrypt";
   version = "3.2.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

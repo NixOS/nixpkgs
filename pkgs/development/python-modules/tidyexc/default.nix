@@ -8,7 +8,7 @@
 buildPythonPackage rec {
   pname = "tidyexc";
   version = "0.10.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

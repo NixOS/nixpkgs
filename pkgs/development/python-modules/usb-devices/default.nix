@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "usb-devices";
   version = "0.4.5";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";

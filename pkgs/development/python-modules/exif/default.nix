@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitLab {
     owner = "TNThieding";
     repo = "exif";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-uiHL3m0C6+YnAHRLwzMCSzffrQsSyVcuem6FBtTLxek=";
   };
 

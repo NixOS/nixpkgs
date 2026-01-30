@@ -8,16 +8,16 @@
   pyyaml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hier-config";
-  version = "3.3.0";
+  version = "3.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "netdevops";
     repo = "hier_config";
-    tag = "v${version}";
-    hash = "sha256-rIZ87jzpvSluDo+g3a2aHSmD7JXbZFHa7tvHePUwboI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Q360VBd7r0URu3zTgnrPL9NaasJQnKaIGDc9KjLJMyI=";
   };
 
   build-system = [ poetry-core ];
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to handle hierarchical configurations";
     homepage = "https://github.com/netdevops/hier_config";
-    changelog = "https://github.com/netdevops/hier_config/releases/tag/v${src.tag}";
+    changelog = "https://github.com/netdevops/hier_config/releases/tag/v${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

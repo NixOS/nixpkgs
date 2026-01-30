@@ -57,7 +57,6 @@ buildGoModule rec {
     changelog = "https://github.com/kubearmor/kubearmor-client/releases/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      urandom
       kashw2
     ];
   };

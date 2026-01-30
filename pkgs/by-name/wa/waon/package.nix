@@ -11,14 +11,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "waon";
   version = "0.11";
 
   src = fetchFromGitHub {
     owner = "kichiki";
     repo = "waon";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1xmq8d2rj58xbp4rnyav95y1vnz3r9s9db7xxfa2rd0ilq0ps4y7";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.puckipedia ];
     platforms = lib.platforms.all;
   };
-}
+})

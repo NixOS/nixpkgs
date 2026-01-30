@@ -10,7 +10,7 @@
   procps,
   python3,
   versionCheckHook,
-  xorg,
+  xorg-server,
   nix-update-script,
 
   # chromedriver is more efficient than geckodriver, but is available on less platforms.
@@ -85,7 +85,7 @@ buildNpmPackage (finalAttrs: {
             ]))
             ffmpeg-headless
             imagemagick_light
-            xorg.xorgserver
+            xorg-server
             procps
             coreutils
           ]

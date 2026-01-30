@@ -14,14 +14,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "artyFX";
   version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "openAVproductions";
     repo = "openAV-ArtyFX";
-    rev = "release-${version}";
+    rev = "release-${finalAttrs.version}";
     hash = "sha256-GD9nwXdXSJX5OvAMxEAnngkvRW+E1jrNfWXK122bsTM=";
   };
 
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
     # Build uses `-msse` and `-mfpmath=sse`
     badPlatforms = [ "aarch64-linux" ];
   };
-}
+})

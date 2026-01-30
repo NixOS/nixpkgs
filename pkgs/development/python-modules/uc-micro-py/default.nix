@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "uc-micro-py";
   version = "1.0.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tsutsu3";

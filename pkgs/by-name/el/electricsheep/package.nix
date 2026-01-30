@@ -8,7 +8,7 @@
   lua5_1,
   curl,
   libpng,
-  xorg,
+  libxrender,
   pkg-config,
   flam3,
   libgtop,
@@ -47,7 +47,7 @@ stdenv.mkDerivation {
     lua5_1
     curl
     libpng
-    xorg.libXrender
+    libxrender
     flam3
     libgtop
     boost

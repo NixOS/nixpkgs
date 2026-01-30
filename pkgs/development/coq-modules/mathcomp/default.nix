@@ -99,6 +99,15 @@ let
     "character" = [ "field" ];
     "all" = [ "character" ];
   };
+  meta = {
+    homepage = "https://math-comp.github.io/";
+    license = lib.licenses.cecill-b;
+    maintainers = with lib.maintainers; [
+      vbgl
+      jwiegley
+      cohencyril
+    ];
+  };
 
   mathcomp_ =
     package:
@@ -121,6 +130,7 @@ let
             releaseRev
             repo
             owner
+            meta
             ;
 
           mlPlugin = lib.versions.isLe "8.6" coq.coq-version;
@@ -147,16 +157,6 @@ let
             cd ${pkgpath} || cd ssreflect  # before 2.5, boot didn't exist, make it behave as ssreflect
           ''
           + lib.optionalString (package == "all") pkgallMake;
-
-          meta = {
-            homepage = "https://math-comp.github.io/";
-            license = lib.licenses.cecill-b;
-            maintainers = with lib.maintainers; [
-              vbgl
-              jwiegley
-              cohencyril
-            ];
-          };
         }
         // lib.optionalAttrs (package != "single") { passthru = lib.mapAttrs (p: _: mathcomp_ p) packages; }
         // lib.optionalAttrs withDoc {
@@ -244,4 +244,40 @@ let
     in
     patched-derivation5;
 in
-mathcomp_ (if single then "single" else "all")
+# this is just a wrapper for rocqPackages.mathcomp for Rocq >= 9.0
+if coq.rocqPackages ? mathcomp && version != "2.3.0" && version != "2.4.0" then
+  let
+    mc = coq.rocqPackages.mathcomp.override {
+      inherit version withDoc single;
+      inherit
+        ncurses
+        graphviz
+        lua
+        fetchzip
+        hierarchy-builder
+        ;
+      inherit (coq.rocqPackages) rocq-core;
+    };
+  in
+  mc
+  // {
+    ssreflect = mkCoqDerivation {
+      inherit
+        version
+        defaultVersion
+        release
+        releaseRev
+        repo
+        owner
+        meta
+        ;
+      pname = "mathcomp-ssreflect";
+      propagatedBuildInputs = [
+        mc.boot
+        mc.order
+      ];
+      preBuild = "cd ssreflect";
+    };
+  }
+else
+  mathcomp_ (if single then "single" else "all")

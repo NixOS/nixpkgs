@@ -33,7 +33,8 @@
   libstrangle,
   fluidsynth,
   xorgserver,
-  xorg,
+  xkbcomp,
+  setxkbmap,
   util-linux,
   pkg-config,
   desktop-file-utils,
@@ -54,8 +55,8 @@ let
     libstrangle
     fluidsynth
     xorgserver
-    xorg.setxkbmap
-    xorg.xkbcomp
+    setxkbmap
+    xkbcomp
     # bypass mount suid wrapper which does not work in fhsenv
     util-linux
   ];
@@ -71,7 +72,7 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-CAXKnx5+60MITRM8enkYgFl5ZKM6HCXhCYNyG7kHhuQ=";
   };
 
-  format = "other";
+  pyproject = false;
 
   nativeBuildInputs = [
     appstream-glib

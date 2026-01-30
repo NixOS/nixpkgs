@@ -35,7 +35,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/Aorimn/dislocker/raw/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
-      elitak
       yuannan
     ];
     platforms = lib.platforms.unix;

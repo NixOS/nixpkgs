@@ -16,14 +16,14 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lcdproc";
   version = "0.5.9";
 
   src = fetchFromGitHub {
     owner = "lcdproc";
     repo = "lcdproc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1r885zv1gsh88j43x6fvzbdgfkh712a227d369h4fdcbnnfd0kpm";
   };
 
@@ -90,4 +90,4 @@ stdenv.mkDerivation rec {
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
-}
+})

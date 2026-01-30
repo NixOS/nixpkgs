@@ -11,14 +11,14 @@
   ghostscript,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "signaturepdf";
   version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "24eme";
     repo = "signaturepdf";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-hQPYS3SskakS+8S2gIjoXojDgIET20nz4ig9+VRv8TM=";
   };
 
@@ -59,9 +59,9 @@ stdenv.mkDerivation rec {
     description = "Web software for signing PDFs and also organize pages, edit metadata and compress pdf";
     mainProgram = "signaturepdf";
     homepage = "https://pdf.24eme.fr/";
-    changelog = "https://github.com/24eme/signaturepdf/releases/tag/v${version}";
+    changelog = "https://github.com/24eme/signaturepdf/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ DamienCassou ];
   };
-}
+})

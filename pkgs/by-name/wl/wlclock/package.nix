@@ -13,14 +13,14 @@
   scdoc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wlclock";
   version = "1.0.1";
 
   src = fetchFromSourcehut {
     owner = "~leon_plickat";
     repo = "wlclock";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-aHA4kXHYH+KvAJSep5X3DqsiK6WFpXr3rGQl/KNiUcY=";
   };
 
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux;
     mainProgram = "wlclock";
   };
-}
+})

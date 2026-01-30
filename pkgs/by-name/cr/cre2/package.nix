@@ -9,14 +9,14 @@
   texinfo,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cre2";
   version = "0.3.6";
 
   src = fetchFromGitHub {
     owner = "marcomaggi";
     repo = "cre2";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1h9jwn6z8kjf4agla85b5xf7gfkdwncp0mfd8zwk98jkm8y2qx9q";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
   };
-}
+})

@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   extra-cmake-modules,
   pkg-config,
@@ -49,7 +50,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-n68Ghhsv15TzpOMH4dBTNxa6AYwqN5s2C5pyO9VVaco=";
   };
 
-  patches = [ ./darwin.patch ];
+  patches = [
+    ./darwin.patch
+    # Fix build: Only make the fallthrough define available in C code
+    # https://github.com/86Box/86Box/issues/6607
+    (fetchpatch {
+      name = "fix-fallthrough-define-c-only.patch";
+      url = "https://github.com/86Box/86Box/commit/0092ce15de3efac108b961882f870a8c05e8c38f.patch";
+      hash = "sha256-DqjOtnyk6Zv9XHCLeuxD1wcLfvjGwGFvUWS0alXcchs=";
+    })
+  ];
 
   postPatch = ''
     substituteAllInPlace src/qt/qt_platform.cpp

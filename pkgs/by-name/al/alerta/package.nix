@@ -25,8 +25,6 @@ python3.pkgs.buildPythonApplication rec {
 
   doCheck = false;
 
-  disabled = python3.pythonOlder "3.6";
-
   meta = {
     homepage = "https://alerta.io";
     description = "Alerta Monitoring System command-line interface";

@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "rmcl";
   version = "0.4.2";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

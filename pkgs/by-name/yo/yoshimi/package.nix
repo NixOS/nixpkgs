@@ -17,22 +17,22 @@
   pcre,
   pkg-config,
   readline,
-  xorg,
+  libpthread-stubs,
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yoshimi";
   version = "2.3.5.2";
 
   src = fetchFromGitHub {
     owner = "Yoshimi";
     repo = "yoshimi";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-X4g4AhPHg2ezHnAm8fWunatZgr3/PZxibzACplWogo8=";
   };
 
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   postPatch = ''
     substituteInPlace Misc/Config.cpp --replace /usr $out
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     minixml
     pcre
     readline
-    xorg.libpthreadstubs
+    libpthread-stubs
     zlib
   ];
 
@@ -77,4 +77,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "yoshimi";
   };
-}
+})

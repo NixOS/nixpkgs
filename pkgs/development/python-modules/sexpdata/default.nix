@@ -8,7 +8,7 @@
 buildPythonPackage rec {
   pname = "sexpdata";
   version = "1.0.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

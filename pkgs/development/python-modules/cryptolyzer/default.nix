@@ -72,7 +72,7 @@ buildPythonPackage rec {
     changelog = "https://gitlab.com/coroner/cryptolyzer/-/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mpl20;
     mainProgram = "cryptolyze";
-    maintainers = with lib.maintainers; [ kranzes ];
+    maintainers = [ ];
     teams = with lib.teams; [ ngi ];
   };
 }

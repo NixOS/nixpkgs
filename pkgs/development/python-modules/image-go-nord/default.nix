@@ -44,6 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Schrodinger-Hat/ImageGoNord-pip";
     changelog = "https://github.com/Schroedinger-Hat/ImageGoNord-pip/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kranzes ];
+    maintainers = [ ];
   };
 }

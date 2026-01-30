@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  gcc14Stdenv,
   fetchFromGitHub,
   replaceVars,
   tracy,
@@ -33,6 +34,8 @@
   zlib,
 }:
 let
+  buildStdenv = if stdenv.cc.isGNU then gcc14Stdenv else stdenv;
+
   gtestSkip = [
     # Skip tests requiring network access
     "AwsLevel*DataProvider.FindKeyFixed"
@@ -54,7 +57,7 @@ let
     "MarkerModelTest.*"
   ];
 in
-stdenv.mkDerivation (finalAttrs: {
+buildStdenv.mkDerivation (finalAttrs: {
   pname = "supercell-wx";
   version = "0.5.3";
 

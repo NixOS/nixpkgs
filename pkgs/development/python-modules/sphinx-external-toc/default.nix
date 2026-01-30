@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "sphinx-external-toc";
   version = "1.0.1";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit version;

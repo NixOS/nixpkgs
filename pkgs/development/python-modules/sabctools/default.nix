@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "sabctools";
-  version = "9.2.1";
+  version = "9.3.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lYs0ve17IfDs3OccKweun/J+Sl5ct/HFVHwwEZP2LNk=";
+    hash = "sha256-oZMYxukDhEbE0ybCbGcD40PNy4ktBei4bk0rccb3B4k=";
   };
 
   build-system = [ setuptools ];

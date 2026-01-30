@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "expandvars";
   version = "1.1.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

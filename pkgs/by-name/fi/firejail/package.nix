@@ -9,14 +9,14 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "firejail";
   version = "0.9.76";
 
   src = fetchFromGitHub {
     owner = "netblue30";
     repo = "firejail";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-0zb5olSuXOHeRj4dqeevubedjqOuDnUEBQaD/vOj2CM=";
   };
 
@@ -99,5 +99,6 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
     homepage = "https://firejail.wordpress.com/";
+    mainProgram = "firejail";
   };
-}
+})

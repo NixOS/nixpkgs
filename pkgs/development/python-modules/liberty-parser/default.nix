@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "liberty-parser";
-  version = "0.0.28";
+  version = "0.0.29";
   pyproject = true;
 
   src = fetchFromGitea {
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "tok";
     repo = "liberty-parser";
     tag = version;
-    hash = "sha256-CdsT0R2KVvN0+TfTuauaNpYTKhxx1gAOJJdWNfQb2Dk=";
+    hash = "sha256-rPEZIRxvmNrDTVD4NG7v2BT3jJXtTisfs4txCG4OfnQ=";
   };
 
   # Tests try to write to /tmp directly. use $TMPDIR instead.

@@ -5,12 +5,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "davtest";
   version = "1.0";
 
   src = fetchurl {
-    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/davtest/davtest-${version}.tar.bz2";
+    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/davtest/davtest-${finalAttrs.version}.tar.bz2";
     sha256 = "0kigcgv1bbnan9yr5481s4b9islmvzl2arpg1ig1i39sxrna06y7";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ emilytrau ];
     platforms = lib.platforms.unix;
   };
-}
+})

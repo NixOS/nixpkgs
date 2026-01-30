@@ -11,7 +11,7 @@
   pkg-config,
   yaml-cpp,
   fmt_11,
-  xorg,
+  libx11,
 }:
 let
   sfl-src = fetchFromGitHub {
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     openal
     yaml-cpp
     fmt_11
-    xorg.libX11
+    libx11
   ];
 
   meta = {
@@ -78,5 +78,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ icewind1991 ];
+    mainProgram = "OpenLoco";
   };
 }

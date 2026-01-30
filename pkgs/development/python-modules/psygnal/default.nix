@@ -18,7 +18,7 @@
 buildPythonPackage rec {
   pname = "psygnal";
   version = "0.14.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyapp-kit";

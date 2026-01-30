@@ -3,14 +3,17 @@
   stdenv,
   fetchurl,
   fetchFromGitHub,
+  gcc14Stdenv,
   coreutils,
   net-tools,
-  java,
+  openjdk21,
   scala_3,
   polyml,
   verit,
   vampire,
   eprover-ho,
+  cvc5,
+  csdp,
   rlwrap,
   perl,
   procps,
@@ -18,16 +21,57 @@
   isabelle-components,
   symlinkJoin,
   fetchhg,
+  electron,
 }:
 
 let
-  vampire' = vampire.overrideAttrs (_: {
+  java = openjdk21;
+
+  # There have been issues with proofs failing on NixOS in the past,
+  # so we pin polyml to the exact commit that upstream isabelle uses
+  polyml' = polyml.overrideAttrs {
+    pname = "polyml-for-isabelle";
+    version = "2025-1";
+
+    src = fetchFromGitHub {
+      owner = "polyml";
+      repo = "polyml";
+      rev = "ccd3e3717f7238b9b5d295fea4b5426182dfc0b6";
+      hash = "sha256-wYW8aSvXzhW3hCDeorkD59j+1S6smzsFXHuPYeqo7z8=";
+    };
+
+    configureFlags = [
+      "--enable-intinf-as-int"
+      "--with-gmp"
+      "--disable-shared"
+    ];
+    buildFlags = [ "compiler" ];
+  };
+
+  # Isabelle uses a branch of vampire that is not in the normal release line
+  # that adds support for higher order goals
+  vampireStdenv = if stdenv.hostPlatform.isLinux then gcc14Stdenv else stdenv;
+  vampire' = (vampire.override { stdenv = vampireStdenv; }).overrideAttrs (_: {
+    pname = "vampire-for-isabelle";
+    version = "4.8";
+
     src = fetchFromGitHub {
       owner = "vprover";
       repo = "vampire";
       tag = "v4.8HO4Sledgahammer";
       hash = "sha256-CmppaGa4M9tkE1b25cY1LSPFygJy5yV4kpHKbPqvcVE=";
     };
+
+    patches = [ ./vampire-add-install-directive.patch ];
+
+    postInstall = ''
+      mv $out/bin/vampire_rel $out/bin/vampire
+    '';
+
+    cmakeFlags = [
+      (lib.cmakeFeature "CMAKE_BUILD_HOL" "On")
+      (lib.cmakeFeature "CMAKE_DISABLE_FIND_PACKAGE_Z3" "On")
+    ];
   });
 
   sha1 = stdenv.mkDerivation {
@@ -53,10 +97,20 @@ let
     '';
   };
 
+  cvc5' = cvc5.overrideAttrs {
+    version = "1.2.0";
+    src = fetchFromGitHub {
+      owner = "cvc5";
+      repo = "cvc5";
+      tag = "cvc5-1.2.0";
+      hash = "sha256-Um1x+XgQ5yWSoqtx1ZWbVAnNET2C4GVasIbn0eNfico=";
+    };
+  };
+
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "isabelle";
-  version = "2025";
+  version = "2025-2";
 
   dirname = "Isabelle${finalAttrs.version}";
 
@@ -64,27 +118,35 @@ stdenv.mkDerivation (finalAttrs: {
     if stdenv.hostPlatform.isDarwin then
       fetchurl {
         url = "https://isabelle.in.tum.de/website-${finalAttrs.dirname}/dist/${finalAttrs.dirname}_macos.tar.gz";
-        hash = "sha256-6ldUwiiFf12dOuJU7JgUeX8kU+opDfILL23LLvDi5/g=";
+        hash = "sha256-jxh0luKV8WmVLpRHRa+eSuAMnBzS7UytvPfYmOREkT4=";
       }
     else if stdenv.hostPlatform.isx86 then
       fetchurl {
         url = "https://isabelle.in.tum.de/website-${finalAttrs.dirname}/dist/${finalAttrs.dirname}_linux.tar.gz";
-        hash = "sha256-PR1m3jcYI/4xqormZjj3NXW6wkTwCzGu4dy2LzgUfFY=";
+        hash = "sha256-ogpQe8fBJw2L6WqfP77AY0U4d4nS3CxNPfYmDUe/szw=";
       }
     else
       fetchurl {
         url = "https://isabelle.in.tum.de/website-${finalAttrs.dirname}/dist/${finalAttrs.dirname}_linux_arm.tar.gz";
-        hash = "sha256-p/Hp+7J5gJy5s6BVD5Ma1Mu2OS53I8BS7gKSOYYB0PE=";
+        hash = "sha256-ZQqWabSgh2da+zQpTYLe0vBwTUfVgN2e1FzdyfF2S90=";
       };
 
   nativeBuildInputs = [ java ];
 
   buildInputs = [
-    polyml
+    polyml'
     verit
     vampire'
     eprover-ho
     net-tools
+    cvc5'
+    csdp
+  ];
+
+  patches = [
+    # Make "isabelle build" work when generating documents
+    # See: https://github.com/NixOS/nixpkgs/issues/289529
+    ./fix-copied-permissions.patch
   ];
 
   propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ procps ];
@@ -102,6 +164,9 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs lib/Tools/ bin/
 
+    substituteInPlace src/Pure/ML/ml_settings.scala \
+      --replace-fail 'polyml_home + Path.basic(ml_platform)' 'Path.explode("${polyml'}/bin")'
+
     cat >contrib/verit-*/etc/settings <<EOF
       ISABELLE_VERIT=${verit}/bin/veriT
     EOF
@@ -117,11 +182,21 @@ stdenv.mkDerivation (finalAttrs: {
       VAMPIRE_EXTRA_OPTIONS="--mode casc"
     EOF
 
+    cat >contrib/cvc5-*/etc/settings <<EOF
+      CVC5_HOME=${cvc5'}
+      CVC5_VERSION=${cvc5'.version}
+      CVC5_SOLVER=${cvc5'}/bin/cvc5
+      CVC5_INSTALLED=yes
+    EOF
+
+    cat >contrib/csdp-*/etc/settings <<EOF
+      ISABELLE_CSDP=${csdp}/bin/csdp
+    EOF
+
     cat >contrib/polyml-*/etc/settings <<EOF
       ML_SYSTEM_64=true
-      ML_SYSTEM=${polyml.name}
+      ML_SYSTEM=${polyml'.name}
       ML_PLATFORM=${stdenv.system}
-      ML_HOME=${polyml}/bin
       ML_OPTIONS="--minheap 1000"
       POLYML_HOME="\$COMPONENT"
       ML_SOURCES="\$POLYML_HOME/src"
@@ -134,7 +209,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     echo ISABELLE_LINE_EDITOR=${rlwrap}/bin/rlwrap >>etc/settings
 
-    for comp in contrib/jdk* contrib/polyml-* contrib/verit-* contrib/vampire-* contrib/e-*; do
+    for comp in contrib/jdk* contrib/polyml-* contrib/verit-* contrib/vampire-* \
+                contrib/e-* contrib/cvc5-* contrib/csdp-*; do
       rm -rf $comp/${if stdenv.hostPlatform.isx86 then "x86" else "arm"}*
     done
     rm -rf contrib/*/src
@@ -159,10 +235,15 @@ stdenv.mkDerivation (finalAttrs: {
     arch=${
       if stdenv.hostPlatform.system == "aarch64-linux" then "arm64-linux" else stdenv.hostPlatform.system
     }
-    for f in contrib/*/$arch/{z3,nunchaku,spass,zipperposition}; do
+    for f in contrib/*/$arch/{z3,nunchaku,SPASS,zipperposition}; do
       patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f"${lib.optionalString stdenv.hostPlatform.isAarch64 " || true"}
     done
     patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) contrib/bash_process-*/$arch/bash_process
+
+    ln -sf ${electron}/bin/electron contrib/vscodium-*/*/electron
+    rm contrib/vscodium-*/*/*.so{,.*}
+    rm contrib/vscodium-*/*/chrome*
+
     for d in contrib/kodkodi-*/jni/$arch; do
       patchelf --set-rpath "${
         lib.concatStringsSep ":" [
@@ -192,11 +273,12 @@ stdenv.mkDerivation (finalAttrs: {
       ARGS["''${#ARGS[@]}"]="src/Tools/Setup/$SRC"
     done
     echo "Building isabelle setup"
-    javac -d "$TARGET_DIR" -classpath "${scala_3.bare}/lib/scala3-interfaces-${scala_3.version}.jar:${scala_3.bare}/lib/scala3-compiler_3-${scala_3.version}.jar" "''${ARGS[@]}"
+    javac -d "$TARGET_DIR" -classpath "${scala_3.bare}/lib/scala3-interfaces-${scala_3.version}.jar:${scala_3.bare}/lib/scala3-compiler_3-${scala_3.version}.jar:./contrib/flatlaf-3.6.2/lib/flatlaf-3.6.2-no-natives.jar" "''${ARGS[@]}"
     jar -c -f "$TARGET_DIR/isabelle_setup.jar" -e "isabelle.setup.Setup" -C "$TARGET_DIR" isabelle
     rm -rf "$TARGET_DIR/isabelle"
 
     echo "Building HOL heap"
+    ln -s ${polyml'}/bin ./contrib/polyml-*/
     bin/isabelle build -v -o system_heaps -b HOL
   '';
 
@@ -243,38 +325,49 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     license = lib.licenses.bsd3;
     maintainers = [
-      lib.maintainers.jwiegley
       lib.maintainers.jvanbruegge
+      lib.maintainers.sempiternal-aurora
     ];
-    platforms = lib.platforms.unix;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
 
-  passthru.withComponents =
-    f:
-    let
-      isabelle = finalAttrs.finalPackage;
-      base = "$out/${isabelle.dirname}";
-      components = f isabelle-components;
-    in
-    symlinkJoin {
-      name = "isabelle-with-components-${isabelle.version}";
-      paths = [ isabelle ] ++ (map (c: c.override { inherit isabelle; }) components);
+  passthru = {
+    vampire = vampire';
+    polyml = polyml';
+    cvc5 = cvc5';
+    sha1 = sha1;
+    withComponents =
+      f:
+      let
+        isabelle = finalAttrs.finalPackage;
+        base = "$out/${isabelle.dirname}";
+        components = f isabelle-components;
+      in
+      symlinkJoin {
+        name = "isabelle-with-components-${isabelle.version}";
+        paths = [ isabelle ] ++ (map (c: c.override { inherit isabelle; }) components);
 
-      postBuild = ''
-        rm $out/bin/*
+        postBuild = ''
+          rm $out/bin/*
 
-        cd ${base}
-        rm bin/*
-        cp ${isabelle}/${isabelle.dirname}/bin/* bin/
-        rm etc/components
-        cat ${isabelle}/${isabelle.dirname}/etc/components > etc/components
+          cd ${base}
+          rm bin/*
+          cp ${isabelle}/${isabelle.dirname}/bin/* bin/
+          rm etc/components
+          cat ${isabelle}/${isabelle.dirname}/etc/components > etc/components
 
-        export HOME=$TMP
-        bin/isabelle install $out/bin
-        patchShebangs $out/bin
-      ''
-      + lib.concatMapStringsSep "\n" (c: ''
-        echo contrib/${c.pname}-${c.version} >> ${base}/etc/components
-      '') components;
-    };
+          export HOME=$TMP
+          bin/isabelle install $out/bin
+          patchShebangs $out/bin
+        ''
+        + lib.concatMapStringsSep "\n" (c: ''
+          echo contrib/${c.pname}-${c.version} >> ${base}/etc/components
+        '') components;
+      };
+  };
 })

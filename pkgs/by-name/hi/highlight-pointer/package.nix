@@ -3,7 +3,8 @@
   stdenv,
   fetchFromGitHub,
   libX11,
-  xorg,
+  libxi,
+  libxfixes,
   libXext,
 }:
 
@@ -21,8 +22,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libX11
     libXext
-    xorg.libXi
-    xorg.libXfixes
+    libxi
+    libxfixes
   ];
 
   installPhase = ''

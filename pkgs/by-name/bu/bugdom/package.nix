@@ -8,14 +8,14 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bugdom";
   version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "jorio";
     repo = "bugdom";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-0c7v5tSqYuqtLOFl4sqD7+naJNqX/wlKHVntkZQGJ8A=";
     fetchSubmodules = true;
   };
@@ -80,4 +80,4 @@ stdenv.mkDerivation rec {
     mainProgram = "Bugdom";
     platforms = lib.platforms.unix;
   };
-}
+})

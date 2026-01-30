@@ -126,6 +126,9 @@ stdenv'.mkDerivation (finalAttrs: {
     hash = "sha256-fNnQRfGfNc7rbk8npkcYtoAqRjJc6MaV4mqtSJxd0EM=";
   };
 
+  # Minimal backport of hiprt 3.x support from https://projects.blender.org/blender/blender/pulls/144889
+  patches = lib.optional rocmSupport ./hiprt-3-compat.patch;
+
   postPatch =
     (lib.optionalString stdenv.hostPlatform.isDarwin ''
       : > build_files/cmake/platform/platform_apple_xcode.cmake
@@ -342,7 +345,7 @@ stdenv'.mkDerivation (finalAttrs: {
       mv $out/Blender.app $out/Applications
     ''
     + ''
-      buildPythonPath "$pythonPath"
+      buildPythonPath "''${pythonPath[*]}"
       wrapProgram $blenderExecutable \
         --prefix PATH : $program_PATH \
         --prefix PYTHONPATH : "$program_PYTHONPATH" \

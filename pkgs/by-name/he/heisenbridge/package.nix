@@ -8,7 +8,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "heisenbridge";
   version = "1.15.4";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hifi";

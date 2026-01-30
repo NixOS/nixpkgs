@@ -14,7 +14,7 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
-  xorg,
+  libxcb,
   libdrm,
   libgbm,
   pipewire,
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     libgbm
     breakpad
     jemalloc
-    xorg.libxcb
+    libxcb
     pam
     pipewire
   ];

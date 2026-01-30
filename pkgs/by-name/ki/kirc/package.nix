@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kirc";
   version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "mcpcpc";
     repo = "kirc";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-ModcUryLJTbf19ZKZDQ05Wqqac5vBsCN7SaT0/TD4Ro=";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

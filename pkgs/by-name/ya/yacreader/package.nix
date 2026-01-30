@@ -8,14 +8,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yacreader";
   version = "9.15.0";
 
   src = fetchFromGitHub {
     owner = "YACReader";
     repo = "yacreader";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-5vCjr8WRwa7Q/84Itgg07K1CJKGnWA1z53et2IxxReE=";
   };
 
@@ -78,4 +78,4 @@ stdenv.mkDerivation rec {
     mainProgram = "YACReader";
     maintainers = [ ];
   };
-}
+})

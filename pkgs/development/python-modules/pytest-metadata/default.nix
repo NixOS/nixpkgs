@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "pytest-metadata";
   version = "3.1.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "pytest_metadata";

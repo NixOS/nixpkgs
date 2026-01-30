@@ -15,7 +15,7 @@ buildPythonPackage rec {
   pname = "pure-protobuf";
   version = "3.1.5";
 
-  format = "pyproject";
+  pyproject = true;
   # < 3.10 requires get-annotations which isn't packaged yet
 
   src = fetchFromGitHub {

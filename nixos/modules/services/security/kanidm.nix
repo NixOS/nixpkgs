@@ -65,13 +65,12 @@ let
   # Merge bind mount paths and remove paths where a prefix is already mounted.
   # This makes sure that if e.g. the tls_chain is in the nix store and /nix/store is already in the mount
   # paths, no new bind mount is added. Adding subpaths caused problems on ofborg.
-  hasPrefixInList =
-    list: newPath: any (path: hasPrefix (builtins.toString path) (builtins.toString newPath)) list;
+  hasPrefixInList = list: newPath: any (path: hasPrefix (toString path) (toString newPath)) list;
   mergePaths = foldl' (
     merged: newPath:
     let
       # If the new path is a prefix to some existing path, we need to filter it out
-      filteredPaths = filter (p: !hasPrefix (builtins.toString newPath) (builtins.toString p)) merged;
+      filteredPaths = filter (p: !hasPrefix (toString newPath) (toString p)) merged;
       # If a prefix of the new path is already in the list, do not add it
       filteredNew = optional (!hasPrefixInList filteredPaths newPath) newPath;
     in
@@ -239,8 +238,8 @@ in
     enablePam = mkEnableOption "the Kanidm PAM and NSS integration";
 
     package = mkPackageOption pkgs "kanidm" {
-      example = "kanidm_1_4";
-      extraDescription = "If not set will receive a specific version based on stateVersion. Set to `pkgs.kanidm` to always receive the latest version, with the understanding that this could introduce breaking changes.";
+      example = "kanidm_1_8";
+      extraDescription = "Must be set to an explicit version.";
     };
 
     serverSettings = mkOption {
@@ -875,16 +874,6 @@ in
         )
       );
 
-    services.kanidm.package =
-      let
-        pkg =
-          if lib.versionAtLeast config.system.stateVersion "24.11" then
-            pkgs.kanidm_1_4
-          else
-            lib.warn "No default kanidm package found for stateVersion = '${config.system.stateVersion}'. Using unpinned version. Consider setting `services.kanidm.package = pkgs.kanidm_1_x` to avoid upgrades introducing breaking changes." pkgs.kanidm;
-      in
-      lib.mkDefault pkg;
-
     environment.systemPackages = mkIf cfg.enableClient [ cfg.package ];
 
     systemd.tmpfiles.settings."10-kanidm" = mkIf enableServerBackup {
@@ -1081,6 +1070,7 @@ in
   };
 
   meta.maintainers = with lib.maintainers; [
+    adamcstephens
     Flakebi
     oddlama
   ];

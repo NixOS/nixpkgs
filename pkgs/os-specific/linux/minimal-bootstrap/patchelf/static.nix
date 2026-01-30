@@ -68,6 +68,7 @@ bash.runCommand "${pname}-${version}"
       --prefix=$out \
       --build=${buildPlatform.config} \
       --host=${hostPlatform.config} \
+      --disable-dependency-tracking \
       CC=musl-gcc \
       CXXFLAGS=-static
 

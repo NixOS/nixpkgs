@@ -15,12 +15,12 @@
   gnome,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-power-manager";
   version = "43.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-power-manager/${lib.versions.major version}/gnome-power-manager-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-power-manager/${lib.versions.major finalAttrs.version}/gnome-power-manager-${finalAttrs.version}.tar.xz";
     hash = "sha256-faq0i73bMOnfKrplDLYNBeZnyfiFrOagoeeVDgy90y8=";
   };
 
@@ -55,4 +55,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

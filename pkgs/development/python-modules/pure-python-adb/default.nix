@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   lib,
-  pythonOlder,
   pytestCheckHook,
 }:
 
@@ -21,7 +20,7 @@ buildPythonPackage rec {
     async = [ aiofiles ];
   };
 
-  doCheck = pythonOlder "3.10"; # all tests result in RuntimeError on 3.10
+  doCheck = false; # all tests result in RuntimeError
 
   nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.async;
 

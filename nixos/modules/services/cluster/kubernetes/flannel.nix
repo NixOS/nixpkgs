@@ -17,7 +17,7 @@ in
     enable = lib.mkEnableOption "flannel networking";
 
     openFirewallPorts = lib.mkOption {
-      description = ''Whether to open the Flannel UDP ports in the firewall on all interfaces.'';
+      description = "Whether to open the Flannel UDP ports in the firewall on all interfaces.";
       type = lib.types.bool;
       default = true;
     };

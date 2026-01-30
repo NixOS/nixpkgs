@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "ghdorker";
   version = "0.3.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

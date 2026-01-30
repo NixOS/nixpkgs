@@ -179,7 +179,7 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     mkdir -p "$out/bin"
     ln -s "${pkg_path}/ghidraRun" "$out/bin/ghidra"
-    for bin ${pkg_path}/support/*; do
+    for bin in ${pkg_path}/support/*; do
       if [[ -x $bin ]]; then
         ln -s "$bin" "$out/bin/ghidra-$(basename $bin)"
       fi

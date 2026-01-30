@@ -17,20 +17,15 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "opengothic";
-  version = "1.0.3010";
+  version = "1.0.3549";
 
   src = fetchFromGitHub {
     owner = "Try";
     repo = "OpenGothic";
     tag = "opengothic-v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-ELDuyoAZmulMjFFctuCmdKDUMtrbVVndJxIf9Xo82N4=";
+    hash = "sha256-dXKZPfV434HHVPgulZZEKhypR6q+uACgmoNWvNQv92w=";
   };
-
-  outputs = [
-    "dev"
-    "out"
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -54,13 +49,18 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "-Werror" ""
   '';
 
-  cmakeFlags = [
-    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10")
-  ];
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm755 -t $out/bin opengothic/Gothic2Notr
+    install -Dm755 -t $out/lib opengothic/libTempest.so
+
+    runHook postInstall
+  '';
 
   postFixup = ''
     wrapProgram $out/bin/Gothic2Notr \
-      --set LD_PRELOAD "${lib.getLib alsa-lib}/lib/libasound.so.2"
+      --prefix LD_PRELOAD : "${lib.getLib alsa-lib}/lib/libasound.so.2"
   '';
 
   passthru.updateScript = nix-update-script {

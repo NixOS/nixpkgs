@@ -7,14 +7,14 @@
   wdiff,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.8";
   pname = "pkgdiff";
 
   src = fetchFromGitHub {
     owner = "lvc";
     repo = "pkgdiff";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-/xhORi/ZHC4B2z6UYPOvDzfgov1DcozRjX0K1WYrqXM=";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "pkgdiff";
   };
-}
+})

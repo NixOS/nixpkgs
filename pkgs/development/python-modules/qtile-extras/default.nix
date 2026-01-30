@@ -25,6 +25,8 @@
 buildPythonPackage rec {
   pname = "qtile-extras";
   version = "0.34.1";
+  # nixpkgs-update: no auto update
+  # should be updated alongside with `qtile`
   pyproject = true;
 
   src = fetchFromGitHub {

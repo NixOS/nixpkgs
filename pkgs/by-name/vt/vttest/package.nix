@@ -4,14 +4,14 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vttest";
   version = "20241208";
 
   src = fetchurl {
     urls = [
-      "https://invisible-mirror.net/archives/vttest/vttest-${version}.tgz"
-      "https://invisible-island.net/archives/vttest/vttest-${version}.tgz"
+      "https://invisible-mirror.net/archives/vttest/vttest-${finalAttrs.version}.tgz"
+      "https://invisible-island.net/archives/vttest/vttest-${finalAttrs.version}.tgz"
     ];
     sha256 = "sha256-j+47rH6H1KpKIXvSs4q5kQw7jPmmBbRQx2zMCtKmUZ0=";
   };
@@ -23,4 +23,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "vttest";
   };
-}
+})

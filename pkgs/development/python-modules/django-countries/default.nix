@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  setuptools,
+  uv-build,
 
   # dependencies
   asgiref,
@@ -20,17 +20,17 @@
 
 buildPythonPackage rec {
   pname = "django-countries";
-  version = "7.6.1";
+  version = "8.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SmileyChris";
     repo = "django-countries";
     tag = "v${version}";
-    hash = "sha256-IR9cJbDVkZrcF3Ti70mV8VeXINQDK8OpwUTWVjD4Zn0=";
+    hash = "sha256-MtRlZFrTlY7t0n08X0aYN5HRGZUGLHkcU1gaZCtj07Q=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ uv-build ];
 
   dependencies = [
     asgiref
@@ -52,7 +52,7 @@ buildPythonPackage rec {
       forms, flag icons static files, and a country field for models.
     '';
     homepage = "https://github.com/SmileyChris/django-countries";
-    changelog = "https://github.com/SmileyChris/django-countries/blob/v${version}/CHANGES.rst";
+    changelog = "https://github.com/SmileyChris/django-countries/blob/v${version}/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };

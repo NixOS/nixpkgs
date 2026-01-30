@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sshpass";
   version = "1.10";
 
   src = fetchurl {
-    url = "mirror://sourceforge/sshpass/sshpass-${version}.tar.gz";
+    url = "mirror://sourceforge/sshpass/sshpass-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-rREGwgPLtWGFyjutjGzK/KO0BkaWGU2oefgcjXvf7to=";
   };
 
@@ -21,4 +21,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "sshpass";
   };
-}
+})

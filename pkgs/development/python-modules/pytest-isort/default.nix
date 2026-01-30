@@ -2,18 +2,16 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  importlib-metadata,
   isort,
   poetry-core,
   pytest,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-isort";
   version = "4.0.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stephrdev";
@@ -26,7 +24,7 @@ buildPythonPackage rec {
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [ isort ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  propagatedBuildInputs = [ isort ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

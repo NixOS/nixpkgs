@@ -4,11 +4,11 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libantlr3c";
   version = "3.4";
   src = fetchurl {
-    url = "https://www.antlr3.org/download/C/libantlr3c-${version}.tar.gz";
+    url = "https://www.antlr3.org/download/C/libantlr3c-${finalAttrs.version}.tar.gz";
     sha256 = "0lpbnb4dq4azmsvlhp6khq1gy42kyqyjv8gww74g5lm2y6blm4fa";
   };
 
@@ -25,4 +25,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ vbgl ];
   };
-}
+})

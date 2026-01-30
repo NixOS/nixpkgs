@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libwhich";
   version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "vtjnash";
     repo = "libwhich";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-JNIWdI12sL3TZqVA3GeH0KbgqFDbMsEdecea3392Goc=";
   };
 
@@ -26,4 +26,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

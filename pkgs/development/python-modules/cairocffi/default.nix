@@ -20,7 +20,7 @@
 buildPythonPackage rec {
   pname = "cairocffi";
   version = "1.7.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

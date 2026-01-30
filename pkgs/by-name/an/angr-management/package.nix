@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   python312,
-  xorg,
+  libxcb-cursor,
 }:
 
 python312.pkgs.buildPythonApplication rec {
@@ -23,7 +23,7 @@ python312.pkgs.buildPythonApplication rec {
     "qtawesome"
   ];
 
-  buildInputs = [ xorg.xcbutilcursor ];
+  buildInputs = [ libxcb-cursor ];
 
   build-system = with python312.pkgs; [ setuptools ];
 

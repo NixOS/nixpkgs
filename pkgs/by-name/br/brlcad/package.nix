@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "BRL-CAD";
     repo = "brlcad";
-    rev = "refs/tags/rel-${lib.replaceStrings [ "." ] [ "-" ] version}";
+    tag = "rel-${lib.replaceStrings [ "." ] [ "-" ] version}";
     hash = "sha256-23UTeH4gY2x/QGYZ64glAkf6LmsXBAppIOHgoUdxgpo=";
   };
 

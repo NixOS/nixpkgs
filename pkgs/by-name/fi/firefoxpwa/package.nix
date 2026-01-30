@@ -24,7 +24,7 @@
   pkg-config,
   stdenv,
   udev,
-  xorg,
+  libxscrnsaver,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -74,7 +74,7 @@ rustPlatform.buildRustPackage rec {
         pciutils
         pipewire
         udev
-        xorg.libXScrnSaver
+        libxscrnsaver
       ]
       ++ gtk_modules
       ++ extraLibs;

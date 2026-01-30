@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "regress";
   version = "2025.10.1";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

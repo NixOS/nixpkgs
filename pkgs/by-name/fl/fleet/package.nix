@@ -12,12 +12,12 @@
 }:
 let
   pname = "fleet";
-  version = "4.78.1";
+  version = "4.79.1";
   src = fetchFromGitHub {
     owner = "fleetdm";
     repo = "fleet";
     tag = "fleet-v${version}";
-    hash = "sha256-3F9vzY1JAw2DMzUhMl7j9I8RGjVXulQH2JcYCFuAwDY=";
+    hash = "sha256-o/exnUy5vXi+Ey8smd36588M8B7GQlG5ZqtGyYySkxQ=";
   };
 
   frontend = stdenvNoCC.mkDerivation {
@@ -54,7 +54,7 @@ in
 buildGoModule (finalAttrs: {
   inherit pname version src;
 
-  vendorHash = "sha256-EwPbZLcqJV5J7ieoQwAJLIn4wwMlwZoTtWaXgvY3pR0=";
+  vendorHash = "sha256-CYqg8kHGUu+wd9l5UYURqmoR8/13HX9t5xHwjzdgJhU=";
 
   subPackages = [
     "cmd/fleet"

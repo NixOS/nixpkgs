@@ -18,7 +18,7 @@
   gobject-introspection,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libmbim";
   version = "1.32.0";
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "mobile-broadband";
     repo = "libmbim";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-+4INXuH2kbKs9C6t4bOJye7yyfYH/BLukmgDVvXo+u0=";
   };
 
@@ -73,9 +73,9 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://www.freedesktop.org/wiki/Software/libmbim/";
     description = "Library for talking to WWAN modems and devices which speak the Mobile Interface Broadband Model (MBIM) protocol";
-    changelog = "https://gitlab.freedesktop.org/mobile-broadband/libmbim/-/raw/${version}/NEWS";
+    changelog = "https://gitlab.freedesktop.org/mobile-broadband/libmbim/-/raw/${finalAttrs.version}/NEWS";
     teams = [ lib.teams.freedesktop ];
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
   };
-}
+})

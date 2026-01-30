@@ -34,6 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Coloquinte/PlaceRoute";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.coloquinte ];
+    maintainers = [ ];
   };
 })

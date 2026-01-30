@@ -30,17 +30,17 @@ let
     ];
   };
 in
-stdenv.mkDerivation rec {
-  version = "16.3.37";
+stdenv.mkDerivation (finalAttrs: {
+  version = "16.3.45";
   pname = "jmol";
 
   src =
     let
-      baseVersion = "${lib.versions.major version}.${lib.versions.minor version}";
+      baseVersion = "${lib.versions.major finalAttrs.version}.${lib.versions.minor finalAttrs.version}";
     in
     fetchurl {
-      url = "mirror://sourceforge/jmol/Jmol/Version%20${baseVersion}/Jmol%20${version}/Jmol-${version}-binary.tar.gz";
-      hash = "sha256-T/55q7+P2rVGlH1s9sD99u/WV8TSP5K4sZYu7MOxRWQ=";
+      url = "mirror://sourceforge/jmol/Jmol/Version%20${baseVersion}/Jmol%20${finalAttrs.version}/Jmol-${finalAttrs.version}-binary.tar.gz";
+      hash = "sha256-TGL8EU9Ow2rbQpLBbz12AJvO8xHNjmUrlIwIp+4qTgQ=";
     };
 
   patchPhase = ''
@@ -68,4 +68,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     teams = [ lib.teams.sage ];
   };
-}
+})

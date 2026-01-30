@@ -16,7 +16,7 @@ let
   cfg = config.services.quake3-server;
 
   configFile = pkgs.writeText "q3ds-extra.cfg" ''
-    set net_port ${builtins.toString cfg.port}
+    set net_port ${toString cfg.port}
 
     ${cfg.extraConfig}
   '';

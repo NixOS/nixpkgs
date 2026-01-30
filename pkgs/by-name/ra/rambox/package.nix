@@ -5,7 +5,7 @@
   makeDesktopItem,
 }:
 
-let
+appimageTools.wrapType2 rec {
   pname = "rambox";
   version = "2.5.2";
 
@@ -14,26 +14,21 @@ let
     hash = "sha256-sx/XLrsDIt2cF4xv/J5i1ZTMf7eHsccBjPEMJ/WISmg=";
   };
 
-  desktopItem = (
-    makeDesktopItem {
-      desktopName = "Rambox";
-      name = pname;
-      exec = "rambox";
-      icon = pname;
-      categories = [ "Network" ];
-    }
-  );
+  desktopItem = makeDesktopItem {
+    desktopName = "Rambox";
+    name = "rambox";
+    exec = "rambox";
+    icon = "rambox";
+    categories = [ "Network" ];
+  };
 
   appimageContents = appimageTools.extract {
     inherit pname version src;
   };
-in
-appimageTools.wrapType2 {
-  inherit pname version src;
 
   extraInstallCommands = ''
     mkdir -p $out/share/applications $out/share/icons/hicolor/256x256/apps
-    install -Dm644 ${appimageContents}/usr/share/icons/hicolor/256x256/apps/rambox*.png $out/share/icons/hicolor/256x256/apps/${pname}.png
+    install -Dm644 ${appimageContents}/usr/share/icons/hicolor/256x256/apps/rambox*.png $out/share/icons/hicolor/256x256/apps/rambox.png
     install -Dm644 ${desktopItem}/share/applications/* $out/share/applications
   '';
 

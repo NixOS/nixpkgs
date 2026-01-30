@@ -573,6 +573,16 @@
       "source": "git",
       "version": "0.0.1"
     },
+    "flutter_staggered_grid_view": {
+      "dependency": "direct main",
+      "description": {
+        "name": "flutter_staggered_grid_view",
+        "sha256": "19e7abb550c96fbfeb546b23f3ff356ee7c59a019a651f8f102a4ba9b7349395",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.7.0"
+    },
     "flutter_test": {
       "dependency": "direct dev",
       "description": "flutter",
@@ -592,11 +602,12 @@
     "flutter_to_debian": {
       "dependency": "direct dev",
       "description": {
-        "name": "flutter_to_debian",
-        "sha256": "d23534407334b331ce20fbaa8395b9ecc255d0c047136b8998715f36933ee696",
-        "url": "https://pub.dev"
+        "path": ".",
+        "ref": "HEAD",
+        "resolved-ref": "3777c91b6b1cc0b7c03357c67ca216d4313c3db5",
+        "url": "https://github.com/venera-app/flutter_to_debian.git"
       },
-      "source": "hosted",
+      "source": "git",
       "version": "2.0.2"
     },
     "flutter_web_plugins": {
@@ -820,11 +831,11 @@
       "dependency": "transitive",
       "description": {
         "name": "meta",
-        "sha256": "e3641ec5d63ebf0d9b41bd43201a66e3fc79a65db5f61fc181f04cd27aab950c",
+        "sha256": "23f08335362185a5ea2ad3a4e597f1375e78bce8a040df5c600c8d3552ef2394",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.16.0"
+      "version": "1.17.0"
     },
     "mime": {
       "dependency": "direct main",
@@ -1189,11 +1200,11 @@
       "dependency": "transitive",
       "description": {
         "name": "test_api",
-        "sha256": "522f00f556e73044315fa4585ec3270f1808a4b186c936e612cab0b565ff1e00",
+        "sha256": "ab2726c1a94d3176a45960b6234466ec367179b87dd74f1611adb1f3b5fb9d55",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.7.6"
+      "version": "0.7.7"
     },
     "typed_data": {
       "dependency": "transitive",
@@ -1400,15 +1411,15 @@
       "dependency": "direct main",
       "description": {
         "name": "zip_flutter",
-        "sha256": "c4d5a34c5803def866bc550926bb16fe89717c9b7304695d5b2ede30964eb8a8",
+        "sha256": "baecf8deb6bf53a50e5ab513707ab56cc0c25f5b43333aa56ef562e8e7057357",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.0.12"
+      "version": "0.0.13"
     }
   },
   "sdks": {
     "dart": ">=3.8.0 <4.0.0",
-    "flutter": ">=3.35.5"
+    "flutter": ">=3.38.5"
   }
 }

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   pname = "uplc";
   version = "1.0.10";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OpShin";

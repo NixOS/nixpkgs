@@ -38,7 +38,7 @@
   wayland,
   wayland-protocols,
   wrapGAppsHook3,
-  xorg,
+  libxdmcp,
   mimalloc,
   opencsg,
   ctestCheckHook,
@@ -106,7 +106,7 @@ clangStdenv.mkDerivation rec {
       qtmultimedia
     ]
     ++ lib.optionals clangStdenv.hostPlatform.isLinux [
-      xorg.libXdmcp
+      libxdmcp
       libICE
       libSM
       wayland
@@ -121,7 +121,7 @@ clangStdenv.mkDerivation rec {
     "-DUSE_BUILTIN_OPENCSG=OFF"
     "-DUSE_BUILTIN_MANIFOLD=OFF"
     "-DUSE_BUILTIN_CLIPPER2=OFF"
-    "-DOPENSCAD_VERSION=\"${builtins.replaceStrings [ "-" ] [ "." ] version}\""
+    "-DOPENSCAD_VERSION=\"${builtins.replaceStrings [ "-" ] [ "." ] (lib.strings.getVersion version)}\""
     "-DCMAKE_UNITY_BUILD=OFF" # broken compile with unity
     # IPO
     "-DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=lld"

@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "slip10";
   version = "1.0.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

@@ -10,16 +10,16 @@
   writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mistral-vibe";
-  version = "1.3.3";
+  version = "2.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mistralai";
     repo = "mistral-vibe";
-    tag = "v${version}";
-    hash = "sha256-nW7pRSyv+t/7yatx84PMgxsHRTfRqqpy6rz+dQfLluU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GqJHFgeaq2oBF1HI0g30IJ+QSj2szvCUUiT7up4VOpk=";
   };
 
   build-system = with python3Packages; [
@@ -37,7 +37,7 @@ python3Packages.buildPythonApplication rec {
   ];
   dependencies = with python3Packages; [
     agent-client-protocol
-    aiofiles
+    anyio
     httpx
     mcp
     mistralai
@@ -51,6 +51,8 @@ python3Packages.buildPythonApplication rec {
     rich
     textual
     textual-speedups
+    tree-sitter
+    tree-sitter-grammars.tree-sitter-bash
     tomli-w
     watchfiles
   ];
@@ -67,22 +69,16 @@ python3Packages.buildPythonApplication rec {
     versionCheckHook
     writableTmpDirAsHomeHook
   ];
-  versionCheckProgramArg = "--version";
   versionCheckKeepEnvironment = [ "HOME" ];
-  pytestFlags = [ "tests/cli/test_clipboard.py" ];
 
-  disabledTests = [
-    # AssertionError: assert '/nix/store/00000000000000000000000000000000-bash-5.3p3/bin/sh:
-    # warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8): No such file or directory\n' == ''
-    "test_decodes_non_utf8_bytes"
-    "test_runs_echo_successfully"
-    "test_truncates_output_to_max_bytes"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # AssertionError: assert 3 == 4
-    "test_get_copy_fns_with_wl_copy"
-    "test_get_copy_fns_with_both_system_tools"
-    "test_get_copy_fns_with_xclip"
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # AssertionError
+    "test_rebuilds_index_when_mass_change_threshold_is_exceeded"
+    "test_updates_index_incrementally_by_default"
+    "test_updates_index_on_file_creation"
+    "test_updates_index_on_file_deletion"
+    "test_updates_index_on_file_rename"
+    "test_updates_index_on_folder_rename"
   ];
 
   disabledTestPaths = [
@@ -96,12 +92,13 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Minimal CLI coding agent by Mistral";
     homepage = "https://github.com/mistralai/mistral-vibe";
-    changelog = "https://github.com/mistralai/mistral-vibe/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/mistralai/mistral-vibe/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       GaetanLepage
       shikanime
+      mana-byte
     ];
     mainProgram = "vibe";
   };
-}
+})

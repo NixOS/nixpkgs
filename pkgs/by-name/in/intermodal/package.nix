@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "intermodal";
-  version = "0.1.14";
+  version = "0.1.15";
 
   src = fetchFromGitHub {
     owner = "casey";
     repo = "intermodal";
     rev = "v${version}";
-    hash = "sha256-N3TumAwHcHDuVyY4t6FPNOO28D7xX5jheCTodfn71/Q=";
+    hash = "sha256-dNDJHLxKsuAwQifNHTjr4qhPx+GGY0KUAeWz1qthqOo=";
   };
 
-  cargoHash = "sha256-NqbsDi47AhYw4hNcoWfXNUnc7WjC1en7mbyCJvhYdR4=";
+  cargoHash = "sha256-QYovc4oSnQgEwjPDjyKyoAdYy0XkRLa1K6aFn9yrX4o=";
 
   # include_hidden test tries to use `chflags` on darwin
   checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [

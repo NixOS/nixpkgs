@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "komari-monitor";
     repo = "komari-agent";
-    tag = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-aWCsaiYkpj0D9hr7V3pxSk14pMD2E117vwemt9Ckqv0=";
   };
 

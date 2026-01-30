@@ -1,74 +1,80 @@
 {
   lib,
-  asdf,
-  asdf-astropy,
-  astropy,
-  beautifulsoup4,
   buildPythonPackage,
-  contourpy,
-  dask,
-  drms,
-  extension-helpers,
   fetchFromGitHub,
-  fsspec,
-  glymur,
-  h5netcdf,
-  h5py,
-  hypothesis,
-  lxml,
-  matplotlib,
+
+  # build-system
+  extension-helpers,
   numpy,
-  opencv-python,
-  packaging,
-  pandas,
-  parfive,
-  pyerfa,
-  pytest-astropy,
-  pytestCheckHook,
-  pytest-mock,
-  python-dateutil,
-  pythonOlder,
-  reproject,
-  requests,
-  scikit-image,
-  scipy,
   setuptools,
   setuptools-scm,
+
+  # dependencies
+  astropy,
+  fsspec,
+  packaging,
+  parfive,
+  pyerfa,
+  requests,
+
+  # optional-dependencies
+  # asdf
+  asdf,
+  asdf-astropy,
+  # dask
+  dask,
+  # image
+  scipy,
+  # jpeg
+  glymur,
+  lxml,
+  # jupyter
+  itables,
+  ipywidgets,
+  # map
+  contourpy,
+  matplotlib,
+  reproject,
+  # net
+  beautifulsoup4,
+  drms,
+  python-dateutil,
   tqdm,
-  writableTmpDirAsHomeHook,
   zeep,
+  # opencv
+  opencv-python,
+  # scikit-image
+  scikit-image,
+  # timeseries
+  h5netcdf,
+  h5py,
+  pandas,
+
+  # tests
+  hypothesis,
+  pytest-astropy,
+  pytest-mock,
+  pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sunpy";
-  version = "7.0.2";
+  version = "7.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "sunpy";
     repo = "sunpy";
-    tag = "v${version}";
-    hash = "sha256-1LT6Dr9OZYIZkOICSYD8lt5v3Gn1gZGN4GWeJL6IH5w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-FeKmg3dZfbbjt1lDliF4uXf8PvM3J5HWtYqKRriJ4l0=";
   };
-
-  # As of 2025-10-15, this requires numpy >=1.25.0,<2.3.
-  # (The >=1.25.0 constraint is in dependencies, the <2.3 in build-system)
-  # We can't use 1.x because it's not supported on Python 3.13+.
-  # And since numpy 2.x is at 2.3.2, it's not supported.
-  # However, the upper bound is "for matching the numpy deprecation policy",
-  # so relaxing it should be OK. (It silently was overridden previously,
-  # due to the use of `format = "setuptools"` instead of `pyproject = true`)
-  postPatch = ''
-    substituteInPlace pyproject.toml --replace-fail "numpy>=2.0.0rc1,<2.3" "numpy"
-  '';
 
   build-system = [
     extension-helpers
+    numpy
     setuptools
     setuptools-scm # Technically needs setuptools-scm[toml], but that's our default.
-    numpy
   ];
 
   dependencies = [
@@ -82,7 +88,7 @@ buildPythonPackage rec {
   ]
   ++ parfive.optional-dependencies.ftp;
 
-  optional-dependencies = {
+  optional-dependencies = lib.fix (self: {
     asdf = [
       asdf
       asdf-astropy
@@ -92,6 +98,10 @@ buildPythonPackage rec {
     jpeg2000 = [
       glymur
       lxml
+    ];
+    jupyter = [
+      itables
+      ipywidgets
     ];
     map = [
       contourpy
@@ -125,30 +135,30 @@ buildPythonPackage rec {
     # We can't use `with` here because "map" would still be the builtin, and
     # we can't below because scikit-image would still be this package's argument.
     core = lib.concatLists [
-      optional-dependencies.image
-      optional-dependencies.map
-      optional-dependencies.net
-      optional-dependencies.timeseries
-      optional-dependencies.visualization
+      self.image
+      self.map
+      self.net
+      self.timeseries
+      self.visualization
     ];
     all = lib.concatLists [
-      optional-dependencies.core
-      optional-dependencies.asdf
-      optional-dependencies.jpeg2000
-      optional-dependencies.opencv
+      self.core
+      self.asdf
+      self.jpeg2000
+      self.opencv
       # optional-dependencies.spice
-      optional-dependencies.scikit-image
+      self.scikit-image
     ];
-  };
+  });
 
   nativeCheckInputs = [
     hypothesis
     pytest-astropy
-    pytestCheckHook
     pytest-mock
+    pytestCheckHook
     writableTmpDirAsHomeHook
   ]
-  ++ optional-dependencies.all;
+  ++ finalAttrs.passthru.optional-dependencies.all;
 
   disabledTests = [
     "rst" # Docs
@@ -156,6 +166,7 @@ buildPythonPackage rec {
     "test_find_dependencies" # Needs cdflib
     # Needs mpl-animators
     "sunpy.coordinates.utils.GreatArc"
+    "test_cutout_not_on_disk_when_tracking"
     "test_expand_list_generator_map"
     "test_great_arc_different_observer"
     "test_great_arc_points_differentiates"
@@ -196,14 +207,14 @@ buildPythonPackage rec {
     "sunpy/coordinates/tests/test_spice.py"
   ];
 
-  pytestFlags = [ "-Wignore::DeprecationWarning" ];
-
   pythonImportsCheck = [ "sunpy" ];
 
   meta = {
     description = "Python for Solar Physics";
     homepage = "https://sunpy.org";
+    downloadPage = "github.com/sunpy/sunpy";
+    changelog = "https://docs.sunpy.org/en/stable/whatsnew/changelog.html";
     license = lib.licenses.bsd2;
     maintainers = [ ];
   };
-}
+})

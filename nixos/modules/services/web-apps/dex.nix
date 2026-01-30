@@ -13,7 +13,7 @@ let
     client:
     if client ? secretFile then
       (
-        (builtins.removeAttrs client [ "secretFile" ])
+        (removeAttrs client [ "secretFile" ])
         // {
           secret = client.secretFile;
         }
@@ -21,10 +21,10 @@ let
     else
       client;
   filteredSettings = mapAttrs (
-    n: v: if n == "staticClients" then (builtins.map fixClient v) else v
+    n: v: if n == "staticClients" then (map fixClient v) else v
   ) cfg.settings;
   secretFiles = flatten (
-    builtins.map (c: optional (c ? secretFile) c.secretFile) (cfg.settings.staticClients or [ ])
+    map (c: optional (c ? secretFile) c.secretFile) (cfg.settings.staticClients or [ ])
   );
 
   settingsFormat = pkgs.formats.yaml { };

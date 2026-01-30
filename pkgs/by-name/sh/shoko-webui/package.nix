@@ -11,13 +11,13 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "shoko-webui";
-  version = "2.2.0";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "ShokoAnime";
     repo = "Shoko-WebUI";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-plXTAN3V0tcAe+uMs4XwYHO1UC9DCAxcMPVNKdFobcY=";
+    hash = "sha256-/frP6qI5xAmogb5a5AA83IJxgOhVUi6X0E4h3Qg5u6w=";
   };
 
   # Avoid requiring git as a build time dependency. It's used for version
@@ -28,7 +28,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 3;
-    hash = "sha256-4/Qbg+jUagPUiQPoc57drorbEkn1ShsPZynvct+HX7A=";
+    hash = "sha256-rTlem83dFptgvKUKUaHK8vi5B0FBehPFtkCUhOnUKd0=";
   };
 
   nativeBuildInputs = [

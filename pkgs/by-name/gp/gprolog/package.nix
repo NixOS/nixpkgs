@@ -4,44 +4,52 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gprolog";
   version = "1.5.0";
 
   src = fetchurl {
     urls = [
-      "mirror://gnu/gprolog/gprolog-${version}.tar.gz"
-      "http://www.gprolog.org/gprolog-${version}.tar.gz"
+      "mirror://gnu/gprolog/gprolog-${finalAttrs.version}.tar.gz"
+      "http://www.gprolog.org/gprolog-${finalAttrs.version}.tar.gz"
+      "https://github.com/didoudiaz/gprolog/archive/refs/tags/v${finalAttrs.version}.tar.gz"
     ];
-    sha256 = "sha256-ZwZCtDwPqifr1olh77F+vnB2iPkbaAlWbd1gYTlRLAE=";
+    hash = "sha256-ZwZCtDwPqifr1olh77F+vnB2iPkbaAlWbd1gYTlRLAE=";
   };
+
+  __structuredAttrs = true;
+  enableParallelBuilding = true;
 
   hardeningDisable = lib.optional stdenv.hostPlatform.isi686 "pic";
 
   patchPhase = ''
-    sed -i -e "s|/tmp/make.log|$TMPDIR/make.log|g" src/Pl2Wam/check_boot
+    sed -i -e "s|/tmp/make.log|$TMPDIR/make.log|g" Pl2Wam/check_boot
   '';
 
-  preConfigure = ''
-    cd src
-    configureFlagsArray=(
-      "--with-install-dir=$out"
-      "--without-links-dir"
-      "--with-examples-dir=$out/share/gprolog-${version}/examples"
-      "--with-doc-dir=$out/share/gprolog-${version}/doc"
-    )
-  '';
+  sourceRoot = "gprolog-${finalAttrs.version}/src";
 
-  postInstall = ''
-    mv -v $out/[A-Z]* $out/gprolog.ico $out/share/gprolog-${version}/
-  '';
+  configureFlags = [
+    "--without-links-dir"
+    "--with-install-dir=${placeholder "out"}"
+    "--with-examples-dir=${placeholder "out"}/share/gprolog-${finalAttrs.version}/examples"
+    "--with-doc-dir=${placeholder "out"}/share/gprolog-${finalAttrs.version}/doc"
+    "--htmldir=${placeholder "out"}/share/gprolog-${finalAttrs.version}/doc"
+    "--with-c-flags=-std=gnu17"
+  ];
 
   doCheck = true;
+
+  postInstall = ''
+    mv -v $out/[A-Z]* $out/gprolog.ico $out/share/gprolog-${finalAttrs.version}
+  '';
 
   meta = {
     homepage = "https://www.gnu.org/software/gprolog/";
     description = "GNU Prolog, a free Prolog compiler with constraint solving over finite domains";
-    license = lib.licenses.lgpl3Plus;
+    license = with lib.licenses; [
+      lgpl3Plus # and/or
+      gpl2Plus
+    ];
 
     longDescription = ''
       GNU Prolog is a free Prolog compiler with constraint solving
@@ -67,6 +75,6 @@ stdenv.mkDerivation rec {
       declarativity of logic programming.
     '';
 
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.all;
   };
-}
+})

@@ -17,12 +17,12 @@ let
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ugs";
   version = "2.1.17";
 
   src = fetchzip {
-    url = "https://github.com/winder/Universal-G-Code-Sender/releases/download/v${version}/UniversalGcodeSender.zip";
+    url = "https://github.com/winder/Universal-G-Code-Sender/releases/download/v${finalAttrs.version}/UniversalGcodeSender.zip";
     hash = "sha256-7Ed3oz6E/9pEX01Xk1UokRxo5vf80JrcdBaPoT7hgm4=";
   };
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
     makeWrapper ${jre}/bin/java $out/bin/ugs \
       --prefix PATH : ${lib.makeBinPath [ jre ]} \
-      --add-flags "-jar ${src}/UniversalGcodeSender.jar"
+      --add-flags "-jar ${finalAttrs.src}/UniversalGcodeSender.jar"
 
     runHook postInstall
   '';
@@ -54,4 +54,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "ugs";
   };
-}
+})

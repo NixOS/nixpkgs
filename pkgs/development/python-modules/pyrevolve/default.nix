@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "pyrevolve";
   version = "2.2.6";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "devitocodes";

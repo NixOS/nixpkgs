@@ -85,7 +85,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       publicDomain
     ];
     maintainers = with lib.maintainers; [
-      normalcea
       pandapip1
     ];
     platforms = lib.platforms.all;

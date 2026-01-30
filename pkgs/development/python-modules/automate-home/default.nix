@@ -8,7 +8,6 @@
   hiredis,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   pytz,
   pyyaml,
   setuptools,
@@ -20,7 +19,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   # Typing issue
-  disabled = pythonOlder "3.8" || pythonAtLeast "3.12";
+  disabled = pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;

@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Gemba";
     repo = "skyscraper";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-z6Y5JUKvwxYgE7sdXvRNOsbUTON5i/DX1q9y4wRXixE=";
   };
 

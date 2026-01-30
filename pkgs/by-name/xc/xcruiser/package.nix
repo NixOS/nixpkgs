@@ -12,12 +12,12 @@
   makeDesktopItem,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xcruiser";
   version = "0.30";
 
   src = fetchurl {
-    url = "mirror://sourceforge/xcruiser/xcruiser/xcruiser-${version}/xcruiser-${version}.tar.gz";
+    url = "mirror://sourceforge/xcruiser/xcruiser/xcruiser-${finalAttrs.version}/xcruiser-${finalAttrs.version}.tar.gz";
     sha256 = "1r8whva38xizqdh7jmn6wcmfmsndc67pkw22wzfzr6rq0vf6hywi";
   };
 
@@ -62,4 +62,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux;
     mainProgram = "xcruiser";
   };
-}
+})

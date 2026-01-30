@@ -7,14 +7,14 @@
   libnetfilter_queue,
   libnfnetlink,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "thc-ipv6";
   version = "3.8";
 
   src = fetchFromGitHub {
     owner = "vanhauser-thc";
     repo = "thc-ipv6";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "07kwika1zdq62s5p5z94xznm77dxjxdg8k0hrg7wygz50151nzmx";
   };
 
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.agpl3Only;
   };
-}
+})

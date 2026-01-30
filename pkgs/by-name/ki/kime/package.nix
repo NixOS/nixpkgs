@@ -13,7 +13,7 @@
   dbus,
   libdbusmenu,
   withXim ? true,
-  xorg,
+  libxcb,
   cairo,
   withGtk3 ? true,
   gtk3,
@@ -110,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
       libdbusmenu
     ]
     ++ lib.optionals withXim [
-      xorg.libxcb
+      libxcb
       cairo
     ]
     ++ lib.optionals withGtk3 [ gtk3 ]

@@ -9,12 +9,12 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "svnfs";
   version = "0.4";
 
   src = fetchurl {
-    url = "http://www.jmadden.eu/wp-content/uploads/svnfs/svnfs-${version}.tgz";
+    url = "http://www.jmadden.eu/wp-content/uploads/svnfs/svnfs-${finalAttrs.version}.tgz";
     sha256 = "1lrzjr0812lrnkkwk60bws9k1hq2iibphm0nhqyv26axdsygkfky";
   };
 
@@ -56,4 +56,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "svnfs";
   };
-}
+})

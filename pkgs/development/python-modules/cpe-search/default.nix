@@ -7,19 +7,20 @@
   hatchling,
   mariadb,
   requests,
+  tqdm,
   ujson,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cpe-search";
-  version = "0.1.7";
+  version = "0.2.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ra1nb0rn";
     repo = "cpe_search";
-    tag = "v${version}";
-    hash = "sha256-gCWKVSVDJNspRwDzHi7+vUETGErWYs3jlpsqkOqSY4I=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GZzMS1zmI7w8L2qVa57KtY3sb/quULyXrPQYTcPFxTI=";
   };
 
   build-system = [ hatchling ];
@@ -28,6 +29,7 @@ buildPythonPackage rec {
     aiohttp
     aiolimiter
     requests
+    tqdm
     ujson
   ];
 
@@ -37,6 +39,7 @@ buildPythonPackage rec {
       aiolimiter
       mariadb
       requests
+      tqdm
       ujson
     ];
     mariadb = [
@@ -52,8 +55,8 @@ buildPythonPackage rec {
   meta = {
     description = "Search for Common Platform Enumeration (CPE) strings using software names and titles";
     homepage = "https://github.com/ra1nb0rn/cpe_search";
-    changelog = "https://github.com/ra1nb0rn/cpe_search/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/ra1nb0rn/cpe_search/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

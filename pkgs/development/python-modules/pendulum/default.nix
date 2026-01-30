@@ -3,8 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
-  pythonOlder,
   isPyPy,
 
   # build-system
@@ -15,7 +13,6 @@
   iconv,
 
   # dependencies
-  importlib-resources,
   python-dateutil,
   time-machine,
   tzdata,
@@ -58,9 +55,6 @@ buildPythonPackage rec {
   ]
   ++ lib.optionals (!isPyPy) [
     time-machine
-  ]
-  ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
   ];
 
   pythonImportsCheck = [ "pendulum" ];

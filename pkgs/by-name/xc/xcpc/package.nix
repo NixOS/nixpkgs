@@ -10,14 +10,14 @@
   libepoxy,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.52.1";
   pname = "xcpc";
 
   src = fetchFromGitHub {
     owner = "ponceto";
     repo = "xcpc-emulator";
-    rev = "xcpc-${version}";
+    rev = "xcpc-${finalAttrs.version}";
     hash = "sha256-N4UfnCbebaAhx0490niMov/JqlrXt5goblWbW0ajkcc=";
   };
 
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "xcpc";
   };
-}
+})

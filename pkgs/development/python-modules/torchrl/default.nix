@@ -10,6 +10,7 @@
   numpy,
   pybind11,
   setuptools,
+  setuptools-scm,
   torch,
 
   # dependencies
@@ -45,6 +46,7 @@
   vllm,
   # marl
   pettingzoo,
+  vmas,
   # offline-data
   h5py,
   huggingface-hub,
@@ -71,16 +73,16 @@
   scipy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "torchrl";
-  version = "0.10.1";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "rl";
-    tag = "v${version}";
-    hash = "sha256-Vd/w11P4NVrx2xki+VYlXQaM8F+vpdokke8ZAHg6h0Q=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Ae1zhc3lESCsuAJbbjrT5Vv0zTIiiBw9HBtKwWsbVzc=";
   };
 
   postPatch = ''
@@ -94,6 +96,7 @@ buildPythonPackage rec {
     numpy
     pybind11
     setuptools
+    setuptools-scm
     torch
   ];
   dontUseCmakeConfigure = true;
@@ -139,7 +142,7 @@ buildPythonPackage rec {
     marl = [
       # dm-meltingpot (unpackaged)
       pettingzoo
-      # vmas (unpackaged)
+      vmas
     ];
     offline-data = [
       h5py
@@ -154,6 +157,9 @@ buildPythonPackage rec {
     ];
     open-spiel = [
       # open-spiel (unpackaged)
+    ];
+    procgen = [
+      # procgen (unpackaged)
     ];
     rendering = [ moviepy ];
     replay-buffer = [ torch ];
@@ -191,10 +197,10 @@ buildPythonPackage rec {
     scipy
     torchvision
   ]
-  ++ optional-dependencies.atari
-  ++ optional-dependencies.gym-continuous
-  ++ optional-dependencies.llm
-  ++ optional-dependencies.rendering;
+  ++ finalAttrs.passthru.optional-dependencies.atari
+  ++ finalAttrs.passthru.optional-dependencies.gym-continuous
+  ++ finalAttrs.passthru.optional-dependencies.llm
+  ++ finalAttrs.passthru.optional-dependencies.rendering;
 
   disabledTests = [
     # Require network
@@ -284,13 +290,16 @@ buildPythonPackage rec {
     # which is not the same as the test file we want to collect:
     #   /build/source/test/smoke_test.py
     "test/llm"
+
+    # Hang indefinitely
+    "test/services/test_services.py"
   ];
 
   meta = {
     description = "Modular, primitive-first, python-first PyTorch library for Reinforcement Learning";
     homepage = "https://github.com/pytorch/rl";
-    changelog = "https://github.com/pytorch/rl/releases/tag/v${version}";
+    changelog = "https://github.com/pytorch/rl/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

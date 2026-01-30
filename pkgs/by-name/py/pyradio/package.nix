@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pyradio";
-  version = "0.9.3.11.21";
+  version = "0.9.3.11.22";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "coderholic";
     repo = "pyradio";
     tag = version;
-    hash = "sha256-elNApj+zslOd2BvXKxLPaCrUhLYBN38yqi6xgFAponI=";
+    hash = "sha256-JUVlaKKprgnGiZzZ0J6VSePrSdCWuWQzhuTTiCeB12U=";
   };
 
   nativeBuildInputs = [
@@ -44,6 +44,12 @@ python3Packages.buildPythonApplication rec {
 
   postInstall = ''
     installManPage *.1
+
+    install -Dm644 $src/devel/pyradio.desktop \
+      "$out/share/applications/pyradio.desktop"
+
+    install -Dm644 "$src/pyradio/icons/pyradio.png" \
+      "$out/share/icons/hicolor/512x512/apps/pyradio.png"
   '';
 
   meta = {
@@ -54,6 +60,7 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       contrun
+      magicquark
       yayayayaka
     ];
   };

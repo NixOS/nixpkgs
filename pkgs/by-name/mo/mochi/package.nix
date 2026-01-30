@@ -5,7 +5,7 @@
   fetchzip,
   lib,
   stdenvNoCC,
-  xorg,
+  libxshmfence,
 }:
 
 let
@@ -22,7 +22,7 @@ let
 
     appimageContents = appimageTools.extractType2 { inherit pname version src; };
 
-    extraPkgs = pkgs: [ xorg.libxshmfence ];
+    extraPkgs = pkgs: [ libxshmfence ];
 
     extraInstallCommands = ''
       install -Dm444 ${appimageContents}/${pname}.desktop -t $out/share/applications/

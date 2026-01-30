@@ -54,6 +54,11 @@ let
     # Remove hardcoded NATIVE_SYSTEM_HEADER_DIR
     ./no-system-headers.patch
   ];
+
+  # config.sub was generated with outdated autotools, which get confused by
+  # 4-component target tuples
+  fakeBuildPlatform = lib.strings.removeSuffix "-musl" buildPlatform.config;
+  fakeHostPlatform = lib.strings.removeSuffix "-musl" hostPlatform.config;
 in
 bash.runCommand "${pname}-${version}"
   {
@@ -132,12 +137,13 @@ bash.runCommand "${pname}-${version}"
 
     bash ./configure \
       --prefix=$out \
-      --build=${buildPlatform.config} \
-      --host=${hostPlatform.config} \
+      --build=${fakeBuildPlatform} \
+      --host=${fakeHostPlatform} \
       --with-native-system-header-dir=${musl}/include \
       --with-build-sysroot=${musl} \
       --enable-languages=c,c++ \
       --disable-bootstrap \
+      --disable-dependency-tracking \
       --disable-libmudflap \
       --disable-libstdcxx-pch \
       --disable-lto \

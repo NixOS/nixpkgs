@@ -198,6 +198,8 @@ let
         inherit pname version;
         inherit plugins;
 
+        strictDeps = true;
+
         __structuredAttrs = true;
         dontUnpack = true;
         inherit
@@ -338,8 +340,7 @@ let
           unwrapped = neovim-unwrapped;
           initRc = neovimRcContent';
 
-          tests = callPackage ./tests {
-          };
+          tests = callPackage ./tests { };
         };
 
         meta = {

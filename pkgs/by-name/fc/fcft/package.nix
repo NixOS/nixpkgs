@@ -31,7 +31,7 @@ let
   ];
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fcft";
   version = "3.3.3";
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     domain = "codeberg.org";
     owner = "dnkl";
     repo = "fcft";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-MkGlph9WpqH4daov5ZZPO2ua2mUbrsuo8Xk6GoKhoxg=";
   };
 
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://codeberg.org/dnkl/fcft";
-    changelog = "https://codeberg.org/dnkl/fcft/releases/tag/${version}";
+    changelog = "https://codeberg.org/dnkl/fcft/releases/tag/${finalAttrs.version}";
     description = "Simple library for font loading and glyph rasterization";
     maintainers = with lib.maintainers; [
       fionera
@@ -94,4 +94,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = with lib.platforms; linux;
   };
-}
+})

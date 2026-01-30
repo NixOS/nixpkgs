@@ -104,7 +104,6 @@ lib.checkListOfEnum "${pname}: color variants" colorVariantList colorVariants
       license = lib.licenses.gpl3Plus;
       maintainers = with lib.maintainers; [
         fuzen
-        d3vil0p3r
       ];
       platforms = lib.platforms.unix;
     };

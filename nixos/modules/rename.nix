@@ -76,6 +76,10 @@ in
     ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [
       "programs"
+      "ecryptfs"
+    ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [
+      "programs"
       "gnome-documents"
     ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule
@@ -139,6 +143,10 @@ in
       "cgmanager"
       "enable"
     ] "cgmanager was deprecated by lxc and therefore removed from nixpkgs.")
+    (mkRemovedOptionModule [
+      "services"
+      "charybdis"
+    ] "The charybdis module has been removed, the project was archived in 2021.")
     (mkRemovedOptionModule [
       "services"
       "chatgpt-retrieval-plugin"
@@ -447,6 +455,9 @@ in
     '')
     (mkRemovedOptionModule [ "services" "simplesamlphp" ] ''
       services.simplesamlphp has been vulnerable and unmaintained in nixpkgs.
+    '')
+    (mkRemovedOptionModule [ "security" "pam" "enableEcryptfs" ] ''
+      security.pam.enableFscrypt was removed since it was unmaintained in nixpkgs.
     '')
     (mkRemovedOptionModule [ "security" "rngd" ] ''
       rngd is not necessary for any device that the kernel recognises

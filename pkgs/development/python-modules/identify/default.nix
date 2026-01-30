@@ -8,16 +8,16 @@
   ukkonen,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "identify";
-  version = "2.6.15";
+  version = "2.6.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pre-commit";
     repo = "identify";
-    tag = "v${version}";
-    hash = "sha256-YA9DwtAFjFYkycCJjBDXgIE4FKTt3En7fvw5xe37GZU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+iLIU2NfKogFAdbAXXER3G7cDyvcey9pR+0HifQZoh8=";
   };
 
   build-system = [ setuptools ];
@@ -37,4 +37,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "identify-cli";
   };
-}
+})

@@ -9,13 +9,13 @@
   enable-tools ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libgpiod";
   version = "2.2.2";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-MePv6LsK+8zCxG8l4vyiiZPSVqv9F4H4KQB0gHjm0YM=";
   };
 
@@ -53,4 +53,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

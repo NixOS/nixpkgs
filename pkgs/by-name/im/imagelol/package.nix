@@ -8,14 +8,14 @@
   stb,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "imagelol";
   version = "0.2";
 
   src = fetchFromGitHub {
     owner = "MCRedstoner2004";
     repo = "imagelol";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "0978zdrfj41jsqm78afyyd1l64iki9nwjvhd8ynii1b553nn4dmd";
     fetchSubmodules = true;
   };
@@ -70,4 +70,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "ImageLOL";
   };
-}
+})

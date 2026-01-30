@@ -1,0 +1,26 @@
+diff --git a/engine/signals.c b/engine/signals.c
+index b522f19..7f89bcd 100644
+--- a/engine/signals.c
++++ b/engine/signals.c
+@@ -399,7 +399,7 @@ void install_signal_handlers(void)
+ #endif
+   };
+   int i;
+-  void (*throw_handler)() = die_on_signal ? graceful_exit : signal_throw;
++  void (*throw_handler)(int) = die_on_signal ? graceful_exit : signal_throw;
+ #ifdef SIGSTKSZ 
+   stack_t sigstack;
+   int sas_retval=-1;
+diff --git a/engine/support.c b/engine/support.c
+index 021fa22..069c32f 100644
+--- a/engine/support.c
++++ b/engine/support.c
+@@ -79,7 +79,7 @@ char *tilde_cstr(Char *from, UCell size, int clear)
+ {
+   char *s1,*s2;
+   int s1_len, s2_len;
+-  struct passwd *getpwnam (), *user_entry;
++  struct passwd *getpwnam (const char *), *user_entry;
+ 
+   if (size<1 || from[0]!='~')
+     return cstr(from, size, clear);

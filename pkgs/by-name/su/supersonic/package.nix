@@ -7,7 +7,13 @@
   copyDesktopItems,
   pkg-config,
   desktopToDarwinBundle,
-  xorg,
+  libxxf86vm,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxext,
+  libxcursor,
+  libx11,
   wayland,
   wayland-protocols,
   libxkbcommon,
@@ -45,15 +51,15 @@ buildGoModule rec {
     mpv-unwrapped
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    xorg.libXxf86vm
-    xorg.libX11
+    libxxf86vm
+    libx11
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && !waylandSupport) [
-    xorg.libXrandr
-    xorg.libXinerama
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXext
+    libxrandr
+    libxinerama
+    libxcursor
+    libxi
+    libxext
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && waylandSupport) [
     wayland

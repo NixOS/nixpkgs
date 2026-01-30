@@ -15,14 +15,14 @@ let
     ]
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sickgear";
   version = "3.33.2";
 
   src = fetchFromGitHub {
     owner = "SickGear";
     repo = "SickGear";
-    rev = "release_${version}";
+    rev = "release_${finalAttrs.version}";
     hash = "sha256-8cynBaVbFDI1hNwP03crkOf8Av+NCWr0xJLsZJpHLGs=";
   };
 
@@ -54,4 +54,4 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/SickGear/SickGear";
     maintainers = with lib.maintainers; [ rembo10 ];
   };
-}
+})

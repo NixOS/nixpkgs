@@ -9,12 +9,12 @@
   patches ? [ ],
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sent";
   version = "1";
 
   src = fetchurl {
-    url = "https://dl.suckless.org/tools/sent-${version}.tar.gz";
+    url = "https://dl.suckless.org/tools/sent-${finalAttrs.version}.tar.gz";
     sha256 = "0cxysz5lp25mgww73jl0mgip68x7iyvialyzdbriyaff269xxwvv";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ pSub ];
   };
-}
+})

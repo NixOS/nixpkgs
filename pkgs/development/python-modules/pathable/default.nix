@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "pathable";
   version = "0.4.4";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "p1c2u";

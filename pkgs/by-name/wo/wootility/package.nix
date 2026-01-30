@@ -7,10 +7,10 @@
 
 let
   pname = "wootility";
-  version = "5.2.2";
+  version = "5.2.3";
   src = fetchurl {
     url = "https://wootility-updates.ams3.cdn.digitaloceanspaces.com/wootility-linux/Wootility-${version}.AppImage";
-    sha256 = "sha256-0ROk+Qv874zxoHFznWbdVYSwdui5XNqHGu5hcWzo4Wg=";
+    sha256 = "sha256-AoToN2oQ0kUnXRYPDEFUk4jS/CXGOn4adD2gyaB/wGo=";
   };
 in
 
@@ -39,7 +39,7 @@ appimageTools.wrapType2 {
 
   extraPkgs =
     pkgs: with pkgs; [
-      xorg.libxkbfile
+      libxkbfile
     ];
 
   meta = {

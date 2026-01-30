@@ -20,11 +20,11 @@
 }:
 let
   pname = "glibc";
-  version = "2.38";
+  version = "2.42";
 
   src = fetchurl {
     url = "mirror://gnu/libc/glibc-${version}.tar.xz";
-    hash = "sha256-+4KZiZiyspllRnvBtp0VLpwwfSzzAcnq+0VVt3DvP9I=";
+    hash = "sha256-0XdeMuRijmTvkw9DW2e7Y691may2viszW58Z8WUJ8X8=";
   };
 
   linkerFile =
@@ -33,6 +33,7 @@ let
       i686-linux = "ld-linux";
     }
     .${buildPlatform.system};
+
 in
 bash.runCommand "${pname}-${version}"
   {
@@ -101,12 +102,14 @@ bash.runCommand "${pname}-${version}"
       --prefix=$out \
       --build=${buildPlatform.config} \
       --host=${hostPlatform.config} \
-      --with-headers=${linux-headers}/include
+      --with-headers=${linux-headers}/include \
+      --disable-dependency-tracking
 
     # Build
     make -j $NIX_BUILD_CORES
 
     # Install
     make -j $NIX_BUILD_CORES INSTALL_UNCOMPRESSED=yes install
+    ln -s $(ls -d ${linux-headers}/include/* | grep -v scsi\$) $out/include/
     find $out/{bin,sbin,lib,libexec} -type f -exec strip --strip-unneeded {} + || true
   ''

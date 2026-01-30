@@ -20,14 +20,14 @@
   withPipewire ? stdenv.hostPlatform.isLinux,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cava";
   version = "0.10.6";
 
   src = fetchFromGitHub {
     owner = "karlstav";
     repo = "cava";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-dWPW9vd9LdGALt7Po4nZnW5HkivtZcIUBlXEFurq2os=";
   };
 
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   versionCheckProgramArg = "-v";
 
   preAutoreconf = ''
-    echo ${version} > version
+    echo ${finalAttrs.version} > version
   '';
 
   meta = {
@@ -76,4 +76,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "cava";
   };
-}
+})

@@ -10,6 +10,7 @@
 
   # dependencies
   huggingface-hub,
+  numpy,
   scikit-learn,
   scipy,
   torch,
@@ -31,22 +32,23 @@
   pytest-cov-stub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sentence-transformers";
-  version = "5.2.0";
+  version = "5.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "sentence-transformers";
-    tag = "v${version}";
-    hash = "sha256-WD5uTfAbDYYeSXlgznSs4XyN1fAILxILmmSHmLosmV4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+ZJb56yo58nJtQz6LIyqsQA4yAFuDGeRRlkj0+iwUJ4=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     huggingface-hub
+    numpy
     scikit-learn
     scipy
     torch
@@ -72,7 +74,7 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "sentence_transformers" ];
 
@@ -173,8 +175,8 @@ buildPythonPackage rec {
   meta = {
     description = "Multilingual Sentence & Image Embeddings with BERT";
     homepage = "https://github.com/huggingface/sentence-transformers";
-    changelog = "https://github.com/huggingface/sentence-transformers/releases/tag/${src.tag}";
+    changelog = "https://github.com/huggingface/sentence-transformers/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dit7ya ];
   };
-}
+})

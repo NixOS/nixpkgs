@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "py-dormakaba-dkey";
   version = "1.0.6";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "emontnemery";

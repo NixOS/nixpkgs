@@ -76,6 +76,10 @@ buildPythonPackage rec {
   ]
   ++ lib.optionals runTorchTests [ torch ];
 
+  disabledTestMarks = [
+    "network"
+  ];
+
   disabledTests = [
     # attempts external network requests
     "test_with_remote"
@@ -83,6 +87,14 @@ buildPythonPackage rec {
   ++ lib.optionals (pythonAtLeast "3.14") [
     # https://github.com/Blosc/python-blosc2/issues/551
     "test_expand_dims"
+  ];
+
+  disabledTestPaths = [
+    # Threads grow without limit
+    # https://github.com/Blosc/python-blosc2/issues/556
+    "tests/ndarray/test_lazyexpr.py"
+    "tests/ndarray/test_lazyexpr_fields.py"
+    "tests/ndarray/test_reductions.py"
   ];
 
   passthru.c-blosc2 = c-blosc2;

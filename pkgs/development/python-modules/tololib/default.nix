@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitLab {
     owner = "MatthiasLohr";
     repo = "tololib";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-dfyc96VcauERv2E5I6nOIXAHbmTHiRLqS+0XH0GB5HM=";
   };
 

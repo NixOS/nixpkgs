@@ -3,6 +3,7 @@
   lib,
   git,
   fetchFromGitHub,
+  pythonAtLeast,
   setuptools,
   git-annex,
   pyside6,
@@ -53,6 +54,10 @@ buildPythonPackage {
     pytest-qt
     git
     git-annex
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+    "test_lsfiles"
   ];
 
   pythonImportsCheck = [ "datalad_gooey" ];

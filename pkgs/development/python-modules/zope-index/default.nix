@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zope.index";
-    tag = "${version}";
+    tag = version;
     hash = "sha256-dHapd/+pJh6qzVx9FGSMmPsGbz8NhAoPqufXm3FOuM8=";
   };
 

@@ -13,18 +13,18 @@
 let
   stdenv = gccStdenv;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "clfft";
   version = "2.12.2";
 
   src = fetchFromGitHub {
     owner = "clMathLibraries";
     repo = "clFFT";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-yp7u6qhpPYQpBw3d+VLg0GgMyZONVII8BsBCEoRZm4w=";
   };
 
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   postPatch = ''
     sed -i '/-m64/d;/-m32/d' CMakeLists.txt
@@ -59,4 +59,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ chessai ];
   };
-}
+})

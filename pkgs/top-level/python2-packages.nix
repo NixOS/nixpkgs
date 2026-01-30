@@ -7,70 +7,49 @@ self: super:
 with self;
 with super;
 {
-  attrs = callPackage ../development/python2-modules/attrs { };
-
-  backports-functools-lru-cache =
-    callPackage ../development/python2-modules/backports-functools-lru-cache
-      { };
+  attrs = disabled super.attrs;
 
   bootstrapped-pip = toPythonModule (callPackage ../development/python2-modules/bootstrapped-pip { });
 
-  cffi = callPackage ../development/python2-modules/cffi { inherit cffi; };
+  cffi = disabed super.cffi;
 
-  configparser = callPackage ../development/python2-modules/configparser { };
+  configparser = disabled super.configparser;
 
-  contextlib2 = callPackage ../development/python2-modules/contextlib2 { };
+  contextlib2 = disabled super.contextlib2;
 
-  coverage = callPackage ../development/python2-modules/coverage { };
+  coverage = disabled super.coverage;
 
-  enum = callPackage ../development/python2-modules/enum { };
+  filelock = disabled super.filelock;
 
-  filelock = callPackage ../development/python2-modules/filelock { };
+  hypothesis = disabled super.hypothesis;
 
-  futures = callPackage ../development/python2-modules/futures { };
+  importlib-metadata = disabled super.importlib-metadata;
 
-  hypothesis = callPackage ../development/python2-modules/hypothesis { };
+  jinja2 = disabled super.jinja2;
 
-  importlib-metadata = callPackage ../development/python2-modules/importlib-metadata { };
+  markupsafe = disabled super.markupsafe;
 
-  jinja2 = callPackage ../development/python2-modules/jinja2 { };
+  mock = disabled super.mock;
 
-  markupsafe = callPackage ../development/python2-modules/markupsafe { };
+  more-itertools = disabled super.more-itertools;
 
-  mock = callPackage ../development/python2-modules/mock { };
+  ninja = disabled super.ninja;
 
-  more-itertools = callPackage ../development/python2-modules/more-itertools { };
-
-  # ninja python stub was created to help simplify python builds using PyPA's
-  # build tool in Python 3, but it does not yet support Python 2
-  ninja = pkgs.buildPackages.ninja;
-
-  packaging = callPackage ../development/python2-modules/packaging { };
+  packaging = disabled super.packaging;
 
   pip = callPackage ../development/python2-modules/pip { };
 
-  pluggy = callPackage ../development/python2-modules/pluggy { };
+  pluggy = disabled super.pluggy;
 
-  pycairo = callPackage ../development/python2-modules/pycairo {
-    inherit (pkgs.buildPackages) meson;
-  };
+  pycairo = disabled super.pycairo;
 
-  pygobject2 = callPackage ../development/python2-modules/pygobject { };
+  pyparsing = disabled super.pyparsing;
 
-  pygtk = callPackage ../development/python2-modules/pygtk { };
+  pytest = disabled super.pytest;
 
-  pyparsing = callPackage ../development/python2-modules/pyparsing { };
+  pytest_4 = disabled super.pytest;
 
-  pytest = pytest_4;
-
-  pytest_4 = callPackage ../development/python2-modules/pytest {
-    # hypothesis tests require pytest that causes dependency cycle
-    hypothesis = self.hypothesis.override {
-      doCheck = false;
-    };
-  };
-
-  pytest-xdist = callPackage ../development/python2-modules/pytest-xdist { };
+  pytest-xdist = disabled super.pytest-xdist;
 
   recoll = disabled super.recoll;
 
@@ -78,26 +57,15 @@ with super;
 
   rpm = disabled super.rpm;
 
-  scandir = callPackage ../development/python2-modules/scandir { };
-
   setuptools = callPackage ../development/python2-modules/setuptools { };
 
-  setuptools-scm = callPackage ../development/python2-modules/setuptools-scm { };
+  six = disabled super.six;
 
-  typing = callPackage ../development/python2-modules/typing { };
-
-  six = super.six.overridePythonAttrs (_: {
-    doCheck = false; # circular dependency with pytest
-  });
-
-  wcwidth = callPackage ../development/python2-modules/wcwidth {
-    inherit wcwidth;
-  };
+  wcwidth = disabled super.wcwitch;
 
   wheel = callPackage ../development/python2-modules/wheel { };
 
   zeek = disabled super.zeek;
 
-  zipp = callPackage ../development/python2-modules/zipp { };
-
+  zipp = disabled super.zipp;
 }

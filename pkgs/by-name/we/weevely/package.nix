@@ -51,6 +51,6 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "weevely";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ d3vil0p3r ];
+    maintainers = [ ];
   };
 }

@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "flake8-length";
   version = "0.3.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

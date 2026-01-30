@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   makeWrapper,
-  nodejs,
+  nodejs_22,
   pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
@@ -14,15 +14,18 @@
   nix-update-script,
   yq-go,
 }:
+let
+  nodejs = nodejs_22;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "renovate";
-  version = "42.76.4";
+  version = "42.83.1";
 
   src = fetchFromGitHub {
     owner = "renovatebot";
     repo = "renovate";
     tag = finalAttrs.version;
-    hash = "sha256-kmQzhmXmrVr3yDecjq2BxGkORgYWnRUi+p/TGd3we7Q=";
+    hash = "sha256-AUGtr1sePGfALOTdalCqos6Iqv8SQsC4BurAuyiwdN0=";
   };
 
   postPatch = ''
@@ -44,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
     fetcherVersion = 2;
-    hash = "sha256-KcZ4MGo/5hZ6DJ/YLaHzd2mp/PEb9a3AlujDMgqHm28=";
+    hash = "sha256-Gw5q7S867OpkANsf3m+Z+TV8FSQkmDXW48hRttUDtQ0=";
   };
 
   env.COREPACK_ENABLE_STRICT = 0;

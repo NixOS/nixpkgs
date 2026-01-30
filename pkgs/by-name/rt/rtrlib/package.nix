@@ -7,14 +7,14 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rtrlib";
   version = "0.8.0";
 
   src = fetchFromGitHub {
     repo = "rtrlib";
     owner = "rtrlib";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-ISb4ojcDvXY/88GbFMrA5V5+SGE6CmE5D+pokDTwotQ=";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ Anillc ];
     platforms = lib.platforms.all;
   };
-}
+})

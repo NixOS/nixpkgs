@@ -6,14 +6,14 @@
   libiio,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libad9361";
   version = "0.3";
 
   src = fetchFromGitHub {
     owner = "analogdevicesinc";
     repo = "libad9361-iio";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-9e66qSrKpczatZY9lPAzi/6f7lHChnl2+Pih53oa28Y=";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ sikmir ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

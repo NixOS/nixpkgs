@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "python-engineio";
-  version = "4.12.3";
+  version = "4.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
     repo = "python-engineio";
     tag = "v${version}";
-    hash = "sha256-VcL8Od1EM/cbbeOVyXlsXYt8Bms636XbtunrTblkGDQ=";
+    hash = "sha256-lNVy2Q14+F43TfV1iXqCy1rm4DGjt5IgNVHzMOeOZ5s=";
   };
 
   build-system = [ setuptools ];

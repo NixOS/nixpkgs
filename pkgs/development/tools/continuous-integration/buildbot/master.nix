@@ -46,10 +46,10 @@
 let
   withPlugins =
     plugins:
-    buildPythonApplication {
+    buildPythonApplication rec {
       pname = "${buildbot.pname}-with-plugins";
       inherit (buildbot) version;
-      format = "other";
+      pyproject = false;
 
       dontUnpack = true;
       dontBuild = true;
@@ -68,6 +68,7 @@ let
       '';
 
       passthru = buildbot.passthru // {
+        inherit pyproject;
         withPlugins = morePlugins: withPlugins (morePlugins ++ plugins);
       };
     };
@@ -75,7 +76,7 @@ in
 buildPythonApplication rec {
   pname = "buildbot";
   version = "4.3.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "buildbot";

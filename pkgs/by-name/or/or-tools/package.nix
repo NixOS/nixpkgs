@@ -43,7 +43,6 @@ let
       ninja
       numpy
       pytestCheckHook
-      pythonOlder
       setuptools
       ;
     python = python3;
@@ -64,12 +63,13 @@ let
   scipopt-scip' = scipopt-scip.overrideAttrs (old: {
     patches = old.patches or [ ] ++ [
       # from https://github.com/google/or-tools/commit/77a28070b9c4c83995ac6bbfa9544722ff3342ce#diff-c95174a817e73db366d414af1e329c1856f70e5158ed3994d43da88765ccc98f
+      # and updated with https://github.com/google/or-tools/pull/4932/files#diff-e6b0a69b2e4b97ec922abc459d909483d440a1e0d2868bed263927b106b6efe6
       ./scip.patch
     ];
     # Their patch forgets to find_package() soplex, bring it back.
     postPatch = (old.postPatch or "") + ''
       substituteInPlace CMakeLists.txt \
-        --replace-fail 'message(STATUS "Finding Soplex...")' 'find_package(SOPLEX CONFIG HINTS ''${SOPLEX_DIR})'
+        --replace-fail 'message(STATUS "Finding Soplex")' 'find_package(SOPLEX CONFIG HINTS ''${SOPLEX_DIR})'
     '';
   });
 
@@ -112,6 +112,16 @@ stdenv.mkDerivation (finalAttrs: {
       includes = [ "ortools/math_opt/solvers/highs_solver_test.cc" ];
       hash = "sha256-/dFk/F/3/BwH5IwIwNU4Ua+4sROPXYCjO8R6jpoZpgo=";
     })
+    # Fix compatibility with SCIP 10.0
+    # https://github.com/google/or-tools/issues/4912
+    (fetchpatch {
+      url = "https://github.com/google/or-tools/pull/4932.patch";
+      includes = [ "ortools/linear_solver/proto_solver/scip_proto_solver.cc" ];
+      hash = "sha256-1jw/r3yAjIpq9o8mqAbNorQgmT1E5nt809N+Gb+D9ZI=";
+    })
+    # Compatibility with SCIP 10.0 also needs the following patch adjusted for or-tools 9.14
+    # https://github.com/google/or-tools/pull/4932/files#diff-9559febee3c6051bab4def3c102cb78cbf8a57fc2be4058ace32f89436c784a9
+    ./gscip-scip10.patch
   ];
 
   # or-tools normally attempts to build Protobuf for the build platform when
@@ -222,7 +232,12 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     cmake . -DBUILD_EXAMPLES=OFF -DBUILD_PYTHON=OFF -DBUILD_SAMPLES=OFF
     cmake --install .
-    pip install --prefix="$python" python/
+
+    # Install the Python bindings.
+    # --no-build-isolation: Required because Nix provides build tools (setuptools/wheel)
+    #   locally; without this, pip tries to download them from the internet.
+    # --no-index: Prevents pip from searching PyPI for packages.
+    pip install --no-index --no-build-isolation --prefix="$python" python/
   '';
 
   outputs = [
@@ -239,5 +254,10 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "fzn-cp-sat";
     maintainers = with lib.maintainers; [ andersk ];
     platforms = with lib.platforms; linux ++ darwin;
+
+    # Only version 9.15 adds support for Python 3.14: https://github.com/google/or-tools/releases/tag/v9.15
+    # Also this package is tied to pybind 2.13.6, and only 3.0.0 supports Python 3.14: https://github.com/pybind/pybind11/releases/tag/v3.0.0
+    # Also, nix review fails to build python314Packages.ortools
+    broken = python3.pythonAtLeast "3.14";
   };
 })

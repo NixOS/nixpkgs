@@ -8,13 +8,13 @@
   stdenv,
   testers,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
 
   pname = "nf-test";
   version = "0.9.3";
 
   src = fetchurl {
-    url = "https://github.com/askimed/nf-test/releases/download/v${version}/nf-test-${version}.tar.gz";
+    url = "https://github.com/askimed/nf-test/releases/download/v${finalAttrs.version}/nf-test-${finalAttrs.version}.tar.gz";
     hash = "sha256-LLylgv34HiMXg+sjBbMdeLVPMV5+h+Z2xEWCiBqbNEY=";
   };
   sourceRoot = ".";
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     mainProgram = "nf-test";
     platforms = lib.platforms.unix;
   };
-}
+})

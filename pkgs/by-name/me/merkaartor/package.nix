@@ -20,14 +20,14 @@
   zbar,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "merkaartor";
   version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "openstreetmap";
     repo = "merkaartor";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-oxLGhIE1qJ9+GOztD1HvrLGRGVO3gyy7Rc6CyzKTFec=";
   };
 
@@ -85,4 +85,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.geospatial ];
     platforms = lib.platforms.unix;
   };
-}
+})

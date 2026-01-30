@@ -7,12 +7,12 @@
   flex,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "filebench";
   version = "1.4.9.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/filebench/filebench-${version}.tar.gz";
+    url = "mirror://sourceforge/filebench/filebench-${finalAttrs.version}.tar.gz";
     sha256 = "13hmx67lsz367sn8lrvz1780mfczlbiz8v80gig9kpkpf009yksc";
   };
 
@@ -30,4 +30,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "filebench";
   };
-}
+})

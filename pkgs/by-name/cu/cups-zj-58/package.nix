@@ -30,6 +30,8 @@ stdenv.mkDerivation {
     --replace-fail "cmake_minimum_required ( VERSION 3.0 )" "cmake_minimum_required ( VERSION 3.10 )"
   '';
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+
   installPhase = ''
     install -D ppd/zj80.ppd $out/share/cups/model/zjiang/zj80.ppd
     install -D ppd/zj58.ppd $out/share/cups/model/zjiang/zj58.ppd

@@ -10,7 +10,15 @@
   imagemagick,
   pkg-config,
   gdk-pixbuf,
-  xorg,
+  libxcb-util,
+  libxcb-wm,
+  libxcb-render-util,
+  libxcb-keysyms,
+  libxcb-image,
+  libxdmcp,
+  libxau,
+  libxshmfence,
+  libxcb,
   libstartup_notification,
   libxdg_basedir,
   libpthreadstubs,
@@ -122,15 +130,15 @@ stdenv.mkDerivation rec {
     net-tools
     pango
     xcb-util-cursor
-    xorg.libXau
-    xorg.libXdmcp
-    xorg.libxcb
-    xorg.libxshmfence
-    xorg.xcbutil
-    xorg.xcbutilimage
-    xorg.xcbutilkeysyms
-    xorg.xcbutilrenderutil
-    xorg.xcbutilwm
+    libxau
+    libxdmcp
+    libxcb
+    libxshmfence
+    libxcb-util
+    libxcb-image
+    libxcb-keysyms
+    libxcb-render-util
+    libxcb-wm
     libxkbcommon
     xcbutilxrm
   ]

@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "kaptan";
   version = "0.6.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

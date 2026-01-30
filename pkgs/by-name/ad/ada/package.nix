@@ -5,14 +5,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ada";
   version = "3.4.1";
 
   src = fetchFromGitHub {
     owner = "ada-url";
     repo = "ada";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2xrued35FRqmtZjrMTBtl5r/TB/pXNhhcKOfuwjxrhc=";
   };
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ nickcao ];
     platforms = lib.platforms.all;
   };
-}
+})

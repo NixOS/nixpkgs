@@ -2,7 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  xorg,
+  libxcb,
   installShellFiles,
   pandoc,
 }:
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-DnIZTeRyxhmVK2uB21ScPiEyL4k9kAWfVoLNIAM9P68=";
 
-  buildInputs = [ xorg.libxcb ];
+  buildInputs = [ libxcb ];
   nativeBuildInputs = [
     pandoc
     installShellFiles

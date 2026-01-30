@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitLab {
     owner = "kraxel";
     repo = "virt-firmware";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-kuFTKMhBVlgCBYLTO23IUz/tRLoMRHxjWPIaauu/PWw=";
   };
 

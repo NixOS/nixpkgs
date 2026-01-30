@@ -2,8 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
-  importlib-metadata,
   matplotlib,
   numpy,
   pytestCheckHook,
@@ -13,7 +11,7 @@
 buildPythonPackage rec {
   pname = "dufte";
   version = "0.2.29";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nschloe";
@@ -27,8 +25,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     matplotlib
     numpy
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ];
 
   preCheck = ''
     export HOME=$(mktemp -d)

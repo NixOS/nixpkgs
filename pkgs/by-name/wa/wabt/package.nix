@@ -5,14 +5,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wabt";
   version = "1.0.37";
 
   src = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "wabt";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Ejr+FxaYRDI01apHhKTs11iwcv72a8ZxyPmVetEvadU=";
     fetchSubmodules = true;
   };
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   cmakeFlags = [
     "-DBUILD_TESTS=OFF"
-    "-DCMAKE_PROJECT_VERSION=${version}"
+    "-DCMAKE_PROJECT_VERSION=${finalAttrs.version}"
   ];
 
   meta = {
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
   };
-}
+})

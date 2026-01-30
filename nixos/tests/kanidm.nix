@@ -17,11 +17,12 @@ in
 {
   name = "kanidm-${kanidmPackage.version}";
   meta.maintainers = with pkgs.lib.maintainers; [
+    adamcstephens
     Flakebi
     oddlama
   ];
 
-  _module.args.kanidmPackage = pkgs.lib.mkDefault pkgs.kanidm;
+  _module.args.kanidmPackage = pkgs.lib.mkDefault pkgs.kanidm_1_8;
 
   nodes.server =
     { pkgs, ... }:

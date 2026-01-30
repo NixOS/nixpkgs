@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "3cpio";
-  version = "0.13.0";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "bdrung";
     repo = "3cpio";
     tag = version;
-    hash = "sha256-4ERSH5Kz/e2MuIIgi3XQVnhW0csBPDIvdmEw05OdREA=";
+    hash = "sha256-LZu+g5ISpG/9ZZimTedvTjUEofhAaYKJdpLTex3ehQE=";
   };
 
-  cargoHash = "sha256-ER1OQZHHtHBNPoEl4NJ5p5KYjzFgJnFR8nXcmCk2HTA=";
+  cargoHash = "sha256-YP6fCmY9fQD4hmKV6gLoElvce/BlRc9vAqyli7aaBNI=";
 
   # Tests attempt to access arbitrary filepaths
   doCheck = false;

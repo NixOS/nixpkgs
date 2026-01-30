@@ -60,7 +60,7 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
   postFixup = ''
-    wrapPythonProgramsIn "$out/share/wike" "$out $pythonPath"
+    wrapPythonProgramsIn "$out/share/wike" "$out ''${pythonPath[*]}"
   '';
 
   passthru = {

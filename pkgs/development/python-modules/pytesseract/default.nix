@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "pytesseract";
   version = "0.3.13";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "madmaze";

@@ -8,14 +8,14 @@
   targetPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rpcsvc-proto";
   version = "1.4.4";
 
   src = fetchFromGitHub {
     owner = "thkukuk";
     repo = "rpcsvc-proto";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-DEXzSSmjMeMsr1PoU/ljaY+6b4COUU2Z8MJkGImsgzk=";
   };
 
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ ma27 ];
     mainProgram = "rpcgen";
   };
-}
+})

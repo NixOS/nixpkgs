@@ -17,11 +17,17 @@ let
   inherit (neovimUtils) grammarToPlugin;
 
   buildQueries =
-    { language }:
+    {
+      language,
+      requires ? [ ],
+    }:
     vimUtils.toVimPlugin (
       runCommand "nvim-treesitter-queries-${language}"
         {
-          passthru = { inherit language; };
+          passthru = {
+            inherit language requires;
+            isTreesitterQuery = true;
+          };
           meta.description = "Queries for ${language} from nvim-treesitter";
         }
         ''
@@ -42,17 +48,49 @@ let
 
   inherit (generated) parsers queries;
 
-  parsersWithMeta = lib.mapAttrs (
+  queriesWithDeps = lib.mapAttrs (
+    lang: query:
+    let
+      requires = query.requires or [ ];
+      dependencies = map (req: queries.${req}) requires;
+    in
+    if dependencies != [ ] then
+      query.overrideAttrs (old: {
+        passthru = old.passthru or { } // {
+          inherit dependencies;
+        };
+      })
+    else
+      query
+  ) queries;
+
+  parsersWithQueries = lib.mapAttrs (
     lang: parser:
-    if lib.hasAttr lang queries then
+    if lib.hasAttr lang queriesWithDeps then
       parser.overrideAttrs (old: {
-        passthru = (old.passthru or { }) // {
-          associatedQuery = queries.${lang};
+        passthru = old.passthru or { } // {
+          associatedQuery = queriesWithDeps.${lang};
         };
       })
     else
       parser
   ) parsers;
+
+  parsersWithMeta = lib.mapAttrs (
+    lang: parser:
+    let
+      requires = parser.requires or [ ];
+      dependencies = map (req: grammarToPlugin parsersWithQueries.${req}) requires;
+    in
+    if dependencies != [ ] then
+      parser.overrideAttrs (old: {
+        passthru = old.passthru or { } // {
+          inherit dependencies;
+        };
+      })
+    else
+      parser
+  ) parsersWithQueries;
 
   # add aliases so grammars from `tree-sitter` are overwritten in `withPlugins`
   # for example, for ocaml_interface, the following aliases will be added
@@ -89,17 +127,12 @@ let
       grammarPlugins = map grammarToPlugin selectedGrammars;
 
       queryPlugins = lib.pipe selectedGrammars [
-        (map (g: g.passthru.associatedQuery or null))
+        (map (g: g.associatedQuery or null))
         (lib.filter (q: q != null))
       ];
     in
     self.nvim-treesitter.overrideAttrs {
-      passthru.dependencies = [
-        (symlinkJoin {
-          name = "nvim-treesitter-grammars";
-          paths = grammarPlugins ++ queryPlugins;
-        })
-      ];
+      passthru.dependencies = grammarPlugins ++ queryPlugins;
     };
 
   withAllGrammars = withPlugins (_: allGrammars);
@@ -117,9 +150,9 @@ in
       grammarToPlugin
       withPlugins
       withAllGrammars
-      queries
       ;
 
+    queries = queriesWithDeps;
     parsers = grammarPlugins;
 
     tests = {

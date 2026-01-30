@@ -3,7 +3,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   makeWrapper,
-  xorg,
+  xvfb,
   getopt,
   xauth,
   util-linux,
@@ -53,7 +53,7 @@ stdenvNoCC.mkDerivation {
       --prefix PATH : ${
         lib.makeBinPath [
           getopt
-          xorg.xvfb
+          xvfb
           xauth
           which
           util-linux

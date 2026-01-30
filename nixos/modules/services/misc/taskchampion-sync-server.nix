@@ -85,10 +85,10 @@ in
         DynamicUser = false;
         ExecStart = ''
           ${lib.getExe cfg.package} \
-            --listen "${cfg.host}:${builtins.toString cfg.port}" \
+            --listen "${cfg.host}:${toString cfg.port}" \
             --data-dir ${cfg.dataDir} \
-            --snapshot-versions ${builtins.toString cfg.snapshot.versions} \
-            --snapshot-days ${builtins.toString cfg.snapshot.days} \
+            --snapshot-versions ${toString cfg.snapshot.versions} \
+            --snapshot-days ${toString cfg.snapshot.days} \
             ${lib.concatMapStringsSep " " (id: "--allow-client-id ${id}") cfg.allowClientIds}
         '';
       };

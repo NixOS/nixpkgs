@@ -11,15 +11,15 @@
   wayland,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vokoscreen-ng";
-  version = "4.8.1";
+  version = "4.8.3";
 
   src = fetchFromGitHub {
     owner = "vkohaupt";
     repo = "vokoscreenNG";
-    tag = version;
-    hash = "sha256-3tyAJxWspyvFmy1Ye1FUSCE4Pbo0cSGux8r0qFmA+NM=";
+    tag = finalAttrs.version;
+    hash = "sha256-D2E4G6rq6kFZbwjYhoccl/aROCdpuS8UJu0JKGc8wKU=";
   };
 
   qmakeFlags = [ "src/vokoscreenNG.pro" ];
@@ -68,10 +68,9 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     homepage = "https://github.com/vkohaupt/vokoscreenNG";
     maintainers = with lib.maintainers; [
-      shamilton
       dietmarw
     ];
     platforms = lib.platforms.linux;
     mainProgram = "vokoscreenNG";
   };
-}
+})

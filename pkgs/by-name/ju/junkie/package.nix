@@ -10,14 +10,14 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "junkie";
   version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "rixed";
     repo = "junkie";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0kfdjgch667gfb3qpiadd2dj3fxc7r19nr620gffb1ahca02wq31";
   };
 
@@ -65,4 +65,4 @@ stdenv.mkDerivation rec {
       - a tool listing TLS certificates...
     '';
   };
-}
+})

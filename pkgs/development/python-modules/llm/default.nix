@@ -82,6 +82,7 @@ let
       llm-hacker-news ? false,
       llm-jq ? false,
       llm-llama-server ? false,
+      llm-lmstudio ? false,
       llm-mistral ? false,
       llm-ollama ? false,
       llm-openai-plugin ? false,
@@ -258,7 +259,7 @@ let
       };
 
       # include tests for all the plugins
-      tests = lib.mergeAttrsList (map (name: python.pkgs.${name}.tests) withPluginsArgNames);
+      tests = lib.mergeAttrsList (map (name: python.pkgs.${name}.tests or { }) withPluginsArgNames);
     };
 
     meta = {

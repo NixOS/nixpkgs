@@ -4,8 +4,6 @@
   buildPythonPackage,
   cfn-flip,
   fetchFromGitHub,
-  pythonOlder,
-  typing-extensions,
   unittestCheckHook,
 }:
 
@@ -21,7 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-s7eb8W/QjD+lNmq3bPhCP3tH8VV/xNf3cE2dGzWAgFk=";
   };
 
-  propagatedBuildInputs = [ cfn-flip ] ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
+  propagatedBuildInputs = [ cfn-flip ];
 
   nativeCheckInputs = [
     awacs

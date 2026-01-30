@@ -14,7 +14,14 @@
   gnused,
   gnugrep,
   findutils,
-  xorg,
+  font-util,
+  xwininfo,
+  xrandr,
+  xmodmap,
+  xkbcomp,
+  xinit,
+  xauth,
+  setxkbmap,
   net-tools,
   iproute2,
   bc,
@@ -86,14 +93,14 @@ let
     pwgen
     openssh
     sshfs
-    xorg.xauth
-    xorg.xinit
-    xorg.xrandr
-    xorg.xmodmap
-    xorg.xwininfo
-    xorg.fontutil
-    xorg.xkbcomp
-    xorg.setxkbmap
+    xauth
+    xinit
+    xrandr
+    xmodmap
+    xwininfo
+    font-util
+    xkbcomp
+    setxkbmap
   ];
 in
 stdenv.mkDerivation {

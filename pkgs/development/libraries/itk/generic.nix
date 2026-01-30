@@ -94,6 +94,18 @@ stdenv.mkDerivation {
     ln -sr ${itkAdaptiveDenoisingSrc} Modules/External/ITKAdaptiveDenoising
     ln -sr ${itkSimpleITKFiltersSrc} Modules/External/ITKSimpleITKFilters
     ln -sr ${rtkSrc} Modules/Remote/RTK
+
+    # fix build with GCC 15
+    substituteInPlace Modules/ThirdParty/GoogleTest/src/itkgoogletest/googletest/src/gtest-death-test.cc \
+      --replace-fail \
+        '#include <utility>' \
+        '#include <utility>
+        #include <cstdint>'
+    substituteInPlace Modules/Core/Common/include/itkFloatingPointExceptions.h \
+      --replace-fail \
+        '#include "itkSingletonMacro.h"' \
+        '#include "itkSingletonMacro.h"
+        #include <cstdint>'
   '';
 
   cmakeFlags = [

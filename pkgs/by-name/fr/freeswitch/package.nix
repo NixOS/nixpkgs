@@ -107,13 +107,13 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "freeswitch";
   version = "1.10.12";
   src = fetchFromGitHub {
     owner = "signalwire";
     repo = "freeswitch";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-uOO+TpKjJkdjEp4nHzxcHtZOXqXzpkIF3dno1AX17d8=";
   };
 
@@ -195,4 +195,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; unix;
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

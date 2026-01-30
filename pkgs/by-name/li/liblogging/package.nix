@@ -7,12 +7,12 @@
   systemd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "liblogging";
   version = "1.0.6";
 
   src = fetchurl {
-    url = "http://download.rsyslog.com/liblogging/liblogging-${version}.tar.gz";
+    url = "http://download.rsyslog.com/liblogging/liblogging-${finalAttrs.version}.tar.gz";
     sha256 = "14xz00mq07qmcgprlj5b2r21ljgpa4sbwmpr6jm2wrf8wms6331k";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd2;
     platforms = lib.platforms.all;
   };
-}
+})

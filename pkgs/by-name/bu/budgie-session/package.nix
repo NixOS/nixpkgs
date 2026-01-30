@@ -24,7 +24,7 @@
   makeWrapper,
   nix-update-script,
   systemd,
-  xorg,
+  xtrans,
   libepoxy,
   bash,
 }:
@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     libICE
     gnome-desktop
     json-glib
-    xorg.xtrans
+    xtrans
     adwaita-icon-theme
     gnome-settings-daemon
     gsettings-desktop-schemas

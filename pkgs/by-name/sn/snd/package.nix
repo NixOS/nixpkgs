@@ -7,15 +7,18 @@
   fftw,
   gsl,
   motif,
-  xorg,
+  libxt,
+  libxpm,
+  libxft,
+  libxext,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "snd";
   version = "25.8";
 
   src = fetchurl {
-    url = "mirror://sourceforge/snd/snd-${version}.tar.gz";
+    url = "mirror://sourceforge/snd/snd-${finalAttrs.version}.tar.gz";
     hash = "sha256-ha8f7vBRUNEHXc0/E0L714jPFDVhMSCluKPrrdQYOTM=";
   };
 
@@ -31,12 +34,12 @@ stdenv.mkDerivation rec {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
   ]
-  ++ (with xorg; [
-    libXext
-    libXft
-    libXpm
-    libXt
-  ]);
+  ++ [
+    libxext
+    libxft
+    libxpm
+    libxt
+  ];
 
   configureFlags = [
     "--with-motif"
@@ -52,4 +55,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "snd";
   };
-}
+})

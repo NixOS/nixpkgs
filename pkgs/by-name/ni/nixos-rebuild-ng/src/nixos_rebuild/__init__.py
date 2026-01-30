@@ -40,19 +40,23 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
     common_build_flags.add_argument("--print-build-logs", "-L", action="store_true")
     common_build_flags.add_argument("--show-trace", action="store_true")
 
+    # Flags that apply to both flake evaluation and building
     flake_common_flags = argparse.ArgumentParser(add_help=False, allow_abbrev=False)
-    flake_common_flags.add_argument("--accept-flake-config", action="store_true")
-    flake_common_flags.add_argument("--refresh", action="store_true")
-    flake_common_flags.add_argument("--impure", action="store_true")
     flake_common_flags.add_argument("--offline", action="store_true")
     flake_common_flags.add_argument("--no-net", action="store_true")
-    flake_common_flags.add_argument("--recreate-lock-file", action="store_true")
-    flake_common_flags.add_argument("--no-update-lock-file", action="store_true")
-    flake_common_flags.add_argument("--no-write-lock-file", action="store_true")
-    flake_common_flags.add_argument("--no-registries", action="store_true")
-    flake_common_flags.add_argument("--commit-lock-file", action="store_true")
-    flake_common_flags.add_argument("--update-input", action="append")
-    flake_common_flags.add_argument("--override-input", nargs=2, action="append")
+
+    # Flags that only apply during flake evaluation (and thus aren't passed to remote builders)
+    flake_eval_flags = argparse.ArgumentParser(add_help=False, allow_abbrev=False)
+    flake_eval_flags.add_argument("--accept-flake-config", action="store_true")
+    flake_eval_flags.add_argument("--refresh", action="store_true")
+    flake_eval_flags.add_argument("--impure", action="store_true")
+    flake_eval_flags.add_argument("--recreate-lock-file", action="store_true")
+    flake_eval_flags.add_argument("--no-update-lock-file", action="store_true")
+    flake_eval_flags.add_argument("--no-write-lock-file", action="store_true")
+    flake_eval_flags.add_argument("--no-registries", action="store_true")
+    flake_eval_flags.add_argument("--commit-lock-file", action="store_true")
+    flake_eval_flags.add_argument("--update-input", action="append")
+    flake_eval_flags.add_argument("--override-input", nargs=2, action="append")
 
     classic_build_flags = argparse.ArgumentParser(add_help=False, allow_abbrev=False)
     classic_build_flags.add_argument(
@@ -74,6 +78,7 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
         "common_flags": common_flags,
         "common_build_flags": common_build_flags,
         "flake_common_flags": flake_common_flags,
+        "flake_eval_flags": flake_eval_flags,
         "classic_build_flags": classic_build_flags,
         "copy_flags": copy_flags,
     }
@@ -135,6 +140,11 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
         "--rollback",
         action="store_true",
         help="Roll back to the previous configuration",
+    )
+    main_parser.add_argument(
+        "--store-path",
+        metavar="PATH",
+        help="Use a pre-built NixOS system store path instead of building",
     )
     main_parser.add_argument(
         "--upgrade",
@@ -269,6 +279,22 @@ def parse_args(
     if args.flake and (args.file or args.attr):
         parser.error("--flake cannot be used with --file or --attr")
 
+    if args.store_path:
+        if args.rollback:
+            parser.error("--store-path and --rollback are mutually exclusive")
+        if args.flake or args.file or args.attr:
+            parser.error("--store-path cannot be used with --flake, --file, or --attr")
+        if args.action not in (
+            Action.SWITCH.value,
+            Action.BOOT.value,
+            Action.TEST.value,
+            Action.DRY_ACTIVATE.value,
+        ):
+            parser.error(f"--store-path cannot be used with '{args.action}'")
+        if args.flake is None:
+            # Disable flake auto-detection since we're using a pre-built store path
+            args.flake = False
+
     return args, grouped_nix_args
 
 
@@ -297,7 +323,7 @@ def execute(argv: list[str]) -> None:
     build_attr = BuildAttr.from_arg(args.attr, args.file)
     flake = Flake.from_arg(args.flake, target_host)
 
-    if can_run and not flake:
+    if can_run and not flake and not args.store_path:
         services.write_version_suffix(grouped_nix_args)
 
     match action:

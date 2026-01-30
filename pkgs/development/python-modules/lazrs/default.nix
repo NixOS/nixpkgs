@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "lazrs";
   version = "0.8.1";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

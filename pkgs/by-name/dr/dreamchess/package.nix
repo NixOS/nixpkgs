@@ -17,7 +17,8 @@
   libXext,
   libGL,
   libGLU,
-  xorg,
+  libx11,
+  libxcb,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -46,8 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
     libXext
     libGL
     libGLU
-    xorg.libxcb
-    xorg.libX11
+    libxcb
+    libx11
   ];
   nativeBuildInputs = [
     cmake

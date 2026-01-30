@@ -6,12 +6,12 @@
   pkg-config,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "bigarray-overlap";
   version = "0.2.1";
 
   src = fetchurl {
-    url = "https://github.com/dinosaure/overlap/releases/download/v${version}/bigarray-overlap-${version}.tbz";
+    url = "https://github.com/dinosaure/overlap/releases/download/v${finalAttrs.version}/bigarray-overlap-${finalAttrs.version}.tbz";
     hash = "sha256-L1IKxHAFTjNYg+upJUvyi2Z23bV3U8+1iyLPhK4aZuA=";
   };
 
@@ -28,4 +28,4 @@ buildDunePackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.sternenseemann ];
   };
-}
+})

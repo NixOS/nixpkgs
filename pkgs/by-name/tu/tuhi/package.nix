@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
   pname = "tuhi";
   version = "0.6";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "tuhiproject";
@@ -62,7 +62,7 @@ python3Packages.buildPythonApplication rec {
       --replace "/usr/bin/env sh" "sh"
   '';
   postFixup = ''
-    wrapPythonProgramsIn $out/libexec "$out $pythonPath"
+    wrapPythonProgramsIn $out/libexec "$out ''${pythonPath[*]}"
   '';
 
   meta = {

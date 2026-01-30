@@ -26,6 +26,7 @@ appimageTools.wrapType2 rec {
     ''
       install -Dm 444 ${appimageContents}/tutanota-desktop.desktop -t $out/share/applications
       install -Dm 444 ${appimageContents}/tutanota-desktop.png -t $out/share/pixmaps
+      cp -r ${appimageContents}/usr/share/icons/. $out/share/icons
 
       substituteInPlace $out/share/applications/tutanota-desktop.desktop \
         --replace 'Exec=AppRun' 'Exec=${pname}'

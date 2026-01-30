@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "autoflake";
   version = "2.3.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

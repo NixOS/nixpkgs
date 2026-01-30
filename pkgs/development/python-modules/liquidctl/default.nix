@@ -21,7 +21,7 @@
 buildPythonPackage rec {
   pname = "liquidctl";
   version = "1.15.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "liquidctl";

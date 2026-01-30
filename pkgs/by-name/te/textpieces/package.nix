@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "liferooter";
     repo = "textpieces";
-    tag = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-BUhcPnvi6cuhaYYNZV9pvOLH/cIV3t7ncpG55fBjqwo=";
   };
 

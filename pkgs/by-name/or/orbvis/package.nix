@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "orbvis";
-  version = "0.3.2";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "wojciech-graj";
     repo = "orbvis";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kPbRhm+HymY6DuR4JgE6qTTYKGIqVxvwxtveu7dOOO0=";
+    hash = "sha256-U19kslgAULBBFozK5KUtew6KRsFeJ4+h8bL9cXmnzso=";
   };
 
   nativeBuildInputs = [

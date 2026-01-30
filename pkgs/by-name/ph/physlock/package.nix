@@ -6,13 +6,13 @@
   systemd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "13";
   pname = "physlock";
   src = fetchFromGitHub {
     owner = "muennich";
     repo = "physlock";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1mz4xxjip5ldiw9jgfq9zvqb6w10bcjfx6939w1appqg8f521a7s";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

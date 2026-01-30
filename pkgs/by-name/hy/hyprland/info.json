@@ -1,7 +1,7 @@
 {
-  "branch": "v0.53.1-b",
-  "commit_hash": "ab1d80f3d6aebd57a0971b53a1993b1c1dfe0b09",
-  "commit_message": "version: bump to 0.53.1",
-  "date": "2026-01-02",
-  "tag": "v0.53.1"
+  "branch": "v0.53.3-b",
+  "commit_hash": "dd220efe7b1e292415bd0ea7161f63df9c95bfd3",
+  "commit_message": "version: bump to 0.53.3",
+  "date": "2026-01-24",
+  "tag": "v0.53.3"
 }

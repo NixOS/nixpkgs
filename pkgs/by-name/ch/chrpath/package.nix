@@ -5,12 +5,12 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "chrpath";
   version = "0.18";
 
   src = fetchurl {
-    url = "https://codeberg.org/pere/chrpath/archive/release-${version}.tar.gz";
+    url = "https://codeberg.org/pere/chrpath/archive/release-${finalAttrs.version}.tar.gz";
     hash = "sha256-8JxJ8GGGYMoR/G2VgN3ekExyJNTG0Pby0fm83JECyao=";
   };
 
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.bjornfor ];
   };
-}
+})

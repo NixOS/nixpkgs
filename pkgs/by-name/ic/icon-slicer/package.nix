@@ -6,12 +6,12 @@
   gdk-pixbuf,
   popt,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "icon-slicer";
   version = "0.3";
 
   src = fetchurl {
-    url = "https://freedesktop.org/software/icon-slicer/releases/icon-slicer-${version}.tar.gz";
+    url = "https://freedesktop.org/software/icon-slicer/releases/icon-slicer-${finalAttrs.version}.tar.gz";
     sha256 = "0kdnc08k2rs8llfg7xgvnrsk60x59pv5fqz6kn2ifnn2s1nj3w05";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "icon-slicer";
   };
-}
+})

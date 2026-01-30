@@ -40,7 +40,7 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ccemux";
   inherit version;
 
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/{bin,share/ccemux}
     cp -r ${desktopItem}/share/applications $out/share/applications
 
-    install -D ${src} $out/share/ccemux/ccemux.jar
+    install -D ${finalAttrs.src} $out/share/ccemux/ccemux.jar
     install -D ${desktopIcon} $out/share/pixmaps/ccemux.png
 
     makeWrapper ${jre}/bin/java $out/bin/ccemux \
@@ -75,4 +75,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "ccemux";
   };
-}
+})

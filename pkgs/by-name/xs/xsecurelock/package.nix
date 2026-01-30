@@ -19,14 +19,14 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xsecurelock";
   version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "xsecurelock";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-OPasi5zmvmcWnVCj/dU2KprzNmar51zDElD23750yk4=";
   };
 
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     cat > version.c <<'EOF'
-      const char *const git_version = "${version}";
+      const char *const git_version = "${finalAttrs.version}";
     EOF
   '';
 
@@ -72,4 +72,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "xsecurelock";
   };
-}
+})

@@ -8,7 +8,7 @@
 python3Packages.buildPythonApplication {
   pname = "bashplotlib";
   version = "0.6.5-unstable-2021-03-31";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "glamp";

@@ -17,7 +17,7 @@ buildPythonPackage rec {
   pname = "pytest-forked";
   version = "1.6.0";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytest-dev";

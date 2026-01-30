@@ -7,12 +7,12 @@
   gnome,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-backgrounds";
   version = "49.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-backgrounds/${lib.versions.major version}/gnome-backgrounds-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-backgrounds/${lib.versions.major finalAttrs.version}/gnome-backgrounds-${finalAttrs.version}.tar.xz";
     hash = "sha256-Af4mDeWLoA5Eq6WJqZjjPovHrsxwHfC+5kz0z7pE9LU=";
   };
 
@@ -35,9 +35,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Default wallpaper set for GNOME";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-backgrounds";
-    changelog = "https://gitlab.gnome.org/GNOME/gnome-backgrounds/-/blob/${version}/NEWS?ref_type=tags";
+    changelog = "https://gitlab.gnome.org/GNOME/gnome-backgrounds/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     license = lib.licenses.cc-by-sa-30;
     platforms = lib.platforms.unix;
     teams = [ lib.teams.gnome ];
   };
-}
+})

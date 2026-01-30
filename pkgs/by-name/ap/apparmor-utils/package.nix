@@ -36,7 +36,7 @@ python3Packages.buildPythonApplication {
     sed -i Makefile -e "/\<vim\>/d"
   '');
 
-  format = "other";
+  pyproject = false;
   strictDeps = true;
 
   doCheck = true;

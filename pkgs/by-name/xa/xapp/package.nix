@@ -6,7 +6,7 @@
   libgnomekbd,
   gdk-pixbuf,
   cairo,
-  xorg,
+  libxkbfile,
   meson,
   ninja,
   pkg-config,
@@ -22,7 +22,7 @@
   libdbusmenu-gtk3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xapp";
   version = "3.2.2";
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xapp";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-xVGIrK7koqX6xKoanVHWQMBUusUjtvHzQg2OV0E0b78=";
   };
 
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     ))
     libgnomekbd
     gdk-pixbuf
-    xorg.libxkbfile
+    libxkbfile
     python3.pkgs.pygobject3 # for .pc file
     mate.mate-panel # for gobject-introspection
     dbus
@@ -107,4 +107,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     teams = [ lib.teams.cinnamon ];
   };
-}
+})

@@ -10,14 +10,14 @@
 let
   jdk_headless = jdk8_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jing-trang";
   version = "20181222";
 
   src = fetchFromGitHub {
     owner = "relaxng";
     repo = "jing-trang";
-    rev = "V${version}";
+    rev = "V${finalAttrs.version}";
     hash = "sha256-Krupa3MGk5UaaQsaNpPMZuIUzHJytDiksz9ysCPkFS4=";
     fetchSubmodules = true;
   };
@@ -66,4 +66,4 @@ stdenv.mkDerivation rec {
     ];
     maintainers = [ lib.maintainers.bjornfor ];
   };
-}
+})

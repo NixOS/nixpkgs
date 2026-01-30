@@ -39,6 +39,5 @@ buildPythonPackage rec {
     homepage = "https://localzone.iomaestro.com";
     changelog = "https://github.com/ags-slc/localzone/blob/v${version}/CHANGELOG.rst";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ flyfloh ];
   };
 }

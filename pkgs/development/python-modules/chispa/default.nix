@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "chispa";
   version = "0.11.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MrPowers";

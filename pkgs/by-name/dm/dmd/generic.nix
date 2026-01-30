@@ -32,9 +32,9 @@ let
     text = (
       lib.generators.toINI { } {
         Environment = {
-          DFLAGS = ''-I@out@/include/dmd -L-L@out@/lib -fPIC ${
+          DFLAGS = "-I@out@/include/dmd -L-L@out@/lib -fPIC ${
             lib.optionalString (!targetPackages.stdenv.cc.isClang) "-L--export-dynamic"
-          }'';
+          }";
         };
       }
     );

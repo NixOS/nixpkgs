@@ -14,7 +14,7 @@
 buildPythonPackage {
   pname = "pbr";
   inherit (pbr) version src;
-  format = "other";
+  pyproject = false;
 
   postPatch = ''
     # only a small portion of the listed packages are actually needed for running the tests

@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "linkify-it-py";
   version = "2.0.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tsutsu3";

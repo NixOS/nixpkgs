@@ -12,14 +12,14 @@
 let
   inherit (python3Packages) python pygobject3;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "networkmanager_dmenu";
   version = "2.6.2";
 
   src = fetchFromGitHub {
     owner = "firecat53";
     repo = "networkmanager-dmenu";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-NTkGKUZ3xA9ZWBLZgjIR5wrUXVhccGkGqnnm0a79p+Q=";
   };
 
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.jensbin ];
     platforms = lib.platforms.all;
   };
-}
+})

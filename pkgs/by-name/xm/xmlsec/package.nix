@@ -17,16 +17,16 @@
 
 lib.fix (
   self:
-  stdenv.mkDerivation rec {
+  stdenv.mkDerivation (finalAttrs: {
     pname = "xmlsec";
     version = "1.3.7";
 
     src = fetchurl {
       urls = [
-        "https://www.aleksey.com/xmlsec/download/xmlsec1-${version}.tar.gz"
+        "https://www.aleksey.com/xmlsec/download/xmlsec1-${finalAttrs.version}.tar.gz"
 
-        # for when the ${version} gets older than the last two
-        "https://www.aleksey.com/xmlsec/download/older-releases/xmlsec1-${version}.tar.gz"
+        # for when the ${finalAttrs.version} gets older than the last two
+        "https://www.aleksey.com/xmlsec/download/older-releases/xmlsec1-${finalAttrs.version}.tar.gz"
       ];
       hash = "sha256-2C6TtpuKogWmFrYpF6JpMiv2Oj6q+zd1AU5hdSsgE+o=";
     };
@@ -124,5 +124,5 @@ lib.fix (
       maintainers = [ ];
       platforms = with lib.platforms; linux ++ darwin;
     };
-  }
+  })
 )

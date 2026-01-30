@@ -6,8 +6,9 @@
   pkg-config,
   openssl,
   buildNpmPackage,
-  nodejs_20,
+  nodejs,
   nix-update-script,
+  nixosTests,
 }:
 let
   pname = "rqbit";
@@ -24,9 +25,7 @@ let
   rqbit-webui = buildNpmPackage {
     pname = "rqbit-webui";
 
-    nodejs = nodejs_20;
-
-    inherit version src;
+    inherit version src nodejs;
 
     sourceRoot = "${src.name}/crates/librqbit/webui";
 
@@ -64,13 +63,15 @@ rustPlatform.buildRustPackage {
 
   doCheck = false;
 
-  passthru.webui = rqbit-webui;
-
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--subpackage"
-      "webui"
-    ];
+  passthru = {
+    webui = rqbit-webui;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "webui"
+      ];
+    };
+    tests.testService = nixosTests.rqbit;
   };
 
   meta = {

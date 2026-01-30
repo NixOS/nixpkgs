@@ -22,7 +22,7 @@
   maven,
   p7zip,
   pkg-config,
-  xorg,
+  libx11,
 }:
 {
   version,
@@ -50,14 +50,14 @@ let
   ideaSrc = fetchFromGitHub {
     owner = "jetbrains";
     repo = "intellij-community";
-    rev = "${buildType}/${buildNumber}";
+    rev = "${buildType}/${version}";
     hash = ideaHash;
   };
 
   androidSrc = fetchFromGitHub {
     owner = "jetbrains";
     repo = "android";
-    rev = "${buildType}/${buildNumber}";
+    rev = "${buildType}/${version}";
     hash = androidHash;
   };
 
@@ -97,7 +97,7 @@ let
     ];
     buildInputs = [
       glib
-      xorg.libX11
+      libx11
       libdbusmenu
     ];
     inherit src;

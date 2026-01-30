@@ -65,11 +65,16 @@
   "module-services-keycloak-unix-socket": [
     "index.html#module-services-keycloak-unix-socket"
   ],
-  "module-services-tandoor-recipes-migrating-media-option-1": [
+  "module-services-tandoor-recipes-migrating-media-option-move": [
+    "index.html#module-services-tandoor-recipes-migrating-media-option-move",
     "index.html#module-services-tandoor-recipes-migrating-media-option-1"
   ],
-  "module-services-tandoor-recipes-migrating-media-option-2": [
+  "module-services-tandoor-recipes-migrating-media-option-postgresql": [
+    "index.html#module-services-tandoor-recipes-migrating-media-option-postgresql",
     "index.html#module-services-tandoor-recipes-migrating-media-option-2"
+  ],
+  "module-services-tandoor-recipes-migrating-media-option-disallow-access": [
+    "index.html#module-services-tandoor-recipes-migrating-media-option-disallow-access"
   ],
   "sec-override-nixos-test": [
     "index.html#sec-override-nixos-test"
@@ -103,6 +108,9 @@
   ],
   "modular-services": [
     "index.html#modular-services"
+  ],
+  "module-services-amule": [
+    "index.html#module-services-amule"
   ],
   "module-services-anubis": [
     "index.html#module-services-anubis"

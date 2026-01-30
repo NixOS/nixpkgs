@@ -300,7 +300,7 @@ in
             type = lib.types.str;
             default =
               if cfg.hostname == "localhost" then "http://${cfg.hostname}" else "https://${cfg.hostname}";
-            defaultText = ''http(s)://''${config.services.bookstack.hostname}'';
+            defaultText = "http(s)://\${config.services.bookstack.hostname}";
             description = ''
               The root URL that you want to host BookStack on. All URLs in BookStack
               will be generated using this value. It is used to validate specific

@@ -7,12 +7,12 @@
   zopfli,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gif2apng";
   version = "1.9";
 
   src = fetchzip {
-    url = "mirror://sourceforge/gif2apng/gif2apng-${version}-src.zip";
+    url = "mirror://sourceforge/gif2apng/gif2apng-${finalAttrs.version}-src.zip";
     stripRoot = false;
     hash = "sha256-rt1Vp4hjeFAVWJOU04BdU2YvBwECe9Q1c7EpNpIN+uE=";
   };
@@ -67,4 +67,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.all;
   };
-}
+})

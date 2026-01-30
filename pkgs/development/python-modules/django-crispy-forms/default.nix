@@ -11,7 +11,7 @@
 buildPythonPackage (finalAttrs: {
   pname = "django-crispy-forms";
   version = "2.5";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-crispy-forms";

@@ -73,7 +73,11 @@ let
     type:
     makeTest {
       name = "oci-containers-podman-rootless-${type}";
-      meta.maintainers = lib.teams.flyingcircus.members ++ [ lib.maintainers.ma27 ];
+      meta.maintainers = [
+        lib.maintainers.leona
+        lib.maintainers.ma27
+        lib.maintainers.osnyx
+      ];
       nodes = {
         podman =
           { pkgs, ... }:
@@ -84,7 +88,7 @@ let
               isSystemUser = true;
               group = "redis";
               home = "/var/lib/redis";
-              linger = type == "healthy";
+              linger = true;
               createHome = true;
               uid = 2342;
               subUidRanges = [

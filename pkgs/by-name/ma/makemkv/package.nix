@@ -26,19 +26,19 @@ stdenv.mkDerivation (
         "http://www.makemkv.com/download/makemkv-bin-${version}.tar.gz"
         "http://www.makemkv.com/download/old/makemkv-bin-${version}.tar.gz"
       ];
-      hash = "sha256-v8THzrwPAEl2cf/Vbmo08HcKnmr37/LwEn76FD8oY24=";
+      hash = "sha256-we5yCukbJ2p8ib6GEUbFuTRjGDHo1sj0U0BkNXJOkr0=";
     };
     srcs.oss = fetchurl {
       urls = [
         "http://www.makemkv.com/download/makemkv-oss-${version}.tar.gz"
         "http://www.makemkv.com/download/old/makemkv-oss-${version}.tar.gz"
       ];
-      hash = "sha256-uUl/VVXCV/XTx/GLarA8dM/z6kQ36ANJ1hjRFb9fpEU=";
+      hash = "sha256-vIuwhK46q81QPVu5PvwnPgRuT9RmPTmpg2zgwEf+6CM=";
     };
   in
   {
     pname = "makemkv";
-    version = "1.18.2";
+    version = "1.18.3";
 
     srcs = lib.attrValues finalAttrs.passthru.srcs;
     sourceRoot = "makemkv-oss-${version}";

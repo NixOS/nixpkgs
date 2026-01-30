@@ -8,7 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "lieer";
   version = "1.6";
-  format = "pyproject";
+  pyproject = true;
 
   passthru.updateScript = nix-update-script { };
 

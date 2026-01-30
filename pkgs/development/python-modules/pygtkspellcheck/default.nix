@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "pygtkspellcheck";
   version = "5.0.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

@@ -305,7 +305,7 @@ in
           }) cfg.preferences
         );
         ExtensionSettings = builtins.listToAttrs (
-          builtins.map (
+          map (
             lang:
             lib.attrsets.nameValuePair "langpack-${lang}@firefox.mozilla.org" {
               installation_mode = "normal_installed";

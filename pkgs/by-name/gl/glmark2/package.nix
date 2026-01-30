@@ -18,14 +18,14 @@
   libgbm,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "glmark2";
   version = "2023.01";
 
   src = fetchFromGitHub {
     owner = "glmark2";
     repo = "glmark2";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-WCvc5GqrAdpIKQ4LVqwO6ZGbzBgLCl49NxiGJynIjSQ=";
   };
 
@@ -70,4 +70,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.wmertens ];
   };
-}
+})

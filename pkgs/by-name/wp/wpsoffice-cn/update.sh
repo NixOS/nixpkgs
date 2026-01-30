@@ -3,6 +3,8 @@
 
 set -euo pipefail
 
+cd $(readlink -e $(dirname "${BASH_SOURCE[0]}"))
+
 export SSL_CERT_FILE=$NIX_SSL_CERT_FILE
 
 readonly SECURITY_KEY="7f8faaaa468174dc1c9cd62e5f218a5b"

@@ -346,6 +346,10 @@ let
 
             substituteInPlace $dev/bin/phpize \
               --replace-fail "$out/lib" "$dev/lib"
+          ''
+          + lib.optionalString (lib.versionAtLeast version "8.5") ''
+            # PHP 8.5+ has lexbor built into core; dom needs its headers.
+            cp -r ext/lexbor/lexbor $dev/include/php/ext/lexbor/
           '';
 
           src = if phpSrc == null then defaultPhpSrc else phpSrc;

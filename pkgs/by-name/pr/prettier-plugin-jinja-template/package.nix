@@ -24,7 +24,7 @@ buildNpmPackage (finalAttrs: {
     description = "Formatter plugin for Jinja2 template files";
     homepage = "https://github.com/davidodenwald/prettier-plugin-jinja-template";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ adamperkowski ];
+    maintainers = with lib.maintainers; [ koi ];
     mainProgram = "prettier-plugin-jinja-template";
   };
 })

@@ -5,14 +5,14 @@
   tt-rss,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tt-rss-plugin-feediron";
   version = "1.33";
 
   src = fetchFromGitHub {
     owner = "feediron";
     repo = "ttrss_plugin-feediron";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-KU4XQJNK7Ua7rZaXA32lv16RlloCysAb54E5kEY847A=";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ milogert ];
     inherit (tt-rss.meta) platforms;
   };
-}
+})

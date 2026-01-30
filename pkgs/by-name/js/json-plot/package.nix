@@ -34,7 +34,7 @@ buildGoModule rec {
     description = "Dead simple terminal plots from JSON (or CSV) data. Bar charts, line charts, scatter plots, histograms and heatmaps are supported";
     homepage = "https://github.com/sgreben/jp";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ urandom ];
+    maintainers = [ ];
     mainProgram = "jp";
   };
 }

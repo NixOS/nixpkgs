@@ -5,21 +5,19 @@
   gitUpdater,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "yaralyzer";
-  version = "1.0.9";
+  version = "1.3.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "michelcrypt4d4mus";
     repo = "yaralyzer";
-    tag = "v${version}";
-    hash = "sha256-OGMvDPwR4WFINKJpoP242Xhi3mhDzrUypClVGgIIHJI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-OhZ1TG1dqxlUoW+OI+BFn0LsujLytqg6L7aNdYnfRPQ=";
   };
 
-  build-system = with python3.pkgs; [
-    poetry-core
-  ];
+  build-system = with python3.pkgs; [ poetry-core ];
 
   dependencies = with python3.pkgs; [
     chardet
@@ -29,9 +27,7 @@ python3.pkgs.buildPythonApplication rec {
     yara-python
   ];
 
-  pythonImportsCheck = [
-    "yaralyzer"
-  ];
+  pythonImportsCheck = [ "yaralyzer" ];
 
   passthru = {
     updateScript = gitUpdater { rev-prefix = "v"; };
@@ -40,9 +36,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Tool to visually inspect and force decode YARA and regex matches";
     homepage = "https://github.com/michelcrypt4d4mus/yaralyzer";
-    changelog = "https://github.com/michelcrypt4d4mus/yaralyzer/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/michelcrypt4d4mus/yaralyzer/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "yaralyze";
   };
-}
+})

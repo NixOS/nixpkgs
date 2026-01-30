@@ -11,13 +11,13 @@
   htmldoc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "htmldoc";
   version = "1.9.21";
   src = fetchFromGitHub {
     owner = "michaelrsweet";
     repo = "htmldoc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-MZKXEwJdQzn49JIUm4clqKBTtjKu6tBU5Sdq6ESn1k4=";
   };
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Converts HTML files to PostScript and PDF";
     homepage = "https://michaelrsweet.github.io/htmldoc";
-    changelog = "https://github.com/michaelrsweet/htmldoc/releases/tag/v${version}";
+    changelog = "https://github.com/michaelrsweet/htmldoc/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Only;
     maintainers = [ ];
     platforms = lib.platforms.unix;
@@ -55,4 +55,4 @@ stdenv.mkDerivation rec {
     '';
     mainProgram = "htmldoc";
   };
-}
+})

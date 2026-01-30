@@ -7,7 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "dotfiles";
   version = "0.6.5";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit version pname;

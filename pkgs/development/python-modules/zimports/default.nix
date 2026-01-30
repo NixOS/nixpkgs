@@ -8,7 +8,6 @@
   setuptools,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +16,7 @@ buildPythonPackage rec {
   format = "setuptools";
 
   # upstream technically support 3.7 through 3.9, but 3.10 happens to work while 3.11 breaks with an import error
-  disabled = pythonOlder "3.7" || pythonAtLeast "3.11";
+  disabled = pythonAtLeast "3.11";
 
   src = fetchFromGitHub {
     owner = "sqlalchemyorg";

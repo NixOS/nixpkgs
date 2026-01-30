@@ -5,13 +5,13 @@
   meson,
   ninja,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wayland-logout";
   version = "1.4";
   src = fetchFromGitHub {
     owner = "soreau";
     repo = "wayland-logout";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-VSAw6go4v937HWazXfMz8OdHgOnUtrlDXkslsV4eDIg=";
   };
   nativeBuildInputs = [
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     license = with lib.licenses; [ mit ];
     platforms = lib.platforms.linux;
   };
-}
+})

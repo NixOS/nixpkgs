@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "merge3";
   version = "0.0.15";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

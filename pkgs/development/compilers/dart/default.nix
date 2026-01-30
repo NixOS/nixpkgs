@@ -26,6 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
+    rm LICENSE
     cp -R . $out
   ''
   + lib.optionalString (stdenv.hostPlatform.isLinux) ''
@@ -95,5 +96,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.bsd3;
+    teams = [ lib.teams.flutter ];
   };
 })

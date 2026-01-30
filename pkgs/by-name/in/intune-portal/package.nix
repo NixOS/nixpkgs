@@ -4,7 +4,7 @@
   fetchurl,
   dpkg,
   libuuid,
-  xorg,
+  libx11,
   curlMinimal,
   openssl_3,
   libsecret,
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
         intune = lib.makeLibraryPath [
           stdenv.cc.cc
           libuuid
-          xorg.libX11
+          libx11
           curlMinimal_openssl_3
           openssl_3
           libsecret

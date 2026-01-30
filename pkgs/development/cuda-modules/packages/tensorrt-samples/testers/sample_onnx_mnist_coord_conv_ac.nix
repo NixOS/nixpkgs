@@ -25,8 +25,8 @@ lib.optionalAttrs false (
       "--fp16"
     ];
   }
-  # Only Orin has a DLA
-  // lib.optionalAttrs (lib.elem "8.7" backendStdenv.cudaCapabilities) {
+  # Only Xavier and Orin have a DLA
+  // lib.optionalAttrs (lib.subtractLists [ "7.2" "8.7" ] backendStdenv.cudaCapabilities == [ ]) {
     dla = mkTester "sample_onnx_mnist_coord_conv_ac-dla" [
       "sample_onnx_mnist_coord_conv_ac"
       "--datadir=${sample-data.outPath + "/mnist"}"

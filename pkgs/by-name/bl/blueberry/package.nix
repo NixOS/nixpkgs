@@ -16,7 +16,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "blueberry";
   version = "1.4.8";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "linuxmint";
@@ -84,7 +84,7 @@ python3Packages.buildPythonApplication rec {
 
   postFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
-    wrapPythonProgramsIn $out/lib "$out $pythonPath"
+    wrapPythonProgramsIn $out/lib "$out ''${pythonPath[*]}"
   '';
 
   meta = {

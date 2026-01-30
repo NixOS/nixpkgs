@@ -8,7 +8,10 @@
   fontconfig,
   tk,
   ncurses,
-  xorg,
+  libxt,
+  libxext,
+  libxaw,
+  libx11,
   file,
 }:
 
@@ -47,13 +50,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ncurses
     fontconfig
-  ]
-  ++ (with xorg; [
-    libX11.dev
-    libXt.dev
-    libXaw.dev
-    libXext.dev
-  ]);
+    libx11.dev
+    libxt.dev
+    libxaw.dev
+    libxext.dev
+  ];
 
   nativeBuildInputs = [
     file

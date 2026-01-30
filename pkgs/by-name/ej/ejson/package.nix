@@ -27,6 +27,5 @@ buildGoModule rec {
     mainProgram = "ejson";
     license = lib.licenses.mit;
     homepage = "https://github.com/Shopify/ejson";
-    maintainers = [ lib.maintainers.manveru ];
   };
 }

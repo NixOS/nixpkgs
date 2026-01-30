@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   pkg-config,
-  fltk13,
+  fltk_1_3,
   portaudio,
   lame,
   libvorbis,
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    fltk13
+    fltk_1_3
     portaudio
     lame
     libvorbis

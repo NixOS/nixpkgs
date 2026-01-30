@@ -1,17 +1,17 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
-  wheel,
-  versionCheckHook,
-  withCli ? false,
+
+  # build-system
+  poetry-core,
+  poetry-dynamic-versioning,
 
   # dependencies
   jsonschema,
   numpy,
   onnxruntime,
-  opencv-python-headless,
   pillow,
   pooch,
   pymatting,
@@ -27,31 +27,47 @@
   filetype,
   gradio,
   python-multipart,
+  sniffio,
   uvicorn,
   watchdog,
+
+  # tests
+  versionCheckHook,
+
+  withCli ? false,
 }:
 
-buildPythonPackage rec {
+let
+  isNotAarch64Linux = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
+in
+buildPythonPackage (finalAttrs: {
   pname = "rembg";
-  version = "2.0.69";
+  version = "2.0.72";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "danielgatis";
     repo = "rembg";
-    tag = "v${version}";
-    hash = "sha256-9Ncs1DHPG3ouU5yFyeH0M2ZCQ9yHqJhVjkDO8fNSqIg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-KYpqRuC7EjgH0UqgIoMaeHF3oQSI87j6J3bcqU+43Wo=";
   };
 
+  env.POETRY_DYNAMIC_VERSIONING_BYPASS = finalAttrs.version;
+
   build-system = [
-    setuptools
-    wheel
+    poetry-core
+    poetry-dynamic-versioning
   ];
 
+  pythonRelaxDeps = [
+    "jsonschema"
+    "pillow"
+    "pymatting"
+    "scikit-image"
+  ];
   dependencies = [
     jsonschema
     numpy
-    opencv-python-headless
     onnxruntime
     pillow
     pooch
@@ -60,7 +76,7 @@ buildPythonPackage rec {
     scipy
     tqdm
   ]
-  ++ lib.optionals withCli optional-dependencies.cli;
+  ++ lib.optionals withCli finalAttrs.passthru.optional-dependencies.cli;
 
   optional-dependencies = {
     cli = [
@@ -71,6 +87,7 @@ buildPythonPackage rec {
       filetype
       gradio
       python-multipart
+      sniffio
       uvicorn
       watchdog
     ];
@@ -83,16 +100,29 @@ buildPythonPackage rec {
   postInstall = lib.optionalString (!withCli) "rm -r $out/bin";
 
   # not running python tests, as they require network access
-  nativeCheckInputs = lib.optionals withCli [ versionCheckHook ];
+  nativeCheckInputs = lib.optionals withCli [
+    versionCheckHook
+  ];
+  versionCheckKeepEnvironment = [
+    # Otherwise, fail with:
+    # RuntimeError: cannot cache function '_make_tree': no locator available for file
+    # '{{storeDir}}/lib/python3.13/site-packages/pymatting/util/kdtree.py'
+    "NUMBA_CACHE_DIR"
+  ];
 
-  pythonImportsCheck = [ "rembg" ];
+  # aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox:
+  # terminate called after throwing an instance of 'onnxruntime::OnnxRuntimeException'
+  #
+  # -> Skip all tests that require importing rembg
+  pythonImportsCheck = lib.optionals isNotAarch64Linux [ "rembg" ];
+  doCheck = isNotAarch64Linux;
 
   meta = {
     description = "Tool to remove background from images";
     homepage = "https://github.com/danielgatis/rembg";
-    changelog = "https://github.com/danielgatis/rembg/releases/tag/${src.tag}";
+    changelog = "https://github.com/danielgatis/rembg/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ defelo ];
     mainProgram = "rembg";
   };
-}
+})

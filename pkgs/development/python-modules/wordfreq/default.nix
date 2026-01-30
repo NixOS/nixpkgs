@@ -15,7 +15,7 @@
 buildPythonPackage rec {
   pname = "wordfreq";
   version = "3.0.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rspeer";

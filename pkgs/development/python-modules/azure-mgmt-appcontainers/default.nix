@@ -2,12 +2,10 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   azure-common,
   azure-mgmt-core,
   isodate,
   setuptools,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -28,8 +26,7 @@ buildPythonPackage rec {
     azure-common
     azure-mgmt-core
     isodate
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
+  ];
 
   # no tests included
   doCheck = false;

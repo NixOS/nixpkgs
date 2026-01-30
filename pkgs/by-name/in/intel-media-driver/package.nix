@@ -15,7 +15,7 @@
   pkgsi686Linux,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "intel-media-driver";
   version = "25.3.4";
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "intel";
     repo = "media-driver";
-    rev = "intel-media-${version}";
+    rev = "intel-media-${finalAttrs.version}";
     hash = "sha256-76FBaeTXSRbUN63AaV0XSj/QFi0UF+K/ig+LFjQQgFQ=";
   };
 
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
       video post processing for GEN based graphics hardware.
     '';
     homepage = "https://github.com/intel/media-driver";
-    changelog = "https://github.com/intel/media-driver/releases/tag/intel-media-${version}";
+    changelog = "https://github.com/intel/media-driver/releases/tag/intel-media-${finalAttrs.version}";
     license = with lib.licenses; [
       bsd3
       mit
@@ -92,4 +92,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
-}
+})

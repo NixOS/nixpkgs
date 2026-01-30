@@ -23,7 +23,13 @@
     hmclJdk
     jdk17
   ],
-  xorg,
+  libxxf86vm,
+  libxtst,
+  libxrandr,
+  libxext,
+  libxcursor,
+  libx11,
+  xrandr,
   glib,
   libGL,
   glfw,
@@ -35,17 +41,17 @@
   libpulseaudio,
   gobject-introspection,
   callPackage,
+  gtk3,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "hmcl";
-  version = "3.9.1";
+  version = "3.9.2";
 
   src = fetchurl {
     # HMCL has built-in keys, such as the Microsoft OAuth secret and the CurseForge API key.
     # See https://github.com/HMCL-dev/HMCL/blob/refs/tags/release-3.6.12/.github/workflows/gradle.yml#L26-L28
     url = "https://github.com/HMCL-dev/HMCL/releases/download/v${finalAttrs.version}/HMCL-${finalAttrs.version}.jar";
-    hash = "sha256-UcycobEFbiSys19a3C01CqLKTM1SdAwHDNExRNVv6ug=";
+    hash = "sha256-/thuAsPadixV2vkez3w9yhkDdpJra54WkhFYaeKH0GU=";
   };
 
   # - HMCL prompts users to download prebuilt Terracotta binary for
@@ -138,15 +144,16 @@ stdenv.mkDerivation (finalAttrs: {
     vulkan-loader
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    xorg.libX11
-    xorg.libXxf86vm
-    xorg.libXext
-    xorg.libXcursor
-    xorg.libXrandr
-    xorg.libXtst
+    libx11
+    libxxf86vm
+    libxext
+    libxcursor
+    libxrandr
+    libxtst
     libpulseaudio
     wayland
     alsa-lib
+    gtk3
   ];
 
   installPhase = ''
@@ -175,9 +182,10 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     makeShellWrapper ${hmclJdk}/bin/java $out/bin/hmcl \
       --add-flags "-jar $out/lib/hmcl/hmcl-terracotta-patch.jar" \
+      --add-flags "-Djdk.gtk.version=3" \
       --set LD_LIBRARY_PATH ${lib.makeLibraryPath finalAttrs.runtimeDeps} \
       --prefix PATH : "${
-        lib.makeBinPath (minecraftJdks ++ lib.optional stdenv.hostPlatform.isLinux xorg.xrandr)
+        lib.makeBinPath (minecraftJdks ++ lib.optional stdenv.hostPlatform.isLinux xrandr)
       }" \
       --run 'cd $HOME' \
       ''${gappsWrapperArgs[@]}

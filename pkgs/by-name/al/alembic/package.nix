@@ -7,14 +7,14 @@
   hdf5-threadsafe,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "alembic";
   version = "1.8.8";
 
   src = fetchFromGitHub {
     owner = "alembic";
     repo = "alembic";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-R69UYyvLnMwv1JzEQ6S6elvR83Rmvc8acBJwSV/+hCk=";
   };
 
@@ -72,4 +72,4 @@ stdenv.mkDerivation rec {
       tmarkus
     ];
   };
-}
+})

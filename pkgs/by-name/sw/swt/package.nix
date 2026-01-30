@@ -11,8 +11,10 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "swt";
-  version = "4.34";
-  fullVersion = "${finalAttrs.version}-202411201800";
+  # NOTE: In case you wish to override, don't override version, override
+  # `fullVersion`.
+  version = builtins.elemAt (lib.splitString "-" finalAttrs.fullVersion) 1;
+  fullVersion = "R-4.34-202411201800";
 
   hardeningDisable = [ "format" ];
 
@@ -44,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     in
     assert srcMetadata != null;
     fetchzip {
-      url = "https://archive.eclipse.org/eclipse/downloads/drops4/R-${finalAttrs.fullVersion}/swt-${finalAttrs.version}-${srcMetadata.platform}.zip";
+      url = "https://download.eclipse.org/eclipse/downloads/drops4/${finalAttrs.fullVersion}/swt-${finalAttrs.version}-${srcMetadata.platform}.zip";
       inherit (srcMetadata) hash;
       stripRoot = false;
       postFetch =
@@ -141,7 +143,13 @@ stdenv.mkDerivation (finalAttrs: {
       mpl11
       mpl20
     ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ mio ];
+    # The darwin src zip file holds simply a prebuilt swt.jar file
+    sourceProvenance = lib.optionals stdenv.hostPlatform.isDarwin [
+      lib.sourceTypes.binaryNativeCode
+    ];
     platforms = lib.attrNames finalAttrs.passthru.srcMetadataByPlatform;
+    # Fails with: `java.nio.file.NoSuchFileException: ../swt.jar`
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 })

@@ -5,14 +5,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.1.2";
   pname = "metastore";
 
   src = fetchFromGitHub {
     owner = "przemoc";
     repo = "metastore";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0mb10wfckswqgi0bq25ncgabnd3iwj7s7hhg3wpcyfgckdynwizv";
   };
 
@@ -27,4 +27,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ sstef ];
     platforms = lib.platforms.linux;
   };
-}
+})

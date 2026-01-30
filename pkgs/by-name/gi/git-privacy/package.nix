@@ -8,7 +8,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "git-privacy";
   version = "2.3.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "EMPRI-DEVOPS";

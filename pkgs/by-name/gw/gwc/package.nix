@@ -12,14 +12,14 @@
   fftw,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gwc";
   version = "0.22-06";
 
   src = fetchFromGitHub {
     owner = "AlisterH";
     repo = "gwc";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-hRwy++gZiW/olIIeiVTpdIjPLIHgvgVUGEaUX9tpFbY=";
   };
 
@@ -48,9 +48,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "GUI application for removing noise (hiss, pops and clicks) from audio files";
     homepage = "https://github.com/AlisterH/gwc/";
-    changelog = "https://github.com/AlisterH/gwc/blob/${version}/Changelog";
+    changelog = "https://github.com/AlisterH/gwc/blob/${finalAttrs.version}/Changelog";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ magnetophon ];
     platforms = lib.platforms.linux;
   };
-}
+})

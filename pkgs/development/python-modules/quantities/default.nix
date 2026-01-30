@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "quantities";
-  version = "0.16.2";
+  version = "0.16.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-quantities";
     repo = "python-quantities";
     tag = "v${version}";
-    hash = "sha256-6Kl7TiSCSDtMjRKMNVweoGJ1y8kmo1j4SY0tikyAozs=";
+    hash = "sha256-a+UtNvcnQr4z87tpidx99u46M2H+EKtQ1EzIG5zQnmI=";
   };
 
   build-system = [

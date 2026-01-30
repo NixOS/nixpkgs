@@ -16,7 +16,7 @@ in
 py.pkgs.buildPythonApplication rec {
   pname = "healthchecks";
   version = "3.11.2";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "healthchecks";

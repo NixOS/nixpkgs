@@ -1,21 +1,26 @@
 {
   lib,
   stdenv,
-  async-timeout,
-  bluez,
   buildPythonPackage,
+  fetchFromGitHub,
+  bluez,
+  pythonOlder,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
   bumble,
   dbus-fast,
-  fetchFromGitHub,
-  poetry-core,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
-  typing-extensions,
   pyobjc-core,
   pyobjc-framework-CoreBluetooth,
   pyobjc-framework-libdispatch,
+  typing-extensions,
+  async-timeout,
+
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -30,11 +35,14 @@ buildPythonPackage rec {
     hash = "sha256-UrKJoEyLa75HMCOgxmOqJi1z+32buMra+dwVe5qbBds=";
   };
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
+  postPatch =
     # bleak checks BlueZ's version with a call to `bluetoothctl --version`
-    substituteInPlace bleak/backends/bluezdbus/version.py \
-      --replace-fail \"bluetoothctl\" \"${bluez}/bin/bluetoothctl\"
-  '';
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      substituteInPlace bleak/backends/bluezdbus/version.py \
+        --replace-fail \
+          '"bluetoothctl"' \
+          '"${lib.getExe' bluez "bluetoothctl"}"'
+    '';
 
   build-system = [ poetry-core ];
 

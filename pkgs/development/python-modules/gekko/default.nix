@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "gekko";
-  version = "1.3.0";
+  version = "1.3.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-S/uHA1UPPX159ZOk/vItSVWZ4VVu1Bylhc98LslAutI=";
+    hash = "sha256-o5nNn4lshkrb37ud0FL5V9EG9FTgpxG9U9tpbIiazn4=";
   };
 
   build-system = [ setuptools ];

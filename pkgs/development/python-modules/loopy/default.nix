@@ -27,7 +27,7 @@
   ply,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "loopy";
   version = "2025.2";
   pyproject = true;
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "inducer";
     repo = "loopy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-VgsUOMCIg61mYNDMcGpMs5I1CkobhUFVjoQFdD8Vchs=";
     fetchSubmodules = true; # submodule at `loopy/target/c/compyte`
   };
@@ -76,8 +76,8 @@ buildPythonPackage rec {
   meta = {
     description = "Code generator for array-based code on CPUs and GPUs";
     homepage = "https://github.com/inducer/loopy";
-    changelog = "https://github.com/inducer/loopy/releases/tag/${src.tag}";
+    changelog = "https://github.com/inducer/loopy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tomasajt ];
   };
-}
+})

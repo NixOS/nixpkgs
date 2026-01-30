@@ -20,14 +20,14 @@
   SDL2_image,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pioneer";
   version = "20250501";
 
   src = fetchFromGitHub {
     owner = "pioneerspacesim";
     repo = "pioneer";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-bQ1JGndHbBM28SuAUybo9msC/nBXu6el1UY41BKJN5A=";
   };
 
@@ -81,4 +81,4 @@ stdenv.mkDerivation rec {
       "i686-linux"
     ];
   };
-}
+})

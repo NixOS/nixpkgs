@@ -59,7 +59,8 @@
   vamp-plugin-sdk,
   wafHook,
   xjadeo,
-  xorg,
+  libxrandr,
+  libxinerama,
   optimize ? true, # disable to print Lua DSP script output to stdout
   videoSupport ? true,
 }:
@@ -164,8 +165,8 @@ stdenv.mkDerivation (
       suil
       taglib
       vamp-plugin-sdk
-      xorg.libXinerama
-      xorg.libXrandr
+      libxinerama
+      libxrandr
     ]
     ++ lib.optionals videoSupport [
       harvid

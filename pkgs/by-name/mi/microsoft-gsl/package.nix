@@ -7,14 +7,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "microsoft-gsl";
   version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "Microsoft";
     repo = "GSL";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-rfSfgyjU1U6gaWzlx2CeaCSb784L29vHDAC/PQl+s6E=";
   };
 
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
       yuriaisaka
     ];
   };
-}
+})

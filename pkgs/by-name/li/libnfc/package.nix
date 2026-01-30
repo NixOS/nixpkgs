@@ -8,14 +8,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libnfc";
   version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "nfc-tools";
     repo = "libnfc";
-    rev = "libnfc-${version}";
+    rev = "libnfc-${finalAttrs.version}";
     sha256 = "5gMv/HajPrUL/vkegEqHgN2d6Yzf01dTMrx4l34KMrQ=";
   };
 
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ offline ];
     platforms = lib.platforms.unix;
   };
-}
+})

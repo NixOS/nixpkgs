@@ -10,14 +10,14 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "isolate";
   version = "2.2";
 
   src = fetchFromGitHub {
     owner = "ioi";
     repo = "isolate";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-AacKIRS/Ah1KoE+bz+lK2GPbS3F3ifBGXvvCFWMd7hs=";
   };
 
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ virchau13 ];
   };
-}
+})

@@ -518,4 +518,5 @@ in
       group = config.services.nginx.group;
     };
   };
+  meta.maintainers = pkgs.cloudlog.meta.maintainers;
 }

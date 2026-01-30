@@ -36,15 +36,12 @@
   # Path to set ROBUST_SOUNDFONT_OVERRIDE to, essentially the default soundfont used.
   soundfont-path ? "${soundfont-fluid}/share/soundfonts/FluidR3_GM2-2.sf2",
 }:
-let
-  version = "0.36.1";
-  pname = "space-station-14-launcher";
-in
 buildDotnetModule rec {
-  inherit pname;
+  pname = "space-station-14-launcher";
+  version = "0.36.1";
 
   # Workaround to prevent buildDotnetModule from overriding assembly versions.
-  name = "${pname}-${version}";
+  name = "space-station-14-launcher-${version}";
 
   # A bit redundant but I don't trust this package to be maintained by anyone else.
   src = fetchFromGitHub {
@@ -69,7 +66,9 @@ buildDotnetModule rec {
     inherit version;
   };
 
-  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0 // {
+    inherit (dotnetCorePackages.sdk_8_0) packages;
+  };
   dotnet-runtime = dotnetCorePackages.runtime_10_0;
 
   dotnetFlags = [
@@ -108,15 +107,15 @@ buildDotnetModule rec {
   # ${soundfont-path} is escaped here:
   # https://github.com/NixOS/nixpkgs/blob/d29975d32b1dc7fe91d5cb275d20f8f8aba399ad/pkgs/build-support/setup-hooks/make-wrapper.sh#L126C35-L126C45
   # via https://www.gnu.org/software/bash/manual/html_node/Shell-Parameter-Expansion.html under ${parameter@operator}
-  makeWrapperArgs = [ ''--set ROBUST_SOUNDFONT_OVERRIDE ${soundfont-path}'' ];
+  makeWrapperArgs = [ "--set ROBUST_SOUNDFONT_OVERRIDE ${soundfont-path}" ];
 
   executables = [ "SS14.Launcher" ];
 
   desktopItems = [
     (makeDesktopItem {
-      name = pname;
+      name = "space-station-14-launcher";
       exec = meta.mainProgram;
-      icon = pname;
+      icon = "space-station-14-launcher";
       desktopName = "Space Station 14 Launcher";
       comment = meta.description;
       categories = [ "Game" ];

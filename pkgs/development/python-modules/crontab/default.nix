@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitLab {
     owner = "doctormo";
     repo = "python-crontab";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-eJXtvTRwokbewWrTArHJ2FXGDLvlkGA/5ZZR01koMW8=";
   };
 

@@ -755,8 +755,8 @@ in
         cfg.package.rake
       ];
       environment = cfg.package.runtimeEnv // {
-        UNICORN_TIMEOUT = builtins.toString cfg.unicornTimeout;
-        UNICORN_SIDEKIQS = builtins.toString cfg.sidekiqProcesses;
+        UNICORN_TIMEOUT = toString cfg.unicornTimeout;
+        UNICORN_SIDEKIQS = toString cfg.sidekiqProcesses;
         MALLOC_ARENA_MAX = "2";
       };
 

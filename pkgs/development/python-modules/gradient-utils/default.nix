@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "gradient-utils";
   version = "0.5.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Paperspace";

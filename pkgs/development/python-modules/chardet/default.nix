@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "chardet";
   version = "5.2.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

@@ -53,7 +53,7 @@
   libtiff,
   libwebp,
   libxml2,
-  lua,
+  lua5_4,
   util-linux,
   openexr,
   openjpeg,
@@ -78,7 +78,9 @@
   versionCheckHook,
   gitUpdater,
 }:
-
+let
+  pugixml-shared = pugixml.override { shared = true; };
+in
 stdenv.mkDerivation rec {
   version = "5.4.0";
   pname = "darktable";
@@ -138,13 +140,13 @@ stdenv.mkDerivation rec {
     libtiff
     libwebp
     libxml2
-    lua
+    lua5_4
     openexr
     openjpeg
     osm-gps-map
     pcre2
     portmidi
-    pugixml
+    pugixml-shared
     sqlite
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [

@@ -13,7 +13,7 @@
   mesonEmulatorHook,
   gtk3,
   icu,
-  enchant2,
+  enchant,
   gnome,
 }:
 
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [
     # required for pkg-config
-    enchant2
+    enchant
   ];
 
   passthru = {

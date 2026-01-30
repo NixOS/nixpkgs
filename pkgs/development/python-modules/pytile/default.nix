@@ -15,7 +15,7 @@
 buildPythonPackage rec {
   pname = "pytile";
   version = "2024.12.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bachya";

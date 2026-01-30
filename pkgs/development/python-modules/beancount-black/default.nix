@@ -12,7 +12,7 @@ buildPythonPackage (finalAttrs: {
   pname = "beancount-black";
   version = "1.0.5";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LaunchPlatform";

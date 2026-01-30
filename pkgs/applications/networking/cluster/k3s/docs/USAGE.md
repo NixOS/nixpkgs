@@ -25,7 +25,7 @@ Multi-node setup
 
 ## Multi-Node
 
-it is simple to create a cluster of multiple nodes in a highly available setup (all nodes are in the control-plane and are a part of the etcd cluster).
+It is simple to create a cluster of multiple nodes in a highly available setup (all nodes are in the control-plane and are a part of the etcd cluster).
 
 The first node is configured like this:
 
@@ -62,7 +62,7 @@ Tip: If you run into connectivity issues between nodes for specific applications
 ### `prefer-bundled-bin`
 
 K3s has a config setting `prefer-bundled-bin` (and CLI flag `--prefer-bundled-bin`) that makes k3s use binaries from the `/var/lib/rancher/k3s/data/current/bin/aux/` directory, as unpacked by the k3s binary, before the system `$PATH`.
-This works with the official distribution of k3s but not with the package from nixpkgs, as it does not bundle the upstream binaries from [`k3s-root`](https://github.com/k3s-io/k3s-root) into the k3s binary.
+This works with the official distribution of k3s but not with the package from Nixpkgs, as it does not bundle the upstream binaries from [`k3s-root`](https://github.com/k3s-io/k3s-root) into the k3s binary.
 Thus the `prefer-bundled-bin` setting **cannot** be used to work around issues (like [this `mount` regression](https://github.com/util-linux/util-linux/issues/3474)) with binaries used/called by the kubelet.
 
 ### Building from a different source

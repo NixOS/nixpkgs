@@ -4,16 +4,14 @@
   fetchPypi,
   hatch-vcs,
   hatchling,
-  importlib-resources,
   pytestCheckHook,
-  pythonOlder,
   referencing,
 }:
 
 buildPythonPackage rec {
   pname = "jsonschema-specifications";
   version = "2025.4.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "jsonschema_specifications";
@@ -28,8 +26,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     referencing
-  ]
-  ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

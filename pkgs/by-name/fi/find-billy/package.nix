@@ -10,7 +10,7 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "find-billy";
   version = "1.1.0";
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     domain = "codeberg.org";
     owner = "annaaurora";
     repo = "Find-Billy";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-jKN3lEnLy0aN98S8BN3dcoOgc0RrxNoqfQdeCawKQaU=";
   };
 
@@ -79,4 +79,4 @@ stdenv.mkDerivation rec {
     ];
     maintainers = [ lib.maintainers.annaaurora ];
   };
-}
+})

@@ -9,14 +9,14 @@
   libXi,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ksuperkey";
   version = "0.4";
 
   src = fetchFromGitHub {
     owner = "hanschen";
     repo = "ksuperkey";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1dvgf356fihfav8pjzww1q6vgd96c5h18dh8vpv022g9iipiwq8a";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "ksuperkey";
   };
-}
+})

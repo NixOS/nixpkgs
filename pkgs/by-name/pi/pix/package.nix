@@ -33,14 +33,14 @@
   xapp-symbolic-icons,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pix";
   version = "3.4.10";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "pix";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-IrRE2Bv2+DZMLI48at7npcAd3TSJRuZNzU/YbNK8x3k=";
   };
 
@@ -111,4 +111,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     teams = [ lib.teams.cinnamon ];
   };
-}
+})

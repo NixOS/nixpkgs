@@ -20,7 +20,7 @@
 buildPythonPackage rec {
   pname = "databricks-sql-connector";
   version = "4.0.5";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "databricks";

@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "demes";
   version = "0.2.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

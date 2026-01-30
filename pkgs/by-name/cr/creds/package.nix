@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "creds";
   version = "0.5.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ihebski";

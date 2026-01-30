@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "pyebus";
   version = "1.4.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

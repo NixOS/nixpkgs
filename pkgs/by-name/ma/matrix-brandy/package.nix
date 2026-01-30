@@ -7,14 +7,14 @@
   SDL,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "matrix-brandy";
   version = "1.23.5";
 
   src = fetchFromGitHub {
     owner = "stardot";
     repo = "MatrixBrandy";
-    rev = "V${version}";
+    rev = "V${finalAttrs.version}";
     hash = "sha256-sMgYgV4/vV1x5xSICXRpW6K8uCdVlJrS7iEg6XzQRo8=";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ fiq ];
   };
-}
+})

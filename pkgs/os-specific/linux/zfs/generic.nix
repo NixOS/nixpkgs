@@ -300,7 +300,15 @@ let
           done
         '';
 
-      outputs = [ "out" ] ++ optionals buildUser [ "dev" ];
+      outputs = [
+        "out"
+      ]
+      ++ optionals buildUser [
+        "dev"
+      ]
+      ++ optionals (!buildKernel) [
+        "man"
+      ];
 
       passthru = {
         inherit kernel;

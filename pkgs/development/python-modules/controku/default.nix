@@ -16,7 +16,7 @@
 buildPythonPackage rec {
   pname = "controku";
   version = "1.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "benthetechguy";

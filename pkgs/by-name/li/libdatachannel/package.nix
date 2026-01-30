@@ -12,14 +12,14 @@
   usrsctp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libdatachannel";
   version = "0.23.2";
 
   src = fetchFromGitHub {
     owner = "paullouisageneau";
     repo = "libdatachannel";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-76rlnO0wr7xQAGCc0GmpHQldzHKnZ8NZWpHmrE70h/c=";
   };
 
@@ -63,4 +63,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ erdnaxe ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

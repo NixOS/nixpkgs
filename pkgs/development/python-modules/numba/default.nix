@@ -37,8 +37,6 @@ buildPythonPackage rec {
   pname = "numba";
   pyproject = true;
 
-  disabled = pythonOlder "3.10" || pythonAtLeast "3.14";
-
   src = fetchFromGitHub {
     owner = "numba";
     repo = "numba";

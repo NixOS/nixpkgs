@@ -19,6 +19,7 @@
   doxygen,
   python3,
   callPackage,
+  fetchpatch,
 }:
 
 let
@@ -36,6 +37,15 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "colobot-gold-${finalAttrs.version}";
     hash = "sha256-QhNHtAG+hKq7qJhKWCJcP4ejm5YDOU8pyYtitJppVlU=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/colobot/colobot/commit/1561854b03500d39955c66971c9c98de1937d7e6.patch";
+      relative = "colobot-app/src";
+      extraPrefix = "src/app/";
+      hash = "sha256-TVd/TsmFb1qQILUJr6E1zdFl/bQkREYKC/cm2I3M/iw=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

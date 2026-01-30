@@ -19,14 +19,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "SG-323";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "greyboxaudio";
     repo = "SG-323";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-DvA9Y7eAG0pWLmHEZmJlo0JLU+0B4c8rlkX1bbVcnL8=";
+    hash = "sha256-yAC4YQt8f5kQ03ECAxvoM9wcqna98F4XKcwUQg6l4E0=";
   };
 
   nativeBuildInputs = [

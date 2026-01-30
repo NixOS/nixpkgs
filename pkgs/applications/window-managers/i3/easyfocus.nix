@@ -6,7 +6,7 @@
   xorgproto,
   libxcb,
   xcbutilkeysyms,
-  xorg,
+  libx11,
   i3ipc-glib,
   glib,
 }:
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
     libxcb
     xcbutilkeysyms
     xorgproto
-    xorg.libX11.dev
+    libx11.dev
     i3ipc-glib
     glib.dev
   ];

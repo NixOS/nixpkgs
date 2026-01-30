@@ -13,14 +13,14 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openfortivpn";
   version = "1.23.1";
 
   src = fetchFromGitHub {
     owner = "adrienverge";
     repo = "openfortivpn";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Pv9v7e5xPTIrgqldBDtTFxW+aIjbxSeu0sQ9n6HjO9w=";
   };
 
@@ -68,4 +68,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "openfortivpn";
   };
-}
+})

@@ -21,14 +21,14 @@ let
   ) mommySettings;
   configFile = writeText "mommy-config" (lib.toShellVars variables);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mommy";
   version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "FWDekker";
     repo = "mommy";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-G/8gUoJ6zKtSVlxrMYAkPX28SNG9XnLE72FZkqGhe+o=";
   };
 
@@ -49,10 +49,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "mommy's here to support you, in any shell, on any system~ ❤️";
     homepage = "https://github.com/FWDekker/mommy";
-    changelog = "https://github.com/FWDekker/mommy/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/FWDekker/mommy/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.unlicense;
     platforms = lib.platforms.all;
     maintainers = [ ];
     mainProgram = "mommy";
   };
-}
+})
