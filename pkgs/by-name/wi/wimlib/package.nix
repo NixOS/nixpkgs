@@ -13,7 +13,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.14.4";
+  version = "1.14.5";
   pname = "wimlib";
 
   nativeBuildInputs = [
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://wimlib.net/downloads/${pname}-${version}.tar.gz";
-    hash = "sha256-NjPbK2yLJV64bTvz3zBZeWvR8I5QuMlyjH62ZmLlEwA=";
+    hash = "sha256-hCIaOr1bkSKPFfjmBlwzWjNiN7VzgZe3W/QZ7qVhoZQ=";
   };
 
   enableParallelBuilding = true;
