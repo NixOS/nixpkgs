@@ -5718,6 +5718,12 @@
     github = "dadada";
     githubId = 7216772;
   };
+  dady8889 = {
+    email = "dady8889@gmail.com";
+    github = "dady8889";
+    githubId = 5238573;
+    name = "dady8889";
+  };
   dalance = {
     email = "dalance@gmail.com";
     github = "dalance";
