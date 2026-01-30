@@ -20330,6 +20330,8 @@ self: super: with self; {
 
   vacuum-map-parser-roidmi = callPackage ../development/python-modules/vacuum-map-parser-roidmi { };
 
+  vacuum-map-parser-viomi = callPackage ../development/python-modules/vacuum-map-parser-viomi { };
+
   validate-email = callPackage ../development/python-modules/validate-email { };
 
   validator-collection = callPackage ../development/python-modules/validator-collection { };
