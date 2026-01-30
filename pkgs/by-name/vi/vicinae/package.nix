@@ -99,7 +99,8 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
 
   postFixup = ''
     substituteInPlace $out/share/systemd/user/vicinae.service \
-      --replace-fail "/bin/kill" "${lib.getExe' coreutils "kill"}"
+      --replace-fail "/bin/kill" "${lib.getExe' coreutils "kill"}"\
+      --replace-fail "ExecStart=vicinae" "ExecStart=$out/bin/vicinae"
   '';
 
   passthru.updateScript = ./update.sh;
