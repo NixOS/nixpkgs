@@ -2,19 +2,29 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
 }:
 
 stdenv.mkDerivation rec {
   pname = "marisa";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "s-yata";
     repo = "marisa-trie";
     tag = "v${version}";
-    hash = "sha256-XOXX0NuU+erL/KDAZgBeX+LKO9uSEOyP1/VuMDE5pi0=";
+    hash = "sha256-+rOmbvlcEBBsjUdWRrW9WN0MfhnSe7Gm3DOXfhtcSDc=";
   };
+
+  patches = [
+    # https://github.com/s-yata/marisa-trie/pull/123
+    (fetchpatch {
+      name = "fix-binding-build.patch";
+      url = "https://github.com/s-yata/marisa-trie/commit/cf4602f08df49861d987d122bd85bfdb456fe7a0.patch";
+      hash = "sha256-h6+ixT63cHSpg3fhiLwJlxU296bD5YgfEaGqAHpm6+g=";
+    })
+  ];
 
   enableParallelBuilding = true;
 
