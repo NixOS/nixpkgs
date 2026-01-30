@@ -2,8 +2,6 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  lazycommit,
-  testers,
   nix-update-script,
 }:
 buildGoModule rec {
