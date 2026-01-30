@@ -154,8 +154,6 @@ python3Packages.buildPythonApplication rec {
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux qt6.qtwayland;
 
-  dontWrapGApps = true;
-
   nativeCheckInputs = with python3Packages; [
     pytest
     mock
@@ -174,6 +172,7 @@ python3Packages.buildPythonApplication rec {
 
   dontUseNinjaInstall = false;
   dontWrapQtApps = true;
+  dontWrapGApps = true;
 
   env = {
     # Activate optimizations
