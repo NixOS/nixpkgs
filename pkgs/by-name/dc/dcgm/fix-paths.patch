@@ -113,21 +113,6 @@ index d0a75dcede..ccd4347719 100644
  
      // Check for NVVS binary path enviroment variable
      value = std::getenv("NVVS_BIN_PATH");
-diff --git a/modules/mndiag/dcgm_mndiag_structs.hpp b/modules/mndiag/dcgm_mndiag_structs.hpp
-index 40e61a8fd0..7e43ce8bed 100644
---- a/modules/mndiag/dcgm_mndiag_structs.hpp
-+++ b/modules/mndiag/dcgm_mndiag_structs.hpp
-@@ -33,8 +33,8 @@
- constexpr std::string_view ENV_ALLOW_RUN_AS_ROOT = "DCGM_MPIRUN_ALLOW_RUN_AS_ROOT";
- 
- // Default paths
--constexpr std::string_view DEFAULT_MPIRUN_PATH     = "/usr/bin/mpirun";
--constexpr std::string_view DEFAULT_MNUBERGEMM_PATH = "/usr/libexec/datacenter-gpu-manager-4/plugins/cuda12/mnubergemm";
-+constexpr std::string_view DEFAULT_MPIRUN_PATH     = "@mpi@/bin/mpirun";
-+constexpr std::string_view DEFAULT_MNUBERGEMM_PATH = "@dcgm_out@/libexec/datacenter-gpu-manager-4/plugins/cuda12/mnubergemm";
- } //namespace MnDiagConstants
- 
- // Message types
 diff --git a/modules/mndiag/tests/MnDiagManagerTests.cpp b/modules/mndiag/tests/MnDiagManagerTests.cpp
 index 40dbda3b72..5ec8dafa1c 100644
 --- a/modules/mndiag/tests/MnDiagManagerTests.cpp
@@ -204,13 +189,6 @@ index 526c80fd47..1e8596d3b7 100755
          REQUIRE(fullCommand.find("sleep 1") != std::string::npos);
          REQUIRE(fullCommand.find("Output from sleep process") != std::string::npos);
  
-@@ -244,4 +244,4 @@
-         // Test with invalid parameter (null pointer)
-         REQUIRE(runner.PopulateResponse(nullptr, nodeInfoMap_t()) == DCGM_ST_BADPARAM);
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/modules/sysmon/DcgmCpuTopology.cpp b/modules/sysmon/DcgmCpuTopology.cpp
 index 786d3877fc..ccbeccc81d 100644
 --- a/modules/sysmon/DcgmCpuTopology.cpp
@@ -224,29 +202,3 @@ index 786d3877fc..ccbeccc81d 100644
  
      dcgmReturn_t result = DCGM_ST_OK;
      for (auto const &prefix : cmdPathPrefix)
-diff --git a/nvvs/plugin_src/nvbandwidth/NVBandwidthPlugin.cpp b/nvvs/plugin_src/nvbandwidth/NVBandwidthPlugin.cpp
-index 261bba4490..4d439ad452 100644
---- a/nvvs/plugin_src/nvbandwidth/NVBandwidthPlugin.cpp
-+++ b/nvvs/plugin_src/nvbandwidth/NVBandwidthPlugin.cpp
-@@ -238,7 +238,7 @@
-     std::vector<std::string> const search_paths
-         = { GetCurrentModuleLocation(),
-             fmt::format("./apps/nvvs/plugins/cuda{}", m_cudaDriverMajorVersion),
--            fmt::format("/usr/libexec/datacenter-gpu-manager-4/plugins/cuda{}", m_cudaDriverMajorVersion),
-+            fmt::format("@dcgm_out@/libexec/datacenter-gpu-manager-4/plugins/cuda{}", m_cudaDriverMajorVersion),
-             GetNvvsBinCheckPath(m_cudaDriverMajorVersion) };
-     std::stringstream path_buf;
- 
-diff --git a/testing/TestDiagManager.cpp b/testing/TestDiagManager.cpp
-index 8087123a49..a6333b3a3d 100644
---- a/testing/TestDiagManager.cpp
-+++ b/testing/TestDiagManager.cpp
-@@ -236,7 +236,7 @@
-     if (nvvsPathEnv)
-         nvvsBinPath = std::string(nvvsPathEnv) + "/nvvs";
-     else
--        nvvsBinPath = "/usr/libexec/datacenter-gpu-manager-4/nvvs";
-+        nvvsBinPath = "@dcgm_out@/libexec/datacenter-gpu-manager-4/nvvs";
- 
-     std::string diagResponseVersionArg = fmt::format("--response-version {}", dcgmDiagResponse_version12);
-     expected.push_back(nvvsBinPath + " --channel-fd 3 " + diagResponseVersionArg

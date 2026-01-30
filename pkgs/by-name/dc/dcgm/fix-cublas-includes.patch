@@ -1,0 +1,16 @@
+diff --git a/cublas_proxy/CMakeLists.txt b/cublas_proxy/CMakeLists.txt
+index 7a79b12..62c0e4f 100755
+--- a/cublas_proxy/CMakeLists.txt
++++ b/cublas_proxy/CMakeLists.txt
+@@ -27,7 +27,10 @@ macro(define_proxy_lib CUDA_VER)
+ 
+     target_include_directories(${lib_name} PUBLIC
+         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>
+-        $<BUILD_INTERFACE:${CUDA${CUDA_VER}_INCLUDE_DIR}>)
++    )
++    foreach(cuda_include_dir IN LISTS CUDA${CUDA_VER}_INCLUDE_DIR)
++        target_include_directories(${lib_name} PUBLIC $<BUILD_INTERFACE:${cuda_include_dir}>)
++    endforeach()
+ 
+     target_link_libraries(${lib_name} PRIVATE
+         ${CUDA${CUDA_VER}_LIBS}
