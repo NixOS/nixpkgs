@@ -1188,6 +1188,28 @@ in
     };
 
     imaginary.enable = lib.mkEnableOption "Imaginary";
+
+    fileBackup = lib.mkOption {
+      description = ''
+        Description of files to be backed up.
+
+        Is a consumer of the [filebackup](#opt-contracts.filebackup) contract.
+      '';
+      type = lib.types.submodule {
+        options = lib.contracts.filebackup.mkConsumer {
+          user = "nextcloud";
+          sourceDirectories = [
+            cfg.datadir
+          ];
+          sourceDirectoriesText = [
+            "services.nextcloud.datadir"
+          ];
+          excludePatterns = [
+            ".rnd"
+          ];
+        };
+      };
+    };
   };
 
   config = lib.mkIf cfg.enable (
