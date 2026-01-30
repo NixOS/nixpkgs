@@ -4,7 +4,6 @@
   fetchFromGitHub,
   nix-update-script,
   nixosTests,
-  testers,
   nodejs,
   node-gyp,
   gnutar,
@@ -15,6 +14,7 @@
   pnpm_9,
   fetchPnpmDeps,
   pnpmConfigHook,
+  versionCheckHook,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "karakeep";
@@ -23,8 +23,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "karakeep-app";
     repo = "karakeep";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-ZYAjbinVMT0iiqojRxcKwQbvDqYteoExm1Ocppka0Ps=";
+    tag = "cli/v${finalAttrs.version}";
+    hash = "sha256-Ssr/KcQHRtEloz4YPAUfUmcbicMumkIQ+wOjxe9PTXM=";
   };
 
   patches = [
@@ -143,21 +143,22 @@ stdenv.mkDerivation (finalAttrs: {
     find $out -type l ! -exec test -e {} \; -delete
   '';
 
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
   passthru = {
     tests = {
       inherit (nixosTests) karakeep;
-      version = testers.testVersion {
-        package = finalAttrs.finalPackage;
-        # remove hardcoded version if upstream syncs general version with cli
-        # version
-        version = "0.29.1";
-      };
     };
     updateScript = nix-update-script { };
   };
 
   meta = {
     homepage = "https://karakeep.app/";
+    changelog = "https://github.com/karakeep-app/karakeep/releases/tag/v${finalAttrs.version}";
     description = "Self-hostable bookmark-everything app (links, notes and images) with AI-based automatic tagging and full text search";
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.three ];
