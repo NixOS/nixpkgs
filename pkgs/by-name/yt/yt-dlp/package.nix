@@ -21,23 +21,19 @@ python3Packages.buildPythonApplication rec {
   # The websites yt-dlp deals with are a very moving target. That means that
   # downloads break constantly. Because of that, updates should always be backported
   # to the latest stable release.
-  version = "2025.12.08";
+  version = "2026.01.29";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yt-dlp";
     repo = "yt-dlp";
     tag = version;
-    hash = "sha256-y06MDP+CrlHGrell9hcLOGlHp/gU2OOxs7can4hbj+g=";
+    hash = "sha256-nw/L71aoAJSCbW1y8ir8obrFPSbVlBA0UtlrxL6YtCQ=";
   };
 
   postPatch = ''
     substituteInPlace yt_dlp/version.py \
       --replace-fail "UPDATE_HINT = None" 'UPDATE_HINT = "Nixpkgs/NixOS likely already contain an updated version.\n       To get it run nix-channel --update or nix flake update in your config directory."'
-    # Until yt-dlp supports curl-cffi 0.14.x, this patch is needed:
-    substituteInPlace yt_dlp/networking/_curlcffi.py \
-      --replace-fail "if curl_cffi_version != (0, 5, 10) and not (0, 10) <= curl_cffi_version < (0, 14)" \
-      "if curl_cffi_version != (0, 5, 10) and not (0, 10) <= curl_cffi_version"
     ${lib.optionalString javascriptSupport ''
       # deno is required for full YouTube support (since 2025.11.12).
       # This makes yt-dlp find deno even if it is used as a python dependency, i.e. in kodiPackages.sendtokodi.
