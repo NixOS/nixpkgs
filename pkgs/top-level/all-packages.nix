@@ -5926,8 +5926,6 @@ with pkgs;
 
   dbt = with python3Packages; toPythonApplication dbt-core;
 
-  devbox = callPackage ../development/tools/devbox { buildGoModule = buildGo124Module; };
-
   libcxx = llvmPackages.libcxx;
 
   libgcc = stdenv.cc.cc.libgcc or null;
