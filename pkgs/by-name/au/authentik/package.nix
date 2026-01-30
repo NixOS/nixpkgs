@@ -15,13 +15,13 @@
 let
   nodejs = nodejs_24;
 
-  version = "2025.10.1";
+  version = "2025.12.3";
 
   src = fetchFromGitHub {
     owner = "goauthentik";
     repo = "authentik";
     tag = "version/${version}";
-    hash = "sha256-HowB6DTGCqz770fKYbnE+rQ11XRV0WSNkLD+HSWZwz8=";
+    hash = "sha256-t9DOFNSQJZdUnZSEr3z8EBRsltS4DKu9xad9gS5/Ikc=";
   };
 
   meta = {
@@ -48,8 +48,8 @@ let
 
     outputHash =
       {
-        "aarch64-linux" = "sha256-aXXlzTsZp5mOrsxy9oHNzcc+1cFSnbC9RmtawBohmLI=";
-        "x86_64-linux" = "sha256-Hi0HXzwTLuer0v4IKF3aim0tVe7AVLi67DiMimrIq5s=";
+        "aarch64-linux" = "sha256-GL5FPIBnoEXYtw8DPJpRPe3tT3qioN4AdoeOmCoiYsM=";
+        "x86_64-linux" = "sha256-AnceTipq6uUvTbOAZanVshAbAJ9LS1kwImbttTOcWxc=";
       }
       .${stdenvNoCC.hostPlatform.system} or (throw "authentik-website-deps: unsupported host platform");
 
@@ -119,8 +119,8 @@ let
 
     outputHash =
       {
-        "aarch64-linux" = "sha256-t/jyzG3ibTW3fu8Gl1tWkSjMG6Lek/7JDccDrZX6sD0=";
-        "x86_64-linux" = "sha256-8I1YAKvgWjM3p9O1mCetZvhZelrfB31w0ZwkZBUEoh4=";
+        "aarch64-linux" = "sha256-eZZ5Ynj81KwFsU5emPtYZ2CxO8MFvWbJnCHs+L88KQQ=";
+        "x86_64-linux" = "sha256-yUAyyO1NFav1EptrRYGSzC8dxCxYVj0FmzHk8IckFZM=";
       }
       .${stdenvNoCC.hostPlatform.system} or (throw "authentik-webui-deps: unsupported host platform");
     outputHashMode = "recursive";
@@ -268,49 +268,6 @@ let
         ];
       };
 
-      # Running authentik currently requires a custom version.
-      # Look in `pyproject.toml` for changes to the rev in the `[tool.uv.sources]` section.
-      # See https://github.com/goauthentik/authentik/pull/14057 for latest version bump.
-      djangorestframework = final.buildPythonPackage {
-        pname = "djangorestframework";
-        version = "3.16.0";
-        format = "setuptools";
-
-        src = fetchFromGitHub {
-          owner = "authentik-community";
-          repo = "django-rest-framework";
-          rev = "896722bab969fabc74a08b827da59409cf9f1a4e";
-          hash = "sha256-YrEDEU3qtw/iyQM3CoB8wYx57zuPNXiJx6ZjrIwnCNU=";
-        };
-
-        propagatedBuildInputs = with final; [
-          django
-          pytz
-        ];
-
-        nativeCheckInputs = with final; [
-          pytest-django
-          pytest7CheckHook
-
-          # optional tests
-          coreapi
-          django-guardian
-          inflection
-          pyyaml
-          uritemplate
-        ];
-
-        disabledTests = [
-          "test_ignore_validation_for_unchanged_fields"
-          "test_invalid_inputs"
-          "test_shell_code_example_rendering"
-          "test_unique_together_condition"
-          "test_unique_together_with_source"
-        ];
-
-        pythonImportsCheck = [ "rest_framework" ];
-      };
-
       # authentik is currently not compatible with v1.18 and fails with the following error:
       # > AttributeError: 'Namespace' object has no attribute 'worker_fork_timeout'. Did you mean: 'worker_shutdown_timeout'?
       dramatiq = prev.dramatiq.overrideAttrs (_: rec {
@@ -324,18 +281,29 @@ let
         };
       });
 
+      ak-guardian = final.buildPythonPackage {
+        pname = "ak-guardian";
+        inherit version src meta;
+        pyproject = true;
+
+        sourceRoot = "${src.name}/packages/ak-guardian";
+
+        build-system = with final; [ hatchling ];
+
+        dependencies = with final; [ django ];
+      };
+
       authentik-django = final.buildPythonPackage {
         pname = "authentik-django";
         inherit version src meta;
         pyproject = true;
 
         postPatch = ''
-          rm lifecycle/system_migrations/tenant_files.py
           substituteInPlace authentik/root/settings.py \
             --replace-fail 'Path(__file__).absolute().parent.parent.parent' "Path(\"$out\")"
           substituteInPlace authentik/lib/default.yml \
             --replace-fail '/blueprints' "$out/blueprints" \
-            --replace-fail './media' '/var/lib/authentik/media'
+            --replace-fail './data' '/var/lib/authentik/data'
           substituteInPlace authentik/stages/email/utils.py \
             --replace-fail 'web/' '${webui}/'
         '';
@@ -351,6 +319,7 @@ let
         dependencies =
           with final;
           [
+            ak-guardian
             argon2-cffi
             cachetools
             channels
@@ -364,7 +333,6 @@ let
             django-cte
             django-dramatiq-postgres
             django-filter
-            django-guardian
             django-model-utils
             django-pglock
             django-pgtrigger
@@ -375,7 +343,6 @@ let
             django-tenants
             djangoql
             djangorestframework
-            djangorestframework-guardian
             docker
             drf-orjson-renderer
             drf-spectacular
@@ -455,7 +422,7 @@ let
 
     env.CGO_ENABLED = 0;
 
-    vendorHash = "sha256-m2shrCwoVdbtr8B83ZcAyG+J6dEys2xdjtlfFFF4CDo=";
+    vendorHash = "sha256-pdQg02f1K4nOhsnadoplQYOhEybqZxn+yDQRN5RNygM=";
 
     postInstall = ''
       mv $out/bin/server $out/bin/authentik
