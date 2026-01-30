@@ -76,16 +76,13 @@ rec {
         {
           preferLocalBuild = true;
           allowSubstitutes = false;
-          # unit.text can be null. But variables that are null listed in
-          # passAsFile are ignored by nix, resulting in no file being created,
-          # making the mv operation fail.
-          text = optionalString (unit.text != null) unit.text;
-          passAsFile = [ "text" ];
+          text = unit.text or "";
+          __structuredAttrs = true;
         }
         ''
           name=${shellEscape name}
           mkdir -p "$out/$(dirname -- "$name")"
-          mv "$textPath" "$out/$name"
+          printf "%s" "$text" > "$out/$name"
         ''
     else
       pkgs.runCommand "unit-${mkPathSafeName name}-disabled"
