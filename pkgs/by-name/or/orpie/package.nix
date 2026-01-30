@@ -1,10 +1,10 @@
 {
   lib,
   fetchFromGitHub,
-  ocamlPackages,
+  ocaml-ng,
 }:
 
-ocamlPackages.buildDunePackage rec {
+ocaml-ng.ocamlPackages_4_14.buildDunePackage rec {
   pname = "orpie";
   version = "1.6.1";
 
@@ -21,8 +21,8 @@ ocamlPackages.buildDunePackage rec {
     substituteInPlace src/orpie/install.ml.in --replace '@prefix@' $out
   '';
 
-  nativeBuildInputs = [ ocamlPackages.camlp5 ];
-  buildInputs = with ocamlPackages; [
+  nativeBuildInputs = [ ocaml-ng.ocamlPackages_4_14.camlp5 ];
+  buildInputs = with ocaml-ng.ocamlPackages_4_14; [
     curses
     num
     gsl
