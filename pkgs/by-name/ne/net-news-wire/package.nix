@@ -52,6 +52,7 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [
       jakuzure
       DimitarNestorov
+      shgew
     ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
