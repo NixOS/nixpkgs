@@ -1,16 +1,14 @@
 {
   lib,
-  buildNpmPackage,
-  pnpm_9,
-  fetchPnpmDeps,
-  pnpmConfigHook,
+  stdenv,
   fetchFromGitHub,
+  nodejs,
+  pnpm_10,
+  pnpmConfigHook,
+  fetchPnpmDeps,
   unstableGitUpdater,
 }:
-let
-  pnpm = pnpm_9;
-in
-buildNpmPackage rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "piped";
   version = "0-unstable-2026-02-20";
 
@@ -21,25 +19,37 @@ buildNpmPackage rec {
     hash = "sha256-maYRZi/EWY03bR4eUmPNgYvaqFmL4RnASFVYxJAfuPg=";
   };
 
-  nativeBuildInputs = [ pnpm_9 ];
-  npmConfigHook = pnpmConfigHook;
+  nativeBuildInputs = [
+    nodejs
+    pnpm_10
+    pnpmConfigHook
+  ];
+
+  buildPhase = ''
+    runHook preBuild
+
+    pnpm build
+
+    runHook postBuild
+  '';
 
   installPhase = ''
     runHook preInstall
-    cp dist $out -r
+
+    cp -r dist "$out"
+
     runHook postInstall
   '';
 
-  npmDeps = pnpmDeps;
   pnpmDeps = fetchPnpmDeps {
-    inherit
+    inherit (finalAttrs)
       pname
       version
       src
       ;
-    pnpm = pnpm_9;
+    pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-SZ4f891OKIuip6Tr8epDEUnjZDMyUHm67hlLOA+kuBs=";
+    hash = "sha256-mBbcNT+vDtrHtqgVAMVxvh18wuKGtwzkCYSIfzGqYeM=";
   };
 
   passthru.updateScript = unstableGitUpdater { };
@@ -50,5 +60,4 @@ buildNpmPackage rec {
     maintainers = [ lib.maintainers.lucasew ];
     license = [ lib.licenses.agpl3Plus ];
   };
-
-}
+})
