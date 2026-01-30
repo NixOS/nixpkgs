@@ -52,14 +52,16 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DUSE_SYSTEM_JSONCPP=ON"
-    "-DBUILD_SHARED=1"
+    (lib.cmakeBool "BUILD_SHARED" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "USE_SYSTEM_JSONCPP" true)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.cmakeBool "BUILD_UNIVERSAL" false)
   ];
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    broken = stdenv.hostPlatform.isDarwin;
     description = "API and runtime that allows access to VR hardware from multiple vendors without requiring that applications have specific knowledge of the hardware they are targeting";
     homepage = "https://github.com/ValveSoftware/openvr";
     license = lib.licenses.bsd3;
