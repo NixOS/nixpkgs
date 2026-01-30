@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "nextdns";
-  version = "4.1.0";
+  version = "5.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "bieniu";
     repo = "nextdns";
     tag = version;
-    hash = "sha256-VTOANFrGOI1XDU/5THWkj/o5AWIpXcPKmOF1IF0I22Y=";
+    hash = "sha256-jZ+ULAlqaOnVWEHDPzIxIFjx+4eC3jMlXyX0QhfZUYM=";
   };
 
   build-system = [ setuptools ];
