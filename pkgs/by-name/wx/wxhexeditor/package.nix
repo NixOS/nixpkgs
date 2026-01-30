@@ -62,6 +62,7 @@ stdenv.mkDerivation rec {
   preConfigure = "patchShebangs .";
 
   makeFlags = lib.optionals stdenv.cc.isGNU [
+    "CFLAGS=-std=c17"
     "OPTFLAGS=-fopenmp"
   ];
 

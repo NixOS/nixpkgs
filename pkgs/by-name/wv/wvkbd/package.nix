@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wvkbd";
-  version = "0.18";
+  version = "0.19.2";
 
   src = fetchFromGitHub {
     owner = "jjsullivan5196";
     repo = "wvkbd";
     tag = "v${version}";
-    hash = "sha256-RfZbPAaf8UB4scUZ9XSL12QZ4UkYMzXqfmNt9ObOgQ0=";
+    hash = "sha256-PHbgARSy2Zlr1dgzuUFbPxtqFvOYoayMK9vGLR6yaTA=";
   };
 
   nativeBuildInputs = [

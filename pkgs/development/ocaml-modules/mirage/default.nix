@@ -14,7 +14,7 @@
   uri,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "mirage";
   inherit (mirage-runtime) version src;
 
@@ -43,11 +43,11 @@ buildDunePackage rec {
 
   installPhase = ''
     runHook preInstall
-    dune install --prefix=$out --libdir=$dev/lib/ocaml/${ocaml.version}/site-lib/ ${pname}
+    dune install --prefix=$out --libdir=$dev/lib/ocaml/${ocaml.version}/site-lib/ mirage
     runHook postInstall
   '';
 
   meta = mirage-runtime.meta // {
     description = "MirageOS library operating system";
   };
-}
+})

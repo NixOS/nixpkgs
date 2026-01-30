@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "minder";
-  version = "2.0.3";
+  version = "2.0.4";
 
   src = fetchFromGitHub {
     owner = "phase1geo";
     repo = "minder";
     tag = version;
-    hash = "sha256-gqTVRICPI6XlJmrBT6b5cONmBQ9LhsEuHUf/19NmXPo=";
+    hash = "sha256-IY4phXunB4ypU6wRhhXA2wg7Vsv8WvcL6nEXDiOGj/E=";
   };
 
   nativeBuildInputs = [

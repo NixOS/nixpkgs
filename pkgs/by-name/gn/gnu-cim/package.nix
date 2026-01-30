@@ -29,13 +29,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  # lib.escapeShellArgs does not work
-  env.CFLAGS = lib.concatStringsSep " " [
-    "-Wno-error=implicit-function-declaration"
-    "-Wno-error=implicit-int"
-    "-Wno-error=return-mismatch"
-    "-Wno-error=incompatible-pointer-types"
-  ];
+  env.CFLAGS = "-std=gnu89";
 
   doCheck = true;
 

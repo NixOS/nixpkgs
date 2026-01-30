@@ -6,7 +6,7 @@
   pkg-config,
   SDL2,
   qttools,
-  xorg,
+  libxtst,
   fetchFromGitHub,
   itstool,
   udevCheckHook,
@@ -33,7 +33,7 @@ mkDerivation rec {
   buildInputs = [
     SDL2
     qttools
-    xorg.libXtst
+    libxtst
   ];
 
   postPatch = ''

@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "savepagenow";
-  version = "1.3.0";
+  version = "1.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pastpages";
     repo = "savepagenow";
     tag = version;
-    sha256 = "sha256-omQ28GqgBKC8W51c0qb6Tg06obXskyfF+2dg/13ah1M=";
+    sha256 = "sha256-ztM1g71g8SN1LTyFF7sxaLhC3+nVsC9fJwfYPjkUsdE=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

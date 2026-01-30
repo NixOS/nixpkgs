@@ -4,13 +4,11 @@
   decorator,
   fetchPypi,
   hatchling,
-  importlib-metadata,
   ipykernel,
   ipython,
   jupyter-client,
   psutil,
   python-dateutil,
-  pythonOlder,
   pyzmq,
   tornado,
   tqdm,
@@ -48,8 +46,7 @@ buildPythonPackage rec {
     tornado
     tqdm
     traitlets
-  ]
-  ++ lib.optional (pythonOlder "3.10") importlib-metadata;
+  ];
 
   # Requires access to cluster
   doCheck = false;

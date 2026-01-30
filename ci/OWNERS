@@ -36,7 +36,7 @@
 /maintainers/computed-team-list.nix @infinisil
 ## Standard environment–related libraries
 /lib/customisation.nix      @alyssais @NixOS/stdenv
-/lib/derivations.nix        @alyssais @NixOS/stdenv
+/lib/derivations.nix        @NixOS/stdenv
 /lib/fetchers.nix           @alyssais @NixOS/stdenv
 /lib/meta.nix               @alyssais @NixOS/stdenv
 /lib/source-types.nix       @alyssais @NixOS/stdenv
@@ -400,9 +400,9 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/applications/blockchains  @mmahut @RaghavSood
 
 # Go
-/doc/languages-frameworks/go.section.md @kalbasit @katexochen @Mic92 @zowoq
-/pkgs/build-support/go @kalbasit @katexochen @Mic92 @zowoq
-/pkgs/development/compilers/go @kalbasit @katexochen @Mic92 @zowoq
+/doc/languages-frameworks/go.section.md @kalbasit @katexochen @Mic92
+/pkgs/build-support/go @kalbasit @katexochen @Mic92
+/pkgs/development/compilers/go @kalbasit @katexochen @Mic92
 
 # GNOME
 /pkgs/desktops/gnome                              @jtojnar
@@ -434,7 +434,7 @@ pkgs/by-name/fo/forgejo/                @adamcstephens @bendlas @emilylange
 
 # Node.js
 /pkgs/build-support/node/build-npm-package      @winterqt
-/pkgs/build-support/node/fetch-npm-deps         @winterqt
+/pkgs/build-support/node/prefetch-npm-deps      @winterqt
 /doc/languages-frameworks/javascript.section.md @winterqt
 /pkgs/development/tools/pnpm                    @Scrumplex @gepbird
 /pkgs/build-support/node/fetch-pnpm-deps        @Scrumplex @gepbird
@@ -504,7 +504,7 @@ pkgs/development/interpreters/elixir/   @NixOS/beam
 pkgs/development/interpreters/lfe/      @NixOS/beam
 
 # Authelia
-pkgs/servers/authelia/ @06kellyjac @dit7ya @nicomem
+pkgs/by-name/au/authelia/ @06kellyjac @dit7ya @nicomem
 
 # OctoDNS
 pkgs/by-name/oc/octodns/ @anthonyroussel

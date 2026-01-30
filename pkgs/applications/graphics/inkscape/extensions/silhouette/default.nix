@@ -81,7 +81,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   postFixup = ''
-    wrapPythonProgramsIn "$out/share/inkscape/extensions/" "$out $pythonPath"
+    wrapPythonProgramsIn "$out/share/inkscape/extensions/" "$out ''${pythonPath[*]}"
   '';
 
   meta = {

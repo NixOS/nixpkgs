@@ -14,7 +14,8 @@
   gtk3,
   vala,
   wrapGAppsHook3,
-  xorg,
+  libsm,
+  libice,
   gobject-introspection,
 }:
 
@@ -49,8 +50,8 @@ stdenv.mkDerivation rec {
     encfs
     gtk3
     libgee
-    xorg.libSM
-    xorg.libICE
+    libsm
+    libice
     libsecret
   ];
 

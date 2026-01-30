@@ -1,7 +1,8 @@
 {
   lib,
-  pkgs,
+  attr,
   fetchPypi,
+  stdenv,
   buildPythonPackage,
 }:
 
@@ -18,11 +19,12 @@ buildPythonPackage rec {
   # IOError: [Errno 95] Operation not supported (expected)
   doCheck = false;
 
-  buildInputs = with pkgs; [ attr ];
+  buildInputs = lib.optional (lib.meta.availableOn stdenv.buildPlatform attr) attr;
 
   meta = {
     description = "Python extension module which gives access to the extended attributes for filesystem objects available in some operating systems";
     license = lib.licenses.lgpl21Plus;
-    inherit (pkgs.attr.meta) platforms;
+    # Darwin doesn't need `attr` for this.
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

@@ -1,6 +1,6 @@
 {
   lib,
-  llvmPackages,
+  llvmPackages_18,
   fetchFromGitHub,
   makeBinaryWrapper,
   which,
@@ -8,6 +8,7 @@
 }:
 
 let
+  llvmPackages = llvmPackages_18;
   inherit (llvmPackages) stdenv;
 in
 stdenv.mkDerivation (finalAttrs: {

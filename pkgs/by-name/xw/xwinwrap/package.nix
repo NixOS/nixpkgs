@@ -2,7 +2,9 @@
   lib,
   stdenv,
   fetchbzr,
-  xorg,
+  libxrender,
+  libxext,
+  libx11,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,9 +18,9 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    xorg.libX11
-    xorg.libXext
-    xorg.libXrender
+    libx11
+    libxext
+    libxrender
   ];
 
   buildPhase =

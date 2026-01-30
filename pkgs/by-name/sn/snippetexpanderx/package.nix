@@ -12,7 +12,7 @@
   gtk3,
   ibus,
   libgee,
-  xorg,
+  libx11,
   snippetexpanderd,
 }:
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     gtk3
     ibus
     libgee
-    xorg.libX11
+    libx11
     snippetexpanderd
   ];
 

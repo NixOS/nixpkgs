@@ -855,6 +855,7 @@ in
               "resilver_finish-start-scrub.sh"
               "scrub_finish-notify.sh"
               "statechange-notify.sh"
+              "zed-functions.sh"
             ]
             ++ lib.optionals (lib.versionOlder cfgZfs.package.version "2.4") [
               "deadman-slot_off.sh"

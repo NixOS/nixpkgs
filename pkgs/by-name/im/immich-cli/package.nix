@@ -10,8 +10,7 @@
 }:
 stdenv.mkDerivation rec {
   pname = "immich-cli";
-  version = "2.2.105";
-  inherit (immich) src pnpmDeps;
+  inherit (immich) version src pnpmDeps;
 
   postPatch = ''
     local -r cli_version="$(jq -r .version cli/package.json)"

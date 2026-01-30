@@ -9,7 +9,6 @@
   setuptools,
   build,
   coloredlogs,
-  importlib-metadata,
   packaging,
   pip,
   toml,
@@ -45,8 +44,7 @@ buildPythonPackage rec {
     pip
     urllib3
   ]
-  ++ lib.optionals (pythonOlder "3.11") [ toml ]
-  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ++ lib.optionals (pythonOlder "3.11") [ toml ];
 
   pythonImportsCheck = [
     "bork"

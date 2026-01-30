@@ -10,7 +10,8 @@
   zlib,
   swig,
   doxygen,
-  xorg,
+  libxmu,
+  libxi,
   python3,
 }:
 
@@ -41,8 +42,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     zlib
     swig
-    xorg.libXi
-    xorg.libXmu
+    libxi
+    libxmu
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libglut

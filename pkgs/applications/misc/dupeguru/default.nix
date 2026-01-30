@@ -67,7 +67,7 @@ python3Packages.buildPythonApplication rec {
   # Executable in $out/bin is a symlink to $out/share/dupeguru/run.py
   # so wrapPythonPrograms hook does not handle it automatically.
   postFixup = ''
-    wrapPythonProgramsIn "$out/share/dupeguru" "$out $pythonPath"
+    wrapPythonProgramsIn "$out/share/dupeguru" "$out ''${pythonPath[*]}"
   '';
 
   meta = {

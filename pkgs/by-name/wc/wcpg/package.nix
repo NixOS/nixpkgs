@@ -35,6 +35,10 @@ stdenv.mkDerivation rec {
     mpfr
   ];
 
+  makeFlags = [
+    "CFLAGS=-std=c17"
+  ];
+
   meta = {
     description = "Worst-Case Peak-Gain library";
     homepage = "https://github.com/fixif/WCPG";

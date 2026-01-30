@@ -201,6 +201,7 @@ in
   # A given major version of ghc-exactprint only supports one version of GHC.
   ghc-exactprint = addBuildDepend self.extra super.ghc-exactprint_1_7_1_0;
 
+  ghc-lib = doDistribute self.ghc-lib_9_8_5_20250214;
   ghc-lib-parser = doDistribute self.ghc-lib-parser_9_8_5_20250214;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_8_0_2;
   haddock-library = doJailbreak super.haddock-library;

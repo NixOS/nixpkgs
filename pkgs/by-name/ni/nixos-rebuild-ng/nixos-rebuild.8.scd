@@ -21,7 +21,7 @@ nixos-rebuild - reconfigure a NixOS machine
 _nixos-rebuild_ \[--verbose] [--quiet] [--max-jobs MAX_JOBS] [--cores CORES] [--log-format LOG_FORMAT] [--keep-going] [--keep-failed] [--fallback] [--repair] [--option OPTION OPTION] [--builders BUILDERS] [--include INCLUDE]++
 	\[--print-build-logs] [--show-trace] [--accept-flake-config] [--refresh] [--impure] [--offline] [--no-net] [--recreate-lock-file] [--no-update-lock-file] [--no-write-lock-file] [--no-registries] [--commit-lock-file]++
 	\[--update-input UPDATE_INPUT] [--override-input OVERRIDE_INPUT OVERRIDE_INPUT] [--no-build-output] [--use-substitutes] [--help] [--debug] [--file FILE] [--attr ATTR] [--flake [FLAKE]] [--no-flake] [--install-bootloader]++
-	\[--profile-name PROFILE_NAME] [--specialisation SPECIALISATION] [--rollback] [--upgrade] [--upgrade-all] [--json] [--ask-sudo-password] [--sudo] [--no-reexec]++
+	\[--profile-name PROFILE_NAME] [--specialisation SPECIALISATION] [--rollback] [--store-path STORE_PATH] [--upgrade] [--upgrade-all] [--json] [--ask-sudo-password] [--sudo] [--no-reexec]++
 	\[--build-host BUILD_HOST] [--target-host TARGET_HOST] [--no-build-nix] [--image-variant IMAGE_VARIANT]++
 	\[{switch,boot,test,build,edit,repl,dry-build,dry-run,dry-activate,build-image,build-vm,build-vm-with-bootloader,list-generations}]
 
@@ -181,6 +181,20 @@ It must be one of the following:
 	_/etc/nixos/configuration.nix_, roll back to the previous configuration.
 	(The previous configuration is defined as the one before the “current”
 	generation of the Nix profile _/nix/var/nix/profiles/system_.)
+
+*--store-path* _path_
+	Use a pre-built NixOS system store path at _path_ instead of evaluating
+	and building from the configuration. This skips the evaluation and build
+	phases entirely. The path must be a valid NixOS system closure
+	(containing _nixos-version_ and _bin/switch-to-configuration_).
+
+	This is useful for deploying closures that were built elsewhere, such as
+	in CI systems or on remote build machines.
+
+	Can only be used with *switch*, *boot*, *test*, and *dry-activate*
+	actions. Mutually exclusive with *--rollback*, *--flake*, *--file*, and
+	*--attr*. The *--build-host* option is ignored when *--store-path* is
+	specified.
 
 *--builders* _builder-spec_
 	Allow ad-hoc remote builders for building the new system. This requires

@@ -214,7 +214,7 @@ in
     ];
 
     # `xwininfo' is used by the test driver to query open windows.
-    environment.systemPackages = [ pkgs.xorg.xwininfo ];
+    environment.systemPackages = [ pkgs.xwininfo ];
 
     # Log everything to the serial console.
     services.journald.extraConfig = ''

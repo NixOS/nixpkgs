@@ -22,18 +22,21 @@
   typer,
   typing-extensions,
   uvicorn,
+
+  # optional-dependencies
+  soundfile,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pocket-tts";
-  version = "1.0.1";
+  version = "1.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kyutai-labs";
     repo = "pocket-tts";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VFLpUsHnQYSr5RgNKJOX1TD30o1A8rG4cs2VeZWriaU=";
+    hash = "sha256-zGZySn8nXCjwfcXYglJIrS/u1cqiJrErx1wQkC7H93k=";
   };
 
   build-system = [
@@ -61,6 +64,12 @@ buildPythonPackage (finalAttrs: {
     typing-extensions
     uvicorn
   ];
+
+  optional-dependencies = {
+    audio = [
+      soundfile
+    ];
+  };
 
   pythonImportsCheck = [ "pocket_tts" ];
 

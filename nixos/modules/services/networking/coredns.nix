@@ -42,7 +42,6 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        PermissionsStartOnly = true;
         LimitNPROC = 512;
         LimitNOFILE = 1048576;
         CapabilityBoundingSet = "cap_net_bind_service";

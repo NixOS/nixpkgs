@@ -4,7 +4,6 @@
   buildPythonPackage,
   defang,
   dnspython,
-  eval-type-backport,
   fetchFromGitHub,
   orjson,
   playwrightcapture,
@@ -51,8 +50,7 @@ buildPythonPackage rec {
   ++ playwrightcapture.optional-dependencies.recaptcha
   ++ redis.optional-dependencies.hiredis
   ++ ua-parser.optional-dependencies.regex
-  ++ lib.optionals (pythonOlder "3.11") [ async-timeout ]
-  ++ lib.optionals (pythonOlder "3.10") [ eval-type-backport ];
+  ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
   # Module has no tests
   doCheck = false;

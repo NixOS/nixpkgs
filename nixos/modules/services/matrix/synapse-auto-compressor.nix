@@ -37,9 +37,9 @@ in
             args = synapseConfig.settings.database.args;
           in
           if synapseConfig.enable then
-            ''postgresql://${args.user}${lib.optionalString (args ? password) (":" + args.password)}@${
+            "postgresql://${args.user}${lib.optionalString (args ? password) (":" + args.password)}@${
               lib.escapeURL (if (args ? host) then args.host else "/run/postgresql")
-            }${lib.optionalString (args ? port) (":" + args.port)}/${args.database}''
+            }${lib.optionalString (args ? port) (":" + args.port)}/${args.database}"
           else
             null;
         defaultText = lib.literalExpression ''

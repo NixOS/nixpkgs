@@ -111,6 +111,8 @@ let
     adios2 = self.callPackage adios2.override { };
     cgns = self.callPackage cgns.override { };
     viskores = self.callPackage viskores.override { };
+    gdal = self.callPackage gdal.override { useMinimalFeatures = true; };
+    pdal = self.callPackage pdal.override { };
   });
   vtkBool = feature: bool: lib.cmakeFeature feature "${if bool then "YES" else "NO"}";
 in
@@ -137,8 +139,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libLAS
-    gdal
-    pdal
     alembic
     imath
     c-blosc
@@ -152,6 +152,8 @@ stdenv.mkDerivation (finalAttrs: {
     libarchive
     libGL
     openvdb
+    vtkPackages.gdal
+    vtkPackages.pdal
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libXfixes

@@ -2,12 +2,13 @@
   lib,
   stdenv,
   fetchFromGitea,
-  xorg,
+  libxcursor,
+  libx11,
   installShellFiles,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  name = "sxcs";
+  pname = "sxcs";
   version = "1.1.0";
 
   src = fetchFromGitea {
@@ -19,8 +20,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [
-    xorg.libX11
-    xorg.libXcursor
+    libx11
+    libxcursor
   ];
   nativeBuildInputs = [ installShellFiles ];
 

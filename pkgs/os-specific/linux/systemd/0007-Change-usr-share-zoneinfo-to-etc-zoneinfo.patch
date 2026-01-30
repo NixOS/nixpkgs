@@ -70,7 +70,7 @@ index 55931a2546..2e00bd7539 100644
                  return r; /* Return EINVAL if not a symlink */
  
 -        const char *e = PATH_STARTSWITH_SET(t, "/usr/share/zoneinfo/", "../usr/share/zoneinfo/");
-+        const char *e = PATH_STARTSWITH_SET(t, "/etc/zoneinfo/", "../etc/zoneinfo/");
++        const char *e = PATH_STARTSWITH_SET(t, "/etc/zoneinfo/", "../etc/zoneinfo/", "zoneinfo/");
          if (!e)
                  return -EINVAL;
          if (!timezone_is_valid(e, LOG_DEBUG))
@@ -112,7 +112,7 @@ index 480a9c55c6..02c9ae6608 100644
                          path,
 -                        "../usr/share/zoneinfo/",
 -                        "/usr/share/zoneinfo/");
-+                        "../etc/zoneinfo/",
++                        "../etc/zoneinfo/", "zoneinfo/",
 +                        "/etc/zoneinfo/");
  }
  

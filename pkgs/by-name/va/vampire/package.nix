@@ -19,13 +19,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vampire";
-  version = "5.0.0";
+  version = "5.0.1";
 
   src = fetchFromGitHub {
     owner = "vprover";
     repo = "vampire";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jRzVh1KirWi9GpOkzSGoIBUExDN1rV0b3AGwa6gWb3I=";
+    hash = "sha256-Ka9HmicIf7b5VN9nbiCW604ZZrGpJuP57RPTzOnwJbU=";
     fetchSubmodules = true;
   };
 
@@ -40,20 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   prePatch = ''
     rm -rf z3
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
-    # some versions place the binary at ./ while others at bin/
-    if test -n "$(find . -maxdepth 1 -name 'vampire*' -print -quit)"
-    then
-      install -m0755 -D vampire* $out/bin/vampire
-    else
-      install -m0755 -D bin/vampire* $out/bin/vampire
-    fi
-
-    runHook postInstall
   '';
 
   meta = {

@@ -5,10 +5,8 @@ stdenv:
 let
   # Lib attributes are inherited to the lexical scope for performance reasons.
   inherit (lib)
-    any
     assertMsg
     attrNames
-    boolToString
     concatLists
     concatMap
     concatMapStrings
@@ -17,7 +15,6 @@ let
     elemAt
     extendDerivation
     filter
-    findFirst
     getDev
     head
     imap1
@@ -199,10 +196,8 @@ let
 
   inherit (hostPlatform)
     isLinux
-    isDarwin
     isWindows
     isCygwin
-    isOpenBSD
     isStatic
     isMusl
     ;

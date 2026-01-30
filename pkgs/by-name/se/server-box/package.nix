@@ -13,13 +13,13 @@
 }:
 
 let
-  version = "1.0.1276";
+  version = "1.0.1297";
 
   src = fetchFromGitHub {
     owner = "lollipopkit";
     repo = "flutter_server_box";
     tag = "v${version}";
-    hash = "sha256-fmL03BNVi1aKhb0jV7MnEtRKTOEaLBGl6uMJtLr6cFk=";
+    hash = "sha256-5E+tvI/YIos5pyO7OfIfzunyiuhgDY9561sV+85hvtg=";
   };
 in
 flutter338.buildFlutterApplication {

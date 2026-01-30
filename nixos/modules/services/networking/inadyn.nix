@@ -221,7 +221,7 @@ in
         startAt = cfg.interval;
         serviceConfig = {
           Type = "oneshot";
-          ExecStart = ''${lib.getExe pkgs.inadyn} -f ${configFile} --cache-dir ''${CACHE_DIRECTORY} -1 --foreground -l ${cfg.logLevel}'';
+          ExecStart = "${lib.getExe pkgs.inadyn} -f ${configFile} --cache-dir \${CACHE_DIRECTORY} -1 --foreground -l ${cfg.logLevel}";
           LoadCredential = "config:${configFile}";
           CacheDirectory = "inadyn";
 

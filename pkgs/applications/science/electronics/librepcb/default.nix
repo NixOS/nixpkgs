@@ -5,7 +5,6 @@
   qtbase,
   qttools,
   qtsvg,
-  qt5compat,
   opencascade-occt,
   libGLU,
   cmake,
@@ -17,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "librepcb";
-  version = "1.3.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "librepcb";
     repo = "librepcb";
     rev = version;
-    hash = "sha256-J4y0ikZNuOguN9msmEQzgcY0/REnOEOoDkY/ga+Cfd8=";
+    hash = "sha256-8hMPrpqwGNYXUTJGL/CMSP+Sjv5F6ZTkJHqauuOxwTw=";
     fetchSubmodules = true;
   };
 
@@ -31,30 +30,44 @@ stdenv.mkDerivation rec {
     cmake
     qttools
     qtsvg
-    qt5compat
     wrapQtAppsHook
     opencascade-occt
     libGLU
-    rustPlatform.cargoSetupHook
     cargo
     rustc
   ];
   buildInputs = [ qtbase ];
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src cargoRoot;
+  cargoDeps1 = rustPlatform.fetchCargoVendor {
+    inherit src;
+    cargoRoot = "libs/librepcb/rust-core";
     hash = "sha256-1td3WjxbDq2lX7c0trpYRhO82ChNAG/ZABBRsekYtq4=";
   };
 
-  cargoRoot = "libs/librepcb/rust-core";
+  cargoDeps2 = rustPlatform.fetchCargoVendor {
+    inherit src;
+    cargoRoot = "libs/slint";
+    hash = "sha256-DYcKoaOXYFvAi5VyWdhli73s7qrypeXmzGJNhVzcWtY=";
+  };
 
   postPatch = ''
-    substituteInPlace libs/muparser/CMakeLists.txt \
-      --replace-fail "cmake_minimum_required (VERSION 3.1.0)" "cmake_minimum_required(VERSION 3.10)"
-    substituteInPlace libs/type_safe{/,/external/debug_assert/}CMakeLists.txt \
-      --replace-fail "cmake_minimum_required(VERSION 3.1)" "cmake_minimum_required(VERSION 3.10)"
-    substituteInPlace libs/googletest{/,/googlemock/,/googletest/}CMakeLists.txt \
-      --replace-fail "cmake_minimum_required(VERSION 3.2)" "cmake_minimum_required(VERSION 3.10)"
+    # Set up cargo config for the first Rust library
+    mkdir -p libs/librepcb/rust-core/.cargo
+    cat > libs/librepcb/rust-core/.cargo/config.toml <<EOF
+    [source.crates-io]
+    replace-with = "vendored-sources"
+    [source.vendored-sources]
+    directory = "${cargoDeps1}"
+    EOF
+
+    # Set up cargo config for the second Rust library
+    mkdir -p libs/slint/.cargo
+    cat > libs/slint/.cargo/config.toml <<EOF
+    [source.crates-io]
+    replace-with = "vendored-sources"
+    [source.vendored-sources]
+    directory = "${cargoDeps2}"
+    EOF
   '';
 
   meta = {

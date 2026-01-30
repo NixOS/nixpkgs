@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  fox,
+  fox_1_6,
   fontconfig,
   freetype,
   pkg-config,
@@ -12,7 +12,8 @@
   intltool,
   file,
   libpng,
-  xorg,
+  libxft,
+  libx11,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
     intltool
   ];
   buildInputs = [
-    fox
+    fox_1_6
     gettext
     xcbutil
     gcc
@@ -37,8 +38,8 @@ stdenv.mkDerivation rec {
     libpng
     fontconfig
     freetype
-    xorg.libX11
-    xorg.libXft
+    libx11
+    libxft
   ];
 
   preConfigure = ''

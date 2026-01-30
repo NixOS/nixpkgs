@@ -306,7 +306,7 @@ python3Packages.buildPythonApplication {
   dontWrapGApps = true;
   dontWrapQtApps = true;
   preFixup = ''
-    buildPythonPath "$out $pythonPath"
+    buildPythonPath "$out ''${pythonPath[*]}"
 
     for bin in $out/bin/*; do
       py=$(readlink -m $bin)

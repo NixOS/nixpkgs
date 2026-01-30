@@ -106,8 +106,5 @@ stdenv.mkDerivation rec {
       dezgeg
       ajs124
     ];
-    # error: ‘struct statx’ has no member named ‘stx_atomic_write_unit_min’ ‘stx_atomic_write_unit_max’ ‘stx_atomic_write_segments_max’
-    # remove if https://www.openwall.com/lists/musl/2024/10/23/6 gets merged
-    broken = stdenv.hostPlatform.isMusl;
   };
 }

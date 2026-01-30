@@ -7,7 +7,7 @@
   leptonica,
   wl-clipboard,
   libnotify,
-  xorg,
+  xvfb,
   makeDesktopItem,
   copyDesktopItems,
 }:
@@ -31,8 +31,6 @@ ps.buildPythonApplication rec {
   pname = "normcap";
   version = "0.6.0";
   pyproject = true;
-
-  disabled = ps.pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "dynobo";
@@ -114,7 +112,7 @@ ps.buildPythonApplication rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       ps.pytest-xvfb
-      xorg.xvfb
+      xvfb
     ];
 
   preCheck = ''

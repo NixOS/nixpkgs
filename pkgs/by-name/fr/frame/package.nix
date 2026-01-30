@@ -4,7 +4,10 @@
   stdenv,
   fetchurl,
   pkg-config,
-  xorg,
+  xorg-server,
+  libxi,
+  libxext,
+  libx11,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,10 +23,10 @@ stdenv.mkDerivation rec {
     stdenv
   ]
   ++ lib.optionals enableX11 [
-    xorg.xorgserver
-    xorg.libX11
-    xorg.libXext
-    xorg.libXi
+    xorg-server
+    libx11
+    libxext
+    libxi
   ];
 
   configureFlags = lib.optional enableX11 "--with-x11";

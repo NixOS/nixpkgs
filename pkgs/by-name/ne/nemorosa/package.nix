@@ -4,7 +4,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nemorosa";
   version = "0.4.1";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "KyokoMiki";
     repo = "nemorosa";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-AqFjpEakEZ21iXmIIxhX+ez2aI/RMsLaUoECipQcaM4=";
   };
 
@@ -62,4 +62,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ ambroisie ];
     mainProgram = "nemorosa";
   };
-}
+})

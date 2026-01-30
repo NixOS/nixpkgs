@@ -187,7 +187,7 @@ derivation.
         };
         nativeBuildInputs = with pkgs; [
           jq
-          xorg.lndir
+          lndir
         ];
         passAsFile = [ "config" ];
       }

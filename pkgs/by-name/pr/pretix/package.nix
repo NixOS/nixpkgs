@@ -3,6 +3,7 @@
   buildNpmPackage,
   fetchFromGitHub,
   fetchPypi,
+  libredirect,
   nodejs,
   python312,
   gettext,
@@ -42,13 +43,13 @@ let
   };
 
   pname = "pretix";
-  version = "2025.10.1";
+  version = "2026.1.0";
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix";
     tag = "v${version}";
-    hash = "sha256-O9HAslZ8xbmLgJi3y91M6mc1oIvJZ8nRJyFRuNorRHs=";
+    hash = "sha256-XS4Kqgvg3Bu5S3gFJ4fvvezCtQEA26jUa+8pSx2saNw=";
   };
 
   npmDeps = buildNpmPackage {
@@ -247,6 +248,7 @@ python.pkgs.buildPythonApplication rec {
   nativeCheckInputs =
     with python.pkgs;
     [
+      libredirect.hook
       pytestCheckHook
       pytest-xdist
       pytest-mock
@@ -271,6 +273,13 @@ python.pkgs.buildPythonApplication rec {
   preCheck = ''
     export PYTHONPATH=$(pwd)/src:$PYTHONPATH
     export DJANGO_SETTINGS_MODULE=tests.settings
+
+    echo "nameserver 127.0.0.1" > resolv.conf
+    export NIX_REDIRECTS=/etc/resolv.conf=$(realpath resolv.conf)
+  '';
+
+  postCheck = ''
+    unset NIX_REDIRECTS
   '';
 
   passthru = {

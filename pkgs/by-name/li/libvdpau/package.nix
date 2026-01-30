@@ -3,7 +3,9 @@
   stdenv,
   fetchurl,
   pkg-config,
-  xorg,
+  libxext,
+  libx11,
+  xorgproto,
   mesa,
   meson,
   ninja,
@@ -29,12 +31,12 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
   ];
-  buildInputs = with xorg; [
+  buildInputs = [
     xorgproto
-    libXext
+    libxext
   ];
 
-  propagatedBuildInputs = [ xorg.libX11 ];
+  propagatedBuildInputs = [ libx11 ];
 
   mesonFlags = lib.optionals stdenv.hostPlatform.isLinux [
     "-Dmoduledir=${mesa.driverLink}/lib/vdpau"

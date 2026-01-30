@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    buildPythonPath "$out $pythonPath"
+    buildPythonPath "$out ''${pythonPath[*]}"
 
     # yt-dlp is needed for mpv to play YouTube channels.
     wrapProgram $out/bin/hypnotix \

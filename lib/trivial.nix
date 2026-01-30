@@ -27,6 +27,8 @@ in
     isFloat
     add
     sub
+    mul
+    div
     lessThan
     seq
     deepSeq
@@ -34,6 +36,8 @@ in
     bitAnd
     bitOr
     bitXor
+    ceil
+    floor
     ;
 
   ## Simple (higher order) functions

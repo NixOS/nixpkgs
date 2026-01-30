@@ -33,7 +33,7 @@
 }:
 
 let
-  version = "7.0.2";
+  version = "7.1.1";
   # major version of this should be the clang version ROCm forked from
   rocmLlvmVersion = "20.0.0-rocm";
   # llvmPackages_base version should match rocmLlvmVersion
@@ -115,7 +115,7 @@ let
     owner = "ROCm";
     repo = "llvm-project";
     rev = "rocm-${version}";
-    hash = "sha256-gJlDFbCRsiwHgRzmwm36C3WvGfWwgPrtBNUHYmZHTB8=";
+    hash = "sha256-CfknIRVeR1bCKh1xzXKl3ehVp0kWT0uGrI9C1HTSKVo=";
   };
   llvmMajorVersion = lib.versions.major rocmLlvmVersion;
   # An llvmPackages (pkgs/development/compilers/llvm/) built from ROCm LLVM's source tree
@@ -436,6 +436,14 @@ overrideLlvmPackagesRocm (s: {
       isGNU = false;
     };
   compiler-rt-libc = s.prev.compiler-rt-libc.overrideAttrs (old: {
+    patches = old.patches ++ [
+      # fix build with glibc >= 2.42
+      (fetchpatch {
+        url = "https://github.com/llvm/llvm-project/commit/59978b21ad9c65276ee8e14f26759691b8a65763.patch";
+        hash = "sha256-ys5SMLfO3Ay9nCX9GV5yRCQ6pLsseFu/ZY6Xd6OL4p0=";
+        relative = "compiler-rt";
+      })
+    ];
     meta = old.meta // llvmMeta;
   });
   compiler-rt = s.final.compiler-rt-libc;

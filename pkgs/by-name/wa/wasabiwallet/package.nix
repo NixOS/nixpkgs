@@ -8,7 +8,9 @@
   lttng-ust_2_12,
   fontconfig,
   openssl,
-  xorg,
+  libx11,
+  libsm,
+  libice,
   zlib,
 }:
 
@@ -19,9 +21,9 @@ let
     fontconfig.lib
     openssl
     (lib.getLib stdenv.cc.cc)
-    xorg.libX11
-    xorg.libICE
-    xorg.libSM
+    libx11
+    libice
+    libsm
     zlib
   ];
 in

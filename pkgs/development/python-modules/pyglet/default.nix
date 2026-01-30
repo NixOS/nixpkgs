@@ -6,7 +6,13 @@
   flit-core,
   libGL,
   libGLU,
-  xorg,
+  libxxf86vm,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxext,
+  libx11,
   pytestCheckHook,
   glibc,
   gtk2-x11,
@@ -55,13 +61,13 @@ buildPythonPackage rec {
               elif name == 'c':
                   path = '${glibc}/lib/libc${ext}.6'
               elif name == 'X11':
-                  path = '${xorg.libX11}/lib/libX11${ext}'
+                  path = '${libx11}/lib/libX11${ext}'
               elif name == 'gdk-x11-2.0':
                   path = '${gtk2-x11}/lib/libgdk-x11-2.0${ext}'
               elif name == 'gdk_pixbuf-2.0':
                   path = '${gdk-pixbuf}/lib/libgdk_pixbuf-2.0${ext}'
               elif name == 'Xext':
-                  path = '${xorg.libXext}/lib/libXext${ext}'
+                  path = '${libxext}/lib/libXext${ext}'
               elif name == 'fontconfig':
                   path = '${fontconfig.lib}/lib/libfontconfig${ext}'
               elif name == 'freetype':
@@ -73,15 +79,15 @@ buildPythonPackage rec {
               elif name == 'pulse':
                   path = '${libpulseaudio}/lib/libpulse${ext}'
               elif name == 'Xi':
-                  path = '${xorg.libXi}/lib/libXi${ext}'
+                  path = '${libxi}/lib/libXi${ext}'
               elif name == 'Xinerama':
-                  path = '${xorg.libXinerama}/lib/libXinerama${ext}'
+                  path = '${libxinerama}/lib/libXinerama${ext}'
               elif name == 'Xrandr':
-                  path = '${lib.getLib xorg.libXrandr}/lib/libXrandr${ext}'
+                  path = '${lib.getLib libxrandr}/lib/libXrandr${ext}'
               elif name == 'Xrender':
-                  path = '${lib.getLib xorg.libXrender}/lib/libXrender${ext}'
+                  path = '${lib.getLib libxrender}/lib/libXrender${ext}'
               elif name == 'Xxf86vm':
-                  path = '${xorg.libXxf86vm}/lib/libXxf86vm${ext}'
+                  path = '${libxxf86vm}/lib/libXxf86vm${ext}'
               elif name == 'harfbuzz':
                   path = '${harfbuzz}/lib/libharfbuzz${ext}'
               if path is not None:

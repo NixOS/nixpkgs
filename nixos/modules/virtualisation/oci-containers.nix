@@ -542,7 +542,7 @@ let
         Environment = "PODMAN_SYSTEMD_UNIT=%n";
         Type = "notify";
         NotifyAccess = "all";
-        Delegate = mkIf (container.podman.sdnotify == "healthy") true;
+        Delegate = true;
         User = effectiveUser;
         RuntimeDirectory = escapedName;
       };
@@ -630,13 +630,9 @@ in
               inherit (config.users.users.${podman.user}) linger;
             in
             warnings
-            ++ lib.optional (podman.user != "root" && linger && podman.sdnotify == "conmon") ''
-              Podman container ${name} is configured as rootless (user ${podman.user})
-              with `--sdnotify=conmon`, but lingering for this user is turned on.
-            ''
-            ++ lib.optional (podman.user != "root" && !linger && podman.sdnotify == "healthy") ''
-              Podman container ${name} is configured as rootless (user ${podman.user})
-              with `--sdnotify=healthy`, but lingering for this user is turned off.
+            ++ lib.optional (podman.user != "root" && !linger) ''
+              Podman container ${name} is configured as rootless (user ${podman.user}),
+              but lingering for this user is turned off.
             ''
           ) [ ] cfg.containers
         );

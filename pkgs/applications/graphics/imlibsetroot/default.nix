@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   libX11,
-  libXinerama,
+  libxinerama,
   imlib2,
 }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   buildInputs = [
     libX11
     imlib2
-    libXinerama
+    libxinerama
   ];
 
   buildPhase = ''

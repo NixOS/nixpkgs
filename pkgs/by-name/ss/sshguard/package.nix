@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://sshguard.net";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ sargon ];
+    maintainers = [ ];
     platforms = with lib.platforms; linux ++ darwin ++ freebsd ++ netbsd ++ openbsd;
   };
 }

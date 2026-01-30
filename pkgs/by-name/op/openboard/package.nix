@@ -39,13 +39,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openboard";
-  version = "1.7.3";
+  version = "1.7.4";
 
   src = fetchFromGitHub {
     owner = "OpenBoard-org";
     repo = "OpenBoard";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Igp5WSVQ9FrzS2AhDDPwVBo76SaFw9xP6lqgW7S/KIE=";
+    hash = "sha256-CeW8G4aHo+IlB4F/ty48jIjhD7Nc7HFgudVbxrzZ2LU=";
   };
 
   postPatch = ''
@@ -98,7 +98,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://openboard.ch/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
-      atinba
       fufexan
     ];
     platforms = lib.platforms.linux;

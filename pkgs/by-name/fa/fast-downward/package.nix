@@ -51,8 +51,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/${python3.sitePackages}
     cp -r driver $out/${python3.sitePackages}
 
-    wrapPythonProgramsIn $out/bin "$out $pythonPath"
-    wrapPythonProgramsIn $out/libexec/fast-downward/translate "$out $pythonPath"
+    wrapPythonProgramsIn $out/bin "$out ''${pythonPath[*]}"
+    wrapPythonProgramsIn $out/libexec/fast-downward/translate "$out ''${pythonPath[*]}"
     # Because fast-downward calls `python translate.py` we need to return wrapped scripts back.
     for i in $out/libexec/fast-downward/translate/.*-wrapped; do
       name="$(basename "$i")"

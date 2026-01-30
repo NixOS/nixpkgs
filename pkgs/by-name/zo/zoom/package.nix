@@ -6,7 +6,11 @@
   expat,
   fontconfig,
   freetype,
-  xorg,
+  libxrender,
+  libxext,
+  libx11,
+  libsm,
+  libice,
 }:
 
 # !!! assert freetype == xorg.freetype
@@ -25,11 +29,11 @@ stdenv.mkDerivation rec {
     expat
     fontconfig
     freetype
-    xorg.libICE
-    xorg.libSM
-    xorg.libX11
-    xorg.libXext
-    xorg.libXrender
+    libice
+    libsm
+    libx11
+    libxext
+    libxrender
   ];
 
   env.NIX_CFLAGS_COMPILE = "-I${freetype}/include/freetype2 -fgnu89-inline";

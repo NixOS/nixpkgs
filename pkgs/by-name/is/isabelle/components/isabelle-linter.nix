@@ -1,11 +1,11 @@
 {
-  stdenv,
+  stdenvNoCC,
   lib,
   fetchFromGitHub,
   isabelle,
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "isabelle-linter";
   version = "2025-1-1.0.0";
 

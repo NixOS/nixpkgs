@@ -47,7 +47,7 @@ in
 
           port = dependencyTrackPort;
           nginx.domain = "localhost";
-          database.passwordFile = "${pkgs.writeText "dbPassword" ''hunter2'THE'''H''''E''}";
+          database.passwordFile = "${pkgs.writeText "dbPassword" "hunter2'THE''H'''E"}";
         };
       };
   };

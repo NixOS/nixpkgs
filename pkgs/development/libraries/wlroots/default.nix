@@ -15,7 +15,11 @@
   pixman,
   libcap,
   libgbm,
-  xorg,
+  libxcb-wm,
+  libxcb-render-util,
+  libxcb-image,
+  libxcb-errors,
+  libx11,
   hwdata,
   seatd,
   vulkan-loader,
@@ -88,11 +92,11 @@ let
         vulkan-loader
         wayland
         wayland-protocols
-        xorg.libX11
-        xorg.xcbutilerrors
-        xorg.xcbutilimage
-        xorg.xcbutilrenderutil
-        xorg.xcbutilwm
+        libx11
+        libxcb-errors
+        libxcb-image
+        libxcb-render-util
+        libxcb-wm
       ]
       ++ lib.optional finalAttrs.enableXWayland xwayland
       ++ extraBuildInputs;

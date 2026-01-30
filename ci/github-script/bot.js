@@ -9,6 +9,9 @@ module.exports = async ({ github, context, core, dry }) => {
 
   const artifactClient = new DefaultArtifactClient()
 
+  // Detect if running in a fork (not NixOS/nixpkgs)
+  const isFork = context.repo.owner !== 'NixOS'
+
   async function downloadMaintainerMap(branch) {
     let run
 
@@ -68,9 +71,18 @@ module.exports = async ({ github, context, core, dry }) => {
 
     // We get here when none of the 10 commits we looked at contained a maintainer map.
     // For the master branch, we don't have any fallback options, so we error out.
-    // For other branches, we select a suitable fallback below.
-    if (branch === 'master') throw new Error('No maintainer map found.')
+    // In forks without merge-group history, return empty map to allow testing.
+    if (branch === 'master') {
+      if (isFork) {
+        core.warning(
+          'No maintainer map found. Using empty map (expected in forks without merge-group history).',
+        )
+        return {}
+      }
+      throw new Error('No maintainer map found.')
+    }
 
+    // For other branches, we select a suitable fallback below.
     const { stable, version } = classify(branch)
 
     const release = `release-${version}`
@@ -109,6 +121,11 @@ module.exports = async ({ github, context, core, dry }) => {
       return []
     }
 
+    // Forks don't have NixOS teams, return empty list
+    if (isFork) {
+      return []
+    }
+
     if (!members[team_slug]) {
       members[team_slug] = github.paginate(github.rest.teams.listMembersInOrg, {
         org: context.repo.owner,
@@ -133,6 +150,11 @@ module.exports = async ({ github, context, core, dry }) => {
           id,
         })
         .then((resp) => resp.data)
+        .catch((e) => {
+          // User may have deleted their account
+          if (e.status === 404) return null
+          throw e
+        })
     }
 
     return users[id]
@@ -145,22 +167,10 @@ module.exports = async ({ github, context, core, dry }) => {
 
     // This API request is important for the merge-conflict label, because it triggers the
     // creation of a new test merge commit. This is needed to actually determine the state of a PR.
-    //
-    // NOTE (2025-12-15): Temporarily skipping mergeability checks here
-    // on GitHub’s request to measure the impact of the resulting ref
-    // writes on their internal metrics; merge conflicts resulting from
-    // changes to target branches will not have labels applied for the
-    // duration. The label should still be updated on pushes.
-    //
-    // TODO: Restore mergeability checks in some form after a few days
-    // or when we hear back from GitHub.
     const pull_request = (
       await github.rest.pulls.get({
         ...context.repo,
         pull_number,
-        // Undocumented parameter (as of 2025-12-15), added by GitHub
-        // for us; stability unclear.
-        skip_mergeability_checks: true,
       })
     ).data
 
@@ -311,9 +321,40 @@ module.exports = async ({ github, context, core, dry }) => {
         expectedHash: artifact.digest,
       })
 
-      const evalLabels = JSON.parse(
+      const changedPaths = JSON.parse(
         await readFile(`${pull_number}/changed-paths.json`, 'utf-8'),
-      ).labels
+      )
+      const evalLabels = changedPaths.labels
+
+      // Fetch all PR commits to check their messages for package patterns
+      const prCommits = await github.paginate(github.rest.pulls.listCommits, {
+        ...context.repo,
+        pull_number,
+        per_page: 100,
+      })
+      const commitSubjects = prCommits.map(
+        (c) => c.commit.message.split('\n')[0],
+      )
+
+      // Label new package PRs: "packagename: init at X.Y.Z"
+      // Exclude NixOS module commits like "nixos/timekpr: init at 0.5.8"
+      const newPackagePattern = /^(?<!nixos\/)\S+: init at\b/
+      const hasNewPackages = changedPaths.attrdiff?.added?.length > 0
+      const commitsIndicateNewPackage = commitSubjects.some((msg) =>
+        newPackagePattern.test(msg),
+      )
+      evalLabels['8.has: package (new)'] =
+        hasNewPackages && commitsIndicateNewPackage
+
+      // Label package update PRs: "packagename: X.Y.Z -> A.B.C"
+      // Matches versions like: 1.2.3, 0-unstable-2024-01-15, 1.3rc1, alpha, unstable
+      // Exclude NixOS module commits like "nixos/ncps: types.str -> types.path"
+      const updatePackagePattern =
+        /^(?<!nixos\/)\S+: [\w.-]*\d[\w.-]* (->|→) [\w.-]*\d[\w.-]*$/
+      const commitsIndicateUpdate = commitSubjects.some((msg) =>
+        updatePackagePattern.test(msg),
+      )
+      evalLabels['8.has: package (update)'] = commitsIndicateUpdate
 
       // TODO: Get "changed packages" information from list of changed by-name files
       // in addition to just the Eval results, to make this work for these packages

@@ -5,7 +5,6 @@
   wheel,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -14,7 +13,7 @@ buildPythonPackage rec {
   format = "setuptools";
 
   # uses the removed asyncore module
-  disabled = pythonOlder "3.9" || pythonAtLeast "3.12";
+  disabled = pythonAtLeast "3.12";
 
   src = fetchFromGitHub {
     owner = "JoelBender";

@@ -2,7 +2,10 @@
   lib,
   stdenv,
   fetchurl,
-  xorg,
+  libxrandr,
+  libxext,
+  libx11,
+  xorgproto,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,11 +19,11 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-std=gnu89";
 
-  buildInputs = with xorg; [
-    libX11
+  buildInputs = [
+    libx11
     xorgproto
-    libXext
-    libXrandr
+    libxext
+    libxrandr
   ];
 
   hardeningDisable = [ "format" ];

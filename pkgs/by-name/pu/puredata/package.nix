@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = ''Real-time graphical programming environment for audio, video, and graphical processing'';
+    description = "Real-time graphical programming environment for audio, video, and graphical processing";
     homepage = "http://puredata.info";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

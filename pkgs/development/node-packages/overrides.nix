@@ -79,19 +79,4 @@ final: prev: {
   rush = prev."@microsoft/rush".override {
     name = "rush";
   };
-
-  wavedrom-cli = prev.wavedrom-cli.override {
-    nativeBuildInputs = [
-      pkgs.pkg-config
-      pkgs.node-pre-gyp
-    ];
-    # These dependencies are required by
-    # https://github.com/Automattic/node-canvas.
-    buildInputs = with pkgs; [
-      giflib
-      pixman
-      cairo
-      pango
-    ];
-  };
 }

@@ -7,7 +7,7 @@
 ############################################################################
 # Compiling a custom version of mathcomp using `mathcomp.override`.        #
 # This is the replacement for the former `mathcomp_ config` function.      #
-# See the documentation at doc/languages-frameworks/coq.section.md.        #
+# See the documentation at doc/languages-frameworks/rocq.section.md.       #
 ############################################################################
 
 {

@@ -17,33 +17,38 @@
   wrapGAppsHook3,
   wayland,
   gobject-introspection,
-  xorg,
+  libxxf86vm,
+  libxrandr,
+  libxi,
+  libxcursor,
+  libx11,
+  libxcb,
 }:
 let
   rpathLibs = lib.optionals stdenv.hostPlatform.isLinux [
     libGL
     libxkbcommon
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libXxf86vm
-    xorg.libxcb
+    libx11
+    libxcursor
+    libxi
+    libxrandr
+    libxxf86vm
+    libxcb
     wayland
   ];
 in
 rustPlatform.buildRustPackage rec {
   pname = "lapce";
-  version = "0.4.5";
+  version = "0.4.6";
 
   src = fetchFromGitHub {
     owner = "lapce";
     repo = "lapce";
     tag = "v${version}";
-    sha256 = "sha256-0mF8JusW/oMjkAaCtL6ySazlWoR+76vRydyVXHbxNRM=";
+    sha256 = "sha256-D5DEmMkCAkMiMMzYP8FoVIUeT2CDOepUWUlUqWSaUnM=";
   };
 
-  cargoHash = "sha256-Jjul26YTcMSf8szuetX3rU4b1eVsD/SBe1UanIAS1Ew=";
+  cargoHash = "sha256-BFaR8jWdET2nInBkKZhnoqLCB1dnXH3pywkD1Cv5SuE=";
 
   env = {
     # Get openssl-sys to use pkg-config

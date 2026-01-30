@@ -15,7 +15,7 @@
   libxkbfile,
   libjpeg_turbo,
   xcbutilxrm,
-  xorg,
+  libxcb-util,
 }:
 
 stdenv.mkDerivation rec {
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     libxkbfile
     libjpeg_turbo
     xcbutilxrm
-    xorg.xcbutil
+    libxcb-util
   ];
 
   makeFlags = [ "all" ];

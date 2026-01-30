@@ -11,16 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "seaweedfs";
-  version = "4.06";
+  version = "4.07";
 
   src = fetchFromGitHub {
     owner = "seaweedfs";
     repo = "seaweedfs";
     tag = finalAttrs.version;
-    hash = "sha256-6pdRL5YceoMkToRmGxMeCghwyqmwhpm+MXajpiS7plM=";
+    hash = "sha256-MeMB5YuRVWL9bR2LUvSzRcaNpSu+D5IwLqPI/OKvjoI=";
   };
 
-  vendorHash = "sha256-H56gS8E4MdO3MXC3yd2+r5ueffNfrDt5kTD7lkUuYBg=";
+  vendorHash = "sha256-m3rOw41lJA9rRd5788V0H9tlJf10BDzKJNAZepMQ9oI=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libredirect.hook ];
 

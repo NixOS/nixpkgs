@@ -21,7 +21,7 @@
   nixosTests,
   openssh,
   sqliteSupport ? true,
-  xorg,
+  lndir,
   runCommand,
   stdenv,
   fetchFromGitea,
@@ -167,7 +167,7 @@ buildGoModule rec {
         {
           nativeBuildInputs = [
             brotli
-            xorg.lndir
+            lndir
           ];
         }
         ''

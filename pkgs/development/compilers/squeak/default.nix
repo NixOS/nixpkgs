@@ -23,7 +23,7 @@
   libuuid,
   openssl,
   pango,
-  xorg,
+  libx11,
   squeakImageHash ? null,
   squeakSourcesHash ? null,
   squeakSourcesVersion ? null,
@@ -124,7 +124,7 @@ stdenv.mkDerivation {
     libuuid
     openssl
     pango
-    xorg.libX11
+    libx11
   ];
 
   postUnpack = ''

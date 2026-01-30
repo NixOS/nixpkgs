@@ -30,7 +30,7 @@ stdenv.mkDerivation {
     openssl
     readline
   ];
-  sourceRoot = ''pil21'';
+  sourceRoot = "pil21";
   preBuild = ''
     cd src
   ''

@@ -106,7 +106,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       fpletz
-      ma27
     ];
     platforms = lib.platforms.linux;
   };

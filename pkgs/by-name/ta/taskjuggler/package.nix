@@ -29,7 +29,6 @@ bundlerApp {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
-      manveru
       nicknovitski
     ];
   };

@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   ];
 
   preFixup = ''
-    buildPythonPath "$out $pythonPath"
+    buildPythonPath "$out ''${pythonPath[*]}"
 
     gappsWrapperArgs+=(
       --prefix PYTHONPATH : "$program_PYTHONPATH"
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gitUpdater {
-      ignoredVersions = ''master.*'';
+      ignoredVersions = "master.*";
     };
   };
 

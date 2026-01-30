@@ -1,7 +1,6 @@
 {
   bpylist2,
   buildPythonPackage,
-  click,
   coloredlogs,
   construct,
   construct-typing,
@@ -41,6 +40,8 @@
   srptools,
   sslpsk-pmd3,
   tqdm,
+  typer,
+  typer-injector,
   uvicorn,
   wsproto,
   xonsh,
@@ -48,14 +49,14 @@
 
 buildPythonPackage rec {
   pname = "pymobiledevice3";
-  version = "6.2.0";
+  version = "7.3.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "doronz88";
     repo = "pymobiledevice3";
     tag = "v${version}";
-    hash = "sha256-Sc02p2zZb/CPYFU+lz6fe1UZgWhdJYH2/pSJ5gVE0iY=";
+    hash = "sha256-xvtO+BWtXZxrg1VMoqKhSWJ7edkkZ+myAXtyPD4DXFg=";
   };
 
   build-system = [
@@ -65,7 +66,6 @@ buildPythonPackage rec {
 
   dependencies = [
     bpylist2
-    click
     coloredlogs
     construct
     construct-typing
@@ -99,6 +99,8 @@ buildPythonPackage rec {
     srptools
     sslpsk-pmd3
     tqdm
+    typer
+    typer-injector
     uvicorn
     wsproto
     xonsh

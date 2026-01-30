@@ -8,7 +8,7 @@
   wayland-protocols,
   wayland-scanner,
   wayland,
-  xorg,
+  libx11,
   nix-update-script,
   alsa-lib,
   openssl,
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     libffi
     wayland-protocols
     wayland
-    xorg.libX11
+    libx11
     alsa-lib
   ];
 

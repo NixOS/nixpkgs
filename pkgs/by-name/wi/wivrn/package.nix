@@ -50,6 +50,9 @@
   vulkan-loader,
   x264,
   xrizer,
+  # Only build the OpenXR client library. Useful for building the client library for a different architecture,
+  # e.g. 32-bit library while running 64-bit service on host, so 32-bit apps can connect to the runtime
+  clientLibOnly ? false,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wivrn";
@@ -98,6 +101,8 @@ stdenv.mkDerivation (finalAttrs: {
     librsvg
     pkg-config
     python3
+  ]
+  ++ lib.optionals (!clientLibOnly) [
     qt6.wrapQtAppsHook
   ]
   ++ lib.optionals cudaSupport [
@@ -105,14 +110,25 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    avahi
-    boost
-    cli11
     eigen
-    ffmpeg
     freetype
     glm
     harfbuzz
+    libGL
+    libX11
+    libXrandr
+    openxr-loader
+    shaderc
+    systemd
+    udev
+    vulkan-headers
+    vulkan-loader
+  ]
+  ++ lib.optionals (!clientLibOnly) [
+    avahi
+    boost
+    cli11
+    ffmpeg
     kdePackages.kcoreaddons
     kdePackages.ki18n
     kdePackages.kiconthemes
@@ -121,33 +137,34 @@ stdenv.mkDerivation (finalAttrs: {
     kdePackages.qqc2-desktop-style
     libarchive
     libdrm
-    libGL
     libnotify
     libpulseaudio
     librsvg
     libva
-    libX11
-    libXrandr
     nlohmann_json
-    openxr-loader
-    onnxruntime
     pipewire
     qt6.qtbase
     qt6.qtsvg
     qt6.qttools
-    shaderc
-    spdlog
-    systemd
-    udev
-    vulkan-headers
-    vulkan-loader
     x264
   ]
-  ++ lib.optionals cudaSupport [
+  ++ lib.optionals (cudaSupport && !clientLibOnly) [
     cudaPackages.cudatoolkit
   ];
 
   cmakeFlags = [
+    (lib.cmakeBool "WIVRN_BUILD_CLIENT" false)
+    (lib.cmakeBool "WIVRN_BUILD_DASHBOARD" (!clientLibOnly))
+    (lib.cmakeBool "WIVRN_BUILD_SERVER" (!clientLibOnly))
+    (lib.cmakeBool "WIVRN_BUILD_SERVER_LIBRARY" true)
+    (lib.cmakeBool "WIVRN_BUILD_WIVRNCTL" (!clientLibOnly))
+    (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
+    (lib.cmakeFeature "WIVRN_OPENXR_MANIFEST_TYPE" "absolute")
+    (lib.cmakeBool "WIVRN_OPENXR_MANIFEST_ABI" clientLibOnly)
+    (lib.cmakeFeature "GIT_DESC" "v${finalAttrs.version}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_MONADO" "${finalAttrs.monado}")
+  ]
+  ++ lib.optionals (!clientLibOnly) [
     (lib.cmakeBool "WIVRN_USE_NVENC" cudaSupport)
     (lib.cmakeBool "WIVRN_USE_VAAPI" true)
     (lib.cmakeBool "WIVRN_USE_VULKAN_ENCODE" true)
@@ -155,27 +172,20 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WIVRN_USE_PIPEWIRE" true)
     (lib.cmakeBool "WIVRN_USE_PULSEAUDIO" true)
     (lib.cmakeBool "WIVRN_FEATURE_STEAMVR_LIGHTHOUSE" true)
-    (lib.cmakeBool "WIVRN_BUILD_CLIENT" false)
-    (lib.cmakeBool "WIVRN_BUILD_DASHBOARD" true)
-    (lib.cmakeBool "WIVRN_CHECK_CAPSYSNICE" false)
-    (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
-    (lib.cmakeFeature "WIVRN_OPENXR_MANIFEST_TYPE" "absolute")
     (lib.cmakeFeature "OVR_COMPAT_SEARCH_PATH" ovrCompatSearchPaths)
-    (lib.cmakeFeature "GIT_DESC" "v${finalAttrs.version}")
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_MONADO" "${finalAttrs.monado}")
   ]
-  ++ lib.optionals cudaSupport [
+  ++ lib.optionals (cudaSupport && !clientLibOnly) [
     (lib.cmakeFeature "CUDA_TOOLKIT_ROOT_DIR" "${cudaPackages.cudatoolkit}")
   ];
 
   dontWrapQtApps = true;
 
-  preFixup = ''
+  preFixup = lib.optional (!clientLibOnly) ''
     wrapQtApp "$out/bin/wivrn-dashboard" \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}
   '';
 
-  desktopItems = [
+  desktopItems = lib.optionals (!clientLibOnly) [
     (makeDesktopItem {
       name = "WiVRn Server";
       desktopName = "WiVRn Server";

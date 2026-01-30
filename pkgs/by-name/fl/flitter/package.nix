@@ -4,7 +4,7 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
-  xorg,
+  libx11,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = [
-    xorg.libX11
+    libx11
   ];
 
   meta = {

@@ -9,16 +9,16 @@
   nvidia-ml-py,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nvidia-ml-py";
-  version = "13.590.44";
+  version = "13.590.48";
 
   pyproject = true;
 
   src = fetchPypi {
     pname = "nvidia_ml_py";
-    inherit version;
-    hash = "sha256-s1jHYUsP3upLlfBG8ckBI7/iXRSKuTuxwAJIuDRwM3M=";
+    inherit (finalAttrs) version;
+    hash = "sha256-gYTRvlKRSsfwmRzRwNlGxl3IioQMdUzRLCdLd7iHYN0=";
   };
 
   patches = [
@@ -61,4 +61,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

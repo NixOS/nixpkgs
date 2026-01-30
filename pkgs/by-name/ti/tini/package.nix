@@ -27,6 +27,10 @@ stdenv.mkDerivation rec {
       url = "https://github.com/krallin/tini/commit/071c715e376e9ee0ac1a196fe8c38bcb61ad385c.patch";
       hash = "sha256-idnYcVuhCXQuhFSqcrNjbCLhR4HNlv8QonrtBqEbo3A=";
     })
+    (fetchpatch {
+      url = "https://github.com/krallin/tini/commit/924c4bd6028457188942ecbfdc75e6a343fa9395.patch";
+      hash = "sha256-i6xcf+qpjD+7ZQY3ueiDaxO4+UA2LutLCZLNmT+ji1s=";
+    })
   ];
 
   postPatch = "sed -i /tini-static/d CMakeLists.txt";

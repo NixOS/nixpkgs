@@ -79,7 +79,6 @@ buildPythonPackage rec {
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
       nyanloutre
-      ma27
       sumnerevans
       nickcao
     ];

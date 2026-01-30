@@ -262,12 +262,7 @@ builtins.intersectAttrs super {
   ghc-debug-brick = enableSeparateBinOutput super.ghc-debug-brick;
   nixfmt = enableSeparateBinOutput super.nixfmt;
   calligraphy = enableSeparateBinOutput super.calligraphy;
-  niv = overrideCabal (drv: {
-    buildTools = (drv.buildTools or [ ]) ++ [ pkgs.buildPackages.makeWrapper ];
-    postInstall = ''
-      wrapProgram ''${!outputBin}/bin/niv --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.nix ]}
-    '';
-  }) (enableSeparateBinOutput (self.generateOptparseApplicativeCompletions [ "niv" ] super.niv));
+  niv = enableSeparateBinOutput (self.generateOptparseApplicativeCompletions [ "niv" ] super.niv);
   ghcid = enableSeparateBinOutput super.ghcid;
   ormolu = self.generateOptparseApplicativeCompletions [ "ormolu" ] (
     enableSeparateBinOutput super.ormolu
@@ -582,9 +577,9 @@ builtins.intersectAttrs super {
       testDepends =
         drv.testDepends or [ ]
         ++ map lib.getBin [
-          pkgs.xorg.xorgserver
-          pkgs.xorg.xprop
-          pkgs.xorg.xrandr
+          pkgs.xorg-server
+          pkgs.xprop
+          pkgs.xrandr
           pkgs.xdummy
           pkgs.xterm
           pkgs.dbus
@@ -715,7 +710,7 @@ builtins.intersectAttrs super {
   pcap = addExtraLibrary pkgs.libpcap super.pcap;
 
   # https://github.com/NixOS/nixpkgs/issues/53336
-  greenclip = addExtraLibrary pkgs.xorg.libXdmcp super.greenclip;
+  greenclip = addExtraLibrary pkgs.libxdmcp super.greenclip;
 
   # The cabal files for these libraries do not list the required system dependencies.
   libjwt-typed = addExtraLibrary pkgs.libjwt super.libjwt-typed;
@@ -1005,6 +1000,11 @@ builtins.intersectAttrs super {
     '';
   }) super.sbv;
 
+  # Don't use vendored (and outdated) c-blosc library
+  hblosc = addPkgconfigDepends [
+    pkgs.c-blosc
+  ] (enableCabalFlag "externalBlosc" super.hblosc);
+
   # The test-suite requires a running PostgreSQL server.
   Frames-beam = dontCheck super.Frames-beam;
 
@@ -1156,6 +1156,11 @@ builtins.intersectAttrs super {
           hinotify = if pkgs.stdenv.hostPlatform.isLinux then self.hinotify else self.fsnotify;
         }
       );
+
+  # Don't use vendored copy of zxcvbn-c
+  zxcvbn-c = addBuildDepends [
+    pkgs.zxcvbn-c
+  ] (enableCabalFlag "use-shared-lib" super.zxcvbn-c);
 
   # The test suite has undeclared dependencies on git.
   githash = dontCheck super.githash;
@@ -1586,7 +1591,6 @@ builtins.intersectAttrs super {
           wrapProgram "$out/bin/nvfetcher" --prefix 'PATH' ':' "${
             pkgs.lib.makeBinPath [
               pkgs.nvchecker
-              pkgs.nix # nix-prefetch-url
               pkgs.nix-prefetch-git
               pkgs.nix-prefetch-docker
             ]
@@ -1726,6 +1730,9 @@ builtins.intersectAttrs super {
 
   # Tries to access network
   aws-sns-verify = dontCheck super.aws-sns-verify;
+
+  # Wants anthropic API key
+  claude = dontCheck super.claude;
 
   # Test suite requires network access
   minicurl = dontCheck super.minicurl;
@@ -1967,6 +1974,7 @@ builtins.intersectAttrs super {
     gi-gtksource5
     gi-gsk
     gi-adwaita
+    gi-ostree
     sdl2-ttf
     sdl2
     dear-imgui
@@ -1974,13 +1982,13 @@ builtins.intersectAttrs super {
     ;
 
   webkit2gtk3-javascriptcore = lib.pipe super.webkit2gtk3-javascriptcore [
-    (addBuildDepend pkgs.xorg.libXtst)
+    (addBuildDepend pkgs.libxtst)
     (addBuildDepend pkgs.lerc)
     (overrideCabal { __onlyPropagateKnownPkgConfigModules = true; })
   ];
 
   gi-webkit2 = lib.pipe super.gi-webkit2 [
-    (addBuildDepend pkgs.xorg.libXtst)
+    (addBuildDepend pkgs.libxtst)
     (addBuildDepend pkgs.lerc)
     (overrideCabal { __onlyPropagateKnownPkgConfigModules = true; })
   ];
@@ -2141,6 +2149,21 @@ builtins.intersectAttrs super {
   cpython = doJailbreak super.cpython;
 
   botan-bindings = super.botan-bindings.override { botan = pkgs.botan3; };
+
+  # Avoids a cycle by disabling use of the external interpreter for the packages that are dependencies of iserv-proxy.
+  # These in particular can't rely on template haskell for cross-compilation anyway as they can't rely on iserv-proxy.
+  inherit
+    (
+      let
+        noExternalInterpreter = overrideCabal {
+          enableExternalInterpreter = false;
+        };
+      in
+      lib.mapAttrs (_: noExternalInterpreter) { inherit (super) iserv-proxy network; }
+    )
+    iserv-proxy
+    network
+    ;
 
   # Workaround for flaky test: https://github.com/basvandijk/threads/issues/10
   threads = appendPatch ./patches/threads-flaky-test.patch super.threads;

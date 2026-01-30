@@ -1,25 +1,25 @@
 diff --git a/src/global/Configs.cpp b/src/global/Configs.cpp
-index 7943d7a..5bb20cc 100644
+index e7bec9c..f0dfe53 100644
 --- a/src/global/Configs.cpp
 +++ b/src/global/Configs.cpp
-@@ -355,6 +355,12 @@ namespace Configs {
+@@ -404,6 +404,12 @@ namespace Configs {
      // System Utils
  
      QString FindCoreRealPath() {
 +        // find in PATH first
-+        QString path = QStandardPaths::findExecutable("throne-core");
-+        if (!path.isEmpty()) {
-+            return path;
++        QString path_for_nixos = QStandardPaths::findExecutable("throne-core");
++        if (!path_for_nixos.isEmpty()) {
++            return path_for_nixos;
 +        }
 +
          auto fn = QApplication::applicationDirPath() + "/Core";
-         auto fi = QFileInfo(fn);
-         if (fi.isSymLink()) return fi.symLinkTarget();
+ #ifdef Q_OS_WIN
+         fn += ".exe";
 diff --git a/src/ui/mainwindow.cpp b/src/ui/mainwindow.cpp
-index 9aa46b2..ba7137a 100644
+index d31c311..ce4c357 100644
 --- a/src/ui/mainwindow.cpp
 +++ b/src/ui/mainwindow.cpp
-@@ -125,8 +125,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
+@@ -151,8 +151,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
      Configs::dataStore->core_port = MkPort();
      if (Configs::dataStore->core_port <= 0) Configs::dataStore->core_port = 19810;
  
@@ -29,7 +29,7 @@ index 9aa46b2..ba7137a 100644
  
      QStringList args;
      args.push_back("-port");
-@@ -844,6 +843,15 @@ bool MainWindow::get_elevated_permissions(int reason) {
+@@ -1045,6 +1044,15 @@ bool MainWindow::get_elevated_permissions(int reason) {
          return true;
      }
      if (Configs::IsAdmin()) return true;

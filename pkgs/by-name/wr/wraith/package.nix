@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://wraith.botpack.net/";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ elitak ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

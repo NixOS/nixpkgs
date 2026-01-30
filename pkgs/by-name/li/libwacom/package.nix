@@ -20,6 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.17.0";
 
   outputs = [
+    "bin"
     "out"
     "dev"
   ];

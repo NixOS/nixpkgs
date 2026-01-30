@@ -20,16 +20,16 @@
   trio,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cyclopts";
-  version = "4.4.1";
+  version = "4.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "BrianPugh";
     repo = "cyclopts";
-    tag = "v${version}";
-    hash = "sha256-kp/mnqa2difEA3s1jtXF1fDluQhLCJ4f6rFRruRbE9k=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-m1VKwyGTKEnXplc2Gxmgdol8XaWadc6LC29KzCamdvQ=";
   };
 
   build-system = [
@@ -61,7 +61,7 @@ buildPythonPackage rec {
     pytestCheckHook
     syrupy
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "cyclopts" ];
 
@@ -80,8 +80,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to create CLIs based on Python type hints";
     homepage = "https://github.com/BrianPugh/cyclopts";
-    changelog = "https://github.com/BrianPugh/cyclopts/releases/tag/${src.tag}";
+    changelog = "https://github.com/BrianPugh/cyclopts/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

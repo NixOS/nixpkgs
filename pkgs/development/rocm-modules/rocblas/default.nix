@@ -40,13 +40,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocblas${clr.gpuArchSuffix}";
-  version = "7.0.2";
+  version = "7.1.1";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocBLAS";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-528jAdhWtZbbw76dfUgpMr5px0T7q4Oj76jp0z0lh3A=";
+    hash = "sha256-obKypbYmnSeOtOr7g0pxOz02YfzZ0bGugTtznkeHz14=";
   };
 
   outputs = [ "out" ] ++ lib.optional buildBenchmarks "benchmark" ++ lib.optional buildTests "test";
@@ -92,7 +92,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.CXXFLAGS = "-fopenmp -I${lib.getDev boost}/include -I${hipblas-common}/include -I${roctracer}/include";
   # Fails to link tests with undefined symbol: cblas_*
-  env.LDFLAGS = lib.optionalString (buildTests || buildBenchmarks) "-Wl,--as-needed -lcblas";
+  env.LDFLAGS =
+    "-Wl,--as-needed -lzstd" + lib.optionalString (buildTests || buildBenchmarks) " -lcblas";
   env.TENSILE_ROCM_ASSEMBLER_PATH = "${stdenv.cc}/bin/clang++";
 
   cmakeFlags = [

@@ -17,7 +17,6 @@
   fetchurl,
   fzf,
   glib,
-  glibc,
   gmp,
   gnulib,
   gnum4,
@@ -25,6 +24,7 @@
   imagemagick,
   installShellFiles,
   lib,
+  libc,
   libevent,
   libiconv,
   libmpack,
@@ -126,6 +126,10 @@ in
         dep = openssl;
       }
     ];
+
+    env = old.env // {
+      NIX_CFLAGS_COMPILE = "-std=gnu17"; # for gcc15
+    };
 
     # Upstream rockspec is pointlessly broken into separate rockspecs, per Lua
     # version, which doesn't work well for us, so modify it
@@ -389,6 +393,7 @@ in
     buildInputs = old.buildInputs ++ [
       gnulib
     ];
+    meta.broken = isLuaJIT;
   });
 
   lrexlib-oniguruma = prev.lrexlib-oniguruma.overrideAttrs {
@@ -411,9 +416,13 @@ in
 
   lrexlib-posix = prev.lrexlib-posix.overrideAttrs (old: {
     buildInputs = old.buildInputs ++ [
-      glibc.dev
+      (lib.getDev libc)
     ];
   });
+
+  lua-cmsgpack = prev.lua-cmsgpack.overrideAttrs {
+    meta.broken = isLuaJIT;
+  };
 
   lua-curl = prev.lua-curl.overrideAttrs (old: {
     buildInputs = old.buildInputs ++ [
@@ -470,6 +479,13 @@ in
     buildInputs = old.buildInputs ++ [
       yajl
     ];
+    luarocksConfig = old.luarocksConfig // {
+      variables = {
+        # Since yajl's outputs are split, we need to help luarocks find the
+        # include directory.
+        YAJL_INCDIR = "${lib.getDev yajl}/include";
+      };
+    };
   });
 
   lua-zlib = prev.lua-zlib.overrideAttrs (old: {
@@ -688,7 +704,7 @@ in
 
   luasystem = prev.luasystem.overrideAttrs (
     lib.optionalAttrs stdenv.hostPlatform.isLinux {
-      buildInputs = [ glibc.out ];
+      buildInputs = [ libc.out ];
     }
   );
 
@@ -826,7 +842,8 @@ in
       substituteInPlace ''${rockspecFilename} \
         --replace-fail "'nvim-nio ~> 1.7'," "'nvim-nio >= 1.7'," \
         --replace-fail "'plenary.nvim == 0.1.4'," "'plenary.nvim'," \
-        --replace-fail "'nui.nvim == 0.3.0'," "'nui.nvim',"
+        --replace-fail "'nui.nvim == 0.3.0'," "'nui.nvim'," \
+        --replace-fail ", 'nvim-treesitter-legacy-api == 0.9.2'" ""
     '';
   };
 
@@ -997,6 +1014,27 @@ in
     '';
   };
 
+  rocks-nvim = prev.rocks-nvim.overrideAttrs (oa: {
+
+    nativeCheckInputs = [
+      final.nlua
+      final.busted
+      writableTmpDirAsHomeHook
+    ];
+
+    doCheck = lua.luaversion == "5.1";
+
+    nvimSkipModules = [
+      "bootstrap" # tries to install luarocks from network
+    ];
+
+    checkPhase = ''
+      runHook preCheck
+      busted --run=offline
+      runHook postCheck
+    '';
+  });
+
   rtp-nvim = prev.rtp-nvim.overrideAttrs {
     doCheck = lua.luaversion == "5.1";
     nativeCheckInputs = [
@@ -1142,9 +1180,12 @@ in
       ++ [
         lua.pkgs.luarocks-build-treesitter-parser-cpp
       ];
+
+    meta.broken = lua.luaversion != "5.1";
   });
 
   tree-sitter-orgmode = prev.tree-sitter-orgmode.overrideAttrs (old: {
+    strictDeps = true; # can be removed after february 2026
     propagatedBuildInputs =
       let
         # HACK: luarocks-nix puts rockspec build dependencies in the nativeBuildInputs,
@@ -1154,11 +1195,14 @@ in
       old.propagatedBuildInputs
       ++ [
         lua.pkgs.luarocks-build-treesitter-parser
-        tree-sitter
       ];
     nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [
       writableTmpDirAsHomeHook
+      tree-sitter
     ];
+
+    # should be fixed upstream
+    meta.broken = lua.luaversion != "5.1";
   });
 
   vstruct = prev.vstruct.overrideAttrs (_: {

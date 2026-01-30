@@ -10,7 +10,8 @@
   libgudev,
   libusb1,
   libdrm,
-  xorg,
+  libxrandr,
+  libxext,
 }:
 
 stdenv.mkDerivation rec {
@@ -34,8 +35,8 @@ stdenv.mkDerivation rec {
     libgudev
     libusb1
     udev
-    xorg.libXext
-    xorg.libXrandr
+    libxext
+    libxrandr
   ];
 
   enableParallelBuilding = true;

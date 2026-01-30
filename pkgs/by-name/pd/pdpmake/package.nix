@@ -5,13 +5,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "pdpmake";
-  version = "2.0.3";
+  version = "2.0.4";
 
   src = fetchFromGitHub {
     owner = "rmyorston";
     repo = "pdpmake";
     rev = version;
-    hash = "sha256-6lLYtBKZTmi+fBkCyDysJS1O37/Z6ir9hU3pX4X1VHQ=";
+    hash = "sha256-ivRXZxm9RAWSmNfiV7BhVzVFsBKuMMpKjub8ADinYyc=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

@@ -5,7 +5,7 @@
   libjack2,
   libGL,
   pkg-config,
-  xorg,
+  libx11,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     libjack2
-    xorg.libX11
+    libx11
     libGL
   ];
 

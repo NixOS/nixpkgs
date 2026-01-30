@@ -15,7 +15,7 @@
   makeDesktopItem,
   pango,
   unzip,
-  xorg,
+  libx11,
   zlib,
 }:
 stdenv.mkDerivation rec {
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     glib
     gdk-pixbuf
     pango
-    xorg.libX11
+    libx11
     zlib
   ];
 

@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   unzip,
-  xorg,
+  libx11,
   libGLU,
   libGL,
 }:
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ unzip ];
   buildInputs = [
-    xorg.libX11
+    libx11
     libGLU
     libGL
   ];

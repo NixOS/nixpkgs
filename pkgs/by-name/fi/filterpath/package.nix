@@ -4,7 +4,7 @@
   lib,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  name = "filterpath";
+  pname = "filterpath";
   version = "1.0.4";
 
   src = fetchFromGitHub {

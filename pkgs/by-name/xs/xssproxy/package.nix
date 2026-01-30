@@ -4,7 +4,8 @@
   fetchFromGitHub,
   glib,
   pkg-config,
-  xorg,
+  libxscrnsaver,
+  libx11,
   dbus,
 }:
 
@@ -22,8 +23,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     glib
-    xorg.libX11
-    xorg.libXScrnSaver
+    libx11
+    libxscrnsaver
     dbus
   ];
 

@@ -93,7 +93,17 @@ in
   nss_latest,
   onnxruntime,
   pango,
-  xorg,
+  libxt,
+  libxtst,
+  libxrender,
+  libxi,
+  libxft,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libx11,
+  xorgproto,
+  pixman,
   zip,
   zlib,
   pkgsBuildBuild,
@@ -293,7 +303,14 @@ buildStdenv.mkDerivation {
   pname = "${pname}-unwrapped";
   version = packageVersion;
 
-  inherit src unpackPhase meta;
+  inherit src unpackPhase;
+
+  meta =
+    meta
+    // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+      # MacOS builds may take a long time and sometimes hit the default timeout
+      timeout = lib.max (24 * 60 * 60) (meta.timeout or 0);
+    };
 
   outputs = [
     "out"
@@ -569,17 +586,17 @@ buildStdenv.mkDerivation {
       libwebp
       nspr
       pango
-      xorg.libX11
-      xorg.libXcursor
-      xorg.libXdamage
-      xorg.libXext
-      xorg.libXft
-      xorg.libXi
-      xorg.libXrender
-      xorg.libXt
-      xorg.libXtst
-      xorg.pixman
-      xorg.xorgproto
+      libx11
+      libxcursor
+      libxdamage
+      libxext
+      libxft
+      libxi
+      libxrender
+      libxt
+      libxtst
+      pixman
+      xorgproto
       zlib
       (if (lib.versionAtLeast version "144") then nss_latest else nss_esr)
     ]

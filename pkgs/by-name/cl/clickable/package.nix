@@ -4,19 +4,24 @@
   gitUpdater,
   python3Packages,
   stdenv,
+  docker,
+  git,
+  which,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "clickable";
-  version = "8.6.0";
+  version = "8.7.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "clickable";
     repo = "clickable";
     rev = "v${version}";
-    hash = "sha256-rgIp4LCSUamImYhgFeG+XEpgnxHcKylWRB2CCx9u5S0=";
+    hash = "sha256-W6NPZ5uP7wGjgyA+Nv2vpmshKWny2CCSrn/Gaoi7Pr4=";
   };
+
+  __structuredAttrs = true;
 
   build-system = [ python3Packages.setuptools ];
 
@@ -29,50 +34,45 @@ python3Packages.buildPythonApplication rec {
     watchdog
   ];
 
-  nativeCheckInputs = [ python3Packages.pytestCheckHook ];
+  nativeCheckInputs = [
+    docker
+    git
+    python3Packages.pytestCheckHook
+    which
+  ];
 
   disabledTests = [
-    # Tests require docker
-    "test_cpp_plugin"
-    "test_html"
-    "test_python"
-    "test_qml_only"
-    "test_rust"
-    "test_review"
-    "test_click_build"
-    "test_no_device"
-    "test_no_file_temp"
-    "test_update"
-    "test_lib_build"
-    "test_clean"
-    "test_temp_exception"
-    "test_create_interactive"
-    "test_create_non_interactive"
-    "test_kill"
-    "test_writable_image"
-    "test_no_desktop_mode"
-    "test_no_lock"
-    "test_run_default_command"
-    "test_run"
-    "test_no_container_mode_log"
-    "test_custom_mode_log"
-    "test_skip_desktop_mode"
-    "test_log"
-    "test_custom_lock_file"
-    "test_launch_custom"
-    "test_launch"
-    "test_devices"
-    "test_install"
-    "test_skip_container_mode"
-    "test_godot_plugin"
+    # Requires running docker daemon
+    "TestTemplates"
+
+    # Expects /tmp to exist and not be a symlink
+    # https://gitlab.com/clickable/clickable/-/issues/479
+    "TestReviewCommand and test_run and not test_run_with_path_arg"
   ]
-  ++
-    # There are no docker images available for the aarch64 architecture
-    # which are required for tests.
-    lib.optionals stdenv.hostPlatform.isAarch64 [
-      "test_arch"
-      "test_restricted_arch"
-    ];
+  ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [
+    # pytest's lack of exact nodeid matching or deselecting makes it impossible to nicely disable just
+    # test_architectures.py::TestArchitectures::test_arch (infix matching makes test_arch match test_architectures.py).
+    # Have to `or` for every other TestArchitectures test and then `not` that.
+    # What we want to disable: test_arch & test_restricted_arch
+    # Reason: they hardcode amd64
+    "TestArchitectures and not (${
+      lib.strings.concatStringsSep " or " [
+        "test_arch_agnostic"
+        "test_default_arch"
+        "test_fail_arch_agnostic"
+        "test_fail_in_restricted_arch"
+        "test_restricted_arch_env"
+      ]
+    })"
+
+    # no -ide images on non-x86_64
+    # https://gitlab.com/clickable/clickable/-/issues/478
+    "TestIdeQtCreatorCommand and test_command_overrided"
+    "TestIdeQtCreatorCommand and test_init_cmake_project"
+    "TestIdeQtCreatorCommand and test_initialize_qtcreator_conf"
+    "TestIdeQtCreatorCommand and test_project_pre_configured"
+    "TestIdeQtCreatorCommand and test_recurse_replace"
+  ];
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 

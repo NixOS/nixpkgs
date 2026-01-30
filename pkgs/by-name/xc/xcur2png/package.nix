@@ -5,7 +5,9 @@
   fetchpatch,
   pkg-config,
   libpng,
-  xorg,
+  libxcursor,
+  libx11,
+  xorgproto,
 }:
 
 stdenv.mkDerivation rec {
@@ -43,9 +45,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libpng
-    xorg.libX11
-    xorg.libXcursor
-    xorg.xorgproto
+    libx11
+    libxcursor
+    xorgproto
   ];
 
   meta = {

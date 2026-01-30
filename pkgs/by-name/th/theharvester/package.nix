@@ -4,16 +4,16 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "theharvester";
-  version = "4.9.2";
+  version = "4.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "laramies";
     repo = "theharvester";
-    tag = version;
-    hash = "sha256-ZD5nFjhunD6miBBgCp7r82l/zIbLjHSj1jghXGav8hI=";
+    tag = finalAttrs.version;
+    hash = "sha256-PDFKDm1amqmdYo/avxudWZ9Xhp16Cw4ejmUAQ+BlvC0=";
   };
 
   pythonRelaxDeps = true;
@@ -26,6 +26,7 @@ python3.pkgs.buildPythonApplication rec {
     aiodns
     aiofiles
     aiohttp
+    aiohttp-socks
     aiomultiprocess
     aiosqlite
     beautifulsoup4
@@ -71,7 +72,7 @@ python3.pkgs.buildPythonApplication rec {
       gathers emails, names, subdomains, IPs, and URLs using multiple public data sources.
     '';
     homepage = "https://github.com/laramies/theHarvester";
-    changelog = "https://github.com/laramies/theHarvester/releases/tag/${src.tag}";
+    changelog = "https://github.com/laramies/theHarvester/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       c0bw3b
@@ -80,4 +81,4 @@ python3.pkgs.buildPythonApplication rec {
     ];
     mainProgram = "theHarvester";
   };
-}
+})

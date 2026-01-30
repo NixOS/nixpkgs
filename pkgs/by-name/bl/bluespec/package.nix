@@ -13,7 +13,7 @@
   pkg-config,
   tcl,
   tk,
-  xorg,
+  libxft,
   yices, # bsc uses a patched version of yices
   zlib,
   ghc,
@@ -151,7 +151,7 @@ stdenv.mkDerivation rec {
     tcl
     tk
     which
-    xorg.libXft
+    libxft
     zlib
   ];
 

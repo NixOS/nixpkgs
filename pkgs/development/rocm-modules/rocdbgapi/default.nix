@@ -47,7 +47,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocdbgapi";
-  version = "7.0.2";
+  version = "7.1.1";
 
   outputs = [
     "out"
@@ -56,11 +56,13 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
+  buildFlags = lib.optionals buildDocs [ "doc" ];
+
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "ROCdbgapi";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-adzHfTd4O59YKqkPL1oZnM8qiuGjlWefbl50MI2Z7co=";
+    hash = "sha256-RwYZJPwGhNtSSvmSgy0AsNTc98cav0/u9jH5f93sB9M=";
   };
 
   nativeBuildInputs = [
@@ -89,12 +91,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
   ];
 
-  # Unfortunately, it seems like we have to call make on this manually
-  postBuild = lib.optionalString buildDocs ''
-    make -j$NIX_BUILD_CORES doc
-  '';
-
   postInstall = lib.optionalString buildDocs ''
+    mkdir -p $doc/share/doc/amd-dbgapi/
     mv $out/share/html/amd-dbgapi $doc/share/doc/amd-dbgapi/html
     rmdir $out/share/html
   '';
@@ -106,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "Debugger support for control of execution and inspection state";
+    description = "Debugger support for control of execution and inspection state of AMD's GPU architectures";
     homepage = "https://github.com/ROCm/ROCdbgapi";
     license = with lib.licenses; [ mit ];
     teams = [ lib.teams.rocm ];

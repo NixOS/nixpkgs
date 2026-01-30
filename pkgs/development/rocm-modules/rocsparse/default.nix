@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocsparse${clr.gpuArchSuffix}";
-  version = "7.0.2";
+  version = "7.1.1";
 
   outputs = [
     "out"
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "rocSPARSE";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-0KFzrVGScCQDbOdlX016ymZ4lgCimd9XK4auK9V5p3k=";
+    hash = "sha256-ZNeFslIQZlFCNqWHmrpcxDuOvVu1cjiEd8b6ZNXcZzo=";
   };
 
   nativeBuildInputs = [

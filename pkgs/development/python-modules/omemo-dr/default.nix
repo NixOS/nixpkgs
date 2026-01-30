@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   cryptography,
-  fetchPypi,
+  fetchFromGitLab,
   protobuf,
   pytestCheckHook,
   setuptools,
@@ -10,12 +10,15 @@
 
 buildPythonPackage rec {
   pname = "omemo-dr";
-  version = "1.0.1";
+  version = "1.2.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-KoqMdyMdc5Sb3TdSeNTVomElK9ruUstiQayyUcIC02E=";
+  src = fetchFromGitLab {
+    domain = "dev.gajim.org";
+    owner = "gajim";
+    repo = "omemo-dr";
+    tag = "v${version}";
+    hash = "sha256-8+uBO7Nl6YcEwthWmChqCTLvUelF8QJl+dHzkqbPVqM=";
   };
 
   nativeBuildInputs = [ setuptools ];

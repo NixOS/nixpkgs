@@ -85,7 +85,6 @@ rec {
         BLK_DEV_DM m
         DM_CRYPT m
         MD y
-        REISERFS_FS m
         BTRFS_FS m
         XFS_FS m
         JFS_FS m
@@ -430,7 +429,6 @@ rec {
         BLK_DEV_DM m
         DM_CRYPT m
         MD y
-        REISERFS_FS m
         EXT4_FS m
         USB_STORAGE_CYPRESS_ATACB m
 
@@ -475,7 +473,6 @@ rec {
         FRAMEBUFFER_CONSOLE y
         EXT2_FS y
         EXT3_FS y
-        REISERFS_FS y
         MAGIC_SYSRQ y
 
         # The kernel doesn't boot at all, with FTRACE

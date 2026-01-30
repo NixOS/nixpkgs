@@ -192,9 +192,10 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "dovecot";
     maintainers = with lib.maintainers; [
+      das_j
       fpletz
+      helsinki-Jo
     ];
-    teams = [ lib.teams.helsinki-systems ];
     platforms = lib.platforms.unix;
   };
   passthru.tests = {

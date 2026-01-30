@@ -40,7 +40,6 @@ buildRubyGem rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [
       aschleck
-      shamilton
     ];
     mainProgram = "anystyle";
     platforms = lib.platforms.unix;

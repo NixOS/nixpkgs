@@ -151,7 +151,7 @@ stdenv.mkDerivation (finalAttrs: {
       bsd3
       asl20
     ];
-    maintainers = with lib.maintainers; [ normalcea ];
+    maintainers = [ ];
     platforms = lib.platforms.aarch64;
   };
 })

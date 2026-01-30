@@ -2,14 +2,12 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   pdm-backend,
 
   # propagates
   quart,
-  typing-extensions,
 
   # tests
   pytestCheckHook,
@@ -31,7 +29,7 @@ buildPythonPackage rec {
 
   build-system = [ pdm-backend ];
 
-  dependencies = [ quart ] ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
+  dependencies = [ quart ];
 
   pythonImportsCheck = [ "quart_cors" ];
 

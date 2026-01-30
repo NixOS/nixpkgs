@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "walrus";
-  version = "0.9.7";
+  version = "0.9.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "coleifer";
     repo = "walrus";
     tag = finalAttrs.version;
-    hash = "sha256-CXy6jjGIG8nuqnF39DqDLvYDGq7N1VL2yitVQrNMEzI=";
+    hash = "sha256-AgaqDZHjUX/oLjzisWjZcrGL9QXQf73WW+hfK2WMQJ8=";
   };
 
   build-system = [ setuptools ];

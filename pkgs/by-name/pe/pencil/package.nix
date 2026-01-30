@@ -23,7 +23,18 @@
   nspr,
   nss,
   pango,
-  xorg,
+  libxtst,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  libxcb,
   systemd,
 }:
 let
@@ -47,18 +58,18 @@ let
     nspr
     nss
     pango
-    xorg.libX11
-    xorg.libxcb
-    xorg.libXScrnSaver
-    xorg.libXcomposite
-    xorg.libXcursor
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libXtst
+    libx11
+    libxcb
+    libxscrnsaver
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxrandr
+    libxrender
+    libxtst
     (lib.getLib stdenv.cc.cc)
     stdenv.cc.cc
   ];

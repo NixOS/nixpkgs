@@ -6,7 +6,7 @@
   libgnomekbd,
   gdk-pixbuf,
   cairo,
-  xorg,
+  libxkbfile,
   meson,
   ninja,
   pkg-config,
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     ))
     libgnomekbd
     gdk-pixbuf
-    xorg.libxkbfile
+    libxkbfile
     python3.pkgs.pygobject3 # for .pc file
     mate.mate-panel # for gobject-introspection
     dbus

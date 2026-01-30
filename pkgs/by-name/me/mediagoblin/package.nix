@@ -7,7 +7,7 @@
   gst_all_1,
   poppler-utils,
   python3,
-  xorg,
+  lndir,
 }:
 
 let
@@ -76,7 +76,7 @@ python.pkgs.buildPythonApplication rec {
   nativeBuildInputs = [
     gobject-introspection
     python3.pkgs.babel
-    xorg.lndir
+    lndir
   ];
 
   build-system = with python.pkgs; [
@@ -175,6 +175,9 @@ python.pkgs.buildPythonApplication rec {
     description = "Free software media publishing platform that anyone can run";
     homepage = "https://mediagoblin.org/";
     license = lib.licenses.agpl3Plus;
-    teams = with lib.maintainers; [ SuperSandro2000 ];
+    maintainers = with lib.maintainers; [
+      # for the C3D2
+      SuperSandro2000
+    ];
   };
 }

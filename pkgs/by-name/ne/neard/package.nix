@@ -72,7 +72,7 @@ stdenv.mkDerivation {
 
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
-    wrapPythonProgramsIn "$out/lib/neard" "$pythonPath"
+    wrapPythonProgramsIn "$out/lib/neard" "''${pythonPath[*]}"
   '';
 
   meta = {

@@ -10,7 +10,7 @@
   pango,
   cairo,
   gdk-pixbuf,
-  xorg,
+  libxtst,
   makeBinaryWrapper,
   makeDesktopItem,
   copyDesktopItems,
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
           pango
           cairo
           gdk-pixbuf
-          xorg.libXtst
+          libxtst
         ]
       } \
        --add-flags "--module-path ${openjfx_jdk}/lib --add-modules=javafx.controls,javafx.fxml"

@@ -31,12 +31,14 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
   buildInputs = [
-    libX11
-    libXxf86vm
-    libXrandr
     vulkan-headers
     libGL
     vulkan-loader
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libX11
+    libXxf86vm
+    libXrandr
     wayland
   ];
 
@@ -45,8 +47,10 @@ stdenv.mkDerivation rec {
   outputs = [
     "out"
     "dev"
-    "layers"
-  ];
+  ]
+  # layers don't currently build on darwin
+  # https://github.com/KhronosGroup/OpenXR-SDK-Source/issues/582
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) "layers";
 
   # https://github.com/KhronosGroup/OpenXR-SDK-Source/issues/305
   postPatch = ''
@@ -54,7 +58,7 @@ stdenv.mkDerivation rec {
       --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     mkdir -p "$layers/share"
     mv "$out/share/openxr" "$layers/share"
     # Use absolute paths in manifests so no LD_LIBRARY_PATH shenanigans are necessary
@@ -68,7 +72,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Khronos OpenXR loader";
     homepage = "https://www.khronos.org/openxr";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.ralith ];
   };

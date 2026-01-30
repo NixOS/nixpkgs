@@ -9,7 +9,7 @@
 let
   py = python3.override {
     self = py;
-    packageOverrides = _final: prev: { django = prev.django_5_2; };
+    packageOverrides = _final: prev: { django = prev.django_5; };
   };
 
   extraBuildInputs = plugins py.pkgs;

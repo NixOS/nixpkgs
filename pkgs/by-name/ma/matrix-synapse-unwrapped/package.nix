@@ -14,14 +14,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.145.0";
+  version = "1.146.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "synapse";
     rev = "v${version}";
-    hash = "sha256-JFMxnp4//Q8t6LZf6L2jJxaShE51r4MY7eJvD9JhhVo=";
+    hash = "sha256-XeDXXiGmY4Lsn5qNVvsBUdQYlTz40fuVVus7jRsUNW4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -33,6 +33,7 @@ python3Packages.buildPythonApplication rec {
     with python3Packages;
     [
       poetry-core
+      setuptools-rust
     ]
     ++ [
       rustPlatform.maturinBuildHook
@@ -51,7 +52,7 @@ python3Packages.buildPythonApplication rec {
     libiconv
   ];
 
-  pythonRemoveDeps = [ "setuptools_rust" ];
+  pythonRemoveDeps = [ "setuptools-rust" ];
 
   dependencies =
     with python3Packages;
@@ -82,7 +83,6 @@ python3Packages.buildPythonApplication rec {
       pyrsistent
       pyyaml
       service-identity
-      setuptools-rust
       signedjson
       sortedcontainers
       treq

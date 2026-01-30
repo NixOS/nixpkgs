@@ -8,7 +8,7 @@
   expat,
   fontconfig,
   gtk2,
-  xorg,
+  libsm,
   autoPatchelfHook,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     expat
     fontconfig.lib
     gtk2
-    xorg.libSM
+    libsm
   ];
 
   installPhase = ''

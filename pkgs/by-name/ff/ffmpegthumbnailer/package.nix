@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   pkg-config,
   ffmpeg-headless,
@@ -12,22 +11,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ffmpegthumbnailer";
-  version = "2.2.3";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "dirkvdb";
     repo = "ffmpegthumbnailer";
-    tag = finalAttrs.version;
-    hash = "sha256-1hVPtCPwfovCtA6aagViUJkYTCFuiFkOqGEqMHIoZe8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-h8B12FItvSrYgy6t78A02DL96Az4BxtW8brFKkZLH9o=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "ffmpeg-8-fix.patch";
-      url = "https://github.com/dirkvdb/ffmpegthumbnailer/commit/df789ec326ae0f2c619f91c8f2fc8b5e45b50a70.patch";
-      hash = "sha256-PArrcKuaWWA6/H59MbdC36B57GSvvp5sHz24QLTBZYw=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -40,7 +31,10 @@ stdenv.mkDerivation (finalAttrs: {
     libjpeg
   ];
 
-  cmakeFlags = [ "-DENABLE_THUMBNAILER=ON" ];
+  cmakeFlags = [
+    "-DENABLE_THUMBNAILER=ON"
+    "-DENABLE_AUDIO_THUMBNAILER=ON"
+  ];
 
   # https://github.com/dirkvdb/ffmpegthumbnailer/issues/215
   postPatch = ''

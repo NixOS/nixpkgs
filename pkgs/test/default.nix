@@ -229,6 +229,8 @@ in
 
   auto-patchelf-hook = callPackage ./auto-patchelf-hook { };
 
+  auto-patchelf-hook-preserve-origin = callPackage ./auto-patchelf-hook-preserve-origin { };
+
   # Accumulate all passthru.tests from arrayUtilities into a single attribute set.
   arrayUtilities = recurseIntoAttrs (
     concatMapAttrs (
@@ -254,4 +256,6 @@ in
   prefer-remote-fetch = recurseIntoAttrs (
     callPackages ../build-support/prefer-remote-fetch/tests.nix { }
   );
+
+  home-assistant-component-tests = recurseIntoAttrs pkgs.home-assistant.tests.components;
 }

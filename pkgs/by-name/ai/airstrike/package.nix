@@ -8,11 +8,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "airstrike-pre";
-  version = "6a";
+  pname = "airstrike";
+  version = "pre6a";
 
   src = fetchurl {
-    url = "https://icculus.org/airstrike/airstrike-pre${version}-src.tar.gz";
+    url = "https://icculus.org/airstrike/airstrike-${version}-src.tar.gz";
     sha256 = "1h6rv2zcp84ycmd0kv1pbpqjgwx57dw42x7878d2c2vnpi5jn8qi";
   };
 

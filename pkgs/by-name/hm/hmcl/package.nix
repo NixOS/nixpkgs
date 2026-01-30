@@ -23,7 +23,13 @@
     hmclJdk
     jdk17
   ],
-  xorg,
+  libxxf86vm,
+  libxtst,
+  libxrandr,
+  libxext,
+  libxcursor,
+  libx11,
+  xrandr,
   glib,
   libGL,
   glfw,
@@ -35,8 +41,8 @@
   libpulseaudio,
   gobject-introspection,
   callPackage,
+  gtk3,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "hmcl";
   version = "3.9.2";
@@ -138,15 +144,16 @@ stdenv.mkDerivation (finalAttrs: {
     vulkan-loader
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    xorg.libX11
-    xorg.libXxf86vm
-    xorg.libXext
-    xorg.libXcursor
-    xorg.libXrandr
-    xorg.libXtst
+    libx11
+    libxxf86vm
+    libxext
+    libxcursor
+    libxrandr
+    libxtst
     libpulseaudio
     wayland
     alsa-lib
+    gtk3
   ];
 
   installPhase = ''
@@ -175,9 +182,10 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     makeShellWrapper ${hmclJdk}/bin/java $out/bin/hmcl \
       --add-flags "-jar $out/lib/hmcl/hmcl-terracotta-patch.jar" \
+      --add-flags "-Djdk.gtk.version=3" \
       --set LD_LIBRARY_PATH ${lib.makeLibraryPath finalAttrs.runtimeDeps} \
       --prefix PATH : "${
-        lib.makeBinPath (minecraftJdks ++ lib.optional stdenv.hostPlatform.isLinux xorg.xrandr)
+        lib.makeBinPath (minecraftJdks ++ lib.optional stdenv.hostPlatform.isLinux xrandr)
       }" \
       --run 'cd $HOME' \
       ''${gappsWrapperArgs[@]}

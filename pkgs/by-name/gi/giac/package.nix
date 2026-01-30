@@ -28,7 +28,7 @@
   enableGUI ? false,
   libGL,
   libGLU,
-  xorg,
+  libx11,
   fltk,
   enableMicroPy ? false,
   python3,
@@ -139,7 +139,7 @@ stdenv.mkDerivation rec {
     libGL
     libGLU
     fltk
-    xorg.libX11
+    libx11
   ]
   ++ lib.optional enableMicroPy python3;
 

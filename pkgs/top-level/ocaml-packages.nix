@@ -413,6 +413,8 @@ let
 
         dns-client-lwt = callPackage ../development/ocaml-modules/dns/client-lwt.nix { };
 
+        dns-client-miou-unix = callPackage ../development/ocaml-modules/dns/client-miou-unix.nix { };
+
         dns-client-mirage = callPackage ../development/ocaml-modules/dns/client-mirage.nix { };
 
         dns-mirage = callPackage ../development/ocaml-modules/dns/mirage.nix { };
@@ -521,7 +523,9 @@ let
 
         easy-format = callPackage ../development/ocaml-modules/easy-format { };
 
-        eigen = callPackage ../development/ocaml-modules/eigen { };
+        eigen = callPackage ../development/ocaml-modules/eigen {
+          stdenv = pkgs.gcc14Stdenv;
+        };
 
         eio = callPackage ../development/ocaml-modules/eio { };
         eio_linux = callPackage ../development/ocaml-modules/eio/linux.nix { };
@@ -622,25 +626,25 @@ let
 
         ffmpeg = callPackage ../development/ocaml-modules/ffmpeg { };
         ffmpeg-av = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-av.nix {
-          ffmpeg = pkgs.ffmpeg_6;
+          ffmpeg = pkgs.ffmpeg_8;
         };
         ffmpeg-avcodec = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-avcodec.nix {
-          ffmpeg = pkgs.ffmpeg_6;
+          ffmpeg = pkgs.ffmpeg_8;
         };
         ffmpeg-avdevice = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-avdevice.nix {
-          ffmpeg = pkgs.ffmpeg_6;
+          ffmpeg = pkgs.ffmpeg_8;
         };
         ffmpeg-avfilter = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-avfilter.nix {
-          ffmpeg = pkgs.ffmpeg_6;
+          ffmpeg = pkgs.ffmpeg_8;
         };
         ffmpeg-avutil = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-avutil.nix {
-          ffmpeg = pkgs.ffmpeg_6;
+          ffmpeg = pkgs.ffmpeg_8;
         };
         ffmpeg-swresample = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-swresample.nix {
-          ffmpeg = pkgs.ffmpeg_6;
+          ffmpeg = pkgs.ffmpeg_8;
         };
         ffmpeg-swscale = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-swscale.nix {
-          ffmpeg = pkgs.ffmpeg_6;
+          ffmpeg = pkgs.ffmpeg_8;
         };
 
         fiber = callPackage ../development/ocaml-modules/fiber { };
@@ -666,12 +670,17 @@ let
         fpath = callPackage ../development/ocaml-modules/fpath { };
 
         frama-c = callPackage ../development/ocaml-modules/frama-c {
-          framac = pkgs.framac.override { ocamlPackages = self; };
+          framac = pkgs.framac.override {
+            ocamlPackages = self;
+            why3 = pkgs.why3.override { ocamlPackages = self; };
+          };
         };
 
         frama-c-lannotate = callPackage ../development/ocaml-modules/frama-c-lannotate { };
 
-        frama-c-luncov = callPackage ../development/ocaml-modules/frama-c-luncov { };
+        frama-c-luncov = callPackage ../development/ocaml-modules/frama-c-luncov {
+          why3 = pkgs.why3.override { ocamlPackages = self; };
+        };
 
         frei0r = callPackage ../development/ocaml-modules/frei0r {
           inherit (pkgs) frei0r;
@@ -786,6 +795,10 @@ let
 
         happy-eyeballs-lwt = callPackage ../development/ocaml-modules/happy-eyeballs/lwt.nix { };
 
+        happy-eyeballs-miou-unix =
+          callPackage ../development/ocaml-modules/happy-eyeballs/miou-unix.nix
+            { };
+
         happy-eyeballs-mirage = callPackage ../development/ocaml-modules/happy-eyeballs/mirage.nix { };
 
         hashcons = callPackage ../development/ocaml-modules/hashcons { };
@@ -811,6 +824,8 @@ let
         httpaf = callPackage ../development/ocaml-modules/httpaf { };
 
         httpaf-lwt-unix = callPackage ../development/ocaml-modules/httpaf/lwt-unix.nix { };
+
+        httpcats = callPackage ../development/ocaml-modules/httpcats { };
 
         httpun = callPackage ../development/ocaml-modules/httpun { };
 

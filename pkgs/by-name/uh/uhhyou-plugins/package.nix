@@ -10,7 +10,7 @@
   freetype,
   libxcb,
   xcbutil,
-  xorg,
+  libxcb-cursor,
   xcbutilkeysyms,
   libxkbcommon,
   libX11,
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     libxcb
     xcbutil
-    xorg.xcbutilcursor
+    libxcb-cursor
     xcbutilkeysyms
     libxkbcommon
     libX11

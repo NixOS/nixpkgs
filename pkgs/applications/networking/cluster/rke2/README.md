@@ -33,7 +33,8 @@ release channel tied to each Kubernetes minor version, e.g. `v1.32`.
 
 Nixpkgs follows active minor version release channels (typically 4 at a time) and sets aliases for
 `rke2_stable` and `rke2_latest` accordingly. The [update-script](./update-script.sh) takes care of
-updating the aliases automatically.
+updating the aliases automatically, but these updates **should not be backported** to release
+channels as they can cause breakage on multi-node clusters.
 
 For further information visit the
 [RKE2 release channels documentation](https://docs.rke2.io/upgrades/manual_upgrade?_highlight=manua#release-channels).
@@ -64,7 +65,8 @@ by doing the following:
 2. Add a new package block to [default.nix](./default.nix), you can copy an existing block from a
    previous release and update the version numbers
    - `rke2_1_35 = ...`
-3. Run the update script for the new package
+3. Add the package reference to [pkgs/top-level/all-packages.nix](/pkgs/top-level/all-packages.nix)
+4. Run the update script for the new package
    - `./pkgs/applications/networking/cluster/rke2/update-script.sh 35`
 
 New minor versions are **not** backported to stable release channels.

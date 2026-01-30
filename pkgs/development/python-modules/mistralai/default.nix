@@ -33,14 +33,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mistralai";
-  version = "1.10.1";
+  version = "1.11.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mistralai";
     repo = "client-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-y1et8Ez5TAge0kk/a9fA1zcgPStYf+6aO19OLhMGk/8=";
+    hash = "sha256-KpZCUaitc5Gz5ZI7vEK0CEe4Eo+H6gS9FuKlqhyQDes=";
   };
 
   preBuild = ''

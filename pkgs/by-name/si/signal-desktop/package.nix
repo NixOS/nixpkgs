@@ -54,13 +54,13 @@ let
     '';
   });
 
-  version = "7.84.0";
+  version = "7.86.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "Signal-Desktop";
     tag = "v${version}";
-    hash = "sha256-Ay4mMurnEDNoFkEhxPn4SWBhrkNg94+AGFMrNA0mTcE=";
+    hash = "sha256-TnblDCYUhwvnKiq3klMRw0+bj4hKPrwmEDzCGSLyt8I=";
   };
 
   sticker-creator = stdenv.mkDerivation (finalAttrs: {
@@ -111,7 +111,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = (lib.optional (!withAppleEmojis) noto-fonts-color-emoji-png);
 
-  patches = lib.optional (!withAppleEmojis) (
+  patches = [
+    ./force-90-days-expiration.patch
+  ]
+  ++ lib.optional (!withAppleEmojis) (
     replaceVars ./replace-apple-emoji-with-noto-emoji.patch {
       noto-emoji-pngs = "${noto-fonts-color-emoji-png}/share/noto-fonts-color-emoji-png";
     }
@@ -144,15 +147,15 @@ stdenv.mkDerivation (finalAttrs: {
     fetcherVersion = 1;
     hash =
       if withAppleEmojis then
-        "sha256-/1/sUHt1J6wv/MuaZdE1XbkIkXfrllBoqt8AXP1d0Pw="
+        "sha256-EqDHhfpdnj4ZhTVnmVmyiRjTUIGX5fpdAsxqRY/tzQI="
       else
-        "sha256-x2A4sX7m/zNVTEWRXOKD6VsUR+aGjEFhIv+NQVe+RwQ=";
+        "sha256-Vfs1/J3R6O0Ct4gAPO/mVCwr6EaMBpltOImPrRHLkFM=";
   };
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     SIGNAL_ENV = "production";
-    SOURCE_DATE_EPOCH = 1767827358;
+    SOURCE_DATE_EPOCH = 1769033121;
   };
 
   preBuild = ''
@@ -289,6 +292,7 @@ stdenv.mkDerivation (finalAttrs: {
       ]
       ++ lib.optional withAppleEmojis unfree;
     maintainers = with lib.maintainers; [
+      eclairevoyant
       marcin-serwin
       teutat3s
     ];

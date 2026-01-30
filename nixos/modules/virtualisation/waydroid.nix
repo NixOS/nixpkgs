@@ -27,7 +27,7 @@ in
     enable = lib.mkEnableOption "Waydroid";
     package = lib.mkPackageOption pkgs "waydroid" { } // {
       default = if config.networking.nftables.enable then pkgs.waydroid-nftables else pkgs.waydroid;
-      defaultText = lib.literalExpression ''if config.networking.nftables.enable then pkgs.waydroid-nftables else pkgs.waydroid'';
+      defaultText = lib.literalExpression "if config.networking.nftables.enable then pkgs.waydroid-nftables else pkgs.waydroid";
     };
   };
 

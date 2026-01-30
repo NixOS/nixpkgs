@@ -9,7 +9,7 @@
   gtk3,
   libvorbis,
   libGLU,
-  xorg,
+  libxxf86vm,
   pkg-config,
   installShellFiles,
 }:
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     libvorbis
     libGLU
-    xorg.libXxf86vm
+    libxxf86vm
   ];
 
   installPhase = ''

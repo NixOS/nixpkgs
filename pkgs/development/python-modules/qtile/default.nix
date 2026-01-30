@@ -39,6 +39,9 @@
 buildPythonPackage (finalAttrs: {
   pname = "qtile";
   version = "0.34.1";
+  # nixpkgs-update: no auto update
+  # should be updated alongside with `qtile-extras`
+
   pyproject = true;
 
   src = fetchFromGitHub {

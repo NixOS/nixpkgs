@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "dnsmonster";
-  version = "1.1.0";
+  version = "1.2.9";
 
   src = fetchFromGitHub {
     owner = "mosajjal";
     repo = "dnsmonster";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+GFkGUR3XKDgrxVAZ3MuPxGyI0oGROdhHKMBwMSvoBI=";
+    hash = "sha256-SDAD5OBactf0dynUmLgdrg+m0bZATh4wGW/NZ2gG+dI=";
   };
 
   vendorHash = "sha256-7rIBbaYr1dgC0ArcuwZelHKG5TLIQDV9JSBoYOcz+C0=";

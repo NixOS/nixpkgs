@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   flit-core,
@@ -12,7 +11,6 @@
   jinja2,
   pyyaml,
   sphinx,
-  stdlib-list,
 
   # tests
   beautifulsoup4,
@@ -38,9 +36,6 @@ buildPythonPackage rec {
     jinja2
     pyyaml
     sphinx
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [
-    stdlib-list
   ];
 
   nativeCheckInputs = [

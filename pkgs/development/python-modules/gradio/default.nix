@@ -81,14 +81,14 @@ let
 in
 buildPythonPackage rec {
   pname = "gradio";
-  version = "6.3.0";
+  version = "6.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gradio-app";
     repo = "gradio";
     tag = "gradio@${version}";
-    hash = "sha256-JnoA+nQMmP5gA6VTPidv0kon8rc2bc8tmS61T2PdFc4=";
+    hash = "sha256-XHFhPoYSYmiEqTkknkqikfzdr3RRIagKWFlMgYWHYZ0=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -99,7 +99,7 @@ buildPythonPackage rec {
       src
       ;
     fetcherVersion = 3;
-    hash = "sha256-Lk8B2nQsKHs7JP3tjZufghXI7VL7GYfC30e/gpSSd4M=";
+    hash = "sha256-6Cx0hdVd0srhArvck2Kn9U2fT7aKtTZjgV5b/Usrnoo=";
   };
 
   pythonRelaxDeps = [

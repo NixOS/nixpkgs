@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "sqlit-tui";
-  version = "1.2.6";
+  version = "1.2.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Maxteabag";
     repo = "sqlit";
     tag = "v${version}";
-    hash = "sha256-5uGdKK7z/Rvb4VHZDJOjwPFXedX8l8RTvGvCQs7iAq8=";
+    hash = "sha256-zPkBdGq4PoAWonMq5FWGaz19QWiZsHuVQcW/45ynqq4=";
   };
 
   build-system = with python3Packages; [

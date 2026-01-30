@@ -34,7 +34,7 @@ jobs:
           permission-contents: write
           permission-pull-requests: write
 
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
 
@@ -65,5 +65,5 @@ jobs:
         with:
           issue-number: 105153
           body: |
-            Periodic merge from `${{ inputs.from }}` into `${{ inputs.into }}` has [failed](https://github.com/NixOS/nixpkgs/actions/runs/${{ github.run_id }}).
+            Periodic merge from `${{ inputs.from }}` into [`${{ inputs.into }}`](https://github.com/NixOS/nixpkgs/tree/${{ inputs.into }}) has [failed](https://github.com/NixOS/nixpkgs/actions/runs/${{ github.run_id }}).
           token: ${{ steps.app-token.outputs.token }}

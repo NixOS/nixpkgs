@@ -50,11 +50,11 @@ buildFHSEnv {
 
       # Undocumented dependencies discovered from testing
       gtk3
-      xorg.libICE
-      xorg.libSM
-      xorg.libX11
-      xorg.libXcursor
-      xorg.libXi
+      libice
+      libsm
+      libx11
+      libxcursor
+      libxi
     ]
     ++ extraLibs pkgs;
 

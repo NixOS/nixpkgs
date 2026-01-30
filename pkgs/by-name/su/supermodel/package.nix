@@ -4,7 +4,7 @@
   libGLU,
   SDL2,
   SDL2_net,
-  xorg,
+  libx11,
   stdenv,
   zlib,
 }:
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     libGLU
     SDL2
     SDL2_net
-    xorg.libX11
+    libx11
     zlib
   ];
 

@@ -24,21 +24,21 @@
   versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jupyter-book";
-  version = "2.1.0";
+  version = "2.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jupyter-book";
     repo = "jupyter-book";
-    tag = "v${version}";
-    hash = "sha256-Wh3ggKbV0mmcIbpIMsF09UH9ZyVOgpYAx4ppTSUHIKo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-TpscnIywWNBd3eGMe8QDV1bqbTs1z2FbGJqAh/BCOg8=";
   };
 
   npmDeps = fetchNpmDeps {
-    inherit src;
-    hash = "sha256-oNTVzpjDb4bXIpuZcO/6f82UfOVxbkMMluwOKaNM5tE=";
+    inherit (finalAttrs) src;
+    hash = "sha256-y2vZG64+ZtjANZgResUTVIoibK8GQIgKildpvTJypq4=";
   };
 
   build-system = [
@@ -76,9 +76,9 @@ buildPythonPackage rec {
   meta = {
     description = "Build a book with Jupyter Notebooks and Sphinx";
     homepage = "https://jupyterbook.org/";
-    changelog = "https://github.com/jupyter-book/jupyter-book/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/jupyter-book/jupyter-book/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.jupyter ];
     mainProgram = "jupyter-book";
   };
-}
+})

@@ -2,7 +2,8 @@
   lib,
   stdenv,
   fetchurl,
-  xorg,
+  mkfontscale,
+  fonttosfnt,
   libfaketime,
 }:
 
@@ -16,8 +17,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    xorg.fonttosfnt
-    xorg.mkfontscale
+    fonttosfnt
+    mkfontscale
     libfaketime
   ];
 

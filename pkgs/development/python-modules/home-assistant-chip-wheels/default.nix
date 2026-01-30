@@ -258,9 +258,9 @@ stdenv.mkDerivation rec {
   gnFlags = [
     ''chip_project_config_include_dirs=["//.."]''
     ''chip_crypto="openssl"''
-    ''enable_rtti=true''
-    ''chip_config_memory_debug_checks=false''
-    ''chip_config_memory_debug_dmalloc=false''
+    "enable_rtti=true"
+    "chip_config_memory_debug_checks=false"
+    "chip_config_memory_debug_dmalloc=false"
     ''chip_mdns="minimal"''
     ''chip_minmdns_default_policy="libnl"''
     ''chip_python_version="${lib.versions.majorMinor python.version}"''

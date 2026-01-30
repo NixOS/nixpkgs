@@ -7,19 +7,20 @@
   rust-jemalloc-sys,
   zlib,
   gitMinimal,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "biome";
-  version = "2.3.11";
+  version = "2.3.13";
 
   src = fetchFromGitHub {
     owner = "biomejs";
     repo = "biome";
     rev = "@biomejs/biome@${finalAttrs.version}";
-    hash = "sha256-AWVFrzIDg+mVnUYTMLr10o8IOSvewVhVMcYd2wvT5y0=";
+    hash = "sha256-WvEY3YslLu0FdIG8OcL4pPpfB945coU+W+YGLLecTc0=";
   };
 
-  cargoHash = "sha256-N2TauXj1pRrYnVD0qPtruy7qwdWBGJaa47++AaY8TMQ=";
+  cargoHash = "sha256-iIKs6tzhMZ7f8tKh95Db+FdE21vqiw3ksT72xacpPf8=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -56,6 +57,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # tests assume $BIOME_VERSION is unset
     unset BIOME_VERSION
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Toolchain of the web";

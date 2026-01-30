@@ -5,7 +5,7 @@
   fetchFromGitHub,
   testers,
   lazysql,
-  xorg ? null,
+  libx11,
   darwin ? null,
 }:
 
@@ -26,7 +26,7 @@ buildGoModule rec {
     "-X main.version=${version}"
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ xorg.libX11 ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libx11 ];
 
   passthru.tests.version = testers.testVersion {
     package = lazysql;

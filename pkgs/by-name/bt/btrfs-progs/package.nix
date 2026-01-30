@@ -79,6 +79,13 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "udevruledir=$(out)/lib/udev/rules.d" ];
 
+  outputs = [
+    "out"
+    "dev"
+    "man"
+    "lib"
+  ];
+
   enableParallelBuilding = true;
 
   doInstallCheck = true;

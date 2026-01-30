@@ -60,7 +60,7 @@ python3Packages.buildPythonApplication rec {
   makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
 
   postFixup = ''
-    wrapPythonProgramsIn $out/libexec $out $pythonPath
+    wrapPythonProgramsIn $out/libexec "$out ''${pythonPath[*]}"
   '';
 
   # NOTE: `postCheck` is intentionally not used here, as the entire checkPhase

@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  xorg,
+  xvfb,
   pytestCheckHook,
 }:
 
@@ -21,11 +21,11 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [ xorg.xvfb ];
+  dependencies = [ xvfb ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    xorg.xvfb
+    xvfb
   ];
 
   meta = {

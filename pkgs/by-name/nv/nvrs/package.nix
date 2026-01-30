@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=api::regex::request_test"
   ];
 
-  passthru.update-script = nix-update-script { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Fast new version checker for software releases";

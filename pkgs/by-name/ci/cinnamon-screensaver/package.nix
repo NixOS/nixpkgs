@@ -22,7 +22,10 @@
   pam,
   cairo,
   xdotool,
-  xorg,
+  libxrandr,
+  libxinerama,
+  libxext,
+  libx11,
   iso-flags-png-320x240,
 }:
 
@@ -61,10 +64,10 @@ stdenv.mkDerivation rec {
     gtk3
     glib
 
-    xorg.libXext
-    xorg.libXinerama
-    xorg.libX11
-    xorg.libXrandr
+    libxext
+    libxinerama
+    libx11
+    libxrandr
 
     (python3.withPackages (
       pp: with pp; [

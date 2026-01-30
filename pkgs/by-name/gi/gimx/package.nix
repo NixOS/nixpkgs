@@ -9,7 +9,8 @@
   libxml2,
   ncurses5,
   libmhash,
-  xorg,
+  libxi,
+  libx11,
 }:
 
 let
@@ -45,8 +46,8 @@ stdenv.mkDerivation rec {
     libxml2
     ncurses5
     libmhash
-    xorg.libX11
-    xorg.libXi
+    libx11
+    libxi
   ];
 
   installPhase = ''

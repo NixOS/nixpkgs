@@ -85,9 +85,14 @@ in
       }
   );
   julia_112 = wrapJulia (
-    callPackage (import ./generic.nix {
-      version = "1.12.1";
-      hash = "sha256-iR0Wu5HIqU1aY1WoLBf6PCRY64kWDUKEQ6CyobhB6lI=";
-    }) { }
+    callPackage
+      (import ./generic.nix {
+        version = "1.12.4";
+        hash = "sha256-bqYMBTleKQErY5NOaGsNqhzBVZR75CmuCyR7PqfnvpM=";
+      })
+      {
+        stdenv = gcc14Stdenv;
+        gfortran = gfortran14;
+      }
   );
 }

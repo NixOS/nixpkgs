@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "scummvm";
-  version = "2.9.1";
+  version = "2026.1.0";
 
   src = fetchFromGitHub {
     owner = "scummvm";
     repo = "scummvm";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-+MM47piuXuIBmAQd0g/cAg5t02qSQ0sw/DwFrMUSIAA=";
+    hash = "sha256-wgMOhQ6yHk4dG94J4EdHTxsaCqapyFhJU1GjRuQY8TY=";
   };
 
   nativeBuildInputs = [ nasm ];

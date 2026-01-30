@@ -6,7 +6,6 @@
   fetchFromGitHub,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 
   # for passthru.tests
@@ -38,8 +37,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # Fixes for Python 3.10 can't be applied easily, https://github.com/aio-libs/aiosmtpd/pull/294
-  doCheck = pythonOlder "3.10";
+  # Fixes can't be applied easily, https://github.com/aio-libs/aiosmtpd/pull/294
+  doCheck = false;
 
   disabledTests = [
     # Requires git

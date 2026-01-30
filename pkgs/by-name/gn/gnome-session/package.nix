@@ -25,7 +25,7 @@
   libxslt,
   gettext,
   systemd,
-  xorg,
+  xtrans,
   libepoxy,
   gnome-session-ctl,
   wrapGAppsHook4,
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     libICE
     gnome-desktop
     json-glib
-    xorg.xtrans
+    xtrans
     adwaita-icon-theme
     gnome-settings-daemon
     gsettings-desktop-schemas

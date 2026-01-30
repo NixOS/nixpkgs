@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule rec {
@@ -24,6 +25,15 @@ buildGoModule rec {
   ];
 
   subPackages = [ "cmd/gok" ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --cmd gok \
+      --bash <($out/bin/gok completion bash) \
+      --fish <($out/bin/gok completion fish) \
+      --zsh <($out/bin/gok completion zsh)
+  '';
 
   meta = {
     description = "Turn your Go program(s) into an appliance running on the Raspberry Pi 3, Pi 4, Pi Zero 2 W, or amd64 PCs";

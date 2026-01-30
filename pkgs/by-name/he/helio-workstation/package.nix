@@ -4,7 +4,12 @@
   fetchFromGitHub,
   alsa-lib,
   freetype,
-  xorg,
+  libxrandr,
+  libxinerama,
+  libxext,
+  libxcursor,
+  libxcomposite,
+  libx11,
   curl,
   libGL,
   libjack2,
@@ -28,12 +33,12 @@ stdenv.mkDerivation rec {
   buildInputs = [
     alsa-lib
     freetype
-    xorg.libX11
-    xorg.libXext
-    xorg.libXinerama
-    xorg.libXrandr
-    xorg.libXcursor
-    xorg.libXcomposite
+    libx11
+    libxext
+    libxinerama
+    libxrandr
+    libxcursor
+    libxcomposite
     curl
     libGL
     libjack2

@@ -13,7 +13,7 @@
   wrapGAppsHook3,
   cairo,
   glib,
-  goocanvas3,
+  goocanvas_3,
   gtk3,
   gtksourceview3,
   json-glib,
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cairo
     glib
-    goocanvas3
+    goocanvas_3
     pantheon.granite
     gtk3
     gtksourceview3

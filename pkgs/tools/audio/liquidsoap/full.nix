@@ -21,26 +21,22 @@
     yt-dlp
   ],
 }:
-
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "liquidsoap";
-  version = "2.3.3";
-in
-stdenv.mkDerivation {
-  inherit pname version;
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "liquidsoap";
-    tag = "v${version}";
-    hash = "sha256-EQFWFtgWvwsV+ZhO36Sd7mpxYOnd4Vv6Z+6xsgi335k=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ViJlG+AUncL37mltlFFXVho98Up11qZI3wwSnrd9C8g=";
   };
 
   postPatch = ''
-    substituteInPlace src/lang/dune \
+    substituteInPlace src/lang/base/dune \
       --replace-warn "(run git rev-parse --short HEAD)" "(run echo -n nixpkgs)"
     # Compatibility with camlimages 5.0.5
-    substituteInPlace src/core/dune \
+    substituteInPlace src/core/optionals/camlimages/dune \
       --replace-warn camlimages.all_formats camlimages.core
   '';
 
@@ -141,6 +137,7 @@ stdenv.mkDerivation {
     ocamlPackages.shine
     ocamlPackages.soundtouch
     ocamlPackages.speex
+    ocamlPackages.ocaml_sqlite3
     ocamlPackages.srt
     ocamlPackages.ssl
     ocamlPackages.taglib
@@ -160,8 +157,9 @@ stdenv.mkDerivation {
     changelog = "https://raw.githubusercontent.com/savonet/liquidsoap/main/CHANGES.md";
     maintainers = with lib.maintainers; [
       dandellion
+      juaningan
     ];
     license = lib.licenses.gpl2Plus;
     platforms = ocamlPackages.ocaml.meta.platforms or [ ];
   };
-}
+})

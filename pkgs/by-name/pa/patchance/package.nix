@@ -47,7 +47,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   postFixup = ''
-    wrapPythonProgramsIn "$out/share/patchance/src" "$out $pythonPath"
+    wrapPythonProgramsIn "$out/share/patchance/src" "$out ''${pythonPath[*]}"
     for file in $out/bin/*; do
       wrapQtApp "$file"
     done

@@ -131,7 +131,6 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       psydvl
-      shamilton
       Gliczy
       XBagon
     ];

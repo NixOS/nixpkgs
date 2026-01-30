@@ -11,7 +11,8 @@
   libnotify,
   pcre,
   sqlite,
-  xorg,
+  libxdmcp,
+  libpthread-stubs,
   harfbuzz,
 }:
 
@@ -49,8 +50,8 @@ stdenv.mkDerivation rec {
     libnotify
     pcre
     sqlite
-    xorg.libXdmcp
-    xorg.libpthreadstubs
+    libxdmcp
+    libpthread-stubs
   ];
 
   cmakeFlags = [

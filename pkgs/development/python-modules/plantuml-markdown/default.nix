@@ -65,6 +65,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/mikitex70/plantuml-markdown";
     changelog = "https://github.com/mikitex70/plantuml-markdown/releases/tag/${src.tag}";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ nikstur ];
   };
 }

@@ -290,7 +290,14 @@ def build_and_activate_system(
         grouped_nix_args=grouped_nix_args,
     )
 
-    if args.rollback:
+    if args.store_path:
+        path_to_config = Path(args.store_path)
+        nix.copy_closure(
+            path_to_config,
+            to_host=target_host,
+            copy_flags=grouped_nix_args.copy_flags,
+        )
+    elif args.rollback:
         path_to_config = _rollback_system(
             action=action,
             args=args,

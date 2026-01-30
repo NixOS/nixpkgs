@@ -19,7 +19,6 @@ stdenv.mkDerivation rec {
     description = "Disk information utility; displays everything 'df' does and more";
     homepage = "https://diskinfo-di.sourceforge.io/";
     license = lib.licenses.zlib;
-    maintainers = with lib.maintainers; [ manveru ];
     platforms = lib.platforms.all;
   };
 }

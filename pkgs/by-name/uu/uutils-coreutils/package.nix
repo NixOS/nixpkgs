@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals buildMulticallBinary [ "MULTICALL=y" ];
 
   env = lib.optionalAttrs selinuxSupport {
-    SELINUX_INCLUDE_DIR = ''${libselinux.dev}/include'';
+    SELINUX_INCLUDE_DIR = "${libselinux.dev}/include";
     SELINUX_LIB_DIR = lib.makeLibraryPath [
       libselinux
     ];

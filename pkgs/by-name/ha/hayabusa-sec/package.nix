@@ -56,7 +56,6 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/Yamato-Security/hayabusa";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [
-      d3vil0p3r
       jk
     ];
     mainProgram = "hayabusa";

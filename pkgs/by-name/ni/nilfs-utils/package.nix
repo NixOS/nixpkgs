@@ -51,6 +51,12 @@ stdenv.mkDerivation rec {
     find . -name .libs -exec rm -rf -- {} +
   '';
 
+  outputs = [
+    "out"
+    "man"
+    "dev"
+  ];
+
   meta = {
     description = "NILFS utilities";
     maintainers = [ lib.maintainers.raskin ];

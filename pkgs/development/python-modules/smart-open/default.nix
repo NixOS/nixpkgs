@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  awscli,
+  awscli2,
   azure-common,
   azure-core,
   azure-storage-blob,
@@ -58,7 +58,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "smart_open" ];
 
   nativeCheckInputs = [
-    awscli
+    awscli2
     moto
     numpy
     pytest-cov-stub

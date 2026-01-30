@@ -15,7 +15,9 @@
   autoreconfHook,
   autoconf-archive,
   x11Support ? (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin),
-  xorg,
+  libx11,
+  libsm,
+  libice,
 }:
 
 stdenv.mkDerivation rec {
@@ -69,14 +71,11 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs =
-    lib.optionals x11Support (
-      with xorg;
-      [
-        libX11
-        libICE
-        libSM
-      ]
-    )
+    lib.optionals x11Support [
+      libx11
+      libice
+      libsm
+    ]
     ++ lib.optional enableSystemd systemdMinimal
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       audit

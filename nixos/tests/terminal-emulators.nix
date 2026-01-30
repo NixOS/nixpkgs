@@ -183,8 +183,6 @@ mapAttrs (
 
     testScript =
       { nodes, ... }:
-      let
-      in
       ''
         with subtest("wait for x"):
             start_all()

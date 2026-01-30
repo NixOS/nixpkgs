@@ -8,7 +8,7 @@
   mkLibretroCore,
   portaudio,
   python3,
-  xorg,
+  libx11,
 }:
 mkLibretroCore {
   core = "same_cdi";
@@ -45,7 +45,7 @@ mkLibretroCore {
     libGL
     libGLU
     portaudio
-    xorg.libX11
+    libx11
   ];
 
   meta = {

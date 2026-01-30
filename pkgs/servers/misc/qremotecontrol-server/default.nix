@@ -5,7 +5,7 @@
   qmake,
   wrapQtAppsHook,
   qtbase,
-  xorg,
+  libxtst,
 }:
 
 stdenv.mkDerivation {
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     qtbase
-    xorg.libXtst
+    libxtst
   ];
 
   postPatch = ''

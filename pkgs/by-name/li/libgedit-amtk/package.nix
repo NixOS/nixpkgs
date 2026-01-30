@@ -77,7 +77,6 @@ stdenv.mkDerivation rec {
     changelog = "https://gitlab.gnome.org/World/gedit/libgedit-amtk/-/blob/${version}/NEWS?ref_type=tags";
     description = "Actions, Menus and Toolbars Kit for GTK applications";
     maintainers = with lib.maintainers; [
-      manveru
       bobby285271
     ];
     license = lib.licenses.lgpl21Plus;

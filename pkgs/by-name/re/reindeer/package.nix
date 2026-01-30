@@ -9,7 +9,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "reindeer";
-  version = "2026.01.12.00";
+  version = "2026.01.19.00";
 
   src = fetchFromGitHub {
     owner = "facebookincubator";
@@ -31,6 +31,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "reindeer";
     homepage = "https://github.com/facebookincubator/reindeer";
     license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ nickgerace ];
+    maintainers = with lib.maintainers; [ amaanq ];
   };
 }

@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "plantuml-server";
-  version = "1.2026.0";
+  version = "1.2026.1";
 
   src = fetchurl {
     url = "https://github.com/plantuml/plantuml-server/releases/download/v${version}/plantuml-v${version}.war";
-    hash = "sha256-mFkfHqzvWXhivfWssPh2ImilWurr88AiNpU8ZJSRKSk=";
+    hash = "sha256-+r7SL+JXXAGC0Q7wxvohXBfBucVZzQPX3TIVd/tR0t8=";
   };
 
   dontUnpack = true;

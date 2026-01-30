@@ -69,7 +69,9 @@ buildGoModule (finalAttrs: {
     homepage = "https://www.github.com/temporalio/tcld";
     changelog = "https://github.com/temporalio/tcld/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    teams = [ lib.teams.mercury ];
+    maintainers = with lib.maintainers; [
+      jkachmar
+    ];
     mainProgram = "tcld";
   };
 })

@@ -9,12 +9,12 @@
   rocrand,
   gtest,
   buildTests ? false,
-  gpuTargets ? [ ],
+  gpuTargets ? clr.localGpuTargets or [ ],
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hiprand";
-  version = "7.0.2";
+  version = "7.1.1";
 
   outputs = [
     "out"
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "hipRAND";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-yOLdFQ4/OGGfX75A/ElY1xD+4nkcqT8tZx2bQZgXTx4=";
+    hash = "sha256-yypKwJ5p2aSAqapEHre9eOjjaFAI8Q1dDYWhwfrrdhg=";
   };
 
   nativeBuildInputs = [

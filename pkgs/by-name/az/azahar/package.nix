@@ -31,7 +31,9 @@
   stdenv,
   vulkan-headers,
   xbyak,
-  xorg,
+  libxext,
+  libx11,
+  libxcb,
   enableQtTranslations ? true,
   qt6,
   gtk3,
@@ -55,11 +57,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "azahar";
-  version = "2124";
+  version = "2124.1";
 
   src = fetchzip {
     url = "https://github.com/azahar-emu/azahar/releases/download/${finalAttrs.version}/azahar-unified-source-${finalAttrs.version}.tar.xz";
-    hash = "sha256-k/Rz7hiYtX0tVW2lrrEwiB8LanvAuhXHxPC79Dy4aUI=";
+    hash = "sha256-ezgDELKw3Nb4EwJhD3+bMykoGdEzQpU4FSyIiEt7Lac=";
   };
 
   strictDeps = true;
@@ -112,9 +114,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals stdenv.hostPlatform.isLinux [
     pipewire
     qt6.qtwayland
-    xorg.libX11
-    xorg.libxcb
-    xorg.libXext
+    libx11
+    libxcb
+    libxext
   ]
   ++ optionals stdenv.hostPlatform.isDarwin [
     moltenvk

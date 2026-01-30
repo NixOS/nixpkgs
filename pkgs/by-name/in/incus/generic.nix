@@ -1,8 +1,9 @@
 {
   hash,
   lts ? false,
-  patches ? [ ],
   nixUpdateExtraArgs ? [ ],
+  patches ? [ ],
+  rev ? null,
   vendorHash,
   version,
 }:
@@ -65,12 +66,14 @@ buildGoModule (finalAttrs: {
     "doc"
   ];
 
-  src = fetchFromGitHub {
-    owner = "lxc";
-    repo = "incus";
-    tag = "v${version}";
-    inherit hash;
-  };
+  src = fetchFromGitHub (
+    {
+      owner = "lxc";
+      repo = "incus";
+      inherit hash;
+    }
+    // (if (rev == null) then { tag = "v${version}"; } else { inherit rev; })
+  );
 
   patches = [ ./docs.patch ] ++ patches;
 

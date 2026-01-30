@@ -5,7 +5,12 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  xorg,
+  libxxf86vm,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxcursor,
+  libx11,
   libGLU,
   libGL,
   glew,
@@ -48,12 +53,12 @@ stdenv.mkDerivation (finalAttrs: {
       libGL
       # FIXME: these are not actually needed, but the configure script wants them.
       glew
-      xorg.libX11
-      xorg.libXrandr
-      xorg.libXxf86vm
-      xorg.libXcursor
-      xorg.libXinerama
-      xorg.libXi
+      libx11
+      libxrandr
+      libxxf86vm
+      libxcursor
+      libxinerama
+      libxi
     ]
     ++ lib.optionals (openclSupport && stdenv.hostPlatform.isLinux) [
       ocl-icd

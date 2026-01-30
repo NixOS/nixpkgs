@@ -6,14 +6,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "20251207";
+  version = "20260122";
   pname = "m4ri";
 
   src = fetchFromGitHub {
     owner = "malb";
     repo = "m4ri";
     rev = version;
-    hash = "sha256-8cO4mPPZj/QUnSJmsqTFQ+THdrnZnCa6wFACKOk78UQ=";
+    hash = "sha256-/M/DVl2tRXIz5l3LFwY8Bvxnzjeoluy+zVgBVpPSdZM=";
   };
 
   doCheck = true;

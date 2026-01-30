@@ -21,8 +21,8 @@ let
   };
 
   cygwin = fetchurl {
-    url = "https://mirrors.kernel.org/sourceware/cygwin/x86_64/release/cygwin/cygwin-3.6.1-1-x86_64.tar.xz";
-    sha256 = "45d1c76a15426209c20a8d4df813e94fbd17bd5d85ad4d742515ff432400143e";
+    url = "https://mirrors.kernel.org/sourceware/cygwin/x86_64/release/cygwin/cygwin-3.6.6-1-x86_64.tar.xz";
+    hash = "sha256-xcgYjfVB9dF0twGC1ww7r4NCPHT/+aEk1CMmS7ndJuA=";
   };
 
   patched_eac = stdenv.mkDerivation {
@@ -77,7 +77,7 @@ let
   };
 in
 symlinkJoin {
-  name = "${pname}-${version}";
+  inherit pname version;
 
   paths = [
     wrapper

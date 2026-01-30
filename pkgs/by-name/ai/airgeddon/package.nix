@@ -17,7 +17,8 @@
   tmux,
   # X11 Front
   xterm,
-  xorg,
+  xset,
+  xdpyinfo,
   # what the author calls "Internals"
   usbutils,
   wget,
@@ -108,8 +109,8 @@ let
   ]
   ++ lib.optionals supportX11 [
     xterm
-    xorg.xset
-    xorg.xdpyinfo
+    xset
+    xdpyinfo
   ];
 in
 stdenv.mkDerivation rec {

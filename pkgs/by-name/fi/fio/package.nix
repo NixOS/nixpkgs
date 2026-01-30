@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    wrapPythonProgramsIn "$out/bin" "$out $pythonPath"
+    wrapPythonProgramsIn "$out/bin" "$out ''${pythonPath[*]}"
   '';
 
   meta = {

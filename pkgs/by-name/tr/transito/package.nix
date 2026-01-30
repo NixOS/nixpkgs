@@ -7,7 +7,10 @@
   vulkan-headers,
   libxkbcommon,
   wayland,
-  xorg,
+  libxfixes,
+  libxcursor,
+  libx11,
+  libxcb,
   libGL,
   sqlite,
 }:
@@ -29,10 +32,10 @@ buildGoModule rec {
     vulkan-headers
     libxkbcommon
     wayland
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXfixes
-    xorg.libxcb
+    libx11
+    libxcursor
+    libxfixes
+    libxcb
     libGL
     sqlite
   ];

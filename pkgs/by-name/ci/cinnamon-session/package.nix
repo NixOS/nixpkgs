@@ -17,7 +17,13 @@
   systemd,
   wrapGAppsHook3,
   xapp,
-  xorg,
+  libxtst,
+  libxrender,
+  libxext,
+  libxcomposite,
+  libxau,
+  libx11,
+  xtrans,
   libexecinfo,
   pango,
 }:
@@ -49,17 +55,17 @@ stdenv.mkDerivation rec {
     glib
     libcanberra
     pango
-    xorg.libX11
-    xorg.libXext
+    libx11
+    libxext
     xapp
-    xorg.libXau
-    xorg.libXcomposite
+    libxau
+    libxcomposite
 
     systemd
 
-    xorg.libXtst
-    xorg.libXrender
-    xorg.xtrans
+    libxtst
+    libxrender
+    xtrans
 
     # other (not meson.build)
     cinnamon-settings-daemon
