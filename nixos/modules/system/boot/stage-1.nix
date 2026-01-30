@@ -106,13 +106,13 @@ let
         ln -s $out/bin $out/sbin
 
         copy_bin_and_libs () {
-          [ -f "$out/bin/$(basename $1)" ] && rm "$out/bin/$(basename $1)"
-          cp -pdv $1 $out/bin
+          [ -f "$out/bin/$(basename "$1")" ] && rm "$out/bin/$(basename "$1")"
+          cp -pdv "$1" $out/bin
         }
 
         # Copy BusyBox.
         for BIN in ${pkgs.busybox}/{s,}bin/*; do
-          copy_bin_and_libs $BIN
+          copy_bin_and_libs "$BIN"
         done
 
         # Copy some util-linux stuff.
@@ -128,7 +128,7 @@ let
         cp ${lib.getLib udev.kmod}/lib/libkmod.so* $out/lib
         copy_bin_and_libs ${udev}/lib/systemd/systemd-sysctl
         for BIN in ${udev}/lib/udev/*_id; do
-          copy_bin_and_libs $BIN
+          copy_bin_and_libs "$BIN"
         done
         # systemd-udevd is only a symlink to udevadm these days
         ln -sf udevadm $out/bin/systemd-udevd
@@ -156,7 +156,7 @@ let
                 source' = if source == null then dest else source;
               in
               ''
-                mkdir -p $(dirname "$out/secrets/${dest}")
+                mkdir -p "$(dirname "$out/secrets/${dest}")"
                 # Some programs (e.g. ssh) doesn't like secrets to be
                 # symlinks, so we use `cp -L` here to match the
                 # behaviour when secrets are natively supported.
