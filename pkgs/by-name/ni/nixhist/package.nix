@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     description = "A TUI for viewing, comparing, and managing NixOS generations";
     homepage = "https://github.com/daskladas/nixhist";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "nixhist";
     platforms = lib.platforms.linux;
   };
