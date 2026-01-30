@@ -145,10 +145,10 @@ python3Packages.buildPythonApplication rec {
     writableTmpDirAsHomeHook
     yarn-berry_4.yarnBerryConfigHook
 
-    wrapGAppsHook3
     imagemagick
   ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin swift;
+  ++ lib.optional stdenv.hostPlatform.isDarwin swift
+  ++ lib.optional stdenv.hostPlatform.isLinux wrapGAppsHook3;
 
   buildInputs = [
     qt6.qtbase
@@ -174,7 +174,7 @@ python3Packages.buildPythonApplication rec {
 
   dontUseNinjaInstall = false;
   dontWrapQtApps = true;
-  dontWrapGApps = true;
+  dontWrapGApps = stdenv.hostPlatform.isLinux;
 
   env = {
     # Activate optimizations
