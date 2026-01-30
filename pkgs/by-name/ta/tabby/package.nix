@@ -3,6 +3,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  fetchurl,
   nix-update-script,
   stdenv,
 
@@ -32,7 +33,12 @@ let
   # https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/ollama/default.nix
 
   pname = "tabby";
-  version = "0.28.0";
+  version = "0.32.0";
+
+  swaggerUiSrc = fetchurl {
+    url = "https://github.com/swagger-api/swagger-ui/archive/refs/tags/v5.17.14.zip";
+    hash = "sha256-SBJE0IEgl7Efuu73n3HZQrFxYX+cn5UU5jrL4T5xzNw=";
+  };
 
   availableAccelerations = flatten [
     (optional cudaSupport "cuda")
@@ -122,11 +128,11 @@ rustPlatform.buildRustPackage {
     owner = "TabbyML";
     repo = "tabby";
     tag = "v${version}";
-    hash = "sha256-cdY1/k7zZ4am6JP9ghnnJFHop/ZcnC/9alzd2MS8xqc=";
+    hash = "sha256-qcp0QKiF5Fldbc8SI3q0TWdbizVA5tppDfmM4OL7vh8=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-yEns0QAARmuV697/na08K8uwJWZihY3pMyCZcERDlFM=";
+  cargoHash = "sha256-/qo2MbtkIe4dXsvQPUT5n5O94/oAlQwAmR75tIEDnv8=";
 
   # Don't need to build llama-cpp-server (included in default build)
   # We also don't add CUDA features here since we're using the overridden llama-cpp package
@@ -142,6 +148,10 @@ rustPlatform.buildRustPackage {
     versionCheckHook
   ];
   doInstallCheck = true;
+
+  preBuild = ''
+    export SWAGGER_UI_DOWNLOAD_URL="file://${swaggerUiSrc}"
+  '';
 
   nativeBuildInputs = [
     git
