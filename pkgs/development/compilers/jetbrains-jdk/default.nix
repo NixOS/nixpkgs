@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  fetchurl,
   fetchFromGitHub,
   jetbrains,
   jdk,
@@ -26,6 +27,8 @@
   libdrm,
   libgbm,
   wayland,
+  wayland-scanner,
+  wayland-protocols,
   udev,
   fontconfig,
   shaderc,
@@ -45,27 +48,32 @@ let
 in
 jdk.overrideAttrs (oldAttrs: rec {
   pname = "jetbrains-jdk" + lib.optionalString withJcef "-jcef";
-  javaVersion = "21.0.9";
-  build = "1163.86";
+  javaVersion = "25.0.1";
+  build = "268.52";
   # To get the new tag:
   # git clone https://github.com/jetbrains/jetbrainsruntime
   # cd jetbrainsruntime
   # git tag --points-at [revision]
   # Look for the line that starts with jbr-
-  openjdkTag = "jbr-release-21.0.9b1163.86";
   version = "${javaVersion}-b${build}";
+  openjdkTag = "jbr-release-${javaVersion}b${build}";
 
   src = fetchFromGitHub {
     owner = "JetBrains";
     repo = "JetBrainsRuntime";
     rev = "jb${version}";
-    hash = "sha256-P2boCbGB66X8LB4sZHGFO8lqHbv6F4kqGVMGBd9yKu0=";
+    hash = "sha256-MoPwKb2ViEzWmnnNQsqT7uUra6zjfRbhVpcxmFORCYg=";
+  };
+
+  gtk-protocols = fetchurl {
+    url = "https://raw.githubusercontent.com/GNOME/gtk/refs/heads/main/gdk/wayland/protocol/gtk-shell.xml";
+    hash = "sha256-o92IsnRtYv9oOa1Bg5BuOG1PhqQ1p9iJXW658HhsX9M=";
   };
 
   env = (oldAttrs.env or { }) // {
     BOOT_JDK = jdk.home;
     # run `git log -1 --pretty=%ct` in jdk repo for new value on update
-    SOURCE_DATE_EPOCH = 1765114563;
+    SOURCE_DATE_EPOCH = 1769205294;
   };
 
   patches = [ ];
@@ -76,25 +84,35 @@ jdk.overrideAttrs (oldAttrs: rec {
     runHook preBuild
 
     ${lib.optionalString withJcef "cp -r ${jetbrains.jcef} jcef_linux_${arch}"}
+    cp -r ${gtk-protocols.out} gtk-shell.xml
 
     sed \
         -e "s/OPENJDK_TAG=.*/OPENJDK_TAG=${openjdkTag}/" \
         -e "s/SOURCE_DATE_EPOCH=.*//" \
         -e "s/export SOURCE_DATE_EPOCH//" \
         -i jb/project/tools/common/scripts/common.sh
+
     declare -a realConfigureFlags
+
     for configureFlag in "''${configureFlags[@]}"; do
       case "$configureFlag" in
         --host=*)
           # intentionally omit flag
+          ;;
+        --with-vendor-version-string=*)
+          # Replace the flag from the JDK to include that it is JBR and the package version, so it passes the installation tests
+          realConfigureFlags+=('--with-vendor-version-string="nix/JBR-${version}${lib.optionalString withJcef "-jcef"}"')
           ;;
         *)
           realConfigureFlags+=("$configureFlag")
           ;;
       esac
     done
+    realConfigureFlags+=("--with-wayland-protocols=${wayland-protocols.out}/share/wayland-protocols")
     echo "computed configure flags: ''${realConfigureFlags[*]}"
+
     substituteInPlace jb/project/tools/linux/scripts/mkimages_${arch}.sh --replace-fail "STATIC_CONF_ARGS" "STATIC_CONF_ARGS ''${realConfigureFlags[*]}"
+
     sed \
         -e "s/create_image_bundle \"jb/#/" \
         -e "s/echo Creating /exit 0 #/" \
@@ -175,6 +193,8 @@ jdk.overrideAttrs (oldAttrs: rec {
     unzip
     rsync
     shaderc # glslc
+    wayland-scanner
+    libxkbcommon
   ]
   ++ oldAttrs.nativeBuildInputs;
 
