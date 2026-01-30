@@ -11,7 +11,9 @@ let
       mkConsumer = inputDefaults: {
         input = mkConsumerOptions inputDefaults;
 
-        output = mkProviderOptions { };
+        output = mkProviderOptions { } // {
+          visible = "shallow";
+        };
       };
 
       mkProvider =
@@ -20,7 +22,9 @@ let
           providerOptions ? { },
         }:
         {
-          input = mkConsumerOptions { };
+          input = mkConsumerOptions { } // {
+            visible = "shallow";
+          };
         }
         // optionalAttrs (outputDefaults != { }) {
           output = mkProviderOptions outputDefaults;
@@ -28,6 +32,12 @@ let
         // optionalAttrs (providerOptions != { }) {
           inherit providerOptions;
         };
+
+      # Used for documentation
+      allOptions = {
+        input = mkConsumerOptions { };
+        output = mkProviderOptions { };
+      };
     };
 
   importContract =
@@ -39,7 +49,7 @@ let
       inherit (importedModule) mkConsumerOptions mkProviderOptions;
     }
     // {
-      inherit (importedModule) behaviorTest;
+      inherit (importedModule) description behaviorTest;
     };
 in
 {
