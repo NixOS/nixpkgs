@@ -89,24 +89,39 @@ There are several ways to tweak how Nix handles a package which has been marked 
     $ export NIXPKGS_ALLOW_UNFREE=1
     ```
 
--   It is possible to permanently allow individual unfree packages, while still blocking unfree packages by default using the `allowUnfreePredicate` configuration option in the user configuration file.
+-   It is possible to permanently allow individual unfree packages, while still blocking unfree packages by default, using either the `allowUnfreePackages` configuration option or the `allowUnfreePredicate` configuration option in the user configuration file.
 
-    This option is a function which accepts a package as a parameter, and returns a boolean. The following example configuration accepts a package and always returns false:
-
-    ```nix
-    { allowUnfreePredicate = (pkg: false); }
-    ```
-
-    For a more useful example, try the following. This configuration only allows unfree packages named roon-server and Visual Studio Code:
+    The `allowUnfreePackages` option is a list of package names that are permitted even when unfree packages are blocked by default. This option is merged across all configuration modules, so you can keep the unfree exceptions close to where you declare the package that needs them.
 
     ```nix
     {
-      allowUnfreePredicate =
-        pkg:
-        builtins.elem (lib.getName pkg) [
-          "roon-server"
-          "vscode"
-        ];
+      allowUnfreePackages = [
+        "fence"
+        "roon-server"
+        "vscode"
+      ];
+    }
+    ```
+
+    The `allowUnfreePredicate` option is a function which accepts a package as a parameter, and returns a boolean. This allows for more complex matching logic that cannot be expressed with a simple list, such as pattern matching on package names or checking package attributes.
+
+    ```nix
+    {
+      nixpkgs.config.allowUnfreePredicate = pkg: lib.hasPrefix "roon" (lib.getName pkg);
+    }
+    ```
+
+    This example matches all packages whose name starts with "roon", such as `roon-bridge` and `roon-server`, without having to list each one individually.
+
+    If both `allowUnfreePackages` and `allowUnfreePredicate` are set, a package is allowed if it matches either one. `allowUnfreePackages` is syntactic sugar for a common predicate and is primarily useful because it merges across modules.
+
+    ```nix
+    {
+      allowUnfreePackages = [
+        "fence"
+        "vscode"
+      ];
+      nixpkgs.config.allowUnfreePredicate = pkg: lib.hasPrefix "roon" (lib.getName pkg);
     }
     ```
 
