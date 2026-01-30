@@ -497,6 +497,12 @@ stdenv.mkDerivation (
           hash = "sha256-Ixkf1xzuDGk5t8J/apXKtghY0X9cfqSj/q987zrUuLQ=";
         })
       ]
+      ++ optionals (lib.versionAtLeast version "7.1.1" && lib.versionOlder version "7.1.3") [
+        (fetchpatch2 {
+          url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/d8ffec5bf9a2803f55cc0822a97b7815f24bee83";
+          hash = "sha256-lmSI5arShb2/W84FMnSNs3lb6rd5vWdUSzfU8oza0Ic=";
+        })
+      ]
       ++ optionals (lib.versionOlder version "7.1.2") [
         (fetchpatch2 {
           name = "unbreak-svt-av1-3.0.0.patch";
