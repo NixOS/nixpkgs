@@ -4808,6 +4808,12 @@
     githubId = 1438690;
     name = "Chris Pickard";
   };
+  chrisportela = {
+    email = "chris@chrisportela.com";
+    github = "chrisportela";
+    githubId = 505649;
+    name = "Chris Portela";
+  };
   chrispwill = {
     email = "chris@chrispwill.com";
     github = "ChrisPWill";
