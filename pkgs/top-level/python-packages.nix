@@ -20328,6 +20328,8 @@ self: super: with self; {
     callPackage ../development/python-modules/vacuum-map-parser-roborock
       { };
 
+  vacuum-map-parser-roidmi = callPackage ../development/python-modules/vacuum-map-parser-roidmi { };
+
   validate-email = callPackage ../development/python-modules/validate-email { };
 
   validator-collection = callPackage ../development/python-modules/validator-collection { };
