@@ -20322,6 +20322,8 @@ self: super: with self; {
 
   vacuum-map-parser-dreame = callPackage ../development/python-modules/vacuum-map-parser-dreame { };
 
+  vacuum-map-parser-ijai = callPackage ../development/python-modules/vacuum-map-parser-ijai { };
+
   vacuum-map-parser-roborock =
     callPackage ../development/python-modules/vacuum-map-parser-roborock
       { };
