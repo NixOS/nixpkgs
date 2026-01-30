@@ -38,11 +38,7 @@ buildGoModule rec {
     changelog = "https://github.com/m7medvision/lazycommit/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      Br1ght0ne
-      equirosa
-      khaneliman
-      starsep
-      sigmasquadron
+      m7medvision
     ];
     mainProgram = "lazycommit";
   };
