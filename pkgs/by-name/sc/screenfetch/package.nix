@@ -74,6 +74,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
+
   meta = {
     description = "Fetches system/theme information in terminal for Linux desktop screenshots";
     longDescription = ''
