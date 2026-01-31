@@ -66,6 +66,7 @@
   libxkbcommon,
   libsoup_3,
   libxml2,
+  webkitgtk_6_0,
 }:
 
 let
@@ -174,6 +175,7 @@ stdenv.mkDerivation (finalAttrs: {
     # not declared at build time, but typelib is needed at runtime
     libgweather
     libnma-gtk4
+    webkitgtk_6_0 # for gnome-shell-portal-helper
 
     # for gnome-extension tool
     bash-completion
