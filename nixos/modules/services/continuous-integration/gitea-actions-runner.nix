@@ -1,3 +1,11 @@
+let
+  attributeName = "gitea-actions-runner";
+  mainProgram = "act_runner";
+  name = "gitea";
+  prettyName = "Gitea";
+  runnerPrettyName = "Gitea Actions Runner";
+  srcUrl = "https://gitea.com/gitea/act_runner";
+in
 {
   config,
   lib,
@@ -44,7 +52,7 @@ let
     escapeSystemdPath
     ;
 
-  cfg = config.services.gitea-actions-runner;
+  cfg = config.services.${attributeName};
 
   settingsFormat = pkgs.formats.yaml { };
 in
@@ -54,23 +62,23 @@ in
     sigmasquadron
   ];
 
-  options.services.gitea-actions-runner = {
-    package = mkPackageOption pkgs "gitea-actions-runner" { };
+  options.services.${attributeName} = {
+    package = mkPackageOption pkgs attributeName { };
 
     instances = mkOption {
       default = { };
       description = ''
-        Gitea Actions Runner instances.
+        ${runnerPrettyName} instances.
       '';
       type = attrsOf (submodule {
         options = {
-          enable = mkEnableOption "Gitea Actions Runner instance";
+          enable = mkEnableOption "${runnerPrettyName} instance";
 
           name = mkOption {
             type = str;
             example = literalExpression "config.networking.hostName";
             description = ''
-              The name identifying the runner instance towards the Gitea/Forgejo instance.
+              The name identifying the runner instance towards the ${prettyName} instance.
             '';
           };
 
@@ -78,7 +86,7 @@ in
             type = str;
             example = "https://forge.example.com";
             description = ''
-              Base URL of your Gitea/Forgejo instance.
+              Base URL of your ${prettyName} instance.
             '';
           };
 
@@ -86,7 +94,7 @@ in
             type = nullOr str;
             default = null;
             description = ''
-              Plain token to register at the configured Gitea/Forgejo instance.
+              Plain token to register at the configured ${prettyName} instance.
             '';
           };
 
@@ -96,7 +104,7 @@ in
             description = ''
               Path to an environment file, containing the `TOKEN` environment
               variable, that holds a token to register at the configured
-              Gitea/Forgejo instance.
+              ${prettyName} instance.
             '';
           };
 
@@ -122,8 +130,8 @@ in
           };
           settings = mkOption {
             description = ''
-              Configuration for the `act_runner` daemon.
-              See <https://gitea.com/gitea/act_runner/src/branch/main/internal/pkg/config/config.example.yaml> for an example configuration.
+              Configuration for the `${mainProgram}` daemon.
+              See <${srcUrl}/src/branch/main/internal/pkg/config/config.example.yaml> for an example configuration.
             '';
 
             type = types.submodule {
@@ -177,7 +185,6 @@ in
 
         # Check whether any runner instance label requires a container runtime.
         # Empty label strings result in the upstream defined defaultLabels, which require docker.
-        # https://gitea.com/gitea/act_runner/src/tag/v0.1.5/internal/app/cmd/register.go#L93-L98
         hasDockerScheme =
           instance: instance.labels == [ ] || any (label: hasInfix ":docker:" label) instance.labels;
         anyWantsContainerRuntime = any hasDockerScheme (attrValues cfg.instances);
@@ -191,18 +198,18 @@ in
         assertions = [
           {
             assertion = any tokenXorTokenFile (attrValues cfg.instances);
-            message = "Gitea Actions Runner instances may have either a `token` or a `tokenFile` configured, but not both simultaneously.";
+            message = "${runnerPrettyName} instances may have either a `token` or a `tokenFile` configured, but not both simultaneously.";
           }
           {
             assertion = anyWantsContainerRuntime -> hasDocker || hasPodman;
-            message = "At least one of the configured Gitea Actions Runner instances require a container hypervisor, but neither Docker nor Podman are enabled.";
+            message = "At least one of the configured ${runnerPrettyName} instances require a container hypervisor, but neither Docker nor Podman are enabled.";
           }
         ];
 
         systemd.services =
           let
             mkRunnerService =
-              name: instance:
+              id: instance:
               let
                 wantsContainerRuntime = hasDockerScheme instance;
                 wantsHost = hasHostScheme instance;
@@ -210,9 +217,9 @@ in
                 wantsPodman = wantsContainerRuntime && hasPodman;
                 configFile = settingsFormat.generate "config.yaml" instance.settings;
               in
-              nameValuePair "gitea-runner-${escapeSystemdPath name}" {
+              nameValuePair "${name}-runner-${escapeSystemdPath id}" {
                 inherit (instance) enable;
-                description = "Gitea Actions Runner";
+                description = runnerPrettyName;
                 wants = [ "network-online.target" ];
                 after = [
                   "network-online.target"
@@ -234,7 +241,7 @@ in
                     DOCKER_HOST = "unix:///run/podman/podman.sock";
                   }
                   // {
-                    HOME = "/var/lib/gitea-runner/${name}";
+                    HOME = "/var/lib/${name}-runner/${id}";
                   };
                 path =
                   with pkgs;
@@ -244,17 +251,17 @@ in
                   ++ optionals wantsHost instance.hostPackages;
                 serviceConfig = {
                   DynamicUser = true;
-                  User = "gitea-runner";
-                  StateDirectory = "gitea-runner";
-                  WorkingDirectory = "-/var/lib/gitea-runner/${name}";
+                  User = "${name}-runner";
+                  StateDirectory = "${name}-runner";
+                  WorkingDirectory = "-/var/lib/${name}-runner/${id}";
 
-                  # gitea-runner might fail when gitea is restarted during upgrade.
+                  # act_runner might fail when the forge is restarted during an upgrade.
                   Restart = "on-failure";
                   RestartSec = 2;
 
                   ExecStartPre = [
-                    (pkgs.writeShellScript "gitea-register-runner-${name}" ''
-                      export INSTANCE_DIR="$STATE_DIRECTORY/${name}"
+                    (pkgs.writeShellScript "${name}-register-runner-${id}" ''
+                      export INSTANCE_DIR="$STATE_DIRECTORY/${id}"
                       mkdir -vp "$INSTANCE_DIR"
                       cd "$INSTANCE_DIR"
 
