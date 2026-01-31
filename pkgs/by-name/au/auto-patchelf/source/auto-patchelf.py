@@ -6,10 +6,11 @@ import pprint
 import subprocess
 import sys
 import json
-from fnmatch import fnmatch
 from collections import defaultdict
 from contextlib import contextmanager
 from dataclasses import dataclass, asdict
+from enum import IntEnum, auto
+from fnmatch import fnmatch
 from itertools import chain
 from pathlib import Path, PurePath
 from typing import DefaultDict, Generator, Iterator, Optional, Protocol
@@ -50,7 +51,13 @@ def is_separate_debug_object(elf: ELFFile) -> bool:
     return elf.has_dwarf_info() and bool(text_section) and text_section.header['sh_type'] == "SHT_NOBITS"
 
 
-def get_dependencies(elf: ELFFile) -> list[list[Path]]:
+class Priority(IntEnum):
+    required = auto()
+    recommended = auto()
+    suggested = auto()
+
+
+def get_dependencies(elf: ELFFile) -> list[tuple[list[Path], Priority]]:
     dependencies = []
     # This convoluted code is here on purpose. For some reason, using
     # elf.get_section_by_name(".dynamic") does not always return an
@@ -58,13 +65,13 @@ def get_dependencies(elf: ELFFile) -> list[list[Path]]:
     for section in elf.iter_sections():
         if isinstance(section, DynamicSection):
             for tag in section.iter_tags('DT_NEEDED'):
-                dependencies.append([Path(tag.needed)])
+                dependencies.append(([Path(tag.needed)], Priority.required))
             break # There is only one dynamic section
 
     return dependencies
 
 
-def get_dlopen_dependencies(elf: ELFFile) -> list[list[Path]]:
+def get_dlopen_dependencies(elf: ELFFile) -> list[tuple[list[Path], Priority]]:
     """
     Extracts dependencies from the `.note.dlopen` section.
     This is a FreeDesktop standard to annotate binaries with libraries that it may `dlopen`.
@@ -81,7 +88,8 @@ def get_dlopen_dependencies(elf: ELFFile) -> list[list[Path]]:
             text = note_desc.decode("utf-8").rstrip("\0")
             j = json.loads(text)
             for d in j:
-                dependencies.append([Path(soname) for soname in d["soname"]])
+                priority = Priority[d["priority"]] if "priority" in d else Priority.recommended
+                dependencies.append(([Path(soname) for soname in d["soname"]], priority))
     return dependencies
 
 
@@ -257,18 +265,10 @@ class SetInterpreter:
 
 
 @dataclass
-class IgnoredDependency:
-    file: Path                          # The file that contains the ignored dependency
-    name: Path                          # The name of the dependency
-    pattern: str                        # The pattern that caused this missing dep to be ignored
-
-    def to_human_readable_str(self) -> str:
-        return f"warn: auto-patchelf ignoring missing {self.name} wanted by {self.file}"
-
-@dataclass
 class Dependency:
     file: Path                          # The file that contains the dependency
     name: Path                          # The name of the dependency
+    priority: Priority                  # The dlopen priority of the dependency
     found: bool = False                 # Whether it was found somewhere
     location: Optional[Path] = None     # Where the dependency was found (if found)
 
@@ -277,6 +277,14 @@ class Dependency:
             return f"    {self.name} -> found: {self.location}"
         else:
             return f"    {self.name} -> not found!"
+
+@dataclass
+class IgnoredDependency:
+    dep: Dependency                     # The dependency being ignored
+    pattern: Optional[str] = None       # The pattern that caused this missing dep to be ignored, or None for a priority-based ignore
+
+    def to_human_readable_str(self) -> str:
+        return f"warn: auto-patchelf ignoring missing {self.dep.name}, {self.dep.priority.name} by {self.dep.file}"
 
 
 @dataclass
@@ -361,7 +369,7 @@ def auto_patchelf_file(logger: Logger, path: Path, runtime_deps: list[Path], app
     # Be sure to get the output of all missing dependencies instead of
     # failing at the first one, because it's more useful when working
     # on a new package where you don't yet know the dependencies.
-    for dep in file_dependencies:
+    for dep, priority in file_dependencies:
         was_found = False
         for candidate in dep:
 
@@ -402,7 +410,7 @@ def auto_patchelf_file(logger: Logger, path: Path, runtime_deps: list[Path], app
             elif found_dependency := find_dependency(candidate.name, file_arch, file_osabi):
                 origin_rpath_entry = find_first_matching_rpath_with_origin(path, found_dependency, existing_rpaths) if preserve_origin else None
                 rpath.append(origin_rpath_entry or found_dependency)
-                dep = Dependency(file=path, name=candidate, found=True, location=found_dependency)
+                dep = Dependency(file=path, name=candidate, priority=priority, found=True, location=found_dependency)
                 dependencies.append(dep)
                 logger.log(dep)
                 was_found = True
@@ -413,7 +421,7 @@ def auto_patchelf_file(logger: Logger, path: Path, runtime_deps: list[Path], app
 
         if not was_found:
             dep_name = dep[0] if len(dep) == 1 else f"any({', '.join(map(str, dep))})"
-            dep = Dependency(file=path, name=dep_name, found=False, location=None)
+            dep = Dependency(file=path, name=dep_name, priority=priority, found=False, location=None)
             dependencies.append(dep)
             logger.log(dep)
 
@@ -448,6 +456,7 @@ def auto_patchelf(
         keep_libc: bool = False,
         preserve_origin: bool = False,
         add_existing: bool = True,
+        enforce_priority: Priority = Priority.suggested,
         extra_args: list[str] = []) -> None:
 
     if not paths_to_patch:
@@ -471,13 +480,16 @@ def auto_patchelf(
     logger.debug(f"auto-patchelf: {len(missing)} dependencies could not be satisfied")
     failure = False
     for dep in missing:
-        for pattern in ignore_missing:
-            if fnmatch(dep.name.name, pattern):
-                logger.log(IgnoredDependency(file=dep.file, name=dep.name, pattern=pattern))
-                break
+        if dep.priority <= enforce_priority:
+            for pattern in ignore_missing:
+                if fnmatch(dep.name.name, pattern):
+                    logger.log(IgnoredDependency(dep=dep, pattern=pattern))
+                    break
+            else:
+                logger.debug(f"error: auto-patchelf could not satisfy dependency {dep.name} wanted by {dep.file}")
+                failure = True
         else:
-            logger.debug(f"error: auto-patchelf could not satisfy dependency {dep.name} wanted by {dep.file}")
-            failure = True
+            logger.log(IgnoredDependency(dep=dep))
 
     if failure:
         sys.exit('auto-patchelf failed to find all the required dependencies.\n'
@@ -561,6 +573,15 @@ def main() -> None:
         help="Output events as JSON Lines to stdout instead of human-readable diagnostics.",
     )
     parser.add_argument(
+        "--enforce-priority",
+        choices=[p.name for p in Priority],
+        default="suggested",
+        help="Sets the lowest priority of dependencies to error when missing."
+             " Priorities lower than the value set here are automatically ignored."
+             " This value only affects dlopen dependencies, and doesn't apply to DT_NEEDED dependencies."
+             " Defaults to \"suggested\".",
+    )
+    parser.add_argument(
         "--extra-args",
         # Undocumented Python argparse feature: consume all remaining arguments
         # as values for this one. This means this argument should always be passed
@@ -587,6 +608,7 @@ def main() -> None:
         keep_libc=args.keep_libc,
         preserve_origin=args.preserve_origin,
         add_existing=args.add_existing,
+        enforce_priority=Priority[args.enforce_priority],
         extra_args=args.extra_args)
 
 
