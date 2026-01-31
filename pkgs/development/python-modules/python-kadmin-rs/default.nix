@@ -10,26 +10,23 @@
   rustc,
   pkg-config,
   sccache,
-  setuptools,
-  setuptools-rust,
-  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "python-kadmin-rs";
-  version = "0.6.3";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "authentik-community";
     repo = "kadmin-rs";
     rev = "kadmin/version/${version}";
-    hash = "sha256-ofoxgaTflem/QG/aQc6M5oxrUl/YoLHzDWlNyeVr0H8=";
+    hash = "sha256-7aRbpQblRFoCmuZJgm2mrGoUNL0BBcIpzlKblCnHVPc=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-mSwuR8TCljPYgVhguZiu2fXprCl+IEyZxE7ML+FBI98=";
+    hash = "sha256-dzTcB5GfeUbgikznq4YFEzZ75z0zvz4I1/+5UCQ0e2o=";
   };
 
   buildInputs = [
@@ -42,19 +39,13 @@ buildPythonPackage rec {
     pythonImportsCheckHook
     rustPlatform.bindgenHook
     rustPlatform.cargoSetupHook
+    rustPlatform.maturinBuildHook
     cargo
     rustc
   ];
 
-  build-system = [
-    setuptools
-    setuptools-rust
-    setuptools-scm
-  ];
-
   pythonImportsCheck = [
     "kadmin"
-    "kadmin_local"
   ];
 
   meta = {
