@@ -117,6 +117,12 @@ symlinkJoin {
   passthru.tests.mpv-scripts-should-not-collide = buildEnv {
     name = "mpv-scripts-env";
     paths = lib.pipe mpvScripts [
+      (lib.flip lib.removeAttrs [
+        # Deprecated (intentionally throws when evaluating)
+        "youtube-quality"
+        # Collides with modernx
+        "modernx-zydezu"
+      ])
       # filters "override" "overrideDerivation" "recurseForDerivations"
       (lib.filterAttrs (key: script: lib.isDerivation script))
       # replaces unfree and meta.broken scripts with decent placeholders
