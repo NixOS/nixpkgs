@@ -63,7 +63,7 @@ copyToKernelsDir() {
     # kernels or initrd if this script is ever interrupted.
     if ! test -e $dst; then
         local dstTmp=$dst.tmp.$$
-        cp -r $src $dstTmp
+        cp -r $src $dstTmp || rm -f $dstTmp
         mv $dstTmp $dst
     fi
     filesCopied[$dst]=1
@@ -124,6 +124,8 @@ addEntry() {
 }
 
 tmpFile="$target/extlinux/extlinux.conf.tmp.$$"
+
+trap "rm -f $tmpFile" EXIT
 
 cat > $tmpFile <<EOF
 # Generated file, all changes will be lost on nixos-rebuild!
