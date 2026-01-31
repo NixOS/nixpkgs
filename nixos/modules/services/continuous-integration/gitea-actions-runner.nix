@@ -34,24 +34,6 @@ let
   cfg = config.services.gitea-actions-runner;
 
   settingsFormat = pkgs.formats.yaml { };
-
-  # Check whether any runner instance label requires a container runtime
-  # Empty label strings result in the upstream defined defaultLabels, which require docker
-  # https://gitea.com/gitea/act_runner/src/tag/v0.1.5/internal/app/cmd/register.go#L93-L98
-  hasDockerScheme =
-    instance: instance.labels == [ ] || any (label: hasInfix ":docker:" label) instance.labels;
-  wantsContainerRuntime = any hasDockerScheme (attrValues cfg.instances);
-
-  hasHostScheme = instance: any (label: hasSuffix ":host" label) instance.labels;
-
-  # provide shorthands for whether container runtimes are enabled
-  hasDocker = config.virtualisation.docker.enable;
-  hasPodman = config.virtualisation.podman.enable;
-
-  tokenXorTokenFile =
-    instance:
-    (instance.token == null && instance.tokenFile != null)
-    || (instance.token != null && instance.tokenFile == null);
 in
 {
   meta.maintainers = with lib.maintainers; [
@@ -174,6 +156,22 @@ in
   config = mkMerge [
     (mkIf (cfg.instances != { }) (
       let
+        tokenXorTokenFile =
+          instance:
+          (instance.token == null && instance.tokenFile != null)
+          || (instance.token != null && instance.tokenFile == null);
+
+        # Check whether any runner instance label requires a container runtime.
+        # Empty label strings result in the upstream defined defaultLabels, which require docker.
+        # https://gitea.com/gitea/act_runner/src/tag/v0.1.5/internal/app/cmd/register.go#L93-L98
+        hasDockerScheme =
+          instance: instance.labels == [ ] || any (label: hasInfix ":docker:" label) instance.labels;
+        wantsContainerRuntime = any hasDockerScheme (attrValues cfg.instances);
+
+        # provide shorthands for whether container runtimes are enabled and whether host execution is possible.
+        hasDocker = config.virtualisation.docker.enable;
+        hasPodman = config.virtualisation.podman.enable;
+        hasHostScheme = instance: any (label: hasSuffix ":host" label) instance.labels;
       in
       {
         assertions = [
