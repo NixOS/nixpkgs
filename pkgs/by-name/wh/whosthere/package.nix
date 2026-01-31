@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "whosthere";
-  version = "0.2.1";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "ramonvermeulen";
     repo = "whosthere";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-jwXJ+mF3r+Xg3lyQzwzfGp3TmfVjnxO9Lg272zeTREY=";
+    sha256 = "sha256-7NzQTwl+3FqihMB8nsgzoFoxvnxraZHgG66kPa77ulY=";
   };
 
-  vendorHash = "sha256-ZiomQ+Md0kFkq7nERsnLZwkA9nlcvglMtzJV7NX3Igs=";
+  vendorHash = "sha256-YVPsWpIXC5SLm+T2jEGqF4MBcKOAAk0Vpc7zCIFkNw8=";
 
   checkFlags =
     let
