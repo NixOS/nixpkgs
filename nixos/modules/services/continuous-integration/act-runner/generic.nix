@@ -1,5 +1,7 @@
 {
   attributeName,
+  docsUrl,
+  labelsUrl,
   mainProgram,
   name,
   prettyName,
@@ -69,6 +71,8 @@ in
       default = { };
       description = ''
         ${runnerPrettyName} instances.
+
+        See <${docsUrl}> for additional information on how to use these CI instances.
       '';
       type = attrsOf (submodule {
         options = {
@@ -126,6 +130,8 @@ in
 
               Many common actions require `bash`, `git` and `nodejs`, as well as a
               filesystem that follows the filesystem hierarchy standard.
+
+              See <${labelsUrl}> for more information.
             '';
           };
           settings = mkOption {
