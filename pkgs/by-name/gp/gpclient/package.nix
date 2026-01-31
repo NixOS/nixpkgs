@@ -1,43 +1,43 @@
 {
   lib,
   rustPlatform,
-  glib-networking,
   stdenv,
-  gpauth,
-  makeBinaryWrapper,
+  atk,
   autoconf,
   automake,
+  cairo,
+  glib,
+  glib-networking,
+  gnutls,
+  gpauth,
+  gtk3,
   libtool,
+  libxml2,
+  lz4,
+  makeBinaryWrapper,
   openssl,
+  p11-kit,
+  pango,
   perl,
   pkg-config,
   vpnc-scripts,
-  glib,
-  pango,
-  cairo,
-  atk,
-  gtk3,
-  libxml2,
-  p11-kit,
-  lz4,
-  gnutls,
 }:
 
 rustPlatform.buildRustPackage {
   pname = "gpclient";
 
   inherit (gpauth)
-    src
-    version
     cargoHash
     meta
+    src
+    version
     ;
 
   buildAndTestSubdir = "apps/gpclient";
 
   nativeBuildInputs = [
-    perl
     makeBinaryWrapper
+    perl
     pkg-config
 
     # used to build vendored openconnect
@@ -46,10 +46,10 @@ rustPlatform.buildRustPackage {
     libtool
   ];
   buildInputs = [
+    glib
+    glib-networking
     gpauth
     openssl
-    glib-networking
-    glib
 
     # used for vendored openconnect
     gnutls
