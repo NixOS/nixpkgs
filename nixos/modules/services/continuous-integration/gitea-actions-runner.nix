@@ -116,14 +116,14 @@ in
               Labels used to map jobs to their runtime environment. Changing these
               labels currently requires a new registration token.
 
-              Many common actions require bash, git and nodejs, as well as a filesystem
-              that follows the filesystem hierarchy standard.
+              Many common actions require `bash`, `git` and `nodejs`, as well as a
+              filesystem that follows the filesystem hierarchy standard.
             '';
           };
           settings = mkOption {
             description = ''
-              Configuration for `act_runner daemon`.
-              See <https://gitea.com/gitea/act_runner/src/branch/main/internal/pkg/config/config.example.yaml> for an example configuration
+              Configuration for the `act_runner` daemon.
+              See <https://gitea.com/gitea/act_runner/src/branch/main/internal/pkg/config/config.example.yaml> for an example configuration.
             '';
 
             type = types.submodule {
@@ -158,8 +158,8 @@ in
               ]
             '';
             description = ''
-              List of packages, that are available to actions, when the runner is configured
-              with a host execution label.
+              List of packages that are available to actions when the runner
+              is configured with a host execution label.
             '';
           };
         };
