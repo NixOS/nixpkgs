@@ -39,6 +39,7 @@ in
 {
   meta.maintainers = with maintainers; [
     hexa
+    sigmasquadron
   ];
 
   options.services.gitea-actions-runner = with types; {
