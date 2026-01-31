@@ -191,11 +191,11 @@ in
         assertions = [
           {
             assertion = any tokenXorTokenFile (attrValues cfg.instances);
-            message = "Instances of gitea-actions-runner can have `token` or `tokenFile`, not both.";
+            message = "Gitea Actions Runner instances may have either a `token` or a `tokenFile` configured, but not both simultaneously.";
           }
           {
             assertion = anyWantsContainerRuntime -> hasDocker || hasPodman;
-            message = "Label configuration on gitea-actions-runner instance requires either docker or podman.";
+            message = "At least one of the configured Gitea Actions Runner instances require a container hypervisor, but neither Docker nor Podman are enabled.";
           }
         ];
 
