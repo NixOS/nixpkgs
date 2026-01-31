@@ -20,6 +20,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-a85gLy0Ix4cWvXY0s3m+ZD+ga7en6bYu1iAA22OaSwk=";
   };
 
+  pythonRelaxDeps = [
+    # Upstream views pins as known-good versions: https://github.com/mozilla/bleach/pull/741
+    "tinycss2"
+  ];
+
   build-system = [ setuptools ];
 
   dependencies = [
