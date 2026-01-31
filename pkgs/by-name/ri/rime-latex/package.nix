@@ -7,7 +7,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "rime-latex";
-  version = "0-unstable-2025-04-04";
+  version = "firstrelease";
 
   src = fetchFromGitHub {
     owner = "shenlebantongying";
