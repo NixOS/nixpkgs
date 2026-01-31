@@ -18,8 +18,14 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-c5SwgLMHEuXoR11QACUHnMy9paQsNFXLcoVQfXdrLQo=";
 
-  cargoBuildFlags = [ "--package" "neve" ];
-  cargoTestFlags = [ "--package" "neve" ];
+  cargoBuildFlags = [
+    "--package"
+    "neve"
+  ];
+  cargoTestFlags = [
+    "--package"
+    "neve"
+  ];
   doCheck = false;
 
   nativeBuildInputs = [
