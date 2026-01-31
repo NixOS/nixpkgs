@@ -29,14 +29,14 @@ in
 
 python3Packages.buildPythonApplication rec {
   pname = "piper-tts";
-  version = "1.3.0";
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OHF-Voice";
     repo = "piper1-gpl";
     tag = "v${version}";
-    hash = "sha256-WDMIXsbUzJ5XnA/KUVUPQKZzkqrXagzAOrhFtLR4fGk=";
+    hash = "sha256-BfagTqf/4d4H7cTXsQVVYxhdKLz3X8XuVdYeaOyVG88=";
   };
 
   patches = [
@@ -86,9 +86,11 @@ python3Packages.buildPythonApplication rec {
     train =
       with python3Packages;
       [
+        cython
         jsonargparse
         librosa
         lightning
+        onnx
         pathvalidate
         pysilero-vad
         tensorboard
@@ -101,6 +103,13 @@ python3Packages.buildPythonApplication rec {
     ];
     alignment = with python3Packages; [
       onnx
+    ];
+    zh = with python3Packages; [
+      # TOOD: g2pw
+      sentence-stream
+      unicode-rbnf
+      torch
+      requests
     ];
   };
 
