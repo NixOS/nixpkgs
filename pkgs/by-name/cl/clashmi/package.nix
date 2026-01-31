@@ -24,11 +24,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clashmi";
-  version = "1.0.16.204";
+  version = "1.0.17.300";
 
   src = fetchurl {
     url = "https://github.com/KaringX/clashmi/releases/download/v${finalAttrs.version}/clashmi_${finalAttrs.version}_linux_amd64.deb";
-    hash = "sha256-IOCrk4dl9BYf8rzhgXmRAaFP4pzsJMx6i2zTg/NpOCQ=";
+    hash = "sha256-jsWDBIFKoainN8zu9kgFmaPpZXaZZbe8MQ1i/ICpNP4=";
   };
 
   nativeBuildInputs = [
