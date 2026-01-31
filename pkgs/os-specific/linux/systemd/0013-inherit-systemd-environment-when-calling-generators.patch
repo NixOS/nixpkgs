@@ -16,7 +16,7 @@ executables that are being called from managers.
  1 file changed, 8 insertions(+)
 
 diff --git a/src/core/manager.c b/src/core/manager.c
-index 2a4782a55e..8dfdc227a1 100644
+index c442672dfe..a4132fd2e4 100644
 --- a/src/core/manager.c
 +++ b/src/core/manager.c
 @@ -3977,9 +3977,17 @@ static int build_generator_environment(Manager *m, char ***ret) {

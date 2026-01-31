@@ -35,10 +35,10 @@ index 3a13e04a27..4fd58068a1 100644
      <literal>Etc/UTC</literal>. The resulting link should lead to the
      corresponding binary
 diff --git a/src/basic/time-util.c b/src/basic/time-util.c
-index 55931a2546..2e00bd7539 100644
+index 5add913c8a..af328a7436 100644
 --- a/src/basic/time-util.c
 +++ b/src/basic/time-util.c
-@@ -1410,7 +1410,7 @@ static int get_timezones_from_zone1970_tab(char ***ret) {
+@@ -1406,7 +1406,7 @@ static int get_timezones_from_zone1970_tab(char ***ret) {
  
          assert(ret);
  
@@ -56,7 +56,7 @@ index 55931a2546..2e00bd7539 100644
          if (!f)
                  return -errno;
  
-@@ -1562,7 +1562,7 @@ int verify_timezone(const char *name, int log_level) {
+@@ -1566,7 +1566,7 @@ int verify_timezone(const char *name, int log_level) {
          if (p - name >= PATH_MAX)
                  return -ENAMETOOLONG;
  
@@ -65,7 +65,7 @@ index 55931a2546..2e00bd7539 100644
  
          fd = open(t, O_RDONLY|O_CLOEXEC);
          if (fd < 0)
-@@ -1614,7 +1614,7 @@ int get_timezone(char **ret) {
+@@ -1618,7 +1618,7 @@ int get_timezone(char **ret) {
          if (r < 0)
                  return r; /* Return EINVAL if not a symlink */
  
@@ -103,10 +103,10 @@ index 5ed6d3a9d2..f922d91a9d 100644
                  return log_error_errno(r, "Failed to create /etc/localtime symlink: %m");
  
 diff --git a/src/nspawn/nspawn.c b/src/nspawn/nspawn.c
-index 480a9c55c6..02c9ae6608 100644
+index 9e35349dab..b765989a70 100644
 --- a/src/nspawn/nspawn.c
 +++ b/src/nspawn/nspawn.c
-@@ -1821,8 +1821,8 @@ int userns_mkdir(const char *root, const char *path, mode_t mode, uid_t uid, gid
+@@ -1823,8 +1823,8 @@ int userns_mkdir(const char *root, const char *path, mode_t mode, uid_t uid, gid
  static const char *timezone_from_path(const char *path) {
          return PATH_STARTSWITH_SET(
                          path,
@@ -118,7 +118,7 @@ index 480a9c55c6..02c9ae6608 100644
  
  static bool etc_writable(void) {
 diff --git a/src/timedate/timedated.c b/src/timedate/timedated.c
-index 57f3413dc6..6a456fe601 100644
+index 57f3413dc6..fb2bc354aa 100644
 --- a/src/timedate/timedated.c
 +++ b/src/timedate/timedated.c
 @@ -266,7 +266,7 @@ static int context_read_data(Context *c) {
