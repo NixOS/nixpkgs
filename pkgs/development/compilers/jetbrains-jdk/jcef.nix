@@ -9,6 +9,7 @@
   jdk,
   git,
   rsync,
+  which,
   lib,
   ant,
   ninja,
@@ -91,11 +92,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "jcef-jetbrains";
-  rev = "6f9ab690b28a1262f82e6f869c310bdf1d0697ac";
+  rev = "a899e7a14a69578b1fbbedaf013c5ddc190dc63d";
   # This is the commit number
-  # Currently from the branch: https://github.com/JetBrains/jcef/tree/251
+  # Currently from the branch: https://github.com/JetBrains/jcef/tree/261
   # Run `git rev-list --count HEAD`
-  version = "1086";
+  version = "1130";
 
   nativeBuildInputs = [
     cmake
@@ -103,12 +104,14 @@ stdenv.mkDerivation rec {
     jdk
     git
     rsync
+    which
     ant
     ninja
     strip-nondeterminism
     stripJavaArchivesHook
     autoPatchelfHook
   ];
+
   buildInputs = [
     boost
     libGL
@@ -123,7 +126,7 @@ stdenv.mkDerivation rec {
     owner = "jetbrains";
     repo = "jcef";
     inherit rev;
-    hash = "sha256-w5t1M66KW5cUbNTpAc4ksGd+414EJsXwbq1UP1COFsw=";
+    hash = "sha256-4xnMxS7UQsNHxoTFqVCHjnLBlDows+H+mSkjUIYF7u4=";
   };
 
   # Find the hash in tools/buildtools/linux64/clang-format.sha1
@@ -172,6 +175,13 @@ stdenv.mkDerivation rec {
 
   postBuild = ''
     export JCEF_ROOT_DIR=$(realpath ..)
+
+    # Apply https://github.com/JetBrains/jcef/pull/42
+    substituteInPlace ../build.xml \
+      --replace-fail \
+        '<matches pattern="17*.*" string="''${java.version}"/>' \
+        '<javaversion atLeast="17"/>'
+
     ../tools/compile.sh ${platform} Release
   '';
 
