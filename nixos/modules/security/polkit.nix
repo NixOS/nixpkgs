@@ -96,13 +96,6 @@ in
 
     security.pam.services.polkit-1 = { };
 
-    security.wrappers.pkexec = {
-      setuid = true;
-      owner = "root";
-      group = "root";
-      source = "${cfg.package.bin}/bin/pkexec";
-    };
-
     systemd.tmpfiles.rules = [
       # Probably no more needed, clean up
       "R /var/lib/polkit-1"
