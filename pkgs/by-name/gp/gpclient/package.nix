@@ -4,7 +4,7 @@
   glib-networking,
   stdenv,
   gpauth,
-  makeWrapper,
+  makeBinaryWrapper,
   autoconf,
   automake,
   libtool,
@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage {
 
   nativeBuildInputs = [
     perl
-    makeWrapper
+    makeBinaryWrapper
     pkg-config
 
     # used to build vendored openconnect
