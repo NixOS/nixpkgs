@@ -499,6 +499,7 @@
   ./services/computing/slurm/slurm.nix
   ./services/computing/torque/mom.nix
   ./services/computing/torque/server.nix
+  ./services/continuous-integration/act-runner/forgejo-runner.nix
   ./services/continuous-integration/act-runner/gitea-actions-runner.nix
   ./services/continuous-integration/buildbot/master.nix
   ./services/continuous-integration/buildbot/worker.nix
