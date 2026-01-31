@@ -55,7 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     cairo
     libX11
     m4
-    mesa
     mesa_glu
     ncurses
     tcl

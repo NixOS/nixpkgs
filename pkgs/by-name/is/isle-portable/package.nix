@@ -23,7 +23,6 @@
   wayland-protocols,
   glew,
   qt6,
-  mesa,
   alsa-lib,
   sdl3,
   iniparser,
@@ -81,7 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     wayland-protocols
     glew
-    mesa
     alsa-lib
   ];
 
