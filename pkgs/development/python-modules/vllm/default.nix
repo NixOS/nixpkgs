@@ -117,8 +117,8 @@ let
   cutlass-flashmla = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "cutlass";
-    tag = "v3.9.0";
-    hash = "sha256-Q6y/Z6vahASeSsfxvZDwbMFHGx8CnsF90IlveeVLO9g=";
+    rev = "147f5673d0c1c3dcf66f78d677fd647e4a020219";
+    hash = "sha256-dHQto08IwTDOIuFUp9jwm1MWkFi8v2YJ/UESrLuG71g=";
   };
 
   flashmla = stdenv.mkDerivation {
@@ -132,8 +132,8 @@ let
       name = "FlashMLA-source";
       owner = "vllm-project";
       repo = "FlashMLA";
-      rev = "46d64a8ebef03fa50b4ae74937276a5c940e3f95";
-      hash = "sha256-jtMzWB5hKz8mJGsdK6q4YpQbGp9IrQxbwmB3a64DIl0=";
+      rev = "c2afa9cb93e674d5a9120a170a6da57b89267208";
+      hash = "sha256-pKlwxV6G9iHag/jbu3bAyvYvnu5TbrQwUMFV0AlGC3s=";
     };
 
     dontConfigure = true;
@@ -299,7 +299,7 @@ in
 
 buildPythonPackage rec {
   pname = "vllm";
-  version = "0.14.1";
+  version = "0.15.0";
   pyproject = true;
 
   stdenv = torch.stdenv;
@@ -308,7 +308,7 @@ buildPythonPackage rec {
     owner = "vllm-project";
     repo = "vllm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qoC3RpjnqbMR3JwkJfquIyuXhLyW+uGG+zSCCek4G2U=";
+    hash = "sha256-E6F69tVN4+uws9X8wJzwRrFYuLsf7Iv88n3zcVH1geg=";
   };
 
   patches = [
