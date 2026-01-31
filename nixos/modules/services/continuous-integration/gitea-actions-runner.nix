@@ -14,15 +14,15 @@ let
     escapeShellArg
     hasInfix
     hasSuffix
-    optionalAttrs
-    optionals
     literalExpression
     mapAttrs'
     mkEnableOption
+    mkIf
     mkOption
     mkPackageOption
-    mkIf
     nameValuePair
+    optionalAttrs
+    optionals
     types
     ;
 
