@@ -63,17 +63,27 @@ rustPlatform.buildRustPackage {
   ];
 
   postPatch = ''
-    substituteInPlace crates/common/src/constants.rs \
-      --replace-fail /usr/bin/gpauth ${gpauth}/bin/gpauth
     substituteInPlace crates/openconnect/src/vpn_utils.rs \
-      --replace-fail /usr/sbin/vpnc-script ${vpnc-scripts}/bin/vpnc-script
-    substituteInPlace packaging/files/usr/share/applications/gpgui.desktop \
-      --replace-fail /usr/bin/gpclient gpclient
+      --replace-fail /etc/vpnc/vpnc-script ${vpnc-scripts}/bin/vpnc-script \
+      --replace-fail /usr/libexec/gpclient/hipreport.sh $out/libexec/gpclient/hipreport.sh
+
+    substituteInPlace crates/common/src/constants.rs \
+      --replace-fail /usr/bin/gpclient $out/bin/gpclient \
+      --replace-fail /usr/bin/gpservice $out/bin/gpservice \
+      --replace-fail /usr/bin/gpauth ${gpauth}/bin/gpauth \
+      --replace-fail /opt/homebrew/ $out/
   '';
 
-  postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-    mkdir -p $out/share/applications
-    cp packaging/files/usr/share/applications/gpgui.desktop $out/share/applications/gpgui.desktop
+  postInstall = ''
+    cp -r packaging/files/usr/libexec $out/libexec
+
+    substituteInPlace $out/libexec/gpclient/hipreport.sh \
+      --replace-fail /usr/bin/gpclient $out/bin/gpclient
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    cp -r packaging/files/usr/lib $out/lib
+    substituteInPlace $out/lib/NetworkManager/dispatcher.d/pre-down.d/gpclient.down \
+      --replace-fail /usr/bin/gpclient $out/bin/gpclient
   '';
 
   postFixup = ''
