@@ -167,7 +167,7 @@ in
         # https://gitea.com/gitea/act_runner/src/tag/v0.1.5/internal/app/cmd/register.go#L93-L98
         hasDockerScheme =
           instance: instance.labels == [ ] || any (label: hasInfix ":docker:" label) instance.labels;
-        wantsContainerRuntime = any hasDockerScheme (attrValues cfg.instances);
+        anyWantsContainerRuntime = any hasDockerScheme (attrValues cfg.instances);
 
         # provide shorthands for whether container runtimes are enabled and whether host execution is possible.
         hasDocker = config.virtualisation.docker.enable;
@@ -181,7 +181,7 @@ in
             message = "Instances of gitea-actions-runner can have `token` or `tokenFile`, not both.";
           }
           {
-            assertion = wantsContainerRuntime -> hasDocker || hasPodman;
+            assertion = anyWantsContainerRuntime -> hasDocker || hasPodman;
             message = "Label configuration on gitea-actions-runner instance requires either docker or podman.";
           }
         ];
@@ -193,8 +193,8 @@ in
               let
                 wantsContainerRuntime = hasDockerScheme instance;
                 wantsHost = hasHostScheme instance;
-                wantsDocker = wantsContainerRuntime && config.virtualisation.docker.enable;
-                wantsPodman = wantsContainerRuntime && config.virtualisation.podman.enable;
+                wantsDocker = wantsContainerRuntime && hasDocker;
+                wantsPodman = wantsContainerRuntime && hasPodman;
                 configFile = settingsFormat.generate "config.yaml" instance.settings;
               in
               nameValuePair "gitea-runner-${escapeSystemdPath name}" {
