@@ -9,17 +9,19 @@
   nodejs,
   nix-update-script,
   nixosTests,
+  installShellFiles,
+  buildPackages,
 }:
 let
   pname = "rqbit";
 
-  version = "8.1.1";
+  version = "9.0.0-beta.2";
 
   src = fetchFromGitHub {
     owner = "ikatson";
     repo = "rqbit";
     rev = "v${version}";
-    hash = "sha256-5ErcI3hwC2EgxsjgEVlbHP1MzBf/LndpgTfynQGc29s=";
+    hash = "sha256-48gWvfPsmsQAifxHHCNpWYE8cGxdA4I4c27yqykSNK0=";
   };
 
   rqbit-webui = buildNpmPackage {
@@ -27,15 +29,15 @@ let
 
     inherit version src nodejs;
 
-    sourceRoot = "${src.name}/crates/librqbit/webui";
+    npmWorkspace = [ "crates/librqbit/webui" ];
 
-    npmDepsHash = "sha256-vib8jpf7Jn1qv0m/dWJ4TbisByczNbtEd8hIM5ll2Q8=";
+    npmDepsHash = "sha256-78mSuT6D49F0SWJIHBxZBKS0bZImwXXqk+lfmzL2R70=";
 
     installPhase = ''
       runHook preInstall
 
       mkdir -p $out/dist
-      cp -r dist/** $out/dist
+      cp -r ./crates/librqbit/webui/dist/** $out/dist
 
       runHook postInstall
     '';
@@ -44,9 +46,11 @@ in
 rustPlatform.buildRustPackage {
   inherit pname version src;
 
-  cargoHash = "sha256-gYasOjrG0oeT/6Ben57MKAvBtgpoSmZ93RZQqSXAxIc=";
+  cargoHash = "sha256-cOB4hgwGIT6NzNI45cp755ysABtXVXQ45cweJPqKdWU=";
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
+  nativeBuildInputs =
+    (lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ])
+    ++ (lib.optionals (stdenv.hostPlatform.emulatorAvailable buildPackages) [ installShellFiles ]);
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
 
@@ -60,6 +64,18 @@ rustPlatform.buildRustPackage {
     #  we've already built that
     rm crates/librqbit/build.rs
   '';
+
+  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
+    let
+      emulator = stdenv.hostPlatform.emulator buildPackages;
+    in
+    ''
+      installShellCompletion --cmd rqbit \
+        --bash <(${emulator} $out/bin/rqbit completions bash) \
+        --fish <(${emulator} $out/bin/rqbit completions fish) \
+        --zsh <(${emulator} $out/bin/rqbit completions zsh)
+    ''
+  );
 
   doCheck = false;
 
