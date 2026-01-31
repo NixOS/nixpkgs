@@ -13681,6 +13681,12 @@
     githubId = 546087;
     name = "Kristoffer K. Føllesdal";
   };
+  kggx = {
+    email = "kggx@pm.me";
+    github = "kggx";
+    githubId = 31655619;
+    name = "kggx";
+  };
   kgtkr = {
     email = "contact@kgtkr.net";
     github = "kgtkr";
