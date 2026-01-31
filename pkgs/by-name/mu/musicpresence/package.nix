@@ -73,6 +73,6 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "musicpresence";
-    maintainers = with lib.maintainers; [ wiyba ];
+    maintainers = with lib.maintainers; [ wiyba nonplay ];
   };
 }
