@@ -1,6 +1,7 @@
 {
   lib,
-  beamPackages,
+  beam27Packages,
+  elixir_1_18,
   stdenv,
   fetchurl,
   python3,
@@ -39,6 +40,8 @@ let
       systemd # for systemd unit activation check
     ]
   );
+
+  beamPackages = beam27Packages.extend (self: super: { elixir = elixir_1_18; });
 in
 
 stdenv.mkDerivation (finalAttrs: {
