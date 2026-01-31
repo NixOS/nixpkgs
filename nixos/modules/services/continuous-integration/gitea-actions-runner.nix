@@ -28,6 +28,17 @@ let
     types
     ;
 
+  inherit (types)
+    attrsOf
+    either
+    listOf
+    nullOr
+    package
+    path
+    str
+    submodule
+    ;
+
   inherit (utils)
     escapeSystemdPath
     ;
@@ -42,7 +53,7 @@ in
     sigmasquadron
   ];
 
-  options.services.gitea-actions-runner = with types; {
+  options.services.gitea-actions-runner = {
     package = mkPackageOption pkgs "gitea-actions-runner" { };
 
     instances = mkOption {
