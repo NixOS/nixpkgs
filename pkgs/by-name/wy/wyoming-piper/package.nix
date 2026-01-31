@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "wyoming-piper";
-  version = "2.1.2";
+  version = "2.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "wyoming-piper";
     tag = "v${version}";
-    hash = "sha256-j6QvGChAkASKdD+4XqIwC6UWdhi5oMDfYmSk6kvRrNE=";
+    hash = "sha256-f8bUNgPrO5n/5sxY8JGZKmwk4oWYqOTM3FMFw1RYfJk=";
   };
 
   build-system = with python3Packages; [
@@ -22,7 +22,6 @@ python3Packages.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
-    "regex"
     "sentence-stream"
     "wyoming"
   ];
