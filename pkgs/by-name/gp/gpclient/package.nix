@@ -50,16 +50,18 @@ rustPlatform.buildRustPackage {
     openssl
     glib-networking
     glib
-    pango
-    cairo
-    atk
-    gtk3
 
     # used for vendored openconnect
+    gnutls
     libxml2
     lz4
     p11-kit
-    gnutls
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    atk
+    cairo
+    gtk3
+    pango
   ];
 
   postPatch = ''
