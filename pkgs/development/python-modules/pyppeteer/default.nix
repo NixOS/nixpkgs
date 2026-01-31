@@ -27,13 +27,6 @@ buildPythonPackage rec {
     hash = "sha256-LYyV4Wzz4faewSsGjNe0i/9BLbCHzzEns2ZL2MYkGWw=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'pyee = "^8.1.0"' 'pyee = "*"' \
-      --replace 'urllib3 = "^1.25.8"' 'urllib3 = "*"' \
-      --replace 'websockets = "^10.0"' 'websockets = "*"'
-  '';
-
   nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
@@ -44,6 +37,12 @@ buildPythonPackage rec {
     tqdm
     urllib3
     websockets
+  ];
+
+  pythonRelaxDeps = [
+    "pyee"
+    "urllib3"
+    "websockets"
   ];
 
   nativeCheckInputs = [
