@@ -29,6 +29,13 @@ in
     security.polkit.enable = true;
     environment.systemPackages = [ cfg.package ];
 
+    security.wrappers.polkit-agent-helper-1 = {
+      setuid = true;
+      owner = "root";
+      group = "root";
+      source = "${config.security.polkit.package.out}/lib/polkit-1/polkit-agent-helper-1";
+    };
+
     systemd.user.services.polkit-soteria = {
       description = "Soteria, Polkit authentication agent for any desktop environment";
 
