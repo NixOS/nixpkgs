@@ -15,6 +15,7 @@ let
     hasInfix
     hasSuffix
     literalExpression
+    maintainers
     mapAttrs'
     mkEnableOption
     mkIf
@@ -36,7 +37,7 @@ let
   settingsFormat = pkgs.formats.yaml { };
 in
 {
-  meta.maintainers = with lib.maintainers; [
+  meta.maintainers = with maintainers; [
     hexa
   ];
 
@@ -227,7 +228,7 @@ in
                   [
                     coreutils
                   ]
-                  ++ lib.optionals wantsHost instance.hostPackages;
+                  ++ optionals wantsHost instance.hostPackages;
                 serviceConfig = {
                   DynamicUser = true;
                   User = "gitea-runner";
