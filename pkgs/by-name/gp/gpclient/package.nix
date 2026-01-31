@@ -76,7 +76,7 @@ rustPlatform.buildRustPackage {
     cp packaging/files/usr/share/applications/gpgui.desktop $out/share/applications/gpgui.desktop
   '';
 
-  preFixup = ''
+  postFixup = ''
     wrapProgram "$out/bin/gpclient" \
       --prefix GIO_EXTRA_MODULES : ${glib-networking}/lib/gio/modules
   '';
