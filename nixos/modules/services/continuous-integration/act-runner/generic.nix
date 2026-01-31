@@ -1,11 +1,11 @@
-let
-  attributeName = "gitea-actions-runner";
-  mainProgram = "act_runner";
-  name = "gitea";
-  prettyName = "Gitea";
-  runnerPrettyName = "Gitea Actions Runner";
-  srcUrl = "https://gitea.com/gitea/act_runner";
-in
+{
+  attributeName,
+  mainProgram,
+  name,
+  prettyName,
+  runnerPrettyName,
+  srcUrl,
+}:
 {
   config,
   lib,

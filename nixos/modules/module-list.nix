@@ -499,10 +499,10 @@
   ./services/computing/slurm/slurm.nix
   ./services/computing/torque/mom.nix
   ./services/computing/torque/server.nix
+  ./services/continuous-integration/act-runner/gitea-actions-runner.nix
   ./services/continuous-integration/buildbot/master.nix
   ./services/continuous-integration/buildbot/worker.nix
   ./services/continuous-integration/buildkite-agents.nix
-  ./services/continuous-integration/gitea-actions-runner.nix
   ./services/continuous-integration/github-runners.nix
   ./services/continuous-integration/gitlab-runner/runner.nix
   ./services/continuous-integration/gocd-agent/default.nix
