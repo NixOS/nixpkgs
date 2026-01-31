@@ -12,6 +12,7 @@ let
     attrValues
     concatStringsSep
     escapeShellArg
+    getExe
     hasInfix
     hasSuffix
     literalExpression
@@ -267,7 +268,7 @@ in
                         rm -v "$INSTANCE_DIR/.runner" || true
 
                         # perform the registration
-                        ${cfg.package}/bin/act_runner register --no-interactive \
+                        ${getExe cfg.package} register --no-interactive \
                           --instance ${escapeShellArg instance.url} \
                           --token "$TOKEN" \
                           --name ${escapeShellArg instance.name} \
@@ -280,7 +281,7 @@ in
 
                     '')
                   ];
-                  ExecStart = "${cfg.package}/bin/act_runner daemon --config ${configFile}";
+                  ExecStart = "${getExe cfg.package} daemon --config ${configFile}";
                   SupplementaryGroups =
                     optionals wantsDocker [
                       "docker"
