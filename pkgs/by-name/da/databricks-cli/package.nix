@@ -99,6 +99,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       kfollesdal
       taranarmo
+      kggx
     ];
   };
 })
