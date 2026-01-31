@@ -62,18 +62,15 @@ let
 
             specialisation.runner = {
               inheritParentConfig = true;
-              configuration.services.gitea-actions-runner = {
-                package = pkgs.forgejo-runner;
-                instances."test" = {
-                  enable = true;
-                  name = "ci";
-                  url = "http://localhost:3000";
-                  labels = [
-                    # type ":host" does not depend on docker/podman/lxc
-                    "native:host"
-                  ];
-                  tokenFile = "/var/lib/forgejo/runner_token";
-                };
+              configuration.services.forgejo-runner.instances."test" = {
+                enable = true;
+                name = "ci";
+                url = "http://localhost:3000";
+                labels = [
+                  # type ":host" does not depend on docker/podman/lxc
+                  "native:host"
+                ];
+                tokenFile = "/var/lib/forgejo/runner_token";
               };
             };
             specialisation.dump = {
@@ -222,8 +219,8 @@ let
                   "su -l forgejo -c 'GITEA_WORK_DIR=/var/lib/forgejo forgejo actions generate-runner-token' | sed 's/^/TOKEN=/' | tee /var/lib/forgejo/runner_token"
               )
               server.succeed("${serverSystem}/specialisation/runner/bin/switch-to-configuration test")
-              server.wait_for_unit("gitea-runner-test.service")
-              server.succeed("journalctl -o cat -u gitea-runner-test.service | grep -q 'Runner registered successfully'")
+              server.wait_for_unit("forgejo-runner-test.service")
+              server.succeed("journalctl -o cat -u forgejo-runner-test.service | grep -q 'Runner registered successfully'")
 
               # enable actions feature for this repository, defaults to disabled
               server.succeed(
