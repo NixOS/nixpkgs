@@ -25,15 +25,15 @@
   wrapGAppsHook4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tangram";
-  version = "3.3";
+  version = "3.4";
 
   src = fetchFromGitHub {
     owner = "sonnyp";
     repo = "Tangram";
-    tag = "v${version}";
-    hash = "sha256-OtQN8Iigu92iKa7CAaslIpbS0bqJ9Vus++inrgV/eeM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-NTTunlWeS44iUxrfvjwB4NBbYjojVP2SxLDvh+aXvOA=";
     fetchSubmodules = true;
   };
 
@@ -99,4 +99,4 @@ stdenv.mkDerivation rec {
     ];
     teams = [ lib.teams.gnome-circle ];
   };
-}
+})
