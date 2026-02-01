@@ -23,6 +23,17 @@
     serviceMode = lib.mkEnableOption "Service Mode";
     tunMode = lib.mkEnableOption "Setcap for TUN Mode. DNS settings won't work on this way";
     autoStart = lib.mkEnableOption "Clash Verge auto launch";
+    group = lib.mkOption {
+      type = lib.types.str;
+      example = "wheel";
+      default = "users";
+      description = ''
+        The group to grant access to clash-verge-rev's service socket.
+
+        For better security, you should set a group that only contains
+        users who need to access clash-verge-rev's service socket.
+      '';
+    };
   };
 
   config =
@@ -54,6 +65,7 @@
         serviceConfig = {
           ExecStart = "${cfg.package}/bin/clash-verge-service";
           Restart = "on-failure";
+          Group = cfg.group;
           ProtectSystem = "strict";
           NoNewPrivileges = true;
           ProtectHostname = true;
