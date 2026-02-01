@@ -99,6 +99,7 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
+    "aiofiles"
     "aiohttp"
     "aiosqlite"
     "aiovban" # PyPi and GitHub versioning is out of sync
