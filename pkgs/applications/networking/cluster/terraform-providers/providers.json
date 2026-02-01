@@ -553,13 +553,13 @@
     "vendorHash": "sha256-HQXioE9mbc+0Qf6MGiXKXSfmbUUtkUafA01GEXbLQfE="
   },
   "hashicorp_dns": {
-    "hash": "sha256-+M4i5tvGrjGRBwB9bFp6YYhbz3qGRcg9W6PhD59Rfbk=",
+    "hash": "sha256-ErvlkaFiIHEXUZYDJZmqEgGpZ75mnLRhhsULRvTm7Rc=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/dns",
     "owner": "hashicorp",
     "repo": "terraform-provider-dns",
-    "rev": "v3.4.3",
+    "rev": "v3.5.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-xu5t7VaLvbwo/Q7Xb4mkNt7UjU+hzfk7NgfFlxwbIhU="
+    "vendorHash": "sha256-P4018IUQ4MfdPHP20rHvuzeFSxLHBcoJuLHS/TNAHLk="
   },
   "hashicorp_external": {
     "hash": "sha256-rHMmGzYvsE5GT0E71UUIXjDG9+v52LI69/gdP2xuI7w=",
