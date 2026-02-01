@@ -1,12 +1,12 @@
 {
   lib,
-  gccStdenv,
+  stdenv,
   dos2unix,
   fetchurl,
   unzip,
 }:
 
-gccStdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bwbasic";
   version = "3.40";
 
@@ -20,15 +20,17 @@ gccStdenv.mkDerivation (finalAttrs: {
     unzip
   ];
 
-  unpackPhase = ''
-    unzip $src
-  '';
+  sourceRoot = ".";
 
   postPatch = ''
     dos2unix configure
     patchShebangs configure
     chmod +x configure
+    substituteInPlace bwbasic.h \
+      --replace-fail "extern int putenv (const char *buffer)" "extern int putenv (char *buffer)"
   '';
+
+  env.NIX_CFLAGS_COMPILE = "-std=c89";
 
   hardeningDisable = [ "format" ];
 
