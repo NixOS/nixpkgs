@@ -194,7 +194,7 @@ module.exports = async ({ github, context, core, dry, cherryPicks }) => {
     // An empty results array will always trigger this condition, which is helpful
     // to clean up reviews created by the prepare step when on the wrong branch.
     if (results.every(({ severity }) => severity === 'info')) {
-      await dismissReviews({ github, context, dry, reviewKey })
+      await dismissReviews({ github, context, core, dry, reviewKey })
       return
     }
 
