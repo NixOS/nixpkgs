@@ -10,6 +10,7 @@ let
   configFile = configFormat.generate "stalwart.toml" cfg.settings;
   useLegacyStorage = lib.versionOlder config.system.stateVersion "24.11";
   useLegacyDefault = lib.versionOlder config.system.stateVersion "26.05";
+  default = if useLegacyDefault then "stalwart-mail" else "stalwart";
 
   parsePorts =
     listeners:
@@ -62,7 +63,7 @@ in
 
     user = lib.mkOption {
       type = lib.types.str;
-      default = if useLegacyDefault then "stalwart-mail" else "stalwart";
+      inherit default;
       description = ''
         User ownership of service
       '';
@@ -70,7 +71,7 @@ in
 
     group = lib.mkOption {
       type = lib.types.str;
-      default = if useLegacyDefault then "stalwart-mail" else "stalwart";
+      inherit default;
       description = ''
         Group ownership of service
       '';
@@ -154,7 +155,7 @@ in
           );
         in
         {
-          path = if useLegacyDefault then "/var/cache/stalwart-mail" else "/var/cache/stalwart";
+          path = "/var/cache/${default}";
           resource = lib.mkIf hasHttpListener (lib.mkDefault "file://${cfg.package.webadmin}/webadmin.zip");
         };
     };
@@ -164,10 +165,10 @@ in
     # service is restarted on a potentially large number of files.
     # That would cause unnecessary and unwanted delays.
     users = {
-      groups = {
+      groups = lib.mkIf (cfg.group == default) {
         ${cfg.group} = { };
       };
-      users = {
+      users = lib.mkIf (cfg.user == default) {
         ${cfg.user} = {
           isSystemUser = true;
           inherit (cfg) group;
@@ -196,7 +197,7 @@ in
           KillSignal = "SIGINT";
           Restart = "on-failure";
           RestartSec = 5;
-          SyslogIdentifier = "stalwart";
+          SyslogIdentifier = default;
 
           ExecStartPre =
             if useLegacyStorage then
@@ -216,8 +217,8 @@ in
           ReadWritePaths = [
             cfg.dataDir
           ];
-          CacheDirectory = if useLegacyDefault then "stalwart-mail" else "stalwart";
-          StateDirectory = if useLegacyDefault then "stalwart-mail" else "stalwart";
+          CacheDirectory = default;
+          StateDirectory = default;
 
           # Upstream uses "stalwart" as the username since 0.12.0
           User = cfg.user;
