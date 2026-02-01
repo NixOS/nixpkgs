@@ -93,6 +93,8 @@ tauriInstallHook() {
 }
 
 tauriFixupHook() {
+  echo "Executing tauriFixupHook"
+
   # NOTE: This runs as a preFixupPhase and does not replace the original hook.
   @fixupScript@
 }
