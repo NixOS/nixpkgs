@@ -6404,6 +6404,10 @@ self: super: with self; {
 
   google-cloud-storage = callPackage ../development/python-modules/google-cloud-storage { };
 
+  google-cloud-storage-control =
+    callPackage ../development/python-modules/google-cloud-storage-control
+      { };
+
   google-cloud-tasks = callPackage ../development/python-modules/google-cloud-tasks { };
 
   google-cloud-testutils = callPackage ../development/python-modules/google-cloud-testutils { };
