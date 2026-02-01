@@ -9,21 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rmpc";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "mierak";
     repo = "rmpc";
     rev = "v${version}";
-    hash = "sha256-NU8T26oPhm8L7wdO4p65cpNa0pax7/oqHGs98QDoEc0=";
+    hash = "sha256-IcWn15tKlThuLR8s/4KtaHm4np8B8UaKYQsyEWlQoB4=";
   };
 
-  cargoHash = "sha256-d2/4q2s/11HNE18D8d8Y2yWidhT+XsUS4J9ahnxToI0=";
-
-  checkFlags = [
-    # Test currently broken, needs to be removed. See https://github.com/mierak/rmpc/issues/254
-    "--skip=core::scheduler::tests::interleaves_repeated_and_scheduled_jobs"
-  ];
+  cargoHash = "sha256-DDOJqA5S+JiRCOgAPqw1k1b8SNCLS0aKsJsFqlykZDI=";
 
   nativeBuildInputs = [
     installShellFiles
