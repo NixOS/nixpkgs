@@ -120,6 +120,10 @@ buildPythonPackage rec {
     "test_itercapture_limit"
     "test_stamping_headers_in_options"
     "test_stamping_with_replace"
+    # pymongo api compat
+    # TypeError: InvalidDocument.__init__() missing 1 required positional argumen...
+    "test_store_result"
+    "test_store_result_with_request"
 
     # Celery tries to look up group ID (e.g. 30000)
     # which does not reliably succeed in the sandbox on linux,
