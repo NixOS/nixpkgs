@@ -144,7 +144,6 @@ python3Packages.buildPythonApplication rec {
     rustPlatform.cargoSetupHook
     writableTmpDirAsHomeHook
     yarn-berry_4.yarnBerryConfigHook
-
     imagemagick
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin swift
