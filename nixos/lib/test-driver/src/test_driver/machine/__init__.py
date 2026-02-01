@@ -819,7 +819,7 @@ class QemuMachine(BaseMachine):
         Get the output printed to a given TTY.
         """
         status, output = self.execute(
-            f"fold -w$(stty -F /dev/tty{tty} size | awk '{{print $2}}') /dev/vcs{tty}"
+            f"fold -b -w$(stty -F /dev/tty{tty} size | awk '{{print $2}}') /dev/vcs{tty}"
         )
         return output
 
@@ -843,7 +843,7 @@ class QemuMachine(BaseMachine):
 
     def dump_tty_contents(self, tty: str) -> None:
         """Debugging: Dump the contents of the TTY<n>"""
-        self.execute(f"fold -w 80 /dev/vcs{tty} | systemd-cat")
+        self.execute(f"fold -b -w 80 /dev/vcs{tty} | systemd-cat")
 
     def _execute(
         self,
