@@ -6,12 +6,12 @@
 
 buildGoModule (finalAttrs: {
   pname = "dcv";
-  version = "v0.3.1";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "tokuhirom";
     repo = "dcv";
-    tag = "${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-OwfGZq+ce6RNb5dhNHsQ15iMPoEp7QlaYIUVYIiVqmI=";
   };
 
