@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   hatchling,
@@ -58,11 +59,31 @@ buildPythonPackage (finalAttrs: {
     "tests/test_beanie_factory.py"
   ];
 
+  enabledTestPaths = [
+    "tests/test_msgspec_factory.py"
+  ];
+
   disabledTests = [
     # Unsupported type: LiteralAlias
     "test_type_alias"
     # Unsupported type: 'JsonValue' on field '' from class RecursiveTypeModelFactory.
     "test_recursive_type_annotation"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # AttributeError: 'Foo' object has no attribute 'set_field'
+    "test_other_basic_types"
+
+    # KeyError: 'foo_field'
+    "test_with_nested_struct"
+
+    # AttributeError: 'Foo' object has no attribute 'unset'
+    "test_msgspec_types"
+
+    # Failed: DID NOT RAISE <class 'polyfactory.exceptions.ParameterException'>
+    "test_datetime_constraints"
+
+    # assert <msgspec._core.Field object at 0x7ffff34794c0> == 10
+    "test_use_default_with_callable_default"
   ];
 
   pythonImportsCheck = [ "polyfactory" ];
