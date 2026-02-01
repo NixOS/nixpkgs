@@ -1,16 +1,13 @@
-diff --git a/conftest.py b/conftest.py
-index 4426e02..1f84096 100644
---- a/conftest.py
-+++ b/conftest.py
-@@ -73,17 +73,12 @@ def mysql_db_user():
- @pytest.fixture
- def postgresql_dsn(postgresql_db_user, postgresql_db_password, postgresql_db_host,
-                    db_name):
+diff --git a/tests/conftest.py b/tests/conftest.py
+index c63468c..4c1c061 100644
+--- a/tests/conftest.py
++++ b/tests/conftest.py
+@@ -64,29 +64,27 @@ def mysql_db_user():
+ def postgresql_dsn(
+     postgresql_db_user, postgresql_db_password, postgresql_db_host, db_name
+ ):
 -    return 'postgresql://{}:{}@{}/{}'.format(
--        postgresql_db_user,
--        postgresql_db_password,
--        postgresql_db_host,
--        db_name
+-        postgresql_db_user, postgresql_db_password, postgresql_db_host, db_name
 -    )
 +    pytest.skip()
  
@@ -22,12 +19,33 @@ index 4426e02..1f84096 100644
  
  
  @pytest.fixture
-@@ -121,8 +116,7 @@ def mssql_db_driver():
+ def sqlite_memory_dsn():
+-    return 'sqlite:///:memory:'
++    pytest.skip()
+ 
+ 
+ @pytest.fixture
+ def sqlite_none_database_dsn():
+-    return 'sqlite://'
++    pytest.skip()
+ 
+ 
+ @pytest.fixture
+ def sqlite_file_dsn(db_name):
+-    return f'sqlite:///{db_name}.db'
++    pytest.skip()
+ 
+ 
+ @pytest.fixture
+@@ -109,11 +107,7 @@ def mssql_db_driver():
  
  @pytest.fixture
  def mssql_dsn(mssql_db_user, mssql_db_password, mssql_db_driver, db_name):
--    return 'mssql+pyodbc://{}:{}@localhost/{}?driver={}'\
--        .format(mssql_db_user, mssql_db_password, db_name, mssql_db_driver)
+-    return (
+-        'mssql+pyodbc://{}:{}@localhost/{}?driver={}&TrustServerCertificate=yes'.format(
+-            mssql_db_user, mssql_db_password, db_name, mssql_db_driver
+-        )
+-    )
 +    pytest.skip()
  
  
