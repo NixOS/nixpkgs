@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   hatchling,
@@ -148,6 +149,11 @@ buildPythonPackage (finalAttrs: {
   enabledTestPaths = [
     # Follow GitHub CI
     "docs/examples/"
+  ];
+
+  pytestFlags = lib.optionals (pythonAtLeast "3.14") [
+    # UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+    "-Wignore::UserWarning"
   ];
 
   disabledTests = [
