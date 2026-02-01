@@ -61,7 +61,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     addBinToPathHook
     ansible-core # required to place ansible CLI onto the PATH in tests
-    glibcLocales
     mock
     openssh
     pytest-mock
@@ -70,6 +69,9 @@ buildPythonPackage rec {
     pytestCheckHook
     versionCheckHook
     writableTmpDirAsHomeHook
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
+    glibcLocales
   ];
 
   preCheck = ''

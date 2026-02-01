@@ -94,6 +94,9 @@ stdenv.mkDerivation (finalAttrs: {
     webkitgtk_4_1
     py
   ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform glibcLocales) [
+    glibcLocales
+  ]
   ++ (with perlPackages; [
     JSONParse
     FinanceQuote

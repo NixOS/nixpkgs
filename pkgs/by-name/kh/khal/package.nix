@@ -36,11 +36,13 @@ python3Packages.buildPythonApplication rec {
   ];
 
   nativeBuildInputs = [
-    glibcLocales
     installShellFiles
     sphinxHook
     python3Packages.sphinx-rtd-theme
     python3Packages.sphinxcontrib-newsfeed
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
+    glibcLocales
   ];
 
   dependencies = with python3Packages; [

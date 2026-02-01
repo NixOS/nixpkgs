@@ -299,7 +299,6 @@ stdenv.mkDerivation (finalAttrs: {
     gperf
     ninja
     meson
-    glibcLocales
     m4
     autoPatchelfHook
 
@@ -321,6 +320,9 @@ stdenv.mkDerivation (finalAttrs: {
       ++ lib.optional withEfi ps.pyelftools
       ++ lib.optional (withUkify && finalAttrs.finalPackage.doCheck) ps.pefile
     ))
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
+    glibcLocales
   ]
   ++ lib.optionals withLibBPF [
     bpftools

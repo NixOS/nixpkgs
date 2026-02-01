@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   tag ? "",
 
@@ -132,7 +133,9 @@ python3.pkgs.buildPythonApplication rec {
     glibcLocales
     hicolor-icon-theme
     xvfb-run
-    writableTmpDirAsHomeHook
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
+    glibcLocales
   ]
   ++ (with python3.pkgs; [
     polib

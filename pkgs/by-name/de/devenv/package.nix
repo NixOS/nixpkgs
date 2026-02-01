@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   fetchpatch2,
   gitMinimal,
@@ -94,7 +95,7 @@ rustPlatform.buildRustPackage {
 
   postInstall =
     let
-      setDefaultLocaleArchive = lib.optionalString (glibcLocalesUtf8 != null) ''
+      setDefaultLocaleArchive = lib.optionalString (lib.meta.availableOn stdenv.hostPlatform glibcLocalesUtf8) ''
         --set-default LOCALE_ARCHIVE ${glibcLocalesUtf8}/lib/locale/locale-archive
       '';
     in

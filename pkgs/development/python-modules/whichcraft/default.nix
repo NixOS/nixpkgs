@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchPypi,
   pytest,
@@ -17,7 +18,9 @@ buildPythonPackage rec {
   };
 
   LC_ALL = "en_US.utf-8";
-  buildInputs = [ glibcLocales ];
+  buildInputs = lib.optionals (lib.meta.availableOn stdenv.hostPlatform glibcLocales) [
+    glibcLocales
+  ];
 
   nativeCheckInputs = [ pytest ];
 

@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   glibcLocales,
@@ -40,6 +41,8 @@ buildPythonPackage rec {
     biopython
     htslib
     fsspec
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
     glibcLocales
   ];
 

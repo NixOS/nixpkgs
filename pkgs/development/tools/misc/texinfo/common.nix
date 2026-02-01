@@ -130,7 +130,9 @@ stdenv.mkDerivation {
   ];
 
   nativeCheckInputs = [ procps ] ++ optionals stdenv.buildPlatform.isFreeBSD [ freebsd.locale ];
-  checkInputs = optionals (lib.versionAtLeast version "7.2") [ glibcLocales ];
+  checkInputs = optionals (
+    lib.versionAtLeast version "7.2" && lib.meta.availableOn stdenv.hostPlatform glibcLocales
+  ) [ glibcLocales ];
 
   doCheck = interactive && !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isSunOS; # flaky
 

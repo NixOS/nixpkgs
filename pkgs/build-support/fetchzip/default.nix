@@ -7,11 +7,12 @@
 
 {
   lib,
+  stdenv,
+  buildPackages,
   repoRevToNameMaybe,
   fetchurl,
   withUnzip ? true,
   unzip,
-  glibcLocalesUtf8,
 }:
 
 lib.extendMkDerivation {
@@ -69,10 +70,14 @@ lib.extendMkDerivation {
       # UTF-8 aware locale:
       #   https://github.com/NixOS/nixpkgs/issues/176225#issuecomment-1146617263
       nativeBuildInputs =
-        lib.optionals withUnzip [
-          unzip
-          glibcLocalesUtf8
-        ]
+        lib.optionals withUnzip (
+          [
+            unzip
+          ]
+          ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform buildPackages.glibcLocalesUtf8) [
+            buildPackages.glibcLocalesUtf8
+          ]
+        )
         ++ nativeBuildInputs;
 
       postFetch = ''

@@ -35,8 +35,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     ffmpeg
-    glibcLocales
     perl
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
+    glibcLocales
   ]
   ++ (with perlPackages; [
     ListMoreUtils

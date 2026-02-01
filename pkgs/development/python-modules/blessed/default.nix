@@ -34,6 +34,8 @@ buildPythonPackage {
   nativeCheckInputs = [
     pytestCheckHook
     mock
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
     glibcLocales
   ];
 

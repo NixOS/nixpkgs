@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  buildInputs = [
+  buildInputs = lib.optionals (lib.meta.availableOn stdenv.hostPlatform glibcLocales) [
     glibcLocales
   ];
 

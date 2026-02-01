@@ -43,12 +43,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     curl
-    glibcLocales
     jdk
     libedit
     librist
     openssl
     srt
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform glibcLocales) [
+    glibcLocales
   ];
 
   enableParallelBuilding = true;

@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   python3Packages,
   fetchPypi,
   taskwarrior2,
@@ -26,7 +27,9 @@ buildPythonApplication rec {
     urwid
   ];
 
-  nativeCheckInputs = [ glibcLocales ];
+  nativeCheckInputs = lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
+    glibcLocales
+  ];
 
   makeWrapperArgs = [
     "--suffix"

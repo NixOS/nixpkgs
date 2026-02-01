@@ -40,9 +40,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "libarchive" ];
 
   nativeCheckInputs = [
-    glibcLocales
     mock
     pytestCheckHook
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
+    glibcLocales
   ];
 
   meta = {

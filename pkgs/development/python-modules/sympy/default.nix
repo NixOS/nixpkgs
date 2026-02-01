@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchPypi,
   glibcLocales,
@@ -19,7 +20,9 @@ buildPythonPackage rec {
     hash = "sha256-09P+jfHloLQvDnvfUFQWl9vn0jdG6JSZDAMOKwXnJRc=";
   };
 
-  nativeCheckInputs = [ glibcLocales ];
+  nativeCheckInputs = lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
+    glibcLocales
+  ];
 
   propagatedBuildInputs = [ mpmath ];
 

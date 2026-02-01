@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   glibcLocales,
@@ -22,6 +23,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     lxml
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
     glibcLocales
   ];
 

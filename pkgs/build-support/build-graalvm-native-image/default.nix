@@ -60,11 +60,15 @@ lib.extendMkDerivation {
 
       inherit dontUnpack strictDeps __structuredAttrs;
 
-      nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [
-        graalvmDrv
-        glibcLocales
-        removeReferencesTo
-      ];
+      nativeBuildInputs =
+        (args.nativeBuildInputs or [ ])
+        ++ [
+          graalvmDrv
+          removeReferencesTo
+        ]
+        ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
+          glibcLocales
+        ];
 
       # `nativeBuildInputs` does not allow `graalvmDrv`'s propagatedBuildInput to reach here this package.
       # As its `propagatedBuildInputs` is required for the build process with `native-image`, we must add it here as well.

@@ -162,7 +162,9 @@ let
     mbs = buildExtension {
       inherit gawkextlib;
       name = "mbs";
-      extraBuildInputs = [ glibcLocales ];
+      extraBuildInputs = lib.optionals (lib.meta.availableOn stdenv.hostPlatform glibcLocales) [
+        glibcLocales
+      ];
       #! "spät": length: 5, mbs_length: 6, wcswidth: 4
       doCheck = !stdenv.hostPlatform.isDarwin;
     };

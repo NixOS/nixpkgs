@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   python3,
   fetchFromGitHub,
   fetchpatch,
@@ -27,14 +28,18 @@ python3.pkgs.buildPythonApplication rec {
     })
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    arrow
-    glibcLocales
-    icalendar
-    prompt-toolkit
-    urwid
-    watchdog
-  ];
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      arrow
+      icalendar
+      prompt-toolkit
+      urwid
+      watchdog
+    ]
+    ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform glibcLocales) [
+      glibcLocales
+    ];
 
   nativeCheckInputs = with python3.pkgs; [
     freezegun

@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fastnumbers,
   fetchPypi,
@@ -26,10 +27,12 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    glibcLocales
     hypothesis
     pytest-mock
     pytestCheckHook
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
+    glibcLocales
   ];
 
   disabledTests = [

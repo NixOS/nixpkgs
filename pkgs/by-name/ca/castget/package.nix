@@ -46,9 +46,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   nativeBuildInputs = [
     autoreconfHook
+    pkg-config
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
     # See comment on locale above
     glibcLocales
-    pkg-config
   ];
 
   meta = {

@@ -174,12 +174,16 @@ lib.warnIf (withDocs != null)
       tests.withChecks = fa.finalPackage.overrideAttrs (attrs: {
         doCheck = true;
 
-        nativeCheckInputs = attrs.nativeCheckInputs or [ ] ++ [
-          util-linuxMinimal
-          libredirect.hook
-          glibcLocales
-          gnused
-        ];
+        nativeCheckInputs =
+          attrs.nativeCheckInputs or [ ]
+          ++ [
+            util-linuxMinimal
+            libredirect.hook
+            gnused
+          ]
+          ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
+            glibcLocales
+          ];
 
         meta = attrs.meta // {
           # Ignore Darwin for now, because the tests fail in many more ways than on Linux

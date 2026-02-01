@@ -66,25 +66,29 @@ let
   # these match the host's architecture, glibc_multi is used for multilib
   # builds. glibcLocales must be before glibc or glibc_multi as otherwiese
   # the wrong LOCALE_ARCHIVE will be used where only C.UTF-8 is available.
-  baseTargetPaths = with pkgs; [
-    glibcLocales
-    (if isMultiBuild then glibc_multi else glibc)
-    gcc.cc.lib
-    bashInteractiveFHS
-    coreutils
-    less
-    shadow
-    su
-    gawk
-    diffutils
-    findutils
-    gnused
-    gnugrep
-    gnutar
-    gzip
-    bzip2
-    xz
-  ];
+  baseTargetPaths =
+    with pkgs;
+    lib.optionals (lib.meta.availableOn stdenv.hostPlatform glibcLocales) [
+      glibcLocales
+    ]
+    ++ [
+      (if isMultiBuild then glibc_multi else glibc)
+      gcc.cc.lib
+      bashInteractiveFHS
+      coreutils
+      less
+      shadow
+      su
+      gawk
+      diffutils
+      findutils
+      gnused
+      gnugrep
+      gnutar
+      gzip
+      bzip2
+      xz
+    ];
   baseMultiPaths = with pkgsi686Linux; [
     gcc.cc.lib
   ];

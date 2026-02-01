@@ -35,9 +35,7 @@ stdenv.mkDerivation rec {
   ];
 
   LANG = "en_US.UTF-8";
-  LOCALE_ARCHIVE = lib.optionalString (
-    stdenv.buildPlatform.libc == "glibc"
-  ) "${buildPackages.glibcLocales}/lib/locale/locale-archive";
+  LOCALE_ARCHIVE = lib.optionalString (lib.meta.availableOn stdenv.buildPlatform buildPackages.glibcLocales) "${buildPackages.glibcLocales}/lib/locale/locale-archive";
 
   postPatch = ''
     patchShebangs create-libraries.sh

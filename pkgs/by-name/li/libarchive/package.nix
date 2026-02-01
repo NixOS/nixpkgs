@@ -5,8 +5,8 @@
   acl,
   attr,
   autoreconfHook,
+  buildPackages,
   bzip2,
-  glibcLocalesUtf8,
   lzo,
   openssl,
   pkg-config,
@@ -79,8 +79,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     autoreconfHook
-    glibcLocalesUtf8 # test_I test requires an UTF-8 locale
     pkg-config
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform buildPackages.glibcLocalesUtf8) [
+    buildPackages.glibcLocalesUtf8 # test_I test requires an UTF-8 locale
   ];
 
   buildInputs = [

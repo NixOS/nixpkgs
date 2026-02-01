@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchPypi,
   isPyPy,
@@ -29,10 +30,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
-    glibcLocales
     pytestCheckHook
     # https://github.com/python-babel/babel/issues/988#issuecomment-1521765563
     pytz
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
+    glibcLocales
   ]
   ++ lib.optionals isPyPy [ tzdata ];
 

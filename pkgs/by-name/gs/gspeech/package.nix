@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   python3,
   gtk3,
@@ -47,9 +48,11 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   buildInputs = [
-    glibcLocales
     gtk3
     python3
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform glibcLocales) [
+    glibcLocales
   ];
 
   propagatedBuildInputs = with python3.pkgs; [

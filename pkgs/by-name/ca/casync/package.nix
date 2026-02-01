@@ -50,8 +50,10 @@ stdenv.mkDerivation {
     sphinx
   ];
   nativeCheckInputs = [
-    glibcLocales
     rsync
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
+    glibcLocales
   ]
   ++ lib.optionals udevSupport [
     udevCheckHook

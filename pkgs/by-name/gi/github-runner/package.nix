@@ -103,7 +103,7 @@ buildDotnetModule (finalAttrs: {
                      'true'
   '';
 
-  DOTNET_SYSTEM_GLOBALIZATION_INVARIANT = isNull glibcLocales;
+  DOTNET_SYSTEM_GLOBALIZATION_INVARIANT = !(lib.meta.availableOn stdenv.hostPlatform glibcLocales);
   LOCALE_ARCHIVE = lib.optionalString (
     !finalAttrs.DOTNET_SYSTEM_GLOBALIZATION_INVARIANT
   ) "${glibcLocales}/lib/locale/locale-archive";
