@@ -38,6 +38,8 @@ rustPlatform.buildRustPackage rec {
       --bash target/completions/rmpc.bash \
       --fish target/completions/rmpc.fish \
       --zsh target/completions/_rmpc
+
+    install -m 444 -D assets/rmpc.desktop $out/share/applications/rmpc.desktop
   '';
 
   meta = {
