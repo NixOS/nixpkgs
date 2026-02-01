@@ -4994,7 +4994,7 @@ rec {
       assert (builtins.isList features);
       assert (builtins.all builtins.isString features);
       let
-        outFeaturesSet = lib.foldl (set: feature: set // { "${feature}" = 1; }) { } features;
+        outFeaturesSet = lib.genAttrs features (_: 1);
         outFeaturesUnique = builtins.attrNames outFeaturesSet;
       in
       builtins.sort (a: b: a < b) outFeaturesUnique;
