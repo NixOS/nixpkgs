@@ -2,8 +2,9 @@
   lib,
   fetchFromGitHub,
   stdenv,
-  nodejs,
-  pnpm_9,
+  dart-sass,
+  nodejs_24,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   buildGoModule,
@@ -18,41 +19,42 @@ let
     owner = "go-vikunja";
     repo = "vikunja";
     rev = "v${version}";
-    hash = "sha256-yUUZ6gPI2Bte36HzfUE6z8B/I1NlwWDSJA2pwkuzd34=";
+    hash = "sha256-IJ6985gLuI0O08xZq8NYoet02NPFqQQhDLND+nfmdbA=";
   };
+
+  pnpm' = pnpm_10.override { nodejs = nodejs_24; };
 
   frontend = stdenv.mkDerivation (finalAttrs: {
     pname = "vikunja-frontend";
     inherit version src;
 
-    patches = [
-      ./nodejs-22.12-tailwindcss-update.patch
-    ];
     sourceRoot = "${finalAttrs.src.name}/frontend";
 
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs)
         pname
         version
-        patches
         src
         sourceRoot
         ;
-      pnpm = pnpm_9;
+      pnpm = pnpm';
       fetcherVersion = 1;
-      hash = "sha256-94ZlywOZYmW/NsvE0dtEA81MeBWGUrJsBXTUauuOmZM=";
+      hash = "sha256-OmLFn5aKsXPSbW6AehjkuTJMgOMzDSaYo2XbPvU6WXo=";
     };
 
     nativeBuildInputs = [
-      nodejs
+      dart-sass
+      nodejs_24
       pnpmConfigHook
-      pnpm_9
+      pnpm'
     ];
 
     doCheck = true;
 
     postBuild = ''
-      find node_modules/.pnpm/sass-embedded-linux-*/node_modules/sass-embedded-linux-*/dart-sass/src -name dart -print0 | xargs -I {} -0 patchelf --set-interpreter "$(<$NIX_CC/nix-support/dynamic-linker)" {}
+      # Force sass-embedded to use dart-sass from PATH instead of the bundled binary.
+      substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
+        --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["dart-sass"];'
       pnpm run build
     '';
 
