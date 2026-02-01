@@ -18,12 +18,23 @@ Run `./run labels OWNER REPO`, where OWNER is your username or "NixOS" and REPO 
 
 ## Type checking
 
-The JavaScript files can be type-checked using TypeScript with `--checkJs`. This catches common bugs like using `Set.length` instead of `Set.size`, undeclared variables, and mismatched function signatures.
+The JavaScript files are type-checked using TypeScript with `--checkJs`. This catches common bugs like using `Set.length` instead of `Set.size`, undeclared variables, and mismatched function signatures.
 
-To run the type checker:
+To run the type checker from the repository root:
 
 ```
-nix-shell
+nix-build ci -A typecheck-ci-scripts
+```
+
+Or use the `typecheck-ci-scripts` command from this folder's development shell:
+
+```
+typecheck-ci-scripts
+```
+
+For interactive development, enter `nix-shell` in this directory and run:
+
+```
 tsc --project jsconfig.json
 ```
 
