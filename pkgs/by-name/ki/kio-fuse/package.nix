@@ -4,8 +4,7 @@
   fetchgit,
   cmake,
   extra-cmake-modules,
-  wrapQtAppsHook,
-  kio,
+  libsForQt5,
   fuse3,
 }:
 
@@ -22,11 +21,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
-    kio
+    libsForQt5.kio
     fuse3
   ];
 
