@@ -1049,12 +1049,6 @@
     github = "ALameLlama";
     githubId = 55490546;
   };
-  alanpearce = {
-    email = "alan@alanpearce.eu";
-    github = "alanpearce";
-    githubId = 850317;
-    name = "Alan Pearce";
-  };
   alapshin = {
     email = "alapshin@fastmail.com";
     github = "alapshin";
@@ -1337,6 +1331,12 @@
         fingerprint = "7D31 15DC D912 C15A 2781  F7BB 511C B44B C752 2A89";
       }
     ];
+  };
+  alinnow = {
+    name = "Alin";
+    email = "alin@alin.ovh";
+    github = "alinnow";
+    githubId = 850317;
   };
   alirezameskin = {
     email = "alireza.meskin@gmail.com";

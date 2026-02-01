@@ -38,7 +38,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "Bring your ZSH history to Fish shell";
     homepage = "https://github.com/rsalmei/zsh-history-to-fish";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ alanpearce ];
+    maintainers = with lib.maintainers; [ alinnow ];
     mainProgram = "zsh-history-to-fish";
   };
 }
