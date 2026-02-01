@@ -147,6 +147,7 @@ python3Packages.buildPythonApplication rec {
     imagemagick
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin swift
+  # Needed for when Qt uses a system's GTK file picker.
   ++ lib.optional stdenv.hostPlatform.isLinux wrapGAppsHook3;
 
   buildInputs = [
