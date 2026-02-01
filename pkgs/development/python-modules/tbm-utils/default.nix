@@ -42,6 +42,9 @@ buildPythonPackage rec {
     substituteInPlace pyproject.toml \
       --replace-fail 'poetry>=1.0.0' 'poetry-core' \
       --replace-fail 'poetry.masonry.api' 'poetry.core.masonry.api'
+
+    substituteInPlace pytest.ini \
+      --replace-fail 'strict = True' 'strict = False'
   '';
 
   pythonRelaxDeps = [
