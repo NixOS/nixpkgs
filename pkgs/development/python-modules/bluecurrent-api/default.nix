@@ -32,6 +32,8 @@ buildPythonPackage rec {
     websockets
   ];
 
+  pythonRelaxDeps = [ "websockets" ];
+
   pythonImportsCheck = [ "bluecurrent_api" ];
 
   nativeCheckInputs = [
