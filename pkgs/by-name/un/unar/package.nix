@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  clangStdenv,
   fetchFromGitHub,
   installShellFiles,
   gnustep-base,
@@ -12,7 +12,7 @@
   xcbuildHook,
 }:
 
-stdenv.mkDerivation rec {
+clangStdenv.mkDerivation rec {
   pname = "unar";
   version = "1.10.8";
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
       --replace-fail "v1.10.7" "v${version}"
   ''
   + (
-    if stdenv.hostPlatform.isDarwin then
+    if clangStdenv.hostPlatform.isDarwin then
       ''
         substituteInPlace "./XADMaster.xcodeproj/project.pbxproj" \
           --replace "libstdc++.6.dylib" "libc++.1.dylib"
@@ -47,8 +47,8 @@ stdenv.mkDerivation rec {
       ''
         for f in Makefile.linux ../UniversalDetector/Makefile.linux ; do
           substituteInPlace $f \
-            --replace "= gcc" "=${stdenv.cc.targetPrefix}cc" \
-            --replace "= g++" "=${stdenv.cc.targetPrefix}c++" \
+            --replace "= gcc" "=${clangStdenv.cc.targetPrefix}cc" \
+            --replace "= g++" "=${clangStdenv.cc.targetPrefix}c++" \
             --replace "-DGNU_RUNTIME=1" "" \
             --replace "-fgnu-runtime" "-fobjc-runtime=gnustep-2.0"
         done
@@ -65,21 +65,21 @@ stdenv.mkDerivation rec {
     wavpack
     zlib
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ gnustep-base ];
+  ++ lib.optionals clangStdenv.hostPlatform.isLinux [ gnustep-base ];
 
   nativeBuildInputs = [
     installShellFiles
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuildHook ];
+  ++ lib.optionals clangStdenv.hostPlatform.isDarwin [ xcbuildHook ];
 
-  xcbuildFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+  xcbuildFlags = lib.optionals clangStdenv.hostPlatform.isDarwin [
     "-target unar"
     "-target lsar"
     "-configuration Release"
-    "MACOSX_DEPLOYMENT_TARGET=${stdenv.hostPlatform.darwinMinVersion}"
+    "MACOSX_DEPLOYMENT_TARGET=${clangStdenv.hostPlatform.darwinMinVersion}"
   ];
 
-  makefile = lib.optionalString (!stdenv.hostPlatform.isDarwin) "Makefile.linux";
+  makefile = lib.optionalString (!clangStdenv.hostPlatform.isDarwin) "Makefile.linux";
 
   enableParallelBuilding = true;
 
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -Dm555 -t $out/bin ${lib.optionalString stdenv.hostPlatform.isDarwin "Products/Release/"}{lsar,unar}
+    install -Dm555 -t $out/bin ${lib.optionalString clangStdenv.hostPlatform.isDarwin "Products/Release/"}{lsar,unar}
     for f in lsar unar; do
       installManPage ./Extra/$f.?
       installShellCompletion --bash --name $f ./Extra/$f.bash_completion
