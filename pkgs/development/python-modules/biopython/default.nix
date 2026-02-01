@@ -33,6 +33,8 @@ buildPythonPackage rec {
   '';
 
   meta = {
+    # https://github.com/biopython/biopython/issues/5135
+    broken = lib.versionAtLeast numpy.version "2.4";
     description = "Python library for bioinformatics";
     longDescription = ''
       Biopython is a set of freely available tools for biological computation
