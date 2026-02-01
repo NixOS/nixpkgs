@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   setuptools,
@@ -46,6 +47,9 @@ buildPythonPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-CNeHsOpFkKvcCWGEholabcsqXJzINUUxFZ7I5bPBoYM=";
   };
+
+  # pydantic.v1.errors.ConfigError: unable to infer type for attribute "sortby"
+  disabled = pythonAtLeast "3.14";
 
   postPatch = ''
     substituteInPlace pyproject.toml \
