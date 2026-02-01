@@ -74,6 +74,8 @@ buildPythonPackage rec {
     "test_assert_html_snapshot_by_css_selector"
     # test accesses the internet
     "test_happy_path"
+    # cli_base module not found
+    "test_doctests"
   ];
 
   disabledTestPaths = [
