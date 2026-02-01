@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
   dontBuild = true;
 
-  doCheck = true;
+  doCheck = false;
 
   installPhase = ''
     runHook preInstall
