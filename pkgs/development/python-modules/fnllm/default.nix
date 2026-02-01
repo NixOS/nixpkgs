@@ -1,34 +1,41 @@
 {
   lib,
-  aiolimiter,
-  azure-identity,
-  azure-storage-blob,
   buildPythonPackage,
   fetchPypi,
+
+  # build-system
   hatchling,
+  uv-dynamic-versioning,
+
+  # dependencies
+  aiolimiter,
   httpx,
   json-repair,
-  openai,
-  polyfactory,
   pydantic,
+  tenacity,
+
+  # optional-dependencies
+  # azure
+  azure-identity,
+  azure-storage-blob,
+  # openai
+  openai,
+  tiktoken,
+
+  # tests
+  polyfactory,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
-  tenacity,
-  tiktoken,
-  uv-dynamic-versioning,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fnllm";
   version = "0.4.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
-
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-gKdFBpNpG/CDLhKi1wQgZHv+o1pDy5HEqcteLzkXK1A=";
   };
 
@@ -62,7 +69,7 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "fnllm" ];
 
@@ -89,4 +96,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
