@@ -28,6 +28,10 @@ clangStdenv.mkDerivation (finalAttrs: {
         "cmake_minimum_required(VERSION 3.13)"
   '';
 
+  # Fix GCC 15 compatibility
+  # error: unknown type name 'uint32_t'
+  env.CXXFLAGS = "-include cstdint";
+
   nativeBuildInputs = [ cmake ];
 
   installPhase = ''
