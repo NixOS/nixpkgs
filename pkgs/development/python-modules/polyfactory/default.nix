@@ -1,22 +1,28 @@
 {
-  buildPythonPackage,
   lib,
+  buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   hatchling,
-  hypothesis,
-  faker,
-  msgspec,
-  sqlalchemy,
+
+  # dependencies
   aiosqlite,
-  typing-extensions,
-  pymongo,
-  pytest-asyncio,
-  pydantic,
-  pytestCheckHook,
   email-validator,
+  faker,
+  hypothesis,
+  msgspec,
+  pydantic,
+  pymongo,
+  sqlalchemy,
+  typing-extensions,
+
+  # tests
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "polyfactory";
   version = "3.2.0";
   pyproject = true;
@@ -24,22 +30,22 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "litestar-org";
     repo = "polyfactory";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-J/CHf85jomybMp2U9l5kbD5q0MtYlY9hZkjxjS2jXvg=";
   };
 
   build-system = [ hatchling ];
 
   dependencies = [
-    faker
-    typing-extensions
-    hypothesis
-    pydantic
-    sqlalchemy
-    msgspec
-    pymongo
     aiosqlite
     email-validator
+    faker
+    hypothesis
+    msgspec
+    pydantic
+    pymongo
+    sqlalchemy
+    typing-extensions
   ];
 
   nativeCheckInputs = [
@@ -48,6 +54,7 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
+    # Requires unpackaged 'beanie'
     "tests/test_beanie_factory.py"
   ];
 
@@ -64,8 +71,8 @@ buildPythonPackage rec {
     homepage = "https://polyfactory.litestar.dev/";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ bot-wxt1221 ];
-    changelog = "https://github.com/litestar-org/polyfactory/releases/tag/${src.tag}";
+    changelog = "https://github.com/litestar-org/polyfactory/releases/tag/${finalAttrs.src.tag}";
     description = "Simple and powerful factories for mock data generation";
     license = lib.licenses.mit;
   };
-}
+})
