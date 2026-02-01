@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -67,6 +68,13 @@ buildPythonPackage (finalAttrs: {
 
   disabledTests = [
     "test_patches"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Flaky: PermissionError: [Errno 13] Permission denied: '/tmp/somefile'
+    "test_s3_copy"
+    "test_s3_copy_multipart"
+    "test_s3_download_file_404"
+    "test_s3_upload_file"
   ];
 
   pythonImportsCheck = [ "aioboto3" ];
