@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  nix-update-script,
   installShellFiles,
   pkg-config,
   cmake,
@@ -25,6 +26,8 @@ rustPlatform.buildRustPackage rec {
     pkg-config
     cmake
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   env.VERGEN_GIT_DESCRIBE = version;
 
