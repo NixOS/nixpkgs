@@ -2,30 +2,24 @@
   lib,
   stdenv,
   buildPythonPackage,
+  dm-haiku,
+  equinox,
   fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
+  flax,
+  funsor,
+  graphviz,
   jax,
   jaxlib,
   multipledispatch,
   numpy,
-  tqdm,
-
-  # tests
-  dm-haiku,
-  equinox,
-  flax,
-  funsor,
-  graphviz,
   optax,
   pyro-api,
   pytest-xdist,
   pytestCheckHook,
   scikit-learn,
+  setuptools,
   tensorflow-probability,
+  tqdm,
 }:
 
 buildPythonPackage (finalAttrs: {
