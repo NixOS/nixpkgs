@@ -64,6 +64,11 @@ buildPythonPackage rec {
     tqdm
   ];
 
+  pythonRelaxDeps = [
+    "numba"
+    "llvmlite"
+  ];
+
   optional-dependencies = {
     plots = [
       matplotlib
