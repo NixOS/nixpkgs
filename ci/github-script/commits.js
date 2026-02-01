@@ -286,7 +286,7 @@ module.exports = async ({ github, context, core, dry, cherryPicks }) => {
         // that's too long. We think this is unlikely to happen, and so don't deal with it explicitly.
         const truncated = []
         let total_length = 0
-        for (line of diff) {
+        for (const line of diff) {
           total_length += line.length
           if (total_length > 10000) {
             truncated.push('', '[...truncated...]')
