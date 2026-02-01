@@ -10771,6 +10771,12 @@
     githubId = 43995067;
     name = "Songlin Jiang";
   };
+  hollymlem = {
+    email = "oliviafloof@disroot.org";
+    github = "hollymlem";
+    githubId = 35699052;
+    name = "holly";
+  };
   holymonson = {
     email = "holymonson@gmail.com";
     github = "holymonson";
