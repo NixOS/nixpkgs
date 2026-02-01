@@ -49,7 +49,10 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Performs the communication between the YubiHSM 2 and applications that use it";
     homepage = "https://developers.yubico.com/yubihsm-connector/";
-    maintainers = with lib.maintainers; [ matthewcroughan ];
+    maintainers = with lib.maintainers; [
+      matthewcroughan
+      numinit
+    ];
     license = lib.licenses.asl20;
     mainProgram = "yubihsm-connector";
   };
