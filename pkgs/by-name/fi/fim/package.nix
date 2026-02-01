@@ -84,7 +84,6 @@ stdenv.mkDerivation rec {
   ];
 
   env.LIBAA_CONFIG = lib.getExe' (lib.getDev aalib) "aalib-config";
-  env.LIBPNG_CONFIG = lib.getExe' (lib.getDev libpng) "libpng-config";
   env.NIX_CFLAGS_COMPILE = lib.optionalString x11Support "-lSDL";
 
   meta = {
