@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     changelog = "https://github.com/mierak/rmpc/releases/tag/${src.rev}";
     description = "TUI music player client for MPD with album art support via kitty image protocol";
-    homepage = "https://mierak.github.io/rmpc/";
+    homepage = "https://rmpc.mierak.dev/";
     license = lib.licenses.bsd3;
     longDescription = ''
       Rusty Music Player Client is a beautiful, modern and configurable terminal-based Music Player
