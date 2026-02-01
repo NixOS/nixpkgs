@@ -8,15 +8,13 @@
   libXmu,
 }:
 
-stdenv.mkDerivation rec {
-
+stdenv.mkDerivation (finalAttrs: {
   pname = "wmctrl";
   version = "1.07";
 
   src = fetchurl {
-    # NOTE: 2019-04-11: There is also a semi-official mirror: http://tripie.sweb.cz/utils/wmctrl/
-    url = "https://sites.google.com/site/tstyblo/wmctrl/${pname}-${version}.tar.gz";
-    sha256 = "1afclc57b9017a73mfs9w7lbdvdipmf9q0xdk116f61gnvyix2np";
+    url = "https://web.archive.org/web/20221116231622/http://tripie.sweb.cz/utils/wmctrl/dist/wmctrl-${finalAttrs.version}.tar.gz";
+    hash = "sha256-RW/cIbA0w1UuRNDEvrljAkuKMqpdqf3996oUNSE6kx8=";
   };
 
   strictDeps = true;
@@ -31,12 +29,11 @@ stdenv.mkDerivation rec {
   patches = [ ./64-bit-data.patch ];
 
   meta = {
-    homepage = "https://sites.google.com/site/tstyblo/wmctrl";
+    homepage = "https://web.archive.org/web/20221116231622/http://tripie.sweb.cz/utils/wmctrl/";
     description = "CLI tool to interact with EWMH/NetWM compatible X Window Managers";
     license = lib.licenses.gpl2Plus;
     platforms = with lib.platforms; all;
     maintainers = [ lib.maintainers.Anton-Latukha ];
     mainProgram = "wmctrl";
   };
-
-}
+})
