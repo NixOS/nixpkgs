@@ -15141,6 +15141,11 @@
     github = "ljxfstorm";
     githubId = 7077478;
   };
+  lks = {
+    name = "Lukas";
+    github = "1H0";
+    githubId = 37246258;
+  };
   llakala = {
     email = "elevenaka11@gmail.com";
     github = "llakala";
