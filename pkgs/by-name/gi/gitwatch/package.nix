@@ -13,6 +13,7 @@
 }:
 runCommand "gitwatch"
   rec {
+    pname = "gitwatch";
     version = "0.5";
     src = fetchFromGitHub {
       owner = "gitwatch";
