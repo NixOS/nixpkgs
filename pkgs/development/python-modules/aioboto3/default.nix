@@ -1,20 +1,30 @@
 {
   lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
   aiobotocore,
   aiofiles,
-  buildPythonPackage,
+
+  # optional-dependencies
+  # chalice
   chalice,
+  # s3cse
   cryptography,
+
+  # tests
   dill,
-  fetchFromGitHub,
   moto,
   pytest-asyncio,
   pytestCheckHook,
-  setuptools,
-  setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aioboto3";
   version = "15.5.0";
   pyproject = true;
@@ -22,7 +32,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "terricain";
     repo = "aioboto3";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-yGKjcZlXs1f72OGX5rUWvfDKZAYU3ZV2RVQnd0InxBQ=";
   };
 
@@ -53,7 +63,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ]
   ++ moto.optional-dependencies.server
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   disabledTests = [
     "test_patches"
@@ -64,8 +74,8 @@ buildPythonPackage rec {
   meta = {
     description = "Wrapper to use boto3 resources with the aiobotocore async backend";
     homepage = "https://github.com/terricain/aioboto3";
-    changelog = "https://github.com/terricain/aioboto3/blob/${src.rev}/CHANGELOG.rst";
+    changelog = "https://github.com/terricain/aioboto3/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})
