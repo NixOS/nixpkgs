@@ -89,6 +89,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "beartype"
     "grpcio"
+    "httplib2"
     "jsonpickle"
     "objsize"
 
