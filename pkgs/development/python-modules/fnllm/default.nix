@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  pythonAtLeast,
 
   # build-system
   hatchling,
@@ -88,6 +89,10 @@ buildPythonPackage (finalAttrs: {
     "test_clear"
     "test_handles_common_errors"
     "test_children"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # RuntimeError: There is no current event loop in thread 'MainThread'
+    "test_call_batch_raises_if_response_length_mismatch"
   ];
 
   meta = {
