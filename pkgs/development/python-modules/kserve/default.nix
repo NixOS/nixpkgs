@@ -51,7 +51,7 @@
   tomlkit,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "kserve";
   version = "0.16.0";
   pyproject = true;
@@ -59,11 +59,23 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kserve";
     repo = "kserve";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-f6ILZMLxfckEpy7wSgCqUx89JWSnn0DbQiqRSHcQHms=";
   };
 
-  sourceRoot = "${src.name}/python/kserve";
+  # Fix vllm 0.12.0 compatibility
+  # Patch submitted upstream: https://github.com/kserve/kserve/pull/4882
+  postPatch = ''
+    substituteInPlace kserve/protocol/rest/openai/types/__init__.py \
+      --replace-fail \
+        "from vllm.entrypoints.openai.protocol import EmbeddingRequest, EmbeddingResponse as Embedding, EmbeddingResponseData, EmbeddingCompletionRequest" \
+        "from vllm.entrypoints.pooling.embed.protocol import EmbeddingRequest, EmbeddingResponse as Embedding, EmbeddingResponseData, EmbeddingCompletionRequest" \
+      --replace-fail \
+        "from vllm.entrypoints.openai.protocol import RerankRequest, RerankResponse as Rerank" \
+        "from vllm.entrypoints.pooling.score.protocol import RerankRequest, RerankResponse as Rerank"
+  '';
+
+  sourceRoot = "${finalAttrs.src.name}/python/kserve";
 
   pythonRelaxDeps = [
     "fastapi"
@@ -130,7 +142,7 @@ buildPythonPackage rec {
     pytestCheckHook
     tomlkit
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "kserve" ];
 
@@ -185,8 +197,8 @@ buildPythonPackage rec {
   meta = {
     description = "Standardized Serverless ML Inference Platform on Kubernetes";
     homepage = "https://github.com/kserve/kserve/tree/master/python/kserve";
-    changelog = "https://github.com/kserve/kserve/releases/tag/${src.tag}";
+    changelog = "https://github.com/kserve/kserve/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})
