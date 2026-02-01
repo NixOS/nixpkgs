@@ -44,6 +44,13 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-MSPqQmC70pq+sEM8zJrrFiz32dorOJxr2G/y2H4EUQI=";
   };
 
+  env = {
+    # Python 3.14 compatibility
+    # error: the configured Python interpreter version (3.14) is newer than PyO3's maximum supported
+    # version (3.13)
+    PYO3_USE_ABI3_FORWARD_COMPATIBILITY = 1;
+  };
+
   build-system = [
     meson
     setuptools
