@@ -8,7 +8,7 @@
   python3,
 }:
 stdenv.mkDerivation (final: {
-  name = "termpaint";
+  pname = "termpaint";
   version = "0.3.1";
 
   src = fetchFromGitHub {
