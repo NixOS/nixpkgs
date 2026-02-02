@@ -10,14 +10,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "firefox_decrypt";
-  version = "1.1.1";
+  version = "1.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "unode";
     repo = "firefox_decrypt";
     tag = finalAttrs.version;
-    hash = "sha256-HPjOUWusPXoSwwDvW32Uad4gFERvn79ee/WxeX6h3jY=";
+    hash = "sha256-ohCQcIn++eFlY9Kzmc5VkYt1pCO97qtmWG5JRyE8Y6I=";
   };
 
   build-system = with python3Packages; [
