@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "incomfort-client";
-  version = "0.6.11";
+  version = "0.6.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zxdavb";
     repo = "incomfort-client";
     tag = "v${version}";
-    hash = "sha256-HCawa+eFpC0t/dC8fQ+teMaPpuxrYBprEV8SxnhZ1ls=";
+    hash = "sha256-5IP0R7NI+TXBOPwDZ26inVC6YxhYozo4ZM/V7w73EvQ=";
   };
 
   build-system = [ poetry-core ];
