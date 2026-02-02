@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   buildGoModule,
+  nix-update-script,
   copyDesktopItems,
   makeDesktopItem,
   cmake,
@@ -114,6 +115,12 @@ stdenv.mkDerivation (finalAttrs: {
       ];
     })
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+
+    goModules = finalAttrs.ipatool-go-modules;
+  };
 
   meta = {
     homepage = "https://github.com/iDescriptor/iDescriptor";
