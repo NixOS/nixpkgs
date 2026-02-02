@@ -3,6 +3,8 @@
   stdenv,
   fetchurl,
   fetchpatch2,
+  autoreconfHook,
+  pkg-config,
   perl,
   zlib,
   apr,
@@ -62,6 +64,8 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
     perl
     which
   ];
@@ -75,13 +79,16 @@ stdenv.mkDerivation rec {
   ++ lib.optional sslSupport openssl
   ++ lib.optional ldapSupport openldap
   # there is no --with-ldap flag
+  ++ lib.optional luaSupport lua5
   ++ lib.optional libxml2Support libxml2
   ++ lib.optional http2Support nghttp2
   ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   postPatch = ''
     sed -i config.layout -e "s|installbuilddir:.*|installbuilddir: $dev/share/build|"
-    sed -i configure -e 's|perlbin=.*|perlbin="/usr/bin/env perl"|'
+    sed -i configure.in \
+      -e 's|AC_PATH_PROG|AC_PATH_TOOL|' \
+      -e 's|perlbin=.*|perlbin="/usr/bin/env perl"|'
     sed -i support/apachectl.in -e 's|@LYNX_PATH@|${lynx}/bin/lynx|'
   '';
 
@@ -101,19 +108,13 @@ stdenv.mkDerivation rec {
     "--enable-imagemap"
     "--enable-cgi"
     "--includedir=${placeholder "dev"}/include"
+    "--docdir=$(doc)/share/doc"
     (lib.enableFeature proxySupport "proxy")
     (lib.enableFeature sslSupport "ssl")
     (lib.withFeatureAs libxml2Support "libxml2" "${libxml2.dev}/include/libxml2")
-    "--docdir=$(doc)/share/doc"
-
     (lib.enableFeature brotliSupport "brotli")
-    (lib.withFeatureAs brotliSupport "brotli" brotli)
-
     (lib.enableFeature http2Support "http2")
-    (lib.withFeature http2Support "nghttp2")
-
     (lib.enableFeature luaSupport "lua")
-    (lib.withFeatureAs luaSupport "lua" lua5)
   ]
   ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     # skip bad config check when cross compiling
