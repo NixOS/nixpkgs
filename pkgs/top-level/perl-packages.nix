@@ -6135,6 +6135,30 @@ with self;
     };
   };
 
+  ConfigScoped = buildPerlModule rec {
+    pname = "Config-Scoped";
+    version = "0.22";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/G/GA/GAISSMAI/Config-Scoped-${version}.tar.gz";
+      hash = "sha256-NQ2MdJJ2EwJNA0N0KPHs7bJ3Yq05PQ5yC3wDz6uBgSs=";
+    };
+    propagatedBuildInputs = [
+      Error
+      ParseRecDescent
+    ];
+    meta = {
+      description = "Feature-rich configuration file parser";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+      maintainers = with lib.maintainers; [
+        de11n
+        despsyched
+      ];
+    };
+  };
+
   ConfigStd = buildPerlModule {
     pname = "Config-Std";
     version = "0.903";
