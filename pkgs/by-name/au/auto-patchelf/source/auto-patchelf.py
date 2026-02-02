@@ -190,7 +190,7 @@ def populate_cache(initial: list[Path], recursive: bool =False) -> None:
                     rpath = [Path(p) for p in get_rpath(elf)
                                      if p and '$ORIGIN' not in p]
                     lib_dirs += rpath
-                    soname_cache[(path.name, arch)].append((resolved.parent, osabi))
+                    soname_cache[(path.name, arch)].append((resolved, osabi))
 
             except ELFError:
                 # Not an ELF file in the right format
@@ -295,6 +295,7 @@ def auto_patchelf_file(path: Path, runtime_deps: list[Path], append_rpaths: list
     # failing at the first one, because it's more useful when working
     # on a new package where you don't yet know the dependencies.
     for dep in file_dependencies:
+        found_dependency = None
         was_found = False
         for candidate in dep:
 
@@ -327,14 +328,15 @@ def auto_patchelf_file(path: Path, runtime_deps: list[Path], append_rpaths: list
             is_libc = (libc_lib / candidate).is_file()
 
             if candidate.is_absolute() and candidate.is_file():
+                found_dependency = candidate
                 was_found = True
                 break
             elif is_libc and not keep_libc:
                 was_found = True
                 break
             elif found_dependency := find_dependency(candidate.name, file_arch, file_osabi):
-                origin_rpath_entry = find_first_matching_rpath_with_origin(path, found_dependency, existing_rpaths) if preserve_origin else None
-                rpath.append(origin_rpath_entry or found_dependency)
+                origin_rpath_entry = find_first_matching_rpath_with_origin(path, found_dependency.parent, existing_rpaths) if preserve_origin else None
+                rpath.append(origin_rpath_entry or found_dependency.parent)
                 dependencies.append(Dependency(path, candidate, found=True))
                 print(f"    {candidate} -> found: {found_dependency}")
                 was_found = True
@@ -342,6 +344,16 @@ def auto_patchelf_file(path: Path, runtime_deps: list[Path], append_rpaths: list
             elif is_libc and keep_libc:
                 was_found = True
                 break
+
+        # dlopen() on musl libc searches only the executable's rpath, so its
+        # dependency set must include all transitively dlopened dependencies
+        if file_is_dynamic_executable and found_dependency:
+            try:
+                with open_elf(found_dependency) as elf:
+                    file_dependencies += get_dlopen_dependencies(elf)
+            except ELFError:
+                print(f"expected {found_dependency} to be a shared library")
+                pass
 
         if not was_found:
             dep_name = dep[0] if len(dep) == 1 else f"any({', '.join(map(str, dep))})"
