@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "aiobafi6";
-  version = "0.10.0";
+  version = "0.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jfroy";
     repo = "aiobafi6";
     tag = version;
-    hash = "sha256-7NIpIRVs6PFPByrGfVDA6P7JTvXGrzbH/lOPdPfZH04=";
+    hash = "sha256-EXLMrZobSICAmWPREjx5D8boj/S/3AH5+lsWQlTCl1g=";
   };
 
   build-system = [ poetry-core ];
