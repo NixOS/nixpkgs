@@ -108,7 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests.redis = nixosTests.redis;
+    tests.valkey = nixosTests.valkey;
     serverBin = "valkey-server";
   };
 
