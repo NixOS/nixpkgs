@@ -15,7 +15,7 @@
 
 let
   executableName = "vikunja-desktop";
-  version = "0.24.6";
+  version = "1.0.0";
   src = fetchFromGitHub {
     owner = "go-vikunja";
     repo = "vikunja";
