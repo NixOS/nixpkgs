@@ -26520,6 +26520,26 @@ with self;
     };
   };
 
+  ObjectDestroyer = buildPerlPackage rec {
+    pname = "Object-Destroyer";
+    version = "2.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SI/SIMBABQUE/Object-Destroyer-${version}.tar.gz";
+      hash = "sha256-3BnVFtVuiYc9H3TSoCm+ixQ8zT1AinwcL+7angkVfYo=";
+    };
+    meta = {
+      description = "Make objects with circular references DESTROY normally";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+      maintainers = with lib.maintainers; [
+        de11n
+        despsyched
+      ];
+    };
+  };
+
   ObjectEvent = buildPerlPackage rec {
     pname = "Object-Event";
     version = "1.23";
