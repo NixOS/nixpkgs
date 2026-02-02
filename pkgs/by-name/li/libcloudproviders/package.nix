@@ -7,8 +7,7 @@
   pkg-config,
   gobject-introspection,
   vala,
-  gtk-doc,
-  docbook_xsl,
+  gi-docgen,
   glib,
   mesonEmulatorHook,
   gnome,
@@ -18,11 +17,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libcloudproviders";
-  version = "0.3.6";
+  version = "0.4.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/libcloudproviders/${lib.versions.majorMinor finalAttrs.version}/libcloudproviders-${finalAttrs.version}.tar.xz";
-    hash = "sha256-O3URCzpP3vTFxaRA5IcB/gVNKuBh0VbIkTa7W6BedLc=";
+    hash = "sha256-JHsijRAnsmg4aOfXCA04aTpFfpCKrdDBGdUt5Zo5gGQ=";
   };
 
   outputs = [
@@ -32,24 +31,35 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
-    "-Denable-gtk-doc=true"
+    "-Ddocumentation=true"
   ];
 
   strictDeps = true;
+
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
     gobject-introspection
     vala
-    gtk-doc
-    docbook_xsl
+    gi-docgen
   ]
   ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     mesonEmulatorHook
   ];
 
-  buildInputs = [ glib ];
+  buildInputs = [
+    glib
+  ];
+
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
+  '';
 
   passthru = {
     updateScript = gnome.updateScript {

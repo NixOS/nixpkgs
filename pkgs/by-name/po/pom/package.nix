@@ -28,7 +28,6 @@ buildGoModule rec {
     homepage = "https://github.com/maaslalani/pom";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      maaslalani
       redyf
     ];
     mainProgram = "pom";

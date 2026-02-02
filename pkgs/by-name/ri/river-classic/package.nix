@@ -2,7 +2,7 @@
   lib,
   stdenv,
   callPackage,
-  fetchFromGitea,
+  fetchFromCodeberg,
   libGL,
   libX11,
   libevdev,
@@ -29,8 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [ "out" ] ++ lib.optionals withManpages [ "man" ];
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "river";
     repo = "river-classic";
     hash = "sha256-UhWA7jmBDhktHqHds06C0GY+xzlQZZezYopsLmIAGgI=";

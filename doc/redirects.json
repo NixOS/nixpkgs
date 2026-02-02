@@ -2671,6 +2671,9 @@
   "dont-tauri-build": [
     "index.html#dont-tauri-build"
   ],
+  "dont-tauri-fixup": [
+    "index.html#dont-tauri-fixup"
+  ],
   "dont-tauri-install": [
     "index.html#dont-tauri-install"
   ],

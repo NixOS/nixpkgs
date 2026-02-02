@@ -60,6 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm 0755 screenfetch-dev $out/bin/screenfetch
     install -Dm 0644 screenfetch.1 $out/share/man/man1/screenfetch.1
     install -Dm 0644 -t $out/share/doc/screenfetch CHANGELOG COPYING README.mkdn TODO
@@ -68,7 +70,15 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs $out/bin/screenfetch
     wrapProgram "$out/bin/screenfetch" \
       --prefix PATH : ${path}
+
+    runHook postInstall
   '';
+
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
 
   meta = {
     description = "Fetches system/theme information in terminal for Linux desktop screenshots";

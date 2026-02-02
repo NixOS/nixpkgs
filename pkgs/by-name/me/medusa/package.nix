@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "jmk-foofus";
     repo = "medusa";
     tag = finalAttrs.version;
-    hash = "sha256-devirQMmS8mtxT5H5XafRRvCyfcvwoWxtTp0V1SJeSM=";
+    hash = "sha256-ftn5RBE3NYfjXLq8Gm92sbFW+M925BDuL/VmwfPYXpo=";
   };
 
   outputs = [

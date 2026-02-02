@@ -51,6 +51,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [ "--enable-compat-symlinks" ];
 
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
+
   nativeCheckInputs = [ xxd ];
   doCheck = true;
 

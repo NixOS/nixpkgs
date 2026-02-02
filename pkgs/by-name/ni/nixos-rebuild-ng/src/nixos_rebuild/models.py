@@ -150,8 +150,8 @@ class GroupedNixArgs:
     build_flags: Args
     common_flags: Args
     copy_flags: Args
+    flake_eval_flags: Args
     flake_build_flags: Args
-    flake_common_flags: Args
 
     @classmethod
     def from_parsed_args_groups(cls, args_groups: dict[str, Namespace]) -> Self:
@@ -159,6 +159,7 @@ class GroupedNixArgs:
         common_build_flags = common_flags | vars(args_groups["common_build_flags"])
         build_flags = common_build_flags | vars(args_groups["classic_build_flags"])
         flake_common_flags = common_flags | vars(args_groups["flake_common_flags"])
+        flake_eval_flags = vars(args_groups["flake_eval_flags"])
         flake_build_flags = common_build_flags | flake_common_flags
         copy_flags = common_flags | vars(args_groups["copy_flags"])
         # --no-build-output -> --no-link
@@ -169,8 +170,8 @@ class GroupedNixArgs:
             build_flags=build_flags,
             common_flags=common_flags,
             copy_flags=copy_flags,
+            flake_eval_flags=flake_eval_flags,
             flake_build_flags=flake_build_flags,
-            flake_common_flags=flake_common_flags,
         )
 
 

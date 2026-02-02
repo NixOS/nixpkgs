@@ -6,7 +6,7 @@
   Cabal-syntax,
   containers,
   directory,
-  fetchFromGitea,
+  fetchFromCodeberg,
   filepath,
   generic-lens-lite,
   lib,
@@ -20,8 +20,7 @@
 mkDerivation rec {
   pname = "changelog-d";
   version = "1.0.2";
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "fgaz";
     repo = "changelog-d";
     rev = "v${version}";

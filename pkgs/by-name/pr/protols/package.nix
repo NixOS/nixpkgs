@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "protols";
-  version = "0.13.1";
+  version = "0.13.2";
 
   src = fetchFromGitHub {
     owner = "coder3101";
     repo = "protols";
     tag = version;
-    hash = "sha256-ZvQC7huJS37cgmAVZoiHZMjFWTdma7dueTczaKDdHks=";
+    hash = "sha256-kPYCvkPVxWDNgYpieDMIwvM7Q/HWKu0hNbKW1K5jo+Y=";
   };
 
-  cargoHash = "sha256-q3GMizdBupQSMVCuRqLjuw0Mof1q3UYOdUBugmrTDMU=";
+  cargoHash = "sha256-TIzPXQm9SPi1H+KpZuoLag1C90skMiKQvTwXVt6jy+0=";
 
   env.FALLBACK_INCLUDE_PATH = "${protobuf}/include";
 

@@ -1,12 +1,12 @@
 {
   "desktop_webview_window": "sha256-kkBPJvPVAChzk9eDL5xwZvonWobChW0C5dGQYTlQ8qA=",
-  "media_kit": "sha256-jMfpfakselaBaQ6wxoHObTvclVPJg1WF3hbup+WdzLE=",
-  "media_kit_libs_android_video": "sha256-jMfpfakselaBaQ6wxoHObTvclVPJg1WF3hbup+WdzLE=",
-  "media_kit_libs_ios_video": "sha256-jMfpfakselaBaQ6wxoHObTvclVPJg1WF3hbup+WdzLE=",
-  "media_kit_libs_linux": "sha256-jMfpfakselaBaQ6wxoHObTvclVPJg1WF3hbup+WdzLE=",
-  "media_kit_libs_macos_video": "sha256-jMfpfakselaBaQ6wxoHObTvclVPJg1WF3hbup+WdzLE=",
-  "media_kit_libs_video": "sha256-jMfpfakselaBaQ6wxoHObTvclVPJg1WF3hbup+WdzLE=",
-  "media_kit_libs_windows_video": "sha256-jMfpfakselaBaQ6wxoHObTvclVPJg1WF3hbup+WdzLE=",
-  "media_kit_video": "sha256-jMfpfakselaBaQ6wxoHObTvclVPJg1WF3hbup+WdzLE=",
+  "media_kit": "sha256-Az58j17UwEKYrxpJGlswhxMTEkO573xFsEijH0Od3v4=",
+  "media_kit_libs_android_video": "sha256-Az58j17UwEKYrxpJGlswhxMTEkO573xFsEijH0Od3v4=",
+  "media_kit_libs_ios_video": "sha256-Az58j17UwEKYrxpJGlswhxMTEkO573xFsEijH0Od3v4=",
+  "media_kit_libs_linux": "sha256-Az58j17UwEKYrxpJGlswhxMTEkO573xFsEijH0Od3v4=",
+  "media_kit_libs_macos_video": "sha256-Az58j17UwEKYrxpJGlswhxMTEkO573xFsEijH0Od3v4=",
+  "media_kit_libs_video": "sha256-Az58j17UwEKYrxpJGlswhxMTEkO573xFsEijH0Od3v4=",
+  "media_kit_libs_windows_video": "sha256-Az58j17UwEKYrxpJGlswhxMTEkO573xFsEijH0Od3v4=",
+  "media_kit_video": "sha256-Az58j17UwEKYrxpJGlswhxMTEkO573xFsEijH0Od3v4=",
   "webview_windows": "sha256-pDnCv8tkeeaodMcNggHOyvPPkoCfd0hvopTg1Uvx0sM="
 }

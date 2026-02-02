@@ -1,6 +1,6 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchFromGitHub,
   qmake,
   pkg-config,
@@ -19,7 +19,7 @@
   mpv-unwrapped,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "anilibria-winmaclinux";
   version = "2.2.32";
 

@@ -39,26 +39,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "lerobot";
-  version = "0.4.2";
+  version = "0.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "lerobot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qBbXFvVQ+cESBrNy8NIoT6GR6dqzeLbRNe3JmcpiiTw=";
+    hash = "sha256-3z8gyK9bx5GpFXM/kLbxume/e8F2U84yUTUhmn57mLs=";
   };
-
-  # ValueError: mutable default <class 'lerobot.configs.types.PolicyFeature'> for field value is not allowed: use default_factory
-  postPatch = ''
-    substituteInPlace tests/processor/test_pipeline.py \
-      --replace-fail \
-        "from dataclasses import dataclass" \
-        "from dataclasses import dataclass, field" \
-      --replace-fail \
-        "value: PolicyFeature = PolicyFeature(type=FeatureType.STATE, shape=(1,))" \
-        "value: PolicyFeature = field(default_factory=lambda: PolicyFeature(type=FeatureType.STATE, shape=(1,)))"
-  '';
 
   build-system = [
     cmake
@@ -68,6 +57,7 @@ buildPythonPackage (finalAttrs: {
 
   pythonRelaxDeps = [
     "av"
+    "datasets"
     "draccus"
     "gymnasium"
     "rerun-sdk"
@@ -123,6 +113,8 @@ buildPythonPackage (finalAttrs: {
     # Require internet access
     "test_act_backbone_lr"
     "test_backward_compatibility"
+    "test_convert_image_to_video_dataset"
+    "test_convert_image_to_video_dataset_subset_episodes"
     "test_dataset_initialization"
     "test_factory"
     "test_from_pretrained_nonexistent_path"

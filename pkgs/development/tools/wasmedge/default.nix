@@ -24,13 +24,13 @@ let
 in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "wasmedge";
-  version = "0.15.0";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "WasmEdge";
     repo = "WasmEdge";
     rev = finalAttrs.version;
-    sha256 = "sha256-P4syb8v3EY/tHwG8FOvR+kgMew/nwG+pG2weN6172go=";
+    sha256 = "sha256-h98gjBITAYpD6pdrlgfOC0cAYdJA6i9fWdD0bMsuEK4=";
   };
 
   nativeBuildInputs = [

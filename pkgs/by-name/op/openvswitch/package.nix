@@ -52,6 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
     ./patches/disable-bash-arg-completion-test.patch
   ];
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     autoconf
     automake
@@ -129,6 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     iproute2
+    openssl
   ]
   ++ (with python3.pkgs; [
     netaddr

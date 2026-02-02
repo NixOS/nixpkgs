@@ -23,7 +23,6 @@
   wayland-protocols,
   glew,
   qt6,
-  mesa,
   alsa-lib,
   sdl3,
   iniparser,
@@ -35,7 +34,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
-  name = "isle-portable";
+  pname = "isle-portable";
   version = "0-unstable-2025-11-15";
 
   src = fetchFromGitHub {
@@ -81,7 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     wayland-protocols
     glew
-    mesa
     alsa-lib
   ];
 

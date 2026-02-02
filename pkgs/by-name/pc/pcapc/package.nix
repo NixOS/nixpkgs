@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   libpcap,
 }:
 
@@ -9,8 +9,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "pcapc";
   version = "1.0.1";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "post-factum";
     repo = "pcapc";
     rev = "v${finalAttrs.version}";

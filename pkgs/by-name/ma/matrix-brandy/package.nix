@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "matrix-brandy";
-  version = "1.23.5";
+  version = "1.23.6";
 
   src = fetchFromGitHub {
     owner = "stardot";
     repo = "MatrixBrandy";
     rev = "V${finalAttrs.version}";
-    hash = "sha256-sMgYgV4/vV1x5xSICXRpW6K8uCdVlJrS7iEg6XzQRo8=";
+    hash = "sha256-Cyr3nfX8JHf8udTMQKTHy4sNVkSRjtScye6yUffLXHI=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isDarwin [ ./no-lrt.patch ];

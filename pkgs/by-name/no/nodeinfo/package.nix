@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   buildGoModule,
 }:
 buildGoModule rec {
@@ -8,8 +8,7 @@ buildGoModule rec {
   version = "1.0.0";
   vendorHash = "sha256-P0klk3YWa2qprCUNUjiuF+Akxh246WCu4vwUAZmSDCw=";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "thefederationinfo";
     repo = "nodeinfo-go";
     tag = "v${version}";

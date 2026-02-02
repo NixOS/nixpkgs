@@ -78,7 +78,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoBuildFlags = [
-    "--package lighthouse"
+    "--package"
+    "lighthouse"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -88,15 +89,15 @@ rustPlatform.buildRustPackage rec {
   # All of these tests require network access and/or docker
   cargoTestFlags = [
     "--workspace"
-    "--exclude beacon_chain"
-    "--exclude beacon_node"
-    "--exclude http_api"
-    "--exclude lighthouse"
-    "--exclude lighthouse_network"
-    "--exclude network"
-    "--exclude slashing_protection"
-    "--exclude watch"
-    "--exclude web3signer_tests"
+    "--exclude=beacon_chain"
+    "--exclude=beacon_node"
+    "--exclude=http_api"
+    "--exclude=lighthouse"
+    "--exclude=lighthouse_network"
+    "--exclude=network"
+    "--exclude=slashing_protection"
+    "--exclude=watch"
+    "--exclude=web3signer_tests"
   ];
 
   # All of these tests require network access

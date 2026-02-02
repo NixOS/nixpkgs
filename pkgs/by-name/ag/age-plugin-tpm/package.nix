@@ -4,20 +4,19 @@
   buildGoModule,
   fetchFromGitHub,
   nixosTests,
-  swtpm,
   openssl,
   age,
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "age-plugin-tpm";
   version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "Foxboron";
     repo = "age-plugin-tpm";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-1BHVQY8ZexwdjchQiG8aQMEPukq/3ez+QYY1X67DgPc=";
   };
 
@@ -27,9 +26,9 @@ buildGoModule rec {
 
   nativeCheckInputs = [
     age
-    swtpm
   ];
   nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   buildInputs = [
     openssl
@@ -38,7 +37,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   passthru.tests = {
@@ -50,10 +49,11 @@ buildGoModule rec {
     description = "TPM 2.0 plugin for age (This software is experimental, use it at your own risk)";
     mainProgram = "age-plugin-tpm";
     homepage = "https://github.com/Foxboron/age-plugin-tpm";
+    changelog = "https://github.com/Foxboron/age-plugin-tpm/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
       sgo
     ];
   };
-}
+})

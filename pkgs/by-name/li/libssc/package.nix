@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   meson,
   ninja,
   glib,
@@ -15,8 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "libssc";
   version = "0.2.2";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "DylanVanAssche";
     repo = "libssc";
     tag = "v${finalAttrs.version}";

@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   pkg-config,
   meson,
   ninja,
@@ -35,8 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "fcft";
   version = "3.3.3";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "dnkl";
     repo = "fcft";
     rev = finalAttrs.version;

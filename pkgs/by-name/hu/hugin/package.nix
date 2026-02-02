@@ -30,7 +30,8 @@
   sqlite,
   vigra,
   wrapGAppsHook3,
-  wxGTK,
+  wxGTK32,
+  wxGTK' ? wxGTK32,
   zlib,
 }:
 
@@ -65,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     panotools
     sqlite
     vigra
-    wxGTK
+    wxGTK'
     zlib
   ];
 
@@ -74,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     pkg-config
     wrapGAppsHook3
-    wxGTK
+    wxGTK'
   ];
 
   strictDeps = true;

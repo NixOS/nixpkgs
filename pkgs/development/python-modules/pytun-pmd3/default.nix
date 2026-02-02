@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pytun-pmd3";
-  version = "3.0.2";
+  version = "3.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "doronz88";
     repo = "pytun-pmd3";
     tag = "v${version}";
-    hash = "sha256-3x+z+O6isgVRbPK+INfG5nG/+Tb2CWvPHg4TosH91so=";
+    hash = "sha256-7kkQB+3MFq283JI2lbEBmpuV0S4KADibgIRBJWVp5Ug=";
   };
 
   build-system = [

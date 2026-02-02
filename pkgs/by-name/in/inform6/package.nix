@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "inform6";
-  version = "6.42-r9";
+  version = "6.44-r3";
 
   src = fetchurl {
     url = "https://ifarchive.org/if-archive/infocom/compilers/inform6/source/inform-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-aHYjqjdISnyUxtruDDWD0cHEOxBpvm3+TfNxtGofezQ=";
+    hash = "sha256-NVO1bvDRdQowkkr6tBhDYzu7yLPd47XaTOXBivGJplk=";
   };
 
   buildInputs = [ perl ];

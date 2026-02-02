@@ -7,7 +7,7 @@
   gitUpdater,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
-  name = "xpra-html5";
+  pname = "xpra-html5";
   version = "17.1";
 
   src = fetchFromGitHub {

@@ -20,7 +20,6 @@
   nghttp2,
   openjpeg,
   libcaca,
-  mesa,
   mesa_glu,
   xvidcore,
   openssl,
@@ -113,7 +112,6 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libxv
     xorgproto
-    mesa
     mesa_glu
     xvidcore
     openssl

@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   rustPlatform,
   dbus,
   networkmanager,
@@ -11,8 +11,7 @@ rustPlatform.buildRustPackage rec {
   pname = "nm-file-secret-agent";
   version = "1.2.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "lilly";
     repo = "nm-file-secret-agent";
     rev = "v${version}";

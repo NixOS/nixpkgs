@@ -12748,6 +12748,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  org-notebook-nvim = buildVimPlugin {
+    pname = "org-notebook.nvim";
+    version = "0-unstable-2025-12-18";
+    src = fetchFromGitHub {
+      owner = "bitbloxhub";
+      repo = "org-notebook.nvim";
+      rev = "fd381c5381930c773ef99d1ff11d0f77dc409f65";
+      hash = "sha256-O1AwDqi2SdmycDHe1wWBeo5dEMPmYlFDjZJBSCCf3fM=";
+    };
+    meta.homepage = "https://github.com/bitbloxhub/org-notebook.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   org-roam-nvim = buildVimPlugin {
     pname = "org-roam.nvim";
     version = "0.2.0-unstable-2025-12-15";

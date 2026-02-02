@@ -33,7 +33,7 @@
 }:
 
 let
-  version = "2024.1.3";
+  version = "2024.1.4";
   data = stdenv.mkDerivation rec {
     pname = "flightgear-data";
     inherit version;
@@ -42,7 +42,7 @@ let
       owner = "flightgear";
       repo = "fgdata";
       tag = version;
-      hash = "sha256-LNHO/W8p4b8fYcehdfVecldKQ9uJp1zlg60xdgDC45c=";
+      hash = "sha256-0cIOyQhw/+jqwO1OddBC09ZnvrmtyjSoMhcu1tuwx4k=";
     };
 
     dontUnpack = true;
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     owner = "flightgear";
     repo = "flightgear";
     tag = version;
-    hash = "sha256-m4bbWwMXwKJrMkb6svGrIZhcsPghrTMgFs8JCx3Wn/A=";
+    hash = "sha256-s897bsHsVP0OAcrwDVRTPz3YNJkynyErJpH18oLPl3Y=";
   };
 
   nativeBuildInputs = [
@@ -111,7 +111,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Flight simulator";
-    maintainers = with lib.maintainers; [ raskin ];
+    maintainers = with lib.maintainers; [
+      raskin
+      kirillrdy
+    ];
     platforms = lib.platforms.linux;
     hydraPlatforms = [ ]; # disabled from hydra because it's so big
     license = lib.licenses.gpl2Plus;

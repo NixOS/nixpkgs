@@ -62,6 +62,8 @@ buildGoModule (finalAttrs: {
       "TestVenvSuccess"
       "TestCacheDirEnvVar"
       "TestPatchWheel"
+      # Requires HOME to be set
+      "TestCacheDirEnvVar"
     ]);
 
   nativeCheckInputs = [

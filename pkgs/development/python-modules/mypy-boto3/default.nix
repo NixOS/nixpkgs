@@ -335,8 +335,8 @@ in
       "sha256-HQUL0R1NWP6DXQ26iS9k6lIAVdwK899fwLGH4/Z4U8Q=";
 
   mypy-boto3-connect =
-    buildMypyBoto3Package "connect" "1.42.37"
-      "sha256-LoZkeyFIr8U3OnFc2ay/731aS86kGEPZqwQr9DjTZt0=";
+    buildMypyBoto3Package "connect" "1.42.39"
+      "sha256-KfkfCa5Kwz8v13mVdP5n5VIL5g2u2VUQdJ4Dxw8JIFU=";
 
   mypy-boto3-connect-contact-lens =
     buildMypyBoto3Package "connect-contact-lens" "1.42.3"
@@ -1070,8 +1070,8 @@ in
       "sha256-YrrEKl3aGz//5Z5JGapHhWtk6hBXQ4cuRQmLqGYztzg=";
 
   mypy-boto3-quicksight =
-    buildMypyBoto3Package "quicksight" "1.42.32"
-      "sha256-HwzkZUZBuCfDa8EYrn+A+sm2qkgQktgeR7j4k3waFds=";
+    buildMypyBoto3Package "quicksight" "1.42.39"
+      "sha256-q7GExVZQ4fHaCZ/xcFKUg09DH079zesCaqFB9KMr+eI=";
 
   mypy-boto3-ram =
     buildMypyBoto3Package "ram" "1.42.3"

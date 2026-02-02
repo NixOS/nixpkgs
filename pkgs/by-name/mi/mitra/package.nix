@@ -2,7 +2,7 @@
   lib,
   stdenv,
   rustPlatform,
-  fetchFromGitea,
+  fetchFromCodeberg,
   installShellFiles,
 }:
 
@@ -10,8 +10,7 @@ rustPlatform.buildRustPackage rec {
   pname = "mitra";
   version = "4.16.1";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "silverpill";
     repo = "mitra";
     rev = "v${version}";

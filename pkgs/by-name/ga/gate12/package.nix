@@ -16,6 +16,9 @@
   libXrandr,
   libXtst,
   writableTmpDirAsHomeHook,
+
+  buildVST3 ? true,
+  buildLV2 ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -56,7 +59,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "COPY_PLUGIN_AFTER_BUILD" false)
-    (lib.cmakeFeature "BUILD_STANDALONE" "OFF")
+
+    (lib.cmakeBool "BUILD_STANDALONE" false)
+    (lib.cmakeBool "BUILD_VST3" buildVST3)
+    (lib.cmakeBool "BUILD_LV2" buildLV2)
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DCMAKE_OSX_ARCHITECTURES=${stdenv.hostPlatform.darwinArch}"
@@ -76,10 +82,17 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/lib/vst3 $out/lib/lv2
+    pushd GATE12_artefacts/Release
+      ${lib.optionalString buildVST3 ''
+        mkdir -p $out/lib/vst3
+        cp -r VST3/GATE-12.vst3 $out/lib/vst3
+      ''}
 
-    cp -r "GATE12_artefacts/Release/LV2/GATE-12.lv2" $out/lib/lv2
-    cp -r "GATE12_artefacts/Release/VST3/GATE-12.vst3" $out/lib/vst3
+      ${lib.optionalString buildLV2 ''
+        mkdir -p $out/lib/lv2
+        cp -r LV2/GATE-12.lv2 $out/lib/lv2
+      ''}
+    popd
 
     runHook postInstall
   '';
@@ -89,7 +102,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/tiagolr/gate12";
     changelog = "https://github.com/tiagolr/gate12/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ magnetophon ];
+    maintainers = with lib.maintainers; [
+      magnetophon
+      mrtnvgr
+    ];
     platforms = lib.platforms.all;
   };
 })

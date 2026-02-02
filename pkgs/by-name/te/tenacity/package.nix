@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   cmake,
   ninja,
   wxGTK32,
@@ -52,8 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "tenacity";
   version = "1.3.4";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "tenacityteam";
     repo = "tenacity";
     fetchSubmodules = true;

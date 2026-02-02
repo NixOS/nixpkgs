@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-HG0HZes01shEtuVK7QCYmy/zsU0snbwsqCtev7u3/WI=";
 
   # For aws-lc-sys@0.22.0: use external bindgen.
-  AWS_LC_SYS_EXTERNAL_BINDGEN = "true";
+  env.AWS_LC_SYS_EXTERNAL_BINDGEN = "true";
 
   # For aws-lc-sys@0.22.0: fix gcc error:
   # In function 'memcpy',

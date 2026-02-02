@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   qt5,
   appstream,
   fetchFromGitHub,
@@ -9,7 +10,7 @@
   docbook_xsl,
 }:
 
-qt5.mkDerivation rec {
+stdenv.mkDerivation rec {
   version = "20.0";
   pname = "pentobi";
 
@@ -24,6 +25,7 @@ qt5.mkDerivation rec {
     cmake
     docbook_xsl
     qt5.qttools
+    qt5.wrapQtAppsHook
   ];
   buildInputs = [
     appstream

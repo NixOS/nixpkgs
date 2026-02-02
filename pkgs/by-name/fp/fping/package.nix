@@ -18,6 +18,11 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-ipv4"
   ];
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   meta = {
     description = "Send ICMP echo probes to network hosts";
     homepage = "http://fping.org/";

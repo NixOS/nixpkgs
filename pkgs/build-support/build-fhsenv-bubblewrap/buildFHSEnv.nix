@@ -125,15 +125,16 @@ let
       unset NIX_ENFORCE_PURITY
       export NIX_BINTOOLS_WRAPPER_TARGET_HOST_${stdenv.cc.suffixSalt}=1
       export NIX_CC_WRAPPER_TARGET_HOST_${stdenv.cc.suffixSalt}=1
-      export NIX_CFLAGS_COMPILE='-idirafter /usr/include'
-      export NIX_CFLAGS_LINK='-L/usr/lib -L/usr/lib32'
-      export NIX_LDFLAGS='-L/usr/lib -L/usr/lib32'
-      export PKG_CONFIG_PATH=/usr/lib/pkgconfig
-      export ACLOCAL_PATH=/usr/share/aclocal
+      export NIX_CFLAGS_COMPILE="-idirafter /usr/include"''${NIX_CFLAGS_COMPILE:+" $NIX_CFLAGS_COMPILE"}
+      export NIX_CFLAGS_LINK="-L/usr/lib -L/usr/lib32"''${NIX_CFLAGS_LINK:+" $NIX_CFLAGS_LINK"}
+      export NIX_LDFLAGS="-L/usr/lib -L/usr/lib32"''${NIX_LDFLAGS:+" $NIX_LDFLAGS"}
+      export PKG_CONFIG_PATH=/usr/lib/pkgconfig''${PKG_CONFIG_PATH:+":$PKG_CONFIG_PATH"}
+      export ACLOCAL_PATH=/usr/share/aclocal''${ACLOCAL_PATH:+":$ACLOCAL_PATH"}
 
       # GStreamer searches for plugins relative to its real binary's location
       # https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/bd97973ce0f2c5495bcda5cccd4f7ef7dcb7febc
-      export GST_PLUGIN_SYSTEM_PATH_1_0=/usr/lib/gstreamer-1.0:/usr/lib32/gstreamer-1.0
+      export GST_PLUGIN_SYSTEM_PATH_1_0=/usr/lib/gstreamer-1.0:/usr/lib32/gstreamer-1.0''${GST_PLUGIN_SYSTEM_PATH_1_0:+":$GST_PLUGIN_SYSTEM_PATH_1_0"}
+
 
       ${profile}
     '';
