@@ -6,17 +6,18 @@
   dotnetCorePackages,
   openssl,
   mono,
+  nix-update-script,
   nixosTests,
 }:
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "jackett";
   version = "0.24.1066";
 
   src = fetchFromGitHub {
     owner = "jackett";
     repo = "jackett";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-o0Mu5+m6+2iVRIJ8OIlUDNUY9h3qKn1hOsSA1JYd71o=";
   };
 
@@ -32,7 +33,7 @@ buildDotnetModule rec {
   ];
 
   postPatch = ''
-    substituteInPlace ${projectFile} ${testProjectFile} \
+    substituteInPlace ${finalAttrs.projectFile} ${finalAttrs.testProjectFile} \
       --replace-fail '<TargetFrameworks>net9.0;net471</' '<TargetFrameworks>net9.0</'
   '';
 
@@ -49,15 +50,17 @@ buildDotnetModule rec {
     ln -s $out/bin/jackett $out/bin/Jackett || :
     ln -s $out/bin/Jackett $out/bin/jackett || :
   '';
-  passthru.updateScript = ./updater.sh;
 
-  passthru.tests = { inherit (nixosTests) jackett; };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = { inherit (nixosTests) jackett; };
+  };
 
   meta = {
     description = "API Support for your favorite torrent trackers";
     mainProgram = "jackett";
     homepage = "https://github.com/Jackett/Jackett/";
-    changelog = "https://github.com/Jackett/Jackett/releases/tag/v${version}";
+    changelog = "https://github.com/Jackett/Jackett/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       edwtjo
@@ -65,4 +68,4 @@ buildDotnetModule rec {
       purcell
     ];
   };
-}
+})
