@@ -109,9 +109,6 @@ in
       }
     ];
 
-    # TODO(arianvp): Remove after https://github.com/NixOS/nixpkgs/pull/480686 is merged
-    console.enable = true;
-
     virtualisation.systemd-nspawn.options = [
       "--private-network"
       "--machine=${config.system.name}"
