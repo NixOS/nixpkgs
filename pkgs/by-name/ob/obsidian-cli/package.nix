@@ -1,25 +1,27 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, testers }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "obsidian-cli";
   version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "Yakitrak";
     repo = "obsidian-cli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-H7Nm+QwpAD5K1Ltl4irvSI/z3Ct7g3rh2w0Rbka7LwE=";
   };
 
-  vendorHash = null;          # repo includes vendor/
-  subPackages = [ "." ];      # change to [ "cmd/obsidian-cli" ] if needed
+  vendorHash = null;
+  subPackages = [ "." ];
 
-  meta = with lib; {
+  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+
+  meta = {
     description = "Interact with an Obsidian vault from the terminal";
     homepage = "https://github.com/Yakitrak/obsidian-cli";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "obsidian-cli";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
   };
-}
-
+})
