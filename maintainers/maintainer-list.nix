@@ -26663,6 +26663,12 @@
     githubId = 174156;
     name = "timor";
   };
+  timoschirmer = {
+    name = "Timo";
+    github = "timoschirmer";
+    githubId = 97628241;
+    email = "nix@timoschirmer.de";
+  };
   timput = {
     email = "tim@timput.com";
     github = "TimPut";
