@@ -17,6 +17,10 @@ buildDotnetModule rec {
     hash = "sha256-0hUc4f1avPfNDGAQDokLpRLK4sSrUFD5GkJZeP/Gu34=";
   };
 
+  patches = [
+    ./disable-auto-updates.patch
+  ];
+
   projectFile = "MelonLoader.Installer/MelonLoader.Installer.csproj";
   dotnet-sdk = dotnetCorePackages.sdk_9_0;
   dotnet-runtime = dotnetCorePackages.runtime_9_0;
