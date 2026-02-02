@@ -3713,7 +3713,6 @@ broken-packages:
   - levmar # failure in job https://hydra.nixos.org/build/233254731 at 2023-09-02
   - lfst # failure in job https://hydra.nixos.org/build/233240622 at 2023-09-02
   - lhc # failure in job https://hydra.nixos.org/build/233220731 at 2023-09-02
-  - lhs2tex # failure in job https://hydra.nixos.org/build/307520007 at 2025-09-19
   - lhs2TeX-hl # failure in job https://hydra.nixos.org/build/233221405 at 2023-09-02
   - lhslatex # failure in job https://hydra.nixos.org/build/233246375 at 2023-09-02
   - LibClang # failure in job https://hydra.nixos.org/build/233194732 at 2023-09-02
