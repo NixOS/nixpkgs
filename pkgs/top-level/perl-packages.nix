@@ -32379,6 +32379,27 @@ with self;
     };
   };
 
+  SysFilesystem = buildPerlPackage rec {
+    pname = "Sys-Filesystem";
+    version = "1.408";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RE/REHSACK/Sys-Filesystem-${version}.tar.gz";
+      hash = "sha256-V34RByuJfXGMI0GBpcBZ+NwEtl/ZVGXwsSkstjWXTZc=";
+    };
+    propagatedBuildInputs = [
+      ModulePluggable
+      ParamsUtil
+    ];
+    meta = {
+      description = "Retrieve list of filesystems and their properties";
+      license = lib.licenses.asl20;
+      maintainers = with lib.maintainers; [
+        de11n
+        despsyched
+      ];
+    };
+  };
+
   SysMmap = buildPerlPackage {
     pname = "Sys-Mmap";
     version = "0.20";
