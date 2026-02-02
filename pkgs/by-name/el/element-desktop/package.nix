@@ -18,6 +18,7 @@
   asar,
   copyDesktopItems,
   darwin,
+  apple-sdk_26,
 }:
 
 let
@@ -46,6 +47,10 @@ stdenv.mkDerivation (
     };
 
     env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+
+    buildInputs = [
+      apple-sdk_26
+    ];
 
     nativeBuildInputs = [
       asar
