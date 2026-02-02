@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -26,6 +27,8 @@ buildGoModule rec {
     "-w"
     "-extldflags -static"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Language for writing HTML user interfaces in Go";

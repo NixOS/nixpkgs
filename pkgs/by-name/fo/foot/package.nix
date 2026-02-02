@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   fetchurl,
   runCommand,
   fcft,
@@ -99,8 +99,7 @@ stdenv.mkDerivation {
   pname = "foot";
   inherit version;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "dnkl";
     repo = "foot";
     tag = version;

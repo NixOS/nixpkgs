@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  name = "ramfetch";
+  pname = "ramfetch";
   version = "1.1.0a";
 
   src = fetchgit {

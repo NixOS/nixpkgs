@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   qt5,
   fetchFromGitHub,
   fetchpatch,
@@ -21,7 +22,7 @@ let
   protobuf = protobuf_21;
 in
 
-qt5.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "pokerth-${target}";
   version = "1.1.2";
 

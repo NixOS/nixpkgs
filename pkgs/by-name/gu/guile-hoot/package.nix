@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   autoreconfHook,
   guile,
   pkg-config,
@@ -13,8 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "guile-hoot";
   version = "0.7.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "spritely";
     repo = "hoot";
     tag = "v${finalAttrs.version}";

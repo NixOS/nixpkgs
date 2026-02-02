@@ -692,7 +692,7 @@
   };
 
   org-nvim = {
-    version = "0-unstable-2023-06-19";
+    version = "1.3.1-unstable-2023-06-19";
     url = "github:emiasims/tree-sitter-org/64cfbc213f5a83da17632c95382a5a0a2f3357c1";
     hash = "sha256-/03eZBbv23W5s/GbDgPgaJV5TyK+/lrWUVeINRS5wtA=";
     meta = {

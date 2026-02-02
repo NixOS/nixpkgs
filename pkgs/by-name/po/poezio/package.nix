@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   pkg-config,
   python3,
 }:
@@ -10,8 +10,7 @@ python3.pkgs.buildPythonApplication rec {
   version = "0.14";
   pyproject = true;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "poezio";
     repo = "poezio";
     rev = "v${version}";

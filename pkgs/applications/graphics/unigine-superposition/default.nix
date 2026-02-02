@@ -20,7 +20,6 @@
   libXrender,
   autoPatchelfHook,
   makeWrapper,
-  mkDerivation,
   xkeyboard_config,
   fetchurl,
   buildFHSEnv,

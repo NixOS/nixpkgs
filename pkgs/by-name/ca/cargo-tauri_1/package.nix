@@ -46,7 +46,7 @@ cargo-tauri.overrideAttrs (
     };
 
     passthru = {
-      inherit (oldAttrs.passthru) hook;
+      inherit (oldAttrs.passthru) hook gst-plugin;
       tests = { inherit (oldAttrs.passthru.tests) version; };
     };
 

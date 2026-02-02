@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   hatchling,
@@ -35,26 +36,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langchain-mongodb";
-  version = "0.10.0";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-mongodb";
     tag = "libs/langchain-mongodb/v${finalAttrs.version}";
-    hash = "sha256-MRvj6RJ6N+u1wA+zkyWhe4tnGaC4FduPl+k7AhBIwLI=";
+    hash = "sha256-dO0dASjyNMxnbxZ/ry8lcJxedPdrv6coYiTjOcaT8/0=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libs/langchain-mongodb";
 
   build-system = [ hatchling ];
-
-  pythonRelaxDeps = [
-    # Each component release requests the exact latest core.
-    # That prevents us from updating individual components.
-    "langchain-core"
-    "numpy"
-  ];
 
   dependencies = [
     langchain
@@ -91,6 +85,10 @@ buildPythonPackage (finalAttrs: {
   pytestFlags = [
     # DeprecationWarning: 'asyncio.get_event_loop_policy' is deprecated
     "-Wignore::DeprecationWarning"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14
+    "-Wignore::UserWarning"
   ];
 
   pythonImportsCheck = [ "langchain_mongodb" ];

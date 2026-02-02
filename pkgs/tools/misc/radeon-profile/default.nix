@@ -1,20 +1,24 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
+  qmake,
+  wrapQtAppsHook,
   qtbase,
   qtcharts,
-  qmake,
   libXrandr,
   libdrm,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
 
   pname = "radeon-profile";
   version = "20200824";
 
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = [
+    qmake
+    wrapQtAppsHook
+  ];
   buildInputs = [
     qtbase
     qtcharts

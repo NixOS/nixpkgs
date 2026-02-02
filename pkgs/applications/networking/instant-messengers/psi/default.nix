@@ -1,9 +1,10 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   cmake,
   qtbase,
+  wrapQtAppsHook,
   qtmultimedia,
   qtx11extras,
   qttools,
@@ -14,7 +15,7 @@
   hunspell,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "psi";
   version = "1.5";
   src = fetchFromGitHub {
@@ -30,6 +31,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     qttools
+    wrapQtAppsHook
   ];
   buildInputs = [
     qtbase

@@ -1,5 +1,5 @@
 {
-  fetchFromGitea,
+  fetchFromCodeberg,
   fetchpatch,
   hareHook,
   lib,
@@ -11,8 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "hare-toml";
   version = "0.1.2";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "lunacb";
     repo = "hare-toml";
     rev = "v${finalAttrs.version}";

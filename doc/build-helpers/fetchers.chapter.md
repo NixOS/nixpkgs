@@ -855,9 +855,11 @@ Used with Mercurial. Expects `url`, `rev`, `hash`, overridable with [`<pkg>.over
 
 A number of fetcher functions wrap part of `fetchurl` and `fetchzip`. They are mainly convenience functions intended for commonly used destinations of source code in Nixpkgs. These wrapper fetchers are listed below.
 
-## `fetchFromGitea` {#fetchfromgitea}
+## `fetchFromGitea`, `fetchFromForgejo` and `fetchFromCodeberg` {#fetchfromgitea}
 
-`fetchFromGitea` expects five arguments. `domain` is the gitea server name. `owner` is a string corresponding to the Gitea user or organization that controls this repository. `repo` corresponds to the name of the software repository. These are located at the top of every Gitea HTML page as `owner`/`repo`. `rev` corresponds to the Git commit hash or tag (e.g `v1.0`) that will be downloaded from Git. Finally, `hash` corresponds to the hash of the extracted directory. Again, other hash algorithms are also available but `hash` is currently preferred.
+`fetchFromGitea`, also aliased to `fetchFromForgejo`, expects five arguments. `domain` is the Gitea/Forgejo server name. `owner` is a string corresponding to the user or organization that controls this repository. `repo` corresponds to the name of the software repository. These are located at the top of every Gitea/Forgejo HTML page as `owner`/`repo`. `rev` corresponds to the Git commit hash or tag (e.g `v1.0`) that will be downloaded from Git. Finally, `hash` corresponds to the hash of the extracted directory. Again, other hash algorithms are also available but `hash` is currently preferred.
+
+As <codeberg.org> is currently the most popular public Forgejo server, the `fetchFromCodeberg` fetcher is also available, which pre-fills the `domain` attribute.
 
 ## `fetchFromGitHub` {#fetchfromgithub}
 

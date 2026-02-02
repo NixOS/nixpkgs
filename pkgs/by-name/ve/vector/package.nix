@@ -83,40 +83,45 @@ rustPlatform.buildRustPackage (finalAttrs: {
   CARGO_PROFILE_RELEASE_LTO = "fat";
   CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
 
-  # TODO investigate compilation failure for tests
-  # there are about 100 tests failing (out of 1100) for version 0.22.0
-  doCheck = false;
+  doCheck = true;
+  checkType = "debug";
 
   checkFlags = [
-    # tries to make a network access
+    # Tries to make a network access
+    "--skip=dns::tests::resolve_example"
     "--skip=sinks::loki::tests::healthcheck_grafana_cloud"
 
-    # flaky on linux-aarch64
-    "--skip=kubernetes::api_watcher::tests::test_stream_errors"
+    # Requires secret server
+    "--skip=secrets::exec::tests::test_exec_backend::case_1"
+    "--skip=secrets::exec::tests::test_exec_backend::case_2"
+    "--skip=secrets::exec::tests::test_exec_backend_missing_secrets"
 
-    # flaky on linux-x86_64
-    "--skip=sources::socket::test::tcp_with_tls_intermediate_ca"
+    # Flakey
     "--skip=sources::host_metrics::cgroups::tests::generates_cgroups_metrics"
-    "--skip=sources::aws_kinesis_firehose::tests::aws_kinesis_firehose_forwards_events"
-    "--skip=sources::aws_kinesis_firehose::tests::aws_kinesis_firehose_forwards_events_gzip_request"
-    "--skip=sources::aws_kinesis_firehose::tests::handles_acknowledgement_failure"
-  ];
+    "--skip=sources::host_metrics::cpu::tests::generates_cpu_metrics"
+    "--skip=sources::internal_logs::tests::repeated_logs_are_not_rate_limited"
 
-  # recent overhauls of DNS support in 0.9 mean that we try to resolve
-  # vector.dev during the checkPhase, which obviously isn't going to work.
-  # these tests in the DNS module are trivial though, so stubbing them out is
-  # fine IMO.
-  #
-  # the geoip transform yields maxmindb.so which contains references to rustc.
-  # neither figured out why the shared object is included in the output
-  # (it doesn't seem to be a runtime dependencies of the geoip transform),
-  # nor do I know why it depends on rustc.
-  # However, in order for the closure size to stay at a reasonable level,
-  # transforms-geoip is patched out of Cargo.toml for now - unless explicitly asked for.
-  postPatch = ''
-    substituteInPlace ./src/dns.rs \
-      --replace-fail "#[tokio::test]" ""
-  '';
+    # Requires access to journalctl
+    "--skip=sources::journald::tests::emits_cursor"
+    "--skip=sources::journald::tests::excludes_matches"
+    "--skip=sources::journald::tests::excludes_units"
+    "--skip=sources::journald::tests::handles_acknowledgements"
+    "--skip=sources::journald::tests::handles_checkpoint"
+    "--skip=sources::journald::tests::handles_missing_timestamp"
+    "--skip=sources::journald::tests::includes_kernel"
+    "--skip=sources::journald::tests::includes_matches"
+    "--skip=sources::journald::tests::includes_units"
+    "--skip=sources::journald::tests::parses_array_fields"
+    "--skip=sources::journald::tests::parses_array_messages"
+    "--skip=sources::journald::tests::parses_string_sequences"
+    "--skip=sources::journald::tests::reads_journal"
+
+    # No multicast access avaiable in sandbox
+    "--skip=sources::socket::test::multicast_and_unicast_udp_message"
+    "--skip=sources::socket::test::multicast_udp_message"
+    "--skip=sources::socket::test::multiple_multicast_addresses_udp_message"
+    "--skip=sources::syslog::test::test_udp_syslog"
+  ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     for shell in bash fish zsh; do

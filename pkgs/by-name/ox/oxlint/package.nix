@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oxlint";
-  version = "1.41.0";
+  version = "1.42.0";
 
   src = fetchFromGitHub {
     owner = "oxc-project";
     repo = "oxc";
     tag = "oxlint_v${finalAttrs.version}";
-    hash = "sha256-/XLGvEut0TsFkq0U+evPOumjBYahEL29kjJ0u2iBkx8=";
+    hash = "sha256-EAM1DxA/TqnIRN5Tlvg5/jvbyOUtSuwQ4RCBeO9esCw=";
   };
 
-  cargoHash = "sha256-8Q94e9zZRdOMd7WVzS6kE31gBHCG8KC4SteaxnxDjHo=";
+  cargoHash = "sha256-okwkhcT6mekIvo52T8eSrXUcp/LQhcEYvHyIc5CLdrE=";
 
   nativeBuildInputs = [
     cmake

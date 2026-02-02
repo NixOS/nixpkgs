@@ -39,6 +39,11 @@ python3Packages.buildPythonApplication rec {
     runHook postInstall
   '';
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   meta = {
     homepage = "http://kassiopeia.juls.savba.sk/~garabik/software/grc.html";
     description = "Generic text colouriser";

@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "cagent";
-  version = "1.19.0";
+  version = "1.20.0";
 
   src = fetchFromGitHub {
     owner = "docker";
     repo = "cagent";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-J7IRlSsjXRDvbUKwnV2rrWnEmvqciJw3mN8NerQBtl4=";
+    hash = "sha256-HOQibgT9R7Ic1tGtgjSB+nSWKID6TD1Yt6tr37Voa7w=";
   };
 
-  vendorHash = "sha256-q7mP9JWJEdDbUO/3MHsJwiySNvN2SbhnhEbJArnCW3M=";
+  vendorHash = "sha256-8NXiIxaq+03+LrHFBaxZ4YFb0sqYikajgk5gYXTn3Rs=";
 
   # Disable tests: Networked model providers and writable cache directories are required.
   doCheck = false;

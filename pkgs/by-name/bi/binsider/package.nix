@@ -6,16 +6,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "binsider";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "binsider";
     rev = "v${version}";
-    hash = "sha256-ZfLFZXLnH5nBg/5ufOfwMG8c8n+BDex3j7da+Hvh1fw=";
+    hash = "sha256-Un3pKb0+5rwK0tKRp+HVl3vynPt5V8YxhPiLgshL3L0=";
   };
 
-  cargoHash = "sha256-HnJBeqZhzDT0XfZ5UDg+lWMaX8tP7Q4iXrAz84XM3QE=";
+  cargoHash = "sha256-Lcnc2fVyzip+g/mZvbMarQHkjBTNhKB5kZVTHFsR+Xo=";
 
   buildNoDefaultFeatures = !stdenv.hostPlatform.isLinux;
 

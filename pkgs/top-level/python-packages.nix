@@ -2014,6 +2014,8 @@ self: super: with self; {
 
   binsync = callPackage ../development/python-modules/binsync { };
 
+  binwalk3 = callPackage ../development/python-modules/binwalk3 { };
+
   biocframe = callPackage ../development/python-modules/biocframe { };
 
   biocutils = callPackage ../development/python-modules/biocutils { };
@@ -2415,8 +2417,6 @@ self: super: with self; {
   calver = callPackage ../development/python-modules/calver { };
 
   calysto = callPackage ../development/python-modules/calysto { };
-
-  calysto-scheme = callPackage ../development/python-modules/calysto-scheme { };
 
   camel-converter = callPackage ../development/python-modules/camel-converter { };
 
@@ -4570,7 +4570,7 @@ self: super: with self; {
 
   downloader-cli = callPackage ../development/python-modules/downloader-cli { };
 
-  doxmlparser = callPackage ../development/tools/documentation/doxygen/doxmlparser.nix { };
+  doxmlparser = callPackage ../development/python-modules/doxmlparser { };
 
   dparse = callPackage ../development/python-modules/dparse { };
 
@@ -6494,6 +6494,8 @@ self: super: with self; {
 
   gpib-ctypes = callPackage ../development/python-modules/gpib-ctypes { };
 
+  gpiodevice = callPackage ../development/python-modules/gpiodevice { };
+
   gpiozero = callPackage ../development/python-modules/gpiozero { };
 
   gprof2dot = callPackage ../development/python-modules/gprof2dot { inherit (pkgs) graphviz; };
@@ -7407,6 +7409,8 @@ self: super: with self; {
   inkbird-ble = callPackage ../development/python-modules/inkbird-ble { };
 
   inkex = callPackage ../development/python-modules/inkex { };
+
+  inky = callPackage ../development/python-modules/inky { };
 
   inline-snapshot = callPackage ../development/python-modules/inline-snapshot { };
 
@@ -15104,6 +15108,8 @@ self: super: with self; {
 
   pytest-postgresql = callPackage ../development/python-modules/pytest-postgresql { };
 
+  pytest-pretty = callPackage ../development/python-modules/pytest-pretty { };
+
   pytest-pudb = callPackage ../development/python-modules/pytest-pudb { };
 
   pytest-pycodestyle = callPackage ../development/python-modules/pytest-pycodestyle { };
@@ -17491,8 +17497,6 @@ self: super: with self; {
   slack-sdk = callPackage ../development/python-modules/slack-sdk { };
 
   slapd = callPackage ../development/python-modules/slapd { };
-
-  sleekxmpp = callPackage ../development/python-modules/sleekxmpp { };
 
   sleekxmppfs = callPackage ../development/python-modules/sleekxmppfs { };
 
@@ -21058,8 +21062,6 @@ self: super: with self; {
 
   yarl = callPackage ../development/python-modules/yarl { };
 
-  yasi = callPackage ../development/python-modules/yasi { };
-
   yaspin = callPackage ../development/python-modules/yaspin { };
 
   yaswfp = callPackage ../development/python-modules/yaswfp { };
@@ -21177,8 +21179,6 @@ self: super: with self; {
   zerorpc = callPackage ../development/python-modules/zerorpc { };
 
   zeversolar = callPackage ../development/python-modules/zeversolar { };
-
-  zeversolarlocal = callPackage ../development/python-modules/zeversolarlocal { };
 
   zfec = callPackage ../development/python-modules/zfec { };
 

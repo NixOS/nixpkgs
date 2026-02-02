@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   rdkafka,
   pkg-config,
   fetchFromGitHub,
@@ -11,21 +12,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "parseable";
-  version = "2.5.1";
+  version = "2.5.10";
 
   src = fetchFromGitHub {
     owner = "parseablehq";
     repo = "parseable";
     tag = "v${version}";
-    hash = "sha256-+KTSpkrMlIu24YvHvLOLHZiqRZua3D7/kprFqtRuNOQ=";
+    hash = "sha256-Asb6064TqvL9kNkWBMj4Z+1j1yIM+iBWsN+R5EuMOVA=";
   };
 
   LOCAL_ASSETS_PATH = fetchzip {
     url = "https://parseable-prism-build.s3.us-east-2.amazonaws.com/v${version}/build.zip";
-    hash = "sha256-tSH9gyB9T2ywut+joLIp55Us2ALKvgsyiG/gBQgYLfI=";
+    hash = "sha256-gWzfucetsJJSSjI9nGm7I8xLo0t1VKb4AertiEGuLWA=";
   };
 
-  cargoHash = "sha256-3hMGiQmXxar4n4cGPrj4UUznNi8V5YokH+29UGmz34Y=";
+  cargoHash = "sha256-1K+EY8YkAjLiWfqUkgkqQOveXjHzraEV51zz3gwGMNs=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -35,6 +36,11 @@ rustPlatform.buildRustPackage rec {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
+
+  # Disables tests that rely on hostnames.
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    "--skip=generate_correct_path_with_current_time_and"
+  ];
 
   passthru.updateScript = nix-update-script { };
 

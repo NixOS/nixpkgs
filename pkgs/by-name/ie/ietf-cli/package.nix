@@ -6,7 +6,7 @@
   nix-update-script,
 }:
 python3.pkgs.buildPythonApplication rec {
-  name = "ietf-cli";
+  pname = "ietf-cli";
   version = "1.29";
   pyproject = false;
 

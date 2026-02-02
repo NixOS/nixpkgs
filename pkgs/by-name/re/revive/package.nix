@@ -53,6 +53,6 @@ buildGoModule rec {
     mainProgram = "revive";
     homepage = "https://revive.run";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ maaslalani ];
+    maintainers = [ ];
   };
 }

@@ -1,9 +1,11 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   fetchurl,
   qmake,
+  copyDesktopItems,
+  wrapQtAppsHook,
   makeDesktopItem,
   qtbase,
   qtscript,
@@ -14,10 +16,9 @@
   diffutils,
   gawk,
   libnl,
-  copyDesktopItems,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "ostinato";
   version = "1.3.0";
 
@@ -44,6 +45,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     copyDesktopItems
     qmake
+    wrapQtAppsHook
   ];
 
   patches = [ ./drone_ini.patch ];

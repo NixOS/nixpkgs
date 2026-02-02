@@ -394,7 +394,7 @@ let
 in
 {
   # Get revisions from
-  # https://github.com/moby/moby/tree/${version}/hack/dockerfile/install/*
+  # https://github.com/moby/moby/tree/${mobyRev}/Dockerfile
   docker_25 =
     let
       version = "25.0.13";
@@ -435,18 +435,18 @@ in
 
   docker_29 =
     let
-      version = "29.1.5";
+      version = "29.2.0";
     in
     callPackage dockerGen {
       inherit version;
       cliRev = "v${version}";
-      cliHash = "sha256-fg18lmJsMoy7lpL4hGkIhM0LKnhEY5nl5f0YuW8yg0A=";
+      cliHash = "sha256-GbXPe8DlhV4WnwJO8OVAdbXZ18IOUlXszenMGvPvSMQ=";
       mobyRev = "docker-v${version}";
-      mobyHash = "sha256-iUoqJT0lIiVh5WaHzlw71QXxc3sEsSpQpADb0KveXNQ=";
+      mobyHash = "sha256-Uilc5cxKuctSkjVxY3R5aezlmGHhLhHY4opVkTYRVIY=";
       runcRev = "v1.3.4";
       runcHash = "sha256-1IfY08sBoDpbLrwz1AKBRSTuCZyOgQzYPHTDUI6fOZ8=";
-      containerdRev = "v2.2.0";
-      containerdHash = "sha256-LXBGA03FTrrbxlH+DxPBFtp3/AYQf096YE2rpe6A+WM=";
+      containerdRev = "v2.2.1";
+      containerdHash = "sha256-fDOfN0XESrBTDW7Nxj9niqU93BQ5/JaGLwAR3u6Xaik=";
       tiniRev = "369448a167e8b3da4ca5bca0b3307500c3371828";
       tiniHash = "sha256-jCBNfoJAjmcTJBx08kHs+FmbaU82CbQcf0IVjd56Nuw=";
     };

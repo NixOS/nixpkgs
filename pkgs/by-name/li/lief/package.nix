@@ -6,6 +6,8 @@
   cmake,
   ninja,
   nix-update-script,
+  testers,
+  validatePkgConfig,
 }:
 
 let
@@ -35,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
+    validatePkgConfig
   ];
 
   # Not in propagatedBuildInputs because only the $py output needs it; $out is
@@ -73,6 +76,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
+  passthru.tests = {
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+      versionCheck = true;
+    };
+  };
+
   meta = {
     description = "Library to Instrument Executable Formats";
     homepage = "https://lief.quarkslab.com/";
@@ -81,5 +91,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       lassulus
     ];
+    pkgConfigModules = [ "LIEF" ];
   };
 })

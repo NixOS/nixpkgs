@@ -12,14 +12,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mistral-vibe";
-  version = "2.0.1";
+  version = "2.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mistralai";
     repo = "mistral-vibe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GqJHFgeaq2oBF1HI0g30IJ+QSj2szvCUUiT7up4VOpk=";
+    hash = "sha256-eZqNxibJ0Ps65tHT6msaizRxvUPNNq0OZ++aAYvUi0E=";
   };
 
   build-system = with python3Packages; [

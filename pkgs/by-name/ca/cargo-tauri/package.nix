@@ -39,7 +39,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       zstd
     ];
 
-  cargoBuildFlags = [ "--package tauri-cli" ];
+  cargoBuildFlags = [
+    "--package"
+    "tauri-cli"
+  ];
   cargoTestFlags = finalAttrs.cargoBuildFlags;
 
   env = lib.optionalAttrs stdenv.hostPlatform.isLinux {
@@ -49,6 +52,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru = {
     # See ./doc/hooks/tauri.section.md
     hook = callPackage ./hook.nix { cargo-tauri = finalAttrs.finalPackage; };
+    gst-plugin = callPackage ./gst-plugin.nix { };
 
     tests = {
       hook = callPackage ./test-app.nix { cargo-tauri = finalAttrs.finalPackage; };

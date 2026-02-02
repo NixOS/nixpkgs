@@ -233,6 +233,7 @@ let
       Vpl = callPackage ../development/coq-modules/Vpl { };
       VplTactic = callPackage ../development/coq-modules/VplTactic { };
       vscoq-language-server = callPackage ../development/coq-modules/vscoq-language-server { };
+      vsrocq-language-server = callPackage ../development/rocq-modules/vsrocq-language-server { };
       VST = callPackage ../development/coq-modules/VST (
         (lib.optionalAttrs (lib.versionAtLeast self.coq.version "8.14") {
           compcert = self.compcert.override {

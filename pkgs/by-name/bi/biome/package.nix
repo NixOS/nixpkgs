@@ -34,8 +34,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoBuildFlags = [ "-p=biome_cli" ];
   cargoTestFlags = finalAttrs.cargoBuildFlags ++ [
+    "--"
     # fails due to cargo insta
-    "-- --skip=commands::check::print_json"
+    "--skip=commands::check::print_json"
     "--skip=commands::check::print_json_pretty"
     "--skip=commands::explain::explain_logs"
     "--skip=commands::format::print_json"

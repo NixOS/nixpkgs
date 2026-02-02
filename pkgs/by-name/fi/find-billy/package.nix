@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   godot_4,
   makeWrapper,
   just,
@@ -14,8 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "find-billy";
   version = "1.1.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "annaaurora";
     repo = "Find-Billy";
     rev = "v${finalAttrs.version}";

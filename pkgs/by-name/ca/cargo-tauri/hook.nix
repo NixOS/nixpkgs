@@ -18,6 +18,9 @@ makeSetupHook {
   propagatedBuildInputs = [
     cargo
     cargo-tauri
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    cargo-tauri.gst-plugin
   ];
 
   substitutions = {
@@ -32,6 +35,14 @@ makeSetupHook {
         linux = "deb";
       }
       .${kernelName} or (throw "${kernelName} is not supported by cargo-tauri.hook");
+
+    fixupScript = lib.optionalString stdenv.hostPlatform.isLinux ''
+      gappsWrapperArgs+=(
+        --prefix WEBKIT_GST_ALLOWED_URI_PROTOCOLS : "asset"
+        # Not picked up automatically by the wrappers from the propagatedBuildInputs.
+        --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "${cargo-tauri.gst-plugin}/lib/gstreamer-1.0/"
+      )
+    '';
 
     # $targetDir is the path to the build artifacts (i.e., `./target/release`)
     installScript =

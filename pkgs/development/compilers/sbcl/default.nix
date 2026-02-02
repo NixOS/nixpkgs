@@ -316,6 +316,8 @@ stdenv.mkDerivation (self: {
   __darwinAllowLocalNetworking = true;
 
   meta = {
+    # Broken since 2025-09-05 https://hydra.nixos.org/job/nixpkgs/staging-next/sbcl.x86_64-darwin
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
     description = "Common Lisp compiler";
     homepage = "https://sbcl.org";
     license = lib.licenses.publicDomain; # and FreeBSD

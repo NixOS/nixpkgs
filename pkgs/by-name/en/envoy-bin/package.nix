@@ -1,15 +1,14 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   autoPatchelfHook,
   fetchurl,
-  makeWrapper,
   nixosTests,
   versionCheckHook,
 }:
 let
   version = "1.37.0";
-  inherit (stdenv.hostPlatform) system;
+  inherit (stdenvNoCC.hostPlatform) system;
   throwSystem = throw "envoy-bin is not available for ${system}.";
 
   plat =
@@ -26,7 +25,7 @@ let
     }
     .${system} or throwSystem;
 in
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "envoy-bin";
   inherit version;
 
@@ -36,21 +35,24 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ autoPatchelfHook ];
-  buildInputs = [ makeWrapper ];
+
+  strictDeps = true;
 
   dontUnpack = true;
+  dontConfigure = true;
   dontBuild = true;
 
   installPhase = ''
     runHook preInstall
+
     mkdir -p $out/bin
     install -m755 $src $out/bin/envoy
+
     runHook postInstall
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  versionCheckProgram = "${placeholder "out"}/bin/envoy";
 
   passthru = {
     tests.envoy-bin = nixosTests.envoy-bin;

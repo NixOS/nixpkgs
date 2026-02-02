@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   python3Packages,
   qt6,
   bash,
@@ -15,8 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "lxqt-panel-profiles";
   version = "1.3";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "MrReplikant";
     repo = "lxqt-panel-profiles";
     rev = "v${finalAttrs.version}";

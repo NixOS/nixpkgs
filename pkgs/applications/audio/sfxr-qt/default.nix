@@ -1,9 +1,10 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   cmake,
   extra-cmake-modules,
+  wrapQtAppsHook,
   qtbase,
   qtquickcontrols2,
   SDL,
@@ -13,7 +14,7 @@
   nixosTests,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "sfxr-qt";
   version = "1.5.1";
 
@@ -35,6 +36,7 @@ mkDerivation rec {
         setuptools
       ]
     ))
+    wrapQtAppsHook
   ];
 
   buildInputs = [

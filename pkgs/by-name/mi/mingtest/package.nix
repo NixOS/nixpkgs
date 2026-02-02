@@ -6,7 +6,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  name = "mingtest";
+  pname = "mingtest";
   version = "0.2.1";
   src = fetchFromGitHub {
     owner = "craflin";

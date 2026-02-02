@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  nix-update-script,
   installShellFiles,
   pkg-config,
   cmake,
@@ -9,27 +10,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rmpc";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "mierak";
     repo = "rmpc";
     rev = "v${version}";
-    hash = "sha256-NU8T26oPhm8L7wdO4p65cpNa0pax7/oqHGs98QDoEc0=";
+    hash = "sha256-IcWn15tKlThuLR8s/4KtaHm4np8B8UaKYQsyEWlQoB4=";
   };
 
-  cargoHash = "sha256-d2/4q2s/11HNE18D8d8Y2yWidhT+XsUS4J9ahnxToI0=";
-
-  checkFlags = [
-    # Test currently broken, needs to be removed. See https://github.com/mierak/rmpc/issues/254
-    "--skip=core::scheduler::tests::interleaves_repeated_and_scheduled_jobs"
-  ];
+  cargoHash = "sha256-DDOJqA5S+JiRCOgAPqw1k1b8SNCLS0aKsJsFqlykZDI=";
 
   nativeBuildInputs = [
     installShellFiles
     pkg-config
     cmake
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   env.VERGEN_GIT_DESCRIBE = version;
 
@@ -40,12 +38,14 @@ rustPlatform.buildRustPackage rec {
       --bash target/completions/rmpc.bash \
       --fish target/completions/rmpc.fish \
       --zsh target/completions/_rmpc
+
+    install -m 444 -D assets/rmpc.desktop $out/share/applications/rmpc.desktop
   '';
 
   meta = {
     changelog = "https://github.com/mierak/rmpc/releases/tag/${src.rev}";
     description = "TUI music player client for MPD with album art support via kitty image protocol";
-    homepage = "https://mierak.github.io/rmpc/";
+    homepage = "https://rmpc.mierak.dev/";
     license = lib.licenses.bsd3;
     longDescription = ''
       Rusty Music Player Client is a beautiful, modern and configurable terminal-based Music Player
