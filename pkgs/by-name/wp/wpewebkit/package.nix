@@ -121,6 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
     libjpeg
     libjxl
     libpng
+    libinput
     libseccomp
     libsoup_3
     libtasn1
