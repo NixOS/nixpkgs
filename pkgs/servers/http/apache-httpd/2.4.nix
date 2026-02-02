@@ -32,6 +32,8 @@
   brotli,
   luaSupport ? false,
   lua5,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdLibs,
 }:
 
 stdenv.mkDerivation rec {
@@ -83,7 +85,8 @@ stdenv.mkDerivation rec {
   ++ lib.optional luaSupport lua5
   ++ lib.optional libxml2Support libxml2
   ++ lib.optional http2Support nghttp2
-  ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
+  ++ lib.optional stdenv.hostPlatform.isDarwin libiconv
+  ++ lib.optional systemdSupport systemdLibs;
 
   postPatch = ''
     sed -i config.layout -e "s|installbuilddir:.*|installbuilddir: $dev/share/build|"
@@ -117,6 +120,7 @@ stdenv.mkDerivation rec {
     (lib.withFeatureAs libxml2Support "libxml2" "${libxml2.dev}/include/libxml2")
     (lib.enableFeature brotliSupport "brotli")
     (lib.enableFeature http2Support "http2")
+    (lib.enableFeature systemdSupport "systemd")
     (lib.enableFeature luaSupport "lua")
   ]
   ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
