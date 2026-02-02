@@ -588,7 +588,7 @@ in
                   ExecStart = "${nvidia_x11.out}/bin/nvidia-sleep.sh '${state}'";
                 };
                 before = [ "systemd-${state}.service" ];
-                requiredBy = [ "systemd-${state}.service" ];
+                wantedBy = [ "systemd-${state}.service" ];
               };
             in
             lib.mkMerge [
@@ -606,7 +606,7 @@ in
                     ];
                   };
                   before = [ "systemd-suspend-then-hibernate.service" ];
-                  requiredBy = [ "systemd-suspend-then-hibernate.service" ];
+                  wantedBy = [ "systemd-suspend-then-hibernate.service" ];
                 };
                 nvidia-resume = (nvidiaService "resume") // {
                   before = [ ];
@@ -616,7 +616,7 @@ in
                     "systemd-hybrid-sleep.service"
                     "systemd-suspend-then-hibernate.service"
                   ];
-                  requiredBy = [
+                  wantedBy = [
                     "systemd-suspend.service"
                     "systemd-hibernate.service"
                     "systemd-hybrid-sleep.service"
