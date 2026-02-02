@@ -23,6 +23,24 @@ fixupOutputHooks+=(patchShebangsAuto)
 # $ patchShebangs --build configure
 
 patchShebangs() {
+    # Use C implementation if available (much faster)
+    if command -v patch-shebangs >/dev/null 2>&1; then
+        local mode="" update=""
+        while [[ $# -gt 0 ]]; do
+            case "$1" in
+                --host)   mode="--host"; shift ;;
+                --build)  mode="--build"; shift ;;
+                --update) update="--update"; shift ;;
+                --) shift; break ;;
+                -*|--*) echo "Unknown option $1 supplied to patchShebangs" >&2; return 1 ;;
+                *) break ;;
+            esac
+        done
+        [[ -z "$mode" ]] && { [[ -n $strictDeps && $1 == "$NIX_STORE"* ]] && mode="--host" || mode="--build"; }
+        patch-shebangs $mode $update -- "$@"
+        return
+    fi
+
     local pathName
     local update=false
 
