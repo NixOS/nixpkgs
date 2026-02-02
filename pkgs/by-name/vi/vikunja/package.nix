@@ -2,56 +2,57 @@
   lib,
   fetchFromGitHub,
   stdenv,
-  nodejs,
-  pnpm_9,
+  nodejs_24,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   buildGoModule,
   mage,
+  dart-sass,
   writeShellScriptBin,
   nixosTests,
 }:
 
 let
-  version = "0.24.6";
+  version = "1.0.0";
   src = fetchFromGitHub {
     owner = "go-vikunja";
     repo = "vikunja";
     rev = "v${version}";
-    hash = "sha256-yUUZ6gPI2Bte36HzfUE6z8B/I1NlwWDSJA2pwkuzd34=";
+    hash = "sha256-IJ6985gLuI0O08xZq8NYoet02NPFqQQhDLND+nfmdbA=";
   };
 
   frontend = stdenv.mkDerivation (finalAttrs: {
     pname = "vikunja-frontend";
     inherit version src;
 
-    patches = [
-      ./nodejs-22.12-tailwindcss-update.patch
-    ];
     sourceRoot = "${finalAttrs.src.name}/frontend";
 
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs)
         pname
         version
-        patches
         src
         sourceRoot
         ;
-      pnpm = pnpm_9;
+      pnpm = pnpm_10;
       fetcherVersion = 1;
-      hash = "sha256-94ZlywOZYmW/NsvE0dtEA81MeBWGUrJsBXTUauuOmZM=";
+      hash = "sha256-OmLFn5aKsXPSbW6AehjkuTJMgOMzDSaYo2XbPvU6WXo=";
     };
 
     nativeBuildInputs = [
-      nodejs
+      nodejs_24
+      dart-sass
       pnpmConfigHook
-      pnpm_9
+      pnpm_10
     ];
 
     doCheck = true;
 
     postBuild = ''
+      # Force sass-embedded to use our dart-sass instead of bundled binaries.
+      substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
+        --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["${lib.getExe dart-sass}"];'
       pnpm run build
     '';
 
@@ -96,7 +97,7 @@ buildGoModule {
       mage
     ];
 
-  vendorHash = "sha256-OsKejno8QGg7HzRsrftngiWGiWHFc1jDLi5mQ9/NjI4=";
+  vendorHash = "sha256-PV6WlJlG839FtWUR6QONMuuBnmo+AA53xmUNbodQdzk=";
 
   inherit frontend;
 
@@ -108,6 +109,9 @@ buildGoModule {
     # These tests need internet, so we skip them.
     ${skipTest 1 "TestConvertTrelloToVikunja" "pkg/modules/migration/trello/trello_test.go"}
     ${skipTest 1 "TestConvertTodoistToVikunja" "pkg/modules/migration/todoist/todoist_test.go"}
+    # These tests require a full config with public URL and CORS enabled.
+    ${skipTest 1 "TestCreateOrganizationMap" "pkg/modules/migration/trello/trello_test.go"}
+    ${skipTest 1 "TestTaskAttachmentUploadSize" "pkg/webtests/task_attachment_upload_test.go"}
   '';
 
   buildPhase = ''
@@ -121,8 +125,8 @@ buildGoModule {
   '';
 
   checkPhase = ''
-    mage test:unit
-    mage test:integration
+    mage test:feature
+    mage test:web
   '';
 
   installPhase = ''
