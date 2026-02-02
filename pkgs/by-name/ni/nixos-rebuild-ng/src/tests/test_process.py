@@ -27,7 +27,7 @@ def test_run(mock_run: Any) -> None:
             extra_env={"FOO": "bar"},
         )
     mock_run.assert_called_with(
-        ["sudo", "test", "--with", "flags"],
+        ["sudo", "-B", "test", "--with", "flags"],
         check=False,
         text=True,
         errors="surrogateescape",

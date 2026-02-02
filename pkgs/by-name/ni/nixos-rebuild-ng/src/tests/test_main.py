@@ -483,6 +483,7 @@ def test_execute_nix_switch_flake(mock_run: Mock, tmp_path: Path) -> None:
             call(
                 [
                     "sudo",
+                    "-B",
                     "nix-env",
                     "-p",
                     Path("/nix/var/nix/profiles/system"),
@@ -500,6 +501,7 @@ def test_execute_nix_switch_flake(mock_run: Mock, tmp_path: Path) -> None:
             call(
                 [
                     "sudo",
+                    "-B",
                     *nr.nix.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
                     config_path / "bin/switch-to-configuration",
                     "switch",
