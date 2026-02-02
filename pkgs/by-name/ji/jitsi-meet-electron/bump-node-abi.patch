@@ -1,0 +1,32 @@
+diff --git a/package-lock.json b/package-lock.json
+index 6d9795b..c9370e2 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -12444,10 +12444,11 @@
+       "dev": true
+     },
+     "node_modules/node-abi": {
+-      "version": "3.74.0",
+-      "resolved": "https://registry.npmjs.org/node-abi/-/node-abi-3.74.0.tgz",
+-      "integrity": "sha512-c5XK0MjkGBrQPGYG24GBADZud0NCbznxNx0ZkS+ebUTrmV1qTDxPxSL8zEAPURXSbLRWVexxmP4986BziahL5w==",
++      "version": "3.87.0",
++      "resolved": "https://registry.npmjs.org/node-abi/-/node-abi-3.87.0.tgz",
++      "integrity": "sha512-+CGM1L1CgmtheLcBuleyYOn7NWPVu0s0EJH2C4puxgEZb9h8QpR9G2dBfZJOAUhi7VQxuBPMd0hiISWcTyiYyQ==",
+       "dev": true,
++      "license": "MIT",
+       "dependencies": {
+         "semver": "^7.3.5"
+       },
+@@ -26000,9 +26001,9 @@
+       }
+     },
+     "node-abi": {
+-      "version": "3.74.0",
+-      "resolved": "https://registry.npmjs.org/node-abi/-/node-abi-3.74.0.tgz",
+-      "integrity": "sha512-c5XK0MjkGBrQPGYG24GBADZud0NCbznxNx0ZkS+ebUTrmV1qTDxPxSL8zEAPURXSbLRWVexxmP4986BziahL5w==",
++      "version": "3.87.0",
++      "resolved": "https://registry.npmjs.org/node-abi/-/node-abi-3.87.0.tgz",
++      "integrity": "sha512-+CGM1L1CgmtheLcBuleyYOn7NWPVu0s0EJH2C4puxgEZb9h8QpR9G2dBfZJOAUhi7VQxuBPMd0hiISWcTyiYyQ==",
+       "dev": true,
+       "requires": {
+         "semver": "^7.3.5"
