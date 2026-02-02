@@ -2455,6 +2455,8 @@ with pkgs;
 
   licensee = callPackage ../tools/package-management/licensee { };
 
+  lichess-external-engine = python3Packages.callPackage ../by-name/li/lichess-external-engine/package.nix { };
+
   linux-gpib = callPackage ../applications/science/electronics/linux-gpib/user.nix { };
 
   liquidctl = with python3Packages; toPythonApplication liquidctl;
