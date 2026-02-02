@@ -1,20 +1,18 @@
 {
   lib,
   fetchFromGitHub,
-  buildPythonApplication,
-  setuptools,
-  wrapPython,
+  python3Packages,
   makeWrapper,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "Tautulli";
   version = "2.16.1";
   pyproject = false;
 
-  pythonPath = [ setuptools ];
+  pythonPath = [ python3Packages.setuptools ];
   nativeBuildInputs = [
-    wrapPython
+    python3Packages.wrapPython
     makeWrapper
   ];
 
