@@ -31,16 +31,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "kmod";
-  version = "31";
+  version = "34";
 
-  # autogen.sh is missing from the release tarball,
-  # and we need to run it to regenerate gtk_doc.make,
-  # because the version in the release tarball is broken.
-  # Possibly this will be fixed in kmod 30?
-  # https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/commit/.gitignore?id=61a93a043aa52ad62a11ba940d4ba93cb3254e78
   src = fetchzip {
     url = "https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/snapshot/kmod-${version}.tar.gz";
-    hash = "sha256-FNR015/AoYBbi7Eb1M2TXH3yxUuddKICCu+ot10CdeQ=";
+    hash = "sha256-5iIk3b2QnRz/VbJlSHhp4D10KXwQXpkWZClTA1Pgddw=";
   };
 
   outputs = [
@@ -80,28 +75,17 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--with-xz"
     "--with-zstd"
-    "--with-modulesdirs=${modulesDirs}"
+    "--disable-manpages"
     (lib.enableFeature withDevdoc "gtk-doc")
   ]
   ++ lib.optional withStatic "--enable-static";
 
-  patches = [
-    ./module-dir.patch
-    (fetchpatch {
-      name = "musl.patch";
-      url = "https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/patch/?id=11eb9bc67c319900ab00523997323a97d2d08ad2";
-      hash = "sha256-CYG615elMWces6QGQRg2H/NL7W4XsG9Zvz5H+xsdFFo=";
-    })
-  ]
-  ++ lib.optional withStatic ./enable-static.patch;
-
+  patches = lib.optional withStatic ./enable-static.patch;
+  
   postInstall = ''
     for prog in rmmod insmod lsmod modinfo modprobe depmod; do
       ln -sv $out/bin/kmod $out/bin/$prog
     done
-
-    # Backwards compatibility
-    ln -s bin $out/sbin
   '';
 
   passthru.updateScript = gitUpdater {
