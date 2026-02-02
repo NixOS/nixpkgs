@@ -1,7 +1,7 @@
 {
   lib,
   buildLua,
-  fetchFromGitea,
+  fetchFromCodeberg,
   unstableGitUpdater,
   curl,
   coreutils,
@@ -12,8 +12,7 @@ buildLua {
   version = "0-unstable-2025-12-21";
   scriptPath = "sponsorblock_minimal.lua";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "jouni";
     repo = "mpv_sponsorblock_minimal";
     rev = "8f4b186d6ea46e6fe0e5e94a53dda2f50dceb576";

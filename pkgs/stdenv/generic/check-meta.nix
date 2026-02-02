@@ -373,15 +373,6 @@ let
       unfree = bool;
       unsupported = bool;
       insecure = bool;
-      tests = {
-        name = "test";
-        verify =
-          x:
-          x == { }
-          ||
-            # Accept {} for tests that are unsupported
-            (isDerivation x && x ? meta.timeout);
-      };
       timeout = int;
       knownVulnerabilities = listOf str;
       badPlatforms = platforms;

@@ -1,9 +1,9 @@
 {
   stdenv,
-  mkDerivation,
   fetchFromGitHub,
   cmake,
   pkg-config,
+  wrapQtAppsHook,
   lib,
   qttools,
   fribidi,
@@ -11,7 +11,7 @@
   zstd,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "coolreader";
   version = "3.2.58";
 
@@ -27,6 +27,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    wrapQtAppsHook
   ];
 
   buildInputs = [

@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   arcan,
   audit,
   dbus,
@@ -44,8 +44,7 @@ stdenv.mkDerivation (finalPackages: rec {
   pname = "xarcan";
   version = "0.7.1";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "letoram";
     repo = "xarcan";
     tag = version;

@@ -126,6 +126,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.all;
-    mainProgram = lib.optionalString stdenv.hostPlatform.isDarwin "EasyRPG Player";
+    mainProgram = if stdenv.hostPlatform.isDarwin then "EasyRPG Player" else "easyrpg-player";
   };
 }

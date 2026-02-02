@@ -7,7 +7,7 @@
 
 mkHyprlandPlugin (finalAttrs: {
   pluginName = "hypr-darkwindow";
-  version = "0.53.1";
+  version = "0.53.3";
 
   src = fetchFromGitHub {
     owner = "micha4w";

@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   autoconf,
   automake,
   libtool,
@@ -11,8 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "soundtouch";
   version = "2.4.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "soundtouch";
     repo = "soundtouch";
     rev = finalAttrs.version;

@@ -3003,6 +3003,17 @@ assertNoAdditions {
     dependencies = [ self.orgmode ];
   };
 
+  org-notebook-nvim = super.org-notebook-nvim.overrideAttrs {
+    dependencies = [
+      self.orgmode
+      self.jupyter-api-nvim
+    ];
+    nvimSkipModules = [
+      # Requires mini.test, deno, and some deno dependencies, look into it once https://github.com/NixOS/nixpkgs/pull/453904 is merged
+      "org-notebook.test"
+    ];
+  };
+
   otter-nvim = super.otter-nvim.overrideAttrs {
     dependencies = [ self.nvim-lspconfig ];
     nvimSkipModules = [

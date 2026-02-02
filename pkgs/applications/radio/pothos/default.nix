@@ -1,6 +1,6 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   fetchpatch,
   cmake,
@@ -20,7 +20,7 @@
   python3,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "pothos";
   version = "0.7.1";
 

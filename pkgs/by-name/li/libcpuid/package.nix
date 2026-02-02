@@ -18,6 +18,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ autoreconfHook ];
 
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   meta = {
     homepage = "https://libcpuid.sourceforge.net/";
     description = "Small C library for x86 CPU detection and feature extraction";

@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   autoreconfHook,
   nix-update-script,
 }:
@@ -10,8 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "libHX";
   version = "5.2";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     tag = "v${finalAttrs.version}";
     owner = "jengelh";
     repo = "libhx";

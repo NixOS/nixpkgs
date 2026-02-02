@@ -20,7 +20,6 @@
   libXrender,
   autoPatchelfHook,
   makeWrapper,
-  mkDerivation,
   xkeyboard_config,
   fetchurl,
   buildFHSEnv,
@@ -37,7 +36,7 @@ let
 
     src = fetchurl {
       url = "https://assets.unigine.com/d/Unigine_Superposition-${version}.run";
-      sha256 = "12hzlz792pf8pvxf13fww3qhahqzwzkxq9q3mq20hbhvaphbg7nd";
+      hash = "sha256-dJThxzv1nvIWFRPV1cudm/+9hHmSnUl2rFO2lV3lgPg=";
     };
 
     nativeBuildInputs = [

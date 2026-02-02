@@ -4,7 +4,6 @@
   python3Packages,
   fetchFromGitHub,
   writableTmpDirAsHomeHook,
-  withXmpp ? false, # sleekxmpp doesn't support python 3.10, see https://github.com/dschep/ntfy/issues/266
   withMatrix ? true,
   withSlack ? true,
   withEmoji ? true,
@@ -42,10 +41,6 @@ python3Packages.buildPythonApplication rec {
         appdirs
         ntfy-webpush
       ]
-      ++ lib.optionals withXmpp [
-        sleekxmpp
-        dnspython
-      ]
       ++ lib.optionals withMatrix [
         matrix-client
       ]
@@ -72,12 +67,12 @@ python3Packages.buildPythonApplication rec {
   disabledTests = [
     # AssertionError: {'backends': ['default']} != {}
     "test_default_config"
-  ]
-  ++ lib.optionals (!withXmpp) [
+
+    # sleekxmpp was deprecated in favor of slixmpp
     "test_xmpp"
   ];
 
-  disabledTestPaths = lib.optionals (!withXmpp) [
+  disabledTestPaths = [
     "tests/test_xmpp.py"
   ];
 

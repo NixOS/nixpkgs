@@ -1,8 +1,9 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   cmake,
+  wrapQtAppsHook,
   qtbase,
   qtmultimedia,
   qtimageformats,
@@ -43,7 +44,7 @@ assert builtins.elem (lib.toLower chatType) [
 
 assert enablePsiMedia -> enablePlugins;
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "psi-plus";
 
   version = "1.5.2115";
@@ -63,6 +64,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     qttools
+    wrapQtAppsHook
   ]
   ++ lib.optionals enablePsiMedia [
     pkg-config

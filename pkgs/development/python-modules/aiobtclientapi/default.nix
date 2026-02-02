@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitea,
+  fetchFromCodeberg,
   aiobtclientrpc,
   async-timeout,
   httpx,
@@ -17,8 +17,7 @@ buildPythonPackage (finalAttrs: {
   version = "1.1.4";
   pyproject = true;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "plotski";
     repo = "aiobtclientapi";
     tag = "v${finalAttrs.version}";

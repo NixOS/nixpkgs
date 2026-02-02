@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   qt5,
   fetchFromGitHub,
   cmake,
@@ -8,7 +9,7 @@
 let
   protobuf = protobuf_21;
 in
-qt5.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "cockatrice";
   version = "2025-04-03-Release-2.10.2";
 

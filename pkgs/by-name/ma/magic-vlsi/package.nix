@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "magic-vlsi";
-  version = "8.3.593";
+  version = "8.3.597";
 
   src = fetchFromGitHub {
     owner = "RTimothyEdwards";
     repo = "magic";
     tag = finalAttrs.version;
-    hash = "sha256-o9x29CDOtSQpQvTach6RaTJxRd2iTjyYi94ZjffUxVI=";
+    hash = "sha256-aFT/uTs/nMb8srf0Hjit03qM7+x1yZasIrSv8cjLS88=";
     leaveDotGit = true;
   };
 
@@ -37,9 +37,9 @@ stdenv.mkDerivation (finalAttrs: {
     })
 
     (fetchpatch {
-      name = "neuer-fix-name.patch";
-      url = "https://github.com/RTimothyEdwards/magic/commit/a70ca249c3a4e7a256a4482bd887452267c8cd52.patch";
-      hash = "sha256-sNQDz4/hBtwJeDrOCe+LfJkuaB0zRzX7w1aDv8ZD7Pw=";
+      name = "fix_txinput_termbits.patch";
+      url = "https://github.com/RTimothyEdwards/magic/commit/790f0196d4fef21dc8a3f5646ccf87a531c4d6aa.patch";
+      hash = "sha256-zpmFT813USxX3PDpi6TGlWpWX4xfdirVrVtAlBtkSF0=";
     })
   ];
 
@@ -55,7 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     cairo
     libX11
     m4
-    mesa
     mesa_glu
     ncurses
     tcl

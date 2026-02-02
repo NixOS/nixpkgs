@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   fetchYarnDeps,
   yarnConfigHook,
   yarnBuildHook,
@@ -14,8 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "keyoxide-cli";
   version = "0.4.4";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "keyoxide";
     repo = "keyoxide-cli";
     tag = finalAttrs.version;

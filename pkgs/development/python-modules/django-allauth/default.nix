@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitea,
+  fetchFromCodeberg,
   python,
 
   # build-system
@@ -44,8 +44,7 @@ buildPythonPackage rec {
   version = "65.14.0";
   pyproject = true;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "allauth";
     repo = "django-allauth";
     tag = version;

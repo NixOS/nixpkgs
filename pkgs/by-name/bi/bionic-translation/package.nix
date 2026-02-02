@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  mesa,
   wayland,
   libglvnd,
   libbsd,
@@ -35,7 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
     libelf
     libglvnd
     libunwind
-    mesa
     wayland
   ];
 

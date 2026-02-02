@@ -417,7 +417,10 @@ in
       ./1.1/nix-ssl-cert-file.patch
 
       (
-        if stdenv.hostPlatform.isDarwin then ./use-etc-ssl-certs-darwin.patch else ./use-etc-ssl-certs.patch
+        if stdenv.hostPlatform.isDarwin then
+          ./1.1/use-etc-ssl-certs-darwin.patch
+        else
+          ./1.1/use-etc-ssl-certs.patch
       )
     ];
     withDocs = true;

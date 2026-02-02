@@ -3563,7 +3563,6 @@ broken-packages:
   - koofr-client # failure in job https://hydra.nixos.org/build/233255749 at 2023-09-02
   - korea-holidays # failure in job https://hydra.nixos.org/build/233222677 at 2023-09-02
   - kraken # failure in job https://hydra.nixos.org/build/233202384 at 2023-09-02
-  - krank # failure in job https://hydra.nixos.org/build/307611020 at 2025-09-19
   - krapsh # failure in job https://hydra.nixos.org/build/233219887 at 2023-09-02
   - Kriens # failure in job https://hydra.nixos.org/build/233251673 at 2023-09-02
   - krpc # failure in job https://hydra.nixos.org/build/233231587 at 2023-09-02

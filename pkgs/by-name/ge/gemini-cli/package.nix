@@ -14,18 +14,20 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "gemini-cli";
-  version = "0.23.0";
+  version = "0.25.2";
 
   src = fetchFromGitHub {
     owner = "google-gemini";
     repo = "gemini-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tl9Iy1M0YxPvUpbIQRl7/P2iRIb5n1cvHEqK2k3OR5I=";
+    hash = "sha256-2Fl6bkoAgu+KvwVIkQEIAPYKQRYyEQPWMRv3vsfnNA4=";
   };
 
   nodejs = nodejs_22;
 
-  npmDepsHash = "sha256-gPmH/Ym6+UxbpH8CEuDmdZtbR6HqWPjMchs1zlDELDU=";
+  npmDepsHash = "sha256-4peAAxCws5IjWaiNwkRBiaL+n1fE+zsK0qbk1owueeY=";
+
+  dontPatchElf = stdenv.isDarwin;
 
   nativeBuildInputs = [
     jq
@@ -77,7 +79,13 @@ buildNpmPackage (finalAttrs: {
     mkdir -p $out/{bin,share/gemini-cli}
 
     npm prune --omit=dev
-    rm node_modules/shell-quote/print.py # remove python demo to prevent python from getting into the closure
+
+    # Remove python files to prevent python from getting into the closure
+    find node_modules -name "*.py" -delete
+    # keytar/build has gyp-mac-tool with a Python shebang that gets patched,
+    # creating a python3 reference in the closure
+    rm -rf node_modules/keytar/build
+
     cp -r node_modules $out/share/gemini-cli/
 
     rm -f $out/share/gemini-cli/node_modules/@google/gemini-cli
@@ -93,6 +101,11 @@ buildNpmPackage (finalAttrs: {
 
     ln -s $out/share/gemini-cli/node_modules/@google/gemini-cli/dist/index.js $out/bin/gemini
     chmod +x "$out/bin/gemini"
+
+    # Clean up any remaining references to npmDeps in node_modules metadata
+    find $out/share/gemini-cli/node_modules -name "package-lock.json" -delete
+    find $out/share/gemini-cli/node_modules -name ".package-lock.json" -delete
+    find $out/share/gemini-cli/node_modules -name "config.gypi" -delete
 
     runHook postInstall
   '';

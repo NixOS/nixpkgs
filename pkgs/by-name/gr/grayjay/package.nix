@@ -7,6 +7,7 @@
   libz,
   icu,
   openssl,
+  libgbm,
   libxrandr,
   libxfixes,
   libxext,
@@ -28,7 +29,6 @@
   cairo,
   udev,
   alsa-lib,
-  mesa,
   libGL,
   libsecret,
   nix-update-script,
@@ -74,12 +74,12 @@ buildDotnetModule (finalAttrs: {
 
   buildInputs = [
     openssl
+    libgbm
     libgcc
     libx11
     gtk3
     glib
     alsa-lib
-    mesa
     nspr
     nss
     icu

@@ -566,6 +566,7 @@ with lib.maintainers;
       ethancedwards8
       fricklerhandwerk
       OPNA2608
+      phanirithvij
       prince213
       wegank
     ];

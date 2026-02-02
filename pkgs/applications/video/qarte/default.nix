@@ -1,7 +1,8 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchbzr,
+  wrapQtAppsHook,
   python3,
   rtmpdump,
 }:
@@ -14,7 +15,7 @@ let
     ]
   );
 in
-mkDerivation {
+stdenv.mkDerivation {
   pname = "qarte";
   version = "5.5.0";
 
@@ -23,6 +24,8 @@ mkDerivation {
     rev = "88";
     sha256 = "sha256-+Ixe4bWKubH/XBESwmP2NWS8bH0jq611c3MZn7W87Jw=";
   };
+
+  nativeBuildInputs = [ wrapQtAppsHook ];
 
   buildInputs = [ pythonEnv ];
 

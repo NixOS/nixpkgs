@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "stackql";
-  version = "0.8.175";
+  version = "0.9.339";
 
   src = fetchFromGitHub {
     owner = "stackql";
     repo = "stackql";
     rev = "v${version}";
-    hash = "sha256-JA9vTmjNIXhvcdH9BPmtSD3W3VkytG+dYOtOJ+hFnsQ=";
+    hash = "sha256-WuzY4Vje+Gwzf0Ep5nE5jkF1iJkFKX640ay+nqiF0Dg=";
   };
 
-  vendorHash = "sha256-lACvTdzOZ5AnPqaw+uGMbO3HnjKU/dSVATgmrdYpWNE=";
+  vendorHash = "sha256-H8vp2yuP2/mh8GAWTsFOpNJEXfxjyLHZq4m65iyERmw=";
 
   ldflags = [
     "-s"
@@ -25,7 +25,7 @@ buildGoModule rec {
     "-X github.com/stackql/stackql/internal/stackql/cmd.BuildMajorVersion=${builtins.elemAt (lib.splitVersion version) 0}"
     "-X github.com/stackql/stackql/internal/stackql/cmd.BuildMinorVersion=${builtins.elemAt (lib.splitVersion version) 1}"
     "-X github.com/stackql/stackql/internal/stackql/cmd.BuildPatchVersion=${builtins.elemAt (lib.splitVersion version) 2}"
-    "-X github.com/stackql/stackql/internal/stackql/cmd.BuildDate=2024-05-15T07:51:52Z" # date of commit hash
+    "-X github.com/stackql/stackql/internal/stackql/cmd.BuildDate=2026-01-14T07:36:20Z" # date of commit hash
     "-X stackql/internal/stackql/planbuilder.PlanCacheEnabled=true"
   ];
 

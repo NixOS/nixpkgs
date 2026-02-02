@@ -1,5 +1,5 @@
 {
-  fetchFromGitea,
+  fetchFromCodeberg,
   installShellFiles,
   lib,
   openssl,
@@ -11,8 +11,7 @@ rustPlatform.buildRustPackage rec {
   pname = "codeberg-cli";
   version = "0.5.4";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "Aviac";
     repo = "codeberg-cli";
     rev = "v${version}";

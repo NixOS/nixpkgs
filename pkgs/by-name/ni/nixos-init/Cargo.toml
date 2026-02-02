@@ -7,6 +7,9 @@ edition = "2024"
 anyhow = "1.0.98"
 log = "0.4.27"
 env_logger = { version = "0.11.8", default-features = false }
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = "1.0.145"
+bootspec = "2.0.0"
 
 [dev-dependencies]
 tempfile = "3.20.0"

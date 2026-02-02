@@ -24,14 +24,13 @@
   lndir,
   runCommand,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   buildNpmPackage,
   writableTmpDirAsHomeHook,
 }:
 
 let
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "forgejo";
     repo = "forgejo";
     inherit rev hash;

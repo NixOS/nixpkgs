@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   fetchNpmDeps,
   buildGoModule,
   nodejs_22,
@@ -12,8 +12,7 @@ buildGoModule rec {
   pname = "readeck";
   version = "0.21.5";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "readeck";
     repo = "readeck";
     tag = version;

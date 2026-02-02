@@ -8,9 +8,9 @@ The jdk is in `pkgs/development/compilers/jetbrains-jdk`.
 ## How to use plugins:
  - Pass your IDE package and a list of plugin packages to `jetbrains.plugins.addPlugins`.
    E.g. `pkgs.jetbrains.plugins.addPlugins pkgs.jetbrains.idea [ ideavim ]`
- - The list has to contain contain drvs giving the directory contents of the plugin or a single `.jar` (executable).
+ - The list has to contain drvs giving the directory contents of the plugin or a single `.jar` (executable).
 
-Nixpkgs does not package Jetbrains plugins, however you can use third-party sources, such as
+Nixpkgs does not package JetBrains plugins, however you can use third-party sources, such as
 [nix-jetbrains-plugins](https://github.com/nix-community/nix-jetbrains-plugins).
 Note that some plugins may not work without modification, if they are packaged in a way that is incompatible with NixOS.
 You can try installing such plugins from within the IDE instead.
@@ -68,7 +68,7 @@ Any comments or other manual changes between these markers will be removed when 
  - from source builds:
    - remove timestamps in output `.jar` of `jps-bootstrap`
    - automated update scripts
-   - fetch `.jar` s from stuff built in nixpkgs when available
+   - fetch `.jar`s from stuff built in nixpkgs when available
      - what stuff built in nixpkgs provides `.jar`s we care about?
        - kotlin
    - make `configurePhase` respect `$NIX_BUILD_CORES`

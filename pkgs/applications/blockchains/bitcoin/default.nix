@@ -145,7 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     install -Dm644 ${desktop} $out/share/applications/bitcoin-qt.desktop
     substituteInPlace $out/share/applications/bitcoin-qt.desktop --replace "Icon=bitcoin128" "Icon=bitcoin"
-    install -Dm644 share/pixmaps/bitcoin256.png $out/share/pixmaps/bitcoin.png
+    install -Dm644 share/pixmaps/bitcoin256.png $out/share/icons/hicolor/256x256/apps/bitcoin.png
   '';
 
   cmakeFlags = [

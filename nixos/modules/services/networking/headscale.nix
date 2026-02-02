@@ -350,31 +350,33 @@ in
               };
 
               extra_records = lib.mkOption {
-                type = lib.types.listOf (
-                  lib.types.submodule {
-                    options = {
-                      name = lib.mkOption {
-                        type = lib.types.str;
-                        description = "DNS record name.";
-                        example = "grafana.tailnet.example.com";
+                type = lib.types.nullOr (
+                  lib.types.listOf (
+                    lib.types.submodule {
+                      options = {
+                        name = lib.mkOption {
+                          type = lib.types.str;
+                          description = "DNS record name.";
+                          example = "grafana.tailnet.example.com";
+                        };
+                        type = lib.mkOption {
+                          type = lib.types.enum [
+                            "A"
+                            "AAAA"
+                          ];
+                          description = "DNS record type.";
+                          example = "A";
+                        };
+                        value = lib.mkOption {
+                          type = lib.types.str;
+                          description = "DNS record value (IP address).";
+                          example = "100.64.0.3";
+                        };
                       };
-                      type = lib.mkOption {
-                        type = lib.types.enum [
-                          "A"
-                          "AAAA"
-                        ];
-                        description = "DNS record type.";
-                        example = "A";
-                      };
-                      value = lib.mkOption {
-                        type = lib.types.str;
-                        description = "DNS record value (IP address).";
-                        example = "100.64.0.3";
-                      };
-                    };
-                  }
+                    }
+                  )
                 );
-                default = [ ];
+                default = null;
                 description = ''
                   Extra DNS records to expose to clients.
                 '';

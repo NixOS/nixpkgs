@@ -1,17 +1,16 @@
 {
   lib,
   fetchurl,
-  fetchFromGitea,
+  fetchFromCodeberg,
 }:
 let
   src = lib.importJSON ./src.json;
 in
 {
   inherit (src) packageVersion;
-  source = fetchFromGitea (
+  source = fetchFromCodeberg (
     src.source
     // {
-      domain = "codeberg.org";
       owner = "librewolf";
       repo = "source";
       fetchSubmodules = true;

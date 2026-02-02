@@ -74,6 +74,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ priyaananthasankar ];
     platforms = lib.platforms.unix; # Now supports both Linux and macOS with withoutebpf
-    mainProgram = "aks-mcp-server";
+    mainProgram = "aks-mcp";
   };
 })

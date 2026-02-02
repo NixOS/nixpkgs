@@ -1,14 +1,13 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitea,
+  fetchFromCodeberg,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "inhibridge";
   version = "0.3.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "Scrumplex";
     repo = "inhibridge";
     rev = version;

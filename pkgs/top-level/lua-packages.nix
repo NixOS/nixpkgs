@@ -110,6 +110,8 @@ rec {
     }
   ) { };
 
+  image-nvim = callPackage ../development/lua-modules/image-nvim { };
+
   lua-pam = callPackage (
     {
       fetchFromGitHub,
@@ -250,6 +252,8 @@ rec {
   nfd = callPackage ../development/lua-modules/nfd {
     inherit (pkgs) zenity;
   };
+
+  readline = callPackage ../development/lua-modules/readline { inherit (pkgs) readline; };
 
   vicious = callPackage (
     { fetchFromGitHub }:
