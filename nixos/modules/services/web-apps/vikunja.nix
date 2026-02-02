@@ -58,6 +58,8 @@ in
         Vikunja configuration. Refer to
         <https://vikunja.io/docs/config-options/>
         for details on supported values.
+        Setting names can be suffixed with `_FILE` to read values from files,
+        which pairs well with `services.vikunja.environmentFiles`.
       '';
     };
     database = {
@@ -107,6 +109,7 @@ in
       service = {
         interface = ":${toString cfg.port}";
         frontendurl = "${cfg.frontendScheme}://${cfg.frontendHostname}/";
+        publicurl = "${cfg.frontendScheme}://${cfg.frontendHostname}/";
       };
       files = {
         basepath = "/var/lib/vikunja/files";
