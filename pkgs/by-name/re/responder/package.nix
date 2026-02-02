@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "responder";
-  version = "3.2.1.0";
+  version = "3.2.2.0";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "lgandx";
     repo = "Responder";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ajVG4ZUw1GB4dgOztnOfZJ+9wpsrupZuHh8FLRZVZ24=";
+    hash = "sha256-vzn+7w7RgAsCt1pOz53cvBE1F1U+NFE4c1MehwLoFeQ=";
   };
 
   nativeBuildInputs = [
