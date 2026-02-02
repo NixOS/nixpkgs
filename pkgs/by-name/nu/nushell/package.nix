@@ -67,6 +67,9 @@ rustPlatform.buildRustPackage {
       # The skipped tests all fail in the sandbox because in the nushell test playground,
       # the tmp $HOME is not set, so nu falls back to looking up the passwd dir of the build
       # user (/var/empty). The assertions however do respect the set $HOME.
+      #
+      # On Darwin, path_is_a_list_in_repl fails with "Operation not permitted" in the sandbox:
+      # https://github.com/NixOS/nixpkgs/issues/485915
       set -x
       HOME=$(mktemp -d) cargo test -j $NIX_BUILD_CORES --offline -- \
         --test-threads=$NIX_BUILD_CORES \
@@ -77,7 +80,8 @@ rustPlatform.buildRustPackage {
                   --skip=plugins::config::some \
                   --skip=plugins::stress_internals::test_exit_early_local_socket \
                   --skip=plugins::stress_internals::test_failing_local_socket_fallback \
-                  --skip=plugins::stress_internals::test_local_socket
+                  --skip=plugins::stress_internals::test_local_socket \
+                  --skip=shell::environment::env::path_is_a_list_in_repl
         ''}
     )
     runHook postCheck
