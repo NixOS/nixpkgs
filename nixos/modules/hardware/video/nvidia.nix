@@ -719,6 +719,18 @@ in
             cfg.powerManagement.enable && !cfg.powerManagement.kernelSuspendNotifier
           ) nvidia_x11.out;
 
+          environment.etc."systemd/system-sleep/nvidia".source = lib.mkIf cfg.powerManagement.enable (
+            pkgs.writeShellScript "nvidia-sleep" ''
+              export PATH=${
+                lib.makeBinPath [
+                  pkgs.coreutils
+                  pkgs.kbd
+                ]
+              }:$PATH
+              exec "${nvidia_x11.out}/lib/systemd/system-sleep/nvidia" "$@"
+            ''
+          );
+
           systemd.services =
             let
               nvidiaService = state: {
