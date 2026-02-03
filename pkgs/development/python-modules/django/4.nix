@@ -45,16 +45,16 @@
 
 buildPythonPackage rec {
   pname = "django";
-  version = "4.2.27";
-  format = "pyproject";
+  version = "4.2.28";
+  pyproject = true;
 
   disabled = pythonOlder "3.8" || pythonAtLeast "3.13";
 
   src = fetchFromGitHub {
     owner = "django";
     repo = "django";
-    rev = "refs/tags/${version}";
-    hash = "sha256-vdY85Ib2knRFLPmZZ6ojiD5R9diuvpVut1+nOVXSp0Y=";
+    tag = version;
+    hash = "sha256-dxlTonT8zFIFGFrrOW4GFKOy5b0chcESxt9i9xHO8h4=";
   };
 
   patches = [
