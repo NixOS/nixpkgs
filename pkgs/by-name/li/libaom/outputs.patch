@@ -46,7 +46,7 @@ index e8fff2e77..b8a73aad4 100644
                    "CONFIG_MULTITHREAD")
  
  foreach(arg ${REQUIRED_ARGS})
-@@ -35,15 +35,15 @@ else()
+@@ -35,16 +35,16 @@ else()
  endif()
  
  # Write pkg-config info.
@@ -63,7 +63,9 @@ index e8fff2e77..b8a73aad4 100644
  file(WRITE "${pkgconfig_file}" "# libaom pkg-config.\n")
  file(APPEND "${pkgconfig_file}" "prefix=${prefix}\n")
 -file(APPEND "${pkgconfig_file}" "exec_prefix=\${prefix}\n")
+-file(APPEND "${pkgconfig_file}" "includedir=\${prefix}/${includedir}\n")
 +file(APPEND "${pkgconfig_file}" "exec_prefix=${exec_prefix}\n")
- file(APPEND "${pkgconfig_file}" "includedir=\${prefix}/${includedir}\n")
++file(APPEND "${pkgconfig_file}" "includedir=${CMAKE_INSTALL_FULL_INCLUDEDIR}\n")
  file(APPEND "${pkgconfig_file}" "libdir=\${exec_prefix}/${libdir}\n\n")
  file(APPEND "${pkgconfig_file}" "Name: ${pkg_name}\n")
+ file(
