@@ -78,6 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "man"
+    "tutorials"
   ];
 
   src = fetchurl {
@@ -177,11 +178,18 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # Make sure PyXML modules can be found at run-time.
-  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    for f in $out/lib/inkscape/*.dylib; do
-      ln -s $f $out/lib/$(basename $f)
-    done
-  '';
+  postInstall =
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      for f in $out/lib/inkscape/*.dylib; do
+        ln -s $f $out/lib/$(basename $f)
+      done
+    ''
+    +
+    # Move tutorials to their own output
+    ''
+      mkdir -p $tutorials/share/inkscape/
+      mv $out/share/inkscape/tutorials $tutorials/share/inkscape/
+    '';
 
   passthru = {
     tests = {
