@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  asciidoc,
   autoreconfHook,
   bashInteractive,
   cacert,
@@ -44,17 +45,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cockpit";
-  version = "351";
+  version = "355";
 
   src = fetchFromGitHub {
     owner = "cockpit-project";
     repo = "cockpit";
     tag = finalAttrs.version;
-    hash = "sha256-8f/mm53eE0L5fxNwgBkKeNvlBV2gPPvLI+U8c7QkKAI=";
+    hash = "sha256-LD3bjb87AvElwMFB5YKwz04PEmWw+DWDP7RGBCzwSb4=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
+    asciidoc
     autoreconfHook
     makeWrapper
     docbook_xml_dtd_43
@@ -95,11 +97,8 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/tls/cockpit-certificate-helper.in \
       --replace-fail 'COCKPIT_CONFIG="@sysconfdir@/cockpit"' 'COCKPIT_CONFIG=/etc/cockpit'
 
-    substituteInPlace src/tls/cockpit-certificate-ensure.c \
-      --replace-fail '#define COCKPIT_SELFSIGNED_PATH      PACKAGE_SYSCONF_DIR COCKPIT_SELFSIGNED_FILENAME' '#define COCKPIT_SELFSIGNED_PATH      "/etc" COCKPIT_SELFSIGNED_FILENAME'
-
-    substituteInPlace src/common/cockpitconf.c \
-      --replace-fail 'const char *cockpit_config_dirs[] = { PACKAGE_SYSCONF_DIR' 'const char *cockpit_config_dirs[] = { "/etc"'
+    substituteInPlace src/Makefile.am \
+      --replace-fail '-DPACKAGE_SYSCONF_DIR=\""$(sysconfdir)"\"' '-DPACKAGE_SYSCONF_DIR=\""/etc"\"'
 
     substituteInPlace src/**/*.c \
       --replace-quiet "/bin/sh" "${lib.getExe bashInteractive}"
