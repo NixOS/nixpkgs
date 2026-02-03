@@ -1668,6 +1668,7 @@
   ./services/web-apps/lanraragi.nix
   ./services/web-apps/lasuite-docs.nix
   ./services/web-apps/lasuite-meet.nix
+  ./services/web-apps/leantime.nix
   ./services/web-apps/lemmy.nix
   ./services/web-apps/librechat.nix
   ./services/web-apps/librespeed.nix
