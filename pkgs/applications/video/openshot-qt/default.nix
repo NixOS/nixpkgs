@@ -47,7 +47,6 @@ mkDerivationWith python3.pkgs.buildPythonApplication {
   propagatedBuildInputs = with python3.pkgs; [
     httplib2
     libopenshot
-    pyqtwebengine
     pyzmq
     requests
     sip
@@ -96,5 +95,6 @@ mkDerivationWith python3.pkgs.buildPythonApplication {
     mainProgram = "openshot-qt";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    broken = true; # pyqtwebengine has been removed
   };
 }
