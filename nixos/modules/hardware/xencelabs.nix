@@ -30,13 +30,14 @@ in
     services.udev.packages = [ cfg.package ];
 
     systemd.services.xencelabs = lib.mkIf cfg.enable {
-    description = "Xencelabs Multi-User Service";
+      description = "Xencelabs Multi-User Service";
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
         Type = "simple";
         ExecStart = "chmod 777 /tmp/qtsingleapp-Xencel-fb8d-lockfile";
         Restart = "on-failure";
+      };
     };
   };
 }
