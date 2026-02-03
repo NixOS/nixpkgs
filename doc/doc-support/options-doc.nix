@@ -12,10 +12,10 @@ let
   transformDeclaration =
     decl:
     let
-      declStr = toString decl;
-      subpath = lib.removePrefix "/" (lib.removePrefix root declStr);
+      resolvedDeclStr = toString (lib.filesystem.resolveDefaultNix decl);
+      subpath = lib.removePrefix "/" (lib.removePrefix root resolvedDeclStr);
     in
-    assert lib.hasPrefix root declStr;
+    assert lib.hasPrefix root resolvedDeclStr;
     {
       url = "https://github.com/NixOS/nixpkgs/blob/master/${subpath}";
       name = subpath;
