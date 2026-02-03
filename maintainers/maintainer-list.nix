@@ -19839,6 +19839,12 @@
     name = "Oops418";
     githubId = 93655215;
   };
+  OpalAayan = {
+    email = "YougurtMyFace@proton.me";
+    github = "OpalAayan";
+    githubId = 169937134;
+    name = "OpalAayan";
+  };
   opeik = {
     email = "sandro@stikic.com";
     github = "opeik";

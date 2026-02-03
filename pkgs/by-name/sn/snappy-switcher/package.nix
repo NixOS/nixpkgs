@@ -63,11 +63,23 @@ stdenv.mkDerivation (finalAttrs: {
     # Install and wrap scripts
     install -m 755 scripts/snappy-wrapper.sh $out/bin/snappy-wrapper
     wrapProgram $out/bin/snappy-wrapper \
-      --prefix PATH : ${lib.makeBinPath [ coreutils gnugrep gnused ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          coreutils
+          gnugrep
+          gnused
+        ]
+      }
 
     install -m 755 scripts/install-config.sh $out/bin/snappy-install-config
     wrapProgram $out/bin/snappy-install-config \
-      --prefix PATH : ${lib.makeBinPath [ coreutils gnugrep gnused ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          coreutils
+          gnugrep
+          gnused
+        ]
+      }
 
     runHook postInstall
   '';
@@ -77,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/OpalAayan/snappy-switcher";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [OpalAayan];
+    maintainers = with lib.maintainers; [ OpalAayan ];
     mainProgram = "snappy-switcher";
   };
 })
