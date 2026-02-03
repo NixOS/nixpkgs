@@ -2,14 +2,12 @@
   qtModule,
   python3,
   qtbase,
-  qtsvg,
 }:
 
 qtModule {
   pname = "qtdeclarative";
   propagatedBuildInputs = [
     qtbase
-    qtsvg
   ];
   nativeBuildInputs = [ python3 ];
   outputs = [
