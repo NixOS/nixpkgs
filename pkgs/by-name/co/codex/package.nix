@@ -99,8 +99,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.asl20;
     mainProgram = "codex";
     maintainers = with lib.maintainers; [
-      malo
       delafthi
+      jeafleohj
+      malo
     ];
     platforms = lib.platforms.unix;
   };

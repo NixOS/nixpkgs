@@ -12117,6 +12117,12 @@
     github = "jdupak";
     githubId = 22683640;
   };
+  jeafleohj = {
+    name = "Jhony Elmer Angulo Fabian";
+    email = "jhonyangulof+nixpkgs@gmail.com";
+    github = "jeafleohj";
+    githubId = 26931381;
+  };
   jeancaspar = {
     name = "Jean Caspar";
     github = "JeanCASPAR";
