@@ -1590,6 +1590,9 @@ with pkgs;
 
   blockdiag = with python3Packages; toPythonApplication blockdiag;
 
+  bogofilter-sqlite = bogofilter.override { database = sqlite; };
+  bogofilter-db = bogofilter.override { database = db; };
+
   boomerang = libsForQt5.callPackage ../development/tools/boomerang { };
 
   bozohttpd-minimal = bozohttpd.override { minimal = true; };
