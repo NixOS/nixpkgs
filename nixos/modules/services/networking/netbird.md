@@ -89,3 +89,122 @@ See the option description for more information.
 [environment](#opt-services.netbird.clients._name_.environment) allows you to pass additional configurations
 through environment variables, but special care needs to be taken for overriding config location and
 daemon address due [hardened](#opt-services.netbird.clients._name_.hardened) option.
+
+## DNS Configuration {#module-services-netbird-dns}
+
+NetBird provides DNS features for peer name resolution. You can customize or disable these:
+
+```nix
+{
+  services.netbird.clients.work = {
+    port = 51820;
+    dns.disable = true; # Completely disable NetBird DNS
+    dns.extraLabels = [ "myserver=10.0.0.5" ]; # Extra DNS labels
+    dns.routeInterval = 5000; # DNS route update interval (ms)
+  };
+}
+```
+
+## Routing and Firewall Controls {#module-services-netbird-routing}
+
+Fine-grained control over routing and firewall behavior:
+
+```nix
+{
+  services.netbird.clients.restricted = {
+    port = 51820;
+    routing.disableClientRoutes = true; # Don't accept routes from peers
+    routing.disableServerRoutes = true; # Don't advertise routes
+    routing.blockLanAccess = true; # Block LAN access from NetBird
+    routing.blockInbound = true; # Block all inbound connections
+    firewall.disableNetbird = true; # Disable NetBird's built-in firewall
+  };
+}
+```
+
+## Security Features {#module-services-netbird-security}
+
+### Rosenpass (Post-Quantum Cryptography) {#module-services-netbird-rosenpass}
+
+Enable post-quantum key exchange for enhanced security:
+
+```nix
+{
+  services.netbird.clients.secure = {
+    port = 51820;
+    rosenpass.enable = true;
+    rosenpass.permissive = true; # Allow connections with non-Rosenpass peers
+  };
+}
+```
+
+See [the NetBird docs](https://docs.netbird.io/how-to/enable-post-quantum-cryptography) for more information.
+
+### SSH Server {#module-services-netbird-ssh}
+
+NetBird includes a built-in SSH server for remote access:
+
+```nix
+{
+  services.netbird.clients.withSsh = {
+    port = 51820;
+    ssh.enable = true;
+    ssh.permitRoot = false;
+    ssh.sftp.enable = true;
+    ssh.portForwarding.local = true;
+    ssh.portForwarding.remote = false;
+  };
+}
+```
+
+## Connection Management {#module-services-netbird-connection}
+
+Configure connection behavior:
+
+```nix
+{
+  services.netbird.clients.lazy = {
+    port = 51820;
+    connection.lazy = true; # Connect only when traffic is detected
+    connection.networkMonitor = true; # Enable network monitoring
+    hostname = "my-custom-hostname"; # Custom peer hostname
+  };
+}
+```
+
+## Self-Hosted Deployments {#module-services-netbird-selfhosted}
+
+For self-hosted NetBird deployments, configure custom server URLs:
+
+```nix
+{
+  services.netbird.clients.selfhosted = {
+    port = 51820;
+    server.managementUrl = "https://management.example.com:443";
+    server.adminUrl = "https://admin.example.com:443";
+  };
+}
+```
+
+## Advanced Configuration {#module-services-netbird-advanced}
+
+Additional options for specific use cases:
+
+```nix
+{
+  services.netbird.clients.advanced = {
+    port = 51820;
+    mtu = 1280; # Custom MTU
+    externalIpMap = "192.168.1.100/32->203.0.113.50/32"; # NAT traversal
+    interfaceBlacklist = [
+      "docker0"
+      "br-*"
+    ]; # Exclude interfaces
+    debug.anonymizeLogs = true; # Anonymize logs
+    extraEnvironment = {
+      # Additional env vars
+      MY_CUSTOM_VAR = "value";
+    };
+  };
+}
+```

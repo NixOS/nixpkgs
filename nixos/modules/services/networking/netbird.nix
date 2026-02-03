@@ -42,6 +42,8 @@ let
     attrsOf
     bool
     enum
+    int
+    ints
     listOf
     nullOr
     package
@@ -180,6 +182,190 @@ in
                 '';
               };
 
+              dns = {
+                disable = mkOption {
+                  type = bool;
+                  default = false;
+                  description = "Completely disable NetBird DNS features.";
+                };
+                extraLabels = mkOption {
+                  type = listOf str;
+                  default = [ ];
+                  example = [ "myserver=10.0.0.5" ];
+                  description = "Extra DNS labels for peer resolution (format: hostname=ip).";
+                };
+                routeInterval = mkOption {
+                  type = nullOr ints.positive;
+                  default = null;
+                  description = "DNS route update interval in milliseconds.";
+                };
+              };
+
+              firewall.disableNetbird = mkOption {
+                type = bool;
+                default = false;
+                description = "Disable NetBird's built-in firewall rules.";
+              };
+
+              routing = {
+                disableClientRoutes = mkOption {
+                  type = bool;
+                  default = false;
+                  description = "Don't accept routes advertised by peers.";
+                };
+                disableServerRoutes = mkOption {
+                  type = bool;
+                  default = false;
+                  description = "Don't advertise routes to peers.";
+                };
+                blockLanAccess = mkOption {
+                  type = bool;
+                  default = false;
+                  description = "Block access to local LAN from NetBird network.";
+                };
+                blockInbound = mkOption {
+                  type = bool;
+                  default = false;
+                  description = "Block all inbound connections from NetBird peers.";
+                };
+              };
+
+              externalIpMap = mkOption {
+                type = nullOr str;
+                default = null;
+                example = "192.168.1.100/32->203.0.113.50/32";
+                description = "Map external IPs for NAT traversal.";
+              };
+
+              mtu = mkOption {
+                type = nullOr ints.positive;
+                default = null;
+                example = 1280;
+                description = "Custom MTU for the WireGuard interface.";
+              };
+
+              interfaceBlacklist = mkOption {
+                type = listOf str;
+                default = [ ];
+                example = [
+                  "docker0"
+                  "br-*"
+                ];
+                description = "Network interfaces to exclude from routing.";
+              };
+
+              rosenpass = {
+                enable = mkOption {
+                  type = bool;
+                  default = false;
+                  description = "Enable Rosenpass post-quantum key exchange.";
+                };
+                permissive = mkOption {
+                  type = bool;
+                  default = false;
+                  description = "Allow connections with peers that don't support Rosenpass.";
+                };
+              };
+
+              ssh = {
+                enable = mkOption {
+                  type = bool;
+                  default = false;
+                  description = "Enable NetBird's built-in SSH server.";
+                };
+                permitRoot = mkOption {
+                  type = bool;
+                  default = false;
+                  description = "Allow root SSH access via NetBird.";
+                };
+                sftp.enable = mkOption {
+                  type = bool;
+                  default = false;
+                  description = "Enable SFTP subsystem.";
+                };
+                portForwarding = {
+                  local = mkOption {
+                    type = bool;
+                    default = false;
+                    description = "Enable local port forwarding.";
+                  };
+                  remote = mkOption {
+                    type = bool;
+                    default = false;
+                    description = "Enable remote port forwarding.";
+                  };
+                };
+                disableAuth = mkOption {
+                  type = bool;
+                  default = false;
+                  description = ''
+                    Disable SSH authentication.
+
+                    WARNING: This is a security risk. Only enable if you understand the implications.
+                  '';
+                };
+                jwtCacheTtl = mkOption {
+                  type = nullOr ints.positive;
+                  default = null;
+                  description = "JWT cache TTL in seconds.";
+                };
+              };
+
+              connection = {
+                lazy = mkOption {
+                  type = bool;
+                  default = false;
+                  description = "Connect only when traffic is detected.";
+                };
+                networkMonitor = mkOption {
+                  type = bool;
+                  default = true;
+                  description = "Enable network monitoring.";
+                };
+                preSharedKey = mkOption {
+                  type = nullOr path;
+                  default = null;
+                  description = "Path to WireGuard preshared key file.";
+                };
+              };
+
+              server = {
+                managementUrl = mkOption {
+                  type = nullOr str;
+                  default = null;
+                  example = "https://management.example.com:443";
+                  description = "Custom management server URL (self-hosted).";
+                };
+                adminUrl = mkOption {
+                  type = nullOr str;
+                  default = null;
+                  description = "Custom admin panel URL.";
+                };
+              };
+
+              hostname = mkOption {
+                type = nullOr str;
+                default = null;
+                description = "Custom hostname for this peer.";
+              };
+
+              debug.anonymizeLogs = mkOption {
+                type = bool;
+                default = false;
+                description = "Anonymize sensitive information in logs.";
+              };
+
+              extraEnvironment = mkOption {
+                type = attrsOf str;
+                default = { };
+                description = ''
+                  Additional environment variables to pass to the NetBird service.
+
+                  These are merged with the computed environment variables, with
+                  values from this option taking precedence on conflicts.
+                '';
+              };
+
               interface = mkOption {
                 type = str;
                 default = "nb-${client.name}";
@@ -208,6 +394,30 @@ in
                   } // optionalAttrs (client.dns-resolver.address != null) {
                     NB_DNS_RESOLVER_ADDRESS = "''${client.dns-resolver.address}:''${toString client.dns-resolver.port}";
                   }
+                  // optionalAttrs client.dns.disable { NB_DISABLE_DNS = "true"; }
+                  // optionalAttrs (client.dns.extraLabels != []) { NB_EXTRA_DNS_LABELS = "..."; }
+                  // optionalAttrs (client.dns.routeInterval != null) { NB_DNS_ROUTER_INTERVAL = "..."; }
+                  // optionalAttrs client.firewall.disableNetbird { NB_DISABLE_FIREWALL = "true"; }
+                  // optionalAttrs client.routing.disableClientRoutes { NB_DISABLE_CLIENT_ROUTES = "true"; }
+                  // optionalAttrs client.routing.disableServerRoutes { NB_DISABLE_SERVER_ROUTES = "true"; }
+                  // optionalAttrs client.routing.blockLanAccess { NB_BLOCK_LAN_ACCESS = "true"; }
+                  // optionalAttrs client.routing.blockInbound { NB_BLOCK_INBOUND = "true"; }
+                  // optionalAttrs (client.externalIpMap != null) { NB_EXTERNAL_IP_MAP = "..."; }
+                  // optionalAttrs (client.interfaceBlacklist != []) { NB_INTERFACE_BLACKLIST = "..."; }
+                  // optionalAttrs client.rosenpass.enable { NB_ENABLE_ROSENPASS = "true"; }
+                  // optionalAttrs client.rosenpass.permissive { NB_ROSENPASS_PERMISSIVE = "true"; }
+                  // optionalAttrs client.ssh.enable { NB_ALLOW_SERVER_SSH = "true"; }
+                  // optionalAttrs client.ssh.permitRoot { NB_SSH_ALLOW_ROOT = "true"; }
+                  // optionalAttrs client.ssh.sftp.enable { NB_SSH_ALLOW_SFTP = "true"; }
+                  // optionalAttrs client.ssh.portForwarding.local { NB_SSH_ALLOW_LOCAL_PORT_FORWARDING = "true"; }
+                  // optionalAttrs client.ssh.portForwarding.remote { NB_SSH_ALLOW_REMOTE_PORT_FORWARDING = "true"; }
+                  // optionalAttrs client.ssh.disableAuth { NB_DISABLE_SSH_AUTH = "true"; }
+                  // optionalAttrs (client.ssh.jwtCacheTtl != null) { NB_SSH_JWT_CACHE_TTL = "..."; }
+                  // optionalAttrs client.connection.lazy { NB_ENABLE_LAZY_CONNECTION = "true"; }
+                  // optionalAttrs (!client.connection.networkMonitor) { NB_DISABLE_NETWORK_MONITOR = "true"; }
+                  // optionalAttrs (client.hostname != null) { NB_HOSTNAME = "..."; }
+                  // optionalAttrs client.debug.anonymizeLogs { NB_ANONYMIZE = "true"; }
+                  // client.extraEnvironment
                 '';
                 description = ''
                   Environment for the netbird service, used to pass configuration options.
@@ -275,10 +485,7 @@ in
                   - `CAP_NET_RAW`, `CAP_NET_ADMIN` and `CAP_BPF` still give unlimited network manipulation possibilites,
                   - older kernels don't have `CAP_BPF` and use `CAP_SYS_ADMIN` instead,
 
-                  Known security features that are not (yet) integrated into the module:
-                  - 2024-02-14: `rosenpass` is an experimental feature configurable solely
-                    through `--enable-rosenpass` flag on the `netbird up` command,
-                    see [the docs](https://docs.netbird.io/how-to/enable-post-quantum-cryptography)
+                  For post-quantum cryptography, see the [](#opt-services.netbird.clients._name_.rosenpass.enable) option.
                 '';
               };
 
@@ -357,6 +564,9 @@ in
                   } // optionalAttrs (client.dns-resolver.address != null) {
                     CustomDNSAddress = "''${client.dns-resolver.address}:''${toString client.dns-resolver.port}";
                   }
+                  // optionalAttrs (client.mtu != null) { Mtu = client.mtu; }
+                  // optionalAttrs (client.server.managementUrl != null) { ManagementURL = client.server.managementUrl; }
+                  // optionalAttrs (client.server.adminUrl != null) { AdminURL = client.server.adminUrl; }
                 '';
                 description = ''
                   Additional configuration that exists before the first start and
@@ -447,7 +657,49 @@ in
             }
             // optionalAttrs (client.dns-resolver.address != null) {
               NB_DNS_RESOLVER_ADDRESS = "${client.dns-resolver.address}:${toString client.dns-resolver.port}";
-            };
+            }
+            # DNS options
+            // optionalAttrs client.dns.disable { NB_DISABLE_DNS = "true"; }
+            // optionalAttrs (client.dns.extraLabels != [ ]) {
+              NB_EXTRA_DNS_LABELS = concatStringsSep "," client.dns.extraLabels;
+            }
+            // optionalAttrs (client.dns.routeInterval != null) {
+              NB_DNS_ROUTER_INTERVAL = toString client.dns.routeInterval;
+            }
+            # Firewall options
+            // optionalAttrs client.firewall.disableNetbird { NB_DISABLE_FIREWALL = "true"; }
+            # Routing options
+            // optionalAttrs client.routing.disableClientRoutes { NB_DISABLE_CLIENT_ROUTES = "true"; }
+            // optionalAttrs client.routing.disableServerRoutes { NB_DISABLE_SERVER_ROUTES = "true"; }
+            // optionalAttrs client.routing.blockLanAccess { NB_BLOCK_LAN_ACCESS = "true"; }
+            // optionalAttrs client.routing.blockInbound { NB_BLOCK_INBOUND = "true"; }
+            # NAT traversal
+            // optionalAttrs (client.externalIpMap != null) { NB_EXTERNAL_IP_MAP = client.externalIpMap; }
+            // optionalAttrs (client.interfaceBlacklist != [ ]) {
+              NB_INTERFACE_BLACKLIST = concatStringsSep "," client.interfaceBlacklist;
+            }
+            # Rosenpass (post-quantum cryptography)
+            // optionalAttrs client.rosenpass.enable { NB_ENABLE_ROSENPASS = "true"; }
+            // optionalAttrs client.rosenpass.permissive { NB_ROSENPASS_PERMISSIVE = "true"; }
+            # SSH options
+            // optionalAttrs client.ssh.enable { NB_ALLOW_SERVER_SSH = "true"; }
+            // optionalAttrs client.ssh.permitRoot { NB_SSH_ALLOW_ROOT = "true"; }
+            // optionalAttrs client.ssh.sftp.enable { NB_SSH_ALLOW_SFTP = "true"; }
+            // optionalAttrs client.ssh.portForwarding.local { NB_SSH_ALLOW_LOCAL_PORT_FORWARDING = "true"; }
+            // optionalAttrs client.ssh.portForwarding.remote { NB_SSH_ALLOW_REMOTE_PORT_FORWARDING = "true"; }
+            // optionalAttrs client.ssh.disableAuth { NB_DISABLE_SSH_AUTH = "true"; }
+            // optionalAttrs (client.ssh.jwtCacheTtl != null) {
+              NB_SSH_JWT_CACHE_TTL = toString client.ssh.jwtCacheTtl;
+            }
+            # Connection options
+            // optionalAttrs client.connection.lazy { NB_ENABLE_LAZY_CONNECTION = "true"; }
+            // optionalAttrs (!client.connection.networkMonitor) { NB_DISABLE_NETWORK_MONITOR = "true"; }
+            # Hostname
+            // optionalAttrs (client.hostname != null) { NB_HOSTNAME = client.hostname; }
+            # Debug options
+            // optionalAttrs client.debug.anonymizeLogs { NB_ANONYMIZE = "true"; }
+            # User extra environment (merged last, can override)
+            // client.extraEnvironment;
 
             config.config = {
               DisableAutoConnect = !client.autoStart;
@@ -456,7 +708,14 @@ in
             }
             // optionalAttrs (client.dns-resolver.address != null) {
               CustomDNSAddress = "${client.dns-resolver.address}:${toString client.dns-resolver.port}";
-            };
+            }
+            # MTU setting
+            // optionalAttrs (client.mtu != null) { Mtu = client.mtu; }
+            # Server URLs for self-hosted deployments
+            // optionalAttrs (client.server.managementUrl != null) {
+              ManagementURL = client.server.managementUrl;
+            }
+            // optionalAttrs (client.server.adminUrl != null) { AdminURL = client.server.adminUrl; };
           }
         )
       );
