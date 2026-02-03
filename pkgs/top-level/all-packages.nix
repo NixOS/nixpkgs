@@ -4325,8 +4325,6 @@ with pkgs;
   graalvmPackages = recurseIntoAttrs (callPackage ../development/compilers/graalvm { });
   buildGraalvmNativeImage = callPackage ../build-support/build-graalvm-native-image { };
 
-  openshot-qt = libsForQt5.callPackage ../applications/video/openshot-qt { };
-
   inherit (callPackage ../development/compilers/julia { })
     julia_110-bin
     julia_111-bin

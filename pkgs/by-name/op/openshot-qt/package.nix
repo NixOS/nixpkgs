@@ -1,33 +1,23 @@
 {
   lib,
-  stdenv,
-  mkDerivationWith,
   fetchFromGitHub,
   doxygen,
   gtk3,
   libopenshot,
-  python3,
-  qtbase,
-  qtsvg,
-  qtwayland,
-  wayland,
-  waylandSupport ? stdenv.hostPlatform.isLinux,
   wrapGAppsHook3,
+  python3Packages,
 }:
 
-let
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "openshot-qt";
-  version = "3.3.0";
+  version = "3.5.1-unstable-2026-04-22";
   src = fetchFromGitHub {
     owner = "OpenShot";
     repo = "openshot-qt";
-    tag = "v${version}";
-    hash = "sha256-+QI1772ys1Czd+KSVBAdAUjLg9mUcMZs+UhkNljY7nQ=";
+    rev = "930ff919762570eaf35a879574da8f8da9f196be";
+    hash = "sha256-o0BPEzkEAyoZkPkiR9G8i2nANgDFI4wjD5b9hGOqB0c=";
   };
-in
-mkDerivationWith python3.pkgs.buildPythonApplication {
   format = "setuptools";
-  inherit pname version src;
 
   outputs = [ "out" ]; # "lib" can't be split
 
@@ -38,43 +28,29 @@ mkDerivationWith python3.pkgs.buildPythonApplication {
 
   buildInputs = [
     gtk3
-  ]
-  ++ lib.optionals waylandSupport [
-    qtwayland
-    wayland
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python3Packages; [
     httplib2
     libopenshot
-    pyqtwebengine
     pyzmq
     requests
     sip
+    pyside6
   ];
 
   strictDeps = true;
-
-  preConfigure = ''
-    # the builder tries to create caching directories during install
-    export HOME=$(mktemp -d)
-  '';
 
   doCheck = false;
 
   dontWrapGApps = true;
   dontWrapQtApps = true;
 
+  # https://github.com/OpenShot/openshot-qt/blob/930ff919762570eaf35a879574da8f8da9f196be/src/launch.py#L86
+  # imports qt_api.py from its own site-packages directory
   postFixup = ''
     wrapProgram $out/bin/openshot-qt \
-  ''
-  # Fix toolbar icons on Darwin
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    --suffix QT_PLUGIN_PATH : "${lib.getBin qtsvg}/${qtbase.qtPluginPrefix}" \
-  ''
-  + ''
-    "''${gappsWrapperArgs[@]}" \
-    "''${qtWrapperArgs[@]}"
+      --prefix PYTHONPATH : "$out/${python3Packages.python.sitePackages}/openshot_qt"
   '';
 
   passthru = {
@@ -97,4 +73,4 @@ mkDerivationWith python3.pkgs.buildPythonApplication {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})
