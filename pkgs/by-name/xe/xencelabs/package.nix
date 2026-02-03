@@ -67,6 +67,11 @@ stdenv.mkDerivation rec {
         mkdir -p "$USER_CONFIG"
         cp -r "$dirname/config/." "$USER_CONFIG/"
     fi
+    # Set the proper permissions for the config files regardless of if they were just created or not.
+    setfacl -Rb "$USER_CONFIG"
+    chown -R "$(id -u)":"$(id -g)" "$USER_CONFIG"
+    find "$USER_CONFIG" -type d -exec chmod 755 {} +
+    find "$USER_CONFIG" -type f -exec chmod 644 {} +
 
     lockfile="/tmp/qtsingleapp-Xencel-fb8d-lockfile"
     touch "$lockfile"
