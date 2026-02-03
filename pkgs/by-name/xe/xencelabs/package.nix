@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
     libGL
     qt5.qtbase
     qt5.qtsvg
+    xorg.xkeyboardconfig
   ];
 
   dontWrapQtApps = true;
@@ -80,8 +81,8 @@ stdenv.mkDerivation rec {
         # Fix desktop file to point to the proper directory rather than /lib.
         desktopFile="$out/share/applications/xencelabs.desktop"
         substituteInPlace "$desktopFile" \
-          --replace "/usr/lib/xencelabs/start.sh" "$out/lib/xencelabs/start.sh" \
-          --replace "/usr/share/icons/xencelabs.png" "$out/share/icons/xencelabs.png"
+          --replace-fail "/usr/lib/xencelabs/start.sh" "$out/bin/xencelabs" \
+          --replace-fail "/usr/share/icons/xencelabs.png" "$out/share/icons/xencelabs.png"
 
         # Set the main binary executable.
         chmod +x $out/lib/xencelabs/xencelabs
@@ -90,14 +91,14 @@ stdenv.mkDerivation rec {
         mkdir -p $out/lib/systemd/system
         cp xencelabs-${version}/App/etc/systemd/system/xencelabs.service $out/lib/systemd/system/
         substituteInPlace $out/lib/systemd/system/xencelabs.service \
-          --replace "/usr/lib/xencelabs/restar.sh" "$out/lib/xencelabs/restar.sh"
+          --replace-fail "/usr/lib/xencelabs/restar.sh" "$out/lib/xencelabs/restar.sh"
 
         # Copy and modify the restart script, but with the proper start for a Nix script.
         cp xencelabs-${version}/App/usr/lib/xencelabs/restar.sh $out/lib/xencelabs/restar.sh
         substituteInPlace $out/lib/xencelabs/restar.sh \
-          --replace "#!/bin/sh" "#!/usr/bin/env sh"
+          --replace-fail "#!/bin/sh" "#!/usr/bin/env sh"
         substituteInPlace $out/lib/xencelabs/restar.sh \
-          --replace "sudo chmod" "chmod"
+          --replace-fail "sudo chmod" "chmod"
         chmod +x $out/lib/xencelabs/restar.sh
 
         runHook postInstall
@@ -105,11 +106,12 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     makeBinaryWrapper \
-      "$out/lib/xencelabs/xencelabs" \
+      "$out/lib/xencelabs/start.sh" \
       "$out/bin/xencelabs" \
       --set LD_LIBRARY_PATH "$out/lib/xencelabs/lib" \
       --set QT_PLUGIN_PATH "$out/lib/xencelabs/platforms" \
-      --set XDG_DATA_DIRS "$out/share"
+      --set XDG_DATA_DIRS "$out/share" \
+      --set QT_XKB_CONFIG_ROOT "${xorg.xkeyboardconfig}/share/X11/xkb"
   '';
 
   meta = with lib; {
