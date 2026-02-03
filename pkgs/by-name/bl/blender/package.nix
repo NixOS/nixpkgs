@@ -118,12 +118,12 @@ in
 
 stdenv'.mkDerivation (finalAttrs: {
   pname = "blender";
-  version = "5.0.1";
+  version = "4.5.6";
 
   src = fetchzip {
     name = "source";
     url = "https://download.blender.org/source/blender-${finalAttrs.version}.tar.xz";
-    hash = "sha256-fNnQRfGfNc7rbk8npkcYtoAqRjJc6MaV4mqtSJxd0EM=";
+    hash = "sha256-kw0dlTX97LcrhgTG3CDBE74H5iPljM87X4zeWKLdetQ=";
   };
 
   # Minimal backport of hiprt 3.x support from https://projects.blender.org/blender/blender/pulls/144889
