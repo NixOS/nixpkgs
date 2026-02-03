@@ -16,7 +16,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "numberstation";
-  version = "1.4.0";
+  version = "1.5.0";
 
   pyproject = false;
 
@@ -24,7 +24,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "~martijnbraam";
     repo = "numberstation";
     rev = version;
-    hash = "sha256-0T/Dc2i6auuZiWjcPR72JT8yOrzmdEmbW2PS5YhmEwI=";
+    hash = "sha256-N8hTXlJcekg/+dCK/tp2EhbNBtj8n9K3LHURRI5ruQQ=";
   };
 
   postPatch = ''
