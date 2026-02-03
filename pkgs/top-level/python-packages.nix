@@ -4528,6 +4528,8 @@ self: super: with self; {
 
   dohq-artifactory = callPackage ../development/python-modules/dohq-artifactory { };
 
+  doipclient = callPackage ../development/python-modules/doipclient { };
+
   doit = callPackage ../development/python-modules/doit { };
 
   doit-py = callPackage ../development/python-modules/doit-py { };
