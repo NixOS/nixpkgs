@@ -18640,6 +18640,11 @@
     github = "nagymathev";
     githubId = 49335802;
   };
+  naitrate = {
+    name = "Naitrate";
+    github = "Naitrate";
+    githubId = 64479044;
+  };
   naho = {
     github = "trueNAHO";
     githubId = 90870942;
