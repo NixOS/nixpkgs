@@ -25,6 +25,9 @@ buildGoModule rec {
   # we have no bash at the moment for windows
   BASH_PATH = lib.optionalString (!stdenv.hostPlatform.isWindows) "${bash}/bin/bash";
 
+  # Build a static executable to avoid environment runtime impurities
+  env.CGO_ENABLED = 0;
+
   # replace the build phase to use the GNUMakefile instead
   buildPhase = ''
     make BASH_PATH=$BASH_PATH
