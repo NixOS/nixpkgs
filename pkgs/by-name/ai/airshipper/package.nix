@@ -27,8 +27,8 @@
 }:
 let
   version = "0.17.0";
-  # Patch for airshipper to install veloren
-  patch =
+
+  patchVoxygen =
     let
       runtimeLibs = [
         udev
@@ -42,20 +42,28 @@ let
         libXi
         vulkan-loader
         libGL
+        wayland
+        wayland-protocols
       ];
     in
-    writeShellScript "patch" ''
-      echo "making binaries executable"
-      chmod +x {veloren-voxygen,veloren-server-cli}
-      echo "patching dynamic linkers"
-      ${patchelf}/bin/patchelf \
-        --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" \
-        veloren-server-cli
+    writeShellScript "patch-veloren-voxygen" ''
+      echo "making veloren-voxygen executable"
+      chmod +x veloren-voxygen
+      echo "patching veloren-voxygen dynamic linker"
       ${patchelf}/bin/patchelf \
         --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" \
         --set-rpath "${lib.makeLibraryPath runtimeLibs}" \
         veloren-voxygen
     '';
+
+  patchServerCLI = writeShellScript "patch-veloren-server-cli" ''
+    echo "making veloren-server-cli executable"
+    chmod +x veloren-server-cli
+    echo "patching veloren-server-cli dynamic linker"
+    ${patchelf}/bin/patchelf \
+      --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" \
+      veloren-server-cli
+  '';
 in
 rustPlatform.buildRustPackage {
   pname = "airshipper";
@@ -109,14 +117,14 @@ rustPlatform.buildRustPackage {
         libXrandr
         libXi
         libXcursor
+        openssl
       ];
     in
     ''
-      # We set LD_LIBRARY_PATH instead of using patchelf in order to propagate the libs
-      # to both Airshipper itself as well as the binaries downloaded by Airshipper.
+      patchelf --set-rpath "${libPath}" "$out/bin/airshipper"
       wrapProgram "$out/bin/airshipper" \
-        --set VELOREN_PATCHER "${patch}" \
-        --prefix LD_LIBRARY_PATH : "${libPath}"
+        --set VELOREN_VOXYGEN_PATCHER "${patchVoxygen}" \
+        --set VELOREN_SERVER_CLI_PATCHER "${patchServerCLI}"
     '';
 
   doCheck = false;
