@@ -14,19 +14,19 @@ in
 
   options = {
     hardware.xencelabs = {
-    enable = lib.mkOption {
+      enable = lib.mkOption {
         default = false;
         type = lib.types.bool;
         description = ''
           Enable Xencelabs hardware udev rules, and service.
         '';
+      };
+      package = lib.mkPackageOption pkgs "xencelabs" { };
     };
-    package = lib.mkPackageOption pkgs "xencelabs" { };
   };
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
-
     services.udev.packages = [ cfg.package ];
 
     systemd.services.xencelabs = lib.mkIf cfg.enable {
