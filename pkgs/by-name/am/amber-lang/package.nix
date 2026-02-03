@@ -73,7 +73,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Programming language compiled to bash";
     homepage = "https://amber-lang.com";
-    license = lib.licenses.gpl3Plus;
+    license = lib.licenses.lgpl3Plus;
     mainProgram = "amber";
     maintainers = with lib.maintainers; [
       cafkafk
