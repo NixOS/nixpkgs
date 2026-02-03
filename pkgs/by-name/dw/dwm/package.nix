@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dwm";
-  version = "6.6";
+  version = "6.8";
 
   src = fetchzip {
     url = "https://dl.suckless.org/dwm/dwm-${finalAttrs.version}.tar.gz";
-    hash = "sha256-fD97OpObSOBTAMc3teejS0u2h4hCkMVYJrNZ6F4IaFs=";
+    hash = "sha256-mkMFmqV9NVGTdDGqW8f+T7r0YQNU1KDsn6uRcacoNco=";
   };
 
   nativeBuildInputs = lib.optional stdenv.hostPlatform.isStatic pkg-config;
