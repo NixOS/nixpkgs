@@ -27,6 +27,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
       url = "https://github.com/CaringCaribou/caringcaribou/commit/f05c5cec0e643654587fd346378be2ad69ef4d17.patch";
       hash = "sha256-+XyTpB1HGW1/rzUfn8FuKeOMza5JU11iFWfuzpOzO5c=";
     })
+    # Backport fix that removes the deprecated pkg_resources library usage
+    (fetchpatch {
+      url = "https://github.com/CaringCaribou/caringcaribou/commit/93d9518df4f496efccefd8d637802b99be9fa83c.patch";
+      hash = "sha256-bknn5HfkyU5iDekl8Tq5sdASQx6wXEi+Yhfa4L11vio=";
+    })
   ];
 
   build-system = [
@@ -35,7 +40,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   dependencies = with python3Packages; [
     python-can
-    setuptools
     doipclient
   ];
 
@@ -45,7 +49,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   meta = {
     description = "A friendly automatic security exploration tool";
+    homepage = "https://github.com/CaringCaribou/caringcaribou";
+    changelog = "https://github.com/CaringCaribou/caringcaribou/releases/tag/${finalAttrs.version}";
+    mainProgram = "caringcaribou";
     license = lib.licenses.gpl3Only;
-    maintainer = lib.maintainers.RossSmyth;
+    maintainers = [
+      lib.maintainers.RossSmyth
+    ];
   };
 })
