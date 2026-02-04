@@ -28,6 +28,7 @@ meson.section.md
 mpi-check-hook.section.md
 ninja.section.md
 nodejs-install-executables.section.md
+nodejs-install-manuals.section.md
 npm-build-hook.section.md
 npm-config-hook.section.md
 npm-install-hook.section.md

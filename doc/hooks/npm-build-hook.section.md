@@ -15,6 +15,7 @@ Hook for building packages that use npm. Can be used in multi-language environme
   fetchNpmDeps,
   npmHooks,
   nodejsInstallExecutables,
+  nodejsInstallManuals,
   nodejs,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -33,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     nodejs
     nodejsInstallExecutables
+    nodejsInstallManuals
     npmHooks.npmConfigHook
     npmHooks.npmBuildHook
     npmHooks.npmInstallHook

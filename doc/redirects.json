@@ -218,6 +218,12 @@
   "nodejs-install-executables-wrapper-args": [
     "index.html#nodejs-install-executables-wrapper-args"
   ],
+  "nodejs-install-manuals": [
+    "index.html#nodejs-install-manuals"
+  ],
+  "nodejs-install-manuals-example": [
+    "index.html#nodejs-install-manuals-example"
+  ],
   "nostrictaliasing": [
     "index.html#nostrictaliasing"
   ],
