@@ -85,6 +85,16 @@ buildFHSEnv {
       libxrandr
     ];
 
+  extraBuildCommands = ''
+    mkdir -p $out/usr/share/wordlists
+    mkdir -p $out/usr/share/seclists
+  '';
+
+  extraBwrapArgs = [
+    "--ro-bind-try /usr/share/wordlists /usr/share/wordlists"
+    "--ro-bind-try /usr/share/seclists /usr/share/seclists"
+  ];
+
   extraInstallCommands = ''
     mkdir -p "$out/share/pixmaps"
     ${lib.getBin unzip}/bin/unzip -p ${src} resources/Media/icon64${product.productName}.png > "$out/share/pixmaps/burpsuite.png"
