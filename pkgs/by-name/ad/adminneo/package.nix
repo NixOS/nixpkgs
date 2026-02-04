@@ -32,6 +32,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     cp compiled/adminneo-${finalAttrs.version}.php $out/adminneo.php
     # for compatibility
     ln -s adminneo.php $out/index.php
+    ln -s adminneo.php $out/adminer.php
   ''
   + (lib.optionalString installPlugins ''
     cp -r compiled/adminneo-plugins $out/
