@@ -203,6 +203,21 @@
   "no-broken-symlinks.sh": [
     "index.html#no-broken-symlinks.sh"
   ],
+  "nodejs-install-executables": [
+    "index.html#nodejs-install-executables"
+  ],
+  "nodejs-install-executables-example": [
+    "index.html#nodejs-install-executables-example"
+  ],
+  "nodejs-install-executables-exclusive-variables": [
+    "index.html#nodejs-install-executables-exclusive-variables"
+  ],
+  "nodejs-install-executables-variables": [
+    "index.html#nodejs-install-executables-variables"
+  ],
+  "nodejs-install-executables-wrapper-args": [
+    "index.html#nodejs-install-executables-wrapper-args"
+  ],
   "nostrictaliasing": [
     "index.html#nostrictaliasing"
   ],
