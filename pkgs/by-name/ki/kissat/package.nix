@@ -23,14 +23,14 @@ let
     homepage = "https://fmv.jku.at/kissat";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kissat";
   version = "4.0.4";
 
   src = fetchFromGitHub {
     owner = "arminbiere";
     repo = "kissat";
-    rev = "rel-${version}";
+    rev = "rel-${finalAttrs.version}";
     sha256 = "sha256-hgB1U2Pmh1hEyNA3ej3fXxxf0YjCRgtOuSddRl6s0eo=";
   };
 
@@ -87,9 +87,9 @@ stdenv.mkDerivation rec {
     libdir=${placeholder "lib"}/lib
     includedir=\''${prefix}/include
 
-    Name: ${pname}
+    Name: ${finalAttrs.pname}
     Description: ${meta.description}
-    Version: ${version}
+    Version: ${finalAttrs.version}
     Libs: -L\''${libdir} -lkissat
     Cflags: -I\''${includedir}
     EOF
@@ -98,4 +98,4 @@ stdenv.mkDerivation rec {
   '';
 
   inherit meta;
-}
+})
