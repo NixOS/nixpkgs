@@ -233,6 +233,33 @@
   "npm-build-hook-variables": [
     "index.html#npm-build-hook-variables"
   ],
+  "npm-config-hook": [
+    "index.html#npm-config-hook"
+  ],
+  "npm-config-hook-deps": [
+    "index.html#npm-config-hook-deps"
+  ],
+  "npm-config-hook-exclusive-variables": [
+    "index.html#npm-config-hook-exclusive-variables"
+  ],
+  "npm-config-hook-honored-variables": [
+    "index.html#npm-config-hook-honored-variables"
+  ],
+  "npm-config-hook-install-flags": [
+    "index.html#npm-config-hook-install-flags"
+  ],
+  "npm-config-hook-rebuild-flags": [
+    "index.html#npm-config-hook-rebuild-flags"
+  ],
+  "npm-config-hook-snippet": [
+    "index.html#npm-config-hook-snippet"
+  ],
+  "npm-config-hook-variables": [
+    "index.html#npm-config-hook-variables"
+  ],
+  "npm-config-hook-writable-cache": [
+    "index.html#npm-config-hook-writable-cache"
+  ],
   "pkgs-replacevars": [
     "index.html#pkgs-replacevars",
     "index.html#pkgs-substituteall",
