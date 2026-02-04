@@ -1,0 +1,71 @@
+--- a/ticket
++++ b/ticket
+@@ -4,6 +4,8 @@
+ # ticket - minimal ticket system with dependency tracking
+ # Stores markdown files with YAML frontmatter in .tickets/
+ 
++readonly PROGNAME="$(basename "$0")"
++
+ # Find .tickets directory by walking parent directories
+ find_tickets_dir() {
+     # Explicit env var takes priority
+@@ -247,7 +249,7 @@
+ 
+ cmd_status() {
+     if [[ $# -lt 2 ]]; then
+-        echo "Usage: $(basename "$0") status <id> <status>" >&2
++        echo "Usage: $PROGNAME status <id> <status>" >&2
+         echo "Valid statuses: $VALID_STATUSES" >&2
+         return 1
+     fi
+@@ -266,7 +268,7 @@
+ 
+ cmd_start() {
+     if [[ $# -lt 1 ]]; then
+-        echo "Usage: $(basename "$0") start <id>" >&2
++        echo "Usage: $PROGNAME start <id>" >&2
+         return 1
+     fi
+     cmd_status "$1" "in_progress"
+@@ -274,7 +276,7 @@
+ 
+ cmd_close() {
+     if [[ $# -lt 1 ]]; then
+-        echo "Usage: $(basename "$0") close <id>" >&2
++        echo "Usage: $PROGNAME close <id>" >&2
+         return 1
+     fi
+     cmd_status "$1" "closed"
+@@ -282,7 +284,7 @@
+ 
+ cmd_reopen() {
+     if [[ $# -lt 1 ]]; then
+-        echo "Usage: $(basename "$0") reopen <id>" >&2
++        echo "Usage: $PROGNAME reopen <id>" >&2
+         return 1
+     fi
+     cmd_status "$1" "open"
+@@ -1432,12 +1434,10 @@
+ }
+ 
+ cmd_help() {
+-    local cmd
+-    cmd=$(basename "$0")
+     cat << EOF
+-$cmd - minimal ticket system with dependency tracking
++$PROGNAME - minimal ticket system with dependency tracking
+ 
+-Usage: $cmd <command> [args]
++Usage: $PROGNAME <command> [args]
+ 
+ Commands:
+   create [title] [options] Create ticket, prints ID
+@@ -1471,7 +1471,7 @@
+   migrate-beads            Import tickets from .beads/issues.jsonl
+ 
+ Tickets stored as markdown files in .tickets/
+-Supports partial ID matching (e.g., '$cmd show 5c4' matches 'nw-5c46')
++Supports partial ID matching (e.g., '$PROGNAME show 5c4' matches 'nw-5c46')
+ EOF
+ }
+ 
