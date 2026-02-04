@@ -27,6 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-lkA9eYuOc1J+tUM1Bd57ROsT8es6AAMjHB5AyoN7oqg=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     pnpmConfigHook
     pnpm_10
