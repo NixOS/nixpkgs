@@ -1,5 +1,6 @@
 {
   name,
+  vendorHash,
   buildGoModule,
   lib,
   stdenv,
@@ -10,12 +11,24 @@
 # Builds plugins from the navidrome example folder
 buildGoModule rec {
   pname = name;
-  inherit (navidrome) src version vendorHash;
+  inherit (navidrome) version;
+
+  inherit vendorHash;
+
+  src = navidrome.src // {
+    sourceRoot = "plugins/examples/${pname}";
+  };
+
+  env.CGO_ENABLED = "0";
 
   buildPhase = ''
     runHook preBuild
 
-    GOOS=wasip1 GOARCH=wasm go build -buildmode=c-shared -o plugin.wasm ./plugins/examples/${pname}/...
+    GOOS=wasip1 \
+    GOARCH=wasm \
+    go build \
+      -buildmode=c-shared \
+      -o ../plugin.wasm .
 
     runHook postBuild
   '';
@@ -24,7 +37,7 @@ buildGoModule rec {
     runHook preInstall
 
     DEST=$out/share/plugins/${pname}
-    install -m 755 -Dt $out/share/${pname} plugin.wasm plugins/examples/${pname}/manifest.json
+    install -m 755 -Dt $out/share/${pname} plugins/plugin.wasm plugins/examples/${pname}/manifest.json
 
     runHook postInstall
   '';

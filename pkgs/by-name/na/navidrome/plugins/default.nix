@@ -7,16 +7,21 @@ lib.makeScope pkgs.newScope (
   in
   builtins.listToAttrs (
     map
-      (name: {
-        inherit name;
-        value = callPackage main-repo-plugin-builder { inherit name; };
+      (data: {
+        inherit (data) name;
+        value = callPackage main-repo-plugin-builder { inherit (data) name
+        vendorHash;
+      };
       })
       [
-        "wikimedia"
-        "coverartarchive"
-        "crypto-ticker"
-        "discord-rich-presence"
-        "subsonicapi-demo"
+        {
+          name = "wikimedia";
+          vendorHash = "sha256-DCz/WKZXnZy109WgStCK7NJg8VpR3IJEaQZLMDXdegk=";
+        }
+        { name = "coverartarchive"; vendorHash = lib.fakeHash; }
+        { name = "crypto-ticker"; vendorHash = lib.fakeHash; }
+        { name = "discord-rich-presence"; vendorHash = lib.fakeHash; }
+        { name = "subsonicapi-demo"; vendorHash = lib.fakeHash; }
       ]
   )
 )
