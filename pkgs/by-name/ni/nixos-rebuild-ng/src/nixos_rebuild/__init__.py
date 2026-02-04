@@ -387,9 +387,7 @@ def main() -> None:
 
 def _handle_called_process_error(ex: CalledProcessError) -> None:
     if logger.isEnabledFor(logging.DEBUG):
-        import traceback
-
-        traceback.print_exception(ex)
+        raise ex
     else:
         import shlex
 
