@@ -1339,6 +1339,7 @@ in
   pyload = runTest ./pyload.nix;
   qbittorrent = runTest ./qbittorrent.nix;
   qboot = handleTestOn [ "x86_64-linux" "i686-linux" ] ./qboot.nix { };
+  qemu-vm-bootdisk-space = runTest ./qemu-vm-bootdisk-space.nix;
   qemu-vm-credentials-fwcfg = runTest {
     imports = [ ./qemu-vm-credentials.nix ];
     _module.args.mechanism = "fw_cfg";
