@@ -5,6 +5,7 @@
   pnpm_9,
   fetchPnpmDeps,
   pnpmConfigHook,
+  pnpmBuildHook,
   nodejs,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -25,19 +26,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
+    pnpmBuildHook
     pnpm_9
   ];
 
-  buildPhase = ''
-    runHook preBuild
-
-    cd $pnpmRoot
-    pnpm build
+  postBuild = ''
     mkdir -p assets/identifier/static
     cp -v src/images/favicon.svg assets/identifier/static/favicon.svg
     cp -v src/images/icon-lilac.svg assets/identifier/static/icon-lilac.svg
-
-    runHook postBuild
   '';
 
   installPhase = ''
