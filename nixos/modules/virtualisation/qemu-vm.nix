@@ -356,7 +356,7 @@ let
     installBootLoader = cfg.installBootLoader;
     touchEFIVars = cfg.useEFIBoot;
     diskSize = "auto";
-    additionalSpace = "0M";
+    additionalSpace = cfg.bootDiskAdditionalSpace;
     copyChannel = false;
     OVMF = cfg.efi.OVMF;
   };
@@ -917,6 +917,20 @@ in
 
         Check the documentation on {option}`virtualisation.directBoot.enable` for details.
       '';
+    };
+
+    virtualisation.bootDiskAdditionalSpace = mkOption {
+      type = types.str;
+      default = "512M";
+      description = ''
+        Additional disk space beyond the NixOS closure for bootloader-enabled VMs.
+        Only applies when {option}`virtualisation.useBootLoader` is `true`.
+
+        The system disk image is sized as: closure size + this value.
+        Set to a larger value if your tests write significant runtime data
+        (e.g., container images, databases).
+      '';
+      example = "2G";
     };
 
     virtualisation.installBootLoader = mkOption {
