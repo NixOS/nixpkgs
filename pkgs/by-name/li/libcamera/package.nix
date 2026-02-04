@@ -27,12 +27,12 @@
 
 stdenv.mkDerivation rec {
   pname = "libcamera";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchgit {
     url = "https://git.libcamera.org/libcamera/libcamera.git";
     rev = "v${version}";
-    hash = "sha256-zGcbzL1Q2hUaj/s9NjBlp7hVjmSFb0GF8CnCoDS82Tw=";
+    hash = "sha256-W9pRE8/0Cf2EEP5bbvy4FsDSeKKSklfJb6T48ZN4dzE=";
   };
 
   outputs = [
