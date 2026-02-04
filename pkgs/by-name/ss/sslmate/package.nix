@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "sslmate";
-  version = "1.9.1";
+  version = "1.10.0";
 
   src = fetchurl {
     url = "https://packages.sslmate.com/other/${pname}-${version}.tar.gz";
-    sha256 = "sha256-F5szGn1cbw7R3lHMocM7as1RS/uaBqKCsvOxA+rXDOc=";
+    sha256 = "sha256-yjeK/CjFSjjymriVb41AWy0SSJ5mwPp6T+asyHaeX5E=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
