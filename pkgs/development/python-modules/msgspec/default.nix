@@ -12,6 +12,7 @@
   pre-commit,
   pyright,
   pytest,
+  pytestCheckHook,
   pyyaml,
   setuptools,
   setuptools-scm,
@@ -73,8 +74,12 @@ buildPythonPackage rec {
     yaml = [ pyyaml ];
   };
 
-  # Requires libasan to be accessible
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  # `tests/typing` runs type checkers
+  enabledTestPaths = [ "tests/unit" ];
 
   pythonImportsCheck = [ "msgspec" ];
 
