@@ -27122,6 +27122,12 @@
     githubId = 5356506;
     name = "Tricia Tan";
   };
+  trivaris = {
+    email = "git@trivaris.org";
+    github = "trivaris";
+    githubId = 102437240;
+    name = "Torben Joneit";
+  };
   trobert = {
     email = "thibaut.robert@gmail.com";
     github = "trobert";
