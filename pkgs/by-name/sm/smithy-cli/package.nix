@@ -68,7 +68,7 @@ stdenvNoCC.mkDerivation {
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.asl20;
     mainProgram = "smithy";
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.joshgodsiff ];
     platforms = lib.attrNames sources;
   };
 }
