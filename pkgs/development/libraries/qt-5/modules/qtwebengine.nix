@@ -38,17 +38,19 @@
   zlib,
   minizip,
   libjpeg,
+  openjpeg,
   libpng,
   libtiff,
   libwebp,
   libopus,
-  jsoncpp,
-  protobuf,
   libvpx,
   srtp,
   snappy,
   nss,
   libevent,
+  lcms2,
+  libxml2,
+  libxslt,
   alsa-lib,
   pulseaudio,
   libcap,
@@ -224,21 +226,42 @@ qtModule (
 
       # Fix the build with gperf ≥ 3.2 and Clang 19.
       ./qtwebengine-gperf-3.2.patch
+
+      # Support building with gcc15
+      (fetchpatch2 {
+        url = "https://salsa.debian.org/qt-kde-team/qt/qtwebengine/-/raw/451b2e7a6a0ac2c6eb409b4e2c03dada141bcd7f/debian/patches/gcc-15.patch";
+        hash = "sha256-nOGntSYDwyYXZYb1/VQMJQDfvn2KbN5/Ok4rs/ZabdQ=";
+      })
+
+      # support for building with python 3.12
+      (fetchpatch2 {
+        url = "https://salsa.debian.org/qt-kde-team/qt/qtwebengine/-/raw/313423e0178cee6eb9419c5803b982df2a71d689/debian/patches/python3.12-six.patch";
+        hash = "sha256-gjc9sOPbcyHtJWnSHpkpupY6dIAODO20tiaTEtAfFr0=";
+      })
+
+      # Build with C++17, which is required by ICU 75
+      (fetchpatch2 {
+        url = "https://salsa.debian.org/qt-kde-team/qt/qtwebengine/-/raw/313423e0178cee6eb9419c5803b982df2a71d689/debian/patches/build-with-c++17.patch";
+        hash = "sha256-1fhkj50radAc3uG386UnS735+LRe0Xs8jQOJtMqE7hQ=";
+      })
+
+      # Use system openjpeg
+      (fetchpatch2 {
+        url = "https://salsa.debian.org/qt-kde-team/qt/qtwebengine/-/raw/313423e0178cee6eb9419c5803b982df2a71d689/debian/patches/system-openjpeg2.patch";
+        hash = "sha256-H3WwC40t0FRMGf1K2aXucrQjynMU/U/14goB4HK9/KM=";
+      })
+
+      # Use system lcms2
+      (fetchpatch2 {
+        url = "https://salsa.debian.org/qt-kde-team/qt/qtwebengine/-/raw/313423e0178cee6eb9419c5803b982df2a71d689/debian/patches/system-lcms2.patch";
+        hash = "sha256-ccEbt5T54uXTV1pJnHI12NfYJ+QdUSUJFj0xcKcmtIA=";
+      })
     ];
 
     postPatch = ''
       # Patch Chromium build tools
       (
         cd src/3rdparty/chromium;
-
-        patch -p1 < ${
-          (fetchpatch {
-            # support for building with python 3.12
-            name = "python312-six.patch";
-            url = "https://gitlab.archlinux.org/archlinux/packaging/packages/qt5-webengine/-/raw/6b0c0e76e0934db2f84be40cb5978cee47266e78/python3.12-six.patch";
-            hash = "sha256-YgP9Sq5+zTC+U7+0hQjZokwb+fytk0UEIJztUXFhTkI=";
-          })
-        }
 
         # Manually fix unsupported shebangs
         substituteInPlace third_party/harfbuzz-ng/src/src/update-unicode-tables.make \
@@ -327,11 +350,12 @@ qtModule (
 
     qmakeFlags = [
       "--"
-      "-system-ffmpeg"
+      "-webengine-icu"
     ]
     ++ lib.optional (
       pipewireSupport && stdenv.buildPlatform == stdenv.hostPlatform
     ) "-webengine-webrtc-pipewire"
+    ++ lib.optional (ffmpeg_7 != null) "-webengine-ffmpeg"
     ++ lib.optional enableProprietaryCodecs "-proprietary-codecs";
 
     propagatedBuildInputs = [
@@ -339,9 +363,14 @@ qtModule (
       qtquickcontrols
       qtlocation
       qtwebchannel
+    ];
 
+    # Optional dependency on system-provided re2 library is not used here because it activates
+    # some broken code paths in chromium.
+    buildInputs = [
       # Image formats
       libjpeg
+      openjpeg
       libpng
       libtiff
       libwebp
@@ -356,18 +385,20 @@ qtModule (
       # Text rendering
       harfbuzz
       icu
+      freetype
 
       libevent
       ffmpeg_7
+
+      lcms2
+
+      snappy
+      minizip
+      zlib
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       dbus
-      zlib
-      minizip
-      snappy
       nss
-      protobuf
-      jsoncpp
 
       # Audio formats
       alsa-lib
@@ -375,10 +406,16 @@ qtModule (
 
       # Text rendering
       fontconfig
-      freetype
 
       libcap
       pciutils
+
+      # there's an explicit check for LIBXML_ICU_ENABLED at configuraion time
+      # FIXME: still doesn't work because of the propagation of non-icu libxml2
+      # from qtbase. Not sure what is the right move here.
+      # FIXME: those could also be used on Darwin if we fix https://github.com/NixOS/nixpkgs/issues/272383
+      (libxml2.override { icuSupport = true; })
+      libxslt
 
       # X11 libs
       xrandr
