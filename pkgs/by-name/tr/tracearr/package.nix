@@ -32,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pnpmConfigHook
     pnpm_10
+    nodejs
     makeWrapper
     turbo
   ];
