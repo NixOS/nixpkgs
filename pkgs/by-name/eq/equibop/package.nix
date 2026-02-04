@@ -6,6 +6,7 @@
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
+  coreutils,
   electron,
   python3Packages,
   pipewire,
@@ -13,6 +14,7 @@
   autoPatchelfHook,
   bun,
   nodejs,
+  speechd,
   withTTS ? true,
   withMiddleClickScroll ? false,
 }:
@@ -118,8 +120,35 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = ''
     makeWrapper ${electron}/bin/electron $out/bin/equibop \
+      --prefix PATH : ${lib.makeBinPath ([ coreutils ] ++ lib.optionals withTTS [ speechd ])} \
+      --run '
+        cfg_home="''${XDG_CONFIG_HOME:-$HOME/.config}"
+        cfg_file="$cfg_home/equibop/settings/settings.json"
+
+        # Home Manager (and similar tooling) may symlink config files into the
+        # Nix store, which is read-only. Equibop expects to mutate this file at
+        # runtime, so replace a read-only symlink with a writable copy.
+        if [[ -L "$cfg_file" && ! -w "$cfg_file" ]]; then
+          target="$(readlink -f "$cfg_file" 2>/dev/null || true)"
+          if [[ "$target" == /nix/store/* ]]; then
+            cfg_dir="''${cfg_file%/*}"
+            mkdir -p "$cfg_dir"
+            tmp="$(mktemp -p "$cfg_dir" settings.json.XXXXXX)"
+            if cp -L "$cfg_file" "$tmp" 2>/dev/null; then
+              rm -f "$cfg_file"
+              mv -f "$tmp" "$cfg_file"
+            else
+              rm -f "$tmp"
+              rm -f "$cfg_file"
+            fi
+          fi
+        fi
+      ' \
       --add-flags $out/opt/Equibop/resources/app.asar \
-      ${lib.optionalString withTTS "--add-flags \"--enable-speech-dispatcher\""} \
+      ${lib.strings.optionalString withTTS ''
+        --run 'if [[ "''${NIXOS_SPEECH:-default}" != "False" ]]; then NIXOS_SPEECH=True; else unset NIXOS_SPEECH; fi' \
+        --add-flags "\''${NIXOS_SPEECH:+--enable-speech-dispatcher}" \
+      ''} \
       ${lib.optionalString withMiddleClickScroll "--add-flags \"--enable-blink-features=MiddleClickAutoscroll\""} \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
   '';
