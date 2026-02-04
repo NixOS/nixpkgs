@@ -27,6 +27,7 @@ fetchFromGitHub {
   owner = "oriansj";
   repo = "stage0-posix";
   sha256 = expected.outputHash;
+  deepClone = true;
   fetchSubmodules = true;
   postFetch = ''
     # Seed binaries will be fetched separately
@@ -40,6 +41,9 @@ fetchFromGitHub {
       $out/M2-Planet/M2libc \
       $out/mescc-tools/M2libc \
       $out/mescc-tools-extra/M2libc
+
+    # deepClone causes .git to be present, remove
+    rm -rf $out/*/.git $out/.git
   '';
 
   meta = {
