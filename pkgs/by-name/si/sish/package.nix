@@ -2,8 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  testers,
-  sish,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -27,11 +26,9 @@ buildGoModule (finalAttrs: {
     "-X=github.com/antoniomika/sish/cmd.Version=${finalAttrs.src.tag}"
   ];
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = sish;
-    };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  doInstallCheck = true;
 
   meta = {
     description = "HTTP(S)/WS(S)/TCP Tunnels to localhost";
