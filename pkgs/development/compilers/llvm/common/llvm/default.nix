@@ -585,6 +585,10 @@ stdenv.mkDerivation (
       '';
     };
   }
+  // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && lib.versionAtLeast release_version "22") {
+    # https://github.com/NixOS/nixpkgs/pull/487407
+    GTEST_FILTER = "-ProgramEnvTest.TestExecuteEmptyEnvironment";
+  }
   // lib.optionalAttrs enableManpages {
     pname = "llvm-manpages";
 
