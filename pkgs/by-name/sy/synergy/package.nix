@@ -22,50 +22,88 @@
   libXrandr,
   libXinerama,
   xkeyboardconfig,
+  gtest,
+  lerc,
+  libdeflate,
+  libsysprof-capture,
+  libwebp,
+  libxcb-cursor,
+  python3,
+  qt6,
+  tomlplusplus,
   xinput,
   avahi-compat,
-  libsForQt5,
+  cli11,
+  xz,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "synergy";
-  version = "1.14.6.19-stable";
+  version = "1.20.0";
 
   src = fetchFromGitHub {
     owner = "symless";
     repo = "synergy-core";
-    rev = finalAttrs.version;
-    hash = "sha256-0QqklfSsvcXh7I2jaHk82k0nY8gQOj9haA4WOjGqBqY=";
-    fetchSubmodules = true;
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-cY+npgBkDOPAe6IUGvJMGiVDr8ZRHmj2BEXvPOmYZY0=";
+    fetchSubmodules = false;
   };
 
-  patches = [
-    # Without this OpenSSL from nixpkgs is not detected
-    ./darwin-non-static-openssl.patch
-  ];
+  postUnpack =
+    let
+      synergyExtraSubmodule = fetchFromGitHub {
+        owner = "symless";
+        repo = "synergy-extra";
+        rev = "5056ed0d4a22e00a4c410733cc0129040de84099";
+        hash = "sha256-137ozE5xexzkdl++wiqZxkTy0b8NfhooKF5vpQdDNRw=";
+      };
+
+    in
+    ''
+      # Synergy pulls in `synergy-extra` via an *SSH* url since march 2025
+      # This breaks the submodule fetching functionality of `fetchFromGitHub`
+      rmdir $sourceRoot/ext/synergy-extra
+      mkdir -p $sourceRoot/ext
+      cp -r ${synergyExtraSubmodule} $sourceRoot/ext/synergy-extra
+      chmod -R +w $sourceRoot/ext/synergy-extra
+    '';
 
   postPatch = ''
-    substituteInPlace src/gui/src/SslCertificate.cpp \
-      --replace-fail 'kUnixOpenSslCommand[] = "openssl";' 'kUnixOpenSslCommand[] = "${openssl}/bin/openssl";'
+    substituteInPlace cmake/Version.cmake --replace-fail \
+      'version_from_git_tags(VERSION VERSION_MAJOR VERSION_MINOR VERSION_PATCH VERSION_REVISION)' \
+      'set(VERSION "${finalAttrs.version}")'
 
-    substituteInPlace CMakeLists.txt cmake/Version.cmake src/gui/CMakeLists.txt \
-    --replace-fail "cmake_minimum_required (VERSION 3.4)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace cmake/Version.cmake --replace-fail \
+      'set(DESKFLOW_VERSION_FOUR_PART "''${VERSION_MAJOR}.''${VERSION_MINOR}.''${VERSION_PATCH}.''${VERSION_REVISION}")' \
+      'set(DESKFLOW_VERSION_FOUR_PART "${finalAttrs.version}.0")'
+
+    substituteInPlace src/lib/gui/tls/TlsCertificate.cpp \
+      --replace-fail 'kUnixOpenSslCommand = "openssl";' 'kUnixOpenSslCommand = "${openssl}/bin/openssl";'
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
-    substituteInPlace src/lib/synergy/unix/AppUtilUnix.cpp \
+    substituteInPlace src/lib/deskflow/unix/AppUtilUnix.cpp \
       --replace-fail "/usr/share/X11/xkb/rules/evdev.xml" "${xkeyboardconfig}/share/X11/xkb/rules/evdev.xml"
   '';
 
   nativeBuildInputs = [
     cmake
     pkg-config
+    python3
   ]
-  ++ lib.optional withGUI libsForQt5.wrapQtAppsHook;
+  ++ lib.optional withGUI qt6.wrapQtAppsHook;
 
   buildInputs = [
-    libsForQt5.qttools # Used for translations even when not building the GUI
+    qt6.qttools # Used for translations even when not building the GUI
+    libsysprof-capture
     openssl
     pcre
+    cli11
+    tomlplusplus
+    libdeflate
+    lerc
+    xz
+    libwebp
+    gtest
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     util-linux
@@ -83,6 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
     avahi-compat
     gdk-pixbuf
     libnotify
+    libxcb-cursor
   ];
 
   # Silences many warnings
@@ -98,6 +137,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   checkPhase = ''
+    export QT_QPA_PLATFORM=offscreen
     runHook preCheck
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -113,15 +153,15 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/bin
-    cp bin/{synergyc,synergys,synergyd,syntool} $out/bin/
+    cp bin/{synergy,synergy-server,synergy-client,synergy-legacy} $out/bin/
   ''
   + lib.optionalString withGUI ''
     cp bin/synergy $out/bin/
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     mkdir -p $out/share/{applications,icons/hicolor/scalable/apps}
-    cp ../res/synergy.svg $out/share/icons/hicolor/scalable/apps/
-    substitute ../res/synergy.desktop $out/share/applications/synergy.desktop \
+    cp ../res/app.svg $out/share/icons/hicolor/scalable/apps/synergy.svg
+    substitute ../res/dist/linux/com.symless.synergy.desktop $out/share/applications/synergy.desktop \
       --replace "/usr/bin" "$out/bin"
   ''
   + lib.optionalString (stdenv.hostPlatform.isDarwin && withGUI) ''
@@ -138,8 +178,8 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Share one mouse and keyboard between multiple computers";
     homepage = "https://symless.com/synergy";
-    changelog = "https://github.com/symless/synergy-core/blob/${finalAttrs.version}/ChangeLog";
-    mainProgram = lib.optionalString (!withGUI) "synergyc";
+    changelog = "https://github.com/symless/synergy/releases";
+    mainProgram = lib.optionalString (!withGUI) "synergy-client";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ talyz ];
     platforms = lib.platforms.unix;
