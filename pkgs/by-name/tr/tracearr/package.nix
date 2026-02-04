@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  buildNpmPackage,
   pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
@@ -9,7 +9,7 @@
   fetchFromGitHub,
   turbo,
 }:
-stdenv.mkDerivation (finalAttrs: {
+buildNpmPackage (finalAttrs: rec {
   pname = "tracearr";
   version = "1.4.12";
 
@@ -20,6 +20,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-KE/kMB620+Eksq21uaqzEeoQVIlJN2cEEkJVh9/ccBE=";
   };
 
+  npmConfigHook = pnpmConfigHook;
+
+  npmDeps = pnpmDeps;
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
@@ -30,33 +33,18 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   nativeBuildInputs = [
-    pnpmConfigHook
-    pnpm_10
-    nodejs
     makeWrapper
+    pnpm_10
     turbo
   ];
 
-  buildInputs = [ nodejs ];
-
   env.NODE_ENV = "production";
 
-  buildPhase = ''
-    runHook preBuild
-    pnpm run build
-    runHook postBuild
-  '';
+  npmBuildScript = "build";
 
-  preInstall = ''
-    # Remove unnecessary files
-    rm node_modules/.modules.yaml
-    CI=true pnpm prune --prod --ignore-scripts
-    find -type f \( -name "*.d.ts" -o -name "*.map" \) -exec rm -rf {} +
+  makeWrapperArgs = [ "--add-flags $out/share/tracearr/apps/server/dist/index.js" ];
 
-    # Remove non-deterministic files
-    rm node_modules/.modules.yaml
-  '';
-
+  dontNpmInstall = true;
   installPhase = ''
     runHook preInstall
     mkdir -p $out/{share/tracearr,bin}
