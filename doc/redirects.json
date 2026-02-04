@@ -125,6 +125,12 @@
   "inkscape-plugins": [
     "index.html#inkscape-plugins"
   ],
+  "javascript-buildNpmPackage-npmFlags": [
+    "index.html#javascript-buildNpmPackage-npmFlags"
+  ],
+  "javascript-buildNpmPackage-npmWorkspace": [
+    "index.html#javascript-buildNpmPackage-npmWorkspace"
+  ],
   "libcxxhardeningextensive": [
     "index.html#libcxxhardeningextensive"
   ],
@@ -199,6 +205,33 @@
   ],
   "nostrictaliasing": [
     "index.html#nostrictaliasing"
+  ],
+  "npm-build-hook": [
+    "index.html#npm-build-hook"
+  ],
+  "npm-build-hook-dont": [
+    "index.html#npm-build-hook-dont"
+  ],
+  "npm-build-hook-example-snippet": [
+    "index.html#npm-build-hook-example-snippet"
+  ],
+  "npm-build-hook-exclusive-variables": [
+    "index.html#npm-build-hook-exclusive-variables"
+  ],
+  "npm-build-hook-flags": [
+    "index.html#npm-build-hook-flags"
+  ],
+  "npm-build-hook-honored-variables": [
+    "index.html#npm-build-hook-honored-variables"
+  ],
+  "npm-build-hook-script": [
+    "index.html#npm-build-hook-script"
+  ],
+  "npm-build-hook-snippet": [
+    "index.html#npm-build-hook-snippet"
+  ],
+  "npm-build-hook-variables": [
+    "index.html#npm-build-hook-variables"
   ],
   "pkgs-replacevars": [
     "index.html#pkgs-replacevars",
