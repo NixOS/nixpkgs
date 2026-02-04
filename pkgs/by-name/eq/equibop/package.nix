@@ -146,7 +146,6 @@ stdenv.mkDerivation (finalAttrs: {
       ' \
       --add-flags $out/opt/Equibop/resources/app.asar \
       ${lib.strings.optionalString withTTS ''
-        --run 'if [[ "''${NIXOS_SPEECH:-default}" != "False" ]]; then NIXOS_SPEECH=True; else unset NIXOS_SPEECH; fi' \
         --add-flags "\''${NIXOS_SPEECH:+--enable-speech-dispatcher}" \
       ''} \
       ${lib.optionalString withMiddleClickScroll "--add-flags \"--enable-blink-features=MiddleClickAutoscroll\""} \
