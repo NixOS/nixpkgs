@@ -3,6 +3,9 @@
   stdenvNoCC,
   fetchzip,
   jdk17,
+  testers,
+  runCommand,
+  writeText,
 }:
 
 let
@@ -31,7 +34,7 @@ let
     sources.${stdenvNoCC.hostPlatform.system}
       or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
 in
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "smithy-cli";
   inherit version;
 
@@ -61,6 +64,44 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
+  passthru.tests = {
+    version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
+    validate =
+      let
+        sampleModel = writeText "example.smithy" ''
+          $version: "2.0"
+
+          namespace example
+
+          service ExampleService {
+              version: "2023-01-01"
+              operations: [GetUser]
+          }
+
+          operation GetUser {
+              input: GetUserInput
+              output: GetUserOutput
+          }
+
+          structure GetUserInput {
+              @required
+              userId: String
+          }
+
+          structure GetUserOutput {
+              @required
+              name: String
+          }
+        '';
+      in
+      runCommand "smithy-cli-validate-test" { } ''
+        ${lib.getExe finalAttrs.finalPackage} validate ${sampleModel}
+        touch $out
+      '';
+  };
+
   meta = {
     description = "CLI for the Smithy interface definition language (IDL)";
     homepage = "https://smithy.io/";
@@ -71,4 +112,4 @@ stdenvNoCC.mkDerivation {
     maintainers = [ lib.maintainers.joshgodsiff ];
     platforms = lib.attrNames sources;
   };
-}
+})
