@@ -16348,6 +16348,8 @@ self: super: with self; {
 
   pyxdg = callPackage ../development/python-modules/pyxdg { };
 
+  pyxdia = callPackage ../development/python-modules/pyxdia { };
+
   pyxeoma = callPackage ../development/python-modules/pyxeoma { };
 
   pyxiaomigateway = callPackage ../development/python-modules/pyxiaomigateway { };
