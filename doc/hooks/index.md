@@ -29,6 +29,7 @@ mpi-check-hook.section.md
 ninja.section.md
 npm-build-hook.section.md
 npm-config-hook.section.md
+npm-install-hook.section.md
 patch-rc-path-hooks.section.md
 perl.section.md
 pkg-config.section.md

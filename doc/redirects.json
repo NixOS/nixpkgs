@@ -260,6 +260,30 @@
   "npm-config-hook-writable-cache": [
     "index.html#npm-config-hook-writable-cache"
   ],
+  "npm-install-hook": [
+    "index.html#npm-install-hook"
+  ],
+  "npm-install-hook-dont": [
+    "index.html#npm-install-hook-dont"
+  ],
+  "npm-install-hook-dont-prune": [
+    "index.html#npm-install-hook-dont-prune"
+  ],
+  "npm-install-hook-exclusive-variables": [
+    "index.html#npm-install-hook-exclusive-variables"
+  ],
+  "npm-install-hook-honored-variables": [
+    "index.html#npm-install-hook-honored-variables"
+  ],
+  "npm-install-hook-prune-flags": [
+    "index.html#npm-install-hook-prune-flags"
+  ],
+  "npm-install-hook-snippet": [
+    "index.html#npm-install-hook-snippet"
+  ],
+  "npm-install-hook-variables": [
+    "index.html#npm-install-hook-variables"
+  ],
   "pkgs-replacevars": [
     "index.html#pkgs-replacevars",
     "index.html#pkgs-substituteall",
