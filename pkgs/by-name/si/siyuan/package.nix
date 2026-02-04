@@ -9,6 +9,7 @@
   pnpm_9,
   fetchPnpmDeps,
   pnpmConfigHook,
+  pnpmBuildHook,
   electron,
   makeWrapper,
   makeDesktopItem,
@@ -85,6 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
+    pnpmBuildHook
     pnpm_9
     makeWrapper
     copyDesktopItems
@@ -116,18 +118,12 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${finalAttrs.kernel}/bin/kernel kernel-${platformId}/SiYuan-Kernel
   '';
 
-  buildPhase = ''
-    runHook preBuild
-
-    pnpm build
-
+  postBuild = ''
     npm exec electron-builder -- \
         --dir \
         --config electron-builder-${platformId}.yml \
         -c.electronDist=${electron.dist} \
         -c.electronVersion=${electron.version}
-
-    runHook postBuild
   '';
 
   installPhase = ''
