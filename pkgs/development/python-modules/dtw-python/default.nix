@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "dtw-python";
-  version = "1.7.2";
+  version = "1.7.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DynamicTimeWarping";
     repo = "dtw-python";
     tag = "v${version}";
-    hash = "sha256-DaYqKvjbp2yjL0a5f+vkB4OFOCWqt+f1HUUfarbns3A=";
+    hash = "sha256-BDFiMj9pgN51REeRhxouR64/mWkiudGFgwW7KCJ0TOo=";
   };
 
   build-system = [
