@@ -7,6 +7,7 @@
   lib,
   pam,
   python3,
+  python3Packages,
   libxslt,
   perl,
   perlPackages,
@@ -28,6 +29,8 @@
   flex,
   zip,
   unzip,
+  fast-float,
+  md4c,
   gtk3,
   libmspack,
   getopt,
@@ -35,6 +38,7 @@
   cairo,
   which,
   icu,
+  boost,
   jdk21,
   ant,
   cups,
@@ -78,6 +82,7 @@
   libcdr,
   lcms2,
   unixodbc,
+  mdds,
   sane-backends,
   mythes,
   libexttextcat,
@@ -107,6 +112,7 @@
   libepubgen,
   libetonyek,
   libpng,
+  liborcus,
   libxcrypt,
   langs ? [
     "ar"
@@ -321,7 +327,7 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-lbPOkc1HeT5Qsp6XfVyVJtmvSL68qTrmbd3q9lvKSu8=";
     })
   ]
-  ++ lib.optionals (lib.versionAtLeast version "25.8.2.2") [
+  ++ lib.optionals (lib.versionAtLeast version "25.8.2.2" && lib.versionOlder version "26.2.1.2") [
     # Fix build with Poppler 25.10
     (fetchpatch2 {
       url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-fresh/-/raw/f7b0e4385108b95c134599502a7bccf0a41925c8/poppler-25.10.patch";
@@ -391,6 +397,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withJava [
     ant
     jdk21
+  ]
+  ++ optionals (lib.versionAtLeast version "26.2.1.2") [
+    python3Packages.afdko
   ];
 
   buildInputs =
@@ -404,6 +413,7 @@ stdenv.mkDerivation (finalAttrs: {
       coinmp
       abseil-cpp
       bluez5
+      boost
       box2d_2
       cairo
       clucene-core_2
@@ -453,6 +463,7 @@ stdenv.mkDerivation (finalAttrs: {
       libmspack
       libmwaw
       libodfgen
+      liborcus
       libpthread-stubs
       librdf_redland
       librevenge
@@ -469,6 +480,7 @@ stdenv.mkDerivation (finalAttrs: {
       libzmf
       libwebp
       lp_solve
+      mdds
       mythes
       ncurses
       neon
@@ -495,6 +507,10 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ optionals withJava [
       jre'
+    ]
+    ++ optionals (lib.versionAtLeast version "26.2.1.2") [
+      fast-float
+      md4c
     ];
 
   preConfigure = ''
@@ -537,6 +553,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--without-buildconfig-recorded"
 
     (lib.withFeature withHelp "help")
+    "--with-boost=${getDev boost}"
+    "--with-boost-libdir=${getLib boost}/lib"
     "--with-vendor=NixOS"
     "--disable-report-builder"
     "--disable-online-update"
@@ -563,8 +581,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeature withFonts "fonts")
     "--without-doxygen"
 
+    "--with-system-afdko"
     "--with-system-cairo"
     "--with-system-coinmp"
+    "--with-system-fast-float"
     "--with-system-headers"
     "--with-system-libabw"
     "--with-system-libcmis"
@@ -574,6 +594,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-system-libs"
     "--with-system-libwps"
     "--with-system-lpsolve"
+    "--with-system-mdds"
     "--with-system-openldap"
     "--with-system-openssl"
     "--with-system-orcus"
@@ -593,12 +614,6 @@ stdenv.mkDerivation (finalAttrs: {
     "--without-system-dragonbox"
     "--without-system-libfixmath"
 
-    # TODO: bump this to 0.20
-    "--without-system-orcus"
-
-    # TODO: bump this to 3.0 (#382851)
-    "--without-system-mdds"
-
     # requires an oddly specific, old version
     "--without-system-hsqldb"
 
@@ -607,9 +622,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     # is packaged but headers can't be found because there is no pkg-config file
     "--without-system-zxcvbn"
-
-    # cannot find headers, no idea why
-    "--without-system-boost"
 
     "--without-system-java-websocket"
   ]

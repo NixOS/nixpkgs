@@ -83,19 +83,6 @@ index 6cf8f22647b9..12848713771b 100644
      createSwWebDoc("outline-level.html");
      // This was 0, HTML imported into Writer lost the outline numbering for
      // Heading 1 styles.
-diff --git a/sw/qa/extras/layout/layout3.cxx b/sw/qa/extras/layout/layout3.cxx
-index e53d22c8fd1a..2f9decb0d931 100644
---- a/sw/qa/extras/layout/layout3.cxx
-+++ b/sw/qa/extras/layout/layout3.cxx
-@@ -1388,6 +1388,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf158658c)
- 
- CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf155177)
- {
-+    return; // flaky
-+
-     createSwDoc("tdf155177-1-min.odt");
- 
-     uno::Reference<beans::XPropertySet> xStyle(
 diff --git a/sw/qa/extras/odfimport/odfimport.cxx b/sw/qa/extras/odfimport/odfimport.cxx
 index 794b3bd16ed4..3feaadd7a20f 100644
 --- a/sw/qa/extras/odfimport/odfimport.cxx
