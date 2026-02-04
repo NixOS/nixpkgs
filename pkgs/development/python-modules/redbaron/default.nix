@@ -23,6 +23,8 @@ buildPythonPackage rec {
     rm tests/test_bounding_box.py
   ''; # error about fixtures
 
+  disabledTests = [ "test_no_pygments" ]; # some tests about formatting of the help message
+
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
