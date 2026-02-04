@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -16,6 +17,8 @@ buildGoModule rec {
   };
 
   vendorHash = "sha256-+PwVigu/9rDkFlGtgr+OOL+N+EOgcLab2Rla33HYBGI=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Prometheus exporter for Oxidized";
