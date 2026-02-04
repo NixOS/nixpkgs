@@ -57,6 +57,7 @@
   llvmPackages,
   gexiv2,
   harfbuzz,
+  makeFontsConf,
   mypaint-brushes1,
   libwebp,
   libheif,
@@ -250,6 +251,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Check if librsvg was built with --disable-pixbuf-loader.
     PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = "${librsvg}/${gdk-pixbuf.moduleDir}";
+
+    # Silence fontconfig warnings about missing config during tests
+    FONTCONFIG_FILE = makeFontsConf {
+      fontDirectories = [ ];
+    };
   };
 
   postPatch = ''
