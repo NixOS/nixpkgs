@@ -1,4 +1,8 @@
-{ callPackage }:
+{
+  callPackage,
+  lib,
+  config,
+}:
 {
   accessibility-inspector = callPackage ./accessibility-inspector { };
   akonadi = callPackage ./akonadi { };
@@ -50,7 +54,7 @@
   kaccounts-integration = callPackage ./kaccounts-integration { };
   kaccounts-providers = callPackage ./kaccounts-providers { };
   kaddressbook = callPackage ./kaddressbook { };
-  kajongg = callPackage ./kajongg { };
+
   kalarm = callPackage ./kalarm { };
   kalgebra = callPackage ./kalgebra { };
   kalk = callPackage ./kalk { };
@@ -249,4 +253,7 @@
   umbrello = callPackage ./umbrello { };
   yakuake = callPackage ./yakuake { };
   zanshin = callPackage ./zanshin { };
+}
+// lib.optionalAttrs config.allowAliases {
+  kajongg = throw "kdePackages.kajongg has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
 }

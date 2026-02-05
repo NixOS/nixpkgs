@@ -1,5 +1,6 @@
 {
   lib,
+  config,
   generateSplicesForMkScope,
   makeScopeWithSplicing',
   fetchurl,
@@ -16,7 +17,10 @@ let
     self:
     let
       frameworks = import ./frameworks { inherit (self) callPackage; };
-      gear = import ./gear { inherit (self) callPackage; };
+      gear = import ./gear {
+        inherit lib config;
+        inherit (self) callPackage;
+      };
       plasma = import ./plasma { inherit (self) callPackage; };
 
       sets = [
