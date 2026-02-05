@@ -2,6 +2,7 @@
   lib,
   stdenv,
   buildGoModule,
+  buildNpmPackage,
   buildPackages,
   fetchFromGitHub,
   installShellFiles,
@@ -43,6 +44,29 @@ buildGoModule (finalAttrs: {
     package = finalAttrs.finalPackage;
     version = "v${finalAttrs.version}";
   };
+
+  preBuild =
+    let
+      webui = buildNpmPackage {
+        pname = "kluctl-webui";
+        inherit (finalAttrs) version src;
+
+        sourceRoot = "source/pkg/webui/ui";
+
+        npmDepsHash = "sha256-e5Ic3W1UPQn/2ggaYez7G7exXNZA6BobP4BTM6B6rlI=";
+
+        npmBuildScript = "build";
+
+        installPhase = ''
+          mkdir -p $out
+          cp -r build $out/
+        '';
+      };
+    in
+    ''
+      rm -rf pkg/webui/ui/build
+      cp -r ${webui}/build pkg/webui/ui/build
+    '';
 
   postInstall =
     let
