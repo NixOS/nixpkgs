@@ -5,6 +5,7 @@
   fetchurl,
   bash,
   gcc,
+  gcc-glibc, # for hello-world test
   binutils,
   linux-headers,
   gnumake,
@@ -29,8 +30,9 @@ let
 
   linkerFile =
     {
-      x86_64-linux = "ld-linux-x86-64";
-      i686-linux = "ld-linux";
+      x86_64-linux = "ld-linux-x86-64.so.2";
+      i686-linux = "ld-linux.so.2";
+      aarch64-linux = "ld-linux-aarch64.so.1";
     }
     .${buildPlatform.system};
 
@@ -59,7 +61,7 @@ bash.runCommand "${pname}-${version}"
       bash.runCommand "${pname}-simple-program-${version}"
         {
           nativeBuildInputs = [
-            gcc
+            gcc-glibc # can't use musl-specialized gcc to test glibc
             binutils
           ];
         }
@@ -72,7 +74,7 @@ bash.runCommand "${pname}-${version}"
           }
           EOF
           gcc \
-            -Wl,--dynamic-linker=${result}/lib/${linkerFile}.so.2 \
+            -Wl,--dynamic-linker=${result}/lib/${linkerFile} \
             -B${result}/lib \
             -I${result}/include \
             -o test test.c
@@ -98,12 +100,14 @@ bash.runCommand "${pname}-${version}"
     cd build
     # libstdc++.so is built against musl and fails to link
     export CXX=false
+    # Work around issue relating to gettimeofday() in glibc 2.31
     bash ../configure \
       --prefix=$out \
       --build=${buildPlatform.config} \
       --host=${hostPlatform.config} \
       --with-headers=${linux-headers}/include \
-      --disable-dependency-tracking
+      --disable-dependency-tracking \
+      CFLAGS="-Wno-error=attribute-alias -O2"
 
     # Build
     make -j $NIX_BUILD_CORES
