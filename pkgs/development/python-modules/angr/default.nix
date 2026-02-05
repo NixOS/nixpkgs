@@ -2,6 +2,7 @@
   lib,
   stdenv,
   archinfo,
+  angr,
   buildPythonPackage,
   cachetools,
   capstone,
@@ -116,9 +117,6 @@ buildPythonPackage rec {
     "linux"
   ];
 
-  # cle is executing the tests with the angr binaries
-  doCheck = false;
-
   pythonImportsCheck = [
     "angr"
     "claripy"
@@ -126,6 +124,41 @@ buildPythonPackage rec {
     "pyvex"
     "archinfo"
     "pypcode"
+  ];
+
+  doCheck = false;
+  passthru.tests.pytest = angr.overridePythonAttrs (prev: {
+    doCheck = true;
+    dependencies =
+      prev.dependencies
+      ++ prev.optional-dependencies.angrdb
+      ++ prev.optional-dependencies.unicorn
+      ++ prev.optional-dependencies.keystone;
+  });
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-insta
+  ];
+
+  preCheck =
+    let
+      binaries = fetchFromGitHub {
+        owner = "angr";
+        repo = "binaries";
+        tag = "v${version}";
+        hash = "sha256-x5Ot4UlJelvYANQc8h0O6FlMEEKtdWDrrQ1ku1cwey4=";
+      };
+    in
+    ''
+      cd ..
+      cp -r ${binaries} binaries
+    '';
+
+  enabledTestPaths = [ "source/tests" ];
+
+  disabledTestPaths = [
+    "source/tests/engines/test_unicorn.py"
   ];
 
   meta = {
