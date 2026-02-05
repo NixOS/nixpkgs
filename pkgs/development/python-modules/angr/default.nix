@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  ailment,
   archinfo,
   buildPythonPackage,
   cachetools,
@@ -27,32 +26,54 @@
   pyvex,
   rich,
   rpyc,
-  setuptools,
+  setuptools-rust,
   sortedcontainers,
   sqlalchemy,
   sympy,
-  unicorn-angr,
+  unicorn,
   unique-log-filter,
+  cargo,
+  rustPlatform,
+  rustc,
+  lmdb,
+  msgspec,
+  pypcode,
+  pytestCheckHook,
+  pytest-insta,
+  keystone-engine,
 }:
 
 buildPythonPackage rec {
   pname = "angr";
-  version = "9.2.193";
+  version = "9.2.197";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "angr";
     repo = "angr";
     tag = "v${version}";
-    hash = "sha256-7wBfxHWD5FRin8pfKup4izJBQzFN5N5dQZqIto5y83k=";
+    hash = "sha256-EMTYn6pvZaVb4mimRYfOt21wOUBTQD7YLhAzU9PpP5w=";
   };
 
   pythonRelaxDeps = [ "capstone" ];
 
-  build-system = [ setuptools ];
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit
+      pname
+      version
+      src
+      ;
+    hash = "sha256-/IQCbZUVGV5WNzIIELr5tfFPOITUqHj+zp8FH2bAuCU=";
+  };
+
+  nativeBuildInputs = [
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+    setuptools-rust
+  ];
 
   dependencies = [
-    ailment
     archinfo
     cachetools
     capstone
@@ -79,11 +100,15 @@ buildPythonPackage rec {
     sortedcontainers
     sympy
     unique-log-filter
+    lmdb
+    msgspec
+    pypcode
   ];
 
   optional-dependencies = {
     angrdb = [ sqlalchemy ];
-    unicorn = [ unicorn-angr ];
+    unicorn = [ unicorn ];
+    keystone = [ keystone-engine ];
   };
 
   setupPyBuildFlags = lib.optionals stdenv.hostPlatform.isLinux [
@@ -91,7 +116,6 @@ buildPythonPackage rec {
     "linux"
   ];
 
-  # Tests have additional requirements, e.g., pypcode and angr binaries
   # cle is executing the tests with the angr binaries
   doCheck = false;
 
@@ -101,11 +125,13 @@ buildPythonPackage rec {
     "cle"
     "pyvex"
     "archinfo"
+    "pypcode"
   ];
 
   meta = {
     description = "Powerful and user-friendly binary analysis platform";
     homepage = "https://angr.io/";
+    changelog = "https://github.com/theopolis/uefi-firmware-parser/releases/tag/${src.tag}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ fab ];
   };
