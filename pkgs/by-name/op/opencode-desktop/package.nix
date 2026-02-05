@@ -79,11 +79,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cp ${opencode}/bin/opencode packages/desktop/src-tauri/sidecars/opencode-cli-${stdenv.hostPlatform.rust.rustcTarget}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "AI coding agent desktop client";
     homepage = "https://opencode.ai";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       xiaoxiangmoe
     ];
     mainProgram = "OpenCode";
