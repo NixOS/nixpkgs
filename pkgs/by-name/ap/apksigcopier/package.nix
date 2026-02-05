@@ -5,10 +5,10 @@
   fetchFromGitHub,
   installShellFiles,
   pandoc,
-  python3,
+  python3Packages,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "apksigcopier";
   version = "1.1.1";
   pyproject = true;
@@ -16,8 +16,8 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "obfusk";
     repo = "apksigcopier";
-    tag = "v${version}";
-    sha256 = "sha256-VuwSaoTv5qq1jKwgBTKd1y9RKUzz89n86Z4UBv7Q51o=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-VuwSaoTv5qq1jKwgBTKd1y9RKUzz89n86Z4UBv7Q51o=";
   };
 
   nativeBuildInputs = [
@@ -25,11 +25,11 @@ python3.pkgs.buildPythonApplication rec {
     pandoc
   ];
 
-  build-system = with python3.pkgs; [
+  build-system = with python3Packages; [
     setuptools
   ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python3Packages; [
     click
   ];
 
@@ -46,18 +46,18 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   postBuild = ''
-    make ${pname}.1
+    make apksigcopier.1
   '';
 
   postInstall = ''
-    installManPage ${pname}.1
+    installManPage apksigcopier.1
   '';
 
   doInstallCheck = true;
 
   installCheckPhase = ''
     runHook preInstallCheck
-    $out/bin/apksigcopier --version | grep "${version}"
+    $out/bin/apksigcopier --version | grep "${finalAttrs.version}"
     runHook postInstallCheck
   '';
 
@@ -79,4 +79,4 @@ python3.pkgs.buildPythonApplication rec {
     license = with lib.licenses; [ gpl3Plus ];
     maintainers = with lib.maintainers; [ obfusk ];
   };
-}
+})
