@@ -51,6 +51,10 @@ let
     url = "https://gcc.gnu.org/pub/gcc/infrastructure/isl-${islVersion}.tar.bz2";
     hash = "sha256-/PeN2WVsEOuM+fvV9ZoLawE4YgX+GTSzsoegoYmBRcA=";
   };
+
+  # see: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=95129
+  fakeBuildPlatform = (lib.strings.removeSuffix "-gnu" buildPlatform.config) + "-musl";
+  fakeHostPlatform = (lib.strings.removeSuffix "-gnu" hostPlatform.config) + "-musl";
 in
 bash.runCommand "${pname}-${version}"
   {
@@ -129,8 +133,8 @@ bash.runCommand "${pname}-${version}"
 
     bash ./configure \
       --prefix=$out \
-      --build=${buildPlatform.config} \
-      --host=${hostPlatform.config} \
+      --build=${fakeBuildPlatform} \
+      --host=${fakeHostPlatform} \
       --with-native-system-header-dir=/include \
       --with-sysroot=${musl} \
       --enable-languages=c,c++ \
