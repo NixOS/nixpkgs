@@ -7,7 +7,7 @@ rec {
   version = "1.9.1";
   rev = "Release_${version}";
   outputHashAlgo = "sha256";
-  outputHash = "sha256-UNoyb2teqH26VM7YoOcazyqZ0AlDae045aWc31ZHFdw=";
+  outputHash = "sha256-VYsEnYMo6TTetrY07BiqBpPw+AA/yrx2Muj7oSF5/dg=";
 
   /*
     Since `make-minimal-bootstrap-sources` requires nixpkgs and nix it
