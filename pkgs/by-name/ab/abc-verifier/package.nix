@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   readline,
-  cmake,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,21 +16,36 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-T6Hj8zrr3XuI3Eh0I5rJI3+DAsuQIMtWEsaBJ8a5Cag=";
   };
 
-  nativeBuildInputs = [ cmake ];
   buildInputs = [ readline ];
 
-  cmakeFlags = [
-    # This prevents CMake from trying to download googletest during the build
-    (lib.cmakeBool "ABC_SKIP_TESTS" true)
+  # Defining the namespace is still required for OpenROAD
+  env.NIX_CFLAGS_COMPILE = "-DABC_NAMESPACE=abc";
+
+  makeFlags = [
+    "ABC_USE_LIBSTDCXX=1"
+    "ABC_USE_NAMESPACE=abc"
+    "CC=${stdenv.cc.targetPrefix}gcc"
+    "CXX=${stdenv.cc.targetPrefix}g++"
   ];
+
+  buildPhase = ''
+    runHook preBuild
+    # Build both the 'abc' executable and the 'libabc.a' static library
+    make -j$NIX_BUILD_CORES $makeFlags abc libabc.a
+    runHook postBuild
+  '';
 
   installPhase = ''
     runHook preInstall
-    install -Dm755 'abc' "$out/bin/abc"
+    install -Dm755 abc $out/bin/abc
+    install -Dm644 libabc.a $out/lib/libabc.a
+
+    pushd src
+    find . -name "*.h" -exec install -Dm644 {} $out/include/{} \;
+    popd
     runHook postInstall
   '';
 
-  # needed by yosys
   passthru.rev = finalAttrs.src.rev;
 
   meta = {
@@ -42,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
       thoughtpolice
       Luflosi
     ];
+
     mainProgram = "abc";
     platforms = lib.platforms.unix;
   };

@@ -17,6 +17,7 @@
   versionCheckHook,
 
   # buildInputs
+  abc-verifier,
   boost,
   cbc,
   cimg,
@@ -66,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    abc-verifier
     boost
     cbc
     cimg
@@ -95,6 +97,13 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [ libx11 ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.openmp ];
 
+  # This activates the namespace logic found in abc_namespaces.h
+  env.NIX_CFLAGS_COMPILE = "-DABC_NAMESPACE=abc";
+
+  # Linker flags for transitive dependencies of the static libabc.a
+  # This avoids passing spaces/flags directly into CMake's ABC_LIBRARY variable
+  env.NIX_LDFLAGS = "-lreadline -lrt";
+
   postPatch = ''
     patchShebangs etc/
 
@@ -111,10 +120,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   cmakeFlags = [
-    # Disable tests on Darwin to avoid discovery timeouts during build
     (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "USE_SYSTEM_BOOST" true)
-    (lib.cmakeBool "USE_SYSTEM_ABC" false)
+    (lib.cmakeBool "USE_SYSTEM_ABC" true)
+    (lib.cmakeFeature "ABC_INCLUDE_DIR" "${abc-verifier}/include")
+    (lib.cmakeFeature "ABC_LIBRARY" "${abc-verifier}/lib/libabc.a")
+
     (lib.cmakeBool "ABC_SKIP_TESTS" true)
     (lib.cmakeBool "USE_SYSTEM_OPENSTA" false)
     (lib.cmakeFeature "OPENROAD_VERSION" finalAttrs.version)

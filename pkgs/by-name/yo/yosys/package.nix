@@ -7,6 +7,7 @@
   bison,
   flex,
   pkg-config,
+  makeWrapper,
 
   # propagatedBuildInputs
   libffi,
@@ -14,6 +15,7 @@
   readline,
   tcl,
   zlib,
+  abc-verifier,
 
   # tests
   gtkwave,
@@ -22,12 +24,11 @@
   # passthru
   symlinkJoin,
   yosys,
-  makeWrapper,
   yosys-bluespec,
   yosys-ghdl,
   yosys-symbiflow,
   nix-update-script,
-  enablePython ? true, # enable python binding
+  enablePython ? true,
 }:
 
 let
@@ -71,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "yosys";
     tag = "v${finalAttrs.version}";
     hash = "sha256-FzvdjdAURB5iCkGwsYY6A2wP/Je/IW4AOd4kVOEOeVc=";
-    fetchSubmodules = true;
+    fetchSubmodules = false; # ABC is now external
   };
 
   enableParallelBuilding = true;
@@ -80,6 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     bison
     flex
     pkg-config
+    makeWrapper
   ];
 
   propagatedBuildInputs = [
@@ -102,22 +104,29 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [
     "PREFIX=${placeholder "out"}"
     "YOSYS_VER=${finalAttrs.version}"
+    "ABCEXTERNAL=${lib.getExe abc-verifier}"
   ];
 
   postPatch = ''
+    patchShebangs tests ./misc/yosys-config.in
+
     substituteInPlace Makefile \
       --replace-fail 'GIT_REV := $(shell GIT_DIR=$(YOSYS_SRC)/.git git rev-parse --short=9 HEAD || echo UNKNOWN)' 'GIT_REV := v${finalAttrs.version}' \
       --replace-fail 'GIT_DIRTY := $(shell GIT_DIR=$(YOSYS_SRC)/.git git diff --exit-code --quiet 2>/dev/null; if [ $$? -ne 0 ]; then echo "-dirty"; fi)' 'GIT_DIRTY := ""'
 
+    # Remove internal ABC build checks and submodule requirements
     substituteInPlace Makefile \
-      --replace-fail "| check-git-abc" ""
-
-    substituteInPlace Makefile \
+      --replace-fail "| check-git-abc" "" \
       --replace-fail 'new=$$(cd abc 2>/dev/null && git rev-parse HEAD 2>/dev/null || echo none)' 'new=none'
 
+    # Ensure the version is correctly set in the Makefile
     sed -i 's/^YOSYS_VER :=.*/YOSYS_VER := ${finalAttrs.version}/' Makefile
 
-    patchShebangs tests ./misc/yosys-config.in
+    # Patch setup.py for Pyosys to use external ABC
+    if [ -e setup.py ]; then
+      substituteInPlace setup.py \
+        --replace-fail '"ABCEXTERNAL=",' '"ABCEXTERNAL=${lib.getExe abc-verifier}",'
+    fi
   '';
 
   preBuild = ''
@@ -134,6 +143,11 @@ stdenv.mkDerivation (finalAttrs: {
     echo "ENABLE_PYOSYS := 1" >> Makefile.conf
     echo "PYTHON_DESTDIR := $out/${python3.sitePackages}" >> Makefile.conf
     echo "BOOST_PYTHON_LIB := -lboost_python${lib.versions.major python3.version}${lib.versions.minor python3.version}" >> Makefile.conf
+  '';
+
+  postInstall = ''
+    # Create the symlink that sby and internal scripts expect
+    ln -s ${lib.getExe abc-verifier} $out/bin/yosys-abc
   '';
 
   preCheck = ''
