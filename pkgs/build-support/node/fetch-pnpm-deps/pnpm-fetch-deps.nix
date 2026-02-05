@@ -37,6 +37,9 @@ lib.extendMkDerivation {
       prePnpmInstall ? "",
       pnpmInstallFlags ? [ ],
       fetcherVersion ? null,
+      nativeBuildInputs ? [ ],
+      impureEnvVars ? [ ],
+      passthru ? { },
       ...
     }@args:
     let
@@ -75,10 +78,9 @@ lib.extendMkDerivation {
         yq
         zstd
       ]
-      ++ args.nativeBuildInputs or [ ];
+      ++ nativeBuildInputs;
 
-      impureEnvVars =
-        lib.fetchers.proxyImpureEnvVars ++ [ "NIX_NPM_REGISTRY" ] ++ args.impureEnvVars or [ ];
+      impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [ "NIX_NPM_REGISTRY" ] ++ impureEnvVars;
 
       installPhase = ''
         runHook preInstall
@@ -176,7 +178,7 @@ lib.extendMkDerivation {
         runHook postFixup
       '';
 
-      passthru = args.passthru or { } // {
+      passthru = passthru // {
         inherit fetcherVersion;
         serve = callPackage ./serve.nix {
           inherit pnpm; # from args
