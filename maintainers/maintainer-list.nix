@@ -27238,6 +27238,12 @@
     github = "Tungsten842";
     githubId = 24614168;
   };
+  tunnelmaker = {
+    email = "nix@finnrut.is";
+    github = "Multipixelone";
+    githubId = 505116;
+    name = "Finn Rutis";
+  };
   turbomack = {
     email = "marek.faj@gmail.com";
     github = "turboMaCk";
