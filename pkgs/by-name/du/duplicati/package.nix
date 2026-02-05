@@ -58,15 +58,15 @@ let
 in
 buildDotnetModule rec {
   pname = "duplicati";
-  version = "2.2.0.1";
+  version = "2.2.0.3";
   channel = "stable";
-  buildDate = "2025-11-09";
+  buildDate = "2026-01-06";
 
   src = fetchFromGitHub {
     owner = "duplicati";
     repo = "duplicati";
     tag = "v${version}_${channel}_${buildDate}";
-    hash = "sha256-fARK2nAqE9aN2PQSC62yIcYr3e/kBT3BVTBxLwMqk24=";
+    hash = "sha256-p2hl1S/XsKsbAfWBAgvNMl6z5zGm/FBH3EYSqDvkKy8=";
     stripRoot = true;
   };
 
