@@ -7,8 +7,6 @@
   makeWrapper,
   fetchFromGitHub,
   turbo,
-  runCommand,
-  jq,
   nodejs,
 }:
 buildNpmPackage (finalAttrs: rec {
