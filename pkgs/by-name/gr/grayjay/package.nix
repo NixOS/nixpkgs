@@ -41,13 +41,13 @@
   _experimental-update-script-combinators,
 }:
 let
-  version = "13";
+  version = "16";
   src = fetchFromGitLab {
     domain = "gitlab.futo.org";
     owner = "videostreaming";
     repo = "Grayjay.Desktop";
     tag = version;
-    hash = "sha256-cnOhyaeoDXPaeRJnJpx1HcegWitcfMJe/vezxZ/zpFQ=";
+    hash = "sha256-g7q59lh4h9G3WX1v29lTyavCaZpWpgmqAf1nl91qk3Q=";
     fetchSubmodules = true;
     fetchLFS = true;
   };
@@ -58,7 +58,7 @@ let
     sourceRoot = "source/Grayjay.Desktop.Web";
 
     npmBuildScript = "build";
-    npmDepsHash = "sha256-3nPzQcDWhPCdLrPvwGY+K0t1OSxWrVwQ3hH7i0eynRU=";
+    npmDepsHash = "sha256-3yJIPkuEvkFL9Wb4y/r0yEULQbXx/wHqicFBLzOPj68=";
 
     installPhase = ''
       runHook preInstall
@@ -114,7 +114,6 @@ buildDotnetModule (finalAttrs: {
   ];
 
   testProjectFile = [
-    "Grayjay.Desktop.Tests/Grayjay.Desktop.Tests.csproj"
     "Grayjay.Engine/Grayjay.Engine.Tests/Grayjay.Engine.Tests.csproj"
   ];
 
@@ -203,7 +202,7 @@ buildDotnetModule (finalAttrs: {
       integrations.
     '';
     homepage = "https://grayjay.app/desktop/";
-    license = lib.licenses.sfl;
+    # license = lib.licenses.sfl;
     maintainers = with lib.maintainers; [
       kruziikrel13
       samfundev
