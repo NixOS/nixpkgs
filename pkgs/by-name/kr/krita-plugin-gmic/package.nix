@@ -1,23 +1,27 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   cmake,
-  extra-cmake-modules,
+  curl,
   fftw,
   krita-unwrapped,
-  libsForQt5,
+  kdePackages,
+  qt6,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "krita-plugin-gmic";
-  version = "3.6.4.1";
+  version = "3.6.6.2";
 
-  src = fetchurl {
-    url = "https://files.kde.org/krita/build/dependencies/gmic-${finalAttrs.version}.tar.gz";
-    hash = "sha256-prbGkwFWC+LqK1WDqOwZvX5Q5LQal3dFUXzpILwF+v4=";
+  src = fetchFromGitHub {
+    owner = "vanyossi";
+    repo = "gmic";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-YvTVzH5IpjMFo8WxiK0MtwRiN947cnLO/sbmOtZY404=";
   };
-  sourceRoot = "gmic-v${finalAttrs.version}/gmic-qt";
+
+  sourceRoot = "${finalAttrs.src.name}/gmic-qt";
   dontWrapQtApps = true;
 
   postPatch = ''
@@ -28,14 +32,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
-    libsForQt5.qttools
+    kdePackages.extra-cmake-modules
+    qt6.qttools
   ];
 
   buildInputs = [
+    curl
     fftw
     krita-unwrapped
-    libsForQt5.kcoreaddons
+    kdePackages.kcoreaddons
+    qt6.qtbase
   ];
 
   strictDeps = true;
