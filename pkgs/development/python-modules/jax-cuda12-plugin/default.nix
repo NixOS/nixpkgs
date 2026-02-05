@@ -39,42 +39,42 @@ let
     "3.11-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_x86_64";
       dist = "cp311";
-      hash = "sha256-iTh3d+FyGqq97aGKV3r8fP5O4KscN7MmG9Ryq43wcvc=";
+      hash = "sha256-0uHOs02KZ+MS2F5A5pqaI0Z1KffcagwsTRoY6x68tCk=";
     };
     "3.11-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_aarch64";
       dist = "cp311";
-      hash = "sha256-ocPzEElPn3vmLyuEJXBcPEZvKmIbTk29v7Fa2aevvcA=";
+      hash = "sha256-oAxosFJqTpbx9tzJrwy+PkwwlpBq9+VLbY3JBkjAubs=";
     };
     "3.12-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_x86_64";
       dist = "cp312";
-      hash = "sha256-NJNtd+1oWdoIwugYpRVMx++1hFHZ0Ew+zVtE02BfvfI=";
+      hash = "sha256-BE8rr9OR6CTQvt9AbVcpQ6zd8p3AZZw4T69Kim0HKsg=";
     };
     "3.12-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_aarch64";
       dist = "cp312";
-      hash = "sha256-3i6vpuutVBA/CccRAOTkb36gl+jRGUWe+R6OWxTLn6I=";
+      hash = "sha256-TkEvqionVUPOFMn2AMRzOxvFHysNdlBgyF0EtV8hcFg=";
     };
     "3.13-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_x86_64";
       dist = "cp313";
-      hash = "sha256-ZnkKIJR/f2RqKkqcXvghdW0sM/uZ3iqA5hKIwI3BeJo=";
+      hash = "sha256-3LeOJhu5Efvxds8xGBdsAwz5aqqlKO7HViEGJseO9oM=";
     };
     "3.13-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_aarch64";
       dist = "cp313";
-      hash = "sha256-mNfwbW7TH/5Ug2A1gv/fyAsTG9fjl+YStiTiG/ad4uI=";
+      hash = "sha256-r1Jg0LnX1y+IvZGc7VR3+lEwUImbFvgQN35K5Oh2feg=";
     };
     "3.14-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_x86_64";
       dist = "cp314";
-      hash = "sha256-lELFh5/7QAfiU7p+cThmQls7pwg2PNuxoRM4KZwye70=";
+      hash = "sha256-mq3bsTWgPJ6CbUfMoz+4rmHWi6wZyIGkM3TOqEIGNw8=";
     };
     "3.14-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_aarch64";
       dist = "cp314";
-      hash = "sha256-6pHYc/E6Y8QBwoOk9e6HC4EcsrgSLi9qp9Wr+iRBDzM=";
+      hash = "sha256-t6cxqMF7nwpkD5TEI3k1ZdSK/m4of8nZ4K97Ei5CesE=";
     };
   };
 in
