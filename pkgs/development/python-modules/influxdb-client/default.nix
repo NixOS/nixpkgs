@@ -9,6 +9,7 @@
   numpy,
   pandas,
   python-dateutil,
+  pythonAtLeast,
   reactivex,
   setuptools,
   urllib3,
@@ -16,14 +17,15 @@
 
 buildPythonPackage rec {
   pname = "influxdb-client";
-  version = "1.49.0";
+  version = "1.50.0";
   pyproject = true;
+  disabled = pythonAtLeast "3.14";
 
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = "influxdb-client-python";
     tag = "v${version}";
-    hash = "sha256-lu3we/KXwP3oC9bfv6gzbwacOVLGSuPBf9giwmsHXgI=";
+    hash = "sha256-39ioVlTgvICHArTNhfXZQ+WrUda2B5LxLtMwXWp6krU=";
   };
 
   build-system = [ setuptools ];
@@ -32,7 +34,6 @@ buildPythonPackage rec {
     certifi
     python-dateutil
     reactivex
-    setuptools
     urllib3
   ];
 
