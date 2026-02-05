@@ -22,7 +22,10 @@ npmInstallHook() {
 
     if [ ! -d "$nodeModulesPath" ]; then
         if [ -z "${dontNpmPrune-}" ]; then
-            if ! npm prune --omit=dev --no-save ${npmWorkspace+--workspace=$npmWorkspace} $npmPruneFlags "${npmPruneFlagsArray[@]}" $npmFlags "${npmFlagsArray[@]}"; then
+            local -a pruneFlagsArray
+            concatTo pruneFlagsArray npmPruneFlags npmPruneFlagsArray npmFlags npmFlagsArray
+
+            if ! npm prune --omit=dev --no-save ${npmWorkspace+--workspace=$npmWorkspace} "${pruneFlagsArray[@]}"; then
               echo
               echo
               echo "ERROR: npm prune step failed"
