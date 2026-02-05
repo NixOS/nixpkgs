@@ -1236,6 +1236,7 @@ mapAliases {
   lowPrio = warnAlias "'lowPrio' has been removed from pkgs, use `lib.lowPrio` instead" lib.lowPrio; # Added 2025-10-30
   LPCNet = throw "'LPCNet' has been renamed to/replaced by 'lpcnet'"; # Converted to throw 2025-10-27
   luci-go = throw "luci-go has been removed since it was unused and failing to build for 5 months"; # Added 2025-08-27
+  lunarvim = throw "'lunarvim' has been removed since it was abandoned upstream and relied on an older version of 'neovim' to work properly"; # Added 2026-02-05
   lxd = throw "
     LXD has been removed from NixOS due to lack of Nixpkgs maintenance.
     Consider migrating or switching to Incus, or remove from your configuration.
