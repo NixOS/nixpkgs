@@ -12,7 +12,7 @@
 }:
 let
   pname = "obsidian";
-  version = "1.11.5";
+  version = "1.11.7";
   appname = "Obsidian";
   meta = {
     description = "Powerful knowledge base that works on top of a local folder of plain text Markdown files";
@@ -43,9 +43,9 @@ let
     url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/${filename}";
     hash =
       if stdenv.hostPlatform.isDarwin then
-        "sha256-5orx4Fbf7t87dPC4lHO205tnLZ5zhtpxKGOIAva9K/Q="
+        "sha256-TRE9ymNtpcp7gEbuuSfJxvYDXLDVNz+o4+RSNyHZgmE="
       else
-        "sha256-j1hMEey5Z0gHkOZTGWdDQL/NKjT7S3qVu3Cpb88Zq68=";
+        "sha256-HrqeFJ2C5uZw0IBtD9y607V6007fOwnA0KnA83cwWjg=";
   };
 
   icon = fetchurl {
