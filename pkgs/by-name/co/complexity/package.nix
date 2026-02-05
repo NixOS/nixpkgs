@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "1.10";
 
   src = fetchurl {
-    url = "mirror://gnu/complexity/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/complexity/complexity-${version}.tar.gz";
     sha256 = "1vfns9xm7w0wrz12a3w15slrqnrfh6qxk15nv7qkj3irll3ff522";
   };
 

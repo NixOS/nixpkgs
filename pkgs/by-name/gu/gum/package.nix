@@ -49,7 +49,6 @@ buildGoModule rec {
     changelog = "https://github.com/charmbracelet/gum/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      maaslalani
       savtrip
     ];
     mainProgram = "gum";

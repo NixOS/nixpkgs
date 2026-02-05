@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nawk";
-  version = "20250116";
+  version = "20251225";
 
   src = fetchFromGitHub {
     owner = "onetrueawk";
     repo = "awk";
     rev = finalAttrs.version;
-    hash = "sha256-zRGMqMPkP801nZE/pG/NwsiOvv6dTQBcPtfTJCh1eiQ=";
+    hash = "sha256-8QocZx6Diy3xLakZQxqmWdOywvhVYRjSndY5EiV+dng=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    homepage = "https://awk.dev";
+    homepage = "https://github.com/onetrueawk/awk";
     description = "One, true implementation of AWK";
     longDescription = ''
       This is the version of awk described in "The AWK Programming Language",

@@ -1,16 +1,17 @@
 {
-  mkDerivation,
   fetchurl,
+  stdenv,
   fetchpatch,
   lib,
   extra-cmake-modules,
   kdoctools,
+  wrapQtAppsHook,
   kconfig,
   kcrash,
   kinit,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "kronometer";
   version = "2.3.0";
 
@@ -26,16 +27,17 @@ mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://kde.org/applications/utilities/kronometer/";
     description = "Stopwatch application";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ peterhoeg ];
     mainProgram = "kronometer";
   };
   nativeBuildInputs = [
     extra-cmake-modules
     kdoctools
+    wrapQtAppsHook
   ];
   propagatedBuildInputs = [
     kconfig

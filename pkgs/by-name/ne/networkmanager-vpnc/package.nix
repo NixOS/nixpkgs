@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   version = "1.4.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/NetworkManager-vpnc/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/NetworkManager-vpnc/${lib.versions.majorMinor version}/NetworkManager-vpnc-${version}.tar.xz";
     sha256 = "47KpiIAnWht1FUvDF6eGQ8/fnqfnDfTu2WSPKeolNzA=";
   };
 
@@ -68,9 +68,9 @@ stdenv.mkDerivation rec {
     networkManagerPlugin = "VPN/nm-vpnc-service.name";
   };
 
-  meta = with lib; {
+  meta = {
     description = "NetworkManager's VPNC plugin";
     inherit (networkmanager.meta) maintainers teams platforms;
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
   };
 }

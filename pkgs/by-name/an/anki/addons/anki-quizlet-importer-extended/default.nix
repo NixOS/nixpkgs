@@ -6,12 +6,12 @@
 }:
 anki-utils.buildAnkiAddon (finalAttrs: {
   pname = "anki-quizlet-importer-extended";
-  version = "2025.03.13";
+  version = "2025.09.28";
   src = fetchFromGitHub {
     owner = "sviatoslav-lebediev";
     repo = "anki-quizlet-importer-extended";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-46j/CXhsrehu00P5QLuOj/08gNlFeJttslAFLgz7AJ8=";
+    hash = "sha256-j/ow/HCc70dD/BpMDqGx7rib7G0FfxazzjuPmEQbYTk=";
   };
   passthru.updateScript = nix-update-script { };
   meta = {

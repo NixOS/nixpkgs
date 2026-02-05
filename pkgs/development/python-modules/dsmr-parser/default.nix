@@ -7,7 +7,6 @@
   pyserial-asyncio-fast,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   pytz,
   setuptools,
   tailer,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "dsmr-parser";
   version = "1.4.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ndokter";
@@ -45,12 +42,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dsmr_parser" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to parse Dutch Smart Meter Requirements (DSMR)";
     homepage = "https://github.com/ndokter/dsmr_parser";
     changelog = "https://github.com/ndokter/dsmr_parser/releases/tag/${src.tag}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "dsmr_console";
   };
 }

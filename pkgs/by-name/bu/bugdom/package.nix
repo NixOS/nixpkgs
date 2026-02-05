@@ -8,14 +8,14 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bugdom";
   version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "jorio";
     repo = "bugdom";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-0c7v5tSqYuqtLOFl4sqD7+naJNqX/wlKHVntkZQGJ8A=";
     fetchSubmodules = true;
   };
@@ -72,12 +72,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Port of Bugdom, a 1999 Macintosh game by Pangea Software, for modern operating systems";
     homepage = "https://github.com/jorio/Bugdom";
-    license = with licenses; [ cc-by-sa-40 ];
-    maintainers = with maintainers; [ lux ];
+    license = with lib.licenses; [ cc-by-sa-40 ];
+    maintainers = with lib.maintainers; [ lux ];
     mainProgram = "Bugdom";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

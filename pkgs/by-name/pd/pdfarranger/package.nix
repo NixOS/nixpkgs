@@ -12,14 +12,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pdfarranger";
-  version = "1.12.1";
+  version = "1.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pdfarranger";
     repo = "pdfarranger";
     tag = version;
-    hash = "sha256-of1itPubf6LBJ4rSh1bca3yoNTiz5Qt9ar9XDe4nhxI=";
+    hash = "sha256-lZuzFGRk19opLJ2pnh8s/VwdzDLtGwTchFh0ZuLezU4=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook3 ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ gettext ];

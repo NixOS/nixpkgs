@@ -3,29 +3,22 @@
   stdenvNoCC,
   fetchurl,
   jre8,
-  curl,
-  ccid,
   pcsclite,
-  pcsc-tools,
-  writeShellScript,
+  udev,
+  makeWrapper,
 }:
-let
-  exec = writeShellScript "e-imzo" ''
-    cd "$(dirname "$0")/../lib/e-imzo"
-
-    ${jre8}/bin/java -Dsun.security.smartcardio.library=${pcsclite.lib}/lib/libpcsclite.${stdenvNoCC.hostPlatform.extensions.sharedLibrary} -jar E-IMZO.jar
-
-    exit 0
-  '';
-in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "e-imzo";
-  version = "4.73";
+  version = "5.00";
 
   src = fetchurl {
     url = "https://cdn.xinux.uz/e-imzo/E-IMZO-v${finalAttrs.version}.tar.gz";
-    hash = "sha256-pkBpU0pyI1kmISNShhB17psLHmTZn3JdHbnRZCgLuGc==";
+    hash = "sha256-jPAZu98prkC4NQlfA8/kJuw9qdCrSSSyzySSWPlIXpY=";
   };
+
+  nativeBuildInputs = [
+    makeWrapper
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -37,7 +30,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     install -m 644 ./truststore.jks $out/lib/e-imzo/
     cp -r ./lib $out/lib/e-imzo/
 
-    install -m 755 "${exec}" $out/bin/e-imzo
+    makeWrapper ${jre8}/bin/java $out/bin/e-imzo \
+      --set LD_LIBRARY_PATH "${
+        lib.makeLibraryPath [
+          udev
+          pcsclite
+        ]
+      }" \
+      --add-flags "-Dsun.security.smartcardio.library=${pcsclite.lib}/lib/libpcsclite${stdenvNoCC.hostPlatform.extensions.sharedLibrary}" \
+      --add-flags "-jar $out/lib/e-imzo/E-IMZO.jar"
 
     runHook postInstall
   '';
@@ -49,6 +50,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://e-imzo.soliq.uz";
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    teams = [ lib.teams.uzinfocom ];
+    maintainers = with lib.maintainers; [
+      orzklv
+      shakhzodkudratov
+      bahrom04
+      bemeritus
+    ];
   };
 })

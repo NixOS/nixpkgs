@@ -12,18 +12,19 @@
   libXi,
   libXext,
   libGLU,
-  ffmpeg,
+  ffmpeg_7,
   ncurses,
+  python3,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "glslviewer";
-  version = "3.2.4";
+  version = "3.5.1";
   src = fetchFromGitHub {
     owner = "patriciogonzalezvivo";
     repo = "glslViewer";
     fetchSubmodules = true;
-    tag = version;
-    hash = "sha256-Ve3wmX5+kABCu8IRe4ySrwsBJm47g1zvMqDbqrpQl88=";
+    tag = finalAttrs.version;
+    hash = "sha256-gQF3hkudQXxI3t1e0Iaa4dYbVc3I7lBekt5jmJLJFpI=";
   };
   nativeBuildInputs = [
     cmake
@@ -39,18 +40,17 @@ stdenv.mkDerivation rec {
     libXext
     libGLU
     ncurses
-    ffmpeg
+    ffmpeg_7
+    python3
   ];
-
-  cmakeFlags = [ "-DCMAKE_POLICY_VERSION_MINIMUM=3.20" ];
-  meta = with lib; {
+  meta = {
     description = "Live GLSL coding renderer";
     homepage = "https://patriciogonzalezvivo.com/2015/glslViewer/";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.hodapp ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.hodapp ];
+    platforms = lib.platforms.unix;
     mainProgram = "glslViewer";
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

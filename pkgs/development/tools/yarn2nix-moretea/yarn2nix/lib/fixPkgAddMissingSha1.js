@@ -7,7 +7,7 @@ const crypto = require("crypto");
 
 function getSha1(url) {
   return new Promise((resolve, reject) => {
-    https.get(url, res => {
+    https.get(url, (res) => {
       const { statusCode } = res;
       const hash = crypto.createHash("sha1");
 
@@ -20,7 +20,7 @@ function getSha1(url) {
         reject(err);
       }
 
-      res.on("data", chunk => {
+      res.on("data", (chunk) => {
         hash.update(chunk);
       });
 
@@ -39,7 +39,7 @@ async function fixPkgAddMissingSha1(pkg) {
 
   if (!pkg.resolved) {
     console.error(
-      `yarn2nix: can't find "resolved" field for package ${pkg.nameWithVersion}, you probably required it using "file:...", this feature is not supported, ignoring`
+      `yarn2nix: can't find "resolved" field for package ${pkg.nameWithVersion}, you probably required it using "file:...", this feature is not supported, ignoring`,
     );
     return pkg;
   }
@@ -57,7 +57,7 @@ async function fixPkgAddMissingSha1(pkg) {
 
   return {
     ...pkg,
-    resolved: `${url}#${newSha1}`
+    resolved: `${url}#${newSha1}`,
   };
 }
 

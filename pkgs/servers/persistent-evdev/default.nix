@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "persistent-evdev";
   version = "unstable-2022-05-07";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "aiberia";
@@ -48,12 +48,12 @@ buildPythonPackage rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/aiberia/persistent-evdev";
     description = "Persistent virtual input devices for qemu/libvirt/evdev hotplug support";
-    license = licenses.mit;
-    maintainers = [ maintainers.lodi ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.lodi ];
+    platforms = lib.platforms.linux;
     mainProgram = "persistent-evdev.py";
   };
 }

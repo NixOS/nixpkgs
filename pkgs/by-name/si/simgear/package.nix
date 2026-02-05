@@ -8,8 +8,8 @@
   libX11,
   libXext,
   libXi,
-  libICE,
-  libSM,
+  libice,
+  libsm,
   libXt,
   libXmu,
   libGLU,
@@ -25,19 +25,20 @@
   apr,
   xz,
   curl,
+  c-ares,
 }:
 let
-  version = "2024.1.1";
+  version = "2024.1.4";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "simgear";
   inherit version;
 
   src = fetchFromGitLab {
     owner = "flightgear";
     repo = "simgear";
-    tag = "v${version}";
-    hash = "sha256-hOA/q/cTsqRy82rTAXRxyHBDdw93TW9UL+K5Jq5b/08=";
+    tag = finalAttrs.version;
+    hash = "sha256-WJI15egN1H+EAIaFuI3svYCvM0xzsIGcIPsZgLsvBc0=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -48,8 +49,8 @@ stdenv.mkDerivation rec {
     libX11
     libXext
     libXi
-    libICE
-    libSM
+    libice
+    libsm
     libXt
     libXmu
     libGLU
@@ -66,11 +67,13 @@ stdenv.mkDerivation rec {
     xz
   ];
 
-  meta = with lib; {
+  propagatedBuildInputs = [ c-ares ];
+
+  meta = {
     description = "Simulation construction toolkit";
     homepage = "https://wiki.flightgear.org/SimGear";
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
-    license = licenses.lgpl2;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.lgpl2;
   };
-}
+})

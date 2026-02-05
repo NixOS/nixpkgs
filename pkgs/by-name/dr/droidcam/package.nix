@@ -12,14 +12,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "droidcam";
   version = "2.1.4";
 
   src = fetchFromGitHub {
     owner = "aramg";
     repo = "droidcam";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-z/SteW3jYR/VR+HffvTetdGs5oz4qWBNkaqLYiP1V8c=";
   };
 
@@ -60,11 +60,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Linux client for DroidCam app";
     homepage = "https://github.com/aramg/droidcam";
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.suhr ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = [ lib.maintainers.suhr ];
+    platforms = lib.platforms.linux;
   };
-}
+})

@@ -12,14 +12,14 @@
   unbound,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opendkim";
   version = "2.11.0-Beta2";
 
   src = fetchFromGitHub {
     owner = "trusteddomainproject";
     repo = "OpenDKIM";
-    rev = "rel-opendkim-${lib.replaceStrings [ "." ] [ "-" ] version}";
+    rev = "rel-opendkim-${lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version}";
     sha256 = "0nx3in8sa6xna4vfacj8g60hfzk61jpj2ldag80xzxip9c3rd2pw";
   };
 
@@ -49,11 +49,11 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${openssl.bin}/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "C library for producing DKIM-aware applications and an open source milter for providing DKIM service";
     homepage = "http://www.opendkim.org/";
     maintainers = [ ];
-    license = licenses.bsd3;
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
   };
-}
+})

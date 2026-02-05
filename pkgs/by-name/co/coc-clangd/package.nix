@@ -2,21 +2,23 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 buildNpmPackage {
   pname = "coc-clangd";
-  version = "0.31.0";
+  version = "0-unstable-2026-01-01";
 
   src = fetchFromGitHub {
     owner = "clangd";
     repo = "coc-clangd";
-    # Upstream has no tagged versions
-    rev = "3a85a36f1ac08454deab1ed8d2553e0cae00cc1c";
-    hash = "sha256-uxK0nciLq4ZKFCoMJrO4dR0tuOBHYpgdZUc/KJ+JA/I=";
+    rev = "d4f246f326f066637653eafdf60e12e6b159827d";
+    hash = "sha256-+ydeReWxXp93PtU0zv8OEuSpIebqi1avGNzopyKXeD0=";
   };
 
-  npmDepsHash = "sha256-93MEug2eEL/Hum+RFmXx0JYO6jUygF8QRmL5nTTFyrs=";
+  npmDepsHash = "sha256-1331Qaz9BXOeg6NsHuIokXI6VAjiRoslbLT3hXcjgak=";
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     description = "clangd extension for coc.nvim";

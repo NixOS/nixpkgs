@@ -6,17 +6,18 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "most";
   version = "5.2.0";
 
   src = fetchurl {
-    url = "https://www.jedsoft.org/releases/most/most-${version}.tar.gz";
+    url = "https://www.jedsoft.org/releases/most/most-${finalAttrs.version}.tar.gz";
     hash = "sha256-lFWuuPgm+oOFyFDcIr8PIs+QabPDQj+6S/LG9iJtmQM=";
   };
 
   outputs = [
     "out"
+    "man"
     "doc"
   ];
 
@@ -40,7 +41,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Terminal pager similar to 'more' and 'less'";
     longDescription = ''
       MOST is a powerful paging program for Unix, VMS, MSDOS, and win32
@@ -48,8 +49,8 @@ stdenv.mkDerivation rec {
       windows and can scroll left and right. Why settle for less?
     '';
     homepage = "https://www.jedsoft.org/most/index.html";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
     mainProgram = "most";
   };
-}
+})

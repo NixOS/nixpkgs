@@ -17,7 +17,7 @@
   jansson,
   libjack2,
   libxkbcommon,
-  libpthreadstubs,
+  libpthread-stubs,
   libXdmcp,
   qtbase,
   qtsvg,
@@ -26,7 +26,7 @@
   x264,
   curl,
   wayland,
-  xorg,
+  libx11,
   pkg-config,
   libvlc,
   libGL,
@@ -99,13 +99,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-studio";
-  version = "32.0.1";
+  version = "32.0.4";
 
   src = fetchFromGitHub {
     owner = "obsproject";
     repo = "obs-studio";
     rev = finalAttrs.version;
-    hash = "sha256-99VAVV3hEMDI2R30OrX/in/9KtesUxMGOPg6yT5e4oM=";
+    hash = "sha256-OiLlYnHaW+ehHtz4N20ctkfL4WmCzI45+VUG5hHOga4=";
     fetchSubmodules = true;
   };
 
@@ -139,7 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
     libjack2
     libv4l
     libxkbcommon
-    libpthreadstubs
+    libpthread-stubs
     libXdmcp
     qtbase
     qtsvg
@@ -196,6 +196,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DENABLE_WEBRTC=ON"
     (lib.cmakeBool "ENABLE_QSV11" stdenv.hostPlatform.isx86_64)
     (lib.cmakeBool "ENABLE_LIBFDK" withFdk)
+    (lib.cmakeBool "ENABLE_SCRIPTING" scriptingSupport)
     (lib.cmakeBool "ENABLE_ALSA" alsaSupport)
     (lib.cmakeBool "ENABLE_PULSEAUDIO" pulseaudioSupport)
     (lib.cmakeBool "ENABLE_PIPEWIRE" pipewireSupport)
@@ -214,7 +215,7 @@ stdenv.mkDerivation (finalAttrs: {
   preFixup =
     let
       wrapperLibraries = [
-        xorg.libX11
+        libx11
         libvlc
         libGL
       ]
@@ -250,7 +251,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Free and open source software for video recording and live streaming";
     longDescription = ''
       This project is a rewrite of what was formerly known as "Open Broadcaster
@@ -258,12 +259,12 @@ stdenv.mkDerivation (finalAttrs: {
       video content, efficiently
     '';
     homepage = "https://obsproject.com";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       jb55
       materus
       fpletz
     ];
-    license = with licenses; [ gpl2Plus ] ++ optional withFdk fraunhofer-fdk;
+    license = with lib.licenses; [ gpl2Plus ] ++ optional withFdk fraunhofer-fdk;
     platforms = [
       "x86_64-linux"
       "i686-linux"

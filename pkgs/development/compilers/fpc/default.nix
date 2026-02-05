@@ -80,9 +80,6 @@ stdenv.mkDerivation rec {
     "FPC=${startFPC}/bin/fpc"
   ];
 
-  # disabled by default in fpcsrc/compiler/llvm/agllvm.pas
-  hardeningDisable = [ "pie" ];
-
   installFlags = [ "INSTALL_PREFIX=\${out}" ];
 
   postInstall = ''
@@ -102,15 +99,15 @@ stdenv.mkDerivation rec {
     bootstrap = startFPC;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Free Pascal Compiler from a source distribution";
     homepage = "https://www.freepascal.org";
-    maintainers = [ maintainers.raskin ];
-    license = with licenses; [
+    maintainers = [ lib.maintainers.raskin ];
+    license = with lib.licenses; [
       gpl2
       lgpl2
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     # See:
     # * <https://gitlab.com/freepascal.org/fpc/source/-/issues/41045>
     # * <https://gitlab.com/freepascal.org/fpc/source/-/merge_requests/887>

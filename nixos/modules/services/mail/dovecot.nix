@@ -134,7 +134,7 @@ let
           ssl_cert = <${cfg.sslServerCert}
           ssl_key = <${cfg.sslServerKey}
           ${optionalString (cfg.sslCACert != null) ("ssl_ca = <" + cfg.sslCACert)}
-          ${optionalString cfg.enableDHE ''ssl_dh = <${config.security.dhparams.params.dovecot2.path}''}
+          ${optionalString cfg.enableDHE "ssl_dh = <${config.security.dhparams.params.dovecot2.path}"}
           disable_plaintext_auth = yes
         ''
     )
@@ -294,20 +294,6 @@ in
     };
 
     enableLmtp = mkEnableOption "starting the LMTP listener (when Dovecot is enabled)";
-
-    hasNewUnitName = mkOption {
-      type = types.bool;
-      default = true;
-      readOnly = true;
-      internal = true;
-      description = ''
-        Inspectable option to confirm that the dovecot module uses the new
-        `dovecot.service` name, instead of `dovecot2.service`.
-
-        This is a helper added for the nixos-mailserver project and can be
-        removed after branching off nixos-25.11.
-      '';
-    };
 
     protocols = mkOption {
       type = types.listOf types.str;
@@ -705,7 +691,6 @@ in
     environment.etc."dovecot/dovecot.conf".source = cfg.configFile;
 
     systemd.services.dovecot = {
-      aliases = [ "dovecot2.service" ];
       description = "Dovecot IMAP/POP3 server";
       documentation = [
         "man:dovecot(1)"

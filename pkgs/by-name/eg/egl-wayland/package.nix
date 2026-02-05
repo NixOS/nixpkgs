@@ -14,9 +14,9 @@
   wayland-protocols,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "egl-wayland";
-  version = "1.1.20";
+  version = "1.1.21";
 
   outputs = [
     "out"
@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Nvidia";
     repo = "egl-wayland";
-    rev = version;
-    hash = "sha256-uexvXwLj7QEBht74gmqC1+/y37wC6F/fTtf5RNcK/Pw=";
+    rev = finalAttrs.version;
+    hash = "sha256-a98DzmzCG6DlLJ1HCl/LeD21Q7yyNbTce1poOoAnTjA=";
   };
 
   postPatch = ''
@@ -59,11 +59,11 @@ stdenv.mkDerivation rec {
     eglexternalplatform
   ];
 
-  meta = with lib; {
+  meta = {
     description = "EGLStream-based Wayland external platform";
     homepage = "https://github.com/NVIDIA/egl-wayland/";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ hedning ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ hedning ];
   };
-}
+})

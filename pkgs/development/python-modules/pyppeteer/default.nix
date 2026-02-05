@@ -9,7 +9,6 @@
   pyee,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   syncer,
   tqdm,
   urllib3,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "pyppeteer";
   version = "1.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pyppeteer";
@@ -84,12 +81,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyppeteer" ];
 
-  meta = with lib; {
+  meta = {
     description = "Headless chrome/chromium automation library (unofficial port of puppeteer)";
     mainProgram = "pyppeteer-install";
     homepage = "https://github.com/pyppeteer/pyppeteer";
     changelog = "https://github.com/pyppeteer/pyppeteer/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kmein ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kmein ];
   };
 }

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "0.14.5";
 
   src = fetchurl {
-    url = "https://www.spice-space.org/download/releases/${pname}-${version}.tar.xz";
+    url = "https://www.spice-space.org/download/releases/spice-protocol-${version}.tar.xz";
     sha256 = "sha256-uvWESfbonRn0dYma1fuRlv3EbAPMUyM/TjnPKXj5z/c=";
   };
 
@@ -25,10 +25,10 @@ stdenv.mkDerivation rec {
     ln -sv ../share/pkgconfig $out/lib/pkgconfig
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Protocol headers for the SPICE protocol";
     homepage = "https://www.spice-space.org/";
-    license = licenses.bsd3;
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
   };
 }

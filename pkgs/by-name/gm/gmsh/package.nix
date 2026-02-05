@@ -14,7 +14,15 @@
   zlib,
   libGL,
   libGLU,
-  xorg,
+  libxrender,
+  libxinerama,
+  libxft,
+  libxfixes,
+  libxext,
+  libxcursor,
+  libx11,
+  libsm,
+  libice,
   opencascade-occt,
   llvmPackages,
   python3Packages,
@@ -53,15 +61,15 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libGL
     libGLU
-    xorg.libXrender
-    xorg.libXcursor
-    xorg.libXfixes
-    xorg.libXext
-    xorg.libXft
-    xorg.libXinerama
-    xorg.libX11
-    xorg.libSM
-    xorg.libICE
+    libxrender
+    libxcursor
+    libxfixes
+    libxext
+    libxft
+    libxinerama
+    libx11
+    libsm
+    libice
   ]
   ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
@@ -113,6 +121,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gmsh.info/";
     changelog = "https://gitlab.onelab.info/gmsh/gmsh/-/releases/gmsh_${lib.concatStringsSep "_" (lib.versions.splitVersion finalAttrs.version)}#changelog";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ iedame ];
+    maintainers = [ ];
   };
 })

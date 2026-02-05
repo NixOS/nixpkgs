@@ -7,15 +7,12 @@
   pycryptodome,
   requests,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "block-io";
   version = "2.0.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
@@ -40,10 +37,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "block_io" ];
 
-  meta = with lib; {
+  meta = {
     description = "Integrate Bitcoin, Dogecoin and Litecoin in your Python applications using block.io";
     homepage = "https://github.com/BlockIo/block_io-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ nyanloutre ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nyanloutre ];
   };
 }

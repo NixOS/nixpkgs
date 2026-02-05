@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://www.opensmtpd.org/archives/${pname}-${version}.tar.gz";
+    url = "https://www.opensmtpd.org/archives/opensmtpd-${version}.tar.gz";
     hash = "sha256-QDTeLpLGH6g+7a2x2Ni9/mXlfrUM6WeeAUCVDjTKSrc=";
   };
 
@@ -71,17 +71,16 @@ stdenv.mkDerivation rec {
     "localstatedir=\${TMPDIR}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.opensmtpd.org/";
     description = ''
       A free implementation of the server-side SMTP protocol as defined by
       RFC 5321, with some additional standard extensions
     '';
-    license = licenses.isc;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.isc;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       obadz
-      ekleog
       vifino
     ];
   };

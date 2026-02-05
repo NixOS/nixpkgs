@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  pythonAtLeast,
   fetchPypi,
   setuptools,
   bzip2,
@@ -11,6 +12,11 @@ buildPythonPackage rec {
   pname = "zeroc-ice";
   version = "3.7.10.1";
   pyproject = true;
+
+  # Upstream PR: https://github.com/zeroc-ice/ice/pull/2910
+  # But this hasn't been merged into the 3.7 branch, and the patch doesn't
+  # apply cleanly.
+  disabled = pythonAtLeast "3.13";
 
   src = fetchPypi {
     pname = "zeroc_ice";
@@ -27,9 +33,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "Ice" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://zeroc.com/";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     description = "Comprehensive RPC framework with support for Python, C++, .NET, Java, JavaScript and more";
     mainProgram = "slice2py";
     maintainers = [ ];

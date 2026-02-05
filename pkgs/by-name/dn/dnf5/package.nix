@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # workaround for https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105329
-  NIX_CFLAGS_COMPILE = "-Wno-restrict -Wno-maybe-uninitialized";
+  env.NIX_CFLAGS_COMPILE = "-Wno-restrict -Wno-maybe-uninitialized";
 
   cmakeFlags = [
     "-DWITH_PERL5=OFF"
@@ -121,16 +121,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Next-generation RPM package management system";
     homepage = "https://github.com/rpm-software-management/dnf5";
     changelog = "https://github.com/rpm-software-management/dnf5/releases/tag/${finalAttrs.version}";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       malt3
       katexochen
     ];
     mainProgram = "dnf5";
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

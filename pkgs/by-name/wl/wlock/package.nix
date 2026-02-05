@@ -1,13 +1,14 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   pkg-config,
   wayland-scanner,
   wayland,
   wayland-protocols,
   libxkbcommon,
   libxcrypt,
+  versionCheckHook,
   nix-update-script,
 }:
 
@@ -15,8 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "wlock";
   version = "1.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "sewn";
     repo = "wlock";
     tag = finalAttrs.version;
@@ -45,6 +45,10 @@ stdenv.mkDerivation (finalAttrs: {
     "PREFIX=$(out)"
     ("WAYLAND_SCANNER=" + lib.getExe wayland-scanner)
   ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-v";
 
   passthru.updateScript = nix-update-script { };
 

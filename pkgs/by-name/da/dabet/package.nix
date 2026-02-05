@@ -1,15 +1,14 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitea,
+  fetchFromCodeberg,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "dabet";
   version = "3.0.1";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "annaaurora";
     repo = "dabet";
     rev = "v${version}";
@@ -18,11 +17,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-2ixdugxgc6lyLd06BeXxlrSqpVGJJ9SkFKwnAsol7V4=";
 
-  meta = with lib; {
+  meta = {
     description = "Print the duration between two times";
     homepage = "https://codeberg.org/annaaurora/dabet";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ annaaurora ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ annaaurora ];
     mainProgram = "dabet";
   };
 }

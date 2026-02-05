@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   pname = "avfs";
   version = "1.2.0";
   src = fetchurl {
-    url = "mirror://sourceforge/avf/${version}/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/avf/${version}/avfs-${version}.tar.bz2";
     sha256 = "sha256-olqOxDwe4XJiThpMec5mobkwhBzbVFtyXx7GS8q+iJw=";
   };
 

@@ -29,10 +29,10 @@ buildPythonPackage rec {
     "-v"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for OpenType specification metadata";
     homepage = "https://github.com/simoncozens/opentypespec-py";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ danc86 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ danc86 ];
   };
 }

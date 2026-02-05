@@ -12,14 +12,14 @@
   imlib2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "alock";
   version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "Arkq";
     repo = "alock";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-xfPhsXZrTlEqea75SvacDfjM9o21MTudrqfNN9xtdcg=";
   };
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     allowedVersions = "\\.";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Arkq/alock";
     description = "Simple screen lock application for X server";
     mainProgram = "alock";
@@ -62,11 +62,11 @@ stdenv.mkDerivation rec {
       xscreensaver and never will. It's just for locking the current
       X session.
     '';
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       ftrvxmtrx
       chris-martin
     ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
-}
+})

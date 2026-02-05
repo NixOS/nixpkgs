@@ -5,7 +5,6 @@
   fetchPypi,
   html5lib,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "mechanize";
   version = "0.4.10";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -49,11 +46,11 @@ buildPythonPackage rec {
     "test_password_manager"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Stateful programmatic web browsing in Python";
     homepage = "https://github.com/python-mechanize/mechanize";
     changelog = "https://github.com/python-mechanize/mechanize/blob/v${version}/ChangeLog";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

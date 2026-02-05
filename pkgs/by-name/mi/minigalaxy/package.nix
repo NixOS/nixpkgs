@@ -18,14 +18,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "minigalaxy";
-  version = "1.4.0";
+  version = "1.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sharkwouter";
     repo = "minigalaxy";
     tag = version;
-    hash = "sha256-ZHTjppdLxKDURceonbH7dJz+krBhu3lr2P7QPVDxRZw=";
+    hash = "sha256-YZhgVeWdVaNiTj7hvYuHbaVtoKN6EFoOANWdkrlj4dU=";
   };
 
   patches = [

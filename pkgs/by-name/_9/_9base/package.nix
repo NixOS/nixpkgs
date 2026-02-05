@@ -3,6 +3,7 @@
   stdenv,
   fetchgit,
   pkg-config,
+  unstableGitUpdater,
   patches ? [ ],
   pkgsBuildHost,
   enableStatic ? stdenv.hostPlatform.isStatic,
@@ -10,7 +11,7 @@
 
 stdenv.mkDerivation {
   pname = "9base";
-  version = "unstable-2019-09-11";
+  version = "6-unstable-2019-09-13";
 
   src = fetchgit {
     url = "https://git.suckless.org/9base";
@@ -29,6 +30,10 @@ stdenv.mkDerivation {
     # https://github.com/9fans/plan9port/commit/540caa5873bcc3bc2a0e1896119f5b53a0e8e630
     # https://github.com/9fans/plan9port/commit/323e1a8fac276f008e6d5146a83cbc88edeabc87
     ./getcallerpc-use-macro-or-stub.patch
+    # fix build with c23
+    #   dd.c:315:30: error: expected identifier or '*' before 'true'
+    #   n5.c:690:22: error: lvalue required as left operand of assignment
+    ./fix-build-with-c23.patch
   ]
   ++ patches;
 
@@ -65,6 +70,8 @@ stdenv.mkDerivation {
     "man"
     "troff"
   ];
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     homepage = "https://tools.suckless.org/9base/";

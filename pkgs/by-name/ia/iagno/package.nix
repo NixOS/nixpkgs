@@ -20,12 +20,12 @@
   desktop-file-utils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "iagno";
   version = "3.38.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/iagno/${lib.versions.majorMinor version}/iagno-${version}.tar.xz";
+    url = "mirror://gnome/sources/iagno/${lib.versions.majorMinor finalAttrs.version}/iagno-${finalAttrs.version}.tar.xz";
     hash = "sha256-hLnzLOA4l1iiHWPH6xwifbcRa1HTFJqg6uNQkWjg7SQ=";
   };
 
@@ -67,12 +67,12 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript { packageName = "iagno"; };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/iagno";
     description = "Computer version of the game Reversi, more popularly called Othello";
     mainProgram = "iagno";
-    teams = [ teams.gnome ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
   };
-}
+})

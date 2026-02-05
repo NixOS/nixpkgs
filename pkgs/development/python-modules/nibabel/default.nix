@@ -1,36 +1,45 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   fetchpatch2,
+  pythonAtLeast,
   pythonOlder,
-  hatchling,
+
+  # build-system
   hatch-vcs,
+  hatchling,
+
+  # dependencies
   numpy,
   packaging,
   importlib-resources,
   typing-extensions,
+
+  # optional-dependencies
   pydicom,
   pillow,
   h5py,
   scipy,
-  git,
+
+  addBinToPathHook,
+  gitMinimal,
   pytest-doctestplus,
   pytest-httpserver,
   pytest-xdist,
   pytest7CheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nibabel";
-  version = "5.3.2";
+  version = "5.3.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-C9ymUDsceEtEbHRaRUI2fed1bPug1yFDuR+f+3i+Vps=";
+  src = fetchFromGitHub {
+    owner = "nipy";
+    repo = "nibabel";
+    tag = finalAttrs.version;
+    hash = "sha256-Kdz7kCY5QnA9OiV/FPW1RerjP1GGLn+YaTwFpA0dJAM=";
   };
 
   patches = [
@@ -41,8 +50,8 @@ buildPythonPackage rec {
   ];
 
   build-system = [
-    hatchling
     hatch-vcs
+    hatchling
   ];
 
   dependencies = [
@@ -52,35 +61,37 @@ buildPythonPackage rec {
   ++ lib.optionals (pythonOlder "3.12") [ importlib-resources ]
   ++ lib.optionals (pythonOlder "3.13") [ typing-extensions ];
 
-  optional-dependencies = rec {
-    all = dicom ++ dicomfs ++ minc2 ++ spm ++ zstd;
+  optional-dependencies = lib.fix (self: {
+    all = self.dicom ++ self.dicomfs ++ self.minc2 ++ self.spm ++ self.zstd;
     dicom = [ pydicom ];
-    dicomfs = [ pillow ] ++ dicom;
+    dicomfs = [ pillow ] ++ self.dicom;
     minc2 = [ h5py ];
     spm = [ scipy ];
     zstd = [
       # TODO: pyzstd
     ];
-  };
+  });
 
   nativeCheckInputs = [
-    git
+    addBinToPathHook
+    gitMinimal
     pytest-doctestplus
     pytest-httpserver
     pytest-xdist
     pytest7CheckHook
   ]
-  ++ optional-dependencies.all;
+  ++ finalAttrs.passthru.optional-dependencies.all;
 
-  preCheck = ''
-    export PATH=$out/bin:$PATH
-  '';
+  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+    # https://github.com/nipy/nibabel/issues/1390
+    "test_deprecator_maker"
+  ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://nipy.org/nibabel";
-    changelog = "https://github.com/nipy/nibabel/blob/${version}/Changelog";
+    changelog = "https://github.com/nipy/nibabel/blob/${finalAttrs.version}/Changelog";
     description = "Access a multitude of neuroimaging data formats";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ashgillman ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ashgillman ];
   };
-}
+})

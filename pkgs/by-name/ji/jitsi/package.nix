@@ -12,7 +12,10 @@
   gtk2,
   libpulseaudio,
   openssl,
-  xorg,
+  libxv,
+  libxscrnsaver,
+  libxext,
+  libx11,
 }:
 
 let
@@ -47,10 +50,10 @@ stdenv.mkDerivation rec {
     gtk2
     libpulseaudio
     openssl
-    xorg.libX11
-    xorg.libXext
-    xorg.libXScrnSaver
-    xorg.libXv
+    libx11
+    libxext
+    libxscrnsaver
+    libxv
   ];
 
   nativeBuildInputs = [ unzip ];
@@ -81,16 +84,16 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://desktop.jitsi.org/";
     description = "Open Source Video Calls and Chat";
     mainProgram = "jitsi";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
       binaryNativeCode
     ];
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    teams = [ teams.jitsi ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.jitsi ];
   };
 }

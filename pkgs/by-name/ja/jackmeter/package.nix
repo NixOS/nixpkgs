@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "0.4";
 
   src = fetchurl {
-    url = "https://www.aelius.com/njh/${pname}/${pname}-${version}.tar.gz";
+    url = "https://www.aelius.com/njh/jackmeter/jackmeter-${version}.tar.gz";
     sha256 = "1cnvgx3jv0yvxlqy0l9k285zgvazmh5k8m4l7lxckjfm5bn6hm1r";
   };
 

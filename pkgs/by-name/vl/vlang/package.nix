@@ -8,7 +8,10 @@
   makeWrapper,
   upx,
   boehmgc,
-  xorg,
+  libxdmcp,
+  libxau,
+  libx11,
+  xorgproto,
   binaryen,
 }:
 
@@ -76,10 +79,10 @@ stdenv.mkDerivation {
     binaryen
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    xorg.libX11
-    xorg.libXau
-    xorg.libXdmcp
-    xorg.xorgproto
+    libx11
+    libxau
+    libxdmcp
+    xorgproto
   ];
 
   makeFlags = [
@@ -115,14 +118,14 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://vlang.io/";
     description = "Simple, fast, safe, compiled language for developing maintainable software";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       delta231
     ];
     mainProgram = "v";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

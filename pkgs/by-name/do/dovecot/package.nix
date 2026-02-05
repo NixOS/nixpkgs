@@ -17,7 +17,7 @@
   pam,
   libcap,
   coreutils,
-  clucene_core_2,
+  clucene-core_2,
   icu75,
   libexttextcat,
   libsodium,
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     zlib
     zstd
     xz
-    clucene_core_2
+    clucene-core_2
     icu75
     libexttextcat
     libsodium
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional withLua lua5_3;
 
   src = fetchurl {
-    url = "https://dovecot.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.gz";
+    url = "https://dovecot.org/releases/${lib.versions.majorMinor version}/dovecot-${version}.tar.gz";
     hash = "sha256-LZCheMQpdhEIi/farlSSo7w9WrYyjDoDLrQl0sJJCX4=";
   };
 
@@ -180,10 +180,10 @@ stdenv.mkDerivation rec {
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://dovecot.org/";
     description = "Open source IMAP and POP3 email server written with security primarily in mind";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       publicDomain
       lgpl21Only
@@ -191,12 +191,12 @@ stdenv.mkDerivation rec {
       bsdOriginal
     ];
     mainProgram = "dovecot";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
+      das_j
       fpletz
-      globin
+      helsinki-Jo
     ];
-    teams = [ lib.teams.helsinki-systems ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
   passthru.tests = {
     opensmtpd-interaction = nixosTests.opensmtpd;

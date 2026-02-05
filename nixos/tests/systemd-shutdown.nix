@@ -27,7 +27,7 @@ in
     # automatically and that 'systemd-shutdown' runs our script.
     machine.wait_for_unit("multi-user.target")
     # .shutdown() would wait for the machine to power off
-    machine.succeed("systemctl poweroff")
+    machine.execute("systemctl poweroff", check_return=False)
     # Message printed by systemd-shutdown
     machine.wait_for_console_text("Unmounting '/oldroot'")
     machine.wait_for_console_text("${msg}")

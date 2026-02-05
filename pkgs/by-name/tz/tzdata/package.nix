@@ -8,16 +8,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tzdata";
-  version = "2025b";
+  version = "2025c";
 
   srcs = [
     (fetchurl {
       url = "https://data.iana.org/time-zones/releases/tzdata${finalAttrs.version}.tar.gz";
-      hash = "sha256-EYEEEzRfx4BQF+J+qfpIhf10zWGykRcRrQOPXSjXFHQ=";
+      hash = "sha256-SqeeTv/uU/xAKf/l9uvpeTcoLrzfOG1dLakc6EFC+Vc=";
     })
     (fetchurl {
       url = "https://data.iana.org/time-zones/releases/tzcode${finalAttrs.version}.tar.gz";
-      hash = "sha256-Bfj+2zUl7nDUnIfT+ueKig265P6HqlZcZc2plIrhNew=";
+      hash = "sha256-aX6+ZiVESu9QgPWOSdA0JLu1Lgi/SD0921rPEMvRV0A=";
     })
   ];
 
@@ -94,16 +94,16 @@ stdenv.mkDerivation (finalAttrs: {
   # minor releases.
   passthru.tests = postgresql;
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.iana.org/time-zones";
     description = "Database of current and historical time zones";
     changelog = "https://github.com/eggert/tz/blob/${finalAttrs.version}/NEWS";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd3 # tzcode
       publicDomain # tzdata
     ];
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       ajs124
       fpletz
     ];

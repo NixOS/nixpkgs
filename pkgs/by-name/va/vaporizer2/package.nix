@@ -30,6 +30,11 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  postPatch = ''
+    rm -rf clap-juce-extensions
+    ln -s ${finalAttrs.passthru.clapJuceExtensions} clap-juce-extensions
+  '';
+
   strictDeps = true;
 
   nativeBuildInputs = [
@@ -56,11 +61,24 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "USE_SYSTEM_JUCE" "ON")
   ];
 
-  # LTO needs special setup on Linux
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail 'juce::juce_recommended_lto_flags' '# Not forcing LTO'
-  '';
+  env.NIX_CFLAGS_COMPILE = toString [
+    # juce, compiled in this build as part of a Git submodule, uses `-flto` as
+    # a Link Time Optimization flag, and instructs the plugin compiled here to
+    # use this flag to. This breaks the build for us. Using _fat_ LTO allows
+    # successful linking while still providing LTO benefits. If our build of
+    # `juce` was used as a dependency, we could have patched that `-flto` line
+    # in our juce's source, but that is not possible because it is used as a
+    # Git Submodule.
+    "-ffat-lto-objects"
+  ];
+
+  passthru.clapJuceExtensions = fetchFromGitHub {
+    owner = "free-audio";
+    repo = "clap-juce-extensions";
+    rev = "645ed2fd0949d36639e3d63333f26136df6df769";
+    hash = "sha256-Lx88nyEFjPLA5yh8rrqBdyZIxe/j0FgIHoyKcbjuuI4=";
+    fetchSubmodules = true;
+  };
 
   meta = {
     description = "Wavetable synthesizer";

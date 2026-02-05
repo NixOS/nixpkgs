@@ -31,9 +31,8 @@
   libid3tag,
   libopus,
   libuuid,
-  ffmpeg,
+  ffmpeg_7,
   soundtouch,
-  pcre,
   portaudio, # given up fighting their portaudio.patch?
   portmidi,
   linuxHeaders,
@@ -43,7 +42,7 @@
   libepoxy,
   libXdmcp,
   libXtst,
-  libpthreadstubs,
+  libpthread-stubs,
   libsbsms_2_3_0,
   libselinux,
   libsepol,
@@ -59,15 +58,18 @@
 # TODO
 # 1. detach sbsms
 
+let
+  ffmpeg = ffmpeg_7;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "audacity";
-  version = "3.7.5";
+  version = "3.7.7";
 
   src = fetchFromGitHub {
     owner = "audacity";
     repo = "audacity";
     rev = "Audacity-${finalAttrs.version}";
-    hash = "sha256-gTky+wORQ6n3EepOUA8Y2zc8AocqjGP42N42G6FXRS8=";
+    hash = "sha256-UyQffN9vOSD3uDk4jpYGsjH577pU4V7FpFAu0xdsXUA=";
   };
 
   patches = [
@@ -78,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     mkdir src/private
     substituteInPlace scripts/build/macOS/fix_bundle.py \
-      --replace-fail "path.startswith('/usr/lib/')" "path.startswith('${builtins.storeDir}')"
+      --replace-fail "path.startswith('/usr/lib/')" "path.startswith('/usr/lib/') or path.startswith('${builtins.storeDir}')"
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace libraries/lib-files/FileNames.cpp \
@@ -115,7 +117,6 @@ stdenv.mkDerivation (finalAttrs: {
     lv2
     mpg123
     opusfile
-    pcre
     portmidi
     rapidjson
     serd
@@ -137,7 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
     libepoxy
     libXdmcp
     libXtst
-    libpthreadstubs
+    libpthread-stubs
     libxkbcommon
     libselinux
     libsepol

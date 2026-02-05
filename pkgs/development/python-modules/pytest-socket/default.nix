@@ -4,15 +4,12 @@
   fetchFromGitHub,
   poetry-core,
   pytest,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-socket";
   version = "0.7.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "miketheman";
@@ -30,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_socket" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytest Plugin to disable socket calls during tests";
     homepage = "https://github.com/miketheman/pytest-socket";
     changelog = "https://github.com/miketheman/pytest-socket/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

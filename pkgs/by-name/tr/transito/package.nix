@@ -7,7 +7,10 @@
   vulkan-headers,
   libxkbcommon,
   wayland,
-  xorg,
+  libxfixes,
+  libxcursor,
+  libx11,
+  libxcb,
   libGL,
   sqlite,
 }:
@@ -29,10 +32,10 @@ buildGoModule rec {
     vulkan-headers
     libxkbcommon
     wayland
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXfixes
-    xorg.libxcb
+    libx11
+    libxcursor
+    libxfixes
+    libxcb
     libGL
     sqlite
   ];
@@ -52,7 +55,7 @@ buildGoModule rec {
 
   doCheck = false; # no test
 
-  meta = with lib; {
+  meta = {
     description = "Data-provider-agnostic (GTFS) public transportation app";
     longDescription = ''
       Transito is a data-provider-agnostic public transportation app
@@ -69,10 +72,10 @@ buildGoModule rec {
     '';
     homepage = "https://git.sr.ht/~mil/transito";
     changelog = "https://git.sr.ht/~mil/transito/refs/v${version}";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.McSinyx ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.McSinyx ];
     mainProgram = "transito";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     broken = stdenv.isDarwin;
   };
 }

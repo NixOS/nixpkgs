@@ -50,9 +50,9 @@ let
       # https://gitlab.com/armagetronad/armagetronad/-/tags
       ${latestVersionMajor} =
         let
-          version = "${latestVersionMajor}.2.3";
+          version = "${latestVersionMajor}.2.5";
           rev = "v${version}";
-          hash = "sha256-lfYJ3luGK9hB0aiiBiJIqq5ddANqGaVtKXckbo4fl2g=";
+          hash = "sha256-bj+oUqz0WHAjZ0iS7GlbIfLeMFSPQkH99mPaLdapkPo=";
         in
         dedicatedServer: {
           inherit version;
@@ -98,8 +98,8 @@ let
       # https://gitlab.com/armagetronad/armagetronad/-/commits/hack-0.2.8-sty+ct+ap/?ref_type=heads
       "${latestVersionMajor}-sty+ct+ap" =
         let
-          rev = "c907ee3efd76f3b1e6eb41257cf7127f3eab280c";
-          hash = "sha256-d5uWBSz07OinbGHoxUQ64go3eOugLu/tWNjeihobQdo=";
+          rev = "22fdbee08ca301c09ae4dee7210ccef02536670d";
+          hash = "sha256-F+nnQxI2TTTa+gJYWjQPFjd8tQLCh/dEu/oTV0ie8BI=";
         in
         dedicatedServer: {
           version = "${latestVersionMajor}-sty+ct+ap-${lib.substring 0 8 rev}";

@@ -8,13 +8,13 @@
 }:
 buildGoModule rec {
   pname = "beszel";
-  version = "0.14.1";
+  version = "0.18.3";
 
   src = fetchFromGitHub {
     owner = "henrygd";
     repo = "beszel";
     tag = "v${version}";
-    hash = "sha256-IQ39OtYG2VDyHIPFRR0VNK56czGlJly66Bwb/NYIBxY=";
+    hash = "sha256-/rFVH3kWf9OB3/iJNOARG85y1WH03hW8LvsIRzq1vnU=";
   };
 
   webui = buildNpmPackage {
@@ -48,10 +48,10 @@ buildGoModule rec {
 
     sourceRoot = "${src.name}/internal/site";
 
-    npmDepsHash = "sha256-Wtq/pesnovOyAnFta/wI+j8rml8XWORvOLz/Q82sy8g=";
+    npmDepsHash = "sha256-509/n5OH4z6LZH+jlmDLl2DlqKrD7M5ajtalmF/4n1o=";
   };
 
-  vendorHash = "sha256-IfwgL4Ms5Uho1l0yGCyumbr1N/SN+j5HaFl4hACkTsQ=";
+  vendorHash = "sha256-O5gFpQ90AQFSAidPTWPrODZ4LWuwrOMpzEH/8HrjBig=";
 
   preBuild = ''
     mkdir -p internal/site/dist
@@ -80,6 +80,7 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [
       bot-wxt1221
       arunoruto
+      BonusPlay
     ];
     license = lib.licenses.mit;
   };

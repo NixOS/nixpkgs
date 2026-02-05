@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
   pname = "tuhi";
   version = "0.6";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "tuhiproject";
@@ -62,15 +62,15 @@ python3Packages.buildPythonApplication rec {
       --replace "/usr/bin/env sh" "sh"
   '';
   postFixup = ''
-    wrapPythonProgramsIn $out/libexec "$out $pythonPath"
+    wrapPythonProgramsIn $out/libexec "$out ''${pythonPath[*]}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "DBus daemon to access Wacom SmartPad devices";
     mainProgram = "tuhi";
     homepage = "https://github.com/tuhiproject/tuhi";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ lammermann ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ lammermann ];
   };
 }

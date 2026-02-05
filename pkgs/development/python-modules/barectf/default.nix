@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "barectf";
   version = "3.1.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "efficios";
@@ -45,10 +45,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytest7CheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Generator of ANSI C tracers which output CTF data streams";
     mainProgram = "barectf";
     homepage = "https://github.com/efficios/barectf";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

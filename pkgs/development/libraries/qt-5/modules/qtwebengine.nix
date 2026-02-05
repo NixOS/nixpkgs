@@ -20,7 +20,11 @@
   pkgsBuildTarget,
   pkgsBuildBuild,
 
-  xorg,
+  libxdamage,
+  libxcomposite,
+  xrandr,
+  libxkbfile,
+  libpciaccess,
   libXcursor,
   libXScrnSaver,
   libXrandr,
@@ -57,7 +61,7 @@
   bootstrap_cmds,
   xcbuild,
   writeScriptBin,
-  ffmpeg ? null,
+  ffmpeg_7 ? null,
   lib,
   stdenv,
   version ? null,
@@ -354,7 +358,7 @@ qtModule (
       icu
 
       libevent
-      ffmpeg
+      ffmpeg_7
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       dbus
@@ -377,16 +381,16 @@ qtModule (
       pciutils
 
       # X11 libs
-      xorg.xrandr
+      xrandr
       libXScrnSaver
       libXcursor
       libXrandr
-      xorg.libpciaccess
+      libpciaccess
       libXtst
-      xorg.libXcomposite
-      xorg.libXdamage
+      libxcomposite
+      libxdamage
       libdrm
-      xorg.libxkbfile
+      libxkbfile
 
     ]
     ++ lib.optionals pipewireSupport [
@@ -438,10 +442,10 @@ qtModule (
 
     requiredSystemFeatures = [ "big-parallel" ];
 
-    meta = with lib; {
+    meta = {
       description = "Web engine based on the Chromium web browser";
       mainProgram = "qwebengine_convert_dict";
-      maintainers = with maintainers; [ matthewbauer ];
+      maintainers = [ ];
 
       # qtwebengine-5.15.8: "QtWebEngine can only be built for x86,
       # x86-64, ARM, Aarch64, and MIPSel architectures."
@@ -450,7 +454,7 @@ qtModule (
         let
           inherit (lib.systems.inspect) patternLogicalAnd;
         in
-        concatMap (patternLogicalAnd isUnix) (
+        lib.concatMap (patternLogicalAnd isUnix) (
           lib.concatMap lib.toList [
             isx86_32
             isx86_64

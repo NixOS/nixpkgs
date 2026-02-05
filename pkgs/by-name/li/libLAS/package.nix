@@ -54,6 +54,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/libLAS/libLAS/commit/be77a75f475ec8d59c0dae1c3c896289bcb5a287.patch";
       hash = "sha256-5XDexk3IW7s2/G27GXkWp7cw1WZyQLMk/lTpfOM6PM0=";
     })
+    (fetchpatch {
+      name = "fix-gcc15.patch";
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/liblas/-/raw/1.8.1.r128+gded46373-17/liblas-gcc15.patch";
+      hash = "sha256-cOm5ElnR2mK+ofU0F4xzYTkFa3Oq8r/WSm4qo45vkt8=";
+    })
   ];
 
   # Disable setting of C++98 standard which was dropped in boost 1.84.0

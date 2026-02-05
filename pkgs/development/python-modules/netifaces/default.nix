@@ -2,15 +2,12 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   version = "0.11.0";
   pname = "netifaces";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -22,10 +19,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "netifaces" ];
 
-  meta = with lib; {
+  meta = {
     description = "Portable access to network interfaces from Python";
     homepage = "https://github.com/al45tair/netifaces";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -3,7 +3,7 @@
   buildPackages,
   fetchFromGitHub,
   buildNpmPackage,
-  fetchFromGitea,
+  fetchFromCodeberg,
   nix-update-script,
 }:
 
@@ -30,8 +30,7 @@ buildNpmPackage rec {
   pname = "kaufkauflist";
   version = "4.0.2";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "annaaurora";
     repo = "kaufkauflist";
     rev = "v${version}";
@@ -50,11 +49,11 @@ buildNpmPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://codeberg.org/annaaurora/kaufkauflist";
     description = "To-do list for shopping or other use cases";
-    license = licenses.mit;
-    maintainers = with maintainers; [ annaaurora ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ annaaurora ];
     mainProgram = "kaufdbclean";
   };
 }

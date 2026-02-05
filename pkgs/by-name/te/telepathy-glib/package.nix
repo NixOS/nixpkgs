@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "${meta.homepage}/releases/telepathy-glib/${pname}-${version}.tar.gz";
+    url = "${meta.homepage}/releases/telepathy-glib/telepathy-glib-${version}.tar.gz";
     sha256 = "sKN013HN0IESXzjDq9B5ZXZCMBxxpUPVVeK/IZGSc/A=";
   };
 
@@ -66,10 +66,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://telepathy.freedesktop.org";
-    platforms = platforms.unix;
-    license = with licenses; [
+    platforms = lib.platforms.unix;
+    license = with lib.licenses; [
       bsd2
       bsd3
       lgpl21Plus

@@ -16,7 +16,6 @@
   webob,
   zope-deprecation,
   zope-interface,
-  pythonOlder,
   pytestCheckHook,
 }:
 
@@ -24,8 +23,6 @@ buildPythonPackage rec {
   pname = "pyramid";
   version = "2.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -64,11 +61,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyramid" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python web framework";
     homepage = "https://trypyramid.com/";
     changelog = "https://github.com/Pylons/pyramid/blob/${version}/CHANGES.rst";
-    license = licenses.bsd0;
+    license = lib.licenses.bsd0;
     maintainers = [ ];
   };
 }

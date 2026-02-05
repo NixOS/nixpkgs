@@ -4,9 +4,11 @@
   callPackage,
   fetchFromGitHub,
   fetchPypi,
+  fetchpatch,
   python313,
   replaceVars,
   ffmpeg-headless,
+  ffmpeg_7-headless,
   inetutils,
   nixosTests,
   home-assistant,
@@ -48,7 +50,7 @@ let
         src = fetchFromGitHub {
           owner = "tkdrob";
           repo = "aioskybell";
-          rev = "refs/tags/${version}";
+          tag = version;
           hash = "sha256-aBT1fDFtq1vasTvCnAXKV2vmZ6LBLZqRCiepv1HDJ+Q=";
         };
       });
@@ -58,7 +60,7 @@ let
         src = fetchFromGitHub {
           owner = "bachya";
           repo = "aiowatttime";
-          rev = "refs/tags/${version}";
+          tag = version;
           hash = "sha256-tWnxGLJT+CRFvkhxFamHxnLXBvoR8tfOvzH1o1i5JJg=";
         };
         postPatch = ''
@@ -85,16 +87,6 @@ let
         ];
       });
 
-      av = super.av.overridePythonAttrs rec {
-        version = "13.1.0";
-        src = fetchFromGitHub {
-          owner = "PyAV-Org";
-          repo = "PyAV";
-          tag = "v${version}";
-          hash = "sha256-x2a9SC4uRplC6p0cD7fZcepFpRidbr6JJEEOaGSWl60=";
-        };
-      };
-
       imageio = super.imageio.overridePythonAttrs (oldAttrs: {
         disabledTests = oldAttrs.disabledTests or [ ] ++ [
           # broken by pyav pin
@@ -108,7 +100,7 @@ let
         src = fetchFromGitHub {
           owner = "burnash";
           repo = "gspread";
-          rev = "refs/tags/v${version}";
+          tag = "v${version}";
           hash = "sha256-i+QbnF0Y/kUMvt91Wzb8wseO/1rZn9xzeA5BWg1haks=";
         };
         dependencies = with self; [
@@ -129,11 +121,12 @@ let
       notifications-android-tv = super.notifications-android-tv.overridePythonAttrs (oldAttrs: rec {
         version = "0.1.5";
         format = "setuptools";
+        pyproject = null;
 
         src = fetchFromGitHub {
           owner = "engrbm87";
           repo = "notifications_android_tv";
-          rev = "refs/tags/${version}";
+          tag = version;
           hash = "sha256-adkcUuPl0jdJjkBINCTW4Kmc16C/HzL+jaRZB/Qr09A=";
         };
 
@@ -152,7 +145,7 @@ let
         version = "2.2";
         src = fetchFromGitHub {
           inherit (oldAttrs.src) owner repo;
-          rev = "refs/tags/${version}";
+          tag = version;
           hash = "sha256-GGp7nKFH01m1KW6yMkKlAdd26bDi8JDWva6OQ0CWMIw=";
         };
       });
@@ -203,22 +196,12 @@ let
         };
       });
 
-      pydexcom = super.pydexcom.overridePythonAttrs (oldAttrs: rec {
-        version = "0.2.3";
-        src = fetchFromGitHub {
-          owner = "gagebenne";
-          repo = "pydexcom";
-          rev = "refs/tags/${version}";
-          hash = "sha256-ItDGnUUUTwCz4ZJtFVlMYjjoBPn2h8QZgLzgnV2T/Qk=";
-        };
-      });
-
       pyflume = super.pyflume.overridePythonAttrs (oldAttrs: rec {
         version = "0.6.5";
         src = fetchFromGitHub {
           owner = "ChrisMandich";
           repo = "PyFlume";
-          rev = "refs/tags/v${version}";
+          tag = "v${version}";
           hash = "sha256-kIE3y/qlsO9Y1MjEQcX0pfaBeIzCCHk4f1Xa215BBHo=";
         };
         dependencies = oldAttrs.propagatedBuildInputs or [ ] ++ [
@@ -226,21 +209,12 @@ let
         ];
       });
 
-      pykaleidescape = super.pykaleidescape.overridePythonAttrs (oldAttrs: rec {
-        version = "1.0.1";
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          rev = "refs/tags/v${version}";
-          hash = "sha256-KM/gtpsQ27QZz2uI1t/yVN5no0zp9LZag1duAJzK55g=";
-        };
-      });
-
       pysnooz = super.pysnooz.overridePythonAttrs (oldAttrs: rec {
         version = "0.8.6";
         src = fetchFromGitHub {
           owner = "AustinBrunkhorst";
           repo = "pysnooz";
-          rev = "refs/tags/v${version}";
+          tag = "v${version}";
           hash = "sha256-hJwIObiuFEAVhgZXYB9VCeAlewBBnk0oMkP83MUCpyU=";
         };
         patches = [ ];
@@ -252,7 +226,7 @@ let
         src = fetchFromGitHub {
           owner = "home-assistant-libs";
           repo = "pytradfri";
-          rev = "refs/tags/${version}";
+          tag = version;
           hash = "sha256-xOdTzG0bF5p1QpkXv2btwrVugQRjSwdAj8bXcC0IoQg=";
         };
         patches = [ ];
@@ -299,7 +273,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2025.11.1";
+  hassVersion = "2026.2.0";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -320,13 +294,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-39OY9lKlqnv3QdIdJ698cMTBrF41SxbqQfz6N32mD5s=";
+    hash = "sha256-SZv5UVB62nwRjaemVZpxj8ZUpOzFGp/RsvOYm6uWiNc=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-W9xuWfz9lCQXaPg+O313mzMxvBfY64CrU7vwNjra/3k=";
+    hash = "sha256-ArCk9UrObDLmcmcS8/xT0ADPLzw/DUs3vKyX/fKCeU8=";
   };
 
   build-system = with python.pkgs; [
@@ -352,6 +326,14 @@ python.pkgs.buildPythonApplication rec {
     (replaceVars ./patches/ffmpeg-path.patch {
       ffmpeg = "${lib.getExe ffmpeg-headless}";
     })
+
+    (fetchpatch {
+      # pytest 9 renames some snapshots
+      name = "revert-to-pytest-8.patch";
+      url = "https://github.com/home-assistant/core/commit/3f22dbaa2e1a7776185ec443bf26f90e90e55efa.patch";
+      revert = true;
+      hash = "sha256-rHXpmHUNCr+lhYqiOVrCSQTWvWJ+jHNwPJzUeFtDPIw=";
+    })
   ];
 
   postPatch = ''
@@ -361,10 +343,13 @@ python.pkgs.buildPythonApplication rec {
       --replace-fail "setuptools==78.1.1" setuptools
   '';
 
+  pythonRemoveDeps = [
+    "uv"
+  ];
+
   dependencies = with python.pkgs; [
     # Only packages required in pyproject.toml
     aiodns
-    aiofiles
     aiohasupervisor
     aiohttp
     aiohttp-asyncmdnsresolver
@@ -384,28 +369,20 @@ python.pkgs.buildPythonApplication rec {
     cronsim
     cryptography
     fnv-hash-fast
-    ha-ffmpeg
     hass-nabucasa
-    hassil
     home-assistant-bluetooth
-    home-assistant-intents
     httpx
     ifaddr
     jinja2
     lru-dict
-    mutagen
-    numpy
     orjson
     packaging
     pillow
     propcache
     psutil-home-assistant
     pyjwt
-    pymicro-vad
     pyopenssl
-    pyspeex-noise
     python-slugify
-    pyturbojpeg
     pyyaml
     requests
     securetar
@@ -415,7 +392,6 @@ python.pkgs.buildPythonApplication rec {
     typing-extensions
     ulid-transform
     urllib3
-    uv
     voluptuous
     voluptuous-openapi
     voluptuous-serialize
@@ -432,31 +408,38 @@ python.pkgs.buildPythonApplication rec {
   # upstream only tests on Linux, so do we.
   doCheck = stdenv.hostPlatform.isLinux;
 
+  requirementsTest = with python.pkgs; [
+    # test infrastructure (selectively from requirement_test.txt)
+    freezegun
+    pytest-asyncio
+    pytest-aiohttp
+    pytest-freezer
+    pytest-socket
+    pytest-timeout
+    pytest-unordered
+    pytest-xdist
+    pytestCheckHook
+    requests-mock
+    respx
+    syrupy
+  ];
+
   nativeCheckInputs =
-    with python.pkgs;
-    [
-      # test infrastructure (selectively from requirement_test.txt)
-      freezegun
-      pytest-asyncio
-      pytest-aiohttp
-      pytest-freezer
-      pytest-socket
-      pytest-timeout
-      pytest-unordered
-      pytest-xdist
-      pytestCheckHook
-      requests-mock
-      respx
-      syrupy
+    requirementsTest
+    ++ (with python.pkgs; [
       # Used in tests/non_packaged_scripts/test_alexa_locales.py
       beautifulsoup4
       # Used in tests/scripts/test_check_config.py
       colorlog
-    ]
+      # Used in tests/helpers/test_httpx_client.py
+      h2
+    ])
     ++ lib.concatMap (component: getPackages component python.pkgs) [
       # some components are needed even if tests in tests/components are disabled
-      "default_config"
+      "assist_pipeline"
+      "frontend"
       "hue"
+      "mobile_app"
     ];
 
   pytestFlags = [
@@ -488,6 +471,7 @@ python.pkgs.buildPythonApplication rec {
     "tests/test_bootstrap.py::test_setup_hass_takes_longer_than_log_slow_startup"
     "tests/test_test_fixtures.py::test_evict_faked_translations"
     "tests/helpers/test_backup.py::test_async_get_manager"
+    "tests/helpers/test_trigger.py::test_platform_multiple_triggers[sync_action]"
   ];
 
   preCheck = ''
@@ -526,13 +510,13 @@ python.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://home-assistant.io/";
     changelog = "https://github.com/home-assistant/core/releases/tag/${src.tag}";
     description = "Open source home automation that puts local control and privacy first";
-    license = licenses.asl20;
-    teams = [ teams.home-assistant ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.home-assistant ];
+    platforms = lib.platforms.linux;
     mainProgram = "hass";
   };
 }

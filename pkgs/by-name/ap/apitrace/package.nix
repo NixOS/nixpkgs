@@ -15,14 +15,14 @@
   libsForQt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "apitrace";
   version = "13.0";
 
   src = fetchFromGitHub {
     owner = "apitrace";
     repo = "apitrace";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-ZZ2RL9nvwvHBEuKSDr1tgRhxBeg+XJKPUvSiHz6g/cg=";
     fetchSubmodules = true;
   };
@@ -96,10 +96,10 @@ stdenv.mkDerivation rec {
     wrapQtApp $out/bin/qapitrace
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://apitrace.github.io";
     description = "Tools to trace OpenGL, OpenGL ES, Direct3D, and DirectDraw APIs";
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
   };
-}
+})

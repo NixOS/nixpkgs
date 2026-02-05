@@ -7,11 +7,11 @@
 }:
 
 buildTeleport {
-  version = "18.3.1";
-  hash = "sha256-HM0pu+3O7zoClH15YC0naxxmKJC9ngamnvraTosRqG0=";
-  vendorHash = "sha256-HyS0KKW7lyn3NzedxM4+UxFV9OnxgtFDMW5jkj3ir/8=";
-  pnpmHash = "sha256-6sThtwACNEdV0fleaQf3iMmFxPsd0AshYeYZUatFMcg=";
-  cargoHash = "sha256-ia4We4IfIkqz82aFMVvXdzjDXw0w+OJSPVdutfau6PA=";
+  version = "18.6.5";
+  hash = "sha256-xNdNyWpH1NpF8O9BLsiov3mmnrXXr/kbi2zbEaGDGNg=";
+  vendorHash = "sha256-sXBCfzVjffSyPDIxmAWFp1WINmMPV1HRx9O6JkOgqLM=";
+  pnpmHash = "sha256-aHiBD/GYK5zal2NeBzaDEftzruPwoSwARz/2uuqyKlY=";
+  cargoHash = "sha256-tp+xxa+sYQpvgD2Yv/W0hegRpUubBeFpdngRyByNxJc=";
 
   wasm-bindgen-cli = wasm-bindgen-cli_0_2_99;
   buildGoModule = buildGo124Module;

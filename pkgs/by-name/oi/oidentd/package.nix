@@ -15,15 +15,15 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://files.janikrabe.com/pub/oidentd/releases/${version}/${pname}-${version}.tar.gz";
+    url = "https://files.janikrabe.com/pub/oidentd/releases/${version}/oidentd-${version}.tar.gz";
     sha256 = "sha256-yyvcnabxNkcIMOiZBjvoOm/pEjrGXFt4W4SG5lprkbc=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Configurable Ident protocol server";
     mainProgram = "oidentd";
     homepage = "https://oidentd.janikrabe.com/";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
   };
 }

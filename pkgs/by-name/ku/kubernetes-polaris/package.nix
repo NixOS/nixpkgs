@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "kubernetes-polaris";
-  version = "10.1.2";
+  version = "10.1.4";
 
   src = fetchFromGitHub {
     owner = "FairwindsOps";
     repo = "polaris";
     rev = version;
-    sha256 = "sha256-wu/Ouozi89y1abFgDk16uqBHoYDQDIzoqPgwA0BofLo=";
+    sha256 = "sha256-OwKW8a7bka6YYI8xIRaxcNvrFOjuf+0jG3CSQGVCRPM=";
   };
 
-  vendorHash = "sha256-ihA9RJDFHePox1G47Jr4Q1NSVJ9k5KDXgm8KTe2wYBQ=";
+  vendorHash = "sha256-gqMeXzPqQ0RBtjx+fS0+b7KhfJh1Ss0mC3djzOR84dU=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -45,11 +45,11 @@ buildGoModule rec {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Validate and remediate Kubernetes resources to ensure configuration best practices are followed";
     mainProgram = "polaris";
     homepage = "https://www.fairwinds.com/polaris";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ longer ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ longer ];
   };
 }

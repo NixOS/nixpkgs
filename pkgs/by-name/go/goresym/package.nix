@@ -3,6 +3,7 @@
   fetchFromGitHub,
   buildGoModule,
   unzip,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -29,6 +30,8 @@ buildGoModule rec {
   '';
 
   doCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Go symbol recovery tool";

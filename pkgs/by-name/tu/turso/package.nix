@@ -7,16 +7,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "turso";
-  version = "0.3.2";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "tursodatabase";
     repo = "turso";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-biElXD4d6h28Nq7LIjuL+at/y69TxnsJzvnEX8cOM9E=";
+    hash = "sha256-94ow9LUouifdE3ml2iyo72Y0nQSSLfnU5qnNHiJHqKw=";
   };
 
-  cargoHash = "sha256-G2VowcxnCRulQ4pJcpfJbH73vkG+KIteeUF1Hq8TEZg=";
+  cargoHash = "sha256-c6PIrbRclU/l7wuhOIANBgCnRu2Y/UoUeZA/eg13KoA=";
 
   cargoBuildFlags = [
     "-p"
@@ -27,7 +27,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 

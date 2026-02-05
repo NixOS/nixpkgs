@@ -53,7 +53,7 @@
   libtiff,
   libwebp,
   libxml2,
-  lua,
+  lua5_4,
   util-linux,
   openexr,
   openjpeg,
@@ -78,14 +78,16 @@
   versionCheckHook,
   gitUpdater,
 }:
-
+let
+  pugixml-shared = pugixml.override { shared = true; };
+in
 stdenv.mkDerivation rec {
-  version = "5.2.1";
+  version = "5.4.0";
   pname = "darktable";
 
   src = fetchurl {
     url = "https://github.com/darktable-org/darktable/releases/download/release-${version}/darktable-${version}.tar.xz";
-    hash = "sha256-AvGqmuk5See8VMNO61/5LCuH+V0lR4Zd9VxgRnVk7hE=";
+    hash = "sha256-K/C66njSeUXPCcM9iATxeeA6g+4Z0ukn/WYOpGrKOxY=";
   };
 
   nativeBuildInputs = [
@@ -138,13 +140,13 @@ stdenv.mkDerivation rec {
     libtiff
     libwebp
     libxml2
-    lua
+    lua5_4
     openexr
     openjpeg
     osm-gps-map
     pcre2
     portmidi
-    pugixml
+    pugixml-shared
     sqlite
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -198,7 +200,6 @@ stdenv.mkDerivation rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = gitUpdater {

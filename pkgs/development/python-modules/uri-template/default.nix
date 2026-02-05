@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   python,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "uri-template";
   version = "1.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "plinss";
@@ -33,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "uri_template" ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of RFC 6570 URI Templates";
     homepage = "https://github.com/plinss/uri_template/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

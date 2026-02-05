@@ -32,14 +32,14 @@
   qt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tiscamera";
   version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "TheImagingSource";
     repo = "tiscamera";
-    rev = "v-tiscamera-${version}";
+    rev = "v-tiscamera-${finalAttrs.version}";
     hash = "sha256-33U/8CbqNWIRwfDHXCZSN466WEQj9fip+Z5EJ7kIwRM=";
   };
 
@@ -134,11 +134,11 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Linux sources and UVC firmwares for The Imaging Source cameras";
     homepage = "https://github.com/TheImagingSource/tiscamera";
-    license = with licenses; [ asl20 ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ jraygauthier ];
+    license = with lib.licenses; [ asl20 ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ jraygauthier ];
   };
-}
+})

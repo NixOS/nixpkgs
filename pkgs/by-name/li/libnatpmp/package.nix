@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "20230423";
 
   src = fetchurl {
-    url = "https://miniupnp.tuxfamily.org/files/${pname}-${version}.tar.gz";
+    url = "https://miniupnp.tuxfamily.org/files/libnatpmp-${version}.tar.gz";
     hash = "sha256-BoTtLIQGQ351GaG9IOqDeA24cbOjpddSMRuj6Inb/HA=";
   };
 
@@ -34,12 +34,12 @@ stdenv.mkDerivation rec {
     chmod +x $out/lib/*
   '';
 
-  meta = with lib; {
+  meta = {
     description = "NAT-PMP client";
     homepage = "http://miniupnp.free.fr/libnatpmp.html";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ orivej ];
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
     mainProgram = "natpmpc";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

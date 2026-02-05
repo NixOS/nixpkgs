@@ -5,12 +5,12 @@
   installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nuttcp";
   version = "8.2.2";
 
   src = fetchurl {
-    url = "http://nuttcp.net/nuttcp/nuttcp-${version}.tar.bz2";
+    url = "http://nuttcp.net/nuttcp/nuttcp-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-fq16ieeqoFnSDjQELFihmMKYHK1ylVDROI3fyQNtOYM=";
   };
 
@@ -22,14 +22,14 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp nuttcp-${version} $out/bin/nuttcp
+    cp nuttcp-${finalAttrs.version} $out/bin/nuttcp
   '';
 
   postInstall = ''
     installManPage nuttcp.8
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Network performance measurement tool";
     longDescription = ''
       nuttcp is a network performance measurement tool intended for use by
@@ -43,10 +43,10 @@ stdenv.mkDerivation rec {
       system, and wall-clock time, transmitter and receiver CPU utilization,
       and loss percentage (for UDP transfers).
     '';
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     homepage = "http://nuttcp.net/";
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "nuttcp";
   };
-}
+})

@@ -23,10 +23,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flask_allowed_hosts" ];
 
-  meta = with lib; {
+  meta = {
     description = "Flask extension that helps you limit access to your API endpoints";
     homepage = "https://github.com/riad-azz/flask-allowedhosts";
-    license = licenses.mit;
-    maintainers = with maintainers; [ erictapen ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ erictapen ];
   };
 }

@@ -13,14 +13,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tuxedo-drivers-${kernel.version}";
-  version = "4.18.0";
+  version = "4.20.1";
 
   src = fetchFromGitLab {
     group = "tuxedocomputers";
     owner = "development/packages";
     repo = "tuxedo-drivers";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-9XtogovzAWaMkJI5CxszY5qO3q6NOACZ7pnejyobJlY=";
+    hash = "sha256-t+Y1qYFJ9EeYtMFtBIsHzG1J4IVunpZHevYsEZNHGH0=";
   };
 
   patches = [ ./no-cp-usr.patch ];

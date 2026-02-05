@@ -8,7 +8,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "heisenbridge";
   version = "1.15.4";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hifi";
@@ -42,11 +42,11 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Bouncer-style Matrix-IRC bridge";
     homepage = "https://github.com/hifi/heisenbridge";
-    license = licenses.mit;
-    maintainers = [ maintainers.sumnerevans ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.sumnerevans ];
     mainProgram = "heisenbridge";
   };
 }

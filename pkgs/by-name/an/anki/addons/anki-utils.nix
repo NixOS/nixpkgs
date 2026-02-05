@@ -13,9 +13,6 @@
       finalAttrs:
       {
         pname,
-        version,
-        src,
-        sourceRoot ? "",
         configurePhase ? ''
           runHook preConfigure
           runHook postConfigure
@@ -24,9 +21,9 @@
           runHook preBuild
           runHook postBuild
         '',
+        strictDeps ? true,
         dontPatchELF ? true,
         dontStrip ? true,
-        nativeBuildInputs ? [ ],
         passthru ? { },
         meta ? { },
         # Script run after "user_files" folder is populated.
@@ -37,14 +34,11 @@
       }:
       {
         inherit
-          version
-          src
-          sourceRoot
           configurePhase
           buildPhase
+          strictDeps
           dontPatchELF
           dontStrip
-          nativeBuildInputs
           ;
 
         pname = "anki-addon-${pname}";

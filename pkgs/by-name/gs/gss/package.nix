@@ -16,7 +16,7 @@
   shishi,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gss";
   version = "1.0.4";
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   #
   # https://lists.gnu.org/archive/html/help-libidn/2021-07/msg00009.html
   src = fetchzip {
-    url = "https://gitweb.git.savannah.gnu.org/gitweb/?p=gss.git;a=snapshot;h=v${version};sf=tgz";
+    url = "https://gitweb.git.savannah.gnu.org/gitweb/?p=gss.git;a=snapshot;h=v${finalAttrs.version};sf=tgz";
     extension = "tar.gz";
     hash = "sha256-yT19kwAhGzbIoMjRbrrsn6CyvkMH5v1nxxWpnGYmZUw=";
   };
@@ -74,12 +74,12 @@ stdenv.mkDerivation rec {
     sed -i 's,\(-lshishi\),-L${shishi}/lib \1,' $out/lib/libgss.la
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnu.org/software/gss/";
     description = "Generic Security Service";
     mainProgram = "gss";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

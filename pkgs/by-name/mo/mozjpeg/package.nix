@@ -9,14 +9,14 @@
   nasm,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "4.1.5";
   pname = "mozjpeg";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "mozjpeg";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-k8qWtU4j3ipIHvY60ae7kdNnPvWnUa0qgacqlSIJijo=";
   };
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/mozilla/mozjpeg";
     license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.aristid ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

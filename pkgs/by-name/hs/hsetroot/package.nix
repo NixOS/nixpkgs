@@ -8,14 +8,14 @@
   libXinerama,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hsetroot";
   version = "1.0.5";
 
   src = fetchFromGitHub {
     owner = "himdel";
     repo = "hsetroot";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1jbk5hlxm48zmjzkaq5946s58rqwg1v1ds2sdyd2ba029hmvr722";
   };
 
@@ -36,11 +36,10 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/bin"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Allows you to compose wallpapers ('root pixmaps') for X";
     homepage = "https://github.com/himdel/hsetroot";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ shamilton ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
   };
-}
+})

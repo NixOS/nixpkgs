@@ -2,15 +2,12 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyric";
   version = "0.1.6.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "PyRIC";
@@ -28,10 +25,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyric" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Radio Interface Controller";
     homepage = "https://github.com/wraith-wireless/PyRIC";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

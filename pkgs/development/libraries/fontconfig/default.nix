@@ -98,7 +98,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "bin"}/bin/fc-list";
-  versionCheckProgramArg = "--version";
 
   installCheckPhase = ''
     runHook preInstallCheck
@@ -122,12 +121,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library for font customization and configuration";
     homepage = "http://fontconfig.org/";
-    license = licenses.bsd2; # custom but very bsd-like
-    platforms = platforms.all;
-    teams = [ teams.freedesktop ];
+    license = lib.licenses.bsd2; # custom but very bsd-like
+    platforms = lib.platforms.all;
+    teams = [ lib.teams.freedesktop ];
     pkgConfigModules = [ "fontconfig" ];
   };
 })

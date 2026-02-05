@@ -17,13 +17,18 @@
   fontconfig,
   freetype,
   libGL,
-  xorg,
+  libxxf86vm,
+  libxi,
+  libxcursor,
+  libx11,
+  libxcb,
   libxkbcommon,
   wayland,
   xdg-utils,
 
   nix-update-script,
   withGraphics ? false,
+  versionCheckHook,
 }:
 let
   rpathLibs = [
@@ -33,18 +38,18 @@ let
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libGL
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXxf86vm
-    xorg.libxcb
+    libx11
+    libxcursor
+    libxi
+    libxxf86vm
+    libxcb
     libxkbcommon
     wayland
   ];
 in
 rustPlatform.buildRustPackage (finalAttrs: {
-  pname = "alacritty";
-  version = if !withGraphics then "0.16.1" else "0.16.1-graphics";
+  pname = "alacritty${lib.optionalString withGraphics "-graphics"}";
+  version = "0.16.1";
 
   src =
     # by default we want the official package
@@ -60,7 +65,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       fetchFromGitHub {
         owner = "ayosec";
         repo = "alacritty";
-        tag = "v${finalAttrs.version}";
+        tag = "v${finalAttrs.version}-graphics";
         hash = "sha256-e+o0GLy05qXEY4T57dCuqhukTKBSm1WIHzPUV8uswRI=";
       };
 
@@ -142,6 +147,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
   meta = {
     description = "Cross-platform, GPU-accelerated terminal emulator";
     homepage =
@@ -155,7 +165,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       with lib.maintainers;
       if !withGraphics then
         [
-          Br1ght0ne
           rvdp
         ]
       else

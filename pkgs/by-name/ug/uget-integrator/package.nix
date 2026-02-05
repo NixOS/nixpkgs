@@ -7,14 +7,14 @@
   installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "uget-integrator";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "ugetdm";
     repo = "uget-integrator";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0bfqwbpprxp5sy49p2hqcjdfj7zamnp2hhcnnyccffkn7pghx8pp";
   };
 
@@ -42,12 +42,12 @@ stdenv.mkDerivation rec {
     wrapPythonPrograms
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Native messaging host to integrate uGet Download Manager with web browsers";
     mainProgram = "uget-integrator";
     homepage = "https://github.com/ugetdm/uget-integrator";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.romildo ];
   };
-}
+})

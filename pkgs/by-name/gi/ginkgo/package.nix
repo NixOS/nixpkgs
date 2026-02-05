@@ -8,15 +8,15 @@
 
 buildGoModule rec {
   pname = "ginkgo";
-  version = "2.27.2";
+  version = "2.28.1";
 
   src = fetchFromGitHub {
     owner = "onsi";
     repo = "ginkgo";
     rev = "v${version}";
-    sha256 = "sha256-+B/yl6Jl7BwtyGUWuyBPPK2bT+vulHtUbn8GygPlbh0=";
+    sha256 = "sha256-mevZN35RUpaPmAYw3lfmzvdT2H+yucD8g3/bX9Rl00s=";
   };
-  vendorHash = "sha256-Vmcva/iMaOszQi87avO7utD0ahlB2gFBmVEI86hvnyQ=";
+  vendorHash = "sha256-I3n1FPINb/nhi4QUzRFEspn7REN1dQEPg8Bhb3PemQU=";
 
   # integration tests expect more file changes
   # types tests are missing CodeLocation
@@ -32,7 +32,7 @@ buildGoModule rec {
     command = "ginkgo version";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://onsi.github.io/ginkgo/";
     changelog = "https://github.com/onsi/ginkgo/blob/master/CHANGELOG.md";
     description = "Modern Testing Framework for Go";
@@ -48,8 +48,8 @@ buildGoModule rec {
       active use across a wide variety of testing contexts: unit tests,
       integration tests, acceptance test, performance tests, etc.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       saschagrunert
       jk
     ];

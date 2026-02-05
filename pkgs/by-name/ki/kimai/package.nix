@@ -7,13 +7,13 @@
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "kimai";
-  version = "2.40.0";
+  version = "2.47.0";
 
   src = fetchFromGitHub {
     owner = "kimai";
     repo = "kimai";
     tag = finalAttrs.version;
-    hash = "sha256-/962VDi/50PMfSjMtJtlR9uIbJSzkF7kSQiRzb6o+SI=";
+    hash = "sha256-aMvgioXuKZWstkslfX8bFuxBpTo9F3VHl9aqyNPDMFQ=";
   };
 
   php = php.buildEnv {
@@ -38,10 +38,9 @@ php.buildComposerProject2 (finalAttrs: {
     '';
   };
 
-  vendorHash = "sha256-I4v4WkPGLc8vBPjCiYzPxcLn4rH3HWtQXSqwGVKXeGg=";
+  vendorHash = "sha256-HOpl+cfQgh/I/Od8o6/hRlJvuMsaEouwn3w4M9FmR7Q=";
 
   composerNoPlugins = false;
-
   postInstall = ''
     # Make available the console utility, as Kimai doesn't list this in
     # composer.json.

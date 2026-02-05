@@ -64,13 +64,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "openmolcas";
-  version = "25.06";
+  version = "25.10";
 
   src = fetchFromGitLab {
     owner = "Molcas";
     repo = "OpenMolcas";
     rev = "v${version}";
-    hash = "sha256-/d+jusCFtbAVwvords2B7Cxuxh3FwnR/AWGDeir43oU=";
+    hash = "sha256-z5RNLUP1DjvQ+LvNzOBwiPrYqGeZoPPbtaJv9gIefuM=";
   };
 
   patches = [
@@ -116,6 +116,9 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = lib.optionalAttrs enableMpi { inherit mpi; };
+
+  # fix build with GCC 15
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
 
   cmakeFlags = [
     "-DOPENMP=ON"

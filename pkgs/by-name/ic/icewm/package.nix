@@ -14,8 +14,8 @@
   giflib,
   glib,
   imlib2,
-  libICE,
-  libSM,
+  libice,
+  libsm,
   libX11,
   libXcomposite,
   libXdamage,
@@ -29,7 +29,7 @@
   libjpeg,
   libogg,
   libpng,
-  libpthreadstubs,
+  libpthread-stubs,
   libsndfile,
   libtiff,
   libxcb,
@@ -71,8 +71,8 @@ gccStdenv.mkDerivation (finalAttrs: {
     giflib
     glib
     imlib2
-    libICE
-    libSM
+    libice
+    libsm
     libX11
     libXcomposite
     libXdamage
@@ -86,7 +86,7 @@ gccStdenv.mkDerivation (finalAttrs: {
     libjpeg
     libogg
     libpng
-    libpthreadstubs
+    libpthread-stubs
     libsndfile
     libtiff
     libxcb

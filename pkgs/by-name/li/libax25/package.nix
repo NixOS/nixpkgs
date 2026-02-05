@@ -29,16 +29,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [ "--sysconfdir=/etc" ];
 
-  LDFLAGS = lib.optionals stdenv.hostPlatform.isStatic [
-    "-static-libgcc"
-    "-static"
-  ];
+  env = lib.optionalAttrs stdenv.hostPlatform.isStatic {
+    LDFLAGS = toString [
+      "-static-libgcc"
+      "-static"
+    ];
+  };
 
-  meta = with lib; {
+  meta = {
     description = "AX.25 library for hamradio applications";
     homepage = "https://linux-ax25.in-berlin.de/wiki/Main_Page";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ sarcasticadmin ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ sarcasticadmin ];
+    platforms = lib.platforms.linux;
   };
 })

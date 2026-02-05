@@ -29,6 +29,10 @@ let
 
   escapeCredentialName = input: replaceStrings [ "\\" ] [ "_" ] input;
 
+  fwMarkFromHexOrNum =
+    fwMark:
+    if (lib.hasPrefix "0x" fwMark) then lib.fromHexString fwMark else (fromTOML "v=${fwMark}").v;
+
   privateKeyCredential = interfaceName: escapeCredentialName "wireguard-${interfaceName}-private-key";
   presharedKeyCredential =
     interfaceName: peer: escapeCredentialName "wireguard-${interfaceName}-${peer.name}-preshared-key";
@@ -52,7 +56,7 @@ let
       wireguardConfig = removeNulls {
         PrivateKey = "@${privateKeyCredential name}";
         ListenPort = interface.listenPort;
-        FirewallMark = interface.fwMark;
+        FirewallMark = if interface.fwMark == null then null else (fwMarkFromHexOrNum interface.fwMark);
         RouteTable = if interface.allowedIPsAsRoutes then interface.table else null;
         RouteMetric = interface.metric;
       };
@@ -70,10 +74,12 @@ let
       PersistentKeepalive = peer.persistentKeepalive;
     };
 
-  generateNetwork = name: interface: {
-    matchConfig.Name = name;
-    address = interface.ips;
-  };
+  generateNetwork =
+    name: interface:
+    nameValuePair "40-${name}" {
+      matchConfig.Name = name;
+      address = interface.ips;
+    };
 
   cfg = config.networking.wireguard;
 
@@ -229,7 +235,7 @@ in
     systemd.network = {
       enable = true;
       netdevs = mapAttrs' generateNetdev cfg.interfaces;
-      networks = mapAttrs generateNetwork cfg.interfaces;
+      networks = mapAttrs' generateNetwork cfg.interfaces;
     };
 
     environment.etc = mapAttrs' generateRefreshNetdevMode refreshEnabledInterfaces;

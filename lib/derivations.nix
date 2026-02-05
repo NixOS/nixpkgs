@@ -21,6 +21,11 @@ let
     if pkg ? meta.position && isString pkg.meta.position then "${prefix}${pkg.meta.position}" else "";
 in
 {
+  inherit (builtins)
+    addDrvOutputDependencies
+    unsafeDiscardOutputDependency
+    ;
+
   /**
     Restrict a derivation to a predictable set of attribute names, so
     that the returned attrset is not strict in the actual derivation,
@@ -86,7 +91,7 @@ in
       This can be used for adding package attributes, such as `tests`.
 
     `outputs`
-    : Optional list of assumed outputs. Default: ["out"]
+    : Optional list of assumed outputs. Default: `[ "out" ]`
 
       This must match the set of outputs that the returned derivation has.
       You must use this when the derivation has multiple outputs.

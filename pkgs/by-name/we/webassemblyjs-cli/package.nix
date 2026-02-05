@@ -8,6 +8,7 @@
   nodejs,
   makeBinaryWrapper,
   gcc,
+  nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "webassemblyjs-cli";
@@ -64,6 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Toolbox for WebAssembly";

@@ -6,7 +6,6 @@
   pytest-benchmark,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "getmac";
   version = "0.9.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "GhostofGoes";
@@ -49,11 +46,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "getmac" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python package to get the MAC address of network interfaces and hosts on the local network";
     homepage = "https://github.com/GhostofGoes/getmac";
     changelog = "https://github.com/GhostofGoes/getmac/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "getmac";
   };

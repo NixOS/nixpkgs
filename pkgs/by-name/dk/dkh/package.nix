@@ -5,14 +5,14 @@
   fetchFromGitHub,
   cmake,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dkh";
   version = "1.2";
 
   src = fetchFromGitHub {
     owner = "psi4";
     repo = "dkh";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1wb4qmb9f8rnrwnnw1gdhzx1fmhy628bxfrg56khxy3j5ljxkhck";
   };
 
@@ -32,11 +32,11 @@ stdenv.mkDerivation rec {
     "format"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Arbitrary-order scalar-relativistic Douglas-Kroll-Hess module";
-    license = licenses.lgpl3Only;
+    license = lib.licenses.lgpl3Only;
     homepage = "https://github.com/psi4/dkh";
-    platforms = platforms.unix;
-    maintainers = [ maintainers.sheepforce ];
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})

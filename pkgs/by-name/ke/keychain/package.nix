@@ -15,14 +15,14 @@
   gnused,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "keychain";
   version = "2.9.8";
 
   src = fetchFromGitHub {
     owner = "funtoo";
     repo = "keychain";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-xk3ooFhBkgv93Po5oC4TZRmMhJJXDv7yekoE102FQd8=";
   };
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
       }" \
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Manage SSH and GPG keys in a convenient and secure manner";
     longDescription = ''
       Keychain helps you to manage SSH and GPG keys in a convenient and secure
@@ -66,9 +66,9 @@ stdenv.mkDerivation rec {
       process, allowing your scripts to take advantage of key-based logins.
     '';
     homepage = "https://www.funtoo.org/Keychain";
-    license = licenses.gpl2Only;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ sigma ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ sigma ];
     mainProgram = "keychain";
   };
-}
+})

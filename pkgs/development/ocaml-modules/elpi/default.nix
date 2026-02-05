@@ -90,7 +90,7 @@ buildDunePackage {
   ]
   ++ (if lib.versionAtLeast version "1.15" || version == "dev" then [ menhirLib ] else [ camlp5 ])
   ++ (
-    if lib.versionAtLeast version "3.3.0" || version == "dev" then
+    if lib.versionAtLeast version "2.0.7" || version == "dev" then
       [
         ppx_deriving
       ]
@@ -104,10 +104,10 @@ buildDunePackage {
       ]
   );
 
-  meta = with lib; {
+  meta = {
     description = "Embeddable λProlog Interpreter";
-    license = licenses.lgpl21Plus;
-    maintainers = [ maintainers.vbgl ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = [ lib.maintainers.vbgl ];
     homepage = "https://github.com/LPCIC/elpi";
   };
 

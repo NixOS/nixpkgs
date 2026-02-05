@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  pdm-backend,
+  hatchling,
 
   # dependencies
   huggingface-hub,
@@ -33,19 +33,19 @@
 
 buildPythonPackage rec {
   pname = "langchain-huggingface";
-  version = "0.3.1";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-huggingface==${version}";
-    hash = "sha256-nae7KwCKjkvenOO8vErxFQStHolc+N8EUuK6U8r48Kc=";
+    hash = "sha256-ucKhuu8J6XudIyjCniJixFq79wPfoCnNBUd6r1U2ieI=";
   };
 
   sourceRoot = "${src.name}/libs/partners/huggingface";
 
-  build-system = [ pdm-backend ];
+  build-system = [ hatchling ];
 
   pythonRelaxDeps = [
     # Each component release requests the exact latest core.
@@ -77,6 +77,11 @@ buildPythonPackage rec {
   ];
 
   enabledTestPaths = [ "tests/unit_tests" ];
+
+  disabledTests = [
+    # Requires a circular dependency on langchain
+    "test_init_chat_model_huggingface"
+  ];
 
   pythonImportsCheck = [ "langchain_huggingface" ];
 

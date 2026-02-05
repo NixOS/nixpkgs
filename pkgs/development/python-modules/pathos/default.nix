@@ -6,15 +6,12 @@
   multiprocess,
   pox,
   ppft,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pathos";
   version = "0.3.4";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "uqfoundation";
@@ -35,11 +32,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pathos" ];
 
-  meta = with lib; {
+  meta = {
     description = "Parallel graph management and execution in heterogeneous computing";
     homepage = "https://pathos.readthedocs.io/";
     changelog = "https://github.com/uqfoundation/pathos/releases/tag/${src.tag}";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

@@ -4,16 +4,13 @@
   fetchFromGitHub,
   pytestCheckHook,
   pytest-cov-stub,
-  pythonOlder,
   poetry-core,
 }:
 
 buildPythonPackage rec {
   pname = "pathable";
   version = "0.4.4";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "p1c2u";
@@ -31,11 +28,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pathable" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for object-oriented paths";
     homepage = "https://github.com/p1c2u/pathable";
     changelog = "https://github.com/p1c2u/pathable/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

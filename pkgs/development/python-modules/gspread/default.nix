@@ -7,16 +7,13 @@
   google-auth-oauthlib,
   pytest-vcr,
   pytestCheckHook,
-  pythonOlder,
   strenum,
 }:
 
 buildPythonPackage rec {
   pname = "gspread";
   version = "6.2.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "burnash";
@@ -40,11 +37,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gspread" ];
 
-  meta = with lib; {
+  meta = {
     description = "Google Spreadsheets client library";
     homepage = "https://github.com/burnash/gspread";
     changelog = "https://github.com/burnash/gspread/blob/${src.tag}/HISTORY.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

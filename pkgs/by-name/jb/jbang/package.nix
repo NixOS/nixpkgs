@@ -9,12 +9,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.132.1";
+  version = "0.135.1";
   pname = "jbang";
 
   src = fetchzip {
     url = "https://github.com/jbangdev/jbang/releases/download/v${version}/${pname}-${version}.tar";
-    sha256 = "sha256-+JqToH2DHfExu0HtGK1M/YobgjTApWxyp9Hp6VjdRvI=";
+    sha256 = "sha256-7MUiUi7Q4tTCN8RUkO0FM9ZwIqAnTD6yJqUr3199FKQ=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     $out/bin/jbang --version 2>&1 | grep -q "${version}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Run java as scripts anywhere";
     mainProgram = "jbang";
     longDescription = ''
@@ -51,8 +51,8 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
     ];
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ moaxcp ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ moaxcp ];
   };
 }

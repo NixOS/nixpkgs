@@ -4,30 +4,30 @@
   buildDotnetModule,
   dotnetCorePackages,
   buildNpmPackage,
-  electron_37,
+  electron_39,
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
   stdenv,
 }:
 let
-  electron = electron_37;
+  electron = electron_39;
   dotnet = dotnetCorePackages.dotnet_9;
 in
 buildNpmPackage (finalAttrs: {
   pname = "vrcx";
-  version = "2025.10.11";
+  version = "2026.01.04";
 
   src = fetchFromGitHub {
     repo = "VRCX";
     owner = "vrcx-team";
-    rev = "cb6bc979d9371b89b289b6cb0bb8b6f60b350bc7";
-    hash = "sha256-0LnFXSLyby5b2gSIse7Qld4cQlwNAFHSuGGqk6B9TZY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ibsmlNfW64mzJOhIkJydpJ9ys2PbPfyj2XBGwY5xuww=";
   };
 
   makeCacheWritable = true;
   npmFlags = [ "--ignore-scripts" ];
-  npmDepsHash = "sha256-giWeXrsiFaZOh5zs7L4L0w3wcnD/F3TyrMM/POfOTvE=";
+  npmDepsHash = "sha256-TUdzrEa2dW4rKA/9HGgF6c9JTMiBmNWvc/9R0kIKSls=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -61,7 +61,7 @@ buildNpmPackage (finalAttrs: {
     cp -r ${finalAttrs.passthru.backend}/build/Electron/* "$out/share/vrcx/resources/app.asar.unpacked/build/Electron/"
 
     makeWrapper '${electron}/bin/electron' "$out/bin/vrcx"  \
-      --add-flags "--ozone-platform-hint=auto"              \
+      --add-flags "--ozone-platform-hint=auto --no-updater" \
       --add-flags "$out/share/vrcx/resources/app.asar"      \
       --set NODE_ENV production                             \
       --set DOTNET_ROOT ${dotnet.runtime}/share/dotnet      \

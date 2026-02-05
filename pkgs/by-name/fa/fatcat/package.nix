@@ -6,14 +6,14 @@
   cmake,
   gitUpdater,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fatcat";
   version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "Gregwar";
     repo = "fatcat";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-/iGNVP7Bz/UZAR+dFxAKMKM9jm07h0x0F3VGpdxlHdk=";
   };
 
@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "FAT filesystems explore, extract, repair, and forensic tool";
     mainProgram = "fatcat";
     homepage = "https://github.com/Gregwar/fatcat";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cynerd ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cynerd ];
   };
-}
+})

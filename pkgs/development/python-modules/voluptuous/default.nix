@@ -4,15 +4,12 @@
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "voluptuous";
   version = "0.15.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "alecthomas";
@@ -29,12 +26,12 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "voluptuous/tests/" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python data validation library";
     downloadPage = "https://github.com/alecthomas/voluptuous";
     homepage = "http://alecthomas.github.io/voluptuous/";
     changelog = "https://github.com/alecthomas/voluptuous/blob/${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

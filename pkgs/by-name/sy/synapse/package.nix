@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   inherit version;
 
   src = fetchurl {
-    url = "https://launchpad.net/synapse-project/0.3/${version}/+download/${pname}-${version}.tar.xz";
+    url = "https://launchpad.net/synapse-project/0.3/${version}/+download/synapse-${version}.tar.xz";
     sha256 = "1g6x9knb4jy1d8zgssjhzkgac583137pibisy9whjs8mckaj4k1j";
   };
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     zeitgeist
   ];
 
-  meta = with lib; {
+  meta = {
     longDescription = ''
       Semantic launcher written in Vala that you can use to start applications
       as well as find and access relevant documents and files by making use of
@@ -52,9 +52,9 @@ stdenv.mkDerivation rec {
     '';
     description = "Semantic launcher to start applications and find relevant files";
     homepage = "https://launchpad.net/synapse-project";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ mahe ];
-    platforms = with platforms; all;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ mahe ];
+    platforms = with lib.platforms; all;
     mainProgram = "synapse";
   };
 }

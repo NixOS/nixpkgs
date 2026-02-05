@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "esr";
     repo = "ascii";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-TE9YR5Va9tXaf2ZyNxz7d8lZRTgnD4Lz7FyqRDl1HNY=";
   };
 
@@ -31,13 +31,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Interactive ASCII name and synonym chart";
     mainProgram = "ascii";
     homepage = "http://www.catb.org/~esr/ascii/";
     changelog = "https://gitlab.com/esr/ascii/-/blob/${finalAttrs.version}/NEWS.adoc";
-    license = licenses.bsd2;
-    platforms = platforms.all;
-    maintainers = [ maintainers.bjornfor ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.bjornfor ];
   };
 })

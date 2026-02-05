@@ -16,14 +16,14 @@
   enableTools ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "exult";
   version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "exult";
     repo = "exult";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-SZwYaqTTWESNRphXefa3JyH988y3WiaIr12yORhiFow=";
   };
 
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "NIX_DESTDIR=$(out)" ]; # see postPatch
   configureFlags = lib.optional (!enableTools) "--disable-tools";
 
-  meta = with lib; {
+  meta = {
     description = "Recreation of Ultima VII for modern operating systems";
     longDescription = ''
       Ultima VII, an RPG from the early 1990's, still has a huge following. But,
@@ -68,8 +68,8 @@ stdenv.mkDerivation rec {
       possible.
     '';
     homepage = "http://exult.info";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     mainProgram = "exult";
   };
-}
+})

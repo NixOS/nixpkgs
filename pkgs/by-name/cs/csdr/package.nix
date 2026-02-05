@@ -9,14 +9,14 @@
   versionCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "csdr";
   version = "0.18.2";
 
   src = fetchFromGitHub {
     owner = "jketterl";
     repo = "csdr";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-LdVzeTTIvDQIXRdcz/vpQu/fUgtE8nx1kIEfoiwxrUg=";
   };
 
@@ -51,11 +51,11 @@ stdenv.mkDerivation rec {
   versionCheckProgramArg = "version";
   doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jketterl/csdr";
     description = "Simple DSP library and command-line tool for Software Defined Radio";
-    license = licenses.gpl3Only;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

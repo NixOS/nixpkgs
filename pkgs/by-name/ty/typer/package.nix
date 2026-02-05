@@ -22,11 +22,11 @@ buildGoModule {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Typing test in your terminal";
     homepage = "https://github.com/maaslalani/typer";
-    license = licenses.mit;
-    maintainers = [ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ iamanaws ];
     mainProgram = "typer";
   };
 }

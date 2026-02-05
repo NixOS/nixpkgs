@@ -18,11 +18,34 @@ let
     types
     mkIf
     optional
-    mkMerge
     singleton
+    mkRemovedOptionModule
     ;
 in
 {
+  imports = [
+    (mkRemovedOptionModule [
+      "services"
+      "wakapi"
+      "passwordSalt"
+    ] "Use services.wakapi.environmentFiles instead.")
+    (mkRemovedOptionModule [
+      "services"
+      "wakapi"
+      "passwordSaltFile"
+    ] "Use services.wakapi.environmentFiles instead.")
+    (mkRemovedOptionModule [
+      "services"
+      "wakapi"
+      "smtpPassword"
+    ] "Use services.wakapi.environmentFiles instead.")
+    (mkRemovedOptionModule [
+      "services"
+      "wakapi"
+      "smtpPasswordFile"
+    ] "Use services.wakapi.environmentFiles instead.")
+  ];
+
   options.services.wakapi = {
     enable = mkEnableOption "Wakapi";
     package = mkPackageOption pkgs "wakapi" { };
@@ -45,33 +68,11 @@ in
       '';
     };
 
-    passwordSalt = mkOption {
-      type = types.nullOr types.str;
-      default = null;
+    environmentFiles = mkOption {
+      type = types.listOf types.path;
+      default = [ ];
       description = ''
-        The password salt to use for Wakapi.
-      '';
-    };
-    passwordSaltFile = mkOption {
-      type = types.nullOr types.path;
-      default = null;
-      description = ''
-        The path to a file containing the password salt to use for Wakapi.
-      '';
-    };
-
-    smtpPassword = mkOption {
-      type = types.nullOr types.str;
-      default = null;
-      description = ''
-        The password used for the smtp mailed to used by Wakapi.
-      '';
-    };
-    smtpPasswordFile = mkOption {
-      type = types.nullOr types.path;
-      default = null;
-      description = ''
-        The path to a file containing the password for the smtp mailer used by Wakapi.
+        Use this to set `WAKAPI_PASSWORD_SALT` and `WAKAPI_MAIL_SMTP_PASS`.
       '';
     };
 
@@ -148,14 +149,7 @@ in
       '';
 
       serviceConfig = {
-        Environment = mkMerge [
-          (mkIf (cfg.passwordSalt != null) "WAKAPI_PASSWORD_SALT=${cfg.passwordSalt}")
-          (mkIf (cfg.smtpPassword != null) "WAKAPI_MAIL_SMTP_PASS=${cfg.smtpPassword}")
-        ];
-
-        EnvironmentFile =
-          (lib.optional (cfg.passwordSaltFile != null) cfg.passwordSaltFile)
-          ++ (lib.optional (cfg.smtpPasswordFile != null) cfg.smtpPasswordFile);
+        EnvironmentFile = cfg.environmentFiles;
 
         User = config.users.users.wakapi.name;
         Group = config.users.users.wakapi.group;
@@ -196,18 +190,6 @@ in
     };
 
     assertions = [
-      {
-        assertion = cfg.passwordSalt != null || cfg.passwordSaltFile != null;
-        message = "Either `services.wakapi.passwordSalt` or `services.wakapi.passwordSaltFile` must be set.";
-      }
-      {
-        assertion = !(cfg.passwordSalt != null && cfg.passwordSaltFile != null);
-        message = "Both `services.wakapi.passwordSalt` and `services.wakapi.passwordSaltFile` should not be set at the same time.";
-      }
-      {
-        assertion = !(cfg.smtpPassword != null && cfg.smtpPasswordFile != null);
-        message = "Both `services.wakapi.smtpPassword` and `services.wakapi.smtpPasswordFile` should not be set at the same time.";
-      }
       {
         assertion = cfg.database.createLocally -> cfg.settings.db.dialect != null;
         message = "`services.wakapi.database.createLocally` is true, but a database dialect is not set!";

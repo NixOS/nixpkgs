@@ -3,10 +3,9 @@
   nix-update-script,
   stdenv,
   fetchFromGitHub,
-  apple-sdk_13,
+  apple-sdk,
   cmake,
   coreutils,
-  darwinMinVersionHook,
   libxml2,
   lto ? true,
   makeWrapper,
@@ -59,9 +58,6 @@ stdenv.mkDerivation rec {
     git
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Keep in sync with `PONY_OSX_PLATFORM`.
-    apple-sdk_13
-    (darwinMinVersionHook "13.0")
     cctools.libtool
   ];
 
@@ -77,7 +73,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (replaceVars ./fix-darwin-build.patch {
-      apple-sdk = apple-sdk_13;
+      inherit apple-sdk;
     })
   ];
 
@@ -166,11 +162,11 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Pony is an Object-oriented, actor-model, capabilities-secure, high performance programming language";
-    homepage = "https://www.ponylang.org";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [
+    homepage = "https://www.ponylang.io";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [
       kamilchm
       redvers
       numinit

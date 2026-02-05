@@ -8,8 +8,8 @@
   httplib,
   libarchive,
   libXdmcp,
-  libpthreadstubs,
-  xcbutilkeysyms,
+  libpthread-stubs,
+  libxcb-keysyms,
   qt6,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -36,16 +36,26 @@ stdenv.mkDerivation (finalAttrs: {
     httplib
     libXdmcp
     libarchive
-    libpthreadstubs
+    libpthread-stubs
     qt6.qtbase
     qt6.qtimageformats
     qt6.qtwebengine
-    xcbutilkeysyms
+    libxcb-keysyms
   ];
 
   cmakeFlags = [
     (lib.cmakeBool "ZEAL_RELEASE_BUILD" true)
   ];
+
+  installPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    runHook preInstall
+
+    mkdir -p $out/{Applications,bin}
+    cp -r Zeal.app $out/Applications
+    ln -s $out/Applications/Zeal.app/Contents/MacOS/Zeal $out/bin/zeal
+
+    runHook postInstall
+  '';
 
   meta = {
     description = "Simple offline API documentation browser";

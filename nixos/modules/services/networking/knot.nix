@@ -61,10 +61,14 @@ let
           "remotes"
           "acl"
           "submission"
+          "dnskey-sync"
           "policy"
+          "external"
+          # mod-* is above
           "template"
           "zone"
           "include"
+          "clear"
         ];
       secsCheck =
         let
@@ -101,6 +105,7 @@ let
             "remotes"
             "acl"
             "submission"
+            "dnskey-sync"
             "policy"
             "external"
           ]

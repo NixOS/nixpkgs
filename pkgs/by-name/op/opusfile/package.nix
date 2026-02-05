@@ -9,11 +9,11 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opusfile";
   version = "0.12";
   src = fetchurl {
-    url = "http://downloads.xiph.org/releases/opus/opusfile-${version}.tar.gz";
+    url = "http://downloads.xiph.org/releases/opus/opusfile-${finalAttrs.version}.tar.gz";
     sha256 = "02smwc5ah8nb3a67mnkjzqmrzk43j356hgj2a97s9midq40qd38i";
   };
 
@@ -40,11 +40,11 @@ stdenv.mkDerivation rec {
   ++ lib.optionals stdenv.hostPlatform.isWindows [ ./disable-cert-store.patch ];
   configureFlags = [ "--disable-examples" ];
 
-  meta = with lib; {
+  meta = {
     description = "High-level API for decoding and seeking in .opus files";
     homepage = "https://www.opus-codec.org/";
-    license = licenses.bsd3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ taeer ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ taeer ];
   };
-}
+})

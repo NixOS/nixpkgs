@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   joblib,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "imbalanced-learn";
   version = "0.14.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "scikit-learn-contrib";

@@ -7,12 +7,12 @@
   undmg,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   inherit pname version meta;
 
   src = fetchurl {
-    url = "https://download.zotero.org/client/release/${version}/Zotero-${version}.dmg";
-    hash = "sha256-YivHBEFPkm79y2R5QIV+trm8O3aFzvXTqVzFr1tcoIo=";
+    url = "https://download.zotero.org/client/release/${finalAttrs.version}/Zotero-${finalAttrs.version}.dmg";
+    hash = "sha256-lDf/jULLQyzxNVGRUKuF2df+FTbJK08z+fFQbVgwjsY=";
   };
   sourceRoot = ".";
 
@@ -30,4 +30,4 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
-}
+})

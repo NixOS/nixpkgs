@@ -6,12 +6,12 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zdbsp";
   version = "1.19";
 
   src = fetchzip {
-    url = "https://zdoom.org/files/utils/zdbsp/zdbsp-${version}-src.zip";
+    url = "https://zdoom.org/files/utils/zdbsp/zdbsp-${finalAttrs.version}-src.zip";
     sha256 = "sha256-DTj0jMNurvwRwMbo0L4+IeNlbfIwUbqcG1LKd68C08g=";
     stripRoot = false;
   };
@@ -33,15 +33,15 @@ stdenv.mkDerivation rec {
     install -Dm755 zdbsp $out/bin/zdbsp
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://zdoom.org/wiki/ZDBSP";
     description = "ZDoom's internal node builder for DOOM maps";
     mainProgram = "zdbsp";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       lassulus
       siraben
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

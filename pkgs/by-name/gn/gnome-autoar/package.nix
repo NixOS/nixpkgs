@@ -13,7 +13,7 @@
   vala,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-autoar";
   version = "0.4.5";
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-autoar/${lib.versions.majorMinor version}/gnome-autoar-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-autoar/${lib.versions.majorMinor finalAttrs.version}/gnome-autoar-${finalAttrs.version}.tar.xz";
     hash = "sha256-g4xTBvw4v6ovI6viQmL0vxV3HjMD+13LdPW5x6YV2r4=";
   };
 
@@ -54,10 +54,10 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
-    platforms = platforms.linux;
-    teams = [ teams.gnome ];
-    license = licenses.lgpl21Plus;
+  meta = {
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.lgpl21Plus;
     description = "Library to integrate compressed files management with GNOME";
   };
-}
+})

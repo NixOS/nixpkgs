@@ -24,7 +24,6 @@
   yasm,
 
   # runtime deps
-  apple-sdk_14,
   fontconfig,
   freetype,
   gst_all_1,
@@ -35,7 +34,11 @@
   udev,
   vulkan-loader,
   wayland,
-  xorg,
+  libxrandr,
+  libxi,
+  libxcursor,
+  libx11,
+  libxcb,
   zlib,
 
   # tests
@@ -53,9 +56,9 @@ let
   );
   runtimePaths = lib.makeLibraryPath (
     lib.optionals (stdenv.hostPlatform.isLinux) [
-      xorg.libXcursor
-      xorg.libXrandr
-      xorg.libXi
+      libxcursor
+      libxrandr
+      libxi
       libxkbcommon
       vulkan-loader
       wayland
@@ -64,15 +67,15 @@ let
   );
 in
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "servo";
-  version = "0.0.1-unstable-2025-10-29";
+  version = "0.0.4";
 
   src = fetchFromGitHub {
     owner = "servo";
     repo = "servo";
-    rev = "32c0c41d118e55fda1ab9aa778c2a59fa27710e9";
-    hash = "sha256-kQbwqKTsW5gkEeHE7Yp/fbGObjUJnvOG/0U6RSZc7oU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-KKZDz0NTIEx1NpTjDtrZdZD2RLxtZYarwn54RbPPeCA=";
     # Breaks reproducibility depending on whether the picked commit
     # has other ref-names or not, which may change over time, i.e. with
     # "ref-names: HEAD -> main" as long this commit is the branch HEAD
@@ -82,7 +85,7 @@ rustPlatform.buildRustPackage {
     '';
   };
 
-  cargoHash = "sha256-wwS4fhYG8pvmNLCgSO26yf65No7wL1Xrqm+38sP2pxM=";
+  cargoHash = "sha256-huQ3dq5tTLN53fOhj458aH00jFnt6CWZQhJ9MogktJM=";
 
   # set `HOME` to a temp dir for write access
   # Fix invalid option errors during linking (https://github.com/mozilla/nixpkgs-mozilla/commit/c72ff151a3e25f14182569679ed4cd22ef352328)
@@ -113,17 +116,6 @@ rustPlatform.buildRustPackage {
 
   env.UV_PYTHON = customPython.interpreter;
 
-  postPatch = ''
-    # mozjs-sys attempts to find the header path of the icu_capi crate through cargo-metadata at build time.
-    # Unfortunately, cargo-metadata also attempts to fetch optional, disabled crates in the process.
-    # As these are not part of servo's Cargo.lock, they are not included in our cache and cargo-metadata fails.
-    # We work around this by finding the header path ourselves and substituting the invocation in mozjs-sys' build.rs.
-    icu_capi_dir=$(find $cargoDepsCopy -maxdepth 2 -type d -name icu_capi-\*)
-    icu_c_include_path="$icu_capi_dir/bindings/c"
-    substituteInPlace $cargoDepsCopy/mozjs_sys-*/build.rs \
-      --replace-fail "let icu_c_include_path = get_icu_capi_include_path();" "let icu_c_include_path = \"$icu_c_include_path\".to_string();"
-  '';
-
   buildInputs = [
     fontconfig
     freetype
@@ -139,13 +131,10 @@ rustPlatform.buildRustPackage {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     wayland
-    xorg.libX11
-    xorg.libxcb
+    libx11
+    libxcb
     udev
     vulkan-loader
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_14
   ];
 
   # Builds with additional features for aarch64, see https://github.com/servo/servo/issues/36819
@@ -175,7 +164,7 @@ rustPlatform.buildRustPackage {
   '';
 
   passthru = {
-    updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+    updateScript = nix-update-script { };
     tests = { inherit (nixosTests) servo; };
   };
 
@@ -193,4 +182,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "servo";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   version = "3.6";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/imagination/imagination-${version}.tar.gz";
     sha256 = "139dgb9vfr2q7bxvjskykdz526xxwrn0bh463ir8m2p7rx5a3pw5";
   };
 
@@ -58,12 +58,12 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight and simple DVD slide show maker";
     homepage = "https://imagination.sourceforge.net";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ austinbutler ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ austinbutler ];
+    platforms = lib.platforms.linux;
     mainProgram = "imagination";
   };
 }

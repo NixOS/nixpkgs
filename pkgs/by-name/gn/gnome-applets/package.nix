@@ -25,11 +25,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-applets";
-  version = "3.56.0";
+  version = "3.58.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-applets/${lib.versions.majorMinor finalAttrs.version}/gnome-applets-${finalAttrs.version}.tar.xz";
-    hash = "sha256-+heu3JVa3ZgaouQ7TAcTU/aGu9HuwdcXqJCnNTIK0XE=";
+    hash = "sha256-5h7bcTRNzV2qbnF137snSnWL6LWEUnc1abs1ZFuFojg=";
   };
 
   nativeBuildInputs = [
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   # Don't try to install modules to gnome panel's directory, as it's read only
-  PKG_CONFIG_LIBGNOME_PANEL_MODULESDIR = "${placeholder "out"}/lib/gnome-panel/modules";
+  env.PKG_CONFIG_LIBGNOME_PANEL_MODULESDIR = "${placeholder "out"}/lib/gnome-panel/modules";
 
   passthru = {
     updateScript = gnome.updateScript {
@@ -72,13 +72,13 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Applets for use with the GNOME panel";
     mainProgram = "cpufreq-selector";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-applets";
     changelog = "https://gitlab.gnome.org/GNOME/gnome-applets/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
-    license = licenses.gpl2Plus;
-    teams = [ teams.gnome ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
 })

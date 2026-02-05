@@ -12,7 +12,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "biom-format";
   version = "2.1.17";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "biocore";
     repo = "biom-format";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-FjIC21LoqltixBstbbANByjTNxVm/3YCxdWaD9KbOQ0=";
   };
 
@@ -58,4 +58,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ tomasajt ];
   };
-}
+})

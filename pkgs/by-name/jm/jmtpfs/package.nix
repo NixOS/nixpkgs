@@ -9,13 +9,13 @@
   libmtp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jmtpfs";
   version = "0.5";
 
   src = fetchFromGitHub {
     sha256 = "1pm68agkhrwgrplrfrnbwdcvx5lrivdmqw8pb5gdmm3xppnryji1";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     repo = "jmtpfs";
     owner = "JasonFerrara";
   };
@@ -35,12 +35,12 @@ stdenv.mkDerivation rec {
     libmtp
   ];
 
-  meta = with lib; {
+  meta = {
     description = "FUSE filesystem for MTP devices like Android phones";
     homepage = "https://github.com/JasonFerrara/jmtpfs";
-    license = licenses.gpl3Only;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.coconnor ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.coconnor ];
     mainProgram = "jmtpfs";
   };
-}
+})

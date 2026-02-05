@@ -89,7 +89,6 @@ buildGoModule (finalAttrs: {
   ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/limactl";
-  versionCheckProgramArg = "--version";
   versionCheckKeepEnvironment = [ "HOME" ];
 
   installCheckPhase = ''
@@ -166,7 +165,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       anhduy
-      kachick
     ];
   };
 })

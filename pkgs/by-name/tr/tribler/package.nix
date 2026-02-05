@@ -47,7 +47,7 @@ in
 
 python3.pkgs.buildPythonApplication {
   inherit version src;
-  name = "tribler";
+  pname = "tribler";
   pyproject = true;
 
   build-system = with python3.pkgs; [
@@ -115,7 +115,7 @@ python3.pkgs.buildPythonApplication {
   '';
 
   postInstall = ''
-    ln -s ${tribler-webui} $out/lib/python*/site-packages/tribler/ui
+    ln -s ${tribler-webui} $out/${python312.sitePackages}/tribler/ui
   '';
 
   preFixup = ''

@@ -14,17 +14,22 @@
   udev,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libbladeRF";
   version = "2025.10";
 
   src = fetchFromGitHub {
     owner = "Nuand";
     repo = "bladeRF";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-gp+OnAlECGZs4+JEWNX5Gt7LYdTFJUItpmDdJgeoJO4=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # fix clang build: https://github.com/Nuand/bladeRF/pull/1045
+    ./clang-fix.patch
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -62,16 +67,16 @@ stdenv.mkDerivation rec {
   ];
 
   env = lib.optionalAttrs stdenv.cc.isClang {
-    NIX_CFLAGS_COMPILE = "-Wno-error=unused-but-set-variable";
+    NIX_CFLAGS_COMPILE = "-Wno-error=unused-but-set-variable -Wno-error=tautological-overlap-compare";
   };
 
   hardeningDisable = [ "fortify" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://nuand.com/libbladeRF-doc";
     description = "Supporting library of the BladeRF SDR opensource hardware";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ markuskowa ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ markuskowa ];
+    platforms = lib.platforms.unix;
   };
-}
+})

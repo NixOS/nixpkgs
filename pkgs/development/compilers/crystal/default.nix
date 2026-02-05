@@ -19,6 +19,7 @@
   llvmPackages_19,
   llvmPackages_20,
   llvmPackages_21,
+  llvmPackages_22,
   makeWrapper,
   openssl,
   pcre2,
@@ -267,15 +268,14 @@ let
       };
       passthru.llvmPackages = llvmPackages;
 
-      meta = with lib; {
+      meta = {
         inherit (binary.meta) platforms;
         description = "Compiled language with Ruby like syntax and type inference";
         mainProgram = "crystal";
         homepage = "https://crystal-lang.org/";
-        license = licenses.asl20;
-        maintainers = with maintainers; [
+        license = lib.licenses.asl20;
+        maintainers = with lib.maintainers; [
           david50407
-          manveru
           peterhoeg
           donovanglover
         ];
@@ -333,5 +333,13 @@ rec {
     doCheck = false;
   };
 
-  crystal = crystal_1_18;
+  crystal_1_19 = generic {
+    version = "1.19.1";
+    sha256 = "sha256-vMS2GJb6c6RvflDSS2EWHsERJ0rvzZMVm50gaTXRs4Y=";
+    binary = binaryCrystal_1_10;
+    llvmPackages = llvmPackages_22;
+    doCheck = false;
+  };
+
+  crystal = crystal_1_19;
 }

@@ -13,14 +13,15 @@ let
 
     buildCommand = ''
       install -D -t "$out/include/IOKit/pwr_mgt" \
-        '${iokitUser}/pwr_mgt.subproj/IOPMLibPrivate.h'
+        '${iokitUser}/pwr_mgt.subproj/IOPMLibPrivate.h' \
+        '${iokitUser}/pwr_mgt.subproj/IOPMAssertionCategories.h'
     '';
   };
 in
 mkAppleDerivation {
   releaseName = "PowerManagement";
 
-  xcodeHash = "sha256-l6lm8aaiJg4H2BQVCjlFldpfhnmPAlsiMK7Cghzuh1E=";
+  xcodeHash = "sha256-cjTF4dR6S55mLwp4GkQhkkNk9sMMKDc/5JTm46Z7/KE=";
 
   env.NIX_CFLAGS_COMPILE = "-I${privateHeaders}/include";
 

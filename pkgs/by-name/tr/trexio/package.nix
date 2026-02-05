@@ -10,14 +10,14 @@
   swig,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "trexio";
   version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "TREX-CoE";
     repo = "trexio";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-mTn/46oIvBbv7X0QwDxXQJH3QyH34u487QpLferC2Uc=";
   };
 
@@ -44,11 +44,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "File format and library for the storage of quantum chemical wave functions";
     homepage = "https://trex-coe.github.io/trexio/";
     downloadPage = "https://github.com/TREX-CoE/trexio";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.sheepforce ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})

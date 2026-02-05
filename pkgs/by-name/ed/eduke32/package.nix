@@ -14,7 +14,7 @@
   libGL,
   SDL2,
   SDL2_mixer,
-  xorg,
+  libx11,
   graphicsmagick,
   unstableGitUpdater,
 }:
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     libGL
-    xorg.libX11
+    libx11
   ];
 
   nativeBuildInputs = [
@@ -179,12 +179,11 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
   meta = {
-    description = "Enhanched port of Duke Nukem 3D for various platforms";
-    homepage = "http://eduke32.com";
+    description = "Enhanced port of Duke Nukem 3D for various platforms";
+    homepage = "https://eduke32.com";
     license = with lib.licenses; [ gpl2Plus ];
     maintainers = with lib.maintainers; [
       qubitnano
-      sander
     ];
     platforms = lib.platforms.all;
   };

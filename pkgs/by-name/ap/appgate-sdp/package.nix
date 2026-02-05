@@ -36,7 +36,19 @@
   stdenv,
   systemd,
   xdg-utils,
-  xorg,
+  libxtst,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  libxshmfence,
+  libxkbfile,
   zlib,
 }:
 
@@ -69,19 +81,19 @@ let
     pango
     stdenv.cc.cc
     systemd
-    xorg.libX11
-    xorg.libXScrnSaver
-    xorg.libXcomposite
-    xorg.libXcursor
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libXtst
-    xorg.libxkbfile
-    xorg.libxshmfence
+    libx11
+    libxscrnsaver
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxrandr
+    libxrender
+    libxtst
+    libxkbfile
+    libxshmfence
     zlib
   ];
 in
@@ -155,13 +167,13 @@ stdenv.mkDerivation rec {
     wrapProgram $out/opt/appgate/linux/set_dns --set PYTHONPATH $PYTHONPATH
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Appgate SDP (Software Defined Perimeter) desktop client";
     homepage = "https://www.appgate.com/support/software-defined-perimeter-support";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ymatsiuk ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ymatsiuk ];
     mainProgram = "appgate";
   };
 }

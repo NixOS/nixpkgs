@@ -18,7 +18,7 @@ let
 in
 buildPythonPackage {
   inherit pname version;
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

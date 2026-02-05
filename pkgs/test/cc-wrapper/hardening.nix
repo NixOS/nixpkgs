@@ -31,8 +31,8 @@ let
         [ -n "$preBuild" ] && eval "$preBuild"
         n=$out/bin/test-bin
         mkdir -p "$(dirname "$n")"
-        cp "$codePath" code.c
-        NIX_DEBUG=1 $CC -x c code.c -O1 $TEST_EXTRA_FLAGS -o "$n"
+        cp "$codePath" .
+        NIX_DEBUG=1 $CC -x ''${TEST_SOURCE_LANG:-c} "$(basename $codePath)" -O1 $TEST_EXTRA_FLAGS -o "$n"
       '';
 
   f1exampleWithStdEnv = writeCBinWithStdenv ./fortify1-example.c;
@@ -41,15 +41,60 @@ let
 
   flexArrF2ExampleWithStdEnv = writeCBinWithStdenv ./flex-arrays-fortify-example.c;
 
+  # we don't really have a reliable property for testing for
+  # libstdc++ we'll just have to check for the absence of libcxx
   checkGlibcxxassertionsWithStdEnv =
-    expectDefined:
-    writeCBinWithStdenv (
-      writeText "main.cpp" ''
-        #if${if expectDefined then "n" else ""}def _GLIBCXX_ASSERTIONS
-        #error "Expected _GLIBCXX_ASSERTIONS to be ${if expectDefined then "" else "un"}defined"
-        #endif
-        int main() {}
-      ''
+    expectDefined: stdenv': derivationArgs:
+    brokenIf (stdenv.cc.libcxx != null) (
+      writeCBinWithStdenv
+        (writeText "main.cpp" ''
+          #if${if expectDefined then "n" else ""}def _GLIBCXX_ASSERTIONS
+          #error "Expected _GLIBCXX_ASSERTIONS to be ${if expectDefined then "" else "un"}defined"
+          #endif
+          int main() {}
+        '')
+        stdenv'
+        (
+          derivationArgs
+          // {
+            env = (derivationArgs.env or { }) // {
+              TEST_SOURCE_LANG = derivationArgs.env.TEST_SOURCE_LANG or "c++";
+            };
+          }
+        )
+    );
+
+  checkLibcxxHardeningWithStdEnv =
+    expectValue: stdenv': env:
+    brokenIf (stdenv.cc.libcxx == null) (
+      writeCBinWithStdenv
+        (writeText "main.cpp" (
+          ''
+            #include <limits>
+            #ifndef _LIBCPP_HARDENING_MODE
+            #error "Expected _LIBCPP_HARDENING_MODE to be defined"
+            #endif
+            #ifndef ${expectValue}
+            #error "Expected ${expectValue} to be defined"
+            #endif
+
+            #if _LIBCPP_HARDENING_MODE != ${expectValue}
+            #error "Expected _LIBCPP_HARDENING_MODE to equal ${expectValue}"
+            #endif
+          ''
+          + ''
+            int main() {}
+          ''
+        ))
+        stdenv'
+        (
+          env
+          // {
+            env = (env.env or { }) // {
+              TEST_SOURCE_LANG = env.env.TEST_SOURCE_LANG or "c++";
+            };
+          }
+        )
     );
 
   # for when we need a slightly more complicated program
@@ -455,25 +500,10 @@ nameDrvAfterAttrName (
       )
     );
 
-    pieExplicitEnabled = brokenIf stdenv.hostPlatform.isStatic (
-      checkTestBin
-        (f2exampleWithStdEnv stdenv {
-          hardeningEnable = [ "pie" ];
-        })
-        {
-          ignorePie = false;
-        }
-    );
-
-    pieExplicitEnabledStructuredAttrs = brokenIf stdenv.hostPlatform.isStatic (
-      checkTestBin
-        (f2exampleWithStdEnv stdenv {
-          hardeningEnable = [ "pie" ];
-          __structuredAttrs = true;
-        })
-        {
-          ignorePie = false;
-        }
+    pieAlwaysEnabled = brokenIf stdenv.hostPlatform.isStatic (
+      checkTestBin (f2exampleWithStdEnv stdenv { }) {
+        ignorePie = false;
+      }
     );
 
     relROExplicitEnabled =
@@ -662,22 +692,10 @@ nameDrvAfterAttrName (
       )
     );
 
-    pieExplicitDisabled = brokenIf (stdenv.hostPlatform.isMusl && stdenv.cc.isClang) (
-      checkTestBin
-        (f2exampleWithStdEnv stdenv {
-          hardeningDisable = [ "pie" ];
-        })
-        {
-          ignorePie = false;
-          expectFailure = true;
-        }
-    );
-
     # can't force-disable ("partial"?) relro
     relROExplicitDisabled = brokenIf true (
       checkTestBin
         (f2exampleWithStdEnv stdenv {
-          hardeningDisable = [ "pie" ];
         })
         {
           ignoreRelRO = false;
@@ -716,6 +734,48 @@ nameDrvAfterAttrName (
     glibcxxassertionsExplicitDisabled = checkGlibcxxassertionsWithStdEnv false stdenv {
       hardeningDisable = [ "glibcxxassertions" ];
     };
+
+    lchFastExplicitDisabled = checkLibcxxHardeningWithStdEnv "_LIBCPP_HARDENING_MODE_NONE" stdenv {
+      hardeningDisable = [ "libcxxhardeningfast" ];
+    };
+
+    lchExtensiveExplicitEnabled =
+      checkLibcxxHardeningWithStdEnv "_LIBCPP_HARDENING_MODE_EXTENSIVE" stdenv
+        {
+          hardeningEnable = [ "libcxxhardeningextensive" ];
+        };
+
+    lchExtensiveExplicitDisabledDoesntDisableLchFast =
+      checkLibcxxHardeningWithStdEnv "_LIBCPP_HARDENING_MODE_FAST" stdenv
+        {
+          hardeningEnable = [ "libcxxhardeningfast" ];
+          hardeningDisable = [ "libcxxhardeningextensive" ];
+        };
+
+    lchFastExplicitDisabledDisablesLchExtensive =
+      checkLibcxxHardeningWithStdEnv "_LIBCPP_HARDENING_MODE_NONE" stdenv
+        {
+          hardeningEnable = [ "libcxxhardeningextensive" ];
+          hardeningDisable = [ "libcxxhardeningfast" ];
+        };
+
+    lchFastExtensiveExplicitEnabledResultsInLchExtensive =
+      checkLibcxxHardeningWithStdEnv "_LIBCPP_HARDENING_MODE_EXTENSIVE" stdenv
+        {
+          hardeningEnable = [
+            "libcxxhardeningfast"
+            "libcxxhardeningextensive"
+          ];
+        };
+
+    lchFastExtensiveExplicitDisabledDisablesBoth =
+      checkLibcxxHardeningWithStdEnv "_LIBCPP_HARDENING_MODE_NONE" stdenv
+        {
+          hardeningDisable = [
+            "libcxxhardeningfast"
+            "libcxxhardeningextensive"
+          ];
+        };
 
     # most flags can't be "unsupported" by compiler alone and
     # binutils doesn't have an accessible hardeningUnsupportedFlags
@@ -923,6 +983,30 @@ nameDrvAfterAttrName (
           hardeningEnable = [ "glibcxxassertions" ];
         };
 
+    lchFastStdenvUnsupp =
+      checkLibcxxHardeningWithStdEnv "_LIBCPP_HARDENING_MODE_NONE"
+        (stdenvUnsupport [ "libcxxhardeningfast" ])
+        {
+          hardeningEnable = [ "libcxxhardeningfast" ];
+        };
+
+    lchFastStdenvUnsuppUnsupportsLchExtensive =
+      checkLibcxxHardeningWithStdEnv "_LIBCPP_HARDENING_MODE_NONE"
+        (stdenvUnsupport [ "libcxxhardeningfast" ])
+        {
+          hardeningEnable = [ "libcxxhardeningextensive" ];
+        };
+
+    lchExtensiveStdenvUnsuppDoesntUnsupportLchFast =
+      checkLibcxxHardeningWithStdEnv "_LIBCPP_HARDENING_MODE_FAST"
+        (stdenvUnsupport [ "libcxxhardeningextensive" ])
+        {
+          hardeningEnable = [
+            "libcxxhardeningfast"
+            "libcxxhardeningextensive"
+          ];
+        };
+
     fortify3EnabledEnvEnablesFortify1 =
       checkTestBin
         (f1exampleWithStdEnv stdenv {
@@ -1018,6 +1102,38 @@ nameDrvAfterAttrName (
           expectFailure = true;
         };
 
+    lchFastEnabledEnv = checkLibcxxHardeningWithStdEnv "_LIBCPP_HARDENING_MODE_FAST" stdenv {
+      hardeningDisable = [
+        "libcxxhardeningfast"
+        "libcxxhardeningextensive"
+      ];
+      postConfigure = ''
+        export NIX_HARDENING_ENABLE="libcxxhardeningfast"
+      '';
+    };
+
+    lchExtensiveEnabledEnv = checkLibcxxHardeningWithStdEnv "_LIBCPP_HARDENING_MODE_EXTENSIVE" stdenv {
+      hardeningDisable = [
+        "libcxxhardeningfast"
+        "libcxxhardeningextensive"
+      ];
+      postConfigure = ''
+        export NIX_HARDENING_ENABLE="libcxxhardeningextensive"
+      '';
+    };
+
+    lchFastExtensiveEnabledEnvResultsInLchExtensive =
+      checkLibcxxHardeningWithStdEnv "_LIBCPP_HARDENING_MODE_EXTENSIVE" stdenv
+        {
+          hardeningDisable = [
+            "libcxxhardeningfast"
+            "libcxxhardeningextensive"
+          ];
+          postConfigure = ''
+            export NIX_HARDENING_ENABLE="libcxxhardeningextensive libcxxhardeningfast"
+          '';
+        };
+
     # NIX_HARDENING_ENABLE can't enable an unsupported feature
     stackProtectorUnsupportedEnabledEnv =
       checkTestBin
@@ -1085,7 +1201,6 @@ nameDrvAfterAttrName (
         hardeningDisable = [ "all" ];
         hardeningEnable = [
           "fortify"
-          "pie"
         ];
       };
     in
@@ -1100,13 +1215,6 @@ nameDrvAfterAttrName (
         ignoreFortify = false;
         expectFailure = true;
       };
-
-      allExplicitDisabledPie = brokenIf (stdenv.hostPlatform.isMusl && stdenv.cc.isClang) (
-        checkTestBin tb {
-          ignorePie = false;
-          expectFailure = true;
-        }
-      );
 
       # can't force-disable ("partial"?) relro
       allExplicitDisabledRelRO = brokenIf true (
@@ -1134,9 +1242,15 @@ nameDrvAfterAttrName (
         hardeningDisable = [ "all" ];
       }) true;
 
-      glibcxxassertionsExplicitDisabled = checkGlibcxxassertionsWithStdEnv false stdenv {
+      allExplicitDisabledGlibcxxAssertions = checkGlibcxxassertionsWithStdEnv false stdenv {
         hardeningDisable = [ "all" ];
       };
+
+      allExplicitDisabledLibcxxHardening =
+        checkLibcxxHardeningWithStdEnv "_LIBCPP_HARDENING_MODE_NONE" stdenv
+          {
+            hardeningDisable = [ "all" ];
+          };
     }
   )
 )

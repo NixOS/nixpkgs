@@ -6,16 +6,16 @@
 }:
 buildGoModule rec {
   pname = "oh-my-posh";
-  version = "26.23.6";
+  version = "29.1.0";
 
   src = fetchFromGitHub {
     owner = "jandedobbeleer";
     repo = "oh-my-posh";
     tag = "v${version}";
-    hash = "sha256-4Po4QKPetRmTfmgq7lTK300h1Nn7spxNxRB9q58yrzo=";
+    hash = "sha256-gbb/ZVd3oNABw8Hjeht//bPdLVQnWtEtAkvYudGqMTs=";
   };
 
-  vendorHash = "sha256-R1MNLBATbivhP27VfWLGNnZ8uJWzKhx4XhNILc7FCmE=";
+  vendorHash = "sha256-75buRo7DNq4gzY+66NEVSI1XOJdgckqzHoDwraUmEAw=";
 
   sourceRoot = "${src.name}/src";
 
@@ -53,7 +53,7 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       lucperkins
-      urandom
+      olillin
     ];
   };
 }

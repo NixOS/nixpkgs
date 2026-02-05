@@ -52,23 +52,30 @@ stdenv.mkDerivation (finalAttrs: {
     libXrandr
   ];
 
-  # JUCE dlopens these at runtime, standalone executable crashes without them
-  NIX_LDFLAGS = [
-    "-lX11"
-    "-lXext"
-    "-lXcursor"
-    "-lXinerama"
-    "-lXrandr"
-  ];
+  env = {
+    # JUCE dlopens these at runtime, standalone executable crashes without them
+    NIX_LDFLAGS = toString [
+      "-lX11"
+      "-lXext"
+      "-lXcursor"
+      "-lXinerama"
+      "-lXrandr"
+    ];
 
-  # Fontconfig error: Cannot load default config file: No such file: (null)
-  env.FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
+    NIX_CFLAGS_COMPILE = toString [
+      # juce, compiled in this build as part of a Git submodule, uses `-flto` as
+      # a Link Time Optimization flag, and instructs the plugin compiled here to
+      # use this flag to. This breaks the build for us. Using _fat_ LTO allows
+      # successful linking while still providing LTO benefits. If our build of
+      # `juce` was used as a dependency, we could have patched that `-flto` line
+      # in our juce's source, but that is not possible because it is used as a
+      # Git Submodule.
+      "-ffat-lto-objects"
+    ];
 
-  # LTO needs special setup on Linux
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail 'juce::juce_recommended_lto_flags' '# Not forcing LTO'
-  '';
+    # Fontconfig error: Cannot load default config file: No such file: (null)
+    FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
+  };
 
   installPhase = ''
     runHook preInstall

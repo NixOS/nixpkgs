@@ -14,7 +14,7 @@
   libGLU,
   libjpeg,
   libpng,
-  libpthreadstubs,
+  libpthread-stubs,
   libpulseaudio,
   libtheora,
   libvorbis,
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
-    libpthreadstubs
+    libpthread-stubs
     libpulseaudio
     libX11
     libXcursor
@@ -131,11 +131,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Game programming library";
     homepage = "https://liballeg.org/";
-    license = licenses.zlib;
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.zlib;
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

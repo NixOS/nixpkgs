@@ -7,7 +7,7 @@
   python3Packages,
 }:
 python3Packages.buildPythonApplication rec {
-  name = "tiddit";
+  pname = "tiddit";
   version = "3.6.1";
   pyproject = true;
 

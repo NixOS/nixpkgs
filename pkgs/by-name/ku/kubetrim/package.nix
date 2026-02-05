@@ -5,7 +5,7 @@
 }:
 
 buildGoModule rec {
-  name = "kubetrim";
+  pname = "kubetrim";
   version = "0.0.1";
 
   src = fetchFromGitHub {

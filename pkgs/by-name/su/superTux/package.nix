@@ -8,7 +8,7 @@
   curl,
   SDL2,
   SDL2_image,
-  libSM,
+  libsm,
   libXext,
   libpng,
   freetype,
@@ -21,12 +21,12 @@
   libvorbis,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "supertux";
   version = "0.6.3";
 
   src = fetchurl {
-    url = "https://github.com/SuperTux/supertux/releases/download/v${version}/SuperTux-v${version}-Source.tar.gz";
+    url = "https://github.com/SuperTux/supertux/releases/download/v${finalAttrs.version}/SuperTux-v${finalAttrs.version}-Source.tar.gz";
     sha256 = "1xkr3ka2sxp5s0spp84iv294i29s1vxqzazb6kmjc0n415h0x57p";
   };
 
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     curl
     SDL2
     SDL2_image
-    libSM
+    libsm
     libXext
     libpng
     freetype
@@ -87,12 +87,12 @@ stdenv.mkDerivation rec {
     ln -s $out/games/supertux2 $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Classic 2D jump'n run sidescroller game";
     homepage = "https://supertux.github.io/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ pSub ];
-    platforms = with platforms; linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ pSub ];
+    platforms = with lib.platforms; linux;
     mainProgram = "supertux2";
   };
-}
+})

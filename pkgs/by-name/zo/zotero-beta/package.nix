@@ -12,7 +12,16 @@
   glib,
   gtk3,
   libGL,
-  xorg,
+  libxtst,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  libxcb,
   libgbm,
   pango,
   pciutils,
@@ -44,16 +53,16 @@ stdenv.mkDerivation rec {
       glib
       gtk3
       libGL
-      xorg.libX11
-      xorg.libXcomposite
-      xorg.libXcursor
-      xorg.libXdamage
-      xorg.libXext
-      xorg.libXfixes
-      xorg.libXi
-      xorg.libXrandr
-      xorg.libXtst
-      xorg.libxcb
+      libx11
+      libxcomposite
+      libxcursor
+      libxdamage
+      libxext
+      libxfixes
+      libxi
+      libxrandr
+      libxtst
+      libxcb
       libgbm
       pango
       pciutils
@@ -116,14 +125,14 @@ stdenv.mkDerivation rec {
         "$out/usr/lib/zotero-bin-${version}/{}" \;
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.zotero.org";
     description = "Collect, organize, cite, and share your research sources";
     mainProgram = "zotero";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.agpl3Only;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.agpl3Only;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       atila
       justanotherariel
     ];

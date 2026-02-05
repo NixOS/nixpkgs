@@ -5,15 +5,12 @@
   buildPythonPackage,
   pytestCheckHook,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "nwdiag";
   version = "3.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "blockdiag";
@@ -40,13 +37,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nwdiag" ];
 
-  meta = with lib; {
+  meta = {
     description = "Generate network-diagram image from spec-text file (similar to Graphviz)";
     homepage = "http://blockdiag.com/";
     changelog = "https://github.com/blockdiag/nwdiag/blob/${version}/CHANGES.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bjornfor ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bjornfor ];
     mainProgram = "rackdiag";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

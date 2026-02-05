@@ -26,14 +26,14 @@ let
     python3
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "souffle";
   version = "2.5";
 
   src = fetchFromGitHub {
     owner = "souffle-lang";
     repo = "souffle";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-Umfeb1pGAeK5K3QDRD/labC6IJLsPPJ73ycsAV4yPNM=";
   };
 
@@ -97,15 +97,15 @@ stdenv.mkDerivation rec {
 
   passthru.tests = callPackage ./tests.nix { };
 
-  meta = with lib; {
+  meta = {
     description = "Translator of declarative Datalog programs into the C++ language";
     homepage = "https://souffle-lang.github.io/";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       thoughtpolice
       wchresta
       markusscherer
     ];
-    license = licenses.upl;
+    license = lib.licenses.upl;
   };
-}
+})

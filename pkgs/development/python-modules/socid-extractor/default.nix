@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   python-dateutil,
-  pythonOlder,
   setuptools,
   requests,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "socid-extractor";
   version = "0.0.27";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "soxoj";
@@ -38,12 +35,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "socid_extractor" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to extract details from personal pages";
     homepage = "https://github.com/soxoj/socid-extractor";
     changelog = "https://github.com/soxoj/socid-extractor/blob/v${src.tag}/CHANGELOG.md";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "socid_extractor";
   };
 }

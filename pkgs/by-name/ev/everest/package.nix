@@ -11,7 +11,7 @@
 
 let
   pname = "everest";
-  version = "5961";
+  version = "6157";
   phome = "$out/lib/Celeste";
 in
 buildDotnetModule {
@@ -20,11 +20,11 @@ buildDotnetModule {
   src = fetchFromGitHub {
     owner = "EverestAPI";
     repo = "Everest";
-    rev = "7972286159c1f4d1f219c1101273067d45cd1161";
+    rev = "44350f94f150bfa9b0ffb3cf979eeaf6146cab34";
     fetchSubmodules = true;
     # TODO: use leaveDotGit = true and modify external/MonoMod in postFetch to please SourceLink
     # Microsoft.SourceLink.Common.targets(53,5): warning : Source control information is not available - the generated source link is empty.
-    hash = "sha256-GkWeOfatzw9uLWkzNzjSEM8p+HWuJPbycv/0YNxTdqk=";
+    hash = "sha256-2cbeheBQLcGBUS20CUMNuDgVHqgtWFRAObkTcRZ4xCk=";
   };
 
   nativeBuildInputs = [ autoPatchelfHook ];

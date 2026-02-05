@@ -3,7 +3,6 @@
   bc,
   fetchurl,
   getopt,
-  ksh,
   pkgsMusl ? { },
   stdenv,
   tzdata,
@@ -11,11 +10,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bmake";
-  version = "20250804";
+  version = "20251111";
 
   src = fetchurl {
     url = "https://www.crufty.net/ftp/pub/sjg/bmake-${finalAttrs.version}.tar.gz";
-    hash = "sha256-C0kDdkSyUyBtLnENRuMoWeYt/ixsjnIYrkOfLvUN6K0=";
+    hash = "sha256-RaP4UVZ3uo85M9ghP0u2EaXDyIOAvi5GIi+kRwlQYGA=";
   };
 
   patches = [
@@ -39,9 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [
     bc
     tzdata
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.libc != "musl") [
-    ksh
   ];
 
   # The generated makefile is a small wrapper for calling ./boot-strap with a

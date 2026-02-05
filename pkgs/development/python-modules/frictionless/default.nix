@@ -47,8 +47,6 @@
 
   # Tests
   pytestCheckHook,
-  pytest-cov,
-  pytest-dotenv,
   pytest-lazy-fixtures,
   pytest-mock,
   pytest-timeout,
@@ -72,6 +70,12 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-svspEHcEw994pEjnuzWf0FFaYeFZuqriK96yFAB6/gI=";
   };
+
+  postPatch = ''
+    substituteInPlace frictionless/conftest.py \
+      --replace-fail "from pytest_cov.embed import cleanup_on_sigterm" "" \
+      --replace-fail "cleanup_on_sigterm()" ""
+  '';
 
   build-system = [
     hatchling
@@ -179,8 +183,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-cov
-    pytest-dotenv
     pytest-lazy-fixtures
     pytest-mock
     pytest-timeout
@@ -193,7 +195,7 @@ buildPythonPackage rec {
     openpyxl
     xlrd
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTestPaths = [
     # Requires optional dependencies that have not been packaged (commented out above)
@@ -202,9 +204,15 @@ buildPythonPackage rec {
     "frictionless/formats/spss"
     # Console CLI tests fail due to typer/Click CliRunner output capture issues
     # result.stdout is empty when error messages are expected
-    # All 1690 functional tests pass (including duckdb adapter tests)
     "frictionless/console/__spec__/test_console.py"
     "frictionless/console/commands/__spec__/test_summary.py"
+    # We're well-ahead of requirements for duckdb and sqlalchemy
+    # https://github.com/frictionlessdata/frictionless-py/blob/be08dcf491781a565d230f47e08707e703292d85/pyproject.toml#L84
+    "frictionless/formats/sql/__spec__/duckdb/test_adapter.py"
+    "frictionless/formats/sql/__spec__/duckdb/test_parser.py"
+    "frictionless/indexer/__spec__/test_resource.py::test_resource_index_sqlite[duckdb_url]"
+    "frictionless/indexer/__spec__/test_resource.py::test_resource_index_sqlite_with_metadata[duckdb_url]"
+    "frictionless/indexer/__spec__/test_resource.py::test_resource_index_sqlite_on_progress[duckdb_url]"
   ];
 
   pythonImportsCheck = [

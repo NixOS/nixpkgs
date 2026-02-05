@@ -12,20 +12,20 @@
   pytestCheckHook,
 
   # tests
+  pycrdt-websocket,
   websockets,
-  ypy-websocket,
 }:
 
 buildPythonPackage rec {
   pname = "jupyter-ydoc";
-  version = "3.1.0";
+  version = "3.3.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jupyter-server";
     repo = "jupyter_ydoc";
     tag = "v${version}";
-    hash = "sha256-AI/Ml1MgMFaclJxuHbZMXT8Cf531tzX0uaWPVg6SgMM=";
+    hash = "sha256-hcIBLhwRLyDdl7LemK8Et10aS2AVPM0wmHAcnmpA9Zg=";
   };
 
   build-system = [
@@ -39,8 +39,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pycrdt-websocket
     websockets
-    ypy-websocket
   ];
 
   # requires a Node.js environment
@@ -48,7 +48,7 @@ buildPythonPackage rec {
 
   meta = {
     changelog = "https://github.com/jupyter-server/jupyter_ydoc/blob/${src.tag}/CHANGELOG.md";
-    description = "Document structures for collaborative editing using Ypy";
+    description = "Document structures for collaborative editing using Yjs/pycrdt";
     homepage = "https://github.com/jupyter-server/jupyter_ydoc";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.jupyter ];

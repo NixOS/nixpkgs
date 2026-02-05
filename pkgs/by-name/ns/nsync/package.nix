@@ -5,14 +5,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nsync";
   version = "1.29.2";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "nsync";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-RAwrS8Vz5fZwZRvF4OQfn8Ls11S8OIV2TmJpNrBE4MI=";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

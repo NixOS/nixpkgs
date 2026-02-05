@@ -20,14 +20,14 @@
   withPipewire ? stdenv.hostPlatform.isLinux,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cava";
   version = "0.10.6";
 
   src = fetchFromGitHub {
     owner = "karlstav";
     repo = "cava";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-dWPW9vd9LdGALt7Po4nZnW5HkivtZcIUBlXEFurq2os=";
   };
 
@@ -62,18 +62,18 @@ stdenv.mkDerivation rec {
   versionCheckProgramArg = "-v";
 
   preAutoreconf = ''
-    echo ${version} > version
+    echo ${finalAttrs.version} > version
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Console-based Audio Visualizer for Alsa";
     homepage = "https://github.com/karlstav/cava";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       offline
       mirrexagon
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "cava";
   };
-}
+})

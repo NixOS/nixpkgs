@@ -38,6 +38,9 @@ in
     boot.kernelModules = [
       "ddcci_backlight"
     ];
+    boot.extraModulePackages = [
+      config.boot.kernelPackages.ddcci-driver
+    ];
     # Load the i2c-dev module
     hardware.i2c = {
       enable = true;

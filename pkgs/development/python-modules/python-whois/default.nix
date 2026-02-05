@@ -4,22 +4,19 @@
   fetchPypi,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   setuptools,
   simplejson,
 }:
 
 buildPythonPackage rec {
   pname = "python-whois";
-  version = "0.9.5";
+  version = "0.9.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "python_whois";
     inherit version;
-    hash = "sha256-GJaMIUhHUvzEuaXwr0d+9rjcLou38b1cM4MUmcDdQco=";
+    hash = "sha256-Lm3nttcOMFqF9IWc0XeB7j8No6AqjpTyPLTNzS5AC/o=";
   };
 
   build-system = [ setuptools ];
@@ -43,10 +40,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "whois" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to produce parsed WHOIS data";
     homepage = "https://github.com/richardpenman/whois";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

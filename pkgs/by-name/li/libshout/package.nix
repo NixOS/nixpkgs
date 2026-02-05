@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   version = "2.4.6";
 
   src = fetchurl {
-    url = "https://downloads.xiph.org/releases/libshout/${pname}-${version}.tar.gz";
+    url = "https://downloads.xiph.org/releases/libshout/libshout-${version}.tar.gz";
     sha256 = "sha256-OcvU8O/f3cl1XYghfkf48tcQj6dn+dWKK6JqFtj3yRA=";
   };
 

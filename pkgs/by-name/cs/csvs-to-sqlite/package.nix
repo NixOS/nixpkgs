@@ -8,7 +8,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "csvs-to-sqlite";
   version = "1.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "simonw";
@@ -57,11 +57,11 @@ python3.pkgs.buildPythonApplication rec {
     "test_if_cog_needs_to_be_run"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Convert CSV files into a SQLite database";
     homepage = "https://github.com/simonw/csvs-to-sqlite";
-    license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.costrouc ];
     mainProgram = "csvs-to-sqlite";
   };
 }

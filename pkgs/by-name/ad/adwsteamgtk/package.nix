@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   pname = "adwsteamgtk";
   version = "0.8.0";
   # built with meson, not a python format
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Foldex";
@@ -46,10 +46,7 @@ python3Packages.buildPythonApplication rec {
     description = "Simple Gtk wrapper for Adwaita-for-Steam";
     homepage = "https://github.com/Foldex/AdwSteamGtk";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
-      reedrw
-      iedame
-    ];
+    maintainers = with lib.maintainers; [ reedrw ];
     mainProgram = "adwaita-steam-gtk";
     platforms = lib.platforms.linux;
   };

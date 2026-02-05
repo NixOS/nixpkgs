@@ -19,7 +19,9 @@
   icu,
   freetype,
   pugixml,
-  xorg,
+  libxrandr,
+  libxinerama,
+  libxcursor,
   nix-update-script,
 }:
 
@@ -33,13 +35,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "organicmaps";
-  version = "2025.10.23-22";
+  version = "2026.01.26-11";
 
   src = fetchFromGitHub {
     owner = "organicmaps";
     repo = "organicmaps";
     tag = "${finalAttrs.version}-android";
-    hash = "sha256-4TSN4G5tUvtzSXASDfOE1xiitQx9wE2/ZydFwpov+UM=";
+    hash = "sha256-EsVPzibUta0cmKA6bYLqCKKij5FWbwPHgMmIs2THpL0=";
     fetchSubmodules = true;
   };
 
@@ -79,9 +81,9 @@ stdenv.mkDerivation (finalAttrs: {
     icu
     freetype
     pugixml
-    xorg.libXrandr
-    xorg.libXinerama
-    xorg.libXcursor
+    libxrandr
+    libxinerama
+    libxcursor
   ];
 
   # Yes, this is PRE configure. The configure phase uses cmake

@@ -12,7 +12,6 @@
   paramiko,
   pyparsing,
   pyserial,
-  pythonOlder,
   pyyaml,
   scp,
   setuptools,
@@ -26,8 +25,6 @@ buildPythonPackage rec {
   pname = "junos-eznc";
   version = "2.7.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Juniper";
@@ -77,11 +74,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jnpr.junos" ];
 
-  meta = with lib; {
+  meta = {
     description = "Junos 'EZ' automation for non-programmers";
     homepage = "https://github.com/Juniper/py-junos-eznc";
     changelog = "https://github.com/Juniper/py-junos-eznc/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ xnaveira ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ xnaveira ];
   };
 }

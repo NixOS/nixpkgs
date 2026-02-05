@@ -10,7 +10,7 @@
   libXext,
   libX11,
   libpng,
-  libpthreadstubs,
+  libpthread-stubs,
   libsmf,
   libsndfile,
   lv2,
@@ -49,18 +49,18 @@ stdenv.mkDerivation rec {
     libXext
     libX11
     libpng
-    libpthreadstubs
+    libpthread-stubs
     libsmf
     libsndfile
     lv2
     zita-resampler
   ];
 
-  meta = with lib; {
+  meta = {
     description = "LV2 sample based drum plugin";
     homepage = "https://www.drumgizmo.org";
-    license = licenses.lgpl3Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.nico202 ];
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.nico202 ];
   };
 }

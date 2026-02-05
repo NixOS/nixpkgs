@@ -37,7 +37,7 @@ python3Packages.buildPythonApplication rec {
     msrplib
     python3-eventlib
     python3-gnutls
-    sipsimple
+    python3-sipsimple
     wokkel
     xcaplib
   ];
@@ -48,7 +48,6 @@ python3Packages.buildPythonApplication rec {
 
   nativeCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/sylk-server";
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "SIP/XMPP/WebRTC Application Server";

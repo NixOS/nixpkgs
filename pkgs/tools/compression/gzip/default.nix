@@ -5,6 +5,10 @@
   makeShellWrapper,
   updateAutotoolsGnuConfigScriptsHook,
   runtimeShellPackage,
+  # Tests
+  gzip,
+  less,
+  perl,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -12,12 +16,12 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gzip";
   version = "1.14";
 
   src = fetchurl {
-    url = "mirror://gnu/gzip/${pname}-${version}.tar.xz";
+    url = "mirror://gnu/gzip/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
     hash = "sha256-Aae4gb0iC/32Ffl7hxj4C9/T9q3ThbmT3Pbv0U6MCsY=";
   };
 
@@ -44,6 +48,12 @@ stdenv.mkDerivation rec {
     "ZLESS_PROG=zless"
   ];
 
+  nativeCheckInputs = [
+    less
+    perl
+  ];
+  doCheck = false;
+
   # Many gzip executables are shell scripts that depend upon other gzip
   # executables being in $PATH.  Rather than try to re-write all the
   # internal cross-references, just add $out/bin to PATH at the top of
@@ -51,6 +61,12 @@ stdenv.mkDerivation rec {
   preFixup = ''
     sed -i '1{;/#!\/bin\/sh/aPATH="'$out'/bin:$PATH"
     }' $out/bin/*
+  ''
+  # avoid wrapping the actual executable on cygwin because changing the
+  # extension will break dll linking
+  + lib.optionalString stdenv.hostPlatform.isCygwin ''
+    mv $out/bin/{,.}gzip.exe
+    ln -s .gzip.exe $out/bin/gzip
   ''
   # run gzip with "-n" when $GZIP_NO_TIMESTAMPS (set by stdenv's setup.sh) is set to stop gzip from adding timestamps
   # to archive headers: https://github.com/NixOS/nixpkgs/issues/86348
@@ -60,10 +76,11 @@ stdenv.mkDerivation rec {
       --add-flags "\''${GZIP_NO_TIMESTAMPS:+-n}"
   '';
 
+  passthru.tests.makecheck = gzip.overrideAttrs { doCheck = true; };
+
   meta = {
     homepage = "https://www.gnu.org/software/gzip/";
     description = "GNU zip compression program";
-
     longDescription = ''
       gzip (GNU zip) is a popular data compression program written by
       Jean-loup Gailly for the GNU project.  Mark Adler wrote the
@@ -75,11 +92,9 @@ stdenv.mkDerivation rec {
       and we needed a replacement.  The superior compression ratio of gzip
       is just a bonus.
     '';
-
     platforms = lib.platforms.all;
-
     license = lib.licenses.gpl3Plus;
-
     mainProgram = "gzip";
+    maintainers = [ lib.maintainers.mdaniels5757 ];
   };
-}
+})

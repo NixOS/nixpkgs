@@ -13,7 +13,7 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "bloznelis";
     repo = "typioca";
-    tag = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-fViYwewzhJUJjMupCYk1UsnnPAhByYZqYkuKD6MJNnE=";
   };
 

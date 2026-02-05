@@ -10,12 +10,12 @@
   libXtst,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "imwheel";
   version = "1.0.0pre12";
 
   src = fetchurl {
-    url = "mirror://sourceforge/imwheel/imwheel-${version}.tar.gz";
+    url = "mirror://sourceforge/imwheel/imwheel-${finalAttrs.version}.tar.gz";
     sha256 = "2320ed019c95ca4d922968e1e1cbf0c075a914e865e3965d2bd694ca3d57cfe3";
   };
 
@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
     libXtst
   ];
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+
   makeFlags = [
     "sysconfdir=/etc"
     "ETCDIR=/etc"
@@ -38,12 +40,12 @@ stdenv.mkDerivation rec {
     "ETCDIR=${placeholder "out"}/etc"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://imwheel.sourceforge.net/";
     description = "Mouse wheel configuration tool for XFree86/Xorg";
-    maintainers = with maintainers; [ jhillyerd ];
-    platforms = platforms.linux;
-    license = licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ jhillyerd ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Only;
     mainProgram = "imwheel";
   };
-}
+})

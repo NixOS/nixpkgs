@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchurl,
+  fetchpatch,
   meson,
   ninja,
   gettext,
@@ -31,14 +32,23 @@
   xvfb-run,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "totem";
   version = "43.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/totem/${lib.versions.major version}/totem-${version}.tar.xz";
+    url = "mirror://gnome/sources/totem/${lib.versions.major finalAttrs.version}/totem-${finalAttrs.version}.tar.xz";
     hash = "sha256-CwB9MPu5O5WmBPFISKSX9X/DM6dcLmOKJJly6ZwB5qQ=";
   };
+
+  patches = [
+    # Use girepository-2.0
+    # This will be ported to libpeas2 in https://gitlab.gnome.org/GNOME/totem/-/merge_requests/373
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/totem/raw/a213a514b7c2ac22d4e012e168e41eaf839e8112/f/girepository-2.0.patch";
+      hash = "sha256-D+i45yebZMbA7Ybfog3bwtOghoIHHVMqyXiUcZTkpxk=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson
@@ -112,7 +122,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://apps.gnome.org/Totem/";
-    changelog = "https://gitlab.gnome.org/GNOME/totem/-/blob/${version}/NEWS?ref_type=tags";
+    changelog = "https://gitlab.gnome.org/GNOME/totem/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "Movie player for the GNOME desktop based on GStreamer";
     teams = [ lib.teams.gnome ];
     license = lib.licenses.gpl2Plus; # with exception to allow use of non-GPL compatible plug-ins
@@ -120,4 +130,4 @@ stdenv.mkDerivation rec {
     # gst-inspect-1.0 is not smart enough for cross compiling
     broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
-}
+})

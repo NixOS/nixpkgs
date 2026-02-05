@@ -14,12 +14,12 @@
   libXxf86vm,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "freepv";
   version = "0.3.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/freepv/freepv-${version}.tar.gz";
+    url = "mirror://sourceforge/freepv/freepv-${finalAttrs.version}.tar.gz";
     sha256 = "1w19abqjn64w47m35alg7bcdl1p97nf11zn64cp4p0dydihmhv56";
   };
 
@@ -37,6 +37,9 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.4.0)" "cmake_minimum_required(VERSION 3.10)"
+
     sed -i -e '/GECKO/d' CMakeLists.txt
     sed -i -e '/mozilla/d' src/CMakeLists.txt
     sed -i -e '1i \
@@ -56,4 +59,4 @@ stdenv.mkDerivation rec {
     homepage = "https://freepv.sourceforge.net/";
     license = [ lib.licenses.lgpl21 ];
   };
-}
+})

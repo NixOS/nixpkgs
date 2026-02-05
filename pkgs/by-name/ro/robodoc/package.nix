@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
       Java -- basically any program in which you can use remarks/comments.
     '';
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ iedame ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
     mainProgram = "robodoc";
   };

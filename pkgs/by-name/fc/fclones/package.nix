@@ -4,16 +4,18 @@
   fetchFromGitHub,
   stdenv,
   installShellFiles,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fclones";
   version = "0.35.0";
 
   src = fetchFromGitHub {
     owner = "pkolaczk";
-    repo = pname;
-    rev = "v${version}";
+    repo = "fclones";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-OCRfJh6vfAkL86J1GuLgfs57from3fx0NS1Bh1+/oXE=";
   };
 
@@ -38,14 +40,25 @@ rustPlatform.buildRustPackage rec {
       --zsh <(fclones complete zsh)
   '';
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Efficient Duplicate File Finder and Remover";
     homepage = "https://github.com/pkolaczk/fclones";
-    changelog = "https://github.com/pkolaczk/fclones/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/pkolaczk/fclones/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       cyounkins
+      progrm_jarvis
     ];
     mainProgram = "fclones";
   };
-}
+})

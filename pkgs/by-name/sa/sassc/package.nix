@@ -6,19 +6,19 @@
   libsass,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sassc";
   version = "3.6.2"; # also check libsass for updates
 
   src = fetchFromGitHub {
     owner = "sass";
     repo = "sassc";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-jcs3+orRqKt9C3c2FTdeaj4H2rBP74lW3HF8CHSm7lQ=";
   };
 
   postPatch = ''
-    export SASSC_VERSION=${version}
+    export SASSC_VERSION=${finalAttrs.version}
   '';
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -27,15 +27,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Front-end for libsass";
     homepage = "https://github.com/sass/sassc/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "sassc";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       codyopel
       pjones
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

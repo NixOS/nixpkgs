@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   python,
   numpy_2,
   pythonAtLeast,
@@ -19,6 +20,7 @@
 
   # native dependencies
   blas,
+  coreutils,
   lapack,
 
   # Reverse dependency
@@ -59,7 +61,7 @@ let
 in
 buildPythonPackage rec {
   pname = "numpy";
-  version = "2.3.3";
+  version = "2.3.5";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -69,20 +71,37 @@ buildPythonPackage rec {
     repo = "numpy";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-6RMzF5vOWSX7gL3mps9ECClJF3mNqL1mexM6j8/yfdc=";
+    hash = "sha256-CMgJmsjPLgMCWN2iJk0OzcKIlnRRcayrTAns51S4B6k=";
   };
 
-  patches = lib.optionals python.hasDistutilsCxxPatch [
-    # We patch cpython/distutils to fix https://bugs.python.org/issue1222585
-    # Patching of numpy.distutils is needed to prevent it from undoing the
-    # patch to distutils.
-    ./numpy-distutils-C++.patch
-  ];
+  patches =
+    lib.optionals python.hasDistutilsCxxPatch [
+      # We patch cpython/distutils to fix https://bugs.python.org/issue1222585
+      # Patching of numpy.distutils is needed to prevent it from undoing the
+      # patch to distutils.
+      ./numpy-distutils-C++.patch
+    ]
+    ++
+      lib.optionals
+        (pythonAtLeast "3.14" && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
+        [
+          # don't assert RecursionError in monster dtype test
+          # see https://github.com/numpy/numpy/pull/30375
+          (fetchpatch2 {
+            url = "https://github.com/numpy/numpy/commit/eeaf04662e07cc8e2041f3e25bbd3698949a0c02.patch?full_index=1";
+            excludes = [ ".github/workflows/macos.yml" ];
+            hash = "sha256-bLPLExlKnX18MXhbZxzCHniaAE0yTSyK9WuQyFyYHOI=";
+          })
+        ];
 
   postPatch = ''
     # remove needless reference to full Python path stored in built wheel
     substituteInPlace numpy/meson.build \
       --replace-fail 'py.full_path()' "'python'"
+
+    # Test_POWER_Features::test_features - FileNotFoundError: [Errno 2] No such file or directory: '/bin/true'
+    substituteInPlace numpy/_core/tests/test_cpu_features.py \
+      --replace-fail '/bin/true' '${lib.getExe' coreutils "true"}'
   '';
 
   build-system = [
@@ -160,6 +179,10 @@ buildPythonPackage rec {
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     # AssertionError: (np.int64(0), np.longdouble('9.9999999999999994515e-21'), np.longdouble('3.9696755572509052902e+20'), 'arctanh')
     "test_loss_of_precision"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isBigEndian) [
+    # https://github.com/numpy/numpy/issues/29918
+    "test_sq_cases"
   ]
   ++ lib.optionals (stdenv.hostPlatform ? gcc.arch) [
     # remove if https://github.com/numpy/numpy/issues/27460 is resolved

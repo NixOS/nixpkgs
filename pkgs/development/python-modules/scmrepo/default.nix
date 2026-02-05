@@ -11,7 +11,6 @@
   pathspec,
   pygit2,
   pygtrie,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   tqdm,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "scmrepo";
   version = "3.5.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "iterative";
@@ -54,11 +51,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "scmrepo" ];
 
-  meta = with lib; {
+  meta = {
     description = "SCM wrapper and fsspec filesystem";
     homepage = "https://github.com/iterative/scmrepo";
     changelog = "https://github.com/iterative/scmrepo/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

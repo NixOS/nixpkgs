@@ -8,7 +8,19 @@
   makeWrapper,
   runtimeShell,
   gtk3,
-  xorg,
+  libxtst,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  libxshmfence,
+  libxkbfile,
   glib,
   cairo,
   pango,
@@ -40,7 +52,7 @@
 
 let
   pname = "mongodb-compass";
-  version = "1.48.1";
+  version = "1.49.1";
 
   selectSystem =
     attrs:
@@ -55,9 +67,9 @@ let
       }
     }";
     hash = selectSystem {
-      x86_64-linux = "sha256-C+0IezU2kAQzju3Ev2xl82ybQeB8B8ViXDHoRXPHIus=";
-      x86_64-darwin = "sha256-LtiXq1chSRUj/hgVRvHwS1KvJKiQW838K8EVSdmNSQk=";
-      aarch64-darwin = "sha256-P0VfIRmBgF65BcxoRNIh6e6ccqztO/BG7qtYP528YDI=";
+      x86_64-linux = "sha256-6wjwV6KViRJiJiS+Cc3+sjLjKm/K7dGHUHAx9u5Rngk=";
+      x86_64-darwin = "sha256-v4lxvKMcLabMfshpBD4PqCXcyf/cJz+kn6qKIfLruNc=";
+      aarch64-darwin = "sha256-7FmRgA+5qHUiozGGlzGM/gWffzcpHwiOY52yGKvH5GY=";
     };
   };
 
@@ -90,19 +102,19 @@ let
     pango
     stdenv.cc.cc
     systemd
-    xorg.libX11
-    xorg.libXScrnSaver
-    xorg.libXcomposite
-    xorg.libXcursor
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libXtst
-    xorg.libxkbfile
-    xorg.libxshmfence
+    libx11
+    libxscrnsaver
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxrandr
+    libxrender
+    libxtst
+    libxkbfile
+    libxshmfence
     (lib.getLib stdenv.cc.cc)
   ];
 in
@@ -179,7 +191,6 @@ stdenv.mkDerivation (finalAttrs: {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "mongodb-compass";
     maintainers = with lib.maintainers; [
-      bryanasdev000
       friedow
       iamanaws
     ];

@@ -9,14 +9,14 @@
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "html2text";
   version = "2.3.0";
 
   src = fetchFromGitLab {
     owner = "grobian";
     repo = "html2text";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-e/KWyc7lOdWhtFC7ZAD7sYgCsO3JzGkLUThVI7edqIQ=";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.eikek ];
   };
-}
+})

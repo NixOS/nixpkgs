@@ -7,7 +7,7 @@
 python3Packages.buildPythonPackage rec {
   pname = "lesscpy";
   version = "0.15.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -25,11 +25,11 @@ python3Packages.buildPythonPackage rec {
 
   pythonImportsCheck = [ "lesscpy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python LESS Compiler";
     mainProgram = "lesscpy";
     homepage = "https://github.com/lesscpy/lesscpy";
-    license = licenses.mit;
-    maintainers = with maintainers; [ s1341 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ s1341 ];
   };
 }

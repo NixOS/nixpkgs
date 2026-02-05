@@ -1,10 +1,11 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   qmake,
   qtbase,
   pkg-config,
+  wrapQtAppsHook,
   taglib,
   libbass,
   libbass_fx,
@@ -15,7 +16,7 @@
 # there’s a WIP branch here:
 # https://github.com/UltraStar-Deluxe/UltraStar-Creator/commits/BASS_removed
 
-mkDerivation {
+stdenv.mkDerivation {
   pname = "ultrastar-creator";
   version = "2019-04-23";
 
@@ -45,6 +46,7 @@ mkDerivation {
   nativeBuildInputs = [
     qmake
     pkg-config
+    wrapQtAppsHook
   ];
   buildInputs = [
     qtbase
@@ -53,11 +55,11 @@ mkDerivation {
     libbass_fx
   ];
 
-  meta = with lib; {
+  meta = {
     mainProgram = "UltraStar-Creator";
     description = "Ultrastar karaoke song creation tool";
     homepage = "https://github.com/UltraStar-Deluxe/UltraStar-Creator";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ Profpatsch ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ Profpatsch ];
   };
 }

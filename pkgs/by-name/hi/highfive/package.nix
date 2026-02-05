@@ -12,14 +12,14 @@
 
 assert mpiSupport -> mpi != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "highfive${lib.optionalString mpiSupport "-mpi"}";
   version = "2.10.1";
 
   src = fetchFromGitHub {
     owner = "BlueBrain";
     repo = "HighFive";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Nv+nbel/xGlGTB8sKF0EM1xwz/ZEri5uGB7ma6Ba6fo=";
   };
 
@@ -45,11 +45,11 @@ stdenv.mkDerivation rec {
   ]
   ++ (lib.optionals mpiSupport [ "-DHIGHFIVE_PARALLEL_HDF5=ON" ]);
 
-  meta = with lib; {
+  meta = {
     description = "Header-only C++ HDF5 interface";
-    license = licenses.boost;
+    license = lib.licenses.boost;
     homepage = "https://bluebrain.github.io/HighFive/";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ robertodr ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ robertodr ];
   };
-}
+})

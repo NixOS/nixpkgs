@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   version = "4.16.1";
 
   src = fetchurl {
-    url = "mirror://apache/flex/${version}/binaries/${pname}-${version}-bin.tar.gz";
+    url = "mirror://apache/flex/${version}/binaries/apache-flex-sdk-${version}-bin.tar.gz";
     sha256 = "13iq16dqvgcpb0p35x66hzxsq5pkbr2lbwr766nnqiryinnagz8p";
   };
 
@@ -54,10 +54,10 @@ stdenv.mkDerivation rec {
 
   dontFixup = true;
 
-  meta = with lib; {
+  meta = {
     description = "Flex SDK for Adobe Flash / ActionScript";
     homepage = "https://flex.apache.org/";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ dywedir ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ dywedir ];
   };
 }

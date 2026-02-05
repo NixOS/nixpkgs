@@ -9,14 +9,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pytr";
-  version = "0.4.3";
+  version = "0.4.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytr-org";
     repo = "pytr";
     tag = "v${version}";
-    hash = "sha256-72CxtO9AvjgK0lwcjHZexfedpNbrFEvRSN30hhiv+Zk=";
+    hash = "sha256-VfNoovNGvu1tNbYYiIX8KTOfll0WrHxJsLk/Yoyhu6s=";
   };
 
   build-system = with python3Packages; [
@@ -49,8 +49,6 @@ python3Packages.buildPythonApplication rec {
     versionCheckHook
     python3Packages.pytestCheckHook
   ];
-
-  versionCheckProgramArg = "--version";
 
   pythonImportsCheck = [ "pytr" ];
 

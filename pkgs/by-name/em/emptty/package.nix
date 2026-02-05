@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "emptty";
-  version = "0.14.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "tvrzna";
     repo = "emptty";
     rev = "v${version}";
-    hash = "sha256-AsIt7EI5RkSchhaMGKofOsfPNROhX8f5gDaqZ7Q2394=";
+    hash = "sha256-7RYzj+LcxK9i2RM8NFfKjz2DiD9CjCTNSJe7wVnYzdM=";
   };
 
   buildInputs = [
@@ -25,11 +25,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-PLyemAUcCz9H7+nAxftki3G7rQoEeyPzY3YUEj2RFn4=";
 
-  meta = with lib; {
+  meta = {
     description = "Dead simple CLI Display Manager on TTY";
     homepage = "https://github.com/tvrzna/emptty";
-    license = licenses.mit;
-    maintainers = with maintainers; [ urandom ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     # many undefined functions
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "emptty";

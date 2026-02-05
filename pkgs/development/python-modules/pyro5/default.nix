@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchPypi,
   serpent,
-  pythonOlder,
   pytestCheckHook,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pyro5";
   version = "5.15";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "Pyro5";
@@ -41,11 +38,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "Pyro5" ];
 
-  meta = with lib; {
+  meta = {
     description = "Distributed object middleware for Python (RPC)";
     homepage = "https://github.com/irmen/Pyro5";
     changelog = "https://github.com/irmen/Pyro5/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ peterhoeg ];
   };
 }

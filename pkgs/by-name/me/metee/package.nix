@@ -7,12 +7,12 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "metee";
-  version = "6.0.2";
+  version = "6.2.1";
   src = fetchFromGitHub {
     owner = "intel";
     repo = "metee";
     tag = finalAttrs.version;
-    hash = "sha256-eQpw0VdO+JGtgW4FGduoxY0Gji4hFPSONcEzDRcgWGU=";
+    hash = "sha256-TMHc/0N1DUx+aKOCrfBRoQgKj968FIq+FcusyLG0oPI=";
   };
 
   nativeBuildInputs = [ cmake ];

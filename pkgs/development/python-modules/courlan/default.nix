@@ -5,7 +5,6 @@
   fetchPypi,
   langcodes,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   tld,
   urllib3,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "courlan";
   version = "1.3.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -47,12 +44,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "courlan" ];
 
-  meta = with lib; {
+  meta = {
     description = "Clean, filter and sample URLs to optimize data collection";
     homepage = "https://github.com/adbar/courlan";
     changelog = "https://github.com/adbar/courlan/blob/v${version}/HISTORY.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jokatzke ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jokatzke ];
     mainProgram = "courlan";
   };
 }

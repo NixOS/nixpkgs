@@ -2,15 +2,12 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "rcssmin";
   version = "1.2.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -23,10 +20,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rcssmin" ];
 
-  meta = with lib; {
+  meta = {
     description = "CSS minifier written in pure python";
     homepage = "http://opensource.perlig.de/rcssmin/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

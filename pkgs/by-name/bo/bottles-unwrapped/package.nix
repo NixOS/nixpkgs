@@ -32,19 +32,20 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "bottles-unwrapped";
-  version = "52.0";
+  version = "61.1";
 
   src = fetchFromGitHub {
     owner = "bottlesdevs";
     repo = "bottles";
     tag = version;
-    hash = "sha256-nly5DldxJtgBLpXdVpfQwu3qTQm9E0MmC3i4QGYbOEw=";
+    hash = "sha256-LW+os+5DtdUBZWONu2YX4FYMtAYg4BDlKbnVF64T2xI=";
   };
 
   patches = [
     ./vulkan_icd.patch
     ./redirect-bugtracker.patch
     ./remove-flatpak-check.patch
+    ./terminal.patch # Needed for `Launch with Terminal`
   ]
   ++ (
     if removeWarningPopup then
@@ -95,6 +96,7 @@ python3Packages.buildPythonApplication rec {
       urllib3
       certifi
       pefile
+      yara-python
     ]
     ++ [
       cabextract
@@ -114,7 +116,7 @@ python3Packages.buildPythonApplication rec {
       procps
     ];
 
-  format = "other";
+  pyproject = false;
   dontWrapGApps = true; # prevent double wrapping
 
   preFixup = ''
@@ -130,7 +132,6 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       psydvl
-      shamilton
       Gliczy
       XBagon
     ];

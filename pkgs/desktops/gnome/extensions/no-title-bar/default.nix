@@ -5,7 +5,8 @@
   replaceVars,
   glib,
   gettext,
-  xorg,
+  xwininfo,
+  xprop,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,8 +27,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     (replaceVars ./fix-paths.patch {
-      xprop = "${xorg.xprop}/bin/xprop";
-      xwininfo = "${xorg.xwininfo}/bin/xwininfo";
+      xprop = "${xprop}/bin/xprop";
+      xwininfo = "${xwininfo}/bin/xwininfo";
     })
   ];
 
@@ -37,11 +38,11 @@ stdenv.mkDerivation rec {
     extensionUuid = "no-title-bar@jonaspoehler.de";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Integrates maximized windows with the top panel";
     homepage = "https://github.com/poehlerj/no-title-bar";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ svsdep ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ svsdep ];
+    platforms = lib.platforms.linux;
   };
 }

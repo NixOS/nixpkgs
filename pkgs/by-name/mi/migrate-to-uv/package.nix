@@ -11,19 +11,19 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "migrate-to-uv";
-  version = "0.7.3";
+  version = "0.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mkniewallner";
     repo = "migrate-to-uv";
     tag = version;
-    hash = "sha256-hLcWZKY1wauGpcAn+tC4P1zvFid7QDVXUK24QSIJ4u0=";
+    hash = "sha256-oGkxKuaRaZf6pQEBooogg8al7GFhb9b3wyd7nKqjh6o=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src pname version;
-    hash = "sha256-nyJ2UbdBcNX8mNpq447fM2QuscTdJwnjqP7AKBKv7kY=";
+    hash = "sha256-IO6MK2N012T3JIKqGylDCf4GlU/m1R6Ex0PlSoJixRQ=";
   };
 
   build-system = [
@@ -34,7 +34,6 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   nativeCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 

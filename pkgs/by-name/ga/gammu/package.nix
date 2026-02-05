@@ -20,14 +20,14 @@
   libpq ? null,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gammu";
   version = "1.42.0";
 
   src = fetchFromGitHub {
     owner = "gammu";
     repo = "gammu";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-aeaGHVxOMiXRU6RHws+oAnzdO9RY1jw/X/xuGfSt76I=";
   };
 
@@ -67,11 +67,11 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals postgresSupport [ libpq ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://wammu.eu/gammu/";
     description = "Command line utility and library to control mobile phones";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

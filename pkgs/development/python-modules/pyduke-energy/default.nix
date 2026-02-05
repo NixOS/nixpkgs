@@ -9,15 +9,12 @@
   pytest-timeout,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyduke-energy";
   version = "1.0.6";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mjmeli";
@@ -41,11 +38,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyduke_energy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for the Duke Energy API";
     homepage = "https://github.com/mjmeli/pyduke-energy";
     changelog = "https://github.com/mjmeli/pyduke-energy/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

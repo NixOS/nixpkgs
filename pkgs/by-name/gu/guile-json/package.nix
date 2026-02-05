@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "4.7.3";
 
   src = fetchurl {
-    url = "mirror://savannah/guile-json/${pname}-${version}.tar.gz";
+    url = "mirror://savannah/guile-json/guile-json-${version}.tar.gz";
     sha256 = "sha256-OLoEjtKdEvBbMsWy+3pReVxEi0HkA6Kxty/wA1gX84g=";
   };
 
@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
   doCheck = true;
   makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
 
-  meta = with lib; {
+  meta = {
     description = "JSON Bindings for GNU Guile";
     homepage = "https://savannah.nongnu.org/projects/guile-json";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ethancedwards8 ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ ethancedwards8 ];
+    platforms = lib.platforms.all;
   };
 }

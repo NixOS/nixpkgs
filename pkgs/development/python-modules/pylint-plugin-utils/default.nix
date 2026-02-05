@@ -5,7 +5,6 @@
   poetry-core,
   pylint,
   pytestCheckHook,
-  pythonOlder,
   toml,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "pylint-plugin-utils";
   version = "0.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "PyCQA";
@@ -34,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pylint_plugin_utils" ];
 
-  meta = with lib; {
+  meta = {
     description = "Utilities and helpers for writing Pylint plugins";
     homepage = "https://github.com/PyCQA/pylint-plugin-utils";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ kamadorueda ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 }

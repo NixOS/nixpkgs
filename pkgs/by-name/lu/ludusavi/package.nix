@@ -125,7 +125,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       pasqui23
       megheaiulian
-      iedame
     ];
     mainProgram = "ludusavi";
   };

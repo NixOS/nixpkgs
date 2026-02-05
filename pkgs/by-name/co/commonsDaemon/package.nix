@@ -4,17 +4,17 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.4.1";
   pname = "commons-daemon";
 
   src = fetchurl {
-    url = "mirror://apache/commons/daemon/binaries/commons-daemon-${version}-bin.tar.gz";
+    url = "mirror://apache/commons/daemon/binaries/commons-daemon-${finalAttrs.version}-bin.tar.gz";
     sha256 = "sha256-pfKrZ3duDz5wKTn3+SM+ye3UNN129VWCPOeI7JSuYts=";
   };
 
   installPhase = ''
-    tar xf ${src}
+    tar xf ${finalAttrs.src}
     mkdir -p $out/share/java
     cp *.jar $out/share/java/
   '';
@@ -27,4 +27,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     platforms = with lib.platforms; unix;
   };
-}
+})

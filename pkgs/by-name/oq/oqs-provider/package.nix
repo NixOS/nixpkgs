@@ -8,7 +8,7 @@
   nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  name = "oqs-provider";
+  pname = "oqs-provider";
   version = "0.10.0";
 
   src = fetchFromGitHub {
@@ -50,11 +50,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/open-quantum-safe/oqs-provider";
     description = "Open Quantum Safe provider for OpenSSL (3.x)";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rixxc ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rixxc ];
+    platforms = lib.platforms.all;
   };
 })

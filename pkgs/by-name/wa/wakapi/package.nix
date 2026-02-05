@@ -6,7 +6,7 @@
   nix-update-script,
 }:
 let
-  version = "2.15.0";
+  version = "2.17.1";
 in
 buildGoLatestModule {
   pname = "wakapi";
@@ -16,21 +16,24 @@ buildGoLatestModule {
     owner = "muety";
     repo = "wakapi";
     tag = version;
-    hash = "sha256-tRLZV8vZEvPq5hsUhj5h3AtSGvYXm1SXc+w3CRZFIRU=";
+    hash = "sha256-/7jYfLs9IcAWYVWISdDeXWV+PfHGFjkxcFkpqH2lxS8=";
   };
 
-  vendorHash = "sha256-912x6LwitYXdjWpP75Xoc56JXadeLQZuESSyLoaJcU0=";
+  vendorHash = "sha256-AA9gIIUsoJG4RnDZ1fAJu+iqeXXbRbprBVxuVvR1tzo=";
 
   # Not a go module required by the project, contains development utilities
   excludedPackages = [ "scripts" ];
 
   # Fix up reported version
-  postPatch = ''echo ${version} > version.txt'';
+  postPatch = "echo ${version} > version.txt";
 
   ldflags = [
     "-s"
     "-w"
   ];
+
+  # Skip tests that require network access
+  checkFlags = [ "-skip=TestLoginHandlerTestSuite" ];
 
   passthru = {
     nixos = nixosTests.wakapi;

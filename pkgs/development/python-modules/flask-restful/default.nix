@@ -8,7 +8,6 @@
   fetchpatch2,
   mock,
   pytest8_3CheckHook,
-  pythonOlder,
   pytz,
   six,
   werkzeug,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "flask-restful";
   version = "0.3.10";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "Flask-RESTful";
@@ -66,14 +63,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flask_restful" ];
 
-  meta = with lib; {
+  meta = {
     description = "Framework for creating REST APIs";
     homepage = "https://flask-restful.readthedocs.io";
     longDescription = ''
       Flask-RESTful provides the building blocks for creating a great
       REST API.
     '';
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   # deps
   setuptools,
   aiohttp,
@@ -28,8 +27,6 @@ buildPythonPackage rec {
   pname = "mautrix";
   version = "0.20.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "mautrix";
@@ -75,14 +72,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mautrix" ];
 
-  meta = with lib; {
+  meta = {
     description = "Asyncio Matrix framework";
     homepage = "https://github.com/tulir/mautrix-python";
     changelog = "https://github.com/mautrix/python/releases/tag/v${version}";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [
       nyanloutre
-      ma27
       sumnerevans
       nickcao
     ];

@@ -3,7 +3,9 @@
   stdenv,
   fetchFromGitHub,
   makeWrapper,
-  xorg,
+  libxt,
+  libxinerama,
+  libx11,
   imlib2Full,
   libjpeg,
   libpng,
@@ -34,9 +36,9 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = [
-    xorg.libXt
-    xorg.libX11
-    xorg.libXinerama
+    libxt
+    libx11
+    libxinerama
     imlib2Full
     libjpeg
     libpng
@@ -65,17 +67,16 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = lib.singleton (perl.withPackages (p: [ p.TestCommand ]));
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Light-weight image viewer";
     homepage = "https://feh.finalrewind.org/";
     # released under a variant of the MIT license
     # https://spdx.org/licenses/MIT-feh.html
-    license = licenses.mit-feh;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit-feh;
+    maintainers = with lib.maintainers; [
       gepbird
-      globin
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "feh";
   };
 })

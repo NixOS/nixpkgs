@@ -14,14 +14,14 @@
   swig,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nnpdf";
   version = "4.0.9";
 
   src = fetchFromGitHub {
     owner = "NNPDF";
     repo = "nnpdf";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-PyhkHlOlzKfDxUX91NkeZWjdEzFR4PW0Yh5Yz6ZA27g=";
   };
 
@@ -57,12 +57,12 @@ stdenv.mkDerivation rec {
     "-DCOMPILE_evolvefit=ON"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Open-source machine learning framework for global analyses of parton distributions";
     mainProgram = "evolven3fit";
     homepage = "https://docs.nnpdf.science/";
-    license = licenses.gpl3Only;
-    maintainers = [ maintainers.veprbl ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Only;
+    maintainers = [ lib.maintainers.veprbl ];
+    platforms = lib.platforms.unix;
   };
-}
+})

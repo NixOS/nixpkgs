@@ -22,11 +22,10 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/shoenig/marathonctl";
     description = "CLI tool for Marathon";
-    license = licenses.mit;
-    maintainers = with maintainers; [ manveru ];
+    license = lib.licenses.mit;
     mainProgram = "marathonctl";
   };
 }

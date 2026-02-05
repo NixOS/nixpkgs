@@ -13,15 +13,15 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "oidc-agent";
-  version = "5.3.3";
+  version = "5.3.4";
 
   src = fetchFromGitHub {
     owner = "indigo-dc";
     repo = "oidc-agent";
-    rev = "v${version}";
-    hash = "sha256-PV1aswfvEMtsgHWKfdtIo/BV+MHKKdul2vjFdyoT2Ic=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-hM5Q1xrjFOCIL5BLRvhVMmPiip1bwRo0ikeQXu/Oouk=";
   };
 
   nativeBuildInputs = [
@@ -62,10 +62,10 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Manage OpenID Connect tokens on the command line";
     homepage = "https://github.com/indigo-dc/oidc-agent";
-    maintainers = with maintainers; [ xinyangli ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ xinyangli ];
+    license = lib.licenses.mit;
   };
-}
+})

@@ -5,7 +5,6 @@
   fetchPypi,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   pyyaml,
   setuptools,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "related";
   version = "0.7.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -66,10 +63,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "related" ];
 
-  meta = with lib; {
+  meta = {
     description = "Nested Object Models in Python";
     homepage = "https://github.com/genomoncology/related";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

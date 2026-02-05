@@ -11,14 +11,14 @@
   lib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gpick";
   version = "0.3";
 
   src = fetchFromGitHub {
     owner = "thezbyg";
     repo = "gpick";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Z17YpdAAr2wvDFkrAosyCN6Y/wsFVkiB9IDvXuP9lYo=";
   };
 
@@ -53,12 +53,12 @@ stdenv.mkDerivation rec {
     lua
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Advanced color picker written in C++ using GTK+ toolkit";
     homepage = "https://www.gpick.org/";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.vanilla ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.vanilla ];
+    platforms = lib.platforms.linux;
     mainProgram = "gpick";
   };
-}
+})

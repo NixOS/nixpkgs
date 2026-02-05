@@ -18,7 +18,7 @@ in
   name = "kanidm-provisioning-${kanidmPackage.version}";
   meta.maintainers = with pkgs.lib.maintainers; [ oddlama ];
 
-  _module.args.kanidmPackage = pkgs.lib.mkDefault pkgs.kanidmWithSecretProvisioning;
+  _module.args.kanidmPackage = pkgs.lib.mkDefault pkgs.kanidmWithSecretProvisioning_1_8;
 
   nodes.provision =
     { pkgs, lib, ... }:

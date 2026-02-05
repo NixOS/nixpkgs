@@ -6,8 +6,8 @@
   zlib,
   libX11,
   libXext,
-  libSM,
-  libICE,
+  libsm,
+  libice,
   libxkbcommon,
   libxshmfence,
   libXfixes,
@@ -66,7 +66,7 @@
 
 stdenv.mkDerivation rec {
   pname = "vivaldi";
-  version = "7.6.3797.63";
+  version = "7.8.3925.56";
 
   suffix =
     {
@@ -79,8 +79,8 @@ stdenv.mkDerivation rec {
     url = "https://downloads.vivaldi.com/stable/vivaldi-stable_${version}-1_${suffix}.deb";
     hash =
       {
-        aarch64-linux = "sha256-byMooo6J8ycd6Nhmd8UUXJgDZA+Da+rCZauXQRWXIq8=";
-        x86_64-linux = "sha256-6ernnmXIg+h8lOYo4MTDTuCDuTJ87VIR8UNDr2EHIJA=";
+        aarch64-linux = "sha256-ZfxeBtArPGxvM6ocCEbcM8afTcLTl0TM2xCILNDB1Bo=";
+        x86_64-linux = "sha256-j1u0WlOqRPh+/NjowpAXKRPACxmdImi9ma2ILFDgWpQ=";
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
@@ -107,8 +107,8 @@ stdenv.mkDerivation rec {
     libX11
     libXt
     libXext
-    libSM
-    libICE
+    libsm
+    libice
     libxcb
     libxkbcommon
     libxshmfence
@@ -202,7 +202,7 @@ stdenv.mkDerivation rec {
     substituteInPlace "$out"/share/applications/*.desktop \
       --replace-fail vivaldi-stable vivaldi
     local d
-    for d in 16 22 24 32 48 64 128 256; do
+    for d in 16 24 32 48 64 128 256; do
       mkdir -p "$out"/share/icons/hicolor/''${d}x''${d}/apps
       ln -s \
         "$out"/opt/vivaldi/product_logo_''${d}.png \

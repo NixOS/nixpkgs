@@ -32,8 +32,6 @@
   socat,
   libslirp,
   libcbor,
-  apple-sdk_13,
-  darwinMinVersionHook,
   guestAgentSupport ?
     (with stdenv.hostPlatform; isLinux || isNetBSD || isOpenBSD || isSunOS || isWindows) && !minimal,
   numaSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32 && !minimal,
@@ -128,14 +126,6 @@ assert lib.assertMsg (
 
 let
   hexagonSupport = hostCpuTargets == null || lib.elem "hexagon" hostCpuTargets;
-
-  # needed in buildInputs and depsBuildBuild
-  # check log for warnings eg: `warning: 'hv_vm_config_get_max_ipa_size' is only available on macOS 13.0`
-  # to indicate if min version needs to get bumped.
-  darwinSDK = [
-    apple-sdk_13
-    (darwinMinVersionHook "13")
-  ];
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -146,17 +136,16 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString nixosTestRunner "-for-vm-tests"
     + lib.optionalString toolsOnly "-utils"
     + lib.optionalString userOnly "-user";
-  version = "10.1.2";
+  version = "10.2.0";
 
   src = fetchurl {
     url = "https://download.qemu.org/qemu-${finalAttrs.version}.tar.xz";
-    hash = "sha256-nXXzMcGly5tuuP2fZPVj7C6rNGyCLLl/izXNgtPxFHk=";
+    hash = "sha256-njCtG4ufe0RjABWC0aspfznPzOpdCFQMDKbWZyeFiDo=";
   };
 
   depsBuildBuild = [
     buildPackages.stdenv.cc
   ]
-  ++ lib.optionals stdenv.buildPlatform.isDarwin darwinSDK
   ++ lib.optionals hexagonSupport [ pkg-config ];
 
   nativeBuildInputs = [
@@ -205,7 +194,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (!userOnly) [ curl ]
   ++ lib.optionals ncursesSupport [ ncurses ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin darwinSDK
   ++ lib.optionals seccompSupport [ libseccomp ]
   ++ lib.optionals numaSupport [ numactl ]
   ++ lib.optionals alsaSupport [ alsa-lib ]
@@ -279,6 +267,50 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.com/qemu-project/qemu/-/commit/3e4546d5bd38a1e98d4bd2de48631abf0398a3a2.diff";
       sha256 = "sha256-oC+bRjEHixv1QEFO9XAm4HHOwoiT+NkhknKGPydnZ5E=";
       revert = true;
+    })
+
+    # Implement termios2 (TCGETS2 etc) for glibc 2.42 compatibility. Should be in the next release.
+    # https://gitlab.com/qemu-project/qemu/-/issues/3065
+    # https://lore.kernel.org/qemu-devel/20260103153239.15787-1-dilfridge@gentoo.org/t/#u
+    (fetchpatch {
+      name = "0001-Add-termios2-support-to-linux-user.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/e9a8a10e84c1bf6e2e8be000e4dd5c83ba0d8470.patch";
+      hash = "sha256-Zc+ZjiSug3uT/F7+mmoYc2VXqw2MV6UubYqB+pr2dNY=";
+    })
+    (fetchpatch {
+      name = "0002-Add-termios2-support-to-alpha-target.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/8d8c6aeee8599a099e49ec4411f3d1e087ae40ad.patch";
+      hash = "sha256-5e5vUp9nr96ZmVA98W/ETReLbkofayysJXlx1Ck9gDs=";
+    })
+    (fetchpatch {
+      name = "0003-Add-termios2-support-to-hppa-target.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/edc741710acedd61011f937967b960d154794258.patch";
+      hash = "sha256-nls6eTOB06eqACjQ/r1sQvb9YaYmrpJcegsDGqKAOaI=";
+    })
+    (fetchpatch {
+      name = "0004-Add-termios2-support-to-mips-target.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/edf9184f4feb691b0f70dc544443db2380891598.patch";
+      hash = "sha256-GrBhyMq2QiCc+WlUwaB9j4G8vB3ipxJRV5Hvyab/5Fk=";
+    })
+    (fetchpatch {
+      name = "0005-Add-termios2-support-to-sh4-target.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/afbe0ff81c29d674b9c18a588bcaab34ddcb8a7b.patch";
+      hash = "sha256-h+9eC6H8/GJ85Lt1Y0ggdJbbgTIvDfIJkPQfX/FgO4c=";
+    })
+    (fetchpatch {
+      name = "0006-Add-termios2-support-to-sparc-target.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/947b971cad90375040f399899909a3f1f32b483f.patch";
+      hash = "sha256-/JvF25aSR2mBSvkpqupDySMJYZI+lv7L0YwhqiaDk3A=";
+    })
+    (fetchpatch {
+      name = "0007-linux-user-Add-missing-termios-baud-rates.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/4f22fcb5c67f40a36e6654f6cfaee23f9f9e93d1.patch";
+      hash = "sha256-CM81yL0/i+fmQe8qzemre13N3A74J1HIC7ilCbb7ESQ=";
+    })
+    (fetchpatch {
+      name = "0008-linux-user-fixup-termios2-related-things-on-PowerPC.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/d68f0e2e906939bef076d0cd52f902d433c8c3da.patch";
+      hash = "sha256-vF47CKqg0wBBOUkHeJ3hv3nUHCftl2OwD3Nh0dL1PNk=";
     })
   ]
   ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;
@@ -442,14 +474,14 @@ stdenv.mkDerivation (finalAttrs: {
   requiredSystemFeatures = [ "big-parallel" ];
 
   meta =
-    with lib;
+
     {
       homepage = "https://www.qemu.org/";
       description = "Generic and open source machine emulator and virtualizer";
-      license = licenses.gpl2Plus;
-      maintainers = with maintainers; [ qyliss ];
+      license = lib.licenses.gpl2Plus;
+      maintainers = with lib.maintainers; [ qyliss ];
       teams = lib.optionals xenSupport xen.meta.teams;
-      platforms = platforms.unix;
+      platforms = lib.platforms.unix;
     }
     # toolsOnly: Does not have qemu-kvm and there's no main support tool
     # userOnly: There's one qemu-<arch> for every architecture
@@ -458,7 +490,7 @@ stdenv.mkDerivation (finalAttrs: {
     }
     # userOnly: https://qemu.readthedocs.io/en/v9.0.2/user/main.html
     // lib.optionalAttrs userOnly {
-      platforms = with platforms; (linux ++ freebsd ++ openbsd ++ netbsd);
+      platforms = with lib.platforms; (linux ++ freebsd ++ openbsd ++ netbsd);
       description = "QEMU User space emulator - launch executables compiled for one CPU on another CPU";
     };
 })

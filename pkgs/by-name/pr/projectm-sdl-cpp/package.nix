@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation {
   pname = "projectm-sdl-cpp";
-  version = "0-unstable-2025-10-17";
+  version = "0-unstable-2026-01-20";
 
   src = fetchFromGitHub {
     owner = "projectM-visualizer";
     repo = "frontend-sdl-cpp";
-    rev = "72e5632897c9d9bef452c679d3cbe8c7b4bb4157";
-    hash = "sha256-uO2+CX2DqVn6NdcZhBlKFIPuUQpz6N8LazG3ALJTSx0=";
+    rev = "7a07229428c51378f43843cf160bcddc21ef70ff";
+    hash = "sha256-hz1Au5Gn10Yi5f7d7UiQOHTCU00Ze5UoQ40jirg54Pc=";
     fetchSubmodules = true;
   };
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation {
   ];
 
   # poco 1.14 requires c++17
-  NIX_CFLAGS_COMPILE = [ "-std=gnu++17" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-std=gnu++17" ];
 
   strictDeps = true;
 

@@ -28,7 +28,7 @@ buildGoModule rec {
     homepage = "https://github.com/pherrymason/c3-lsp";
     changelog = "https://github.com/pherrymason/c3-lsp/blob/${src.rev}/changelog.md";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ arthsmn ];
+    maintainers = [ ];
     mainProgram = "c3-lsp";
     platforms = lib.platforms.all;
   };

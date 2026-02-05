@@ -2,10 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   docutils,
-  importlib-metadata,
   oset,
   pybtex,
   pybtex-docutils,
@@ -18,8 +16,6 @@ buildPythonPackage rec {
   pname = "sphinxcontrib-bibtex";
   version = "2.6.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mcmtroffaes";
@@ -36,9 +32,6 @@ buildPythonPackage rec {
     pybtex
     pybtex-docutils
     sphinx
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
   ];
 
   nativeCheckInputs = [
@@ -50,10 +43,10 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "sphinxcontrib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Sphinx extension for BibTeX style citations";
     homepage = "https://github.com/mcmtroffaes/sphinxcontrib-bibtex";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
   };
 }

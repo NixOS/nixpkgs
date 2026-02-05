@@ -98,6 +98,17 @@ let
     postPatch = ''
       substituteInPlace Modules/ThirdParty/KWSys/src/KWSys/CMakeLists.txt \
       --replace-fail 'cmake_minimum_required(VERSION 3.1 FATAL_ERROR)' 'cmake_minimum_required(VERSION 3.10)'
+      # fix build with GCC 15
+      substituteInPlace Modules/ThirdParty/GoogleTest/src/itkgoogletest/googletest/src/gtest-death-test.cc \
+        --replace-fail \
+          '#include <utility>' \
+          '#include <utility>
+          #include <cstdint>'
+      substituteInPlace Modules/Core/Common/include/itkFloatingPointExceptions.h \
+        --replace-fail \
+          '#include "itkSingletonMacro.h"' \
+          '#include "itkSingletonMacro.h"
+          #include <cstdint>'
     '';
 
     # fix the CMake config files for ITK which contains double slashes
@@ -216,22 +227,16 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "otb";
-  version = "10.0-unstable-2025-04-03";
+  version = "10.0-unstable-2025-12-11";
 
   src = fetchFromGitHub {
     owner = "orfeotoolbox";
     repo = "otb";
-    rev = "93649b68f54975a1a48a0acd49f2602a55fc8032";
-    hash = "sha256-S6yhV//qlKdWWcT9J1p64WuVS0QNepIYTr/t4JvyEwE=";
+    rev = "2dd72c102a0a95794c0cc3e7da1843bc67537f6e";
+    hash = "sha256-dLphF4h/QkO/lSVEmVUPuRRGDU5SRhNLoxXxHWpINbU=";
   };
 
   patches = [
-    # fixes for gdal 10
-    # https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/merge_requests/1056
-    (fetchpatch {
-      url = "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/merge_requests/1056/diffs.patch";
-      hash = "sha256-Zj/wkx0vxn5vqj0hszn7NxoYW1yf63G3HPVKbSdZIOY=";
-    })
     ./1-otb-swig-include-itk.diff
   ];
 

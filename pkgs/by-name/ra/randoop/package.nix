@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   pname = "randoop";
 
   src = fetchurl {
-    url = "https://github.com/randoop/randoop/releases/download/v${version}/${pname}-${version}.zip";
+    url = "https://github.com/randoop/randoop/releases/download/v${version}/randoop-${version}.zip";
     sha256 = "sha256-yzQw9l3uAq51SHXJ4rsZNRCiFdhOEoSrwv9iPvD2i9c=";
   };
 
@@ -23,12 +23,12 @@ stdenv.mkDerivation rec {
     cp README.txt $out/doc
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Automatic test generation for Java";
     homepage = "https://randoop.github.io/randoop/";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.mit;
-    maintainers = with maintainers; [ pSub ];
-    platforms = platforms.linux;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pSub ];
+    platforms = lib.platforms.linux;
   };
 }

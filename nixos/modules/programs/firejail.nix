@@ -34,14 +34,13 @@ let
                     extraArgs = [ ];
                   };
               args = lib.escapeShellArgs (
-                opts.extraArgs
-                ++ (lib.optional (opts.profile != null) "--profile=${builtins.toString opts.profile}")
+                opts.extraArgs ++ (lib.optional (opts.profile != null) "--profile=${toString opts.profile}")
               );
             in
             ''
               cat <<_EOF >$out/bin/${command}
               #! ${pkgs.runtimeShell} -e
-              exec /run/wrappers/bin/firejail ${args} -- ${builtins.toString opts.executable} "\$@"
+              exec /run/wrappers/bin/firejail ${args} -- ${toString opts.executable} "\$@"
               _EOF
               chmod 0755 $out/bin/${command}
 

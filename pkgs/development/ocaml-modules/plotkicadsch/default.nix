@@ -41,10 +41,10 @@ buildDunePackage {
     tyxml
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to export Kicad Sch files to SVG pictures";
     homepage = "https://github.com/jnavila/plotkicadsch";
-    license = licenses.isc;
-    maintainers = with maintainers; [ leungbk ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ leungbk ];
   };
 }

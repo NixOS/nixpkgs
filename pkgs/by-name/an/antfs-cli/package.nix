@@ -7,14 +7,14 @@
 python3Packages.buildPythonApplication {
   pname = "antfs-cli";
   version = "0-unstable-2017-02-11";
-  format = "pyproject";
+  pyproject = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Tigge/antfs-cli";
     description = "Extracts FIT files from ANT-FS based sport watches";
     mainProgram = "antfs-cli";
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
   };
 
   src = fetchFromGitHub {

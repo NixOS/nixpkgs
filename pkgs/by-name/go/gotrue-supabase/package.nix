@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "auth";
-  version = "2.180.0";
+  version = "2.186.0";
 
   src = fetchFromGitHub {
     owner = "supabase";
     repo = "auth";
     rev = "v${version}";
-    hash = "sha256-LtCe/VQMXbdarxK95+rvtaLYGtZ3U4DzLVK+T5HrWR4=";
+    hash = "sha256-8kB7gh5sp2D9dvyxsE/YMWoUx/jzAqw8nEBwB0XQlRQ=";
   };
 
-  vendorHash = "sha256-knYvNkEVffWisvb4Dhm5qqtqQ4co9MGoNt6yH6dUll8=";
+  vendorHash = "sha256-QrqucIuYIhIMsD93+6HWf74LwVncOsbFB9gJR1GdMvA=";
 
   ldflags = [
     "-s"
@@ -34,12 +34,12 @@ buildGoModule rec {
     inherit version;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/supabase/auth";
     description = "JWT based API for managing users and issuing JWT tokens";
     mainProgram = "auth";
     changelog = "https://github.com/supabase/auth/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ urandom ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

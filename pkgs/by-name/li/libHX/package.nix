@@ -1,46 +1,40 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  autoconf,
-  automake,
-  libtool,
+  fetchFromCodeberg,
+  autoreconfHook,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libHX";
-  version = "3.22";
+  version = "5.3";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/libhx/libHX/${version}/${pname}-${version}.tar.xz";
-    sha256 = "18w39j528lyg2026dr11f2xxxphy91cg870nx182wbd8cjlqf86c";
+  src = fetchFromCodeberg {
+    tag = "v${finalAttrs.version}";
+    owner = "jengelh";
+    repo = "libhx";
+    hash = "sha256-q9cIZhQx1BjD7Py0VEevKwFflJ1cdFn9RcW6q52t/h8=";
   };
 
-  patches = [ ];
+  nativeBuildInputs = [ autoreconfHook ];
 
-  nativeBuildInputs = [
-    autoconf
-    automake
-    libtool
-  ];
+  passthru.updateScript = nix-update-script { };
 
-  preConfigure = ''
-    sh autogen.sh
-  '';
-
-  meta = with lib; {
-    homepage = "https://libhx.sourceforge.net/";
+  meta = {
+    homepage = "https://inai.de/projects/libhx/";
     longDescription = ''
       libHX is a C library (with some C++ bindings available) that provides data structures
       and functions commonly needed, such as maps, deques, linked lists, string formatting
       and autoresizing, option and config file parsing, type checking casts and more.
     '';
-    maintainers = [ ];
-    platforms = platforms.linux;
-    license = with licenses; [
+    changelog = "https://codeberg.org/jengelh/libhx/src/branch/master/doc/changelog.rst";
+    maintainers = with lib.maintainers; [ chillcicada ];
+    platforms = lib.platforms.linux;
+    license = with lib.licenses; [
       gpl3
       lgpl21Plus
-      wtfpl
+      mit
     ];
   };
-}
+})

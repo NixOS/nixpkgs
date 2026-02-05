@@ -9,7 +9,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "bumpver";
   version = "2021.1110";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -47,11 +47,11 @@ python3.pkgs.buildPythonApplication rec {
     "test_parse_default_pattern"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Bump version numbers in project files";
     homepage = "https://pypi.org/project/bumpver/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kfollesdal ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kfollesdal ];
     mainProgram = "bumpver";
   };
 }

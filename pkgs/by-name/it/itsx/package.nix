@@ -6,12 +6,12 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.1.1";
   pname = "itsx";
 
   src = fetchurl {
-    url = "http://microbiology.se/sw/ITSx_${version}.tar.gz";
+    url = "http://microbiology.se/sw/ITSx_${finalAttrs.version}.tar.gz";
     sha256 = "0lrmy2n3ax7f208k0k8l3yz0j5cpz05hv4hx1nnxzn0c51z1pc31";
   };
 
@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
     cp -r ITSx_db $out/share
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Improved software detection and extraction of ITS1 and ITS2 from ribosomal ITS sequences of fungi and other eukaryotes for use in environmental sequencing";
     mainProgram = "ITSx";
     homepage = "https://microbiology.se/software/itsx/";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.bzizou ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.bzizou ];
+    platforms = lib.platforms.unix;
   };
-}
+})

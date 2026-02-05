@@ -1,5 +1,6 @@
 {
   config,
+  fetchpatch,
   fetchurl,
   stdenv,
   unixODBC,
@@ -60,6 +61,14 @@
       ./mariadb-connector-odbc-unistd.patch
 
       ./mariadb-connector-odbc-musl.patch
+
+      # Fix build with gcc15
+      # https://github.com/mariadb-corporation/mariadb-connector-odbc/pull/63
+      (fetchpatch {
+        name = "mariadb-connector-odbc-add-include-cstdint-gcc15.patch";
+        url = "https://github.com/mariadb-corporation/mariadb-connector-odbc/commit/a3ced654db2ef93de0a818f2d66171f6084e5f2d.patch";
+        hash = "sha256-GZITSryfRdAgNxZehasoBModGNZo575Dd5aokwNWzpY=";
+      })
     ];
 
     nativeBuildInputs = [ cmake ];
@@ -94,22 +103,31 @@
       driver = "lib/libmaodbc${stdenv.hostPlatform.extensions.sharedLibrary}";
     };
 
-    meta = with lib; {
+    meta = {
       description = "MariaDB ODBC database driver";
       homepage = "https://downloads.mariadb.org/connector-odbc/";
-      license = licenses.gpl2;
-      platforms = platforms.linux ++ platforms.darwin;
+      license = lib.licenses.gpl2;
+      platforms = lib.platforms.linux ++ lib.platforms.darwin;
     };
   };
 
   sqlite = stdenv.mkDerivation rec {
     pname = "sqlite-connector-odbc";
-    version = "0.9993";
+    version = "0.99991";
 
     src = fetchurl {
       url = "http://www.ch-werner.de/sqliteodbc/sqliteodbc-${version}.tar.gz";
-      sha256 = "0dgsj28sc7f7aprmdd0n5a1rmcx6pv7170c8dfjl0x1qsjxim6hs";
+      hash = "sha256-TZStuNPN4fqUoorrDfzHvnMUW8383z1eIlQ02zHcilw=";
     };
+
+    patches = [
+      # Fix build with gcc15
+      (fetchpatch {
+        name = "sqlite-connector-odbc-fix-incompatible-pointer-compilation-error.patch";
+        url = "https://src.fedoraproject.org/rpms/sqliteodbc/raw/e3d93f5909c884fd8846b36b71ba67a3ad65da2a/f/sqliteodbc-0.99991-Fix-incompatible-pointer-compilation-error.patch";
+        hash = "sha256-IAZDujEkAyU40sKa4GC+upURNt7vplCDAx91Eeny+bU=";
+      })
+    ];
 
     buildInputs = [
       unixODBC
@@ -137,12 +155,13 @@
       driver = "lib/libsqlite3odbc.so";
     };
 
-    meta = with lib; {
+    meta = {
       description = "ODBC driver for SQLite";
       homepage = "http://www.ch-werner.de/sqliteodbc";
-      license = licenses.bsd2;
-      platforms = platforms.unix;
-      maintainers = with maintainers; [ vlstill ];
+      changelog = "http://www.ch-werner.de/sqliteodbc/html/index.html#changelog";
+      license = lib.licenses.bsd2;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ vlstill ];
     };
   };
 
@@ -192,14 +211,14 @@
       driver = "lib/libmsodbcsql-${versionMajor}.${versionMinor}.so.${versionAdditional}";
     };
 
-    meta = with lib; {
+    meta = {
       broken = stdenv.hostPlatform.isDarwin;
       description = "ODBC Driver ${versionMajor} for SQL Server";
       homepage = "https://docs.microsoft.com/en-us/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-2017";
-      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-      license = licenses.unfree;
-      platforms = platforms.linux;
-      maintainers = with maintainers; [ spencerjanssen ];
+      sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+      license = lib.licenses.unfree;
+      platforms = lib.platforms.linux;
+      maintainers = with lib.maintainers; [ spencerjanssen ];
     };
   };
 
@@ -292,13 +311,13 @@
       }";
     };
 
-    meta = with lib; {
+    meta = {
       description = finalAttrs.passthru.fancyName;
       homepage = "https://learn.microsoft.com/en-us/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-ver16";
-      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-      platforms = platforms.unix;
-      license = licenses.unfree;
-      maintainers = with maintainers; [ SamirTalwar ];
+      sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+      platforms = lib.platforms.unix;
+      license = lib.licenses.unfree;
+      maintainers = with lib.maintainers; [ SamirTalwar ];
     };
   });
 
@@ -337,14 +356,14 @@
       driver = "lib/libamazonredshiftodbc64.so";
     };
 
-    meta = with lib; {
+    meta = {
       broken = stdenv.hostPlatform.isDarwin;
       description = "Amazon Redshift ODBC driver";
       homepage = "https://docs.aws.amazon.com/redshift/latest/mgmt/configure-odbc-connection.html";
-      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-      license = licenses.unfree;
-      platforms = platforms.linux;
-      maintainers = with maintainers; [ sir4ur0n ];
+      sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+      license = lib.licenses.unfree;
+      platforms = lib.platforms.linux;
+      maintainers = with lib.maintainers; [ sir4ur0n ];
     };
   };
 }

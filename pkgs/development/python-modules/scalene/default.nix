@@ -12,7 +12,6 @@
   psutil,
   pydantic,
   pytestCheckHook,
-  pythonOlder,
   rich,
   setuptools-scm,
   setuptools,
@@ -40,7 +39,6 @@ buildPythonPackage rec {
   pname = "scalene";
   version = "1.5.55";
   pyproject = true;
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "plasma-umass";
@@ -106,13 +104,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "scalene" ];
 
-  meta = with lib; {
+  meta = {
     description = "High-resolution, low-overhead CPU, GPU, and memory profiler for Python with AI-powered optimization suggestions";
     homepage = "https://github.com/plasma-umass/scalene";
     changelog = "https://github.com/plasma-umass/scalene/releases/tag/v${version}";
     mainProgram = "scalene";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ sarahec ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ sarahec ];
     badPlatforms = [
       # The scalene doesn't seem to account for arm64 linux
       "aarch64-linux"

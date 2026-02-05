@@ -5,7 +5,7 @@
   ninja,
   python3,
   weston,
-  xorg,
+  xauth,
   xwayland,
   withCage ? false,
   cage,
@@ -56,7 +56,7 @@ python3.pkgs.buildPythonApplication rec {
       --prefix PATH : ${
         lib.makeBinPath [
           xwayland
-          xorg.xauth
+          xauth
         ]
       }
     wrapProgram $out/bin/xwfb-run \
@@ -65,7 +65,7 @@ python3.pkgs.buildPythonApplication rec {
           compositors
           ++ [
             xwayland
-            xorg.xauth
+            xauth
           ]
         )
       }
@@ -76,7 +76,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "Set of small utilities revolving around running Xwayland and various Wayland compositor headless";
     homepage = "https://gitlab.freedesktop.org/ofourdan/xwayland-run";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ arthsmn ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

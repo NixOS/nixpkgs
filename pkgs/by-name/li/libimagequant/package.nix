@@ -15,13 +15,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "libimagequant";
-  version = "4.4.0";
+  version = "4.4.1";
 
   src = fetchFromGitHub {
     owner = "ImageOptim";
     repo = "libimagequant";
     rev = version;
-    hash = "sha256-c9j0wVwTWtNrPy9UUsc0Gxbe6lP82C3DMXe+k/ZBYEw=";
+    hash = "sha256-A7idjAAJ+syqIahyU+LPZBF+MLxVDymY+M3HM7d/qk0=";
   };
 
   cargoLock = {
@@ -57,12 +57,12 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pngquant.org/lib/";
     description = "Image quantization library";
     longDescription = "Small, portable C library for high-quality conversion of RGBA images to 8-bit indexed-color (palette) images.";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ ma9e ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ ma9e ];
   };
 }

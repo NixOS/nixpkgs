@@ -1,8 +1,0 @@
-{
-  "node_modules": {
-    "aarch64-linux": "3yXOsptDRUoyL/FBQu8esD4ipudOA9jyLenNt1WChMU=",
-    "x86_64-linux": "sha256-ocgmxMx+V6uBMLZTrHfYAqO4l38WQVCrQ2AbUWagaoM=",
-    "aarch64-darwin": "sha256-xNU+ucIy84iqmyoWKwwLBIV34TTmH/OGmIbIiNOPM/w=",
-    "x86_64-darwin": "sha256-9kplc7tpWgYnB+4471EBkE2xYF3RkpgKqpg26M6bUPs="
-  }
-}

@@ -8,7 +8,10 @@
   freetype,
   expat,
   wayland,
-  xorg,
+  libxrandr,
+  libxi,
+  libxcursor,
+  libx11,
   libxkbcommon,
   pop-launcher,
   vulkan-loader,
@@ -36,10 +39,10 @@ rustPlatform.buildRustPackage {
   buildInputs = [
     expat
     freetype
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXrandr
+    libx11
+    libxcursor
+    libxi
+    libxrandr
   ];
 
   postFixup =
@@ -61,15 +64,15 @@ rustPlatform.buildRustPackage {
         }
     '';
 
-  meta = with lib; {
+  meta = {
     description = "General purpose application launcher for X and wayland inspired by rofi/wofi and alfred";
     homepage = "https://github.com/onagre-launcher/onagre";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [
-      maintainers.jfvillablanca
-      maintainers.ilya-epifanov
+      lib.maintainers.jfvillablanca
+      lib.maintainers.ilya-epifanov
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "onagre";
   };
 }

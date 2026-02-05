@@ -7,6 +7,7 @@
   pkg-config,
   autoAddDriverRunpath,
   alsa-lib,
+  android-tools,
   brotli,
   bzip2,
   celt,
@@ -27,6 +28,7 @@
   libva,
   libvdpau,
   libxkbcommon,
+  openapv,
   openssl,
   openvr,
   pipewire,
@@ -59,6 +61,15 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace alvr/server_openvr/cpp/platform/linux/EncodePipelineVAAPI.cpp \
+      --replace-fail 'FF_PROFILE_H264_MAIN' 'AV_PROFILE_H264_MAIN' \
+      --replace-fail 'FF_PROFILE_H264_BASELINE' 'AV_PROFILE_H264_BASELINE' \
+      --replace-fail 'FF_PROFILE_H264_HIGH' 'AV_PROFILE_H264_HIGH' \
+      --replace-fail 'FF_PROFILE_HEVC_MAIN' 'AV_PROFILE_HEVC_MAIN' \
+      --replace-fail 'FF_PROFILE_AV1_MAIN' 'AV_PROFILE_AV1_MAIN'
+  '';
+
   env = {
     NIX_CFLAGS_COMPILE = toString [
       "-lbrotlicommon"
@@ -67,18 +78,19 @@ rustPlatform.buildRustPackage rec {
       "-lpng"
       "-lssl"
     ];
+    RUSTFLAGS = toString (
+      map (a: "-C link-arg=${a}") [
+        "-Wl,--push-state,--no-as-needed"
+        "-lEGL"
+        "-lwayland-client"
+        "-lxkbcommon"
+        "-Wl,--pop-state"
+      ]
+    );
   };
 
-  RUSTFLAGS = map (a: "-C link-arg=${a}") [
-    "-Wl,--push-state,--no-as-needed"
-    "-lEGL"
-    "-lwayland-client"
-    "-lxkbcommon"
-    "-Wl,--pop-state"
-  ];
-
   cargoBuildFlags = [
-    "--exclude alvr_xtask"
+    "--exclude=alvr_xtask"
     "--workspace"
   ];
 
@@ -91,6 +103,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     alsa-lib
+    android-tools
     brotli
     bzip2
     celt
@@ -111,6 +124,7 @@ rustPlatform.buildRustPackage rec {
     libva
     libvdpau
     libxkbcommon
+    openapv
     openssl
     openvr
     pipewire

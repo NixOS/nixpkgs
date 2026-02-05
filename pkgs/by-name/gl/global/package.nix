@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   version = "6.6.14";
 
   src = fetchurl {
-    url = "mirror://gnu/global/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/global/global-${version}.tar.gz";
     hash = "sha256-9uf9C2iu0pLoW7aGYWuvZVHVyUJK3N3KEdgIujGMsyA=";
   };
 
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
       --prefix PYTHONPATH : "$(toPythonPath ${pygments})"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Source code tag system";
     longDescription = ''
       GNU GLOBAL is a source code tagging system that works the same way
@@ -71,12 +71,12 @@ stdenv.mkDerivation rec {
       operating system like GNU and BSD.
     '';
     homepage = "https://www.gnu.org/software/global/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       pSub
       peterhoeg
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     changelog = "https://cvs.savannah.gnu.org/viewvc/global/global/NEWS?view=markup&pathrev=VERSION-${
       lib.replaceStrings [ "." ] [ "_" ] version
     }";

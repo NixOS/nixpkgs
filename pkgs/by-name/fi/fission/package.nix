@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "fission";
-  version = "1.21.0";
+  version = "1.22.0";
 
   src = fetchFromGitHub {
     owner = "fission";
     repo = "fission";
     rev = "v${version}";
-    hash = "sha256-Tl7aKibVbNAKOa1tycKtEzdJ8rJHBMa8PTUm0i7DKA4=";
+    hash = "sha256-5+TyOBHHDhHtAJUtrcWUCRbewGODsut/w3chrmL+dis=";
   };
 
-  vendorHash = "sha256-PhB6zR/dXnOCHJiJ/EjVOD26SubaAITRm61XOvULerU=";
+  vendorHash = "sha256-y5h1lMq99gWhB9T5e8b2t9USgKc2pv+FMgl9wva8t28=";
 
   ldflags = [
     "-s"
@@ -29,10 +29,10 @@ buildGoModule rec {
     ln -s $out/bin/fission-cli $out/bin/fission
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cli used by end user to interact Fission";
     homepage = "https://fission.io";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ neverbehave ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ neverbehave ];
   };
 }

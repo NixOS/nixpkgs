@@ -6,7 +6,7 @@
   cairomm,
   cmake,
   lv2,
-  libpthreadstubs,
+  libpthread-stubs,
   libXdmcp,
   libXft,
   ntk,
@@ -15,14 +15,14 @@
   zita-resampler,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "infamousPlugins";
   version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "ssj71";
     repo = "infamousPlugins";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-AhW4hLmCxz7yHMdxM6kOvtCXk1jEg/XtyPgt4yk1xqs=";
   };
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cairomm
     lv2
-    libpthreadstubs
+    libpthread-stubs
     libXdmcp
     libXft
     ntk
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://ssj71.github.io/infamousPlugins";
     description = "Collection of open-source LV2 plugins";
     longDescription = ''
@@ -69,9 +69,9 @@ stdenv.mkDerivation rec {
         * ewham - a whammy style pitchshifter
         * lushlife - a simulated double tracking plugin capable of everything from a thin beatle effect to thick lush choruses to weird outlandish effects
     '';
-    license = licenses.gpl2;
-    maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.linux;
     mainProgram = "infamous-rule";
   };
-}
+})

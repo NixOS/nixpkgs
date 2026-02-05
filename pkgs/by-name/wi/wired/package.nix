@@ -6,7 +6,11 @@
   dbus,
   pango,
   cairo,
-  xorg,
+  libxscrnsaver,
+  libxrandr,
+  libxi,
+  libxcursor,
+  libx11,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -29,11 +33,11 @@ rustPlatform.buildRustPackage rec {
     dbus
     pango
     cairo
-    xorg.libXScrnSaver
-    xorg.libXcursor
-    xorg.libXrandr
-    xorg.libX11
-    xorg.libXi
+    libxscrnsaver
+    libxcursor
+    libxrandr
+    libx11
+    libxi
   ];
 
   postInstall = ''

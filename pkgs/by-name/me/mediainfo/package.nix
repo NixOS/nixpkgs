@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mediainfo";
-  version = "25.09";
+  version = "25.10";
 
   src = fetchurl {
     url = "https://mediaarea.net/download/source/mediainfo/${version}/mediainfo_${version}.tar.xz";
-    hash = "sha256-jUug2L19QJf9CjiNQTHeQMNaxdvlKkdgt52PHSnvLmM=";
+    hash = "sha256-NmsyUQGrGppO55+9uOPdnni8wKIcD5sZZjE6rtPTNQI=";
   };
 
   nativeBuildInputs = [
@@ -34,16 +34,16 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Supplies technical and tag information about a video or audio file";
     longDescription = ''
       MediaInfo is a convenient unified display of the most relevant technical
       and tag data for video and audio files.
     '';
     homepage = "https://mediaarea.net/";
-    license = licenses.bsd2;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.devhell ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.devhell ];
     mainProgram = "mediainfo";
   };
 }

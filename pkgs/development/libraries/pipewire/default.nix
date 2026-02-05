@@ -57,7 +57,9 @@
   roc-toolkit,
   x11Support ? true,
   libcanberra,
-  xorg,
+  libxfixes,
+  libx11,
+  libxcb,
   libmysofa,
   ffadoSupport ?
     x11Support
@@ -66,6 +68,7 @@
   ffado,
   libselinux,
   libebur128,
+  bashNonInteractive,
 }:
 
 let
@@ -133,6 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
     lilv
     ncurses
     readline
+    bashNonInteractive
   ]
   ++ (
     if enableSystemd then
@@ -164,9 +168,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals x11Support [
     libcanberra
-    xorg.libX11
-    xorg.libxcb
-    xorg.libXfixes
+    libx11
+    libxcb
+    libxfixes
   ]
   ++ lib.optionals bluezSupport [
     bluez
@@ -260,14 +264,13 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Server and user space API to deal with multimedia pipelines";
     changelog = "https://gitlab.freedesktop.org/pipewire/pipewire/-/releases/${finalAttrs.version}";
     homepage = "https://pipewire.org/";
-    license = licenses.mit;
-    platforms = platforms.linux ++ platforms.freebsd;
-    maintainers = with maintainers; [
-      kranzes
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
+    maintainers = with lib.maintainers; [
       k900
     ];
     pkgConfigModules = [

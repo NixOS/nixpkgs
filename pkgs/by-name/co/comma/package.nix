@@ -12,14 +12,14 @@
   buildPackages,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "comma";
   version = "2.3.3";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "comma";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-dNek1a8Yt3icWc8ZpVe1NGuG+eSoTDOmAAJbkYmMocU=";
   };
 
@@ -60,11 +60,11 @@ rustPlatform.buildRustPackage rec {
     version = testers.testVersion { package = comma; };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/nix-community/comma";
     description = "Runs programs without installing them";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "comma";
-    maintainers = with maintainers; [ artturin ];
+    maintainers = with lib.maintainers; [ artturin ];
   };
-}
+})

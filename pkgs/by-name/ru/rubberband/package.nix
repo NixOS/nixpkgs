@@ -14,12 +14,12 @@
   ninja,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rubberband";
   version = "4.0.0";
 
   src = fetchurl {
-    url = "https://breakfastquay.com/files/releases/rubberband-${version}.tar.bz2";
+    url = "https://breakfastquay.com/files/releases/rubberband-${finalAttrs.version}.tar.bz2";
     hash = "sha256-rwUDE+5jvBizWy4GTl3OBbJ2qvbRqiuKgs7R/i+AKOk=";
   };
 
@@ -44,12 +44,12 @@ stdenv.mkDerivation rec {
   mesonFlags = [ "-Dtests=disabled" ];
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "High quality software library for audio time-stretching and pitch-shifting";
     homepage = "https://breakfastquay.com/rubberband/";
     # commercial license available as well, see homepage. You'll get some more optimized routines
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.marcweber ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.marcweber ];
+    platforms = lib.platforms.all;
   };
-}
+})

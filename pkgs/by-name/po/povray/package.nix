@@ -7,8 +7,8 @@
   boost,
   zlib,
   libX11,
-  libICE,
-  libSM,
+  libice,
+  libsm,
   libpng,
   libjpeg,
   libtiff,
@@ -36,8 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     boost
     libX11
-    libICE
-    libSM
+    libice
+    libsm
     libpng
     libjpeg
     libtiff

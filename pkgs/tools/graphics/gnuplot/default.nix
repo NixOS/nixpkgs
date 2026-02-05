@@ -17,34 +17,33 @@
   lua,
   withCaca ? false,
   libcaca,
-  libX11 ? null,
-  libXt ? null,
-  libXpm ? null,
-  libXaw ? null,
+  libX11,
+  libXt,
+  libXpm,
+  libXaw,
   aquaterm ? false,
   withWxGTK ? false,
   wxGTK32,
-  fontconfig ? null,
-  gnused ? null,
-  coreutils ? null,
+  fontconfig,
+  gnused,
+  coreutils,
   withQt ? false,
-  mkDerivation,
   qttools,
+  wrapQtAppsHook,
   qtbase,
   qtsvg,
 }:
 
-assert libX11 != null -> (fontconfig != null && gnused != null && coreutils != null);
 let
-  withX = libX11 != null && !aquaterm && !stdenv.hostPlatform.isDarwin;
+  withX = !aquaterm && !stdenv.hostPlatform.isDarwin;
 in
-(if withQt then mkDerivation else stdenv.mkDerivation) rec {
+stdenv.mkDerivation rec {
   pname = "gnuplot";
-  version = "6.0.3";
+  version = "6.0.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gnuplot/${pname}-${version}.tar.gz";
-    sha256 = "sha256-7FLjr4xAg9RTgVKz8T20f20pkpo/bs7FNlyDTnfyUas=";
+    url = "mirror://sourceforge/gnuplot/gnuplot-${version}.tar.gz";
+    sha256 = "sha256-RY2UdpYl5z1fYjJQD0nLrcsrGDOA1D0iZqD5cBrrnFs=";
   };
 
   nativeBuildInputs = [
@@ -52,7 +51,10 @@ in
     pkg-config
     texinfo
   ]
-  ++ lib.optional withQt qttools;
+  ++ lib.optionals withQt [
+    qttools
+    wrapQtAppsHook
+  ];
 
   buildInputs = [
     cairo
@@ -119,12 +121,12 @@ in
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.gnuplot.info/";
     description = "Portable command-line driven graphing utility for many platforms";
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     license = lib.licenses.gnuplot;
-    maintainers = with maintainers; [ lovek323 ];
+    maintainers = with lib.maintainers; [ lovek323 ];
     mainProgram = "gnuplot";
   };
 }

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "2.0.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/opencore-amr/fdk-aac/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/opencore-amr/fdk-aac/fdk-aac-${version}.tar.gz";
     sha256 = "sha256-gptrie7zgkCc2mhX/YKvhPq7Y0F7CO3p6npVP4Ect54=";
   };
 
@@ -23,11 +23,11 @@ stdenv.mkDerivation rec {
 
   configureFlags = lib.optional exampleSupport "--enable-example";
 
-  meta = with lib; {
+  meta = {
     description = "High-quality implementation of the AAC codec from Android";
     homepage = "https://sourceforge.net/projects/opencore-amr/";
-    license = licenses.fraunhofer-fdk;
-    maintainers = with maintainers; [ codyopel ];
-    platforms = platforms.all;
+    license = lib.licenses.fraunhofer-fdk;
+    maintainers = with lib.maintainers; [ codyopel ];
+    platforms = lib.platforms.all;
   };
 }

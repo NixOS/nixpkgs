@@ -10,7 +10,7 @@
   xdg-user-dirs,
   keybinder3,
   libnotify,
-  curl,
+  gst_all_1,
 }:
 
 let
@@ -18,11 +18,11 @@ let
     rec {
       x86_64-linux = {
         urlSuffix = "linux-x86_64.tar.gz";
-        hash = "sha256-E0N07kvABMrjWyRNpLmYsJ+ZY8+1NcR3ND4wNxUvAEA=";
+        hash = "sha256-87mauW50ccOaPyK04O4I7+0bsvxVrdFxhi/Muc53wDY=";
       };
       x86_64-darwin = {
         urlSuffix = "macos-universal.zip";
-        hash = "sha256-wziZaxSmGnEZDeKi5kQvrQwfHZ/Uan5gRseIIqXYvsI=";
+        hash = "sha256-a1WhOQ8NU3/aGAdaw8o3y7ckRdBsNgLZZ2nOrMsQdOA=";
       };
       aarch64-darwin = x86_64-darwin;
     }
@@ -31,7 +31,7 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "appflowy";
-  version = "0.10.0";
+  version = "0.10.6";
 
   src = fetchzip {
     url = "https://github.com/AppFlowy-IO/appflowy/releases/download/${finalAttrs.version}/AppFlowy-${finalAttrs.version}-${dist.urlSuffix}";
@@ -49,7 +49,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     gtk3
     keybinder3
     libnotify
-    curl
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
   ];
 
   dontBuild = true;
@@ -103,14 +104,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Open-source alternative to Notion";
     homepage = "https://www.appflowy.io/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.agpl3Only;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.agpl3Only;
     changelog = "https://github.com/AppFlowy-IO/appflowy/releases/tag/${finalAttrs.version}";
-    maintainers = with maintainers; [ darkonion0 ];
-    platforms = [ "x86_64-linux" ] ++ platforms.darwin;
+    maintainers = with lib.maintainers; [ darkonion0 ];
+    platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;
     mainProgram = "appflowy";
   };
 })

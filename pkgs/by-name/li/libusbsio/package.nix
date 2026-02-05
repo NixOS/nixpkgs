@@ -8,12 +8,12 @@
   systemdMinimal,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libusbsio";
   version = "2.1.11";
 
   src = fetchzip {
-    url = "https://www.nxp.com/downloads/en/libraries/libusbsio-${version}-src.zip";
+    url = "https://www.nxp.com/downloads/en/libraries/libusbsio-${finalAttrs.version}-src.zip";
     sha256 = "sha256-qgoeaGWTWdTk5XpJwoauckEQlqB9lp5x2+TN09vQttI=";
   };
 
@@ -47,14 +47,14 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.nxp.com/design/software/development-software/library-for-windows-macos-and-ubuntu-linux:LIBUSBSIO";
     description = "Library for communicating with devices connected via the USB bridge on LPC-Link2 and MCU-Link debug probes on supported NXP microcontroller evaluation boards";
-    platforms = platforms.all;
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       frogamic
       sbruder
     ];
   };
-}
+})

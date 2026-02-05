@@ -5,15 +5,12 @@
   stdenv,
   cppy,
   setuptools-scm,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "kiwisolver";
   version = "1.4.8";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -28,10 +25,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "kiwisolver" ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of the Cassowary constraint solver";
     homepage = "https://github.com/nucleic/kiwi";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

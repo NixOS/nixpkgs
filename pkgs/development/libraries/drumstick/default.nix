@@ -25,11 +25,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "drumstick";
-  version = "2.10.0";
+  version = "2.11.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/drumstick/${version}/drumstick-${version}.tar.bz2";
-    hash = "sha256-rFoH1daXHiT3LZWQRP+buzMRQSWLJfGMgRtJ9XFy/L0=";
+    hash = "sha256-vPlhQ+i8gifI/UIXii7KhZQ+RYBdnE09FVCXQiJcQdU=";
   };
 
   patches = [ ./drumstick-plugins.patch ];
@@ -72,11 +72,11 @@ stdenv.mkDerivation rec {
     (lib.cmakeBool "USE_QT5" (!isQt6))
   ];
 
-  meta = with lib; {
+  meta = {
     description = "MIDI libraries for Qt/C++";
     homepage = "https://drumstick.sourceforge.io/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ wegank ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ wegank ];
+    platforms = lib.platforms.linux;
   };
 }

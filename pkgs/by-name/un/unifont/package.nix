@@ -2,7 +2,8 @@
   lib,
   stdenv,
   fetchurl,
-  xorg,
+  mkfontscale,
+  fonttosfnt,
   libfaketime,
 }:
 
@@ -27,8 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     libfaketime
-    xorg.fonttosfnt
-    xorg.mkfontscale
+    fonttosfnt
+    mkfontscale
   ];
 
   dontUnpack = true;
@@ -61,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Unicode font for Base Multilingual Plane";
     homepage = "https://unifoundry.com/unifont/";
 
@@ -70,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
       gpl2Plus
       fontException
     ];
-    maintainers = [ maintainers.rycee ];
-    platforms = platforms.all;
+    maintainers = [ lib.maintainers.rycee ];
+    platforms = lib.platforms.all;
   };
 })

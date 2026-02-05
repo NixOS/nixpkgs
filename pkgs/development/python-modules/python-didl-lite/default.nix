@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   defusedxml,
   pytestCheckHook,
   setuptools,
@@ -10,32 +9,29 @@
 
 buildPythonPackage rec {
   pname = "python-didl-lite";
-  version = "1.4.1";
-  format = "setuptools";
-  pyroject = true;
-
-  disabled = pythonOlder "3.8";
+  version = "1.5.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "StevenLooman";
     repo = "python-didl-lite";
     tag = version;
-    hash = "sha256-YSP24GiSngwwvpwfOoKkm/i0qCtpryjcshxZCskf5BM=";
+    hash = "sha256-pdXdGRycMB6M6qnPl+Z+ezRw6td45IqYkEpx4YtL1rQ=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ defusedxml ];
+  dependencies = [ defusedxml ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "didl_lite" ];
 
-  meta = with lib; {
+  meta = {
     description = "DIDL-Lite (Digital Item Declaration Language) tools for Python";
     homepage = "https://github.com/StevenLooman/python-didl-lite";
-    changelog = "https://github.com/StevenLooman/python-didl-lite/blob/${version}/CHANGES.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    changelog = "https://github.com/StevenLooman/python-didl-lite/blob/${src.tag}/CHANGES.rst";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

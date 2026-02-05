@@ -17,14 +17,14 @@
   xz,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "eos-installer";
   version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "endlessm";
     repo = "eos-installer";
-    tag = "Release_${version}";
+    tag = "Release_${finalAttrs.version}";
     sha256 = "BqvZglzFJabGXkI8hnLiw1r+CvM7kSKQPj8IKYBB6S4=";
     fetchSubmodules = true;
   };
@@ -61,18 +61,18 @@ stdenv.mkDerivation rec {
     ''}"
   ];
 
-  PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
+  env.PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
 
   doCheck = true;
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/endlessm/eos-installer";
     description = "Installer UI which writes images to disk";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ qyliss ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ qyliss ];
     mainProgram = "gnome-image-installer";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

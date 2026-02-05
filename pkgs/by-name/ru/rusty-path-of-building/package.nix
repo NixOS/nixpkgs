@@ -13,20 +13,22 @@
   libxkbcommon,
   vulkan-loader,
   wayland,
-  xorg,
+  libxi,
+  libxcursor,
+  libx11,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "rusty-path-of-building";
-  version = "0.2.8";
+  version = "0.2.10";
 
   src = fetchFromGitHub {
     owner = "meehl";
     repo = "rusty-path-of-building";
     rev = "v${version}";
-    hash = "sha256-GJP5kuDHDyKFzlDW3EiMzd2KruYB1L51QgK4NT6B3Cc=";
+    hash = "sha256-odiiYWoBfcnPNfXsxj0gt/ra6Z3zeBQdWRjF7BazffY=";
   };
 
-  cargoHash = "sha256-RfF53qd/crWDgEDveP58FPInlH7vtpprMU3aLf9KO8A=";
+  cargoHash = "sha256-OX4L8EmgMJVT6sFZRdhPl36ZUcXq2JEFpb/PJml2YE8=";
 
   nativeBuildInputs = [
     pkg-config
@@ -66,9 +68,9 @@ rustPlatform.buildRustPackage rec {
           libxkbcommon
           vulkan-loader
           wayland
-          xorg.libX11
-          xorg.libXcursor
-          xorg.libXi
+          libx11
+          libxcursor
+          libxi
         ]
       }
 

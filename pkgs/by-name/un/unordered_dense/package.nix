@@ -3,10 +3,9 @@
   lib,
   fetchFromGitHub,
   cmake,
-  ninja,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  pname = "unordered-dense";
+  pname = "unordered_dense";
   version = "4.8.1";
 
   src = fetchFromGitHub {
@@ -16,10 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-JdPlyShWnAcdgixDHRaroFg7YWdPtD4Nl1PmpcQ1SAk=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    ninja
-  ];
+  nativeBuildInputs = [ cmake ];
 
   meta = {
     description = "Fast & densely stored hashmap and hashset based on robin-hood backward shift deletion";

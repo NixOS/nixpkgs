@@ -1,0 +1,22 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index f2efa3c..3f363dd 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -11,15 +11,9 @@ endif()
+ option(NBYTES_DEVELOPMENT_CHECKS "Enable development checks" OFF)
+ 
+ include(GNUInstallDirs)
+-include(FetchContent)
+ 
+-FetchContent_Declare(
+-  googletest
+-  URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
+-)
+-# For Windows: Prevent overriding the parent project's compiler/linker settings
+-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+-FetchContent_MakeAvailable(googletest)
++# Use find_package to use the gtest package provided by Nix
++find_package(GTest REQUIRED)
+ 
+ add_subdirectory(src)
+ enable_testing()

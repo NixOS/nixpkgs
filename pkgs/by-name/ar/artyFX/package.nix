@@ -5,7 +5,7 @@
   cairomm,
   cmake,
   libjack2,
-  libpthreadstubs,
+  libpthread-stubs,
   libXdmcp,
   libxshmfence,
   libsndfile,
@@ -14,14 +14,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "artyFX";
   version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "openAVproductions";
     repo = "openAV-ArtyFX";
-    rev = "release-${version}";
+    rev = "release-${finalAttrs.version}";
     hash = "sha256-GD9nwXdXSJX5OvAMxEAnngkvRW+E1jrNfWXK122bsTM=";
   };
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cairomm
     libjack2
-    libpthreadstubs
+    libpthread-stubs
     libXdmcp
     libxshmfence
     libsndfile
@@ -49,13 +49,13 @@ stdenv.mkDerivation rec {
       'cmake_minimum_required(VERSION 4.0)'
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://openavproductions.com/artyfx/";
     description = "LV2 plugin bundle of artistic realtime effects";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.linux;
     # Build uses `-msse` and `-mfpmath=sse`
     badPlatforms = [ "aarch64-linux" ];
   };
-}
+})

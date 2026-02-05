@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   version = "2.6.13";
 
   src = fetchurl {
-    url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
+    url = "mirror://savannah/oath-toolkit/oath-toolkit-${version}.tar.gz";
     hash = "sha256-W12C6aRFUgbST8vX7li/THk5ii5nmX2AvUWuknWGsYs=";
   };
 
@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Components for building one-time password authentication systems";
     homepage = "https://www.nongnu.org/oath-toolkit/";
-    maintainers = with maintainers; [ schnusch ];
-    platforms = with platforms; linux ++ darwin;
+    maintainers = with lib.maintainers; [ schnusch ];
+    platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "oathtool";
   };
 }

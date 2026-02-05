@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "sigtools";
   version = "4.0.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -33,10 +33,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sigtools" ];
 
-  meta = with lib; {
+  meta = {
     description = "Utilities for working with inspect.Signature objects";
     homepage = "https://sigtools.readthedocs.io/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

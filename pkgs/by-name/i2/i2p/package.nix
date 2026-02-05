@@ -2,7 +2,8 @@
   lib,
   stdenv,
   fetchzip,
-  jdk,
+  jdk_headless,
+  jre_minimal,
   ant,
   gettext,
   which,
@@ -12,6 +13,22 @@
   gmp,
 }:
 
+let
+  jre = jre_minimal.override {
+    modules = [
+      "java.base"
+      "java.desktop"
+      "java.instrument"
+      "java.logging"
+      "java.management"
+      "java.naming"
+      "java.rmi"
+      "java.security.jgss"
+      "java.sql"
+      "java.xml"
+    ];
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "i2p";
   version = "2.10.0";
@@ -34,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     ant
     gettext
-    jdk
+    jdk_headless
     which
   ];
 
@@ -77,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
       fi
     done
 
-    makeWrapper ${jdk}/bin/java $out/bin/i2prouter \
+    makeWrapper ${jre}/bin/java $out/bin/i2prouter \
       --add-flags "-cp $CP -Djava.library.path=$out/lib/ -Di2p.dir.base=$out -DloggerFilenameOverride=logs/log-router-@.txt" \
       --add-flags "net.i2p.router.RouterLaunch"
 
@@ -96,15 +113,15 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Applications and router for I2P, anonymity over the Internet";
     homepage = "https://geti2p.net";
     changelog = "https://github.com/i2p/i2p.i2p/releases/tag/i2p-${finalAttrs.version}";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # source bundles dependencies as jars
     ];
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       boost
       bsd2
@@ -124,7 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
       "i686-linux"
       "aarch64-linux"
     ];
-    maintainers = with maintainers; [ linsui ];
+    maintainers = with lib.maintainers; [ linsui ];
     mainProgram = "i2prouter-plain";
   };
 })

@@ -22,7 +22,7 @@ buildPythonPackage (
   rec {
     pname = "pyqtwebengine";
     version = "5.15.7";
-    format = "pyproject";
+    pyproject = true;
 
     disabled = isPy27;
 

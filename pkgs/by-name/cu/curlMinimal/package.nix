@@ -17,7 +17,8 @@
   gssSupport ?
     with stdenv.hostPlatform;
     (
-      !isWindows
+      # krb5 is broken on cygwin
+      !(isWindows || isCygwin)
       &&
         # disable gss because of: undefined reference to `k5_bcmp'
         # a very sad story re static: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=439039
@@ -86,7 +87,7 @@ assert
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "curl";
-  version = "8.16.0";
+  version = "8.17.0";
 
   src = fetchurl {
     urls = [
@@ -95,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
         builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
       }/curl-${finalAttrs.version}.tar.xz"
     ];
-    hash = "sha256-QMjN28tsxiUcA96kI6Ryps6kA3vmVLpc9d7G6y0i/x0=";
+    hash = "sha256-lV9ucprWs1ZiYOj+9oYg52ujwxrPChhSRBahhaz3eZI=";
   };
 
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion

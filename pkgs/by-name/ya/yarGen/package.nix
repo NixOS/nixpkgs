@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "yarGen";
   version = "0.23.4";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Neo23x0";
@@ -50,11 +50,11 @@ python3.pkgs.buildPythonApplication rec {
     lxml
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Generator for YARA rules";
     mainProgram = "yarGen.py";
     homepage = "https://github.com/Neo23x0/yarGen";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

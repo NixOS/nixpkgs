@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   setuptools-scm,
-  pythonOlder,
   msprime,
   numpy,
   tskit,
@@ -12,8 +11,7 @@
 buildPythonPackage rec {
   pname = "pyslim";
   version = "1.1.0";
-  format = "pyproject";
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -33,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyslim" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tools for dealing with tree sequences coming to and from SLiM";
     homepage = "https://github.com/tskit-dev/pyslim";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -11,14 +11,14 @@
   gtk-engine-murrine,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zuki-themes";
   version = "4.0";
 
   src = fetchFromGitHub {
     owner = "lassekongo83";
     repo = "zuki-themes";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1q026wa8xgyb6f5k7pqpm5zav30dbnm3b8w59as3sh8rhfgpbf80";
   };
 
@@ -36,11 +36,11 @@ stdenv.mkDerivation rec {
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
-  meta = with lib; {
+  meta = {
     description = "Themes for GTK, gnome-shell and Xfce";
     homepage = "https://github.com/lassekongo83/zuki-themes";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.romildo ];
   };
-}
+})

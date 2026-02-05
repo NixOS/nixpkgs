@@ -11,7 +11,7 @@
   libX11,
   gtk3,
   pcre,
-  libpthreadstubs,
+  libpthread-stubs,
   libXdmcp,
   libxkbcommon,
   libepoxy,
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     libX11
     gtk3
     pcre
-    libpthreadstubs
+    libpthread-stubs
     libXdmcp
     libxkbcommon
     libepoxy
@@ -81,12 +81,12 @@ stdenv.mkDerivation rec {
     cp  -r ${impulseDB}/* $out/share/HybridReverb2/
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jpcima/HybridReverb2";
     description = "Reverb effect using hybrid impulse convolution";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.linux;
     mainProgram = "HybridReverb2";
   };
 }

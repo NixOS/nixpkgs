@@ -12,7 +12,7 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "glib-testing";
   version = "0.1.1";
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "pwithnall";
     repo = "libglib-testing";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "U3epLDdLES7MA71z7Q1WXMjzySTFERWBU0u8poObbEo=";
   };
 
@@ -60,11 +60,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Test library providing test harnesses and mock classes complementing the classes provided by GLib";
     homepage = "https://gitlab.gnome.org/pwithnall/libglib-testing";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ jtojnar ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ jtojnar ];
+    platforms = lib.platforms.unix;
   };
-}
+})

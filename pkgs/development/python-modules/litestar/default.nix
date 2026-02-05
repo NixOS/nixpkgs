@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   hatchling,
@@ -31,7 +32,6 @@
   prometheus-client,
   psutil,
   opentelemetry-instrumentation-asgi,
-  psycopg,
   pydantic-extra-types,
   pydantic,
   email-validator,
@@ -47,6 +47,7 @@
   # valkey,
 
   # tests
+  addBinToPathHook,
   httpx-sse,
   pytest-asyncio,
   pytest-lazy-fixtures,
@@ -59,16 +60,16 @@
   versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "litestar";
-  version = "2.18.0";
+  version = "2.19.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "litestar-org";
     repo = "litestar";
-    tag = "v${version}";
-    hash = "sha256-bqj7tvCNeMEEJKDF3g2beKfd0urbNszrbLdF96JygYk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ZKvHsHkGEqDEDUz1JosBd3Thc+9D/gZmcACkyOWN8As=";
   };
 
   build-system = [ hatchling ];
@@ -127,6 +128,7 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    addBinToPathHook
     httpx-sse
     pytest-asyncio
     pytest-lazy-fixtures
@@ -144,13 +146,14 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  preCheck = ''
-    export PATH=$out/bin:$PATH
-  '';
-
   enabledTestPaths = [
     # Follow GitHub CI
     "docs/examples/"
+  ];
+
+  pytestFlags = lib.optionals (pythonAtLeast "3.14") [
+    # UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+    "-Wignore::UserWarning"
   ];
 
   disabledTests = [
@@ -161,10 +164,10 @@ buildPythonPackage rec {
   meta = {
     description = "Production-ready, Light, Flexible and Extensible ASGI API framework";
     homepage = "https://litestar.dev/";
-    changelog = "https://github.com/litestar-org/litestar/releases/tag/${src.tag}";
+    changelog = "https://github.com/litestar-org/litestar/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     mainProgram = "litestar";
     maintainers = with lib.maintainers; [ bot-wxt1221 ];
     platforms = lib.platforms.unix;
   };
-}
+})

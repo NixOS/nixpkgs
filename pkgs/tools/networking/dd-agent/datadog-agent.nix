@@ -23,12 +23,12 @@ let
   owner = "DataDog";
   repo = "datadog-agent";
   goPackagePath = "github.com/${owner}/${repo}";
-  version = "7.71.2";
+  version = "7.75.0";
 
   src = fetchFromGitHub {
     inherit owner repo;
     tag = version;
-    hash = "sha256-WERO2vs0x5w+9L68BucvcuBWF2qoYU6qP7FvCYrnfrc=";
+    hash = "sha256-oj4LFQiaEeSHcSx0Bar4vU7w/8gi0fgBGSAUjaD4SFc=";
   };
   rtloader = stdenv.mkDerivation {
     pname = "datadog-agent-rtloader";
@@ -49,7 +49,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  vendorHash = "sha256-lL31RZqSQy3iqdJ/07pxjeMMFCK9HOX2TI7xvIa2Z3s=";
+  vendorHash = "sha256-5lqWfhMXrYyZkP/MYH/Uvgu0VHaDmYMOmBOc5xExLi4=";
 
   subPackages = [
     "cmd/agent"
@@ -124,14 +124,14 @@ buildGoModule rec {
     command = "agent version";
   };
 
-  meta = with lib; {
+  meta = {
     description = ''
       Event collector for the DataDog analysis service
       -- v6 new golang implementation.
     '';
     homepage = "https://www.datadoghq.com";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       thoughtpolice
     ];
   };

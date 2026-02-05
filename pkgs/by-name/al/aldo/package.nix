@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchgit {
-    url = "git://git.savannah.gnu.org/${pname}.git";
+    url = "git://git.savannah.gnu.org/aldo.git";
     tag = "v${version}";
     sha256 = "0swvdq0pw1msy40qkpn1ar9kacqjyrw2azvf2fy38y0svyac8z2i";
   };
@@ -23,12 +23,12 @@ stdenv.mkDerivation {
 
   buildInputs = [ libao ];
 
-  meta = with lib; {
+  meta = {
     description = "Morse code training program";
     homepage = "http://aldo.nongnu.org/";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "aldo";
   };
 }

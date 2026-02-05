@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  pythonOlder,
   wheel,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pyyardian";
   version = "1.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "h3l1o5";
@@ -34,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyyardian" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for interacting with the Yardian irrigation controller";
     homepage = "https://github.com/h3l1o5/pyyardian";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

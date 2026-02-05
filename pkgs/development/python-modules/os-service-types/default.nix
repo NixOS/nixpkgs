@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "os-service-types";
-  version = "1.8.1";
+  version = "1.8.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "os_service_types";
     inherit version;
-    hash = "sha256-w9YBNO5QnPVUUsc/+L1BiRvLbPQkIaFZwBOIJOEmQCs=";
+    hash = "sha256-q3ZI1yMoSZQxluG7AKMOLiXmAPo7V7skHRW39SG1tXU=";
   };
 
   postPatch = ''
@@ -44,10 +44,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "os_service_types" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for consuming OpenStack service-types-authority data";
     homepage = "https://github.com/openstack/os-service-types";
-    license = licenses.asl20;
-    teams = [ teams.openstack ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

@@ -113,15 +113,15 @@ python3.pkgs.buildPythonApplication rec {
 
   postFixup = ''
     # Wrap the project so it can find runtime dependencies.
-    wrapPythonProgramsIn "$out/share/inkscape/extensions/textext" "$out $pythonPath"
+    wrapPythonProgramsIn "$out/share/inkscape/extensions/textext" "$out ''${pythonPath[*]}"
     cp ${launchScript} $out/share/inkscape/extensions/textext/launch.sh
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Re-editable LaTeX graphics for Inkscape";
     homepage = "https://textext.github.io/textext/";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.raboof ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.raboof ];
+    platforms = lib.platforms.all;
   };
 }

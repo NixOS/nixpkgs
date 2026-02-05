@@ -41,14 +41,14 @@ in
 
 py.pkgs.buildPythonPackage rec {
   pname = "irrd";
-  version = "4.5.0b1";
+  version = "4.5.0b2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "irrdnet";
     repo = "irrd";
     rev = "v${version}";
-    hash = "sha256-Hr/PbC4N/yrYeQ7bTfqIchDFmaL3c4afxV1XS7FR1F8=";
+    hash = "sha256-MMacxjF0LLSdInSwXwpHJUTdUQJ6sl4yu83vWR/A4Jc=";
   };
 
   postPatch = ''
@@ -157,6 +157,6 @@ py.pkgs.buildPythonPackage rec {
     description = "Internet Routing Registry database server, processing IRR objects in the RPSL format";
     license = lib.licenses.mit;
     homepage = "https://github.com/irrdnet/irrd";
-    teams = [ lib.teams.wdz ];
+    maintainers = with lib.maintainers; [ yureka-wdz ];
   };
 }

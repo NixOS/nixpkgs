@@ -12,7 +12,7 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libcomps";
   version = "0.1.23";
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rpm-software-management";
     repo = "libcomps";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-6nX6Oa2ACVALOtXDxjowIGKaziZkGZbtkgZzDfuP4PE=";
   };
 
@@ -60,11 +60,11 @@ stdenv.mkDerivation rec {
     moveToOutput "lib/${python3.libPrefix}" "$py"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Comps XML file manipulation library";
     homepage = "https://github.com/rpm-software-management/libcomps";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ katexochen ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ katexochen ];
+    platforms = lib.platforms.unix;
   };
-}
+})

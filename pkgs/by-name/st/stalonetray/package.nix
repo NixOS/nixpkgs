@@ -10,14 +10,14 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "stalonetray";
   version = "0.8.5";
 
   src = fetchFromGitHub {
     owner = "kolbusa";
     repo = "stalonetray";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-/55oP6xA1LeLawOBkhh9acaDcObO4L4ojcy7e3vwnBw=";
   };
 
@@ -42,12 +42,12 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with lib; {
+  meta = {
     description = "Stand alone tray";
     homepage = "https://github.com/kolbusa/stalonetray";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ raskin ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ raskin ];
     mainProgram = "stalonetray";
   };
-}
+})

@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   pname = "libircclient";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}/${version}/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/libircclient/libircclient/${version}/libircclient-${version}.tar.gz";
     sha256 = "0b9wa0h3xc31wpqlvgxgnvqp5wgx3kwsf5s9432m5cj8ycx6zcmv";
   };
 
@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
       --replace "cp "              "install "
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Small but extremely powerful library which implements the client IRC protocol";
     homepage = "http://www.ulduzsoft.com/libircclient/";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ obadz ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [ obadz ];
+    platforms = lib.platforms.linux;
   };
 }

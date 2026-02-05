@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "nix-fast-build";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-6X4BW+3C2nfkorMfe+tuoeYrdddxPtLqOJ1rZxuxPrc=";
   };
 

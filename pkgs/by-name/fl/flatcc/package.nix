@@ -6,14 +6,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flatcc";
   version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "dvidelabs";
     repo = "flatcc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-0/IZ7eX6b4PTnlSSdoOH0FsORGK9hrLr1zlr/IHsJFQ=";
   };
 
@@ -50,11 +50,11 @@ stdenv.mkDerivation rec {
     "-DFLATCC_INSTALL=on"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "FlatBuffers Compiler and Library in C for C";
     mainProgram = "flatcc";
     homepage = "https://github.com/dvidelabs/flatcc";
-    license = [ licenses.asl20 ];
-    maintainers = with maintainers; [ onny ];
+    license = [ lib.licenses.asl20 ];
+    maintainers = with lib.maintainers; [ onny ];
   };
-}
+})

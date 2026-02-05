@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   pname = "ephemeralpg";
   version = "3.4";
   src = fetchurl {
-    url = "https://eradman.com/ephemeralpg/code/${pname}-${version}.tar.gz";
+    url = "https://eradman.com/ephemeralpg/code/ephemeralpg-${version}.tar.gz";
     hash = "sha256-IwAIJFW/ahDXGgINi4N9mG3XKw74JXK6+SLxGMZ8tS0=";
   };
   nativeBuildInputs = [ makeWrapper ];
@@ -24,13 +24,12 @@ stdenv.mkDerivation rec {
       ]
     }
   '';
-  meta = with lib; {
+  meta = {
     description = "Run tests on an isolated, temporary PostgreSQL database";
-    license = licenses.isc;
+    license = lib.licenses.isc;
     homepage = "https://eradman.com/ephemeralpg/";
-    platforms = platforms.all;
-    maintainers = with maintainers; [
-      hrdinka
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       medv
     ];
   };

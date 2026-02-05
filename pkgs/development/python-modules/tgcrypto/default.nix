@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
@@ -11,9 +10,7 @@ buildPythonPackage rec {
   pname = "tgcrypto";
   version = "1.2.5";
 
-  disabled = pythonOlder "3.6";
-
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyrogram";
@@ -28,10 +25,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tgcrypto" ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast and Portable Telegram Crypto Library for Python";
     homepage = "https://github.com/pyrogram/tgcrypto";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

@@ -5,7 +5,6 @@
   latex2mathml,
   pygments,
   pytest7CheckHook,
-  pythonOlder,
   setuptools,
   wavedrom,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "markdown2";
   version = "2.5.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "trentm";
@@ -34,7 +31,7 @@ buildPythonPackage rec {
     code_syntax_highlighting = [ pygments ];
     wavedrom = [ wavedrom ];
     latex = [ latex2mathml ];
-    all = lib.flatten (lib.attrValues (lib.removeAttrs optional-dependencies [ "all" ]));
+    all = lib.concatAttrValues (lib.removeAttrs optional-dependencies [ "all" ]);
   };
 
   meta = {

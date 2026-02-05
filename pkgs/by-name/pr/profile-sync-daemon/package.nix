@@ -6,14 +6,14 @@
   coreutils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "profile-sync-daemon";
   version = "6.50";
 
   src = fetchFromGitHub {
     owner = "graysky2";
     repo = "profile-sync-daemon";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Wb9YLxuu9i9s/Y6trz5NZDU9WRywe3138cp5Q2gWbxM=";
   };
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       --replace "sudo " "/run/wrappers/bin/sudo "
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Syncs browser profile dirs to RAM";
     longDescription = ''
       Profile-sync-daemon (psd) is a tiny pseudo-daemon designed to manage your
@@ -41,8 +41,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/graysky2/profile-sync-daemon";
     downloadPage = "https://github.com/graysky2/profile-sync-daemon/releases";
-    license = licenses.mit;
-    maintainers = [ maintainers.prikhi ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.prikhi ];
+    platforms = lib.platforms.linux;
   };
-}
+})

@@ -2,15 +2,12 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "kitchen";
   version = "1.2.6";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -22,11 +19,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "kitchen" ];
 
-  meta = with lib; {
+  meta = {
     description = "Kitchen contains a cornucopia of useful code";
     homepage = "https://github.com/fedora-infra/kitchen";
     changelog = "https://github.com/fedora-infra/kitchen/blob/${version}/NEWS.rst";
-    license = licenses.lgpl2Only;
+    license = lib.licenses.lgpl2Only;
     maintainers = [ ];
   };
 }

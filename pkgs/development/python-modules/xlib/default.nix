@@ -6,7 +6,9 @@
   six,
   setuptools,
   setuptools-scm,
-  xorg,
+  libx11,
+  xvfb,
+  xauth,
   mock,
   pytestCheckHook,
   util-linux,
@@ -28,7 +30,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  buildInputs = [ xorg.libX11 ];
+  buildInputs = [ libx11 ];
 
   propagatedBuildInputs = [ six ];
 
@@ -38,8 +40,8 @@ buildPythonPackage rec {
     pytestCheckHook
     mock
     util-linux
-    xorg.xauth
-    xorg.xvfb
+    xauth
+    xvfb
   ];
 
   disabledTestPaths = [
@@ -47,11 +49,11 @@ buildPythonPackage rec {
     "test/test_xlib_display.py"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/python-xlib/python-xlib/releases/tag/${version}";
     description = "Fully functional X client library for Python programs";
     homepage = "https://github.com/python-xlib/python-xlib";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
   };
 }

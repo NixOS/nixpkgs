@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   version = "1.4.82";
 
   src = fetchurl {
-    url = "https://download.lighttpd.net/lighttpd/releases-${lib.versions.majorMinor version}.x/${pname}-${version}.tar.xz";
+    url = "https://download.lighttpd.net/lighttpd/releases-${lib.versions.majorMinor version}.x/lighttpd-${version}.tar.xz";
     sha256 = "sha256-q/50OR+cvWarFU6gfmTxlNvn6QbvTtR+s7DztGJGyWI=";
   };
 
@@ -106,12 +106,12 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) lighttpd;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight high-performance web server";
     homepage = "http://www.lighttpd.net/";
     license = lib.licenses.bsd3;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [
       bjornfor
       brecht
     ];

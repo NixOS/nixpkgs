@@ -3,15 +3,12 @@
   buildPythonPackage,
   pytestCheckHook,
   fetchFromGitHub,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "crossplane";
   version = "0.5.8";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "nginxinc";
@@ -24,11 +21,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "crossplane" ];
 
-  meta = with lib; {
+  meta = {
     description = "NGINX configuration file parser and builder";
     mainProgram = "crossplane";
     homepage = "https://github.com/nginxinc/crossplane";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ kaction ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ kaction ];
   };
 }

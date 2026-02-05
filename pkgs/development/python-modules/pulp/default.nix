@@ -5,7 +5,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pyparsing,
-  pythonOlder,
   pytestCheckHook,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "pulp";
   version = "2.8.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "coin-or";
@@ -38,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pulp" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to generate MPS or LP files";
     mainProgram = "pulptest";
     homepage = "https://github.com/coin-or/pulp";
-    license = licenses.mit;
-    maintainers = with maintainers; [ teto ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ teto ];
   };
 }

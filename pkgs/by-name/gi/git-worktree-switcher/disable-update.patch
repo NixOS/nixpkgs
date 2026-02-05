@@ -1,18 +1,18 @@
 diff --git a/wt b/wt
-index 60999f2..5687822 100755
+index 7166bf2..cdbebab 100755
 --- a/wt
 +++ b/wt
-@@ -27,7 +27,6 @@ help_message() {
- 	echo -e "\twt: go to the main worktree"
- 	echo -e "\twt <worktree-name>: search for worktree names and change to that directory."
+@@ -48,7 +48,6 @@ help_message() {
+ 	echo -e "\twt -i: interactively select a worktree using fzf."
+ 	echo -e "\twt list: list out all the git worktrees."
  	echo -e "\twt names: list out only the git worktree names."
 -	echo -e "\twt update: update to the latest release of worktree switcher."
  	echo -e "\twt version: show the CLI version."
  	echo -e "\twt init <shell>: print the init script for <shell>."
  	echo -e "\twt help: shows this help message."
-@@ -163,9 +162,6 @@ case "${args[0]}" in
- names)
- 	worktree_list_names
+@@ -189,9 +188,6 @@ names)
+ 	echo -e '\033[0;31mThe '\''names'\'' option is deprecated and will be removed in future versions.\033[0m' >&2
+ 	echo -e '\033[0;31mUse '\''list'\'' instead.\033[0m' >&2
  	;;
 -update)
 -	update
@@ -20,11 +20,11 @@ index 60999f2..5687822 100755
  help)
  	help_message
  	;;
-@@ -176,7 +172,6 @@ init)
+@@ -202,7 +198,6 @@ init)
  	init
  	;;
  *)
 -	auto_check_update
- 	directory=$(git worktree list --porcelain 2> /dev/null | sed -n '/'"${arg:-.}"'/{s/^worktree\s*//p;q}')
- 	;;
- esac
+ 	if [[ "$is_interactive" == true ]]; then
+ 		directory=$(git worktree list --porcelain |
+ 		awk '/worktree/ {wt=$2} /branch/ {sub("refs/heads/", "", $2); print wt " [" $2 "]"}' |

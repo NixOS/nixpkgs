@@ -31,7 +31,6 @@
   pytestCheckHook,
   pytest-cov-stub,
   python-dateutil,
-  pythonOlder,
   requests,
   ruamel-yaml,
   setuptools,
@@ -46,8 +45,6 @@ buildPythonPackage rec {
   pname = "nikola";
   version = "8.3.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -111,12 +108,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nikola" ];
 
-  meta = with lib; {
+  meta = {
     description = "Static website and blog generator";
     homepage = "https://getnikola.com/";
     changelog = "https://github.com/getnikola/nikola/blob/v${version}/CHANGES.txt";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jluttine ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jluttine ];
     mainProgram = "nikola";
   };
 }

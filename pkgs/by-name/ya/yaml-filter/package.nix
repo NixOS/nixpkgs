@@ -6,7 +6,7 @@
   libyaml,
   pkg-config,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yaml-filter";
   version = "0.2.0";
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "OpenSCAP";
     repo = "yaml-filter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-HDHjOapMFjuDcWW5+opKD2tllbwz4YBw/EI4W7Wf/6g=";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     mainProgram = "yamlp";
     platforms = lib.platforms.all;
   };
-}
+})

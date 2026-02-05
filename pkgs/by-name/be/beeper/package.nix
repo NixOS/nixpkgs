@@ -9,10 +9,10 @@
 }:
 let
   pname = "beeper";
-  version = "4.1.311";
+  version = "4.2.532";
   src = fetchurl {
     url = "https://beeper-desktop.download.beeper.com/builds/Beeper-${version}-x86_64.AppImage";
-    hash = "sha256-r7WPuxPlqcUQ937TcBBG93Uo9WCY1wnH3Jm2PWI9siU=";
+    hash = "sha256-7v3MPwfsW47rP8Nnt39M9aBR4niYEaG2UZ6cuMfVp+Q=";
   };
   appimageContents = appimageTools.extract {
     inherit pname version src;
@@ -23,7 +23,7 @@ let
       echo "export function registerLinuxConfig() {}" > $linuxConfigFilename
 
       # disable auto update
-      sed -i 's/[^=]*\.auto_update_disabled/true/' $out/resources/app/build/main/main-entry-*.mjs
+      sed -i 's/auto_update_disabled:[^,}]*/auto_update_disabled:true/g' $out/resources/app/build/main/main-entry-*.mjs
 
       # prevent updates
       sed -i -E 's/executeDownload\([^)]+\)\{/executeDownload(){return;/g' $out/resources/app/build/main/main-entry-*.mjs
@@ -70,7 +70,7 @@ appimageTools.wrapAppImage {
     inherit src;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Universal chat app";
     longDescription = ''
       Beeper is a universal chat app. With Beeper, you can send
@@ -78,10 +78,9 @@ appimageTools.wrapAppImage {
       many different chat networks.
     '';
     homepage = "https://beeper.com";
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       jshcmpbll
-      edmundmiller
       zh4ngx
     ];
     platforms = [ "x86_64-linux" ];

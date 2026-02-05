@@ -12,15 +12,12 @@
   httpx,
   fastapi,
   uvicorn,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "aioprometheus";
   version = "unstable-2023-03-14";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "claws";
@@ -47,15 +44,15 @@ buildPythonPackage rec {
     fastapi
     uvicorn
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "aioprometheus" ];
 
-  meta = with lib; {
+  meta = {
     description = "Prometheus Python client library for asyncio-based applications";
     homepage = "https://github.com/claws/aioprometheus";
     changelog = "https://github.com/claws/aioprometheus/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mbalatsko ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

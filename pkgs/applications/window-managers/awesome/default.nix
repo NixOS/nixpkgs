@@ -10,18 +10,25 @@
   imagemagick,
   pkg-config,
   gdk-pixbuf,
-  xorg,
+  libxcb-util,
+  libxcb-wm,
+  libxcb-render-util,
+  libxcb-keysyms,
+  libxcb-image,
+  libxdmcp,
+  libxau,
+  libxshmfence,
+  libxcb,
   libstartup_notification,
   libxdg_basedir,
-  libpthreadstubs,
-  xcb-util-cursor,
+  libpthread-stubs,
+  libxcb-cursor,
   makeWrapper,
   pango,
   gobject-introspection,
   which,
   dbus,
   net-tools,
-  git,
   doxygen,
   xmlto,
   docbook_xml_dtd_45,
@@ -115,24 +122,23 @@ stdenv.mkDerivation rec {
     librsvg
     dbus
     gdk-pixbuf
-    git
     luaEnv
-    libpthreadstubs
+    libpthread-stubs
     libstartup_notification
     libxdg_basedir
     lua
     net-tools
     pango
-    xcb-util-cursor
-    xorg.libXau
-    xorg.libXdmcp
-    xorg.libxcb
-    xorg.libxshmfence
-    xorg.xcbutil
-    xorg.xcbutilimage
-    xorg.xcbutilkeysyms
-    xorg.xcbutilrenderutil
-    xorg.xcbutilwm
+    libxcb-cursor
+    libxau
+    libxdmcp
+    libxcb
+    libxshmfence
+    libxcb-util
+    libxcb-image
+    libxcb-keysyms
+    libxcb-render-util
+    libxcb-wm
     libxkbcommon
     xcbutilxrm
   ]
@@ -168,14 +174,13 @@ stdenv.mkDerivation rec {
     inherit lua;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Highly configurable, dynamic window manager for X";
     homepage = "https://awesomewm.org/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       lovek323
-      rasendubi
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

@@ -8,7 +8,7 @@
   imlib2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
 
   pname = "bgs";
   version = "0.8";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Gottox";
     repo = "bgs";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "V8GP+xLSiCvaYZt8Bi3/3KlTBaGnMYQUeNCHwH6Ejzo=";
   };
 
@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''sed -i "s@PREFIX = /usr/local@PREFIX = $out@g" config.mk'';
 
-  meta = with lib; {
+  meta = {
     description = "Extremely fast and small background setter for X";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ pSub ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ pSub ];
     mainProgram = "bgs";
   };
-}
+})

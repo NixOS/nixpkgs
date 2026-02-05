@@ -41,6 +41,6 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     homepage = "https://github.com/mongodb/motor";
     changelog = "https://github.com/mongodb/motor/releases/tag/${src.tag}";
-    maintainers = with lib.maintainers; [ globin ];
+    maintainers = [ ];
   };
 }

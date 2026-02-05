@@ -7,14 +7,14 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "catatonit";
   version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "catatonit";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-sc/T4WjCPFfwUWxlBx07mQTmcOApblHygfVT824HcJM=";
   };
 
@@ -34,13 +34,13 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) podman; };
 
-  meta = with lib; {
+  meta = {
     description = "Container init that is so simple it's effectively brain-dead";
     homepage = "https://github.com/openSUSE/catatonit";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ erosennin ];
-    teams = [ teams.podman ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ erosennin ];
+    teams = [ lib.teams.podman ];
+    platforms = lib.platforms.linux;
     mainProgram = "catatonit";
   };
-}
+})

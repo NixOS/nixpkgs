@@ -10,7 +10,7 @@
   automake,
   libnotify,
   libX11,
-  xf86inputevdev,
+  xf86-input-evdev,
 }:
 
 stdenv.mkDerivation {
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
     glibc
     libnotify
     libX11
-    xf86inputevdev
+    xf86-input-evdev
   ];
 
   preConfigure = ''
@@ -47,11 +47,11 @@ stdenv.mkDerivation {
 
   postInstall = "";
 
-  meta = with lib; {
+  meta = {
     description = "";
     mainProgram = "pa-applet";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

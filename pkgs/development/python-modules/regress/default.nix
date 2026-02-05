@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "regress";
   version = "2025.10.1";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -30,10 +30,10 @@ buildPythonPackage rec {
     hash = "sha256-DOnKFVg+5cIv0T3mKzF8O9jj5+ZenQrLjTltfd+Tm9U=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings to the Rust regress crate, exposing ECMA regular expressions";
     homepage = "https://github.com/Julian/regress";
-    license = licenses.mit;
-    maintainers = [ maintainers.matthiasbeyer ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.matthiasbeyer ];
   };
 }

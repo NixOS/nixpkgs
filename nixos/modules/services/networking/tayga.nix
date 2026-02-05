@@ -167,7 +167,7 @@ in
     networking.interfaces."${cfg.tunDevice}" = {
       virtual = true;
       virtualType = "tun";
-      virtualOwner = mkIf config.networking.useNetworkd "";
+      virtualOwner = null;
       ipv4 = {
         addresses = [
           {
@@ -205,9 +205,7 @@ in
         ExecReload = "${pkgs.coreutils}/bin/kill -SIGHUP $MAINPID";
         Restart = "always";
 
-        # Hardening Score:
-        #  - nixos-scripts: 2.1
-        #  - systemd-networkd: 1.6
+        # Hardening Score: 1.5
         ProtectHome = true;
         SystemCallFilter = [
           "@network-io"
@@ -216,9 +214,6 @@ in
           "~@resources"
         ];
         ProtectKernelLogs = true;
-        AmbientCapabilities = [
-          "CAP_NET_ADMIN"
-        ];
         CapabilityBoundingSet = "";
         RestrictAddressFamilies = [
           "AF_INET"
@@ -226,7 +221,7 @@ in
           "AF_NETLINK"
         ];
         StateDirectory = "tayga";
-        DynamicUser = mkIf config.networking.useNetworkd true;
+        DynamicUser = true;
         MemoryDenyWriteExecute = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;

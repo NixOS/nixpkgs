@@ -26,7 +26,12 @@
   wrapGAppsHook3,
   xcb-imdkit,
   xdg-utils,
-  xorg,
+  libxcb-util,
+  libxcb-wm,
+  libxtst,
+  libxcursor,
+  libx11,
+  libxcb,
   zlib,
 }:
 
@@ -64,10 +69,10 @@ stdenv.mkDerivation rec {
     # libjpeg8 is required for converting jpeg's to colour palettes
     libjpeg
     libnghttp2
-    xorg.libxcb
-    xorg.libXcursor
-    xorg.libX11
-    xorg.libXtst
+    libxcb
+    libxcursor
+    libx11
+    libxtst
     libxkbcommon
     libudev-zero
     pango
@@ -75,8 +80,8 @@ stdenv.mkDerivation rec {
     (lib.getLib stdenv.cc.cc)
     vulkan-loader
     xcb-imdkit
-    xorg.xcbutil
-    xorg.xcbutilwm
+    libxcb-util
+    libxcb-wm
     zlib
   ];
 
@@ -92,11 +97,7 @@ stdenv.mkDerivation rec {
     # Removing it will force it to use our version.
     rm $out/libexec/lib/bitwig-studio/libxcb-imdkit.so.1
 
-    substitute usr/share/applications/com.bitwig.BitwigStudio.desktop \
-      $out/share/applications/com.bitwig.BitwigStudio.desktop \
-      --replace-fail "Exec=bitwig-studio" "Exec=$out/bin/bitwig-studio"
-
-      runHook postInstall
+    runHook postInstall
   '';
 
   postFixup = ''

@@ -9,12 +9,12 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mate-icon-theme-faenza";
   version = "1.20.0";
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor finalAttrs.version}/mate-icon-theme-faenza-${finalAttrs.version}.tar.xz";
     sha256 = "000vr9cnbl2qlysf2gyg1lsjirqdzmwrnh6d3hyrsfc0r2vh4wna";
   };
 
@@ -39,15 +39,15 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru.updateScript = gitUpdater {
+    url = "https://github.com/mate-desktop-legacy-archive/mate-icon-theme-faenza";
     rev-prefix = "v";
-    url = "https://github.com/mate-desktop-legacy-archive/${pname}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Faenza icon theme from MATE";
     homepage = "https://mate-desktop.org";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    teams = [ teams.mate ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.mate ];
   };
-}
+})

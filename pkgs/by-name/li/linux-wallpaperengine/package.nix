@@ -39,7 +39,7 @@
 
 let
   cef = cef-binary.override {
-    version = "135.0.17"; # follow upstream. https://github.com/Almamu/linux-wallpaperengine/blob/b39f12757908eda9f4c1039613b914606568bb84/CMakeLists.txt#L47
+    version = "135.0.17"; # follow upstream. https://github.com/Almamu/linux-wallpaperengine/blob/ef986841e2c43f9a387afa5f96237a859ad61e75/CMakeLists.txt#L47
     gitRevision = "cbc1c5b";
     chromiumVersion = "135.0.7049.52";
 
@@ -51,14 +51,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "linux-wallpaperengine";
-  version = "0-unstable-2025-09-19";
+  version = "0-unstable-2026-01-25";
 
   src = fetchFromGitHub {
     owner = "Almamu";
     repo = "linux-wallpaperengine";
-    rev = "b39f12757908eda9f4c1039613b914606568bb84";
+    rev = "ef986841e2c43f9a387afa5f96237a859ad61e75";
     fetchSubmodules = true;
-    hash = "sha256-Lm4BixK+PBCN/I+ecoYfoD96zS9UysEDOfponFy3SDU=";
+    hash = "sha256-VUhEEHid23l+z4fj8PoovE8nafSQLr//BMVUBoCDd+I=";
   };
 
   nativeBuildInputs = [

@@ -17,14 +17,14 @@ assert (
   ]
 );
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "test-drive";
   version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "fortran-lang";
     repo = "test-drive";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-xRx8ErIN9xjxZt/nEsdIQkIGFRltuELdlI8lXA+M030=";
   };
 
@@ -45,14 +45,14 @@ stdenv.mkDerivation rec {
 
   mesonAutoFeatures = "auto";
 
-  meta = with lib; {
+  meta = {
     description = "Procedural Fortran testing framework";
     homepage = "https://github.com/fortran-lang/test-drive";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    platforms = platforms.linux;
-    maintainers = [ maintainers.sheepforce ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})

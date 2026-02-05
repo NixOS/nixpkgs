@@ -10,7 +10,7 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openvdb";
   version = "12.1.0";
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "openvdb";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-28vrIlruPl1tvw2JhjIAARtord45hqCqnA9UNnu4Z70=";
   };
 
@@ -47,12 +47,12 @@ stdenv.mkDerivation rec {
       --replace \''${OPENVDB_INCLUDEDIR} $dev/include
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open framework for voxel";
     mainProgram = "vdb_print";
     homepage = "https://www.openvdb.org";
-    maintainers = [ maintainers.guibou ];
-    platforms = platforms.unix;
-    license = licenses.asl20;
+    maintainers = [ lib.maintainers.guibou ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.asl20;
   };
-}
+})

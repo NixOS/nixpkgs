@@ -2,7 +2,7 @@
   lib,
   stdenv,
   rustPlatform,
-  fetchFromGitea,
+  fetchFromCodeberg,
   pkg-config,
   openssl,
   nixVersions,
@@ -19,8 +19,7 @@ rustPlatform.buildRustPackage rec {
   pname = "nix-web";
   version = "0.4.2";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "gorgon";
     repo = "gorgon";
     rev = "nix-web-v${version}";
@@ -45,12 +44,12 @@ rustPlatform.buildRustPackage rec {
 
   NIX_WEB_BUILD_NIX_CLI_PATH = "${nixPackage}/bin/nix";
 
-  meta = with lib; {
+  meta = {
     description = "Web interface for the Nix store";
     homepage = "https://codeberg.org/gorgon/gorgon/src/branch/main/nix-web";
-    license = licenses.eupl12;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ embr ];
+    license = lib.licenses.eupl12;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ embr ];
     mainProgram = "nix-web";
   };
 }

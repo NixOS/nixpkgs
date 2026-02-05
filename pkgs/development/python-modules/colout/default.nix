@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pygments,
-  pythonOlder,
   setuptools-scm,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "colout";
   version = "1.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "nojhan";
@@ -34,11 +31,11 @@ buildPythonPackage rec {
   # This project does not have a unit test
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Color Up Arbitrary Command Output";
     mainProgram = "colout";
     homepage = "https://github.com/nojhan/colout";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ badele ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ badele ];
   };
 }

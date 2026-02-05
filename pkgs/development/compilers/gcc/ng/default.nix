@@ -14,7 +14,7 @@
 }@packageSetArgs:
 let
   versions = {
-    "15.1.0".officialRelease.sha256 = "sha256-4rCewhZg8B/s/7cV4BICZSFpQ/A40OSKmGhxPlTwbOo=";
+    "15.2.0".officialRelease.sha256 = "sha256-Q4/ZloJrDIJIWinaA6ctcdbjVBqD7HAt9Ccfb+Al0k4=";
   }
   // gccVersions;
 

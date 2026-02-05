@@ -44,7 +44,7 @@ let
             stdenvNoCC
             texinfo
             unionfs-fuse
-            xorg.lndir
+            lndir
 
             # These are used in the configure-from-userdata tests
             # for EC2. Httpd and valgrind are requested by the
@@ -123,7 +123,7 @@ in
     inherit image;
     sshPublicKey = snakeOilPublicKey;
 
-    # ### https://nixos.org/channels/nixos-unstable nixos
+    # ### https://channels.nixos.org/nixos-unstable nixos
     userData = ''
       { pkgs, ... }:
 

@@ -1,9 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
-  typing-extensions,
   pytestCheckHook,
   pytest-cov-stub,
 }:
@@ -20,8 +18,6 @@ buildPythonPackage rec {
     hash = "sha256-FRO/stQDTa4W1f6mLPDCJslYFfIvgS0EgoEhuh0rxwA=";
   };
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.9") [ typing-extensions ];
-
   nativeCheckInputs = [
     pytestCheckHook
     pytest-cov-stub
@@ -29,10 +25,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "injector" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python dependency injection framework, inspired by Guice";
     homepage = "https://github.com/alecthomas/injector";
     maintainers = [ ];
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

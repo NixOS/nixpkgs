@@ -59,11 +59,11 @@ buildGoModule rec {
     "info"
   ];
 
-  meta = with lib; {
+  meta = {
     outputsToInstall = [ "out" ];
     description = "Makefile replacement that sucks less";
     homepage = "https://www.goredo.cypherpunks.ru";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.spacefrogg ];
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.spacefrogg ];
   };
 }

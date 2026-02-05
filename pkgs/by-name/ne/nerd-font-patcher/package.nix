@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [ fontforge ];
 
-  format = "other";
+  pyproject = false;
 
   patches = [
     ./use-nix-paths.patch
@@ -31,11 +31,11 @@ python3Packages.buildPythonApplication rec {
     cp -ra bin/scripts/name_parser $out/lib/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Font patcher to generate Nerd font";
     mainProgram = "nerd-font-patcher";
     homepage = "https://nerdfonts.com/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ck3d ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ck3d ];
   };
 }

@@ -13,15 +13,15 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fcitx5-mcbopomofo";
-  version = "2.9.2";
+  version = "2.9.5";
 
   src = fetchFromGitHub {
     owner = "openvanilla";
     repo = "fcitx5-mcbopomofo";
-    rev = version;
-    hash = "sha256-2TWJsEScC5rMz5dowJOQHA2Mjzsq+d9n2lKXdEWiELU=";
+    rev = finalAttrs.version;
+    hash = "sha256-efpVvWchJywKyGu7I6pNRVKJhIv01iKAXFCJ+7kcMwc=";
   };
 
   nativeBuildInputs = [
@@ -53,4 +53,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ shiphan ];
     platforms = lib.platforms.linux;
   };
-}
+})

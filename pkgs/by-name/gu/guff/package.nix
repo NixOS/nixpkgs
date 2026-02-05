@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "guff";
   version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "silentbicycle";
     repo = "guff";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0n8mc9j3044j4b3vgc94ryd2j9ik6g73fqja54yxfdfrks4ksyds";
   };
 
@@ -19,12 +19,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Plot device";
     homepage = "https://github.com/silentbicycle/guff";
-    license = licenses.isc;
+    license = lib.licenses.isc;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = "guff";
   };
-}
+})

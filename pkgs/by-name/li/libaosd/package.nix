@@ -11,14 +11,14 @@
   automake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.2.7-9-g177589f";
   pname = "libaosd";
 
   src = fetchFromGitHub {
     owner = "atheme-legacy";
     repo = "libaosd";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1cn7k0n74p6jp25kxwcyblhmbdvgw3mikvj0m2jh4c6xccfrgb9a";
   };
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
-  meta = with lib; {
+  meta = {
     longDescription = ''
       libaosd is an advanced on screen display library.
 
@@ -49,8 +49,8 @@ stdenv.mkDerivation rec {
     '';
     broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://github.com/atheme-legacy/libaosd";
-    license = licenses.mit;
-    maintainers = with maintainers; [ unode ];
-    platforms = with platforms; unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ unode ];
+    platforms = with lib.platforms; unix;
   };
-}
+})

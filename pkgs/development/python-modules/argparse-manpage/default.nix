@@ -41,18 +41,23 @@ buildPythonPackage rec {
     "test_old_example_file_name"
   ];
 
+  disabledTestPaths = [
+    # network access to install setuptools, likely due to pip update
+    "tests/test_examples.py"
+  ];
+
   pythonImportsCheck = [ "argparse_manpage" ];
 
   optional-dependencies = {
     setuptools = [ setuptools ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Automatically build man-pages for your Python project";
     homepage = "https://github.com/praiskup/argparse-manpage";
     changelog = "https://github.com/praiskup/argparse-manpage/blob/${src.tag}/NEWS";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ nickcao ];
     mainProgram = "argparse-manpage";
   };
 }

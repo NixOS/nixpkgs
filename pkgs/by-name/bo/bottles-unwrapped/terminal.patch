@@ -1,0 +1,29 @@
+diff --git a/bottles/backend/utils/terminal.py b/bottles/backend/utils/terminal.py
+index 943cface..1f67822e 100644
+--- a/bottles/backend/utils/terminal.py
++++ b/bottles/backend/utils/terminal.py
+@@ -132,21 +132,21 @@ class TerminalUtils:
+                 full_cmd = f"{template} {palette} {cmd_for_shell}"
+ 
+         elif term_bin == "xfce4-terminal":
+-            cmd_for_shell = shlex.quote(f"sh -c {command}")
++            cmd_for_shell = f"sh -c {command}"
+             try:
+                 full_cmd = template % cmd_for_shell
+             except Exception:
+                 full_cmd = f"{template} {cmd_for_shell}"
+ 
+         elif term_bin in ["kitty", "foot", "konsole", "gnome-terminal", "wezterm"]:
+-            cmd_for_shell = shlex.quote(f"sh -c {command}")
++            cmd_for_shell = f"sh -c {command}"
+             try:
+                 full_cmd = template % cmd_for_shell
+             except Exception:
+                 full_cmd = f"{template} {cmd_for_shell}"
+ 
+         else:
+-            cmd_for_shell = shlex.quote(f"bash -c {command}")
++            cmd_for_shell = f"sh -c {command}"
+             try:
+                 full_cmd = template % cmd_for_shell
+             except Exception:

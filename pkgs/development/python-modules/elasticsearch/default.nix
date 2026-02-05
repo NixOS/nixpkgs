@@ -8,7 +8,6 @@
   orjson,
   pyarrow,
   python-dateutil,
-  pythonOlder,
   requests,
   typing-extensions,
 }:
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "elasticsearch";
   version = "8.18.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -46,10 +43,10 @@ buildPythonPackage rec {
   # https://github.com/elasticsearch/elasticsearch-py/tree/master/test_elasticsearch
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Official low-level client for Elasticsearch";
     homepage = "https://github.com/elasticsearch/elasticsearch-py";
     changelog = "https://github.com/elastic/elasticsearch-py/releases/tag/v${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

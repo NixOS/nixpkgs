@@ -8,7 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "grc";
   version = "1.13";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "garabik";
@@ -38,6 +38,11 @@ python3Packages.buildPythonApplication rec {
 
     runHook postInstall
   '';
+
+  outputs = [
+    "out"
+    "man"
+  ];
 
   meta = {
     homepage = "http://kassiopeia.juls.savba.sk/~garabik/software/grc.html";

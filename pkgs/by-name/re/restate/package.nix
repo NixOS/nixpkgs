@@ -25,16 +25,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "restate";
-  version = "1.5.3";
+  version = "1.5.6";
 
   src = fetchFromGitHub {
     owner = "restatedev";
     repo = "restate";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5sGVVJ8Y90yJoikQnPeGbZhNlSR/d3EkMct9isSWies=";
+    hash = "sha256-N27cKlJxQtE+/fMnaTlWyM3QeOIkt5M79t9PzB69eqw=";
   };
 
-  cargoHash = "sha256-+Yc7u6q4U4MwT5eHnxHC2DCG66SmEyRfNMeMqSO+GeQ=";
+  cargoHash = "sha256-JnlqKESW2VBv902/qZqEr5rEDSLhnpQ/nZdYHU6tBMI=";
 
   env = {
     PROTOC = lib.getExe protobuf;
@@ -100,13 +100,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   checkFlags = [
     # Error: deadline has elapsed
-    "--skip replicated_loglet"
-
+    "--skip"
+    "replicated_loglet"
     # TIMEOUT [ 180.006s]
-    "--skip fast_forward_over_trim_gap"
-
-    # TIMEOUT (could be related to https://github.com/restatedev/restate/issues/3043)
-    "--skip restatectl_smoke_test"
+    "--skip"
+    "fast_forward_over_trim_gap"
+    # TIMEOUT (could be related to https://github.com/resytatedev/restate/issues/3043)
+    "--skip"
+    "restatectl_smoke_test"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -114,7 +115,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

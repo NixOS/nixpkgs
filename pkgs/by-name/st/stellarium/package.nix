@@ -17,17 +17,18 @@
   xvfb-run,
   gitUpdater,
   md4c,
+  withQtWebEngine ? lib.meta.availableOn stdenv.hostPlatform qt6.qtwebengine,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "stellarium";
-  version = "25.3";
+  version = "25.4";
 
   src = fetchFromGitHub {
     owner = "Stellarium";
     repo = "stellarium";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-9uQ6u1+dSszmKG8eY6kSXhqsCPRGw6tulCTCrLByIxc=";
+    hash = "sha256-DA4VuVTVGTTzZA9ml+sh6R2qUU+QhHD9k1qOb8C5sSA=";
   };
 
   patches = [
@@ -59,7 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtpositioning
     qt6.qtmultimedia
     qt6.qtserialport
-    qt6.qtwebengine
     calcmysky
     qt6Packages.qxlsx
     indilib
@@ -70,6 +70,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     qt6.qtwayland
+  ]
+  ++ lib.optionals withQtWebEngine [
+    qt6.qtwebengine
   ];
 
   preConfigure = ''

@@ -19,14 +19,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ctagdrc";
-  version = "0.1.1";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "BillyDM";
     repo = "CTAGDRC";
-    tag = finalAttrs.version;
-    hash = "sha256-szBI8ESJz1B/JuGcZD8D53c1yJeUW1uK4GewQExtD9Q=";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
+    hash = "sha256-dJAmcoDhGoVG8h1T84qYhzEuvGdBVYQUuQC8mJkD4To=";
   };
 
   nativeBuildInputs = [
@@ -48,6 +48,17 @@ stdenv.mkDerivation (finalAttrs: {
     libXtst
   ];
 
+  env.NIX_CFLAGS_COMPILE = toString [
+    # juce, compiled in this build as part of a Git submodule, uses `-flto` as
+    # a Link Time Optimization flag, and instructs the plugin compiled here to
+    # use this flag to. This breaks the build for us. Using _fat_ LTO allows
+    # successful linking while still providing LTO benefits. If our build of
+    # `juce` was used as a dependency, we could have patched that `-flto` line
+    # in our juce's source, but that is not possible because it is used as a
+    # Git Submodule.
+    "-ffat-lto-objects"
+  ];
+
   enableParallelBuilding = true;
 
   postPatch = ''
@@ -55,8 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
           --replace-fail 'COPY_PLUGIN_AFTER_BUILD TRUE' 'COPY_PLUGIN_AFTER_BUILD FALSE'
     substituteInPlace CMakeLists.txt \
           --replace-fail 'include(cmake-include/CPM.cmake)' '# No CPM needed'
-    substituteInPlace CMakeLists.txt \
-          --replace-fail 'juce::juce_recommended_lto_flags' '# Not forcing LTO'
   '';
 
   installPhase = ''
@@ -87,6 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Audio compressor plugin created with JUCE";
     homepage = "https://github.com/BillyDM/CTAGDRC";
+    changelog = "https://github.com/BillyDM/CTAGDRC/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ magnetophon ];
     mainProgram = "CTAGDRC";

@@ -6,15 +6,12 @@
   hypothesis,
   isodate,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "isoduration";
   version = "20.11.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bolsote";
@@ -38,10 +35,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "isoduration" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for operations with ISO 8601 durations";
     homepage = "https://github.com/bolsote/isoduration";
-    license = licenses.isc;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

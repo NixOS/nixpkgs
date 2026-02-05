@@ -118,6 +118,12 @@ stdenv.mkDerivation (
       ++ optional noNakedPointers (flags "--disable-naked-pointers" "-no-naked-pointers");
     dontAddStaticConfigureFlags = lib.versionOlder version "4.08";
 
+    env =
+      lib.optionalAttrs (lib.versionOlder version "4.14" || lib.versions.majorMinor version == "5.0")
+        {
+          NIX_CFLAGS_COMPILE = "-std=gnu11";
+        };
+
     # on aarch64-darwin using --host and --target causes the build to invoke
     # `aarch64-apple-darwin-clang` while using assembler. However, such binary
     # does not exist. So, disable these configure flags on `aarch64-darwin`.
@@ -134,8 +140,7 @@ stdenv.mkDerivation (
         ];
     # x86_64-unknown-linux-musl-ld: -r and -pie may not be used together
     hardeningDisable =
-      lib.optional (lib.versionAtLeast version "4.09" && stdenv.hostPlatform.isMusl) "pie"
-      ++ lib.optional (lib.versionAtLeast version "5.0" && stdenv.cc.isClang) "strictoverflow"
+      lib.optional (lib.versionAtLeast version "5.0" && stdenv.cc.isClang) "strictoverflow"
       ++ lib.optionals (args ? hardeningDisable) args.hardeningDisable;
 
     # Older versions have some race:
@@ -190,10 +195,10 @@ stdenv.mkDerivation (
       nativeCompilers = useNativeCompilers;
     };
 
-    meta = with lib; {
+    meta = {
       homepage = "https://ocaml.org/";
       branch = versionNoPatch;
-      license = with licenses; [
+      license = with lib.licenses; [
         qpl # compiler
         lgpl2 # library
       ];
@@ -216,7 +221,7 @@ stdenv.mkDerivation (
         Learn more at: https://ocaml.org/learn/description.html
       '';
 
-      platforms = with platforms; linux ++ darwin;
+      platforms = with lib.platforms; linux ++ darwin;
       broken =
         stdenv.hostPlatform.isAarch64
         && lib.versionOlder version (if stdenv.hostPlatform.isDarwin then "4.10" else "4.02");

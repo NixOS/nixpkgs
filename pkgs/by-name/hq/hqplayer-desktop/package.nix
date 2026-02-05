@@ -17,15 +17,15 @@
 }:
 
 let
-  version = "5.13.0-35";
+  version = "5.16.2-43";
   srcs = {
     aarch64-linux = fetchurl {
-      url = "https://signalyst.com/bins/bookworm/hqplayer5desktop_${version}_arm64.deb";
-      hash = "sha256-ofS+EDNHKv94GSi9DrZPUhosAZsjSuP8rQghldKZmkU=";
+      url = "https://signalyst.com/bins/trixie/hqplayer5desktop_${version}_arm64.deb";
+      hash = "sha256-dmnDbFf1obuBvKSMIGFiI7fXi/5YRP23625Y+UEj+Wo=";
     };
     x86_64-linux = fetchurl {
       url = "https://signalyst.com/bins/noble/hqplayer5desktop_${version}_amd64.deb";
-      hash = "sha256-ej4H7SuDMkihlJsHcvPIFSGghyqCvVY/7LbCdq6lky4=";
+      hash = "sha256-WUqfMUQSVb+MSc0GyhuEMM9H6fJP/NcmpFAX46BCiPI=";
     };
   };
 in

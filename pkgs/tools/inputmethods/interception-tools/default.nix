@@ -22,6 +22,9 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    # Fix PATH forwarding to child processes.
+    # See #126681 issue for more information
+    ./interception-tools-udevmon-path-fix.patch
     (fetchpatch {
       name = "Bump-CMake-minimum-version-to-3.10";
       url = "https://gitlab.com/interception/linux/tools/-/commit/110c9b39b54eae9acd16fa6d64539ce9886b5684.patch";

@@ -1,13 +1,15 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   fetchpatch,
   cmake,
   pkg-config,
+  wrapQtAppsHook,
   alsa-lib ? null,
   carla ? null,
   fftwFloat,
-  fltk13,
+  fltk_1_3,
   fluidsynth ? null,
   lame ? null,
   libgig ? null,
@@ -22,10 +24,9 @@
   qtx11extras,
   qttools,
   SDL ? null,
-  mkDerivation,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "lmms";
   version = "1.2.2";
 
@@ -41,13 +42,14 @@ mkDerivation rec {
     cmake
     qttools
     pkg-config
+    wrapQtAppsHook
   ];
 
   buildInputs = [
     carla
     alsa-lib
     fftwFloat
-    fltk13
+    fltk_1_3
     fluidsynth
     lame
     libgig
@@ -86,12 +88,12 @@ mkDerivation rec {
     "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "DAW similar to FL Studio (music production software)";
     mainProgram = "lmms";
     homepage = "https://lmms.io";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

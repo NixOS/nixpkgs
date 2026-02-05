@@ -21,7 +21,7 @@ let
     ];
 
     src = fetchurl {
-      url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
+      url = "mirror://gnu/auctex/auctex-${version}.tar.gz";
       hash = "sha256-Hn5AKrz4RmlOuncZklvwlcI+8zpeZgIgHHS2ymCUQDU=";
     };
 
@@ -44,11 +44,11 @@ let
       "--with-texmf-dir=\${tex}"
     ];
 
-    meta = with lib; {
+    meta = {
       homepage = "https://www.gnu.org/software/auctex";
       description = "Extensible package for writing and formatting TeX files in GNU Emacs and XEmacs";
-      license = licenses.gpl3Plus;
-      platforms = platforms.unix;
+      license = lib.licenses.gpl3Plus;
+      platforms = lib.platforms.unix;
     };
   };
 

@@ -15,14 +15,14 @@ let
     ]
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sickgear";
   version = "3.33.2";
 
   src = fetchFromGitHub {
     owner = "SickGear";
     repo = "SickGear";
-    rev = "release_${version}";
+    rev = "release_${finalAttrs.version}";
     hash = "sha256-8cynBaVbFDI1hNwP03crkOf8Av+NCWr0xJLsZJpHLGs=";
   };
 
@@ -47,11 +47,11 @@ stdenv.mkDerivation rec {
       --suffix PATH : ${lib.makeBinPath [ libarchive ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Most reliable stable TV fork of the great Sick-Beard to fully automate TV enjoyment with innovation";
     mainProgram = "sickgear";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     homepage = "https://github.com/SickGear/SickGear";
     maintainers = with lib.maintainers; [ rembo10 ];
   };
-}
+})

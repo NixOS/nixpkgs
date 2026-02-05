@@ -21,7 +21,7 @@ let
     hash = "sha256-qm30C++rpLtxBhOABBzo+6WILSpKz2ibvUvoe8ku4ow=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libei";
   version = "1.5.0";
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "libinput";
     repo = "libei";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-PqQpJz88tDzjwsBuwxpWcGAWz6Gp6A/oAOS87uxGOGs=";
   };
 
@@ -61,12 +61,12 @@ stdenv.mkDerivation rec {
     patchShebangs ./proto/ei-scanner
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Library for Emulated Input";
     mainProgram = "ei-debug-events";
     homepage = "https://gitlab.freedesktop.org/libinput/libei";
-    license = licenses.mit;
-    maintainers = [ maintainers.pedrohlc ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.pedrohlc ];
+    platforms = lib.platforms.linux;
   };
-}
+})

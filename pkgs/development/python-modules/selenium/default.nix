@@ -6,7 +6,6 @@
   setuptools,
   certifi,
   pytestCheckHook,
-  pythonOlder,
   trio,
   trio-websocket,
   typing-extensions,
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "selenium";
   version = "4.29.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "SeleniumHQ";
@@ -80,10 +77,10 @@ buildPythonPackage rec {
     testing-vaultwarden = nixosTests.vaultwarden;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Bindings for Selenium WebDriver";
     homepage = "https://selenium.dev/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jraygauthier ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jraygauthier ];
   };
 }

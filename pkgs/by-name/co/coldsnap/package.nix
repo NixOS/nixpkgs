@@ -22,12 +22,11 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl ];
   nativeBuildInputs = [ pkg-config ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/awslabs/coldsnap";
     description = "Command line interface for Amazon EBS snapshots";
     changelog = "https://github.com/awslabs/coldsnap/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.asl20;
-    teams = [ teams.determinatesystems ];
+    license = lib.licenses.asl20;
     mainProgram = "coldsnap";
   };
 }

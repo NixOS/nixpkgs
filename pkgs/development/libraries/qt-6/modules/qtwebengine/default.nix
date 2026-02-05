@@ -15,7 +15,12 @@
   python3,
   which,
   nodejs,
-  xorg,
+  libxext,
+  libxdamage,
+  libxcomposite,
+  xrandr,
+  libxkbfile,
+  libpciaccess,
   libXcursor,
   libXScrnSaver,
   libXrandr,
@@ -111,6 +116,12 @@ qtModule {
 
     # Reproducibility QTBUG-136068
     ./gn-object-sorted.patch
+
+    # Backport crash fix
+    (fetchpatch2 {
+      url = "https://invent.kde.org/qt/qt/qtwebengine/-/commit/ecf90f65ef738ae20b114691d02fb15c82e6babe.diff";
+      hash = "sha256-TW+EmCxasH5LdZ80y/0YHird3NsrVdlwciDJpgSD9x0=";
+    })
   ]
   ++ lib.optionals stdenv.cc.isClang [
     # https://chromium-review.googlesource.com/c/chromium/src/+/6633292
@@ -248,19 +259,19 @@ qtModule {
     pciutils
 
     # X11 libs
-    xorg.xrandr
+    xrandr
     libXScrnSaver
     libXcursor
     libXrandr
-    xorg.libpciaccess
+    libpciaccess
     libXtst
-    xorg.libXcomposite
-    xorg.libXdamage
+    libxcomposite
+    libxdamage
     libdrm
-    xorg.libxkbfile
+    libxkbfile
     libxshmfence
     libXi
-    xorg.libXext
+    libxext
 
     # Pipewire
     pipewire

@@ -5,7 +5,7 @@
   fetchurl,
   updateAutotoolsGnuConfigScriptsHook,
   bison,
-  util-linux,
+  util-linuxMinimal,
   coreutils,
   libredirect,
   glibcLocales,
@@ -49,7 +49,7 @@ lib.warnIf (withDocs != null)
     # bionic libc is super weird and has issues with fortify outside of its own libc, check this comment:
     # https://github.com/NixOS/nixpkgs/pull/192630#discussion_r978985593
     # or you can check libc/include/sys/cdefs.h in bionic source code
-    ++ lib.optional (stdenv.hostPlatform.libc == "bionic") "fortify";
+    ++ lib.optionals (stdenv.hostPlatform.libc == "bionic") [ "fortify" ];
 
     outputs = [
       "out"
@@ -73,7 +73,23 @@ lib.warnIf (withDocs != null)
     + ''
       -DNON_INTERACTIVE_LOGIN_SHELLS
       -DSSH_SOURCE_BASHRC
-    '';
+    ''
+    # Bash's configure script assumes that CC and CC_FOR_BUILD have the
+    # same default -std=... flags. But at this moment, for FreeBSD, we
+    # have CC_FOR_BUILD that defaults to c23, and a CC that default to
+    # something older, perhaps c17. This breaks the build because of
+    # bash's faulty assumptions.
+    #
+    # To fix, we simply force the standard to be the higher for CC to
+    # match CC_FOR_BUILD.
+    #
+    # Once FreeBSD is built with a newer version of Clang, this hack
+    # should be removed.
+    +
+      lib.optionalString (stdenv.hostPlatform.isFreeBSD && stdenv.hostPlatform != stdenv.buildPlatform)
+        ''
+          -std=c23
+        '';
 
     patchFlags = [ "-p0" ];
 
@@ -107,12 +123,9 @@ lib.warnIf (withDocs != null)
       }"
     ]
     ++ lib.optionals stdenv.hostPlatform.isCygwin [
-      "--without-libintl-prefix"
-      "--without-libiconv-prefix"
-      "--with-installed-readline"
       "bash_cv_dev_stdin=present"
       "bash_cv_dev_fd=standard"
-      "bash_cv_termcap_lib=libncurses"
+      "gt_cv_func_printf_posix=yes"
     ]
     ++ lib.optionals (stdenv.hostPlatform.libc == "musl") [
       "--disable-nls"
@@ -130,21 +143,16 @@ lib.warnIf (withDocs != null)
       updateAutotoolsGnuConfigScriptsHook
       bison
     ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin stdenv.cc.bintools;
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ stdenv.cc.bintools ];
 
-    buildInputs = lib.optional interactive readline;
+    buildInputs = lib.optionals interactive [ readline ];
 
     enableParallelBuilding = true;
-
-    makeFlags = lib.optionals stdenv.hostPlatform.isCygwin [
-      "LOCAL_LDFLAGS=-Wl,--export-all,--out-implib,libbash.dll.a"
-      "SHOBJ_LIBS=-lbash"
-    ];
 
     doCheck = false; # Can't be enabled by default due to dependency cycle, use passthru.tests.withChecks instead
 
     postInstall = ''
-      ln -s bash "$out/bin/sh"
+      ln -s bash${stdenv.hostPlatform.extensions.executable} "$out/bin/sh"
       rm -f $out/lib/bash/Makefile.inc
     '';
 
@@ -167,7 +175,7 @@ lib.warnIf (withDocs != null)
         doCheck = true;
 
         nativeCheckInputs = attrs.nativeCheckInputs or [ ] ++ [
-          util-linux
+          util-linuxMinimal
           libredirect.hook
           glibcLocales
           gnused
@@ -255,7 +263,7 @@ lib.warnIf (withDocs != null)
       });
     };
 
-    meta = with lib; {
+    meta = {
       homepage = "https://www.gnu.org/software/bash/";
       description =
         "GNU Bourne-Again Shell, the de facto standard shell on Linux"
@@ -270,8 +278,8 @@ lib.warnIf (withDocs != null)
         interactive use.  In addition, most sh scripts can be run by
         Bash without modification.
       '';
-      license = licenses.gpl3Plus;
-      platforms = platforms.all;
+      license = lib.licenses.gpl3Plus;
+      platforms = lib.platforms.all;
       # https://github.com/NixOS/nixpkgs/issues/333338
       badPlatforms = [ lib.systems.inspect.patterns.isMinGW ];
       maintainers = with lib.maintainers; [ infinisil ];

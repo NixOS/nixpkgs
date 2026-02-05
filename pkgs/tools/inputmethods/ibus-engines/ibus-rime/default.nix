@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ibus-rime";
-  version = "1.5.1";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "rime";
     repo = "ibus-rime";
     rev = version;
-    sha256 = "sha256-6lqPdcIJmwHcr4G6BhIDMhEtEOpOPgWqfkKXqaDjUY0=";
+    sha256 = "sha256-prxXFC5l7JKmrKJe2R5U7kKJmb2m06B+Tic+m6LGthM=";
   };
 
   buildInputs = [
@@ -54,12 +54,12 @@ stdenv.mkDerivation rec {
     cp -r "${rimeDataDrv}/share/rime-data/." $out/share/rime-data/
   '';
 
-  meta = with lib; {
+  meta = {
     isIbusEngine = true;
     description = "Rime input method engine for IBus";
     homepage = "https://rime.im/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ pmy ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ pmy ];
   };
 }

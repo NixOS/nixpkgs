@@ -19,10 +19,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "wheezy.captcha" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://wheezycaptcha.readthedocs.io/en/latest/";
     description = "Lightweight CAPTCHA library";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Flakebi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Flakebi ];
   };
 }

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "0.2.4";
 
   src = fetchurl {
-    url = "https://launchpad.net/gnuclad/trunk/${lib.versions.majorMinor version}/+download/${pname}-${version}.tar.gz";
+    url = "https://launchpad.net/gnuclad/trunk/${lib.versions.majorMinor version}/+download/gnuclad-${version}.tar.gz";
     sha256 = "0ka2kscpjff7gflsargv3r9fdaxhkf3nym9mfaln3pnq6q7fwdki";
   };
 
@@ -18,12 +18,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://launchpad.net/gnuclad";
     description = "Generating cladogram trees for the GNU/Linux distro timeline project";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ mog ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ mog ];
+    platforms = lib.platforms.unix;
     mainProgram = "gnuclad";
   };
 }

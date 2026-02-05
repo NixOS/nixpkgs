@@ -37,10 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://khumba.net/projects/nvd";
     license = lib.licenses.asl20;
     mainProgram = "nvd";
-    maintainers = with lib.maintainers; [
-      khumba
-      iedame
-    ];
+    maintainers = with lib.maintainers; [ khumba ];
     platforms = lib.platforms.all;
   };
 })

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://telepathy.freedesktop.org/releases/${pname}/${pname}-${version}.tar.gz";
+    url = "https://telepathy.freedesktop.org/releases/telepathy-mission-control/telepathy-mission-control-${version}.tar.gz";
     sha256 = "0ibs575pfr0wmhfcw6ln6iz7gw2y45l3bah11rksf6g9jlwsxy1d";
   };
 
@@ -55,12 +55,12 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Account manager and channel dispatcher for the Telepathy framework";
     homepage = "https://telepathy.freedesktop.org/components/telepathy-mission-control/";
-    license = licenses.lgpl21Only;
+    license = lib.licenses.lgpl21Only;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     # The last successful Darwin Hydra build was in 2024
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };

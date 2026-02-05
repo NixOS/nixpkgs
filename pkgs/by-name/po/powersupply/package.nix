@@ -14,16 +14,16 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "powersupply";
-  version = "0.10.1";
+  version = "0.10.2";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitLab {
     domain = "gitlab.postmarketos.org";
     owner = "postmarketOS";
     repo = "powersupply";
     rev = version;
-    hash = "sha256-sPdtrm2WQYjPu+1bb0ltBiqS9t8FFvbgRdGe1PEthy0=";
+    hash = "sha256-i0AZfxYWj8ct2jiXl2GnCGMU3xBSRRny4H0G/5Qs14Y=";
   };
 
   postPatch = ''
@@ -52,12 +52,12 @@ python3.pkgs.buildPythonApplication rec {
 
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Graphical app to display power status of mobile Linux platforms";
     homepage = "https://gitlab.postmarketos.org/postmarketOS/powersupply";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "powersupply";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ Luflosi ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ Luflosi ];
   };
 }

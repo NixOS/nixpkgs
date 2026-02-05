@@ -14,15 +14,15 @@
   qt6,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qdigidoc";
-  version = "4.8.2";
+  version = "4.9.1";
 
   src = fetchFromGitHub {
     owner = "open-eid";
     repo = "DigiDoc4-Client";
-    tag = "v${version}";
-    hash = "sha256-HxFH1vpXXPVSYnaMrPOJwYCt8Z0pnOLrpixQlDkTN5w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sp+qlWtsMZHyoG0OVKbhalgak5KIx7C7Rpp0PbKVxK8=";
     fetchSubmodules = true;
   };
 
@@ -67,15 +67,15 @@ stdenv.mkDerivation rec {
     "--prefix LD_LIBRARY_PATH : ${opensc}/lib/pkcs11/"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Qt-based UI for signing and verifying DigiDoc documents";
     mainProgram = "qdigidoc4";
     homepage = "https://www.id.ee/";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       flokli
       mmahut
     ];
   };
-}
+})

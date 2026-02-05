@@ -14,11 +14,7 @@
   tweaks ? [ ],
 }:
 
-let
-  pname = "vimix-gtk-themes";
-
-in
-lib.checkListOfEnum "${pname}: theme variants"
+lib.checkListOfEnum "vimix-gtk-themes: theme variants"
   [
     "doder"
     "beryl"
@@ -30,21 +26,21 @@ lib.checkListOfEnum "${pname}: theme variants"
   ]
   themeVariants
   lib.checkListOfEnum
-  "${pname}: color variants"
+  "vimix-gtk-themes: color variants"
   [ "standard" "light" "dark" ]
   colorVariants
   lib.checkListOfEnum
-  "${pname}: size variants"
+  "vimix-gtk-themes: size variants"
   [ "standard" "compact" "all" ]
   sizeVariants
   lib.checkListOfEnum
-  "${pname}: tweaks"
+  "vimix-gtk-themes: tweaks"
   [ "flat" "grey" "mix" "translucent" ]
   tweaks
 
   stdenvNoCC.mkDerivation
   rec {
-    inherit pname;
+    pname = "vimix-gtk-themes";
     version = "2025-06-20";
 
     src = fetchFromGitHub {
@@ -88,11 +84,11 @@ lib.checkListOfEnum "${pname}: theme variants"
 
     passthru.updateScript = gitUpdater { };
 
-    meta = with lib; {
+    meta = {
       description = "Flat Material Design theme for GTK based desktop environments";
       homepage = "https://github.com/vinceliuice/vimix-gtk-themes";
-      license = licenses.gpl3Only;
-      platforms = platforms.unix;
-      maintainers = [ maintainers.romildo ];
+      license = lib.licenses.gpl3Only;
+      platforms = lib.platforms.unix;
+      maintainers = [ lib.maintainers.romildo ];
     };
   }

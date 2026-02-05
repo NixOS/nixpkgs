@@ -596,7 +596,7 @@ recurseIntoAttrs {
 
     no-empty-wrapper =
       let
-        bin = writeBashBin "bin" { makeWrapperArgs = [ ]; } ''true'';
+        bin = writeBashBin "bin" { makeWrapperArgs = [ ]; } "true";
       in
       runCommand "run-test-writers-wrapping-no-empty-wrapper" { } ''
         ls -A ${bin}/bin

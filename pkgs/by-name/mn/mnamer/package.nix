@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "mnamer";
-  version = "2.5.5";
-  format = "pyproject";
+  version = "2.6.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jkwill87";
     repo = "mnamer";
     tag = version;
-    sha256 = "sha256-qQu5V1GOsbrR00HOrot6TTAkc3KRasBPDEU7ZojUBio=";
+    sha256 = "sha256-lu1DWbR7LkaRddeAAHBWM61cnEZG4KVZdQWWRsbghb8=";
   };
 
   build-system = with python3Packages; [
@@ -46,11 +46,11 @@ python3Packages.buildPythonApplication rec {
     "test_utils.py"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jkwill87/mnamer";
     description = "Intelligent and highly configurable media organization utility";
     mainProgram = "mnamer";
-    license = licenses.mit;
-    maintainers = with maintainers; [ urlordjames ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ urlordjames ];
   };
 }

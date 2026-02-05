@@ -29,6 +29,7 @@
   swift,
 
   mesa,
+  imagemagick,
 }:
 
 let
@@ -100,7 +101,7 @@ let
 in
 
 python3Packages.buildPythonApplication rec {
-  format = "other";
+  pyproject = false;
   inherit pname version;
 
   outputs = [
@@ -141,6 +142,7 @@ python3Packages.buildPythonApplication rec {
     rustPlatform.cargoSetupHook
     writableTmpDirAsHomeHook
     yarn-berry_4.yarnBerryConfigHook
+    imagemagick
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin swift;
 
@@ -269,7 +271,10 @@ python3Packages.buildPythonApplication rec {
     install -D -t $out/share/applications qt/launcher/lin/anki.desktop
     install -D -t $doc/share/doc/anki README* LICENSE*
     install -D -t $out/share/mime/packages qt/launcher/lin/anki.xml
-    install -D -t $out/share/pixmaps qt/launcher/lin/anki.{png,xpm}
+
+    mkdir -p $out/share/icons/hicolor/{32x32,128x128}/apps
+    magick qt/launcher/lin/anki.xpm $out/share/icons/hicolor/32x32/apps/anki.png
+    magick qt/launcher/lin/anki.png -resize 128x128 $out/share/icons/hicolor/128x128/apps/anki.png
     installManPage qt/launcher/lin/anki.1
 
     runHook postInstall
@@ -288,7 +293,7 @@ python3Packages.buildPythonApplication rec {
     tests.anki-sync-server = nixosTests.anki-sync-server;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Spaced repetition flashcard program";
     mainProgram = "anki";
     longDescription = ''
@@ -304,19 +309,12 @@ python3Packages.buildPythonApplication rec {
       or even practicing guitar chords!
     '';
     homepage = "https://apps.ankiweb.net";
-    license = licenses.agpl3Plus;
+    license = lib.licenses.agpl3Plus;
     inherit (mesa.meta) platforms;
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       euank
       junestepp
       oxij
-    ];
-    # Reported to crash at launch on darwin (as of 2.1.65)
-    broken = stdenv.hostPlatform.isDarwin;
-    badPlatforms = [
-      # pyqt6-webengine is broken on darwin
-      # https://github.com/NixOS/nixpkgs/issues/375059
-      lib.systems.inspect.patterns.isDarwin
     ];
   };
 }

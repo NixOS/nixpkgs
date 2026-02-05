@@ -2,7 +2,7 @@
   lib,
   stdenv,
   libcxxStdenv,
-  fetchurl,
+  fetchFromGitHub,
   pkgsStatic,
   runCommandLocal,
   binutils,
@@ -21,6 +21,9 @@
   # useful, but have to disable tests for now, as /dev/tpmrm0 is not accessible
   withTpm2 ? false,
   policy ? null,
+  # create additional "selftests" output and put botan-test binary together with
+  # test vectors there. Useful to perform initial botan self-tests before using it
+  exposeSelftests ? false,
 }@args:
 
 assert lib.assertOneOf "policy" policy [
@@ -52,7 +55,7 @@ let
       '';
 in
 stdenv.mkDerivation (finalAttrs: {
-  version = "3.9.0";
+  version = "3.10.0";
   pname = "botan";
 
   __structuredAttrs = true;
@@ -65,11 +68,16 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
     "doc"
     "man"
+  ]
+  ++ lib.optionals exposeSelftests [
+    "selftests"
   ];
 
-  src = fetchurl {
-    url = "http://botan.randombit.net/releases/Botan-${finalAttrs.version}.tar.xz";
-    hash = "sha256-jD8oS1jd1C6OQ+n6hqcSnYfqfD93aoDT2mPsIHIrCIM=";
+  src = fetchFromGitHub {
+    owner = "randombit";
+    repo = "botan";
+    tag = finalAttrs.version;
+    hash = "sha256-E4kKk4ry3SMn2DbnUTVx22lcAWDxxbo8DLyixjr/S6A=";
   };
 
   nativeBuildInputs = [
@@ -84,15 +92,12 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (stdenv.hostPlatform.isLinux && withTpm2) [
     tpm2-tss
   ]
-  ++ lib.optionals (lib.versionAtLeast finalAttrs.version "3.6.0" && !stdenv.hostPlatform.isMinGW) [
+  ++ lib.optionals (!stdenv.hostPlatform.isMinGW) [
     jitterentropy
   ]
-  ++
-    lib.optionals
-      (lib.versionAtLeast finalAttrs.version "3.7.0" && withEsdm && !stdenv.hostPlatform.isMinGW)
-      [
-        esdm
-      ]
+  ++ lib.optionals (withEsdm && !stdenv.hostPlatform.isMinGW) [
+    esdm
+  ]
   ++ lib.optionals (stdenv.hostPlatform.isMinGW) [
     windows.pthreads
   ];
@@ -102,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildTargets = [
     "cli"
   ]
-  ++ lib.optionals finalAttrs.finalPackage.doCheck [ "tests" ]
+  ++ lib.optionals (finalAttrs.finalPackage.doCheck || exposeSelftests) [ "tests" ]
   ++ lib.optionals static [ "static" ]
   ++ lib.optionals (!static) [ "shared" ];
 
@@ -124,19 +129,16 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (stdenv.hostPlatform.isLinux && withTpm2) [
     "--with-tpm2"
   ]
-  ++ lib.optionals (lib.versionAtLeast finalAttrs.version "3.6.0" && !stdenv.hostPlatform.isMinGW) [
+  ++ lib.optionals (!stdenv.hostPlatform.isMinGW) [
     "--enable-modules=jitter_rng"
   ]
-  ++
-    lib.optionals
-      (lib.versionAtLeast finalAttrs.version "3.7.0" && withEsdm && !stdenv.hostPlatform.isMinGW)
-      [
-        "--enable-modules=esdm_rng"
-      ]
-  ++ lib.optionals (lib.versionAtLeast finalAttrs.version "3.8.0" && policy != null) [
+  ++ lib.optionals (withEsdm && !stdenv.hostPlatform.isMinGW) [
+    "--enable-modules=esdm_rng"
+  ]
+  ++ lib.optionals (policy != null) [
     "--module-policy=${policy}"
   ]
-  ++ lib.optionals (lib.versionAtLeast finalAttrs.version "3.8.0" && policy == "bsi") [
+  ++ lib.optionals (policy == "bsi") [
     "--enable-module=ffi"
     "--enable-module=shake"
   ]
@@ -156,10 +158,21 @@ stdenv.mkDerivation (finalAttrs: {
     fi
   '';
 
-  postInstall = ''
-    cd "$out"/lib/pkgconfig
-    ln -s botan-*.pc botan.pc || true
-  '';
+  postInstall =
+    lib.optionalString exposeSelftests ''
+      mkdir -p $selftests/bin
+      install -Dpm755 -D botan-test $selftests/bin/botan-test
+
+      # don't copy leading source folder structure
+      pushd src/tests/data &> /dev/null
+      find . -type d -exec install -d $selftests/test-data/{} \;
+      find . -type f -exec install -Dpm644 {} $selftests/test-data/{} \;
+      popd &> /dev/null
+    ''
+    + ''
+      cd "$out"/lib/pkgconfig
+      ln -s botan-*.pc botan.pc || true
+    '';
 
   doCheck = true;
 
@@ -167,16 +180,16 @@ stdenv.mkDerivation (finalAttrs: {
     static = pkgsStatic.botan3;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Cryptographic algorithms library";
     homepage = "https://botan.randombit.net";
     mainProgram = "botan";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       raskin
       thillux
       nikstur
     ];
-    platforms = platforms.unix ++ platforms.windows;
-    license = licenses.bsd2;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
+    license = lib.licenses.bsd2;
   };
 })

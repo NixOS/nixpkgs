@@ -7,7 +7,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "nlohmann_json_schema_validator";
-  version = "2.3.0";
+  version = "2.4.0";
 
   outputs = [
     "out"
@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "pboettch";
     repo = "json-schema-validator";
     rev = finalAttrs.version;
-    hash = "sha256-Ybr5dNmjBBPTYPvgorJ6t2+zvAjxYQISWXJmgUVHBVE=";
+    hash = "sha256-VTRnlkcSPMCRQiu5H2P44nHG1JMV9gl04xYjppstsk4=";
   };
 
   buildInputs = [ nlohmann_json ];

@@ -18,14 +18,14 @@
   qt6,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gargoyle";
   version = "2023.1";
 
   src = fetchFromGitHub {
     owner = "garglk";
     repo = "garglk";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-XsN5FXWJb3DSOjipxr/HW9R7QS+7iEaITERTrbGEMwA=";
   };
 
@@ -83,12 +83,12 @@ stdenv.mkDerivation rec {
     (lib.cmakeBool "WITH_MAGNETIC" (!stdenv.hostPlatform.isDarwin))
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://ccxvii.net/gargoyle/";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     description = "Interactive fiction interpreter GUI";
     mainProgram = "gargoyle";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ orivej ];
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
   };
-}
+})

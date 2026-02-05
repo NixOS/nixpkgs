@@ -1,6 +1,6 @@
 {
   buildGoModule,
-  fetchFromGitea,
+  fetchFromCodeberg,
   lib,
   jq,
   installShellFiles,
@@ -13,8 +13,7 @@ buildGoModule rec {
   pname = "ijq";
   version = "1.2.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "gpanders";
     repo = "ijq";
     rev = "v${version}";
@@ -47,12 +46,12 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Interactive wrapper for jq";
     mainProgram = "ijq";
     homepage = "https://codeberg.org/gpanders/ijq";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       justinas
       mattpolzin
       SuperSandro2000

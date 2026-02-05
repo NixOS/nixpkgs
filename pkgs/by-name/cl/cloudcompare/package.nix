@@ -20,14 +20,14 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cloudcompare";
   version = "2.13.2";
 
   src = fetchFromGitHub {
     owner = "CloudCompare";
     repo = "CloudCompare";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-a/0lf3Mt5ZpLFRM8jAoqZer8pY1ROgPRY4dPt34Bk3E=";
     fetchSubmodules = true;
   };
@@ -152,12 +152,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "3D point cloud and mesh processing software";
     homepage = "https://cloudcompare.org";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ nh2 ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ nh2 ];
     mainProgram = "CloudCompare";
-    platforms = with platforms; linux; # only tested here; might work on others
+    platforms = with lib.platforms; linux; # only tested here; might work on others
   };
-}
+})

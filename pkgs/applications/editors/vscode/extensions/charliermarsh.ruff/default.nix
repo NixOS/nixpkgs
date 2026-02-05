@@ -12,26 +12,26 @@ vscode-utils.buildVscodeMarketplaceExtension {
       sources = {
         "x86_64-linux" = {
           arch = "linux-x64";
-          hash = "sha256-Rf8cx11qoXxFdPoItXSsEFc/QvLxYnyEt46Fv9fZdWw=";
+          hash = "sha256-Mm0OXz9yURDyi8liVhbzrAAFB+atfSu4YKaanxsLN1s=";
         };
         "x86_64-darwin" = {
           arch = "darwin-x64";
-          hash = "sha256-t97dol5FTLl2gSi3HbI4S7YpHcRygfBNcpNhWnlO1Xc=";
+          hash = "sha256-wWIve2qM3qXcuuCA63Xc5S69UdOTvNDWjyQfaBsRruA=";
         };
         "aarch64-linux" = {
           arch = "linux-arm64";
-          hash = "sha256-BRkebtBrOVD/usNbu1TOXxklrLyKIOxSgzZEeBlhRAo=";
+          hash = "sha256-1ckD1nc2K/hJHZPXDZ/eCE2zIQGkvDJGyDiFD/3V/xs=";
         };
         "aarch64-darwin" = {
           arch = "darwin-arm64";
-          hash = "sha256-us/4xn6IO09MZApja9KwdD+0HIKm5+cmG/kmggJ6mC8=";
+          hash = "sha256-T6+9h5pn/NI7ZDvl9hmCu8KWrleRiZ8qLEfsKPXO56A=";
         };
       };
     in
     {
       name = "ruff";
       publisher = "charliermarsh";
-      version = "2025.28.0";
+      version = "2026.34.0";
     }
     // sources.${stdenvNoCC.hostPlatform.system}
       or (throw "Unsupported system ${stdenvNoCC.hostPlatform.system}");

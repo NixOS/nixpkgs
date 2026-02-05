@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "0.92.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/cntlm/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/cntlm/cntlm-${version}.tar.gz";
     sha256 = "1632szz849wasvh5sm6rm1zbvbrkq35k7kcyvx474gyl4h4x2flw";
   };
 
@@ -27,15 +27,15 @@ stdenv.mkDerivation rec {
     mkdir -p $out/man/; cp doc/cntlm.1 $out/man/;
   '';
 
-  meta = with lib; {
+  meta = {
     description = "NTLM/NTLMv2 authenticating HTTP proxy";
     homepage = "https://cntlm.sourceforge.net/";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     maintainers = [
-      maintainers.qknight
-      maintainers.carlosdagos
+      lib.maintainers.qknight
+      lib.maintainers.carlosdagos
     ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "cntlm";
   };
 }

@@ -3,6 +3,7 @@
   lib,
   nixosTests,
   fetchFromGitHub,
+  fetchpatch,
   applyPatches,
   bundlerEnv,
   callPackage,
@@ -13,6 +14,8 @@
   moreutils,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   cacert,
   valkey,
   dataDir ? "/var/lib/zammad",
@@ -26,6 +29,12 @@ let
     src = fetchFromGitHub (lib.importJSON ./source.json);
     patches = [
       ./fix-sendmail-location.diff
+      # Fix mail fetch failing with OpenSSL 3.6
+      # https://github.com/zammad/zammad/pull/5888
+      (fetchpatch {
+        url = "https://github.com/zammad/zammad/commit/01376d45f48df057e4377518e6f7e4a0db7de624.patch";
+        hash = "sha256-uH1/t0dP5nvh12GsJz6Yf/RXpf8+hkYoVJnLJAXqpuc=";
+      })
     ];
 
     postPatch = ''
@@ -70,7 +79,8 @@ stdenvNoCC.mkDerivation {
   nativeBuildInputs = [
     valkey
     postgresql
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_9
     nodejs
     procps
     cacert
@@ -78,8 +88,9 @@ stdenvNoCC.mkDerivation {
 
   env.RAILS_ENV = "production";
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit pname src;
+    pnpm = pnpm_9;
 
     fetcherVersion = 1;
     hash = "sha256-mfdzb/LXQYL8kaQpWi9wD3OOroOOonDlJrhy9Dwl1no";
@@ -108,11 +119,12 @@ stdenvNoCC.mkDerivation {
   installPhase = ''
     cp -R . $out
     rm -rf $out/config/database.yml $out/config/secrets.yml $out/tmp $out/log
-    # dataDir will be set in the module, and the package gets overriden there
+    # dataDir will be set in the module, and the package gets overridden there
     ln -s ${dataDir}/config/database.yml $out/config/database.yml
     ln -s ${dataDir}/config/secrets.yml $out/config/secrets.yml
-    ln -s ${dataDir}/tmp $out/tmp
     ln -s ${dataDir}/log $out/log
+    ln -s ${dataDir}/storage $out/storage
+    ln -s ${dataDir}/tmp $out/tmp
   '';
 
   passthru = {

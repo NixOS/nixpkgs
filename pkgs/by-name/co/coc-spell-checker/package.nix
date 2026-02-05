@@ -7,10 +7,11 @@
   yarnBuildHook,
   yarnInstallHook,
   nodejs,
+  nix-update-script,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "coc-spell-checker";
-  version = "1.3.2-unstable-2022-12-18";
+  version = "0-unstable-2022-12-19";
 
   src = fetchFromGitHub {
     owner = "iamcco";
@@ -33,6 +34,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ];
 
   NODE_OPTIONS = "--openssl-legacy-provider";
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     description = "Basic spell checker that works well with camelCase code for (Neo)vim";

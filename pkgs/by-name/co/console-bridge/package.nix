@@ -7,14 +7,14 @@
   validatePkgConfig,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "console-bridge";
   version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "ros";
     repo = "console_bridge";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-M3GocT0hodw3Sc2NHcFDiPVZ1XN7BqIUuYLW8OaXMqM=";
   };
 
@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
     validatePkgConfig
   ];
 
-  meta = with lib; {
+  meta = {
     description = "ROS-independent package for logging that seamlessly pipes into rosconsole/rosout for ROS-dependent packages";
     homepage = "https://github.com/ros/console_bridge";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ lopsided98 ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ lopsided98 ];
+    platforms = lib.platforms.all;
   };
-}
+})

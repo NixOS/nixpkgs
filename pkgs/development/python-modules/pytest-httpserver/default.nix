@@ -4,7 +4,6 @@
   fetchFromGitHub,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   requests,
   toml,
   werkzeug,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "pytest-httpserver";
   version = "1.1.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "csernazs";
@@ -42,11 +39,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_httpserver" ];
 
-  meta = with lib; {
+  meta = {
     description = "HTTP server for pytest to test HTTP clients";
     homepage = "https://www.github.com/csernazs/pytest-httpserver";
     changelog = "https://github.com/csernazs/pytest-httpserver/blob/${src.tag}/CHANGES.rst";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

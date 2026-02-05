@@ -3,7 +3,7 @@
   stdenv,
   gcc13Stdenv,
   fetchFromGitHub,
-  xorg,
+  libx11,
   xorgproto,
   cairo,
   lv2,
@@ -27,7 +27,7 @@ buildStdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    xorg.libX11
+    libx11
     xorgproto
     cairo
     lv2
@@ -43,5 +43,6 @@ buildStdenv.mkDerivation (finalAttrs: {
     description = "Matching Equalizer to apply EQ curve from one source to another source";
     maintainers = with lib.maintainers; [ magnetophon ];
     license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
   };
 })

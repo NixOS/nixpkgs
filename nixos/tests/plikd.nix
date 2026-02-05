@@ -1,14 +1,12 @@
 { lib, ... }:
 {
   name = "plikd";
-  meta = with lib.maintainers; {
-    maintainers = [ freezeboy ];
+  meta = {
+    maintainers = [ ];
   };
 
   nodes.machine =
     { pkgs, ... }:
-    let
-    in
     {
       services.plikd.enable = true;
       environment.systemPackages = [ pkgs.plik ];

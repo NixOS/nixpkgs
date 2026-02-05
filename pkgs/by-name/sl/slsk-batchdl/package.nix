@@ -7,13 +7,13 @@
 }:
 buildDotnetModule (finalAttrs: {
   pname = "slsk-batchdl";
-  version = "2.5.0";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "fiso64";
     repo = "slsk-batchdl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZgNjNdk03jIc/REJMmuc5rZLbibLoy94DJxh7jAJY7g=";
+    hash = "sha256-H10pApWZ6zUkL1FuSrpbEzGGpDVAiBJB2aZtV9jDTz4=";
   };
 
   postPatch = ''

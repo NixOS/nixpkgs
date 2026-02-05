@@ -12,8 +12,6 @@
   farama-notifications,
   numpy,
   typing-extensions,
-  pythonOlder,
-  importlib-metadata,
 
   # optional-dependencies
   # atari
@@ -38,7 +36,7 @@
 
 buildPythonPackage rec {
   pname = "gymnasium";
-  version = "1.2.2";
+  version = "1.2.3";
 
   pyproject = true;
 
@@ -46,7 +44,7 @@ buildPythonPackage rec {
     owner = "Farama-Foundation";
     repo = "gymnasium";
     tag = "v${version}";
-    hash = "sha256-GD/ZC6BRcsIiVrvTz3j2hg10tbJMfCou/ydUFbC2fc4=";
+    hash = "sha256-b712BPs7AS8UE8Zsu9GW/J6Vag9NB/x728MtQ5yrjbY=";
   };
 
   build-system = [ setuptools ];
@@ -56,8 +54,7 @@ buildPythonPackage rec {
     farama-notifications
     numpy
     typing-extensions
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ];
 
   optional-dependencies = {
     atari = [

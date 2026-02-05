@@ -27,13 +27,13 @@ let
     polkit
     polkit_gnome
   ];
-  meta = with lib; {
+  meta = {
     description = "Passwordless MFA identities for workforces, customers, and developers";
     homepage = "https://www.beyondidentity.com";
     downloadPage = "https://app.byndid.com/downloads";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       klden
       hornwall
     ];

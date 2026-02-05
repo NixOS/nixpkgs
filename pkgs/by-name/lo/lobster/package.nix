@@ -8,7 +8,8 @@
 
   # Linux deps
   libGL,
-  xorg,
+  libxext,
+  libx11,
 
 }:
 
@@ -34,8 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ];
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libGL
-    xorg.libX11
-    xorg.libXext
+    libx11
+    libxext
   ];
 
   preConfigure = ''
@@ -44,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.can-run-hello-world = callPackage ./test-can-run-hello-world.nix { };
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://strlen.com/lobster/";
     description = "Lobster programming language";
@@ -54,8 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
       very static typing and memory management with a very lightweight,
       friendly and terse syntax, by doing most of the heavy lifting for you.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.all;
   };
 })

@@ -6,7 +6,7 @@
   pkg-config,
   bzip2,
   feather-tk,
-  ffmpeg,
+  ffmpeg_7,
   freetype,
   glfw,
   imath,
@@ -19,7 +19,7 @@
   nativefiledialog-extended,
   nlohmann_json,
   opencolorio,
-  openexr,
+  openexr_2,
   openssl,
   opentimelineio,
   plutovg,
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     bzip2
     feather-tk
-    ffmpeg
+    ffmpeg_7
     freetype
     glfw
     imath
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     nativefiledialog-extended
     nlohmann_json
     opencolorio
-    openexr
+    openexr_2
     openssl
     opentimelineio
     plutovg

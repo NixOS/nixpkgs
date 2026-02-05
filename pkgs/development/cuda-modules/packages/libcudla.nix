@@ -1,7 +1,7 @@
 {
   backendStdenv,
   buildRedist,
-  cudaMajorMinorVersion,
+  cudaOlder,
   lib,
 }:
 buildRedist {
@@ -19,7 +19,7 @@ buildRedist {
   autoPatchelfIgnoreMissingDeps = [
     "libnvcudla.so"
   ]
-  ++ lib.optionals (cudaMajorMinorVersion == "11.8") [
+  ++ lib.optionals (cudaOlder "12") [
     "libcuda.so.1"
     "libnvdla_runtime.so"
   ];
@@ -27,12 +27,7 @@ buildRedist {
   platformAssertions = [
     {
       message = "Only Xavier (7.2) and Orin (8.7) Jetson devices are supported";
-      assertion =
-        let
-          inherit (backendStdenv) hasJetsonCudaCapability requestedJetsonCudaCapabilities;
-        in
-        hasJetsonCudaCapability
-        -> (lib.subtractLists [ "7.2" "8.7" ] requestedJetsonCudaCapabilities == [ ]);
+      assertion = lib.subtractLists [ "7.2" "8.7" ] backendStdenv.cudaCapabilities == [ ];
     }
   ];
 }

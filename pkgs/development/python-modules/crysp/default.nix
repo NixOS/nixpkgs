@@ -5,15 +5,12 @@
   grandalf,
   matplotlib,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "crysp";
   version = "1.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bdcht";
@@ -36,10 +33,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "crysp" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module that provides crypto-related facilities";
     homepage = "https://github.com/bdcht/crysp";
-    license = with licenses; [ gpl2Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl2Only ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

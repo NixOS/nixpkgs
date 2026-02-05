@@ -21,7 +21,7 @@
   config,
   stdenv,
   qt5,
-  xorg,
+  libsm,
   cudaSupport ? config.cudaSupport,
   cudaCapabilities ? cudaPackages.flags.cudaCapabilities,
   cudaPackages,
@@ -105,7 +105,7 @@ stdenv'.mkDerivation {
     cgal
     gmp
     mpfr
-    xorg.libSM
+    libsm
   ]
   ++ depsAlsoForPycolmap;
 
@@ -120,7 +120,7 @@ stdenv'.mkDerivation {
 
   passthru.depsAlsoForPycolmap = depsAlsoForPycolmap;
 
-  meta = with lib; {
+  meta = {
     description = "Structure-From-Motion and Multi-View Stereo pipeline";
     longDescription = ''
       COLMAP is a general-purpose Structure-from-Motion (SfM) and Multi-View Stereo (MVS) pipeline
@@ -128,9 +128,9 @@ stdenv'.mkDerivation {
     '';
     mainProgram = "colmap";
     homepage = "https://colmap.github.io/index.html";
-    license = licenses.bsd3;
-    platforms = if cudaSupport then platforms.linux else platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    platforms = if cudaSupport then lib.platforms.linux else lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       lebastr
       usertam
       chpatrick

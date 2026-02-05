@@ -14,7 +14,7 @@ pythonPackages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "mopidy";
     repo = "mopidy-spotify";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-pM+kqeWYiPXv9DZDBTgwiEwC6Sbqv6uz5vJ5odcixOw=";
   };
 
@@ -26,25 +26,10 @@ pythonPackages.buildPythonApplication rec {
     pythonPackages.requests
   ];
 
-  optional-dependencies = {
-    lint = with pythonPackages; [
-      black
-      check-manifest
-      flake8
-      flake8-bugbear
-      isort
-    ];
-
-    test = with pythonPackages; [
-      pytest
-      pytest-cov
-      responses
-    ];
-
-    dev = optional-dependencies.lint ++ optional-dependencies.test ++ [ pythonPackages.tox ];
-  };
-
-  nativeCheckInputs = [ pythonPackages.pytestCheckHook ] ++ optional-dependencies.test;
+  nativeCheckInputs = [
+    pythonPackages.pytestCheckHook
+    pythonPackages.responses
+  ];
 
   pythonImportsCheck = [ "mopidy_spotify" ];
 

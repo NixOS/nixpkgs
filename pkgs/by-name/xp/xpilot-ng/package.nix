@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   libX11,
-  libSM,
+  libsm,
   libXext,
   SDL,
   libGLU,
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
   buildInputs = [
     libX11
-    libSM
+    libsm
     libXext
     SDL
     SDL_ttf
@@ -38,16 +38,14 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./xpilot-ng-gcc-14-fix.patch
     ./xpilot-ng-sdl-window-fix.patch
+    ./xpilot-ng-gcc-15-fix.patch
   ];
 
   meta = {
     description = "Multiplayer X11 space combat game";
     homepage = "http://xpilot.sf.net/";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [
-      raskin
-      iedame
-    ];
+    maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.linux;
   };
 })

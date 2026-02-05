@@ -4,22 +4,19 @@
   fetchFromGitHub,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   zlib,
 }:
 
 buildPythonPackage rec {
   pname = "pybigwig";
-  version = "0.3.24";
+  version = "0.3.25";
   format = "setuptools";
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "deeptools";
     repo = "pyBigWig";
     tag = version;
-    hash = "sha256-gK3cOwbvQtf+g1H/4x69swqCFdkBwpV7ZOrbE0eANh0=";
+    hash = "sha256-Vq/QdJg2qObJ49lHZ4RjULfI0f7pScLRWGW8NBZoMAw=";
   };
 
   buildInputs = [ zlib ];
@@ -41,7 +38,7 @@ buildPythonPackage rec {
     "testNumpyValues"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "File access to bigBed files, and read and write access to bigWig files";
     longDescription = ''
       A Python extension, written in C, for quick access to bigBed files
@@ -50,7 +47,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/deeptools/pyBigWig";
     changelog = "https://github.com/deeptools/pyBigWig/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ scalavision ];
+    license = lib.licenses.mit;
   };
 }

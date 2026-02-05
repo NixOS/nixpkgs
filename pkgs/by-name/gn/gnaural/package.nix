@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "20110606";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}_${version}.tar.xz";
+    url = "mirror://sourceforge/gnaural/gnaural_${version}.tar.xz";
     hash = "sha256-0a09DUMfHEIGYuIYSBGJalBiIHIgejr/KVDXCFgKBb8=";
   };
 
@@ -41,10 +41,10 @@ stdenv.mkDerivation rec {
     rm -rf $out/share/gnome
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Programmable auditory binaural-beat synthesizer";
     homepage = "https://gnaural.sourceforge.net/";
-    license = with licenses; [ gpl2Only ];
+    license = with lib.licenses; [ gpl2Only ];
     mainProgram = "gnaural";
   };
 }

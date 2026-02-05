@@ -4,15 +4,12 @@
   fetchFromGitHub,
   numpy,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "sdds";
   version = "0.4.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pylhc";
@@ -27,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sdds" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to handle SDDS files";
     homepage = "https://pylhc.github.io/sdds/";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ veprbl ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

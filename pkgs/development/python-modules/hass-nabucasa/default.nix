@@ -2,6 +2,7 @@
   lib,
   acme,
   aiohttp,
+  async-timeout,
   atomicwrites-homeassistant,
   attrs,
   buildPythonPackage,
@@ -9,6 +10,8 @@
   cryptography,
   fetchFromGitHub,
   freezegun,
+  grpcio,
+  icmplib,
   josepy,
   pycognito,
   pyjwt,
@@ -29,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "hass-nabucasa";
-  version = "1.5.1";
+  version = "1.12.0";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -38,7 +41,7 @@ buildPythonPackage rec {
     owner = "nabucasa";
     repo = "hass-nabucasa";
     tag = version;
-    hash = "sha256-BYRVr8YWYG+6vmCFCEJH0v2s+EpefDxmcBMHkXHRCrA=";
+    hash = "sha256-hBfO/dHsoMwUKcJf+6wGmS2+GWXauMu5FC527X3Ygow=";
   };
 
   postPatch = ''
@@ -50,17 +53,19 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "acme"
-    "josepy"
     "snitun"
   ];
 
   dependencies = [
     acme
     aiohttp
+    async-timeout
     atomicwrites-homeassistant
     attrs
     ciso8601
     cryptography
+    grpcio
+    icmplib
     josepy
     pycognito
     pyjwt
@@ -83,11 +88,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hass_nabucasa" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for the Home Assistant cloud integration";
     homepage = "https://github.com/NabuCasa/hass-nabucasa";
     changelog = "https://github.com/NabuCasa/hass-nabucasa/releases/tag/${src.tag}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ Scriptkiddi ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ Scriptkiddi ];
   };
 }

@@ -11,11 +11,11 @@
   libxml2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "etherape";
   version = "0.9.21";
   src = fetchurl {
-    url = "mirror://sourceforge/etherape/etherape-${version}.tar.gz";
+    url = "mirror://sourceforge/etherape/etherape-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-SckN87uIDTxg36xERMqPxdaLqPNrgg7V+Hc4HJoHF1w=";
   };
 
@@ -33,10 +33,10 @@ stdenv.mkDerivation rec {
     popt
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://etherape.sourceforge.net/";
     license = lib.licenses.gpl2Plus;
-    platforms = with platforms; linux;
-    maintainers = with maintainers; [ symphorien ];
+    platforms = with lib.platforms; linux;
+    maintainers = with lib.maintainers; [ symphorien ];
   };
-}
+})

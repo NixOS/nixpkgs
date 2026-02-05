@@ -2,7 +2,6 @@
   lib,
   fetchPypi,
   buildPythonPackage,
-  pythonOlder,
   setuptools,
   numpy,
   hdf5,
@@ -12,7 +11,6 @@
   openssh,
   pytestCheckHook,
   pytest-mpi,
-  cached-property,
 }:
 
 assert hdf5.mpiSupport -> mpi4py != null && hdf5.mpi == mpi4py.mpi;
@@ -25,8 +23,6 @@ buildPythonPackage rec {
   version = "3.14.0";
   pname = "h5py";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -73,8 +69,7 @@ buildPythonPackage rec {
   ++ lib.optionals mpiSupport [
     mpi4py
     openssh
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [ cached-property ];
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

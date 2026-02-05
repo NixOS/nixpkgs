@@ -15,7 +15,7 @@
   sqlite,
   unixODBC,
   gtk2,
-  xorg,
+  libxtst,
   glibcLocales,
   releasePath ? null,
 }:
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     gtk2
     sqlite
     unixODBC
-    xorg.libXtst
+    libxtst
     glibcLocales
   ];
 
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
         gtk2
         gtk3
         libsecret
-        xorg.libXtst
+        libxtst
       ];
     in
     ''
@@ -171,13 +171,13 @@ stdenv.mkDerivation rec {
     libSuffix = "${version}0";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Optimization solver for mathematical programming";
     homepage = "https://www.ibm.com/be-en/marketplace/ibm-ilog-cplex";
     mainProgram = "cplex";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ bfortz ];
+    maintainers = with lib.maintainers; [ bfortz ];
   };
 }

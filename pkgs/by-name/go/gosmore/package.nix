@@ -8,7 +8,7 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gosmore";
   version = "0-unstable-2014-03-17";
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-MfuJVsyGWspGNAFD6Ktbbyawb4bPwUITe7WkyFs6JxI=";
   };
 
-  sourceRoot = "${src.name}/applications/rendering/gosmore";
+  sourceRoot = "${finalAttrs.src.name}/applications/rendering/gosmore";
 
   buildInputs = [
     libxml2
@@ -41,14 +41,14 @@ stdenv.mkDerivation rec {
     "--binary"
   ]; # patch has dos style eol
 
-  meta = with lib; {
+  meta = {
     description = "Open Street Map viewer";
     mainProgram = "gosmore";
     homepage = "https://sourceforge.net/projects/gosmore/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       raskin
     ];
-    platforms = platforms.linux;
-    license = licenses.bsd2;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd2;
   };
-}
+})

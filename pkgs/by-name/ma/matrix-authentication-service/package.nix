@@ -18,21 +18,21 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-authentication-service";
-  version = "1.5.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "matrix-authentication-service";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MlOilH01OpiYHxhCceSXVw1zhyNQXYomTvSMkM9sUrk=";
+    hash = "sha256-Cw7EPjN9PLmMxRTHV2DeUWM/BVNrDIQfy//Cn++C98o=";
   };
 
-  cargoHash = "sha256-hvEr+cMjPJ4DLigAL9SQLUJqOVSOktsP8v4xTtOKvSg=";
+  cargoHash = "sha256-aQ6zGaHVEGgrNMhbx2tnb4yQ4B31Nr2gf4BKyJsnP0U=";
 
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
     src = "${finalAttrs.src}/${finalAttrs.npmRoot}";
-    hash = "sha256-0YWguliIJjYh1IUUIX4/CHDYwvUk/M2Hz15tL558tws=";
+    hash = "sha256-CXS5o1qYXPS5armoT9jLq4vv5ni3hht3ZCMXtNAGBQY=";
   };
 
   npmRoot = "frontend";
@@ -87,7 +87,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
   passthru.updateScript = nix-update-script {
     extraArgs = [

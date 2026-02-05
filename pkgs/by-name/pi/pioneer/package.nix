@@ -20,14 +20,14 @@
   SDL2_image,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pioneer";
   version = "20250501";
 
   src = fetchFromGitHub {
     owner = "pioneerspacesim";
     repo = "pioneer";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-bQ1JGndHbBM28SuAUybo9msC/nBXu6el1UY41BKJN5A=";
   };
 
@@ -69,10 +69,10 @@ stdenv.mkDerivation rec {
     "build-data"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Space adventure game set in the Milky Way galaxy at the turn of the 31st century";
     homepage = "https://pioneerspacesim.net";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Only
       cc-by-sa-30
     ];
@@ -81,4 +81,4 @@ stdenv.mkDerivation rec {
       "i686-linux"
     ];
   };
-}
+})

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   version = "2.2.13";
 
   src = fetchurl {
-    url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/indent/indent-${version}.tar.gz";
     hash = "sha256-nmRjT8TOZ5eyBLy4iXzhT90KtIyldpb3h2fFnK5XgJU=";
   };
 

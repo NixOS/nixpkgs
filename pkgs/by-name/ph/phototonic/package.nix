@@ -7,14 +7,14 @@
   exiv2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "phototonic";
   version = "2.1";
 
   src = fetchFromGitHub {
     owner = "oferkv";
     repo = "phototonic";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-BxJgTKblOKIwt88+PT7XZE0mk0t2B4SfsdXpQHttUTM=";
   };
 
@@ -39,12 +39,12 @@ stdenv.mkDerivation rec {
     sed -i 's;/usr;$$PREFIX/;g' phototonic.pro
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Image viewer and organizer";
     mainProgram = "phototonic";
     homepage = "https://github.com/oferkv/phototonic";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ pSub ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ pSub ];
+    platforms = lib.platforms.linux;
   };
-}
+})

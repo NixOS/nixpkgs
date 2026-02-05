@@ -22,9 +22,6 @@ stdenv.mkDerivation {
     sed 's/depmod /true /' -i Makefile
   '';
 
-  # Fix build on Linux kernel >= 5.18
-  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=implicit-fallthrough" ];
-
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
   makeFlags = kernelModuleMakeFlags ++ [
@@ -34,11 +31,11 @@ stdenv.mkDerivation {
     "INSTALL_MOD_PATH=${placeholder "out"}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "DIGImend graphics tablet drivers for the Linux kernel";
     homepage = "https://digimend.github.io/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ PuercoPop ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ PuercoPop ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -7,6 +7,13 @@
       { pkgs, lib, ... }:
       {
         services.gollum.enable = true;
+        services.gollum.extraConfig = ''
+          wiki_options = {
+            show_local_time: true
+          }
+
+          Precious::App.set(:wiki_options, wiki_options)
+        '';
       };
   };
 

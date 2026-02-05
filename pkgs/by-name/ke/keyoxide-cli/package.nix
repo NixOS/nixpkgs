@@ -1,20 +1,20 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   fetchYarnDeps,
   yarnConfigHook,
   yarnBuildHook,
   yarnInstallHook,
   nodejs,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "keyoxide-cli";
   version = "0.4.4";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "keyoxide";
     repo = "keyoxide-cli";
     tag = finalAttrs.version;
@@ -36,6 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Needed for executing package.json scripts
     nodejs
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://codeberg.org/keyoxide/keyoxide-cli/releases/tag/${finalAttrs.version}";

@@ -8,13 +8,13 @@
 
 perlPackages.buildPerlPackage {
   pname = "ham-unstable";
-  version = "2025-02-25";
+  version = "2025-11-12";
 
   src = fetchFromGitHub {
     owner = "kernkonzept";
     repo = "ham";
-    rev = "81b6f05fd91865c7d42b94a683388504489356dc";
-    hash = "sha256-a1JaUD/jrF7Yf+vyUoKQFjojxenmsCVw3Uo8u7RjPiQ=";
+    rev = "11c8b146f8b11e7f284050fe205ae8afb1715541";
+    hash = "sha256-SlraTVE03UEF5Spjy6ZEPbhS/INBR/9MaRLw4/AxZds=";
   };
 
   outputs = [ "out" ];
@@ -45,12 +45,12 @@ perlPackages.buildPerlPackage {
       --prefix PATH : ${openssh}/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to manage big projects consisting of multiple loosely-coupled git repositories";
     homepage = "https://github.com/kernkonzept/ham";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ aw ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ aw ];
     mainProgram = "ham";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

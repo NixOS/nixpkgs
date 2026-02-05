@@ -39,11 +39,11 @@ buildPythonPackage rec {
     "test_camel_config"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to convert strings from snake case to camel case or camel case to snake case";
     homepage = "https://github.com/sanders41/camel-converter";
     changelog = "https://github.com/sanders41/camel-converter/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

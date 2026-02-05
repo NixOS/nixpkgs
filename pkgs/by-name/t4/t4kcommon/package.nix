@@ -15,14 +15,14 @@
   libxml2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.1.1";
   pname = "t4kcommon";
 
   src = fetchFromGitHub {
     owner = "tux4kids";
     repo = "t4kcommon";
-    rev = "upstream/${version}";
+    rev = "upstream/${finalAttrs.version}";
     sha256 = "13q02xpmps9qg8zrzzy2gzv4a6afgi28lxk4z242j780v0gphchp";
   };
 
@@ -62,11 +62,11 @@ stdenv.mkDerivation rec {
       --replace-fail "cmake_minimum_required(VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Library of code shared between tuxmath and tuxtype";
     homepage = "https://github.com/tux4kids/t4kcommon";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

@@ -18,12 +18,12 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dnsdist";
   version = "1.9.10";
 
   src = fetchurl {
-    url = "https://downloads.powerdns.com/releases/dnsdist-${version}.tar.bz2";
+    url = "https://downloads.powerdns.com/releases/dnsdist-${finalAttrs.version}.tar.bz2";
     hash = "sha256-An3b3uaVxaWXKAV7/EHFsaaR+hx6XokniwnzVTJfvtY=";
   };
 
@@ -73,11 +73,11 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) dnsdist;
   };
 
-  meta = with lib; {
+  meta = {
     description = "DNS Loadbalancer";
     mainProgram = "dnsdist";
     homepage = "https://dnsdist.org";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ jojosch ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ jojosch ];
   };
-}
+})

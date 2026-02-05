@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   flit-core,
   python-dateutil,
   types-python-dateutil,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "arrow";
   version = "1.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -48,10 +45,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "arrow" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for date manipulation";
     homepage = "https://github.com/crsmithdev/arrow";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ thoughtpolice ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
 }

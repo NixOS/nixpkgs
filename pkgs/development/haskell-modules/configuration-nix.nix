@@ -262,12 +262,7 @@ builtins.intersectAttrs super {
   ghc-debug-brick = enableSeparateBinOutput super.ghc-debug-brick;
   nixfmt = enableSeparateBinOutput super.nixfmt;
   calligraphy = enableSeparateBinOutput super.calligraphy;
-  niv = overrideCabal (drv: {
-    buildTools = (drv.buildTools or [ ]) ++ [ pkgs.buildPackages.makeWrapper ];
-    postInstall = ''
-      wrapProgram ''${!outputBin}/bin/niv --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.nix ]}
-    '';
-  }) (enableSeparateBinOutput (self.generateOptparseApplicativeCompletions [ "niv" ] super.niv));
+  niv = enableSeparateBinOutput (self.generateOptparseApplicativeCompletions [ "niv" ] super.niv);
   ghcid = enableSeparateBinOutput super.ghcid;
   ormolu = self.generateOptparseApplicativeCompletions [ "ormolu" ] (
     enableSeparateBinOutput super.ormolu
@@ -285,6 +280,10 @@ builtins.intersectAttrs super {
       ];
     }))
   ];
+
+  # Test suite requires access to an actual serial port
+  # https://github.com/jputcu/serialport/issues/25 krank:ignore-line
+  serialport = dontCheck super.serialport;
 
   # Provides a library and an executable (pretty-derivation)
   nix-derivation = enableSeparateBinOutput super.nix-derivation;
@@ -526,9 +525,21 @@ builtins.intersectAttrs super {
   ];
 
   # Avoid compiling twice by providing executable as a separate output (with small closure size),
+  # add postgresqlTestHook to allow test executiion
   postgres-websockets = lib.pipe super.postgres-websockets [
     enableSeparateBinOutput
-    (overrideCabal { passthru.tests = pkgs.nixosTests.postgres-websockets; })
+    (overrideCabal {
+      passthru.tests = pkgs.nixosTests.postgres-websockets;
+      preCheck = ''
+        export postgresqlEnableTCP=1
+        export PGDATABASE=postgres_ws_test
+      '';
+    })
+    (addTestToolDepends [
+      pkgs.postgresql
+      pkgs.postgresqlTestHook
+    ])
+    (dontCheckIf pkgs.postgresqlTestHook.meta.broken)
   ];
 
   # Test suite requires a running postgresql server,
@@ -561,6 +572,26 @@ builtins.intersectAttrs super {
   # Disable tests because they require a running dbus session
   xmonad-dbus = dontCheck super.xmonad-dbus;
 
+  taffybar = lib.pipe super.taffybar [
+    (overrideCabal (drv: {
+      testDepends =
+        drv.testDepends or [ ]
+        ++ map lib.getBin [
+          pkgs.xorg-server
+          pkgs.xprop
+          pkgs.xrandr
+          pkgs.xdummy
+          pkgs.xterm
+          pkgs.dbus
+        ];
+      testFlags = drv.testFlags or [ ] ++ [
+        # TODO(@rvl): figure out why this doesn't work in Nixpkgs
+        "--skip=/python-dbusmock System services/"
+      ];
+    }))
+    (self.generateOptparseApplicativeCompletions [ "taffybar" ])
+  ];
+
   # Test suite requires running a docker container via testcontainers
   amqp-streamly = dontCheck super.amqp-streamly;
 
@@ -583,6 +614,8 @@ builtins.intersectAttrs super {
     addExtraLibraries [ pkgs.libGLU pkgs.libGL ] (super.hsqml.override { qt5 = pkgs.qt5.qtbase; })
   );
   monomer = dontCheck super.monomer;
+  # GLFW init fails in sandbox https://github.com/bsl/GLFW-b/issues/50 krank:ignore-line
+  GLFW-b = dontCheck super.GLFW-b;
 
   # Wants to check against a real DB, Needs freetds
   odbc = dontCheck (addExtraLibraries [ pkgs.freetds ] super.odbc);
@@ -677,7 +710,7 @@ builtins.intersectAttrs super {
   pcap = addExtraLibrary pkgs.libpcap super.pcap;
 
   # https://github.com/NixOS/nixpkgs/issues/53336
-  greenclip = addExtraLibrary pkgs.xorg.libXdmcp super.greenclip;
+  greenclip = addExtraLibrary pkgs.libxdmcp super.greenclip;
 
   # The cabal files for these libraries do not list the required system dependencies.
   libjwt-typed = addExtraLibrary pkgs.libjwt super.libjwt-typed;
@@ -722,7 +755,7 @@ builtins.intersectAttrs super {
   fltkhs = overrideCabal (drv: {
     libraryToolDepends = (drv.libraryToolDepends or [ ]) ++ [ pkgs.buildPackages.autoconf ];
     librarySystemDepends = (drv.librarySystemDepends or [ ]) ++ [
-      pkgs.fltk13
+      pkgs.fltk_1_3
       pkgs.libGL
       pkgs.libjpeg
     ];
@@ -781,9 +814,6 @@ builtins.intersectAttrs super {
     patches = drv.patches or [ ] ++ [
       ./patches/GLUT.patch
     ];
-    prePatch = drv.prePatch or "" + ''
-      ${lib.getBin pkgs.buildPackages.dos2unix}/bin/dos2unix *.cabal
-    '';
   }) super.GLUT;
 
   libsystemd-journal = addExtraLibrary pkgs.systemd super.libsystemd-journal;
@@ -970,6 +1000,11 @@ builtins.intersectAttrs super {
     '';
   }) super.sbv;
 
+  # Don't use vendored (and outdated) c-blosc library
+  hblosc = addPkgconfigDepends [
+    pkgs.c-blosc
+  ] (enableCabalFlag "externalBlosc" super.hblosc);
+
   # The test-suite requires a running PostgreSQL server.
   Frames-beam = dontCheck super.Frames-beam;
 
@@ -1122,6 +1157,11 @@ builtins.intersectAttrs super {
         }
       );
 
+  # Don't use vendored copy of zxcvbn-c
+  zxcvbn-c = addBuildDepends [
+    pkgs.zxcvbn-c
+  ] (enableCabalFlag "use-shared-lib" super.zxcvbn-c);
+
   # The test suite has undeclared dependencies on git.
   githash = dontCheck super.githash;
 
@@ -1273,6 +1313,7 @@ builtins.intersectAttrs super {
       pkgs.postgresql
       pkgs.postgresqlTestHook
     ];
+    doCheck = drv.doCheck or true && !(pkgs.postgresqlTestHook.meta.broken);
   }) super.relocant;
 
   # https://gitlab.iscpif.fr/gargantext/haskell-pgmq/blob/9a869df2842eccc86a0f31a69fb8dc5e5ca218a8/README.md#running-test-cases
@@ -1285,7 +1326,103 @@ builtins.intersectAttrs super {
       (lib.getBin (pkgs.postgresql.withPackages (ps: [ ps.pgmq ])))
       pkgs.postgresqlTestHook
     ];
+    doCheck = drv.doCheck or true && !(pkgs.postgresqlTestHook.meta.broken);
   }) super.haskell-pgmq;
+
+  migrant-postgresql-simple = lib.pipe super.migrant-postgresql-simple [
+    (overrideCabal {
+      preCheck = ''
+        postgresqlTestUserOptions="LOGIN SUPERUSER"
+      '';
+    })
+    (addTestToolDepends [
+      pkgs.postgresql
+      pkgs.postgresqlTestHook
+    ])
+    (dontCheckIf pkgs.postgresqlTestHook.meta.broken)
+  ];
+
+  postgresql-simple-migration = overrideCabal (drv: {
+    preCheck = ''
+      PGUSER=test
+      PGDATABASE=test
+    '';
+    testToolDepends = drv.testToolDepends or [ ] ++ [
+      pkgs.postgresql
+      pkgs.postgresqlTestHook
+    ];
+    jailbreak = true;
+    doCheck = drv.doCheck or true && !(pkgs.postgresqlTestHook.meta.broken);
+  }) super.postgresql-simple-migration;
+
+  postgresql-simple = lib.pipe super.postgresql-simple [
+    (addTestToolDepends [
+      pkgs.postgresql
+      pkgs.postgresqlTestHook
+    ])
+    (dontCheckIf pkgs.postgresqlTestHook.meta.broken)
+  ];
+
+  beam-postgres = lib.pipe super.beam-postgres [
+    # Requires pg_ctl command during tests
+    (addTestToolDepends [ pkgs.postgresql ])
+    (dontCheckIf (!pkgs.postgresql.doInstallCheck || !self.testcontainers.doCheck))
+  ];
+
+  users-postgresql-simple = lib.pipe super.users-postgresql-simple [
+    (addTestToolDepends [
+      pkgs.postgresql
+      pkgs.postgresqlTestHook
+    ])
+    (dontCheckIf pkgs.postgresqlTestHook.meta.broken)
+  ];
+
+  esqueleto =
+    overrideCabal
+      (drv: {
+        postPatch = drv.postPatch or "" + ''
+          # patch out TCP usage: https://nixos.org/manual/nixpkgs/stable/#sec-postgresqlTestHook-tcp
+          sed -i test/PostgreSQL/Test.hs \
+            -e s^host=localhost^^
+        '';
+        # Match the test suite defaults (or hardcoded values?)
+        preCheck = drv.preCheck or "" + ''
+          PGUSER=esqutest
+          PGDATABASE=esqutest
+        '';
+        testFlags = drv.testFlags or [ ] ++ [
+          # We don't have a MySQL test hook yet
+          "--skip=/Esqueleto/MySQL"
+        ];
+        testToolDepends = drv.testToolDepends or [ ] ++ [
+          pkgs.postgresql
+          pkgs.postgresqlTestHook
+        ];
+      })
+      # https://github.com/NixOS/nixpkgs/issues/198495
+      (dontCheckIf (pkgs.postgresqlTestHook.meta.broken) super.esqueleto);
+
+  persistent-postgresql =
+    # TODO: move this override to configuration-nix.nix
+    overrideCabal
+      (drv: {
+        postPatch = drv.postPath or "" + ''
+          # patch out TCP usage: https://nixos.org/manual/nixpkgs/stable/#sec-postgresqlTestHook-tcp
+          # NOTE: upstream host variable takes only two values...
+          sed -i test/PgInit.hs \
+            -e s^'host=" <> host <> "'^^
+        '';
+        preCheck = drv.preCheck or "" + ''
+          PGDATABASE=test
+          PGUSER=test
+        '';
+        testToolDepends = drv.testToolDepends or [ ] ++ [
+          pkgs.postgresql
+          pkgs.postgresqlTestHook
+        ];
+      })
+      # https://github.com/NixOS/nixpkgs/issues/198495
+      (dontCheckIf (pkgs.postgresqlTestHook.meta.broken) super.persistent-postgresql);
 
   # https://gitlab.iscpif.fr/gargantext/haskell-bee/blob/19c8775f0d960c669235bf91131053cb6f69a1c1/README.md#redis
   haskell-bee-redis = overrideCabal (drv: {
@@ -1419,6 +1556,18 @@ builtins.intersectAttrs super {
     };
   }) (enableSeparateBinOutput super.cabal2nix-unstable);
 
+  # Cabal doesn't allow us to properly specify the test dependency
+  # on nix-instantiate(1). Even though we're just evaluating pure code,
+  # it absolutely wants to write to disk.
+  language-nix-unstable = overrideCabal (drv: {
+    testDepends = drv.testDepends or [ ] ++ [ pkgs.nix ];
+    preCheck = ''
+      export TMP_NIX_DIR="$(mktemp -d)"
+      export NIX_STORE_DIR="$TMP_NIX_DIR/store"
+      export NIX_STATE_DIR="$TMP_NIX_DIR/state"
+    '';
+  }) super.language-nix-unstable;
+
   # test suite needs local redis daemon
   nri-redis = dontCheck super.nri-redis;
 
@@ -1442,7 +1591,6 @@ builtins.intersectAttrs super {
           wrapProgram "$out/bin/nvfetcher" --prefix 'PATH' ':' "${
             pkgs.lib.makeBinPath [
               pkgs.nvchecker
-              pkgs.nix # nix-prefetch-url
               pkgs.nix-prefetch-git
               pkgs.nix-prefetch-docker
             ]
@@ -1503,7 +1651,7 @@ builtins.intersectAttrs super {
     overrideCabal
       (old: {
         passthru = old.passthru or { } // {
-          nixPackage = pkgs.nixVersions.nix_2_28;
+          nixPackage = pkgs.nixVersions.nix_2_31;
         };
       })
       (
@@ -1582,6 +1730,9 @@ builtins.intersectAttrs super {
 
   # Tries to access network
   aws-sns-verify = dontCheck super.aws-sns-verify;
+
+  # Wants anthropic API key
+  claude = dontCheck super.claude;
 
   # Test suite requires network access
   minicurl = dontCheck super.minicurl;
@@ -1691,12 +1842,6 @@ builtins.intersectAttrs super {
   # Additionally install documentation
   jacinda = overrideCabal (drv: {
     enableSeparateDocOutput = true;
-    # Test suite is broken by DOS line endings inserted by Hackage revisions
-    # https://github.com/vmchale/jacinda/issues/5
-    postPatch = ''
-      ${drv.postPatch or ""}
-      ${pkgs.buildPackages.dos2unix}/bin/dos2unix *.cabal
-    '';
     postInstall = ''
       ${drv.postInstall or ""}
 
@@ -1768,7 +1913,7 @@ builtins.intersectAttrs super {
     addBuildDepend
       # Overrides for tailwindcss copied from:
       # https://github.com/EmaApps/emanote/blob/master/nix/tailwind.nix
-      (pkgs.tailwindcss.overrideAttrs (oa: {
+      (pkgs.tailwindcss.overrideAttrs (old: {
         plugins = [
           pkgs.nodePackages."@tailwindcss/aspect-ratio"
           pkgs.nodePackages."@tailwindcss/forms"
@@ -1776,10 +1921,10 @@ builtins.intersectAttrs super {
           pkgs.nodePackages."@tailwindcss/typography"
         ];
         # Added a shim for the `tailwindcss` CLI entry point
-        nativeBuildInputs = (oa.nativeBuildInputs or [ ]) ++ [ pkgs.buildPackages.makeBinaryWrapper ];
-        postInstall = (oa.postInstall or "") + ''
+        nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.buildPackages.makeBinaryWrapper ];
+        postInstall = (old.postInstall or "") + ''
           nodePath=""
-          for p in "$out" "${pkgs.nodePackages.postcss}" $plugins; do
+          for p in "$out" "${pkgs.postcss}" $plugins; do
             nodePath="$nodePath''${nodePath:+:}$p/lib/node_modules"
           done
           makeWrapper "$out/bin/tailwindcss" "$out/bin/tailwind" --prefix NODE_PATH : "$nodePath"
@@ -1787,8 +1932,6 @@ builtins.intersectAttrs super {
         '';
       }))
       super.tailwind;
-
-  emanote = addBuildDepend pkgs.stork super.emanote;
 
   keid-render-basic = addBuildTool pkgs.glslang super.keid-render-basic;
 
@@ -1831,6 +1974,7 @@ builtins.intersectAttrs super {
     gi-gtksource5
     gi-gsk
     gi-adwaita
+    gi-ostree
     sdl2-ttf
     sdl2
     dear-imgui
@@ -1838,13 +1982,13 @@ builtins.intersectAttrs super {
     ;
 
   webkit2gtk3-javascriptcore = lib.pipe super.webkit2gtk3-javascriptcore [
-    (addBuildDepend pkgs.xorg.libXtst)
+    (addBuildDepend pkgs.libxtst)
     (addBuildDepend pkgs.lerc)
     (overrideCabal { __onlyPropagateKnownPkgConfigModules = true; })
   ];
 
   gi-webkit2 = lib.pipe super.gi-webkit2 [
-    (addBuildDepend pkgs.xorg.libXtst)
+    (addBuildDepend pkgs.libxtst)
     (addBuildDepend pkgs.lerc)
     (overrideCabal { __onlyPropagateKnownPkgConfigModules = true; })
   ];
@@ -2005,4 +2149,46 @@ builtins.intersectAttrs super {
   cpython = doJailbreak super.cpython;
 
   botan-bindings = super.botan-bindings.override { botan = pkgs.botan3; };
+
+  # Avoids a cycle by disabling use of the external interpreter for the packages that are dependencies of iserv-proxy.
+  # These in particular can't rely on template haskell for cross-compilation anyway as they can't rely on iserv-proxy.
+  inherit
+    (
+      let
+        noExternalInterpreter = overrideCabal {
+          enableExternalInterpreter = false;
+        };
+      in
+      lib.mapAttrs (_: noExternalInterpreter) { inherit (super) iserv-proxy network; }
+    )
+    iserv-proxy
+    network
+    ;
+
+  # Workaround for flaky test: https://github.com/basvandijk/threads/issues/10
+  threads = appendPatch ./patches/threads-flaky-test.patch super.threads;
 }
+
+// lib.optionalAttrs pkgs.config.allowAliases (
+  lib.genAttrs
+    [
+      "2captcha"
+      "3d-graphics-examples"
+      "3dmodels"
+      "4Blocks"
+      "assert"
+      "if"
+    ]
+    (
+      old:
+      let
+        new = "_" + old;
+      in
+      {
+        name = old;
+        value =
+          lib.warnOnInstantiate "haskell.packages.*.${old} has been renamed to haskell.packages.*.${new}"
+            self.${new};
+      }
+    )
+)

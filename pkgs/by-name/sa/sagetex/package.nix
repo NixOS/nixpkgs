@@ -6,14 +6,14 @@
   texliveBasic,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sagetex";
   version = "3.6.1";
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "sagetex";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-OfhbXHbGI+DaDHqZCOGiSHJPHjGuT7ZqSEjKweloW38=";
   };
 
@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
     cp -va *.sty *.cfg *.def "$path/"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Embed code, results of computations, and plots from Sage into LaTeX documents";
     homepage = "https://github.com/sagemath/sagetex";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ alexnortung ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ alexnortung ];
+    platforms = lib.platforms.all;
   };
-}
+})

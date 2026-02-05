@@ -1,17 +1,18 @@
 {
+  stdenv,
   cmake,
   fetchFromGitHub,
   fetchpatch,
   lib,
   libusb1,
-  mkDerivation,
   python3,
   qtbase,
   qttools,
+  wrapQtAppsHook,
   udev,
   zlib,
 }:
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "openambit";
   version = "0.5";
 
@@ -49,6 +50,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     qttools
+    wrapQtAppsHook
   ];
   buildInputs = [
     libusb1
@@ -76,11 +78,11 @@ mkDerivation rec {
           $out/lib/udev/rules.d/20-libambit.rules
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Helps fetch data from Suunto Ambit GPS watches";
     homepage = "https://github.com/openambitproject/openambit/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ rycee ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ rycee ];
+    platforms = lib.platforms.linux;
   };
 }

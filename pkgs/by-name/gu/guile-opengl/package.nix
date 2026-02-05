@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "0.2.0";
 
   src = fetchurl {
-    url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/guile-opengl/guile-opengl-${version}.tar.gz";
     hash = "sha256-uPCH7CiCPQmfuELDupQQS7BPqecIFmSHpHGYnhwXbGU=";
   };
 
@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
     guile
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnu.org/software/guile-opengl/";
     description = "Guile bindings for the OpenGL graphics API";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

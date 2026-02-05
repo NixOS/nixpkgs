@@ -1,5 +1,5 @@
 {
-  fetchFromGitea,
+  fetchFromCodeberg,
   meson,
   ninja,
   pkg-config,
@@ -13,17 +13,16 @@
   xset,
   xautolock,
   xscreensaver,
-  xfce,
+  xfconf,
   wrapGAppsHook3,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "caffeine-ng";
   version = "4.2.0";
-  format = "other";
+  pyproject = false;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "WhyNotHugo";
     repo = "caffeine-ng";
     rev = "v${version}";
@@ -74,7 +73,7 @@ python3Packages.buildPythonApplication rec {
           procps
           xautolock
           xscreensaver
-          xfce.xfconf
+          xfconf
           xset
         ]
       }

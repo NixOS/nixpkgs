@@ -11,7 +11,7 @@
   libX11,
   libXau,
   libXdmcp,
-  libpthreadstubs,
+  libpthread-stubs,
   fetchpatch,
 }:
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     libX11
     libXau
     libXdmcp
-    libpthreadstubs
+    libpthread-stubs
   ];
   nativeCheckInputs = [ gtest ];
 
@@ -61,11 +61,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Intel Media SDK";
     mainProgram = "mfx-tracer-config";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       midchildan
       pjungkamp
     ];

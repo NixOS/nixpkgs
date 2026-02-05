@@ -23,14 +23,14 @@ assert (
   ]
 );
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "multicharge";
   version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "grimme-lab";
     repo = "multicharge";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-8qwM3dpvFoL2WrMWNf14zYtRap0ijdfZ95XaTlkHhqQ=";
   };
 
@@ -75,12 +75,12 @@ stdenv.mkDerivation rec {
     export OMP_NUM_THREADS=2
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Electronegativity equilibration model for atomic partial charges";
     mainProgram = "multicharge";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://github.com/grimme-lab/multicharge";
-    platforms = platforms.linux;
-    maintainers = [ maintainers.sheepforce ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})

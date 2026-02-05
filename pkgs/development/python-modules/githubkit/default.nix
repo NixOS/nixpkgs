@@ -3,6 +3,7 @@
   anyio,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   hishel,
   httpx,
   pydantic,
@@ -16,15 +17,23 @@
 
 buildPythonPackage rec {
   pname = "githubkit";
-  version = "0.13.4";
+  version = "0.13.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yanyongyu";
     repo = "githubkit";
     tag = "v${version}";
-    hash = "sha256-67Y0r4Po3z4YmnbWC0HBLmsKD68HMIGvHKo5SLe+KRc=";
+    hash = "sha256-YKL31M1H4LBE29xmi6GfX3tTBGxS9yUvHQEiWke3ANA=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "uv-build.patch";
+      url = "https://github.com/yanyongyu/githubkit/commit/2817664d904541242d4cedf7aae85cd4c4b606e2.patch?full_index=1";
+      hash = "sha256-mmtjlebHZpHX457frSOe88tsUo7iNdSIUynGZjcjuw4=";
+    })
+  ];
 
   pythonRelaxDeps = [ "hishel" ];
 
@@ -56,7 +65,7 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytest-xdist
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "githubkit" ];
 
@@ -75,6 +84,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/yanyongyu/githubkit";
     changelog = "https://github.com/yanyongyu/githubkit/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kranzes ];
+    maintainers = [ ];
   };
 }

@@ -7,6 +7,8 @@
 final: prev:
 let
   cocPackages = [
+    # keep-sorted start
+    "coc-basedpyright"
     "coc-clangd"
     "coc-cmake"
     "coc-css"
@@ -31,24 +33,21 @@ let
     "coc-r-lsp"
     "coc-rust-analyzer"
     "coc-sh"
-    "coc-sh"
     "coc-smartf"
     "coc-snippets"
     "coc-solargraph"
     "coc-spell-checker"
     "coc-sqlfluff"
     "coc-stylelint"
-    "coc-sumneko-lua"
     "coc-tabnine"
     "coc-texlab"
-    "coc-toml"
     "coc-toml"
     "coc-vimlsp"
     "coc-vimtex"
     "coc-wxml"
-    "coc-basedpyright"
     "coc-yaml"
     "coc-yank"
+    # keep-sorted end
   ];
 in
 lib.genAttrs cocPackages (

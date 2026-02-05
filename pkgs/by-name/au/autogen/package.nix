@@ -12,12 +12,12 @@
   libxml2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "autogen";
   version = "5.18.16";
 
   src = fetchurl {
-    url = "mirror://gnu/autogen/rel${version}/autogen-${version}.tar.xz";
+    url = "mirror://gnu/autogen/rel${finalAttrs.version}/autogen-${finalAttrs.version}.tar.xz";
     sha256 = "16mlbdys8q4ckxlvxyhwkdnh1ay9f6g0cyp1kylkpalgnik398gq";
   };
 
@@ -150,14 +150,14 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Automated text and program generation tool";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Plus
       lgpl3Plus
     ];
     homepage = "https://www.gnu.org/software/autogen/";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})

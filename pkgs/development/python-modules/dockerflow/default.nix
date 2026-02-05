@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "dockerflow";
-  version = "2024.04.2";
+  version = "2026.01.26";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mozilla-services";
     repo = "python-dockerflow";
     tag = version;
-    hash = "sha256-5Ov605FyhX+n6vFks2sdtviGqkrgDIMXpcvgqR85jmQ=";
+    hash = "sha256-wtofNcpsOAq2yQJf6n+DcVfzY+IQ2k6S8r2zHIWAosg=";
   };
 
   build-system = [
@@ -74,7 +74,7 @@ buildPythonPackage rec {
     # fastapi
     httpx
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # AssertionError: assert 'c7a05e2b-8a21-4255-a3ed-92cea1e74a62' is None

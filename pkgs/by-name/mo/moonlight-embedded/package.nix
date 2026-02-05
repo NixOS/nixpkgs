@@ -11,7 +11,8 @@
   SDL2,
   ffmpeg,
   pkg-config,
-  xorg,
+  libpthread-stubs,
+  libxcb,
   libvdpau,
   libpulseaudio,
   libcec,
@@ -22,14 +23,14 @@
   libva,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "moonlight-embedded";
   version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "moonlight-stream";
     repo = "moonlight-embedded";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Jc706BjIT3rS9zwntNOdgszP4CHuX+qxvPvWeU68Amg=";
     fetchSubmodules = true;
   };
@@ -51,11 +52,11 @@ stdenv.mkDerivation rec {
     udev
     SDL2
     ffmpeg
-    xorg.libxcb
+    libxcb
     libvdpau
     libpulseaudio
     libcec
-    xorg.libpthreadstubs
+    libpthread-stubs
     curl
     expat
     avahi
@@ -63,12 +64,12 @@ stdenv.mkDerivation rec {
     libva
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Open source implementation of NVIDIA's GameStream";
     homepage = "https://github.com/moonlight-stream/moonlight-embedded";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     mainProgram = "moonlight";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

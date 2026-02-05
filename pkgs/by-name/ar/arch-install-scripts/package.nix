@@ -111,14 +111,14 @@ resholve.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Useful scripts for installing Arch Linux";
     longDescription = ''
       A small suite of scripts aimed at automating some menial tasks when installing Arch Linux.
     '';
     homepage = "https://github.com/archlinux/arch-install-scripts";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ samlukeyes123 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ samlukeyes123 ];
+    platforms = lib.platforms.linux;
   };
 }

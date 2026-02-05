@@ -10,7 +10,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "intercept-build";
   inherit (clang-unwrapped) version;
 
-  format = "other";
+  pyproject = false;
 
   src = clang-unwrapped + "/bin";
 

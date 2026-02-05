@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "1.4.48";
 
   src = fetchurl {
-    url = "https://dbmx.net/tokyocabinet/${pname}-${version}.tar.gz";
+    url = "https://dbmx.net/tokyocabinet/tokyocabinet-${version}.tar.gz";
     sha256 = "140zvr0n8kvsl0fbn2qn3f2kh3yynfwnizn4dgbj47m975yg80x0";
   };
 

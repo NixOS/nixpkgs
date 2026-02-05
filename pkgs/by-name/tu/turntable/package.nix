@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   meson,
   ninja,
   pkg-config,
@@ -12,7 +12,10 @@
   libsoup_3,
   json-glib,
   libsecret,
+  libglycin,
+  libglycin-gtk4,
   glib-networking,
+  glycin-loaders,
 
   # Per the upstream request. Key owned by Aleksana
   lastfmKey ? "b5027c5178ca2abfcc31bd04397c3c0e",
@@ -21,14 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "turntable";
-  version = "0.3.3";
+  version = "0.4.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "GeopJr";
     repo = "Turntable";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fBduW49eNOEzRVBb72zcB5arTjTiRUy8jE3sSMjPITE=";
+    hash = "sha256-Rvkzh2Cila6ZhQZyX5zzUrWane6nLAjrwnKk0LPWKuE=";
   };
 
   nativeBuildInputs = [
@@ -45,6 +47,9 @@ stdenv.mkDerivation (finalAttrs: {
     libsoup_3
     json-glib
     libsecret
+    libglycin
+    libglycin-gtk4
+    glycin-loaders
     glib-networking
   ];
 

@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   replaceVars,
   graphviz,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "pygraphviz";
   version = "1.14";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "pygraphviz";
@@ -52,11 +49,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pygraphviz" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface to Graphviz graph drawing package";
     homepage = "https://github.com/pygraphviz/pygraphviz";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       matthiasbeyer
       dotlambda
     ];

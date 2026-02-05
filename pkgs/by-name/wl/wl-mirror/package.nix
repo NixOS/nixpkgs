@@ -29,15 +29,15 @@ let
   ];
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wl-mirror";
-  version = "0.18.3";
+  version = "0.18.4";
 
   src = fetchFromGitHub {
     owner = "Ferdi265";
     repo = "wl-mirror";
-    rev = "v${version}";
-    hash = "sha256-xj+CZPHeMAisOMB8mYSIc2jAa5iQD5pM+Stccq4gnak=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-vT4Z4iR3lIsK3gQyrbSGcK9PE/Uwa8cCFLuBI36xCTw=";
   };
 
   strictDeps = true;
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    echo 'v${version}' > version.txt
+    echo 'v${finalAttrs.version}' > version.txt
     substituteInPlace CMakeLists.txt \
       --replace 'WL_PROTOCOL_DIR "/usr' 'WL_PROTOCOL_DIR "${wayland-protocols}' \
       --replace 'WLR_PROTOCOL_DIR "/usr' 'WLR_PROTOCOL_DIR "${wlr-protocols}'
@@ -85,11 +85,11 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/wl-present --prefix PATH ":" ${wl-present-binpath}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Ferdi265/wl-mirror";
     description = "Simple Wayland output mirror client";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ synthetica ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ synthetica ];
+    platforms = lib.platforms.linux;
   };
-}
+})

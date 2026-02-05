@@ -10,14 +10,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pamixer";
   version = "1.6";
 
   src = fetchFromGitHub {
     owner = "cdemoulins";
     repo = "pamixer";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-LbRhsW2MiTYWSH6X9Pz9XdJdH9Na0QCO8CFmlzZmDjQ=";
   };
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     libpulseaudio
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Pulseaudio command line mixer";
     longDescription = ''
       Features:
@@ -51,9 +51,9 @@ stdenv.mkDerivation rec {
         - Mute or unmute a device
     '';
     homepage = "https://github.com/cdemoulins/pamixer";
-    maintainers = with maintainers; [ thiagokokada ];
-    license = licenses.gpl3;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ thiagokokada ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
     mainProgram = "pamixer";
   };
-}
+})

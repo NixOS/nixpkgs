@@ -7,7 +7,7 @@
   qt6Packages,
 }:
 python3Packages.buildPythonApplication rec {
-  name = "openfreebuds";
+  pname = "openfreebuds";
   version = "0.17.1";
 
   src = fetchFromGitHub {

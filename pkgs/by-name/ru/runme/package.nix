@@ -13,16 +13,16 @@
 
 buildGoModule rec {
   pname = "runme";
-  version = "3.15.4";
+  version = "3.16.5";
 
   src = fetchFromGitHub {
     owner = "runmedev";
     repo = "runme";
     rev = "v${version}";
-    hash = "sha256-RU2VU+yLBrnj9Gf1p0kB2Y6rfPaXIDQ8oMs2MaoJ5kM=";
+    hash = "sha256-FtZSwD9kGFaE43iJcei2K4tzPzXku9R9OnEeub/jYlg=";
   };
 
-  vendorHash = "sha256-Uw5igaQpKKI4y7EoznFdmyTXfex350Pps6nt3lvKeAM=";
+  vendorHash = "sha256-5x8KEd0foUZ68dS+SeXvaDzfwHVKuKTKCxlhXivTsB0=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -76,6 +76,6 @@ buildGoModule rec {
     homepage = "https://runme.dev";
     changelog = "https://github.com/runmedev/runme/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ _7karni ];
   };
 }

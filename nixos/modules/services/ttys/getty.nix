@@ -151,11 +151,9 @@ in
     # We can't just rely on 'Conflicts=autovt@tty1.service' because
     # 'switch-to-configuration switch' will start 'autovt@tty1.service'
     # and kill the display manager.
-    systemd.targets.getty.wants =
-      lib.mkIf (!(config.systemd.services.display-manager.enable or false))
-        [
-          "autovt@tty1.service"
-        ];
+    systemd.targets.getty.wants = lib.mkIf (!config.services.displayManager.enable) [
+      "autovt@tty1.service"
+    ];
 
     systemd.services."getty@" = {
       serviceConfig.ExecStart = [

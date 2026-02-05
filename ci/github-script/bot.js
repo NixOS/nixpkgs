@@ -9,6 +9,9 @@ module.exports = async ({ github, context, core, dry }) => {
 
   const artifactClient = new DefaultArtifactClient()
 
+  // Detect if running in a fork (not NixOS/nixpkgs)
+  const isFork = context.repo.owner !== 'NixOS'
+
   async function downloadMaintainerMap(branch) {
     let run
 
@@ -46,7 +49,7 @@ module.exports = async ({ github, context, core, dry }) => {
           name: 'maintainers',
         })
       ).data.artifacts[0]
-      if (!artifact) continue
+      if (!artifact || artifact.expired) continue
 
       await artifactClient.downloadArtifact(artifact.id, {
         findBy: {
@@ -68,9 +71,18 @@ module.exports = async ({ github, context, core, dry }) => {
 
     // We get here when none of the 10 commits we looked at contained a maintainer map.
     // For the master branch, we don't have any fallback options, so we error out.
-    // For other branches, we select a suitable fallback below.
-    if (branch === 'master') throw new Error('No maintainer map found.')
+    // In forks without merge-group history, return empty map to allow testing.
+    if (branch === 'master') {
+      if (isFork) {
+        core.warning(
+          'No maintainer map found. Using empty map (expected in forks without merge-group history).',
+        )
+        return {}
+      }
+      throw new Error('No maintainer map found.')
+    }
 
+    // For other branches, we select a suitable fallback below.
     const { stable, version } = classify(branch)
 
     const release = `release-${version}`
@@ -109,6 +121,11 @@ module.exports = async ({ github, context, core, dry }) => {
       return []
     }
 
+    // Forks don't have NixOS teams, return empty list
+    if (isFork) {
+      return []
+    }
+
     if (!members[team_slug]) {
       members[team_slug] = github.paginate(github.rest.teams.listMembersInOrg, {
         org: context.repo.owner,
@@ -133,6 +150,11 @@ module.exports = async ({ github, context, core, dry }) => {
           id,
         })
         .then((resp) => resp.data)
+        .catch((e) => {
+          // User may have deleted their account
+          if (e.status === 404) return null
+          throw e
+        })
     }
 
     return users[id]
@@ -152,6 +174,8 @@ module.exports = async ({ github, context, core, dry }) => {
       })
     ).data
 
+    log('author', pull_request.user?.login)
+
     const maintainers = await getMaintainerMap(pull_request.base.ref)
 
     const merge_bot_eligible = await handleMerge({
@@ -166,49 +190,6 @@ module.exports = async ({ github, context, core, dry }) => {
       getTeamMembers,
       getUser,
     })
-
-    // When the same change has already been merged to the target branch, a PR will still be
-    // open and display the same changes - but will not actually have any effect. This causes
-    // strange CI behavior, because the diff of the merge-commit is empty, no rebuilds will
-    // be detected, no maintainers pinged.
-    // We can just check the temporary merge commit, and if it's empty the PR can safely be
-    // closed - there are no further changes.
-    // We only do this for PRs, which are non-empty to start with. This avoids closing PRs
-    // which have been created with an empty commit for notification purposes, for example
-    // the yearly election notification for voters.
-    if (pull_request.merge_commit_sha && pull_request.changed_files > 0) {
-      const commit = (
-        await github.rest.repos.getCommit({
-          ...context.repo,
-          ref: pull_request.merge_commit_sha,
-        })
-      ).data
-
-      if (commit.files.length === 0) {
-        const body = [
-          `The diff for the temporary merge commit ${pull_request.merge_commit_sha} is empty.`,
-          'The changes in this PR have almost certainly already been merged to the target branch.',
-        ].join('\n')
-
-        core.info(`PR #${item.number}: closed`)
-
-        if (!dry) {
-          await github.rest.issues.createComment({
-            ...context.repo,
-            issue_number: pull_number,
-            body,
-          })
-
-          await github.rest.pulls.update({
-            ...context.repo,
-            pull_number,
-            state: 'closed',
-          })
-        }
-
-        return {}
-      }
-    }
 
     // Check for any human reviews other than the PR author, GitHub actions and other GitHub apps.
     // Accounts could be deleted as well, so don't count them.
@@ -340,9 +321,40 @@ module.exports = async ({ github, context, core, dry }) => {
         expectedHash: artifact.digest,
       })
 
-      const evalLabels = JSON.parse(
+      const changedPaths = JSON.parse(
         await readFile(`${pull_number}/changed-paths.json`, 'utf-8'),
-      ).labels
+      )
+      const evalLabels = changedPaths.labels
+
+      // Fetch all PR commits to check their messages for package patterns
+      const prCommits = await github.paginate(github.rest.pulls.listCommits, {
+        ...context.repo,
+        pull_number,
+        per_page: 100,
+      })
+      const commitSubjects = prCommits.map(
+        (c) => c.commit.message.split('\n')[0],
+      )
+
+      // Label new package PRs: "packagename: init at X.Y.Z"
+      // Exclude NixOS module commits like "nixos/timekpr: init at 0.5.8"
+      const newPackagePattern = /^(?<!nixos\/)\S+: init at\b/
+      const hasNewPackages = changedPaths.attrdiff?.added?.length > 0
+      const commitsIndicateNewPackage = commitSubjects.some((msg) =>
+        newPackagePattern.test(msg),
+      )
+      evalLabels['8.has: package (new)'] =
+        hasNewPackages && commitsIndicateNewPackage
+
+      // Label package update PRs: "packagename: X.Y.Z -> A.B.C"
+      // Matches versions like: 1.2.3, 0-unstable-2024-01-15, 1.3rc1, alpha, unstable
+      // Exclude NixOS module commits like "nixos/ncps: types.str -> types.path"
+      const updatePackagePattern =
+        /^(?<!nixos\/)\S+: [\w.-]*\d[\w.-]* (->|→) [\w.-]*\d[\w.-]*$/
+      const commitsIndicateUpdate = commitSubjects.some((msg) =>
+        updatePackagePattern.test(msg),
+      )
+      evalLabels['8.has: package (update)'] = commitsIndicateUpdate
 
       // TODO: Get "changed packages" information from list of changed by-name files
       // in addition to just the Eval results, to make this work for these packages
@@ -481,22 +493,6 @@ module.exports = async ({ github, context, core, dry }) => {
         },
       )
 
-      if (item.pull_request || context.payload.pull_request) {
-        stats.prs++
-        Object.assign(
-          itemLabels,
-          await handlePullRequest({ item, stats, events }),
-        )
-      } else {
-        stats.issues++
-        if (item.labels.some(({ name }) => name === '4.workflow: auto-close')) {
-          // If this returns true, the issue was closed. In this case we return, to not
-          // label the issue anymore. Most importantly this avoids unlabeling stale issues
-          // which are closed via auto-close.
-          if (await handleAutoClose(item)) return
-        }
-      }
-
       const latest_event_at = new Date(
         events
           .filter(({ event }) =>
@@ -537,6 +533,29 @@ module.exports = async ({ github, context, core, dry }) => {
       log('latest_event_at', latest_event_at.toISOString())
 
       const stale_at = new Date(new Date().setDate(new Date().getDate() - 180))
+      const is_stale = latest_event_at < stale_at
+
+      if (item.pull_request || context.payload.pull_request) {
+        // No need to compute merge commits for stale PRs over and over again.
+        // This increases the repo size on GitHub's side unnecessarily and wastes
+        // a lot of API requests, too. Any relevant change will result in the
+        // stale status to change and thus pick up the PR again for labeling.
+        if (!is_stale) {
+          stats.prs++
+          Object.assign(
+            itemLabels,
+            await handlePullRequest({ item, stats, events }),
+          )
+        }
+      } else {
+        stats.issues++
+        if (item.labels.some(({ name }) => name === '4.workflow: auto-close')) {
+          // If this returns true, the issue was closed. In this case we return, to not
+          // label the issue anymore. Most importantly this avoids unlabeling stale issues
+          // which are closed via auto-close.
+          if (await handleAutoClose(item)) return
+        }
+      }
 
       // Create a map (Label -> Boolean) of all currently set labels.
       // Each label is set to True and can be disabled later.
@@ -550,8 +569,7 @@ module.exports = async ({ github, context, core, dry }) => {
       )
 
       Object.assign(itemLabels, {
-        '2.status: stale':
-          !before['1.severity: security'] && latest_event_at < stale_at,
+        '2.status: stale': !before['1.severity: security'] && is_stale,
       })
 
       const after = Object.assign({}, before, itemLabels)
@@ -644,7 +662,7 @@ module.exports = async ({ github, context, core, dry }) => {
         ).data.artifacts[0]
 
         // If the artifact is not available, the next iteration starts at the beginning.
-        if (artifact) {
+        if (artifact && !artifact.expired) {
           stats.artifacts++
 
           const { downloadPath } = await artifactClient.downloadArtifact(

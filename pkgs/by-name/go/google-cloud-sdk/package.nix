@@ -8,6 +8,7 @@
 #
 
 {
+  cacert,
   stdenv,
   lib,
   fetchurl,
@@ -168,23 +169,33 @@ stdenv.mkDerivation rec {
     $out/bin/gsutil version | grep -w "$(cat platform/gsutil/VERSION)"
   '';
 
+  # Replace all vendored copies of CA bundle with the one used by Nixpkgs.
+  # This search/replace is a bit overzealous and replaces some files used by tests
+  # but it should cause no harm since we're not running those tests.
+  postFixup = ''
+    while IFS= read -rd "" f; do
+      echo "rewriting certificate bundle: $f"
+      ln -sf ${cacert}/etc/ssl/certs/ca-bundle.crt "$f"
+    done < <(find "$out" '(' -name cacert.pem -o -name cacerts.txt ')' -print0)
+  '';
+
   passthru = {
     inherit components withExtraComponents;
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tools for the google cloud platform";
     longDescription = "The Google Cloud SDK for GCE hosts. Used by `google-cloud-sdk` only on GCE guests.";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryNativeCode # anthoscli and possibly more
     ];
     # This package contains vendored dependencies. All have free licenses.
-    license = licenses.free;
+    license = lib.licenses.free;
     homepage = "https://cloud.google.com/sdk/";
     changelog = "https://cloud.google.com/sdk/docs/release-notes";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       iammrinal0
       marcusramberg
       pradyuman

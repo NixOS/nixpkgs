@@ -15,19 +15,19 @@
 
 buildPythonPackage rec {
   pname = "cmsis-pack-manager";
-  version = "0.5.2";
-  format = "pyproject";
+  version = "0.6.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyocd";
     repo = "cmsis-pack-manager";
     tag = "v${version}";
-    hash = "sha256-PeyJf3TGUxv8/MKIQUgWrenrK4Hb+4cvtDA2h3r6kGg=";
+    hash = "sha256-kb0VSg89qglL6Q5kx1nEN1OW1GYoccBTITtPw2/dXTY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-OBh5WWSekrqdLLmxEXS0LfPIfy4QWKYgO+8o6PYWjN4=";
+    hash = "sha256-yRNSFlEwFhfkSNjbFHipVZvJZ40pKbI9HhLtciws7nc=";
   };
 
   nativeBuildInputs = [
@@ -63,11 +63,11 @@ buildPythonPackage rec {
     "test_dump_parts_cli"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Rust and Python module for handling CMSIS Pack files";
     homepage = "https://github.com/pyocd/cmsis-pack-manager";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       frogamic
       sbruder
     ];

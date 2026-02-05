@@ -9,14 +9,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ciftilib";
   version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "Washington-University";
     repo = "CiftiLib";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-xc2dpMse4SozYEV/w3rXCrh1LKpTThq5nHB2y5uAD0A=";
   };
 
@@ -45,12 +45,12 @@ stdenv.mkDerivation rec {
       --replace-fail "CMAKE_POLICY(SET CMP0045 OLD)" ""
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Washington-University/CiftiLib";
     description = "Library for reading and writing CIFTI files";
-    maintainers = with maintainers; [ bcdarwin ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ bcdarwin ];
+    platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
   };
-}
+})

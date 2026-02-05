@@ -4,7 +4,7 @@
   fetchFromGitHub,
   makeBinaryWrapper,
   acl,
-  xorg,
+  xhost,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,18 +26,21 @@ rustPlatform.buildRustPackage rec {
 
   # requires access to /root
   checkFlags = [
-    "--skip tests::test_check_user_homedir"
+    "--skip=tests::test_check_user_homedir"
   ];
 
   postInstall = ''
-    wrapProgram $out/bin/ego --prefix PATH : ${lib.makeBinPath [ xorg.xhost ]}
+    wrapProgram $out/bin/ego --prefix PATH : ${lib.makeBinPath [ xhost ]}
   '';
 
   meta = {
     description = "Run Linux desktop applications under a different local user";
     homepage = "https://github.com/intgr/ego";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = with lib.maintainers; [
+      dit7ya
+      mio
+    ];
     mainProgram = "ego";
   };
 }

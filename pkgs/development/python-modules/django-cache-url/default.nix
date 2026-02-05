@@ -5,7 +5,6 @@
   fetchFromGitHub,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "django-cache-url";
   version = "3.4.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "epicserve";
@@ -33,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "django_cache_url" ];
 
-  meta = with lib; {
+  meta = {
     description = "Use Cache URLs in your Django application";
     homepage = "https://github.com/epicserve/django-cache-url";
     changelog = "https://github.com/epicserve/django-cache-url/blob/v${version}/CHANGELOG.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -9,18 +9,18 @@ python3Packages.buildPythonApplication rec {
   version = "0.99.13";
 
   src = fetchurl {
-    url = "mirror://sourceforge/menumaker/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/menumaker/menumaker-${version}.tar.gz";
     sha256 = "sha256-JBXs5hnt1snbnB1hi7q7HBI7rNp0OoalLeIM0uJCdkE=";
   };
 
-  format = "other";
+  pyproject = false;
 
-  meta = with lib; {
+  meta = {
     description = "Heuristics-driven menu generator for several window managers";
     mainProgram = "mmaker";
     homepage = "https://menumaker.sourceforge.net";
-    license = licenses.bsd2;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

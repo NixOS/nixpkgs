@@ -5,7 +5,6 @@
   fetchFromGitHub,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   pytz,
   ujson,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "ripe-atlas-sagan";
   version = "1.3.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "RIPE-NCC";
@@ -45,10 +42,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ripe.atlas.sagan" ];
 
-  meta = with lib; {
+  meta = {
     description = "Parsing library for RIPE Atlas measurements results";
     homepage = "https://github.com/RIPE-NCC/ripe-atlas-sagan";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ raitobezarius ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ raitobezarius ];
   };
 }

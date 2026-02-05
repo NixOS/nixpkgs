@@ -9,7 +9,6 @@
   pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   rich-argparse,
   setuptools-scm,
   wcwidth,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "cmd2";
   version = "2.7.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
@@ -53,11 +50,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cmd2" ];
 
-  meta = with lib; {
+  meta = {
     description = "Enhancements for standard library's cmd module";
     homepage = "https://github.com/python-cmd2/cmd2";
     changelog = "https://github.com/python-cmd2/cmd2/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ teto ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ teto ];
   };
 }

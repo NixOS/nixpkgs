@@ -19,16 +19,22 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-JpXjnkZHz12YxgTSqTcWdQTkrMugP7ZGw48145BeBZk=";
 
-  cargoBuildFlags = [ "-p eludris" ];
-  cargoTestFlags = [ "-p eludris" ];
+  cargoBuildFlags = [
+    "--package"
+    "eludris"
+  ];
+  cargoTestFlags = [
+    "--package"
+    "eludris"
+  ];
   buildInputs = [ openssl ];
   nativeBuildInputs = [ pkg-config ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple CLI to help you with setting up and managing your Eludris instance";
     mainProgram = "eludris";
     homepage = "https://github.com/eludris/eludris/tree/main/cli";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ooliver1 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ooliver1 ];
   };
 }

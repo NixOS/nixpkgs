@@ -9,7 +9,6 @@
   mock,
   prawcore,
   pytestCheckHook,
-  pythonOlder,
   requests-toolbelt,
   update-checker,
   websocket-client,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "praw";
   version = "7.8.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "praw-dev";
@@ -53,11 +50,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "praw" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Reddit API wrapper";
     homepage = "https://praw.readthedocs.org/";
     changelog = "https://github.com/praw-dev/praw/blob/v${version}/CHANGES.rst";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

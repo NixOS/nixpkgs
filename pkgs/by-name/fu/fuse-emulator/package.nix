@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   version = "1.6.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/fuse-${version}.tar.gz";
+    url = "mirror://sourceforge/fuse-emulator/fuse-${version}.tar.gz";
     sha256 = "sha256-Oo/t8v/pR8VxVhusVaWa2tTFkzj3TkSbfnpn2coEcJY=";
   };
 
@@ -47,12 +47,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://fuse-emulator.sourceforge.net/";
     description = "ZX Spectrum emulator";
     mainProgram = "fuse";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ orivej ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
   };
 }

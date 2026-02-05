@@ -4,9 +4,9 @@
   fetchurl,
   imake,
   libX11,
-  libSM,
+  libsm,
   libXext,
-  libICE,
+  libice,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   version = "1.2.4";
 
   src = fetchurl {
-    url = "http://www.jfc.org.uk/files/lwm/${pname}-${version}.tar.gz";
+    url = "http://www.jfc.org.uk/files/lwm/lwm-${version}.tar.gz";
     sha256 = "1bcdr173f0gl61fyl43p3gr145angci7lvjqb8rl00y9f9amvh3y";
   };
 
@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libX11
-    libSM
+    libsm
     libXext
-    libICE
+    libice
   ];
 
   dontConfigure = true;
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     install -m644 lwm.man $out/share/man/man1/lwm.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight Window Manager";
     longDescription = ''
       lwm is a window manager for X that tries to keep out of your face. There
@@ -51,9 +51,9 @@ stdenv.mkDerivation rec {
       disc space and its annexation of your physical memory.
     '';
     homepage = "http://www.jfc.org.uk/software/lwm.html";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "lwm";
   };
 }

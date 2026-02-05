@@ -11,14 +11,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mmdoc";
   version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "ryantm";
     repo = "mmdoc";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-NS8i5xvCwq0pSdfxnaxnpuwmDAkfH6Tkc4N2F6aGvWY=";
   };
 
@@ -35,12 +35,12 @@ stdenv.mkDerivation rec {
     libzip
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Minimal Markdown Documentation";
     mainProgram = "mmdoc";
     homepage = "https://github.com/ryantm/mmdoc";
-    license = licenses.cc0;
-    maintainers = with maintainers; [ ryantm ];
-    platforms = platforms.unix;
+    license = lib.licenses.cc0;
+    maintainers = with lib.maintainers; [ ryantm ];
+    platforms = lib.platforms.unix;
   };
-}
+})

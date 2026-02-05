@@ -1,19 +1,17 @@
 {
   lib,
-  apple-sdk_14,
   buildNpmPackage,
   cargo,
   copyDesktopItems,
+  dart-sass,
   darwin,
-  electron_37,
+  electron_39,
   fetchFromGitHub,
-  fetchpatch2,
   gnome-keyring,
   jq,
   llvmPackages_18,
   makeDesktopItem,
   makeWrapper,
-  napi-rs-cli,
   nix-update-script,
   nodejs_22,
   pkg-config,
@@ -26,7 +24,7 @@
 let
   description = "Secure and free password manager for all of your devices";
   icon = "bitwarden";
-  electron = electron_37;
+  electron = electron_39;
 
   # argon2 npm dependency is using `std::basic_string<uint8_t>`, which is no longer allowed in LLVM 19
   buildNpmPackage' = buildNpmPackage.override {
@@ -35,13 +33,13 @@ let
 in
 buildNpmPackage' rec {
   pname = "bitwarden-desktop";
-  version = "2025.10.0";
+  version = "2025.12.1";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    hash = "sha256-A7bxAdFDChr7yiexV70N3tqhaUVAwJdGhhRKJyX0ra8=";
+    hash = "sha256-yER9LDFwTQkOdjB84UhEiWUDE+5Qa2vlRzq1/Qc/soY=";
   };
 
   patches = [
@@ -54,13 +52,6 @@ buildNpmPackage' rec {
     ./set-desktop-proxy-path.patch
     # on linux: don't flip fuses, don't create wrapper script, on darwin: don't try copying safari extensions, don't try re-signing app
     ./skip-afterpack-and-aftersign.patch
-    # since out arch doesn't match upstream, we'll generate and use desktop_napi.node instead of desktop_napi.${platform}-${arch}.node
-    ./dont-use-platform-triple.patch
-
-    (fetchpatch2 {
-      url = "https://github.com/bitwarden/clients/commit/cd56d01894c38cf046a7e44dcacc7e0ff2aa2a37.patch?full_index=1";
-      hash = "sha256-NRZiM+Y/ifh77vS+8mldbiwv/vPDr1JUOJzSu2tFMS8=";
-    })
   ];
 
   postPatch = ''
@@ -93,7 +84,7 @@ buildNpmPackage' rec {
     "--ignore-scripts"
   ];
   npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-Qhj8Lh25vNnJzbUm/M+mKIc6Fa5plSCiy53vjevs7Tc=";
+  npmDepsHash = "sha256-hczwOG30ad5oaTU7APPrW+a7LmjPch+P4dZSb7B+2eU=";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit
@@ -103,7 +94,7 @@ buildNpmPackage' rec {
       cargoRoot
       patches
       ;
-    hash = "sha256-fgnf+yT3UV8dHTE2tDHdBWTBW+LHAYI/JGgfS0J/Bgk=";
+    hash = "sha256-NaomkYqkRW5ir6DI5t0JqoewN8QZtSibGKW93MwsqPQ=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
@@ -114,9 +105,9 @@ buildNpmPackage' rec {
 
   nativeBuildInputs = [
     cargo
+    dart-sass
     jq
     makeWrapper
-    napi-rs-cli
     pkg-config
     rustc
     rustPlatform.cargoCheckHook
@@ -130,15 +121,17 @@ buildNpmPackage' rec {
     darwin.autoSignDarwinBinariesHook
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_14
-  ];
-
   preBuild = ''
     if [[ $(jq --raw-output '.devDependencies.electron' < package.json | grep -E --only-matching '^[0-9]+') != ${lib.escapeShellArg (lib.versions.major electron.version)} ]]; then
       echo 'ERROR: electron version mismatch'
       exit 1
     fi
+
+    # force our dart-sass executable
+    echo "export const compilerCommand = ['dart-sass'];" > node_modules/sass-embedded/dist/lib/src/compiler-path.js
+
+    # needed so that the napi executable actually is usable
+    patchShebangs apps/desktop/node_modules
 
     pushd apps/desktop/desktop_native/napi
     npm run build

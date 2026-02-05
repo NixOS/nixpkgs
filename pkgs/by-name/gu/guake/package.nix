@@ -19,7 +19,7 @@
 
 python311Packages.buildPythonApplication rec {
   pname = "guake";
-  version = "3.10";
+  version = "3.10.1";
 
   pyproject = false;
 
@@ -27,7 +27,7 @@ python311Packages.buildPythonApplication rec {
     owner = "Guake";
     repo = "guake";
     tag = version;
-    hash = "sha256-e6Bf4HDftHBxFPcw9z02CqgZhSIvt6wlLF6dnIh9fEc=";
+    hash = "sha256-TTDVJeM37SbpWucJGYoeYX9t4r1k3ldru9Cd02hBrU4=";
   };
 
   patches = [
@@ -94,14 +94,14 @@ python311Packages.buildPythonApplication rec {
 
   passthru.tests.test = nixosTests.terminal-emulators.guake;
 
-  meta = with lib; {
+  meta = {
     description = "Drop-down terminal for GNOME";
     homepage = "http://guake-project.org";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [
-      maintainers.msteen
-      maintainers.heywoodlh
+      lib.maintainers.msteen
+      lib.maintainers.heywoodlh
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

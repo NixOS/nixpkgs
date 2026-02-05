@@ -15,6 +15,33 @@ let
     mkPackageOption
     ;
   settingsFormat = pkgs.formats.ini { };
+
+  pathPkgs = [ cfg.package ] ++ cfg.plugins;
+
+  resourcesEnv = pkgs.buildEnv {
+    name = "cockpit-plugins";
+    paths = pathPkgs;
+    pathsToLink = [ "/share/cockpit" ];
+  };
+
+  depsEnv = pkgs.buildEnv {
+    name = "cockpit-plugins-env";
+    paths = lib.concatMap (p: p.passthru.cockpitPath or [ ]) pathPkgs;
+    pathsToLink = [
+      "/bin"
+      "/share"
+      "/lib"
+    ];
+  };
+
+  share = pkgs.buildEnv {
+    name = "cockpit-share";
+    paths = [
+      resourcesEnv
+      depsEnv
+    ];
+    pathsToLink = [ "/share" ];
+  };
 in
 {
   options = {
@@ -25,11 +52,24 @@ in
         default = [ "cockpit" ];
       };
 
+      plugins = lib.mkOption {
+        type = types.listOf types.package;
+        default = [ ];
+        description = ''
+          List of cockpit plugins.
+
+          This add the passthru.cockpitPath of the packages to the systemd cockpit service.
+        '';
+        example = lib.literalExpression ''
+          [
+            pkgs.cockpit-zfs
+          ]
+        '';
+      };
+
       allowed-origins = lib.mkOption {
         type = types.listOf types.str;
-
         default = [ ];
-
         description = ''
           List of allowed origins.
 
@@ -71,11 +111,6 @@ in
   };
 
   config = mkIf cfg.enable {
-    # expose cockpit-bridge system-wide
-    environment.systemPackages = [ cfg.package ];
-
-    # allow cockpit to find its plugins
-    environment.pathsToLink = [ "/share/cockpit" ];
 
     environment.etc = {
       # generate cockpit settings
@@ -90,6 +125,13 @@ in
         enable = cfg.showBanner;
         source = "/run/cockpit/issue";
       };
+
+      # Add plugins in discoverable folder
+      "cockpit/share".source = "${share}/share";
+
+      # Add plugins dependencies
+      "cockpit/bin".source = "${depsEnv}/bin";
+      "cockpit/lib".source = "${depsEnv}/lib";
     };
 
     security.pam.services.cockpit = {

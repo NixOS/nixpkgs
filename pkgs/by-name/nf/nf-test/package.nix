@@ -8,13 +8,13 @@
   stdenv,
   testers,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
 
   pname = "nf-test";
   version = "0.9.3";
 
   src = fetchurl {
-    url = "https://github.com/askimed/nf-test/releases/download/v${version}/nf-test-${version}.tar.gz";
+    url = "https://github.com/askimed/nf-test/releases/download/v${finalAttrs.version}/nf-test-${finalAttrs.version}.tar.gz";
     hash = "sha256-LLylgv34HiMXg+sjBbMdeLVPMV5+h+Z2xEWCiBqbNEY=";
   };
   sourceRoot = ".";
@@ -40,13 +40,13 @@ stdenv.mkDerivation rec {
     command = "nf-test version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple test framework for Nextflow pipelines";
     homepage = "https://www.nf-test.com/";
     changelog = "https://github.com/askimed/nf-test/releases";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rollf ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rollf ];
     mainProgram = "nf-test";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

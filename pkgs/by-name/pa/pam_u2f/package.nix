@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   version = "1.4.0";
 
   src = fetchurl {
-    url = "https://developers.yubico.com/pam-u2f/Releases/${pname}-${version}.tar.gz";
+    url = "https://developers.yubico.com/pam-u2f/Releases/pam_u2f-${version}.tar.gz";
     hash = "sha256-pZknzqOOqNkaaDagTiD8Yp7d5CBLFggvcD9ts3jpxjQ=";
   };
 

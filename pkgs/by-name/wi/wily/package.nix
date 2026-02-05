@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   pname = "wily";
 
   src = fetchurl {
-    url = "mirror://sourceforge/wily/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/wily/wily-${version}.tar.gz";
     sha256 = "1jy4czk39sh365b0mjpj4d5wmymj98x163vmwzyx3j183jqrhm2z";
   };
 
@@ -26,12 +26,12 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Emulation of ACME";
     homepage = "http://wily.sourceforge.net";
-    license = licenses.artistic1;
+    license = lib.licenses.artistic1;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "wily";
   };
 }

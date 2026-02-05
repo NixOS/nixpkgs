@@ -9,7 +9,7 @@
   fetchurl,
   lib,
   stdenv,
-  xorg,
+  libx11,
   glib,
   glibcLocales,
   gtk3,
@@ -47,7 +47,7 @@ let
   arch = if stdenv.hostPlatform.system == "i686-linux" then "x32" else "x64";
 
   libPath = lib.makeLibraryPath [
-    xorg.libX11
+    libx11
     glib
     gtk3
     cairo
@@ -167,16 +167,16 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Sophisticated text editor for code, markup and prose";
     homepage = "https://www.sublimetext.com/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       wmertens
       demin-dmitriy
       zimbatm
     ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     platforms = [
       "x86_64-linux"
       "i686-linux"

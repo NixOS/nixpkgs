@@ -29,11 +29,13 @@ rustPlatform.buildRustPackage rec {
       --replace 'get_git_version()?' '"nix:${version}"'
   '';
 
-  CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
-  CARGO_PROFILE_RELEASE_LTO = "fat";
-  NEAR_RELEASE_BUILD = "release";
+  env = {
+    CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
+    CARGO_PROFILE_RELEASE_LTO = "fat";
+    NEAR_RELEASE_BUILD = "release";
 
-  OPENSSL_NO_VENDOR = 1; # we want to link to OpenSSL provided by Nix
+    OPENSSL_NO_VENDOR = 1; # we want to link to OpenSSL provided by Nix
+  };
 
   # don't build SDK samples that require wasm-enabled rust
   buildAndTestSubdir = "neard";
@@ -53,11 +55,13 @@ rustPlatform.buildRustPackage rec {
   # fat LTO requires ~3.4GB RAM
   requiredSystemFeatures = [ "big-parallel" ];
 
-  meta = with lib; {
+  meta = {
+    # Marked broken 2025-11-28 because it has failed on Hydra for at least one year.
+    broken = true;
     description = "Reference client for NEAR Protocol";
     homepage = "https://github.com/near/nearcore";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ mikroskeem ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ mikroskeem ];
     # only x86_64 is supported in nearcore because of sse4+ support, macOS might
     # be also possible
     platforms = [ "x86_64-linux" ];

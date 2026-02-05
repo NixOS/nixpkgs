@@ -6,7 +6,6 @@
   hatchling,
   hatch-vcs,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   version = "4.0.0";
 
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ikalnytskyi";
@@ -36,10 +33,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "picobox" ];
 
-  meta = with lib; {
+  meta = {
     description = "Opinionated dependency injection framework";
     homepage = "https://github.com/ikalnytskyi/picobox";
-    license = licenses.mit;
-    maintainers = with maintainers; [ flokli ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ flokli ];
   };
 }

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   diff-cover,
   graphviz,
   hatchling,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "pipdeptree";
   version = "2.28.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "tox-dev";
@@ -55,7 +52,7 @@ buildPythonPackage rec {
     pytestCheckHook
     virtualenv
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "pipdeptree" ];
 
@@ -64,12 +61,12 @@ buildPythonPackage rec {
     "test_console"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command line utility to show dependency tree of packages";
     homepage = "https://github.com/tox-dev/pipdeptree";
     changelog = "https://github.com/tox-dev/pipdeptree/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       charlesbaynham
       mdaniels5757
     ];

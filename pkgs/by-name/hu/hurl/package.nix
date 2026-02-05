@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hurl";
-  version = "7.0.0";
+  version = "7.1.0";
 
   src = fetchFromGitHub {
     owner = "Orange-OpenSource";
     repo = "hurl";
     tag = finalAttrs.version;
-    hash = "sha256-dmPXI2RHEi/wcdVVwBRtBgNXyBXFnm44236pqYjxgBs=";
+    hash = "sha256-ZKTlS+J+43cqB0O5BAqvGwB9ZXfiOunOVB4hH6t2NxI=";
   };
 
-  cargoHash = "sha256-1bZaSdMJe39cDEOoqW82zS5NvOlZDGe1ia56BjXddyc=";
+  cargoHash = "sha256-ZfkOh/sZb0OrA/f5v1mwZ23XuArTAoAcs3evmtAElf4=";
 
   nativeBuildInputs = [
     pkg-config

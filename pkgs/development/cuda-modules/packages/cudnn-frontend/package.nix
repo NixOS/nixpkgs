@@ -34,22 +34,14 @@ backendStdenv.mkDerivation (finalAttrs: {
   name = "${cudaNamePrefix}-${finalAttrs.pname}-${finalAttrs.version}";
 
   pname = "cudnn-frontend";
-  version = "1.9.0";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "cudnn-frontend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Vc5jqB1XHcJEdKG0nxbWLewW2fDezRVwjUSzPDubSGE=";
+    hash = "sha256-+8aBl9dKd2Uz50XoOr91NRyJ4OGJtzfDNNNYGQJ9b94=";
   };
-
-  patches = [
-    # https://github.com/NVIDIA/cudnn-frontend/pull/125
-    ./0001-cmake-float-out-common-python-bindings-option.patch
-    ./0002-cmake-add-config-so-headers-can-be-discovered-when-i.patch
-    ./0003-cmake-install-samples-and-tests-when-built.patch
-    ./0004-samples-fix-instances-of-maybe-uninitialized.patch
-  ];
 
   # nlohmann_json should be the only vendored dependency.
   postPatch = ''
@@ -106,6 +98,8 @@ backendStdenv.mkDerivation (finalAttrs: {
     nlohmann_json
   ];
 
+  # TODO(@connorbaker): I'm using this incorrectly to build the executables which would allow us to test functionality,
+  # rather than to indicate the checkPhase will actually run.
   doCheck = true;
 
   postInstall = optionalString finalAttrs.doCheck ''
@@ -128,8 +122,8 @@ backendStdenv.mkDerivation (finalAttrs: {
     description = "A c++ wrapper for the cudnn backend API";
     homepage = "https://github.com/NVIDIA/cudnn-frontend";
     license = licenses.mit;
-    # TODO(@connorbaker): How tightly coupled is this library to specific cuDNN versions?
-    # Should it be marked as broken if it doesn't match our expected version?
+    # Supports cuDNN 8.5.0 and newer:
+    # https://github.com/NVIDIA/cudnn-frontend/blob/11b51e9c5ad6cc71cd66cb873e34bc922d97d547/README.md?plain=1#L32
     platforms = [
       "aarch64-linux"
       "x86_64-linux"

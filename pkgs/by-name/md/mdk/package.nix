@@ -7,11 +7,11 @@
   glib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnu-mdk";
   version = "1.3.1";
   src = fetchurl {
-    url = "mirror://gnu/mdk/v${version}/mdk-${version}.tar.gz";
+    url = "mirror://gnu/mdk/v${finalAttrs.version}/mdk-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-67ljk4xojBUP9qrtwp8w0JAgoeMdVbMMIQHwh3NRbRk=";
   };
   nativeBuildInputs = [
@@ -30,4 +30,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     platforms = lib.platforms.all;
   };
-}
+})

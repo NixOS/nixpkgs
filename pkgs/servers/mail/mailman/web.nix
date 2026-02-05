@@ -13,7 +13,6 @@ with python3.pkgs;
 buildPythonPackage rec {
   pname = "mailman_web";
   version = "0.0.9";
-  disabled = pythonOlder "3.8";
   pyproject = true;
 
   src = fetchPypi {
@@ -46,12 +45,12 @@ buildPythonPackage rec {
 
   passthru.tests = { inherit (nixosTests) mailman; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.com/mailman/mailman-web";
     description = "Django project for Mailman 3 web interface";
     mainProgram = "mailman-web";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       qyliss
       m1cr0man
     ];

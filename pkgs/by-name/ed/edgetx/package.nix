@@ -133,7 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    cmakeCommonFlags="$''\{cmakeFlags[@]}"
+    cmakeCommonFlags="''${cmakeFlags[@]}"
     # This is the most sensible way to convert target name -> cmake options
     # aside from manually extracting bash variables from upstream's CI scripts
     # and converting that to nix expressions. Let's hope upstream doesn't break
@@ -142,7 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Yes, this is really how upstream expects packaging to look like ¯\_(ツ)_/¯.
     # https://github.com/EdgeTX/edgetx/wiki/Build-Instructions-under-Ubuntu-20.04#building-companion-simulator-and-radio-simulator-libraries
-    for plugin in "$''\{targetsToBuild[@]''\}"
+    for plugin in "''${targetsToBuild[@]}"
     do
       # Variable modified by `get_target_build_options` from build-common.sh.
       local BUILD_OPTIONS=""
@@ -183,7 +183,6 @@ stdenv.mkDerivation (finalAttrs: {
       "aarch64-linux"
     ];
     maintainers = with lib.maintainers; [
-      elitak
       lopsided98
       wucke13
       xokdvium

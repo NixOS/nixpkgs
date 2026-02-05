@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "redshift-connector";
-  version = "2.1.9";
+  version = "2.1.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "amazon-redshift-python-driver";
     tag = "v${version}";
-    hash = "sha256-x0VhICEtZZz4Q7btCl7nP0D+YHPIKqbEUWnrEekJpt0=";
+    hash = "sha256-UaH3Uoq3unArgeY7jDcN8ZXxZfo31oneUz34cUMyNHg=";
   };
 
   # remove addops as they add test directory and coverage parameters to pytest

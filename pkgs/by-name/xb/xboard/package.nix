@@ -7,8 +7,8 @@
   xorgproto,
   libXt,
   libXaw,
-  libSM,
-  libICE,
+  libsm,
+  libice,
   libXmu,
   libXext,
   gnuchess,
@@ -21,12 +21,12 @@
   gtk2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xboard";
   version = "4.9.1";
 
   src = fetchurl {
-    url = "mirror://gnu/xboard/xboard-${version}.tar.gz";
+    url = "mirror://gnu/xboard/xboard-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-Ky5T6EKK2bbo3IpVs6UYM4GRGk2uLABy+pYpa7sZcNY=";
   };
 
@@ -46,8 +46,8 @@ stdenv.mkDerivation rec {
     xorgproto
     libXt
     libXaw
-    libSM
-    libICE
+    libsm
+    libice
     libXmu
     libXext
     gnuchess
@@ -59,12 +59,12 @@ stdenv.mkDerivation rec {
     gtk2
   ];
 
-  meta = with lib; {
+  meta = {
     description = "GUI for chess engines";
     mainProgram = "xboard";
     homepage = "https://www.gnu.org/software/xboard/";
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.unix;
-    license = licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl3Plus;
   };
-}
+})

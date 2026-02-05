@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-rIwlNXe7me3Ehj1EIYiOYo12FQqovmZT0ui58gFRWWw=";
 
-  OPENSSL_NO_VENDOR = true;
+  env.OPENSSL_NO_VENDOR = true;
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
@@ -36,12 +36,11 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Bundle any web page into a single HTML file";
     mainProgram = "monolith";
     homepage = "https://github.com/Y2Z/monolith";
-    license = licenses.cc0;
+    license = lib.licenses.cc0;
     platforms = lib.platforms.unix;
-    maintainers = with maintainers; [ Br1ght0ne ];
   };
 }

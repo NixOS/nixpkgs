@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dotmap";
   version = "1.3.30";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -24,10 +21,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dotmap" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python for dot-access dictionaries";
     homepage = "https://github.com/drgrib/dotmap";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

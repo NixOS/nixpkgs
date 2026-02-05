@@ -64,14 +64,14 @@
 
 stdenv.mkDerivation rec {
   pname = "jami";
-  version = "20251003.0";
+  version = "20251124.0";
 
   src = fetchFromGitLab {
     domain = "git.jami.net";
     owner = "savoirfairelinux";
     repo = "jami-client-qt";
     rev = "stable/${version}";
-    hash = "sha256-CYKrIWGTmGvHIhNdyEhDKE1Rm84O7X3yPVLkF6qakwU=";
+    hash = "sha256-IQA6V0Sl+xhuit9kySpsSAS/a0GOsiT+ysYET91/gmc=";
     fetchSubmodules = true;
   };
 
@@ -127,14 +127,14 @@ stdenv.mkDerivation rec {
 
   dhtnet = stdenv.mkDerivation {
     pname = "dhtnet";
-    version = "unstable-2025-09-15";
+    version = "unstable-2025-11-10";
 
     src = fetchFromGitLab {
       domain = "git.jami.net";
       owner = "savoirfairelinux";
       repo = "dhtnet";
-      rev = "7861b4620b4cec5fa34c5d1bb2b304912730f638";
-      hash = "sha256-nhGB4u12Ubmc7lLVOAwycRsP+cWzn4A9bYH0+sSBQTg=";
+      rev = "03c6ce608daf906fc98b82f114b61ebfdeae5dc6";
+      hash = "sha256-VTciKJ1IYtQopdV/TpnuB3T2tipcQjjKDlh2cKGDtRQ=";
     };
 
     postPatch = ''
@@ -173,11 +173,11 @@ stdenv.mkDerivation rec {
       "-DBUILD_EXAMPLE=Off"
     ];
 
-    meta = with lib; {
+    meta = {
       description = "Lightweight Peer-to-Peer Communication Library";
-      license = licenses.gpl3Only;
-      platforms = platforms.linux;
-      maintainers = [ maintainers.linsui ];
+      license = lib.licenses.gpl3Only;
+      platforms = lib.platforms.linux;
+      maintainers = [ lib.maintainers.linsui ];
     };
   };
 
@@ -308,12 +308,12 @@ stdenv.mkDerivation rec {
     inherit daemon pjsip dhtnet;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://jami.net/";
     description = "Free and universal communication platform that respects the privacy and freedoms of its users";
     mainProgram = "jami";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.linsui ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.linsui ];
   };
 }

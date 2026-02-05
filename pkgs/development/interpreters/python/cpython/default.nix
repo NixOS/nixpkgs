@@ -208,10 +208,16 @@ let
   nativeBuildInputs = [
     nukeReferences
   ]
-  ++ optionals (!stdenv.hostPlatform.isDarwin && !withMinimalDeps) [
-    autoconf-archive # needed for AX_CHECK_COMPILE_FLAG
-    autoreconfHook
-  ]
+  ++
+    optionals
+      (
+        (!stdenv.hostPlatform.isDarwin && !withMinimalDeps)
+        || (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.isFreeBSD)
+      )
+      [
+        autoconf-archive # needed for AX_CHECK_COMPILE_FLAG
+        autoreconfHook
+      ]
   ++
     optionals ((!stdenv.hostPlatform.isDarwin || passthru.pythonAtLeast "3.14") && !withMinimalDeps)
       [
@@ -399,6 +405,10 @@ stdenv.mkDerivation (finalAttrs: {
     # backport fix for https://github.com/python/cpython/issues/95855
     ./platform-triplet-detection.patch
   ]
+  ++ optionals (version == "3.13.10" || version == "3.14.1") [
+    # https://github.com/python/cpython/issues/142218
+    ./${lib.versions.majorMinor version}/gh-142218.patch
+  ]
   ++ optionals (stdenv.hostPlatform.isMinGW) (
     let
       # https://src.fedoraproject.org/rpms/mingw-python3
@@ -583,9 +593,6 @@ stdenv.mkDerivation (finalAttrs: {
     optionalString enableNoSemanticInterposition ''
       export CFLAGS_NODIST="-fno-semantic-interposition"
     '';
-
-  # Our aarch64-linux bootstrap files lack Scrt1.o, which fails the config test
-  hardeningEnable = lib.optionals (!withMinimalDeps && !stdenv.hostPlatform.isAarch64) [ "pie" ];
 
   setupHook = python-setup-hook sitePackages;
 
@@ -821,12 +828,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.python.org";
     changelog =
       let
-        majorMinor = versions.majorMinor version;
-        dashedVersion = replaceStrings [ "." "a" "b" ] [ "-" "-alpha-" "-beta-" ] version;
+        majorMinor = lib.versions.majorMinor version;
+        dashedVersion = lib.replaceStrings [ "." "a" "b" ] [ "-" "-alpha-" "-beta-" ] version;
       in
       if sourceVersion.suffix == "" then
         "https://docs.python.org/release/${version}/whatsnew/changelog.html"
@@ -842,9 +849,10 @@ stdenv.mkDerivation (finalAttrs: {
       hierarchical packages; exception-based error handling; and very
       high level dynamic data types.
     '';
-    license = licenses.psfl;
+    license = lib.licenses.psfl;
     pkgConfigModules = [ "python3" ];
-    platforms = platforms.linux ++ platforms.darwin ++ platforms.windows ++ platforms.freebsd;
+    platforms =
+      lib.platforms.linux ++ lib.platforms.darwin ++ lib.platforms.windows ++ lib.platforms.freebsd;
     mainProgram = executable;
     teams = [ lib.teams.python ];
     # static build on x86_64-darwin/aarch64-darwin breaks with:

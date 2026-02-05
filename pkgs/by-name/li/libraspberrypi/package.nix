@@ -22,6 +22,8 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   cmakeFlags = [
     # -DARM64=ON disables all targets that only build on 32-bit ARM; this allows
     # the package to build on aarch64 and other architectures
@@ -30,17 +32,17 @@ stdenv.mkDerivation {
     (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10")
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Userland tools & libraries for interfacing with Raspberry Pi hardware";
     homepage = "https://github.com/raspberrypi/userland";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     platforms = [
       "armv6l-linux"
       "armv7l-linux"
       "aarch64-linux"
       "x86_64-linux"
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       dezgeg
       tkerber
     ];

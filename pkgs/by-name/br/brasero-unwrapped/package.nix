@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   pname = "brasero";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/brasero/${major}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/brasero/${major}/brasero-${version}.tar.xz";
     hash = "sha256-h3SerjOhQSB9GwC+IzttgEWYLtMkntS5ja4fOpdf6hU=";
   };
 
@@ -78,12 +78,12 @@ stdenv.mkDerivation rec {
     NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Gnome CD/DVD Burner";
     homepage = "https://gitlab.gnome.org/GNOME/brasero";
-    maintainers = [ maintainers.bdimcheff ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.bdimcheff ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     mainProgram = "brasero";
   };
 }

@@ -16,12 +16,12 @@
   makeDesktopItem,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dosbox";
   version = "0.74-3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/dosbox/dosbox-${version}.tar.gz";
+    url = "mirror://sourceforge/dosbox/dosbox-${finalAttrs.version}.tar.gz";
     hash = "sha256-wNE91+0u02O2jeYVR1eB6JHNWC6BYrXDZpE3UCIiJgo=";
   };
 
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.dosbox.com/";
     changelog = "https://www.dosbox.com/wiki/Releases";
     description = "DOS emulator";
@@ -97,9 +97,9 @@ stdenv.mkDerivation rec {
       unmodified. In order to utilize all of DOSBox's features you need to first
       understand some basic concepts about the MS-DOS environment.
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ matthewbauer ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
     mainProgram = "dosbox";
   };
-}
+})

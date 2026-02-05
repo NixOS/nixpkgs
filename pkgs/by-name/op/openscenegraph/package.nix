@@ -60,14 +60,14 @@
   fltk,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openscenegraph";
   version = "3.6.5";
 
   src = fetchFromGitHub {
     owner = "openscenegraph";
     repo = "OpenSceneGraph";
-    rev = "OpenSceneGraph-${version}";
+    rev = "OpenSceneGraph-${finalAttrs.version}";
     sha256 = "00i14h82qg3xzcyd8p02wrarnmby3aiwmz0z43l50byc9f8i05n1";
   };
 
@@ -146,17 +146,17 @@ stdenv.mkDerivation rec {
     lib.optional (!withApps) "-DBUILD_OSG_APPLICATIONS=OFF"
     ++ lib.optional withExamples "-DBUILD_OSG_EXAMPLES=ON";
 
-  meta = with lib; {
+  meta = {
     description = "3D graphics toolkit";
     homepage = "http://www.openscenegraph.org/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       aanderse
       raskin
     ];
-    platforms = with platforms; linux ++ darwin;
+    platforms = with lib.platforms; linux ++ darwin;
     license = with lib.licenses; [
       lgpl21Only
       wxWindowsException31
     ];
   };
-}
+})

@@ -20,7 +20,7 @@ let
 
   /**
     A basic filter for `cleanSourceWith` that removes
-    directories of version control system, backup files (*~)
+    directories of version control system, backup files (`*~`)
     and some generated files.
 
     # Inputs
@@ -72,7 +72,7 @@ let
     );
 
   /**
-    Filters a source tree removing version control files and directories using cleanSourceFilter.
+    Filters a source tree removing version control files and directories using `cleanSourceFilter`.
 
     # Inputs
 
@@ -529,4 +529,6 @@ in
 
     trace
     ;
+
+  inherit (builtins) filterSource;
 }

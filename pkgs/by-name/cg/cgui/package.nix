@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "2.1.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/cgui/${version}/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/project/cgui/${version}/cgui-${version}.tar.gz";
     sha256 = "1pp1hvidpilq37skkmbgba4lvzi01rasy04y0cnas9ck0canv00s";
   };
 
@@ -36,10 +36,10 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "SYSTEM_DIR=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Multiplatform basic GUI library";
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.linux;
-    license = licenses.free;
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.free;
   };
 }

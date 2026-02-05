@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
   setuptools-scm,
   setuptools,
   python,
@@ -11,6 +12,7 @@
   jaraco-envs,
   jaraco-path,
   jaraco-text,
+  libz,
   more-itertools,
   packaging,
   path,
@@ -27,8 +29,8 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "distutils";
-    rev = "72837514c2b67081401db556be9aaaa43debe44f"; # correlate commit from setuptools version
-    hash = "sha256-Kx4Iudy9oZ0oQT96Meyq/m0k0BuexPLVxwvpNJehCW0=";
+    rev = "5ad8291ff2ad3e43583bc72a4c09299ca6134f09"; # correlate commit from setuptools version
+    hash = "sha256-3Mqpe/Goj3lQ6GEbX3DHWjdoh7XsFIg9WkOCK138OAo=";
   };
 
   build-system = [ setuptools-scm ];
@@ -58,8 +60,18 @@ buildPythonPackage {
     pytestCheckHook
   ];
 
+  checkInputs = [
+    # https://github.com/pypa/distutils/blob/5ad8291ff2ad3e43583bc72a4c09299ca6134f09/distutils/tests/test_build_ext.py#L107
+    libz
+  ];
+
   # jaraco-path depends ob pyobjc
   doCheck = !stdenv.hostPlatform.isDarwin;
+
+  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+    #  AssertionError: assert '(?s:foo[^/]*)\\z' == '(?s:foo[^/]*)\\Z'
+    "test_glob_to_re"
+  ];
 
   meta = {
     description = "Distutils as found in cpython";

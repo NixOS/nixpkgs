@@ -106,7 +106,7 @@
             "pkey" = "{sshkey}";
             "port" = "45876";
             "tkn" = "{utoken}";
-            "users" = ''{user['record']['id']}'';
+            "users" = "{user['record']['id']}";
           }
         }}\' "${agentCfg.environment.HUB_URL}/api/collections/systems/records"')
 

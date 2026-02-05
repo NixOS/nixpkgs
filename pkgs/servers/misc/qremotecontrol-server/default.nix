@@ -5,7 +5,7 @@
   qmake,
   wrapQtAppsHook,
   qtbase,
-  xorg,
+  libxtst,
 }:
 
 stdenv.mkDerivation {
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     qtbase
-    xorg.libXtst
+    libxtst
   ];
 
   postPatch = ''
@@ -37,10 +37,10 @@ stdenv.mkDerivation {
       --replace /usr $out
   '';
 
-  meta = with lib; {
-    license = licenses.gpl3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ fgaz ];
+  meta = {
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ fgaz ];
     homepage = "https://sourceforge.net/projects/qrc/";
     description = "Remote control your desktop from your mobile";
     mainProgram = "qremotecontrol-server";

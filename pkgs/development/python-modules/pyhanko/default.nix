@@ -99,7 +99,7 @@ buildPythonPackage rec {
     passthru.testData
     signxml
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTestPaths = [
     # ModuleNotFoundError: No module named 'csc_dummy'

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "2.2.7";
 
   src = fetchurl {
-    url = "https://github.com/jaymzh/iptstate/releases/download/v${version}/${pname}-${version}.tar.bz2";
+    url = "https://github.com/jaymzh/iptstate/releases/download/v${version}/iptstate-${version}.tar.bz2";
     sha256 = "sha256-iW3wYCiFRWomMfeV1jT8ITEeUF+MkQNI5jEoYPIJeVU=";
   };
 
@@ -20,14 +20,14 @@ stdenv.mkDerivation rec {
     ncurses
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Conntrack top like tool";
     mainProgram = "iptstate";
     homepage = "https://github.com/jaymzh/iptstate";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ trevorj ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ trevorj ];
     downloadPage = "https://github.com/jaymzh/iptstate/releases";
-    license = licenses.zlib;
+    license = lib.licenses.zlib;
   };
 
   installPhase = ''

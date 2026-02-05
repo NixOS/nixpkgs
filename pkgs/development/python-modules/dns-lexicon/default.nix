@@ -6,14 +6,12 @@
   cryptography,
   dnspython,
   fetchFromGitHub,
-  importlib-metadata,
   localzone,
   oci,
   poetry-core,
   pyotp,
   pytest-vcr,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   requests,
   softlayer,
@@ -25,8 +23,6 @@ buildPythonPackage rec {
   pname = "dns_lexicon";
   version = "3.16.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Analogj";
@@ -52,8 +48,7 @@ buildPythonPackage rec {
     pyyaml
     requests
     tldextract
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ];
 
   optional-dependencies = {
     route53 = [ boto3 ];
@@ -99,12 +94,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "lexicon" ];
 
-  meta = with lib; {
+  meta = {
     description = "Manipulate DNS records on various DNS providers in a standardized way";
     mainProgram = "lexicon";
     homepage = "https://github.com/AnalogJ/lexicon";
     changelog = "https://github.com/AnalogJ/lexicon/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ aviallon ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ aviallon ];
   };
 }

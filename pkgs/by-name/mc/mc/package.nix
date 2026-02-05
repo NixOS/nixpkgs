@@ -8,7 +8,7 @@
   gpm,
   file,
   e2fsprogs,
-  libICE,
+  libice,
   perl,
   zip,
   unzip,
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   version = "4.8.33";
 
   src = fetchurl {
-    url = "https://ftp.osuosl.org/pub/midnightcommander/${pname}-${version}.tar.xz";
+    url = "https://ftp.osuosl.org/pub/midnightcommander/mc-${version}.tar.xz";
     hash = "sha256-yuFJ1C+ETlGF2MgdfbOROo+iFMZfhSIAqdiWtGivFkw=";
   };
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     file
     gettext
     glib
-    libICE
+    libice
     libssh2
     openssl
     slang
@@ -71,6 +71,11 @@ stdenv.mkDerivation rec {
     # configure arguments have a bunch of build-only dependencies.
     # Avoid their retention in final closure.
     "--disable-configure-args"
+  ];
+
+  outputs = [
+    "out"
+    "man"
   ];
 
   postPatch = ''
@@ -96,13 +101,12 @@ stdenv.mkDerivation rec {
     update-source-version mc "$new_version"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "File Manager and User Shell for the GNU Project, known as Midnight Commander";
     downloadPage = "https://ftp.osuosl.org/pub/midnightcommander/";
     homepage = "https://midnight-commander.org";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ sander ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "mc";
   };
 }

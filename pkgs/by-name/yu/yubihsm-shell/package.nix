@@ -15,14 +15,14 @@
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yubihsm-shell";
   version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubihsm-shell";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-ymGS35kjhNlFee3FEXF8n6Jm7NVaynjv+lpix6F75BQ=";
   };
 
@@ -70,14 +70,14 @@ stdenv.mkDerivation rec {
   # causes redefinition of _FORTIFY_SOURCE
   hardeningDisable = [ "fortify3" ];
 
-  meta = with lib; {
+  meta = {
     description = "Thin wrapper around libyubihsm providing both an interactive and command-line interface to a YubiHSM";
     homepage = "https://github.com/Yubico/yubihsm-shell";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       matthewcroughan
       numinit
     ];
-    license = licenses.asl20;
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
   };
-}
+})

@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   hatchling,
   platformdirs,
@@ -16,7 +15,6 @@
 buildPythonPackage rec {
   pname = "jupyter-core";
   version = "5.8.1";
-  disabled = pythonOlder "3.7";
 
   pyproject = true;
 
@@ -65,11 +63,11 @@ buildPythonPackage rec {
     inherit sage;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Base package on which Jupyter projects rely";
     homepage = "https://jupyter.org/";
     changelog = "https://github.com/jupyter/jupyter_core/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.bsd3;
-    teams = [ teams.jupyter ];
+    license = lib.licenses.bsd3;
+    teams = [ lib.teams.jupyter ];
   };
 }

@@ -11,7 +11,6 @@
   pyqt6-sip,
   pyqt-builder,
   qt6Packages,
-  pythonOlder,
   mesa,
   withMultimedia ? true,
   withWebSockets ? true,
@@ -21,14 +20,13 @@
   withPrintSupport ? true,
   withSerialPort ? false,
   cups,
+  withSpeech ? true,
 }:
 
 buildPythonPackage rec {
   pname = "pyqt6";
   version = "6.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   # It looks like a stable release, but is it? Who knows.
   # It's not on PyPI proper yet, at least, and the current
@@ -105,7 +103,8 @@ buildPythonPackage rec {
     ++ lib.optional withMultimedia qtmultimedia
     ++ lib.optional withWebSockets qtwebsockets
     ++ lib.optional withLocation qtlocation
-    ++ lib.optional withSerialPort qtserialport;
+    ++ lib.optional withSerialPort qtserialport
+    ++ lib.optional withSpeech qtspeech;
 
   buildInputs =
     with qt6Packages;
@@ -121,7 +120,8 @@ buildPythonPackage rec {
     ++ lib.optional withMultimedia qtmultimedia
     ++ lib.optional withWebSockets qtwebsockets
     ++ lib.optional withLocation qtlocation
-    ++ lib.optional withSerialPort qtserialport;
+    ++ lib.optional withSerialPort qtserialport
+    ++ lib.optional withSpeech qtspeech;
 
   propagatedBuildInputs =
     # ld: library not found for -lcups
@@ -150,15 +150,16 @@ buildPythonPackage rec {
   ++ lib.optional withMultimedia "PyQt6.QtMultimedia"
   # ++ lib.optional withConnectivity "PyQt6.QtConnectivity"
   ++ lib.optional withLocation "PyQt6.QtPositioning"
-  ++ lib.optional withSerialPort "PyQt6.QtSerialPort";
+  ++ lib.optional withSerialPort "PyQt6.QtSerialPort"
+  ++ lib.optional withSpeech "PyQt6.QtTextToSpeech";
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-address-of-temporary";
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for Qt6";
     homepage = "https://riverbankcomputing.com/";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     inherit (mesa.meta) platforms;
-    maintainers = with maintainers; [ LunNova ];
+    maintainers = with lib.maintainers; [ LunNova ];
   };
 }

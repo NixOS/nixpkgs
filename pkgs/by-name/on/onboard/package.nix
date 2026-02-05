@@ -26,7 +26,8 @@
   procps,
   python3,
   wrapGAppsHook3,
-  xorg,
+  libxtst,
+  libxkbfile,
   yelp,
 }:
 
@@ -43,7 +44,7 @@ python3.pkgs.buildPythonApplication rec {
   format = "setuptools";
 
   src = fetchurl {
-    url = "https://launchpad.net/onboard/${majorVersion}/${version}/+download/${pname}-${version}.tar.gz";
+    url = "https://launchpad.net/onboard/${majorVersion}/${version}/+download/onboard-${version}.tar.gz";
     sha256 = "0r9q38ikmr4in4dwqd8m9gh9xjbgxnfxglnjbfcapw8ybfnf3jh1";
   };
 
@@ -92,8 +93,8 @@ python3.pkgs.buildPythonApplication rec {
     libxkbcommon
     mousetweaks
     udev
-    xorg.libXtst
-    xorg.libxkbfile
+    libxtst
+    libxkbfile
   ]
   ++ lib.optional atspiSupport at-spi2-core;
 
@@ -103,7 +104,7 @@ python3.pkgs.buildPythonApplication rec {
     pyatspi
     pycairo
     pygobject3
-    systemd
+    systemd-python
   ];
 
   propagatedUserEnvPkgs = [ dconf ];
@@ -189,10 +190,10 @@ python3.pkgs.buildPythonApplication rec {
     rm -rf  $out/share/icons/ubuntu-mono-*
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://launchpad.net/onboard";
     description = "Onscreen keyboard useful for tablet PC users and for mobility impaired users";
     maintainers = [ ];
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
   };
 }

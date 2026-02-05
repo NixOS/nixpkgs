@@ -1,9 +1,10 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchFromGitHub,
   cmake,
   python3,
+  wrapQtAppsHook,
   qtbase,
   qtquickcontrols2,
   qtgraphicaleffects,
@@ -11,7 +12,7 @@
   plugins ? [ ],
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "cura";
   version = "4.13.1";
 
@@ -52,6 +53,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     python3.pkgs.wrapPython
+    wrapQtAppsHook
   ];
 
   cmakeFlags = [
@@ -83,12 +85,12 @@ mkDerivation rec {
     wrapQtApp $out/bin/cura
   '';
 
-  meta = with lib; {
+  meta = {
     description = "3D printer / slicing GUI built on top of the Uranium framework";
     mainProgram = "cura";
     homepage = "https://github.com/Ultimaker/Cura";
-    license = licenses.lgpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

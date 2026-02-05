@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "mosdns";
-  version = "5.3.3";
+  version = "5.3.4";
 
   src = fetchFromGitHub {
     owner = "IrineSistiana";
     repo = "mosdns";
     tag = "v${version}";
-    hash = "sha256-nSqSfbpi91W28DaLjCsWlPiLe1gLVHeZnstktc/CLag=";
+    hash = "sha256-N0JY0brs9IXx3L+sz66JniRaBzY0bGD8PawJ1WA3tkw=";
   };
 
-  vendorHash = "sha256-RpvWkIDhHSNbdkpBCcXYbbvbmGiG15qyB5aEJRmg9s4=";
+  vendorHash = "sha256-FfCA5204MP+m5nkzj/jLDh5NzpD1EtrL7owmcvZhOBU=";
 
   nativeBuildInputs = [ installShellFiles ];
 

@@ -6,7 +6,7 @@
   libXdmcp,
   libexif,
   libfm,
-  libpthreadstubs,
+  libpthread-stubs,
   libxcb,
   lxqt-build-tools,
   lxqt-menu-data,
@@ -15,7 +15,7 @@
   qttools,
   wrapQtAppsHook,
   gitUpdater,
-  version ? "2.3.0",
+  version ? "2.3.1",
   qtx11extras ? null,
 }:
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash =
       {
         "1.4.0" = "sha256-QxPYSA7537K+/dRTxIYyg+Q/kj75rZOdzlUsmSdQcn4=";
-        "2.3.0" = "sha256-A0kBwLiPvHIsJWQvg6lwb5lrojU8oDDQYHuC2pTXdPc=";
+        "2.3.1" = "sha256-2PDVNMBwzDpUOkZ7GnrWDMlXBeUgCyZ6vHXurW6fr4s=";
       }
       ."${finalAttrs.version}";
   };
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXdmcp
     libexif
     libfm
-    libpthreadstubs
+    libpthread-stubs
     libxcb
     lxqt-menu-data
     menu-cache

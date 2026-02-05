@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
   # Library only
   dontWrapQtApps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Qt based Color Picker with popup menu";
     homepage = "https://github.com/ksnip/kColorPicker";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ fliegendewurst ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ fliegendewurst ];
+    platforms = lib.platforms.linux;
   };
 }

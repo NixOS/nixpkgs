@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   gitUpdater,
-  apple-sdk_11,
   cmake,
   pkg-config,
   ninja,
@@ -23,15 +22,14 @@
   libGL,
   libxcb,
   vst2-sdk,
-  xcbutil,
+  libxcb-util,
   libxkbcommon,
-  xcbutilkeysyms,
-  xcb-util-cursor,
+  libxcb-keysyms,
+  libxcb-cursor,
   gtk3,
   webkitgtk_4_1,
   python3,
   curl,
-  pcre,
   mount,
   zenity,
   # It is not allowed to distribute binaries with the VST2 SDK plugin without a license
@@ -114,15 +112,11 @@ stdenv.mkDerivation (finalAttrs: {
     zenity
     alsa-tools
     libxcb
-    xcbutil
+    libxcb-util
     libxkbcommon
-    xcbutilkeysyms
-    xcb-util-cursor
-    pcre
+    libxcb-keysyms
+    libxcb-cursor
     mount
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_11
   ];
 
   postInstall =

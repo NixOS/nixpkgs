@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
-  pythonOlder,
   torch,
   torchvision,
   pytestCheckHook,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "torchinfo";
   version = "1.8.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "TylerYep";
@@ -64,10 +61,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "torchinfo" ];
 
-  meta = with lib; {
+  meta = {
     description = "API to visualize pytorch models";
     homepage = "https://github.com/TylerYep/torchinfo";
-    license = licenses.mit;
-    maintainers = with maintainers; [ petterstorvik ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ petterstorvik ];
   };
 }

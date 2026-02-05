@@ -11,14 +11,14 @@
   libXmu,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "glui";
   version = "2.37";
 
   src = fetchFromGitHub {
     owner = "libglui";
     repo = "glui";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0qg2y8w95s03zay1qsqs8pqxxlg6l9kwm7rrs1qmx0h22sxb360i";
   };
 
@@ -41,10 +41,10 @@ stdenv.mkDerivation rec {
     cp LICENSE.txt "$out/share/glui/doc"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "User interface library using OpenGL";
-    license = licenses.zlib;
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.linux;
+    license = lib.licenses.zlib;
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.linux;
   };
-}
+})

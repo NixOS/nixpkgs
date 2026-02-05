@@ -9,7 +9,7 @@
   fetchpatch,
   libXdmcp,
   libglvnd,
-  libpthreadstubs,
+  libpthread-stubs,
   makeWrapper,
   nix-update-script,
   pcre,
@@ -33,13 +33,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "renderdoc";
-  version = "1.40";
+  version = "1.42";
 
   src = fetchFromGitHub {
     owner = "baldurk";
     repo = "renderdoc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-420UV9I+jJ8sLOQVhfGfkGPqAnN+kgPy8k0rZLt5X+Y=";
+    hash = "sha256-BnLmDN7SzhuyQOou8kJObfr/zJxSukUUmD7u5BiiLh0=";
   };
 
   outputs = [
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libXdmcp
-    libpthreadstubs
+    libpthread-stubs
     python312Packages.pyside2
     python312Packages.pyside2-tools
     python312Packages.shiboken2

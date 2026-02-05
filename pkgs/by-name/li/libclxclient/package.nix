@@ -5,16 +5,16 @@
   libclthreads,
   libX11,
   libXft,
-  xorg,
+  xorgproto,
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libclxclient";
   version = "3.9.2";
 
   src = fetchurl {
-    url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/clxclient-${version}.tar.bz2";
+    url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/clxclient-${finalAttrs.version}.tar.bz2";
     sha256 = "10bq6fy8d3pr1x2x3xx9qhf2hdxrwdgvg843a2y6lx70y1jfj0c5";
   };
 
@@ -22,12 +22,12 @@ stdenv.mkDerivation rec {
     libclthreads
     libX11
     libXft
-    xorg.xorgproto
+    xorgproto
   ];
 
   nativeBuildInputs = [ pkg-config ];
 
-  env.NIX_CFLAGS_COMPILE = "-I${xorg.xorgproto}/include -I${libXft.dev}/include";
+  env.NIX_CFLAGS_COMPILE = "-I${xorgproto}/include -I${libXft.dev}/include";
 
   patchPhase = ''
     cd source
@@ -53,11 +53,11 @@ stdenv.mkDerivation rec {
     ln $out/lib/libclxclient.so $out/lib/libclxclient.so.3
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Zita X11 library";
     homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/index.html";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ magnetophon ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ magnetophon ];
+    platforms = lib.platforms.linux;
   };
-}
+})

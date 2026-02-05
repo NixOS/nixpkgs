@@ -5,7 +5,7 @@
   writeShellScriptBin,
   xdg-utils,
 
-  fetchFromGitea,
+  fetchFromCodeberg,
 
   cmake,
   ninja,
@@ -38,8 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "calamares";
   version = "3.4.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "Calamares";
     repo = "calamares";
     tag = "v${finalAttrs.version}";
@@ -117,19 +116,18 @@ stdenv.mkDerivation (finalAttrs: {
     inherit calamares-nixos;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Distribution-independent installer framework";
     homepage = "https://calamares.io/";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Plus
       bsd2
       cc0
     ];
-    maintainers = with maintainers; [
-      manveru
+    maintainers = with lib.maintainers; [
       vlinkz
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "calamares";
   };
 })

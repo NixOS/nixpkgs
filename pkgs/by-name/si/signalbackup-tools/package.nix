@@ -12,15 +12,15 @@
   sqlite,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "signalbackup-tools";
-  version = "20251102";
+  version = "20260126";
 
   src = fetchFromGitHub {
     owner = "bepaald";
     repo = "signalbackup-tools";
-    tag = version;
-    hash = "sha256-UlBFXn9l4eKLWCEIhLtQmYRuMK179e9PDfANDUMfVcs=";
+    tag = finalAttrs.version;
+    hash = "sha256-gmS1aZxdCPn3o+bYa5/NKEo9JZ3jq71l55t6enNxeEE=";
   };
 
   nativeBuildInputs = [
@@ -48,12 +48,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to work with Signal Backup files";
     mainProgram = "signalbackup-tools";
     homepage = "https://github.com/bepaald/signalbackup-tools";
-    license = licenses.gpl3Only;
-    maintainers = [ maintainers.malo ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Only;
+    maintainers = [ lib.maintainers.malo ];
+    platforms = lib.platforms.all;
   };
-}
+})

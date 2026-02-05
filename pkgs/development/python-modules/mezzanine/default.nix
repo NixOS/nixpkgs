@@ -14,7 +14,6 @@
   pytestCheckHook,
   pytest-cov-stub,
   pytest-django,
-  pythonOlder,
   pytz,
   requests,
   requests-oauthlib,
@@ -28,7 +27,7 @@ buildPythonPackage rec {
   version = "6.1.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7" || isPyPy;
+  disabled = isPyPy;
 
   src = fetchFromGitHub {
     owner = "stephenmcd";
@@ -67,7 +66,9 @@ buildPythonPackage rec {
     requirements-parser
   ];
 
-  meta = with lib; {
+  meta = {
+    # not updated to django 5.x
+    broken = lib.versionAtLeast django.version "5";
     description = "Content management platform built using the Django framework";
     mainProgram = "mezzanine-project";
     longDescription = ''
@@ -87,8 +88,8 @@ buildPythonPackage rec {
     '';
     homepage = "http://mezzanine.jupo.org/";
     downloadPage = "https://github.com/stephenmcd/mezzanine/releases";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ prikhi ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ prikhi ];
+    platforms = lib.platforms.unix;
   };
 }

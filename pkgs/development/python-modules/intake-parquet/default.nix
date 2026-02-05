@@ -6,7 +6,6 @@
   fetchFromGitHub,
   pandas,
   pyarrow,
-  pythonOlder,
   setuptools,
   versioneer,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "intake-parquet";
   version = "0.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "intake";
@@ -49,10 +46,10 @@ buildPythonPackage rec {
 
   #pythonImportsCheck = [ "intake_parquet" ];
 
-  meta = with lib; {
+  meta = {
     description = "Parquet plugin for Intake";
     homepage = "https://github.com/intake/intake-parquet";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

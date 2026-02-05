@@ -6,14 +6,14 @@
   automake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ndstool";
   version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "devkitPro";
     repo = "ndstool";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-121xEmbt1WBR1wi4RLw9/iLHqkpyXImXKiCNnLCYnJs=";
   };
 
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     mainProgram = "ndstool";
   };
-}
+})

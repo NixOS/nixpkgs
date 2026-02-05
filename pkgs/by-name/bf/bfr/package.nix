@@ -5,12 +5,12 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bfr";
   version = "1.6";
 
   src = fetchurl {
-    url = "http://www.sourcefiles.org/Utilities/Text_Utilities/bfr-${version}.tar.bz2";
+    url = "http://www.sourcefiles.org/Utilities/Text_Utilities/bfr-${finalAttrs.version}.tar.bz2";
     sha256 = "0fadfssvj9klj4dq9wdrzys1k2a1z2j0p6kgnfgbjv0n1bq6h4cy";
   };
 
@@ -26,10 +26,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ perl ];
 
-  meta = with lib; {
+  meta = {
     description = "General-purpose command-line pipe buffer";
     license = lib.licenses.gpl2Only;
-    maintainers = with maintainers; [ pSub ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ pSub ];
+    platforms = lib.platforms.linux;
   };
-}
+})

@@ -9,7 +9,7 @@
 buildPythonPackage {
   pname = "openvino";
   inherit (openvino-native) version;
-  format = "other";
+  pyproject = false;
 
   src = openvino-native.python;
 
@@ -29,10 +29,10 @@ buildPythonPackage {
     "openvino.runtime"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "OpenVINO(TM) Runtime";
     homepage = "https://github.com/openvinotoolkit/openvino";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

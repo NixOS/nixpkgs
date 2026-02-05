@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "whoosh";
   version = "2.7.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "Whoosh";
@@ -35,10 +32,10 @@ buildPythonPackage rec {
 
   disabledTests = [ "test_minimize_dfa" ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast, pure-Python full text indexing, search, and spell checking library";
     homepage = "https://github.com/mchaput/whoosh";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
   };
 }

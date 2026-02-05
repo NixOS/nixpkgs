@@ -19,14 +19,14 @@
 }:
 llvmPackages_20.stdenv.mkDerivation {
   pname = "xenia-canary";
-  version = "0-unstable-2025-11-10";
+  version = "0-unstable-2026-02-02";
 
   src = fetchFromGitHub {
     owner = "xenia-canary";
     repo = "xenia-canary";
     fetchSubmodules = true;
-    rev = "68b3490c8bdb2a819e80b113457aa16c6634118e";
-    hash = "sha256-pUvOUAwF4FdDrQkXKH2zyQmlZ5/lM+7syROWVWhJcX8=";
+    rev = "60ffc2e83f901bcce4ccb9b9fdd86f5fe8c1bc6b";
+    hash = "sha256-2mUS3mAXaKnE7FWk+hcn1SiQZnjOaQFKi/A6l57qMI0=";
   };
 
   dontConfigure = true;
@@ -47,7 +47,7 @@ llvmPackages_20.stdenv.mkDerivation {
       --replace-fail "cdialect(\"C17\")" ""
   ''; # Prevent build failure
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=unused-result"
   ];
 

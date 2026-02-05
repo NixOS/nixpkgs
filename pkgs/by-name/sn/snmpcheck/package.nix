@@ -8,11 +8,11 @@
 let
   rubyEnv = ruby.withPackages (ps: [ ps.snmp ]);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "snmpcheck";
   version = "1.9";
   src = fetchurl {
-    url = "http://www.nothink.org/codes/snmpcheck/snmpcheck-${version}.rb";
+    url = "http://www.nothink.org/codes/snmpcheck/snmpcheck-${finalAttrs.version}.rb";
     sha256 = "sha256-9xkLqbgxU1uykx+M9QsbPAH8OI/Cqn9uw6ALe23Lbq0=";
     executable = true;
   };
@@ -26,10 +26,10 @@ stdenv.mkDerivation rec {
     cp $src $out/bin/snmp-check
   '';
 
-  meta = with lib; {
+  meta = {
     description = "SNMP enumerator";
     homepage = "http://www.nothink.org/codes/snmpcheck/";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "snmp-check";
   };
-}
+})

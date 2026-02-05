@@ -13,7 +13,7 @@
   libmicrohttpd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libjson-rpc-cpp";
   version = "1.4.1";
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "cinemast";
     repo = "libjson-rpc-cpp";
     sha256 = "sha256-YCCZN4y88AixQeo24pk6YHfSCsJz8jJ97Dg40KM08cQ=";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
   };
 
   env.NIX_CFLAGS_COMPILE = "-I${catch2}/include/catch2";
@@ -101,13 +101,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "C++ framework for json-rpc (json remote procedure call)";
     mainProgram = "jsonrpcstub";
     homepage = "https://github.com/cinemast/libjson-rpc-cpp";
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    maintainers = with maintainers; [ robertrichter ];
+    maintainers = with lib.maintainers; [ robertrichter ];
   };
-}
+})

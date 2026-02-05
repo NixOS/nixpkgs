@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   pname = "libaio";
 
   src = fetchurl {
-    url = "https://pagure.io/libaio/archive/${pname}-${version}/${pname}-${pname}-${version}.tar.gz";
+    url = "https://pagure.io/libaio/archive/libaio-${version}/libaio-libaio-${version}.tar.gz";
     sha256 = "sha256-cWxwWXAyRzROsGa1TsvDyiE08BAzBxkubCt9q1+VKKs=";
   };
 

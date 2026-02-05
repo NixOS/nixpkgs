@@ -10,14 +10,14 @@
   libepoxy,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.52.1";
   pname = "xcpc";
 
   src = fetchFromGitHub {
     owner = "ponceto";
     repo = "xcpc-emulator";
-    rev = "xcpc-${version}";
+    rev = "xcpc-${finalAttrs.version}";
     hash = "sha256-N4UfnCbebaAhx0490niMov/JqlrXt5goblWbW0ajkcc=";
   };
 
@@ -39,12 +39,12 @@ stdenv.mkDerivation rec {
       "$out/share/pixmaps/" ""
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Portable Amstrad CPC 464/664/6128 emulator written in C";
     homepage = "https://www.xcpc-emulator.net";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "xcpc";
   };
-}
+})

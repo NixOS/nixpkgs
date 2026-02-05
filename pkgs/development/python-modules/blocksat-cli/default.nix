@@ -9,7 +9,6 @@
   pytestCheckHook,
   python-gnupg,
   pythonAtLeast,
-  pythonOlder,
   qrcode,
   requests,
   setuptools,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "blocksat-cli";
   version = "2.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Blockstream";
@@ -66,12 +63,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "blocksatcli" ];
 
-  meta = with lib; {
+  meta = {
     description = "Blockstream Satellite CLI";
     homepage = "https://github.com/Blockstream/satellite";
     changelog = "https://github.com/Blockstream/satellite/releases/tag/${src.tag}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ prusnak ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ prusnak ];
     mainProgram = "blocksat-cli";
   };
 }

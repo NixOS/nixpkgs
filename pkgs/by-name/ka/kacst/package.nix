@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation rec {
   version = "2.01";
 
   src = fetchurl {
-    url = "mirror://debian/pool/main/f/fonts-${pname}/fonts-${pname}_${version}+mry.orig.tar.bz2";
+    url = "mirror://debian/pool/main/f/fonts-kacst/fonts-kacst_${version}+mry.orig.tar.bz2";
     hash = "sha256-byiZzpYiMU6kJs+NSISfHPFzAnJtc8toNIbV/fKiMzg=";
   };
 
@@ -22,10 +22,10 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Latin-Arabic TrueType fonts";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ serge ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

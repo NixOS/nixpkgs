@@ -7,14 +7,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "unicorn";
   version = "2.1.4";
 
   src = fetchFromGitHub {
     owner = "unicorn-engine";
     repo = "unicorn";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-jEQXjYlLUdKrKPL4XfSbixn2KWJlNG7IYQveF4jDgl4=";
   };
 
@@ -36,13 +36,13 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight multi-platform CPU emulator library";
     homepage = "https://www.unicorn-engine.org";
-    license = licenses.gpl2Only;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       thoughtpolice
     ];
   };
-}
+})

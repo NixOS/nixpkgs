@@ -4,6 +4,7 @@
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
+  pythonAtLeast,
   wrapt,
 }:
 
@@ -11,6 +12,9 @@ buildPythonPackage rec {
   pname = "aiounittest";
   version = "1.5.0";
   pyproject = true;
+
+  # https://github.com/kwarunek/aiounittest/issues/28
+  disabled = pythonAtLeast "3.14";
 
   src = fetchFromGitHub {
     owner = "kwarunek";
@@ -27,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiounittest" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/kwarunek/aiounittest/releases/tag/${src.tag}";
     description = "Test asyncio code more easily";
     homepage = "https://github.com/kwarunek/aiounittest";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

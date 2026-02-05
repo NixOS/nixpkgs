@@ -4,18 +4,19 @@
   fetchFromGitHub,
   nix-update-script,
 }:
-rustPlatform.buildRustPackage rec {
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tcping-rs";
-  version = "1.2.19";
+  version = "1.2.24";
 
   src = fetchFromGitHub {
     owner = "lvillis";
     repo = "tcping-rs";
-    tag = version;
-    hash = "sha256-I7rcIemdPGFPBeOoIRft0tq49ikDs49UH5sEobL6fOA=";
+    tag = finalAttrs.version;
+    hash = "sha256-gsTZls5guqtDk8x+3q4nFYGwhr+TAV5iE9kiZgbmzCI=";
   };
 
-  cargoHash = "sha256-k+Hm6dHy6igk1deeVrWrAOdhlz0h/jen6pVNaGvB7Ak=";
+  cargoHash = "sha256-m/juo6+SPFAxQ7E2JgTkv47kxn4LhwfI4UGSDzHAXMc=";
 
   checkFlags = [
     # This test requires external network access
@@ -27,8 +28,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "TCP Ping (tcping) Utility for Port Reachability";
     homepage = "https://github.com/lvillis/tcping-rs";
+    changelog = "https://github.com/lvillis/tcping-rs/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     mainProgram = "tcping";
     maintainers = with lib.maintainers; [ heitorPB ];
   };
-}
+})

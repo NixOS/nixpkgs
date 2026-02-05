@@ -1,16 +1,17 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   pkg-config,
   cmake,
+  qttools,
+  wrapQtAppsHook,
   libX11,
   libXtst,
   qtbase,
-  qttools,
   qtx11extras,
 }:
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "qjoypad";
   version = "4.3.1";
 
@@ -30,6 +31,7 @@ mkDerivation rec {
     pkg-config
     cmake
     qttools
+    wrapQtAppsHook
   ];
   buildInputs = [
     libX11
@@ -38,7 +40,7 @@ mkDerivation rec {
     qtx11extras
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Program that lets you use gaming devices anywhere";
     longDescription = ''
       A simple Linux/QT program that lets you use your gaming devices
@@ -58,7 +60,7 @@ mkDerivation rec {
     '';
     homepage = "https://github.com/panzi/qjoypad/";
     license = lib.licenses.gpl2Only;
-    platforms = with platforms; linux;
+    platforms = with lib.platforms; linux;
     mainProgram = "qjoypad";
   };
 }

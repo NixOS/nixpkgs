@@ -18,7 +18,7 @@
   libXcursor,
   libXrandr,
   libXrender,
-  xcbutilimage,
+  libxcb-image,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "sfml";
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXcursor
     libXrandr
     libXrender
-    xcbutilimage
+    libxcb-image
   ];
 
   cmakeFlags = [

@@ -1,17 +1,18 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchFromGitHub,
   makeWrapper,
   python3,
   qtbase,
   qmake,
   qtserialport,
+  wrapQtAppsHook,
   ctags,
   gdb,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "gede";
   version = "2.22.1";
 
@@ -28,6 +29,7 @@ mkDerivation rec {
     python3
     qmake
     qtserialport
+    wrapQtAppsHook
   ];
 
   strictDeps = true;
@@ -48,12 +50,12 @@ mkDerivation rec {
       }
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Graphical frontend (GUI) to GDB";
     mainProgram = "gede";
     homepage = "http://gede.dexar.se";
-    license = licenses.bsd2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ juliendehos ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ juliendehos ];
   };
 }

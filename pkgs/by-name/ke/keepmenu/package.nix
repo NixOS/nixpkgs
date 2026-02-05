@@ -11,7 +11,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "keepmenu";
   version = "1.4.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "firecat53";
@@ -52,12 +52,12 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "keepmenu" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/firecat53/keepmenu";
     description = "Dmenu/Rofi frontend for Keepass databases";
     mainProgram = "keepmenu";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ elliot ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ elliot ];
+    platforms = lib.platforms.linux;
   };
 }

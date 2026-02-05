@@ -7,7 +7,7 @@
 python3Packages.buildPythonPackage rec {
   pname = "hyp-server";
   version = "1.2.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -18,15 +18,15 @@ python3Packages.buildPythonPackage rec {
     setuptools
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Hyperminimal https server";
     mainProgram = "hyp";
     homepage = "https://github.com/rnhmjoj/hyp";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Plus
       mit
     ];
-    maintainers = with maintainers; [ rnhmjoj ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ rnhmjoj ];
+    platforms = lib.platforms.unix;
   };
 }

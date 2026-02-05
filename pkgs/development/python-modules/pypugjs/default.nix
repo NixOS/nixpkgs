@@ -49,17 +49,17 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestCheckFlags = [ "pypugjs/testsuite" ];
+  pytestFlags = [ "pypugjs/testsuite" ];
 
   pythonImportsCheck = [
     "pypugjs"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "PugJS syntax template adapter for Django, Jinja2, Mako and Tornado templates";
     mainProgram = "pypugjs";
     homepage = "https://github.com/kakulukia/pypugjs";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lopsided98 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lopsided98 ];
   };
 }

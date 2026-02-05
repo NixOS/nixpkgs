@@ -29,7 +29,11 @@
   ncurses ? null,
   x11Support ? true,
   freetype,
-  xorg,
+  libxft,
+  libxext,
+  libx11,
+  libsm,
+  libice,
   waylandSupport ? true,
   pango,
   wayland,
@@ -65,6 +69,7 @@
   extrasSupport ? true,
 
   versionCheckHook,
+  expat,
 }:
 
 assert docsSupport -> pandoc != null && python3 != null;
@@ -131,11 +136,13 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals x11Support [
     freetype
     libxfixes
-    xorg.libICE
-    xorg.libX11
-    xorg.libXext
-    xorg.libXft
-    xorg.libSM
+    libice
+    libx11
+    libxext
+    libxft
+    libxfixes
+    libsm
+    expat
   ]
   ++ lib.optionals waylandSupport [
     pango
@@ -182,7 +189,6 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   meta = {

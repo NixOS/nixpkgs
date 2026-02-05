@@ -1,26 +1,21 @@
 {
   buildGoModule,
   fetchgit,
+  nix-update-script,
   lib,
 }:
 buildGoModule rec {
   pname = "libcwtch";
-  version = "0.1.7";
+  version = "0.2.1";
   # This Gitea instance has archive downloads disabled, so: fetchgit
   src = fetchgit {
     url = "https://git.openprivacy.ca/cwtch.im/autobindings.git";
     rev = "v${version}";
-    hash = "sha256-QHEaf3xm6SIHLnQamf0cUrKJ/A1v0iFaaGsMg33uIBs=";
+    hash = "sha256-Il4jADldw/tnRRiecCUrddKEvJ8WHvyT4s4zxSXqrnM=";
   };
 
-  vendorHash = "sha256-pnAdUFG1G0Bi/e9KNVX0WwloJy8xQ25YVFnGerRGy9A=";
-  overrideModAttrs = (
-    old: {
-      preBuild = ''
-        make lib.go
-      '';
-    }
-  );
+  proxyVendor = true;
+  vendorHash = "sha256-2Bs4cBQ+z5fqEvQ3xu31EngzdUZzZIl0sFsSjD60n2A=";
 
   postPatch = ''
     substituteInPlace Makefile \
@@ -41,6 +36,8 @@ buildGoModule rec {
     install -D build/linux/*/libCwtch.so $out/lib/libCwtch.so
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Decentralized, privacy-preserving, multi-party messaging protocol";

@@ -14,14 +14,14 @@
   accelergy,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "timeloop";
   version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "NVlabs";
     repo = "timeloop";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-CGPhrBNzFdERAA/Eym2v0+FvFUe+VkBLnwYEqEMHE9k=";
   };
 
@@ -91,11 +91,11 @@ stdenv.mkDerivation rec {
     cp -r ./problem-shapes ./configs $out/data
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Chip modeling/mapping benchmarking framework";
     homepage = "https://timeloop.csail.mit.edu";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ gdinh ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ gdinh ];
   };
-}
+})

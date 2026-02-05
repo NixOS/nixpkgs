@@ -9,7 +9,6 @@
   oldest-supported-numpy,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   scipy,
   setuptools-scm,
   tskit,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "msprime";
   version = "1.3.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -78,11 +75,11 @@ buildPythonPackage rec {
   '';
   pythonImportsCheck = [ "msprime" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simulate genealogical trees and genomic sequence data using population genetic models";
     homepage = "https://github.com/tskit-dev/msprime";
     changelog = "https://github.com/tskit-dev/msprime/blob/${version}/CHANGELOG.md";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
   };
 }

@@ -4,15 +4,12 @@
   fetchFromGitHub,
   pyparsing,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "bibtexparser";
   version = "1.4.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sciunto-org";
@@ -27,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bibtexparser" ];
 
-  meta = with lib; {
+  meta = {
     description = "Bibtex parser for Python";
     homepage = "https://github.com/sciunto-org/python-bibtexparser";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl3Only # or
       bsd3
     ];

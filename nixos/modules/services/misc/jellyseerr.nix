@@ -11,19 +11,19 @@ in
   meta.maintainers = [ lib.maintainers.camillemndn ];
 
   options.services.jellyseerr = {
-    enable = lib.mkEnableOption ''Jellyseerr, a requests manager for Jellyfin'';
+    enable = lib.mkEnableOption "Jellyseerr, a requests manager for Jellyfin";
     package = lib.mkPackageOption pkgs "jellyseerr" { };
 
     openFirewall = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = ''Open port in the firewall for the Jellyseerr web interface.'';
+      description = "Open port in the firewall for the Jellyseerr web interface.";
     };
 
     port = lib.mkOption {
       type = lib.types.port;
       default = 5055;
-      description = ''The port which the Jellyseerr web UI should listen to.'';
+      description = "The port which the Jellyseerr web UI should listen to.";
     };
 
     configDir = lib.mkOption {

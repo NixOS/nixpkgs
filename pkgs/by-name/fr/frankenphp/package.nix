@@ -6,7 +6,6 @@
   php,
   brotli,
   watcher,
-  testers,
   frankenphp,
   cctools,
   darwin,
@@ -15,6 +14,7 @@
   makeBinaryWrapper,
   runCommand,
   writeText,
+  versionCheckHook,
 }:
 
 let
@@ -31,13 +31,13 @@ let
 in
 buildGoModule rec {
   pname = "frankenphp";
-  version = "1.9.1";
+  version = "1.11.1";
 
   src = fetchFromGitHub {
-    owner = "dunglas";
+    owner = "php";
     repo = "frankenphp";
     tag = "v${version}";
-    hash = "sha256-zkB/kN6noCkUyUsXAbaWeRq1fpNErTcZPzDRoRp+LtM=";
+    hash = "sha256-JzZXg/tkSZqLZn56RyLb8Q8SaeG/tHA8Sqxu99s5ks0=";
   };
 
   sourceRoot = "${src.name}/caddy";
@@ -45,7 +45,7 @@ buildGoModule rec {
   # frankenphp requires C code that would be removed with `go mod tidy`
   # https://github.com/golang/go/issues/26366
   proxyVendor = true;
-  vendorHash = "sha256-scL015vSSfhuK06UZFRxK0Sk9dG6W3AOuFSPTogTCfI=";
+  vendorHash = "sha256-9RHD2ZcolhgQO0UKxkqFjxXGAVijSYQxVt7s+/aXNIo=";
 
   buildInputs = [
     phpUnwrapped
@@ -60,6 +60,7 @@ buildGoModule rec {
     pkg-config
     cctools
     darwin.autoSignDarwinBinariesHook
+    libiconv
   ];
 
   subPackages = [ "frankenphp" ];
@@ -87,11 +88,6 @@ buildGoModule rec {
     export CGO_LDFLAGS="-DFRANKENPHP_VERSION=${version} \
       $(${phpConfig} --ldflags) \
       $(${phpConfig} --libs)"
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # replace hard-code homebrew path
-    substituteInPlace ../frankenphp.go \
-      --replace "-L/opt/homebrew/opt/libiconv/lib" "-L${libiconv}/lib"
   '';
 
   preFixup = ''
@@ -103,15 +99,14 @@ buildGoModule rec {
 
   doCheck = false;
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
+  doInstallCheck = true;
+
   passthru = {
     php = phpEmbedWithZts;
     tests = {
       # TODO: real NixOS test with Symfony application
-      version = testers.testVersion {
-        inherit version;
-        package = frankenphp;
-        command = "frankenphp version";
-      };
       phpinfo =
         runCommand "php-cli-phpinfo"
           {
@@ -126,14 +121,12 @@ buildGoModule rec {
   };
 
   meta = {
-    changelog = "https://github.com/dunglas/frankenphp/releases/tag/v${version}";
+    changelog = "https://github.com/php/frankenphp/releases/tag/v${version}";
     description = "Modern PHP app server";
-    homepage = "https://github.com/dunglas/frankenphp";
+    homepage = "https://github.com/php/frankenphp";
     license = lib.licenses.mit;
     mainProgram = "frankenphp";
-    maintainers = with lib.maintainers; [
-      gaelreyrol
-    ];
+    maintainers = [ lib.maintainers.piotrkwiecinski ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

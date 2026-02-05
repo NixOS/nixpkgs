@@ -6,13 +6,13 @@
   clang,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "alglib3";
-  version = "4.05.0";
+  version = "4.07.0";
 
   src = fetchurl {
-    url = "https://www.alglib.net/translator/re/alglib-${version}.cpp.gpl.tgz";
-    sha256 = "sha256-czgBhziKjAO17ZwXChsjOazIaNODRrGyswhc4j4/T9s=";
+    url = "https://www.alglib.net/translator/re/alglib-${finalAttrs.version}.cpp.gpl.tgz";
+    sha256 = "sha256-y4mlU+4gKwqUFgUHKoVxAjdq5EsMzSJeT6Dg4Llwi/A=";
   };
 
   nativeBuildInputs = [
@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
     ./patch-alglib-CMakeLists.patch
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Numerical analysis and data processing library";
     homepage = "https://www.alglib.net/";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ maintainers.paperdigits ];
+    maintainers = [ lib.maintainers.paperdigits ];
     longDescription = ''
       ALGLIB is a cross-platform numerical analysis and data processing library. It supports several programming languages (C++, C#, Delphi) and several operating systems (Windows and POSIX, including Linux). ALGLIB features include:
 
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
       * Fast Fourier Transform and many other algorithms
     '';
   };
-}
+})

@@ -8,7 +8,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "headphones";
   version = "0.6.4";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "rembo10";
@@ -35,9 +35,9 @@ python3.pkgs.buildPythonApplication rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Automatic music downloader for SABnzbd";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     homepage = "https://github.com/rembo10/headphones";
     maintainers = with lib.maintainers; [ rembo10 ];
     mainProgram = "headphones";

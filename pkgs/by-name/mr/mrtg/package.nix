@@ -16,12 +16,12 @@ let
     ]
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mrtg";
   version = "2.17.10";
 
   src = fetchurl {
-    url = "https://oss.oetiker.ch/mrtg/pub/mrtg-${version}.tar.gz";
+    url = "https://oss.oetiker.ch/mrtg/pub/mrtg-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-x/EcteIXpQDYfuO10mxYqGUu28DTKRaIu3krAQ+uQ6w=";
   };
 
@@ -49,14 +49,14 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/mrtg  --set LANG C
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Multi Router Traffic Grapher";
     homepage = "https://oss.oetiker.ch/mrtg/";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       robberer
       usovalx
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

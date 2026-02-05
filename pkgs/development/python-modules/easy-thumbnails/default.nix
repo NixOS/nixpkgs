@@ -5,7 +5,6 @@
   fetchFromGitHub,
   fetchpatch,
   pillow,
-  pythonOlder,
   reportlab,
   svglib,
   pytestCheckHook,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "easy-thumbnails";
   version = "2.10.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "SmileyChris";
@@ -41,6 +38,9 @@ buildPythonPackage rec {
   dependencies = [
     django
     pillow
+  ];
+
+  optional-dependencies.svg = [
     reportlab
     svglib
   ];
@@ -48,7 +48,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-django
-  ];
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   checkInputs = [ testfixtures ];
 

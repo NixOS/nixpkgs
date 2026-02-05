@@ -3,7 +3,7 @@
   lib,
   glib,
   wrapGAppsHook3,
-  xorg,
+  lndir,
   marco,
   mate-panel,
   panelApplets,
@@ -16,11 +16,15 @@ let
 in
 stdenv.mkDerivation {
   pname = "${mate-panel.pname}-with-applets";
-  version = mate-panel.version;
+  inherit (mate-panel) version outputs;
 
   src = null;
 
-  paths = [ mate-panel ] ++ selectedApplets;
+  paths = [
+    mate-panel.out
+    mate-panel.man
+  ]
+  ++ selectedApplets;
   passAsFile = [ "paths" ];
 
   nativeBuildInputs = [
@@ -47,7 +51,7 @@ stdenv.mkDerivation {
 
     mkdir -p $out
     for i in $(cat $pathsPath); do
-      ${xorg.lndir}/bin/lndir -silent $i $out
+      ${lndir}/bin/lndir -silent $i $out
     done
 
     runHook postInstall

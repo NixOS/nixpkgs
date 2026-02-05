@@ -9,15 +9,15 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ser2net";
-  version = "4.6.5";
+  version = "4.6.6";
 
   src = fetchFromGitHub {
     owner = "cminyard";
     repo = "ser2net";
-    rev = "v${version}";
-    hash = "sha256-Iyr0ix+V9EXK01RceVQLc37tN/b83TvhUfuD+HSUjc0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-TL6btl8Q8hpIBfzHdJ+TLdF+r9zQRLytzVx810R7yYI=";
   };
 
   passthru = {
@@ -34,12 +34,12 @@ stdenv.mkDerivation rec {
     libyaml
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Serial to network connection server";
     homepage = "https://github.com/cminyard/ser2net";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ emantor ];
-    platforms = with platforms; linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ emantor ];
+    platforms = with lib.platforms; linux;
     mainProgram = "ser2net";
   };
-}
+})

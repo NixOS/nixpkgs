@@ -12,14 +12,14 @@
   file,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hubicfuse";
   version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "TurboGit";
     repo = "hubicfuse";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1x988hfffxgvqxh083pv3lj5031fz03sbgiiwrjpaiywfbhm8ffr";
   };
 
@@ -53,11 +53,11 @@ stdenv.mkDerivation rec {
     ln -sf $out/bin/hubicfuse $out/sbin/mount.hubicfuse
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/TurboGit/hubicfuse";
     description = "FUSE-based filesystem to access hubic cloud storage";
-    platforms = platforms.unix;
-    license = licenses.mit;
-    maintainers = [ maintainers.jpierre03 ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.jpierre03 ];
   };
-}
+})

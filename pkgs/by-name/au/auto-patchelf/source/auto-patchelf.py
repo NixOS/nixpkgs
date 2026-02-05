@@ -204,6 +204,36 @@ def find_dependency(soname: str, soarch: str, soabi: str) -> Optional[Path]:
     return None
 
 
+def find_first_matching_rpath_with_origin(binary: Path, lib_dir: Path, rpaths: list[str]) -> Optional[Path]:
+    """
+    If lib_dir equals one of the existing $ORIGIN-based RPATH entries
+    (after resolving $ORIGIN relative to this binary), return that $ORIGIN
+    entry to preserve it; otherwise return None.
+
+    Note: we return a Path constructed from the RPATH string (which may
+    contain $ORIGIN). This is intentional so that the caller can treat it
+    uniformly with other Path entries when building the final RPATH string
+    (via Path.as_posix). We do not expect this Path to exist on the
+    filesystem; it functions as a display value.
+    """
+    try:
+        # resolve(strict=False) does not require the path to exist, but may still
+        # raise RuntimeError (cycles) or OSError in odd environments. Guard those.
+        lib_dir_realpath = lib_dir.resolve()
+    except (OSError, RuntimeError):
+        return None
+    for rpath in rpaths:
+        if "$ORIGIN" not in rpath:
+            continue
+        try:
+            candidate_rpath_realpath = (binary.parent / rpath.replace("$ORIGIN", ".")).resolve()
+        except (OSError, RuntimeError):
+            continue
+        if candidate_rpath_realpath == lib_dir_realpath:
+            return Path(rpath)
+    return None
+
+
 @dataclass
 class Dependency:
     file: Path              # The file that contains the dependency
@@ -211,7 +241,7 @@ class Dependency:
     found: bool = False     # Whether it was found somewhere
 
 
-def auto_patchelf_file(path: Path, runtime_deps: list[Path], append_rpaths: list[Path] = [], keep_libc: bool = False, extra_args: list[str] = []) -> list[Dependency]:
+def auto_patchelf_file(path: Path, runtime_deps: list[Path], append_rpaths: list[Path] = [], keep_libc: bool = False, preserve_origin: bool = False, extra_args: list[str] = []) -> list[Dependency]:
     try:
         with open_elf(path) as elf:
 
@@ -242,6 +272,7 @@ def auto_patchelf_file(path: Path, runtime_deps: list[Path], append_rpaths: list
             file_is_dynamic_executable = is_dynamic_executable(elf)
 
             file_dependencies = get_dependencies(elf) + get_dlopen_dependencies(elf)
+            existing_rpaths = get_rpath(elf)
 
     except ELFError:
         return []
@@ -279,7 +310,10 @@ def auto_patchelf_file(path: Path, runtime_deps: list[Path], append_rpaths: list
             #    and resolved automatically by the dynamic linker, unless
             #    keep_libc is enabled.
             # 3. If a candidate is found in our library dependencies, that
-            #    dependency should be added to rpath.
+            #    dependency should be added to rpath. If --preserve-origin
+            #    is set and this file's existing RUNPATH/RPATH contains a $ORIGIN
+            #    entry that resolves to the same directory, we add that $ORIGIN
+            #    entry instead of an absolute path.
             # 4. If all of the above fail, libc dependencies should still be
             #    considered found. This is in contrast to step 2, because
             #    enabling keep_libc should allow libc to be found in step 3
@@ -299,7 +333,8 @@ def auto_patchelf_file(path: Path, runtime_deps: list[Path], append_rpaths: list
                 was_found = True
                 break
             elif found_dependency := find_dependency(candidate.name, file_arch, file_osabi):
-                rpath.append(found_dependency)
+                origin_rpath_entry = find_first_matching_rpath_with_origin(path, found_dependency, existing_rpaths) if preserve_origin else None
+                rpath.append(origin_rpath_entry or found_dependency)
                 dependencies.append(Dependency(path, candidate, found=True))
                 print(f"    {candidate} -> found: {found_dependency}")
                 was_found = True
@@ -314,6 +349,12 @@ def auto_patchelf_file(path: Path, runtime_deps: list[Path], append_rpaths: list
             print(f"    {dep_name} -> not found!")
 
     rpath.extend(append_rpaths)
+
+    # Keep any existing $ORIGIN entries that didn't match a discovered dependency (i.e. dlopen-only lookups)
+    if preserve_origin:
+        for existing_rpath in existing_rpaths:
+            if "$ORIGIN" in existing_rpath:
+                rpath.append(Path(existing_rpath))
 
     # Dedup the rpath
     rpath_str = ":".join(dict.fromkeys(map(Path.as_posix, rpath)))
@@ -335,6 +376,7 @@ def auto_patchelf(
         ignore_missing: list[str] = [],
         append_rpaths: list[Path] = [],
         keep_libc: bool = False,
+        preserve_origin: bool = False,
         add_existing: bool = True,
         extra_args: list[str] = []) -> None:
 
@@ -351,7 +393,7 @@ def auto_patchelf(
     dependencies = []
     for path in chain.from_iterable(glob(p, '*', recursive) for p in paths_to_patch):
         if not path.is_symlink() and path.is_file():
-            dependencies += auto_patchelf_file(path, runtime_deps, append_rpaths, keep_libc, extra_args)
+            dependencies += auto_patchelf_file(path, runtime_deps, append_rpaths, keep_libc, preserve_origin, extra_args)
 
     missing = [dep for dep in dependencies if not dep.found]
 
@@ -432,6 +474,12 @@ def main() -> None:
         help="Attempt to search for and relink libc dependencies.",
     )
     parser.add_argument(
+        "--preserve-origin",
+        dest="preserve_origin",
+        action="store_true",
+        help="When possible, replace absolute RPATH entries with original $ORIGIN entries that resolve to the same directory.",
+    )
+    parser.add_argument(
         "--ignore-existing",
         dest="add_existing",
         action="store_false",
@@ -460,6 +508,7 @@ def main() -> None:
         args.ignore_missing,
         append_rpaths=args.append_rpaths,
         keep_libc=args.keep_libc,
+        preserve_origin=args.preserve_origin,
         add_existing=args.add_existing,
         extra_args=args.extra_args)
 

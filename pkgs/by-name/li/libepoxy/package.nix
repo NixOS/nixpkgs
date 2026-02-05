@@ -5,7 +5,7 @@
   meson,
   ninja,
   pkg-config,
-  utilmacros,
+  util-macros,
   python3,
   libGL,
   libX11,
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    utilmacros
+    util-macros
     python3
   ];
 
@@ -81,12 +81,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library for handling OpenGL function pointer management";
     homepage = "https://github.com/anholt/libepoxy";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     pkgConfigModules = [ "epoxy" ];
   };
 })

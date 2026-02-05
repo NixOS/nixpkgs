@@ -17,7 +17,12 @@
   wayland-protocols,
   wayland-scanner,
   x11Support ? stdenv.hostPlatform.isLinux,
-  xorg,
+  libxinerama,
+  libxft,
+  libxdmcp,
+  libx11,
+  libpthread-stubs,
+  libxcb,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -56,12 +61,12 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
   ]
   ++ lib.optionals x11Support [
-    xorg.libX11
-    xorg.libXinerama
-    xorg.libXft
-    xorg.libXdmcp
-    xorg.libpthreadstubs
-    xorg.libxcb
+    libx11
+    libxinerama
+    libxft
+    libxdmcp
+    libpthread-stubs
+    libxcb
   ];
 
   makeFlags = [ "PREFIX=$(out)" ];
@@ -81,12 +86,12 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Cloudef/bemenu";
     description = "Dynamic menu library and client program inspired by dmenu";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ crertel ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ crertel ];
     mainProgram = "bemenu";
-    platforms = with platforms; linux ++ darwin;
+    platforms = with lib.platforms; linux ++ darwin;
   };
 })

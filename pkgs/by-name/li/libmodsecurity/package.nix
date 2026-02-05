@@ -19,14 +19,14 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libmodsecurity";
   version = "3.0.14";
 
   src = fetchFromGitHub {
     owner = "owasp-modsecurity";
     repo = "ModSecurity";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-SaeBO3+WvPhHiJoiOmijB0G3/QYxjAdxgeCVqESS+4U=";
     fetchSubmodules = true;
   };
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     mkdir -p $out/share/modsecurity
-    cp ${src}/{AUTHORS,CHANGES,LICENSE,README.md,modsecurity.conf-recommended,unicode.mapping} $out/share/modsecurity
+    cp ${finalAttrs.src}/{AUTHORS,CHANGES,LICENSE,README.md,modsecurity.conf-recommended,unicode.mapping} $out/share/modsecurity
   '';
 
   enableParallelBuilding = true;
@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
     nginx-modsecurity = nixosTests.nginx-modsecurity;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/owasp-modsecurity/ModSecurity";
     description = ''
       ModSecurity v3 library component.
@@ -107,9 +107,9 @@ stdenv.mkDerivation rec {
       the ModSecurity SecRules format and apply them to HTTP content provided
       by your application via Connectors.
     '';
-    license = licenses.asl20;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ izorkin ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ izorkin ];
     mainProgram = "modsec-rules-check";
   };
-}
+})

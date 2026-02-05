@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "atomic-operator";
   version = "0.8.5";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "swimlane";
@@ -55,11 +55,11 @@ python3.pkgs.buildPythonApplication rec {
     "test_config_parser"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to execute Atomic Red Team tests (Atomics)";
     mainProgram = "atomic-operator";
     homepage = "https://www.atomic-operator.com/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

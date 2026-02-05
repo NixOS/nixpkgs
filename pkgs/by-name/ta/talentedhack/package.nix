@@ -7,14 +7,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "talentedhack";
   version = "1.86";
 
   src = fetchFromGitHub {
     owner = "jeremysalwen";
     repo = "talentedhack";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0kwvayalysmk7y49jq0k16al252md8d45z58hphzsksmyz6148bx";
   };
 
@@ -36,11 +36,11 @@ stdenv.mkDerivation rec {
     cp *.so *.ttl $d
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jeremysalwen/TalentedHack";
     description = "LV2 port of Autotalent pitch correction plugin";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.michalrus ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.michalrus ];
+    platforms = lib.platforms.linux;
   };
-}
+})

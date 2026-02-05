@@ -8,14 +8,14 @@
   installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "git-subrepo";
   version = "0.4.9";
 
   src = fetchFromGitHub {
     owner = "ingydotnet";
     repo = "git-subrepo";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-Fwh4haGXVDsLexe/1kjUhY4lF6u5cTrAwivZiOkPig0=";
   };
 
@@ -45,12 +45,12 @@ stdenv.mkDerivation rec {
       --prefix PATH : "${git}/bin"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ingydotnet/git-subrepo";
     description = "Git submodule alternative";
     mainProgram = "git-subrepo";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ ryantrinkle ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ ryantrinkle ];
   };
-}
+})

@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "spirv-tools";
-  version = "1.4.328.0";
+  version = "1.4.335.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Tools";
     rev = "vulkan-sdk-${finalAttrs.version}";
-    hash = "sha256-NXxC5XLvEEIAlA0sym6l7vWj+g8pJ4trsJI3pmZwRxU=";
+    hash = "sha256-H+t7ZH4SB+XgWTLj9XaJWZwAWk8M2QeC98Zi5ay8PBc=";
   };
 
   # The cmake options are sufficient for turning on static building, but not
@@ -50,11 +50,11 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
   '';
 
-  meta = with lib; {
+  meta = {
     description = "SPIR-V Tools project provides an API and commands for processing SPIR-V modules";
     homepage = "https://github.com/KhronosGroup/SPIRV-Tools";
-    license = licenses.asl20;
-    platforms = with platforms; unix ++ windows;
-    maintainers = [ maintainers.ralith ];
+    license = lib.licenses.asl20;
+    platforms = with lib.platforms; unix ++ windows;
+    maintainers = [ lib.maintainers.ralith ];
   };
 })

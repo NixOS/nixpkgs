@@ -1,0 +1,53 @@
+From 7534c427f720ce2134a4fba7b7c3f8cddadf9069 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?David=20Chocholat=C3=BD?= <chocholaty.david@protonmail.com>
+Date: Sat, 31 Jan 2026 11:04:04 +0100
+Subject: [PATCH] fix: Remove duplicate dependency entry for tauri-build
+
+---
+ Cargo.lock | 23 -----------------------
+ 1 file changed, 23 deletions(-)
+
+diff --git a/Cargo.lock b/Cargo.lock
+index 80a7920f..92a7bef6 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -590,7 +590,6 @@ dependencies = [
+  "sqlx",
+  "syntect",
+  "tauri",
+- "tauri-build 2.5.3 (registry+https://github.com/rust-lang/crates.io-index)",
+  "tauri-plugin-deep-link",
+  "tauri-plugin-dialog",
+  "tauri-plugin-fs",
+@@ -8932,28 +8931,6 @@ dependencies = [
+  "windows 0.61.1",
+ ]
+ 
+-[[package]]
+-name = "tauri-build"
+-version = "2.5.3"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "17fcb8819fd16463512a12f531d44826ce566f486d7ccd211c9c8cebdaec4e08"
+-dependencies = [
+- "anyhow",
+- "cargo_toml",
+- "dirs 6.0.0",
+- "glob",
+- "heck 0.5.0",
+- "json-patch",
+- "schemars",
+- "semver",
+- "serde",
+- "serde_json",
+- "tauri-utils",
+- "tauri-winres",
+- "toml 0.9.8",
+- "walkdir",
+-]
+-
+ [[package]]
+ name = "tauri-build"
+ version = "2.5.3"
+-- 
+2.51.2
+

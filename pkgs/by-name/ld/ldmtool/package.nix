@@ -17,14 +17,14 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ldmtool";
   version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "mdbooth";
     repo = "libldm";
-    rev = "libldm-${version}";
+    rev = "libldm-${finalAttrs.version}";
     sha256 = "1fy5wbmk8kwl86lzswq0d1z2j5y023qzfm2ppm8knzv9c47kniqk";
   };
 
@@ -62,12 +62,12 @@ stdenv.mkDerivation rec {
     libuuid
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool and library for managing Microsoft Windows Dynamic Disks";
     homepage = "https://github.com/mdbooth/libldm";
-    maintainers = with maintainers; [ jensbin ];
-    license = licenses.gpl3;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ jensbin ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
     mainProgram = "ldmtool";
   };
-}
+})

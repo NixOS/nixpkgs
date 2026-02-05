@@ -1,9 +1,10 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchurl,
   cmake,
   pkg-config,
+  wrapQtAppsHook,
   qtbase,
   qt5,
   libGLU,
@@ -13,7 +14,7 @@
   SDL2 ? null,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "yabause";
   version = "0.9.15";
 
@@ -25,6 +26,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    wrapQtAppsHook
   ];
   buildInputs = [
     qtbase
@@ -57,12 +59,12 @@ mkDerivation rec {
       --replace-fail "cmake_minimum_required(VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open-source Sega Saturn emulator";
     mainProgram = "yabause";
     homepage = "https://yabause.org/";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

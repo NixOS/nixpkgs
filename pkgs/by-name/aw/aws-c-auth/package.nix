@@ -13,7 +13,7 @@
   s2n-tls,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "aws-c-auth";
   # nixpkgs-update: no auto update
   version = "0.9.1";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-auth";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8oQTTqBuEzhBUWqXHVYrGtaX44SmB2sJQZchiweHekM=";
   };
 
@@ -50,11 +50,11 @@ stdenv.mkDerivation rec {
     inherit nix;
   };
 
-  meta = with lib; {
+  meta = {
     description = "C99 library implementation of AWS client-side authentication";
     homepage = "https://github.com/awslabs/aws-c-auth";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ r-burns ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ r-burns ];
   };
-}
+})

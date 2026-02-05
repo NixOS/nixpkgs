@@ -11,7 +11,7 @@
   util-linux,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bobcat";
   version = "5.11.01";
 
@@ -19,11 +19,11 @@ stdenv.mkDerivation rec {
     domain = "gitlab.com";
     owner = "fbb-git";
     repo = "bobcat";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-JLJKaJmztputIon9JkKzpm3Ch60iwm4Imh9p42crYzA=";
   };
 
-  sourceRoot = "${src.name}/bobcat";
+  sourceRoot = "${finalAttrs.src.name}/bobcat";
 
   postPatch = ''
     substituteInPlace INSTALL.im \
@@ -64,10 +64,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Brokken's Own Base Classes And Templates";
     homepage = "https://fbb-git.gitlab.io/bobcat/";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
   };
-}
+})

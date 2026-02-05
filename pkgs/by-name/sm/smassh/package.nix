@@ -8,14 +8,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "smassh";
-  version = "3.1.6";
+  version = "3.1.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kraanzu";
     repo = "smassh";
     rev = "v${version}";
-    hash = "sha256-P0fZHSsaKIwJspEBxM5MEK3Z4kemXJWlIOQI9cmvlF4=";
+    hash = "sha256-i04DzsurF6sMMBHZjBOrkKKmkn6Nt6uF27QXABE3igg=";
   };
 
   nativeBuildInputs = with python3.pkgs; [ poetry-core ];
@@ -41,12 +41,12 @@ python3.pkgs.buildPythonApplication rec {
     version = "smassh - v${version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "TUI based typing test application inspired by MonkeyType";
     homepage = "https://github.com/kraanzu/smassh";
     changelog = "https://github.com/kraanzu/smassh/blob/main/CHANGELOG.md";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       aimpizza
       kraanzu
     ];

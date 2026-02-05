@@ -9,7 +9,7 @@
   gtk3,
   libGL,
   libGLU,
-  libSM,
+  libsm,
   libXinerama,
   libXtst,
   libXxf86vm,
@@ -45,14 +45,14 @@ let
     hash = "sha256-ymziU0NgGqxPOKHwGm0QyEdK/8jL/QYk5UdIQ3Tn8jw=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wxwidgets";
   version = "3.2.8.1";
 
   src = fetchFromGitHub {
     owner = "wxWidgets";
     repo = "wxWidgets";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-aXI59oN5qqds6u2/6MI7BYLbFPy3Yrfn2FGTfxlPG7o=";
   };
 
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     curl
     gspell # wxTextCtrl spell checking
     gtk3
-    libSM
+    libsm
     libXinerama
     libXtst
     libXxf86vm
@@ -101,6 +101,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional unicode "--enable-unicode"
   ++ lib.optional withMesa "--with-opengl"
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "--with-macosx-version-min=${stdenv.hostPlatform.darwinMinVersion}"
     "--with-osx_cocoa"
     "--with-libiconv"
     "--with-urlsession" # for wxWebRequest
@@ -134,7 +135,7 @@ stdenv.mkDerivation rec {
     inherit compat28 compat30 unicode;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.wxwidgets.org/";
     description = "Cross-Platform C++ GUI Library";
     longDescription = ''
@@ -147,13 +148,13 @@ stdenv.mkDerivation rec {
       multithreading, image loading and saving in a variety of popular formats,
       database support, HTML viewing and printing, and much more.
     '';
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl2Plus
       wxWindowsException31
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       fliegendewurst
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

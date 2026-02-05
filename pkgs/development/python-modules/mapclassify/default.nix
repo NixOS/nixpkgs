@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
 
   geopandas,
   libpysal,
@@ -20,7 +19,6 @@ buildPythonPackage rec {
   pname = "mapclassify";
   version = "2.10.0";
   pyproject = true;
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pysal";

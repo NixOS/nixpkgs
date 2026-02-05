@@ -19,16 +19,15 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Command line helpers for fuzzing";
     mainProgram = "cargo-fuzz";
     homepage = "https://github.com/rust-fuzz/cargo-fuzz";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       asl20
     ];
-    maintainers = with maintainers; [
-      ekleog
+    maintainers = with lib.maintainers; [
       matthiasbeyer
     ];
   };

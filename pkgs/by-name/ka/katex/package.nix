@@ -10,18 +10,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "katex";
-  version = "0.16.25";
+  version = "0.16.28";
 
   src = fetchFromGitHub {
     owner = "katex";
     repo = "katex";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-XwKjoXkn96YNxrBv2qcUSqKMtHxz9+levevc4Rz1SYw=";
+    hash = "sha256-M9PqzSQkMcnfuL2n/eLwxnk3E9gSEVu0t6Tahiw7niI=";
   };
 
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-vPYzt+ZBbi1sR7T1I08f/syTnN8hnUTqH4fKCBiFIM0=";
+    hash = "sha256-bRzYuiYDAz9LTcaUgI0dvfxU/eo0uTSz0pPP7dH5XW8=";
   };
 
   nativeBuildInputs = [

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   version = "2.3.3";
 
   src = fetchurl {
-    url = "https://github.com/libgd/libgd/releases/download/${pname}-${version}/libgd-${version}.tar.xz";
+    url = "https://github.com/libgd/libgd/releases/download/gd-${version}/libgd-${version}.tar.xz";
     sha256 = "0qas3q9xz3wgw06dm2fj0i189rain6n60z1vyq50d5h7wbn25s1z";
   };
 
@@ -74,11 +74,11 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails 2 tests
 
-  meta = with lib; {
+  meta = {
     homepage = "https://libgd.github.io/";
     description = "Dynamic image creation library";
-    license = licenses.free; # some custom license
-    platforms = platforms.unix;
+    license = lib.licenses.free; # some custom license
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 }

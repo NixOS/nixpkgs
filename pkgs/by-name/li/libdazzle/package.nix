@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   outputBin = "dev";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libdazzle/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/libdazzle/${lib.versions.majorMinor version}/libdazzle-${version}.tar.xz";
     sha256 = "PNPkXrbiaAywXVLh6A3Y+dWdR2UhLw4o945sF4PRjq4=";
   };
 
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library to delight your users with fancy features";
     mainProgram = "dazzle-list-counters";
     longDescription = ''
@@ -89,8 +89,8 @@ stdenv.mkDerivation rec {
       enough to work for everyone.
     '';
     homepage = "https://gitlab.gnome.org/GNOME/libdazzle";
-    license = licenses.gpl3Plus;
-    teams = [ teams.gnome ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.unix;
   };
 }

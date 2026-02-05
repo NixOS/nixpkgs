@@ -12,7 +12,7 @@
   unstableGitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bpftune";
   version = "0-unstable-2025-03-20";
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     "prefix=${placeholder "out"}"
     "confprefix=${placeholder "out"}/etc"
     "libdir=lib"
-    "BPFTUNE_VERSION=${version}"
+    "BPFTUNE_VERSION=${finalAttrs.version}"
     "NL_INCLUDE=${lib.getDev libnl}/include/libnl3"
     "BPF_INCLUDE=${lib.getDev libbpf}/include"
   ];
@@ -69,11 +69,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "BPF-based auto-tuning of Linux system parameters";
     mainProgram = "bpftune";
     homepage = "https://github.com/oracle-samples/bpftune";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
-}
+})

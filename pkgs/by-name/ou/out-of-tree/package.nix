@@ -15,7 +15,7 @@ buildGoModule rec {
 
   src = fetchgit {
     tag = "v${version}";
-    url = "https://code.dumpstack.io/tools/${pname}.git";
+    url = "https://code.dumpstack.io/tools/out-of-tree.git";
     hash = "sha256-XzO8NU7A5m631PjAm0F/K7qLrD+ZDSdHXaNowGaZAPo=";
   };
 
@@ -33,11 +33,11 @@ buildGoModule rec {
       }"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Kernel {module, exploit} development tool";
     mainProgram = "out-of-tree";
     homepage = "https://out-of-tree.io";
-    maintainers = [ maintainers.dump_stack ];
-    license = licenses.agpl3Plus;
+    maintainers = [ lib.maintainers.dump_stack ];
+    license = lib.licenses.agpl3Plus;
   };
 }

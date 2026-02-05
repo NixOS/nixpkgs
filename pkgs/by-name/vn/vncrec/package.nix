@@ -10,8 +10,8 @@
   libXmu,
   libXaw,
   libXext,
-  libSM,
-  libICE,
+  libsm,
+  libice,
   libXpm,
   libXp,
 }:
@@ -47,8 +47,8 @@ stdenv.mkDerivation {
     libXmu
     libXaw
     libXext
-    libSM
-    libICE
+    libsm
+    libice
     libXpm
     libXp
   ];

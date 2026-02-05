@@ -6,14 +6,14 @@
   libpcap,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nethogs";
   version = "0.8.8";
 
   src = fetchFromGitHub {
     owner = "raboof";
     repo = "nethogs";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-+yVMyGSBIBWYjA9jaGWvrcsNPbJ6S4ax9H1BhWHYUUU=";
   };
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ];
 
   makeFlags = [
-    "VERSION=${version}"
+    "VERSION=${finalAttrs.version}"
     "nethogs"
   ];
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     "sbin=$(out)/bin"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Small 'net top' tool, grouping bandwidth by process";
     longDescription = ''
       NetHogs is a small 'net top' tool. Instead of breaking the traffic down
@@ -43,10 +43,10 @@ stdenv.mkDerivation rec {
       identify programs that have gone wild and are suddenly taking up your
       bandwidth.
     '';
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     homepage = "https://github.com/raboof/nethogs#readme";
-    platforms = platforms.linux;
-    maintainers = [ maintainers.rycee ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.rycee ];
     mainProgram = "nethogs";
   };
-}
+})

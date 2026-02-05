@@ -14,14 +14,14 @@
   libsForQt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gittyup";
   version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "Murmele";
     repo = "Gittyup";
-    rev = "gittyup_v${version}";
+    rev = "gittyup_v${finalAttrs.version}";
     hash = "sha256-anyjHSF0ZCBJTuqNdH49iwngt3zeJZat5XGDsKbiwPE=";
     fetchSubmodules = true;
   };
@@ -73,15 +73,15 @@ stdenv.mkDerivation rec {
     rm -rf $out/{include,lib}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Graphical Git client designed to help you understand and manage your source code history";
     homepage = "https://murmele.github.io/Gittyup";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [
       fliegendewurst
       phijor
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

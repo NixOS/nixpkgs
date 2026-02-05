@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "0.97";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/stund-${version}.tgz";
+    url = "mirror://sourceforge/stun/stund-${version}.tgz";
     sha256 = "1mxirnnqfqdwb9x8hfjjsscp6lx3468ph6ddx32l94ir46fbzqc3";
   };
 
@@ -38,15 +38,15 @@ stdenv.mkDerivation rec {
     cp -v debian/manpages/stund.8.gz $server/man/man8
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Stun server and test client";
     homepage = "https://sourceforge.net/projects/stun/";
-    license = licenses.vsl10;
-    maintainers = with maintainers; [
+    license = lib.licenses.vsl10;
+    maintainers = with lib.maintainers; [
       marcweber
       obadz
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "stun";
   };
 }

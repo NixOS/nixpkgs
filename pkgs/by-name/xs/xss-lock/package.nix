@@ -6,10 +6,10 @@
   docutils,
   pkg-config,
   glib,
-  libpthreadstubs,
+  libpthread-stubs,
   libXau,
   libXdmcp,
-  xcbutil,
+  libxcb-util,
   nixosTests,
 }:
 
@@ -37,22 +37,22 @@ stdenv.mkDerivation {
   ];
   buildInputs = [
     glib
-    libpthreadstubs
+    libpthread-stubs
     libXau
     libXdmcp
-    xcbutil
+    libxcb-util
   ];
 
   passthru.tests = { inherit (nixosTests) xss-lock; };
 
-  meta = with lib; {
+  meta = {
     description = "Use external locker (such as i3lock) as X screen saver";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "xss-lock";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       malyn
       offline
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

@@ -31,10 +31,9 @@ python3.pkgs.buildPythonApplication {
 
   pythonImportsCheck = [ "nix_bisect" ];
 
-  meta = with lib; {
+  meta = {
     description = "Bisect nix builds";
     homepage = "https://github.com/timokau/nix-bisect";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
   };
 }

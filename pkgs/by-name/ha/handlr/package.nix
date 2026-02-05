@@ -38,11 +38,11 @@ rustPlatform.buildRustPackage {
       --fish completions/handlr.fish
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Alternative to xdg-open to manage default applications with ease";
     homepage = "https://github.com/chmln/handlr";
-    license = licenses.mit;
-    maintainers = with maintainers; [ artturin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ artturin ];
     mainProgram = "handlr";
   };
 }

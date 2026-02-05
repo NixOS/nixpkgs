@@ -3,7 +3,9 @@
   lib,
   nodejs_22,
   pnpm_10,
-  electron_38,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  electron_39,
   python3,
   makeWrapper,
   callPackage,
@@ -22,8 +24,8 @@
 }:
 let
   nodejs = nodejs_22;
-  pnpm = pnpm_10.override { inherit nodejs; };
-  electron = electron_38;
+  pnpm = pnpm_10;
+  electron = electron_39;
 
   libsignal-node = callPackage ./libsignal-node.nix { inherit nodejs; };
   signal-sqlcipher = callPackage ./signal-sqlcipher.nix { inherit pnpm nodejs; };
@@ -52,13 +54,13 @@ let
     '';
   });
 
-  version = "7.78.0";
+  version = "7.88.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "Signal-Desktop";
     tag = "v${version}";
-    hash = "sha256-pQk1k3ARBMk3YDTPeLNCWG7dCl1TWBn/evgKIEny3k0=";
+    hash = "sha256-uKN6zandxyc2VUCq3uINMgeniPyJiE9lskT/Opz1WMA=";
   };
 
   sticker-creator = stdenv.mkDerivation (finalAttrs: {
@@ -66,8 +68,9 @@ let
     inherit version;
     src = src + "/sticker-creator";
 
-    pnpmDeps = pnpm.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname src version;
+      inherit pnpm;
       fetcherVersion = 1;
       hash = "sha256-m/JxsKnVhcya7dUz1MBMQKwEdqoV3xQiGOoT4egh3K4=";
     };
@@ -75,7 +78,8 @@ let
     strictDeps = true;
     nativeBuildInputs = [
       nodejs
-      pnpm.configHook
+      pnpmConfigHook
+      pnpm
     ];
 
     buildPhase = ''
@@ -98,7 +102,8 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
   nativeBuildInputs = [
     nodejs
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm
     makeWrapper
     copyDesktopItems
     python3
@@ -106,7 +111,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = (lib.optional (!withAppleEmojis) noto-fonts-color-emoji-png);
 
-  patches = lib.optional (!withAppleEmojis) (
+  patches = [
+    ./force-90-days-expiration.patch
+  ]
+  ++ lib.optional (!withAppleEmojis) (
     replaceVars ./replace-apple-emoji-with-noto-emoji.patch {
       noto-emoji-pngs = "${noto-fonts-color-emoji-png}/share/noto-fonts-color-emoji-png";
     }
@@ -122,27 +130,32 @@ stdenv.mkDerivation (finalAttrs: {
     # it at runtime.
     substituteInPlace app/updateDefaultSession.main.ts \
       --replace-fail "\''${process.versions.electron}" "`jq -r '.devDependencies.electron' < package.json`"
+
+    # https://github.com/signalapp/Signal-Desktop/issues/7667
+    substituteInPlace ts/util/version.std.ts \
+      --replace-fail 'isAdhoc(version)' 'true'
   '';
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
       src
       patches
       ;
+    inherit pnpm;
     fetcherVersion = 1;
     hash =
       if withAppleEmojis then
-        "sha256-qOVwVQRGtxjpfVF+zBqeotYD0JE1n3az9yFclzXrHgs="
+        "sha256-NWzGyoj1BafRe9LxLkhpWWjGaT0gfQGHnxYDMpvRLYE="
       else
-        "sha256-Pby9shhDbvXGMY7K1Z+BZXwxY8QVwTYViaEMwZiDggI=";
+        "sha256-XZ0XivOvZ4yormMgLK5vtV63t4CtNaZ1l0eexTUbbPg=";
   };
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     SIGNAL_ENV = "production";
-    SOURCE_DATE_EPOCH = 1762378649;
+    SOURCE_DATE_EPOCH = 1770233682;
   };
 
   preBuild = ''
@@ -279,6 +292,7 @@ stdenv.mkDerivation (finalAttrs: {
       ]
       ++ lib.optional withAppleEmojis unfree;
     maintainers = with lib.maintainers; [
+      eclairevoyant
       marcin-serwin
       teutat3s
     ];

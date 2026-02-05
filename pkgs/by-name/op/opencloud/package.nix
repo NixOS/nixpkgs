@@ -28,13 +28,13 @@ let
 in
 buildGoModule rec {
   pname = "opencloud";
-  version = "3.7.0";
+  version = "5.0.2";
 
   src = fetchFromGitHub {
     owner = "opencloud-eu";
     repo = "opencloud";
     tag = "v${version}";
-    hash = "sha256-EseQbzQ/YRdv4b7cMl+563aQN5IcRMIZZtVqf9C4XCw=";
+    hash = "sha256-ncV7aPT56NNJawNLVuHfTlHMpXsW+3Rq/NEaTnoKz/c=";
   };
 
   postPatch = ''
@@ -96,6 +96,8 @@ buildGoModule rec {
     # avoids 'make generate' calling `git`, otherwise no-op
     STRING = version;
     VERSION = version;
+    # avoids weird test failure
+    AUTOMEMLIMIT = "off";
   };
 
   excludedPackages = [ "tests/*" ];

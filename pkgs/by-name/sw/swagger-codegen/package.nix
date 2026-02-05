@@ -7,7 +7,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.4.45";
+  version = "2.4.50";
   pname = "swagger-codegen";
 
   jarfilename = "${pname}-cli-${version}.jar";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://maven/io/swagger/${pname}-cli/${version}/${jarfilename}";
-    sha256 = "sha256-imM4/JG878P2QJf/YaHOkHTupQPSXzkmldrYYQd9ZWE=";
+    sha256 = "sha256-rsoQFd5XTIcAz32jv2vv/OkqSSC3wCvxBeRbVJhZfLA=";
   };
 
   dontUnpack = true;
@@ -30,12 +30,12 @@ stdenv.mkDerivation rec {
       --add-flags "-jar $out/share/java/${jarfilename}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Allows generation of API client libraries (SDK generation), server stubs and documentation automatically given an OpenAPI Spec";
     homepage = "https://github.com/swagger-api/swagger-codegen";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.asl20;
-    maintainers = [ maintainers.jraygauthier ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.jraygauthier ];
     mainProgram = "swagger-codegen";
   };
 }

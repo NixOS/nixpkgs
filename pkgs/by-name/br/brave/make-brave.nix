@@ -47,7 +47,7 @@
   wayland,
   xdg-utils,
   coreutils,
-  xorg,
+  libxcb,
   zlib,
 
   # Darwin dependencies
@@ -132,7 +132,7 @@ let
     pipewire
     udev
     wayland
-    xorg.libxcb
+    libxcb
     zlib
     snappy
     libkrb5

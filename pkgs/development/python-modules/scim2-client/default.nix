@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   hatchling,
   scim2-models,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   version = "0.6.1";
 
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit version;
@@ -57,11 +54,11 @@ buildPythonPackage rec {
     werkzeug = [ werkzeug ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Pythonically build SCIM requests and parse SCIM responses";
     homepage = "https://scim2-client.readthedocs.io/";
     changelog = "https://github.com/python-scim/scim2-client/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ erictapen ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ erictapen ];
   };
 }

@@ -39,13 +39,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openboard";
-  version = "1.7.3";
+  version = "1.7.5";
 
   src = fetchFromGitHub {
     owner = "OpenBoard-org";
     repo = "OpenBoard";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Igp5WSVQ9FrzS2AhDDPwVBo76SaFw9xP6lqgW7S/KIE=";
+    hash = "sha256-mu7bhJx+Mv6Megq2jYK1s8oVt8QCMvD6sd2nnxI3VsA=";
   };
 
   postPatch = ''
@@ -93,15 +93,14 @@ stdenv.mkDerivation (finalAttrs: {
     libXfixes
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Interactive whiteboard application";
     homepage = "https://openboard.ch/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
-      atinba
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       fufexan
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "openboard";
   };
 })

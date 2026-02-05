@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "isort";
   version = "6.0.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PyCQA";
@@ -77,11 +77,11 @@ buildPythonPackage rec {
     "test_isort_should_warn_on_empty_custom_config_issue_1433"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python utility / library to sort Python imports";
     homepage = "https://github.com/PyCQA/isort";
-    license = licenses.mit;
-    maintainers = with maintainers; [ couchemar ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ couchemar ];
     mainProgram = "isort";
   };
 }

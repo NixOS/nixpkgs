@@ -5,9 +5,9 @@
   fetchpatch2,
   cmake,
   pkg-config,
+  wrapQtAppsHook,
   bzip2,
   libX11,
-  mkDerivation,
   qtbase,
   qttools,
   qtmultimedia,
@@ -22,7 +22,7 @@
   perl,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "eiskaltdcpp";
   version = "2.4.2";
 
@@ -43,6 +43,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    wrapQtAppsHook
   ];
   buildInputs = [
     qtbase
@@ -88,10 +89,10 @@ mkDerivation rec {
       --replace "/usr/local" "$out"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform program that uses the Direct Connect and ADC protocols";
     homepage = "https://github.com/eiskaltdcpp/eiskaltdcpp";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
   };
 }

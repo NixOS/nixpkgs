@@ -13,15 +13,15 @@
   libXi,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sndpeek";
   version = "1.4";
 
   src = fetchurl {
-    url = "https://soundlab.cs.princeton.edu/software/sndpeek/files/sndpeek-${version}.tgz";
+    url = "https://soundlab.cs.princeton.edu/software/sndpeek/files/sndpeek-${finalAttrs.version}.tgz";
     sha256 = "2d86cf74854fa00dcdc05a35dd92bc4cf6115e87102b17023be5cba9ead8eedf";
   };
-  sourceRoot = "sndpeek-${version}/src/sndpeek";
+  sourceRoot = "sndpeek-${finalAttrs.version}/src/sndpeek";
 
   # this patch adds -lpthread to the list of libraries, without it a
   # symbol-not-found-error is thrown
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     mv sndpeek $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Real-time 3D animated audio display/playback";
     longDescription = ''
       sndpeek is just what it sounds (and looks) like:
@@ -62,8 +62,8 @@ stdenv.mkDerivation rec {
         * part of the sndtools distribution.
     '';
     homepage = "https://soundlab.cs.princeton.edu/software/sndpeek/";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.laikq ];
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.laikq ];
     mainProgram = "sndpeek";
   };
-}
+})

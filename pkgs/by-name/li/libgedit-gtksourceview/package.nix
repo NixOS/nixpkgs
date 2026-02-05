@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libgedit-gtksourceview";
-  version = "299.5.0";
+  version = "299.6.0";
 
   outputs = [
     "out"
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "gedit";
     repo = "libgedit-gtksourceview";
     rev = finalAttrs.version;
-    hash = "sha256-3HnlYLa1Zy1GRpX5fjEoXUzfB9X6nydpVjZTzJyhvIs=";
+    hash = "sha256-PBayAXttEFB1nHXOFTHvc4/vSL8+VZjuuwyeMKHKd9I=";
   };
 
   patches = [
@@ -64,11 +64,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { ignoredVersions = "(alpha|beta|rc).*"; };
 
-  meta = with lib; {
+  meta = {
     description = "Source code editing widget for GTK";
     homepage = "https://gitlab.gnome.org/World/gedit/libgedit-gtksourceview";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ bobby285271 ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ bobby285271 ];
+    platforms = lib.platforms.linux;
   };
 })

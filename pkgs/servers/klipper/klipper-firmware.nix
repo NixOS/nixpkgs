@@ -26,8 +26,8 @@ let
     "lib/rp2040_flash/rp2040_flash"
   ];
 in
-stdenv.mkDerivation rec {
-  name = "klipper-firmware-${mcu}-${version}";
+stdenv.mkDerivation {
+  pname = "klipper-firmware-${mcu}";
   version = klipper.version;
   src = klipper.src;
 
@@ -107,13 +107,13 @@ stdenv.mkDerivation rec {
       };
   };
 
-  meta = with lib; {
+  meta = {
     inherit (klipper.meta) homepage license;
     description = "Firmware part of Klipper";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       vtuan10
       cab404
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

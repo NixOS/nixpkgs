@@ -2,12 +2,12 @@
 
 grafanaPlugin {
   pname = "grafana-exploretraces-app";
-  version = "1.2.0";
-  zipHash = "sha256-QXBOODMgFJvPLgr1Gr6mkpW2YJwYlDO/ZXL3BlEhEJ0=";
-  meta = with lib; {
+  version = "1.3.0";
+  zipHash = "sha256-7dSaO+m67oQ3WlL+SC+IsuzFeZ2GtSBJORggd4YENxU=";
+  meta = {
     description = "Opinionated traces app";
-    license = licenses.agpl3Only;
-    teams = [ lib.teams.fslabs ];
-    platforms = platforms.unix;
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ lpostula ];
+    platforms = lib.platforms.unix;
   };
 }

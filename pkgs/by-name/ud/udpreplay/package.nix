@@ -6,7 +6,7 @@
   fetchpatch,
   lib,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "updreplay";
   version = "1.1.0";
   nativeBuildInputs = [ cmake ];
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rigtorp";
     repo = "udpreplay";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-kF9a3pjQbFKf25NKyK7uSq0AAO6JK7QeChLhm9Z3wEA=";
   };
 
@@ -26,15 +26,15 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Replay UDP packets from a pcap file";
     longDescription = ''
       udpreplay is a lightweight alternative to tcpreplay for replaying UDP unicast and multicast streams from a pcap file.
     '';
     homepage = "https://github.com/rigtorp/udpreplay";
-    license = licenses.mit;
-    maintainers = [ maintainers.considerate ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.considerate ];
+    platforms = lib.platforms.linux;
     mainProgram = "udpreplay";
   };
-}
+})

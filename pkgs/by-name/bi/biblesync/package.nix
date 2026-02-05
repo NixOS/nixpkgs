@@ -8,7 +8,7 @@
   libuuid,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
 
   pname = "biblesync";
   version = "2.1.0";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "karlkleinpaste";
     repo = "biblesync";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "0prmd12jq2cjdhsph5v89y38j7hhd51dr3r1hivgkhczr3m5hf4s";
   };
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ libuuid ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://wiki.crosswire.org/BibleSync";
     description = "Multicast protocol to Bible software shared conavigation";
     longDescription = ''
@@ -47,8 +47,8 @@ stdenv.mkDerivation rec {
       support mode setting, setup for packet reception, transmit on local
       navigation, and handling of incoming packets.
     '';
-    license = licenses.publicDomain;
+    license = lib.licenses.publicDomain;
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

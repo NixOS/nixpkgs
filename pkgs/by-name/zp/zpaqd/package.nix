@@ -15,12 +15,12 @@ let
     ++ lib.optional (!stdenv.hostPlatform.isx86) "-DNOJIT"
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zpaqd";
   version = "715";
 
   src = fetchurl {
-    url = "http://mattmahoney.net/dc/zpaqd${version}.zip";
+    url = "http://mattmahoney.net/dc/zpaqd${finalAttrs.version}.zip";
     sha256 = "sha256-Mx87Zt0AASk0ZZCjyTzYbhlYJAXBlb59OpUWsqynyCA=";
   };
 
@@ -41,11 +41,11 @@ stdenv.mkDerivation rec {
     cp readme_zpaqd.txt "$out/share/doc/zpaq"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "ZPAQ archive (de)compressor and algorithm development tool";
     mainProgram = "zpaqd";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
   };
-}
+})

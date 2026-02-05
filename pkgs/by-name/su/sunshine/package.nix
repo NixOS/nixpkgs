@@ -11,7 +11,12 @@
   avahi,
   libevdev,
   libpulseaudio,
-  xorg,
+  libxtst,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxdmcp,
+  libx11,
   libxcb,
   openssl,
   libopus,
@@ -130,12 +135,12 @@ stdenv'.mkDerivation (finalAttrs: {
     avahi
     libevdev
     libpulseaudio
-    xorg.libX11
+    libx11
     libxcb
-    xorg.libXfixes
-    xorg.libXrandr
-    xorg.libXtst
-    xorg.libXi
+    libxfixes
+    libxrandr
+    libxtst
+    libxi
     openssl
     libopus
     boost
@@ -153,7 +158,7 @@ stdenv'.mkDerivation (finalAttrs: {
     libsepol
     libthai
     libdatrie
-    xorg.libXdmcp
+    libxdmcp
     libxkbcommon
     libepoxy
     libva
@@ -175,7 +180,7 @@ stdenv'.mkDerivation (finalAttrs: {
   runtimeDependencies = [
     avahi
     libgbm
-    xorg.libXrandr
+    libxrandr
     libxcb
     libglvnd
   ];

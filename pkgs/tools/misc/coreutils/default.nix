@@ -2,14 +2,11 @@
   lib,
   stdenv,
   fetchurl,
-  autoreconfHook,
   buildPackages,
   libiconv,
   perl,
-  texinfo,
   xz,
   binlore,
-  coreutils,
   gmpSupport ? true,
   gmp,
   aclSupport ? lib.meta.availableOn stdenv.hostPlatform acl,
@@ -46,13 +43,13 @@ let
     ;
   isCross = (stdenv.hostPlatform != stdenv.buildPlatform);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "coreutils" + (optionalString (!minimal) "-full");
-  version = "9.8";
+  version = "9.9";
 
   src = fetchurl {
-    url = "mirror://gnu/coreutils/coreutils-${version}.tar.xz";
-    hash = "sha256-5tT9LYUskUGhwqGKE9FGoM1+RRlfcik6TkwETsbMyhU=";
+    url = "mirror://gnu/coreutils/coreutils-${finalAttrs.version}.tar.xz";
+    hash = "sha256-Gby2yoZxg8V9dxVerpRsXs7YgYMUO0XKUa19JsYoynU=";
   };
 
   postPatch = ''
@@ -135,11 +132,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     perl
     xz.bin
-  ]
-  ++ optionals stdenv.hostPlatform.isCygwin [
-    # due to patch
-    autoreconfHook
-    texinfo
   ];
 
   buildInputs =
@@ -209,7 +201,8 @@ stdenv.mkDerivation rec {
     ++ optional stdenv.hostPlatform.isAndroid "-D__USE_FORTIFY_LEVEL=0"
     # gnulib does not consider Clang-specific warnings to be bugs:
     # https://lists.gnu.org/r/bug-gnulib/2025-06/msg00325.html
-    ++ optional stdenv.cc.isClang "-Wno-error=format-security"
+    # TODO: find out why these are happening on cygwin, which is gcc
+    ++ optional (stdenv.cc.isClang || stdenv.hostPlatform.isCygwin) "-Wno-error=format-security"
   );
 
   # Works around a bug with 8.26:
@@ -236,22 +229,30 @@ stdenv.mkDerivation rec {
       #
       # binlore only spots exec in runcon on some platforms (i.e., not
       # darwin; see comment on inverse case below)
-      binlore.out = binlore.synthesize coreutils ''
-        execer can bin/{chroot,env,install,nice,nohup,runcon,sort,split,stdbuf,timeout}
-        execer cannot bin/{[,b2sum,base32,base64,basename,basenc,cat,chcon,chgrp,chmod,chown,cksum,comm,cp,csplit,cut,date,dd,df,dir,dircolors,dirname,du,echo,expand,expr,factor,false,fmt,fold,groups,head,hostid,id,join,kill,link,ln,logname,ls,md5sum,mkdir,mkfifo,mknod,mktemp,mv,nl,nproc,numfmt,od,paste,pathchk,pinky,pr,printenv,printf,ptx,pwd,readlink,realpath,rm,rmdir,seq,sha1sum,sha224sum,sha256sum,sha384sum,sha512sum,shred,shuf,sleep,stat,stty,sum,sync,tac,tail,tee,test,touch,tr,true,truncate,tsort,tty,uname,unexpand,uniq,unlink,uptime,users,vdir,wc,who,whoami,yes}
-      '';
+      binlore.out = binlore.synthesize finalAttrs.finalPackage (
+        ''
+          execer can bin/{chroot,env,install,nice,nohup,sort,split,stdbuf,timeout}
+          execer cannot bin/{[,b2sum,base32,base64,basename,basenc,cat,chgrp,chmod,chown,cksum,comm,cp,csplit,cut,date,dd,df,dir,dircolors,dirname,du,echo,expand,expr,factor,false,fmt,fold,groups,head,hostid,id,join,kill,link,ln,logname,ls,md5sum,mkdir,mkfifo,mknod,mktemp,mv,nl,nproc,numfmt,od,paste,pathchk,pinky,pr,printenv,printf,ptx,pwd,readlink,realpath,rm,rmdir,seq,sha1sum,sha224sum,sha256sum,sha384sum,sha512sum,shred,shuf,sleep,stat,stty,sum,sync,tac,tail,tee,test,touch,tr,true,truncate,tsort,tty,uname,unexpand,uniq,unlink,uptime,users,vdir,wc,who,whoami,yes}
+        ''
+        + optionalString selinuxSupport ''
+          execer can bin/runcon
+          execer cannot bin/chcon
+        ''
+      );
     }
     // optionalAttrs (singleBinary == false) {
       # binlore only spots exec in runcon on some platforms (i.e., not
       # darwin; I have a note that the behavior may need selinux?).
       # hard-set it so people working on macOS don't miss cases of
       # runcon until ofBorg fails.
-      binlore.out = binlore.synthesize coreutils ''
-        execer can bin/runcon
-      '';
+      binlore.out = binlore.synthesize finalAttrs.finalPackage (
+        optionalString selinuxSupport ''
+          execer can bin/runcon
+        ''
+      );
     };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnu.org/software/coreutils/";
     description = "GNU Core Utilities";
     longDescription = ''
@@ -259,9 +260,12 @@ stdenv.mkDerivation rec {
       utilities of the GNU operating system. These are the core utilities which
       are expected to exist on every operating system.
     '';
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ das_j ];
-    platforms = with platforms; unix ++ windows;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
+      das_j
+      mdaniels5757
+    ];
+    platforms = with lib.platforms; unix ++ windows;
     priority = 10;
   };
-}
+})

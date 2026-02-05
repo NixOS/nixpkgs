@@ -11,14 +11,14 @@ bundlerApp {
 
   passthru.updateScript = bundlerUpdateScript "corundum";
 
-  meta = with lib; {
+  meta = {
     description = "Tool and libraries for maintaining Ruby gems";
     homepage = "https://github.com/nyarly/corundum";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       nyarly
       nicknovitski
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

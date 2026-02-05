@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "lil-pwny";
   version = "2.0.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PaperMtn";

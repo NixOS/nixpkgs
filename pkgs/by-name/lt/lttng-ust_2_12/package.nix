@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   version = "2.12.2";
 
   src = fetchurl {
-    url = "https://lttng.org/files/lttng-ust/${pname}-${version}.tar.bz2";
+    url = "https://lttng.org/files/lttng-ust/lttng-ust-${version}.tar.bz2";
     sha256 = "sha256-vNDwZLbKiMcthOdg6sNHKuXIKEEcY0Q1kivun841n8c=";
   };
 
@@ -53,17 +53,17 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "LTTng Userspace Tracer libraries";
     mainProgram = "lttng-gen-tp";
     homepage = "https://lttng.org/";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl21Only
       gpl2Only
       mit
     ];
-    platforms = lib.intersectLists platforms.linux liburcu.meta.platforms;
-    maintainers = [ maintainers.bjornfor ];
+    platforms = lib.intersectLists lib.platforms.linux liburcu.meta.platforms;
+    maintainers = [ lib.maintainers.bjornfor ];
   };
 
 }

@@ -244,7 +244,7 @@ in
 
     installDeviceTree = mkOption {
       default = with config.hardware.deviceTree; enable && name != null;
-      defaultText = ''with config.hardware.deviceTree; enable && name != null'';
+      defaultText = "with config.hardware.deviceTree; enable && name != null";
       description = ''
         Install the devicetree blob specified by `config.hardware.deviceTree.name`
         to the ESP and instruct systemd-boot to pass this DTB to linux.
@@ -391,7 +391,7 @@ in
       type = types.attrsOf types.path;
       default = { };
       example = literalExpression ''
-        { "efi/memtest86/memtest.efi" = "''${pkgs.memtest86plus}/memtest.efi"; }
+        { "efi/memtest86/memtest.efi" = pkgs.memtest86plus.efi; }
       '';
       description = ''
         A set of files to be copied to {file}`$BOOT`.
@@ -578,7 +578,7 @@ in
 
     boot.loader.systemd-boot.extraFiles = mkMerge [
       (mkIf cfg.memtest86.enable {
-        "efi/memtest86/memtest.efi" = "${pkgs.memtest86plus.efi}";
+        "efi/memtest86/memtest.efi" = pkgs.memtest86plus.efi;
       })
       (mkIf cfg.netbootxyz.enable {
         "efi/netbootxyz/netboot.xyz.efi" = "${pkgs.netbootxyz-efi}";

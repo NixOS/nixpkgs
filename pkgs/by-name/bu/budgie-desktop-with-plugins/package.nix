@@ -3,7 +3,7 @@
   stdenv,
   glib,
   gobject-introspection,
-  xorg,
+  lndir,
   wrapGAppsHook3,
   budgie-desktop,
   plugins ? [ ],
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
   installPhase = ''
     mkdir -p $out
     for i in $(cat $pathsPath); do
-      ${xorg.lndir}/bin/lndir -silent $i $out
+      ${lndir}/bin/lndir -silent $i $out
     done
   '';
 

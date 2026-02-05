@@ -9,18 +9,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "userborn";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "nikstur";
     repo = "userborn";
     rev = version;
-    hash = "sha256-Zh2u7we/MAIM7varuJA4AmEWeSMuA/C+0NSIUJN7zTs=";
+    hash = "sha256-mXXakR75Iz6AFf/TYgIHE8SxOri2HyReYUYTT3lCEPA=";
   };
 
   sourceRoot = "${src.name}/rust/userborn";
 
-  cargoHash = "sha256-oLw/I8PEv75tz+KxbIJrwl8Wr0I/RzDh1SDZ6mRQpL8=";
+  cargoHash = "sha256-uAid5GsM9lasVQAYfeo9jwp4xg1MrXdJqtD0l6ME6OQ=";
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
 
@@ -37,6 +37,7 @@ rustPlatform.buildRustPackage rec {
         userborn-mutable-etc
         userborn-immutable-users
         userborn-immutable-etc
+        userborn-static
         ;
     };
   };

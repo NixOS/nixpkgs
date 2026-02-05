@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation rec {
   version = "1.521";
 
   src = fetchurl {
-    url = "https://github.com/lxgw/LxgwWenKai/releases/download/v${version}/${pname}-v${version}.tar.gz";
+    url = "https://github.com/lxgw/LxgwWenKai/releases/download/v${version}/lxgw-wenkai-v${version}.tar.gz";
     hash = "sha256-4GWCSMl+gdxnEPa8JPz7c+bWmxP7HaZHj+D0yUDqgVc=";
   };
 
@@ -22,11 +22,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://lxgw.github.io/";
     description = "Open-source Chinese font derived from Fontworks' Klee One";
-    license = licenses.ofl;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ ryanccn ];
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ ryanccn ];
   };
 }

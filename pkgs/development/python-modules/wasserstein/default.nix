@@ -45,10 +45,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "wasserstein" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python/C++ library for computing Wasserstein distances efficiently";
     homepage = "https://github.com/pkomiske/Wasserstein";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ veprbl ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

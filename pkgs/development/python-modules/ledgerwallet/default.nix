@@ -20,7 +20,7 @@
 buildPythonPackage rec {
   pname = "ledgerwallet";
   version = "0.5.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LedgerHQ";
@@ -60,12 +60,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ledgerwallet" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/LedgerHQ/ledgerctl";
     description = "Library to control Ledger devices";
     mainProgram = "ledgerctl";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       erdnaxe
     ];
   };

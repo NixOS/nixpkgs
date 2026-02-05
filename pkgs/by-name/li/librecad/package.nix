@@ -7,17 +7,18 @@
   muparser,
   pkg-config,
   qt5,
+  xcbuild,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "librecad";
-  version = "2.2.1.2";
+  version = "2.2.1.3";
 
   src = fetchFromGitHub {
     owner = "LibreCAD";
     repo = "LibreCAD";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-a/0prti7aFIzoHXyd6NsiKx4ugW/vRXURAHBrAqyp84=";
+    hash = "sha256-pun0mMCIsL8XfFlP14EkpBitNHL4OKezPfAF17D9pLg=";
   };
 
   buildInputs = [
@@ -33,6 +34,9 @@ stdenv.mkDerivation (finalAttrs: {
     qt5.qmake
     qt5.qttools
     qt5.wrapQtAppsHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcbuild
   ];
 
   qmakeFlags = [
@@ -45,7 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-warn __DATE__ 0
 
     substituteInPlace librecad/src/src.pro \
-      --replace-warn '$$[QT_INSTALL_BINS]' '${lib.getDev qt5.qttools}/bin'
+      --replace-warn '$$[QT_INSTALL_BINS]' '${lib.getDev qt5.qttools}/bin' \
+      --replace-warn '/usr/libexec/PlistBuddy' 'PlistBuddy'
     substituteInPlace librecad/src/muparser.pri \
       --replace-warn "macx|" ""
   '';

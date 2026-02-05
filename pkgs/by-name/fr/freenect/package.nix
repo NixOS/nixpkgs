@@ -12,14 +12,14 @@
   libXmu,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "freenect";
   version = "0.7.5";
 
   src = fetchFromGitHub {
     owner = "OpenKinect";
     repo = "libfreenect";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-PpJGFWrlQ5sK7TJxQNoPujw1MxWRjphvblwOqnF+mSg=";
   };
 
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ bennofs ];
     platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

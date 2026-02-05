@@ -9,13 +9,13 @@
 
 buildGo124Module rec {
   pname = "hubble";
-  version = "1.18.3";
+  version = "1.18.5";
 
   src = fetchFromGitHub {
     owner = "cilium";
     repo = "hubble";
     tag = "v${version}";
-    hash = "sha256-9TY7at4k3IrxJJ4HmAW9oeQX3Wg0V/LGVDNGYfBOvSA=";
+    hash = "sha256-0R9Bm+8eiCOfsCs2oCBjZQR/N8z0DmkGBC/6Fy4JNyM=";
   };
 
   nativeBuildInputs = [
@@ -52,7 +52,6 @@ buildGo124Module rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       humancalico
-      bryanasdev000
       FKouhai
     ];
     mainProgram = "hubble";

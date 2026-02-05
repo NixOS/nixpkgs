@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   meson-python,
   cython,
   pytestCheckHook,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "pywavelets";
   version = "1.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "PyWavelets";
@@ -46,10 +43,10 @@ buildPythonPackage rec {
     "pywt._extensions._swt"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Wavelet transform module";
     homepage = "https://github.com/PyWavelets/pywt";
     changelog = "https://github.com/PyWavelets/pywt/releases/tag/${src.tag}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

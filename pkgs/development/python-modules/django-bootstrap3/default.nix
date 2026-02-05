@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "django-bootstrap3";
-  version = "25.2";
-  format = "pyproject";
+  version = "25.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zostera";
     repo = "django-bootstrap3";
     tag = "v${version}";
-    hash = "sha256-TaB2PeBjmCNFuEZ+To2Q3C6zlFCaaTB70LxQWWb5AEo=";
+    hash = "sha256-OCr25Sc5fbL5ivrM2LpDAcTj8bPX4Q23Yj1j6jRG03U=";
   };
 
   build-system = [ uv-build ];
@@ -39,11 +39,11 @@ buildPythonPackage rec {
 
   env.DJANGO_SETTINGS_MODULE = "tests.app.settings";
 
-  meta = with lib; {
+  meta = {
     description = "Bootstrap 3 integration for Django";
     homepage = "https://github.com/zostera/django-bootstrap3";
     changelog = "https://github.com/zostera/django-bootstrap3/blob/v${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

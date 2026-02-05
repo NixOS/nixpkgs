@@ -9,7 +9,7 @@
   readline,
   zlib,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "foma";
   version = "0.10.0alpha-unstable-2025-09-10";
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-CXRZNcEgsjD/9PowNynPyfLVbk8KDe3T52UetYMwC6w=";
   };
 
-  sourceRoot = "${src.name}/foma";
+  sourceRoot = "${finalAttrs.src.name}/foma";
 
   outputs = [
     "out"
@@ -47,11 +47,11 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Multi-purpose finite-state toolkit designed for applications ranging from natural language processing to research in automata theory";
     homepage = "https://github.com/mhulden/foma";
-    license = licenses.asl20;
-    maintainers = [ maintainers.tckmn ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.tckmn ];
+    platforms = lib.platforms.all;
   };
-}
+})

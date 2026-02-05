@@ -24,9 +24,9 @@
   pkg-config,
   stdenv,
   uthash,
-  xcbutil,
-  xcbutilimage,
-  xcbutilrenderutil,
+  libxcb-util,
+  libxcb-image,
+  libxcb-render-util,
   xorgproto,
   xwininfo,
   withDebug ? false,
@@ -74,9 +74,9 @@ stdenv.mkDerivation (finalAttrs: {
     pcre2
     pixman
     uthash
-    xcbutil
-    xcbutilimage
-    xcbutilrenderutil
+    libxcb-util
+    libxcb-image
+    libxcb-render-util
     xorgproto
   ];
 

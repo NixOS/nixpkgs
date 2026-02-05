@@ -6,16 +6,16 @@
   oelint-parser,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "oelint-data";
-  version = "1.2.3";
+  version = "1.3.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "priv-kweihmann";
     repo = "oelint-data";
-    tag = version;
-    hash = "sha256-R8K0rJoIZz/+cAurb0623MdC3qkV9YBwT5RKiWHDrn0=";
+    tag = finalAttrs.version;
+    hash = "sha256-Gn8iddrZj6dRv5Lz68Qq375zKAf2uOSMX2l35WkdQ9k=";
   };
 
   build-system = [
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Data for oelint-adv";
     homepage = "https://github.com/priv-kweihmann/oelint-data";
-    changelog = "https://github.com/priv-kweihmann/oelint-data/releases/tag/${src.tag}";
+    changelog = "https://github.com/priv-kweihmann/oelint-data/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

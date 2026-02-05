@@ -1,6 +1,7 @@
 {
   lib,
   buildGoModule,
+  callPackage,
   fetchFromGitHub,
   hwinfo,
   libusb1,
@@ -24,13 +25,13 @@ let
 in
 buildGoModule rec {
   pname = "nixos-facter";
-  version = "0.4.2";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "numtide";
     repo = "nixos-facter";
     tag = "v${version}";
-    hash = "sha256-oMOiZhppyUwyhLMtTofmeQINi8rHwsuQ1cD8Kr1/KwM=";
+    hash = "sha256-bbF16siqAqokXOHwLmBL61p/C7YiDGqBJhhJiF08pHk=";
   };
 
   vendorHash = "sha256-5duwAxAgbPZIbbgzZE2m574TF/0+jF/TvTKI4YBH6jM=";
@@ -64,6 +65,8 @@ buildGoModule rec {
 
   passthru.tests = {
     inherit (nixosTests) facter;
+    debug-nvd = callPackage ./test-debug-nvd.nix { };
+    debug-nix-diff = nixosTests.facter.nodes.machine.hardware.facter.debug.nix-diff;
   };
 
   meta = {

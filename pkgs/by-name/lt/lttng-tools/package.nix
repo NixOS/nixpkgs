@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "lttng-tools";
-  version = "2.14.0";
+  version = "2.14.1";
 
   src = fetchurl {
     url = "https://lttng.org/files/lttng-tools/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-2MOcJs7BO3vYJVHNUqIu/DWLiI4268+cG2DvHDo8L9M=";
+    sha256 = "sha256-DmjrJ5I2IcS8Enz85AQi0oz35HP+32IprmwyulxbfG0=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -34,16 +34,16 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Tracing tools (kernel + user space) for Linux";
     mainProgram = "lttng";
     homepage = "https://lttng.org/";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl21Only
       gpl2Only
     ];
-    platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.bjornfor ];
   };
 
 }

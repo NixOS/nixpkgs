@@ -1,6 +1,6 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   which,
   qtbase,
@@ -33,6 +33,7 @@
   autoconf,
   automake,
   file,
+  wrapQtAppsHook,
   exiv2,
   linuxHeaders,
   soundtouch,
@@ -41,7 +42,7 @@
   withWebKit ? false,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "mythtv";
   version = "35.0";
 
@@ -98,17 +99,18 @@ mkDerivation rec {
     autoconf
     automake
     file
+    wrapQtAppsHook
   ];
 
   configureFlags = [ "--dvb-path=${linuxHeaders}/include" ];
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.mythtv.org/";
     description = "Open Source DVR";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   pname = "weather";
 
   src = fetchurl {
-    url = "http://fungi.yuggoth.org/weather/src/${pname}-${version}.tar.xz";
+    url = "http://fungi.yuggoth.org/weather/src/weather-${version}.tar.xz";
     sha256 = "sha256-wn3cpgfrlqntMIiVFh4317DrbGgQ4YRnFz3KHXacTw4=";
   };
 
@@ -44,12 +44,12 @@ stdenv.mkDerivation rec {
     installManPage weather.1 weatherrc.5
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://fungi.yuggoth.org/weather";
     description = "Quick access to current weather conditions and forecasts";
     mainProgram = "weather";
-    license = licenses.isc;
-    maintainers = [ maintainers.matthiasbeyer ];
-    platforms = platforms.unix;
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.matthiasbeyer ];
+    platforms = lib.platforms.unix;
   };
 }

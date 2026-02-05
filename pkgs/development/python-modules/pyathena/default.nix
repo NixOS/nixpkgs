@@ -10,7 +10,6 @@
   pandas,
   pyarrow,
   python-dateutil,
-  pythonOlder,
   sqlalchemy,
   tenacity,
 }:
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "pyathena";
   version = "3.17.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
@@ -51,11 +48,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyathena" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python DB API 2.0 (PEP 249) client for Amazon Athena";
     homepage = "https://github.com/laughingman7743/PyAthena/";
     changelog = "https://github.com/laughingman7743/PyAthena/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

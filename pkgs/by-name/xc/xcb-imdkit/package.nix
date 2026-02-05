@@ -5,19 +5,19 @@
   cmake,
   extra-cmake-modules,
   uthash,
-  xcbutil,
-  xcbutilkeysyms,
+  libxcb-util,
+  libxcb-keysyms,
   xorgproto,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xcb-imdkit";
   version = "1.0.9";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = "xcb-imdkit";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-QfuetGPY6u4OhFiE5/CoVEpdODWnd1PHWBtM3ymsZ98=";
   };
 
@@ -31,15 +31,15 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    xcbutil
-    xcbutilkeysyms
+    libxcb-util
+    libxcb-keysyms
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Input method development support for xcb";
     homepage = "https://github.com/fcitx/xcb-imdkit";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ poscat ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ poscat ];
+    platforms = lib.platforms.linux;
   };
-}
+})

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "1.19";
 
   src = fetchurl {
-    url = "https://dl.cihar.com/enca/${pname}-${version}.tar.xz";
+    url = "https://dl.cihar.com/enca/enca-${version}.tar.xz";
     sha256 = "1f78jmrggv3jymql8imm5m9yc8nqjw5l99mpwki2245l8357wj1s";
   };
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     libiconv
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Detects the encoding of text files and reencodes them";
 
     longDescription = ''
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       Unicode variants, independently on language.
     '';
 
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
 
   };
 }

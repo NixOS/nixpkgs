@@ -24,10 +24,10 @@
   wayland-scanner,
   which,
   xcb-imdkit,
-  xcbutil,
-  xcb-util-cursor,
-  xcbutilkeysyms,
-  xcbutilwm,
+  libxcb-util,
+  libxcb-cursor,
+  libxcb-keysyms,
+  libxcb-wm,
   xcbutilxrm,
   waylandSupport ? true,
   x11Support ? true,
@@ -87,10 +87,10 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals x11Support [
     libxcb
     xcb-imdkit
-    xcbutil
-    xcb-util-cursor
-    xcbutilkeysyms
-    xcbutilwm
+    libxcb-util
+    libxcb-cursor
+    libxcb-keysyms
+    libxcb-wm
     xcbutilxrm
   ];
 

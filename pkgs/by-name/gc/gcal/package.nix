@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "4.1";
 
   src = fetchurl {
-    url = "mirror://gnu/gcal/${pname}-${version}.tar.xz";
+    url = "mirror://gnu/gcal/gcal-${version}.tar.xz";
     sha256 = "1av11zkfirbixn05hyq4xvilin0ncddfjqzc4zd9pviyp506rdci";
   };
 

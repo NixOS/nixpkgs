@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "1.4";
 
   src = fetchurl {
-    url = "http://linukz.org/download/${pname}-${version}.tar.gz";
+    url = "http://linukz.org/download/cd-discid-${version}.tar.gz";
     sha256 = "0qrcvn7227qaayjcd5rm7z0k5q89qfy5qkdgwr5pd7ih0va8rmpz";
   };
 
@@ -18,10 +18,10 @@ stdenv.mkDerivation rec {
     "INSTALL=install"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://linukz.org/cd-discid.shtml";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
     description = "Command-line utility to get CDDB discid information from a CD-ROM disc";
     mainProgram = "cd-discid";
 

@@ -80,7 +80,6 @@ stdenv.mkDerivation {
   doInstallCheck = true;
 
   versionCheckProgram = "${placeholder "out"}/bin/op";
-  versionCheckProgramArg = "--version";
 
   passthru = {
     updateScript = ./update.sh;
@@ -93,7 +92,6 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [
       joelburget
       khaneliman
-      iedame
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;

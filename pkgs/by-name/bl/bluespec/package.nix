@@ -13,11 +13,12 @@
   pkg-config,
   tcl,
   tk,
-  xorg,
+  libxft,
   yices, # bsc uses a patched version of yices
   zlib,
   ghc,
-  gmp-static,
+  gmp,
+  gmp-static ? gmp.override { withStatic = true; },
   iverilog,
   asciidoctor,
   texliveFull,
@@ -150,7 +151,7 @@ stdenv.mkDerivation rec {
     tcl
     tk
     which
-    xorg.libXft
+    libxft
     zlib
   ];
 

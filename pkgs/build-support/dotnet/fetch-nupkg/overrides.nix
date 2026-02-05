@@ -3,8 +3,8 @@
   dotnetCorePackages,
   fontconfig,
   lib,
-  libICE,
-  libSM,
+  libice,
+  libsm,
   libX11,
   stdenv,
   writeText,
@@ -56,8 +56,8 @@
       lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
         setupHook = writeText "setupHook.sh" ''
           prependToVar dotnetRuntimeDeps \
-            "${lib.getLib libICE}" \
-            "${lib.getLib libSM}" \
+            "${lib.getLib libice}" \
+            "${lib.getLib libsm}" \
             "${lib.getLib libX11}"
         '';
       }

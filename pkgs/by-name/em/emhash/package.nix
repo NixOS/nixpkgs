@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DWITH_BENCHMARKS=Off"
   ];
 
-  passthru.update-script = nix-update-script { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/ktprime/emhash";

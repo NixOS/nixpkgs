@@ -5,8 +5,6 @@
   replaceVars,
   ruff,
   click,
-  click-default-group,
-  docformatter,
   jinja2,
   toposort,
   typing-extensions,
@@ -18,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "xsdata";
-  version = "25.7";
+  version = "26.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tefra";
     repo = "xsdata";
     tag = "v${version}";
-    hash = "sha256-npwJlyUYjoYzvwaZZK4PIqhJmTeYGDDfc4T4/ODcx4c=";
+    hash = "sha256-cMXLRk74y+yHYyIQqlUcMZawNfMXa5L17qhVkTpgEsk=";
   };
 
   patches = [
@@ -46,8 +44,6 @@ buildPythonPackage rec {
   optional-dependencies = {
     cli = [
       click
-      click-default-group
-      docformatter
       jinja2
       toposort
     ];
@@ -58,9 +54,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ]
-  ++ optional-dependencies.cli
-  ++ optional-dependencies.lxml
-  ++ optional-dependencies.soap;
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTestPaths = [ "tests/integration/benchmarks" ];
 

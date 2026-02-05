@@ -37,12 +37,12 @@ let
     ;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "refind";
   version = "0.14.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/refind/${version}/refind-src-${version}.tar.gz";
+    url = "mirror://sourceforge/project/refind/${finalAttrs.version}/refind-src-${finalAttrs.version}.tar.gz";
     hash = "sha256-99k86A2na4bFZygeoiW2qHkHzob/dyM8k1elIsEVyPA=";
   };
 
@@ -166,7 +166,7 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) refind;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Graphical {,U}EFI boot manager";
     longDescription = ''
       rEFInd is a graphical boot manager for EFI- and UEFI-based
@@ -184,7 +184,7 @@ stdenv.mkDerivation rec {
       Linux kernels that provide EFI stub support.
     '';
     homepage = "http://refind.sourceforge.net/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       johnrtitor
       RossComputerGuy
     ];
@@ -193,7 +193,7 @@ stdenv.mkDerivation rec {
       "x86_64-linux"
       "aarch64-linux"
     ];
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
   };
 
-}
+})

@@ -24,10 +24,10 @@ python3.pkgs.buildPythonApplication rec {
   pname = "pitivi";
   version = "2023.03";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchurl {
-    url = "mirror://gnome/sources/pitivi/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/pitivi/${lib.versions.major version}/pitivi-${version}.tar.xz";
     sha256 = "PX1OFEeavqMPvF613BKgxwErxqW2huw6mQxo8YpBS/M=";
   };
 
@@ -95,7 +95,7 @@ python3.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Non-Linear video editor utilizing the power of GStreamer";
     homepage = "http://pitivi.org/";
     longDescription = ''
@@ -103,9 +103,9 @@ python3.pkgs.buildPythonApplication rec {
       It aims to be an intuitive and flexible application
       that can appeal to newbies and professionals alike.
     '';
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ aleksana ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ aleksana ];
+    platforms = lib.platforms.linux;
     mainProgram = "pitivi";
   };
 }

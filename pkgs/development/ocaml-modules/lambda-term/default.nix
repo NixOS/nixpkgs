@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildDunePackage,
-  ocaml,
   zed,
   lwt_log,
   lwt_react,
@@ -11,31 +10,15 @@
   logs,
 }:
 
-let
-  params =
-    if lib.versionAtLeast ocaml.version "4.08" then
-      {
-        version = "3.3.2";
-        sha256 = "sha256-T2DDpHqLar1sgmju0PLvhAZef5VzOpPWcFVhuZlPQmM=";
-      }
-    else
-      {
-        version = "3.1.0";
-        sha256 = "1k0ykiz0vhpyyj9fkss29ajas4fh1xh449j702xkvayqipzj1mkg";
-      };
-in
-
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "lambda-term";
-  inherit (params) version;
-
-  duneVersion = if lib.versionAtLeast ocaml.version "4.08" then "3" else "2";
+  version = "3.3.2";
 
   src = fetchFromGitHub {
     owner = "ocaml-community";
-    repo = pname;
-    rev = version;
-    inherit (params) sha256;
+    repo = "lambda-term";
+    tag = finalAttrs.version;
+    hash = "sha256-T2DDpHqLar1sgmju0PLvhAZef5VzOpPWcFVhuZlPQmM=";
   };
 
   propagatedBuildInputs = [
@@ -43,8 +26,6 @@ buildDunePackage rec {
     lwt_log
     lwt_react
     mew_vi
-  ]
-  ++ lib.optionals (lib.versionAtLeast version "3.3.1") [
     uucp
     logs
   ];
@@ -66,9 +47,9 @@ buildDunePackage rec {
       console applications.
     '';
 
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/ocaml-community/lambda-term";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.gal_bolle ];
     mainProgram = "lambda-term-actions";
   };
-}
+})

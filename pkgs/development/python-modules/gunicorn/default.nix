@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   setuptools,
@@ -24,8 +23,6 @@ buildPythonPackage rec {
   pname = "gunicorn";
   version = "23.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "benoitc";
@@ -52,7 +49,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-cov-stub
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   meta = {
     description = "WSGI HTTP Server for UNIX, fast clients and sleepy applications";

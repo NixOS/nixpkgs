@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   python3Packages,
-  xorg,
+  xrdb,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "posting";
@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
 
   # Required for x resources themes
   buildInputs = [
-    xorg.xrdb
+    xrdb
   ];
 
   dependencies =

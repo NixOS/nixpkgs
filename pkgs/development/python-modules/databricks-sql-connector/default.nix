@@ -11,7 +11,6 @@
   poetry-core,
   pyarrow,
   pytestCheckHook,
-  pythonOlder,
   sqlalchemy,
   thrift,
   requests,
@@ -21,9 +20,7 @@
 buildPythonPackage rec {
   pname = "databricks-sql-connector";
   version = "4.0.5";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "databricks";
@@ -62,11 +59,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "databricks" ];
 
-  meta = with lib; {
+  meta = {
     description = "Databricks SQL Connector for Python";
     homepage = "https://docs.databricks.com/dev-tools/python-sql-connector.html";
     changelog = "https://github.com/databricks/databricks-sql-python/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ harvidsen ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ harvidsen ];
   };
 }

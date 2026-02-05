@@ -103,14 +103,14 @@ let
     xfsprogs # xfs_info
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "glusterfs";
   version = "11.2";
 
   src = fetchFromGitHub {
     owner = "gluster";
     repo = "glusterfs";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-MGTntR9SVmejgpAkZnhJOaIkZeCMNBGaQSorLOStdjo=";
   };
   inherit buildInputs propagatedBuildInputs;
@@ -150,7 +150,7 @@ stdenv.mkDerivation rec {
   # See upstream GlusterFS bug https://bugzilla.redhat.com/show_bug.cgi?id=1452705
   preConfigure = ''
     patchShebangs build-aux/pkg-version
-    echo "v${version}" > VERSION
+    echo "v${finalAttrs.version}" > VERSION
     ./autogen.sh
     export PYTHON=${python3}/bin/python
   '';
@@ -259,11 +259,11 @@ stdenv.mkDerivation rec {
     glusterfs = nixosTests.glusterfs;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Distributed storage system";
     homepage = "https://www.gluster.org";
-    license = licenses.lgpl3Plus; # dual licese: choice of lgpl3Plus or gpl2
-    maintainers = [ maintainers.raskin ];
-    platforms = with platforms; linux ++ freebsd;
+    license = lib.licenses.lgpl3Plus; # dual licese: choice of lgpl3Plus or gpl2
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = with lib.platforms; linux ++ freebsd;
   };
-}
+})

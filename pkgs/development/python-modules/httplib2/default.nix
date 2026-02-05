@@ -11,7 +11,6 @@
   pytest-randomly,
   pytest-timeout,
   pytestCheckHook,
-  pythonAtLeast,
   six,
 }:
 
@@ -42,9 +41,6 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  # Don't run tests for older Pythons
-  doCheck = pythonAtLeast "3.9";
-
   disabledTests = [
     # ValueError: Unable to load PEM file.
     # https://github.com/httplib2/httplib2/issues/192#issuecomment-993165140
@@ -66,10 +62,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "httplib2" ];
 
-  meta = with lib; {
+  meta = {
     description = "Comprehensive HTTP client library";
     homepage = "https://github.com/httplib2/httplib2";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

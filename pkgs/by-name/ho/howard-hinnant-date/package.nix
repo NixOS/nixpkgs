@@ -8,14 +8,14 @@
   replaceVars,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "howard-hinnant-date";
   version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "HowardHinnant";
     repo = "date";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-qfrmH3NRyrDVmHRmmWzM5Zz37E7RFXJqaV1Rq2E59qs=";
   };
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     substituteInPlace date.pc.in \
       --replace '@CMAKE_INSTALL_LIB@' '@CMAKE_INSTALL_FULL_LIBDIR@' \
       --replace '@CMAKE_INSTALL_INCLUDE@' '@CMAKE_INSTALL_FULL_INCLUDEDIR@' \
-      --replace '@PACKAGE_VERSION@' '${version}'
+      --replace '@PACKAGE_VERSION@' '${finalAttrs.version}'
   '';
 
   nativeBuildInputs = [ cmake ];
@@ -63,11 +63,11 @@ stdenv.mkDerivation rec {
     mv $out/CMake $dev/lib/cmake
   '';
 
-  meta = with lib; {
-    license = licenses.mit;
+  meta = {
+    license = lib.licenses.mit;
     description = "Date and time library based on the C++11/14/17 <chrono> header";
     homepage = "https://github.com/HowardHinnant/date";
-    platforms = with platforms; unix ++ windows;
-    maintainers = with maintainers; [ r-burns ];
+    platforms = with lib.platforms; unix ++ windows;
+    maintainers = with lib.maintainers; [ r-burns ];
   };
-}
+})

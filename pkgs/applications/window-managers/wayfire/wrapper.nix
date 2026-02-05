@@ -7,7 +7,8 @@
 }:
 
 symlinkJoin {
-  name = "wayfire-wrapped-${lib.getVersion wayfire}";
+  pname = "wayfire-wrapped";
+  inherit (wayfire) version;
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -31,6 +32,7 @@ symlinkJoin {
   };
 
   meta = wayfire.meta // {
+    outputsToInstall = [ "out" ];
     # To prevent builds on hydra
     hydraPlatforms = [ ];
     # prefer wrapper over the package

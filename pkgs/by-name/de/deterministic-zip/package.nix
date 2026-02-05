@@ -11,7 +11,7 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "timo-reymann";
     repo = "deterministic-zip";
-    tag = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-rvheo/DkQTfpVy8fVRRwRA4G9mdMNArptxNT0sxdqnc=";
   };
 
@@ -23,7 +23,6 @@ buildGoModule (finalAttrs: {
     "-X github.com/timo-reymann/deterministic-zip/pkg/buildinfo.Version=${finalAttrs.version}"
   ];
 
-  versionCheckProgramArg = "--version";
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 

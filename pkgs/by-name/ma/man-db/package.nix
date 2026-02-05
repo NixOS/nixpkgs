@@ -20,12 +20,12 @@ let
   libiconv' =
     if stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isFreeBSD then libiconvReal else libiconv;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "man-db";
   version = "2.13.1";
 
   src = fetchurl {
-    url = "mirror://savannah/man-db/man-db-${version}.tar.xz";
+    url = "mirror://savannah/man-db/man-db-${finalAttrs.version}.tar.xz";
     hash = "sha256-iv67b362u4VCkpRYhB9cfm8kDjDIY1jB+8776gdsh9k=";
   };
 
@@ -121,11 +121,11 @@ stdenv.mkDerivation rec {
     nixos = nixosTests.man;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "http://man-db.nongnu.org";
     description = "Implementation of the standard Unix documentation system accessed using the man command";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     mainProgram = "man";
   };
-}
+})

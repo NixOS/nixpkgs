@@ -62,14 +62,14 @@ let
 in
 buildPythonPackage rec {
   pname = "gftools";
-  version = "0.9.92";
+  version = "0.9.99";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "gftools";
     tag = "v${version}";
-    hash = "sha256-Fm2+OidrGeuWVMg3rn2zBa6hHFBQcxVqXw+cM/tU/QQ=";
+    hash = "sha256-40pUW18DP2oqPwQJZ38ZvBv9AKgw54eTRq77dVcwqbM=";
   };
 
   postPatch = ''
@@ -202,12 +202,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gftools" ];
 
-  meta = with lib; {
+  meta = {
     description = "Misc tools for working with the Google Fonts library";
     homepage = "https://github.com/googlefonts/gftools";
     changelog = "https://github.com/googlefonts/gftools/releases/tag/${src.tag}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "gftools";
-    maintainers = with maintainers; [ jopejoe1 ];
+    maintainers = with lib.maintainers; [ jopejoe1 ];
   };
 }

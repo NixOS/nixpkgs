@@ -4,7 +4,6 @@
   dvc,
   fetchFromGitHub,
   pydrive2,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "dvc-gdrive";
   version = "3.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "iterative";
@@ -38,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dvc_gdrive" ];
 
-  meta = with lib; {
+  meta = {
     description = "Google Drive plugin for DVC";
     homepage = "https://github.com/iterative/dvc-gdrive";
     changelog = "https://github.com/iterative/dvc-gdrive/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

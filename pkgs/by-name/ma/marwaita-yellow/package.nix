@@ -9,14 +9,14 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "marwaita-yellow";
   version = "23";
 
   src = fetchFromGitHub {
     owner = "darkomarko42";
     repo = "marwaita-yellow";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-1nGQvN6xacMoRyT7WkNC2lKX/QnXA7pCBz1kIo0aOwA=";
   };
 
@@ -41,11 +41,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Marwaita GTK theme with Pop_os Linux style";
     homepage = "https://www.pling.com/p/1377894/";
-    license = licenses.gpl3Only;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.romildo ];
   };
-}
+})

@@ -4,7 +4,6 @@
   docopt,
   fetchPypi,
   pdfminer-six,
-  pythonOlder,
   setuptools,
   wand,
 }:
@@ -12,9 +11,7 @@
 buildPythonPackage rec {
   pname = "py-pdf-parser";
   version = "0.13.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -45,11 +42,11 @@ buildPythonPackage rec {
     "py_pdf_parser.loaders"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to help extracting information from structured PDFs";
     homepage = "https://github.com/jstockwin/py-pdf-parser";
     changelog = "https://github.com/jstockwin/py-pdf-parser/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -282,6 +282,7 @@ def update_plugins():
     plugins = [
         {'name': 'discourse-bbcode-color'},
         {'name': 'discourse-docs'},
+        {'name': 'discourse-events', 'owner': 'angusmcleod'},
         {'name': 'discourse-ldap-auth', 'owner': 'jonmbake'},
         {'name': 'discourse-prometheus'},
         {'name': 'discourse-saved-searches'},
@@ -347,10 +348,10 @@ def update_plugins():
                              rev = "replace-with-git-rev";
                              sha256 = "replace-with-sha256";
                            }};
-                           meta = with lib; {{
+                           meta = {{
                              homepage = "";
-                             maintainers = with maintainers; [ ];
-                             license = licenses.mit; # change to the correct license!
+                             maintainers = with lib.maintainers; [ ];
+                             license = lib.licenses.mit; # change to the correct license!
                              description = "";
                            }};
                          }}"""))
@@ -402,7 +403,7 @@ def update_plugins():
         plugin_file = plugin_file.replace(",\n", ", ") # fix split lines
         for line in plugin_file.splitlines():
             if 'gem ' in line:
-                line = ','.join(filter(lambda x: ":require_name" not in x, line.split(',')))
+                line = ','.join(filter(lambda x: ":require_name" not in x and "require_name:" not in x, line.split(',')))
                 gemfile_text = gemfile_text + line + os.linesep
 
                 version_file_match = version_file_regex.match(line)

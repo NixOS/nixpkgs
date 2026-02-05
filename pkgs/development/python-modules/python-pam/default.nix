@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "python-pam";
   version = "2.0.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "FirefighterBlu3";
@@ -37,11 +37,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pam" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python pam module";
     homepage = "https://github.com/FirefighterBlu3/python-pam";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       mkg20001
     ];
   };

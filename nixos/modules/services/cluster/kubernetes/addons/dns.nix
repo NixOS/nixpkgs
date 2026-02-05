@@ -6,7 +6,6 @@
   ...
 }:
 let
-  version = "1.10.1";
   cfg = config.services.kubernetes.addons.dns;
   ports = {
     dns = 10053;
@@ -15,6 +14,26 @@ let
   };
 in
 {
+  imports = [
+    (lib.mkRenamedOptionModuleWith {
+      sinceRelease = 2605;
+      from = [
+        "services"
+        "kubernetes"
+        "addons"
+        "dns"
+        "coredns"
+      ];
+      to = [
+        "services"
+        "kubernetes"
+        "addons"
+        "dns"
+        "corednsImage"
+      ];
+    })
+  ];
+
   options.services.kubernetes.addons.dns = {
     enable = lib.mkEnableOption "kubernetes dns addon";
 
@@ -61,14 +80,12 @@ in
       ];
     };
 
-    coredns = lib.mkOption {
+    corednsImage = lib.mkOption {
       description = "Docker image to seed for the CoreDNS container.";
-      type = lib.types.attrs;
-      default = {
-        imageName = "coredns/coredns";
-        imageDigest = "sha256:a0ead06651cf580044aeb0a0feba63591858fb2e43ade8c9dea45a6a89ae7e5e";
-        finalImageTag = version;
-        sha256 = "0wg696920smmal7552a2zdhfncndn5kfammfa8bk8l7dz9bhk0y1";
+      type = lib.types.package;
+      default = pkgs.dockerTools.buildImage {
+        name = "coredns";
+        config.Entrypoint = [ "${pkgs.coredns}/bin/coredns" ];
       };
     };
 
@@ -116,9 +133,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    services.kubernetes.kubelet.seedDockerImages = lib.singleton (
-      pkgs.dockerTools.pullImage cfg.coredns
-    );
+    services.kubernetes.kubelet.seedDockerImages = lib.singleton (cfg.corednsImage);
 
     services.kubernetes.addonManager.bootstrapAddons = {
       coredns-cr = {
@@ -264,7 +279,7 @@ in
                     "-conf"
                     "/etc/coredns/Corefile"
                   ];
-                  image = with cfg.coredns; "${imageName}:${finalImageTag}";
+                  image = with cfg.corednsImage; "${imageName}:${imageTag}";
                   imagePullPolicy = "Never";
                   livenessProbe = {
                     failureThreshold = 5;
@@ -307,6 +322,7 @@ in
                   securityContext = {
                     allowPrivilegeEscalation = false;
                     capabilities = {
+                      add = [ "NET_BIND_SERVICE" ];
                       drop = [ "all" ];
                     };
                     readOnlyRootFilesystem = true;

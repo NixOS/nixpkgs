@@ -48,7 +48,11 @@ buildGoModule rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  postInstall = ''
+    rm -rf "$out/share/fish"
+  '';
+
+  meta = {
     description = "Shell extension that manages your environment";
     longDescription = ''
       Once hooked into your shell direnv is looking for an .envrc file in your
@@ -62,8 +66,8 @@ buildGoModule rec {
       environment variables.
     '';
     homepage = "https://direnv.net";
-    license = licenses.mit;
-    maintainers = [ maintainers.zimbatm ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.zimbatm ];
     mainProgram = "direnv";
   };
 }

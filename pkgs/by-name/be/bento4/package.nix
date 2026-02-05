@@ -4,14 +4,14 @@
   fetchFromGitHub,
   cmake,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bento4";
   version = "1.6.0-641";
 
   src = fetchFromGitHub {
     owner = "axiomatic-systems";
     repo = "Bento4";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Qy8D3cbCVHmLAaXtiF64rL2oRurXNCtd5Dsgt0W7WdY=";
   };
 
@@ -41,11 +41,11 @@ stdenv.mkDerivation rec {
     find $out/bin -maxdepth 1 -executable -type f -exec install_name_tool -change @rpath/libap4.dylib $out/lib/libap4.dylib {} \;
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Full-featured MP4 format and MPEG DASH library and tools";
     homepage = "http://bento4.com";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ makefu ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ makefu ];
+    platforms = lib.platforms.unix;
   };
-}
+})

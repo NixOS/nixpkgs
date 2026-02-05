@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   pytest,
   pyflakes,
 }:
@@ -13,7 +12,6 @@ buildPythonPackage rec {
   pname = "pytest-flakes";
   version = "4.0.5";
   format = "setuptools";
-  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
@@ -32,8 +30,8 @@ buildPythonPackage rec {
     py.test test_flakes.py -k 'not test_syntax_error'
   '';
 
-  meta = with lib; {
-    license = licenses.mit;
+  meta = {
+    license = lib.licenses.mit;
     homepage = "https://pypi.python.org/pypi/pytest-flakes";
     description = "Pytest plugin to check source code with pyflakes";
   };

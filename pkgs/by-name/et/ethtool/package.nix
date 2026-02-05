@@ -7,12 +7,12 @@
   writeScript,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ethtool";
   version = "6.15";
 
   src = fetchurl {
-    url = "mirror://kernel/software/network/ethtool/ethtool-${version}.tar.xz";
+    url = "mirror://kernel/software/network/ethtool/ethtool-${finalAttrs.version}.tar.xz";
     hash = "sha256-lHfDZRFNkQEgquxTNqHRYZbIM9hIb3xtpnvt71eICt4=";
   };
 
@@ -42,12 +42,12 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Utility for controlling network drivers and hardware";
     homepage = "https://www.kernel.org/pub/software/network/ethtool/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ bjornfor ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ bjornfor ];
     mainProgram = "ethtool";
   };
-}
+})

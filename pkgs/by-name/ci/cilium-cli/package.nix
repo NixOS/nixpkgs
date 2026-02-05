@@ -10,13 +10,13 @@
 
 buildGoModule rec {
   pname = "cilium-cli";
-  version = "0.18.8";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "cilium";
     repo = "cilium-cli";
     tag = "v${version}";
-    hash = "sha256-6/ECHhPV9rJHcHFVAvkwtlZi96rjhEe2PjEvXtv8OMY=";
+    hash = "sha256-pW+9UN+pWkKCYRTvZxslrPgczOezVnPpDF5XdRHCh+g=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -54,7 +54,6 @@ buildGoModule rec {
     changelog = "https://github.com/cilium/cilium-cli/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      bryanasdev000
       humancalico
       qjoly
       ryan4yin

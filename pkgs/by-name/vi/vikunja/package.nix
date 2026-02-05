@@ -3,7 +3,9 @@
   fetchFromGitHub,
   stdenv,
   nodejs,
-  pnpm,
+  pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   buildGoModule,
   mage,
   writeShellScriptBin,
@@ -28,7 +30,7 @@ let
     ];
     sourceRoot = "${finalAttrs.src.name}/frontend";
 
-    pnpmDeps = pnpm.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs)
         pname
         version
@@ -36,13 +38,15 @@ let
         src
         sourceRoot
         ;
+      pnpm = pnpm_9;
       fetcherVersion = 1;
       hash = "sha256-94ZlywOZYmW/NsvE0dtEA81MeBWGUrJsBXTUauuOmZM=";
     };
 
     nativeBuildInputs = [
       nodejs
-      pnpm.configHook
+      pnpmConfigHook
+      pnpm_9
     ];
 
     doCheck = true;
@@ -127,7 +131,10 @@ buildGoModule {
     runHook postInstall
   '';
 
-  passthru.tests.vikunja = nixosTests.vikunja;
+  passthru = {
+    tests.vikunja = nixosTests.vikunja;
+    frontend = frontend;
+  };
 
   meta = {
     changelog = "https://kolaente.dev/vikunja/api/src/tag/v${version}/CHANGELOG.md";

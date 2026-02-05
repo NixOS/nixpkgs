@@ -6,12 +6,12 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "riot-redis";
   version = "2.19.0";
 
   src = fetchzip {
-    url = "https://github.com/redis-developer/riot/releases/download/v${version}/riot-redis-${version}.zip";
+    url = "https://github.com/redis-developer/riot/releases/download/v${finalAttrs.version}/riot-redis-${finalAttrs.version}.zip";
     sha256 = "sha256-q2ZqFVdjg5HSH4kiwoC1W+a8VgHNxBgNeMaw5n97isc=";
   };
 
@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/redis-developer/riot";
     description = "Get data in and out of Redis";
     mainProgram = "riot-redis";
-    license = licenses.asl20;
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    maintainers = with maintainers; [ wesnel ];
+    license = lib.licenses.asl20;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    maintainers = with lib.maintainers; [ wesnel ];
   };
-}
+})

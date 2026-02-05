@@ -5,7 +5,7 @@
   alsa-lib,
   dbus,
   fetchFromGitHub,
-  ffmpeg,
+  ffmpeg_7,
   flac,
   freetype,
   gamemode,
@@ -36,6 +36,7 @@
   vulkan-loader,
   wayland,
   wayland-scanner,
+  wrapGAppsHook3,
   zlib,
   # wrapper deps
   libretro,
@@ -56,26 +57,27 @@ let
   runtimeLibs =
     lib.optional withVulkan vulkan-loader ++ lib.optional withGamemode (lib.getLib gamemode);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "retroarch-bare";
-  version = "1.21.0";
+  version = "1.22.2";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "RetroArch";
-    hash = "sha256-OewUmnYpRByOgTi42G2reoaSuwxyPGHwP0+Uts/pg54=";
-    rev = "v${version}";
+    hash = "sha256-+3jgoh6OVbPzW5/nCvpB1CRgkMTBxLkYMm6UV16/cfU=";
+    rev = "v${finalAttrs.version}";
   };
 
   nativeBuildInputs = [
     pkg-config
     qt6.wrapQtAppsHook
+    wrapGAppsHook3
   ]
   ++ lib.optional withWayland wayland
   ++ lib.optional (runtimeLibs != [ ]) makeBinaryWrapper;
 
   buildInputs = [
-    ffmpeg
+    ffmpeg_7
     flac
     freetype
     libGL
@@ -117,7 +119,8 @@ stdenv.mkDerivation rec {
     "--disable-builtinmbedtls"
     "--enable-systemmbedtls"
     "--disable-builtinzlib"
-    "--disable-builtinflac"
+    # https://github.com/libretro/RetroArch/issues/18370
+    # "--disable-builtinflac"
     "--disable-update_assets"
     "--disable-update_core_info"
   ]
@@ -176,9 +179,8 @@ stdenv.mkDerivation rec {
     description = "Multi-platform emulator frontend for libretro cores";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
-    changelog = "https://github.com/libretro/RetroArch/blob/v${version}/CHANGES.md";
+    changelog = "https://github.com/libretro/RetroArch/blob/v${finalAttrs.version}/CHANGES.md";
     maintainers = with lib.maintainers; [
-      matthewbauer
       kolbycrouch
     ];
     teams = [ lib.teams.libretro ];
@@ -189,4 +191,4 @@ stdenv.mkDerivation rec {
     # https://github.com/libretro/RetroArch/blob/71eb74d256cb4dc5b8b43991aec74980547c5069/.gitlab-ci.yml#L330
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

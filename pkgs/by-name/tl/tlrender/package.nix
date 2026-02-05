@@ -7,7 +7,7 @@
 
   bzip2,
   feather-tk,
-  ffmpeg,
+  ffmpeg_7,
   freetype,
   glfw,
   imath,
@@ -112,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals enableTiff [ libtiff ]
   ++ lib.optionals enablePng [ libpng ]
   ++ lib.optionals enableOpenexr [ openexr ]
-  ++ lib.optionals enableFfmpeg [ ffmpeg ]
+  ++ lib.optionals enableFfmpeg [ ffmpeg_7 ]
   ++ lib.optionals enableUsd [ openusd ];
 
   cmakeFlags = [

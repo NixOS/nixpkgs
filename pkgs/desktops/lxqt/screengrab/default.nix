@@ -8,7 +8,7 @@
   kwindowsystem,
   layer-shell-qt,
   libXdmcp,
-  libpthreadstubs,
+  libpthread-stubs,
   libqtxdg,
   lxqt-build-tools,
   perl,
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     kwindowsystem
     layer-shell-qt
     libXdmcp
-    libpthreadstubs
+    libpthread-stubs
     libqtxdg
     qtbase
     qtsvg

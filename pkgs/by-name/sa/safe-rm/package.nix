@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchgit {
     url = "https://git.launchpad.net/safe-rm";
-    rev = "refs/tags/${pname}-${version}";
+    tag = "${pname}-${version}";
     sha256 = "sha256-7+4XwsjzLBCQmHDYNwhlN4Yg3eL43GUEbq8ROtuP2Kw=";
   };
 
@@ -32,12 +32,12 @@ rustPlatform.buildRustPackage rec {
     installManPage safe-rm.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool intended to prevent the accidental deletion of important files";
     homepage = "https://launchpad.net/safe-rm";
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
     mainProgram = "safe-rm";
   };
 }

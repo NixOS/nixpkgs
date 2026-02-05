@@ -4,37 +4,37 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cnspec";
-  version = "12.8.0";
+  version = "12.21.0";
 
   src = fetchFromGitHub {
     owner = "mondoohq";
     repo = "cnspec";
-    tag = "v${version}";
-    hash = "sha256-9vGqElva4sS0uV2Be1WV9dW2bLYNOFZRB3wF3rSassM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MxdCYUxPKRwnZuoBBI6CB6vAansojfdQ0aiBpZiYnHw=";
   };
 
   proxyVendor = true;
 
-  vendorHash = "sha256-aEiHnYEJGg+kTUN2k9GKUtSaNpdQio5OsEJ8EnbxPLk=";
+  vendorHash = "sha256-y1IXxytA5n1m8qOhZiZ7X1O7qJlx7Q+VCuox53miX2M=";
 
   subPackages = [ "apps/cnspec" ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X=go.mondoo.com/cnspec.Version=${version}"
+    "-X=go.mondoo.com/cnspec.Version=${finalAttrs.version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Open source, cloud-native security and policy project";
     homepage = "https://github.com/mondoohq/cnspec";
-    changelog = "https://github.com/mondoohq/cnspec/releases/tag/v${version}";
-    license = licenses.bsl11;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/mondoohq/cnspec/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.bsl11;
+    maintainers = with lib.maintainers; [
       fab
       mariuskimmina
     ];
   };
-}
+})

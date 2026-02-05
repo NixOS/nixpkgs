@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   cmake,
   ninja,
   wxGTK32,
@@ -31,7 +31,7 @@
   expat,
   libid3tag,
   libopus,
-  ffmpeg,
+  ffmpeg_7,
   soundtouch,
   pcre,
   portaudio,
@@ -41,7 +41,7 @@
   libepoxy,
   libXdmcp,
   libXtst,
-  libpthreadstubs,
+  libpthread-stubs,
   libselinux,
   libsepol,
   libxkbcommon,
@@ -52,14 +52,19 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "tenacity";
   version = "1.3.4";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "tenacityteam";
     repo = "tenacity";
     fetchSubmodules = true;
     rev = "v${finalAttrs.version}";
     hash = "sha256-2gndOwgEJK2zDSbjcZigbhEpGv301/ygrf+EQhKp8PI=";
   };
+
+  # https://codeberg.org/tenacityteam/tenacity/pulls/696
+  # can be removed at next version bump
+  patches = [
+    ./cstdlib.patch
+  ];
 
   postPatch = ''
     # GIT_DESCRIBE is used for the version string and can't be passed in
@@ -76,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     # looking only in a few specific directories.
     # Make sure it searches for our version of ffmpeg in the nix store.
     substituteInPlace libraries/lib-ffmpeg-support/FFmpegFunctions.cpp \
-      --replace-fail /usr/local/lib/tenacity ${lib.getLib ffmpeg}/lib
+      --replace-fail /usr/local/lib/tenacity ${lib.getLib ffmpeg_7}/lib
   '';
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -130,7 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     expat
-    ffmpeg
+    ffmpeg_7
     file
     flac
     glib
@@ -163,7 +168,7 @@ stdenv.mkDerivation (finalAttrs: {
     libepoxy
     libXdmcp
     libXtst
-    libpthreadstubs
+    libpthread-stubs
     libxkbcommon
     libselinux
     libsepol

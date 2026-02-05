@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   python,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "demjson3";
   version = "3.0.6";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -24,11 +21,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "demjson3" ];
 
-  meta = with lib; {
+  meta = {
     description = "Encoder/decoder and lint/validator for JSON (JavaScript Object Notation)";
     mainProgram = "jsonlint";
     homepage = "https://github.com/nielstron/demjson3/";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

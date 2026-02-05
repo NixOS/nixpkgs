@@ -14,7 +14,7 @@ let
   cfg = config.services.searx;
 
   settingsFile = pkgs.writeText "settings.yml" (
-    builtins.toJSON (builtins.removeAttrs cfg.settings [ "redis" ])
+    builtins.toJSON (removeAttrs cfg.settings [ "redis" ])
   );
 
   faviconsSettingsFile = (pkgs.formats.toml { }).generate "favicons.toml" cfg.faviconsSettings;

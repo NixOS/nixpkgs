@@ -6,12 +6,12 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ucarp";
   version = "1.5.2";
 
   src = fetchurl {
-    url = "https://download.pureftpd.org/pub/ucarp/ucarp-${version}.tar.bz2";
+    url = "https://download.pureftpd.org/pub/ucarp/ucarp-${finalAttrs.version}.tar.bz2";
     sha256 = "0qidz5sr55nxlmnl8kcbjsrff2j97b44h9l1dmhvvjl46iji7q7j";
   };
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) ucarp; };
 
-  meta = with lib; {
+  meta = {
     description = "Userspace implementation of CARP";
     longDescription = ''
       UCARP allows a couple of hosts to share common virtual IP addresses in
@@ -36,13 +36,13 @@ stdenv.mkDerivation rec {
       Warning: This package has not received any upstream updates for a long
       time and can be considered as unmaintained.
     '';
-    license = with licenses; [
+    license = with lib.licenses; [
       isc
       bsdOriginal
       bsd2
       gpl2Plus
     ];
-    maintainers = with maintainers; [ oxzi ];
+    maintainers = with lib.maintainers; [ oxzi ];
     mainProgram = "ucarp";
   };
-}
+})

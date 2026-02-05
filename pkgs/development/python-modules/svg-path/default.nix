@@ -5,15 +5,12 @@
   setuptools,
   pillow,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "svg.path";
   version = "7.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "regebro";
@@ -36,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "svg.path" ];
 
-  meta = with lib; {
+  meta = {
     description = "SVG path objects and parser";
     homepage = "https://github.com/regebro/svg.path";
     changelog = "https://github.com/regebro/svg.path/blob/${version}/CHANGES.txt";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

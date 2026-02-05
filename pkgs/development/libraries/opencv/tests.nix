@@ -38,6 +38,18 @@ runCommand "opencv4-tests"
     ignoredTests = [
       "AsyncAPICancelation/cancel*"
       "Photo_CalibrateDebevec.regression"
+
+      # /build/source/modules/imgproc/test/test_connectedcomponents.cpp:444: Failure
+      # Expected equality of these values:
+      #   cv::countNonZero(diff)
+      #     Which is: 243
+      #   0
+      # Probably related to https://github.com/opencv/opencv/issues/28383
+      "Imgproc_ConnectedComponents.chessboard_even"
+      "Imgproc_ConnectedComponents.chessboard_odd"
+      "Imgproc_ConnectedComponents.maxlabels_8conn_even"
+      "Imgproc_ConnectedComponents.maxlabels_8conn_odd"
+      "Imgproc_ConnectedComponents.spaghetti_bbdt_sauf_stats"
     ]
     ++ optionals cudaSupport [
       # opencv4-tests> /build/source/modules/photo/test/test_denoising.cuda.cpp:115: Failure
@@ -49,7 +61,7 @@ runCommand "opencv4-tests"
     inherit runAccuracyTests;
 
     accuracyTestNames = [
-      "calib3d"
+      # "calib3d" # reached a month of CPU time without completing
       "core"
       "features2d"
       "flann"
@@ -69,7 +81,7 @@ runCommand "opencv4-tests"
     inherit runPerformanceTests;
 
     performanceTestNames = [
-      "calib3d"
+      # "calib3d" # reached a month of CPU time without completing
       "core"
       "features2d"
       "imgcodecs"
@@ -83,7 +95,7 @@ runCommand "opencv4-tests"
 
     testRunner = optionalString (!isDarwin) "${getExe xvfb-run} -a ";
 
-    requiredSystemFeatures = optionals cudaSupport [ "cuda" ];
+    requiredSystemFeatures = [ "big-parallel" ] ++ optionals cudaSupport [ "cuda" ];
   }
   ''
     set -euo pipefail

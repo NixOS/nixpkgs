@@ -3,11 +3,13 @@
   config,
   fetchFromGitHub,
   stdenv,
+  capiSupport ? true,
   cmake,
   cudaPackages ? { },
   cudaSupport ? config.cudaSupport,
   pythonSupport ? true,
   python3Packages,
+  sharedLibrarySupport ? false,
   llvmPackages,
   blas,
   swig,
@@ -24,9 +26,6 @@
 }@inputs:
 
 let
-  pname = "faiss";
-  version = "1.12.0";
-
   inherit (cudaPackages) flags backendStdenv;
 
   stdenv = if cudaSupport then backendStdenv else inputs.stdenv;
@@ -41,16 +40,17 @@ let
     (cudaPackages.cuda_profiler_api or cudaPackages.cuda_nvprof)
   ];
 in
-stdenv.mkDerivation {
-  inherit pname version;
+stdenv.mkDerivation (finalAttrs: {
+  pname = "faiss";
+  version = "1.13.2";
 
   outputs = [ "out" ] ++ lib.optionals pythonSupport [ "dist" ];
 
   src = fetchFromGitHub {
     owner = "facebookresearch";
     repo = "faiss";
-    tag = "v${version}";
-    hash = "sha256-VYryu70qu3JA0euPSD2xp2oJcACr7gXvssyZs1VBnSU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-EiqkOkMI65T2kNNMQvjl51GIN4XGzTKpkpQ3ImFa3rs=";
   };
 
   nativeBuildInputs = [
@@ -75,6 +75,8 @@ stdenv.mkDerivation {
   ++ lib.optionals cudaSupport cudaComponents;
 
   cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" sharedLibrarySupport)
+    (lib.cmakeBool "FAISS_ENABLE_C_API" capiSupport)
     (lib.cmakeBool "FAISS_ENABLE_GPU" cudaSupport)
     (lib.cmakeBool "FAISS_ENABLE_PYTHON" pythonSupport)
     (lib.cmakeFeature "FAISS_OPT_LEVEL" optLevel)
@@ -105,9 +107,9 @@ stdenv.mkDerivation {
     description = "Library for efficient similarity search and clustering of dense vectors by Facebook Research";
     mainProgram = "demo_ivfpq_indexing";
     homepage = "https://github.com/facebookresearch/faiss";
-    changelog = "https://github.com/facebookresearch/faiss/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/facebookresearch/faiss/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ SomeoneSerge ];
   };
-}
+})

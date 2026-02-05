@@ -199,7 +199,6 @@ lib.makeOverridable (
       "fortify"
       "stackprotector"
       "pic"
-      "pie"
     ];
 
     ${if isModular then "outputs" else null} = [
@@ -504,6 +503,12 @@ lib.makeOverridable (
         installFlags+=("-j$NIX_BUILD_CORES")
         export HOME=${installkernel}
       '';
+
+    preFixup = ''
+      if [ -z "''${dontStrip-}" -a -e $out/vmlinux ]; then
+        strip -v -S -p $out/vmlinux
+      fi
+    '';
 
     requiredSystemFeatures = [ "big-parallel" ];
 

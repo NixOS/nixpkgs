@@ -11,7 +11,6 @@
   debtcollector,
   iso8601,
   netaddr,
-  netifaces,
   oslo-i18n,
   packaging,
   psutil,
@@ -29,7 +28,6 @@
   oslotest,
   pyyaml,
   qemu-utils,
-  replaceVars,
   stdenv,
   stestr,
   testscenarios,
@@ -37,26 +35,27 @@
 
 buildPythonPackage rec {
   pname = "oslo-utils";
-  version = "9.1.0";
+  version = "9.2.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "oslo_utils";
     inherit version;
-    hash = "sha256-AcOHXnzKAFtZRlxCn0ZxE7X0sEIRy9U0yawvFSJ207M=";
+    hash = "sha256-H0IAbea5KRoDBQJfXM24kHEg2I7X68N4ShRyozKASKs=";
   };
 
-  patches = [
-    (replaceVars ./ctypes.patch {
-      crypt = "${lib.getLib libxcrypt-legacy}/lib/libcrypt${stdenv.hostPlatform.extensions.sharedLibrary}";
-    })
-  ];
+  postPatch =
+    let
+      soext = stdenv.hostPlatform.extensions.sharedLibrary;
+    in
+    ''
+      substituteInPlace oslo_utils/secretutils.py \
+        --replace-fail "ctypes.util.find_library(\"crypt\")" '"${lib.getLib libxcrypt-legacy}/lib/libcrypt${soext}"'
 
-  postPatch = ''
-    # only a small portion of the listed packages are actually needed for running the tests
-    # so instead of removing them one by one remove everything
-    rm test-requirements.txt
-  '';
+      # only a small portion of the listed packages are actually needed for running the tests
+      # so instead of removing them one by one remove everything
+      rm test-requirements.txt
+    '';
 
   build-system = [
     pbr
@@ -67,7 +66,6 @@ buildPythonPackage rec {
     debtcollector
     iso8601
     netaddr
-    netifaces
     oslo-i18n
     packaging
     psutil

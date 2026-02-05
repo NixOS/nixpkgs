@@ -7,7 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "gomp";
   version = "1.1.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -20,12 +20,12 @@ python3Packages.buildPythonApplication rec {
 
   doCheck = false; # tests require interactive terminal
 
-  meta = with lib; {
+  meta = {
     description = "Tool for comparing Git branches";
     homepage = "https://github.com/MarkForged/GOMP";
-    license = licenses.mit;
-    maintainers = with maintainers; [ prusnak ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ prusnak ];
+    platforms = lib.platforms.unix;
     mainProgram = "gomp";
   };
 }

@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   version = "9.0.0";
 
   src = fetchurl {
-    url = "https://archive.mesa3d.org/demos/${pname}-${version}.tar.xz";
+    url = "https://archive.mesa3d.org/demos/mesa-demos-${version}.tar.xz";
     sha256 = "sha256-MEaj0mp7BRr3690lel8jv+sWDK1u2VIynN/x6fHtSWs=";
   };
 
@@ -65,10 +65,10 @@ stdenv.mkDerivation rec {
     (lib.mesonEnable "wayland" (lib.meta.availableOn stdenv.hostPlatform wayland))
   ];
 
-  meta = with lib; {
+  meta = {
     inherit (mesa.meta) homepage platforms;
     description = "Collection of demos and test programs for OpenGL and Mesa";
-    license = licenses.mit;
-    maintainers = with maintainers; [ andersk ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ andersk ];
   };
 }

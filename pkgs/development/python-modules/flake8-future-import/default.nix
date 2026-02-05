@@ -2,10 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  isPy27,
-  isPy38,
-  isPy39,
-  pythonAtLeast,
   setuptools,
   flake8,
   six,
@@ -25,15 +21,9 @@ buildPythonPackage rec {
     hash = "sha256-2EcCOx3+PCk9LYpQjHCFNpQVI2Pdi+lWL8R6bNadFe0=";
   };
 
-  patches =
-    lib.optionals (pythonAtLeast "3.10") [ ./fix-annotations-version-11.patch ]
-    ++ lib.optionals (isPy38 || isPy39) [ ./fix-annotations-version-10.patch ]
-    ++ lib.optionals isPy27 [
-      # Upstream disables this test case naturally on python 3, but it also fails
-      # inside NixPkgs for python 2. Since it's going to be deleted, we just skip it
-      # on py2 as well.
-      ./skip-test.patch
-    ];
+  patches = [
+    ./fix-annotations-version-11.patch
+  ];
 
   postPatch = ''
     substituteInPlace "test_flake8_future_import.py" \
@@ -54,9 +44,9 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Flake8 extension to check for the imported __future__ modules to make it easier to have a consistent code base";
     homepage = "https://github.com/xZise/flake8-future-import";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

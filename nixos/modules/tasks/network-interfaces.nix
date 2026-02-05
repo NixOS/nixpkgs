@@ -205,7 +205,7 @@ let
         tempAddress = mkOption {
           type = types.enum (lib.attrNames tempaddrValues);
           default = cfg.tempAddresses;
-          defaultText = literalExpression ''config.networking.tempAddresses'';
+          defaultText = literalExpression "config.networking.tempAddresses";
           description = ''
             When IPv6 is enabled with SLAAC, this option controls the use of
             temporary address (aka privacy extensions) on this
@@ -348,9 +348,10 @@ let
 
         virtualOwner = mkOption {
           default = "root";
-          type = types.str;
+          type = types.nullOr types.str;
           description = ''
             In case of a virtual device, the user who owns it.
+            `null` will not set owner, allowing access to any user.
           '';
         };
 
@@ -1769,13 +1770,9 @@ in
 
     environment.corePackages = [
       pkgs.host
-      pkgs.hostname-debian
+      pkgs.hostname
       pkgs.iproute2
-      pkgs.iputils
-    ]
-    ++ optionals config.networking.wireless.enable [
-      pkgs.wirelesstools # FIXME: obsolete?
-      pkgs.iw
+      pkgs.iputils # ping
     ]
     ++ bridgeStp;
 
@@ -1926,7 +1923,7 @@ in
               # Udev attributes for systemd to name the device and to create a .device target.
               systemdAttrs =
                 n:
-                ''NAME:="${n}", ENV{INTERFACE}="${n}", ENV{SYSTEMD_ALIAS}="/sys/subsystem/net/devices/${n}", TAG+="systemd"'';
+                ''NAME:="${n}", ENV{ID_NET_NAME}="${n}", ENV{SYSTEMD_ALIAS}="/sys/subsystem/net/devices/${n}", TAG+="systemd"'';
             in
             flip (concatMapStringsSep "\n") (attrNames wlanDeviceInterfaces) (
               device:

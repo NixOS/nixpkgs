@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "jellyfin-tui";
-  version = "1.2.6";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "dhonus";
     repo = "jellyfin-tui";
     tag = "v${version}";
-    hash = "sha256-UwWL5YCBUHG6+r41E0mMaNKl+o2/YxhMCIFaQVR8X7A=";
+    hash = "sha256-D3AzGrh04D05+v+t3gVZU68KlHM9HbaAx5dY2utJeFU=";
   };
 
-  cargoHash = "sha256-+oqC83gObCulyGbAx0EXPqnpyFBA4vtJSW6/MNide+U=";
+  cargoHash = "sha256-u8W67NYHZh798bgGfwpXhQxZ/BZFUCZ+gWAr5Pv/W8M=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
@@ -34,7 +34,6 @@ rustPlatform.buildRustPackage rec {
     writableTmpDirAsHomeHook
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   versionCheckKeepEnvironment = [ "HOME" ];
   preInstallCheck = ''
     mkdir -p "$HOME/${

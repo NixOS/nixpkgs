@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "5.7";
 
   src = fetchurl {
-    url = "mirror://sourceforge/nedit/nedit-source/${pname}-${version}-src.tar.gz";
+    url = "mirror://sourceforge/nedit/nedit-source/nedit-${version}-src.tar.gz";
     sha256 = "0ym1zhjx9976rf2z5nr7dj4mjkxcicimhs686snjhdcpzxwsrndd";
   };
 
@@ -34,10 +34,10 @@ stdenv.mkDerivation rec {
     cp -p source/nedit source/nc $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sourceforge.net/projects/nedit";
     description = "Fast, compact Motif/X11 plain text editor";
-    platforms = with platforms; linux ++ darwin;
-    license = licenses.gpl2;
+    platforms = with lib.platforms; linux ++ darwin;
+    license = lib.licenses.gpl2;
   };
 }

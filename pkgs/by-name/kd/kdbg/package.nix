@@ -7,11 +7,11 @@
   kdePackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kdbg";
   version = "3.2.0";
   src = fetchurl {
-    url = "mirror://sourceforge/kdbg/${version}/kdbg-${version}.tar.gz";
+    url = "mirror://sourceforge/kdbg/${finalAttrs.version}/kdbg-${finalAttrs.version}.tar.gz";
     hash = "sha256-GoWLKWD/nWXBTiTbDLxeNArDMyPI/gSzADqyOgxrNHE=";
   };
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.kdbg.org/";
     description = ''
       A graphical user interface to gdb, the GNU debugger. It provides an
@@ -48,7 +48,6 @@ stdenv.mkDerivation rec {
       stepping through code.
     '';
     mainProgram = "kdbg";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.catern ];
+    license = lib.licenses.gpl2;
   };
-}
+})

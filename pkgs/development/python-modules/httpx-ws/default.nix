@@ -8,7 +8,6 @@
   httpx,
   pytestCheckHook,
   pytest-cov-stub,
-  pythonOlder,
   starlette,
   trio,
   uvicorn,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "httpx-ws";
   version = "0.7.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "frankie567";
@@ -61,11 +58,11 @@ buildPythonPackage rec {
     "tests/test_api.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "WebSocket support for HTTPX";
     homepage = "https://github.com/frankie567/httpx-ws";
     changelog = "https://github.com/frankie567/httpx-ws/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }
