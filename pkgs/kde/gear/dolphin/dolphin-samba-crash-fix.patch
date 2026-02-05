@@ -1,0 +1,81 @@
+From d0f8985b4c5c790781be6fcd06d299f087e78756 Mon Sep 17 00:00:00 2001
+From: Wendi Gan <gwdx@mail.ustc.edu.cn>
+Date: Tue, 2 Sep 2025 10:38:32 +0800
+Subject: [PATCH] DolphinTabPage, DolphinView: Fix duplicate folder for MTP
+ device
+
+Issue:
+When opening an MTP device via the sidebar, Dolphin shows one "Internal shared storage" folder. However, clicking the entry again results in a duplicate folder being displayed.
+This regression was introduced by !865 (commit 6c7c047).
+
+Reason:
+The URL of an MTP device in the sidebar is `mtp:udi=/org/kde/solid/udev/sys/devices/...`. When clicking to open the MTP device, it is redirected to `mtp:/...`.
+- On the first click (no cache), `KCoreDirListerCache::slotUpdateResult()` calls `KCoreDirListerPrivate::emitItems()`.
+- On the second click (with cache), `KCoreDirListerCache::slotRedirection()` first calls `KCoreDirListerPrivate::emitItems()`. Besides, `DolphinTabPage::slotViewUrlRedirection()` calls `KCoreDirLister::openUrl()`, which triggers `CachedItemsJob::start()`, and eventually calls `KCoreDirListerPrivate::emitItems()` again. As a result, two `KCoreDirLister::itemsAdded` signals are emitted, causing `m_pendingItemsToInsert` to be appended twice.
+
+---
+
+BUG 496414:
+Need to rename folder twice to make it reflect in the tab title.
+
+Reason:
+`m_url` is updated after emitting the `DolphinView::redirection` signal. It triggers `DolphinTabWidget::tabUrlChanged()`, which still uses the old URL and thus resets the tab title incorrectly.
+
+---
+
+Change:
+- Revert the change in `DolphinTabPage::slotViewUrlRedirection()`.
+- Update `m_url` before `DolphinView::redirection` to fix BUG 496414.
+- Emit `DolphinView::urlChanged` signal to refresh the navigator of the inactive view.
+
+BUG: 506634
+CCBUG: 497313
+CCBUG: 496414
+---
+ src/dolphintabpage.cpp    | 12 +-----------
+ src/views/dolphinview.cpp |  5 ++++-
+ 2 files changed, 5 insertions(+), 12 deletions(-)
+
+diff --git a/src/dolphintabpage.cpp b/src/dolphintabpage.cpp
+index 8e06bbb694..35c244c9ef 100644
+--- a/src/dolphintabpage.cpp
++++ b/src/dolphintabpage.cpp
+@@ -470,17 +470,7 @@ void DolphinTabPage::slotViewActivated()
+ 
+ void DolphinTabPage::slotViewUrlRedirection(const QUrl &oldUrl, const QUrl &newUrl)
+ {
+-    // Make sure the url of the view is updated. BUG:496414
+-    if (splitViewEnabled()) {
+-        if (primaryViewContainer()->view()->url() == oldUrl) {
+-            primaryViewContainer()->view()->setUrl(newUrl);
+-        }
+-        if (secondaryViewContainer()->view()->url() == oldUrl) {
+-            secondaryViewContainer()->view()->setUrl(newUrl);
+-        }
+-    } else {
+-        activeViewContainer()->view()->setUrl(newUrl);
+-    }
++    Q_UNUSED(oldUrl)
+     Q_EMIT activeViewUrlChanged(newUrl);
+ }
+ 
+diff --git a/src/views/dolphinview.cpp b/src/views/dolphinview.cpp
+index f48767e11d..e8772fdad8 100644
+--- a/src/views/dolphinview.cpp
++++ b/src/views/dolphinview.cpp
+@@ -1786,8 +1786,11 @@ void DolphinView::observeCreatedItem(const QUrl &url)
+ void DolphinView::slotDirectoryRedirection(const QUrl &oldUrl, const QUrl &newUrl)
+ {
+     if (oldUrl.matches(url(), QUrl::StripTrailingSlash)) {
+-        Q_EMIT redirection(oldUrl, newUrl);
++        // Update the view's URL before emitting signals.
+         m_url = newUrl; // #186947
++        Q_EMIT urlChanged(m_url);
++
++        Q_EMIT redirection(oldUrl, newUrl);
+     }
+ }
+ 
+-- 
+GitLab
+
