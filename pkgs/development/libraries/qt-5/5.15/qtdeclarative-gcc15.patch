@@ -1,0 +1,12 @@
+diff --git a/src/qml/compiler/qv4compiler.cpp b/src/qml/compiler/qv4compiler.cpp
+index 18e19cf01c..13934eebb5 100644
+--- a/src/qml/compiler/qv4compiler.cpp
++++ b/src/qml/compiler/qv4compiler.cpp
+@@ -47,6 +47,7 @@
+ #include <private/qml_compile_hash_p.h>
+ #include <private/qqmlirbuilder_p.h>
+ #include <QCryptographicHash>
++#include <cstdint>
+ 
+ // Efficient implementation that takes advantage of powers of two.
+ static inline size_t roundUpToMultipleOf(size_t divisor, size_t x)

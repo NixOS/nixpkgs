@@ -30,19 +30,40 @@ else
     cmakeBuildType="Release"
 fi
 
+isCrossBuild() {
+    # Check if the tool is prefixed. Will probably break on Windows.
+    # Maybe we should have a standard variable for this?
+    [[ -v AS ]] && [[ "${#AS}" -gt 2 ]]
+}
+
+if isCrossBuild; then
+    # When cross compiling we're using a native-built qmake binary and
+    # it will need a little help finding the target of cross compilation.
+    if nixCrossConf="$(basename $(ls -d @dev@/mkspecs/*-nix-cross))"; then
+        # Force qmake to use this config as the target instead of QMAKE_XSPEC
+        # that was baked into it at compile time.
+        export "XQMAKESPEC=$nixCrossConf"
+        # Use the same config for tools marked with host_build
+        export "QMAKESPEC=$XQMAKESPEC"
+    else
+        echo "Please add a qtPlatformCross entry for $($CC -dumpmachine)" >&2
+        exit 1
+    fi
+fi
+
 providesQtRuntime() {
     [ -d "$1/$qtPluginPrefix" ] || [ -d "$1/$qtQmlPrefix" ]
 }
 
+if ! QMAKE="$(PATH="$_PATH" command -v qmake)"; then
+    echo "FYI: can't find a runnable qmake in PATH. If nothing breaks than it's perfectly fine."
+    echo "Otherwise you should add qmake or qtbase.qmake to nativeBuildInputs."
+fi
 # Build tools are often confused if QMAKE is unset.
-QMAKE=@dev@/bin/qmake
 export QMAKE
 
 QMAKEPATH=
 export QMAKEPATH
-
-QMAKEMODULES=
-export QMAKEMODULES
 
 declare -Ag qmakePathSeen=()
 qmakePathHook() {
@@ -52,11 +73,10 @@ qmakePathHook() {
     qmakePathSeen[$1]=1
     if [ -d "$1/mkspecs" ]
     then
-        QMAKEMODULES="${QMAKEMODULES}${QMAKEMODULES:+:}/mkspecs"
         QMAKEPATH="${QMAKEPATH}${QMAKEPATH:+:}$1"
     fi
 }
-envBuildHostHooks+=(qmakePathHook)
+envHostTargetHooks+=(qmakePathHook)
 
 # Propagate any runtime dependency of the building package.
 # Each dependency is propagated to the user environment and as a build

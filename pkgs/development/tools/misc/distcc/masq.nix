@@ -42,6 +42,14 @@ stdenv.mkDerivation {
         ln -sf $bbin/*-as $out/bin/as
       done
     fi
+
+    if [ -f $bbin/ar ]; then
+      ln -s $bbin/ar $out/bin
+    else
+      for a in $bbin/*-ar; do
+        ln -sf $bbin/*-ar $out/bin/ar
+      done
+    fi
   '';
 
   meta = {

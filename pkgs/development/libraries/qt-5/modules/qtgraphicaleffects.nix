@@ -1,8 +1,15 @@
-{ qtModule, qtdeclarative }:
+{
+  qtModule,
+  qtbase,
+  qtdeclarative,
+}:
 
 qtModule {
   pname = "qtgraphicaleffects";
-  propagatedBuildInputs = [ qtdeclarative ];
+  propagatedBuildInputs = [
+    qtbase
+    qtdeclarative
+  ];
   outputs = [
     "out"
     "dev"
