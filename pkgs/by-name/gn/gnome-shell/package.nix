@@ -120,6 +120,15 @@ stdenv.mkDerivation (finalAttrs: {
       stripLen = 1;
       extraPrefix = "subprojects/gvc/";
     })
+
+    # fix https://gitlab.gnome.org/GNOME/libgnome-volume-control/-/issues/39
+    (fetchpatch {
+      name = "fix-duplicated-virtual-sinks.patch";
+      url = "https://gitlab.gnome.org/GNOME/libgnome-volume-control/-/commit/3e68238ed7c9d3f26f8bfaf03780f79ce7c7043e.patch";
+      hash = "sha256-miOtI0Y/dUCLtTU5Wckp34k1JEJ87wyoDWAt8Cc1BOI=";
+      stripLen = 1;
+      extraPrefix = "subprojects/gvc/";
+    })
   ];
 
   nativeBuildInputs = [
