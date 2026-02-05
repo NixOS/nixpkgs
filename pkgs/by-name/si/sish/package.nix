@@ -16,6 +16,8 @@ buildGoModule (finalAttrs: {
     hash = "sha256-AHMga+5JLowaBJ2BvCWWamSrQNem4unIwuxd8D8vDsQ=";
   };
 
+  __darwinAllowLocalNetworking = true;
+
   vendorHash = "sha256-1MojbM5MsJzhrUWLyQuTw7rBvDdAaQonpkCpuJz9EHA=";
 
   ldflags = [
