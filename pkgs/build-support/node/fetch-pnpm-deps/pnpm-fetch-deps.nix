@@ -63,6 +63,8 @@ lib.extendMkDerivation {
       "fetchPnpmDeps `fetcherVersion` is not set to a supported value (${lib.concatStringsSep ", " (map toString supportedFetcherVersions)}), see https://nixos.org/manual/nixpkgs/stable/#javascript-pnpm-fetcherVersion.";
     {
       name = "${pname}-pnpm-deps";
+      strictDeps = true;
+      __structuredAttrs = true;
 
       nativeBuildInputs = [
         cacert
