@@ -9,6 +9,7 @@
   turbo,
   runCommand,
   jq,
+  nodejs,
 }:
 buildNpmPackage (finalAttrs: rec {
   pname = "tracearr";
@@ -21,16 +22,6 @@ buildNpmPackage (finalAttrs: rec {
     hash = "sha256-KE/kMB620+Eksq21uaqzEeoQVIlJN2cEEkJVh9/ccBE=";
   };
 
-  patchedPackageJSON = runCommand "package.json" { nativeBuildInputs = [ jq ]; } ''
-    jq '
-    . += {"bin": "apps/server/dist/index.js" }
-    ' ${src}/package.json > $out
-  '';
-
-  postPatch = ''
-    cp ${patchedPackageJSON} ./package.json
-  '';
-
   npmConfigHook = pnpmConfigHook;
 
   npmDeps = pnpmDeps;
@@ -40,10 +31,8 @@ buildNpmPackage (finalAttrs: rec {
     fetcherVersion = 3;
     hash = "sha256-lkA9eYuOc1J+tUM1Bd57ROsT8es6AAMjHB5AyoN7oqg=";
   };
-  strictDeps = true;
 
-  npmPackFlags = [ "--ignore-scripts" ];
-  dontNpmPrune = true;
+  strictDeps = true;
 
   env.NODE_ENV = "production";
 
@@ -55,7 +44,20 @@ buildNpmPackage (finalAttrs: rec {
 
   npmBuildScript = "build";
 
-  makeWrapperArgs = [ "--set NODE_PATH $out/lib/node_modules/tracearr/node_modules" ];
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/{bin,lib/tracearr}
+    cp -r {node_modules,apps,packages,data} $out/lib/tracearr
+
+    makeWrapper ${lib.getExe nodejs} $out/bin/tracearr \
+      --add-flags $out/lib/tracearr/apps/server/dist/index.js \
+      --set NODE_PATH "$out/lib/tracearr/node_modules:$out/lib/tracearr/apps/server/node_modules:$out/lib/tracearr/apps/web/node_modules"
+
+    find $out/lib -xtype l -delete
+
+    runHook postInstall
+  '';
 
   meta = {
     description = "Real-time monitoring for Plex, Jellyfin, and Emby servers. Track streams, analyze playback, and detect account sharing from a single dashboard.";
