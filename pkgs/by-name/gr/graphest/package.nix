@@ -24,7 +24,7 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "graphest";
   # 1.8.2 cannot build due to https://github.com/NixOS/nixpkgs/issues/483500
-  version = "1.8.2-unstable-2026-01-21";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "unageek";
