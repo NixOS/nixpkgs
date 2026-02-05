@@ -20109,6 +20109,12 @@
     githubId = 17091659;
     name = "Pablo Andres Dealbera";
   };
+  pacjo = {
+    email = "korycinski.kam@gmail.com";
+    github = "pacjo";
+    githubId = 56438628;
+    name = "pacjo";
+  };
   pacman99 = {
     email = "pachum99@gmail.com";
     matrix = "@pachumicchu:myrdd.info";
