@@ -54,6 +54,9 @@ let
     url = "https://gcc.gnu.org/pub/gcc/infrastructure/isl-${islVersion}.tar.bz2";
     hash = "sha256-/PeN2WVsEOuM+fvV9ZoLawE4YgX+GTSzsoegoYmBRcA=";
   };
+
+  fakeBuildPlatform = (lib.strings.removeSuffix "-gnu" buildPlatform.config) + "-musl";
+  fakeHostPlatform = (lib.strings.removeSuffix "-gnu" hostPlatform.config) + "-musl";
 in
 bash.runCommand "${pname}-${version}"
   {
@@ -134,15 +137,24 @@ bash.runCommand "${pname}-${version}"
 
     bash ./configure \
       --prefix=$out \
-      --build=${buildPlatform.config} \
-      --host=${hostPlatform.config} \
+      --build=${fakeBuildPlatform} \
+      --host=${fakeHostPlatform} \
       --with-native-system-header-dir=/include \
       --with-sysroot=${musl} \
+      --enable-initfini-array \
       --enable-languages=c,c++ \
+      --disable-analyzer \
       --disable-bootstrap \
+      --disable-decimal-float \
       --disable-dependency-tracking \
+      --disable-gcov \
+      --disable-libitm \
+      --disable-libgomp \
       --disable-libmpx \
+      --disable-libquadmath \
       --disable-libsanitizer \
+      --disable-libssp \
+      --disable-libvtv \
       --disable-lto \
       --disable-multilib \
       --disable-plugin
