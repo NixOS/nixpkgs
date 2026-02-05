@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   pkg-config,
   alsa-lib,
@@ -15,7 +16,20 @@
   libXinerama,
   libXrandr,
   libXtst,
+
+  buildVST3 ? true,
+  buildCLAP ? true,
+  buildAU ? stdenv.hostPlatform.isDarwin,
+  buildLV2 ? stdenv.hostPlatform.isLinux,
 }:
+
+let
+  formats = lib.concatStringsSep " " [
+    (lib.optionalString buildVST3 "VST3")
+    (lib.optionalString buildLV2 "LV2")
+    (lib.optionalString buildAU "AU")
+  ];
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "SG-323";
@@ -28,6 +42,19 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
     hash = "sha256-yAC4YQt8f5kQ03ECAxvoM9wcqna98F4XKcwUQg6l4E0=";
   };
+
+  patches = [
+    # Adds BUILD_CLAP option
+    (fetchpatch {
+      url = "https://github.com/greyboxaudio/SG-323/pull/26.patch";
+      hash = "sha256-k1KY6elA6sajVLgI2omW9LpMdB5RtKA4NsE/G/b/SdM=";
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "FORMATS VST3 AAX AU LV2" "FORMATS ${formats}"
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -48,6 +75,10 @@ stdenv.mkDerivation (finalAttrs: {
     libXinerama
     libXrandr
     libXtst
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_CLAP" buildCLAP)
   ];
 
   enableParallelBuilding = true;
@@ -75,23 +106,25 @@ stdenv.mkDerivation (finalAttrs: {
     ''
       runHook preInstall
 
-    ''
-    + (
-      if stdenv.hostPlatform.isDarwin then
-        ''
-          mkdir -p ${auDir}
-          cp -r "SG323_artefacts/Release/AU/SG-323.component" ${auDir}
-        ''
-      else
-        ''
-          mkdir -p $out/lib/lv2
-          cp -r "SG323_artefacts/Release/LV2/SG-323.lv2" $out/lib/lv2
-        ''
-    )
-    + ''
-      mkdir -p ${vst3Dir} ${clapDir}
-      mv SG323_artefacts/Release/VST3/* ${vst3Dir}
-      mv SG323_artefacts/Release/CLAP/* ${clapDir}
+      ${lib.optionalString buildAU ''
+        mkdir -p ${auDir}
+        cp -r "SG323_artefacts/Release/AU/SG-323.component" ${auDir}
+      ''}
+
+      ${lib.optionalString buildLV2 ''
+        mkdir -p $out/lib/lv2
+        cp -r "SG323_artefacts/Release/LV2/SG-323.lv2" $out/lib/lv2
+      ''}
+
+      ${lib.optionalString buildVST3 ''
+        mkdir -p ${vst3Dir}
+        mv SG323_artefacts/Release/VST3/* ${vst3Dir}
+      ''}
+
+      ${lib.optionalString buildCLAP ''
+        mkdir -p ${clapDir}
+        mv SG323_artefacts/Release/CLAP/* ${clapDir}
+      ''}
 
       runHook postInstall
     '';
