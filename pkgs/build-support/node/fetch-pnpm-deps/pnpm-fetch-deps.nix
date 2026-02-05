@@ -43,15 +43,6 @@ lib.extendMkDerivation {
       ...
     }@args:
     let
-      hash' =
-        if hash != "" then
-          { outputHash = hash; }
-        else
-          {
-            outputHash = "";
-            outputHashAlgo = "sha256";
-          };
-
       filterFlags = lib.map (package: "--filter=${package}") pnpmWorkspaces;
     in
     # pnpmWorkspace was deprecated, so throw if it's used.
@@ -189,6 +180,9 @@ lib.extendMkDerivation {
       dontConfigure = true;
       dontBuild = true;
       outputHashMode = "recursive";
-    }
-    // hash';
+
+      # Only use sha256 SRI hashes
+      outputHashAlgo = null;
+      outputHash = if hash != "" then hash else lib.fakeHash;
+    };
 }
