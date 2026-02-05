@@ -1,15 +1,15 @@
 {
   lib,
-  buildNpmPackage,
+  stdenv,
   pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   makeWrapper,
+  nodejs,
   fetchFromGitHub,
   turbo,
-  nodejs,
 }:
-buildNpmPackage (finalAttrs: rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tracearr";
   version = "1.4.12";
 
@@ -20,9 +20,6 @@ buildNpmPackage (finalAttrs: rec {
     hash = "sha256-KE/kMB620+Eksq21uaqzEeoQVIlJN2cEEkJVh9/ccBE=";
   };
 
-  npmConfigHook = pnpmConfigHook;
-
-  npmDeps = pnpmDeps;
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
@@ -36,30 +33,47 @@ buildNpmPackage (finalAttrs: rec {
 
   nativeBuildInputs = [
     makeWrapper
+    nodejs
+    pnpmConfigHook
     pnpm_10
     turbo
   ];
 
-  npmBuildScript = "build";
+  buildInputs = [ nodejs ];
+
+  buildPhase = ''
+    runHook preBuild
+    pnpm run build
+    runHook postBuild
+  '';
+
+  preInstall = ''
+    rm node_modules/.modules.yaml
+
+    CI=true pnpm prune --prod --ignore-scripts
+
+    find -type f \( -name "*.d.ts" -o -name "*.map" \) -exec rm -rf {} +
+  '';
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,lib/tracearr}
+    mkdir -p $out/{lib/tracearr,bin}
     cp -r {node_modules,apps,packages,data} $out/lib/tracearr
-
     makeWrapper ${lib.getExe nodejs} $out/bin/tracearr \
       --add-flags $out/lib/tracearr/apps/server/dist/index.js \
-      --set NODE_PATH "$out/lib/tracearr/node_modules:$out/lib/tracearr/apps/server/node_modules:$out/lib/tracearr/apps/web/node_modules"
-
-    find $out/lib -xtype l -delete
+      --set NODE_PATH "$out/lib/tracearr/node_modules:$out/lib/tracearr/apps/server/node_modules:$out/lib/tracearr/apps/web/node_modules" \
+      --set-default NODE_ENV production
 
     runHook postInstall
   '';
 
+  postInstall = ''
+    find $out/lib -xtype l -delete
+  '';
+
   meta = {
     description = "Real-time monitoring for Plex, Jellyfin, and Emby servers. Track streams, analyze playback, and detect account sharing from a single dashboard.";
-    mainProgram = "tracearr";
     homepage = "https://tracearr.com";
     license = lib.licenses.agpl3Plus;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
