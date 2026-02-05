@@ -70,12 +70,12 @@ rec {
         "${src}/lib/libtcc1.c"
         "${src}/lib/va_list.c"
       ]
-      ++ buildPlatform.isAarch64 "${src}/lib/lib-arm64.c"),
+      ++ (lib.optional buildPlatform.isAarch64 "${src}/lib/lib-arm64.c"),
       libtccObjects ? [
         "libtcc1.o"
         "va_list.o"
       ]
-      ++ buildPlatform.isAarch64 "lib-arm64.o"),
+      ++ (lib.optional buildPlatform.isAarch64 "lib-arm64.o"),
       libtccBuildOptions,
       meta,
     }:
