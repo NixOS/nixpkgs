@@ -56,9 +56,13 @@ lib.extendMkDerivation {
     assert lib.assertMsg (builtins.elem fetcherVersion supportedFetcherVersions)
       "fetchPnpmDeps `fetcherVersion` is not set to a supported value (${lib.concatStringsSep ", " (map toString supportedFetcherVersions)}), see https://nixos.org/manual/nixpkgs/stable/#javascript-pnpm-fetcherVersion.";
     {
-      name = "${pname}-pnpm-deps";
+      # structuredAttrs
+      inherit fetcherVersion filterFlags prePnpmInstall;
+
       strictDeps = true;
       __structuredAttrs = true;
+
+      name = "${pname}-pnpm-deps";
 
       nativeBuildInputs = [
         cacert
@@ -85,7 +89,7 @@ lib.extendMkDerivation {
         # For fetcherVersion < 3, the pnpm store files are placed directly into $out.
         # For fetcherVersion >= 3, it is bundled into a compressed tarball within $out,
         # without distributing the uncompressed store files.
-        if [[ ${toString fetcherVersion} -ge 3 ]]; then
+        if [[ $fetcherVersion -ge 3 ]]; then
           mkdir $out
           storePath=$(mktemp -d)
         else
@@ -104,20 +108,20 @@ lib.extendMkDerivation {
         # As we pin pnpm versions, we don't really care about updates
         pnpm config set update-notifier false
         # Run any additional pnpm configuration commands that users provide.
-        ${prePnpmInstall}
+        runHook prePnpmInstall
         # pnpm is going to warn us about using --force
         # --force allows us to fetch all dependencies including ones that aren't meant for our host platform
         pnpm install \
             --force \
             --ignore-scripts \
-            ${lib.escapeShellArgs filterFlags} \
-            ${lib.escapeShellArgs pnpmInstallFlags} \
+            "''${filterFlags[@]}" \
+            "''${pnpmInstallFlags[@]}" \
             --registry="$NIX_NPM_REGISTRY" \
             --frozen-lockfile
 
         # Store newer fetcherVersion in case pnpmConfigHook also needs it
-        if [[ ${toString fetcherVersion} -gt 1 ]]; then
-          echo ${toString fetcherVersion} > $out/.fetcher-version
+        if [[ $fetcherVersion -gt 1 ]]; then
+          echo $fetcherVersion > $out/.fetcher-version
         fi
 
         runHook postInstall
@@ -147,13 +151,13 @@ lib.extendMkDerivation {
         # * All folders have 555.
         # See https://github.com/NixOS/nixpkgs/pull/350063
         # See https://github.com/NixOS/nixpkgs/issues/422889
-        if [[ ${toString fetcherVersion} -ge 2 ]]; then
+        if [[ $fetcherVersion -ge 2 ]]; then
           find $storePath -type f -name "*-exec" -print0 | xargs -0 chmod 555
           find $storePath -type f -not -name "*-exec" -print0 | xargs -0 chmod 444
           find $storePath -type d -print0 | xargs -0 chmod 555
         fi
 
-        if [[ ${toString fetcherVersion} -ge 3 ]]; then
+        if [[ $fetcherVersion -ge 3 ]]; then
           (
             cd $storePath
 
@@ -170,7 +174,6 @@ lib.extendMkDerivation {
       '';
 
       passthru = passthru // {
-        inherit fetcherVersion;
         serve = callPackage ./serve.nix {
           inherit pnpm; # from args
           pnpmDeps = finalAttrs.finalPackage;
