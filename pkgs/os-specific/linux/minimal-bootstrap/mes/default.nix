@@ -14,17 +14,19 @@
 
 let
   pname = "mes";
-  version = "0.27.1";
+  version = "0.27.1-unstable-2026-02-05";
+  rev = "7f613af05dfd6118a80a203cabe24a180f2bcd74";
 
   src = fetchurl {
-    url = "mirror://gnu/mes/mes-${version}.tar.gz";
-    hash = "sha256-GDpA6kfqSfih470bnRLmdjdNZNY7x557wa59Zz398l0=";
+    url = "https://codeberg.org/aleksi/mes/archive/${rev}.tar.gz";
+    hash = "sha256-L8y30Co9+9Kc1jaB7WlLKJayvmQj5OhXsAR+jRiWtO8=";
   };
 
   nyacc = callPackage ./nyacc.nix { inherit nyacc; };
 
   intptr =
     {
+      aarch64-linux = "long";
       i686-linux = "int";
       x86_64-linux = "long";
     }
@@ -52,6 +54,7 @@ let
 
   arch =
     {
+      aarch64-linux = "aarch64";
       i686-linux = "x86";
       x86_64-linux = "x86_64";
     }
@@ -68,7 +71,6 @@ let
 
   # add symlink() to libc+tcc so we can use it in ln-boot
   libc_tcc_SOURCES = sources.libc_tcc_SOURCES ++ [ "lib/linux/symlink.c" ];
-  setjmp_x86_64 = ./setjmp_x86_64.c;
 
   meta = {
     description = "Scheme interpreter and C compiler for bootstrapping";
@@ -76,6 +78,7 @@ let
     license = lib.licenses.gpl3Plus;
     teams = [ lib.teams.minimal-bootstrap ];
     platforms = [
+      "aarch64-linux"
       "i686-linux"
       "x86_64-linux"
     ];
@@ -97,91 +100,17 @@ let
         cd ''${out}
         untar --non-strict --file ''${NIX_BUILD_TOP}/mes.tar # ignore symlinks
 
-        MES_PREFIX=''${out}/mes-${version}
+        #MES_PREFIX=''${out}/mes-${rev}
+        MES_PREFIX=''${out}/mes
 
         cd ''${MES_PREFIX}
 
         cp ${config_h} include/mes/config.h
 
-        # rax is used to indicate the syscall; we need to inform the assembler that rax should not be used to
-        # pass the exit code as it would be overwritten
-        exit_c=lib/linux/x86_64-mes-gcc/_exit.c
-        replace --file ''${exit_c} --output ''${exit_c} --match-on "(code)" --replace-with "(code) : \"rax\", \"rdi\""
-
-        # Replace broken implementation of setjmp & longjmp with asm.
-        cp ${setjmp_x86_64} lib/x86_64-mes-gcc/setjmp.c
-
-        # wrong number of arguments for linkat() syscall
-        link_c=lib/linux/link.c
-        replace --file ''${link_c} --output ''${link_c} --match-on "_sys_call4" --replace-with "_sys_call5"
-        replace --file ''${link_c} --output ''${link_c} --match-on "AT_FDCWD, (long) new_name" --replace-with "AT_FDCWD, (long) new_name, 0"
-
-        # wrong syscall number used for nanosleep.
-        amd64_syscall_h=include/linux/x86_64/syscall.h
-        replace --file ''${amd64_syscall_h} --output ''${amd64_syscall_h} --match-on "SYS_nanosleep 0x33" --replace-with "SYS_nanosleep 0x23"
-
-        # strpbrk should return NULL when there is no match.
-        # The order of these `replace` commands is significant.
-        strpbrk_c=lib/string/strpbrk.c
-        replace --file ''${strpbrk_c} --output ''${strpbrk_c} --match-on "return p;" --replace-with "return 0;"
-        replace --file ''${strpbrk_c} --output ''${strpbrk_c} --match-on "break;" --replace-with "return p;"
-
-        # Wrong type used; fix.
-        # ntoab.c:  __measbi_uldiv should use unsigned long as per "ul", not size_t
-        # ioctl3.c: unsigned long used to align with ioctl.c
-        # lib.h:    change ioctl3 signature, per above
-        ntoab=lib/mes/ntoab.c
-        replace --file ''${ntoab} --output ''${ntoab} --match-on "size_t" --replace-with "unsigned long"
-        ioctl=lib/linux/ioctl3.c
-        replace --file ''${ioctl} --output ''${ioctl} --match-on "size_t" --replace-with "unsigned long"
-        lib_h=include/mes/lib.h
-        replace --file ''${lib_h} --output ''${lib_h} --match-on "size_t command" --replace-with "unsigned long command"
-
-        # vfprintf assumes %d arguments can be accessed as `long`. This
-        # is true on sign-extending platforms like RV64, but not on i686 or x86_64.
-        # Let's use the caller-specified width for better portability. Also account for
-        # potential need to zero-extend.
+        # Get rid of va_arg8
         vfprintf_c=lib/stdio/vfprintf.c
-        replace --file ''${vfprintf_c} --output ''${vfprintf_c} --match-on "int count = 0;" --replace-with "int count = 0; int has_l = 0;"
-        replace --file ''${vfprintf_c} --output ''${vfprintf_c} --match-on "long d = va_arg (ap, long);" --replace-with "
-          long d;
-          if (has_l) {
-            has_l = 0;
-            d = va_arg (ap, long);
-          } else if (c != 'd' && c != 'i') {
-            d = (long) (va_arg (ap, unsigned int));
-          } else {
-            d = (long) (va_arg (ap, int));
-          }
-        "
-        replace --file ''${vfprintf_c} --output ''${vfprintf_c} --match-on "if (c == 'l')" --replace-with "
-          if (c == 'l') {
-            /* this is annoying to patch... */
-            has_l = 1;
-            c = *++p;
-          } else if (0)"
-        # Also, get rid of va_arg8
-        replace --file ''${vfprintf_c} --output ''${vfprintf_c} --match-on "va_arg8" --replace-with "va_arg"
-        # Same thing for vsnprintf.
         vsnprintf_c=lib/stdio/vsnprintf.c
-        replace --file ''${vsnprintf_c} --output ''${vsnprintf_c} --match-on "int count = 0;" --replace-with "int count = 0; int has_l = 0;"
-        replace --file ''${vsnprintf_c} --output ''${vsnprintf_c} --match-on "long d = va_arg (ap, long);" --replace-with "
-          long d;
-          if (has_l) {
-            has_l = 0;
-            d = va_arg (ap, long);
-          } else if (c != 'd' && c != 'i') {
-            d = (long) (va_arg (ap, unsigned int));
-          } else {
-            d = (long) (va_arg (ap, int));
-          }
-        "
-        replace --file ''${vsnprintf_c} --output ''${vsnprintf_c} --match-on "if (c == 'l')" --replace-with "
-          if (c == 'l') {
-            /* this is annoying to patch... */
-            has_l = 1;
-            c = *++p;
-          } else if (0)"
+        replace --file ''${vfprintf_c} --output ''${vfprintf_c} --match-on "va_arg8" --replace-with "va_arg"
         replace --file ''${vsnprintf_c} --output ''${vsnprintf_c} --match-on "va_arg8" --replace-with "va_arg"
 
         mkdir include/arch
@@ -237,7 +166,7 @@ let
         chmod 555 ''${bin}/bin/mes-m2
       '';
 
-  srcPrefix = "${srcPost.out}/mes-${version}";
+  srcPrefix = "${srcPost.out}/mes";
 
   cc = "${srcPost.bin}/bin/mes-m2";
   ccArgs = [
