@@ -35,6 +35,7 @@ lib.makeScope
         supportedSystems = [
           "i686-linux"
           "x86_64-linux"
+          "aarch64-linux"
         ];
 
         bash_2_05 = callPackage ./bash/2.nix { tinycc = tinycc-mes; };
