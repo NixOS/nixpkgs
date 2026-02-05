@@ -88,13 +88,13 @@
   enabledProviders,
 }:
 let
-  version = "3.1.6";
+  version = "3.1.7";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "airflow";
     tag = version;
-    hash = "sha256-wC6C0jhCA76/+KhBQbe3WeSGqR6FwaudCT5xPV39Z6c=";
+    hash = "sha256-qFgI65wAttERPCHn7ezSdNGB0sclEV7zYIBqaC0Gs4A=";
   };
 
   airflowUi = stdenv.mkDerivation rec {
@@ -112,7 +112,7 @@ let
       pname = "airflow-ui";
       inherit sourceRoot src version;
       fetcherVersion = 1;
-      hash = "sha256-UcEFQkDZ9Ye+VfyJ9rdZKe0wilTgO4dMsULABWfL2Co=";
+      hash = "sha256-t39aatMfqyHtP+kdszyTQs+w7EojNGX0zVmlxqtY1jk=";
     };
 
     buildPhase = ''
