@@ -52,17 +52,15 @@ lib.extendMkDerivation {
       filterFlags = lib.map (package: "--filter=${package}") pnpmWorkspaces;
     in
     # pnpmWorkspace was deprecated, so throw if it's used.
-    assert (lib.throwIf (args ? pnpmWorkspace)
-      "fetchPnpmDeps: `pnpmWorkspace` is no longer supported, please migrate to `pnpmWorkspaces`."
-    ) true;
+    assert lib.assertMsg (
+      !args ? pnpmWorkspace
+    ) "fetchPnpmDeps: `pnpmWorkspace` is no longer supported, please migrate to `pnpmWorkspaces`.";
 
-    assert (lib.throwIf (fetcherVersion == null)
-      "fetchPnpmDeps: `fetcherVersion` is not set, see https://nixos.org/manual/nixpkgs/stable/#javascript-pnpm-fetcherVersion."
-    ) true;
+    assert lib.assertMsg (fetcherVersion != null)
+      "fetchPnpmDeps: `fetcherVersion` is not set, see https://nixos.org/manual/nixpkgs/stable/#javascript-pnpm-fetcherVersion.";
 
-    assert (lib.throwIf (!(builtins.elem fetcherVersion supportedFetcherVersions))
-      "fetchPnpmDeps `fetcherVersion` is not set to a supported value (${lib.concatStringsSep ", " (map toString supportedFetcherVersions)}), see https://nixos.org/manual/nixpkgs/stable/#javascript-pnpm-fetcherVersion."
-    ) true;
+    assert lib.assertMsg (builtins.elem fetcherVersion supportedFetcherVersions)
+      "fetchPnpmDeps `fetcherVersion` is not set to a supported value (${lib.concatStringsSep ", " (map toString supportedFetcherVersions)}), see https://nixos.org/manual/nixpkgs/stable/#javascript-pnpm-fetcherVersion.";
     {
       name = "${pname}-pnpm-deps";
 
