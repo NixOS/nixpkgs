@@ -23,7 +23,6 @@ lib.extendMkDerivation {
   constructDrv = stdenvNoCC.mkDerivation;
 
   excludeDrvArgNames = [
-    "hash"
     "pname"
   ];
 
@@ -186,6 +185,6 @@ lib.extendMkDerivation {
 
       # Only use sha256 SRI hashes
       outputHashAlgo = null;
-      outputHash = if hash != "" then hash else lib.fakeHash;
+      outputHash = if finalAttrs.hash != "" then finalAttrs.hash else lib.fakeHash;
     };
 }
