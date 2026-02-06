@@ -1,7 +1,10 @@
 { lib, ... }:
 {
   name = "seerr";
-  meta.maintainers = with lib.maintainers; [ matteopacini ];
+  meta.maintainers = with lib.maintainers; [
+    matteopacini
+    fallenbagel
+  ];
 
   nodes.machine =
     { pkgs, ... }:

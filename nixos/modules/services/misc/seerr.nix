@@ -12,7 +12,10 @@ in
     (lib.mkRenamedOptionModule [ "services" "jellyseerr" ] [ "services" "seerr" ])
   ];
 
-  meta.maintainers = [ lib.maintainers.camillemndn ];
+  meta.maintainers = with lib.maintainers; [
+    camillemndn
+    fallenbagel
+  ];
 
   options.services.seerr = {
     enable = lib.mkEnableOption "Seerr, a requests manager for Jellyfin";

@@ -92,7 +92,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Open-source media request and discovery manager for Jellyfin, Plex, and Emby";
     homepage = "https://github.com/seerr-team/seerr";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ camillemndn ];
+    maintainers = with lib.maintainers; [
+      camillemndn
+      fallenbagel
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "seerr";
   };
