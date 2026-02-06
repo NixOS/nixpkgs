@@ -24948,6 +24948,12 @@
     githubId = 13762043;
     matrix = "@sophie:nue.soopy.moe";
   };
+  sophronesis = {
+    email = "oleksandr.buzynnyi@gmail.com";
+    github = "sophronesis";
+    githubId = 13190573;
+    name = "Oleksandr Buzynnyi";
+  };
   sophrosyne = {
     email = "joshuaortiz@tutanota.com";
     github = "sophrosyne97";
