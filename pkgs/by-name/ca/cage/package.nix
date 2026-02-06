@@ -14,7 +14,7 @@
   wayland-protocols,
   pixman,
   libxkbcommon,
-  xcbutilwm,
+  libxcb-wm,
   libGL,
   libX11,
   xwayland ? null,
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
     pixman
     libxkbcommon
-    xcbutilwm
+    libxcb-wm
     libGL
     libX11
   ];

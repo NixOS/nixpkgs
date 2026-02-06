@@ -6,7 +6,7 @@
   nix-update-script,
   pkg-config,
   rustPlatform,
-  xcb-util-cursor,
+  libxcb-cursor,
   xwayland,
   withSystemd ? true,
 }:
@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     libxcb
-    xcb-util-cursor
+    libxcb-cursor
   ];
 
   buildNoDefaultFeatures = true;

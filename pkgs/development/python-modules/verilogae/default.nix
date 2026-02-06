@@ -14,12 +14,10 @@
   zlib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage.override { stdenv = llvmPackages.stdenv; } rec {
   pname = "verilogae";
   version = "24.0.0mob-unstable-2025-07-21";
   pyproject = true;
-
-  stdenv = llvmPackages.stdenv;
 
   src = fetchFromGitHub {
     owner = "OpenVAF";

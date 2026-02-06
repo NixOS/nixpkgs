@@ -1,22 +1,21 @@
 {
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   rustPlatform,
   versionCheckHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pay-respects";
-  version = "0.7.9";
+  version = "0.7.10";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "iff";
     repo = "pay-respects";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qKej29kM0Kq5RRHo+lu9cGeTjnjUvpmIqSxq5yHuCKc=";
+    hash = "sha256-HRSSJPiHILV3YsyXw0vRNDNV6gR1wB2W0H396yU2wko=";
   };
 
-  cargoHash = "sha256-2MEbUBTZ/zsPLhHTnQCrWQManqUQ3V3xta5NT9gu38A=";
+  cargoHash = "sha256-jgeypBPHffZPu8mEJPn8d6eh691K7Jh5OvXdVBeuwF0=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

@@ -17,14 +17,14 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opensc";
   version = "0.26.1";
 
   src = fetchFromGitHub {
     owner = "OpenSC";
     repo = "OpenSC";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-H5df+x15fz28IlL/G9zPBxbNBzc+BlDmmgNZVEYQgac=";
   };
 
@@ -76,4 +76,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.michaeladler ];
   };
-}
+})

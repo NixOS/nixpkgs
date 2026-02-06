@@ -5,14 +5,14 @@
   installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yarn-bash-completion";
   version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "dsifford";
     repo = "yarn-completion";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0xflbrbwskjqv3knvc8jqygpvfxh5ak66q7w22d1ng8gwrfqzcng";
   };
 
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ DamienCassou ];
   };
-}
+})

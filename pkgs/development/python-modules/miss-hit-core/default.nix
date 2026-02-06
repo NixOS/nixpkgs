@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   coverage,
   python,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "miss-hit-core";
   version = "0.9.44";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "florianschanda";

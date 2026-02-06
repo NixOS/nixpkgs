@@ -12,14 +12,32 @@
   readline,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "${lib.optionalString withNgshared "lib"}ngspice";
   version = "45";
 
   src = fetchurl {
-    url = "mirror://sourceforge/ngspice/ngspice-${version}.tar.gz";
+    url = "mirror://sourceforge/ngspice/ngspice-${finalAttrs.version}.tar.gz";
     hash = "sha256-8arYq6woKKe3HaZkEd6OQGUk518wZuRnVUOcSQRC1zQ=";
   };
+
+  patches = [
+    (builtins.toFile "fix-cppduals.patch" ''
+      --- a/src/include/cppduals/duals/dual
+      +++ b/src/include/cppduals/duals/dual
+      @@ -485,10 +485,6 @@ struct is_arithmetic<duals::dual<T>> : is_arithmetic<T> {};
+
+       #endif // CPPDUALS_ENABLE_IS_ARITHMETIC
+
+      -/// Duals are compound types.
+      -template <class T>
+      -struct is_compound<duals::dual<T>> : true_type {};
+      -
+       // Modification of std::numeric_limits<> per
+       // C++03 17.4.3.1/1, and C++11 18.3.2.3/1.
+       template <class T>
+    '')
+  ];
 
   nativeBuildInputs = [
     flex
@@ -62,4 +80,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ bgamari ];
     platforms = lib.platforms.unix;
   };
-}
+})

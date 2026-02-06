@@ -10,18 +10,19 @@
   zlib,
   swig,
   doxygen,
-  xorg,
+  libxmu,
+  libxi,
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "partio";
   version = "1.19.0";
 
   src = fetchFromGitHub {
     owner = "wdas";
     repo = "partio";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-p3mpxP0slHIQ75UtNAr5PcSOaSt9UyGR/MyOZ2GoXdU=";
   };
 
@@ -41,8 +42,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     zlib
     swig
-    xorg.libXi
-    xorg.libXmu
+    libxi
+    libxmu
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libglut
@@ -62,4 +63,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.guibou ];
   };
-}
+})

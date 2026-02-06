@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "0.12.2";
 
   src = fetchurl {
-    url = "https://libbsd.freedesktop.org/releases/${pname}-${version}.tar.xz";
+    url = "https://libbsd.freedesktop.org/releases/libbsd-${version}.tar.xz";
     hash = "sha256-uIzJFj0MZSqvOamZkdl03bocOpcR248bWDivKhRzEBQ=";
   };
 

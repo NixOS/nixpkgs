@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "1.2";
 
   src = fetchurl {
-    url = "https://njw.me.uk/getxbook/${pname}-${version}.tar.xz";
+    url = "https://njw.me.uk/getxbook/getxbook-${version}.tar.xz";
     sha256 = "0ihwrx4gspj8l7fc8vxch6dpjrw1lvv9z3c19f0wxnmnxhv1cjvs";
   };
 

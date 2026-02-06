@@ -5,14 +5,14 @@
   icon-slicer,
   xcursorgen,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openzone-cursors";
   version = "1.2.9";
 
   src = fetchFromGitHub {
     owner = "ducakar";
     repo = "openzone-cursors";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "02c536mc17ccsrzgma366k3wlm02ivklvr30fafxl981zgghlii4";
   };
 
@@ -30,4 +30,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ zaninime ];
     platforms = lib.platforms.linux;
   };
-}
+})

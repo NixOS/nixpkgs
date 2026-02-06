@@ -17,10 +17,10 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "archipelago";
-  version = "0.6.5";
+  version = "0.6.6";
   src = fetchurl {
     url = "https://github.com/ArchipelagoMW/Archipelago/releases/download/${finalAttrs.version}/Archipelago_${finalAttrs.version}_linux-x86_64.AppImage";
-    hash = "sha256-06EFpnMMz+yqqHDuUDw9AMBd0a0Ay7oVkzD4mna7XeM=";
+    hash = "sha256-mJ0bPBBou3BRqEW5QierjD0ohDBQ9J0jnoV4TCf9XOM=";
   };
 
   dontUnpack = true;

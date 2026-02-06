@@ -19,7 +19,21 @@
   libxcrypt-legacy,
   libGL,
   numactl,
-  xorg,
+  libxtst,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxft,
+  libxfixes,
+  libxext,
+  libxdmcp,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libxau,
+  libx11,
   kmod,
   python3,
   autoPatchelfHook,
@@ -106,21 +120,21 @@ stdenv.mkDerivation (finalAttrs: {
     libxcrypt-legacy
     libGL
     numactl
-    xorg.libX11
-    xorg.libXau
-    xorg.libXcomposite
-    xorg.libXcursor
-    xorg.libXdamage
-    xorg.libXdmcp
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXft
-    xorg.libXinerama
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libXScrnSaver
-    xorg.libXtst
+    libx11
+    libxau
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxdmcp
+    libxext
+    libxfixes
+    libxft
+    libxinerama
+    libxi
+    libxrandr
+    libxrender
+    libxscrnsaver
+    libxtst
   ];
 
   installPhase = ''
@@ -229,8 +243,8 @@ stdenv.mkDerivation (finalAttrs: {
         --add-needed ${libpulseaudio}/lib/libpulse.so.0 \
         --add-needed ${libGL}/lib/libEGL.so.1 \
         --add-needed ${numactl}/lib/libnuma.so.1 \
-        --add-needed ${xorg.libX11}/lib/libX11.so.6 \
-        --add-needed ${xorg.libXi}/lib/libXi.so.6 \
+        --add-needed ${libx11}/lib/libX11.so.6 \
+        --add-needed ${libxi}/lib/libXi.so.6 \
         --add-needed ${libGL}/lib/libGL.so.1 \
         $out/lib/vmware/bin/$binary
     done

@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "1.1.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/log4cpp/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/log4cpp/log4cpp-${version}.tar.gz";
     sha256 = "sha256-aWETZZ5CZUBiUnSoslEFLMBDBtjuXEKgx2OfOcqQydY=";
   };
 

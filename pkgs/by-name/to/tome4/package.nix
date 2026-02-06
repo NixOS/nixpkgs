@@ -14,7 +14,8 @@
   SDL2,
   SDL2_image,
   SDL2_ttf,
-  xorg,
+  libx11,
+  xorgproto,
   nix-update-script,
 }:
 
@@ -56,6 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
     # unistd required for read and close
     ./0002-zlib-missing-include.patch
     ./0003-incompatible-pointer-types.patch
+    # C23 requires stdbool for an actual proper boolean type instead of `char'
+    ./0004-fix-build-with-C23.patch
   ];
 
   nativeBuildInputs = [
@@ -71,8 +74,8 @@ stdenv.mkDerivation (finalAttrs: {
     openal
     libpng
     libvorbis
-    xorg.libX11
-    xorg.xorgproto
+    libx11
+    xorgproto
   ]
   ++ sdlInputs;
 

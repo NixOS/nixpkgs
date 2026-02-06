@@ -1,6 +1,6 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   which,
   qtbase,
@@ -33,6 +33,7 @@
   autoconf,
   automake,
   file,
+  wrapQtAppsHook,
   exiv2,
   linuxHeaders,
   soundtouch,
@@ -41,7 +42,7 @@
   withWebKit ? false,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "mythtv";
   version = "35.0";
 
@@ -98,6 +99,7 @@ mkDerivation rec {
     autoconf
     automake
     file
+    wrapQtAppsHook
   ];
 
   configureFlags = [ "--dvb-path=${linuxHeaders}/include" ];

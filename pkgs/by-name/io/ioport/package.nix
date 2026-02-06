@@ -5,12 +5,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ioport";
   version = "1.2";
 
   src = fetchurl {
-    url = "https://people.redhat.com/rjones/ioport/files/ioport-${version}.tar.gz";
+    url = "https://people.redhat.com/rjones/ioport/files/ioport-${finalAttrs.version}.tar.gz";
     sha256 = "1h4d5g78y7kla0zl25jgyrk43wy3m3bygqg0blki357bc55irb3z";
   };
 
@@ -26,4 +26,4 @@ stdenv.mkDerivation rec {
     ];
     maintainers = [ lib.maintainers.cleverca22 ];
   };
-}
+})

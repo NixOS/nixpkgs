@@ -29,7 +29,6 @@ buildGoModule rec {
     mainProgram = "surfboard_exporter";
     homepage = "https://github.com/ipstatic/surfboard_exporter";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ disassembler ];
     platforms = lib.platforms.unix;
   };
 }

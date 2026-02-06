@@ -17,12 +17,13 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "lychee";
-  version = "0.21.0";
+  version = "0.22.0-unstable-2025-12-05";
 
   src = fetchFromGitHub {
     owner = "lycheeverse";
     repo = "lychee";
-    tag = "lychee-v${version}";
+    # tag = "lychee-v${version}"; # use again with next release
+    rev = "db0f8a842f594e0a879563caf7d183266c02ca95"; # one revision after 0.22.0
     leaveDotGit = true;
     postFetch = ''
       GIT_DATE=$(git -C $out/.git show -s --format=%cs)
@@ -32,10 +33,10 @@ rustPlatform.buildRustPackage rec {
           '("cargo:rustc-env=GIT_DATE={}", "'$GIT_DATE'")'
       rm -rf $out/.git
     '';
-    hash = "sha256-Nt7LsnQkWQS0f2/lS8WNYkI+XbKUSHQ6bNf9FNjfk7A=";
+    hash = "sha256-l8/llYq8rwt+UQMLnsva4/2m53cwqaJXD/XvgEfxXg4=";
   };
 
-  cargoHash = "sha256-1sqFjNil6KktpqrsXXgt3xtOz7eFQc2skkFHqmTMDg4=";
+  cargoHash = "sha256-03eahQ6GvOPxnvC82lfT1J/XfOg9V7gOZeOEBJx8IYY=";
 
   nativeBuildInputs = [
     pkg-config
@@ -55,8 +56,6 @@ rustPlatform.buildRustPackage rec {
     "--bins"
     "--tests"
   ];
-
-  checkType = "debug"; # compilation fails otherwise
 
   checkFlags = [
     #  Network errors for all of these tests

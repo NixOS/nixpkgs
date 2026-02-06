@@ -164,9 +164,9 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i '/set (ADD_AVX_BUILDS 1)/d' CMakeLists.txt
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Manticore Columnar Library - columnar storage and secondary indexes library for Manticore Search";
     homepage = "https://github.com/manticoresoftware/columnar";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 })

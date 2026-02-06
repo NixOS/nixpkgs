@@ -7,13 +7,13 @@
 }:
 buildGoModule rec {
   pname = "regolith";
-  version = "1.6.2";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "Bedrock-OSS";
     repo = "regolith";
     tag = version;
-    hash = "sha256-J4DkEjN+hPK6fu9dIuHdY6gu1imb0sB/KdWnXYJSgw8=";
+    hash = "sha256-9mRfK93eHuCA19RSdLKhlhbnQ0UTmBS46Gp1cXstTIk=";
   };
 
   # Requires network access.

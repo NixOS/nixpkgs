@@ -19,7 +19,7 @@
   libxkbcommon,
   wayland,
   libglvnd,
-  xorg,
+  libxcb,
   stdenv,
   makeFontsConf,
   vulkan-loader,
@@ -106,7 +106,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zed-editor";
-  version = "0.217.3";
+  version = "0.221.5";
 
   outputs = [
     "out"
@@ -119,7 +119,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "zed-industries";
     repo = "zed";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-flUkt39vttnF1HjzxLQ4pizFqxHxlIkaV+mb/GtxphU=";
+    hash = "sha256-1q0nwNsPbckGivm9MAXvGX8/SC0ioQVEB93W7Zpobcs=";
   };
 
   postPatch = ''
@@ -139,7 +139,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rm -r $out/git/*/candle-book/
   '';
 
-  cargoHash = "sha256-ZUHz93ImWj3S5kRaWsiLz4Xc0sdaWzy+4CxCW5cvEf0=";
+  cargoHash = "sha256-vmG90W+MNUZ+3IiLltr5ok7h6fP7WfS7gwy3LloIAIw=";
 
   nativeBuildInputs = [
     cmake
@@ -170,7 +170,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     alsa-lib
     libxkbcommon
     wayland
-    xorg.libxcb
+    libxcb
     # required by livekit:
     libGL
     libX11
@@ -208,9 +208,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # Used by `zed --version`
     RELEASE_VERSION = finalAttrs.version;
     LK_CUSTOM_WEBRTC = livekit-libwebrtc;
+    RUSTFLAGS = lib.optionalString withGLES "--cfg gles";
   };
-
-  RUSTFLAGS = lib.optionalString withGLES "--cfg gles";
 
   preBuild = ''
     bash script/generate-licenses
@@ -226,23 +225,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
-  checkFlags = [
-    # Flaky: unreliably fails on certain hosts (including Hydra)
-    "--skip=zed::tests::test_window_edit_state_restoring_enabled"
-    # The following tests are flaky on at least x86_64-linux and aarch64-darwin,
-    # where they sometimes fail with: "database table is locked: workspaces".
-    "--skip=zed::tests::test_open_file_in_many_spaces"
-    "--skip=zed::tests::test_open_non_existing_file"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Flaky: unreliably fails on certain hosts (including Hydra)
-    "--skip=zed::open_listener::tests::test_open_workspace_with_directory"
-    "--skip=zed::open_listener::tests::test_open_workspace_with_nonexistent_files"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    # Fails on certain hosts (including Hydra) for unclear reason
-    "--skip=test_open_paths_action"
-  ];
+  useNextest = true;
 
   installPhase = ''
     runHook preInstall

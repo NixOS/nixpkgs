@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   version = "0.7";
 
   src = fetchurl {
-    url = "http://das.nasophon.de/download/${pname}-${version}.tar.gz";
+    url = "http://das.nasophon.de/download/jack_oscrolloscope-${version}.tar.gz";
     sha256 = "1pl55in0sj7h5r06n1v91im7d18pplvhbjhjm1fdl39zwnyxiash";
   };
 

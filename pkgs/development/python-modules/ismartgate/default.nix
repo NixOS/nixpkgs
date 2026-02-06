@@ -10,7 +10,6 @@
   pytest-asyncio,
   pytest-raises,
   pytestCheckHook,
-  pythonOlder,
   respx,
   typing-extensions,
 }:
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "ismartgate";
   version = "5.0.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bdraco";

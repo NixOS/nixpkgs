@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "meteo-qt";
-  version = "4.2";
+  version = "4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dglent";
     repo = "meteo-qt";
     tag = "v${version}";
-    hash = "sha256-s02A5WwJffjbB497sXyugkIolqyK3OpEY7aBgnOBdbM=";
+    hash = "sha256-ksG5cnVV/4QOCzK+UWwe7LjPncIeFElAuTK60KaHgrY=";
   };
 
   postPatch = ''

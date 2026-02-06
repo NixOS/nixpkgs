@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   pname = "dnstracer";
 
   src = fetchurl {
-    url = "https://www.mavetju.org/download/${pname}-${version}.tar.bz2";
+    url = "https://www.mavetju.org/download/dnstracer-${version}.tar.bz2";
     sha256 = "089bmrjnmsga2n0r4xgw4bwbf41xdqsnmabjxhw8lngg2pns1kb4";
   };
 

@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "doubleratchet";
-  version = "1.2.0";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Syndace";
     repo = "python-doubleratchet";
     tag = "v${version}";
-    hash = "sha256-TgkRityDMSzyF6ihM63lAGCSrCHCHrsbCyGYUaObvDU=";
+    hash = "sha256-iw0JIegwEiBpA/9blGKb0Oh1K3j74A3ZomtMRKgJL0E=";
   };
 
   strictDeps = true;

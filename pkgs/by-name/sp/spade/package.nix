@@ -10,24 +10,24 @@
   git,
   pkg-config,
   openssl,
-  python312,
+  python314,
   swim,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "spade";
-  version = "0.13.0";
+  version = "0.16.0";
 
   src = fetchFromGitLab {
     owner = "spade-lang";
     repo = "spade";
     rev = "v${version}";
-    hash = "sha256-eWeEbwIm+PC0XHmvV3xZqUIcA01arnalbGFtPTUP9tg=";
+    hash = "sha256-Q9LiyCkrHQxnTorAqPOykS4F06c01pYPW9t82xEn6DY=";
     # only needed for vatch, which contains test data
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-YMUeHr9eUOYIcO7PbaFgZa0Ib10GMF+jT10ZCSG7PNo=";
+  cargoHash = "sha256-zuj34DpQKu7uWYgL/JTq7zLTPvZKQ/eedBXrkN1Pvg0=";
 
   # TODO: somehow respect https://nixos.org/manual/nixpkgs/stable/#var-passthru-updateScript-commit
   passthru.updateScript = _experimental-update-script-combinators.sequence [
@@ -55,8 +55,19 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     openssl
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ python312 ];
-  env.NIX_CFLAGS_LINK = lib.optionalString stdenv.hostPlatform.isDarwin "-L${python312}/lib/python3.12/config-3.12-darwin -lpython3.12";
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    python314
+  ];
+  env.NIX_CFLAGS_LINK = lib.optionalString stdenv.hostPlatform.isDarwin "-L${python314}/lib/python3.14/config-3.14-darwin -lpython3.14";
+
+  cargoBuildFlags = [
+    "--workspace"
+    # TODO: --exclude the excluded crates listed in release.sh?
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # "Undefined symbols for architecture arm:" ...
+    "--exclude=spade-surfer-plugin"
+  ];
 
   passthru.tests = {
     inherit swim;

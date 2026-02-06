@@ -82,6 +82,11 @@ stdenv.mkDerivation (finalAttrs: {
     extraArgs = [ "--version-regex=^v(\\d+(?:\\.\\d+)*)$" ];
   };
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   meta = {
     homepage = "https://github.com/tstack/lnav";
     description = "Logfile Navigator";

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "1.1.0";
 
   src = fetchurl {
-    url = "https://netfilter.org/projects/libnetfilter_conntrack/files/${pname}-${version}.tar.xz";
+    url = "https://netfilter.org/projects/libnetfilter_conntrack/files/libnetfilter_conntrack-${version}.tar.xz";
     hash = "sha256-Z+3LTrgmwvjcmK8I2r/2jzs9D+b7fZ0Kwe5+zOD+aU4=";
   };
 

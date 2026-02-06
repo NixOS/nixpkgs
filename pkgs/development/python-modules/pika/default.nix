@@ -20,7 +20,7 @@
 buildPythonPackage rec {
   pname = "pika";
   version = "1.3.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pika";

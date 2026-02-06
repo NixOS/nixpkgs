@@ -2,15 +2,12 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "lightwave";
   version = "0.24";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

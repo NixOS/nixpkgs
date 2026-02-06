@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   autoreconfHook,
   atf,
   pkg-config,
@@ -11,11 +11,10 @@ stdenv.mkDerivation rec {
   pname = "mlmmj";
   version = "1.5.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "mlmmj";
     repo = "mlmmj";
-    rev = "refs/tags/RELEASE_" + lib.replaceStrings [ "." ] [ "_" ] version;
+    tag = "RELEASE_" + lib.replaceStrings [ "." ] [ "_" ] version;
     hash = "sha256-kAo04onxVve3kCaM4h1APsjs3C4iePabkBFJeqvnPxo=";
   };
 

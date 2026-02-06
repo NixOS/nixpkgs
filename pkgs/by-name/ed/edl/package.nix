@@ -23,8 +23,7 @@ python3Packages.buildPythonPackage {
     pyusb
     pyserial
     docopt
-    pylzma
-    pycryptodome
+    pycryptodomex
     lxml
     colorama
     capstone

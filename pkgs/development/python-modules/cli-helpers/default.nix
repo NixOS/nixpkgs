@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   configobj,
   mock,
   pytestCheckHook,
@@ -12,15 +11,13 @@
 
 buildPythonPackage rec {
   pname = "cli-helpers";
-  version = "2.7.0";
+  version = "2.9.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "cli_helpers";
     inherit version;
-    hash = "sha256-YtEXENvrwvxGAAPeEhVogyXYY2hZBW1oizhBm9QEi8A=";
+    hash = "sha256-qYh0XsQx3a5wf3ON0NE4kLdKAKKqBCjqzX/B4Dsgahc=";
   };
 
   propagatedBuildInputs = [

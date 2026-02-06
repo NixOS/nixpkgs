@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "0.9.3";
 
   src = fetchurl {
-    url = "https://launchpad.net/seq24/trunk/${version}/+download/${pname}-${version}.tar.gz";
+    url = "https://launchpad.net/seq24/trunk/${version}/+download/seq24-${version}.tar.gz";
     sha256 = "1qpyb7355s21sgy6gibkybxpzx4ikha57a8w644lca6qy9mhcwi3";
   };
 

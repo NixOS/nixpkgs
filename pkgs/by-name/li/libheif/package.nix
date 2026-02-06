@@ -22,7 +22,7 @@
   vips,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libheif";
   version = "1.20.2";
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "strukturag";
     repo = "libheif";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-PVfdX3/Oe3DXpYU5WMnCSi2p9X4fPszq2X3uuyh8RVU=";
   };
 
@@ -90,4 +90,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ kuflierl ];
   };
-}
+})

@@ -2,7 +2,15 @@
   lib,
   stdenv,
   fetchurl,
-  xorg,
+  libxt,
+  libxft,
+  libxext,
+  libxaw,
+  libx11,
+  libsm,
+  libice,
+  xorgproto,
+  luit,
   ncurses,
   freetype,
   fontconfig,
@@ -14,16 +22,16 @@
   enableDecLocator ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xterm";
-  version = "404";
+  version = "406";
 
   src = fetchurl {
     urls = [
-      "https://invisible-island.net/archives/xterm/${pname}-${version}.tgz"
-      "https://invisible-mirror.net/archives/xterm/${pname}-${version}.tgz"
+      "https://invisible-island.net/archives/xterm/${finalAttrs.pname}-${finalAttrs.version}.tgz"
+      "https://invisible-mirror.net/archives/xterm/${finalAttrs.pname}-${finalAttrs.version}.tgz"
     ];
-    hash = "sha256-YzMvkhwie6WeWJ+gff2tFZnBCshZ6ibHKsHdSkG1ZaQ=";
+    hash = "sha256-Bm6y1mQwiX/h2t0nFVTM2uM9d8USEmp1j8TeN7EUh5k=";
   };
 
   patches = [ ./sixel-256.support.patch ];
@@ -37,17 +45,17 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    xorg.libXaw
-    xorg.xorgproto
-    xorg.libXt
-    xorg.libXext
-    xorg.libX11
-    xorg.libSM
-    xorg.libICE
+    libxaw
+    xorgproto
+    libxt
+    libxext
+    libx11
+    libsm
+    libice
     ncurses
     freetype
-    xorg.libXft
-    xorg.luit
+    libxft
+    luit
   ];
 
   configureFlags = [
@@ -111,10 +119,21 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
+    description = "Terminal emulator for the X Window System";
+    longDescription = ''
+      The xterm program is a terminal emulator for the X Window System. It
+      provides DEC VT102/VT220 and selected features from higher-level
+      terminals such as VT320/VT420/VT520 (VTxxx). It also provides Tektronix
+      4014 emulation for programs that cannot use the window system directly.
+      If the underlying operating system supports terminal resizing
+      capabilities (for example, the SIGWINCH signal in systems derived from
+      4.3bsd), xterm will use the facilities to notify programs running in the
+      window whenever it is resized.
+    '';
     homepage = "https://invisible-island.net/xterm";
     license = with lib.licenses; [ mit ];
     platforms = with lib.platforms; linux ++ darwin;
-    changelog = "https://invisible-island.net/xterm/xterm.log.html";
+    changelog = "https://invisible-island.net/xterm/xterm.log.html#xterm_${finalAttrs.version}";
     mainProgram = "xterm";
   };
-}
+})

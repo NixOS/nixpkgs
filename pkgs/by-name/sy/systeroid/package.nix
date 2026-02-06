@@ -3,7 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   linux-doc,
-  xorg,
+  libxcb,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-Gce7DqhGD0CeBTPEqKhzdQ3IIHA6kjoWrejj4V8gT1I=";
 
   buildInputs = [
-    xorg.libxcb
+    libxcb
   ];
 
   # tries to access /sys/

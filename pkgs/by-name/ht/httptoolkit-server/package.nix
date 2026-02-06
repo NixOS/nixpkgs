@@ -1,6 +1,6 @@
 {
   lib,
-  nodejs_20,
+  nodejs_22,
   buildNpmPackage,
   fetchFromGitHub,
   writeShellScriptBin,
@@ -13,16 +13,18 @@
 }:
 
 let
-  nodejs = nodejs_20;
+  nodejs = nodejs_22;
   buildNpmPackage' = buildNpmPackage.override { inherit nodejs; };
 
-  version = "1.24.0";
+  # update together with httptoolkit
+  # nixpkgs-update: no auto update
+  version = "1.24.2";
 
   src = fetchFromGitHub {
     owner = "httptoolkit";
     repo = "httptoolkit-server";
     tag = "v${version}";
-    hash = "sha256-bwtNJz72dgeojMETvobsFr9x1St5rCO/Mwu5DBmcMhs=";
+    hash = "sha256-tcUQe4YIUpQ9I5nq66K7LO84mLFo8YAdHY/c2HROSpk=";
   };
 
   overridesNodeModules = buildNpmPackage' {
@@ -30,7 +32,7 @@ let
     inherit version src;
     sourceRoot = "${src.name}/overrides/js";
 
-    npmDepsHash = "sha256-MtUJY9IxzkGPuoIXHAr9nNNF+NpEf2b/oAYauJPwdaw=";
+    npmDepsHash = "sha256-8cNGJdT8ndXa72ETttU2PjA8nfn+MTWesVVlA8GA1qQ=";
 
     dontBuild = true;
 
@@ -85,8 +87,6 @@ let
       # don't fetch node headers
       substituteInPlace node_modules/cmake-js/lib/dist.js \
           --replace-fail '!this.downloaded' 'false'
-
-      npm rebuild --verbose
     '';
 
     installPhase = ''
@@ -102,7 +102,7 @@ buildNpmPackage' {
 
   patches = [ ./only-build-for-one-platform.patch ];
 
-  npmDepsHash = "sha256-ZumcKqm0JFu8UR/6tnSDzv9ABULmhsUnHtNsYvmR0Ao=";
+  npmDepsHash = "sha256-vhTe7EccEX57h7LDtNaaLaNR8xHSOlbnLtGrs7qT7pY=";
 
   npmFlags = [ "--ignore-scripts" ];
 

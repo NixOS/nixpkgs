@@ -5,7 +5,6 @@
   fetchFromGitHub,
   jwcrypto,
   poetry-core,
-  pythonOlder,
   requests,
   requests-toolbelt,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "python-keycloak";
   version = "4.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "marcospereirampj";

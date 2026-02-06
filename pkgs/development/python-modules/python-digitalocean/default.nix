@@ -4,7 +4,6 @@
   fetchFromGitHub,
   jsonpickle,
   pytestCheckHook,
-  pythonOlder,
   requests,
   responses,
   setuptools,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "python-digitalocean";
   version = "1.17.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "koalalorenzo";

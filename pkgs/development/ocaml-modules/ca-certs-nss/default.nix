@@ -12,14 +12,14 @@
   alcotest,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "ca-certs-nss";
   version = "3.118";
 
   minimalOCamlVersion = "4.13";
 
   src = fetchurl {
-    url = "https://github.com/mirage/ca-certs-nss/releases/download/v${version}/ca-certs-nss-${version}.tbz";
+    url = "https://github.com/mirage/ca-certs-nss/releases/download/v${finalAttrs.version}/ca-certs-nss-${finalAttrs.version}.tbz";
     hash = "sha256-BthKUUeuf3jFRmQzw0U9SEbvRqcVc1UKHmb4+YePRio=";
   };
 
@@ -46,4 +46,4 @@ buildDunePackage rec {
     maintainers = [ lib.maintainers.sternenseemann ];
     mainProgram = "extract-from-certdata";
   };
-}
+})

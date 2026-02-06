@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   version = "1.64.6";
 
   src = fetchurl {
-    url = "mirror://sourceforge/streamripper/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/streamripper/streamripper-${version}.tar.gz";
     sha256 = "0hnyv3206r0rfprn3k7k6a0j959kagsfyrmyjm3gsf3vkhp5zmy1";
   };
 

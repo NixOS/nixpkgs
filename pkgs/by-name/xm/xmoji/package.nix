@@ -6,11 +6,11 @@
   fontconfig,
   harfbuzz,
   libpng,
-  xcbutil,
+  libxcb-util,
   libXcursor,
-  xcbutilimage,
+  libxcb-image,
   libxkbcommon,
-  xcb-util-cursor,
+  libxcb-cursor,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -40,9 +40,9 @@ stdenv.mkDerivation (finalAttrs: {
     libXcursor
     libpng
     libxkbcommon
-    xcb-util-cursor
-    xcbutil
-    xcbutilimage
+    libxcb-cursor
+    libxcb-util
+    libxcb-image
   ];
 
   makeFlags = [ "prefix=${placeholder "out"}" ];

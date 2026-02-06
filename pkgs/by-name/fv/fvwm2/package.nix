@@ -23,14 +23,14 @@
   enableGestures ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fvwm";
   version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "fvwmorg";
     repo = "fvwm";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-KcuX8las1n8UUE/BOHj7WOeZjva5hxgpFHtATMUk3bg=";
   };
 
@@ -80,10 +80,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://fvwm.org";
-    changelog = "https://github.com/fvwmorg/fvwm/releases/tag/${src.rev}";
+    changelog = "https://github.com/fvwmorg/fvwm/releases/tag/${finalAttrs.src.rev}";
     description = "Multiple large virtual desktop window manager";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ edanaher ];
   };
-}
+})

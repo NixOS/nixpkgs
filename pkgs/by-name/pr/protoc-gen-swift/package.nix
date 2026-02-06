@@ -31,12 +31,12 @@ stdenv.mkDerivation (finalAttrs: {
     swiftPackages.Dispatch
   ];
 
-  # swiftpm fails to found libdispatch.so on Linux
-  LD_LIBRARY_PATH = lib.optionalString stdenv.hostPlatform.isLinux (
-    lib.makeLibraryPath [
+  env = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    # swiftpm fails to found libdispatch.so on Linux
+    LD_LIBRARY_PATH = lib.makeLibraryPath [
       swiftPackages.Dispatch
-    ]
-  );
+    ];
+  };
 
   installPhase = ''
     runHook preInstall

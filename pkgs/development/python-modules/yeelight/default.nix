@@ -14,12 +14,10 @@ buildPythonPackage rec {
   version = "0.7.16";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitLab {
     owner = "stavros";
     repo = "python-yeelight";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-WLEXTDVcSpGCmfEI31cQXGf9+4EIUCkcaeaj25f4ERU=";
   };
 

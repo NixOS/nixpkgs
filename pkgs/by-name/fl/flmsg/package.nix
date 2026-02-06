@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  fltk13,
+  fltk_1_3,
   libjpeg,
   pkg-config,
 }:
@@ -12,12 +12,12 @@ stdenv.mkDerivation rec {
   pname = "flmsg";
 
   src = fetchurl {
-    url = "mirror://sourceforge/fldigi/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/fldigi/flmsg-${version}.tar.gz";
     sha256 = "sha256-3eR0wrzkNjlqm5xW5dtgihs33cVUmZeS0/rf+xnPeRY=";
   };
 
   buildInputs = [
-    fltk13
+    fltk_1_3
     libjpeg
   ];
 

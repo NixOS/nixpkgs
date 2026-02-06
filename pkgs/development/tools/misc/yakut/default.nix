@@ -55,6 +55,5 @@ buildPythonApplication rec {
     '';
     homepage = "https://github.com/OpenCyphal/yakut/";
     license = lib.licenses.mit;
-    teams = [ lib.teams.ororatech ];
   };
 }

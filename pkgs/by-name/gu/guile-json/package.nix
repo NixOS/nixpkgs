@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "4.7.3";
 
   src = fetchurl {
-    url = "mirror://savannah/guile-json/${pname}-${version}.tar.gz";
+    url = "mirror://savannah/guile-json/guile-json-${version}.tar.gz";
     sha256 = "sha256-OLoEjtKdEvBbMsWy+3pReVxEi0HkA6Kxty/wA1gX84g=";
   };
 

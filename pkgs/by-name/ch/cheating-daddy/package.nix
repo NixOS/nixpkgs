@@ -13,16 +13,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "cheating-daddy";
-  version = "0.4";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "sohzm";
     repo = "cheating-daddy";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-yoUHBxiuwFdHF5uvQEFrjONnqBdks5gJgTvX1ME5Vv8=";
+    tag = finalAttrs.version;
+    hash = "sha256-w1Kd9V9MQvsWiVHr9pRPVLkds+Aj/dsZg6Xvj0vWWVg=";
   };
 
-  npmDepsHash = "sha256-HNI0I02tWXJ0Th9oownQ/akXITBs3RlVFpnnmt6kINw=";
+  npmDepsHash = "sha256-fMvzHrljOm43Dj0uJcqCj6QWd6qosARainhW9WSE348=";
 
   nativeBuildInputs = [
     copyDesktopItems

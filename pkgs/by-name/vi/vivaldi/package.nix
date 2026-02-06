@@ -6,8 +6,8 @@
   zlib,
   libX11,
   libXext,
-  libSM,
-  libICE,
+  libsm,
+  libice,
   libxkbcommon,
   libxshmfence,
   libXfixes,
@@ -66,7 +66,7 @@
 
 stdenv.mkDerivation rec {
   pname = "vivaldi";
-  version = "7.7.3851.66";
+  version = "7.8.3925.56";
 
   suffix =
     {
@@ -79,8 +79,8 @@ stdenv.mkDerivation rec {
     url = "https://downloads.vivaldi.com/stable/vivaldi-stable_${version}-1_${suffix}.deb";
     hash =
       {
-        aarch64-linux = "sha256-xXhRTTieuoLXIVYgc0jAiUJrrSWfKmurstQqTDkfyPU=";
-        x86_64-linux = "sha256-kVD0aVfhqM1ZhFhyVcZ6teF3SM2GleY4BdsRXdxu1r4=";
+        aarch64-linux = "sha256-ZfxeBtArPGxvM6ocCEbcM8afTcLTl0TM2xCILNDB1Bo=";
+        x86_64-linux = "sha256-j1u0WlOqRPh+/NjowpAXKRPACxmdImi9ma2ILFDgWpQ=";
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
@@ -107,8 +107,8 @@ stdenv.mkDerivation rec {
     libX11
     libXt
     libXext
-    libSM
-    libICE
+    libsm
+    libice
     libxcb
     libxkbcommon
     libxshmfence

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   version = "0.69";
 
   src = fetchurl {
-    url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
+    url = "mirror://savannah/quilt/quilt-${version}.tar.gz";
     sha256 = "sha256-VV3f/eIto8htHK9anB+4oVKsK4RzBDe9OcwIhJyfSFI=";
   };
 

@@ -12,7 +12,7 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
-  xcbutilwm,
+  libxcb-wm,
   xwayland,
   enableXWayland ? true,
   meson,
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals enableXWayland [
     libX11
-    xcbutilwm
+    libxcb-wm
     xwayland
   ];
 

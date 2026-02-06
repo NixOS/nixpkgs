@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   version = "1.1.4";
 
   src = fetchurl {
-    url = "https://github.com/acaudwell/Logstalgia/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
+    url = "https://github.com/acaudwell/Logstalgia/releases/download/logstalgia-${version}/logstalgia-${version}.tar.gz";
     hash = "sha256-wEnv9AXpJANSIu2ya8xse18AoIkmq9t7Rn4kSSQnkKk=";
   };
 

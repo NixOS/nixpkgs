@@ -7,12 +7,12 @@
   patches ? [ ], # allow users to easily override config.def.h
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sacc";
   version = "1.07";
 
   src = fetchurl {
-    url = "ftp://bitreich.org/releases/sacc/sacc-${version}.tar.gz";
+    url = "ftp://bitreich.org/releases/sacc/sacc-${finalAttrs.version}.tar.gz";
     hash = "sha256-LdEeZH+JWb7iEEzikAXaxG0N5GMPxjgTId4THLgdU2w=";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.sternenseemann ];
     platforms = lib.platforms.unix;
   };
-}
+})

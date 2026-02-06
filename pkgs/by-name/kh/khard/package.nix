@@ -9,7 +9,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "khard";
   version = "0.20.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

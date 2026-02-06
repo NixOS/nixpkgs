@@ -16,12 +16,12 @@
   svfSupport ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "urjtag";
   version = "2021.03";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/urjtag/urjtag/${version}/urjtag-${version}.tar.xz";
+    url = "mirror://sourceforge/project/urjtag/urjtag/${finalAttrs.version}/urjtag-${finalAttrs.version}.tar.xz";
     hash = "sha256-sKLqokVROvCW3E13AQmDIzXGlMbBKqXpL++uhoVBbxw=";
   };
 
@@ -55,4 +55,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "reindeer";
-  version = "2025.12.22.00";
+  version = "2026.01.26.00";
 
   src = fetchFromGitHub {
     owner = "facebookincubator";
     repo = "reindeer";
     tag = "v${version}";
-    hash = "sha256-9e3QWszac5P1OhhM2VOFYPPMJmzv5MdWHwL0O8Dq+v0=";
+    hash = "sha256-jUyb8fzzk1TzTe4pBXlZTByesdlDGJc2Q5L5pmHn9bw=";
   };
 
-  cargoHash = "sha256-G8Q7mhWRLWx91bRb8apcMFy1s+nxtsXMhDwZVoZTRfA=";
+  cargoHash = "sha256-CZcbEFZpZonp8iGI/DklPpAvaCoaS+LGMO8F/6NryBY=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -31,6 +31,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "reindeer";
     homepage = "https://github.com/facebookincubator/reindeer";
     license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ nickgerace ];
+    maintainers = with lib.maintainers; [ amaanq ];
   };
 }

@@ -119,7 +119,7 @@ in
       + (
         if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
           ''
-            echo SUPPORTED-LOCALES=C.UTF-8/UTF-8 > ../glibc-2*/localedata/SUPPORTED
+            echo SUPPORTED-LOCALES=C.UTF-8/UTF-8 > ../localedata/SUPPORTED
             # Don't install C.utf-8 into the archive, but into $out/lib/locale: on non-NixOS
             # systems with an empty /usr/lib/locale/locale-archive, glibc would fall back to
             # $libdir/locale/C.utf-8 instead of the locale archive of pkgs.glibc. See also #347965.
@@ -139,7 +139,7 @@ in
             # evaluating buildPackages.glibc when glibc hasn't come from stdenv
             # (e.g. on musl)." https://github.com/NixOS/nixpkgs/pull/259964
             ''
-              pushd ../glibc-2*/localedata
+              pushd ../localedata
               export I18NPATH=$PWD GCONV_PATH=$PWD/../iconvdata
               mkdir -p $NIX_BUILD_TOP/${pkgsBuildBuild.glibc}/lib/locale
               ${lib.getBin pkgsBuildBuild.glibc}/bin/localedef \

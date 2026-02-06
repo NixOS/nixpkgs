@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "lexy";
-  version = "0.5.1";
+  version = "0.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "antoniorodr";
     repo = "lexy";
     tag = "v${version}";
-    hash = "sha256-r6Jy37Ici7l0jlQiGdF0YlbViW0Tl+0UwHMAe59YoKc=";
+    hash = "sha256-Ff+4QymAAxLK61Zdic26TcUzFEvH1A8X6puynMivKaY=";
   };
 
   build-system = [

@@ -12,7 +12,8 @@
   libXv,
   pkg-config,
   portmidi,
-  xorg,
+  libxpm,
+  libxext,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -35,8 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
     ffmpeg
     libjack2
     libX11
-    xorg.libXext
-    xorg.libXpm
+    libxext
+    libxpm
     # The following are recommended in the README, but are seemingly
     # unnecessary for a successful build. That said, the result of including
     # these in the build process is possibly required at runtime in some cases,

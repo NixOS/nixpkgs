@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "5.7";
 
   src = fetchurl {
-    url = "mirror://sourceforge/nedit/nedit-source/${pname}-${version}-src.tar.gz";
+    url = "mirror://sourceforge/nedit/nedit-source/nedit-${version}-src.tar.gz";
     sha256 = "0ym1zhjx9976rf2z5nr7dj4mjkxcicimhs686snjhdcpzxwsrndd";
   };
 

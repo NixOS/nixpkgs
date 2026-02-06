@@ -22,7 +22,6 @@ let
   binaryName = "librewolf";
 
   mozillaPlatforms = {
-    i686-linux = "linux-i686";
     x86_64-linux = "linux-x86_64";
     aarch64-linux = "linux-arm64";
   };
@@ -37,19 +36,18 @@ let
 
   pname = "librewolf-bin-unwrapped";
 
-  version = "146.0.1-1";
+  version = "147.0.2-1";
 in
 
 stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchurl {
-    url = "https://gitlab.com/api/v4/projects/44042130/packages/generic/librewolf/${version}/librewolf-${version}-${arch}-package.tar.xz";
+    url = "https://codeberg.org/api/packages/librewolf/generic/librewolf/${version}/librewolf-${version}-${arch}-package.tar.xz";
     hash =
       {
-        i686-linux = "sha256-Z8dQhYH3PuKI2vXQ2nQ4CmyNyDxtAirX0YVxI0r5n3w=";
-        x86_64-linux = "sha256-pRpSHAkLQpg80pOfUBvGBujr4fDDg4wpltVIw9wrlBE=";
-        aarch64-linux = "sha256-BTqzBAohy+kcWou2WKStoAykcqV1DYfLRNbjUF/TTIY=";
+        x86_64-linux = "sha256-5WeLYaZuixXEFrzMXbF7GkVlSptC0Ng6QkCC8ecISXE=";
+        aarch64-linux = "sha256-xz9ApgpG8b7EgIi6n8L9lQbLmo8hxtGtfpLppYvRM1k=";
       }
       .${stdenv.hostPlatform.system} or throwSystem;
   };

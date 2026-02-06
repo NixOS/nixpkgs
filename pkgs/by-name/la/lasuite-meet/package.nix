@@ -7,20 +7,20 @@
 let
   python = python3.override {
     self = python3;
-    packageOverrides = (self: super: { django = super.django_5_2; });
+    packageOverrides = (self: super: { django = super.django_5; });
   };
 in
 
 python.pkgs.buildPythonApplication rec {
   pname = "lasuite-meet";
-  version = "1.0.1";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "meet";
     tag = "v${version}";
-    hash = "sha256-QtaP0b8Aj//tCS6uo4NJcK+IjyrSBTOZ+/ijG3T3ePE=";
+    hash = "sha256-VUOTGRI3U9G4BfZMBk81MifcpALGA6OY3g++rCFZC5U=";
   };
 
   sourceRoot = "source/src/backend";

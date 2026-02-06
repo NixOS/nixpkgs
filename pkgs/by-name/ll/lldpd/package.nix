@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   version = "1.0.20";
 
   src = fetchurl {
-    url = "https://media.luffy.cx/files/lldpd/${pname}-${version}.tar.gz";
+    url = "https://media.luffy.cx/files/lldpd/lldpd-${version}.tar.gz";
     hash = "sha256-YbjLItSHnmj3glovuOHpKrtKukdzl3zwJYvDLtn1VFA=";
   };
 

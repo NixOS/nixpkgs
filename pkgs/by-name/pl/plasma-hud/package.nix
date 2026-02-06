@@ -10,7 +10,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "plasma-hud";
   version = "22.01.0";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Zren";

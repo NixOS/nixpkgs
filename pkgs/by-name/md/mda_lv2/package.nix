@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   version = "1.2.6";
 
   src = fetchurl {
-    url = "https://download.drobilla.net/${pname}-${version}.tar.bz2";
+    url = "https://download.drobilla.net/mda-lv2-${version}.tar.bz2";
     sha256 = "sha256-zWYRcCSuBJzzrKg/npBKcCdyJOI6lp9yqcXQEKSYV9s=";
   };
 

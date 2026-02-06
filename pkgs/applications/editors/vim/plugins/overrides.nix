@@ -48,7 +48,7 @@
   xdg-utils,
   xdotool,
   xkb-switch,
-  xorg,
+  xwininfo,
   xxd,
   ycmd,
   zathura,
@@ -161,6 +161,13 @@ assertNoAdditions {
       vim-rhubarb
       plenary-nvim
     ];
+    nvimSkipModules = [
+      # Address in use error from fzf-lua on darwin
+      # https://github.com/NixOS/nixpkgs/issues/431458
+      "advanced_git_search.fzf.previewers.init"
+      "advanced_git_search.fzf.pickers.init"
+      "advanced_git_search.fzf.pickers.utils"
+    ];
   };
 
   aerial-nvim = super.aerial-nvim.overrideAttrs {
@@ -169,6 +176,11 @@ assertNoAdditions {
       lualine-nvim
       telescope-nvim
       fzf-lua
+    ];
+    nvimSkipModules = [
+      # Address in use error from fzf-lua on darwin
+      # https://github.com/NixOS/nixpkgs/issues/431458
+      "aerial.fzf-lua"
     ];
   };
 
@@ -371,6 +383,8 @@ assertNoAdditions {
   };
 
   chadtree = super.chadtree.overrideAttrs {
+    # > E5108: Error executing lua ...implugin-chadtree-0-unstable-2026-01-18/lua/chadtree.lua:162: Vim:Failed to start server: address already in use
+    doCheck = stdenv.hostPlatform.isLinux;
     buildInputs = [
       python3
     ];
@@ -796,7 +810,7 @@ assertNoAdditions {
     };
 
   codewindow-nvim = super.codewindow-nvim.overrideAttrs {
-    dependencies = [ self.nvim-treesitter ];
+    dependencies = [ self.nvim-treesitter-legacy ];
   };
 
   colorful-menu-nvim = super.colorful-menu-nvim.overrideAttrs {
@@ -1199,6 +1213,14 @@ assertNoAdditions {
     '';
   };
 
+  evergarden-nvim = super.evergarden-nvim.overrideAttrs {
+    # optional modules
+    nvimSkipModules = [
+      "evergarden.extras"
+      "minidoc"
+    ];
+  };
+
   executor-nvim = super.executor-nvim.overrideAttrs {
     dependencies = [ self.nui-nvim ];
   };
@@ -1365,10 +1387,13 @@ assertNoAdditions {
   };
 
   go-nvim = super.go-nvim.overrideAttrs {
+    dependencies = with self; [
+      nvim-treesitter
+      guihua-lua
+    ];
     checkInputs = with self; [
       luasnip
       null-ls-nvim
-      nvim-treesitter
     ];
     nvimSkipModules = [
       "init"
@@ -1397,6 +1422,25 @@ assertNoAdditions {
 
   guard-collection = super.guard-collection.overrideAttrs {
     dependencies = [ self.guard-nvim ];
+  };
+
+  guihua-lua = super.guihua-lua.overrideAttrs {
+    dependencies = [ self.nvim-treesitter ];
+
+    buildPhase = ''
+      runHook preBuild
+
+      pushd lua/fzy
+      make
+      popd
+
+      runHook postBuild
+    '';
+
+    nvimSkipModules = [
+      # lua module '.init' not found
+      "fzy.fzy-lua-native"
+    ];
   };
 
   gx-nvim = super.gx-nvim.overrideAttrs {
@@ -1473,6 +1517,11 @@ assertNoAdditions {
       fzf-lua
       telescope-nvim
     ];
+    nvimSkipModules = [
+      # Address in use error from fzf-lua on darwin
+      # https://github.com/NixOS/nixpkgs/issues/431458
+      "himalaya.folder.pickers.fzflua"
+    ];
   };
 
   hover-nvim = super.hover-nvim.overrideAttrs {
@@ -1543,7 +1592,7 @@ assertNoAdditions {
   };
 
   iswap-nvim = super.iswap-nvim.overrideAttrs {
-    dependencies = [ self.nvim-treesitter ];
+    dependencies = [ self.nvim-treesitter-legacy ];
   };
 
   jdd-nvim = super.jdd-nvim.overrideAttrs {
@@ -1591,7 +1640,6 @@ assertNoAdditions {
       dependencies = [ kulala-http-grammar ];
       buildInputs = [ curl ];
 
-      patches = [ ./patches/kulala-nvim/do-not-install-grammar.patch ];
       postPatch = ''
         substituteInPlace lua/kulala/config/defaults.lua \
           --replace-fail 'curl_path = "curl"' 'curl_path = "${lib.getExe curl}"'
@@ -1684,7 +1732,7 @@ assertNoAdditions {
   leap-ast-nvim = super.leap-ast-nvim.overrideAttrs {
     dependencies = with self; [
       leap-nvim
-      nvim-treesitter
+      nvim-treesitter-legacy
     ];
   };
 
@@ -1927,7 +1975,7 @@ assertNoAdditions {
     };
 
   markid = super.markid.overrideAttrs {
-    dependencies = [ self.nvim-treesitter ];
+    dependencies = [ self.nvim-treesitter-legacy ];
   };
 
   mason-lspconfig-nvim = super.mason-lspconfig-nvim.overrideAttrs {
@@ -2421,7 +2469,7 @@ assertNoAdditions {
       nvim-cmp
       nvim-lspconfig
       telescope-nvim
-      nvim-treesitter
+      nvim-treesitter-legacy
       nvchad-ui
     ];
     nvimSkipModules = [
@@ -2464,7 +2512,7 @@ assertNoAdditions {
 
   nvim-biscuits = super.nvim-biscuits.overrideAttrs {
     dependencies = with self; [
-      nvim-treesitter
+      nvim-treesitter-legacy
       plenary-nvim
     ];
   };
@@ -2526,7 +2574,7 @@ assertNoAdditions {
   };
 
   nvim-FeMaco-lua = super.nvim-FeMaco-lua.overrideAttrs {
-    dependencies = [ self.nvim-treesitter ];
+    dependencies = [ self.nvim-treesitter-legacy ];
   };
 
   nvim-fzf-commands = super.nvim-fzf-commands.overrideAttrs {
@@ -2666,6 +2714,7 @@ assertNoAdditions {
     dependencies = with self; [
       none-ls-nvim
       nvim-treesitter-parsers.nu
+      plenary-nvim
     ];
   };
 
@@ -2677,6 +2726,8 @@ assertNoAdditions {
     checkInputs = [
       # Optional telescope picker
       self.telescope-nvim
+      # Optional fzf-lua integration
+      self.fzf-lua
     ];
   };
 
@@ -2699,7 +2750,7 @@ assertNoAdditions {
     # Optional toggleterm integration
     checkInputs = [ self.toggleterm-nvim ];
     dependencies = with self; [
-      nvim-treesitter
+      nvim-treesitter-legacy
       nvim-treesitter-parsers.c_sharp
       nvim-treesitter-parsers.go
       nvim-treesitter-parsers.haskell
@@ -2731,6 +2782,28 @@ assertNoAdditions {
       # Meta can't be required
       "nvim-tree._meta.api"
       "nvim-tree._meta.api_decorator"
+      "nvim-tree._meta.config.filters"
+      "nvim-tree._meta.config.actions"
+      "nvim-tree._meta.config.git"
+      "nvim-tree._meta.config.renderer"
+      "nvim-tree._meta.config.experimental"
+      "nvim-tree._meta.config.tab"
+      "nvim-tree._meta.config.modified"
+      "nvim-tree._meta.config.help"
+      "nvim-tree._meta.config.notify"
+      "nvim-tree._meta.config.sort"
+      "nvim-tree._meta.config.view"
+      "nvim-tree._meta.config.update_focused_file"
+      "nvim-tree._meta.config.diagnostics"
+      "nvim-tree._meta.config.log"
+      "nvim-tree._meta.config.system_open"
+      "nvim-tree._meta.config.ui"
+      "nvim-tree._meta.config.hijack_directories"
+      "nvim-tree._meta.config.trash"
+      "nvim-tree._meta.config.filesystem_watchers"
+      "nvim-tree._meta.config.live_filter"
+      "nvim-tree._meta.config.bookmarks"
+      "nvim-tree._meta.config"
     ];
   };
 
@@ -2738,37 +2811,42 @@ assertNoAdditions {
     callPackage ./nvim-treesitter/overrides.nix { } self super
   );
 
+  # TODO: raise warning at 26.04; drop at 26.11
+  nvim-treesitter-legacy = super.nvim-treesitter-legacy.overrideAttrs (
+    callPackage ./nvim-treesitter-legacy/overrides.nix { } self super
+  );
+
   nvim-treesitter-context = super.nvim-treesitter-context.overrideAttrs {
     # Meant for CI installing parsers
     nvimSkipModules = [ "install_parsers" ];
   };
 
-  nvim-treesitter-endwise = super.nvim-treesitter-endwise.overrideAttrs {
-    dependencies = [ self.nvim-treesitter ];
-  };
-
   nvim-treesitter-pairs = super.nvim-treesitter-pairs.overrideAttrs {
-    dependencies = [ self.nvim-treesitter ];
+    dependencies = [ self.nvim-treesitter-legacy ];
   };
 
   nvim-treesitter-pyfold = super.nvim-treesitter-pyfold.overrideAttrs {
-    dependencies = [ self.nvim-treesitter ];
+    dependencies = [ self.nvim-treesitter-legacy ];
   };
 
   nvim-treesitter-refactor = super.nvim-treesitter-refactor.overrideAttrs {
-    dependencies = [ self.nvim-treesitter ];
+    dependencies = [ self.nvim-treesitter-legacy ];
   };
 
   nvim-treesitter-sexp = super.nvim-treesitter-sexp.overrideAttrs {
-    dependencies = [ self.nvim-treesitter ];
+    dependencies = [ self.nvim-treesitter-legacy ];
   };
 
   nvim-treesitter-textobjects = super.nvim-treesitter-textobjects.overrideAttrs {
     dependencies = [ self.nvim-treesitter ];
   };
 
+  nvim-treesitter-textobjects-legacy = super.nvim-treesitter-textobjects-legacy.overrideAttrs {
+    dependencies = [ self.nvim-treesitter-legacy ];
+  };
+
   nvim-treesitter-textsubjects = super.nvim-treesitter-textsubjects.overrideAttrs {
-    dependencies = [ self.nvim-treesitter ];
+    dependencies = [ self.nvim-treesitter-legacy ];
   };
 
   nvim-ufo = super.nvim-ufo.overrideAttrs {
@@ -2835,6 +2913,9 @@ assertNoAdditions {
     nvimSkipModules = [
       # Issue reproduction file
       "minimal"
+      # Address in use error from fzf-lua on darwin
+      # https://github.com/NixOS/nixpkgs/issues/431458
+      "obsidian.picker._fzf"
     ];
   };
 
@@ -2927,6 +3008,17 @@ assertNoAdditions {
     dependencies = [ self.orgmode ];
   };
 
+  org-notebook-nvim = super.org-notebook-nvim.overrideAttrs {
+    dependencies = [
+      self.orgmode
+      self.jupyter-api-nvim
+    ];
+    nvimSkipModules = [
+      # Requires mini.test, deno, and some deno dependencies, look into it once https://github.com/NixOS/nixpkgs/pull/453904 is merged
+      "org-notebook.test"
+    ];
+  };
+
   otter-nvim = super.otter-nvim.overrideAttrs {
     dependencies = [ self.nvim-lspconfig ];
     nvimSkipModules = [
@@ -2948,6 +3040,7 @@ assertNoAdditions {
       # Optional integration
       neotest
       toggleterm-nvim
+      nodejs
       nvim-dap
     ];
     checkPhase = ''
@@ -3001,6 +3094,17 @@ assertNoAdditions {
       })
     ];
   });
+
+  perfanno-nvim = super.perfanno-nvim.overrideAttrs {
+    checkInputs = with self; [
+      fzf-lua
+    ];
+    nvimSkipModules = [
+      # Address in use error from fzf-lua on darwin
+      # https://github.com/NixOS/nixpkgs/issues/431458
+      "perfanno.fzf_lua"
+    ];
+  };
 
   persisted-nvim = super.persisted-nvim.overrideAttrs {
     nvimSkipModules = [
@@ -3316,7 +3420,7 @@ assertNoAdditions {
     postPatch = ''
       substituteInPlace lua/stylish/common/mouse_hover_handler.lua --replace-fail xdotool ${xdotool}/bin/xdotool
       substituteInPlace lua/stylish/components/menu.lua --replace-fail xdotool ${xdotool}/bin/xdotool
-      substituteInPlace lua/stylish/components/menu.lua --replace-fail xwininfo ${xorg.xwininfo}/bin/xwininfo
+      substituteInPlace lua/stylish/components/menu.lua --replace-fail xwininfo ${xwininfo}/bin/xwininfo
     '';
   };
 
@@ -3487,6 +3591,13 @@ assertNoAdditions {
     dependencies = [ self.telescope-nvim ];
   };
 
+  telescope-hierarchy-nvim = super.telescope-hierarchy-nvim.overrideAttrs {
+    dependencies = with self; [
+      telescope-nvim
+      plenary-nvim
+    ];
+  };
+
   telescope-live-grep-args-nvim = super.telescope-live-grep-args-nvim.overrideAttrs {
     dependencies = with self; [
       plenary-nvim
@@ -3645,6 +3756,7 @@ assertNoAdditions {
     ];
     dependencies = with self; [
       nvim-lspconfig
+      plenary-nvim
     ];
   };
 
@@ -4242,6 +4354,11 @@ assertNoAdditions {
       mini-nvim
       snacks-nvim
       telescope-nvim
+    ];
+    nvimSkipModules = [
+      # Address in use error from fzf-lua on darwin
+      # https://github.com/NixOS/nixpkgs/issues/431458
+      "zk.pickers.fzf_lua"
     ];
   };
 

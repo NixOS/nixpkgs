@@ -20,7 +20,7 @@
   kwindowsystem,
   kdelibs4support,
   kiconthemes,
-  libpthreadstubs,
+  libpthread-stubs,
   pcre,
   libXdmcp,
   libX11,
@@ -76,7 +76,7 @@ mkDerivation rec {
     kwindowsystem
     kdelibs4support
     frameworkintegration
-    libpthreadstubs
+    libpthread-stubs
     pcre
     libXdmcp
     libX11

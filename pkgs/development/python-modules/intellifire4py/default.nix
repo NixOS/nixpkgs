@@ -10,7 +10,6 @@
   pytest-asyncio,
   pytest-httpx,
   pytestCheckHook,
-  pythonOlder,
   rich,
 }:
 
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "intellifire4py";
   version = "4.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jeeftor";

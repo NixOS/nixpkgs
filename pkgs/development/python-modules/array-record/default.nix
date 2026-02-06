@@ -21,7 +21,8 @@ buildPythonPackage rec {
       pyShortVersion = "cp${builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion}";
     in
     fetchPypi {
-      inherit version format;
+      inherit version;
+      format = "wheel";
       pname = "array_record";
       dist = pyShortVersion;
       python = pyShortVersion;

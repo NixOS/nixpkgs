@@ -196,21 +196,21 @@ let
       pkgs.udev
       pkgs.util-linux
       pkgs.wayland
-      pkgs.xorg.libX11
-      pkgs.xorg.libXcomposite
-      pkgs.xorg.libXdamage
-      pkgs.xorg.libXext
-      pkgs.xorg.libXfixes
-      pkgs.xorg.libXrandr
-      pkgs.xorg.libXrender
-      pkgs.xorg.libXtst
-      pkgs.xorg.libxcb
-      pkgs.xorg.libxshmfence
-      pkgs.xorg.xcbutilcursor
-      pkgs.xorg.xcbutilimage
-      pkgs.xorg.xcbutilkeysyms
-      pkgs.xorg.xcbutilrenderutil
-      pkgs.xorg.xcbutilwm
+      pkgs.libx11
+      pkgs.libxcomposite
+      pkgs.libxdamage
+      pkgs.libxext
+      pkgs.libxfixes
+      pkgs.libxrandr
+      pkgs.libxrender
+      pkgs.libxtst
+      pkgs.libxcb
+      pkgs.libxshmfence
+      pkgs.libxcb-cursor
+      pkgs.libxcb-image
+      pkgs.libxcb-keysyms
+      pkgs.libxcb-render-util
+      pkgs.libxcb-wm
       pkgs.zlib
     ]
     ++ lib.optionals pulseaudioSupport [

@@ -2,7 +2,8 @@
   lib,
   fetchFromGitLab,
   wrapGAppsHook3,
-  xorg,
+  libxtst,
+  libx11,
   gobject-introspection,
   gtk3,
   libappindicator-gtk3,
@@ -60,8 +61,8 @@ python3.pkgs.buildPythonApplication rec {
   # Fix CDLL python calls for non absolute paths of xorg libraries
   postPatch = ''
     substituteInPlace Screenkey/xlib.py \
-      --replace-fail libX11.so.6 ${lib.getLib xorg.libX11}/lib/libX11.so.6 \
-      --replace-fail libXtst.so.6 ${lib.getLib xorg.libXtst}/lib/libXtst.so.6
+      --replace-fail libX11.so.6 ${lib.getLib libx11}/lib/libX11.so.6 \
+      --replace-fail libXtst.so.6 ${lib.getLib libxtst}/lib/libXtst.so.6
   '';
 
   meta = {

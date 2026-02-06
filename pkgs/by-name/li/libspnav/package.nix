@@ -5,14 +5,14 @@
   libX11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libspnav";
   version = "1.2";
 
   src = fetchFromGitHub {
     owner = "FreeSpacenav";
     repo = "libspnav";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-4ESzH2pMTGoDI/AAX8Iz/MVhxQD8q5cg9I91ryUi5Ys=";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ sohalt ];
   };
-}
+})

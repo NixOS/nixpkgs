@@ -235,18 +235,19 @@ in
         }
         {
           assertion =
-            !cfg.enable
-            || !cfg.gitHttpBackend.enable
-            || !cfg.gitHttpBackend.checkExportOkFiles
-            || cfg.settings.strict-export == "git-daemon-export-ok";
+            cfg.enable
+            -> cfg.gitHttpBackend.enable
+            -> cfg.gitHttpBackend.checkExportOkFiles
+            -> (cfg.settings ? strict-export && cfg.settings.strict-export == "git-daemon-export-ok");
           message = "Misconfigured services.cgit.${vhost}: When gitHttpBackend.checkExportOkFiles is true then settings.strict-export must be \"git-daemon-export-ok\".";
         }
         {
           assertion =
-            !cfg.enable
-            || !cfg.gitHttpBackend.enable
-            || cfg.settings.strict-export == null
-            || cfg.gitHttpBackend.checkExportOkFiles;
+            cfg.enable
+            -> cfg.gitHttpBackend.enable
+            -> !cfg.gitHttpBackend.checkExportOkFiles
+            -> cfg.settings ? strict-export
+            -> cfg.settings.strict-export == null;
           message = "Misconfigured services.cgit.${vhost}: settings.strict-export is set but the gitHttpBackend is enabled and checkExportOkFiles is false.";
         }
       ]) cfgs

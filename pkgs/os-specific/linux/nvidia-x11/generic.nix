@@ -106,11 +106,11 @@ let
       with pkgs;
       [
         libdrm
-        xorg.libXext
-        xorg.libX11
-        xorg.libXv
-        xorg.libXrandr
-        xorg.libxcb
+        libxext
+        libx11
+        libxv
+        libxrandr
+        libxcb
         zlib
         stdenv.cc.cc
         wayland

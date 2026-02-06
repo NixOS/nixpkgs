@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   hypothesis,
-  pythonOlder,
   pytestCheckHook,
   setuptools,
 }:
@@ -11,8 +10,7 @@
 buildPythonPackage rec {
   pname = "chardet";
   version = "5.2.0";
-  format = "pyproject";
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

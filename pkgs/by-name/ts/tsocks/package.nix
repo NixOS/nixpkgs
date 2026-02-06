@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "1.8beta5";
 
   src = fetchurl {
-    url = "mirror://sourceforge/tsocks/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/tsocks/tsocks-${version}.tar.gz";
     sha256 = "0ixkymiph771dcdzvssi9dr2pk1bzaw9zv85riv3xl40mzspx7c4";
   };
 

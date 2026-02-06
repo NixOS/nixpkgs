@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "amoco";
   version = "2.9.8";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bdcht";

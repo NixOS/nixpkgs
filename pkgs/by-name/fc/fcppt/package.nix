@@ -6,14 +6,14 @@
   boost,
   catch2_3,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fcppt";
   version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "freundlich";
     repo = "fcppt";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-8dBG6LdSngsutBboqb3WVVg3ylayoUYDOJV6p/ZFkoE=";
   };
 
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
       "x86_64-windows"
     ];
   };
-}
+})

@@ -8,7 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "legit";
   version = "1.2.0.post0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

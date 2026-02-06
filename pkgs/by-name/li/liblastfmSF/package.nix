@@ -7,7 +7,7 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "liblastfm-SF";
   version = "0.5";
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://sourceforge/liblastfm/libclastfm-${version}.tar.gz";
+    url = "mirror://sourceforge/liblastfm/libclastfm-${finalAttrs.version}.tar.gz";
     sha256 = "0hpfflvfx6r4vvsbvdc564gkby8kr07p8ma7hgpxiy2pnlbpian9";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     description = "Unofficial C lastfm library";
     license = lib.licenses.gpl3;
   };
-}
+})

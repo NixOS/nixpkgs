@@ -1,14 +1,13 @@
 {
   lib,
   buildGoModule,
-  fetchFromGitea,
+  fetchFromCodeberg,
 }:
 buildGoModule rec {
   pname = "woodpecker-pipeline-transform";
   version = "0.2.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "lafriks";
     repo = "woodpecker-pipeline-transform";
     rev = "v${version}";

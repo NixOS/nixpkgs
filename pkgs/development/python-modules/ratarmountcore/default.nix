@@ -8,7 +8,6 @@
   libarchive-c,
   pytestCheckHook,
   python-xz,
-  pythonOlder,
   writableTmpDirAsHomeHook,
   rapidgzip,
   rarfile,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "ratarmountcore";
   version = "0.10.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "mxmlnkn";

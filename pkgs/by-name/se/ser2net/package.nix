@@ -9,14 +9,14 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ser2net";
   version = "4.6.6";
 
   src = fetchFromGitHub {
     owner = "cminyard";
     repo = "ser2net";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-TL6btl8Q8hpIBfzHdJ+TLdF+r9zQRLytzVx810R7yYI=";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux;
     mainProgram = "ser2net";
   };
-}
+})

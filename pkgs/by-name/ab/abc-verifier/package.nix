@@ -8,17 +8,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "abc-verifier";
-  version = "0.55";
+  version = "0.61";
 
   src = fetchFromGitHub {
     owner = "yosyshq";
     repo = "abc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Ib6bZSPQmpI1UOsUG733TH6W6v+UnLyagdjUc8MreKw=";
+    hash = "sha256-j/JmEJa29mT/XQmVL/adVbj4S+AAgpga1jbEinCN16w=";
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ readline ];
+
+  cmakeFlags = [
+    # This prevents CMake from trying to download googletest during the build
+    (lib.cmakeBool "ABC_SKIP_TESTS" true)
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -30,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.rev = finalAttrs.src.rev;
 
   meta = {
-    description = "Tool for squential logic synthesis and formal verification";
+    description = "Tool for sequential logic synthesis and formal verification";
     homepage = "https://people.eecs.berkeley.edu/~alanmi/abc";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [

@@ -40,7 +40,7 @@
   libXinerama,
   libjpeg,
   libXt,
-  libSM,
+  libsm,
   freetype,
   fontconfig,
 
@@ -108,7 +108,7 @@ let
       libXft
       libXinerama
       libjpeg
-      libSM
+      libsm
       freetype
       fontconfig
     ])

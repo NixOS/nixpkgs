@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-AcH5V5hapVQgGrwWAEN6Xpj00RRNqZiCSn+/onpmd50=";
 
-  RUSTFLAGS = "--cfg tokio_unstable";
+  env.RUSTFLAGS = "--cfg tokio_unstable";
 
   checkFlags = [
     # these tests set setuid permissions on a test file (3oXXX) which doesn't work in a sandbox

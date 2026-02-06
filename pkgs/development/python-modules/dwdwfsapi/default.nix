@@ -5,15 +5,12 @@
   hatchling,
   requests,
   ciso8601,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dwdwfsapi";
   version = "1.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

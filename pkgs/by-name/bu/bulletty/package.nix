@@ -10,13 +10,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bulletty";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "CrociDB";
     repo = "bulletty";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HX5J00Y7nkBwLIOEoc9jRtv9xObeWrWpHhYBQUOUVKA=";
+    hash = "sha256-J4ljTQuEWwGvxDbwBaP7z0TPqpLKQCmd4YSaIpcVYvg=";
   };
 
   patches = [
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./remove-rustfmt-exec.patch
   ];
 
-  cargoHash = "sha256-WIEbZIWdIGWiwi6918MVFu++aZ2oWJTF4AUSTpKRZvQ=";
+  cargoHash = "sha256-yL7qYE60TBtEoj+0/ykhbEv6XBfk9JA0y8JLvRzaAHI=";
 
   nativeBuildInputs = [ pkg-config ];
 

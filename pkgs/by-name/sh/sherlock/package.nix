@@ -8,7 +8,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "sherlock";
   version = "0.16.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sherlock-project";

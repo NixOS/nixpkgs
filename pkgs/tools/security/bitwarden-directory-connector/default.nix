@@ -19,14 +19,14 @@ let
     }:
     buildNpmPackage rec {
       pname = name;
-      version = "2025.12.0";
+      version = "2026.1.0";
       nodejs = nodejs_22;
 
       src = fetchFromGitHub {
         owner = "bitwarden";
         repo = "directory-connector";
         rev = "v${version}";
-        hash = "sha256-kf4ky/dsZJJiShVJ2uYp1DsH5BP/RAeEnbjUQxjoxkk=";
+        hash = "sha256-UC4m+jUKYD6NYQ62l18+UCZYONFQyUgyqbonNj4iGjg=";
       };
 
       postPatch = ''
@@ -38,7 +38,7 @@ let
           --replace-fail "AppImage" "dir"
       '';
 
-      npmDepsHash = "sha256-j90y6R3MCcUmEuoI3clNz5WqVyTNH5x6xyg3Je+krL0=";
+      npmDepsHash = "sha256-4tqcrJuMSxqqVmB8K32vts6LbAWFCPMw7+hvmblV/m4=";
 
       env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 

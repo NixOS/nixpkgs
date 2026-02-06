@@ -7,17 +7,17 @@
   pypblib,
   pytestCheckHook,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-sat";
-  version = "1.8.dev25";
+  version = "1.8.dev28";
   pyproject = true;
 
   build-system = [ setuptools ];
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "python_sat";
-    hash = "sha256-3eVCBXg95RyzMA8O8EOss1FKh+1EofnkKYJcVNuQAzY=";
+    hash = "sha256-eFBUismC7x2+ng+8rbXxZTis/xNKSx2I/lVkCbx4dgo=";
   };
 
   preBuild = ''
@@ -57,4 +57,4 @@ buildPythonPackage rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})

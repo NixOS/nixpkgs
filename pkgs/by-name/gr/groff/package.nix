@@ -30,9 +30,15 @@ stdenv.mkDerivation rec {
   version = "1.23.0";
 
   src = fetchurl {
-    url = "mirror://gnu/groff/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/groff/groff-${version}.tar.gz";
     hash = "sha256-a5dX9ZK3UYtJAutq9+VFcL3Mujeocf3bLTCuOGNRHBM=";
   };
+
+  patches = [
+    # Backport e49b934 "Fix underspecified `getenv()` prototype." for non-glibc systems with C23
+    # This can be dropped in the next release, when the local getopt implementation in libgroff is removed
+    ./fix-underspecified-getenv-prototype.patch
+  ];
 
   outputs = [
     "out"

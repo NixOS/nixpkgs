@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "2.2.7";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libdc1394/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/libdc1394/libdc1394-${version}.tar.gz";
     sha256 = "sha256-U3zreN087ycaGD9KF2GR0c7PhfAlUg5r03WLDhnmYJ8=";
   };
 

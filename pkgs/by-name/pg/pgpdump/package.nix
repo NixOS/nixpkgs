@@ -8,14 +8,14 @@
   bzip2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pgpdump";
   version = "0.36";
 
   src = fetchFromGitHub {
     owner = "kazu-yamamoto";
     repo = "pgpdump";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-JKedgHCTDnvLyLR3nGl4XFAaxXDU1TgHrxPMlRFwtBo=";
   };
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

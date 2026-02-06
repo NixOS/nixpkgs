@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "1.19";
 
   src = fetchurl {
-    url = "mirror://sourceforge/lcms/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/lcms/lcms-${version}.tar.gz";
     sha256 = "1abkf8iphwyfs3z305z3qczm3z1i9idc1lz4gvfg92jnkz5k5bl0";
   };
 

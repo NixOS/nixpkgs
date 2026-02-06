@@ -13,7 +13,7 @@
   libXext,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gorilla-bin";
   version = "1.5.3.7";
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   unpackCmd = ''
     mkdir gorilla;
-    cp $curSrc gorilla/gorilla-${version};
+    cp $curSrc gorilla/gorilla-${finalAttrs.version};
   '';
 
   installPhase =
@@ -49,10 +49,10 @@ stdenv.mkDerivation rec {
     ''
       mkdir -p $out/opt/password-gorilla
       mkdir -p $out/bin
-      cp gorilla-${version} $out/opt/password-gorilla
-      chmod ugo+x $out/opt/password-gorilla/gorilla-${version}
-      patchelf --set-interpreter "${interpreter}" "$out/opt/password-gorilla/gorilla-${version}"
-      makeWrapper "$out/opt/password-gorilla/gorilla-${version}" "$out/bin/gorilla" \
+      cp gorilla-${finalAttrs.version} $out/opt/password-gorilla
+      chmod ugo+x $out/opt/password-gorilla/gorilla-${finalAttrs.version}
+      patchelf --set-interpreter "${interpreter}" "$out/opt/password-gorilla/gorilla-${finalAttrs.version}"
+      makeWrapper "$out/opt/password-gorilla/gorilla-${finalAttrs.version}" "$out/bin/gorilla" \
         --prefix LD_LIBRARY_PATH : "${libPath}"
     '';
 
@@ -65,4 +65,4 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.gpl2Plus;
   };
-}
+})

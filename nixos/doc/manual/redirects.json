@@ -62,11 +62,31 @@
   "module-boot-plymouth-tpm2-totp-quick-start-enable": [
     "index.html#module-boot-plymouth-tpm2-totp-quick-start-enable"
   ],
-  "module-services-tandoor-recipes-migrating-media-option-1": [
+  "module-services-keycloak-unix-socket": [
+    "index.html#module-services-keycloak-unix-socket"
+  ],
+  "module-services-tandoor-recipes-migrating-media-option-move": [
+    "index.html#module-services-tandoor-recipes-migrating-media-option-move",
     "index.html#module-services-tandoor-recipes-migrating-media-option-1"
   ],
-  "module-services-tandoor-recipes-migrating-media-option-2": [
+  "module-services-tandoor-recipes-migrating-media-option-postgresql": [
+    "index.html#module-services-tandoor-recipes-migrating-media-option-postgresql",
     "index.html#module-services-tandoor-recipes-migrating-media-option-2"
+  ],
+  "module-services-tandoor-recipes-migrating-media-option-disallow-access": [
+    "index.html#module-services-tandoor-recipes-migrating-media-option-disallow-access"
+  ],
+  "module-virtualisation-xen": [
+    "index.html#module-virtualisation-xen"
+  ],
+  "module-virtualisation-xen-installation-dom0": [
+    "index.html#module-virtualisation-xen-installation-dom0"
+  ],
+  "module-virtualisation-xen-installation-domU": [
+    "index.html#module-virtualisation-xen-installation-domU"
+  ],
+  "module-virtualisation-xen-introduction": [
+    "index.html#module-virtualisation-xen-introduction"
   ],
   "sec-override-nixos-test": [
     "index.html#sec-override-nixos-test"
@@ -100,6 +120,9 @@
   ],
   "modular-services": [
     "index.html#modular-services"
+  ],
+  "module-services-amule": [
+    "index.html#module-services-amule"
   ],
   "module-services-anubis": [
     "index.html#module-services-anubis"

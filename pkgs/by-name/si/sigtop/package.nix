@@ -7,7 +7,7 @@
 }:
 
 buildGoModule rec {
-  name = "sigtop";
+  pname = "sigtop";
   version = "0.22.0";
 
   src = fetchFromGitHub {

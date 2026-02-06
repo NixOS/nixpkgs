@@ -13,9 +13,9 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "subarulink";
-  version = "0.7.17";
+  version = "0.7.18";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -23,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "G-Two";
     repo = "subarulink";
-    tag = "v${version}";
-    hash = "sha256-vmMvKDZV8jChLehgdSGWQdxWVylnKU2BWXSiG9zI/to=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GzTIgxFBmVjdM+D5IxHAoqDW29ZJEywX4+B217ZdITM=";
   };
 
   build-system = [ setuptools ];
@@ -49,9 +49,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python module for interacting with STARLINK-enabled vehicle";
     homepage = "https://github.com/G-Two/subarulink";
-    changelog = "https://github.com/G-Two/subarulink/releases/tag/${src.tag}";
+    changelog = "https://github.com/G-Two/subarulink/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "subarulink";
   };
-}
+})

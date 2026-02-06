@@ -40,7 +40,7 @@ let
       icu73
     ];
 
-    LD_LIBRARY_PATH = lib.makeLibraryPath [ icu73 ];
+    env.LD_LIBRARY_PATH = lib.makeLibraryPath [ icu73 ];
 
     configureFlags = [
       "--with-system-editline"

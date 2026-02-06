@@ -11,21 +11,23 @@
   pytestCheckHook,
   python-dateutil,
   python-gnupg,
-  pythonOlder,
   pytz,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "limnoria";
-  version = "2025.11.2";
+  version = "2026.1.16";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-cvlp1cfsdN8lv8hFvaHV6vtWEJ0CJUBmN1yCgxrhMi8=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-ZkEXZMjJsEgSwX2a8TwaQ/vtvskSOFwNBZg/Ru5q/bc=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "version=version" 'version="${finalAttrs.version}"'
+  '';
 
   build-system = [ setuptools ];
 
@@ -37,15 +39,9 @@ buildPythonPackage rec {
     pysocks
     python-dateutil
     python-gnupg
-  ]
-  ++ lib.optionals (pythonOlder "3.9") [ pytz ];
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "version=version" 'version="${version}"'
-  '';
 
   checkPhase = ''
     runHook preCheck
@@ -62,7 +58,8 @@ buildPythonPackage rec {
   meta = {
     description = "Modified version of Supybot, an IRC bot";
     homepage = "https://github.com/ProgVal/Limnoria";
+    changelog = "https://github.com/progval/Limnoria/releases/tag/master-${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

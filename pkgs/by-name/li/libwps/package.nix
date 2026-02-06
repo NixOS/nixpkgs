@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "0.4.14";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libwps/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/libwps/libwps-${version}.tar.bz2";
     sha256 = "sha256-xVEdlAngO446F50EZcHMKW7aBvyDcTVu9Egs2oaIadE=";
   };
 

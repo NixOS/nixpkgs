@@ -65,6 +65,8 @@ let
     "syslog.socket"
     "systemd-ask-password-console.path"
     "systemd-ask-password-console.service"
+    "systemd-factory-reset-complete.service"
+    "factory-reset-now.target"
     "systemd-fsck@.service"
     "systemd-halt.service"
     "systemd-hibernate-resume.service"
@@ -555,6 +557,7 @@ in
         "${cfg.package}/lib/systemd/systemd-sysctl"
         "${cfg.package}/lib/systemd/systemd-bsod"
         "${cfg.package}/lib/systemd/systemd-sysroot-fstab-check"
+        "${cfg.package}/lib/systemd/systemd-factory-reset"
 
         # generators
         "${cfg.package}/lib/systemd/system-generators/systemd-debug-generator"
@@ -562,6 +565,7 @@ in
         "${cfg.package}/lib/systemd/system-generators/systemd-gpt-auto-generator"
         "${cfg.package}/lib/systemd/system-generators/systemd-hibernate-resume-generator"
         "${cfg.package}/lib/systemd/system-generators/systemd-run-generator"
+        "${cfg.package}/lib/systemd/system-generators/systemd-factory-reset-generator"
 
         # utilities needed by systemd
         "${cfg.package.util-linux}/bin/mount"
@@ -583,7 +587,7 @@ in
         "${pkgs.bashNonInteractive}/bin"
       ]
       ++ jobScripts
-      ++ map (c: builtins.removeAttrs c [ "text" ]) (builtins.attrValues cfg.contents)
+      ++ map (c: removeAttrs c [ "text" ]) (builtins.attrValues cfg.contents)
       ++ lib.optional (pkgs.stdenv.hostPlatform.libc == "glibc") "${pkgs.glibc}/lib/libnss_files.so.2";
 
       targets.initrd.aliases = [ "default.target" ];
@@ -729,17 +733,6 @@ in
               cfg.package.util-linux
               config.system.nixos-init.package
             ];
-            environment = {
-              FIRMWARE = "${config.hardware.firmware}/lib/firmware";
-              MODPROBE_BINARY = "${pkgs.kmod}/bin/modprobe";
-              NIX_STORE_MOUNT_OPTS = lib.concatStringsSep "," config.boot.nixStoreMountOpts;
-            }
-            // lib.optionalAttrs (config.environment.usrbinenv != null) {
-              ENV_BINARY = config.environment.usrbinenv;
-            }
-            // lib.optionalAttrs (config.environment.binsh != null) {
-              SH_BINARY = config.environment.binsh;
-            };
             serviceConfig = {
               ExecStart = [
                 ""

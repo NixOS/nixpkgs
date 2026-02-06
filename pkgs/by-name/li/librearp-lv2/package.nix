@@ -6,9 +6,9 @@
   pkg-config,
   cairo,
   libxkbcommon,
-  xcbutilcursor,
-  xcbutilkeysyms,
-  xcbutil,
+  libxcb-cursor,
+  libxcb-keysyms,
+  libxcb-util,
   libXrandr,
   libXinerama,
   libXcursor,
@@ -38,9 +38,9 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     cairo
     libxkbcommon
-    xcbutilcursor
-    xcbutilkeysyms
-    xcbutil
+    libxcb-cursor
+    libxcb-keysyms
+    libxcb-util
     libXrandr
     libXinerama
     libXcursor

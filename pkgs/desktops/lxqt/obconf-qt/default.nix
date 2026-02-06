@@ -3,9 +3,9 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  libSM,
+  libsm,
   libXdmcp,
-  libpthreadstubs,
+  libpthread-stubs,
   lxqt-build-tools,
   openbox,
   pcre,
@@ -37,9 +37,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libSM
+    libsm
     libXdmcp
-    libpthreadstubs
+    libpthread-stubs
     openbox
     pcre
     qtbase

@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "lavacli";
-  version = "2.5";
+  version = "2.7";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "lava";
     repo = "lavacli";
     tag = "v${version}";
-    hash = "sha256-VEUjqelhqUD6NTiWTtl9gAYzJDQzgP7NpxDyloYEmGU=";
+    hash = "sha256-UiAqZJU7+x8f53myMY0gUwQ5PYNzKmO6kYWEqs1QvG4=";
   };
 
   build-system = with python3.pkgs; [
@@ -38,7 +38,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://lava.gitlab.io/lavacli/";
     changelog = "https://gitlab.com/lava/lavacli/-/commits/v${version}?ref_type=tags";
     license = lib.licenses.agpl3Only;
-    teams = [ lib.teams.cyberus ];
+    maintainers = with lib.maintainers; [ snu ];
     mainProgram = "lavacli";
   };
 }

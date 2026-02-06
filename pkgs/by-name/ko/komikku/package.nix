@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   desktop-file-utils,
   gettext,
   glib,
@@ -24,15 +24,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "komikku";
-  version = "1.98.0";
+  version = "1.101.0";
   pyproject = false;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "valos";
     repo = "Komikku";
     tag = "v${version}";
-    hash = "sha256-7UMCSqVj6eOjpuuMeOuvMtBELjkG4ayaJgFVwMDP0Ag=";
+    hash = "sha256-sDhnG6d77erHO9HS0fL4Fl5qHbeyuLz2TFeic5zLJIE=";
   };
 
   nativeBuildInputs = [
@@ -61,6 +60,7 @@ python3.pkgs.buildPythonApplication rec {
     brotli
     colorthief
     dateparser
+    ebooklib
     emoji
     keyring
     lxml

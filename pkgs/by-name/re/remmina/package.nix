@@ -23,7 +23,7 @@
   libdbusmenu-gtk3,
   libappindicator-gtk3,
   libvncserver,
-  libpthreadstubs,
+  libpthread-stubs,
   libXdmcp,
   libxkbcommon,
   libsecret,
@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     gnutls
     pcre2
     libvncserver
-    libpthreadstubs
+    libpthread-stubs
     libXdmcp
     libxkbcommon
     libsoup_3

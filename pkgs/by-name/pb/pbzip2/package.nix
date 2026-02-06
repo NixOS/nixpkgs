@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   inherit version;
 
   src = fetchurl {
-    url = "https://launchpad.net/pbzip2/${major}/${version}/+download/${pname}-${version}.tar.gz";
+    url = "https://launchpad.net/pbzip2/${major}/${version}/+download/pbzip2-${version}.tar.gz";
     sha256 = "1rnvgcdixjzbrmcr1nv9b6ccrjfrhryaj7jwz28yxxv6lam3xlcg";
   };
 

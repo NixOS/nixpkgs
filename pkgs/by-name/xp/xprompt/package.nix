@@ -11,14 +11,14 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xprompt";
   version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "phillbush";
     repo = "xprompt";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-pOayKngUlrMY3bFsP4Fi+VsOLKCUQU3tdkZ+0OY1SCo=";
   };
 
@@ -59,4 +59,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "xprompt";
   };
-}
+})

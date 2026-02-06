@@ -8,12 +8,12 @@
   which,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.9.2";
   pname = "djvu2pdf";
 
   src = fetchurl {
-    url = "http://0x2a.at/site/projects/djvu2pdf/djvu2pdf-${version}.tar.gz";
+    url = "http://0x2a.at/site/projects/djvu2pdf/djvu2pdf-${finalAttrs.version}.tar.gz";
     sha256 = "0v2ax30m7j1yi4m02nzn9rc4sn4vzqh5vywdh96r64j4pwvn5s5g";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "djvu2pdf";
   };
-}
+})

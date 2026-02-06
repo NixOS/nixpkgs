@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pandas,
   typing-extensions,
   pytestCheckHook,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "kotsu";
   version = "0.3.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "datavaluepeople";

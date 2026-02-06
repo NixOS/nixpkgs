@@ -8,14 +8,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wiremix";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-wBE7gYR2fVbSc9NA8IGI2SGJwMACoPi1NTTdGq4UVF8=";
+    hash = "sha256-gs6KqluASHTf4fURZKEmNvERguQEH5UDc4044uJddrU=";
   };
 
-  cargoHash = "sha256-0O8Oe4EppvvFIF9e0MzNSAGp0ZmnW3wr8DHw7G00UWY=";
+  cargoHash = "sha256-WqC+JVjE0zxvn9/64eGmMIwSqIBXj/OsEmvUHnGKEkA=";
 
   nativeBuildInputs = [
     pkg-config

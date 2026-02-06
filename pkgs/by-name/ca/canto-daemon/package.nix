@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonApplication rec {
   version = "0.9.8";
-  format = "pyproject";
+  pyproject = true;
   pname = "canto-daemon";
 
   src = fetchFromGitHub {

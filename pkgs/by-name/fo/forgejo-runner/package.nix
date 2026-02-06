@@ -22,6 +22,7 @@ let
     # Requires running Docker daemon
     "TestDocker"
     "TestJobExecutor"
+    "TestRunExec"
     "TestRunner"
     "Test_validateCmd"
 
@@ -48,17 +49,17 @@ let
 in
 buildGoModule rec {
   pname = "forgejo-runner";
-  version = "12.4.0";
+  version = "12.6.3";
 
   src = fetchFromGitea {
     domain = "code.forgejo.org";
     owner = "forgejo";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-e7IDkeeEz8uAZ8WbRnBjSGq3SXVt5NY5li/3s/kf6dY=";
+    hash = "sha256-YBPUxKFHB6eqYyDAFBEbVVTLe5tfHwtLYfR+uCU73hc=";
   };
 
-  vendorHash = "sha256-oCSAehLC5NiL0Ttp+FeHQyTQYNh/59I1i0UfbwWPeRE=";
+  vendorHash = "sha256-MrumzEpSuLVmtrySnlI7Nb7GqxmW8Yk9agsaH4HA6QU=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -100,7 +101,8 @@ buildGoModule rec {
   passthru = {
     updateScript = nix-update-script { };
     tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
-      sqlite3 = nixosTests.forgejo.sqlite3;
+      latest = nixosTests.forgejo.sqlite3;
+      lts = nixosTests.forgejo-lts.sqlite3;
     };
   };
 

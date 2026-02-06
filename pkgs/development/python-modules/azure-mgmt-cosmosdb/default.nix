@@ -5,7 +5,6 @@
   buildPythonPackage,
   fetchPypi,
   isodate,
-  pythonOlder,
   setuptools,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "azure-mgmt-cosmosdb";
   version = "9.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "azure_mgmt_cosmosdb";

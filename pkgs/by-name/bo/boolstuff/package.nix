@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "0.1.17";
 
   src = fetchurl {
-    url = "http://perso.b2b2c.ca/~sarrazip/dev/${pname}-${version}.tar.gz";
+    url = "http://perso.b2b2c.ca/~sarrazip/dev/boolstuff-${version}.tar.gz";
     hash = "sha256-WPFUoTUofigPxTRo6vUbVTEVWMeEPDWszCA05toOX0I=";
   };
 

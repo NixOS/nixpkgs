@@ -11,11 +11,11 @@
   libXmu,
   bdftopcf,
   mkfontdir,
-  fontadobe100dpi,
-  fontadobeutopia100dpi,
-  fontbh100dpi,
-  fontbhlucidatypewriter100dpi,
-  fontbitstream100dpi,
+  font-adobe-100dpi,
+  font-adobe-utopia-100dpi,
+  font-bh-100dpi,
+  font-bh-lucidatypewriter-100dpi,
+  font-bitstream-100dpi,
   tcl,
   ncurses,
   openssl,
@@ -73,11 +73,11 @@ stdenv.mkDerivation (finalAttrs: {
     libXmu
     bdftopcf
     mkfontdir
-    fontadobe100dpi
-    fontadobeutopia100dpi
-    fontbh100dpi
-    fontbhlucidatypewriter100dpi
-    fontbitstream100dpi
+    font-adobe-100dpi
+    font-adobe-utopia-100dpi
+    font-bh-100dpi
+    font-bh-lucidatypewriter-100dpi
+    font-bitstream-100dpi
     tcl
     ncurses
     expat

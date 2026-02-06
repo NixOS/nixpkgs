@@ -7,14 +7,14 @@
   boost,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cryptominisat";
   version = "5.11.21";
 
   src = fetchFromGitHub {
     owner = "msoos";
     repo = "cryptominisat";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-8oH9moMjQEWnQXKmKcqmXuXcYkEyvr4hwC1bC4l26mo=";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ mic92 ];
     platforms = lib.platforms.unix;
   };
-}
+})

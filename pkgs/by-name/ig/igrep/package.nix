@@ -19,6 +19,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-NZN9pB9McZkTlpGgAbxi8bwn+aRiPMymGmBLYBc6bmw=";
 
+  # Fix build with gcc 15
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   passthru.tests = {
     version = testers.testVersion {
       package = igrep;

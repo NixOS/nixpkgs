@@ -446,20 +446,6 @@ let
         expr = package-stub-libcxx.stdenv;
         expected = pkgs.libcxxStdenv;
       };
-      overridePythonAttrs-stdenv-deprecated = {
-        expr =
-          (package-stub.overridePythonAttrs (_: {
-            stdenv = pkgs.clangStdenv;
-          })).stdenv;
-        expected = pkgs.clangStdenv;
-      };
-      overridePythonAttrs-override-clangStdenv-deprecated-nested = {
-        expr =
-          (package-stub-gcc.overridePythonAttrs {
-            stdenv = pkgs.clangStdenv;
-          }).stdenv;
-        expected = pkgs.clangStdenv;
-      };
 
       overridePythonAttrs = {
         expr = (applyOverridePythonAttrs package-stub).overridePythonAttrsFlag;

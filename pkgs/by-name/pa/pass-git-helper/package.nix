@@ -33,7 +33,7 @@ python3Packages.buildPythonApplication rec {
   meta = {
     homepage = "https://github.com/languitar/pass-git-helper";
     description = "Git credential helper interfacing with pass, the standard unix password manager";
-    license = lib.licenses.gpl3Plus;
+    license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [
       hmenke
     ];

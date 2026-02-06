@@ -29,17 +29,17 @@
     };
   }
   {
-    name = "binutils-2.44.tar.xz";
+    name = "binutils-2.45.tar.xz";
     archive = fetchurl {
-      sha256 = "0dvj6zs7fcfm5bln1k9ma1h96a4wqi79s3i4p7fnfgnnb7h1f86f";
-      url = "mirror://gnu/binutils/binutils-2.44.tar.xz";
+      sha256 = "1lpmpszs3lk9mcg7yn0m312745kbc8vlazn95h79i25ikizhw365";
+      url = "mirror://gnu/binutils/binutils-2.45.tar.xz";
     };
   }
   {
-    name = "acpica-unix-20250404.tar.gz";
+    name = "acpica-unix-20250807.tar.gz";
     archive = fetchurl {
-      sha256 = "0593dicbdx5qcx13ari1c0rhsay09bwwsq6w94pcjbfbws4m92f0";
-      url = "https://downloadmirror.intel.com/852044/acpica-unix-20250404.tar.gz";
+      sha256 = "0cwfm7i5a2fqq35hznnal38pgxgmnkm0v2xkb82jm1yv9014rjpa";
+      url = "https://downloadmirror.intel.com/864114/acpica-unix-20250807.tar.gz";
     };
   }
   {

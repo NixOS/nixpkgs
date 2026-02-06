@@ -6,7 +6,7 @@
   groff,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mktemp";
   version = "1.7";
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   src = fetchurl {
-    url = "ftp://ftp.mktemp.org/pub/mktemp/mktemp-${version}.tar.gz";
+    url = "ftp://ftp.mktemp.org/pub/mktemp/mktemp-${finalAttrs.version}.tar.gz";
     sha256 = "0x969152znxxjbj7387xb38waslr4yv6bnj5jmhb4rpqxphvk54f";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.isc;
     platforms = lib.platforms.unix;
   };
-}
+})

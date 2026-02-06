@@ -8,7 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "swaytools";
   version = "0.1.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tmccombs";

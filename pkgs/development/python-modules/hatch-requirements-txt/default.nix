@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "hatch-requirements-txt";
   version = "0.4.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "repo-helper";

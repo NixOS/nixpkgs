@@ -11,9 +11,9 @@
   websockets,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytibber";
-  version = "0.34.0";
+  version = "0.35.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -21,11 +21,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pyTibber";
-    tag = version;
-    hash = "sha256-xL/6obdpAH2+OsuapUnqqfDLrSoDRuDut0+7Ex7SgZU=";
+    tag = finalAttrs.version;
+    hash = "sha256-zipHn6ZLRwRtvTKgJTrTSZwETviwLOPS8rMTRB3fErs=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "gql"
+  ];
 
   dependencies = [
     aiohttp
@@ -48,8 +52,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library to communicate with Tibber";
     homepage = "https://github.com/Danielhiversen/pyTibber";
-    changelog = "https://github.com/Danielhiversen/pyTibber/releases/tag/${src.tag}";
+    changelog = "https://github.com/Danielhiversen/pyTibber/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

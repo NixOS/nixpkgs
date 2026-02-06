@@ -84,6 +84,8 @@ let
       "arm64"
     else if stdenv.hostPlatform.isx86_32 then
       "x86"
+    else if (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian) then
+      "ppc64le"
     else
       stdenv.hostPlatform.parsed.cpu.name;
 
@@ -97,7 +99,10 @@ let
       stdenv.hostPlatform.parsed.kernel.name;
 
   isGeneric =
-    (stdenv.hostPlatform.isPower && stdenv.hostPlatform.isLittleEndian)
+    (
+      stdenv.hostPlatform.isPower
+      && !(stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian)
+    )
     || stdenv.hostPlatform.parsed.cpu.name == "armv6l"
     || stdenv.hostPlatform.isLoongArch64
     || stdenv.hostPlatform.isRiscV;
@@ -129,14 +134,14 @@ assert unitTestsSupport -> curl != null && coreutils != null;
 assert vp9HighbitdepthSupport -> (vp9DecoderSupport || vp9EncoderSupport);
 assert isCygwin -> unitTestsSupport && webmIOSupport && libyuvSupport;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libvpx";
   version = "1.15.2";
 
   src = fetchFromGitHub {
     owner = "webmproject";
     repo = "libvpx";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-1F5Zlue2DY1yJXwfDfGeh3KcFTQVo9voHcGkgItKgh0=";
   };
 
@@ -260,9 +265,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "WebM VP8/VP9 codec SDK";
     homepage = "https://www.webmproject.org/";
-    changelog = "https://github.com/webmproject/libvpx/raw/v${version}/CHANGELOG";
+    changelog = "https://github.com/webmproject/libvpx/raw/v${finalAttrs.version}/CHANGELOG";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ codyopel ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -9,9 +9,9 @@
   fontconfig,
   freetype,
   libxcb,
-  xcbutil,
-  xorg,
-  xcbutilkeysyms,
+  libxcb-util,
+  libxcb-cursor,
+  libxcb-keysyms,
   libxkbcommon,
   libX11,
   libXrandr,
@@ -44,9 +44,9 @@ stdenv.mkDerivation (finalAttrs: {
     fontconfig
     freetype
     libxcb
-    xcbutil
-    xorg.xcbutilcursor
-    xcbutilkeysyms
+    libxcb-util
+    libxcb-cursor
+    libxcb-keysyms
     libxkbcommon
     libX11
     libXrandr

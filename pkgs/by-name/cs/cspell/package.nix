@@ -11,13 +11,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "cspell";
-  version = "9.5.0";
+  version = "9.6.2";
 
   src = fetchFromGitHub {
     owner = "streetsidesoftware";
     repo = "cspell";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-O8CwJZfFSKmPP8tE5KcpW1bC3kUKjjjHS7QAKBc79qc=";
+    hash = "sha256-JEvvopeSqoVXrh9t4ORUlT0nPdE+3PofzD7h4VajnAs=";
   };
 
   pnpmWorkspaces = [ "cspell..." ];
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     pnpm = pnpm_10;
     fetcherVersion = 2;
-    hash = "sha256-DBCwysotJBsM8GYro2NTwMe+t29zooX8yAr1FyPR3Ek=";
+    hash = "sha256-CNsxfAsIQxmDvuGZtedKnHMOoB1usDlw45cKYxaD05U=";
   };
 
   nativeBuildInputs = [

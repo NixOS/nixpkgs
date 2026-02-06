@@ -5,14 +5,14 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zpaq";
   version = "7.15";
 
   src = fetchFromGitHub {
     owner = "zpaq";
     repo = "zpaq";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0v44rlg9gvwc4ggr2lhcqll8ppal3dk7zsg5bqwcc5lg3ynk2pz4";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "zpaq";
   };
-}
+})

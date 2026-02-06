@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   buildGoModule,
   tailwindcss_3,
 }:
@@ -8,8 +8,7 @@ buildGoModule rec {
   pname = "rimgo";
   version = "1.2.6";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "rimgo";
     repo = "rimgo";
     rev = "v${version}";

@@ -12,17 +12,17 @@
   alsa-lib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "syncterm";
   version = "1.6";
 
   src = fetchurl {
-    url = "mirror://sourceforge/syncterm/syncterm-${version}-src.tgz";
+    url = "mirror://sourceforge/syncterm/syncterm-${finalAttrs.version}-src.tgz";
     hash = "sha256-eeOuQ9OfmKWSJo/0AJQJTaYqpYe1uSXmt0WdZqXRHUk=";
   };
 
   # We can't use sourceRoot, as the cherry-picked patches apply to files outside of it.
-  postPatch = ''cd src/syncterm'';
+  postPatch = "cd src/syncterm";
 
   CFLAGS = [
     "-DHAS_INTTYPES_H"
@@ -70,4 +70,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2Plus;
   };
-}
+})

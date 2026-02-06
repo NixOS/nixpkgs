@@ -6,7 +6,7 @@
   fetchpatch,
   libuv,
   libXdmcp,
-  libpthreadstubs,
+  libpthread-stubs,
   libxcb,
   pcre,
   pkg-config,
@@ -15,11 +15,11 @@
   lib,
   stdenv,
   xcbproto,
-  xcbutil,
-  xcbutilcursor,
-  xcbutilimage,
-  xcbutilrenderutil,
-  xcbutilwm,
+  libxcb-util,
+  libxcb-cursor,
+  libxcb-image,
+  libxcb-render-util,
+  libxcb-wm,
   xcbutilxrm,
   makeWrapper,
   removeReferencesTo,
@@ -66,16 +66,16 @@ stdenv.mkDerivation (finalAttrs: {
     cairo
     libuv
     libXdmcp
-    libpthreadstubs
+    libpthread-stubs
     libxcb
     pcre
     python3
     xcbproto
-    xcbutil
-    xcbutilcursor
-    xcbutilimage
-    xcbutilrenderutil
-    xcbutilwm
+    libxcb-util
+    libxcb-cursor
+    libxcb-image
+    libxcb-render-util
+    libxcb-wm
     xcbutilxrm
   ]
   ++ lib.optional alsaSupport alsa-lib

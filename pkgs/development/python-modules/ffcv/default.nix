@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "libffcv";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-L2mwGFivq/gtAw+1D6U2jbW6VxYgetHX7OUrjwyybqE=";
   };
 

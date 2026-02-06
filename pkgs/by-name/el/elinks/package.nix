@@ -25,7 +25,7 @@
   python ? null,
   enablePerl ? (!stdenv.hostPlatform.isDarwin) && (stdenv.hostPlatform == stdenv.buildPlatform),
   perl ? null,
-# re-add javascript support when upstream supports modern spidermonkey
+  # re-add javascript support when upstream supports modern spidermonkey
 }:
 
 assert enableGuile -> guile != null;

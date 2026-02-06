@@ -4,8 +4,8 @@
   factorio-utils,
   fetchurl,
   libGL,
-  libICE,
-  libSM,
+  libice,
+  libsm,
   libX11,
   libXcursor,
   libXext,
@@ -16,7 +16,7 @@
   libxkbcommon,
   makeDesktopItem,
   makeWrapper,
-  releaseType,
+  releaseType ? "alpha",
   stdenv,
   wayland,
 
@@ -224,7 +224,6 @@ let
       license = lib.licenses.unfree;
       maintainers = with lib.maintainers; [
         Baughn
-        elitak
         priegger
         lukegb
       ];
@@ -243,8 +242,8 @@ let
       libPath = lib.makeLibraryPath [
         alsa-lib
         libGL
-        libICE
-        libSM
+        libice
+        libsm
         libX11
         libXcursor
         libXext

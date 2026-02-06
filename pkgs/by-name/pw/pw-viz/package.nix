@@ -10,7 +10,10 @@
   libxkbcommon,
   pipewire,
   wayland,
-  xorg,
+  libxrandr,
+  libxi,
+  libxcursor,
+  libx11,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -37,10 +40,10 @@ rustPlatform.buildRustPackage rec {
     pipewire
     rustPlatform.bindgenHook
     wayland
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXrandr
+    libx11
+    libxcursor
+    libxi
+    libxrandr
   ];
 
   postFixup = ''

@@ -27,7 +27,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cryptsetup";
-  version = "2.8.1";
+  version = "2.8.3";
 
   outputs = [
     "bin"
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     url =
       "mirror://kernel/linux/utils/cryptsetup/v${lib.versions.majorMinor finalAttrs.version}/"
       + "cryptsetup-${finalAttrs.version}.tar.xz";
-    hash = "sha256-LDN563ZZfcq1CRFEmwE+JpfEv/zHFtu/DZsOj7u0b7Q=";
+    hash = "sha256-SoojuLnRoyUEUuQKzq1EIaA+RaOJVK0FlWNPQmaqgA8=";
   };
 
   patches = [

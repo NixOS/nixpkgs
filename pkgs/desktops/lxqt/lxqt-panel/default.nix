@@ -14,7 +14,7 @@
   libXtst,
   libdbusmenu,
   liblxqt,
-  libpthreadstubs,
+  libpthread-stubs,
   libpulseaudio,
   libqtxdg,
   libstatgrab,
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXtst
     libdbusmenu
     liblxqt
-    libpthreadstubs
+    libpthread-stubs
     libpulseaudio
     libqtxdg
     libstatgrab

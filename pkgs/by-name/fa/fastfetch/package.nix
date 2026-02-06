@@ -35,7 +35,9 @@
   vulkan-loader,
   wayland,
   xfconf,
-  xorg,
+  libxext,
+  libxdmcp,
+  libxau,
   yyjson,
   zlib,
   zfs,
@@ -59,13 +61,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastfetch";
-  version = "2.56.1";
+  version = "2.58.0";
 
   src = fetchFromGitHub {
     owner = "fastfetch-cli";
     repo = "fastfetch";
     tag = finalAttrs.version;
-    hash = "sha256-loTEadHPhE0b7VYCq2Lh+FKKnqzc4kzWFkHLnTjFsBg=";
+    hash = "sha256-kWMR2qtwgzpYZmbqkpNkII6MuMFb13jkBtI/1pdgSgE=";
   };
 
   outputs = [
@@ -169,9 +171,9 @@ stdenv.mkDerivation (finalAttrs: {
           libXrandr
           libxcb
           # Required by libxcb messages
-          xorg.libXau
-          xorg.libXdmcp
-          xorg.libXext
+          libxau
+          libxdmcp
+          libxext
         ]
         ++ lib.optionals xfceSupport [
           #  Needed for XFWM theme and XFCE Terminal font.

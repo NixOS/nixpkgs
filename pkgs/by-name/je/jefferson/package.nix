@@ -8,8 +8,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "jefferson";
   version = "0.4.6";
-  format = "pyproject";
-  disabled = python3.pkgs.pythonOlder "3.9";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "onekey-sec";

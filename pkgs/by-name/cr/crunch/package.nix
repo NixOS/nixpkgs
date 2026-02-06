@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "3.6";
 
   src = fetchurl {
-    url = "mirror://sourceforge/crunch-wordlist/${pname}-${version}.tgz";
+    url = "mirror://sourceforge/crunch-wordlist/crunch-${version}.tgz";
     sha256 = "0mgy6ghjvzr26yrhj1bn73qzw6v9qsniskc5wqq1kk0hfhy6r3va";
   };
 

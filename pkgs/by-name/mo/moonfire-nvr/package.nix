@@ -87,7 +87,7 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/scottlamb/moonfire-nvr";
     changelog = "https://github.com/scottlamb/moonfire-nvr/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ gaelreyrol ];
+    maintainers = [ ];
     mainProgram = "moonfire-nvr";
   };
 }

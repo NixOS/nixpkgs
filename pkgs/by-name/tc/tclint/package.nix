@@ -6,7 +6,15 @@
   versionCheckHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+let
+  pythonPackages = python3Packages.overrideScope (
+    self: super: {
+      lsprotocol = self.lsprotocol_2023;
+      pygls = self.pygls_1;
+    }
+  );
+in
+pythonPackages.buildPythonApplication rec {
   pname = "tclint";
   version = "0.7.0";
   pyproject = true;
@@ -18,7 +26,7 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-GkWQlOmPh/IpkdcNKkaHJoVDD2r5wCSFeMZA96dxiXM=";
   };
 
-  build-system = with python3Packages; [
+  build-system = with pythonPackages; [
     setuptools
     setuptools-scm
   ];
@@ -27,12 +35,12 @@ python3Packages.buildPythonApplication rec {
     "importlib-metadata"
     "pathspec"
   ];
-  dependencies = with python3Packages; [
+  dependencies = with pythonPackages; [
     importlib-metadata
     pathspec
     ply
-    pygls_1
-    lsprotocol_2023
+    pygls
+    lsprotocol
     tomli
     voluptuous
   ];
@@ -41,7 +49,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeCheckInputs = [
     addBinToPathHook
-    python3Packages.pytestCheckHook
+    pythonPackages.pytestCheckHook
     versionCheckHook
   ];
   versionCheckProgramArg = "--version";

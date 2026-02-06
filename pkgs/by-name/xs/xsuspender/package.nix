@@ -10,14 +10,14 @@
   procps,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xsuspender";
   version = "1.3";
 
   src = fetchFromGitHub {
     owner = "kernc";
     repo = "xsuspender";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1c6ab1s9bbkjbmcfv2mny273r66dlz7sgxsmzfwi0fm2vcb2lwim";
   };
 
@@ -55,4 +55,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ offline ];
     platforms = lib.platforms.linux;
   };
-}
+})

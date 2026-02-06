@@ -7,7 +7,13 @@
   makeWrapper,
   copyDesktopItems,
   autoPatchelfHook,
-  xorg,
+  libxxf86vm,
+  libxrandr,
+  libxext,
+  libxcursor,
+  libx11,
+  xrandr,
+  libxcb,
   libpulseaudio,
   libGL,
   udev,
@@ -46,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    xorg.libxcb
+    libxcb
     stdenv.cc.cc.lib
   ];
 
@@ -70,11 +76,11 @@ stdenv.mkDerivation (finalAttrs: {
   postConfigure =
     let
       libPath = lib.makeLibraryPath [
-        xorg.libX11
-        xorg.libXext
-        xorg.libXcursor
-        xorg.libXrandr
-        xorg.libXxf86vm
+        libx11
+        libxext
+        libxcursor
+        libxrandr
+        libxxf86vm
 
         # lwjgl
         libpulseaudio
@@ -88,8 +94,8 @@ stdenv.mkDerivation (finalAttrs: {
         # Used for opening directories and URLs in the electron app
         xdg-utils
 
-        # xorg.xrandr needed for LWJGL [2.9.2, 3) https://github.com/LWJGL/lwjgl/issues/128
-        xorg.xrandr
+        # xrandr needed for LWJGL [2.9.2, 3) https://github.com/LWJGL/lwjgl/issues/128
+        xrandr
       ];
     in
     ''

@@ -2,11 +2,12 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   gfortran,
   tk,
   hdf5,
-  xorg,
+  libxmu,
   libGLU,
   withTools ? false,
   testers,
@@ -21,6 +22,14 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-0cZtq8nVAHAubHD6IDofnh8N7xiNHQkbhXR5OpdhPQU=";
   };
+
+  patches = [
+    # Fixes crash for test_particlef on LoongArch64
+    (fetchpatch2 {
+      url = "https://github.com/CGNS/CGNS/commit/0ea14abf6da44f13ca8a01117ad7af8eb405394c.patch?full_index=1";
+      hash = "sha256-dtwTD8YqRm0NCXTDPRHmaPLTU17ZLzOyVii1aoGYge0=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace src/cgnstools/tkogl/tkogl.c \
@@ -37,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals withTools [
     tk
-    xorg.libXmu
+    libxmu
     libGLU
   ];
 

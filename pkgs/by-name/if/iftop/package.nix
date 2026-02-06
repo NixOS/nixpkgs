@@ -7,12 +7,12 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "iftop";
   version = "1.0pre4";
 
   src = fetchurl {
-    url = "http://ex-parrot.com/pdw/iftop/download/iftop-${version}.tar.gz";
+    url = "http://ex-parrot.com/pdw/iftop/download/iftop-${finalAttrs.version}.tar.gz";
     sha256 = "15sgkdyijb7vbxpxjavh5qm5nvyii3fqcg9mzvw7fx8s6zmfwczp";
   };
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   # Explicitly link against libgcc_s, to work around the infamous
   # "libgcc_s.so.1 must be installed for pthread_cancel to work".
-  LDFLAGS = lib.optionalString stdenv.hostPlatform.isLinux "-lgcc_s";
+  env.LDFLAGS = lib.optionalString stdenv.hostPlatform.isLinux "-lgcc_s";
 
   buildInputs = [
     ncurses
@@ -54,4 +54,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "iftop";
   };
-}
+})

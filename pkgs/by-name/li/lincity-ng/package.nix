@@ -77,7 +77,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "City building game";
     mainProgram = "lincity-ng";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ raskin ];
+    maintainers = with lib.maintainers; [
+      raskin
+      iedame
+    ];
     platforms = lib.platforms.linux;
   };
 })

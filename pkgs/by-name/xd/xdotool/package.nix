@@ -13,14 +13,14 @@
   libXext,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xdotool";
   version = "3.20211022.1";
 
   src = fetchFromGitHub {
     owner = "jordansissel";
     repo = "xdotool";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-XFiaiHHtUSNFw+xhUR29+2RUHOa+Eyj1HHfjCUjwd9k=";
   };
 
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux;
     mainProgram = "xdotool";
   };
-}
+})

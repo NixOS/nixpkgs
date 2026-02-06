@@ -24,8 +24,8 @@
   docutils,
   libxcb,
   libX11,
-  xcbutil,
-  xcbutilwm,
+  libxcb-util,
+  libxcb-wm,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -48,8 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libxcb
     libX11
-    xcbutil
-    xcbutilwm
+    libxcb-util
+    libxcb-wm
     libXdmcp
     libXau
     libpulseaudio
@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Universal status bar content generator";
     homepage = "https://github.com/shdown/luastatus";
-    changelog = "https://github.com/shdown/luastatus/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/shdown/luastatus/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ kashw2 ];
     platforms = lib.platforms.linux;

@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "adhami3310";
     repo = "Footage";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-VEL96JrJ5eJEoX2miiB4dqGUXizNlYWCUZkkYkh09B8=";
   };
 

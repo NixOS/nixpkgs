@@ -473,7 +473,7 @@ in
 
       nginx.hostName = mkOption {
         type = types.str;
-        example = literalExpression ''wiki.example.com'';
+        example = literalExpression "wiki.example.com";
         default = "localhost";
         description = ''
           The hostname to use for the nginx virtual host.

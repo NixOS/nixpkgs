@@ -10,11 +10,19 @@
   imagemagick,
   pkg-config,
   gdk-pixbuf,
-  xorg,
+  libxcb-util,
+  libxcb-wm,
+  libxcb-render-util,
+  libxcb-keysyms,
+  libxcb-image,
+  libxdmcp,
+  libxau,
+  libxshmfence,
+  libxcb,
   libstartup_notification,
   libxdg_basedir,
-  libpthreadstubs,
-  xcb-util-cursor,
+  libpthread-stubs,
+  libxcb-cursor,
   makeWrapper,
   pango,
   gobject-introspection,
@@ -115,22 +123,22 @@ stdenv.mkDerivation rec {
     dbus
     gdk-pixbuf
     luaEnv
-    libpthreadstubs
+    libpthread-stubs
     libstartup_notification
     libxdg_basedir
     lua
     net-tools
     pango
-    xcb-util-cursor
-    xorg.libXau
-    xorg.libXdmcp
-    xorg.libxcb
-    xorg.libxshmfence
-    xorg.xcbutil
-    xorg.xcbutilimage
-    xorg.xcbutilkeysyms
-    xorg.xcbutilrenderutil
-    xorg.xcbutilwm
+    libxcb-cursor
+    libxau
+    libxdmcp
+    libxcb
+    libxshmfence
+    libxcb-util
+    libxcb-image
+    libxcb-keysyms
+    libxcb-render-util
+    libxcb-wm
     libxkbcommon
     xcbutilxrm
   ]

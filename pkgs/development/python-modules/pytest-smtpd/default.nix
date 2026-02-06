@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   hatchling,
   pytest,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "pytest-smtpd";
   version = "0.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   # Pypi tarball doesn't include tests/
   src = fetchFromGitHub {

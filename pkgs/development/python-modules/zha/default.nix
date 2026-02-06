@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   freezegun,
+  looptime,
   pyserial,
   pyserial-asyncio-fast,
   pytest-asyncio_0,
@@ -22,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "zha";
-  version = "0.0.81";
+  version = "0.0.89";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -31,7 +32,7 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "zha";
     tag = version;
-    hash = "sha256-MsuCzb2jIjZh24tXUz0fE9MgstuvmUOIWEC0s1jRoow=";
+    hash = "sha256-mtlf8Uh2C9s5ie6aWWbRuNvmS0QbzqpCMeSf/WTW0Zw=";
   };
 
   postPatch = ''
@@ -58,6 +59,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
+    looptime
     pytest-asyncio_0
     pytest-timeout
     pytest-xdist

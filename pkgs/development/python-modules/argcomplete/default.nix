@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   hatchling,
   hatch-vcs,
 }:
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "argcomplete";
   version = "3.6.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "kislyuk";

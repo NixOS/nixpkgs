@@ -7,7 +7,14 @@
   libz,
   icu,
   openssl,
-  xorg,
+  libgbm,
+  libxrandr,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcomposite,
+  libx11,
+  libxcb,
   gtk3,
   glib,
   nss,
@@ -22,7 +29,6 @@
   cairo,
   udev,
   alsa-lib,
-  mesa,
   libGL,
   libsecret,
   nix-update-script,
@@ -68,12 +74,12 @@ buildDotnetModule (finalAttrs: {
 
   buildInputs = [
     openssl
+    libgbm
     libgcc
-    xorg.libX11
+    libx11
     gtk3
     glib
     alsa-lib
-    mesa
     nspr
     nss
     icu
@@ -155,12 +161,12 @@ buildDotnetModule (finalAttrs: {
   runtimeDeps = [
     libz
 
-    xorg.libXcomposite
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXrandr
-    xorg.libxcb
+    libxcomposite
+    libxdamage
+    libxext
+    libxfixes
+    libxrandr
+    libxcb
 
     dbus
     atk

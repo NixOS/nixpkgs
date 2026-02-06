@@ -15,14 +15,14 @@
   coreutils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lxcfs";
   version = "6.0.5";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "lxcfs";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-mRTM06QyWcB4XOi0w2qvyDABGuu1SPJX0gjlBktDOac=";
   };
 
@@ -90,4 +90,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     teams = [ lib.teams.lxc ];
   };
-}
+})

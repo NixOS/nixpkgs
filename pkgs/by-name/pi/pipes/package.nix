@@ -7,14 +7,14 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pipes";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "pipeseroni";
     repo = "pipes.sh";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-856OWlnNiGB20571TJg7Ayzcz4r6NqdW5DMDiim09mc=";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     mainProgram = "pipes.sh";
     platforms = lib.platforms.unix;
   };
-}
+})

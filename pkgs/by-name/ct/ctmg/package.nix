@@ -4,12 +4,12 @@
   fetchzip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ctmg";
   version = "1.2";
 
   src = fetchzip {
-    url = "https://git.zx2c4.com/ctmg/snapshot/ctmg-${version}.tar.xz";
+    url = "https://git.zx2c4.com/ctmg/snapshot/ctmg-${finalAttrs.version}.tar.xz";
     sha256 = "1i4v8sriwjrmj3yizbl1ysckb711yl9qsn9x45jq0ij1apsydhyc";
   };
 
@@ -23,4 +23,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "ctmg";
   };
-}
+})

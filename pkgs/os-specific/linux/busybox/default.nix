@@ -3,7 +3,6 @@
   lib,
   buildPackages,
   fetchurl,
-  fetchpatch,
   fetchFromGitLab,
   enableStatic ? stdenv.hostPlatform.isStatic,
   enableMinimal ? false,

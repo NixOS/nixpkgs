@@ -7,14 +7,14 @@
   libxkbfile,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xkb-switch";
   version = "1.8.5";
 
   src = fetchFromGitHub {
     owner = "ierton";
     repo = "xkb-switch";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-DZAIL6+D+Hgs+fkJwRaQb9BHrEjAkxiqhOZyrR+Mpuk=";
   };
 
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "xkb-switch";
   };
-}
+})

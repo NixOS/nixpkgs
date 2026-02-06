@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   packageurl-python,
-  pythonOlder,
   rich,
   setuptools,
   versionCheckHook,
@@ -14,12 +13,10 @@ buildPythonPackage rec {
   version = "0.3.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "anthonyharrison";
     repo = "csaf";
-    tag = "${version}";
+    tag = version;
     hash = "sha256-LR6r03z0nvvAQgFHaTWfukoJmLZ6SLPXfbp/G8N/HtM=";
   };
 

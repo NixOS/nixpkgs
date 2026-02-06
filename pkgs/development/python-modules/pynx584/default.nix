@@ -8,7 +8,6 @@
   prettytable,
   pyserial,
   pytestCheckHook,
-  pythonOlder,
   requests,
   stevedore,
 }:
@@ -17,8 +16,6 @@ buildPythonPackage {
   pname = "pynx584";
   version = "0.8.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "kk7ds";

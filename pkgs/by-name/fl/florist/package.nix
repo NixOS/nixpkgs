@@ -6,14 +6,14 @@
   lib,
 }:
 
-stdenv.mkDerivation rec {
-  name = "florist";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "florist";
   version = "24.2";
 
   src = fetchFromGitHub {
     owner = "adacore";
     repo = "florist";
-    rev = "refs/heads/${version}";
+    rev = "refs/heads/${finalAttrs.version}";
     hash = "sha256-EFGmcQfWpxEWfsAoQrHegTlizl6siE8obKx+fCpVwUQ=";
   };
 
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ lutzberger ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "0.92.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/cntlm/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/cntlm/cntlm-${version}.tar.gz";
     sha256 = "1632szz849wasvh5sm6rm1zbvbrkq35k7kcyvx474gyl4h4x2flw";
   };
 

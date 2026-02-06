@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   cython,
   fuse,
@@ -15,17 +14,15 @@
 
 buildPythonPackage rec {
   pname = "llfuse";
-  version = "1.5.1";
+  version = "1.5.2";
 
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-llfuse";
     repo = "python-llfuse";
     tag = "release-${version}";
-    hash = "sha256-wni/b1hEn6/G0RszCJi+wmBHx6F0Ov1cZ/sRf8PLmps=";
+    hash = "sha256-PFnY+gmm1tjZhptc27XTE9yxF0IaJ+U4Ng/OGhNDDPI=";
   };
 
   nativeBuildInputs = [

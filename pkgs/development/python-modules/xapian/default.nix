@@ -13,7 +13,7 @@ in
 buildPythonPackage rec {
   pname = "xapian";
   inherit (xapian) version;
-  format = "other";
+  pyproject = false;
 
   src = fetchurl {
     url = "https://oligarchy.co.uk/xapian/${version}/xapian-bindings-${version}.tar.xz";

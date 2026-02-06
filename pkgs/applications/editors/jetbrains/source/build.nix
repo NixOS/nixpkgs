@@ -22,8 +22,9 @@
   maven,
   p7zip,
   pkg-config,
-  xorg,
-
+  libx11,
+}:
+{
   version,
   buildNumber,
   buildType,
@@ -35,7 +36,6 @@
   repositories,
   kotlin-jps-plugin,
 }:
-
 let
   kotlin' = kotlin.overrideAttrs (oldAttrs: {
     version = "2.2.20";
@@ -50,14 +50,14 @@ let
   ideaSrc = fetchFromGitHub {
     owner = "jetbrains";
     repo = "intellij-community";
-    rev = "${buildType}/${buildNumber}";
+    rev = "${buildType}/${version}";
     hash = ideaHash;
   };
 
   androidSrc = fetchFromGitHub {
     owner = "jetbrains";
     repo = "android";
-    rev = "${buildType}/${buildNumber}";
+    rev = "${buildType}/${version}";
     hash = androidHash;
   };
 
@@ -97,7 +97,7 @@ let
     ];
     buildInputs = [
       glib
-      xorg.libX11
+      libx11
       libdbusmenu
     ];
     inherit src;
@@ -313,6 +313,12 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   passthru = {
-    inherit libdbm fsnotifier jps-bootstrap;
+    inherit
+      version
+      buildNumber
+      libdbm
+      fsnotifier
+      jps-bootstrap
+      ;
   };
 }

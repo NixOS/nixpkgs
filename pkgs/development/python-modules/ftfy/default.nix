@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   hatchling,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "ftfy";
   version = "6.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "rspeer";

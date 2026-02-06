@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   version = "15.6";
 
   src = fetchurl {
-    url = "mirror://sourceforge/pio/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/pio/pioneers-${version}.tar.gz";
     sha256 = "07b3xdd81n8ybsb4fzc5lx0813y9crzp1hj69khncf4faj48sdcs";
   };
 

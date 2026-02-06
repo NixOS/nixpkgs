@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "txredisapi";
   version = "1.4.11";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "IlyaSkriblovsky";

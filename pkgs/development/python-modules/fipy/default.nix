@@ -15,7 +15,6 @@
   openssh,
   fetchFromGitHub,
   pythonAtLeast,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -26,12 +25,12 @@ buildPythonPackage rec {
   # Python 3.12 is not yet supported.
   # https://github.com/usnistgov/fipy/issues/997
   # https://github.com/usnistgov/fipy/pull/1023
-  disabled = pythonOlder "3.7" || pythonAtLeast "3.12";
+  disabled = pythonAtLeast "3.12";
 
   src = fetchFromGitHub {
     owner = "usnistgov";
     repo = "fipy";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-usuAj+bIzbCSxYuKeUDxEESbjxPCwYwdD/opaBbgl1w=";
   };
 

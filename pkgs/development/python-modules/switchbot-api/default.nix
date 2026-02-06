@@ -6,16 +6,16 @@
   poetry-core,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "switchbot-api";
-  version = "2.9.0";
+  version = "2.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SeraphicCorp";
     repo = "py-switchbot-api";
-    tag = "v${version}";
-    hash = "sha256-G5cUpX89KC6C4295wbvyeYWvUob4LdHiJjcN0UbVJnY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-s6ezIkW36eIaxqedOfIk4KNhCwjXPFkc49qqK2p2eGw=";
   };
 
   build-system = [ poetry-core ];
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Asynchronous library to use Switchbot API";
     homepage = "https://github.com/SeraphicCorp/py-switchbot-api";
-    changelog = "https://github.com/SeraphicCorp/py-switchbot-api/releases/tag/${src.tag}";
+    changelog = "https://github.com/SeraphicCorp/py-switchbot-api/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

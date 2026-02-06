@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nyancat";
   version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "klange";
     repo = "nyancat";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1mg8nm5xzcq1xr8cvx24ym2vmafkw53rijllwcdm9miiz0p5ky9k";
   };
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "nyancat";
   };
-}
+})

@@ -140,7 +140,7 @@ in
           inherit (cfg) user group;
           mode = "0700";
         };
-        "${builtins.dirOf cfg.settings.database}".d = {
+        "${dirOf cfg.settings.database}".d = {
           inherit (cfg) user group;
           mode = "0700";
         };

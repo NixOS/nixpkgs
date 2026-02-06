@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   python,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "bitarray";
   version = "3.7.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

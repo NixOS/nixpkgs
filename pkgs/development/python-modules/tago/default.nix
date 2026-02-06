@@ -5,7 +5,6 @@
   fetchFromGitHub,
   promise,
   python-socketio,
-  pythonOlder,
   requests,
   websockets,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "tago";
   version = "3.1.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "tago-io";

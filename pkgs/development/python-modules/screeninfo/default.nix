@@ -7,16 +7,15 @@
   libXinerama,
   libXrandr,
   poetry-core,
+  pyobjc-framework-Cocoa,
+  cython,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "screeninfo";
   version = "0.8.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rr-";
@@ -25,9 +24,14 @@ buildPythonPackage rec {
     hash = "sha256-TEy4wff0eRRkX98yK9054d33Tm6G6qWrd9Iv+ITcFmA=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  postPatch = ''
+  dependencies = lib.optionals (stdenv.isDarwin) [
+    pyobjc-framework-Cocoa
+    cython
+  ];
+
+  postPatch = lib.optionalString (stdenv.isLinux) ''
     substituteInPlace screeninfo/enumerators/xinerama.py \
       --replace 'load_library("X11")' 'ctypes.cdll.LoadLibrary("${libX11}/lib/libX11.so")' \
       --replace 'load_library("Xinerama")' 'ctypes.cdll.LoadLibrary("${libXinerama}/lib/libXinerama.so")'
@@ -46,7 +50,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "screeninfo" ];
 
   meta = {
-    broken = stdenv.hostPlatform.isDarwin;
     description = "Fetch location and size of physical screens";
     homepage = "https://github.com/rr-/screeninfo";
     license = lib.licenses.mit;

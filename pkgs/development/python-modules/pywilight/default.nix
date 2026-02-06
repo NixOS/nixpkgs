@@ -4,15 +4,12 @@
   fetchPypi,
   ifaddr,
   requests,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pywilight";
   version = "0.0.74";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

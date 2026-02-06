@@ -10,16 +10,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "squawk";
-  version = "2.34.0";
+  version = "2.37.0";
 
   src = fetchFromGitHub {
     owner = "sbdchd";
     repo = "squawk";
     tag = "v${version}";
-    hash = "sha256-SdCtZ+A4MuHhTrL5v65uDb47FeIBaGweHRXhD9crx2k=";
+    hash = "sha256-+7cIymENIjF2fVD+qAblY4+dkENYiaTnDhCc/VuuAIk=";
   };
 
-  cargoHash = "sha256-r12pNc7C4mNYzIaE/99jrWBQ/YPqR30k90TFx1hBGR4=";
+  cargoHash = "sha256-2CJkwkC8/BgaYi994WoLtsykdTH5ZAyH0CpbvDTZ1GA=";
 
   nativeBuildInputs = [
     pkg-config

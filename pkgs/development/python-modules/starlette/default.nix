@@ -19,7 +19,6 @@
 
   # tests
   pytestCheckHook,
-  pythonOlder,
   trio,
 
   # reverse dependencies
@@ -40,7 +39,7 @@ buildPythonPackage rec {
 
   build-system = [ hatchling ];
 
-  dependencies = [ anyio ] ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
+  dependencies = [ anyio ];
 
   optional-dependencies.full = [
     itsdangerous

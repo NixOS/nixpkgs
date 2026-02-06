@@ -8,11 +8,11 @@
 }:
 mkKdeDerivation rec {
   pname = "kirigami-addons";
-  version = "1.10.0";
+  version = "1.11.0";
 
   src = fetchurl {
     url = "mirror://kde/stable/kirigami-addons/kirigami-addons-${version}.tar.xz";
-    hash = "sha256-yY+Sv3xFLhL23EA0BCFUE9s5Wf6QStgw6tDba7CbPRE=";
+    hash = "sha256-bc36Mk9xDwCIfmMhIS/IWCo8RxJFDRKdkUNbse3Y1SM=";
   };
 
   extraNativeBuildInputs = [ qttools ];

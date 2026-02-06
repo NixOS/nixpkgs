@@ -6,14 +6,14 @@
   libXmu,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xclip";
   version = "0.13";
 
   src = fetchFromGitHub {
     owner = "astrand";
     repo = "xclip";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0q0hmvcjlv8arhh1pzhja2wglyj6n7z209jnpnzd281kqqv4czcs";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "xclip";
   };
-}
+})

@@ -30,7 +30,7 @@
   libdvdnav,
   libjack2,
   libplacebo,
-  libpthreadstubs,
+  libpthread-stubs,
   libpulseaudio,
   libsixel,
   libuchardet,
@@ -171,7 +171,7 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     libass
     libplacebo
-    libpthreadstubs
+    libpthread-stubs
     libuchardet
     luaEnv
     python3
@@ -327,6 +327,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     mainProgram = "mpv";
     maintainers = with lib.maintainers; [
+      colinsane
       fpletz
       SchweGELBin
     ];

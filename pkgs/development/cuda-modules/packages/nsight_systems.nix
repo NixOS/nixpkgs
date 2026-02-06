@@ -14,7 +14,10 @@
   rdma-core,
   ucx,
   wayland,
-  xorg,
+  libxtst,
+  libxrandr,
+  libxdamage,
+  libxcursor,
 }:
 let
   # NOTE(@connorbaker): nsight_systems doesn't support Jetson, so no need for case splitting on aarch64-linux.
@@ -119,10 +122,10 @@ buildRedist (
       rdma-core
       ucx
       wayland
-      xorg.libXcursor
-      xorg.libXdamage
-      xorg.libXrandr
-      xorg.libXtst
+      libxcursor
+      libxdamage
+      libxrandr
+      libxtst
     ]
     # NOTE(@connorbaker): Seems to be required only for aarch64-linux.
     ++ lib.optionals (backendStdenv.hostPlatform.isAarch64 && cudaAtLeast "11.8") [

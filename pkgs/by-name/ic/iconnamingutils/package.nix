@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "0.8.90";
 
   src = fetchurl {
-    url = "http://tango.freedesktop.org/releases/${pname}-${version}.tar.gz";
+    url = "http://tango.freedesktop.org/releases/icon-naming-utils-${version}.tar.gz";
     sha256 = "071fj2jm5kydlz02ic5sylhmw6h2p3cgrm3gwdfabinqkqcv4jh4";
   };
 

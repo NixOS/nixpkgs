@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "0.7";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/stm32flash/stm32flash-${version}.tar.gz";
     sha256 = "sha256-xMnNi+x52mOxEdFXE+9cws2UfeykEdNdbjBl4ifcQUo=";
   };
 
@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     homepage = "https://sourceforge.net/projects/stm32flash/";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.all; # Should work on all platforms
-    maintainers = with lib.maintainers; [ elitak ];
+    maintainers = [ ];
   };
 }

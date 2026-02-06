@@ -2,10 +2,12 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchurl,
   cmake,
   python3Packages,
   staticOnly ? stdenv.hostPlatform.isStatic,
   testers,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,6 +20,15 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-kl8ZHt71v17QR2bDP+ad/5uixf+GStEPLQ5ooFoC5i8=";
   };
+
+  patches = [
+    # Fixes build on LoongArch64 & IA64
+    # https://github.com/google/brotli/commit/e230f474b87134e8c6c85b630084c612057f253e
+    (fetchurl {
+      url = "https://github.com/google/brotli/commit/e230f474b87134e8c6c85b630084c612057f253e.patch";
+      hash = "sha256-QERl8RHJz7tFr++hZIYwdj1/ogPpjArC+ia8S/bWxKk=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
 
@@ -41,9 +52,12 @@ stdenv.mkDerivation (finalAttrs: {
     cp ../docs/*.3 $out/share/man/man3/
   '';
 
-  passthru.tests = {
-    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-    python = python3Packages.brotli;
+  passthru = {
+    tests = {
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      python = python3Packages.brotli;
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = {
@@ -63,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
       https://datatracker.ietf.org/doc/html/rfc7932
     '';
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ mdaniels5757 ];
     pkgConfigModules = [
       "libbrotlidec"
       "libbrotlienc"

@@ -257,6 +257,10 @@ with haskellLib;
   ### END HASKELL-LANGUAGE-SERVER SECTION ###
   ###########################################
 
+  # network < 3.2.8
+  # bound only required when running under WINE: https://github.com/haskell/network/issues/604
+  iserv-proxy = doJailbreak super.iserv-proxy;
+
   # Test ldap server test/ldap.js is missing from sdist
   # https://github.com/supki/ldap-client/issues/18
   ldap-client-og = dontCheck super.ldap-client-og;
@@ -610,8 +614,8 @@ with haskellLib;
       src = pkgs.fetchgit {
         name = "git-annex-${super.git-annex.version}-src";
         url = "git://git-annex.branchable.com/";
-        rev = "refs/tags/" + super.git-annex.version;
-        sha256 = "sha256-+OLFMrqpf1Ooy7CQ9S+N/H5R5+aHQtbO1pYwDF4ln8A=";
+        tag = super.git-annex.version;
+        sha256 = "sha256-Cnkohi1sl7kS4JECCsNDbxXKIWBus1gDcWoO3xZtXoM=";
         # delete android and Android directories which cause issues on
         # darwin (case insensitive directory). Since we don't need them
         # during the build process, we can delete it to prevent a hash
@@ -652,6 +656,16 @@ with haskellLib;
   # Too strict upper bounds on turtle and text
   # https://github.com/awakesecurity/nix-deploy/issues/35
   nix-deploy = doJailbreak super.nix-deploy;
+
+  call-stack = appendPatches [
+    # Fixes test suites with GHC >= 9.10
+    (pkgs.fetchpatch {
+      name = "call-stack-tests-normalize-pkg-name.patch";
+      url = "https://github.com/sol/call-stack/commit/cbbee23ce309d18201951e16a8b6d30b57e2bdf9.patch";
+      sha256 = "sha256-xkdjf8zXW+UMxot2Z8WYYmvAJsT+VGKXWGt19mZZwCg=";
+      includes = [ "test/Data/CallStackSpec.hs" ];
+    })
+  ] super.call-stack;
 
   # Too strict upper bound on algebraic-graphs
   # https://github.com/awakesecurity/nix-graph/issues/5
@@ -699,10 +713,14 @@ with haskellLib;
     hash = "sha256-feGEuALVJ0Zl8zJPIfgEFry9eH/MxA0Aw7zlDq0PC/s=";
   }) super.algebraic-graphs;
 
-  # Relies on DWARF <-> register mappings in GHC, not available for every arch & ABI
-  # (check dwarfReturnRegNo in compiler/GHC/CmmToAsm/Dwarf/Constants.hs, that's where ppc64 elfv1 gives up)
   inspection-testing = overrideCabal (drv: {
-    broken = with pkgs.stdenv.hostPlatform; !(isx86 || (isPower64 && isAbiElfv2) || isAarch64);
+    broken =
+      with pkgs.stdenv.hostPlatform;
+      # Relies on DWARF <-> register mappings in GHC, not available for every arch & ABI
+      # (check dwarfReturnRegNo in compiler/GHC/CmmToAsm/Dwarf/Constants.hs, that's where ppc64 elfv1 gives up)
+      !(isx86 || (isPower64 && isAbiElfv2) || isAarch64)
+      # We compile static with -fexternal-interpreter which is incompatible with plugins
+      || (isStatic && lib.versionAtLeast self.ghc.version "9.10");
   }) super.inspection-testing;
 
   # Too strict bounds on filepath, hpsec, tasty, tasty-quickcheck, transformers
@@ -1002,6 +1020,7 @@ with haskellLib;
   lvmrun = disableHardening [ "format" ] (dontCheck super.lvmrun);
   matplotlib = dontCheck super.matplotlib;
   milena = dontCheck super.milena;
+  MIP = dontCheck super.MIP; # https://github.com/msakai/haskell-MIP/issues/87
   modular-arithmetic = dontCheck super.modular-arithmetic; # tests require a very old Glob (0.7.*)
   nats-queue = dontCheck super.nats-queue;
   network-dbus = dontCheck super.network-dbus;
@@ -1546,7 +1565,16 @@ with haskellLib;
   # PortMidi needs an environment variable to have ALSA find its plugins:
   # https://github.com/NixOS/nixpkgs/issues/6860
   PortMidi = overrideCabal (drv: {
-    patches = (drv.patches or [ ]) ++ [ ./patches/portmidi-alsa-plugins.patch ];
+    patches = (drv.patches or [ ]) ++ [
+      ./patches/portmidi-alsa-plugins.patch
+      # Fixes compilation with GCC15 which defaults to C23
+      # https://github.com/PortMidi/PortMidi-haskell/pull/24
+      (pkgs.fetchpatch {
+        name = "PortMidi-C23.patch";
+        url = "https://github.com/PortMidi/PortMidi-haskell/commit/24b6ce1c77137b055ae57a99080d5f1616490197.patch";
+        sha256 = "sha256-PqnWA/DMW00Gtfa4YDV6iC/MXwQ3gFsNESbx+daw4C4=";
+      })
+    ];
     postPatch = (drv.postPatch or "") + ''
       substituteInPlace portmidi/pm_linux/pmlinuxalsa.c \
         --replace @alsa_plugin_dir@ "${pkgs.alsa-plugins}/lib/alsa-lib"
@@ -1830,7 +1858,6 @@ with haskellLib;
       # PATH.
       deps = [
         pkgs.git
-        pkgs.nix
         pkgs.nix-prefetch-git
       ];
     in
@@ -1844,7 +1871,9 @@ with haskellLib;
           wrapProgram "$out/bin/update-nix-fetchgit" --prefix 'PATH' ':' "${lib.makeBinPath deps}"
         '';
       }))
-      (addTestToolDepends deps)
+      # pkgs.nix is not added to the wrapper since we can resonably expect it to be installed
+      # and we don't know which implementation the eventual user prefers
+      (addTestToolDepends (deps ++ [ pkgs.nix ]))
       # Patch for hnix compat.
       (appendPatches [
         (fetchpatch {
@@ -2014,6 +2043,7 @@ with haskellLib;
   cli-git = addBuildTool pkgs.git super.cli-git;
 
   cli-nix = addBuildTools [
+    # Required due to https://github.com/obsidiansystems/cli-nix/issues/11
     pkgs.nix
     pkgs.nix-prefetch-git
   ] super.cli-nix;
@@ -2573,22 +2603,6 @@ with haskellLib;
   lucid-htmx = doJailbreak super.lucid-htmx;
 
   clash-prelude = dontCheck super.clash-prelude;
-
-  krank = appendPatches [
-    # Deal with removed exports in base
-    (pkgs.fetchpatch {
-      name = "krank-issue-97.patch";
-      url = "https://github.com/guibou/krank/commit/f6b676774537f8e2357115fd8cd3c93fb68e8a85.patch";
-      sha256 = "0d85q2x37yhjwp17wmqvblkna7p7vnl7rwdqr3kday46wvdgblgl";
-      excludes = [ ".envrc" ];
-    })
-    # Fix build of tests with http-client >=0.7.16
-    (pkgs.fetchpatch {
-      name = "krank-http-client-0.7.16.patch";
-      url = "https://github.com/guibou/krank/commit/50fd3d08526f3ed6add3352460d3d1ce9dc15f6d.patch";
-      sha256 = "0h15iir2v4pli2b72gv69amxs277xmmzw3wavrix74h9prbs4pms";
-    })
-  ] super.krank;
 
   # 2025-08-06: Upper bounds on containers <0.7 and hedgehog < 1.5 too strict.
   hermes-json = doJailbreak super.hermes-json;
@@ -3172,6 +3186,12 @@ with haskellLib;
     doJailbreak super.egison-pattern-src-th-mode
   );
 
+  # 2025-12-27: doctests broken with -Wx-partial warning
+  # https://github.com/junjihashimoto/th-cas/issues/1
+  th-cas = overrideCabal {
+    testTargets = [ "spec" ];
+  } super.th-cas;
+
   # 2025-04-09: jailbreak to allow base >= 4.17, hasql >= 1.6, hasql-transaction-io >= 0.2
   hasql-streams-core = warnAfterVersion "0.1.0.0" (doJailbreak super.hasql-streams-core);
 
@@ -3326,12 +3346,6 @@ with haskellLib;
   # 2025-5-15: Too strict bounds on base <4.19, see: https://github.com/zachjs/sv2v/issues/317
   sv2v = doJailbreak super.sv2v;
 
-  # 2025-09-20: New revision already on hackage.
-  nvfetcher = lib.pipe super.nvfetcher [
-    (warnAfterVersion "0.7.0.0")
-    doJailbreak
-  ];
-
   # 2025-06-25: Upper bounds of transformers and bytestring too strict,
   # as haskore 0.2.0.8 was released in 2016 and is quite outdated.
   # Tests fail with:
@@ -3367,146 +3381,6 @@ with haskellLib;
   stripe-concepts = doJailbreak super.stripe-concepts;
   stripe-signature = doJailbreak super.stripe-signature;
   stripe-wreq = doJailbreak super.stripe-wreq;
-
-  # 2025-08-04: Disable failing testcases. It would feel bad to disable all the
-  # checks in a cryptography related package.
-  botan-low = overrideCabal (drv: {
-    testFlags =
-      drv.testFlags or [ ]
-      ++ (lib.concatMap (x: [ "--skip" ] ++ [ x ]) [
-        # botan-low-cipher-tests
-        "/AES-128/SIV/can incrementally / online encipher a message/"
-        "/AES-128/SIV/can incrementally / online decipher a message/"
-        "/AES-128/SIV/has parity between online and offline/"
-        "/AES-192/SIV/can incrementally / online encipher a message/"
-        "/AES-192/SIV/can incrementally / online decipher a message/"
-        "/AES-192/SIV/has parity between online and offline/"
-        "/AES-256/SIV/can incrementally / online encipher a message/"
-        "/AES-256/SIV/can incrementally / online decipher a message/"
-        "/AES-256/SIV/has parity between online and offline/"
-        "/ARIA-128/SIV/can incrementally / online encipher a message/"
-        "/ARIA-128/SIV/can incrementally / online decipher a message/"
-        "/ARIA-128/SIV/has parity between online and offline/"
-        "/ARIA-192/SIV/can incrementally / online encipher a message/"
-        "/ARIA-192/SIV/can incrementally / online decipher a message/"
-        "/ARIA-192/SIV/has parity between online and offline/"
-        "/ARIA-256/SIV/can incrementally / online encipher a message/"
-        "/ARIA-256/SIV/can incrementally / online decipher a message/"
-        "/ARIA-256/SIV/has parity between online and offline/"
-        "/Camellia-128/SIV/can incrementally / online encipher a message/"
-        "/Camellia-128/SIV/can incrementally / online decipher a message/"
-        "/Camellia-128/SIV/has parity between online and offline/"
-        "/Camellia-192/SIV/can incrementally / online encipher a message/"
-        "/Camellia-192/SIV/can incrementally / online decipher a message/"
-        "/Camellia-192/SIV/has parity between online and offline/"
-        "/Camellia-256/SIV/can incrementally / online encipher a message/"
-        "/Camellia-256/SIV/can incrementally / online decipher a message/"
-        "/Camellia-256/SIV/has parity between online and offline/"
-        "/Noekeon/SIV/can incrementally / online encipher a message/"
-        "/Noekeon/SIV/can incrementally / online decipher a message/"
-        "/Noekeon/SIV/has parity between online and offline/"
-        "/SEED/SIV/can incrementally / online encipher a message/"
-        "/SEED/SIV/can incrementally / online decipher a message/"
-        "/SEED/SIV/has parity between online and offline/"
-        "/SM4/SIV/can incrementally / online encipher a message/"
-        "/SM4/SIV/can incrementally / online decipher a message/"
-        "/SM4/SIV/has parity between online and offline/"
-        "/Serpent/SIV/can incrementally / online encipher a message/"
-        "/Serpent/SIV/can incrementally / online decipher a message/"
-        "/Serpent/SIV/has parity between online and offline/"
-        "/Twofish/SIV/can incrementally / online encipher a message/"
-        "/Twofish/SIV/can incrementally / online decipher a message/"
-        "/Twofish/SIV/has parity between online and offline/"
-        "/AES-128/CCM/can incrementally / online encipher a message/"
-        "/AES-128/CCM/can incrementally / online decipher a message/"
-        "/AES-128/CCM/has parity between online and offline/"
-        "/AES-192/CCM/can incrementally / online encipher a message/"
-        "/AES-192/CCM/can incrementally / online decipher a message/"
-        "/AES-192/CCM/has parity between online and offline/"
-        "/AES-256/CCM/can incrementally / online encipher a message/"
-        "/AES-256/CCM/can incrementally / online decipher a message/"
-        "/AES-256/CCM/has parity between online and offline/"
-        "/ARIA-128/CCM/can incrementally / online encipher a message/"
-        "/ARIA-128/CCM/can incrementally / online decipher a message/"
-        "/ARIA-128/CCM/has parity between online and offline/"
-        "/ARIA-192/CCM/can incrementally / online encipher a message/"
-        "/ARIA-192/CCM/can incrementally / online decipher a message/"
-        "/ARIA-192/CCM/has parity between online and offline/"
-        "/ARIA-256/CCM/can incrementally / online encipher a message/"
-        "/ARIA-256/CCM/can incrementally / online decipher a message/"
-        "/ARIA-256/CCM/has parity between online and offline/"
-        "/Camellia-128/CCM/can incrementally / online encipher a message/"
-        "/Camellia-128/CCM/can incrementally / online decipher a message/"
-        "/Camellia-128/CCM/has parity between online and offline/"
-        "/Camellia-192/CCM/can incrementally / online encipher a message/"
-        "/Camellia-192/CCM/can incrementally / online decipher a message/"
-        "/Camellia-192/CCM/has parity between online and offline/"
-        "/Camellia-256/CCM/can incrementally / online encipher a message/"
-        "/Camellia-256/CCM/can incrementally / online decipher a message/"
-        "/Camellia-256/CCM/has parity between online and offline/"
-        "/Noekeon/CCM/can incrementally / online encipher a message/"
-        "/Noekeon/CCM/can incrementally / online decipher a message/"
-        "/Noekeon/CCM/has parity between online and offline/"
-        "/SEED/CCM/can incrementally / online encipher a message/"
-        "/SEED/CCM/can incrementally / online decipher a message/"
-        "/SEED/CCM/has parity between online and offline/"
-        "/SM4/CCM/can incrementally / online encipher a message/"
-        "/SM4/CCM/can incrementally / online decipher a message/"
-        "/SM4/CCM/has parity between online and offline/"
-        "/Serpent/CCM/can incrementally / online encipher a message/"
-        "/Serpent/CCM/can incrementally / online decipher a message/"
-        "/Serpent/CCM/has parity between online and offline/"
-        "/Twofish/CCM/can incrementally / online encipher a message/"
-        "/Twofish/CCM/can incrementally / online decipher a message/"
-        "/Twofish/CCM/has parity between online and offline/"
-        # botan-low-mpi-tests
-        "/can compute the modular inverse/"
-        # botan-low-pubkey-dsa-tests
-        "/modp/srp/1024/privKeyLoadDSA/"
-        "/modp/srp/1024/pubKeyLoadDSA/"
-        "/modp/srp/1536/privKeyLoadDSA/"
-        "/modp/srp/1536/pubKeyLoadDSA/"
-        "/modp/srp/2048/privKeyLoadDSA/"
-        "/modp/srp/2048/pubKeyLoadDSA/"
-        "/modp/srp/3072/privKeyLoadDSA/"
-        "/modp/srp/3072/pubKeyLoadDSA/"
-        "/modp/srp/4096/privKeyLoadDSA/"
-        "/modp/srp/4096/pubKeyLoadDSA/"
-        "/modp/srp/6144/privKeyLoadDSA/"
-        "/modp/srp/6144/pubKeyLoadDSA/"
-        "/modp/srp/8192/privKeyLoadDSA/"
-        "/modp/srp/8192/pubKeyLoadDSA/"
-        # botan-low-pubkey-decrypt-tests
-        "/SM2 sm2p256v1 SHA-256/decrypt/"
-        # botan-low-pubkey-encrypt-tests
-        "/SM2 sm2p256v1 SHA-256/encrypt/"
-        # botan-low-pwdhash-tests
-        "/Scrypt/pwdhashTimed/"
-        # botan-low-srp6-tests
-        "/ffdhe/ietf/2048/can negotiate a shared secret/"
-        "/ffdhe/ietf/3072/can negotiate a shared secret/"
-        "/ffdhe/ietf/4096/can negotiate a shared secret/"
-        "/ffdhe/ietf/6144/can negotiate a shared secret/"
-        "/ffdhe/ietf/8192/can negotiate a shared secret/"
-        "/modp/ietf/1024/can negotiate a shared secret/"
-        "/modp/ietf/1536/can negotiate a shared secret/"
-        "/modp/ietf/2048/can negotiate a shared secret/"
-        "/modp/ietf/3072/can negotiate a shared secret/"
-        "/modp/ietf/4096/can negotiate a shared secret/"
-        "/modp/ietf/6144/can negotiate a shared secret/"
-        "/modp/ietf/8192/can negotiate a shared secret/"
-        "/modp/srp/1024/can negotiate a shared secret/"
-        "/modp/srp/1536/can negotiate a shared secret/"
-        "/modp/srp/2048/can negotiate a shared secret/"
-        "/modp/srp/3072/can negotiate a shared secret/"
-        "/modp/srp/4096/can negotiate a shared secret/"
-        "/modp/srp/6144/can negotiate a shared secret/"
-        "/modp/srp/8192/can negotiate a shared secret/"
-        "/dsa/jce/1024/can negotiate a shared secret/"
-        "/dsa/botan/2048/can negotiate a shared secret/"
-        "/dsa/botan/3072/can negotiate a shared secret/"
-      ]);
-  }) super.botan-low;
 }
 // import ./configuration-tensorflow.nix { inherit pkgs haskellLib; } self super
 
@@ -3907,13 +3781,13 @@ with haskellLib;
 # Manually maintained
 // (
   let
-    version = "1.9.1";
+    version = "1.10.1";
 
     src = pkgs.fetchFromGitHub {
       owner = "cachix";
       repo = "cachix";
       tag = "v${version}";
-      hash = "sha256-IwnNtbNVrlZIHh7h4Wz6VP0Furxg9Hh0ycighvL5cZc=";
+      hash = "sha256-kNwoplCrqAymyFIzoR1rpEj0I1Ass+wuP8YsVS61630=";
     };
   in
   {

@@ -9,7 +9,7 @@
 let
   datapath = "$out/share/XaoS";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xaos";
   version = "4.3.4";
   outputs = [
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "xaos-project";
     repo = "XaoS";
-    tag = "release-${version}";
+    tag = "release-${finalAttrs.version}";
     hash = "sha256-vOFwZbdbcrcJLHUa1QzxzadPcx5GF5uNPg+MZ7NbAPc=";
   };
 
@@ -62,11 +62,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = src.meta // {
+  meta = finalAttrs.src.meta // {
     description = "Real-time interactive fractal zoomer";
     mainProgram = "xaos";
     homepage = "https://xaos-project.github.io/";
     license = lib.licenses.gpl2Plus;
     platforms = [ "x86_64-linux" ];
   };
-}
+})

@@ -40,23 +40,23 @@
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lancedb";
-  version = "0.26.0";
+  version = "0.26.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lancedb";
-    tag = "python-v${version}";
-    hash = "sha256-urOHHuPFce7Ms1EqjM4n72zx0APVrIQ1bLIkmrp/Dec=";
+    tag = "python-v${finalAttrs.version}";
+    hash = "sha256-yx4cwO7qRH9/1rW0UFz17HkvJ8utJynYoAHnN+wPpKw=";
   };
 
   buildAndTestSubdir = "python";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-03p1mDsE//YafUGImB9xMqqUzKlBD9LCiV1RGP2L5lw=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-ymoA/KKL7oLgp5u/NcXxbYfOueiKH+bpLxLcO+mn0Eo=";
   };
 
   build-system = [ rustPlatform.maturinBuildHook ];
@@ -139,8 +139,8 @@ buildPythonPackage rec {
   meta = {
     description = "Developer-friendly, serverless vector database for AI applications";
     homepage = "https://github.com/lancedb/lancedb";
-    changelog = "https://github.com/lancedb/lancedb/releases/tag/python-v${version}";
+    changelog = "https://github.com/lancedb/lancedb/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ natsukium ];
   };
-}
+})

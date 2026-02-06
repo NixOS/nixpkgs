@@ -6,7 +6,6 @@
   fetchFromGitHub,
   scspell,
   setuptools,
-  pythonOlder,
   pytestCheckHook,
   rustfmt,
   toml,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "colcon-cargo";
   version = "0.1.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "colcon";

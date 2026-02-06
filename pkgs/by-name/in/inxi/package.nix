@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   perl,
   perlPackages,
   makeWrapper,
@@ -25,7 +25,9 @@
   pciutils,
   withRecommendedDisplayInformationPrograms ? withRecommends,
   mesa-demos,
-  xorg,
+  xrandr,
+  xprop,
+  xdpyinfo,
 }:
 
 let
@@ -46,14 +48,12 @@ let
     upower
     pciutils
   ];
-  recommendedDisplayInformationPrograms = lib.optionals withRecommendedDisplayInformationPrograms (
-    [ mesa-demos ]
-    ++ (with xorg; [
-      xdpyinfo
-      xprop
-      xrandr
-    ])
-  );
+  recommendedDisplayInformationPrograms = lib.optionals withRecommendedDisplayInformationPrograms [
+    mesa-demos
+    xdpyinfo
+    xprop
+    xrandr
+  ];
   programs = [
     ps
     dnsutils
@@ -63,14 +63,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "inxi";
-  version = "3.3.39-1";
+  version = "3.3.40-1";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "smxi";
     repo = "inxi";
     tag = finalAttrs.version;
-    hash = "sha256-IfwklyXMOuluQ6L96n7k31RHItE7GmmjExrPAGBjbUQ=";
+    hash = "sha256-GpXfLLJhM4L9TB8Qw38uaCCwtCmBYg9nrVC001kDckc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

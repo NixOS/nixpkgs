@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "http-sfv";
   version = "0.9.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mnot";

@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "esptool-ck";
   version = "0.4.13";
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "1cb81b30a71r7i0gmkh2qagfx9lhq0myq5i37fk881bq6g7i5n2k";
   };
 
-  makeFlags = [ "VERSION=${version}" ];
+  makeFlags = [ "VERSION=${finalAttrs.version}" ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -30,4 +30,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "esptool";
   };
-}
+})

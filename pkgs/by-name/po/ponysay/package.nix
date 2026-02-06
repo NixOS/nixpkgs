@@ -7,7 +7,7 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ponysay";
   version = "unstable-2021-03-27";
 
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ bodil ];
     platforms = lib.platforms.unix;
   };
-}
+})

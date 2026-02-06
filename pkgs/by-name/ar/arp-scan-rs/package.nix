@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "arp-scan-rs";
-  version = "0.14.0";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "kongbytes";
     repo = "arp-scan-rs";
     tag = "v${version}";
-    hash = "sha256-CLxeT2olrxRCJ12IZ1PvLW7ZuX0HPsoNuFyxmGBhB8w=";
+    hash = "sha256-cTV1mJjHXT3LHFpzOC867VNnhaBo7zuinT8qqd4joY0=";
   };
 
-  cargoHash = "sha256-lPE/mx4LzSOG1YjGol1f77oox4voZzp9RqrKYZAMoX0=";
+  cargoHash = "sha256-qTVgFUgDctfHavejoHeW0wRi3BNsr8NV+rL/2kykBGY=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 

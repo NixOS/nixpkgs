@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   version = "2.0";
 
   src = fetchurl {
-    url = "https://dl.2f30.org/releases/${pname}-${version}.tar.gz";
+    url = "https://dl.2f30.org/releases/dedup-${version}.tar.gz";
     sha256 = "0n5kkni4d6blz3s94y0ddyhijb74lxv7msr2mvdmj8l19k0lrfh1";
   };
 

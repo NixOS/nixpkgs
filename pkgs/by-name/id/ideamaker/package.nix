@@ -22,7 +22,7 @@
   shared-mime-info,
   stdenv,
   writeShellApplication,
-  xkeyboardconfig,
+  xkeyboard-config,
 }:
 let
   pname = "ideamaker";
@@ -86,7 +86,7 @@ stdenv.mkDerivation {
   preFixup = ''
     wrapProgram $out/bin/ideamaker \
       --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
-      --set QT_XKB_CONFIG_ROOT "${xkeyboardconfig}/share/X11/xkb" \
+      --set QT_XKB_CONFIG_ROOT "${xkeyboard-config}/share/X11/xkb" \
       --set QTCOMPOSE "${libX11.out}/share/X11/locale" \
       --set KDEDIRS "$HOME/.nix-profile:/nix/var/nix/profiles/default" \
       --set NIX_REDIRECTS /usr/share=$out/share/

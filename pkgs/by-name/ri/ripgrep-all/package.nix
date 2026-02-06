@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-v+lLCI2ti/xL8hcGkm/xDDN9qk0G9MgtijE8xYnhC68=";
 
   # override debug=true set in Cargo.toml upstream
-  RUSTFLAGS = "-C debuginfo=none";
+  env.RUSTFLAGS = "-C debuginfo=none";
 
   nativeBuildInputs = [
     makeWrapper

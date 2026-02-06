@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   version = "1.6.3";
 
   src = fetchurl {
-    url = "https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/keyutils.git/snapshot/${pname}-${version}.tar.gz";
+    url = "https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/keyutils.git/snapshot/keyutils-${version}.tar.gz";
     sha256 = "sha256-ph1XBhNq5MBb1I+GGGvP29iN2L1RB+Phlckkz8Gzm7Q=";
   };
 

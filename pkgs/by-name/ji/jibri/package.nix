@@ -6,17 +6,18 @@
   jdk11_headless,
   makeWrapper,
   writeText,
-  xorg,
+  xorg-server,
+  xf86-video-dummy,
   nixosTests,
 }:
 
 let
   xorgModulePaths = writeText "module-paths" ''
     Section "Files"
-      ModulePath "${xorg.xorgserver}/lib/xorg/modules
-      ModulePath "${xorg.xorgserver}/lib/xorg/extensions
-      ModulePath "${xorg.xorgserver}/lib/xorg/drivers
-      ModulePath "${xorg.xf86videodummy}/lib/xorg/modules/drivers
+      ModulePath "${xorg-server}/lib/xorg/modules
+      ModulePath "${xorg-server}/lib/xorg/extensions
+      ModulePath "${xorg-server}/lib/xorg/drivers
+      ModulePath "${xf86-video-dummy}/lib/xorg/modules/drivers
     EndSection
   '';
 
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
   pname = "jibri";
   version = "8.0-183-g7b406bf";
   src = fetchurl {
-    url = "https://download.jitsi.org/stable/${pname}_${version}-1_all.deb";
+    url = "https://download.jitsi.org/stable/jibri_${version}-1_all.deb";
     sha256 = "QF7BkLizAsEzjC6PdTyPFAFf82AzukTnxHxLHyz5Kco=";
   };
 

@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional buildDocs "devdoc";
 
   src = fetchurl {
-    url = "mirror://sourceforge/pidgin/${pname}-${version}.tar.xz";
+    url = "mirror://sourceforge/pidgin/libgnt-${version}.tar.xz";
     hash = "sha256-GVkzqacx01dXkbiBulzArSpxXh6cTCPMqqKhfhZMluw=";
   };
 

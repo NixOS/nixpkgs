@@ -13,16 +13,16 @@
 
 buildGoModule rec {
   pname = "runme";
-  version = "3.16.4";
+  version = "3.16.5";
 
   src = fetchFromGitHub {
     owner = "runmedev";
     repo = "runme";
     rev = "v${version}";
-    hash = "sha256-2uJl7lfYS3b4SgiXLYmf6UcNnYDQMaVkfkhlLDqCukE=";
+    hash = "sha256-FtZSwD9kGFaE43iJcei2K4tzPzXku9R9OnEeub/jYlg=";
   };
 
-  vendorHash = "sha256-msRPjX3oYRLRwK4j7WDtERYh+6b67QQEw/EDS3+bY8k=";
+  vendorHash = "sha256-5x8KEd0foUZ68dS+SeXvaDzfwHVKuKTKCxlhXivTsB0=";
 
   nativeBuildInputs = [
     installShellFiles

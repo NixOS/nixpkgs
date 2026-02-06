@@ -5,7 +5,6 @@
   lib,
   nix-update-script,
   pytestCheckHook,
-  pythonOlder,
   rustPlatform,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   version = "0.38.1";
 
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   # Fetching from Pypi, because there is no Cargo.lock in the GitHub repo.
   src = fetchPypi {
@@ -48,6 +45,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/Stranger6667/jsonschema/tree/master/crates/jsonschema-py";
     changelog = "https://github.com/Stranger6667/jsonschema/blob/python-v${version}/crates/jsonschema-py/CHANGELOG.md";
     license = lib.licenses.mit;
-    teams = [ lib.teams.apm ];
+    maintainers = with lib.maintainers; [
+      DutchGerman
+      friedow
+    ];
   };
 }

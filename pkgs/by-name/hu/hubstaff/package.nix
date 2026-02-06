@@ -6,8 +6,8 @@
   makeWrapper,
   libX11,
   zlib,
-  libSM,
-  libICE,
+  libsm,
+  libice,
   libXext,
   freetype,
   libXrender,
@@ -26,6 +26,8 @@
   writeShellScript,
   common-updater-scripts,
   xmlstarlet,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 
 let
@@ -36,8 +38,8 @@ let
   rpath = lib.makeLibraryPath [
     libX11
     zlib
-    libSM
-    libICE
+    libsm
+    libice
     libXext
     freetype
     libXrender
@@ -67,6 +69,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     unzip
     makeWrapper
+    copyDesktopItems
   ];
 
   unpackCmd = ''
@@ -81,7 +84,23 @@ stdenv.mkDerivation {
 
   dontBuild = true;
 
+  # Upstream doesn't seem to have a desktop item out of the box
+  desktopItems = [
+    (makeDesktopItem {
+      name = "netsoft-com.netsoft.hubstaff";
+      desktopName = "Hubstaff";
+      exec = "HubstaffClient";
+      icon = "hubstaff";
+      comment = "Time tracking software";
+      categories = [
+        "Office"
+        "ProjectManagement"
+      ];
+    })
+  ];
+
   installPhase = ''
+    runHook preInstall
     # remove files for 32-bit arch to skip building for this arch
     # but add -f flag to not fail if files were not found (new versions dont provide 32-bit arch)
     rm -rf x86 x86_64/lib64
@@ -100,6 +119,7 @@ stdenv.mkDerivation {
 
     # Why is this needed? SEGV otherwise.
     ln -s $opt/data/resources $opt/x86_64/resources
+    runHook postInstall
   '';
 
   # to test run:

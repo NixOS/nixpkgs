@@ -243,19 +243,29 @@ stdenv.mkDerivation {
     echo CONFIG_MPEGAUDIODSP=yes >> config.mak
   '';
 
-  # Fixes compilation with newer versions of clang that make these warnings errors by default.
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-int-conversion -Wno-incompatible-function-pointer-types";
-
-  NIX_LDFLAGS = toString (
-    lib.optional fontconfigSupport "-lfontconfig"
-    ++ lib.optional fribidiSupport "-lfribidi"
-    ++ lib.optionals x11Support [
-      "-lX11"
-      "-lXext"
-    ]
-    ++ lib.optional x264Support "-lx264"
-    ++ [ "-lfreetype" ]
-  );
+  env =
+    lib.optionalAttrs stdenv.cc.isClang {
+      # Fixes compilation with newer versions of clang that make these warnings errors by default.
+      NIX_CFLAGS_COMPILE = "-Wno-int-conversion -Wno-incompatible-function-pointer-types";
+    }
+    // {
+      NIX_LDFLAGS = toString (
+        lib.optionals fontconfigSupport [
+          "-lfontconfig"
+        ]
+        ++ lib.optionals fribidiSupport [
+          "-lfribidi"
+        ]
+        ++ lib.optionals x11Support [
+          "-lX11"
+          "-lXext"
+        ]
+        ++ lib.optionals x264Support [
+          "-lx264"
+        ]
+        ++ [ "-lfreetype" ]
+      );
+    };
 
   installTargets = [ "install" ] ++ lib.optional x11Support "install-gui";
 

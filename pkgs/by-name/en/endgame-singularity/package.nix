@@ -25,7 +25,7 @@ let
 in
 
 python3.pkgs.buildPythonApplication {
-  format = "pyproject";
+  pyproject = true;
   inherit pname version;
 
   srcs = [ main_src ] ++ lib.optional enableDefaultMusicPack music_src;

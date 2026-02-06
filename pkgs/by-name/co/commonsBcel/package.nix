@@ -4,19 +4,19 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "6.10.0";
   pname = "commons-bcel";
 
   src = fetchurl {
-    url = "mirror://apache/commons/bcel/binaries/bcel-${version}-bin.tar.gz";
+    url = "mirror://apache/commons/bcel/binaries/bcel-${finalAttrs.version}-bin.tar.gz";
     hash = "sha256-RRVXxPtwbT9AX92T60uDJpFWF6DiotcG1KvKrlFfEWU=";
   };
 
   installPhase = ''
-    tar xf ${src}
+    tar xf ${finalAttrs.src}
     mkdir -p $out/share/java
-    cp bcel-${version}.jar $out/share/java/
+    cp bcel-${finalAttrs.version}.jar $out/share/java/
   '';
 
   meta = {
@@ -27,4 +27,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     platforms = with lib.platforms; unix;
   };
-}
+})

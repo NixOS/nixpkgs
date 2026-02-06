@@ -721,12 +721,6 @@ in
       else
         listToAttrs (map (i: nameValuePair "wpa_supplicant-${i}" (mkUnit i)) cfg.interfaces);
 
-    # Restart wpa_supplicant after resuming from sleep
-    powerManagement.resumeCommands = concatStringsSep "\n" (
-      optional (cfg.interfaces == [ ]) "${systemctl} try-restart wpa_supplicant"
-      ++ map (i: "${systemctl} try-restart wpa_supplicant-${i}") cfg.interfaces
-    );
-
     # Restart wpa_supplicant when a wlan device appears or disappears. This is
     # only needed when an interface hasn't been specified by the user.
     services.udev.extraRules = optionalString (cfg.interfaces == [ ]) ''

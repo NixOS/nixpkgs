@@ -11,14 +11,14 @@
   netpbm,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yad";
   version = "14.1";
 
   src = fetchFromGitHub {
     owner = "v1cont";
     repo = "yad";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Y7bp20fkNdSgBcSV1kPEpWEP7ASwZcScVRaPauwI72M=";
   };
 
@@ -69,4 +69,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ smironov ];
     platforms = with lib.platforms; linux;
   };
-}
+})

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   version = "0.34.7";
 
   src = fetchurl {
-    url = "https://pagure.io/oddjob/archive/${pname}-${version}/oddjob-${pname}-${version}.tar.gz";
+    url = "https://pagure.io/oddjob/archive/oddjob-${version}/oddjob-oddjob-${version}.tar.gz";
     hash = "sha256-SUOsMH55HtEsk5rX0CXK0apDObTj738FGOaL5xZRnIM=";
   };
 

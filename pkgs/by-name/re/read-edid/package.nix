@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "3.0.2";
 
   src = fetchurl {
-    url = "http://www.polypux.org/projects/read-edid/${pname}-${version}.tar.gz";
+    url = "http://www.polypux.org/projects/read-edid/read-edid-${version}.tar.gz";
     sha256 = "0vqqmwsgh2gchw7qmpqk6idgzcm5rqf2fab84y7gk42v1x2diin7";
   };
 

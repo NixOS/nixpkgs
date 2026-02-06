@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   rustPlatform,
   nix-update-script,
 
@@ -11,17 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mergiraf";
-  version = "0.16.1";
+  version = "0.16.3";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "mergiraf";
     repo = "mergiraf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vKqvVpGyQ9ayebssupiySjJ7R7gn1W8HTlDuGM4d1Ns=";
+    hash = "sha256-KlielG8XxOlS5Np8LZT+GMujWw/7EDOwsZHWVjneV3g=";
   };
 
-  cargoHash = "sha256-vhes4p8e1PW4p5tqqPffAgl3V4dK17+n748VA6Q23lE=";
+  cargoHash = "sha256-F6YtOgcAR4fN33j7Ae4ixhTfNctUfgkV3t1I7XJzHHw=";
 
   nativeCheckInputs = [ git ];
 

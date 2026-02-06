@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   pname = "autocutsel";
 
   src = fetchurl {
-    url = "https://github.com/sigmike/autocutsel/releases/download/${version}/${pname}-${version}.tar.gz";
+    url = "https://github.com/sigmike/autocutsel/releases/download/${version}/autocutsel-${version}.tar.gz";
     sha256 = "sha256-8X4G1C90lENtSyb0vgtrDaOUgcBADJZ3jkuQW2NB6xc=";
   };
 

@@ -6,7 +6,15 @@
   pandoc,
 }:
 
-python3Packages.buildPythonApplication rec {
+let
+  pythonPackages = python3Packages.overrideScope (
+    self: super: {
+      lsprotocol = self.lsprotocol_2023;
+      pygls = self.pygls_1;
+    }
+  );
+in
+pythonPackages.buildPythonApplication rec {
   pname = "systemd-language-server";
   version = "0.3.5";
   pyproject = true;
@@ -18,14 +26,14 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-QRd2mV4qRh4OfVJ2/5cOm3Wh8ydsLTG9Twp346DHjs0=";
   };
 
-  build-system = with python3Packages; [
+  build-system = with pythonPackages; [
     poetry-core
   ];
 
   pythonRelaxDeps = [
     "lxml"
   ];
-  dependencies = with python3Packages; [
+  dependencies = with pythonPackages; [
     lxml
     pygls
   ];
@@ -34,7 +42,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeCheckInputs = [
     pandoc
-    python3Packages.pytestCheckHook
+    pythonPackages.pytestCheckHook
   ];
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [

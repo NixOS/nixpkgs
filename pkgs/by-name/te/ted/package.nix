@@ -5,7 +5,10 @@
   pkg-config,
   zlib,
   pcre,
-  xorg,
+  libxpm,
+  libx11,
+  libsm,
+  libice,
   libjpeg,
   libtiff,
   libpng,
@@ -21,7 +24,7 @@ stdenv.mkDerivation rec {
   version = "2.23";
 
   src = fetchurl {
-    url = "http://ftp.nluug.nl/pub/editors/${pname}/${pname}-${version}.src.tar.gz";
+    url = "http://ftp.nluug.nl/pub/editors/ted/ted-${version}.src.tar.gz";
     hash = "sha256-P6mSwryWrzyniO+UHLUxT0odhDIC79AgG4tO6a2/MWw=";
   };
 
@@ -87,10 +90,10 @@ stdenv.mkDerivation rec {
   buildInputs = [
     zlib
     pcre
-    xorg.libX11
-    xorg.libICE
-    xorg.libSM
-    xorg.libXpm
+    libx11
+    libice
+    libsm
+    libxpm
     libjpeg
     libtiff
     libpng

@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "radicale";
-  version = "3.5.10";
+  version = "3.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Kozea";
     repo = "Radicale";
     tag = "v${version}";
-    hash = "sha256-tLBWPWkSGI7vQIGo9FIwCEgHWPlrs1q70CsAWQn9sEs=";
+    hash = "sha256-FzCNmmlQeka+Z7h1Dp631coKPF7gc0LOWnyca994bgs=";
   };
 
   build-system = with python3.pkgs; [
@@ -25,14 +25,15 @@ python3.pkgs.buildPythonApplication rec {
     with python3.pkgs;
     [
       defusedxml
-      passlib
+      libpass
       vobject
+      packaging
       pika
       requests
-      pytz # https://github.com/Kozea/Radicale/issues/816
       ldap3
     ]
-    ++ passlib.optional-dependencies.bcrypt;
+    ++ libpass.optional-dependencies.argon2
+    ++ libpass.optional-dependencies.bcrypt;
 
   __darwinAllowLocalNetworking = true;
 

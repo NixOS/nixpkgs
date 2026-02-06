@@ -29,6 +29,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ gettext ];
 
+  # tools/attr.c: Add missing libgen.h include for basename(3)
+  # Fixes compilation issue with musl and modern C99 compilers.
+  # See: https://bugs.gentoo.org/926294
   patches = [ ./musl.patch ];
 
   postPatch = ''
@@ -36,6 +39,9 @@ stdenv.mkDerivation rec {
       patchShebangs $script
     done
   '';
+
+  # See nixos/tests/attr.nix
+  doCheck = false;
 
   meta = {
     homepage = "https://savannah.nongnu.org/projects/attr/";

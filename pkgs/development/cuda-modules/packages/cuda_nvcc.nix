@@ -87,7 +87,7 @@ buildRedist (finalAttrs: {
         ++ lib.optionals (cudaOlder "12.5") [ "$(_NVVM_BRANCH_)" ]
         ++ lib.optionals (cudaAtLeast "12.5") [ "nvvm" ]
       );
-      newNvvmDir = ''''${!outputBin:?}/nvvm'';
+      newNvvmDir = "\${!outputBin:?}/nvvm";
     in
     lib.optionalString finalAttrs.finalPackage.meta.available (
       # From CUDA 13.0, NVVM is available as a separate library and not bundled in the NVCC redist.

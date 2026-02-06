@@ -5,14 +5,14 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "3proxy";
   version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "3proxy";
     repo = "3proxy";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-uy6flZ1a7o02pr5O0pgl9zCjh8mE9W5JxotJeBMB16A=";
   };
 
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ misuzu ];
   };
-}
+})

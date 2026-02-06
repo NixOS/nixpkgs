@@ -4,7 +4,7 @@
   fetchFromGitLab,
   autoreconfHook,
   pkg-config,
-  utilmacros,
+  util-macros,
   libX11,
   libXaw,
   libXmu,
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
-    utilmacros
+    util-macros
   ];
   buildInputs = [
     libX11
@@ -51,7 +51,6 @@ stdenv.mkDerivation rec {
     description = "Simple graphical text editor using Athena Widgets (Xaw)";
     homepage = "https://gitlab.freedesktop.org/xorg/app/xedit";
     license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ shamilton ];
     platforms = lib.platforms.unix;
     # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin;

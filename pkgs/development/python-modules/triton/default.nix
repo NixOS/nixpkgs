@@ -258,6 +258,11 @@ buildPythonPackage rec {
               ps.triton
               ps.torch-no-triton
             ];
+
+            gpuCheckArgs.nativeBuildInputs = [
+              # PermissionError: [Errno 13] Permission denied: '/homeless-shelter'
+              writableTmpDirAsHomeHook
+            ];
           }
           ''
             # Adopted from Philippe Tillet https://triton-lang.org/main/getting-started/tutorials/01-vector-add.html

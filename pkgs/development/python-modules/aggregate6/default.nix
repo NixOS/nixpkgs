@@ -45,6 +45,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/job/aggregate6";
     license = with lib.licenses; [ bsd2 ];
     maintainers = with lib.maintainers; [ marcel ];
-    teams = [ lib.teams.wdz ];
   };
 }

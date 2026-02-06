@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   version = "2.2.3-1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/urlget/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/urlget/uget-${version}.tar.gz";
     sha256 = "0jchvgkkphhwp2z7vd4axxr9ns8b6vqc22b2z8a906qm8916wd8i";
   };
 

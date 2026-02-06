@@ -24,7 +24,6 @@
 
       # Prerequisites
       boot.initrd.systemd.enable = true;
-      boot.kernelPackages = pkgs.linuxPackages_latest;
 
       specialisation.new-generation.configuration = {
         environment.etc."newgen".text = "newgen";

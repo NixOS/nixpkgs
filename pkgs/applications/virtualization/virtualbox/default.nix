@@ -72,9 +72,9 @@ let
   buildType = "release";
   # Use maintainers/scripts/update.nix to update the version and all related hashes or
   # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
-  virtualboxVersion = "7.2.4";
+  virtualboxVersion = "7.2.6";
   virtualboxSubVersion = "";
-  virtualboxSha256 = "d281ec981b5f580211a0cedd1b75a1adcb0fbfcbb768d8c2bf4429f4763e8bbd";
+  virtualboxSha256 = "c58443a0e6fcc7fc7e84c1011a10823b3540c6a2b8f2e27c4d8971272baf09f7";
 
   kvmPatchVboxVersion = "7.2.4";
   kvmPatchVersion = "20251103";
@@ -231,14 +231,6 @@ stdenv.mkDerivation (finalAttrs: {
         url = "https://salsa.debian.org/pkg-virtualbox-team/virtualbox/-/raw/8028d88e6876ca5977de13c58b54e243229efe98/debian/patches/16-no-update.patch";
         hash = "sha256-AGtFsRjwd8Yw296eqX3NC2TUptAhpFTRaOMutiheQ6Y=";
       })
-      # NAT network shouldn't fully saturate one CPU
-      # https://github.com/VirtualBox/virtualbox/issues/356
-      (fetchpatch {
-        name = "vbox-nat-cpu.patch";
-        url = "https://github.com/VirtualBox/virtualbox/commit/efa378dadd192af8fbce331e9ec66fb36d65ad3d.diff";
-        hash = "sha256-7u3kSszv77leZdMs911TzAchU5mBqmNpgvuZDQaY9To=";
-        hunks = [ "2-" ];
-      })
     ]
     ++ [ ./extra_symbols.patch ]
     # When hardening is enabled, we cannot use wrapQtApp to ensure that VirtualBoxVM sees
@@ -264,11 +256,6 @@ stdenv.mkDerivation (finalAttrs: {
       ./qt-dependency-paths.patch
       # https://github.com/NixOS/nixpkgs/issues/123851
       ./fix-audio-driver-loading.patch
-      # curl 8.16 upgrade breakage
-      (fetchpatch {
-        url = "https://salsa.debian.org/pkg-virtualbox-team/virtualbox/-/raw/dbf9a6ef75380ebd2705df0198c6ac8073d0b4cb/debian/patches/new-curl.patch";
-        hash = "sha256-WWnCWdXlJo9jTr8yXA0NxcDQBScryuu/53wyX0rhszk=";
-      })
     ];
 
   postPatch = ''

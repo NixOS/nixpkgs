@@ -14,7 +14,7 @@
   libmodule,
   libXdmcp,
   util-linux,
-  libpthreadstubs,
+  libpthread-stubs,
   enableDdc ? true,
   ddcutil,
   enableDpms ? true,
@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     libXdmcp
     util-linux
-    libpthreadstubs
+    libpthread-stubs
   ]
   ++ lib.optionals enableDdc [ ddcutil ]
   ++ lib.optionals enableDpms [ libXext ]

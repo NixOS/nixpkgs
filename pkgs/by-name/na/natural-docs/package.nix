@@ -6,12 +6,12 @@
   lib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "natural-docs";
   version = "2.3.1";
 
   src = fetchzip {
-    url = "https://naturaldocs.org/download/natural_docs/${version}/Natural_Docs_${version}.zip";
+    url = "https://naturaldocs.org/download/natural_docs/${finalAttrs.version}/Natural_Docs_${finalAttrs.version}.zip";
     sha256 = "sha256-gjAhS2hdFA8G+E5bJD18BQdb7PrBeRnpBBSlnVJ5hgY=";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.nkpvk ];
     mainProgram = "NaturalDocs";
   };
-}
+})

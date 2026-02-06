@@ -8,7 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "graph-cli";
   version = "0.1.19";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit version;

@@ -6,15 +6,14 @@
   imagemagick,
   libgbm,
   libdrm,
-  flutter332,
-  flutter335,
+  flutter338,
   pulseaudio,
   webkitgtk_4_1,
   copyDesktopItems,
   makeDesktopItem,
 
   callPackage,
-  vodozemac-wasm ? callPackage ./vodozemac-wasm.nix { flutter = flutter332; },
+  vodozemac-wasm ? callPackage ./vodozemac-wasm.nix { flutter = flutter338; },
 
   targetFlutterPlatform ? "linux",
 }:
@@ -30,16 +29,16 @@ let
     sha256 = "sha256-lRfymTSfoNUtR5tSUiAptAvrrTwbB8p+SaYQeOevMzA=";
   };
 in
-flutter335.buildFlutterApplication (
+flutter338.buildFlutterApplication (
   rec {
     pname = "fluffychat-${targetFlutterPlatform}";
-    version = "2.3.1";
+    version = "2.4.1";
 
     src = fetchFromGitHub {
       owner = "krille-chan";
       repo = "fluffychat";
       tag = "v${version}";
-      hash = "sha256-jQdWy/oo8WS6DU7VD4n4smL6P+aoqJvN+Yb2gt3hpyY=";
+      hash = "sha256-8Q+A5IZW6RjmnE+ovI7HYPZCi0oOoj9SU7o0VUPXxsM=";
     };
 
     inherit pubspecLock;
@@ -50,6 +49,11 @@ flutter335.buildFlutterApplication (
     };
 
     inherit targetFlutterPlatform;
+
+    flutterBuildFlags = [
+      # Required since v2.4.0
+      "--enable-experiment=dot-shorthands"
+    ];
 
     meta = {
       description = "Chat with your friends (matrix client)";

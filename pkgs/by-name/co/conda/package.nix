@@ -8,19 +8,24 @@
   libselinux,
   libarchive,
   libGL,
-  xorg,
+  libxrender,
+  libxi,
+  libxau,
+  libx11,
+  libsm,
+  libice,
   zlib,
   # Conda installs its packages and environments under this directory
   installationPath ? "~/.conda",
   # Conda manages most pkgs itself, but expects a few to be on the system.
   condaDeps ? [
     stdenv.cc
-    xorg.libSM
-    xorg.libICE
-    xorg.libX11
-    xorg.libXau
-    xorg.libXi
-    xorg.libXrender
+    libsm
+    libice
+    libx11
+    libxau
+    libxi
+    libxrender
     libselinux
     libGL
     zlib
@@ -44,7 +49,7 @@
 # $ conda-shell
 # $ conda install spyder
 let
-  version = "25.9.1-3";
+  version = "25.11.1-1";
 
   src =
     let
@@ -60,8 +65,8 @@ let
     fetchurl {
       url = "https://repo.anaconda.com/miniconda/Miniconda3-py313_${version}-Linux-${arch}.sh";
       hash = selectSystem {
-        x86_64-linux = "sha256-a+xl/LDGZZalBYxnZ9JdiaU364PuhGhOwPpaT7+zJkc=";
-        aarch64-linux = "sha256-A2BT5+blhmQ1vBoRcRtBKT5b8HdrtKqafqRtAfMO2jE=";
+        x86_64-linux = "sha256-4LEOBQ6JKOLrmq0sUi7jtdMdMASLipmXZjqKRg1TjO8=";
+        aarch64-linux = "sha256-nznMjEbKN6/tXlY8wjSzrdNP6i8RGeB23K56N3ymuO4=";
       };
     };
 
@@ -117,7 +122,7 @@ buildFHSEnv {
       export NIX_CFLAGS_LINK="-L${installationPath}/lib"
       # Some other required environment variables
       export FONTCONFIG_FILE=/etc/fonts/fonts.conf
-      export QTCOMPOSE=${xorg.libX11}/share/X11/locale
+      export QTCOMPOSE=${libx11}/share/X11/locale
       export LIBARCHIVE=${lib.getLib libarchive}/lib/libarchive.so
       # Allows `conda activate` to work properly
       if [ ! -f ${condaSh} ]; then

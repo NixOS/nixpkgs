@@ -36,14 +36,14 @@
   wayland-protocols,
   wayland-scanner,
   wrapGAppsHook3,
-  xorgserver,
+  xorg-server,
   xwayland,
   zenity,
 }:
 
 stdenv.mkDerivation rec {
   pname = "muffin";
-  version = "6.6.0";
+  version = "6.6.3";
 
   outputs = [
     "out"
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     owner = "linuxmint";
     repo = "muffin";
     rev = version;
-    hash = "sha256-yGbnqIKw+Ouk1onr2H+KckO/YQob1N1beLmfqQhOheU=";
+    hash = "sha256-PNL6PAZinds+kqCUCesJkTS+93juhm35sPE7RFUdxeU=";
   };
 
   patches = [
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     wrapGAppsHook3
-    xorgserver # for cvt command
+    xorg-server # for cvt command
     gobject-introspection
     wayland-scanner
   ];

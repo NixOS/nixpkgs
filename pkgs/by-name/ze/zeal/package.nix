@@ -8,8 +8,8 @@
   httplib,
   libarchive,
   libXdmcp,
-  libpthreadstubs,
-  xcbutilkeysyms,
+  libpthread-stubs,
+  libxcb-keysyms,
   qt6,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -36,11 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
     httplib
     libXdmcp
     libarchive
-    libpthreadstubs
+    libpthread-stubs
     qt6.qtbase
     qt6.qtimageformats
     qt6.qtwebengine
-    xcbutilkeysyms
+    libxcb-keysyms
   ];
 
   cmakeFlags = [

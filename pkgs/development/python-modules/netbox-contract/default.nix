@@ -11,7 +11,7 @@
 }:
 buildPythonPackage rec {
   pname = "netbox-contract";
-  version = "2.4.3";
+  version = "2.4.4";
   pyproject = true;
 
   disabled = python.pythonVersion != netbox.python.pythonVersion;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "mlebreuil";
     repo = "netbox-contract";
     tag = "v${version}";
-    hash = "sha256-6xJ/c2VsAL2WlV/djbYeZIZ1FHWCtHy+UC3U4cMSIZA=";
+    hash = "sha256-3kjxy6gkhqYrWvl/gbeAxb8m8r3Dihas9cDf50NQMC4=";
   };
 
   build-system = [ setuptools ];
@@ -48,6 +48,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/mlebreuil/netbox-contract/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    teams = with lib.teams; [ secshell ];
+    maintainers = with lib.maintainers; [ felbinger ];
   };
 }

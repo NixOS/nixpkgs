@@ -7,7 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "ipgrep";
   version = "1.0.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jedisct1";

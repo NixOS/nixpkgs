@@ -20,7 +20,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "whatip";
   version = "1.2";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";

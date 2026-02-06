@@ -8,14 +8,14 @@
   versionCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "macopix";
   version = "3.4.0";
 
   # GitHub does not contain tags
   # https://github.com/chimari/MaCoPiX/issues/6
   src = fetchurl {
-    url = "http://rosegray.sakura.ne.jp/macopix/macopix-${version}.tar.gz";
+    url = "http://rosegray.sakura.ne.jp/macopix/macopix-${finalAttrs.version}.tar.gz";
     hash = "sha256-1AjqdPPCc9UQWqLdWlA+Va+MmvKL8dAIfJURPifN7RI=";
   };
 
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

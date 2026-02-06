@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "aocl-utils";
-  version = "5.1";
+  version = "5.2";
 
   src = fetchFromGitHub {
     owner = "amd";
     repo = "aocl-utils";
     tag = version;
-    hash = "sha256-1g5gERVxXKAeCyNR9/HheUfj+MPxJso3NzqDonvuyMo=";
+    hash = "sha256-wPnKfPbkW9ILu1YgyymKmg5gZj0l0cWio3/JTXtbylA=";
   };
 
   patches = [ ./pkg-config.patch ];

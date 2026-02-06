@@ -7,7 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "krakenx";
   version = "0.0.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

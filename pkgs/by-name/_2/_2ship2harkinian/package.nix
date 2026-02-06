@@ -106,15 +106,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "2ship2harkinian";
-  version = "3.0.1";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "HarbourMasters";
     repo = "2ship2harkinian";
     tag = finalAttrs.version;
-    hash = "sha256-EC8o5FIP/eXa+0LZt0C8EWHzKVAniv9SIXkZdbibcxg=";
+    hash = "sha256-fG9HIJChPGngb8vouLsQTo9xQXBq6qIZn7oyYssvNhI=";
     fetchSubmodules = true;
-    fetchTags = true;
     deepClone = true;
     postFetch = ''
       cd $out
@@ -173,6 +172,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
+  __structuredAttrs = true;
+  enableParallelBuilding = true;
 
   dontAddPrefix = true;
 

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-std=gnu17";
 
   src = fetchurl {
-    url = "https://ftp.gnu.org/gnu/${pname}/${pname}-${version}.tar.gz";
+    url = "https://ftp.gnu.org/gnu/unrtf/unrtf-${version}.tar.gz";
     sha256 = "1bil6z4niydz9gqm2j861dkxmqnpc8m7hvidsjbzz7x63whj17xl";
   };
 

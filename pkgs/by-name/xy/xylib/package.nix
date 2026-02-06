@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "1.6";
 
   src = fetchurl {
-    url = "https://github.com/wojdyr/xylib/releases/download/v${version}/${pname}-${version}.tar.bz2";
+    url = "https://github.com/wojdyr/xylib/releases/download/v${version}/xylib-${version}.tar.bz2";
     sha256 = "1iqfrfrk78mki5csxysw86zm35ag71w0jvim0f12nwq1z8rwnhdn";
   };
 

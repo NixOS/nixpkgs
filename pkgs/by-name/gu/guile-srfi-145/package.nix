@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   guile,
   guile-irregex,
 }:
@@ -9,8 +9,7 @@ stdenv.mkDerivation {
   pname = "guile-srfi-145";
   version = "0-unstable-2023-06-04";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "rgherdt";
     repo = "srfi";
     rev = "e598c28eb78e9c3e44f5c3c3d997ef28abb6f32e";

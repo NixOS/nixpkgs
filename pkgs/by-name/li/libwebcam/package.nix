@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "0.2.5";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/${pname}/source/${pname}-src-${version}.tar.gz";
+    url = "mirror://sourceforge/project/libwebcam/source/libwebcam-src-${version}.tar.gz";
     sha256 = "0hcxv8di83fk41zjh0v592qm7c0v37a3m3n3lxavd643gff1k99w";
   };
 

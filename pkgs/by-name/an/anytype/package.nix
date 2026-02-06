@@ -3,10 +3,13 @@
   stdenv,
   fetchFromGitHub,
   buildNpmPackage,
+  nodejs_22,
   pkg-config,
   anytype-heart,
   libsecret,
   electron,
+  go,
+  lsof,
   makeDesktopItem,
   copyDesktopItems,
   commandLineArgs ? "",
@@ -32,12 +35,16 @@ buildNpmPackage (finalAttrs: {
 
   npmDepsHash = "sha256-hJJK/RJnSm8QpjGcnxUsemrAsRNYCHSGSH8iUZZYXJI=";
 
+  # npm dependency install fails with nodejs_24: https://github.com/NixOS/nixpkgs/issues/474535
+  nodejs = nodejs_22;
+
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
   };
 
   nativeBuildInputs = [
     pkg-config
+    go
     copyDesktopItems
   ];
   buildInputs = [ libsecret ];
@@ -63,6 +70,7 @@ buildNpmPackage (finalAttrs: {
     done
 
     npm run build
+    npm run build:nmh
 
     runHook postBuild
   '';
@@ -92,6 +100,9 @@ buildNpmPackage (finalAttrs: {
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --add-flags $out/lib/anytype/ \
       --add-flags ${lib.escapeShellArg commandLineArgs}
+
+    wrapProgram $out/lib/anytype/dist/nativeMessagingHost \
+       --prefix PATH : ${lib.makeBinPath [ lsof ]}
 
     runHook postInstall
   '';

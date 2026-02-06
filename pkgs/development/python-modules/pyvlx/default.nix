@@ -9,16 +9,16 @@
   zeroconf,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyvlx";
-  version = "0.2.27";
+  version = "0.2.28";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Julius2342";
     repo = "pyvlx";
-    tag = version;
-    hash = "sha256-FOchtl3HDByHIBRh0MXYnQYh6opzkcHOOYaINmMPu7w=";
+    tag = finalAttrs.version;
+    hash = "sha256-l+Yfp8s6x+l/1ssL0wgyzd8QbA4ikr+ZUVMdTEaIjYE=";
   };
 
   build-system = [ setuptools ];
@@ -40,8 +40,8 @@ buildPythonPackage rec {
       devices, e.g. Velux Windows.
     '';
     homepage = "https://github.com/Julius2342/pyvlx";
-    changelog = "https://github.com/Julius2342/pyvlx/releases/tag/${src.tag}";
+    changelog = "https://github.com/Julius2342/pyvlx/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.lgpl2Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

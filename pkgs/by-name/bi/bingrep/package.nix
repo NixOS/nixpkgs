@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "bingrep";
-  version = "0.11.0";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "m4b";
     repo = "bingrep";
     rev = "v${version}";
-    hash = "sha256-bHu3/f25U1QtRZv1z5OQSDMayOpLU6tbNaV00K55ZY8=";
+    hash = "sha256-1GSAYhxFg5nXR8+vWBN10JLV7qUIxT1hYNXdnpE5Uag=";
   };
 
-  cargoHash = "sha256-cGDFbf8fUGbuxl8tOvKss5tqpBd1TY7TcwNzWwdw12A=";
+  cargoHash = "sha256-llyItFYNnvWjPYoTrY8oS4z8tU9IuKYCfvHSURDKNDk=";
 
   meta = {
     description = "Greps through binaries from various OSs and architectures, and colors them";

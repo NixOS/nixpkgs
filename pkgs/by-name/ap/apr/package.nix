@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "1.7.6";
 
   src = fetchurl {
-    url = "mirror://apache/apr/${pname}-${version}.tar.bz2";
+    url = "mirror://apache/apr/apr-${version}.tar.bz2";
     hash = "sha256-SQMNktJXXac1eRtJbcMi885c/5SUd5uozCjH9Gxd6zI=";
   };
 

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "semver-tool";
   version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "fsaintjacques";
     repo = "semver-tool";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-BnHuiCxE0VjzMWFTEMunQ9mkebQKIKbbMxZVfBUO57Y=";
   };
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.qyliss ];
     mainProgram = "semver";
   };
-}
+})

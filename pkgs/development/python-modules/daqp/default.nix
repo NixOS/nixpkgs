@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "daqp";
   version = "0.7.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "darnstrom";

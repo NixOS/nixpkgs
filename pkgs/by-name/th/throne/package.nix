@@ -19,20 +19,23 @@
 
   # override if you want to have more up-to-date rulesets
   throne-srslist ? fetchurl {
-    url = "https://raw.githubusercontent.com/throneproj/routeprofiles/60eb41122de3aa53c701ec948cd52d7a26adafea/srslist.h";
-    hash = "sha256-k9vPtcusML4GR81UVeJ7jhuDHGk5Qh0eKw/cSOxBd5g=";
+    url = "https://raw.githubusercontent.com/throneproj/routeprofiles/0fca735ff2759422c407ac04fac819aef2fc88f9/srslist.h";
+    hash = "sha256-G2WUStxFtN0fbZm/KoD9ldUvkMWf9cDA+9fvYt8dcqo=";
   },
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "throne";
-  version = "1.0.8-unstable-2025-10-29";
+  version = "1.0.13";
 
   src = fetchFromGitHub {
     owner = "throneproj";
     repo = "Throne";
-    rev = "54af50fc414ffaf98b3ff88e3dd8aa041c65e041";
-    hash = "sha256-kfvsGw0RUYHkOUSeSA4egLl+gQqN4KkZKXX3CQQzYks=";
+    # the release CI job was triggered on the xhttp branch (https://github.com/throneproj/Throne/actions/runs/20588046213),
+    # but the 1.0.13 tag was wrongly created on the dev branch
+    # we'll use the revision that was used for the job as well
+    rev = "3b737ec8cf29e03e4b7d5a09b1f502bdb8ef52e2";
+    hash = "sha256-OVgmhiKL4BaFYBeUqIX3LRNa54zq5oYyNMUYwKNvo1A=";
   };
 
   strictDeps = true;
@@ -48,6 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
     qt6Packages.qtbase
     qt6Packages.qttools
   ];
+
+  env.INPUT_VERSION = finalAttrs.version;
 
   cmakeFlags = [
     # makes sure the app uses the user's config directory to store it's non-static content
@@ -103,7 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
     proxyVendor = true;
-    vendorHash = "sha256-thMRkbs5fS7KsUSRSeUaB2xkTjs7kJ9AKXW0+OXN3io=";
+    vendorHash = "sha256-cPo/2bUXEF9jomr0Pnty7ZutAaC0TFG397FSIqefrjw=";
 
     nativeBuildInputs = [
       protobuf
@@ -116,13 +121,15 @@ stdenv.mkDerivation (finalAttrs: {
       pushd gen
       protoc -I . --go_out=. --protorpc_out=. libcore.proto
       popd
+
+      VERSION_SINGBOX=$(go list -m -f '{{.Version}}' github.com/sagernet/sing-box)
+      ldflags+=("-X 'github.com/sagernet/sing-box/constant.Version=$VERSION_SINGBOX'")
     '';
 
     # ldflags and tags are taken from script/build_go.sh
     ldflags = [
       "-w"
       "-s"
-      "-X github.com/sagernet/sing-box/constant.Version=${finalAttrs.version}"
     ];
 
     tags = [

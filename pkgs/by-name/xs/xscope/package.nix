@@ -5,7 +5,8 @@
   pkg-config,
   autoreconfHook,
   util-macros,
-  xorg,
+  libxt,
+  xtrans,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,8 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    xorg.libXt
-    xorg.xtrans
+    libxt
+    xtrans
   ];
 
   meta = {

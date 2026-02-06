@@ -6,14 +6,14 @@
   makeWrapper,
   nix-update-script,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "async-profiler";
   version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "jvm-profiling-tools";
     repo = "async-profiler";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ggqfBndcwHUerWjsvDqmRQ5uEyL6zhNgwVl18R18k0Q=";
   };
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "async-profiler";
   };
-}
+})

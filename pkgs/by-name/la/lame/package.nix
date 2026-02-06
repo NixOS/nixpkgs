@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   version = "3.100";
 
   src = fetchurl {
-    url = "mirror://sourceforge/lame/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/lame/lame-${version}.tar.gz";
     sha256 = "07nsn5sy3a8xbmw1bidxnsj5fj6kg9ai04icmqw40ybkp353dznx";
   };
 

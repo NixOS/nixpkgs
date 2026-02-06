@@ -18,7 +18,7 @@
   pkg-config,
   doxygen,
   graphviz,
-  libpthreadstubs,
+  libpthread-stubs,
   libXdmcp,
   unixODBC,
   libgit2,
@@ -164,7 +164,7 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     glew
     glm
-    libpthreadstubs
+    libpthread-stubs
     cairo
     curl
     openssl

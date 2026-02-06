@@ -1,21 +1,20 @@
 {
   stdenv,
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   autoconf,
   automake,
   libtool,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "soundtouch";
   version = "2.4.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "soundtouch";
     repo = "soundtouch";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-7JUBAFURKtPCZrcKqL1rOLdsYMd7kGe7wY0JUl2XPvw=";
   };
 
@@ -37,4 +36,4 @@ stdenv.mkDerivation rec {
     mainProgram = "soundstretch";
     platforms = lib.platforms.all;
   };
-}
+})

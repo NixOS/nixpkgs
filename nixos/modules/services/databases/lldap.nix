@@ -8,6 +8,10 @@
 let
   cfg = config.services.lldap;
   format = pkgs.formats.toml { };
+  dbName = "lldap";
+  dbUser = "lldap";
+  localPostgresql = cfg.database.createLocally && cfg.database.type == "postgresql";
+  localMysql = cfg.database.createLocally && cfg.database.type == "mariadb";
 in
 {
   options.services.lldap = with lib; {
@@ -34,6 +38,25 @@ in
       description = ''
         Environment file as defined in {manpage}`systemd.exec(5)` passed to the service.
       '';
+    };
+
+    database = {
+      createLocally = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Create the database and database user locally.";
+      };
+
+      type = mkOption {
+        type = types.enum [
+          "mariadb"
+          "postgresql"
+          "sqlite"
+        ];
+        example = "postgresql";
+        default = "sqlite";
+        description = "Database engine to use.";
+      };
     };
 
     settings = mkOption {
@@ -96,9 +119,20 @@ in
           };
 
           database_url = mkOption {
-            type = types.str;
+            type = types.nullOr types.str;
+            default = null;
+            defaultText = lib.literalExpression ''
+              if config.services.lldap.database.createLocally
+              then
+                if cfg.database.type == "sqlite"
+                then "sqlite://./users.db?mode=rwc"
+                else if cfg.database.type == "postgresql"
+                then "postgresql:///lldap?host=/run/postgresql"
+                else if cfg.database.type == "mariadb"
+                then "mysql://lldap@localhost/lldap?socket=/run/mysqld/mysqld.sock"
+              else null
+            '';
             description = "Database URL.";
-            default = "sqlite://./users.db?mode=rwc";
             example = "postgres://postgres-user:password@postgres-server/my-database";
           };
 
@@ -188,7 +222,7 @@ in
     ];
 
     warnings =
-      lib.optionals (cfg.settings.ldap_user_pass or null != null) [
+      lib.optionals ((cfg.settings.ldap_user_pass or null) != null) [
         ''
           lldap: Unsecure `ldap_user_pass` setting is used. Prefer `ldap_user_pass_file` instead.
         ''
@@ -205,10 +239,29 @@ in
             ''
           ];
 
+    services.lldap.settings.database_url = lib.mkIf cfg.database.createLocally (
+      lib.mkDefault (
+        if cfg.database.type == "sqlite" then
+          "sqlite://./users.db?mode=rwc"
+        else if cfg.database.type == "postgresql" then
+          "postgresql:///${dbName}?host=/run/postgresql"
+        else if cfg.database.type == "mariadb" then
+          "mysql://${dbUser}@localhost/${dbName}?socket=/run/mysqld/mysqld.sock"
+        else
+          null
+      )
+    );
+
     systemd.services.lldap = {
       description = "Lightweight LDAP server (lldap)";
       wants = [ "network-online.target" ];
-      after = [ "network-online.target" ];
+      after = [
+        "network-online.target"
+      ]
+      ++ lib.optional localPostgresql "postgresql.target"
+      ++ lib.optional localMysql "mysql.service";
+      requires =
+        lib.optional localPostgresql "postgresql.target" ++ lib.optional localMysql "mysql.service";
       wantedBy = [ "multi-user.target" ];
       # lldap defaults to a hardcoded `jwt_secret` value if none is provided, which is bad, because
       # an attacker could create a valid admin jwt access token fairly trivially.
@@ -237,6 +290,31 @@ in
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
       };
       inherit (cfg) environment;
+    };
+
+    services.postgresql = lib.mkIf localPostgresql {
+      enable = true;
+      ensureDatabases = [ dbName ];
+      ensureUsers = [
+        {
+          name = dbUser;
+          ensureDBOwnership = true;
+        }
+      ];
+    };
+
+    services.mysql = lib.mkIf localMysql {
+      enable = true;
+      package = lib.mkDefault pkgs.mariadb;
+      ensureDatabases = [ dbName ];
+      ensureUsers = [
+        {
+          name = dbUser;
+          ensurePermissions = {
+            "${dbName}.*" = "ALL PRIVILEGES";
+          };
+        }
+      ];
     };
   };
 }

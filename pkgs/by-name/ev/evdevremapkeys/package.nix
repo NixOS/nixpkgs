@@ -7,7 +7,7 @@
 python3Packages.buildPythonPackage {
   pname = "evdevremapkeys";
   version = "1.0.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "philipl";

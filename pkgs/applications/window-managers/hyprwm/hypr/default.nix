@@ -13,10 +13,10 @@
   makeWrapper,
   pcre2,
   pkg-config,
-  xcbutilcursor,
-  xcbutilkeysyms,
-  xcbutilwm,
-  xcbutil,
+  libxcb-cursor,
+  libxcb-keysyms,
+  libxcb-wm,
+  libxcb-util,
   xmodmap,
 }:
 
@@ -50,10 +50,10 @@ stdenv.mkDerivation (finalAttrs: {
     libXdmcp
     libxcb
     pcre2
-    xcbutilcursor
-    xcbutilkeysyms
-    xcbutilwm
-    xcbutil
+    libxcb-cursor
+    libxcb-keysyms
+    libxcb-wm
+    libxcb-util
   ];
 
   # src/ewmh/ewmh.cpp:67:28: error: non-constant-expression cannot be narrowed from type 'int' to 'uint32_t' (aka 'unsigned int') in initializer list

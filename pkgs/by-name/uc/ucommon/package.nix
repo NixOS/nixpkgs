@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "7.0.0";
 
   src = fetchurl {
-    url = "mirror://gnu/commoncpp/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/commoncpp/ucommon-${version}.tar.gz";
     sha256 = "6ac9f76c2af010f97e916e4bae1cece341dc64ca28e3881ff4ddc3bc334060d7";
   };
 

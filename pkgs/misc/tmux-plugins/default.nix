@@ -421,19 +421,19 @@ in
     };
   };
 
-  kanagawa = mkTmuxPlugin {
-    pluginName = "kanagawa";
-    version = "0-unstable-2025-12-17";
+  ukiyo = mkTmuxPlugin {
+    pluginName = "ukiyo";
+    version = "0-unstable-2026-01-30";
     src = fetchFromGitHub {
       owner = "Nybkox";
-      repo = "tmux-kanagawa";
-      rev = "10a59af0a50aacf7e68e6757fb42e94d1804246e";
-      hash = "sha256-ldc++p2PcYdzoOLrd4PGSrueAGNWncdbc5k6wmFM9kQ=";
+      repo = "tmux-ukiyo";
+      rev = "14fdf51ad16f7b81019c53b987877e78e697f51b";
+      hash = "sha256-ILQVOQ6cfG7I7hFN72mgSTc0AZZW4WWHSxwWKbK0piY=";
     };
     meta = {
-      homepage = "https://github.com/Nybkox/tmux-kanagawa";
-      downloadPage = "https://github.com/Nybkox/tmux-kanagawa";
-      description = "Feature packed kanagawa theme for tmux";
+      homepage = "https://github.com/Nybkox/tmux-ukiyo";
+      downloadPage = "https://github.com/Nybkox/tmux-ukiyo";
+      description = "Feature packed ukiyo theme for tmux";
       license = lib.licenses.mit;
       platforms = lib.platforms.unix;
       maintainers = with lib.maintainers; [ FKouhai ];
@@ -1204,4 +1204,6 @@ in
 }
 // lib.optionalAttrs config.allowAliases {
   mkDerivation = throw "tmuxPlugins.mkDerivation is deprecated, use tmuxPlugins.mkTmuxPlugin instead"; # added 2021-03-14
+
+  kanagawa = throw "'tmuxPlugins.kanagawa' has been renamed to/replaced by 'tmuxPlugins.ukiyo'"; # Converted to throw 2026-01-30
 }

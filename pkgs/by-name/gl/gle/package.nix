@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "linas";
     repo = "glextrusion";
-    rev = "refs/tags/${pname}-${version}";
+    tag = "${pname}-${version}";
     sha256 = "sha256-yvCu0EOwxOMN6upeHX+C2sIz1YVjjB/320g+Mf24S6g=";
   };
 

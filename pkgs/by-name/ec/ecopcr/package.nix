@@ -7,12 +7,12 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ecopcr";
   version = "1.0.1";
 
   src = fetchurl {
-    url = "https://git.metabarcoding.org/obitools/ecopcr/-/archive/ecopcr_v${version}/ecopcr-ecopcr_v${version}.tar.gz";
+    url = "https://git.metabarcoding.org/obitools/ecopcr/-/archive/ecopcr_v${finalAttrs.version}/ecopcr-ecopcr_v${finalAttrs.version}.tar.gz";
     hash = "sha256-ssvWpi7HuuRRAkpqqrX3ijLuBqM3QsrmrG+t7/m6fZA=";
   };
 
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.cecill20;
     maintainers = [ ];
   };
-}
+})

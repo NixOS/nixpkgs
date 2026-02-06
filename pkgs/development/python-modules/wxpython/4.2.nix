@@ -25,7 +25,7 @@
   gtk3,
   libGL,
   libGLU,
-  libSM,
+  libsm,
   libXinerama,
   libXtst,
   libXxf86vm,
@@ -51,7 +51,7 @@
 buildPythonPackage rec {
   pname = "wxpython";
   version = "4.2.4";
-  format = "other";
+  pyproject = false;
 
   src = fetchPypi {
     inherit pname version;
@@ -102,7 +102,7 @@ buildPythonPackage rec {
     gst_all_1.gstreamer
     libGL
     libGLU
-    libSM
+    libsm
     libXinerama
     libXtst
     libXxf86vm

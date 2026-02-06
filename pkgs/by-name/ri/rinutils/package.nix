@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "0.10.3";
 
   src = fetchurl {
-    url = "https://github.com/shlomif/${pname}/releases/download/${version}/${pname}-${version}.tar.xz";
+    url = "https://github.com/shlomif/rinutils/releases/download/${version}/rinutils-${version}.tar.xz";
     sha256 = "sha256-+eUn03psyMe4hwraY8qiTzKrDSn9ERbfPrtoZYMDCVU=";
   };
 

@@ -158,7 +158,19 @@ let
   #   allowUnfree = false;
   #   allowUnfreePredicate = (x: pkgs.lib.hasPrefix "vscode" x.name);
   # }
-  allowUnfreePredicate = config.allowUnfreePredicate or (x: false);
+  # Defaults to allow all names defined in config.allowUnfreePackages
+  allowUnfreePredicate =
+    let
+      listPredicate = pkg: builtins.elem (lib.getName pkg) (config.allowUnfreePackages or [ ]);
+
+      # Be robust against misconfigured allowUnfreePredicate values such as null
+      explicitPredicate =
+        let
+          raw = config.allowUnfreePredicate or null;
+        in
+        if builtins.isFunction raw then raw else (_: false);
+    in
+    pkg: (listPredicate pkg) || (explicitPredicate pkg);
 
   # Check whether unfree packages are allowed and if not, whether the
   # package has an unfree license and is not explicitly allowed by the
@@ -361,15 +373,6 @@ let
       unfree = bool;
       unsupported = bool;
       insecure = bool;
-      tests = {
-        name = "test";
-        verify =
-          x:
-          x == { }
-          ||
-            # Accept {} for tests that are unsupported
-            (isDerivation x && x ? meta.timeout);
-      };
       timeout = int;
       knownVulnerabilities = listOf str;
       badPlatforms = platforms;

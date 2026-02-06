@@ -13,14 +13,14 @@
   withShibboleth ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "seafile-client";
   version = "9.0.15";
 
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seafile-client";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-BV1+9/+ryZB1BQyRJ5JaIU6bbOi4h8vt+V+FQIfUJp8=";
   };
 
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/haiwen/seafile-client";
-    changelog = "https://github.com/haiwen/seafile-client/releases/tag/${src.tag}";
+    changelog = "https://github.com/haiwen/seafile-client/releases/tag/${finalAttrs.src.tag}";
     description = "Desktop client for Seafile, the Next-generation Open Source Cloud Storage";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
@@ -72,4 +72,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "seafile-applet";
   };
-}
+})

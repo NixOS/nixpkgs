@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   version = "0.3.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/cppcms/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/cppcms/cppdb-${version}.tar.bz2";
     sha256 = "0blr1casmxickic84dxzfmn3lm7wrsl4aa2abvpq93rdfddfy3nn";
   };
 

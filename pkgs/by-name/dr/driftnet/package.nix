@@ -17,14 +17,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "driftnet";
   version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "deiv";
     repo = "driftnet";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-f7EPC/n3CyxVOXC6j43Nnwkgu/aDVst8lQpzfgegDsI=";
   };
 
@@ -54,10 +54,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Watches network traffic, and picks out and displays JPEG and GIF images for display";
     homepage = "https://github.com/deiv/driftnet";
-    changelog = "https://github.com/deiv/driftnet/releases/tag/v${version}";
+    changelog = "https://github.com/deiv/driftnet/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ offline ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "driftnet";
   };
-}
+})

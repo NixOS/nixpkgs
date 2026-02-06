@@ -12,7 +12,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "invoice2data";
   version = "0.4.4";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "invoice-x";

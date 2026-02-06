@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "0.3.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/natspec/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/natspec/libnatspec-${version}.tar.bz2";
     sha256 = "0wffxjlc8svilwmrcg3crddpfrpv35mzzjgchf8ygqsvwbrbb3b7";
   };
 

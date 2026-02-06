@@ -47,6 +47,11 @@ buildDotnetModule rec {
       --replace-fail "patch" "latestFeature"
   '';
 
+  dotnetFlags = [
+    # this removes the Microsoft.WindowsDesktop.App.Ref dependency
+    "-p:EnableWindowsTargeting=false"
+  ];
+
   buildPhase = ''
     runHook preBuild
 
@@ -54,7 +59,8 @@ buildDotnetModule rec {
       -p:Configuration=Release \
       -p:RepositoryUrl="${meta.homepage}" \
       -p:RepositoryCommit="v${version}" \
-      src/NuGet/Microsoft.Net.Compilers.Toolset/Framework/Microsoft.Net.Compilers.Toolset.Framework.Package.csproj
+      $dotnetFlags \
+      $dotnetProjectFiles
 
     runHook postBuild
   '';

@@ -53,10 +53,15 @@ buildPythonPackage rec {
     "dscribe.ext"
   ];
 
-  # Prevents python from loading dscribe from the current working directory instead of using $out
-  preCheck = ''
-    rm -rf dscribe
-  '';
+  preCheck =
+    # Prevents python from loading dscribe from the current working directory instead of using $out
+    ''
+      rm -rf dscribe
+    ''
+    # Prevents 'Fatal Python error: Aborted' on darwin during checkPhase
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      export MPLBACKEND="Agg"
+    '';
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -72,12 +77,7 @@ buildPythonPackage rec {
       [
         # AssertionError on a numerical test
         "test_cell_list"
-      ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Fatal Python error: Aborted
-    # matplotlib/backend_bases.py", line 2654 in create_with_canvas
-    "test_examples"
-  ];
+      ];
 
   # Broken due to use of missing _get_constraints attr in ase >= 3.26.0
   # https://github.com/SINGROUP/dscribe/issues/160

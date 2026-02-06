@@ -10,13 +10,13 @@
   wafHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ntk";
   version = "1.3.1001";
   src = fetchFromGitHub {
     owner = "linuxaudio";
     repo = "ntk";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-NyEdg6e+9CI9V+TIgdpPyH1ei+Vq8pUxD3wPzWY5fEU=";
   };
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Fork of FLTK 1.3.0 with additional functionality";
-    version = version;
+    version = finalAttrs.version;
     homepage = "http://non.tuxfamily.org/";
     license = lib.licenses.lgpl21;
     maintainers = with lib.maintainers; [
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

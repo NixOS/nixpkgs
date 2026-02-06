@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "smlfmt";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "shwestrick";
     repo = "smlfmt";
     rev = "v${version}";
-    hash = "sha256-QdpEsypkCzR/OwllKFLjz3/JvzV0OlGiqXUnS7iGD5A=";
+    hash = "sha256-k3sAz1auKJpta1RdLX3ugSrc9ibVQJOCOPVmTYS/AZY=";
   };
 
   nativeBuildInputs = [ mlton ];

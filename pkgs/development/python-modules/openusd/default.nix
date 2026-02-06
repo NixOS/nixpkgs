@@ -33,6 +33,7 @@
   python,
   qt6,
   setuptools,
+  stdenv,
   onetbb,
   withDocs ? false,
   withOsl ? true,
@@ -60,8 +61,6 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-gxikEC4MqTkhgYaRsCVYtS/VmXClSaCMdzpQ0LmiR7Q=";
   };
-
-  stdenv = python.stdenv;
 
   outputs = [ "out" ] ++ lib.optional withDocs "doc";
 

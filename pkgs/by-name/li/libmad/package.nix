@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   version = "0.15.1b";
 
   src = fetchurl {
-    url = "mirror://sourceforge/mad/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/mad/libmad-${version}.tar.gz";
     sha256 = "14460zhacxhswnzb36qfpd1f2wbk10qvksvm6wyq5hpvdgnw7ymv";
   };
 

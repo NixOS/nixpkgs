@@ -5,7 +5,7 @@
   meson,
   ninja,
   pkg-config,
-  utilmacros,
+  util-macros,
   python3,
   libGL,
   libX11,
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    utilmacros
+    util-macros
     python3
   ];
 

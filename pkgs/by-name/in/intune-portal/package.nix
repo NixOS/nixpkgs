@@ -4,7 +4,7 @@
   fetchurl,
   dpkg,
   libuuid,
-  xorg,
+  libx11,
   curlMinimal,
   openssl_3,
   libsecret,
@@ -30,11 +30,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "intune-portal";
-  version = "1.2503.10-noble";
+  version = "1.2508.17-noble";
 
   src = fetchurl {
     url = "https://packages.microsoft.com/ubuntu/24.04/prod/pool/main/i/intune-portal/intune-portal_${version}_amd64.deb";
-    hash = "sha256-NlJ8m7V1yLErOntprHs3EagPtwSzYWd7NBH0jc72+i4=";
+    hash = "sha256-UTP+Z6xsjr48deizuwVDb8GrpeeAf5RZwloXsZ7Um3E=";
   };
 
   nativeBuildInputs = [ dpkg ];
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
         intune = lib.makeLibraryPath [
           stdenv.cc.cc
           libuuid
-          xorg.libX11
+          libx11
           curlMinimal_openssl_3
           openssl_3
           libsecret

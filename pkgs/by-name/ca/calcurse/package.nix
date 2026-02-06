@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   version = "4.8.2";
 
   src = fetchurl {
-    url = "https://calcurse.org/files/${pname}-${version}.tar.gz";
+    url = "https://calcurse.org/files/calcurse-${version}.tar.gz";
     hash = "sha256-hJuoUsfze2dyNlywxCqUzeD+de+6kTY+lqDn73l7pWU=";
   };
 

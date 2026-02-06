@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "genact";
-  version = "1.4.2";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = "genact";
     rev = "v${version}";
-    sha256 = "sha256-Rn9kJWutWKPj9cLu2ZJKITmC+I8/ikhCAoIp00Yg6ZA=";
+    sha256 = "sha256-D1uecxrRR49EUa2fHm/ieQ4Gp0m5p0ncj5YiINwlvN8=";
   };
 
-  cargoHash = "sha256-Ttg9stfiIYCXk35+GWdGOzQrM/aYZPZK+e9y+zw1ZXQ=";
+  cargoHash = "sha256-lX/bb6RGcsfgfjhK7SwwcY9R7USSEdG5VLK6v2LOvas=";
 
   nativeBuildInputs = [ installShellFiles ];
 

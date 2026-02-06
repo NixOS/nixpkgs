@@ -17,7 +17,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "openswitcher";
   version = "0.13.0";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromSourcehut {
     owner = "~martijnbraam";

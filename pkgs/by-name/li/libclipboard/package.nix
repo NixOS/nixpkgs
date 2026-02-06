@@ -10,7 +10,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  name = "libclipboard";
+  pname = "libclipboard";
   version = "1.1";
 
   src = fetchFromGitHub {

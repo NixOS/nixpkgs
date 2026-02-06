@@ -13,13 +13,18 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-xoGMEcGMwDDVX/g/ZLK62P7vSF53QvhPlKYdgRpiWL0=";
   };
 
+  outputs = [
+    "out"
+    "doc"
+  ];
+
   installPhase = ''
     runHook preInstall
 
     install -D -m644 ipw2200-bss.fw     $out/lib/firmware/ipw2200-bss.fw
     install -D -m644 ipw2200-ibss.fw    $out/lib/firmware/ipw2200-ibss.fw
     install -D -m644 ipw2200-sniffer.fw $out/lib/firmware/ipw2200-sniffer.fw
-    install -D -m644 LICENSE.ipw2200-fw $out/share/doc/intel2200BGFirmware/LICENSE
+    install -D -m644 LICENSE.ipw2200-fw ''${!outputDoc}/share/doc/intel2200BGFirmware/LICENSE
 
     runHook postInstall
   '';

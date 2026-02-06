@@ -14,7 +14,7 @@
   s2n-tls,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "aws-c-s3";
   # nixpkgs-update: no auto update
   version = "0.8.7";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-s3";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-8yUwgiZ50BiItapeg0zIc5vr0+OFHvzIRrwWH4lQFBM=";
   };
 
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
     mainProgram = "s3";
     platforms = lib.platforms.unix;
   };
-}
+})

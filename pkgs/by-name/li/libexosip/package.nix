@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "5.3.0";
 
   src = fetchurl {
-    url = "mirror://savannah/exosip/${pname}-${version}.tar.gz";
+    url = "mirror://savannah/exosip/libexosip2-${version}.tar.gz";
     sha256 = "sha256-W3gjmGQx6lztyfCV1pZKzpZvCTsq59CwhAR4i/zrycI=";
   };
 

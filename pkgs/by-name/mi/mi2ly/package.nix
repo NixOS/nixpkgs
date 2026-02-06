@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "0.12";
 
   src = fetchurl {
-    url = "mirror://savannah/${pname}/${pname}.${version}.tar.bz2";
+    url = "mirror://savannah/mi2ly/mi2ly.${version}.tar.bz2";
     hash = "sha256-lFbqH+syFaQDMbXfb+OUcWnyKnjfVz9yl7DbTTn7JKw=";
   };
 

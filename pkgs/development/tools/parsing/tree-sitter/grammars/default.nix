@@ -20,7 +20,7 @@ let
   parseUrl =
     url:
     let
-      parts = lib.match "(.+):([^/]+)\/([^/?]+)((\/|.+ref=)([^&]+))?" url;
+      parts = lib.match "(.+):([^/]+)/([^/?]+)((/|.+ref=)([^&]+))?" url;
       ref = lib.elemAt parts 5;
     in
     {

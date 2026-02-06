@@ -24,14 +24,14 @@
 
 assert lib.versionAtLeast (lib.getVersion ocaml) "4.07";
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "llpp";
   version = "42";
 
   src = fetchFromGitHub {
     owner = "criticic";
     repo = "llpp";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-B/jKvBtBwMOErUVmGFGXXIT8FzMl1DFidfDCHIH41TU=";
   };
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    sed -i "2d;s/ver=.*/ver=${version}/" build.bash
+    sed -i "2d;s/ver=.*/ver=${finalAttrs.version}/" build.bash
   '';
 
   strictDeps = true;
@@ -100,4 +100,4 @@ stdenv.mkDerivation rec {
       lib.licenses.bsd3
     ];
   };
-}
+})

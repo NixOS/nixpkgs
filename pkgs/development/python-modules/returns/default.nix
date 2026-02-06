@@ -5,11 +5,13 @@
   fetchFromGitHub,
   httpx,
   hypothesis,
+  mypy,
   poetry-core,
   pytest-aio,
+  pytest-mypy,
+  pytest-mypy-plugins,
   pytest-subtests,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   trio,
   typing-extensions,
@@ -20,8 +22,6 @@ buildPythonPackage rec {
   version = "0.26.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "dry-python";
     repo = "returns";
@@ -31,8 +31,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     sed -i setup.cfg \
-      -e '/--cov.*/d' \
-      -e '/--mypy.*/d'
+      -e '/--cov.*/d'
   '';
 
   nativeBuildInputs = [ poetry-core ];
@@ -42,17 +41,24 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     anyio
     httpx
-    hypothesis
+    # https://github.com/dry-python/returns/issues/2224
+    (hypothesis.overrideAttrs (old: {
+      src = fetchFromGitHub {
+        owner = "HypothesisWorks";
+        repo = "hypothesis";
+        tag = "hypothesis-python-6.136.9";
+        hash = "sha256-Q1wxIJwAYKZ0x6c85CJSGgcdKw9a3xFw8YpJROElSNU=";
+      };
+    }))
+    mypy
     pytestCheckHook
     pytest-aio
+    pytest-mypy
+    pytest-mypy-plugins
     pytest-subtests
     setuptools
     trio
   ];
-
-  preCheck = ''
-    rm -rf returns/contrib/mypy
-  '';
 
   pythonImportsCheck = [ "returns" ];
 

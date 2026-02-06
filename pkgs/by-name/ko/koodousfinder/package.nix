@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication {
     owner = "teixeira0xfffff";
     repo = "KoodousFinder";
     # Not properly tagged, https://github.com/teixeira0xfffff/KoodousFinder/issues/7
-    #rev = "refs/tags/v${version}";
+    #tag = "v${version}";
     rev = "d9dab5572f44e5cd45c04e6fcda38956897855d1";
     hash = "sha256-skCbt2lDKgSyZdHY3WImbr6CF0icrDPTIXNV1736gKk=";
   };

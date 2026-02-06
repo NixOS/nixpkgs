@@ -31,13 +31,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dunst";
-  version = "1.13.0";
+  version = "1.13.1";
 
   src = fetchFromGitHub {
     owner = "dunst-project";
     repo = "dunst";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HPmIcOLoYDD1GEgTh1elA9xiZGFKt1In4vsAtRsOukE=";
+    hash = "sha256-F7CONYJ95aKNZ+BpWNUerCBMflgJYgSaLAqp6XJ1G5k=";
   };
 
   nativeBuildInputs = [
@@ -77,7 +77,8 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [
     "PREFIX=$(out)"
     "VERSION=$(version)"
-    "SYSCONFDIR=$(out)/etc"
+    "SYSCONFDIR=/etc/xdg"
+    "SYSCONF_FORCE_NEW=0"
     "SERVICEDIR_DBUS=$(out)/share/dbus-1/services"
     "SERVICEDIR_SYSTEMD=$(out)/lib/systemd/user"
   ]

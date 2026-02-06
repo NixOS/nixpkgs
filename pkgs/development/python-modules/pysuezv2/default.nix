@@ -4,15 +4,12 @@
   fetchFromGitHub,
   hatchling,
   aiohttp,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pysuezv2";
   version = "2.0.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jb101010-2";

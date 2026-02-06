@@ -7,7 +7,7 @@
   gtk3,
   libGL,
   libGLU,
-  libSM,
+  libsm,
   libXinerama,
   libXtst,
   libXxf86vm,
@@ -25,14 +25,14 @@
   libpng,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wxwidgets";
   version = "3.1.7";
 
   src = fetchFromGitHub {
     owner = "wxWidgets";
     repo = "wxWidgets";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-9qYPatpTT28H+fz77o7/Y3YVmiK0OCsiQT5QAYe93M0=";
     fetchSubmodules = true;
   };
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     gtk3
-    libSM
+    libsm
     libXinerama
     libXtst
     libXxf86vm
@@ -133,4 +133,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

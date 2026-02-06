@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     installShellFiles
-    zig.hook
+    zig
     nasm
   ];
 

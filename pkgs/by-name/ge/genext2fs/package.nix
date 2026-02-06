@@ -6,14 +6,14 @@
   libarchive,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "genext2fs";
   version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "bestouff";
     repo = "genext2fs";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-9LAU5XuCwwEhU985MzZ2X+YYibvyECULQSn9X2jdj5I=";
   };
 
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.bjornfor ];
     mainProgram = "genext2fs";
   };
-}
+})

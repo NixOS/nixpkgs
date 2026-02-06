@@ -5,7 +5,7 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "secp256k1";
 
   version = "0.6.0";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "bitcoin-core";
     repo = "secp256k1";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-pCSNUSrPyN/lLYZm7zK/b9LICkThXOr6JAyFvHZSPW0=";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = with lib.platforms; all;
   };
-}
+})

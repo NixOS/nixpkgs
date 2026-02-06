@@ -17,14 +17,14 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "junction";
   version = "1.9";
 
   src = fetchFromGitHub {
     owner = "sonnyp";
     repo = "junction";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-gnFig8C46x73gAUl9VVx3Y3hrhEVeP/DvaYHYuv9RTg=";
     fetchSubmodules = true;
   };
@@ -77,4 +77,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.linux;
   };
-}
+})

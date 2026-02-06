@@ -5,23 +5,20 @@
   buildPythonPackage,
   fetchFromGitHub,
   pydantic,
-  pythonOlder,
   setuptools,
   tenacity,
 }:
 
 buildPythonPackage rec {
   pname = "yolink-api";
-  version = "0.6.0";
+  version = "0.6.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "YoSmart-Inc";
     repo = "yolink-api";
     tag = "v${version}";
-    hash = "sha256-ayNSYIhNqSqMH9OJ8pyFDQWuIBkv4tda+eOWEGOn2Pk=";
+    hash = "sha256-NViXbi5s4Ht2b8hpsumnlbstjiR/MWz2El39xk3uqb4=";
   };
 
   build-system = [ setuptools ];

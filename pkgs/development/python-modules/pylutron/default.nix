@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "pylutron";
   version = "0.2.18";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

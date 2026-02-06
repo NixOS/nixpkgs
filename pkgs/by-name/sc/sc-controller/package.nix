@@ -70,7 +70,7 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace scc/device_monitor.py --replace "find_library('bluetooth')" "'libbluetooth.so.3'"
   '';
 
-  LD_LIBRARY_PATH = lib.makeLibraryPath [
+  env.LD_LIBRARY_PATH = lib.makeLibraryPath [
     libX11
     libXext
     libXfixes

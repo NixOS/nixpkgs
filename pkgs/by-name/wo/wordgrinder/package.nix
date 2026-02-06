@@ -12,14 +12,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wordgrinder";
   version = "0.8";
 
   src = fetchFromGitHub {
     repo = "wordgrinder";
     owner = "davidgiven";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "124d1bnn2aqs6ik8pdazzni6a0583prz9lfdjrbwyb97ipqga9pm";
   };
 
@@ -72,4 +72,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ matthiasbeyer ];
     platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

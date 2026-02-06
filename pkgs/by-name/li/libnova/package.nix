@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   # pull from git repo because upstream stopped tarball releases after v0.15
   src = fetchgit {
-    url = "https://git.code.sf.net/p/libnova/${pname}";
+    url = "https://git.code.sf.net/p/libnova/libnova";
     rev = "v${version}";
     sha256 = "0icwylwkixihzni0kgl0j8dx3qhqvym6zv2hkw2dy6v9zvysrb1b";
   };

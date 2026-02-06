@@ -6,14 +6,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pngoptimizer";
   version = "2.7";
 
   src = fetchFromGitHub {
     owner = "hadrien-psydk";
     repo = "pngoptimizer";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1hbgf91vzx46grslfdx86smdvm6gs6lq9hpa3bax9xfbsknxi0i7";
   };
 
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ smitop ];
     platforms = with lib.platforms; linux;
   };
-}
+})

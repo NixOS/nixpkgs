@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   cmake,
   ninja,
   wxGTK32,
@@ -41,7 +41,7 @@
   libepoxy,
   libXdmcp,
   libXtst,
-  libpthreadstubs,
+  libpthread-stubs,
   libselinux,
   libsepol,
   libxkbcommon,
@@ -52,8 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "tenacity";
   version = "1.3.4";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "tenacityteam";
     repo = "tenacity";
     fetchSubmodules = true;
@@ -169,7 +168,7 @@ stdenv.mkDerivation (finalAttrs: {
     libepoxy
     libXdmcp
     libXtst
-    libpthreadstubs
+    libpthread-stubs
     libxkbcommon
     libselinux
     libsepol

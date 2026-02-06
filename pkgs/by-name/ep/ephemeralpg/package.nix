@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   pname = "ephemeralpg";
   version = "3.4";
   src = fetchurl {
-    url = "https://eradman.com/ephemeralpg/code/${pname}-${version}.tar.gz";
+    url = "https://eradman.com/ephemeralpg/code/ephemeralpg-${version}.tar.gz";
     hash = "sha256-IwAIJFW/ahDXGgINi4N9mG3XKw74JXK6+SLxGMZ8tS0=";
   };
   nativeBuildInputs = [ makeWrapper ];

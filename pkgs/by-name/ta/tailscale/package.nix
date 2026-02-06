@@ -24,7 +24,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "tailscale";
-  version = "1.92.3";
+  version = "1.94.1";
 
   outputs = [
     "out"
@@ -35,10 +35,10 @@ buildGoModule (finalAttrs: {
     owner = "tailscale";
     repo = "tailscale";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6dE3kgYABAVtrAjGWnWZ3X4Aq7yJagxNEk6BSyIC3Yk=";
+    hash = "sha256-jk4C2xw6vKIjo5F+FHRNTgNGZ7Zl+Hgpl84xeptCs1g=";
   };
 
-  vendorHash = "sha256-jJSSXMyUqcJoZuqfSlBsKDQezyqS+jDkRglMMjG1K8g=";
+  vendorHash = "sha256-WeMTOkERj4hvdg4yPaZ1gRgKnhRIBXX55kUVbX/k/xM=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -55,7 +55,6 @@ buildGoModule (finalAttrs: {
     "cmd/derper"
     "cmd/derpprobe"
     "cmd/tailscaled"
-    "cmd/tsidp"
     "cmd/get-authkey"
   ];
 
@@ -83,6 +82,9 @@ buildGoModule (finalAttrs: {
   # Tests start http servers which need to bind to local addresses:
   # panic: httptest: failed to listen on a port: listen tcp6 [::1]:0: bind: operation not permitted
   __darwinAllowLocalNetworking = true;
+
+  # Tests are in the `tests` passthru derivation because they are flaky, frequently causing build failures.
+  doCheck = false;
 
   preCheck = ''
     # feed in all tests for testing
@@ -152,6 +154,10 @@ buildGoModule (finalAttrs: {
 
         # Fails because we vendor dependencies
         "TestLicenseHeaders"
+
+        # Uses testing/synctest with gonotify.DirWatcher which spawns goroutines
+        # that block on inotify syscalls incompatible with synctest's bubble mechanism
+        "TestDNSTrampleRecovery"
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         # syscall default route interface en0 differs from netstat
@@ -215,6 +221,7 @@ buildGoModule (finalAttrs: {
   passthru.tests = {
     inherit (nixosTests) headscale;
     inherit tailscale-nginx-auth;
+    tests = finalAttrs.finalPackage.overrideAttrs { doCheck = true; };
   };
 
   meta = {

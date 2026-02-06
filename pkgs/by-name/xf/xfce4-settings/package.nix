@@ -26,7 +26,7 @@
   wlr-protocols,
   xapp,
   xfconf,
-  xf86inputlibinput,
+  xf86-input-libinput,
   colord,
   withColord ? true,
   gitUpdater,
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxklavier
     wlr-protocols
     xapp # org.x.apps.portal
-    xf86inputlibinput
+    xf86-input-libinput
     xfconf
   ]
   ++ lib.optionals withUpower [ upower ]

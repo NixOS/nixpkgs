@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   pname = "smbnetfs";
   version = "0.6.3";
   src = fetchurl {
-    url = "mirror://sourceforge/project/smbnetfs/smbnetfs/SMBNetFS-${version}/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/project/smbnetfs/smbnetfs/SMBNetFS-${version}/smbnetfs-${version}.tar.bz2";
     sha256 = "sha256-6sN7l2n76cP0uvPrZMYaa1mtTyqgXf3culoaxK301WA=";
   };
 

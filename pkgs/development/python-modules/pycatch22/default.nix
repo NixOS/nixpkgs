@@ -4,7 +4,6 @@
   fetchFromGitHub,
   setuptools,
   pandas,
-  pythonOlder,
   numpy,
   pytestCheckHook,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "pycatch22";
   version = "0.4.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "DynamicsAndNeuralSystems";

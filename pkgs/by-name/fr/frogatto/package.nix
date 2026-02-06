@@ -26,7 +26,8 @@ let
   inherit (data) version;
 in
 buildEnv {
-  name = "frogatto-${version}";
+  pname = "frogatto";
+  inherit version;
 
   nativeBuildInputs = [ makeWrapper ];
   paths = [

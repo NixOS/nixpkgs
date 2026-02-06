@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "1.3";
 
   src = fetchurl {
-    url = "mirror://debian/pool/main/t/tipa/${pname}_${version}.orig.tar.gz";
+    url = "mirror://debian/pool/main/t/tipa/tipa_${version}.orig.tar.gz";
     sha256 = "1q1sisxdcd2zd9b7mnagr2mxf9v3n1r4s5892zx5ly4r0niyya9m";
   };
 

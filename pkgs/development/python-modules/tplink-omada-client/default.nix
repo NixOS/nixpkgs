@@ -5,15 +5,12 @@
   buildPythonPackage,
   fetchPypi,
   hatchling,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "tplink-omada-client";
   version = "1.5.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "tplink_omada_client";

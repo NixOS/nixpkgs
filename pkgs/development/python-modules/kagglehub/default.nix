@@ -7,6 +7,7 @@
   hatchling,
 
   # dependencies
+  kagglesdk,
   packaging,
   pyyaml,
   requests,
@@ -35,16 +36,16 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "kagglehub";
-  version = "0.3.13";
+  version = "0.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Kaggle";
     repo = "kagglehub";
-    tag = "v${version}";
-    hash = "sha256-pwQZhNtps2wZeLlMMsX0M8t6qBuEdL3m/Kjf0Qdk0PM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-r7PP9d6W/rAjt/PUNeF5xlo7EpEfAbyNTNr7/oEpbN0=";
   };
 
   build-system = [
@@ -52,6 +53,7 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    kagglesdk
     packaging
     pyyaml
     requests
@@ -90,7 +92,7 @@ buildPythonPackage rec {
     pytestCheckHook
     writableTmpDirAsHomeHook
   ]
-  ++ optional-dependencies.pandas-datasets;
+  ++ finalAttrs.passthru.optional-dependencies.pandas-datasets;
 
   disabledTestPaths = [
     # Require internet access
@@ -107,8 +109,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library to access Kaggle resources";
     homepage = "https://github.com/Kaggle/kagglehub";
-    changelog = "https://github.com/Kaggle/kagglehub/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/Kaggle/kagglehub/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

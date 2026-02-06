@@ -8,7 +8,6 @@
   prompt-toolkit,
   pyfwup,
   pygreat,
-  pythonOlder,
   pyusb,
   setuptools,
   tabulate,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "greatfet";
   version = "2024.0.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "greatscottgadgets";

@@ -23,14 +23,14 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pwsafe";
   version = "1.23.0"; # do NOT update to 3.x Windows releases
 
   src = fetchFromGitHub {
     owner = "pwsafe";
     repo = "pwsafe";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-54cwQZi93p32JxxLc2Mql2XbJPvwqA2Rfne5G+5i6eU=";
   };
 
@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater {
     allowedVersions = "^1\\.";
-    url = src.gitRepoUrl;
+    url = finalAttrs.src.gitRepoUrl;
   };
 
   meta = {
@@ -117,4 +117,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.artistic2;
   };
-}
+})

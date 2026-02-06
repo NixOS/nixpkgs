@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   gdk-pixbuf,
   gobject-introspection,
   gtk3,
@@ -14,10 +14,9 @@
 python3Packages.buildPythonApplication rec {
   pname = "eduvpn-client";
   version = "4.6.0";
-  format = "pyproject";
+  pyproject = true;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "eduVPN";
     repo = "linux-app";
     rev = version;

@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "lk-jwt-service";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "lk-jwt-service";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Qb+6DzaObeNjV+XVXLR6GkgtodIVTqTxC4G4Ef2xFrE=";
+    hash = "sha256-x3QYq+PT0MFcRR50CG4NpCxv5KkoCLWzUEkPSdQnZX0=";
   };
 
   vendorHash = "sha256-GJKSvdv41rRSCGVAgUDxHdXoxRj/h+eDktjRJ3O5QFE=";

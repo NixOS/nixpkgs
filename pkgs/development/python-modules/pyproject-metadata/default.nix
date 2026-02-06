@@ -12,9 +12,7 @@
 buildPythonPackage rec {
   pname = "pyproject-metadata";
   version = "0.9.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "pyproject_metadata";

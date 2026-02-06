@@ -14,14 +14,14 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.8.3";
   pname = "gummi";
 
   src = pkgs.fetchFromGitHub {
     owner = "alexandervdm";
     repo = "gummi";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-71n71KjLmICp4gznd27NlbyA3kayje3hYk/cwkOXEO0=";
   };
 
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ flokli ];
     platforms = with lib.platforms; linux;
   };
-}
+})

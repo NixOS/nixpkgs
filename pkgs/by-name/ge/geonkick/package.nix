@@ -13,14 +13,14 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "geonkick";
   version = "3.7.0";
 
   src = fetchFromGitLab {
     owner = "Geonkick-Synthesizer";
     repo = "geonkick";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-8FfgtqFfiO1CKp2t0uXbXEtH6C1bx1EJWagjCfDwIwY=";
   };
 
@@ -53,4 +53,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.magnetophon ];
     mainProgram = "geonkick";
   };
-}
+})

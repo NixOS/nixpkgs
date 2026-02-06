@@ -6,12 +6,12 @@
   bash,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "atool";
   version = "0.39.0";
 
   src = fetchurl {
-    url = "mirror://savannah/atool/atool-${version}.tar.gz";
+    url = "mirror://savannah/atool/atool-${finalAttrs.version}.tar.gz";
     sha256 = "aaf60095884abb872e25f8e919a8a63d0dabaeca46faeba87d12812d6efc703b";
   };
 
@@ -25,4 +25,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     mainProgram = "atool";
   };
-}
+})

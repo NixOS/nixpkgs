@@ -37,7 +37,7 @@ python3Packages.buildPythonApplication rec {
     msrplib
     python3-eventlib
     python3-gnutls
-    sipsimple
+    python3-sipsimple
     wokkel
     xcaplib
   ];

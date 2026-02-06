@@ -120,10 +120,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Share one mouse and keyboard between multiple computers on Windows, macOS and Linux";
     mainProgram = "deskflow";
     maintainers = with lib.maintainers; [ flacks ];
-    license = with lib; [
-      licenses.gpl2Plus
-      licenses.openssl
-      licenses.mit # share/applications/org.deskflow.deskflow.desktop
+    license = with lib.licenses; [
+      gpl2Plus
+      openssl
+      mit # share/applications/org.deskflow.deskflow.desktop
     ];
     platforms = lib.platforms.linux;
   };

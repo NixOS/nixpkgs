@@ -6,8 +6,8 @@
   makeWrapper,
   unzip,
   libGL,
-  libICE,
-  libSM,
+  libice,
+  libsm,
   libX11,
   libXrandr,
   zlib,
@@ -33,8 +33,8 @@ stdenv.mkDerivation {
 
   buildInputs = [
     libGL
-    libICE
-    libSM
+    libice
+    libsm
     libX11
     libXrandr
     stdenv.cc.cc

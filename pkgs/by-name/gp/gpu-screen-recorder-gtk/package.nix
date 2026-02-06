@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   version = "5.7.9";
 
   src = fetchgit {
-    url = "https://repo.dec05eba.com/${pname}";
+    url = "https://repo.dec05eba.com/gpu-screen-recorder-gtk";
     tag = version;
     hash = "sha256-RFY5hQqv5XkLliB3+YJX4TXLxV9y1/P8PIYMi6MCbww=";
   };

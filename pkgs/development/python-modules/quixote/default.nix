@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "quixote";
   version = "3.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

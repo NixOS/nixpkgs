@@ -6,12 +6,12 @@
 }:
 
 # The homepage says this script is mature..
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mysql2pgsql";
   version = "0.0.1a";
 
   src = fetchurl {
-    url = "http://ftp.plusline.de/ftp.postgresql.org/projects/gborg/mysql2psql/devel/mysql2psql-${version}.tgz";
+    url = "http://ftp.plusline.de/ftp.postgresql.org/projects/gborg/mysql2psql/devel/mysql2psql-${finalAttrs.version}.tgz";
     sha256 = "0dpbxf3kdvpihz9cisx6wi3zzd0cnifaqvjxavrbwm4k4sz1qamp";
   };
 
@@ -29,4 +29,4 @@ stdenv.mkDerivation rec {
     mainProgram = "mysql2psql";
     platforms = lib.platforms.unix;
   };
-}
+})

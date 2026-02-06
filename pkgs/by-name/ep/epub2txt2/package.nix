@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "epub2txt2";
   version = "2.08";
 
   src = fetchFromGitHub {
     owner = "kevinboone";
     repo = "epub2txt2";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-YFaXkcIdat2cn1ITYFyG1hxbbepqcxvyJ6ZzDo4dVYI=";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.leonid ];
     mainProgram = "epub2txt";
   };
-}
+})

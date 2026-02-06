@@ -1,9 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
-  awscli,
+  awscli2,
   azure-common,
   azure-core,
   azure-storage-blob,
@@ -27,8 +26,6 @@ buildPythonPackage rec {
   pname = "smart-open";
   version = "7.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "RaRe-Technologies";
@@ -61,7 +58,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "smart_open" ];
 
   nativeCheckInputs = [
-    awscli
+    awscli2
     moto
     numpy
     pytest-cov-stub

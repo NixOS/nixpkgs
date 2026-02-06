@@ -6,10 +6,10 @@
   docutils,
   pkg-config,
   glib,
-  libpthreadstubs,
+  libpthread-stubs,
   libXau,
   libXdmcp,
-  xcbutil,
+  libxcb-util,
   nixosTests,
 }:
 
@@ -37,10 +37,10 @@ stdenv.mkDerivation {
   ];
   buildInputs = [
     glib
-    libpthreadstubs
+    libpthread-stubs
     libXau
     libXdmcp
-    xcbutil
+    libxcb-util
   ];
 
   passthru.tests = { inherit (nixosTests) xss-lock; };

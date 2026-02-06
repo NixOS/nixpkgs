@@ -11,15 +11,15 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-cloud-run";
-  version = "0.13.0";
+  version = "0.15.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_run";
-    inherit version;
-    hash = "sha256-l1NK1206LCBH0STAoKKUpIIvzCQzHroPKUyt+xk8Sa0=";
+    inherit (finalAttrs) version;
+    hash = "sha256-FY8mRkP5gr+k9PGPnijFbqAOqVwki8inRuFZtTivq1c=";
   };
 
   build-system = [ setuptools ];
@@ -41,8 +41,8 @@ buildPythonPackage rec {
   meta = {
     description = "Google Cloud Run API client library";
     homepage = "https://pypi.org/project/google-cloud-run/";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-run-v${version}/packages/google-cloud-run/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-run-v${finalAttrs.version}/packages/google-cloud-run/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

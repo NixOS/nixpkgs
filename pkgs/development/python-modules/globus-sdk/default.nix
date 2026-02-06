@@ -6,19 +6,15 @@
   flaky,
   pyjwt,
   pytestCheckHook,
-  pythonOlder,
   requests,
   responses,
   setuptools,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "globus-sdk";
   version = "3.63.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "globus";
@@ -37,8 +33,7 @@ buildPythonPackage rec {
     cryptography
     requests
     pyjwt
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

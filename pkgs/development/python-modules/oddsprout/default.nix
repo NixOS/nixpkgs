@@ -4,22 +4,19 @@
   fetchFromGitHub,
   hatchling,
   pytestCheckHook,
-  pythonOlder,
   dahlia,
   ixia,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "oddsprout";
   version = "0.1.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "trag1c";
     repo = "oddsprout";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-RfAU3/Je3aC8JjQ51DqRCSAIfW2tQmQPP6G0/bfa1ZE=";
   };
 
@@ -35,7 +32,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "oddsprout" ];
 
   meta = {
-    changelog = "https://github.com/trag1c/oddsprout/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/trag1c/oddsprout/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Generate random JSON with no schemas involved";
     license = lib.licenses.mit;
     homepage = "https://trag1c.github.io/oddsprout";
@@ -45,4 +42,4 @@ buildPythonPackage rec {
     ];
     mainProgram = "oddsprout";
   };
-}
+})

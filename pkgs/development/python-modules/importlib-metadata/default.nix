@@ -2,10 +2,8 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   setuptools-scm,
-  typing-extensions,
   toml,
   zipp,
 
@@ -17,8 +15,6 @@ buildPythonPackage rec {
   pname = "importlib-metadata";
   version = "8.7.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "importlib_metadata";
@@ -34,8 +30,7 @@ buildPythonPackage rec {
   dependencies = [
     toml
     zipp
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
+  ];
 
   # Cyclic dependencies due to pyflakefs
   doCheck = false;

@@ -4,16 +4,15 @@
   fetchFromGitHub,
   nix-update-script,
 }:
-
-buildGoModule {
+buildGoModule (finalAttrs: {
   pname = "nix-converter";
-  version = "0-unstable-2025-12-29";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "theobori";
     repo = "nix-converter";
-    rev = "6e5c00e94f078a1eea610e736e7e1fb8349b1ab5";
-    hash = "sha256-Pdw/vUgfEws+EOyFT9WK8SjZP6DCVJkWWJgI01+5+KI=";
+    tag = finalAttrs.version;
+    hash = "sha256-RfZcQsDPZJZXggvjF0JQqUXg5p2WnMjYANkDXkQZIhU=";
   };
 
   vendorHash = "sha256-Ay1f9sk8RuJyOS7hl/lrscpxdlIgm9dMow/xTFoR+H4=";
@@ -35,4 +34,4 @@ buildGoModule {
     ];
     mainProgram = "nix-converter";
   };
-}
+})

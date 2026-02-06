@@ -6,15 +6,12 @@
   fetchFromGitHub,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "datasette-publish-fly";
   version = "1.3.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "simonw";

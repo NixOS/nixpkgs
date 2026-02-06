@@ -34,14 +34,14 @@ let
     esac
   '';
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "glava";
   version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "wacossusca34";
     repo = "glava";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0kqkjxmpqkmgby05lsf6c6iwm45n33jk5qy6gi3zvjx4q4yzal1i";
   };
 
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
       --replace '$(DESTDIR)$(SHADERDIR)' '$(SHADERDIR)'
 
     substituteInPlace Makefile \
-      --replace 'unknown' 'v${version}'
+      --replace 'unknown' 'v${finalAttrs.version}'
   '';
 
   makeFlags = optional (!enableGlfw) "DISABLE_GLFW=1";
@@ -103,4 +103,4 @@ stdenv.mkDerivation rec {
       eadwu
     ];
   };
-}
+})

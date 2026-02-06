@@ -15,9 +15,14 @@ stdenv.mkDerivation rec {
   version = "0.9.13";
 
   src = fetchurl {
-    url = "https://arthurdejong.org/nss-pam-ldapd/${pname}-${version}.tar.gz";
+    url = "https://arthurdejong.org/nss-pam-ldapd/nss-pam-ldapd-${version}.tar.gz";
     sha256 = "sha256-4BeE4Xy1M7tmvQYB4gXnhSY0RcPC33pvkCMqtBMccW0=";
   };
+
+  patches = [
+    # Fix C23 compatibility: rename 'bool' variable which is now a keyword
+    ./fix-bool-c23-keyword.patch
+  ];
 
   nativeBuildInputs = [
     pkg-config

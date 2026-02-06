@@ -23,8 +23,8 @@
   zlib,
   minizip,
   asio,
-  libSM,
-  libICE,
+  libsm,
+  libice,
   libXext,
 }:
 
@@ -77,8 +77,8 @@ stdenv.mkDerivation rec {
     zlib
     minizip
     asio
-    libSM # XXX: these should be propagated by SDL2?
-    libICE
+    libsm # XXX: these should be propagated by SDL2?
+    libice
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux libXext;
 

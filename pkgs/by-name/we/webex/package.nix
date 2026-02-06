@@ -44,11 +44,11 @@
   libXrender,
   libXtst,
   libxshmfence,
-  xcbutil,
-  xcbutilimage,
-  xcbutilkeysyms,
-  xcbutilrenderutil,
-  xcbutilwm,
+  libxcb-util,
+  libxcb-image,
+  libxcb-keysyms,
+  libxcb-render-util,
+  libxcb-wm,
   p7zip,
   onetbb,
   wayland,
@@ -110,12 +110,12 @@ stdenv.mkDerivation rec {
     libXrender
     libXtst
     libxshmfence
-    xcbutil
-    xcbutilimage
+    libxcb-util
+    libxcb-image
     libXScrnSaver
-    xcbutilkeysyms
-    xcbutilrenderutil
-    xcbutilwm
+    libxcb-keysyms
+    libxcb-render-util
+    libxcb-wm
     onetbb
     wayland
   ];

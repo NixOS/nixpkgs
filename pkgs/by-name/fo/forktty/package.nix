@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "1.3";
 
   src = fetchurl {
-    url = "mirror://ibiblioPubLinux/utils/terminal/${pname}-${version}.tgz";
+    url = "mirror://ibiblioPubLinux/utils/terminal/forktty-${version}.tgz";
     hash = "sha256-6xc5eshCuCIOsDh0r2DizKAeypGH0TRRotZ4itsvpVk=";
   };
 

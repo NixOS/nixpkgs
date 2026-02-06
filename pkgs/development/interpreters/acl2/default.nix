@@ -3,6 +3,7 @@
   stdenv,
   callPackage,
   fetchFromGitHub,
+  fetchpatch,
   runCommandLocal,
   makeWrapper,
   replaceVars,
@@ -50,6 +51,12 @@ stdenv.mkDerivation rec {
   libipasir = callPackage ./libipasirglucose4 { };
 
   patches = [
+    # The upstream fix for the input-files macro regression
+    (fetchpatch {
+      url = "https://github.com/acl2/acl2/commit/be39e7835f1c68008c17188d2f65eeaef61632fa.patch";
+      sha256 = "sha256-pZ/r0vlyJz7ymYfrVtHDxsLdw0M/MJStBH42ZLO7Fs4=";
+    })
+
     (replaceVars ./0001-path-changes-for-nix.patch {
       libipasir = "${libipasir}/lib/${libipasir.libname}";
       libssl = "${lib.getLib openssl}/lib/libssl${stdenv.hostPlatform.extensions.sharedLibrary}";

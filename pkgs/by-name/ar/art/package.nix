@@ -15,7 +15,7 @@
   libXtst,
   wrapGAppsHook3,
   pixman,
-  libpthreadstubs,
+  libpthread-stubs,
   gtkmm3,
   libXau,
   libXdmcp,
@@ -38,15 +38,15 @@
   color-transformation-language,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "art";
-  version = "1.25.12";
+  version = "1.26.1";
 
   src = fetchFromGitHub {
     owner = "artpixls";
     repo = "ART";
-    tag = version;
-    hash = "sha256-iF409zromKDliFRjGWYHBeK38UsxUCH70dgSsHLHhhw=";
+    tag = finalAttrs.version;
+    hash = "sha256-Abh3Hj3wKdWNN7rdU61MgkZHmoa7ufYzZGKsrxplkj0=";
   };
 
   # Fix the build with CMake 4.
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     libepoxy
     libXtst
     pixman
-    libpthreadstubs
+    libpthread-stubs
     gtkmm3
     libXau
     libXdmcp
@@ -120,4 +120,4 @@ stdenv.mkDerivation rec {
     mainProgram = "ART";
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -3,7 +3,7 @@
   stdenv,
   autoreconfHook,
   dockapps-sources,
-  fontutil,
+  font-util,
   libX11,
   libXext,
   libXpm,
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     libX11
     libXext
     libXpm
-    fontutil
+    font-util
     mkfontdir
   ];
 

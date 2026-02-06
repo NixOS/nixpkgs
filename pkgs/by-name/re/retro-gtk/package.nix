@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   version = "1.0.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/retro-gtk/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/retro-gtk/${lib.versions.majorMinor version}/retro-gtk-${version}.tar.xz";
     sha256 = "1lnb7dwcj3lrrvdzd85dxwrlid28xf4qdbrgfjyg1wn1z6sv063i";
   };
 

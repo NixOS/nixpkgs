@@ -1,6 +1,6 @@
 {
   buildGoModule,
-  fetchFromGitea,
+  fetchFromCodeberg,
   lib,
   jq,
   installShellFiles,
@@ -13,8 +13,7 @@ buildGoModule rec {
   pname = "ijq";
   version = "1.2.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "gpanders";
     repo = "ijq";
     rev = "v${version}";

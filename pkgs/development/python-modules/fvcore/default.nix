@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   # build inputs
   numpy,
   yacs,
@@ -26,8 +25,6 @@ in
 buildPythonPackage {
   inherit pname version;
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

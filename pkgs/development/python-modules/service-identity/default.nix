@@ -11,16 +11,13 @@
   pyasn1,
   pyasn1-modules,
   pytestCheckHook,
-  pythonOlder,
   pyopenssl,
 }:
 
 buildPythonPackage rec {
   pname = "service-identity";
   version = "24.2.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyca";

@@ -24,10 +24,10 @@
   qttools,
   qtwebengine,
   qtwebview,
-  xcbutilimage,
-  xcbutilkeysyms,
-  xcbutilrenderutil,
-  xcbutilwm,
+  libxcb-image,
+  libxcb-keysyms,
+  libxcb-render-util,
+  libxcb-wm,
 }:
 
 {
@@ -66,10 +66,10 @@ let
       qttools
       qtwebengine
       qtwebview
-      xcbutilimage
-      xcbutilkeysyms
-      xcbutilrenderutil
-      xcbutilwm
+      libxcb-image
+      libxcb-keysyms
+      libxcb-render-util
+      libxcb-wm
     ];
 
     dontBuild = true;

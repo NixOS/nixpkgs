@@ -7,7 +7,6 @@
   buildGoModule,
   buildPackages,
   gpgme,
-  lvm2,
   btrfs-progs,
   libapparmor,
   libseccomp,
@@ -83,7 +82,6 @@ buildGoModule (finalAttrs: {
     libapparmor
     libseccomp
     libselinux
-    lvm2
     systemd
   ];
 
@@ -157,6 +155,8 @@ buildGoModule (finalAttrs: {
         podman-tls-ghostunnel
         ;
       oci-containers-podman = nixosTests.oci-containers.podman;
+      oci-containers-podman-rootless-conmon = nixosTests.oci-containers.podman-rootless-conmon;
+      oci-containers-podman-rootless-healthy = nixosTests.oci-containers.podman-rootless-healthy;
     };
     # do not add qemu to this wrapper, store paths get written to the podman vm config and break when GCed
     binPath = lib.makeBinPath (

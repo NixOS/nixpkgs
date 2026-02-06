@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "0.1.12";
 
   src = fetchurl {
-    url = "mirror://sourceforge/id3v2/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/id3v2/id3v2-${version}.tar.gz";
     sha256 = "1gr22w8gar7zh5pyyvdy7cy26i47l57jp1l1nd60xfwx339zl1c1";
   };
 

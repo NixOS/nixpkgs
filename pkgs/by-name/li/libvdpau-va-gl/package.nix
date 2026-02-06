@@ -5,7 +5,7 @@
   cmake,
   pkg-config,
   libX11,
-  libpthreadstubs,
+  libpthread-stubs,
   libXau,
   libXdmcp,
   libXext,
@@ -33,7 +33,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     libX11
-    libpthreadstubs
+    libpthread-stubs
     libXau
     libXdmcp
     libXext

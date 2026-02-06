@@ -8,7 +8,7 @@
   mkLibretroCore,
   portaudio,
   python3,
-  xorg,
+  libx11,
 }:
 mkLibretroCore {
   core = "same_cdi";
@@ -30,13 +30,22 @@ mkLibretroCore {
     })
   ];
 
+  postPatch = ''
+    # Fix sol2 compatibility with GCC 15 (construct -> emplace)
+    # https://github.com/ThePhD/sol2/issues/1657
+    sed -i 's/this->construct(std::forward<Args>(args)\.\.\.);/this->emplace(std::forward<Args>(args)...);/g' 3rdparty/sol2/sol/sol.hpp
+
+    # Fix missing cstdint include for uint8_t
+    sed -i '1i #include <cstdint>' src/lib/util/corestr.cpp
+  '';
+
   extraNativeBuildInputs = [ python3 ];
   extraBuildInputs = [
     alsa-lib
     libGL
     libGLU
     portaudio
-    xorg.libX11
+    libx11
   ];
 
   meta = {

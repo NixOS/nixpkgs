@@ -131,7 +131,10 @@ buildGoModule {
     runHook postInstall
   '';
 
-  passthru.tests.vikunja = nixosTests.vikunja;
+  passthru = {
+    tests.vikunja = nixosTests.vikunja;
+    frontend = frontend;
+  };
 
   meta = {
     changelog = "https://kolaente.dev/vikunja/api/src/tag/v${version}/CHANGELOG.md";

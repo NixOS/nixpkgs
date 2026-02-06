@@ -5,12 +5,12 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bibtool";
   version = "2.68";
 
   src = fetchurl {
-    url = "http://www.gerd-neugebauer.de/software/TeX/BibTool/BibTool-${version}.tar.gz";
+    url = "http://www.gerd-neugebauer.de/software/TeX/BibTool/BibTool-${finalAttrs.version}.tar.gz";
     sha256 = "1ymq901ckaysq2n1bplk1064rb2njq9n30pii15w157y0lxcwd3i";
   };
 
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.rycee ];
     mainProgram = "bibtool";
   };
-}
+})

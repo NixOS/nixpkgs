@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "0.8";
 
   src = fetchurl {
-    url = "http://0pointer.de/lennart/projects/libasyncns/${pname}-${version}.tar.gz";
+    url = "http://0pointer.de/lennart/projects/libasyncns/libasyncns-${version}.tar.gz";
     sha256 = "0x5b6lcic4cd7q0bx00x93kvpyzl7n2abbgvqbrlzrfb8vknc6jg";
   };
 

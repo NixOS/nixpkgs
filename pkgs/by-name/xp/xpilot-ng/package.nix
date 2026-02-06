@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   libX11,
-  libSM,
+  libsm,
   libXext,
   SDL,
   libGLU,
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
   buildInputs = [
     libX11
-    libSM
+    libsm
     libXext
     SDL
     SDL_ttf

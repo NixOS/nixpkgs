@@ -7,7 +7,7 @@
   git,
 }:
 let
-  version = "1.1.8";
+  version = "1.1.10";
 in
 rustPlatform.buildRustPackage {
   pname = "committed";
@@ -17,10 +17,10 @@ rustPlatform.buildRustPackage {
     owner = "crate-ci";
     repo = "committed";
     tag = "v${version}";
-    hash = "sha256-JjVF2Qv3gcS1bNAlWLDHthOgtX3J36IDEb45hMFlPYw=";
+    hash = "sha256-shYfKpQl0hv9m/x9UuWFksdNB6mkeQPFPP16vGxUbVw=";
   };
 
-  cargoHash = "sha256-W6znChJaDPKdqACDGrVRyEYWKGRinZKLb/21fze2t0c=";
+  cargoHash = "sha256-CK/vYcxYXE/hEq1h9mgwrYyeS36hfiYC8WDJN9iNH6s=";
 
   nativeCheckInputs = [
     git

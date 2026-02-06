@@ -40,6 +40,10 @@ stdenv.mkDerivation {
     })
   ];
 
+  # opt out of GCC 15's stricter C standards
+  # https://github.com/NixOS/nixpkgs/issues/475479
+  env.NIX_CFLAGS_COMPILE = toString [ "-std=gnu17" ];
+
   buildInputs = [ openssl ];
 
   unpackPhase = ''

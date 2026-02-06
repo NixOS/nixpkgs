@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   version = "0.3.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libwpg/${pname}-${version}.tar.xz";
+    url = "mirror://sourceforge/libwpg/libwpg-${version}.tar.xz";
     hash = "sha256-tV/alEDR4HBjDrJIfYuGl89BLCFKJ8runfac7HwATeM=";
   };
 

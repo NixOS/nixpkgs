@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "sqls";
-  version = "0.2.30";
+  version = "0.2.45";
 
   src = fetchFromGitHub {
     owner = "sqls-server";
     repo = "sqls";
     rev = "v${version}";
-    hash = "sha256-vsU0EZZ7Wwo2esv7StmSB4DbQXCwp4Mi+KsylCL0WcM=";
+    hash = "sha256-r9D3YtUk/hv3ex/PSGPTNIBTW3s3a3KdIBtxDry30Zc=";
   };
 
-  vendorHash = "sha256-BSGKFSw/ReeADnB3FuEJoxstkCcJx434vNaFf5A+Gbw=";
+  vendorHash = "sha256-eh43G0fR+NRRXRPCfxjlwzzw3yg/ZRb1GpWwHGqyRrE=";
 
   ldflags = [
     "-s"

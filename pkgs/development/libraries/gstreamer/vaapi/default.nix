@@ -13,7 +13,13 @@
   wayland-scanner,
   libdrm,
   udev,
-  xorg,
+  libxv,
+  libxrandr,
+  libxext,
+  libx11,
+  libsm,
+  libice,
+  libxcb,
   libGLU,
   libGL,
   gstreamer,
@@ -63,13 +69,13 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
     libdrm
     udev
-    xorg.libX11
-    xorg.libxcb
-    xorg.libXext
-    xorg.libXv
-    xorg.libXrandr
-    xorg.libSM
-    xorg.libICE
+    libx11
+    libxcb
+    libxext
+    libxv
+    libxrandr
+    libsm
+    libice
     nasm
     libvpx
   ]

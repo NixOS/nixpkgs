@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   version = "2.00";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/blobwars/blobwars-${version}.tar.gz";
     sha256 = "c406279f6cdf2aed3c6edb8d8be16efeda0217494acd525f39ee2bd3e77e4a99";
   };
 

@@ -31,6 +31,16 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
+  outputs = [
+    "out"
+    "bin"
+    "dev"
+  ];
+
+  postFixup = ''
+    moveToOutput bin "''${!outputBin}"
+  '';
+
   meta = {
     description = "Yet Another JSON Library";
     longDescription = ''

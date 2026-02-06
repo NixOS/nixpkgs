@@ -364,13 +364,13 @@ rec {
   # https://docs.gradle.org/current/userguide/compatibility.html
 
   gradle_9 = mkGradle {
-    version = "9.2.1";
-    hash = "sha256-cvRMn468sa9Dg49F7lxKqcVESJizRoqz9K97YHbFvD8=";
+    version = "9.3.1";
+    hash = "sha256-smbV/2uQ6tptw7IMsJDjcxMC5VOifF0+TfHw12vq/wY=";
     defaultJava = jdk21;
   };
   gradle_8 = mkGradle {
-    version = "8.14.3";
-    hash = "sha256-vXEQIhNJMGCVbsIp2Ua+7lcVjb2J0OYrkbyg+ixfNTE=";
+    version = "8.14.4";
+    hash = "sha256-8XcSmKcPbbWina9iN4xOGKF/wzybprFDYuDN9AYQOA0=";
     defaultJava = jdk21;
     # Only enable this on *one* version to avoid duplicate PRs.
     enableUpdateScript = true;

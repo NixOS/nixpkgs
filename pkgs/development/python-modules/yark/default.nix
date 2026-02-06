@@ -7,7 +7,6 @@
   flask,
   poetry-core,
   progress,
-  pythonOlder,
   requests,
   yt-dlp,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "yark";
   version = "1.2.12";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;

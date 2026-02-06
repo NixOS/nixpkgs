@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   version = "1.3.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/xplanet/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/xplanet/xplanet-${version}.tar.gz";
     sha256 = "1rzc1alph03j67lrr66499zl0wqndiipmj99nqgvh9xzm1qdb023";
   };
 

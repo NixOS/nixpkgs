@@ -6,15 +6,12 @@
   multiprocess,
   pox,
   ppft,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pathos";
   version = "0.3.4";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "uqfoundation";

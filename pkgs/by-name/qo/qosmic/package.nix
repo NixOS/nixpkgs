@@ -12,14 +12,14 @@
   lib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qosmic";
   version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "bitsed";
     repo = "qosmic";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "13nw1mkdib14430r21mj352v62vi546vf184vyhxm7yjjygyra1w";
   };
 
@@ -81,4 +81,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.raboof ];
     platforms = lib.platforms.unix;
   };
-}
+})

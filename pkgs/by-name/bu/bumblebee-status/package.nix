@@ -22,7 +22,7 @@ in
 python3.pkgs.buildPythonPackage {
   pname = "bumblebee-status";
   inherit version;
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tobi-wan-kenobi";

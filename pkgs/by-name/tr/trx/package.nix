@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "0.5";
 
   src = fetchurl {
-    url = "https://www.pogo.org.uk/~mark/trx/releases/${pname}-${version}.tar.gz";
+    url = "https://www.pogo.org.uk/~mark/trx/releases/trx-${version}.tar.gz";
     sha256 = "1jjgca92nifjhcr3n0fmpfr6f5gxlqyal2wmgdlgd7hx834r1if7";
   };
 

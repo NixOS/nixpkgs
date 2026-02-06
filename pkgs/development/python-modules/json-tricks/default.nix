@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   pytest7CheckHook,
   numpy,
   pandas,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "json-tricks";
   version = "3.17.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mverleg";

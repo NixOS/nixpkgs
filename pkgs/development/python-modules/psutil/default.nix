@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "7.1.3";
   pyproject = true;
 
-  inherit stdenv;
-
   src = fetchFromGitHub {
     owner = "giampaolo";
     repo = "psutil";

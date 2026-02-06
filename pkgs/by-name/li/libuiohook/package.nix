@@ -9,17 +9,24 @@
   libxcb,
   libxkbcommon,
   xinput,
-  xorg,
+  libxt,
+  libxtst,
+  libxi,
+  libxinerama,
+  libxext,
+  libxdmcp,
+  libxau,
+  libxkbfile,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libuiohook";
   version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "kwhat";
     repo = "libuiohook";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1qlz55fp4i9dd8sdwmy1m8i4i1jy1s09cpmlxzrgf7v34w72ncm7";
   };
 
@@ -28,24 +35,20 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) (
-    [
-      libX11
-      libxcb
-      libxkbcommon
-      xinput
-    ]
-    ++ (with xorg; [
-      libXau
-      libXdmcp
-      libXi
-      libXinerama
-      libXt
-      libXtst
-      libXext
-      libxkbfile
-    ])
-  );
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libX11
+    libxcb
+    libxkbcommon
+    xinput
+    libxau
+    libxdmcp
+    libxi
+    libxinerama
+    libxt
+    libxtst
+    libxext
+    libxkbfile
+  ];
 
   outputs = [
     "out"
@@ -74,4 +77,4 @@ stdenv.mkDerivation rec {
   };
 
   passthru.tests.libuiohook = nixosTests.libuiohook;
-}
+})

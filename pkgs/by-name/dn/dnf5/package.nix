@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # workaround for https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105329
-  NIX_CFLAGS_COMPILE = "-Wno-restrict -Wno-maybe-uninitialized";
+  env.NIX_CFLAGS_COMPILE = "-Wno-restrict -Wno-maybe-uninitialized";
 
   cmakeFlags = [
     "-DWITH_PERL5=OFF"

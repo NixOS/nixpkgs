@@ -36,7 +36,7 @@
   libjpeg8,
   libkate,
   librsvg,
-  xorg,
+  libxpm,
   libsForQt5,
   libupnp,
   aalib,
@@ -51,7 +51,7 @@
   libshout,
   ffmpeg_6,
   libmpeg2,
-  xcbutilkeysyms,
+  libxcb-keysyms,
   lirc,
   lua5_2,
   taglib,
@@ -174,7 +174,7 @@ stdenv.mkDerivation (finalAttrs: {
     libjpeg8
     libkate
     librsvg
-    xorg.libXpm
+    libxpm
     libsForQt5.qt5.qtsvg
     libsForQt5.qt5.qtbase
     libsForQt5.qt5.qtx11extras
@@ -203,7 +203,7 @@ stdenv.mkDerivation (finalAttrs: {
     srt
     libshout
     ffmpeg_6
-    xcbutilkeysyms
+    libxcb-keysyms
     lirc
     lua5_2
     taglib

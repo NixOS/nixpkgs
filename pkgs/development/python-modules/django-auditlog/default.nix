@@ -26,12 +26,12 @@ buildPythonPackage rec {
     hash = "sha256-ZOCLlS9SUY8W3jfA+51gy5yUchJr+rpBzH+Sx1G/kUM=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     django
     python-dateutil
   ];

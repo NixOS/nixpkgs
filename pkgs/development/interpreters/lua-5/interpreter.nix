@@ -33,7 +33,7 @@ stdenv.mkDerivation (
     plat =
       if (stdenv.hostPlatform.isLinux && lib.versionOlder self.luaversion "5.4") then
         "linux"
-      else if (stdenv.hostPlatform.isLinux && lib.versionAtLeast self.luaversion "5.4") then
+      else if (stdenv.hostPlatform.isLinux && self.luaversion == "5.4") then
         "linux-readline"
       else if stdenv.hostPlatform.isDarwin then
         "macosx"

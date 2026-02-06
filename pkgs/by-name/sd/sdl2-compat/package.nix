@@ -30,13 +30,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdl2-compat";
-  version = "2.32.60";
+  version = "2.32.62";
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "sdl2-compat";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-8nhSyifEeYEZj9tqid1x67jhxqmrR61NwQ/g0Z8vbw8=";
+    hash = "sha256-JYHkc3DyCsKtq8zbwLGsptCrIRDDbHUjlC9rVaEbEzc=";
   };
 
   nativeBuildInputs = [

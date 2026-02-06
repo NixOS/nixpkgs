@@ -6,7 +6,7 @@
 {
   lib,
   runCommand,
-  xorg,
+  lndir,
   cacert,
   unzip,
 
@@ -44,7 +44,7 @@ in
 runCommand "flutter-artifacts-${flutterPlatform}-${systemPlatform}"
   {
     nativeBuildInputs = [
-      xorg.lndir
+      lndir
       flutter'
       unzip
     ];

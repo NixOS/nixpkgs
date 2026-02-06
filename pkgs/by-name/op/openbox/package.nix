@@ -11,8 +11,8 @@
   libXcursor,
   libXau,
   libXrandr,
-  libICE,
-  libSM,
+  libice,
+  libsm,
   imlib2,
   pango,
   libstartup_notification,
@@ -36,8 +36,8 @@ stdenv.mkDerivation rec {
     libXcursor
     libXau
     libXrandr
-    libICE
-    libSM
+    libice
+    libsm
     libstartup_notification
     python3
   ];
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "http://openbox.org/dist/openbox/${pname}-${version}.tar.gz";
+    url = "http://openbox.org/dist/openbox/openbox-${version}.tar.gz";
     sha256 = "1xvyvqxlhy08n61rjkckmrzah2si1i7nmc7s8h07riqq01vc0jlb";
   };
 
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/openbox-session" --prefix XDG_DATA_DIRS : "$out/share"
     wrapProgram "$out/bin/openbox-gnome-session" --prefix XDG_DATA_DIRS : "$out/share"
     wrapProgram "$out/bin/openbox-kde-session" --prefix XDG_DATA_DIRS : "$out/share"
-    wrapPythonProgramsIn "$out/libexec" "$out $pythonPath"
+    wrapPythonProgramsIn "$out/libexec" "$out ''${pythonPath[*]}"
   '';
 
   meta = {

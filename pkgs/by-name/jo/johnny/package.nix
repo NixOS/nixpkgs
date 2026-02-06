@@ -9,14 +9,14 @@
   copyDesktopItems,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "johnny";
   version = "2.2";
 
   src = fetchFromGitHub {
     owner = "openwall";
     repo = "johnny";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-fwRvyQbRO63iVt9AHlfl+Cv4NRFQmyVsZUQLxmzGjAY=";
   };
 
@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
-    install -D ${pname} $out/bin/${pname}
-    wrapProgram $out/bin/${pname} \
+    install -D johnny $out/bin/johnny
+    wrapProgram $out/bin/johnny \
       --prefix PATH : ${lib.makeBinPath [ john ]}
-    install -D README $out/share/doc/${pname}/README
-    install -D LICENSE $out/share/licenses/${pname}/LICENSE
-    install -D resources/icons/${pname}_128.png $out/share/pixmaps/${pname}.png
+    install -D README $out/share/doc/johnny/README
+    install -D LICENSE $out/share/licenses/johnny/LICENSE
+    install -D resources/icons/johnny_128.png $out/share/pixmaps/johnny.png
     runHook postInstall
   '';
 
@@ -46,8 +46,8 @@ stdenv.mkDerivation rec {
       name = "Johnny";
       desktopName = "Johnny";
       comment = "A GUI for John the Ripper";
-      icon = pname;
-      exec = pname;
+      icon = "johnny";
+      exec = "johnny";
       terminal = false;
       categories = [
         "Application"
@@ -65,4 +65,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ Misaka13514 ];
     platforms = lib.platforms.linux;
   };
-}
+})

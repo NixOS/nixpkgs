@@ -10,14 +10,14 @@
   miniupnpc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "i2pd";
   version = "2.58.0";
 
   src = fetchFromGitHub {
     owner = "PurpleI2P";
     repo = "i2pd";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-moUcivW3YIE2SvjS7rCXTjeCKUW/u/NXWH3VmJ9x6jg=";
   };
 
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "i2pd";
   };
-}
+})

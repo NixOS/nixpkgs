@@ -95,7 +95,7 @@ let
     };
   };
 
-  optionalKV = k: v: lib.optionalString (v != null) "${k} = ${builtins.toString v}";
+  optionalKV = k: v: lib.optionalString (v != null) "${k} = ${toString v}";
 
   renderPhocOutput =
     name: output:

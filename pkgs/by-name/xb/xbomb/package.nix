@@ -6,11 +6,11 @@
   libXaw,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xbomb";
   version = "2.2b";
   src = fetchurl {
-    url = "https://www.gedanken.org.uk/software/xbomb/download/xbomb-${version}.tgz";
+    url = "https://www.gedanken.org.uk/software/xbomb/download/xbomb-${finalAttrs.version}.tgz";
     sha256 = "0692gjw28qvh8wj9l58scjw6kxj7jdyb3yzgcgs9wcznq11q839m";
   };
 
@@ -30,4 +30,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -5,8 +5,8 @@
   autoreconfHook,
   pkg-config,
   libxcb,
-  xcbutilkeysyms,
-  xcbutilimage,
+  libxcb-keysyms,
+  libxcb-image,
   pam,
   libX11,
   libev,
@@ -15,7 +15,7 @@
   libxkbfile,
   libjpeg_turbo,
   xcbutilxrm,
-  xorg,
+  libxcb-util,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     libxcb
-    xcbutilkeysyms
-    xcbutilimage
+    libxcb-keysyms
+    libxcb-image
     pam
     libX11
     libev
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     libxkbfile
     libjpeg_turbo
     xcbutilxrm
-    xorg.xcbutil
+    libxcb-util
   ];
 
   makeFlags = [ "all" ];

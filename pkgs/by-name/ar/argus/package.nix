@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   version = "3.0.8.2";
 
   src = fetchurl {
-    url = "http://qosient.com/argus/src/${pname}-${version}.tar.gz";
+    url = "http://qosient.com/argus/src/argus-${version}.tar.gz";
     sha256 = "1zzf688dbbcb5z2r9v1p28rddns6znzx35nc05ygza6lp7aknkna";
   };
 

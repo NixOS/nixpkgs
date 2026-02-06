@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "podlet";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podlet";
     tag = "v${version}";
-    hash = "sha256-STkYCaXBoQSmFKpMdsKzqFGXHh9s0jeGi5K2itj8jmc=";
+    hash = "sha256-9hZ0JggtLgLpWQXTCNI4+loyGIzh2l9pbrCjI41hNuA=";
   };
 
-  cargoHash = "sha256-FeYGNyBtMCiufeX9Eik3QXPxqOGEW/ZbvwFn50mTag8=";
+  cargoHash = "sha256-WYOddpFgD41TpkBXWbzSarfIWRIBR9W+RwkZczkn0sQ=";
 
   meta = {
     description = "Generate Podman Quadlet files from a Podman command, compose file, or existing object";

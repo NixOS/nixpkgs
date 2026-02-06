@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "wpprobe";
-  version = "0.8.0";
+  version = "0.10.12";
 
   src = fetchFromGitHub {
     owner = "Chocapikk";
     repo = "wpprobe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Cu0Bs9oDD/OAKASLXsLPve0e92PoHUaLmk6C+VDIaCU=";
+    hash = "sha256-fIPgWHPAjMQcKvH8fJhQUx08JfUfhOZAHSQCZ4YKK3k=";
   };
 
   vendorHash = "sha256-pAKFrdja+rH0kiJH6hToZwLjE8lLBHFAUCjnCLbgxVo=";
@@ -27,14 +27,14 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/Chocapikk/wpprobe/internal/utils.Version=v${finalAttrs.version}"
+    "-X=github.com/Chocapikk/wpprobe/internal/version.Version=v${finalAttrs.version}"
   ];
 
   doInstallCheck = true;
 
   checkFlags = [
-    # Test requires network access
-    "-skip=TestUpdateWordfence"
+    # Tests require network access
+    "-skip=TestUpdateWordfence|TestAPI_Scan|TestAPI_ScanWithContext|TestAPI_ScanWithProgress|TestAPI_UpdateDatabases"
   ];
 
   meta = {

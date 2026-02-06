@@ -10,19 +10,19 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "custom-sidebar";
-  version = "10.7.0";
+  version = "12.0.0";
 
   src = fetchFromGitHub {
     owner = "elchininet";
     repo = "custom-sidebar";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aV4dMt79t9ZZm+Z08odSONf/ghow4U+/aryk2+GJZvw=";
+    hash = "sha256-U/HjDnHKAlUVAMbiA4AUPSasLJQbSeuvq/e4oR/dTcI=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 1;
-    hash = "sha256-gfjRgq75hKxgfOn0wnWIzcFcdWVe7PZ4z8YHxLTCsjo=";
+    hash = "sha256-VbmbqTwuXfJQVSaQHGVwIZJf7350HsH+TGeVCtCXL38=";
   };
 
   nativeBuildInputs = [

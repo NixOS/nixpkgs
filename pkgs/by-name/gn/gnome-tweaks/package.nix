@@ -29,10 +29,10 @@
 python3Packages.buildPythonApplication rec {
   pname = "gnome-tweaks";
   version = "49.0";
-  format = "other";
+  pyproject = false;
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-tweaks/${lib.versions.major version}/gnome-tweaks-${version}.tar.xz";
     hash = "sha256-s5Cb3LSQW2hCfWq1geAfQ23/jlwKOJseCxRQDxiAbrs=";
   };
 
@@ -79,7 +79,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   postFixup = ''
-    wrapPythonProgramsIn "$out/libexec" "$out $pythonPath"
+    wrapPythonProgramsIn "$out/libexec" "$out ''${pythonPath[*]}"
   '';
 
   passthru = {

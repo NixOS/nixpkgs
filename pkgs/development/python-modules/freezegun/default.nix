@@ -5,7 +5,6 @@
   pytestCheckHook,
   python-dateutil,
   pythonAtLeast,
-  pythonOlder,
   setuptools,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "freezegun";
   version = "1.5.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

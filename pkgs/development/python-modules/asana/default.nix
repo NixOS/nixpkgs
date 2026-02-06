@@ -6,7 +6,6 @@
   pytestCheckHook,
   python-dateutil,
   python-dotenv,
-  pythonOlder,
   setuptools,
   six,
   urllib3,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "asana";
   version = "5.2.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "asana";

@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "accounts-sso";
     repo = "libaccounts-qt";
-    rev = "refs/tags/VERSION_${finalAttrs.version}";
+    tag = "VERSION_${finalAttrs.version}";
     hash = "sha256-mPZgD4r7vlUP6wklvZVknGqTXZBckSOtNzK7p6e2qSA=";
   };
 

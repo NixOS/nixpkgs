@@ -12,10 +12,9 @@
   raygui,
   lib,
   writers,
-  raylib-python-cffi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "raylib-python-cffi";
   version = "5.5.0.4";
   pyproject = true;
@@ -23,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "electronstudio";
     repo = "raylib-python-cffi";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-MKyTpGnup4QmRui2OVBpnyn9KENATWcwYcikOmYX4c8=";
   };
 
@@ -51,7 +50,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pyray" ];
 
   passthru.tests = import ./passthru-tests.nix {
-    inherit src raylib-python-cffi writers;
+    inherit writers;
+    raylib-python-cffi = finalAttrs.finalPackage;
   };
 
   meta = {
@@ -60,4 +60,4 @@ buildPythonPackage rec {
     license = lib.licenses.epl20;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
-}
+})

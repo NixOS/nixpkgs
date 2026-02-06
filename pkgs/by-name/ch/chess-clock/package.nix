@@ -15,7 +15,7 @@
   wrapGAppsHook4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "chess-clock";
   version = "0.6.1";
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "chess-clock";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-XDOCHFZC3s3b/4kD1ZkhWar3kozW3vXc0pk7O6oQfiE=";
   };
 
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
     mainProgram = "chess-clock";
     teams = [ lib.teams.gnome-circle ];
   };
-}
+})

@@ -11,7 +11,7 @@
   libXext,
   libXpm,
   libXt,
-  xorgcffiles,
+  xorg-cf-files,
   xorgproto,
 }:
 
@@ -46,6 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [
+    "-std=c17"
     "-Wno-error=implicit-function-declaration"
     "-Wno-error=implicit-int"
     "-Wno-error=incompatible-pointer-types"
@@ -57,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postInstall = ''
-    mv $out/${xorgcffiles}/* $out
+    mv $out/${xorg-cf-files}/* $out
     rm -fr $out/nix
   '';
 

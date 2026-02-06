@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildPhase = "make staticlib sharedlib rblcheck_s dnsget_s";
 
   src = fetchurl {
-    url = "http://www.corpit.ru/mjt/udns/${pname}-${version}.tar.gz";
+    url = "http://www.corpit.ru/mjt/udns/udns-${version}.tar.gz";
     sha256 = "sha256-aWotDVGNqYXZdaZeEdFm8/V829HUI3aguFMH9JYBxug=";
   };
 

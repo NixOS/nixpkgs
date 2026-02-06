@@ -186,6 +186,18 @@ stdenv.mkDerivation (finalAttrs: {
 
     (replaceVars ./0002-scripts-external-executable-calls.patch scriptDeps)
 
+    # XSA #477
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa477.patch";
+      hash = "sha256-c9i61GvHPiLwMGvd+5IKgUwyu/NPub+mtnxUPHW/HhI=";
+    })
+
+    # XSA #479
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa479.patch";
+      hash = "sha256-2o6RYyT4Nrg1le6BUOQ3AwedorCvxvKao2uMYWrUV1Y=";
+    })
+
     # patch `libxl` to search for `qemu-system-i386` properly. (Before 4.21)
     (fetchpatch {
       url = "https://github.com/xen-project/xen/commit/f6281291704aa356489f4bd927cc7348a920bd01.diff?full_index=1";
@@ -317,7 +329,7 @@ stdenv.mkDerivation (finalAttrs: {
     # We also need to wrap pygrub, which lies in $out/libexec/xen/bin.
     ''
       wrapPythonPrograms
-      wrapPythonProgramsIn "$out/libexec/xen/bin" "$out $pythonPath"
+      wrapPythonProgramsIn "$out/libexec/xen/bin" "$out ''${pythonPath[*]}"
     '';
 
   postFixup = ''

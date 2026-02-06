@@ -20,12 +20,12 @@
   desktop-file-utils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-taquin";
   version = "3.38.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-taquin/${lib.versions.majorMinor version}/gnome-taquin-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-taquin/${lib.versions.majorMinor finalAttrs.version}/gnome-taquin-${finalAttrs.version}.tar.xz";
     hash = "sha256-lts9j61JeSSnOQrRCKPvckMqHWLSRWyuXhk0BXAYgU8=";
   };
 
@@ -73,4 +73,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
   };
-}
+})

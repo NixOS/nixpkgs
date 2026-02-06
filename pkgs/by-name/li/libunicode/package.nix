@@ -7,26 +7,27 @@
   catch2_3,
   fmt,
   python3,
+  simdImplementation ? "none", # see https://github.com/contour-terminal/libunicode/blob/v0.7.0/CMakeLists.txt#L53 for options
 }:
 
 let
-  ucd-version = "16.0.0";
+  ucd-version = "17.0.0";
 
   ucd-src = fetchzip {
     url = "https://www.unicode.org/Public/${ucd-version}/ucd/UCD.zip";
-    hash = "sha256-GgEYjOLrxxfTAQsc2bpi7ShoAr3up8z7GXXpe+txFuw";
+    hash = "sha256-k2OFy8xPvn+Bboyr1EsmZNeVDOglvk2kSZ+H17YaX60=";
     stripRoot = false;
   };
 in
 stdenv.mkDerivation (final: {
   pname = "libunicode";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "contour-terminal";
     repo = "libunicode";
-    rev = "v${final.version}";
-    hash = "sha256-zX33aTQ7Wgl8MABu+o6nA2HWrfXD4zQ9b3NDB+T2saI";
+    tag = "v${final.version}";
+    hash = "sha256-J8qawT1oiUO9xTVEMQvsY0K2NtIfkUq9PoCbFt6wqek=";
   };
 
   # Fix: set_target_properties Can not find target to add properties to: Catch2, et al.
@@ -41,7 +42,10 @@ stdenv.mkDerivation (final: {
     fmt
   ];
 
-  cmakeFlags = [ "-DLIBUNICODE_UCD_DIR=${ucd-src}" ];
+  cmakeFlags = [
+    (lib.cmakeFeature "LIBUNICODE_SIMD_IMPLEMENTATION" simdImplementation)
+    (lib.cmakeFeature "LIBUNICODE_UCD_DIR" "${ucd-src}")
+  ];
 
   meta = {
     description = "Modern C++20 Unicode library";

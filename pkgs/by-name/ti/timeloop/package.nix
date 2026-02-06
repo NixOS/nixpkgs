@@ -14,14 +14,14 @@
   accelergy,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "timeloop";
   version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "NVlabs";
     repo = "timeloop";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-CGPhrBNzFdERAA/Eym2v0+FvFUe+VkBLnwYEqEMHE9k=";
   };
 
@@ -98,4 +98,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ gdinh ];
   };
-}
+})

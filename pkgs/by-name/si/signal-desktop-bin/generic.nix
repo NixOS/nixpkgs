@@ -23,7 +23,8 @@
   fontconfig,
   dbus,
   libX11,
-  xorg,
+  libxshmfence,
+  libxcb,
   libXi,
   libXcursor,
   libXdamage,
@@ -100,7 +101,7 @@ let
     hash = "sha256-eVoMWY0WLJpKriPyGIxge4ybwZEst9hDgkWfjekaOuE=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   inherit pname version;
 
   # Please backport all updates to the stable channel.
@@ -187,8 +188,8 @@ stdenv.mkDerivation rec {
     nss
     pango
     systemdLibs
-    xorg.libxcb
-    xorg.libxshmfence
+    libxcb
+    libxshmfence
   ];
 
   runtimeDependencies = [
@@ -218,7 +219,7 @@ stdenv.mkDerivation rec {
 
     # Symlink to bin
     mkdir -p $out/bin
-    ln -s "$out/lib/signal-desktop/signal-desktop" $out/bin/${meta.mainProgram}
+    ln -s "$out/lib/signal-desktop/signal-desktop" $out/bin/${finalAttrs.meta.mainProgram}
 
     # Create required symlinks:
     ln -s libGLESv2.so "$out/lib/signal-desktop/libGLESv2.so.2"
@@ -263,7 +264,7 @@ stdenv.mkDerivation rec {
 
     # Fix the desktop link
     substituteInPlace $out/share/applications/signal-desktop.desktop \
-      --replace-fail "/${bindir}/signal-desktop" ${meta.mainProgram}
+      --replace-fail "/${bindir}/signal-desktop" ${finalAttrs.meta.mainProgram}
 
     mv $out/share/applications/signal{-desktop,}.desktop
 
@@ -285,7 +286,7 @@ stdenv.mkDerivation rec {
       "Signal Android" or "Signal iOS" app.
     '';
     homepage = "https://signal.org/";
-    changelog = "https://github.com/signalapp/Signal-Desktop/releases/tag/v${version}";
+    changelog = "https://github.com/signalapp/Signal-Desktop/releases/tag/v${finalAttrs.version}";
     license = [
       lib.licenses.agpl3Only
 
@@ -296,9 +297,9 @@ stdenv.mkDerivation rec {
       lib.licenses.mit # emoji-data
     ];
     maintainers = with lib.maintainers; [
+      eclairevoyant
       mic92
       equirosa
-      urandom
       bkchr
       emily
       Gliczy
@@ -312,4 +313,4 @@ stdenv.mkDerivation rec {
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-}
+})

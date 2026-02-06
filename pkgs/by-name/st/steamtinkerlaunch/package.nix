@@ -14,7 +14,9 @@
   wget,
   writeShellApplication,
   xdotool,
-  xorg,
+  xwininfo,
+  xrandr,
+  xprop,
   yad,
 }:
 
@@ -70,9 +72,9 @@ stdenvNoCC.mkDerivation {
           util-linux
           wget
           xdotool
-          xorg.xprop
-          xorg.xrandr
-          xorg.xwininfo
+          xprop
+          xrandr
+          xwininfo
           yad
         ];
         name = "stl-head";
@@ -112,7 +114,6 @@ stdenvNoCC.mkDerivation {
     homepage = "https://github.com/sonic2kk/steamtinkerlaunch";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [
-      urandom
       surfaceflinger
     ];
     platforms = lib.platforms.linux;

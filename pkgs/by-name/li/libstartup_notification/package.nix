@@ -5,14 +5,14 @@
   libX11,
   libxcb,
   pkg-config,
-  xcbutil,
+  libxcb-util,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libstartup-notification";
   version = "0.12";
   src = fetchurl {
-    url = "https://www.freedesktop.org/software/startup-notification/releases/startup-notification-${version}.tar.gz";
+    url = "https://www.freedesktop.org/software/startup-notification/releases/startup-notification-${finalAttrs.version}.tar.gz";
     sha256 = "3c391f7e930c583095045cd2d10eb73a64f085c7fde9d260f2652c7cb3cfbe4a";
   };
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libX11
     libxcb
-    xcbutil
+    libxcb-util
   ];
 
   meta = {
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
     description = "Application startup notification and feedback library";
     license = lib.licenses.lgpl2;
   };
-}
+})

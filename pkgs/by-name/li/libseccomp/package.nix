@@ -11,12 +11,12 @@
   python3Packages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libseccomp";
   version = "2.6.0";
 
   src = fetchurl {
-    url = "https://github.com/seccomp/libseccomp/releases/download/v${version}/libseccomp-${version}.tar.gz";
+    url = "https://github.com/seccomp/libseccomp/releases/download/v${finalAttrs.version}/libseccomp-${finalAttrs.version}.tar.gz";
     hash = "sha256-g7YIUjLRWIw3ncm5yuR7s3QHzyYubnSZPGG6ctKnhNw=";
   };
 
@@ -93,4 +93,4 @@ stdenv.mkDerivation rec {
     ];
     maintainers = with lib.maintainers; [ thoughtpolice ];
   };
-}
+})

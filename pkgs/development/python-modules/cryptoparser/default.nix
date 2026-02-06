@@ -7,7 +7,6 @@
   fetchFromGitLab,
   fetchpatch2,
   pyfakefs,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   unittestCheckHook,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "cryptoparser";
   version = "1.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitLab {
     owner = "coroner";
@@ -65,7 +62,7 @@ buildPythonPackage rec {
     homepage = "https://gitlab.com/coroner/cryptoparser";
     changelog = "https://gitlab.com/coroner/cryptoparser/-/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ kranzes ];
+    maintainers = [ ];
     teams = with lib.teams; [ ngi ];
   };
 }

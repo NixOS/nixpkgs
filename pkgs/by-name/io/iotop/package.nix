@@ -8,7 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "iotop";
   version = "0.6";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchurl {
     url = "http://guichaz.free.fr/iotop/files/iotop-${version}.tar.bz2";

@@ -3,15 +3,12 @@
   aiohttp,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "lightwave2";
   version = "0.8.23";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

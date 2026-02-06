@@ -6,12 +6,12 @@
   coreutils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "berkeley_upc";
   version = "2020.12.0";
 
   src = fetchurl {
-    url = "http://upc.lbl.gov/download/release/berkeley_upc-${version}.tar.gz";
+    url = "http://upc.lbl.gov/download/release/berkeley_upc-${finalAttrs.version}.tar.gz";
     hash = "sha256-JdpFORlXHpCQE+TivoQQnjQlxQN7C8BNfHvTOSwXbYQ=";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ zimbatm ];
   };
-}
+})

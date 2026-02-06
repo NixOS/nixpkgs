@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   version = "0.11.89";
 
   src = fetchurl {
-    url = "https://launchpad.net/${pname}/1.0/${version}/+download/${pname}-${version}.tar.xz";
+    url = "https://launchpad.net/plank/1.0/${version}/+download/plank-${version}.tar.xz";
     sha256 = "17cxlmy7n13jp1v8i4abxyx9hylzb39andhz3mk41ggzmrpa8qm6";
   };
 

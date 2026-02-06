@@ -64,24 +64,10 @@ let
             confDir
             ;
 
-          boehmgc =
-            # TODO: Why is this called `boehmgc-nix_2_3`?
-            let
-              boehmgc-nix_2_3 = boehmgc.override {
-                enableLargeConfig = true;
-                initialMarkStackSize = 1048576;
-              };
-            in
-            # Since Lix 2.91 does not use boost coroutines, it does not need boehmgc patches either.
-            if lib.versionOlder lix-args.version "2.91" then
-              boehmgc-nix_2_3.overrideAttrs (drv: {
-                patches = (drv.patches or [ ]) ++ [
-                  # Part of the GC solution in https://github.com/NixOS/nix/pull/4944
-                  ../nix/patches/boehmgc-coroutine-sp-fallback.patch
-                ];
-              })
-            else
-              boehmgc-nix_2_3;
+          boehmgc = boehmgc.override {
+            enableLargeConfig = true;
+            initialMarkStackSize = 1048576;
+          };
 
           aws-sdk-cpp =
             (aws-sdk-cpp.override {
@@ -265,14 +251,14 @@ lib.makeExtensible (
       attrName = "git";
 
       lix-args = rec {
-        version = "2.95.0-pre-20251121_${builtins.substring 0 12 src.rev}";
+        version = "2.95.0-pre-20260103_${builtins.substring 0 12 src.rev}";
 
         src = fetchFromGitea {
           domain = "git.lix.systems";
           owner = "lix-project";
           repo = "lix";
-          rev = "b707403a308030739dfeacc5b0aaaeef8ba3f633";
-          hash = "sha256-kas7FT2J86DVJlPH5dNNHM56OgdQQyfCE/dX/EOKDp8=";
+          rev = "d387c9113c73f04bed46dbdd59b6c36de2253d73";
+          hash = "sha256-jYUcmXA4FNwoJtxRgH+Be96wQv8h9Y9dByYf+KmcgK4=";
         };
 
         cargoDeps = rustPlatform.fetchCargoVendor {
@@ -280,14 +266,12 @@ lib.makeExtensible (
           inherit src;
           hash = "sha256-APm8m6SVEAO17BBCka13u85/87Bj+LePP7Y3zHA3Mpg=";
         };
-
-        patches = [ lixMdbookPatch ];
       };
     };
 
     latest = self.lix_2_94;
 
-    stable = self.lix_2_93;
+    stable = self.lix_2_94;
 
     # Previously, `nix-eval-jobs` was not packaged here, so we export an
     # attribute with the previously-expected structure for compatibility. This

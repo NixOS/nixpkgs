@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   meson-python,
   cython,
   pytestCheckHook,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "pywavelets";
   version = "1.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "PyWavelets";

@@ -10,7 +10,7 @@
   libXext,
   libX11,
   libpng,
-  libpthreadstubs,
+  libpthread-stubs,
   libsmf,
   libsndfile,
   lv2,
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     libXext
     libX11
     libpng
-    libpthreadstubs
+    libpthread-stubs
     libsmf
     libsndfile
     lv2

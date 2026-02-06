@@ -20,11 +20,11 @@
   libXScrnSaver,
   libusb1,
   pkg-config,
-# #FIXME: Could not get cmake to pick up on these dependencies
-# Ommiting them prevents cmake from building the OCR video capabilities
-# Everything else should work it's just missing this one plugin
-# tesseract,
-# leptonica,
+  # #FIXME: Could not get cmake to pick up on these dependencies
+  # Ommiting them prevents cmake from building the OCR video capabilities
+  # Everything else should work it's just missing this one plugin
+  # tesseract,
+  # leptonica,
 }:
 let
   httplib-src = fetchFromGitHub {
@@ -36,13 +36,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "advanced-scene-switcher";
-  version = "1.32.5";
+  version = "1.32.6";
 
   src = fetchFromGitHub {
     owner = "WarmUpTill";
     repo = "SceneSwitcher";
     rev = version;
-    hash = "sha256-MoOakwxyDlhB4YFXWR5Q2jLb0k3wuj87tOO5f0Xy5Vg=";
+    hash = "sha256-BQnu7zRk1zOsEqFjmRrOeK/jE+rmnsB1ktW+OfH+L3I=";
   };
 
   nativeBuildInputs = [

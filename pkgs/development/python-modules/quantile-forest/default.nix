@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   python,
-  pythonOlder,
 
   setuptools,
   wheel,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "quantile-forest";
   version = "1.4.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "zillow";

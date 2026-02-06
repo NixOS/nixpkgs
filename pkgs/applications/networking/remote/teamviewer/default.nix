@@ -1,5 +1,4 @@
 {
-  mkDerivation,
   lib,
   stdenv,
   fetchurl,
@@ -14,7 +13,7 @@
   libXext,
   libXdamage,
   libXtst,
-  libSM,
+  libsm,
   libXfixes,
   coreutils,
   wrapQtAppsHook,
@@ -23,7 +22,7 @@
   minizip,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "teamviewer";
   # teamviewer itself has not development files but the dev output removes propagated other dev outputs from runtime
   outputs = [
@@ -132,7 +131,7 @@ mkDerivation rec {
         libXext
         libXdamage
         libXtst
-        libSM
+        libsm
         libXfixes
         dbus
         icu63

@@ -37,7 +37,7 @@
 }:
 ags.bundle {
   pname = "hyprpanel";
-  version = "0-unstable-2026-01-03";
+  version = "0-unstable-2026-01-07";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -45,8 +45,8 @@ ags.bundle {
   src = fetchFromGitHub {
     owner = "Jas-SinghFSU";
     repo = "HyprPanel";
-    rev = "b8c255b610f045925e3e41b946a29db99639fcfe";
-    hash = "sha256-Sa3EOZHlhD1JwyxbxLzVm3C9d6pe7Iitcad5FofOeaI=";
+    rev = "0e73df1dfedf0f6fa21ed0ae5e031b0663c8f400";
+    hash = "sha256-yBejG3j6OLQYn87UozFAI3q9a1vH00u9xjIf2Q4V5j8=";
   };
 
   # keep in sync with https://github.com/Jas-SinghFSU/HyprPanel/blob/master/flake.nix#L42

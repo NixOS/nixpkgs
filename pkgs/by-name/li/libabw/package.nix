@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   version = "0.1.3";
 
   src = fetchurl {
-    url = "https://dev-www.libreoffice.org/src/libabw/${pname}-${version}.tar.xz";
+    url = "https://dev-www.libreoffice.org/src/libabw/libabw-${version}.tar.xz";
     sha256 = "1vbfrmnvib3cym0yyyabnd8xpx4f7wp20vnn09s6dln347fajqz7";
   };
 

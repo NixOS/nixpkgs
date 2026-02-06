@@ -15,8 +15,8 @@
   pkg-config,
   wayland,
   which,
-  xcbutilkeysyms,
-  xcbutilwm,
+  libxcb-keysyms,
+  libxcb-wm,
   valijson,
   vulkan-headers,
   vulkan-loader,
@@ -25,14 +25,14 @@
   qt6,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vulkan-tools-lunarg";
   version = "1.4.335.0";
 
   src = fetchFromGitHub {
     owner = "LunarG";
     repo = "VulkanTools";
-    rev = "vulkan-sdk-${version}";
+    rev = "vulkan-sdk-${finalAttrs.version}";
     hash = "sha256-2DUxlGH9Yco64Y74QByVniWXiYYy+e4MfyN4S+E6KKA=";
   };
 
@@ -58,8 +58,8 @@ stdenv.mkDerivation rec {
     vulkan-loader
     vulkan-utility-libraries
     wayland
-    xcbutilkeysyms
-    xcbutilwm
+    libxcb-keysyms
+    libxcb-wm
     qt6.qtbase
     qt6.qtwayland
   ];
@@ -97,4 +97,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

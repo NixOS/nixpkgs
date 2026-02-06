@@ -18,7 +18,7 @@
   libX11,
   libXrandr,
   librsvg,
-  libpthreadstubs,
+  libpthread-stubs,
   libXdmcp,
   libstartup_notification,
   wrapGAppsHook3,
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     libX11
     libXrandr
     librsvg
-    libpthreadstubs
+    libpthread-stubs
     libXdmcp
     libstartup_notification
   ];

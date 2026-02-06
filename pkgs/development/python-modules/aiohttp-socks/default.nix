@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchPypi,
   python-socks,
-  pythonOlder,
   setuptools,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "aiohttp-socks";
   version = "0.11.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit version;

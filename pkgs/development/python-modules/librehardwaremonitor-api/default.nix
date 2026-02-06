@@ -4,22 +4,22 @@
   fetchFromGitHub,
   lib,
   pytestCheckHook,
-  setuptools,
+  hatchling,
 }:
 
 buildPythonPackage rec {
   pname = "librehardwaremonitor-api";
-  version = "1.5.0";
+  version = "1.8.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Sab44";
     repo = "librehardwaremonitor-api";
     tag = "v${version}";
-    hash = "sha256-LWh0kZp+8OUfBohQMLFXI/kkHsVuJt99YqwSGeq4EvA=";
+    hash = "sha256-RGtR/VSamfpSpS5TN9nUPCjzkwp5eUcV41Q8R76MDAA=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [
     aiohttp

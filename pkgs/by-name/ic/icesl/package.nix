@@ -6,10 +6,10 @@
   libXmu,
   libXi,
   libX11,
-  libICE,
+  libice,
   libGLU,
   libGL,
-  libSM,
+  libsm,
   libXext,
   glibc,
   lua,
@@ -25,10 +25,10 @@ let
     libXi
     libX11
     libglut
-    libICE
+    libice
     libGLU
     libGL
-    libSM
+    libsm
     libXext
     glibc
     lua

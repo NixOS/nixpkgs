@@ -11,12 +11,12 @@
   libxcb,
   lz4,
   vulkan-loader,
-  xcbutilkeysyms,
+  libxcb-keysyms,
   zlib,
   zstd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gfxreconstruct";
   version = "1.0.4-unstable-2025-10-30";
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     lz4
     python3
     wayland
-    xcbutilkeysyms
+    libxcb-keysyms
     zlib
     zstd
   ];
@@ -72,9 +72,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Graphics API Capture and Replay Tools";
     homepage = "https://github.com/LunarG/gfxreconstruct/";
-    changelog = "https://github.com/LunarG/gfxreconstruct/releases/tag/v${version}";
+    changelog = "https://github.com/LunarG/gfxreconstruct/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Flakebi ];
     platforms = lib.platforms.linux;
   };
-}
+})

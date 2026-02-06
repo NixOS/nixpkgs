@@ -28,11 +28,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "tdb";
-  version = "1.4.14";
+  version = "1.4.15";
 
   src = fetchurl {
-    url = "mirror://samba/tdb/${pname}-${version}.tar.gz";
-    hash = "sha256-FE9AfULteg7BRwpA7xetQRM/6RC86GXdn+CE1JyQdSY=";
+    url = "mirror://samba/tdb/tdb-${version}.tar.gz";
+    hash = "sha256-+6CdjfHxuQcq6ujniyvUPFr+8gsvbe76YzqhSjd6jdI=";
   };
 
   nativeBuildInputs = [
@@ -79,19 +79,22 @@ stdenv.mkDerivation rec {
 
   postFixup =
     if stdenv.hostPlatform.isDarwin then
-      ''install_name_tool -id $out/lib/libtdb.dylib $out/lib/libtdb.dylib''
+      "install_name_tool -id $out/lib/libtdb.dylib $out/lib/libtdb.dylib"
     else
       null;
 
-  # python-config from build Python gives incorrect values when cross-compiling.
-  # If python-config is not found, the build falls back to using the sysconfig
-  # module, which works correctly in all cases.
-  PYTHON_CONFIG = "/invalid";
-
-  # https://reviews.llvm.org/D135402
-  NIX_LDFLAGS = lib.optional (
-    stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
-  ) "--undefined-version";
+  env = {
+    # python-config from build Python gives incorrect values when cross-compiling.
+    # If python-config is not found, the build falls back to using the sysconfig
+    # module, which works correctly in all cases.
+    PYTHON_CONFIG = "/invalid";
+  }
+  //
+    lib.optionalAttrs (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17")
+      {
+        # https://reviews.llvm.org/D135402
+        NIX_LDFLAGS = "--undefined-version";
+      };
 
   meta = {
     description = "Trivial database";

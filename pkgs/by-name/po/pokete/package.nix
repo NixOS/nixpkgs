@@ -11,7 +11,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "pokete";
   version = "0.9.1";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "lxgr-linux";
@@ -37,7 +37,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   postFixup = ''
-    wrapPythonProgramsIn $out/share/pokete "$pythonPath"
+    wrapPythonProgramsIn $out/share/pokete "''${pythonPath[*]}"
   '';
 
   passthru.tests = {

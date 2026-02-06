@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "instawow";
-  version = "6.0.0";
+  version = "7.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "layday";
     repo = "instawow";
     tag = "v${version}";
-    hash = "sha256-NFs8+BUXJEn64TDojG/xkH1O+zZurv0PWY+YDhu2mQY=";
+    hash = "sha256-dT1oiPX+id0g28I9I/WJS9G6hyeHHGx5mWvNKXX1Wus=";
   };
 
   extras = [ ]; # Disable GUI, most dependencies are not packaged.
@@ -34,6 +34,7 @@ python3.pkgs.buildPythonApplication rec {
       diskcache
       iso8601
       loguru
+      multidict
       packaging
       pluggy
       prompt-toolkit

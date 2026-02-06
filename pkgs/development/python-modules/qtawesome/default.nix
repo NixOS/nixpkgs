@@ -4,22 +4,19 @@
   fetchFromGitHub,
   pyqt5,
   pytestCheckHook,
-  pythonOlder,
   qtpy,
 }:
 
 buildPythonPackage rec {
   pname = "qtawesome";
-  version = "1.4.0";
+  version = "1.4.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "spyder-ide";
     repo = "qtawesome";
     tag = "v${version}";
-    hash = "sha256-VjUlP+5QU9ApD09UNvF48b0gepCUpVO6U6zYaKm0KoE=";
+    hash = "sha256-CdELoMML7j9m1HrAY8MhKcYx5Q4xuEMZIBeyzQnRQtk=";
   };
 
   propagatedBuildInputs = [

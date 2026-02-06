@@ -8,7 +8,7 @@
   nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  name = "oqs-provider";
+  pname = "oqs-provider";
   version = "0.10.0";
 
   src = fetchFromGitHub {

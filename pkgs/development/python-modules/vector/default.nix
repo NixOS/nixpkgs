@@ -22,16 +22,16 @@
   sympy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "vector";
-  version = "1.7.0";
+  version = "1.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "vector";
-    tag = "v${version}";
-    hash = "sha256-U1ttxt7Ba+NrcbslmkZT/d+ZdXrmk0teT5vGAcfLqF4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-k54tCCGZ0ix112u8oxuHPl3LDNV6Fp5s79iVE85b33k=";
   };
 
   build-system = [
@@ -85,8 +85,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for 2D, 3D, and Lorentz vectors, especially arrays of vectors, to solve common physics problems in a NumPy-like way";
     homepage = "https://github.com/scikit-hep/vector";
-    changelog = "https://github.com/scikit-hep/vector/releases/tag/${src.tag}";
+    changelog = "https://github.com/scikit-hep/vector/releases/tag/${finalAttrs.src.tag}";
     license = with lib.licenses; [ bsd3 ];
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

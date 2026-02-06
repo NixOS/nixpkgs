@@ -5,13 +5,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "nauty";
-  version = "2.9.1";
+  version = "2.9.3";
 
   src = fetchurl {
     url = "https://pallini.di.uniroma1.it/nauty${
       builtins.replaceStrings [ "." ] [ "_" ] version
     }.tar.gz";
-    sha256 = "sha256-SI+pBtEKNyxy0jZMXe5I4PcwcAT75SwrzlDFLejNhz4=";
+    sha256 = "sha256-n8TtrgT4ig9Yg5hb47Oc9/iY/WzJbpa57iVFJ0PMG1s=";
   };
 
   outputs = [
@@ -19,10 +19,8 @@ stdenv.mkDerivation rec {
     "dev"
   ];
 
-  # HACK: starting from 2.8.9, the makefile tries to copy .libs/*.a files unconditionally
-  dontDisableStatic = true;
-
   configureFlags = [
+    "--libdir=${placeholder "dev"}/lib"
     # Prevent nauty from sniffing some cpu features. While those are very
     # widely available, it can lead to nasty bugs when they are not available:
     # https://groups.google.com/forum/#!topic/sage-packaging/Pe4SRDNYlhA
@@ -31,19 +29,11 @@ stdenv.mkDerivation rec {
     "--${if stdenv.hostPlatform.sse4_aSupport then "enable" else "disable"}-clz"
   ];
 
-  installPhase = ''
-    mkdir -p "$out"/{bin,share/doc/nauty} "$dev"/{lib,include/nauty}
-
-    find . -type f -perm -111 \! -name '*.*' \! -name configure -exec cp '{}' "$out/bin" \;
+  postInstall = ''
+    mkdir -p "$out/share/doc/nauty" "$dev/include/nauty"
     cp [Rr][Ee][Aa][Dd]* COPYRIGHT This* [Cc]hange* "$out/share/doc/nauty"
-
     cp *.h "$dev/include/nauty"
-    for i in *.a; do
-      cp "$i" "$dev/lib/lib$i";
-    done
   '';
-
-  checkTarget = "checks";
 
   meta = {
     description = "Programs for computing automorphism groups of graphs and digraphs";

@@ -4,7 +4,6 @@
   editorconfig,
   fetchPypi,
   jsbeautifier,
-  pythonOlder,
   setuptools,
   six,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "cssbeautifier";
   version = "1.15.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

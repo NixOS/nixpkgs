@@ -3,7 +3,6 @@
   fetchFromGitHub,
   buildPythonPackage,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   base58,
   coincurve,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "bip32";
   version = "5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   # the PyPi source distribution ships a broken setup.py, so use github instead
   src = fetchFromGitHub {

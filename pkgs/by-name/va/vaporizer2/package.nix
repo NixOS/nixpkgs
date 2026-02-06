@@ -31,10 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   postPatch = ''
-    # LTO needs special setup on Linux
-    substituteInPlace CMakeLists.txt \
-      --replace-fail 'juce::juce_recommended_lto_flags' '# Not forcing LTO'
-
     rm -rf clap-juce-extensions
     ln -s ${finalAttrs.passthru.clapJuceExtensions} clap-juce-extensions
   '';
@@ -63,6 +59,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeFeature "USE_SYSTEM_JUCE" "ON")
+  ];
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    # juce, compiled in this build as part of a Git submodule, uses `-flto` as
+    # a Link Time Optimization flag, and instructs the plugin compiled here to
+    # use this flag to. This breaks the build for us. Using _fat_ LTO allows
+    # successful linking while still providing LTO benefits. If our build of
+    # `juce` was used as a dependency, we could have patched that `-flto` line
+    # in our juce's source, but that is not possible because it is used as a
+    # Git Submodule.
+    "-ffat-lto-objects"
   ];
 
   passthru.clapJuceExtensions = fetchFromGitHub {

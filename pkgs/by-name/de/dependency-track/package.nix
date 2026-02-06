@@ -65,7 +65,7 @@ maven.buildMavenPackage rec {
   '';
 
   mvnJdk = jre_headless;
-  mvnHash = "sha256-Y4imt+eB9KrLN6f1X5CqYoj0FiGU/6ST79R5tK4rWw4=";
+  mvnHash = "sha256-UrLni4shNCv9aHvaGdkzFNBVe8BT4/z4cQ6Ekjr0l9s=";
   manualMvnArtifacts = [ "com.coderplus.maven.plugins:copy-rename-maven-plugin:1.0.1" ];
   buildOffline = true;
 
@@ -120,7 +120,10 @@ maven.buildMavenPackage rec {
     description = "Intelligent Component Analysis platform that allows organizations to identify and reduce risk in the software supply chain";
     homepage = "https://github.com/DependencyTrack/dependency-track";
     license = lib.licenses.asl20;
-    teams = [ lib.teams.cyberus ];
+    maintainers = with lib.maintainers; [
+      e1mo
+      xanderio
+    ];
     mainProgram = "dependency-track";
     inherit (jre_headless.meta) platforms;
   };

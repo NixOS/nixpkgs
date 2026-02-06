@@ -5,13 +5,13 @@
   lzip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ddrescue";
-  version = "1.29.1";
+  version = "1.30";
 
   src = fetchurl {
-    url = "mirror://gnu/ddrescue/ddrescue-${version}.tar.lz";
-    sha256 = "sha256-3dfUXfAmgHg1ouxqucNl3y7xno3hpQ/+aIbNOR4E3XU=";
+    url = "mirror://gnu/ddrescue/ddrescue-${finalAttrs.version}.tar.lz";
+    hash = "sha256-ImRiLTCdbIehz8GRSCkriFmmiOm8AtRwL1zU8oh0VUI=";
   };
 
   nativeBuildInputs = [ lzip ];
@@ -54,4 +54,4 @@ stdenv.mkDerivation rec {
       fpletz
     ];
   };
-}
+})

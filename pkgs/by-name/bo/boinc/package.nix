@@ -15,7 +15,7 @@
   libjpeg,
   libtool,
   wxGTK32,
-  xcbutil,
+  libxcb-util,
   sqlite,
   gtk3,
   patchelf,
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     libnotify
     libX11
     libxcb
-    xcbutil
+    libxcb-util
   ];
 
   NIX_LDFLAGS = lib.optionalString (!headless) "-lX11";

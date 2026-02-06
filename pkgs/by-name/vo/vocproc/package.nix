@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   version = "0.2.1";
 
   src = fetchzip {
-    url = "https://hyperglitch.com/files/vocproc/${pname}-${version}.default.tar.gz";
+    url = "https://hyperglitch.com/files/vocproc/vocproc-${version}.default.tar.gz";
     sha256 = "07a1scyz14mg2jdbw6fpv4qg91zsw61qqii64n9qbnny9d5pn8n2";
   };
 

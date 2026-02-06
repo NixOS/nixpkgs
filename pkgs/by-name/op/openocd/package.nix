@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   pname = "openocd";
   version = "0.12.0";
   src = fetchurl {
-    url = "mirror://sourceforge/project/${pname}/${pname}/${version}/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/project/openocd/openocd/${version}/openocd-${version}.tar.bz2";
     sha256 = "sha256-ryVHiL6Yhh8r2RA/5uYKd07Jaow3R0Tu+Rl/YEMHWvo=";
   };
 

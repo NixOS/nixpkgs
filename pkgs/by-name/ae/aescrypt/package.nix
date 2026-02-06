@@ -5,12 +5,12 @@
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "3.16";
   pname = "aescrypt";
 
   src = fetchurl {
-    url = "https://www.aescrypt.com/download/v3/linux/aescrypt-${version}.tgz";
+    url = "https://www.aescrypt.com/download/v3/linux/aescrypt-${finalAttrs.version}.tgz";
     sha256 = "sha256-4uGS0LReq5dI7+Wel7ZWzFXx+utZWi93q4TUSw7AhNI=";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     hydraPlatforms = with lib.platforms; unix;
   };
-}
+})

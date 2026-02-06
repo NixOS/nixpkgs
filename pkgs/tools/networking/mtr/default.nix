@@ -49,6 +49,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   meta = {
     description = "Network diagnostics tool";
     homepage = "https://www.bitwizard.nl/mtr/";

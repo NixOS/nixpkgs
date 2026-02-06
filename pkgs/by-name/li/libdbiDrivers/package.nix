@@ -9,12 +9,12 @@
   libpq ? null,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libdbi-drivers";
   version = "0.9.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libdbi-drivers/libdbi-drivers-${version}.tar.gz";
+    url = "mirror://sourceforge/libdbi-drivers/libdbi-drivers-${finalAttrs.version}.tar.gz";
     hash = "sha256-Q9LqzVc6T6/ylvqSXdl/vyrtvxrjXGJjR4IQxhAEyFQ=";
   };
 
@@ -90,4 +90,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21;
     maintainers = [ ];
   };
-}
+})

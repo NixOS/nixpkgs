@@ -39,6 +39,7 @@ rec {
     toJSON
     typeOf
     unsafeDiscardStringContext
+    appendContext
     ;
 
   /**
@@ -2111,6 +2112,9 @@ rec {
       [the CMake set documentation](https://cmake.org/cmake/help/latest/command/set.html)
       the possible values (case insensitive) are:
       BOOL FILEPATH PATH STRING INTERNAL LIST
+
+    `feature`
+    : The feature to be set
 
     `feature`
     : The feature to be set

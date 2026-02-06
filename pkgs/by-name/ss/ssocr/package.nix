@@ -7,15 +7,15 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ssocr";
-  version = "2.25.0";
+  version = "2.25.1";
 
   src = fetchFromGitHub {
     owner = "auerswal";
     repo = "ssocr";
-    rev = "v${version}";
-    sha256 = "sha256-yQPjs4kGvp6C7kFcWQ3EzoFhwEAhm2nC7yXu9RbU4os=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-GRjUCE4l/IIAqV+W2s/+HaGMKqfSTmEQeW28o4Gkw/A=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     mainProgram = "ssocr";
     platforms = lib.platforms.unix;
   };
-}
+})

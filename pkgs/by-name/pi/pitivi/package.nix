@@ -24,10 +24,10 @@ python3.pkgs.buildPythonApplication rec {
   pname = "pitivi";
   version = "2023.03";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchurl {
-    url = "mirror://gnome/sources/pitivi/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/pitivi/${lib.versions.major version}/pitivi-${version}.tar.xz";
     sha256 = "PX1OFEeavqMPvF613BKgxwErxqW2huw6mQxo8YpBS/M=";
   };
 

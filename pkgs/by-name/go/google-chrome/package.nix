@@ -94,8 +94,13 @@
   addDriverRunpath,
   undmg,
 
-  # For QT support
+  # Enables Chrome's "Use QT" appearance to introspect the user's Plasma theme
+  plasmaSupport ? false,
   qt6,
+  kdePackages,
+
+  # Create a symlink at $out/bin/google-chrome
+  withSymlink ? true,
 }:
 
 let
@@ -164,17 +169,21 @@ let
   ++ [
     gtk3
     gtk4
+  ]
+  ++ lib.optionals plasmaSupport [
     qt6.qtbase
     qt6.qtwayland
+    kdePackages.plasma-integration
+    kdePackages.breeze
   ];
 
   linux = stdenvNoCC.mkDerivation (finalAttrs: {
     inherit pname meta passthru;
-    version = "143.0.7499.169";
+    version = "144.0.7559.132";
 
     src = fetchurl {
       url = "https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${finalAttrs.version}-1_amd64.deb";
-      hash = "sha256-j9eDgZfP9Ii6B3XhLYF6t6oZq8zWRpl0Tkm4GuCDPKE=";
+      hash = "sha256-5VuJaixlw9o+oD1bp6S3o2kR8KcolomSFyWpMZQydwM=";
     };
 
     # With strictDeps on, some shebangs were not being patched correctly
@@ -246,9 +255,13 @@ let
 
       # "--simulate-outdated-no-au" disables auto updates and browser outdated popup
       makeWrapper "$out/share/google/$appname/google-$appname" "$exe" \
-        --prefix QT_PLUGIN_PATH  : "${qt6.qtbase}/lib/qt-6/plugins" \
-        --prefix QT_PLUGIN_PATH  : "${qt6.qtwayland}/lib/qt-6/plugins" \
-        --prefix NIXPKGS_QT6_QML_IMPORT_PATH : "${qt6.qtwayland}/lib/qt-6/qml" \
+        ${lib.optionalString plasmaSupport ''
+          --prefix QT_PLUGIN_PATH  : "${qt6.qtbase}/lib/qt-6/plugins" \
+          --prefix QT_PLUGIN_PATH  : "${qt6.qtwayland}/lib/qt-6/plugins" \
+          --prefix QT_PLUGIN_PATH  : "${kdePackages.plasma-integration}/lib/qt-6/plugins" \
+          --prefix QT_PLUGIN_PATH  : "${kdePackages.breeze}/lib/qt-6/plugins" \
+          --prefix NIXPKGS_QT6_QML_IMPORT_PATH : "${qt6.qtwayland}/lib/qt-6/qml" \
+        ''} \
         --prefix LD_LIBRARY_PATH : "$rpath" \
         --prefix PATH            : "$binpath" \
         --suffix PATH            : "${lib.makeBinPath [ xdg-utils ]}" \
@@ -268,15 +281,19 @@ let
 
       runHook postInstall
     '';
+
+    postInstall = lib.optionalString withSymlink ''
+      ln -s $out/bin/google-chrome-stable $out/bin/google-chrome
+    '';
   });
 
   darwin = stdenvNoCC.mkDerivation (finalAttrs: {
     inherit pname meta passthru;
-    version = "143.0.7499.170";
+    version = "144.0.7559.97";
 
     src = fetchurl {
-      url = "http://dl.google.com/release2/chrome/mhjgbmlx5vzoqorxvxcf4zts4y_143.0.7499.170/GoogleChrome-143.0.7499.170.dmg";
-      hash = "sha256-WoT/+dTPh3YVcMoKmmuRb0+9E3N91ffPiw0fkMlaR5o=";
+      url = "http://dl.google.com/release2/chrome/acs3ozv33k7hgpukzi2nuehve3aa_144.0.7559.97/GoogleChrome-144.0.7559.97.dmg";
+      hash = "sha256-uhNWvAnifxbNMPR9QiXSgpDK9tnim39q2bLMCM9Q93w=";
     };
 
     dontPatch = true;
@@ -305,6 +322,10 @@ let
         --add-flags ${lib.escapeShellArg commandLineArgs}
       runHook postInstall
     '';
+
+    postInstall = lib.optionalString withSymlink ''
+      ln -s $out/bin/google-chrome-stable $out/bin/google-chrome
+    '';
   });
 
   passthru.updateScript = ./update.sh;
@@ -313,9 +334,12 @@ let
     changelog = "https://chromereleases.googleblog.com/";
     description = "Freeware web browser developed by Google";
     homepage = "https://www.google.com/chrome/browser/";
+    knownVulnerabilities = lib.optionals stdenvNoCC.hostPlatform.isDarwin [
+      "Out of date, because the updater (pkgs/by-name/go/google-chrome/update.sh) has stopped working, and there does not seem to be another way to get stable URLs to particular Chrome versions."
+    ];
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
-      johnrtitor
+      iedame
       mdaniels5757
     ];
     platforms = lib.platforms.darwin ++ [ "x86_64-linux" ];

@@ -8,10 +8,10 @@
   freetype,
   libGL,
   libGLU,
-  libX11,
-  libXext,
-  libXi,
-  libXmu,
+  libx11,
+  libxext,
+  libxi,
+  libxmu,
   opencascade-occt,
   numpy,
   rapidjson,
@@ -39,10 +39,10 @@ stdenv.mkDerivation rec {
     freetype
     libGL
     libGLU
-    libX11
-    libXext
-    libXmu
-    libXi
+    libx11
+    libxext
+    libxmu
+    libxi
     fontconfig
     numpy
     rapidjson

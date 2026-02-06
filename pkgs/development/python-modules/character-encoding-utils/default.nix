@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   pytestCheckHook,
   nix-update-script,
   hatchling,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "character-encoding-utils";
   version = "0.0.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     pname = "character_encoding_utils";

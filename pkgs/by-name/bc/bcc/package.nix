@@ -118,7 +118,7 @@ python3Packages.buildPythonApplication rec {
   pythonImportsCheck = [ "bcc" ];
 
   postFixup = ''
-    wrapPythonProgramsIn "$out/share/bcc/tools" "$out $pythonPath"
+    wrapPythonProgramsIn "$out/share/bcc/tools" "$out ''${pythonPath[*]}"
   '';
 
   outputs = [

@@ -8,7 +8,7 @@
   gpm,
   file,
   e2fsprogs,
-  libICE,
+  libice,
   perl,
   zip,
   unzip,
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   version = "4.8.33";
 
   src = fetchurl {
-    url = "https://ftp.osuosl.org/pub/midnightcommander/${pname}-${version}.tar.xz";
+    url = "https://ftp.osuosl.org/pub/midnightcommander/mc-${version}.tar.xz";
     hash = "sha256-yuFJ1C+ETlGF2MgdfbOROo+iFMZfhSIAqdiWtGivFkw=";
   };
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     file
     gettext
     glib
-    libICE
+    libice
     libssh2
     openssl
     slang
@@ -71,6 +71,11 @@ stdenv.mkDerivation rec {
     # configure arguments have a bunch of build-only dependencies.
     # Avoid their retention in final closure.
     "--disable-configure-args"
+  ];
+
+  outputs = [
+    "out"
+    "man"
   ];
 
   postPatch = ''

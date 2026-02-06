@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "energyzero";
-  version = "2.1.1";
+  version = "4.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "klaasnicolaas";
     repo = "python-energyzero";
     tag = "v${version}";
-    hash = "sha256-KOeYdTruD8AN/NkLEKKJDUB/JkOoQwfAMZkp/RvvUQE=";
+    hash = "sha256-Tisng08X/jyNtT27qy1hH6qM6Nqho/X8bg1tFg1oIx8=";
   };
 
   postPatch = ''

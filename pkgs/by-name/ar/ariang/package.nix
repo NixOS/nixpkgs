@@ -6,21 +6,20 @@
   imagemagick,
   xdg-utils,
   makeDesktopItem,
-  nix-update-script,
 }:
 
 buildNpmPackage rec {
   pname = "ariang";
-  version = "1.3.12";
+  version = "1.3.13";
 
   src = fetchFromGitHub {
     owner = "mayswind";
     repo = "AriaNg";
     tag = version;
-    hash = "sha256-InS+kw/bF1ygiFoWgpXg//XE5xgQifIr79C6Qoa84Fo=";
+    hash = "sha256-u4MnjGMvnnb9EGHwK2QYpW7cuX1e1+6z2/1X1baR8iA=";
   };
 
-  npmDepsHash = "sha256-ch/+i0jNO47Zyet7/MTaIpibbaPJi9Sq97jTp8iq6dA=";
+  npmDepsHash = "sha256-kxoSEdM8H7M9s6U2dtCdfuvqVROEk35jAkO7MgyVVRg=";
 
   makeCacheWritable = true;
 
@@ -64,8 +63,6 @@ buildNpmPackage rec {
       ];
     })
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Modern web frontend making aria2 easier to use";

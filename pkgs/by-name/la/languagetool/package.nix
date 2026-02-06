@@ -2,20 +2,34 @@
   lib,
   stdenv,
   fetchzip,
-  jre,
+  jre_minimal,
   makeWrapper,
   nixosTests,
 }:
-
+let
+  jre = jre_minimal.override {
+    modules = [
+      "java.base"
+      "java.datatransfer"
+      "java.desktop"
+      "java.naming"
+      "java.sql"
+      "java.xml"
+      "jdk.httpserver"
+    ];
+  };
+in
 stdenv.mkDerivation rec {
-  pname = "LanguageTool";
+  pname = "languagetool";
   version = "6.6";
 
   src = fetchzip {
-    url = "https://www.languagetool.org/download/${pname}-${version}.zip";
+    url = "https://www.languagetool.org/download/LanguageTool-${version}.zip";
     sha256 = "sha256-BNiUIk5h38oEM4IliHdy8rNmZY0frQ1RaFeJ7HI5nOI=";
   };
+
   nativeBuildInputs = [ makeWrapper ];
+
   buildInputs = [ jre ];
 
   installPhase = ''
@@ -35,7 +49,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.tests.languagetool = nixosTests.languagetool;
+  passthru = {
+    inherit jre;
+    tests.languagetool = nixosTests.languagetool;
+  };
 
   meta = {
     homepage = "https://languagetool.org";
@@ -44,5 +61,6 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ edwtjo ];
     platforms = jre.meta.platforms;
     description = "Proofreading program for English, French German, Polish, and more";
+    mainProgram = "languagetool";
   };
 }

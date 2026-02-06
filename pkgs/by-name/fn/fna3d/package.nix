@@ -9,16 +9,16 @@
   useSDL3 ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fna3d";
-  version = "25.12";
+  version = "26.01";
 
   src = fetchFromGitHub {
     owner = "FNA-XNA";
     repo = "FNA3D";
-    tag = version;
+    tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-nrCBW3UypXUYAt7Ccr3w64QikmN/Vg5TSlQ19/g+anM=";
+    hash = "sha256-MlSaB7PNw3lBIgbLlU1o2lk4LGIJDLRzxddZYSju5jY=";
   };
 
   cmakeFlags = [
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ mrtnvgr ];
   };
-}
+})

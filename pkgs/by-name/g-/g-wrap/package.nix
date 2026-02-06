@@ -2,7 +2,7 @@
   fetchurl,
   lib,
   stdenv,
-  guile,
+  guile_2_2,
   guile-lib,
   libffi,
   pkg-config,
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   version = "1.9.15";
 
   src = fetchurl {
-    url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
+    url = "mirror://savannah/g-wrap/g-wrap-${version}.tar.gz";
     sha256 = "0ak0bha37dfpj9kmyw1r8fj8nva639aw5xr66wr5gd3l1rqf5xhg";
   };
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   # Note: Glib support is optional, but it's quite useful (e.g., it's used by
   # Guile-GNOME).
   buildInputs = [
-    guile
+    guile_2_2
     glib
     guile-lib
   ];

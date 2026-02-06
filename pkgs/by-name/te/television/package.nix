@@ -20,16 +20,16 @@ let
   television = rustPlatform.buildRustPackage (finalAttrs: {
     pname = "television";
 
-    version = "0.14.3";
+    version = "0.15.0";
 
     src = fetchFromGitHub {
       owner = "alexpasmantier";
       repo = "television";
       tag = finalAttrs.version;
-      hash = "sha256-z+ztj21JJaMuqTaN44JVAyAzSmOzUgjo9t23lTnehyI=";
+      hash = "sha256-WjIvsLO+LIDNEx2fEn0oe6YwrQYMhmRqWTomIoSH3Co=";
     };
 
-    cargoHash = "sha256-TAj6QgQK/ZOcUMeIePD2tzBKav4BJSeOjaSSaO5eD6o=";
+    cargoHash = "sha256-AI7B4z8C+q3xcaB+BpPb0IIyZeDpWxx2qZVWPJkG/sY=";
 
     strictDeps = true;
     nativeBuildInputs = [

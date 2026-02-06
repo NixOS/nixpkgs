@@ -13,7 +13,7 @@
   ruby,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mblaze";
   version = "1.3";
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "leahneukirchen";
     repo = "mblaze";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-398wiXJ/iG9ZfPGDZc57xH37lft3NpEZuLE0Qhb2GGc=";
   };
 
@@ -75,4 +75,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.ajgrf ];
   };
-}
+})

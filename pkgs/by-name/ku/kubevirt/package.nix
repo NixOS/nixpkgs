@@ -50,7 +50,10 @@ buildGoModule rec {
     description = "Client tool to use advanced features such as console access";
     homepage = "https://kubevirt.io/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ haslersn ];
+    maintainers = with lib.maintainers; [
+      haslersn
+      johanot
+    ];
     mainProgram = "virtctl";
   };
 }

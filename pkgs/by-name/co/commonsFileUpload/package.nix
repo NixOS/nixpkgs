@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   pname = "commons-fileupload";
 
   src = fetchurl {
-    url = "mirror://apache/commons/fileupload/binaries/${pname}-${version}-bin.tar.gz";
+    url = "mirror://apache/commons/fileupload/binaries/commons-fileupload-${version}-bin.tar.gz";
     sha256 = "sha256-r7EGiih4qOCbjaL7Wg+plbe0m3CuFWXs/RmbfGLmj1g=";
   };
   installPhase = ''

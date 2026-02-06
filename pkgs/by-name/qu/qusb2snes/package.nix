@@ -6,14 +6,14 @@
   installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qusb2snes";
   version = "0.7.35";
 
   src = fetchFromGitHub {
     owner = "Skarsnik";
     repo = "QUsb2snes";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-521L4awWr4L2W12vAZUMheq4plXUXKYo4d3S6AfHgPA=";
   };
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     mainProgram = "QUsb2Snes";
     maintainers = with lib.maintainers; [ alexland7219 ];
   };
-}
+})

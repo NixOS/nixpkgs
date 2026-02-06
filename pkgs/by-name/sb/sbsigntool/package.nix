@@ -12,13 +12,13 @@
   libbfd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sbsigntool";
   version = "0.9.5";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/linux/kernel/git/jejb/sbsigntools.git";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-5DInWgl1gThjjfGOsts1H1s1GbMCkd0gjbmG3gA3Fhg=";
   };
 
@@ -73,4 +73,4 @@ stdenv.mkDerivation rec {
     ]; # Broken on i686
     license = lib.licenses.gpl3;
   };
-}
+})

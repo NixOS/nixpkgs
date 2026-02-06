@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   version = "0.60.11";
 
   src = fetchurl {
-    url = "mirror://sourceforge/bristol/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/bristol/bristol-${version}.tar.gz";
     hash = "sha256-fR8LvQ19MD/HfGuVSbYXCNeoO03AB4GAEbH1XR+pIro=";
   };
 

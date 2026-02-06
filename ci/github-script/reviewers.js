@@ -42,9 +42,15 @@ async function handleReviewers({
   }
 
   const users = new Set([
-    ...(await Promise.all(
-      maintainers.map(async (id) => (await getUser(id)).login.toLowerCase()),
-    )),
+    ...(
+      await Promise.all(
+        maintainers.map(async (id) => {
+          const user = await getUser(id)
+          // User may have deleted their account
+          return user?.login?.toLowerCase()
+        }),
+      )
+    ).filter(Boolean),
     ...owners
       .filter((handle) => handle && !handle.includes('/'))
       .map((handle) => handle.toLowerCase()),

@@ -17,9 +17,9 @@ let
         command,
         ...
       }:
-      ''${
+      "${
         lib.concatMapStringsSep "+" toString keys
-      }:${lib.concatStringsSep "," events}:${lib.concatStringsSep "," attributes}:${command}''
+      }:${lib.concatStringsSep "," events}:${lib.concatStringsSep "," attributes}:${command}"
     ) cfg.bindings}
     ${cfg.extraConfig}
   '';

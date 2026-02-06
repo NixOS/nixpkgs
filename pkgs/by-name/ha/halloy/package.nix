@@ -12,22 +12,25 @@
   rustPlatform,
   vulkan-loader,
   wayland,
-  xorg,
+  libxi,
+  libxcursor,
+  libx11,
+  libxcb,
   alsa-lib,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "halloy";
-  version = "2025.12";
+  version = "2026.1.1";
 
   src = fetchFromGitHub {
     owner = "squidowl";
     repo = "halloy";
     tag = version;
-    hash = "sha256-rVeh0nvmRjfOErwUhiWBx3hHla9bA2mSOORNSqSOrfw=";
+    hash = "sha256-qQ6hNpOqI3yC26KqYYq42KjJw/bMzaXACpGyIXE2axo=";
   };
 
-  cargoHash = "sha256-lxRLTVtc2Gu3x3bt4po4q5/sfmRXb7CslEQIP8hX0+Q=";
+  cargoHash = "sha256-LPVOm/96qWR93I0+wYp4M4P4R5Es0LdRM3y62WLU1u4=";
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -43,10 +46,10 @@ rustPlatform.buildRustPackage rec {
     libxkbcommon
     vulkan-loader
     wayland
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libxcb
+    libx11
+    libxcursor
+    libxi
+    libxcb
   ];
 
   desktopItems = [

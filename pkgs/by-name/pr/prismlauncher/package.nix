@@ -51,7 +51,7 @@ assert lib.assertMsg (
 ) "textToSpeechSupport only has an effect on Linux.";
 
 let
-  prismlauncher' = prismlauncher-unwrapped.override { inherit msaClientID gamemodeSupport; };
+  prismlauncher' = prismlauncher-unwrapped.override { inherit msaClientID; };
 in
 
 symlinkJoin {
@@ -67,9 +67,7 @@ symlinkJoin {
     kdePackages.qtimageformats
     kdePackages.qtsvg
   ]
-  ++ lib.optional (
-    lib.versionAtLeast kdePackages.qtbase.version "6" && stdenv.hostPlatform.isLinux
-  ) kdePackages.qtwayland;
+  ++ lib.optional stdenv.hostPlatform.isLinux kdePackages.qtwayland;
 
   postBuild = ''
     wrapQtAppsHook

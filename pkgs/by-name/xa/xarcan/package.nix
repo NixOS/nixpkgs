@@ -1,13 +1,13 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   arcan,
   audit,
   dbus,
   dri-pkgconfig-stub,
   libepoxy,
-  fontutil,
+  font-util,
   libGL,
   libX11,
   libXau,
@@ -30,9 +30,9 @@
   pixman,
   pkg-config,
   systemd,
-  xcbutil,
-  xcbutilwm,
-  xcbutilimage,
+  libxcb-util,
+  libxcb-wm,
+  libxcb-image,
   xkbcomp,
   xkeyboard_config,
   xorgproto,
@@ -44,8 +44,7 @@ stdenv.mkDerivation (finalPackages: rec {
   pname = "xarcan";
   version = "0.7.1";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "letoram";
     repo = "xarcan";
     tag = version;
@@ -64,7 +63,7 @@ stdenv.mkDerivation (finalPackages: rec {
     dbus
     dri-pkgconfig-stub
     libepoxy
-    fontutil
+    font-util
     libGL
     libX11
     libXau
@@ -84,9 +83,9 @@ stdenv.mkDerivation (finalPackages: rec {
     openssl
     pixman
     systemd
-    xcbutil
-    xcbutilwm
-    xcbutilimage
+    libxcb-util
+    libxcb-wm
+    libxcb-image
     xkbcomp
     xkeyboard_config
     xorgproto

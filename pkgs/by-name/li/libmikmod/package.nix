@@ -11,12 +11,12 @@ let
   inherit (lib) optional optionalString;
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libmikmod";
   version = "3.3.13";
 
   src = fetchurl {
-    url = "mirror://sourceforge/mikmod/libmikmod-${version}.tar.gz";
+    url = "mirror://sourceforge/mikmod/libmikmod-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-n8F5n36mqVx8WILemL6F/H0gugpKb8rK4RyMazgrsgc=";
   };
 
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
       including MOD, S3M, IT and XM.
     '';
   };
-}
+})

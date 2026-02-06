@@ -9,9 +9,14 @@ stdenv.mkDerivation rec {
   pname = "libmpeg2";
 
   src = fetchurl {
-    url = "http://libmpeg2.sourceforge.net/files/${pname}-${version}.tar.gz";
+    url = "http://libmpeg2.sourceforge.net/files/libmpeg2-${version}.tar.gz";
     sha256 = "1m3i322n2fwgrvbs1yck7g5md1dbg22bhq5xdqmjpz5m7j4jxqny";
   };
+
+  patches = [
+    # Fixes mismatching definitions with C23 / GCC15 on non-glibc platforms
+    ./getopt-getenv-signatures.patch
+  ];
 
   # Otherwise clang fails with 'duplicate symbol ___sputc'
   buildFlags = lib.optional stdenv.hostPlatform.isDarwin "CFLAGS=-std=gnu89";
