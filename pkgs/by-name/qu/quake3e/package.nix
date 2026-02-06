@@ -19,15 +19,15 @@
 let
   arch = if stdenv.hostPlatform.isx86_64 then "x64" else stdenv.hostPlatform.parsed.cpu.name;
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "Quake3e";
-  version = "2024-09-02-dev";
+  version = "2025-10-14";
 
   src = fetchFromGitHub {
     owner = "ec-";
     repo = "Quake3e";
-    rev = "b6e7ce4f78711e1c9d2924044a9a9d8a9db7020f";
-    sha256 = "sha256-tQgrHiP+QhBzcUnHRwzaDe38Th0uDt450fra8O3Vjqc=";
+    tag = finalAttrs.version;
+    sha256 = "sha256-3Ij0GEPXdl7Lhp9o1Zdwg1tcLgFEay686QjhSlh8iAo=";
   };
 
   nativeBuildInputs = [
@@ -87,4 +87,4 @@ stdenv.mkDerivation {
       alx
     ];
   };
-}
+})
