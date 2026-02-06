@@ -10,7 +10,7 @@
   testers,
 }:
 let
-  version = "0.12.64";
+  version = "0.12.167";
 
   sources = {
     x86_64-linux = {
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
       chmod +x -- "$out/bin/nebius"
     ''
     + lib.optionalString withShellCompletions ''
-      for shell in bash zsh; do
+      for shell in bash zsh fish; do
         ''${emulator:+"$emulator"} "$out/bin/nebius" completion $shell >nebius.$shell
         installShellCompletion nebius.$shell
       done
