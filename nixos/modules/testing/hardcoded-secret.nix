@@ -37,41 +37,39 @@ in
     type = attrsOf (
       submodule (
         { name, ... }:
-        {
-          options = lib.contracts.secrets.mkProvider {
-            providerOptions = mkOption {
-              description = ''
-                Settings specific to the hardcoded secrets module.
+        lib.contracts.secrets.mkProvider {
+          providerOptions = mkOption {
+            description = ''
+              Settings specific to the hardcoded secrets module.
 
-                Define either `content` or `source`.
-              '';
+              Define either `content` or `source`.
+            '';
 
-              type = submodule {
-                options = {
-                  content = mkOption {
-                    type = nullOr str;
-                    description = ''
-                      Content of the secret as a string.
+            type = submodule {
+              options = {
+                content = mkOption {
+                  type = nullOr str;
+                  description = ''
+                    Content of the secret as a string.
 
-                      This will be stored in the nix store and should only be used for testing or maybe in dev.
-                    '';
-                    default = null;
-                  };
+                    This will be stored in the nix store and should only be used for testing or maybe in dev.
+                  '';
+                  default = null;
+                };
 
-                  source = mkOption {
-                    type = nullOr str;
-                    description = ''
-                      Source of the content of the secret as a path in the nix store.
-                    '';
-                    default = null;
-                  };
+                source = mkOption {
+                  type = nullOr str;
+                  description = ''
+                    Source of the content of the secret as a path in the nix store.
+                  '';
+                  default = null;
                 };
               };
             };
+          };
 
-            outputDefaults = {
-              path = "/run/hardcodedsecrets/hardcodedsecret_${name}";
-            };
+          outputDefaults = {
+            path = "/run/hardcodedsecrets/hardcodedsecret_${name}";
           };
         }
       )

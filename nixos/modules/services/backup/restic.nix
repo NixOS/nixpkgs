@@ -19,21 +19,19 @@ in
     type = lib.types.attrsOf (
       lib.types.submodule (
         { name, config, ... }:
-        {
-          options = lib.contracts.filebackup.mkProvider {
-            outputDefaults = {
-              backupService = "restic-backups-${name}.service";
-              restoreScript = "restic-backups-${name}-restore";
-            };
-            providerOptions = lib.mkOption {
-              # This should be more specific and use common submodule options
-              # with the options.services.restic.backups option.
-              description = ''
-                Passthrough options to the restic instance.
-              '';
-              type = lib.types.anything;
-              default = { };
-            };
+        lib.contracts.filebackup.mkProvider {
+          outputDefaults = {
+            backupService = "restic-backups-${name}.service";
+            restoreScript = "restic-backups-${name}-restore";
+          };
+          providerOptions = lib.mkOption {
+            # This should be more specific and use common submodule options
+            # with the options.services.restic.backups option.
+            description = ''
+              Passthrough options to the restic instance.
+            '';
+            type = lib.types.anything;
+            default = { };
           };
         }
       )

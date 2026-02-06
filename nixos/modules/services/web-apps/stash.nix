@@ -126,7 +126,7 @@ let
       stash_boxes = mkOption {
         type = types.listOf stashBoxType;
         default = [ ];
-        description = ''Stash-box facilitates automated tagging of scenes and performers based on fingerprints and filenames'';
+        description = "Stash-box facilitates automated tagging of scenes and performers based on fingerprints and filenames";
         example = literalExpression ''
           {
             stash_boxes = [
@@ -419,13 +419,13 @@ in
 
       password = mkOption {
         type = types.nullOr (
-          lib.types.submodule {
-            options = lib.contracts.secrets.mkConsumer {
+          lib.types.submodule (
+            lib.contracts.secrets.mkConsumer {
               owner = cfg.user;
               group = cfg.group;
               mode = "0400";
-            };
-          }
+            }
+          )
         );
         default = null;
         example = "/path/to/password/file";
@@ -441,25 +441,25 @@ in
 
       jwtSecretKey = mkOption {
         type = types.nullOr (
-          lib.types.submodule {
-            options = lib.contracts.secrets.mkConsumer {
+          lib.types.submodule (
+            lib.contracts.secrets.mkConsumer {
               owner = cfg.user;
               group = cfg.group;
               mode = "0400";
-            };
-          }
+            }
+          )
         );
         description = "Path to file containing a secret used to sign JWT tokens.";
       };
       sessionStoreKey = mkOption {
         type = types.nullOr (
-          lib.types.submodule {
-            options = lib.contracts.secrets.mkConsumer {
+          lib.types.submodule (
+            lib.contracts.secrets.mkConsumer {
               owner = cfg.user;
               group = cfg.group;
               mode = "0400";
-            };
-          }
+            }
+          )
         );
         description = "Path to file containing a secret for session store.";
       };

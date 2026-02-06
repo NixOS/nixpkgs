@@ -9,10 +9,12 @@ let
     }:
     {
       mkConsumer = inputDefaults: {
-        input = mkConsumerOptions inputDefaults;
+        options = {
+          input = mkConsumerOptions inputDefaults;
 
-        output = mkProviderOptions { } // {
-          visible = "shallow";
+          output = mkProviderOptions { } // {
+            visible = "shallow";
+          };
         };
       };
 
@@ -22,15 +24,17 @@ let
           providerOptions ? { },
         }:
         {
-          input = mkConsumerOptions { } // {
-            visible = "shallow";
+          options = {
+            input = mkConsumerOptions { } // {
+              visible = "shallow";
+            };
+          }
+          // optionalAttrs (outputDefaults != { }) {
+            output = mkProviderOptions outputDefaults;
+          }
+          // optionalAttrs (providerOptions != { }) {
+            inherit providerOptions;
           };
-        }
-        // optionalAttrs (outputDefaults != { }) {
-          output = mkProviderOptions outputDefaults;
-        }
-        // optionalAttrs (providerOptions != { }) {
-          inherit providerOptions;
         };
 
       # Used for documentation

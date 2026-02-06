@@ -2,7 +2,7 @@
   Renders documentation for contracts.
   For inclusion into documentation.nixos.extraModules.
 */
-{ lib, pkgs, ... }:
+{ lib, ... }:
 let
   /**
     Causes a contracts docs to be rendered.
@@ -29,11 +29,11 @@ let
           ```nix
           {
             options.<consumer>.<option> = lib.mkOption {
-              type = lib.types.submodule {
-                options = lib.contracts.<contracts>.mkConsumer {
+              type = lib.types.submodule (
+                lib.contracts.<contracts>.mkConsumer {
                   // Fill out consumer option definitions
                 };
-              };
+              );
             };
           }
           ```
@@ -43,11 +43,11 @@ let
           ```nix
           {
             options.<provider>.<option> = lib.mkOption {
-              type = lib.types.submodule {
-                options = lib.contracts.<contracts>.mkProvider {
+              type = lib.types.submodule (
+                lib.contracts.<contracts>.mkProvider {
                   // Fill out provider option definitions
                 };
-              };
+              );
             };
           }
           ```

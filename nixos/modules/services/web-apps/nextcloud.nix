@@ -1195,8 +1195,8 @@ in
 
         Is a consumer of the [filebackup](#opt-contracts.filebackup) contract.
       '';
-      type = lib.types.submodule {
-        options = lib.contracts.filebackup.mkConsumer {
+      type = lib.types.submodule (
+        lib.contracts.filebackup.mkConsumer {
           user = "nextcloud";
           sourceDirectories = [
             cfg.datadir
@@ -1207,8 +1207,8 @@ in
           excludePatterns = [
             ".rnd"
           ];
-        };
-      };
+        }
+      );
     };
   };
 
