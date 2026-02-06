@@ -33,7 +33,7 @@ buildGoModule rec {
   };
 
   meta = {
-    description = "Simple cli for genrate git commits";
+    description = "Simple cli for generating git commits";
     homepage = "https://github.com/m7medvision/lazycommit";
     changelog = "https://github.com/m7medvision/lazycommit/releases/tag/v${version}";
     license = lib.licenses.mit;
