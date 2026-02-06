@@ -173,7 +173,9 @@ class Driver:
                     ["mount", "-t", "cgroup2", "none", "/sys/fs/cgroup"], check=True
                 )
 
-        # ensure /etc/os-release exists
+        # systemd-nspawn requires that /etc/os-release exists
+        # It supports SYSTEMD_NSPAWN_CHECK_OS_RELEASE=0, but that
+        # would try to "fix" it by bind mounting, which is worse.
         if not os.path.isfile("/etc/os-release"):
             subprocess.run(["touch", "/etc/os-release"], check=True)
 
