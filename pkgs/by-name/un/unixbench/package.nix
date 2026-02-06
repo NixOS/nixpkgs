@@ -19,16 +19,15 @@
   withGL ? true,
   withX11perf ? true,
 }:
-
 stdenv.mkDerivation rec {
   pname = "unixbench";
-  version = "unstable-2023-02-27";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "kdlucas";
     repo = "byte-unixbench";
-    rev = "a07fcc03264915c624f0e4818993c5b4df3fa703";
-    hash = "sha256-gmRWAqE9/HBb0S9rK0DXoaCoiGbtat0gmdeozhbv0NI=";
+    tag = "v${version}";
+    hash = "sha256-GQYejkIf7g2abHafJJQTl0nWqRGsg9VDtYQgyBY/jOg=";
   };
 
   patches = [
@@ -41,7 +40,10 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "-Wa,-q" ""
+      --replace-fail "-Wa,-q" ""
+
+    substituteInPlace src/syscall.c \
+      --replace-fail @coreutils@ "${coreutils}"
   '';
 
   nativeBuildInputs = [
@@ -78,6 +80,8 @@ stdenv.mkDerivation rec {
     "GRAPHIC_TESTS=defined"
   ];
 
+  env.NIX_CFLAGS_COMPILE = "-std=gnu89";
+
   installPhase = ''
     runHook preInstall
     mkdir -p $out/{bin,libexec,share}
@@ -89,16 +93,16 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     substituteInPlace USAGE \
-      --replace 'Run"' 'ubench"' \
-      --replace './Run' 'ubench' \
-      --replace 'Run ' 'ubench '
+      --replace-fail 'Run"' 'ubench"' \
+      --replace-fail './Run' 'ubench' \
+      --replace-fail 'Run ' 'ubench '
     pandoc -f rst -t man USAGE -o ubench.1
     installManPage ubench.1
   '';
 
   preFixup = ''
     substituteInPlace $out/libexec/pgms/multi.sh \
-      --replace '/bin/sh "$' '${runtimeShell} "$'
+      --replace-fail '/bin/sh "$' '${runtimeShell} "$'
 
     substituteInPlace $out/bin/ubench \
       --subst-var out
