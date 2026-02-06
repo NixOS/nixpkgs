@@ -11,7 +11,7 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "digitalocean";
     repo = "do-agent";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     sha256 = "sha256-uOZTiP+2r5wTPuYXcPc3bShfTIlQMkcfwiuBqUeLxPA=";
   };
 

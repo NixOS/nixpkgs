@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     sha256 = "0b24anpwkmvbsn5klnr58vxksw00ci9pjhwzx7a61kplyhsaiydw";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     repo = "cpp-hocon";
     owner = "puppetlabs";
   };

@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "fcsonline";
     repo = "drill";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     sha256 = "sha256-jBnRVTnrSfEpN7xgMrlAsCwl62kZpHMI4IeT0rPb+zg=";
   };
 

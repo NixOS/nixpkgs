@@ -14,7 +14,7 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "life4";
     repo = "enc";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-VBtjULav6ks2BYMVnUmOn/bAvonGDPia0eO7pJ1P5+Q=";
   };
 

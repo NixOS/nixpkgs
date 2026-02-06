@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "fnproject";
     repo = "cli";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-TTGZoCvhJXRsGY5pGiURpHVhlCacDYiLTnyjVJHJLno=";
   };
 

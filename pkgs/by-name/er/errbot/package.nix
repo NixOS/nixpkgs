@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   src = fetchFromGitHub {
     owner = "errbotio";
     repo = "errbot";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-UdqzBrlcb9NkuVo8ChADJmaKevadoGLyZUrckStb5ko=";
   };
 

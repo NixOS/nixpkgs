@@ -23,7 +23,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   src = fetchFromGitHub {
     owner = "dusansimic";
     repo = "dynamic-wallpaper";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-DAdx34EYO8ysQzbWrAIPoghhibwFtoqCi8oyDVyO5lk=";
   };
 

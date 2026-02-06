@@ -11,7 +11,7 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "shadow1ng";
     repo = "fscan";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-OFlwL7PXKOPKIW2YCirCGCXRCGIWYMmYHMmSU2he/tw=";
   };
 

@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "anthraxx";
     repo = "dfrs";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     sha256 = "01h00328kbw83q11yrsvcly69p0hql3kw49b4jx6gwkrdm8c2amk";
   };
 

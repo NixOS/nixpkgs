@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "slimtoolkit";
     repo = "slim";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-X+1euWp4W53axbiBpL82bUPfod/JNhGVGWgOqKyhz6A=";
   };
 

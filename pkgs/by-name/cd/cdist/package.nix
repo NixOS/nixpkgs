@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     domain = "code.ungleich.ch";
     owner = "ungleich-public";
     repo = "cdist";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-lIx0RtGQJdY2e00azI9yS6TV+5pCegpKOOD0dQmgMqA=";
   };
 

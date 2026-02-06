@@ -29,7 +29,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "eartag";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-Iwfk0SqxYF2bzkKZNqGonJh8MQ2c+K1wN0o4GECR/Rw=";
   };
 

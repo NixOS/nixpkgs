@@ -26,7 +26,7 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "JustArchiNET";
     repo = "ArchiSteamFarm";
-    rev = version;
+    tag = version;
     hash = "sha256-bTaa7iRUcd2yHov9pBqUo8VxdjukuKFA6HO88bQ56sg=";
   };
 

@@ -29,7 +29,7 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "openfaas";
     repo = "faas-cli";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     sha256 = "sha256-ggDfHqGu17nSxRNZESBLn8MYrvSU+ItQubNdUCAFK1c=";
   };
 

@@ -11,7 +11,7 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "R4yGM";
     repo = "dorkscout";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-v0OgEfl6L92ux+2GbSPHEgkmA/ZobQHB66O2LlEhVUA=";
   };
 

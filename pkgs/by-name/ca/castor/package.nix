@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromSourcehut {
     owner = "~julienxx";
     repo = "castor";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     sha256 = "sha256-yYLDbxmUR86fdpbHQQTiHVUbicnOD75cl3Vhofw5qr0=";
   };
 

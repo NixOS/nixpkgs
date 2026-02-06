@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ryze312";
     repo = "ff2mpv-rust";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-kJpKcwwwGjFYE7R4ZhkEGK44QqxsUEB/Scj0RoySta4=";
   };
 
