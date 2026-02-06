@@ -21,8 +21,6 @@ let
   isNixfmt = p: p.meta.mainProgram or null == "nixfmt";
 
   treefmtWithConfig = treefmt.withConfig {
-    name = "nixfmt-tree";
-
     settings = lib.mkMerge [
       # Default settings
       {
@@ -55,6 +53,9 @@ let
   };
 in
 treefmtWithConfig.overrideAttrs {
+  pname = "nixfmt-tree";
+  inherit (lib.trivial) version;
+
   meta = {
     mainProgram = "treefmt";
     description = "Official Nix formatter zero-setup starter using treefmt";
