@@ -7,14 +7,14 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "talosctl";
   version = "1.12.2";
 
   src = fetchFromGitHub {
     owner = "siderolabs";
     repo = "talos";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-E3WeFu4PpgJN+ZLeTfAqqkTgInu/imytpdCixM33wiw=";
   };
 
@@ -51,4 +51,4 @@ buildGoModule rec {
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ flokli ];
   };
-}
+})
