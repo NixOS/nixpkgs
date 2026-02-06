@@ -60,12 +60,6 @@ stdenv.mkDerivation {
     sed -i -e 's#"libcurl.so.4"#"${curl.out}/lib/libcurl.so.4"#' code/client/cl_curl.h
   '';
 
-  # Default value for `USE_SDL` changed (from 0 to 1) in 5f8ce6d (2020-12-26)
-  # Setting `USE_SDL=0` in `makeFlags` doesn't work
-  preConfigure = ''
-    sed -i 's/USE_SDL *= 1/USE_SDL = 0/' Makefile
-  '';
-
   installPhase = ''
     runHook preInstall
     make install DESTDIR=$out/lib
