@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  callPackage,
   makeWrapper,
   fetchurl,
   fetchzip,
@@ -89,10 +90,13 @@ let
 
   get = as: platform: as.${platform.system} or (throw "Unsupported system: ${platform.system}");
 
-  common = platform: {
+  common = platform: finalAttrs: {
     inherit pname version meta;
     src = fetcher version (get tags platform) (get hashes platform);
-    passthru.headers = headersFetcher version hashes.headers;
+    passthru = {
+      headers = headersFetcher finalAttrs.version hashes.headers;
+    }
+    // (callPackage ../hooks { electron = finalAttrs.finalPackage; });
   };
 
   electronLibPath = lib.makeLibraryPath [
@@ -211,7 +215,7 @@ let
 in
 stdenv.mkDerivation (
   finalAttrs:
-  lib.recursiveUpdate (common stdenv.hostPlatform) (
+  lib.recursiveUpdate (common stdenv.hostPlatform finalAttrs) (
     (if stdenv.hostPlatform.isDarwin then darwin else linux) finalAttrs
   )
 )
