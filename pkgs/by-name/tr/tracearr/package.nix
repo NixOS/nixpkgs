@@ -74,6 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Real-time monitoring for Plex, Jellyfin, and Emby servers. Track streams, analyze playback, and detect account sharing from a single dashboard.";
+    mainProgram = "tracearr";
     homepage = "https://tracearr.com";
     license = lib.licenses.agpl3Plus;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
