@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "rtic-scope";
     repo = "itm";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-VYRTh3ClQ1JeKfkEmE63NzMbr22wP9sKQurwkRZiVZI=";
   };
 
@@ -30,6 +30,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "A tool to parse and dump ARM [ITM] packets";
     homepage = "https://github.com/rtic-scope/itm";
+    changelog = "https://github.com/rtic-scope/itm/releases/tag/v${finalAttrs.version}";
+    platforms = lib.platforms.all;
     license = with lib.licenses; [
       mit
       asl20
