@@ -1,22 +1,35 @@
 {
   lib,
+  perl,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  stdenv,
+  udev,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "anchor";
-  version = "0.31.1";
+  version = "0.32.1";
 
   src = fetchFromGitHub {
     owner = "coral-xyz";
     repo = "anchor";
     tag = "v${version}";
-    hash = "sha256-pvD0v4y7DilqCrhT8iQnAj5kBxGQVqNvObJUBzFLqzA=";
+    hash = "sha256-oyCe8STDciRtdhOWgJrT+k50HhUWL2LSG8m4Ewnu2dc=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-fjhLA+utQdgR75wg+/N4VwASW6+YBHglRPj14sPHmGA=";
+  nativeBuildInputs = [
+    perl
+    pkg-config
+  ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    udev
+  ];
+
+  cargoHash = "sha256-XrVvhJ1lFLBA+DwWgTV34jufrcjszpbCgXpF+TUoEvo=";
 
   checkFlags = [
     # the following test cases try to access network, skip them
@@ -32,5 +45,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ Denommus ];
     mainProgram = "anchor";
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 }
