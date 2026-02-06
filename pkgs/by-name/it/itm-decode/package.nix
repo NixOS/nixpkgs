@@ -12,10 +12,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "rtic-scope";
     repo = "itm";
     rev = "v${finalAttrs.version}";
-    hash = lib.fakeHash;
+    hash = "sha256-VYRTh3ClQ1JeKfkEmE63NzMbr22wP9sKQurwkRZiVZI=";
   };
 
-  cargoHash = lib.fakeHash;
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "cortex-m-0.7.4" = "sha256-EqXHntEgAO5qiWOidcy44u0Jo3aSH9oW2H91xf18yLc=";
+      "nix-0.23.1" = "sha256-X7Sza6Rw2GQoGk6MIJmJqoZFp4oIkZmNhS82V4I28O4=";
+    };
+  };
+
+  postPatch = ''
+    ln -s ${./Cargo.lock} Cargo.lock
+  '';
 
   meta = {
     description = "A tool to parse and dump ARM [ITM] packets";
@@ -24,6 +34,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       mit
       asl20
     ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ scottcowe ];
   };
 })
