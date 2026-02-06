@@ -4,34 +4,35 @@
   fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
-  stdenv,
+  util-linux,
 }:
 
 buildGoModule rec {
   pname = "bunster";
-  version = "0.9.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "yassinebenaid";
     repo = "bunster";
     tag = "v${version}";
-    hash = "sha256-HE5Wp5A0wc5jgs9kNkCH1f82Y+SkILHvOwlQAsC6DVU=";
+    hash = "sha256-7OT4C4A65Q662sO9yGPsYO5Tjph6Defro8+89b8etu0=";
   };
 
-  vendorHash = "sha256-Gs+8J+yEVynsBte3Hnx7jnYRPa/61CIISDbMyDKhPRE=";
-  # checks fail on aarch64-darwin but binary still builds successfully
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  vendorHash = "sha256-Npm4LEINzeAf8qof0Sp86MIxA3uPRjdkMTHn+gtQrfQ=";
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
+  nativeCheckInputs = [ util-linux ];
+  checkFlags = [ "-skip=TestBunster/tests/(conditionals|builtins|01)" ];
+
   doInstallCheck = true;
-  versionCheckProgramArg = "version";
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Compile shell scripts to static binaries";
     homepage = "https://github.com/yassinebenaid/bunster";
-    changelog = "https://github.com/yassinebenaid/bunster/releases/tag/v{version}";
+    changelog = "https://github.com/yassinebenaid/bunster/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       yunz
