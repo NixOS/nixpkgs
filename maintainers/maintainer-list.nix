@@ -5757,6 +5757,12 @@
     githubId = 75175586;
     name = "Douglas Damiano";
   };
+  damien = {
+    email = "damien@absurd.engineering";
+    github = "damien";
+    githubId = 12211;
+    name = "Damien Wilson";
+  };
   DamienCassou = {
     email = "damien@cassou.me";
     github = "DamienCassou";
