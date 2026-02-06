@@ -42,6 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
     license = with lib.licenses; [ gpl2Plus ];
     maintainers = with lib.maintainers; [ jluttine ];
     platforms = with lib.platforms; unix;
+    # This package was broken by the update of SuiteSparse from 5.x to 7.x.
+    broken = true;
   };
 
 })

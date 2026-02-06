@@ -1,9 +1,11 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   blas,
   cmake,
+  config,
+  cudaPackages,
   eigen,
   gflags,
   glog,
@@ -12,18 +14,26 @@
   runTests ? false,
   enableStatic ? stdenv.hostPlatform.isStatic,
   withBlas ? true,
-}:
+  enableCuda ? config.cudaSupport,
+}@inputs:
+
+let
+  stdenv = throw "Use effectiveStdenv instead";
+  effectiveStdenv = if enableCuda then cudaPackages.backendStdenv else inputs.stdenv;
+in
 
 # gflags is required to run tests
 assert runTests -> gflags != null;
 
-stdenv.mkDerivation rec {
+effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "ceres-solver";
-  version = "2.1.0";
+  version = "2.2.0";
 
-  src = fetchurl {
-    url = "http://ceres-solver.org/ceres-solver-${version}.tar.gz";
-    sha256 = "sha256-99dO7N4K7XW/xR7EjJHQH+Fqa/FrzhmHpwcyhnAeL8Y=";
+  src = fetchFromGitHub {
+    owner = "ceres-solver";
+    repo = finalAttrs.pname;
+    tag = finalAttrs.version;
+    hash = "sha256-5SdHXcgwTlkDIUuyOQgD8JlAElk7aEWcFo/nyeOgN/k=";
   };
 
   outputs = [
@@ -31,8 +41,26 @@ stdenv.mkDerivation rec {
     "dev"
   ];
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = lib.optional runTests gflags;
+  # https://github.com/ceres-solver/ceres-solver/blob/85331393dc0dff09f6fb9903ab0c4bfa3e134b01/CMakeLists.txt#L251-L252
+  postPatch = lib.optionalString enableCuda ''
+    nixLog "patching $PWD/CMakeLists.txt to remove hardcoded CUDA architectures"
+    substituteInPlace "$PWD/CMakeLists.txt" \
+      --replace-fail \
+        'set(CMAKE_CUDA_ARCHITECTURES' \
+        '# set(CMAKE_CUDA_ARCHITECTURES'
+  '';
+
+  nativeBuildInputs = [ cmake ] ++ lib.optionals enableCuda [ cudaPackages.cuda_nvcc ];
+
+  buildInputs =
+    lib.optional runTests gflags
+    ++ lib.optionals enableCuda [
+      cudaPackages.cuda_cudart
+      cudaPackages.libcublas
+      cudaPackages.libcusolver
+      cudaPackages.libcusparse
+    ];
+
   propagatedBuildInputs = [
     eigen
     glog
@@ -44,7 +72,10 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=${if enableStatic then "OFF" else "ON"}"
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!enableStatic))
+  ]
+  ++ lib.optionals enableCuda [
+    (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
   ];
 
   # The Basel BUILD file conflicts with the cmake build directory on
@@ -64,4 +95,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ giogadi ];
     platforms = lib.platforms.unix;
   };
-}
+})

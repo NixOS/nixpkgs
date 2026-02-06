@@ -1,42 +1,58 @@
 {
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gfortran,
   blas,
-  lapack,
-  metis,
-  fixDarwinDylibNames,
-  gmp,
-  mpfr,
+  cmake,
   config,
-  enableCuda ? config.cudaSupport,
   cudaPackages,
+  enableAccelerate ? false, # Use Accelerate on Darwin
+  enableCuda ? config.cudaSupport,
+  enableStatic ? stdenv.hostPlatform.isStatic,
+  fetchFromGitHub,
+  fixDarwinDylibNames,
+  gfortran,
+  gmp,
+  lapack,
+  lib,
+  mpfr,
+  ninja,
   openmp ? null,
+  pkg-config,
+  stdenv,
+  writableTmpDirAsHomeHook,
 }@inputs:
 
 let
   stdenv = throw "Use effectiveStdenv instead";
   effectiveStdenv = if enableCuda then cudaPackages.backendStdenv else inputs.stdenv;
 in
-effectiveStdenv.mkDerivation rec {
+effectiveStdenv.mkDerivation (finalAttrs: {
+  __structuredAttrs = true;
+  strictDep = true;
+
   pname = "suitesparse";
-  version = "5.13.0";
+  version = "7.12.1";
 
   outputs = [
     "out"
     "dev"
-    "doc"
   ];
 
   src = fetchFromGitHub {
     owner = "DrTimothyAldenDavis";
     repo = "SuiteSparse";
-    rev = "v${version}";
-    sha256 = "sha256-Anen1YtXsSPhk8DpA4JtADIz9m8oXFl9umlkb4iImf8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6EMPEH5dcNT1qtuSlzR26RhpfN7MbYJdSKcrsQ0Pzow=";
   };
 
   nativeBuildInputs = [
+    cmake
+    ninja
+    pkg-config
+    # Needs to create directories as part of the build for the JIT
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.optionals effectiveStdenv.cc.isGNU [
+    # Per SuiteSparse, we can only use Fortran when it has the same compiler ID as the C/C++ compilers.
+    gfortran
   ]
   ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [
     fixDarwinDylibNames
@@ -51,8 +67,6 @@ effectiveStdenv.mkDerivation rec {
     [
       blas
       lapack
-      metis
-      (lib.getLib gfortran.cc)
       gmp
       mpfr
     ]
@@ -60,52 +74,50 @@ effectiveStdenv.mkDerivation rec {
       openmp
     ]
     ++ lib.optionals enableCuda [
-      cudaPackages.cuda_cudart
       cudaPackages.cuda_cccl
+      cudaPackages.cuda_cudart
+      cudaPackages.cuda_nvrtc
       cudaPackages.libcublas
     ];
 
-  preConfigure = ''
-    # Mongoose and GraphBLAS are packaged separately
-    sed -i "Makefile" -e '/GraphBLAS\|Mongoose/d'
-  '';
-
-  makeFlags = [
-    "INSTALL=${placeholder "out"}"
-    "INSTALL_INCLUDE=${placeholder "dev"}/include"
-    "JOBS=$(NIX_BUILD_CORES)"
-    "MY_METIS_LIB=-lmetis"
-  ]
-  ++ lib.optionals blas.isILP64 [
-    "CFLAGS=-DBLAS64"
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_STATIC_LIBS" enableStatic)
+    (lib.cmakeBool "SUITESPARSE_DEMOS" false) # Demos aren't installed but could make interesting unit tests
+    (lib.cmakeBool "SUITESPARSE_USE_STRICT" true)
+    (lib.cmakeBool "SUITESPARSE_USE_PYTHON" false)
+    (lib.cmakeBool "SUITESPARSE_USE_CUDA" enableCuda)
+    (lib.cmakeBool "SUITESPARSE_USE_64BIT_BLAS" blas.isILP64)
+    # CMake Warning at SuiteSparse_config/cmake_modules/SuiteSparsePolicy.cmake:328 (message):
+    #   Warning: Using Fortran with SuiteSparse requires that it has the same
+    #   compiler ID as the C/C++ compilers.  Use a compatible Fortran compiler, or
+    #   set SUITESPARSE_USE_FORTRAN to OFF.
+    (lib.cmakeBool "SUITESPARSE_USE_FORTRAN" effectiveStdenv.cc.isGNU)
   ]
   ++ lib.optionals enableCuda [
-    "CUDA_PATH=${lib.getBin cudaPackages.cuda_nvcc}"
-    "CUDART_LIB=${lib.getLib cudaPackages.cuda_cudart}/lib/libcudart.so"
-    "CUBLAS_LIB=${lib.getLib cudaPackages.libcublas}/lib/libcublas.so"
+    (lib.cmakeFeature "SUITESPARSE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
   ]
   ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [
-    # Unless these are set, the build will attempt to use `Accelerate` on darwin, see:
-    # https://github.com/DrTimothyAldenDavis/SuiteSparse/blob/v5.13.0/SuiteSparse_config/SuiteSparse_config.mk#L368
-    "BLAS=-lblas"
-    "LAPACK=-llapack"
+    (lib.cmakeFeature "BLA_VENDOR" (if enableAccelerate then "Apple" else "Generic"))
   ];
 
-  env = {
-    # in GCC14 these two warnings were promoted to error
-    # let's make them warnings again to fix the build failure
-    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration -Wno-error=incompatible-pointer-types";
-  }
-  // lib.optionalAttrs effectiveStdenv.hostPlatform.isDarwin {
+  # Follow Spack's practice of enabling backwards compatiblity by creating symlinks to headers
+  # found in the nested include/suitesparse directory at the root of include:
+  # https://github.com/spack/spack-packages/blob/9a7f32a93e4096ca0747ac19a10f77f9d2762786/repos/spack_repo/builtin/packages/suite_sparse/package.py#L324-L332
+  postInstall = ''
+    nixLog "creating symlinks in ''${!outputDev:?}/include for backwards compat"
+    pushd "''${!outputDev:?}/include" >/dev/null
+    ln -svrf suitesparse/* .
+    popd >/dev/null
+  '';
+
+  # The numerical tests can be flaky depending on the hardware and require further inspection before being enabled.
+  doCheck = false;
+
+  env = lib.optionalAttrs effectiveStdenv.hostPlatform.isDarwin {
     # Ensure that there is enough space for the `fixDarwinDylibNames` hook to
     # update the install names of the output dylibs.
-    NIX_LDFLAGS = "-headerpad_max_install_names";
+    NIX_CFLAGS_LINK = "-headerpad_max_install_names";
   };
-
-  buildFlags = [
-    # Build individual shared libraries, not demos
-    "library"
-  ];
 
   meta = {
     homepage = "http://faculty.cse.tamu.edu/davis/suitesparse.html";
@@ -117,5 +129,6 @@ effectiveStdenv.mkDerivation rec {
     ];
     maintainers = with lib.maintainers; [ ttuegel ];
     platforms = with lib.platforms; unix;
+    broken = !(enableAccelerate -> effectiveStdenv.hostPlatform.isDarwin);
   };
-}
+})
