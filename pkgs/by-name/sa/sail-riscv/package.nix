@@ -5,19 +5,19 @@
   cmake,
   gmp,
   pkg-config,
-  sail,
+  ocamlPackages,
   ninja,
   z3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sail-riscv";
   version = "0.8";
 
   src = fetchFromGitHub {
     owner = "riscv";
     repo = "sail-riscv";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-50ATe3DQcdyNOqP85mEMyEwxzpBOplzRN9ulaJNo9zo=";
   };
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
     ninja
-    sail
+    ocamlPackages.sail
   ];
   buildInputs = [
     gmp
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     license = lib.licenses.bsd2;
   };
-}
+})

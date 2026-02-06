@@ -12758,10 +12758,6 @@ with pkgs;
     waylandSupport = true;
   };
 
-  sail-riscv = callPackage ../applications/virtualization/sail-riscv {
-    inherit (ocamlPackages) sail;
-  };
-
   mfcj470dwlpr = pkgsi686Linux.callPackage ../misc/cups/drivers/mfcj470dwlpr { };
 
   mfcj6510dwlpr = pkgsi686Linux.callPackage ../misc/cups/drivers/mfcj6510dwlpr { };
