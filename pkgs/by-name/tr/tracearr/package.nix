@@ -1,14 +1,5 @@
-{
-  lib,
-  stdenv,
-  pnpm_10,
-  fetchPnpmDeps,
-  pnpmConfigHook,
-  makeWrapper,
-  nodejs,
-  fetchFromGitHub,
-  turbo,
-}:
+{ lib, stdenv, pnpm_10, fetchPnpmDeps, pnpmConfigHook, makeWrapper, nodejs
+, fetchFromGitHub, turbo, }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "tracearr";
   version = "1.4.12";
@@ -31,13 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.NODE_ENV = "production";
 
-  nativeBuildInputs = [
-    makeWrapper
-    nodejs
-    pnpmConfigHook
-    pnpm_10
-    turbo
-  ];
+  nativeBuildInputs = [ makeWrapper nodejs pnpmConfigHook pnpm_10 turbo ];
 
   buildInputs = [ nodejs ];
 
@@ -45,6 +30,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preBuild
     pnpm run build
     runHook postBuild
+  '';
+
+  doCheck = true;
+
+  checkPhase = ''
+    pnpm test
   '';
 
   preInstall = ''
@@ -73,7 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Real-time monitoring for Plex, Jellyfin, and Emby servers. Track streams, analyze playback, and detect account sharing from a single dashboard.";
+    description =
+      "Real-time monitoring for Plex, Jellyfin, and Emby servers. Track streams, analyze playback, and detect account sharing from a single dashboard.";
     mainProgram = "tracearr";
     homepage = "https://tracearr.com";
     license = lib.licenses.agpl3Plus;
