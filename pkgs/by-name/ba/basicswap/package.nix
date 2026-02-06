@@ -58,14 +58,14 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "basicswap";
-  version = "0.14.4";
+  version = "0.14.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "basicswap";
     repo = "basicswap";
     tag = "v${version}";
-    hash = "sha256-UhuBTbGULImqRSsbg0QNb3yvnN7rnSzycweDLbqrW+8=";
+    hash = "sha256-ynqwbWDdqBSXf3RKVAQwiHNxltkeMhbzdfNGvAemD6U=";
   };
 
   postPatch = ''
@@ -90,6 +90,7 @@ python3Packages.buildPythonApplication rec {
     pycryptodome
     pysocks
     mnemonic
+    websocket-client
   ];
 
   postInstall = ''
