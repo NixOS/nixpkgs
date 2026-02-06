@@ -5,6 +5,7 @@
   autoreconfHook,
   fetchFromGitHub,
   stdenv,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -39,6 +40,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-I${lib.getDev SDL}/include/SDL"
     "-I${lib.getDev SDL_image}/include/SDL"
   ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = {
     homepage = "https://github.com/erikg/vp";
