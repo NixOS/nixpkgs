@@ -1,34 +1,41 @@
 {
-  "version": "2.1.25",
-  "buildDate": "2026-01-29T20:35:15Z",
+  "version": "2.1.34",
+  "buildDate": "2026-02-06T06:39:27Z",
   "platforms": {
     "darwin-arm64": {
-      "checksum": "1023c0334b0bf99ce7a466adbdb24ed0cae0ce4e1138837238e132b3886dd789",
-      "size": 182288624
+      "binary": "claude",
+      "checksum": "58bd74f33a9f0beb4338e02f613f63064fda73e9226288d10909df50a466ec60",
+      "size": 180901616
     },
     "darwin-x64": {
-      "checksum": "13fc5f92b6fec84b674ac7cf506524323f012cf999740733f7377f6fb46bcfd7",
-      "size": 188585664
+      "binary": "claude",
+      "checksum": "57e08c32782d0e3d1e38cf697261f85813a710d2719447a75770bdafdc4740c8",
+      "size": 187198656
     },
     "linux-arm64": {
-      "checksum": "38016991376efb8b1a83488800a9589694a6e77a7a920c5e654778c68753c776",
-      "size": 216667439
+      "binary": "claude",
+      "checksum": "ffb0625ad609b5816cedfb23f88325f62b63747ab6fdfe5a53f352fd4ed77b33",
+      "size": 215296297
     },
     "linux-x64": {
-      "checksum": "696135f0eccaf7a4070168845146833fa4fc93a6191fe026a7517af4d2e14fec",
-      "size": 224472763
+      "binary": "claude",
+      "checksum": "3665f12f67a1159b31005dcce11ca1de41d49759bae3d01ed853940fe7c4a21f",
+      "size": 223101542
     },
     "linux-arm64-musl": {
-      "checksum": "a6aee1f2d6e5010432a589fc52772e44186099e3d1fd94419b1689ff860935de",
-      "size": 211931471
+      "binary": "claude",
+      "checksum": "2f610b62fb441b4b9d4223f1036a76d86576ab484876eb5f10bcede91178f913",
+      "size": 210560329
     },
     "linux-x64-musl": {
-      "checksum": "bd51f99dca3ba650ce74d9a491d6fae06da7f48e426d2948b0aed274eb34b141",
-      "size": 217161339
+      "binary": "claude",
+      "checksum": "e1f8081c9f53bcb7055bfe855c717bd6040cee8a81a7c29deb6d8b1c6e4d8259",
+      "size": 215790118
     },
     "win32-x64": {
-      "checksum": "d47eb36d833a4a9c74fac9a91026cd7f8959d509bb6b7a14702fb2a72e7c0b66",
-      "size": 234309792
+      "binary": "claude.exe",
+      "checksum": "655008c690f8e5397ce7d420d0b3e09ef286035e7a1e4d12caa8f61fb3c968ec",
+      "size": 232975520
     }
   }
 }
