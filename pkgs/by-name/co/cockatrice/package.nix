@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Cockatrice";
     repo = "Cockatrice";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     sha256 = "sha256-GQVdn6vUW0B9vSk7ZvSDqMNhLNe86C+/gE1n6wfQIMw=";
   };
 

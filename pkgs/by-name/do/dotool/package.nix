@@ -15,7 +15,7 @@ buildGoModule (finalAttrs: {
   src = fetchFromSourcehut {
     owner = "~geb";
     repo = "dotool";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-KI3vA45/MvFRV8Fr3Q4yd/argDy1PpFHCT3KA9VDP80=";
   };
 

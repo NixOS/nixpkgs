@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromCodeberg {
     owner = "simonrepp";
     repo = "faircamp";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-r5r7vfTbMPjAqMg5f7L/YfSzlxZgrSFjO6WHO64wfIo=";
   };
 

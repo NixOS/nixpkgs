@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/linux/kernel/git/superm1/amd-debug-tools.git";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-748K4Ee9HVYWQ7/DVz7F2nZNjau5v4OGvgHwJZ4vYpM=";
   };
 

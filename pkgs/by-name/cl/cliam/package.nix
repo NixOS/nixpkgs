@@ -13,7 +13,7 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "securisec";
     repo = "cliam";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-59nPoH0+k1umMwFg95hQHOr/SRGKqr1URFG7xtVRiTs=";
   };
 

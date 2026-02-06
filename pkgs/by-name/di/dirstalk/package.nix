@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "stefanoj3";
     repo = "dirstalk";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-gSMkTGzMDI+scG3FQ0u0liUDL4qOPPW2UWLlAQcmmaA=";
   };
 

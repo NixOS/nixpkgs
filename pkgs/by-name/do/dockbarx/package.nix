@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   src = fetchFromGitHub {
     owner = "xuzhen";
     repo = "dockbarx";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     sha256 = "sha256-J/5KpHptGzgRF1qIGrgjkRR3in5pE0ffkiYVTR3iZKY=";
   };
 

@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "cntr";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     sha256 = "sha256-4HBOUx9086nn3hRBLA4zuH0Dq+qDZHgo3DivmiEMh3w=";
   };
 
