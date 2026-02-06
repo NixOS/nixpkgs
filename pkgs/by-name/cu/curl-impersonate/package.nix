@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  darwin,
   fetchFromGitHub,
   callPackage,
   buildGoModule,
@@ -74,6 +75,9 @@ stdenv.mkDerivation rec {
     zlib
     zstd
     sqlite
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.ICU
   ];
 
   configureFlags = [
