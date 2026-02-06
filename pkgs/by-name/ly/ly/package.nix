@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ly";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchFromCodeberg {
     owner = "fairyglade";
     repo = "ly";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BelsR/+sfm3qdEnyf4bbadyzuUVvVPrPEhdZaNPLxiE=";
+    hash = "sha256-P0yLiRIA0bDMiYfL6Kz2/OXh+nmnbHZnsCbcYGIGnbc=";
   };
 
   nativeBuildInputs = [
