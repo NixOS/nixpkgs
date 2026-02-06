@@ -1484,8 +1484,14 @@ class NspawnMachine(BaseMachine):
         nsenter = shutil.which("nsenter")
         assert nsenter is not None
 
-        # Pull in /etc/profile, and some shell sanity.
+        # Sourcing /etc/profile on every call of `_execute` ensures a correct shell
+        # environment (correct PATH, etc.). This is slower than the QEMU version.
+        #
+        # NOTE If the test calls switch-to-configuration (with a differently configured specialization)
+        # this will use the /etc/profile of the new specialisation while `QemuMachine` nodes
+        # will continue to use the original /etc/profile.
         command = f"set -eo pipefail; source /etc/profile; set -u; {command}"
+
         cp = subprocess.run(
             [
                 nsenter,
