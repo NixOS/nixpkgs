@@ -1,7 +1,9 @@
 {
   lib,
-  SDL,
-  SDL_image,
+  pkg-config,
+  SDL2,
+  SDL2_image,
+  libx11,
   autoreconfHook,
   fetchFromGitHub,
   stdenv,
@@ -10,23 +12,24 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vp";
-  version = "1.8-unstable-2017-03-22";
+  version = "1.8-unstable-2025-09-15";
 
   src = fetchFromGitHub {
     owner = "erikg";
     repo = "vp";
-    rev = "52bae15955dbd7270cc906af59bb0fe821a01f27";
-    hash = "sha256-AWRJ//0z97EwvQ00qWDjVeZrPrKnRMOXn4RagdVrcFc=";
+    rev = "12ab0c49a7d837af8370b91d3f6e4fa11789e57a";
+    hash = "sha256-Ea1p9NLk7tW3elU0zmlPAkobyv+yLYeKv5hscJTFJhs=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
-    SDL
+    pkg-config
   ];
 
   buildInputs = [
-    SDL
-    SDL_image
+    SDL2
+    SDL2_image
+    libx11
   ];
 
   outputs = [
@@ -36,10 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  env.NIX_CFLAGS_COMPILE = toString [
-    "-I${lib.getDev SDL}/include/SDL"
-    "-I${lib.getDev SDL_image}/include/SDL"
-  ];
+  # gcc15 build failure
+  env.NIX_CFLAGS_COMPILE = toString [ "-std=gnu17" ];
 
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--version=branch" ];
@@ -51,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     mainProgram = "vp";
     maintainers = [ ];
-    inherit (SDL.meta) platforms;
+    inherit (SDL2.meta) platforms;
     hydraPlatforms = lib.platforms.linux; # build hangs on both Darwin platforms, needs investigation
   };
 })
