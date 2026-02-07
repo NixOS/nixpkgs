@@ -130,6 +130,7 @@ lib.makeOverridable (
 
       #name = builtins.trace (attrs.name or "no attr.name" ) "${namePrefix}${gemName}-${version}";
       name = attrs.name or "${namePrefix}${gemName}-${suffix}";
+      pname = gemName;
 
       inherit src;
 
