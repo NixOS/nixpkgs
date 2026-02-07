@@ -132,6 +132,7 @@ bash.runCommand "${pname}-${version}"
       --prefix=$out \
       --build=${buildPlatform.config} \
       --host=${hostPlatform.config} \
+      --target=${hostPlatform.config} \
       --with-native-system-header-dir=${glibc}/include \
       --enable-languages=c,c++ \
       --disable-bootstrap \

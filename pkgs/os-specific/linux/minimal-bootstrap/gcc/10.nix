@@ -55,8 +55,8 @@ let
     hash = "sha256-/PeN2WVsEOuM+fvV9ZoLawE4YgX+GTSzsoegoYmBRcA=";
   };
 
-  fakeBuildPlatform = (lib.strings.removeSuffix "-gnu" buildPlatform.config) + "-musl";
-  fakeHostPlatform = (lib.strings.removeSuffix "-gnu" hostPlatform.config) + "-musl";
+  fakeBuildPlatform = lib.systems.elaborate "${buildPlatform.parsed.cpu.name}-unknown-linux-musl";
+  fakeHostPlatform = lib.systems.elaborate "${hostPlatform.parsed.cpu.name}-unknown-linux-musl";
 in
 bash.runCommand "${pname}-${version}"
   {
@@ -137,8 +137,8 @@ bash.runCommand "${pname}-${version}"
 
     bash ./configure \
       --prefix=$out \
-      --build=${fakeBuildPlatform} \
-      --host=${fakeHostPlatform} \
+      --build=${fakeBuildPlatform.config} \
+      --host=${fakeHostPlatform.config} \
       --with-native-system-header-dir=/include \
       --with-sysroot=${musl} \
       --enable-initfini-array \

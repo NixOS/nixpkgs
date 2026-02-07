@@ -53,8 +53,18 @@ let
   };
 
   # see: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=95129
-  fakeBuildPlatform = (lib.strings.removeSuffix "-gnu" buildPlatform.config) + "-musl";
-  fakeHostPlatform = (lib.strings.removeSuffix "-gnu" hostPlatform.config) + "-musl";
+  # HACK: Changing the platforms however breaks i686-linux,
+  # so we only do it for aarch64-linux.
+  fakeBuildPlatform =
+    if buildPlatform.system == "aarch64-linux" then
+      lib.systems.elaborate "${buildPlatform.parsed.cpu.name}-unknown-linux-musl"
+    else
+      buildPlatform;
+  fakeHostPlatform =
+    if hostPlatform.system == "aarch64-linux" then
+      lib.systems.elaborate "${hostPlatform.parsed.cpu.name}-unknown-linux-musl"
+    else
+      hostPlatform;
 in
 bash.runCommand "${pname}-${version}"
   {
@@ -133,8 +143,9 @@ bash.runCommand "${pname}-${version}"
 
     bash ./configure \
       --prefix=$out \
-      --build=${fakeBuildPlatform} \
-      --host=${fakeHostPlatform} \
+      --build=${fakeBuildPlatform.config} \
+      --host=${fakeHostPlatform.config} \
+      --target=${fakeHostPlatform.config} \
       --with-native-system-header-dir=/include \
       --with-sysroot=${musl} \
       --enable-languages=c,c++ \
