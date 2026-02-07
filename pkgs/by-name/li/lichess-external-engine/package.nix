@@ -1,11 +1,10 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
-  requests,
 }:
 
-buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "lichess-external-engine";
   version = "a6ef15a8e395eb609535857aabf18837ea7696cf";
   pyproject = false;
@@ -17,7 +16,7 @@ buildPythonApplication (finalAttrs: {
     sha256 = "18dwzrcvzycmgjsij3lyrih0n1824kv87bl3bl7f4zg9rr46ksci";
   };
 
-  dependencies = [
+  dependencies = with python3Packages; [
     requests
   ];
 
