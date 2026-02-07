@@ -154,7 +154,9 @@ bash.runCommand "${pname}-${version}"
       --disable-libsanitizer \
       --disable-lto \
       --disable-multilib \
-      --disable-plugin
+      --disable-plugin \
+      --disable-libssp \
+      --with-specs="-fno-stack-protector"
 
     # Build
     make -j $NIX_BUILD_CORES
