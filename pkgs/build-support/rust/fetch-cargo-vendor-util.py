@@ -166,20 +166,14 @@ def create_vendor_staging(lockfile_path: Path, out_dir: Path) -> None:
             pool.starmap(download_tarball, tarball_args_gen)
 
 
-def get_manifest_metadata(manifest_path: Path) -> dict[str, Any] | None:
+def get_manifest_metadata(manifest_path: Path) -> dict[str, Any]:
     cmd = ["cargo", "metadata", "--format-version", "1", "--no-deps", "--manifest-path", str(manifest_path)]
-    try:
-        output = subprocess.check_output(cmd)
-    except subprocess.CalledProcessError:
-        eprint(f"Skipping manifest due to cargo metadata failure: {manifest_path}")
-        return None
+    output = subprocess.check_output(cmd)
     return json.loads(output)
 
 
 def try_get_crate_manifest_path_from_mainfest_path(manifest_path: Path, crate_name: str) -> Path | None:
     metadata = get_manifest_metadata(manifest_path)
-    if metadata is None:
-        return None
 
     for pkg in metadata["packages"]:
         if pkg["name"] == crate_name:
