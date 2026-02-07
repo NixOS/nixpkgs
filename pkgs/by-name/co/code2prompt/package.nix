@@ -8,7 +8,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "code2prompt";
-  version = "1.1.0";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "mufeedvh";
