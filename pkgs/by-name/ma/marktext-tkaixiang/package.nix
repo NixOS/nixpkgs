@@ -57,11 +57,11 @@ buildNpmPackage rec {
     libxkbfile
   ];
 
-# Package lock in repo doesn't work
+  # Package lock in repo doesn't work
   postPatch = ''
-      rm package-lock.json
-      cp ${./package-lock.json} package-lock.json
-    '';
+    rm package-lock.json
+    cp ${./package-lock.json} package-lock.json
+  '';
 
   buildPhase = ''
     npm run build:linux -- --linux --dir \
@@ -69,32 +69,32 @@ buildNpmPackage rec {
       --config.electronVersion=${electron.version}
   '';
 
-installPhase = ''
-  mkdir -p $out/lib/marktext
-  cp -r dist/linux-unpacked/* $out/lib/marktext/
+  installPhase = ''
+      mkdir -p $out/lib/marktext
+      cp -r dist/linux-unpacked/* $out/lib/marktext/
 
-# Patch the process.resourcesPath
-  asar extract $out/lib/marktext/resources/app.asar patched-asar
-  sed -i \
-    "s#process\\.resourcesPath#'$out/lib/marktext/resources'#g" \
-    patched-asar/out/main/index.js
-  asar pack patched-asar $out/lib/marktext/resources/app.asar
+    # Patch the process.resourcesPath
+      asar extract $out/lib/marktext/resources/app.asar patched-asar
+      sed -i \
+        "s#process\\.resourcesPath#'$out/lib/marktext/resources'#g" \
+        patched-asar/out/main/index.js
+      asar pack patched-asar $out/lib/marktext/resources/app.asar
 
-  mkdir -p $out/bin
-  makeWrapper ${electron}/bin/electron $out/bin/marktext \
-    --add-flags "--app=$out/lib/marktext/resources/app.asar"\
-    --chdir $out/lib/marktext/resources \
+      mkdir -p $out/bin
+      makeWrapper ${electron}/bin/electron $out/bin/marktext \
+        --add-flags "--app=$out/lib/marktext/resources/app.asar"\
+        --chdir $out/lib/marktext/resources
 
-    install -Dm444 \
-        ${desktopItem}/share/applications/*.desktop \
-        $out/share/applications/marktext.desktop
-'';
+        install -Dm444 \
+            ${desktopItem}/share/applications/*.desktop \
+            $out/share/applications/marktext.desktop
+  '';
 
-    meta = with lib; {
+  meta = with lib; {
     description = "Modern Markdown Editor (fork by tkaixiang)";
     homepage = "https://github.com/Tkaixiang/marktext";
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
     mainProgram = "marktext";
   };
 }
