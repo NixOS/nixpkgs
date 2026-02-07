@@ -118,10 +118,6 @@ makeScopeWithSplicing' {
 
       qtspell = callPackage ../development/libraries/qtspell { };
 
-      qwlroots = callPackage ../development/libraries/qwlroots {
-        wlroots = pkgs.wlroots_0_18;
-      };
-
       qwt = callPackage ../development/libraries/qwt/default.nix { };
 
       qxlsx = callPackage ../development/libraries/qxlsx { };
