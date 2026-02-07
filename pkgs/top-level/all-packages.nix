@@ -3033,7 +3033,7 @@ with pkgs;
 
   licensee = callPackage ../tools/package-management/licensee { };
 
-  lichess-external-engine = python3Packages.callPackage ../by-name/li/lichess-external-engine/package.nix { };
+  lichess-external-engine = callPackage ../by-name/li/lichess-external-engine/package.nix { };
 
   inherit
     ({
