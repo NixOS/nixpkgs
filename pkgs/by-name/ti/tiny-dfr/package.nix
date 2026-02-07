@@ -16,16 +16,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tiny-dfr";
-  version = "0.3.5";
+  version = "0.3.6";
 
   src = fetchFromGitHub {
     owner = "AsahiLinux";
     repo = "tiny-dfr";
-    tag = "v${version}";
-    hash = "sha256-G4OeYZH3VF6fKWxHYLTmwzQmQ4JupgYNH/6aJSgINvg=";
+    rev = "a04f1abf4179d0e3c2ddf5c9b1a442b923680ef9";
+    hash = "sha256-dUqF1ct/ioR5+cA06S8BIA8yc3FksLC0vj+FQEUfpXI=";
   };
 
-  cargoHash = "sha256-/PtoAc2ZNJfW5gegcFQAAlEmjSMysZ+QebVfHtW35Nk=";
+  cargoHash = "sha256-ObE4aYHfCeQdamhSZmZbgNSHawRyUl5xFWdIhor16pI=";
 
   nativeBuildInputs = [
     pkg-config
