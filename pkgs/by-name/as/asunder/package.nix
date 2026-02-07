@@ -36,11 +36,11 @@ let
 in
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "3.0.1";
+  version = "3.0.2";
   pname = "asunder";
   src = fetchurl {
     url = "http://littlesvr.ca/asunder/releases/asunder-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-iGji4bl7ZofIAOf2EiYqMWu4V+3TmIN2jOYottJTN2s=";
+    hash = "sha256-txNB10bM9WqnexeFxq+BqmQdCErD00t4vrU3YYhItks=";
   };
 
   nativeBuildInputs = [
