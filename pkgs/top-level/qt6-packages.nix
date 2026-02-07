@@ -149,8 +149,6 @@ makeScopeWithSplicing' {
 
       timed = callPackage ../applications/system/timed { };
 
-      waylib = callPackage ../development/libraries/waylib { };
-
       wayqt = callPackage ../development/libraries/wayqt { };
     }
   );
