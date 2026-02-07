@@ -13,6 +13,14 @@ let
     config.allowAliases = false;
   };
 
+  nixpkgsRoot = toString ../../.. + "/";
+
+  fileMaintainers =
+    # Currently just nixos module maintainers, but in the future we can use this for code owners too
+    lib.mapAttrs' (
+      file: maintainers: lib.nameValuePair (lib.removePrefix nixpkgsRoot file) maintainers
+    ) (pkgs.nixos { }).config.meta.maintainers;
+
   changedpaths = lib.importJSON changedpathsjson;
 
   # Extract attributes that changed from by-name paths.
@@ -94,39 +102,42 @@ let
   attrsWithModifiedFiles = lib.filter (pkg: anyMatchingFiles pkg.filenames) attrsWithFilenames;
 
   userPings =
-    pkg:
+    context:
     map (maintainer: {
       type = "user";
       userId = maintainer.githubId;
-      packageName = pkg.name;
+      inherit context;
     });
 
   teamPings =
-    pkg: team:
+    context: team:
     if team ? github then
       [
         {
           type = "team";
           teamId = team.githubId;
-          packageName = pkg.name;
+          inherit context;
         }
       ]
     else
-      userPings pkg team.members;
+      userPings context team.members;
 
-  maintainersToPing = lib.concatMap (
-    pkg: userPings pkg pkg.users ++ lib.concatMap (teamPings pkg) pkg.teams
-  ) attrsWithModifiedFiles;
+  maintainersToPing =
+    lib.concatMap (
+      pkg:
+      userPings { attr = pkg.name; } pkg.users ++ lib.concatMap (teamPings { pkg = pkg.name; }) pkg.teams
+    ) attrsWithModifiedFiles
+    ++ lib.concatMap (path: userPings { file = path; } (fileMaintainers.${path} or [ ])) changedpaths;
 
   byType = lib.groupBy (ping: ping.type) maintainersToPing;
 
   byUser = lib.pipe (byType.user or [ ]) [
     (lib.groupBy (ping: toString ping.userId))
-    (lib.mapAttrs (_user: lib.map (pkg: pkg.packageName)))
+    (lib.mapAttrs (_user: lib.map (pkg: pkg.context)))
   ];
   byTeam = lib.pipe (byType.team or [ ]) [
     (lib.groupBy (ping: toString ping.teamId))
-    (lib.mapAttrs (_team: lib.map (pkg: pkg.packageName)))
+    (lib.mapAttrs (_team: lib.map (pkg: pkg.context)))
   ];
 in
 {
