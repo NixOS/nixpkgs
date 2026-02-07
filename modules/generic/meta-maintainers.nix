@@ -17,7 +17,14 @@ in
   options = {
     meta = {
       maintainers = mkOption {
-        type = sourceList;
+        type =
+          let
+            allMaintainers = lib.attrValues lib.maintainers;
+          in
+          lib.types.addCheck sourceList (lib.all (v: lib.elem v allMaintainers))
+          // {
+            description = "list of lib.maintainers";
+          };
         default = [ ];
         example = lib.literalExpression "[ lib.maintainers.alice lib.maintainers.bob ]";
         description = ''
