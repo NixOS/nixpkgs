@@ -37,11 +37,12 @@ buildPythonApplication (finalAttrs: {
     $out/bin/lichess-external-engine --help
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Using engines running outside of the browser for analysis on lichess";
     homepage = "https://github.com/lichess-org/external-engine";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ malix ];
     mainProgram = "lichess-external-engine";
   };
+
 })
