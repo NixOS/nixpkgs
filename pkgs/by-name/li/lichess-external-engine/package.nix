@@ -8,7 +8,7 @@
 buildPythonApplication (finalAttrs: {
   pname = "lichess-external-engine";
   version = "a6ef15a8e395eb609535857aabf18837ea7696cf";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "lichess-org";
