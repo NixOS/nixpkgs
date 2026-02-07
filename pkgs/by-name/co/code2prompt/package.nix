@@ -4,6 +4,7 @@
   rustPlatform,
   pkg-config,
   openssl,
+  perl,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -13,22 +14,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "mufeedvh";
     repo = "code2prompt";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-KZqh0Vq4Mn56PhUO1JUzVpNBAGOZqUAsj31Cj5K+Lyk=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  cargoHash = "sha256-t4HpGqojIkw9OBUAYz4ZEaB7XyHQxkFB2HtlkGKbe2s=";
 
-  postPatch = ''
-    # src is missing Cargo.lock
-    ln -s ${./Cargo.lock} Cargo.lock
-  '';
+  nativeBuildInputs = [
+    pkg-config
+    perl
+  ];
 
-  nativeBuildInputs = [ pkg-config ];
-
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+  ];
 
   meta = {
     description = "CLI tool that converts your codebase into a single LLM prompt with a source tree, prompt templating, and token counting";
