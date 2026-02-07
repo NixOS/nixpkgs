@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "lichess-external-engine";
-  version = "a6ef15a8e395eb609535857aabf18837ea7696cf";
+  version = "1.0.0-unstable-2024-05-10";
   pyproject = false;
 
   src = fetchFromGitHub {
