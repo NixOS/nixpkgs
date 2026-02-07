@@ -10,14 +10,14 @@
   docbook_xsl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "20.0";
   pname = "pentobi";
 
   src = fetchFromGitHub {
     owner = "enz";
     repo = "pentobi";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-DQM3IJ0pRkX4OsrjZGROg50LfKb621UnpvtqSjxchz8=";
   };
 
@@ -56,4 +56,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

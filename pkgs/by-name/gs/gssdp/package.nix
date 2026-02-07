@@ -20,7 +20,7 @@
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gssdp";
   version = "1.4.1";
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   ++ lib.optionals withIntrospection [ "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gssdp/${lib.versions.majorMinor version}/gssdp-${version}.tar.xz";
+    url = "mirror://gnome/sources/gssdp/${lib.versions.majorMinor finalAttrs.version}/gssdp-${finalAttrs.version}.tar.xz";
     sha256 = "VySWVDV9PVGxQDFRaaJMBnHeeqUsb3XIxcmr1Ao1JSk=";
   };
 
@@ -106,4 +106,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.all;
   };
-}
+})

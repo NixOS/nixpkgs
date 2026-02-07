@@ -16,13 +16,13 @@
   mpg123,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zdoom";
   majorVersion = "2.8";
   version = "${majorVersion}.1";
 
   src = fetchurl {
-    url = "https://zdoom.org/files/zdoom/${majorVersion}/zdoom-${version}-src.7z";
+    url = "https://zdoom.org/files/zdoom/${majorVersion}/zdoom-${finalAttrs.version}-src.7z";
     sha256 = "0453fqrh9l00xwphfxni5qkf9y134n3s1mr1dvi5cbkxcva7j8bq";
   };
 
@@ -79,4 +79,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ lassulus ];
   };
-}
+})

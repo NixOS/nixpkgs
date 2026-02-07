@@ -18,7 +18,7 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "muse-sounds-manager";
   version = "2.1.1.912";
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     stdenv.cc.cc
     zlib
   ]
-  ++ runtimeDependencies;
+  ++ finalAttrs.runtimeDependencies;
 
   runtimeDependencies = map lib.getLib [
     icu
@@ -87,4 +87,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-}
+})

@@ -8,12 +8,12 @@
   copyDesktopItems,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "jflap";
   version = "7.1";
 
   src = fetchurl {
-    url = "https://www.jflap.org/jflaptmp/july27-18/JFLAP${version}.jar";
+    url = "https://www.jflap.org/jflaptmp/july27-18/JFLAP${finalAttrs.version}.jar";
     sha256 = "oiwJXdxWsYFj6Ovu7xZbOgTLVw8160a5YQUWbgbJlAY=";
   };
 
@@ -38,7 +38,7 @@ stdenvNoCC.mkDerivation rec {
         url = "https://www.jflap.org/jflapLogo2.jpg";
         sha256 = "sha256-IiworHI+GT6Fm6B0E+FXnKe+hN8nZYPrxHGZFAcsWDw=";
       };
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       categories = [
         "Development"
         "Education"
@@ -70,4 +70,4 @@ stdenvNoCC.mkDerivation rec {
     ];
     platforms = jre8.meta.platforms;
   };
-}
+})

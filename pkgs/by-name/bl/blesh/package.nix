@@ -7,12 +7,12 @@
   glibcLocales,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "blesh";
   version = "0.4.0-devel3";
 
   src = fetchzip {
-    url = "https://github.com/akinomyoga/ble.sh/releases/download/v${version}/ble-${version}.tar.xz";
+    url = "https://github.com/akinomyoga/ble.sh/releases/download/v${finalAttrs.version}/ble-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-kGLp8RaInYSrJEi3h5kWEOMAbZV/gEPFUjOLgBuMhCI=";
   };
 
@@ -66,4 +66,4 @@ stdenvNoCC.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

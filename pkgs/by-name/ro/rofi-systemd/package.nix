@@ -11,14 +11,14 @@
   jq,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rofi-systemd";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "IvanMalison";
     repo = "rofi-systemd";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "1zwbw119mblp5b6dj4h92fi0y2ymimlgh4bawi5ks2051hpq6c1a";
   };
 
@@ -54,4 +54,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux;
     mainProgram = "rofi-systemd";
   };
-}
+})

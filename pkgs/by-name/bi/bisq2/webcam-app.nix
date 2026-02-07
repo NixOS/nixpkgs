@@ -20,12 +20,12 @@ let
   launcher = writeShellScript "bisq2-webcam-app-launcher" ''
     ${socat}/bin/socat TCP-LISTEN:8000,keepalive,fork STDIO &
     socat_pid=$!
-    LD_LIBRARY_PATH=${libraryPath} "${lib.getExe jdk}" -classpath @out@/lib/app/webcam-app-${version}-all.jar:${bisq2}/lib/app/* bisq.webcam.WebcamAppLauncher "$@"
+    LD_LIBRARY_PATH=${libraryPath} "${lib.getExe jdk}" -classpath @out@/lib/app/webcam-app-${finalAttrs.version}-all.jar:${bisq2}/lib/app/* bisq.webcam.WebcamAppLauncher "$@"
     kill $socat_pid
   '';
 in
-stdenv.mkDerivation rec {
-  inherit version;
+stdenv.mkDerivation (finalAttrs: {
+  inherit (finalAttrs) version;
 
   pname = "bisq2-webcam-app";
   src = bisq2;
@@ -47,10 +47,10 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out/lib/app $out/bin
-    cp webcam-app-${version}-all.jar $out/lib/app/
+    cp webcam-app-${finalAttrs.version}-all.jar $out/lib/app/
     install -D -m 777 ${launcher} $out/bin/bisq2-webcam-app
     substituteAllInPlace $out/bin/bisq2-webcam-app
 
     runHook postInstall
   '';
-}
+})

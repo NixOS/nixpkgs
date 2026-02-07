@@ -33,14 +33,14 @@ let
     ]
   );
 in
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "moonraker";
   version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "Arksine";
     repo = "moonraker";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-jprhbO3wQF/ozOf6VUrDYqNK0TstmLc4nZsZrB6hjOY=";
   };
 
@@ -66,4 +66,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ zhaofengli ];
     mainProgram = "moonraker";
   };
-}
+})

@@ -6,16 +6,16 @@
   wrapGNUstepAppsHook,
 }:
 
-clangStdenv.mkDerivation rec {
+clangStdenv.mkDerivation (finalAttrs: {
   pname = "pikopixel";
   version = "1.0-b10";
 
   src = fetchurl {
-    url = "https://twilightedge.com/downloads/PikoPixel.Sources.${version}.tar.gz";
+    url = "https://twilightedge.com/downloads/PikoPixel.Sources.${finalAttrs.version}.tar.gz";
     sha256 = "1b27npgsan2nx1p581b9q2krx4506yyd6s34r4sf1r9x9adshm77";
   };
 
-  sourceRoot = "PikoPixel.Sources.${version}/PikoPixel";
+  sourceRoot = "PikoPixel.Sources.${finalAttrs.version}/PikoPixel";
 
   nativeBuildInputs = [
     wrapGNUstepAppsHook
@@ -45,4 +45,4 @@ clangStdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.all;
   };
-}
+})

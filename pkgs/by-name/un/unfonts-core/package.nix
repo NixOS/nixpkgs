@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "unfonts-core";
   version = "1.0.2-080608";
 
   src = fetchurl {
-    url = "https://kldp.net/unfonts/release/2607-un-fonts-core-${version}.tar.gz";
+    url = "https://kldp.net/unfonts/release/2607-un-fonts-core-${finalAttrs.version}.tar.gz";
     hash = "sha256-OwpydPmqt+jw8ZOMAacOFYF2bVG0lLoUVoPzesVXkY4=";
   };
 
@@ -32,4 +32,4 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.all;
   };
-}
+})

@@ -23,7 +23,7 @@ let
   );
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   srcVersion = "nov25a";
   version = "20251101_a";
   pname = "gildas";
@@ -32,8 +32,8 @@ stdenv.mkDerivation rec {
     # For each new release, the upstream developers of Gildas move the
     # source code of the previous release to a different directory
     urls = [
-      "http://www.iram.fr/~gildas/dist/gildas-src-${srcVersion}.tar.xz"
-      "http://www.iram.fr/~gildas/dist/archive/gildas/gildas-src-${srcVersion}.tar.xz"
+      "http://www.iram.fr/~gildas/dist/gildas-src-${finalAttrs.srcVersion}.tar.xz"
+      "http://www.iram.fr/~gildas/dist/archive/gildas/gildas-src-${finalAttrs.srcVersion}.tar.xz"
     ];
     hash = "sha256-1wUKOW0DtGuxggZXzZf2aXRf9F4EFkgU5D4SjK8EwXM=";
   };
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     mkdir -p $out/bin
-    cp -a ../gildas-exe-${srcVersion}/* $out
+    cp -a ../gildas-exe-${finalAttrs.srcVersion}/* $out
     mv $out/$GAG_EXEC_SYSTEM $out/libexec
     for i in ${userExec} ; do
       cp admin/wrapper.sh $out/bin/$i
@@ -114,4 +114,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
   };
 
-}
+})

@@ -18,19 +18,19 @@
   sqlite,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "notify-client";
   version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "ranfdev";
     repo = "notify";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-0p/XIGaawreGHbMRoHNmUEIxgwEgigtrubeJpndHsug=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-hnv4XXsx/kmhH4YUTdTvvxxjbguHBx3TnUKacGwnCTw=";
   };
 
@@ -62,4 +62,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.platforms.linux;
   };
-}
+})

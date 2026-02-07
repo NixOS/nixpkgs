@@ -9,14 +9,14 @@
   stdenvNoCC,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "quill-qr";
   version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "IvanMalison";
     repo = "quill-qr";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1kdsq6csmxfvs2wy31bc9r92l5pkmzlzkyqrangvrf4pbk3sk0r6";
   };
 
@@ -46,4 +46,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ imalison ];
     platforms = with lib.platforms; linux;
   };
-}
+})

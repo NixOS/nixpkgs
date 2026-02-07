@@ -5,12 +5,12 @@
   dpkg,
   sdbus-cpp,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "msalsdk-dbusclient";
   version = "1.0.1";
 
   src = fetchurl {
-    url = "https://packages.microsoft.com/ubuntu/22.04/prod/pool/main/m/msalsdk-dbusclient/msalsdk-dbusclient_${version}_amd64.deb";
+    url = "https://packages.microsoft.com/ubuntu/22.04/prod/pool/main/m/msalsdk-dbusclient/msalsdk-dbusclient_${finalAttrs.version}_amd64.deb";
     hash = "sha256-AVPrNxCjXGza2gGETP0YrlXeEgI6AjlrSVTtqKb2UBI=";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ rhysmdnz ];
   };
-}
+})

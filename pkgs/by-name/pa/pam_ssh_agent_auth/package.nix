@@ -10,14 +10,14 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pam_ssh_agent_auth";
   version = "0.10.4";
 
   src = fetchFromGitHub {
     owner = "jbeverly";
     repo = "pam_ssh_agent_auth";
-    rev = "pam_ssh_agent_auth-${version}";
+    rev = "pam_ssh_agent_auth-${finalAttrs.version}";
     sha256 = "YD1R8Cox0UoNiuWleKGzWSzxJ5lhDRCB2mZPp9OM6Cs=";
   };
 
@@ -100,4 +100,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

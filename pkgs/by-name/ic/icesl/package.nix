@@ -37,20 +37,20 @@ let
     libgccjit
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "iceSL";
   version = "2.4.1";
 
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchzip {
-        url = "https://icesl.loria.fr/assets/other/download.php?build=${version}&os=amd64";
+        url = "https://icesl.loria.fr/assets/other/download.php?build=${finalAttrs.version}&os=amd64";
         extension = "zip";
         sha256 = "0rrnkqkhlsjclif5cjbf17qz64vs95ja49xarxjvq54wb4jhbs4l";
       }
     else if stdenv.hostPlatform.system == "i686-linux" then
       fetchzip {
-        url = "https://icesl.loria.fr/assets/other/download.php?build=${version}&os=i386";
+        url = "https://icesl.loria.fr/assets/other/download.php?build=${finalAttrs.version}&os=i386";
         extension = "zip";
         sha256 = "0n2yyxzw0arkc70f0qli4n5chdlh9vc7aqizk4v7825mcglhwlyh";
       }
@@ -84,4 +84,4 @@ stdenv.mkDerivation rec {
     ];
     maintainers = with lib.maintainers; [ mgttlinger ];
   };
-}
+})

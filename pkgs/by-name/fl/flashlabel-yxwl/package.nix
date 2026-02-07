@@ -6,14 +6,14 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flashlabel-yxwl";
   version = "1.2.1";
 
   # The source URL currently redirects through “pCloud”, a file storage service
   # that resists direct downloads.
   src = requireFile {
-    name = "A4_Linux_Driver_Ver${version}.run";
+    name = "A4_Linux_Driver_Ver${finalAttrs.version}.run";
     url = "https://flashlabel.net/YXWL-A4driver-linux";
     hash = "sha256-qkc3NJ1dK0nJf+Q7xL7f1/+X0COWSWMEbH4luzaFARc=";
   };
@@ -84,4 +84,4 @@ stdenv.mkDerivation rec {
       AndrewKvalheim
     ];
   };
-}
+})

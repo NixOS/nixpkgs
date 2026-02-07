@@ -20,14 +20,14 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "GameHub";
   version = "0.16.3-2";
 
   src = fetchFromGitHub {
     owner = "tkashkin";
     repo = "GameHub";
-    rev = "${version}-master";
+    rev = "${finalAttrs.version}-master";
     hash = "sha256-dBGzXwDO9BvnEIcdfqlGnMzUdBqaVA96Ds0fY6eukes=";
   };
 
@@ -67,4 +67,4 @@ stdenv.mkDerivation rec {
     license = with lib.licenses; [ gpl3Only ];
     platforms = lib.platforms.linux;
   };
-}
+})

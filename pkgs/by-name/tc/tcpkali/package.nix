@@ -10,13 +10,13 @@ let
   version = "1.1.1";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tcpkali";
-  inherit version;
+  inherit (finalAttrs) version;
   src = fetchFromGitHub {
     owner = "machinezone";
     repo = "tcpkali";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "09ky3cccaphcqc6nhfs00pps99lasmzc2pf5vk0gi8hlqbbhilxf";
   };
   postPatch = ''
@@ -27,9 +27,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "High performance TCP and WebSocket load generator and sink";
     license = lib.licenses.bsd2;
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ ethercrow ];
     mainProgram = "tcpkali";
   };
-}
+})

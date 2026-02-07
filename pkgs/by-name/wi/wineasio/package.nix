@@ -11,24 +11,24 @@
   qt6,
 }:
 
-multiStdenv.mkDerivation rec {
+multiStdenv.mkDerivation (finalAttrs: {
   pname = "wineasio";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "wineasio";
     repo = "wineasio";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Yw07XBzllbZ7l1XZcCvEaxZieaHLVxM5cmBM+HAjtQ4=";
     fetchSubmodules = true;
   };
 
   wineasio-settings = python3Packages.buildPythonApplication {
-    inherit src version;
+    inherit (finalAttrs) src version;
     pname = "wineasio-settings";
     pyproject = false;
 
-    sourceRoot = "${src.name}/gui";
+    sourceRoot = "${finalAttrs.src.name}/gui";
 
     postPatch = ''
       patchShebangs wineasio-settings
@@ -88,7 +88,7 @@ multiStdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/wineasio/wineasio";
-    changelog = "https://github.com/wineasio/wineasio/releases/tag/${src.tag}";
+    changelog = "https://github.com/wineasio/wineasio/releases/tag/${finalAttrs.src.tag}";
     description = "ASIO to JACK driver for WINE";
     license = with lib.licenses; [
       gpl2
@@ -97,4 +97,4 @@ multiStdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ lovesegfault ];
     platforms = lib.platforms.linux;
   };
-}
+})

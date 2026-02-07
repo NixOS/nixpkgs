@@ -10,13 +10,13 @@
 let
   codepoints_set = writeText "codepoints.set" (builtins.concatStringsSep "\n" codepoints);
 in
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cozette";
   version = "1.30.0";
 
   src = fetchzip {
-    url = "https://github.com/slavfox/Cozette/releases/download/v.${version}/CozetteFonts-v-${
-      builtins.replaceStrings [ "." ] [ "-" ] version
+    url = "https://github.com/slavfox/Cozette/releases/download/v.${finalAttrs.version}/CozetteFonts-v-${
+      builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     }.zip";
     hash = "sha256-Njh6V5wTBKM/1QKmPwG1qiOYyAJSVQXLTBLN03V6DaE=";
   };
@@ -53,9 +53,9 @@ stdenvNoCC.mkDerivation rec {
   meta = {
     description = "Bitmap programming font optimized for coziness";
     homepage = "https://github.com/slavfox/cozette";
-    changelog = "https://github.com/slavfox/Cozette/blob/v.${version}/CHANGELOG.md";
+    changelog = "https://github.com/slavfox/Cozette/blob/v.${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ brettlyons ];
   };
-}
+})

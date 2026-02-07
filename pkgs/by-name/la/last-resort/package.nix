@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "last-resort";
   version = "17.000";
 
   src = fetchurl {
-    url = "https://github.com/unicode-org/last-resort-font/releases/download/${version}/LastResortHE-Regular.ttf";
+    url = "https://github.com/unicode-org/last-resort-font/releases/download/${finalAttrs.version}/LastResortHE-Regular.ttf";
     hash = "sha256-OpNv4jeenhZKj5gZCVy/U9kwWi0IUy2b5bSW9L5FvN4=";
   };
 
@@ -29,4 +29,4 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.ofl;
     maintainers = [ ];
   };
-}
+})

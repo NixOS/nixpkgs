@@ -4,14 +4,14 @@
   stdenvNoCC,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "swiftdefaultapps";
   version = "2.0.1";
 
   # Fetch the release which includes the prebuild binary since this is a Swift project and nixpkgs
   # doesn't currently have the ability to build Swift projects.
   src = fetchzip {
-    url = "https://github.com/Lord-Kamina/SwiftDefaultApps/releases/download/v${version}/SwiftDefaultApps-v${version}.zip";
+    url = "https://github.com/Lord-Kamina/SwiftDefaultApps/releases/download/v${finalAttrs.version}/SwiftDefaultApps-v${finalAttrs.version}.zip";
     stripRoot = false;
     sha256 = "sha256-0HsHjZBPUzmdvHy7E9EdZj6zwaXjSX2u5aj8pij0u3E=";
   };
@@ -30,4 +30,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.darwin;
     mainProgram = "swda";
   };
-}
+})

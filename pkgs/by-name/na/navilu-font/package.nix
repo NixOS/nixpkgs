@@ -5,14 +5,14 @@
   fontforge,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "navilu-font";
   version = "1.2";
 
   src = fetchFromGitHub {
     owner = "aravindavk";
     repo = "Navilu";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1vm6n04siaa0zf6jzp5s2gzgr2qxs3vdnmcmg4dcy07py2kd2fla";
   };
 
@@ -31,4 +31,4 @@ stdenvNoCC.mkDerivation rec {
       license = lib.licenses.gpl3Plus;
       platforms = lib.platforms.all;
     };
-}
+})

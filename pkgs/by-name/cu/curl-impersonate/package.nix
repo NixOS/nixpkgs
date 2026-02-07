@@ -25,7 +25,7 @@
   p11-kit,
   nixosTests,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "curl-impersonate";
   version = "1.4.2";
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "lexiforest";
     repo = "curl-impersonate";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-c24KaYc0cH6b+92kg02mMtTp7ZVu36LeDpW5xjxuzk4=";
   };
 
@@ -100,13 +100,13 @@ stdenv.mkDerivation rec {
 
   postUnpack =
     lib.concatStringsSep "\n" (
-      lib.mapAttrsToList (name: dep: "ln -sT ${dep.outPath} ${src.name}/${name}") (
+      lib.mapAttrsToList (name: dep: "ln -sT ${dep.outPath} ${finalAttrs.src.name}/${name}") (
         lib.filterAttrs (n: v: v ? outPath) passthru.deps
       )
     )
     + ''
 
-      curltar=$(realpath -s ${src.name}/curl-*.tar.gz)
+      curltar=$(realpath -s ${finalAttrs.src.name}/curl-*.tar.gz)
 
       pushd "$(mktemp -d)"
 
@@ -198,13 +198,13 @@ stdenv.mkDerivation rec {
         proxyVendor = true;
       }).goModules;
 
-    inherit src;
+    inherit (finalAttrs) src;
 
     tests = { inherit (nixosTests) curl-impersonate; };
   };
 
   meta = {
-    changelog = "https://github.com/lexiforest/curl-impersonate/releases/tag/${src.tag}";
+    changelog = "https://github.com/lexiforest/curl-impersonate/releases/tag/${finalAttrs.src.tag}";
     description = "Special build of curl that can impersonate Chrome, Edge, Safari and Firefox";
     homepage = "https://github.com/lexiforest/curl-impersonate";
     license = with lib.licenses; [
@@ -215,4 +215,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "curl-impersonate";
   };
-}
+})

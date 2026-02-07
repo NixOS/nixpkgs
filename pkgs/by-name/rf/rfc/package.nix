@@ -7,14 +7,14 @@
   makeWrapper,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "rfc";
   version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "bfontaine";
     repo = "rfc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-bCqgLkbZGQFcxhLwekVw+rUGinXTc7QJHlVRGtNf6Jc=";
   };
 
@@ -44,10 +44,10 @@ stdenvNoCC.mkDerivation rec {
       It fetches RFCs and drafts from the Web and caches them locally.
     '';
     homepage = "https://github.com/bfontaine/rfc";
-    changelog = "https://github.com/bfontaine/rfc/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/bfontaine/rfc/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ azahi ];
     platforms = lib.platforms.all;
     mainProgram = "rfc";
   };
-}
+})

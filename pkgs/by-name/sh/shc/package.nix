@@ -4,10 +4,10 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "shc";
   version = "4.0.3";
-  rev = version;
+  rev = finalAttrs.version;
 
   src = fetchFromGitHub {
     inherit rev;
@@ -23,4 +23,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     license = lib.licenses.gpl3;
   };
-}
+})

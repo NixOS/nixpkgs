@@ -20,7 +20,7 @@
   udev,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bluemail";
   version = "1.140.93";
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       icon = "bluemail";
       exec = "bluemail";
       desktopName = "BlueMail";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       genericName = "Email Reader";
       mimeTypes = [
         "x-scheme-handler/me.blueone.linux"
@@ -125,4 +125,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "bluemail";
   };
-}
+})

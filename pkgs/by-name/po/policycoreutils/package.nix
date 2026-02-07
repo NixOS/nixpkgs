@@ -9,13 +9,13 @@
   libxcrypt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "policycoreutils";
   version = "3.8.1";
   inherit (libsepol) se_url;
 
   src = fetchurl {
-    url = "${se_url}/${version}/policycoreutils-${version}.tar.gz";
+    url = "${se_url}/${finalAttrs.version}/policycoreutils-${finalAttrs.version}.tar.gz";
     hash = "sha256-7vIxlrUB0UHLlfX8Uu8acon0WbZeRBXqD+mu7cXYDvI=";
   };
 
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
     inherit (libsepol.meta) homepage platforms maintainers;
   };
-}
+})

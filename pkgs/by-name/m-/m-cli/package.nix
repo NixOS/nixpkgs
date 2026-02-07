@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "m-cli";
   version = "2.0.5";
 
   src = fetchFromGitHub {
     owner = "rgcr";
     repo = "m-cli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-41o7RoRlHwAmzSREDhQpq2Lchkz8QPxJRqN42ShUJb8=";
   };
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       gsub(/^\[ -L.*|^\s+\|\| pushd.*|^popd.*/, "");
       gsub(/MPATH=.*/, "MPATH='$MPATH'");
       gsub(/(update|uninstall)_mcli \&\&.*/, "echo NOOP \\&\\& exit 0");
-      gsub(/get_version \&\&.*/, "echo m-cli version: ${version} \\&\\& exit 0");
+      gsub(/get_version \&\&.*/, "echo m-cli version: ${finalAttrs.version} \\&\\& exit 0");
       print
     }' m
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Swiss Army Knife for macOS";
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
 
     license = lib.licenses.mit;
 
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "m";
   };
-}
+})

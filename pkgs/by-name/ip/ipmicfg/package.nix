@@ -4,13 +4,13 @@
   fetchzip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ipmicfg";
   version = "1.34.0";
   buildVersion = "220906";
 
   src = fetchzip {
-    url = "https://www.supermicro.com/Bios/sw_download/481/IPMICFG_${version}_build.${buildVersion}.zip";
+    url = "https://www.supermicro.com/Bios/sw_download/481/IPMICFG_${finalAttrs.version}_build.${buildVersion}.zip";
     hash = "sha256-ZumCXuR7M2Ep7maBOBFk0UsxyRo4fBkf+9AVmkz4AF0=";
   };
 
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ sorki ];
   };
-}
+})

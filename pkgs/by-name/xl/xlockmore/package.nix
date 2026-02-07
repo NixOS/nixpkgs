@@ -11,12 +11,12 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xlockmore";
   version = "5.87";
 
   src = fetchurl {
-    url = "http://sillycycle.com/xlock/xlockmore-${version}.tar.xz";
+    url = "http://sillycycle.com/xlock/xlockmore-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-Pzu/xN3jCMqA05MHj1FTiSHaKzx11cKmBkIOEpVga3s=";
     curlOpts = "--user-agent 'Mozilla/5.0'";
   };
@@ -60,4 +60,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "xlock";
   };
-}
+})

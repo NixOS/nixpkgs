@@ -4,12 +4,12 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "edukai";
   version = "5.0";
 
   src = fetchzip {
-    url = "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/edukai-${version}.zip";
+    url = "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/edukai-${finalAttrs.version}.zip";
     sha256 = "sha256-3+w9n6GJQg9+HfHYukC7tlm4GVs8vEOO23hrLw6qjTY=";
   };
 
@@ -30,4 +30,4 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.cc-by-nd-30;
     maintainers = with lib.maintainers; [ ShamrockLee ];
   };
-}
+})

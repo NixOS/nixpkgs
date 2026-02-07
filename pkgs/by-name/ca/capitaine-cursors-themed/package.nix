@@ -4,12 +4,12 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "capitaine-cursors-themed";
   version = "5";
 
   src = fetchzip {
-    url = "https://github.com/sainnhe/capitaine-cursors/releases/download/r${version}/Linux.zip";
+    url = "https://github.com/sainnhe/capitaine-cursors/releases/download/r${finalAttrs.version}/Linux.zip";
     stripRoot = false;
     hash = "sha256-ipPpmZKU/xLA45fdOvxVbtFDCUsCYIvzeps/DjhFkNg=";
   };
@@ -29,4 +29,4 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.lgpl3Only;
     platforms = lib.platforms.unix;
   };
-}
+})

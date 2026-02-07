@@ -18,12 +18,12 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lightsoff";
   version = "48.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/lightsoff/${lib.versions.major version}/lightsoff-${version}.tar.xz";
+    url = "mirror://gnome/sources/lightsoff/${lib.versions.major finalAttrs.version}/lightsoff-${finalAttrs.version}.tar.xz";
     hash = "sha256-LsmVAXE9vNE8WlZaLhGMxMwrUCg2s4enc2z7pAqLOYk=";
   };
 
@@ -58,11 +58,11 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://gitlab.gnome.org/GNOME/lightsoff";
-    changelog = "https://gitlab.gnome.org/GNOME/lightsoff/-/blob/${version}/NEWS?ref_type=tags";
+    changelog = "https://gitlab.gnome.org/GNOME/lightsoff/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "Puzzle game, where the objective is to turn off all of the tiles on the board";
     mainProgram = "lightsoff";
     teams = [ lib.teams.gnome ];
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
   };
-}
+})

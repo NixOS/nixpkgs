@@ -10,13 +10,13 @@
   nix-update-script,
   nixosTests,
 }:
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "homer";
   version = "25.11.1";
   src = fetchFromGitHub {
     owner = "bastienwirtz";
     repo = "homer";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-6shFVaCtPQeZCeeswAQHgcXOwVwABNa3ljsdUG63QGo=";
   };
 
@@ -80,4 +80,4 @@ stdenvNoCC.mkDerivation rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})

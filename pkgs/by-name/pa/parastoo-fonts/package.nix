@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "parastoo-fonts";
   version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "rastikerdar";
     repo = "parastoo-font";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-E94B9R2h227D49dscCBsprmb7w0GrQ+2tWOWRf8FH30=";
   };
 
@@ -30,4 +30,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})

@@ -13,14 +13,14 @@
   gnome-themes-extra,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yaru-remix";
   version = "40";
 
   src = fetchFromGitHub {
     owner = "Muqtxdir";
     repo = "yaru-remix";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0xilhw5gbxsyy80ixxgj0nw6w782lz9dsinhi24026li1xny804c";
   };
 
@@ -53,4 +53,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ hoppla20 ];
   };
-}
+})

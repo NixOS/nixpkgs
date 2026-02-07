@@ -5,14 +5,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "x-create-mouse-void";
   version = "0.1";
 
   src = fetchFromGitHub {
     owner = "cas--";
     repo = "XCreateMouseVoid";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "151pv4gmzz9g6nd1xw94hmawlb5z8rgs1jb3x1zpvn3znd7f355c";
   };
 
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ eigengrau ];
     mainProgram = "x-create-mouse-void";
   };
-}
+})

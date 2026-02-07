@@ -32,14 +32,14 @@
 let
   stdenv = gccStdenv;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "justbuild";
   version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "just-buildsystem";
     repo = "justbuild";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ZTwe6S0AH1yQt5mABtIeWuMbiVSKeOZWMFI26fthLsM=";
   };
 
@@ -180,7 +180,7 @@ stdenv.mkDerivation rec {
     tests.version = testers.testVersion {
       package = justbuild;
       command = "just version";
-      version = builtins.replaceStrings [ "." ] [ "," ] version;
+      version = builtins.replaceStrings [ "." ] [ "," ] finalAttrs.version;
     };
   };
 
@@ -188,9 +188,9 @@ stdenv.mkDerivation rec {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Generic build tool";
     homepage = "https://github.com/just-buildsystem/justbuild";
-    changelog = "https://github.com/just-buildsystem/justbuild/releases/tag/v${version}";
+    changelog = "https://github.com/just-buildsystem/justbuild/releases/tag/v${finalAttrs.version}";
     mainProgram = "just";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ clkamp ];
   };
-}
+})

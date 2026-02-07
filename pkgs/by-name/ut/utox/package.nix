@@ -21,7 +21,7 @@
   libopus,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "utox";
 
   version = "0.18.1";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "uTox";
     repo = "uTox";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-DxnolxUTn+CL6TbZHKLHOUMTHhtTSWufzzOTRpKjOwc=";
     fetchSubmodules = true;
   };
@@ -77,4 +77,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

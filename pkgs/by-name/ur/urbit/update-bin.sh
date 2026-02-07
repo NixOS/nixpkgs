@@ -14,7 +14,7 @@ fetch_arch() {
   VER="$1"; ARCH="$2"
   URL="https://github.com/urbit/vere/releases/download/vere-v${VER}/${ARCH}.tgz";
   nix-prefetch "{ stdenv, fetchzip }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = \"vere\"; version = \"${VER}\";
   src = fetchzip { url = \"$URL\"; };
 }
@@ -38,3 +38,4 @@ replace_sha "aarch64-linux" "$VERE_LINUX_AARCH64_SHA256"
 replace_sha "x86_64-linux" "$VERE_LINUX_X64_SHA256"
 replace_sha "aarch64-darwin" "$VERE_DARWIN_AARCH64_SHA256"
 replace_sha "x86_64-darwin" "$VERE_DARWIN_X64_SHA256"
+)

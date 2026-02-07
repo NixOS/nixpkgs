@@ -35,12 +35,12 @@
 # Result:
 # The user can run brprintconf_mfcj880dw in the shell.
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mfcj880dwlpr";
   version = "1.0.0-0";
 
   src = fetchurl {
-    url = "https://download.brother.com/welcome/dlf102038/mfcj880dwlpr-${version}.i386.deb";
+    url = "https://download.brother.com/welcome/dlf102038/mfcj880dwlpr-${finalAttrs.version}.i386.deb";
     hash = "sha256-FoCzAfZgpAf+C2n13lnHRz0tZtxHKhWJsM2fUXNr/qc=";
   };
 
@@ -126,4 +126,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ _6543 ];
     platforms = with lib.platforms; linux;
   };
-}
+})

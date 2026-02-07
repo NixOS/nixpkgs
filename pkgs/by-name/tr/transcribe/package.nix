@@ -21,14 +21,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "transcribe";
   version = "9.50.1";
 
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchzip {
-        url = "https://www.seventhstring.com/xscribe/downlo/xscsetup-${version}.tar.gz";
+        url = "https://www.seventhstring.com/xscribe/downlo/xscsetup-${finalAttrs.version}.tar.gz";
         sha256 = "sha256-FdaUglemrnLC2uSmKDgrYLCPB7Uu/pzp+oA+Zj/9W/s=";
       }
     else
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH_1_0"
-      --prefix LD_LIBRARY_PATH : "${libPath}"
+      --prefix LD_LIBRARY_PATH : "${finalAttrs.libPath}"
     )
   '';
 
@@ -116,4 +116,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "transcribe";
   };
-}
+})

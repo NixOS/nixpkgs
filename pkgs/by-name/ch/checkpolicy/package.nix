@@ -7,13 +7,13 @@
   libsepol,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "checkpolicy";
   version = "3.8.1";
   inherit (libsepol) se_url;
 
   src = fetchurl {
-    url = "${se_url}/${version}/checkpolicy-${version}.tar.gz";
+    url = "${se_url}/${finalAttrs.version}/checkpolicy-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-e0d8UW4mk9i2xRE4YyMXfx19tRwuBOttDejKKzYSDl0=";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
       description = "SELinux policy compiler";
       mainProgram = "checkpolicy";
     };
-}
+})

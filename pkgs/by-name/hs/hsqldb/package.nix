@@ -7,13 +7,13 @@
   jre,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hsqldb";
   version = "2.7.4";
-  underscoreMajMin = lib.replaceStrings [ "." ] [ "_" ] (lib.versions.majorMinor version);
+  underscoreMajMin = lib.replaceStrings [ "." ] [ "_" ] (lib.versions.majorMinor finalAttrs.version);
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/hsqldb/hsqldb/hsqldb_${underscoreMajMin}/hsqldb-${version}.zip";
+    url = "mirror://sourceforge/project/hsqldb/hsqldb/hsqldb_${underscoreMajMin}/hsqldb-${finalAttrs.version}.zip";
     sha256 = "sha256-k4ih0VHD+RV1+kyrx/kiWUqm7P0gEpV66FPoKjpQCNU=";
   };
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.bsd3;
   };
-}
+})

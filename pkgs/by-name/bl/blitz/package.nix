@@ -24,14 +24,14 @@
 let
   inherit (lib) optional optionals;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "blitz++";
   version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "blitzpp";
     repo = "blitz";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-wZDg+4lCd9iHvxuQQE/qs58NorkxZ0+mf+8PKQ57CDE=";
   };
 
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     optional enablePadding "-DARRAY_LENGTH_PADDING=ON"
     ++ optional enableSerialization "-DENABLE_SERIALISATION=ON"
     ++ optional stdenv.hostPlatform.is64bit "-DBZ_FULLY64BIT=ON";
-  # FIXME ++ optional doCheck "-DBUILD_TESTING=ON";
+  # FIXME ++ optional finalAttrs.doCheck "-DBUILD_TESTING=ON";
 
   # skip broken library name detection
   ax_boost_user_serialization_lib = lib.optionalString stdenv.hostPlatform.isDarwin "boost_serialization";
@@ -96,4 +96,4 @@ stdenv.mkDerivation rec {
       multicomponent or vector fields).
     '';
   };
-}
+})

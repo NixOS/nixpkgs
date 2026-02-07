@@ -9,12 +9,12 @@
   less,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "colorless";
   version = "109";
 
   src = fetchurl {
-    url = "http://software.kimmo.suominen.com/colorless-${version}.tar.gz";
+    url = "http://software.kimmo.suominen.com/colorless-${finalAttrs.version}.tar.gz";
     sha256 = "039a140fa11cf153cc4d03e4f753b7ff142cab88ff116b7600ccf9edee81927c";
   };
 
@@ -52,4 +52,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "colorless";
   };
-}
+})

@@ -14,12 +14,12 @@
   libsamplerate,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "darkice";
   version = "1.5";
 
   src = fetchurl {
-    url = "https://github.com/rafael2k/darkice/releases/download/v${version}/darkice-${version}.tar.gz";
+    url = "https://github.com/rafael2k/darkice/releases/download/v${finalAttrs.version}/darkice-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-GLTEVzp8z+CcEJTrV5gVniqYkhBupi11OTP28qdGBY4=";
   };
 
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ ikervagyok ];
   };
-}
+})

@@ -15,12 +15,12 @@
   enablePosixThreads ? false,
   enableOpenMPThreads ? false,
 }:
-gccStdenv.mkDerivation rec {
+gccStdenv.mkDerivation (finalAttrs: {
   pname = "eccodes";
   version = "2.44.0";
 
   src = fetchurl {
-    url = "https://confluence.ecmwf.int/download/attachments/45757960/eccodes-${version}-Source.tar.gz";
+    url = "https://confluence.ecmwf.int/download/attachments/45757960/eccodes-${finalAttrs.version}-Source.tar.gz";
     hash = "sha256-x1+x+Rt2W2uLR3RjKopvvOyWk02wFftjwq0lYK7dRDs=";
   };
 
@@ -79,4 +79,4 @@ gccStdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     description = "ECMWF library for reading and writing GRIB, BUFR and GTS abbreviated header";
   };
-}
+})

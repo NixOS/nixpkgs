@@ -24,12 +24,12 @@ let
     "--add-opens=java.base/java.lang=ALL-UNNAMED"
   ];
 in
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   version = "3.0.12";
   pname = "minion";
 
   src = fetchzip {
-    url = "https://cdn.mmoui.com/minion/v3/Minion${version}-java.zip";
+    url = "https://cdn.mmoui.com/minion/v3/Minion${finalAttrs.version}-java.zip";
     hash = "sha256-KjSj3TBMY3y5kgIywtIDeil0L17dau/Rb2HuXAulSO8=";
     stripRoot = false;
   };
@@ -73,4 +73,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ patrickdag ];
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
   };
-}
+})

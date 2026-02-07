@@ -15,11 +15,11 @@
   debugLvl ? "0",
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cups-brother-dcpt725dw";
   version = "3.5.0-1";
   src = fetchurl {
-    url = "https://download.brother.com/welcome/dlf105181/dcpt725dwpdrv-${version}.i386.deb";
+    url = "https://download.brother.com/welcome/dlf105181/dcpt725dwpdrv-${finalAttrs.version}.i386.deb";
     hash = "sha256-fK6RHaW/ej1nFgSaTbzWxVgjIW32YTbJbd1xD37ZE7c=";
   };
 
@@ -110,4 +110,4 @@ stdenv.mkDerivation rec {
     downloadPage = "https://support.brother.com/g/b/downloadtop.aspx?c=cn_ot&lang=en&prod=dcpt725dw_cn";
     homepage = "http://www.brother.com/";
   };
-}
+})

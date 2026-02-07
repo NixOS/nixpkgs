@@ -9,13 +9,13 @@
   stdenvNoCC,
   util-linuxMinimal,
 }:
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "btrfs-snap";
   version = "1.7.3";
   src = fetchFromGitHub {
     owner = "jf647";
     repo = "btrfs-snap";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-SDzLjgNRuR9XpmcYCD9T10MLS+//+pWFGDiTAb8NiLQ=";
   };
   buildInputs = [ bash ];
@@ -42,4 +42,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ lionello ];
     platforms = lib.platforms.linux;
   };
-}
+})

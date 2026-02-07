@@ -9,14 +9,14 @@
   installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "findimagedupes";
   version = "2.20.1";
 
   src = fetchFromGitHub {
     owner = "jhnc";
     repo = "findimagedupes";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-LJbZGuBVksfS7nVxgrMLSeygWuy9oDmw/pD8wAyr3f0=";
   };
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     substituteInPlace findimagedupes \
       --replace-fail "DIRECTORY => '/usr/local/lib/findimagedupes';" "DIRECTORY => '$out';" \
       --replace-fail "Graphics::Magick" "Image::Magick" \
-      --replace-fail "my \$Id = '""';" "my \$Id = '${version}';"
+      --replace-fail "my \$Id = '""';" "my \$Id = '${finalAttrs.version}';"
   '';
 
   # with DIRECTORY = "/tmp":
@@ -97,4 +97,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ stunkymonkey ];
   };
-}
+})

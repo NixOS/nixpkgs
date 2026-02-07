@@ -21,12 +21,12 @@
 
 # resholve does not yet support `finalAttrs` call pattern hence `rec`
 # https://github.com/abathur/resholve/issues/107
-resholve.mkDerivation rec {
+resholve.mkDerivation (finalAttrs: {
   pname = "unix-privesc-check";
   version = "1.4";
 
   src = fetchurl {
-    url = "https://pentestmonkey.net/tools/unix-privesc-check/unix-privesc-check-${version}.tar.gz";
+    url = "https://pentestmonkey.net/tools/unix-privesc-check/unix-privesc-check-${finalAttrs.version}.tar.gz";
     hash = "sha256-4fhef2n6ut0jdWo9dqDj2GSyHih2O2DOLmGBKQ0cGWk=";
   };
 
@@ -85,4 +85,4 @@ resholve.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2Plus;
   };
-}
+})

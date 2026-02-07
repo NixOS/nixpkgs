@@ -11,12 +11,12 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pdfchain";
   version = "0.4.4.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/pdfchain/pdfchain-${version}/pdfchain-${version}.tar.gz";
+    url = "mirror://sourceforge/pdfchain/pdfchain-${finalAttrs.version}/pdfchain-${finalAttrs.version}.tar.gz";
     hash = "sha256-Hu4Pk9voyc75+f5OwKEOCkXKjN5nzWzv+izmyEN1Lz0=";
   };
 
@@ -74,4 +74,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "pdfchain";
   };
-}
+})

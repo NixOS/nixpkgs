@@ -34,14 +34,14 @@
 
 let
   version = "2024.1.4";
-  data = stdenv.mkDerivation rec {
+  data = stdenv.mkDerivation (finalAttrs: {
     pname = "flightgear-data";
-    inherit version;
+    inherit (finalAttrs) version;
 
     src = fetchFromGitLab {
       owner = "flightgear";
       repo = "fgdata";
-      tag = version;
+      tag = finalAttrs.version;
       hash = "sha256-0cIOyQhw/+jqwO1OddBC09ZnvrmtyjSoMhcu1tuwx4k=";
     };
 
@@ -49,12 +49,12 @@ let
 
     installPhase = ''
       mkdir -p "$out/share/FlightGear"
-      cp ${src}/* -a "$out/share/FlightGear/"
+      cp ${finalAttrs.src}/* -a "$out/share/FlightGear/"
     '';
   };
   openscenegraph = callPackage ./openscenegraph-flightgear.nix { };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flightgear";
   # inheriting data for `nix-prefetch-url -A pkgs.flightgear.data.src`
   inherit version data;
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "flightgear";
     repo = "flightgear";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-s897bsHsVP0OAcrwDVRTPz3YNJkynyErJpH18oLPl3Y=";
   };
 
@@ -121,3 +121,4 @@ stdenv.mkDerivation rec {
     mainProgram = "fgfs";
   };
 }
+)

@@ -15,12 +15,12 @@ let
     else
       throw "Unsupported system: ${stdenv.hostPlatform.system}";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pcsc-scm-scl";
   version = "2.09";
 
   src = fetchurl {
-    url = "http://files.identiv.com/products/smart-card-readers/contactless/scl010-011/Linux_Driver_Ver${version}.zip";
+    url = "http://files.identiv.com/products/smart-card-readers/contactless/scl010-011/Linux_Driver_Ver${finalAttrs.version}.zip";
     sha256 = "0ik26sxgqgsqplksl87z61vwmx51k7plaqmrkdid7xidgfhfxr42";
   };
 
@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
 
   unpackPhase = ''
     unzip $src
-    tar xf "Linux Driver Ver${version}/sclgeneric_${version}_linux_${arch}bit.tar.gz"
-    export sourceRoot=$(readlink -e sclgeneric_${version}_linux_${arch}bit)
+    tar xf "Linux Driver Ver${finalAttrs.version}/sclgeneric_${finalAttrs.version}_linux_${arch}bit.tar.gz"
+    export sourceRoot=$(readlink -e sclgeneric_${finalAttrs.version}_linux_${arch}bit)
   '';
 
   # Add support for SCL011 nPA (subsidized model for German eID)
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   fixupPhase = ''
     patchelf --set-rpath $libPath \
-      $out/pcsc/drivers/SCLGENERIC.bundle/Contents/Linux/libSCLGENERIC.so.${version};
+      $out/pcsc/drivers/SCLGENERIC.bundle/Contents/Linux/libSCLGENERIC.so.${finalAttrs.version};
   '';
 
   meta = {
@@ -56,4 +56,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ sephalon ];
     platforms = lib.platforms.linux;
   };
-}
+})

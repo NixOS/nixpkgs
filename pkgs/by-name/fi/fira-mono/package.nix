@@ -4,13 +4,13 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "fira-mono";
   version = "3.2";
 
   src = fetchzip {
     url = "https://carrois.com/downloads/Fira/Fira_Mono_${
-      lib.replaceStrings [ "." ] [ "_" ] version
+      lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }.zip";
     hash = "sha256-Ukc+K2sdSz+vUQFD8mmwJHZQ3N68oM4fk6YzGLwzAfQ=";
   };
@@ -36,4 +36,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = [ lib.maintainers.rycee ];
     platforms = lib.platforms.all;
   };
-}
+})

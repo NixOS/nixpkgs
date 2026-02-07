@@ -107,20 +107,20 @@ let
   sources = {
     x86_64-linux = fetchurl {
       urls = [
-        "https://archive.torproject.org/tor-package-archive/torbrowser/${version}/tor-browser-linux-x86_64-${version}.tar.xz"
-        "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux-x86_64-${version}.tar.xz"
-        "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux-x86_64-${version}.tar.xz"
-        "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux-x86_64-${version}.tar.xz"
+        "https://archive.torproject.org/tor-package-archive/torbrowser/${finalAttrs.version}/tor-browser-linux-x86_64-${finalAttrs.version}.tar.xz"
+        "https://dist.torproject.org/torbrowser/${finalAttrs.version}/tor-browser-linux-x86_64-${finalAttrs.version}.tar.xz"
+        "https://tor.eff.org/dist/torbrowser/${finalAttrs.version}/tor-browser-linux-x86_64-${finalAttrs.version}.tar.xz"
+        "https://tor.calyxinstitute.org/dist/torbrowser/${finalAttrs.version}/tor-browser-linux-x86_64-${finalAttrs.version}.tar.xz"
       ];
       hash = "sha256-QD94RdxXl6P7sHPVx11TqpyOvIzq8Y3FMJC91PuyORY=";
     };
 
     i686-linux = fetchurl {
       urls = [
-        "https://archive.torproject.org/tor-package-archive/torbrowser/${version}/tor-browser-linux-i686-${version}.tar.xz"
-        "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux-i686-${version}.tar.xz"
-        "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux-i686-${version}.tar.xz"
-        "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux-i686-${version}.tar.xz"
+        "https://archive.torproject.org/tor-package-archive/torbrowser/${finalAttrs.version}/tor-browser-linux-i686-${finalAttrs.version}.tar.xz"
+        "https://dist.torproject.org/torbrowser/${finalAttrs.version}/tor-browser-linux-i686-${finalAttrs.version}.tar.xz"
+        "https://tor.eff.org/dist/torbrowser/${finalAttrs.version}/tor-browser-linux-i686-${finalAttrs.version}.tar.xz"
+        "https://tor.calyxinstitute.org/dist/torbrowser/${finalAttrs.version}/tor-browser-linux-i686-${finalAttrs.version}.tar.xz"
       ];
       hash = "sha256-D6umWK8Po+KPLJYfw3NHTX7K2p2Wu+9Jm4ywjMXHte8=";
     };
@@ -143,9 +143,9 @@ let
     }
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tor-browser";
-  inherit version;
+  inherit (finalAttrs) version;
 
   src =
     sources.${stdenv.hostPlatform.system}
@@ -178,7 +178,7 @@ stdenv.mkDerivation rec {
       icon = "tor-browser";
       desktopName = "Tor Browser";
       genericName = "Web Browser";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       categories = [
         "Network"
         "WebBrowser"
@@ -218,7 +218,7 @@ stdenv.mkDerivation rec {
 
     # The final libPath.  Note, we could split this into firefoxLibPath
     # and torLibPath for accuracy, but this is more convenient ...
-    libPath=${libPath}:$TBB_IN_STORE:$TBB_IN_STORE/TorBrowser/Tor
+    libPath=${finalAttrs.libPath}:$TBB_IN_STORE:$TBB_IN_STORE/TorBrowser/Tor
 
     # apulse uses a non-standard library path.  For now special-case it.
     ${lib.optionalString (audioSupport && !pulseaudioSupport) ''
@@ -347,7 +347,7 @@ stdenv.mkDerivation rec {
     description = "Privacy-focused browser routing traffic through the Tor network";
     mainProgram = "tor-browser";
     homepage = "https://www.torproject.org/";
-    changelog = "https://gitweb.torproject.org/builders/tor-browser-build.git/plain/projects/tor-browser/Bundle-Data/Docs/ChangeLog.txt?h=maint-${version}";
+    changelog = "https://gitweb.torproject.org/builders/tor-browser-build.git/plain/projects/tor-browser/Bundle-Data/Docs/ChangeLog.txt?h=maint-${finalAttrs.version}";
     platforms = lib.attrNames sources;
     maintainers = with lib.maintainers; [
       c4patino
@@ -367,4 +367,4 @@ stdenv.mkDerivation rec {
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-}
+})

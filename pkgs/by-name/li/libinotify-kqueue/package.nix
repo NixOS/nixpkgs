@@ -6,14 +6,14 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libinotify-kqueue";
   version = "20240724";
 
   src = fetchFromGitHub {
     owner = "libinotify-kqueue";
     repo = "libinotify-kqueue";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-m59GWrx5C+JXDbhVdKx+SNSn8wwIKyW+KlXabNi17A0=";
   };
 
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = with lib.platforms; darwin ++ freebsd ++ netbsd ++ openbsd;
   };
-}
+})

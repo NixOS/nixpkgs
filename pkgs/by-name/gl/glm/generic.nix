@@ -8,9 +8,9 @@
   src,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "glm";
-  inherit version src;
+  inherit (finalAttrs) version src;
 
   outputs = [
     "out"
@@ -69,4 +69,4 @@ stdenv.mkDerivation rec {
     broken = !stdenv.hostPlatform.isLittleEndian && !stdenv.hostPlatform.isLinux;
     maintainers = with lib.maintainers; [ smancill ];
   };
-}
+})

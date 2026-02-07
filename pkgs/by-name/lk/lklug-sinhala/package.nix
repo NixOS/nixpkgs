@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "lklug-sinhala";
   version = "0.6";
 
   src = fetchurl {
-    url = "mirror://debian/pool/main/f/fonts-lklug-sinhala/fonts-lklug-sinhala_${version}.orig.tar.xz";
+    url = "mirror://debian/pool/main/f/fonts-lklug-sinhala/fonts-lklug-sinhala_${finalAttrs.version}.orig.tar.xz";
     hash = "sha256-oPCCa01PMQcCK5fEILgXjrGzoDg+UvxkqK6AgeQaKio=";
   };
 
@@ -29,4 +29,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ serge ];
     platforms = lib.platforms.all;
   };
-}
+})

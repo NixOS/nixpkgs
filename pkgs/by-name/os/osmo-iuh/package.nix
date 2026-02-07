@@ -16,14 +16,14 @@ let
   inherit (stdenv.hostPlatform) isLinux;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "osmo-iuh";
   version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "osmo-iuh";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-3ADn0GSoXPXL1gD79JjD2hXNBN/v8aaEKgf5qFNGEJs=";
   };
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   postPatch = ''
-    echo "${version}" > .tarball-version
+    echo "${finalAttrs.version}" > .tarball-version
   '';
 
   nativeBuildInputs = [
@@ -59,4 +59,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

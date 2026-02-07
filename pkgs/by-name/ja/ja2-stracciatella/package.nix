@@ -28,14 +28,14 @@ let
     hash = "sha256-oQ+mUDB8YJULcSploz+0bprJbqclhc+p/Pmsn1AsAes=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ja2-stracciatella";
   version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "ja2-stracciatella";
     repo = "ja2-stracciatella";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-zMCFDMSKcsYz5LjW8UJbBlSmuJX6ibr9zIS3BgZMgAg=";
   };
 
@@ -112,4 +112,4 @@ stdenv.mkDerivation rec {
     homepage = "https://ja2-stracciatella.github.io/";
     maintainers = [ ];
   };
-}
+})

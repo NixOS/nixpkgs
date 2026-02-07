@@ -5,10 +5,10 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "simpleproxy";
   version = "3.5";
-  rev = "v.${version}";
+  rev = "v.${finalAttrs.version}";
 
   src = fetchFromGitHub {
     inherit rev;
@@ -26,4 +26,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.montag451 ];
     mainProgram = "simpleproxy";
   };
-}
+})

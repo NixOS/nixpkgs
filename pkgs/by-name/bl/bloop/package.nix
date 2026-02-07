@@ -9,7 +9,7 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bloop";
   version = "2.0.19";
 
@@ -24,22 +24,22 @@ stdenv.mkDerivation rec {
       throw "unsupported platform";
 
   bloop-bash = fetchurl {
-    url = "https://github.com/scalacenter/bloop/releases/download/v${version}/bash-completions";
+    url = "https://github.com/scalacenter/bloop/releases/download/v${finalAttrs.version}/bash-completions";
     sha256 = "sha256-2mt+zUEJvQ/5ixxFLZ3Z0m7uDSj/YE9sg/uNMjamvdE=";
   };
 
   bloop-fish = fetchurl {
-    url = "https://github.com/scalacenter/bloop/releases/download/v${version}/fish-completions";
+    url = "https://github.com/scalacenter/bloop/releases/download/v${finalAttrs.version}/fish-completions";
     sha256 = "sha256-eFESR6iPHRDViGv+Fk3sCvPgVAhk2L1gCG4LnfXO/v4=";
   };
 
   bloop-zsh = fetchurl {
-    url = "https://github.com/scalacenter/bloop/releases/download/v${version}/zsh-completions";
+    url = "https://github.com/scalacenter/bloop/releases/download/v${finalAttrs.version}/zsh-completions";
     sha256 = "sha256-WNMsPwBfd5EjeRbRtc06lCEVI2FVoLfrqL82OR0G7/c=";
   };
 
   bloop-binary = fetchurl {
-    url = "https://github.com/scalacenter/bloop/releases/download/v${version}/bloop-${platform}";
+    url = "https://github.com/scalacenter/bloop/releases/download/v${finalAttrs.version}/bloop-${platform}";
     sha256 =
       if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64 then
         "sha256-HyjsBpSoek56no+19rZtjih+/Deu1NO9bwjMBz44B2U="
@@ -95,4 +95,4 @@ stdenv.mkDerivation rec {
       tomahna
     ];
   };
-}
+})

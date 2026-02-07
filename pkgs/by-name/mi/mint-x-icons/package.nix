@@ -10,14 +10,14 @@
   ubuntu-themes,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mint-x-icons";
   version = "1.7.5";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "mint-x-icons";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-UNta7sj5xzZglYJekhxa0N/2RJU4cyqjX2fCFdWqoiY=";
   };
 
@@ -55,4 +55,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.linux;
     teams = [ lib.teams.cinnamon ];
   };
-}
+})

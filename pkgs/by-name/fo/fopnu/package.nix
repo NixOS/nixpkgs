@@ -10,12 +10,12 @@
   gtk3,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "fopnu";
   version = "1.68";
 
   src = fetchurl {
-    url = "https://download2.fopnu.com/download/fopnu-${version}-1.x86_64.manualinstall.tar.gz";
+    url = "https://download2.fopnu.com/download/fopnu-${finalAttrs.version}-1.x86_64.manualinstall.tar.gz";
     hash = "sha256-q+nI0s4zu6+Lr8pdEyR8/zOkq5ULydYt2bntvzyalZo=";
   };
 
@@ -51,4 +51,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

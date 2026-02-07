@@ -14,7 +14,7 @@ fetch_arch() {
   VER="$1"; ARCH="$2"
   URL="https://github.com/openziti/zrok/releases/download/v${VER}/zrok_${VER}_${ARCH}.tar.gz"
   nix-prefetch "{ stdenv, fetchzip }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = \"zrok\"; version = \"${VER}\";
   src = fetchzip { url = \"$URL\"; stripRoot = false; };
 }
@@ -40,3 +40,4 @@ replace_sha "aarch64-linux" "$ZROK_LINUX_AARCH64_SHA256"
 replace_sha "armv7l-linux" "$ZROK_LINUX_ARMV7L_SHA256"
 replace_sha "x86_64-darwin" "$ZROK_DARWIN_X64_SHA256"
 replace_sha "aarch64-darwin" "$ZROK_DARWIN_ARM64_SHA256"
+)

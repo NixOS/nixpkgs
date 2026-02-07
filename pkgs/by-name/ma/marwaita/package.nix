@@ -9,14 +9,14 @@
   gitUpdater,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "marwaita";
   version = "23";
 
   src = fetchFromGitHub {
     owner = "darkomarko42";
     repo = "marwaita";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-NFXvaKASWltskCSOidXDNVZpFpdpCTnuWjpfETxiI8U=";
   };
 
@@ -48,4 +48,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.romildo ];
   };
-}
+})

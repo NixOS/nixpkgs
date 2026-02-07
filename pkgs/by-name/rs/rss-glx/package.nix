@@ -13,12 +13,12 @@
   bzip2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.9.1";
   pname = "rss-glx";
 
   src = fetchurl {
-    url = "mirror://sourceforge/rss-glx/rss-glx_${version}.tar.bz2";
+    url = "mirror://sourceforge/rss-glx/rss-glx_${finalAttrs.version}.tar.bz2";
     sha256 = "1aikafjqrfmv23jnrrm5d56dg6injh4l67zjdxzdapv9chw7g3cg";
   };
 
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
   };
-}
+})

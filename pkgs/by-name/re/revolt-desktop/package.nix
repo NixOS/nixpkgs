@@ -7,26 +7,27 @@
   makeWrapper,
   electron,
 }:
-(stdenvNoCC.mkDerivation rec {
-  pname = "revolt-desktop";
-  version = "1.0.8";
-  dontConfigure = true;
-  dontBuild = true;
-  meta = {
-    description = "Open source user-first chat platform";
-    homepage = "https://revolt.chat/";
-    changelog = "https://github.com/revoltchat/desktop/releases/tag/v${version}";
-    license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [
-      heyimnova
-      magistau
-    ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    mainProgram = "revolt-desktop";
-  };
-  nativeBuildInputs = [ makeWrapper ];
-}).overrideAttrs
+(stdenvNoCC.mkDerivation
+  (finalAttrs: {
+    pname = "revolt-desktop";
+    version = "1.0.8";
+    dontConfigure = true;
+    dontBuild = true;
+    meta = {
+      description = "Open source user-first chat platform";
+      homepage = "https://revolt.chat/";
+      changelog = "https://github.com/revoltchat/desktop/releases/tag/v${finalAttrs.version}";
+      license = lib.licenses.agpl3Only;
+      maintainers = with lib.maintainers; [
+        heyimnova
+        magistau
+      ];
+      platforms = lib.platforms.linux ++ lib.platforms.darwin;
+      sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+      mainProgram = "revolt-desktop";
+    };
+    nativeBuildInputs = [ makeWrapper ];
+  }).overrideAttrs
   (
     final: prev:
     let
@@ -37,15 +38,15 @@
         src =
           {
             x86_64-linux = fetchurl {
-              url = "https://github.com/revoltchat/desktop/releases/download/v${version}/Revolt-${version}.AppImage";
+              url = "https://github.com/revoltchat/desktop/releases/download/v${finalAttrs.version}/Revolt-${finalAttrs.version}.AppImage";
               hash = "sha256-L23Je5p7VmQpOLC+IfmQRk2CKKUm4rNBdsYLvqLTlRY=";
             };
             armv7l-linux = fetchurl {
-              url = "https://github.com/revoltchat/desktop/releases/download/v${version}/Revolt-${version}-armv7l.AppImage";
+              url = "https://github.com/revoltchat/desktop/releases/download/v${finalAttrs.version}/Revolt-${finalAttrs.version}-armv7l.AppImage";
               hash = "sha256-Qwya5tgHjMB8IJi0ueGmkzgQMQu+rlsDoWIVpl6Vj2w=";
             };
             aarch64-linux = fetchurl {
-              url = "https://github.com/revoltchat/desktop/releases/download/v${version}/Revolt-${version}-arm64.AppImage";
+              url = "https://github.com/revoltchat/desktop/releases/download/v${finalAttrs.version}/Revolt-${finalAttrs.version}-arm64.AppImage";
               hash = "sha256-VQXyXaL4Ma3peO1duAlyFwkb1CRQ/4DNZhjiAnhms6I=";
             };
           }
@@ -81,7 +82,7 @@
       assert stdenvNoCC.hostPlatform.isDarwin;
       {
         src = fetchzip {
-          url = "https://github.com/revoltchat/desktop/releases/download/v${version}/Revolt-${version}-universal-mac.zip";
+          url = "https://github.com/revoltchat/desktop/releases/download/v${finalAttrs.version}/Revolt-${finalAttrs.version}-universal-mac.zip";
           hash = "sha256-CpG1LLYYHa9ho4rotDwSS+wNIJ2z0kBPqu70xKEFg+k=";
           stripRoot = false;
         };
@@ -97,3 +98,4 @@
         '';
       }
   )
+)

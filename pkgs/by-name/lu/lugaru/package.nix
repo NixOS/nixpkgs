@@ -22,7 +22,7 @@ let
     ;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
 
   pname = "lugaru";
   version = "1.2";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "osslugaru";
     repo = "lugaru";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "089rblf8xw3c6dq96vnfla6zl8gxcpcbc1bj5jysfpq63hhdpypz";
   };
 
@@ -70,4 +70,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
   };
-}
+})

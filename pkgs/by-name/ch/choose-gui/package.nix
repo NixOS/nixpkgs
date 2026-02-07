@@ -5,14 +5,14 @@
   xcbuild,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "choose-gui";
   version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "chipsenkbeil";
     repo = "choose";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-ewXZpP3XmOuV/MA3fK4BwZnNb2jkE727Sse6oAd4HJk=";
   };
 
@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/chipsenkbeil/choose";
     license = lib.licenses.mit;
     platforms = lib.platforms.darwin;
-    changelog = "https://github.com/chipsenkbeil/choose/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/chipsenkbeil/choose/blob/${finalAttrs.version}/CHANGELOG.md";
     maintainers = with lib.maintainers; [
       heywoodlh
       niksingh710
     ];
     mainProgram = "choose";
   };
-}
+})

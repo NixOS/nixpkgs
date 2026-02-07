@@ -4,14 +4,14 @@
   stdenvNoCC,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "ssh-agents";
   version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "kalbasit";
     repo = "ssh-agents";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1l09zy87033v7hd17lhkxikwikqz5nj9x6c2w80rqpad4lp9ihwz";
   };
 
@@ -42,4 +42,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "ssh-agents";
   };
-}
+})

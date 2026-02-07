@@ -17,12 +17,12 @@
 let
   luaEnv = lua.withPackages (ps: [ ps.lpeg ]);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vis";
   version = "0.9";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-SYM3zlzhp3NdyOjtXc+pOiWY4/WA/Ax+qAWe18ggq3g=";
     repo = "vis";
     owner = "martanne";
@@ -47,8 +47,8 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/vis \
-      --prefix LUA_CPATH ';' "${luaEnv}/lib/lua/${lua.luaversion}/?.so" \
-      --prefix LUA_PATH ';' "${luaEnv}/share/lua/${lua.luaversion}/?.lua" \
+      --prefix LUA_CPATH ';' "${luaEnv}/lib/lua/${lua.luafinalAttrs.version}/?.so" \
+      --prefix LUA_PATH ';' "${luaEnv}/share/lua/${lua.luafinalAttrs.version}/?.lua" \
       --prefix VIS_PATH : "\$HOME/.config:$out/share/vis"
   '';
 
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
       exec = "vis %U";
       type = "Application";
       icon = "accessories-text-editor";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       desktopName = "vis";
       genericName = "Text editor";
       categories = [
@@ -83,4 +83,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "vis";
   };
-}
+})

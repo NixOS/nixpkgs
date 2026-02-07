@@ -4,13 +4,13 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "fira-go";
   version = "1.001";
 
   src = fetchzip {
     url = "https://carrois.com/downloads/FiraGO/Download_Folder_FiraGO_${
-      lib.replaceStrings [ "." ] [ "" ] version
+      lib.replaceStrings [ "." ] [ "" ] finalAttrs.version
     }.zip";
     hash = "sha256-+lw4dh7G/Xv3pzGXdMUl9xNc2Nk7wUOAh+lq3K1LrXs=";
     stripRoot = false;
@@ -34,4 +34,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = [ lib.maintainers.loicreynier ];
     platforms = lib.platforms.all;
   };
-}
+})

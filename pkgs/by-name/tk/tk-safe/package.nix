@@ -19,7 +19,7 @@
   udev,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tk-safe";
   version = "25.12.0";
   revision = "24";
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       icon = "tk-safe";
       exec = "tk-safe";
       desktopName = "TK-Safe";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       genericName = "Eletronic medical record (ePA)";
       categories = [ "Utility" ];
     })
@@ -123,4 +123,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ felschr ];
     mainProgram = "tk-safe";
   };
-}
+})

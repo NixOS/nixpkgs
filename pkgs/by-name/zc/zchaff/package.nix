@@ -4,12 +4,12 @@
   fetchzip,
 }:
 
-clangStdenv.mkDerivation rec {
+clangStdenv.mkDerivation (finalAttrs: {
   pname = "zchaff";
   version = "2007.3.12";
 
   src = fetchzip {
-    url = "https://www.princeton.edu/~chaff/zchaff/zchaff.64bit.${version}.zip";
+    url = "https://www.princeton.edu/~chaff/zchaff/zchaff.64bit.${finalAttrs.version}.zip";
     sha256 = "sha256-88fAtJb7o+Qv2GohTdmquxMEq4oCbiKbqLFmS7zs1Ak=";
   };
 
@@ -33,4 +33,4 @@ clangStdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ siraben ];
     platforms = lib.platforms.unix;
   };
-}
+})

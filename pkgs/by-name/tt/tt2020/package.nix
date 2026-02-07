@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "TT2020";
   version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "ctrlcctrlv";
     repo = "TT2020";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-eAJzaookHcQ/7QNq/HUKA/O2liyKynJNdo6QuZ1Bv6k=";
   };
 
@@ -31,4 +31,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ sikmir ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "khmeros";
   version = "5.0";
 
   src = fetchurl {
-    url = "mirror://debian/pool/main/f/fonts-khmeros/fonts-khmeros_${version}.orig.tar.xz";
+    url = "mirror://debian/pool/main/f/fonts-khmeros/fonts-khmeros_${finalAttrs.version}.orig.tar.xz";
     hash = "sha256-gBcM9YHSuhbxvwfQTvywH/5kN921GOyvGtkROcmcBiw=";
   };
 
@@ -29,4 +29,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ serge ];
     platforms = lib.platforms.all;
   };
-}
+})

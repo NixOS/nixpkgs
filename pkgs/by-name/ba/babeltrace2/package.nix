@@ -20,14 +20,14 @@
   ensureNewerSourcesForZipFilesHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "babeltrace2";
   version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "efficios";
     repo = "babeltrace";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-4vqeIwCWEAzsHTdM2S2grF7F4vPqiWTeTEZpxsqf2g8=";
   };
 
@@ -79,4 +79,4 @@ stdenv.mkDerivation rec {
     mainProgram = "babeltrace2";
     platforms = lib.platforms.all;
   };
-}
+})

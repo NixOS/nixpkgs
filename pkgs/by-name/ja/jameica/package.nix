@@ -39,14 +39,14 @@ let
     categories = [ "Office" ];
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jameica";
   version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "willuhn";
     repo = "jameica";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-7KpQas8ttL2DP+gFH87uLQyx4PMwVQ+FaqXpZBPWV5U=i";
   };
 
@@ -70,31 +70,31 @@ stdenv.mkDerivation rec {
   # and is not able to build the application itself
   buildPhase = ''
     runHook preBuild
-    ant -f build -Dsystem.version=${version} init compile jar ${lib.optionalString stdenv.hostPlatform.isDarwin "zip lib"}
+    ant -f build -Dsystem.version=${finalAttrs.version} init compile jar ${lib.optionalString stdenv.hostPlatform.isDarwin "zip lib"}
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/libexec $out/lib $out/bin $out/share/{applications,jameica-${version},java}/
+    mkdir -p $out/libexec $out/lib $out/bin $out/share/{applications,jameica-${finalAttrs.version},java}/
 
     # copy libraries except SWT
-    cp $(find lib -type f -iname '*.jar' | grep -ve 'swt/.*/swt.jar') $out/share/jameica-${version}/
+    cp $(find lib -type f -iname '*.jar' | grep -ve 'swt/.*/swt.jar') $out/share/jameica-${finalAttrs.version}/
     # copy platform-specific SWT
-    cp lib/swt/${swtSystem}/swt.jar $out/share/jameica-${version}/
+    cp lib/swt/${swtSystem}/swt.jar $out/share/jameica-${finalAttrs.version}/
 
-    install -Dm644 releases/${version}/jameica/jameica.jar $out/share/java/
+    install -Dm644 releases/${finalAttrs.version}/jameica/jameica.jar $out/share/java/
     install -Dm644 plugin.xml $out/share/java/
     install -Dm644 build/jameica-icon.png $out/share/pixmaps/jameica.png
-    cp ${desktopItem}/share/applications/* $out/share/applications/
+    cp ${finalAttrs.desktopItem}/share/applications/* $out/share/applications/
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
 
     # Create .app bundle for macOS
     mkdir -p $out/Applications
-    chmod +x releases/${version}/tmp/jameica.app/jameica*.sh
-    cp -r releases/${version}/tmp/jameica.app $out/Applications/Jameica.app
+    chmod +x releases/${finalAttrs.version}/tmp/jameica.app/jameica*.sh
+    cp -r releases/${finalAttrs.version}/tmp/jameica.app $out/Applications/Jameica.app
   ''
   + ''
 
@@ -103,8 +103,8 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     makeWrapper ${jre}/bin/java $out/bin/jameica \
-      --add-flags "-cp $out/share/java/jameica.jar:$out/share/jameica-${version}/* ${lib.optionalString stdenv.hostPlatform.isDarwin ''-Xdock:name="Jameica" -XstartOnFirstThread''} de.willuhn.jameica.Main" \
-      --prefix LD_LIBRARY_PATH : ${lib.escapeShellArg (lib.makeLibraryPath buildInputs)} \
+      --add-flags "-cp $out/share/java/jameica.jar:$out/share/jameica-${finalAttrs.version}/* ${lib.optionalString stdenv.hostPlatform.isDarwin ''-Xdock:name="Jameica" -XstartOnFirstThread''} de.willuhn.jameica.Main" \
+      --prefix LD_LIBRARY_PATH : ${lib.escapeShellArg (lib.makeLibraryPath finalAttrs.buildInputs)} \
       --chdir "$out/share/java/" \
       "''${gappsWrapperArgs[@]}"
   '';
@@ -127,4 +127,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "jameica";
   };
-}
+})

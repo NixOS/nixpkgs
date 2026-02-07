@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "libguestfs-appliance";
   version = "1.56.0";
 
   src = fetchurl {
-    url = "http://download.libguestfs.org/binaries/appliance/appliance-${version}.tar.xz";
+    url = "http://download.libguestfs.org/binaries/appliance/appliance-${finalAttrs.version}.tar.xz";
     hash = "sha256-YbJlNaogMyutdtc7d+etyJvdd//yE8tedsZfkGXJr54=";
   };
 
@@ -36,4 +36,4 @@ stdenvNoCC.mkDerivation rec {
     ];
     hydraPlatforms = [ ]; # Hydra fails with "Output limit exceeded"
   };
-}
+})

@@ -31,7 +31,7 @@ let
   ];
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cups-brother-hll2350dw";
   version = "4.0.0-1";
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   src = fetchurl {
-    url = "https://download.brother.com/welcome/dlf103566/hll2350dwpdrv-${version}.i386.deb";
+    url = "https://download.brother.com/welcome/dlf103566/hll2350dwpdrv-${finalAttrs.version}.i386.deb";
     sha256 = "0b7hhln105agc3rwpi7cjlx5nf4d2yk9iksahdv3725nnd06lg46";
   };
 
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
 
     # Make sure all executables have the necessary runtime dependencies available
     find "$out" -executable -and -type f | while read file; do
-      wrapProgram "$file" --prefix PATH : "${lib.makeBinPath runtimeDeps}"
+      wrapProgram "$file" --prefix PATH : "${lib.makeBinPath finalAttrs.runtimeDeps}"
     done
 
     # Symlink filter and ppd into a location where CUPS will discover it
@@ -103,4 +103,4 @@ stdenv.mkDerivation rec {
     downloadPage = "https://support.brother.com/g/b/downloadlist.aspx?c=us_ot&lang=en&prod=hll2350dw_us_eu_as&os=128";
     maintainers = [ lib.maintainers.sternenseemann ];
   };
-}
+})

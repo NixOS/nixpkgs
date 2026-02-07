@@ -20,7 +20,7 @@
 let
   mkDerivation = if pyProject == "" then stdenv.mkDerivation else buildPythonPackage;
 in
-mkDerivation rec {
+mkDerivation (finalAttrs: {
   pname = "lgpio";
   version = "0.2.2";
   format = if pyProject == "" then null else "setuptools";
@@ -28,7 +28,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "joan2937";
     repo = "lg";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-92lLV+EMuJj4Ul89KIFHkpPxVMr/VvKGEocYSW2tFiE=";
   };
 
@@ -65,4 +65,4 @@ mkDerivation rec {
     maintainers = with lib.maintainers; [ doronbehar ];
     platforms = lib.platforms.linux;
   };
-}
+})

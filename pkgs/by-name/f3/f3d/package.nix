@@ -20,7 +20,7 @@
   withUsd ? openusd.meta.available,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "f3d";
   version = "3.4.1";
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "f3d-app";
     repo = "f3d";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2Kcy9CF0K9jBfVc944i289jbMQdQWXW+gOiaHHchF6U=";
     fetchLFS = true;
   };
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Fast and minimalist 3D viewer using VTK";
     homepage = "https://f3d-app.github.io/f3d";
-    changelog = "https://github.com/f3d-app/f3d/releases/tag/v${version}";
+    changelog = "https://github.com/f3d-app/f3d/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       bcdarwin
@@ -96,4 +96,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; unix;
     mainProgram = "f3d";
   };
-}
+})

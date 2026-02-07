@@ -21,12 +21,12 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lightburn";
   version = "1.7.08";
 
   src = fetchurl {
-    url = "https://release.lightburnsoftware.com/LightBurn/Release/LightBurn-v${version}/LightBurn-Linux64-v${version}.7z";
+    url = "https://release.lightburnsoftware.com/LightBurn/Release/LightBurn-v${finalAttrs.version}/LightBurn-Linux64-v${finalAttrs.version}.7z";
     hash = "sha256-dG/A39/SapyS6GGSKCsHUvYN+CONul/s55HTi9Cc59g=";
   };
 
@@ -92,4 +92,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     mainProgram = "lightburn";
   };
-}
+})

@@ -23,14 +23,14 @@ let
     forOCF = true;
   };
 
-  resource-agentsForOCF = stdenv.mkDerivation rec {
+  resource-agentsForOCF = stdenv.mkDerivation (finalAttrs: {
     pname = "resource-agents";
     version = "4.10.0";
 
     src = fetchFromGitHub {
       owner = "ClusterLabs";
       repo = "resource-agents";
-      rev = "v${version}";
+      rev = "v${finalAttrs.version}";
       sha256 = "0haryi3yrszdfpqnkfnppxj1yiy6ipah6m80snvayc7v0ss0wnir";
     };
 
@@ -95,3 +95,4 @@ runCommand "ocf-resource-agents"
     ${lndir}/bin/lndir -silent "${drbdForOCF}/usr/lib/ocf/" $out/usr/lib/ocf
     ${lndir}/bin/lndir -silent "${pacemakerForOCF}/usr/lib/ocf/" $out/usr/lib/ocf
   ''
+)

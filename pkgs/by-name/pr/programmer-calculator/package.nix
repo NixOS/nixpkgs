@@ -5,7 +5,7 @@
   ncurses,
 }:
 
-gccStdenv.mkDerivation rec {
+gccStdenv.mkDerivation (finalAttrs: {
   pname = "programmer-calculator";
   version = "3.0-unstable-2025-11-06";
 
@@ -32,9 +32,9 @@ gccStdenv.mkDerivation rec {
       representations, sizes, and overall close to the bits
     '';
     homepage = "https://alt-romes.github.io/programmer-calculator";
-    changelog = "https://github.com/alt-romes/programmer-calculator/releases/tag/v${lib.versions.majorMinor version}";
+    changelog = "https://github.com/alt-romes/programmer-calculator/releases/tag/v${lib.versions.majorMinor finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ cjab ];
     platforms = lib.platforms.all;
   };
-}
+})

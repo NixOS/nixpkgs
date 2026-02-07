@@ -5,7 +5,7 @@
   flex,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libsepol";
   version = "3.8.1";
   se_url = "https://github.com/SELinuxProject/selinux/releases/download";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "${se_url}/${version}/libsepol-${version}.tar.gz";
+    url = "${se_url}/${finalAttrs.version}/libsepol-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-DnhwUwX5VavUwGVNN6VHfuJjSat0254rA6eGiJeuHd8=";
   };
 
@@ -56,4 +56,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     pkgConfigModules = [ "libselinux" ];
   };
-}
+})

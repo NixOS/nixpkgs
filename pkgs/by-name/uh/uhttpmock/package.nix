@@ -14,7 +14,7 @@
   libsoup_2_4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "uhttpmock";
   version = "0.5.5";
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "pwithnall";
     repo = "uhttpmock";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "NuxiVVowZ8ilP9rcgapCe9OzFCpoOfZxZiSyjTeOrts=";
   };
 
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

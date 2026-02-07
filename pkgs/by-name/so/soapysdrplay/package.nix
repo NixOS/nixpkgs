@@ -8,14 +8,14 @@
   sdrplay,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "soapysdr-sdrplay3";
   version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "pothosware";
     repo = "SoapySDRPlay3";
-    rev = "soapy-sdrplay3-${version}";
+    rev = "soapy-sdrplay3-${finalAttrs.version}";
     sha256 = "sha256-WMcAw0uR2o2SrQR4mBtdVEZlJ/ZXRqwo6zMJNsB/5U4=";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.pmenke ];
     platforms = lib.platforms.linux;
   };
-}
+})

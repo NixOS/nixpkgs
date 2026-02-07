@@ -27,11 +27,11 @@ let
     sha256 = "d3511ac0f822d512c42abd34b3122f2990862d3d0af6ce464ff372f5bd7f35e9";
   };
 in
-stdenv.mkDerivation rec {
-  name = "glob2-${version}.${patchlevel}";
+stdenv.mkDerivation (finalAttrs: {
+  name = "glob2-${finalAttrs.version}.${patchlevel}";
 
   src = fetchurl {
-    url = "mirror://savannah/glob2/${version}/${name}.tar.gz";
+    url = "mirror://savannah/glob2/${finalAttrs.version}/${name}.tar.gz";
     sha256 = "1f0l2cqp2g3llhr9jl6jj15k0wb5q8n29vqj99xy4p5hqs78jk8g";
   };
 
@@ -109,4 +109,4 @@ stdenv.mkDerivation rec {
     broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   };
   passthru.updateInfo.downloadPage = "http://globulation2.org/wiki/Download_and_Install";
-}
+})

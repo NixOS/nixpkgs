@@ -12,12 +12,12 @@
   zita-convolver,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jconvolver";
   version = "1.1.0";
 
   src = fetchurl {
-    url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/jconvolver-${version}.tar.bz2";
+    url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/jconvolver-${finalAttrs.version}.tar.bz2";
     sha256 = "03fq1rk5wyn32w0aaa9vqijnw9x9i0i7sv4nhsf949bk5lvi2nmc";
   };
 
@@ -130,4 +130,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

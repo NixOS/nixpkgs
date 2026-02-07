@@ -26,14 +26,14 @@
   uhd,
 }:
 
-gnuradio.pkgs.mkDerivation rec {
+gnuradio.pkgs.mkDerivation (finalAttrs: {
   pname = "qradiolink";
   version = "0.9.1-3";
 
   src = fetchFromGitHub {
     owner = "qradiolink";
     repo = "qradiolink";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-0inXfeOSVmJYtNhD6WBExjT43STfBjePomKILxoHO6Q=";
   };
 
@@ -116,4 +116,4 @@ gnuradio.pkgs.mkDerivation rec {
     maintainers = with lib.maintainers; [ markuskowa ];
     platforms = lib.platforms.linux;
   };
-}
+})

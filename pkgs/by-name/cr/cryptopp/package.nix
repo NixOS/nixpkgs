@@ -10,10 +10,10 @@
   llvmPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "crypto++";
   version = "8.9.0";
-  underscoredVersion = lib.strings.replaceStrings [ "." ] [ "_" ] version;
+  underscoredVersion = lib.strings.replaceStrings [ "." ] [ "_" ] finalAttrs.version;
 
   src = fetchFromGitHub {
     owner = "weidai11";
@@ -66,4 +66,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ c0bw3b ];
   };
-}
+})

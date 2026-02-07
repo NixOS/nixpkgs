@@ -7,14 +7,14 @@
   fetchPnpmDeps,
   pnpmConfigHook,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "it-tools";
   version = "2024.10.22-7ca5933";
 
   src = fetchFromGitHub {
     owner = "CorentinTh";
     repo = "it-tools";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-SQAZv+9tINRH10lewcuv8G2qwfulLOP8sGjX47LxeUk=";
   };
 
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ akotro ];
   };
-}
+})

@@ -6,12 +6,12 @@
   installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jotta-cli";
   version = "0.17.148769";
 
   src = fetchzip {
-    url = "https://repo.jotta.us/archives/linux/amd64/jotta-cli-${version}_linux_amd64.tar.gz";
+    url = "https://repo.jotta.us/archives/linux/amd64/jotta-cli-${finalAttrs.version}_linux_amd64.tar.gz";
     hash = "sha256-uI5yYpyLa7gGg9eL1nG5MMwHZ2j2yH5/8n5sB/WgoQI=";
     stripRoot = false;
   };
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
   };
-}
+})

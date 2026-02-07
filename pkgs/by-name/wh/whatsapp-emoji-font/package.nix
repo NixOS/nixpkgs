@@ -10,12 +10,12 @@
   zopfli,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "whatsapp-emoji-linux";
   version = "2.25.9.78-3";
 
   src = fetchFromGitHub {
-    tag = version;
+    tag = finalAttrs.version;
     owner = "dmlls";
     repo = "whatsapp-emoji-linux";
     hash = "sha256-IP8zWFttr7Osy8rrTLL0bTrdEMLvTNjuadZ2ksfTViw=";
@@ -44,4 +44,4 @@ stdenvNoCC.mkDerivation rec {
     sourceProvenance = [ lib.sourceTypes.fromSource ];
     license = lib.licenses.unfree;
   };
-}
+})

@@ -7,14 +7,14 @@
   hicolor-icon-theme,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "oranchelo-icon-theme";
   version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "OrancheloTeam";
     repo = "oranchelo-icon-theme";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-IDsZj/X9rFSdDpa3bL6IPEPCRe5GustPteDxSbfz+SA=";
   };
 
@@ -51,4 +51,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ _414owen ];
   };
-}
+})

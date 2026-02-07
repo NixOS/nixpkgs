@@ -5,14 +5,14 @@
   installShellFiles,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "wd";
   version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "mfaerevaag";
     repo = "wd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-dlpkSKdWilNnz3dpRfN+EPx/vjIZpmZ/DMzeO9sh4z0=";
   };
 
@@ -33,10 +33,10 @@ stdenvNoCC.mkDerivation rec {
       frequently visited or has a long path.
     '';
     homepage = "https://github.com/mfaerevaag/wd";
-    changelog = "https://github.com/mfaerevaag/wd/releases/tag/v${version}";
+    changelog = "https://github.com/mfaerevaag/wd/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.zimeg ];
     mainProgram = "wd";
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -4,12 +4,12 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "ttf-tw-moe";
   version = "2020-11-14";
 
   src = fetchzip {
-    url = "https://github.com/Jiehong/TW-fonts/archive/${version}.zip";
+    url = "https://github.com/Jiehong/TW-fonts/archive/${finalAttrs.version}.zip";
     hash = "sha256-9gy8xO93ViIPmpg1du0DbXVCR2FowourLH8nP9d6HK0=";
   };
 
@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation rec {
   meta = {
     homepage = "http://www.moe.gov.tw/";
     description = "Set of KAI and SONG fonts from the Ministry of Education of Taiwan";
-    version = version;
+    version = finalAttrs.version;
     longDescription = ''
       Installs 2 TTF fonts: MOESongUN and TW-MOE-Std-Kai.
       Both are provided by the Ministry of Education of Taiwan; each character's shape
@@ -34,4 +34,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = [ lib.maintainers.jiehong ];
     platforms = lib.platforms.all;
   };
-}
+})

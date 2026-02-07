@@ -10,7 +10,7 @@
   util-linux,
   wget,
 }:
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "stylish";
   version = "0-unstable-2022-12-05";
 
@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin
-    cp "${src}/styli.sh" $out/bin
+    cp "${finalAttrs.src}/styli.sh" $out/bin
     chmod +x $out/bin/styli.sh
     runHook postInstall
   '';
@@ -59,4 +59,4 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tchab ];
   };
-}
+})

@@ -4,12 +4,12 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mononoki";
   version = "1.6";
 
   src = fetchzip {
-    url = "https://github.com/madmalik/mononoki/releases/download/${version}/mononoki.zip";
+    url = "https://github.com/madmalik/mononoki/releases/download/${finalAttrs.version}/mononoki.zip";
     stripRoot = false;
     hash = "sha256-HQM9rzIJXLOScPEXZu0MzRlblLfbVVNJ+YvpONxXuwQ=";
   };
@@ -29,4 +29,4 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
   };
-}
+})

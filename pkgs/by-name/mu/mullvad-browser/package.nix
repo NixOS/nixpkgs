@@ -102,12 +102,12 @@ let
   sources = {
     x86_64-linux = fetchurl {
       urls = [
-        "https://cdn.mullvad.net/browser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
-        "https://github.com/mullvad/mullvad-browser/releases/download/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
-        "https://archive.torproject.org/tor-package-archive/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
-        "https://dist.torproject.org/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
-        "https://tor.eff.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
-        "https://tor.calyxinstitute.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
+        "https://cdn.mullvad.net/browser/${finalAttrs.version}/mullvad-browser-linux-x86_64-${finalAttrs.version}.tar.xz"
+        "https://github.com/mullvad/mullvad-browser/releases/download/${finalAttrs.version}/mullvad-browser-linux-x86_64-${finalAttrs.version}.tar.xz"
+        "https://archive.torproject.org/tor-package-archive/mullvadbrowser/${finalAttrs.version}/mullvad-browser-linux-x86_64-${finalAttrs.version}.tar.xz"
+        "https://dist.torproject.org/mullvadbrowser/${finalAttrs.version}/mullvad-browser-linux-x86_64-${finalAttrs.version}.tar.xz"
+        "https://tor.eff.org/dist/mullvadbrowser/${finalAttrs.version}/mullvad-browser-linux-x86_64-${finalAttrs.version}.tar.xz"
+        "https://tor.calyxinstitute.org/dist/mullvadbrowser/${finalAttrs.version}/mullvad-browser-linux-x86_64-${finalAttrs.version}.tar.xz"
       ];
       hash = "sha256-l41Sn69hvQXwb13T1o6ukIWOxpXuARA+J8+QjNh+bdo=";
     };
@@ -130,9 +130,9 @@ let
     }
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mullvad-browser";
-  inherit version;
+  inherit (finalAttrs) version;
 
   src =
     sources.${stdenv.hostPlatform.system}
@@ -165,7 +165,7 @@ stdenv.mkDerivation rec {
       icon = "mullvad-browser";
       desktopName = "Mullvad Browser";
       genericName = "Web Browser";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       categories = [
         "Network"
         "WebBrowser"
@@ -203,7 +203,7 @@ stdenv.mkDerivation rec {
     touch "$MB_IN_STORE/system-install"
 
     # Add bundled libraries to libPath.
-    libPath=${libPath}:$MB_IN_STORE
+    libPath=${finalAttrs.libPath}:$MB_IN_STORE
 
     # apulse uses a non-standard library path.  For now special-case it.
     ${lib.optionalString (audioSupport && !pulseaudioSupport) ''
@@ -317,4 +317,4 @@ stdenv.mkDerivation rec {
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-}
+})

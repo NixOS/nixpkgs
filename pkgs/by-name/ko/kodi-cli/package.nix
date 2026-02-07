@@ -10,14 +10,14 @@
   zenity,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kodi-cli";
   version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "nawar";
     repo = "kodi-cli";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0f9wdq2fg8hlpk3qbjfkb3imprxkvdrhxfkcvr3dwfma0j2yfwam";
   };
 
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.pstn ];
   };
-}
+})

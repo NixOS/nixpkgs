@@ -4,12 +4,12 @@
   fetchurl,
   unzip,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "shortcat";
   version = "0.12.2";
 
   src = fetchurl {
-    url = "https://files.shortcat.app/releases/v${version}/Shortcat.zip";
+    url = "https://files.shortcat.app/releases/v${finalAttrs.version}/Shortcat.zip";
     sha256 = "sha256-jmp9mBMYID0Zcu/o6ICYPS8QGHhSwcLz072jG3zR2mM=";
   };
 
@@ -30,4 +30,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ t-monaghan ];
     license = lib.licenses.unfreeRedistributable;
   };
-}
+})

@@ -11,14 +11,14 @@
   scdoc,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tessen";
   version = "2.2.3";
 
   src = fetchFromSourcehut {
     owner = "~ayushnix";
     repo = "tessen";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-mVGsI1JBG7X8J7gqocdfxWuTVSZpxS23QPGHCUofvV8=";
   };
 
@@ -62,4 +62,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ monaaraj ];
     mainProgram = "tessen";
   };
-}
+})

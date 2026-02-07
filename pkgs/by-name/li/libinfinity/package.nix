@@ -25,11 +25,11 @@ assert avahiSupport -> avahi != null;
 assert gtkWidgets -> gtk3 != null;
 
 let
-  self = stdenv.mkDerivation rec {
+  self = stdenv.mkDerivation (finalAttrs: {
     pname = "libinfinity";
     version = "0.7.2";
     src = fetchurl {
-      url = "https://github.com/gobby/libinfinity/releases/download/${version}/libinfinity-${version}.tar.gz";
+      url = "https://github.com/gobby/libinfinity/releases/download/${finalAttrs.version}/libinfinity-${finalAttrs.version}.tar.gz";
       sha256 = "17i3g61hxz9pzl3ryd1yr15142r25m06jfzjrpdy7ic1b8vjjw3f";
     };
 
@@ -73,7 +73,7 @@ let
     ];
 
     passthru = {
-      infinoted = "${self.bin}/bin/infinoted-${lib.versions.majorMinor version}";
+      infinoted = "${self.bin}/bin/infinoted-${lib.versions.majorMinor finalAttrs.version}";
     };
 
     meta = {
@@ -89,3 +89,4 @@ let
   };
 in
 self
+)

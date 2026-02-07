@@ -9,19 +9,19 @@
 let
   versionMajor = "1";
   versionMinor = "0.6";
-  version = versionMajor + "." + versionMinor;
+  version = finalAttrs.versionMajor + "." + versionMinor;
   removeDots = lib.replaceStrings [ "." ] [ "" ];
   src-doc = fetchurl {
-    url = "http://www.inchi-trust.org/download/${removeDots version}/INCHI-1-DOC.zip";
+    url = "http://www.inchi-trust.org/download/${removeDots finalAttrs.version}/INCHI-1-DOC.zip";
     sha256 = "1kyda09i9p89xfq90ninwi7w13k1w3ljpl4gqdhpfhi5g8fgxx7f";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "inchi";
-  inherit version;
+  inherit (finalAttrs) version;
 
   src = fetchurl {
-    url = "http://www.inchi-trust.org/download/${removeDots version}/INCHI-1-SRC.zip";
+    url = "http://www.inchi-trust.org/download/${removeDots finalAttrs.version}/INCHI-1-SRC.zip";
     sha256 = "1zbygqn0443p0gxwr4kx3m1bkqaj8x9hrpch3s41py7jq08f6x28";
   };
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   '';
   installPhase =
     let
-      versionOneDot = versionMajor + "." + removeDots versionMinor;
+      versionOneDot = finalAttrs.versionMajor + "." + removeDots versionMinor;
     in
     ''
       runHook preInstall
@@ -55,9 +55,9 @@ stdenv.mkDerivation rec {
       mkdir -p $out/include/inchi
       mkdir -p $doc/share/
 
-      install -m 755 INCHI_API/bin/Linux/libinchi.so.${versionOneDot}.00 $out/lib
-      ln -s $out/lib/libinchi.so.${versionOneDot}.00 $out/lib/libinchi.so.1
-      ln -s $out/lib/libinchi.so.${versionOneDot}.00 $out/lib/libinchi.so
+      install -m 755 INCHI_API/bin/Linux/libinchi.so.${finalAttrs.versionOneDot}.00 $out/lib
+      ln -s $out/lib/libinchi.so.${finalAttrs.versionOneDot}.00 $out/lib/libinchi.so.1
+      ln -s $out/lib/libinchi.so.${finalAttrs.versionOneDot}.00 $out/lib/libinchi.so
       install -m 644 INCHI_BASE/src/*.h $out/include/inchi
 
       runHook postInstall
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    unzip '${src-doc}'
+    unzip '${finalAttrs.src-doc}'
     install -m 644 INCHI-1-DOC/*.pdf $doc/share
   '';
 
@@ -78,4 +78,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [ rmcgibbo ];
   };
-}
+})

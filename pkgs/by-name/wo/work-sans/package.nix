@@ -4,12 +4,12 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "work-sans";
   version = "2.010";
 
   src = fetchzip {
-    url = "https://github.com/weiweihuanghuang/Work-Sans/archive/refs/tags/v${version}.zip";
+    url = "https://github.com/weiweihuanghuang/Work-Sans/archive/refs/tags/v${finalAttrs.version}.zip";
     hash = "sha256-cedcx3CpcPZk3jxxIs5Bz78dxZNtOemvXnUBO6zl2dw=";
   };
 
@@ -28,4 +28,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

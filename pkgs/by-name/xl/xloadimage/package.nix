@@ -25,16 +25,16 @@ let
   version = "4.1";
   deb_patch = "25";
   debian_patches = fetchzip {
-    url = "mirror://debian/pool/main/x/xloadimage/xloadimage_${version}-${deb_patch}.debian.tar.xz";
+    url = "mirror://debian/pool/main/x/xloadimage/xloadimage_${finalAttrs.version}-${deb_patch}.debian.tar.xz";
     hash = "sha256-5FbkiYjI8ASUyi1DTFiAcJ9y2z1sEKrNNyKoqnca30I=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xloadimage";
-  inherit version;
+  inherit (finalAttrs) version;
 
   src = fetchurl {
-    url = "mirror://debian/pool/main/x/xloadimage/xloadimage_${version}.orig.tar.gz";
+    url = "mirror://debian/pool/main/x/xloadimage/xloadimage_${finalAttrs.version}.orig.tar.gz";
     sha256 = "1i7miyvk5ydhi6yi8593vapavhwxcwciir8wg9d2dcyg9pccf2s0";
   };
 
@@ -106,4 +106,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux; # arbitrary choice
   };
-}
+})

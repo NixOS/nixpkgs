@@ -23,13 +23,13 @@
   vector,
 }:
 
-mkDerivation rec {
+mkDerivation (finalAttrs: {
   pname = "mkjson";
   version = "0.4.0";
   src = fetchFromGitHub {
     owner = "mfussenegger";
     repo = "mkjson";
-    rev = "${version}";
+    rev = "${finalAttrs.version}";
     hash = "sha256-+NDLFtsWWxHv/6XC9hJOAHPU6YED5oHqS/j5BPwNsqA=";
   };
 
@@ -116,4 +116,4 @@ mkDerivation rec {
   license = lib.licenses.mit;
   maintainers = with lib.maintainers; [ athas ];
   mainProgram = "mkjson";
-}
+})

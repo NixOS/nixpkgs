@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "caladea";
   version = "20130214";
 
   src = fetchurl {
-    url = "https://commondatastorage.googleapis.com/chromeos-localmirror/distfiles/crosextrafonts-${version}.tar.gz";
+    url = "https://commondatastorage.googleapis.com/chromeos-localmirror/distfiles/crosextrafonts-${finalAttrs.version}.tar.gz";
     hash = "sha256-xI0cL9YTycBslZw02nuDiAWeJAjSuxmEXcPtNfduTQk=";
   };
 
@@ -43,4 +43,4 @@ stdenvNoCC.mkDerivation rec {
     # not want to install the font alias of this package.
     priority = 10;
   };
-}
+})

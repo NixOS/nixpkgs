@@ -22,14 +22,14 @@
   procps,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ponyc";
   version = "0.60.5";
 
   src = fetchFromGitHub {
     owner = "ponylang";
     repo = "ponyc";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ssKpRhMNpA4Sm8qVIZTyT4aDMn6Jz2PpOABtplARhZ4=";
     fetchSubmodules = true;
   };
@@ -115,7 +115,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   makeFlags = [
-    "PONYC_VERSION=${version}"
+    "PONYC_VERSION=${finalAttrs.version}"
     "prefix=${placeholder "out"}"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin ([ "bits=64" ] ++ lib.optional (!lto) "lto=no");
@@ -178,4 +178,4 @@ stdenv.mkDerivation rec {
       "aarch64-darwin"
     ];
   };
-}
+})

@@ -10,14 +10,14 @@
   zsh,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "getoptions";
   version = "3.3.2";
 
   src = fetchFromGitHub {
     owner = "ko1nksm";
     repo = "getoptions";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-hapOGPibqt2Mm6k73v63gHxrX+lifZ8xcwzj8vWbtgo=";
   };
 
@@ -53,4 +53,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ matrss ];
   };
-}
+})

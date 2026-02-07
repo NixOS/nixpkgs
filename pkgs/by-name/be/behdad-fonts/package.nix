@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "behdad-fonts";
   version = "0.0.3";
 
   src = fetchFromGitHub {
     owner = "font-store";
     repo = "BehdadFont";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-gKfzxo3/bCMKXl2d6SP07ahIiNrUyrk/SN5XLND2lWY=";
   };
 
@@ -30,4 +30,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})

@@ -7,14 +7,14 @@
   gtk_engines,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "rose-pine-gtk-theme";
   version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "rose-pine";
     repo = "gtk";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-vCWs+TOVURl18EdbJr5QAHfB+JX9lYJ3TPO6IklKeFE=";
   };
 
@@ -54,4 +54,4 @@ stdenvNoCC.mkDerivation rec {
       the-argus
     ];
   };
-}
+})

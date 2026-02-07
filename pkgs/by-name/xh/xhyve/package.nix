@@ -5,7 +5,7 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xhyve";
   version = "20210203";
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "CFLAGS+=-Wno-shift-sign-overflow"
-    ''CFLAGS+=-DVERSION=\"${version}\"''
+    ''CFLAGS+=-DVERSION=\"${finalAttrs.version}\"''
   ];
 
   installPhase = ''
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
-}
+})

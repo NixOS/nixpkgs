@@ -8,12 +8,12 @@
   scaleft,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "scaleft";
   version = "1.80.1";
 
   src = fetchurl {
-    url = "https://dist.scaleft.com/repos/rpm/stable/centos/9/x86_64/1.80.1/scaleft-client-tools-${version}-1.x86_64.rpm";
+    url = "https://dist.scaleft.com/repos/rpm/stable/centos/9/x86_64/1.80.1/scaleft-client-tools-${finalAttrs.version}-1.x86_64.rpm";
     sha256 = "sha256-QrkqAgkplFF6Tp6FWKb2TJaqeOw8ec4zd9pymDP2IyY=";
   };
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
       usr/bin/sft
     patchelf \
-      --set-rpath ${libPath} \
+      --set-rpath ${finalAttrs.libPath} \
       usr/bin/sft
     ln -s $out/usr/bin/sft $out/bin/sft
     chmod +x $out/bin/sft
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   passthru.tests.version = testers.testVersion {
     package = scaleft;
     command = "sft -v";
-    version = "sft version ${version}";
+    version = "sft version ${finalAttrs.version}";
   };
 
   meta = {
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     mainProgram = "sft";
   };
-}
+})

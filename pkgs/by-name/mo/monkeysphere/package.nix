@@ -28,7 +28,7 @@ let
     patches = oldAttrs.patches ++ [ ./openssh-nixos-sandbox.patch ];
   });
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "monkeysphere";
   version = "0.44";
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   disallowedRequisites = [ opensshUnsafe ];
 
   src = fetchurl {
-    url = "http://archive.monkeysphere.info/debian/pool/monkeysphere/m/monkeysphere/monkeysphere_${version}.orig.tar.gz";
+    url = "http://archive.monkeysphere.info/debian/pool/monkeysphere/m/monkeysphere/monkeysphere_${finalAttrs.version}.orig.tar.gz";
     sha256 = "1ah7hy8r9gj96pni8azzjb85454qky5l17m3pqn37854l6grgika";
   };
 
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     libassuan
     libgcrypt
   ]
-  ++ lib.optional doCheck (
+  ++ lib.optional finalAttrs.doCheck (
     [
       gnupg
       opensshUnsafe
@@ -105,9 +105,9 @@ stdenv.mkDerivation rec {
         )
         + lib.optionalString (
           builtins.length runtimeDeps > 0
-        ) " --prefix PATH : ${lib.makeBinPath runtimeDeps}";
+        ) " --prefix PATH : ${lib.makeBinPath finalAttrs.runtimeDeps}";
       wrapMonkeysphere =
-        runtimeDeps: program: "wrapProgram $out/bin/${program} ${wrapperArgs runtimeDeps}\n";
+        runtimeDeps: program: "wrapProgram $out/bin/${program} ${wrapperArgs finalAttrs.runtimeDeps}\n";
       wrapPrograms = runtimeDeps: programs: lib.concatMapStrings (wrapMonkeysphere runtimeDeps) programs;
     in
     wrapPrograms [ gnupg ] [ "monkeysphere-authentication" "monkeysphere-host" ]
@@ -138,4 +138,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

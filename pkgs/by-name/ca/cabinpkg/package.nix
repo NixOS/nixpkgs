@@ -15,18 +15,18 @@ let
     owner = "ToruNiina";
     repo = "toml11";
     version = "4.2.0";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-NUuEgTpq86rDcsQnpG0IsSmgLT0cXhd1y32gT57QPAw=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cabinpkg";
   version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "cabinpkg";
     repo = "cabin";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-qMmfViu3ol8+Tpyy8hn0j5r+bql0SFeKPVVj/ox4AGQ=";
   };
 
@@ -74,4 +74,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "cabin";
   };
-}
+})

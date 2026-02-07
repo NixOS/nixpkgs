@@ -45,14 +45,14 @@ let
     else
       stdenv;
 in
-stdenv'.mkDerivation rec {
+stdenv'.mkDerivation (finalAttrs: {
   pname = "katago";
   version = "1.15.3";
 
   src = fetchFromGitHub {
     owner = "lightvector";
     repo = "katago";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-hZc8LlOxnVqJqyqOSIWKv3550QOaGr79xgqsAQ8B8SM=";
   };
 
@@ -142,4 +142,4 @@ stdenv'.mkDerivation rec {
     maintainers = [ lib.maintainers.omnipotententity ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

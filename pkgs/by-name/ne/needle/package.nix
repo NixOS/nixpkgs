@@ -10,18 +10,18 @@
 let
   generated = swiftpm2nix.helpers ./nix;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "needle";
   version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "uber";
     repo = "needle";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-vQlUcfIj+LHZ3R+XwSr9bBIjcZUWkW2k/wI6HF+sDPo=";
   };
 
-  sourceRoot = "${src.name}/Generator";
+  sourceRoot = "${finalAttrs.src.name}/Generator";
 
   nativeBuildInputs = [
     swift
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ matteopacini ];
     platforms = lib.platforms.darwin;
   };
-}
+})

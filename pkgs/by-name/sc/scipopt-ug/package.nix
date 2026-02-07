@@ -9,7 +9,7 @@
   gmp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "scipopt-ug";
   version = "1.0.0";
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-Nskb8quLsox7igz1UZCfd+VjR9Q8/oa8dZBYjAdc1EU=";
   };
 
-  sourceRoot = "${src.name}/ug";
+  sourceRoot = "${finalAttrs.src.name}/ug";
 
   nativeBuildInputs = [
     cmake
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl3Plus;
     homepage = "https://ug.zib.de";
   };
-}
+})

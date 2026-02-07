@@ -44,12 +44,12 @@
   libxkbcommon,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "avocode";
   version = "4.15.6";
 
   src = fetchurl {
-    url = "https://media.avocode.com/download/avocode-app/${version}/avocode-${version}-linux.zip";
+    url = "https://media.avocode.com/download/avocode-app/${finalAttrs.version}/avocode-${finalAttrs.version}-linux.zip";
     sha256 = "sha256-vNQT4jyMIIAk1pV3Hrp40nawFutWCv7xtwg2gU6ejy0=";
   };
 
@@ -138,7 +138,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/avocode
     for file in $(find $out -type f \( -perm /0111 -o -name \*.so\* \) ); do
-      patchelf --set-rpath ${libPath}:$out/ $file || true
+      patchelf --set-rpath ${finalAttrs.libPath}:$out/ $file || true
     done
   '';
 
@@ -152,4 +152,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ megheaiulian ];
   };
-}
+})

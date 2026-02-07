@@ -6,14 +6,14 @@
   ffmpeg,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "vr-reversal";
   version = "1.1";
 
   src = fetchFromGitHub {
     owner = "dfaker";
     repo = "vr-reversal";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1wn2ngcvn7wcsl3kmj782x5q9130qw951lj6ilrkafp6q6zscpqr";
   };
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
@@ -39,4 +39,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ schnusch ];
   };
-}
+})

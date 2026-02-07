@@ -11,7 +11,7 @@ let
   versionPkg = "0.4.2";
 
   contrib = fetchurl {
-    url = "mirror://sourceforge/ats2-lang/ATS2-Postiats-contrib-${versionPkg}.tgz";
+    url = "mirror://sourceforge/ats2-lang/ATS2-Postiats-contrib-${finalAttrs.versionPkg}.tgz";
     hash = "sha256-m0hfBLsaNiLaIktcioK+ZtWUsWht3IDSJ6CzgJmS06c=";
   };
 
@@ -28,12 +28,12 @@ let
   '';
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ats2";
-  version = versionPkg;
+  version = finalAttrs.versionPkg;
 
   src = fetchurl {
-    url = "mirror://sourceforge/ats2-lang/ATS2-Postiats-gmp-${version}.tgz";
+    url = "mirror://sourceforge/ats2-lang/ATS2-Postiats-gmp-${finalAttrs.version}.tgz";
     hash = "sha256-UWgDjFojPBYgykrCrJyYvVWY+Gc5d4aRGjTWjc528AM=";
   };
 
@@ -81,4 +81,4 @@ stdenv.mkDerivation rec {
       bbarker
     ];
   };
-}
+})

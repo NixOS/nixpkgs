@@ -81,12 +81,12 @@
 let
   pugixml-shared = pugixml.override { shared = true; };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "5.4.1";
   pname = "darktable";
 
   src = fetchurl {
-    url = "https://github.com/darktable-org/darktable/releases/download/release-${version}/darktable-${version}.tar.xz";
+    url = "https://github.com/darktable-org/darktable/releases/download/release-${finalAttrs.version}/darktable-${finalAttrs.version}.tar.xz";
     hash = "sha256-r9x8iKM4qM0vrDHIRQ0Hbtv3PpVuQwcmDIPrwZX4ReQ=";
   };
 
@@ -211,7 +211,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Virtual lighttable and darkroom for photographers";
     homepage = "https://www.darktable.org";
-    changelog = "https://github.com/darktable-org/darktable/releases/tag/release-${version}";
+    changelog = "https://github.com/darktable-org/darktable/releases/tag/release-${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     platforms = with lib.platforms; linux ++ darwin;
     maintainers = with lib.maintainers; [
@@ -221,4 +221,4 @@ stdenv.mkDerivation rec {
       freyacodes
     ];
   };
-}
+})

@@ -4,7 +4,7 @@
   udevCheckHook,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   name = "usb-blaster-udev-rules";
 
   udevRules = ./usb-blaster.rules;
@@ -33,4 +33,4 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.free;
     platforms = lib.platforms.linux;
   };
-}
+})

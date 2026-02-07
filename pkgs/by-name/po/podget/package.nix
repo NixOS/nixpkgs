@@ -10,14 +10,14 @@
   iconv,
   wget,
 }:
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "podget";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "dvehrs";
     repo = "podget";
-    tag = "V${version}";
+    tag = "V${finalAttrs.version}";
     hash = "sha256-0I42UPWTdSzfRJodB1v3BNI5vwt8GRGpHR7eACoR9YQ=";
   };
 
@@ -55,4 +55,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ _9R ];
     mainProgram = "podget";
   };
-}
+})

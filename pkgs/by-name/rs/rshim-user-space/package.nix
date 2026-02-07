@@ -23,14 +23,14 @@
   withBfbInstall ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rshim-user-space";
   version = "2.5.7";
 
   src = fetchFromGitHub {
     owner = "Mellanox";
     repo = "rshim-user-space";
-    rev = "rshim-${version}";
+    rev = "rshim-${finalAttrs.version}";
     hash = "sha256-dXrReU6Wx8t6ObrrF3MeUWdFBSfn6tyQqQdGBAZsvDg=";
   };
 
@@ -111,4 +111,4 @@ stdenv.mkDerivation rec {
     # patch appears broken though.
     broken = true;
   };
-}
+})

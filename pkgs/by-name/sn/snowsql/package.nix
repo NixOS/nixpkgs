@@ -9,12 +9,12 @@
   libxcrypt-legacy,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "snowsql";
   version = "1.3.3";
 
   src = fetchurl {
-    url = "https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/${lib.versions.majorMinor version}/linux_x86_64/snowflake-snowsql-${version}-1.x86_64.rpm";
+    url = "https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/${lib.versions.majorMinor finalAttrs.version}/linux_x86_64/snowflake-snowsql-${finalAttrs.version}-1.x86_64.rpm";
     sha256 = "sha256-BedOcd3ZllzMSZ6hjs1BG0o9TEg3aJKtLzutOE3nI1s=";
   };
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
         lib64/snowflake/snowsql/snowsql
 
     makeWrapper $out/lib64/snowflake/snowsql/snowsql $out/bin/snowsql \
-      --set LD_LIBRARY_PATH "${libPath}":"${placeholder "out"}"/lib64/snowflake/snowsql \
+      --set LD_LIBRARY_PATH "${finalAttrs.libPath}":"${placeholder "out"}"/lib64/snowflake/snowsql \
   '';
 
   meta = {
@@ -53,4 +53,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     mainProgram = "snowsql";
   };
-}
+})

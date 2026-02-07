@@ -10,14 +10,14 @@
   buildPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "micropython";
   version = "1.26.0";
 
   src = fetchFromGitHub {
     owner = "micropython";
     repo = "micropython";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-T0yaTXRQFEdx6lap+S68I2RRA2kQnjbKGz+YB6okJkY=";
     fetchSubmodules = true;
 
@@ -146,4 +146,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "micropython";
   };
-}
+})

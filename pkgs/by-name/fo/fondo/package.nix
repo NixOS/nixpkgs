@@ -21,14 +21,14 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fondo";
   version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "calo001";
     repo = "fondo";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-JiDbkVs+EZRWRohSiuh8xFFgEhbnMYZfnZtz5Z4Wdb0=";
   };
 
@@ -69,4 +69,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "com.github.calo001.fondo";
   };
-}
+})

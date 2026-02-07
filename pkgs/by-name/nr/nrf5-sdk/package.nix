@@ -4,14 +4,14 @@
   fetchzip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nrf5-sdk";
   version = "17.1.0";
 
   urlHash = "ddde560";
 
   src = fetchzip {
-    url = "https://nsscprodmedia.blob.core.windows.net/prod/software-and-other-downloads/sdks/nrf5/binaries/nrf5_sdk_${version}_${urlHash}.zip";
+    url = "https://nsscprodmedia.blob.core.windows.net/prod/software-and-other-downloads/sdks/nrf5/binaries/nrf5_sdk_${finalAttrs.version}_${urlHash}.zip";
     sha256 = "sha256-q4WQ7X7/z/42/qcii+mOLnobqcbUy0tInkOfRH/Gwus=";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ stargate01 ];
   };
-}
+})

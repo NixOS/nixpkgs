@@ -15,14 +15,14 @@
 }:
 
 let
-  self = stdenv.mkDerivation rec {
+  self = stdenv.mkDerivation (finalAttrs: {
     pname = "kcov";
     version = "43";
 
     src = fetchFromGitHub {
       owner = "SimonKagstrom";
       repo = "kcov";
-      rev = "v${version}";
+      rev = "v${finalAttrs.version}";
       sha256 = "sha256-hRJYuHNSXyRoUDBF/yIPXPcBBxZoTO5cgoB2tBhKPwY=";
     };
 
@@ -93,3 +93,4 @@ let
   };
 in
 self
+)

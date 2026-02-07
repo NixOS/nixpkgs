@@ -6,12 +6,12 @@
   nix-update-script,
   versionCheckHook,
 }:
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "swiftlint";
   version = "0.62.1";
 
   src = fetchurl {
-    url = "https://github.com/realm/SwiftLint/releases/download/${version}/portable_swiftlint.zip";
+    url = "https://github.com/realm/SwiftLint/releases/download/${finalAttrs.version}/portable_swiftlint.zip";
     hash = "sha256-VB20vZT4z4+6q3YvWX5/DkkBan+MpccNhrQ3CnzSNkE=";
   };
 
@@ -46,4 +46,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.darwin;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
-}
+})

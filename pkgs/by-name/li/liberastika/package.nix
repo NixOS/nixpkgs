@@ -4,12 +4,12 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "liberastika";
   version = "1.1.5";
 
   src = fetchzip {
-    url = "mirror://sourceforge/project/lib-ka/liberastika-ttf-${version}.zip";
+    url = "mirror://sourceforge/project/lib-ka/liberastika-ttf-${finalAttrs.version}.zip";
     stripRoot = false;
     hash = "sha256-woUpOmxhj6eEw7PKJ8EyRcs3ORj0gCZhxHP5a5dy5z0=";
   };
@@ -30,4 +30,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})

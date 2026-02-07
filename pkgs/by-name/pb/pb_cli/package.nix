@@ -17,7 +17,7 @@ assert screenshots -> maim != null;
 assert video -> capture != null;
 assert clipboard -> xclip != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pb_cli-unstable";
   version = "2019-03-10";
 
@@ -53,4 +53,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     mainProgram = "pb";
   };
-}
+})

@@ -15,7 +15,7 @@
   gnused,
   docbook5,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xmloscopy";
   version = "0.1.3";
 
@@ -38,12 +38,12 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "grahamc";
     repo = "xmloscopy";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "06y5bckrmnq7b5ny2hfvlmdws910jw3xbw5nzy3bcpqsccqnjxrc";
   };
 
   installPhase = ''
-    sed -i "s/hard to say/v${version}/" ./xmloscopy
+    sed -i "s/hard to say/v${finalAttrs.version}/" ./xmloscopy
     type -P shellcheck && shellcheck ./xmloscopy
     chmod +x ./xmloscopy
     patchShebangs ./xmloscopy
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
   };
-}
+})

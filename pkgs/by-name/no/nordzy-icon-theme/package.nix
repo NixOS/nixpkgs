@@ -7,14 +7,14 @@
   nordzy-themes ? [ "all" ], # Override this to only install selected themes
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "nordzy-icon-theme";
   version = "1.8.7";
 
   src = fetchFromGitHub {
     owner = "alvatip";
     repo = "Nordzy-icon";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-r/WYGcHRAFX7TennestobjcJhwu3GE8aQXxnaeokQM0=";
   };
 
@@ -54,4 +54,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ alexnortung ];
   };
-}
+})

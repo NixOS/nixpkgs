@@ -6,12 +6,12 @@
   SDL,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dgen-sdl";
   version = "1.33";
 
   src = fetchurl {
-    url = "https://sourceforge.net/projects/dgen/files/dgen/${version}/dgen-sdl-${version}.tar.gz";
+    url = "https://sourceforge.net/projects/dgen/files/dgen/${finalAttrs.version}/dgen-sdl-${finalAttrs.version}.tar.gz";
     hash = "sha256-meLAYBfCKHPHf4gYbrzAmGckTrbgQsdjuwlLArje9h4=";
   };
 
@@ -73,3 +73,4 @@ stdenv.mkDerivation rec {
   };
 }
 # TODO: implement configure options
+)

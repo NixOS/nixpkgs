@@ -7,12 +7,12 @@
   libz,
   lib,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cato-client";
   version = "5.5.0.2620";
 
   src = fetchurl {
-    url = "https://clients.catonetworks.com/linux/${version}/cato-client-install.deb";
+    url = "https://clients.catonetworks.com/linux/${finalAttrs.version}/cato-client-install.deb";
     sha256 = "sha256-V1BhgLOHP/pGlwvjVFdNslKupjHBVSTDVIRtZ6amwbk=";
   };
 
@@ -66,4 +66,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ yarekt ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

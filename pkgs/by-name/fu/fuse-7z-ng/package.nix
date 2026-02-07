@@ -10,7 +10,7 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fuse-7z-ng";
   version = "0-unstable-2014-06-08";
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     description = "FUSE-based filesystem that uses the p7zip library";
     longDescription = ''
       fuse-7z-ng is a FUSE file system that uses the p7zip
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     mainProgram = "fuse-7z-ng";
   };
-}
+})

@@ -11,13 +11,13 @@
   yarn2nix,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   name = "zammad-update-script";
   installPhase = ''
     mkdir -p $out/bin
     cp ${./update.sh} $out/bin/update.sh
     patchShebangs $out/bin/update.sh
-    wrapProgram $out/bin/update.sh --prefix PATH : ${lib.makeBinPath buildInputs}
+    wrapProgram $out/bin/update.sh --prefix PATH : ${lib.makeBinPath finalAttrs.buildInputs}
   '';
   dontUnpack = true;
 
@@ -37,4 +37,4 @@ stdenvNoCC.mkDerivation rec {
     description = "Utility to generate Nix expressions for Zammad's dependencies";
     platforms = lib.platforms.unix;
   };
-}
+})

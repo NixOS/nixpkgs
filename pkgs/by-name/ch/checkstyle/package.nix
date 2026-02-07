@@ -6,12 +6,12 @@
   jre,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   version = "13.1.0";
   pname = "checkstyle";
 
   src = fetchurl {
-    url = "https://github.com/checkstyle/checkstyle/releases/download/checkstyle-${version}/checkstyle-${version}-all.jar";
+    url = "https://github.com/checkstyle/checkstyle/releases/download/checkstyle-${finalAttrs.version}/checkstyle-${finalAttrs.version}-all.jar";
     sha256 = "sha256-o00i6bi9qNABypHRKLfniqYMxeWmiYx/eOy6Q3oh3UA=";
   };
 
@@ -37,10 +37,10 @@ stdenvNoCC.mkDerivation rec {
       Conventions, but is highly configurable.
     '';
     homepage = "https://checkstyle.org/";
-    changelog = "https://checkstyle.org/releasenotes.html#Release_${version}";
+    changelog = "https://checkstyle.org/releasenotes.html#Release_${finalAttrs.version}";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.lgpl21;
     maintainers = with lib.maintainers; [ pSub ];
     platforms = jre.meta.platforms;
   };
-}
+})

@@ -4,12 +4,12 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "hermit";
   version = "2.0";
 
   src = fetchzip {
-    url = "https://pcaro.es/d/otf-hermit-${version}.tar.gz";
+    url = "https://pcaro.es/d/otf-hermit-${finalAttrs.version}.tar.gz";
     stripRoot = false;
     hash = "sha256-RYXZ2yJ8BIxsgeEwhXz7g0NnWG3kMPZoJaOLMUQyWWQ=";
   };
@@ -29,4 +29,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

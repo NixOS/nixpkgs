@@ -22,12 +22,12 @@ let
     ];
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "styluslabs-write-bin";
   version = "300";
 
   src = fetchurl {
-    url = "http://www.styluslabs.com/write/write${version}.tar.gz";
+    url = "http://www.styluslabs.com/write/write${finalAttrs.version}.tar.gz";
     sha256 = "0h1wf3af7jzp3f3l8mlnshi83d7a4v4y8nfqfai4lmskyicqlz7c";
   };
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
     # Create desktop item
     mkdir -p $out/share/applications
-    ln -s ${desktopItem}/share/applications/* $out/share/applications/
+    ln -s ${finalAttrs.desktopItem}/share/applications/* $out/share/applications/
     mkdir -p $out/share/icons
     ln -s $out/Write/Write144x144.png $out/share/icons/write_stylus.png
   '';
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     ''
       patchelf \
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath "${libPath}" \
+        --set-rpath "${finalAttrs.libPath}" \
         $out/Write/Write
     '';
 
@@ -77,4 +77,4 @@ stdenv.mkDerivation rec {
       atemu
     ];
   };
-}
+})

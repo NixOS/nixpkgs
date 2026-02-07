@@ -6,14 +6,14 @@
   versionCheckHook,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "pfetch";
   version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "Un1q32";
     repo = "pfetch";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-0EI5D33lVm/lJ0m47wDBE5fGmx/7tDRAC/AE58nJ2ao=";
   };
 
@@ -35,7 +35,7 @@ stdenvNoCC.mkDerivation rec {
   meta = {
     description = "Pretty system information tool written in POSIX sh";
     homepage = "https://github.com/Un1q32/pfetch";
-    changelog = "https://github.com/Un1q32/pfetch/releases/tag/${version}";
+    changelog = "https://github.com/Un1q32/pfetch/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
@@ -44,4 +44,4 @@ stdenvNoCC.mkDerivation rec {
     ];
     mainProgram = "pfetch";
   };
-}
+})

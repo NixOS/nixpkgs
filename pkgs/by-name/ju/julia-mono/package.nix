@@ -4,12 +4,12 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "JuliaMono-ttf";
   version = "0.062";
 
   src = fetchzip {
-    url = "https://github.com/cormullion/juliamono/releases/download/v${version}/JuliaMono-ttf.tar.gz";
+    url = "https://github.com/cormullion/juliamono/releases/download/v${finalAttrs.version}/JuliaMono-ttf.tar.gz";
     stripRoot = false;
     hash = "sha256-f9hjo3B4q2WBl0j86fHny8bYUqldYSC0pP4uoWOI8Zk=";
   };
@@ -37,4 +37,4 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://juliamono.netlify.app/";
     license = lib.licenses.ofl;
   };
-}
+})

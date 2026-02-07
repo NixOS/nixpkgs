@@ -15,12 +15,12 @@ let
     sha256 = "0pawqwichzpz29rva7mh8lpx4zznnrh2rqyzzj6h7z98l0dxpair";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tarsnap";
   version = "1.0.41";
 
   src = fetchurl {
-    url = "https://www.tarsnap.com/download/tarsnap-autoconf-${version}.tgz";
+    url = "https://www.tarsnap.com/download/tarsnap-autoconf-${finalAttrs.version}.tgz";
     hash = "sha256-vr2+Hm6RIzdVvrQu8LStvv2Vc0VSWPAJ+zMVVseZs9A=";
   };
 
@@ -69,4 +69,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "tarsnap";
   };
-}
+})

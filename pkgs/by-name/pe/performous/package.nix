@@ -23,14 +23,14 @@
   portaudio,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "performous";
   version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "performous";
     repo = "performous";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-f70IHA8LqIlkMRwJqSmszx3keStSx50nKcEWLGEjc3g=";
   };
 
@@ -106,4 +106,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ wegank ];
     platforms = lib.platforms.linux;
   };
-}
+})

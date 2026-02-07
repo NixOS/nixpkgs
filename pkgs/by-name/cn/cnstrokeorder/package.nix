@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cnstrokeorder";
   version = "0.0.4.7";
 
   src = fetchurl {
-    url = "http://rtega.be/chmn/CNstrokeorder-${version}.ttf";
+    url = "http://rtega.be/chmn/CNstrokeorder-${finalAttrs.version}.ttf";
     hash = "sha256-YYtOcUvt1V0DwAs/vf9KltcmYCFJNirvwjGyOK4JpIY=";
   };
 
@@ -18,7 +18,7 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -D $src $out/share/fonts/truetype/CNstrokeorder-${version}.ttf
+    install -D $src $out/share/fonts/truetype/CNstrokeorder-${finalAttrs.version}.ttf
 
     runHook postInstall
   '';
@@ -30,4 +30,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ johnazoidberg ];
     platforms = lib.platforms.all;
   };
-}
+})

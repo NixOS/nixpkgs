@@ -32,7 +32,7 @@
 
 # Known issues:
 # - Video playback (upon starting a new game) does not work (screen is black)
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "everspace";
   version = "1.3.5.3655";
 
@@ -122,7 +122,7 @@ stdenv.mkDerivation rec {
       type = "Application";
       name = "everspace-gog";
       desktopName = "EVERSPACE™";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       exec = "everspace";
       icon = "everspace-gog";
       categories = [ "Game" ];
@@ -137,4 +137,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
-}
+})

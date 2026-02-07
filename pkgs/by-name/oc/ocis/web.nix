@@ -7,14 +7,14 @@
   pnpmConfigHook,
   fetchFromGitHub,
 }:
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "ocis-web";
   version = "8.0.5";
 
   src = fetchFromGitHub {
     owner = "owncloud";
     repo = "web";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-hupdtK/V74+X7/eXoDmUjFvSKuhnoOtNQz7o6TLJXG4=";
   };
 
@@ -54,4 +54,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ xinyangli ];
     license = lib.licenses.agpl3Only;
   };
-}
+})

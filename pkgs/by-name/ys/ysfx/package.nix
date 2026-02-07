@@ -14,7 +14,7 @@
   libglvnd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ysfx";
   version = "0-unstable-2022-07-31";
 
@@ -75,4 +75,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

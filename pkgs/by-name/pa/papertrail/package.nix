@@ -8,7 +8,7 @@
   testers,
   papertrail,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "papertrail";
   version = (import ./gemset.nix).papertrail.version;
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ nicknovitski ];
     platforms = ruby.meta.platforms;
   };
-}
+})

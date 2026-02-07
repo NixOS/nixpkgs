@@ -6,13 +6,13 @@
   conf ? null,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "noice";
   version = "0.8";
 
   src = fetchgit {
     url = "git://git.2f30.org/noice.git";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "0975j4m93s9a21pazwdzn4gqhkngwq7q6ghp0q8a75r6c4fb7aar";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "noice";
   };
-}
+})

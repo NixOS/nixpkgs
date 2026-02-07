@@ -54,19 +54,19 @@ let
   );
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bluespec";
   version = "2024.07";
 
   src = fetchFromGitHub {
     owner = "B-Lang-org";
     repo = "bsc";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-gA/vfAkkM2cuArN99JZVYEWTIJqg82HlC+BHNVS5Ot0=";
   };
 
   yices-src = fetchurl {
-    url = "https://github.com/B-Lang-org/bsc/releases/download/${version}/yices-src-for-bsc-${version}.tar.gz";
+    url = "https://github.com/B-Lang-org/bsc/releases/download/${finalAttrs.version}/yices-src-for-bsc-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-pyEdCJvmgwOYPMZEtw7aro76tSn/Y/2GcKTyARmIh4E=";
   };
 
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
   patches = [ ./libstp_stub_makefile.patch ];
 
   postUnpack = ''
-    tar -C $sourceRoot/ -xf ${yices-src}
+    tar -C $sourceRoot/ -xf ${yices-finalAttrs.src}
     chmod -R +rwX $sourceRoot/src/vendor/yices/v2.6/yices2
   '';
 
@@ -299,4 +299,4 @@ stdenv.mkDerivation rec {
       thoughtpolice
     ];
   };
-}
+})

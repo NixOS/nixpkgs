@@ -15,14 +15,14 @@ let
   );
 in
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "notonoto";
   version = "0.0.3";
 
   src = fetchFromGitHub {
     owner = "yuru7";
     repo = "NOTONOTO";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-1dbx4yC8gL41OEAE/LNDyoDb4xhAwV5h8oRmdlPULUo=";
   };
 
@@ -61,4 +61,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ genga898 ];
     platforms = lib.platforms.all;
   };
-}
+})

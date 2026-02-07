@@ -4,12 +4,12 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "courier-prime";
   version = "unstable-2019-12-05";
 
   src = fetchzip {
-    url = "https://github.com/quoteunquoteapps/CourierPrime/archive/7f6d46a766acd9391d899090de467c53fd9c9cb0/courier-prime-${version}.zip";
+    url = "https://github.com/quoteunquoteapps/CourierPrime/archive/7f6d46a766acd9391d899090de467c53fd9c9cb0/courier-prime-${finalAttrs.version}.zip";
     hash = "sha256-pMFZpytNtgoZrBj2Gj8SgJ0Lab8uVY5aQtcO2lFbHj4=";
   };
 
@@ -28,4 +28,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = [ lib.maintainers.austinbutler ];
     platforms = lib.platforms.all;
   };
-}
+})

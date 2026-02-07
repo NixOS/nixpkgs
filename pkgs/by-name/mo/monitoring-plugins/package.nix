@@ -36,14 +36,14 @@ let
     procps
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "monitoring-plugins";
   version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "monitoring-plugins";
     repo = "monitoring-plugins";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-T37t0shhC+8k7CN/hIOxsskuuCi0LwQui8xyRTC+pjQ=";
   };
 
@@ -103,4 +103,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

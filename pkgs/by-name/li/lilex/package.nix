@@ -4,12 +4,12 @@
   fetchurl,
   unzip,
 }:
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "lilex";
   version = "2.621";
 
   src = fetchurl {
-    url = "https://github.com/mishamyrt/Lilex/releases/download/${version}/Lilex.zip";
+    url = "https://github.com/mishamyrt/Lilex/releases/download/${finalAttrs.version}/Lilex.zip";
     hash = "sha256-TsLJ96SZpokW3354/yt0Re4ZtFXqYK/46iyZXdPKhoE=";
   };
 
@@ -34,4 +34,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ redyf ];
     platforms = lib.platforms.all;
   };
-}
+})

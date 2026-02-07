@@ -10,7 +10,7 @@
 }:
 
 let
-  openbsd_version = "OPENBSD_6_8"; # This has to be equal to ${src}/OPENBSD_BRANCH
+  openbsd_version = "OPENBSD_6_8"; # This has to be equal to ${finalAttrs.src}/OPENBSD_BRANCH
   openbsd = fetchFromGitHub {
     name = "portable";
     owner = "openbgpd-portable";
@@ -19,14 +19,14 @@ let
     sha256 = "sha256-vCVK5k4g6aW2z2fg7Kv0uvkX7f34aRc8K2myb3jjl6w=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opengpd";
   version = "6.8p0";
 
   src = fetchFromGitHub {
     owner = "openbgpd-portable";
     repo = "openbgpd-portable";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-TKs6tt/SCWes6kYAGIrSShZgOLf7xKh26xG3Zk7wCCw=";
   };
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     cp -r ${openbsd}/* ./openbsd/
     chmod -R +w ./openbsd
     openbsd_version=$(cat ./OPENBSD_BRANCH)
-    if [ "$openbsd_version" != "${openbsd_version}" ]; then
+    if [ "$openbsd_version" != "${openbsd_finalAttrs.version}" ]; then
       echo "OPENBSD VERSION does not match"
       exit 1
     fi
@@ -63,4 +63,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ kloenk ];
     platforms = lib.platforms.linux;
   };
-}
+})

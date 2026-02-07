@@ -13,19 +13,19 @@
   webkitgtk_4_1,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fontfinder";
   version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "mmstick";
     repo = "fontfinder";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-C4KqEdqToVnPXFPWvNkl/md9L2W4NxRd5jvZ4E7CtfA=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-g6PRGHrkHA0JTekKaQs+8mtyOCj99m0zPbgP8AnP7GU=";
   };
 
@@ -51,9 +51,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "GTK application for browsing and installing fonts from Google's font archive";
     homepage = "https://github.com/mmstick/fontfinder";
-    changelog = "https://github.com/mmstick/fontfinder/releases/tag/${src.rev}";
+    changelog = "https://github.com/mmstick/fontfinder/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "fontfinder-gtk";
   };
-}
+})

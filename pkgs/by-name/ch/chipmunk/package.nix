@@ -16,13 +16,13 @@
   libxrandr,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "chipmunk";
   majorVersion = "7";
   version = "${majorVersion}.0.3";
 
   src = fetchurl {
-    url = "https://chipmunk-physics.net/release/Chipmunk-${majorVersion}.x/Chipmunk-${version}.tgz";
+    url = "https://chipmunk-physics.net/release/Chipmunk-${majorVersion}.x/Chipmunk-${finalAttrs.version}.tgz";
     sha256 = "06j9cfxsyrrnyvl7hsf55ac5mgff939mmijliampphlizyg0r2q4";
   };
 
@@ -59,4 +59,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix; # supports Windows and MacOS as well, but those require more work
   };
-}
+})

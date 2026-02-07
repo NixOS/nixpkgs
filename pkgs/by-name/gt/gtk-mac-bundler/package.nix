@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtk-mac-bundler";
   version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "GNOME";
     repo = "gtk-mac-bundler";
-    rev = "bundler-${version}";
+    rev = "bundler-${finalAttrs.version}";
     sha256 = "1kyyq2hc217i5vhbfff0ldgv0r3aziwryd1xlck5cw3s6hgskbza";
   };
 
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/GNOME/gtk-mac-bundler";
     license = lib.licenses.gpl2;
   };
-}
+})

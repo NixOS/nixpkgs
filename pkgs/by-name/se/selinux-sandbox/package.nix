@@ -19,13 +19,13 @@
 
 with python3.pkgs;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "selinux-sandbox";
   version = "3.3";
   inherit (policycoreutils) se_url;
 
   src = fetchurl {
-    url = "${se_url}/${version}/selinux-sandbox-${version}.tar.gz";
+    url = "${se_url}/${finalAttrs.version}/selinux-sandbox-${finalAttrs.version}.tar.gz";
     sha256 = "0rw8pxfqhl6ww4w31fbf4hi3zilh1n3b1rfjm7ra76mm78wfyylj";
   };
 
@@ -84,4 +84,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ RossComputerGuy ];
   };
-}
+})

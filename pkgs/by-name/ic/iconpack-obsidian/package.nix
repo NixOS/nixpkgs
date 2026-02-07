@@ -8,14 +8,14 @@
   hicolor-icon-theme,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "iconpack-obsidian";
   version = "4.15";
 
   src = fetchFromGitHub {
     owner = "madmaxms";
     repo = "iconpack-obsidian";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1f32isq1xyn9b6p1nx5rssqgg9gw0jp9ld19860xk29fspmlfb8n";
   };
 
@@ -63,4 +63,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.romildo ];
   };
-}
+})

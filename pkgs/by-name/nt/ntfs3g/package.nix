@@ -15,7 +15,7 @@
   fuse,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ntfs3g";
   version = "2022.10.3";
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "tuxera";
     repo = "ntfs-3g";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-nuFTsGkm3zmSzpwmhyY7Ke0VZfZU0jHOzEWaLBbglQk=";
   };
 
@@ -91,4 +91,4 @@ stdenv.mkDerivation rec {
       lgpl2Plus # fuse-lite
     ];
   };
-}
+})

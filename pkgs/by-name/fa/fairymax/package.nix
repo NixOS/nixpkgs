@@ -4,7 +4,7 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fairymax";
   version = "4.8";
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   };
 
   unpackPhase = ''
-    cp ${src} fairymax.c
+    cp ${finalAttrs.src} fairymax.c
     cp ${ini} fmax.ini
   '';
 
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "redhat-official";
   version = "4.0.3";
 
   src = fetchFromGitHub {
     owner = "RedHatOfficial";
     repo = "RedHatFont";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-r43KtMIedNitb5Arg8fTGB3hrRZoA8oUHVEL24k4LeQ=";
   };
 
@@ -33,4 +33,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})

@@ -16,7 +16,7 @@
 # Note: Renoise creates an individual build for each license which screws somewhat with the
 # use of functions like requireFile as the hash will be different for every user.
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "redux";
   version = "1.4.1";
 
@@ -27,10 +27,10 @@ stdenv.mkDerivation rec {
       fetchurl {
         urls = [
           "https://files.renoise.com/demo/Renoise_Redux_${
-            lib.replaceStrings [ "." ] [ "_" ] version
+            lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version
           }_Demo_Linux_x86_64.tar.gz"
           "https://files.renoise.com/demo/archive/Renoise_Redux_${
-            lib.replaceStrings [ "." ] [ "_" ] version
+            lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version
           }_Demo_Linux_x86_64.tar.gz"
         ];
         sha256 = "sha256-q9hxDI8tgjIFaZyrguXn57C4vh0oeSQBY8koq8cPDlg=";
@@ -81,4 +81,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ mihnea-s ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

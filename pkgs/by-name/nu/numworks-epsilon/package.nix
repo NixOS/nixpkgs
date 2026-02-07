@@ -15,14 +15,14 @@
   copyDesktopItems,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "numworks-epsilon";
   version = "23.2.3";
 
   src = fetchFromGitHub {
     owner = "numworks";
     repo = "epsilon";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-w9ddcULE1MrGnYcXA0qOg1elQv/eBhcXqhMSjWT3Bkk=";
   };
 
@@ -91,4 +91,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ erikbackman ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

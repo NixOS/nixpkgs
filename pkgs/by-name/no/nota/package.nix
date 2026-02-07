@@ -4,7 +4,7 @@
   lib,
 }:
 
-haskellPackages.mkDerivation rec {
+haskellPackages.mkDerivation (finalAttrs: {
   pname = "nota";
   version = "1.0-unstable-2023-03-01";
 
@@ -15,7 +15,7 @@ haskellPackages.mkDerivation rec {
     hash = "sha256-96T9uxUEV22/vn6aoInG1UPXbzlDHswOSkywkdwsMeY=";
   };
 
-  sourceRoot = "${src.name}/source";
+  sourceRoot = "${finalAttrs.src.name}/source";
 
   isLibrary = false;
   isExecutable = true;
@@ -41,4 +41,4 @@ haskellPackages.mkDerivation rec {
   license = lib.licenses.mpl20;
   maintainers = [ ];
   mainProgram = "nota";
-}
+})

@@ -14,14 +14,14 @@ let
   # Note: this module is actually the source code of crypto/x509
   # taken from the Go stdlib and patcheed. So, it can't simply
   # be pinned and added to the vendor dir as everything else.
-  x509 = stdenv.mkDerivation rec {
+  x509 = stdenv.mkDerivation (finalAttrs: {
     pname = "x509-compressed";
     version = "0.0.3";
 
     src = fetchFromGitHub {
       owner = "namecoin";
       repo = "x509-compressed";
-      rev = "v${version}";
+      rev = "v${finalAttrs.version}";
       hash = "sha256-BmVtClZ3TsUbQrhwREXa42pUOlkBA4a2HVBzl1sdBIo=";
     };
 
@@ -112,3 +112,4 @@ buildGoModule {
     maintainers = with lib.maintainers; [ rnhmjoj ];
   };
 }
+)

@@ -13,12 +13,12 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "deconz";
   version = "2.31.2";
 
   src = fetchurl {
-    url = "https://deconz.dresden-elektronik.de/ubuntu/beta/deconz-${version}-qt5.deb";
+    url = "https://deconz.dresden-elektronik.de/ubuntu/beta/deconz-${finalAttrs.version}-qt5.deb";
     sha256 = "sha256-FiZFi7nRVn4i4KEAFc0P+5MPNw/DzBTds06jXvC7qGg=";
   };
 
@@ -93,4 +93,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ bjornfor ];
     mainProgram = "deCONZ";
   };
-}
+})

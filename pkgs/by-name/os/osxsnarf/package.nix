@@ -5,14 +5,14 @@
   plan9port,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "osxsnarf";
   version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "eraserhd";
     repo = "osxsnarf";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1vpg39mpc5avnv1j0yfx0x2ncvv38slmm83zv6nmm7alfwfjr2ss";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.darwin;
     maintainers = [ lib.maintainers.eraserhd ];
   };
-}
+})

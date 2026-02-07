@@ -5,11 +5,11 @@
   openssl_1_1,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wraith";
   version = "1.4.10";
   src = fetchurl {
-    url = "mirror://sourceforge/wraithbotpack/wraith-v${version}.tar.gz";
+    url = "mirror://sourceforge/wraithbotpack/wraith-v${finalAttrs.version}.tar.gz";
     sha256 = "1h8159g6wh1hi69cnhqkgwwwa95fa6z1zrzjl219mynbf6vjjzkw";
   };
   hardeningDisable = [ "format" ];
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

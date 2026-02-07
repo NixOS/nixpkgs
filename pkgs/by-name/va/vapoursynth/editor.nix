@@ -13,7 +13,7 @@
 }:
 
 let
-  unwrapped = stdenv.mkDerivation rec {
+  unwrapped = stdenv.mkDerivation (finalAttrs: {
     pname = "vapoursynth-editor";
     version = "R19-mod-4";
 
@@ -98,3 +98,4 @@ let
       '';
 in
 withPlugins [ ]
+)

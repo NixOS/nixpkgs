@@ -6,12 +6,12 @@
   gettext,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "minidjvu";
   version = "0.8";
 
   src = fetchurl {
-    url = "mirror://sourceforge/minidjvu/minidjvu-${version}.tar.gz";
+    url = "mirror://sourceforge/minidjvu/minidjvu-${finalAttrs.version}.tar.gz";
     sha256 = "0jmpvy4g68k6xgplj9zsl6brg6vi81mx3nx2x9hfbr1f4zh95j79";
   };
 
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
       "minidjvu is vulnerable to a number of out-of-bound read vulnerabilities, potentially causing denials of service (CVE-2017-12441, CVE-2017-12442, CVE-2017-12443, CVE-2017-12444, CVE-2017-12445)"
     ];
   };
-}
+})

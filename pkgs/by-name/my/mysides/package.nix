@@ -6,12 +6,12 @@
   p7zip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mysides";
   version = "1.0.1";
 
   src = fetchurl {
-    url = "https://github.com/mosen/mysides/releases/download/v${version}/mysides-${version}.pkg";
+    url = "https://github.com/mosen/mysides/releases/download/v${finalAttrs.version}/mysides-${finalAttrs.version}.pkg";
     sha256 = "sha256-dpRrj3xb9xQSXXXxragUDgNPBaniiMc6evRF12wqVRQ=";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ tboerger ];
     platforms = lib.platforms.darwin;
   };
-}
+})

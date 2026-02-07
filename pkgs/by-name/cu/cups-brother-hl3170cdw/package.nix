@@ -16,7 +16,7 @@
   pkgsi686Linux,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cups-brother-${model}";
   version = "1.1.4-0";
   lprVersion = "1.1.2-1";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   lprFileNo = "007056";
 
   src = fetchurl {
-    url = "https://download.brother.com/welcome/dlf${cupsFileNo}/${model}_cupswrapper_GPL_source_${version}.tar.gz";
+    url = "https://download.brother.com/welcome/dlf${cupsFileNo}/${model}_cupswrapper_GPL_source_${finalAttrs.version}.tar.gz";
     hash = "sha256-E3GSwiMRkuiCIJYkDozoYUPfOqvopPqPPQt1uaMDEAU=";
   };
 
@@ -164,4 +164,4 @@ stdenv.mkDerivation rec {
     downloadPage = "https://support.brother.com/g/b/downloadlist.aspx?c=us&lang=en&prod=${model}_all&os=128";
     maintainers = with lib.maintainers; [ luna_1024 ];
   };
-}
+})

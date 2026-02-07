@@ -64,7 +64,7 @@
   libkrb5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vivaldi";
   version = "7.8.3925.62";
 
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   src = fetchurl {
-    url = "https://downloads.vivaldi.com/stable/vivaldi-stable_${version}-1_${suffix}.deb";
+    url = "https://downloads.vivaldi.com/stable/vivaldi-stable_${finalAttrs.version}-1_${suffix}.deb";
     hash =
       {
         aarch64-linux = "sha256-BdtQC4+IHuJY5B21VcyhVlBeZQyEiCt+eBFShigUGjM=";
@@ -158,7 +158,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional kerberosSupport libkrb5;
 
   libPath =
-    lib.makeLibraryPath buildInputs
+    lib.makeLibraryPath finalAttrs.buildInputs
     + lib.optionalString (stdenv.hostPlatform.is64bit) (
       ":" + lib.makeSearchPathOutput "lib" "lib64" buildInputs
     )
@@ -170,16 +170,16 @@ stdenv.mkDerivation rec {
     for f in chrome_crashpad_handler vivaldi-bin vivaldi-sandbox ; do
       patchelf \
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath "${libPath}" \
+        --set-rpath "${finalAttrs.libPath}" \
         opt/vivaldi/$f
     done
 
     for f in libGLESv2.so libqt5_shim.so libqt6_shim.so; do
-      patchelf --set-rpath "${libPath}" opt/vivaldi/$f
+      patchelf --set-rpath "${finalAttrs.libPath}" opt/vivaldi/$f
     done
   ''
   + lib.optionalString proprietaryCodecs ''
-    ln -s ${vivaldi-ffmpeg-codecs}/lib/libffmpeg.so opt/vivaldi/libffmpeg.so.''${version%\.*\.*}
+    ln -s ${vivaldi-ffmpeg-codecs}/lib/libffmpeg.so opt/vivaldi/libffmpeg.so.''${finalAttrs.version%\.*\.*}
   ''
   + ''
     echo "Finished patching Vivaldi binaries"
@@ -211,7 +211,7 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/vivaldi" \
       --add-flags ${lib.escapeShellArg commandLineArgs} \
       --prefix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}/ \
-      --prefix LD_LIBRARY_PATH : ${libPath} \
+      --prefix LD_LIBRARY_PATH : ${finalAttrs.libPath} \
       --prefix PATH : ${coreutils}/bin \
       ''${qtWrapperArgs[@]}
   ''
@@ -240,4 +240,4 @@ stdenv.mkDerivation rec {
       "aarch64-linux"
     ];
   };
-}
+})

@@ -43,7 +43,7 @@ let
     # meta.longDescription.)
     lib.mapCartesianProduct variantName dimensions;
 in
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "comixcursors";
   version = "0.9.2";
 
@@ -135,4 +135,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = [ lib.maintainers.DerickEddington ];
     platforms = lib.platforms.all;
   };
-}
+})

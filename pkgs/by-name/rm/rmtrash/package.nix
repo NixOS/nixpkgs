@@ -9,14 +9,14 @@
   getopt,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "rmtrash";
   version = "1.15";
 
   src = fetchFromGitHub {
     owner = "PhrozenByte";
     repo = "rmtrash";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-vCtIM6jAYfrAOopiTcb4M5GNtucVnK0XEEKbMq1Cbc4=";
   };
 
@@ -49,4 +49,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ peelz ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -42,14 +42,14 @@
   python3Packages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "far2l";
   version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "elfmz";
     repo = "far2l";
-    tag = "v_${version}";
+    tag = "v_${finalAttrs.version}";
     hash = "sha256-pqyAZtVeE3awejx1/glJgAQN6fjAe4YHJX/fLHlF1+Y=";
   };
 
@@ -122,7 +122,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/far2l \
-      --prefix PATH : ${lib.makeBinPath runtimeDeps} \
+      --prefix PATH : ${lib.makeBinPath finalAttrs.runtimeDeps} \
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
   '';
 
@@ -133,4 +133,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ hypersw ];
     platforms = lib.platforms.unix;
   };
-}
+})

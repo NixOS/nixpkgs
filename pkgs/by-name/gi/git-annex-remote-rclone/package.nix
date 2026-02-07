@@ -6,14 +6,14 @@
   makeWrapper,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "git-annex-remote-rclone";
   version = "0.8";
 
   src = fetchFromGitHub {
     owner = "DanielDent";
     repo = "git-annex-remote-rclone";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-B6x67XXE4BHd3x7a8pQlqPPmpy0c62ziDAldB4QpqQ4=";
   };
 
@@ -33,4 +33,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = [ lib.maintainers.montag451 ];
     mainProgram = "git-annex-remote-rclone";
   };
-}
+})

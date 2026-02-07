@@ -9,12 +9,12 @@
   libx11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "6.3";
   pname = "molden";
 
   src = fetchurl {
-    url = "https://ftp.science.ru.nl/Molden//molden${version}.tar.gz";
+    url = "https://ftp.science.ru.nl/Molden//molden${finalAttrs.version}.tar.gz";
     sha256 = "02qi16pz2wffn3cc47dpjqhfafzwfmb79waw4nnhfyir8a4h3cq1";
   };
 
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ markuskowa ];
   };
-}
+})

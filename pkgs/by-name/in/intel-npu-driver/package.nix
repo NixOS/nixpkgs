@@ -10,14 +10,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "intel-npu-driver";
   version = "1.28.0";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "linux-npu-driver";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-aH7npJompKYlyq2RPXHn/lflQ1C/yYcTp2K+6kX/L0w=";
   };
@@ -77,4 +77,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pseudocc ];
   };
-}
+})

@@ -7,12 +7,12 @@
   makeBinaryWrapper,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "net-news-wire";
   version = "6.2";
 
   src = fetchurl {
-    url = "https://github.com/Ranchero-Software/NetNewsWire/releases/download/mac-${version}/NetNewsWire${version}.zip";
+    url = "https://github.com/Ranchero-Software/NetNewsWire/releases/download/mac-${finalAttrs.version}/NetNewsWire${finalAttrs.version}.zip";
     hash = "sha256-DXpC2bXgFRKYULXlrkDkwxtU77iChh5SITAIEQC5exQ=";
   };
 
@@ -46,7 +46,7 @@ stdenvNoCC.mkDerivation rec {
       NetNewsWire shows you articles from your favorite blogs and news sites and keeps track of what you've read.
     '';
     homepage = "https://github.com/Ranchero-Software/NetNewsWire";
-    changelog = "https://github.com/Ranchero-Software/NetNewsWire/releases/tag/mac-${version}";
+    changelog = "https://github.com/Ranchero-Software/NetNewsWire/releases/tag/mac-${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.darwin;
     maintainers = with lib.maintainers; [
@@ -55,4 +55,4 @@ stdenvNoCC.mkDerivation rec {
     ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
-}
+})

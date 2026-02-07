@@ -4,12 +4,12 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "hanazono";
   version = "20170904";
 
   src = fetchzip {
-    url = "mirror://osdn/hanazono-font/68253/hanazono-${version}.zip";
+    url = "mirror://osdn/hanazono-font/68253/hanazono-${finalAttrs.version}.zip";
     stripRoot = false;
     hash = "sha256-qd0q4wQnHBGLT7C+UQIiOHnxCnRCscMZcj3P5RRxD1U=";
   };
@@ -46,4 +46,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ mathnerd314 ];
     platforms = lib.platforms.all;
   };
-}
+})

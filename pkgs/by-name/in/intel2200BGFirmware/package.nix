@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "intel2200BGFirmware";
   version = "3.1";
 
   src = fetchurl {
-    url = "https://src.fedoraproject.org/repo/pkgs/ipw2200-firmware/ipw2200-fw-${version}.tgz/eaba788643c7cc7483dd67ace70f6e99/ipw2200-fw-${version}.tgz";
+    url = "https://src.fedoraproject.org/repo/pkgs/ipw2200-firmware/ipw2200-fw-${finalAttrs.version}.tgz/eaba788643c7cc7483dd67ace70f6e99/ipw2200-fw-${finalAttrs.version}.tgz";
     hash = "sha256-xoGMEcGMwDDVX/g/ZLK62P7vSF53QvhPlKYdgRpiWL0=";
   };
 
@@ -37,4 +37,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.linux;
     sourceProvenance = with lib.sourceTypes; [ binaryFirmware ];
   };
-}
+})

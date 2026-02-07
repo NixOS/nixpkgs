@@ -16,13 +16,13 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "c-ares";
   version = "1.34.6";
 
   src = fetchurl {
     # Note: tag name varies in some versions, e.g. v1.30.0, c-ares-1_17_0.
-    url = "https://github.com/c-ares/c-ares/releases/download/v${version}/c-ares-${version}.tar.gz";
+    url = "https://github.com/c-ares/c-ares/releases/download/v${finalAttrs.version}/c-ares-${finalAttrs.version}.tar.gz";
     hash = "sha256-kS3XzDs+innFL9f7nA9Ozwqqc+Re/aiAJmotbia4TvU=";
   };
 
@@ -55,8 +55,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "C library for asynchronous DNS requests";
     homepage = "https://c-ares.haxx.se";
-    changelog = "https://c-ares.org/changelog.html#${lib.replaceStrings [ "." ] [ "_" ] version}";
+    changelog = "https://c-ares.org/changelog.html#${
+      lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version
+    }";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
   };
-}
+})

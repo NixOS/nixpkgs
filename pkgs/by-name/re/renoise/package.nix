@@ -34,7 +34,7 @@ let
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "renoise";
   version = "3.5.1";
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     else
       let
         platform = platforms.${stdenv.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
-        urlVersion = lib.replaceStrings [ "." ] [ "_" ] version;
+        urlVersion = lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version;
       in
       fetchurl {
         urls = [
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
 
     cp renoise $out/renoise
 
-    for path in ${toString buildInputs}; do
+    for path in ${toString finalAttrs.buildInputs}; do
       ln -s $path/lib/*.so* $out/lib/
     done
 
@@ -140,4 +140,4 @@ stdenv.mkDerivation rec {
     platforms = lib.attrNames platforms;
     mainProgram = "renoise";
   };
-}
+})

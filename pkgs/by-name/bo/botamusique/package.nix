@@ -23,22 +23,22 @@ let
   src = fetchFromGitHub {
     owner = "azlux";
     repo = "botamusique";
-    inherit (srcJson) rev sha256;
+    inherit (finalAttrs.srcJson) rev sha256;
   };
 
   # Python needed to instantiate the html templates
   buildPython = python3Packages.python.withPackages (ps: [ ps.jinja2 ]);
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "botamusique";
-  version = srcJson.version;
+  version = finalAttrs.srcJson.version;
 
-  inherit src;
+  inherit (finalAttrs) src;
 
   npmDeps = fetchNpmDeps {
-    src = "${src}/web";
-    hash = srcJson.npmDepsHash;
+    src = "${finalAttrs.src}/web";
+    hash = finalAttrs.srcJson.npmDepsHash;
   };
 
   npmRoot = "web";
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     # after all. So we need to counter-patch it here so it can find it absolutely
     substituteInPlace mumbleBot.py \
       --replace "configuration.default.ini" "$out/share/botamusique/configuration.default.ini" \
-      --replace "version = 'git'" "version = '${version}'"
+      --replace "version = 'git'" "version = '${finalAttrs.version}'"
   '';
 
   NODE_OPTIONS = "--openssl-legacy-provider";
@@ -164,4 +164,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "botamusique";
   };
-}
+})

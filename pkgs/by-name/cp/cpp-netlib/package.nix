@@ -11,14 +11,14 @@ let
   # std::char_traits has been removed
   stdenvForCppNetlib = if stdenv.hostPlatform.isDarwin then llvmPackages_18.stdenv else stdenv;
 in
-stdenvForCppNetlib.mkDerivation rec {
+stdenvForCppNetlib.mkDerivation (finalAttrs: {
   pname = "cpp-netlib";
   version = "0.13.0-final";
 
   src = fetchFromGitHub {
     owner = "cpp-netlib";
     repo = "cpp-netlib";
-    tag = "cpp-netlib-${version}";
+    tag = "cpp-netlib-${finalAttrs.version}";
     sha256 = "18782sz7aggsl66b4mmi1i0ijwa76iww337fi9sygnplz2hs03a3";
     fetchSubmodules = true;
   };
@@ -59,4 +59,4 @@ stdenvForCppNetlib.mkDerivation rec {
     license = lib.licenses.boost;
     platforms = lib.platforms.all;
   };
-}
+})

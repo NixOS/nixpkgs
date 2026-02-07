@@ -22,7 +22,7 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "squeekboard";
   version = "1.43.1";
 
@@ -31,12 +31,12 @@ stdenv.mkDerivation rec {
     group = "World";
     owner = "Phosh";
     repo = "squeekboard";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-UsUr4UnYNo2ybEdNyOD/IiafEZ1YJFwRQ3CVy76X2H0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-3K1heokPYxYbiAGha9TrrjQXguzGv/djIB4eWa8dVjg=";
   };
 
@@ -72,4 +72,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ artturin ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "newrelic-sysmond";
   version = "2.3.0.132";
 
   src = fetchurl {
-    url = "https://download.newrelic.com/server_monitor/archive/${version}/newrelic-sysmond-${version}-linux.tar.gz";
+    url = "https://download.newrelic.com/server_monitor/archive/${finalAttrs.version}/newrelic-sysmond-${finalAttrs.version}-linux.tar.gz";
     sha256 = "0cdvffdsadfahfn1779zjfawz6l77awab3g9mw43vsba1568jh4f";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ lnl7 ];
   };
-}
+})

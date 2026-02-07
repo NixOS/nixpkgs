@@ -24,18 +24,18 @@ let
     version:
     let
       isOdd = n: lib.trivial.mod n 2 != 0;
-      patch = lib.toInt (lib.versions.patch version);
+      patch = lib.toInt (lib.versions.patch finalAttrs.version);
     in
     isOdd patch;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "foundationdb";
   version = "7.3.68";
 
   src = fetchFromGitHub {
     owner = "apple";
     repo = "foundationdb";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-OaV7YyBggeX3vrnI2EYwlWdIGRHOAeP5OZN0Rmd/dnw=";
   };
 
@@ -149,7 +149,7 @@ stdenv.mkDerivation rec {
     # NB: use the original setup.py.in, so we can substitute VERSION correctly
     cp ../LICENSE ./bindings/python
     substitute ../bindings/python/setup.py.in ./bindings/python/setup.py \
-      --replace 'VERSION' "${version}"
+      --replace 'VERSION' "${finalAttrs.version}"
     rm -f ./bindings/python/setup.py.* ./bindings/python/CMakeLists.txt
     rm -f ./bindings/python/fdb/*.pth # remove useless files
     rm -f ./bindings/python/*.rst ./bindings/python/*.mk
@@ -181,4 +181,4 @@ stdenv.mkDerivation rec {
       kornholi
     ];
   };
-}
+})

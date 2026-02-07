@@ -9,12 +9,12 @@
 # last version named "Pro". It is useful for backward compatibility
 # with older documents/templates/etc.
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "source-sans-pro";
   version = "3.006";
 
   src = fetchzip {
-    url = "https://github.com/adobe-fonts/source-sans/archive/${version}R.zip";
+    url = "https://github.com/adobe-fonts/source-sans/archive/${finalAttrs.version}R.zip";
     hash = "sha256-1Savijgq3INuUN89MR0t748HOuGseXVw5Kd4hYwuVas=";
   };
 
@@ -35,4 +35,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ ttuegel ];
   };
-}
+})

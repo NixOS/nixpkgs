@@ -19,7 +19,7 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "htcondor";
   version = "24.2.2";
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "htcondor";
     repo = "htcondor";
 
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-F8uI8Stvao7VKULTcOjv/nFUhFHxqd00gRNe6tkKgPE=";
   };
 
@@ -66,4 +66,4 @@ stdenv.mkDerivation rec {
     # On x86_64:  ld: cannot find -ldl:      No such file or directory
     broken = true;
   };
-}
+})

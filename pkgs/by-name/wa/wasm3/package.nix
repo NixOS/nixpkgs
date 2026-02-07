@@ -5,14 +5,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wasm3";
   version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "wasm3";
     repo = "wasm3";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "07zzmk776j8ydyxhrnnjiscbhhmz182a62r6aix6kfk5kq2cwia2";
   };
 
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
       "CVE-2021-38592"
     ];
   };
-}
+})

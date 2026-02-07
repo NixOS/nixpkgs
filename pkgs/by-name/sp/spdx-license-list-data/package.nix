@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "spdx-license-list-data";
   version = "3.27.0";
 
   src = fetchFromGitHub {
     owner = "spdx";
     repo = "license-list-data";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-TRrsxk+gtxI9KqJvFzD0Cfy1h5cZAJ2kT9KUARjlXcY=";
   };
 
@@ -60,4 +60,4 @@ stdenvNoCC.mkDerivation rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})

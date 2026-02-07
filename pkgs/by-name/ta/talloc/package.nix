@@ -14,12 +14,12 @@
   buildPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "talloc";
   version = "2.4.3";
 
   src = fetchurl {
-    url = "mirror://samba/talloc/talloc-${version}.tar.gz";
+    url = "mirror://samba/talloc/talloc-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-3EbEC59GuzTdl/5B9Uiw6LJHt3qRhXZzPFKOg6vYVN0=";
   };
 
@@ -89,4 +89,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.matthiasbeyer ];
   };
-}
+})

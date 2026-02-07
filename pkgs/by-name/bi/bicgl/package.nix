@@ -9,7 +9,7 @@
   libglut,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bicgl";
   version = "unstable-2018-04-06";
 
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.hpndUc;
   };
-}
+})

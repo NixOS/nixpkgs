@@ -10,14 +10,14 @@
   nix-update-script,
 }:
 
-swift.stdenv.mkDerivation rec {
+swift.stdenv.mkDerivation (finalAttrs: {
   pname = "swiftformat";
   version = "0.58.5";
 
   src = fetchFromGitHub {
     owner = "nicklockwood";
     repo = "SwiftFormat";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-QTfdMJpdm4m2YSZefPclGcAZFjyFgJeeWIYLf3apuFo=";
   };
 
@@ -49,4 +49,4 @@ swift.stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

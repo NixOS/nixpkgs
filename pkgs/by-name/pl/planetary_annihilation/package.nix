@@ -28,13 +28,13 @@
   requireFile,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "planetary-annihalation";
   version = "62857";
 
   src = requireFile {
     message = "This file has to be downloaded manually via nix-prefetch-url.";
-    name = "PA_Linux_${version}.tar.bz2";
+    name = "PA_Linux_${finalAttrs.version}.tar.bz2";
     sha256 = "0imi3k5144dsn3ka9khx3dj76klkw46ga7m6rddqjk4yslwabh3k";
   };
 
@@ -116,4 +116,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
-}
+})

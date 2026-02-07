@@ -14,14 +14,14 @@
   xfconf,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xfce4-dockbarx-plugin";
   version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "xuzhen";
     repo = "xfce4-dockbarx-plugin";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-pgWKHKJGeiMPryoEC3zt6DnzadzoHvS4mVeWkVxiMVQ=";
   };
 
@@ -70,4 +70,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     teams = [ lib.teams.xfce ];
   };
-}
+})

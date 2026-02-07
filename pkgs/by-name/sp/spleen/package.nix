@@ -5,12 +5,12 @@
   mkfontscale,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "spleen";
   version = "2.1.0";
 
   src = fetchurl {
-    url = "https://github.com/fcambus/spleen/releases/download/${version}/spleen-${version}.tar.gz";
+    url = "https://github.com/fcambus/spleen/releases/download/${finalAttrs.version}/spleen-${finalAttrs.version}.tar.gz";
     hash = "sha256-i0fFbxpuuFj7z540UwVXQEsC+7NFXjjmT7hEc/0MNy8=";
   };
 
@@ -38,4 +38,4 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.bsd2;
     maintainers = [ ];
   };
-}
+})

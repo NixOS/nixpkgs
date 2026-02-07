@@ -22,14 +22,14 @@
   enableOsmosdr ? true,
 }:
 
-gnuradio.pkgs.mkDerivation rec {
+gnuradio.pkgs.mkDerivation (finalAttrs: {
   pname = "gnss-sdr";
   version = "0.0.20";
 
   src = fetchFromGitHub {
     owner = "gnss-sdr";
     repo = "gnss-sdr";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-kQv8I4dcWeRuAfYtD5EAAMwvfnOTi+QWDogUZb4M/qQ=";
   };
 
@@ -120,4 +120,4 @@ gnuradio.pkgs.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

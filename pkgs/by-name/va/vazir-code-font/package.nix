@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "vazir-code-font";
   version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "rastikerdar";
     repo = "vazir-code-font";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-iBojse3eHr4ucZtPfpkN+mmO6sEExY8WcAallyPgMsI=";
   };
 
@@ -30,4 +30,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.dearrude ];
   };
-}
+})

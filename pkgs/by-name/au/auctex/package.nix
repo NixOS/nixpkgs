@@ -8,7 +8,7 @@
 }:
 
 let
-  auctex = stdenv.mkDerivation rec {
+  auctex = stdenv.mkDerivation (finalAttrs: {
     # Make this a valid tex(live-new) package;
     # the pkgs attribute is provided with a hack below.
     pname = "auctex";
@@ -21,7 +21,7 @@ let
     ];
 
     src = fetchurl {
-      url = "mirror://gnu/auctex/auctex-${version}.tar.gz";
+      url = "mirror://gnu/auctex/auctex-${finalAttrs.version}.tar.gz";
       hash = "sha256-Hn5AKrz4RmlOuncZklvwlcI+8zpeZgIgHHS2ymCUQDU=";
     };
 
@@ -54,3 +54,4 @@ let
 
 in
 auctex // { pkgs = [ auctex.tex ]; }
+)

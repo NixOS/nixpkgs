@@ -34,16 +34,16 @@ let
       throw "Unsupported platform ${stdenv.hostPlatform.system}";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "unigine-valley";
-  inherit version;
+  inherit (finalAttrs) version;
 
   src = fetchurl {
-    url = "https://assets.unigine.com/d/Unigine_Valley-${version}.run";
+    url = "https://assets.unigine.com/d/Unigine_Valley-${finalAttrs.version}.run";
     hash = "sha256-L7R6nEXQbLTEi76VUoUyhS2LFeTdgdaTaIQVWGn/1+8=";
   };
 
-  sourceRoot = "Unigine_Valley-${version}";
+  sourceRoot = "Unigine_Valley-${finalAttrs.version}";
   instPath = "lib/unigine/valley";
 
   nativeBuildInputs = [
@@ -143,4 +143,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "valley";
   };
-}
+})

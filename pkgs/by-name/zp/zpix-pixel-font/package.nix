@@ -3,19 +3,19 @@
   stdenvNoCC,
   fetchurl,
 }:
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "zpix-pixel-font";
   version = "3.1.8";
 
   srcs = [
     (fetchurl {
       name = "zpix-pixel-font.bdf";
-      url = "https://github.com/SolidZORO/zpix-pixel-font/releases/download/v${version}/zpix.bdf";
+      url = "https://github.com/SolidZORO/zpix-pixel-font/releases/download/v${finalAttrs.version}/zpix.bdf";
       hash = "sha256-qE6YPKuk1FRRrTvmy4YIDuxRfslma264piUDj1FWtk4=";
     })
     (fetchurl {
       name = "zpix-pixel-font.ttf";
-      url = "https://github.com/SolidZORO/zpix-pixel-font/releases/download/v${version}/zpix.ttf";
+      url = "https://github.com/SolidZORO/zpix-pixel-font/releases/download/v${finalAttrs.version}/zpix.ttf";
       hash = "sha256-UIgLGsVTbyhYMKfTYiA+MZmV4dFT9HX3sxTdrcc4vE0=";
     })
   ];
@@ -25,8 +25,8 @@ stdenvNoCC.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-    install -Dm444 ''${srcs[0]} $out/share/fonts/misc/zpix.bdf
-    install -Dm444 ''${srcs[1]} $out/share/fonts/truetype/zpix.ttf
+    install -Dm444 ''${finalAttrs.srcs[0]} $out/share/fonts/misc/zpix.bdf
+    install -Dm444 ''${finalAttrs.srcs[1]} $out/share/fonts/truetype/zpix.ttf
     runHook postInstall
   '';
 
@@ -38,4 +38,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = [ lib.maintainers.adriangl ];
     platforms = lib.platforms.all;
   };
-}
+})

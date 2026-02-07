@@ -12,14 +12,14 @@
 let
   savesDir = "~/.umoria";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "umoria";
   version = "5.7.15";
 
   src = fetchFromGitHub {
     owner = "dungeons-of-moria";
     repo = "umoria";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-1j4QkE33UcTzM06qAjk1/PyK5uNA7E/kyDe3bZcFKUM=";
   };
 
@@ -113,4 +113,4 @@ stdenv.mkDerivation rec {
     ];
     license = lib.licenses.gpl3Plus;
   };
-}
+})

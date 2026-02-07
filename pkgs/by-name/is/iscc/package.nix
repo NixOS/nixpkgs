@@ -11,11 +11,11 @@ let
   version = "6.2.2";
   majorVersion = builtins.substring 0 1 version;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "iscc";
-  inherit version;
+  inherit (finalAttrs) version;
   src = fetchurl {
-    url = "https://files.jrsoftware.org/is/${majorVersion}/innosetup-${version}.exe";
+    url = "https://files.jrsoftware.org/is/${majorVersion}/innosetup-${finalAttrs.version}.exe";
     hash = "sha256-gRfRDQCirTOhOQl46jhyhhwzDgh5FEEKY3eyLExbhWM=";
   };
   nativeBuildInputs = [
@@ -65,4 +65,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = wineWow64Packages.stable.meta.platforms;
   };
-}
+})

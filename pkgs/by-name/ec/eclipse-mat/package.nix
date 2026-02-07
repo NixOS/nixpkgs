@@ -28,12 +28,12 @@ let
   baseVersion = "${majorVersion}.${minorVersion}.${patchVersion}";
   jdk = jdk17;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "eclipse-mat";
   version = pVersion;
 
   src = fetchurl {
-    url = "http://ftp.halifax.rwth-aachen.de/eclipse//mat/${baseVersion}/rcp/MemoryAnalyzer-${version}-linux.gtk.x86_64.zip";
+    url = "http://ftp.halifax.rwth-aachen.de/eclipse//mat/${baseVersion}/rcp/MemoryAnalyzer-${finalAttrs.version}-linux.gtk.x86_64.zip";
     sha256 = "sha256-icmo5zdK0XaH32kXwZUVaQ0VPSGEgvlLr7v7PtdbmCg=";
   };
 
@@ -82,11 +82,11 @@ stdenv.mkDerivation rec {
         ]
       } \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
-      --add-flags "-configuration \$HOME/.eclipse-mat/''${version}/configuration"
+      --add-flags "-configuration \$HOME/.eclipse-mat/''${finalAttrs.version}/configuration"
 
     # Create desktop item.
     mkdir -p $out/share/applications
-    cp ${desktopItem}/share/applications/* $out/share/applications
+    cp ${finalAttrs.desktopItem}/share/applications/* $out/share/applications
     mkdir -p $out/share/pixmaps
     find $out/mat/plugins -name 'eclipse*.png' -type f -exec cp {} $out/share/pixmaps \;
     mv $out/share/pixmaps/eclipse64.png $out/share/pixmaps/eclipse.png
@@ -132,4 +132,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
   };
 
-}
+})

@@ -10,7 +10,7 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qgroundcontrol";
   version = "4.4.5";
 
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mavlink";
     repo = "qgroundcontrol";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-wjrfwE97J+UzBPIARQ6cPadN6xIdqR8i+ZKbtiDproM=";
     fetchSubmodules = true;
   };
@@ -111,4 +111,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "QGroundControl";
   };
-}
+})

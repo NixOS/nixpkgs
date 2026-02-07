@@ -4,13 +4,13 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "fira-sans";
   version = "4.301";
 
   src = fetchzip {
     url = "https://carrois.com/downloads/Fira/Download_Folder_FiraSans_${
-      lib.replaceStrings [ "." ] [ "" ] version
+      lib.replaceStrings [ "." ] [ "" ] finalAttrs.version
     }.zip";
     hash = "sha256-WBt3oqPK7ACqMhilYkyFx9Ek2ugwdCDFZN+8HLRnGRs";
     stripRoot = false;
@@ -39,4 +39,4 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
   };
-}
+})

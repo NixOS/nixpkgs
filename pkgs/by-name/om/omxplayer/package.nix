@@ -11,12 +11,12 @@
 }:
 
 let
-  ffmpeg = stdenv.mkDerivation rec {
+  ffmpeg = stdenv.mkDerivation (finalAttrs: {
     pname = "ffmpeg";
     version = "1.1.3";
 
     src = fetchurl {
-      url = "http://www.ffmpeg.org/releases/ffmpeg-${version}.tar.bz2";
+      url = "http://www.ffmpeg.org/releases/ffmpeg-${finalAttrs.version}.tar.bz2";
       sha256 = "03s1zsprz5p6gjgwwqcf7b6cvzwwid6l8k7bamx9i0f1iwkgdm0j";
     };
 
@@ -109,3 +109,4 @@ stdenv.mkDerivation {
     platforms = lib.platforms.arm;
   };
 }
+)

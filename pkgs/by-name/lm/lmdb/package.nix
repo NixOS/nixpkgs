@@ -5,7 +5,7 @@
   windows,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lmdb";
   version = "0.9.33";
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     domain = "git.openldap.org";
     owner = "openldap";
     repo = "openldap";
-    rev = "LMDB_${version}";
+    rev = "LMDB_${finalAttrs.version}";
     sha256 = "sha256-5IBoJ3jaNXao5zVzb0LDM8RGid4s8DGQpjVqrVPLpXQ=";
   };
 
@@ -60,8 +60,8 @@ stdenv.mkDerivation rec {
     mkdir -p "$dev/lib/pkgconfig"
     cat > "$dev/lib/pkgconfig/lmdb.pc" <<EOF
     Name: lmdb
-    Description: ${meta.description}
-    Version: ${version}
+    Description: ${finalAttrs.meta.description}
+    Version: ${finalAttrs.version}
 
     Cflags: -I$dev/include
     Libs: -L$out/lib -llmdb
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
       limited to the size of the virtual address space.
     '';
     homepage = "https://symas.com/lmdb/";
-    changelog = "https://git.openldap.org/openldap/openldap/-/blob/LMDB_${version}/libraries/liblmdb/CHANGES";
+    changelog = "https://git.openldap.org/openldap/openldap/-/blob/LMDB_${finalAttrs.version}/libraries/liblmdb/CHANGES";
     maintainers = with lib.maintainers; [
       jb55
       vcunat
@@ -89,4 +89,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.openldap;
     platforms = lib.platforms.all;
   };
-}
+})

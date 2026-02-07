@@ -11,12 +11,12 @@
   slang,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jed";
   version = "0.99-19";
 
   src = fetchzip {
-    url = "https://www.jedsoft.org/releases/jed/jed-${version}.tar.bz2";
+    url = "https://www.jedsoft.org/releases/jed/jed-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-vzeX0P+2+IuKtrX+2lQDeJj7VMDS6XurD2pb2jhxy2Q=";
   };
 
@@ -98,3 +98,4 @@ stdenv.mkDerivation rec {
   };
 }
 # TODO: build tex documentation
+)
