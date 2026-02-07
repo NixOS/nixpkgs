@@ -8,12 +8,13 @@ index e9b36e2a2..bc9e2f1e3 100644
  
 +import os
 +import json
++import shlex
 +
 +if "NIX_ATTRS_JSON_FILE" in os.environ:
 +    with open(os.environ["NIX_ATTRS_JSON_FILE"], "r") as f:
 +        NIX_ATTRS = json.load(f)
 +else:
-+    NIX_ATTRS = { "cmakeFlags": os.environ.get("cmakeFlags", "").split() }
++    NIX_ATTRS = { "cmakeFlags": shlex.split(os.environ.get("cmakeFlags", "")) }
 +
  
  def load_module_from_path(module_name, path):
