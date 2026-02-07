@@ -195,6 +195,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   doCheck = false;
 
   passthru = {
+    inherit rocmSupport cudaSupport vulkanSupport;
     tests = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
       metal = llama-cpp.override { metalSupport = true; };
     };
