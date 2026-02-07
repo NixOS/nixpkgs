@@ -1,6 +1,5 @@
 {
   lib,
-  mkDerivationWith,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -9,7 +8,7 @@
   setuptools-scm,
 
   # nativeBuildInputs
-  wrapQtAppsHook,
+  qt6,
 
   # dependencies
   app-model,
@@ -43,7 +42,7 @@
   wrapt,
 }:
 
-mkDerivationWith buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "napari";
   version = "0.6.4";
   pyproject = true;
@@ -65,7 +64,11 @@ mkDerivationWith buildPythonPackage rec {
     setuptools-scm
   ];
 
-  nativeBuildInputs = [ wrapQtAppsHook ];
+  nativeBuildInputs = [ qt6.wrapQtAppsHook ];
+
+  buildInputs = [
+    qt6.qtbase
+  ];
 
   dependencies = [
     app-model
