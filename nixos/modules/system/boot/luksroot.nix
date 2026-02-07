@@ -16,6 +16,15 @@ let
   kernelPackages = config.boot.kernelPackages;
   defaultPrio = (mkOptionDefault { }).priority;
 
+  # Select the appropriate cryptsetup version.
+  # Traditional initrd systems should use the version unrelated to systemd.
+  # withLuks2ExternalTokens will use systemd.
+  cryptsetup =
+    if config.boot.initrd.systemd.enable then
+      pkgs.cryptsetup
+    else
+      pkgs.cryptsetup.override { withLuks2ExternalTokens = false; };
+
   commonFunctions = ''
     die() {
         echo "$@" >&2
@@ -1153,7 +1162,7 @@ in
         '';
       in
       mkIf (!config.boot.initrd.systemd.enable) ''
-        copy_bin_and_libs ${pkgs.cryptsetup}/bin/cryptsetup
+        copy_bin_and_libs ${cryptsetup}/bin/cryptsetup
         copy_bin_and_libs ${askPass}/bin/cryptsetup-askpass
         sed -i s,/bin/sh,$out/bin/sh, $out/bin/cryptsetup-askpass
 
