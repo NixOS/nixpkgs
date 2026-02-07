@@ -16,12 +16,12 @@
 
 buildPythonPackage rec {
   pname = "skl2onnx";
-  version = "1.19.1";
+  version = "1.20.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-DBBfKjuHpiTdIY0fuY/dGc8b9iFxkNJc5+FUhBJ9Dl0=";
+    hash = "sha256-x06oJ9kroYb+ZZaV6PyYnNl7/DIO3OPTK5k2pYeNoQo=";
   };
 
   build-system = [ setuptools ];
