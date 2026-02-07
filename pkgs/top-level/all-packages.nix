@@ -3033,8 +3033,6 @@ with pkgs;
 
   licensee = callPackage ../tools/package-management/licensee { };
 
-  lichess-external-engine = callPackage ../by-name/li/lichess-external-engine/package.nix { };
-
   inherit
     ({
       limesuite = callPackage ../applications/radio/limesuite {
