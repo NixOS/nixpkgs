@@ -7,6 +7,7 @@ nvidia_x11: sha256:
   patchelf,
   zlib,
   glibc,
+  versionCheckHook,
 }:
 
 let
@@ -20,6 +21,7 @@ stdenv.mkDerivation rec {
   phases = [
     "unpackPhase"
     "installPhase"
+    "installCheckPhase"
   ];
 
   pname = "fabricmanager";
@@ -30,6 +32,10 @@ stdenv.mkDerivation rec {
       + "${sys}/${pname}-${sys}-${fmver}-archive.tar.xz";
     inherit sha256;
   };
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
 
   installPhase = ''
     mkdir -p $out/{bin,share/nvidia-fabricmanager}
