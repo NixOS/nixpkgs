@@ -17,6 +17,11 @@ let
 in
 
 stdenv.mkDerivation rec {
+  phases = [
+    "unpackPhase"
+    "installPhase"
+  ];
+
   pname = "fabricmanager";
   version = fmver;
   src = fetchurl {
