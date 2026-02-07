@@ -21,6 +21,11 @@ buildPythonPackage rec {
     hash = "sha256-uA04KHKLXW0lx1y5brpCDARLac4/C8VmVinVMkEtTdM=";
   };
 
+  patches = [
+    # fix: https://github.com/AnonymouX47/term-image/pull/195
+    ./0001-getdata.patch
+  ];
+
   build-system = [
     setuptools
   ];

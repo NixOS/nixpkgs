@@ -1,0 +1,48 @@
+From aa8e862769c36e3ea7fe07d2d2623324d3a9293a Mon Sep 17 00:00:00 2001
+From: cinereal <cinereal@riseup.net>
+Date: Sat, 7 Feb 2026 14:52:39 +0100
+Subject: [PATCH] chore: replace `getdata` -> `get_flattened_data`
+
+addresses Pillow's deprecation of `getdata`.
+
+see: https://github.com/python-pillow/Pillow/pull/9292
+
+Signed-off-by: cinereal <cinereal@riseup.net>
+---
+ src/term_image/image/common.py | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/term_image/image/common.py b/src/term_image/image/common.py
+index 3c21e82..cf935a4 100644
+--- a/src/term_image/image/common.py
++++ b/src/term_image/image/common.py
+@@ -1489,7 +1489,7 @@ class BaseImage(metaclass=ImageMeta):
+         if alpha is None or img.mode in {"1", "L", "RGB", "HSV", "CMYK"}:
+             convert_resize_img("RGB")
+             if pixel_data:
+-                rgb = list(img.getdata())
++                rgb = list(img.get_flattened_data())
+                 a = [255] * mul(*size)
+         else:
+             convert_resize_img("RGBA")
+@@ -1505,7 +1505,7 @@ class BaseImage(metaclass=ImageMeta):
+                     a = [255] * mul(*size)
+             else:
+                 if pixel_data:
+-                    a = list(img.getdata(3))
++                    a = list(img.get_flattened_data(3))
+                     if round_alpha:
+                         alpha = round(alpha * 255)
+                         a = [0 if val < alpha else 255 for val in a]
+@@ -1520,7 +1520,7 @@ class BaseImage(metaclass=ImageMeta):
+                     img = bg
+ 
+             if pixel_data:
+-                rgb = list((img if img.mode == "RGB" else img.convert("RGB")).getdata())
++                rgb = list((img if img.mode == "RGB" else img.convert("RGB")).get_flattened_data())
+ 
+         return (img, *(pixel_data and (rgb, a) or (None, None)))
+ 
+-- 
+2.51.2
+
