@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
   phases = [
     "unpackPhase"
     "installPhase"
+    "checkPhase"
     "installCheckPhase"
   ];
 
@@ -58,10 +59,12 @@ stdenv.mkDerivation rec {
       mv $d $out/.
     done
     patchShebangs $out/bin
+  '';
 
-    for b in $out/bin/*;do
-      ${ldd} $b | grep -vqz "not found"
-    done
+  doCheck = true;
+
+  checkPhase = ''
+    ldd $out/bin/* | grep -v "not found"
   '';
 
   meta = {
