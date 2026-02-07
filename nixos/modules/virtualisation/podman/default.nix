@@ -63,7 +63,7 @@ in
   ];
 
   meta = {
-    maintainers = lib.teams.podman.members;
+    teams = [ lib.teams.podman ];
   };
 
   options.virtualisation.podman = {
