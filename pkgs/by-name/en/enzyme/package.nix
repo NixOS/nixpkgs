@@ -5,14 +5,14 @@
   llvmPackages,
   git,
 }:
-llvmPackages.stdenv.mkDerivation rec {
+llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "enzyme";
   version = "0.0.239";
 
   src = fetchFromGitHub {
     owner = "EnzymeAD";
     repo = "Enzyme";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Sa+AVA8OdCQ5PGphs60zWnMkkEMm9CRyGT5Nsc5TX+M=";
   };
 
@@ -49,4 +49,4 @@ llvmPackages.stdenv.mkDerivation rec {
       llvm-exception
     ];
   };
-}
+})

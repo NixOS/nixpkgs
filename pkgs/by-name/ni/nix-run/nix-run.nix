@@ -12,12 +12,12 @@
   relude,
   unix,
 }:
-mkDerivation rec {
+mkDerivation (finalAttrs: {
   pname = "nix-run";
   version = "0.1.0.0-alpha.2";
   src = fetchgit {
     url = "https://tangled.org/weethet.bsky.social/nix-run";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-vnYD3N32H6eEPLis8eNlglXVY+guP5DDKCf2z7CLzwA=";
   };
   isLibrary = false;
@@ -37,4 +37,4 @@ mkDerivation rec {
   homepage = "https://tangled.org/@weethet.bsky.social/nix-run";
   license = lib.licenses.bsd3;
   mainProgram = "nix-run";
-}
+})

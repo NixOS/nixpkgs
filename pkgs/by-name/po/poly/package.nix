@@ -5,7 +5,7 @@
   unzip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   name = "poly";
 
   regular = fetchurl {
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.ofl;
     maintainers = with lib.maintainers; [ relrod ];
   };
-}
+})

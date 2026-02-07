@@ -13,14 +13,14 @@
   gnustep-base,
 }:
 
-clangStdenv.mkDerivation rec {
+clangStdenv.mkDerivation (finalAttrs: {
   pname = "sope";
   version = "5.12.3";
 
   src = fetchFromGitHub {
     owner = "Alinto";
     repo = "sope";
-    rev = "SOPE-${version}";
+    rev = "SOPE-${finalAttrs.version}";
     hash = "sha256-GeJ1o8Juw7jm3/pkfuMqVpfMxKewU6hQmBoPmb0HgTc=";
   };
 
@@ -86,4 +86,4 @@ clangStdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ jceb ];
     knownVulnerabilities = [ ];
   };
-}
+})

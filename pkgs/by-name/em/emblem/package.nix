@@ -16,7 +16,7 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "emblem";
   version = "1.5.0";
 
@@ -25,12 +25,12 @@ stdenv.mkDerivation rec {
     group = "World";
     owner = "design";
     repo = "emblem";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-knq8OKoc8Xv7lOr0ub9+2JfeQE84UlTHR1q4SFFF8Ug=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-CsISaVlRGtVVEna1jyGZo/IdWcJdwHJv6LXcXYha2UE=";
   };
 
@@ -70,4 +70,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     teams = [ lib.teams.gnome-circle ];
   };
-}
+})

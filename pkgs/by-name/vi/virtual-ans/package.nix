@@ -10,12 +10,12 @@
   autoPatchelfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "virtual-ans";
   version = "3.0.3";
 
   src = fetchzip {
-    url = "https://warmplace.ru/soft/ans/virtual_ans-${version}.zip";
+    url = "https://warmplace.ru/soft/ans/virtual_ans-${finalAttrs.version}.zip";
     hash = "sha256-QrYWTRYCh1YYJFtBukC2kUNoiRlsAJOD1NdB9rcx7yM=";
   };
 
@@ -100,4 +100,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ jacg ];
   };
 
-}
+})

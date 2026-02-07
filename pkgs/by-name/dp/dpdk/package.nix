@@ -32,12 +32,12 @@
   ),
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dpdk";
   version = "25.07";
 
   src = fetchurl {
-    url = "https://fast.dpdk.org/rel/dpdk-${version}.tar.xz";
+    url = "https://fast.dpdk.org/rel/dpdk-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-aIbL7cNQu4y+80fRA2fWJZ42Q1Yn+7J9V4rb3A07QQ0=";
   };
 
@@ -117,4 +117,4 @@ stdenv.mkDerivation rec {
       zhaofengli
     ];
   };
-}
+})

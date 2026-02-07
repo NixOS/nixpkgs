@@ -13,7 +13,7 @@
 # deprecated and upstream does not (yet ?) support KDE5.
 # See historical versions of this file for building ktikz with KDE4.
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.12";
   pname = "qtikz";
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "fhackenberger";
     repo = "ktikz";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1s83x8r2yi64wc6ah2iz09dj3qahy0fkxx6cfgpkavjw9x0j0582";
   };
 
@@ -71,4 +71,4 @@ stdenv.mkDerivation rec {
   ];
 
   qtWrapperArgs = [ ''--prefix PATH : "${gnuplot}/bin"'' ];
-}
+})

@@ -4,12 +4,12 @@
   stdenvNoCC,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "carlito";
   version = "20130920";
 
   src = fetchurl {
-    url = "https://commondatastorage.googleapis.com/chromeos-localmirror/distfiles/crosextrafonts-carlito-${version}.tar.gz";
+    url = "https://commondatastorage.googleapis.com/chromeos-localmirror/distfiles/crosextrafonts-carlito-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-S9ErbLwyHBzxbaduLFhcklzpVqCAZ65vbGTv9sz9r1o=";
   };
 
@@ -39,4 +39,4 @@ stdenvNoCC.mkDerivation rec {
     # not want to install the font alias of this package.
     priority = 10;
   };
-}
+})

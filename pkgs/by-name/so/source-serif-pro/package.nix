@@ -9,12 +9,12 @@
 # last version named "Pro". It is useful for backward compatibility
 # with older documents/templates/etc.
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "source-serif-pro";
   version = "3.001";
 
   src = fetchzip {
-    url = "https://github.com/adobe-fonts/source-serif/releases/download/${version}R/source-serif-pro-${version}R.zip";
+    url = "https://github.com/adobe-fonts/source-serif/releases/download/${finalAttrs.version}R/source-serif-pro-${finalAttrs.version}R.zip";
     hash = "sha256-chXoaPOACtQ7wz/etElXuIJH/yvUsP03WlxeCfqWF/w=";
   };
 
@@ -35,4 +35,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ ttuegel ];
   };
-}
+})

@@ -5,13 +5,13 @@
   stdenv,
   nix-update-script,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "espresso";
   version = "2.4";
   src = fetchFromGitHub {
     owner = "chipsalliance";
     repo = "espresso";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-z5By57VbmIt4sgRgvECnLbZklnDDWUA6fyvWVyXUzsI=";
   };
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     # See: https://github.com/chipsalliance/espresso/issues/4
     license = lib.licenses.unfree;
   };
-}
+})

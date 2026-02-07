@@ -5,14 +5,14 @@
   python3Packages,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "jetbrains-mono";
   version = "2.304";
 
   src = fetchFromGitHub {
     owner = "jetbrains";
     repo = "jetbrainsmono";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-SW9d5yVud2BWUJpDOlqYn1E1cqicIHdSZjbXjqOAQGw=";
   };
 
@@ -40,9 +40,9 @@ stdenvNoCC.mkDerivation rec {
   meta = {
     description = "Typeface made for developers";
     homepage = "https://jetbrains.com/mono/";
-    changelog = "https://github.com/JetBrains/JetBrainsMono/blob/v${version}/Changelog.md";
+    changelog = "https://github.com/JetBrains/JetBrainsMono/blob/v${finalAttrs.version}/Changelog.md";
     license = lib.licenses.ofl;
     maintainers = with lib.maintainers; [ vinnymeller ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -5,7 +5,7 @@
   premake5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "otfcc";
   version = "0.10.4";
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "caryll";
     repo = "otfcc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1nrkzpqklfpqsccji4ans40rj88l80cv7dpxwx4g577xrvk13a0f";
   };
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     broken = true;
   };
 
-}
+})

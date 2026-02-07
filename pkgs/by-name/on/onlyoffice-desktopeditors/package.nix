@@ -76,12 +76,12 @@ let
     pulseaudio
   ];
 
-  derivation = stdenv.mkDerivation rec {
+  derivation = stdenv.mkDerivation (finalAttrs: {
     pname = "onlyoffice-desktopeditors";
     version = "9.1.0";
     minor = null;
     src = fetchurl {
-      url = "https://github.com/ONLYOFFICE/DesktopEditors/releases/download/v${version}/onlyoffice-desktopeditors_amd64.deb";
+      url = "https://github.com/ONLYOFFICE/DesktopEditors/releases/download/v${finalAttrs.version}/onlyoffice-desktopeditors_amd64.deb";
       hash = "sha256-D36E7hYCTJ9Lw9XnB8nxMGMJDJRhM+K+bviuM9uuzhk=";
     };
 
@@ -159,7 +159,7 @@ let
 
     preFixup = ''
       gappsWrapperArgs+=(
-        --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
+        --prefix LD_LIBRARY_PATH : "${finalAttrs.runtimeLibs}" \
         --set QT_XKB_CONFIG_ROOT "${xkeyboard_config}/share/X11/xkb" \
         --set QTCOMPOSE "${libx11.out}/share/X11/locale" \
         --set QT_QPA_PLATFORM "xcb"
@@ -208,3 +208,4 @@ buildFHSEnv {
     ];
   };
 }
+)

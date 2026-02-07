@@ -7,12 +7,12 @@
   gitUpdater,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "theme-obsidian2";
   version = "2.25";
 
   src = fetchurl {
-    url = "https://github.com/madmaxms/theme-obsidian-2/releases/download/v${version}/obsidian-2-theme.tar.xz";
+    url = "https://github.com/madmaxms/theme-obsidian-2/releases/download/v${finalAttrs.version}/obsidian-2-theme.tar.xz";
     sha256 = "sha256-Hajz2bFcsi+9kSjxuZ6Jav8t7S6trDUF5yJivw+Vypw=";
   };
 
@@ -46,4 +46,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.romildo ];
   };
-}
+})

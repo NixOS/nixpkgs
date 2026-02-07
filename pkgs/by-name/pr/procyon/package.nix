@@ -24,14 +24,14 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "procyon";
   version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "mstrobel";
     repo = "procyon";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-l8+eEdJtneZY1s6rvh9h87XwL7ioU3Y9T64CH7LdjXo=";
   };
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
       -e '/uploadArchives/d' \
       -e 's/configurations.compile/configurations.runtimeClasspath/' \
       -e "/jcommander/d"
-    cp -a ${jcommander-src}/src Procyon.Decompiler
+    cp -a ${jcommander-finalAttrs.src}/src Procyon.Decompiler
   '';
 
   nativeBuildInputs = [
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin $out/share/procyon
-    mv build/Procyon.Decompiler/libs/Procyon.Decompiler-${version}.jar $out/share/procyon/procyon-decompiler.jar
+    mv build/Procyon.Decompiler/libs/Procyon.Decompiler-${finalAttrs.version}.jar $out/share/procyon/procyon-decompiler.jar
 
     makeWrapper ${jre}/bin/java $out/bin/procyon \
       --add-flags "-jar $out/share/procyon/procyon-decompiler.jar"
@@ -70,4 +70,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ linsui ];
     mainProgram = "procyon";
   };
-}
+})

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "sahel-fonts";
   version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "rastikerdar";
     repo = "sahel-font";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-U4tIICXZFK9pk7zdzRwBPIPYFUlYXPSebnItUJUgGJY=";
   };
 
@@ -30,4 +30,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})

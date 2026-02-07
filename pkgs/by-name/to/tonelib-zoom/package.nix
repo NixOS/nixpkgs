@@ -15,7 +15,7 @@
   libjack2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tonelib-zoom";
   version = "4.3.1";
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     libglvnd
     # webkitgtk_4_0
   ]
-  ++ runtimeDependencies;
+  ++ finalAttrs.runtimeDependencies;
 
   runtimeDependencies = map lib.getLib [
     curl
@@ -65,4 +65,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     mainProgram = "ToneLib-Zoom";
   };
-}
+})

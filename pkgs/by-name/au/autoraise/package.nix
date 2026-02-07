@@ -4,14 +4,14 @@
   fetchFromGitHub,
   apple-sdk,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "autoraise";
   version = "5.3";
 
   src = fetchFromGitHub {
     owner = "sbmpost";
     repo = "AutoRaise";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-OsvmNHpQ46+cWkR4Nz/9oIgSFSWLfCwZnAnRKRiNm5E=";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     mainProgram = "autoraise";
     platforms = lib.platforms.darwin;
   };
-}
+})

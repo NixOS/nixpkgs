@@ -4,12 +4,12 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "roboto-flex";
   version = "3.200";
 
   src = fetchzip {
-    url = "https://github.com/googlefonts/roboto-flex/releases/download/${version}/roboto-flex-fonts.zip";
+    url = "https://github.com/googlefonts/roboto-flex/releases/download/${finalAttrs.version}/roboto-flex-fonts.zip";
     stripRoot = false;
     hash = "sha256-p8BvE4f6zQLygl49hzYTXXVQFZEJjrlfUvjNW+miar4=";
   };
@@ -29,4 +29,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.romildo ];
   };
-}
+})

@@ -8,13 +8,13 @@
   unzip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "megacli";
   version = "8.07.14";
 
   src = fetchurl {
     url = "https://docs.broadcom.com/docs-and-downloads/raid-controllers/raid-controllers-common-files/${
-      builtins.replaceStrings [ "." ] [ "-" ] version
+      builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     }_MegaCLI.zip";
     sha256 = "1sdn58fbmd3fj4nzbajq3gcyw71ilgdh45r5p4sa6xmb7np55cfr";
   };
@@ -31,16 +31,16 @@ stdenv.mkDerivation rec {
   ];
 
   buildCommand = ''
-    unzip ${src}
-    rpmextract Linux/MegaCli-${version}-1.noarch.rpm
+    unzip ${finalAttrs.src}
+    rpmextract Linux/MegaCli-${finalAttrs.version}-1.noarch.rpm
 
     mkdir -p $out/{bin,share/MegaRAID/MegaCli}
     cp -r opt $out
-    cp ${version}_MegaCLI.txt $out/share/MegaRAID/MegaCli
+    cp ${finalAttrs.version}_MegaCLI.txt $out/share/MegaRAID/MegaCli
 
     ${patchelf}/bin/patchelf \
       --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath ${libPath}:${lib.getLib stdenv.cc.cc}/lib64:${lib.getLib stdenv.cc.cc}/lib \
+      --set-rpath ${finalAttrs.libPath}:${lib.getLib stdenv.cc.cc}/lib64:${lib.getLib stdenv.cc.cc}/lib \
       $out/opt/MegaRAID/MegaCli/MegaCli64
 
     ln -s $out/opt/MegaRAID/MegaCli/MegaCli64 $out/bin/MegaCli64
@@ -54,4 +54,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     mainProgram = "MegaCli64";
   };
-}
+})

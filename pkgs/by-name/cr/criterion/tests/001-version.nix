@@ -3,7 +3,7 @@
   pkg-config,
   criterion,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   name = "version-tester";
   inherit (criterion) version;
   src = ./test_dummy.c;
@@ -22,4 +22,4 @@ stdenv.mkDerivation rec {
   '';
 
   meta.mainProgram = name;
-}
+})

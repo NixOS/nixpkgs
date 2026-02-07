@@ -9,14 +9,14 @@
   c-stdaux,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "c-siphash";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "c-util";
     repo = "c-siphash";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-S5eAlLR6p0Tpd6aYPGGGOH1sCGOyflVyhICi2pYt/8U=";
   };
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/c-util/c-siphash";
     description = "Streaming-capable SipHash Implementation";
-    changelog = "https://github.com/c-util/c-siphash/releases/tag/${src.tag}";
+    changelog = "https://github.com/c-util/c-siphash/releases/tag/${finalAttrs.src.tag}";
     license = with lib.licenses; [
       asl20
       lgpl2Plus
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ qbisi ];
   };
-}
+})

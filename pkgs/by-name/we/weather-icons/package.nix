@@ -4,12 +4,12 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "weather-icons";
   version = "2.0.12";
 
   src = fetchzip {
-    url = "https://github.com/erikflowers/weather-icons/archive/refs/tags/${version}.zip";
+    url = "https://github.com/erikflowers/weather-icons/archive/refs/tags/${finalAttrs.version}.zip";
     hash = "sha256-0ZFH2awUo4BkTpK1OsWZ4YKczJHo+HHM6ezGBJAmT+U=";
   };
 
@@ -33,4 +33,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ pnelson ];
   };
-}
+})

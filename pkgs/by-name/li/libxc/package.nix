@@ -16,15 +16,15 @@ let
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libxc";
-  inherit version;
+  inherit (finalAttrs) version;
 
   src = fetchFromGitLab {
     owner = "libxc";
     repo = "libxc";
-    rev = version;
-    hash = versionHashes."${version}";
+    rev = finalAttrs.version;
+    hash = finalAttrs.versionHashes."${finalAttrs.version}";
   };
 
   patches = [
@@ -78,4 +78,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ markuskowa ];
   };
-}
+})

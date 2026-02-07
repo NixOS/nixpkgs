@@ -63,13 +63,13 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "saleae-logic";
   version = "1.2.18";
 
   src = fetchurl {
-    name = "saleae-logic-${version}-64bit.zip";
-    url = "http://downloads.saleae.com/logic/${version}/Logic%20${version}%20(64-bit).zip";
+    name = "saleae-logic-${finalAttrs.version}-64bit.zip";
+    url = "http://downloads.saleae.com/logic/${finalAttrs.version}/Logic%20${finalAttrs.version}%20(64-bit).zip";
     sha256 = "0lhair2vsg8sjvzicvfcjfmvy30q7i01xj4z02iqh7pgzpb025h8";
   };
 
@@ -97,10 +97,10 @@ stdenv.mkDerivation rec {
                "$out/libQt5Gui.so.5"     \
                "$out/libQt5Core.so.5"    \
                "$out/libQt5Network.so.5" ; do
-        patchelf --set-rpath "${lib.getLib stdenv.cc.cc}/lib:${lib.getLib stdenv.cc.cc}/lib64:${libPath}:\$ORIGIN/Analyzers:\$ORIGIN" "$bin"
+        patchelf --set-rpath "${lib.getLib stdenv.cc.cc}/lib:${lib.getLib stdenv.cc.cc}/lib64:${finalAttrs.libPath}:\$ORIGIN/Analyzers:\$ORIGIN" "$bin"
     done
 
-    patchelf --set-rpath "${lib.getLib stdenv.cc.cc}/lib:${lib.getLib stdenv.cc.cc}/lib64:${libPath}:\$ORIGIN/../" "$out/platforms/libqxcb.so"
+    patchelf --set-rpath "${lib.getLib stdenv.cc.cc}/lib:${lib.getLib stdenv.cc.cc}/lib64:${finalAttrs.libPath}:\$ORIGIN/../" "$out/platforms/libqxcb.so"
 
     # Build the LD_PRELOAD library that makes Logic work from a read-only directory
     mkdir -p "$out/lib"
@@ -134,4 +134,4 @@ stdenv.mkDerivation rec {
     platforms = lib.intersectLists lib.platforms.x86_64 lib.platforms.linux;
     maintainers = [ lib.maintainers.bjornfor ];
   };
-}
+})

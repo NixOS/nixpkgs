@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "inriafonts";
   version = "1.200";
 
   src = fetchFromGitHub {
     owner = "BlackFoundry";
     repo = "InriaFonts";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-CMKkwGuUEVYavnFi15FCk7Xloyk97w+LhAZ6mpIv5xg=";
   };
 
@@ -40,4 +40,4 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
   };
-}
+})

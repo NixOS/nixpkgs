@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "barlow";
   version = "1.422";
 
   src = fetchFromGitHub {
     owner = "jpt";
     repo = "barlow";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-FG68o6qN/296RhSNDHFXYXbkhlXSZJgGhVjzlJqsksY=";
   };
 
@@ -34,4 +34,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

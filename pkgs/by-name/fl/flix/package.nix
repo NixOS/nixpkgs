@@ -6,12 +6,12 @@
   jre,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "flix";
   version = "0.67.2";
 
   src = fetchurl {
-    url = "https://github.com/flix/flix/releases/download/v${version}/flix.jar";
+    url = "https://github.com/flix/flix/releases/download/v${finalAttrs.version}/flix.jar";
     sha256 = "sha256-MWK6Az135IHIzXMUQeHyeb2PROXyeLKyFjIUnDD47T8=";
   };
 
@@ -39,4 +39,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ athas ];
     inherit (jre.meta) platforms;
   };
-}
+})

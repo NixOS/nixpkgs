@@ -6,12 +6,12 @@
   perlPackages,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "schema2ldif";
   version = "1.3";
 
   src = fetchurl {
-    url = "https://repos.fusiondirectory.org/sources/schema2ldif/schema2ldif-${version}.tar.gz";
+    url = "https://repos.fusiondirectory.org/sources/schema2ldif/schema2ldif-${finalAttrs.version}.tar.gz";
     hash = "sha256-KmXdqVuINUnJ6EF5oKgk6BsT3h5ebVqss7aCl3pPjQE=";
   };
 
@@ -45,4 +45,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ das_j ];
   };
-}
+})

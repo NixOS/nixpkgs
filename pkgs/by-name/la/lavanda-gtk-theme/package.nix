@@ -8,14 +8,14 @@
   stdenvNoCC,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "lavanda-gtk-theme";
   version = "2024-04-28";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = "Lavanda-gtk-theme";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-2ryhdgLHSNXdV9QesdB0rpXkr3i2vVqXWDDC5fNuL1c=";
   };
 
@@ -49,4 +49,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ dretyuiop ];
   };
-}
+})

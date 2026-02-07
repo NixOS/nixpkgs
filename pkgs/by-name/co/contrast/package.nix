@@ -19,7 +19,7 @@
   wrapGAppsHook4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "contrast";
   version = "0.0.11";
 
@@ -28,12 +28,12 @@ stdenv.mkDerivation rec {
     group = "World";
     owner = "design";
     repo = "contrast";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-8A1qX1H0cET5AUvMoHC1/VyIQiaTysEY5RJRrVYvGng=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-Nj5MkYDeYUzgqegCbPt/XofSCw8ULFXAD7XHNecPznc=";
   };
 
@@ -69,4 +69,4 @@ stdenv.mkDerivation rec {
     mainProgram = "contrast";
     platforms = lib.platforms.linux;
   };
-}
+})

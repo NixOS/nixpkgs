@@ -31,24 +31,24 @@ let
   src = fetchFromGitHub {
     owner = "firezone";
     repo = "firezone";
-    tag = "gui-client-${version}";
+    tag = "gui-client-${finalAttrs.version}";
     hash = "sha256-KozSy44Opx6cukA0QTXeMpI3fP49iyabFzPLIJckOZ4=";
   };
 
-  frontend = stdenvNoCC.mkDerivation rec {
+  frontend = stdenvNoCC.mkDerivation (finalAttrs: {
     pname = "firezone-gui-client-frontend";
-    inherit version src;
+    inherit (finalAttrs) version src;
 
     pnpmDeps = fetchPnpmDeps {
-      inherit pname version;
+      inherit (finalAttrs) pname version;
       pnpm = pnpm_9;
-      src = "${src}/rust/gui-client";
+      src = "${finalAttrs.src}/rust/gui-client";
       fetcherVersion = 1;
       hash = "sha256-ttbTYBuUv0vyiYzrFATF4x/zngsRXjuLPfL3qW2HEe4=";
     };
     pnpmRoot = "rust/gui-client";
 
-    env.GITHUB_SHA = version;
+    env.GITHUB_SHA = finalAttrs.version;
 
     nativeBuildInputs = [
       pnpmConfigHook
@@ -77,10 +77,10 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "firezone-gui-client";
-  inherit version src;
+  inherit (finalAttrs) version src;
 
   cargoHash = "sha256-TDP1Z4MeQaSER8MGnCEQfIhRsakaSCeJ7boUMBYkkI0=";
-  sourceRoot = "${src.name}/rust";
+  sourceRoot = "${finalAttrs.src.name}/rust";
   buildAndTestSubdir = "gui-client";
   env.RUSTFLAGS = "--cfg system_certs";
 
@@ -123,7 +123,7 @@ rustPlatform.buildRustPackage rec {
       name = "firezone-client-gui-deep-link";
       exec = "firezone-client-gui open-deep-link %U";
       icon = "firezone-client-gui";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       desktopName = "Firezone GUI Client";
       categories = [ "Network" ];
       noDisplay = true;
@@ -174,3 +174,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
   };
 }
+)

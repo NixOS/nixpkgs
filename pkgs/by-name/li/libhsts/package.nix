@@ -12,12 +12,12 @@ let
   chromium_version = "140.0.7324.1";
 
   hsts_list = fetchurl {
-    url = "https://raw.github.com/chromium/chromium/${chromium_version}/net/http/transport_security_state_static.json";
+    url = "https://raw.github.com/chromium/chromium/${chromium_finalAttrs.version}/net/http/transport_security_state_static.json";
     hash = "sha256-XV3yZA3Ai4It7S/y4V0h+UtKm8SXm6x1hlITD7jGY9I=";
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libhsts";
   version = "0.1.0";
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "rockdaboot";
     repo = "libhsts";
-    tag = "libhsts-${version}";
+    tag = "libhsts-${finalAttrs.version}";
     hash = "sha256-pM9ZFk8W73Sx3ru/mqN/rWYMyZnNFCa/Wb8TB9yHbD0=";
   };
 
@@ -65,4 +65,4 @@ stdenv.mkDerivation rec {
     ];
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
-}
+})

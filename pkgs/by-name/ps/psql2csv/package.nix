@@ -8,14 +8,14 @@
   makeWrapper,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "psql2csv";
   version = "0.12";
 
   src = fetchFromGitHub {
     owner = "fphilipe";
     repo = "psql2csv";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-XIdZ2+Jlw2JLn4KXD9h3+xXymu4FhibAfp5uGGkVwLQ=";
   };
 
@@ -48,4 +48,4 @@ stdenvNoCC.mkDerivation rec {
     inherit (postgresql.meta) platforms;
     mainProgram = "psql2csv";
   };
-}
+})

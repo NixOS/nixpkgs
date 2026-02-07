@@ -21,14 +21,14 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bpftrace";
   version = "0.24.2";
 
   src = fetchFromGitHub {
     owner = "bpftrace";
     repo = "bpftrace";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-LkiHwmKU+TOtn6mDvlqIKvSOQaU320aVQOkcElzB7gM=";
   };
 
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "High-level tracing language for Linux eBPF";
     homepage = "https://github.com/bpftrace/bpftrace";
-    changelog = "https://github.com/bpftrace/bpftrace/releases/tag/v${version}";
+    changelog = "https://github.com/bpftrace/bpftrace/releases/tag/v${finalAttrs.version}";
     mainProgram = "bpftrace";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
@@ -93,4 +93,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

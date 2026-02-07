@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-multiStdenv.mkDerivation rec {
+multiStdenv.mkDerivation (finalAttrs: {
   pname = "statifier";
   version = "1.7.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/statifier/statifier-${version}.tar.gz";
+    url = "mirror://sourceforge/statifier/statifier-${finalAttrs.version}.tar.gz";
     sha256 = "03lzkla6knjhh186b43cac410x2fmhi28pkmzb3d211n3zp5i9y8";
   };
 
@@ -29,4 +29,4 @@ multiStdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Only;
   };
-}
+})

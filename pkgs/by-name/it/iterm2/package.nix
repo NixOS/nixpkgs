@@ -13,13 +13,13 @@
   SUEnableAutomaticChecks = 0;
 */
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "iterm2";
   version = "3.6.6";
 
   src = fetchzip {
     url = "https://iterm2.com/downloads/stable/iTerm2-${
-      lib.replaceStrings [ "." ] [ "_" ] version
+      lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }.zip";
     hash = "sha256-n3VoRxMOBQK/8mbVbORSBz73tsuKAUMG7dFZIbaqdHU=";
   };
@@ -57,4 +57,4 @@ stdenvNoCC.mkDerivation rec {
     ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
-}
+})

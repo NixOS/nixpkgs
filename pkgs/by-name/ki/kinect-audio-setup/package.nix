@@ -17,7 +17,7 @@ let
   # redirects to the following url:
   licenseUrl = "https://www.microsoft.com/en-us/legal/terms-of-use";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kinect-audio-setup";
 
   # On update: Make sure that the `firmwareURL` is still in sync with upstream.
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "git://git.ao2.it/kinect-audio-setup.git";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-bFwmWh822KvFwP/0Gu097nF5K2uCwCLMB1RtP7k+Zt0=";
   };
 
@@ -93,4 +93,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.unfree;
   };
-}
+})

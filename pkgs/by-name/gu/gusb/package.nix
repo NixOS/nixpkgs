@@ -28,7 +28,7 @@ let
     ]
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gusb";
   version = "0.4.9";
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "hughsie";
     repo = "libgusb";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-piIPNLc3deToyQaajXFvM+CKh9ni8mb0P3kb+2RoJOs=";
   };
 
@@ -103,4 +103,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.marcweber ];
     platforms = lib.platforms.unix;
   };
-}
+})

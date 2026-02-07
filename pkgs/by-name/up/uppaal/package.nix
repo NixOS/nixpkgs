@@ -11,14 +11,14 @@
   gdk-pixbuf,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "uppaal";
   version = "5.0";
   subversion = "0";
   platform = "linux64";
 
   src = fetchzip {
-    url = "https://download.uppaal.org/uppaal-${version}/uppaal-${version}.${subversion}/uppaal-${version}.${subversion}-${platform}.zip";
+    url = "https://download.uppaal.org/uppaal-${finalAttrs.version}/uppaal-${finalAttrs.version}.${subfinalAttrs.version}/uppaal-${finalAttrs.version}.${subfinalAttrs.version}-${platform}.zip";
     hash = "sha256-o71mP2/sDNRpmA1Qx59cvx6t4pk5pP0lrn1CogN3PuM=";
   };
 
@@ -78,4 +78,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ mortenmunk ];
     mainProgram = "uppaal";
   };
-}
+})

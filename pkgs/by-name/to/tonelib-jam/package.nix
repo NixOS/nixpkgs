@@ -15,7 +15,7 @@
   libjack2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tonelib-jam";
   version = "4.8.7";
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     freetype
     libglvnd
   ]
-  ++ runtimeDependencies;
+  ++ finalAttrs.runtimeDependencies;
 
   runtimeDependencies = map lib.getLib [
     curl
@@ -65,4 +65,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     mainProgram = "ToneLib-Jam";
   };
-}
+})

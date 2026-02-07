@@ -11,7 +11,7 @@
   gobject-introspection,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtk-mac-integration";
   version = "3.0.1";
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "gtk-mac-integration";
-    rev = "gtk-mac-integration-${version}";
+    rev = "gtk-mac-integration-${finalAttrs.version}";
     sha256 = "0sc0m3p8r5xfh5i4d7dg72kfixx9yi4f800y43bszyr88y52jkga";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.darwin;
   };
-}
+})

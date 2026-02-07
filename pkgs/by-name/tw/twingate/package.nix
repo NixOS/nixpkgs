@@ -12,12 +12,12 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "twingate";
   version = "2025.310.174671";
 
   src = fetchurl {
-    url = "https://binaries.twingate.com/client/linux/DEB/x86_64/${version}/twingate-amd64.deb";
+    url = "https://binaries.twingate.com/client/linux/DEB/x86_64/${finalAttrs.version}/twingate-amd64.deb";
     hash = "sha256-ZzOsXpjLBR447Kvo2kwy9y8TRm8Yp3EMlVx6vQU72jQ=";
   };
 
@@ -59,4 +59,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
   };
-}
+})

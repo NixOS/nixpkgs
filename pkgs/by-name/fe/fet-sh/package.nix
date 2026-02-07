@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "fet-sh";
   version = "1.9";
 
   src = fetchFromGitHub {
     owner = "6gk";
     repo = "fet.sh";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-xhX2nVteC3T3IjQh++mYlm0btDJQbyQa6b8sGualV0E=";
   };
 
@@ -31,4 +31,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ elkowar ];
     mainProgram = "fet.sh";
   };
-}
+})

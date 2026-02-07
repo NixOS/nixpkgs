@@ -6,14 +6,14 @@
   libsForQt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fontmatrix";
   version = "0.9.100";
 
   src = fetchFromGitHub {
     owner = "fontmatrix";
     repo = "fontmatrix";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-DtajGhx79DiecglXHja9q/TKVq8Jl2faQdA5Ib/yT88=";
   };
 
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

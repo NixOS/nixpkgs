@@ -4,12 +4,14 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libmaxminddb";
   version = "1.12.2";
 
   src = fetchurl {
-    url = meta.homepage + "/releases/download/${version}/libmaxminddb-${version}.tar.gz";
+    url =
+      finalAttrs.meta.homepage
+      + "/releases/download/${finalAttrs.version}/libmaxminddb-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-G/v477o+1kYuBOIlkGrVzl/pWKo9YmoSNbKiJT1gB0M=";
   };
 
@@ -24,4 +26,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})

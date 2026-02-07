@@ -9,14 +9,14 @@
   libsForQt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nmapsi4";
   version = "0.5-alpha2";
 
   src = fetchFromGitHub {
     owner = "nmapsi4";
     repo = "nmapsi4";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-q3XfwJ4TGK4E58haN0Q0xRH4GDpKD8VZzyxHe/VwBqY=";
   };
 
@@ -59,9 +59,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Qt frontend for nmap";
     mainProgram = "nmapsi4";
-    changelog = "https://github.com/nmapsi4/nmapsi4/releases/tag/${src.rev}";
+    changelog = "https://github.com/nmapsi4/nmapsi4/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ peterhoeg ];
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
   };
-}
+})

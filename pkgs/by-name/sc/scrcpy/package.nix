@@ -19,19 +19,19 @@ let
   version = "3.3.4";
   prebuilt_server = fetchurl {
     name = "scrcpy-server";
-    inherit version;
-    url = "https://github.com/Genymobile/scrcpy/releases/download/v${version}/scrcpy-server-v${version}";
+    inherit (finalAttrs) version;
+    url = "https://github.com/Genymobile/scrcpy/releases/download/v${finalAttrs.version}/scrcpy-server-v${finalAttrs.version}";
     hash = "sha256-hYgjjJpaAKpUKQa27H5tVUHZ/7m10PbhvA42XiMDB54=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "scrcpy";
-  inherit version;
+  inherit (finalAttrs) version;
 
   src = fetchFromGitHub {
     owner = "Genymobile";
     repo = "scrcpy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-5yd4YHVJH5+iBN5z0SYdTB0ay6vY4XwM/CCDjbEux74=";
   };
 
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Display and control Android devices over USB or TCP/IP";
     homepage = "https://github.com/Genymobile/scrcpy";
-    changelog = "https://github.com/Genymobile/scrcpy/releases/tag/v${version}";
+    changelog = "https://github.com/Genymobile/scrcpy/releases/tag/v${finalAttrs.version}";
     sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # server
@@ -86,4 +86,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "scrcpy";
   };
-}
+})

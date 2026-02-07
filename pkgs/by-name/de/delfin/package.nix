@@ -20,19 +20,19 @@
   wrapGAppsHook4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "delfin";
   version = "0.4.8";
 
   src = fetchFromCodeberg {
     owner = "avery42";
     repo = "delfin";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-2ussvPXMX4wGE9N+Zh8KYIjbbqEKkPaNymN1Oqj8w8U=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-zZc2+0oskptpWZE4fyVcR4QHxqzpj71GXMXNXMK4an0=";
   };
 
@@ -85,4 +85,4 @@ stdenv.mkDerivation rec {
     mainProgram = "delfin";
     platforms = lib.platforms.linux;
   };
-}
+})

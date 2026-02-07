@@ -19,19 +19,19 @@
   gettext,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "done";
   version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "done-devs";
     repo = "done";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-SbeP7PnJd7jjdXa9uDIAlMAJLOrYHqNP5p9gQclb6RU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-yEpaQa9hKOq0k9MurihbFM4tDB//TPCJdOgKA9tyqVc=";
   };
 
@@ -62,9 +62,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Ultimate task management solution for seamless organization and efficiency";
     homepage = "https://done.edfloreshz.dev/";
-    changelog = "https://github.com/done-devs/done/blob/${src.rev}/CHANGES.md";
+    changelog = "https://github.com/done-devs/done/blob/${finalAttrs.src.rev}/CHANGES.md";
     license = lib.licenses.mpl20;
     mainProgram = "done";
     maintainers = [ ];
   };
-}
+})

@@ -10,7 +10,7 @@
   libxext,
   withNethackLevels ? true,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xsok";
   version = "1.02";
 
@@ -59,4 +59,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     homepage = "https://tracker.debian.org/pkg/xsok";
   };
-}
+})

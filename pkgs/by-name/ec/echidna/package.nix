@@ -9,14 +9,14 @@
   slither-analyzer,
 }:
 
-haskellPackages.mkDerivation rec {
+haskellPackages.mkDerivation (finalAttrs: {
   pname = "echidna";
   version = "2.2.7";
 
   src = fetchFromGitHub {
     owner = "crytic";
     repo = "echidna";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-rDtxyUpWfdMvS5BY1y8nydkQk/eCdmtjCqGJ+I4vy0I=";
   };
 
@@ -129,4 +129,4 @@ haskellPackages.mkDerivation rec {
   mainProgram = "echidna";
   # Fails to build since https://hydra.nixos.org/build/313316669/nixlog/2
   broken = true;
-}
+})

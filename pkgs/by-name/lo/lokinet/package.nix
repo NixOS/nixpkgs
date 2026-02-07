@@ -16,14 +16,14 @@
   zeromq,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lokinet";
   version = "0.9.13";
 
   src = fetchFromGitHub {
     owner = "oxen-io";
     repo = "lokinet";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-6TVMuT4O8zJj97873BTsR1PJU8NaBgYr/nBkc/EfQuQ=";
   };
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DGIT_VERSION=v${version}"
+    "-DGIT_VERSION=v${finalAttrs.version}"
     "-DWITH_BOOTSTRAP=OFF" # we provide bootstrap files manually
     "-DWITH_SETCAP=OFF"
   ];
@@ -67,8 +67,8 @@ stdenv.mkDerivation rec {
     broken = true;
     description = "Anonymous, decentralized and IP based overlay network for the internet";
     homepage = "https://lokinet.org/";
-    changelog = "https://github.com/oxen-io/lokinet/releases/tag/v${version}";
+    changelog = "https://github.com/oxen-io/lokinet/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ wyndon ];
   };
-}
+})

@@ -8,7 +8,7 @@
   ffmpeg,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "crossfire-jxclient";
   version = "2025-01";
 
@@ -70,4 +70,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ ToxicFrog ];
   };
-}
+})

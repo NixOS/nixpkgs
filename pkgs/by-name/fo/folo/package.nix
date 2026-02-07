@@ -11,7 +11,7 @@
   pnpmConfigHook,
   stdenv,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "folo";
 
   version = "0.6.3";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "RSSNext";
     repo = "Folo";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-huVk5KcsepDwtdWMm9pvn31GE1felbH1pR3mGqlSWRs=";
   };
 
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     mimeTypes = [ "x-scheme-handler/follow" ];
   };
 
-  icon = src + "/apps/desktop/resources/icon.png";
+  icon = finalAttrs.src + "/apps/desktop/resources/icon.png";
 
   buildPhase = ''
     runHook preBuild
@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
       --add-flags $out/share/follow/apps/desktop \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
-    install -m 444 -D "${desktopItem}/share/applications/"* \
+    install -m 444 -D "${finalAttrs.desktopItem}/share/applications/"* \
         -t $out/share/applications/
 
     for size in 16 24 32 48 64 128 256 512; do
@@ -123,10 +123,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Next generation information browser";
     homepage = "https://github.com/RSSNext/Folo";
-    changelog = "https://github.com/RSSNext/Folo/releases/tag/${src.tag}";
+    changelog = "https://github.com/RSSNext/Folo/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ iosmanthus ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "follow";
   };
-}
+})

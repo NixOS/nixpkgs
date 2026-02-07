@@ -62,7 +62,7 @@
   opendht,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jami";
   version = "20251124.0";
 
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     domain = "git.jami.net";
     owner = "savoirfairelinux";
     repo = "jami-client-qt";
-    rev = "stable/${version}";
+    rev = "stable/${finalAttrs.version}";
     hash = "sha256-IQA6V0Sl+xhuit9kySpsSAS/a0GOsiT+ysYET91/gmc=";
     fetchSubmodules = true;
   };
@@ -184,7 +184,7 @@ stdenv.mkDerivation rec {
   daemon = stdenv.mkDerivation {
     pname = "jami-daemon";
     inherit src version meta;
-    sourceRoot = "${src.name}/daemon";
+    sourceRoot = "${finalAttrs.src.name}/daemon";
 
     nativeBuildInputs = [
       autoreconfHook
@@ -236,14 +236,14 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -i -e '/GIT_REPOSITORY/,+1c SOURCE_DIR ''${CMAKE_CURRENT_SOURCE_DIR}/qwindowkit' extras/build/cmake/contrib_tools.cmake
-    cp -R --no-preserve=mode,ownership ${qwindowkit-src} qwindowkit
+    cp -R --no-preserve=mode,ownership ${qwindowkit-finalAttrs.src} qwindowkit
     substituteInPlace CMakeLists.txt \
       --replace-fail 'add_subdirectory(3rdparty/zxing-cpp EXCLUDE_FROM_ALL)' 'find_package(ZXing)'
     sed -i -e '/pkg_check_modules/i FIND_PACKAGE(PkgConfig REQUIRED)' src/libclient/CMakeLists.txt
   '';
 
   preConfigure = ''
-    echo 'const char VERSION_STRING[] = "${version}";' > src/app/version.h
+    echo 'const char VERSION_STRING[] = "${finalAttrs.version}";' > src/app/version.h
     # Currently the daemon is still built seperately but jami expects it in CMAKE_INSTALL_PREFIX
     # This can be removed in future versions when JAMICORE_AS_SUBDIR is on
     mkdir -p $out
@@ -316,4 +316,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.linsui ];
   };
-}
+})

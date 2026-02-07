@@ -8,19 +8,19 @@
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "exempi";
   version = "2.6.6";
 
   src = fetchurl {
-    url = "https://libopenraw.freedesktop.org/download/exempi-${version}.tar.bz2";
+    url = "https://libopenraw.freedesktop.org/download/exempi-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-dRO35Cw72QpY132TjGDS6Hxo+BZG58uLEtcf4zQ5HG8=";
   };
 
   configureFlags = [
     "--with-boost=${boost.dev}"
   ]
-  ++ lib.optionals (!doCheck) [
+  ++ lib.optionals (!finalAttrs.doCheck) [
     "--enable-unittest=no"
   ];
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     license = lib.licenses.bsd3;
   };
-}
+})

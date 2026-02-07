@@ -8,13 +8,13 @@
   language ? "English",
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cups-kyocera-ecosys-m2x35-40-p2x35-40dnw";
   version = "8.1606";
 
   src =
     let
-      urlVersion = builtins.replaceStrings [ "." ] [ "_" ] version;
+      urlVersion = builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version;
     in
     fetchzip {
       url = "https://www.kyoceradocumentsolutions.de/content/download-center/de/drivers/all/Linux_${urlVersion}_ECOSYS_M2x35_40_P2x35_40dnw_zip.download.zip";
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ hexa ];
     platforms = lib.platforms.linux;
   };
-}
+})

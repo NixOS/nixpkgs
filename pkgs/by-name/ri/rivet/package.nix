@@ -19,12 +19,12 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rivet";
   version = "4.1.2";
 
   src = fetchurl {
-    url = "https://www.hepforge.org/archive/rivet/Rivet-${version}.tar.bz2";
+    url = "https://www.hepforge.org/archive/rivet/Rivet-${finalAttrs.version}.tar.bz2";
     hash = "sha256-YSR/vD1qSKNcoBovKvn2JsTOKhQBpQ30a2B4yyDs3kY=";
   };
 
@@ -116,4 +116,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

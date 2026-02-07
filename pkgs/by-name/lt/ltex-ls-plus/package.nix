@@ -7,12 +7,12 @@
   jvmOptions ? [ ],
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "ltex-ls-plus";
   version = "18.6.1";
 
   src = fetchurl {
-    url = "https://github.com/ltex-plus/ltex-ls-plus/releases/download/${version}/ltex-ls-plus-${version}.tar.gz";
+    url = "https://github.com/ltex-plus/ltex-ls-plus/releases/download/${finalAttrs.version}/ltex-ls-plus-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-YhuT1ZKpecysA4DuMrgko77L0t0Ve9VanXWHbX8p3qo=";
   };
 
@@ -47,4 +47,4 @@ stdenvNoCC.mkDerivation rec {
       maintainers = [ maintainers.FirelightFlagboy ];
       platforms = jre_headless.meta.platforms;
     };
-}
+})

@@ -4,12 +4,12 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "pixel-code";
   version = "2.2";
 
   src = fetchzip {
-    url = "https://github.com/qwerasd205/PixelCode/releases/download/v${version}/otf.zip";
+    url = "https://github.com/qwerasd205/PixelCode/releases/download/v${finalAttrs.version}/otf.zip";
     hash = "sha256-GNYEnv0bIWz5d8821N46FD2NBNBf3Dd7DNqjSdJKDoE=";
     stripRoot = false;
   };
@@ -28,4 +28,4 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.ofl;
     maintainers = with lib.maintainers; [ mattpolzin ];
   };
-}
+})

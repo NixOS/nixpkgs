@@ -33,7 +33,7 @@ let
   stdenv = throw "Use effectiveStdenv instead of stdenv in xgboost derivation.";
 in
 
-effectiveStdenv.mkDerivation rec {
+effectiveStdenv.mkDerivation (finalAttrs: {
   pnameBase = "xgboost";
   # prefix with r when building the R library
   # The R package build results in a special xgboost.so file
@@ -53,7 +53,7 @@ effectiveStdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "dmlc";
     repo = "xgboost";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-khaD9gvKfUyWhkrIZXzGzKw/nfgeTcp9akCi5X3IORo=";
   };
@@ -79,7 +79,7 @@ effectiveStdenv.mkDerivation rec {
   ];
 
   cmakeFlags =
-    lib.optionals doCheck [ "-DGOOGLE_TEST=ON" ]
+    lib.optionals finalAttrs.doCheck [ "-DGOOGLE_TEST=ON" ]
     ++ lib.optionals cudaSupport [
       "-DUSE_CUDA=ON"
       # Their CMakeLists.txt does not respect CUDA_HOST_COMPILER, instead using the CXX compiler.
@@ -201,4 +201,4 @@ effectiveStdenv.mkDerivation rec {
       nviets
     ];
   };
-}
+})

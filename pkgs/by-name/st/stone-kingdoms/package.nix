@@ -10,14 +10,14 @@
   zip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "stone-kingdoms";
   version = "0.6.1";
 
   src = fetchFromGitLab {
     owner = "stone-kingdoms";
     repo = "stone-kingdoms";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-W2hzJg22O857Kh7CJVVHV5qu8QKjXCwW3hmgKBc0n2g=";
   };
 
@@ -61,4 +61,4 @@ stdenvNoCC.mkDerivation rec {
     ];
     maintainers = with lib.maintainers; [ hulr ];
   };
-}
+})

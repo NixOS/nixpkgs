@@ -15,13 +15,13 @@
   imlib2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
 
   pname = "fluxbox";
   version = "1.3.7";
 
   src = fetchurl {
-    url = "mirror://sourceforge/fluxbox/fluxbox-${version}.tar.xz";
+    url = "mirror://sourceforge/fluxbox/fluxbox-${finalAttrs.version}.tar.xz";
     sha256 = "1h1f70y40qd225dqx937vzb4k2cz219agm1zvnjxakn5jkz7b37w";
   };
 
@@ -72,3 +72,4 @@ stdenv.mkDerivation rec {
   };
 }
 # Many thanks Jack Ryan from Nix-dev mailing list!
+)

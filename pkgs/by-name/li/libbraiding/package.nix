@@ -6,7 +6,7 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.3.1";
   pname = "libbraiding";
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.sage ];
     platforms = lib.platforms.all;
   };
-}
+})

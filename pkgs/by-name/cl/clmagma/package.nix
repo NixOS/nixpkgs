@@ -40,13 +40,13 @@ let
                #-I$(AMDAPP)/include
   '';
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "clmagma";
   version = "1.3.0";
   src = fetchurl {
-    url = "https://icl.cs.utk.edu/projectsfiles/magma/cl/clmagma-${version}.tar.gz";
+    url = "https://icl.cs.utk.edu/projectsfiles/magma/cl/clmagma-${finalAttrs.version}.tar.gz";
     sha256 = "1n27ny0xhwirw2ydn46pfcwy53gzia9zbam4irx44fd4d7f9ydv7";
-    name = "clmagma-${version}.tar.gz";
+    name = "clmagma-${finalAttrs.version}.tar.gz";
   };
 
   buildInputs = [
@@ -81,4 +81,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ volhovm ];
   };
-}
+})

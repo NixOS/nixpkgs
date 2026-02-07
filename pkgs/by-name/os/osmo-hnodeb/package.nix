@@ -17,19 +17,19 @@ let
   inherit (stdenv.hostPlatform) isLinux;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "osmo-hnodeb";
   version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "osmo-hnodeb";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Izivyw2HqRmrM68ehGqlIkJeuZ986d1WQ0yr6NWWTdA=";
   };
 
   postPatch = ''
-    echo "${version}" > .tarball-version
+    echo "${finalAttrs.version}" > .tarball-version
   '';
 
   nativeBuildInputs = [
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -9,13 +9,13 @@
   boost,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "202407";
   build_nr = "1";
   pname = "mcrl2";
 
   src = fetchurl {
-    url = "https://www.mcrl2.org/download/release/mcrl2-${version}.${build_nr}.tar.gz";
+    url = "https://www.mcrl2.org/download/release/mcrl2-${finalAttrs.version}.${build_nr}.tar.gz";
     hash = "sha256-VhP9BFSujxYMcQVu6P6k6yiH2UUhCB3P+Pj+9Ir7x6s=";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ moretea ];
     platforms = lib.platforms.unix;
   };
-}
+})

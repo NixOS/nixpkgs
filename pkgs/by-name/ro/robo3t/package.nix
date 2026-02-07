@@ -21,13 +21,13 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "robo3t";
   version = "1.4.3";
   rev = "48f7dfd";
 
   src = fetchurl {
-    url = "https://github.com/Studio3T/robomongo/releases/download/v${version}/robo3t-${version}-linux-x86_64-${rev}.tar.gz";
+    url = "https://github.com/Studio3T/robomongo/releases/download/v${finalAttrs.version}/robo3t-${finalAttrs.version}-linux-x86_64-${rev}.tar.gz";
     sha256 = "sha256-pH4q/O3bq45ZZn+s/12iScd0WbfkcLjK4MBdVCMXK00=";
   };
 
@@ -106,4 +106,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ eperuffo ];
     mainProgram = "robo3t";
   };
-}
+})

@@ -43,9 +43,9 @@ let
 
   ucd-tools = stdenv.mkDerivation {
     pname = "ucd-tools";
-    inherit version src;
+    inherit (finalAttrs) version src;
 
-    sourceRoot = "${src.name}/src/ucd-tools";
+    sourceRoot = "${finalAttrs.src.name}/src/ucd-tools";
 
     # fix compatibility with CMake (https://cmake.org/cmake/help/v4.0/policy/CMP0000.html)
     postPatch = ''
@@ -63,9 +63,9 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "espeak-ng";
-  inherit version src;
+  inherit (finalAttrs) version src;
 
   patches = [
     # https://github.com/espeak-ng/espeak-ng/pull/2274
@@ -139,10 +139,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Speech synthesizer that supports more than hundred languages and accents";
     homepage = "https://github.com/espeak-ng/espeak-ng";
-    changelog = "https://github.com/espeak-ng/espeak-ng/blob/${src.rev}/ChangeLog.md";
+    changelog = "https://github.com/espeak-ng/espeak-ng/blob/${finalAttrs.src.rev}/ChangeLog.md";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ aske ];
     platforms = lib.platforms.all;
     mainProgram = "espeak-ng";
   };
-}
+})

@@ -4,12 +4,12 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "source-serif";
   version = "4.005";
 
   src = fetchzip {
-    url = "https://github.com/adobe-fonts/source-serif/archive/refs/tags/${version}R.zip";
+    url = "https://github.com/adobe-fonts/source-serif/archive/refs/tags/${finalAttrs.version}R.zip";
     hash = "sha256-djeRJWcKqirkHus52JSeZJXeB7yMTnUXpkPxyzgRC04=";
   };
 
@@ -30,4 +30,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ ttuegel ];
   };
-}
+})

@@ -20,13 +20,13 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "teamspeak3";
 
   version = "3.6.2";
 
   src = fetchurl {
-    url = "https://files.teamspeak-services.com/releases/client/${version}/TeamSpeak3-Client-linux_amd64-${version}.run";
+    url = "https://files.teamspeak-services.com/releases/client/${finalAttrs.version}/TeamSpeak3-Client-linux_amd64-${finalAttrs.version}.run";
     hash = "sha256-WfEQQ4lxoj+QSnAOfdCoEc+Z1Oa5dbo6pFli1DsAZCI=";
   };
 
@@ -134,4 +134,4 @@ stdenv.mkDerivation rec {
     mainProgram = "ts3client";
     platforms = [ "x86_64-linux" ];
   };
-}
+})

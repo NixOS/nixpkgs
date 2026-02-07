@@ -14,12 +14,12 @@
   libvorbis,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "timidity";
   version = "2.15.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/timidity/TiMidity++-${version}.tar.bz2";
+    url = "mirror://sourceforge/timidity/TiMidity++-${finalAttrs.version}.tar.bz2";
     sha256 = "1xf8n6dqzvi6nr2asags12ijbj1lwk1hgl3s27vm2szib8ww07qn";
   };
 
@@ -123,4 +123,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "timidity";
   };
-}
+})

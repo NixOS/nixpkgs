@@ -4,13 +4,13 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "stix-two";
   version = "2.13";
 
   src = fetchzip {
-    url = "https://github.com/stipub/stixfonts/raw/v${version}/zipfiles/STIX${
-      builtins.replaceStrings [ "." ] [ "_" ] version
+    url = "https://github.com/stipub/stixfonts/raw/v${finalAttrs.version}/zipfiles/STIX${
+      builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }-all.zip";
     stripRoot = false;
     hash = "sha256-hfQmrw7HjlhQSA0rVTs84i3j3iMVR0k7tCRBcB6hEpU=";
@@ -32,4 +32,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.rycee ];
   };
-}
+})

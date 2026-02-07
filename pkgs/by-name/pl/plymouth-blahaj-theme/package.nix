@@ -4,12 +4,12 @@
   lib,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "plymouth-blahaj-theme";
   version = "1.0.0";
 
   src = fetchurl {
-    url = "https://github.com/190n/plymouth-blahaj/releases/download/v${version}/blahaj.tar.gz";
+    url = "https://github.com/190n/plymouth-blahaj/releases/download/v${finalAttrs.version}/blahaj.tar.gz";
     sha256 = "sha256-JSCu/3SK1FlSiRwxnjQvHtPGGkPc6u/YjaoIvw0PU8A=";
   };
 
@@ -45,4 +45,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ miampf ];
   };
-}
+})

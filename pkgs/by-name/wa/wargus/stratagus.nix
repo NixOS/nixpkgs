@@ -16,14 +16,14 @@
   libGL,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "stratagus";
   version = "3.3.1";
 
   src = fetchFromGitHub {
     owner = "wargus";
     repo = "stratagus";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-q8AvIWr/bOzI0wV0D2emxIXYEKDYmFxbtwr2BS+xYfA=";
   };
 
@@ -54,4 +54,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.astro ];
     platforms = lib.platforms.linux;
   };
-}
+})

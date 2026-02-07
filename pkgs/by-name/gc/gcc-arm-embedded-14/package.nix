@@ -8,7 +8,7 @@
   zstd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gcc-arm-embedded";
   version = "14.3.rel1";
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   src = fetchurl {
-    url = "https://developer.arm.com/-/media/Files/downloads/gnu/${version}/binrel/arm-gnu-toolchain-${version}-${platform}-arm-none-eabi.tar.xz";
+    url = "https://developer.arm.com/-/media/Files/downloads/gnu/${finalAttrs.version}/binrel/arm-gnu-toolchain-${finalAttrs.version}-${platform}-arm-none-eabi.tar.xz";
     # hashes obtained from location ${url}.sha256asc
     sha256 =
       {
@@ -83,4 +83,4 @@ stdenv.mkDerivation rec {
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-}
+})

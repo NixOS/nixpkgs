@@ -7,12 +7,12 @@
   autoPatchelfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rainbowcrack";
   version = "1.8";
 
   src = fetchurl {
-    url = "http://project-rainbowcrack.com/rainbowcrack-${version}-linux64.zip";
+    url = "http://project-rainbowcrack.com/rainbowcrack-${finalAttrs.version}-linux64.zip";
     hash = "sha256-xMC9teHiDvBY/VHV63TsNQjdcuLqHGeXUyjHvRTO9HQ=";
   };
 
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-linux64" ];
   };
-}
+})

@@ -16,10 +16,10 @@ let
   ];
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fmod";
   version = "4.44.64";
-  shortVersion = builtins.replaceStrings [ "." ] [ "" ] version;
+  shortVersion = builtins.replaceStrings [ "." ] [ "" ] finalAttrs.version;
 
   src = fetchurl (
     if stdenv.hostPlatform.isLinux then
@@ -42,9 +42,9 @@ stdenv.mkDerivation rec {
 
   installPhase =
     lib.optionalString stdenv.hostPlatform.isLinux ''
-      install -Dm755 api/lib/libfmodex${bits}-${version}.so $out/lib/libfmodex-${version}.so
-      ln -s libfmodex-${version}.so $out/lib/libfmodex.so
-      patchelf --set-rpath ${libPath} $out/lib/libfmodex.so
+      install -Dm755 api/lib/libfmodex${bits}-${finalAttrs.version}.so $out/lib/libfmodex-${finalAttrs.version}.so
+      ln -s libfmodex-${finalAttrs.version}.so $out/lib/libfmodex.so
+      patchelf --set-rpath ${finalAttrs.libPath} $out/lib/libfmodex.so
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       install -D api/lib/libfmodex.dylib $out/lib/libfmodex.dylib
@@ -65,4 +65,4 @@ stdenv.mkDerivation rec {
     ];
     maintainers = [ lib.maintainers.lassulus ];
   };
-}
+})

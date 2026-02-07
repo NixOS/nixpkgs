@@ -13,7 +13,7 @@
   openldap,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "outfox";
   version = "0.5.0-pre043";
 
@@ -77,4 +77,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ maxwell-lt ];
     mainProgram = "OutFox";
   };
-}
+})

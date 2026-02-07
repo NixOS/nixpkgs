@@ -60,12 +60,12 @@ let
   util-linux = util-linuxMinimal;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnutls";
   version = "3.8.11";
 
   src = fetchurl {
-    url = "mirror://gnupg/gnutls/v${lib.versions.majorMinor version}/gnutls-${version}.tar.xz";
+    url = "mirror://gnupg/gnutls/v${lib.versions.majorMinor finalAttrs.version}/gnutls-${finalAttrs.version}.tar.xz";
     hash = "sha256-kb0jxKhuvGFS6BMD0gz2zq65e8j4QmbQ+uxuKfF7qiA=";
   };
 
@@ -172,7 +172,7 @@ stdenv.mkDerivation rec {
     buildPackages.autoconf269
     automake
   ]
-  ++ lib.optionals doCheck [
+  ++ lib.optionals finalAttrs.doCheck [
     which
     net-tools
     util-linux
@@ -245,4 +245,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnu" version;
   };
-}
+})

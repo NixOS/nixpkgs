@@ -7,14 +7,14 @@
   avx2Support ? stdenv.hostPlatform.avx2Support,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "j";
   version = "9.6.2";
 
   src = fetchFromGitHub {
     owner = "jsoftware";
     repo = "jsource";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Afa2QzzgJYijcavurgGH/qwyofNn4rtFMIHzlqJwFGU=";
   };
 
@@ -95,4 +95,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "jconsole";
   };
-}
+})

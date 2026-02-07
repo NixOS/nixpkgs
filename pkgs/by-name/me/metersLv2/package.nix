@@ -13,7 +13,7 @@
   libjack2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "meters.lv2";
   version = "0.9.20";
   robtkVersion = "0.7.5";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "x42";
     repo = "meters.lv2";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-eGXTbE83bJEDqTBltL6ZX9qa/OotCFmUxpE/aLqGELU=";
   };
 
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace "-msse -msse2 -mfpmath=sse" ""
   ''; # remove x86-specific flags
 
-  meter_VERSION = version;
+  meter_VERSION = finalAttrs.version;
   enableParallelBuilding = true;
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
@@ -64,4 +64,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
   };
-}
+})

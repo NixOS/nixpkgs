@@ -22,7 +22,7 @@
   libxext,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openspades";
   version = "0.1.3";
   devPakVersion = "33";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "yvt";
     repo = "openspades";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1fvmqbif9fbipd0vphp57pk6blb4yp8xvqlc2ppipk5pjv6a3d2h";
   };
 
@@ -108,4 +108,4 @@ stdenv.mkDerivation rec {
     broken =
       stdenv.hostPlatform.isDarwin || (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
   };
-}
+})

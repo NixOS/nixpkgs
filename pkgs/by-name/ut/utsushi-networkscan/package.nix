@@ -5,7 +5,7 @@
   rpmextract,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "imagescan-plugin-networkscan";
   imagescanVersion = "3.65.0";
   version = "1.1.4";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ rpmextract ];
 
   installPhase = ''
-    rpmextract plugins/imagescan-plugin-networkscan-${version}-*.x86_64.rpm
+    rpmextract plugins/imagescan-plugin-networkscan-${finalAttrs.version}-*.x86_64.rpm
     install -Dm755 usr/libexec/utsushi/networkscan $out/libexec/utsushi/networkscan
     patchelf \
       --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

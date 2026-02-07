@@ -4,12 +4,12 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "hack-font";
   version = "3.003";
 
   src = fetchzip {
-    url = "https://github.com/chrissimpkins/Hack/releases/download/v${version}/Hack-v${version}-ttf.zip";
+    url = "https://github.com/chrissimpkins/Hack/releases/download/v${finalAttrs.version}/Hack-v${finalAttrs.version}-ttf.zip";
     hash = "sha256-SxF4kYp9aL/9L9EUniquFadzWt/+PcvhUQOIOvCrFRM=";
   };
 
@@ -44,4 +44,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ dywedir ];
     platforms = lib.platforms.all;
   };
-}
+})

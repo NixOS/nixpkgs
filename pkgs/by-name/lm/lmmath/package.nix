@@ -4,7 +4,7 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "lmmath";
   version = "1.959";
 
@@ -17,9 +17,9 @@ stdenvNoCC.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out/share/fonts/opentype/
-    mkdir -p $out/share/doc/latinmodern-math-${version}/
+    mkdir -p $out/share/doc/latinmodern-math-${finalAttrs.version}/
     cp otf/*.otf $out/share/fonts/opentype/
-    cp doc/*.txt $out/share/doc/latinmodern-math-${version}/
+    cp doc/*.txt $out/share/doc/latinmodern-math-${finalAttrs.version}/
 
     runHook postInstall
   '';
@@ -34,4 +34,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ siddharthist ];
     platforms = lib.platforms.all;
   };
-}
+})

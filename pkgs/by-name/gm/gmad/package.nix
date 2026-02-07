@@ -6,7 +6,7 @@
   bootil,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gmad";
   version = "unstable-2020-02-24";
 
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp ${targetName} $out/bin/gmad
   '';
-}
+})

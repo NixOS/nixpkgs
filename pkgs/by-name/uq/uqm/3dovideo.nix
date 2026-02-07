@@ -28,14 +28,14 @@ let
 
   helper =
     with haskellPackages;
-    mkDerivation rec {
+    mkDerivation (finalAttrs: {
       pname = "uqm3donix";
       version = "0.1.0.0";
 
       src = fetchFromGitHub {
         owner = "aszlig";
         repo = "uqm3donix";
-        rev = "v${version}";
+        rev = "v${finalAttrs.version}";
         hash = "sha256-rK30u2PBysiSGSA9829F1Nom/wtoVN6rGTBneRKeWEw=";
       };
 
@@ -81,3 +81,4 @@ stdenv.mkDerivation {
     cp "${videoRMP}" "$out/3dovideo.rmp"
   '';
 }
+)

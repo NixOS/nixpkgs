@@ -7,14 +7,14 @@
   makeWrapper,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "discocss";
   version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "mlvzk";
     repo = "discocss";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-of7OMgbuwebnFmbefGD1/dOhyTX1Hy7TccnWSRCweW0=";
   };
 
@@ -35,11 +35,11 @@ stdenvNoCC.mkDerivation rec {
 
   meta = {
     description = "Tiny Discord css-injector";
-    changelog = "https://github.com/mlvzk/discocss/releases/tag/v${version}";
+    changelog = "https://github.com/mlvzk/discocss/releases/tag/v${finalAttrs.version}";
     homepage = "https://github.com/mlvzk/discocss";
     license = lib.licenses.mpl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ mlvzk ];
     mainProgram = "discocss";
   };
-}
+})

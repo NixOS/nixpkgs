@@ -7,14 +7,14 @@
   buildNativeImage ? false,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dbqn" + lib.optionalString buildNativeImage "-native";
   version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "dzaima";
     repo = "BQN";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-AUfT7l7zr/pyG63wX8FMej8RUg7tXC1aroCrunjyw/8=";
   };
 
@@ -80,4 +80,4 @@ stdenvNoCC.mkDerivation rec {
     inherit (jre.meta) platforms;
     broken = stdenvNoCC.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/dbqn-native.x86_64-darwin
   };
-}
+})

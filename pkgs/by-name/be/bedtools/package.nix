@@ -8,14 +8,14 @@
   xz,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bedtools";
   version = "2.31.1";
 
   src = fetchFromGitHub {
     owner = "arq5x";
     repo = "bedtools2";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-rrk+FSv1bGL0D1lrIOsQu2AT7cw2T4lkDiCnzil5fpg=";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ jbedo ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -9,12 +9,12 @@
   buildFHSEnv,
 }:
 let
-  bigpemu-unwrapped = stdenv.mkDerivation rec {
+  bigpemu-unwrapped = stdenv.mkDerivation (finalAttrs: {
     pname = "BigPEmu";
     version = "1.21";
     src = fetchurl {
       url = "https://www.richwhitehouse.com/jaguar/builds/BigPEmu_Linux64_v${
-        builtins.replaceStrings [ "." ] [ "" ] version
+        builtins.replaceStrings [ "." ] [ "" ] finalAttrs.version
       }.tar.gz";
       hash = "sha256-DCHgGZMmi2R0PFhAgxNh/jzuT1ONjrofFgO04cgacrA=";
     };
@@ -51,3 +51,4 @@ buildFHSEnv {
     updateScript = ./update.sh;
   };
 }
+)

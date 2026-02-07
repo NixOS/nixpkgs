@@ -18,14 +18,14 @@
   libinotify-kqueue,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "owncloud-client";
   version = "6.0.3";
 
   src = fetchFromGitHub {
     owner = "owncloud";
     repo = "client";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-RNa3i+Qf/cPE+TvYFt5FjbQcHgep3z/XBzno/EyJ3EQ==";
   };
 
@@ -61,6 +61,6 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2Plus;
-    changelog = "https://github.com/owncloud/client/releases/tag/v${version}";
+    changelog = "https://github.com/owncloud/client/releases/tag/v${finalAttrs.version}";
   };
-}
+})

@@ -93,14 +93,14 @@ let
   src = fetchFromGitHub {
     owner = "apache";
     repo = "airflow";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-wC6C0jhCA76/+KhBQbe3WeSGqR6FwaudCT5xPV39Z6c=";
   };
 
-  airflowUi = stdenv.mkDerivation rec {
+  airflowUi = stdenv.mkDerivation (finalAttrs: {
     pname = "airflow-ui-assets";
-    inherit src version;
-    sourceRoot = "${src.name}/airflow-core/src/airflow/ui";
+    inherit (finalAttrs) src version;
+    sourceRoot = "${finalAttrs.src.name}/airflow-core/src/airflow/ui";
 
     nativeBuildInputs = [
       nodejs
@@ -126,10 +126,10 @@ let
     '';
   };
 
-  airflowSimpleAuthUi = stdenv.mkDerivation rec {
+  airflowSimpleAuthUi = stdenv.mkDerivation (finalAttrs: {
     pname = "airflow-simple-ui-assets";
-    inherit src version;
-    sourceRoot = "${src.name}/airflow-core/src/airflow/api_fastapi/auth/managers/simple/ui";
+    inherit (finalAttrs) src version;
+    sourceRoot = "${finalAttrs.src.name}/airflow-core/src/airflow/api_fastapi/auth/managers/simple/ui";
 
     nativeBuildInputs = [
       nodejs
@@ -172,8 +172,8 @@ let
       version = providers.${provider}.version;
       pyproject = true;
 
-      inherit src;
-      sourceRoot = "${src.name}/providers/${lib.replaceStrings [ "_" ] [ "/" ] provider}";
+      inherit (finalAttrs) src;
+      sourceRoot = "${finalAttrs.src.name}/providers/${lib.replaceStrings [ "_" ] [ "/" ] provider}";
 
       buildInputs = [ flit-core ];
 
@@ -190,10 +190,10 @@ let
 
   airflowCore = buildPythonPackage {
     pname = "apache-airflow-core";
-    inherit src version;
+    inherit (finalAttrs) src version;
     pyproject = true;
 
-    sourceRoot = "${src.name}/airflow-core";
+    sourceRoot = "${finalAttrs.src.name}/airflow-core";
 
     postPatch = ''
       # remove cyclic dependency
@@ -291,10 +291,10 @@ let
 
   taskSdk = buildPythonPackage {
     pname = "task-sdk";
-    inherit src version;
+    inherit (finalAttrs) src version;
     pyproject = true;
 
-    sourceRoot = "${src.name}/task-sdk";
+    sourceRoot = "${finalAttrs.src.name}/task-sdk";
 
     postPatch = ''
       # resolve cyclic dependency
@@ -332,7 +332,7 @@ let
 in
 buildPythonPackage rec {
   pname = "apache-airflow";
-  inherit src version;
+  inherit (finalAttrs) src version;
   pyproject = true;
 
   postPatch = ''
@@ -399,7 +399,7 @@ buildPythonPackage rec {
   meta = {
     description = "Platform to programmatically author, schedule and monitor workflows";
     homepage = "https://airflow.apache.org/";
-    changelog = "https://airflow.apache.org/docs/apache-airflow/${version}/release_notes.html";
+    changelog = "https://airflow.apache.org/docs/apache-airflow/${finalAttrs.version}/release_notes.html";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       taranarmo
@@ -407,3 +407,4 @@ buildPythonPackage rec {
     mainProgram = "airflow";
   };
 }
+)

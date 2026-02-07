@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "samim-fonts";
   version = "4.0.5";
 
   src = fetchFromGitHub {
     owner = "rastikerdar";
     repo = "samim-font";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-DVBMsNOVAVwzlZ3cDus/3CSsC05bLZalQ2KeueEvwXs=";
   };
 
@@ -30,4 +30,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})

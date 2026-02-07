@@ -12,7 +12,7 @@
 
 # adding a plugin for another printer shouldn't be too difficult, but you need the firmware to test...
 {
-  v330 = stdenv.mkDerivation rec {
+  v330 = stdenv.mkDerivation (finalAttrs: {
     name = "iscan-v330-bundle";
     version = "2.30.4";
 
@@ -23,8 +23,8 @@
       # version.
       # NOTE: Don't forget to update the webarchive link too!
       urls = [
-        "https://download2.ebz.epson.net/iscan/plugin/perfection-v330/rpm/x64/iscan-perfection-v330-bundle-${version}.x64.rpm.tar.gz"
-        "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/perfection-v330/rpm/x64/iscan-perfection-v330-bundle-${version}.x64.rpm.tar.gz"
+        "https://download2.ebz.epson.net/iscan/plugin/perfection-v330/rpm/x64/iscan-perfection-v330-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
+        "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/perfection-v330/rpm/x64/iscan-perfection-v330-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
       ];
       sha256 = "056c04pfsf98nnknphg28l489isqb6y4l2c8g7wqhclwgj7m338i";
     };
@@ -51,14 +51,14 @@
       description = "Plugin to support " + passthru.hw + " scanner in sane";
     };
   };
-  v370 = stdenv.mkDerivation rec {
+  v370 = stdenv.mkDerivation (finalAttrs: {
     name = "iscan-v370-bundle";
     version = "2.30.4";
 
     src = fetchurl {
       urls = [
-        "https://download2.ebz.epson.net/iscan/plugin/perfection-v370/rpm/x64/iscan-perfection-v370-bundle-${version}.x64.rpm.tar.gz"
-        "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/perfection-v370/rpm/x64/iscan-perfection-v370-bundle-${version}.x64.rpm.tar.gz"
+        "https://download2.ebz.epson.net/iscan/plugin/perfection-v370/rpm/x64/iscan-perfection-v370-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
+        "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/perfection-v370/rpm/x64/iscan-perfection-v370-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
       ];
       sha256 = "1ff7adp9mha1i2ibllz540xkagpy8r757h4s3h60bgxbyzv2yggr";
     };
@@ -90,7 +90,7 @@
       description = "Plugin to support " + passthru.hw + " scanner in sane";
     };
   };
-  v550 = stdenv.mkDerivation rec {
+  v550 = stdenv.mkDerivation (finalAttrs: {
     pname = "iscan-perfection-v550-bundle";
     version = "2.30.4";
 
@@ -100,8 +100,8 @@
     ];
     src = fetchurl {
       urls = [
-        "https://download2.ebz.epson.net/iscan/plugin/perfection-v550/rpm/x64/iscan-perfection-v550-bundle-${version}.x64.rpm.tar.gz"
-        "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/perfection-v550/rpm/x64/iscan-perfection-v550-bundle-${version}.x64.rpm.tar.gz"
+        "https://download2.ebz.epson.net/iscan/plugin/perfection-v550/rpm/x64/iscan-perfection-v550-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
+        "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/perfection-v550/rpm/x64/iscan-perfection-v550-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
       ];
       sha256 = "f8b3abf21354fc5b9bc87753cef950b6c0f07bf322a94aaff2c163bafcf50cd9";
     };
@@ -124,7 +124,7 @@
       description = "Plugin to support " + passthru.hw + " scanner in sane";
     };
   };
-  v600 = stdenv.mkDerivation rec {
+  v600 = stdenv.mkDerivation (finalAttrs: {
     pname = "iscan-gt-x820-bundle";
     version = "2.30.4";
 
@@ -134,8 +134,8 @@
     ];
     src = fetchurl {
       urls = [
-        "https://download2.ebz.epson.net/iscan/plugin/gt-x820/rpm/x64/iscan-gt-x820-bundle-${version}.x64.rpm.tar.gz"
-        "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/gt-x820/rpm/x64/iscan-gt-x820-bundle-${version}.x64.rpm.tar.gz"
+        "https://download2.ebz.epson.net/iscan/plugin/gt-x820/rpm/x64/iscan-gt-x820-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
+        "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/gt-x820/rpm/x64/iscan-gt-x820-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
       ];
       sha256 = "1vlba7dsgpk35nn3n7is8nwds3yzlk38q43mppjzwsz2d2n7sr33";
     };
@@ -158,7 +158,7 @@
       description = "iscan esci x820 plugin for " + passthru.hw;
     };
   };
-  x770 = stdenv.mkDerivation rec {
+  x770 = stdenv.mkDerivation (finalAttrs: {
     pname = "iscan-gt-x770-bundle";
     version = "2.30.4";
 
@@ -168,8 +168,8 @@
     ];
     src = fetchurl {
       urls = [
-        "https://download2.ebz.epson.net/iscan/plugin/gt-x770/rpm/x64/iscan-gt-x770-bundle-${version}.x64.rpm.tar.gz"
-        "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/gt-x770/rpm/x64/iscan-gt-x770-bundle-${version}.x64.rpm.tar.gz"
+        "https://download2.ebz.epson.net/iscan/plugin/gt-x770/rpm/x64/iscan-gt-x770-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
+        "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/gt-x770/rpm/x64/iscan-gt-x770-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
       ];
       sha256 = "1chxdm6smv2d14pn2jl9xyd0vr42diy7vpskd3b9a61gf5h3gj03";
     };
@@ -192,7 +192,7 @@
       description = "iscan esci x770 plugin for " + passthru.hw;
     };
   };
-  f720 = stdenv.mkDerivation rec {
+  f720 = stdenv.mkDerivation (finalAttrs: {
     pname = "iscan-gt-f720-bundle";
     version = "2.30.4";
 
@@ -200,8 +200,8 @@
     buildInputs = [ gcc.cc.lib ];
     src = fetchurl {
       urls = [
-        "https://download2.ebz.epson.net/iscan/plugin/gt-f720/rpm/x64/iscan-gt-f720-bundle-${version}.x64.rpm.tar.gz"
-        "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/gt-f720/rpm/x64/iscan-gt-f720-bundle-${version}.x64.rpm.tar.gz"
+        "https://download2.ebz.epson.net/iscan/plugin/gt-f720/rpm/x64/iscan-gt-f720-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
+        "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/gt-f720/rpm/x64/iscan-gt-f720-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
       ];
       sha256 = "1xnbmb2rn610kqpg1x6k1cc13zlmx2f3l2xnj6809rnhg96qqn20";
     };
@@ -224,7 +224,7 @@
       description = "iscan esci f720 plugin for " + passthru.hw;
     };
   };
-  s80 = stdenv.mkDerivation rec {
+  s80 = stdenv.mkDerivation (finalAttrs: {
     pname = "iscan-gt-s80-bundle";
     version = "2.30.4";
 
@@ -235,8 +235,8 @@
     ];
     src = fetchurl {
       urls = [
-        "https://download2.ebz.epson.net/iscan/plugin/gt-s80/rpm/x64/iscan-gt-s80-bundle-${version}.x64.rpm.tar.gz"
-        "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/gt-s80/rpm/x64/iscan-gt-s80-bundle-${version}.x64.rpm.tar.gz"
+        "https://download2.ebz.epson.net/iscan/plugin/gt-s80/rpm/x64/iscan-gt-s80-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
+        "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/gt-s80/rpm/x64/iscan-gt-s80-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
       ];
       sha256 = "00qfdgs03k7bbs67zjrk8hbxvlyinsmk890amp9cmpfjfzdxgg58";
     };
@@ -264,14 +264,14 @@
       description = "iscan esci s80 plugin for " + passthru.hw;
     };
   };
-  s600 = stdenv.mkDerivation rec {
+  s600 = stdenv.mkDerivation (finalAttrs: {
     name = "iscan-gt-s600-bundle";
     version = "2.30.4";
 
     src = fetchurl {
       urls = [
-        "https://download2.ebz.epson.net/iscan/plugin/gt-s600/rpm/x64/iscan-gt-s600-bundle-${version}.x64.rpm.tar.gz"
-        "https://web.archive.org/web/20240614120113/https://download2.ebz.epson.net/iscan/plugin/gt-s600/rpm/x64/iscan-gt-s600-bundle-${version}.x64.rpm.tar.gz"
+        "https://download2.ebz.epson.net/iscan/plugin/gt-s600/rpm/x64/iscan-gt-s600-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
+        "https://web.archive.org/web/20240614120113/https://download2.ebz.epson.net/iscan/plugin/gt-s600/rpm/x64/iscan-gt-s600-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
       ];
       sha256 = "fe1356b1d5c40bc5ac985a5693166efb9e5049a78b412f49c385eb503eadf2c6";
     };
@@ -301,14 +301,14 @@
       description = "iscan gt-s600 plugin for " + passthru.hw;
     };
   };
-  s650 = stdenv.mkDerivation rec {
+  s650 = stdenv.mkDerivation (finalAttrs: {
     name = "iscan-gt-s650-bundle";
     version = "2.30.4";
 
     src = fetchurl {
       urls = [
-        "https://download2.ebz.epson.net/iscan/plugin/gt-s650/rpm/x64/iscan-gt-s650-bundle-${version}.x64.rpm.tar.gz"
-        "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/gt-s650/rpm/x64/iscan-gt-s650-bundle-${version}.x64.rpm.tar.gz"
+        "https://download2.ebz.epson.net/iscan/plugin/gt-s650/rpm/x64/iscan-gt-s650-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
+        "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/gt-s650/rpm/x64/iscan-gt-s650-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
       ];
       sha256 = "0fn4lz4g0a8l301v6yv7fwl37wgwhz5y90nf681f655xxc91hqh7";
     };
@@ -339,14 +339,14 @@
       description = "iscan GT-S650 for " + passthru.hw;
     };
   };
-  x750 = stdenv.mkDerivation rec {
+  x750 = stdenv.mkDerivation (finalAttrs: {
     name = "iscan-gt-x750-bundle";
     version = "2.30.4";
 
     src = fetchurl {
       urls = [
-        "https://download2.ebz.epson.net/iscan/plugin/gt-x750/rpm/x64/iscan-gt-x750-bundle-${version}.x64.rpm.tar.gz"
-        "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/gt-x750/rpm/x64/iscan-gt-x750-bundle-${version}.x64.rpm.tar.gz"
+        "https://download2.ebz.epson.net/iscan/plugin/gt-x750/rpm/x64/iscan-gt-x750-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
+        "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/gt-x750/rpm/x64/iscan-gt-x750-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
       ];
       sha256 = "sha256-9EeBHmh1nwSxnTnevPP8RZ4WBdyY+itR3VXo2I7f5N0=";
     };
@@ -376,14 +376,14 @@
       description = "iscan GT-X750 for " + passthru.hw;
     };
   };
-  gt1500 = stdenv.mkDerivation rec {
+  gt1500 = stdenv.mkDerivation (finalAttrs: {
     name = "iscan-gt-1500-bundle";
     version = "2.30.4";
 
     src = fetchurl {
       urls = [
-        "https://download2.ebz.epson.net/iscan/plugin/gt-1500/rpm/x64/iscan-gt-1500-bundle-${version}.x64.rpm.tar.gz"
-        "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/gt-1500/rpm/x64/iscan-gt-1500-bundle-${version}.x64.rpm.tar.gz"
+        "https://download2.ebz.epson.net/iscan/plugin/gt-1500/rpm/x64/iscan-gt-1500-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
+        "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/gt-1500/rpm/x64/iscan-gt-1500-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
       ];
       sha256 = "sha256-1rVsbBsb+QtCOT1FsyhgvCbZIN6IeQH7rZXNmsD7cl8=";
     };
@@ -413,14 +413,14 @@
       description = "iscan GT-1500 for " + passthru.hw;
     };
   };
-  ds30 = stdenv.mkDerivation rec {
+  ds30 = stdenv.mkDerivation (finalAttrs: {
     name = "iscan-ds-30-bundle";
     version = "2.30.4";
 
     src = fetchurl {
       urls = [
-        "https://download2.ebz.epson.net/iscan/plugin/ds-30/rpm/x64/iscan-ds-30-bundle-${version}.x64.rpm.tar.gz"
-        "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/ds-30/rpm/x64/iscan-ds-30-bundle-${version}.x64.rpm.tar.gz"
+        "https://download2.ebz.epson.net/iscan/plugin/ds-30/rpm/x64/iscan-ds-30-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
+        "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/ds-30/rpm/x64/iscan-ds-30-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
       ];
       sha256 = "0d5ef9b83999c56c14bd17ca63537f63ad4f0d70056870dc00888af1b36f4153";
     };
@@ -449,7 +449,7 @@
       description = "Plugin to support " + passthru.hw + " scanner in sane";
     };
   };
-  network = stdenv.mkDerivation rec {
+  network = stdenv.mkDerivation (finalAttrs: {
     pname = "iscan-nt-bundle";
     # for the version, look for the driver of XP-750 in the search page
     version = "2.30.4";
@@ -459,8 +459,8 @@
 
     src = fetchurl {
       urls = [
-        "https://download2.ebz.epson.net/iscan/general/rpm/x64/iscan-bundle-${version}.x64.rpm.tar.gz"
-        "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/general/rpm/x64/iscan-bundle-${version}.x64.rpm.tar.gz"
+        "https://download2.ebz.epson.net/iscan/general/rpm/x64/iscan-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
+        "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/general/rpm/x64/iscan-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
       ];
       sha256 = "0jssigsgkxb9i7qa7db291a1gbvwl795i4ahvb7bnqp33czkj85k";
     };
@@ -483,3 +483,4 @@
     };
   };
 }
+)

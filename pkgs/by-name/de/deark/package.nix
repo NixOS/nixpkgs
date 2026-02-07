@@ -5,14 +5,14 @@
   help2man,
   installShellFiles,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "deark";
   version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "jsummers";
     repo = "deark";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-FA0O/yJoFByOPEb1UcRWARr2z7CdjWHKa4s8Q4Sl5Zo=";
   };
 
@@ -69,4 +69,4 @@ stdenv.mkDerivation rec {
     mainProgram = "deark";
     platforms = lib.platforms.unix;
   };
-}
+})

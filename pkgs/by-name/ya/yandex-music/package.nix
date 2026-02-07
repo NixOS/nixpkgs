@@ -27,7 +27,7 @@
 }:
 assert lib.assertMsg (trayStyle >= 1 && trayStyle <= 3) "Tray style must be withing 1 and 3";
 assert lib.assertMsg (vibeAnimationMaxFps >= 0) "Vibe animation max FPS must be greater then 0";
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "yandex-music";
   version = "5.63.1";
 
@@ -115,9 +115,9 @@ stdenvNoCC.mkDerivation rec {
     description = "Personal recommendations, selections for any occasion and new music";
     homepage = "https://music.yandex.ru/";
     downloadPage = "https://music.yandex.ru/download/";
-    changelog = "https://github.com/cucumber-sp/yandex-music-linux/releases/tag/v${version}";
+    changelog = "https://github.com/cucumber-sp/yandex-music-linux/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.unfree;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ shved ];
   };
-}
+})

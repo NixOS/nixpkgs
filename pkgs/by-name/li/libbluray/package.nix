@@ -25,12 +25,12 @@
 # Info on how to use:
 # https://wiki.archlinux.org/index.php/BluRay
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libbluray";
   version = "1.4.0";
 
   src = fetchurl {
-    url = "https://get.videolan.org/libbluray/${version}/libbluray-${version}.tar.xz";
+    url = "https://get.videolan.org/libbluray/${finalAttrs.version}/libbluray-${finalAttrs.version}.tar.xz";
     hash = "sha256-d5N7rwfq3aSysxHPOvTFAmnS6jFlBB9YQ9lkdsTJJ3c=";
   };
 
@@ -85,4 +85,4 @@ stdenv.mkDerivation rec {
       inherit libbluray-full;
     };
   };
-}
+})

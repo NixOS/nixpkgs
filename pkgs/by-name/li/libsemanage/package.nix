@@ -14,13 +14,13 @@
   python3 ? null,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libsemanage";
   version = "3.8.1";
   inherit (libsepol) se_url;
 
   src = fetchurl {
-    url = "${se_url}/${version}/libsemanage-${version}.tar.gz";
+    url = "${se_url}/${finalAttrs.version}/libsemanage-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-ezkSeyGcxwv9k1pK9rDyuoPUs1yRbyU8fpQsI6tJDwc=";
   };
 
@@ -80,4 +80,4 @@ stdenv.mkDerivation rec {
     description = "Policy management tools for SELinux";
     license = lib.licenses.lgpl21;
   };
-}
+})

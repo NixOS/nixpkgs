@@ -6,14 +6,14 @@
   luajit,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ccloader";
   version = "11.4.2";
 
   src = fetchFromGitHub {
     owner = "26F-Studio";
     repo = "cold_clear_ai_love2d_wrapper";
-    rev = version;
+    rev = finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-sguV+Dw+etZH43tXZYL46NAdsI/qvyvGWCPUiTEjhy4=";
   };
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     runHook preBuild
 
-    gcc -shared cold_clear_wrapper.c -lcold_clear -lluajit-${luajit.luaversion} -o CCLoader.so
+    gcc -shared cold_clear_wrapper.c -lcold_clear -lluajit-${luajit.luafinalAttrs.version} -o CCLoader.so
 
     runHook postBuild
   '';
@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/lib/lua/${luajit.luaversion}
-    mv CCLoader.so $out/lib/lua/${luajit.luaversion}
+    mkdir -p $out/lib/lua/${luajit.luafinalAttrs.version}
+    mv CCLoader.so $out/lib/lua/${luajit.luafinalAttrs.version}
 
     runHook postInstall
   '';
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ chayleaf ];
   };
-}
+})

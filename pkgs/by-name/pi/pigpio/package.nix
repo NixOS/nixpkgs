@@ -9,7 +9,7 @@
 let
   mkDerivation = if isNull buildPythonPackage then stdenv.mkDerivation else buildPythonPackage;
 in
-mkDerivation rec {
+mkDerivation (finalAttrs: {
   pname = "pigpio";
   version = "79";
   format = if buildPythonPackage == null then null else "setuptools";
@@ -22,7 +22,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "joan2937";
     repo = "pigpio";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Z+SwUlBbtWtnbjTe0IghR3gIKS43ZziN0amYtmXy7HE=";
   };
 
@@ -37,4 +37,4 @@ mkDerivation rec {
     maintainers = with lib.maintainers; [ doronbehar ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -5,12 +5,12 @@
   undmg,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "hidden-bar";
   version = "1.9";
 
   src = fetchurl {
-    url = "https://github.com/dwarvesf/hidden/releases/download/v${version}/Hidden.Bar.${version}.dmg";
+    url = "https://github.com/dwarvesf/hidden/releases/download/v${finalAttrs.version}/Hidden.Bar.${finalAttrs.version}.dmg";
     hash = "sha256-P1SwJPXBxAvBiuvjkBRxAom0fhR+cVYfriKmYcqybQI=";
   };
 
@@ -35,4 +35,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-}
+})

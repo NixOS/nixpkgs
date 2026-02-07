@@ -25,14 +25,14 @@
   buildPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "crawl${lib.optionalString tileMode "-tiles"}";
   version = "0.33.1";
 
   src = fetchFromGitHub {
     owner = "crawl";
     repo = "crawl";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-GXrYLGoQ1UwDHs+kLLcaBNpJ2BVMv4NhmpyfNFxPmg8=";
   };
 
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     cd crawl-ref/source
-    echo "${version}" > util/release_ver
+    echo "${finalAttrs.version}" > util/release_ver
     patchShebangs 'util'
     patchShebangs util/gen-mi-enum
     rm -rf contrib
@@ -134,4 +134,4 @@ stdenv.mkDerivation rec {
     ];
     maintainers = [ ];
   };
-}
+})

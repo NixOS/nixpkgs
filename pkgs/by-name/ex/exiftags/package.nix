@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "exiftags";
   version = "1.01";
 
   src = fetchurl {
-    url = "https://johnst.org/sw/exiftags/exiftags-${version}.tar.gz";
+    url = "https://johnst.org/sw/exiftags/exiftags-${finalAttrs.version}.tar.gz";
     sha256 = "194ifl6hybx2a5x8jhlh9i56k3qfc6p2l72z0ii1b7v0bzg48myr";
   };
 
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
       "CVE-2024-42851"
     ];
   };
-}
+})

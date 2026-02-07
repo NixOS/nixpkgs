@@ -9,14 +9,14 @@
 
 # resholve does not yet support `finalAttrs` call pattern hence `rec`
 # https://github.com/abathur/resholve/issues/107
-resholve.mkDerivation rec {
+resholve.mkDerivation (finalAttrs: {
   pname = "nix-direnv";
   version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-direnv";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-HdnQRcysoKNPbVa/D3KDcLgqf5+u9JDPmcl29cGj4AI=";
   };
 
@@ -77,4 +77,4 @@ resholve.mkDerivation rec {
       bbenne10
     ];
   };
-}
+})

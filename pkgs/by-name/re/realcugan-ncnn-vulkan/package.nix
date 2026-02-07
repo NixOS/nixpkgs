@@ -10,17 +10,17 @@
   libwebp,
   ncnn,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "realcugan-ncnn-vulkan";
   version = "20220728";
 
   src = fetchFromGitHub {
     owner = "nihui";
     repo = "realcugan-ncnn-vulkan";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-P3Y1B8m1+mpFinacwnvBE2vU150jj6Q12IS6QYNRZ6A=";
   };
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   models = fetchzip {
     url = "https://github.com/nihui/realcugan-ncnn-vulkan/releases/download/20220728/realcugan-ncnn-vulkan-20220728-ubuntu.zip";
@@ -68,4 +68,4 @@ stdenv.mkDerivation rec {
     mainProgram = "realcugan-ncnn-vulkan";
     platforms = lib.platforms.all;
   };
-}
+})

@@ -6,13 +6,13 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gocd-server";
   version = "23.1.0";
   rev = "16079";
 
   src = fetchurl {
-    url = "https://download.go.cd/binaries/${version}-${rev}/generic/go-server-${version}-${rev}.zip";
+    url = "https://download.go.cd/binaries/${finalAttrs.version}-${rev}/generic/go-server-${finalAttrs.version}-${rev}.zip";
     sha256 = "sha256-//d6izGm1odE25H/PI5pn51FfUL4/6GbLwKUKAqZ3Kw=";
   };
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   buildCommand = "
     unzip $src -d $out
-    mv $out/go-server-${version} $out/go-server
+    mv $out/go-server-${finalAttrs.version} $out/go-server
     mkdir -p $out/go-server/conf
   ";
-}
+})

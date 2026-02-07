@@ -15,7 +15,7 @@
   libxrender,
   libjack2,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tonelib-metal";
   version = "1.3.0";
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     libglvnd
     libgbm
   ]
-  ++ runtimeDependencies;
+  ++ finalAttrs.runtimeDependencies;
 
   installPhase = ''
     runHook preInstall
@@ -66,4 +66,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     mainProgram = "ToneLib-Metal";
   };
-}
+})

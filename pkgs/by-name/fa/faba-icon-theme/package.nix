@@ -11,14 +11,14 @@
   hicolor-icon-theme,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "faba-icon-theme";
   version = "4.3";
 
   src = fetchFromGitHub {
     owner = "moka-project";
     repo = "faba-icon-theme";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0xh6ppr73p76z60ym49b4d0liwdc96w41cc5p07d48hxjsa6qd6n";
   };
 
@@ -51,4 +51,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ romildo ];
   };
-}
+})

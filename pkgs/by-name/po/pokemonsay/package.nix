@@ -8,14 +8,14 @@
   findutils,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "pokemonsay";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "HRKings";
     repo = "pokemonsay-newgenerations";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-IDTAZmOzkUg0kLUM0oWuVbi8EwE4sEpLWrNAtq/he+g=";
   };
 
@@ -76,4 +76,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ pbsds ];
   };
-}
+})

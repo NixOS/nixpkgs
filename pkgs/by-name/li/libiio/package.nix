@@ -16,7 +16,7 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libiio";
   version = "0.26";
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "analogdevicesinc";
     repo = "libiio";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-nrpGccj9Q3S9wYs0/dHC3YAy5ZvTiPiSUtPY6r5WlaE=";
   };
 
@@ -102,11 +102,11 @@ stdenv.mkDerivation rec {
   pythonImportsCheck = [ "iio" ];
 
   meta = {
-    changelog = "https://github.com/analogdevicesinc/libiio/releases/tag/${src.tag}";
+    changelog = "https://github.com/analogdevicesinc/libiio/releases/tag/${finalAttrs.src.tag}";
     description = "API for interfacing with the Linux Industrial I/O Subsystem";
     homepage = "https://github.com/analogdevicesinc/libiio";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ thoughtpolice ];
   };
-}
+})

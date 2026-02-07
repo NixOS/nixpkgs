@@ -11,17 +11,17 @@
   ncnn,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "Real-ESRGAN-ncnn-vulkan";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "xinntao";
     repo = "Real-ESRGAN-ncnn-vulkan";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-F+NfkAbk8UtAKzsF42ppPF2UGjK/M6iFfBsRRBbCmcI=";
   };
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   models = fetchzip {
     # Choose the newst release from https://github.com/xinntao/Real-ESRGAN/releases to update
@@ -77,4 +77,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "realesrgan-ncnn-vulkan";
   };
-}
+})

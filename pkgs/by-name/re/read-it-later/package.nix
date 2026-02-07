@@ -19,7 +19,7 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "read-it-later";
   version = "0.6.2";
 
@@ -27,12 +27,12 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "read-it-later";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-dXDpZ5CXR/+lJUpQ1EpGgzYC6WKE4Y6CKytvCPrsMNk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-zC9rb+yUWKozTTc3aBOnpTkhqykhQYemnzPtjjKnOdQ=";
   };
 
@@ -61,10 +61,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Simple Wallabag client with basic features to manage articles";
     homepage = "https://gitlab.gnome.org/World/read-it-later";
-    changelog = "https://gitlab.gnome.org/World/read-it-later/-/releases/${src.tag}";
+    changelog = "https://gitlab.gnome.org/World/read-it-later/-/releases/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
     mainProgram = "read-it-later";
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.platforms.unix;
   };
-}
+})

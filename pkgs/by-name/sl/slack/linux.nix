@@ -54,7 +54,7 @@
   libxshmfence,
   libxkbfile,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   inherit
     pname
     version
@@ -163,4 +163,4 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
-}
+})

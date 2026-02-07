@@ -8,18 +8,18 @@
   libxml2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xmlrpc-c";
   version = "1.60.05";
 
   src = fetchurl {
-    url = "mirror://sourceforge/xmlrpc-c/xmlrpc-c-${version}.tgz";
+    url = "mirror://sourceforge/xmlrpc-c/xmlrpc-c-${finalAttrs.version}.tgz";
     hash = "sha256-Z9hgBiRZ6ieEwHtNeRMxnZU5+nKfU0N46OQciRjyrfY=";
   };
 
   patches = [
     (fetchDebianPatch {
-      inherit pname version;
+      inherit (finalAttrs) pname version;
       debianRevision = "1";
       patch = "fix-gcc15-build.patch";
       hash = "sha256-VcjXzzruDBuDarqhgNDHOtLxz2vlBrUAylILfMEGPmA=";
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.bjornfor ];
   };
-}
+})

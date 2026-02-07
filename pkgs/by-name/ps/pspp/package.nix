@@ -23,12 +23,12 @@
   iconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pspp";
   version = "2.0.1";
 
   src = fetchurl {
-    url = "mirror://gnu/pspp/pspp-${version}.tar.gz";
+    url = "mirror://gnu/pspp/pspp-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-jtuw8J6M+AEMrZ4FWeAjDX/FquRyHHVsNQVU3zMCTAA=";
   };
 
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
 
   C_INCLUDE_PATH =
     "${libxml2.dev}/include/libxml2/:" + lib.makeSearchPathOutput "dev" "include" buildInputs;
-  LIBRARY_PATH = lib.makeLibraryPath buildInputs;
+  LIBRARY_PATH = lib.makeLibraryPath finalAttrs.buildInputs;
 
   doCheck = false;
 
@@ -90,4 +90,4 @@ stdenv.mkDerivation rec {
 
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -7,14 +7,14 @@
   versionCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bfg-repo-cleaner";
   version = "1.15.0";
 
-  jarName = "bfg-${version}.jar";
+  jarName = "bfg-${finalAttrs.version}.jar";
 
   src = fetchurl {
-    url = "mirror://maven/com/madgag/bfg/${version}/${jarName}";
+    url = "mirror://maven/com/madgag/bfg/${finalAttrs.version}/${jarName}";
     hash = "sha256-3+KIWtwpFjeQk/AqgBgSAFNoVsmph78hxJLkUq3v73o=";
   };
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     versionCheckHook
   ];
   doInstallCheck = true;
-  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
+  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
 
   meta = {
     homepage = "https://rtyley.github.io/bfg-repo-cleaner/";
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.changlinli ];
     mainProgram = "bfg";
     platforms = lib.platforms.unix;
-    downloadPage = "https://mvnrepository.com/artifact/com.madgag/bfg/${version}";
+    downloadPage = "https://mvnrepository.com/artifact/com.madgag/bfg/${finalAttrs.version}";
   };
 
-}
+})

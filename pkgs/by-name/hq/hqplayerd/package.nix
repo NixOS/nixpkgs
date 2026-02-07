@@ -24,12 +24,12 @@
 let
   rygel-hqplayerd = callPackage ./rygel.nix { };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hqplayerd";
   version = "5.13.2-39";
 
   src = fetchurl {
-    url = "https://www.signalyst.eu/bins/hqplayerd/fc37/hqplayerd-${version}.fc37.x86_64.rpm";
+    url = "https://www.signalyst.eu/bins/hqplayerd/fc37/hqplayerd-${finalAttrs.version}.fc37.x86_64.rpm";
     hash = "sha256-4wB32xFYpGcBdLqSZFkNXoS7IerPS8f6KIpn13ulqUY=";
   };
 
@@ -118,4 +118,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ lovesegfault ];
   };
-}
+})

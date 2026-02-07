@@ -6,7 +6,7 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   name = "ilbc-rfc3951";
 
   script = ./extract-cfile.awk;
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
   meta = {
     platforms = lib.platforms.unix;
   };
-}
+})

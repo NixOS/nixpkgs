@@ -4,15 +4,15 @@
   fetchurl,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "arkpandora";
   version = "2.04";
 
   src = fetchurl {
     urls = [
-      "http://distcache.FreeBSD.org/ports-distfiles/ttf-arkpandora-${version}.tgz"
-      "ftp://ftp.FreeBSD.org/pub/FreeBSD/ports/distfiles/ttf-arkpandora-${version}.tgz"
-      "http://www.users.bigpond.net.au/gavindi/ttf-arkpandora-${version}.tgz"
+      "http://distcache.FreeBSD.org/ports-distfiles/ttf-arkpandora-${finalAttrs.version}.tgz"
+      "ftp://ftp.FreeBSD.org/pub/FreeBSD/ports/distfiles/ttf-arkpandora-${finalAttrs.version}.tgz"
+      "http://www.users.bigpond.net.au/gavindi/ttf-arkpandora-${finalAttrs.version}.tgz"
     ];
     hash = "sha256-ofyVPJjQD8w+8WgETF2UcJlfbSsKQgBsH3ob+yjvrpo=";
   };
@@ -30,4 +30,4 @@ stdenvNoCC.mkDerivation rec {
     description = "Font, metrically identical to Arial and Times New Roman";
     license = lib.licenses.bitstreamVera;
   };
-}
+})

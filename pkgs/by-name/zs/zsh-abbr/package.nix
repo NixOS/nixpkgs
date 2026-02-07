@@ -4,14 +4,14 @@
   fetchFromGitHub,
   installShellFiles,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zsh-abbr";
   version = "6.4.0";
 
   src = fetchFromGitHub {
     owner = "olets";
     repo = "zsh-abbr";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-nfkXtRZ7CB/MnmzMe1ivKz26Vv5duP4zTAv7EZwpMTM=";
     fetchSubmodules = true;
   };
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ icy-thought ];
     platforms = lib.platforms.all;
   };
-}
+})

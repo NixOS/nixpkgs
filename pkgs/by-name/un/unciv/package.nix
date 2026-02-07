@@ -24,7 +24,7 @@ let
   };
 
   desktopIcon = fetchurl {
-    url = "https://github.com/yairm210/Unciv/blob/${version}/extraImages/Icons/Unciv%20icon%20v6.png?raw=true";
+    url = "https://github.com/yairm210/Unciv/blob/${finalAttrs.version}/extraImages/Icons/Unciv%20icon%20v6.png?raw=true";
     hash = "sha256-Zuz+HGfxjGviGBKTiHdIFXF8UMRLEIfM8f+LIB/xonk=";
   };
 
@@ -36,12 +36,12 @@ let
     ]
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "unciv";
-  inherit version;
+  inherit (finalAttrs) version;
 
   src = fetchurl {
-    url = "https://github.com/yairm210/Unciv/releases/download/${version}/Unciv.jar";
+    url = "https://github.com/yairm210/Unciv/releases/download/${finalAttrs.version}/Unciv.jar";
     hash = "sha256-GLIgiCx+bpBWKi+IewXUNIG6SDAKNvAjGie1XmFzF04=";
   };
 
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     makeWrapper ${jre}/bin/java $out/bin/unciv \
       --prefix LD_LIBRARY_PATH : "${envLibPath}" \
       --prefix PATH : ${lib.makeBinPath [ jre ]} \
-      --add-flags "-jar ${src}"
+      --add-flags "-jar ${finalAttrs.src}"
 
     install -Dm444 ${desktopIcon} $out/share/icons/hicolor/512x512/apps/unciv.png
 
@@ -78,4 +78,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mpl20;
     platforms = lib.platforms.all;
   };
-}
+})

@@ -7,7 +7,7 @@
   themeConfig ? null,
   embeddedTheme ? "astronaut",
 }:
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "sddm-astronaut";
   version = "1.0-unstable-2025-01-05";
 
@@ -51,7 +51,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = {
     description = "Modern looking qt6 sddm theme";
-    homepage = "https://github.com/${src.owner}/${src.repo}";
+    homepage = "https://github.com/${finalAttrs.src.owner}/${finalAttrs.src.repo}";
     license = lib.licenses.gpl3;
 
     platforms = lib.platforms.linux;
@@ -60,4 +60,4 @@ stdenvNoCC.mkDerivation rec {
       uxodb
     ];
   };
-}
+})

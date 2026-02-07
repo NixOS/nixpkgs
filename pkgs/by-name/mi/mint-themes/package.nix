@@ -6,14 +6,14 @@
   python3Packages,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mint-themes";
   version = "2.3.8";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "mint-themes";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-cIXEg6Crq4DrHBeJUgwCF5k8A5bsR4trO0UC5wMZLpk=";
   };
 
@@ -40,4 +40,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.linux;
     teams = [ lib.teams.cinnamon ];
   };
-}
+})

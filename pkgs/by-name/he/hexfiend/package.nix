@@ -7,14 +7,14 @@
 }:
 
 let
-  urlSuffix = version: if lib.versions.patch == 0 then lib.versions.majorMinor version else version;
+  urlSuffix = finalAttrs.version: if lib.versions.patch == 0 then lib.versions.majorMinor version else version;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hexfiend";
   version = "2.17.1";
 
   src = fetchurl {
-    url = "https://github.com/HexFiend/HexFiend/releases/download/v${version}/Hex_Fiend_${urlSuffix version}.dmg";
+    url = "https://github.com/HexFiend/HexFiend/releases/download/v${finalAttrs.version}/Hex_Fiend_${urlSuffix finalAttrs.version}.dmg";
     hash = "sha256-QpGmpxDpdS+sJtsNtp0VSAd9WJXaZiKTH4yDsDK8FSk=";
   };
 
@@ -37,3 +37,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.darwin;
   };
 }
+)

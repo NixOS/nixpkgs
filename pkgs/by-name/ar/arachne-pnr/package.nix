@@ -5,7 +5,7 @@
   icestorm,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "arachne-pnr";
   version = "2019.07.29";
 
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

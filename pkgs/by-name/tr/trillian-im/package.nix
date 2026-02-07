@@ -20,12 +20,12 @@
   libappindicator-gtk3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "trillian-im";
   version = "6.3.0.2";
 
   src = fetchurl {
-    url = "https://www.trillian.im/get/linux/6.3/trillian_${version}_amd64.deb";
+    url = "https://www.trillian.im/get/linux/6.3/trillian_${finalAttrs.version}_amd64.deb";
     hash = "sha256-5QvvAld9IC+6DAWVsyT6BoyKx+0WUA+UC8q1RBnwjqg=";
   };
 
@@ -74,4 +74,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ majiir ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

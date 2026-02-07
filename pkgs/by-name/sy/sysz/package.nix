@@ -7,14 +7,14 @@
   gawk,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "sysz";
   version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "joehillen";
     repo = "sysz";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-X9vj6ILPUKFo/i50JNehM2GSDWfxTdroWGYJv765Cm4=";
   };
 
@@ -40,7 +40,7 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ hleboulanger ];
     platforms = lib.platforms.unix;
-    changelog = "https://github.com/joehillen/sysz/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/joehillen/sysz/blob/${finalAttrs.version}/CHANGELOG.md";
     mainProgram = "sysz";
   };
-}
+})

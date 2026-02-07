@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fzf-obc";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "rockandska";
     repo = "fzf-obc";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-KIAlDpt1Udl+RLp3728utgQ9FCjZz/OyoG92MOJmgPI=";
   };
 
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ loicreynier ];
   };
-}
+})

@@ -68,13 +68,13 @@ let
       -exec rm -r '{}' \;
     '';
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gap";
   # https://www.gap-system.org/Releases/
   version = "4.15.1";
 
   src = fetchurl {
-    url = "https://github.com/gap-system/gap/releases/download/v${version}/gap-${version}.tar.gz";
+    url = "https://github.com/gap-system/gap/releases/download/v${finalAttrs.version}/gap-${finalAttrs.version}.tar.gz";
     hash = "sha256-YEnVPpmxLiXC2EjbIaxKBjgKRv5MQVckPVVv4GkwBCw=";
   };
 
@@ -161,4 +161,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     homepage = "https://www.gap-system.org";
   };
-}
+})

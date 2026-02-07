@@ -26,14 +26,14 @@
   enableSystemdResolved ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openvpn3";
   version = "25";
 
   src = fetchFromGitHub {
     owner = "OpenVPN";
     repo = "openvpn3-linux";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Fme8OT49h2nZw5ypyeKdHlqv2Hk92LW2KVisd0jC66s=";
     # `openvpn3-core` is a submodule.
     # TODO: make it into a separate package
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     echo '#define OPENVPN_VERSION "3.git:unknown:unknown"
-    #define PACKAGE_GUIVERSION "v${builtins.replaceStrings [ "_" ] [ ":" ] version}"
+    #define PACKAGE_GUIVERSION "v${builtins.replaceStrings [ "_" ] [ ":" ] finalAttrs.version}"
     #define PACKAGE_NAME "openvpn3-linux"
     ' > ./src/build-version.h
 
@@ -127,10 +127,10 @@ stdenv.mkDerivation rec {
     description = "OpenVPN 3 Linux client";
     license = lib.licenses.agpl3Plus;
     homepage = "https://github.com/OpenVPN/openvpn3-linux/";
-    changelog = "https://github.com/OpenVPN/openvpn3-linux/releases/tag/v${version}";
+    changelog = "https://github.com/OpenVPN/openvpn3-linux/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [
       progrm_jarvis
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

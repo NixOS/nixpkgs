@@ -4,14 +4,14 @@
   stdenvNoCC,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "complete-alias";
   version = "1.18.0";
 
   src = fetchFromGitHub {
     owner = "cykerway";
     repo = "complete-alias";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "18lmdb3inphxyjv08ing5wckqnjq0m5zfl0f15mqzlvf2ypar63x";
   };
 
@@ -42,4 +42,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ tuxinaut ];
     mainProgram = "complete_alias";
   };
-}
+})

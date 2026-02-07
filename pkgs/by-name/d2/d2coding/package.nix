@@ -4,12 +4,12 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "d2codingfont";
   version = "1.3.2";
 
   src = fetchzip {
-    url = "https://github.com/naver/d2codingfont/releases/download/VER${version}/D2Coding-Ver${version}-20180524.zip";
+    url = "https://github.com/naver/d2codingfont/releases/download/VER${finalAttrs.version}/D2Coding-Ver${finalAttrs.version}-20180524.zip";
     stripRoot = false;
     hash = "sha256-iC6iaUSVg4zt3wVFJUU4HEeswuKDOTFsAxq/0gRiOCA=";
   };
@@ -36,4 +36,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})

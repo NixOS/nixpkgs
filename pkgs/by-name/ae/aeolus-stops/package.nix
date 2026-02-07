@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "stops";
   version = "0.4.0";
 
   src = fetchurl {
-    url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/stops-${version}.tar.bz2";
+    url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/stops-${finalAttrs.version}.tar.bz2";
     hash = "sha256-DnmguOAGyw9nv88ekJfbC04Qwbsw5tXEAaKeiCQR/LA=";
   };
 
@@ -21,8 +21,8 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/${subdir}
-    cp -r * $out/${subdir}
+    mkdir -p $out/${finalAttrs.subdir}
+    cp -r * $out/${finalAttrs.subdir}
 
     runHook postInstall
   '';
@@ -36,4 +36,4 @@ stdenvNoCC.mkDerivation rec {
       nico202
     ];
   };
-}
+})

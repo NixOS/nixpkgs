@@ -9,14 +9,14 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gcli";
   version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "herrhotzenplotz";
     repo = "gcli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-2L6/ZYxRY2xrTxr/oD02xCRqdk7VWrPlFwr8wU8C2x8=";
   };
 
@@ -30,10 +30,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Portable Git(Hub|Lab|ea) CLI tool";
     homepage = "https://herrhotzenplotz.de/gcli/";
-    changelog = "https://github.com/herrhotzenplotz/gcli/releases/tag/${version}";
+    changelog = "https://github.com/herrhotzenplotz/gcli/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd2;
     mainProgram = "gcli";
     maintainers = with lib.maintainers; [ kenran ];
     platforms = lib.platforms.unix;
   };
-}
+})

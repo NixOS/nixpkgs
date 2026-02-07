@@ -4,12 +4,12 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "gyre-fonts";
   version = "2.005";
 
   src = fetchzip {
-    url = "http://www.gust.org.pl/projects/e-foundry/tex-gyre/whole/tg-${version}otf.zip";
+    url = "http://www.gust.org.pl/projects/e-foundry/tex-gyre/whole/tg-${finalAttrs.version}otf.zip";
     stripRoot = false;
     hash = "sha256-+6IufuFf+IoLXoZEPlfHUNgRhKrQNBEZ1OwPD9/uOjg=";
   };
@@ -37,4 +37,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ bergey ];
   };
-}
+})

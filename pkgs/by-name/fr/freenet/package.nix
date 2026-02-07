@@ -34,14 +34,14 @@ let
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "freenet";
   version = "01504";
 
   src = fetchFromGitHub {
     owner = "hyphanet";
     repo = "fred";
-    tag = "build${version}";
+    tag = "build${finalAttrs.version}";
     hash = "sha256-a+yRsJ4+gi2UiVeWLsbTgFbzekCSnOJO++9fLVWX0C0=";
   };
 
@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ nagy ];
     platforms = with lib.platforms; linux;
-    changelog = "https://github.com/freenet/fred/blob/build${version}/NEWS.md";
+    changelog = "https://github.com/freenet/fred/blob/build${finalAttrs.version}/NEWS.md";
     mainProgram = "freenet";
   };
-}
+})

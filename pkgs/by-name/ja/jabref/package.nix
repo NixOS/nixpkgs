@@ -56,21 +56,21 @@ let
   };
   kotlinDslVersion = "6.4.2";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "6.0-alpha.4";
   pname = "jabref";
 
   src = fetchFromGitHub {
     owner = "JabRef";
     repo = "jabref";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ZhyWYZD8QT3dH6MwG2kMjTAjkxaVFIMR4C9aAvi3FJQ=";
     fetchSubmodules = true;
   };
 
   desktopItems = [
     (makeDesktopItem {
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       name = "JabRef";
       desktopName = "JabRef";
       genericName = "BibTex Editor";
@@ -133,12 +133,12 @@ stdenv.mkDerivation rec {
   ];
 
   gradleFlags = [
-    "-PprojVersion=${version}"
+    "-PprojVersion=${finalAttrs.version}"
     "-Dorg.gradle.java.home=${jdk}"
   ];
 
   preBuild = ''
-    gradleFlagsArray+=(-PprojVersionInfo="${version} NixOS")
+    gradleFlagsArray+=(-PprojVersionInfo="${finalAttrs.version} NixOS")
   '';
 
   dontWrapGApps = true;
@@ -247,4 +247,4 @@ stdenv.mkDerivation rec {
       linsui
     ];
   };
-}
+})

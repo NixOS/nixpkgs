@@ -5,14 +5,14 @@
   libsepol,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "semodule-utils";
   version = "3.8.1";
 
   inherit (libsepol) se_url;
 
   src = fetchurl {
-    url = "${se_url}/${version}/semodule-utils-${version}.tar.gz";
+    url = "${se_url}/${finalAttrs.version}/semodule-utils-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-dwWw2wWcU6IdanfAtQ9sRn2RoOqS/4dfHJNSfNJ2I5U=";
   };
 
@@ -29,4 +29,4 @@ stdenv.mkDerivation rec {
     inherit (libsepol.meta) homepage platforms;
     maintainers = with lib.maintainers; [ RossComputerGuy ];
   };
-}
+})

@@ -16,7 +16,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "poco";
 
   version = "1.14.2";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     owner = "pocoproject";
     repo = "poco";
     hash = "sha256-koREkrfAHWfpqITN5afiXwZg37Wve2Ftx8sr8t2bSV4=";
-    rev = "poco-${version}-release";
+    rev = "poco-${finalAttrs.version}-release";
   };
 
   nativeBuildInputs = [
@@ -116,4 +116,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

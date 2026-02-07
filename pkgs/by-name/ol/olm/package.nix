@@ -5,7 +5,7 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "olm";
   version = "3.2.16";
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.matrix.org";
     owner = "matrix-org";
     repo = "olm";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-JX20mpuLO+UoNc8iQlXEHAbH9sfblkBbM1gE27Ve0ac=";
   };
 
@@ -95,4 +95,4 @@ stdenv.mkDerivation rec {
       ''
     ];
   };
-}
+})

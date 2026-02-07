@@ -11,12 +11,12 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mfcl2700dncupswrapper";
   version = "3.2.0-1";
 
   src = fetchurl {
-    url = "https://download.brother.com/welcome/dlf102086/mfcl2700dncupswrapper-${version}.i386.deb";
+    url = "https://download.brother.com/welcome/dlf102086/mfcl2700dncupswrapper-${finalAttrs.version}.i386.deb";
     sha256 = "07w48mah0xbv4h8vsh1qd5cd4b463bx8y6gc5x9pfgsxsy6h6da1";
   };
 
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.tv ];
     platforms = lib.platforms.linux;
   };
-}
+})

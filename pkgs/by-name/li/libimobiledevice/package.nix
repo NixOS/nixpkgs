@@ -15,19 +15,19 @@
   unstableGitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libimobiledevice";
   version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = "libimobiledevice";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-SWWsa7asCXpcz80VNhxoePWr74QY8SP0byGSCp+nGG0=";
   };
 
   preAutoreconf = ''
-    export RELEASE_VERSION=${version}
+    export RELEASE_VERSION=${finalAttrs.version}
   '';
 
   configureFlags = [ "--without-cython" ];
@@ -75,4 +75,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ RossComputerGuy ];
   };
-}
+})

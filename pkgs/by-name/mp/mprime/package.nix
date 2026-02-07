@@ -29,20 +29,20 @@ let
     ."${stdenv.hostPlatform.system}" or throwSystem;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mprime";
   version = "30.19b21";
   src = fetchurl {
     url = "https://download.mersenne.ca/gimps/v30/30.19/p95v${
-      lib.replaceStrings [ "." ] [ "" ] version
+      lib.replaceStrings [ "." ] [ "" ] finalAttrs.version
     }.source.zip";
     hash = "sha256-vchDpUem+R3GcASj77zZmFivfbB17Nd7cYiyPlrCzio=";
   };
 
   postPatch = ''
-    sed -i ${srcDir}/makefile \
+    sed -i ${finalAttrs.srcDir}/makefile \
       -e 's/^LFLAGS =.*//'
-    substituteInPlace ${srcDir}/makefile \
+    substituteInPlace ${finalAttrs.srcDir}/makefile \
       --replace '-Wl,-Bstatic'  "" \
       --replace '-Wl,-Bdynamic' ""
   '';
@@ -62,11 +62,11 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     make -C gwnum -f ${gwnum}
-    make -C ${srcDir}
+    make -C ${finalAttrs.srcDir}
   '';
 
   installPhase = ''
-    install -Dm555 -t $out/bin ${srcDir}/mprime
+    install -Dm555 -t $out/bin ${finalAttrs.srcDir}/mprime
   '';
 
   meta = {
@@ -90,4 +90,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ dstremur ];
     mainProgram = "mprime";
   };
-}
+})

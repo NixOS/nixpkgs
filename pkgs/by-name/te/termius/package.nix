@@ -15,7 +15,7 @@
   sqlite,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "termius";
   version = "9.36.2";
   revision = "253";
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     cp -r ./ $out/opt/termius
 
     mkdir -p "$out/share/applications" "$out/share/pixmaps"
-    cp "${desktopItem}/share/applications/"* "$out/share/applications"
+    cp "${finalAttrs.desktopItem}/share/applications/"* "$out/share/applications"
     cp meta/gui/icon.png $out/share/pixmaps/termius-app.png
 
     runHook postInstall
@@ -122,4 +122,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     mainProgram = "termius-app";
   };
-}
+})

@@ -10,14 +10,14 @@
   jemalloc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lwan";
   version = "0.7";
 
   src = fetchFromGitHub {
     owner = "lpereira";
     repo = "lwan";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-kH4pZXLcVqGtiGF9IXsybWc+iG8bGASmxcaCKTAB40g=";
   };
 
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

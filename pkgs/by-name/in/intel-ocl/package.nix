@@ -8,7 +8,7 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "intel-ocl";
   version = "5.0-63503";
 
@@ -36,8 +36,8 @@ stdenv.mkDerivation rec {
 
   postUnpack = ''
     # Extract the RPMs contained within the source ZIP.
-    rpmextract source/intel-opencl-r${version}.x86_64.rpm
-    rpmextract source/intel-opencl-cpu-r${version}.x86_64.rpm
+    rpmextract source/intel-opencl-r${finalAttrs.version}.x86_64.rpm
+    rpmextract source/intel-opencl-cpu-r${finalAttrs.version}.x86_64.rpm
   '';
 
   patchPhase = ''
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
     # Patch shared libraries.
     for lib in opt/intel/opencl/*.so; do
-      patchelf --set-rpath "${libPath}:$out/lib/intel-ocl" $lib || true
+      patchelf --set-rpath "${finalAttrs.libPath}:$out/lib/intel-ocl" $lib || true
     done
 
     runHook postPatch
@@ -84,4 +84,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
-}
+})

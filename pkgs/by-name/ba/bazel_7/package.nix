@@ -53,7 +53,7 @@ let
   sourceRoot = ".";
 
   src = fetchurl {
-    url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
+    url = "https://github.com/bazelbuild/bazel/releases/download/${finalAttrs.version}/bazel-${finalAttrs.version}-dist.zip";
     hash = "sha256-eQKNB38G8ziDuorzoj5Rne/DZQL22meVLrdK0z7B2FI=";
   };
 
@@ -104,29 +104,29 @@ let
     ];
 
   # Bootstrap an existing Bazel so we can vendor deps with vendor mode
-  bazelBootstrap = stdenv.mkDerivation rec {
+  bazelBootstrap = stdenv.mkDerivation (finalAttrs: {
     name = "bazelBootstrap";
 
     src =
       if stdenv.hostPlatform.system == "x86_64-linux" then
         fetchurl {
-          url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel_nojdk-${version}-linux-x86_64";
+          url = "https://github.com/bazelbuild/bazel/releases/download/${finalAttrs.version}/bazel_nojdk-${finalAttrs.version}-linux-x86_64";
           hash = "sha256-94KFvsS7fInXFTQZPzMq6DxnHQrRktljwACyAz8adSw=";
         }
       else if stdenv.hostPlatform.system == "aarch64-linux" then
         fetchurl {
-          url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel_nojdk-${version}-linux-arm64";
+          url = "https://github.com/bazelbuild/bazel/releases/download/${finalAttrs.version}/bazel_nojdk-${finalAttrs.version}-linux-arm64";
           hash = "sha256-wfuZLSHa77wr0A4ZLF5DqH7qyOljYNXM2a5imoS+nGQ";
         }
       else if stdenv.hostPlatform.system == "x86_64-darwin" then
         fetchurl {
-          url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-darwin-x86_64";
+          url = "https://github.com/bazelbuild/bazel/releases/download/${finalAttrs.version}/bazel-${finalAttrs.version}-darwin-x86_64";
           hash = "sha256-qAb9s6R5+EbqVfWHUT7sk1sOrbDEPv4EhgXH7nC46Zw=";
         }
       else
         fetchurl {
           # stdenv.hostPlatform.system == "aarch64-darwin"
-          url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-darwin-arm64";
+          url = "https://github.com/bazelbuild/bazel/releases/download/${finalAttrs.version}/bazel-${finalAttrs.version}-darwin-arm64";
           hash = "sha256-4bRp4OvkRIvhpZ2r/eFJdwrByECHy3rncDEM1tClFYo=";
         };
 
@@ -151,7 +151,7 @@ let
 
     postFixup = ''
       wrapProgram $out/bin/bazel \
-        --prefix PATH : ${lib.makeBinPath nativeBuildInputs}
+        --prefix PATH : ${lib.makeBinPath finalAttrs.nativeBuildInputs}
     '';
 
     meta.sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
@@ -159,7 +159,7 @@ let
 
   bazelFhs = buildFHSEnv {
     pname = "bazel";
-    inherit version;
+    inherit (finalAttrs) version;
     targetPkgs = _: [ bazelBootstrap ];
     runScript = "bazel";
   };
@@ -174,7 +174,7 @@ let
     in
     stdenv.mkDerivation {
       name = "bazelDeps";
-      inherit src version;
+      inherit (finalAttrs) src version;
       sourceRoot = ".";
       patches = [
         # The repo rule that creates a manifest of the bazel source for testing
@@ -308,9 +308,9 @@ let
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bazel";
-  inherit version src;
+  inherit (finalAttrs) version src;
   inherit sourceRoot;
 
   patches = [
@@ -597,7 +597,7 @@ stdenv.mkDerivation rec {
     # on branch/tag information which we don't have with tarball releases.
     # Note that .bazelversion is always correct and is based on bazel-*
     # executable name, version checks should work fine
-    export EMBED_LABEL="${version}- (@non-git)"
+    export EMBED_LABEL="${finalAttrs.version}- (@non-git)"
 
     echo "Stage 1 - Running bazel bootstrap script"
     ${bash}/bin/bash ./bazel_src/compile.sh
@@ -624,10 +624,10 @@ stdenv.mkDerivation rec {
 
     # official wrapper scripts that searches for $WORKSPACE_ROOT/tools/bazel if
     # it can’t find something in tools, it calls
-    # $out/bin/bazel-{version}-{os_arch} The binary _must_ exist with this
+    # $out/bin/bazel-{finalAttrs.version}-{os_arch} The binary _must_ exist with this
     # naming if your project contains a .bazelversion file.
     cp ./bazel_src/scripts/packages/bazel.sh $out/bin/bazel
-    versionned_bazel="$out/bin/bazel-${version}-${system}-${arch}"
+    versionned_bazel="$out/bin/bazel-${finalAttrs.version}-${system}-${arch}"
     mv ./bazel_src/output/bazel "$versionned_bazel"
     wrapProgram "$versionned_bazel" --suffix PATH : ${defaultShellPath}
 
@@ -691,7 +691,7 @@ stdenv.mkDerivation rec {
     exec "$BAZEL_REAL" "$@"
     EOF
 
-    # second call succeeds because it defers to $out/bin/bazel-{version}-{os_arch}
+    # second call succeeds because it defers to $out/bin/bazel-{finalAttrs.version}-{os_arch}
     hello_test
 
     ## Test that the GSON serialisation files are present
@@ -739,3 +739,4 @@ stdenv.mkDerivation rec {
     inherit bazelDeps bazelFhs bazelBootstrap;
   };
 }
+)

@@ -28,7 +28,7 @@
 let
   pythonEnv = python3.withPackages (ps: [ ps.tkinter ]);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fido2-manage";
   version = "0-unstable-2025-06-06";
 
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
       name = "fido2-manage";
       exec = "fido2-manage-gui";
       icon = "token2";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       categories = [
         "Utility"
       ];
@@ -137,4 +137,4 @@ stdenv.mkDerivation rec {
     mainProgram = "fido2-manage";
     maintainers = with lib.maintainers; [ Srylax ];
   };
-}
+})

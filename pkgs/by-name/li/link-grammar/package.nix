@@ -13,7 +13,7 @@
 
 let
 
-  link-grammar = stdenv.mkDerivation rec {
+  link-grammar = stdenv.mkDerivation (finalAttrs: {
     pname = "link-grammar";
     version = "5.10.5";
 
@@ -25,7 +25,7 @@ let
     ];
 
     src = fetchurl {
-      url = "http://www.abisource.com/downloads/link-grammar/${version}/link-grammar-${version}.tar.gz";
+      url = "http://www.abisource.com/downloads/link-grammar/${finalAttrs.version}/link-grammar-${finalAttrs.version}.tar.gz";
       sha256 = "sha256-MkcQzYEyl1/5zLU1CXMvdVhHOxwZ8XiSAAo97bhhiu0=";
     };
 
@@ -65,7 +65,7 @@ let
     meta = {
       description = "Grammar Checking library";
       homepage = "https://www.abisource.com/projects/link-grammar/";
-      changelog = "https://github.com/opencog/link-grammar/blob/link-grammar-${version}/ChangeLog";
+      changelog = "https://github.com/opencog/link-grammar/blob/link-grammar-${finalAttrs.version}/ChangeLog";
       license = lib.licenses.lgpl21Only;
       maintainers = with lib.maintainers; [ jtojnar ];
       platforms = lib.platforms.unix;
@@ -74,3 +74,4 @@ let
 
 in
 link-grammar
+)

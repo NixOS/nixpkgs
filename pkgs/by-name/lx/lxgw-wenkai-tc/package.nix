@@ -4,11 +4,11 @@
   lib,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "lxgw-wenkai-tc";
   version = "1.521";
   src = fetchurl {
-    url = "https://github.com/lxgw/LxgwWenKaiTC/releases/download/v${version}/lxgw-wenkai-tc-v${version}.tar.gz";
+    url = "https://github.com/lxgw/LxgwWenKaiTC/releases/download/v${finalAttrs.version}/lxgw-wenkai-tc-v${finalAttrs.version}.tar.gz";
     hash = "sha256-secUl91sR6AgHD1ac96ka4BtaMjdQYUPnzVM7jgv5n4=";
   };
 
@@ -28,4 +28,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ lebensterben ];
   };
-}
+})

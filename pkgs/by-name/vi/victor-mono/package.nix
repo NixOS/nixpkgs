@@ -4,7 +4,7 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "victor-mono";
   version = "1.5.6";
 
@@ -16,7 +16,7 @@ stdenvNoCC.mkDerivation rec {
   # Both methods produce the same file, but this way
   # we can safely reason about what version it is.
   src = fetchzip {
-    url = "https://github.com/rubjo/victor-mono/raw/v${version}/public/VictorMonoAll.zip";
+    url = "https://github.com/rubjo/victor-mono/raw/v${finalAttrs.version}/public/VictorMonoAll.zip";
     stripRoot = false;
     hash = "sha256-PnCCU7PO+XcxUk445sU5xVl8XqdSPJighjtDTqI6qiw=";
   };
@@ -39,4 +39,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ jpotier ];
     platforms = lib.platforms.all;
   };
-}
+})

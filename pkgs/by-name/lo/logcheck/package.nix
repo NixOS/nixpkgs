@@ -6,10 +6,10 @@
   perlPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "logcheck";
   version = "1.4.7";
-  _name = "logcheck_${version}";
+  _name = "logcheck_${finalAttrs.version}";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/l/logcheck/${_name}.tar.xz";
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     homepage = "https://salsa.debian.org/debian/logcheck";
     license = lib.licenses.gpl2Plus;
   };
-}
+})

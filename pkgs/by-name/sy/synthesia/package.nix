@@ -15,7 +15,7 @@ let
     hash = "sha256-M9cQqHwwjko5pchdNtIMjYwd4joIvBphAYnpw73qYzM=";
   };
 in
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "synthesia";
   version = "10.9";
 
@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation rec {
     (makeDesktopItem {
       name = "synthesia";
       desktopName = "Synthesia";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       exec = "synthesia";
       icon = "synthesia";
       categories = [
@@ -40,7 +40,7 @@ stdenvNoCC.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://cdn.synthesia.app/files/Synthesia-${version}-installer.exe";
+    url = "https://cdn.synthesia.app/files/Synthesia-${finalAttrs.version}-installer.exe";
     hash = "sha256-BFTsbesfMqxY1731ss6S0w8BcUaoqjVrr62VeU1BfrU=";
   };
 
@@ -59,7 +59,7 @@ stdenvNoCC.mkDerivation rec {
     export WINEDLLOVERRIDES="mscoree=" # disable mono
     if [ ! -d "$WINEPREFIX" ] ; then
       mkdir -p "$WINEPREFIX"
-      wine ${src} /S
+      wine ${finalAttrs.src} /S
     fi
     wine "$WINEPREFIX/drive_c/Program Files (x86)/Synthesia/Synthesia.exe"
     EOF
@@ -77,4 +77,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ ners ];
     platforms = wineWowPackages.stable.meta.platforms;
   };
-}
+})

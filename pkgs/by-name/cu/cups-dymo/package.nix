@@ -5,7 +5,7 @@
   cups,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cups-dymo";
   version = "1.4.0.5";
 
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ makefu ];
   };
-}
+})

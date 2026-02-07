@@ -12,24 +12,24 @@
   libcap,
   lsof,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "explain";
   version = "1.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libexplain/libexplain-${version}.tar.gz";
+    url = "mirror://sourceforge/libexplain/libexplain-${finalAttrs.version}.tar.gz";
     hash = "sha256-KIY7ZezMdJNOI3ysQTZMs8GALDbJ4jGO0EF0YP7oP4A=";
   };
 
   patches =
     let
       debian-src = "https://sources.debian.org/data/main";
-      debian-ver = "${version}.D001-12";
+      debian-ver = "${finalAttrs.version}.D001-12";
       debian-patch =
         fname: hash:
         fetchpatch {
           name = fname;
-          url = "${debian-src}/libe/libexplain/${debian-ver}/debian/patches/${fname}";
+          url = "${debian-finalAttrs.src}/libe/libexplain/${debian-ver}/debian/patches/${fname}";
           hash = hash;
         };
     in
@@ -72,4 +72,4 @@ stdenv.mkDerivation rec {
     # never built on aarch64-linux since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
   };
-}
+})

@@ -8,14 +8,14 @@
   xcursorgen,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "hackneyed";
   version = "0.9.3";
 
   src = fetchFromGitLab {
     owner = "Enthymeme";
     repo = "hackneyed-x11-cursors";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-gq+qBYm15satH/XXK1QYDVu2L2DvZ+2aYg/wDqncwmA=";
   };
 
@@ -60,4 +60,4 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ somasis ];
   };
-}
+})

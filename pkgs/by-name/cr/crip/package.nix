@@ -18,11 +18,11 @@
   which,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "crip";
   version = "3.9";
   src = fetchurl {
-    url = "http://bach.dynet.com/crip/src/crip-${version}.tar.gz";
+    url = "http://bach.dynet.com/crip/src/crip-${finalAttrs.version}.tar.gz";
     sha256 = "0pk9152wll6fmkj1pki3fz3ijlf06jyk32v31yarwvdkwrk7s9xz";
   };
 
@@ -72,4 +72,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.endgame ];
   };
-}
+})

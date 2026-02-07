@@ -5,12 +5,12 @@
   unzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "selfoss";
   version = "2.19";
 
   src = fetchurl {
-    url = "https://github.com/SSilence/selfoss/releases/download/${version}/selfoss-${version}.zip";
+    url = "https://github.com/SSilence/selfoss/releases/download/${finalAttrs.version}/selfoss-${finalAttrs.version}.zip";
     sha256 = "5JxHUOlyMneWPKaZtgLwn5FI4rnyWPzmsUQpSYrw5Pw=";
   };
 
@@ -41,4 +41,4 @@ stdenvNoCC.mkDerivation rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})

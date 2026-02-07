@@ -18,14 +18,14 @@
   cudaSupport ? config.cudaSupport,
   cudaPackages,
 }@inputs:
-(if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv).mkDerivation rec {
+(if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv).mkDerivation (finalAttrs: {
   pname = "dlib";
   version = "20.0";
 
   src = fetchFromGitHub {
     owner = "davisking";
     repo = "dlib";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-VTX7s0p2AzlvPUsSMXwZiij+UY9g2y+a1YIge9bi0sw=";
   };
 
@@ -96,4 +96,4 @@
     maintainers = with lib.maintainers; [ christopherpoole ];
     platforms = lib.platforms.unix;
   };
-}
+})

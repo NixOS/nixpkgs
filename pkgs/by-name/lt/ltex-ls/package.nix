@@ -6,12 +6,12 @@
   jre_headless,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "ltex-ls";
   version = "16.0.0";
 
   src = fetchurl {
-    url = "https://github.com/valentjn/ltex-ls/releases/download/${version}/ltex-ls-${version}.tar.gz";
+    url = "https://github.com/valentjn/ltex-ls/releases/download/${finalAttrs.version}/ltex-ls-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-lW1TfTckqhCmhjcvduISY9qAdKPM/0cobxbIrCq5JkQ=";
   };
 
@@ -38,4 +38,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ vinnymeller ];
     platforms = jre_headless.meta.platforms;
   };
-}
+})

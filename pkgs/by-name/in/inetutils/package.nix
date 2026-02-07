@@ -10,12 +10,12 @@
   util-linux,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "inetutils";
   version = "2.6";
 
   src = fetchurl {
-    url = "mirror://gnu/inetutils/inetutils-${version}.tar.xz";
+    url = "mirror://gnu/inetutils/inetutils-${finalAttrs.version}.tar.xz";
     hash = "sha256-aL7b/q9z99hr4qfZm8+9QJPYKfUncIk5Ga4XTAsjV8o=";
   };
 
@@ -110,4 +110,4 @@ stdenv.mkDerivation rec {
     */
     priority = (util-linux.meta.priority or lib.meta.defaultPriority) + 1;
   };
-}
+})

@@ -5,12 +5,12 @@
   writeScript,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "i.ming";
   version = "8.10";
 
   src = fetchurl {
-    url = "https://raw.githubusercontent.com/ichitenfont/I.Ming/${version}/${version}/I.Ming-${version}.ttf";
+    url = "https://raw.githubusercontent.com/ichitenfont/I.Ming/${finalAttrs.version}/${finalAttrs.version}/I.Ming-${finalAttrs.version}.ttf";
     hash = "sha256-y6E7dbBQ1nG2EdAGMUcmLkIeFDWa1FMJSLBw9WER8PM=";
   };
 
@@ -30,7 +30,7 @@ stdenvNoCC.mkDerivation rec {
       #!nix-shell -i bash -p curl gnused
       set -e
       version=$(curl -i -s https://github.com/ichitenfont/I.Ming/releases/latest | sed -n -E 's|^location.*releases/tag/([0-9.]+).*$|\1|p')
-      if [[ $version != ${version} ]]; then
+      if [[ $version != ${finalAttrs.version} ]]; then
         tmp=$(mktemp -d)
         curl -Lo $tmp/I.Ming.ttf https://raw.githubusercontent.com/ichitenfont/I.Ming/$version/$version/I.Ming-$version.ttf
         install -DT -m444 $tmp/I.Ming.ttf $tmp/share/fonts/truetype/I.Ming/I.Ming.ttf
@@ -51,4 +51,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.linsui ];
   };
-}
+})

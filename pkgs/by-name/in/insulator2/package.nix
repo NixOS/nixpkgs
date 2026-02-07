@@ -22,14 +22,14 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "insulator2";
   version = "2.13.2";
 
   src = fetchFromGitHub {
     owner = "andrewinci";
     repo = "insulator2";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-34JRIB7/x7miReWOxR/m+atjfUiE3XGyh9OBSbMg3m4=";
   };
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   '';
 
   yarnOfflineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
+    yarnLock = "${finalAttrs.src}/yarn.lock";
     hash = "sha256-5wOgVrcHJVF07QpnN52d4VWEM3FKw3NdLrZ1goAP2oI=";
   };
 
@@ -95,4 +95,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ tc-kaluza ];
     mainProgram = "insulator-2";
   };
-}
+})

@@ -6,14 +6,14 @@
   cctools,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "macdylibbundler";
   version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "auriamg";
     repo = "macdylibbundler";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0j4ij48jf5izgymzxxaakf6vc50w9q0761yir6nfj1n6qlnrlidf";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.nomeata ];
 
   };
-}
+})

@@ -8,11 +8,11 @@
   withPngSupport ? true, # support png output
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tachyon";
   version = "0.99.5";
   src = fetchurl {
-    url = "http://jedi.ks.uiuc.edu/~johns/tachyon/files/${version}/tachyon-${version}.tar.gz";
+    url = "http://jedi.ks.uiuc.edu/~johns/tachyon/files/${finalAttrs.version}/tachyon-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-CSA8ECMRFJ9d9cw2dAn5bHJXQmZtGcJNtbqZTVqBpvU=";
   };
   buildInputs =
@@ -90,4 +90,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux ++ cygwin ++ darwin;
     homepage = "http://jedi.ks.uiuc.edu/~johns/tachyon/";
   };
-}
+})

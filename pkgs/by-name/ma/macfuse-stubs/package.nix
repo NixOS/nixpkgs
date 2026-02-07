@@ -8,12 +8,12 @@
   libtapi,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "macfuse-stubs";
   version = "4.8.0";
 
   src = fetchurl {
-    url = "https://github.com/osxfuse/osxfuse/releases/download/macfuse-${version}/macfuse-${version}.dmg";
+    url = "https://github.com/osxfuse/osxfuse/releases/download/macfuse-${finalAttrs.version}/macfuse-${finalAttrs.version}.dmg";
     hash = "sha256-ucTzO2qdN4QkowMVvC3+4pjEVjbwMsB0xFk+bvQxwtQ=";
   };
 
@@ -74,4 +74,4 @@ stdenv.mkDerivation rec {
     use the installer from the <link xlink:href="https://osxfuse.github.io/">
     project website</link>.
   '';
-}
+})

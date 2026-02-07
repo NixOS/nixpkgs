@@ -54,7 +54,7 @@ let
     )
   );
 in
-clangStdenv.mkDerivation rec {
+clangStdenv.mkDerivation (finalAttrs: {
   pname = "openscad-unstable";
   version = "2021.01-unstable-2025-10-27";
   src = fetchFromGitHub {
@@ -121,7 +121,9 @@ clangStdenv.mkDerivation rec {
     "-DUSE_BUILTIN_OPENCSG=OFF"
     "-DUSE_BUILTIN_MANIFOLD=OFF"
     "-DUSE_BUILTIN_CLIPPER2=OFF"
-    "-DOPENSCAD_VERSION=\"${builtins.replaceStrings [ "-" ] [ "." ] (lib.strings.getVersion version)}\""
+    "-DOPENSCAD_VERSION=\"${
+      builtins.replaceStrings [ "-" ] [ "." ] (lib.strings.getVersion finalAttrs.version)
+    }\""
     "-DCMAKE_UNITY_BUILD=OFF" # broken compile with unity
     # IPO
     "-DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=lld"
@@ -198,4 +200,4 @@ clangStdenv.mkDerivation rec {
     ];
     mainProgram = "openscad";
   };
-}
+})

@@ -6,12 +6,12 @@
   jre,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "panoply";
   version = "5.9.0";
 
   src = fetchurl {
-    url = "https://www.giss.nasa.gov/tools/panoply/download/PanoplyJ-${version}.tgz";
+    url = "https://www.giss.nasa.gov/tools/panoply/download/PanoplyJ-${finalAttrs.version}.tgz";
     hash = "sha256-OCxplchCBx5hCbihg4WNu/RrcYBo5Jfdm1VDIr9swRU=";
   };
 
@@ -41,4 +41,4 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.unfree; # Package does not state a license
     mainProgram = "panoply";
   };
-}
+})

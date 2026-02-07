@@ -5,12 +5,12 @@
   unzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "unicode-character-database";
   version = "17.0.0";
 
   src = fetchurl {
-    url = "https://www.unicode.org/Public/${version}/ucd/UCD.zip";
+    url = "https://www.unicode.org/Public/${finalAttrs.version}/ucd/UCD.zip";
     sha256 = "sha256-IGbRkJsuqTkWzgktocDuSAjqPvhAfJS08U9bfrJj0o4=";
   };
 
@@ -36,4 +36,4 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.unicode-dfs-2016;
     platforms = lib.platforms.all;
   };
-}
+})

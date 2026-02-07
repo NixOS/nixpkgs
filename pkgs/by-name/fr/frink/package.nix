@@ -7,7 +7,7 @@
   stdenv,
   testers,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "frink";
   version = "2025-01-07";
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/bin $out/lib
 
-    cp ${src} $out/lib/frink-tng.jar
+    cp ${finalAttrs.src} $out/lib/frink-tng.jar
 
     # Generate rlwrap helper files.
     # See https://frinklang.org/fsp/colorize.fsp?f=listUnits.frink
@@ -66,4 +66,4 @@ stdenv.mkDerivation rec {
       command = "frink -e 'FrinkVersion[]'";
     };
   };
-}
+})

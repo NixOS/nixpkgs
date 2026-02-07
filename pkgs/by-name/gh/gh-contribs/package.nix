@@ -7,14 +7,14 @@
   nix-update-script,
   stdenvNoCC,
 }:
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "gh-contribs";
   version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "MintArchit";
     repo = "gh-contribs";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-fqyxq/lpMcLXOYY0MNI5uv8Go2erpg7dEIsEI+ExSVI=";
   };
 
@@ -46,4 +46,4 @@ stdenvNoCC.mkDerivation rec {
     mainProgram = "gh-contribs";
     platforms = lib.platforms.all;
   };
-}
+})

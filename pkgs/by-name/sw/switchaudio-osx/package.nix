@@ -6,14 +6,14 @@
   xcbuildHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "switchaudio-osx";
   version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "deweller";
     repo = "switchaudio-osx";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-AZJn5kHK/al94ONfIHcG+W0jyMfgdJkIngN+PVj+I44=";
   };
 
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ taranarmo ];
     platforms = lib.platforms.darwin;
   };
-}
+})

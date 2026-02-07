@@ -6,14 +6,14 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flatbuffers";
   version = "25.9.23";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "flatbuffers";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-A9nWfgcuVW3x9MDFeviCUK/oGcWJQwadI8LqNR8BlQw=";
   };
 
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     mainProgram = "flatc";
     platforms = lib.platforms.unix;
   };
-}
+})

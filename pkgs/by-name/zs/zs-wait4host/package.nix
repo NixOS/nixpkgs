@@ -6,12 +6,12 @@
   stdenvNoCC,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "zs-wait4host";
   version = "0.3.2";
 
   src = fetchurl {
-    url = "https://ytrizja.de/distfiles/zs-wait4host-${version}.tar.gz";
+    url = "https://ytrizja.de/distfiles/zs-wait4host-${finalAttrs.version}.tar.gz";
     sha256 = "9F1264BDoGlRR7bWlRXhfyvxWio4ydShKmabUQEIz9I=";
   };
 
@@ -37,4 +37,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

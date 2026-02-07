@@ -8,7 +8,7 @@
   coreutils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lean";
   version = "3.51.0";
 
@@ -49,9 +49,9 @@ stdenv.mkDerivation rec {
     assert builtins.stringLength src.rev == 40;
     ''
       substituteInPlace src/githash.h.in \
-        --subst-var-by GIT_SHA1 "${src.rev}"
+        --subst-var-by GIT_SHA1 "${finalAttrs.src.rev}"
       substituteInPlace library/init/version.lean.in \
-        --subst-var-by GIT_SHA1 "${src.rev}"
+        --subst-var-by GIT_SHA1 "${finalAttrs.src.rev}"
     '';
 
   postPatch = ''
@@ -70,11 +70,11 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Automatic and interactive theorem prover";
     homepage = "https://leanprover.github.io/";
-    changelog = "https://github.com/leanprover-community/lean/blob/v${version}/doc/changes.md";
+    changelog = "https://github.com/leanprover-community/lean/blob/v${finalAttrs.version}/doc/changes.md";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       thoughtpolice
     ];
   };
-}
+})

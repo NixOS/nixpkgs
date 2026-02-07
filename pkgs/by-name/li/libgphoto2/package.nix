@@ -16,14 +16,14 @@
   gd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libgphoto2";
   version = "2.5.33";
 
   src = fetchFromGitHub {
     owner = "gphoto";
     repo = "libgphoto2";
-    rev = "libgphoto2-${builtins.replaceStrings [ "." ] [ "_" ] version}-release";
+    rev = "libgphoto2-${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}-release";
     sha256 = "sha256-gv84HD/ZjmAa0EpuYtUTGLcC7+BE8kWi4ut+RlvQvow=";
   };
 
@@ -84,4 +84,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; unix;
     maintainers = with lib.maintainers; [ jcumming ];
   };
-}
+})

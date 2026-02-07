@@ -7,14 +7,14 @@
   gawk,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cfs-zen-tweaks";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "igo95862";
     repo = "cfs-zen-tweaks";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-E3sNWWXm0NEqLCzFccd/nfYby+/b/MVjIHeGlDxV1W4=";
   };
 
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ mkg20001 ];
   };
-}
+})

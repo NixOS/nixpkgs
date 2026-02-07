@@ -22,7 +22,7 @@ let
           src = fetchFromGitHub {
             owner = "pyparsing";
             repo = "pyparsing";
-            tag = version;
+            tag = finalAttrs.version;
             hash = "sha256-0B8DjO4kLgvt4sYsk8CZI+5icdKy73XE2tWeqVLqO5A=";
           };
         });
@@ -33,14 +33,14 @@ let
       self = python;
     };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "quickder";
   version = "1.7.1";
 
   src = fetchFromGitLab {
     owner = "arpa2";
     repo = "quick-der";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-f+ph5PL+uWRkswpOLDwZFWjh938wxoJ6xocJZ2WZLEk=";
   };
 
@@ -78,4 +78,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux;
   };
-}
+})

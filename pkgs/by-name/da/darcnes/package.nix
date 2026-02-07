@@ -8,12 +8,12 @@
   libxaw,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "darcnes";
   version = "9b0401";
 
   src = fetchurl {
-    url = "https://web.archive.org/web/20130511081532/http://www.dridus.com/~nyef/darcnes/download/dn${version}.tgz";
+    url = "https://web.archive.org/web/20130511081532/http://www.dridus.com/~nyef/darcnes/download/dn${finalAttrs.version}.tgz";
     sha256 = "05a7mh51rg7ydb414m3p5mm05p4nz2bgvspqzwm3bhbj7zz543k3";
   };
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.free;
     platforms = [ "i686-linux" ];
   };
-}
+})

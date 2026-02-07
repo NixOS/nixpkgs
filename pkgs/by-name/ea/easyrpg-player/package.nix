@@ -39,7 +39,7 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "easyrpg-player";
   # liblcf needs to be updated before this.
   version = "0.8.1.1";
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "EasyRPG";
     repo = "Player";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-fYSpFhqETkQhRK1/Uws0fWWdCr35+1J4vCPX9ZiQ3ZA=";
   };
 
@@ -107,7 +107,7 @@ stdenv.mkDerivation rec {
     "man"
   ];
 
-  buildFlags = lib.optionals doCheck [
+  buildFlags = lib.optionals finalAttrs.doCheck [
     "test_runner_player"
   ];
 
@@ -128,4 +128,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = if stdenv.hostPlatform.isDarwin then "EasyRPG Player" else "easyrpg-player";
   };
-}
+})

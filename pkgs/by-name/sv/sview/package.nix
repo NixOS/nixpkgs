@@ -16,14 +16,14 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sview";
   version = "20_08";
 
   src = fetchFromGitHub {
     owner = "gkv311";
     repo = "sview";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-mbEacdBQchziXoZ5vJUiEpa/iHeXeaozte2aXs50/Fo=";
   };
 
@@ -82,4 +82,4 @@ stdenv.mkDerivation rec {
     mainProgram = "sView";
     platforms = lib.platforms.linux;
   };
-}
+})

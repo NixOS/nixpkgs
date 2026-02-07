@@ -8,12 +8,12 @@
   libpciaccess,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "radeontool";
   version = "1.6.3";
 
   src = fetchurl {
-    url = "https://people.freedesktop.org/~airlied/radeontool/radeontool-${version}.tar.gz";
+    url = "https://people.freedesktop.org/~airlied/radeontool/radeontool-${finalAttrs.version}.tar.gz";
     sha256 = "0mjk9wr9rsb17yy92j6yi16hfpa6v5r1dbyiy60zp4r125wr63za";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     homepage = "https://airlied.livejournal.com/";
     license = lib.licenses.zlib;
   };
-}
+})

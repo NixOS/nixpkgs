@@ -17,7 +17,7 @@
   pipewire,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lilv";
   version = "0.26.0";
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://download.drobilla.net/lilv-${version}.tar.xz";
+    url = "https://download.drobilla.net/lilv-${finalAttrs.version}.tar.xz";
     hash = "sha256-kS+dAlprXZYkTY3FHnXb/GeT45h2tTwZbboWYjCNt/A=";
   };
 
@@ -81,4 +81,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

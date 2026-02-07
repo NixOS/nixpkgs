@@ -9,7 +9,7 @@
   jansson,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "3.3-20241031";
   commit = "d00c062d76d86b76c8c179bfb4babc9e2200b3f1";
   pname = "libsearpc";
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

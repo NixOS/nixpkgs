@@ -16,16 +16,16 @@ python3Packages.buildPythonApplication rec {
   format = "setuptools";
 
   src = fetchzip {
-    url = "mirror://sourceforge/pysolfc/PySolFC-${version}.tar.xz";
+    url = "mirror://sourceforge/pysolfc/PySolFC-${finalAttrs.version}.tar.xz";
     hash = "sha256-jijrrWhj80n/XFKMFLptDZCsclIhdJHiTrX6CGjVju8=";
   };
 
-  cardsets = stdenv.mkDerivation rec {
+  cardsets = stdenv.mkDerivation (finalAttrs: {
     pname = "pysol-cardsets";
     version = "3.1";
 
     src = fetchzip {
-      url = "mirror://sourceforge/pysolfc/PySolFC-Cardsets-${version}.tar.bz2";
+      url = "mirror://sourceforge/pysolfc/PySolFC-Cardsets-${finalAttrs.version}.tar.bz2";
       hash = "sha256-NyCnMlMZ6d5+IiyG4cVn/zlDlArLJSs0dIqZiD7Nv4M=";
     };
 
@@ -36,12 +36,12 @@ python3Packages.buildPythonApplication rec {
     '';
   };
 
-  music = stdenv.mkDerivation rec {
+  music = stdenv.mkDerivation (finalAttrs: {
     pname = "pysol-music";
     version = "4.50";
 
     src = fetchzip {
-      url = "mirror://sourceforge/pysolfc/pysol-music-${version}.tar.xz";
+      url = "mirror://sourceforge/pysolfc/pysol-music-${finalAttrs.version}.tar.xz";
       hash = "sha256-sOl5U98aIorrQHJRy34s0HHaSW8hMUE7q84FMQAj5Yg=";
     };
 
@@ -106,3 +106,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = [ ];
   };
 }
+)

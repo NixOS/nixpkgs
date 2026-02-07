@@ -14,7 +14,7 @@
 let
   stdenv = clangStdenv;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cctag";
   version = "1.0.4";
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "alicevision";
     repo = "CCTag";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-M35KGTTmwGwXefsFWB2UKAKveUQyZBW7V8ejgOAJpXk=";
   };
 
@@ -75,4 +75,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ tmarkus ];
   };
-}
+})

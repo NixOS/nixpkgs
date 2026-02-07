@@ -8,7 +8,7 @@
   libx11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "glee";
   rev = "f727ec7463d514b6279981d12833f2e11d62b33d";
   version = "20170205-${lib.strings.substring 0 7 rev}";
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3;
   };
-}
+})

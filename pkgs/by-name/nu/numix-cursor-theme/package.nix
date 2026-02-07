@@ -6,14 +6,14 @@
   xcursorgen,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "numix-cursor-theme";
   version = "1.2";
 
   src = fetchFromGitHub {
     owner = "numixproject";
     repo = "numix-cursor-theme";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1q3w5i0h3ly6i7s9pqjdrb14kp89i78s0havri7lhiqyxizjvcvh";
   };
 
@@ -39,4 +39,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ offline ];
   };
-}
+})

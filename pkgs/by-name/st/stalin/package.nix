@@ -6,7 +6,7 @@
   libx11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "stalin";
   version = "0.11";
 
@@ -32,16 +32,16 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/share/emacs/site-lisp"
     cp stalin.el "$out/share/emacs/site-lisp"
 
-    mkdir -p "$out/doc/stalin-${version}"
-    cp README "$out/doc/stalin-${version}"
+    mkdir -p "$out/doc/stalin-${finalAttrs.version}"
+    cp README "$out/doc/stalin-${finalAttrs.version}"
 
-    mkdir -p "$out/share/stalin-${version}/include"
-    cp "include/"* "$out/share/stalin-${version}/include"
+    mkdir -p "$out/share/stalin-${finalAttrs.version}/include"
+    cp "include/"* "$out/share/stalin-${finalAttrs.version}/include"
 
     substituteInPlace "$out/bin/stalin" \
-      --replace "$PWD/include/stalin" "$out/share/stalin-${version}/include/stalin"
+      --replace "$PWD/include/stalin" "$out/share/stalin-${finalAttrs.version}/include/stalin"
     substituteInPlace "$out/bin/stalin" \
-      --replace "$PWD/include" "$out/share/stalin-${version}/include"
+      --replace "$PWD/include" "$out/share/stalin-${finalAttrs.version}/include"
   '';
 
   meta = {
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = [ "i686-linux" ]; # doesn't want to work on 64-bit platforms
   };
-}
+})

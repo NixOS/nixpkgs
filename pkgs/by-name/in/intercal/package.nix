@@ -9,13 +9,13 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
 
   pname = "intercal";
   version = "0.31";
 
   src = fetchurl {
-    url = "http://catb.org/esr/intercal/intercal-${version}.tar.gz";
+    url = "http://catb.org/esr/intercal/intercal-${finalAttrs.version}.tar.gz";
     sha256 = "1z2gpa5rbqb7jscqlf258k0b0jc7d2zkyipb5csjpj6d3sw45n4k";
   };
 
@@ -59,3 +59,4 @@ stdenv.mkDerivation rec {
   };
 }
 # TODO: investigate if LD_LIBRARY_PATH needs to be set
+)

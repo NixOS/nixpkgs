@@ -5,12 +5,12 @@
   powershell,
   runtimeShell,
 }:
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "powershell-editor-services";
   version = "4.4.0";
 
   src = fetchzip {
-    url = "https://github.com/PowerShell/PowerShellEditorServices/releases/download/v${version}/PowerShellEditorServices.zip";
+    url = "https://github.com/PowerShell/PowerShellEditorServices/releases/download/v${finalAttrs.version}/PowerShellEditorServices.zip";
     hash = "sha256-tmz6xkcF44xnG5VwSeHNWzjRQK6wxQ7Ii6mDNisCMb8=";
     stripRoot = false;
   };
@@ -28,11 +28,11 @@ stdenvNoCC.mkDerivation rec {
   meta = {
     description = "Common platform for PowerShell development support in any editor or application";
     homepage = "https://github.com/PowerShell/PowerShellEditorServices";
-    changelog = "https://github.com/PowerShell/PowerShellEditorServices/releases/tag/v${version}";
+    changelog = "https://github.com/PowerShell/PowerShellEditorServices/releases/tag/v${finalAttrs.version}";
     platforms = lib.platforms.unix;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sharpchen ];
     mainProgram = "powershell-editor-services";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
   };
-}
+})

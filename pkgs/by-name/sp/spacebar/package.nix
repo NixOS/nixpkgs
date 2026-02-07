@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "spacebar";
   version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "cmacrae";
     repo = "spacebar";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-4LiG43kPZtsm7SQ/28RaGMpYsDshCaGvc1mouPG3jFM=";
   };
 
@@ -29,4 +29,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.cmacrae ];
     license = lib.licenses.mit;
   };
-}
+})

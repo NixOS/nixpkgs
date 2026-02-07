@@ -18,14 +18,14 @@
   hiredis,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "oven-media-engine";
   version = "0.17.1";
 
   src = fetchFromGitHub {
     owner = "AirenSoft";
     repo = "OvenMediaEngine";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-fYvP1mk32lrnYxWdpI1WqEUxAfHsQH3Ng0JLC/GbjrY=";
   };
 
@@ -93,4 +93,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ lukegb ];
     platforms = lib.platforms.linux;
   };
-}
+})

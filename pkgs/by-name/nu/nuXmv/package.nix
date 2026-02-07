@@ -6,12 +6,12 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nuXmv";
   version = "2.0.0";
 
   src = fetchurl {
-    url = "https://es-static.fbk.eu/tools/nuxmv/downloads/nuXmv-${version}-${
+    url = "https://es-static.fbk.eu/tools/nuxmv/downloads/nuXmv-${finalAttrs.version}-${
       if stdenv.hostPlatform.isDarwin then "macosx64" else "linux64"
     }.tar.gz";
     sha256 =
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
       "x86_64-darwin"
     ];
   };
-}
+})

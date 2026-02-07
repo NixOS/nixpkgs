@@ -5,14 +5,14 @@
   libx11,
   vst2-sdk,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "oxefmsynth";
   version = "1.3.5";
 
   src = fetchFromGitHub {
     owner = "oxesoft";
     repo = "oxefmsynth";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1rk71ls33a38wx8i22plsi7d89cqqxrfxknq5i4f9igsw1ipm4gn";
   };
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     license = lib.licenses.gpl3Only;
   };
-}
+})

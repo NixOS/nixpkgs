@@ -13,7 +13,7 @@
 let
   arch = stdenv.hostPlatform.qemuArch;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   inherit
     pname
     version
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   env = {
-    majorVersion = lib.versions.major version;
+    majorVersion = lib.versions.major finalAttrs.version;
     majorMinorVersion = lib.versions.majorMinor version;
   };
 
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     cp -r inc/* $out/include/
     awk 'index($0, "cat > /etc/udev/rules.d/66-sdrplay.rules"){flag=1; next} /EOF/{flag=0} flag' install_lib.sh > $out/lib/udev/rules.d/66-sdrplay.rules
   '';
-}
+})

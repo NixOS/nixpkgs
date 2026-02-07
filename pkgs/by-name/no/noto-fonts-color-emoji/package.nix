@@ -13,14 +13,14 @@
   which,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "noto-fonts-color-emoji";
   version = "2.051";
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "noto-emoji";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-qngf8t5fLYAOtO2GMhbMv7I34RO/eYfNawW+Th/uaYQ=";
   };
 
@@ -76,4 +76,4 @@ stdenvNoCC.mkDerivation rec {
       sternenseemann
     ];
   };
-}
+})

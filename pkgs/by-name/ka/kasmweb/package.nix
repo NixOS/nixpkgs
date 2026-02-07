@@ -4,13 +4,13 @@
   fetchzip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kasmweb";
   version = "1.15.0";
   build = "06fdc8";
 
   src = fetchzip {
-    url = "https://kasm-static-content.s3.amazonaws.com/kasm_release_${version}.${build}.tar.gz";
+    url = "https://kasm-static-content.s3.amazonaws.com/kasm_release_${finalAttrs.version}.${build}.tar.gz";
     sha256 = "sha256-7z5lc4QEpQQdVGMEMc04wXlJTK5VXJ4rufZmDEflJLw=";
   };
 
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ s1341 ];
   };
-}
+})

@@ -18,15 +18,15 @@ let
     else
       throw "unsupported platform for NDI SDK";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ndi-6";
-  version = versionJSON.version;
-  majorVersion = lib.versions.major version;
+  version = finalAttrs.versionJSON.version;
+  majorVersion = lib.versions.major finalAttrs.version;
   installerName = "Install_NDI_SDK_v${majorVersion}_Linux";
 
   src = fetchurl {
     url = "https://downloads.ndi.tv/SDK/NDI_SDK_Linux/${installerName}.tar.gz";
-    hash = versionJSON.hash;
+    hash = finalAttrs.versionJSON.hash;
   };
 
   buildInputs = [ avahi ];
@@ -83,4 +83,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ globule655 ];
   };
-}
+})

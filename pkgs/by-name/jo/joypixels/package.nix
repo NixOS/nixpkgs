@@ -64,7 +64,7 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "joypixels";
   version = "9.0.0";
 
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     with systemSpecific;
     fetchurl {
       name = fontFile;
-      url = "https://cdn.joypixels.com/distributions/${systemTag}/font/${version}/${fontFile}";
+      url = "https://cdn.joypixels.com/distributions/${systemTag}/font/${finalAttrs.version}/${fontFile}";
       sha256 =
         {
           darwin = "sha256-muUxXzz8BePyPsiZocYvM0ebM1H+u84ysN5YUvsMLiU=";
@@ -123,4 +123,4 @@ stdenv.mkDerivation rec {
     # indicates we're not actually building it from source.
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
-}
+})

@@ -7,12 +7,12 @@
   hicolor-icon-theme,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "humanity-icon-theme";
   version = "0.6.16";
 
   src = fetchurl {
-    url = "https://launchpad.net/ubuntu/+archive/primary/+files/humanity-icon-theme_${version}.tar.xz";
+    url = "https://launchpad.net/ubuntu/+archive/primary/+files/humanity-icon-theme_${finalAttrs.version}.tar.xz";
     sha256 = "sha256-AyHl4zMyFE2/5Cui3Y/SB1yEUuyafDdybFPrafo4Ki0=";
   };
 
@@ -51,4 +51,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.romildo ];
   };
-}
+})

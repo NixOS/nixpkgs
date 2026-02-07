@@ -7,14 +7,14 @@
   babashka-unwrapped,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "bbin";
   version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "babashka";
     repo = "bbin";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-kkW95GKQIoWTlAhZ+MKQMmZ1MfYgYbp6gn9RHSrIpYs=";
   };
 
@@ -52,4 +52,4 @@ stdenvNoCC.mkDerivation rec {
     inherit (babashka-unwrapped.meta) platforms;
     maintainers = with lib.maintainers; [ sohalt ];
   };
-}
+})

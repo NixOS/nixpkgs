@@ -25,13 +25,13 @@ haskell.lib.compose.justStaticExecutables (
       mtl,
       extra,
     }:
-    mkDerivation rec {
+    mkDerivation (finalAttrs: {
       pname = "tetris";
       version = "0.1.6";
       src = fetchFromGitHub {
         repo = "tetris";
         owner = "Samtay";
-        tag = "v${version}";
+        tag = "v${finalAttrs.version}";
         hash = "sha256-xA2/n5zY01BLKlUI8BVvfuUvsqh2U23XOooTQwXkDpQ=";
       };
       libraryHaskellDepends = [
@@ -54,10 +54,10 @@ haskell.lib.compose.justStaticExecutables (
         optparse-applicative
       ];
       homepage = "https://github.com/samtay/tetris";
-      changelog = "https://github.com/samtay/tetris/releases/tag/v${version}";
+      changelog = "https://github.com/samtay/tetris/releases/tag/v${finalAttrs.version}";
       license = lib.licenses.bsd3;
       mainProgram = "tetris";
       maintainers = [ lib.maintainers.Svenum ];
-    }
-  ) { }
+    }) { }
+  )
 )

@@ -4,12 +4,12 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "emacs-all-the-icons-fonts";
   version = "5.0.0";
 
   src = fetchzip {
-    url = "https://github.com/domtronn/all-the-icons.el/archive/${version}.zip";
+    url = "https://github.com/domtronn/all-the-icons.el/archive/${finalAttrs.version}.zip";
     hash = "sha256-70ysVxOey6NLlCwhEYhxpxO6uuarMFDpg3Efh+3bj1M=";
   };
 
@@ -39,4 +39,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ rlupton20 ];
   };
-}
+})

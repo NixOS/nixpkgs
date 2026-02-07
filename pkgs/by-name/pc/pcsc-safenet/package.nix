@@ -9,11 +9,11 @@
   pcsclite,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pcsc-safenet";
   version = "10.8.1050";
 
-  debName = "Installation/Standard/Ubuntu-2204/safenetauthenticationclient_${version}_amd64.deb";
+  debName = "Installation/Standard/Ubuntu-2204/safenetauthenticationclient_${finalAttrs.version}_amd64.deb";
 
   # extract debian package from larger zip file
   src = fetchzip {
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     autoPatchelf "$out"
 
-    runtime_rpath="${lib.makeLibraryPath runtimeDependencies}"
+    runtime_rpath="${lib.makeLibraryPath finalAttrs.runtimeDependencies}"
 
     for mod in $(find "$out" -type f -name '*.so.*'); do
       mod_rpath="$(patchelf --print-rpath "$mod")"
@@ -99,4 +99,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ wldhx ];
   };
-}
+})

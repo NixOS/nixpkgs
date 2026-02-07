@@ -19,7 +19,7 @@
   pango,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "smuxi";
   version = "unstable-2023-07-01";
 
@@ -128,7 +128,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://smuxi.im/";
     downloadPage = "https://smuxi.im/download/";
-    changelog = "https://github.com/meebey/smuxi/releases/tag/v${version}";
+    changelog = "https://github.com/meebey/smuxi/releases/tag/v${finalAttrs.version}";
     description = "irssi-inspired, detachable, cross-platform, multi-protocol (IRC, XMPP/Jabber) chat client for the GNOME desktop";
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2Plus;
@@ -136,4 +136,4 @@ stdenv.mkDerivation rec {
       meebey
     ];
   };
-}
+})

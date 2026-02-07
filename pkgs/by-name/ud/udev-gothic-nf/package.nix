@@ -4,12 +4,12 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "udev-gothic-nf";
   version = "2.1.0";
 
   src = fetchzip {
-    url = "https://github.com/yuru7/udev-gothic/releases/download/v${version}/UDEVGothic_NF_v${version}.zip";
+    url = "https://github.com/yuru7/udev-gothic/releases/download/v${finalAttrs.version}/UDEVGothic_NF_v${finalAttrs.version}.zip";
     hash = "sha256-55SHOQD+6eJ2L3+95eofr18fp1nFeBKcZvZq8gfj7rA=";
   };
 
@@ -26,4 +26,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ haruki7049 ];
     platforms = lib.platforms.all;
   };
-}
+})

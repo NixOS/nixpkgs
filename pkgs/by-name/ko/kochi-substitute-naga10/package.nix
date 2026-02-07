@@ -4,12 +4,12 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "kochi-substitute-naga10";
   version = "20030809";
 
   src = fetchzip {
-    url = "mirror://osdn/efont/5411/kochi-substitute-${version}.tar.bz2";
+    url = "mirror://osdn/efont/5411/kochi-substitute-${finalAttrs.version}.tar.bz2";
     stripRoot = false;
     hash = "sha256-dRJAxeVGYcNjLWqJJ+9Z2FW3BHrgyGRzlgM2x5YG3AM=";
   };
@@ -37,4 +37,4 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.unfreeRedistributable;
     maintainers = [ lib.maintainers.auntie ];
   };
-}
+})

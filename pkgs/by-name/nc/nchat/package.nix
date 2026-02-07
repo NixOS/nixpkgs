@@ -21,15 +21,15 @@ let
   src = fetchFromGitHub {
     owner = "d99kris";
     repo = "nchat";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-WofBqdUX88USnCA4iyDVMDXyx4Bxz/ZV0FqDUeAOe4Q=";
   };
 
   libcgowm = buildGoModule {
     pname = "nchat-wmchat-libcgowm";
-    inherit version src;
+    inherit (finalAttrs) version src;
 
-    sourceRoot = "${src.name}/lib/wmchat/go";
+    sourceRoot = "${finalAttrs.src.name}/lib/wmchat/go";
     vendorHash = "sha256-4jn2CDWqg0GqZ7QTTaZh+9GDUH7L6WllfTONkxnfKEU=";
 
     buildPhase = ''
@@ -45,9 +45,9 @@ let
     '';
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nchat";
-  inherit version src;
+  inherit (finalAttrs) version src;
 
   nl = "\n";
   postPatch = ''
@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Terminal-based chat client with support for Telegram and WhatsApp";
-    changelog = "https://github.com/d99kris/nchat/releases/tag/v${version}";
+    changelog = "https://github.com/d99kris/nchat/releases/tag/v${finalAttrs.version}";
     homepage = "https://github.com/d99kris/nchat";
     license = lib.licenses.mit;
     mainProgram = "nchat";
@@ -116,4 +116,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cccc";
   version = "3.1.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/cccc/${version}/cccc-${version}.tar.gz";
+    url = "mirror://sourceforge/cccc/${finalAttrs.version}/cccc-${finalAttrs.version}.tar.gz";
     sha256 = "1gsdzzisrk95kajs3gfxks3bjvfd9g680fin6a9pjrism2lyrcr7";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     # the upstream code did not update since 2006.
     broken = true;
   };
-}
+})

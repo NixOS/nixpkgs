@@ -7,14 +7,14 @@
   haskellPackages,
 }:
 
-haskellPackages.mkDerivation rec {
+haskellPackages.mkDerivation (finalAttrs: {
   pname = "carp";
   version = "0.5.5";
 
   src = fetchFromGitHub {
     owner = "carp-lang";
     repo = "Carp";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-B7SBzjegFzL2gGivIJE6BZcLD3f0Bsh8yndjScG2TZI=";
   };
 
@@ -76,4 +76,4 @@ haskellPackages.mkDerivation rec {
 
   # Windows not (yet) supported.
   platforms = with lib.platforms; unix ++ darwin;
-}
+})

@@ -7,7 +7,7 @@
   jre,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "subgit";
   version = "3.3.18";
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   '';
 
   src = fetchurl {
-    url = "https://subgit.com/download/subgit-${version}.zip";
+    url = "https://subgit.com/download/subgit-${finalAttrs.version}.zip";
     sha256 = "sha256-u4lgbX62bhgv/419if+jykCVkuN5SJ4OBhqF2Nl9Qe4=";
   };
-}
+})

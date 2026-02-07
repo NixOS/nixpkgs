@@ -16,14 +16,14 @@
   gnugrep, # We can't use busybox's 'grep' as it doesn't support perl '-P' expressions.
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "bootiso";
   version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "jsamr";
     repo = "bootiso";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1l09d543b73r0wbpsj5m6kski8nq48lbraq1myxhidkgl3mm3d5i";
   };
 
@@ -71,4 +71,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "bootiso";
   };
-}
+})

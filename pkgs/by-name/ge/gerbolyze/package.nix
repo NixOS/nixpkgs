@@ -12,16 +12,16 @@ let
   src = fetchFromGitHub {
     owner = "jaseg";
     repo = "gerbolyze";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-bisLln3Y239HuJt0MkrCU+6vLLbEDxfTjEJMkcbE/wE=";
     fetchSubmodules = true;
   };
 
-  svg-flatten = stdenv.mkDerivation rec {
-    inherit version src;
+  svg-flatten = stdenv.mkDerivation (finalAttrs: {
+    inherit (finalAttrs) version src;
     pname = "svg-flatten";
 
-    sourceRoot = "${src.name}/svg-flatten";
+    sourceRoot = "${finalAttrs.src.name}/svg-flatten";
 
     preInstall = ''
       mkdir -p $out/bin
@@ -40,7 +40,7 @@ let
   };
 in
 python3Packages.buildPythonApplication rec {
-  inherit version src;
+  inherit (finalAttrs) version src;
   pname = "gerbolyze";
   pyproject = true;
 
@@ -64,7 +64,7 @@ python3Packages.buildPythonApplication rec {
     # setup.py tries to execute a call to git in a subprocess, this avoids it.
     substituteInPlace setup.py \
       --replace-fail "version = get_version()," \
-                     "version = '${version}'," \
+                     "version = '${finalAttrs.version}'," \
 
     # setup.py tries to execute a call to git in a subprocess, this avoids it.
     substituteInPlace setup.py \
@@ -102,3 +102,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux;
   };
 }
+)

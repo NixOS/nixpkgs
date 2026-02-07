@@ -6,14 +6,14 @@
   openpam,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pam_reattach";
   version = "1.3";
 
   src = fetchFromGitHub {
     owner = "fabianishere";
     repo = "pam_reattach";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1k77kxqszdwgrb50w7algj22pb4fy5b9649cjb08zq9fqrzxcbz7";
   };
 
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ lockejan ];
     platforms = lib.platforms.darwin;
   };
-}
+})

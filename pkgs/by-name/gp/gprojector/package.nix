@@ -9,12 +9,12 @@
   extraJavaArgs ? "-Xms512M -Xmx2000M",
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "gprojector";
   version = "3.1.0";
 
   src = fetchzip {
-    url = "https://www.giss.nasa.gov/tools/gprojector/download/G.ProjectorJ-${version}.tgz";
+    url = "https://www.giss.nasa.gov/tools/gprojector/download/G.ProjectorJ-${finalAttrs.version}.tgz";
     sha256 = "sha256-cMmjyitetXxQzfSBh5ry5tIsLWOnBaaYOD1eQg1IX+w=";
   };
 
@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation rec {
       name = "gprojector";
       exec = "gprojector";
       desktopName = "G.Projector";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       categories = [ "Science" ];
       startupWMClass = "gov-nasa-giss-projector-GProjector";
     })
@@ -55,4 +55,4 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.unfree;
     inherit (jre.meta) platforms;
   };
-}
+})

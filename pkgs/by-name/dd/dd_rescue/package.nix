@@ -5,13 +5,13 @@
   autoconf,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.99.21";
   pname = "dd_rescue";
 
   src = fetchurl {
     hash = "sha256-YB3gyUX/8dsFfIbGUWX5rvRuIa2q9E4LOCtEOz+z/bk=";
-    url = "http://www.garloff.de/kurt/linux/ddrescue/dd_rescue-${version}.tar.bz2";
+    url = "http://www.garloff.de/kurt/linux/ddrescue/dd_rescue-${finalAttrs.version}.tar.bz2";
   };
 
   dd_rhelp_src = fetchurl {
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     mkdir -p "$out/share/dd_rescue" "$out/bin"
-    tar xf "${dd_rhelp_src}" -C "$out/share/dd_rescue"
+    tar xf "${dd_rhelp_finalAttrs.src}" -C "$out/share/dd_rescue"
     cp "$out/share/dd_rescue"/dd_rhelp*/dd_rhelp "$out/bin"
   '';
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     mainProgram = "dd_rescue";
   };
-}
+})

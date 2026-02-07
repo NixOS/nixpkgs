@@ -15,12 +15,12 @@
   fig2dev,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xfig";
   version = "3.2.9a";
 
   src = fetchurl {
-    url = "mirror://sourceforge/mcj/xfig-${version}.tar.xz";
+    url = "mirror://sourceforge/mcj/xfig-${finalAttrs.version}.tar.xz";
     hash = "sha256-vFcqGIHl4gmHrFkBWLBBq3gDhFqWkQNtO6XpgvZtnKM=";
   };
 
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    changelog = "https://sourceforge.net/p/mcj/xfig/ci/${version}/tree/CHANGES";
+    changelog = "https://sourceforge.net/p/mcj/xfig/ci/${finalAttrs.version}/tree/CHANGES";
     description = "Interactive drawing tool for X11";
     mainProgram = "xfig";
     longDescription = ''
@@ -89,4 +89,4 @@ stdenv.mkDerivation rec {
       maintainers
       ;
   };
-}
+})

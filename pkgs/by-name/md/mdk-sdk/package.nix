@@ -31,12 +31,12 @@ let
     }
     .${stdenv.hostPlatform.system};
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mdk-sdk";
   version = "0.35.1";
 
   src = fetchurl {
-    url = "https://github.com/wang-bin/mdk-sdk/releases/download/v${version}/mdk-sdk-linux.tar.xz";
+    url = "https://github.com/wang-bin/mdk-sdk/releases/download/v${finalAttrs.version}/mdk-sdk-linux.tar.xz";
     hash = "sha256-qdsYWu0bRRhPTbOEeGBFhPdk3S2JpqroOz+gd3KMDts=";
   };
 
@@ -89,4 +89,4 @@ stdenv.mkDerivation rec {
       "aarch64-linux"
     ];
   };
-}
+})

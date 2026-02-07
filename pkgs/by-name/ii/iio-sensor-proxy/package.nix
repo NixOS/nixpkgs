@@ -17,7 +17,7 @@
   libqmi,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "iio-sensor-proxy";
   version = "3.8";
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "hadess";
     repo = "iio-sensor-proxy";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-ZVaV4Aj4alr5eP3uz6SunpeRsMOo8YcZMqCcB0DUYGY=";
   };
 
@@ -76,4 +76,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ _999eagle ];
     platforms = lib.platforms.linux;
   };
-}
+})

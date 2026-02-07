@@ -14,7 +14,7 @@
   xprintidle-ng,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "surf-display";
   version = "unstable-2022-10-07";
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
     patchShebangs $out/bin/surf-display
     wrapProgram $out/bin/surf-display \
-       --prefix PATH ':' ${lib.makeBinPath buildInputs}
+       --prefix PATH ':' ${lib.makeBinPath finalAttrs.buildInputs}
   '';
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
@@ -67,4 +67,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
   };
-}
+})

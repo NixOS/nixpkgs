@@ -5,12 +5,12 @@
   autoPatchelfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "discord-gamesdk";
   version = "3.2.1";
 
   src = fetchzip {
-    url = "https://dl-game-sdk.discordapp.net/${version}/discord_game_sdk.zip";
+    url = "https://dl-game-sdk.discordapp.net/${finalAttrs.version}/discord_game_sdk.zip";
     hash = "sha256-83DgL9y3lHLLJ8vgL3EOVk2Tjcue64N+iuDj/UpSdLc=";
     stripRoot = false;
   };
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
       "x86_64-windows"
     ];
   };
-}
+})

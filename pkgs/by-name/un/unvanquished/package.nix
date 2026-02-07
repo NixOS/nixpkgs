@@ -40,18 +40,18 @@ let
   src = fetchFromGitHub {
     owner = "Unvanquished";
     repo = "Unvanquished";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-wOFSPPEu7AGsEcqHG7xFWzFlYZRWAIvvfTj5FLZ3HFc=";
   };
 
-  unvanquished-binary-deps = stdenv.mkDerivation rec {
+  unvanquished-binary-deps = stdenv.mkDerivation (finalAttrs: {
     # DISCLAIMER: this is selected binary crap from the NaCl SDK
     pname = "unvanquished-binary-deps";
     version = binary-deps-version;
 
     src = fetchzip {
-      url = "https://dl.unvanquished.net/deps/linux-amd64-default_${version}.tar.xz ";
+      url = "https://dl.unvanquished.net/deps/linux-amd64-default_${finalAttrs.version}.tar.xz ";
       hash = "sha256-5n8gRvTuke4e7EaZ/5G+dtCG6qmnawhtA1IXIFQPkzA=";
     };
 
@@ -98,7 +98,7 @@ let
 
   fhsEnv = buildFHSEnv {
     pname = "unvanquished-fhs-wrapper";
-    inherit version;
+    inherit (finalAttrs) version;
 
     targetPkgs = pkgs: [ libstdcpp-preload-for-unvanquished-nacl ];
   };
@@ -119,7 +119,7 @@ let
 
   unvanquished-assets = stdenv.mkDerivation {
     pname = "unvanquished-assets";
-    inherit version src;
+    inherit (finalAttrs) version src;
 
     outputHash = "sha256-6v6NO4Ad4rMFziWAO9x22CHtm/nfOuT0ptBEVhCMqZo=";
     outputHashMode = "recursive";
@@ -130,18 +130,18 @@ let
     ];
 
     buildCommand = ''
-      bash $src/download-paks --cache=$(pwd) --version=${version} $out
+      bash $src/download-paks --cache=$(pwd) --version=${finalAttrs.version} $out
     '';
   };
 
   # this really is the daemon game engine, the game itself is in the assets
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "unvanquished";
   inherit version src binary-deps-version;
 
   preConfigure = ''
-    TARGET="linux-amd64-default_${binary-deps-version}"
+    TARGET="linux-amd64-default_${binary-deps-finalAttrs.version}"
     mkdir daemon/external_deps/"$TARGET"
     cp -r ${unvanquished-binary-deps}/* daemon/external_deps/"$TARGET"/
     chmod +w -R daemon/external_deps/"$TARGET"/
@@ -221,7 +221,7 @@ stdenv.mkDerivation rec {
     ${wrapBinary "daemon-tty" "unvanquished-tty"}
     ${wrapBinary "daemonded" "unvanquished-server"}
 
-    for d in ${src}/dist/icons/*; do
+    for d in ${finalAttrs.src}/dist/icons/*; do
       install -Dm0644 -t $out/share/icons/hicolor/$(basename $d)/apps/ $d/unvanquished.png
     done
 
@@ -253,3 +253,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
   };
 }
+)

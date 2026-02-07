@@ -17,13 +17,13 @@ let
     name = "jdiskreport";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jdiskreport";
   version = "1.4.1";
 
   src = fetchurl {
     url = "https://www.jgoodies.com/download/jdiskreport/jdiskreport-${
-      lib.replaceStrings [ "." ] [ "_" ] version
+      lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }.zip";
     sha256 = "0d5mzkwsbh9s9b1vyvpaawqc09b0q41l2a7pmwf7386b1fsx6d58";
   };
@@ -68,4 +68,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ kylesferrazza ];
     mainProgram = "jdiskreport";
   };
-}
+})

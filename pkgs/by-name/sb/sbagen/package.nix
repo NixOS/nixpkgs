@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sbagen";
   version = "1.4.4";
 
   src = fetchurl {
-    url = "https://uazu.net/sbagen/sbagen-${version}.tgz";
+    url = "https://uazu.net/sbagen/sbagen-${finalAttrs.version}.tgz";
     sha256 = "0w62yk1b0hq79kl0angma897yqa8p1ww0dwydf3zlwav333prkd2";
   };
 
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     platforms = [ "i686-linux" ];
   };
-}
+})

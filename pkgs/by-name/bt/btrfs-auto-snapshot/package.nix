@@ -13,14 +13,14 @@
   util-linux ? null,
 }:
 assert syslogSupport -> util-linux != null;
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "2.0.4";
   pname = "btrfs-auto-snapshot";
 
   src = fetchFromGitHub {
     owner = "hunleyd";
     repo = "btrfs-auto-snapshot";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-QpuwkGaYAkpu5hYyb360Mr5tHsZc2LzMlKtpS8CyyhI=";
   };
 
@@ -70,4 +70,4 @@ stdenv.mkDerivation rec {
       filesystem being snapped and are read-only by default.
     '';
   };
-}
+})

@@ -8,12 +8,12 @@
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dcraw";
   version = "9.28.0";
 
   src = fetchurl {
-    url = "https://www.dechifro.org/dcraw/archive/dcraw-${version}.tar.gz";
+    url = "https://www.dechifro.org/dcraw/archive/dcraw-${finalAttrs.version}.tar.gz";
     sha256 = "1fdl3xa1fbm71xzc3760rsjkvf0x5jdjrvdzyg2l9ka24vdc7418";
   };
 
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
       "CVE-2018-19568"
     ];
   };
-}
+})

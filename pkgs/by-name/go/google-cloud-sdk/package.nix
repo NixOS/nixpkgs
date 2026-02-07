@@ -34,7 +34,7 @@ let
       pyopenssl = super.pyopenssl.overridePythonAttrs (old: rec {
         version = "24.2.1";
         src = old.src.override {
-          tag = version;
+          tag = finalAttrs.version;
           hash = "sha256-/TQnDWdycN4hQ7ZGvBhMJEZVafmL+0wy9eJ8hC6rfio=";
         };
         # 36 failed tests
@@ -67,7 +67,7 @@ let
   withExtraComponents = callPackage ./withExtraComponents.nix { inherit components; };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "google-cloud-sdk";
   inherit (data) version;
 
@@ -165,7 +165,7 @@ stdenv.mkDerivation rec {
   installCheckPhase = ''
     # Avoid trying to write logs to homeless-shelter
     export HOME=$(mktemp -d)
-    $out/bin/gcloud version --format json | jq '."Google Cloud SDK"' | grep "${version}"
+    $out/bin/gcloud version --format json | jq '."Google Cloud SDK"' | grep "${finalAttrs.version}"
     $out/bin/gsutil version | grep -w "$(cat platform/gsutil/VERSION)"
   '';
 
@@ -206,4 +206,4 @@ stdenv.mkDerivation rec {
     platforms = builtins.attrNames data.googleCloudSdkPkgs;
     mainProgram = "gcloud";
   };
-}
+})

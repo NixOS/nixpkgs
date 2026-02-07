@@ -5,18 +5,18 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libunibreak";
   version = "6.1";
 
   src =
     let
-      rev_version = lib.replaceStrings [ "." ] [ "_" ] version;
+      rev_version = lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version;
     in
     fetchFromGitHub {
       owner = "adah1972";
       repo = "libunibreak";
-      rev = "libunibreak_${rev_version}";
+      rev = "libunibreak_${rev_finalAttrs.version}";
       sha256 = "sha256-8yheb+XSvc1AqITjSutF+/4OWb4+7hweedKzhKJcE1Y=";
     };
 
@@ -29,4 +29,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

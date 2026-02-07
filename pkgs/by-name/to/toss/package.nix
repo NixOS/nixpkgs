@@ -4,13 +4,13 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "toss";
   version = "1.1";
   src = fetchFromGitHub {
     owner = "zerotier";
     repo = "toss";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "05ql0d8wbdhnmh3dw8ch5bi6clfb9h8v21lq2a74iy02slya2y0r";
   };
   preInstall = "export DESTDIR=$out/bin";
@@ -21,4 +21,4 @@ stdenv.mkDerivation rec {
       license = with lib.licenses; [ mit ];
       platforms = lib.platforms.unix;
     };
-}
+})

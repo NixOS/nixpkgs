@@ -25,13 +25,13 @@
   libtiff, # withQcam
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libcamera";
   version = "0.6.0";
 
   src = fetchgit {
     url = "https://git.libcamera.org/libcamera/libcamera.git";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-zGcbzL1Q2hUaj/s9NjBlp7hVjmSFb0GF8CnCoDS82Tw=";
   };
 
@@ -132,7 +132,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Open source camera stack and framework for Linux, Android, and ChromeOS";
     homepage = "https://libcamera.org";
-    changelog = "https://git.libcamera.org/libcamera/libcamera.git/tag/?h=${src.rev}";
+    changelog = "https://git.libcamera.org/libcamera/libcamera.git/tag/?h=${finalAttrs.src.rev}";
     license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [ citadelcore ];
     platforms = lib.platforms.linux;
@@ -141,4 +141,4 @@ stdenv.mkDerivation rec {
       lib.systems.inspect.platformPatterns.isStatic
     ];
   };
-}
+})

@@ -27,7 +27,7 @@
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "at-spi2-core";
   version = "2.58.2";
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   separateDebugInfo = true;
 
   src = fetchurl {
-    url = "mirror://gnome/sources/at-spi2-core/${lib.versions.majorMinor version}/at-spi2-core-${version}.tar.xz";
+    url = "mirror://gnome/sources/at-spi2-core/${lib.versions.majorMinor finalAttrs.version}/at-spi2-core-${finalAttrs.version}.tar.xz";
     hash = "sha256-ooI7li7RbN1csfxTZQKf0hg5TYUqzUCYsyGFS9ZpL24=";
   };
 
@@ -122,4 +122,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;
   };
-}
+})

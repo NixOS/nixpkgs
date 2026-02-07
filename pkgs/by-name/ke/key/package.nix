@@ -19,13 +19,13 @@ let
   gradle = gradle_8;
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "key";
   version = "2.12.3";
   src = fetchFromGitHub {
     owner = "KeYProject";
     repo = "key";
-    tag = "KEY-${version}";
+    tag = "KEY-${finalAttrs.version}";
     hash = "sha256-1pN0lmr/teVitpMIM9M9lSTkmnVcZwdAQay2pzgJDCk=";
   };
 
@@ -51,9 +51,9 @@ stdenv.mkDerivation rec {
   desktopItems = [
     (makeDesktopItem {
       name = "KeY";
-      exec = meta.mainProgram;
+      exec = finalAttrs.meta.mainProgram;
       icon = "key";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       desktopName = "KeY";
       genericName = "KeY";
       categories = [ "Science" ];
@@ -115,4 +115,4 @@ stdenv.mkDerivation rec {
     mainProgram = "KeY";
     platforms = jdk.meta.platforms;
   };
-}
+})

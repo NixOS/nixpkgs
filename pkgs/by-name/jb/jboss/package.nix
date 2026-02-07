@@ -5,11 +5,11 @@
   jdk,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jboss-as";
   version = "7.1.1.Final";
   src = fetchurl {
-    url = "https://download.jboss.org/jbossas/${lib.versions.majorMinor version}/jboss-as-${version}/jboss-as-${version}.tar.gz";
+    url = "https://download.jboss.org/jbossas/${lib.versions.majorMinor finalAttrs.version}/jboss-as-${finalAttrs.version}/jboss-as-${finalAttrs.version}.tar.gz";
     sha256 = "1bdjw0ib9qr498vpfbg8klqw6rl11vbz7vwn6gp1r5gpqkd3zzc8";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
       "CVE-2015-7501: remote code execution in apache-commons-collections: InvokerTransformer during deserialisation"
     ];
   };
-}
+})

@@ -31,14 +31,14 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xournalpp";
   version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "xournalpp";
     repo = "xournalpp";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-adzL/2zQlG4hBPV0rQzkQrOyGROv73GyjIH8Debhhq8=";
   };
 
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Xournal++ is a handwriting Notetaking software with PDF annotation support";
     homepage = "https://xournalpp.github.io/";
-    changelog = "https://github.com/xournalpp/xournalpp/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/xournalpp/xournalpp/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       iedame
@@ -93,4 +93,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "xournalpp";
   };
-}
+})

@@ -11,14 +11,14 @@
 # This is done because multiple derivations rely on these sources and they should
 # all get the same sources with the same patches applied.
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "10.7";
   pname = "sage-src";
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "sage";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-nYlBmKQ9TD5EAVvNwo8YzqAd5IUCpTU3kBTqUH21IxQ=";
   };
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   # TODO: investigate https://github.com/sagemath/sage/pull/35950
   configure-src = fetchurl {
     # the hash below is the tagged commit's _parent_. it can also be found by looking for
-    # the "configure" asset at https://github.com/sagemath/sage/releases/tag/${version}
+    # the "configure" asset at https://github.com/sagemath/sage/releases/tag/${finalAttrs.version}
     url = "mirror://sageupstream/configure/configure-858268b40010e5ed6da13488ad0f52cda4d1f70e.tar.gz";
     hash = "sha256-TsVX+wUWr+keCXmGQp1OHGXgNc7luajyGxfTwduSEtc=";
   };
@@ -125,7 +125,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     cp -r . "$out"
-    tar xzf ${configure-src} -C "$out"
+    tar xzf ${configure-finalAttrs.src} -C "$out"
     rm "$out/configure"
   '';
-}
+})

@@ -16,15 +16,15 @@
   libxcrypt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "2024.06.12.0";
   pname = "cernlib";
-  year = lib.versions.major version;
+  year = lib.versions.major finalAttrs.version;
 
   src = fetchurl {
     urls = [
-      "https://ftp.riken.jp/cernlib/download/${year}_source/tar/cernlib-cernlib-${version}-free.tar.gz"
-      "https://cernlib.web.cern.ch/download/${year}_source/tar/cernlib-cernlib-${version}-free.tar.gz"
+      "https://ftp.riken.jp/cernlib/download/${year}_source/tar/cernlib-cernlib-${finalAttrs.version}-free.tar.gz"
+      "https://cernlib.web.cern.ch/download/${year}_source/tar/cernlib-cernlib-${finalAttrs.version}-free.tar.gz"
     ];
     hash = "sha256-SEFgQjPBkmRoaMD/7yXiXO9DZNrRhqZ01kptSDQur84=";
   };
@@ -77,4 +77,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ veprbl ];
     license = lib.licenses.gpl2;
   };
-}
+})

@@ -8,18 +8,18 @@
   fftw,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libofa";
   version = "0.9.3";
   deb_patch = "5";
 
   src = fetchurl {
-    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/musicip-libofa/libofa-${version}.tar.gz";
+    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/musicip-libofa/libofa-${finalAttrs.version}.tar.gz";
     sha256 = "184ham039l7lwhfgg0xr2vch2xnw1lwh7sid432mh879adhlc5h2";
   };
 
   debian_patches = fetchzip {
-    url = "mirror://debian/pool/main/libo/libofa/libofa_${version}-${deb_patch}.debian.tar.gz";
+    url = "mirror://debian/pool/main/libo/libofa/libofa_${finalAttrs.version}-${deb_patch}.debian.tar.gz";
     hash = "sha256-tENhXSRcUP1PKm35IJyLUEEROze8UzxJzRx3VNAqo40=";
   };
 
@@ -60,4 +60,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2;
   };
-}
+})

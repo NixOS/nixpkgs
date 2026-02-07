@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "scientifica";
   version = "2.3";
 
   src = fetchurl {
-    url = "https://github.com/oppiliappan/scientifica/releases/download/v${version}/scientifica.tar";
+    url = "https://github.com/oppiliappan/scientifica/releases/download/v${finalAttrs.version}/scientifica.tar";
     hash = "sha256-8IV4aaDoRsbxddy4U90fEZ6henUhjmO38HNtWo4ein8=";
   };
 
@@ -32,4 +32,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ moni ];
   };
-}
+})

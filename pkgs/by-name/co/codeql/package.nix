@@ -13,7 +13,7 @@
   curl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "codeql";
   version = "2.24.0";
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   src = fetchzip {
-    url = "https://github.com/github/codeql-cli-binaries/releases/download/v${version}/codeql.zip";
+    url = "https://github.com/github/codeql-cli-binaries/releases/download/v${finalAttrs.version}/codeql.zip";
     hash = "sha256-LxKS/KKuw6vwsYnrHE2jAJ3lEuudXQ57870WSdtTW50=";
   };
 
@@ -65,4 +65,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     license = lib.licenses.unfree;
   };
-}
+})

@@ -9,14 +9,14 @@
   hicolor-icon-theme,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "pop-icon-theme";
   version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "icon-theme";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-V8xBZj6T4Ly/GHV0CVLZ1a4UZbmCkhYRe05qUfJk7Wg=";
   };
 
@@ -43,4 +43,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.linux; # hash mismatch on darwin due to file names differing only in case
     maintainers = with lib.maintainers; [ romildo ];
   };
-}
+})

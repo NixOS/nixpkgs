@@ -15,7 +15,7 @@ let
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "keyboard-layout-editor";
   version = "0-unstable-2019-05-14";
 
@@ -82,4 +82,4 @@ stdenv.mkDerivation rec {
       "aarch64-darwin"
     ];
   };
-}
+})

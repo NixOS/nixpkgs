@@ -24,12 +24,12 @@
   withPython ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "avahi${lib.optionalString withLibdnssdCompat "-compat"}";
   version = "0.8";
 
   src = fetchurl {
-    url = "https://github.com/lathiat/avahi/releases/download/v${version}/avahi-${version}.tar.gz";
+    url = "https://github.com/lathiat/avahi/releases/download/v${finalAttrs.version}/avahi-${finalAttrs.version}.tar.gz";
     sha256 = "1npdixwxxn3s9q1f365x9n9rc5xgfz39hxf23faqvlrklgbhj0q6";
   };
 
@@ -243,4 +243,4 @@ stdenv.mkDerivation rec {
       protocols.
     '';
   };
-}
+})

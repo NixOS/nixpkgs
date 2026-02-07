@@ -7,14 +7,14 @@
   static ? false, # whether to build the static version of the font
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "noto-fonts-cjk-serif";
   version = "2.003";
 
   src = fetchFromGitHub {
     owner = "notofonts";
     repo = "noto-cjk";
-    tag = "Serif${version}";
+    tag = "Serif${finalAttrs.version}";
     hash = "sha256-Bwuu64TAnOnqUgLlBsUw/jnv9emngqFBmVn6zEqySlc=";
     sparseCheckout = [
       "Serif/OTC"
@@ -59,4 +59,4 @@ stdenvNoCC.mkDerivation rec {
       leana8959
     ];
   };
-}
+})

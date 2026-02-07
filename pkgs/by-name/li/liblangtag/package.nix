@@ -14,13 +14,13 @@
   unzip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "liblangtag";
   version = "0.6.7";
 
   # Artifact tarball contains lt-localealias.h needed for darwin
   src = fetchurl {
-    url = "https://bitbucket.org/tagoh/liblangtag/downloads/liblangtag-${version}.tar.bz2";
+    url = "https://bitbucket.org/tagoh/liblangtag/downloads/liblangtag-${finalAttrs.version}.tar.bz2";
     hash = "sha256-Xta81K4/PAXJEuYvIWzRpEEjhGFH9ymkn7VmjaUeAw4=";
   };
 
@@ -73,4 +73,4 @@ stdenv.mkDerivation rec {
     # There are links to a homepage that are broken by a BitBucket change
     homepage = "https://bitbucket.org/tagoh/liblangtag/overview";
   };
-}
+})

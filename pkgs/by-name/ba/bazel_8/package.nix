@@ -44,7 +44,7 @@ let
   bazelArch = if isDarwin && isAarch64 then "arm64" else stdenv.hostPlatform.parsed.cpu.name;
 
   src = fetchzip {
-    url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
+    url = "https://github.com/bazelbuild/bazel/releases/download/${finalAttrs.version}/bazel-${finalAttrs.version}-dist.zip";
     hash = "sha256-L8gnWpQAeHMUbydrrEtZ6WGIzhunDBWCNWMA+3dAKT0=";
     stripRoot = false;
   };
@@ -114,9 +114,9 @@ let
   ];
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bazel";
-  inherit version src;
+  inherit (finalAttrs) version src;
 
   darwinPatches = [
     # Bazel integrates with apple IOKit to inhibit and track system sleep.
@@ -254,7 +254,7 @@ stdenv.mkDerivation rec {
     # on branch/tag information which we don't have with tarball releases.
     # Note that .bazelversion is always correct and is based on bazel-*
     # executable name, version checks should work fine
-    export EMBED_LABEL="${version}- (@non-git)"
+    export EMBED_LABEL="${finalAttrs.version}- (@non-git)"
 
     echo "Stage 1 - Running bazel bootstrap script"
     # Note: can't use lib.escapeShellArgs here because it will escape arguments
@@ -299,10 +299,10 @@ stdenv.mkDerivation rec {
 
     # official wrapper scripts that searches for $WORKSPACE_ROOT/tools/bazel if
     # it can’t find something in tools, it calls
-    # $out/bin/bazel-{version}-{os_arch} The binary _must_ exist with this
+    # $out/bin/bazel-{finalAttrs.version}-{os_arch} The binary _must_ exist with this
     # naming if your project contains a .bazelversion file.
     cp ./scripts/packages/bazel.sh $out/bin/bazel
-    versioned_bazel="$out/bin/bazel-${version}-${bazelSystem}-${bazelArch}"
+    versioned_bazel="$out/bin/bazel-${finalAttrs.version}-${bazelSystem}-${bazelArch}"
     mv ./output/bazel "$versioned_bazel"
     wrapProgram "$versioned_bazel" --suffix PATH : ${defaultShell.defaultShellPath}
 
@@ -329,15 +329,15 @@ stdenv.mkDerivation rec {
   postFixup =
     # verify that bazel binary still works post-fixup
     ''
-      USE_BAZEL_VERSION=${version} $out/bin/bazel --batch info release
+      USE_BAZEL_VERSION=${finalAttrs.version} $out/bin/bazel --batch info release
     '';
 
   # Bazel binary includes zip archive at the end that `strip` would end up discarding
-  stripExclude = [ "bin/.bazel-${version}-*-wrapped" ];
+  stripExclude = [ "bin/.bazel-${finalAttrs.version}-*-wrapped" ];
 
   passthru = {
     tests = {
       inherit (callPackage ./examples.nix { }) cpp java rust;
     };
   };
-}
+})

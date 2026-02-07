@@ -10,14 +10,14 @@
   makeWrapper,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "giph";
   version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "phisch";
     repo = "giph";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "19l46m1f32b3bagzrhaqsfnl5n3wbrmg3sdy6fdss4y1yf6nqayk";
   };
 
@@ -50,4 +50,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "giph";
   };
-}
+})

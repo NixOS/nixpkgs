@@ -61,13 +61,13 @@ let
   src = fetchFromGitHub {
     owner = "Predidit";
     repo = "oneAnime";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-4EieR+Wys7vK+0/pWF5MkA71EeChThVGJ8J5x/8k8nA=";
   };
 in
 flutter338.buildFlutterApplication {
   pname = "oneanime";
-  inherit version src;
+  inherit (finalAttrs) version src;
 
   postPatch = ''
     substituteInPlace lib/pages/init_page.dart \
@@ -82,10 +82,10 @@ flutter338.buildFlutterApplication {
     # unofficial media_kit_libs_linux
     media_kit_libs_linux =
       { version, src, ... }:
-      stdenv.mkDerivation rec {
+      stdenv.mkDerivation (finalAttrs: {
         pname = "media_kit_libs_linux";
-        inherit version src;
-        inherit (src) passthru;
+        inherit (finalAttrs) version src;
+        inherit (finalAttrs.src) passthru;
 
         postPatch = ''
           sed -i '/set(MIMALLOC "mimalloc-/,/add_custom_target/d' libs/linux/media_kit_libs_linux/linux/CMakeLists.txt
@@ -103,10 +103,10 @@ flutter338.buildFlutterApplication {
     # unofficial media_kit_video
     media_kit_video =
       { version, src, ... }:
-      stdenv.mkDerivation rec {
+      stdenv.mkDerivation (finalAttrs: {
         pname = "media_kit_video";
-        inherit version src;
-        inherit (src) passthru;
+        inherit (finalAttrs) version src;
+        inherit (finalAttrs.src) passthru;
 
         postPatch = ''
           sed -i '/if(ARCH_NAME STREQUAL "x86_64")/,/if(MEDIA_KIT_LIBS_AVAILABLE)/{ /if(MEDIA_KIT_LIBS_AVAILABLE)/!d; /set(LIBMPV_ZIP_URL/d }' media_kit_video/linux/CMakeLists.txt
@@ -152,7 +152,7 @@ flutter338.buildFlutterApplication {
     pubspecSource =
       runCommand "pubspec.lock.json"
         {
-          inherit src;
+          inherit (finalAttrs) src;
           nativeBuildInputs = [ yq-go ];
         }
         ''
@@ -188,3 +188,4 @@ flutter338.buildFlutterApplication {
     platforms = lib.platforms.linux;
   };
 }
+)

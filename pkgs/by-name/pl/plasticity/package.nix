@@ -38,12 +38,12 @@
   libx11,
   libxcb,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "plasticity";
   version = "25.3.8";
 
   src = fetchurl {
-    url = "https://github.com/nkallen/plasticity/releases/download/v${version}/Plasticity-${version}-1.x86_64.rpm";
+    url = "https://github.com/nkallen/plasticity/releases/download/v${finalAttrs.version}/Plasticity-${finalAttrs.version}-1.x86_64.rpm";
     hash = "sha256-b3SsVd5y0GvM2cnil+ar4OGoaNlQn13gIEfzqOs4HfI=";
   };
 
@@ -136,4 +136,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ imadnyc ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

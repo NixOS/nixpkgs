@@ -14,14 +14,14 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ebusd";
   version = "25.1";
 
   src = fetchFromGitHub {
     owner = "john30";
     repo = "ebusd";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-rj0Wkfk3Tpm58fbCUkgCdHt5MvW+tGgDyUd5COXfBc0=";
   };
 
@@ -65,4 +65,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ nathan-gs ];
     platforms = lib.platforms.linux;
   };
-}
+})

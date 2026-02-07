@@ -19,12 +19,14 @@ let
       throw "Platform ${stdenv.hostPlatform.system} not yet supported.";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "iozone";
   version = "3.507";
 
   src = fetchurl {
-    url = "http://www.iozone.org/src/current/iozone${lib.replaceStrings [ "." ] [ "_" ] version}.tar";
+    url = "http://www.iozone.org/src/current/iozone${
+      lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version
+    }.tar";
     hash = "sha256-HoCHraBW9dgBjuC8dmhtQW/CJR7QMDgFXb0K940eXOM=";
   };
 
@@ -77,4 +79,4 @@ stdenv.mkDerivation rec {
       makefu
     ];
   };
-}
+})

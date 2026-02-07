@@ -5,12 +5,12 @@
   nixosTests,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mediawiki";
   version = "1.45.1";
 
   src = fetchurl {
-    url = "https://releases.wikimedia.org/mediawiki/${lib.versions.majorMinor version}/mediawiki-${version}.tar.gz";
+    url = "https://releases.wikimedia.org/mediawiki/${lib.versions.majorMinor finalAttrs.version}/mediawiki-${finalAttrs.version}.tar.gz";
     hash = "sha256-4vEmsZrsQiBRoKUODGq36QTzOzmIpHudqK+/0MCiUsw=";
   };
 
@@ -45,4 +45,4 @@ stdenvNoCC.mkDerivation rec {
       SuperSandro2000
     ];
   };
-}
+})

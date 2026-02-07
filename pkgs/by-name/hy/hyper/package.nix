@@ -80,12 +80,12 @@ let
   ];
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hyper";
   version = "3.4.1";
 
   src = fetchurl {
-    url = "https://github.com/vercel/hyper/releases/download/v${version}/hyper_${version}_amd64.deb";
+    url = "https://github.com/vercel/hyper/releases/download/v${finalAttrs.version}/hyper_${finalAttrs.version}_amd64.deb";
     sha256 = "sha256-jEzZ6MWFaNXBS8CAzfn/ufMPpWcua9HhBFzetWMlH1Y=";
   };
 
@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
     mv opt "$out/"
 
     ln -s "$out/opt/Hyper/hyper" "$out/bin/hyper"
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" --set-rpath "${libPath}:$out/opt/Hyper:\$ORIGIN" "$out/opt/Hyper/hyper"
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" --set-rpath "${finalAttrs.libPath}:$out/opt/Hyper:\$ORIGIN" "$out/opt/Hyper/hyper"
 
     mv usr/* "$out/"
 
@@ -120,4 +120,4 @@ stdenv.mkDerivation rec {
     mainProgram = "hyper";
     broken = true; # Error: 'node-pty' failed to load
   };
-}
+})

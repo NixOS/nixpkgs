@@ -10,13 +10,13 @@
   runtimeShell,
 }:
 let
-  self = stdenv.mkDerivation rec {
+  self = stdenv.mkDerivation (finalAttrs: {
     pname = "nix-pin";
     version = "0.4.0";
     src = fetchFromGitHub {
       owner = "timbertson";
       repo = "nix-pin";
-      rev = "version-${version}";
+      rev = "version-${finalAttrs.version}";
       sha256 = "1pccvc0iqapms7kidrh09g5fdx44x622r5l9k7bkmssp3v4c68vy";
     };
     nativeBuildInputs = [ makeWrapper ];
@@ -58,8 +58,8 @@ let
             --set owner timbertson \
             --set repo nix-pin \
             --set type fetchFromGitHub \
-            --set rev 'version-{version}' \
-            --substitute rev 'version-''${{version}}' \
+            --set rev 'version-{finalAttrs.version}' \
+            --substitute rev 'version-''${{finalAttrs.version}}' \
             --modify-nix default.nix
         '';
       };
@@ -74,3 +74,4 @@ let
   };
 in
 self
+)

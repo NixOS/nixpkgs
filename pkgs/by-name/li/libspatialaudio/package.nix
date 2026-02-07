@@ -8,14 +8,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libspatialaudio";
   version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "videolabs";
     repo = "libspatialaudio";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-sPnQPD41AceXM4uGqWXMYhuQv0TUkA6TZP8ChxUFIoI=";
   };
 
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ krav ];
   };
-}
+})

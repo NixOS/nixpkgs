@@ -8,12 +8,12 @@
 
 # This package comes with its own copy of zlib, libpng and pngxtern
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "optipng";
   version = "7.9.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/optipng/optipng-${version}.tar.gz";
+    url = "mirror://sourceforge/optipng/optipng-${finalAttrs.version}.tar.gz";
     hash = "sha256-wleb5YwsZtrp1jFU7cs9Qn/vZMsA7Ar/B5ydFW7Ebyk=";
   };
 
@@ -53,4 +53,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "optipng";
   };
-}
+})

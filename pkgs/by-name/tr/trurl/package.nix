@@ -10,14 +10,14 @@
   versionCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "trurl";
   version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "curl";
     repo = "trurl";
-    rev = "trurl-${version}";
+    rev = "trurl-${finalAttrs.version}";
     hash = "sha256-VCMT4WgZ6LG7yiKaRy7KTgTkbACVXb4rw62lWnVAuP0=";
   };
 
@@ -60,10 +60,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Command line tool for URL parsing and manipulation";
     homepage = "https://curl.se/trurl";
-    changelog = "https://github.com/curl/trurl/releases/tag/trurl-${version}";
+    changelog = "https://github.com/curl/trurl/releases/tag/trurl-${finalAttrs.version}";
     license = lib.licenses.curl;
     maintainers = with lib.maintainers; [ christoph-heiss ];
     platforms = lib.platforms.all;
     mainProgram = "trurl";
   };
-}
+})

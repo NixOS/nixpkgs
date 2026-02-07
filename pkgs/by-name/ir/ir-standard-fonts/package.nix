@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "ir-standard-fonts";
   version = "20170121";
 
   src = fetchFromGitHub {
     owner = "molaeiali";
     repo = "ir-standard-fonts";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-o1d8SBX3nf7g6Gh4OP+JRS+LNrHTQOIiHhW3VNCkDV0=";
   };
 
@@ -31,4 +31,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})

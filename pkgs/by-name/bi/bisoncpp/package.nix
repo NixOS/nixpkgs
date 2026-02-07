@@ -8,7 +8,7 @@
   flexcpp,
   bobcat,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bisonc++";
   version = "6.04.00";
 
@@ -64,4 +64,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     homepage = "https://fbb-git.gitlab.io/bisoncpp/";
   };
-}
+})

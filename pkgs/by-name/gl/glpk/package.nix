@@ -16,12 +16,12 @@
 
 assert withGmp -> gmp != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "5.0";
   pname = "glpk";
 
   src = fetchurl {
-    url = "mirror://gnu/glpk/glpk-${version}.tar.gz";
+    url = "mirror://gnu/glpk/glpk-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-ShAT7rtQ9yj8YBvdgzsLKHAzPDs+WoFu66kh2VvsbxU=";
   };
 
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
     # Fix build with gcc15
     (fetchDebianPatch {
-      inherit pname version;
+      inherit (finalAttrs) pname version;
       debianRevision = "2";
       patch = "gcc-15.patch";
       hash = "sha256-wuWPYqJKIKJAJaeJXW7lhvapu8Fd3zHjLAv7Ve7q8Qw=";
@@ -88,4 +88,4 @@ stdenv.mkDerivation rec {
     mainProgram = "glpsol";
     platforms = lib.platforms.all;
   };
-}
+})

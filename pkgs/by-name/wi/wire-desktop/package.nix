@@ -30,17 +30,17 @@ let
 
   version =
     {
-      x86_64-darwin = versions.macos.version;
-      aarch64-darwin = versions.macos.version;
-      x86_64-linux = versions.linux.version;
+      x86_64-darwin = finalAttrs.versions.macos.version;
+      aarch64-darwin = finalAttrs.versions.macos.version;
+      x86_64-linux = finalAttrs.versions.linux.version;
     }
     .${system} or throwSystem;
 
   hash =
     {
-      x86_64-darwin = versions.macos.hash;
-      aarch64-darwin = versions.macos.hash;
-      x86_64-linux = versions.linux.hash;
+      x86_64-darwin = finalAttrs.versions.macos.hash;
+      aarch64-darwin = finalAttrs.versions.macos.hash;
+      x86_64-linux = finalAttrs.versions.linux.hash;
     }
     .${system} or throwSystem;
 
@@ -82,7 +82,7 @@ let
     supportedFeatures = [ "commit" ];
   };
 
-  linux = stdenv.mkDerivation rec {
+  linux = stdenv.mkDerivation (finalAttrs: {
     inherit
       pname
       version
@@ -91,7 +91,7 @@ let
       ;
 
     src = fetchurl {
-      url = "https://wire-app.wire.com/linux/debian/pool/main/Wire-${version}_amd64.deb";
+      url = "https://wire-app.wire.com/linux/debian/pool/main/Wire-${finalAttrs.version}_amd64.deb";
       inherit hash;
     };
 
@@ -142,7 +142,7 @@ let
 
       # Desktop file
       mkdir -p "$out/share/applications"
-      cp "${desktopItem}/share/applications/"* "$out/share/applications"
+      cp "${finalAttrs.desktopItem}/share/applications/"* "$out/share/applications"
 
       runHook postInstall
     '';
@@ -171,7 +171,7 @@ let
       ;
 
     src = fetchurl {
-      url = "https://github.com/wireapp/wire-desktop/releases/download/macos%2F${version}/Wire.pkg";
+      url = "https://github.com/wireapp/wire-desktop/releases/download/macos%2F${finalAttrs.version}/Wire.pkg";
       inherit hash;
     };
 
@@ -209,3 +209,4 @@ let
 
 in
 if stdenv.hostPlatform.isDarwin then darwin else linux
+)

@@ -3,13 +3,13 @@
   fetchFromGitHub,
   lib,
 }:
-haskellPackages.mkDerivation rec {
+haskellPackages.mkDerivation (finalAttrs: {
   pname = "pshash";
   version = "0.1.16.0";
   src = fetchFromGitHub {
     owner = "thornoar";
     repo = "pshash";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-3Qe52Hto3Z96b5q9TLz7XB7BzMfdNBd4p8V6dknH6VM=";
   };
 
@@ -38,4 +38,4 @@ haskellPackages.mkDerivation rec {
   homepage = "https://github.com/thornoar/pshash";
   maintainers = with lib.maintainers; [ thornoar ];
   mainProgram = "pshash";
-}
+})

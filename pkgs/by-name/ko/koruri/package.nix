@@ -4,14 +4,14 @@
   stdenvNoCC,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "koruri";
   version = "20210720";
 
   src = fetchFromGitHub {
     owner = "Koruri";
     repo = "Koruri";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-zL9UtT15mWvsXgGJqbTs6cOsQaoh/0AIAyQ5z7JpTXk=";
   };
 
@@ -28,4 +28,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ haruki7049 ];
     platforms = lib.platforms.all;
   };
-}
+})

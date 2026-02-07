@@ -9,7 +9,7 @@
   common-updater-scripts,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "blackfire";
   version = "2.29.7";
 
@@ -59,23 +59,23 @@ stdenv.mkDerivation rec {
   passthru = {
     sources = {
       "x86_64-linux" = fetchurl {
-        url = "https://packages.blackfire.io/debian/pool/any/main/b/blackfire/blackfire_${version}_amd64.deb";
+        url = "https://packages.blackfire.io/debian/pool/any/main/b/blackfire/blackfire_${finalAttrs.version}_amd64.deb";
         sha256 = "47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=";
       };
       "i686-linux" = fetchurl {
-        url = "https://packages.blackfire.io/debian/pool/any/main/b/blackfire/blackfire_${version}_i386.deb";
+        url = "https://packages.blackfire.io/debian/pool/any/main/b/blackfire/blackfire_${finalAttrs.version}_i386.deb";
         sha256 = "47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=";
       };
       "aarch64-linux" = fetchurl {
-        url = "https://packages.blackfire.io/debian/pool/any/main/b/blackfire/blackfire_${version}_arm64.deb";
+        url = "https://packages.blackfire.io/debian/pool/any/main/b/blackfire/blackfire_${finalAttrs.version}_arm64.deb";
         sha256 = "47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=";
       };
       "aarch64-darwin" = fetchurl {
-        url = "https://packages.blackfire.io/blackfire/${version}/blackfire-darwin_arm64.pkg.tar.gz";
+        url = "https://packages.blackfire.io/blackfire/${finalAttrs.version}/blackfire-darwin_arm64.pkg.tar.gz";
         sha256 = "TvxIm4plE7nnTIkJNfCzxzr2r0B2Aqlxdveb1M+sqL4=";
       };
       "x86_64-darwin" = fetchurl {
-        url = "https://packages.blackfire.io/blackfire/${version}/blackfire-darwin_amd64.pkg.tar.gz";
+        url = "https://packages.blackfire.io/blackfire/${finalAttrs.version}/blackfire-darwin_amd64.pkg.tar.gz";
         sha256 = "oNDNIPBqvaARz9W967bxuvo2bpPORiHci3sryGqznsU=";
       };
     };
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
       }"
       NEW_VERSION=$(curl -s https://blackfire.io/api/v1/releases | jq .cli --raw-output)
 
-      if [[ "${version}" = "$NEW_VERSION" ]]; then
+      if [[ "${finalAttrs.version}" = "$NEW_VERSION" ]]; then
           echo "The new version same as the old version."
           exit 0
       fi
@@ -116,4 +116,4 @@ stdenv.mkDerivation rec {
       "aarch64-darwin"
     ];
   };
-}
+})

@@ -4,8 +4,8 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
-  name = "alsa-topology-conf-${version}";
+stdenv.mkDerivation (finalAttrs: {
+  name = "alsa-topology-conf-${finalAttrs.version}";
   version = "1.2.5.1";
 
   src = fetchurl {
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.roastiek ];
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
   };
-}
+})
