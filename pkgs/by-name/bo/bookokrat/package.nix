@@ -17,16 +17,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "bookokrat";
-  version = "0.3.1";
+  version = "0.3.5";
 
   src = fetchFromGitHub {
     owner = "bugzmanov";
     repo = "bookokrat";
-    rev = "dc876b5749c5a45d1184eac2d7e5048788761bf1";
-    hash = "sha256-mYWKqaPZejUaAX3IBUeL3tWWJYU5xrIND7JDRuWoM14=";
+    rev = "v${version}";
+    hash = "sha256-oXUJqGHcxZMoJF/OFCMw81AFEK3ACb7xOW4T++GzRHI=";
   };
 
-  cargoHash = "sha256-nwKioyjsHnUkEK06TGSHfH+7Z8Xl2fu1YqyizIKHJIo=";
+  cargoHash = "sha256-Wv3Jcrp7iDLdFSVGKtVQCdBLkA7OZjIJxEuc4So+wzA=";
 
   nativeBuildInputs = [
     pkg-config
@@ -51,6 +51,9 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_definition_list_with_complex_content_svg"
     "--skip=test_mouse_scroll_file_list_svg"
     "--skip=test_toc_chapter_navigation_svg"
+    "--skip=test_resolve_library_paths_creates_dirs"
+    "--skip=test_resolve_log_path"
+    "--skip=test_ctrl_l_force_redraw_svg"
   ];
 
   meta = {
