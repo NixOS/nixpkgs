@@ -14,12 +14,15 @@ let
   };
 
   nixpkgsRoot = toString ../../.. + "/";
+  stripNixpkgsRootFromKeys = lib.mapAttrs' (
+    file: value: lib.nameValuePair (lib.removePrefix nixpkgsRoot file) value
+  );
 
-  fileMaintainers =
-    # Currently just nixos module maintainers, but in the future we can use this for code owners too
-    lib.mapAttrs' (
-      file: maintainers: lib.nameValuePair (lib.removePrefix nixpkgsRoot file) maintainers
-    ) (pkgs.nixos { }).config.meta.maintainers;
+  moduleMeta = (pkgs.nixos { }).config.meta;
+
+  # Currently just nixos module maintainers, but in the future we can use this for code owners too
+  fileMaintainers = stripNixpkgsRootFromKeys moduleMeta.maintainers;
+  fileTeams = stripNixpkgsRootFromKeys moduleMeta.teams;
 
   changedpaths = lib.importJSON changedpathsjson;
 
@@ -127,7 +130,11 @@ let
       pkg:
       userPings { attr = pkg.name; } pkg.users ++ lib.concatMap (teamPings { pkg = pkg.name; }) pkg.teams
     ) attrsWithModifiedFiles
-    ++ lib.concatMap (path: userPings { file = path; } (fileMaintainers.${path} or [ ])) changedpaths;
+    ++ lib.concatMap (
+      path:
+      userPings { file = path; } (fileMaintainers.${path} or [ ])
+      ++ lib.concatMap (teamPings { file = path; }) (fileTeams.${path} or [ ])
+    ) changedpaths;
 
   byType = lib.groupBy (ping: ping.type) maintainersToPing;
 

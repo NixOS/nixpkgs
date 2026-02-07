@@ -34,6 +34,22 @@ in
           The option value is not a list of maintainers, but an attribute set that maps module file names to lists of maintainers.
         '';
       };
+      teams = mkOption {
+        type =
+          let
+            allTeams = lib.attrValues lib.teams;
+          in
+          lib.types.addCheck sourceList (lib.all (v: lib.elem v allTeams))
+          // {
+            description = "list of lib.teams";
+          };
+        default = [ ];
+        example = lib.literalExpression "[ lib.teams.acme lib.teams.haskell ]";
+        description = ''
+          List of team maintainers of each module.
+          This option should be defined at most once per module.
+        '';
+      };
     };
   };
   meta.maintainers = with lib.maintainers; [
