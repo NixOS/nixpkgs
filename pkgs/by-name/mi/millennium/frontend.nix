@@ -6,9 +6,8 @@
 
   lib,
   stdenv,
-  fetchFromGitHub,
 
-  millennium-src ? (fetchFromGitHub (lib.importJSON ./sources.json).millennium-src),
+  millennium-src,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "millennium-frontend";
@@ -54,8 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     description = "Frontend for Millennium";
 
-    maintainers = with lib.maintainers; [
-      trivaris
+    maintainers = [
+      lib.maintainers.trivaris
     ];
 
     platforms = [

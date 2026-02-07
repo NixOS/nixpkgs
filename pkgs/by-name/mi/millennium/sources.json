@@ -2,8 +2,8 @@
     "millennium-src" : {
         "owner": "SteamClientHomebrew",
         "repo": "Millennium",
-        "rev": "4722a8ec5824e0425a3d07f2c21935dbf694813f",
-        "hash" : "sha256-vtnqP4WxEr8C0vJ59rvEPSJTAyx0MmxzIEn+HrlCobI="
+        "rev": "1bc62c94a06f25f7e8d7e269f11cd968cf576bff",
+        "hash" : "sha256-MceGTpXobCAh5Ll/1iTWcEf6/nHY3Ll1t06JxbYc+Co="
     },
     "zlib-src" : {
         "owner": "zlib-ng",
@@ -20,7 +20,7 @@
     "luajson-src" : {
         "owner": "SteamClientHomebrew",
         "repo": "LuaJSON",
-        "rev": "master",
+        "rev": "0c1fabf07c42f3907287d1e4f729e0620c1fe6fd",
         "hash" : "sha256-5Mdp4jp+rqz2ufkBa1gMfd8nep+Um+mBdr6+Ut6yz9I="
     },
     "minhook-src" : {
@@ -74,7 +74,7 @@
     "incbin-src" : {
         "owner": "graphitemaster",
         "repo": "incbin",
-        "rev": "main",
+        "rev": "22061f51fe9f2f35f061f85c2b217b55dd75310d",
         "hash" : "sha256-vgOfViZnWTKpBB6vDNDJSB3YuuGGVhg++zsi9Ubatno="
     },
     "asio-src" : {

@@ -7,15 +7,11 @@
   pkgsi686Linux,
 
   lib,
-  callPackage,
-  fetchFromGitHub,
 
-  sourcesJson ? ./sources.json,
-  inputs ? builtins.mapAttrs (name: info: fetchFromGitHub info) (lib.importJSON sourcesJson),
-
-  millennium-shims ? callPackage ./shims.nix { inherit (inputs) millennium-src; },
-  millennium-frontend ? callPackage ./frontend.nix { inherit (inputs) millennium-src; },
-  millennium-python ? callPackage ./python.nix { },
+  inputs,
+  millennium-python ? pkgsi686Linux.python311,
+  millennium-shims,
+  millennium-frontend,
 }:
 pkgsi686Linux.stdenv.mkDerivation (finalAttrs: {
   pname = "millennium-32";
@@ -35,8 +31,8 @@ pkgsi686Linux.stdenv.mkDerivation (finalAttrs: {
     pkgsi686Linux.libpsl
     pkgsi686Linux.openssl
     pkgsi686Linux.libxtst
-    cacert
     millennium-python
+    cacert
   ];
 
   cmakeGenerator = "Ninja";
@@ -49,9 +45,9 @@ pkgsi686Linux.stdenv.mkDerivation (finalAttrs: {
     "-DNIX_FRONTEND=${millennium-frontend}/share/frontend"
     "-DNIX_SHIMS=${millennium-shims}/share/millennium/shims"
     "-DNIX_PYTHON=${millennium-python}"
+    "-DNIX_PYTHON_LIB=${millennium-python}/lib/libpython${millennium-python.pythonVersion}.so"
     "-DCURL_CA_BUNDLE=${cacert}/etc/ssl/certs/ca-bundle.crt"
     "-DCURL_CA_PATH=${cacert}/etc/ssl/certs"
-    "--preset=linux-release"
   ];
 
   postPatch = ''
@@ -131,8 +127,8 @@ pkgsi686Linux.stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     description = "32-bit Millennium Library for interfacing with the 32-bit Steam frontend";
 
-    maintainers = with lib.maintainers; [
-      trivaris
+    maintainers = [
+      lib.maintainers.trivaris
     ];
 
     platforms = [
