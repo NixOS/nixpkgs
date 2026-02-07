@@ -5,6 +5,7 @@
   fetchFromGitHub,
   installShellFiles,
   nix-update-script,
+  nixosTests,
   stdenv,
 
   config,
@@ -56,7 +57,7 @@ let
     ;
 
   cudaBuildInputs = with cudaPackages; [
-    cuda_cccl # <nv/target>
+    cuda_cccl
 
     # A temporary hack for reducing the closure size, remove once cudaPackages
     # have stopped using lndir: https://github.com/NixOS/nixpkgs/issues/271792
@@ -165,6 +166,15 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ++ optionals rocmSupport [
     (cmakeFeature "CMAKE_HIP_COMPILER" "${rocmPackages.clr.hipClangPath}/clang++")
     (cmakeFeature "CMAKE_HIP_ARCHITECTURES" (builtins.concatStringsSep ";" rocmGpuTargets))
+    (cmakeBool "GGML_HIP_GRAPHS" true)
+    (cmakeBool "GGML_HIP_EXPORT_METRICS" true)
+    (cmakeBool "GGML_CUDA_FA" true)
+    (cmakeBool "GGML_CUDA_FA_ALL_QUANTS" true)
+  ]
+  # MI50/MI60 (gfx906) workarounds — only when targeting gfx906
+  ++ optionals (rocmSupport && lib.any (lib.hasInfix "gfx906") rocmGpuTargets) [
+    (cmakeBool "GGML_HIP_NO_VMM" true)
+    (cmakeBool "GGML_CUDA_NO_PEER_COPY" true)
   ]
   ++ optionals metalSupport [
     (cmakeFeature "CMAKE_C_FLAGS" "-D__ARM_FEATURE_DOTPROD=1")
@@ -179,7 +189,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   # upstream plans on adding targets at the cmakelevel, remove those
   # additional steps after that
   postInstall = ''
-    # Match previous binary name for this package
     ln -sf $out/bin/llama-cli $out/bin/llama
 
     mkdir -p $out/include
@@ -191,11 +200,22 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ''
   + optionalString rpcSupport "cp bin/rpc-server $out/bin/llama-rpc-server";
 
-  # the tests are failing as of 2025-08
+  # 87% of tests pass (40/46), but 6 fail due to Nix sandbox restrictions:
+  #   test-tokenizers-ggml-vocabs    - missing vocab files
+  #   test-jinja-py                  - subprocess creation blocked
+  #   test-download-model            - network access blocked
+  #   test-thread-safety             - dependency on above
+  #   test-arg-parser                - subprocess creation blocked
+  #   test-state-restore-fragmented  - requires model file
   doCheck = false;
 
   passthru = {
-    tests = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    inherit cudaSupport rocmSupport vulkanSupport;
+
+    tests = {
+      inherit (nixosTests) llama-cpp;
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
       metal = llama-cpp.override { metalSupport = true; };
     };
     updateScript = nix-update-script {
@@ -216,6 +236,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       booxter
       dit7ya
       philiptaron
+      randomizedcoder
       xddxdd
       yuannan
     ];
