@@ -111,7 +111,7 @@ py.pkgs.buildPythonApplication rec {
     pythonPath = py.pkgs.makePythonPath dependencies;
     inherit (py.pkgs) gunicorn;
     tests = {
-      netbox = nixosTests.netbox_4_3;
+      netbox = nixosTests.netbox_4_4;
       inherit (nixosTests) netbox-upgrade;
     };
     updateScript = nix-update-script { };
