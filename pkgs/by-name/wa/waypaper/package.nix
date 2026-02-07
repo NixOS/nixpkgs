@@ -20,6 +20,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-wtYF9H56IARkrFbChtuhWtOietA88khQJSOpfDtGQro=";
   };
 
+  patches = [
+    ./hypr-compat.patch
+  ];
+
   nativeBuildInputs = [
     gobject-introspection
     wrapGAppsHook3
