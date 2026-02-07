@@ -7,15 +7,18 @@
   apksigcopier,
   apksigner,
   apktool,
+  asar,
   binutils-unwrapped-all-targets,
   bzip2,
   cbfstool,
+  cctools,
   cdrkit,
   colord,
   colordiff,
   coreutils,
   cpio,
   db,
+  dexdump,
   diffutils,
   docutils,
   dtc,
@@ -54,6 +57,7 @@
   oggvideotools,
   openssh,
   openssl,
+  p7zip,
   pdftk,
   perl,
   pgpdump,
@@ -143,11 +147,6 @@ python.pkgs.buildPythonApplication rec {
   # To help figuring out what's missing from the list, run: ./pkgs/tools/misc/diffoscope/list-missing-tools.sh
   #
   # Still missing these tools:
-  # Android-specific tools:
-  # dexdump
-  # Darwin-specific tools:
-  # lipo
-  # otool
   # Other tools:
   # docx2txt <- makes tests broken:
   # > FAILED tests/comparators/test_docx.py::test_diff - IndexError: list index out of range
@@ -163,6 +162,7 @@ python.pkgs.buildPythonApplication rec {
   pythonPath = lib.filter (lib.meta.availableOn stdenv.hostPlatform) (
     [
       acl
+      asar
       binutils-unwrapped-all-targets
       bzip2
       cdrkit
@@ -185,6 +185,7 @@ python.pkgs.buildPythonApplication rec {
       lz4
       lzip
       openssl
+      p7zip
       pgpdump
       sng
       sqlite
@@ -216,6 +217,7 @@ python.pkgs.buildPythonApplication rec {
         apksigner
         cbfstool
         colord
+        dexdump
         enjarify
         ffmpeg
         fpc
@@ -224,7 +226,7 @@ python.pkgs.buildPythonApplication rec {
         giflib
         gnumeric
         gnupg
-        hdf5
+        hdf5.bin
         imagemagick
         jdk8
         libcaca
@@ -263,6 +265,9 @@ python.pkgs.buildPythonApplication rec {
         aapt
         apktool
       ]
+      # Add lipo and otool
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ]
+
     )
   );
 
@@ -323,7 +328,7 @@ python.pkgs.buildPythonApplication rec {
 
       # Expect the text in format of "Latest release: 198 (31 Dec 2021)"'.
       newVersion="$(curl -s https://diffoscope.org/ | pcregrep -o1 'Latest release: ([0-9]+)')"
-      update-source-version ${pname} "$newVersion"
+      update-source-version diffoscope "$newVersion"
     '';
   };
 
