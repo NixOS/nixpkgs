@@ -4,21 +4,20 @@
   fetchurl,
   appimageTools,
   undmg,
-}: let
+}:
+let
   pname = "slippi-launcher";
   version = "2.13.3";
 
   src =
     fetchurl
-    {
-      x86_64-linux = {
-        url = "https://github.com/project-slippi/slippi-launcher/releases/download/v${version}/Slippi-Launcher-${version}-x86_64.AppImage";
-        hash = "sha256-5tFl0ezk/yMkfd59kUKxGZBvt5MqnoCvxRSepy7O8BQ=";
-      };
-    }
-      .${
-      stdenv.system
-    } or (throw "Unsupported system: ${stdenv.system}");
+      {
+        x86_64-linux = {
+          url = "https://github.com/project-slippi/slippi-launcher/releases/download/v${version}/Slippi-Launcher-${version}-x86_64.AppImage";
+          hash = "sha256-5tFl0ezk/yMkfd59kUKxGZBvt5MqnoCvxRSepy7O8BQ=";
+        };
+      }
+      .${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
 
   meta = {
     homepage = "https://slippi.gg/";
@@ -34,19 +33,21 @@
     ];
   };
 in
-  appimageTools.wrapType2 {
-    inherit
-      pname
-      version
-      src
-      meta
-      ;
+appimageTools.wrapType2 {
+  inherit
+    pname
+    version
+    src
+    meta
+    ;
 
-    extraInstallCommands = let
+  extraInstallCommands =
+    let
       appimageContents = appimageTools.extract {
         inherit pname version src;
       };
-    in ''
+    in
+    ''
       # Install desktop entry
       install -Dm444 \
         ${appimageContents}/slippi-launcher.desktop \
@@ -65,4 +66,4 @@ in
       substituteInPlace $out/share/applications/slippi-launcher.desktop \
         --replace 'Exec=AppRun %U' 'Exec=slippi-launcher %U'
     '';
-  }
+}
