@@ -1150,6 +1150,7 @@ mapAliases {
   linux_rpi02w = linuxKernel.kernels.linux_rpi3;
   linux_rpi3 = linuxKernel.kernels.linux_rpi3;
   linux_rpi4 = linuxKernel.kernels.linux_rpi4;
+  linuxConsoleTools = warnAlias "'linuxConsoleTools' has been renamed to 'linuxconsoletools'" linuxconsoletools; # Added 2026-02-08
   linuxPackages-libre = throw "linux_libre has been removed due to lack of maintenance"; # Added 2025-10-01
   linuxPackages_5_4 = throw "linux 5.4 was removed because it will reach its end of life within 25.11"; # Added 2025-10-26
   linuxPackages_5_4_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS"; # Added 2025-08-10
