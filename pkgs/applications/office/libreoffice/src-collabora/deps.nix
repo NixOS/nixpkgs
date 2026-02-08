@@ -875,11 +875,11 @@
     md5name = "c065f04aad42737aebd60b2fe4939704ac844266bc0aeaa1609f0cad987be516-openldap-2.6.10.tgz";
   }
   {
-    name = "openssl-3.0.18.tar.gz";
-    url = "https://dev-www.libreoffice.org/src/openssl-3.0.18.tar.gz";
-    sha256 = "d80c34f5cf902dccf1f1b5df5ebb86d0392e37049e5d73df1b3abae72e4ffe8b";
+    name = "openssl-3.0.19.tar.gz";
+    url = "https://dev-www.libreoffice.org/src/openssl-3.0.19.tar.gz";
+    sha256 = "fa5a4143b8aae18be53ef2f3caf29a2e0747430b8bc74d32d88335b94ab63072";
     md5 = "";
-    md5name = "d80c34f5cf902dccf1f1b5df5ebb86d0392e37049e5d73df1b3abae72e4ffe8b-openssl-3.0.18.tar.gz";
+    md5name = "fa5a4143b8aae18be53ef2f3caf29a2e0747430b8bc74d32d88335b94ab63072-openssl-3.0.19.tar.gz";
   }
   {
     name = "liborcus-0.19.2.tar.xz";
@@ -924,11 +924,11 @@
     md5name = "ea1480efada2fd948bc75366f7c349e1c96d3297d09a3fe62626e38e234a625e-pixman-0.42.2.tar.gz";
   }
   {
-    name = "libpng-1.6.52.tar.xz";
-    url = "https://dev-www.libreoffice.org/src/libpng-1.6.52.tar.xz";
-    sha256 = "36bd726228ec93a3b6c22fdb49e94a67b16f2fe9b39b78b7cb65772966661ccc";
+    name = "libpng-1.6.54.tar.xz";
+    url = "https://dev-www.libreoffice.org/src/libpng-1.6.54.tar.xz";
+    sha256 = "01c9d8a303c941ec2c511c14312a3b1d36cedb41e2f5168ccdaa85d53b887805";
     md5 = "";
-    md5name = "36bd726228ec93a3b6c22fdb49e94a67b16f2fe9b39b78b7cb65772966661ccc-libpng-1.6.52.tar.xz";
+    md5name = "01c9d8a303c941ec2c511c14312a3b1d36cedb41e2f5168ccdaa85d53b887805-libpng-1.6.54.tar.xz";
   }
   {
     name = "tiff-4.7.1.tar.xz";
@@ -952,11 +952,11 @@
     md5name = "c835b640a40ce357e1b83666aabd95edffa24ddddd49b8daff63adb851cdab74-poppler-data-0.4.12.tar.gz";
   }
   {
-    name = "postgresql-14.19.tar.bz2";
-    url = "https://dev-www.libreoffice.org/src/postgresql-14.19.tar.bz2";
-    sha256 = "727e9e334bc1a31940df808259f69fe47a59f6d42174b22ae62d67fe7a01ad80";
+    name = "postgresql-15.15.tar.bz2";
+    url = "https://dev-www.libreoffice.org/src/postgresql-15.15.tar.bz2";
+    sha256 = "5753aaeb8b09cbf61016f78aa69bf5cbdf01b43263f010cbf168c82896213aaa";
     md5 = "";
-    md5name = "727e9e334bc1a31940df808259f69fe47a59f6d42174b22ae62d67fe7a01ad80-postgresql-14.19.tar.bz2";
+    md5name = "5753aaeb8b09cbf61016f78aa69bf5cbdf01b43263f010cbf168c82896213aaa-postgresql-15.15.tar.bz2";
   }
   {
     name = "Python-3.10.19.tar.xz";

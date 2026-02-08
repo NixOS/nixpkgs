@@ -1,7 +1,7 @@
 { fetchgit, ... }:
 fetchgit {
   url = "https://gerrit.libreoffice.org/core";
-  rev = "refs/tags/cp-25.04.8-1";
-  hash = "sha256-Ddof55XENNbxsho1NT+O5Qrz0bTQurx42EPICRLvfPs=";
+  rev = "cp-25.04.8-3";
+  hash = "sha256-kvP3OzF5rSb8q0qVMlH50fti6edR+EqQk7Rm5gPSJAA=";
   fetchSubmodules = false;
 }
