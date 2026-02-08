@@ -14,18 +14,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "chawan";
-  version = "0.3.2";
+  version = "0.3.3";
 
   src = fetchFromSourcehut {
     owner = "~bptato";
     repo = "chawan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JPFQsu5vLSesgpbX79Z5e0GGFIsC4PUJuZQS8a5Oq2c=";
+    hash = "sha256-GVDh94pgdMlwHMyqtT8q2yM+rwioodBYQfA+AOZ/CsU=";
   };
-
-  env.NIX_CFLAGS_COMPILE = toString (
-    lib.optional stdenv.cc.isClang "-Wno-error=implicit-function-declaration"
-  );
 
   nativeBuildInputs = [
     makeBinaryWrapper

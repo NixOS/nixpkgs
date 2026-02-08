@@ -6,14 +6,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libccd";
   version = "2.1";
 
   src = fetchFromGitHub {
     owner = "danfis";
     repo = "libccd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0sfmn5pd7k5kyhbxnd689xmsa5v843r7sska96dlysqpljd691jc";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ lopsided98 ];
     platforms = lib.platforms.unix;
   };
-}
+})

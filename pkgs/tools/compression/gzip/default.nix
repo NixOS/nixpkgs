@@ -5,6 +5,10 @@
   makeShellWrapper,
   updateAutotoolsGnuConfigScriptsHook,
   runtimeShellPackage,
+  # Tests
+  gzip,
+  less,
+  perl,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -44,6 +48,12 @@ stdenv.mkDerivation (finalAttrs: {
     "ZLESS_PROG=zless"
   ];
 
+  nativeCheckInputs = [
+    less
+    perl
+  ];
+  doCheck = false;
+
   # Many gzip executables are shell scripts that depend upon other gzip
   # executables being in $PATH.  Rather than try to re-write all the
   # internal cross-references, just add $out/bin to PATH at the top of
@@ -52,6 +62,12 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i '1{;/#!\/bin\/sh/aPATH="'$out'/bin:$PATH"
     }' $out/bin/*
   ''
+  # avoid wrapping the actual executable on cygwin because changing the
+  # extension will break dll linking
+  + lib.optionalString stdenv.hostPlatform.isCygwin ''
+    mv $out/bin/{,.}gzip.exe
+    ln -s .gzip.exe $out/bin/gzip
+  ''
   # run gzip with "-n" when $GZIP_NO_TIMESTAMPS (set by stdenv's setup.sh) is set to stop gzip from adding timestamps
   # to archive headers: https://github.com/NixOS/nixpkgs/issues/86348
   # if changing so that there's no longer a .gzip-wrapped then update copy in make-bootstrap-tools.nix
@@ -59,6 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/gzip \
       --add-flags "\''${GZIP_NO_TIMESTAMPS:+-n}"
   '';
+
+  passthru.tests.makecheck = gzip.overrideAttrs { doCheck = true; };
 
   meta = {
     homepage = "https://www.gnu.org/software/gzip/";

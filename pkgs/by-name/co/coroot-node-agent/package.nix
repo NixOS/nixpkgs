@@ -5,18 +5,18 @@
   systemdLibs,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "coroot-node-agent";
-  version = "1.27.1";
+  version = "1.28.1";
 
   src = fetchFromGitHub {
     owner = "coroot";
     repo = "coroot-node-agent";
-    rev = "v${version}";
-    hash = "sha256-pBSKnQcNBj5gRVpcEKw7CylU9jj4tBeIs0u3F4AmM1o=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-g2qvfK+H1+pK6vBlC0nOwenfYF3/KFHZPiO3OZkOUyg=";
   };
 
-  vendorHash = "sha256-jMR/ylMEgNDOn5mDkJU38h9h2rinCX7/jtOyjDos5Qc=";
+  vendorHash = "sha256-sjdUjnBMzEfGCVOwuL9Zw/5Lup3yUf5LoBajLOCNteA=";
 
   buildInputs = [ systemdLibs ];
 
@@ -24,7 +24,7 @@ buildGoModule rec {
 
   ldflags = [
     "-extldflags='-Wl,-z,lazy'"
-    "-X 'github.com/coroot/coroot-node-agent/flags.Version=${version}'"
+    "-X 'github.com/coroot/coroot-node-agent/flags.Version=${finalAttrs.version}'"
   ];
 
   meta = {
@@ -34,4 +34,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ errnoh ];
     mainProgram = "coroot-node-agent";
   };
-}
+})

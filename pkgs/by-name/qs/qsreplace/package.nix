@@ -4,14 +4,14 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "qsreplace";
   version = "0.0.3";
 
   src = fetchFromGitHub {
     owner = "tomnomnom";
     repo = "qsreplace";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-j9bqO2gp4RUxZHGBCIxI5nA3nD1dG4nCpJ1i4TM/fbo=";
   };
 
@@ -31,4 +31,4 @@ buildGoModule rec {
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     license = lib.licenses.mit;
   };
-}
+})

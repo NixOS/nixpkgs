@@ -29,12 +29,12 @@
   zstd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "librasterlite2";
   version = "1.1.0-beta1";
 
   src = fetchurl {
-    url = "https://www.gaia-gis.it/gaia-sins/librasterlite2-sources/librasterlite2-${version}.tar.gz";
+    url = "https://www.gaia-gis.it/gaia-sins/librasterlite2-sources/librasterlite2-${finalAttrs.version}.tar.gz";
     hash = "sha256-9yhM38B600OjFOSHjfAwCHSwFF2dMxsGOwlrSC5+RPQ=";
   };
 
@@ -93,4 +93,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     teams = [ lib.teams.geospatial ];
   };
-}
+})

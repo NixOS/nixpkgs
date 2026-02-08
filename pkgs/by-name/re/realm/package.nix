@@ -6,14 +6,14 @@
   nixosTests,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "realm";
   version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "zhboner";
     repo = "realm";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-7hOy+bqWoVyI2xGJ0eY7GvyIYykr6VP8d3ZYtY/jGPI=";
   };
 
@@ -33,4 +33,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ocfox ];
   };
-}
+})

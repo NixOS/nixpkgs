@@ -13,7 +13,6 @@
   pytest-cov-stub,
   pytest-httpserver,
   pytestCheckHook,
-  pythonOlder,
   requests,
   respx,
   setuptools,
@@ -25,8 +24,6 @@ buildPythonPackage rec {
   pname = "elastic-transport";
   version = "8.17.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "elastic";

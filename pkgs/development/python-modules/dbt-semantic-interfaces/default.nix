@@ -12,23 +12,20 @@
   more-itertools,
   pydantic,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "dbt-semantic-interfaces";
-  version = "0.9.0";
+  version = "0.10.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
     repo = "dbt-semantic-interfaces";
     tag = "v${version}";
-    hash = "sha256-I/bMpqTaAHs0XnYOYjFRgXv3qB06LItkaSxtRjk55js=";
+    hash = "sha256-1FTK+vi2iFvb1knFe3WKfCtEdYioT7eeONb410RnmNU=";
   };
 
   pythonRelaxDeps = [ "importlib-metadata" ];

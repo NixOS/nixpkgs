@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   ipykernel,
   ipython-genutils,
@@ -17,10 +16,9 @@ buildPythonPackage rec {
   version = "0.9.7";
   format = "wheel";
 
-  disabled = pythonOlder "3.5";
-
   src = fetchPypi {
-    inherit pname version format;
+    inherit pname version;
+    format = "wheel";
     hash = "sha256-NpjufqoLBHp2A1F9eqG3GzIRil9RdUyrRexdmU9nII8=";
     dist = "py3";
     python = "py3";

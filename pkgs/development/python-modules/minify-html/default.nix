@@ -35,6 +35,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/wilsonzlin/minify-html/tree/master/minify-html-python";
     changelog = "https://github.com/wilsonzlin/minify-html/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    teams = [ lib.teams.apm ];
+    maintainers = with lib.maintainers; [
+      DutchGerman
+      friedow
+    ];
   };
 }

@@ -23,14 +23,14 @@
   libGL,
   libuuid,
   libselinux,
-  libXdmcp,
+  libxdmcp,
   libsepol,
   libxkbcommon,
   libthai,
   libdatrie,
-  xcbutilkeysyms,
-  xcbutil,
-  xcbutilwm,
+  libxcb-keysyms,
+  libxcb-util,
+  libxcb-wm,
   xcb-imdkit,
   libxkbfile,
   nixosTests,
@@ -84,11 +84,11 @@ stdenv.mkDerivation rec {
     libuuid
     libselinux
     libsepol
-    libXdmcp
+    libxdmcp
     libxkbcommon
-    xcbutil
-    xcbutilwm
-    xcbutilkeysyms
+    libxcb-util
+    libxcb-wm
+    libxcb-keysyms
     xcb-imdkit
     xkeyboard_config
     libxkbfile

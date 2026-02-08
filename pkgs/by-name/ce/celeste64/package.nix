@@ -12,7 +12,12 @@
   libselinux,
   wayland,
   libdecor,
-  xorg,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxcursor,
+  libx11,
   libxkbcommon,
   libdrm,
   withSELinux ? false,
@@ -44,12 +49,12 @@ buildDotnetModule rec {
     wayland
     libdrm
     libxkbcommon
-    xorg.libX11
-    xorg.libXfixes
-    xorg.libXext
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXrandr
+    libx11
+    libxfixes
+    libxext
+    libxcursor
+    libxi
+    libxrandr
   ]
   ++ lib.optionals withSELinux [ libselinux ];
 

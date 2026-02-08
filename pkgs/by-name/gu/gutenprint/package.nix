@@ -15,12 +15,12 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gutenprint";
   version = "5.3.5";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gimp-print/gutenprint-${version}.tar.xz";
+    url = "mirror://sourceforge/gimp-print/gutenprint-${finalAttrs.version}.tar.xz";
     hash = "sha256-9an0feKFMLGuIGnPvGR6mmQbruq+gJuw7ys+xblmjXA=";
   };
 
@@ -79,4 +79,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     isGutenprint = true;
   };
-}
+})

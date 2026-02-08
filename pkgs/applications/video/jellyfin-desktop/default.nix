@@ -14,7 +14,7 @@
   mpvqt,
   libcec,
   SDL2,
-  libXrandr,
+  libxrandr,
   cacert,
   nix-update-script,
 }:
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     SDL2
 
     # frame rate switching
-    libXrandr
+    libxrandr
     cacert
   ]
   ++ lib.optional (!stdenv.hostPlatform.isDarwin) mpvqt;
@@ -93,7 +93,6 @@ stdenv.mkDerivation rec {
     ];
     maintainers = with lib.maintainers; [
       jojosch
-      kranzes
       paumr
     ];
     mainProgram = "jellyfin-desktop";

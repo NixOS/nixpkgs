@@ -8,22 +8,19 @@
   pysmi,
   pysnmp,
   pytestCheckHook,
-  pythonOlder,
   requests,
 }:
 
-buildPythonPackage rec {
-  version = "1.6.2";
+buildPythonPackage (finalAttrs: {
   pname = "pysmi";
+  version = "1.6.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "lextudio";
     repo = "pysmi";
-    tag = "v${version}";
-    hash = "sha256-GyG3J6qntEIszXrm1t623+x1cYbhJLbTEQl6N2h2LA0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-TpDrsBGym07JPIcnytyWI7Ebx9RR+7Ia36zOzWMWqPM=";
   };
 
   build-system = [ flit-core ];
@@ -49,8 +46,8 @@ buildPythonPackage rec {
   meta = {
     description = "SNMP MIB parser";
     homepage = "https://github.com/lextudio/pysmi";
-    changelog = "https://github.com/lextudio/pysmi/blob/v${version}/CHANGES.rst";
+    changelog = "https://github.com/lextudio/pysmi/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

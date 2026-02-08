@@ -8,7 +8,6 @@
   pendulum,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   setuptools,
   snaptime,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "maya";
   version = "0.6.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "timofurrer";

@@ -11,23 +11,20 @@
   pygobject3,
   pyopenssl,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "nbxmpp";
-  version = "6.4.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.10";
+  version = "7.0.0";
+  pyproject = true;
 
   src = fetchFromGitLab {
     domain = "dev.gajim.org";
     owner = "gajim";
     repo = "python-nbxmpp";
-    rev = "refs/tags/${version}";
-    hash = "sha256-q910WbBp0TBqXw8WfYniliVGnr4Hi6dDhVDqZszSL0c=";
+    tag = version;
+    hash = "sha256-NzSXvuPf7PZbMPgD3nhPgTH4Vd8DVx49fjf7cPcvywc=";
   };
 
   nativeBuildInputs = [
@@ -43,12 +40,7 @@ buildPythonPackage rec {
     idna
     libsoup_3
     packaging
-    (pygobject3.overrideAttrs (o: {
-      src = fetchurl {
-        url = "mirror://gnome/sources/pygobject/3.52/pygobject-3.52.3.tar.gz";
-        hash = "sha256-AOQn0pHpV0Yqj61lmp+ci+d2/4Kot2vfQC8eruwIbYI=";
-      };
-    }))
+    pygobject3
     pyopenssl
   ];
 

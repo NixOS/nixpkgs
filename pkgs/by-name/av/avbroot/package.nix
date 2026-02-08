@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "avbroot";
-  version = "3.23.3";
+  version = "3.24.1";
 
   src = fetchFromGitHub {
     owner = "chenxiaolong";
     repo = "avbroot";
     tag = "v${version}";
-    hash = "sha256-Bdr9oEBIbRyEBhUbY3lIqhtE0l+MklWkwJ1vViYloiM=";
+    hash = "sha256-VLu6tOXcpSTrwjv44bw+/8onDB/GlNmgpcx+s+FYKUE=";
   };
 
-  cargoHash = "sha256-nT1mKRc9UTeday0ZiJEXTRckKSWpX/tYdcV6Izqwg60=";
+  cargoHash = "sha256-oJeO0Vtfesx6quTjv6hdA1PgJVAuzPGsRnp88fz/oSA=";
 
   nativeBuildInputs = [
     pkg-config

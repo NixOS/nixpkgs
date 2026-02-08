@@ -11,7 +11,7 @@
 let
   automat = buildPythonPackage rec {
     version = "25.4.16";
-    format = "pyproject";
+    pyproject = true;
     pname = "automat";
 
     src = fetchPypi {

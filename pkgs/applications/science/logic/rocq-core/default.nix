@@ -14,6 +14,7 @@
   dune,
   customOCamlPackages ? null,
   ocamlPackages_4_14,
+  ocamlPackages_5_4,
   ncurses,
   csdp ? null,
   version,
@@ -26,6 +27,7 @@ let
     "9.0.0".sha256 = "sha256-GRwYSvrJGiPD+I82gLOgotb+8Ra5xHZUJGcNwxWqZkU=";
     "9.0.1".sha256 = "sha256-gRgQhFiYvGR/Z46TmTl1bgN9O32nifxQGdrzfw0WHrk=";
     "9.1.0".sha256 = "sha256-+QL7I1/0BfT87n7lSaOmpHj2jJuDB4idWhAxwzvVQOE=";
+    "9.2+rc1".sha256 = "sha256-zKVhnBid5LOcd7uHWFGmUdHpyNLxIyB7RNNz5btz0mI=";
   };
   releaseRev = v: "V${v}";
   fetched =
@@ -53,7 +55,17 @@ let
     substituteInPlace plugins/micromega/sos.ml --replace-warn "; csdp" "; ${csdp}/bin/csdp"
     substituteInPlace plugins/micromega/coq_micromega.ml --replace-warn "System.is_in_system_path \"csdp\"" "true"
   '';
-  ocamlPackages = if customOCamlPackages != null then customOCamlPackages else ocamlPackages_4_14;
+  ocamlPackages =
+    if customOCamlPackages != null then
+      customOCamlPackages
+    else
+      let
+        case = case: out: { inherit case out; };
+        inherit (lib.versions) range;
+      in
+      lib.switch rocq-version [
+        (case (range "9.0" "9.1") ocamlPackages_4_14)
+      ] ocamlPackages_5_4;
   ocamlNativeBuildInputs = [
     ocamlPackages.ocaml
     ocamlPackages.findlib

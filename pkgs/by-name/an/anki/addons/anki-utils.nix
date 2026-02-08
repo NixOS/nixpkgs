@@ -21,6 +21,7 @@
           runHook preBuild
           runHook postBuild
         '',
+        strictDeps ? true,
         dontPatchELF ? true,
         dontStrip ? true,
         passthru ? { },
@@ -35,6 +36,7 @@
         inherit
           configurePhase
           buildPhase
+          strictDeps
           dontPatchELF
           dontStrip
           ;

@@ -168,7 +168,7 @@ postgresqlBuildExtension (finalAttrs: {
   meta = {
     description = "Geographic Objects for PostgreSQL";
     homepage = "https://postgis.net/";
-    changelog = "https://git.osgeo.org/gitea/postgis/postgis/raw/tag/${finalAttrs.version}/NEWS";
+    changelog = "https://git.osgeo.org/postgis/postgis/raw/tag/${finalAttrs.version}/NEWS";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ marcweber ];
     teams = [ lib.teams.geospatial ];

@@ -359,10 +359,10 @@ in
             let
               isUserAuth = cfg.authType == "form" || cfg.authType == "none";
 
-              userScriptArgs = ''--user ${cfg.defaultUser} ${
+              userScriptArgs = "--user ${cfg.defaultUser} ${
                 optionalString (cfg.authType == "form") ''--password "$(cat ${cfg.passwordFile})"''
-              }'';
-              mkUserScript = name: optionalString isUserAuth ''./cli/${name}.php ${userScriptArgs}'';
+              }";
+              mkUserScript = name: optionalString isUserAuth "./cli/${name}.php ${userScriptArgs}";
 
               updateUserScript = mkUserScript "update-user";
               createUserScript = mkUserScript "create-user";

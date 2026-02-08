@@ -30,16 +30,6 @@
       "source": "hosted",
       "version": "0.1.10"
     },
-    "analyzer_plugin": {
-      "dependency": "transitive",
-      "description": {
-        "name": "analyzer_plugin",
-        "sha256": "a5ab7590c27b779f3d4de67f31c4109dbe13dd7339f86461a6f2a8ab2594d8ce",
-        "url": "https://pub.dev"
-      },
-      "source": "hosted",
-      "version": "0.13.4"
-    },
     "antlr4": {
       "dependency": "transitive",
       "description": {
@@ -390,35 +380,15 @@
       "source": "hosted",
       "version": "1.0.8"
     },
-    "custom_lint_core": {
-      "dependency": "transitive",
-      "description": {
-        "name": "custom_lint_core",
-        "sha256": "cc4684d22ca05bf0a4a51127e19a8aea576b42079ed2bc9e956f11aaebe35dd1",
-        "url": "https://pub.dev"
-      },
-      "source": "hosted",
-      "version": "0.8.0"
-    },
-    "custom_lint_visitor": {
-      "dependency": "transitive",
-      "description": {
-        "name": "custom_lint_visitor",
-        "sha256": "4a86a0d8415a91fbb8298d6ef03e9034dc8e323a599ddc4120a0e36c433983a2",
-        "url": "https://pub.dev"
-      },
-      "source": "hosted",
-      "version": "1.0.0+7.7.0"
-    },
     "d4rt": {
       "dependency": "direct main",
       "description": {
         "name": "d4rt",
-        "sha256": "03d99e97cc893e312d568c657e9fe1034a0941f14043388a578e28500d1a31fb",
+        "sha256": "eff6a10f31e9e5b60b99146a33204c5f2d74e20ac3eeb14132d8a8ed0921c6e1",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.1.8"
+      "version": "0.1.9"
     },
     "dart_style": {
       "dependency": "transitive",
@@ -576,11 +546,11 @@
       "dependency": "direct main",
       "description": {
         "name": "ffigen",
-        "sha256": "2bd9a420ca42cb5ce8cff5d80f88547b547a042ae26807704b1698714e4464a2",
+        "sha256": "b7803707faeec4ce3c1b0c2274906504b796e3b70ad573577e72333bd1c9b3ba",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "19.1.0"
+      "version": "20.1.1"
     },
     "file": {
       "dependency": "transitive",
@@ -596,11 +566,11 @@
       "dependency": "direct main",
       "description": {
         "name": "file_picker",
-        "sha256": "7872545770c277236fd32b022767576c562ba28366204ff1a5628853cf8f2200",
+        "sha256": "d974b6ba2606371ac71dd94254beefb6fa81185bde0b59bdc1df09885da85fde",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "10.3.7"
+      "version": "10.3.8"
     },
     "fixnum": {
       "dependency": "transitive",
@@ -790,11 +760,11 @@
       "dependency": "direct main",
       "description": {
         "name": "flutter_riverpod",
-        "sha256": "9e2d6907f12cc7d23a846847615941bddee8709bf2bfd274acdf5e80bcf22fde",
+        "sha256": "38ec6c303e2c83ee84512f5fc2a82ae311531021938e63d7137eccc107bf3c02",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "3.0.3"
+      "version": "3.1.0"
     },
     "flutter_rust_bridge": {
       "dependency": "direct main",
@@ -893,21 +863,21 @@
       "dependency": "direct main",
       "description": {
         "name": "go_router",
-        "sha256": "c92d18e1fe994cb06d48aa786c46b142a5633067e8297cff6b5a3ac742620104",
+        "sha256": "eff94d2a6fc79fa8b811dde79c7549808c2346037ee107a1121b4a644c745f2a",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "17.0.0"
+      "version": "17.0.1"
     },
     "google_fonts": {
       "dependency": "direct main",
       "description": {
         "name": "google_fonts",
-        "sha256": "517b20870220c48752eafa0ba1a797a092fb22df0d89535fd9991e86ee2cdd9c",
+        "sha256": "eefe5ee217f331627d8bbcf01f91b21c730bf66e225d6dc8a148370b0819168d",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "6.3.2"
+      "version": "7.0.0"
     },
     "graphs": {
       "dependency": "transitive",
@@ -1722,41 +1692,41 @@
       "dependency": "transitive",
       "description": {
         "name": "riverpod",
-        "sha256": "c406de02bff19d920b832bddfb8283548bfa05ce41c59afba57ce643e116aa59",
+        "sha256": "16ff608d21e8ea64364f2b7c049c94a02ab81668f78845862b6e88b71dd4935a",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "3.0.3"
+      "version": "3.1.0"
     },
     "riverpod_analyzer_utils": {
       "dependency": "transitive",
       "description": {
         "name": "riverpod_analyzer_utils",
-        "sha256": "a0f68adb078b790faa3c655110a017f9a7b7b079a57bbd40f540e80dce5fcd29",
+        "sha256": "947b05d04c52a546a2ac6b19ef2a54b08520ff6bdf9f23d67957a4c8df1c3bc0",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.0.0-dev.7"
+      "version": "1.0.0-dev.8"
     },
     "riverpod_annotation": {
       "dependency": "direct main",
       "description": {
         "name": "riverpod_annotation",
-        "sha256": "7230014155777fc31ba3351bc2cb5a3b5717b11bfafe52b1553cb47d385f8897",
+        "sha256": "cc1474bc2df55ec3c1da1989d139dcef22cd5e2bd78da382e867a69a8eca2e46",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "3.0.3"
+      "version": "4.0.0"
     },
     "riverpod_generator": {
       "dependency": "direct dev",
       "description": {
         "name": "riverpod_generator",
-        "sha256": "49894543a42cf7a9954fc4e7366b6d3cb2e6ec0fa07775f660afcdd92d097702",
+        "sha256": "e43b1537229cc8f487f09b0c20d15dba840acbadcf5fc6dad7ad5e8ab75950dc",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "3.0.3"
+      "version": "4.0.0+1"
     },
     "rust_lib_mangayomi": {
       "dependency": "direct main",
@@ -2505,7 +2475,7 @@
     }
   },
   "sdks": {
-    "dart": ">=3.10.1 <4.0.0",
+    "dart": ">=3.10.4 <4.0.0",
     "flutter": ">=3.38.1"
   }
 }

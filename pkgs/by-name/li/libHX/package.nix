@@ -1,21 +1,20 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   autoreconfHook,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libHX";
-  version = "5.2";
+  version = "5.3";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     tag = "v${finalAttrs.version}";
     owner = "jengelh";
     repo = "libhx";
-    hash = "sha256-z1/D5dkcDc2VIoGCvunUYsLGq3AV6jZ01Edf1vuUx9o=";
+    hash = "sha256-q9cIZhQx1BjD7Py0VEevKwFflJ1cdFn9RcW6q52t/h8=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

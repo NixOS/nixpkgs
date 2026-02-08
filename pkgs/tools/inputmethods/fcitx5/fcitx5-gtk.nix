@@ -17,12 +17,12 @@
   libsepol,
   libthai,
   libdatrie,
-  libXdmcp,
+  libxdmcp,
   libxkbcommon,
   libepoxy,
   dbus,
   at-spi2-core,
-  libXtst,
+  libxtst,
   withGTK2 ? false,
 }:
 
@@ -60,12 +60,12 @@ stdenv.mkDerivation rec {
     libsepol
     libthai
     libdatrie
-    libXdmcp
+    libxdmcp
     libxkbcommon
     libepoxy
     dbus
     at-spi2-core
-    libXtst
+    libxtst
   ]
   ++ lib.optional withGTK2 gtk2;
 

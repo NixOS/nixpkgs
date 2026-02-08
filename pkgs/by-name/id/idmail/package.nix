@@ -21,21 +21,23 @@ let
     ];
   });
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "idmail";
   version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "oddlama";
     repo = "idmail";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-9rl2UG8DeWd8hVh3N+dqyV5gO0LErok+kZ1vQZnVAe8=";
   };
 
   cargoHash = "sha256-UcS2gAoa2fzPu6hh8I5sXSHHbAmzsecT44Ju2CVsK0Q=";
 
-  RUSTC_BOOTSTRAP = 1;
-  RUSTFLAGS = "--cfg=web_sys_unstable_apis";
+  env = {
+    RUSTC_BOOTSTRAP = 1;
+    RUSTFLAGS = "--cfg=web_sys_unstable_apis";
+  };
 
   nativeBuildInputs = [
     wasm-bindgen-cli_0_2_100
@@ -69,7 +71,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Email alias and account management interface for self-hosted mailservers";
     homepage = "https://github.com/oddlama/idmail";
-    changelog = "https://github.com/oddlama/idmail/releases/tag/v${version}";
+    changelog = "https://github.com/oddlama/idmail/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       oddlama
@@ -77,4 +79,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "idmail";
   };
-}
+})

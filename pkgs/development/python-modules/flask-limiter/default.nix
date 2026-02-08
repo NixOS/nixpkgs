@@ -13,7 +13,6 @@
   pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   redis,
   rich,
   setuptools,
@@ -24,8 +23,6 @@ buildPythonPackage rec {
   pname = "flask-limiter";
   version = "3.12";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "alisaifee";

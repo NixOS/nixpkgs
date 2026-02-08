@@ -22,7 +22,7 @@ in
   buildEnv,
   libunwind,
   fetchpatch,
-  libX11,
+  libx11,
   xorgproto,
   useX11 ? safeX11 stdenv && lib.versionOlder version "4.09",
   aflSupport ? false,
@@ -72,7 +72,7 @@ let
   x11env = buildEnv {
     name = "x11env";
     paths = [
-      libX11
+      libx11
       xorgproto
     ];
   };
@@ -118,9 +118,11 @@ stdenv.mkDerivation (
       ++ optional noNakedPointers (flags "--disable-naked-pointers" "-no-naked-pointers");
     dontAddStaticConfigureFlags = lib.versionOlder version "4.08";
 
-    env = lib.optionalAttrs (lib.versionOlder version "4.14") {
-      NIX_CFLAGS_COMPILE = "-std=gnu11";
-    };
+    env =
+      lib.optionalAttrs (lib.versionOlder version "4.14" || lib.versions.majorMinor version == "5.0")
+        {
+          NIX_CFLAGS_COMPILE = "-std=gnu11";
+        };
 
     # on aarch64-darwin using --host and --target causes the build to invoke
     # `aarch64-apple-darwin-clang` while using assembler. However, such binary
@@ -165,7 +167,7 @@ stdenv.mkDerivation (
     buildInputs =
       optional (lib.versionOlder version "4.07") ncurses
       ++ optionals useX11 [
-        libX11
+        libx11
         xorgproto
       ];
     depsBuildBuild = lib.optionals (!stdenv.hostPlatform.isDarwin) [ binutils ];

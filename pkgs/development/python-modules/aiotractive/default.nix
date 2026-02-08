@@ -3,26 +3,28 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
+  orjson,
   setuptools,
   yarl,
 }:
 
 buildPythonPackage rec {
   pname = "aiotractive";
-  version = "0.7.0";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zhulik";
     repo = "aiotractive";
     tag = "v${version}";
-    hash = "sha256-tdeRl3fY+OPlLnh/KixdKSy6WLIH/qQR3icoUkKGeGo=";
+    hash = "sha256-pU6Ugd4l9+oUWJAd1hT3oBPfXK5NEjOg+k3YN52C3B8=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
+    orjson
     yarl
   ];
 

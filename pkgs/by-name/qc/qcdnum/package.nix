@@ -6,13 +6,13 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "QCDNUM";
   version = "18-00-00";
 
   src = fetchurl {
     url = "http://www.nikhef.nl/user/h24/qcdnum-files/download/qcdnum${
-      builtins.replaceStrings [ "-" ] [ "" ] version
+      builtins.replaceStrings [ "-" ] [ "" ] finalAttrs.version
     }.tar.gz";
     hash = "sha256-4Qj5JreEA1LkCAunGRTTQD7YEYNk+HcQ4iH97DIO4gA=";
   };
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

@@ -19,6 +19,7 @@
   smartmontools,
   systemd,
   udevCheckHook,
+  usbutils,
   util-linux,
   glib,
   x86_energy_perf_policy,
@@ -29,13 +30,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "tlp";
-  version = "1.9.0";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "linrunner";
     repo = "TLP";
     rev = version;
-    hash = "sha256-aM/4+cgtUe6qv3MNT4moXvNzqG5gKvwMbg14L8ifWlc=";
+    hash = "sha256-23B+KV0VrvfSneKIFB9sm9iZZm8uZRk+r60W13++J4g=";
   };
 
   # XXX: See patch files for relevant explanations.
@@ -105,6 +106,7 @@ stdenv.mkDerivation rec {
           perl
           smartmontools
           systemd
+          usbutils
           util-linux
           glib # gdbus
         ]

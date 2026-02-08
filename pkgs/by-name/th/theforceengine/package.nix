@@ -4,7 +4,7 @@
   fetchFromGitHub,
   SDL2,
   SDL2_image,
-  libX11,
+  libx11,
   rtaudio,
   rtmidi,
   glew,
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     SDL2
     SDL2_image
-    libX11
+    libx11
     rtaudio
     rtmidi
     glew

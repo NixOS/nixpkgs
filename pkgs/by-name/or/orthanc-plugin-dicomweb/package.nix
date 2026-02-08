@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  NIX_LDFLAGS = lib.strings.concatStringsSep " " [
+  env.NIX_LDFLAGS = toString [
     "-L${lib.getLib gtest}"
     "-lgtest"
   ];

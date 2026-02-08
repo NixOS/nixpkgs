@@ -5,12 +5,12 @@
   boost,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mini-httpd";
   version = "1.7";
 
   src = fetchurl {
-    url = "https://download-mirror.savannah.gnu.org/releases/mini-httpd/${pname}-${version}.tar.gz";
+    url = "https://download-mirror.savannah.gnu.org/releases/mini-httpd/mini-httpd-${finalAttrs.version}.tar.gz";
     sha256 = "0jggmlaywjfbdljzv5hyiz49plnxh0har2bnc9dq4xmj1pmjgs49";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.peti ];
   };
-}
+})

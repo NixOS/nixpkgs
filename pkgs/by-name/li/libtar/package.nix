@@ -6,14 +6,14 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.2.20";
   pname = "libtar";
 
   # Maintenance repo for libtar (Arch Linux uses this)
   src = fetchgit {
     url = "git://repo.or.cz/libtar.git";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "1pjsqnqjaqgkzf1j8m6y5h76bwprffsjjj6gk8rh2fjsha14rqn9";
   };
 
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux ++ darwin;
     maintainers = [ lib.maintainers.bjornfor ];
   };
-}
+})

@@ -11,14 +11,14 @@
   vlc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "faad2";
   version = "2.11.2";
 
   src = fetchFromGitHub {
     owner = "knik0";
     repo = "faad2";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-JvmblrmE3doUMUwObBN2b+Ej+CDBWNemBsyYSCXGwo8=";
   };
 
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     mainProgram = "faad";
     platforms = lib.platforms.all;
   };
-}
+})

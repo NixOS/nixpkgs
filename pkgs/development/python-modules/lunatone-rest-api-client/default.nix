@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "lunatone-rest-api-client";
-  version = "0.6.0";
+  version = "0.6.3";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "lunatone-public";
     repo = "lunatone-rest-api-client";
     tag = "v${version}";
-    hash = "sha256-kPvHyabiT+Vl+/yCGQxyD16HPoOKsL7ij3c0LO3qNe8=";
+    hash = "sha256-KP+i5TmvCkdyIiuGiP9H8GmRC2+/r7QCqmzD+/2+tU8=";
   };
 
   build-system = [ hatchling ];
@@ -27,7 +27,8 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     pydantic
-  ];
+  ]
+  ++ aiohttp.optional-dependencies.speedups;
 
   pythonImportsCheck = [ "lunatone_rest_api_client" ];
 

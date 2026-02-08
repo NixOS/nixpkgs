@@ -12,7 +12,7 @@
   ramalama,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ramalama";
   version = "0.15.0";
   pyproject = true;
@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "containers";
     repo = "ramalama";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-0R7y1PpAxXzSlhfOFHf3cWPzZ544fYVUL0w7jOFSuAU=";
   };
 
@@ -56,13 +56,10 @@ python3Packages.buildPythonApplication rec {
             llama-cpp-vulkan
             podman
           ]
-          ++ (
-            with python3Packages;
-            [
-              huggingface-hub
-            ]
-            ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform mlx-lm) mlx-lm
-          )
+          ++ (with python3Packages; [
+            huggingface-hub
+            mlx-lm
+          ])
         )
       }
   '';
@@ -100,4 +97,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ booxter ];
     mainProgram = "ramalama";
   };
-}
+})

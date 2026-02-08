@@ -4,16 +4,16 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "search-vulns";
-  version = "0.8.4";
+  version = "1.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ra1nb0rn";
     repo = "search_vulns";
-    tag = "v${version}";
-    hash = "sha256-lvFx+ozbw7cYAJvaEFkeFxG+CfvbvDO0VRuNJ/Ub+bA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xdZq4Er+0CT59Iv0mEcmkZcUM+xbBi/x+TtBNCiyhbY=";
     fetchSubmodules = true;
   };
 
@@ -26,9 +26,11 @@ python3.pkgs.buildPythonApplication rec {
     aiolimiter
     cpe-search
     cvss
+    pydantic
     requests
     tqdm
     ujson
+    univers
   ];
 
   optional-dependencies = with python3.pkgs; {
@@ -42,9 +44,11 @@ python3.pkgs.buildPythonApplication rec {
       gunicorn
       mariadb
       markdown
+      pydantic
       requests
       tqdm
       ujson
+      univers
     ];
     mariadb = [ mariadb ];
     web = [
@@ -63,9 +67,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Search for known vulnerabilities in software using software titles or a CPE 2.3 string";
     homepage = "https://github.com/ra1nb0rn/search_vulns";
-    changelog = "https://github.com/ra1nb0rn/search_vulns/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/ra1nb0rn/search_vulns/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "search_vulns";
   };
-}
+})

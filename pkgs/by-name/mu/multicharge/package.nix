@@ -23,14 +23,14 @@ assert (
   ]
 );
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "multicharge";
   version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "grimme-lab";
     repo = "multicharge";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-8qwM3dpvFoL2WrMWNf14zYtRap0ijdfZ95XaTlkHhqQ=";
   };
 
@@ -83,4 +83,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})

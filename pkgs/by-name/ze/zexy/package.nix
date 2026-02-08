@@ -5,7 +5,7 @@
   puredata,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zexy";
   version = "2.4.3";
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     domain = "git.iem.at";
     owner = "pd";
     repo = "zexy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-9f0uYBDBq5lcN/N0uJwC/HBEFcj9b8ZtBHnPAce2s/A=";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.magnetophon ];
     platforms = lib.platforms.linux;
   };
-}
+})

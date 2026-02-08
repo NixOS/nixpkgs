@@ -865,6 +865,21 @@ runTests {
     expected = "'á'";
   };
 
+  testEscapeNixIdentifierNoQuote = {
+    expr = strings.escapeNixIdentifier "foo";
+    expected = "foo";
+  };
+
+  testEscapeNixIdentifierNumber = {
+    expr = strings.escapeNixIdentifier "1foo";
+    expected = ''"1foo"'';
+  };
+
+  testEscapeNixIdentifierKeyword = {
+    expr = strings.escapeNixIdentifier "assert";
+    expected = ''"assert"'';
+  };
+
   testSplitStringsDerivation = {
     expr = lib.dropEnd 1 (strings.splitString "/" dummyDerivation);
     expected = strings.splitString "/" builtins.storeDir;
@@ -2619,7 +2634,7 @@ runTests {
       sections = {
       };
     };
-    expected = '''';
+    expected = "";
   };
 
   testToINIWithGlobalSectionGlobalEmptyIsTheSameAsToINI =
@@ -2785,6 +2800,7 @@ runTests {
         ];
         emptylist = [ ];
         attrs = {
+          "assert" = false;
           foo = null;
           "foo b/ar" = "baz";
         };
@@ -2804,7 +2820,7 @@ runTests {
         functionArgs = "<function, args: {arg?, foo}>";
         list = "[ 3 4 ${function} [ false ] ]";
         emptylist = "[ ]";
-        attrs = "{ foo = null; \"foo b/ar\" = \"baz\"; }";
+        attrs = "{ \"assert\" = false; foo = null; \"foo b/ar\" = \"baz\"; }";
         emptyattrs = "{ }";
         drv = "<derivation ${deriv.name}>";
       };
@@ -2986,12 +3002,12 @@ runTests {
 
   testToLuaEmptyAttrSet = {
     expr = generators.toLua { } { };
-    expected = ''{}'';
+    expected = "{}";
   };
 
   testToLuaEmptyList = {
     expr = generators.toLua { } [ ];
-    expected = ''{}'';
+    expected = "{}";
   };
 
   testToLuaListOfVariousTypes = {
@@ -3036,7 +3052,7 @@ runTests {
       41
       43
     ];
-    expected = ''{ 41, 43 }'';
+    expected = "{ 41, 43 }";
   };
 
   testToLuaEmptyBindings = {
@@ -4893,4 +4909,17 @@ runTests {
       targetTarget = "prefix-tt";
     };
   };
+
+  testReplaceElemAt = {
+    expr = lib.replaceElemAt [ 1 2 3 ] 1 "a";
+    expected = [
+      1
+      "a"
+      3
+    ];
+  };
+
+  testReplaceElemAtOutOfRange = testingThrow (lib.replaceElemAt [ 1 2 3 ] 5 "a");
+
+  testReplaceElemAtNegative = testingThrow (lib.replaceElemAt [ 1 2 3 ] (-1) "a");
 }

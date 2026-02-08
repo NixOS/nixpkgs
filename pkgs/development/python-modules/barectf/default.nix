@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "barectf";
   version = "3.1.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "efficios";

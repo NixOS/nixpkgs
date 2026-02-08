@@ -91,6 +91,8 @@ let
           "chromadb/test/db/test_migrations.py::test_migrations[sqlite]"
         ];
       });
+      lsprotocol = self.lsprotocol_2023;
+      pygls = self.pygls_1;
     };
   };
 in

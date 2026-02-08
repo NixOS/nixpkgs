@@ -22,14 +22,14 @@ buildPythonPackage rec {
   pname = "music-assistant-models";
   # Must be compatible with music-assistant-client package
   # nixpkgs-update: no auto update
-  version = "1.1.70";
+  version = "1.1.89";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "models";
     tag = version;
-    hash = "sha256-yJ0MaXbzhvbqdMA1M2l7QC+0ExAHuTU1N4XIkJOj6pg=";
+    hash = "sha256-/eNCgAB5G8g1r2fcW27lySEqg+q/1bJvwwyntigGWjo=";
   };
 
   postPatch = ''

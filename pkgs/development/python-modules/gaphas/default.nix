@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   poetry-core,
   gobject-introspection,
@@ -14,9 +13,7 @@
 buildPythonPackage rec {
   pname = "gaphas";
   version = "5.1.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

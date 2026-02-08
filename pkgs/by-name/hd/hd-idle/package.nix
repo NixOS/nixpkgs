@@ -5,15 +5,15 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "hd-idle";
-  version = "1.21";
+  version = "1.22";
 
   src = fetchFromGitHub {
     owner = "adelolmo";
     repo = "hd-idle";
-    rev = "v${version}";
-    sha256 = "sha256-WHJcysTN9LHI1WnDuFGTyTirxXirpLpJIeNDj4sZGY0=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-Q9EMRXzJTkPMMvehrIyiowytjKNfovtiSH4sAO6fzIo=";
   };
 
   vendorHash = null;
@@ -32,4 +32,4 @@ buildGoModule rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.rycee ];
   };
-}
+})

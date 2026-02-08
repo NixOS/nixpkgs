@@ -16,7 +16,6 @@
   pretend,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   rustPlatform,
 }:
 
@@ -24,8 +23,6 @@ buildPythonPackage rec {
   pname = "cryptography";
   version = "46.0.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pyca";

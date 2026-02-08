@@ -7,7 +7,7 @@
   unzip,
   fpc,
   lazarus,
-  libX11,
+  libx11,
   glib,
   gtk2,
   gdk-pixbuf,
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     fpc
     lazarus
     stdenv.cc
-    libX11
+    libx11
     glib
     gtk2
     gdk-pixbuf

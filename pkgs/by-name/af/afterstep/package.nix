@@ -4,10 +4,10 @@
   fetchFromGitHub,
   fetchpatch,
   dbus,
-  fltk13,
+  fltk_1_3,
   gtk2,
-  libICE,
-  libSM,
+  libice,
+  libsm,
   libtiff,
   pkg-config,
 }:
@@ -58,10 +58,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     dbus
-    fltk13
+    fltk_1_3
     gtk2
-    libICE
-    libSM
+    libice
+    libsm
     libtiff
   ];
 

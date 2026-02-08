@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "hydroxide";
-  version = "0.2.30";
+  version = "0.2.31";
 
   src = fetchFromGitHub {
     owner = "emersion";
     repo = "hydroxide";
-    rev = "v${version}";
-    sha256 = "sha256-PjT8kIS2k4e9Xuw6uCXiCtg5Rawvcmslzz9Qa4Wnroo=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-92eyt+s+kEXRuIXPRmbIQG5Mth7wJFCruqTN3wL5DhI=";
   };
 
-  vendorHash = "sha256-NKWUpyS5IHBTPzjfTkov/ypoGQW6inX32Y7lpdIDOUc=";
+  vendorHash = "sha256-CjvvVFjYRlykZwEqHtuD9qc/MsHZsJtKy2G6e2N7K0M=";
 
   doCheck = false;
 
@@ -27,4 +27,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     mainProgram = "hydroxide";
   };
-}
+})

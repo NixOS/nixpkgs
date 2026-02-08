@@ -16,16 +16,16 @@
   tenacity,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nibe";
-  version = "2.20.0";
+  version = "2.22.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yozik04";
     repo = "nibe";
-    tag = version;
-    hash = "sha256-FeYM4UClx0qfv8QuDUBN3hc2MLVkmnnUC6+0wnywAuA=";
+    tag = finalAttrs.version;
+    hash = "sha256-mbLasfHPPrZvL+PheMutqvIiyQQoew7dGIPGekuk0Oo=";
   };
 
   pythonRelaxDeps = [ "async-modbus" ];
@@ -53,15 +53,15 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "nibe" ];
 
   meta = {
     description = "Library for the communication with Nibe heatpumps";
     homepage = "https://github.com/yozik04/nibe";
-    changelog = "https://github.com/yozik04/nibe/releases/tag/${src.tag}";
+    changelog = "https://github.com/yozik04/nibe/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

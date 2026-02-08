@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "inori";
   version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "eshrh";
     repo = "inori";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-w+UsG4CHdug6TITJLjhHsQeAhHenzDFnZLICDT0Z1UM=";
   };
 
@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Client for the Music Player Daemon (MPD)";
     homepage = "https://github.com/eshrh/inori";
-    changelog = "https://github.com/eshrh/inori/releases/tag/${src.tag}";
+    changelog = "https://github.com/eshrh/inori/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix ++ lib.platforms.windows;
     mainProgram = "inori";
@@ -32,4 +32,4 @@ rustPlatform.buildRustPackage rec {
       esrh
     ];
   };
-}
+})

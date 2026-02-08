@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
     libpcap
   ];
 
-  LD_LIBRARY_PATH = lib.makeLibraryPath [
+  env.LD_LIBRARY_PATH = lib.makeLibraryPath [
     libpcap
     alsa-lib
   ];

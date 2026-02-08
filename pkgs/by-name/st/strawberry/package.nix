@@ -10,12 +10,12 @@
   gst_all_1,
   kdsingleapplication,
   lib,
-  libXdmcp,
+  libxdmcp,
   libcdio,
   libebur128,
   libidn2,
   libmtp,
-  libpthreadstubs,
+  libpthread-stubs,
   libpulseaudio,
   libselinux,
   libsepol,
@@ -38,13 +38,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "strawberry";
-  version = "1.2.16";
+  version = "1.2.18";
 
   src = fetchFromGitHub {
     owner = "jonaski";
     repo = "strawberry";
     rev = finalAttrs.finalPackage.version;
-    hash = "sha256-4V/geww/M0FD3McBuz8MgkwdXA7j+d71SJn5Q4AZrvU=";
+    hash = "sha256-5h1psYJDKnFFgIGZY3ecCttgkR+zuUwa3b/A4keLk9o=";
   };
 
   # the big strawberry shown in the context menu is *very* much in your face, so use the grey version instead
@@ -60,12 +60,12 @@ stdenv.mkDerivation (finalAttrs: {
     fftw
     gnutls
     kdsingleapplication
-    libXdmcp
+    libxdmcp
     libcdio
     libebur128
     libidn2
     libmtp
-    libpthreadstubs
+    libpthread-stubs
     libtasn1
     qt6.qtbase
     sqlite

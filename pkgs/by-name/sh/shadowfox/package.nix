@@ -5,14 +5,14 @@
   fetchpatch,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "shadowfox";
   version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "SrKomodo";
     repo = "shadowfox-updater";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "125mw70jidbp436arhv77201jdp6mpgqa2dzmrpmk55f9bf29sg6";
   };
 
@@ -32,7 +32,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.tag=v${version}"
+    "-X main.tag=v${finalAttrs.version}"
   ];
 
   meta = {
@@ -42,4 +42,4 @@ buildGoModule rec {
     maintainers = [ ];
     mainProgram = "shadowfox-updater";
   };
-}
+})

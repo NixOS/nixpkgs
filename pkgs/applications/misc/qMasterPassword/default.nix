@@ -2,8 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
-  libXtst,
+  libx11,
+  libxtst,
   cmake,
   qtbase,
   qttools,
@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
     libscrypt
   ]
   ++ lib.optionals x11Support [
-    libX11
-    libXtst
+    libx11
+    libxtst
   ];
   nativeBuildInputs = [
     cmake

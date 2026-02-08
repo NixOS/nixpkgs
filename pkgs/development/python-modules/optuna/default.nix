@@ -84,10 +84,15 @@ buildPythonPackage rec {
     ];
   };
 
-  # grpc tests are racy
-  preCheck = ''
-    sed -i '/"grpc",/d' optuna/testing/storages.py
-  '';
+  preCheck =
+    # grpc tests are racy
+    ''
+      sed -i '/"grpc",/d' optuna/testing/storages.py
+    ''
+    # Prevents 'Fatal Python error: Aborted' on darwin during checkPhase
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      export MPLBACKEND="Agg"
+    '';
 
   nativeCheckInputs = [
     addBinToPathHook
@@ -117,24 +122,6 @@ buildPythonPackage rec {
     "test_plot_intermediate_values"
     "test_plot_rank"
     "test_plot_terminator_improvement"
-
-    # Fatal Python error: Aborted
-    # matplotlib/backend_bases.py", line 2654 in create_with_canvas
-    "test_edf_plot_no_trials"
-    "test_get_timeline_plot"
-    "test_plot_contour"
-    "test_plot_contour_customized_target_name"
-    "test_plot_edf_with_multiple_studies"
-    "test_plot_edf_with_target"
-    "test_plot_parallel_coordinate"
-    "test_plot_parallel_coordinate_customized_target_name"
-    "test_plot_param_importances"
-    "test_plot_param_importances_customized_target_name"
-    "test_plot_param_importances_multiobjective_all_objectives_displayed"
-    "test_plot_slice"
-    "test_plot_slice_customized_target_name"
-    "test_target_is_none_and_study_is_multi_obj"
-    "test_visualizations_with_single_objectives"
   ];
 
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [

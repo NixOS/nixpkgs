@@ -21,17 +21,21 @@
   libgbm,
   openssl,
   systemd,
-  xcb-util-cursor,
-  xorg,
+  libxcb-cursor,
+  libxcb-wm,
+  libxcb-render-util,
+  libxcb-keysyms,
+  libxcb-image,
+  libx11,
 }:
 
 stdenv.mkDerivation rec {
   pname = "alfaview";
-  version = "9.23.2";
+  version = "9.24.1";
 
   src = fetchurl {
     url = "https://assets.alfaview.com/stable/linux/deb/${pname}_${version}.deb";
-    hash = "sha256-0EGjm/EYozGXDM/IvmopN04kzJfPM+6wjMpJesyW55U=";
+    hash = "sha256-vRo5ZD3yYTWhR6fbc/HFtBBbYuq3cGbxPuDlSt5D8XM=";
   };
 
   nativeBuildInputs = [
@@ -60,12 +64,12 @@ stdenv.mkDerivation rec {
     openssl
     stdenv.cc.cc
     systemd
-    xcb-util-cursor
-    xorg.libX11
-    xorg.xcbutilwm
-    xorg.xcbutilimage
-    xorg.xcbutilkeysyms
-    xorg.xcbutilrenderutil
+    libxcb-cursor
+    libx11
+    libxcb-wm
+    libxcb-image
+    libxcb-keysyms
+    libxcb-render-util
   ];
 
   libPath = lib.makeLibraryPath buildInputs;

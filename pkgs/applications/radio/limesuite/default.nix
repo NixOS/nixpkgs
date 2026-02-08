@@ -9,7 +9,7 @@
   libusb1,
   soapysdr,
   mesa_glu,
-  libX11,
+  libx11,
   gnuplot,
   fltk,
   withGui ? false,
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals withGui [
     fltk
-    libX11
+    libx11
     mesa_glu
     wxGTK32
   ];

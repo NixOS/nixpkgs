@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "2.26.1";
 
   src = fetchurl {
-    url = "https://www.worldpainter.net/files/${pname}_${version}.tar.gz";
+    url = "https://www.worldpainter.net/files/worldpainter_${version}.tar.gz";
     hash = "sha256-YlFiGim9IeurDZ4H1XzxRDn7GM/U/zL9SqTUT4gJdno=";
   };
 

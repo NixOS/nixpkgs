@@ -4,7 +4,6 @@
   fetchFromGitHub,
   httpx,
   poetry-core,
-  pythonOlder,
   pytest-asyncio,
   pytest-httpx,
   pytestCheckHook,
@@ -14,8 +13,7 @@
 buildPythonPackage rec {
   pname = "elmax";
   version = "0.1.5";
-  format = "pyproject";
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";

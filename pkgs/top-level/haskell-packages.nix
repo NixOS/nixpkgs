@@ -60,6 +60,15 @@ let
   buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_20;
   llvmPackages = pkgs.llvmPackages_20;
 
+  # Note the Nixpkgs default version is chosen in all-packages.nix.
+  chooseDefaultVersions = sets: {
+    ghc94 = sets.ghc948;
+    ghc96 = sets.ghc967;
+    ghc98 = sets.ghc984;
+    ghc910 = sets.ghc9103;
+    ghc912 = sets.ghc9122;
+    ghc914 = sets.ghc9141;
+  };
 in
 {
   lib = haskellLibUncomposable;
@@ -100,7 +109,6 @@ in
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
         inherit buildTargetLlvmPackages llvmPackages;
       };
-      ghc94 = compiler.ghc948;
       ghc967 = callPackage ../development/compilers/ghc/9.6.7.nix {
         bootPkgs =
           if
@@ -116,7 +124,6 @@ in
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
         inherit buildTargetLlvmPackages llvmPackages;
       };
-      ghc96 = compiler.ghc967;
       ghc984 = callPackage ../development/compilers/ghc/9.8.4.nix {
         bootPkgs =
           if
@@ -134,7 +141,6 @@ in
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
         inherit buildTargetLlvmPackages llvmPackages;
       };
-      ghc98 = compiler.ghc984;
       ghc9102 = callPackage ../development/compilers/ghc/9.10.2.nix {
         bootPkgs =
           if
@@ -169,7 +175,6 @@ in
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
         inherit buildTargetLlvmPackages llvmPackages;
       };
-      ghc910 = compiler.ghc9103;
       ghc9122 = callPackage ../development/compilers/ghc/9.12.2.nix {
         bootPkgs =
           # No suitable bindist packaged yet
@@ -186,7 +191,6 @@ in
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
         inherit buildTargetLlvmPackages llvmPackages;
       };
-      ghc912 = compiler.ghc9122;
       ghc9141 = callPackage ../development/compilers/ghc/9.14.1.nix {
         bootPkgs =
           # No suitable bindist packaged yet
@@ -195,7 +199,6 @@ in
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
         inherit buildTargetLlvmPackages llvmPackages;
       };
-      ghc914 = compiler.ghc9141;
       ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
         bootPkgs =
           # No suitable bindist packaged yet
@@ -219,6 +222,7 @@ in
           )
         );
     }
+    // chooseDefaultVersions compiler
     // pkgs.lib.optionalAttrs config.allowAliases {
       ghc810 = throw "'haskell.compiler.ghc810' has been removed."; # Added 2025-09-07
       ghc90 = throw "'haskell.compiler.ghc90' has been removed."; # Added 2025-09-07
@@ -261,19 +265,16 @@ in
         ghc = bh.compiler.ghc948;
         compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.4.x.nix { };
       };
-      ghc94 = packages.ghc948;
       ghc967 = callPackage ../development/haskell-modules {
         buildHaskellPackages = bh.packages.ghc967;
         ghc = bh.compiler.ghc967;
         compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.6.x.nix { };
       };
-      ghc96 = packages.ghc967;
       ghc984 = callPackage ../development/haskell-modules {
         buildHaskellPackages = bh.packages.ghc984;
         ghc = bh.compiler.ghc984;
         compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.8.x.nix { };
       };
-      ghc98 = packages.ghc984;
       ghc9102 = callPackage ../development/haskell-modules {
         buildHaskellPackages = bh.packages.ghc9102;
         ghc = bh.compiler.ghc9102;
@@ -284,7 +285,6 @@ in
         ghc = bh.compiler.ghc9103;
         compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.10.x.nix { };
       };
-      ghc910 = packages.ghc9103;
       ghc9122 = callPackage ../development/haskell-modules {
         buildHaskellPackages = bh.packages.ghc9122;
         ghc = bh.compiler.ghc9122;
@@ -295,13 +295,11 @@ in
         ghc = bh.compiler.ghc9123;
         compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.12.x.nix { };
       };
-      ghc912 = packages.ghc9122;
       ghc9141 = callPackage ../development/haskell-modules {
         buildHaskellPackages = bh.packages.ghc9141;
         ghc = bh.compiler.ghc9141;
         compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.14.x.nix { };
       };
-      ghc914 = packages.ghc9141;
       ghcHEAD = callPackage ../development/haskell-modules {
         buildHaskellPackages = bh.packages.ghcHEAD;
         ghc = bh.compiler.ghcHEAD;
@@ -322,6 +320,7 @@ in
           }
         );
     }
+    // chooseDefaultVersions packages
     // pkgs.lib.optionalAttrs config.allowAliases {
       ghc810 = throw "'haskell.packages.ghc810' has been removed."; # Added 2025-09-07
       ghc90 = throw "'haskell.packages.ghc90' has been removed."; # Added 2025-09-07

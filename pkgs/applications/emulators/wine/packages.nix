@@ -7,14 +7,27 @@
   callPackage,
   replaceVars,
   moltenvk,
-  wineRelease ? "stable",
+  src,
+  pnameSuffix ? "",
+  useStaging ? false,
   supportFlags,
+  # Staging native build deps
+  autoconf,
+  hexdump,
+  perl,
+  python3,
+  gitMinimal,
 }:
 
 let
-  src = lib.getAttr wineRelease (callPackage ./sources.nix { });
+  inherit (src)
+    version
+    patches
+    gecko32
+    gecko64
+    mono
+    ;
 in
-with src;
 {
   wine32 = pkgsi686Linux.callPackage ./base.nix {
     pname = "wine";
@@ -24,7 +37,16 @@ with src;
       supportFlags
       patches
       moltenvk
-      wineRelease
+      pnameSuffix
+      useStaging
+      # Forcing these `nativeBuildInputs` used in the `staging` to come
+      # from ambient `pkgs`, rather than being provided by
+      # `pkgsi686Linux.callPackage` for that platform.
+      autoconf
+      hexdump
+      perl
+      python3
+      gitMinimal
       ;
     pkgArches = [ pkgsi686Linux ];
     geckos = [ gecko32 ];
@@ -43,7 +65,8 @@ with src;
       supportFlags
       patches
       moltenvk
-      wineRelease
+      pnameSuffix
+      useStaging
       ;
     pkgArches = [ pkgs ];
     mingwGccs = with pkgsCross; [ mingwW64.buildPackages.gcc ];
@@ -64,7 +87,8 @@ with src;
       supportFlags
       patches
       moltenvk
-      wineRelease
+      pnameSuffix
+      useStaging
       ;
     stdenv = stdenv_32bit;
     pkgArches = [
@@ -97,7 +121,8 @@ with src;
       version
       patches
       moltenvk
-      wineRelease
+      pnameSuffix
+      useStaging
       ;
     supportFlags = supportFlags // {
       mingwSupport = true;

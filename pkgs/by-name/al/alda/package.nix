@@ -20,7 +20,7 @@ let
   license = lib.licenses.epl20;
 
   alda_client = buildGoModule {
-    pname = "${pname}-client";
+    pname = "alda-client";
     inherit version src;
 
     sourceRoot = "${src.name}/client";
@@ -51,7 +51,7 @@ let
     };
   };
   alda_player = stdenv.mkDerivation {
-    pname = "${pname}-player";
+    pname = "alda-player";
     inherit version src;
 
     sourceRoot = "${src.name}/player";

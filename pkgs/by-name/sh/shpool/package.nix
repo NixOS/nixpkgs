@@ -7,14 +7,14 @@
   shpool,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "shpool";
   version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "shell-pool";
     repo = "shpool";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Ul1CENx1KVU2jnMNfxz3R6loBvFIcAUp6japxaK7wGU=";
   };
 
@@ -53,4 +53,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.platforms.linux;
   };
-}
+})

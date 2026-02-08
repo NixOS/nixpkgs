@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   repeated-test,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "od";
   version = "2.0.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;

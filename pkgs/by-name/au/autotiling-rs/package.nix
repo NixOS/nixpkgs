@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "autotiling-rs";
   version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "ammgws";
     repo = "autotiling-rs";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-21XIKZ2rzuQMpkaOhGu1pg4J3OGOzHNQ20Rcw1V4BfI=";
   };
 
@@ -25,4 +25,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ dit7ya ];
     mainProgram = "autotiling-rs";
   };
-}
+})

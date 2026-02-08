@@ -8,14 +8,14 @@
   fioctl,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "fioctl";
   version = "0.43";
 
   src = fetchFromGitHub {
     owner = "foundriesio";
     repo = "fioctl";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-hZ8jkIbNY2z4M7sHCYq6vVacetThcoYPJjkr8PFQmQA=";
   };
 
@@ -24,7 +24,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/foundriesio/fioctl/subcommands/version.Commit=${src.rev}"
+    "-X github.com/foundriesio/fioctl/subcommands/version.Commit=${finalAttrs.src.rev}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -39,7 +39,7 @@ buildGoModule rec {
   passthru.tests.version = testers.testVersion {
     package = fioctl;
     command = "HOME=$(mktemp -d) fioctl version";
-    version = "v${version}";
+    version = "v${finalAttrs.version}";
   };
 
   meta = {
@@ -52,4 +52,4 @@ buildGoModule rec {
     ];
     mainProgram = "fioctl";
   };
-}
+})

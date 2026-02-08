@@ -4,20 +4,20 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kail";
   version = "0.17.4";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   src = fetchFromGitHub {
     owner = "boz";
     repo = "kail";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-G8U7UEYhgkcFbKeHOjbpf9AY6NW0hBgv6aARuzapE3M=";
   };
 
@@ -33,4 +33,4 @@ buildGoModule rec {
     ];
     mainProgram = "kail";
   };
-}
+})

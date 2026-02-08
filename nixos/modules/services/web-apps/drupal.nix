@@ -51,10 +51,10 @@ let
       '';
 
       postInstall = ''
-        ln -s ${cfg.filesDir} $out/share/php/drupal/sites/default/files
-        ln -s ${cfg.stateDir}/sites/default/settings.php $out/share/php/drupal/sites/default/settings.php
-        ln -s ${cfg.modulesDir} $out/share/php/drupal/modules
-        ln -s ${cfg.themesDir} $out/share/php/drupal/themes
+        ln -s ${cfg.filesDir} $out/share/php/${cfg.package.pname}/sites/default/files
+        ln -s ${cfg.stateDir}/sites/default/settings.php $out/share/php/${cfg.package.pname}/sites/default/settings.php
+        ln -s ${cfg.modulesDir} $out/share/php/${cfg.package.pname}/modules
+        ln -s ${cfg.themesDir} $out/share/php/${cfg.package.pname}/themes
       '';
     });
 
@@ -387,7 +387,7 @@ in
 
                 if [ ! -d "${cfg.stateDir}/sites" ]; then
                   echo "Preparing sites directory..."
-                  cp -r "${cfg.package}/share/php/drupal/sites" "${cfg.stateDir}"
+                  cp -r "${cfg.package}/share/php/${cfg.package.pname}/sites" "${cfg.stateDir}"
                 fi
 
                 if [ ! -d "${cfg.filesDir}" ]; then
@@ -397,7 +397,7 @@ in
                 fi
 
                 settings_file="${cfg.stateDir}/sites/default/settings.php"
-                default_settings="${cfg.package}/share/php/drupal/sites/default/default.settings.php"
+                default_settings="${cfg.package}/share/php/${cfg.package.pname}/sites/default/default.settings.php"
 
                 if [ ! -f "$settings_file" ]; then
                   echo "Preparing settings.php for ${hostName}..."
@@ -434,7 +434,7 @@ in
         enable = true;
         virtualHosts = mapAttrs (hostName: cfg: {
           serverName = mkDefault hostName;
-          root = "${pkg hostName cfg}/share/php/drupal";
+          root = "${pkg hostName cfg}/share/php/${cfg.package.pname}";
           extraConfig = ''
             index index.php;
           '';
@@ -535,7 +535,7 @@ in
           hostName: cfg:
           (nameValuePair hostName {
             extraConfig = ''
-              root * ${pkg hostName cfg}/share/php/drupal
+              root * ${pkg hostName cfg}/share/php/${cfg.package.pname}
               file_server
 
               encode zstd gzip

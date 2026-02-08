@@ -25,7 +25,7 @@ def get_package(pubspec_path: Path, dev_dependencies: bool = False):
 
 
 def main() -> None:
-    package_config_file_path = Path(os.environ["packageConfig"])  # noqa: SIM112
+    package_config_file_path = Path(".dart_tool/package_config.json")
     with package_config_file_path.open("r", encoding="utf-8") as f:
         package_config = json.load(f)
     package_graph = []

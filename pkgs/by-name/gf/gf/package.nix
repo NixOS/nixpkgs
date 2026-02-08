@@ -3,7 +3,7 @@
   stdenv,
   makeWrapper,
   fetchFromGitHub,
-  libX11,
+  libx11,
   pkg-config,
   gdb,
   freetype,
@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation {
   pname = "gf";
-  version = "0-unstable-2025-12-25";
+  version = "0-unstable-2025-12-31";
 
   src = fetchFromGitHub {
     repo = "gf";
     owner = "nakst";
-    rev = "a8c0fb67756c043d63832c008e3ad12132b121cb";
-    hash = "sha256-OJE51lVkHWAgo7u/SX46s3pzQBeMW3zViiXJnB86bpo=";
+    rev = "9a5dbcc90dc9ca9580f6ce2854cd67e2e507b0c1";
+    hash = "sha256-+1ERc7mQCwaov+NdL1cdIZeDtHr4wkuLHaSdR8w5u40=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
     pkg-config
   ];
   buildInputs = [
-    libX11
+    libx11
     gdb
   ]
   ++ lib.optional freetypeSupport freetype;

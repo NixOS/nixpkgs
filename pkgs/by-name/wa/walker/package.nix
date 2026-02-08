@@ -1,52 +1,71 @@
 {
   lib,
-  buildGoModule,
   fetchFromGitHub,
   pkg-config,
-  vips,
+  protobuf,
+  glib,
   gobject-introspection,
-  wrapGAppsHook4,
+  gst_all_1,
   gtk4,
   gtk4-layer-shell,
+  gdk-pixbuf,
+  graphene,
+  cairo,
+  pango,
+  wrapGAppsHook4,
+  poppler,
   nix-update-script,
-  libqalculate,
+  rustPlatform,
 }:
 
-buildGoModule rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "walker";
-  version = "0.13.26";
+  version = "2.14.1";
 
   src = fetchFromGitHub {
     owner = "abenz1267";
     repo = "walker";
-    rev = "v${version}";
-    hash = "sha256-LslpfHXj31Lvq+26ZDzCTaGBbxmp7yXlgKT+uwUEEts=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-ccwJ1ADGNFd5LDF2JWdfP7+f1Hs2EvJ+2o6sUOdYi7w=";
   };
 
-  vendorHash = "sha256-N7lNxO/l3E1BlSSbSiQjrDPy2sWwk4G4JYlUArmMJxs=";
-  subPackages = [ "cmd/walker.go" ];
-
-  passthru.updateScript = nix-update-script { };
+  cargoHash = "sha256-2amur4gkjtYV+CyArBCbMVy9p+2MLl2afQ/diR/4GDo=";
 
   nativeBuildInputs = [
-    pkg-config
     gobject-introspection
+    pkg-config
+    protobuf
     wrapGAppsHook4
   ];
 
   buildInputs = [
+    glib
     gtk4
-    vips
     gtk4-layer-shell
-    libqalculate
-  ];
+    gdk-pixbuf
+    graphene
+    cairo
+    pango
+    poppler
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-libav
+  ]);
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Wayland-native application runner";
     homepage = "https://github.com/abenz1267/walker";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ donovanglover ];
+    maintainers = with lib.maintainers; [
+      donovanglover
+      saadndm
+    ];
     mainProgram = "walker";
   };
-}
+})

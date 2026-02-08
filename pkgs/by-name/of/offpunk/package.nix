@@ -12,17 +12,15 @@
   xsel,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "offpunk";
   version = "2.8";
   pyproject = true;
 
-  disabled = python3Packages.pythonOlder "3.7";
-
   src = fetchFromSourcehut {
     owner = "~lioploum";
     repo = "offpunk";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-s/pEN7n/g9o8a/hYTC39PgbBLyCUwN5LIggqUSMKRS4=";
   };
 
@@ -55,9 +53,9 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     description = "Command-line and offline-first smolnet browser/feed reader";
-    homepage = src.meta.homepage;
+    homepage = finalAttrs.src.meta.homepage;
     license = lib.licenses.agpl3Plus;
     mainProgram = "offpunk";
     maintainers = with lib.maintainers; [ DamienCassou ];
   };
-}
+})

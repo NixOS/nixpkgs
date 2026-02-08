@@ -7,14 +7,14 @@
   oniguruma,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "namaka";
   version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "namaka";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-1ka+5B90UAt7D5kkT9dOExGLJjtLM8dqLeBdFRoeuWg=";
   };
 
@@ -43,8 +43,8 @@ rustPlatform.buildRustPackage rec {
     description = "Snapshot testing tool for Nix based on haumea";
     mainProgram = "namaka";
     homepage = "https://github.com/nix-community/namaka";
-    changelog = "https://github.com/nix-community/namaka/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/nix-community/namaka/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mpl20;
     maintainers = [ ];
   };
-}
+})

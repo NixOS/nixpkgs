@@ -1,12 +1,13 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchFromGitLab,
   qmake,
+  wrapQtAppsHook,
   qtbase,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "nemo-qml-plugin-dbus";
   version = "2.1.24";
 
@@ -18,7 +19,10 @@ mkDerivation rec {
     sha256 = "1ilg929456d3k0xkvxa5r4k7i4kkw9i8kgah5xx1yq0d9wka0l77";
   };
 
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = [
+    qmake
+    wrapQtAppsHook
+  ];
 
   postPatch = ''
     substituteInPlace dbus.pro --replace ' tests' ""

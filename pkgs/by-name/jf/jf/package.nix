@@ -5,14 +5,14 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jf";
   version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "sayanarijit";
     repo = "jf";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-A29OvGdG6PyeKMf5RarEOrfnNSmXhXri0AlECHWep6M=";
   };
 
@@ -34,4 +34,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.sayanarijit ];
   };
-}
+})

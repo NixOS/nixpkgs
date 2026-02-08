@@ -5,7 +5,7 @@
   makeBinaryWrapper,
   replaceVars,
   age,
-  getopt,
+  unixtools,
   coreutils,
   findutils,
   gnugrep,
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     (replaceVars ./darwin-getopt-path.patch {
-      inherit getopt;
+      getopt = unixtools.getopt;
     })
     ./set-correct-program-name-for-sleep.patch
   ];
@@ -44,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
       age
       coreutils
       findutils
+      unixtools.getopt
       git
       gnugrep
       gnused

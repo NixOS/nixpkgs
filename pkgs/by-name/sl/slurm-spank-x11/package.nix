@@ -4,14 +4,14 @@
   fetchFromGitHub,
   slurm,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "slurm-spank-x11";
   version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "hautreux";
     repo = "slurm-spank-x11";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1dmsr7whxcxwnlvl1x4s3bqr5cr6q5ssb28vqi67w5hj4sshisry";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ markuskowa ];
   };
-}
+})

@@ -145,7 +145,7 @@ llvmPackages_19.stdenv.mkDerivation (finalAttrs: {
   # application level if desired.
   postFixup = ''
     wrapProgram $out/bin/MarioKart64Recompiled --chdir "$out/bin/" \
-        ${lib.optionalString forceX11 ''--set SDL_VIDEODRIVER x11''}
+        ${lib.optionalString forceX11 "--set SDL_VIDEODRIVER x11"}
   '';
 
   meta = {

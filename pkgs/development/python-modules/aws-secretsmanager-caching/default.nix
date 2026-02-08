@@ -6,7 +6,6 @@
   pytest-cov-stub,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "aws-secretsmanager-caching";
   version = "1.1.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "aws_secretsmanager_caching";

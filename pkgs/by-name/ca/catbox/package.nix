@@ -4,14 +4,14 @@
   fetchFromGitHub,
   nix-update-script,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "catbox";
   version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "konimarti";
     repo = "catbox";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-mLjrHDc8Sn/cHYc8VbrC0YMVVCKyhiYHVzE5kvMergc=";
   };
 
@@ -26,4 +26,4 @@ buildGoModule rec {
     mainProgram = "catbox";
     maintainers = with lib.maintainers; [ antonmosich ];
   };
-}
+})

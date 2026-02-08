@@ -113,7 +113,7 @@ python3.pkgs.buildPythonApplication rec {
 
   postFixup = ''
     # Wrap the project so it can find runtime dependencies.
-    wrapPythonProgramsIn "$out/share/inkscape/extensions/textext" "$out $pythonPath"
+    wrapPythonProgramsIn "$out/share/inkscape/extensions/textext" "$out ''${pythonPath[*]}"
     cp ${launchScript} $out/share/inkscape/extensions/textext/launch.sh
   '';
 

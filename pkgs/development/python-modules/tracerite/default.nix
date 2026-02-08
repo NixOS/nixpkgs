@@ -6,15 +6,12 @@
   html5tagger,
   setuptools,
   python,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "tracerite";
   version = "1.1.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sanic-org";

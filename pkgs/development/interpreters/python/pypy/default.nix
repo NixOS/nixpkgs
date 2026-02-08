@@ -18,7 +18,7 @@
   tcl,
   tk,
   tclPackages,
-  libX11,
+  libx11,
   gdbm,
   db,
   xz,
@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
     sqlite
     tk
     tcl
-    libX11
+    libx11
     gdbm
     db
   ]

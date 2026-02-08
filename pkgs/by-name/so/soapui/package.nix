@@ -7,12 +7,12 @@
   makeWrapper,
   nixosTests,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "soapui";
   version = "5.9.1";
 
   src = fetchurl {
-    url = "https://dl.eviware.com/soapuios/${version}/SoapUI-${version}-linux-bin.tar.gz";
+    url = "https://dl.eviware.com/soapuios/${finalAttrs.version}/SoapUI-${finalAttrs.version}-linux-bin.tar.gz";
     sha256 = "sha256-VlI6TcesavKOpKf/R8S6IubepkthArFf8Jmi7YUGHjs=";
   };
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     # Adjust java path to point to derivation paths
-    (writeText "soapui-${version}.patch" ''
+    (writeText "soapui-${finalAttrs.version}.patch" ''
       --- a/bin/soapui.sh
       +++ b/bin/soapui.sh
       @@ -50,7 +50,7 @@
@@ -64,4 +64,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux; # we don't fetch the dmg yet
     mainProgram = "soapui";
   };
-}
+})

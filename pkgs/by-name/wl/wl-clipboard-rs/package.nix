@@ -8,14 +8,14 @@
   withNativeLibs ? false,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wl-clipboard-rs";
   version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "YaLTeR";
     repo = "wl-clipboard-rs";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-eUD3XmEiBVMf+bImG6Ah48/96AxFhqTiLjK1gPJFdpw=";
   };
 
@@ -74,7 +74,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Command-line copy/paste utilities for Wayland, written in Rust";
     homepage = "https://github.com/YaLTeR/wl-clipboard-rs";
-    changelog = "https://github.com/YaLTeR/wl-clipboard-rs/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/YaLTeR/wl-clipboard-rs/blob/v${finalAttrs.version}/CHANGELOG.md";
     platforms = lib.platforms.linux;
     license = with lib.licenses; [
       asl20
@@ -86,4 +86,4 @@ rustPlatform.buildRustPackage rec {
       donovanglover
     ];
   };
-}
+})

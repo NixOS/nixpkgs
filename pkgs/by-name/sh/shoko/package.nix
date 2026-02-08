@@ -9,15 +9,16 @@
   rhash,
   nix-update-script,
 }:
+
 buildDotnetModule (finalAttrs: {
   pname = "shoko";
-  version = "5.1.0";
+  version = "5.3.0";
 
   src = fetchFromGitHub {
     owner = "ShokoAnime";
     repo = "ShokoServer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZO5S0zMwzr4giaO1bmQ4dLBIPrv6eZY7k9Os4GiO4C4=";
+    hash = "sha256-qEy+BmvPeog+AIPNlIjD7UMdaN3YxPRt/ZLkTumsfSc=";
     fetchSubmodules = true;
   };
 
@@ -38,8 +39,14 @@ buildDotnetModule (finalAttrs: {
   runtimeDeps = [ rhash ];
 
   passthru = {
-    updateScript = nix-update-script { };
-    tests.shoko = nixosTests.shoko;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        ''v([0-9]+\.[0-9]+\.[0-9]+).*''
+      ];
+    };
+
+    tests = { inherit (nixosTests) shoko; };
   };
 
   meta = {

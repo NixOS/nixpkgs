@@ -5,7 +5,6 @@
   lazy,
   packaging-legacy,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools-changelog-shortener,
   setuptools,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "devpi-common";
   version = "4.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "devpi-common";

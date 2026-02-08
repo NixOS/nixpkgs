@@ -19,7 +19,7 @@ The following arguments can be used to fine-tune performance:
 - `--max-jobs`: The maximum number of derivations to run at the same time.
   Only each [supported system](../supportedSystems.json) gets a separate derivation, so it doesn't make sense to set this higher than that number.
 - `--cores`: The number of cores to use for each job.
-  Recommended to set this to the amount of cores on your system divided by `--max-jobs`.
+  Recommended to set this to the number of cores on your system divided by `--max-jobs`.
 - `--arg chunkSize`: The number of attributes that are evaluated simultaneously on a single core.
   Lowering this decreases memory usage at the cost of increased evaluation time.
   If this is too high, there won't be enough chunks to process them in parallel, and will also increase evaluation time.

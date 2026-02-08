@@ -16,7 +16,7 @@
 # Although we copy in the udev rules here, you probably just want to use
 # `logitech-udev-rules`, which is an alias to `udev` output of this derivation,
 # instead of adding this to `services.udev.packages` on NixOS,
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "solaar";
   version = "1.1.16";
   format = "setuptools";
@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "pwr-Solaar";
     repo = "Solaar";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-PhZoDRsckJXk2t2qR8O3ZGGeMUhmliqSpibfQDO7BeA=";
   };
 
@@ -111,4 +111,4 @@ python3Packages.buildPythonApplication rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

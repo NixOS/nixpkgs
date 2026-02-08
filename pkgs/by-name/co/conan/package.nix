@@ -10,7 +10,7 @@
   zlib,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "conan";
   version = "2.22.2";
   pyproject = true;
@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "conan-io";
     repo = "conan";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-4OKrAfhHgtAS606P88JFYCjgYYlSAH8RReqFs6N2V5s=";
   };
 
@@ -124,9 +124,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Decentralized and portable C/C++ package manager";
     homepage = "https://conan.io";
-    changelog = "https://github.com/conan-io/conan/releases/tag/${src.tag}";
+    changelog = "https://github.com/conan-io/conan/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ HaoZeke ];
     mainProgram = "conan";
   };
-}
+})

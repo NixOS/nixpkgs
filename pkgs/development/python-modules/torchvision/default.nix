@@ -30,11 +30,9 @@ let
   pname = "torchvision";
   version = "0.24.1";
 in
-buildPythonPackage {
+buildPythonPackage.override { stdenv = torch.stdenv; } {
   format = "setuptools";
   inherit pname version;
-
-  stdenv = torch.stdenv;
 
   src = fetchFromGitHub {
     owner = "pytorch";

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
-  name = "kubetrim";
+buildGoModule (finalAttrs: {
+  pname = "kubetrim";
   version = "0.0.1";
 
   src = fetchFromGitHub {
     owner = "alexellis";
     repo = "kubetrim";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-fX8CbId2ArJlnGkevCSB7eE6Ovs8vJR9+l//k4DgvK4=";
   };
 
@@ -20,15 +20,15 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/alexellis/kubetrim/pkg.Version=${version}"
+    "-X github.com/alexellis/kubetrim/pkg.Version=${finalAttrs.version}"
   ];
 
   meta = {
     description = "Trim your KUBECONFIG automatically";
     homepage = "https://github.com/alexellis/kubetrim";
-    changelog = "https://github.com/alexellis/kubetrim/releases/tag/${version}";
+    changelog = "https://github.com/alexellis/kubetrim/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bbigras ];
     mainProgram = "kubetrim";
   };
-}
+})

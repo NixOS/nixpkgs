@@ -6,18 +6,23 @@
   makeWrapper,
   cmake,
   pkg-config,
-  xorg ? null,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxext,
+  libxcursor,
+  libx11,
   libGL ? null,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rx";
   version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "cloudhead";
     repo = "rx";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-LTpaV/fgYUgA2M6Wz5qLHnTNywh13900g+umhgLvciM=";
   };
 
@@ -29,18 +34,15 @@ rustPlatform.buildRustPackage rec {
     makeWrapper
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux (
-    with xorg;
-    [
-      # glfw-sys dependencies:
-      libX11
-      libXrandr
-      libXinerama
-      libXcursor
-      libXi
-      libXext
-    ]
-  );
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    # glfw-sys dependencies:
+    libx11
+    libxrandr
+    libxinerama
+    libxcursor
+    libxi
+    libxext
+  ];
 
   # FIXME: GLFW (X11) requires DISPLAY env variable for all tests
   doCheck = false;
@@ -61,4 +63,4 @@ rustPlatform.buildRustPackage rec {
     ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

@@ -33,14 +33,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2025.12.4";
+  version = "2026.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "esphome";
     tag = version;
-    hash = "sha256-/dO8BS7L62nSblDAmtO2YY5wKXyHGLWlsrtUwoEu2u4=";
+    hash = "sha256-j7PlHGLBY9M5jxzvOt6H+zr3nCNPpM/FCMLgevt6MnM=";
   };
 
   patches = [
@@ -95,6 +95,8 @@ python.pkgs.buildPythonApplication rec {
     pyparsing
     pyserial
     pyyaml
+    requests
+    resvg-py
     ruamel-yaml
     tornado
     tzdata

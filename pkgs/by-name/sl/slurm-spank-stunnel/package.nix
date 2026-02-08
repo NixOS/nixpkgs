@@ -5,14 +5,14 @@
   slurm,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "slurm-spank-stunnel";
   version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "stanford-rc";
     repo = "slurm-spank-stunnel";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "15cpd49ccvzsmmr3gk8svm2nz461rvs4ybczckyf4yla0xzp06gj";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ markuskowa ];
   };
-}
+})

@@ -8,14 +8,14 @@
   libnfc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mfoc";
   version = "0.10.7";
 
   src = fetchFromGitHub {
     owner = "nfc-tools";
     repo = "mfoc";
-    rev = "mfoc-${version}";
+    rev = "mfoc-${finalAttrs.version}";
     sha256 = "0hbg1fn4000qdg1cfc7y8l0vh1mxlxcz7gapkcq54xp2l6kk1z65";
   };
 
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ offline ];
     platforms = lib.platforms.unix;
   };
-}
+})

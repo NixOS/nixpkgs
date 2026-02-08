@@ -16,14 +16,14 @@
   udevCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "iptsd";
   version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "linux-surface";
     repo = "iptsd";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2yYO1xb576IHaJquTrQtmAjJITGdW06I3eHD+HR88xI=";
   };
 
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    changelog = "https://github.com/linux-surface/iptsd/releases/tag/v${version}";
+    changelog = "https://github.com/linux-surface/iptsd/releases/tag/v${finalAttrs.version}";
     description = "Userspace daemon for Intel Precise Touch & Stylus";
     homepage = "https://github.com/linux-surface/iptsd";
     license = lib.licenses.gpl2Plus;
@@ -79,4 +79,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

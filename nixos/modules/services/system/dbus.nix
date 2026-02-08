@@ -104,6 +104,8 @@ in
 
   config = mkIf cfg.enable (mkMerge [
     {
+      system.switch.inhibitors.dbus-implementation = cfg.implementation;
+
       environment.etc."dbus-1".source = configDir;
 
       environment.pathsToLink = [
@@ -174,10 +176,6 @@ in
         permissions = "u+rx,g+rx,o-rx";
       };
 
-      system.switch.inhibitors = [
-        cfg.dbusPackage
-      ];
-
       systemd.services.dbus = {
         aliases = [
           # hack aiding to prevent dbus from restarting when switching from dbus-broker back to dbus
@@ -213,10 +211,6 @@ in
       ];
 
       systemd.packages = [
-        cfg.brokerPackage
-      ];
-
-      system.switch.inhibitors = [
         cfg.brokerPackage
       ];
 

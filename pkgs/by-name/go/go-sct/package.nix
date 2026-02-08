@@ -2,7 +2,8 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  xorg,
+  libxrandr,
+  libx11,
   wayland,
 }:
 
@@ -25,8 +26,8 @@ buildGoModule {
   vendorHash = "sha256-Rx5/oORink2QtRcD+JqbyFroWYhuYmuYDzZ391R4Jsw=";
 
   buildInputs = [
-    xorg.libX11
-    xorg.libXrandr
+    libx11
+    libxrandr
     wayland.dev
   ];
 

@@ -16,7 +16,6 @@
   pytestCheckHook,
   python-memcached,
   pythonAtLeast,
-  pythonOlder,
   requests-toolbelt,
   routes,
   setuptools-scm,
@@ -28,8 +27,6 @@ buildPythonPackage rec {
   pname = "cherrypy";
   version = "18.10.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

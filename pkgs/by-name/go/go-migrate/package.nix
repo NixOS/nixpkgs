@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "go-migrate";
   version = "4.19.1";
 
   src = fetchFromGitHub {
     owner = "golang-migrate";
     repo = "migrate";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Z8ufA2z5XeJ80Jfd6NSls/SurR8rMTO4zq88fQYGGpA=";
   };
 
@@ -53,4 +53,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     mainProgram = "migrate";
   };
-}
+})

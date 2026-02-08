@@ -1,8 +1,9 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   qmake,
+  wrapQtAppsHook,
   qtbase,
   qtscript,
   qtwebkit,
@@ -18,7 +19,7 @@
   SDL2,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "apmplanner2";
   version = "2.0.28";
 
@@ -28,6 +29,11 @@ mkDerivation rec {
     rev = version;
     sha256 = "0wvbfjnnf7sh6fpgw8gimh5hgzywj3nwrgr80r782f5gayd3v2l1";
   };
+
+  nativeBuildInputs = [
+    qmake
+    wrapQtAppsHook
+  ];
 
   buildInputs = [
     alsa-lib
@@ -44,8 +50,6 @@ mkDerivation rec {
     qtdeclarative
     qtquickcontrols2
   ];
-
-  nativeBuildInputs = [ qmake ];
 
   qmakeFlags = [ "apm_planner.pro" ];
 

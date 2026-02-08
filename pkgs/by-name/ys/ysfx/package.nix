@@ -6,11 +6,11 @@
   pkg-config,
   freetype,
   juce,
-  libX11,
-  libXcursor,
-  libXext,
-  libXinerama,
-  libXrandr,
+  libx11,
+  libxcursor,
+  libxext,
+  libxinerama,
+  libxrandr,
   libglvnd,
 }:
 
@@ -46,11 +46,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     freetype
     juce
-    libX11
-    libXcursor
-    libXext
-    libXinerama
-    libXrandr
+    libx11
+    libxcursor
+    libxext
+    libxinerama
+    libxrandr
     libglvnd
   ];
 

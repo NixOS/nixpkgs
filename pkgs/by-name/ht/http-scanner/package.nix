@@ -5,14 +5,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "http-scanner";
   version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "aymaneallaoui";
     repo = "kafka-http-scanner";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-+8UpdNRuu0nTYiBBS+yiVwDEtC/KpEeyPCEeJvsjxfs=";
   };
 
@@ -21,16 +21,16 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/aymaneallaoui/kafka-http-scanner/pkg/utils.Version=${version}"
+    "-X=github.com/aymaneallaoui/kafka-http-scanner/pkg/utils.Version=${finalAttrs.version}"
   ];
 
   meta = {
     description = "HTTP security vulnerability scanner that detects a wide range of web application vulnerabilities";
     homepage = "https://github.com/aymaneallaoui/kafka-http-scanner";
-    changelog = "https://github.com/aymaneallaoui/kafka-http-scanner/releases/tag/${src.tag}";
+    changelog = "https://github.com/aymaneallaoui/kafka-http-scanner/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "http-scanner";
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

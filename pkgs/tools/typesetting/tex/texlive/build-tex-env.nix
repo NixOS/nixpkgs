@@ -3,6 +3,8 @@
   tl,
   bin,
 
+  version,
+
   lib,
   buildEnv,
   libfaketime,
@@ -47,6 +49,9 @@ lib.fix (
       args:
       (buildEnv (
         {
+          pname = name;
+          version = "${toString version.texliveYear}-unstable-${version.year}-${version.month}-${version.day}";
+
           inherit (args) name paths;
         }
         // lib.optionalAttrs (args ? extraOutputsToInstall) { inherit (args) extraOutputsToInstall; }

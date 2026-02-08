@@ -6,14 +6,14 @@
   scdoc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pipectl";
   version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "Ferdi265";
     repo = "pipectl";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-pNBw1ukNaqu40qPXnORUGApYpJ/0EAO9Tq5zAbDe33I=";
   };
 
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ synthetica ];
     mainProgram = "pipectl";
   };
-}
+})

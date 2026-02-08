@@ -49,16 +49,16 @@ GEM
     oxidized-script (0.7.0)
       oxidized (~> 0.29)
       slop (~> 4.6)
-    oxidized-web (0.18.0)
-      charlock_holmes (>= 0.7.5, < 0.8.0)
+    oxidized-web (0.18.1)
+      charlock_holmes (~> 0.7)
       emk-sinatra-url-for (~> 0.2)
-      haml (>= 6.0.0, < 7.0.0)
-      htmlentities (>= 4.3.0, < 4.5.0)
-      json (>= 2.3.0, < 2.17.0)
+      haml (>= 6, < 7)
+      htmlentities (~> 4.3)
+      json (~> 2.3)
       oxidized (>= 0.34.1)
-      puma (>= 6.6, < 7.2)
-      sinatra (>= 4.1.1, < 4.3.0)
-      sinatra-contrib (>= 4.1.1, < 4.3.0)
+      puma (>= 6.6, < 8)
+      sinatra (~> 4.1)
+      sinatra-contrib (~> 4.1)
     psych (5.2.6)
       date
       stringio
@@ -107,7 +107,7 @@ PLATFORMS
 DEPENDENCIES
   oxidized (= 0.35.0)
   oxidized-script (= 0.7.0)
-  oxidized-web (= 0.18.0)
+  oxidized-web (= 0.18.1)
   psych (~> 5.0)
 
 BUNDLED WITH

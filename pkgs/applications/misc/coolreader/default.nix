@@ -1,35 +1,40 @@
 {
   stdenv,
-  mkDerivation,
   fetchFromGitHub,
   cmake,
   pkg-config,
+  wrapQtAppsHook,
   lib,
   qttools,
   fribidi,
   libunibreak,
+  zstd,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "coolreader";
-  version = "3.2.57";
+  version = "3.2.59";
 
   src = fetchFromGitHub {
     owner = "buggins";
     repo = "coolreader";
     rev = "cr${version}";
-    sha256 = "sha256-ZfgaLCLvBU6xP7nx7YJTsJSpvpdQgLpSMWH+BsG8E1g=";
+    sha256 = "sha256-RgVEOaNBaEuPBC75B8PdCkbqMvEzNmnEYmiI1ny/WFQ=";
   };
+
+  patches = [ ./cmake_policy_version_3_5.patch ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
+    wrapQtAppsHook
   ];
 
   buildInputs = [
     qttools
     fribidi
     libunibreak
+    zstd
   ];
 
   meta = {

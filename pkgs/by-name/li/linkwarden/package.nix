@@ -6,6 +6,7 @@
   yarn-berry,
   makeBinaryWrapper,
   nixosTests,
+  stdenv,
   # dependencies
   bash,
   monolith,
@@ -46,6 +47,13 @@ let
       "Bentham"
     ];
   };
+
+  chromeDir =
+    {
+      x86_64-linux = "chrome-linux64";
+      aarch64-linux = "chrome-linux";
+    }
+    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "linkwarden";
@@ -173,7 +181,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --set-default PRISMA_QUERY_ENGINE_LIBRARY "${prisma-engines_6}/lib/libquery_engine.node" \
       --set-default PRISMA_QUERY_ENGINE_BINARY "${prisma-engines_6}/bin/query-engine" \
       --set-default PRISMA_SCHEMA_ENGINE_BINARY "${prisma-engines_6}/bin/schema-engine" \
-      --set-default PLAYWRIGHT_LAUNCH_OPTIONS_EXECUTABLE_PATH ${playwright-driver.browsers-chromium}/chromium-*/chrome-linux/chrome \
+      --set-default PLAYWRIGHT_LAUNCH_OPTIONS_EXECUTABLE_PATH ${playwright-driver.browsers-chromium}/chromium-*/${chromeDir}/chrome \
       --set-default LINKWARDEN_CACHE_DIR /var/cache/linkwarden \
       --set-default LINKWARDEN_HOST localhost \
       --set-default LINKWARDEN_PORT 3000 \

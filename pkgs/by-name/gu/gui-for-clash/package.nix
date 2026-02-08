@@ -18,13 +18,13 @@
 
 let
   pname = "gui-for-clash";
-  version = "1.11.0";
+  version = "1.18.0";
 
   src = fetchFromGitHub {
     owner = "GUI-for-Cores";
     repo = "GUI.for.Clash";
     tag = "v${version}";
-    hash = "sha256-kk6ZjG58gMIPd8f3Ib+1z7bie9X5kJvBq/CwioksbcU=";
+    hash = "sha256-M5M3o7RIXszMW2KGv2UDyR002dNOL3FFj0zM4w4D+U0=";
   };
 
   metaCommon = {
@@ -54,7 +54,7 @@ let
         ;
       pnpm = pnpm_10;
       fetcherVersion = 2;
-      hash = "sha256-MvGLIB68itkCGsBIgAI6ak5xa5rFAJfoAwNuISPRw30=";
+      hash = "sha256-AHGPAYw/6FRKO2FY1J84NrLcp+bZOclOF6UFY61npFI=";
     };
 
     buildPhase = ''
@@ -84,13 +84,7 @@ buildGoModule {
 
   patches = [ ./xdg-path-and-restart-patch.patch ];
 
-  # As we need the $out reference, we can't use `replaceVars` here.
-  postPatch = ''
-    substituteInPlace bridge/bridge.go \
-      --subst-var out
-  '';
-
-  vendorHash = "sha256-6T9cFVzfRJnwnWjc61oSihifgnP81n3K+jlLHXGmA4I=";
+  vendorHash = "sha256-xQ6TeVoBe8906+/5X1q4e5QHVo+KHymB+yoxM+Obk18=";
 
   nativeBuildInputs = [
     autoPatchelfHook

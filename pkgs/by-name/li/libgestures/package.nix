@@ -7,13 +7,13 @@
   jsoncpp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libgestures";
   version = "2.0.1";
   src = fetchFromGitHub {
     owner = "hugegreenbug";
     repo = "libgestures";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0dfvads2adzx4k8cqc1rbwrk1jm2wn9wl2jk51m26xxpmh1g0zab";
   };
   patches = [ ./include-fix.patch ];
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     homepage = "https://chromium.googlesource.com/chromiumos/platform/gestures";
     maintainers = with lib.maintainers; [ kcalvinalvin ];
   };
-}
+})

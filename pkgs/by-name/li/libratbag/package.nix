@@ -20,14 +20,14 @@
   libunistring,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libratbag";
   version = "0.18";
 
   src = fetchFromGitHub {
     owner = "libratbag";
     repo = "libratbag";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-dAWKDF5hegvKhUZ4JW2J/P9uSs4xNrZLNinhAff6NSc=";
   };
 
@@ -69,4 +69,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ mvnetbiz ];
     platforms = lib.platforms.linux;
   };
-}
+})

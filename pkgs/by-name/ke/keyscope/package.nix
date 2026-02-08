@@ -7,14 +7,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "keyscope";
   version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "spectralops";
     repo = "keyscope";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2DhKiQixhTCQD/SYIQa+o1kzEsslu6wAReuWr0rTrH8=";
   };
 
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
     echo "fn main() {}" > build.rs
   '';
 
-  VERGEN_GIT_SEMVER = "v${version}";
+  VERGEN_GIT_SEMVER = "v${finalAttrs.version}";
 
   # Test require network access
   doCheck = false;
@@ -39,9 +39,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Key and secret workflow (validation, invalidation, etc.) tool";
     homepage = "https://github.com/spectralops/keyscope";
-    changelog = "https://github.com/spectralops/keyscope/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/spectralops/keyscope/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "keyscope";
   };
-}
+})

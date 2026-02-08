@@ -37,7 +37,7 @@ buildPythonPackage rec {
   ];
   propagatedBuildInputs = [ pyqt5.dev ];
 
-  format = "pyproject";
+  pyproject = true;
   dontConfigure = true;
 
   postPatch = ''

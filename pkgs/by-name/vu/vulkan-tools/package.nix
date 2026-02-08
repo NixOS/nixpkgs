@@ -8,11 +8,11 @@
   python3,
   glslang,
   libffi,
-  libX11,
-  libXau,
+  libx11,
+  libxau,
   libxcb,
-  libXdmcp,
-  libXrandr,
+  libxdmcp,
+  libxrandr,
   vulkan-headers,
   vulkan-loader,
   vulkan-volk,
@@ -50,11 +50,11 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libffi
-    libX11
-    libXau
+    libx11
+    libxau
     libxcb
-    libXdmcp
-    libXrandr
+    libxdmcp
+    libxrandr
     wayland
     wayland-protocols
   ]
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
 
   dontPatchELF = true;
 
-  env.PKG_CONFIG_WAYLAND_SCANNER_WAYLAND_SCANNER = lib.getExe buildPackages.wayland-scanner;
+  env.PKG_CONFIG_PATH = "${lib.getDev buildPackages.wayland-scanner}/lib/pkgconfig";
 
   cmakeFlags = [
     # Don't build the mock ICD as it may get used instead of other drivers, if installed

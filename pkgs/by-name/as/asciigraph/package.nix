@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "asciigraph";
   version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "guptarohit";
     repo = "asciigraph";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-+4aGkumO42cloHWV8qEEJ5bj8TTdtfXTWGFCgCRE4Mg=";
   };
 
@@ -29,4 +29,4 @@ buildGoModule rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ mmahut ];
   };
-}
+})

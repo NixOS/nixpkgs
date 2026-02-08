@@ -4,14 +4,14 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "redli";
   version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "IBM-Cloud";
     repo = "redli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-pEEfJWDwMBkx2Ff9pHuvO6N8FvEe93pOI3EO40sNV+8=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ tchekda ];
     mainProgram = "redli";
   };
-}
+})

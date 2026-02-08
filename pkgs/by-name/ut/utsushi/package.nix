@@ -28,14 +28,14 @@ let
   '';
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "imagescan";
   version = "3.65.0";
 
   src = fetchFromGitLab {
     owner = "utsushi";
     repo = "imagescan";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-CrN9F/WJKmlDN7eozEHtKgGUQBWVwTqwjnrfiATk7lI=";
   };
 
@@ -194,4 +194,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

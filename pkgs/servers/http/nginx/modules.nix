@@ -529,8 +529,8 @@ let
       src = fetchFromGitHub {
         owner = "nginx";
         repo = "njs";
-        rev = "0.8.9";
-        hash = "sha256-TalS9EJP+vB1o3BKaTvXXnudjKhNOcob3kDAyeKej3c=";
+        tag = "0.9.4";
+        hash = "sha256-Ee55QKaeZ0mYGKUroKr/AYGoOCakEonU483qkhmZdzU=";
       };
 
       # njs module sources have to be writable during nginx build, so we copy them
@@ -680,7 +680,7 @@ let
         name = "secure-token";
         owner = "kaltura";
         repo = "nginx-secure-token-module";
-        rev = "refs/tags/${version}";
+        tag = version;
         hash = "sha256-qYTjGS9pykRqMFmNls52YKxEdXYhHw+18YC2zzdjEpU=";
       };
 
@@ -800,7 +800,10 @@ let
         description = "SPNEGO HTTP Authentication Module";
         homepage = "https://github.com/stnoonan/spnego-http-auth-nginx-module";
         license = with lib.licenses; [ bsd2 ];
-        teams = [ lib.teams.deshaw ];
+        maintainers = with lib.maintainers; [
+          de11n
+          despsyched
+        ];
       };
     };
 
@@ -978,7 +981,7 @@ let
         name = "video-thumbextractor";
         owner = "wandenberg";
         repo = "nginx-video-thumbextractor-module";
-        rev = "refs/tags/${version}";
+        tag = version;
         hash = "sha256-F2cuzCbJdGYX0Zmz9MSXTB7x8+FBR6pPpXtLlDRCcj8=";
       };
 
@@ -1065,7 +1068,10 @@ let
         homepage = "https://github.com/evanmiller/mod_zip";
         license = with lib.licenses; [ bsd3 ];
         broken = stdenv.hostPlatform.isDarwin;
-        teams = [ lib.teams.apm ];
+        maintainers = with lib.maintainers; [
+          DutchGerman
+          friedow
+        ];
       };
     };
 

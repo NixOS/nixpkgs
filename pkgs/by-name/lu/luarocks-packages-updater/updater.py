@@ -161,8 +161,8 @@ class LuaEditor(nixpkgs_plugin_update.Editor):
 
         print(f"updated {outfilename}")
 
-        # Format the generated file with nix fmt
-        subprocess.run(["nix", "fmt", outfilename], check=True)
+        # Format the generated file with nixfmt
+        subprocess.run(["nixfmt", outfilename], check=True)
 
     @property
     def attr_path(self):
@@ -373,6 +373,7 @@ def track_version_change(
 
 @retry(subprocess.CalledProcessError, tries=3, delay=3, backoff=2)
 def run_luarocks(cmd: list[str]) -> str:
+    log.debug("running %s", " ".join(cmd))
     return subprocess.check_output(cmd, text=True)
 
 
@@ -411,8 +412,6 @@ def generate_pkg_nix(plug: LuaPlugin):
             luaver = plug.luaversion.replace(".", "")
             if lua_dir := os.getenv(f"LUA_{luaver}"):
                 cmd.append(f"--lua-dir={lua_dir}")
-
-        log.debug("running %s", " ".join(cmd))
 
         output = run_luarocks(cmd)
         ## FIXME: luarocks nix command output isn't formatted properly

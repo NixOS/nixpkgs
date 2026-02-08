@@ -9,14 +9,14 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gptfdisk";
   version = "1.0.10";
 
   src = fetchurl {
     # https://www.rodsbooks.com/gdisk/${name}.tar.gz also works, but the home
     # page clearly implies a preference for using SourceForge's bandwidth:
-    url = "mirror://sourceforge/gptfdisk/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/gptfdisk/gptfdisk-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-Kr7WG8bSuexJiXPARAuLgEt6ctcUQGm1qSCbKtaTooI=";
   };
 
@@ -66,4 +66,4 @@ stdenv.mkDerivation rec {
     homepage = "https://www.rodsbooks.com/gdisk/";
     platforms = lib.platforms.all;
   };
-}
+})

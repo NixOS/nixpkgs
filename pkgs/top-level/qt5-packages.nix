@@ -122,8 +122,6 @@ makeScopeWithSplicing' {
 
         libqaccessibilityclient = callPackage ../development/libraries/libqaccessibilityclient { };
 
-        mapbox-gl-native = libsForQt5.callPackage ../development/libraries/mapbox-gl-native { };
-
         mapbox-gl-qml = libsForQt5.callPackage ../development/libraries/mapbox-gl-qml { };
 
         maplibre-gl-native = callPackage ../development/libraries/maplibre-gl-native { };
@@ -228,6 +226,7 @@ makeScopeWithSplicing' {
           'libsForQt5.kf5gpgmepp' has been removed because it has been unmaintained upstream since 2017.
           Consider switching to the gpgmepp included in gpgme (gpgme <2), or to the GnuPG fork of gpgmepp (gpgme 2+), instead.
         ''; # Added 2025-10-25
+        mapbox-gl-native = throw "libsForQt5.mapbox-gl-native has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
       }
     ))
   );

@@ -7,7 +7,7 @@
   SDL,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pterm";
   version = "6.0.4";
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://www.cyber1.org/download/linux/pterm-${version}.tar.bz2";
+    url = "https://www.cyber1.org/download/linux/pterm-${finalAttrs.version}.tar.bz2";
     hash = "sha256-0OJvoCOGx/a51Ja7n3fOTeQJEcdyn/GhaJ0NtVCyuC8=";
   };
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  env.PTERMVERSION = "${version}";
+  env.PTERMVERSION = "${finalAttrs.version}";
 
   installPhase = ''
     runHook preInstall
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

@@ -72,10 +72,12 @@ optionals noSysDirs (
       "14" = [
         ./13/no-sys-dirs-riscv.patch
         ./13/mangle-NIX_STORE-in-__FILE__.patch
+        ./13/libsanitizer-fix-with-glibc-2.42.patch
       ];
       "13" = [
         ./13/no-sys-dirs-riscv.patch
         ./13/mangle-NIX_STORE-in-__FILE__.patch
+        ./13/libsanitizer-fix-with-glibc-2.42.patch
       ];
     }
     ."${majorVersion}" or [ ]
@@ -164,7 +166,10 @@ optionals noSysDirs (
 ## Darwin
 
 # Fixes detection of Darwin on x86_64-darwin and aarch64-darwin. Otherwise, GCC uses a deployment target of 10.5, which crashes ld64.
-++ optional (is14 && stdenv.hostPlatform.isDarwin) ../patches/14/libgcc-darwin-detection.patch
+++ optional (
+  # this one would conflict with gcc-14-darwin-aarch64-support.patch
+  is14 && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
+) ../patches/14/libgcc-darwin-detection.patch
 ++ optional (atLeast15 && stdenv.hostPlatform.isDarwin) ../patches/15/libgcc-darwin-detection.patch
 
 # Fix libgcc_s.1.dylib build on Darwin 11+ by not reexporting unwind symbols that don't exist

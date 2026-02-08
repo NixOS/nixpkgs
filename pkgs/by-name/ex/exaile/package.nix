@@ -34,14 +34,14 @@
   wikipediaSupport ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "exaile";
   version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "exaile";
     repo = "exaile";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-eH7JhoGd5jiaye8ZLx836tgEXsRpEd3D3z6gvnVrbIs=";
   };
 
@@ -120,4 +120,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ ryneeverett ];
     platforms = lib.platforms.all;
   };
-}
+})

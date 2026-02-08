@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "awsbck";
   version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "beeb";
     repo = "awsbck";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-WWYUMamMDtnvOR7vjoKd1Kn8vJBAAa9Jj8MFPRGQfEQ=";
   };
 
@@ -30,4 +30,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ beeb ];
     mainProgram = "awsbck";
   };
-}
+})

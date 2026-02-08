@@ -18,14 +18,14 @@
   gst_all_1,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tuner";
   version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "louis77";
     repo = "tuner";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-i6I5NSwiS8FJuZaHbrXvUcumo9RZvEVPcfKOkHUXiLo=";
   };
 
@@ -65,4 +65,4 @@ stdenv.mkDerivation rec {
       aleksana
     ];
   };
-}
+})

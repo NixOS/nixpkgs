@@ -10,14 +10,14 @@
   fuse,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "s3fs-fuse";
   version = "1.95";
 
   src = fetchFromGitHub {
     owner = "s3fs-fuse";
     repo = "s3fs-fuse";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-wHszw3S+fuZRwTvJy+FkxQTR2BAvr8H924Wd4/C5heE=";
   };
 
@@ -43,9 +43,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Mount an S3 bucket as filesystem through FUSE";
     homepage = "https://github.com/s3fs-fuse/s3fs-fuse";
-    changelog = "https://github.com/s3fs-fuse/s3fs-fuse/raw/v${version}/ChangeLog";
+    changelog = "https://github.com/s3fs-fuse/s3fs-fuse/raw/v${finalAttrs.version}/ChangeLog";
     maintainers = [ ];
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
   };
-}
+})

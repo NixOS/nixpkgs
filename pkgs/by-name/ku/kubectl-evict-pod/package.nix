@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubectl-evict-pod";
   version = "0.0.14";
 
   src = fetchFromGitHub {
     owner = "rajatjindal";
     repo = "kubectl-evict-pod";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Z1NIueonjyO2GHulBbXbsQtX7V/Z95GUoZv9AqjLIR0=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.j4m3s ];
   };
-}
+})

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   writeText,
   catboost,
   cloudpickle,
@@ -33,8 +32,6 @@ buildPythonPackage rec {
   pname = "shap";
   version = "0.48.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "slundberg";

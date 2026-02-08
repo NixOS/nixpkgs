@@ -626,8 +626,8 @@
   },
   {
     "pname": "ppy.osu.Framework",
-    "version": "2026.102.0",
-    "hash": "sha256-hmZfLliFuninJkIFml+hRSzpfp+q5h98i7yzTUaH/R8="
+    "version": "2026.108.0",
+    "hash": "sha256-3xYUwhcZJKT446AX3Vvbb2kQaNDTGGR/efGy/E32NP8="
   },
   {
     "pname": "ppy.osu.Framework.NativeLibs",
@@ -641,8 +641,8 @@
   },
   {
     "pname": "ppy.osu.Game.Resources",
-    "version": "2025.1218.0",
-    "hash": "sha256-ZtCdeZpFJd4t7PAf8uVrqMazyifi+MiTQHO/c/9nHP8="
+    "version": "2026.108.0",
+    "hash": "sha256-1kM2v5AqHXS2G8xD++28tcHZe9QPB4946wpG7s6dVeo="
   },
   {
     "pname": "ppy.osuTK.NS20",

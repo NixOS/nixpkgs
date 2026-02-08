@@ -5,15 +5,12 @@
   llama-index-core,
   llama-parse,
   hatchling,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-readers-llama-parse";
   version = "0.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "llama_index_readers_llama_parse";

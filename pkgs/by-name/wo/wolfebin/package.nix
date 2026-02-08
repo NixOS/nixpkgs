@@ -5,14 +5,14 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wolfebin";
   version = "5.6";
 
   src = fetchFromGitHub {
     owner = "thejoshwolfe";
     repo = "wolfebin";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-tsI71/UdLaGZ3O2lNTd1c8S5OS2imquLovh0n0ez8Ts=";
   };
 
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ andrewrk ];
     platforms = lib.platforms.all;
   };
-}
+})

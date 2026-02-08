@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "wego";
   version = "2.3";
 
   src = fetchFromGitHub {
     owner = "schachmat";
     repo = "wego";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-YGUll0Wi/oulNMXSrSFeAVe+aGpyFeyXRZTW4ngC3Zk=";
   };
 
@@ -23,4 +23,4 @@ buildGoModule rec {
     license = lib.licenses.isc;
     mainProgram = "wego";
   };
-}
+})

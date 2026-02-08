@@ -3,7 +3,7 @@
   testers,
   chromedriver,
 }:
-chromium.mkDerivation (_: {
+chromium.mkDerivation (finalAttrs: {
   name = "chromedriver";
   packageName = "chromedriver";
 

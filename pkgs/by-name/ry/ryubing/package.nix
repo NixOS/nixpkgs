@@ -5,7 +5,7 @@
   darwin,
   dotnetCorePackages,
   fetchFromGitLab,
-  libX11,
+  libx11,
   libgdiplus,
   moltenvk,
   ffmpeg,
@@ -17,12 +17,12 @@
   vulkan-loader,
   glew,
   libGL,
-  libICE,
-  libSM,
-  libXcursor,
-  libXext,
-  libXi,
-  libXrandr,
+  libice,
+  libsm,
+  libxcursor,
+  libxext,
+  libxi,
+  libxrandr,
   udev,
   SDL2,
   SDL2_mixer,
@@ -59,7 +59,7 @@ buildDotnetModule rec {
   nugetDeps = ./deps.json;
 
   runtimeDeps = [
-    libX11
+    libx11
     libgdiplus
     SDL2_mixer
     openal
@@ -70,12 +70,12 @@ buildDotnetModule rec {
 
     # Avalonia UI
     glew
-    libICE
-    libSM
-    libXcursor
-    libXext
-    libXi
-    libXrandr
+    libice
+    libsm
+    libxcursor
+    libxext
+    libxi
+    libxrandr
     gtk3
 
     # Headless executable

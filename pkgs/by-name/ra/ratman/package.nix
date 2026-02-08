@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   fetchNpmDeps,
   installShellFiles,
   pkg-config,
@@ -15,11 +15,10 @@ rustPlatform.buildRustPackage rec {
   pname = "ratman";
   version = "0.7.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "irdest";
     repo = "irdest";
-    tag = "${version}";
+    tag = version;
     hash = "sha256-rdKfKbikyqs0Y/y9A8XRVSKenjHD5rS3blxwy98Tvmg=";
   };
 

@@ -36,6 +36,7 @@ buildGoLatestModule (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckKeepEnvironment = [ "TMPDIR" ];
   versionCheckProgramArg = "version";
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=gopls/(.*)" ]; };

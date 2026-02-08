@@ -385,13 +385,13 @@ let
         license = lib.licenses.openssl;
         mainProgram = "openssl";
         maintainers = with lib.maintainers; [ thillux ];
-        teams = [ lib.teams.stridtech ];
         pkgConfigModules = [
           "libcrypto"
           "libssl"
           "openssl"
         ];
         platforms = lib.platforms.all;
+        identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "openssl" finalAttrs.version;
       }
       // extraMeta;
     });
@@ -418,7 +418,10 @@ in
       ./1.1/nix-ssl-cert-file.patch
 
       (
-        if stdenv.hostPlatform.isDarwin then ./use-etc-ssl-certs-darwin.patch else ./use-etc-ssl-certs.patch
+        if stdenv.hostPlatform.isDarwin then
+          ./1.1/use-etc-ssl-certs-darwin.patch
+        else
+          ./1.1/use-etc-ssl-certs.patch
       )
     ];
     withDocs = true;
@@ -430,8 +433,8 @@ in
   };
 
   openssl_3 = common {
-    version = "3.0.18";
-    hash = "sha256-2Aw09c+QLczx8bXfXruG0DkuNwSeXXPfGzq65y5P/os=";
+    version = "3.0.19";
+    hash = "sha256-+lpBQ7iq4YvlPvLzyvKaLgdHQwuLx00y2IM1uUq2MHI=";
 
     patches = [
       # Support for NIX_SSL_CERT_FILE, motivation:

@@ -12,8 +12,6 @@
   farama-notifications,
   numpy,
   typing-extensions,
-  pythonOlder,
-  importlib-metadata,
 
   # optional-dependencies
   # atari
@@ -56,8 +54,7 @@ buildPythonPackage rec {
     farama-notifications
     numpy
     typing-extensions
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ];
 
   optional-dependencies = {
     atari = [

@@ -8,11 +8,11 @@
   curl,
   freetype,
   libGL,
-  libX11,
-  libXcursor,
-  libXext,
-  libXinerama,
-  libXrandr,
+  libx11,
+  libxcursor,
+  libxext,
+  libxinerama,
+  libxrandr,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -39,11 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     freetype
     libGL
-    libX11
-    libXcursor
-    libXext
-    libXinerama
-    libXrandr
+    libx11
+    libxcursor
+    libxext
+    libxinerama
+    libxrandr
   ];
 
   makeFlags = [

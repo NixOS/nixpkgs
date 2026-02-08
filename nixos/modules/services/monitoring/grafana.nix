@@ -13,7 +13,7 @@ let
   opt = options.services.grafana;
   provisioningSettingsFormat = pkgs.formats.yaml { };
   declarativePlugins = pkgs.linkFarm "grafana-plugins" (
-    builtins.map (pkg: {
+    map (pkg: {
       name = pkg.pname;
       path = pkg;
     }) cfg.declarativePlugins
@@ -85,7 +85,10 @@ let
       fi
     '';
   provisionConfDir =
-    pkgs.runCommand "grafana-provisioning" { nativeBuildInputs = [ pkgs.xorg.lndir ]; }
+    pkgs.runCommand "grafana-provisioning"
+      {
+        nativeBuildInputs = [ pkgs.lndir ];
+      }
       ''
         mkdir -p $out/{alerting,datasources,dashboards,plugins}
         ${ln {

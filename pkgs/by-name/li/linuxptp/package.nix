@@ -5,14 +5,14 @@
   linuxHeaders,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "linuxptp";
   version = "4.4";
 
   src = fetchFromGitHub {
     owner = "nwtime";
     repo = "linuxptp";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-w1buo+D8Mnd6ytMhQYhvCDqt+RejlNSN/iVjrDR+Khk=";
   };
 
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
   };
-}
+})

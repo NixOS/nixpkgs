@@ -39,7 +39,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "osxphotos";
   version = "0.74.2";
   pyproject = true;
@@ -47,7 +47,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "RhetTbull";
     repo = "osxphotos";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-dvY6ShScIpJ+HcTJFPOBSETibzfiV8meILI4WrQLsaU=";
   };
 
@@ -111,10 +111,10 @@ buildPythonPackage rec {
   meta = {
     description = "Export photos from Apple's macOS Photos app and query the Photos library database to access metadata about images";
     homepage = "https://github.com/RhetTbull/osxphotos";
-    changelog = "https://github.com/RhetTbull/osxphotos/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/RhetTbull/osxphotos/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
     # missing utitools dependency
     broken = true && stdenv.hostPlatform.isDarwin;
   };
-}
+})

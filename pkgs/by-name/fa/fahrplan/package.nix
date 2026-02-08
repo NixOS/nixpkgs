@@ -3,7 +3,7 @@
   python3,
   fetchFromGitHub,
 }:
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "fahrplan";
   version = "1.1.2";
   pyproject = true;
@@ -11,7 +11,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "dbrgn";
     repo = "fahrplan";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2QVaA2zqqFuxjkKbDXo+SNzkrDCxXiSYMUOftQ++wO4=";
   };
 
@@ -28,9 +28,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Command line access to the SBB/CFF/FFS timetable with human readable argument parsing";
     homepage = "https://github.com/dbrgn/fahrplan";
-    changelog = "https://github.com/dbrgn/fahrplan/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/dbrgn/fahrplan/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ p-h ];
     mainProgram = "fahrplan";
   };
-}
+})

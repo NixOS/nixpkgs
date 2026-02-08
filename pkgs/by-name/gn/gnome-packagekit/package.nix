@@ -15,12 +15,12 @@
   desktop-file-utils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-packagekit";
   version = "43.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-packagekit/${lib.versions.major version}/gnome-packagekit-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-packagekit/${lib.versions.major finalAttrs.version}/gnome-packagekit-${finalAttrs.version}.tar.xz";
     hash = "sha256-zaRVplKpI7LqL3Axa9D92Clve2Lu8/r9nOUMjmbF8ZU=";
   };
 
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     description = "Tools for installing software on the GNOME desktop using PackageKit";
   };
-}
+})

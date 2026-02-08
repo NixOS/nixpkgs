@@ -20,11 +20,11 @@
   libpng,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "44";
   pname = "scorched3d";
   src = fetchurl {
-    url = "mirror://sourceforge/scorched3d/Scorched3D-${version}-src.tar.gz";
+    url = "mirror://sourceforge/scorched3d/Scorched3D-${finalAttrs.version}-src.tar.gz";
     sha256 = "1fldi9pn7cz6hc9h70pacgb7sbykzcac44yp3pkhn0qh4axj10qw";
   };
 
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-fftw=${fftwSinglePrec.dev}" ];
 
-  NIX_LDFLAGS = "-lopenal";
+  env.NIX_LDFLAGS = "-lopenal";
 
   meta = {
     homepage = "http://scorched3d.co.uk/";
@@ -74,4 +74,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux; # maybe more
     maintainers = [ ];
   };
-}
+})

@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "sslstrip";
   version = "2.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "L1ghtn1ng";
     repo = "sslstrip";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-iPWpbRmAUf0Yf5MDlpln1JLBxMIdmr/Ggk2ZGeQzm8s=";
   };
 
@@ -43,9 +43,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Tool for exploiting SSL stripping attacks";
     homepage = "https://github.com/L1ghtn1ng/sslstrip";
-    changelog = "https://github.com/L1ghtn1ng/sslstrip/releases/tag/${version}";
+    changelog = "https://github.com/L1ghtn1ng/sslstrip/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "sslstrip";
   };
-}
+})

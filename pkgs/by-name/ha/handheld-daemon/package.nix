@@ -14,16 +14,16 @@
   btrfs-progs,
   util-linux,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "handheld-daemon";
-  version = "4.1.5";
+  version = "4.1.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hhd-dev";
     repo = "hhd";
-    tag = "v${version}";
-    hash = "sha256-hjqlaJ4mJ1s9ivN4vTzeOXK4GuBi8799DlSZimWaMFg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-9aEq4zL7bVCV7iJ0f3UOhXJx+Dug/O6bRx0LmDnSr3c=";
   };
 
   # Handheld-daemon runs some selinux-related utils which are not in nixpkgs.
@@ -111,11 +111,11 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/hhd-dev/hhd/";
     description = "Linux support for handheld gaming devices like the Legion Go, ROG Ally, and GPD Win";
     platforms = lib.platforms.linux;
-    changelog = "https://github.com/hhd-dev/hhd/releases/tag/${src.tag}";
+    changelog = "https://github.com/hhd-dev/hhd/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [
       toast
     ];
     mainProgram = "hhd";
   };
-}
+})

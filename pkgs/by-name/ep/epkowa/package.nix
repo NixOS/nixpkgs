@@ -95,6 +95,8 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-dependency-reduction"
     "--disable-frontend"
+    # fix build with gcc 15
+    "CFLAGS=-std=gnu17"
   ];
 
   postConfigure = ''

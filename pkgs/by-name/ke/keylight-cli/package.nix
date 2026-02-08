@@ -5,14 +5,14 @@
   babashka,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "keylight-cli";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "versality";
     repo = "keylight-cli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-boL6Sg+C9OxMEcr5tAFCn8NxCDrJ6I2nMn9/2yMOYRI=";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     mainProgram = "keylight";
     platforms = lib.platforms.all;
   };
-}
+})

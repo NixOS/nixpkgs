@@ -16,7 +16,7 @@
   gtksourceview5,
   nix-update-script,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "errands";
   version = "46.2.10";
 
@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "mrvladus";
     repo = "Errands";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-YgKn6tBW1gG6H1zEAzaQjJWzSXh4Na44yZ7lfAnqUFA=";
   };
 
@@ -66,7 +66,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     description = "Manage your tasks";
-    changelog = "https://github.com/mrvladus/Errands/releases/tag/${version}";
+    changelog = "https://github.com/mrvladus/Errands/releases/tag/${finalAttrs.version}";
     homepage = "https://github.com/mrvladus/Errands";
     license = lib.licenses.mit;
     mainProgram = "errands";
@@ -76,4 +76,4 @@ python3Packages.buildPythonApplication rec {
     ];
     teams = [ lib.teams.gnome-circle ];
   };
-}
+})

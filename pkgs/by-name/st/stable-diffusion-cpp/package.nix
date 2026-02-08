@@ -42,13 +42,18 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "stable-diffusion-cpp";
-  version = "master-445-860a78e";
+  version = "master-492-f957fa3";
+
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "leejet";
     repo = "stable-diffusion.cpp";
-    rev = "master-445-860a78e";
-    hash = "sha256-G/f0X+kxKAr/jDKDKpAppAsfsnmuq1/xMFFyUHB+3iI=";
+    rev = "master-492-f957fa3";
+    hash = "sha256-qY21TfU5t5KdD59Q9LoMHxD1AGQKhH/fr5NLRdyeF7k=";
     fetchSubmodules = true;
   };
 
@@ -110,17 +115,17 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (cmakeFeature "CMAKE_HIP_ARCHITECTURES" (builtins.concatStringsSep ";" rocmGpuTargets))
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Stable Diffusion inference in pure C/C++";
     homepage = "https://github.com/leejet/stable-diffusion.cpp";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "sd";
     maintainers = with lib.maintainers; [
       dit7ya
       adriangl
     ];
-    platforms = platforms.unix;
-    badPlatforms = optionals (cudaSupport || openclSupport) platforms.darwin;
+    platforms = lib.platforms.unix;
+    badPlatforms = lib.optionals (cudaSupport || openclSupport) lib.platforms.darwin;
     broken = metalSupport && !stdenv.hostPlatform.isDarwin;
   };
 })

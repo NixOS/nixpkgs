@@ -6,6 +6,9 @@
 
 runCommandCC "xkbvalidate"
   {
+    pname = "xkbvalidate";
+    inherit (lib.trivial) version;
+
     buildInputs = [ libxkbcommon ];
     meta = {
       description = "NixOS tool to validate X keyboard configuration";

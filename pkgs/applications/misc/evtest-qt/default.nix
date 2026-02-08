@@ -1,14 +1,15 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   qtbase,
   cmake,
+  wrapQtAppsHook,
   fetchFromGitHub,
   fetchpatch,
   unstableGitUpdater,
 }:
 
-mkDerivation {
+stdenv.mkDerivation {
   pname = "evtest-qt";
   version = "0.2.0-unstable-2023-09-13";
 
@@ -30,7 +31,10 @@ mkDerivation {
     })
   ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    wrapQtAppsHook
+  ];
 
   buildInputs = [ qtbase ];
 

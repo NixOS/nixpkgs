@@ -7,7 +7,7 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libpoly";
   version = "0.2.0";
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "SRI-CSL";
     repo = "libpoly";
     # they've pushed to the release branch, use explicit tag
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-gE2O1YfiVab/aIqheoMP8GhE+N3yho7kb5EP56pzjW8=";
   };
 
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl3;
     platforms = lib.platforms.all;
   };
-}
+})

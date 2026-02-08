@@ -4,58 +4,61 @@
   fetchFromGitHub,
   accountsservice,
   alsa-lib,
-  budgie-screensaver,
+  budgie-desktop-services,
+  budgie-session,
   docbook-xsl-nons,
   glib,
   gnome-desktop,
   gnome-settings-daemon,
   gobject-introspection,
-  graphene,
   gst_all_1,
   gtk-doc,
   gtk3,
+  gtk-layer-shell,
   ibus,
   intltool,
   libcanberra-gtk3,
   libgee,
-  libGL,
-  libgudev,
   libnotify,
   libpeas2,
   libpulseaudio,
   libuuid,
   libwacom,
   libwnck,
-  magpie,
-  libgbm,
+  libxfce4windowing,
   meson,
   mutter,
   ninja,
   nix-update-script,
-  nixosTests,
   pkg-config,
-  polkit,
+  python3,
   sassc,
   testers,
-  udev,
   upower,
   vala,
   validatePkgConfig,
-  libxfce4windowing,
   wrapGAppsHook3,
-  zenity,
 }:
 
+let
+  pythonEnv = python3.withPackages (
+    pp: with pp; [
+      psutil
+      pygobject3
+      systemd-python
+    ]
+  );
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "budgie-desktop";
-  version = "10.9.4";
+  version = "10.10.1";
 
   src = fetchFromGitHub {
     owner = "BuddiesOfBudgie";
     repo = "budgie-desktop";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-e1kkmzSYX8TwiY0IIZYIK/FgMbZ/8PqkUn8pk3CcXHU=";
+    hash = "sha256-6SRnub0FMRE9AcHwsnYH4WMdG2kqEpl5dfHy56FwrGU=";
   };
 
   outputs = [
@@ -76,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
+    sassc
     vala
     validatePkgConfig
     wrapGAppsHook3
@@ -84,54 +88,50 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     accountsservice
     alsa-lib
-    budgie-screensaver
     glib
     gnome-desktop
     gnome-settings-daemon
-    mutter
-    zenity
-    graphene
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gtk3
+    gtk-layer-shell
     ibus
     libcanberra-gtk3
     libgee
-    libGL
-    libgudev
     libnotify
     libpulseaudio
     libuuid
     libwacom
     libwnck
-    magpie
-    libgbm
-    polkit
-    sassc
-    udev
-    upower
     libxfce4windowing
+    mutter # org.gnome.mutter.keybindings
+    pythonEnv
+    upower
   ];
 
   propagatedBuildInputs = [
-    # budgie-1.0.pc, budgie-raven-plugin-1.0.pc
+    # budgie-3.0.pc, budgie-raven-plugin-3.0.pc
     libpeas2
   ];
 
   mesonFlags = [
-    # FIXME: The meson option name is confusing
-    # https://github.com/BuddiesOfBudgie/budgie-desktop/pull/739#discussion_r2359421711
-    "-Dbsd-libexecdir=${gnome-settings-daemon}/libexec"
+    "-Dgsd-libexecdir=${gnome-settings-daemon}/libexec"
+    "-Dwith-runtime-dependencies=false"
   ];
+
+  postPatch = ''
+    substituteInPlace src/session/budgie-desktop.in \
+      --replace-fail "@bindir@/org.buddiesofbudgie.Services" "${lib.getExe budgie-desktop-services}" \
+      --replace-fail "@gsd_libexecdir@/budgie-session-compositor-ready" "${budgie-session}/libexec/budgie-session-compositor-ready"
+
+    chmod +x src/bridges/labwc/labwc_bridge.py
+    substituteInPlace src/bridges/labwc/org.buddiesofbudgie.labwc-bridge.desktop.in \
+      --replace-fail "Exec=python3 @libexecdir@/labwc_bridge.py" "Exec=@libexecdir@/labwc_bridge.py"
+  '';
 
   passthru = {
     providedSessions = [ "budgie-desktop" ];
-
-    tests = {
-      inherit (nixosTests) budgie;
-      pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
-    };
-
+    tests.pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
     updateScript = nix-update-script { };
   };
 
@@ -147,8 +147,8 @@ stdenv.mkDerivation (finalAttrs: {
     teams = [ lib.teams.budgie ];
     platforms = lib.platforms.linux;
     pkgConfigModules = [
-      "budgie-2.0"
-      "budgie-raven-plugin-2.0"
+      "budgie-3.0"
+      "budgie-raven-plugin-3.0"
       "budgie-theme-1.0"
     ];
   };

@@ -2,37 +2,17 @@
   lib,
   python3,
   fetchFromGitHub,
-  fetchFromGitLab,
+  fetchpatch,
   gettext,
 }:
 let
-  # on update check compatibility to nixpkgs inkex
   version = "3.2.2";
-
-  # remove and use nixpkgs version is recent enough
-  inkex' = python3.pkgs.inkex.overrideAttrs (old: rec {
-    # this is no special commit, just the most recent as of writing
-    version = "3150a5b3b06f7e4c2104d9e8eb6dc448982bb2b0";
-    src = fetchFromGitLab {
-      owner = "inkscape";
-      repo = "extensions";
-      rev = "${version}";
-      hash = "sha256-FYBZ66ERC3nVYCaAmFPqKnBxDOKAoQwT14C0fKLn10c=";
-    };
-
-    postPatch = ''
-      substituteInPlace pyproject.toml \
-        --replace-fail 'scour = "^0.37"' 'scour = ">=0.37"'
-    '';
-  });
 
   dependencies =
     with python3.pkgs;
     [
       pyembroidery
-      # inkex upstream release & nixpkgs is too old
-      # use nixpkgs inkex once up to date
-      inkex'
+      inkex
       wxpython
       networkx
       platformdirs
@@ -94,6 +74,13 @@ python3.pkgs.buildPythonApplication {
     ./0002-plugin-invocation-use-python-script-as-entrypoint.patch
     ./0003-lazy-load-module-to-access-global_settings.patch
     ./0004-enable-force-insertion-of-python-path.patch
+
+    # Fix compatibility with inkex 1.4
+    # https://github.com/inkstitch/inkstitch/pull/3825
+    (fetchpatch {
+      url = "https://github.com/inkstitch/inkstitch/commit/454b5ee1a00e9d4b96f5f057a8611da68a6cc796.patch";
+      hash = "sha256-nAs1rAr3lvN5Qwhj0I+7puM3R2X1NoHpB0ltvlwHDXA=";
+    })
   ];
 
   doCheck = false;

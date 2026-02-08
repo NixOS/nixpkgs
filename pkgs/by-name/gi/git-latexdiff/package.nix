@@ -6,13 +6,13 @@
   bash,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.6.0";
   pname = "git-latexdiff";
 
   src = fetchFromGitLab {
     hash = "sha256-DMoGEbCBuqUGjbna3yDpD4WNTikPudYRD4Wy1pPG2mw=";
-    rev = version;
+    rev = finalAttrs.version;
     repo = "git-latexdiff";
     owner = "git-latexdiff";
   };
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace git-latexdiff \
-      --replace "@GIT_LATEXDIFF_VERSION@" "v${version}"
+      --replace "@GIT_LATEXDIFF_VERSION@" "v${finalAttrs.version}"
     patchShebangs git-latexdiff
   '';
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "git-latexdiff";
   };
-}
+})

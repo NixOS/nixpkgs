@@ -19,12 +19,14 @@
   qtile,
   requests,
   setuptools-scm,
-  xorgserver,
+  xorg-server,
   nixosTests,
 }:
 buildPythonPackage rec {
   pname = "qtile-extras";
   version = "0.34.1";
+  # nixpkgs-update: no auto update
+  # should be updated alongside with `qtile`
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -61,7 +63,7 @@ buildPythonPackage rec {
     python-dateutil
     qtile
     requests
-    xorgserver
+    xorg-server
     # stravalib  # marked as broken due to https://github.com/stravalib/stravalib/issues/379
   ];
 

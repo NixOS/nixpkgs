@@ -31,15 +31,17 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "elementary-greeter";
-  version = "8.1.1";
+  version = "8.1.2-unstable-2025-01-12";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "greeter";
-    tag = version;
-    hash = "sha256-eoZ4WkIUesWTFipC6ji1QdU0dy9iMGCbQSkI74c0VRA=";
+    # Contains crash fixes for mutter 48.
+    # nixpkgs-update: no auto update
+    rev = "5510466126f7aa3412a21c055d59f8eb5fcc8d29";
+    hash = "sha256-30XvdeibAptwH4L5MDPPrqQJF0GuPCwwvRc51DgxZp0=";
   };
 
   patches = [

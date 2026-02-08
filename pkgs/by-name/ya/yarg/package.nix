@@ -9,14 +9,14 @@
   dbus,
   hidapi,
   libGL,
-  libXcursor,
-  libXext,
-  libXi,
-  libXinerama,
+  libxcursor,
+  libxext,
+  libxi,
+  libxinerama,
   libxkbcommon,
-  libXrandr,
-  libXScrnSaver,
-  libXxf86vm,
+  libxrandr,
+  libxscrnsaver,
+  libxxf86vm,
   udev,
   vulkan-loader,
   wayland, # (not used by default, enable with SDL_VIDEODRIVER=wayland - doesn't support HiDPI)
@@ -26,12 +26,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "yarg";
-  version = "0.13.1";
+  version = "0.13.2";
 
   src = fetchzip {
     url = "https://github.com/YARC-Official/YARG/releases/download/v${finalAttrs.version}/YARG_v${finalAttrs.version}-Linux-x86_64.zip";
     stripRoot = false;
-    hash = "sha256-/r3TdeRZEnDJD4y58wFzKgamBAy87e+CtS5Ew2cbBFE=";
+    hash = "sha256-TcX4O0TDesuBMbUH8Lp6wLM8A5xzXH9Pl7vCMEIhQvE=";
   };
 
   nativeBuildInputs = [ autoPatchelfHook ];
@@ -47,14 +47,14 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     hidapi
     libGL
-    libXcursor
-    libXext
-    libXi
-    libXinerama
+    libxcursor
+    libxext
+    libxi
+    libxinerama
     libxkbcommon
-    libXrandr
-    libXScrnSaver
-    libXxf86vm
+    libxrandr
+    libxscrnsaver
+    libxxf86vm
     udev
     vulkan-loader
     wayland

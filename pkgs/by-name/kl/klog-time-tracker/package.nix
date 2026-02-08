@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "klog-time-tracker";
   version = "6.6";
 
   src = fetchFromGitHub {
     owner = "jotaen";
     repo = "klog";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Tq780+Gsu2Ym9+DeMpaOhsP2XluyKBh01USnmwlYsTs=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     maintainers = [ lib.maintainers.blinry ];
     mainProgram = "klog";
   };
-}
+})

@@ -12,19 +12,19 @@
   SDL2,
   SDL2_image,
   SDL2_mixer,
-  xorg,
+  libx11,
   zlib,
 
   makeDesktopItem,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sauerbraten";
   version = "2020-12-29";
 
   src = fetchzip {
     url = "mirror://sourceforge/sauerbraten/sauerbraten_${
-      builtins.replaceStrings [ "-" ] [ "_" ] version
+      builtins.replaceStrings [ "-" ] [ "_" ] finalAttrs.version
     }_linux.tar.bz2";
     hash = "sha256-os3SmonqHRw1+5dIRVt7EeXfnSq298GiyKpusS1K3rM=";
   };
@@ -39,11 +39,11 @@ stdenv.mkDerivation rec {
     SDL2
     SDL2_image
     SDL2_mixer
-    xorg.libX11
+    libx11
     zlib
   ];
 
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   enableParallelBuilding = true;
 
@@ -95,4 +95,4 @@ stdenv.mkDerivation rec {
     license = "freeware"; # as an aggregate - data files have different licenses code is under zlib license
     platforms = lib.platforms.linux;
   };
-}
+})

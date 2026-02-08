@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "rsskey";
   version = "0.2.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

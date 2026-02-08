@@ -5,7 +5,7 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hotpatch";
   version = "0.2";
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Hot patching executables on Linux using .so file injection";
     mainProgram = "hotpatcher";
-    homepage = src.meta.homepage;
+    homepage = finalAttrs.src.meta.homepage;
     license = lib.licenses.bsd3;
     maintainers = [ ];
     platforms = [
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
       "x86_64-linux"
     ];
   };
-}
+})

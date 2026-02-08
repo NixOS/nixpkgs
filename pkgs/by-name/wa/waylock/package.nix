@@ -2,7 +2,7 @@
   lib,
   stdenv,
   callPackage,
-  fetchFromGitea,
+  fetchFromCodeberg,
   libxkbcommon,
   pam,
   pkg-config,
@@ -17,8 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "waylock";
   version = "1.5.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "ifreund";
     repo = "waylock";
     tag = "v${finalAttrs.version}";
@@ -35,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     scdoc
     wayland-scanner
-    zig_0_15.hook
+    zig_0_15
   ];
 
   buildInputs = [

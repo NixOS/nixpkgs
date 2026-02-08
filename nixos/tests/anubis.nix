@@ -1,36 +1,4 @@
 { lib, ... }:
-let
-  legacyBotPolicyJSON = ''
-    {
-      "bots": [
-        {
-          "import": "(data)/bots/_deny-pathological.yaml"
-        },
-        {
-          "import": "(data)/meta/ai-block-aggressive.yaml"
-        },
-        {
-          "import": "(data)/crawlers/_allow-good.yaml"
-        },
-        {
-          "import": "(data)/bots/aggressive-brazilian-scrapers.yaml"
-        },
-        {
-          "import": "(data)/common/keep-internet-working.yaml"
-        },
-        {
-          "name": "generic-browser",
-          "user_agent_regex": "Mozilla|Opera",
-          "action": "CHALLENGE"
-        }
-      ],
-      "dnsbl": false,
-      "status_codes": {
-        "CHALLENGE": 200,
-        "DENY": 200
-      }
-    }'';
-in
 {
   name = "anubis";
   meta.maintainers = with lib.maintainers; [
@@ -54,7 +22,6 @@ in
 
       services.anubis = {
         defaultOptions = {
-          botPolicy = builtins.fromJSON legacyBotPolicyJSON;
           settings = {
             DIFFICULTY = 3;
             USER_DEFINED_DEFAULT = true;
@@ -92,14 +59,29 @@ in
           };
         };
 
-        instances."botPolicy-default" = {
-          botPolicy = null;
+        instances."policy-default" = {
           settings = {
             TARGET = "http://localhost:8080";
           };
         };
 
-        instances."botPolicy-file" = {
+        instances."policy-custom" = {
+          policy = {
+            extraBots = [
+              {
+                name = "custom-allow";
+                user_agent_regex = "CustomBot/.*";
+                action = "ALLOW";
+              }
+            ];
+            settings.dnsbl = false;
+          };
+          settings = {
+            TARGET = "http://localhost:8080";
+          };
+        };
+
+        instances."policy-file" = {
           settings = {
             TARGET = "http://localhost:8080";
             POLICY_FNAME = "/etc/anubis-botPolicy.json";
@@ -191,9 +173,10 @@ in
     machine.succeed('cat /run/current-system/etc/systemd/system/anubis.service | grep "DIFFICULTY=5"')
     machine.succeed('cat /run/current-system/etc/systemd/system/anubis-tcp.service | grep "DIFFICULTY=3"')
 
-    # Check correct BotPolicy settings are applied
-    machine.succeed('cat /run/current-system/etc/systemd/system/anubis.service | grep "POLICY_FNAME=/nix/store"')
-    machine.fail('cat /run/current-system/etc/systemd/system/anubis-botPolicy-default.service | grep "POLICY_FNAME="')
-    machine.succeed('cat /run/current-system/etc/systemd/system/anubis-botPolicy-file.service | grep "POLICY_FNAME=/etc/anubis-botPolicy.json"')
+    # Check correct policy settings are applied.
+    machine.fail('cat /run/current-system/etc/systemd/system/anubis.service | grep "POLICY_FNAME="')
+    machine.fail('cat /run/current-system/etc/systemd/system/anubis-policy-default.service | grep "POLICY_FNAME="')
+    machine.succeed('cat /run/current-system/etc/systemd/system/anubis-policy-custom.service | grep "POLICY_FNAME=/nix/store"')
+    machine.succeed('cat /run/current-system/etc/systemd/system/anubis-policy-file.service | grep "POLICY_FNAME=/etc/anubis-botPolicy.json"')
   '';
 }

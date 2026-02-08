@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "mplhep-data";
   version = "0.0.4";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "mplhep_data";

@@ -5,14 +5,14 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pick";
   version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "mptre";
     repo = "pick";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "8cgt5KpLfnLwhucn4DQYC/7ot1u24ahJxWG+/1SL584=";
   };
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   PREFIX = placeholder "out";
 
   meta = {
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     description = "Fuzzy text selection utility";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.womfoo ];
@@ -29,4 +29,4 @@ stdenv.mkDerivation rec {
     mainProgram = "pick";
   };
 
-}
+})

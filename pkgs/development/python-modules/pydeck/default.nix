@@ -9,7 +9,6 @@
   numpy,
   pandas,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   traitlets,
   wheel,
@@ -18,9 +17,7 @@
 buildPythonPackage rec {
   pname = "pydeck";
   version = "0.9.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

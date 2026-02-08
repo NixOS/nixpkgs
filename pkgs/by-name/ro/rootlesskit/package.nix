@@ -6,14 +6,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "rootlesskit";
   version = "2.3.6";
 
   src = fetchFromGitHub {
     owner = "rootless-containers";
     repo = "rootlesskit";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Y4ZuHddLisLjiftqprDdORDwM9/lSyrinWsMYtUzmco=";
   };
 
@@ -31,4 +31,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ offline ];
     platforms = lib.platforms.linux;
   };
-}
+})

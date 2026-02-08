@@ -6,15 +6,15 @@
   poetry-core,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "playwright-stealth";
-  version = "2.0.0";
+  version = "2.0.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "playwright_stealth";
-    inherit version;
-    hash = "sha256-T0TUFtQiZomJWk0c+0Do0TchbAyXEOqPhLri2/EYb8U=";
+    inherit (finalAttrs) version;
+    hash = "sha256-o29zXWFGnBK9oXm1jV/EIou+5hyc9bE0OxSXpf1R7Bo=";
   };
 
   build-system = [ poetry-core ];
@@ -29,4 +29,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

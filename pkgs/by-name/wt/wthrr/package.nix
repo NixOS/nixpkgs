@@ -6,14 +6,14 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wthrr";
   version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "ttytm";
     repo = "wthrr-the-weathercrab";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-8o84FFdcEPRtbsxWCc97tTGGownxlhpIM71GiBRT6uM=";
   };
 
@@ -36,9 +36,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Weather companion for the terminal";
     homepage = "https://github.com/ttytm/wthrr-the-weathercrab";
-    changelog = "https://github.com/ttytm/wthrr-the-weathercrab/releases/tag/${src.rev}";
+    changelog = "https://github.com/ttytm/wthrr-the-weathercrab/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.matthiasbeyer ];
     mainProgram = "wthrr";
   };
-}
+})

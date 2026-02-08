@@ -6,14 +6,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rsbep";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "ttsiodras";
     repo = "rsbep-backup";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0is4jgil3wdqbvx9h66xcyzbqy84ndyydnnay2g9k81a4mcz4dns";
   };
 
@@ -54,4 +54,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.erikarvstedt ];
   };
-}
+})

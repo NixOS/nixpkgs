@@ -21,19 +21,19 @@ let
   opentelemetry-proto = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-proto";
-    rev = "v1.7.0";
-    hash = "sha256-3SFf/7fStrglxcpwEya7hDp8Sr3wBG9OYyBoR78IUgs=";
+    rev = "v1.8.0";
+    hash = "sha256-5rNJDMjRFIOY/3j+PkAujbippBmxtAudU9busK0q8p0=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "opentelemetry-cpp";
-  version = "1.23.0";
+  version = "1.24.0";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-cpp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-4SmKB2368I/2WTKYCqsZAAdkJygA15zCT+I7/RF8Knk=";
+    hash = "sha256-rVR8JWNoT5mxIgzynY8VzlZ4QxhWIEFBqogi+WFDcF0=";
   };
 
   patches = [
@@ -85,6 +85,13 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
+  # "--replace-fail" would normally be preferred, since it is better at
+  # highlighting obsolete/uneeded substitutions, but in this case
+  # "--replace-quiet" must be used.
+  # substituteInPlace with "--replace-fail" already fails if there is no
+  # substitution in at least one of the specified files. Below is applied to
+  # multiple files where some but not all of them match the substitution
+  # strings.
   postInstall = ''
     substituteInPlace $out/lib/cmake/opentelemetry-cpp/opentelemetry-cpp*-target.cmake \
       --replace-quiet "\''${_IMPORT_PREFIX}/include" "$dev/include"

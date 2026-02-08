@@ -48,8 +48,8 @@ appimageTools.wrapType2 {
       nshalman
     ];
     platforms = [ "x86_64-linux" ];
-    # buildFHSEnv will create a symlink in $out/bin/${pname}
-    mainProgram = pname;
+    # buildFHSEnv will create a symlink in $out/bin/chrysalis
+    mainProgram = "chrysalis";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }

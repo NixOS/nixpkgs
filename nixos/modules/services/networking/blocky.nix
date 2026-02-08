@@ -16,6 +16,10 @@ in
 
     package = lib.mkPackageOption pkgs "blocky" { };
 
+    enableConfigCheck = lib.mkEnableOption "checking the config during build time" // {
+      default = true;
+    };
+
     settings = lib.mkOption {
       type = format.type;
       default = { };
@@ -80,6 +84,14 @@ in
         ];
       };
     };
+    system.checks = lib.mkIf cfg.enableConfigCheck [
+      (pkgs.runCommand "check-blocky-config" { } ''
+        ${lib.getExe cfg.package} --config ${configFile} validate && touch $out
+      '')
+    ];
   };
-  meta.maintainers = with lib.maintainers; [ paepcke ];
+  meta.maintainers = with lib.maintainers; [
+    paepcke
+    kuflierl
+  ];
 }

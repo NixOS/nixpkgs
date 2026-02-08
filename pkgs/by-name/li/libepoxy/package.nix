@@ -5,10 +5,10 @@
   meson,
   ninja,
   pkg-config,
-  utilmacros,
+  util-macros,
   python3,
   libGL,
-  libX11,
+  libx11,
   x11Support ? !stdenv.hostPlatform.isDarwin,
   testers,
 }:
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    utilmacros
+    util-macros
     python3
   ];
 
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
       libGL
     ]
     ++ lib.optionals x11Support [
-      libX11
+      libx11
     ];
 
   mesonFlags = [

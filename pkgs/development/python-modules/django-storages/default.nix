@@ -14,7 +14,6 @@
   paramiko,
   pynacl,
   pytestCheckHook,
-  pythonOlder,
   rsa,
   setuptools,
 }:
@@ -23,8 +22,6 @@ buildPythonPackage rec {
   pname = "django-storages";
   version = "1.14.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jschneier";

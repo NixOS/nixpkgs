@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchpatch,
   fetchurl,
 }:
 
@@ -20,6 +19,11 @@ stdenv.mkDerivation (finalAttrs: {
     # https://lists.gnu.org/archive/html/bug-time/2025-10/msg00000.html
     # fix compilation with gcc15
     ./time-1.9-fix-sighandler-prototype-for-c23.patch
+  ];
+
+  outputs = [
+    "out"
+    "info"
   ];
 
   meta = {
@@ -41,5 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.gnu.org/software/time/";
     platforms = lib.platforms.unix;
     mainProgram = "time";
+    maintainers = with lib.maintainers; [ mdaniels5757 ];
   };
 })

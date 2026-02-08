@@ -1,0 +1,41 @@
+diff --git a/nox/update.py b/nox/update.py
+index ea4425f..3101ab9 100644
+--- a/nox/update.py
++++ b/nox/update.py
+@@ -1,3 +1,4 @@
++import attrs
+ import click
+ import re
+ import subprocess
+@@ -6,15 +7,17 @@ from enum import Enum
+ from bisect import bisect
+ from pkg_resources import parse_version
+ from pathlib import Path
+-from characteristic import attributes
+ from collections import defaultdict
+ 
+ def query(*args):
+     return subprocess.check_output(['nix-store', '--query'] + list(args),
+                                    universal_newlines=True)
+ 
+-@attributes(['full_name', 'path'], apply_with_init=False)
++@attrs.define(init=False)
+ class NixPath:
++    full_name: str = attrs.field(default=None)
++    path: str = attrs.field(default=None)
++
+     def __init__(self, path):
+         self.path = path
+         self.is_drv = self.path.endswith('.drv')
+diff --git a/requirements.txt b/requirements.txt
+index a7bfc0e..4298b69 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -1,4 +1,4 @@
++attrs
+ click
+ dogpile.cache
+-characteristic
+-requests
+\ No newline at end of file
++requests

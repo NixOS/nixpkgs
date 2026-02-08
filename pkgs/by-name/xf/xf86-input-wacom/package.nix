@@ -4,29 +4,29 @@
   autoreconfHook,
   fetchFromGitHub,
   xorgproto,
-  libX11,
-  libXext,
-  libXi,
-  libXinerama,
-  libXrandr,
-  libXrender,
+  libx11,
+  libxext,
+  libxi,
+  libxinerama,
+  libxrandr,
+  libxrender,
   ncurses,
   pixman,
   pkg-config,
   udev,
   udevCheckHook,
-  utilmacros,
-  xorgserver,
+  util-macros,
+  xorg-server,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xf86-input-wacom";
   version = "1.2.4";
 
   src = fetchFromGitHub {
     owner = "linuxwacom";
     repo = "xf86-input-wacom";
-    rev = "xf86-input-wacom-${version}";
+    rev = "xf86-input-wacom-${finalAttrs.version}";
     sha256 = "sha256-12m9PL28NnqIwNpGHOFqjJaNrzBaagdG3Sp/jSLpgkE=";
   };
 
@@ -37,18 +37,18 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libX11
-    libXext
-    libXi
-    libXinerama
-    libXrandr
-    libXrender
+    libx11
+    libxext
+    libxi
+    libxinerama
+    libxrandr
+    libxrender
     ncurses
     udev
-    utilmacros
+    util-macros
     pixman
     xorgproto
-    xorgserver
+    xorg-server
   ];
 
   doInstallCheck = true;
@@ -66,4 +66,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux; # Probably, works with other unixes as well
   };
-}
+})

@@ -6,12 +6,12 @@
   openfst,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opengrm-ngram";
   version = "1.3.16";
 
   src = fetchurl {
-    url = "http://www.openfst.org/twiki/pub/GRM/NGramDownload/ngram-${version}.tar.gz";
+    url = "http://www.openfst.org/twiki/pub/GRM/NGramDownload/ngram-${finalAttrs.version}.tar.gz";
     hash = "sha256-pcwP0VVW8H+0Y2Fsmh4WaH4whPPJlE3WyBI4VJfsES4=";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ mic92 ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -13,15 +13,15 @@
   hicolor-icon-theme,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "elementary-xfce-icon-theme";
-  version = "0.21";
+  version = "0.22";
 
   src = fetchFromGitHub {
     owner = "shimmerproject";
     repo = "elementary-xfce";
-    rev = "v${version}";
-    hash = "sha256-ncPL76HCC9n4wTciGeqb+YAUcCE9EeOpWGM5DRYUCYg=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-snNh6883YUmzU1OG8jLf41/0NrEzfwFikyVtX1JeNdw=";
   };
 
   nativeBuildInputs = [
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     teams = [ lib.teams.xfce ];
   };
-}
+})

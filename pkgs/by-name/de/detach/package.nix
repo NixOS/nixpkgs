@@ -5,12 +5,12 @@
   installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "detach";
   version = "0.2.3";
 
   src = fetchzip {
-    url = "http://inglorion.net/download/detach-${version}.tar.bz2";
+    url = "http://inglorion.net/download/detach-${finalAttrs.version}.tar.bz2";
     hash = "sha256-nnhJGtmPlTeqM20FAKRyhhSMViTXFpQT0A1ol4lhsoc=";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ pbsds ];
     platforms = lib.platforms.unix;
   };
-}
+})

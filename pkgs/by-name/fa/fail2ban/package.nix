@@ -8,7 +8,7 @@
   nixosTests,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "fail2ban";
   version = "1.1.0";
   format = "setuptools";
@@ -16,7 +16,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "fail2ban";
     repo = "fail2ban";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-0xPNhbu6/p/cbHOr5Y+PXbMbt5q/S13S5100ZZSdylE=";
   };
 
@@ -103,4 +103,4 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ lovek323 ];
   };
-}
+})

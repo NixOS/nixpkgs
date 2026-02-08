@@ -32,14 +32,14 @@
   qt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tiscamera";
   version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "TheImagingSource";
     repo = "tiscamera";
-    rev = "v-tiscamera-${version}";
+    rev = "v-tiscamera-${finalAttrs.version}";
     hash = "sha256-33U/8CbqNWIRwfDHXCZSN466WEQj9fip+Z5EJ7kIwRM=";
   };
 
@@ -141,4 +141,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ jraygauthier ];
   };
-}
+})

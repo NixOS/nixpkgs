@@ -18,7 +18,7 @@
   ffmpeg,
   sqlite,
   zlib,
-  libX11,
+  libx11,
   libGLU,
   libGL,
 }:
@@ -36,21 +36,21 @@ let
     sqlite
     lua
     zlib
-    libX11
+    libx11
     libGLU
     libGL
     ffmpeg
   ];
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ultrastardx";
   version = "2025.12.1";
 
   src = fetchFromGitHub {
     owner = "UltraStar-Deluxe";
     repo = "USDX";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-NwYFsd15nUgEnzQaoZdp7Au1H1QrrpoZX8PmnQ9URVA=";
   };
 
@@ -86,4 +86,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

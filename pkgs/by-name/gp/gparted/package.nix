@@ -35,7 +35,6 @@
   lvm2,
   nilfs-utils,
   ntfs3g,
-  reiserfsprogs,
   udftools,
   xfsprogs,
   xfsdump,
@@ -97,7 +96,6 @@ stdenv.mkDerivation (finalAttrs: {
     lvm2
     nilfs-utils
     ntfs3g
-    reiserfsprogs
     udftools
     xfsprogs
     xfsdump

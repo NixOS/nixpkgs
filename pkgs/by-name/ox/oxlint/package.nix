@@ -3,25 +3,30 @@
   rustPlatform,
   fetchFromGitHub,
   cmake,
+  makeBinaryWrapper,
   nix-update-script,
   rust-jemalloc-sys,
+  tsgolint,
   versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oxlint";
-  version = "1.12.0";
+  version = "1.43.0";
 
   src = fetchFromGitHub {
     owner = "oxc-project";
     repo = "oxc";
     tag = "oxlint_v${finalAttrs.version}";
-    hash = "sha256-HH98Q4mvCrylnRmvmfqKksF3ECT3rkoT93bSTqV4xOY=";
+    hash = "sha256-J32iHYWfUSPgs0TbB9kHxwgdPB7/cPvKTI28K5nUlVU=";
   };
 
-  cargoHash = "sha256-lAEAOB6JkIkwckhwXU2/fRMkGOkEZnNtiyx/Xm+0JKc=";
+  cargoHash = "sha256-2W0X9uy1V6cKJTjIIWNfd5vhptITrmh6uJYeCleXG8E=";
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    makeBinaryWrapper
+  ];
   buildInputs = [
     rust-jemalloc-sys
   ];
@@ -30,14 +35,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoBuildFlags = [
     "--bin=oxlint"
-    "--bin=oxc_language_server"
   ];
   cargoTestFlags = finalAttrs.cargoBuildFlags;
+
+  postFixup = ''
+    wrapProgram $out/bin/oxlint \
+      --prefix PATH : "${lib.makeBinPath [ tsgolint ]}"
+  '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=^oxlint_v([0-9.]+)$" ];
+  };
 
   meta = {
     description = "Collection of JavaScript tools written in Rust";

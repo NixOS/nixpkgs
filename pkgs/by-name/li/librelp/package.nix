@@ -9,14 +9,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "librelp";
   version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "rsyslog";
     repo = "librelp";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-VWW5EM1INxBACoQsIN+mxsJjUKDFbfh2mqdvB/3W6Xw=";
   };
 
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
   };
-}
+})

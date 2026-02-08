@@ -9,14 +9,14 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "direnv";
   version = "2.37.1";
 
   src = fetchFromGitHub {
     owner = "direnv";
     repo = "direnv";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-92xjoCjH5O7wx8U7OFG8Lw9eDOAdeVKNvxBHW+TiniM=";
   };
 
@@ -70,4 +70,4 @@ buildGoModule rec {
     maintainers = [ lib.maintainers.zimbatm ];
     mainProgram = "direnv";
   };
-}
+})

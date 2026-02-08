@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "aioslimproto";
-  version = "3.1.2";
+  version = "3.1.5";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = "aioslimproto";
     tag = version;
-    hash = "sha256-NrMcM3pIzTw9FkfVDptIIdIya7jHtwwzT7RRJTmB40c=";
+    hash = "sha256-A5BAMEtyyDoQzl+eRt4XMo1vOyyNZ2D+YLQ64xHfYkk=";
   };
 
   postPatch = ''

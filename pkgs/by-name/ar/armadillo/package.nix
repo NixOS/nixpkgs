@@ -9,13 +9,13 @@
   hdf5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "armadillo";
-  version = "15.2.2";
+  version = "15.2.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/arma/armadillo-${version}.tar.xz";
-    hash = "sha256-juAc1NpVvAe3vH08unAqxugTfThNfnGF8/SuHwx5cE8=";
+    url = "mirror://sourceforge/arma/armadillo-${finalAttrs.version}.tar.xz";
+    hash = "sha256-AYLWfWlJ5DR6C8YvyMJ5O+frIDxx8Z7f+T+MRf1KgZA=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
       juliendehos
     ];
   };
-}
+})

@@ -6,16 +6,16 @@
   versionCheckHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ansible-doctor";
-  version = "8.1.1";
+  version = "8.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "thegeeklab";
     repo = "ansible-doctor";
-    tag = "v${version}";
-    hash = "sha256-izgSdHK+vVS0UcK32gYDwBn3b1yDCzp2ImjDXZbMrzs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-eKUeQp4hvLqBkHDfclyR5dTt7jjcVMHneqXBPt1N8No=";
   };
 
   build-system = with python3Packages; [
@@ -52,8 +52,8 @@ python3Packages.buildPythonApplication rec {
     description = "Annotation based documentation for your Ansible roles";
     mainProgram = "ansible-doctor";
     homepage = "https://github.com/thegeeklab/ansible-doctor";
-    changelog = "https://github.com/thegeeklab/ansible-doctor/releases/tag/${src.tag}";
+    changelog = "https://github.com/thegeeklab/ansible-doctor/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ tboerger ];
   };
-}
+})

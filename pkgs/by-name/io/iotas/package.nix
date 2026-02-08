@@ -18,7 +18,7 @@
   webkitgtk_6_0,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "iotas";
   version = "0.12.5";
   pyproject = false;
@@ -27,7 +27,7 @@ python3.pkgs.buildPythonApplication rec {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "iotas";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-qbUI2hkW3rRiiBWFADuB9KFMf6Maw+WAkdy6dTE+Yo0=";
   };
 
@@ -77,4 +77,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ zendo ];
     teams = [ lib.teams.gnome-circle ];
   };
-}
+})

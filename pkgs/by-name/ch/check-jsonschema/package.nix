@@ -4,16 +4,16 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "check-jsonschema";
-  version = "0.36.0";
+  version = "0.36.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-jsonschema";
     repo = "check-jsonschema";
-    tag = version;
-    hash = "sha256-volbCQ0qxd614CDu0GIFKPXF1qSvgf5tTnJ8skcnnTg=";
+    tag = finalAttrs.version;
+    hash = "sha256-s8a/9kWKSu+WuHQyoBsK4Vn30c+EA/eld/OD3kHYvbk=";
   };
 
   build-system = with python3Packages; [ setuptools ];
@@ -44,8 +44,8 @@ python3Packages.buildPythonApplication rec {
     description = "Jsonschema CLI and pre-commit hook";
     mainProgram = "check-jsonschema";
     homepage = "https://github.com/python-jsonschema/check-jsonschema";
-    changelog = "https://github.com/python-jsonschema/check-jsonschema/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/python-jsonschema/check-jsonschema/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ sudosubin ];
   };
-}
+})

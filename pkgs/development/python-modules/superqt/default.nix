@@ -11,7 +11,6 @@
   pyside2,
   pyside6,
   pytestCheckHook,
-  pythonOlder,
   qtpy,
   typing-extensions,
 }:
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "superqt";
   version = "0.7.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pyapp-kit";
@@ -37,7 +34,6 @@ buildPythonPackage rec {
 
   dependencies = [
     pygments
-    pyqt5
     qtpy
     typing-extensions
   ];
@@ -47,6 +43,7 @@ buildPythonPackage rec {
     pyside2 = [ pyside2 ];
     pyside6 = [ pyside6 ];
     pyqt6 = [ pyqt6 ];
+    pyqt5 = [ pyqt5 ];
   };
 
   nativeCheckInputs = [ pytestCheckHook ];

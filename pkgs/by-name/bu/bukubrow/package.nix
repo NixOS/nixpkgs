@@ -14,14 +14,14 @@ let
   };
 
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bukubrow-host";
   version = "5.4.0";
 
   src = fetchFromGitHub {
     owner = "SamHH";
     repo = "bukubrow-host";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-xz5Agsm+ATQXXgpPGN4EQ00i1t8qUlrviNHauVdCu4U=";
   };
 
@@ -61,4 +61,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ ];
     mainProgram = "bukubrow";
   };
-}
+})

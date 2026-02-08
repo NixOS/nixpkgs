@@ -10,23 +10,22 @@
   pytest-mock,
   requests-mock,
 }:
-buildPythonPackage rec {
+
+buildPythonPackage (finalAttrs: {
   pname = "kestra";
-  version = "1.1.0";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kestra-io";
     repo = "libs";
-    tag = "v${version}";
-    hash = "sha256-cDJ5c4HgwmBnRtAFp8gxCqpo8AYJcuI2tthQOXaSOmU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JpePlqwjIalbkVMIIqZ4z6YfkvjyuYUbhXcD2Z6hp/Y=";
   };
 
-  sourceRoot = "${src.name}/python";
+  sourceRoot = "${finalAttrs.src.name}/python";
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     requests
@@ -34,9 +33,7 @@ buildPythonPackage rec {
     python-dateutil
   ];
 
-  pythonImportsCheck = [
-    "kestra"
-  ];
+  pythonImportsCheck = [ "kestra" ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -47,7 +44,8 @@ buildPythonPackage rec {
   meta = {
     description = "Infinitely scalable orchestration and scheduling platform, creating, running, scheduling, and monitoring millions of complex pipelines";
     homepage = "https://github.com/kestra-io/libs";
+    changelog = "https://github.com/kestra-io/libs/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.apsl20;
     maintainers = with lib.maintainers; [ DataHearth ];
   };
-}
+})

@@ -38,7 +38,15 @@
   jdk21,
   ant,
   cups,
-  xorg,
+  libxtst,
+  libxi,
+  libxinerama,
+  libxext,
+  libxdmcp,
+  libxaw,
+  libx11,
+  libpthread-stubs,
+  libxshmfence,
   fontforge,
   jre21_minimal,
   openssl,
@@ -66,7 +74,7 @@
   nspr,
   libwpg,
   dbus-glib,
-  clucene_core_2,
+  clucene-core_2,
   libcdr,
   lcms2,
   unixODBC,
@@ -408,7 +416,7 @@ stdenv.mkDerivation (finalAttrs: {
       bluez5
       box2d_2
       cairo
-      clucene_core_2
+      clucene-core_2
       cppunit
       cups
       curl
@@ -433,13 +441,13 @@ stdenv.mkDerivation (finalAttrs: {
       libGL
       libGLU
       libtool
-      xorg.libX11
-      xorg.libXaw
-      xorg.libXdmcp
-      xorg.libXext
-      xorg.libXi
-      xorg.libXinerama
-      xorg.libXtst
+      libx11
+      libxaw
+      libxdmcp
+      libxext
+      libxi
+      libxinerama
+      libxtst
       libabw
       libargon2
       libatomic_ops
@@ -455,7 +463,7 @@ stdenv.mkDerivation (finalAttrs: {
       libmspack
       libmwaw
       libodfgen
-      xorg.libpthreadstubs
+      libpthread-stubs
       librdf_redland
       librevenge
       librsvg
@@ -466,7 +474,7 @@ stdenv.mkDerivation (finalAttrs: {
       libwps
       libxcrypt
       libxml2
-      xorg.libxshmfence
+      libxshmfence
       libxslt
       libzmf
       libwebp

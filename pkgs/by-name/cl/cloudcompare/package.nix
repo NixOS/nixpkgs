@@ -20,14 +20,14 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cloudcompare";
   version = "2.13.2";
 
   src = fetchFromGitHub {
     owner = "CloudCompare";
     repo = "CloudCompare";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-a/0lf3Mt5ZpLFRM8jAoqZer8pY1ROgPRY4dPt34Bk3E=";
     fetchSubmodules = true;
   };
@@ -160,4 +160,4 @@ stdenv.mkDerivation rec {
     mainProgram = "CloudCompare";
     platforms = with lib.platforms; linux; # only tested here; might work on others
   };
-}
+})

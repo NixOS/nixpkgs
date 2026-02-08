@@ -6,14 +6,14 @@
   ninja,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.1.1";
   pname = "pfsshell";
 
   src = fetchFromGitHub {
     owner = "uyjulian";
     repo = "pfsshell";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0cr91al3knsbfim75rzl7rxdsglcc144x0nizn7q4jx5cad3zbn8";
   };
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   meta = {
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     description = "PFS (PlayStation File System) shell for POSIX-based systems";
     platforms = lib.platforms.unix;
     license = with lib.licenses; [
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ makefu ];
     mainProgram = "pfsshell";
   };
-}
+})

@@ -12,7 +12,6 @@
   onetbb,
   openssl,
   boost,
-  libpqxx,
   clang-tools,
   catch2_3,
   python3,
@@ -36,14 +35,14 @@ let
   '';
   catch2 = catch2_3;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tiledb";
   version = "2.28.1";
 
   src = fetchFromGitHub {
     owner = "TileDB-Inc";
     repo = "TileDB";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Cs3Lr8I/Mu02x78d7IySG0XX4u/VAjBs4p4b00XDT5k=";
   };
 
@@ -110,7 +109,6 @@ stdenv.mkDerivation rec {
     onetbb
     openssl
     boost
-    libpqxx
     libpng
     file
     rapidcheck'
@@ -152,4 +150,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ rakesh4g ];
   };
-}
+})

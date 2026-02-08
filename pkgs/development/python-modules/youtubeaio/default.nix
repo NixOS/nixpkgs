@@ -25,11 +25,6 @@ buildPythonPackage rec {
     hash = "sha256-2PqVFZ5816g8Ilc0Mhlm+Gzw/eOSaC1JYPY/t2yzxCU=";
   };
 
-  postPatch = ''
-    substituteInPlace tests/__snapshots__/test_video.ambr \
-      --replace-fail "TzInfo(0)" "TzInfo(UTC)"
-  '';
-
   build-system = [ poetry-core ];
 
   dependencies = [

@@ -13,15 +13,15 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openfortivpn";
-  version = "1.23.1";
+  version = "1.24.1";
 
   src = fetchFromGitHub {
     owner = "adrienverge";
     repo = "openfortivpn";
-    tag = "v${version}";
-    hash = "sha256-Pv9v7e5xPTIrgqldBDtTFxW+aIjbxSeu0sQ9n6HjO9w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zJSEBfhb2dFEOW/sJyB7xFLGGUQLjkz20V80L0ew7J8=";
   };
 
   # we cannot write the config file to /etc and as we don't need the file, so drop it
@@ -68,4 +68,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "openfortivpn";
   };
-}
+})

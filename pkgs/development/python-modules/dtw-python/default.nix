@@ -51,7 +51,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/DynamicTimeWarping/dtw-python";
     changelog = "https://github.com/DynamicTimeWarping/dtw-python/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ mbalatsko ];
+    maintainers = [ ];
     mainProgram = "dtw";
   };
 }

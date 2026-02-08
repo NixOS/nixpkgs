@@ -9,7 +9,7 @@
   nix-update,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nix-update";
   version = "1.14.0";
   pyproject = true;
@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "nix-update";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-l6EvOXUZcbx712WYN3L4y8Qdim9sEISH06CWxgav6cQ=";
   };
 
@@ -49,7 +49,7 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Swiss-knife for updating nix packages";
     homepage = "https://github.com/Mic92/nix-update/";
-    changelog = "https://github.com/Mic92/nix-update/releases/tag/${version}";
+    changelog = "https://github.com/Mic92/nix-update/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       mdaniels5757
@@ -57,4 +57,4 @@ python3Packages.buildPythonApplication rec {
     ];
     mainProgram = "nix-update";
   };
-}
+})

@@ -11,14 +11,14 @@
 let
   romkatv_libgit2 = callPackage ./romkatv_libgit2.nix { };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gitstatus";
   version = "1.5.5";
 
   src = fetchFromGitHub {
     owner = "romkatv";
     repo = "gitstatus";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-b+9bwJ87VV6rbOPobkwMkDXGH34STjYPlt8wCRR5tEc=";
   };
 
@@ -140,4 +140,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "gitstatusd";
   };
-}
+})

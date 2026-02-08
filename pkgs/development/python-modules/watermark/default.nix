@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "watermark";
-  version = "2.5.1";
+  version = "2.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rasbt";
     repo = "watermark";
     tag = "v${version}";
-    hash = "sha256-vHnXPGHPQz6+y2ZvfmUouL/3JlATGo4fmZ8AIk+bNEU=";
+    hash = "sha256-WeHMzSt4HUJZ9M9/Yu1h3VB5GuD/I9x+v6VyUhsmFhU=";
   };
 
   build-system = [ setuptools ];

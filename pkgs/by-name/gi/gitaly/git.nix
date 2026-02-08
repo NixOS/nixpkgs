@@ -10,24 +10,18 @@
   pkg-config,
   openssl,
 }:
-
-stdenv.mkDerivation rec {
+let
+  data = lib.importJSON ./git-data.json;
+in
+stdenv.mkDerivation (finalAttrs: {
+  inherit (data) version;
   pname = "gitaly-git";
-  version = "2.50.1.gl1";
 
-  # `src` attribute for nix-update
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "git";
-    rev = "v${version}";
-    hash = "sha256-q+xQAVsatw0vS4iIgAxciAVVMr33BjG0yM4AvZrXB+8=";
-    leaveDotGit = true;
-    # The build system clones the repo from the store (since it always expects
-    # to be able to clone in the makefiles) and it looks like nix doesn't leave
-    # the tag so we re-add it.
-    postFetch = ''
-      git -C $out tag v${version};
-    '';
+    inherit (data) rev hash;
+    fetchSubmodules = true;
   };
 
   # Use gitaly and their build system as source root
@@ -37,10 +31,15 @@ stdenv.mkDerivation rec {
     git config --global --add safe.directory '*'
   '';
 
-  sourceRoot = src.name;
+  # This is a patch for gitaly, not git
+  patches = [
+    ./dont-clone-git-repo.patch
+  ];
 
-  buildFlags = [ "git" ];
-  GIT_REPO_URL = src;
+  sourceRoot = finalAttrs.src.name;
+
+  buildFlags = [ "install-git" ];
+  GIT_REPO_PATH = finalAttrs.src;
   HOME = "/build";
 
   nativeBuildInputs = [
@@ -81,4 +80,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     teams = [ lib.teams.gitlab ];
   };
-}
+})

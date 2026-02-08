@@ -17,7 +17,7 @@
 buildPythonPackage rec {
   pname = "ufolib2";
   version = "0.18.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fonttools";

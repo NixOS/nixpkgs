@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "murex";
   version = "7.1.4143";
 
   src = fetchFromGitHub {
     owner = "lmorg";
     repo = "murex";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-wLEEyRnV0ERji+HPgtu6NgZSgKu0B6MErL+8KX1lUhw=";
   };
 
@@ -33,4 +33,4 @@ buildGoModule rec {
   passthru = {
     shellPath = "/bin/murex";
   };
-}
+})

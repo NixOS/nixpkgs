@@ -9,7 +9,7 @@
   gtk3,
   glib,
   libnotify,
-  libX11,
+  libx11,
   pcre,
 }:
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     glib
     libnotify
-    libX11
+    libx11
     pcre
   ];
 

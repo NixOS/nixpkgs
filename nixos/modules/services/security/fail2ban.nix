@@ -442,7 +442,7 @@ in
           // {
             # Miscellaneous options
             inherit (cfg) banaction maxretry bantime;
-            ignoreip = ''127.0.0.1/8 ${lib.optionalString config.networking.enableIPv6 "::1"} ${lib.concatStringsSep " " cfg.ignoreIP}'';
+            ignoreip = "127.0.0.1/8 ${lib.optionalString config.networking.enableIPv6 "::1"} ${lib.concatStringsSep " " cfg.ignoreIP}";
             backend = "systemd";
             # Actions
             banaction_allports = cfg.banaction-allports;
@@ -452,7 +452,7 @@ in
       # Block SSH if there are too many failing connection attempts.
       (lib.mkIf config.services.openssh.enable {
         sshd.settings.port = lib.mkDefault (
-          lib.concatMapStringsSep "," builtins.toString config.services.openssh.ports
+          lib.concatMapStringsSep "," toString config.services.openssh.ports
         );
       })
     ];

@@ -8,17 +8,17 @@
   alsa-lib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kord";
   version = "0.6.1";
 
   # kord depends on nightly features
-  RUSTC_BOOTSTRAP = 1;
+  env.RUSTC_BOOTSTRAP = 1;
 
   src = fetchFromGitHub {
     owner = "twitchax";
     repo = "kord";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-CeMh6yB4fGoxtGLbkQe4OMMvBM0jesyP+8JtU5kCP84=";
   };
 
@@ -47,4 +47,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ kidsan ];
     license = with lib.licenses; [ mit ];
   };
-}
+})

@@ -1,19 +1,49 @@
-{ lib, ... }:
+{ runTest }:
+
 {
-  name = "Shoko";
+  default = runTest (
+    { lib, ... }:
 
-  nodes.machine = {
-    services.shoko.enable = true;
-  };
+    {
+      name = "Shoko";
 
-  testScript = ''
-    machine.wait_for_unit("shoko.service")
-    machine.wait_for_open_port(8111)
-    machine.succeed("curl --fail http://localhost:8111")
-  '';
+      nodes.machine = {
+        services.shoko.enable = true;
+      };
 
-  meta.maintainers = with lib.maintainers; [
-    diniamo
-    nanoyaki
-  ];
+      testScript = ''
+        machine.wait_for_unit("shoko.service")
+        machine.wait_for_open_port(8111)
+        machine.succeed("curl --fail http://localhost:8111")
+      '';
+
+      meta.maintainers = with lib.maintainers; [
+        diniamo
+        nanoyaki
+      ];
+    }
+  );
+
+  withPlugins = runTest (
+    { pkgs, lib, ... }:
+
+    {
+      name = "Shoko with plugins";
+
+      nodes.machine = {
+        services.shoko = {
+          enable = true;
+          plugins = [ pkgs.luarenamer ];
+        };
+      };
+
+      testScript = ''
+        machine.wait_for_unit("shoko.service")
+        machine.wait_for_open_port(8111)
+        machine.succeed("curl --fail http://localhost:8111")
+      '';
+
+      meta.maintainers = with lib.maintainers; [ nanoyaki ];
+    }
+  );
 }

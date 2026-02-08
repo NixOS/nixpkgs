@@ -9,14 +9,14 @@
   buildPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "protobuf-c";
   version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "protobuf-c";
     repo = "protobuf-c";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-bpxk2o5rYLFkx532A3PYyhh2MwVH2Dqf3p/bnNpQV7s=";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ nickcao ];
   };
-}
+})

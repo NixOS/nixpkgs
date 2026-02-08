@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   numpy,
   pillow,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "highdicom";
   version = "0.27.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "MGHComputationalPathology";

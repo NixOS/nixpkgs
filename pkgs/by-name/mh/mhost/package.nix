@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mhost";
   version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "lukaspustina";
     repo = "mhost";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-6jn9jOCh96d9y2l1OZ5hgxg7sYXPUFzJiiT95OR7lD0=";
   };
 
@@ -31,4 +31,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ lib.maintainers.mgttlinger ];
     mainProgram = "mhost";
   };
-}
+})

@@ -18,7 +18,7 @@ If your package uses native addons, you need to examine what kind of native buil
 - `node-gyp-builder`
 - `node-pre-gyp`
 
-After you have identified the correct system, you need to override your package expression while adding in build system as a build input.
+After you have identified the correct system, you need to override your package expression while adding the build system as a build input.
 For example, `dat` requires `node-gyp-build`, so we override its expression in [pkgs/development/node-packages/overrides.nix](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/node-packages/overrides.nix):
 
 ```nix
@@ -54,7 +54,7 @@ To add a package from npm to Nixpkgs:
    nix-build -A nodePackages.<new-or-updated-package>
    ```
 
-    To build against the latest stable Current Node.js version (e.g. 18.x):
+    To build against the latest stable current Node.js version (e.g. 18.x):
 
     ```sh
     nix-build -A nodePackages_latest.<new-or-updated-package>

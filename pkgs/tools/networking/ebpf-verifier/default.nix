@@ -53,7 +53,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/vbpf/ebpf-verifier";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ gaelreyrol ];
+    maintainers = [ ];
     mainProgram = "ebpf-verifier";
   };
 }

@@ -7,14 +7,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "senpai";
   version = "0.4.1";
 
   src = fetchFromSourcehut {
     owner = "~delthas";
     repo = "senpai";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-lwfhRnaHGOIp6NyugPEu6P+3WXkVgQEWaz7DUfHiJrQ=";
   };
 
@@ -45,8 +45,8 @@ buildGoModule rec {
     description = "Your everyday IRC student";
     mainProgram = "senpai";
     homepage = "https://sr.ht/~delthas/senpai/";
-    changelog = "https://git.sr.ht/~delthas/senpai/refs/v${version}";
+    changelog = "https://git.sr.ht/~delthas/senpai/refs/v${finalAttrs.version}";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ malte-v ];
   };
-}
+})

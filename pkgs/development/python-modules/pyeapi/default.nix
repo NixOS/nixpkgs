@@ -6,15 +6,12 @@
   mock,
   netaddr,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyeapi";
   version = "1.0.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "arista-eosplus";

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "caligula";
   version = "0.4.10";
 
   src = fetchFromGitHub {
     owner = "ifd3f";
     repo = "caligula";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-oaSt6wzMzaGHPyuJ5NVcAJLblHQcHJA5a7o2wkJgZkU=";
   };
 
@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
     rustPlatform.bindgenHook
   ];
 
-  RUSTFLAGS = "--cfg tracing_unstable";
+  env.RUSTFLAGS = "--cfg tracing_unstable";
 
   meta = {
     description = "User-friendly, lightweight TUI for disk imaging";
@@ -34,4 +34,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "caligula";
   };
-}
+})

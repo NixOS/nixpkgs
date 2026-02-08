@@ -3,8 +3,8 @@
   attrs,
   buildPythonPackage,
   cattrs,
-  click,
   click-option-group,
+  click,
   fetchPypi,
   hatch-vcs,
   hatchling,
@@ -13,6 +13,8 @@
   pydantic,
   pytest-cov-stub,
   pytestCheckHook,
+  python-dotenv,
+  pythonAtLeast,
   pythonOlder,
   rich-click,
   sybil,
@@ -21,15 +23,13 @@
 }:
 buildPythonPackage rec {
   pname = "typed-settings";
-  version = "25.0.0";
+  version = "25.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "typed_settings";
     inherit version;
-    hash = "sha256-Kbr9Mc1PXgD+OAw/ADp3HXC+rnAJcFEqjlXxQq/1wRM=";
+    hash = "sha256-hl61LDGE9GdwVkWh5Y251xngi515V0SKKtjLvCLtIaY=";
   };
 
   build-system = [ hatchling ];
@@ -62,6 +62,7 @@ buildPythonPackage rec {
     hypothesis
     pytest-cov-stub
     pytestCheckHook
+    python-dotenv
     rich-click
     sybil
   ]
@@ -79,6 +80,10 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # 1Password CLI is not available
     "tests/test_onepassword.py"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # All the CLI help messages begin with python3.14 instead of python3
+    "tests/test_cli_argparse.py"
   ];
 
   pythonImportsCheck = [ "typed_settings" ];

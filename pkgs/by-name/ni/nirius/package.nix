@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nirius";
   version = "0.6.1";
 
   src = fetchFromSourcehut {
     owner = "~tsdh";
     repo = "nirius";
-    rev = "nirius-${version}";
+    rev = "nirius-${finalAttrs.version}";
     hash = "sha256-KAh45AcNB9Y4ahxamtI6/z3l1xg6yf17h4rnZl3w89I=";
   };
 
@@ -25,4 +25,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ tylerjl ];
     platforms = lib.platforms.linux;
   };
-}
+})

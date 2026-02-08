@@ -11,8 +11,8 @@
   json-glib,
   itstool,
   accountsservice,
-  libX11,
-  libXdmcp,
+  libx11,
+  libxdmcp,
   libxcb,
   gnome,
   systemd,
@@ -26,7 +26,7 @@
   gobject-introspection,
   plymouth,
   coreutils,
-  xorgserver,
+  xorg-server,
   dbus,
   nixos-icons,
   runCommand,
@@ -85,8 +85,8 @@ stdenv.mkDerivation (finalAttrs: {
     json-glib
     gtk3
     keyutils
-    libX11
-    libXdmcp
+    libx11
+    libxdmcp
     libxcb
     libgudev
     libselinux
@@ -110,9 +110,9 @@ stdenv.mkDerivation (finalAttrs: {
       inherit
         coreutils
         plymouth
-        xorgserver
         dbus
         ;
+      xorgserver = xorg-server;
     })
 
     # The following patches implement certain environment variables in GDM which are set by
@@ -135,7 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     # Upstream checks some common paths to find an `X` binary. We already know it.
     echo #!/bin/sh > build-aux/find-x-server.sh
-    echo "echo ${lib.getBin xorgserver}/bin/X" >> build-aux/find-x-server.sh
+    echo "echo ${lib.getBin xorg-server}/bin/X" >> build-aux/find-x-server.sh
     patchShebangs build-aux/find-x-server.sh
 
     # Reverts https://gitlab.gnome.org/GNOME/gdm/-/commit/b0f802e36ff948a415bfd2bccaa268b6990515b7

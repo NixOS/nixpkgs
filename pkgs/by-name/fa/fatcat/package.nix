@@ -6,14 +6,14 @@
   cmake,
   gitUpdater,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fatcat";
   version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "Gregwar";
     repo = "fatcat";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-/iGNVP7Bz/UZAR+dFxAKMKM9jm07h0x0F3VGpdxlHdk=";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cynerd ];
   };
-}
+})

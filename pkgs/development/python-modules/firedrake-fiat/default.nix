@@ -14,7 +14,7 @@
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "firedrake-fiat";
   version = "2025.10.1";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "firedrakeproject";
     repo = "fiat";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-x1/gf/QVez6GxPUafxdhxqyT0MkL6w2Qz6VAxRNufdc=";
   };
 
@@ -82,4 +82,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ qbisi ];
   };
-}
+})

@@ -17,7 +17,11 @@ in
 
 lib.makeOverridable (
   {
-    name,
+    name ? lib.throwIf (
+      pname == null || version == null
+    ) "buildEnv: expect arguments 'pname' and 'version' or 'name'" "${pname}-${version}",
+    pname ? null,
+    version ? null,
 
     # The manifest file (if any).  A symlink $out/manifest will be
     # created to it.
@@ -60,8 +64,6 @@ lib.makeOverridable (
 
     passthru ? { },
     meta ? { },
-    pname ? null,
-    version ? null,
   }:
   let
     chosenOutputs = map (drv: {

@@ -35,7 +35,17 @@ rec {
     }
   ) extraArgs;
 
-  # Automatically set by update script
-  rke2_stable = rke2_1_33;
-  rke2_latest = rke2_1_34;
+  rke2_1_35 = common (
+    (import ./1_35/versions.nix)
+    // {
+      updateScript = [
+        ./update-script.sh
+        "35"
+      ];
+    }
+  ) extraArgs;
+
+  # Automatically set by update script, changes shouldn't be backported
+  rke2_stable = rke2_1_34;
+  rke2_latest = rke2_1_35;
 }

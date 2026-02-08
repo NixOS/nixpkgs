@@ -3,14 +3,14 @@
   rustPlatform,
   fetchFromGitHub,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xan";
   version = "0.54.1";
 
   src = fetchFromGitHub {
     owner = "medialab";
     repo = "xan";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-21NJ9j3WTzAqJypjNNQRn8XUvlpj50ZO+h/+l1dRxUw=";
   };
 
@@ -27,4 +27,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ NotAShelf ];
     mainProgram = "xan";
   };
-}
+})

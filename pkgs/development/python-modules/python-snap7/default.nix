@@ -4,15 +4,12 @@
   snap7,
   fetchFromGitHub,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "python-snap7";
   version = "2.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "gijzelaerr";

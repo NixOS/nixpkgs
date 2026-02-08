@@ -9,7 +9,7 @@
   libusb1,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  name = "kryoflux";
+  pname = "kryoflux";
   version = "3.50";
   src = fetchurl {
     url = "https://www.kryoflux.com/download/kryoflux_${finalAttrs.version}_linux_r2.tar.gz";

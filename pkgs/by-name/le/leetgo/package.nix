@@ -6,14 +6,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "leetgo";
   version = "1.4.16";
 
   src = fetchFromGitHub {
     owner = "j178";
     repo = "leetgo";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-rhMEeVkH9Z0pvtOtxooZKaiIQYyc067vqdSB9SIvqxg=";
   };
 
@@ -24,7 +24,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/j178/leetgo/constants.Version=${version}"
+    "-X=github.com/j178/leetgo/constants.Version=${finalAttrs.version}"
   ];
 
   subPackages = [ "." ];
@@ -39,9 +39,9 @@ buildGoModule rec {
   meta = {
     description = "Command-line tool for LeetCode";
     homepage = "https://github.com/j178/leetgo";
-    changelog = "https://github.com/j178/leetgo/releases/tag/v${version}";
+    changelog = "https://github.com/j178/leetgo/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Ligthiago ];
     mainProgram = "leetgo";
   };
-}
+})

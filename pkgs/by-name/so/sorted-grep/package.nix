@@ -4,12 +4,12 @@
   lib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sorted-grep";
   version = "1.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/sgrep/sgrep-${version}.tgz";
+    url = "mirror://sourceforge/sgrep/sgrep-${finalAttrs.version}.tgz";
     hash = "sha256-3F7cXrZnB38YwE1sHYm/CIGKmG+1c0QU+Pk3Y53a0T4=";
   };
 
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ ivan ];
   };
-}
+})

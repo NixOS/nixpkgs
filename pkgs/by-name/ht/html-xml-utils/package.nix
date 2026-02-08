@@ -6,12 +6,12 @@
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "html-xml-utils";
   version = "8.7";
 
   src = fetchurl {
-    url = "https://www.w3.org/Tools/HTML-XML-utils/${pname}-${version}.tar.gz";
+    url = "https://www.w3.org/Tools/HTML-XML-utils/html-xml-utils-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-iIoxYxp6cDCLsvMz4HfQQW9Lt4MX+Gl/+0qVGH9ncwE=";
   };
 
@@ -26,4 +26,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.w3c;
     platforms = lib.platforms.all;
   };
-}
+})

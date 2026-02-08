@@ -6,14 +6,14 @@
   which,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fatrace";
   version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "martinpitt";
     repo = "fatrace";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-ncLmO7DwkB2nC4K/40ctwRheVVSPDK+zfcGJZvYyuVI=";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     '';
     platforms = lib.platforms.linux;
   };
-}
+})

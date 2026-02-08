@@ -20,11 +20,11 @@
   kwindowsystem,
   kdelibs4support,
   kiconthemes,
-  libpthreadstubs,
+  libpthread-stubs,
   pcre,
-  libXdmcp,
-  libX11,
-  libXau, # X11 dependencies
+  libxdmcp,
+  libx11,
+  libxau, # X11 dependencies
   fetchpatch,
 }:
 
@@ -76,11 +76,11 @@ mkDerivation rec {
     kwindowsystem
     kdelibs4support
     frameworkintegration
-    libpthreadstubs
+    libpthread-stubs
     pcre
-    libXdmcp
-    libX11
-    libXau
+    libxdmcp
+    libx11
+    libxau
   ]
   ++ lib.optional gtk2Support gtk2;
 

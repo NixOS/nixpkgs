@@ -4,17 +4,17 @@
   fetchurl,
   imake,
   gccmakedep,
-  libX11,
-  libXext,
-  libXmu,
+  libx11,
+  libxext,
+  libxmu,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "larswm";
   version = "7.5.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/larswm/larswm-${version}.tar.gz";
+    url = "mirror://sourceforge/larswm/larswm-${finalAttrs.version}.tar.gz";
     sha256 = "1xmlx9g1nhklxjrg0wvsya01s4k5b9fphnpl9zdwp29mm484ni3v";
   };
 
@@ -23,9 +23,9 @@ stdenv.mkDerivation rec {
     gccmakedep
   ];
   buildInputs = [
-    libX11
-    libXext
-    libXmu
+    libx11
+    libxext
+    libxmu
   ];
 
   makeFlags = [
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.free;
     platforms = lib.platforms.linux;
   };
-}
+})

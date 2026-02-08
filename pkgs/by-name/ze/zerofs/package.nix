@@ -4,29 +4,26 @@
   cmake,
   fetchFromGitHub,
   nix-update-script,
-  rust-jemalloc-sys,
   rustPlatform,
   versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zerofs";
-  version = "0.22.9";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "Barre";
     repo = "ZeroFS";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eAH2zOM5FOUaLRfMQp2Dsa6ghKmOGVVbOz7JETnVRzU=";
+    hash = "sha256-qfn4Js4/D+/X4nbO08DAxU1tqfTKERUMxU6q3L9RfkY=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/zerofs";
 
-  cargoHash = "sha256-U/ZsjZ42PxTd/g2G1DfDazCSOIvsULtt/zufyBVZFyQ=";
+  cargoHash = "sha256-0sOb+QQRJ1QNs0CofnCZTAPxQ+UsA0R3J02qtJ4pD7w=";
 
   nativeBuildInputs = [ cmake ];
-
-  buildInputs = [ rust-jemalloc-sys ];
 
   env = {
     RUSTFLAGS = "--cfg tokio_unstable";

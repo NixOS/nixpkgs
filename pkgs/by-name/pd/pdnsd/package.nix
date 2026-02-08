@@ -5,12 +5,12 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pdnsd";
   version = "1.2.9a-par";
 
   src = fetchurl {
-    url = "http://members.home.nl/p.a.rombouts/pdnsd/releases/pdnsd-${version}.tar.gz";
+    url = "http://members.home.nl/p.a.rombouts/pdnsd/releases/pdnsd-${finalAttrs.version}.tar.gz";
     sha256 = "0yragv5zk77a1hfkpnsh17vvsw8b14d6mzfng4bb7i58rb83an5v";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

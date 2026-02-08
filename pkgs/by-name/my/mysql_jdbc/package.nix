@@ -7,13 +7,13 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mysql-connector-java";
-  version = "9.4.0";
+  version = "9.6.0";
 
   src = fetchurl {
-    url = "https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-j-${version}.zip";
-    hash = "sha256-Ze/HzVelG3p5tFnu0lvP0gKWvGr3yGWGBjlVEBZorJ4=";
+    url = "https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-j-${finalAttrs.version}.zip";
+    hash = "sha256-JUTlcbET+e4FNyDssKQ10EwD3riZIRohEfP01JhMpjs=";
   };
 
   installPhase = ''
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-}
+})

@@ -36,9 +36,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     mkdir -p $out/share/icons
     cp -r Gruvbox-Plus-Dark $out/share/icons/
+    cp -r Gruvbox-Plus-Light $out/share/icons/
     patchShebangs scripts/folders-color-chooser
     ./scripts/folders-color-chooser -c ${folder-color}
     gtk-update-icon-cache $out/share/icons/Gruvbox-Plus-Dark
+    gtk-update-icon-cache $out/share/icons/Gruvbox-Plus-Light
 
     runHook postInstall
   '';

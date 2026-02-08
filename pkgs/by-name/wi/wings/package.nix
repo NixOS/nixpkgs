@@ -13,14 +13,14 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wings";
   version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "dgud";
     repo = "wings";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-3ulWbAOtYujaymN50u7buvnBdtYMEAe8Ji3arvPUH/s=";
   };
 
@@ -52,12 +52,12 @@ stdenv.mkDerivation rec {
     find . -type f -name "*.[eh]rl" -exec sed -i 's,wings/src/,../src/,' {} \;
     find . -type f -name "*.[eh]rl" -exec sed -i 's,wings/e3d/,../e3d/,' {} \;
     find . -type f -name "*.[eh]rl" -exec sed -i 's,wings/intl_tools/,../intl_tools/,' {} \;
-    echo "${version}" > version
+    echo "${finalAttrs.version}" > version
   '';
 
   makeFlags = [
     "TYPE=opt"
-    "WINGS_VSN=${version}"
+    "WINGS_VSN=${finalAttrs.version}"
   ];
 
   preBuild = ''
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     runHook preBuild
 
-    make TYPE=opt WINGS_VSN=${version}
+    make TYPE=opt WINGS_VSN=${finalAttrs.version}
     cd c_src
     make
     cd ..
@@ -84,17 +84,17 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin $out/lib/wings-${version}/ebin $out/lib/wings-${version}/priv
-    cp -R ebin/* $out/lib/wings-${version}/ebin/
-    cp -R textures shaders plugins $out/lib/wings-${version}/
-    cp -R priv/* $out/lib/wings-${version}/priv/ || true
+    mkdir -p $out/bin $out/lib/wings-${finalAttrs.version}/ebin $out/lib/wings-${finalAttrs.version}/priv
+    cp -R ebin/* $out/lib/wings-${finalAttrs.version}/ebin/
+    cp -R textures shaders plugins $out/lib/wings-${finalAttrs.version}/
+    cp -R priv/* $out/lib/wings-${finalAttrs.version}/priv/ || true
     if [ -d c_src ]; then
-      find c_src -name "*.so" -exec cp {} $out/lib/wings-${version}/priv/ \;
+      find c_src -name "*.so" -exec cp {} $out/lib/wings-${finalAttrs.version}/priv/ \;
     fi
     cat << EOF > $out/bin/wings
     #!${runtimeShell}
     ${erlang}/bin/erl \
-      -pa $out/lib/wings-${version}/ebin -run wings_start start_halt "$@"
+      -pa $out/lib/wings-${finalAttrs.version}/ebin -run wings_start start_halt "$@"
     EOF
     chmod +x $out/bin/wings
 
@@ -113,4 +113,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "wings";
   };
-}
+})

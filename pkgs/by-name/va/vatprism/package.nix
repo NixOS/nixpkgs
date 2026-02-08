@@ -9,12 +9,12 @@
   libxkbcommon,
   wayland,
   fontconfig,
-  libX11,
-  libXcursor,
-  libXi,
-  libXrandr,
-  libXxf86vm,
-  libXtst,
+  libx11,
+  libxcursor,
+  libxi,
+  libxrandr,
+  libxxf86vm,
+  libxtst,
   copyDesktopItems,
   makeDesktopItem,
 }:
@@ -23,12 +23,12 @@ let
     libGL
     libxkbcommon
     wayland
-    libX11
-    libXcursor
-    libXi
-    libXrandr
-    libXxf86vm
-    libXtst
+    libx11
+    libxcursor
+    libxi
+    libxrandr
+    libxxf86vm
+    libxtst
     fontconfig
   ];
   jdkWithFX = jdk.override { enableJavaFX = true; };

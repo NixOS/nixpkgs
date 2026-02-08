@@ -10,10 +10,10 @@
   intel-gpu-tools,
   libdrm,
   libva,
-  libX11,
+  libx11,
   libGL,
   wayland,
-  libXext,
+  libxext,
   enableHybridCodec ? false,
   vaapi-intel-hybrid,
   enableGui ? true,
@@ -58,8 +58,8 @@ stdenv.mkDerivation {
     libva
   ]
   ++ lib.optionals enableGui [
-    libX11
-    libXext
+    libx11
+    libxext
     libGL
     wayland
   ]

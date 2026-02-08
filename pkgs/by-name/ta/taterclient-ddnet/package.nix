@@ -13,7 +13,7 @@
   libGLU,
   libnotify,
   libogg,
-  libX11,
+  libx11,
   opusfile,
   pcre,
   python3,
@@ -33,13 +33,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "taterclient-ddnet";
-  version = "10.7.0";
+  version = "10.8.1";
 
   src = fetchFromGitHub {
     owner = "TaterClient";
     repo = "TClient";
     tag = "V${finalAttrs.version}";
-    hash = "sha256-9d4vKrWuDW2E1PXs4yRAyR6zNPfYEclW8RfHNnpkpyc=";
+    hash = "sha256-yPGXbTxbj+hsdygC68TRtzVg+flEAxqNnhd9smbbekU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     spirv-tools
     glew
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ libX11 ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libx11 ];
 
   strictDeps = true;
 

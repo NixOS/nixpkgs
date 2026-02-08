@@ -4,14 +4,14 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "fscan";
   version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "shadow1ng";
     repo = "fscan";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-OFlwL7PXKOPKIW2YCirCGCXRCGIWYMmYHMmSU2he/tw=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ Misaka13514 ];
     mainProgram = "fscan";
   };
-}
+})

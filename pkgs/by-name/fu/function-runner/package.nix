@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "function-runner";
   version = "9.0.0";
 
   src = fetchFromGitHub {
     owner = "Shopify";
     repo = "function-runner";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-xzajHtFs7cp7D1ZdG3jBFbjheTSgWR/Vz4fkew3iAkc=";
   };
 
@@ -24,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nintron ];
   };
-}
+})

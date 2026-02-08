@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "pyparsing";
   version = "3.2.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyparsing";

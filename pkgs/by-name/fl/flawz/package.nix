@@ -10,14 +10,14 @@
   buildPackages,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "flawz";
   version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "flawz";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-7p/BUXrElJutUcRMu+LxdsMxA6lCDnaci0fDaKGsawI=";
   };
 
@@ -66,7 +66,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Terminal UI for browsing CVEs";
     homepage = "https://github.com/orhun/flawz";
-    changelog = "https://github.com/orhun/flawz/releases/tag/v${version}";
+    changelog = "https://github.com/orhun/flawz/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       mit
       asl20
@@ -75,4 +75,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ anas ];
     platforms = with lib.platforms; unix ++ windows;
   };
-}
+})

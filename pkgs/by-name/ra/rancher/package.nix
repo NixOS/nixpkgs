@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "rancher";
-  version = "2.12.3";
+  version = "2.13.2";
 
   src = fetchFromGitHub {
     owner = "rancher";
     repo = "cli";
-    tag = "v${version}";
-    hash = "sha256-i+l+vs+uD6h0GruvxhkQtb7DYCJ3uysa/rZ8hGmmu7Y=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5nGUxdhMhhwDaVRwURis3FElMonwoe8h6M09EDwf+Bc=";
   };
 
   env.CGO_ENABLED = 0;
@@ -20,12 +20,12 @@ buildGoModule rec {
   ldflags = [
     "-w"
     "-s"
-    "-X main.VERSION=${version}"
+    "-X main.VERSION=${finalAttrs.version}"
     "-extldflags"
     "-static"
   ];
 
-  vendorHash = "sha256-mObfou6JXQ+ZWvxWMpdcC1ymngFJZ8k9I+rCYCFvDg4=";
+  vendorHash = "sha256-CQkM7zC5RPCguGp6dxBSjnDkWe11hp5v6QwZ6kRAXQE=";
 
   postInstall = ''
     mv $out/bin/cli $out/bin/rancher
@@ -33,7 +33,7 @@ buildGoModule rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
-    $out/bin/rancher | grep ${version} > /dev/null
+    $out/bin/rancher | grep ${finalAttrs.version} > /dev/null
   '';
 
   meta = {
@@ -43,4 +43,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

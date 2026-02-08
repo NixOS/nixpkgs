@@ -7,19 +7,22 @@
   vulkan-headers,
   libxkbcommon,
   wayland,
-  xorg,
+  libxfixes,
+  libxcursor,
+  libx11,
+  libxcb,
   libGL,
   sqlite,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "transito";
   version = "0.10.0";
 
   src = fetchFromSourcehut {
     owner = "~mil";
     repo = "transito";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-87U9RdlP260ApkGJB3dLitxAdY3I9nWrukxzRnwuJ2E=";
   };
   vendorHash = "sha256-mgvfrNKvdjLa7O0oTSec8u3eHHU66ZDqpKzNeeyy2J0=";
@@ -29,16 +32,16 @@ buildGoModule rec {
     vulkan-headers
     libxkbcommon
     wayland
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXfixes
-    xorg.libxcb
+    libx11
+    libxcursor
+    libxfixes
+    libxcb
     libGL
     sqlite
   ];
 
   tags = [ "sqlite_math_functions" ];
-  ldflags = [ "-X git.sr.ht/~mil/transito/src/uipages/pageconfig.Commit=${version}" ];
+  ldflags = [ "-X git.sr.ht/~mil/transito/src/uipages/pageconfig.Commit=${finalAttrs.version}" ];
 
   postInstall = ''
     install -Dm644 -t $out/share/applications assets/transito.desktop
@@ -68,11 +71,11 @@ buildGoModule rec {
       GTFS data, to name a few: Lisbon, NYC, Brussels, Krakow, and Bourges.
     '';
     homepage = "https://git.sr.ht/~mil/transito";
-    changelog = "https://git.sr.ht/~mil/transito/refs/v${version}";
+    changelog = "https://git.sr.ht/~mil/transito/refs/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.McSinyx ];
     mainProgram = "transito";
     platforms = lib.platforms.unix;
     broken = stdenv.isDarwin;
   };
-}
+})

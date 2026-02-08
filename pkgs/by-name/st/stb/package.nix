@@ -6,7 +6,7 @@
   makePkgconfigItem,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "stb";
   version = "0-unstable-2023-01-29";
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
         prefix = "${placeholder "out"}";
         includedir = "${prefix}/include";
       };
-      inherit (meta) description;
+      inherit (finalAttrs.meta) description;
     })
   ];
 
@@ -53,4 +53,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})

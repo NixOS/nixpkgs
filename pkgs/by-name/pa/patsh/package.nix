@@ -17,14 +17,14 @@ let
   '';
 in
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "patsh";
   version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "patsh";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-d2Br4RAlKO7Bpse8sFbIDCIYd2fYvby0ar9oIbQS2jc=";
   };
 
@@ -46,8 +46,8 @@ rustPlatform.buildRustPackage rec {
     description = "Command-line tool for patching shell scripts inspired by resholve";
     mainProgram = "patsh";
     homepage = "https://github.com/nix-community/patsh";
-    changelog = "https://github.com/nix-community/patsh/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/nix-community/patsh/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mpl20;
     maintainers = [ ];
   };
-}
+})

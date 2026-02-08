@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   cmake,
   pkg-config,
   boost186,
@@ -40,13 +39,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "monero-cli";
-  version = "0.18.4.4";
+  version = "0.18.4.5";
 
   src = fetchFromGitHub {
     owner = "monero-project";
     repo = "monero";
     rev = "v${version}";
-    hash = "sha256-NH15PKlkm9Hpt25iIuUQmhDg+X3Qo+yUAbDY4LNnZdM=";
+    hash = "sha256-8ObxMPBpH5uonpb7E/PEfuq++7R4MU0k1khsott5J88=";
   };
 
   patches = [

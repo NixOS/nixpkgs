@@ -9,13 +9,13 @@
 
 buildDotnetModule rec {
   pname = "sbom-tool";
-  version = "4.1.5";
+  version = "4.1.7";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "sbom-tool";
     tag = "v${version}";
-    hash = "sha256-MIsCgUBHhaHobKfq3O/hL7+bXZVHgvtig7h4JIN8Gws=";
+    hash = "sha256-Ls+IaqaWZOjEWvomV9q4JBdZkaevVtI6lCOG8l44AQM=";
   };
 
   projectFile = "src/Microsoft.Sbom.Tool/Microsoft.Sbom.Tool.csproj";

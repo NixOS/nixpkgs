@@ -7,14 +7,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "psi-notify";
   version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "cdown";
     repo = "psi-notify";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-GhGiSI5r0Ki6+MYNa5jCDyYZEW5R9LDNZ/S8K+6L0jo=";
   };
 
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ eduarrrd ];
     mainProgram = "psi-notify";
   };
-}
+})

@@ -17,7 +17,19 @@
   makeWrapper,
   openssl,
   stdenv,
-  xorg,
+  libxcb-wm,
+  libxcb-render-util,
+  libxcb-keysyms,
+  libxcb-image,
+  libxcb-cursor,
+  libxrender,
+  libxi,
+  libxext,
+  libxau,
+  libx11,
+  libsm,
+  libice,
+  libxcb,
   zlib,
 }:
 stdenv.mkDerivation (finalAttrs: rec {
@@ -54,19 +66,19 @@ stdenv.mkDerivation (finalAttrs: rec {
     libxkbcommon
     openssl
     stdenv.cc.cc
-    xorg.libICE
-    xorg.libSM
-    xorg.libX11
-    xorg.libXau
-    xorg.libxcb
-    xorg.libXext
-    xorg.libXi
-    xorg.libXrender
-    xorg.xcbutilimage
-    xorg.xcbutilkeysyms
-    xorg.xcbutilrenderutil
-    xorg.xcbutilwm
-    xorg.xcbutilcursor
+    libice
+    libsm
+    libx11
+    libxau
+    libxcb
+    libxext
+    libxi
+    libxrender
+    libxcb-image
+    libxcb-keysyms
+    libxcb-render-util
+    libxcb-wm
+    libxcb-cursor
     zlib
   ];
   buildInputs = runtimeDependencies;

@@ -21,8 +21,8 @@
   wayland-protocols,
   wayland-scanner,
   libwebp,
-  enchant2,
-  xorg,
+  enchant,
+  libx11,
   libxkbcommon,
   libavif,
   libepoxy,
@@ -37,7 +37,7 @@
   hyphen,
   icu,
   libsysprof-capture,
-  libpthreadstubs,
+  libpthread-stubs,
   nettle,
   libtasn1,
   p11-kit,
@@ -141,7 +141,7 @@ clangStdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     at-spi2-core
     cairo # required even when using skia
-    enchant2
+    enchant
     flite
     libavif
     libepoxy
@@ -160,7 +160,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     libidn
     libintl
     lcms2
-    libpthreadstubs
+    libpthread-stubs
     libsysprof-capture
     libtasn1
     libwebp
@@ -186,7 +186,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     libseccomp
     libmanette
     wayland
-    xorg.libX11
+    libx11
   ]
   ++ lib.optionals systemdSupport [
     systemdLibs

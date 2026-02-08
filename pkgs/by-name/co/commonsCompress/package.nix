@@ -4,17 +4,17 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.28.0";
   pname = "commons-compress";
 
   src = fetchurl {
-    url = "mirror://apache/commons/compress/binaries/${pname}-${version}-bin.tar.gz";
+    url = "mirror://apache/commons/compress/binaries/commons-compress-${finalAttrs.version}-bin.tar.gz";
     sha256 = "sha256-VfAt77mP79azaGiP4+aY5rg2dUFhr59woL6tv2eza5I=";
   };
 
   installPhase = ''
-    tar xf ${src}
+    tar xf ${finalAttrs.src}
     mkdir -p $out/share/java
     cp *.jar $out/share/java/
   '';
@@ -27,4 +27,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     platforms = with lib.platforms; unix;
   };
-}
+})

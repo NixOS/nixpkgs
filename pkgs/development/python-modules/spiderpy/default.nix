@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "spiderpy";
   version = "1.7.2";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = isPy27;
 

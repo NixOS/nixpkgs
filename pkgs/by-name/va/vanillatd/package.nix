@@ -24,7 +24,7 @@
   symlinkJoin,
   rsync,
 
-  appName,
+  appName ? "vanillatd",
   CMAKE_BUILD_TYPE ? "RelWithDebInfo", # "Choose the type of build, recommended options are: Debug Release RelWithDebInfo"
 }:
 assert lib.assertOneOf "appName" appName [
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-iUF9UFc0FMvOwLkGqSyLYGy5E8YqNySqDp5VVUa+u4o=";
   };
   # TODO: Remove this. Just add this flag to ignore the format-security error temporarily.
-  NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
 
   buildInputs = [
     SDL2

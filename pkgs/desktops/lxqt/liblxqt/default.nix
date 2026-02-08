@@ -5,7 +5,7 @@
   cmake,
   gitUpdater,
   kwindowsystem,
-  libXScrnSaver,
+  libxscrnsaver,
   libqtxdg,
   lxqt-build-tools,
   polkit-qt-1,
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     kwindowsystem
-    libXScrnSaver
+    libxscrnsaver
     libqtxdg
     polkit-qt-1
     qtsvg

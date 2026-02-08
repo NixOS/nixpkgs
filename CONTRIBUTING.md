@@ -680,7 +680,7 @@ If you have any problems with formatting, please ping the [formatting team](http
   { buildInputs = if stdenv.hostPlatform.isDarwin then [ iconv ] else null; }
   ```
 
-  As an exception, an explicit conditional expression with null can be used when fixing a important bug without triggering a mass rebuild.
+  As an exception, an explicit conditional expression with null can be used when fixing an important bug without triggering a mass rebuild.
   If this is done a follow up pull request _should_ be created to change the code to `lib.optional(s)`.
 
 - Any style choices not covered here but that can be expressed as general rules should be left at the discretion of the authors of changes and _not_ commented in reviews.
@@ -865,7 +865,7 @@ If someone approved and didn't merge a few days later, they most likely just for
 Please see it as your responsibility to actively remind reviewers of your open PRs.
 
 The easiest way to do so is to notify them via GitHub.
-Github notifies people involved, whenever you add a comment or push to your PR or re-request their review.
+GitHub notifies people involved, whenever you add a comment or push to your PR or re-request their review.
 Doing any of that will get their attention again.
 Everyone deserves proper attention, and yes, that includes you!
 However, please be mindful that committers can sadly not always give everyone the attention they deserve.

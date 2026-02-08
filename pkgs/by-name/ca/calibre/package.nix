@@ -38,11 +38,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
-  version = "8.14.0";
+  version = "8.16.2";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${finalAttrs.version}/calibre-${finalAttrs.version}.tar.xz";
-    hash = "sha256-97kkjzjbrdmiWpNaz9nSt6BbgVvczsxunLrKVJvqxVQ=";
+    hash = "sha256-AYfQQ1T1PMB0EUHaAml37jCnfvoMN7GDm94FiCIsHGw=";
   };
 
   patches =
@@ -135,6 +135,8 @@ stdenv.mkDerivation (finalAttrs: {
         regex
         sip
         setuptools
+        tzdata
+        tzlocal
         zeroconf
         jeepney
         pycryptodome
@@ -212,6 +214,7 @@ stdenv.mkDerivation (finalAttrs: {
         wrapProgram $program \
           ''${qtWrapperArgs[@]} \
           ''${gappsWrapperArgs[@]} \
+          --set QTWEBENGINE_CHROMIUM_FLAGS "--disable-gpu" \
           --prefix PATH : ${
             lib.makeBinPath [
               libjpeg

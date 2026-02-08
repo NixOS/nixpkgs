@@ -27,7 +27,7 @@ let
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "splix-svn";
   version = "315";
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     # We build this from svn, because splix hasn't been in released in several years
     # although the community has been adding some new printer models.
     url = "svn://svn.code.sf.net/p/splix/code/splix";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "16wbm4xnz35ca3mw2iggf5f4jaxpyna718ia190ka6y4ah932jxl";
   };
 
@@ -65,4 +65,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

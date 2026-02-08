@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   rustPlatform,
   pytestCheckHook,
@@ -22,8 +21,6 @@ in
 buildPythonPackage {
   inherit pname version src;
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   nativeBuildInputs = with rustPlatform; [
     cargoSetupHook

@@ -8,15 +8,15 @@
   canto-daemon,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   version = "0.9.9";
-  format = "pyproject";
+  pyproject = true;
   pname = "canto-curses";
 
   src = fetchFromGitHub {
     owner = "themoken";
     repo = "canto-curses";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1vzb9n1j4gxigzll6654ln79lzbrrm6yy0lyazd9kldyl349b8sr";
   };
 
@@ -55,4 +55,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.devhell ];
   };
-}
+})

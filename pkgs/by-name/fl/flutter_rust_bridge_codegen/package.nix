@@ -5,21 +5,27 @@
   cargo-expand,
   stdenv,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "flutter_rust_bridge_codegen";
   version = "2.11.1";
 
   src = fetchFromGitHub {
     owner = "fzyzcjy";
     repo = "flutter_rust_bridge";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Us+LwT6tjBcTl2xclVsiLauSlIO8w+PiokpiDB+h1fI=";
     fetchSubmodules = true;
   };
 
   cargoHash = "sha256-pxEwcLiRB95UBfXb+JgS8duEXiZUApH/C8Exus5TkfU=";
-  cargoBuildFlags = "--package flutter_rust_bridge_codegen";
-  cargoTestFlags = "--package flutter_rust_bridge_codegen";
+  cargoBuildFlags = [
+    "--package"
+    "flutter_rust_bridge_codegen"
+  ];
+  cargoTestFlags = [
+    "--package"
+    "flutter_rust_bridge_codegen"
+  ];
 
   # needed to get tests running
   nativeBuildInputs = [ cargo-expand ];
@@ -44,4 +50,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.eymeric ];
   };
-}
+})

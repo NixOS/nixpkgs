@@ -1,16 +1,19 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
+  autoconf-archive,
+  autoreconfHook,
+  mate-common,
   pkg-config,
   gettext,
   itstool,
   libxml2,
   libcanberra-gtk3,
   libgtop,
-  libXdamage,
-  libXpresent,
-  libXres,
+  libxdamage,
+  libxpresent,
+  libxres,
   libstartup_notification,
   zenity,
   glib,
@@ -18,32 +21,39 @@
   mate-desktop,
   mate-settings-daemon,
   wrapGAppsHook3,
+  yelp-tools,
   gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "marco";
-  version = "1.28.1";
+  version = "1.28.2";
 
-  src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor finalAttrs.version}/marco-${finalAttrs.version}.tar.xz";
-    sha256 = "JJbl5A7pgM1oSUk6w+D4/Q3si4HGdNqNm6GaV38KwuE=";
+  src = fetchFromGitHub {
+    owner = "mate-desktop";
+    repo = "marco";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-k45k49mPxy4vmDtCFHaqk0kwZ5wXVAaTj3kanK79n7I=";
   };
 
   nativeBuildInputs = [
+    autoconf-archive
+    autoreconfHook
     pkg-config
     gettext
     itstool
     libxml2 # xmllint
+    mate-common # mate-common.m4 macros
     wrapGAppsHook3
+    yelp-tools
   ];
 
   buildInputs = [
     libcanberra-gtk3
     libgtop
-    libXdamage
-    libXpresent
-    libXres
+    libxdamage
+    libxpresent
+    libxres
     libstartup_notification
     gtk3
     zenity
@@ -62,7 +72,6 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   passthru.updateScript = gitUpdater {
-    url = "https://git.mate-desktop.org/marco";
     odd-unstable = true;
     rev-prefix = "v";
   };

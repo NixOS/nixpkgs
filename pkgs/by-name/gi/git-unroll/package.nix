@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   makeWrapper,
   bash,
 
@@ -17,8 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "git-unroll";
   version = "0-unstable-2025-08-14";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "gm6k";
     repo = "git-unroll";
     rev = "a66aad56af0440e1d6e807518af298264861b2c7";

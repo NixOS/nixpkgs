@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "yambar-hyprland-wses";
   version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "jonhoo";
     repo = "yambar-hyprland-wses";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-furHj1AAFgNiNHP9RBsVrIvrDckSKU8FXilzH9TQ99c=";
   };
 
@@ -28,4 +28,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "yambar-hyprland-wses";
     platforms = lib.platforms.linux;
   };
-}
+})

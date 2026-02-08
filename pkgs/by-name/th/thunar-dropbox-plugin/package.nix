@@ -10,14 +10,14 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "thunar-dropbox";
   version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "Jeinzi";
     repo = "thunar-dropbox";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-uYqO87ftEtnSRn/yMSF1jVGleYXR3hVj2Jb1/kAd64Y=";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     teams = [ lib.teams.xfce ];
   };
-}
+})

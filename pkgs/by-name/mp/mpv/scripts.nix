@@ -82,16 +82,15 @@ let
 
   scope =
     self:
-    with lib;
-    pipe
+    lib.pipe
       {
         inherit (self) callPackage;
         directory = ./scripts;
       }
       [
-        packagesFromDirectoryRecursive
-        recurseIntoAttrs
-        (mapAttrsRecursiveCond (x: x.recurseForDerivations or false) addTests)
+        lib.packagesFromDirectoryRecursive
+        lib.recurseIntoAttrs
+        (lib.mapAttrsRecursiveCond (x: x.recurseForDerivations or false) addTests)
       ];
 
   mkAliases = self: {

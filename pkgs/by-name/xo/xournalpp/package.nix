@@ -33,13 +33,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xournalpp";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "xournalpp";
     repo = "xournalpp";
     rev = "v${version}";
-    hash = "sha256-yPuApAmhopMWKROUUsok9rULDVtqXC6WIfm2GEevQkw=";
+    hash = "sha256-adzL/2zQlG4hBPV0rQzkQrOyGROv73GyjIH8Debhhq8=";
   };
 
   nativeBuildInputs = [
@@ -86,7 +86,10 @@ stdenv.mkDerivation rec {
     homepage = "https://xournalpp.github.io/";
     changelog = "https://github.com/xournalpp/xournalpp/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ sikmir ];
+    maintainers = with lib.maintainers; [
+      iedame
+      sikmir
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "xournalpp";
   };

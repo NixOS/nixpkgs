@@ -3,40 +3,40 @@
   rustPlatform,
   fetchFromGitHub,
   libdrm,
-  libX11,
+  libx11,
   libGL,
   wayland,
   wayland-protocols,
   libxkbcommon,
-  libXrandr,
-  libXi,
-  libXcursor,
+  libxrandr,
+  libxi,
+  libxcursor,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "amdgpu_top";
-  version = "0.11.0";
+  version = "0.11.2";
 
   src = fetchFromGitHub {
     owner = "Umio-Yasuno";
     repo = "amdgpu_top";
     tag = "v${version}";
-    hash = "sha256-ZXvTLzEjH+R59GqRzDcdtNI7MD7SpG89Wm32KdgEAgg=";
+    hash = "sha256-yw73bKO91O05WBQNwjcQ+AqxYgGXXC7XJzUnMx5/IWc=";
   };
 
-  cargoHash = "sha256-L9vQHht7sZCosKTiMS77IG2WOOTmnMbLQqN8SInU6zM=";
+  cargoHash = "sha256-hQrgAyi7740bY5knICWACZhDYoZwPs/dO/PgVC4Krx0=";
 
   buildInputs = [
     libdrm
-    libX11
+    libx11
     libGL
     wayland
     wayland-protocols
     libxkbcommon
-    libXrandr
-    libXi
-    libXcursor
+    libxrandr
+    libxi
+    libxcursor
   ];
 
   postInstall = ''

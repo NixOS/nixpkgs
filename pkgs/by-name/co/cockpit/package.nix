@@ -14,6 +14,7 @@
   git,
   glib,
   glib-networking,
+  gobject-introspection,
   gnused,
   gnutls,
   hostname,
@@ -160,15 +161,23 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-warn '"/usr/share' '"/run/current-system/sw/share' \
       --replace-warn '"/lib/systemd' '"/run/current-system/sw/lib/systemd'
 
-    # replace reference to system python interpreter, used for e.g. sosreport
-    substituteInPlace pkg/lib/python.ts \
-      --replace-fail /usr/libexec/platform-python ${python3Packages.python.interpreter}
+    # fix polkit agent helper path
+    substituteInPlace src/cockpit/polkit.py \
+      --replace-fail "/usr/lib/polkit-1/polkit-agent-helper-1" "/run/wrappers/bin/polkit-agent-helper-1"
   '';
 
   configureFlags = [
     "--enable-prefix-only=yes"
     "--disable-pcp" # TODO: figure out how to package its dependency
-    "--with-default-session-path=${placeholder "out"}/bin:/etc/cockpit/bin:${util-linux}/bin:/run/wrappers/bin:/run/current-system/sw/bin"
+    "--with-default-session-path=${
+      lib.makeBinPath [
+        (placeholder "out")
+        "/etc/cockpit"
+        util-linux
+        "/run/wrappers"
+        "/run/current-system/sw"
+      ]
+    }"
     "--with-admin-group=root" # TODO: really? Maybe "wheel"?
   ];
 
@@ -192,8 +201,15 @@ stdenv.mkDerivation (finalAttrs: {
     for binary in $out/bin/cockpit-bridge $out/libexec/cockpit-askpass; do
       chmod +x $binary
       wrapProgram $binary \
-        --prefix PYTHONPATH : $out/${python3Packages.python.sitePackages} \
-        --prefix XDG_DATA_DIRS : /etc/cockpit/share # Cockpit apps will be stored at /etc/cockpit/share/cockpit/ (managed by Cockpit nixos service)
+        --prefix PATH : "/etc/cockpit/bin" \
+        --prefix PYTHONPATH : ${
+          lib.makeSearchPath python3Packages.python.sitePackages [
+            "$out"
+            "/etc/cockpit"
+          ]
+        } \
+        --prefix GI_TYPELIB_PATH : "/etc/cockpit/lib/girepository-1.0" \
+        --prefix XDG_DATA_DIRS : "/etc/cockpit/share"
     done
 
     patchShebangs $out/share/cockpit/issue/update-issue
@@ -256,6 +272,12 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     tests = { inherit (nixosTests) cockpit; };
     updateScript = nix-update-script { };
+    cockpitPath = [
+      glib
+      gobject-introspection
+      python3Packages.python
+      python3Packages.pygobject3
+    ];
   };
 
   meta = {
@@ -264,9 +286,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://cockpit-project.org/";
     changelog = "https://cockpit-project.org/blog/cockpit-${finalAttrs.version}.html";
     license = lib.licenses.lgpl21;
-    maintainers = with lib.maintainers; [
-      lucasew
-      andre4ik3
-    ];
+    teams = [ lib.teams.cockpit ];
   };
 })

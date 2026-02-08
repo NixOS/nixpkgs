@@ -16,16 +16,16 @@
   pciutils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "adriconf";
-  version = "2.7.2";
+  version = "2.7.3";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mesa";
     repo = "adriconf";
-    tag = "v${version}";
-    sha256 = "sha256-0XTsYeS4tNAnGhuJ81fmjHhFS6fVq1lirui5b+ojxTQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MRZYAinBL4fzj/Nhhn22sJgupVMpoeeyOYYWTr+fK+E=";
   };
 
   # fix build with c23
@@ -65,11 +65,11 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://gitlab.freedesktop.org/mesa/adriconf/";
-    changelog = "https://gitlab.freedesktop.org/mesa/adriconf/-/releases/v${version}";
+    changelog = "https://gitlab.freedesktop.org/mesa/adriconf/-/releases/v${finalAttrs.version}";
     description = "GUI tool used to configure open source graphics drivers";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ muscaln ];
     platforms = lib.platforms.linux;
     mainProgram = "adriconf";
   };
-}
+})

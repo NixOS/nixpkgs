@@ -9,7 +9,7 @@
   rsync,
 }:
 let
-  urlRegexp = ''.*xt=urn:bt[im]h:([^&]{64}|[^&]{40}).*'';
+  urlRegexp = ".*xt=urn:bt[im]h:([^&]{64}|[^&]{40}).*";
 in
 {
   url,

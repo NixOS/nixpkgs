@@ -3,7 +3,6 @@
   buildPythonPackage,
   setuptools,
   fetchPypi,
-  pythonOlder,
   cffi,
   pytestCheckHook,
   six,
@@ -12,9 +11,7 @@
 buildPythonPackage rec {
   pname = "bcrypt";
   version = "3.2.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

@@ -8,13 +8,13 @@
   withDebug ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tinyproxy";
   version = "1.11.2";
 
   src = fetchFromGitHub {
     hash = "sha256-bpr/O723FmW2gb+85aJrwW5/U7R2HwbePTx15i3rpsE=";
-    rev = version;
+    rev = finalAttrs.version;
     repo = "tinyproxy";
     owner = "tinyproxy";
   };
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.carlosdagos ];
     mainProgram = "tinyproxy";
   };
-}
+})

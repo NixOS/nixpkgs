@@ -1,11 +1,11 @@
 {
-  libX11,
+  libx11,
   libxcb,
-  libXcomposite,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXrandr,
+  libxcomposite,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxrandr,
   stdenv,
   lib,
   alsa-lib,
@@ -45,14 +45,14 @@ let
     glib
     gtk3
     libdrm
-    libX11
+    libx11
     libxcb
-    libXcomposite
-    libXdamage
-    libXext
-    libXfixes
+    libxcomposite
+    libxdamage
+    libxext
+    libxfixes
     libxkbcommon
-    libXrandr
+    libxrandr
     nspr
     nss
     pango
@@ -62,7 +62,7 @@ let
     stdenv.cc.cc
     stdenv.cc.libc
   ];
-  version = "1.498.21";
+  version = "1.506.0";
 in
 stdenv.mkDerivation {
   pname = "tana";
@@ -70,7 +70,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://github.com/tanainc/tana-desktop-releases/releases/download/v${version}/tana_${version}_amd64.deb";
-    hash = "sha256-6rX6UxOdSk29SYLwyVX6zkLuIxeKVfQfap1Q2zGpN7g=";
+    hash = "sha256-w37/8jxAxdDb0FUlS+eaQhremkXnT2xttj6sFEIxzl4=";
   };
 
   nativeBuildInputs = [

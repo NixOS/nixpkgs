@@ -6,14 +6,14 @@
   autoconf,
   automake,
   fontconfig,
-  libX11,
+  libx11,
   perl,
   flex,
   bison,
   pkg-config,
   tcl,
   tk,
-  xorg,
+  libxft,
   yices, # bsc uses a patched version of yices
   zlib,
   ghc,
@@ -147,11 +147,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = yices.buildInputs ++ [
     fontconfig
-    libX11 # tcltk
+    libx11 # tcltk
     tcl
     tk
     which
-    xorg.libXft
+    libxft
     zlib
   ];
 

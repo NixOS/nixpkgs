@@ -9,7 +9,7 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lzip";
   version = "1.25";
   outputs = [
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://savannah/lzip/${pname}-${version}.tar.gz";
+    url = "mirror://savannah/lzip/lzip-${finalAttrs.version}.tar.gz";
     hash = "sha256-CUGKbY+4P1ET9b2FbglwPfXTe64DCMZo0PNG49PwpW8=";
   };
 
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "lzip";
   };
-}
+})

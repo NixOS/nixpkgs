@@ -1,15 +1,14 @@
 {
   lib,
   buildGoModule,
-  fetchFromGitea,
+  fetchFromCodeberg,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "harmonist";
   version = "0.6.1";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "anaseto";
     repo = "harmonist";
     tag = "v${finalAttrs.version}";

@@ -4,9 +4,9 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  libX11,
+  libx11,
   libxcb,
-  libXrandr,
+  libxrandr,
   wayland,
   moltenvk,
   vulkan-headers,
@@ -36,9 +36,9 @@ stdenv.mkDerivation (finalAttrs: {
     vulkan-headers
   ]
   ++ lib.optionals enableX11 [
-    libX11
+    libx11
     libxcb
-    libXrandr
+    libxrandr
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     wayland

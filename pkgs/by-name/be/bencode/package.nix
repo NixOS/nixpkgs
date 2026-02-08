@@ -10,14 +10,14 @@
   ninja,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bencode";
   version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "fbdtemme";
     repo = "bencode";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-zpxvADZfYTUdlNLMZJSCanPL40EGl9BBCxR7oDhvOTw=";
   };
 
@@ -48,11 +48,11 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Header-only C++20 bencode serialization/deserialization library";
     homepage = "https://github.com/fbdtemme/bencode";
-    changelog = "https://github.com/fbdtemme/bencode/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/fbdtemme/bencode/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.unix;
     # Broken because the default stdenv on these targets doesn't support C++20.
     broken = with stdenv; isDarwin || (isLinux && isAarch64);
   };
-}
+})

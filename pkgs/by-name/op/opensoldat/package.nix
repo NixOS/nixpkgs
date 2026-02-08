@@ -10,7 +10,7 @@
   physfs,
   openal,
   gamenetworkingsockets,
-  xorg,
+  libx11,
   autoPatchelfHook,
   cmake,
   python3,
@@ -80,10 +80,10 @@ stdenv.mkDerivation rec {
     physfs
     openal
     gamenetworkingsockets
-    xorg.libX11
+    libx11
   ];
   # TODO(@sternenseemann): set proper rpath via cmake, so we don't need autoPatchelfHook
-  runtimeDependencies = [ xorg.libX11 ];
+  runtimeDependencies = [ libx11 ];
 
   # make sure opensoldat{,server} find their game archive,
   # let them write their state and configuration files

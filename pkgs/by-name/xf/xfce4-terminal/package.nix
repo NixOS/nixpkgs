@@ -13,7 +13,7 @@
   gtk3,
   gtk-layer-shell,
   libutempter,
-  libX11,
+  libx11,
   libxfce4ui,
   pcre2,
   vte,
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     gtk-layer-shell
     libutempter
-    libX11
+    libx11
     libxfce4ui
     pcre2
     vte

@@ -8,7 +8,7 @@
   makeDesktopItem,
   copyDesktopItems,
   vencord,
-  electron,
+  electron_40,
   libicns,
   pipewire,
   libpulseaudio,
@@ -17,6 +17,7 @@
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
+  jq,
   nix-update-script,
   withTTS ? true,
   withMiddleClickScroll ? false,
@@ -24,15 +25,18 @@
   # letting vesktop manage it's own version
   withSystemVencord ? false,
 }:
+let
+  electron = electron_40;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vesktop";
-  version = "1.6.3";
+  version = "1.6.4";
 
   src = fetchFromGitHub {
     owner = "Vencord";
     repo = "Vesktop";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Ceo66G9Dhz6cL4PlXXrM0Es9QrqFCvlaHgvP/c1aJfQ=";
+    hash = "sha256-jLaA6tHupiMdzZK42TLB1oqd9/5pt1TERJiRG4FIM7k=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -44,13 +48,14 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     pnpm = pnpm_10;
     fetcherVersion = 2;
-    hash = "sha256-H5O08/2cWNj1KfYV1be+uYobDYGEdEfO0nlazbtiqvc=";
+    hash = "sha256-V38oQAhj4PBuaFXyeEHdBKaTXeIdeqNk887gPSmtZoU=";
   };
 
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
     pnpm_10
+    jq
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     # vesktop uses venmic, which is a shipped as a prebuilt node module
@@ -88,10 +93,22 @@ stdenv.mkDerivation (finalAttrs: {
     export CSC_IDENTITY_AUTO_DISCOVERY=false
   '';
 
-  # electron builds must be writable on darwin
-  preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
+  # electron builds must be writable
+  preBuild = ''
+    # Validate electron version matches upstream package.json
+    if [ "`jq -r '.devDependencies.electron' < package.json | cut -d. -f1 | tr -d '^'`" != "${lib.versions.major electron.version}" ]
+    then
+      echo "ERROR: electron version mismatch between package.json and nixpkgs"
+      exit 1
+    fi
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     cp -r ${electron.dist}/Electron.app .
     chmod -R u+w Electron.app
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    cp -r ${electron.dist} electron-dist
+    chmod -R u+w electron-dist
   '';
 
   buildPhase = ''
@@ -101,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm exec electron-builder \
       --dir \
       -c.asarUnpack="**/*.node" \
-      -c.electronDist=${if stdenv.hostPlatform.isDarwin then "." else electron.dist} \
+      -c.electronDist=${if stdenv.hostPlatform.isDarwin then "." else "electron-dist"} \
       -c.electronVersion=${electron.version}
 
     runHook postBuild

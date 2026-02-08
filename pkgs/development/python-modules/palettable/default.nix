@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "palettable";
   version = "3.3.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

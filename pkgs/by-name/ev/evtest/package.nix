@@ -7,7 +7,7 @@
   libxml2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "evtest";
   version = "1.36";
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "libevdev";
     repo = "evtest";
-    tag = "evtest-${version}";
+    tag = "evtest-${finalAttrs.version}";
     sha256 = "sha256-M7AGcHklErfRIOu64+OU397OFuqkAn4dqZxx7sDfklc=";
   };
 
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.bjornfor ];
     mainProgram = "evtest";
   };
-}
+})

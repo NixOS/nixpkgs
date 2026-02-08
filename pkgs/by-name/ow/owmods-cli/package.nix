@@ -14,18 +14,18 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "owmods-cli";
-  version = "0.15.2";
+  version = "0.15.4";
 
   src = fetchFromGitHub {
     owner = "ow-mods";
     repo = "ow-mod-man";
-    rev = "cli_v${version}";
-    hash = "sha256-5ymU9X4J5UPLHxV+7WB29e5Wuq++wYA9bqI2YPjDtWs=";
+    rev = "cli_v${finalAttrs.version}";
+    hash = "sha256-Tu7+H8RCUxKqCtdkPDzEUnK2VUq+80R+kumHRJqf7RY=";
   };
 
-  cargoHash = "sha256-Z/muI8JLjOFJBSIMWlvCyFW4JI3lP6/O0AI8Uj8AtBo=";
+  cargoHash = "sha256-/id7DC3W22musOI4r4b0RPqSnIQVn1yHYLZcTilShVk=";
 
   nativeBuildInputs = [
     pkg-config
@@ -54,7 +54,7 @@ rustPlatform.buildRustPackage rec {
     dist/cli/completions/owmods.{bash,fish,zsh}
   ''
   + lib.optionalString wrapWithMono ''
-    wrapProgram $out/bin/${meta.mainProgram} --prefix PATH : '${mono}/bin'
+    wrapProgram $out/bin/${finalAttrs.meta.mainProgram} --prefix PATH : '${mono}/bin'
   '';
 
   passthru.updateScript = nix-update-script { };
@@ -62,8 +62,8 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "CLI version of the mod manager for Outer Wilds Mod Loader";
     homepage = "https://github.com/ow-mods/ow-mod-man/tree/main/owmods_cli";
-    downloadPage = "https://github.com/ow-mods/ow-mod-man/releases/tag/cli_v${version}";
-    changelog = "https://github.com/ow-mods/ow-mod-man/releases/tag/cli_v${version}";
+    downloadPage = "https://github.com/ow-mods/ow-mod-man/releases/tag/cli_v${finalAttrs.version}";
+    changelog = "https://github.com/ow-mods/ow-mod-man/releases/tag/cli_v${finalAttrs.version}";
     mainProgram = "owmods";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
@@ -72,4 +72,4 @@ rustPlatform.buildRustPackage rec {
       locochoco
     ];
   };
-}
+})

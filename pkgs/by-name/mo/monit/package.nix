@@ -12,12 +12,12 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "monit";
   version = "5.35.2";
 
   src = fetchurl {
-    url = "https://mmonit.com/monit/dist/monit-${version}.tar.gz";
+    url = "https://mmonit.com/monit/dist/monit-${finalAttrs.version}.tar.gz";
     hash = "sha256-Tf71QynmPZdyqeHDasmbxBFzt5lj3A2CNfLDL0ueB48=";
   };
 
@@ -65,4 +65,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "monit";
   };
-}
+})

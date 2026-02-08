@@ -6,12 +6,12 @@
   pam,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pam_tmpdir";
   version = "0.09";
 
   src = fetchurl {
-    url = "http://deb.debian.org/debian/pool/main/p/pam-tmpdir/pam-tmpdir_${version}.tar.gz";
+    url = "http://deb.debian.org/debian/pool/main/p/pam-tmpdir/pam-tmpdir_${finalAttrs.version}.tar.gz";
     hash = "sha256-MXa1CY6alD83E/Q+MJmsv8NaImWd0pPJKZd/7nbe4J8=";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ peterhoeg ];
     platforms = lib.platforms.linux;
   };
-}
+})

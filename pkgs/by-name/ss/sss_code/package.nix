@@ -9,14 +9,14 @@
   lib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sss_code";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "SergioRibera";
     repo = "sss";
-    rev = "sss_code/v${version}";
+    rev = "sss_code/v${finalAttrs.version}";
     hash = "sha256-AmJFAwHfG4R2iRz9zNeZsVFLptVy499ozQ7jgwnevOo=";
   };
 
@@ -46,4 +46,4 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = with lib.maintainers; [ krovuxdev ];
   };
-}
+})

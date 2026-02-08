@@ -1,9 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   pytestCheckHook,
-  fetchFromGitea,
+  fetchFromCodeberg,
   setuptools,
 }:
 
@@ -11,11 +10,9 @@ buildPythonPackage rec {
   pname = "desktop-entry-lib";
   version = "3.1";
   pyproject = true;
-  disabled = pythonOlder "3.9";
 
   # We could use fetchPypi, but then the tests won't run
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "JakobDev";
     repo = "desktop-entry-lib";
     rev = version;

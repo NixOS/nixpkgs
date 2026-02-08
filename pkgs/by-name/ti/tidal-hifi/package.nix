@@ -26,13 +26,13 @@
   gdk-pixbuf,
   nss,
   nspr,
-  libX11,
+  libx11,
   libxcb,
-  libXcomposite,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXrandr,
+  libxcomposite,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxrandr,
   libxkbfile,
   pango,
   systemd,
@@ -47,7 +47,7 @@
 }:
 
 let
-  version = "6.0.0";
+  version = "6.0.1";
 
   electronLibPath = lib.makeLibraryPath [
     alsa-lib
@@ -62,13 +62,13 @@ let
     gtk4
     nss
     nspr
-    libX11
+    libx11
     libxcb
-    libXcomposite
-    libXdamage
-    libXext
-    libXfixes
-    libXrandr
+    libxcomposite
+    libxdamage
+    libxext
+    libxfixes
+    libxrandr
     libxkbfile
     pango
     pciutils
@@ -87,7 +87,7 @@ let
     vulkan-loader
   ];
 in
-buildNpmPackage (self: {
+buildNpmPackage (finalAttrs: {
   pname = "tidal-hifi";
   inherit version;
 
@@ -95,7 +95,7 @@ buildNpmPackage (self: {
     owner = "Mastermindzh";
     repo = "tidal-hifi";
     tag = version;
-    hash = "sha256-t9sNOLIhxA2/5tpILgGkNkkg1wmX2smcEeWWh424GPA=";
+    hash = "sha256-wc8KsZGNjaIG9sijVGEzoJ7ZTmu4xX8b/ETjlMkNyDs=";
   };
 
   nativeBuildInputs = [
@@ -104,7 +104,7 @@ buildNpmPackage (self: {
     copyDesktopItems
   ];
 
-  npmDepsHash = "sha256-CvqKElGYJ/sXxIz/vEWi21tyyPbRoZgQG8We1g2XNHM=";
+  npmDepsHash = "sha256-lec3XcdZc+lcp/b175m/4dgBPLJCvlUPN8Ttqdehgw4=";
   forceGitDeps = true;
   makeCacheWritable = true;
 
@@ -125,12 +125,12 @@ buildNpmPackage (self: {
 
   desktopItems = [
     (makeDesktopItem {
-      name = self.pname;
+      name = finalAttrs.pname;
       desktopName = "TIDAL Hi-Fi";
       genericName = "Music Player";
-      comment = self.meta.description;
+      comment = finalAttrs.meta.description;
       icon = "tidal-hifi";
-      exec = self.meta.mainProgram;
+      exec = finalAttrs.meta.mainProgram;
       terminal = false;
       mimeTypes = [ "x-scheme-handler/tidal" ];
       categories = [

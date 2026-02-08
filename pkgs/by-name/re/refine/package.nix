@@ -19,7 +19,7 @@
   glib,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "refine";
   version = "0.6.3";
   pyproject = false; # uses meson
@@ -28,7 +28,7 @@ python3Packages.buildPythonApplication rec {
     domain = "gitlab.gnome.org";
     owner = "TheEvilSkeleton";
     repo = "Refine";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-0FxnohwqAu7UW1e0kBNk8rFv2q736qlmFFhce2BNLdQ=";
   };
 
@@ -83,4 +83,4 @@ python3Packages.buildPythonApplication rec {
     license = with lib.licenses; [ gpl3Plus ];
     maintainers = with lib.maintainers; [ getchoo ];
   };
-}
+})

@@ -20,7 +20,19 @@
   libgbm,
   libGL,
   wayland,
-  xorg,
+  libxtst,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  libxshmfence,
+  libxcb,
   autoPatchelfHook,
   systemd,
   libnotify,
@@ -49,25 +61,25 @@ let
     libappindicator
     libnotify
     libgbm
-    xorg.libX11
-    xorg.libXScrnSaver
-    xorg.libXcomposite
-    xorg.libXcursor
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libXtst
-    xorg.libxcb
-    xorg.libxshmfence
+    libx11
+    libxscrnsaver
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxrandr
+    libxrender
+    libxtst
+    libxcb
+    libxshmfence
     nspr
     nss
     systemd
   ];
 
-  version = "2025.13";
+  version = "2025.14";
 
   selectSystem =
     attrs:
@@ -79,8 +91,8 @@ let
   };
 
   hash = selectSystem {
-    x86_64-linux = "sha256-zgU6pBujCXBhDO9XAqpUSDNuQt5daQ1gVwopXwc0nGo=";
-    aarch64-linux = "sha256-BDrH99li0GWJ+/9QUrHfKxC1JExG3jvd0ujXPKhGM1c=";
+    x86_64-linux = "sha256-JHuYHi4uBHzMopa45ipwsdx/3Ox/FxN3lYhBACQOCkE=";
+    aarch64-linux = "sha256-miCh1x6sCcAbg9iX7SJzYcxJ8DIQVNdrg6b39ht8gTw=";
   };
 in
 

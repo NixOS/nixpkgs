@@ -58,7 +58,7 @@ stdenv.mkDerivation {
     pillow
   ];
   preFixup = ''
-    buildPythonPath "$out $pythonPath"
+    buildPythonPath "$out ''${pythonPath[*]}"
   '';
   postFixup = ''
     wrapPythonPrograms

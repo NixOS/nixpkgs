@@ -5,7 +5,7 @@
   lib,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  name = "lib45d";
+  pname = "lib45d";
   version = "0.3.6";
   src = fetchFromGitHub {
     owner = "45Drives";

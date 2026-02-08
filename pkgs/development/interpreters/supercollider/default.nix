@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  mkDerivation,
   fetchpatch,
   fetchurl,
   cmake,
@@ -14,7 +13,7 @@
   curl,
   gcc,
   libsForQt5,
-  libXt,
+  libxt,
   qtbase,
   qttools,
   qtwebengine,
@@ -31,7 +30,7 @@
   withWebengine ? false, # vulnerable, so disabled by default
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "supercollider";
   version = "3.13.1";
 
@@ -77,7 +76,7 @@ mkDerivation rec {
     libsndfile
     fftw
     curl
-    libXt
+    libxt
     qtbase
     qtwebsockets
     qtwayland

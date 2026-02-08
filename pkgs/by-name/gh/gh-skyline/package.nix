@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gh-skyline";
   version = "0.1.7";
 
   src = fetchFromGitHub {
     owner = "github";
     repo = "gh-skyline";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-yc9NaWx1jV2YUpPz2u9irikkLw1cnManq+AXREvCfII=";
   };
 
@@ -32,4 +32,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ PerchunPak ];
     mainProgram = "gh-skyline";
   };
-}
+})

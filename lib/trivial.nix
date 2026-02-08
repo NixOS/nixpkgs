@@ -27,6 +27,8 @@ in
     isFloat
     add
     sub
+    mul
+    div
     lessThan
     seq
     deepSeq
@@ -34,6 +36,8 @@ in
     bitAnd
     bitOr
     bitXor
+    ceil
+    floor
     ;
 
   ## Simple (higher order) functions
@@ -432,7 +436,7 @@ in
   */
   oldestSupportedRelease =
     # Update on master only. Do not backport.
-    2505;
+    2511;
 
   /**
     Whether a feature is supported in all supported releases (at the time of

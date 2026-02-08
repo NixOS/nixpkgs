@@ -13,7 +13,7 @@
   mesonEmulatorHook,
   gtk3,
   icu,
-  enchant2,
+  enchant,
   gnome,
 }:
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   outputBin = "dev";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gspell/${lib.versions.majorMinor version}/gspell-${version}.tar.xz";
     sha256 = "TsflrMyQEygbrNa7wAAGvnM4GLgbo/4zLB6HbH4eFHc=";
   };
 
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [
     # required for pkg-config
-    enchant2
+    enchant
   ];
 
   passthru = {

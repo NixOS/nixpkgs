@@ -9,7 +9,6 @@
   packaging,
   psutil,
   python-dateutil,
-  pythonOlder,
   pyyaml,
   requests-cache,
   requests-toolbelt,
@@ -24,8 +23,6 @@ buildPythonPackage rec {
   pname = "e3-core";
   version = "22.10.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "AdaCore";

@@ -36,8 +36,8 @@
   fltk,
   libGL,
   libjpeg,
-  libX11,
-  libXpm,
+  libx11,
+  libxpm,
   ntk,
 
   # Test dependencies
@@ -116,16 +116,16 @@ stdenv.mkDerivation rec {
   ++ lib.optionals (guiModule == "fltk") [
     fltk
     libjpeg
-    libXpm
+    libxpm
   ]
   ++ lib.optionals (guiModule == "ntk") [
     ntk
     cairo
-    libXpm
+    libxpm
   ]
   ++ lib.optionals (guiModule == "zest") [
     libGL
-    libX11
+    libx11
   ];
 
   cmakeFlags = [

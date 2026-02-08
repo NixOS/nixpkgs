@@ -8,14 +8,14 @@
   slurp,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "shotman";
   version = "0.4.10";
 
   src = fetchFromSourcehut {
     owner = "~whynothugo";
     repo = "shotman";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-j9HNqRJnGiy720uS0zC6Tt1WjF4b6+XqPEMTqTEOD6w=";
   };
 
@@ -43,4 +43,4 @@ rustPlatform.buildRustPackage rec {
       fpletz
     ];
   };
-}
+})

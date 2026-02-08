@@ -7,7 +7,6 @@
   mscerts,
   oscrypto,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "signify";
   version = "0.9.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ralphje";

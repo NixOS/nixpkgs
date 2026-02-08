@@ -39,8 +39,8 @@
   withXfce4ui ? false,
   totem-pl-parser,
   withTotemPlParser ? false,
-# , grilo, withGrilo ? false
-# , rygel, withRygel ? true
+  # , grilo, withGrilo ? false
+  # , rygel, withRygel ? true
 }:
 
 assert withGlyr -> withLastfm;

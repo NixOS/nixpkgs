@@ -2,20 +2,20 @@
   lib,
   stdenv,
   fetchurl,
-  fltk13,
+  fltk_1_3,
   ghostscript,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flpsed";
   version = "0.7.3";
 
   src = fetchurl {
-    url = "http://www.flpsed.org/${pname}-${version}.tar.gz";
+    url = "http://www.flpsed.org/flpsed-${finalAttrs.version}.tar.gz";
     sha256 = "0vngqxanykicabhfdznisv82k5ypkxwg0s93ms9ribvhpm8vf2xp";
   };
 
-  buildInputs = [ fltk13 ];
+  buildInputs = [ fltk_1_3 ];
 
   postPatch = ''
     # replace the execvp call to ghostscript
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "ac_cv_func_malloc_0_nonnull=yes"
     "ac_cv_func_realloc_0_nonnull=yes"
-    "FLTKCONFIG=${lib.getExe' (lib.getDev fltk13) "fltk-config"}"
+    "FLTKCONFIG=${lib.getExe' (lib.getDev fltk_1_3) "fltk-config"}"
   ];
 
   meta = {
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "flpsed";
   };
-}
+})

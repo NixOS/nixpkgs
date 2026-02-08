@@ -49,20 +49,22 @@ in
   config =
     let
       activationScript = lib.getExe (
-        pkgs.writeShellApplication {
+        (pkgs.writeShellApplication {
           name = "activate";
           text = config.system.activationScripts.script;
           checkPhase = "";
           bashOptions = [ ];
-        }
+        }).overrideAttrs
+          { preferLocalBuild = true; }
       );
       dryActivationScript = lib.getExe (
-        pkgs.writeShellApplication {
+        (pkgs.writeShellApplication {
           name = "dry-activate";
           text = config.system.dryActivationScript;
           checkPhase = "";
           bashOptions = [ ];
-        }
+        }).overrideAttrs
+          { preferLocalBuild = true; }
       );
     in
     {
@@ -74,7 +76,7 @@ in
         ''
           cp ${activationScript} $out/activate
           cp ${dryActivationScript} $out/dry-activate
-          ${lib.getExe pkgs.gnused} --in-place --expression "s|@out@|''${!toplevelVar}|g" $out/activate $out/dry-activate
+          ${lib.getExe pkgs.buildPackages.gnused} --in-place --expression "s|@out@|''${!toplevelVar}|g" $out/activate $out/dry-activate
         '';
 
       system.systemBuilderCommands = lib.mkIf config.system.activatable config.system.activatableSystemBuilderCommands;

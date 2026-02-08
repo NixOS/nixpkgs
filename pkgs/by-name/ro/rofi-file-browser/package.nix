@@ -8,14 +8,14 @@
   gtk3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rofi-file-browser-extended";
   version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "marvinkreis";
     repo = "rofi-file-browser-extended";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-UEFv0skFzWhgFkmz1h8uV1ygW977zNq1Dw8VAawqUgw=";
     fetchSubmodules = true;
   };
@@ -55,4 +55,4 @@ stdenv.mkDerivation rec {
       jluttine
     ];
   };
-}
+})

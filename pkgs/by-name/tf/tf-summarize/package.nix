@@ -6,14 +6,14 @@
   tf-summarize,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tf-summarize";
   version = "0.3.14";
 
   src = fetchFromGitHub {
     owner = "dineshba";
     repo = "tf-summarize";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-yjketL/7+gsWIvltqotouSNgTCBOqVrHqiblXoCsWgI=";
   };
 
@@ -22,13 +22,13 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   passthru.tests.version = testers.testVersion {
     package = tf-summarize;
     command = "tf-summarize -v";
-    inherit version;
+    inherit (finalAttrs) version;
   };
 
   meta = {
@@ -38,4 +38,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pjrm ];
   };
-}
+})

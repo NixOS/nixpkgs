@@ -8,12 +8,12 @@
   gtest,
   libei,
   libportal,
-  libX11,
+  libx11,
   libxkbfile,
-  libXtst,
-  libXinerama,
-  libXi,
-  libXrandr,
+  libxtst,
+  libxinerama,
+  libxi,
+  libxrandr,
   libxkbcommon,
   pugixml,
   python3,
@@ -66,12 +66,12 @@ stdenv.mkDerivation (finalAttrs: {
     gtest
     libei
     libportal
-    libX11
+    libx11
     libxkbfile
-    libXinerama
-    libXi
-    libXrandr
-    libXtst
+    libxinerama
+    libxi
+    libxrandr
+    libxtst
     libxkbcommon
     pugixml
     gdk-pixbuf
@@ -120,10 +120,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Share one mouse and keyboard between multiple computers on Windows, macOS and Linux";
     mainProgram = "deskflow";
     maintainers = with lib.maintainers; [ flacks ];
-    license = with lib; [
-      licenses.gpl2Plus
-      licenses.openssl
-      licenses.mit # share/applications/org.deskflow.deskflow.desktop
+    license = with lib.licenses; [
+      gpl2Plus
+      openssl
+      mit # share/applications/org.deskflow.deskflow.desktop
     ];
     platforms = lib.platforms.linux;
   };

@@ -5,7 +5,7 @@
   bashate,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "kolla";
   version = "21.0.0";
   pyproject = true;
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "kolla";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-wbVaPIvn4jPcb+h5yKhLDmvT6/widfSX2iV+2KNW8pM=";
   };
 
@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication rec {
       --replace-fail "os.path.join(sys.prefix, 'share/kolla')," \
       "os.path.join(PROJECT_ROOT, '../../../share/kolla'),"
 
-    sed -e 's/git_info = .*/git_info = "${version}"/' -i kolla/version.py
+    sed -e 's/git_info = .*/git_info = "${finalAttrs.version}"/' -i kolla/version.py
   '';
 
   pythonRelaxDeps = [
@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   # fake version to make pbr.packaging happy
-  env.PBR_VERSION = version;
+  env.PBR_VERSION = finalAttrs.version;
 
   build-system = with python3Packages; [
     setuptools
@@ -73,4 +73,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = [ lib.maintainers.astro ];
     teams = [ lib.teams.openstack ];
   };
-}
+})

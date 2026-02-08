@@ -7,14 +7,14 @@
   replace,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "discourse-mail-receiver";
   version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "mail-receiver";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-ob4Hb88odlFf5vSC9qhikhJowo4C5LksVmMuJRMNoI4=";
   };
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     description = "Helper program which receives incoming mail for Discourse";
   };
 
-}
+})

@@ -14,11 +14,11 @@
   h5netcdf,
   h5py,
   ipykernel,
-  ipython,
   ipywidgets,
   jsonschema,
   libcst,
   matplotlib,
+  networkx,
   numpy,
   opentelemetry-api,
   packaging,
@@ -32,12 +32,10 @@
   typing-extensions,
   uncertainties,
   websockets,
-  wrapt,
   xarray,
 
   # optional-dependencies
   furo,
-  jinja2,
   nbsphinx,
   pyvisa-sim,
   scipy,
@@ -59,21 +57,23 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "qcodes";
-  version = "0.53.0";
+  version = "0.54.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "Qcodes";
-    tag = "v${version}";
-    hash = "sha256-uXVL25U7szJF/v7OEsB9Ww1h6ziBxsMJdqhZG5qn0VU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xiD/Iy/5FVadOc9/AxUbGgpOlyli2g6/hwpY1J3/urE=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'default-version = "0.0"' 'default-version = "${version}"'
+      --replace-fail \
+        'default-version = "0.54.0dev+Unknown"' \
+        'default-version = "${finalAttrs.version}"'
   '';
 
   build-system = [
@@ -88,10 +88,10 @@ buildPythonPackage rec {
     h5netcdf
     h5py
     ipykernel
-    ipython
     ipywidgets
     jsonschema
     matplotlib
+    networkx
     numpy
     opentelemetry-api
     packaging
@@ -105,7 +105,6 @@ buildPythonPackage rec {
     typing-extensions
     uncertainties
     websockets
-    wrapt
     xarray
   ];
 
@@ -113,7 +112,6 @@ buildPythonPackage rec {
     docs = [
       # autodocsumm
       furo
-      jinja2
       nbsphinx
       pyvisa-sim
       # qcodes-loop
@@ -160,6 +158,13 @@ buildPythonPackage rec {
     "--hypothesis-profile ci"
     # Follow upstream with settings
     "--durations=20"
+
+    # ERROR tests/test_interactive_widget.py - DeprecationWarning: Jupyter is migrating its paths to use standard platformdirs
+    # given by the platformdirs library.  To remove this warning and
+    # see the appropriate new directories, set the environment variable
+    # `JUPYTER_PLATFORM_DIRS=1` and then run `jupyter --paths`.
+    # The use of platformdirs will be the default in `jupyter_core` v6
+    "-Wignore::DeprecationWarning"
   ];
 
   disabledTestPaths = [
@@ -200,10 +205,12 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python-based data acquisition framework";
-    changelog = "https://github.com/QCoDeS/Qcodes/releases/tag/${src.tag}";
+    changelog = "https://github.com/QCoDeS/Qcodes/releases/tag/${finalAttrs.src.tag}";
     downloadPage = "https://github.com/QCoDeS/Qcodes";
     homepage = "https://qcodes.github.io/Qcodes/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ evilmav ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+    ];
   };
-}
+})

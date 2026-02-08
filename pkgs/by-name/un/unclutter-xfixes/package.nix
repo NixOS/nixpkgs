@@ -3,10 +3,10 @@
   stdenv,
   fetchFromGitHub,
   libev,
-  libX11,
-  libXext,
-  libXi,
-  libXfixes,
+  libx11,
+  libxext,
+  libxi,
+  libxfixes,
   pkg-config,
   asciidoc,
   libxslt,
@@ -34,10 +34,10 @@ stdenv.mkDerivation {
   ];
   buildInputs = [
     libev
-    libX11
-    libXext
-    libXi
-    libXfixes
+    libx11
+    libxext
+    libxi
+    libxfixes
   ];
 
   prePatch = ''

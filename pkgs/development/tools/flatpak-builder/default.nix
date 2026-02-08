@@ -154,7 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "flatpak-builder";
     homepage = "https://github.com/flatpak/flatpak-builder";
     license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [ arthsmn ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

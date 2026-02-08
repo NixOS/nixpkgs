@@ -5,17 +5,14 @@
   nix-update-script,
 }:
 
-let
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gluesql";
   version = "0.14.0";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "gluesql";
     repo = "gluesql";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-z2fpyPJfyPtO13Ly7XRmMW3rp6G3jNLsMMFz83Wmr0E=";
   };
 
@@ -30,4 +27,4 @@ rustPlatform.buildRustPackage {
     maintainers = with lib.maintainers; [ happysalada ];
     platforms = lib.platforms.all;
   };
-}
+})

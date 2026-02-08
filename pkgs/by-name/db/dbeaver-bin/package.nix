@@ -8,7 +8,7 @@
   openjdk21,
   gnused,
   autoPatchelfHook,
-  autoSignDarwinBinariesHook,
+  darwin,
   wrapGAppsHook3,
   gtk3,
   glib,
@@ -19,7 +19,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dbeaver-bin";
-  version = "25.3.1";
+  version = "25.3.4";
 
   src =
     let
@@ -32,10 +32,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         aarch64-darwin = "macos-aarch64.dmg";
       };
       hash = selectSystem {
-        x86_64-linux = "sha256-+9bKKfLFR+9iBv/Sgwbd/gVpUa2c4uvkZGzx61x5bJ8=";
-        aarch64-linux = "sha256-sfrytO39RnqODECo0CPj2tusvZBIo5I9KuRqzoLbE0M=";
-        x86_64-darwin = "sha256-74EMwaG2xmH2gEyhcwqZKgVzNOup81DG8T8DmELN53g=";
-        aarch64-darwin = "sha256-cJ9hS/jQySoGbXd0yLmBNlVak8OOnMW2ToXojnx9Th4=";
+        x86_64-linux = "sha256-iqbpvXSn0jsHNdsn6/C1RV28Xc54o2XnvtG8WujpJFE=";
+        aarch64-linux = "sha256-fku9iDSyM5COrCAy9sIBZUCo7E8/2nIQmlhKAtBbmcw=";
+        x86_64-darwin = "sha256-DJpME9xxFSlRIgJuLtemIdnaskim7S1wPWLlrF0doxo=";
+        aarch64-darwin = "sha256-q/IZHXSAV7TR3EjKoxoB06zLnhEvb6A5TywgEK9uL8o=";
       };
     in
     fetchurl {
@@ -55,7 +55,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
     undmg
-    autoSignDarwinBinariesHook
+    darwin.autoSignDarwinBinariesHook
   ];
 
   dontConfigure = true;
@@ -144,10 +144,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.asl20;
-    platforms = with lib.platforms; linux ++ darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [
       gepbird
       mkg20001
+      staticdev
       yzx9
     ];
     mainProgram = "dbeaver";

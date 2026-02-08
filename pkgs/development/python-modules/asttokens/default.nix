@@ -7,19 +7,17 @@
   setuptools-scm,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "asttokens";
-  version = "3.0.0-unstable-2025-11-08";
+  version = "3.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gristlabs";
     repo = "asttokens";
-    rev = "f859c055e8453650e1987c5aefaaec36582d3a07";
-    hash = "sha256-dHtKyd5rj1Y7m1vTL9toyQ+GLV5fBNUFNkBM9t4e8yM=";
+    tag = "v${version}";
+    hash = "sha256-1qkkNpjX89TmGD0z0KA2y+UbiHuEOaXzZ6hs9nw7EeM=";
   };
-
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = "3.0.0";
 
   build-system = [ setuptools-scm ];
 
@@ -43,6 +41,8 @@ buildPythonPackage {
   meta = {
     description = "Annotate Python AST trees with source text and token information";
     homepage = "https://github.com/gristlabs/asttokens";
+    changelog = "https://github.com/gristlabs/asttokens/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

@@ -14,14 +14,14 @@
 let
   inherit (darwin) libresolv;
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "onefetch";
   version = "2.26.1";
 
   src = fetchFromGitHub {
     owner = "o2sh";
     repo = "onefetch";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-JT7iQRKOK/2Zh/IDMv1FM1szITeBaaMy+WuXHjpPkfY=";
   };
 
@@ -67,11 +67,11 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Git repository summary on your terminal";
     homepage = "https://github.com/o2sh/onefetch";
-    changelog = "https://github.com/o2sh/onefetch/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/o2sh/onefetch/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       kloenk
     ];
     mainProgram = "onefetch";
   };
-}
+})

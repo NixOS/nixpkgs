@@ -7,22 +7,25 @@
   libxkbcommon,
   openssl,
   pkg-config,
-  xorg,
+  libxscrnsaver,
+  libxi,
+  libxcursor,
+  libx11,
   vulkan-loader,
   wayland,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "furtherance";
-  version = "25.3.0";
+  version = "26.1.1";
 
   src = fetchFromGitHub {
     owner = "unobserved-io";
     repo = "Furtherance";
     rev = finalAttrs.version;
-    hash = "sha256-LyGO+fbsu16Us0+sK0T6HlGq7EwZWSetd+gCIKKEbkk=";
+    hash = "sha256-VG1Ghhi74tkPU9bgauV98Gp5kVoZJ1cJUqWLWnrUAOU=";
   };
 
-  cargoHash = "sha256-j/5O40k12rl/gmRc1obo9ImdkZ0Mdrke2PCf6tFCWIo=";
+  cargoHash = "sha256-6S0L8FHI5eCTzhxlew35pK7TewMplKKJDaqJdtoYRnM=";
 
   nativeBuildInputs = [
     pkg-config
@@ -32,10 +35,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     fontconfig
     openssl
     libxkbcommon
-    xorg.libX11
-    xorg.libXScrnSaver
-    xorg.libXcursor
-    xorg.libXi
+    libx11
+    libxscrnsaver
+    libxcursor
+    libxi
     vulkan-loader
     wayland
   ];

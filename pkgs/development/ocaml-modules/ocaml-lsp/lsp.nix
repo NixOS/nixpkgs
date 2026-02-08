@@ -25,7 +25,7 @@
   ocaml,
   version ?
     if lib.versionAtLeast ocaml.version "5.4" then
-      "1.24.0"
+      "1.25.0"
     else if lib.versionAtLeast ocaml.version "5.3" then
       "1.23.1"
     else if lib.versionAtLeast ocaml.version "5.2" then
@@ -45,7 +45,7 @@ let
     inherit version;
   };
 in
-buildDunePackage rec {
+buildDunePackage {
   pname = "lsp";
   inherit (jsonrpc_v) version src;
   minimalOCamlVersion = if lib.versionAtLeast version "1.7.0" then "4.12" else "4.06";

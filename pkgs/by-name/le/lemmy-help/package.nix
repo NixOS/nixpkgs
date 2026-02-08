@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lemmy-help";
   version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "numToStr";
     repo = "lemmy-help";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-HcIvHuuzQj4HsRJyn1A9nXiGDGAcz1nqTsC7sROt7OI=";
   };
 
@@ -25,9 +25,9 @@ rustPlatform.buildRustPackage rec {
       `lemmy-help` is an emmylua parser as well as a CLI which takes that parsed tree and converts it into vim help docs.
     '';
     homepage = "https://github.com/numToStr/lemmy-help";
-    changelog = "https://github.com/numToStr/lemmy-help/releases/tag/v${version}";
+    changelog = "https://github.com/numToStr/lemmy-help/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [ mit ];
     maintainers = [ ];
     mainProgram = "lemmy-help";
   };
-}
+})

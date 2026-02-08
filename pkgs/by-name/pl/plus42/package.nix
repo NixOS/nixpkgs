@@ -9,13 +9,13 @@
   pkg-config,
   nix-update-script,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "plus42";
-  version = "1.3.12";
+  version = "1.3.13";
 
   src = fetchurl {
-    url = "https://thomasokken.com/plus42/upstream/plus42-upstream-${version}.tgz";
-    hash = "sha256-IBXQu1hI0bJZISL9wInAzf2z8zbynXXP15oG/od+MC8=";
+    url = "https://thomasokken.com/plus42/upstream/plus42-upstream-${finalAttrs.version}.tgz";
+    hash = "sha256-I5SAR6vEufzT2Cgs4RQk8AWDZWm+QOLtHRqaED2DQtA=";
   };
 
   nativeBuildInputs = [
@@ -117,4 +117,4 @@ stdenv.mkDerivation rec {
     mainProgram = "plus42dec";
     platforms = with lib.platforms; unix;
   };
-}
+})

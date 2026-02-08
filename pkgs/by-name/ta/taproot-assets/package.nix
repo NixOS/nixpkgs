@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "taproot-assets";
   version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "lightninglabs";
     repo = "taproot-assets";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-z4lNeVmy0AEDM8ivdfXfXqi/V1LIDHV2KtS5/19+Jlk=";
   };
 
@@ -33,4 +33,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ prusnak ];
   };
-}
+})

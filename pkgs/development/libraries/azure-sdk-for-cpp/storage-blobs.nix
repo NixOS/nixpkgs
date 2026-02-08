@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "azure-storage-blobs_12.15.0";
     hash = "sha256-u+zaMoX64GcTKE7QIF5WyENTogLBMTCenoI8hPY7m08=";
   };
-  sourceRoot = "source/sdk/storage/azure-storage-blobs";
+  sourceRoot = "${finalAttrs.src.name}/sdk/storage/azure-storage-blobs";
 
   postPatch = ''
     sed -i '/CMAKE_CXX_STANDARD/d' CMakeLists.txt

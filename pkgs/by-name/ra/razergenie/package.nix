@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-TxW6IUHmEaNdJPeEGwo57a3EGH6MMyitVTmzStVmZjc=";
   };
 
-  postUnpack = ''ln -s ${libopenrazer} libopenrazer'';
+  postUnpack = "ln -s ${libopenrazer} libopenrazer";
 
   nativeBuildInputs = [
     pkg-config

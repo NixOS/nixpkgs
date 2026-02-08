@@ -3,18 +3,20 @@
   stdenv,
   fetchurl,
   pkg-config,
-  xorg,
+  libxext,
+  libx11,
+  xorgproto,
   mesa,
   meson,
   ninja,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libvdpau";
   version = "1.5";
 
   src = fetchurl {
-    url = "https://gitlab.freedesktop.org/vdpau/libvdpau/-/archive/${version}/${pname}-${version}.tar.bz2";
+    url = "https://gitlab.freedesktop.org/vdpau/libvdpau/-/archive/${finalAttrs.version}/libvdpau-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-pdUKQrjCiP68BxUatkOsjeBqGERpZcckH4m06BCCGRM=";
   };
   patches = [ ./tracing.patch ];
@@ -29,12 +31,12 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
   ];
-  buildInputs = with xorg; [
+  buildInputs = [
     xorgproto
-    libXext
+    libxext
   ];
 
-  propagatedBuildInputs = [ xorg.libX11 ];
+  propagatedBuildInputs = [ libx11 ];
 
   mesonFlags = lib.optionals stdenv.hostPlatform.isLinux [
     "-Dmoduledir=${mesa.driverLink}/lib/vdpau"
@@ -55,4 +57,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.vcunat ];
   };
-}
+})

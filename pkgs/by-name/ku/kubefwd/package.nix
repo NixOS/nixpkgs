@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubefwd";
   version = "1.22.5";
 
   src = fetchFromGitHub {
     owner = "txn2";
     repo = "kubefwd";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-xTd/1h9fW2GbZ2u3RsExbQouRZot9CUDuqNLItRySxM=";
   };
 
@@ -20,7 +20,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.Version=${version}"
+    "-X=main.Version=${finalAttrs.version}"
   ];
 
   meta = {
@@ -30,4 +30,4 @@ buildGoModule rec {
     maintainers = [ ];
     mainProgram = "kubefwd";
   };
-}
+})

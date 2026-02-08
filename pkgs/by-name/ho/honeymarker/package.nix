@@ -3,7 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "honeymarker";
   version = "0.2.12";
   vendorHash = "sha256-jtDjy8Y2S5/Ujtv+dtoRZ4SP66sSP7yer97fwdNZEpg=";
@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "honeycombio";
     repo = "honeymarker";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-28NCAtx3MHlwm44IUlI0DzUaycH9cPN8ZdEhhQtdciU=";
   };
 
@@ -21,4 +21,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.iand675 ];
   };
-}
+})

@@ -1,0 +1,64 @@
+diff --git a/frigate/data_processing/real_time/bird.py b/frigate/data_processing/real_time/bird.py
+index d547f2dd..402876b7 100644
+--- a/frigate/data_processing/real_time/bird.py
++++ b/frigate/data_processing/real_time/bird.py
+@@ -21,7 +21,7 @@ from .api import RealTimeProcessorApi
+ try:
+     from tflite_runtime.interpreter import Interpreter
+ except ModuleNotFoundError:
+-    from tensorflow.lite.python.interpreter import Interpreter
++    from ai_edge_litert.interpreter import Interpreter
+ 
+ logger = logging.getLogger(__name__)
+ 
+diff --git a/frigate/detectors/plugins/cpu_tfl.py b/frigate/detectors/plugins/cpu_tfl.py
+index 8a54363e..68ae558b 100644
+--- a/frigate/detectors/plugins/cpu_tfl.py
++++ b/frigate/detectors/plugins/cpu_tfl.py
+@@ -10,7 +10,7 @@ from frigate.detectors.detector_config import BaseDetectorConfig
+ try:
+     from tflite_runtime.interpreter import Interpreter
+ except ModuleNotFoundError:
+-    from tensorflow.lite.python.interpreter import Interpreter
++    from ai_edge_litert.interpreter import Interpreter
+ 
+ 
+ logger = logging.getLogger(__name__)
+diff --git a/frigate/detectors/plugins/edgetpu_tfl.py b/frigate/detectors/plugins/edgetpu_tfl.py
+index 246d2dd4..e855bf87 100644
+--- a/frigate/detectors/plugins/edgetpu_tfl.py
++++ b/frigate/detectors/plugins/edgetpu_tfl.py
+@@ -11,7 +11,7 @@ from frigate.detectors.detector_config import BaseDetectorConfig
+ try:
+     from tflite_runtime.interpreter import Interpreter, load_delegate
+ except ModuleNotFoundError:
+-    from tensorflow.lite.python.interpreter import Interpreter, load_delegate
++    from ai_edge_litert.interpreter import Interpreter, load_delegate
+ 
+ 
+ logger = logging.getLogger(__name__)
+diff --git a/frigate/embeddings/onnx/face_embedding.py b/frigate/embeddings/onnx/face_embedding.py
+index eb04b43b..0c6c26fc 100644
+--- a/frigate/embeddings/onnx/face_embedding.py
++++ b/frigate/embeddings/onnx/face_embedding.py
+@@ -14,7 +14,7 @@ from .runner import ONNXModelRunner
+ try:
+     from tflite_runtime.interpreter import Interpreter
+ except ModuleNotFoundError:
+-    from tensorflow.lite.python.interpreter import Interpreter
++    from ai_edge_litert.interpreter import Interpreter
+ 
+ logger = logging.getLogger(__name__)
+ 
+diff --git a/frigate/events/audio.py b/frigate/events/audio.py
+index f2a217fd..82206b5a 100644
+--- a/frigate/events/audio.py
++++ b/frigate/events/audio.py
+@@ -36,7 +36,7 @@ from frigate.video import start_or_restart_ffmpeg, stop_ffmpeg
+ try:
+     from tflite_runtime.interpreter import Interpreter
+ except ModuleNotFoundError:
+-    from tensorflow.lite.python.interpreter import Interpreter
++    from ai_edge_litert.interpreter import Interpreter
+ 
+ 

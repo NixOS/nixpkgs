@@ -20,7 +20,6 @@
   f2fs-tools,
   ntfs3g,
   btrfs-progs,
-  reiserfsprogs,
   mdadm,
   lvm2,
   gfs2-utils,
@@ -76,7 +75,6 @@ buildPythonPackage rec {
     f2fs-tools
     ntfs3g
     btrfs-progs
-    reiserfsprogs
     mdadm
     lvm2
     gfs2-utils

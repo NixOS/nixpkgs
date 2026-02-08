@@ -106,6 +106,7 @@ in
   ghc-exactprint = doDistribute super.ghc-exactprint_1_8_0_0;
 
   haddock-library = doJailbreak super.haddock-library;
+  ghc-lib = doDistribute self.ghc-lib_9_8_5_20250214;
   ghc-lib-parser = doDistribute self.ghc-lib-parser_9_8_5_20250214;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_8_0_2;
   inherit

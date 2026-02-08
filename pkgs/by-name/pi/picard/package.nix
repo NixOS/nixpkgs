@@ -15,7 +15,7 @@ let
   pythonPackages = python312Packages;
   pyqt5 = if enablePlayback then pythonPackages.pyqt5-multimedia else pythonPackages.pyqt5;
 in
-pythonPackages.buildPythonApplication rec {
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "picard";
   # nix-update --commit picard --version-regex 'release-(.*)'
   version = "2.13.3";
@@ -24,7 +24,7 @@ pythonPackages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "metabrainz";
     repo = "picard";
-    tag = "release-${version}";
+    tag = "release-${finalAttrs.version}";
     hash = "sha256-Q0W5Q1+PbN+yneh98jx0/UNHVfD6okX92hxNzCE+Ibc=";
   };
 
@@ -89,4 +89,4 @@ pythonPackages.buildPythonApplication rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

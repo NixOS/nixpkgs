@@ -101,14 +101,14 @@ let
   allGrammars = lib.filter (p: !(p.meta.broken or false)) (lib.attrValues builtGrammars);
 
 in
-rustPlatform.buildRustPackage (final: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tree-sitter";
   version = "0.25.10";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
     repo = "tree-sitter";
-    tag = "v${final.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-aHszbvLCLqCwAS4F4UmM3wbSb81QuG9FM7BDHTu1ZvM=";
     fetchSubmodules = true;
   };
@@ -202,7 +202,7 @@ rustPlatform.buildRustPackage (final: {
     homepage = "https://github.com/tree-sitter/tree-sitter";
     description = "Parser generator tool and an incremental parsing library";
     mainProgram = "tree-sitter";
-    changelog = "https://github.com/tree-sitter/tree-sitter/releases/tag/v${final.version}";
+    changelog = "https://github.com/tree-sitter/tree-sitter/releases/tag/v${finalAttrs.version}";
     longDescription = ''
       Tree-sitter is a parser generator tool and an incremental parsing library.
       It can build a concrete syntax tree for a source file and efficiently update the syntax tree as the source file is edited.

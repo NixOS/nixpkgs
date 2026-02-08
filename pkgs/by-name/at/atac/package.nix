@@ -5,14 +5,14 @@
   pkg-config,
   oniguruma,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "atac";
   version = "0.22.1";
 
   src = fetchFromGitHub {
     owner = "Julien-cpsn";
     repo = "ATAC";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-PXSjyMe7Rcoeczm/cqFgn1Ra66T9cA34NdfaqLTljmc=";
   };
 
@@ -33,4 +33,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ vinnymeller ];
     mainProgram = "atac";
   };
-}
+})

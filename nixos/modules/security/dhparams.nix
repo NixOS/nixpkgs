@@ -194,6 +194,7 @@ in
         description = "Generate Diffie-Hellman Parameters for ${name}";
         after = [ "dhparams-init.service" ];
         before = [ "${name}.service" ];
+        requiredBy = [ "${name}.service" ];
         wantedBy = [ "multi-user.target" ];
         unitConfig.ConditionPathExists = "!${path}";
         serviceConfig.Type = "oneshot";

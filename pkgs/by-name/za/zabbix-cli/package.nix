@@ -7,7 +7,7 @@
   zabbix-cli,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "zabbix-cli";
   version = "3.6.2";
   pyproject = true;
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "unioslo";
     repo = "zabbix-cli";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Y4IR/le+7X3MYmrVnZMr+Gu59LkCB5UfMJ2s9ovSjLM=";
   };
 
@@ -27,7 +27,6 @@ python3Packages.buildPythonApplication rec {
     with python3Packages;
     [
       httpx
-      httpx.optional-dependencies.socks
       packaging
       platformdirs
       prompt-toolkit
@@ -41,9 +40,7 @@ python3Packages.buildPythonApplication rec {
       typer
       typing-extensions
     ]
-    ++ lib.optionals (pythonOlder "3.10") [
-      importlib-metadata
-    ];
+    ++ httpx.optional-dependencies.socks;
 
   nativeCheckInputs = with python3Packages; [
     freezegun
@@ -86,4 +83,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "zabbix-cli";
     maintainers = [ lib.maintainers.anthonyroussel ];
   };
-}
+})

@@ -5,14 +5,19 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dhex";
   version = "0.69";
 
   src = fetchurl {
-    url = "http://www.dettus.net/dhex/dhex_${version}.tar.gz";
+    url = "http://www.dettus.net/dhex/dhex_${finalAttrs.version}.tar.gz";
     sha256 = "06y4lrp29f2fh303ijk1xhspa1d4x4dm6hnyw3dd8szi3k6hnwsj";
   };
+
+  postPatch = ''
+    # Fix build for gcc>=15
+    substituteInPlace ./output.h --replace-fail 'void initcolors();' 'void initcolors(tOutput*);'
+  '';
 
   buildInputs = [ ncurses ];
 
@@ -36,4 +41,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux;
     mainProgram = "dhex";
   };
-}
+})

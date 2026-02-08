@@ -4,12 +4,12 @@
   fetchzip,
   zlib,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "braa";
   version = "0.82";
 
   src = fetchzip {
-    url = "http://s-tech.elsat.net.pl/braa/braa-${version}.tar.gz";
+    url = "http://s-tech.elsat.net.pl/braa/braa-${finalAttrs.version}.tar.gz";
     hash = "sha256-GS3kk432BdGx/sLzzjXvotD9Qn4S3U4XtMmM0fWMhGA=";
   };
 
@@ -29,4 +29,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ bycEEE ];
     mainProgram = "braa";
   };
-}
+})

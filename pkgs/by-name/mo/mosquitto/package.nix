@@ -30,14 +30,14 @@ let
       });
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mosquitto";
   version = "2.0.22";
 
   src = fetchFromGitHub {
     owner = "eclipse";
     repo = "mosquitto";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-PCiNxRG2AqVlS2t/u7Cqn8NbTrrYGO1OXl8zvPQRrJM=";
   };
 
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Open source MQTT v3.1/3.1.1/5.0 broker";
     homepage = "https://mosquitto.org/";
-    changelog = "https://github.com/eclipse/mosquitto/blob/v${version}/ChangeLog.txt";
+    changelog = "https://github.com/eclipse/mosquitto/blob/v${finalAttrs.version}/ChangeLog.txt";
     license = lib.licenses.epl10;
     maintainers = with lib.maintainers; [
       peterhoeg
@@ -97,4 +97,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "mosquitto";
   };
-}
+})

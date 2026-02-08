@@ -8,7 +8,7 @@
   dbus,
   fontconfig,
   portaudio,
-  libXi,
+  libxi,
   copyDesktopItems,
   makeDesktopItem,
 }:
@@ -61,7 +61,7 @@ buildDotnetModule rec {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     fontconfig
-    libXi
+    libxi
   ];
 
   dotnetInstallFlags = [ "-p:PublishReadyToRun=false" ];

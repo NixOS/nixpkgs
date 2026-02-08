@@ -8,7 +8,7 @@
   ffmpeg_7,
   gst_all_1,
   fuse3,
-  libXtst,
+  libxtst,
   libaom,
   libopus,
   libpulseaudio,
@@ -127,7 +127,7 @@ flutter329.buildFlutterApplication rec {
     fuse3
     gst_all_1.gst-plugins-base
     gst_all_1.gstreamer
-    libXtst
+    libxtst
     libaom
     libopus
     libpulseaudio
@@ -248,7 +248,10 @@ flutter329.buildFlutterApplication rec {
     homepage = "https://rustdesk.com";
     changelog = "https://github.com/rustdesk/rustdesk/releases/${version}";
     license = lib.licenses.agpl3Only;
-    teams = [ lib.teams.helsinki-systems ];
+    maintainers = with lib.maintainers; [
+      das_j
+      helsinki-Jo
+    ];
     mainProgram = "rustdesk";
     platforms = lib.platforms.linux; # should work on darwin as well but I have no machine to test with
   };

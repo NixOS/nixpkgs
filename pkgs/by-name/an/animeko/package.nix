@@ -7,8 +7,8 @@
   autoPatchelfHook,
   jetbrains, # Requird by upstream due to JCEF dependency
   fontconfig,
-  libXinerama,
-  libXrandr,
+  libxinerama,
+  libxrandr,
   file,
   gtk3,
   glib,
@@ -36,7 +36,7 @@
   libjpeg8,
   libkate,
   librsvg,
-  xorg,
+  libxpm,
   libsForQt5,
   libupnp,
   aalib,
@@ -51,7 +51,7 @@
   libshout,
   ffmpeg_6,
   libmpeg2,
-  xcbutilkeysyms,
+  libxcb-keysyms,
   lirc,
   lua5_2,
   taglib,
@@ -79,8 +79,8 @@
   boost,
   thrift,
   libGL,
-  libX11,
-  libXdamage,
+  libx11,
+  libxdamage,
   nss,
   nspr,
 }:
@@ -157,8 +157,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     fontconfig
-    libXinerama
-    libXrandr
+    libxinerama
+    libxrandr
     file
     shine
     libmpeg2
@@ -174,7 +174,7 @@ stdenv.mkDerivation (finalAttrs: {
     libjpeg8
     libkate
     librsvg
-    xorg.libXpm
+    libxpm
     libsForQt5.qt5.qtsvg
     libsForQt5.qt5.qtbase
     libsForQt5.qt5.qtx11extras
@@ -203,7 +203,7 @@ stdenv.mkDerivation (finalAttrs: {
     srt
     libshout
     ffmpeg_6
-    xcbutilkeysyms
+    libxcb-keysyms
     lirc
     lua5_2
     taglib
@@ -230,8 +230,8 @@ stdenv.mkDerivation (finalAttrs: {
     nss
     nspr
     libGL
-    libX11
-    libXdamage
+    libx11
+    libxdamage
   ];
 
   dontWrapQtApps = true;

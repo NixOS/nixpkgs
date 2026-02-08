@@ -16,7 +16,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "bitmap";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "app";
     repo = "bitmap";
     tag = "bitmap-${finalAttrs.version}";
-    hash = "sha256-UZxPc19jAqvJPwZSMf4seqxJNHeLOXA8bXh4y6D4gRE=";
+    hash = "sha256-sQDt1zCxJ5kZ4kLVi1Wxrf7JiT721n2Sl6gNv3xZ0ts=";
   };
 
   strictDeps = true;

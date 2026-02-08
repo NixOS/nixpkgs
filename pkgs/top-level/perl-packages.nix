@@ -1393,6 +1393,28 @@ with self;
     };
   };
 
+  AppXMLDocBookBuilder = buildPerlPackage {
+    pname = "docmake";
+    version = "0.1101";
+
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/App-XML-DocBook-Builder-0.1101.tar.gz";
+      hash = "sha256-oa8C24OsbeaNdLIssSz/KH3MNFr0WuQJ67govyhxmqQ=";
+    };
+
+    buildInputs = [
+      ClassXSAccessor
+      TestTrap
+      FileShouldUpdate
+    ];
+
+    meta = {
+      description = "automated builder from DocBook/XML to its output formats (e.g XHTML5 or PDF)";
+      homepage = "https://github.com/shlomif/docmake";
+      license = lib.licenses.mit;
+    };
+  };
+
   ArchiveAnyLite = buildPerlPackage {
     pname = "Archive-Any-Lite";
     version = "0.11";
@@ -2724,7 +2746,10 @@ with self;
     meta = {
       description = "BSD process resource limit and priority functions";
       license = with lib.licenses; [ artistic2 ];
-      teams = [ teams.deshaw ];
+      maintainers = with lib.maintainers; [
+        de11n
+        despsyched
+      ];
     };
   };
 
@@ -4967,7 +4992,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      teams = [ teams.deshaw ];
     };
   };
 
@@ -5982,7 +6006,10 @@ with self;
         artistic1
         gpl1Plus
       ];
-      teams = [ teams.deshaw ];
+      maintainers = with lib.maintainers; [
+        de11n
+        despsyched
+      ];
     };
   };
 
@@ -8827,10 +8854,10 @@ with self;
 
   DateManip = buildPerlPackage {
     pname = "Date-Manip";
-    version = "6.92";
+    version = "6.98";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SB/SBECK/Date-Manip-6.92.tar.gz";
-      hash = "sha256-q5Yr05ygnsb8/n5aaRKvcbDB9vA+TtK+9uRHHJ02ehM=";
+      url = "mirror://cpan/authors/id/S/SB/SBECK/Date-Manip-6.98.tar.gz";
+      hash = "sha256-rP2KYFGbpM0YHIpnqD1/ApxtmrTosCEtxH5B1iEP2kk=";
     };
     # for some reason, parsing /etc/localtime does not work anymore - make sure that the fallback "/bin/date +%Z" will work
     patchPhase = ''
@@ -12970,10 +12997,10 @@ with self;
 
   FFIPlatypus = buildPerlPackage {
     pname = "FFI-Platypus";
-    version = "2.09";
+    version = "2.10";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PL/PLICEASE/FFI-Platypus-2.09.tar.gz";
-      hash = "sha256-nTEjEiieeHNbRcMRt6wWqejaCT93m/aUaccK+sTdW2M=";
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/FFI-Platypus-2.10.tar.gz";
+      hash = "sha256-ZxFcAjF7I9EZtu4aXm1fJvr4mFlD61PPiGLFcZ54+28=";
     };
     buildInputs = [
       AlienFFI
@@ -13427,7 +13454,10 @@ with self;
         artistic1
         gpl1Plus
       ];
-      teams = [ teams.deshaw ];
+      maintainers = with lib.maintainers; [
+        de11n
+        despsyched
+      ];
     };
   };
 
@@ -13458,7 +13488,10 @@ with self;
         artistic1
         gpl1Plus
       ];
-      teams = [ teams.deshaw ];
+      maintainers = with lib.maintainers; [
+        de11n
+        despsyched
+      ];
     };
   };
 
@@ -13773,7 +13806,10 @@ with self;
         artistic1
         gpl1Plus
       ];
-      teams = [ teams.deshaw ];
+      maintainers = with lib.maintainers; [
+        de11n
+        despsyched
+      ];
     };
   };
 
@@ -13904,6 +13940,26 @@ with self;
     };
   };
 
+  FileShouldUpdate = buildPerlModule {
+    pname = "File-ShouldUpdate";
+    version = "0.2.1";
+
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/File-ShouldUpdate-0.2.1.tar.gz";
+      hash = "sha256-r1k1mNBvHCG63TrnQb8LRQbOJl7ImVDGCj8+cQbes+I=";
+    };
+
+    buildInputs = [
+      PathTiny
+    ];
+
+    meta = {
+      description = "an be used to determine if files should be updated based on the mtime timestamps of their dependencies";
+      homepage = "https://github.com/shlomif/perl-File-ShouldUpdate";
+      license = lib.licenses.mit;
+    };
+  };
+
   FilesysDf = buildPerlPackage {
     pname = "Filesys-Df";
     version = "0.92";
@@ -14018,7 +14074,10 @@ with self;
         artistic1
         gpl1Plus
       ];
-      teams = [ teams.deshaw ];
+      maintainers = with lib.maintainers; [
+        de11n
+        despsyched
+      ];
     };
   };
 
@@ -14036,7 +14095,10 @@ with self;
         artistic1
         gpl1Plus
       ];
-      teams = [ teams.deshaw ];
+      maintainers = with lib.maintainers; [
+        de11n
+        despsyched
+      ];
     };
   };
 
@@ -14524,7 +14586,7 @@ with self;
       pkgs.freetype
       pkgs.libpng
       pkgs.fontconfig
-      pkgs.xorg.libXpm
+      pkgs.libxpm
       ExtUtilsPkgConfig
       TestFork
       TestNoWarnings
@@ -14539,7 +14601,7 @@ with self;
       "--lib_zlib_path=${pkgs.zlib.out}"
       "--lib_ft_path=${pkgs.freetype.out}"
       "--lib_fontconfig_path=${pkgs.fontconfig.lib}"
-      "--lib_xpm_path=${pkgs.xorg.libXpm.out}"
+      "--lib_xpm_path=${pkgs.libxpm.out}"
     ];
 
     meta = {
@@ -14742,7 +14804,10 @@ with self;
     meta = {
       description = "This is the Git.pm, plus the other files in the perl/Git directory, from github's git/git";
       license = with lib.licenses; [ gpl2Plus ];
-      teams = [ teams.deshaw ];
+      maintainers = with lib.maintainers; [
+        de11n
+        despsyched
+      ];
     };
   };
 
@@ -14952,7 +15017,7 @@ with self;
       hash = "sha256-DFiMUH7tXmLRLtHMHkkcb/Oh9ZxPs9Q14UIUs3qzklE=";
     };
     propagatedBuildInputs = [
-      pkgs.goocanvas
+      pkgs.goocanvas_1
       pkgs.gtk2
       Gtk2
     ];
@@ -14975,7 +15040,7 @@ with self;
     };
     buildInputs = [ pkgs.gtk3 ];
     propagatedBuildInputs = [
-      pkgs.goocanvas2
+      pkgs.goocanvas_2
       Gtk3
     ];
     meta = {
@@ -14995,7 +15060,7 @@ with self;
       hash = "sha256-uoBnNuvMnePYFBp2Omgr3quxy4cCveKZrf1XSs6HUFI=";
     };
     propagatedBuildInputs = [
-      pkgs.goocanvas2
+      pkgs.goocanvas_2
       Gtk3
     ];
     meta = {
@@ -15271,7 +15336,10 @@ with self;
         artistic1
         gpl1Plus
       ];
-      teams = [ teams.deshaw ];
+      maintainers = with lib.maintainers; [
+        de11n
+        despsyched
+      ];
     };
   };
 
@@ -16548,6 +16616,52 @@ with self;
     meta = {
       description = "Simple http server class";
       homepage = "https://github.com/libwww-perl/HTTP-Daemon";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  HTTPDaemonSSL = buildPerlPackage {
+    pname = "HTTP-Daemon-SSL";
+    version = "1.05-01-5";
+    src = fetchurl {
+      url = "https://salsa.debian.org/perl-team/modules/packages/libhttp-daemon-ssl-perl/-/archive/debian/1.05-01-5/libhttp-daemon-ssl-perl-debian-1.05-01-5.tar.gz";
+      hash = "sha256-2J4W3SAPgktQ8N+CTSm9fddaUlfzq074sj14fe5zHVc=";
+    };
+    patches = [
+      # Several Debian patches to fix test suite
+      # https://sources.debian.org/patches/libhttp-daemon-ssl-perl/1.05-01-5/
+      (fetchpatch2 {
+        name = "testmodule.diff";
+        url = "https://sources.debian.org/data/main/libh/libhttp-daemon-ssl-perl/1.05-01-5/debian/patches/testmodule.diff";
+        hash = "sha256-pVPtQLlMYr7Bm8QprJbCyfY+6SyZ/v7uuqvX3k/GnGs=";
+      })
+      (fetchpatch2 {
+        name = "testpost.diff";
+        url = "https://sources.debian.org/data/main/libh/libhttp-daemon-ssl-perl/1.05-01-5/debian/patches/testpost.diff";
+        hash = "sha256-clI4u2uYGPow8k3YjnjQFam5IK/xlW8SsJvJ/pwMm4o=";
+      })
+      (fetchpatch2 {
+        name = "IO-Socket-SSL_2.078.patch";
+        url = "https://sources.debian.org/data/main/libh/libhttp-daemon-ssl-perl/1.05-01-5/debian/patches/IO-Socket-SSL_2.078.patch";
+        hash = "sha256-EoZPj7mlDm+KKAuXTdIhlyWAFjG9H8tqeZj42ZwV4no=";
+      })
+      (fetchpatch2 {
+        name = "IO-Socket-SSL_2.079.patch";
+        url = "https://sources.debian.org/data/main/libh/libhttp-daemon-ssl-perl/1.05-01-5/debian/patches/IO-Socket-SSL_2.079.patch";
+        hash = "sha256-xT533707i+ZCn1/qDZJU/oW8j+Sk8WWbIPulddJPb1w=";
+      })
+    ];
+    propagatedBuildInputs = [
+      HTTPDaemon
+      IOSocketSSL
+    ];
+    __darwinAllowLocalNetworking = true;
+    meta = {
+      description = "Simple http server class with SSL support";
+      homepage = "https://github.com/aufflick/p5-http-daemon-ssl";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
@@ -18100,9 +18214,12 @@ with self;
       url = "mirror://cpan/authors/id/I/IS/ISHIGAKI/JSON-4.10.tar.gz";
       hash = "sha256-34tRQ9mn3pnEe1XxoXC9H2n3EZNcGGptwKtW3QV1jjU=";
     };
-    # Do not abort cross-compilation on failure to load native JSON module into host perl
+    # Force core provided JSON::PP backend when cross building since dynamic
+    # loading attempts of other backends presumably fail
     preConfigure = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
-      substituteInPlace Makefile.PL --replace "exit 0;" ""
+      substituteInPlace lib/JSON.pm \
+        --replace-fail 'my $backend = exists $ENV{PERL_JSON_BACKEND} ? $ENV{PERL_JSON_BACKEND} : 1;' \
+                       'my $backend = "JSON::PP";'
     '';
     buildInputs = [ TestPod ];
     meta = {
@@ -18914,7 +19031,10 @@ with self;
         artistic1
         gpl1Plus
       ];
-      teams = [ teams.deshaw ];
+      maintainers = with lib.maintainers; [
+        de11n
+        despsyched
+      ];
     };
   };
 
@@ -20406,7 +20526,10 @@ with self;
         artistic1
         gpl1Plus
       ];
-      teams = [ teams.deshaw ];
+      maintainers = with lib.maintainers; [
+        de11n
+        despsyched
+      ];
     };
   };
 
@@ -26576,10 +26699,10 @@ with self;
       pkgs.libGL
       pkgs.libGLU
       pkgs.libglut
-      pkgs.xorg.libX11
-      pkgs.xorg.libXi
-      pkgs.xorg.libXmu
-      pkgs.xorg.libXext
+      pkgs.libx11
+      pkgs.libxi
+      pkgs.libxmu
+      pkgs.libxext
       pkgs.xdummy
     ];
 
@@ -26709,8 +26832,11 @@ with self;
       description = "Perl extension for Apache ZooKeeper";
       homepage = "https://github.com/mark-5/p5-net-zookeeper";
       license = with lib.licenses; [ asl20 ];
-      maintainers = [ maintainers.ztzg ];
-      teams = [ teams.deshaw ];
+      maintainers = with lib.maintainers; [
+        de11n
+        despsyched
+        ztzg
+      ];
     };
   };
 
@@ -27081,7 +27207,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      teams = [ teams.deshaw ];
     };
   };
 
@@ -27269,7 +27394,10 @@ with self;
         artistic1
         gpl1Plus
       ];
-      teams = [ teams.deshaw ];
+      maintainers = with lib.maintainers; [
+        de11n
+        despsyched
+      ];
     };
   };
 
@@ -27544,8 +27672,8 @@ with self;
     ++ (with pkgs; [
       gsl
       libglut
-      xorg.libXmu
-      xorg.libXi
+      libxmu
+      libxi
     ]);
 
     propagatedBuildInputs = [
@@ -27961,7 +28089,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      teams = [ teams.deshaw ];
     };
   };
 
@@ -28034,7 +28161,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      teams = [ teams.deshaw ];
       mainProgram = "ppkg-config";
     };
   };
@@ -28454,7 +28580,10 @@ with self;
         artistic1
         gpl1Plus
       ];
-      teams = [ teams.deshaw ];
+      maintainers = with lib.maintainers; [
+        de11n
+        despsyched
+      ];
     };
   };
 
@@ -28472,7 +28601,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      teams = [ teams.deshaw ];
       mainProgram = "poe-gen-tests";
     };
   };
@@ -33200,9 +33328,10 @@ with self;
       ./scripts/yath test -j $NIX_BUILD_CORES
     '';
 
-    # The t/integration/preload.t test is broken on riscv64
+    # The t/integration/preload.t test is broken on riscv64 & powerpc64
     # https://github.com/Test-More/Test2-Harness/issues/290
-    doCheck = !stdenv.hostPlatform.isRiscV;
+    doCheck =
+      !stdenv.hostPlatform.isRiscV && !(stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isBigEndian);
 
     propagatedBuildInputs = [
       DataUUID
@@ -35228,6 +35357,23 @@ with self;
     };
   };
 
+  TestStrict = buildPerlPackage {
+    pname = "Test-Strict";
+    version = "0.54";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MANWAR/Test-Strict-0.54.tar.gz";
+      hash = "sha256-9oB1F4I6kKlrQN7q7ZqggAgt7UtQpRIE9b4efOd0yFw=";
+    };
+    buildInputs = [ IOStringy ];
+    meta = {
+      description = "Check syntax, presence of use strict; and test coverage";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   TestSubCalls = buildPerlPackage {
     pname = "Test-SubCalls";
     version = "1.10";
@@ -37061,11 +37207,11 @@ with self;
     '';
     makeMakerFlags = [
       "AR=${pkgs.stdenv.cc.targetPrefix}ar"
-      "X11INC=${pkgs.xorg.libX11.dev}/include"
-      "X11LIB=${pkgs.xorg.libX11.out}/lib"
+      "X11INC=${pkgs.libx11.dev}/include"
+      "X11LIB=${pkgs.libx11.out}/lib"
     ];
     buildInputs = [
-      pkgs.xorg.libX11
+      pkgs.libx11
       pkgs.libpng
     ];
     env = lib.optionalAttrs stdenv.cc.isGNU {
@@ -37090,8 +37236,8 @@ with self;
       hash = "sha256-Rj4oTsRxN+fEJclpGwKo3sXOJytY6h9jWa6AQaI53Q8=";
     };
     makeMakerFlags = [
-      "X11INC=${pkgs.xorg.libX11.dev}/include"
-      "X11LIB=${pkgs.xorg.libX11.out}/lib"
+      "X11INC=${pkgs.libx11.dev}/include"
+      "X11LIB=${pkgs.libx11.out}/lib"
     ];
     buildInputs = [ Tk ];
     doCheck = false; # Expects working X11.
@@ -38171,12 +38317,12 @@ with self;
       hash = "sha256-2P3cB455ge4xt2CMZTZFyyDwFr3dx8VQtNUn79NiR0g=";
     };
     buildInputs = [
-      pkgs.xorg.libXext
-      pkgs.xorg.libXScrnSaver
-      pkgs.xorg.libX11
+      pkgs.libxext
+      pkgs.libxscrnsaver
+      pkgs.libx11
     ];
     propagatedBuildInputs = [ InlineC ];
-    patchPhase = "sed -i -e 's,-L/usr/X11R6/lib/,-L${pkgs.xorg.libX11.out}/lib/ -L${pkgs.xorg.libXext.out}/lib/ -L${pkgs.xorg.libXScrnSaver}/lib/,' IdleTime.pm";
+    patchPhase = "sed -i -e 's,-L/usr/X11R6/lib/,-L${pkgs.libx11.out}/lib/ -L${pkgs.libxext.out}/lib/ -L${pkgs.libxscrnsaver}/lib/,' IdleTime.pm";
     meta = {
       description = "Get the idle time of X11";
       license = with lib.licenses; [
@@ -38233,10 +38379,10 @@ with self;
       hash = "sha256-3O7eU3AGEP/xQtydXE5M0DcMiKTysTcfnL9NjYzm9ks=";
     };
     buildInputs = [
-      pkgs.xorg.libX11
-      pkgs.xorg.libXi
-      pkgs.xorg.libXt
-      pkgs.xorg.libXtst
+      pkgs.libx11
+      pkgs.libxi
+      pkgs.libxt
+      pkgs.libxtst
     ];
     NIX_CFLAGS_LINK = "-lX11";
     doCheck = false; # requires an X server
@@ -38265,10 +38411,10 @@ with self;
     env.AUTOMATED_TESTING = false;
     nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = [
-      pkgs.xorg.libxcb
-      pkgs.xorg.xcbproto
-      pkgs.xorg.xcbutil
-      pkgs.xorg.xcbutilwm
+      pkgs.libxcb
+      pkgs.xcb-proto
+      pkgs.libxcb-util
+      pkgs.libxcb-wm
       ExtUtilsDepends
       ExtUtilsPkgConfig
       TestDeep

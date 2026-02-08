@@ -29,7 +29,6 @@
   gd,
   gmp,
   graphite2,
-  harfbuzzFull,
   hunspell,
   libjpeg,
   log4cxx,
@@ -94,13 +93,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "miktex";
-  version = "25.4";
+  version = "25.12";
 
   src = fetchFromGitHub {
     owner = "miktex";
     repo = "miktex";
     tag = finalAttrs.version;
-    hash = "sha256-3QGW8rsettA+Jtrsi9C5ONIG4vP+iuUEUi9dGHfWMSY=";
+    hash = "sha256-gg6qTyY1LkHcUxTQN92yYark0uVoQjXDTbTMD6BucXA=";
   };
 
   patches = [
@@ -136,12 +135,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace Programs/TeXAndFriends/omega/otps/source/outocp.c \
       --replace-fail 'fprintf(stderr, s);' 'fprintf(stderr, "%s", s);'
-  ''
-  # This patch fixes mismatch char types (signed int and unsigned int) on aarch64-linux platform.
-  # Should not be applied to other platforms otherwise the build will fail.
-  + lib.optionalString (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) ''
-    sed -i 's/--using-namespace=MiKTeX::TeXAndFriends/& --chars-are-unsigned/g' \
-      Programs/TeXAndFriends/Knuth/web/CMakeLists.txt
   '';
 
   strictDeps = true;
@@ -173,7 +166,6 @@ stdenv.mkDerivation (finalAttrs: {
     gd
     gmp
     graphite2
-    harfbuzzFull
     hunspell
     libjpeg
     log4cxx
@@ -194,6 +186,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WITH_BOOTSTRAPPING" true)
     (lib.cmakeBool "USE_SYSTEM_POPPLER" true)
     (lib.cmakeBool "USE_SYSTEM_POPPLER_QT" true)
+    (lib.cmakeBool "USE_SYSTEM_HARFBUZZ" false)
+    (lib.cmakeBool "USE_SYSTEM_HARFBUZZ_ICU" false)
     (lib.cmakeBool "MIKTEX_SELF_CONTAINED" false)
     # Miktex infers install prefix by stripping CMAKE_INSTALL_BINDIR from the called program.
     # It should not be set to absolute path in default cmakeFlags, otherwise an infinite loop will happen.
@@ -206,6 +200,9 @@ stdenv.mkDerivation (finalAttrs: {
   env = {
     LANG = "C.UTF-8";
     MIKTEX_REPOSITORY = "file://${miktexLocalRepository}/";
+    # force char to be unsigned on none x86 systems
+    # See https://github.com/MiKTeX/miktex/issues/1440
+    NIX_CFLAGS_COMPILE = "-fsigned-char";
   };
 
   enableParallelBuilding = false;

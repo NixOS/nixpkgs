@@ -5,14 +5,14 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libGDSII";
   version = "0.21";
 
   src = fetchFromGitHub {
     owner = "HomerReid";
     repo = "libGDSII";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-EXEt7l69etcBdDdEDlD1ODOdhTBZCVjgY1jhRUDd/W0=";
   };
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

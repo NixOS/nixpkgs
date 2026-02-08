@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "chamber";
   version = "3.1.4";
 
   src = fetchFromGitHub {
     owner = "segmentio";
     repo = "chamber";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-CSLG1y7D2dozwB5Lme9xX+kjDuPB/5cOrsfmvGDXX4E=";
   };
 
@@ -22,7 +22,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=v${version}"
+    "-X main.Version=v${finalAttrs.version}"
   ];
 
   meta = {
@@ -32,4 +32,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ kalekseev ];
     mainProgram = "chamber";
   };
-}
+})

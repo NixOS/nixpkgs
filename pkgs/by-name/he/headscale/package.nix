@@ -9,21 +9,21 @@
   postgresql,
   stdenv,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "headscale";
   version = "0.27.1";
 
   src = fetchFromGitHub {
     owner = "juanfont";
     repo = "headscale";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-eMqGJL+dxBThtW+0uMvnP5n2gk2kwOao6SukA38OMOE=";
   };
 
   postPatch = ''
     substituteInPlace hscontrol/types/version.go \
-      --replace-fail 'Version:   "dev"' 'Version: "${version}"' \
-      --replace-fail 'Commit:    "unknown"' 'Commit: "${src.tag}"'
+      --replace-fail 'Version:   "dev"' 'Version: "${finalAttrs.version}"' \
+      --replace-fail 'Commit:    "unknown"' 'Commit: "${finalAttrs.src.tag}"'
   '';
 
   vendorHash = "sha256-VOi4PGZ8I+2MiwtzxpKc/4smsL5KcH/pHVkjJfAFPJ0=";
@@ -78,4 +78,4 @@ buildGoModule rec {
       misterio77
     ];
   };
-}
+})

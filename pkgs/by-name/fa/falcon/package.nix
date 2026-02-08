@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   pkg-config,
   pcre,
@@ -22,12 +21,8 @@ stdenv.mkDerivation {
   };
 
   patches = [
-    # part of https://github.com/falconpl/falcon/pull/11
-    (fetchpatch {
-      name = "bump-minimum-cmake-required-version.patch";
-      url = "https://github.com/falconpl/falcon/commit/a1f4fa1607249b0356c2cd2c54134cb3dc2dc231.patch";
-      hash = "sha256-oYLB+71/oan2MOyHTr/IpgDwik+T8ToP1q7AroaBq1g=";
-    })
+    # https://github.com/falconpl/falcon/pull/11
+    ./bump-minimum-cmake-required-version.patch
   ];
 
   nativeBuildInputs = [

@@ -17,14 +17,14 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "safeeyes";
-  version = "3.2.0";
+  version = "3.3.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-t8PMQxQjfyW3t0bamo8kAlminAMfUe0ThtzrgUc33Xo=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-11nw13AAqupSIZRrhmDaViO3V/yYK8/xsVF8ylS49Rw=";
   };
 
   nativeBuildInputs = [
@@ -95,4 +95,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     mainProgram = "safeeyes";
   };
-}
+})

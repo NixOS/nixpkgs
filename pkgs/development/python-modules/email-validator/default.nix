@@ -5,15 +5,12 @@
   fetchPypi,
   idna,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "email-validator";
   version = "2.2.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "email_validator";

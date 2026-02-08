@@ -5,7 +5,6 @@
   poetry-core,
   pylint,
   pytestCheckHook,
-  pythonOlder,
   toml,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "pylint-plugin-utils";
   version = "0.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "PyCQA";
