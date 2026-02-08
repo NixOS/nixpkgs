@@ -15,8 +15,11 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "libbladeRF";
+  pname = "libbladerf";
   version = "2025.10";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Nuand";
