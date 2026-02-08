@@ -239,7 +239,6 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./0002-Don-t-try-to-unmount-nix-or-nix-store.patch
     ./0007-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
-    ./0008-localectl-use-etc-X11-xkb-for-list-x11.patch
     ./0009-add-rootprefix-to-lookup-dir-paths.patch
     ./0010-systemd-shutdown-execute-scripts-in-etc-systemd-syst.patch
     ./0011-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
