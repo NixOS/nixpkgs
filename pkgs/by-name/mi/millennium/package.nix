@@ -15,11 +15,30 @@
   sourcesJson ? ./sources.json,
   inputs ? builtins.mapAttrs (name: info: fetchFromGitHub info) (lib.importJSON sourcesJson),
 
+
   millennium-python ? pkgsi686Linux.python311,
   millennium-shims ? callPackage ./shims.nix { inherit (inputs) millennium-src; },
   millennium-assets ? callPackage ./assets.nix { inherit (inputs) millennium-src; },
   millennium-frontend ? callPackage ./frontend.nix { inherit (inputs) millennium-src; },
 }:
+let
+  curlStatic = (pkgsi686Linux.curl.override {
+    gssSupport = false;
+    brotliSupport = false;
+    ldapSupport = false;
+    gsaslSupport = false;
+
+    openssl = pkgsi686Linux.openssl.override { static = true; };
+    zlib = pkgsi686Linux.zlib.override { static = true; };
+    nghttp2 = pkgsi686Linux.nghttp2;
+
+    scpSupport = false;
+    idnSupport = false;
+  }).overrideAttrs (old: {
+    configureFlags = old.configureFlags ++ [ "--disable-shared" "--enable-static" ];
+    dontDisableStatic = true;
+  });
+in
 multiStdenv.mkDerivation (finalAttrs: {
   pname = "millennium";
   version = "2.34.0";
@@ -36,6 +55,7 @@ multiStdenv.mkDerivation (finalAttrs: {
   patches = [
     ./patches/inject_assets_shims.diff
     ./patches/add_compile_definitions.diff
+    ./patches/devendor.diff
   ];
 
   nativeBuildInputs = [
@@ -49,10 +69,21 @@ multiStdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     pkgsi686Linux.gtk3
     pkgsi686Linux.libpsl
-    pkgsi686Linux.openssl
+    (pkgsi686Linux.openssl.override { static = true; })
     pkgsi686Linux.libxtst
     millennium-python
     cacert
+
+    curlStatic
+    pkgsi686Linux.zlib
+    pkgsi686Linux.fmt
+    pkgsi686Linux.nlohmann_json
+    pkgsi686Linux.libgit2
+    pkgsi686Linux.minizip-ng
+    pkgsi686Linux.asio
+    pkgsi686Linux.abseil-cpp
+    pkgsi686Linux.re2
+    pkgsi686Linux.websocketpp
   ];
 
   cmakeGenerator = "Ninja";
@@ -62,6 +93,7 @@ multiStdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DCMAKE_CXX_FLAGS=-m32"
     "-DCMAKE_C_FLAGS=-m32"
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
     "-DCMAKE_BUILD_TYPE=Release"
     "-DGITHUB_ACTION_BUILD=ON"
     "-DDISTRO_NIX=ON"
@@ -70,59 +102,25 @@ multiStdenv.mkDerivation (finalAttrs: {
     "-DNIX_ASSETS=${millennium-assets}/share/millennium/assets"
     "-DNIX_PYTHON=${millennium-python}"
     "-DNIX_PYTHON_LIB=${millennium-python}/lib/libpython${millennium-python.pythonVersion}.so"
-    "-DCURL_CA_BUNDLE=${cacert}/etc/ssl/certs/ca-bundle.crt"
-    "-DCURL_CA_PATH=${cacert}/etc/ssl/certs"
+    "-DNIX_PYTHON_INCLUDE=${millennium-python}/include/python${millennium-python.pythonVersion}"
+    "-DCURL_USE_STATIC_LIBS=TRUE"
+    "-DCMAKE_FIND_LIBRARY_SUFFIXES=.a"
   ];
 
   postPatch = ''
-    mkdir -p deps
+    mkdir -p deps/
+    cp -r ${inputs.minhook-src} deps/minhook
+    cp -r ${inputs.mini-src} deps/mini
+    cp -r ${inputs.incbin-src} deps/incbin
+    cp -r ${inputs.luajit-src} deps/luajit
+    cp -r ${inputs.luajson-src} deps/luajson
 
-    prepare_dep() {
-      local name="$1"
-      local src="$2"
-      echo "[Nix Millennium Build Setup] Preparing dependency: $name"
-      cp -r --no-preserve=mode "$src" "deps/$name"
-      chmod -R u+w "deps/$name"
-    }
+    chmod -R u+w deps/
 
-    echo "[Nix Millennium Build Setup] Copying all inputs..."
-    ${
-      let
-        deps = [
-          "zlib"
-          "luajit"
-          "luajson"
-          "minhook"
-          "mini"
-          "websocketpp"
-          "fmt"
-          "json"
-          "libgit2"
-          "minizip"
-          "curl"
-          "incbin"
-          "asio"
-          "abseil"
-          "re2"
-        ];
-      in
-      lib.concatStrings (map (dep: "prepare_dep ${dep} \"${inputs."${dep}-src"}\"\n") deps)
-    }
-
-    echo "[Nix Millennium Build Setup] Initializing Git..."
-    export HOME=$(pwd)
-    git config --global init.defaultBranch main
-    git config --global user.email "nix-build@localhost"
-    git config --global user.name "Nix Build"
-    git init
-    git add .
-    git commit -m "Dummy commit for build" > /dev/null 2>&1
-
-    git init deps/luajit
-    git -C deps/luajit add .
-    git -C deps/luajit commit -m "Dummy Commit for Nix Build" > /dev/null 2>&1
-    chmod -R u+rwx deps/
+    find deps/luajit -type f -exec sed -i 's/COMMAND git show.*/COMMAND echo 1710000000 > \$\{CMAKE_CURRENT_BINARY_DIR\}\/luajit_relver.txt/g' {} +
+    sed -i 's/void fpconv_init(void)/void fpconv_init_DISABLED(void)/g' deps/luajson/fpconv.c
   '';
+
 
   installPhase = ''
     runHook preInstall
