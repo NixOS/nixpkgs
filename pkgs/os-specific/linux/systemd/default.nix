@@ -410,7 +410,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "version-tag" finalAttrs.version)
     (lib.mesonOption "mode" "release")
     (lib.mesonOption "tty-gid" "3") # tty in NixOS has gid 3
-    (lib.mesonOption "pamconfdir" "${placeholder "out"}/etc/pam.d")
     (lib.mesonOption "shellprofiledir" "${placeholder "out"}/etc/profile.d")
 
     # /bin/sh is also the upstream default. Explicitly set this so that we're
