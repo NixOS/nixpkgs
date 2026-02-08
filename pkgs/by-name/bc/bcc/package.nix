@@ -1,4 +1,5 @@
 {
+  stdenv,
   audit,
   bash,
   bison,
@@ -19,19 +20,53 @@
   readline,
   replaceVars,
   zip,
+  linuxHeaders,
+  openssl,
+  libbfd,
+  libcap,
 }:
 
-python3Packages.buildPythonApplication rec {
-  pname = "bcc";
+let
   version = "0.35.0";
-  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "iovisor";
     repo = "bcc";
     tag = "v${version}";
-    hash = "sha256-eP/VEq7cPALi2oDKAZFQGQ3NExdmcBKyi6ddRZiYmbI=";
+    fetchSubmodules = true;
+    hash = "sha256-JafewZ7EEzIQlMWFmHxPfaBd7VJ0HF0gvz/akbxDCCI=";
   };
+
+  libbpf-tools = stdenv.mkDerivation (finalAttrs: {
+    pname = "libbpf-tools";
+    inherit version src;
+
+    sourceRoot = "${finalAttrs.src.name}/libbpf-tools";
+
+    nativeBuildInputs = [
+      llvmPackages.llvm
+    ];
+
+    buildInputs = [
+      llvmPackages.libclang
+      elfutils
+      openssl
+      linuxHeaders
+      libbfd
+      libcap
+    ];
+
+    preBuild = ''
+      makeFlagsArray+=(prefix=''${out} BPFCFLAGS="-I${linuxHeaders}/include -g -O2 -Wall -Werror=undef")
+    '';
+  });
+in
+python3Packages.buildPythonApplication rec {
+  pname = "bcc";
+  inherit version;
+  pyproject = false;
+
+  inherit src;
 
   patches = [
     # This is needed until we fix
@@ -126,8 +161,12 @@ python3Packages.buildPythonApplication rec {
     "man"
   ];
 
-  passthru.tests = {
-    bpf = nixosTests.bpf;
+  passthru = {
+    tests = {
+      bpf = nixosTests.bpf;
+    };
+
+    libbpf-tools = libbpf-tools;
   };
 
   meta = {
