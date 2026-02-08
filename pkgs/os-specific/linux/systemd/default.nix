@@ -240,7 +240,6 @@ stdenv.mkDerivation (finalAttrs: {
     ./0002-Don-t-try-to-unmount-nix-or-nix-store.patch
     ./0007-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
     ./0009-add-rootprefix-to-lookup-dir-paths.patch
-    ./0010-systemd-shutdown-execute-scripts-in-etc-systemd-syst.patch
     ./0011-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
     ./0012-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
     ./0013-inherit-systemd-environment-when-calling-generators.patch
@@ -724,7 +723,8 @@ stdenv.mkDerivation (finalAttrs: {
   postConfigure = ''
     substituteInPlace config.h \
       --replace "POLKIT_AGENT_BINARY_PATH" "_POLKIT_AGENT_BINARY_PATH" \
-      --replace "SYSTEMD_BINARY_PATH" "_SYSTEMD_BINARY_PATH"
+      --replace "SYSTEMD_BINARY_PATH" "_SYSTEMD_BINARY_PATH" \
+      --replace-fail "SYSTEM_SHUTDOWN_PATH" "_SYSTEM_SHUTDOWN_PATH"
   '';
 
   env.NIX_CFLAGS_COMPILE = toString [
@@ -735,6 +735,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     "-USYSTEMD_BINARY_PATH"
     "-DSYSTEMD_BINARY_PATH=\"/run/current-system/systemd/lib/systemd/systemd\""
+
+    # This path is not exposed via meson
+    "-USYSTEM_SHUTDOWN_PATH"
+    "-DSYSTEM_SHUTDOWN_PATH=\"/etc/systemd/system-shutdown\""
   ];
 
   doCheck = false;
