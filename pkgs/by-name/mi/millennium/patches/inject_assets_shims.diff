@@ -1,0 +1,22 @@
+diff --git a/src/sys/env.cc b/src/sys/env.cc
+index 72185291..a7e58a53 100644
+--- a/src/sys/env.cc
++++ b/src/sys/env.cc
+@@ -158,6 +158,8 @@ void SetupEnvironmentVariables()
+ #else
+ #ifdef _WIN32
+     const auto shimsPath = SystemIO::GetInstallPath().string() + "/ext/data/shims";
++#elif DISTRO_NIX
++    const auto shimsPath = NIX_SHIMS;
+ #elif __linux__
+     const auto shimsPath = "/usr/share/millennium/shims";
+ #elif __APPLE__
+@@ -170,6 +172,8 @@ void SetupEnvironmentVariables()
+ #else
+ #ifdef _WIN32
+     const auto assetsPath = SystemIO::GetInstallPath().string() + "/ext/data/assets";
++#elif DISTRO_NIX
++    const auto assetsPath = NIX_ASSETS;
+ #elif __linux__
+     const auto assetsPath = "/usr/share/millennium/assets";
+ #elif __APPLE__
