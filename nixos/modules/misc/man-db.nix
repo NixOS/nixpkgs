@@ -55,6 +55,8 @@ in
           configuration options used for the package.
         '';
       };
+
+      generateCachesAtRuntime = lib.mkEnableOption "run man-db as a systemd service";
     };
   };
 
@@ -65,41 +67,81 @@ in
     )
   ];
 
-  config = lib.mkIf cfg.enable {
-    environment.systemPackages = [ cfg.package ];
-    environment.etc."man_db.conf".text =
-      let
-        # We unfortunately can’t use the customized `cfg.package` when
-        # cross‐compiling. Instead we detect that situation and work
-        # around it by using the vanilla one, like the OpenSSH module.
-        buildPackage =
-          if pkgs.stdenv.buildPlatform.canExecute pkgs.stdenv.hostPlatform then
-            cfg.package
-          else
-            pkgs.buildPackages.man-db;
+  config = lib.mkIf cfg.enable (
+    lib.mkMerge [
+      {
+        environment.systemPackages = [ cfg.package ];
+        environment.etc."man_db.conf".text =
+          let
+            # We unfortunately can’t use the customized `cfg.package` when
+            # cross‐compiling. Instead we detect that situation and work
+            # around it by using the vanilla one, like the OpenSSH module.
+            buildPackage =
+              if pkgs.stdenv.buildPlatform.canExecute pkgs.stdenv.hostPlatform then
+                cfg.package
+              else
+                pkgs.buildPackages.man-db;
 
-        manualCache =
-          pkgs.runCommand "man-cache"
-            {
-              nativeBuildInputs = [ buildPackage ];
-              preferLocalBuild = true;
-            }
-            ''
-              echo "MANDB_MAP ${cfg.manualPages}/share/man $out" > man.conf
-              mandb -C man.conf -pscq
-            '';
-      in
-      ''
-        # Manual pages paths for NixOS
-        MANPATH_MAP /run/current-system/sw/bin /run/current-system/sw/share/man
-        MANPATH_MAP /run/wrappers/bin          /run/current-system/sw/share/man
+            manualCache =
+              pkgs.runCommand "man-cache"
+                {
+                  nativeBuildInputs = [ buildPackage ];
+                  preferLocalBuild = true;
+                }
+                ''
+                  echo "MANDB_MAP ${cfg.manualPages}/share/man $out" > man.conf
+                  mandb -C man.conf -pscq
+                '';
+          in
+          ''
+            # Manual pages paths for NixOS
+            MANPATH_MAP /run/current-system/sw/bin /run/current-system/sw/share/man
+            MANPATH_MAP /run/wrappers/bin          /run/current-system/sw/share/man
 
-        ${lib.optionalString config.documentation.man.generateCaches ''
-          # Generated manual pages cache for NixOS (immutable)
-          MANDB_MAP /run/current-system/sw/share/man ${manualCache}
-        ''}
-        # Manual pages caches for NixOS
-        MANDB_MAP /run/current-system/sw/share/man /var/cache/man/nixos
-      '';
-  };
+            ${lib.optionalString (!cfg.generateCachesAtRuntime && config.documentation.man.generateCaches) ''
+              # Generated manual pages cache for NixOS (immutable)
+              MANDB_MAP /run/current-system/sw/share/man ${manualCache}
+            ''}
+            ${lib.optionalString cfg.generateCachesAtRuntime ''
+              # Manual pages caches for NixOS
+              MANDB_MAP /run/current-system/sw/share/man /var/cache/man/nixos
+            ''}
+          '';
+      }
+
+      (lib.mkIf cfg.generateCachesAtRuntime {
+        users.users.mandb = {
+          isSystemUser = true;
+          group = "mandb";
+        };
+        users.groups.mandb = { };
+
+        systemd.services.mandb = {
+          path = [
+            pkgs.man
+            pkgs.rsync
+          ];
+          script = ''
+            echo "MANDB_MAP $CACHE_DIRECTORY/nixos-manpages $CACHE_DIRECTORY/nixos" \
+              > "$RUNTIME_DIRECTORY/man.conf"
+
+            mkdir -p "$CACHE_DIRECTORY/nixos"
+            rsync \
+              --checksum --recursive --copy-links --delete --no-times --no-perms --chmod=+w \
+              ${cfg.manualPages}/share/man/ "$CACHE_DIRECTORY/nixos-manpages"
+
+            mandb -C "$RUNTIME_DIRECTORY/man.conf" -q
+          '';
+          serviceConfig = {
+            CacheDirectory = "man";
+            RuntimeDirectory = "mandb";
+            User = "mandb";
+            InaccessiblePaths = [ "/etc" ]; # man-db still reads /etc/man_db.conf even when setting -C
+            ProtectSystem = "strict";
+          };
+          wantedBy = [ "default.target" ];
+        };
+      })
+    ]
+  );
 }
