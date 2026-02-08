@@ -240,7 +240,6 @@ stdenv.mkDerivation (finalAttrs: {
     ./0002-Don-t-try-to-unmount-nix-or-nix-store.patch
     ./0007-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
     ./0009-add-rootprefix-to-lookup-dir-paths.patch
-    ./0011-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
     ./0012-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
     ./0013-inherit-systemd-environment-when-calling-generators.patch
     ./0014-core-don-t-taint-on-unmerged-usr.patch
@@ -724,7 +723,8 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace config.h \
       --replace "POLKIT_AGENT_BINARY_PATH" "_POLKIT_AGENT_BINARY_PATH" \
       --replace "SYSTEMD_BINARY_PATH" "_SYSTEMD_BINARY_PATH" \
-      --replace-fail "SYSTEM_SHUTDOWN_PATH" "_SYSTEM_SHUTDOWN_PATH"
+      --replace-fail "SYSTEM_SHUTDOWN_PATH" "_SYSTEM_SHUTDOWN_PATH" \
+      --replace-fail "SYSTEM_SLEEP_PATH" "_SYSTEM_SLEEP_PATH"
   '';
 
   env.NIX_CFLAGS_COMPILE = toString [
@@ -739,6 +739,10 @@ stdenv.mkDerivation (finalAttrs: {
     # This path is not exposed via meson
     "-USYSTEM_SHUTDOWN_PATH"
     "-DSYSTEM_SHUTDOWN_PATH=\"/etc/systemd/system-shutdown\""
+
+    # This path is not exposed via meson
+    "-USYSTEM_SLEEP_PATH"
+    "-DSYSTEM_SLEEP_PATH=\"/etc/systemd/system-sleep\""
   ];
 
   doCheck = false;
