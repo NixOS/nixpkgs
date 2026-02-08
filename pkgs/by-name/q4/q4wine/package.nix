@@ -12,15 +12,15 @@
   which, # runtime deps.
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "q4wine";
   version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "brezerk";
     repo = "q4wine";
-    rev = "v${version}";
-    sha256 = "sha256-5rj+EDsOZib78gWT003a4IN23cZQftnhVggIdLN6f7I=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5rj+EDsOZib78gWT003a4IN23cZQftnhVggIdLN6f7I=";
   };
 
   buildInputs = [
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ rkitover ];
     platforms = lib.platforms.unix;
   };
-}
+})
