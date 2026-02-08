@@ -1,25 +1,24 @@
 {
   steam,
   millennium,
+  extraPkgs ? (_: [ ]),
+  extraLibraries ? (_: [ ]),
   ...
-}:
+}@args:
 let
   millenniumLibraries = libPkgs: [
     millennium
     libPkgs.openssl
   ];
-  millenniumEnv = {
-    MILLENNIUM_RUNTIME_PATH = "${millennium}/lib/libmillennium_x86.so";
-  };
+  upstreamArgs = removeAttrs args [
+    "steam"
+    "millennium"
+  ];
 in
-steam.override (prev: {
-  extraEnv = millenniumEnv // (prev.extraEnv or { });
-
-  extraLibraries =
-    libPkgs:
-    let
-      prevLibs = if prev ? extraLibraries then prev.extraLibraries libPkgs else [ ];
-      millenniumLibs = millenniumLibraries libPkgs;
-    in
-    prevLibs ++ millenniumLibs;
-})
+steam.override (
+  upstreamArgs
+  // {
+    extraPkgs = pkgs: extraPkgs pkgs;
+    extraLibraries = pkgs: (millenniumLibraries pkgs) ++ (extraLibraries pkgs);
+  }
+)
