@@ -238,7 +238,6 @@ stdenv.mkDerivation (finalAttrs: {
   # patches
   patches = [
     ./0002-Don-t-try-to-unmount-nix-or-nix-store.patch
-    ./0005-Get-rid-of-a-useless-message-in-user-sessions.patch
     ./0006-hostnamed-localed-timedated-disable-methods-that-cha.patch
     ./0007-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
     ./0008-localectl-use-etc-X11-xkb-for-list-x11.patch
