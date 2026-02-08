@@ -386,6 +386,9 @@ in
   };
 
   meta = {
-    maintainers = with lib.maintainers; [ nicomem ];
+    maintainers = with lib.maintainers; [
+      nicomem
+      tornax
+    ];
   };
 }
