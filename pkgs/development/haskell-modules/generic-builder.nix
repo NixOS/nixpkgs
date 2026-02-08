@@ -23,8 +23,9 @@ let
     emulator = stdenv.hostPlatform.emulator buildPackages;
 
     canProxyTH =
-      # iserv-proxy currently does not build on GHC 9.6
-      lib.versionAtLeast ghc.version "9.8" && stdenv.hostPlatform.emulatorAvailable buildPackages;
+      # Using iserv-proxy with 9.4 yields
+      #   no location info>: error: Dynamic loading not supported
+      lib.versionAtLeast ghc.version "9.6" && stdenv.hostPlatform.emulatorAvailable buildPackages;
 
     iservWrapper =
       let

@@ -2181,8 +2181,9 @@ builtins.intersectAttrs super {
           enableExternalInterpreter = false;
         };
       in
-      lib.mapAttrs (_: noExternalInterpreter) { inherit (super) iserv-proxy network; }
+      lib.mapAttrs (_: noExternalInterpreter) { inherit (super) libiserv iserv-proxy network; }
     )
+    libiserv
     iserv-proxy
     network
     ;
