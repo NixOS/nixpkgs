@@ -242,7 +242,6 @@ stdenv.mkDerivation (finalAttrs: {
     ./0009-add-rootprefix-to-lookup-dir-paths.patch
     ./0012-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
     ./0014-core-don-t-taint-on-unmerged-usr.patch
-    ./0016-systemctl-edit-suggest-systemdctl-edit-runtime-on-sy.patch
 
     # systemd tries to link the systemd-ssh-proxy ssh config snippet with tmpfiles
     # if the install prefix is not /usr, but that does not work for us
