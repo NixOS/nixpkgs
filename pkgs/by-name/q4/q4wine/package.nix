@@ -4,10 +4,7 @@
   stdenv,
   cmake,
   sqlite,
-  qtbase,
-  qtsvg,
-  qttools,
-  wrapQtAppsHook,
+  kdePackages,
   icoutils, # build and runtime deps.
   wget,
   fuseiso,
@@ -29,14 +26,14 @@ stdenv.mkDerivation rec {
   buildInputs = [
     sqlite
     icoutils
-    qtbase
-    qtsvg
-    qttools
+    kdePackages.qtbase
+    kdePackages.qtsvg
+    kdePackages.qttools
   ];
 
   nativeBuildInputs = [
     cmake
-    wrapQtAppsHook
+    kdePackages.wrapQtAppsHook
   ];
 
   # Add runtime deps.
