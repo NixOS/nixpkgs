@@ -10,7 +10,6 @@
   setuptools,
   withCExtensions ? true,
 }:
-
 buildPythonPackage rec {
   pname = "cbor2";
   version = "5.8.0";
@@ -49,6 +48,5 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "cbor2";
-
   };
 }
