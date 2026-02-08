@@ -215,6 +215,19 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-lJUX1sWRouhEEPZoA9UjjOy5IUZYGGV8pltAU0E4Dsg=";
   };
 
+  # PATCH POLICY
+  #
+  # There are only two reasons we accept patches on systemd:
+  # 1. systemd functionality is fundamentally incompatible with how NixOS works
+  #    and workarounds are not possible.
+  # 2. Hotfixes that we want to apply before they have reached a systemd branch
+  #    we can use. If we come up with the fixes in Nixpkgs, they need to be
+  #    reported upstream and the upstream issue needs to be linked in the
+  #    commit message of the patch.
+  #
+  # Importantly, patches to improve usability, enable new features on NixOS or
+  # add entirely new features to systemd are not allowed.
+
   # On major changes, or when otherwise required, you *must* :
   # 1. reformat the patches,
   # 2. `git am path/to/00*.patch` them into a systemd worktree,
