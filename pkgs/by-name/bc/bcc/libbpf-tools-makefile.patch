@@ -1,0 +1,39 @@
+--- a/Makefile
++++ b/Makefile
+@@ -122,7 +122,6 @@
+ ifeq ($(USE_BLAZESYM),1)
+ COMMON_OBJ += \
+ 	$(LIBBLAZESYM_OBJ) \
+-	$(OUTPUT)/blazesym.h \
+ 	#
+ endif
+
+@@ -166,17 +165,6 @@
+ 	$(call msg,CLEAN)
+ 	$(Q)rm -rf $(OUTPUT) $(APPS) $(APP_ALIASES)
+
+-$(LIBBLAZESYM_SRC)/target/release/libblazesym_c.a::
+-	$(Q)cd $(LIBBLAZESYM_SRC) && $(CARGO) build --release --package=blazesym-c
+-
+-$(LIBBLAZESYM_OBJ): $(LIBBLAZESYM_SRC)/target/release/libblazesym_c.a | $(OUTPUT)
+-	$(call msg,LIB,$@)
+-	$(Q)cp $(LIBBLAZESYM_SRC)/target/release/libblazesym_c.a $@
+-
+-$(OUTPUT)/blazesym.h: $(LIBBLAZESYM_SRC)/target/release/libblazesym_c.a | $(OUTPUT)
+-	$(call msg,INC,$@)
+-	$(Q)cp $(LIBBLAZESYM_INC)/blazesym.h $@
+-
+ $(OUTPUT) $(OUTPUT)/libbpf $(BPFTOOL_OUTPUT):
+ 	$(call msg,MKDIR,$@)
+ 	$(Q)mkdir -p $@
+@@ -189,10 +177,6 @@
+ 	$(call msg,BINARY,$@)
+ 	$(Q)$(CC) $(CFLAGS) $^ $(LDFLAGS) -lelf -lz -o $@
+
+-ifeq ($(USE_BLAZESYM),1)
+-$(patsubst %,$(OUTPUT)/%.o,$(BZ_APPS)): $(OUTPUT)/blazesym.h
+-endif
+-
+ $(patsubst %,$(OUTPUT)/%.o,$(APPS)): %.o: %.skel.h
+
+ $(OUTPUT)/%.o: %.c $(wildcard %.h) $(LIBBPF_OBJ) | $(OUTPUT)
