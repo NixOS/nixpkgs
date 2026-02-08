@@ -48,11 +48,12 @@ crystal.buildCrystalPackage rec {
       branchTemplate = ''{{ "#{`git branch | sed -n '/* /s///p'`.strip}" }}'';
       commitTemplate = ''{{ "#{`git rev-list HEAD --max-count=1 --abbrev-commit`.strip}" }}'';
       versionTemplate = ''{{ "#{`git log -1 --format=%ci | awk '{print $1}' | sed s/-/./g`.strip}" }}'';
+      tagTemplate = ''{{ "#{`git tag --points-at HEAD`.strip}" }}'';
       # This always uses the latest commit which invalidates the cache even if
       # the assets were not changed
       assetCommitTemplate = ''{{ "#{`git rev-list HEAD --max-count=1 --abbrev-commit -- assets`.strip}" }}'';
 
-      inherit (versions.invidious) commit date;
+      inherit (versions.invidious) commit date version;
     in
     ''
       for d in ${videojs}/*; do ln -s "$d" assets/videojs; done
@@ -63,6 +64,7 @@ crystal.buildCrystalPackage rec {
           --replace-fail ${lib.escapeShellArg branchTemplate} '"master"' \
           --replace-fail ${lib.escapeShellArg commitTemplate} '"${commit}"' \
           --replace-fail ${lib.escapeShellArg versionTemplate} '"${date}"' \
+          --replace-fail ${lib.escapeShellArg tagTemplate} '"v${version}"' \
           --replace-fail ${lib.escapeShellArg assetCommitTemplate} '"${commit}"'
 
       # Patch the assets and locales paths to be absolute
