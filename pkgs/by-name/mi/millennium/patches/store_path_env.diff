@@ -1,5 +1,5 @@
 diff --git a/src/sys/env.cc b/src/sys/env.cc
-index 72185291..a7e58a53 100644
+index 72185291..e376e92b 100644
 --- a/src/sys/env.cc
 +++ b/src/sys/env.cc
 @@ -158,6 +158,8 @@ void SetupEnvironmentVariables()
@@ -20,3 +20,12 @@ index 72185291..a7e58a53 100644
  #elif __linux__
      const auto assetsPath = "/usr/share/millennium/assets";
  #elif __APPLE__
+@@ -216,7 +220,7 @@ void SetupEnvironmentVariables()
+ 
+     std::map<std::string, std::string> environment_unix = {
+         { "OPENSSL_CONF", "/dev/null" },
+-        { "MILLENNIUM_RUNTIME_PATH", customLdPreload != "" ? customLdPreload : "/usr/lib/millennium/libmillennium_x86.so"},
++        { "MILLENNIUM_RUNTIME_PATH", MILLENNIUM_RUNTIME_PATH},
+ 
+         { "LIBPYTHON_RUNTIME_PATH", LIBPYTHON_RUNTIME_PATH },
+ 

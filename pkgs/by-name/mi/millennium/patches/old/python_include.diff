@@ -1,0 +1,15 @@
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 0cceb9ba..c4acba25 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -166,8 +166,9 @@ elseif(DISTRO_NIX)
+     set(default_python_path "${NIX_PYTHON}")
+     set(MILLENNIUM__PYTHON_ENV "${NIX_PYTHON}")
+     set(LIBPYTHON_RUNTIME_PATH "${NIX_PYTHON_LIB}")
++    set(NIX_PYTHON_INCLUDE "${NIX_PYTHON_INCLUDE}")
+ 
+-    include_directories("${NIX_PYTHON}/include/python3.11/")
++    include_directories("${NIX_PYTHON_INCLUDE}")
+     detect_aur_helper(MILLENNIUM__UPDATE_SCRIPT_PROMPT)
+     set(MILLENNIUM__UPDATE_SCRIPT_PROMPT "echo {}")
+ 

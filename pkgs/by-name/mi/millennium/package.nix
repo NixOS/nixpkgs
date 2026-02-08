@@ -15,29 +15,31 @@
   sourcesJson ? ./sources.json,
   inputs ? builtins.mapAttrs (name: info: fetchFromGitHub info) (lib.importJSON sourcesJson),
 
-
   millennium-python ? pkgsi686Linux.python311,
   millennium-shims ? callPackage ./shims.nix { inherit (inputs) millennium-src; },
   millennium-assets ? callPackage ./assets.nix { inherit (inputs) millennium-src; },
   millennium-frontend ? callPackage ./frontend.nix { inherit (inputs) millennium-src; },
 }:
 let
-  curlStatic = (pkgsi686Linux.curl.override {
-    gssSupport = false;
-    brotliSupport = false;
-    ldapSupport = false;
-    gsaslSupport = false;
+  curlStatic =
+    (pkgsi686Linux.curl.override {
+      gssSupport = false;
+      brotliSupport = false;
+      ldapSupport = false;
+      gsaslSupport = false;
+      scpSupport = false;
+      idnSupport = false;
 
-    openssl = pkgsi686Linux.openssl.override { static = true; };
-    zlib = pkgsi686Linux.zlib.override { static = true; };
-    nghttp2 = pkgsi686Linux.nghttp2;
-
-    scpSupport = false;
-    idnSupport = false;
-  }).overrideAttrs (old: {
-    configureFlags = old.configureFlags ++ [ "--disable-shared" "--enable-static" ];
-    dontDisableStatic = true;
-  });
+      openssl = pkgsi686Linux.openssl.override { static = true; };
+      zlib = pkgsi686Linux.zlib.override { static = true; };
+    }).overrideAttrs
+      (old: {
+        configureFlags = old.configureFlags ++ [
+          "--disable-shared"
+          "--enable-static"
+        ];
+        dontDisableStatic = true;
+      });
 in
 multiStdenv.mkDerivation (finalAttrs: {
   pname = "millennium";
@@ -53,9 +55,11 @@ multiStdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    ./patches/inject_assets_shims.diff
-    ./patches/add_compile_definitions.diff
-    ./patches/devendor.diff
+    ./patches/devendor_bootstrap_deps.diff
+    ./patches/devendor_CMakeLists.diff
+    ./patches/devendor_CMakeListsx64.diff
+    ./patches/store_path_env.diff
+    ./patches/bootstrap.diff
   ];
 
   nativeBuildInputs = [
@@ -74,6 +78,7 @@ multiStdenv.mkDerivation (finalAttrs: {
     millennium-python
     cacert
 
+    # pkgsi686Linux.curlWithGnuTls
     curlStatic
     pkgsi686Linux.zlib
     pkgsi686Linux.fmt
@@ -97,9 +102,13 @@ multiStdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_BUILD_TYPE=Release"
     "-DGITHUB_ACTION_BUILD=ON"
     "-DDISTRO_NIX=ON"
+
+    "-DMILLENNIUM_RUNTIME_PATH=${placeholder "out"}/lib/libmillennium_x86.so"
+
     "-DNIX_FRONTEND=${millennium-frontend}/share/frontend"
     "-DNIX_SHIMS=${millennium-shims}/share/millennium/shims"
     "-DNIX_ASSETS=${millennium-assets}/share/millennium/assets"
+
     "-DNIX_PYTHON=${millennium-python}"
     "-DNIX_PYTHON_LIB=${millennium-python}/lib/libpython${millennium-python.pythonVersion}.so"
     "-DNIX_PYTHON_INCLUDE=${millennium-python}/include/python${millennium-python.pythonVersion}"
@@ -120,7 +129,6 @@ multiStdenv.mkDerivation (finalAttrs: {
     find deps/luajit -type f -exec sed -i 's/COMMAND git show.*/COMMAND echo 1710000000 > \$\{CMAKE_CURRENT_BINARY_DIR\}\/luajit_relver.txt/g' {} +
     sed -i 's/void fpconv_init(void)/void fpconv_init_DISABLED(void)/g' deps/luajson/fpconv.c
   '';
-
 
   installPhase = ''
     runHook preInstall
