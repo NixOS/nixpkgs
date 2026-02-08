@@ -47,6 +47,7 @@ php.buildComposerProject2 (finalAttrs: {
     changelog = "https://github.com/bobthecow/psysh/releases/tag/v${finalAttrs.version}";
     description = "PsySH is a runtime developer console, interactive debugger and REPL for PHP";
     mainProgram = "psysh";
+    maintainers = [ lib.maintainers.piotrkwiecinski ];
     license = lib.licenses.mit;
     homepage = "https://psysh.org/";
   };
