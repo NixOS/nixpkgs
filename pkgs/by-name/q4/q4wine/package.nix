@@ -4,10 +4,7 @@
   stdenv,
   cmake,
   sqlite,
-  qtbase,
-  qtsvg,
-  qttools,
-  wrapQtAppsHook,
+  qt6,
   icoutils, # build and runtime deps.
   wget,
   fuseiso,
@@ -29,14 +26,14 @@ stdenv.mkDerivation rec {
   buildInputs = [
     sqlite
     icoutils
-    qtbase
-    qtsvg
-    qttools
+    qt6.qtbase
+    qt6.qtsvg
+    qt6.qttools
   ];
 
   nativeBuildInputs = [
     cmake
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   # Add runtime deps.
