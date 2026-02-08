@@ -93,6 +93,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/cdcseacave/openMVS";
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ bouk ];
+    maintainers = with lib.maintainers; [
+      bouk
+      miniharinn
+    ];
   };
 }
