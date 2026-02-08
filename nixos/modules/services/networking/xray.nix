@@ -12,7 +12,6 @@
         default = false;
         description = ''
           Whether to run xray server.
-
           Either `settingsFile` or `settings` must be specified.
         '';
       };
@@ -25,10 +24,8 @@
         example = "/etc/xray/config.json";
         description = ''
           The absolute path to the configuration file.
-
           Either `settingsFile` or `settings` must be specified.
-
-          See <https://www.v2fly.org/en_US/config/overview.html>.
+          See <https://xtls.github.io/en/config/>.
         '';
       };
 
@@ -51,10 +48,8 @@
         };
         description = ''
           The configuration object.
-
           Either `settingsFile` or `settings` must be specified.
-
-          See <https://www.v2fly.org/en_US/config/overview.html>.
+          See <https://xtls.github.io/en/config/>.
         '';
       };
     };
