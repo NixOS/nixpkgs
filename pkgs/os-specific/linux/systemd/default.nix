@@ -730,8 +730,7 @@ stdenv.mkDerivation (finalAttrs: {
   postConfigure = ''
     substituteInPlace config.h \
       --replace "POLKIT_AGENT_BINARY_PATH" "_POLKIT_AGENT_BINARY_PATH" \
-      --replace "SYSTEMD_BINARY_PATH" "_SYSTEMD_BINARY_PATH" \
-      --replace "SYSTEMD_CGROUP_AGENTS_PATH" "_SYSTEMD_CGROUP_AGENT_PATH"
+      --replace "SYSTEMD_BINARY_PATH" "_SYSTEMD_BINARY_PATH"
   '';
 
   env.NIX_CFLAGS_COMPILE = toString [
@@ -739,12 +738,6 @@ stdenv.mkDerivation (finalAttrs: {
     # lead to a cyclic dependency.
     "-UPOLKIT_AGENT_BINARY_PATH"
     "-DPOLKIT_AGENT_BINARY_PATH=\"/run/current-system/sw/bin/pkttyagent\""
-
-    # Set the release_agent on /sys/fs/cgroup/systemd to the
-    # currently running systemd (/run/current-system/systemd) so
-    # that we don't use an obsolete/garbage-collected release agent.
-    "-USYSTEMD_CGROUP_AGENTS_PATH"
-    "-DSYSTEMD_CGROUP_AGENTS_PATH=\"/run/current-system/systemd/lib/systemd/systemd-cgroups-agent\""
 
     "-USYSTEMD_BINARY_PATH"
     "-DSYSTEMD_BINARY_PATH=\"/run/current-system/systemd/lib/systemd/systemd\""
