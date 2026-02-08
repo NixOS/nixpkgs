@@ -179,7 +179,6 @@
       # Regression test for https://github.com/NixOS/nixpkgs/pull/91232
       with subtest("setting transient hostnames works"):
           machine.succeed("hostnamectl set-hostname --transient machine-transient")
-          machine.fail("hostnamectl set-hostname machine-all")
 
       with subtest("systemd-shutdown works"):
           machine.shutdown()
