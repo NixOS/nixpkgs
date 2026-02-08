@@ -242,7 +242,9 @@ stdenv.mkDerivation (finalAttrs: {
     ./0009-add-rootprefix-to-lookup-dir-paths.patch
     ./0012-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
     ./0014-core-don-t-taint-on-unmerged-usr.patch
+    # This can be dropped when v260 is released
     ./0017-meson.build-do-not-create-systemdstatedir.patch
+    # This can be dropped when v260 is released
     ./0019-install-unit_file_exists_full-follow-symlinks.patch
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
