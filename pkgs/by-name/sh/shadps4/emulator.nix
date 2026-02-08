@@ -49,13 +49,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shadps4";
-  version = "0.13.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "shadps4-emu";
     repo = "shadPS4";
     tag = "v.${finalAttrs.version}";
-    hash = "sha256-zc3zhFTphty/vwioFEOfhgXttpD9MG2F7+YJYcW0H2w=";
+    hash = "sha256-YnBcogEL7GqTdZCcBhD7YSfDnjgtneceLOUOovGXy2g=";
     fetchSubmodules = true;
 
     leaveDotGit = true;
