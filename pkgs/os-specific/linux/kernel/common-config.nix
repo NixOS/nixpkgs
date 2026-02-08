@@ -1615,6 +1615,12 @@ let
         # > round to working out why.  The workaround is to build it in[…].
         # > (It won't do any harm on non-Mac systems.)
         I2C_POWERMAC = yes;
+      }
+      // lib.optionalAttrs stdenv.hostPlatform.isPower {
+        # Needed for booting PowerMacs from disc
+        # (the only nice way that doesn't involve messing around with internal drives or in Open Firmware)
+        ATA = yes;
+        PATA_MACIO = yes;
       };
 
     accel = {
