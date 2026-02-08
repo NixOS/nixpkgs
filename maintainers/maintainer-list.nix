@@ -15628,6 +15628,12 @@
     githubId = 84395723;
     name = "Lukas Wurzinger";
   };
+  luke = {
+    email = "luke@maraud.earth";
+    github = "LukeDSchenk";
+    githubId = 41804945;
+    name = "Luke Schenk";
+  };
   lukebfox = {
     email = "lbentley-fox1@sheffield.ac.uk";
     github = "lukebfox";
