@@ -297,19 +297,21 @@ in
               default_2fa_method = "totp";
               log.level = "debug";
               server.disable_healthcheck = true;
-              
+
               # Minimal session configuration example
               session = {
                 name = "authelia_session";
                 secret = "YOUR_SESSION_SECRET";
                 expiration = "1h";
                 inactivity = "5m";
-                cookies = [{
-                  domain = "example.com";
-                  authelia_url = "https://auth.example.com";
-                }];
+                cookies = [
+                  {
+                    domain = "example.com";
+                    authelia_url = "https://auth.example.com";
+                  }
+                ];
               };
-              
+
               authentication_backend.file.path = "/var/lib/authelia/users_database.yml";
               access_control.default_policy = "deny";
             };
