@@ -86,6 +86,15 @@ in
         '';
       };
 
+      ignoredCompletionPackages = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
+        default = [ ];
+        example = lib.literalExpression "[ config.system.build.manual.nixos-configuration-reference-manpage ]";
+        description = ''
+          Packages to ignore when generateing completions, if {option}`programs.fish.generateCompletions` is enabled.
+        '';
+      };
+
       vendor.config.enable = lib.mkOption {
         type = lib.types.bool;
         default = true;
@@ -304,7 +313,9 @@ in
           pkgs.buildEnv {
             name = "system_fish-completions";
             ignoreCollisions = true;
-            paths = map generateCompletions (config.environment.systemPackages ++ cfg.extraCompletionPackages);
+            paths = map generateCompletions (
+              lib.subtractLists cfg.ignoredCompletionPackages (cfge.systemPackages ++ cfg.extraCompletionPackages)
+            );
           };
       })
 
