@@ -318,6 +318,7 @@ buildPythonPackage (finalAttrs: {
     platforms = lib.platforms.linux;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+      GaetanLepage
       SomeoneSerge
       derdennisop
     ];
