@@ -10,7 +10,7 @@
   wtype,
   ydotool,
   libnotify,
-  withWhisper ? true,
+  whisperPkg ? whisper-cpp,
 }:
 buildGoModule (finalAttrs: {
   pname = "hyprvoice";
@@ -54,7 +54,7 @@ buildGoModule (finalAttrs: {
             ydotool
             libnotify
           ]
-          ++ lib.optionals withWhisper [ whisper-cpp ]
+          ++ lib.optionals (whisperPkg != null) [ whisperPkg ]
         )
       }
   '';
