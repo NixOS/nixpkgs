@@ -12476,18 +12476,15 @@ with pkgs;
 
   wibo = pkgsi686Linux.callPackage ../applications/emulators/wibo { };
 
-  winePackagesFor = wineBuild: callPackage ./wine-packages.nix { inherit wineBuild; };
+  winePackages = callPackage ./wine-packages.nix { };
+  winePackages_stable = winePackages.stable;
 
-  winePackages = recurseIntoAttrs (winePackagesFor (config.wine.build or "wine32"));
-  wine64Packages = recurseIntoAttrs (winePackagesFor "wine64");
-  wineWow64Packages = recurseIntoAttrs (winePackagesFor "wineWow64");
+  wine = winePackages.full.wine;
+  wine64 = winePackages.full.wine64;
 
-  wine = winePackages.full;
-  wine64 = wine64Packages.full;
+  wine-staging = lowPrio winePackages.stagingFull.wine;
 
-  wine-staging = lowPrio winePackages.stagingFull;
-
-  wine-wayland = lowPrio winePackages.waylandFull;
+  wine-wayland = lowPrio winePackages.waylandFull.wine;
 
   inherit (callPackage ../servers/web-apps/wordpress { })
     wordpress

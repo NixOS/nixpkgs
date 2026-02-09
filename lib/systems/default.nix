@@ -376,7 +376,7 @@ let
           selectEmulator =
             pkgs:
             let
-              wine = (pkgs.winePackagesFor "wine${toString final.parsed.cpu.bits}").minimal;
+              wine = pkgs.winePackages.minimal."wine${toString final.parsed.cpu.bits}";
             in
             # Note: we guarantee that the return value is either `null` or a path
             # to an emulator program. That is, if an emulator requires additional

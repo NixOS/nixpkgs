@@ -5,7 +5,6 @@
   # not for anything bound in the package set, do note
   pkgs,
   newScope,
-  wineBuild,
 }:
 
 let
@@ -88,8 +87,8 @@ lib.makeExtensible (
 
     defaultRelease = config.wine.release or "stable";
 
-    mkWine =
-      flags: info: (callPackage ../applications/emulators/wine/packages.nix (flags // info)).${wineBuild};
+    # Returns { wine32, wine64, wineWow, wineWow64 } for given flags and release info
+    mkWine = flags: info: callPackage ../applications/emulators/wine/packages.nix (flags // info);
 
     mkVariants = flags: lib.mapAttrs (_: mkWine flags) (removeAttrs releaseInfo [ "yabridge" ]);
 
@@ -100,7 +99,7 @@ lib.makeExtensible (
   bases
   // lib.mapAttrs' (name: pkg: lib.nameValuePair "${name}Full" pkg) fulls
   // {
-    inherit callPackage wineBuild;
+    inherit callPackage;
 
     fonts = callPackage ../applications/emulators/wine/fonts.nix { };
 
@@ -110,12 +109,21 @@ lib.makeExtensible (
 
     yabridge =
       let
-        yabridge = (mkWine baseFlags releaseInfo.yabridge).overrideAttrs (old: {
-          env = old.env // {
-            NIX_CFLAGS_COMPILE = "-std=gnu17";
-          };
-        });
+        builds = mkWine baseFlags releaseInfo.yabridge;
+        applyOverride =
+          pkg:
+          pkg.overrideAttrs (old: {
+            env = old.env // {
+              NIX_CFLAGS_COMPILE = "-std=gnu17";
+            };
+          });
       in
-      if wineBuild == "wineWow" then yabridge else lib.dontDistribute yabridge;
+      lib.mapAttrs (
+        name: pkg:
+        let
+          modified = applyOverride pkg;
+        in
+        if name == "wineWow" then modified else lib.dontDistribute modified
+      ) builds;
   }
 )

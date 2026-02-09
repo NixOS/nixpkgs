@@ -4,11 +4,15 @@
   fetchFromGitHub,
   libjack2,
   pkg-config,
-  wineWow64Packages,
+  winePackages_stable,
   python3,
   python3Packages,
   qt6,
 }:
+
+let
+  wine = winePackages_stable.wineWow64;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wineasio";
@@ -52,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
-    wineWow64Packages.stable
+    wine
   ];
 
   buildInputs = [
@@ -61,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontConfigure = true;
 
-  makeFlags = [ "PREFIX=${wineWow64Packages.stable}" ];
+  makeFlags = [ "PREFIX=${wine}" ];
 
   buildPhase = ''
     runHook preBuild

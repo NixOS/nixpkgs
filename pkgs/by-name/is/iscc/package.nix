@@ -3,13 +3,14 @@
   fetchurl,
   innoextract,
   runtimeShell,
-  wineWow64Packages,
+  winePackages_stable,
   lib,
 }:
 
 let
   version = "6.2.2";
   majorVersion = builtins.substring 0 1 version;
+  wine = winePackages_stable.wineWow64;
 in
 stdenv.mkDerivation rec {
   pname = "iscc";
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
   };
   nativeBuildInputs = [
     innoextract
-    wineWow64Packages.stable
+    wine
   ];
   unpackPhase = ''
     runHook preUnpack
@@ -35,14 +36,14 @@ stdenv.mkDerivation rec {
 
     cat << 'EOF' > "$out/bin/iscc"
     #!${runtimeShell}
-    export PATH=${wineWow64Packages.stable}/bin:$PATH
+    export PATH=${wine}/bin:$PATH
     export WINEDLLOVERRIDES="mscoree=" # disable mono
 
     # Solves PermissionError: [Errno 13] Permission denied: '/homeless-shelter/.wine'
     export HOME=$(mktemp -d)
 
-    wineInputFile=$(${wineWow64Packages.stable}/bin/wine winepath -w $1)
-    ${wineWow64Packages.stable}/bin/wine "$out/bin/ISCC.exe" "$wineInputFile"
+    wineInputFile=$(${wine}/bin/wine winepath -w $1)
+    ${wine}/bin/wine "$out/bin/ISCC.exe" "$wineInputFile"
     EOF
 
     substituteInPlace $out/bin/iscc \
@@ -63,6 +64,6 @@ stdenv.mkDerivation rec {
     changelog = "https://jrsoftware.org/files/is6-whatsnew.htm";
     license = lib.licenses.unfreeRedistributable;
     maintainers = [ ];
-    platforms = wineWow64Packages.stable.meta.platforms;
+    platforms = wine.meta.platforms;
   };
 }

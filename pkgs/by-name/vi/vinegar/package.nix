@@ -1,7 +1,7 @@
 {
   lib,
   buildGoModule,
-  wine64Packages,
+  winePackages,
   fetchFromGitHub,
   glib,
   makeBinaryWrapper,
@@ -36,7 +36,7 @@ let
   };
 
   wine =
-    (wine64Packages.stable.override {
+    (winePackages.stable.wine64.override {
       dbusSupport = true;
       embedInstallers = true;
       pulseaudioSupport = true;
