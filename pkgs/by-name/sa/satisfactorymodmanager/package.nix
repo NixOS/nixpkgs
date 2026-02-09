@@ -19,14 +19,14 @@ let
   wails' = wails.override { nodejs = nodejs_20; };
   pnpm' = pnpm_8.override { nodejs = nodejs_20; };
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "satisfactorymodmanager";
   version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "satisfactorymodding";
     repo = "SatisfactoryModManager";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ndvrgSRblm7pVwnGvxpwtGVMEGp+mqpC4kE87lmt36M=";
   };
 
@@ -56,23 +56,19 @@ buildGoModule rec {
     glib-networking
   ];
 
-  # we use env because buildGoModule doesn't forward all normal attrs
-  # this is pretty hacky
-  env = {
-    pnpmDeps = fetchPnpmDeps {
-      inherit
-        pname
-        version
-        src
-        ;
-      pnpm = pnpm';
-      sourceRoot = "${src.name}/frontend";
-      fetcherVersion = 1;
-      hash = "sha256-OP+3zsNlvqLFwvm2cnBd2bj2Kc3EghQZE3hpotoqqrQ=";
-    };
-
-    pnpmRoot = "frontend";
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      ;
+    pnpm = pnpm';
+    sourceRoot = "${finalAttrs.src.name}/frontend";
+    fetcherVersion = 3;
+    hash = "sha256-aicvZ/pmBZNcy/MqH/C12llKnoDm9ahH7egJZh5mIGM=";
   };
+
+  pnpmRoot = "frontend";
 
   # running this caches some additional dependencies for the FOD
   overrideModAttrs = {
@@ -122,4 +118,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ tomasajt ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})
