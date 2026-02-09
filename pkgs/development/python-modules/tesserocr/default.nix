@@ -1,7 +1,6 @@
 {
   buildPythonPackage,
   fetchPypi,
-  fetchpatch,
   lib,
 
   # build-system
@@ -30,23 +29,9 @@ buildPythonPackage rec {
     hash = "sha256-L6H+PHlXXW/VtSd4Xnc/oZsFXwf5Iv6yrJ1sHmIjNSI=";
   };
 
-  patches = [
-    # Fix a broken test. The issue has been reported upstream at
-    # https://github.com/sirfz/tesserocr/issues/363
-    # Check the status of the issue before removing this patch at the next
-    # update.
-    (fetchpatch {
-      url = "https://github.com/sirfz/tesserocr/commit/78d9e8187bd4d282d572bd5221db2c69e560e017.patch";
-      hash = "sha256-s51s9EIV9AZT6UoqwTuQ8lOjToqwIIUkDLjsvCsyYFU=";
-    })
-  ];
-
-  # https://github.com/sirfz/tesserocr/issues/314
   postPatch = ''
-    sed -i '/allheaders.h/a\    pass\n\ncdef extern from "leptonica/pix_internal.h" nogil:' tesserocr/tesseract.pxd
-
     substituteInPlace setup.py \
-      --replace-fail "Cython>=0.23,<3.1.0" Cython
+      --replace-fail "Cython>=3.0.0,<3.2.0" Cython
   '';
 
   build-system = [
