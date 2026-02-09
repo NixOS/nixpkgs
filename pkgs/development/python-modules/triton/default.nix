@@ -41,7 +41,7 @@
   cudaSupport ? config.cudaSupport,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "triton";
   version = "3.5.1";
   pyproject = true;
@@ -50,7 +50,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "triton-lang";
     repo = "triton";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-dyNRtS1qtU8C/iAf0Udt/1VgtKGSvng1+r2BtvT9RB4=";
   };
 
@@ -314,6 +314,7 @@ buildPythonPackage rec {
   meta = {
     description = "Language and compiler for writing highly efficient custom Deep-Learning primitives";
     homepage = "https://github.com/triton-lang/triton";
+    changelog = "https://github.com/triton-lang/triton/releases/tag/${finalAttrs.src.tag}";
     platforms = lib.platforms.linux;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
@@ -321,4 +322,4 @@ buildPythonPackage rec {
       derdennisop
     ];
   };
-}
+})
