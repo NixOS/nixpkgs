@@ -9597,6 +9597,13 @@ with pkgs;
     }
   );
 
+  virtualboxKvmHardened = lowPrio (
+    virtualbox.override {
+      enableKvm = true;
+      enableHardening = true;
+    }
+  );
+
   virtualboxHeadless = lowPrio (
     virtualbox.override {
       enableHardening = true;
