@@ -11,6 +11,9 @@
   fetchzip,
   dovecot,
   openssl,
+  withLDAP ? true,
+  cyrus_sasl,
+  openldap,
 }:
 let
   dovecotMajorMinor = lib.versions.majorMinor dovecot.version;
@@ -32,6 +35,10 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     dovecot
     openssl
+  ]
+  ++ lib.optionals withLDAP [
+    cyrus_sasl
+    openldap
   ];
 
   preConfigure = ''
@@ -47,7 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-dovecot=${dovecot}/lib/dovecot"
     "--with-moduledir=${placeholder "out"}/lib/dovecot/modules"
     "--without-dovecot-install-dirs"
-  ];
+  ]
+  ++ lib.optional withLDAP "--with-ldap";
 
   enableParallelBuilding = true;
 
