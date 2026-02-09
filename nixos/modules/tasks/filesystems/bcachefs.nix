@@ -242,8 +242,8 @@ in
           }
         ];
 
-        # Bcachefs upstream recommends using the latest kernel
-        boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
+        # Use LTS that bcachefs is compatible with.
+        boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_6_18;
 
         # needed for systemd-remount-fs
         system.fsPackages = [ cfg.package ];

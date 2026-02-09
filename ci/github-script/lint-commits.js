@@ -32,10 +32,12 @@ async function checkCommitMessages({ github, context, core }) {
 
   if (
     baseBranchType.includes('development') &&
-    headBranchType.includes('development')
+    headBranchType.includes('development') &&
+    pr.base.repo.id === pr.head.repo?.id
   ) {
-    // This matches, for example, PRs from staging-next to master, or vice versa.
+    // This matches, for example, PRs from NixOS:staging-next to NixOS:master, or vice versa.
     // Ignore them: we should only care about PRs introducing *new* commits.
+    // We still want to run on PRs from, e.g., Someone:master to NixOS:master, though.
     core.info(
       'This PR is from one development branch to another. Skipping checks.',
     )

@@ -49,8 +49,7 @@
       "ethercrow": 222467,
       "groodt": 343415,
       "kalbasit": 87115,
-      "mboes": 51356,
-      "uri-canva": 33242106
+      "mboes": 51356
     },
     "name": "Bazel"
   },
@@ -61,7 +60,6 @@
       "happysalada": 5317234
     },
     "members": {
-      "Br1ght0ne": 12615679,
       "DianaOlympos": 15774340,
       "adamcstephens": 2071575,
       "ankhers": 750786,
@@ -146,7 +144,6 @@
       "peterhoeg": 722550
     },
     "members": {
-      "Br1ght0ne": 12615679,
       "manveru": 3507
     },
     "name": "crystal-lang"
@@ -212,9 +209,11 @@
       "domenkozar": 126339,
       "donn": 12652988,
       "dwt": 57199,
+      "eclairevoyant": 848000,
       "emilazy": 18535642,
       "ethancedwards8": 60861925,
       "fiddlerwoaroof": 808745,
+      "fulsomenko": 14945057,
       "gador": 1883533,
       "griff": 4368,
       "groodt": 343415,
@@ -243,7 +242,6 @@
       "mstone": 412508,
       "n8henrie": 1234956,
       "ofalvai": 1694986,
-      "pasqui23": 6931743,
       "prusnak": 42201,
       "reckenrode": 7413633,
       "ryand56": 22267679,
@@ -262,7 +260,6 @@
       "thefloweringash": 42933,
       "tricktron": 16036882,
       "uncenter": 47499684,
-      "uri-canva": 33242106,
       "usertam": 22500027,
       "veprbl": 245573,
       "viraptor": 188063,
@@ -426,8 +423,7 @@
     "maintainers": {
       "Mic92": 96200,
       "kalbasit": 87115,
-      "katexochen": 49727155,
-      "zowoq": 59103226
+      "katexochen": 49727155
     },
     "members": {
       "mfrw": 4929861,
@@ -501,7 +497,6 @@
     },
     "members": {
       "cpages": 411324,
-      "edwtjo": 54799,
       "minijackson": 1200507,
       "peterhoeg": 722550,
       "sephalon": 893474
@@ -529,8 +524,7 @@
     "members": {
       "K900": 386765,
       "Ma27": 6025220,
-      "NeQuissimus": 628342,
-      "TredwellGit": 61860346
+      "zowoq": 59103226
     },
     "name": "Linux kernel"
   },
@@ -556,8 +550,7 @@
     "members": {
       "9999years": 15312184,
       "Qyriad": 1542224,
-      "RaitoBezarius": 314564,
-      "alois31": 36605164
+      "RaitoBezarius": 314564
     },
     "name": "Lix maintainers"
   },
@@ -642,8 +635,7 @@
     "description": "Marketing team [leader=@djacu]",
     "id": 7709512,
     "maintainers": {
-      "djacu": 7043297,
-      "tomberek": 178444
+      "djacu": 7043297
     },
     "members": {
       "flyfloh": 74379,
@@ -698,7 +690,6 @@
       "0x4A6F": 9675338,
       "MattSturgeon": 5046562,
       "Sereja313": 112060595,
-      "dasJ": 4971975,
       "dyegoaurelio": 42411160
     },
     "name": "nix-formatting"
@@ -707,12 +698,14 @@
     "description": "",
     "id": 174820,
     "maintainers": {
+      "Ericson2314": 1055245,
       "tomberek": 178444
     },
     "members": {
-      "Ericson2314": 1055245,
       "Mic92": 96200,
+      "Radvendii": 1239929,
       "edolstra": 1148549,
+      "lovesegfault": 7243783,
       "xokdvium": 145775305
     },
     "name": "Nix team"
@@ -746,8 +739,7 @@
     "id": 14317027,
     "maintainers": {
       "alyssais": 2768870,
-      "emilazy": 18535642,
-      "wolfgangwalther": 9132420
+      "emilazy": 18535642
     },
     "members": {},
     "name": "Nixpkgs core"
@@ -837,7 +829,6 @@
       "K900": 386765,
       "LunNova": 782440,
       "NickCao": 15247171,
-      "SCOTT-HAMILTON": 24496705,
       "SuperSandro2000": 7258858,
       "bkchr": 5718007,
       "ilya-fedin": 17829319,
@@ -898,9 +889,7 @@
       "winterqt": 78392041,
       "zowoq": 59103226
     },
-    "members": {
-      "tjni": 3806110
-    },
+    "members": {},
     "name": "rust"
   },
   "scala": {

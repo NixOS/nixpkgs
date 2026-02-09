@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "temporal";
-  version = "1.29.2";
+  version = "1.29.3";
 
   src = fetchFromGitHub {
     owner = "temporalio";
     repo = "temporal";
     rev = "v${version}";
-    hash = "sha256-WiiezZ/2FgRte4BStIGHQhb5bHtfldi3TaIRG0xFtW0=";
+    hash = "sha256-rifErftrYC2PnsJmorBE997OarqAg1xYsca1/EM4/KE=";
   };
 
   vendorHash = "sha256-HW2j8swbaWwU1i3udqlT8VyFreML6ZH14zWxF8L5NTQ=";

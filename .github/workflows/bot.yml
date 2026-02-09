@@ -53,7 +53,7 @@ jobs:
             ci/github-script
 
       - name: Install dependencies
-        run: npm install @actions/artifact bottleneck
+        run: npm install @actions/artifact@5.0.3 bottleneck
 
       # Use a GitHub App, because it has much higher rate limits: 12,500 instead of 5,000 req / hour.
       - uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf # v2.2.1

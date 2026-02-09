@@ -121,46 +121,73 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
-    environment.systemPackages = [
-      (pkgs.runCommand "captive-browser-desktop-item" { } ''
-        install -Dm444 -t $out/share/applications ${desktopItem}/share/applications/*.desktop
-      '')
-      captive-browser-configured
-    ];
+  config = mkIf cfg.enable (
+    lib.mkMerge [
+      {
+        environment.systemPackages = [
+          (pkgs.runCommand "captive-browser-desktop-item" { } ''
+            install -Dm444 -t $out/share/applications ${desktopItem}/share/applications/*.desktop
+          '')
+          captive-browser-configured
+        ];
 
-    programs.captive-browser.dhcp-dns =
-      let
-        iface =
-          prefixes: optionalString cfg.bindInterface (escapeShellArgs (prefixes ++ [ cfg.interface ]));
-      in
-      mkOptionDefault (
-        if config.networking.networkmanager.enable then
-          "${pkgs.networkmanager}/bin/nmcli dev show ${iface [ ]} | ${pkgs.gnugrep}/bin/fgrep IP4.DNS"
-        else if config.networking.dhcpcd.enable then
-          "${pkgs.dhcpcd}/bin/dhcpcd ${iface [ "-U" ]} | ${pkgs.gnugrep}/bin/fgrep domain_name_servers"
-        else if config.networking.useNetworkd then
-          "${cfg.package}/bin/systemd-networkd-dns ${iface [ ]}"
-        else
-          "${config.security.wrapperDir}/udhcpc --quit --now -f ${iface [ "-i" ]} -O dns --script ${pkgs.writeShellScript "udhcp-script" ''
-            if [ "$1" = bound ]; then
-              echo "$dns"
-            fi
-          ''}"
-      );
+        programs.captive-browser.dhcp-dns =
+          let
+            iface =
+              prefixes: optionalString cfg.bindInterface (escapeShellArgs (prefixes ++ [ cfg.interface ]));
+          in
+          mkOptionDefault (
+            if config.networking.networkmanager.enable then
+              "${pkgs.networkmanager}/bin/nmcli dev show ${iface [ ]} | ${pkgs.gnugrep}/bin/fgrep IP4.DNS"
+            else if config.networking.dhcpcd.enable then
+              "${pkgs.dhcpcd}/bin/dhcpcd ${iface [ "-U" ]} | ${pkgs.gnugrep}/bin/fgrep domain_name_servers"
+            else if config.networking.useNetworkd then
+              "${cfg.package}/bin/systemd-networkd-dns ${iface [ ]}"
+            else
+              "${config.security.wrapperDir}/udhcpc --quit --now -f ${iface [ "-i" ]} -O dns --script ${pkgs.writeShellScript "udhcp-script" ''
+                if [ "$1" = bound ]; then
+                  echo "$dns"
+                fi
+              ''}"
+          );
 
-    security.wrappers.udhcpc = {
-      owner = "root";
-      group = "root";
-      capabilities = "cap_net_raw+p";
-      source = "${pkgs.busybox}/bin/udhcpc";
-    };
+        security.wrappers.captive-browser = mkIf requiresSetcapWrapper {
+          owner = "root";
+          group = "root";
+          capabilities = "cap_net_raw+p";
+          source = "${captive-browser-configured}/bin/captive-browser";
+        };
+      }
+      (lib.mkIf (lib.strings.hasPrefix "${config.security.wrapperDir}/udhcpc" cfg.dhcp-dns) {
+        warnings = [
+          ''
+            CVE-2026-25740: The `programs.captive-portal` module is using an insecure udhcpc setcap
+            wrapper to determine your upstream DNS server. This could allow a local attacker to run
+            arbitrary code with the `cap_net_raw` capability.
 
-    security.wrappers.captive-browser = mkIf requiresSetcapWrapper {
-      owner = "root";
-      group = "root";
-      capabilities = "cap_net_raw+p";
-      source = "${captive-browser-configured}/bin/captive-browser";
-    };
-  };
+            To remedy this, you should do one of the following:
+
+            1. Configure `config.programs.captive-browser.dhcp-dns` to something other than the udhcpc
+               wrapper.
+
+            2. Enable one of NetworkManager (`config.networking.networkmanager.enable`), dhcpcd
+               (`config.networking.dhcpcd.enable`), or systemd-networkd
+               (`config.networking.useNetworkd`). Any one of these will allow captive-browser to
+               determine your upstream DNS server without the udhcpc wrapper.
+
+            3. Set `config.programs.captive-browser.enable` to false in your config to disable the
+               captive-browser module entirely.
+
+            See https://github.com/NixOS/nixpkgs/security/advisories/GHSA-wc3r-c66x-8xmc for details.
+          ''
+        ];
+        security.wrappers.udhcpc = {
+          owner = "root";
+          group = "root";
+          capabilities = "cap_net_raw+p";
+          source = "${pkgs.busybox}/bin/udhcpc";
+        };
+      })
+    ]
+  );
 }

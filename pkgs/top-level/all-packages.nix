@@ -11056,16 +11056,6 @@ with pkgs;
     pname = "firefox-bin";
   };
 
-  librewolf-unwrapped = import ../applications/networking/browsers/librewolf {
-    inherit
-      stdenv
-      lib
-      callPackage
-      buildMozillaMach
-      nixosTests
-      ;
-  };
-
   librewolf = wrapFirefox librewolf-unwrapped {
     inherit (librewolf-unwrapped) extraPrefsFiles extraPoliciesFiles;
     libName = "librewolf";

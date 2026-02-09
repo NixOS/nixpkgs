@@ -36,7 +36,7 @@ writeScript "update-librewolf" ''
   latestTag=$(curl "https://codeberg.org/api/v1/repos/librewolf/source/tags?page=1&limit=1" | jq -r .[0].name)
   echo "latestTag=$latestTag"
 
-  srcJson=pkgs/applications/networking/browsers/librewolf/src.json
+  srcJson=pkgs/by-name/li/librewolf-unwrapped/src.json
   localRev=$(jq -r .source.rev < $srcJson)
   echo "localRev=$localRev"
 

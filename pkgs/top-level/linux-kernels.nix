@@ -204,6 +204,14 @@ in
           ];
         };
 
+        linux_6_19 = callPackage ../os-specific/linux/kernel/mainline.nix {
+          branch = "6.19";
+          kernelPatches = [
+            kernelPatches.bridge_stp_helper
+            kernelPatches.request_key_helper
+          ];
+        };
+
         linux_testing =
           let
             testing = callPackage ../os-specific/linux/kernel/mainline.nix {
@@ -726,6 +734,7 @@ in
     linux_6_6 = recurseIntoAttrs (packagesFor kernels.linux_6_6);
     linux_6_12 = recurseIntoAttrs (packagesFor kernels.linux_6_12);
     linux_6_18 = recurseIntoAttrs (packagesFor kernels.linux_6_18);
+    linux_6_19 = recurseIntoAttrs (packagesFor kernels.linux_6_19);
   }
   // lib.optionalAttrs config.allowAliases {
     linux_4_19 = throw "linux 4.19 was removed because it will reach its end of life within 24.11"; # Added 2024-09-21
@@ -801,7 +810,7 @@ in
   packageAliases = {
     linux_default = packages.linux_6_12;
     # Update this when adding the newest kernel major version!
-    linux_latest = packages.linux_6_18;
+    linux_latest = packages.linux_6_19;
     linux_rt_default = packages.linux_rt_5_15;
     linux_rt_latest = packages.linux_rt_6_6;
   }
