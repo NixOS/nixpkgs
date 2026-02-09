@@ -5,6 +5,7 @@
   python,
   buildPythonPackage,
   fetchpatch,
+  nix-update-script,
 
   # build-time dependencies
   setuptools,
@@ -148,6 +149,13 @@ buildPythonPackage rec {
         sage -python -m snappy.test --skip-gui
         touch $out
       '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "(.*)_as_released"
+    ];
+  };
 
   meta = {
     description = "Studying the topology and geometry of 3-manifolds, with a focus on hyperbolic structures";
