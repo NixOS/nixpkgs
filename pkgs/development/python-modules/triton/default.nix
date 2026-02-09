@@ -99,6 +99,14 @@ buildPythonPackage (finalAttrs: {
       substituteInPlace cmake/AddTritonUnitTest.cmake \
         --replace-fail "include(\''${PROJECT_SOURCE_DIR}/unittest/googletest.cmake)" ""\
         --replace-fail "include(GoogleTest)" "find_package(GTest REQUIRED)"
+    ''
+
+    # triton will try dlopening libcublas.so at runtime
+    + lib.optionalString cudaSupport ''
+      substituteInPlace third_party/nvidia/include/cublas_instance.h \
+        --replace-fail \
+          '"libcublas.so"' \
+          '"${lib.getLib cudaPackages.libcublas}/lib/libcublas.so"'
     '';
 
   build-system = [ setuptools ];
