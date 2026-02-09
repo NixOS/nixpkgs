@@ -4,6 +4,7 @@
   config,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # patches
   replaceVars,
@@ -225,9 +226,63 @@ buildPythonPackage (finalAttrs: {
 
       doCheck = true;
 
-      preCheck = ''
-        cd python/test/unit
-      '';
+      disabledTests = [
+        # triton.runtime.errors.OutOfResources: out of resource: shared memory,
+        # Required: 131072, Hardware limit: 101376. Reducing block sizes or `num_stages` may help.
+        "test_gather"
+        "test_gather_warp_shuffle"
+        "test_tensor_descriptor_batched_gemm_2d_tma"
+        "test_tensor_descriptor_batched_gemm_3d_tma"
+
+        # AssertionError: assert all(delta == 0 for delta in diff.values())
+        # ----------------------------- Captured stdout call -----------------------------
+        # Expected line "pid (0, 0, 0) idx ( 0,   0) x: 1" 1 time(s), but saw 0 time(s)
+        # ...
+        "test_print"
+
+        # This test ensures that the ptxas binary is available under .../site-packages/triton/backends/nvidia/bin/ptxas
+        # Usually, this is where the install script downloads and copies ptxas to.
+        # However, this is not the case here, as triton is built with TRITON_OFFLINE_BUILD=1
+        # and TRITON_PTXAS_PATH=<path_to_nix_store_ptxas>
+        "test_nvidia_tool"
+      ]
+      ++ lib.optionals (pythonAtLeast "3.14") [
+        # triton.compiler.errors.CompilationError
+        # AttributeError("module 'ast' has no attribute 'Num'"
+        "test_aggregate_modification_in_for_loop"
+        "test_call"
+        "test_call_in_loop"
+        "test_compile_only_k_loop"
+        "test_dot_mulbroadcasted"
+        "test_globaltimer"
+        "test_host_tensor_descriptor_matmul"
+        "test_make_tensor_descriptor_matmul"
+        "test_nested_while"
+        "test_preshuffle_scale_mxfp_cdna4"
+        "test_temp_var_in_loop"
+        "test_tensor_descriptor_rank_reducing_matmul"
+        "test_tensor_descriptor_reshape_matmul"
+      ];
+
+      disabledTestPaths = [
+        # torch.AcceleratorError: CUDA error: device-side assert triggered
+        "python/test/unit/test_debug.py"
+
+        # ptxas fatal   : Unexpected non-ASCII character encountered on line 1
+        # ptxas fatal   : Ptx assembly aborted due to errors
+        "python/test/unit/language/test_line_info.py"
+
+        # Triton Error [CUDA]: \n
+        "python/test/unit/tools/test_aot.py"
+
+        # ptxas fatal   : Unknown option 'sass'
+        "python/test/unit/tools/test_disasm.py"
+      ];
+
+      enabledTestPaths = [
+        "python/test/unit"
+      ];
+
       checkPhase = "pytestCheckPhase";
 
       installPhase = "touch $out";
