@@ -29,15 +29,25 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gpu-viewer";
-  version = "3.23";
+  version = "3.25";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "arunsivaramanneo";
     repo = "gpu-viewer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+x+e/GCNBpZTpExVwY6gm+/20pU5dg34+qMQIDWEf0E=";
+    hash = "sha256-a5CDj7WTzIQ8xggn0hD70AFYhrp2GiroKA9+vSg8UFQ=";
   };
+
+  # Fixes:
+  # data/meson.build:16:0: ERROR: File ../Images/OpenCL.png does not exist.
+  # Patch submitted upstream: https://github.com/arunsivaramanneo/GPU-Viewer/pull/102
+  postPatch = ''
+    substituteInPlace data/meson.build \
+      --replace-fail \
+        "../Images/OpenCL.png" \
+        "../Images/OpenCL.svg"
+  '';
 
   nativeBuildInputs = [
     gobject-introspection
