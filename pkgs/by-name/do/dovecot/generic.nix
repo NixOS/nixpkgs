@@ -103,6 +103,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-liconv";
+
   postConfigure = lib.optionalString (lib.strings.versionAtLeast version "2.4") ''
     substituteInPlace src/lib-regex/Makefile --replace-fail \
       "test_regex_DEPENDENCIES = libdregex.la \$(LIBPCRE_LIBS)" \
@@ -136,6 +138,10 @@ stdenv.mkDerivation (finalAttrs: {
   )
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     export systemdsystemunitdir=$out/etc/systemd/system
+  '';
+
+  preBuild = lib.optionalString (lib.strings.versionOlder version "2.4" && stdenv.isDarwin) ''
+    export NIX_LDFLAGS="$NIX_LDFLAGS -undefined dynamic_lookup"
   '';
 
   # We need this for sysconfdir, see remark below.
