@@ -7,7 +7,7 @@
 stdenv.mkDerivation {
   pname = "virtualbox-modules";
   version = "${virtualbox.version}-${kernel.version}";
-  src = virtualbox.modsrc;
+  src = virtualbox.unwrapped.modsrc;
   hardeningDisable = [
     "fortify"
     "pic"
