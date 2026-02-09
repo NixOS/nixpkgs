@@ -803,7 +803,7 @@ in
   );
 
   packageAliases = {
-    linux_default = packages.linux_6_12;
+    linux_default = packages.linux_6_18;
     # Update this when adding the newest kernel major version!
     linux_latest = packages.linux_6_18;
     linux_rt_default = packages.linux_rt_5_15;
