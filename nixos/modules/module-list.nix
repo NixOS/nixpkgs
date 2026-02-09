@@ -1692,6 +1692,7 @@
   ./services/web-apps/monica.nix
   ./services/web-apps/moodle.nix
   ./services/web-apps/movim.nix
+  ./services/web-apps/mozhi.nix
   ./services/web-apps/netbox.nix
   ./services/web-apps/nextcloud-notify_push.nix
   ./services/web-apps/nextcloud-whiteboard-server.nix
