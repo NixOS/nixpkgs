@@ -931,7 +931,7 @@ rec {
         url ? null,
         message ? null,
         hashMode ? "flat",
-      }:
+      }@args:
       assert lib.assertMsg (
         sha1 == null
       ) "sha1 is insecure, and collisions can be bought online. Do not use it.";
@@ -950,19 +950,15 @@ rec {
             message
           else
             ''
-              Unfortunately, we cannot download file ${name_} automatically.
+              Unfortunately, we cannot download file ${finalAttrs.name} automatically.
               Please go to ${url} to download it yourself, and add it to the Nix store
               using either
-                nix-store --add-fixed ${hashAlgo} ${name_}
-              or
-                nix-prefetch-url --type ${hashAlgo} file:///path/to/${name_}
+                nix-prefetch-url ${if url != null then url else "https://website.com/path/to/${finalAttrs.name}"}
+              or if already downloaded
+                nix-prefetch-url file:///path/to/${finalAttrs.name}
             '';
-
-        # If a name is not provided, use the basename of the url
-        name_ = if name == null then baseNameOf (toString url) else name;
       in
       {
-        name = name_;
         outputHashMode = hashMode;
         outputHashAlgo = if hash != null then "" else "sha256";
         outputHash = if hash != null then hash else sha256;
@@ -978,7 +974,18 @@ rec {
           _EOF_
           exit 1
         '';
-      };
+      }
+      // (lib.optionalAttrs (name == null) {
+        # The case of providing `url`, but not `name`. This has
+        # weird interactions with the positoining system
+
+        # When we set `name` explicitly here, we override where the
+        # position is read from. So we must fix it here.
+        pos = lib.unsafeGetAttrPos "url" args;
+
+        # If a name is not provided, use the basename of the url
+        name = builtins.warn "providing a URL without a name is deprecated" baseNameOf (toString url);
+      });
   };
 
   # TODO: move copyPathToStore docs to the Nixpkgs manual
