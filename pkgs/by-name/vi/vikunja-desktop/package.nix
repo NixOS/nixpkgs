@@ -7,7 +7,7 @@
   pnpmConfigHook,
   nodejs,
   electron,
-  unstableGitUpdater,
+  nix-update-script,
   fetchFromGitHub,
   fetchPnpmDeps,
   vikunja,
@@ -15,12 +15,12 @@
 
 let
   executableName = "vikunja-desktop";
-  version = "1.0.0";
+  version = "1.1.0";
   src = fetchFromGitHub {
     owner = "go-vikunja";
     repo = "vikunja";
     rev = "v${version}";
-    hash = "sha256-IJ6985gLuI0O08xZq8NYoet02NPFqQQhDLND+nfmdbA=";
+    hash = "sha256-xxfn3UoKreRDRC5GR7pLL8gkBLe6VmBYdps9eFc5c3g=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
       pnpmInstallFlags
       ;
     fetcherVersion = 1;
-    hash = "sha256-BvQfRsV5hiOTkxK+W3qHvVQwMAGdLB3X+PwYBa6Bwl4=";
+    hash = "sha256-mzrck/JdfN3Qu+xhf/iM4HFamVmQkVSwUwU2KBK5XsA=";
   };
 
   env = {
@@ -94,9 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     true
   '';
 
-  passthru.updateScript = unstableGitUpdater {
-    url = "${src.meta.homepage}.git";
-  };
+  passthru.updateScript = nix-update-script { };
 
   # The desktop item properties should be kept in sync with data from upstream:
   desktopItem = makeDesktopItem {
