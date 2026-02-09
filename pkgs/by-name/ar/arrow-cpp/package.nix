@@ -195,6 +195,14 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'discover_tz_dir();' '"${tzdata}/share/zoneinfo";'
   '';
 
+  patches = [
+    # Remove dependency on Boost.System, which was removed in Boost 1.89.
+    # Upstream PR: https://github.com/apache/arrow/pull/47947
+    # PR doesn't apply cleanly due to changes between 22.0.0 and the time of
+    # PR, so we vendor the portions we need
+    ./boost-189.patch
+  ];
+
   cmakeFlags = [
     (lib.cmakeBool "CMAKE_FIND_PACKAGE_PREFER_CONFIG" true)
     (lib.cmakeBool "ARROW_BUILD_SHARED" enableShared)

@@ -1,0 +1,51 @@
+diff --git a/cmake_modules/ThirdpartyToolchain.cmake b/cmake_modules/ThirdpartyToolchain.cmake
+index 7b8cef5fb5..06f188f0b7 100644
+--- a/cmake_modules/ThirdpartyToolchain.cmake
++++ b/cmake_modules/ThirdpartyToolchain.cmake
+@@ -1198,6 +1198,8 @@
+ endif()
+ # CMake 3.25.0 has 1.80 and older versions.
+ set(Boost_ADDITIONAL_VERSIONS
++    "1.89.0"
++    "1.89"
+     "1.88.0"
+     "1.88"
+     "1.87.0"
+@@ -1268,7 +1270,7 @@
+     set(Boost_USE_STATIC_LIBS ON)
+   endif()
+   if(ARROW_BOOST_REQUIRE_LIBRARY)
+-    set(ARROW_BOOST_COMPONENTS filesystem system)
++    set(ARROW_BOOST_COMPONENTS filesystem)
+     if(ARROW_FLIGHT_SQL_ODBC AND MSVC)
+       list(APPEND ARROW_BOOST_COMPONENTS locale)
+     endif()
+@@ -1322,9 +1324,6 @@
+       if(TARGET Boost::filesystem)
+         target_link_libraries(arrow::Boost::process INTERFACE Boost::filesystem)
+       endif()
+-      if(TARGET Boost::system)
+-        target_link_libraries(arrow::Boost::process INTERFACE Boost::system)
+-      endif()
+       if(TARGET Boost::headers)
+         target_link_libraries(arrow::Boost::process INTERFACE Boost::headers)
+       endif()
+diff --git a/src/arrow/filesystem/CMakeLists.txt b/src/arrow/filesystem/CMakeLists.txt
+index 5250ed2a88..9c5e655f6c 100644
+--- a/src/arrow/filesystem/CMakeLists.txt
++++ b/src/arrow/filesystem/CMakeLists.txt
+@@ -132,12 +132,11 @@
+                    DEFINITIONS
+                    ARROW_S3_LIBPATH="$<TARGET_FILE:arrow_s3fs>"
+                    EXTRA_LINK_LIBS
+-                   Boost::filesystem
+-                   Boost::system)
++                   Boost::filesystem)
+     target_compile_definitions(arrow-filesystem-test
+                                PUBLIC ARROW_S3_LIBPATH="$<TARGET_FILE:arrow_s3fs>")
+     target_sources(arrow-filesystem-test PUBLIC s3fs_module_test.cc s3_test_util.cc)
+-    target_link_libraries(arrow-filesystem-test PUBLIC Boost::filesystem Boost::system)
++    target_link_libraries(arrow-filesystem-test PUBLIC Boost::filesystem)
+   endif()
+ endif()
+ 
