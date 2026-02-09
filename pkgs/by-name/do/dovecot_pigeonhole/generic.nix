@@ -1,7 +1,14 @@
 {
+  version,
+  url,
+  hash,
+  patches ? _: [ ],
+}:
+{
   lib,
   stdenv,
-  fetchurl,
+  fetchpatch,
+  fetchzip,
   dovecot,
   openssl,
 }:
@@ -10,12 +17,17 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dovecot-pigeonhole";
-  version = "0.5.21.1";
+  inherit version;
 
-  src = fetchurl {
-    url = "https://pigeonhole.dovecot.org/releases/${dovecotMajorMinor}/dovecot-${dovecotMajorMinor}-pigeonhole-${finalAttrs.version}.tar.gz";
-    hash = "sha256-A3fbKEtiByPeBgQxEV+y53keHfQyFBGvcYIB1pJcRpI=";
+  src = fetchzip {
+    url = url {
+      inherit (finalAttrs) version;
+      inherit dovecotMajorMinor;
+    };
+    inherit hash;
   };
+
+  patches = patches fetchpatch;
 
   buildInputs = [
     dovecot
@@ -46,6 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       das_j
       helsinki-Jo
+      jappie3
+      prince213
     ];
     platforms = lib.platforms.unix;
   };
