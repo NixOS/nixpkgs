@@ -18,14 +18,14 @@
 # instead of adding this to `services.udev.packages` on NixOS,
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "solaar";
-  version = "1.1.16";
+  version = "1.1.19";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pwr-Solaar";
     repo = "Solaar";
     tag = finalAttrs.version;
-    hash = "sha256-PhZoDRsckJXk2t2qR8O3ZGGeMUhmliqSpibfQDO7BeA=";
+    hash = "sha256-Z3rWGmFQmfJvsWiPgxQmfXMPHXAAiFneBaoSVIXnAV8=";
   };
 
   outputs = [
@@ -67,7 +67,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   preConfigure = ''
     substituteInPlace lib/solaar/listener.py \
-      --replace-fail /usr/bin/getfacl "${lib.getExe' acl "getfacl"}"
+      --replace-fail '"getfacl"' '"${lib.getExe' acl "getfacl"}"'
   '';
 
   # the -cli symlink is just to maintain compabilility with older versions where
