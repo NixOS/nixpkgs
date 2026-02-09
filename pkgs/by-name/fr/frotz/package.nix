@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  fetchpatch,
   libao,
   libmodplug,
   libsamplerate,
@@ -15,23 +14,28 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "frotz";
-  version = "2.54";
+  version = "2.55";
 
   src = fetchFromGitLab {
     domain = "gitlab.com";
     owner = "DavidGriffith";
     repo = "frotz";
     rev = finalAttrs.version;
-    hash = "sha256-GvGxojD8d5GVy/d8h3q6K7KJroz2lsKbfE0F0acjBl8=";
+    hash = "sha256-XZjimskjupTtYdgfVaOS2QnQrDIBSwkJqxrffdjgZk0=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/macports/macports-ports/raw/496e5b91e3b6c9dc6820d77ab60dbe400d1924ee/games/frotz/files/Makefile.patch";
-      extraPrefix = "";
-      hash = "sha256-P83ZzSi3bhncQ52Y38Q3F/7v1SJKr5614tytt862HRg=";
-    })
-  ];
+  postPatch = ''
+    # Comment out debug flags
+    substituteInPlace Makefile --replace-fail 'CFLAGS += -g' '#CFLAGS += -g'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Remove Homebrew-specific code that breaks Nix builds on macOS
+    sed -i '/# On macOS.*Homebrew/,/SDL_CFLAGS.*_XOPEN_SOURCE/d' Makefile
+    # Remove Homebrew lines from src/curses/Makefile but keep ifeq/endif structure
+    substituteInPlace src/curses/Makefile \
+      --replace-fail 'HOMEBREW_PREFIX ?= $(shell brew --prefix)' "" \
+      --replace-fail 'CFLAGS += -I$(HOMEBREW_PREFIX)/include' ""
+  '';
 
   nativeBuildInputs = [
     which
