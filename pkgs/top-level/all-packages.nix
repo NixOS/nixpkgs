@@ -8097,6 +8097,10 @@ with pkgs;
 
   dodgy = with python3Packages; toPythonApplication dodgy;
 
+  dovecot_2_3 = callPackage ../by-name/do/dovecot/2.3.nix { };
+  dovecot_2_4 = callPackage ../by-name/do/dovecot/2.4.nix { };
+  dovecot = dovecot_2_4;
+
   inherit (callPackages ../servers/firebird { })
     firebird_4
     firebird_3
