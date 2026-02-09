@@ -1,14 +1,19 @@
 {
   lib,
-  buildPythonPackage,
   fetchFromGitHub,
+  python,
+  buildPythonPackage,
+
+  # build-time dependencies
   setuptools,
   cython,
-  networkx,
+
+  # runtime dependencies
   decorator,
   knot-floer-homology,
-  snappy-manifolds,
+  networkx,
   snappy-15-knots,
+  snappy-manifolds,
 }:
 
 buildPythonPackage rec {
@@ -38,6 +43,12 @@ buildPythonPackage rec {
   optional-dependencies.snappy-15-knots = [ snappy-15-knots ];
 
   pythonImportsCheck = [ "spherogram" ];
+
+  checkPhase = ''
+    runHook preCheck
+    ${python.interpreter} -m spherogram.test
+    runHook postCheck
+  '';
 
   meta = {
     description = "Spherical diagrams for 3-manifold topology";
