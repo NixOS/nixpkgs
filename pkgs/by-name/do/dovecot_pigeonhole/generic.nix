@@ -11,12 +11,15 @@
   fetchzip,
   dovecot,
   openssl,
+  libstemmer,
+  perl,
   withLDAP ? true,
   cyrus_sasl,
   openldap,
 }:
 let
   dovecotMajorMinor = lib.versions.majorMinor dovecot.version;
+  isCurrentOnDarwin = lib.strings.versionAtLeast version "2.4" && stdenv.hostPlatform.isDarwin;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dovecot-pigeonhole";
@@ -30,12 +33,19 @@ stdenv.mkDerivation (finalAttrs: {
     inherit hash;
   };
 
-  patches = patches fetchpatch;
+  patches = patches fetchpatch ++ lib.optional isCurrentOnDarwin ./max_lookup_size.patch;
+
+  postPatch = lib.optionalString isCurrentOnDarwin ''
+    patchShebangs src/plugins/settings/settings-get.pl
+  '';
+
+  nativeBuildInputs = lib.optional isCurrentOnDarwin perl;
 
   buildInputs = [
     dovecot
     openssl
   ]
+  ++ lib.optional isCurrentOnDarwin libstemmer
   ++ lib.optionals withLDAP [
     cyrus_sasl
     openldap
@@ -56,6 +66,10 @@ stdenv.mkDerivation (finalAttrs: {
     "--without-dovecot-install-dirs"
   ]
   ++ lib.optional withLDAP "--with-ldap";
+
+  preBuild = lib.optionalString (lib.strings.versionOlder version "2.4" && stdenv.isDarwin) ''
+    export NIX_LDFLAGS="$NIX_LDFLAGS -undefined dynamic_lookup"
+  '';
 
   enableParallelBuilding = true;
 
