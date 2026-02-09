@@ -5,6 +5,7 @@
   setuptools,
   sphinx,
   tkinter,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -27,6 +28,13 @@ buildPythonPackage rec {
   dependencies = [ tkinter ];
 
   pythonImportsCheck = [ "plink" ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "(.*)_as_released"
+    ];
+  };
 
   meta = {
     description = "Full featured Tk-based knot and link editor";
