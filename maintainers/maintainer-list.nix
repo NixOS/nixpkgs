@@ -8035,6 +8035,12 @@
     github = "eripa";
     githubId = 1429673;
   };
+  ErmitaVulpe = {
+    name = "Emily Wilczek";
+    email = "emily.wilczek@proton.me";
+    github = "ErmitaVulpe";
+    githubId = 34629570;
+  };
   ern775 = {
     email = "eren.demir2479090@gmail.com";
     github = "ern775";
