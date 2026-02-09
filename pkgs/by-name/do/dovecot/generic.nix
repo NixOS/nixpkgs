@@ -1,7 +1,12 @@
 {
+  version,
+  hash,
+  patches,
+}:
+{
   stdenv,
   lib,
-  fetchurl,
+  fetchzip,
   flex,
   bison,
   perl,
@@ -32,6 +37,8 @@
   libapparmor,
   withLDAP ? true,
   openldap,
+  withPCRE2 ? lib.strings.versionAtLeast version "2.4",
+  pcre2,
   withUnwind ? false,
   libunwind,
   # Auth modules
@@ -47,7 +54,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dovecot";
-  version = "2.3.21.1";
+  inherit version;
 
   nativeBuildInputs = [
     flex
@@ -81,18 +88,25 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isDarwin) libtirpc
   ++ lib.optional withApparmor libapparmor
   ++ lib.optional withLDAP openldap
+  ++ lib.optional withPCRE2 pcre2
   ++ lib.optional withUnwind libunwind
   ++ lib.optional withMySQL libmysqlclient
   ++ lib.optional withPgSQL libpq
   ++ lib.optional withSQLite sqlite
   ++ lib.optional withLua lua5_3;
 
-  src = fetchurl {
+  src = fetchzip {
     url = "https://dovecot.org/releases/${lib.versions.majorMinor finalAttrs.version}/dovecot-${finalAttrs.version}.tar.gz";
-    hash = "sha256-LZCheMQpdhEIi/farlSSo7w9WrYyjDoDLrQl0sJJCX4=";
+    inherit hash;
   };
 
   enableParallelBuilding = true;
+
+  postConfigure = lib.optionalString (lib.strings.versionAtLeast version "2.4") ''
+    substituteInPlace src/lib-regex/Makefile --replace-fail \
+      "test_regex_DEPENDENCIES = libdregex.la \$(LIBPCRE_LIBS)" \
+      "test_regex_DEPENDENCIES = libdregex.la"
+  '';
 
   postPatch = ''
     sed -i -E \
@@ -105,10 +119,20 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i -s -E 's!\bcat\b!${coreutils}/bin/cat!g' src/lib-smtp/test-bin/*.sh
 
     patchShebangs src/config/settings-get.pl
-
-    # DES-encrypted passwords are not supported by NixPkgs anymore
-    sed '/test_password_scheme("CRYPT"/d' -i src/auth/test-libpassword.c
   ''
+  + (
+    let
+      filePath =
+        if lib.strings.versionAtLeast version "2.4" then
+          "src/lib-auth/test-password-scheme.c"
+        else
+          "src/auth/test-libpassword.c";
+    in
+    ''
+      # DES-encrypted passwords are not supported by Nixpkgs anymore
+      sed '/test_password_scheme("CRYPT"/d' -i ${filePath}
+    ''
+  )
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     export systemdsystemunitdir=$out/etc/systemd/system
   '';
@@ -121,25 +145,12 @@ stdenv.mkDerivation (finalAttrs: {
     rm -rf $out/$(echo "$out" | cut -d "/" -f2)
   '';
 
-  patches = [
-    # Fix loading extended modules.
-    ./load-extended-modules.patch
-    # fix openssl 3.0 compatibility
-    (fetchpatch {
-      url = "https://salsa.debian.org/debian/dovecot/-/raw/debian/1%252.3.19.1+dfsg1-2/debian/patches/Support-openssl-3.0.patch";
-      hash = "sha256-PbBB1jIY3jIC8Js1NY93zkV0gISGUq7Nc67Ul5tN7sw=";
-    })
-    # Fix build with gcc15
-    (fetchpatch {
-      name = "dovecot-test-data-stack-drop-bogus-assertion.patch";
-      url = "https://github.com/dovecot/core/commit/9f642dd868db6e7401f24e4fb4031b5bdca8aae7.patch";
-      hash = "sha256-dAX80dRqOba9Fkzl11ChYJ6vqcgfkaw/o+TOQKCnnns=";
-    })
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # fix timespec calls
-    ./timespec.patch
-  ];
+  patches =
+    (patches fetchpatch)
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # fix timespec calls
+      ./timespec.patch
+    ];
 
   configureFlags = [
     # It will hardcode this for /var/lib/dovecot.
@@ -175,6 +186,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional stdenv.hostPlatform.isLinux "--with-systemd"
   ++ lib.optional stdenv.hostPlatform.isDarwin "--enable-static"
   ++ lib.optional withLDAP "--with-ldap"
+  ++ lib.optional withPCRE2 "--with-pcre2"
   ++ lib.optional withLua "--with-lua"
   ++ lib.optional withMySQL "--with-mysql"
   ++ lib.optional withPgSQL "--with-pgsql"
@@ -199,6 +211,8 @@ stdenv.mkDerivation (finalAttrs: {
       das_j
       fpletz
       helsinki-Jo
+      jappie3
+      prince213
     ];
     platforms = lib.platforms.unix;
   };
