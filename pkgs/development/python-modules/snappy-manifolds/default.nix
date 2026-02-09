@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -20,6 +21,13 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   pythonImportsCheck = [ "snappy_manifolds" ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "(.*)_as_released"
+    ];
+  };
 
   meta = {
     description = "Database of snappy manifolds";
