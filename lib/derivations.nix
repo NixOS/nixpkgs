@@ -255,5 +255,12 @@ in
         "outputName"
       ];
     in
-    drv // mapAttrs (_: lib.warn msg) drvToWrap;
+    drv
+    // mapAttrs (_: lib.warn msg) drvToWrap
+    // (
+      if drv ? overrideAttrs && builtins.isFunction drv.overrideAttrs then
+        { overrideAttrs = x: lib.derivations.warnOnInstantiate msg (drv.overrideAttrs x); }
+      else
+        { }
+    );
 }
