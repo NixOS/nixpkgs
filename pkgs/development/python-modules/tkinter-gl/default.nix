@@ -7,6 +7,7 @@
   setuptools-scm,
   tkgl,
   tkinter,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -47,6 +48,13 @@ buildPythonPackage rec {
     '';
 
   pythonImportsCheck = [ "tkinter_gl" ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "v(.*)_as_released"
+    ];
+  };
 
   meta = {
     description = "Base class for GL rendering surfaces in tkinter";
