@@ -2,7 +2,10 @@
   name = "dovecot";
 
   nodes.machine =
-    { pkgs, ... }:
+    { config, pkgs, ... }:
+    let
+      dovecot = config.services.dovecot2.package;
+    in
     {
       imports = [ common/user-account.nix ];
       services.postfix.enable = true;
@@ -31,7 +34,7 @@
           sendTestMailViaDeliveryAgent = pkgs.writeScriptBin "send-lda" ''
             #!${pkgs.runtimeShell}
 
-            exec ${pkgs.dovecot}/libexec/dovecot/deliver -d bob <<MAIL
+            exec ${dovecot}/libexec/dovecot/deliver -d bob <<MAIL
             From: root@localhost
             To: bob@localhost
             Subject: Something else...
@@ -74,7 +77,7 @@
 
         in
         [
-          pkgs.dovecot_pigeonhole
+          dovecot.passthru.dovecot_pigeonhole
           sendTestMail
           sendTestMailViaDeliveryAgent
           testImap
