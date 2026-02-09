@@ -21,13 +21,13 @@
 # A pure Rust build would lack the Prettier plugin functionality.
 stdenv.mkDerivation (finalAttrs: {
   pname = "oxfmt";
-  version = "0.27.0";
+  version = "0.28.0";
 
   src = fetchFromGitHub {
     owner = "oxc-project";
     repo = "oxc";
     tag = "oxfmt_v${finalAttrs.version}";
-    hash = "sha256-EAM1DxA/TqnIRN5Tlvg5/jvbyOUtSuwQ4RCBeO9esCw=";
+    hash = "sha256-J32iHYWfUSPgs0TbB9kHxwgdPB7/cPvKTI28K5nUlVU=";
   };
 
   # Remove patchedDependencies from both workspace and lockfile
@@ -39,14 +39,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-okwkhcT6mekIvo52T8eSrXUcp/LQhcEYvHyIc5CLdrE=";
+    hash = "sha256-2W0X9uy1V6cKJTjIIWNfd5vhptITrmh6uJYeCleXG8E=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
     fetcherVersion = 2;
-    hash = "sha256-GOsSTfM93VgGhVlgzXhJIJG9MSf306cEnRru/aTA+oY=";
+    hash = "sha256-tgpooYVPk9NfdiaezlPeOA/eZMj2mRGAnEnEp27roIA=";
     prePnpmInstall = finalAttrs.postPatch;
   };
 
