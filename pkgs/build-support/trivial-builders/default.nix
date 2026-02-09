@@ -933,6 +933,9 @@ rec {
         hashMode ? "flat",
       }:
       assert lib.assertMsg (
+        sha1 == null
+      ) "sha1 is insecure, and collisions can be bought online. Do not use it.";
+      assert lib.assertMsg (
         (message != null) || (url != null)
       ) "to help end-users, either `message` or `url` must be set so they can find the required file";
       assert lib.assertMsg (
@@ -954,28 +957,15 @@ rec {
               or
                 nix-prefetch-url --type ${hashAlgo} file:///path/to/${name_}
             '';
-        hashAlgo =
-          if hash != null then
-            (builtins.head (lib.strings.splitString "-" hash))
-          else if sha256 != null then
-            "sha256"
-          else
-            "sha1";
-        hashAlgo_ = if hash != null then "" else hashAlgo;
-        hash_ =
-          if hash != null then
-            hash
-          else if sha256 != null then
-            sha256
-          else
-            sha1;
+
+        # If a name is not provided, use the basename of the url
         name_ = if name == null then baseNameOf (toString url) else name;
       in
       {
         name = name_;
         outputHashMode = hashMode;
-        outputHashAlgo = hashAlgo_;
-        outputHash = hash_;
+        outputHashAlgo = if hash != null then "" else "sha256";
+        outputHash = if hash != null then hash else sha256;
         preferLocalBuild = true;
         builder = writeScript "restrict-message" ''
           source ${stdenvNoCC}/setup
