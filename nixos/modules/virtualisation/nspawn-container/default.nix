@@ -72,6 +72,14 @@ in
 
     assertions = [
       {
+        assertion = config.specialisation == { };
+        message = ''
+          Setting 'specialisation' is disallowed for systemd-nspawn container configurations.
+          Activating a specialisation requires creating SUID wrappers (e.g., for 'sudo'),
+          which is prohibited within the Nix build sandbox where the test is run.
+        '';
+      }
+      {
         # Check every interface defined in allInterfaces.
         # Containers try to create a bridge "${config.system.name}-${interfaceName}"
         assertion = lib.all (
