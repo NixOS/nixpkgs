@@ -80,7 +80,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [
       fromSource
-      binaryNativeCode # librusty_v8.a
     ];
   };
 })
