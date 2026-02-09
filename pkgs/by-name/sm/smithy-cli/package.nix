@@ -9,8 +9,6 @@
 }:
 
 let
-  version = "1.67.0";
-
   sources = {
     x86_64-linux = {
       platform = "linux-x86_64";
@@ -36,10 +34,10 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "smithy-cli";
-  inherit version;
+  version = "1.67.0";
 
   src = fetchzip {
-    url = "https://github.com/smithy-lang/smithy/releases/download/${version}/smithy-cli-${source.platform}.zip";
+    url = "https://github.com/smithy-lang/smithy/releases/download/${finalAttrs.version}/smithy-cli-${source.platform}.zip";
     hash = source.hash;
   };
 
@@ -105,7 +103,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = {
     description = "CLI for the Smithy interface definition language (IDL)";
     homepage = "https://smithy.io/";
-    changelog = "https://github.com/smithy-lang/smithy/releases/tag/${version}";
+    changelog = "https://github.com/smithy-lang/smithy/releases/tag/${finalAttrs.version}";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.asl20;
     mainProgram = "smithy";
