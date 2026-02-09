@@ -4,6 +4,7 @@
   fetchFromGitHub,
   hatchling,
   hatch-vcs,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -25,6 +26,8 @@ buildPythonPackage rec {
 
   # Tries to build and install test packages which fails
   doCheck = false;
+
+  passthru.updateScript = nix-update-script { };
 
   pythonImportsCheck = [ "argcomplete" ];
 
