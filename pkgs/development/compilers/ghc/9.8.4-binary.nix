@@ -321,6 +321,13 @@ stdenv.mkDerivation {
   # fix for `configure: error: Your linker is affected by binutils #16177`
   preConfigure = lib.optionalString stdenv.targetPlatform.isAarch32 "LD=ld.gold";
 
+  # Patch shebangs in mk/ scripts that are executed during install.
+  # Without this, they use /bin/sh which can pick up incompatible
+  # libraries via LD_LIBRARY_PATH, causing glibc version mismatches.
+  postConfigure = ''
+    patchShebangs mk/
+  '';
+
   # GHC has a patched config.sub and bindists' platforms should always work
   dontUpdateAutotoolsGnuConfigScripts = true;
 
