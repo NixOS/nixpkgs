@@ -907,67 +907,83 @@ rec {
 
   # Docs in doc/build-helpers/fetchers.chapter.md
   # See https://nixos.org/manual/nixpkgs/unstable/#requirefile
-  requireFile =
-    {
-      name ? null,
-      sha256 ? null,
-      sha1 ? null,
-      hash ? null,
-      url ? null,
-      message ? null,
-      hashMode ? "flat",
-    }:
-    assert (message != null) || (url != null);
-    assert (sha256 != null) || (sha1 != null) || (hash != null);
-    assert (name != null) || (url != null);
-    let
-      msg =
-        if message != null then
-          message
-        else
-          ''
-            Unfortunately, we cannot download file ${name_} automatically.
-            Please go to ${url} to download it yourself, and add it to the Nix store
-            using either
-              nix-store --add-fixed ${hashAlgo} ${name_}
-            or
-              nix-prefetch-url --type ${hashAlgo} file:///path/to/${name_}
-          '';
-      hashAlgo =
-        if hash != null then
-          (builtins.head (lib.strings.splitString "-" hash))
-        else if sha256 != null then
-          "sha256"
-        else
-          "sha1";
-      hashAlgo_ = if hash != null then "" else hashAlgo;
-      hash_ =
-        if hash != null then
-          hash
-        else if sha256 != null then
-          sha256
-        else
-          sha1;
-      name_ = if name == null then baseNameOf (toString url) else name;
-    in
-    stdenvNoCC.mkDerivation {
-      name = name_;
-      outputHashMode = hashMode;
-      outputHashAlgo = hashAlgo_;
-      outputHash = hash_;
-      preferLocalBuild = true;
-      builder = writeScript "restrict-message" ''
-        source ${stdenvNoCC}/setup
-        cat <<_EOF_
+  requireFile = lib.extendMkDerivation {
+    constructDrv = stdenvNoCC.mkDerivation;
 
-        ***
-        ${msg}
-        ***
+    excludeDrvArgNames = [
+      "sha256"
+      "sha1"
+      "hash"
+      "url"
+      "message"
+      "hashMode"
+    ];
 
-        _EOF_
-        exit 1
-      '';
-    };
+    inheritFunctionArgs = false;
+
+    extendDrvArgs =
+      finalAttrs:
+      {
+        name ? null,
+        sha256 ? null,
+        sha1 ? null,
+        hash ? null,
+        url ? null,
+        message ? null,
+        hashMode ? "flat",
+      }:
+      assert (message != null) || (url != null);
+      assert (sha256 != null) || (sha1 != null) || (hash != null);
+      assert (name != null) || (url != null);
+      let
+        msg =
+          if message != null then
+            message
+          else
+            ''
+              Unfortunately, we cannot download file ${name_} automatically.
+              Please go to ${url} to download it yourself, and add it to the Nix store
+              using either
+                nix-store --add-fixed ${hashAlgo} ${name_}
+              or
+                nix-prefetch-url --type ${hashAlgo} file:///path/to/${name_}
+            '';
+        hashAlgo =
+          if hash != null then
+            (builtins.head (lib.strings.splitString "-" hash))
+          else if sha256 != null then
+            "sha256"
+          else
+            "sha1";
+        hashAlgo_ = if hash != null then "" else hashAlgo;
+        hash_ =
+          if hash != null then
+            hash
+          else if sha256 != null then
+            sha256
+          else
+            sha1;
+        name_ = if name == null then baseNameOf (toString url) else name;
+      in
+      {
+        name = name_;
+        outputHashMode = hashMode;
+        outputHashAlgo = hashAlgo_;
+        outputHash = hash_;
+        preferLocalBuild = true;
+        builder = writeScript "restrict-message" ''
+          source ${stdenvNoCC}/setup
+          cat <<_EOF_
+
+          ***
+          ${msg}
+          ***
+
+          _EOF_
+          exit 1
+        '';
+      };
+  };
 
   # TODO: move copyPathToStore docs to the Nixpkgs manual
   /*
