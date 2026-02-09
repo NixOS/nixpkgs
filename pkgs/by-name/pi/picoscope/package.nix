@@ -11,12 +11,12 @@
   libcap,
   librsvg,
   libusb1,
-  makeWrapper,
   openssl,
   patchelf,
   stdenv,
   systemdMinimal,
   onetbb,
+  wrapGAppsHook3,
   writeTextDir,
 }:
 
@@ -27,6 +27,7 @@ let
   libraryPath = lib.makeLibraryPath libraries;
   libraries = [
     gdk-pixbuf
+    glib
     glibc
     gtk3
     icu
@@ -38,8 +39,6 @@ let
     systemdMinimal
     onetbb
   ];
-
-  gdkLoadersCache = "${gdk-pixbuf.out}/${gdk-pixbuf.moduleDir}.cache";
 
 in
 stdenv.mkDerivation {
@@ -56,8 +55,10 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     dpkg
-    makeWrapper
+    wrapGAppsHook3
   ];
+
+  dontWrapGApps = true;
 
   buildInputs = libraries;
 
@@ -78,17 +79,13 @@ stdenv.mkDerivation {
 
     # LD_LIBRARY_PATH: not strictly needed for the main exe (rpath already covers it), but required
     # for dlopened plugins that ignore rpath or use absolute sonames.
-    # GDK_PIXBUF_MODULE_FILE: points gdk-pixbuf to Nix’s loader cache so image loaders (gif/svg/png)
-    # come from our matched version, not the host. This fixes the “g_module_*” symbol errors.
-    # GIO_MODULE_DIR: restricts GIO to GLib’s core modules only (no dconf/gvfs host bleed-through).
     # SSL_CERT_DIR/SSL_CERT_FILE: Gives OpenSSL a known CA bundle so any HTTPS inside the app works
     # without querying host paths.
     makeWrapper $out/lib/PicoScope.GTK $out/bin/picoscope \
       --set LD_LIBRARY_PATH "$out/lib:${libraryPath}" \
-      --set GDK_PIXBUF_MODULE_FILE "${gdkLoadersCache}" \
-      --set GIO_MODULE_DIR "${glib.out}/lib/gio/modules" \
       --set SSL_CERT_DIR "${cacert}/etc/ssl/certs" \
-      --set SSL_CERT_FILE "${cacert}/etc/ssl/certs/ca-bundle.crt"
+      --set SSL_CERT_FILE "${cacert}/etc/ssl/certs/ca-bundle.crt" \
+      ''${gappsWrapperArgs[@]}
     runHook postInstall
   '';
 
