@@ -120,6 +120,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals enablePython [
     "-DSWIG_PYTHON=ON"
   ]
+  ++ lib.optionals (!enableJackrack) [
+    "-DMOD_JACKRACK=OFF"
+  ]
   ++ lib.optionals (qt == null) [
     "-DMOD_QT6=OFF"
   ]
