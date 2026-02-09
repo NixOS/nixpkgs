@@ -1,12 +1,13 @@
 # fixed output derivation for node_modules
 {
   lib,
-  stdenvNoCC,
+  stdenv,
   goofcord,
   bun,
+  nodejs,
   writableTmpDirAsHomeHook,
 }:
-stdenvNoCC.mkDerivation {
+stdenv.mkDerivation {
   inherit (goofcord) version src;
   pname = goofcord.pname + "-modules";
 
@@ -17,6 +18,7 @@ stdenvNoCC.mkDerivation {
 
   nativeBuildInputs = [
     bun
+    nodejs
     writableTmpDirAsHomeHook
   ];
 
@@ -27,10 +29,11 @@ stdenvNoCC.mkDerivation {
     runHook preBuild
 
     export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
+    export npm_config_build_from_source=true
+    export ELECTRON_SKIP_BINARY_DOWNLOAD=1
 
     bun install \
       --frozen-lockfile \
-      --ignore-scripts \
       --linker=hoisted \
       --no-progress
 
@@ -47,11 +50,10 @@ stdenvNoCC.mkDerivation {
 
   outputHash =
     {
-      x86_64-linux = "sha256-rSK+YiVwc2BPqOIS4U0nZ/iI7GuBv1LNhWqbEPBSA9s=";
-      aarch64-linux = "sha256-v7b9ww3LML50dqpaktmMU1WNJC/rcR54u07TtqqzC+g=";
+      x86_64-linux = "sha256-NjZw+B/Ml5tZAiegqsxyxzM4H/UL/Dlkl1GyO3hchEU=";
+      aarch64-linux = "sha256-+i1d+ii4KUxNT/R1jfr2ttg7R52e4t9N1r44vlGegz4=";
     }
-    .${stdenvNoCC.hostPlatform.system}
-      or (throw "Unsupported system ${stdenvNoCC.hostPlatform.system}");
+    .${stdenv.hostPlatform.system} or (throw "Unsupported system ${stdenv.hostPlatform.system}");
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
 }

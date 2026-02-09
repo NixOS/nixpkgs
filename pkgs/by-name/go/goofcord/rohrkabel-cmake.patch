@@ -1,0 +1,65 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b0b9d32..67b930a 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -82,32 +82,26 @@ target_include_directories(${PROJECT_NAME} PRIVATE "include/rohrkabel")
+ # Setup Dependencies
+ # --------------------------------------------------------------------------------------------------------
+ 
+-include("cmake/cpm.cmake")
++if (NOT DEFINED TL_EXPECTED_SOURCE_DIR)
++  message(FATAL_ERROR "[rohrkabel] TL_EXPECTED_SOURCE_DIR must be set to a local checkout")
++endif()
+ 
+-CPMFindPackage(
+-  NAME           tl-expected
+-  VERSION        1.1.0
+-  GIT_REPOSITORY "https://github.com/TartanLlama/expected"
+-  OPTIONS        "EXPECTED_BUILD_TESTS OFF"
+-)
++if (NOT DEFINED EREIGNIS_SOURCE_DIR)
++  message(FATAL_ERROR "[rohrkabel] EREIGNIS_SOURCE_DIR must be set to a local checkout")
++endif()
+ 
+-CPMFindPackage(
+-  NAME           ereignis
+-  VERSION        3.1
+-  GIT_REPOSITORY "https://github.com/Curve/ereignis"
+-)
++if (NOT DEFINED BOOST_CALLABLE_TRAITS_SOURCE_DIR)
++  message(FATAL_ERROR "[rohrkabel] BOOST_CALLABLE_TRAITS_SOURCE_DIR must be set to a local checkout")
++endif()
+ 
+-CPMFindPackage(
+-  NAME           boost_callable_traits
+-  GIT_TAG        boost-1.85.0
+-  GIT_REPOSITORY "https://github.com/boostorg/callable_traits"
+-)
++if (NOT DEFINED CHANNEL_SOURCE_DIR)
++  message(FATAL_ERROR "[rohrkabel] CHANNEL_SOURCE_DIR must be set to a local checkout")
++endif()
+ 
+-CPMFindPackage(
+-  NAME           channel
+-  VERSION        2.3
+-  GIT_REPOSITORY "https://github.com/Curve/channel"
+-)
++add_subdirectory("${TL_EXPECTED_SOURCE_DIR}" "${CMAKE_BINARY_DIR}/rohrkabel-tl-expected")
++add_subdirectory("${EREIGNIS_SOURCE_DIR}" "${CMAKE_BINARY_DIR}/rohrkabel-ereignis")
++add_subdirectory("${BOOST_CALLABLE_TRAITS_SOURCE_DIR}" "${CMAKE_BINARY_DIR}/rohrkabel-boost-callable-traits")
++add_subdirectory("${CHANNEL_SOURCE_DIR}" "${CMAKE_BINARY_DIR}/rohrkabel-channel")
+ 
+ target_link_libraries(${PROJECT_NAME} PUBLIC tl::expected cr::ereignis Boost::callable_traits cr::channel)
+ 
+diff --git a/src/core.cpp b/src/core.cpp
+index 77a57bd..917e491 100644
+--- a/src/core.cpp
++++ b/src/core.cpp
+@@ -9,6 +9,7 @@
+ 
+ #include <format>
+ #include <optional>
++#include <variant>
+ 
+ #include <pipewire/pipewire.h>
+ 

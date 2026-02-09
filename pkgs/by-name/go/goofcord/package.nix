@@ -5,18 +5,27 @@
   fetchFromGitHub,
   bun,
   nodejs_24,
-  nix-update-script,
   electron,
-  pipewire,
-  libpulseaudio,
   libxkbcommon,
-  libX11,
+  libx11,
   libxcb,
-  libXtst,
+  libxtst,
   makeShellWrapper,
   makeDesktopItem,
   copyDesktopItems,
 }:
+let
+  venbindAddon = callPackage ./venbind-addon.nix { };
+  venmicAddon = callPackage ./venmic-addon.nix { };
+
+  venmicPrebuildDir =
+    if stdenv.hostPlatform.isAarch64 then "venmic-addon-linux-arm64" else "venmic-addon-linux-x64";
+
+  venbindPrebuildDir = if stdenv.hostPlatform.isAarch64 then "linux-aarch64" else "linux-x86_64";
+
+  venbindPrebuildFile =
+    if stdenv.hostPlatform.isAarch64 then "venbind-linux-aarch64.node" else "venbind-linux-x86_64.node";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "goofcord";
   version = "2.0.1";
@@ -36,16 +45,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    libpulseaudio
-    pipewire
     libxkbcommon
-    libX11
+    libx11
     libxcb
-    libXtst
+    libxtst
     (lib.getLib stdenv.cc.cc)
   ];
 
-  node-modules = callPackage ./node-modules.nix { };
+  node-modules = callPackage ./node-modules.nix { nodejs = nodejs_24; };
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
@@ -55,8 +62,20 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preConfigure
 
     cp -R ${finalAttrs.node-modules} node_modules
+    chmod -R u+w node_modules
     patchShebangs node_modules/.bin
     patchShebangs node_modules/@typescript/native-preview/bin
+
+    # Replace vendored venmic prebuilds with Nix-built addon
+    rm -rf node_modules/@vencord/venmic/prebuilds
+    mkdir -p node_modules/@vencord/venmic/prebuilds/${venmicPrebuildDir}
+    cp ${venmicAddon}/venmic.node \
+      node_modules/@vencord/venmic/prebuilds/${venmicPrebuildDir}/node-napi-v7.node
+
+    rm -rf node_modules/venbind/prebuilds
+    mkdir -p node_modules/venbind/prebuilds/${venbindPrebuildDir}
+    cp ${venbindAddon}/venbind.node \
+      node_modules/venbind/prebuilds/${venbindPrebuildDir}/${venbindPrebuildFile}
 
     runHook postConfigure
   '';
@@ -96,9 +115,9 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix LD_LIBRARY_PATH : "${
         lib.makeLibraryPath [
           libxkbcommon
-          libX11
+          libx11
           libxcb
-          libXtst
+          libxtst
         ]
       }" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=UseOzonePlatform,WaylandWindowDecorations,WebRTCPipeWireCapturer --enable-wayland-ime=true}}" \
@@ -133,7 +152,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru = {
-    updateScript = nix-update-script { };
+    # This will likely failed due to multiple layer of deps.
+    # updateScript = nix-update-script { };
   };
 
   meta = {
