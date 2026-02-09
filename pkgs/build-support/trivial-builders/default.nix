@@ -932,9 +932,15 @@ rec {
         message ? null,
         hashMode ? "flat",
       }:
-      assert (message != null) || (url != null);
-      assert (sha256 != null) || (sha1 != null) || (hash != null);
-      assert (name != null) || (url != null);
+      assert lib.assertMsg (
+        (message != null) || (url != null)
+      ) "to help end-users, either `message` or `url` must be set so they can find the required file";
+      assert lib.assertMsg (
+        (sha256 != null) || (sha1 != null) || (hash != null)
+      ) "a hash must be provided to the derivatoin";
+      assert lib.assertMsg (
+        (name != null) || (url != null)
+      ) "the derivation must have a name or a url provided";
       let
         msg =
           if message != null then
