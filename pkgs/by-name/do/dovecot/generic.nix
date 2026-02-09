@@ -33,6 +33,7 @@
   fetchpatch,
   rpcsvc-proto,
   libtirpc,
+  dovecot_pigeonhole,
   withApparmor ? false,
   libapparmor,
   withLDAP ? true,
@@ -216,8 +217,11 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.unix;
   };
-  passthru.tests = {
-    opensmtpd-interaction = nixosTests.opensmtpd;
-    inherit (nixosTests) dovecot;
+  passthru = {
+    inherit dovecot_pigeonhole;
+    tests = {
+      opensmtpd-interaction = nixosTests.opensmtpd;
+      inherit (nixosTests) dovecot;
+    };
   };
 })
