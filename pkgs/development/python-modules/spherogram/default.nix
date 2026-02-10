@@ -3,6 +3,7 @@
   fetchFromGitHub,
   python,
   buildPythonPackage,
+  nix-update-script,
 
   # build-time dependencies
   setuptools,
@@ -73,6 +74,13 @@ buildPythonPackage rec {
         sage -python -m spherogram.test
         touch $out
       '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "(.*)_as_released"
+    ];
+  };
 
   meta = {
     description = "Spherical diagrams for 3-manifold topology";
