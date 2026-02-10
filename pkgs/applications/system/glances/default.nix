@@ -7,18 +7,19 @@
   defusedxml,
   packaging,
   psutil,
+  pyinstrument,
   setuptools,
   nixosTests,
   pytestCheckHook,
   which,
   podman,
   selenium,
+  python-jose,
   # Optional dependencies:
   fastapi,
   jinja2,
   pysnmp,
   hddtemp,
-  netifaces2, # IP module
   uvicorn,
   requests,
   prometheus-client,
@@ -27,7 +28,7 @@
 
 buildPythonApplication rec {
   pname = "glances";
-  version = "4.3.3";
+  version = "4.5.0.5";
   pyproject = true;
 
   disabled = isPyPy;
@@ -36,7 +37,7 @@ buildPythonApplication rec {
     owner = "nicolargo";
     repo = "glances";
     tag = "v${version}";
-    hash = "sha256-RmGbd8Aa2jJ2DMrBUUoa8mPBa6bGnQd0s0y3p/zP0ng=";
+    hash = "sha256-IHgMZw+X7C/72w4vXaP37GgnhLVg7EF5/sd9QlmE0NM=";
   };
 
   build-system = [ setuptools ];
@@ -56,14 +57,15 @@ buildPythonApplication rec {
 
   dependencies = [
     defusedxml
-    netifaces2
     packaging
     psutil
+    pyinstrument
     pysnmp
     fastapi
     uvicorn
     requests
     jinja2
+    python-jose
     which
     prometheus-client
     shtab
@@ -84,6 +86,20 @@ buildPythonApplication rec {
   disabledTestPaths = [
     # Message: Unable to obtain driver for chrome
     "tests/test_webui.py"
+  ];
+
+  disabledTests = [
+    # Upstream bug: diskio plugin doesn't check if args is None before accessing attributes
+    # Bug report: https://github.com/nicolargo/glances/issues/3429
+    "test_msg_curse_returns_list"
+    "test_msg_curse_with_max_width"
+    # Network test expects visible network interfaces
+    # Default config hides loopback and interfaces without IP (glances.conf)
+    # In Nix sandbox environment, this results in zero visible interfaces
+    "test_glances_api_plugin_network"
+    # Test always returns 3 plugin updates, but needs >=5 to not fail
+    # May be an upstream bug, see: https://github.com/nicolargo/glances/issues/3430
+    "test_perf_update"
   ];
 
   meta = {
