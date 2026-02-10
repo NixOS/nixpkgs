@@ -1536,13 +1536,10 @@ class NspawnMachine(BaseMachine):
             with subprocess.Popen(
                 [
                     "journalctl",
-                    "-f",
-                    "-D",
-                    journal_path,
-                    "--lines",
-                    "all",
-                    "-o",
-                    "short-monotonic",
+                    "--follow",
+                    f"--directory={journal_path}",
+                    "--lines=all",
+                    "--output=short-monotonic",
                 ],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,
