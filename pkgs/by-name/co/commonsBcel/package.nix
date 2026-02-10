@@ -5,12 +5,12 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "6.10.0";
+  version = "6.11.0";
   pname = "commons-bcel";
 
   src = fetchurl {
     url = "mirror://apache/commons/bcel/binaries/bcel-${finalAttrs.version}-bin.tar.gz";
-    hash = "sha256-RRVXxPtwbT9AX92T60uDJpFWF6DiotcG1KvKrlFfEWU=";
+    hash = "sha256-tLR5d8D+w4Gd7qeGLx3Zy+oNQLH0bKYZOe7GZ3qJYs4=";
   };
 
   installPhase = ''
