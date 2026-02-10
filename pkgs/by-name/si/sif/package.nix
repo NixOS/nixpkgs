@@ -7,7 +7,7 @@
 
 buildGoModule {
   pname = "sif";
-  version = "0-unstable-2026-01-11";
+  version = "automated-release-b36dfd7";
 
   src = fetchFromGitHub {
     owner = "vmfunc";
