@@ -9,8 +9,8 @@ let
   configFormat = pkgs.formats.toml { };
   configFile = configFormat.generate "stalwart.toml" cfg.settings;
   useLegacyStorage = lib.versionOlder cfg.stateVersion "24.11";
-  useLegacyIdentifier = lib.versionOlder cfg.stateVersion "26.05";
-  stalwartIdentifier = if useLegacyIdentifier then "stalwart-mail" else "stalwart";
+  pre2605 = lib.versionOlder cfg.stateVersion "26.05";
+  stalwartIdentifier = if pre2605 then "stalwart-mail" else "stalwart";
 
   parsePorts =
     listeners:
@@ -123,12 +123,24 @@ in
 
     # Default config: all local
     services.stalwart.settings = {
-      tracer.stdout = {
-        type = lib.mkDefault "stdout";
-        level = lib.mkDefault "info";
-        ansi = lib.mkDefault false; # no colour markers to journald
-        enable = lib.mkDefault true;
-      };
+      tracer =
+        if pre2605 then
+          {
+            stdout = {
+              type = lib.mkDefault "stdout";
+              level = lib.mkDefault "info";
+              ansi = lib.mkDefault false; # no colour markers to journald
+              enable = lib.mkDefault true;
+            };
+          }
+        else
+          {
+            journal = {
+              type = lib.mkDefault "journal";
+              level = lib.mkDefault "info";
+              enable = lib.mkDefault true;
+            };
+          };
       store =
         if useLegacyStorage then
           {
